@@ -216,7 +216,7 @@ public class UserConfig {
                     oldFile.delete();
                 }
             } catch (Throwable e3) {
-                FileLog.m13e(e3);
+                FileLog.e(e3);
             }
         }
     }
@@ -232,7 +232,7 @@ public class UserConfig {
     public int getClientUserId() {
         int i;
         synchronized (this.sync) {
-            i = this.currentUser != null ? this.currentUser.var_id : 0;
+            i = this.currentUser != null ? this.currentUser.id : 0;
         }
         return i;
     }
@@ -240,7 +240,7 @@ public class UserConfig {
     public String getClientPhone() {
         String str;
         synchronized (this.sync) {
-            str = (this.currentUser == null || this.currentUser.phone == null) ? TtmlNode.ANONYMOUS_REGION_ID : this.currentUser.phone;
+            str = (this.currentUser == null || this.currentUser.phone == null) ? "" : this.currentUser.phone;
         }
         return str;
     }
@@ -256,7 +256,7 @@ public class UserConfig {
     public void setCurrentUser(User user) {
         synchronized (this.sync) {
             this.currentUser = user;
-            this.clientUserId = user.var_id;
+            this.clientUserId = user.id;
         }
     }
 
@@ -305,7 +305,7 @@ public class UserConfig {
                     }
                 }
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
             }
             if (this.currentAccount == 0) {
                 this.lastUpdateCheckTime = preferences.getLong("appUpdateCheckTime", System.currentTimeMillis());
@@ -327,7 +327,7 @@ public class UserConfig {
                             PackageInfo packageInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
                             updateTime = Math.max(packageInfo.lastUpdateTime, packageInfo.firstInstallTime);
                         } catch (Throwable e2) {
-                            FileLog.m13e(e2);
+                            FileLog.e(e2);
                         }
                         if (this.pendingAppUpdateBuildVersion != BuildVars.BUILD_VERSION || this.pendingAppUpdateInstallTime < updateTime) {
                             this.pendingAppUpdate = null;
@@ -335,7 +335,7 @@ public class UserConfig {
                         }
                     }
                 } catch (Throwable e22) {
-                    FileLog.m13e(e22);
+                    FileLog.e(e22);
                 }
             }
             this.migrateOffsetId = preferences.getInt("3migrateOffsetId", 0);
@@ -372,7 +372,7 @@ public class UserConfig {
                 }
             }
             if (this.currentUser != null) {
-                this.clientUserId = this.currentUser.var_id;
+                this.clientUserId = this.currentUser.id;
             }
             this.configLoaded = true;
             return;

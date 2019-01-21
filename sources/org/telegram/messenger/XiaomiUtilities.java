@@ -44,7 +44,7 @@ public class XiaomiUtilities {
             }
             return false;
         } catch (Throwable x) {
-            FileLog.m13e(x);
+            FileLog.e(x);
             return true;
         }
     }
@@ -53,7 +53,7 @@ public class XiaomiUtilities {
         String prop = AndroidUtilities.getSystemProperty("ro.miui.ui.version.name");
         if (prop != null) {
             try {
-                return Integer.parseInt(prop.replace("V", TtmlNode.ANONYMOUS_REGION_ID));
+                return Integer.parseInt(prop.replace("V", ""));
             } catch (NumberFormatException e) {
             }
         }

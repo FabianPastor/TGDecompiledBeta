@@ -1,6 +1,5 @@
 package org.telegram.tgnet;
 
-import com.google.android.exoplayer2.CLASSNAMEC;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -11,8 +10,7 @@ import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 
 public class SerializedData extends AbstractSerializedData {
-    /* renamed from: in */
-    private DataInputStream var_in;
+    private DataInputStream in;
     private ByteArrayInputStream inbuf;
     protected boolean isOut;
     private boolean justCalc;
@@ -50,7 +48,7 @@ public class SerializedData extends AbstractSerializedData {
         this.justCalc = false;
         this.isOut = false;
         this.inbuf = new ByteArrayInputStream(data);
-        this.var_in = new DataInputStream(this.inbuf);
+        this.in = new DataInputStream(this.inbuf);
         this.len = 0;
     }
 
@@ -61,15 +59,15 @@ public class SerializedData extends AbstractSerializedData {
                 this.inbuf = null;
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
         try {
-            if (this.var_in != null) {
-                this.var_in.close();
-                this.var_in = null;
+            if (this.in != null) {
+                this.in.close();
+                this.in = null;
             }
         } catch (Throwable e2) {
-            FileLog.m13e(e2);
+            FileLog.e(e2);
         }
         try {
             if (this.outbuf != null) {
@@ -77,7 +75,7 @@ public class SerializedData extends AbstractSerializedData {
                 this.outbuf = null;
             }
         } catch (Throwable e22) {
-            FileLog.m13e(e22);
+            FileLog.e(e22);
         }
         try {
             if (this.out != null) {
@@ -85,7 +83,7 @@ public class SerializedData extends AbstractSerializedData {
                 this.out = null;
             }
         } catch (Throwable e222) {
-            FileLog.m13e(e222);
+            FileLog.e(e222);
         }
     }
 
@@ -98,7 +96,7 @@ public class SerializedData extends AbstractSerializedData {
         is.close();
         this.isOut = false;
         this.inbuf = new ByteArrayInputStream(data);
-        this.var_in = new DataInputStream(this.inbuf);
+        this.in = new DataInputStream(this.inbuf);
     }
 
     public void writeInt32(int x) {
@@ -117,7 +115,7 @@ public class SerializedData extends AbstractSerializedData {
                 i++;
             } catch (Exception e) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m11e("write int32 error");
+                    FileLog.e("write int32 error");
                     return;
                 }
                 return;
@@ -141,7 +139,7 @@ public class SerializedData extends AbstractSerializedData {
                 i++;
             } catch (Exception e) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m11e("write int64 error");
+                    FileLog.e("write int64 error");
                     return;
                 }
                 return;
@@ -168,7 +166,7 @@ public class SerializedData extends AbstractSerializedData {
             }
         } catch (Exception e) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11e("write raw error");
+                FileLog.e("write raw error");
             }
         }
     }
@@ -182,7 +180,7 @@ public class SerializedData extends AbstractSerializedData {
             }
         } catch (Exception e) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11e("write bytes error");
+                FileLog.e("write bytes error");
             }
         }
     }
@@ -196,7 +194,7 @@ public class SerializedData extends AbstractSerializedData {
             }
         } catch (Exception e) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11e("write byte error");
+                FileLog.e("write byte error");
             }
         }
     }
@@ -210,7 +208,7 @@ public class SerializedData extends AbstractSerializedData {
             }
         } catch (Exception e) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11e("write byte error");
+                FileLog.e("write byte error");
             }
         }
     }
@@ -247,17 +245,17 @@ public class SerializedData extends AbstractSerializedData {
             }
         } catch (Exception e) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11e("write byte array error");
+                FileLog.e("write byte array error");
             }
         }
     }
 
     public void writeString(String s) {
         try {
-            writeByteArray(s.getBytes(CLASSNAMEC.UTF8_NAME));
+            writeByteArray(s.getBytes("UTF-8"));
         } catch (Exception e) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11e("write string error");
+                FileLog.e("write string error");
             }
         }
     }
@@ -272,7 +270,7 @@ public class SerializedData extends AbstractSerializedData {
                 }
             } catch (Exception e) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m11e("write byte array error");
+                    FileLog.e("write byte array error");
                     return;
                 }
                 return;
@@ -306,7 +304,7 @@ public class SerializedData extends AbstractSerializedData {
             writeInt64(Double.doubleToRawLongBits(d));
         } catch (Exception e) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11e("write double error");
+                FileLog.e("write double error");
             }
         }
     }
@@ -321,7 +319,7 @@ public class SerializedData extends AbstractSerializedData {
     protected void set(byte[] newData) {
         this.isOut = false;
         this.inbuf = new ByteArrayInputStream(newData);
-        this.var_in = new DataInputStream(this.inbuf);
+        this.in = new DataInputStream(this.inbuf);
     }
 
     public byte[] toByteArray() {
@@ -332,11 +330,11 @@ public class SerializedData extends AbstractSerializedData {
         if (count != 0) {
             if (this.justCalc) {
                 this.len += count;
-            } else if (this.var_in != null) {
+            } else if (this.in != null) {
                 try {
-                    this.var_in.skipBytes(count);
+                    this.in.skipBytes(count);
                 } catch (Throwable e) {
-                    FileLog.m13e(e);
+                    FileLog.e(e);
                 }
             }
         }
@@ -359,20 +357,20 @@ public class SerializedData extends AbstractSerializedData {
         } else if (!BuildVars.LOGS_ENABLED) {
             return false;
         } else {
-            FileLog.m11e("Not bool value!");
+            FileLog.e("Not bool value!");
             return false;
         }
     }
 
     public void readBytes(byte[] b, boolean exception) {
         try {
-            this.var_in.read(b);
+            this.in.read(b);
             this.len += b.length;
         } catch (Exception e) {
             if (exception) {
                 throw new RuntimeException("read bytes error", e);
             } else if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11e("read bytes error");
+                FileLog.e("read bytes error");
             }
         }
     }
@@ -386,27 +384,27 @@ public class SerializedData extends AbstractSerializedData {
     public String readString(boolean exception) {
         int sl = 1;
         try {
-            int l = this.var_in.read();
+            int l = this.in.read();
             this.len++;
             if (l >= 254) {
-                l = (this.var_in.read() | (this.var_in.read() << 8)) | (this.var_in.read() << 16);
+                l = (this.in.read() | (this.in.read() << 8)) | (this.in.read() << 16);
                 this.len += 3;
                 sl = 4;
             }
             byte[] b = new byte[l];
-            this.var_in.read(b);
+            this.in.read(b);
             this.len++;
             for (int i = sl; (l + i) % 4 != 0; i++) {
-                this.var_in.read();
+                this.in.read();
                 this.len++;
             }
-            return new String(b, CLASSNAMEC.UTF8_NAME);
+            return new String(b, "UTF-8");
         } catch (Exception e) {
             if (exception) {
                 throw new RuntimeException("read string error", e);
             }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11e("read string error");
+                FileLog.e("read string error");
             }
             return null;
         }
@@ -415,18 +413,18 @@ public class SerializedData extends AbstractSerializedData {
     public byte[] readByteArray(boolean exception) {
         int sl = 1;
         try {
-            int l = this.var_in.read();
+            int l = this.in.read();
             this.len++;
             if (l >= 254) {
-                l = (this.var_in.read() | (this.var_in.read() << 8)) | (this.var_in.read() << 16);
+                l = (this.in.read() | (this.in.read() << 8)) | (this.in.read() << 16);
                 this.len += 3;
                 sl = 4;
             }
             byte[] bArr = new byte[l];
-            this.var_in.read(bArr);
+            this.in.read(bArr);
             this.len++;
             for (int i = sl; (l + i) % 4 != 0; i++) {
-                this.var_in.read();
+                this.in.read();
                 this.len++;
             }
             return bArr;
@@ -435,7 +433,7 @@ public class SerializedData extends AbstractSerializedData {
                 throw new RuntimeException("read byte array error", e);
             }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11e("read byte array error");
+                FileLog.e("read byte array error");
             }
             return null;
         }
@@ -449,7 +447,7 @@ public class SerializedData extends AbstractSerializedData {
                 throw new RuntimeException("read double error", e);
             }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11e("read double error");
+                FileLog.e("read double error");
             }
             return 0.0d;
         }
@@ -460,7 +458,7 @@ public class SerializedData extends AbstractSerializedData {
         int j = 0;
         while (j < 4) {
             try {
-                i |= this.var_in.read() << (j * 8);
+                i |= this.in.read() << (j * 8);
                 this.len++;
                 j++;
             } catch (Exception e) {
@@ -468,7 +466,7 @@ public class SerializedData extends AbstractSerializedData {
                     throw new RuntimeException("read int32 error", e);
                 }
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m11e("read int32 error");
+                    FileLog.e("read int32 error");
                 }
                 return 0;
             }
@@ -481,7 +479,7 @@ public class SerializedData extends AbstractSerializedData {
         int j = 0;
         while (j < 8) {
             try {
-                i |= ((long) this.var_in.read()) << (j * 8);
+                i |= ((long) this.in.read()) << (j * 8);
                 this.len++;
                 j++;
             } catch (Exception e) {
@@ -489,7 +487,7 @@ public class SerializedData extends AbstractSerializedData {
                     throw new RuntimeException("read int64 error", e);
                 }
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m11e("read int64 error");
+                    FileLog.e("read int64 error");
                 }
                 return 0;
             }
@@ -506,9 +504,9 @@ public class SerializedData extends AbstractSerializedData {
 
     public int remaining() {
         try {
-            return this.var_in.available();
+            return this.in.available();
         } catch (Exception e) {
-            return ConnectionsManager.DEFAULT_DATACENTER_ID;
+            return Integer.MAX_VALUE;
         }
     }
 }

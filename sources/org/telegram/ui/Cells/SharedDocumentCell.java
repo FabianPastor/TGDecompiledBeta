@@ -1,0 +1,366 @@
+package org.telegram.ui.Cells;
+
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
+import android.text.TextUtils.TruncateAt;
+import android.view.View;
+import android.view.View.MeasureSpec;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
+import java.util.Date;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DownloadController;
+import org.telegram.messenger.DownloadController.FileDownloadProgressListener;
+import org.telegram.messenger.FileLoader;
+import org.telegram.messenger.ImageLoader;
+import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.R;
+import org.telegram.messenger.UserConfig;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.Document;
+import org.telegram.tgnet.TLRPC.DocumentAttribute;
+import org.telegram.tgnet.TLRPC.TL_documentAttributeAudio;
+import org.telegram.tgnet.TLRPC.TL_photoSizeEmpty;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.CheckBox;
+import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.LineProgressView;
+
+public class SharedDocumentCell extends FrameLayout implements FileDownloadProgressListener {
+    private int TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
+    private CheckBox checkBox;
+    private int currentAccount = UserConfig.selectedAccount;
+    private TextView dateTextView;
+    private TextView extTextView;
+    private boolean loaded;
+    private boolean loading;
+    private MessageObject message;
+    private TextView nameTextView;
+    private boolean needDivider;
+    private ImageView placeholderImageView;
+    private LineProgressView progressView;
+    private ImageView statusImageView;
+    private BackupImageView thumbImageView;
+
+    public SharedDocumentCell(Context context) {
+        float f;
+        float f2;
+        super(context);
+        this.placeholderImageView = new ImageView(context);
+        View view = this.placeholderImageView;
+        int i = (LocaleController.isRTL ? 5 : 3) | 48;
+        if (LocaleController.isRTL) {
+            f = 0.0f;
+        } else {
+            f = 12.0f;
+        }
+        if (LocaleController.isRTL) {
+            f2 = 12.0f;
+        } else {
+            f2 = 0.0f;
+        }
+        addView(view, LayoutHelper.createFrame(40, 40.0f, i, f, 8.0f, f2, 0.0f));
+        this.extTextView = new TextView(context);
+        this.extTextView.setTextColor(Theme.getColor("files_iconText"));
+        this.extTextView.setTextSize(1, 14.0f);
+        this.extTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        this.extTextView.setLines(1);
+        this.extTextView.setMaxLines(1);
+        this.extTextView.setSingleLine(true);
+        this.extTextView.setGravity(17);
+        this.extTextView.setEllipsize(TruncateAt.END);
+        view = this.extTextView;
+        i = (LocaleController.isRTL ? 5 : 3) | 48;
+        if (LocaleController.isRTL) {
+            f = 0.0f;
+        } else {
+            f = 16.0f;
+        }
+        if (LocaleController.isRTL) {
+            f2 = 16.0f;
+        } else {
+            f2 = 0.0f;
+        }
+        addView(view, LayoutHelper.createFrame(32, -2.0f, i, f, 22.0f, f2, 0.0f));
+        this.thumbImageView = new BackupImageView(context) {
+            protected void onDraw(Canvas canvas) {
+                float alpha;
+                if (SharedDocumentCell.this.thumbImageView.getImageReceiver().hasBitmapImage()) {
+                    alpha = 1.0f - SharedDocumentCell.this.thumbImageView.getImageReceiver().getCurrentAlpha();
+                } else {
+                    alpha = 1.0f;
+                }
+                SharedDocumentCell.this.extTextView.setAlpha(alpha);
+                SharedDocumentCell.this.placeholderImageView.setAlpha(alpha);
+                super.onDraw(canvas);
+            }
+        };
+        this.thumbImageView.setRoundRadius(AndroidUtilities.dp(4.0f));
+        addView(this.thumbImageView, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 12.0f, 8.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
+        this.nameTextView = new TextView(context);
+        this.nameTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        this.nameTextView.setTextSize(1, 16.0f);
+        this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        this.nameTextView.setMaxLines(2);
+        this.nameTextView.setEllipsize(TruncateAt.END);
+        this.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
+        addView(this.nameTextView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 8.0f : 72.0f, 5.0f, LocaleController.isRTL ? 72.0f : 8.0f, 0.0f));
+        this.statusImageView = new ImageView(context);
+        this.statusImageView.setVisibility(4);
+        this.statusImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("sharedMedia_startStopLoadIcon"), Mode.MULTIPLY));
+        addView(this.statusImageView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 8.0f : 72.0f, 35.0f, LocaleController.isRTL ? 72.0f : 8.0f, 0.0f));
+        this.dateTextView = new TextView(context);
+        this.dateTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText3"));
+        this.dateTextView.setTextSize(1, 14.0f);
+        this.dateTextView.setLines(1);
+        this.dateTextView.setMaxLines(1);
+        this.dateTextView.setSingleLine(true);
+        this.dateTextView.setEllipsize(TruncateAt.END);
+        this.dateTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
+        addView(this.dateTextView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 8.0f : 72.0f, 30.0f, LocaleController.isRTL ? 72.0f : 8.0f, 0.0f));
+        this.progressView = new LineProgressView(context);
+        this.progressView.setProgressColor(Theme.getColor("sharedMedia_startStopLoadIcon"));
+        addView(this.progressView, LayoutHelper.createFrame(-1, 2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 72.0f, 54.0f, LocaleController.isRTL ? 72.0f : 0.0f, 0.0f));
+        this.checkBox = new CheckBox(context, R.drawable.round_check2);
+        this.checkBox.setVisibility(4);
+        this.checkBox.setColor(Theme.getColor("checkbox"), Theme.getColor("checkboxCheck"));
+        addView(this.checkBox, LayoutHelper.createFrame(22, 22.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 34.0f, 30.0f, LocaleController.isRTL ? 34.0f : 0.0f, 0.0f));
+    }
+
+    public void setTextAndValueAndTypeAndThumb(String text, String value, String type, String thumb, int resId) {
+        this.nameTextView.setText(text);
+        this.dateTextView.setText(value);
+        if (type != null) {
+            this.extTextView.setVisibility(0);
+            this.extTextView.setText(type);
+        } else {
+            this.extTextView.setVisibility(4);
+        }
+        if (resId == 0) {
+            this.placeholderImageView.setImageResource(AndroidUtilities.getThumbForNameOrMime(text, type, false));
+            this.placeholderImageView.setVisibility(0);
+        } else {
+            this.placeholderImageView.setVisibility(4);
+        }
+        if (thumb == null && resId == 0) {
+            this.extTextView.setAlpha(1.0f);
+            this.placeholderImageView.setAlpha(1.0f);
+            this.thumbImageView.setImageBitmap(null);
+            this.thumbImageView.setVisibility(4);
+            return;
+        }
+        if (thumb != null) {
+            this.thumbImageView.setImage(thumb, "40_40", null);
+        } else {
+            Drawable drawable = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(40.0f), resId);
+            Theme.setCombinedDrawableColor(drawable, Theme.getColor("files_folderIconBackground"), false);
+            Theme.setCombinedDrawableColor(drawable, Theme.getColor("files_folderIcon"), true);
+            this.thumbImageView.setImageDrawable(drawable);
+        }
+        this.thumbImageView.setVisibility(0);
+    }
+
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
+    }
+
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (this.progressView.getVisibility() == 0) {
+            updateFileExistIcon();
+        }
+    }
+
+    public void setChecked(boolean checked, boolean animated) {
+        if (this.checkBox.getVisibility() != 0) {
+            this.checkBox.setVisibility(0);
+        }
+        this.checkBox.setChecked(checked, animated);
+    }
+
+    public void setDocument(MessageObject messageObject, boolean divider) {
+        this.needDivider = divider;
+        this.message = messageObject;
+        this.loaded = false;
+        this.loading = false;
+        if (messageObject == null || messageObject.getDocument() == null) {
+            this.nameTextView.setText("");
+            this.extTextView.setText("");
+            this.dateTextView.setText("");
+            this.placeholderImageView.setVisibility(0);
+            this.extTextView.setVisibility(0);
+            this.extTextView.setAlpha(1.0f);
+            this.placeholderImageView.setAlpha(1.0f);
+            this.thumbImageView.setVisibility(4);
+            this.thumbImageView.setImageBitmap(null);
+        } else {
+            String name = null;
+            if (messageObject.isMusic()) {
+                Document document;
+                if (messageObject.type == 0) {
+                    document = messageObject.messageOwner.media.webpage.document;
+                } else {
+                    document = messageObject.messageOwner.media.document;
+                }
+                for (int a = 0; a < document.attributes.size(); a++) {
+                    DocumentAttribute attribute = (DocumentAttribute) document.attributes.get(a);
+                    if ((attribute instanceof TL_documentAttributeAudio) && !((attribute.performer == null || attribute.performer.length() == 0) && (attribute.title == null || attribute.title.length() == 0))) {
+                        name = messageObject.getMusicAuthor() + " - " + messageObject.getMusicTitle();
+                    }
+                }
+            }
+            String fileName = FileLoader.getDocumentFileName(messageObject.getDocument());
+            if (name == null) {
+                name = fileName;
+            }
+            this.nameTextView.setText(name);
+            this.placeholderImageView.setVisibility(0);
+            this.extTextView.setVisibility(0);
+            this.placeholderImageView.setImageResource(AndroidUtilities.getThumbForNameOrMime(fileName, messageObject.getDocument().mime_type, false));
+            TextView textView = this.extTextView;
+            int idx = fileName.lastIndexOf(46);
+            textView.setText(idx == -1 ? "" : fileName.substring(idx + 1).toLowerCase());
+            TLObject thumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.getDocument().thumbs, 90);
+            if ((thumb instanceof TL_photoSizeEmpty) || thumb == null) {
+                this.thumbImageView.setVisibility(4);
+                this.thumbImageView.setImageBitmap(null);
+                this.extTextView.setAlpha(1.0f);
+                this.placeholderImageView.setAlpha(1.0f);
+            } else {
+                this.thumbImageView.setVisibility(0);
+                this.thumbImageView.setImage(thumb, "40_40", (Drawable) null, (Object) messageObject);
+            }
+            long date = ((long) messageObject.messageOwner.date) * 1000;
+            TextView textView2 = this.dateTextView;
+            Object[] objArr = new Object[2];
+            objArr[0] = AndroidUtilities.formatFileSize((long) messageObject.getDocument().size);
+            objArr[1] = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(new Date(date)), LocaleController.getInstance().formatterDay.format(new Date(date)));
+            textView2.setText(String.format("%s, %s", objArr));
+        }
+        setWillNotDraw(!this.needDivider);
+        this.progressView.setProgress(0.0f, false);
+        updateFileExistIcon();
+    }
+
+    public void updateFileExistIcon() {
+        if (this.message == null || this.message.messageOwner.media == null) {
+            this.loading = false;
+            this.loaded = true;
+            this.progressView.setVisibility(4);
+            this.progressView.setProgress(0.0f, false);
+            this.statusImageView.setVisibility(4);
+            this.dateTextView.setPadding(0, 0, 0, 0);
+            DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
+            return;
+        }
+        this.loaded = false;
+        if (this.message.attachPathExists || this.message.mediaExists) {
+            this.statusImageView.setVisibility(4);
+            this.progressView.setVisibility(4);
+            this.dateTextView.setPadding(0, 0, 0, 0);
+            this.loading = false;
+            this.loaded = true;
+            DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
+            return;
+        }
+        String fileName = FileLoader.getAttachFileName(this.message.getDocument());
+        DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this.message, this);
+        this.loading = FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName);
+        this.statusImageView.setVisibility(0);
+        this.statusImageView.setImageResource(this.loading ? R.drawable.media_doc_pause : R.drawable.media_doc_load);
+        this.dateTextView.setPadding(LocaleController.isRTL ? 0 : AndroidUtilities.dp(14.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(14.0f) : 0, 0);
+        if (this.loading) {
+            this.progressView.setVisibility(0);
+            Float progress = ImageLoader.getInstance().getFileProgress(fileName);
+            if (progress == null) {
+                progress = Float.valueOf(0.0f);
+            }
+            this.progressView.setProgress(progress.floatValue(), false);
+            return;
+        }
+        this.progressView.setVisibility(4);
+    }
+
+    public MessageObject getMessage() {
+        return this.message;
+    }
+
+    public boolean isLoaded() {
+        return this.loaded;
+    }
+
+    public boolean isLoading() {
+        return this.loading;
+    }
+
+    public BackupImageView getImageView() {
+        return this.thumbImageView;
+    }
+
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(56.0f), NUM));
+        setMeasuredDimension(getMeasuredWidth(), (this.needDivider ? 1 : 0) + (this.nameTextView.getMeasuredHeight() + AndroidUtilities.dp(34.0f)));
+    }
+
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        int i = 1;
+        super.onLayout(changed, left, top, right, bottom);
+        if (this.nameTextView.getLineCount() > 1) {
+            int i2;
+            int y = this.nameTextView.getMeasuredHeight() - AndroidUtilities.dp(22.0f);
+            this.dateTextView.layout(this.dateTextView.getLeft(), this.dateTextView.getTop() + y, this.dateTextView.getRight(), this.dateTextView.getBottom() + y);
+            this.statusImageView.layout(this.statusImageView.getLeft(), this.statusImageView.getTop() + y, this.statusImageView.getRight(), this.statusImageView.getBottom() + y);
+            LineProgressView lineProgressView = this.progressView;
+            int left2 = this.progressView.getLeft();
+            int measuredHeight = getMeasuredHeight() - this.progressView.getMeasuredHeight();
+            if (this.needDivider) {
+                i2 = 1;
+            } else {
+                i2 = 0;
+            }
+            i2 = measuredHeight - i2;
+            measuredHeight = this.progressView.getRight();
+            int measuredHeight2 = getMeasuredHeight();
+            if (!this.needDivider) {
+                i = 0;
+            }
+            lineProgressView.layout(left2, i2, measuredHeight, measuredHeight2 - i);
+        }
+    }
+
+    protected void onDraw(Canvas canvas) {
+        if (this.needDivider) {
+            canvas.drawLine((float) AndroidUtilities.dp(72.0f), (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
+        }
+    }
+
+    public void onFailedDownload(String name, boolean canceled) {
+        updateFileExistIcon();
+    }
+
+    public void onSuccessDownload(String name) {
+        this.progressView.setProgress(1.0f, true);
+        updateFileExistIcon();
+    }
+
+    public void onProgressDownload(String fileName, float progress) {
+        if (this.progressView.getVisibility() != 0) {
+            updateFileExistIcon();
+        }
+        this.progressView.setProgress(progress, true);
+    }
+
+    public void onProgressUpload(String fileName, float progress, boolean isEncrypted) {
+    }
+
+    public int getObserverTag() {
+        return this.TAG;
+    }
+}

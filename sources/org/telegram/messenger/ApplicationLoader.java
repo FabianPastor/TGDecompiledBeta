@@ -20,9 +20,9 @@ import com.google.devtools.build.android.desugar.runtime.ThrowableExtension;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import java.io.File;
-import org.telegram.p005ui.Components.ForegroundDetector;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.User;
+import org.telegram.ui.Components.ForegroundDetector;
 
 public class ApplicationLoader extends Application {
     @SuppressLint({"StaticFieldLeak"})
@@ -38,21 +38,6 @@ public class ApplicationLoader extends Application {
     public static volatile long mainInterfacePausedStageQueueTime;
     public static volatile boolean unableGetCurrentNetwork;
 
-    /* renamed from: org.telegram.messenger.ApplicationLoader$1 */
-    static class CLASSNAME extends BroadcastReceiver {
-        CLASSNAME() {
-        }
-
-        public void onReceive(Context context, Intent intent) {
-            ApplicationLoader.currentNetworkInfo = ApplicationLoader.connectivityManager.getActiveNetworkInfo();
-            boolean isSlow = ApplicationLoader.isConnectionSlow();
-            for (int a = 0; a < 3; a++) {
-                ConnectionsManager.getInstance(a).checkConnection();
-                FileLoader.getInstance(a).onNetworkChanged(isSlow);
-            }
-        }
-    }
-
     public static File getFilesDirFixed() {
         File path;
         for (int a = 0; a < 10; a++) {
@@ -66,7 +51,7 @@ public class ApplicationLoader extends Application {
             path.mkdirs();
             return path;
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return new File("/data/data/org.telegram.messenger/files");
         }
     }
@@ -82,7 +67,16 @@ public class ApplicationLoader extends Application {
             }
             try {
                 connectivityManager = (ConnectivityManager) applicationContext.getSystemService("connectivity");
-                applicationContext.registerReceiver(new CLASSNAME(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+                applicationContext.registerReceiver(new BroadcastReceiver() {
+                    public void onReceive(Context context, Intent intent) {
+                        ApplicationLoader.currentNetworkInfo = ApplicationLoader.connectivityManager.getActiveNetworkInfo();
+                        boolean isSlow = ApplicationLoader.isConnectionSlow();
+                        for (int a = 0; a < 3; a++) {
+                            ConnectionsManager.getInstance(a).checkConnection();
+                            FileLoader.getInstance(a).onNetworkChanged(isSlow);
+                        }
+                    }
+                }, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
             } catch (Exception e2) {
                 ThrowableExtension.printStackTrace(e2);
             }
@@ -96,10 +90,10 @@ public class ApplicationLoader extends Application {
             try {
                 isScreenOn = ((PowerManager) applicationContext.getSystemService("power")).isScreenOn();
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m10d("screen state = " + isScreenOn);
+                    FileLog.d("screen state = " + isScreenOn);
                 }
             } catch (Throwable e3) {
-                FileLog.m13e(e3);
+                FileLog.e(e3);
             }
             SharedConfig.loadConfig();
             for (a = 0; a < 3; a++) {
@@ -115,7 +109,7 @@ public class ApplicationLoader extends Application {
             }
             ((ApplicationLoader) applicationContext).initPlayServices();
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m10d("app initied");
+                FileLog.d("app initied");
             }
             MediaController.getInstance();
             for (a = 0; a < 3; a++) {
@@ -172,14 +166,14 @@ public class ApplicationLoader extends Application {
             String currentPushString = SharedConfig.pushString;
             if (TextUtils.isEmpty(currentPushString)) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m10d("GCM Registration not found.");
+                    FileLog.d("GCM Registration not found.");
                 }
             } else if (BuildVars.LOGS_ENABLED) {
-                FileLog.m10d("GCM regId = " + currentPushString);
+                FileLog.d("GCM regId = " + currentPushString);
             }
             Utilities.globalQueue.postRunnable(ApplicationLoader$$Lambda$2.$instance);
         } else if (BuildVars.LOGS_ENABLED) {
-            FileLog.m10d("No valid Google Play Services APK found.");
+            FileLog.d("No valid Google Play Services APK found.");
         }
     }
 
@@ -187,7 +181,7 @@ public class ApplicationLoader extends Application {
         try {
             FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(ApplicationLoader$$Lambda$3.$instance);
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -205,7 +199,7 @@ public class ApplicationLoader extends Application {
             }
             return false;
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return true;
         }
     }
@@ -217,7 +211,7 @@ public class ApplicationLoader extends Application {
                 return netInfo.isRoaming();
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
         return false;
     }
@@ -230,7 +224,7 @@ public class ApplicationLoader extends Application {
                 return true;
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
         return false;
     }
@@ -242,7 +236,7 @@ public class ApplicationLoader extends Application {
                 return true;
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
         return false;
     }
@@ -292,7 +286,7 @@ public class ApplicationLoader extends Application {
             }
             return true;
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return true;
         }
     }

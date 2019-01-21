@@ -92,7 +92,7 @@ public class SQLiteCursor {
                 }
                 try {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m10d("sqlite busy, waiting...");
+                        FileLog.d("sqlite busy, waiting...");
                     }
                     Thread.sleep(500);
                     res = this.preparedStatement.step();
@@ -100,7 +100,7 @@ public class SQLiteCursor {
                         break;
                     }
                 } catch (Throwable e) {
-                    FileLog.m13e(e);
+                    FileLog.e(e);
                 }
             }
             if (res == -1) {

@@ -1,8 +1,8 @@
 package org.telegram.messenger;
 
-import org.telegram.p005ui.ChatActivity;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.KeyboardButton;
+import org.telegram.ui.ChatActivity;
 
 final /* synthetic */ class SendMessagesHelper$$Lambda$53 implements Runnable {
     private final SendMessagesHelper arg$1;

@@ -1,15 +1,19 @@
 package org.telegram.messenger;
 
-final /* synthetic */ class MessagesController$$Lambda$58 implements Runnable {
-    private final MessagesController arg$1;
-    private final boolean arg$2;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
 
-    MessagesController$$Lambda$58(MessagesController messagesController, boolean z) {
+final /* synthetic */ class MessagesController$$Lambda$58 implements RequestDelegate {
+    private final MessagesController arg$1;
+    private final int arg$2;
+
+    MessagesController$$Lambda$58(MessagesController messagesController, int i) {
         this.arg$1 = messagesController;
-        this.arg$2 = z;
+        this.arg$2 = i;
     }
 
-    public void run() {
-        this.arg$1.lambda$checkProxyInfo$78$MessagesController(this.arg$2);
+    public void run(TLObject tLObject, TL_error tL_error) {
+        this.arg$1.lambda$updateTimerProc$81$MessagesController(this.arg$2, tLObject, tL_error);
     }
 }

@@ -1,18 +1,18 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC.FileLocation;
+import org.telegram.tgnet.TLObject;
 
 final /* synthetic */ class ImageLoader$$Lambda$2 implements Runnable {
     private final ImageLoader arg$1;
     private final String arg$2;
     private final String arg$3;
-    private final FileLocation arg$4;
+    private final TLObject arg$4;
 
-    ImageLoader$$Lambda$2(ImageLoader imageLoader, String str, String str2, FileLocation fileLocation) {
+    ImageLoader$$Lambda$2(ImageLoader imageLoader, String str, String str2, TLObject tLObject) {
         this.arg$1 = imageLoader;
         this.arg$2 = str;
         this.arg$3 = str2;
-        this.arg$4 = fileLocation;
+        this.arg$4 = tLObject;
     }
 
     public void run() {

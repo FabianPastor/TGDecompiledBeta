@@ -28,9 +28,9 @@ import java.util.Locale;
 import java.util.Map.Entry;
 
 public class Emoji {
-    private static int bigImgSize = AndroidUtilities.m9dp(AndroidUtilities.isTablet() ? 40.0f : 32.0f);
+    private static int bigImgSize = AndroidUtilities.dp(AndroidUtilities.isTablet() ? 40.0f : 32.0f);
     private static final int[][] cols = new int[][]{new int[]{16, 16, 16, 16}, new int[]{6, 6, 6, 6}, new int[]{9, 9, 9, 9}, new int[]{9, 9, 9, 9}, new int[]{10, 10, 10, 10}};
-    private static int drawImgSize = AndroidUtilities.m9dp(20.0f);
+    private static int drawImgSize = AndroidUtilities.dp(20.0f);
     private static Bitmap[][] emojiBmp = ((Bitmap[][]) Array.newInstance(Bitmap.class, new int[]{5, 4}));
     public static HashMap<String, String> emojiColor = new HashMap();
     public static HashMap<String, Integer> emojiUseHistory = new HashMap();
@@ -116,7 +116,7 @@ public class Emoji {
 
     public static class EmojiSpan extends ImageSpan {
         private FontMetricsInt fontMetrics;
-        private int size = AndroidUtilities.m9dp(20.0f);
+        private int size = AndroidUtilities.dp(20.0f);
 
         public EmojiSpan(EmojiDrawable d, int verticalAlignment, int s, FontMetricsInt original) {
             super(d, verticalAlignment);
@@ -124,7 +124,7 @@ public class Emoji {
             if (original != null) {
                 this.size = Math.abs(this.fontMetrics.descent) + Math.abs(this.fontMetrics.ascent);
                 if (this.size == 0) {
-                    this.size = AndroidUtilities.m9dp(20.0f);
+                    this.size = AndroidUtilities.dp(20.0f);
                 }
             }
         }
@@ -140,8 +140,8 @@ public class Emoji {
             }
             if (this.fontMetrics == null) {
                 int sz = super.getSize(paint, text, start, end, fm);
-                int offset = AndroidUtilities.m9dp(8.0f);
-                int w = AndroidUtilities.m9dp(10.0f);
+                int offset = AndroidUtilities.dp(8.0f);
+                int w = AndroidUtilities.dp(10.0f);
                 fm.top = (-w) - offset;
                 fm.bottom = w - offset;
                 fm.ascent = (-w) - offset;
@@ -223,10 +223,10 @@ public class Emoji {
                 }
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         } catch (Throwable x) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m12e("Error loading emoji", x);
+                FileLog.e("Error loading emoji", x);
                 return;
             }
             return;
@@ -240,7 +240,7 @@ public class Emoji {
             bitmap = BitmapFactory.decodeStream(is, null, opts);
             is.close();
         } catch (Throwable e2) {
-            FileLog.m13e(e2);
+            FileLog.e(e2);
         }
         AndroidUtilities.runOnUIThread(new Emoji$$Lambda$0(page, page2, bitmap));
     }
@@ -270,7 +270,7 @@ public class Emoji {
                 if (ch == 8419) {
                     break;
                 } else if (ch >= 8252 && ch <= 12953 && EmojiData.emojiToFE0FMap.containsKey(Character.valueOf(ch))) {
-                    emoji = emoji.substring(0, a + 1) + "\ufe0f" + emoji.substring(a + 1);
+                    emoji = emoji.substring(0, a + 1) + "️" + emoji.substring(a + 1);
                     length++;
                     a++;
                 }
@@ -279,7 +279,7 @@ public class Emoji {
             } else {
                 ch = emoji.charAt(a + 1);
                 if (ch == 56879 || ch == 56324 || ch == 56858 || ch == 56703) {
-                    emoji = emoji.substring(0, a + 2) + "\ufe0f" + emoji.substring(a + 2);
+                    emoji = emoji.substring(0, a + 2) + "️" + emoji.substring(a + 2);
                     length++;
                     a += 2;
                 } else {
@@ -301,7 +301,7 @@ public class Emoji {
         }
         if (info == null) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m10d("No drawable for emoji " + code);
+                FileLog.d("No drawable for emoji " + code);
             }
             return null;
         }
@@ -485,7 +485,7 @@ public class Emoji {
                 }
                 i++;
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
                 return cs;
             }
         }
@@ -569,7 +569,7 @@ public class Emoji {
             try {
                 emojiUseHistory.clear();
                 if (preferences.contains("emojis")) {
-                    str = preferences.getString("emojis", TtmlNode.ANONYMOUS_REGION_ID);
+                    str = preferences.getString("emojis", "");
                     if (str != null && str.length() > 0) {
                         for (String arg : str.split(",")) {
                             args2 = arg.split("=");
@@ -590,7 +590,7 @@ public class Emoji {
                     preferences.edit().remove("emojis").commit();
                     saveRecentEmoji();
                 } else {
-                    str = preferences.getString("emojis2", TtmlNode.ANONYMOUS_REGION_ID);
+                    str = preferences.getString("emojis2", "");
                     if (str != null && str.length() > 0) {
                         for (String arg2 : str.split(",")) {
                             args2 = arg2.split("=");
@@ -599,7 +599,7 @@ public class Emoji {
                     }
                 }
                 if (emojiUseHistory.isEmpty() && !preferences.getBoolean("filled_default", false)) {
-                    String[] newRecent = new String[]{"\ud83d\ude02", "\ud83d\ude18", "\u2764", "\ud83d\ude0d", "\ud83d\ude0a", "\ud83d\ude01", "\ud83d\udc4d", "\u263a", "\ud83d\ude14", "\ud83d\ude04", "\ud83d\ude2d", "\ud83d\udc8b", "\ud83d\ude12", "\ud83d\ude33", "\ud83d\ude1c", "\ud83d\ude48", "\ud83d\ude09", "\ud83d\ude03", "\ud83d\ude22", "\ud83d\ude1d", "\ud83d\ude31", "\ud83d\ude21", "\ud83d\ude0f", "\ud83d\ude1e", "\ud83d\ude05", "\ud83d\ude1a", "\ud83d\ude4a", "\ud83d\ude0c", "\ud83d\ude00", "\ud83d\ude0b", "\ud83d\ude06", "\ud83d\udc4c", "\ud83d\ude10", "\ud83d\ude15"};
+                    String[] newRecent = new String[]{"😂", "😘", "❤", "😍", "😊", "😁", "👍", "☺", "😔", "😄", "😭", "💋", "😒", "😳", "😜", "🙈", "😉", "😃", "😢", "😝", "😱", "😡", "😏", "😞", "😅", "😚", "🙊", "😌", "😀", "😋", "😆", "👌", "😐", "😕"};
                     for (int i = 0; i < newRecent.length; i++) {
                         emojiUseHistory.put(newRecent[i], Integer.valueOf(newRecent.length - i));
                     }
@@ -608,10 +608,10 @@ public class Emoji {
                 }
                 sortEmoji();
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
             }
             try {
-                str = preferences.getString(TtmlNode.ATTR_TTS_COLOR, TtmlNode.ANONYMOUS_REGION_ID);
+                str = preferences.getString("color", "");
                 if (str != null && str.length() > 0) {
                     String[] args = str.split(",");
                     for (String arg22 : args) {
@@ -620,7 +620,7 @@ public class Emoji {
                     }
                 }
             } catch (Throwable e2) {
-                FileLog.m13e(e2);
+                FileLog.e(e2);
             }
         }
     }
@@ -636,6 +636,6 @@ public class Emoji {
             stringBuilder.append("=");
             stringBuilder.append((String) entry.getValue());
         }
-        preferences.edit().putString(TtmlNode.ATTR_TTS_COLOR, stringBuilder.toString()).commit();
+        preferences.edit().putString("color", stringBuilder.toString()).commit();
     }
 }

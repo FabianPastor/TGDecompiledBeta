@@ -1,22 +1,20 @@
 package org.telegram.messenger;
 
-import android.util.SparseIntArray;
-import java.util.ArrayList;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLRPC.TL_messages_editChatAdmin;
 
 final /* synthetic */ class MessagesController$$Lambda$33 implements Runnable {
     private final MessagesController arg$1;
-    private final ArrayList arg$2;
-    private final boolean arg$3;
-    private final SparseIntArray arg$4;
+    private final TL_messages_editChatAdmin arg$2;
+    private final RequestDelegate arg$3;
 
-    MessagesController$$Lambda$33(MessagesController messagesController, ArrayList arrayList, boolean z, SparseIntArray sparseIntArray) {
+    MessagesController$$Lambda$33(MessagesController messagesController, TL_messages_editChatAdmin tL_messages_editChatAdmin, RequestDelegate requestDelegate) {
         this.arg$1 = messagesController;
-        this.arg$2 = arrayList;
-        this.arg$3 = z;
-        this.arg$4 = sparseIntArray;
+        this.arg$2 = tL_messages_editChatAdmin;
+        this.arg$3 = requestDelegate;
     }
 
     public void run() {
-        this.arg$1.lambda$processLoadedBlockedUsers$46$MessagesController(this.arg$2, this.arg$3, this.arg$4);
+        this.arg$1.lambda$setUserAdminRole$50$MessagesController(this.arg$2, this.arg$3);
     }
 }

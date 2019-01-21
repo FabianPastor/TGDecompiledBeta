@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.IBinder.DeathRecipient;
 import android.os.RemoteException;
-import android.support.p000v4.util.ArrayMap;
+import android.support.v4.util.ArrayMap;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.List;
@@ -22,14 +22,7 @@ public abstract class CustomTabsService extends Service {
     public static final int RESULT_FAILURE_MESSAGING_ERROR = -3;
     public static final int RESULT_FAILURE_REMOTE_ERROR = -2;
     public static final int RESULT_SUCCESS = 0;
-    private Stub mBinder = new CLASSNAME();
-    private final Map<IBinder, DeathRecipient> mDeathRecipientMap = new ArrayMap();
-
-    /* renamed from: org.telegram.messenger.support.customtabs.CustomTabsService$1 */
-    class CLASSNAME extends Stub {
-        CLASSNAME() {
-        }
-
+    private Stub mBinder = new Stub() {
         public boolean warmup(long flags) {
             return CustomTabsService.this.warmup(flags);
         }
@@ -72,7 +65,8 @@ public abstract class CustomTabsService extends Service {
         public int postMessage(ICustomTabsCallback callback, String message, Bundle extras) {
             return CustomTabsService.this.postMessage(new CustomTabsSessionToken(callback), message, extras);
         }
-    }
+    };
+    private final Map<IBinder, DeathRecipient> mDeathRecipientMap = new ArrayMap();
 
     @Retention(RetentionPolicy.SOURCE)
     public @interface Result {

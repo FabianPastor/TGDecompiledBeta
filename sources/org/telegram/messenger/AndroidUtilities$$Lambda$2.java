@@ -1,16 +1,17 @@
 package org.telegram.messenger;
 
-import android.view.View;
-import android.view.View.OnClickListener;
+import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 
 final /* synthetic */ class AndroidUtilities$$Lambda$2 implements OnClickListener {
-    private final Runnable arg$1;
+    private final Activity arg$1;
 
-    AndroidUtilities$$Lambda$2(Runnable runnable) {
-        this.arg$1 = runnable;
+    AndroidUtilities$$Lambda$2(Activity activity) {
+        this.arg$1 = activity;
     }
 
-    public void onClick(View view) {
-        this.arg$1.run();
+    public void onClick(DialogInterface dialogInterface, int i) {
+        AndroidUtilities.lambda$openForView$2$AndroidUtilities(this.arg$1, dialogInterface, i);
     }
 }

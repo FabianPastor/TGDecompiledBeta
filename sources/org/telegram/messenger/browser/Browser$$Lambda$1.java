@@ -1,6 +1,6 @@
 package org.telegram.messenger.browser;
 
-import org.telegram.p005ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.AlertDialog;
 
 final /* synthetic */ class Browser$$Lambda$1 implements Runnable {
     private final AlertDialog[] arg$1;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="14500" android:versionName="5.1.0" android:installLocation="auto" android:compileSdkVersion="28" android:compileSdkVersionCodename="9" package="org.telegram.messenger" platformBuildVersionCode="14500" platformBuildVersionName="5.1.0">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="14700" android:versionName="5.2.0" android:installLocation="auto" android:compileSdkVersion="28" android:compileSdkVersionCodename="9" package="org.telegram.messenger" platformBuildVersionCode="14700" platformBuildVersionName="5.2.0">
     <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="27"/>
     <uses-feature android:name="android.hardware.location.gps" android:required="false"/>
     <uses-feature android:name="android.hardware.location.network" android:required="false"/>
@@ -11,9 +11,6 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
-    <uses-permission android:name="android.permission.READ_SMS"/>
-    <uses-permission android:name="android.permission.READ_CALL_LOG"/>
-    <uses-permission android:name="android.permission.WRITE_CALL_LOG"/>
     <permission android:name="org.telegram.messenger.permission.MAPS_RECEIVE" android:protectionLevel="signature"/>
     <supports-screens android:anyDensity="true" android:smallScreens="true" android:normalScreens="true" android:largeScreens="true" android:resizeable="true" android:xlargeScreens="true"/>
     <uses-feature android:glEsVersion="20000" android:required="true"/>
@@ -29,7 +26,6 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
@@ -70,7 +66,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
     <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE"/>
-    <application android:theme="@style/Theme_TMessages_Start" android:label="@string/AppName" android:icon="@CLASSNAMEdrawable/ic_launcher" android:name="org.telegram.messenger.ApplicationLoader" android:manageSpaceActivity="org.telegram.ui.ExternalActionActivity" android:allowBackup="false" android:hardwareAccelerated="@bool/useHardwareAcceleration" android:largeHeap="true" android:supportsRtl="false" android:roundIcon="@CLASSNAMEdrawable/ic_launcher" android:appComponentFactory="android.support.v4.app.CoreComponentFactory">
+    <application android:theme="@style/Theme.TMessages.Start" android:label="@string/AppName" android:icon="@drawable/ic_launcher" android:name="org.telegram.messenger.ApplicationLoader" android:manageSpaceActivity="org.telegram.ui.ExternalActionActivity" android:allowBackup="false" android:hardwareAccelerated="@bool/useHardwareAcceleration" android:largeHeap="true" android:supportsRtl="false" android:roundIcon="@drawable/ic_launcher" android:appComponentFactory="android.support.v4.app.CoreComponentFactory">
         <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyA-t0jLPjUt2FxrA8VPK2EiYHcYcboIR6k"/>
         <service android:name="org.telegram.messenger.GcmPushListenerService">
             <intent-filter>
@@ -84,7 +80,7 @@
             </intent-filter>
         </receiver>
         <service android:name="com.google.android.gms.measurement.AppMeasurementService" android:enabled="false" android:exported="false"/>
-        <activity android:name="org.telegram.p005ui.LaunchActivity" android:launchMode="singleTask" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:windowSoftInputMode="adjustPan" android:hardwareAccelerated="@bool/useHardwareAcceleration">
+        <activity android:name="org.telegram.ui.LaunchActivity" android:launchMode="singleTask" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:windowSoftInputMode="adjustPan" android:hardwareAccelerated="@bool/useHardwareAcceleration">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -136,7 +132,7 @@
                 <data android:scheme="http" android:host="t.me"/>
                 <data android:scheme="https" android:host="t.me"/>
             </intent-filter>
-            <intent-filter android:icon="@CLASSNAMEdrawable/ic_launcher" android:priority="1">
+            <intent-filter android:icon="@drawable/ic_launcher" android:priority="1">
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -144,23 +140,23 @@
             </intent-filter>
             <meta-data android:name="android.service.chooser.chooser_target_service" android:value=".TgChooserTargetService"/>
         </activity>
-        <activity android:theme="@style/Theme_TMessages_Transparent" android:name="org.telegram.p005ui.ShareActivity" android:stateNotNeeded="true" android:excludeFromRecents="true" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:windowSoftInputMode="adjustPan" android:hardwareAccelerated="@bool/useHardwareAcceleration">
-            <intent-filter android:icon="@CLASSNAMEdrawable/ic_launcher" android:priority="1">
+        <activity android:theme="@style/Theme.TMessages.Transparent" android:name="org.telegram.ui.ShareActivity" android:stateNotNeeded="true" android:excludeFromRecents="true" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:windowSoftInputMode="adjustPan" android:hardwareAccelerated="@bool/useHardwareAcceleration">
+            <intent-filter android:icon="@drawable/ic_launcher" android:priority="1">
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:scheme="tgb"/>
             </intent-filter>
         </activity>
-        <activity android:name="org.telegram.p005ui.ExternalActionActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:windowSoftInputMode="adjustPan" android:hardwareAccelerated="@bool/useHardwareAcceleration">
-            <intent-filter android:icon="@CLASSNAMEdrawable/ic_launcher">
+        <activity android:name="org.telegram.ui.ExternalActionActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:windowSoftInputMode="adjustPan" android:hardwareAccelerated="@bool/useHardwareAcceleration">
+            <intent-filter android:icon="@drawable/ic_launcher">
                 <action android:name="org.telegram.passport.AUTHORIZE"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity android:name="org.telegram.p005ui.IntroActivity" android:launchMode="singleTask" android:configChanges="keyboard|keyboardHidden|orientation|screenSize"/>
+        <activity android:name="org.telegram.ui.IntroActivity" android:launchMode="singleTask" android:configChanges="keyboard|keyboardHidden|orientation|screenSize"/>
         <activity android:name="org.telegram.messenger.OpenChatReceiver" android:exported="true" android:configChanges="keyboard|keyboardHidden|orientation|screenSize"/>
-        <activity android:theme="@style/Theme_TMessages_PopupNotification" android:name="org.telegram.p005ui.PopupNotificationActivity" android:taskAffinity="" android:excludeFromRecents="true" android:launchMode="singleTask" android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" android:windowSoftInputMode="adjustUnspecified|stateHidden|adjustResize" android:resizeableActivity="false"/>
+        <activity android:theme="@style/Theme.TMessages.PopupNotification" android:name="org.telegram.ui.PopupNotificationActivity" android:taskAffinity="" android:excludeFromRecents="true" android:launchMode="singleTask" android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" android:windowSoftInputMode="adjustUnspecified|stateHidden|adjustResize" android:resizeableActivity="false"/>
         <activity android:name="org.telegram.messenger.GoogleVoiceClientActivity" android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.voicesearch.SEND_MESSAGE_TO_CONTACTS"/>
@@ -168,10 +164,10 @@
                 <data android:mimeType="text/plain"/>
             </intent-filter>
         </activity>
-        <activity android:name="org.telegram.p005ui.VoIPActivity" android:taskAffinity="org.telegram.messenger.voip" android:excludeFromRecents="true" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:windowSoftInputMode="adjustNothing"/>
+        <activity android:name="org.telegram.ui.VoIPActivity" android:taskAffinity="org.telegram.messenger.voip" android:excludeFromRecents="true" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:windowSoftInputMode="adjustNothing"/>
         <activity android:name="org.telegram.ui.VoIPGroupActivity" android:taskAffinity="org.telegram.messenger.voip" android:excludeFromRecents="true" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:windowSoftInputMode="adjustNothing"/>
-        <activity android:theme="@style/Theme_TMessages_Transparent" android:name="org.telegram.p005ui.VoIPPermissionActivity" android:taskAffinity="org.telegram.messenger.voip" android:excludeFromRecents="true" android:configChanges="keyboard|keyboardHidden|orientation|screenSize"/>
-        <activity android:theme="@style/Theme_TMessages_TransparentWithAlerts" android:name="org.telegram.p005ui.VoIPFeedbackActivity" android:taskAffinity="org.telegram.messenger.voip_feedback" android:excludeFromRecents="true" android:configChanges="keyboard|keyboardHidden|orientation|screenSize"/>
+        <activity android:theme="@style/Theme.TMessages.Transparent" android:name="org.telegram.ui.VoIPPermissionActivity" android:taskAffinity="org.telegram.messenger.voip" android:excludeFromRecents="true" android:configChanges="keyboard|keyboardHidden|orientation|screenSize"/>
+        <activity android:theme="@style/Theme.TMessages.TransparentWithAlerts" android:name="org.telegram.ui.VoIPFeedbackActivity" android:taskAffinity="org.telegram.messenger.voip_feedback" android:excludeFromRecents="true" android:configChanges="keyboard|keyboardHidden|orientation|screenSize"/>
         <receiver android:name="org.telegram.messenger.AutoMessageHeardReceiver" android:exported="false">
             <intent-filter>
                 <action android:name="org.telegram.messenger.ACTION_MESSAGE_HEARD"/>
@@ -182,15 +178,14 @@
                 <action android:name="org.telegram.messenger.ACTION_MESSAGE_REPLY"/>
             </intent-filter>
         </receiver>
+        <receiver android:name="org.telegram.messenger.SmsReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED"/>
+            </intent-filter>
+        </receiver>
         <receiver android:name="org.telegram.messenger.CallReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE"/>
-            </intent-filter>
-        </receiver>
-        <receiver android:name="org.telegram.messenger.SmsListener">
-            <intent-filter>
-                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
-                <action android:name="android.provider.Telephony.NEW_OUTGOING_SMS"/>
             </intent-filter>
         </receiver>
         <service android:name="org.telegram.messenger.AuthenticatorService" android:exported="true">
@@ -275,7 +270,7 @@
         <receiver android:name="org.telegram.messenger.CustomTabsCopyReceiver" android:enabled="true"/>
         <receiver android:name="org.telegram.messenger.NotificationDismissReceiver" android:exported="false"/>
         <receiver android:name="org.telegram.messenger.voip.VoIPActionsReceiver" android:exported="false"/>
-        <provider android:name="android.support.p000v4.content.FileProvider" android:exported="false" android:authorities="org.telegram.messenger.provider" android:grantUriPermissions="true">
+        <provider android:name="android.support.v4.content.FileProvider" android:exported="false" android:authorities="org.telegram.messenger.provider" android:grantUriPermissions="true">
             <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/provider_paths"/>
         </provider>
         <provider android:name="org.telegram.messenger.NotificationImageProvider" android:exported="false" android:authorities="org.telegram.messenger.notification_image_provider" android:grantUriPermissions="true"/>
@@ -285,7 +280,7 @@
         <meta-data android:name="com.sec.android.multiwindow.DEFAULT_SIZE_H" android:value="598dp"/>
         <meta-data android:name="com.sec.android.multiwindow.MINIMUM_SIZE_W" android:value="632dp"/>
         <meta-data android:name="com.sec.android.multiwindow.MINIMUM_SIZE_H" android:value="598dp"/>
-        <meta-data android:name="com.google.android.gms.car.notification.SmallIcon" android:resource="@CLASSNAMEdrawable/ic_player"/>
+        <meta-data android:name="com.google.android.gms.car.notification.SmallIcon" android:resource="@drawable/ic_player"/>
         <meta-data android:name="com.google.android.gms.car.application" android:resource="@xml/automotive_app_desc"/>
         <meta-data android:name="com.google.android.gms.vision.DEPENDENCIES" android:value="face"/>
         <meta-data android:name="com.samsung.android.icon_container.has_icon_container" android:value="true"/>
@@ -295,6 +290,8 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
+        <activity android:theme="@style/Theme.Translucent.NoTitleBar" android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity" android:exported="false" android:excludeFromRecents="true"/>
+        <service android:name="com.google.android.gms.auth.api.signin.RevocationBoundService" android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION" android:exported="true"/>
         <activity android:name="net.hockeyapp.android.UpdateActivity"/>
         <activity android:name="net.hockeyapp.android.FeedbackActivity"/>
         <activity android:name="net.hockeyapp.android.PaintActivity"/>

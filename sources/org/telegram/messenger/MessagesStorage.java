@@ -4,8 +4,6 @@ import android.text.TextUtils;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
-import com.google.android.exoplayer2.CLASSNAMEC;
-import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.devtools.build.android.desugar.runtime.ThrowableExtension;
 import java.io.File;
 import java.util.ArrayList;
@@ -18,20 +16,18 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicLong;
-import org.telegram.PhoneFormat.CLASSNAMEPhoneFormat;
+import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.ContactsController.Contact;
 import org.telegram.messenger.MediaController.SearchImage;
 import org.telegram.messenger.support.SparseLongArray;
-import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.AbstractSerializedData;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.BotInfo;
 import org.telegram.tgnet.TLRPC.ChannelParticipant;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.ChatFull;
@@ -49,12 +45,11 @@ import org.telegram.tgnet.TLRPC.Photo;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.TL_channelFull;
 import org.telegram.tgnet.TLRPC.TL_channels_deleteMessages;
-import org.telegram.tgnet.TLRPC.TL_chatChannelParticipant;
+import org.telegram.tgnet.TLRPC.TL_chatBannedRights;
 import org.telegram.tgnet.TLRPC.TL_chatFull;
 import org.telegram.tgnet.TLRPC.TL_chatInviteEmpty;
 import org.telegram.tgnet.TLRPC.TL_chatParticipant;
 import org.telegram.tgnet.TLRPC.TL_chatParticipantAdmin;
-import org.telegram.tgnet.TLRPC.TL_chatParticipants;
 import org.telegram.tgnet.TLRPC.TL_contact;
 import org.telegram.tgnet.TLRPC.TL_decryptedMessageActionScreenshotMessages;
 import org.telegram.tgnet.TLRPC.TL_decryptedMessageActionSetMessageTTL;
@@ -94,8 +89,8 @@ import org.telegram.tgnet.TLRPC.TL_userFull;
 import org.telegram.tgnet.TLRPC.TL_userStatusLastMonth;
 import org.telegram.tgnet.TLRPC.TL_userStatusLastWeek;
 import org.telegram.tgnet.TLRPC.TL_userStatusRecently;
+import org.telegram.tgnet.TLRPC.TL_wallPaper;
 import org.telegram.tgnet.TLRPC.User;
-import org.telegram.tgnet.TLRPC.WallPaper;
 import org.telegram.tgnet.TLRPC.WebPage;
 import org.telegram.tgnet.TLRPC.messages_BotResults;
 import org.telegram.tgnet.TLRPC.messages_Dialogs;
@@ -104,6 +99,7 @@ import org.telegram.tgnet.TLRPC.photos_Photos;
 
 public class MessagesStorage {
     private static volatile MessagesStorage[] Instance = new MessagesStorage[3];
+    private static final int LAST_DB_VERSION = 56;
     private File cacheFile;
     private int currentAccount;
     private SQLiteDatabase database;
@@ -300,7 +296,7 @@ public class MessagesStorage {
             this.database.executeFast("PRAGMA journal_mode = WAL").stepThis().dispose();
             if (createTable) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m10d("create new database");
+                    FileLog.d("create new database");
                 }
                 this.database.executeFast("CREATE TABLE messages_holes(uid INTEGER, start INTEGER, end INTEGER, PRIMARY KEY(uid, start));").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_end_messages_holes ON messages_holes(uid, end);").stepThis().dispose();
@@ -353,7 +349,6 @@ public class MessagesStorage {
                 this.database.executeFast("CREATE TABLE channel_users_v2(did INTEGER, uid INTEGER, date INTEGER, data BLOB, PRIMARY KEY(did, uid))").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE channel_admins(did INTEGER, uid INTEGER, PRIMARY KEY(did, uid))").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE contacts(uid INTEGER PRIMARY KEY, mutual INTEGER)").stepThis().dispose();
-                this.database.executeFast("CREATE TABLE wallpapers(uid INTEGER PRIMARY KEY, data BLOB)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE user_photos(uid INTEGER, id INTEGER, data BLOB, PRIMARY KEY (uid, id))").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE blocked_users(uid INTEGER PRIMARY KEY)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE dialog_settings(did INTEGER PRIMARY KEY, flags INTEGER);").stepThis().dispose();
@@ -370,16 +365,18 @@ public class MessagesStorage {
                 this.database.executeFast("CREATE TABLE pending_tasks(id INTEGER PRIMARY KEY, data BLOB);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE requested_holes(uid INTEGER, seq_out_start INTEGER, seq_out_end INTEGER, PRIMARY KEY (uid, seq_out_start, seq_out_end));").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE sharing_locations(uid INTEGER PRIMARY KEY, mid INTEGER, date INTEGER, period INTEGER, message BLOB);").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE wallpapers2(uid INTEGER PRIMARY KEY, data BLOB, num INTEGER)").stepThis().dispose();
+                this.database.executeFast("CREATE INDEX IF NOT EXISTS wallpapers_num ON wallpapers2(num);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE unread_push_messages(uid INTEGER, mid INTEGER, random INTEGER, date INTEGER, data BLOB, fm TEXT, name TEXT, uname TEXT, flags INTEGER, PRIMARY KEY(uid, mid))").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS unread_push_messages_idx_date ON unread_push_messages(date);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS unread_push_messages_idx_random ON unread_push_messages(random);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE polls(mid INTEGER PRIMARY KEY, id INTEGER);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS polls_id ON polls(id);").stepThis().dispose();
-                this.database.executeFast("PRAGMA user_version = 54").stepThis().dispose();
+                this.database.executeFast("PRAGMA user_version = 56").stepThis().dispose();
             } else {
                 int version = this.database.executeInt("PRAGMA user_version", new Object[0]).intValue();
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m10d("current db version = " + version);
+                    FileLog.d("current db version = " + version);
                 }
                 if (version == 0) {
                     throw new Exception("malformed");
@@ -404,20 +401,20 @@ public class MessagesStorage {
                     }
                     cursor.dispose();
                 } catch (Throwable e) {
-                    FileLog.m13e(e);
+                    FileLog.e(e);
                     try {
                         this.database.executeFast("CREATE TABLE IF NOT EXISTS params(id INTEGER PRIMARY KEY, seq INTEGER, pts INTEGER, date INTEGER, qts INTEGER, lsv INTEGER, sg INTEGER, pbytes BLOB)").stepThis().dispose();
                         this.database.executeFast("INSERT INTO params VALUES(1, 0, 0, 0, 0, 0, 0, NULL)").stepThis().dispose();
                     } catch (Throwable e2) {
-                        FileLog.m13e(e2);
+                        FileLog.e(e2);
                     }
                 }
-                if (version < 54) {
+                if (version < 56) {
                     updateDbToLastVersion(version);
                 }
             }
         } catch (Throwable e3) {
-            FileLog.m13e(e3);
+            FileLog.e(e3);
             if (first && e3.getMessage().contains("malformed")) {
                 cleanupInternal();
                 UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetId = 0;
@@ -473,7 +470,7 @@ public class MessagesStorage {
                 this.database.executeFast("PRAGMA user_version = 4").stepThis().dispose();
                 version = 4;
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
                 return;
             }
         }
@@ -598,7 +595,7 @@ public class MessagesStorage {
                     data.reuse();
                     if (participants != null) {
                         TL_chatFull chatFull = new TL_chatFull();
-                        chatFull.var_id = chat_id;
+                        chatFull.id = chat_id;
                         chatFull.chat_photo = new TL_photoEmpty();
                         chatFull.notify_settings = new TL_peerNotifySettingsEmpty_layer77();
                         chatFull.exported_invite = new TL_chatInviteEmpty();
@@ -793,6 +790,17 @@ public class MessagesStorage {
         if (version == 53) {
             this.database.executeFast("ALTER TABLE chat_settings_v2 ADD COLUMN online INTEGER default 0").stepThis().dispose();
             this.database.executeFast("PRAGMA user_version = 54").stepThis().dispose();
+            version = 54;
+        }
+        if (version == 54) {
+            this.database.executeFast("DROP TABLE IF EXISTS wallpapers;").stepThis().dispose();
+            this.database.executeFast("PRAGMA user_version = 55").stepThis().dispose();
+            version = 55;
+        }
+        if (version == 55) {
+            this.database.executeFast("CREATE TABLE IF NOT EXISTS wallpapers2(uid INTEGER PRIMARY KEY, data BLOB, num INTEGER)").stepThis().dispose();
+            this.database.executeFast("CREATE INDEX IF NOT EXISTS wallpapers_num ON wallpapers2(num);").stepThis().dispose();
+            this.database.executeFast("PRAGMA user_version = 56").stepThis().dispose();
         }
     }
 
@@ -837,7 +845,7 @@ public class MessagesStorage {
         cleanupInternal();
         openDatabase(false);
         if (isLogin) {
-            Utilities.stageQueue.postRunnable(new MessagesStorage$$Lambda$135(this));
+            Utilities.stageQueue.postRunnable(new MessagesStorage$$Lambda$136(this));
         }
     }
 
@@ -867,7 +875,7 @@ public class MessagesStorage {
             state.dispose();
             data.reuse();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -885,7 +893,7 @@ public class MessagesStorage {
                     Integer value = (Integer) entry.getValue();
                     if (value.intValue() == 2 || value.intValue() == 3) {
                         long flags;
-                        key = key.replace("notify2_", TtmlNode.ANONYMOUS_REGION_ID);
+                        key = key.replace("notify2_", "");
                         if (value.intValue() == 2) {
                             flags = 1;
                         } else {
@@ -897,7 +905,6 @@ public class MessagesStorage {
                             }
                         }
                         ids.put(Long.parseLong(key), Long.valueOf(flags));
-                    } else if (value.intValue() == 3) {
                     }
                 }
             }
@@ -913,12 +920,12 @@ public class MessagesStorage {
                 state.dispose();
                 this.database.commitTransaction();
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
             }
         } catch (Exception e2) {
             ThrowableExtension.printStackTrace(e2);
         } catch (Throwable e3) {
-            FileLog.m13e(e3);
+            FileLog.e(e3);
         }
     }
 
@@ -939,7 +946,7 @@ public class MessagesStorage {
             state.step();
             state.dispose();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         } finally {
             data.reuse();
         }
@@ -953,7 +960,7 @@ public class MessagesStorage {
         try {
             this.database.executeFast("DELETE FROM pending_tasks WHERE id = " + id).stepThis().dispose();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -974,19 +981,19 @@ public class MessagesStorage {
                         case 0:
                             Chat chat = Chat.TLdeserialize(data, data.readInt32(false), false);
                             if (chat != null) {
-                                Utilities.stageQueue.postRunnable(new MessagesStorage$$Lambda$127(this, chat, taskId));
+                                Utilities.stageQueue.postRunnable(new MessagesStorage$$Lambda$128(this, chat, taskId));
                                 break;
                             }
                             break;
                         case 1:
-                            Utilities.stageQueue.postRunnable(new MessagesStorage$$Lambda$128(this, data.readInt32(false), data.readInt32(false), taskId));
+                            Utilities.stageQueue.postRunnable(new MessagesStorage$$Lambda$129(this, data.readInt32(false), data.readInt32(false), taskId));
                             break;
                         case 2:
                         case 5:
                         case 8:
                         case 10:
                             TL_dialog dialog = new TL_dialog();
-                            dialog.var_id = data.readInt64(false);
+                            dialog.id = data.readInt64(false);
                             dialog.top_message = data.readInt32(false);
                             dialog.read_inbox_max_id = data.readInt32(false);
                             dialog.read_outbox_max_id = data.readInt32(false);
@@ -1004,17 +1011,17 @@ public class MessagesStorage {
                             if (type >= 10) {
                                 dialog.unread_mark = data.readBool(false);
                             }
-                            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$129(this, dialog, InputPeer.TLdeserialize(data, data.readInt32(false), false), taskId));
+                            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$130(this, dialog, InputPeer.TLdeserialize(data, data.readInt32(false), false), taskId));
                             break;
                         case 3:
                             long random_id = data.readInt64(false);
                             SendMessagesHelper.getInstance(this.currentAccount).sendGame(InputPeer.TLdeserialize(data, data.readInt32(false), false), (TL_inputMediaGame) InputMedia.TLdeserialize(data, data.readInt32(false), false), random_id, taskId);
                             break;
                         case 4:
-                            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$130(this, data.readInt64(false), data.readBool(false), InputPeer.TLdeserialize(data, data.readInt32(false), false), taskId));
+                            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$131(this, data.readInt64(false), data.readBool(false), InputPeer.TLdeserialize(data, data.readInt32(false), false), taskId));
                             break;
                         case 6:
-                            Utilities.stageQueue.postRunnable(new MessagesStorage$$Lambda$131(this, data.readInt32(false), data.readInt32(false), taskId, InputChannel.TLdeserialize(data, data.readInt32(false), false)));
+                            Utilities.stageQueue.postRunnable(new MessagesStorage$$Lambda$132(this, data.readInt32(false), data.readInt32(false), taskId, InputChannel.TLdeserialize(data, data.readInt32(false), false)));
                             break;
                         case 7:
                             channelId = data.readInt32(false);
@@ -1024,13 +1031,13 @@ public class MessagesStorage {
                                 request = TL_channels_deleteMessages.TLdeserialize(data, constructor, false);
                             }
                             if (request != null) {
-                                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$132(this, channelId, taskId, request));
+                                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$133(this, channelId, taskId, request));
                                 break;
                             }
                             removePendingTask(taskId);
                             break;
                         case 9:
-                            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$133(this, data.readInt64(false), InputPeer.TLdeserialize(data, data.readInt32(false), false), taskId));
+                            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$134(this, data.readInt64(false), InputPeer.TLdeserialize(data, data.readInt32(false), false), taskId));
                             break;
                         case 11:
                             InputChannel inputChannel;
@@ -1042,7 +1049,7 @@ public class MessagesStorage {
                             } else {
                                 inputChannel = null;
                             }
-                            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$134(this, mid, channelId, inputChannel, ttl, taskId));
+                            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$135(this, mid, channelId, inputChannel, ttl, taskId));
                             break;
                     }
                     data.reuse();
@@ -1050,7 +1057,7 @@ public class MessagesStorage {
             }
             cursor.dispose();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -1098,7 +1105,7 @@ public class MessagesStorage {
             state.step();
             state.dispose();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -1118,7 +1125,7 @@ public class MessagesStorage {
                 this.lastSavedQts = qts;
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -1134,7 +1141,7 @@ public class MessagesStorage {
         try {
             this.database.executeFast(String.format(Locale.US, "REPLACE INTO dialog_settings VALUES(%d, %d)", new Object[]{Long.valueOf(did), Long.valueOf(flags)})).stepThis().dispose();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -1184,7 +1191,7 @@ public class MessagesStorage {
             data.reuse();
             state.dispose();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -1254,7 +1261,7 @@ public class MessagesStorage {
                         message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                         data.reuse();
                         MessageObject.setUnreadFlags(message, cursor.intValue(0));
-                        message.var_id = cursor.intValue(3);
+                        message.id = cursor.intValue(3);
                         message.date = cursor.intValue(4);
                         message.dialog_id = cursor.longValue(5);
                         messages.add(message);
@@ -1262,7 +1269,7 @@ public class MessagesStorage {
                         lower_id = (int) message.dialog_id;
                         addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad);
                         message.send_state = cursor.intValue(2);
-                        if (!(message.to_id.channel_id != 0 || MessageObject.isUnread(message) || lower_id == 0) || message.var_id > 0) {
+                        if (!(message.to_id.channel_id != 0 || MessageObject.isUnread(message) || lower_id == 0) || message.id > 0) {
                             message.send_state = 0;
                         }
                         if (lower_id == 0 && !cursor.isNull(5)) {
@@ -1302,7 +1309,7 @@ public class MessagesStorage {
                                 }
                             }
                         } catch (Throwable e) {
-                            FileLog.m13e(e);
+                            FileLog.e(e);
                         }
                     }
                 }
@@ -1314,7 +1321,7 @@ public class MessagesStorage {
                     if (data != null) {
                         message = Message.TLdeserialize(data, data.readInt32(false), false);
                         data.reuse();
-                        message.var_id = cursor.intValue(1);
+                        message.id = cursor.intValue(1);
                         message.date = cursor.intValue(2);
                         message.dialog_id = cursor.longValue(3);
                         message.random_id = cursor.longValue(4);
@@ -1335,11 +1342,11 @@ public class MessagesStorage {
                             message = Message.TLdeserialize(data, data.readInt32(false), false);
                             message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                             data.reuse();
-                            message.var_id = cursor.intValue(1);
+                            message.id = cursor.intValue(1);
                             message.date = cursor.intValue(2);
                             message.dialog_id = cursor.longValue(3);
                             addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad);
-                            arrayList = (ArrayList) replyMessageOwners.get(message.var_id);
+                            arrayList = (ArrayList) replyMessageOwners.get(message.id);
                             if (arrayList != null) {
                                 for (a = 0; a < arrayList.size(); a++) {
                                     Message m = (Message) arrayList.get(a);
@@ -1366,14 +1373,14 @@ public class MessagesStorage {
                     while (a < chats.size()) {
                         Chat chat = (Chat) chats.get(a);
                         if (chat != null && (chat.left || chat.migrated_to != null)) {
-                            this.database.executeFast("UPDATE dialogs SET unread_count = 0 WHERE did = " + ((long) (-chat.var_id))).stepThis().dispose();
+                            this.database.executeFast("UPDATE dialogs SET unread_count = 0 WHERE did = " + ((long) (-chat.id))).stepThis().dispose();
                             this.database.executeFast(String.format(Locale.US, "UPDATE messages SET read_state = 3 WHERE uid = %d AND mid > 0 AND read_state IN(0,2) AND out = 0", new Object[]{Long.valueOf(did)})).stepThis().dispose();
                             chats.remove(a);
                             a--;
-                            pushDialogs.remove((long) (-chat.var_id));
+                            pushDialogs.remove((long) (-chat.id));
                             int b = 0;
                             while (b < messages.size()) {
-                                if (((Message) messages.get(b)).dialog_id == ((long) (-chat.var_id))) {
+                                if (((Message) messages.get(b)).dialog_id == ((long) (-chat.id))) {
                                     messages.remove(b);
                                     b--;
                                 }
@@ -1385,9 +1392,9 @@ public class MessagesStorage {
                 }
             }
             Collections.reverse(messages);
-            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$126(this, pushDialogs, messages, pushMessages, users, chats, encryptedChats));
+            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$127(this, pushDialogs, messages, pushMessages, users, chats, encryptedChats));
         } catch (Throwable e2) {
-            FileLog.m13e(e2);
+            FileLog.e(e2);
         }
     }
 
@@ -1395,60 +1402,132 @@ public class MessagesStorage {
         NotificationsController.getInstance(this.currentAccount).processLoadedUnreadMessages(pushDialogs, messages, pushMessages, users, chats, encryptedChats);
     }
 
-    public void putWallpapers(ArrayList<WallPaper> wallPapers) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$13(this, wallPapers));
+    public void putWallpapers(ArrayList<TL_wallPaper> wallPapers, boolean replace) {
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$13(this, replace, wallPapers));
     }
 
-    final /* synthetic */ void lambda$putWallpapers$23$MessagesStorage(ArrayList wallPapers) {
-        int num = 0;
-        try {
-            this.database.executeFast("DELETE FROM wallpapers WHERE 1").stepThis().dispose();
-            this.database.beginTransaction();
-            SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO wallpapers VALUES(?, ?)");
-            Iterator it = wallPapers.iterator();
-            while (it.hasNext()) {
-                WallPaper wallPaper = (WallPaper) it.next();
-                state.requery();
-                NativeByteBuffer data = new NativeByteBuffer(wallPaper.getObjectSize());
-                wallPaper.serializeToStream(data);
-                state.bindInteger(1, num);
-                state.bindByteBuffer(2, data);
-                state.step();
-                num++;
-                data.reuse();
+    final /* synthetic */ void lambda$putWallpapers$23$MessagesStorage(boolean replace, ArrayList wallPapers) {
+        SQLitePreparedStatement state;
+        if (replace) {
+            try {
+                this.database.executeFast("DELETE FROM wallpapers2 WHERE 1").stepThis().dispose();
+            } catch (Throwable e) {
+                FileLog.e(e);
+                return;
             }
-            state.dispose();
-            this.database.commitTransaction();
-        } catch (Throwable e) {
-            FileLog.m13e(e);
         }
+        this.database.beginTransaction();
+        if (replace) {
+            state = this.database.executeFast("REPLACE INTO wallpapers2 VALUES(?, ?, ?)");
+        } else {
+            state = this.database.executeFast("UPDATE wallpapers2 SET data = ? WHERE uid = ?");
+        }
+        int N = wallPapers.size();
+        for (int a = 0; a < N; a++) {
+            TL_wallPaper wallPaper = (TL_wallPaper) wallPapers.get(a);
+            state.requery();
+            NativeByteBuffer data = new NativeByteBuffer(wallPaper.getObjectSize());
+            wallPaper.serializeToStream(data);
+            if (replace) {
+                state.bindLong(1, wallPaper.id);
+                state.bindByteBuffer(2, data);
+                state.bindInteger(3, a);
+            } else {
+                state.bindByteBuffer(1, data);
+                state.bindLong(2, wallPaper.id);
+            }
+            state.step();
+            data.reuse();
+        }
+        state.dispose();
+        this.database.commitTransaction();
+    }
+
+    public void getWallpapers() {
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$14(this));
+    }
+
+    /* JADX WARNING: Failed to extract finally block: empty outs */
+    final /* synthetic */ void lambda$getWallpapers$25$MessagesStorage() {
+        /*
+        r8 = this;
+        r0 = 0;
+        r5 = r8.database;	 Catch:{ Exception -> 0x0032 }
+        r6 = "SELECT data FROM wallpapers2 WHERE 1 ORDER BY num ASC";
+        r7 = 0;
+        r7 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x0032 }
+        r0 = r5.queryFinalized(r6, r7);	 Catch:{ Exception -> 0x0032 }
+        r4 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0032 }
+        r4.<init>();	 Catch:{ Exception -> 0x0032 }
+    L_0x0012:
+        r5 = r0.next();	 Catch:{ Exception -> 0x0032 }
+        if (r5 == 0) goto L_0x003c;
+    L_0x0018:
+        r5 = 0;
+        r1 = r0.byteBufferValue(r5);	 Catch:{ Exception -> 0x0032 }
+        if (r1 == 0) goto L_0x0012;
+    L_0x001f:
+        r5 = 0;
+        r5 = r1.readInt32(r5);	 Catch:{ Exception -> 0x0032 }
+        r6 = 0;
+        r3 = org.telegram.tgnet.TLRPC.TL_wallPaper.TLdeserialize(r1, r5, r6);	 Catch:{ Exception -> 0x0032 }
+        r1.reuse();	 Catch:{ Exception -> 0x0032 }
+        if (r3 == 0) goto L_0x0012;
+    L_0x002e:
+        r4.add(r3);	 Catch:{ Exception -> 0x0032 }
+        goto L_0x0012;
+    L_0x0032:
+        r2 = move-exception;
+        org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x004a }
+        if (r0 == 0) goto L_0x003b;
+    L_0x0038:
+        r0.dispose();
+    L_0x003b:
+        return;
+    L_0x003c:
+        r5 = new org.telegram.messenger.MessagesStorage$$Lambda$126;	 Catch:{ Exception -> 0x0032 }
+        r5.<init>(r4);	 Catch:{ Exception -> 0x0032 }
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r5);	 Catch:{ Exception -> 0x0032 }
+        if (r0 == 0) goto L_0x003b;
+    L_0x0046:
+        r0.dispose();
+        goto L_0x003b;
+    L_0x004a:
+        r5 = move-exception;
+        if (r0 == 0) goto L_0x0050;
+    L_0x004d:
+        r0.dispose();
+    L_0x0050:
+        throw r5;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getWallpapers$25$MessagesStorage():void");
     }
 
     public void loadWebRecent(int type) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$14(this, type));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$15(this, type));
     }
 
-    final /* synthetic */ void lambda$loadWebRecent$25$MessagesStorage(int type) {
+    final /* synthetic */ void lambda$loadWebRecent$27$MessagesStorage(int type) {
         try {
             AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$125(this, type, new ArrayList()));
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
-    final /* synthetic */ void lambda$null$24$MessagesStorage(int type, ArrayList arrayList) {
+    final /* synthetic */ void lambda$null$26$MessagesStorage(int type, ArrayList arrayList) {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.recentImagesDidLoad, Integer.valueOf(type), arrayList);
     }
 
     public void addRecentLocalFile(String imageUrl, String localUrl, Document document) {
         if (imageUrl != null && imageUrl.length() != 0) {
             if ((localUrl != null && localUrl.length() != 0) || document != null) {
-                this.storageQueue.postRunnable(new MessagesStorage$$Lambda$15(this, document, imageUrl, localUrl));
+                this.storageQueue.postRunnable(new MessagesStorage$$Lambda$16(this, document, imageUrl, localUrl));
             }
         }
     }
 
-    final /* synthetic */ void lambda$addRecentLocalFile$26$MessagesStorage(Document document, String imageUrl, String localUrl) {
+    final /* synthetic */ void lambda$addRecentLocalFile$28$MessagesStorage(Document document, String imageUrl, String localUrl) {
         SQLitePreparedStatement state;
         if (document != null) {
             try {
@@ -1463,7 +1542,7 @@ public class MessagesStorage {
                 data.reuse();
                 return;
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
                 return;
             }
         }
@@ -1476,36 +1555,36 @@ public class MessagesStorage {
     }
 
     public void clearWebRecent(int type) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$16(this, type));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$17(this, type));
     }
 
-    final /* synthetic */ void lambda$clearWebRecent$27$MessagesStorage(int type) {
+    final /* synthetic */ void lambda$clearWebRecent$29$MessagesStorage(int type) {
         try {
             this.database.executeFast("DELETE FROM web_recent_v3 WHERE type = " + type).stepThis().dispose();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
     public void putWebRecent(ArrayList<SearchImage> arrayList) {
         if (!arrayList.isEmpty() && arrayList.isEmpty()) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$17(this, arrayList));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$18(this, arrayList));
         }
     }
 
-    final /* synthetic */ void lambda$putWebRecent$28$MessagesStorage(ArrayList arrayList) {
+    final /* synthetic */ void lambda$putWebRecent$30$MessagesStorage(ArrayList arrayList) {
         try {
             this.database.beginTransaction();
             SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO web_recent_v3 VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             int a = 0;
-            while (a < arrayList.size() && a != Callback.DEFAULT_DRAG_ANIMATION_DURATION) {
+            while (a < arrayList.size() && a != 200) {
                 SearchImage searchImage = (SearchImage) arrayList.get(a);
                 state.requery();
-                state.bindString(1, searchImage.var_id);
+                state.bindString(1, searchImage.id);
                 state.bindInteger(2, searchImage.type);
-                state.bindString(3, searchImage.imageUrl != null ? searchImage.imageUrl : TtmlNode.ANONYMOUS_REGION_ID);
-                state.bindString(4, searchImage.thumbUrl != null ? searchImage.thumbUrl : TtmlNode.ANONYMOUS_REGION_ID);
-                state.bindString(5, searchImage.localUrl != null ? searchImage.localUrl : TtmlNode.ANONYMOUS_REGION_ID);
+                state.bindString(3, searchImage.imageUrl != null ? searchImage.imageUrl : "");
+                state.bindString(4, searchImage.thumbUrl != null ? searchImage.thumbUrl : "");
+                state.bindString(5, searchImage.localUrl != null ? searchImage.localUrl : "");
                 state.bindInteger(6, searchImage.width);
                 state.bindInteger(7, searchImage.height);
                 state.bindInteger(8, searchImage.size);
@@ -1530,38 +1609,15 @@ public class MessagesStorage {
             }
             state.dispose();
             this.database.commitTransaction();
-            if (arrayList.size() >= Callback.DEFAULT_DRAG_ANIMATION_DURATION) {
+            if (arrayList.size() >= 200) {
                 this.database.beginTransaction();
-                for (a = Callback.DEFAULT_DRAG_ANIMATION_DURATION; a < arrayList.size(); a++) {
-                    this.database.executeFast("DELETE FROM web_recent_v3 WHERE id = '" + ((SearchImage) arrayList.get(a)).var_id + "'").stepThis().dispose();
+                for (a = 200; a < arrayList.size(); a++) {
+                    this.database.executeFast("DELETE FROM web_recent_v3 WHERE id = '" + ((SearchImage) arrayList.get(a)).id + "'").stepThis().dispose();
                 }
                 this.database.commitTransaction();
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
-        }
-    }
-
-    public void getWallpapers() {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$18(this));
-    }
-
-    final /* synthetic */ void lambda$getWallpapers$30$MessagesStorage() {
-        try {
-            SQLiteCursor cursor = this.database.queryFinalized("SELECT data FROM wallpapers WHERE 1", new Object[0]);
-            ArrayList<WallPaper> wallPapers = new ArrayList();
-            while (cursor.next()) {
-                NativeByteBuffer data = cursor.byteBufferValue(0);
-                if (data != null) {
-                    WallPaper wallPaper = WallPaper.TLdeserialize(data, data.readInt32(false), false);
-                    data.reuse();
-                    wallPapers.add(wallPaper);
-                }
-            }
-            cursor.dispose();
-            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$124(wallPapers));
-        } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -1589,7 +1645,7 @@ public class MessagesStorage {
             }
             MessagesController.getInstance(this.currentAccount).processLoadedBlockedUsers(ids, users, true);
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -1601,7 +1657,7 @@ public class MessagesStorage {
         try {
             this.database.executeFast("DELETE FROM blocked_users WHERE uid = " + id).stepThis().dispose();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -1616,7 +1672,7 @@ public class MessagesStorage {
             try {
                 this.database.executeFast("DELETE FROM blocked_users WHERE 1").stepThis().dispose();
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
                 return;
             }
         }
@@ -1649,13 +1705,15 @@ public class MessagesStorage {
                         Message message = Message.TLdeserialize(data, data.readInt32(false), false);
                         message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                         data.reuse();
-                        if (!(message == null || message.from_id != uid || message.var_id == 1)) {
-                            mids.add(Integer.valueOf(message.var_id));
+                        if (!(message == null || message.from_id != uid || message.id == 1)) {
+                            mids.add(Integer.valueOf(message.id));
+                            int N;
+                            int a;
                             File file;
                             if (message.media instanceof TL_messageMediaPhoto) {
-                                Iterator it = message.media.photo.sizes.iterator();
-                                while (it.hasNext()) {
-                                    file = FileLoader.getPathToAttach((PhotoSize) it.next());
+                                N = message.media.photo.sizes.size();
+                                for (a = 0; a < N; a++) {
+                                    file = FileLoader.getPathToAttach((PhotoSize) message.media.photo.sizes.get(a));
                                     if (file != null && file.toString().length() > 0) {
                                         filesToDelete.add(file);
                                     }
@@ -1665,27 +1723,30 @@ public class MessagesStorage {
                                 if (file != null && file.toString().length() > 0) {
                                     filesToDelete.add(file);
                                 }
-                                file = FileLoader.getPathToAttach(message.media.document.thumb);
-                                if (file != null && file.toString().length() > 0) {
-                                    filesToDelete.add(file);
+                                N = message.media.document.thumbs.size();
+                                for (a = 0; a < N; a++) {
+                                    file = FileLoader.getPathToAttach((PhotoSize) message.media.document.thumbs.get(a));
+                                    if (file != null && file.toString().length() > 0) {
+                                        filesToDelete.add(file);
+                                    }
                                 }
                             }
                         }
                     }
                 } catch (Throwable e) {
-                    FileLog.m13e(e);
+                    FileLog.e(e);
                 }
             }
             cursor.dispose();
-            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$122(this, mids, channelId));
+            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$123(this, mids, channelId));
             markMessagesAsDeletedInternal(mids, channelId);
             updateDialogsWithDeletedMessagesInternal(mids, null, channelId);
             FileLoader.getInstance(this.currentAccount).deleteFiles(filesToDelete, 0);
             if (!mids.isEmpty()) {
-                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$123(this, mids, channelId));
+                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$124(this, mids, channelId));
             }
         } catch (Throwable e2) {
-            FileLog.m13e(e2);
+            FileLog.e(e2);
         }
     }
 
@@ -1717,7 +1778,7 @@ public class MessagesStorage {
                     return;
                 }
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
                 return;
             }
         }
@@ -1732,11 +1793,13 @@ public class MessagesStorage {
                         message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                         data.reuse();
                         if (!(message == null || message.media == null)) {
+                            int N;
+                            int a;
                             File file;
                             if (message.media instanceof TL_messageMediaPhoto) {
-                                Iterator it = message.media.photo.sizes.iterator();
-                                while (it.hasNext()) {
-                                    file = FileLoader.getPathToAttach((PhotoSize) it.next());
+                                N = message.media.photo.sizes.size();
+                                for (a = 0; a < N; a++) {
+                                    file = FileLoader.getPathToAttach((PhotoSize) message.media.photo.sizes.get(a));
                                     if (file != null && file.toString().length() > 0) {
                                         filesToDelete.add(file);
                                     }
@@ -1746,15 +1809,18 @@ public class MessagesStorage {
                                 if (file != null && file.toString().length() > 0) {
                                     filesToDelete.add(file);
                                 }
-                                file = FileLoader.getPathToAttach(message.media.document.thumb);
-                                if (file != null && file.toString().length() > 0) {
-                                    filesToDelete.add(file);
+                                N = message.media.document.thumbs.size();
+                                for (a = 0; a < N; a++) {
+                                    file = FileLoader.getPathToAttach((PhotoSize) message.media.document.thumbs.get(a));
+                                    if (file != null && file.toString().length() > 0) {
+                                        filesToDelete.add(file);
+                                    }
                                 }
                             }
                         }
                     }
                 } catch (Throwable e2) {
-                    FileLog.m13e(e2);
+                    FileLog.e(e2);
                 }
             }
             cursor.dispose();
@@ -1789,11 +1855,11 @@ public class MessagesStorage {
                             message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                             data.reuse();
                             if (message != null) {
-                                messageId = message.var_id;
+                                messageId = message.id;
                             }
                         }
                     } catch (Throwable e22) {
-                        FileLog.m13e(e22);
+                        FileLog.e(e22);
                     }
                 }
                 cursor2.dispose();
@@ -1823,7 +1889,7 @@ public class MessagesStorage {
         this.database.executeFast("DELETE FROM messages_holes WHERE uid = " + did).stepThis().dispose();
         this.database.executeFast("DELETE FROM media_holes_v2 WHERE uid = " + did).stepThis().dispose();
         DataQuery.getInstance(this.currentAccount).clearBotKeyboard(did, null);
-        AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$121(this));
+        AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$122(this));
     }
 
     final /* synthetic */ void lambda$null$37$MessagesStorage() {
@@ -1840,7 +1906,7 @@ public class MessagesStorage {
             try {
                 cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM user_photos WHERE uid = %d AND id < %d ORDER BY rowid ASC LIMIT %d", new Object[]{Integer.valueOf(did), Long.valueOf(max_id), Integer.valueOf(count)}), new Object[0]);
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
                 return;
             }
         }
@@ -1855,7 +1921,7 @@ public class MessagesStorage {
             }
         }
         cursor.dispose();
-        Utilities.stageQueue.postRunnable(new MessagesStorage$$Lambda$120(this, res, did, count, max_id, classGuid));
+        Utilities.stageQueue.postRunnable(new MessagesStorage$$Lambda$121(this, res, did, count, max_id, classGuid));
     }
 
     final /* synthetic */ void lambda$null$39$MessagesStorage(photos_Photos res, int did, int count, long max_id, int classGuid) {
@@ -1870,7 +1936,7 @@ public class MessagesStorage {
         try {
             this.database.executeFast("DELETE FROM user_photos WHERE uid = " + uid).stepThis().dispose();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -1882,7 +1948,7 @@ public class MessagesStorage {
         try {
             this.database.executeFast("DELETE FROM user_photos WHERE uid = " + uid + " AND id = " + pid).stepThis().dispose();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -1900,7 +1966,7 @@ public class MessagesStorage {
             ArrayList<Long> oldPinnedOrder = new ArrayList();
             ArrayList<Long> orderArrayList = new ArrayList();
             for (a = dialogsCount; a < dialogsRes.dialogs.size(); a++) {
-                orderArrayList.add(Long.valueOf(((TL_dialog) dialogsRes.dialogs.get(a)).var_id));
+                orderArrayList.add(Long.valueOf(((TL_dialog) dialogsRes.dialogs.get(a)).id));
             }
             SQLiteCursor cursor = this.database.queryFinalized("SELECT did, pinned FROM dialogs WHERE 1", new Object[0]);
             while (cursor.next()) {
@@ -1916,7 +1982,7 @@ public class MessagesStorage {
                     }
                 }
             }
-            Collections.sort(oldPinnedOrder, new MessagesStorage$$Lambda$119(oldPinnedDialogNums));
+            Collections.sort(oldPinnedOrder, new MessagesStorage$$Lambda$120(oldPinnedDialogNums));
             while (oldPinnedOrder.size() < totalPinnedCount) {
                 oldPinnedOrder.add(0, Long.valueOf(0));
             }
@@ -1933,12 +1999,12 @@ public class MessagesStorage {
             this.database.commitTransaction();
             for (a = 0; a < totalPinnedCount; a++) {
                 TL_dialog dialog = (TL_dialog) dialogsRes.dialogs.get(dialogsCount + a);
-                int oldIdx = oldPinnedOrder.indexOf(Long.valueOf(dialog.var_id));
-                int newIdx = orderArrayList.indexOf(Long.valueOf(dialog.var_id));
+                int oldIdx = oldPinnedOrder.indexOf(Long.valueOf(dialog.id));
+                int newIdx = orderArrayList.indexOf(Long.valueOf(dialog.id));
                 if (!(oldIdx == -1 || newIdx == -1)) {
                     Integer oldNum;
                     if (oldIdx == newIdx) {
-                        oldNum = (Integer) oldPinnedDialogNums.get(dialog.var_id);
+                        oldNum = (Integer) oldPinnedDialogNums.get(dialog.id);
                         if (oldNum != null) {
                             dialog.pinnedNum = oldNum.intValue();
                         }
@@ -1955,11 +2021,11 @@ public class MessagesStorage {
             }
             putDialogsInternal(dialogsRes, 0);
             saveDiffParamsInternal(seq, newPts, date, qts);
-            if (lastMessage == null || lastMessage.var_id == UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetId) {
-                UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetId = ConnectionsManager.DEFAULT_DATACENTER_ID;
+            if (lastMessage == null || lastMessage.id == UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetId) {
+                UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetId = Integer.MAX_VALUE;
             } else {
                 UserConfig.getInstance(this.currentAccount).totalDialogsLoadCount = dialogsRes.dialogs.size();
-                UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetId = lastMessage.var_id;
+                UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetId = lastMessage.id;
                 UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetDate = lastMessage.date;
                 Chat chat;
                 if (lastMessage.to_id.channel_id != 0) {
@@ -1968,7 +2034,7 @@ public class MessagesStorage {
                     UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetUserId = 0;
                     for (a = 0; a < dialogsRes.chats.size(); a++) {
                         chat = (Chat) dialogsRes.chats.get(a);
-                        if (chat.var_id == UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetChannelId) {
+                        if (chat.id == UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetChannelId) {
                             UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetAccess = chat.access_hash;
                             break;
                         }
@@ -1979,7 +2045,7 @@ public class MessagesStorage {
                     UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetUserId = 0;
                     for (a = 0; a < dialogsRes.chats.size(); a++) {
                         chat = (Chat) dialogsRes.chats.get(a);
-                        if (chat.var_id == UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetChatId) {
+                        if (chat.id == UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetChatId) {
                             UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetAccess = chat.access_hash;
                             break;
                         }
@@ -1990,7 +2056,7 @@ public class MessagesStorage {
                     UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetChannelId = 0;
                     for (a = 0; a < dialogsRes.users.size(); a++) {
                         User user = (User) dialogsRes.users.get(a);
-                        if (user.var_id == UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetUserId) {
+                        if (user.id == UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetUserId) {
                             UserConfig.getInstance(this.currentAccount).dialogsLoadOffsetAccess = user.access_hash;
                             break;
                         }
@@ -2000,7 +2066,7 @@ public class MessagesStorage {
             UserConfig.getInstance(this.currentAccount).saveConfig(false);
             MessagesController.getInstance(this.currentAccount).completeDialogsReset(dialogsRes, messagesCount, seq, newPts, date, qts, new_dialogs_dict, new_dialogMessage, lastMessage);
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -2026,15 +2092,15 @@ public class MessagesStorage {
         try {
             this.database.executeFast("DELETE FROM user_photos WHERE uid = " + did).stepThis().dispose();
             SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO user_photos VALUES(?, ?, ?)");
-            Iterator it = photos.photos.iterator();
-            while (it.hasNext()) {
-                Photo photo = (Photo) it.next();
+            int N = photos.photos.size();
+            for (int a = 0; a < N; a++) {
+                Photo photo = (Photo) photos.photos.get(a);
                 if (!(photo instanceof TL_photoEmpty)) {
                     state.requery();
                     NativeByteBuffer data = new NativeByteBuffer(photo.getObjectSize());
                     photo.serializeToStream(data);
                     state.bindInteger(1, did);
-                    state.bindLong(2, photo.var_id);
+                    state.bindLong(2, photo.id);
                     state.bindByteBuffer(3, data);
                     state.step();
                     data.reuse();
@@ -2042,7 +2108,7 @@ public class MessagesStorage {
             }
             state.dispose();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -2054,6 +2120,7 @@ public class MessagesStorage {
         try {
             NativeByteBuffer data;
             Message message;
+            int a;
             ArrayList<File> filesToDelete = new ArrayList();
             ArrayList<Message> messages = new ArrayList();
             SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT data, mid, date, uid FROM messages WHERE mid IN (%s)", new Object[]{TextUtils.join(",", mids)}), new Object[0]);
@@ -2065,20 +2132,24 @@ public class MessagesStorage {
                     data.reuse();
                     if (message.media != null) {
                         File file;
+                        int N;
                         if (message.media.document != null) {
                             file = FileLoader.getPathToAttach(message.media.document, true);
                             if (file != null && file.toString().length() > 0) {
                                 filesToDelete.add(file);
                             }
-                            file = FileLoader.getPathToAttach(message.media.document.thumb, true);
-                            if (file != null && file.toString().length() > 0) {
-                                filesToDelete.add(file);
+                            N = message.media.document.thumbs.size();
+                            for (a = 0; a < N; a++) {
+                                file = FileLoader.getPathToAttach((PhotoSize) message.media.document.thumbs.get(a));
+                                if (file != null && file.toString().length() > 0) {
+                                    filesToDelete.add(file);
+                                }
                             }
                             message.media.document = new TL_documentEmpty();
                         } else if (message.media.photo != null) {
-                            Iterator it = message.media.photo.sizes.iterator();
-                            while (it.hasNext()) {
-                                file = FileLoader.getPathToAttach((PhotoSize) it.next(), true);
+                            N = message.media.photo.sizes.size();
+                            for (a = 0; a < N; a++) {
+                                file = FileLoader.getPathToAttach((PhotoSize) message.media.photo.sizes.get(a));
                                 if (file != null && file.toString().length() > 0) {
                                     filesToDelete.add(file);
                                 }
@@ -2086,7 +2157,7 @@ public class MessagesStorage {
                             message.media.photo = new TL_photoEmpty();
                         }
                         message.media.flags &= -2;
-                        message.var_id = cursor.intValue(1);
+                        message.id = cursor.intValue(1);
                         message.date = cursor.intValue(2);
                         message.dialog_id = cursor.longValue(3);
                         messages.add(message);
@@ -2096,12 +2167,12 @@ public class MessagesStorage {
             cursor.dispose();
             if (!messages.isEmpty()) {
                 SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO messages VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?)");
-                for (int a = 0; a < messages.size(); a++) {
+                for (a = 0; a < messages.size(); a++) {
                     message = (Message) messages.get(a);
                     data = new NativeByteBuffer(message.getObjectSize());
                     message.serializeToStream(data);
                     state.requery();
-                    state.bindLong(1, (long) message.var_id);
+                    state.bindLong(1, (long) message.id);
                     state.bindLong(2, message.dialog_id);
                     state.bindInteger(3, MessageObject.getUnreadFlags(message));
                     state.bindInteger(4, message.send_state);
@@ -2120,11 +2191,11 @@ public class MessagesStorage {
                     data.reuse();
                 }
                 state.dispose();
-                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$118(this, messages));
+                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$119(this, messages));
             }
             FileLoader.getInstance(this.currentAccount).deleteFiles(filesToDelete, 0);
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -2215,34 +2286,159 @@ public class MessagesStorage {
     /* JADX WARNING: Missing block: B:45:?, code:
             return;
      */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    final /* synthetic */ void lambda$updateMessagePollResults$48$MessagesStorage(long pollId, TL_poll poll, TL_pollResults results) {
-        Throwable e;
-        ArrayList<Long> mids = null;
-        try {
-            SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT mid FROM polls WHERE id = %d", new Object[]{Long.valueOf(pollId)}), new Object[0]);
-            while (true) {
-                ArrayList<Long> mids2;
-                try {
-                    mids2 = mids;
-                    if (!cursor.next()) {
-                        break;
-                    }
-                    if (mids2 == null) {
-                        mids = new ArrayList();
-                    } else {
-                        mids = mids2;
-                    }
-                    mids.add(Long.valueOf(cursor.longValue(0)));
-                } catch (Exception e2) {
-                    e = e2;
-                    mids = mids2;
-                }
-            }
-        } catch (Exception e3) {
-            e = e3;
-        }
-        FileLog.m13e(e);
+    final /* synthetic */ void lambda$updateMessagePollResults$48$MessagesStorage(long r20, org.telegram.tgnet.TLRPC.TL_poll r22, org.telegram.tgnet.TLRPC.TL_pollResults r23) {
+        /*
+        r19 = this;
+        r10 = 0;
+        r0 = r19;
+        r13 = r0.database;	 Catch:{ Exception -> 0x0121 }
+        r14 = java.util.Locale.US;	 Catch:{ Exception -> 0x0121 }
+        r15 = "SELECT mid FROM polls WHERE id = %d";
+        r16 = 1;
+        r0 = r16;
+        r0 = new java.lang.Object[r0];	 Catch:{ Exception -> 0x0121 }
+        r16 = r0;
+        r17 = 0;
+        r18 = java.lang.Long.valueOf(r20);	 Catch:{ Exception -> 0x0121 }
+        r16[r17] = r18;	 Catch:{ Exception -> 0x0121 }
+        r14 = java.lang.String.format(r14, r15, r16);	 Catch:{ Exception -> 0x0121 }
+        r15 = 0;
+        r15 = new java.lang.Object[r15];	 Catch:{ Exception -> 0x0121 }
+        r4 = r13.queryFinalized(r14, r15);	 Catch:{ Exception -> 0x0121 }
+        r11 = r10;
+    L_0x0026:
+        r13 = r4.next();	 Catch:{ Exception -> 0x0113 }
+        if (r13 == 0) goto L_0x0041;
+    L_0x002c:
+        if (r11 != 0) goto L_0x0123;
+    L_0x002e:
+        r10 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0113 }
+        r10.<init>();	 Catch:{ Exception -> 0x0113 }
+    L_0x0033:
+        r13 = 0;
+        r14 = r4.longValue(r13);	 Catch:{ Exception -> 0x0121 }
+        r13 = java.lang.Long.valueOf(r14);	 Catch:{ Exception -> 0x0121 }
+        r10.add(r13);	 Catch:{ Exception -> 0x0121 }
+        r11 = r10;
+        goto L_0x0026;
+    L_0x0041:
+        r4.dispose();	 Catch:{ Exception -> 0x0113 }
+        if (r11 == 0) goto L_0x0118;
+    L_0x0046:
+        r0 = r19;
+        r13 = r0.database;	 Catch:{ Exception -> 0x0113 }
+        r13.beginTransaction();	 Catch:{ Exception -> 0x0113 }
+        r3 = 0;
+        r2 = r11.size();	 Catch:{ Exception -> 0x0113 }
+    L_0x0052:
+        if (r3 >= r2) goto L_0x0119;
+    L_0x0054:
+        r9 = r11.get(r3);	 Catch:{ Exception -> 0x0113 }
+        r9 = (java.lang.Long) r9;	 Catch:{ Exception -> 0x0113 }
+        r0 = r19;
+        r13 = r0.database;	 Catch:{ Exception -> 0x0113 }
+        r14 = java.util.Locale.US;	 Catch:{ Exception -> 0x0113 }
+        r15 = "SELECT data FROM messages WHERE mid = %d";
+        r16 = 1;
+        r0 = r16;
+        r0 = new java.lang.Object[r0];	 Catch:{ Exception -> 0x0113 }
+        r16 = r0;
+        r17 = 0;
+        r16[r17] = r9;	 Catch:{ Exception -> 0x0113 }
+        r14 = java.lang.String.format(r14, r15, r16);	 Catch:{ Exception -> 0x0113 }
+        r15 = 0;
+        r15 = new java.lang.Object[r15];	 Catch:{ Exception -> 0x0113 }
+        r4 = r13.queryFinalized(r14, r15);	 Catch:{ Exception -> 0x0113 }
+        r13 = r4.next();	 Catch:{ Exception -> 0x0113 }
+        if (r13 == 0) goto L_0x00ee;
+    L_0x0080:
+        r13 = 0;
+        r5 = r4.byteBufferValue(r13);	 Catch:{ Exception -> 0x0113 }
+        if (r5 == 0) goto L_0x00e7;
+    L_0x0087:
+        r13 = 0;
+        r13 = r5.readInt32(r13);	 Catch:{ Exception -> 0x0113 }
+        r14 = 0;
+        r8 = org.telegram.tgnet.TLRPC.Message.TLdeserialize(r5, r13, r14);	 Catch:{ Exception -> 0x0113 }
+        r0 = r19;
+        r13 = r0.currentAccount;	 Catch:{ Exception -> 0x0113 }
+        r13 = org.telegram.messenger.UserConfig.getInstance(r13);	 Catch:{ Exception -> 0x0113 }
+        r13 = r13.clientUserId;	 Catch:{ Exception -> 0x0113 }
+        r8.readAttachPath(r5, r13);	 Catch:{ Exception -> 0x0113 }
+        r5.reuse();	 Catch:{ Exception -> 0x0113 }
+        r13 = r8.media;	 Catch:{ Exception -> 0x0113 }
+        r13 = r13 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaPoll;	 Catch:{ Exception -> 0x0113 }
+        if (r13 == 0) goto L_0x00e7;
+    L_0x00a7:
+        r7 = r8.media;	 Catch:{ Exception -> 0x0113 }
+        r7 = (org.telegram.tgnet.TLRPC.TL_messageMediaPoll) r7;	 Catch:{ Exception -> 0x0113 }
+        if (r22 == 0) goto L_0x00b1;
+    L_0x00ad:
+        r0 = r22;
+        r7.poll = r0;	 Catch:{ Exception -> 0x0113 }
+    L_0x00b1:
+        if (r23 == 0) goto L_0x00b8;
+    L_0x00b3:
+        r0 = r23;
+        org.telegram.messenger.MessageObject.updatePollResults(r7, r0);	 Catch:{ Exception -> 0x0113 }
+    L_0x00b8:
+        r0 = r19;
+        r13 = r0.database;	 Catch:{ Exception -> 0x0113 }
+        r14 = "UPDATE messages SET data = ? WHERE mid = ?";
+        r12 = r13.executeFast(r14);	 Catch:{ Exception -> 0x0113 }
+        r5 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0113 }
+        r13 = r8.getObjectSize();	 Catch:{ Exception -> 0x0113 }
+        r5.<init>(r13);	 Catch:{ Exception -> 0x0113 }
+        r8.serializeToStream(r5);	 Catch:{ Exception -> 0x0113 }
+        r12.requery();	 Catch:{ Exception -> 0x0113 }
+        r13 = 1;
+        r12.bindByteBuffer(r13, r5);	 Catch:{ Exception -> 0x0113 }
+        r13 = 2;
+        r14 = r9.longValue();	 Catch:{ Exception -> 0x0113 }
+        r12.bindLong(r13, r14);	 Catch:{ Exception -> 0x0113 }
+        r12.step();	 Catch:{ Exception -> 0x0113 }
+        r5.reuse();	 Catch:{ Exception -> 0x0113 }
+        r12.dispose();	 Catch:{ Exception -> 0x0113 }
+    L_0x00e7:
+        r4.dispose();	 Catch:{ Exception -> 0x0113 }
+        r3 = r3 + 1;
+        goto L_0x0052;
+    L_0x00ee:
+        r0 = r19;
+        r13 = r0.database;	 Catch:{ Exception -> 0x0113 }
+        r14 = java.util.Locale.US;	 Catch:{ Exception -> 0x0113 }
+        r15 = "DELETE FROM polls WHERE mid = %d";
+        r16 = 1;
+        r0 = r16;
+        r0 = new java.lang.Object[r0];	 Catch:{ Exception -> 0x0113 }
+        r16 = r0;
+        r17 = 0;
+        r16[r17] = r9;	 Catch:{ Exception -> 0x0113 }
+        r14 = java.lang.String.format(r14, r15, r16);	 Catch:{ Exception -> 0x0113 }
+        r13 = r13.executeFast(r14);	 Catch:{ Exception -> 0x0113 }
+        r13 = r13.stepThis();	 Catch:{ Exception -> 0x0113 }
+        r13.dispose();	 Catch:{ Exception -> 0x0113 }
+        goto L_0x00e7;
+    L_0x0113:
+        r6 = move-exception;
+        r10 = r11;
+    L_0x0115:
+        org.telegram.messenger.FileLog.e(r6);
+    L_0x0118:
+        return;
+    L_0x0119:
+        r0 = r19;
+        r13 = r0.database;	 Catch:{ Exception -> 0x0113 }
+        r13.commitTransaction();	 Catch:{ Exception -> 0x0113 }
+        goto L_0x0118;
+    L_0x0121:
+        r6 = move-exception;
+        goto L_0x0115;
+    L_0x0123:
+        r10 = r11;
+        goto L_0x0033;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateMessagePollResults$48$MessagesStorage(long, org.telegram.tgnet.TLRPC$TL_poll, org.telegram.tgnet.TLRPC$TL_pollResults):void");
     }
 
     public void getNewTask(ArrayList<Integer> oldTask, int channelId) {
@@ -2255,7 +2451,7 @@ public class MessagesStorage {
                 String ids = TextUtils.join(",", oldTask);
                 this.database.executeFast(String.format(Locale.US, "DELETE FROM enc_tasks_v2 WHERE mid IN(%s)", new Object[]{ids})).stepThis().dispose();
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
                 return;
             }
         }
@@ -2303,7 +2499,7 @@ public class MessagesStorage {
             sparseArray.put(did, Integer.valueOf(old_mentions_count));
             MessagesController.getInstance(this.currentAccount).processDialogsUpdateRead(null, sparseArray);
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -2315,7 +2511,7 @@ public class MessagesStorage {
         try {
             this.database.executeFast(String.format(Locale.US, "UPDATE messages SET mention = 1, read_state = read_state & ~2 WHERE mid = %d", new Object[]{Long.valueOf(mid)})).stepThis().dispose();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -2328,7 +2524,7 @@ public class MessagesStorage {
             try {
                 this.database.executeFast(String.format(Locale.US, "UPDATE messages SET read_state = read_state | 2 WHERE uid = %d AND mention = 1 AND read_state IN(0, 1)", new Object[]{Long.valueOf(did)})).stepThis().dispose();
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
                 return;
             }
         }
@@ -2356,7 +2552,7 @@ public class MessagesStorage {
             }
             midsArray.add(Long.valueOf(mid));
             messages.put(minDate, midsArray);
-            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$117(this, inner, midsArray));
+            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$118(this, inner, midsArray));
             SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO enc_tasks_v2 VALUES(?, ?)");
             for (int a = 0; a < messages.size(); a++) {
                 int key = messages.keyAt(a);
@@ -2372,7 +2568,7 @@ public class MessagesStorage {
             this.database.executeFast(String.format(Locale.US, "UPDATE messages SET ttl = 0 WHERE mid = %d", new Object[]{Long.valueOf(mid)})).stepThis().dispose();
             MessagesController.getInstance(this.currentAccount).didAddedNewTask(minDate, messages);
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -2388,7 +2584,7 @@ public class MessagesStorage {
     }
 
     final /* synthetic */ void lambda$createTaskForSecretChat$56$MessagesStorage(ArrayList random_ids, int chatId, int isOut, int time, int readTime) {
-        int minDate = ConnectionsManager.DEFAULT_DATACENTER_ID;
+        int minDate = Integer.MAX_VALUE;
         try {
             SQLiteCursor cursor;
             ArrayList<Long> arr;
@@ -2430,7 +2626,7 @@ public class MessagesStorage {
             }
             cursor.dispose();
             if (random_ids != null) {
-                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$116(this, midsArray));
+                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$117(this, midsArray));
             }
             if (messages.size() != 0) {
                 this.database.beginTransaction();
@@ -2451,7 +2647,7 @@ public class MessagesStorage {
                 MessagesController.getInstance(this.currentAccount).didAddedNewTask(minDate, messages);
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -2579,7 +2775,7 @@ public class MessagesStorage {
                 MessagesController.getInstance(this.currentAccount).reloadMentionsCountForChannels(channelMentionsToReload);
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -2641,11 +2837,11 @@ public class MessagesStorage {
             cursor.dispose();
             if (info instanceof TL_chatFull) {
                 info.participants = participants;
-                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$115(this, info));
+                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$116(this, info));
                 SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?, ?, ?)");
                 data = new NativeByteBuffer(info.getObjectSize());
                 info.serializeToStream(data);
-                state.bindInteger(1, info.var_id);
+                state.bindInteger(1, info.id);
                 state.bindByteBuffer(2, data);
                 state.bindInteger(3, info.pinned_msg_id);
                 state.bindInteger(4, info.online_count);
@@ -2654,7 +2850,7 @@ public class MessagesStorage {
                 data.reuse();
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -2676,7 +2872,7 @@ public class MessagesStorage {
             cursor.dispose();
             MessagesController.getInstance(this.currentAccount).processLoadedChannelAdmins(ids, chatId, true);
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -2699,7 +2895,7 @@ public class MessagesStorage {
             state.dispose();
             this.database.commitTransaction();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -2731,7 +2927,7 @@ public class MessagesStorage {
             this.database.commitTransaction();
             loadChatInfo(channel_id, null, false, true);
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -2759,7 +2955,7 @@ public class MessagesStorage {
             state.dispose();
             data.reuse();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -2787,12 +2983,12 @@ public class MessagesStorage {
                         data.reuse();
                     }
                 } catch (Throwable e) {
-                    FileLog.m13e(e);
+                    FileLog.e(e);
                 }
             }
             cursor.dispose();
         } catch (Throwable e2) {
-            FileLog.m13e(e2);
+            FileLog.e(e2);
         } finally {
             requestDelegate.run(result, null);
         }
@@ -2808,7 +3004,7 @@ public class MessagesStorage {
         TL_userFull info = null;
         MessageObject pinnedMessageObject;
         try {
-            SQLiteCursor cursor = this.database.queryFinalized("SELECT info, pinned FROM user_settings WHERE uid = " + user.var_id, new Object[0]);
+            SQLiteCursor cursor = this.database.queryFinalized("SELECT info, pinned FROM user_settings WHERE uid = " + user.id, new Object[0]);
             if (cursor.next()) {
                 AbstractSerializedData data = cursor.byteBufferValue(0);
                 if (data != null) {
@@ -2821,11 +3017,11 @@ public class MessagesStorage {
             if (info == null || info.pinned_msg_id == 0) {
                 pinnedMessageObject = null;
             } else {
-                pinnedMessageObject = DataQuery.getInstance(this.currentAccount).loadPinnedMessage((long) user.var_id, 0, info.pinned_msg_id, false);
+                pinnedMessageObject = DataQuery.getInstance(this.currentAccount).loadPinnedMessage((long) user.id, 0, info.pinned_msg_id, false);
             }
             MessagesController.getInstance(this.currentAccount).processUserInfo(user, info, true, force, pinnedMessageObject, classGuid);
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             pinnedMessageObject = null;
         } finally {
             MessagesController.getInstance(this.currentAccount).processUserInfo(user, null, true, force, null, classGuid);
@@ -2839,21 +3035,21 @@ public class MessagesStorage {
     final /* synthetic */ void lambda$updateUserInfo$66$MessagesStorage(boolean ifExist, TL_userFull info) {
         if (ifExist) {
             try {
-                SQLiteCursor cursor = this.database.queryFinalized("SELECT uid FROM user_settings WHERE uid = " + info.user.var_id, new Object[0]);
+                SQLiteCursor cursor = this.database.queryFinalized("SELECT uid FROM user_settings WHERE uid = " + info.user.id, new Object[0]);
                 boolean exist = cursor.next();
                 cursor.dispose();
                 if (!exist) {
                     return;
                 }
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
                 return;
             }
         }
         SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO user_settings VALUES(?, ?, ?)");
         NativeByteBuffer data = new NativeByteBuffer(info.getObjectSize());
         info.serializeToStream(data);
-        state.bindInteger(1, info.user.var_id);
+        state.bindInteger(1, info.user.id);
         state.bindByteBuffer(2, data);
         state.bindInteger(3, info.pinned_msg_id);
         state.step();
@@ -2868,19 +3064,19 @@ public class MessagesStorage {
     final /* synthetic */ void lambda$updateChatInfo$67$MessagesStorage(ChatFull info, boolean ifExist) {
         int currentOnline = -1;
         try {
-            SQLiteCursor cursor = this.database.queryFinalized("SELECT online FROM chat_settings_v2 WHERE uid = " + info.var_id, new Object[0]);
+            SQLiteCursor cursor = this.database.queryFinalized("SELECT online FROM chat_settings_v2 WHERE uid = " + info.id, new Object[0]);
             if (cursor.next()) {
                 currentOnline = cursor.intValue(0);
             }
             cursor.dispose();
             if (!ifExist || currentOnline != -1) {
-                if (currentOnline >= 0 && (info.flags & MessagesController.UPDATE_MASK_CHANNEL) == 0) {
+                if (currentOnline >= 0 && (info.flags & 8192) == 0) {
                     info.online_count = currentOnline;
                 }
                 SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?, ?, ?)");
                 NativeByteBuffer data = new NativeByteBuffer(info.getObjectSize());
                 info.serializeToStream(data);
-                state.bindInteger(1, info.var_id);
+                state.bindInteger(1, info.id);
                 state.bindByteBuffer(2, data);
                 state.bindInteger(3, info.pinned_msg_id);
                 state.bindInteger(4, info.online_count);
@@ -2888,7 +3084,7 @@ public class MessagesStorage {
                 state.dispose();
                 data.reuse();
                 if (info instanceof TL_channelFull) {
-                    cursor = this.database.queryFinalized("SELECT date, pts, last_mid, inbox_max, outbox_max, pinned, unread_count_i, flags FROM dialogs WHERE did = " + (-info.var_id), new Object[0]);
+                    cursor = this.database.queryFinalized("SELECT date, pts, last_mid, inbox_max, outbox_max, pinned, unread_count_i, flags FROM dialogs WHERE did = " + (-info.id), new Object[0]);
                     if (cursor.next() && cursor.intValue(3) < info.read_inbox_max_id) {
                         int dialog_date = cursor.intValue(0);
                         int pts = cursor.intValue(1);
@@ -2898,7 +3094,7 @@ public class MessagesStorage {
                         int mentions = cursor.intValue(6);
                         int flags = cursor.intValue(7);
                         state = this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                        state.bindLong(1, (long) (-info.var_id));
+                        state.bindLong(1, (long) (-info.id));
                         state.bindInteger(2, dialog_date);
                         state.bindInteger(3, info.unread_count);
                         state.bindLong(4, last_mid);
@@ -2917,7 +3113,7 @@ public class MessagesStorage {
                 }
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -2942,7 +3138,7 @@ public class MessagesStorage {
             if (info instanceof TL_userFull) {
                 info.pinned_msg_id = messageId;
                 info.flags |= 64;
-                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$114(this, userId, info));
+                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$115(this, userId, info));
                 SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO user_settings VALUES(?, ?, ?)");
                 data = new NativeByteBuffer(info.getObjectSize());
                 info.serializeToStream(data);
@@ -2954,7 +3150,7 @@ public class MessagesStorage {
                 data.reuse();
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -2975,7 +3171,7 @@ public class MessagesStorage {
             state.step();
             state.dispose();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -3006,7 +3202,7 @@ public class MessagesStorage {
                     info.pinned_msg_id = messageId;
                     info.flags |= 64;
                 }
-                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$113(this, info));
+                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$114(this, info));
                 SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?, ?, ?)");
                 data = new NativeByteBuffer(info.getObjectSize());
                 info.serializeToStream(data);
@@ -3019,7 +3215,7 @@ public class MessagesStorage {
                 data.reuse();
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -3092,7 +3288,7 @@ public class MessagesStorage {
                     }
                 }
                 info.participants.version = version;
-                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$112(this, info));
+                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$113(this, info));
                 SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO chat_settings_v2 VALUES(?, ?, ?, ?)");
                 data = new NativeByteBuffer(info.getObjectSize());
                 info.serializeToStream(data);
@@ -3105,7 +3301,7 @@ public class MessagesStorage {
                 data.reuse();
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -3120,48 +3316,78 @@ public class MessagesStorage {
         try {
             countDownLatch.await();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
         return result[0];
     }
 
     /* JADX WARNING: Failed to extract finally block: empty outs */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    final /* synthetic */ void lambda$isMigratedChat$75$MessagesStorage(int chat_id, boolean[] result, CountDownLatch countDownLatch) {
-        boolean z = false;
-        try {
-            SQLiteCursor cursor = this.database.queryFinalized("SELECT info FROM chat_settings_v2 WHERE uid = " + chat_id, new Object[0]);
-            ChatFull info = null;
-            ArrayList<User> loadedUsers = new ArrayList();
-            if (cursor.next()) {
-                NativeByteBuffer data = cursor.byteBufferValue(0);
-                if (data != null) {
-                    info = ChatFull.TLdeserialize(data, data.readInt32(false), false);
-                    data.reuse();
-                }
-            }
-            cursor.dispose();
-            if ((info instanceof TL_channelFull) && info.migrated_from_chat_id != 0) {
-                z = true;
-            }
-            result[0] = z;
-            if (countDownLatch != null) {
-                countDownLatch.countDown();
-            }
-            if (countDownLatch != null) {
-                countDownLatch.countDown();
-            }
-        } catch (Throwable e) {
-            FileLog.m13e(e);
-            if (countDownLatch != null) {
-                countDownLatch.countDown();
-            }
-        } catch (Throwable th) {
-            if (countDownLatch != null) {
-                countDownLatch.countDown();
-            }
-            throw th;
-        }
+    final /* synthetic */ void lambda$isMigratedChat$75$MessagesStorage(int r10, boolean[] r11, java.util.concurrent.CountDownLatch r12) {
+        /*
+        r9 = this;
+        r5 = 0;
+        r6 = r9.database;	 Catch:{ Exception -> 0x0058 }
+        r7 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0058 }
+        r7.<init>();	 Catch:{ Exception -> 0x0058 }
+        r8 = "SELECT info FROM chat_settings_v2 WHERE uid = ";
+        r7 = r7.append(r8);	 Catch:{ Exception -> 0x0058 }
+        r7 = r7.append(r10);	 Catch:{ Exception -> 0x0058 }
+        r7 = r7.toString();	 Catch:{ Exception -> 0x0058 }
+        r8 = 0;
+        r8 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0058 }
+        r0 = r6.queryFinalized(r7, r8);	 Catch:{ Exception -> 0x0058 }
+        r3 = 0;
+        r4 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0058 }
+        r4.<init>();	 Catch:{ Exception -> 0x0058 }
+        r6 = r0.next();	 Catch:{ Exception -> 0x0058 }
+        if (r6 == 0) goto L_0x003e;
+    L_0x002a:
+        r6 = 0;
+        r1 = r0.byteBufferValue(r6);	 Catch:{ Exception -> 0x0058 }
+        if (r1 == 0) goto L_0x003e;
+    L_0x0031:
+        r6 = 0;
+        r6 = r1.readInt32(r6);	 Catch:{ Exception -> 0x0058 }
+        r7 = 0;
+        r3 = org.telegram.tgnet.TLRPC.ChatFull.TLdeserialize(r1, r6, r7);	 Catch:{ Exception -> 0x0058 }
+        r1.reuse();	 Catch:{ Exception -> 0x0058 }
+    L_0x003e:
+        r0.dispose();	 Catch:{ Exception -> 0x0058 }
+        r6 = 0;
+        r7 = r3 instanceof org.telegram.tgnet.TLRPC.TL_channelFull;	 Catch:{ Exception -> 0x0058 }
+        if (r7 == 0) goto L_0x004b;
+    L_0x0046:
+        r7 = r3.migrated_from_chat_id;	 Catch:{ Exception -> 0x0058 }
+        if (r7 == 0) goto L_0x004b;
+    L_0x004a:
+        r5 = 1;
+    L_0x004b:
+        r11[r6] = r5;	 Catch:{ Exception -> 0x0058 }
+        if (r12 == 0) goto L_0x0052;
+    L_0x004f:
+        r12.countDown();	 Catch:{ Exception -> 0x0058 }
+    L_0x0052:
+        if (r12 == 0) goto L_0x0057;
+    L_0x0054:
+        r12.countDown();
+    L_0x0057:
+        return;
+    L_0x0058:
+        r2 = move-exception;
+        org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x0062 }
+        if (r12 == 0) goto L_0x0057;
+    L_0x005e:
+        r12.countDown();
+        goto L_0x0057;
+    L_0x0062:
+        r5 = move-exception;
+        if (r12 == 0) goto L_0x0068;
+    L_0x0065:
+        r12.countDown();
+    L_0x0068:
+        throw r5;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$isMigratedChat$75$MessagesStorage(int, boolean[], java.util.concurrent.CountDownLatch):void");
     }
 
     public void loadChatInfo(int chat_id, CountDownLatch countDownLatch, boolean force, boolean byChannelUsers) {
@@ -3183,117 +3409,310 @@ public class MessagesStorage {
             r22 = r2;
             r4 = r17;
      */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    final /* synthetic */ void lambda$loadChatInfo$76$MessagesStorage(int chat_id, CountDownLatch countDownLatch, boolean force, boolean byChannelUsers) {
-        Throwable e;
-        MessageObject pinnedMessageObject = null;
-        ChatFull info = null;
-        ArrayList<User> loadedUsers = new ArrayList();
-        try {
-            NativeByteBuffer data;
-            SQLiteCursor cursor = this.database.queryFinalized("SELECT info, pinned, online FROM chat_settings_v2 WHERE uid = " + chat_id, new Object[0]);
-            if (cursor.next()) {
-                data = cursor.byteBufferValue(0);
-                if (data != null) {
-                    info = ChatFull.TLdeserialize(data, data.readInt32(false), false);
-                    data.reuse();
-                    info.pinned_msg_id = cursor.intValue(1);
-                    info.online_count = cursor.intValue(2);
-                }
-            }
-            ChatFull info2 = info;
-            try {
-                cursor.dispose();
-                StringBuilder usersToLoad;
-                int a;
-                if (info2 instanceof TL_chatFull) {
-                    usersToLoad = new StringBuilder();
-                    for (a = 0; a < info2.participants.participants.size(); a++) {
-                        ChatParticipant c = (ChatParticipant) info2.participants.participants.get(a);
-                        if (usersToLoad.length() != 0) {
-                            usersToLoad.append(",");
-                        }
-                        usersToLoad.append(c.user_id);
-                    }
-                    if (usersToLoad.length() != 0) {
-                        getUsersInternal(usersToLoad.toString(), loadedUsers);
-                    }
-                } else if (info2 instanceof TL_channelFull) {
-                    cursor = this.database.queryFinalized("SELECT us.data, us.status, cu.data, cu.date FROM channel_users_v2 as cu LEFT JOIN users as us ON us.uid = cu.uid WHERE cu.did = " + (-chat_id) + " ORDER BY cu.date DESC", new Object[0]);
-                    info2.participants = new TL_chatParticipants();
-                    while (cursor.next()) {
-                        User user = null;
-                        ChannelParticipant participant = null;
-                        data = cursor.byteBufferValue(0);
-                        if (data != null) {
-                            user = User.TLdeserialize(data, data.readInt32(false), false);
-                            data.reuse();
-                        }
-                        data = cursor.byteBufferValue(2);
-                        if (data != null) {
-                            participant = ChannelParticipant.TLdeserialize(data, data.readInt32(false), false);
-                            data.reuse();
-                        }
-                        if (!(user == null || participant == null)) {
-                            if (user.status != null) {
-                                user.status.expires = cursor.intValue(1);
-                            }
-                            loadedUsers.add(user);
-                            participant.date = cursor.intValue(3);
-                            TL_chatChannelParticipant chatChannelParticipant = new TL_chatChannelParticipant();
-                            chatChannelParticipant.user_id = participant.user_id;
-                            chatChannelParticipant.date = participant.date;
-                            chatChannelParticipant.inviter_id = participant.inviter_id;
-                            chatChannelParticipant.channelParticipant = participant;
-                            info2.participants.participants.add(chatChannelParticipant);
-                        }
-                    }
-                    cursor.dispose();
-                    usersToLoad = new StringBuilder();
-                    for (a = 0; a < info2.bot_info.size(); a++) {
-                        BotInfo botInfo = (BotInfo) info2.bot_info.get(a);
-                        if (usersToLoad.length() != 0) {
-                            usersToLoad.append(",");
-                        }
-                        usersToLoad.append(botInfo.user_id);
-                    }
-                    if (usersToLoad.length() != 0) {
-                        getUsersInternal(usersToLoad.toString(), loadedUsers);
-                    }
-                }
-                if (countDownLatch != null) {
-                    countDownLatch.countDown();
-                }
-                if (!(info2 == null || info2.pinned_msg_id == 0)) {
-                    pinnedMessageObject = DataQuery.getInstance(this.currentAccount).loadPinnedMessage((long) (-chat_id), info2 instanceof TL_channelFull ? chat_id : 0, info2.pinned_msg_id, false);
-                }
-                MessagesController.getInstance(this.currentAccount).processChatInfo(chat_id, info2, loadedUsers, true, force, byChannelUsers, pinnedMessageObject);
-                if (countDownLatch != null) {
-                    countDownLatch.countDown();
-                    info = info2;
-                    return;
-                }
-            } catch (Throwable e2) {
-                FileLog.m13e(e2);
-            } catch (Throwable th) {
-            }
-        } catch (Exception e3) {
-            e2 = e3;
-            try {
-                FileLog.m13e(e2);
-                MessagesController.getInstance(this.currentAccount).processChatInfo(chat_id, info, loadedUsers, true, force, byChannelUsers, null);
-                if (countDownLatch != null) {
-                    countDownLatch.countDown();
-                }
-            } catch (Throwable th2) {
-                Throwable th3 = th2;
-                MessagesController.getInstance(this.currentAccount).processChatInfo(chat_id, info, loadedUsers, true, force, byChannelUsers, null);
-                if (countDownLatch != null) {
-                    countDownLatch.countDown();
-                }
-                throw th3;
-            }
-        }
+    final /* synthetic */ void lambda$loadChatInfo$76$MessagesStorage(int r24, java.util.concurrent.CountDownLatch r25, boolean r26, boolean r27) {
+        /*
+        r23 = this;
+        r9 = 0;
+        r4 = 0;
+        r18 = new java.util.ArrayList;
+        r18.<init>();
+        r0 = r23;
+        r2 = r0.database;	 Catch:{ Exception -> 0x0232 }
+        r3 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0232 }
+        r3.<init>();	 Catch:{ Exception -> 0x0232 }
+        r5 = "SELECT info, pinned, online FROM chat_settings_v2 WHERE uid = ";
+        r3 = r3.append(r5);	 Catch:{ Exception -> 0x0232 }
+        r0 = r24;
+        r3 = r3.append(r0);	 Catch:{ Exception -> 0x0232 }
+        r3 = r3.toString();	 Catch:{ Exception -> 0x0232 }
+        r5 = 0;
+        r5 = new java.lang.Object[r5];	 Catch:{ Exception -> 0x0232 }
+        r14 = r2.queryFinalized(r3, r5);	 Catch:{ Exception -> 0x0232 }
+        r2 = r14.next();	 Catch:{ Exception -> 0x0232 }
+        if (r2 == 0) goto L_0x0050;
+    L_0x002e:
+        r2 = 0;
+        r15 = r14.byteBufferValue(r2);	 Catch:{ Exception -> 0x0232 }
+        if (r15 == 0) goto L_0x0050;
+    L_0x0035:
+        r2 = 0;
+        r2 = r15.readInt32(r2);	 Catch:{ Exception -> 0x0232 }
+        r3 = 0;
+        r4 = org.telegram.tgnet.TLRPC.ChatFull.TLdeserialize(r15, r2, r3);	 Catch:{ Exception -> 0x0232 }
+        r15.reuse();	 Catch:{ Exception -> 0x0232 }
+        r2 = 1;
+        r2 = r14.intValue(r2);	 Catch:{ Exception -> 0x0232 }
+        r4.pinned_msg_id = r2;	 Catch:{ Exception -> 0x0232 }
+        r2 = 2;
+        r2 = r14.intValue(r2);	 Catch:{ Exception -> 0x0232 }
+        r4.online_count = r2;	 Catch:{ Exception -> 0x0232 }
+    L_0x0050:
+        r17 = r4;
+        r14.dispose();	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r0 = r17;
+        r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_chatFull;	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        if (r2 == 0) goto L_0x00ea;
+    L_0x005b:
+        r21 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r21.<init>();	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r10 = 0;
+    L_0x0061:
+        r0 = r17;
+        r2 = r0.participants;	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r2 = r2.participants;	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r2 = r2.size();	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        if (r10 >= r2) goto L_0x0091;
+    L_0x006d:
+        r0 = r17;
+        r2 = r0.participants;	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r2 = r2.participants;	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r12 = r2.get(r10);	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r12 = (org.telegram.tgnet.TLRPC.ChatParticipant) r12;	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r2 = r21.length();	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        if (r2 == 0) goto L_0x0087;
+    L_0x007f:
+        r2 = ",";
+        r0 = r21;
+        r0.append(r2);	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+    L_0x0087:
+        r2 = r12.user_id;	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r0 = r21;
+        r0.append(r2);	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r10 = r10 + 1;
+        goto L_0x0061;
+    L_0x0091:
+        r2 = r21.length();	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        if (r2 == 0) goto L_0x00a2;
+    L_0x0097:
+        r2 = r21.toString();	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r0 = r23;
+        r1 = r18;
+        r0.getUsersInternal(r2, r1);	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+    L_0x00a2:
+        if (r25 == 0) goto L_0x00a7;
+    L_0x00a4:
+        r25.countDown();	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+    L_0x00a7:
+        if (r17 == 0) goto L_0x00cc;
+    L_0x00a9:
+        r0 = r17;
+        r2 = r0.pinned_msg_id;	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        if (r2 == 0) goto L_0x00cc;
+    L_0x00af:
+        r0 = r23;
+        r2 = r0.currentAccount;	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r3 = org.telegram.messenger.DataQuery.getInstance(r2);	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r0 = r24;
+        r2 = -r0;
+        r4 = (long) r2;	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r0 = r17;
+        r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_channelFull;	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        if (r2 == 0) goto L_0x022b;
+    L_0x00c1:
+        r6 = r24;
+    L_0x00c3:
+        r0 = r17;
+        r7 = r0.pinned_msg_id;	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r8 = 0;
+        r9 = r3.loadPinnedMessage(r4, r6, r7, r8);	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+    L_0x00cc:
+        r0 = r23;
+        r2 = r0.currentAccount;
+        r2 = org.telegram.messenger.MessagesController.getInstance(r2);
+        r6 = 1;
+        r3 = r24;
+        r4 = r17;
+        r5 = r18;
+        r7 = r26;
+        r8 = r27;
+        r2.processChatInfo(r3, r4, r5, r6, r7, r8, r9);
+        if (r25 == 0) goto L_0x0235;
+    L_0x00e4:
+        r25.countDown();
+        r4 = r17;
+    L_0x00e9:
+        return;
+    L_0x00ea:
+        r0 = r17;
+        r2 = r0 instanceof org.telegram.tgnet.TLRPC.TL_channelFull;	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        if (r2 == 0) goto L_0x00a2;
+    L_0x00f0:
+        r0 = r23;
+        r2 = r0.database;	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r3 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r3.<init>();	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r5 = "SELECT us.data, us.status, cu.data, cu.date FROM channel_users_v2 as cu LEFT JOIN users as us ON us.uid = cu.uid WHERE cu.did = ";
+        r3 = r3.append(r5);	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r0 = r24;
+        r5 = -r0;
+        r3 = r3.append(r5);	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r5 = " ORDER BY cu.date DESC";
+        r3 = r3.append(r5);	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r3 = r3.toString();	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r5 = 0;
+        r5 = new java.lang.Object[r5];	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r14 = r2.queryFinalized(r3, r5);	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r2 = new org.telegram.tgnet.TLRPC$TL_chatParticipants;	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r2.<init>();	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r0 = r17;
+        r0.participants = r2;	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+    L_0x0122:
+        r2 = r14.next();	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        if (r2 == 0) goto L_0x01c4;
+    L_0x0128:
+        r20 = 0;
+        r19 = 0;
+        r2 = 0;
+        r15 = r14.byteBufferValue(r2);	 Catch:{ Exception -> 0x019e, all -> 0x020c }
+        if (r15 == 0) goto L_0x0140;
+    L_0x0133:
+        r2 = 0;
+        r2 = r15.readInt32(r2);	 Catch:{ Exception -> 0x019e, all -> 0x020c }
+        r3 = 0;
+        r20 = org.telegram.tgnet.TLRPC.User.TLdeserialize(r15, r2, r3);	 Catch:{ Exception -> 0x019e, all -> 0x020c }
+        r15.reuse();	 Catch:{ Exception -> 0x019e, all -> 0x020c }
+    L_0x0140:
+        r2 = 2;
+        r15 = r14.byteBufferValue(r2);	 Catch:{ Exception -> 0x019e, all -> 0x020c }
+        if (r15 == 0) goto L_0x0154;
+    L_0x0147:
+        r2 = 0;
+        r2 = r15.readInt32(r2);	 Catch:{ Exception -> 0x019e, all -> 0x020c }
+        r3 = 0;
+        r19 = org.telegram.tgnet.TLRPC.ChannelParticipant.TLdeserialize(r15, r2, r3);	 Catch:{ Exception -> 0x019e, all -> 0x020c }
+        r15.reuse();	 Catch:{ Exception -> 0x019e, all -> 0x020c }
+    L_0x0154:
+        if (r20 == 0) goto L_0x0122;
+    L_0x0156:
+        if (r19 == 0) goto L_0x0122;
+    L_0x0158:
+        r0 = r20;
+        r2 = r0.status;	 Catch:{ Exception -> 0x019e, all -> 0x020c }
+        if (r2 == 0) goto L_0x0169;
+    L_0x015e:
+        r0 = r20;
+        r2 = r0.status;	 Catch:{ Exception -> 0x019e, all -> 0x020c }
+        r3 = 1;
+        r3 = r14.intValue(r3);	 Catch:{ Exception -> 0x019e, all -> 0x020c }
+        r2.expires = r3;	 Catch:{ Exception -> 0x019e, all -> 0x020c }
+    L_0x0169:
+        r0 = r18;
+        r1 = r20;
+        r0.add(r1);	 Catch:{ Exception -> 0x019e, all -> 0x020c }
+        r2 = 3;
+        r2 = r14.intValue(r2);	 Catch:{ Exception -> 0x019e, all -> 0x020c }
+        r0 = r19;
+        r0.date = r2;	 Catch:{ Exception -> 0x019e, all -> 0x020c }
+        r13 = new org.telegram.tgnet.TLRPC$TL_chatChannelParticipant;	 Catch:{ Exception -> 0x019e, all -> 0x020c }
+        r13.<init>();	 Catch:{ Exception -> 0x019e, all -> 0x020c }
+        r0 = r19;
+        r2 = r0.user_id;	 Catch:{ Exception -> 0x019e, all -> 0x020c }
+        r13.user_id = r2;	 Catch:{ Exception -> 0x019e, all -> 0x020c }
+        r0 = r19;
+        r2 = r0.date;	 Catch:{ Exception -> 0x019e, all -> 0x020c }
+        r13.date = r2;	 Catch:{ Exception -> 0x019e, all -> 0x020c }
+        r0 = r19;
+        r2 = r0.inviter_id;	 Catch:{ Exception -> 0x019e, all -> 0x020c }
+        r13.inviter_id = r2;	 Catch:{ Exception -> 0x019e, all -> 0x020c }
+        r0 = r19;
+        r13.channelParticipant = r0;	 Catch:{ Exception -> 0x019e, all -> 0x020c }
+        r0 = r17;
+        r2 = r0.participants;	 Catch:{ Exception -> 0x019e, all -> 0x020c }
+        r2 = r2.participants;	 Catch:{ Exception -> 0x019e, all -> 0x020c }
+        r2.add(r13);	 Catch:{ Exception -> 0x019e, all -> 0x020c }
+        goto L_0x0122;
+    L_0x019e:
+        r16 = move-exception;
+        org.telegram.messenger.FileLog.e(r16);	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        goto L_0x0122;
+    L_0x01a3:
+        r16 = move-exception;
+        r4 = r17;
+    L_0x01a6:
+        org.telegram.messenger.FileLog.e(r16);	 Catch:{ all -> 0x022e }
+        r0 = r23;
+        r2 = r0.currentAccount;
+        r2 = org.telegram.messenger.MessagesController.getInstance(r2);
+        r6 = 1;
+        r3 = r24;
+        r5 = r18;
+        r7 = r26;
+        r8 = r27;
+        r2.processChatInfo(r3, r4, r5, r6, r7, r8, r9);
+        if (r25 == 0) goto L_0x00e9;
+    L_0x01bf:
+        r25.countDown();
+        goto L_0x00e9;
+    L_0x01c4:
+        r14.dispose();	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r21 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r21.<init>();	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r10 = 0;
+    L_0x01cd:
+        r0 = r17;
+        r2 = r0.bot_info;	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r2 = r2.size();	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        if (r10 >= r2) goto L_0x01f9;
+    L_0x01d7:
+        r0 = r17;
+        r2 = r0.bot_info;	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r11 = r2.get(r10);	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r11 = (org.telegram.tgnet.TLRPC.BotInfo) r11;	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r2 = r21.length();	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        if (r2 == 0) goto L_0x01ef;
+    L_0x01e7:
+        r2 = ",";
+        r0 = r21;
+        r0.append(r2);	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+    L_0x01ef:
+        r2 = r11.user_id;	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r0 = r21;
+        r0.append(r2);	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r10 = r10 + 1;
+        goto L_0x01cd;
+    L_0x01f9:
+        r2 = r21.length();	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        if (r2 == 0) goto L_0x00a2;
+    L_0x01ff:
+        r2 = r21.toString();	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        r0 = r23;
+        r1 = r18;
+        r0.getUsersInternal(r2, r1);	 Catch:{ Exception -> 0x01a3, all -> 0x020c }
+        goto L_0x00a2;
+    L_0x020c:
+        r2 = move-exception;
+        r22 = r2;
+        r4 = r17;
+    L_0x0211:
+        r0 = r23;
+        r2 = r0.currentAccount;
+        r2 = org.telegram.messenger.MessagesController.getInstance(r2);
+        r6 = 1;
+        r3 = r24;
+        r5 = r18;
+        r7 = r26;
+        r8 = r27;
+        r2.processChatInfo(r3, r4, r5, r6, r7, r8, r9);
+        if (r25 == 0) goto L_0x022a;
+    L_0x0227:
+        r25.countDown();
+    L_0x022a:
+        throw r22;
+    L_0x022b:
+        r6 = 0;
+        goto L_0x00c3;
+    L_0x022e:
+        r2 = move-exception;
+        r22 = r2;
+        goto L_0x0211;
+    L_0x0232:
+        r16 = move-exception;
+        goto L_0x01a6;
+    L_0x0235:
+        r4 = r17;
+        goto L_0x00e9;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$loadChatInfo$76$MessagesStorage(int, java.util.concurrent.CountDownLatch, boolean, boolean):void");
     }
 
     public void processPendingRead(long dialog_id, long maxPositiveId, long maxNegativeId, int max_date, boolean isChannel) {
@@ -3379,7 +3798,7 @@ public class MessagesStorage {
             state.dispose();
             this.database.commitTransaction();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -3394,7 +3813,7 @@ public class MessagesStorage {
             try {
                 this.database.executeFast("DELETE FROM contacts WHERE 1").stepThis().dispose();
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
                 return;
             }
         }
@@ -3421,7 +3840,7 @@ public class MessagesStorage {
         try {
             this.database.executeFast("DELETE FROM contacts WHERE uid IN(" + TextUtils.join(",", uids) + ")").stepThis().dispose();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -3440,7 +3859,7 @@ public class MessagesStorage {
                 this.database.executeFast(String.format(Locale.US, "UPDATE user_phones_v7 SET deleted = 1 WHERE sphone IN(%s)", new Object[]{deletes})).stepThis().dispose();
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -3456,7 +3875,7 @@ public class MessagesStorage {
     final /* synthetic */ void lambda$putCachedPhoneBook$81$MessagesStorage(HashMap contactHashMap, boolean migrate) {
         try {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m10d(this.currentAccount + " save contacts to db " + contactHashMap.size());
+                FileLog.d(this.currentAccount + " save contacts to db " + contactHashMap.size());
             }
             this.database.executeFast("DELETE FROM user_contacts_v7 WHERE 1").stepThis().dispose();
             this.database.executeFast("DELETE FROM user_phones_v7 WHERE 1").stepThis().dispose();
@@ -3492,7 +3911,7 @@ public class MessagesStorage {
                 getCachedPhoneBook(false);
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -3515,7 +3934,7 @@ public class MessagesStorage {
                 count = 16;
                 cursor = this.database.queryFinalized("SELECT COUNT(uid) FROM user_contacts_v6 WHERE 1", new Object[0]);
                 if (cursor.next()) {
-                    count = Math.min(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS, cursor.intValue(0));
+                    count = Math.min(5000, cursor.intValue(0));
                 }
                 cursor.dispose();
                 SparseArray<Contact> contactHashMap = new SparseArray(count);
@@ -3529,10 +3948,10 @@ public class MessagesStorage {
                         contact.last_name = cursor.stringValue(2);
                         contact.imported = cursor.intValue(6);
                         if (contact.first_name == null) {
-                            contact.first_name = TtmlNode.ANONYMOUS_REGION_ID;
+                            contact.first_name = "";
                         }
                         if (contact.last_name == null) {
-                            contact.last_name = TtmlNode.ANONYMOUS_REGION_ID;
+                            contact.last_name = "";
                         }
                         contact.contact_id = uid;
                         contactHashMap.put(uid, contact);
@@ -3545,12 +3964,12 @@ public class MessagesStorage {
                             continue;
                         } else {
                             if (sphone.length() == 8 && phone.length() != 8) {
-                                sphone = CLASSNAMEPhoneFormat.stripExceptNumbers(phone);
+                                sphone = PhoneFormat.stripExceptNumbers(phone);
                             }
                             contact.shortPhones.add(sphone);
                             contact.phoneDeleted.add(Integer.valueOf(cursor.intValue(5)));
-                            contact.phoneTypes.add(TtmlNode.ANONYMOUS_REGION_ID);
-                            if (contactHashMap.size() == DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS) {
+                            contact.phoneTypes.add("");
+                            if (contactHashMap.size() == 5000) {
                                 break;
                             }
                         }
@@ -3576,12 +3995,12 @@ public class MessagesStorage {
                 cursor = this.database.queryFinalized("SELECT COUNT(key) FROM user_contacts_v7 WHERE 1", new Object[0]);
                 if (cursor.next()) {
                     currentContactsCount = cursor.intValue(0);
-                    count = Math.min(DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS, currentContactsCount);
-                    if (currentContactsCount > DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS) {
+                    count = Math.min(5000, currentContactsCount);
+                    if (currentContactsCount > 5000) {
                         start = currentContactsCount - 5000;
                     }
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m10d(this.currentAccount + " current cached contacts count = " + currentContactsCount);
+                        FileLog.d(this.currentAccount + " current cached contacts count = " + currentContactsCount);
                     }
                 }
                 if (cursor != null) {
@@ -3598,7 +4017,7 @@ public class MessagesStorage {
                     cursor = this.database.queryFinalized("SELECT us.key, us.uid, us.fname, us.sname, up.phone, up.sphone, up.deleted, us.imported FROM user_contacts_v7 as us LEFT JOIN user_phones_v7 as up ON us.key = up.key WHERE 1 LIMIT 0," + currentContactsCount, new Object[0]);
                 } catch (Throwable e) {
                     contactHashMap2.clear();
-                    FileLog.m13e(e);
+                    FileLog.e(e);
                     if (cursor != null) {
                         cursor.dispose();
                     }
@@ -3620,10 +4039,10 @@ public class MessagesStorage {
                     contact.last_name = cursor.stringValue(3);
                     contact.imported = cursor.intValue(7);
                     if (contact.first_name == null) {
-                        contact.first_name = TtmlNode.ANONYMOUS_REGION_ID;
+                        contact.first_name = "";
                     }
                     if (contact.last_name == null) {
-                        contact.last_name = TtmlNode.ANONYMOUS_REGION_ID;
+                        contact.last_name = "";
                     }
                     contactHashMap2.put(key, contact);
                 }
@@ -3635,12 +4054,12 @@ public class MessagesStorage {
                         continue;
                     } else {
                         if (sphone.length() == 8 && phone.length() != 8) {
-                            sphone = CLASSNAMEPhoneFormat.stripExceptNumbers(phone);
+                            sphone = PhoneFormat.stripExceptNumbers(phone);
                         }
                         contact.shortPhones.add(sphone);
                         contact.phoneDeleted.add(Integer.valueOf(cursor.intValue(6)));
-                        contact.phoneTypes.add(TtmlNode.ANONYMOUS_REGION_ID);
-                        if (contactHashMap2.size() == DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS) {
+                        contact.phoneTypes.add("");
+                        if (contactHashMap2.size() == 5000) {
                             break;
                         }
                     }
@@ -3699,7 +4118,7 @@ public class MessagesStorage {
         } catch (Throwable e) {
             contacts.clear();
             users.clear();
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
         ContactsController.getInstance(this.currentAccount).processLoadedContacts(contacts, users, 1);
     }
@@ -3727,9 +4146,9 @@ public class MessagesStorage {
                     message.send_state = cursor.intValue(2);
                     message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                     data.reuse();
-                    if (messageHashMap.indexOfKey(message.var_id) < 0) {
+                    if (messageHashMap.indexOfKey(message.id) < 0) {
                         MessageObject.setUnreadFlags(message, cursor.intValue(0));
-                        message.var_id = cursor.intValue(3);
+                        message.id = cursor.intValue(3);
                         message.date = cursor.intValue(4);
                         if (!cursor.isNull(5)) {
                             message.random_id = cursor.longValue(5);
@@ -3739,7 +4158,7 @@ public class MessagesStorage {
                         message.seq_out = cursor.intValue(8);
                         message.ttl = cursor.intValue(9);
                         messages.add(message);
-                        messageHashMap.put(message.var_id, message);
+                        messageHashMap.put(message.id, message);
                         int lower_id = (int) message.dialog_id;
                         int high_id = (int) (message.dialog_id >> 32);
                         if (lower_id != 0) {
@@ -3758,7 +4177,7 @@ public class MessagesStorage {
                             encryptedChatIds.add(Integer.valueOf(high_id));
                         }
                         addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad);
-                        if (message.send_state != 3 && (!(message.to_id.channel_id != 0 || MessageObject.isUnread(message) || lower_id == 0) || message.var_id > 0)) {
+                        if (message.send_state != 3 && (!(message.to_id.channel_id != 0 || MessageObject.isUnread(message) || lower_id == 0) || message.id > 0)) {
                             message.send_state = 0;
                         }
                         if (lower_id == 0 && !cursor.isNull(5)) {
@@ -3796,7 +4215,7 @@ public class MessagesStorage {
             }
             SendMessagesHelper.getInstance(this.currentAccount).processUnsentMessages(messages, users, chats, encryptedChats);
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -3807,7 +4226,7 @@ public class MessagesStorage {
         try {
             countDownLatch.await();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
         return result[0];
     }
@@ -3823,7 +4242,7 @@ public class MessagesStorage {
                 cursor.dispose();
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             if (cursor != null) {
                 cursor.dispose();
             }
@@ -3842,7 +4261,7 @@ public class MessagesStorage {
         try {
             countDownLatch.await();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
         return result[0];
     }
@@ -3858,7 +4277,7 @@ public class MessagesStorage {
                 cursor.dispose();
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             if (cursor != null) {
                 cursor.dispose();
             }
@@ -3884,9 +4303,9 @@ public class MessagesStorage {
                 result = 0;
             }
             cursor.dispose();
-            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$111(callback, result));
+            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$112(callback, result));
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -4124,9 +4543,9 @@ public class MessagesStorage {
                             cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)", new Object[]{Long.valueOf(dialog_id), Long.valueOf(messageMaxId), Integer.valueOf(count_query / 2), Long.valueOf(dialog_id), Long.valueOf(messageMaxId), Integer.valueOf(count_query / 2)}), new Object[0]);
                         } else {
                             if (holeMessageMaxId == 0) {
-                                holeMessageMaxId = CLASSNAMEC.NANOS_PER_SECOND;
+                                holeMessageMaxId = NUM;
                                 if (channelId != 0) {
-                                    holeMessageMaxId = CLASSNAMEC.NANOS_PER_SECOND | (((long) channelId) << 32);
+                                    holeMessageMaxId = NUM | (((long) channelId) << 32);
                                 }
                             }
                             cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND (m.mid >= %d OR m.mid < 0) ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND (m.mid <= %d OR m.mid < 0) ORDER BY m.date ASC, m.mid ASC LIMIT %d)", new Object[]{Long.valueOf(dialog_id), Long.valueOf(messageMaxId), Long.valueOf(holeMessageMinId), Integer.valueOf(count_query / 2), Long.valueOf(dialog_id), Long.valueOf(messageMaxId), Long.valueOf(holeMessageMaxId), Integer.valueOf(count_query / 2)}), new Object[0]);
@@ -4272,7 +4691,7 @@ public class MessagesStorage {
                     cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date <= %d ORDER BY m.mid ASC LIMIT %d,%d", new Object[]{Long.valueOf(dialog_id), Integer.valueOf(minDate), Integer.valueOf(0), Integer.valueOf(count_query)}), new Object[0]);
                 }
             }
-            int minId = ConnectionsManager.DEFAULT_DATACENTER_ID;
+            int minId = Integer.MAX_VALUE;
             int maxId = Integer.MIN_VALUE;
             if (cursor != null) {
                 while (cursor.next()) {
@@ -4280,7 +4699,7 @@ public class MessagesStorage {
                     if (data != null) {
                         message = Message.TLdeserialize(data, data.readInt32(false), false);
                         message.send_state = cursor.intValue(2);
-                        if (!(message.var_id <= 0 || message.send_state == 0 || message.send_state == 3)) {
+                        if (!(message.id <= 0 || message.send_state == 0 || message.send_state == 3)) {
                             message.send_state = 0;
                         }
                         if (dialog_id == ((long) currentUserId)) {
@@ -4289,10 +4708,10 @@ public class MessagesStorage {
                         message.readAttachPath(data, currentUserId);
                         data.reuse();
                         MessageObject.setUnreadFlags(message, cursor.intValue(0));
-                        message.var_id = cursor.intValue(3);
-                        if (message.var_id > 0) {
-                            minId = Math.min(message.var_id, minId);
-                            maxId = Math.max(message.var_id, maxId);
+                        message.id = cursor.intValue(3);
+                        if (message.id > 0) {
+                            minId = Math.min(message.id, minId);
+                            maxId = Math.max(message.id, maxId);
                         }
                         message.date = cursor.intValue(4);
                         message.dialog_id = dialog_id;
@@ -4357,13 +4776,13 @@ public class MessagesStorage {
                         }
                         if (MessageObject.isSecretPhotoOrVideo(message)) {
                             try {
-                                SQLiteCursor cursor2 = this.database.queryFinalized(String.format(Locale.US, "SELECT date FROM enc_tasks_v2 WHERE mid = %d", new Object[]{Integer.valueOf(message.var_id)}), new Object[0]);
+                                SQLiteCursor cursor2 = this.database.queryFinalized(String.format(Locale.US, "SELECT date FROM enc_tasks_v2 WHERE mid = %d", new Object[]{Integer.valueOf(message.id)}), new Object[0]);
                                 if (cursor2.next()) {
                                     message.destroyTime = cursor2.intValue(0);
                                 }
                                 cursor2.dispose();
                             } catch (Throwable e) {
-                                FileLog.m13e(e);
+                                FileLog.e(e);
                             }
                         } else {
                             continue;
@@ -4372,7 +4791,7 @@ public class MessagesStorage {
                 }
                 cursor.dispose();
             }
-            Collections.sort(res.messages, MessagesStorage$$Lambda$110.$instance);
+            Collections.sort(res.messages, MessagesStorage$$Lambda$111.$instance);
             if (lower_id != 0) {
                 if ((load_type == 3 || load_type == 4 || (load_type == 2 && queryFromServer && !unreadCountIsLocal)) && !res.messages.isEmpty() && (minId > max_id_query || maxId < max_id_query)) {
                     replyMessages.clear();
@@ -4398,13 +4817,13 @@ public class MessagesStorage {
                         message = Message.TLdeserialize(data, data.readInt32(false), false);
                         message.readAttachPath(data, currentUserId);
                         data.reuse();
-                        message.var_id = cursor.intValue(1);
+                        message.id = cursor.intValue(1);
                         message.date = cursor.intValue(2);
                         message.dialog_id = dialog_id;
                         addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad);
                         Message object;
                         if (replyMessageOwners.size() > 0) {
-                            arrayList = (ArrayList) replyMessageOwners.get(message.var_id);
+                            arrayList = (ArrayList) replyMessageOwners.get(message.id);
                             if (arrayList != null) {
                                 for (a = 0; a < arrayList.size(); a++) {
                                     object = (Message) arrayList.get(a);
@@ -4423,7 +4842,7 @@ public class MessagesStorage {
                                 for (a = 0; a < arrayList.size(); a++) {
                                     object = (Message) arrayList.get(a);
                                     object.replyMessage = message;
-                                    object.reply_to_msg_id = message.var_id;
+                                    object.reply_to_msg_id = message.id;
                                     if (MessageObject.isMegagroup(object)) {
                                         message2 = object.replyMessage;
                                         message2.flags |= Integer.MIN_VALUE;
@@ -4463,7 +4882,7 @@ public class MessagesStorage {
             res.messages.clear();
             res.chats.clear();
             res.users.clear();
-            FileLog.m13e(e2);
+            FileLog.e(e2);
             MessagesController.getInstance(this.currentAccount).processLoadedMessages(res, dialog_id, count_query, max_id_override, offset_date, true, classGuid, min_unread_id, last_message_id, count_unread, max_unread_date, load_type, isChannel, isEnd, loadIndex, queryFromServer, mentions_unread);
         } catch (Throwable th) {
             Throwable th2 = th;
@@ -4472,25 +4891,25 @@ public class MessagesStorage {
     }
 
     static final /* synthetic */ int lambda$null$89$MessagesStorage(Message lhs, Message rhs) {
-        if (lhs.var_id <= 0 || rhs.var_id <= 0) {
-            if (lhs.var_id >= 0 || rhs.var_id >= 0) {
+        if (lhs.id <= 0 || rhs.id <= 0) {
+            if (lhs.id >= 0 || rhs.id >= 0) {
                 if (lhs.date > rhs.date) {
                     return -1;
                 }
                 if (lhs.date < rhs.date) {
                     return 1;
                 }
-            } else if (lhs.var_id < rhs.var_id) {
+            } else if (lhs.id < rhs.id) {
                 return -1;
             } else {
-                if (lhs.var_id > rhs.var_id) {
+                if (lhs.id > rhs.id) {
                     return 1;
                 }
             }
-        } else if (lhs.var_id > rhs.var_id) {
+        } else if (lhs.id > rhs.id) {
             return -1;
         } else {
-            if (lhs.var_id < rhs.var_id) {
+            if (lhs.id < rhs.id) {
                 return 1;
             }
         }
@@ -4505,7 +4924,7 @@ public class MessagesStorage {
         try {
             this.database.executeFast("DELETE FROM sent_files_v2 WHERE 1").stepThis().dispose();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -4519,7 +4938,7 @@ public class MessagesStorage {
         try {
             countDownLatch.await();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
         return result[0] == null ? null : result;
     }
@@ -4547,7 +4966,7 @@ public class MessagesStorage {
             }
             countDownLatch.countDown();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             countDownLatch.countDown();
         } catch (Throwable th) {
             countDownLatch.countDown();
@@ -4562,54 +4981,84 @@ public class MessagesStorage {
     }
 
     /* JADX WARNING: Failed to extract finally block: empty outs */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    final /* synthetic */ void lambda$putSentFile$93$MessagesStorage(String path, TLObject file, int type, String parent) {
-        SQLitePreparedStatement state = null;
-        try {
-            String id = Utilities.MD5(path);
-            if (id != null) {
-                MessageMedia messageMedia = null;
-                if (file instanceof Photo) {
-                    messageMedia = new TL_messageMediaPhoto();
-                    messageMedia.photo = (Photo) file;
-                    messageMedia.flags |= 1;
-                } else if (file instanceof Document) {
-                    messageMedia = new TL_messageMediaDocument();
-                    messageMedia.document = (Document) file;
-                    messageMedia.flags |= 1;
-                }
-                if (messageMedia != null) {
-                    state = this.database.executeFast("REPLACE INTO sent_files_v2 VALUES(?, ?, ?, ?)");
-                    state.requery();
-                    NativeByteBuffer data = new NativeByteBuffer(messageMedia.getObjectSize());
-                    messageMedia.serializeToStream(data);
-                    state.bindString(1, id);
-                    state.bindInteger(2, type);
-                    state.bindByteBuffer(3, data);
-                    state.bindString(4, parent);
-                    state.step();
-                    data.reuse();
-                } else if (state != null) {
-                    state.dispose();
-                    return;
-                } else {
-                    return;
-                }
-            }
-            if (state != null) {
-                state.dispose();
-            }
-        } catch (Throwable e) {
-            FileLog.m13e(e);
-            if (state != null) {
-                state.dispose();
-            }
-        } catch (Throwable th) {
-            if (state != null) {
-                state.dispose();
-            }
-            throw th;
-        }
+    final /* synthetic */ void lambda$putSentFile$93$MessagesStorage(java.lang.String r8, org.telegram.tgnet.TLObject r9, int r10, java.lang.String r11) {
+        /*
+        r7 = this;
+        r4 = 0;
+        r2 = org.telegram.messenger.Utilities.MD5(r8);	 Catch:{ Exception -> 0x0037 }
+        if (r2 == 0) goto L_0x006f;
+    L_0x0007:
+        r3 = 0;
+        r5 = r9 instanceof org.telegram.tgnet.TLRPC.Photo;	 Catch:{ Exception -> 0x0037 }
+        if (r5 == 0) goto L_0x0023;
+    L_0x000c:
+        r3 = new org.telegram.tgnet.TLRPC$TL_messageMediaPhoto;	 Catch:{ Exception -> 0x0037 }
+        r3.<init>();	 Catch:{ Exception -> 0x0037 }
+        r9 = (org.telegram.tgnet.TLRPC.Photo) r9;	 Catch:{ Exception -> 0x0037 }
+        r3.photo = r9;	 Catch:{ Exception -> 0x0037 }
+        r5 = r3.flags;	 Catch:{ Exception -> 0x0037 }
+        r5 = r5 | 1;
+        r3.flags = r5;	 Catch:{ Exception -> 0x0037 }
+    L_0x001b:
+        if (r3 != 0) goto L_0x0041;
+    L_0x001d:
+        if (r4 == 0) goto L_0x0022;
+    L_0x001f:
+        r4.dispose();
+    L_0x0022:
+        return;
+    L_0x0023:
+        r5 = r9 instanceof org.telegram.tgnet.TLRPC.Document;	 Catch:{ Exception -> 0x0037 }
+        if (r5 == 0) goto L_0x001b;
+    L_0x0027:
+        r3 = new org.telegram.tgnet.TLRPC$TL_messageMediaDocument;	 Catch:{ Exception -> 0x0037 }
+        r3.<init>();	 Catch:{ Exception -> 0x0037 }
+        r9 = (org.telegram.tgnet.TLRPC.Document) r9;	 Catch:{ Exception -> 0x0037 }
+        r3.document = r9;	 Catch:{ Exception -> 0x0037 }
+        r5 = r3.flags;	 Catch:{ Exception -> 0x0037 }
+        r5 = r5 | 1;
+        r3.flags = r5;	 Catch:{ Exception -> 0x0037 }
+        goto L_0x001b;
+    L_0x0037:
+        r1 = move-exception;
+        org.telegram.messenger.FileLog.e(r1);	 Catch:{ all -> 0x0075 }
+        if (r4 == 0) goto L_0x0022;
+    L_0x003d:
+        r4.dispose();
+        goto L_0x0022;
+    L_0x0041:
+        r5 = r7.database;	 Catch:{ Exception -> 0x0037 }
+        r6 = "REPLACE INTO sent_files_v2 VALUES(?, ?, ?, ?)";
+        r4 = r5.executeFast(r6);	 Catch:{ Exception -> 0x0037 }
+        r4.requery();	 Catch:{ Exception -> 0x0037 }
+        r0 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0037 }
+        r5 = r3.getObjectSize();	 Catch:{ Exception -> 0x0037 }
+        r0.<init>(r5);	 Catch:{ Exception -> 0x0037 }
+        r3.serializeToStream(r0);	 Catch:{ Exception -> 0x0037 }
+        r5 = 1;
+        r4.bindString(r5, r2);	 Catch:{ Exception -> 0x0037 }
+        r5 = 2;
+        r4.bindInteger(r5, r10);	 Catch:{ Exception -> 0x0037 }
+        r5 = 3;
+        r4.bindByteBuffer(r5, r0);	 Catch:{ Exception -> 0x0037 }
+        r5 = 4;
+        r4.bindString(r5, r11);	 Catch:{ Exception -> 0x0037 }
+        r4.step();	 Catch:{ Exception -> 0x0037 }
+        r0.reuse();	 Catch:{ Exception -> 0x0037 }
+    L_0x006f:
+        if (r4 == 0) goto L_0x0022;
+    L_0x0071:
+        r4.dispose();
+        goto L_0x0022;
+    L_0x0075:
+        r5 = move-exception;
+        if (r4 == 0) goto L_0x007b;
+    L_0x0078:
+        r4.dispose();
+    L_0x007b:
+        throw r5;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putSentFile$93$MessagesStorage(java.lang.String, org.telegram.tgnet.TLObject, int, java.lang.String):void");
     }
 
     public void updateEncryptedChatSeq(EncryptedChat chat, boolean cleanup) {
@@ -4619,36 +5068,79 @@ public class MessagesStorage {
     }
 
     /* JADX WARNING: Failed to extract finally block: empty outs */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    final /* synthetic */ void lambda$updateEncryptedChatSeq$94$MessagesStorage(EncryptedChat chat, boolean cleanup) {
-        SQLitePreparedStatement state = null;
-        try {
-            state = this.database.executeFast("UPDATE enc_chats SET seq_in = ?, seq_out = ?, use_count = ?, in_seq_no = ?, mtproto_seq = ? WHERE uid = ?");
-            state.bindInteger(1, chat.seq_in);
-            state.bindInteger(2, chat.seq_out);
-            state.bindInteger(3, (chat.key_use_count_in << 16) | chat.key_use_count_out);
-            state.bindInteger(4, chat.in_seq_no);
-            state.bindInteger(5, chat.mtproto_seq);
-            state.bindInteger(6, chat.var_id);
-            state.step();
-            if (cleanup) {
-                long did = ((long) chat.var_id) << 32;
-                this.database.executeFast(String.format(Locale.US, "DELETE FROM messages WHERE mid IN (SELECT m.mid FROM messages as m LEFT JOIN messages_seq as s ON m.mid = s.mid WHERE m.uid = %d AND m.date = 0 AND m.mid < 0 AND s.seq_out <= %d)", new Object[]{Long.valueOf(did), Integer.valueOf(chat.in_seq_no)})).stepThis().dispose();
-            }
-            if (state != null) {
-                state.dispose();
-            }
-        } catch (Throwable e) {
-            FileLog.m13e(e);
-            if (state != null) {
-                state.dispose();
-            }
-        } catch (Throwable th) {
-            if (state != null) {
-                state.dispose();
-            }
-            throw th;
-        }
+    final /* synthetic */ void lambda$updateEncryptedChatSeq$94$MessagesStorage(org.telegram.tgnet.TLRPC.EncryptedChat r11, boolean r12) {
+        /*
+        r10 = this;
+        r3 = 0;
+        r4 = r10.database;	 Catch:{ Exception -> 0x006e }
+        r5 = "UPDATE enc_chats SET seq_in = ?, seq_out = ?, use_count = ?, in_seq_no = ?, mtproto_seq = ? WHERE uid = ?";
+        r3 = r4.executeFast(r5);	 Catch:{ Exception -> 0x006e }
+        r4 = 1;
+        r5 = r11.seq_in;	 Catch:{ Exception -> 0x006e }
+        r3.bindInteger(r4, r5);	 Catch:{ Exception -> 0x006e }
+        r4 = 2;
+        r5 = r11.seq_out;	 Catch:{ Exception -> 0x006e }
+        r3.bindInteger(r4, r5);	 Catch:{ Exception -> 0x006e }
+        r4 = 3;
+        r5 = r11.key_use_count_in;	 Catch:{ Exception -> 0x006e }
+        r5 = r5 << 16;
+        r6 = r11.key_use_count_out;	 Catch:{ Exception -> 0x006e }
+        r5 = r5 | r6;
+        r3.bindInteger(r4, r5);	 Catch:{ Exception -> 0x006e }
+        r4 = 4;
+        r5 = r11.in_seq_no;	 Catch:{ Exception -> 0x006e }
+        r3.bindInteger(r4, r5);	 Catch:{ Exception -> 0x006e }
+        r4 = 5;
+        r5 = r11.mtproto_seq;	 Catch:{ Exception -> 0x006e }
+        r3.bindInteger(r4, r5);	 Catch:{ Exception -> 0x006e }
+        r4 = 6;
+        r5 = r11.id;	 Catch:{ Exception -> 0x006e }
+        r3.bindInteger(r4, r5);	 Catch:{ Exception -> 0x006e }
+        r3.step();	 Catch:{ Exception -> 0x006e }
+        if (r12 == 0) goto L_0x0068;
+    L_0x0038:
+        r4 = r11.id;	 Catch:{ Exception -> 0x006e }
+        r4 = (long) r4;	 Catch:{ Exception -> 0x006e }
+        r6 = 32;
+        r0 = r4 << r6;
+        r4 = r10.database;	 Catch:{ Exception -> 0x006e }
+        r5 = java.util.Locale.US;	 Catch:{ Exception -> 0x006e }
+        r6 = "DELETE FROM messages WHERE mid IN (SELECT m.mid FROM messages as m LEFT JOIN messages_seq as s ON m.mid = s.mid WHERE m.uid = %d AND m.date = 0 AND m.mid < 0 AND s.seq_out <= %d)";
+        r7 = 2;
+        r7 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x006e }
+        r8 = 0;
+        r9 = java.lang.Long.valueOf(r0);	 Catch:{ Exception -> 0x006e }
+        r7[r8] = r9;	 Catch:{ Exception -> 0x006e }
+        r8 = 1;
+        r9 = r11.in_seq_no;	 Catch:{ Exception -> 0x006e }
+        r9 = java.lang.Integer.valueOf(r9);	 Catch:{ Exception -> 0x006e }
+        r7[r8] = r9;	 Catch:{ Exception -> 0x006e }
+        r5 = java.lang.String.format(r5, r6, r7);	 Catch:{ Exception -> 0x006e }
+        r4 = r4.executeFast(r5);	 Catch:{ Exception -> 0x006e }
+        r4 = r4.stepThis();	 Catch:{ Exception -> 0x006e }
+        r4.dispose();	 Catch:{ Exception -> 0x006e }
+    L_0x0068:
+        if (r3 == 0) goto L_0x006d;
+    L_0x006a:
+        r3.dispose();
+    L_0x006d:
+        return;
+    L_0x006e:
+        r2 = move-exception;
+        org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x0078 }
+        if (r3 == 0) goto L_0x006d;
+    L_0x0074:
+        r3.dispose();
+        goto L_0x006d;
+    L_0x0078:
+        r4 = move-exception;
+        if (r3 == 0) goto L_0x007e;
+    L_0x007b:
+        r3.dispose();
+    L_0x007e:
+        throw r4;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateEncryptedChatSeq$94$MessagesStorage(org.telegram.tgnet.TLRPC$EncryptedChat, boolean):void");
     }
 
     public void updateEncryptedChatTTL(EncryptedChat chat) {
@@ -4658,28 +5150,41 @@ public class MessagesStorage {
     }
 
     /* JADX WARNING: Failed to extract finally block: empty outs */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    final /* synthetic */ void lambda$updateEncryptedChatTTL$95$MessagesStorage(EncryptedChat chat) {
-        SQLitePreparedStatement state = null;
-        try {
-            state = this.database.executeFast("UPDATE enc_chats SET ttl = ? WHERE uid = ?");
-            state.bindInteger(1, chat.ttl);
-            state.bindInteger(2, chat.var_id);
-            state.step();
-            if (state != null) {
-                state.dispose();
-            }
-        } catch (Throwable e) {
-            FileLog.m13e(e);
-            if (state != null) {
-                state.dispose();
-            }
-        } catch (Throwable th) {
-            if (state != null) {
-                state.dispose();
-            }
-            throw th;
-        }
+    final /* synthetic */ void lambda$updateEncryptedChatTTL$95$MessagesStorage(org.telegram.tgnet.TLRPC.EncryptedChat r5) {
+        /*
+        r4 = this;
+        r1 = 0;
+        r2 = r4.database;	 Catch:{ Exception -> 0x001f }
+        r3 = "UPDATE enc_chats SET ttl = ? WHERE uid = ?";
+        r1 = r2.executeFast(r3);	 Catch:{ Exception -> 0x001f }
+        r2 = 1;
+        r3 = r5.ttl;	 Catch:{ Exception -> 0x001f }
+        r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x001f }
+        r2 = 2;
+        r3 = r5.id;	 Catch:{ Exception -> 0x001f }
+        r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x001f }
+        r1.step();	 Catch:{ Exception -> 0x001f }
+        if (r1 == 0) goto L_0x001e;
+    L_0x001b:
+        r1.dispose();
+    L_0x001e:
+        return;
+    L_0x001f:
+        r0 = move-exception;
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x0029 }
+        if (r1 == 0) goto L_0x001e;
+    L_0x0025:
+        r1.dispose();
+        goto L_0x001e;
+    L_0x0029:
+        r2 = move-exception;
+        if (r1 == 0) goto L_0x002f;
+    L_0x002c:
+        r1.dispose();
+    L_0x002f:
+        throw r2;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateEncryptedChatTTL$95$MessagesStorage(org.telegram.tgnet.TLRPC$EncryptedChat):void");
     }
 
     public void updateEncryptedChatLayer(EncryptedChat chat) {
@@ -4689,28 +5194,41 @@ public class MessagesStorage {
     }
 
     /* JADX WARNING: Failed to extract finally block: empty outs */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    final /* synthetic */ void lambda$updateEncryptedChatLayer$96$MessagesStorage(EncryptedChat chat) {
-        SQLitePreparedStatement state = null;
-        try {
-            state = this.database.executeFast("UPDATE enc_chats SET layer = ? WHERE uid = ?");
-            state.bindInteger(1, chat.layer);
-            state.bindInteger(2, chat.var_id);
-            state.step();
-            if (state != null) {
-                state.dispose();
-            }
-        } catch (Throwable e) {
-            FileLog.m13e(e);
-            if (state != null) {
-                state.dispose();
-            }
-        } catch (Throwable th) {
-            if (state != null) {
-                state.dispose();
-            }
-            throw th;
-        }
+    final /* synthetic */ void lambda$updateEncryptedChatLayer$96$MessagesStorage(org.telegram.tgnet.TLRPC.EncryptedChat r5) {
+        /*
+        r4 = this;
+        r1 = 0;
+        r2 = r4.database;	 Catch:{ Exception -> 0x001f }
+        r3 = "UPDATE enc_chats SET layer = ? WHERE uid = ?";
+        r1 = r2.executeFast(r3);	 Catch:{ Exception -> 0x001f }
+        r2 = 1;
+        r3 = r5.layer;	 Catch:{ Exception -> 0x001f }
+        r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x001f }
+        r2 = 2;
+        r3 = r5.id;	 Catch:{ Exception -> 0x001f }
+        r1.bindInteger(r2, r3);	 Catch:{ Exception -> 0x001f }
+        r1.step();	 Catch:{ Exception -> 0x001f }
+        if (r1 == 0) goto L_0x001e;
+    L_0x001b:
+        r1.dispose();
+    L_0x001e:
+        return;
+    L_0x001f:
+        r0 = move-exception;
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x0029 }
+        if (r1 == 0) goto L_0x001e;
+    L_0x0025:
+        r1.dispose();
+        goto L_0x001e;
+    L_0x0029:
+        r2 = move-exception;
+        if (r1 == 0) goto L_0x002f;
+    L_0x002c:
+        r1.dispose();
+    L_0x002f:
+        throw r2;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateEncryptedChatLayer$96$MessagesStorage(org.telegram.tgnet.TLRPC$EncryptedChat):void");
     }
 
     public void updateEncryptedChat(EncryptedChat chat) {
@@ -4720,89 +5238,174 @@ public class MessagesStorage {
     }
 
     /* JADX WARNING: Failed to extract finally block: empty outs */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    final /* synthetic */ void lambda$updateEncryptedChat$97$MessagesStorage(EncryptedChat chat) {
-        int i = 1;
-        SQLitePreparedStatement state = null;
-        try {
-            int length;
-            if ((chat.key_hash == null || chat.key_hash.length < 16) && chat.auth_key != null) {
-                chat.key_hash = AndroidUtilities.calcAuthKeyHash(chat.auth_key);
-            }
-            state = this.database.executeFast("UPDATE enc_chats SET data = ?, g = ?, authkey = ?, ttl = ?, layer = ?, seq_in = ?, seq_out = ?, use_count = ?, exchange_id = ?, key_date = ?, fprint = ?, fauthkey = ?, khash = ?, in_seq_no = ?, admin_id = ?, mtproto_seq = ? WHERE uid = ?");
-            NativeByteBuffer data = new NativeByteBuffer(chat.getObjectSize());
-            if (chat.a_or_b != null) {
-                length = chat.a_or_b.length;
-            } else {
-                length = 1;
-            }
-            NativeByteBuffer data2 = new NativeByteBuffer(length);
-            if (chat.auth_key != null) {
-                length = chat.auth_key.length;
-            } else {
-                length = 1;
-            }
-            NativeByteBuffer data3 = new NativeByteBuffer(length);
-            if (chat.future_auth_key != null) {
-                length = chat.future_auth_key.length;
-            } else {
-                length = 1;
-            }
-            NativeByteBuffer data4 = new NativeByteBuffer(length);
-            if (chat.key_hash != null) {
-                i = chat.key_hash.length;
-            }
-            NativeByteBuffer data5 = new NativeByteBuffer(i);
-            chat.serializeToStream(data);
-            state.bindByteBuffer(1, data);
-            if (chat.a_or_b != null) {
-                data2.writeBytes(chat.a_or_b);
-            }
-            if (chat.auth_key != null) {
-                data3.writeBytes(chat.auth_key);
-            }
-            if (chat.future_auth_key != null) {
-                data4.writeBytes(chat.future_auth_key);
-            }
-            if (chat.key_hash != null) {
-                data5.writeBytes(chat.key_hash);
-            }
-            state.bindByteBuffer(2, data2);
-            state.bindByteBuffer(3, data3);
-            state.bindInteger(4, chat.ttl);
-            state.bindInteger(5, chat.layer);
-            state.bindInteger(6, chat.seq_in);
-            state.bindInteger(7, chat.seq_out);
-            state.bindInteger(8, (chat.key_use_count_in << 16) | chat.key_use_count_out);
-            state.bindLong(9, chat.exchange_id);
-            state.bindInteger(10, chat.key_create_date);
-            state.bindLong(11, chat.future_key_fingerprint);
-            state.bindByteBuffer(12, data4);
-            state.bindByteBuffer(13, data5);
-            state.bindInteger(14, chat.in_seq_no);
-            state.bindInteger(15, chat.admin_id);
-            state.bindInteger(16, chat.mtproto_seq);
-            state.bindInteger(17, chat.var_id);
-            state.step();
-            data.reuse();
-            data2.reuse();
-            data3.reuse();
-            data4.reuse();
-            data5.reuse();
-            if (state != null) {
-                state.dispose();
-            }
-        } catch (Throwable e) {
-            FileLog.m13e(e);
-            if (state != null) {
-                state.dispose();
-            }
-        } catch (Throwable th) {
-            if (state != null) {
-                state.dispose();
-            }
-            throw th;
-        }
+    final /* synthetic */ void lambda$updateEncryptedChat$97$MessagesStorage(org.telegram.tgnet.TLRPC.EncryptedChat r11) {
+        /*
+        r10 = this;
+        r9 = 16;
+        r7 = 1;
+        r6 = 0;
+        r8 = r11.key_hash;	 Catch:{ Exception -> 0x010e }
+        if (r8 == 0) goto L_0x000d;
+    L_0x0008:
+        r8 = r11.key_hash;	 Catch:{ Exception -> 0x010e }
+        r8 = r8.length;	 Catch:{ Exception -> 0x010e }
+        if (r8 >= r9) goto L_0x0019;
+    L_0x000d:
+        r8 = r11.auth_key;	 Catch:{ Exception -> 0x010e }
+        if (r8 == 0) goto L_0x0019;
+    L_0x0011:
+        r8 = r11.auth_key;	 Catch:{ Exception -> 0x010e }
+        r8 = org.telegram.messenger.AndroidUtilities.calcAuthKeyHash(r8);	 Catch:{ Exception -> 0x010e }
+        r11.key_hash = r8;	 Catch:{ Exception -> 0x010e }
+    L_0x0019:
+        r8 = r10.database;	 Catch:{ Exception -> 0x010e }
+        r9 = "UPDATE enc_chats SET data = ?, g = ?, authkey = ?, ttl = ?, layer = ?, seq_in = ?, seq_out = ?, use_count = ?, exchange_id = ?, key_date = ?, fprint = ?, fauthkey = ?, khash = ?, in_seq_no = ?, admin_id = ?, mtproto_seq = ? WHERE uid = ?";
+        r6 = r8.executeFast(r9);	 Catch:{ Exception -> 0x010e }
+        r0 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x010e }
+        r8 = r11.getObjectSize();	 Catch:{ Exception -> 0x010e }
+        r0.<init>(r8);	 Catch:{ Exception -> 0x010e }
+        r1 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x010e }
+        r8 = r11.a_or_b;	 Catch:{ Exception -> 0x010e }
+        if (r8 == 0) goto L_0x0105;
+    L_0x0031:
+        r8 = r11.a_or_b;	 Catch:{ Exception -> 0x010e }
+        r8 = r8.length;	 Catch:{ Exception -> 0x010e }
+    L_0x0034:
+        r1.<init>(r8);	 Catch:{ Exception -> 0x010e }
+        r2 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x010e }
+        r8 = r11.auth_key;	 Catch:{ Exception -> 0x010e }
+        if (r8 == 0) goto L_0x0108;
+    L_0x003d:
+        r8 = r11.auth_key;	 Catch:{ Exception -> 0x010e }
+        r8 = r8.length;	 Catch:{ Exception -> 0x010e }
+    L_0x0040:
+        r2.<init>(r8);	 Catch:{ Exception -> 0x010e }
+        r3 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x010e }
+        r8 = r11.future_auth_key;	 Catch:{ Exception -> 0x010e }
+        if (r8 == 0) goto L_0x010b;
+    L_0x0049:
+        r8 = r11.future_auth_key;	 Catch:{ Exception -> 0x010e }
+        r8 = r8.length;	 Catch:{ Exception -> 0x010e }
+    L_0x004c:
+        r3.<init>(r8);	 Catch:{ Exception -> 0x010e }
+        r4 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x010e }
+        r8 = r11.key_hash;	 Catch:{ Exception -> 0x010e }
+        if (r8 == 0) goto L_0x0058;
+    L_0x0055:
+        r7 = r11.key_hash;	 Catch:{ Exception -> 0x010e }
+        r7 = r7.length;	 Catch:{ Exception -> 0x010e }
+    L_0x0058:
+        r4.<init>(r7);	 Catch:{ Exception -> 0x010e }
+        r11.serializeToStream(r0);	 Catch:{ Exception -> 0x010e }
+        r7 = 1;
+        r6.bindByteBuffer(r7, r0);	 Catch:{ Exception -> 0x010e }
+        r7 = r11.a_or_b;	 Catch:{ Exception -> 0x010e }
+        if (r7 == 0) goto L_0x006b;
+    L_0x0066:
+        r7 = r11.a_or_b;	 Catch:{ Exception -> 0x010e }
+        r1.writeBytes(r7);	 Catch:{ Exception -> 0x010e }
+    L_0x006b:
+        r7 = r11.auth_key;	 Catch:{ Exception -> 0x010e }
+        if (r7 == 0) goto L_0x0074;
+    L_0x006f:
+        r7 = r11.auth_key;	 Catch:{ Exception -> 0x010e }
+        r2.writeBytes(r7);	 Catch:{ Exception -> 0x010e }
+    L_0x0074:
+        r7 = r11.future_auth_key;	 Catch:{ Exception -> 0x010e }
+        if (r7 == 0) goto L_0x007d;
+    L_0x0078:
+        r7 = r11.future_auth_key;	 Catch:{ Exception -> 0x010e }
+        r3.writeBytes(r7);	 Catch:{ Exception -> 0x010e }
+    L_0x007d:
+        r7 = r11.key_hash;	 Catch:{ Exception -> 0x010e }
+        if (r7 == 0) goto L_0x0086;
+    L_0x0081:
+        r7 = r11.key_hash;	 Catch:{ Exception -> 0x010e }
+        r4.writeBytes(r7);	 Catch:{ Exception -> 0x010e }
+    L_0x0086:
+        r7 = 2;
+        r6.bindByteBuffer(r7, r1);	 Catch:{ Exception -> 0x010e }
+        r7 = 3;
+        r6.bindByteBuffer(r7, r2);	 Catch:{ Exception -> 0x010e }
+        r7 = 4;
+        r8 = r11.ttl;	 Catch:{ Exception -> 0x010e }
+        r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x010e }
+        r7 = 5;
+        r8 = r11.layer;	 Catch:{ Exception -> 0x010e }
+        r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x010e }
+        r7 = 6;
+        r8 = r11.seq_in;	 Catch:{ Exception -> 0x010e }
+        r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x010e }
+        r7 = 7;
+        r8 = r11.seq_out;	 Catch:{ Exception -> 0x010e }
+        r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x010e }
+        r7 = 8;
+        r8 = r11.key_use_count_in;	 Catch:{ Exception -> 0x010e }
+        r8 = r8 << 16;
+        r9 = r11.key_use_count_out;	 Catch:{ Exception -> 0x010e }
+        r8 = r8 | r9;
+        r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x010e }
+        r7 = 9;
+        r8 = r11.exchange_id;	 Catch:{ Exception -> 0x010e }
+        r6.bindLong(r7, r8);	 Catch:{ Exception -> 0x010e }
+        r7 = 10;
+        r8 = r11.key_create_date;	 Catch:{ Exception -> 0x010e }
+        r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x010e }
+        r7 = 11;
+        r8 = r11.future_key_fingerprint;	 Catch:{ Exception -> 0x010e }
+        r6.bindLong(r7, r8);	 Catch:{ Exception -> 0x010e }
+        r7 = 12;
+        r6.bindByteBuffer(r7, r3);	 Catch:{ Exception -> 0x010e }
+        r7 = 13;
+        r6.bindByteBuffer(r7, r4);	 Catch:{ Exception -> 0x010e }
+        r7 = 14;
+        r8 = r11.in_seq_no;	 Catch:{ Exception -> 0x010e }
+        r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x010e }
+        r7 = 15;
+        r8 = r11.admin_id;	 Catch:{ Exception -> 0x010e }
+        r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x010e }
+        r7 = 16;
+        r8 = r11.mtproto_seq;	 Catch:{ Exception -> 0x010e }
+        r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x010e }
+        r7 = 17;
+        r8 = r11.id;	 Catch:{ Exception -> 0x010e }
+        r6.bindInteger(r7, r8);	 Catch:{ Exception -> 0x010e }
+        r6.step();	 Catch:{ Exception -> 0x010e }
+        r0.reuse();	 Catch:{ Exception -> 0x010e }
+        r1.reuse();	 Catch:{ Exception -> 0x010e }
+        r2.reuse();	 Catch:{ Exception -> 0x010e }
+        r3.reuse();	 Catch:{ Exception -> 0x010e }
+        r4.reuse();	 Catch:{ Exception -> 0x010e }
+        if (r6 == 0) goto L_0x0104;
+    L_0x0101:
+        r6.dispose();
+    L_0x0104:
+        return;
+    L_0x0105:
+        r8 = r7;
+        goto L_0x0034;
+    L_0x0108:
+        r8 = r7;
+        goto L_0x0040;
+    L_0x010b:
+        r8 = r7;
+        goto L_0x004c;
+    L_0x010e:
+        r5 = move-exception;
+        org.telegram.messenger.FileLog.e(r5);	 Catch:{ all -> 0x0118 }
+        if (r6 == 0) goto L_0x0104;
+    L_0x0114:
+        r6.dispose();
+        goto L_0x0104;
+    L_0x0118:
+        r7 = move-exception;
+        if (r6 == 0) goto L_0x011e;
+    L_0x011b:
+        r6.dispose();
+    L_0x011e:
+        throw r7;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateEncryptedChat$97$MessagesStorage(org.telegram.tgnet.TLRPC$EncryptedChat):void");
     }
 
     public boolean isDialogHasMessages(long did) {
@@ -4812,7 +5415,7 @@ public class MessagesStorage {
         try {
             countDownLatch.await();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
         return result[0];
     }
@@ -4823,7 +5426,7 @@ public class MessagesStorage {
             result[0] = cursor.next();
             cursor.dispose();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         } finally {
             countDownLatch.countDown();
         }
@@ -4836,7 +5439,7 @@ public class MessagesStorage {
         try {
             countDownLatch.await();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
         return result[0];
     }
@@ -4847,7 +5450,7 @@ public class MessagesStorage {
             result[0] = cursor.next();
             cursor.dispose();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         } finally {
             countDownLatch.countDown();
         }
@@ -4863,7 +5466,7 @@ public class MessagesStorage {
         try {
             ArrayList<Integer> usersToLoad = new ArrayList();
             ArrayList<EncryptedChat> encryptedChats = new ArrayList();
-            getEncryptedChatsInternal(TtmlNode.ANONYMOUS_REGION_ID + chat_id, encryptedChats, usersToLoad);
+            getEncryptedChatsInternal("" + chat_id, encryptedChats, usersToLoad);
             if (!(encryptedChats.isEmpty() || usersToLoad.isEmpty())) {
                 ArrayList<User> users = new ArrayList();
                 getUsersInternal(TextUtils.join(",", usersToLoad), users);
@@ -4874,7 +5477,7 @@ public class MessagesStorage {
             }
             countDownLatch.countDown();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             countDownLatch.countDown();
         } catch (Throwable th) {
             countDownLatch.countDown();
@@ -4920,8 +5523,8 @@ public class MessagesStorage {
             }
             NativeByteBuffer data5 = new NativeByteBuffer(i);
             chat.serializeToStream(data);
-            state.bindInteger(1, chat.var_id);
-            state.bindInteger(2, user.var_id);
+            state.bindInteger(1, chat.id);
+            state.bindInteger(2, user.id);
             state.bindString(3, formatUserSearchName(user));
             state.bindByteBuffer(4, data);
             if (chat.a_or_b != null) {
@@ -4960,7 +5563,7 @@ public class MessagesStorage {
             data5.reuse();
             if (dialog != null) {
                 state = this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                state.bindLong(1, dialog.var_id);
+                state.bindLong(1, dialog.id);
                 state.bindInteger(2, dialog.last_message_date);
                 state.bindInteger(3, dialog.unread_count);
                 state.bindInteger(4, dialog.top_message);
@@ -4976,12 +5579,12 @@ public class MessagesStorage {
                 state.dispose();
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
     private String formatUserSearchName(User user) {
-        StringBuilder str = new StringBuilder(TtmlNode.ANONYMOUS_REGION_ID);
+        StringBuilder str = new StringBuilder();
         if (user.first_name != null && user.first_name.length() > 0) {
             str.append(user.first_name);
         }
@@ -5005,7 +5608,7 @@ public class MessagesStorage {
                 NativeByteBuffer data;
                 User user = (User) users.get(a);
                 if (user.min) {
-                    SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM users WHERE uid = %d", new Object[]{Integer.valueOf(user.var_id)}), new Object[0]);
+                    SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM users WHERE uid = %d", new Object[]{Integer.valueOf(user.id)}), new Object[0]);
                     if (cursor.next()) {
                         try {
                             data = cursor.byteBufferValue(0);
@@ -5031,7 +5634,7 @@ public class MessagesStorage {
                                 }
                             }
                         } catch (Throwable e) {
-                            FileLog.m13e(e);
+                            FileLog.e(e);
                         }
                     }
                     cursor.dispose();
@@ -5039,7 +5642,7 @@ public class MessagesStorage {
                 state.requery();
                 data = new NativeByteBuffer(user.getObjectSize());
                 user.serializeToStream(data);
-                state.bindInteger(1, user.var_id);
+                state.bindInteger(1, user.id);
                 state.bindString(2, formatUserSearchName(user));
                 if (user.status != null) {
                     if (user.status instanceof TL_userStatusRecently) {
@@ -5061,6 +5664,46 @@ public class MessagesStorage {
         }
     }
 
+    public void updateChatDefaultBannedRights(int chatId, TL_chatBannedRights rights, int version) {
+        if (rights != null && chatId != 0) {
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$76(this, chatId, version, rights));
+        }
+    }
+
+    final /* synthetic */ void lambda$updateChatDefaultBannedRights$102$MessagesStorage(int chatId, int version, TL_chatBannedRights rights) {
+        Chat chat = null;
+        try {
+            NativeByteBuffer data;
+            SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM chats WHERE uid = %d", new Object[]{Integer.valueOf(chatId)}), new Object[0]);
+            if (cursor.next()) {
+                data = cursor.byteBufferValue(0);
+                if (data != null) {
+                    chat = Chat.TLdeserialize(data, data.readInt32(false), false);
+                    data.reuse();
+                }
+            }
+            cursor.dispose();
+            if (chat == null) {
+                return;
+            }
+            if (chat.default_banned_rights == null || version >= chat.version) {
+                chat.default_banned_rights = rights;
+                chat.flags |= 262144;
+                chat.version = version;
+                SQLitePreparedStatement state = this.database.executeFast("UPDATE chats SET data = ? WHERE uid = ?");
+                data = new NativeByteBuffer(chat.getObjectSize());
+                chat.serializeToStream(data);
+                state.bindByteBuffer(1, data);
+                state.bindInteger(2, chat.id);
+                state.step();
+                data.reuse();
+                state.dispose();
+            }
+        } catch (Throwable e) {
+            FileLog.e(e);
+        }
+    }
+
     private void putChatsInternal(ArrayList<Chat> chats) throws Exception {
         if (chats != null && !chats.isEmpty()) {
             SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO chats VALUES(?, ?, ?)");
@@ -5068,7 +5711,7 @@ public class MessagesStorage {
                 NativeByteBuffer data;
                 Chat chat = (Chat) chats.get(a);
                 if (chat.min) {
-                    SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM chats WHERE uid = %d", new Object[]{Integer.valueOf(chat.var_id)}), new Object[0]);
+                    SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT data FROM chats WHERE uid = %d", new Object[]{Integer.valueOf(chat.id)}), new Object[0]);
                     if (cursor.next()) {
                         try {
                             data = cursor.byteBufferValue(0);
@@ -5081,7 +5724,18 @@ public class MessagesStorage {
                                     oldChat.broadcast = chat.broadcast;
                                     oldChat.verified = chat.verified;
                                     oldChat.megagroup = chat.megagroup;
-                                    oldChat.democracy = chat.democracy;
+                                    if (chat.default_banned_rights != null) {
+                                        oldChat.default_banned_rights = chat.default_banned_rights;
+                                        oldChat.flags |= 262144;
+                                    }
+                                    if (chat.admin_rights != null) {
+                                        oldChat.admin_rights = chat.admin_rights;
+                                        oldChat.flags |= 16384;
+                                    }
+                                    if (chat.banned_rights != null) {
+                                        oldChat.banned_rights = chat.banned_rights;
+                                        oldChat.flags |= 32768;
+                                    }
                                     if (chat.username != null) {
                                         oldChat.username = chat.username;
                                         oldChat.flags |= 64;
@@ -5093,7 +5747,7 @@ public class MessagesStorage {
                                 }
                             }
                         } catch (Throwable e) {
-                            FileLog.m13e(e);
+                            FileLog.e(e);
                         }
                     }
                     cursor.dispose();
@@ -5101,11 +5755,11 @@ public class MessagesStorage {
                 state.requery();
                 data = new NativeByteBuffer(chat.getObjectSize());
                 chat.serializeToStream(data);
-                state.bindInteger(1, chat.var_id);
+                state.bindInteger(1, chat.id);
                 if (chat.title != null) {
                     state.bindString(2, chat.title.toLowerCase());
                 } else {
-                    state.bindString(2, TtmlNode.ANONYMOUS_REGION_ID);
+                    state.bindString(2, "");
                 }
                 state.bindByteBuffer(3, data);
                 state.step();
@@ -5132,7 +5786,7 @@ public class MessagesStorage {
                         }
                     }
                 } catch (Throwable e) {
-                    FileLog.m13e(e);
+                    FileLog.e(e);
                 }
             }
             cursor.dispose();
@@ -5153,7 +5807,7 @@ public class MessagesStorage {
                         }
                     }
                 } catch (Throwable e) {
-                    FileLog.m13e(e);
+                    FileLog.e(e);
                 }
             }
             cursor.dispose();
@@ -5198,7 +5852,7 @@ public class MessagesStorage {
                         }
                     }
                 } catch (Throwable e) {
-                    FileLog.m13e(e);
+                    FileLog.e(e);
                 }
             }
             cursor.dispose();
@@ -5210,7 +5864,7 @@ public class MessagesStorage {
             try {
                 this.database.beginTransaction();
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
                 return;
             }
         }
@@ -5226,17 +5880,17 @@ public class MessagesStorage {
             return;
         }
         if (useQueue) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$76(this, users, chats, withTransaction));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$77(this, users, chats, withTransaction));
         } else {
             putUsersAndChatsInternal(users, chats, withTransaction);
         }
     }
 
     public void removeFromDownloadQueue(long id, int type, boolean move) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$77(this, move, type, id));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$78(this, move, type, id));
     }
 
-    final /* synthetic */ void lambda$removeFromDownloadQueue$103$MessagesStorage(boolean move, int type, long id) {
+    final /* synthetic */ void lambda$removeFromDownloadQueue$104$MessagesStorage(boolean move, int type, long id) {
         if (move) {
             int minDate = -1;
             try {
@@ -5251,7 +5905,7 @@ public class MessagesStorage {
                 }
                 return;
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
                 return;
             }
         }
@@ -5259,16 +5913,16 @@ public class MessagesStorage {
     }
 
     public void clearDownloadQueue(int type) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$78(this, type));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$79(this, type));
     }
 
-    final /* synthetic */ void lambda$clearDownloadQueue$104$MessagesStorage(int type) {
+    final /* synthetic */ void lambda$clearDownloadQueue$105$MessagesStorage(int type) {
         if (type == 0) {
             try {
                 this.database.executeFast("DELETE FROM download_queue WHERE 1").stepThis().dispose();
                 return;
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
                 return;
             }
         }
@@ -5276,17 +5930,17 @@ public class MessagesStorage {
     }
 
     public void getDownloadQueue(int type) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$79(this, type));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$80(this, type));
     }
 
-    final /* synthetic */ void lambda$getDownloadQueue$106$MessagesStorage(int type) {
+    final /* synthetic */ void lambda$getDownloadQueue$107$MessagesStorage(int type) {
         try {
             ArrayList<DownloadObject> objects = new ArrayList();
             SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT uid, type, data, parent FROM download_queue WHERE type = %d ORDER BY date DESC LIMIT 3", new Object[]{Integer.valueOf(type)}), new Object[0]);
             while (cursor.next()) {
                 DownloadObject downloadObject = new DownloadObject();
                 downloadObject.type = cursor.intValue(1);
-                downloadObject.var_id = cursor.longValue(0);
+                downloadObject.id = cursor.longValue(0);
                 downloadObject.parent = cursor.stringValue(3);
                 NativeByteBuffer data = cursor.byteBufferValue(2);
                 if (data != null) {
@@ -5308,13 +5962,13 @@ public class MessagesStorage {
                 objects.add(downloadObject);
             }
             cursor.dispose();
-            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$109(this, type, objects));
+            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$110(this, type, objects));
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
-    final /* synthetic */ void lambda$null$105$MessagesStorage(int type, ArrayList objects) {
+    final /* synthetic */ void lambda$null$106$MessagesStorage(int type, ArrayList objects) {
         DownloadController.getInstance(this.currentAccount).processDownloadObjects(type, objects);
     }
 
@@ -5338,11 +5992,11 @@ public class MessagesStorage {
 
     public void putWebPages(LongSparseArray<WebPage> webPages) {
         if (!isEmpty((LongSparseArray) webPages)) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$80(this, webPages));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$81(this, webPages));
         }
     }
 
-    final /* synthetic */ void lambda$putWebPages$108$MessagesStorage(LongSparseArray webPages) {
+    final /* synthetic */ void lambda$putWebPages$109$MessagesStorage(LongSparseArray webPages) {
         try {
             int a;
             NativeByteBuffer data;
@@ -5365,7 +6019,7 @@ public class MessagesStorage {
                             message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                             data.reuse();
                             if (message.media instanceof TL_messageMediaWebPage) {
-                                message.var_id = mid;
+                                message.id = mid;
                                 message.media.webpage = (WebPage) webPages.valueAt(a);
                                 messages.add(message);
                             }
@@ -5382,7 +6036,7 @@ public class MessagesStorage {
                     message = (Message) messages.get(a);
                     data = new NativeByteBuffer(message.getObjectSize());
                     message.serializeToStream(data);
-                    long messageId = (long) message.var_id;
+                    long messageId = (long) message.id;
                     if (message.to_id.channel_id != 0) {
                         messageId |= ((long) message.to_id.channel_id) << 32;
                     }
@@ -5399,22 +6053,22 @@ public class MessagesStorage {
                 state.dispose();
                 state2.dispose();
                 this.database.commitTransaction();
-                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$108(this, messages));
+                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$109(this, messages));
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
-    final /* synthetic */ void lambda$null$107$MessagesStorage(ArrayList messages) {
+    final /* synthetic */ void lambda$null$108$MessagesStorage(ArrayList messages) {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didReceivedWebpages, messages);
     }
 
     public void overwriteChannel(int channel_id, TL_updates_channelDifferenceTooLong difference, int newDialogType) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$81(this, channel_id, newDialogType, difference));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$82(this, channel_id, newDialogType, difference));
     }
 
-    final /* synthetic */ void lambda$overwriteChannel$110$MessagesStorage(int channel_id, int newDialogType, TL_updates_channelDifferenceTooLong difference) {
+    final /* synthetic */ void lambda$overwriteChannel$111$MessagesStorage(int channel_id, int newDialogType, TL_updates_channelDifferenceTooLong difference) {
         boolean checkInvite = false;
         long did = (long) (-channel_id);
         int pinned = 0;
@@ -5438,7 +6092,7 @@ public class MessagesStorage {
             dialogs.users.addAll(difference.users);
             dialogs.messages.addAll(difference.messages);
             TL_dialog dialog = new TL_dialog();
-            dialog.var_id = did;
+            dialog.id = did;
             dialog.flags = 1;
             dialog.peer = new TL_peerChannel();
             dialog.peer.channel_id = channel_id;
@@ -5454,7 +6108,7 @@ public class MessagesStorage {
             dialogs.dialogs.add(dialog);
             putDialogsInternal(dialogs, 0);
             updateDialogsWithDeletedMessages(new ArrayList(), null, false, channel_id);
-            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$107(this, did));
+            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$108(this, did));
             if (!checkInvite) {
                 return;
             }
@@ -5464,21 +6118,21 @@ public class MessagesStorage {
                 MessagesController.getInstance(this.currentAccount).generateJoinMessage(channel_id, false);
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
-    final /* synthetic */ void lambda$null$109$MessagesStorage(long did) {
+    final /* synthetic */ void lambda$null$110$MessagesStorage(long did) {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.removeAllMessagesFromDialog, Long.valueOf(did), Boolean.valueOf(true));
     }
 
     public void putChannelViews(SparseArray<SparseIntArray> channelViews, boolean isChannel) {
         if (!isEmpty((SparseArray) channelViews)) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$82(this, channelViews, isChannel));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$83(this, channelViews, isChannel));
         }
     }
 
-    final /* synthetic */ void lambda$putChannelViews$111$MessagesStorage(SparseArray channelViews, boolean isChannel) {
+    final /* synthetic */ void lambda$putChannelViews$112$MessagesStorage(SparseArray channelViews, boolean isChannel) {
         try {
             this.database.beginTransaction();
             SQLitePreparedStatement state = this.database.executeFast("UPDATE messages SET media = max((SELECT media FROM messages WHERE mid = ?), ?) WHERE mid = ?");
@@ -5501,7 +6155,7 @@ public class MessagesStorage {
             state.dispose();
             this.database.commitTransaction();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -5535,7 +6189,7 @@ public class MessagesStorage {
                     return;
                 }
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
                 return;
             }
         }
@@ -5563,7 +6217,7 @@ public class MessagesStorage {
         SQLitePreparedStatement state_polls = null;
         for (a = 0; a < messages.size(); a++) {
             message = (Message) messages.get(a);
-            messageId = (long) message.var_id;
+            messageId = (long) message.id;
             if (message.dialog_id == 0) {
                 MessageObject.getDialogId(message);
             }
@@ -5573,7 +6227,7 @@ public class MessagesStorage {
             if (message.mentioned && message.media_unread) {
                 mentionsIdsMap.put(messageId, Long.valueOf(message.dialog_id));
             }
-            if (!((message.action instanceof TL_messageActionHistoryClear) || MessageObject.isOut(message) || (message.var_id <= 0 && !MessageObject.isUnread(message)))) {
+            if (!((message.action instanceof TL_messageActionHistoryClear) || MessageObject.isOut(message) || (message.id <= 0 && !MessageObject.isUnread(message)))) {
                 Integer currentMaxId = (Integer) dialogsReadMax.get(message.dialog_id);
                 if (currentMaxId == null) {
                     cursor = this.database.queryFinalized("SELECT inbox_max FROM dialogs WHERE did = " + message.dialog_id, new Object[0]);
@@ -5585,7 +6239,7 @@ public class MessagesStorage {
                     cursor.dispose();
                     dialogsReadMax.put(message.dialog_id, currentMaxId);
                 }
-                if (message.var_id < 0 || currentMaxId.intValue() < message.var_id) {
+                if (message.id < 0 || currentMaxId.intValue() < message.id) {
                     if (messageIds.length() > 0) {
                         messageIds.append(",");
                     }
@@ -5608,7 +6262,7 @@ public class MessagesStorage {
             }
             if (isValidKeyboardToSave(message)) {
                 Message oldMessage = (Message) botKeyboards.get(message.dialog_id);
-                if (oldMessage == null || oldMessage.var_id < message.var_id) {
+                if (oldMessage == null || oldMessage.id < message.id) {
                     botKeyboards.put(message.dialog_id, message);
                 }
             }
@@ -5698,7 +6352,7 @@ public class MessagesStorage {
             message = (Message) messages.get(a);
             fixUnsupportedMedia(message);
             state_messages.requery();
-            messageId = (long) message.var_id;
+            messageId = (long) message.id;
             if (message.local_id != 0) {
                 messageId = (long) message.local_id;
             }
@@ -5708,12 +6362,12 @@ public class MessagesStorage {
             NativeByteBuffer data = new NativeByteBuffer(message.getObjectSize());
             message.serializeToStream(data);
             boolean updateDialog = true;
-            if (!(message.action == null || !(message.action instanceof TL_messageEncryptedAction) || (message.action.encryptedAction instanceof TL_decryptedMessageActionSetMessageTTL) || (message.action.encryptedAction instanceof TL_decryptedMessageActionScreenshotMessages))) {
+            if (!(!(message.action instanceof TL_messageEncryptedAction) || (message.action.encryptedAction instanceof TL_decryptedMessageActionSetMessageTTL) || (message.action.encryptedAction instanceof TL_decryptedMessageActionScreenshotMessages))) {
                 updateDialog = false;
             }
             if (updateDialog) {
                 lastMessage = (Message) messagesMap.get(message.dialog_id);
-                if (lastMessage == null || message.date > lastMessage.date || ((message.var_id > 0 && lastMessage.var_id > 0 && message.var_id > lastMessage.var_id) || (message.var_id < 0 && lastMessage.var_id < 0 && message.var_id < lastMessage.var_id))) {
+                if (lastMessage == null || message.date > lastMessage.date || ((message.id > 0 && lastMessage.id > 0 && message.id > lastMessage.id) || (message.id < 0 && lastMessage.id < 0 && message.id < lastMessage.id))) {
                     messagesMap.put(message.dialog_id, message);
                 }
             }
@@ -5758,11 +6412,11 @@ public class MessagesStorage {
                 TL_messageMediaPoll mediaPoll = (TL_messageMediaPoll) message.media;
                 state_polls.requery();
                 state_polls.bindLong(1, messageId);
-                state_polls.bindLong(2, mediaPoll.poll.var_id);
+                state_polls.bindLong(2, mediaPoll.poll.id);
                 state_polls.step();
             } else if (message.media instanceof TL_messageMediaWebPage) {
                 state_webpage.requery();
-                state_webpage.bindLong(1, message.media.webpage.var_id);
+                state_webpage.bindLong(1, message.media.webpage.id);
                 state_webpage.bindLong(2, messageId);
                 state_webpage.step();
             }
@@ -5772,39 +6426,39 @@ public class MessagesStorage {
                 long id = 0;
                 MessageMedia object = null;
                 if (MessageObject.isVoiceMessage(message)) {
-                    id = message.media.document.var_id;
+                    id = message.media.document.id;
                     type = 2;
                     object = new TL_messageMediaDocument();
                     object.document = message.media.document;
                     object.flags |= 1;
                 } else if (MessageObject.isRoundVideoMessage(message)) {
-                    id = message.media.document.var_id;
+                    id = message.media.document.id;
                     type = 64;
                     object = new TL_messageMediaDocument();
                     object.document = message.media.document;
                     object.flags |= 1;
                 } else if (MessageObject.isStickerMessage(message)) {
-                    id = message.media.document.var_id;
+                    id = message.media.document.id;
                     type = 1;
                     object = new TL_messageMediaDocument();
                     object.document = message.media.document;
                     object.flags |= 1;
                 } else if (message.media instanceof TL_messageMediaPhoto) {
                     if (FileLoader.getClosestPhotoSizeWithSize(message.media.photo.sizes, AndroidUtilities.getPhotoSize()) != null) {
-                        id = message.media.photo.var_id;
+                        id = message.media.photo.id;
                         type = 1;
                         object = new TL_messageMediaPhoto();
                         object.photo = message.media.photo;
                         object.flags |= 1;
                     }
                 } else if (MessageObject.isVideoMessage(message)) {
-                    id = message.media.document.var_id;
+                    id = message.media.document.id;
                     type = 4;
                     object = new TL_messageMediaDocument();
                     object.document = message.media.document;
                     object.flags |= 1;
                 } else if (!(!(message.media instanceof TL_messageMediaDocument) || MessageObject.isMusicMessage(message) || MessageObject.isGifDocument(message.media.document))) {
-                    id = message.media.document.var_id;
+                    id = message.media.document.id;
                     type = 8;
                     object = new TL_messageMediaDocument();
                     object.document = message.media.document;
@@ -5823,7 +6477,7 @@ public class MessagesStorage {
                     state_download.bindInteger(2, type);
                     state_download.bindInteger(3, message.date);
                     state_download.bindByteBuffer(4, data);
-                    state_download.bindString(5, "sent_" + (message.to_id != null ? message.to_id.channel_id : 0) + "_" + message.var_id);
+                    state_download.bindString(5, "sent_" + (message.to_id != null ? message.to_id.channel_id : 0) + "_" + message.id);
                     state_download.step();
                     data.reuse();
                 }
@@ -5885,7 +6539,7 @@ public class MessagesStorage {
                     mentionCounts.put(key, Integer.valueOf(mentions_count.intValue() + old_mentions_count));
                 }
                 if (message != null) {
-                    messageId = (long) message.var_id;
+                    messageId = (long) message.id;
                 } else {
                     messageId = (long) last_mid;
                 }
@@ -5950,11 +6604,11 @@ public class MessagesStorage {
         }
         MessagesController.getInstance(this.currentAccount).processDialogsUpdateRead(messagesCounts, mentionCounts);
         if (downloadMediaMask != 0) {
-            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$83(this, downloadMediaMask));
+            AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$84(this, downloadMediaMask));
         }
     }
 
-    final /* synthetic */ void lambda$putMessagesInternal$112$MessagesStorage(int downloadMediaMaskFinal) {
+    final /* synthetic */ void lambda$putMessagesInternal$113$MessagesStorage(int downloadMediaMaskFinal) {
         DownloadController.getInstance(this.currentAccount).newDownloadObjectsAvailable(downloadMediaMaskFinal);
     }
 
@@ -5965,7 +6619,7 @@ public class MessagesStorage {
     public void putMessages(ArrayList<Message> messages, boolean withTransaction, boolean useQueue, boolean doNotUpdateDialogDate, int downloadMask, boolean ifNoLastMessage) {
         if (messages.size() != 0) {
             if (useQueue) {
-                this.storageQueue.postRunnable(new MessagesStorage$$Lambda$84(this, messages, withTransaction, doNotUpdateDialogDate, downloadMask, ifNoLastMessage));
+                this.storageQueue.postRunnable(new MessagesStorage$$Lambda$85(this, messages, withTransaction, doNotUpdateDialogDate, downloadMask, ifNoLastMessage));
             } else {
                 putMessagesInternal(messages, withTransaction, doNotUpdateDialogDate, downloadMask, ifNoLastMessage);
             }
@@ -5973,26 +6627,26 @@ public class MessagesStorage {
     }
 
     public void markMessageAsSendError(Message message) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$85(this, message));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$86(this, message));
     }
 
-    final /* synthetic */ void lambda$markMessageAsSendError$114$MessagesStorage(Message message) {
+    final /* synthetic */ void lambda$markMessageAsSendError$115$MessagesStorage(Message message) {
         try {
-            long messageId = (long) message.var_id;
+            long messageId = (long) message.id;
             if (message.to_id.channel_id != 0) {
                 messageId |= ((long) message.to_id.channel_id) << 32;
             }
             this.database.executeFast("UPDATE messages SET send_state = 2 WHERE mid = " + messageId).stepThis().dispose();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
     public void setMessageSeq(int mid, int seq_in, int seq_out) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$86(this, mid, seq_in, seq_out));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$87(this, mid, seq_in, seq_out));
     }
 
-    final /* synthetic */ void lambda$setMessageSeq$115$MessagesStorage(int mid, int seq_in, int seq_out) {
+    final /* synthetic */ void lambda$setMessageSeq$116$MessagesStorage(int mid, int seq_in, int seq_out) {
         try {
             SQLitePreparedStatement state = this.database.executeFast("REPLACE INTO messages_seq VALUES(?, ?, ?)");
             state.requery();
@@ -6002,7 +6656,7 @@ public class MessagesStorage {
             state.step();
             state.dispose();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -6019,7 +6673,7 @@ public class MessagesStorage {
                     cursor.dispose();
                 }
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
                 if (cursor != null) {
                     cursor.dispose();
                 }
@@ -6047,7 +6701,7 @@ public class MessagesStorage {
                 cursor.dispose();
             }
         } catch (Throwable e2) {
-            FileLog.m13e(e2);
+            FileLog.e(e2);
             if (cursor != null) {
                 cursor.dispose();
             }
@@ -6076,7 +6730,7 @@ public class MessagesStorage {
                     this.database.executeFast(String.format(Locale.US, "DELETE FROM messages WHERE mid = %d", new Object[]{Long.valueOf(oldMessageId)})).stepThis().dispose();
                     this.database.executeFast(String.format(Locale.US, "DELETE FROM messages_seq WHERE mid = %d", new Object[]{Long.valueOf(oldMessageId)})).stepThis().dispose();
                 } catch (Throwable e22) {
-                    FileLog.m13e(e22);
+                    FileLog.e(e22);
                 } catch (Throwable th3) {
                     if (state != null) {
                         state.dispose();
@@ -6100,7 +6754,7 @@ public class MessagesStorage {
                 try {
                     this.database.executeFast(String.format(Locale.US, "DELETE FROM media_v2 WHERE mid = %d", new Object[]{Long.valueOf(oldMessageId)})).stepThis().dispose();
                 } catch (Throwable e222) {
-                    FileLog.m13e(e222);
+                    FileLog.e(e222);
                 } catch (Throwable th4) {
                     if (state != null) {
                         state.dispose();
@@ -6120,7 +6774,7 @@ public class MessagesStorage {
                     state.dispose();
                 }
             } catch (Throwable e23) {
-                FileLog.m13e(e23);
+                FileLog.e(e23);
                 if (state != null) {
                     state.dispose();
                 }
@@ -6141,7 +6795,7 @@ public class MessagesStorage {
                 state.dispose();
             }
         } catch (Throwable e232) {
-            FileLog.m13e(e232);
+            FileLog.e(e232);
             if (state != null) {
                 state.dispose();
             }
@@ -6157,12 +6811,13 @@ public class MessagesStorage {
         if (!useQueue) {
             return updateMessageStateAndIdInternal(random_id, _oldId, newId, date, channelId);
         }
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$87(this, random_id, _oldId, newId, date, channelId));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$88(this, random_id, _oldId, newId, date, channelId));
         return null;
     }
 
     private void updateUsersInternal(ArrayList<User> users, boolean onlyStatus, boolean withTransaction) {
-        Iterator it;
+        int N;
+        int a;
         User user;
         if (Thread.currentThread().getId() != this.storageQueue.getId()) {
             throw new RuntimeException("wrong db thread");
@@ -6171,21 +6826,21 @@ public class MessagesStorage {
                 try {
                     this.database.beginTransaction();
                 } catch (Throwable e) {
-                    FileLog.m13e(e);
+                    FileLog.e(e);
                     return;
                 }
             }
             SQLitePreparedStatement state = this.database.executeFast("UPDATE users SET status = ? WHERE uid = ?");
-            it = users.iterator();
-            while (it.hasNext()) {
-                user = (User) it.next();
+            N = users.size();
+            for (a = 0; a < N; a++) {
+                user = (User) users.get(a);
                 state.requery();
                 if (user.status != null) {
                     state.bindInteger(1, user.status.expires);
                 } else {
                     state.bindInteger(1, 0);
                 }
-                state.bindInteger(2, user.var_id);
+                state.bindInteger(2, user.id);
                 state.step();
             }
             state.dispose();
@@ -6195,21 +6850,21 @@ public class MessagesStorage {
         } else {
             StringBuilder ids = new StringBuilder();
             SparseArray<User> usersDict = new SparseArray();
-            it = users.iterator();
-            while (it.hasNext()) {
-                user = (User) it.next();
+            N = users.size();
+            for (a = 0; a < N; a++) {
+                user = (User) users.get(a);
                 if (ids.length() != 0) {
                     ids.append(",");
                 }
-                ids.append(user.var_id);
-                usersDict.put(user.var_id, user);
+                ids.append(user.id);
+                usersDict.put(user.id, user);
             }
             ArrayList<User> loadedUsers = new ArrayList();
             getUsersInternal(ids.toString(), loadedUsers);
-            it = loadedUsers.iterator();
-            while (it.hasNext()) {
-                user = (User) it.next();
-                User updateUser = (User) usersDict.get(user.var_id);
+            N = loadedUsers.size();
+            for (a = 0; a < N; a++) {
+                user = (User) loadedUsers.get(a);
+                User updateUser = (User) usersDict.get(user.id);
                 if (updateUser != null) {
                     if (updateUser.first_name != null && updateUser.last_name != null) {
                         if (!UserObject.isContact(user)) {
@@ -6239,7 +6894,7 @@ public class MessagesStorage {
     public void updateUsers(ArrayList<User> users, boolean onlyStatus, boolean withTransaction, boolean useQueue) {
         if (users != null && !users.isEmpty()) {
             if (useQueue) {
-                this.storageQueue.postRunnable(new MessagesStorage$$Lambda$88(this, users, onlyStatus, withTransaction));
+                this.storageQueue.postRunnable(new MessagesStorage$$Lambda$89(this, users, onlyStatus, withTransaction));
             } else {
                 updateUsersInternal(users, onlyStatus, withTransaction);
             }
@@ -6284,17 +6939,17 @@ public class MessagesStorage {
                 }
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
     public void markMessagesContentAsRead(ArrayList<Long> mids, int date) {
         if (!isEmpty((List) mids)) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$89(this, mids, date));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$90(this, mids, date));
         }
     }
 
-    final /* synthetic */ void lambda$markMessagesContentAsRead$118$MessagesStorage(ArrayList mids, int date) {
+    final /* synthetic */ void lambda$markMessagesContentAsRead$119$MessagesStorage(ArrayList mids, int date) {
         try {
             String midsStr = TextUtils.join(",", mids);
             this.database.executeFast(String.format(Locale.US, "UPDATE messages SET read_state = read_state | 2 WHERE mid IN (%s)", new Object[]{midsStr})).stepThis().dispose();
@@ -6313,13 +6968,13 @@ public class MessagesStorage {
                 cursor.dispose();
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
     public void markMessagesAsRead(SparseLongArray inbox, SparseLongArray outbox, SparseIntArray encryptedMessages, boolean useQueue) {
         if (useQueue) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$90(this, inbox, outbox, encryptedMessages));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$91(this, inbox, outbox, encryptedMessages));
         } else {
             markMessagesAsReadInternal(inbox, outbox, encryptedMessages);
         }
@@ -6327,11 +6982,11 @@ public class MessagesStorage {
 
     public void markMessagesAsDeletedByRandoms(ArrayList<Long> messages) {
         if (!messages.isEmpty()) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$91(this, messages));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$92(this, messages));
         }
     }
 
-    final /* synthetic */ void lambda$markMessagesAsDeletedByRandoms$121$MessagesStorage(ArrayList messages) {
+    final /* synthetic */ void lambda$markMessagesAsDeletedByRandoms$122$MessagesStorage(ArrayList messages) {
         try {
             String ids = TextUtils.join(",", messages);
             SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT mid FROM randoms WHERE random_id IN(%s)", new Object[]{ids}), new Object[0]);
@@ -6341,17 +6996,17 @@ public class MessagesStorage {
             }
             cursor.dispose();
             if (!mids.isEmpty()) {
-                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$106(this, mids));
+                AndroidUtilities.runOnUIThread(new MessagesStorage$$Lambda$107(this, mids));
                 updateDialogsWithReadMessagesInternal(mids, null, null, null);
                 markMessagesAsDeletedInternal(mids, 0);
                 updateDialogsWithDeletedMessagesInternal(mids, null, 0);
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
-    final /* synthetic */ void lambda$null$120$MessagesStorage(ArrayList mids) {
+    final /* synthetic */ void lambda$null$121$MessagesStorage(ArrayList mids) {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messagesDeleted, mids, Integer.valueOf(0));
     }
 
@@ -6409,11 +7064,12 @@ public class MessagesStorage {
                                 message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                                 data.reuse();
                                 if (message != null) {
+                                    int N;
                                     File file;
                                     if (message.media instanceof TL_messageMediaPhoto) {
-                                        Iterator it = message.media.photo.sizes.iterator();
-                                        while (it.hasNext()) {
-                                            file = FileLoader.getPathToAttach((PhotoSize) it.next());
+                                        N = message.media.photo.sizes.size();
+                                        for (a = 0; a < N; a++) {
+                                            file = FileLoader.getPathToAttach((PhotoSize) message.media.photo.sizes.get(a));
                                             if (file != null && file.toString().length() > 0) {
                                                 filesToDelete.add(file);
                                             }
@@ -6423,9 +7079,12 @@ public class MessagesStorage {
                                         if (file != null && file.toString().length() > 0) {
                                             filesToDelete.add(file);
                                         }
-                                        file = FileLoader.getPathToAttach(message.media.document.thumb);
-                                        if (file != null && file.toString().length() > 0) {
-                                            filesToDelete.add(file);
+                                        N = message.media.document.thumbs.size();
+                                        for (a = 0; a < N; a++) {
+                                            file = FileLoader.getPathToAttach((PhotoSize) message.media.document.thumbs.get(a));
+                                            if (file != null && file.toString().length() > 0) {
+                                                filesToDelete.add(file);
+                                            }
                                         }
                                     }
                                 }
@@ -6433,7 +7092,7 @@ public class MessagesStorage {
                         }
                     }
                 } catch (Throwable e) {
-                    FileLog.m13e(e);
+                    FileLog.e(e);
                 }
             }
             cursor.dispose();
@@ -6526,7 +7185,7 @@ public class MessagesStorage {
             DataQuery.getInstance(this.currentAccount).clearBotKeyboard(0, messages);
             return arrayList2;
         } catch (Throwable e2) {
-            FileLog.m13e(e2);
+            FileLog.e(e2);
             return null;
         }
     }
@@ -6585,7 +7244,7 @@ public class MessagesStorage {
             cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, m.date, d.pts, d.inbox_max, d.outbox_max, d.pinned, d.unread_count_i, d.flags FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid WHERE d.did IN(%s)", new Object[]{ids}), new Object[0]);
             while (cursor.next()) {
                 TL_dialog dialog = new TL_dialog();
-                dialog.var_id = cursor.longValue(0);
+                dialog.id = cursor.longValue(0);
                 dialog.top_message = cursor.intValue(1);
                 dialog.read_inbox_max_id = cursor.intValue(10);
                 dialog.read_outbox_max_id = cursor.intValue(11);
@@ -6604,18 +7263,18 @@ public class MessagesStorage {
                     message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                     data.reuse();
                     MessageObject.setUnreadFlags(message, cursor.intValue(5));
-                    message.var_id = cursor.intValue(6);
+                    message.id = cursor.intValue(6);
                     message.send_state = cursor.intValue(7);
                     int date = cursor.intValue(8);
                     if (date != 0) {
                         dialog.last_message_date = date;
                     }
-                    message.dialog_id = dialog.var_id;
+                    message.dialog_id = dialog.id;
                     dialogs.messages.add(message);
                     addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad);
                 }
-                int lower_id = (int) dialog.var_id;
-                int high_id = (int) (dialog.var_id >> 32);
+                int lower_id = (int) dialog.id;
+                int high_id = (int) (dialog.id >> 32);
                 if (lower_id != 0) {
                     if (high_id == 1) {
                         if (!chatsToLoad.contains(Integer.valueOf(lower_id))) {
@@ -6646,14 +7305,14 @@ public class MessagesStorage {
                 MessagesController.getInstance(this.currentAccount).processDialogsUpdate(dialogs, encryptedChats);
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
     public void updateDialogsWithDeletedMessages(ArrayList<Integer> messages, ArrayList<Long> additionalDialogsToUpdate, boolean useQueue, int channelId) {
         if (!messages.isEmpty() || channelId != 0) {
             if (useQueue) {
-                this.storageQueue.postRunnable(new MessagesStorage$$Lambda$92(this, messages, additionalDialogsToUpdate, channelId));
+                this.storageQueue.postRunnable(new MessagesStorage$$Lambda$93(this, messages, additionalDialogsToUpdate, channelId));
             } else {
                 updateDialogsWithDeletedMessagesInternal(messages, additionalDialogsToUpdate, channelId);
             }
@@ -6667,13 +7326,14 @@ public class MessagesStorage {
         if (!useQueue) {
             return markMessagesAsDeletedInternal((ArrayList) messages, channelId);
         }
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$93(this, messages, channelId));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$94(this, messages, channelId));
         return null;
     }
 
     private ArrayList<Long> markMessagesAsDeletedInternal(int channelId, int mid) {
         try {
             long did;
+            int a;
             ArrayList<Long> dialogsIds = new ArrayList();
             LongSparseArray<Integer[]> dialogsToUpdate = new LongSparseArray();
             long maxMessageId = ((long) mid) | (((long) channelId) << 32);
@@ -6708,11 +7368,12 @@ public class MessagesStorage {
                                 message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                                 data.reuse();
                                 if (message != null) {
+                                    int N;
                                     File file;
                                     if (message.media instanceof TL_messageMediaPhoto) {
-                                        Iterator it = message.media.photo.sizes.iterator();
-                                        while (it.hasNext()) {
-                                            file = FileLoader.getPathToAttach((PhotoSize) it.next());
+                                        N = message.media.photo.sizes.size();
+                                        for (a = 0; a < N; a++) {
+                                            file = FileLoader.getPathToAttach((PhotoSize) message.media.photo.sizes.get(a));
                                             if (file != null && file.toString().length() > 0) {
                                                 filesToDelete.add(file);
                                             }
@@ -6722,9 +7383,12 @@ public class MessagesStorage {
                                         if (file != null && file.toString().length() > 0) {
                                             filesToDelete.add(file);
                                         }
-                                        file = FileLoader.getPathToAttach(message.media.document.thumb);
-                                        if (file != null && file.toString().length() > 0) {
-                                            filesToDelete.add(file);
+                                        N = message.media.document.thumbs.size();
+                                        for (a = 0; a < N; a++) {
+                                            file = FileLoader.getPathToAttach((PhotoSize) message.media.document.thumbs.get(a));
+                                            if (file != null && file.toString().length() > 0) {
+                                                filesToDelete.add(file);
+                                            }
                                         }
                                     }
                                 }
@@ -6732,12 +7396,12 @@ public class MessagesStorage {
                         }
                     }
                 } catch (Throwable e) {
-                    FileLog.m13e(e);
+                    FileLog.e(e);
                 }
             }
             cursor.dispose();
             FileLoader.getInstance(this.currentAccount).deleteFiles(filesToDelete, 0);
-            for (int a = 0; a < dialogsToUpdate.size(); a++) {
+            for (a = 0; a < dialogsToUpdate.size(); a++) {
                 did = dialogsToUpdate.keyAt(a);
                 Integer[] counts = (Integer[]) dialogsToUpdate.valueAt(a);
                 cursor = this.database.queryFinalized("SELECT unread_count, unread_count_i FROM dialogs WHERE did = " + did, new Object[0]);
@@ -6762,7 +7426,7 @@ public class MessagesStorage {
             this.database.executeFast(String.format(Locale.US, "UPDATE media_counts_v2 SET old = 1 WHERE uid = %d", new Object[]{Integer.valueOf(-channelId)})).stepThis().dispose();
             return dialogsIds;
         } catch (Throwable e2) {
-            FileLog.m13e(e2);
+            FileLog.e(e2);
             return null;
         }
     }
@@ -6771,7 +7435,7 @@ public class MessagesStorage {
         if (!useQueue) {
             return markMessagesAsDeletedInternal(channelId, mid);
         }
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$94(this, channelId, mid));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$95(this, channelId, mid));
         return null;
     }
 
@@ -6780,12 +7444,12 @@ public class MessagesStorage {
             if (message.media instanceof TL_messageMediaUnsupported_old) {
                 if (message.media.bytes.length == 0) {
                     message.media.bytes = new byte[1];
-                    message.media.bytes[0] = (byte) 91;
+                    message.media.bytes[0] = (byte) 94;
                 }
             } else if (message.media instanceof TL_messageMediaUnsupported) {
                 message.media = new TL_messageMediaUnsupported_old();
                 message.media.bytes = new byte[1];
-                message.media.bytes[0] = (byte) 91;
+                message.media.bytes[0] = (byte) 94;
                 message.flags |= 512;
             }
         }
@@ -6847,7 +7511,7 @@ public class MessagesStorage {
             try {
                 cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT type, start, end FROM media_holes_v2 WHERE uid = %d AND type >= 0 AND ((end >= %d AND end <= %d) OR (start >= %d AND start <= %d) OR (start >= %d AND end <= %d) OR (start <= %d AND end >= %d))", new Object[]{Long.valueOf(did), Integer.valueOf(minId), Integer.valueOf(maxId), Integer.valueOf(minId), Integer.valueOf(maxId), Integer.valueOf(minId), Integer.valueOf(maxId), Integer.valueOf(minId), Integer.valueOf(maxId)}), new Object[0]);
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
                 return;
             }
         }
@@ -6875,7 +7539,7 @@ public class MessagesStorage {
                         try {
                             this.database.executeFast(String.format(Locale.US, "UPDATE media_holes_v2 SET end = %d WHERE uid = %d AND type = %d AND start = %d AND end = %d", new Object[]{Integer.valueOf(minId), Long.valueOf(did), Integer.valueOf(hole.type), Integer.valueOf(hole.start), Integer.valueOf(hole.end)})).stepThis().dispose();
                         } catch (Throwable e2) {
-                            FileLog.m13e(e2);
+                            FileLog.e(e2);
                         }
                     }
                 } else if (minId > hole.start + 1) {
@@ -6898,7 +7562,7 @@ public class MessagesStorage {
                     try {
                         this.database.executeFast(String.format(Locale.US, "UPDATE media_holes_v2 SET start = %d WHERE uid = %d AND type = %d AND start = %d AND end = %d", new Object[]{Integer.valueOf(maxId), Long.valueOf(did), Integer.valueOf(hole.type), Integer.valueOf(hole.start), Integer.valueOf(hole.end)})).stepThis().dispose();
                     } catch (Throwable e22) {
-                        FileLog.m13e(e22);
+                        FileLog.e(e22);
                     }
                 }
             }
@@ -6930,7 +7594,7 @@ public class MessagesStorage {
                             try {
                                 this.database.executeFast(String.format(Locale.US, "UPDATE " + table + " SET end = %d WHERE uid = %d AND start = %d AND end = %d", new Object[]{Integer.valueOf(minId), Long.valueOf(did), Integer.valueOf(hole.start), Integer.valueOf(hole.end)})).stepThis().dispose();
                             } catch (Throwable e) {
-                                FileLog.m13e(e);
+                                FileLog.e(e);
                             }
                         }
                     } else if (minId > hole.start + 1) {
@@ -6951,25 +7615,25 @@ public class MessagesStorage {
                         try {
                             this.database.executeFast(String.format(Locale.US, "UPDATE " + table + " SET start = %d WHERE uid = %d AND start = %d AND end = %d", new Object[]{Integer.valueOf(maxId), Long.valueOf(did), Integer.valueOf(hole.start), Integer.valueOf(hole.end)})).stepThis().dispose();
                         } catch (Throwable e2) {
-                            FileLog.m13e(e2);
+                            FileLog.e(e2);
                         }
                     }
                 }
             }
         } catch (Throwable e22) {
-            FileLog.m13e(e22);
+            FileLog.e(e22);
         }
     }
 
     public void replaceMessageIfExists(Message message) {
         if (message != null) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$95(this, message));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$96(this, message));
         }
     }
 
-    final /* synthetic */ void lambda$replaceMessageIfExists$125$MessagesStorage(Message message) {
+    final /* synthetic */ void lambda$replaceMessageIfExists$126$MessagesStorage(Message message) {
         try {
-            long messageId = (long) message.var_id;
+            long messageId = (long) message.id;
             int channelId = 0;
             if (null == null) {
                 channelId = message.to_id.channel_id;
@@ -7027,7 +7691,7 @@ public class MessagesStorage {
                     cursor.dispose();
                 }
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
                 if (cursor != null) {
                     cursor.dispose();
                 }
@@ -7037,36 +7701,36 @@ public class MessagesStorage {
                 }
             }
         } catch (Throwable e2) {
-            FileLog.m13e(e2);
+            FileLog.e(e2);
         }
     }
 
     public void putMessages(messages_Messages messages, long dialog_id, int load_type, int max_id, boolean createDialog) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$96(this, messages, load_type, dialog_id, max_id, createDialog));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$97(this, messages, load_type, dialog_id, max_id, createDialog));
     }
 
-    final /* synthetic */ void lambda$putMessages$126$MessagesStorage(messages_Messages messages, int load_type, long dialog_id, int max_id, boolean createDialog) {
-        int mentionCountUpdate = ConnectionsManager.DEFAULT_DATACENTER_ID;
+    final /* synthetic */ void lambda$putMessages$127$MessagesStorage(messages_Messages messages, int load_type, long dialog_id, int max_id, boolean createDialog) {
+        int mentionCountUpdate = Integer.MAX_VALUE;
         try {
             if (!messages.messages.isEmpty()) {
                 this.database.beginTransaction();
                 int minId;
                 int maxId;
                 if (load_type == 0) {
-                    minId = ((Message) messages.messages.get(messages.messages.size() - 1)).var_id;
+                    minId = ((Message) messages.messages.get(messages.messages.size() - 1)).id;
                     closeHolesInTable("messages_holes", dialog_id, minId, max_id);
                     closeHolesInMedia(dialog_id, minId, max_id, -1);
                 } else if (load_type == 1) {
-                    maxId = ((Message) messages.messages.get(0)).var_id;
+                    maxId = ((Message) messages.messages.get(0)).id;
                     closeHolesInTable("messages_holes", dialog_id, max_id, maxId);
                     closeHolesInMedia(dialog_id, max_id, maxId, -1);
                 } else if (load_type == 3 || load_type == 2 || load_type == 4) {
                     if (max_id != 0 || load_type == 4) {
-                        maxId = ((Message) messages.messages.get(0)).var_id;
+                        maxId = ((Message) messages.messages.get(0)).id;
                     } else {
-                        maxId = ConnectionsManager.DEFAULT_DATACENTER_ID;
+                        maxId = Integer.MAX_VALUE;
                     }
-                    minId = ((Message) messages.messages.get(messages.messages.size() - 1)).var_id;
+                    minId = ((Message) messages.messages.get(messages.messages.size() - 1)).id;
                     closeHolesInTable("messages_holes", dialog_id, minId, maxId);
                     closeHolesInMedia(dialog_id, minId, maxId, -1);
                 }
@@ -7080,7 +7744,7 @@ public class MessagesStorage {
                 for (int a = 0; a < count; a++) {
                     SQLiteCursor cursor;
                     Message message = (Message) messages.messages.get(a);
-                    long messageId = (long) message.var_id;
+                    long messageId = (long) message.id;
                     if (channelId == 0) {
                         channelId = message.to_id.channel_id;
                     }
@@ -7141,7 +7805,7 @@ public class MessagesStorage {
                         state3.bindInteger(2, message.date);
                         state3.bindInteger(3, 0);
                         state3.bindLong(4, messageId);
-                        state3.bindInteger(5, message.var_id);
+                        state3.bindInteger(5, message.id);
                         state3.bindInteger(6, 0);
                         state3.bindLong(7, messageId);
                         state3.bindInteger(8, mentions);
@@ -7189,18 +7853,18 @@ public class MessagesStorage {
                         TL_messageMediaPoll mediaPoll = (TL_messageMediaPoll) message.media;
                         state_polls.requery();
                         state_polls.bindLong(1, messageId);
-                        state_polls.bindLong(2, mediaPoll.poll.var_id);
+                        state_polls.bindLong(2, mediaPoll.poll.id);
                         state_polls.step();
                     } else if (message.media instanceof TL_messageMediaWebPage) {
                         if (state_webpage == null) {
                             state_webpage = this.database.executeFast("REPLACE INTO webpage_pending VALUES(?, ?)");
                         }
                         state_webpage.requery();
-                        state_webpage.bindLong(1, message.media.webpage.var_id);
+                        state_webpage.bindLong(1, message.media.webpage.id);
                         state_webpage.bindLong(2, messageId);
                         state_webpage.step();
                     }
-                    if (load_type == 0 && isValidKeyboardToSave(message) && (botKeyboard == null || botKeyboard.var_id < message.var_id)) {
+                    if (load_type == 0 && isValidKeyboardToSave(message) && (botKeyboard == null || botKeyboard.id < message.id)) {
                         botKeyboard = message;
                     }
                 }
@@ -7232,7 +7896,7 @@ public class MessagesStorage {
                 doneHolesInMedia(dialog_id, max_id, -1);
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -7309,10 +7973,10 @@ public class MessagesStorage {
     }
 
     public void getDialogs(int offset, int count) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$97(this, offset, count));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$98(this, offset, count));
     }
 
-    final /* synthetic */ void lambda$getDialogs$127$MessagesStorage(int offset, int count) {
+    final /* synthetic */ void lambda$getDialogs$128$MessagesStorage(int offset, int count) {
         messages_Dialogs dialogs = new TL_messages_dialogs();
         ArrayList<EncryptedChat> encryptedChats = new ArrayList();
         try {
@@ -7328,12 +7992,12 @@ public class MessagesStorage {
             SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, s.flags, m.date, d.pts, d.inbox_max, d.outbox_max, m.replydata, d.pinned, d.unread_count_i, d.flags FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid LEFT JOIN dialog_settings as s ON d.did = s.did ORDER BY d.pinned DESC, d.date DESC LIMIT %d,%d", new Object[]{Integer.valueOf(offset), Integer.valueOf(count)}), new Object[0]);
             while (cursor.next()) {
                 TL_dialog dialog = new TL_dialog();
-                dialog.var_id = cursor.longValue(0);
+                dialog.id = cursor.longValue(0);
                 dialog.top_message = cursor.intValue(1);
                 dialog.unread_count = cursor.intValue(2);
                 dialog.last_message_date = cursor.intValue(3);
                 dialog.pts = cursor.intValue(10);
-                int i = (dialog.pts == 0 || ((int) dialog.var_id) > 0) ? 0 : 1;
+                int i = (dialog.pts == 0 || ((int) dialog.id) > 0) ? 0 : 1;
                 dialog.flags = i;
                 dialog.read_inbox_max_id = cursor.intValue(11);
                 dialog.read_outbox_max_id = cursor.intValue(12);
@@ -7347,7 +8011,7 @@ public class MessagesStorage {
                 if ((low_flags & 1) != 0) {
                     dialog.notify_settings.mute_until = (int) (flags >> 32);
                     if (dialog.notify_settings.mute_until == 0) {
-                        dialog.notify_settings.mute_until = ConnectionsManager.DEFAULT_DATACENTER_ID;
+                        dialog.notify_settings.mute_until = Integer.MAX_VALUE;
                     }
                 }
                 dialogs.dialogs.add(dialog);
@@ -7358,13 +8022,13 @@ public class MessagesStorage {
                     data.reuse();
                     if (message != null) {
                         MessageObject.setUnreadFlags(message, cursor.intValue(5));
-                        message.var_id = cursor.intValue(6);
+                        message.id = cursor.intValue(6);
                         int date = cursor.intValue(9);
                         if (date != 0) {
                             dialog.last_message_date = date;
                         }
                         message.send_state = cursor.intValue(7);
-                        message.dialog_id = dialog.var_id;
+                        message.dialog_id = dialog.id;
                         dialogs.messages.add(message);
                         addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad);
                         try {
@@ -7392,16 +8056,16 @@ public class MessagesStorage {
                                     if (!replyMessages.contains(Long.valueOf(messageId))) {
                                         replyMessages.add(Long.valueOf(messageId));
                                     }
-                                    replyMessageOwners.put(dialog.var_id, message);
+                                    replyMessageOwners.put(dialog.id, message);
                                 }
                             }
                         } catch (Throwable e) {
-                            FileLog.m13e(e);
+                            FileLog.e(e);
                         }
                     }
                 }
-                int lower_id = (int) dialog.var_id;
-                int high_id = (int) (dialog.var_id >> 32);
+                int lower_id = (int) dialog.id;
+                int high_id = (int) (dialog.id >> 32);
                 if (lower_id == 0) {
                     if (!encryptedToLoad.contains(Integer.valueOf(high_id))) {
                         encryptedToLoad.add(Integer.valueOf(high_id));
@@ -7427,7 +8091,7 @@ public class MessagesStorage {
                         message = Message.TLdeserialize(data, data.readInt32(false), false);
                         message.readAttachPath(data, UserConfig.getInstance(this.currentAccount).clientUserId);
                         data.reuse();
-                        message.var_id = cursor.intValue(1);
+                        message.id = cursor.intValue(1);
                         message.date = cursor.intValue(2);
                         message.dialog_id = cursor.longValue(3);
                         addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad);
@@ -7459,7 +8123,7 @@ public class MessagesStorage {
             dialogs.users.clear();
             dialogs.chats.clear();
             encryptedChats.clear();
-            FileLog.m13e(e2);
+            FileLog.e(e2);
             MessagesController.getInstance(this.currentAccount).processLoadedDialogs(dialogs, encryptedChats, 0, 100, 1, true, false, true);
         }
     }
@@ -7496,182 +8160,634 @@ public class MessagesStorage {
     /* JADX WARNING: Removed duplicated region for block: B:66:0x0452 A:{Catch:{ Exception -> 0x014d }} */
     /* JADX WARNING: Removed duplicated region for block: B:84:0x0124 A:{SYNTHETIC} */
     /* JADX WARNING: Removed duplicated region for block: B:69:0x0466 A:{Catch:{ Exception -> 0x014d }} */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    private void putDialogsInternal(messages_Dialogs dialogs, int check) {
-        try {
-            int a;
-            Message message;
-            this.database.beginTransaction();
-            LongSparseArray<Message> longSparseArray = new LongSparseArray(dialogs.messages.size());
-            for (a = 0; a < dialogs.messages.size(); a++) {
-                message = (Message) dialogs.messages.get(a);
-                longSparseArray.put(MessageObject.getDialogId(message), message);
-            }
-            if (!dialogs.dialogs.isEmpty()) {
-                SQLitePreparedStatement state_messages = this.database.executeFast("REPLACE INTO messages VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?)");
-                SQLitePreparedStatement state_dialogs = this.database.executeFast("REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                SQLitePreparedStatement state_media = this.database.executeFast("REPLACE INTO media_v2 VALUES(?, ?, ?, ?, ?)");
-                SQLitePreparedStatement state_settings = this.database.executeFast("REPLACE INTO dialog_settings VALUES(?, ?)");
-                SQLitePreparedStatement state_holes = this.database.executeFast("REPLACE INTO messages_holes VALUES(?, ?, ?)");
-                SQLitePreparedStatement state_media_holes = this.database.executeFast("REPLACE INTO media_holes_v2 VALUES(?, ?, ?, ?)");
-                SQLitePreparedStatement state_polls = null;
-                for (a = 0; a < dialogs.dialogs.size(); a++) {
-                    TL_dialog dialog = (TL_dialog) dialogs.dialogs.get(a);
-                    if (dialog.var_id == 0) {
-                        if (dialog.peer.user_id != 0) {
-                            dialog.var_id = (long) dialog.peer.user_id;
-                        } else if (dialog.peer.chat_id != 0) {
-                            dialog.var_id = (long) (-dialog.peer.chat_id);
-                        } else {
-                            dialog.var_id = (long) (-dialog.peer.channel_id);
-                        }
-                    }
-                    SQLiteCursor cursor;
-                    int messageDate;
-                    long topMessage;
-                    int flags;
-                    if (check == 1) {
-                        cursor = this.database.queryFinalized("SELECT did FROM dialogs WHERE did = " + dialog.var_id, new Object[0]);
-                        boolean exists = cursor.next();
-                        cursor.dispose();
-                        if (exists) {
-                        }
-                        messageDate = 0;
-                        message = (Message) longSparseArray.get(dialog.var_id);
-                        if (message != null) {
-                            messageDate = Math.max(message.date, 0);
-                            if (isValidKeyboardToSave(message)) {
-                                DataQuery.getInstance(this.currentAccount).putBotKeyboard(dialog.var_id, message);
-                            }
-                            fixUnsupportedMedia(message);
-                            NativeByteBuffer data = new NativeByteBuffer(message.getObjectSize());
-                            message.serializeToStream(data);
-                            long messageId = (long) message.var_id;
-                            if (message.to_id.channel_id != 0) {
-                                messageId |= ((long) message.to_id.channel_id) << 32;
-                            }
-                            state_messages.requery();
-                            state_messages.bindLong(1, messageId);
-                            state_messages.bindLong(2, dialog.var_id);
-                            state_messages.bindInteger(3, MessageObject.getUnreadFlags(message));
-                            state_messages.bindInteger(4, message.send_state);
-                            state_messages.bindInteger(5, message.date);
-                            state_messages.bindByteBuffer(6, data);
-                            state_messages.bindInteger(7, MessageObject.isOut(message) ? 1 : 0);
-                            state_messages.bindInteger(8, 0);
-                            state_messages.bindInteger(9, (message.flags & 1024) != 0 ? message.views : 0);
-                            state_messages.bindInteger(10, 0);
-                            state_messages.bindInteger(11, message.mentioned ? 1 : 0);
-                            state_messages.step();
-                            if (DataQuery.canAddMessageToMedia(message)) {
-                                state_media.requery();
-                                state_media.bindLong(1, messageId);
-                                state_media.bindLong(2, dialog.var_id);
-                                state_media.bindInteger(3, message.date);
-                                state_media.bindInteger(4, DataQuery.getMediaType(message));
-                                state_media.bindByteBuffer(5, data);
-                                state_media.step();
-                            }
-                            data.reuse();
-                            if (message.media instanceof TL_messageMediaPoll) {
-                                if (state_polls == null) {
-                                    state_polls = this.database.executeFast("REPLACE INTO polls VALUES(?, ?)");
-                                }
-                                TL_messageMediaPoll mediaPoll = message.media;
-                                state_polls.requery();
-                                state_polls.bindLong(1, messageId);
-                                state_polls.bindLong(2, mediaPoll.poll.var_id);
-                                state_polls.step();
-                            }
-                            createFirstHoles(dialog.var_id, state_holes, state_media_holes, message.var_id);
-                        }
-                        topMessage = (long) dialog.top_message;
-                        if (dialog.peer.channel_id != 0) {
-                            topMessage |= ((long) dialog.peer.channel_id) << 32;
-                        }
-                        state_dialogs.requery();
-                        state_dialogs.bindLong(1, dialog.var_id);
-                        state_dialogs.bindInteger(2, messageDate);
-                        state_dialogs.bindInteger(3, dialog.unread_count);
-                        state_dialogs.bindLong(4, topMessage);
-                        state_dialogs.bindInteger(5, dialog.read_inbox_max_id);
-                        state_dialogs.bindInteger(6, dialog.read_outbox_max_id);
-                        state_dialogs.bindLong(7, 0);
-                        state_dialogs.bindInteger(8, dialog.unread_mentions_count);
-                        state_dialogs.bindInteger(9, dialog.pts);
-                        state_dialogs.bindInteger(10, 0);
-                        state_dialogs.bindInteger(11, dialog.pinnedNum);
-                        flags = 0;
-                        if (dialog.unread_mark) {
-                            flags = 0 | 1;
-                        }
-                        state_dialogs.bindInteger(12, flags);
-                        state_dialogs.step();
-                        if (dialog.notify_settings == null) {
-                            state_settings.requery();
-                            state_settings.bindLong(1, dialog.var_id);
-                            state_settings.bindInteger(2, dialog.notify_settings.mute_until != 0 ? 1 : 0);
-                            state_settings.step();
-                        }
-                    } else {
-                        if (dialog.pinned && check == 2) {
-                            cursor = this.database.queryFinalized("SELECT pinned FROM dialogs WHERE did = " + dialog.var_id, new Object[0]);
-                            if (cursor.next()) {
-                                dialog.pinnedNum = cursor.intValue(0);
-                            }
-                            cursor.dispose();
-                        }
-                        messageDate = 0;
-                        message = (Message) longSparseArray.get(dialog.var_id);
-                        if (message != null) {
-                        }
-                        topMessage = (long) dialog.top_message;
-                        if (dialog.peer.channel_id != 0) {
-                        }
-                        state_dialogs.requery();
-                        state_dialogs.bindLong(1, dialog.var_id);
-                        state_dialogs.bindInteger(2, messageDate);
-                        state_dialogs.bindInteger(3, dialog.unread_count);
-                        state_dialogs.bindLong(4, topMessage);
-                        state_dialogs.bindInteger(5, dialog.read_inbox_max_id);
-                        state_dialogs.bindInteger(6, dialog.read_outbox_max_id);
-                        state_dialogs.bindLong(7, 0);
-                        state_dialogs.bindInteger(8, dialog.unread_mentions_count);
-                        state_dialogs.bindInteger(9, dialog.pts);
-                        state_dialogs.bindInteger(10, 0);
-                        state_dialogs.bindInteger(11, dialog.pinnedNum);
-                        flags = 0;
-                        if (dialog.unread_mark) {
-                        }
-                        state_dialogs.bindInteger(12, flags);
-                        state_dialogs.step();
-                        if (dialog.notify_settings == null) {
-                        }
-                    }
-                }
-                state_messages.dispose();
-                state_dialogs.dispose();
-                state_media.dispose();
-                state_settings.dispose();
-                state_holes.dispose();
-                state_media_holes.dispose();
-                if (state_polls != null) {
-                    state_polls.dispose();
-                }
-            }
-            putUsersInternal(dialogs.users);
-            putChatsInternal(dialogs.chats);
-            this.database.commitTransaction();
-        } catch (Throwable e) {
-            FileLog.m13e(e);
-        }
+    private void putDialogsInternal(org.telegram.tgnet.TLRPC.messages_Dialogs r33, int r34) {
+        /*
+        r32 = this;
+        r0 = r32;
+        r0 = r0.database;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r28.beginTransaction();	 Catch:{ Exception -> 0x014d }
+        r18 = new android.util.LongSparseArray;	 Catch:{ Exception -> 0x014d }
+        r0 = r33;
+        r0 = r0.messages;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r28 = r28.size();	 Catch:{ Exception -> 0x014d }
+        r0 = r18;
+        r1 = r28;
+        r0.<init>(r1);	 Catch:{ Exception -> 0x014d }
+        r6 = 0;
+    L_0x001d:
+        r0 = r33;
+        r0 = r0.messages;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r28 = r28.size();	 Catch:{ Exception -> 0x014d }
+        r0 = r28;
+        if (r6 >= r0) goto L_0x0047;
+    L_0x002b:
+        r0 = r33;
+        r0 = r0.messages;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r0 = r28;
+        r14 = r0.get(r6);	 Catch:{ Exception -> 0x014d }
+        r14 = (org.telegram.tgnet.TLRPC.Message) r14;	 Catch:{ Exception -> 0x014d }
+        r28 = org.telegram.messenger.MessageObject.getDialogId(r14);	 Catch:{ Exception -> 0x014d }
+        r0 = r18;
+        r1 = r28;
+        r0.put(r1, r14);	 Catch:{ Exception -> 0x014d }
+        r6 = r6 + 1;
+        goto L_0x001d;
+    L_0x0047:
+        r0 = r33;
+        r0 = r0.dialogs;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r28 = r28.isEmpty();	 Catch:{ Exception -> 0x014d }
+        if (r28 != 0) goto L_0x04bc;
+    L_0x0053:
+        r0 = r32;
+        r0 = r0.database;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r29 = "REPLACE INTO messages VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?)";
+        r23 = r28.executeFast(r29);	 Catch:{ Exception -> 0x014d }
+        r0 = r32;
+        r0 = r0.database;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r29 = "REPLACE INTO dialogs VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        r19 = r28.executeFast(r29);	 Catch:{ Exception -> 0x014d }
+        r0 = r32;
+        r0 = r0.database;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r29 = "REPLACE INTO media_v2 VALUES(?, ?, ?, ?, ?)";
+        r21 = r28.executeFast(r29);	 Catch:{ Exception -> 0x014d }
+        r0 = r32;
+        r0 = r0.database;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r29 = "REPLACE INTO dialog_settings VALUES(?, ?)";
+        r25 = r28.executeFast(r29);	 Catch:{ Exception -> 0x014d }
+        r0 = r32;
+        r0 = r0.database;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r29 = "REPLACE INTO messages_holes VALUES(?, ?, ?)";
+        r20 = r28.executeFast(r29);	 Catch:{ Exception -> 0x014d }
+        r0 = r32;
+        r0 = r0.database;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r29 = "REPLACE INTO media_holes_v2 VALUES(?, ?, ?, ?)";
+        r22 = r28.executeFast(r29);	 Catch:{ Exception -> 0x014d }
+        r24 = 0;
+        r6 = 0;
+    L_0x00a4:
+        r0 = r33;
+        r0 = r0.dialogs;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r28 = r28.size();	 Catch:{ Exception -> 0x014d }
+        r0 = r28;
+        if (r6 >= r0) goto L_0x04a5;
+    L_0x00b2:
+        r0 = r33;
+        r0 = r0.dialogs;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r0 = r28;
+        r9 = r0.get(r6);	 Catch:{ Exception -> 0x014d }
+        r9 = (org.telegram.tgnet.TLRPC.TL_dialog) r9;	 Catch:{ Exception -> 0x014d }
+        r0 = r9.id;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r30 = 0;
+        r28 = (r28 > r30 ? 1 : (r28 == r30 ? 0 : -1));
+        if (r28 != 0) goto L_0x00e9;
+    L_0x00ca:
+        r0 = r9.peer;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r0 = r28;
+        r0 = r0.user_id;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        if (r28 == 0) goto L_0x0128;
+    L_0x00d6:
+        r0 = r9.peer;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r0 = r28;
+        r0 = r0.user_id;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r0 = r28;
+        r0 = (long) r0;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r0 = r28;
+        r9.id = r0;	 Catch:{ Exception -> 0x014d }
+    L_0x00e9:
+        r28 = 1;
+        r0 = r34;
+        r1 = r28;
+        if (r0 != r1) goto L_0x016c;
+    L_0x00f1:
+        r0 = r32;
+        r0 = r0.database;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r29 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x014d }
+        r29.<init>();	 Catch:{ Exception -> 0x014d }
+        r30 = "SELECT did FROM dialogs WHERE did = ";
+        r29 = r29.append(r30);	 Catch:{ Exception -> 0x014d }
+        r0 = r9.id;	 Catch:{ Exception -> 0x014d }
+        r30 = r0;
+        r29 = r29.append(r30);	 Catch:{ Exception -> 0x014d }
+        r29 = r29.toString();	 Catch:{ Exception -> 0x014d }
+        r30 = 0;
+        r0 = r30;
+        r0 = new java.lang.Object[r0];	 Catch:{ Exception -> 0x014d }
+        r30 = r0;
+        r7 = r28.queryFinalized(r29, r30);	 Catch:{ Exception -> 0x014d }
+        r11 = r7.next();	 Catch:{ Exception -> 0x014d }
+        r7.dispose();	 Catch:{ Exception -> 0x014d }
+        if (r11 == 0) goto L_0x01b9;
+    L_0x0124:
+        r6 = r6 + 1;
+        goto L_0x00a4;
+    L_0x0128:
+        r0 = r9.peer;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r0 = r28;
+        r0 = r0.chat_id;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        if (r28 == 0) goto L_0x0152;
+    L_0x0134:
+        r0 = r9.peer;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r0 = r28;
+        r0 = r0.chat_id;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r0 = r28;
+        r0 = -r0;
+        r28 = r0;
+        r0 = r28;
+        r0 = (long) r0;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r0 = r28;
+        r9.id = r0;	 Catch:{ Exception -> 0x014d }
+        goto L_0x00e9;
+    L_0x014d:
+        r10 = move-exception;
+        org.telegram.messenger.FileLog.e(r10);
+    L_0x0151:
+        return;
+    L_0x0152:
+        r0 = r9.peer;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r0 = r28;
+        r0 = r0.channel_id;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r0 = r28;
+        r0 = -r0;
+        r28 = r0;
+        r0 = r28;
+        r0 = (long) r0;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r0 = r28;
+        r9.id = r0;	 Catch:{ Exception -> 0x014d }
+        goto L_0x00e9;
+    L_0x016c:
+        r0 = r9.pinned;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        if (r28 == 0) goto L_0x01b9;
+    L_0x0172:
+        r28 = 2;
+        r0 = r34;
+        r1 = r28;
+        if (r0 != r1) goto L_0x01b9;
+    L_0x017a:
+        r0 = r32;
+        r0 = r0.database;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r29 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x014d }
+        r29.<init>();	 Catch:{ Exception -> 0x014d }
+        r30 = "SELECT pinned FROM dialogs WHERE did = ";
+        r29 = r29.append(r30);	 Catch:{ Exception -> 0x014d }
+        r0 = r9.id;	 Catch:{ Exception -> 0x014d }
+        r30 = r0;
+        r29 = r29.append(r30);	 Catch:{ Exception -> 0x014d }
+        r29 = r29.toString();	 Catch:{ Exception -> 0x014d }
+        r30 = 0;
+        r0 = r30;
+        r0 = new java.lang.Object[r0];	 Catch:{ Exception -> 0x014d }
+        r30 = r0;
+        r7 = r28.queryFinalized(r29, r30);	 Catch:{ Exception -> 0x014d }
+        r28 = r7.next();	 Catch:{ Exception -> 0x014d }
+        if (r28 == 0) goto L_0x01b6;
+    L_0x01aa:
+        r28 = 0;
+        r0 = r28;
+        r28 = r7.intValue(r0);	 Catch:{ Exception -> 0x014d }
+        r0 = r28;
+        r9.pinnedNum = r0;	 Catch:{ Exception -> 0x014d }
+    L_0x01b6:
+        r7.dispose();	 Catch:{ Exception -> 0x014d }
+    L_0x01b9:
+        r15 = 0;
+        r0 = r9.id;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r0 = r18;
+        r1 = r28;
+        r14 = r0.get(r1);	 Catch:{ Exception -> 0x014d }
+        r14 = (org.telegram.tgnet.TLRPC.Message) r14;	 Catch:{ Exception -> 0x014d }
+        if (r14 == 0) goto L_0x0387;
+    L_0x01ca:
+        r0 = r14.date;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r0 = r28;
+        r15 = java.lang.Math.max(r0, r15);	 Catch:{ Exception -> 0x014d }
+        r0 = r32;
+        r28 = r0.isValidKeyboardToSave(r14);	 Catch:{ Exception -> 0x014d }
+        if (r28 == 0) goto L_0x01f1;
+    L_0x01dc:
+        r0 = r32;
+        r0 = r0.currentAccount;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r28 = org.telegram.messenger.DataQuery.getInstance(r28);	 Catch:{ Exception -> 0x014d }
+        r0 = r9.id;	 Catch:{ Exception -> 0x014d }
+        r30 = r0;
+        r0 = r28;
+        r1 = r30;
+        r0.putBotKeyboard(r1, r14);	 Catch:{ Exception -> 0x014d }
+    L_0x01f1:
+        r0 = r32;
+        r0.fixUnsupportedMedia(r14);	 Catch:{ Exception -> 0x014d }
+        r8 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x014d }
+        r28 = r14.getObjectSize();	 Catch:{ Exception -> 0x014d }
+        r0 = r28;
+        r8.<init>(r0);	 Catch:{ Exception -> 0x014d }
+        r14.serializeToStream(r8);	 Catch:{ Exception -> 0x014d }
+        r0 = r14.id;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r0 = r28;
+        r0 = (long) r0;	 Catch:{ Exception -> 0x014d }
+        r16 = r0;
+        r0 = r14.to_id;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r0 = r28;
+        r0 = r0.channel_id;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        if (r28 == 0) goto L_0x022e;
+    L_0x0219:
+        r0 = r14.to_id;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r0 = r28;
+        r0 = r0.channel_id;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r0 = r28;
+        r0 = (long) r0;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r30 = 32;
+        r28 = r28 << r30;
+        r16 = r16 | r28;
+    L_0x022e:
+        r23.requery();	 Catch:{ Exception -> 0x014d }
+        r28 = 1;
+        r0 = r23;
+        r1 = r28;
+        r2 = r16;
+        r0.bindLong(r1, r2);	 Catch:{ Exception -> 0x014d }
+        r28 = 2;
+        r0 = r9.id;	 Catch:{ Exception -> 0x014d }
+        r30 = r0;
+        r0 = r23;
+        r1 = r28;
+        r2 = r30;
+        r0.bindLong(r1, r2);	 Catch:{ Exception -> 0x014d }
+        r28 = 3;
+        r29 = org.telegram.messenger.MessageObject.getUnreadFlags(r14);	 Catch:{ Exception -> 0x014d }
+        r0 = r23;
+        r1 = r28;
+        r2 = r29;
+        r0.bindInteger(r1, r2);	 Catch:{ Exception -> 0x014d }
+        r28 = 4;
+        r0 = r14.send_state;	 Catch:{ Exception -> 0x014d }
+        r29 = r0;
+        r0 = r23;
+        r1 = r28;
+        r2 = r29;
+        r0.bindInteger(r1, r2);	 Catch:{ Exception -> 0x014d }
+        r28 = 5;
+        r0 = r14.date;	 Catch:{ Exception -> 0x014d }
+        r29 = r0;
+        r0 = r23;
+        r1 = r28;
+        r2 = r29;
+        r0.bindInteger(r1, r2);	 Catch:{ Exception -> 0x014d }
+        r28 = 6;
+        r0 = r23;
+        r1 = r28;
+        r0.bindByteBuffer(r1, r8);	 Catch:{ Exception -> 0x014d }
+        r29 = 7;
+        r28 = org.telegram.messenger.MessageObject.isOut(r14);	 Catch:{ Exception -> 0x014d }
+        if (r28 == 0) goto L_0x0496;
+    L_0x0289:
+        r28 = 1;
+    L_0x028b:
+        r0 = r23;
+        r1 = r29;
+        r2 = r28;
+        r0.bindInteger(r1, r2);	 Catch:{ Exception -> 0x014d }
+        r28 = 8;
+        r29 = 0;
+        r0 = r23;
+        r1 = r28;
+        r2 = r29;
+        r0.bindInteger(r1, r2);	 Catch:{ Exception -> 0x014d }
+        r29 = 9;
+        r0 = r14.flags;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r0 = r28;
+        r0 = r0 & 1024;
+        r28 = r0;
+        if (r28 == 0) goto L_0x049a;
+    L_0x02af:
+        r0 = r14.views;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+    L_0x02b3:
+        r0 = r23;
+        r1 = r29;
+        r2 = r28;
+        r0.bindInteger(r1, r2);	 Catch:{ Exception -> 0x014d }
+        r28 = 10;
+        r29 = 0;
+        r0 = r23;
+        r1 = r28;
+        r2 = r29;
+        r0.bindInteger(r1, r2);	 Catch:{ Exception -> 0x014d }
+        r29 = 11;
+        r0 = r14.mentioned;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        if (r28 == 0) goto L_0x049e;
+    L_0x02d1:
+        r28 = 1;
+    L_0x02d3:
+        r0 = r23;
+        r1 = r29;
+        r2 = r28;
+        r0.bindInteger(r1, r2);	 Catch:{ Exception -> 0x014d }
+        r23.step();	 Catch:{ Exception -> 0x014d }
+        r28 = org.telegram.messenger.DataQuery.canAddMessageToMedia(r14);	 Catch:{ Exception -> 0x014d }
+        if (r28 == 0) goto L_0x032c;
+    L_0x02e5:
+        r21.requery();	 Catch:{ Exception -> 0x014d }
+        r28 = 1;
+        r0 = r21;
+        r1 = r28;
+        r2 = r16;
+        r0.bindLong(r1, r2);	 Catch:{ Exception -> 0x014d }
+        r28 = 2;
+        r0 = r9.id;	 Catch:{ Exception -> 0x014d }
+        r30 = r0;
+        r0 = r21;
+        r1 = r28;
+        r2 = r30;
+        r0.bindLong(r1, r2);	 Catch:{ Exception -> 0x014d }
+        r28 = 3;
+        r0 = r14.date;	 Catch:{ Exception -> 0x014d }
+        r29 = r0;
+        r0 = r21;
+        r1 = r28;
+        r2 = r29;
+        r0.bindInteger(r1, r2);	 Catch:{ Exception -> 0x014d }
+        r28 = 4;
+        r29 = org.telegram.messenger.DataQuery.getMediaType(r14);	 Catch:{ Exception -> 0x014d }
+        r0 = r21;
+        r1 = r28;
+        r2 = r29;
+        r0.bindInteger(r1, r2);	 Catch:{ Exception -> 0x014d }
+        r28 = 5;
+        r0 = r21;
+        r1 = r28;
+        r0.bindByteBuffer(r1, r8);	 Catch:{ Exception -> 0x014d }
+        r21.step();	 Catch:{ Exception -> 0x014d }
+    L_0x032c:
+        r8.reuse();	 Catch:{ Exception -> 0x014d }
+        r0 = r14.media;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r0 = r28;
+        r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaPoll;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        if (r28 == 0) goto L_0x0374;
+    L_0x033b:
+        if (r24 != 0) goto L_0x034a;
+    L_0x033d:
+        r0 = r32;
+        r0 = r0.database;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r29 = "REPLACE INTO polls VALUES(?, ?)";
+        r24 = r28.executeFast(r29);	 Catch:{ Exception -> 0x014d }
+    L_0x034a:
+        r13 = r14.media;	 Catch:{ Exception -> 0x014d }
+        r13 = (org.telegram.tgnet.TLRPC.TL_messageMediaPoll) r13;	 Catch:{ Exception -> 0x014d }
+        r24.requery();	 Catch:{ Exception -> 0x014d }
+        r28 = 1;
+        r0 = r24;
+        r1 = r28;
+        r2 = r16;
+        r0.bindLong(r1, r2);	 Catch:{ Exception -> 0x014d }
+        r28 = 2;
+        r0 = r13.poll;	 Catch:{ Exception -> 0x014d }
+        r29 = r0;
+        r0 = r29;
+        r0 = r0.id;	 Catch:{ Exception -> 0x014d }
+        r30 = r0;
+        r0 = r24;
+        r1 = r28;
+        r2 = r30;
+        r0.bindLong(r1, r2);	 Catch:{ Exception -> 0x014d }
+        r24.step();	 Catch:{ Exception -> 0x014d }
+    L_0x0374:
+        r0 = r9.id;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r0 = r14.id;	 Catch:{ Exception -> 0x014d }
+        r30 = r0;
+        r0 = r28;
+        r2 = r20;
+        r3 = r22;
+        r4 = r30;
+        createFirstHoles(r0, r2, r3, r4);	 Catch:{ Exception -> 0x014d }
+    L_0x0387:
+        r0 = r9.top_message;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r0 = r28;
+        r0 = (long) r0;	 Catch:{ Exception -> 0x014d }
+        r26 = r0;
+        r0 = r9.peer;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r0 = r28;
+        r0 = r0.channel_id;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        if (r28 == 0) goto L_0x03b1;
+    L_0x039c:
+        r0 = r9.peer;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r0 = r28;
+        r0 = r0.channel_id;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r0 = r28;
+        r0 = (long) r0;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r30 = 32;
+        r28 = r28 << r30;
+        r26 = r26 | r28;
+    L_0x03b1:
+        r19.requery();	 Catch:{ Exception -> 0x014d }
+        r28 = 1;
+        r0 = r9.id;	 Catch:{ Exception -> 0x014d }
+        r30 = r0;
+        r0 = r19;
+        r1 = r28;
+        r2 = r30;
+        r0.bindLong(r1, r2);	 Catch:{ Exception -> 0x014d }
+        r28 = 2;
+        r0 = r19;
+        r1 = r28;
+        r0.bindInteger(r1, r15);	 Catch:{ Exception -> 0x014d }
+        r28 = 3;
+        r0 = r9.unread_count;	 Catch:{ Exception -> 0x014d }
+        r29 = r0;
+        r0 = r19;
+        r1 = r28;
+        r2 = r29;
+        r0.bindInteger(r1, r2);	 Catch:{ Exception -> 0x014d }
+        r28 = 4;
+        r0 = r19;
+        r1 = r28;
+        r2 = r26;
+        r0.bindLong(r1, r2);	 Catch:{ Exception -> 0x014d }
+        r28 = 5;
+        r0 = r9.read_inbox_max_id;	 Catch:{ Exception -> 0x014d }
+        r29 = r0;
+        r0 = r19;
+        r1 = r28;
+        r2 = r29;
+        r0.bindInteger(r1, r2);	 Catch:{ Exception -> 0x014d }
+        r28 = 6;
+        r0 = r9.read_outbox_max_id;	 Catch:{ Exception -> 0x014d }
+        r29 = r0;
+        r0 = r19;
+        r1 = r28;
+        r2 = r29;
+        r0.bindInteger(r1, r2);	 Catch:{ Exception -> 0x014d }
+        r28 = 7;
+        r30 = 0;
+        r0 = r19;
+        r1 = r28;
+        r2 = r30;
+        r0.bindLong(r1, r2);	 Catch:{ Exception -> 0x014d }
+        r28 = 8;
+        r0 = r9.unread_mentions_count;	 Catch:{ Exception -> 0x014d }
+        r29 = r0;
+        r0 = r19;
+        r1 = r28;
+        r2 = r29;
+        r0.bindInteger(r1, r2);	 Catch:{ Exception -> 0x014d }
+        r28 = 9;
+        r0 = r9.pts;	 Catch:{ Exception -> 0x014d }
+        r29 = r0;
+        r0 = r19;
+        r1 = r28;
+        r2 = r29;
+        r0.bindInteger(r1, r2);	 Catch:{ Exception -> 0x014d }
+        r28 = 10;
+        r29 = 0;
+        r0 = r19;
+        r1 = r28;
+        r2 = r29;
+        r0.bindInteger(r1, r2);	 Catch:{ Exception -> 0x014d }
+        r28 = 11;
+        r0 = r9.pinnedNum;	 Catch:{ Exception -> 0x014d }
+        r29 = r0;
+        r0 = r19;
+        r1 = r28;
+        r2 = r29;
+        r0.bindInteger(r1, r2);	 Catch:{ Exception -> 0x014d }
+        r12 = 0;
+        r0 = r9.unread_mark;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        if (r28 == 0) goto L_0x0454;
+    L_0x0452:
+        r12 = r12 | 1;
+    L_0x0454:
+        r28 = 12;
+        r0 = r19;
+        r1 = r28;
+        r0.bindInteger(r1, r12);	 Catch:{ Exception -> 0x014d }
+        r19.step();	 Catch:{ Exception -> 0x014d }
+        r0 = r9.notify_settings;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        if (r28 == 0) goto L_0x0124;
+    L_0x0466:
+        r25.requery();	 Catch:{ Exception -> 0x014d }
+        r28 = 1;
+        r0 = r9.id;	 Catch:{ Exception -> 0x014d }
+        r30 = r0;
+        r0 = r25;
+        r1 = r28;
+        r2 = r30;
+        r0.bindLong(r1, r2);	 Catch:{ Exception -> 0x014d }
+        r29 = 2;
+        r0 = r9.notify_settings;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r0 = r28;
+        r0 = r0.mute_until;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        if (r28 == 0) goto L_0x04a2;
+    L_0x0486:
+        r28 = 1;
+    L_0x0488:
+        r0 = r25;
+        r1 = r29;
+        r2 = r28;
+        r0.bindInteger(r1, r2);	 Catch:{ Exception -> 0x014d }
+        r25.step();	 Catch:{ Exception -> 0x014d }
+        goto L_0x0124;
+    L_0x0496:
+        r28 = 0;
+        goto L_0x028b;
+    L_0x049a:
+        r28 = 0;
+        goto L_0x02b3;
+    L_0x049e:
+        r28 = 0;
+        goto L_0x02d3;
+    L_0x04a2:
+        r28 = 0;
+        goto L_0x0488;
+    L_0x04a5:
+        r23.dispose();	 Catch:{ Exception -> 0x014d }
+        r19.dispose();	 Catch:{ Exception -> 0x014d }
+        r21.dispose();	 Catch:{ Exception -> 0x014d }
+        r25.dispose();	 Catch:{ Exception -> 0x014d }
+        r20.dispose();	 Catch:{ Exception -> 0x014d }
+        r22.dispose();	 Catch:{ Exception -> 0x014d }
+        if (r24 == 0) goto L_0x04bc;
+    L_0x04b9:
+        r24.dispose();	 Catch:{ Exception -> 0x014d }
+    L_0x04bc:
+        r0 = r33;
+        r0 = r0.users;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r0 = r32;
+        r1 = r28;
+        r0.putUsersInternal(r1);	 Catch:{ Exception -> 0x014d }
+        r0 = r33;
+        r0 = r0.chats;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r0 = r32;
+        r1 = r28;
+        r0.putChatsInternal(r1);	 Catch:{ Exception -> 0x014d }
+        r0 = r32;
+        r0 = r0.database;	 Catch:{ Exception -> 0x014d }
+        r28 = r0;
+        r28.commitTransaction();	 Catch:{ Exception -> 0x014d }
+        goto L_0x0151;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.putDialogsInternal(org.telegram.tgnet.TLRPC$messages_Dialogs, int):void");
     }
 
     public void unpinAllDialogsExceptNew(ArrayList<Long> dids) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$98(this, dids));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$99(this, dids));
     }
 
-    final /* synthetic */ void lambda$unpinAllDialogsExceptNew$128$MessagesStorage(ArrayList dids) {
+    final /* synthetic */ void lambda$unpinAllDialogsExceptNew$129$MessagesStorage(ArrayList dids) {
         try {
             ArrayList<Long> unpinnedDialogs = new ArrayList();
             SQLiteCursor cursor = this.database.queryFinalized(String.format(Locale.US, "SELECT did FROM dialogs WHERE pinned != 0 AND did NOT IN (%s)", new Object[]{TextUtils.join(",", dids)}), new Object[0]);
@@ -7693,15 +8809,15 @@ public class MessagesStorage {
                 state.dispose();
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
     public void setDialogUnread(long did, boolean unread) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$99(this, did, unread));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$100(this, did, unread));
     }
 
-    final /* synthetic */ void lambda$setDialogUnread$129$MessagesStorage(long did, boolean unread) {
+    final /* synthetic */ void lambda$setDialogUnread$130$MessagesStorage(long did, boolean unread) {
         int flags = 0;
         SQLiteCursor cursor = null;
         try {
@@ -7713,12 +8829,12 @@ public class MessagesStorage {
                 try {
                     cursor.dispose();
                 } catch (Throwable e) {
-                    FileLog.m13e(e);
+                    FileLog.e(e);
                     return;
                 }
             }
         } catch (Throwable e2) {
-            FileLog.m13e(e2);
+            FileLog.e(e2);
             if (cursor != null) {
                 cursor.dispose();
             }
@@ -7740,10 +8856,10 @@ public class MessagesStorage {
     }
 
     public void setDialogPinned(long did, int pinned) {
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$100(this, pinned, did));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$101(this, pinned, did));
     }
 
-    final /* synthetic */ void lambda$setDialogPinned$130$MessagesStorage(int pinned, long did) {
+    final /* synthetic */ void lambda$setDialogPinned$131$MessagesStorage(int pinned, long did) {
         try {
             SQLitePreparedStatement state = this.database.executeFast("UPDATE dialogs SET pinned = ? WHERE did = ?");
             state.bindInteger(1, pinned);
@@ -7751,44 +8867,44 @@ public class MessagesStorage {
             state.step();
             state.dispose();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
     public void putDialogs(messages_Dialogs dialogs, int check) {
         if (!dialogs.dialogs.isEmpty()) {
-            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$101(this, dialogs, check));
+            this.storageQueue.postRunnable(new MessagesStorage$$Lambda$102(this, dialogs, check));
         }
     }
 
-    final /* synthetic */ void lambda$putDialogs$131$MessagesStorage(messages_Dialogs dialogs, int check) {
+    final /* synthetic */ void lambda$putDialogs$132$MessagesStorage(messages_Dialogs dialogs, int check) {
         putDialogsInternal(dialogs, check);
         try {
             loadUnreadMessages();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
     public int getDialogReadMax(boolean outbox, long dialog_id) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Integer[] max = new Integer[]{Integer.valueOf(0)};
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$102(this, outbox, dialog_id, max, countDownLatch));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$103(this, outbox, dialog_id, max, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
         return max[0].intValue();
     }
 
-    final /* synthetic */ void lambda$getDialogReadMax$132$MessagesStorage(boolean outbox, long dialog_id, Integer[] max, CountDownLatch countDownLatch) {
+    final /* synthetic */ void lambda$getDialogReadMax$133$MessagesStorage(boolean outbox, long dialog_id, Integer[] max, CountDownLatch countDownLatch) {
         SQLiteCursor cursor = null;
         if (outbox) {
             try {
                 cursor = this.database.queryFinalized("SELECT outbox_max FROM dialogs WHERE did = " + dialog_id, new Object[0]);
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
                 if (cursor != null) {
                     cursor.dispose();
                 }
@@ -7812,16 +8928,16 @@ public class MessagesStorage {
     public int getChannelPtsSync(int channelId) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Integer[] pts = new Integer[]{Integer.valueOf(0)};
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$103(this, channelId, pts, countDownLatch));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$104(this, channelId, pts, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
         return pts[0].intValue();
     }
 
-    final /* synthetic */ void lambda$getChannelPtsSync$133$MessagesStorage(int channelId, Integer[] pts, CountDownLatch countDownLatch) {
+    final /* synthetic */ void lambda$getChannelPtsSync$134$MessagesStorage(int channelId, Integer[] pts, CountDownLatch countDownLatch) {
         SQLiteCursor cursor = null;
         try {
             cursor = this.database.queryFinalized("SELECT pts FROM dialogs WHERE did = " + (-channelId), new Object[0]);
@@ -7832,7 +8948,7 @@ public class MessagesStorage {
                 cursor.dispose();
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             if (cursor != null) {
                 cursor.dispose();
             }
@@ -7845,7 +8961,7 @@ public class MessagesStorage {
             try {
                 countDownLatch.countDown();
             } catch (Throwable e2) {
-                FileLog.m13e(e2);
+                FileLog.e(e2);
             }
         }
     }
@@ -7853,16 +8969,16 @@ public class MessagesStorage {
     public User getUserSync(int user_id) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         User[] user = new User[1];
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$104(this, user, user_id, countDownLatch));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$105(this, user, user_id, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
         return user[0];
     }
 
-    final /* synthetic */ void lambda$getUserSync$134$MessagesStorage(User[] user, int user_id, CountDownLatch countDownLatch) {
+    final /* synthetic */ void lambda$getUserSync$135$MessagesStorage(User[] user, int user_id, CountDownLatch countDownLatch) {
         user[0] = getUser(user_id);
         countDownLatch.countDown();
     }
@@ -7870,16 +8986,16 @@ public class MessagesStorage {
     public Chat getChatSync(int chat_id) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Chat[] chat = new Chat[1];
-        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$105(this, chat, chat_id, countDownLatch));
+        this.storageQueue.postRunnable(new MessagesStorage$$Lambda$106(this, chat, chat_id, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
         return chat[0];
     }
 
-    final /* synthetic */ void lambda$getChatSync$135$MessagesStorage(Chat[] chat, int chat_id, CountDownLatch countDownLatch) {
+    final /* synthetic */ void lambda$getChatSync$136$MessagesStorage(Chat[] chat, int chat_id, CountDownLatch countDownLatch) {
         chat[0] = getChat(chat_id);
         countDownLatch.countDown();
     }
@@ -7887,13 +9003,13 @@ public class MessagesStorage {
     public User getUser(int user_id) {
         try {
             ArrayList<User> users = new ArrayList();
-            getUsersInternal(TtmlNode.ANONYMOUS_REGION_ID + user_id, users);
+            getUsersInternal("" + user_id, users);
             if (users.isEmpty()) {
                 return null;
             }
             return (User) users.get(0);
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return null;
         }
     }
@@ -7904,7 +9020,7 @@ public class MessagesStorage {
             getUsersInternal(TextUtils.join(",", uids), users);
         } catch (Throwable e) {
             users.clear();
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
         return users;
     }
@@ -7912,13 +9028,13 @@ public class MessagesStorage {
     public Chat getChat(int chat_id) {
         try {
             ArrayList<Chat> chats = new ArrayList();
-            getChatsInternal(TtmlNode.ANONYMOUS_REGION_ID + chat_id, chats);
+            getChatsInternal("" + chat_id, chats);
             if (chats.isEmpty()) {
                 return null;
             }
             return (Chat) chats.get(0);
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return null;
         }
     }
@@ -7926,13 +9042,13 @@ public class MessagesStorage {
     public EncryptedChat getEncryptedChat(int chat_id) {
         try {
             ArrayList<EncryptedChat> encryptedChats = new ArrayList();
-            getEncryptedChatsInternal(TtmlNode.ANONYMOUS_REGION_ID + chat_id, encryptedChats, null);
+            getEncryptedChatsInternal("" + chat_id, encryptedChats, null);
             if (encryptedChats.isEmpty()) {
                 return null;
             }
             return (EncryptedChat) encryptedChats.get(0);
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return null;
         }
     }

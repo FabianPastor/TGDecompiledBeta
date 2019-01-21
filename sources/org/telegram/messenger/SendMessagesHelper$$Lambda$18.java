@@ -4,15 +4,15 @@ import java.util.HashMap;
 import org.telegram.tgnet.TLRPC.BotInlineResult;
 
 final /* synthetic */ class SendMessagesHelper$$Lambda$18 implements Runnable {
-    private final BotInlineResult arg$1;
-    private final long arg$2;
+    private final long arg$1;
+    private final BotInlineResult arg$2;
     private final int arg$3;
     private final HashMap arg$4;
     private final MessageObject arg$5;
 
-    SendMessagesHelper$$Lambda$18(BotInlineResult botInlineResult, long j, int i, HashMap hashMap, MessageObject messageObject) {
-        this.arg$1 = botInlineResult;
-        this.arg$2 = j;
+    SendMessagesHelper$$Lambda$18(long j, BotInlineResult botInlineResult, int i, HashMap hashMap, MessageObject messageObject) {
+        this.arg$1 = j;
+        this.arg$2 = botInlineResult;
         this.arg$3 = i;
         this.arg$4 = hashMap;
         this.arg$5 = messageObject;

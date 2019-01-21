@@ -2,8 +2,8 @@ package org.telegram.messenger.browser;
 
 import android.content.Context;
 import android.net.Uri;
-import org.telegram.p005ui.ActionBar.AlertDialog;
 import org.telegram.tgnet.TLObject;
+import org.telegram.ui.ActionBar.AlertDialog;
 
 final /* synthetic */ class Browser$$Lambda$3 implements Runnable {
     private final AlertDialog[] arg$1;

@@ -83,12 +83,12 @@ public class FileLog {
 
     public static String getNetworkLogPath() {
         if (!BuildVars.LOGS_ENABLED) {
-            return TtmlNode.ANONYMOUS_REGION_ID;
+            return "";
         }
         try {
             File sdCard = ApplicationLoader.applicationContext.getExternalFilesDir(null);
             if (sdCard == null) {
-                return TtmlNode.ANONYMOUS_REGION_ID;
+                return "";
             }
             File dir = new File(sdCard.getAbsolutePath() + "/logs");
             dir.mkdirs();
@@ -96,15 +96,14 @@ public class FileLog {
             return getInstance().networkFile.getAbsolutePath();
         } catch (Throwable e) {
             ThrowableExtension.printStackTrace(e);
-            return TtmlNode.ANONYMOUS_REGION_ID;
+            return "";
         }
     }
 
-    /* renamed from: e */
-    public static void m12e(String message, Throwable exception) {
+    public static void e(String message, Throwable exception) {
         if (BuildVars.LOGS_ENABLED) {
             ensureInitied();
-            Log.e(tag, message, exception);
+            Log.e("tmessages", message, exception);
             if (getInstance().streamWriter != null) {
                 getInstance().logQueue.postRunnable(new FileLog$$Lambda$0(message, exception));
             }
@@ -121,11 +120,10 @@ public class FileLog {
         }
     }
 
-    /* renamed from: e */
-    public static void m11e(String message) {
+    public static void e(String message) {
         if (BuildVars.LOGS_ENABLED) {
             ensureInitied();
-            Log.e(tag, message);
+            Log.e("tmessages", message);
             if (getInstance().streamWriter != null) {
                 getInstance().logQueue.postRunnable(new FileLog$$Lambda$1(message));
             }
@@ -141,8 +139,7 @@ public class FileLog {
         }
     }
 
-    /* renamed from: e */
-    public static void m13e(Throwable e) {
+    public static void e(Throwable e) {
         if (BuildVars.LOGS_ENABLED) {
             ensureInitied();
             ThrowableExtension.printStackTrace(e);
@@ -167,11 +164,10 @@ public class FileLog {
         }
     }
 
-    /* renamed from: d */
-    public static void m10d(String message) {
+    public static void d(String message) {
         if (BuildVars.LOGS_ENABLED) {
             ensureInitied();
-            Log.d(tag, message);
+            Log.d("tmessages", message);
             if (getInstance().streamWriter != null) {
                 getInstance().logQueue.postRunnable(new FileLog$$Lambda$3(message));
             }
@@ -187,11 +183,10 @@ public class FileLog {
         }
     }
 
-    /* renamed from: w */
-    public static void m14w(String message) {
+    public static void w(String message) {
         if (BuildVars.LOGS_ENABLED) {
             ensureInitied();
-            Log.w(tag, message);
+            Log.w("tmessages", message);
             if (getInstance().streamWriter != null) {
                 getInstance().logQueue.postRunnable(new FileLog$$Lambda$4(message));
             }

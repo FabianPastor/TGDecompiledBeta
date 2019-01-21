@@ -1,7 +1,7 @@
 package org.telegram.messenger;
 
-import org.telegram.p005ui.ActionBar.AlertDialog;
-import org.telegram.p005ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.BaseFragment;
 
 final /* synthetic */ class MessagesController$$Lambda$150 implements Runnable {
     private final MessagesController arg$1;
@@ -17,6 +17,6 @@ final /* synthetic */ class MessagesController$$Lambda$150 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$openByUserName$248$MessagesController(this.arg$2, this.arg$3, this.arg$4);
+        this.arg$1.lambda$openByUserName$254$MessagesController(this.arg$2, this.arg$3, this.arg$4);
     }
 }

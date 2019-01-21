@@ -2,14 +2,14 @@ package org.telegram.messenger;
 
 final /* synthetic */ class MessagesController$$Lambda$236 implements Runnable {
     private final MessagesController arg$1;
-    private final int arg$2;
+    private final long arg$2;
 
-    MessagesController$$Lambda$236(MessagesController messagesController, int i) {
+    MessagesController$$Lambda$236(MessagesController messagesController, long j) {
         this.arg$1 = messagesController;
-        this.arg$2 = i;
+        this.arg$2 = j;
     }
 
     public void run() {
-        this.arg$1.lambda$null$41$MessagesController(this.arg$2);
+        this.arg$1.lambda$null$63$MessagesController(this.arg$2);
     }
 }

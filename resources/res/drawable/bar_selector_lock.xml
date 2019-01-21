@@ -15,5 +15,5 @@
             <solid android:color="#4cffffff"/>
         </shape>
     </item>
-    <item android:drawable="@CLASSNAMEdrawable/transparent"/>
+    <item android:drawable="@drawable/transparent"/>
 </selector>

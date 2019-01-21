@@ -25,7 +25,7 @@ public class CustomTabsClient {
     }
 
     public static boolean bindCustomTabsService(Context context, String packageName, CustomTabsServiceConnection connection) {
-        Intent intent = new Intent(CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION);
+        Intent intent = new Intent("android.support.customtabs.action.CustomTabsService");
         if (!TextUtils.isEmpty(packageName)) {
             intent.setPackage(packageName);
         }
@@ -58,7 +58,7 @@ public class CustomTabsClient {
                 packageNames2 = packageNames3;
             }
         }
-        Intent serviceIntent = new Intent(CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION);
+        Intent serviceIntent = new Intent("android.support.customtabs.action.CustomTabsService");
         for (String packageName2 : packageNames) {
             serviceIntent.setPackage(packageName2);
             if (pm.resolveService(serviceIntent, 0) != null) {

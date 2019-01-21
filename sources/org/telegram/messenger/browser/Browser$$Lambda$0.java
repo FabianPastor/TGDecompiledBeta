@@ -3,10 +3,10 @@ package org.telegram.messenger.browser;
 import android.content.Context;
 import android.net.Uri;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.p005ui.ActionBar.AlertDialog;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.ui.ActionBar.AlertDialog;
 
 final /* synthetic */ class Browser$$Lambda$0 implements RequestDelegate {
     private final AlertDialog[] arg$1;

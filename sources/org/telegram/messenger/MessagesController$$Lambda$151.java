@@ -13,6 +13,6 @@ final /* synthetic */ class MessagesController$$Lambda$151 implements OnCancelLi
     }
 
     public void onCancel(DialogInterface dialogInterface) {
-        this.arg$1.lambda$null$247$MessagesController(this.arg$2, dialogInterface);
+        this.arg$1.lambda$null$253$MessagesController(this.arg$2, dialogInterface);
     }
 }

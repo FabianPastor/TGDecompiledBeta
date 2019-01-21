@@ -1,7 +1,5 @@
 package org.telegram.messenger.time;
 
-import com.google.android.exoplayer2.extractor.p003ts.TsExtractor;
-import com.googlecode.mp4parser.boxes.microsoft.XtraBox;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
@@ -79,7 +77,7 @@ public class FastDateParser implements Serializable, DateParser {
         private Strategy() {
         }
 
-        /* synthetic */ Strategy(CLASSNAME x0) {
+        /* synthetic */ Strategy(AnonymousClass1 x0) {
             this();
         }
 
@@ -178,8 +176,7 @@ public class FastDateParser implements Serializable, DateParser {
     }
 
     private static class TimeZoneStrategy extends Strategy {
-        /* renamed from: ID */
-        private static final int var_ID = 0;
+        private static final int ID = 0;
         private static final int LONG_DST = 3;
         private static final int LONG_STD = 1;
         private static final int SHORT_DST = 4;
@@ -378,43 +375,56 @@ public class FastDateParser implements Serializable, DateParser {
             r3.append(r0);
             r1 = r1 + 1;
      */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    private static StringBuilder escapeRegex(StringBuilder regex, String value, boolean unquote) {
-        regex.append("\\Q");
-        int i = 0;
-        while (i < value.length()) {
-            char c = value.charAt(i);
-            switch (c) {
-                case '\'':
-                    if (unquote) {
-                        i++;
-                        if (i != value.length()) {
-                            c = value.charAt(i);
-                            break;
-                        }
-                        break;
-                    }
-                    continue;
-                case '\\':
-                    i++;
-                    if (i != value.length()) {
-                        regex.append(c);
-                        c = value.charAt(i);
-                        if (c != 'E') {
-                            break;
-                        }
-                        regex.append("E\\\\E\\");
-                        c = 'Q';
-                        break;
-                    }
-                    continue;
-                default:
-                    break;
-            }
-            return regex;
-        }
-        regex.append("\\E");
-        return regex;
+    private static java.lang.StringBuilder escapeRegex(java.lang.StringBuilder r3, java.lang.String r4, boolean r5) {
+        /*
+        r2 = "\\Q";
+        r3.append(r2);
+        r1 = 0;
+    L_0x0007:
+        r2 = r4.length();
+        if (r1 >= r2) goto L_0x0046;
+    L_0x000d:
+        r0 = r4.charAt(r1);
+        switch(r0) {
+            case 39: goto L_0x001a;
+            case 92: goto L_0x002a;
+            default: goto L_0x0014;
+        };
+    L_0x0014:
+        r3.append(r0);
+        r1 = r1 + 1;
+        goto L_0x0007;
+    L_0x001a:
+        if (r5 == 0) goto L_0x0014;
+    L_0x001c:
+        r1 = r1 + 1;
+        r2 = r4.length();
+        if (r1 != r2) goto L_0x0025;
+    L_0x0024:
+        return r3;
+    L_0x0025:
+        r0 = r4.charAt(r1);
+        goto L_0x0014;
+    L_0x002a:
+        r1 = r1 + 1;
+        r2 = r4.length();
+        if (r1 == r2) goto L_0x0014;
+    L_0x0032:
+        r3.append(r0);
+        r0 = r4.charAt(r1);
+        r2 = 69;
+        if (r0 != r2) goto L_0x0014;
+    L_0x003d:
+        r2 = "E\\\\E\\";
+        r3.append(r2);
+        r0 = 81;
+        goto L_0x0014;
+    L_0x0046:
+        r2 = "\\E";
+        r3.append(r2);
+        goto L_0x0024;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.time.FastDateParser.escapeRegex(java.lang.StringBuilder, java.lang.String, boolean):java.lang.StringBuilder");
     }
 
     private static String[] getDisplayNameArray(int field, boolean isLong, Locale locale) {
@@ -482,9 +492,9 @@ public class FastDateParser implements Serializable, DateParser {
                 return getLocaleSpecificStrategy(7, definingCalendar);
             case 'F':
                 return DAY_OF_WEEK_IN_MONTH_STRATEGY;
-            case TsExtractor.TS_SYNC_BYTE /*71*/:
+            case 'G':
                 return getLocaleSpecificStrategy(0, definingCalendar);
-            case XtraBox.MP4_XTRA_BT_GUID /*72*/:
+            case 'H':
                 return MODULO_HOUR_OF_DAY_STRATEGY;
             case 'K':
                 return HOUR_STRATEGY;

@@ -53,16 +53,6 @@ public class DownloadController implements NotificationCenterDelegate {
     public int[] wifiDownloadMask = new int[4];
     public int[] wifiMaxFileSize = new int[7];
 
-    /* renamed from: org.telegram.messenger.DownloadController$1 */
-    class CLASSNAME extends BroadcastReceiver {
-        CLASSNAME() {
-        }
-
-        public void onReceive(Context context, Intent intent) {
-            DownloadController.this.checkAutodownloadSettings();
-        }
-    }
-
     public interface FileDownloadProgressListener {
         int getObserverTag();
 
@@ -108,15 +98,15 @@ public class DownloadController implements NotificationCenterDelegate {
         SharedPreferences preferences = MessagesController.getMainSettings(this.currentAccount);
         int a = 0;
         while (a < 4) {
-            String key = "mobileDataDownloadMask" + (a == 0 ? TtmlNode.ANONYMOUS_REGION_ID : Integer.valueOf(a));
+            String key = "mobileDataDownloadMask" + (a == 0 ? "" : Integer.valueOf(a));
             if (a == 0 || preferences.contains(key)) {
                 Object obj;
                 this.mobileDataDownloadMask[a] = preferences.getInt(key, 115);
-                this.wifiDownloadMask[a] = preferences.getInt("wifiDownloadMask" + (a == 0 ? TtmlNode.ANONYMOUS_REGION_ID : Integer.valueOf(a)), 115);
+                this.wifiDownloadMask[a] = preferences.getInt("wifiDownloadMask" + (a == 0 ? "" : Integer.valueOf(a)), 115);
                 int[] iArr = this.roamingDownloadMask;
                 StringBuilder append = new StringBuilder().append("roamingDownloadMask");
                 if (a == 0) {
-                    obj = TtmlNode.ANONYMOUS_REGION_ID;
+                    obj = "";
                 } else {
                     obj = Integer.valueOf(a);
                 }
@@ -143,7 +133,11 @@ public class DownloadController implements NotificationCenterDelegate {
         }
         this.globalAutodownloadEnabled = preferences.getBoolean("globalAutodownloadEnabled", true);
         AndroidUtilities.runOnUIThread(new DownloadController$$Lambda$0(this));
-        ApplicationLoader.applicationContext.registerReceiver(new CLASSNAME(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+        ApplicationLoader.applicationContext.registerReceiver(new BroadcastReceiver() {
+            public void onReceive(Context context, Intent intent) {
+                DownloadController.this.checkAutodownloadSettings();
+            }
+        }, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
         if (UserConfig.getInstance(this.currentAccount).isClientActivated()) {
             checkAutodownloadSettings();
         }
@@ -195,7 +189,7 @@ public class DownloadController implements NotificationCenterDelegate {
         this.typingTimes.clear();
     }
 
-    protected int getAutodownloadMask() {
+    public int getAutodownloadMask() {
         if (!this.globalAutodownloadEnabled) {
             return 0;
         }
@@ -524,7 +518,7 @@ public class DownloadController implements NotificationCenterDelegate {
         if (downloadObject != null) {
             this.downloadQueueKeys.remove(fileName);
             if (state == 0 || state == 2) {
-                MessagesStorage.getInstance(this.currentAccount).removeFromDownloadQueue(downloadObject.var_id, downloadObject.type, false);
+                MessagesStorage.getInstance(this.currentAccount).removeFromDownloadQueue(downloadObject.id, downloadObject.type, false);
             }
             if (downloadObject.type == 1) {
                 this.photoDownloadQueue.remove(downloadObject);
@@ -766,7 +760,7 @@ public class DownloadController implements NotificationCenterDelegate {
                     }
                 }
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
             }
         }
     }

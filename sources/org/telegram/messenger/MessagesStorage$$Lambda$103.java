@@ -4,18 +4,20 @@ import java.util.concurrent.CountDownLatch;
 
 final /* synthetic */ class MessagesStorage$$Lambda$103 implements Runnable {
     private final MessagesStorage arg$1;
-    private final int arg$2;
-    private final Integer[] arg$3;
-    private final CountDownLatch arg$4;
+    private final boolean arg$2;
+    private final long arg$3;
+    private final Integer[] arg$4;
+    private final CountDownLatch arg$5;
 
-    MessagesStorage$$Lambda$103(MessagesStorage messagesStorage, int i, Integer[] numArr, CountDownLatch countDownLatch) {
+    MessagesStorage$$Lambda$103(MessagesStorage messagesStorage, boolean z, long j, Integer[] numArr, CountDownLatch countDownLatch) {
         this.arg$1 = messagesStorage;
-        this.arg$2 = i;
-        this.arg$3 = numArr;
-        this.arg$4 = countDownLatch;
+        this.arg$2 = z;
+        this.arg$3 = j;
+        this.arg$4 = numArr;
+        this.arg$5 = countDownLatch;
     }
 
     public void run() {
-        this.arg$1.lambda$getChannelPtsSync$133$MessagesStorage(this.arg$2, this.arg$3, this.arg$4);
+        this.arg$1.lambda$getDialogReadMax$133$MessagesStorage(this.arg$2, this.arg$3, this.arg$4, this.arg$5);
     }
 }

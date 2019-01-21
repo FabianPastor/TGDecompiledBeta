@@ -3,7 +3,7 @@ package org.telegram.messenger;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import org.telegram.p005ui.LaunchActivity;
+import org.telegram.ui.LaunchActivity;
 
 public class OpenChatReceiver extends Activity {
     protected void onCreate(Bundle savedInstanceState) {

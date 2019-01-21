@@ -11,97 +11,13 @@ public class AsyncListUtil<T> {
     static final boolean DEBUG = false;
     static final String TAG = "AsyncListUtil";
     boolean mAllowScrollHints;
-    private final BackgroundCallback<T> mBackgroundCallback = new CLASSNAME();
-    final BackgroundCallback<T> mBackgroundProxy;
-    final DataCallback<T> mDataCallback;
-    int mDisplayedGeneration = 0;
-    int mItemCount = 0;
-    private final MainThreadCallback<T> mMainThreadCallback = new CLASSNAME();
-    final MainThreadCallback<T> mMainThreadProxy;
-    final SparseIntArray mMissingPositions = new SparseIntArray();
-    final int[] mPrevRange = new int[2];
-    int mRequestedGeneration = this.mDisplayedGeneration;
-    private int mScrollHint = 0;
-    final Class<T> mTClass;
-    final TileList<T> mTileList;
-    final int mTileSize;
-    final int[] mTmpRange = new int[2];
-    final int[] mTmpRangeExtended = new int[2];
-    final ViewCallback mViewCallback;
-
-    /* renamed from: org.telegram.messenger.support.util.AsyncListUtil$1 */
-    class CLASSNAME implements MainThreadCallback<T> {
-        CLASSNAME() {
-        }
-
-        public void updateItemCount(int generation, int itemCount) {
-            if (isRequestedGeneration(generation)) {
-                AsyncListUtil.this.mItemCount = itemCount;
-                AsyncListUtil.this.mViewCallback.onDataRefresh();
-                AsyncListUtil.this.mDisplayedGeneration = AsyncListUtil.this.mRequestedGeneration;
-                recycleAllTiles();
-                AsyncListUtil.this.mAllowScrollHints = false;
-                AsyncListUtil.this.updateRange();
-            }
-        }
-
-        public void addTile(int generation, Tile<T> tile) {
-            if (isRequestedGeneration(generation)) {
-                Tile<T> duplicate = AsyncListUtil.this.mTileList.addOrReplace(tile);
-                if (duplicate != null) {
-                    Log.e(AsyncListUtil.TAG, "duplicate tile @" + duplicate.mStartPosition);
-                    AsyncListUtil.this.mBackgroundProxy.recycleTile(duplicate);
-                }
-                int endPosition = tile.mStartPosition + tile.mItemCount;
-                int index = 0;
-                while (index < AsyncListUtil.this.mMissingPositions.size()) {
-                    int position = AsyncListUtil.this.mMissingPositions.keyAt(index);
-                    if (tile.mStartPosition > position || position >= endPosition) {
-                        index++;
-                    } else {
-                        AsyncListUtil.this.mMissingPositions.removeAt(index);
-                        AsyncListUtil.this.mViewCallback.onItemLoaded(position);
-                    }
-                }
-                return;
-            }
-            AsyncListUtil.this.mBackgroundProxy.recycleTile(tile);
-        }
-
-        public void removeTile(int generation, int position) {
-            if (isRequestedGeneration(generation)) {
-                Tile<T> tile = AsyncListUtil.this.mTileList.removeAtPos(position);
-                if (tile == null) {
-                    Log.e(AsyncListUtil.TAG, "tile not found @" + position);
-                } else {
-                    AsyncListUtil.this.mBackgroundProxy.recycleTile(tile);
-                }
-            }
-        }
-
-        private void recycleAllTiles() {
-            for (int i = 0; i < AsyncListUtil.this.mTileList.size(); i++) {
-                AsyncListUtil.this.mBackgroundProxy.recycleTile(AsyncListUtil.this.mTileList.getAtIndex(i));
-            }
-            AsyncListUtil.this.mTileList.clear();
-        }
-
-        private boolean isRequestedGeneration(int generation) {
-            return generation == AsyncListUtil.this.mRequestedGeneration;
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.support.util.AsyncListUtil$2 */
-    class CLASSNAME implements BackgroundCallback<T> {
+    private final BackgroundCallback<T> mBackgroundCallback = new BackgroundCallback<T>() {
         private int mFirstRequiredTileStart;
         private int mGeneration;
         private int mItemCount;
         private int mLastRequiredTileStart;
         final SparseBooleanArray mLoadedTiles = new SparseBooleanArray();
         private Tile<T> mRecycledRoot;
-
-        CLASSNAME() {
-        }
 
         public void refresh(int generation) {
             this.mGeneration = generation;
@@ -206,9 +122,81 @@ public class AsyncListUtil<T> {
         }
 
         private void log(String s, Object... args) {
-            Log.d(AsyncListUtil.TAG, "[BKGR] " + String.format(s, args));
+            Log.d("AsyncListUtil", "[BKGR] " + String.format(s, args));
         }
-    }
+    };
+    final BackgroundCallback<T> mBackgroundProxy;
+    final DataCallback<T> mDataCallback;
+    int mDisplayedGeneration = 0;
+    int mItemCount = 0;
+    private final MainThreadCallback<T> mMainThreadCallback = new MainThreadCallback<T>() {
+        public void updateItemCount(int generation, int itemCount) {
+            if (isRequestedGeneration(generation)) {
+                AsyncListUtil.this.mItemCount = itemCount;
+                AsyncListUtil.this.mViewCallback.onDataRefresh();
+                AsyncListUtil.this.mDisplayedGeneration = AsyncListUtil.this.mRequestedGeneration;
+                recycleAllTiles();
+                AsyncListUtil.this.mAllowScrollHints = false;
+                AsyncListUtil.this.updateRange();
+            }
+        }
+
+        public void addTile(int generation, Tile<T> tile) {
+            if (isRequestedGeneration(generation)) {
+                Tile<T> duplicate = AsyncListUtil.this.mTileList.addOrReplace(tile);
+                if (duplicate != null) {
+                    Log.e("AsyncListUtil", "duplicate tile @" + duplicate.mStartPosition);
+                    AsyncListUtil.this.mBackgroundProxy.recycleTile(duplicate);
+                }
+                int endPosition = tile.mStartPosition + tile.mItemCount;
+                int index = 0;
+                while (index < AsyncListUtil.this.mMissingPositions.size()) {
+                    int position = AsyncListUtil.this.mMissingPositions.keyAt(index);
+                    if (tile.mStartPosition > position || position >= endPosition) {
+                        index++;
+                    } else {
+                        AsyncListUtil.this.mMissingPositions.removeAt(index);
+                        AsyncListUtil.this.mViewCallback.onItemLoaded(position);
+                    }
+                }
+                return;
+            }
+            AsyncListUtil.this.mBackgroundProxy.recycleTile(tile);
+        }
+
+        public void removeTile(int generation, int position) {
+            if (isRequestedGeneration(generation)) {
+                Tile<T> tile = AsyncListUtil.this.mTileList.removeAtPos(position);
+                if (tile == null) {
+                    Log.e("AsyncListUtil", "tile not found @" + position);
+                } else {
+                    AsyncListUtil.this.mBackgroundProxy.recycleTile(tile);
+                }
+            }
+        }
+
+        private void recycleAllTiles() {
+            for (int i = 0; i < AsyncListUtil.this.mTileList.size(); i++) {
+                AsyncListUtil.this.mBackgroundProxy.recycleTile(AsyncListUtil.this.mTileList.getAtIndex(i));
+            }
+            AsyncListUtil.this.mTileList.clear();
+        }
+
+        private boolean isRequestedGeneration(int generation) {
+            return generation == AsyncListUtil.this.mRequestedGeneration;
+        }
+    };
+    final MainThreadCallback<T> mMainThreadProxy;
+    final SparseIntArray mMissingPositions = new SparseIntArray();
+    final int[] mPrevRange = new int[2];
+    int mRequestedGeneration = this.mDisplayedGeneration;
+    private int mScrollHint = 0;
+    final Class<T> mTClass;
+    final TileList<T> mTileList;
+    final int mTileSize;
+    final int[] mTmpRange = new int[2];
+    final int[] mTmpRangeExtended = new int[2];
+    final ViewCallback mViewCallback;
 
     public static abstract class DataCallback<T> {
         public abstract void fillData(T[] tArr, int i, int i2);
@@ -254,7 +242,7 @@ public class AsyncListUtil<T> {
     }
 
     void log(String s, Object... args) {
-        Log.d(TAG, "[MAIN] " + String.format(s, args));
+        Log.d("AsyncListUtil", "[MAIN] " + String.format(s, args));
     }
 
     public AsyncListUtil(Class<T> klass, int tileSize, DataCallback<T> dataCallback, ViewCallback viewCallback) {

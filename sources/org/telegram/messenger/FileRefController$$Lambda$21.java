@@ -1,14 +1,14 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC.Chat;
+import org.telegram.tgnet.TLRPC.User;
 
 final /* synthetic */ class FileRefController$$Lambda$21 implements Runnable {
     private final FileRefController arg$1;
-    private final Chat arg$2;
+    private final User arg$2;
 
-    FileRefController$$Lambda$21(FileRefController fileRefController, Chat chat) {
+    FileRefController$$Lambda$21(FileRefController fileRefController, User user) {
         this.arg$1 = fileRefController;
-        this.arg$2 = chat;
+        this.arg$2 = user;
     }
 
     public void run() {

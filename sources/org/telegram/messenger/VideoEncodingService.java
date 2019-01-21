@@ -3,8 +3,8 @@ package org.telegram.messenger;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.support.p000v4.app.NotificationCompat.Builder;
-import android.support.p000v4.app.NotificationManagerCompat;
+import android.support.v4.app.NotificationCompat.Builder;
+import android.support.v4.app.NotificationManagerCompat;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 
 public class VideoEncodingService extends Service implements NotificationCenterDelegate {
@@ -26,7 +26,7 @@ public class VideoEncodingService extends Service implements NotificationCenterD
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.stopEncodingService);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileUploadProgressChanged);
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m10d("destroy video service");
+            FileLog.d("destroy video service");
         }
     }
 
@@ -46,7 +46,7 @@ public class VideoEncodingService extends Service implements NotificationCenterD
                 try {
                     NotificationManagerCompat.from(ApplicationLoader.applicationContext).notify(4, this.builder.build());
                 } catch (Throwable e) {
-                    FileLog.m13e(e);
+                    FileLog.e(e);
                 }
             }
         } else if (id == NotificationCenter.stopEncodingService) {
@@ -74,7 +74,7 @@ public class VideoEncodingService extends Service implements NotificationCenterD
             stopSelf();
         } else {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m10d("start video service");
+                FileLog.d("start video service");
             }
             if (this.builder == null) {
                 NotificationsController.checkOtherNotificationsChannel();
@@ -82,13 +82,13 @@ public class VideoEncodingService extends Service implements NotificationCenterD
                 this.builder.setSmallIcon(17301640);
                 this.builder.setWhen(System.currentTimeMillis());
                 this.builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
-                this.builder.setContentTitle(LocaleController.getString("AppName", CLASSNAMER.string.AppName));
+                this.builder.setContentTitle(LocaleController.getString("AppName", R.string.AppName));
                 if (isGif) {
-                    this.builder.setTicker(LocaleController.getString("SendingGif", CLASSNAMER.string.SendingGif));
-                    this.builder.setContentText(LocaleController.getString("SendingGif", CLASSNAMER.string.SendingGif));
+                    this.builder.setTicker(LocaleController.getString("SendingGif", R.string.SendingGif));
+                    this.builder.setContentText(LocaleController.getString("SendingGif", R.string.SendingGif));
                 } else {
-                    this.builder.setTicker(LocaleController.getString("SendingVideo", CLASSNAMER.string.SendingVideo));
-                    this.builder.setContentText(LocaleController.getString("SendingVideo", CLASSNAMER.string.SendingVideo));
+                    this.builder.setTicker(LocaleController.getString("SendingVideo", R.string.SendingVideo));
+                    this.builder.setContentText(LocaleController.getString("SendingVideo", R.string.SendingVideo));
                 }
             }
             this.currentProgress = 0;

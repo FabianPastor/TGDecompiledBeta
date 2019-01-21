@@ -3,16 +3,12 @@ package org.telegram.messenger.audioinfo.mp3;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
-import com.google.android.exoplayer2.metadata.id3.ApicFrame;
-import com.google.android.exoplayer2.metadata.id3.CommentFrame;
 import com.google.devtools.build.android.desugar.runtime.ThrowableExtension;
-import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.telegram.messenger.audioinfo.AudioInfo;
-import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 
 public class ID3v2Info extends AudioInfo {
     static final Logger LOGGER = Logger.getLogger(ID3v2Info.class.getName());
@@ -212,13 +208,13 @@ public class ID3v2Info extends AudioInfo {
                 }
                 break;
             case 2015625:
-                if (frameId.equals(ApicFrame.var_ID)) {
+                if (frameId.equals("APIC")) {
                     obj = 1;
                     break;
                 }
                 break;
             case 2074380:
-                if (frameId.equals(CommentFrame.var_ID)) {
+                if (frameId.equals("COMM")) {
                     obj = 3;
                     break;
                 }
@@ -357,7 +353,7 @@ public class ID3v2Info extends AudioInfo {
             case 2:
             case 3:
                 CommentOrUnsynchronizedLyrics comm = parseCommentOrUnsynchronizedLyricsFrame(frame);
-                if (this.comment == null || comm.description == null || TtmlNode.ANONYMOUS_REGION_ID.equals(comm.description)) {
+                if (this.comment == null || comm.description == null || "".equals(comm.description)) {
                     this.comment = comm.text;
                     return;
                 }
@@ -478,7 +474,7 @@ public class ID3v2Info extends AudioInfo {
                     }
                 }
                 return;
-            case NalUnitTypes.NAL_TYPE_RSV_IRAP_VCL23 /*23*/:
+            case 23:
             case 24:
                 String trck = parseTextFrame(frame);
                 if (trck.length() > 0) {
@@ -514,16 +510,16 @@ public class ID3v2Info extends AudioInfo {
                     }
                 }
                 return;
-            case NalUnitTypes.NAL_TYPE_RSV_VCL25 /*25*/:
-            case NalUnitTypes.NAL_TYPE_RSV_VCL26 /*26*/:
+            case 25:
+            case 26:
                 this.grouping = parseTextFrame(frame);
                 return;
             case 27:
-            case NalUnitTypes.NAL_TYPE_RSV_VCL28 /*28*/:
+            case 28:
                 this.title = parseTextFrame(frame);
                 return;
-            case NalUnitTypes.NAL_TYPE_RSV_VCL29 /*29*/:
-            case NalUnitTypes.NAL_TYPE_RSV_VCL30 /*30*/:
+            case 29:
+            case 30:
                 String tyer = parseTextFrame(frame);
                 if (tyer.length() > 0) {
                     try {
@@ -538,7 +534,7 @@ public class ID3v2Info extends AudioInfo {
                     }
                 }
                 return;
-            case NalUnitTypes.NAL_TYPE_RSV_VCL31 /*31*/:
+            case 31:
             case 32:
                 if (this.lyrics == null) {
                     this.lyrics = parseCommentOrUnsynchronizedLyricsFrame(frame).text;
@@ -556,7 +552,7 @@ public class ID3v2Info extends AudioInfo {
 
     CommentOrUnsynchronizedLyrics parseCommentOrUnsynchronizedLyricsFrame(ID3v2FrameBody data) throws IOException, ID3v2Exception {
         ID3v2Encoding encoding = data.readEncoding();
-        return new CommentOrUnsynchronizedLyrics(data.readFixedLengthString(3, ID3v2Encoding.ISO_8859_1), data.readZeroTerminatedString(Callback.DEFAULT_DRAG_ANIMATION_DURATION, encoding), data.readFixedLengthString((int) data.getRemainingLength(), encoding));
+        return new CommentOrUnsynchronizedLyrics(data.readFixedLengthString(3, ID3v2Encoding.ISO_8859_1), data.readZeroTerminatedString(200, encoding), data.readFixedLengthString((int) data.getRemainingLength(), encoding));
     }
 
     AttachedPicture parseAttachedPictureFrame(ID3v2FrameBody data) throws IOException, ID3v2Exception {
@@ -592,6 +588,6 @@ public class ID3v2Info extends AudioInfo {
             }
         }
         imageType = data.readZeroTerminatedString(20, ID3v2Encoding.ISO_8859_1);
-        return new AttachedPicture(data.getData().readByte(), data.readZeroTerminatedString(Callback.DEFAULT_DRAG_ANIMATION_DURATION, encoding), imageType, data.getData().readFully((int) data.getRemainingLength()));
+        return new AttachedPicture(data.getData().readByte(), data.readZeroTerminatedString(200, encoding), imageType, data.getData().readFully((int) data.getRemainingLength()));
     }
 }

@@ -1,13 +1,13 @@
 package org.telegram.messenger;
 
 final /* synthetic */ class MediaController$$Lambda$10 implements Runnable {
-    private final MediaController arg$1;
+    private final MessageObject arg$1;
 
-    MediaController$$Lambda$10(MediaController mediaController) {
-        this.arg$1 = mediaController;
+    MediaController$$Lambda$10(MessageObject messageObject) {
+        this.arg$1 = messageObject;
     }
 
     public void run() {
-        this.arg$1.lambda$playMessage$10$MediaController();
+        NotificationCenter.getInstance(this.arg$1.currentAccount).postNotificationName(NotificationCenter.fileDidLoad, FileLoader.getAttachFileName(this.arg$1.getDocument()));
     }
 }

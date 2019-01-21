@@ -43,8 +43,7 @@ public class Track {
     private int width;
 
     private class SamplePresentationTime {
-        /* renamed from: dt */
-        private long var_dt;
+        private long dt;
         private int index;
         private long presentationTime;
 
@@ -78,7 +77,7 @@ public class Track {
             this.handler = "soun";
             this.headerBox = new SoundMediaHeaderBox();
             this.sampleDescriptionBox = new SampleDescriptionBox();
-            AudioSampleEntry audioSampleEntry = new AudioSampleEntry(AudioSampleEntry.TYPE3);
+            AudioSampleEntry audioSampleEntry = new AudioSampleEntry("mp4a");
             audioSampleEntry.setChannelCount(format.getInteger("channel-count"));
             audioSampleEntry.setSampleRate((long) format.getInteger("sample-rate"));
             audioSampleEntry.setDataReferenceIndex(1);
@@ -122,7 +121,7 @@ public class Track {
         String mime = format.getString("mime");
         VisualSampleEntry visualSampleEntry;
         if (mime.equals("video/avc")) {
-            visualSampleEntry = new VisualSampleEntry(VisualSampleEntry.TYPE3);
+            visualSampleEntry = new VisualSampleEntry("avc1");
             visualSampleEntry.setDataReferenceIndex(1);
             visualSampleEntry.setDepth(24);
             visualSampleEntry.setFrameCount(1);
@@ -216,7 +215,7 @@ public class Track {
             visualSampleEntry.addBox(avcConfigurationBox);
             this.sampleDescriptionBox.addBox(visualSampleEntry);
         } else if (mime.equals("video/mp4v")) {
-            visualSampleEntry = new VisualSampleEntry(VisualSampleEntry.TYPE1);
+            visualSampleEntry = new VisualSampleEntry("mp4v");
             visualSampleEntry.setDataReferenceIndex(1);
             visualSampleEntry.setDepth(24);
             visualSampleEntry.setFrameCount(1);
@@ -270,13 +269,13 @@ public class Track {
             this.duration += minDelta;
         }
         for (a = 1; a < original.size(); a++) {
-            ((SamplePresentationTime) original.get(a)).var_dt = this.sampleDurations[a] + ((SamplePresentationTime) original.get(a - 1)).var_dt;
+            ((SamplePresentationTime) original.get(a)).dt = this.sampleDurations[a] + ((SamplePresentationTime) original.get(a - 1)).dt;
         }
         if (outOfOrder) {
             this.sampleCompositions = new int[this.samplePresentationTimes.size()];
             for (a = 0; a < this.samplePresentationTimes.size(); a++) {
                 presentationTime = (SamplePresentationTime) this.samplePresentationTimes.get(a);
-                this.sampleCompositions[presentationTime.index] = (int) (presentationTime.presentationTime - presentationTime.var_dt);
+                this.sampleCompositions[presentationTime.index] = (int) (presentationTime.presentationTime - presentationTime.dt);
             }
         }
     }

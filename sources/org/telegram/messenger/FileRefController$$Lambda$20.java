@@ -1,17 +1,16 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC.User;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
 
-final /* synthetic */ class FileRefController$$Lambda$20 implements Runnable {
-    private final FileRefController arg$1;
-    private final User arg$2;
+final /* synthetic */ class FileRefController$$Lambda$20 implements RequestDelegate {
+    static final RequestDelegate $instance = new FileRefController$$Lambda$20();
 
-    FileRefController$$Lambda$20(FileRefController fileRefController, User user) {
-        this.arg$1 = fileRefController;
-        this.arg$2 = user;
+    private FileRefController$$Lambda$20() {
     }
 
-    public void run() {
-        this.arg$1.lambda$onRequestComplete$20$FileRefController(this.arg$2);
+    public void run(TLObject tLObject, TL_error tL_error) {
+        FileRefController.lambda$onUpdateObjectReference$20$FileRefController(tLObject, tL_error);
     }
 }

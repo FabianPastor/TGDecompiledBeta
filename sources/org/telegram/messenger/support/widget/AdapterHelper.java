@@ -1,7 +1,7 @@
 package org.telegram.messenger.support.widget;
 
-import android.support.p000v4.util.Pools.Pool;
-import android.support.p000v4.util.Pools.SimplePool;
+import android.support.v4.util.Pools.Pool;
+import android.support.v4.util.Pools.SimplePool;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

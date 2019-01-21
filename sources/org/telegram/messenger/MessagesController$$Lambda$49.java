@@ -1,22 +1,22 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC.TL_userFull;
-import org.telegram.tgnet.TLRPC.User;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.tgnet.TLRPC.TL_messages_saveRecentSticker;
 
-final /* synthetic */ class MessagesController$$Lambda$49 implements Runnable {
+final /* synthetic */ class MessagesController$$Lambda$49 implements RequestDelegate {
     private final MessagesController arg$1;
-    private final User arg$2;
-    private final TL_userFull arg$3;
-    private final MessageObject arg$4;
+    private final Object arg$2;
+    private final TL_messages_saveRecentSticker arg$3;
 
-    MessagesController$$Lambda$49(MessagesController messagesController, User user, TL_userFull tL_userFull, MessageObject messageObject) {
+    MessagesController$$Lambda$49(MessagesController messagesController, Object obj, TL_messages_saveRecentSticker tL_messages_saveRecentSticker) {
         this.arg$1 = messagesController;
-        this.arg$2 = user;
-        this.arg$3 = tL_userFull;
-        this.arg$4 = messageObject;
+        this.arg$2 = obj;
+        this.arg$3 = tL_messages_saveRecentSticker;
     }
 
-    public void run() {
-        this.arg$1.lambda$processUserInfo$65$MessagesController(this.arg$2, this.arg$3, this.arg$4);
+    public void run(TLObject tLObject, TL_error tL_error) {
+        this.arg$1.lambda$saveRecentSticker$68$MessagesController(this.arg$2, this.arg$3, tLObject, tL_error);
     }
 }

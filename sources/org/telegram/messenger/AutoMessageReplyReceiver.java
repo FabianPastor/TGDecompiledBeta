@@ -4,14 +4,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.p000v4.app.RemoteInput;
+import android.support.v4.app.RemoteInput;
 
 public class AutoMessageReplyReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         ApplicationLoader.postInitApplication();
         Bundle remoteInput = RemoteInput.getResultsFromIntent(intent);
         if (remoteInput != null) {
-            CharSequence text = remoteInput.getCharSequence(NotificationsController.EXTRA_VOICE_REPLY);
+            CharSequence text = remoteInput.getCharSequence("extra_voice_reply");
             if (text != null && text.length() != 0) {
                 long dialog_id = intent.getLongExtra("dialog_id", 0);
                 int max_id = intent.getIntExtra("max_id", 0);

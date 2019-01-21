@@ -9,7 +9,6 @@ import android.os.Build.VERSION;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import com.google.android.exoplayer2.extractor.p003ts.PsExtractor;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
@@ -55,7 +54,7 @@ public class JNIUtilities {
                     if (!a.isLinkLocalAddress()) {
                         ipv4 = a.getHostAddress();
                     }
-                } else if (!(!(a instanceof Inet6Address) || a.isLinkLocalAddress() || (a.getAddress()[0] & PsExtractor.VIDEO_STREAM_MASK) == PsExtractor.VIDEO_STREAM_MASK)) {
+                } else if (!(!(a instanceof Inet6Address) || a.isLinkLocalAddress() || (a.getAddress()[0] & 240) == 240)) {
                     ipv6 = a.getHostAddress();
                 }
             }
@@ -78,7 +77,7 @@ public class JNIUtilities {
                             if (!a.isLinkLocalAddress()) {
                                 ipv4 = a.getHostAddress();
                             }
-                        } else if (!(!(a instanceof Inet6Address) || a.isLinkLocalAddress() || (a.getAddress()[0] & PsExtractor.VIDEO_STREAM_MASK) == PsExtractor.VIDEO_STREAM_MASK)) {
+                        } else if (!(!(a instanceof Inet6Address) || a.isLinkLocalAddress() || (a.getAddress()[0] & 240) == 240)) {
                             ipv6 = a.getHostAddress();
                         }
                     }
@@ -87,7 +86,7 @@ public class JNIUtilities {
             }
             return null;
         } catch (Throwable x) {
-            FileLog.m13e(x);
+            FileLog.e(x);
             return null;
         }
     }
@@ -100,8 +99,8 @@ public class JNIUtilities {
         if (TextUtils.isEmpty(tm.getNetworkOperatorName())) {
             return null;
         }
-        String mnc = TtmlNode.ANONYMOUS_REGION_ID;
-        String mcc = TtmlNode.ANONYMOUS_REGION_ID;
+        String mnc = "";
+        String mcc = "";
         String carrierID = tm.getNetworkOperator();
         if (carrierID != null && carrierID.length() > 3) {
             mcc = carrierID.substring(0, 3);

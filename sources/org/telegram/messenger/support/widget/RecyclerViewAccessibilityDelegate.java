@@ -1,8 +1,8 @@
 package org.telegram.messenger.support.widget;
 
 import android.os.Bundle;
-import android.support.p000v4.view.AccessibilityDelegateCompat;
-import android.support.p000v4.view.accessibility.AccessibilityNodeInfoCompat;
+import android.support.v4.view.AccessibilityDelegateCompat;
+import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
 

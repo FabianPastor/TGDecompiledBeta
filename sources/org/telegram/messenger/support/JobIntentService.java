@@ -15,7 +15,6 @@ import android.os.Build.VERSION;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
-import com.google.android.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -117,7 +116,7 @@ public abstract class JobIntentService extends Service {
                     if (!this.mLaunchingService) {
                         this.mLaunchingService = true;
                         if (!this.mServiceProcessing) {
-                            this.mLaunchWakeLock.acquire(ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS);
+                            this.mLaunchWakeLock.acquire(60000);
                         }
                     }
                 }
@@ -144,7 +143,7 @@ public abstract class JobIntentService extends Service {
             synchronized (this) {
                 if (this.mServiceProcessing) {
                     if (this.mLaunchingService) {
-                        this.mLaunchWakeLock.acquire(ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS);
+                        this.mLaunchWakeLock.acquire(60000);
                     }
                     this.mServiceProcessing = false;
                     this.mRunWakeLock.release();
@@ -239,18 +238,42 @@ public abstract class JobIntentService extends Service {
         /* JADX WARNING: Missing block: B:22:?, code:
             return new org.telegram.messenger.support.JobIntentService.JobServiceEngineImpl.WrapperWorkItem(r4, r0);
      */
-        /* Code decompiled incorrectly, please refer to instructions dump. */
-        public GenericWorkItem dequeueWork() {
-            JobWorkItem work = null;
-            synchronized (this.mLock) {
-                if (this.mParams == null) {
-                    return null;
-                }
-                try {
-                    work = this.mParams.dequeueWork();
-                } catch (Throwable th) {
-                }
-            }
+        public org.telegram.messenger.support.JobIntentService.GenericWorkItem dequeueWork() {
+            /*
+            r4 = this;
+            r1 = 0;
+            r0 = 0;
+            r2 = r4.mLock;
+            monitor-enter(r2);
+            r3 = r4.mParams;	 Catch:{ all -> 0x0027 }
+            if (r3 != 0) goto L_0x000b;
+        L_0x0009:
+            monitor-exit(r2);	 Catch:{ all -> 0x0027 }
+        L_0x000a:
+            return r1;
+        L_0x000b:
+            r3 = r4.mParams;	 Catch:{ Throwable -> 0x002a }
+            r0 = r3.dequeueWork();	 Catch:{ Throwable -> 0x002a }
+        L_0x0011:
+            monitor-exit(r2);	 Catch:{ all -> 0x0027 }
+            if (r0 == 0) goto L_0x000a;
+        L_0x0014:
+            r1 = r0.getIntent();
+            r2 = r4.mService;
+            r2 = r2.getClassLoader();
+            r1.setExtrasClassLoader(r2);
+            r1 = new org.telegram.messenger.support.JobIntentService$JobServiceEngineImpl$WrapperWorkItem;
+            r1.<init>(r0);
+            goto L_0x000a;
+        L_0x0027:
+            r1 = move-exception;
+            monitor-exit(r2);	 Catch:{ all -> 0x0027 }
+            throw r1;
+        L_0x002a:
+            r3 = move-exception;
+            goto L_0x0011;
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.support.JobIntentService.JobServiceEngineImpl.dequeueWork():org.telegram.messenger.support.JobIntentService$GenericWorkItem");
         }
     }
 
