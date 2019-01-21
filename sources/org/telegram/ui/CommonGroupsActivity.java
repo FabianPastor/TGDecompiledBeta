@@ -133,7 +133,7 @@ public class CommonGroupsActivity extends BaseFragment {
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    CommonGroupsActivity.this.lambda$checkDiscard$17$ChatUsersActivity();
+                    CommonGroupsActivity.this.lambda$checkDiscard$18$ChatUsersActivity();
                 }
             }
         });

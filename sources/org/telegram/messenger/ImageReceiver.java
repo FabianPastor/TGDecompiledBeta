@@ -1458,20 +1458,20 @@ public class ImageReceiver implements NotificationCenterDelegate {
             String oldKey = args[0];
             if (this.currentKey != null && this.currentKey.equals(oldKey)) {
                 this.currentKey = (String) args[1];
-                this.currentImageLocation = (FileLocation) args[2];
+                this.currentImageLocation = (TLObject) args[2];
             }
             if (this.currentThumbKey != null && this.currentThumbKey.equals(oldKey)) {
                 this.currentThumbKey = (String) args[1];
-                this.currentThumbLocation = (FileLocation) args[2];
+                this.currentThumbLocation = (TLObject) args[2];
             }
             if (this.setImageBackup != null) {
                 if (this.currentKey != null && this.currentKey.equals(oldKey)) {
                     this.currentKey = (String) args[1];
-                    this.currentImageLocation = (FileLocation) args[2];
+                    this.currentImageLocation = (TLObject) args[2];
                 }
                 if (this.currentThumbKey != null && this.currentThumbKey.equals(oldKey)) {
                     this.currentThumbKey = (String) args[1];
-                    this.currentThumbLocation = (FileLocation) args[2];
+                    this.currentThumbLocation = (TLObject) args[2];
                 }
             }
         }

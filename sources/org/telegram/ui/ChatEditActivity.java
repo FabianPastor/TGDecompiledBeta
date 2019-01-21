@@ -215,7 +215,7 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
             public void onItemClick(int id) {
                 if (id == -1) {
                     if (ChatEditActivity.this.checkDiscard()) {
-                        ChatEditActivity.this.lambda$checkDiscard$17$ChatUsersActivity();
+                        ChatEditActivity.this.lambda$checkDiscard$18$ChatUsersActivity();
                     }
                 } else if (id == 1) {
                     ChatEditActivity.this.processDone();
@@ -713,7 +713,7 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
         }
         MessagesController.getInstance(this.currentAccount).deleteUserFromChat(this.chatId, MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId())), this.info, true);
-        lambda$checkDiscard$17$ChatUsersActivity();
+        lambda$checkDiscard$18$ChatUsersActivity();
     }
 
     public void didReceivedNotification(int id, int account, Object... args) {
@@ -838,7 +838,7 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
                 } else if (this.avatar == null && (this.currentChat.photo instanceof TL_chatPhoto)) {
                     MessagesController.getInstance(this.currentAccount).changeChatAvatar(this.chatId, null, null, null);
                 }
-                lambda$checkDiscard$17$ChatUsersActivity();
+                lambda$checkDiscard$18$ChatUsersActivity();
                 return;
             }
             MessagesController.getInstance(this.currentAccount).convertToMegaGroup(getParentActivity(), this.chatId, new ChatEditActivity$$Lambda$16(this));

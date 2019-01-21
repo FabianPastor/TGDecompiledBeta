@@ -4232,7 +4232,7 @@ public class ImageLoader {
         return this.memCache.get(key);
     }
 
-    private void replaceImageInCacheInternal(String oldKey, String newKey, FileLocation newLocation) {
+    private void replaceImageInCacheInternal(String oldKey, String newKey, TLObject newLocation) {
         ArrayList<String> arr = this.memCache.getFilterKeys(oldKey);
         if (arr != null) {
             for (int a = 0; a < arr.size(); a++) {
@@ -4246,7 +4246,7 @@ public class ImageLoader {
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didReplacedPhotoInMemCache, oldKey, newKey, newLocation);
     }
 
-    public void replaceImageInCache(String oldKey, String newKey, FileLocation newLocation, boolean post) {
+    public void replaceImageInCache(String oldKey, String newKey, TLObject newLocation, boolean post) {
         if (post) {
             AndroidUtilities.runOnUIThread(new ImageLoader$$Lambda$2(this, oldKey, newKey, newLocation));
         } else {

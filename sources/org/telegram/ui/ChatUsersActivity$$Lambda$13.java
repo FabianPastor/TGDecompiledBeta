@@ -1,22 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_chatAdminRights;
-import org.telegram.tgnet.TLRPC.TL_chatBannedRights;
-import org.telegram.ui.ChatRightsEditActivity.ChatRightsEditActivityDelegate;
+import java.util.Comparator;
+import org.telegram.tgnet.TLRPC.ChannelParticipant;
 
-final /* synthetic */ class ChatUsersActivity$$Lambda$13 implements ChatRightsEditActivityDelegate {
+final /* synthetic */ class ChatUsersActivity$$Lambda$13 implements Comparator {
     private final ChatUsersActivity arg$1;
-    private final TLObject arg$2;
-    private final int arg$3;
 
-    ChatUsersActivity$$Lambda$13(ChatUsersActivity chatUsersActivity, TLObject tLObject, int i) {
+    ChatUsersActivity$$Lambda$13(ChatUsersActivity chatUsersActivity) {
         this.arg$1 = chatUsersActivity;
-        this.arg$2 = tLObject;
-        this.arg$3 = i;
     }
 
-    public void didSetRights(int i, TL_chatAdminRights tL_chatAdminRights, TL_chatBannedRights tL_chatBannedRights) {
-        this.arg$1.lambda$null$10$ChatUsersActivity(this.arg$2, this.arg$3, i, tL_chatAdminRights, tL_chatBannedRights);
+    public int compare(Object obj, Object obj2) {
+        return this.arg$1.lambda$null$20$ChatUsersActivity((ChannelParticipant) obj, (ChannelParticipant) obj2);
     }
 }

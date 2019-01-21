@@ -131,6 +131,9 @@ public class FileRefController {
         if (parentObject instanceof MessageObject) {
             MessageObject messageObject = (MessageObject) parentObject;
             return "message" + messageObject.getId() + "_" + messageObject.getChannelId();
+        } else if (parentObject instanceof Message) {
+            Message message = (Message) parentObject;
+            return "message" + message.id + "_" + (message.to_id != null ? message.to_id.channel_id : 0);
         } else if (parentObject instanceof WebPage) {
             return "webpage" + ((WebPage) parentObject).id;
         } else if (parentObject instanceof User) {

@@ -1103,9 +1103,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         this.listView.setOnItemClickListener(new ProfileActivity$$Lambda$1(this));
         this.listView.setOnItemLongClickListener(new ProfileActivity$$Lambda$2(this));
         if (this.banFromGroup != 0) {
+            Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.banFromGroup));
             if (this.currentChannelParticipant == null) {
-                TL_channels_getParticipant req = new TL_channels_getParticipant();
-                req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(this.banFromGroup);
+                TLObject req = new TL_channels_getParticipant();
+                req.channel = MessagesController.getInputChannel(chat);
                 req.user_id = MessagesController.getInstance(this.currentAccount).getInputUser(this.user_id);
                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new ProfileActivity$$Lambda$3(this));
             }
@@ -1119,7 +1120,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             };
             frameLayout1.setWillNotDraw(false);
             frameLayout.addView(frameLayout1, LayoutHelper.createFrame(-1, 51, 83));
-            frameLayout1.setOnClickListener(new ProfileActivity$$Lambda$4(this));
+            frameLayout1.setOnClickListener(new ProfileActivity$$Lambda$4(this, chat));
             View textView = new TextView(context);
             textView.setTextColor(Theme.getColor("windowBackgroundWhiteRedText"));
             textView.setTextSize(1, 15.0f);
@@ -1423,8 +1424,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             channelParticipant = ((TL_chatChannelParticipant) participant).channelParticipant;
             User u = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(participant.user_id));
             canEditAdmin = ChatObject.canAddAdmins(this.currentChat);
-            canRestrict = !((channelParticipant instanceof TL_channelParticipantAdmin) || (channelParticipant instanceof TL_channelParticipantCreator)) || channelParticipant.can_edit;
-            allowKick = ChatObject.canBlockUsers(this.currentChat);
+            canRestrict = ChatObject.canBlockUsers(this.currentChat) && (!((channelParticipant instanceof TL_channelParticipantAdmin) || (channelParticipant instanceof TL_channelParticipantCreator)) || channelParticipant.can_edit);
+            allowKick = canRestrict;
             editingAdmin = channelParticipant instanceof TL_channelParticipantAdmin;
         } else {
             channelParticipant = null;
@@ -1516,11 +1517,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         this.currentChannelParticipant = ((TL_channels_channelParticipant) response).participant;
     }
 
-    final /* synthetic */ void lambda$createView$10$ProfileActivity(View v) {
+    final /* synthetic */ void lambda$createView$10$ProfileActivity(Chat chat, View v) {
         TL_chatBannedRights tL_chatBannedRights;
         int i = this.user_id;
         int i2 = this.banFromGroup;
-        TL_chatBannedRights tL_chatBannedRights2 = this.currentChat.default_banned_rights;
+        TL_chatBannedRights tL_chatBannedRights2 = chat.default_banned_rights;
         if (this.currentChannelParticipant != null) {
             tL_chatBannedRights = this.currentChannelParticipant.banned_rights;
         } else {

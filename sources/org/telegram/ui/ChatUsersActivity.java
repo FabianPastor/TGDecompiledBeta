@@ -1221,7 +1221,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             public void onItemClick(int id) {
                 if (id == -1) {
                     if (ChatUsersActivity.this.checkDiscard()) {
-                        ChatUsersActivity.this.lambda$checkDiscard$17$ChatUsersActivity();
+                        ChatUsersActivity.this.lambda$checkDiscard$18$ChatUsersActivity();
                     }
                 } else if (id == 1) {
                     ChatUsersActivity.this.processDone();
@@ -1356,7 +1356,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     bundle.putInt("type", 2);
                     bundle.putInt("selectType", 1);
                     fragment = new ChatUsersActivity(bundle);
-                    fragment.setDelegate(new ChatUsersActivity$$Lambda$18(this));
+                    fragment.setDelegate(new ChatUsersActivity$$Lambda$19(this));
                     fragment.setInfo(this.info);
                     presentFragment(fragment);
                     return;
@@ -1376,7 +1376,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                         args.putString("selectAlertString", LocaleController.getString("AddToTheGroup", R.string.AddToTheGroup));
                     }
                     ContactsActivity fragment2 = new ContactsActivity(args);
-                    fragment2.setDelegate(new ChatUsersActivity$$Lambda$19(this));
+                    fragment2.setDelegate(new ChatUsersActivity$$Lambda$20(this));
                     presentFragment(fragment2);
                     return;
                 } else {
@@ -1584,7 +1584,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 Builder builder = new Builder(getParentActivity());
                 builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                 builder.setMessage(LocaleController.formatString("AdminWillBeRemoved", R.string.AdminWillBeRemoved, ContactsController.formatName(user.first_name, user.last_name)));
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new ChatUsersActivity$$Lambda$20(this, user, participant, ar, br, canEdit));
+                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new ChatUsersActivity$$Lambda$21(this, user, participant, ar, br, canEdit));
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 showDialog(builder.create());
             } else {
@@ -1616,7 +1616,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     bannedRights.change_info = true;
                 }
                 ChatRightsEditActivity fragment3 = new ChatRightsEditActivity(user_id, this.chatId, adminRights, this.defaultBannedRights, bannedRights, this.type == 1 ? 0 : 1, canEdit, participant == null);
-                fragment3.setDelegate(new ChatUsersActivity$$Lambda$21(this, participant));
+                fragment3.setDelegate(new ChatUsersActivity$$Lambda$22(this, participant));
                 presentFragment(fragment3);
                 return;
             }
@@ -1629,7 +1629,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     final /* synthetic */ void lambda$null$1$ChatUsersActivity(int uid, TLObject participant) {
         if (participant != null && this.participantsMap.get(uid) == null) {
             this.participants.add(participant);
-            Collections.sort(this.participants, new ChatUsersActivity$$Lambda$22(this));
+            Collections.sort(this.participants, new ChatUsersActivity$$Lambda$23(this));
             updateRows();
             this.listViewAdapter.notifyDataSetChanged();
         }
@@ -1682,13 +1682,72 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         return getParentActivity() != null && this.listView.getAdapter() == this.listViewAdapter && createMenuForParticipant(this.listViewAdapter.getItem(position), false);
     }
 
+    private void openRightsEdit2(int userId, int date, TLObject participant, TL_chatAdminRights adminRights, TL_chatBannedRights bannedRights, boolean canEditAdmin, int type, boolean removeFragment) {
+        ChatRightsEditActivity fragment = new ChatRightsEditActivity(userId, this.chatId, adminRights, this.defaultBannedRights, bannedRights, type, true, false);
+        fragment.setDelegate(new ChatUsersActivity$$Lambda$2(this, type, userId, date));
+        presentFragment(fragment);
+    }
+
+    final /* synthetic */ void lambda$openRightsEdit2$7$ChatUsersActivity(int type, int userId, int date, int rights, TL_chatAdminRights rightsAdmin, TL_chatBannedRights rightsBanned) {
+        int a;
+        TLObject p;
+        if (type == 0) {
+            for (a = 0; a < this.participants.size(); a++) {
+                p = (TLObject) this.participants.get(a);
+                if (p instanceof ChannelParticipant) {
+                    if (((ChannelParticipant) p).user_id == userId) {
+                        ChannelParticipant newPart;
+                        if (rights == 1) {
+                            newPart = new TL_channelParticipantAdmin();
+                        } else {
+                            newPart = new TL_channelParticipant();
+                        }
+                        newPart.admin_rights = rightsAdmin;
+                        newPart.banned_rights = rightsBanned;
+                        newPart.inviter_id = UserConfig.getInstance(this.currentAccount).getClientUserId();
+                        newPart.user_id = userId;
+                        newPart.date = date;
+                        this.participants.set(a, newPart);
+                        return;
+                    }
+                } else if (p instanceof ChatParticipant) {
+                    ChatParticipant newParticipant;
+                    ChatParticipant chatParticipant = (ChatParticipant) p;
+                    if (rights == 1) {
+                        newParticipant = new TL_chatParticipantAdmin();
+                    } else {
+                        newParticipant = new TL_chatParticipant();
+                    }
+                    newParticipant.user_id = chatParticipant.user_id;
+                    newParticipant.date = chatParticipant.date;
+                    newParticipant.inviter_id = chatParticipant.inviter_id;
+                    int index = this.info.participants.participants.indexOf(chatParticipant);
+                    if (index >= 0) {
+                        this.info.participants.participants.set(index, newParticipant);
+                    }
+                    loadChatParticipants(0, 200);
+                }
+            }
+        } else if (type == 1 && rights == 0) {
+            for (a = 0; a < this.participants.size(); a++) {
+                p = (TLObject) this.participants.get(a);
+                if ((p instanceof ChannelParticipant) && ((ChannelParticipant) p).user_id == userId) {
+                    this.participants.remove(a);
+                    updateRows();
+                    this.listViewAdapter.notifyDataSetChanged();
+                    return;
+                }
+            }
+        }
+    }
+
     private void openRightsEdit(int user_id, TLObject participant, TL_chatAdminRights adminRights, TL_chatBannedRights bannedRights, boolean canEditAdmin, int type, boolean removeFragment) {
         ChatRightsEditActivity fragment = new ChatRightsEditActivity(user_id, this.chatId, adminRights, this.defaultBannedRights, bannedRights, type, canEditAdmin, participant == null);
-        fragment.setDelegate(new ChatUsersActivity$$Lambda$2(this, participant, user_id));
+        fragment.setDelegate(new ChatUsersActivity$$Lambda$3(this, participant, user_id));
         presentFragment(fragment, removeFragment);
     }
 
-    final /* synthetic */ void lambda$openRightsEdit$7$ChatUsersActivity(TLObject participant, int user_id, int rights, TL_chatAdminRights rightsAdmin, TL_chatBannedRights rightsBanned) {
+    final /* synthetic */ void lambda$openRightsEdit$8$ChatUsersActivity(TLObject participant, int user_id, int rights, TL_chatAdminRights rightsAdmin, TL_chatBannedRights rightsBanned) {
         if (participant instanceof ChannelParticipant) {
             ChannelParticipant channelParticipant = (ChannelParticipant) participant;
             channelParticipant.admin_rights = rightsAdmin;
@@ -1710,7 +1769,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     private void removeUser(int userId) {
         if (ChatObject.isChannel(this.currentChat)) {
             MessagesController.getInstance(this.currentAccount).deleteUserFromChat(this.chatId, MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(userId)), null);
-            lambda$checkDiscard$17$ChatUsersActivity();
+            lambda$checkDiscard$18$ChatUsersActivity();
         }
     }
 
@@ -1799,7 +1858,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 return false;
             }
             builder = new Builder(getParentActivity());
-            builder.setItems((CharSequence[]) items.toArray(new CharSequence[actions.size()]), AndroidUtilities.toIntArray(icons), new ChatUsersActivity$$Lambda$3(this, actions, user, userId, adminRights, bannedRights, date));
+            builder.setItems((CharSequence[]) items.toArray(new CharSequence[actions.size()]), AndroidUtilities.toIntArray(icons), new ChatUsersActivity$$Lambda$4(this, actions, user, userId, canEditAdmin, participant, date, adminRights, bannedRights));
             alertDialog = builder.create();
             showDialog(alertDialog);
             if (hasRemove) {
@@ -1843,7 +1902,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 return false;
             }
             builder = new Builder(getParentActivity());
-            builder.setItems(items2, iArr, new ChatUsersActivity$$Lambda$4(this, items2, userId, adminRights, participant, bannedRights));
+            builder.setItems(items2, iArr, new ChatUsersActivity$$Lambda$5(this, items2, userId, adminRights, participant, bannedRights));
             alertDialog = builder.create();
             showDialog(alertDialog);
             if (this.type == 1) {
@@ -1853,7 +1912,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         return true;
     }
 
-    final /* synthetic */ void lambda$createMenuForParticipant$9$ChatUsersActivity(ArrayList actions, User user, int userId, TL_chatAdminRights adminRights, TL_chatBannedRights bannedRights, int date, DialogInterface dialogInterface, int i) {
+    final /* synthetic */ void lambda$createMenuForParticipant$10$ChatUsersActivity(ArrayList actions, User user, int userId, boolean canEditAdmin, TLObject participant, int date, TL_chatAdminRights adminRights, TL_chatBannedRights bannedRights, DialogInterface dialogInterface, int i) {
         if (((Integer) actions.get(i)).intValue() == 2) {
             MessagesController.getInstance(this.currentAccount).deleteUserFromChat(this.chatId, user, null);
             for (int a = 0; a < this.participants.size(); a++) {
@@ -1867,74 +1926,29 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             }
             if (this.searchItem != null && this.actionBar.isSearchFieldVisible()) {
                 this.actionBar.closeSearchField();
-                return;
             }
-            return;
-        }
-        ChatRightsEditActivity fragment = new ChatRightsEditActivity(user.id, this.chatId, adminRights, this.defaultBannedRights, bannedRights, ((Integer) actions.get(i)).intValue(), true, false);
-        fragment.setDelegate(new ChatUsersActivity$$Lambda$17(this, actions, i, userId, date));
-        presentFragment(fragment);
-    }
-
-    final /* synthetic */ void lambda$null$8$ChatUsersActivity(ArrayList actions, int i, int userId, int date, int rights, TL_chatAdminRights rightsAdmin, TL_chatBannedRights rightsBanned) {
-        int a;
-        TLObject p;
-        if (((Integer) actions.get(i)).intValue() == 0) {
-            for (a = 0; a < this.participants.size(); a++) {
-                p = (TLObject) this.participants.get(a);
-                if (p instanceof ChannelParticipant) {
-                    if (((ChannelParticipant) p).user_id == userId) {
-                        ChannelParticipant newPart;
-                        if (rights == 1) {
-                            newPart = new TL_channelParticipantAdmin();
-                        } else {
-                            newPart = new TL_channelParticipant();
-                        }
-                        newPart.admin_rights = rightsAdmin;
-                        newPart.banned_rights = rightsBanned;
-                        newPart.inviter_id = UserConfig.getInstance(this.currentAccount).getClientUserId();
-                        newPart.user_id = userId;
-                        newPart.date = date;
-                        this.participants.set(a, newPart);
-                        return;
-                    }
-                } else if (p instanceof ChatParticipant) {
-                    ChatParticipant newParticipant;
-                    ChatParticipant chatParticipant = (ChatParticipant) p;
-                    if (rights == 1) {
-                        newParticipant = new TL_chatParticipantAdmin();
-                    } else {
-                        newParticipant = new TL_chatParticipant();
-                    }
-                    newParticipant.user_id = chatParticipant.user_id;
-                    newParticipant.date = chatParticipant.date;
-                    newParticipant.inviter_id = chatParticipant.inviter_id;
-                    int index = this.info.participants.participants.indexOf(chatParticipant);
-                    if (index >= 0) {
-                        this.info.participants.participants.set(index, newParticipant);
-                    }
-                    loadChatParticipants(0, 200);
-                }
-            }
-        } else if (((Integer) actions.get(i)).intValue() == 1 && rights == 0) {
-            for (a = 0; a < this.participants.size(); a++) {
-                p = (TLObject) this.participants.get(a);
-                if ((p instanceof ChannelParticipant) && ((ChannelParticipant) p).user_id == userId) {
-                    this.participants.remove(a);
-                    updateRows();
-                    this.listViewAdapter.notifyDataSetChanged();
-                    return;
-                }
-            }
+        } else if (canEditAdmin && ((participant instanceof TL_channelParticipantAdmin) || (participant instanceof TL_chatParticipantAdmin))) {
+            Builder builder2 = new Builder(getParentActivity());
+            builder2.setTitle(LocaleController.getString("AppName", R.string.AppName));
+            builder2.setMessage(LocaleController.formatString("AdminWillBeRemoved", R.string.AdminWillBeRemoved, ContactsController.formatName(user.first_name, user.last_name)));
+            builder2.setPositiveButton(LocaleController.getString("OK", R.string.OK), new ChatUsersActivity$$Lambda$18(this, userId, date, participant, adminRights, bannedRights, canEditAdmin, actions, i));
+            builder2.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            showDialog(builder2.create());
+        } else {
+            openRightsEdit2(userId, date, participant, adminRights, bannedRights, canEditAdmin, ((Integer) actions.get(i)).intValue(), false);
         }
     }
 
-    final /* synthetic */ void lambda$createMenuForParticipant$14$ChatUsersActivity(CharSequence[] items, int userId, TL_chatAdminRights adminRights, TLObject participant, TL_chatBannedRights bannedRights, DialogInterface dialogInterface, int i) {
+    final /* synthetic */ void lambda$null$9$ChatUsersActivity(int userId, int date, TLObject participant, TL_chatAdminRights adminRights, TL_chatBannedRights bannedRights, boolean canEditAdmin, ArrayList actions, int i, DialogInterface dialog, int which) {
+        openRightsEdit2(userId, date, participant, adminRights, bannedRights, canEditAdmin, ((Integer) actions.get(i)).intValue(), false);
+    }
+
+    final /* synthetic */ void lambda$createMenuForParticipant$15$ChatUsersActivity(CharSequence[] items, int userId, TL_chatAdminRights adminRights, TLObject participant, TL_chatBannedRights bannedRights, DialogInterface dialogInterface, int i) {
         ChatRightsEditActivity fragment;
         if (this.type == 1) {
             if (i == 0 && items.length == 2) {
                 fragment = new ChatRightsEditActivity(userId, this.chatId, adminRights, null, null, 0, true, false);
-                fragment.setDelegate(new ChatUsersActivity$$Lambda$13(this, participant, userId));
+                fragment.setDelegate(new ChatUsersActivity$$Lambda$14(this, participant, userId));
                 presentFragment(fragment);
                 return;
             }
@@ -1950,7 +1964,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             if (i == 0) {
                 if (this.type == 3) {
                     fragment = new ChatRightsEditActivity(userId, this.chatId, null, this.defaultBannedRights, bannedRights, 1, true, false);
-                    fragment.setDelegate(new ChatUsersActivity$$Lambda$14(this, participant, userId));
+                    fragment.setDelegate(new ChatUsersActivity$$Lambda$15(this, participant, userId));
                     presentFragment(fragment);
                 } else if (this.type == 0) {
                     MessagesController.getInstance(this.currentAccount).addUserToChat(this.chatId, MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(userId)), null, 0, null, this, null);
@@ -1960,7 +1974,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 req.user_id = MessagesController.getInstance(this.currentAccount).getInputUser(userId);
                 req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(this.chatId);
                 req.banned_rights = new TL_chatBannedRights();
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new ChatUsersActivity$$Lambda$15(this));
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new ChatUsersActivity$$Lambda$16(this));
                 if (this.searchItem != null && this.actionBar.isSearchFieldVisible()) {
                     this.actionBar.closeSearchField();
                 }
@@ -1972,23 +1986,6 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             }
         } else if (i == 0) {
             MessagesController.getInstance(this.currentAccount).deleteUserFromChat(this.chatId, MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(userId)), null);
-        }
-    }
-
-    final /* synthetic */ void lambda$null$10$ChatUsersActivity(TLObject participant, int userId, int rights, TL_chatAdminRights rightsAdmin, TL_chatBannedRights rightsBanned) {
-        if (participant != null) {
-            ChannelParticipant channelParticipant;
-            if (participant instanceof ChannelParticipant) {
-                channelParticipant = (ChannelParticipant) participant;
-                channelParticipant.admin_rights = rightsAdmin;
-                channelParticipant.banned_rights = rightsBanned;
-            }
-            TLObject p = (TLObject) this.participantsMap.get(userId);
-            if (p instanceof ChannelParticipant) {
-                channelParticipant = (ChannelParticipant) p;
-                channelParticipant.admin_rights = rightsAdmin;
-                channelParticipant.banned_rights = rightsBanned;
-            }
         }
     }
 
@@ -2009,17 +2006,34 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         }
     }
 
-    final /* synthetic */ void lambda$null$13$ChatUsersActivity(TLObject response, TL_error error) {
-        if (response != null) {
-            Updates updates = (Updates) response;
-            MessagesController.getInstance(this.currentAccount).processUpdates(updates, false);
-            if (!updates.chats.isEmpty()) {
-                AndroidUtilities.runOnUIThread(new ChatUsersActivity$$Lambda$16(this, updates), 1000);
+    final /* synthetic */ void lambda$null$12$ChatUsersActivity(TLObject participant, int userId, int rights, TL_chatAdminRights rightsAdmin, TL_chatBannedRights rightsBanned) {
+        if (participant != null) {
+            ChannelParticipant channelParticipant;
+            if (participant instanceof ChannelParticipant) {
+                channelParticipant = (ChannelParticipant) participant;
+                channelParticipant.admin_rights = rightsAdmin;
+                channelParticipant.banned_rights = rightsBanned;
+            }
+            TLObject p = (TLObject) this.participantsMap.get(userId);
+            if (p instanceof ChannelParticipant) {
+                channelParticipant = (ChannelParticipant) p;
+                channelParticipant.admin_rights = rightsAdmin;
+                channelParticipant.banned_rights = rightsBanned;
             }
         }
     }
 
-    final /* synthetic */ void lambda$null$12$ChatUsersActivity(Updates updates) {
+    final /* synthetic */ void lambda$null$14$ChatUsersActivity(TLObject response, TL_error error) {
+        if (response != null) {
+            Updates updates = (Updates) response;
+            MessagesController.getInstance(this.currentAccount).processUpdates(updates, false);
+            if (!updates.chats.isEmpty()) {
+                AndroidUtilities.runOnUIThread(new ChatUsersActivity$$Lambda$17(this, updates), 1000);
+            }
+        }
+    }
+
+    final /* synthetic */ void lambda$null$13$ChatUsersActivity(Updates updates) {
         MessagesController.getInstance(this.currentAccount).loadFullChat(((Chat) updates.chats.get(0)).id, 0, true);
     }
 
@@ -2032,12 +2046,12 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             }
             if (!byChannelUsers || !ChatObject.isChannel(this.currentChat)) {
                 this.info = chatFull;
-                AndroidUtilities.runOnUIThread(new ChatUsersActivity$$Lambda$5(this));
+                AndroidUtilities.runOnUIThread(new ChatUsersActivity$$Lambda$6(this));
             }
         }
     }
 
-    final /* synthetic */ void lambda$didReceivedNotification$15$ChatUsersActivity() {
+    final /* synthetic */ void lambda$didReceivedNotification$16$ChatUsersActivity() {
         loadChatParticipants(0, 200);
     }
 
@@ -2060,8 +2074,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         } else {
             builder.setMessage(LocaleController.getString("GroupSettingsChangedAlert", R.string.GroupSettingsChangedAlert));
         }
-        builder.setPositiveButton(LocaleController.getString("ApplyTheme", R.string.ApplyTheme), new ChatUsersActivity$$Lambda$6(this));
-        builder.setNegativeButton(LocaleController.getString("PassportDiscard", R.string.PassportDiscard), new ChatUsersActivity$$Lambda$7(this));
+        builder.setPositiveButton(LocaleController.getString("ApplyTheme", R.string.ApplyTheme), new ChatUsersActivity$$Lambda$7(this));
+        builder.setNegativeButton(LocaleController.getString("PassportDiscard", R.string.PassportDiscard), new ChatUsersActivity$$Lambda$8(this));
         showDialog(builder.create());
         return false;
     }
@@ -2142,7 +2156,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     chat.default_banned_rights = this.defaultBannedRights;
                 }
             }
-            lambda$checkDiscard$17$ChatUsersActivity();
+            lambda$checkDiscard$18$ChatUsersActivity();
         }
     }
 
@@ -2185,7 +2199,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 req.filter.q = "";
                 req.offset = offset;
                 req.limit = count;
-                ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new ChatUsersActivity$$Lambda$8(this)), this.classGuid);
+                ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new ChatUsersActivity$$Lambda$9(this)), this.classGuid);
                 return;
             }
             this.loadingUsers = false;
@@ -2231,11 +2245,11 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         }
     }
 
-    final /* synthetic */ void lambda$loadChatParticipants$21$ChatUsersActivity(TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new ChatUsersActivity$$Lambda$10(this, error, response));
+    final /* synthetic */ void lambda$loadChatParticipants$22$ChatUsersActivity(TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new ChatUsersActivity$$Lambda$11(this, error, response));
     }
 
-    final /* synthetic */ void lambda$null$20$ChatUsersActivity(TL_error error, TLObject response) {
+    final /* synthetic */ void lambda$null$21$ChatUsersActivity(TL_error error, TLObject response) {
         this.loadingUsers = false;
         this.firstLoaded = true;
         if (this.emptyView != null) {
@@ -2264,9 +2278,9 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             }
             try {
                 if (this.type == 0 || this.type == 3 || this.type == 2) {
-                    Collections.sort(res.participants, new ChatUsersActivity$$Lambda$11(this, ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()));
+                    Collections.sort(res.participants, new ChatUsersActivity$$Lambda$12(this, ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()));
                 } else if (this.type == 1) {
-                    Collections.sort(res.participants, new ChatUsersActivity$$Lambda$12(this));
+                    Collections.sort(res.participants, new ChatUsersActivity$$Lambda$13(this));
                 }
             } catch (Throwable e) {
                 FileLog.e(e);
@@ -2278,7 +2292,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         }
     }
 
-    final /* synthetic */ int lambda$null$18$ChatUsersActivity(int currentTime, ChannelParticipant lhs, ChannelParticipant rhs) {
+    final /* synthetic */ int lambda$null$19$ChatUsersActivity(int currentTime, ChannelParticipant lhs, ChannelParticipant rhs) {
         User user1 = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(rhs.user_id));
         User user2 = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(lhs.user_id));
         int status1 = 0;
@@ -2319,7 +2333,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         }
     }
 
-    final /* synthetic */ int lambda$null$19$ChatUsersActivity(ChannelParticipant lhs, ChannelParticipant rhs) {
+    final /* synthetic */ int lambda$null$20$ChatUsersActivity(ChannelParticipant lhs, ChannelParticipant rhs) {
         int type1 = getChannelAdminParticipantType(lhs);
         int type2 = getChannelAdminParticipantType(rhs);
         if (type1 > type2) {
@@ -2345,7 +2359,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate cellDelegate = new ChatUsersActivity$$Lambda$9(this);
+        ThemeDescriptionDelegate cellDelegate = new ChatUsersActivity$$Lambda$10(this);
         ThemeDescription[] themeDescriptionArr = new ThemeDescription[36];
         themeDescriptionArr[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{ManageChatUserCell.class, ManageChatTextCell.class, TextCheckCell2.class, TextSettingsCell.class}, null, null, null, "windowBackgroundWhite");
         themeDescriptionArr[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundGray");
@@ -2386,7 +2400,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         return themeDescriptionArr;
     }
 
-    final /* synthetic */ void lambda$getThemeDescriptions$22$ChatUsersActivity() {
+    final /* synthetic */ void lambda$getThemeDescriptions$23$ChatUsersActivity() {
         if (this.listView != null) {
             int count = this.listView.getChildCount();
             for (int a = 0; a < count; a++) {

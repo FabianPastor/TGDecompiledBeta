@@ -162,7 +162,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     private boolean searching;
     private String selectAlertString;
     private String selectAlertStringGroup;
-    private long selectedDialog;
     private RecyclerView sideMenu;
     private ActionBarMenuItem switchItem;
     private UndoView undoView;
@@ -612,11 +611,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     }
                     TL_dialog dialog = (TL_dialog) dialogs.get(position);
                     if (!DialogsActivity.this.onlySelect) {
-                        DialogsActivity.this.selectedDialog = dialog.id;
+                        long selectedDialog = dialog.id;
                         boolean pinned = dialog.pinned;
                         Builder builder = new Builder(DialogsActivity.this.getParentActivity());
-                        int lower_id = (int) DialogsActivity.this.selectedDialog;
-                        high_id = (int) (DialogsActivity.this.selectedDialog >> 32);
+                        int lower_id = (int) selectedDialog;
+                        high_id = (int) (selectedDialog >> 32);
                         boolean hasUnread = dialog.unread_count != 0 || dialog.unread_mark;
                         String string;
                         Dialog sheet;
@@ -652,7 +651,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                                 items[2] = TextUtils.isEmpty(chat.username) ? LocaleController.getString("ClearHistory", R.string.ClearHistory) : LocaleController.getString("ClearHistoryCache", R.string.ClearHistoryCache);
                                 items[3] = LocaleController.getString("LeaveMegaMenu", R.string.LeaveMegaMenu);
                             }
-                            builder.setItems(items, icons, new DialogsActivity$5$$Lambda$1(this, dialog, pinned, hasUnread, chat, lower_id));
+                            builder.setItems(items, icons, new DialogsActivity$5$$Lambda$1(this, dialog, selectedDialog, pinned, hasUnread, chat, lower_id));
                             sheet = builder.create();
                             DialogsActivity.this.showDialog(sheet);
                             sheet.setItemColor(3, Theme.getColor("dialogTextRed2"), Theme.getColor("dialogRedIcon"));
@@ -672,7 +671,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                             iArr[1] = hasUnread ? R.drawable.menu_read : R.drawable.menu_unread;
                             iArr[2] = R.drawable.chats_clear;
                             iArr[3] = isChat ? R.drawable.chats_leave : R.drawable.chats_delete;
-                            builder.setItems(charSequenceArr, iArr, new DialogsActivity$5$$Lambda$2(this, dialog, lower_id, pinned, hasUnread, chat, user, isChat, isBot));
+                            builder.setItems(charSequenceArr, iArr, new DialogsActivity$5$$Lambda$2(this, dialog, lower_id, selectedDialog, pinned, hasUnread, chat, user, isChat, isBot));
                             sheet = builder.create();
                             DialogsActivity.this.showDialog(sheet);
                             sheet.setItemColor(3, Theme.getColor("dialogTextRed2"), Theme.getColor("dialogRedIcon"));
@@ -705,10 +704,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 }
             }
 
-            final /* synthetic */ void lambda$onItemClick$3$DialogsActivity$5(TL_dialog dialog, boolean pinned, boolean hasUnread, Chat chat, int lower_id, DialogInterface d, int which) {
+            final /* synthetic */ void lambda$onItemClick$3$DialogsActivity$5(TL_dialog dialog, long selectedDialog, boolean pinned, boolean hasUnread, Chat chat, int lower_id, DialogInterface d, int which) {
                 if (which == 0) {
                     if (dialog.pinned || MessagesController.getInstance(DialogsActivity.this.currentAccount).canPinDialog(false)) {
-                        if (MessagesController.getInstance(DialogsActivity.this.currentAccount).pinDialog(DialogsActivity.this.selectedDialog, !pinned, null, 0) && !pinned) {
+                        if (MessagesController.getInstance(DialogsActivity.this.currentAccount).pinDialog(selectedDialog, !pinned, null, 0) && !pinned) {
                             DialogsActivity.this.hideFloatingButton(false);
                             DialogsActivity.this.listView.smoothScrollToPosition(0);
                             return;
@@ -717,35 +716,35 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     }
                     AlertsCreator.showSimpleAlert(DialogsActivity.this, LocaleController.formatString("PinToTopLimitReached", R.string.PinToTopLimitReached, LocaleController.formatPluralString("Chats", MessagesController.getInstance(DialogsActivity.this.currentAccount).maxPinnedDialogsCount)));
                 } else if (which != 1) {
-                    AlertsCreator.createClearOrDeleteDialogAlert(DialogsActivity.this, which == 2, chat, null, lower_id == 0, new DialogsActivity$5$$Lambda$5(this, which, chat));
+                    AlertsCreator.createClearOrDeleteDialogAlert(DialogsActivity.this, which == 2, chat, null, lower_id == 0, new DialogsActivity$5$$Lambda$5(this, which, chat, selectedDialog));
                 } else if (hasUnread) {
-                    MessagesController.getInstance(DialogsActivity.this.currentAccount).markMentionsAsRead(DialogsActivity.this.selectedDialog);
-                    MessagesController.getInstance(DialogsActivity.this.currentAccount).markDialogAsRead(DialogsActivity.this.selectedDialog, dialog.top_message, dialog.top_message, dialog.last_message_date, false, 0, true);
+                    MessagesController.getInstance(DialogsActivity.this.currentAccount).markMentionsAsRead(selectedDialog);
+                    MessagesController.getInstance(DialogsActivity.this.currentAccount).markDialogAsRead(selectedDialog, dialog.top_message, dialog.top_message, dialog.last_message_date, false, 0, true);
                 } else {
-                    MessagesController.getInstance(DialogsActivity.this.currentAccount).markDialogAsUnread(DialogsActivity.this.selectedDialog, null, 0);
+                    MessagesController.getInstance(DialogsActivity.this.currentAccount).markDialogAsUnread(selectedDialog, null, 0);
                 }
             }
 
-            final /* synthetic */ void lambda$null$2$DialogsActivity$5(int which, Chat chat) {
+            final /* synthetic */ void lambda$null$2$DialogsActivity$5(int which, Chat chat, long selectedDialog) {
                 if (which != 2 || (chat.megagroup && TextUtils.isEmpty(chat.username))) {
-                    DialogsActivity.this.undoView.showWithAction(DialogsActivity.this.selectedDialog, which == 2, new DialogsActivity$5$$Lambda$6(this, which));
+                    DialogsActivity.this.undoView.showWithAction(selectedDialog, which == 2, new DialogsActivity$5$$Lambda$6(this, which, selectedDialog));
                 } else {
-                    MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteDialog(DialogsActivity.this.selectedDialog, 2);
+                    MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteDialog(selectedDialog, 2);
                 }
             }
 
-            final /* synthetic */ void lambda$null$1$DialogsActivity$5(int which) {
+            final /* synthetic */ void lambda$null$1$DialogsActivity$5(int which, long selectedDialog) {
                 if (which == 2) {
-                    MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteDialog(DialogsActivity.this.selectedDialog, 1);
+                    MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteDialog(selectedDialog, 1);
                     return;
                 }
-                MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteUserFromChat((int) (-DialogsActivity.this.selectedDialog), UserConfig.getInstance(DialogsActivity.this.currentAccount).getCurrentUser(), null);
+                MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteUserFromChat((int) (-selectedDialog), UserConfig.getInstance(DialogsActivity.this.currentAccount).getCurrentUser(), null);
                 if (AndroidUtilities.isTablet()) {
-                    NotificationCenter.getInstance(DialogsActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, Long.valueOf(DialogsActivity.this.selectedDialog));
+                    NotificationCenter.getInstance(DialogsActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, Long.valueOf(selectedDialog));
                 }
             }
 
-            final /* synthetic */ void lambda$onItemClick$6$DialogsActivity$5(TL_dialog dialog, int lower_id, boolean pinned, boolean hasUnread, Chat chat, User user, boolean isChat, boolean isBot, DialogInterface d, int which) {
+            final /* synthetic */ void lambda$onItemClick$6$DialogsActivity$5(TL_dialog dialog, int lower_id, long selectedDialog, boolean pinned, boolean hasUnread, Chat chat, User user, boolean isChat, boolean isBot, DialogInterface d, int which) {
                 if (which == 0) {
                     if (!dialog.pinned) {
                         if (!MessagesController.getInstance(DialogsActivity.this.currentAccount).canPinDialog(lower_id == 0)) {
@@ -753,46 +752,46 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                             return;
                         }
                     }
-                    if (MessagesController.getInstance(DialogsActivity.this.currentAccount).pinDialog(DialogsActivity.this.selectedDialog, !pinned, null, 0) && !pinned) {
+                    if (MessagesController.getInstance(DialogsActivity.this.currentAccount).pinDialog(selectedDialog, !pinned, null, 0) && !pinned) {
                         DialogsActivity.this.hideFloatingButton(false);
                         DialogsActivity.this.listView.smoothScrollToPosition(0);
                     }
                 } else if (which != 1) {
-                    AlertsCreator.createClearOrDeleteDialogAlert(DialogsActivity.this, which == 2, chat, user, lower_id == 0, new DialogsActivity$5$$Lambda$3(this, which, isChat, isBot));
+                    AlertsCreator.createClearOrDeleteDialogAlert(DialogsActivity.this, which == 2, chat, user, lower_id == 0, new DialogsActivity$5$$Lambda$3(this, selectedDialog, which, isChat, isBot));
                 } else if (hasUnread) {
-                    MessagesController.getInstance(DialogsActivity.this.currentAccount).markMentionsAsRead(DialogsActivity.this.selectedDialog);
-                    MessagesController.getInstance(DialogsActivity.this.currentAccount).markDialogAsRead(DialogsActivity.this.selectedDialog, dialog.top_message, dialog.top_message, dialog.last_message_date, false, 0, true);
+                    MessagesController.getInstance(DialogsActivity.this.currentAccount).markMentionsAsRead(selectedDialog);
+                    MessagesController.getInstance(DialogsActivity.this.currentAccount).markDialogAsRead(selectedDialog, dialog.top_message, dialog.top_message, dialog.last_message_date, false, 0, true);
                 } else {
-                    MessagesController.getInstance(DialogsActivity.this.currentAccount).markDialogAsUnread(DialogsActivity.this.selectedDialog, null, 0);
+                    MessagesController.getInstance(DialogsActivity.this.currentAccount).markDialogAsUnread(selectedDialog, null, 0);
                 }
             }
 
-            final /* synthetic */ void lambda$null$5$DialogsActivity$5(int which, boolean isChat, boolean isBot) {
-                DialogsActivity.this.undoView.showWithAction(DialogsActivity.this.selectedDialog, which == 2, new DialogsActivity$5$$Lambda$4(this, which, isChat, isBot));
+            final /* synthetic */ void lambda$null$5$DialogsActivity$5(long selectedDialog, int which, boolean isChat, boolean isBot) {
+                DialogsActivity.this.undoView.showWithAction(selectedDialog, which == 2, new DialogsActivity$5$$Lambda$4(this, which, isChat, selectedDialog, isBot));
             }
 
-            final /* synthetic */ void lambda$null$4$DialogsActivity$5(int which, boolean isChat, boolean isBot) {
+            final /* synthetic */ void lambda$null$4$DialogsActivity$5(int which, boolean isChat, long selectedDialog, boolean isBot) {
                 if (which != 2) {
                     if (isChat) {
-                        Chat currentChat = MessagesController.getInstance(DialogsActivity.this.currentAccount).getChat(Integer.valueOf((int) (-DialogsActivity.this.selectedDialog)));
+                        Chat currentChat = MessagesController.getInstance(DialogsActivity.this.currentAccount).getChat(Integer.valueOf((int) (-selectedDialog)));
                         if (currentChat == null || !ChatObject.isNotInChat(currentChat)) {
-                            MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteUserFromChat((int) (-DialogsActivity.this.selectedDialog), MessagesController.getInstance(DialogsActivity.this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(DialogsActivity.this.currentAccount).getClientUserId())), null);
+                            MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteUserFromChat((int) (-selectedDialog), MessagesController.getInstance(DialogsActivity.this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(DialogsActivity.this.currentAccount).getClientUserId())), null);
                         } else {
-                            MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteDialog(DialogsActivity.this.selectedDialog, 0);
+                            MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteDialog(selectedDialog, 0);
                         }
                     } else {
-                        MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteDialog(DialogsActivity.this.selectedDialog, 0);
+                        MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteDialog(selectedDialog, 0);
                     }
                     if (isBot) {
-                        MessagesController.getInstance(DialogsActivity.this.currentAccount).blockUser((int) DialogsActivity.this.selectedDialog);
+                        MessagesController.getInstance(DialogsActivity.this.currentAccount).blockUser((int) selectedDialog);
                     }
                     if (AndroidUtilities.isTablet()) {
-                        NotificationCenter.getInstance(DialogsActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, Long.valueOf(DialogsActivity.this.selectedDialog));
+                        NotificationCenter.getInstance(DialogsActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, Long.valueOf(selectedDialog));
                         return;
                     }
                     return;
                 }
-                MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteDialog(DialogsActivity.this.selectedDialog, 1);
+                MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteDialog(selectedDialog, 1);
             }
 
             public void onLongClickRelease() {

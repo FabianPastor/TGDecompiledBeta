@@ -1,16 +1,13 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-
-final /* synthetic */ class ChatUsersActivity$$Lambda$6 implements OnClickListener {
+final /* synthetic */ class ChatUsersActivity$$Lambda$6 implements Runnable {
     private final ChatUsersActivity arg$1;
 
     ChatUsersActivity$$Lambda$6(ChatUsersActivity chatUsersActivity) {
         this.arg$1 = chatUsersActivity;
     }
 
-    public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$checkDiscard$16$ChatUsersActivity(dialogInterface, i);
+    public void run() {
+        this.arg$1.lambda$didReceivedNotification$16$ChatUsersActivity();
     }
 }

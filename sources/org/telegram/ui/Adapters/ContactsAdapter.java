@@ -223,13 +223,13 @@ public class ContactsAdapter extends SectionsAdapter {
             count++;
         }
         if (this.needPhonebook) {
-            return count + 1;
         }
         return count;
     }
 
     public int getCountForSection(int section) {
         ArrayList<String> sortedUsersSectionsArray;
+        int i = 0;
         HashMap<String, ArrayList<TL_contact>> usersSectionsDict = this.onlyUsers == 2 ? ContactsController.getInstance(this.currentAccount).usersMutualSectionsDict : ContactsController.getInstance(this.currentAccount).usersSectionsDict;
         if (this.onlyUsers == 2) {
             sortedUsersSectionsArray = ContactsController.getInstance(this.currentAccount).sortedUsersMutualSectionsArray;
@@ -245,7 +245,10 @@ public class ContactsAdapter extends SectionsAdapter {
                 return 4;
             } else if (this.sortType == 2) {
                 if (section == 1) {
-                    return this.onlineContacts.size() + 1;
+                    if (!this.onlineContacts.isEmpty()) {
+                        i = this.onlineContacts.size() + 1;
+                    }
+                    return i;
                 }
             } else if (section - 1 < sortedUsersSectionsArray.size()) {
                 count = ((ArrayList) usersSectionsDict.get(sortedUsersSectionsArray.get(section - 1))).size();
@@ -261,10 +264,7 @@ public class ContactsAdapter extends SectionsAdapter {
             }
             return count;
         }
-        if (this.needPhonebook) {
-            return ContactsController.getInstance(this.currentAccount).phoneBookContacts.size();
-        }
-        return 0;
+        return this.needPhonebook ? ContactsController.getInstance(this.currentAccount).phoneBookContacts.size() : 0;
     }
 
     public View getSectionHeaderView(int section, View view) {

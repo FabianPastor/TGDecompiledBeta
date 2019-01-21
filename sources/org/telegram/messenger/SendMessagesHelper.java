@@ -1555,9 +1555,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 int oldId = newMsgObj1.id;
                                 ArrayList<Message> sentMessages = new ArrayList();
                                 sentMessages.add(message);
+                                updateMediaPaths(msgObj1, message, null, true);
                                 newMsgObj1.id = message.id;
                                 sentCount++;
-                                updateMediaPaths(msgObj1, message, null, true);
                                 MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new SendMessagesHelper$$Lambda$57(this, newMsgObj1, oldId, to_id, sentMessages, peer, message));
                             }
                         }
@@ -7117,6 +7117,11 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             if ((sentMessage.media instanceof TL_messageMediaPhoto) && sentMessage.media.photo != null && (newMsg.media instanceof TL_messageMediaPhoto) && newMsg.media.photo != null) {
                 if (sentMessage.media.ttl_seconds == 0) {
                     MessagesStorage.getInstance(this.currentAccount).putSentFile(originalPath, sentMessage.media.photo, 0, "sent_" + sentMessage.to_id.channel_id + "_" + sentMessage.id);
+                }
+                PhotoSize strippedOld = FileLoader.getClosestPhotoSizeWithSize(newMsg.media.photo.sizes, 40);
+                TLObject strippedNew = FileLoader.getClosestPhotoSizeWithSize(sentMessage.media.photo.sizes, 40);
+                if ((strippedNew instanceof TL_photoStrippedSize) && (strippedOld instanceof TL_photoStrippedSize)) {
+                    ImageLoader.getInstance().replaceImageInCache("stripped" + FileRefController.getKeyForParentObject(newMsgObj), "stripped" + FileRefController.getKeyForParentObject(sentMessage), strippedNew, post);
                 }
                 if (newMsg.media.photo.sizes.size() == 1 && (((PhotoSize) newMsg.media.photo.sizes.get(0)).location instanceof TL_fileLocationUnavailable)) {
                     newMsg.media.photo.sizes = sentMessage.media.photo.sizes;
