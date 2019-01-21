@@ -731,9 +731,15 @@ public class LocaleController {
         if (langCode != null) {
             langCode = langCode.replace("-", "_");
         }
-        if (langCode == null || langCode.equals(this.currentLocaleInfo.shortName) || langCode.equals(this.currentLocaleInfo.baseLangCode)) {
-            applyRemoteLanguage(this.currentLocaleInfo, langCode, true, currentAccount);
+        if (langCode != null) {
+            if (this.currentLocaleInfo == null) {
+                return;
+            }
+            if (!(langCode.equals(this.currentLocaleInfo.shortName) || langCode.equals(this.currentLocaleInfo.baseLangCode))) {
+                return;
+            }
         }
+        applyRemoteLanguage(this.currentLocaleInfo, langCode, true, currentAccount);
     }
 
     public void checkUpdateForCurrentRemoteLocale(int currentAccount, int version, int baseVersion) {

@@ -3,9 +3,18 @@ package org.telegram.messenger;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.TL_channel;
 import org.telegram.tgnet.TLRPC.TL_channelForbidden;
+import org.telegram.tgnet.TLRPC.TL_channel_layer48;
+import org.telegram.tgnet.TLRPC.TL_channel_layer67;
+import org.telegram.tgnet.TLRPC.TL_channel_layer72;
+import org.telegram.tgnet.TLRPC.TL_channel_layer77;
+import org.telegram.tgnet.TLRPC.TL_channel_layer92;
+import org.telegram.tgnet.TLRPC.TL_channel_old;
 import org.telegram.tgnet.TLRPC.TL_chatBannedRights;
 import org.telegram.tgnet.TLRPC.TL_chatEmpty;
 import org.telegram.tgnet.TLRPC.TL_chatForbidden;
+import org.telegram.tgnet.TLRPC.TL_chat_layer92;
+import org.telegram.tgnet.TLRPC.TL_chat_old;
+import org.telegram.tgnet.TLRPC.TL_chat_old2;
 
 public class ChatObject {
     public static final int ACTION_ADD_ADMINS = 4;
@@ -153,6 +162,9 @@ public class ChatObject {
             return false;
         }
         if (chat.admin_rights != null && !isAdminAction(action)) {
+            return true;
+        }
+        if (chat.default_banned_rights == null && ((chat instanceof TL_chat_layer92) || (chat instanceof TL_chat_old) || (chat instanceof TL_chat_old2) || (chat instanceof TL_channel_layer92) || (chat instanceof TL_channel_layer77) || (chat instanceof TL_channel_layer72) || (chat instanceof TL_channel_layer67) || (chat instanceof TL_channel_layer48) || (chat instanceof TL_channel_old))) {
             return true;
         }
         if (chat.default_banned_rights == null || getBannedRight(chat.default_banned_rights, action)) {
