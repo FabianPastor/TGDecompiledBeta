@@ -66,7 +66,7 @@ public class TextureRenderer {
     }
 
     public void surfaceCreated() {
-        this.mProgram = createProgram(VERTEX_SHADER, FRAGMENT_SHADER);
+        this.mProgram = createProgram("uniform mat4 uMVPMatrix;\nuniform mat4 uSTMatrix;\nattribute vec4 aPosition;\nattribute vec4 aTextureCoord;\nvarying vec2 vTextureCoord;\nvoid main() {\n  gl_Position = uMVPMatrix * aPosition;\n  vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n}\n", "#extension GL_OES_EGL_image_external : require\nprecision highp float;\nvarying vec2 vTextureCoord;\nuniform samplerExternalOES sTexture;\nvoid main() {\n  gl_FragColor = texture2D(sTexture, vTextureCoord);\n}\n");
         if (this.mProgram == 0) {
             throw new RuntimeException("failed creating program");
         }

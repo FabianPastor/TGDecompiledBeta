@@ -5,58 +5,19 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.p000v4.app.NotificationCompat.Builder;
-import android.support.p000v4.app.NotificationManagerCompat;
-import com.google.android.exoplayer2.source.chunk.ChunkedTrackBlacklistUtil;
+import android.support.v4.app.NotificationCompat.Builder;
+import android.support.v4.app.NotificationManagerCompat;
 import java.util.ArrayList;
 import org.telegram.messenger.LocationController.SharingLocationInfo;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.beta.R;
-import org.telegram.p005ui.LaunchActivity;
 import org.telegram.tgnet.TLRPC.Chat;
+import org.telegram.ui.LaunchActivity;
 
 public class LocationSharingService extends Service implements NotificationCenterDelegate {
     private Builder builder;
     private Handler handler;
     private Runnable runnable;
-
-    /* renamed from: org.telegram.messenger.LocationSharingService$1 */
-    class CLASSNAME implements Runnable {
-
-        /* renamed from: org.telegram.messenger.LocationSharingService$1$1 */
-        class CLASSNAME implements Runnable {
-            CLASSNAME() {
-            }
-
-            public void run() {
-                for (int a = 0; a < 3; a++) {
-                    LocationController.getInstance(a).update();
-                }
-            }
-        }
-
-        CLASSNAME() {
-        }
-
-        public void run() {
-            LocationSharingService.this.handler.postDelayed(LocationSharingService.this.runnable, ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS);
-            Utilities.stageQueue.postRunnable(new CLASSNAME());
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.LocationSharingService$2 */
-    class CLASSNAME implements Runnable {
-        CLASSNAME() {
-        }
-
-        public void run() {
-            if (LocationSharingService.this.getInfos().isEmpty()) {
-                LocationSharingService.this.stopSelf();
-            } else {
-                LocationSharingService.this.updateNotification(true);
-            }
-        }
-    }
 
     public LocationSharingService() {
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.liveLocationsChanged);
@@ -65,8 +26,19 @@ public class LocationSharingService extends Service implements NotificationCente
     public void onCreate() {
         super.onCreate();
         this.handler = new Handler();
-        this.runnable = new CLASSNAME();
-        this.handler.postDelayed(this.runnable, ChunkedTrackBlacklistUtil.DEFAULT_TRACK_BLACKLIST_MS);
+        this.runnable = new Runnable() {
+            public void run() {
+                LocationSharingService.this.handler.postDelayed(LocationSharingService.this.runnable, 60000);
+                Utilities.stageQueue.postRunnable(new Runnable() {
+                    public void run() {
+                        for (int a = 0; a < 3; a++) {
+                            LocationController.getInstance(a).update();
+                        }
+                    }
+                });
+            }
+        };
+        this.handler.postDelayed(this.runnable, 60000);
     }
 
     public IBinder onBind(Intent arg2) {
@@ -83,7 +55,15 @@ public class LocationSharingService extends Service implements NotificationCente
 
     public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.liveLocationsChanged && this.handler != null) {
-            this.handler.post(new CLASSNAME());
+            this.handler.post(new Runnable() {
+                public void run() {
+                    if (LocationSharingService.this.getInfos().isEmpty()) {
+                        LocationSharingService.this.stopSelf();
+                    } else {
+                        LocationSharingService.this.updateNotification(true);
+                    }
+                }
+            });
         }
     }
 
@@ -113,7 +93,7 @@ public class LocationSharingService extends Service implements NotificationCente
                     if (chat != null) {
                         param = chat.title;
                     } else {
-                        param = TtmlNode.ANONYMOUS_REGION_ID;
+                        param = "";
                     }
                 }
             } else {

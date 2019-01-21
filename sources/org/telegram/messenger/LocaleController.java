@@ -9,12 +9,8 @@ import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
-import android.util.Xml;
-import com.google.android.exoplayer2.CLASSNAMEC;
-import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -45,7 +41,6 @@ import org.telegram.tgnet.TLRPC.TL_userStatusLastWeek;
 import org.telegram.tgnet.TLRPC.TL_userStatusRecently;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.tgnet.TLRPC.Vector;
-import org.xmlpull.v1.XmlPullParser;
 
 public class LocaleController {
     private static volatile LocaleController Instance = null;
@@ -105,7 +100,7 @@ public class LocaleController {
         public int version;
 
         public String getSaveString() {
-            String langCode = this.baseLangCode == null ? TtmlNode.ANONYMOUS_REGION_ID : this.baseLangCode;
+            String langCode = this.baseLangCode == null ? "" : this.baseLangCode;
             String pluralCode;
             if (TextUtils.isEmpty(this.pluralLangCode)) {
                 pluralCode = this.shortName;
@@ -131,7 +126,7 @@ public class LocaleController {
             if (args.length >= 5) {
                 localeInfo.version = Utilities.parseInt(args[4]).intValue();
             }
-            localeInfo.baseLangCode = args.length >= 6 ? args[5] : TtmlNode.ANONYMOUS_REGION_ID;
+            localeInfo.baseLangCode = args.length >= 6 ? args[5] : "";
             localeInfo.pluralLangCode = args.length >= 7 ? args[6] : localeInfo.shortName;
             if (args.length >= 8) {
                 boolean z;
@@ -148,7 +143,7 @@ public class LocaleController {
             if (args.length >= 10) {
                 localeInfo.serverIndex = Utilities.parseInt(args[9]).intValue();
             } else {
-                localeInfo.serverIndex = ConnectionsManager.DEFAULT_DATACENTER_ID;
+                localeInfo.serverIndex = Integer.MAX_VALUE;
             }
             if (TextUtils.isEmpty(localeInfo.baseLangCode)) {
                 return localeInfo;
@@ -209,7 +204,7 @@ public class LocaleController {
         }
 
         public String getBaseLangCode() {
-            return this.baseLangCode == null ? TtmlNode.ANONYMOUS_REGION_ID : this.baseLangCode.replace("_", "-");
+            return this.baseLangCode == null ? "" : this.baseLangCode.replace("_", "-");
         }
     }
 
@@ -531,13 +526,13 @@ public class LocaleController {
         addRules(new String[]{"ar"}, new PluralRules_Arabic());
         addRules(new String[]{"mk"}, new PluralRules_Macedonian());
         addRules(new String[]{"cy"}, new PluralRules_Welsh());
-        addRules(new String[]{TtmlNode.TAG_BR}, new PluralRules_Breton());
+        addRules(new String[]{"br"}, new PluralRules_Breton());
         addRules(new String[]{"lag"}, new PluralRules_Langi());
         addRules(new String[]{"shi"}, new PluralRules_Tachelhit());
         addRules(new String[]{"mt"}, new PluralRules_Maltese());
         addRules(new String[]{"ga", "se", "sma", "smi", "smj", "smn", "sms"}, new PluralRules_Two());
         addRules(new String[]{"ak", "am", "bh", "fil", "tl", "guw", "hi", "ln", "mg", "nso", "ti", "wa"}, new PluralRules_Zero());
-        addRules(new String[]{"az", "bm", "fa", "ig", "hu", "ja", "kde", "kea", "ko", "my", "ses", "sg", "to", "tr", "vi", "wo", "yo", "zh", "bo", "dz", TtmlNode.ATTR_ID, "jv", "jw", "ka", "km", "kn", "ms", "th", "in"}, new PluralRules_None());
+        addRules(new String[]{"az", "bm", "fa", "ig", "hu", "ja", "kde", "kea", "ko", "my", "ses", "sg", "to", "tr", "vi", "wo", "yo", "zh", "bo", "dz", "id", "jv", "jw", "ka", "km", "kn", "ms", "th", "in"}, new PluralRules_None());
         LocaleInfo localeInfo = new LocaleInfo();
         localeInfo.name = "English";
         localeInfo.nameEnglish = "English";
@@ -559,7 +554,7 @@ public class LocaleController {
         this.languages.add(localeInfo);
         this.languagesDict.put(localeInfo.shortName, localeInfo);
         localeInfo = new LocaleInfo();
-        localeInfo.name = "Espa\u00f1ol";
+        localeInfo.name = "Español";
         localeInfo.nameEnglish = "Spanish";
         str = "es";
         localeInfo.pluralLangCode = str;
@@ -588,7 +583,7 @@ public class LocaleController {
         this.languages.add(localeInfo);
         this.languagesDict.put(localeInfo.shortName, localeInfo);
         localeInfo = new LocaleInfo();
-        localeInfo.name = "\u0627\u0644\u0639\u0631\u0628\u064a\u0629";
+        localeInfo.name = "العربية";
         localeInfo.nameEnglish = "Arabic";
         str = "ar";
         localeInfo.pluralLangCode = str;
@@ -599,7 +594,7 @@ public class LocaleController {
         this.languages.add(localeInfo);
         this.languagesDict.put(localeInfo.shortName, localeInfo);
         localeInfo = new LocaleInfo();
-        localeInfo.name = "Portugu\u00eas (Brasil)";
+        localeInfo.name = "Português (Brasil)";
         localeInfo.nameEnglish = "Portuguese (Brazil)";
         str = "pt_br";
         localeInfo.pluralLangCode = str;
@@ -609,7 +604,7 @@ public class LocaleController {
         this.languages.add(localeInfo);
         this.languagesDict.put(localeInfo.shortName, localeInfo);
         localeInfo = new LocaleInfo();
-        localeInfo.name = "\ud55c\uad6d\uc5b4";
+        localeInfo.name = "한국어";
         localeInfo.nameEnglish = "Korean";
         str = "ko";
         localeInfo.pluralLangCode = str;
@@ -677,12 +672,12 @@ public class LocaleController {
             }
             applyLanguage(currentInfo, override, true, UserConfig.selectedAccount);
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
         try {
             ApplicationLoader.applicationContext.registerReceiver(new TimeZoneChangedReceiver(), new IntentFilter("android.intent.action.TIMEZONE_CHANGED"));
         } catch (Throwable e2) {
-            FileLog.m13e(e2);
+            FileLog.e(e2);
         }
         AndroidUtilities.runOnUIThread(new LocaleController$$Lambda$1(this));
     }
@@ -840,7 +835,7 @@ public class LocaleController {
                 }
                 break;
             case 3355:
-                if (code.equals(TtmlNode.ATTR_ID)) {
+                if (code.equals("id")) {
                     obj = 6;
                     break;
                 }
@@ -908,7 +903,7 @@ public class LocaleController {
         }
         switch (obj) {
             case null:
-                return TtmlNode.ATTR_ID;
+                return "id";
             case 1:
                 return "he";
             case 2:
@@ -974,7 +969,7 @@ public class LocaleController {
                 return true;
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
         return false;
     }
@@ -1020,7 +1015,7 @@ public class LocaleController {
     }
 
     public boolean deleteLanguage(LocaleInfo localeInfo, int currentAccount) {
-        if (localeInfo.pathToFile == null || (localeInfo.isRemote() && localeInfo.serverIndex != ConnectionsManager.DEFAULT_DATACENTER_ID)) {
+        if (localeInfo.pathToFile == null || (localeInfo.isRemote() && localeInfo.serverIndex != Integer.MAX_VALUE)) {
             return false;
         }
         if (this.currentLocaleInfo == localeInfo) {
@@ -1093,119 +1088,178 @@ public class LocaleController {
 
     /* JADX WARNING: Removed duplicated region for block: B:66:0x0109 A:{SYNTHETIC, Splitter: B:66:0x0109} */
     /* JADX WARNING: Removed duplicated region for block: B:50:0x00e2 A:{SYNTHETIC, Splitter: B:50:0x00e2} */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    private HashMap<String, String> getLocaleFileStrings(File file, boolean preserveEscapes) {
-        Throwable e;
-        Throwable th;
-        FileInputStream stream = null;
-        this.reloadLastFile = false;
-        try {
-            HashMap<String, String> stringMap;
-            if (file.exists()) {
-                stringMap = new HashMap();
-                XmlPullParser parser = Xml.newPullParser();
-                FileInputStream stream2 = new FileInputStream(file);
-                try {
-                    parser.setInput(stream2, CLASSNAMEC.UTF8_NAME);
-                    String name = null;
-                    String value = null;
-                    String attrName = null;
-                    for (int eventType = parser.getEventType(); eventType != 1; eventType = parser.next()) {
-                        if (eventType == 2) {
-                            name = parser.getName();
-                            if (parser.getAttributeCount() > 0) {
-                                attrName = parser.getAttributeValue(0);
-                            }
-                        } else if (eventType == 4) {
-                            if (attrName != null) {
-                                value = parser.getText();
-                                if (value != null) {
-                                    value = value.trim();
-                                    if (preserveEscapes) {
-                                        value = value.replace("<", "&lt;").replace(">", "&gt;").replace("'", "\\'").replace("& ", "&amp; ");
-                                    } else {
-                                        value = value.replace("\\n", "\n").replace("\\", TtmlNode.ANONYMOUS_REGION_ID);
-                                        String old = value;
-                                        value = value.replace("&lt;", "<");
-                                        if (!(this.reloadLastFile || value.equals(old))) {
-                                            this.reloadLastFile = true;
-                                        }
-                                    }
-                                }
-                            }
-                        } else if (eventType == 3) {
-                            value = null;
-                            attrName = null;
-                            name = null;
-                        }
-                        if (!(name == null || !name.equals("string") || value == null || attrName == null || value.length() == 0 || attrName.length() == 0)) {
-                            stringMap.put(attrName, value);
-                            name = null;
-                            value = null;
-                            attrName = null;
-                        }
-                    }
-                    if (stream2 != null) {
-                        try {
-                            stream2.close();
-                        } catch (Throwable e2) {
-                            FileLog.m13e(e2);
-                        }
-                    }
-                    stream = stream2;
-                    return stringMap;
-                } catch (Exception e3) {
-                    e2 = e3;
-                    stream = stream2;
-                    try {
-                        FileLog.m13e(e2);
-                        this.reloadLastFile = true;
-                        if (stream != null) {
-                            try {
-                                stream.close();
-                            } catch (Throwable e22) {
-                                FileLog.m13e(e22);
-                            }
-                        }
-                        return new HashMap();
-                    } catch (Throwable th2) {
-                        th = th2;
-                        if (stream != null) {
-                            try {
-                                stream.close();
-                            } catch (Throwable e222) {
-                                FileLog.m13e(e222);
-                            }
-                        }
-                        throw th;
-                    }
-                } catch (Throwable th3) {
-                    th = th3;
-                    stream = stream2;
-                    if (stream != null) {
-                    }
-                    throw th;
-                }
-            }
-            stringMap = new HashMap();
-            if (stream == null) {
-                return stringMap;
-            }
-            try {
-                stream.close();
-                return stringMap;
-            } catch (Throwable e2222) {
-                FileLog.m13e(e2222);
-                return stringMap;
-            }
-        } catch (Exception e4) {
-            e2222 = e4;
-            FileLog.m13e(e2222);
-            this.reloadLastFile = true;
-            if (stream != null) {
-            }
-            return new HashMap();
-        }
+    private java.util.HashMap<java.lang.String, java.lang.String> getLocaleFileStrings(java.io.File r15, boolean r16) {
+        /*
+        r14 = this;
+        r7 = 0;
+        r11 = 0;
+        r14.reloadLastFile = r11;
+        r11 = r15.exists();	 Catch:{ Exception -> 0x0115 }
+        if (r11 != 0) goto L_0x001a;
+    L_0x000a:
+        r9 = new java.util.HashMap;	 Catch:{ Exception -> 0x0115 }
+        r9.<init>();	 Catch:{ Exception -> 0x0115 }
+        if (r7 == 0) goto L_0x0014;
+    L_0x0011:
+        r7.close();	 Catch:{ Exception -> 0x0015 }
+    L_0x0014:
+        return r9;
+    L_0x0015:
+        r2 = move-exception;
+        org.telegram.messenger.FileLog.e(r2);
+        goto L_0x0014;
+    L_0x001a:
+        r9 = new java.util.HashMap;	 Catch:{ Exception -> 0x0115 }
+        r9.<init>();	 Catch:{ Exception -> 0x0115 }
+        r6 = android.util.Xml.newPullParser();	 Catch:{ Exception -> 0x0115 }
+        r8 = new java.io.FileInputStream;	 Catch:{ Exception -> 0x0115 }
+        r8.<init>(r15);	 Catch:{ Exception -> 0x0115 }
+        r11 = "UTF-8";
+        r6.setInput(r8, r11);	 Catch:{ Exception -> 0x00d8, all -> 0x0112 }
+        r3 = r6.getEventType();	 Catch:{ Exception -> 0x00d8, all -> 0x0112 }
+        r4 = 0;
+        r10 = 0;
+        r0 = 0;
+    L_0x0035:
+        r11 = 1;
+        if (r3 == r11) goto L_0x00f4;
+    L_0x0038:
+        r11 = 2;
+        if (r3 != r11) goto L_0x0070;
+    L_0x003b:
+        r4 = r6.getName();	 Catch:{ Exception -> 0x00d8, all -> 0x0112 }
+        r1 = r6.getAttributeCount();	 Catch:{ Exception -> 0x00d8, all -> 0x0112 }
+        if (r1 <= 0) goto L_0x004a;
+    L_0x0045:
+        r11 = 0;
+        r0 = r6.getAttributeValue(r11);	 Catch:{ Exception -> 0x00d8, all -> 0x0112 }
+    L_0x004a:
+        if (r4 == 0) goto L_0x006b;
+    L_0x004c:
+        r11 = "string";
+        r11 = r4.equals(r11);	 Catch:{ Exception -> 0x00d8, all -> 0x0112 }
+        if (r11 == 0) goto L_0x006b;
+    L_0x0055:
+        if (r10 == 0) goto L_0x006b;
+    L_0x0057:
+        if (r0 == 0) goto L_0x006b;
+    L_0x0059:
+        r11 = r10.length();	 Catch:{ Exception -> 0x00d8, all -> 0x0112 }
+        if (r11 == 0) goto L_0x006b;
+    L_0x005f:
+        r11 = r0.length();	 Catch:{ Exception -> 0x00d8, all -> 0x0112 }
+        if (r11 == 0) goto L_0x006b;
+    L_0x0065:
+        r9.put(r0, r10);	 Catch:{ Exception -> 0x00d8, all -> 0x0112 }
+        r4 = 0;
+        r10 = 0;
+        r0 = 0;
+    L_0x006b:
+        r3 = r6.next();	 Catch:{ Exception -> 0x00d8, all -> 0x0112 }
+        goto L_0x0035;
+    L_0x0070:
+        r11 = 4;
+        if (r3 != r11) goto L_0x00ec;
+    L_0x0073:
+        if (r0 == 0) goto L_0x004a;
+    L_0x0075:
+        r10 = r6.getText();	 Catch:{ Exception -> 0x00d8, all -> 0x0112 }
+        if (r10 == 0) goto L_0x004a;
+    L_0x007b:
+        r10 = r10.trim();	 Catch:{ Exception -> 0x00d8, all -> 0x0112 }
+        if (r16 == 0) goto L_0x00aa;
+    L_0x0081:
+        r11 = "<";
+        r12 = "&lt;";
+        r11 = r10.replace(r11, r12);	 Catch:{ Exception -> 0x00d8, all -> 0x0112 }
+        r12 = ">";
+        r13 = "&gt;";
+        r11 = r11.replace(r12, r13);	 Catch:{ Exception -> 0x00d8, all -> 0x0112 }
+        r12 = "'";
+        r13 = "\\'";
+        r11 = r11.replace(r12, r13);	 Catch:{ Exception -> 0x00d8, all -> 0x0112 }
+        r12 = "& ";
+        r13 = "&amp; ";
+        r10 = r11.replace(r12, r13);	 Catch:{ Exception -> 0x00d8, all -> 0x0112 }
+        goto L_0x004a;
+    L_0x00aa:
+        r11 = "\\n";
+        r12 = "\n";
+        r10 = r10.replace(r11, r12);	 Catch:{ Exception -> 0x00d8, all -> 0x0112 }
+        r11 = "\\";
+        r12 = "";
+        r10 = r10.replace(r11, r12);	 Catch:{ Exception -> 0x00d8, all -> 0x0112 }
+        r5 = r10;
+        r11 = "&lt;";
+        r12 = "<";
+        r10 = r10.replace(r11, r12);	 Catch:{ Exception -> 0x00d8, all -> 0x0112 }
+        r11 = r14.reloadLastFile;	 Catch:{ Exception -> 0x00d8, all -> 0x0112 }
+        if (r11 != 0) goto L_0x004a;
+    L_0x00cd:
+        r11 = r10.equals(r5);	 Catch:{ Exception -> 0x00d8, all -> 0x0112 }
+        if (r11 != 0) goto L_0x004a;
+    L_0x00d3:
+        r11 = 1;
+        r14.reloadLastFile = r11;	 Catch:{ Exception -> 0x00d8, all -> 0x0112 }
+        goto L_0x004a;
+    L_0x00d8:
+        r2 = move-exception;
+        r7 = r8;
+    L_0x00da:
+        org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x0106 }
+        r11 = 1;
+        r14.reloadLastFile = r11;	 Catch:{ all -> 0x0106 }
+        if (r7 == 0) goto L_0x00e5;
+    L_0x00e2:
+        r7.close();	 Catch:{ Exception -> 0x0101 }
+    L_0x00e5:
+        r9 = new java.util.HashMap;
+        r9.<init>();
+        goto L_0x0014;
+    L_0x00ec:
+        r11 = 3;
+        if (r3 != r11) goto L_0x004a;
+    L_0x00ef:
+        r10 = 0;
+        r0 = 0;
+        r4 = 0;
+        goto L_0x004a;
+    L_0x00f4:
+        if (r8 == 0) goto L_0x00f9;
+    L_0x00f6:
+        r8.close();	 Catch:{ Exception -> 0x00fc }
+    L_0x00f9:
+        r7 = r8;
+        goto L_0x0014;
+    L_0x00fc:
+        r2 = move-exception;
+        org.telegram.messenger.FileLog.e(r2);
+        goto L_0x00f9;
+    L_0x0101:
+        r2 = move-exception;
+        org.telegram.messenger.FileLog.e(r2);
+        goto L_0x00e5;
+    L_0x0106:
+        r11 = move-exception;
+    L_0x0107:
+        if (r7 == 0) goto L_0x010c;
+    L_0x0109:
+        r7.close();	 Catch:{ Exception -> 0x010d }
+    L_0x010c:
+        throw r11;
+    L_0x010d:
+        r2 = move-exception;
+        org.telegram.messenger.FileLog.e(r2);
+        goto L_0x010c;
+    L_0x0112:
+        r11 = move-exception;
+        r7 = r8;
+        goto L_0x0107;
+    L_0x0115:
+        r2 = move-exception;
+        goto L_0x00da;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.LocaleController.getLocaleFileStrings(java.io.File, boolean):java.util.HashMap<java.lang.String, java.lang.String>");
     }
 
     public void applyLanguage(LocaleInfo localeInfo, boolean override, boolean init, int currentAccount) {
@@ -1236,7 +1290,7 @@ public class LocaleController {
             }
             if ((localeInfo.isRemote() || localeInfo.isUnofficial()) && (force || !pathToFile.exists() || (hasBase && !pathToBaseFile.exists()))) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m10d("reload locale because one of file doesn't exist" + pathToFile + " " + pathToBaseFile);
+                    FileLog.d("reload locale because one of file doesn't exist" + pathToFile + " " + pathToBaseFile);
                 }
                 if (init) {
                     AndroidUtilities.runOnUIThread(new LocaleController$$Lambda$2(this, localeInfo, currentAccount));
@@ -1302,7 +1356,7 @@ public class LocaleController {
                     this.reloadLastFile = false;
                 }
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
                 this.changingConfiguration = false;
             }
             recreateFormatters();
@@ -1327,12 +1381,12 @@ public class LocaleController {
     }
 
     private String getStringInternal(String key, int res) {
-        String value = (String) this.localeValues.get(key);
+        String value = BuildVars.USE_CLOUD_STRINGS ? (String) this.localeValues.get(key) : null;
         if (value == null) {
             try {
                 value = ApplicationLoader.applicationContext.getString(res);
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
             }
         }
         if (value == null) {
@@ -1375,7 +1429,7 @@ public class LocaleController {
 
     public static String formatString(String key, int res, Object... args) {
         try {
-            String value = (String) getInstance().localeValues.get(key);
+            String value = BuildVars.USE_CLOUD_STRINGS ? (String) getInstance().localeValues.get(key) : null;
             if (value == null) {
                 value = ApplicationLoader.applicationContext.getString(res);
             }
@@ -1384,7 +1438,7 @@ public class LocaleController {
             }
             return String.format(value, args);
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return "LOC_ERR: " + key;
         }
     }
@@ -1641,16 +1695,16 @@ public class LocaleController {
             case 20:
             case 21:
             case 22:
-            case NalUnitTypes.NAL_TYPE_RSV_IRAP_VCL23 /*23*/:
+            case 23:
             case 24:
-            case NalUnitTypes.NAL_TYPE_RSV_VCL25 /*25*/:
-            case NalUnitTypes.NAL_TYPE_RSV_VCL26 /*26*/:
+            case 25:
+            case 26:
             case 27:
-            case NalUnitTypes.NAL_TYPE_RSV_VCL28 /*28*/:
+            case 28:
                 customFormat = " %.0f";
                 doubleAmount = (double) amount;
                 break;
-            case NalUnitTypes.NAL_TYPE_RSV_VCL29 /*29*/:
+            case 29:
                 customFormat = " %.1f";
                 doubleAmount = ((double) amount) / 10.0d;
                 break;
@@ -1665,9 +1719,9 @@ public class LocaleController {
             if (type.equals("IRR")) {
                 format.setMaximumFractionDigits(0);
             }
-            return (discount ? "-" : TtmlNode.ANONYMOUS_REGION_ID) + format.format(doubleAmount);
+            return (discount ? "-" : "") + format.format(doubleAmount);
         }
-        return (discount ? "-" : TtmlNode.ANONYMOUS_REGION_ID) + String.format(Locale.US, type + customFormat, new Object[]{Double.valueOf(doubleAmount)});
+        return (discount ? "-" : "") + String.format(Locale.US, type + customFormat, new Object[]{Double.valueOf(doubleAmount)});
     }
 
     public String formatCurrencyDecimalString(long amount, String type, boolean inludeType) {
@@ -1895,16 +1949,16 @@ public class LocaleController {
             case 20:
             case 21:
             case 22:
-            case NalUnitTypes.NAL_TYPE_RSV_IRAP_VCL23 /*23*/:
+            case 23:
             case 24:
-            case NalUnitTypes.NAL_TYPE_RSV_VCL25 /*25*/:
-            case NalUnitTypes.NAL_TYPE_RSV_VCL26 /*26*/:
+            case 25:
+            case 26:
             case 27:
-            case NalUnitTypes.NAL_TYPE_RSV_VCL28 /*28*/:
+            case 28:
                 customFormat = " %.0f";
                 doubleAmount = (double) amount;
                 break;
-            case NalUnitTypes.NAL_TYPE_RSV_VCL29 /*29*/:
+            case 29:
                 customFormat = " %.1f";
                 doubleAmount = ((double) amount) / 10.0d;
                 break;
@@ -1915,7 +1969,7 @@ public class LocaleController {
         }
         Locale locale = Locale.US;
         if (!inludeType) {
-            type = TtmlNode.ANONYMOUS_REGION_ID + customFormat;
+            type = "" + customFormat;
         }
         return String.format(locale, type, new Object[]{Double.valueOf(doubleAmount)}).trim();
     }
@@ -1927,7 +1981,7 @@ public class LocaleController {
             }
             return String.format(string, args);
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return "LOC_ERR: " + string;
         }
     }
@@ -1992,7 +2046,7 @@ public class LocaleController {
             }
             return getInstance().chatFullDate.format(date);
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return "LOC_ERR: formatDateChat";
         }
     }
@@ -2017,7 +2071,7 @@ public class LocaleController {
             }
             return getInstance().formatterYear.format(new Date(date));
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return "LOC_ERR: formatDate";
         }
     }
@@ -2041,7 +2095,7 @@ public class LocaleController {
                 return formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().formatterYear.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return "LOC_ERR";
         }
     }
@@ -2066,7 +2120,7 @@ public class LocaleController {
                 return formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().chatFullDate.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return "LOC_ERR";
         }
     }
@@ -2105,7 +2159,7 @@ public class LocaleController {
                 return formatString("LocationUpdatedFormatted", R.string.LocationUpdatedFormatted, format);
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return "LOC_ERR";
         }
     }
@@ -2166,7 +2220,7 @@ public class LocaleController {
                 return formatString("LastSeenDateFormatted", R.string.LastSeenDateFormatted, format);
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return "LOC_ERR";
         }
     }
@@ -2230,7 +2284,7 @@ public class LocaleController {
             }
             return getInstance().formatterMonthYear.format(new Date(date));
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return "LOC_ERR";
         }
     }
@@ -2246,7 +2300,7 @@ public class LocaleController {
             }
             return getInstance().formatterBannedUntil.format(new Date(date));
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return "LOC_ERR";
         }
     }
@@ -2270,7 +2324,7 @@ public class LocaleController {
             }
             return getInstance().formatterWeek.format(new Date(date));
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return "LOC_ERR";
         }
     }
@@ -2312,7 +2366,7 @@ public class LocaleController {
                 user.status.expires = -102;
             }
         }
-        if (user != null && user.status != null && user.status.expires <= 0 && MessagesController.getInstance(currentAccount).onlinePrivacy.containsKey(Integer.valueOf(user.var_id))) {
+        if (user != null && user.status != null && user.status.expires <= 0 && MessagesController.getInstance(currentAccount).onlinePrivacy.containsKey(Integer.valueOf(user.id))) {
             return getString("Online", R.string.Online);
         }
         if (user == null || user.status == null || user.status.expires == 0 || UserObject.isDeleted(user) || (user instanceof TL_userEmpty)) {
@@ -2381,16 +2435,16 @@ public class LocaleController {
                             values.put(string.key, escapeString(string.value));
                         } else if (string instanceof TL_langPackStringPluralized) {
                             Object escapeString;
-                            values.put(string.key + "_zero", string.zero_value != null ? escapeString(string.zero_value) : TtmlNode.ANONYMOUS_REGION_ID);
-                            values.put(string.key + "_one", string.one_value != null ? escapeString(string.one_value) : TtmlNode.ANONYMOUS_REGION_ID);
-                            values.put(string.key + "_two", string.two_value != null ? escapeString(string.two_value) : TtmlNode.ANONYMOUS_REGION_ID);
-                            values.put(string.key + "_few", string.few_value != null ? escapeString(string.few_value) : TtmlNode.ANONYMOUS_REGION_ID);
-                            values.put(string.key + "_many", string.many_value != null ? escapeString(string.many_value) : TtmlNode.ANONYMOUS_REGION_ID);
+                            values.put(string.key + "_zero", string.zero_value != null ? escapeString(string.zero_value) : "");
+                            values.put(string.key + "_one", string.one_value != null ? escapeString(string.one_value) : "");
+                            values.put(string.key + "_two", string.two_value != null ? escapeString(string.two_value) : "");
+                            values.put(string.key + "_few", string.few_value != null ? escapeString(string.few_value) : "");
+                            values.put(string.key + "_many", string.many_value != null ? escapeString(string.many_value) : "");
                             String str = string.key + "_other";
                             if (string.other_value != null) {
                                 escapeString = escapeString(string.other_value);
                             } else {
-                                escapeString = TtmlNode.ANONYMOUS_REGION_ID;
+                                escapeString = "";
                             }
                             values.put(str, escapeString);
                         } else if (string instanceof TL_langPackStringDeleted) {
@@ -2398,7 +2452,7 @@ public class LocaleController {
                         }
                     }
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m10d("save locale file to " + finalFile);
+                        FileLog.d("save locale file to " + finalFile);
                     }
                     BufferedWriter writer = new BufferedWriter(new FileWriter(finalFile));
                     writer.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
@@ -2473,7 +2527,7 @@ public class LocaleController {
                 }
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             this.changingConfiguration = false;
         }
         recreateFormatters();
@@ -2499,13 +2553,13 @@ public class LocaleController {
         Vector res = (Vector) response;
         int size = this.remoteLanguages.size();
         for (a = 0; a < size; a++) {
-            ((LocaleInfo) this.remoteLanguages.get(a)).serverIndex = ConnectionsManager.DEFAULT_DATACENTER_ID;
+            ((LocaleInfo) this.remoteLanguages.get(a)).serverIndex = Integer.MAX_VALUE;
         }
         size = res.objects.size();
         for (a = 0; a < size; a++) {
             TL_langPackLanguage language = (TL_langPackLanguage) res.objects.get(a);
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m10d("loaded lang " + language.name);
+                FileLog.d("loaded lang " + language.name);
             }
             LocaleInfo localeInfo = new LocaleInfo();
             localeInfo.nameEnglish = language.name;
@@ -2514,7 +2568,7 @@ public class LocaleController {
             if (language.base_lang_code != null) {
                 localeInfo.baseLangCode = language.base_lang_code.replace('-', '_').toLowerCase();
             } else {
-                localeInfo.baseLangCode = TtmlNode.ANONYMOUS_REGION_ID;
+                localeInfo.baseLangCode = "";
             }
             localeInfo.pluralLangCode = language.plural_code.replace('-', '_').toLowerCase();
             localeInfo.isRtl = language.rtl;
@@ -2541,9 +2595,9 @@ public class LocaleController {
         a = 0;
         while (a < this.remoteLanguages.size()) {
             LocaleInfo info = (LocaleInfo) this.remoteLanguages.get(a);
-            if (info.serverIndex == ConnectionsManager.DEFAULT_DATACENTER_ID && info != this.currentLocaleInfo) {
+            if (info.serverIndex == Integer.MAX_VALUE && info != this.currentLocaleInfo) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m10d("remove lang " + info.getKey());
+                    FileLog.d("remove lang " + info.getKey());
                 }
                 this.remoteLanguages.remove(a);
                 this.remoteLanguagesDict.remove(info.getKey());
@@ -2628,525 +2682,525 @@ public class LocaleController {
         }
         if (this.translitChars == null) {
             this.translitChars = new HashMap(520);
-            this.translitChars.put("\u023c", "c");
-            this.translitChars.put("\u1d87", "n");
-            this.translitChars.put("\u0256", "d");
-            this.translitChars.put("\u1eff", "y");
-            this.translitChars.put("\u1d13", "o");
-            this.translitChars.put("\u00f8", "o");
-            this.translitChars.put("\u1e01", "a");
-            this.translitChars.put("\u02af", "h");
-            this.translitChars.put("\u0177", "y");
-            this.translitChars.put("\u029e", "k");
-            this.translitChars.put("\u1eeb", "u");
-            this.translitChars.put("\ua733", "aa");
-            this.translitChars.put("\u0133", "ij");
-            this.translitChars.put("\u1e3d", "l");
-            this.translitChars.put("\u026a", "i");
-            this.translitChars.put("\u1e07", "b");
-            this.translitChars.put("\u0280", "r");
-            this.translitChars.put("\u011b", "e");
-            this.translitChars.put("\ufb03", "ffi");
-            this.translitChars.put("\u01a1", "o");
-            this.translitChars.put("\u2CLASSNAME", "r");
-            this.translitChars.put("\u1ed3", "o");
-            this.translitChars.put("\u01d0", "i");
-            this.translitChars.put("\ua755", TtmlNode.TAG_P);
-            this.translitChars.put("\u00fd", "y");
-            this.translitChars.put("\u1e1d", "e");
-            this.translitChars.put("\u2092", "o");
-            this.translitChars.put("\u2CLASSNAME", "a");
-            this.translitChars.put("\u0299", "b");
-            this.translitChars.put("\u1e1b", "e");
-            this.translitChars.put("\u0188", "c");
-            this.translitChars.put("\u0266", "h");
-            this.translitChars.put("\u1d6c", "b");
-            this.translitChars.put("\u1e63", "s");
-            this.translitChars.put("\u0111", "d");
-            this.translitChars.put("\u1ed7", "o");
-            this.translitChars.put("\u025f", "j");
-            this.translitChars.put("\u1e9a", "a");
-            this.translitChars.put("\u024f", "y");
-            this.translitChars.put("\u043b", "l");
-            this.translitChars.put("\u028c", "v");
-            this.translitChars.put("\ua753", TtmlNode.TAG_P);
-            this.translitChars.put("\ufb01", "fi");
-            this.translitChars.put("\u1d84", "k");
-            this.translitChars.put("\u1e0f", "d");
-            this.translitChars.put("\u1d0c", "l");
-            this.translitChars.put("\u0117", "e");
-            this.translitChars.put("\u0451", "yo");
-            this.translitChars.put("\u1d0b", "k");
-            this.translitChars.put("\u010b", "c");
-            this.translitChars.put("\u0281", "r");
-            this.translitChars.put("\u0195", "hv");
-            this.translitChars.put("\u0180", "b");
-            this.translitChars.put("\u1e4d", "o");
-            this.translitChars.put("\u0223", "ou");
-            this.translitChars.put("\u01f0", "j");
-            this.translitChars.put("\u1d83", "g");
-            this.translitChars.put("\u1e4b", "n");
-            this.translitChars.put("\u0249", "j");
-            this.translitChars.put("\u01e7", "g");
-            this.translitChars.put("\u01f3", "dz");
-            this.translitChars.put("\u017a", "z");
-            this.translitChars.put("\ua737", "au");
-            this.translitChars.put("\u01d6", "u");
-            this.translitChars.put("\u1d79", "g");
-            this.translitChars.put("\u022f", "o");
-            this.translitChars.put("\u0250", "a");
-            this.translitChars.put("\u0105", "a");
-            this.translitChars.put("\u00f5", "o");
-            this.translitChars.put("\u027b", "r");
-            this.translitChars.put("\ua74d", "o");
-            this.translitChars.put("\u01df", "a");
-            this.translitChars.put("\u0234", "l");
-            this.translitChars.put("\u0282", "s");
-            this.translitChars.put("\ufb02", "fl");
-            this.translitChars.put("\u0209", "i");
-            this.translitChars.put("\u2c7b", "e");
-            this.translitChars.put("\u1e49", "n");
-            this.translitChars.put("\u00ef", "i");
-            this.translitChars.put("\u00f1", "n");
-            this.translitChars.put("\u1d09", "i");
-            this.translitChars.put("\u0287", "t");
-            this.translitChars.put("\u1e93", "z");
-            this.translitChars.put("\u1ef7", "y");
-            this.translitChars.put("\u0233", "y");
-            this.translitChars.put("\u1e69", "s");
-            this.translitChars.put("\u027d", "r");
-            this.translitChars.put("\u011d", "g");
-            this.translitChars.put("\u0432", "v");
-            this.translitChars.put("\u1d1d", "u");
-            this.translitChars.put("\u1e33", "k");
-            this.translitChars.put("\ua76b", "et");
-            this.translitChars.put("\u012b", "i");
-            this.translitChars.put("\u0165", "t");
-            this.translitChars.put("\ua73f", "c");
-            this.translitChars.put("\u029f", "l");
-            this.translitChars.put("\ua739", "av");
-            this.translitChars.put("\u00fb", "u");
-            this.translitChars.put("\u00e6", "ae");
-            this.translitChars.put("\u0438", "i");
-            this.translitChars.put("\u0103", "a");
-            this.translitChars.put("\u01d8", "u");
-            this.translitChars.put("\ua785", "s");
-            this.translitChars.put("\u1d63", "r");
-            this.translitChars.put("\u1d00", "a");
-            this.translitChars.put("\u0183", "b");
-            this.translitChars.put("\u1e29", "h");
-            this.translitChars.put("\u1e67", "s");
-            this.translitChars.put("\u2091", "e");
-            this.translitChars.put("\u029c", "h");
-            this.translitChars.put("\u1e8b", "x");
-            this.translitChars.put("\ua745", "k");
-            this.translitChars.put("\u1e0b", "d");
-            this.translitChars.put("\u01a3", "oi");
-            this.translitChars.put("\ua751", TtmlNode.TAG_P);
-            this.translitChars.put("\u0127", "h");
-            this.translitChars.put("\u2CLASSNAME", "v");
-            this.translitChars.put("\u1e87", "w");
-            this.translitChars.put("\u01f9", "n");
-            this.translitChars.put("\u026f", "m");
-            this.translitChars.put("\u0261", "g");
-            this.translitChars.put("\u0274", "n");
-            this.translitChars.put("\u1d18", TtmlNode.TAG_P);
-            this.translitChars.put("\u1d65", "v");
-            this.translitChars.put("\u016b", "u");
-            this.translitChars.put("\u1e03", "b");
-            this.translitChars.put("\u1e57", TtmlNode.TAG_P);
-            this.translitChars.put("\u044c", TtmlNode.ANONYMOUS_REGION_ID);
-            this.translitChars.put("\u00e5", "a");
-            this.translitChars.put("\u0255", "c");
-            this.translitChars.put("\u1ecd", "o");
-            this.translitChars.put("\u1eaf", "a");
-            this.translitChars.put("\u0192", "f");
-            this.translitChars.put("\u01e3", "ae");
-            this.translitChars.put("\ua761", "vy");
-            this.translitChars.put("\ufb00", "ff");
-            this.translitChars.put("\u1d89", "r");
-            this.translitChars.put("\u00f4", "o");
-            this.translitChars.put("\u01ff", "o");
-            this.translitChars.put("\u1e73", "u");
-            this.translitChars.put("\u0225", "z");
-            this.translitChars.put("\u1e1f", "f");
-            this.translitChars.put("\u1e13", "d");
-            this.translitChars.put("\u0207", "e");
-            this.translitChars.put("\u0215", "u");
-            this.translitChars.put("\u043f", TtmlNode.TAG_P);
-            this.translitChars.put("\u0235", "n");
-            this.translitChars.put("\u02a0", "q");
-            this.translitChars.put("\u1ea5", "a");
-            this.translitChars.put("\u01e9", "k");
-            this.translitChars.put("\u0129", "i");
-            this.translitChars.put("\u1e75", "u");
-            this.translitChars.put("\u0167", "t");
-            this.translitChars.put("\u027e", "r");
-            this.translitChars.put("\u0199", "k");
-            this.translitChars.put("\u1e6b", "t");
-            this.translitChars.put("\ua757", "q");
-            this.translitChars.put("\u1ead", "a");
-            this.translitChars.put("\u043d", "n");
-            this.translitChars.put("\u0284", "j");
-            this.translitChars.put("\u019a", "l");
-            this.translitChars.put("\u1d82", "f");
-            this.translitChars.put("\u0434", "d");
-            this.translitChars.put("\u1d74", "s");
-            this.translitChars.put("\ua783", "r");
-            this.translitChars.put("\u1d8c", "v");
-            this.translitChars.put("\u0275", "o");
-            this.translitChars.put("\u1e09", "c");
-            this.translitChars.put("\u1d64", "u");
-            this.translitChars.put("\u1e91", "z");
-            this.translitChars.put("\u1e79", "u");
-            this.translitChars.put("\u0148", "n");
-            this.translitChars.put("\u028d", "w");
-            this.translitChars.put("\u1ea7", "a");
-            this.translitChars.put("\u01c9", "lj");
-            this.translitChars.put("\u0253", "b");
-            this.translitChars.put("\u027c", "r");
-            this.translitChars.put("\u00f2", "o");
-            this.translitChars.put("\u1e98", "w");
-            this.translitChars.put("\u0257", "d");
-            this.translitChars.put("\ua73d", "ay");
-            this.translitChars.put("\u01b0", "u");
-            this.translitChars.put("\u1d80", "b");
-            this.translitChars.put("\u01dc", "u");
-            this.translitChars.put("\u1eb9", "e");
-            this.translitChars.put("\u01e1", "a");
-            this.translitChars.put("\u0265", "h");
-            this.translitChars.put("\u1e4f", "o");
-            this.translitChars.put("\u01d4", "u");
-            this.translitChars.put("\u028e", "y");
-            this.translitChars.put("\u0231", "o");
-            this.translitChars.put("\u1ec7", "e");
-            this.translitChars.put("\u1ebf", "e");
-            this.translitChars.put("\u012d", "i");
-            this.translitChars.put("\u2CLASSNAME", "e");
-            this.translitChars.put("\u1e6f", "t");
-            this.translitChars.put("\u1d91", "d");
-            this.translitChars.put("\u1e27", "h");
-            this.translitChars.put("\u1e65", "s");
-            this.translitChars.put("\u00eb", "e");
-            this.translitChars.put("\u1d0d", "m");
-            this.translitChars.put("\u00f6", "o");
-            this.translitChars.put("\u00e9", "e");
-            this.translitChars.put("\u0131", "i");
-            this.translitChars.put("\u010f", "d");
-            this.translitChars.put("\u1d6f", "m");
-            this.translitChars.put("\u1ef5", "y");
-            this.translitChars.put("\u044f", "ya");
-            this.translitChars.put("\u0175", "w");
-            this.translitChars.put("\u1ec1", "e");
-            this.translitChars.put("\u1ee9", "u");
-            this.translitChars.put("\u01b6", "z");
-            this.translitChars.put("\u0135", "j");
-            this.translitChars.put("\u1e0d", "d");
-            this.translitChars.put("\u016d", "u");
-            this.translitChars.put("\u029d", "j");
-            this.translitChars.put("\u0436", "zh");
-            this.translitChars.put("\u00ea", "e");
-            this.translitChars.put("\u01da", "u");
-            this.translitChars.put("\u0121", "g");
-            this.translitChars.put("\u1e59", "r");
-            this.translitChars.put("\u019e", "n");
-            this.translitChars.put("\u044a", TtmlNode.ANONYMOUS_REGION_ID);
-            this.translitChars.put("\u1e17", "e");
-            this.translitChars.put("\u1e9d", "s");
-            this.translitChars.put("\u1d81", "d");
-            this.translitChars.put("\u0137", "k");
-            this.translitChars.put("\u1d02", "ae");
-            this.translitChars.put("\u0258", "e");
-            this.translitChars.put("\u1ee3", "o");
-            this.translitChars.put("\u1e3f", "m");
-            this.translitChars.put("\ua730", "f");
-            this.translitChars.put("\u0430", "a");
-            this.translitChars.put("\u1eb5", "a");
-            this.translitChars.put("\ua74f", "oo");
-            this.translitChars.put("\u1d86", "m");
-            this.translitChars.put("\u1d7d", TtmlNode.TAG_P);
-            this.translitChars.put("\u0446", "ts");
-            this.translitChars.put("\u1eef", "u");
-            this.translitChars.put("\u2c6a", "k");
-            this.translitChars.put("\u1e25", "h");
-            this.translitChars.put("\u0163", "t");
-            this.translitChars.put("\u1d71", TtmlNode.TAG_P);
-            this.translitChars.put("\u1e41", "m");
-            this.translitChars.put("\u00e1", "a");
-            this.translitChars.put("\u1d0e", "n");
-            this.translitChars.put("\ua75f", "v");
-            this.translitChars.put("\u00e8", "e");
-            this.translitChars.put("\u1d8e", "z");
-            this.translitChars.put("\ua77a", "d");
-            this.translitChars.put("\u1d88", TtmlNode.TAG_P);
-            this.translitChars.put("\u043c", "m");
-            this.translitChars.put("\u026b", "l");
-            this.translitChars.put("\u1d22", "z");
-            this.translitChars.put("\u0271", "m");
-            this.translitChars.put("\u1e5d", "r");
-            this.translitChars.put("\u1e7d", "v");
-            this.translitChars.put("\u0169", "u");
-            this.translitChars.put("\u00df", "ss");
-            this.translitChars.put("\u0442", "t");
-            this.translitChars.put("\u0125", "h");
-            this.translitChars.put("\u1d75", "t");
-            this.translitChars.put("\u0290", "z");
-            this.translitChars.put("\u1e5f", "r");
-            this.translitChars.put("\u0272", "n");
-            this.translitChars.put("\u00e0", "a");
-            this.translitChars.put("\u1e99", "y");
-            this.translitChars.put("\u1ef3", "y");
-            this.translitChars.put("\u1d14", "oe");
-            this.translitChars.put("\u044b", "i");
-            this.translitChars.put("\u2093", "x");
-            this.translitChars.put("\u0217", "u");
-            this.translitChars.put("\u2c7c", "j");
-            this.translitChars.put("\u1eab", "a");
-            this.translitChars.put("\u0291", "z");
-            this.translitChars.put("\u1e9b", "s");
-            this.translitChars.put("\u1e2d", "i");
-            this.translitChars.put("\ua735", "ao");
-            this.translitChars.put("\u0240", "z");
-            this.translitChars.put("\u00ff", "y");
-            this.translitChars.put("\u01dd", "e");
-            this.translitChars.put("\u01ed", "o");
-            this.translitChars.put("\u1d05", "d");
-            this.translitChars.put("\u1d85", "l");
-            this.translitChars.put("\u00f9", "u");
-            this.translitChars.put("\u1ea1", "a");
-            this.translitChars.put("\u1e05", "b");
-            this.translitChars.put("\u1ee5", "u");
-            this.translitChars.put("\u043a", "k");
-            this.translitChars.put("\u1eb1", "a");
-            this.translitChars.put("\u1d1b", "t");
-            this.translitChars.put("\u01b4", "y");
-            this.translitChars.put("\u2CLASSNAME", "t");
-            this.translitChars.put("\u0437", "z");
-            this.translitChars.put("\u2CLASSNAME", "l");
-            this.translitChars.put("\u0237", "j");
-            this.translitChars.put("\u1d76", "z");
-            this.translitChars.put("\u1e2b", "h");
-            this.translitChars.put("\u2CLASSNAME", "w");
-            this.translitChars.put("\u1e35", "k");
-            this.translitChars.put("\u1edd", "o");
-            this.translitChars.put("\u00ee", "i");
-            this.translitChars.put("\u0123", "g");
-            this.translitChars.put("\u0205", "e");
-            this.translitChars.put("\u0227", "a");
-            this.translitChars.put("\u1eb3", "a");
-            this.translitChars.put("\u0449", "sch");
-            this.translitChars.put("\u024b", "q");
-            this.translitChars.put("\u1e6d", "t");
-            this.translitChars.put("\ua778", "um");
-            this.translitChars.put("\u1d04", "c");
-            this.translitChars.put("\u1e8d", "x");
-            this.translitChars.put("\u1ee7", "u");
-            this.translitChars.put("\u1ec9", "i");
-            this.translitChars.put("\u1d1a", "r");
-            this.translitChars.put("\u015b", "s");
-            this.translitChars.put("\ua74b", "o");
-            this.translitChars.put("\u1ef9", "y");
-            this.translitChars.put("\u1e61", "s");
-            this.translitChars.put("\u01cc", "nj");
-            this.translitChars.put("\u0201", "a");
-            this.translitChars.put("\u1e97", "t");
-            this.translitChars.put("\u013a", "l");
-            this.translitChars.put("\u017e", "z");
-            this.translitChars.put("\u1d7a", "th");
-            this.translitChars.put("\u018c", "d");
-            this.translitChars.put("\u0219", "s");
-            this.translitChars.put("\u0161", "s");
-            this.translitChars.put("\u1d99", "u");
-            this.translitChars.put("\u1ebd", "e");
-            this.translitChars.put("\u1e9c", "s");
-            this.translitChars.put("\u0247", "e");
-            this.translitChars.put("\u1e77", "u");
-            this.translitChars.put("\u1ed1", "o");
-            this.translitChars.put("\u023f", "s");
-            this.translitChars.put("\u1d20", "v");
-            this.translitChars.put("\ua76d", "is");
-            this.translitChars.put("\u1d0f", "o");
-            this.translitChars.put("\u025b", "e");
-            this.translitChars.put("\u01fb", "a");
-            this.translitChars.put("\ufb04", "ffl");
-            this.translitChars.put("\u2c7a", "o");
-            this.translitChars.put("\u020b", "i");
-            this.translitChars.put("\u1d6b", "ue");
-            this.translitChars.put("\u0221", "d");
-            this.translitChars.put("\u2c6c", "z");
-            this.translitChars.put("\u1e81", "w");
-            this.translitChars.put("\u1d8f", "a");
-            this.translitChars.put("\ua787", "t");
-            this.translitChars.put("\u011f", "g");
-            this.translitChars.put("\u0273", "n");
-            this.translitChars.put("\u029b", "g");
-            this.translitChars.put("\u1d1c", "u");
-            this.translitChars.put("\u0444", "f");
-            this.translitChars.put("\u1ea9", "a");
-            this.translitChars.put("\u1e45", "n");
-            this.translitChars.put("\u0268", "i");
-            this.translitChars.put("\u1d19", "r");
-            this.translitChars.put("\u01ce", "a");
-            this.translitChars.put("\u017f", "s");
-            this.translitChars.put("\u0443", "u");
-            this.translitChars.put("\u022b", "o");
-            this.translitChars.put("\u027f", "r");
-            this.translitChars.put("\u01ad", "t");
-            this.translitChars.put("\u1e2f", "i");
-            this.translitChars.put("\u01fd", "ae");
-            this.translitChars.put("\u2CLASSNAME", "v");
-            this.translitChars.put("\u0276", "oe");
-            this.translitChars.put("\u1e43", "m");
-            this.translitChars.put("\u017c", "z");
-            this.translitChars.put("\u0115", "e");
-            this.translitChars.put("\ua73b", "av");
-            this.translitChars.put("\u1edf", "o");
-            this.translitChars.put("\u1ec5", "e");
-            this.translitChars.put("\u026c", "l");
-            this.translitChars.put("\u1ecb", "i");
-            this.translitChars.put("\u1d6d", "d");
-            this.translitChars.put("\ufb06", "st");
-            this.translitChars.put("\u1e37", "l");
-            this.translitChars.put("\u0155", "r");
-            this.translitChars.put("\u1d15", "ou");
-            this.translitChars.put("\u0288", "t");
-            this.translitChars.put("\u0101", "a");
-            this.translitChars.put("\u044d", "e");
-            this.translitChars.put("\u1e19", "e");
-            this.translitChars.put("\u1d11", "o");
-            this.translitChars.put("\u00e7", "c");
-            this.translitChars.put("\u1d8a", "s");
-            this.translitChars.put("\u1eb7", "a");
-            this.translitChars.put("\u0173", "u");
-            this.translitChars.put("\u1ea3", "a");
-            this.translitChars.put("\u01e5", "g");
-            this.translitChars.put("\u0440", "r");
-            this.translitChars.put("\ua741", "k");
-            this.translitChars.put("\u1e95", "z");
-            this.translitChars.put("\u015d", "s");
-            this.translitChars.put("\u1e15", "e");
-            this.translitChars.put("\u0260", "g");
-            this.translitChars.put("\ua749", "l");
-            this.translitChars.put("\ua77c", "f");
-            this.translitChars.put("\u1d8d", "x");
-            this.translitChars.put("\u0445", "h");
-            this.translitChars.put("\u01d2", "o");
-            this.translitChars.put("\u0119", "e");
-            this.translitChars.put("\u1ed5", "o");
-            this.translitChars.put("\u01ab", "t");
-            this.translitChars.put("\u01eb", "o");
-            this.translitChars.put("i\u0307", "i");
-            this.translitChars.put("\u1e47", "n");
-            this.translitChars.put("\u0107", "c");
-            this.translitChars.put("\u1d77", "g");
-            this.translitChars.put("\u1e85", "w");
-            this.translitChars.put("\u1e11", "d");
-            this.translitChars.put("\u1e39", "l");
-            this.translitChars.put("\u0447", "ch");
-            this.translitChars.put("\u0153", "oe");
-            this.translitChars.put("\u1d73", "r");
-            this.translitChars.put("\u013c", "l");
-            this.translitChars.put("\u0211", "r");
-            this.translitChars.put("\u022d", "o");
-            this.translitChars.put("\u1d70", "n");
-            this.translitChars.put("\u1d01", "ae");
-            this.translitChars.put("\u0140", "l");
-            this.translitChars.put("\u00e4", "a");
-            this.translitChars.put("\u01a5", TtmlNode.TAG_P);
-            this.translitChars.put("\u1ecf", "o");
-            this.translitChars.put("\u012f", "i");
-            this.translitChars.put("\u0213", "r");
-            this.translitChars.put("\u01c6", "dz");
-            this.translitChars.put("\u1e21", "g");
-            this.translitChars.put("\u1e7b", "u");
-            this.translitChars.put("\u014d", "o");
-            this.translitChars.put("\u013e", "l");
-            this.translitChars.put("\u1e83", "w");
-            this.translitChars.put("\u021b", "t");
-            this.translitChars.put("\u0144", "n");
-            this.translitChars.put("\u024d", "r");
-            this.translitChars.put("\u0203", "a");
-            this.translitChars.put("\u00fc", "u");
-            this.translitChars.put("\ua781", "l");
-            this.translitChars.put("\u1d10", "o");
-            this.translitChars.put("\u1edb", "o");
-            this.translitChars.put("\u1d03", "b");
-            this.translitChars.put("\u0279", "r");
-            this.translitChars.put("\u1d72", "r");
-            this.translitChars.put("\u028f", "y");
-            this.translitChars.put("\u1d6e", "f");
-            this.translitChars.put("\u2CLASSNAME", "h");
-            this.translitChars.put("\u014f", "o");
-            this.translitChars.put("\u00fa", "u");
-            this.translitChars.put("\u1e5b", "r");
-            this.translitChars.put("\u02ae", "h");
-            this.translitChars.put("\u00f3", "o");
-            this.translitChars.put("\u016f", "u");
-            this.translitChars.put("\u1ee1", "o");
-            this.translitChars.put("\u1e55", TtmlNode.TAG_P);
-            this.translitChars.put("\u1d96", "i");
-            this.translitChars.put("\u1ef1", "u");
-            this.translitChars.put("\u00e3", "a");
-            this.translitChars.put("\u1d62", "i");
-            this.translitChars.put("\u1e71", "t");
-            this.translitChars.put("\u1ec3", "e");
-            this.translitChars.put("\u1eed", "u");
-            this.translitChars.put("\u00ed", "i");
-            this.translitChars.put("\u0254", "o");
-            this.translitChars.put("\u0441", "s");
-            this.translitChars.put("\u0439", "i");
-            this.translitChars.put("\u027a", "r");
-            this.translitChars.put("\u0262", "g");
-            this.translitChars.put("\u0159", "r");
-            this.translitChars.put("\u1e96", "h");
-            this.translitChars.put("\u0171", "u");
-            this.translitChars.put("\u020d", "o");
-            this.translitChars.put("\u0448", "sh");
-            this.translitChars.put("\u1e3b", "l");
-            this.translitChars.put("\u1e23", "h");
-            this.translitChars.put("\u0236", "t");
-            this.translitChars.put("\u0146", "n");
-            this.translitChars.put("\u1d92", "e");
-            this.translitChars.put("\u00ec", "i");
-            this.translitChars.put("\u1e89", "w");
-            this.translitChars.put("\u0431", "b");
-            this.translitChars.put("\u0113", "e");
-            this.translitChars.put("\u1d07", "e");
-            this.translitChars.put("\u0142", "l");
-            this.translitChars.put("\u1ed9", "o");
-            this.translitChars.put("\u026d", "l");
-            this.translitChars.put("\u1e8f", "y");
-            this.translitChars.put("\u1d0a", "j");
-            this.translitChars.put("\u1e31", "k");
-            this.translitChars.put("\u1e7f", "v");
-            this.translitChars.put("\u0229", "e");
-            this.translitChars.put("\u00e2", "a");
-            this.translitChars.put("\u015f", "s");
-            this.translitChars.put("\u0157", "r");
-            this.translitChars.put("\u028b", "v");
-            this.translitChars.put("\u2090", "a");
-            this.translitChars.put("\u2184", "c");
-            this.translitChars.put("\u1d93", "e");
-            this.translitChars.put("\u0270", "m");
-            this.translitChars.put("\u0435", "e");
-            this.translitChars.put("\u1d21", "w");
-            this.translitChars.put("\u020f", "o");
-            this.translitChars.put("\u010d", "c");
-            this.translitChars.put("\u01f5", "g");
-            this.translitChars.put("\u0109", "c");
-            this.translitChars.put("\u044e", "yu");
-            this.translitChars.put("\u1d97", "o");
-            this.translitChars.put("\ua743", "k");
-            this.translitChars.put("\ua759", "q");
-            this.translitChars.put("\u0433", "g");
-            this.translitChars.put("\u1e51", "o");
-            this.translitChars.put("\ua731", "s");
-            this.translitChars.put("\u1e53", "o");
-            this.translitChars.put("\u021f", "h");
-            this.translitChars.put("\u0151", "o");
-            this.translitChars.put("\ua729", "tz");
-            this.translitChars.put("\u1ebb", "e");
-            this.translitChars.put("\u043e", "o");
+            this.translitChars.put("ȼ", "c");
+            this.translitChars.put("ᶇ", "n");
+            this.translitChars.put("ɖ", "d");
+            this.translitChars.put("ỿ", "y");
+            this.translitChars.put("ᴓ", "o");
+            this.translitChars.put("ø", "o");
+            this.translitChars.put("ḁ", "a");
+            this.translitChars.put("ʯ", "h");
+            this.translitChars.put("ŷ", "y");
+            this.translitChars.put("ʞ", "k");
+            this.translitChars.put("ừ", "u");
+            this.translitChars.put("ꜳ", "aa");
+            this.translitChars.put("ĳ", "ij");
+            this.translitChars.put("ḽ", "l");
+            this.translitChars.put("ɪ", "i");
+            this.translitChars.put("ḇ", "b");
+            this.translitChars.put("ʀ", "r");
+            this.translitChars.put("ě", "e");
+            this.translitChars.put("ﬃ", "ffi");
+            this.translitChars.put("ơ", "o");
+            this.translitChars.put("ⱹ", "r");
+            this.translitChars.put("ồ", "o");
+            this.translitChars.put("ǐ", "i");
+            this.translitChars.put("ꝕ", "p");
+            this.translitChars.put("ý", "y");
+            this.translitChars.put("ḝ", "e");
+            this.translitChars.put("ₒ", "o");
+            this.translitChars.put("ⱥ", "a");
+            this.translitChars.put("ʙ", "b");
+            this.translitChars.put("ḛ", "e");
+            this.translitChars.put("ƈ", "c");
+            this.translitChars.put("ɦ", "h");
+            this.translitChars.put("ᵬ", "b");
+            this.translitChars.put("ṣ", "s");
+            this.translitChars.put("đ", "d");
+            this.translitChars.put("ỗ", "o");
+            this.translitChars.put("ɟ", "j");
+            this.translitChars.put("ẚ", "a");
+            this.translitChars.put("ɏ", "y");
+            this.translitChars.put("л", "l");
+            this.translitChars.put("ʌ", "v");
+            this.translitChars.put("ꝓ", "p");
+            this.translitChars.put("ﬁ", "fi");
+            this.translitChars.put("ᶄ", "k");
+            this.translitChars.put("ḏ", "d");
+            this.translitChars.put("ᴌ", "l");
+            this.translitChars.put("ė", "e");
+            this.translitChars.put("ё", "yo");
+            this.translitChars.put("ᴋ", "k");
+            this.translitChars.put("ċ", "c");
+            this.translitChars.put("ʁ", "r");
+            this.translitChars.put("ƕ", "hv");
+            this.translitChars.put("ƀ", "b");
+            this.translitChars.put("ṍ", "o");
+            this.translitChars.put("ȣ", "ou");
+            this.translitChars.put("ǰ", "j");
+            this.translitChars.put("ᶃ", "g");
+            this.translitChars.put("ṋ", "n");
+            this.translitChars.put("ɉ", "j");
+            this.translitChars.put("ǧ", "g");
+            this.translitChars.put("ǳ", "dz");
+            this.translitChars.put("ź", "z");
+            this.translitChars.put("ꜷ", "au");
+            this.translitChars.put("ǖ", "u");
+            this.translitChars.put("ᵹ", "g");
+            this.translitChars.put("ȯ", "o");
+            this.translitChars.put("ɐ", "a");
+            this.translitChars.put("ą", "a");
+            this.translitChars.put("õ", "o");
+            this.translitChars.put("ɻ", "r");
+            this.translitChars.put("ꝍ", "o");
+            this.translitChars.put("ǟ", "a");
+            this.translitChars.put("ȴ", "l");
+            this.translitChars.put("ʂ", "s");
+            this.translitChars.put("ﬂ", "fl");
+            this.translitChars.put("ȉ", "i");
+            this.translitChars.put("ⱻ", "e");
+            this.translitChars.put("ṉ", "n");
+            this.translitChars.put("ï", "i");
+            this.translitChars.put("ñ", "n");
+            this.translitChars.put("ᴉ", "i");
+            this.translitChars.put("ʇ", "t");
+            this.translitChars.put("ẓ", "z");
+            this.translitChars.put("ỷ", "y");
+            this.translitChars.put("ȳ", "y");
+            this.translitChars.put("ṩ", "s");
+            this.translitChars.put("ɽ", "r");
+            this.translitChars.put("ĝ", "g");
+            this.translitChars.put("в", "v");
+            this.translitChars.put("ᴝ", "u");
+            this.translitChars.put("ḳ", "k");
+            this.translitChars.put("ꝫ", "et");
+            this.translitChars.put("ī", "i");
+            this.translitChars.put("ť", "t");
+            this.translitChars.put("ꜿ", "c");
+            this.translitChars.put("ʟ", "l");
+            this.translitChars.put("ꜹ", "av");
+            this.translitChars.put("û", "u");
+            this.translitChars.put("æ", "ae");
+            this.translitChars.put("и", "i");
+            this.translitChars.put("ă", "a");
+            this.translitChars.put("ǘ", "u");
+            this.translitChars.put("ꞅ", "s");
+            this.translitChars.put("ᵣ", "r");
+            this.translitChars.put("ᴀ", "a");
+            this.translitChars.put("ƃ", "b");
+            this.translitChars.put("ḩ", "h");
+            this.translitChars.put("ṧ", "s");
+            this.translitChars.put("ₑ", "e");
+            this.translitChars.put("ʜ", "h");
+            this.translitChars.put("ẋ", "x");
+            this.translitChars.put("ꝅ", "k");
+            this.translitChars.put("ḋ", "d");
+            this.translitChars.put("ƣ", "oi");
+            this.translitChars.put("ꝑ", "p");
+            this.translitChars.put("ħ", "h");
+            this.translitChars.put("ⱴ", "v");
+            this.translitChars.put("ẇ", "w");
+            this.translitChars.put("ǹ", "n");
+            this.translitChars.put("ɯ", "m");
+            this.translitChars.put("ɡ", "g");
+            this.translitChars.put("ɴ", "n");
+            this.translitChars.put("ᴘ", "p");
+            this.translitChars.put("ᵥ", "v");
+            this.translitChars.put("ū", "u");
+            this.translitChars.put("ḃ", "b");
+            this.translitChars.put("ṗ", "p");
+            this.translitChars.put("ь", "");
+            this.translitChars.put("å", "a");
+            this.translitChars.put("ɕ", "c");
+            this.translitChars.put("ọ", "o");
+            this.translitChars.put("ắ", "a");
+            this.translitChars.put("ƒ", "f");
+            this.translitChars.put("ǣ", "ae");
+            this.translitChars.put("ꝡ", "vy");
+            this.translitChars.put("ﬀ", "ff");
+            this.translitChars.put("ᶉ", "r");
+            this.translitChars.put("ô", "o");
+            this.translitChars.put("ǿ", "o");
+            this.translitChars.put("ṳ", "u");
+            this.translitChars.put("ȥ", "z");
+            this.translitChars.put("ḟ", "f");
+            this.translitChars.put("ḓ", "d");
+            this.translitChars.put("ȇ", "e");
+            this.translitChars.put("ȕ", "u");
+            this.translitChars.put("п", "p");
+            this.translitChars.put("ȵ", "n");
+            this.translitChars.put("ʠ", "q");
+            this.translitChars.put("ấ", "a");
+            this.translitChars.put("ǩ", "k");
+            this.translitChars.put("ĩ", "i");
+            this.translitChars.put("ṵ", "u");
+            this.translitChars.put("ŧ", "t");
+            this.translitChars.put("ɾ", "r");
+            this.translitChars.put("ƙ", "k");
+            this.translitChars.put("ṫ", "t");
+            this.translitChars.put("ꝗ", "q");
+            this.translitChars.put("ậ", "a");
+            this.translitChars.put("н", "n");
+            this.translitChars.put("ʄ", "j");
+            this.translitChars.put("ƚ", "l");
+            this.translitChars.put("ᶂ", "f");
+            this.translitChars.put("д", "d");
+            this.translitChars.put("ᵴ", "s");
+            this.translitChars.put("ꞃ", "r");
+            this.translitChars.put("ᶌ", "v");
+            this.translitChars.put("ɵ", "o");
+            this.translitChars.put("ḉ", "c");
+            this.translitChars.put("ᵤ", "u");
+            this.translitChars.put("ẑ", "z");
+            this.translitChars.put("ṹ", "u");
+            this.translitChars.put("ň", "n");
+            this.translitChars.put("ʍ", "w");
+            this.translitChars.put("ầ", "a");
+            this.translitChars.put("ǉ", "lj");
+            this.translitChars.put("ɓ", "b");
+            this.translitChars.put("ɼ", "r");
+            this.translitChars.put("ò", "o");
+            this.translitChars.put("ẘ", "w");
+            this.translitChars.put("ɗ", "d");
+            this.translitChars.put("ꜽ", "ay");
+            this.translitChars.put("ư", "u");
+            this.translitChars.put("ᶀ", "b");
+            this.translitChars.put("ǜ", "u");
+            this.translitChars.put("ẹ", "e");
+            this.translitChars.put("ǡ", "a");
+            this.translitChars.put("ɥ", "h");
+            this.translitChars.put("ṏ", "o");
+            this.translitChars.put("ǔ", "u");
+            this.translitChars.put("ʎ", "y");
+            this.translitChars.put("ȱ", "o");
+            this.translitChars.put("ệ", "e");
+            this.translitChars.put("ế", "e");
+            this.translitChars.put("ĭ", "i");
+            this.translitChars.put("ⱸ", "e");
+            this.translitChars.put("ṯ", "t");
+            this.translitChars.put("ᶑ", "d");
+            this.translitChars.put("ḧ", "h");
+            this.translitChars.put("ṥ", "s");
+            this.translitChars.put("ë", "e");
+            this.translitChars.put("ᴍ", "m");
+            this.translitChars.put("ö", "o");
+            this.translitChars.put("é", "e");
+            this.translitChars.put("ı", "i");
+            this.translitChars.put("ď", "d");
+            this.translitChars.put("ᵯ", "m");
+            this.translitChars.put("ỵ", "y");
+            this.translitChars.put("я", "ya");
+            this.translitChars.put("ŵ", "w");
+            this.translitChars.put("ề", "e");
+            this.translitChars.put("ứ", "u");
+            this.translitChars.put("ƶ", "z");
+            this.translitChars.put("ĵ", "j");
+            this.translitChars.put("ḍ", "d");
+            this.translitChars.put("ŭ", "u");
+            this.translitChars.put("ʝ", "j");
+            this.translitChars.put("ж", "zh");
+            this.translitChars.put("ê", "e");
+            this.translitChars.put("ǚ", "u");
+            this.translitChars.put("ġ", "g");
+            this.translitChars.put("ṙ", "r");
+            this.translitChars.put("ƞ", "n");
+            this.translitChars.put("ъ", "");
+            this.translitChars.put("ḗ", "e");
+            this.translitChars.put("ẝ", "s");
+            this.translitChars.put("ᶁ", "d");
+            this.translitChars.put("ķ", "k");
+            this.translitChars.put("ᴂ", "ae");
+            this.translitChars.put("ɘ", "e");
+            this.translitChars.put("ợ", "o");
+            this.translitChars.put("ḿ", "m");
+            this.translitChars.put("ꜰ", "f");
+            this.translitChars.put("а", "a");
+            this.translitChars.put("ẵ", "a");
+            this.translitChars.put("ꝏ", "oo");
+            this.translitChars.put("ᶆ", "m");
+            this.translitChars.put("ᵽ", "p");
+            this.translitChars.put("ц", "ts");
+            this.translitChars.put("ữ", "u");
+            this.translitChars.put("ⱪ", "k");
+            this.translitChars.put("ḥ", "h");
+            this.translitChars.put("ţ", "t");
+            this.translitChars.put("ᵱ", "p");
+            this.translitChars.put("ṁ", "m");
+            this.translitChars.put("á", "a");
+            this.translitChars.put("ᴎ", "n");
+            this.translitChars.put("ꝟ", "v");
+            this.translitChars.put("è", "e");
+            this.translitChars.put("ᶎ", "z");
+            this.translitChars.put("ꝺ", "d");
+            this.translitChars.put("ᶈ", "p");
+            this.translitChars.put("м", "m");
+            this.translitChars.put("ɫ", "l");
+            this.translitChars.put("ᴢ", "z");
+            this.translitChars.put("ɱ", "m");
+            this.translitChars.put("ṝ", "r");
+            this.translitChars.put("ṽ", "v");
+            this.translitChars.put("ũ", "u");
+            this.translitChars.put("ß", "ss");
+            this.translitChars.put("т", "t");
+            this.translitChars.put("ĥ", "h");
+            this.translitChars.put("ᵵ", "t");
+            this.translitChars.put("ʐ", "z");
+            this.translitChars.put("ṟ", "r");
+            this.translitChars.put("ɲ", "n");
+            this.translitChars.put("à", "a");
+            this.translitChars.put("ẙ", "y");
+            this.translitChars.put("ỳ", "y");
+            this.translitChars.put("ᴔ", "oe");
+            this.translitChars.put("ы", "i");
+            this.translitChars.put("ₓ", "x");
+            this.translitChars.put("ȗ", "u");
+            this.translitChars.put("ⱼ", "j");
+            this.translitChars.put("ẫ", "a");
+            this.translitChars.put("ʑ", "z");
+            this.translitChars.put("ẛ", "s");
+            this.translitChars.put("ḭ", "i");
+            this.translitChars.put("ꜵ", "ao");
+            this.translitChars.put("ɀ", "z");
+            this.translitChars.put("ÿ", "y");
+            this.translitChars.put("ǝ", "e");
+            this.translitChars.put("ǭ", "o");
+            this.translitChars.put("ᴅ", "d");
+            this.translitChars.put("ᶅ", "l");
+            this.translitChars.put("ù", "u");
+            this.translitChars.put("ạ", "a");
+            this.translitChars.put("ḅ", "b");
+            this.translitChars.put("ụ", "u");
+            this.translitChars.put("к", "k");
+            this.translitChars.put("ằ", "a");
+            this.translitChars.put("ᴛ", "t");
+            this.translitChars.put("ƴ", "y");
+            this.translitChars.put("ⱦ", "t");
+            this.translitChars.put("з", "z");
+            this.translitChars.put("ⱡ", "l");
+            this.translitChars.put("ȷ", "j");
+            this.translitChars.put("ᵶ", "z");
+            this.translitChars.put("ḫ", "h");
+            this.translitChars.put("ⱳ", "w");
+            this.translitChars.put("ḵ", "k");
+            this.translitChars.put("ờ", "o");
+            this.translitChars.put("î", "i");
+            this.translitChars.put("ģ", "g");
+            this.translitChars.put("ȅ", "e");
+            this.translitChars.put("ȧ", "a");
+            this.translitChars.put("ẳ", "a");
+            this.translitChars.put("щ", "sch");
+            this.translitChars.put("ɋ", "q");
+            this.translitChars.put("ṭ", "t");
+            this.translitChars.put("ꝸ", "um");
+            this.translitChars.put("ᴄ", "c");
+            this.translitChars.put("ẍ", "x");
+            this.translitChars.put("ủ", "u");
+            this.translitChars.put("ỉ", "i");
+            this.translitChars.put("ᴚ", "r");
+            this.translitChars.put("ś", "s");
+            this.translitChars.put("ꝋ", "o");
+            this.translitChars.put("ỹ", "y");
+            this.translitChars.put("ṡ", "s");
+            this.translitChars.put("ǌ", "nj");
+            this.translitChars.put("ȁ", "a");
+            this.translitChars.put("ẗ", "t");
+            this.translitChars.put("ĺ", "l");
+            this.translitChars.put("ž", "z");
+            this.translitChars.put("ᵺ", "th");
+            this.translitChars.put("ƌ", "d");
+            this.translitChars.put("ș", "s");
+            this.translitChars.put("š", "s");
+            this.translitChars.put("ᶙ", "u");
+            this.translitChars.put("ẽ", "e");
+            this.translitChars.put("ẜ", "s");
+            this.translitChars.put("ɇ", "e");
+            this.translitChars.put("ṷ", "u");
+            this.translitChars.put("ố", "o");
+            this.translitChars.put("ȿ", "s");
+            this.translitChars.put("ᴠ", "v");
+            this.translitChars.put("ꝭ", "is");
+            this.translitChars.put("ᴏ", "o");
+            this.translitChars.put("ɛ", "e");
+            this.translitChars.put("ǻ", "a");
+            this.translitChars.put("ﬄ", "ffl");
+            this.translitChars.put("ⱺ", "o");
+            this.translitChars.put("ȋ", "i");
+            this.translitChars.put("ᵫ", "ue");
+            this.translitChars.put("ȡ", "d");
+            this.translitChars.put("ⱬ", "z");
+            this.translitChars.put("ẁ", "w");
+            this.translitChars.put("ᶏ", "a");
+            this.translitChars.put("ꞇ", "t");
+            this.translitChars.put("ğ", "g");
+            this.translitChars.put("ɳ", "n");
+            this.translitChars.put("ʛ", "g");
+            this.translitChars.put("ᴜ", "u");
+            this.translitChars.put("ф", "f");
+            this.translitChars.put("ẩ", "a");
+            this.translitChars.put("ṅ", "n");
+            this.translitChars.put("ɨ", "i");
+            this.translitChars.put("ᴙ", "r");
+            this.translitChars.put("ǎ", "a");
+            this.translitChars.put("ſ", "s");
+            this.translitChars.put("у", "u");
+            this.translitChars.put("ȫ", "o");
+            this.translitChars.put("ɿ", "r");
+            this.translitChars.put("ƭ", "t");
+            this.translitChars.put("ḯ", "i");
+            this.translitChars.put("ǽ", "ae");
+            this.translitChars.put("ⱱ", "v");
+            this.translitChars.put("ɶ", "oe");
+            this.translitChars.put("ṃ", "m");
+            this.translitChars.put("ż", "z");
+            this.translitChars.put("ĕ", "e");
+            this.translitChars.put("ꜻ", "av");
+            this.translitChars.put("ở", "o");
+            this.translitChars.put("ễ", "e");
+            this.translitChars.put("ɬ", "l");
+            this.translitChars.put("ị", "i");
+            this.translitChars.put("ᵭ", "d");
+            this.translitChars.put("ﬆ", "st");
+            this.translitChars.put("ḷ", "l");
+            this.translitChars.put("ŕ", "r");
+            this.translitChars.put("ᴕ", "ou");
+            this.translitChars.put("ʈ", "t");
+            this.translitChars.put("ā", "a");
+            this.translitChars.put("э", "e");
+            this.translitChars.put("ḙ", "e");
+            this.translitChars.put("ᴑ", "o");
+            this.translitChars.put("ç", "c");
+            this.translitChars.put("ᶊ", "s");
+            this.translitChars.put("ặ", "a");
+            this.translitChars.put("ų", "u");
+            this.translitChars.put("ả", "a");
+            this.translitChars.put("ǥ", "g");
+            this.translitChars.put("р", "r");
+            this.translitChars.put("ꝁ", "k");
+            this.translitChars.put("ẕ", "z");
+            this.translitChars.put("ŝ", "s");
+            this.translitChars.put("ḕ", "e");
+            this.translitChars.put("ɠ", "g");
+            this.translitChars.put("ꝉ", "l");
+            this.translitChars.put("ꝼ", "f");
+            this.translitChars.put("ᶍ", "x");
+            this.translitChars.put("х", "h");
+            this.translitChars.put("ǒ", "o");
+            this.translitChars.put("ę", "e");
+            this.translitChars.put("ổ", "o");
+            this.translitChars.put("ƫ", "t");
+            this.translitChars.put("ǫ", "o");
+            this.translitChars.put("i̇", "i");
+            this.translitChars.put("ṇ", "n");
+            this.translitChars.put("ć", "c");
+            this.translitChars.put("ᵷ", "g");
+            this.translitChars.put("ẅ", "w");
+            this.translitChars.put("ḑ", "d");
+            this.translitChars.put("ḹ", "l");
+            this.translitChars.put("ч", "ch");
+            this.translitChars.put("œ", "oe");
+            this.translitChars.put("ᵳ", "r");
+            this.translitChars.put("ļ", "l");
+            this.translitChars.put("ȑ", "r");
+            this.translitChars.put("ȭ", "o");
+            this.translitChars.put("ᵰ", "n");
+            this.translitChars.put("ᴁ", "ae");
+            this.translitChars.put("ŀ", "l");
+            this.translitChars.put("ä", "a");
+            this.translitChars.put("ƥ", "p");
+            this.translitChars.put("ỏ", "o");
+            this.translitChars.put("į", "i");
+            this.translitChars.put("ȓ", "r");
+            this.translitChars.put("ǆ", "dz");
+            this.translitChars.put("ḡ", "g");
+            this.translitChars.put("ṻ", "u");
+            this.translitChars.put("ō", "o");
+            this.translitChars.put("ľ", "l");
+            this.translitChars.put("ẃ", "w");
+            this.translitChars.put("ț", "t");
+            this.translitChars.put("ń", "n");
+            this.translitChars.put("ɍ", "r");
+            this.translitChars.put("ȃ", "a");
+            this.translitChars.put("ü", "u");
+            this.translitChars.put("ꞁ", "l");
+            this.translitChars.put("ᴐ", "o");
+            this.translitChars.put("ớ", "o");
+            this.translitChars.put("ᴃ", "b");
+            this.translitChars.put("ɹ", "r");
+            this.translitChars.put("ᵲ", "r");
+            this.translitChars.put("ʏ", "y");
+            this.translitChars.put("ᵮ", "f");
+            this.translitChars.put("ⱨ", "h");
+            this.translitChars.put("ŏ", "o");
+            this.translitChars.put("ú", "u");
+            this.translitChars.put("ṛ", "r");
+            this.translitChars.put("ʮ", "h");
+            this.translitChars.put("ó", "o");
+            this.translitChars.put("ů", "u");
+            this.translitChars.put("ỡ", "o");
+            this.translitChars.put("ṕ", "p");
+            this.translitChars.put("ᶖ", "i");
+            this.translitChars.put("ự", "u");
+            this.translitChars.put("ã", "a");
+            this.translitChars.put("ᵢ", "i");
+            this.translitChars.put("ṱ", "t");
+            this.translitChars.put("ể", "e");
+            this.translitChars.put("ử", "u");
+            this.translitChars.put("í", "i");
+            this.translitChars.put("ɔ", "o");
+            this.translitChars.put("с", "s");
+            this.translitChars.put("й", "i");
+            this.translitChars.put("ɺ", "r");
+            this.translitChars.put("ɢ", "g");
+            this.translitChars.put("ř", "r");
+            this.translitChars.put("ẖ", "h");
+            this.translitChars.put("ű", "u");
+            this.translitChars.put("ȍ", "o");
+            this.translitChars.put("ш", "sh");
+            this.translitChars.put("ḻ", "l");
+            this.translitChars.put("ḣ", "h");
+            this.translitChars.put("ȶ", "t");
+            this.translitChars.put("ņ", "n");
+            this.translitChars.put("ᶒ", "e");
+            this.translitChars.put("ì", "i");
+            this.translitChars.put("ẉ", "w");
+            this.translitChars.put("б", "b");
+            this.translitChars.put("ē", "e");
+            this.translitChars.put("ᴇ", "e");
+            this.translitChars.put("ł", "l");
+            this.translitChars.put("ộ", "o");
+            this.translitChars.put("ɭ", "l");
+            this.translitChars.put("ẏ", "y");
+            this.translitChars.put("ᴊ", "j");
+            this.translitChars.put("ḱ", "k");
+            this.translitChars.put("ṿ", "v");
+            this.translitChars.put("ȩ", "e");
+            this.translitChars.put("â", "a");
+            this.translitChars.put("ş", "s");
+            this.translitChars.put("ŗ", "r");
+            this.translitChars.put("ʋ", "v");
+            this.translitChars.put("ₐ", "a");
+            this.translitChars.put("ↄ", "c");
+            this.translitChars.put("ᶓ", "e");
+            this.translitChars.put("ɰ", "m");
+            this.translitChars.put("е", "e");
+            this.translitChars.put("ᴡ", "w");
+            this.translitChars.put("ȏ", "o");
+            this.translitChars.put("č", "c");
+            this.translitChars.put("ǵ", "g");
+            this.translitChars.put("ĉ", "c");
+            this.translitChars.put("ю", "yu");
+            this.translitChars.put("ᶗ", "o");
+            this.translitChars.put("ꝃ", "k");
+            this.translitChars.put("ꝙ", "q");
+            this.translitChars.put("г", "g");
+            this.translitChars.put("ṑ", "o");
+            this.translitChars.put("ꜱ", "s");
+            this.translitChars.put("ṓ", "o");
+            this.translitChars.put("ȟ", "h");
+            this.translitChars.put("ő", "o");
+            this.translitChars.put("ꜩ", "tz");
+            this.translitChars.put("ẻ", "e");
+            this.translitChars.put("о", "o");
         }
         StringBuilder dst = new StringBuilder(src.length());
         int len = src.length();

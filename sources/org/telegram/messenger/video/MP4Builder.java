@@ -27,8 +27,6 @@ import com.coremedia.iso.boxes.SyncSampleBox;
 import com.coremedia.iso.boxes.TimeToSampleBox;
 import com.coremedia.iso.boxes.TrackBox;
 import com.coremedia.iso.boxes.TrackHeaderBox;
-import com.coremedia.iso.boxes.mdat.MediaDataBox;
-import com.coremedia.iso.boxes.sampleentry.VisualSampleEntry;
 import com.googlecode.mp4parser.DataSource;
 import com.googlecode.mp4parser.util.Matrix;
 import java.io.FileOutputStream;
@@ -46,8 +44,7 @@ import java.util.List;
 public class MP4Builder {
     private Mp4Movie currentMp4Movie = null;
     private long dataOffset = 0;
-    /* renamed from: fc */
-    private FileChannel var_fc = null;
+    private FileChannel fc = null;
     private FileOutputStream fos = null;
     private InterleaveChunkMdat mdat = null;
     private ByteBuffer sizeBuffer = null;
@@ -91,7 +88,7 @@ public class MP4Builder {
         }
 
         public String getType() {
-            return MediaDataBox.TYPE;
+            return "mdat";
         }
 
         public long getSize() {
@@ -113,7 +110,7 @@ public class MP4Builder {
             } else {
                 IsoTypeWriter.writeUInt32(bb, 1);
             }
-            bb.put(IsoFile.fourCCtoBytes(MediaDataBox.TYPE));
+            bb.put(IsoFile.fourCCtoBytes("mdat"));
             if (isSmallBox(size)) {
                 bb.put(new byte[8]);
             } else {
@@ -127,9 +124,9 @@ public class MP4Builder {
     public MP4Builder createMovie(Mp4Movie mp4Movie, boolean split) throws Exception {
         this.currentMp4Movie = mp4Movie;
         this.fos = new FileOutputStream(mp4Movie.getCacheFile());
-        this.var_fc = this.fos.getChannel();
+        this.fc = this.fos.getChannel();
         FileTypeBox fileTypeBox = createFileTypeBox();
-        fileTypeBox.getBox(this.var_fc);
+        fileTypeBox.getBox(this.fc);
         this.dataOffset += fileTypeBox.getSize();
         this.writedSinceLastMdat += this.dataOffset;
         this.splitMdat = split;
@@ -139,10 +136,10 @@ public class MP4Builder {
     }
 
     private void flushCurrentMdat() throws Exception {
-        long oldPosition = this.var_fc.position();
-        this.var_fc.position(this.mdat.getOffset());
-        this.mdat.getBox(this.var_fc);
-        this.var_fc.position(oldPosition);
+        long oldPosition = this.fc.position();
+        this.fc.position(this.mdat.getOffset());
+        this.mdat.getBox(this.fc);
+        this.fc.position(oldPosition);
         this.mdat.setDataOffset(0);
         this.mdat.setContentSize(0);
         this.fos.flush();
@@ -152,7 +149,7 @@ public class MP4Builder {
     public boolean writeSampleData(int trackIndex, ByteBuffer byteBuf, BufferInfo bufferInfo, boolean writeLength) throws Exception {
         if (this.writeNewMdat) {
             this.mdat.setContentSize(0);
-            this.mdat.getBox(this.var_fc);
+            this.mdat.getBox(this.fc);
             this.mdat.setDataOffset(this.dataOffset);
             this.dataOffset += 16;
             this.writedSinceLastMdat += 16;
@@ -176,9 +173,9 @@ public class MP4Builder {
             this.sizeBuffer.position(0);
             this.sizeBuffer.putInt(bufferInfo.size - 4);
             this.sizeBuffer.position(0);
-            this.var_fc.write(this.sizeBuffer);
+            this.fc.write(this.sizeBuffer);
         }
-        this.var_fc.write(byteBuf);
+        this.fc.write(byteBuf);
         this.dataOffset += (long) bufferInfo.size;
         if (flush) {
             this.fos.flush();
@@ -205,10 +202,10 @@ public class MP4Builder {
             }
             this.track2SampleSizes.put(track, sizes);
         }
-        createMovieBox(this.currentMp4Movie).getBox(this.var_fc);
+        createMovieBox(this.currentMp4Movie).getBox(this.fc);
         this.fos.flush();
         this.fos.getFD().sync();
-        this.var_fc.close();
+        this.fc.close();
         this.fos.close();
     }
 
@@ -216,7 +213,7 @@ public class MP4Builder {
         LinkedList<String> minorBrands = new LinkedList();
         minorBrands.add("isom");
         minorBrands.add("iso2");
-        minorBrands.add(VisualSampleEntry.TYPE3);
+        minorBrands.add("avc1");
         minorBrands.add("mp41");
         return new FileTypeBox("isom", 512, minorBrands);
     }

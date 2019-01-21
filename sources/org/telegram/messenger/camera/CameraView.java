@@ -19,17 +19,14 @@ import android.widget.FrameLayout;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.tgnet.ConnectionsManager;
 
 @SuppressLint({"NewApi"})
 public class CameraView extends FrameLayout implements SurfaceTextureListener {
     private CameraSession cameraSession;
     private int clipLeft;
     private int clipTop;
-    /* renamed from: cx */
-    private int var_cx;
-    /* renamed from: cy */
-    private int var_cy;
+    private int cx;
+    private int cy;
     private CameraViewDelegate delegate;
     private int focusAreaSize;
     private float focusProgress = 1.0f;
@@ -48,31 +45,6 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     private TextureView textureView;
     private Matrix txform = new Matrix();
 
-    /* renamed from: org.telegram.messenger.camera.CameraView$1 */
-    class CLASSNAME implements Runnable {
-        CLASSNAME() {
-        }
-
-        public void run() {
-            if (CameraView.this.cameraSession != null) {
-                CameraView.this.cameraSession.setInitied();
-            }
-            CameraView.this.checkPreviewMatrix();
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.camera.CameraView$2 */
-    class CLASSNAME implements Runnable {
-        CLASSNAME() {
-        }
-
-        public void run() {
-            if (CameraView.this.delegate != null) {
-                CameraView.this.delegate.onCameraCreated(CameraView.this.cameraSession.cameraInfo.camera);
-            }
-        }
-    }
-
     public interface CameraViewDelegate {
         void onCameraCreated(Camera camera);
 
@@ -86,11 +58,11 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         this.textureView = new TextureView(context);
         this.textureView.setSurfaceTextureListener(this);
         addView(this.textureView);
-        this.focusAreaSize = AndroidUtilities.m9dp(96.0f);
+        this.focusAreaSize = AndroidUtilities.dp(96.0f);
         this.outerPaint.setColor(-1);
         this.outerPaint.setStyle(Style.STROKE);
-        this.outerPaint.setStrokeWidth((float) AndroidUtilities.m9dp(2.0f));
-        this.innerPaint.setColor(ConnectionsManager.DEFAULT_DATACENTER_ID);
+        this.outerPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
+        this.innerPaint.setColor(Integer.MAX_VALUE);
     }
 
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
@@ -179,7 +151,20 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
                 if (this.previewSize != null && surfaceTexture != null) {
                     surfaceTexture.setDefaultBufferSize(this.previewSize.getWidth(), this.previewSize.getHeight());
                     this.cameraSession = new CameraSession(info, this.previewSize, pictureSize, 256);
-                    CameraController.getInstance().open(this.cameraSession, surfaceTexture, new CLASSNAME(), new CLASSNAME());
+                    CameraController.getInstance().open(this.cameraSession, surfaceTexture, new Runnable() {
+                        public void run() {
+                            if (CameraView.this.cameraSession != null) {
+                                CameraView.this.cameraSession.setInitied();
+                            }
+                            CameraView.this.checkPreviewMatrix();
+                        }
+                    }, new Runnable() {
+                        public void run() {
+                            if (CameraView.this.delegate != null) {
+                                CameraView.this.delegate.onCameraCreated(CameraView.this.cameraSession.cameraInfo.camera);
+                            }
+                        }
+                    });
                 }
             }
         }
@@ -287,8 +272,8 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         this.focusProgress = 0.0f;
         this.innerAlpha = 1.0f;
         this.outerAlpha = 1.0f;
-        this.var_cx = x;
-        this.var_cy = y;
+        this.cx = x;
+        this.cy = y;
         this.lastDrawTime = System.currentTimeMillis();
         invalidate();
     }
@@ -315,7 +300,7 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
         boolean result = super.drawChild(canvas, child, drawingTime);
         if (!(this.focusProgress == 1.0f && this.innerAlpha == 0.0f && this.outerAlpha == 0.0f)) {
-            int baseRad = AndroidUtilities.m9dp(30.0f);
+            int baseRad = AndroidUtilities.dp(30.0f);
             long newTime = System.currentTimeMillis();
             long dt = newTime - this.lastDrawTime;
             if (dt < 0 || dt > 17) {
@@ -325,8 +310,8 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
             this.outerPaint.setAlpha((int) (this.interpolator.getInterpolation(this.outerAlpha) * 255.0f));
             this.innerPaint.setAlpha((int) (this.interpolator.getInterpolation(this.innerAlpha) * 127.0f));
             float interpolated = this.interpolator.getInterpolation(this.focusProgress);
-            canvas.drawCircle((float) this.var_cx, (float) this.var_cy, ((float) baseRad) + (((float) baseRad) * (1.0f - interpolated)), this.outerPaint);
-            canvas.drawCircle((float) this.var_cx, (float) this.var_cy, ((float) baseRad) * interpolated, this.innerPaint);
+            canvas.drawCircle((float) this.cx, (float) this.cy, ((float) baseRad) + (((float) baseRad) * (1.0f - interpolated)), this.outerPaint);
+            canvas.drawCircle((float) this.cx, (float) this.cy, ((float) baseRad) * interpolated, this.innerPaint);
             if (this.focusProgress < 1.0f) {
                 this.focusProgress += ((float) dt) / 200.0f;
                 if (this.focusProgress > 1.0f) {

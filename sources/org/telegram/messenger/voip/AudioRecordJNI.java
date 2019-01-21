@@ -21,8 +21,7 @@ public class AudioRecordJNI {
     private int bufferSize;
     private long nativeInst;
     private boolean needResampling = false;
-    /* renamed from: ns */
-    private NoiseSuppressor var_ns;
+    private NoiseSuppressor ns;
     private boolean running;
     private Thread thread;
 
@@ -61,20 +60,20 @@ public class AudioRecordJNI {
                             this.agc.setEnabled(false);
                         }
                     } else if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m14w("AutomaticGainControl is not available on this device :(");
+                        FileLog.w("AutomaticGainControl is not available on this device :(");
                     }
                 } catch (Throwable x) {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m12e("error creating AutomaticGainControl", x);
+                        FileLog.e("error creating AutomaticGainControl", x);
                     }
                 }
                 try {
                     if (NoiseSuppressor.isAvailable()) {
-                        this.var_ns = NoiseSuppressor.create(this.audioRecord.getAudioSessionId());
-                        if (this.var_ns != null) {
+                        this.ns = NoiseSuppressor.create(this.audioRecord.getAudioSessionId());
+                        if (this.ns != null) {
                             boolean z2;
-                            NoiseSuppressor noiseSuppressor = this.var_ns;
-                            if (VoIPServerConfig.getBoolean("use_system_ns", true) && isGoodAudioEffect(this.var_ns)) {
+                            NoiseSuppressor noiseSuppressor = this.ns;
+                            if (VoIPServerConfig.getBoolean("use_system_ns", true) && isGoodAudioEffect(this.ns)) {
                                 z2 = true;
                             } else {
                                 z2 = false;
@@ -82,11 +81,11 @@ public class AudioRecordJNI {
                             noiseSuppressor.setEnabled(z2);
                         }
                     } else if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m14w("NoiseSuppressor is not available on this device :(");
+                        FileLog.w("NoiseSuppressor is not available on this device :(");
                     }
                 } catch (Throwable x2) {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m12e("error creating NoiseSuppressor", x2);
+                        FileLog.e("error creating NoiseSuppressor", x2);
                     }
                 }
                 try {
@@ -100,11 +99,11 @@ public class AudioRecordJNI {
                             acousticEchoCanceler.setEnabled(z);
                         }
                     } else if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m14w("AcousticEchoCanceler is not available on this device");
+                        FileLog.w("AcousticEchoCanceler is not available on this device");
                     }
                 } catch (Throwable x22) {
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.m12e("error creating AcousticEchoCanceler", x22);
+                        FileLog.e("error creating AcousticEchoCanceler", x22);
                     }
                 }
             }
@@ -121,12 +120,12 @@ public class AudioRecordJNI {
             }
         }
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m10d("Trying to initialize AudioRecord with source=" + source + " and sample rate=" + sampleRate);
+            FileLog.d("Trying to initialize AudioRecord with source=" + source + " and sample rate=" + sampleRate);
         }
         try {
             this.audioRecord = new AudioRecord(source, sampleRate, 16, 2, getBufferSize(this.bufferSize, 48000));
         } catch (Exception x) {
-            FileLog.m12e("AudioRecord init failed!", x);
+            FileLog.e("AudioRecord init failed!", x);
         }
         if (sampleRate != 48000) {
             z = true;
@@ -155,7 +154,7 @@ public class AudioRecordJNI {
             try {
                 this.thread.join();
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
             }
             this.thread = null;
         }
@@ -167,9 +166,9 @@ public class AudioRecordJNI {
             this.agc.release();
             this.agc = null;
         }
-        if (this.var_ns != null) {
-            this.var_ns.release();
-            this.var_ns = null;
+        if (this.ns != null) {
+            this.ns.release();
+            this.ns = null;
         }
         if (this.aec != null) {
             this.aec.release();
@@ -195,7 +194,7 @@ public class AudioRecordJNI {
             if (!BuildVars.LOGS_ENABLED) {
                 return false;
             }
-            FileLog.m12e("Error initializing AudioRecord", x);
+            FileLog.e("Error initializing AudioRecord", x);
             return false;
         }
     }
@@ -222,11 +221,11 @@ public class AudioRecordJNI {
                         }
                         AudioRecordJNI.this.nativeCallback(AudioRecordJNI.this.buffer);
                     } catch (Throwable e) {
-                        FileLog.m13e(e);
+                        FileLog.e(e);
                     }
                 }
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m10d("audiorecord thread exits");
+                    FileLog.d("audiorecord thread exits");
                 }
             }
         });
@@ -238,7 +237,7 @@ public class AudioRecordJNI {
         if (this.aec != null && this.aec.getEnabled()) {
             r = 0 | 1;
         }
-        if (this.var_ns == null || !this.var_ns.getEnabled()) {
+        if (this.ns == null || !this.ns.getEnabled()) {
             return r;
         }
         return r | 2;
@@ -246,14 +245,14 @@ public class AudioRecordJNI {
 
     private static Pattern makeNonEmptyRegex(String configKey) {
         Pattern pattern = null;
-        String r = VoIPServerConfig.getString(configKey, TtmlNode.ANONYMOUS_REGION_ID);
+        String r = VoIPServerConfig.getString(configKey, "");
         if (TextUtils.isEmpty(r)) {
             return pattern;
         }
         try {
             return Pattern.compile(r);
         } catch (Throwable x) {
-            FileLog.m13e(x);
+            FileLog.e(x);
             return pattern;
         }
     }
@@ -262,7 +261,7 @@ public class AudioRecordJNI {
         Pattern globalImpl = makeNonEmptyRegex("adsp_good_impls");
         Pattern globalName = makeNonEmptyRegex("adsp_good_names");
         Descriptor desc = effect.getDescriptor();
-        FileLog.m10d(effect.getClass().getSimpleName() + ": implementor=" + desc.implementor + ", name=" + desc.name);
+        FileLog.d(effect.getClass().getSimpleName() + ": implementor=" + desc.implementor + ", name=" + desc.name);
         if (globalImpl != null && globalImpl.matcher(desc.implementor).find()) {
             return true;
         }

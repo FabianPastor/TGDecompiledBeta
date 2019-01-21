@@ -11,20 +11,13 @@ import org.telegram.messenger.support.widget.RecyclerView.SmoothScroller;
 import org.telegram.messenger.support.widget.RecyclerView.SmoothScroller.Action;
 import org.telegram.messenger.support.widget.RecyclerView.SmoothScroller.ScrollVectorProvider;
 import org.telegram.messenger.support.widget.RecyclerView.State;
-import org.telegram.tgnet.ConnectionsManager;
 
 public abstract class SnapHelper extends OnFlingListener {
     static final float MILLISECONDS_PER_INCH = 100.0f;
     private Scroller mGravityScroller;
     RecyclerView mRecyclerView;
-    private final OnScrollListener mScrollListener = new CLASSNAME();
-
-    /* renamed from: org.telegram.messenger.support.widget.SnapHelper$1 */
-    class CLASSNAME extends OnScrollListener {
+    private final OnScrollListener mScrollListener = new OnScrollListener() {
         boolean mScrolled = false;
-
-        CLASSNAME() {
-        }
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
             super.onScrollStateChanged(recyclerView, newState);
@@ -39,7 +32,7 @@ public abstract class SnapHelper extends OnFlingListener {
                 this.mScrolled = true;
             }
         }
-    }
+    };
 
     public abstract int[] calculateDistanceToFinalSnap(LayoutManager layoutManager, View view);
 
@@ -88,7 +81,7 @@ public abstract class SnapHelper extends OnFlingListener {
 
     public int[] calculateScrollDistance(int velocityX, int velocityY) {
         outDist = new int[2];
-        this.mGravityScroller.fling(0, 0, velocityX, velocityY, Integer.MIN_VALUE, ConnectionsManager.DEFAULT_DATACENTER_ID, Integer.MIN_VALUE, ConnectionsManager.DEFAULT_DATACENTER_ID);
+        this.mGravityScroller.fling(0, 0, velocityX, velocityY, Integer.MIN_VALUE, Integer.MAX_VALUE, Integer.MIN_VALUE, Integer.MAX_VALUE);
         outDist[0] = this.mGravityScroller.getFinalX();
         outDist[1] = this.mGravityScroller.getFinalY();
         return outDist;
@@ -147,7 +140,7 @@ public abstract class SnapHelper extends OnFlingListener {
                 }
 
                 protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
-                    return SnapHelper.MILLISECONDS_PER_INCH / ((float) displayMetrics.densityDpi);
+                    return 100.0f / ((float) displayMetrics.densityDpi);
                 }
             };
         }

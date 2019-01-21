@@ -17,7 +17,9 @@ import org.telegram.tgnet.TLRPC.Message;
 import org.telegram.tgnet.TLRPC.Photo;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.StickerSetCovered;
+import org.telegram.tgnet.TLRPC.TL_account_getWallPaper;
 import org.telegram.tgnet.TLRPC.TL_account_getWallPapers;
+import org.telegram.tgnet.TLRPC.TL_account_wallPapers;
 import org.telegram.tgnet.TLRPC.TL_channel;
 import org.telegram.tgnet.TLRPC.TL_channels_getChannels;
 import org.telegram.tgnet.TLRPC.TL_channels_getMessages;
@@ -33,6 +35,7 @@ import org.telegram.tgnet.TLRPC.TL_inputSingleMedia;
 import org.telegram.tgnet.TLRPC.TL_inputStickerSetID;
 import org.telegram.tgnet.TLRPC.TL_inputStickeredMediaDocument;
 import org.telegram.tgnet.TLRPC.TL_inputStickeredMediaPhoto;
+import org.telegram.tgnet.TLRPC.TL_inputWallPaper;
 import org.telegram.tgnet.TLRPC.TL_messageActionChatEditPhoto;
 import org.telegram.tgnet.TLRPC.TL_messages_chats;
 import org.telegram.tgnet.TLRPC.TL_messages_editMessage;
@@ -56,10 +59,10 @@ import org.telegram.tgnet.TLRPC.TL_messages_sendMultiMedia;
 import org.telegram.tgnet.TLRPC.TL_messages_stickerSet;
 import org.telegram.tgnet.TLRPC.TL_photos_getUserPhotos;
 import org.telegram.tgnet.TLRPC.TL_users_getUsers;
+import org.telegram.tgnet.TLRPC.TL_wallPaper;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.tgnet.TLRPC.UserProfilePhoto;
 import org.telegram.tgnet.TLRPC.Vector;
-import org.telegram.tgnet.TLRPC.WallPaper;
 import org.telegram.tgnet.TLRPC.WebPage;
 import org.telegram.tgnet.TLRPC.messages_Messages;
 import org.telegram.tgnet.TLRPC.photos_Photos;
@@ -124,14 +127,36 @@ public class FileRefController {
         this.currentAccount = instance;
     }
 
+    public static String getKeyForParentObject(Object parentObject) {
+        if (parentObject instanceof MessageObject) {
+            MessageObject messageObject = (MessageObject) parentObject;
+            return "message" + messageObject.getId() + "_" + messageObject.getChannelId();
+        } else if (parentObject instanceof WebPage) {
+            return "webpage" + ((WebPage) parentObject).id;
+        } else if (parentObject instanceof User) {
+            return "user" + ((User) parentObject).id;
+        } else if (parentObject instanceof Chat) {
+            return "chat" + ((Chat) parentObject).id;
+        } else if (parentObject instanceof String) {
+            return "str" + ((String) parentObject);
+        } else if (parentObject instanceof TL_messages_stickerSet) {
+            return "set" + ((TL_messages_stickerSet) parentObject).set.id;
+        } else if (parentObject instanceof StickerSetCovered) {
+            return "set" + ((StickerSetCovered) parentObject).set.id;
+        } else if (parentObject instanceof InputStickerSet) {
+            return "set" + ((InputStickerSet) parentObject).id;
+        } else if (!(parentObject instanceof TL_wallPaper)) {
+            return null;
+        } else {
+            return "wallpaper" + ((TL_wallPaper) parentObject).id;
+        }
+    }
+
     public void requestReference(Object parentObject, Object... args) {
         String locationKey;
         InputFileLocation location;
-        MessageObject messageObject;
-        TLObject parentObject2;
-        String parentKey;
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.m10d("start loading request reference for parent = " + parentObject2 + " args = " + args[0]);
+            FileLog.d("start loading request reference for parent = " + parentObject + " args = " + args[0]);
         }
         TL_inputMediaDocument mediaDocument;
         TL_inputMediaPhoto mediaPhoto;
@@ -139,28 +164,28 @@ public class FileRefController {
             TL_inputSingleMedia req = args[0];
             if (req.media instanceof TL_inputMediaDocument) {
                 mediaDocument = req.media;
-                locationKey = "file_" + mediaDocument.var_id.var_id;
+                locationKey = "file_" + mediaDocument.id.id;
                 location = new TL_inputDocumentFileLocation();
-                location.var_id = mediaDocument.var_id.var_id;
+                location.id = mediaDocument.id.id;
             } else if (req.media instanceof TL_inputMediaPhoto) {
                 mediaPhoto = req.media;
-                locationKey = "photo_" + mediaPhoto.var_id.var_id;
+                locationKey = "photo_" + mediaPhoto.id.id;
                 location = new TL_inputSecureFileLocation();
-                location.var_id = mediaPhoto.var_id.var_id;
+                location.id = mediaPhoto.id.id;
             } else {
                 sendErrorToObject(args, 0);
                 return;
             }
         } else if (args[0] instanceof TL_messages_sendMultiMedia) {
             TL_messages_sendMultiMedia req2 = args[0];
-            ArrayList<Object> parentObjects = (ArrayList) parentObject2;
+            ArrayList<Object> parentObjects = (ArrayList) parentObject;
             this.multiMediaCache.put(req2, args);
             int size = req2.multi_media.size();
             for (int a = 0; a < size; a++) {
                 TL_inputSingleMedia media = (TL_inputSingleMedia) req2.multi_media.get(a);
-                parentObject2 = parentObjects.get(a);
-                if (parentObject2 != null) {
-                    requestReference(parentObject2, media, req2);
+                parentObject = parentObjects.get(a);
+                if (parentObject != null) {
+                    requestReference(parentObject, media, req2);
                 }
             }
             return;
@@ -168,14 +193,14 @@ public class FileRefController {
             TL_messages_sendMedia req3 = args[0];
             if (req3.media instanceof TL_inputMediaDocument) {
                 mediaDocument = (TL_inputMediaDocument) req3.media;
-                locationKey = "file_" + mediaDocument.var_id.var_id;
+                locationKey = "file_" + mediaDocument.id.id;
                 location = new TL_inputDocumentFileLocation();
-                location.var_id = mediaDocument.var_id.var_id;
+                location.id = mediaDocument.id.id;
             } else if (req3.media instanceof TL_inputMediaPhoto) {
                 mediaPhoto = (TL_inputMediaPhoto) req3.media;
-                locationKey = "photo_" + mediaPhoto.var_id.var_id;
+                locationKey = "photo_" + mediaPhoto.id.id;
                 location = new TL_inputSecureFileLocation();
-                location.var_id = mediaPhoto.var_id.var_id;
+                location.id = mediaPhoto.id.id;
             } else {
                 sendErrorToObject(args, 0);
                 return;
@@ -184,45 +209,45 @@ public class FileRefController {
             TL_messages_editMessage req4 = args[0];
             if (req4.media instanceof TL_inputMediaDocument) {
                 mediaDocument = (TL_inputMediaDocument) req4.media;
-                locationKey = "file_" + mediaDocument.var_id.var_id;
+                locationKey = "file_" + mediaDocument.id.id;
                 location = new TL_inputDocumentFileLocation();
-                location.var_id = mediaDocument.var_id.var_id;
+                location.id = mediaDocument.id.id;
             } else if (req4.media instanceof TL_inputMediaPhoto) {
                 mediaPhoto = (TL_inputMediaPhoto) req4.media;
-                locationKey = "photo_" + mediaPhoto.var_id.var_id;
+                locationKey = "photo_" + mediaPhoto.id.id;
                 location = new TL_inputSecureFileLocation();
-                location.var_id = mediaPhoto.var_id.var_id;
+                location.id = mediaPhoto.id.id;
             } else {
                 sendErrorToObject(args, 0);
                 return;
             }
         } else if (args[0] instanceof TL_messages_saveGif) {
             TL_messages_saveGif req5 = args[0];
-            locationKey = "file_" + req5.var_id.var_id;
+            locationKey = "file_" + req5.id.id;
             location = new TL_inputDocumentFileLocation();
-            location.var_id = req5.var_id.var_id;
+            location.id = req5.id.id;
         } else if (args[0] instanceof TL_messages_saveRecentSticker) {
             TL_messages_saveRecentSticker req6 = args[0];
-            locationKey = "file_" + req6.var_id.var_id;
+            locationKey = "file_" + req6.id.id;
             location = new TL_inputDocumentFileLocation();
-            location.var_id = req6.var_id.var_id;
+            location.id = req6.id.id;
         } else if (args[0] instanceof TL_messages_faveSticker) {
             TL_messages_faveSticker req7 = args[0];
-            locationKey = "file_" + req7.var_id.var_id;
+            locationKey = "file_" + req7.id.id;
             location = new TL_inputDocumentFileLocation();
-            location.var_id = req7.var_id.var_id;
+            location.id = req7.id.id;
         } else if (args[0] instanceof TL_messages_getAttachedStickers) {
             TL_messages_getAttachedStickers req8 = args[0];
             if (req8.media instanceof TL_inputStickeredMediaDocument) {
                 TL_inputStickeredMediaDocument mediaDocument2 = req8.media;
-                locationKey = "file_" + mediaDocument2.var_id.var_id;
+                locationKey = "file_" + mediaDocument2.id.id;
                 location = new TL_inputDocumentFileLocation();
-                location.var_id = mediaDocument2.var_id.var_id;
+                location.id = mediaDocument2.id.id;
             } else if (req8.media instanceof TL_inputStickeredMediaPhoto) {
                 TL_inputStickeredMediaPhoto mediaPhoto2 = req8.media;
-                locationKey = "photo_" + mediaPhoto2.var_id.var_id;
+                locationKey = "photo_" + mediaPhoto2.id.id;
                 location = new TL_inputSecureFileLocation();
-                location.var_id = mediaPhoto2.var_id.var_id;
+                location.id = mediaPhoto2.id.id;
             } else {
                 sendErrorToObject(args, 0);
                 return;
@@ -232,41 +257,18 @@ public class FileRefController {
             locationKey = "loc_" + location2.local_id + "_" + location2.volume_id;
         } else if (args[0] instanceof TL_inputDocumentFileLocation) {
             TL_inputDocumentFileLocation location22 = (TL_inputDocumentFileLocation) args[0];
-            locationKey = "file_" + location22.var_id;
+            locationKey = "file_" + location22.id;
         } else {
             sendErrorToObject(args, 0);
             return;
         }
-        if (parentObject2 instanceof MessageObject) {
-            messageObject = (MessageObject) parentObject2;
+        if (parentObject instanceof MessageObject) {
+            MessageObject messageObject = (MessageObject) parentObject;
             if (messageObject.getId() < 0 && messageObject.messageOwner.media.webpage != null) {
-                parentObject2 = messageObject.messageOwner.media.webpage;
+                parentObject = messageObject.messageOwner.media.webpage;
             }
         }
-        if (parentObject2 instanceof MessageObject) {
-            messageObject = (MessageObject) parentObject2;
-            parentKey = "message" + messageObject.getId() + "_" + messageObject.getChannelId();
-        } else if (parentObject2 instanceof WebPage) {
-            WebPage webPage = (WebPage) parentObject2;
-            parentKey = "webpage" + webPage.var_id;
-        } else if (parentObject2 instanceof User) {
-            parentKey = "user" + ((User) parentObject2).var_id;
-        } else if (parentObject2 instanceof Chat) {
-            parentKey = "chat" + ((Chat) parentObject2).var_id;
-        } else if (parentObject2 instanceof String) {
-            parentKey = "str" + ((String) parentObject2);
-        } else if (parentObject2 instanceof TL_messages_stickerSet) {
-            TL_messages_stickerSet stickerSet = (TL_messages_stickerSet) parentObject2;
-            parentKey = "set" + stickerSet.set.var_id;
-        } else if (parentObject2 instanceof StickerSetCovered) {
-            StickerSetCovered stickerSet2 = (StickerSetCovered) parentObject2;
-            parentKey = "set" + stickerSet2.set.var_id;
-        } else if (parentObject2 instanceof InputStickerSet) {
-            InputStickerSet inputStickerSet = (InputStickerSet) parentObject2;
-            parentKey = "set" + inputStickerSet.var_id;
-        } else {
-            parentKey = null;
-        }
+        String parentKey = getKeyForParentObject(parentObject);
         if (parentKey == null) {
             sendErrorToObject(args, 0);
             return;
@@ -307,7 +309,7 @@ public class FileRefController {
             } else {
                 return;
             }
-            requestReferenceFromServer(parentObject2, locationKey, parentKey, args);
+            requestReferenceFromServer(parentObject, locationKey, parentKey, args);
         }
     }
 
@@ -322,63 +324,75 @@ public class FileRefController {
             if (channelId != 0) {
                 req = new TL_channels_getMessages();
                 req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(channelId);
-                req.var_id.add(Integer.valueOf(messageObject.getId()));
+                req.id.add(Integer.valueOf(messageObject.getId()));
                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new FileRefController$$Lambda$0(this, locationKey, parentKey));
                 return;
             }
             req2 = new TL_messages_getMessages();
-            req2.var_id.add(Integer.valueOf(messageObject.getId()));
+            req2.id.add(Integer.valueOf(messageObject.getId()));
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, new FileRefController$$Lambda$1(this, locationKey, parentKey));
+        } else if (parentObject instanceof TL_wallPaper) {
+            TL_wallPaper wallPaper = (TL_wallPaper) parentObject;
+            TL_account_getWallPaper req4 = new TL_account_getWallPaper();
+            TL_inputWallPaper inputWallPaper = new TL_inputWallPaper();
+            inputWallPaper.id = wallPaper.id;
+            inputWallPaper.access_hash = wallPaper.access_hash;
+            req4.wallpaper = inputWallPaper;
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req4, new FileRefController$$Lambda$2(this, locationKey, parentKey));
         } else if (parentObject instanceof WebPage) {
             WebPage webPage = (WebPage) parentObject;
-            TL_messages_getWebPage req4 = new TL_messages_getWebPage();
-            req4.url = webPage.url;
-            req4.hash = 0;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req4, new FileRefController$$Lambda$2(this, locationKey, parentKey));
+            TL_messages_getWebPage req5 = new TL_messages_getWebPage();
+            req5.url = webPage.url;
+            req5.hash = 0;
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req5, new FileRefController$$Lambda$3(this, locationKey, parentKey));
         } else if (parentObject instanceof User) {
             User user = (User) parentObject;
-            TL_users_getUsers req5 = new TL_users_getUsers();
-            req5.var_id.add(MessagesController.getInstance(this.currentAccount).getInputUser(user));
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req5, new FileRefController$$Lambda$3(this, locationKey, parentKey));
+            TL_users_getUsers req6 = new TL_users_getUsers();
+            req6.id.add(MessagesController.getInstance(this.currentAccount).getInputUser(user));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req6, new FileRefController$$Lambda$4(this, locationKey, parentKey));
         } else if (parentObject instanceof Chat) {
             Chat chat = (Chat) parentObject;
             if (chat instanceof TL_chat) {
-                TL_messages_getChats req6 = new TL_messages_getChats();
-                req6.var_id.add(Integer.valueOf(chat.var_id));
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req6, new FileRefController$$Lambda$4(this, locationKey, parentKey));
-            } else if (chat instanceof TL_channel) {
-                TL_channels_getChannels req7 = new TL_channels_getChannels();
-                req7.var_id.add(MessagesController.getInputChannel(chat));
+                TL_messages_getChats req7 = new TL_messages_getChats();
+                req7.id.add(Integer.valueOf(chat.id));
                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(req7, new FileRefController$$Lambda$5(this, locationKey, parentKey));
+            } else if (chat instanceof TL_channel) {
+                TL_channels_getChannels req8 = new TL_channels_getChannels();
+                req8.id.add(MessagesController.getInputChannel(chat));
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req8, new FileRefController$$Lambda$6(this, locationKey, parentKey));
             }
         } else if (parentObject instanceof String) {
             String string = (String) parentObject;
             if ("wallpaper".equals(string)) {
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getWallPapers(), new FileRefController$$Lambda$6(this, locationKey, parentKey));
+                TL_account_getWallPapers req9 = new TL_account_getWallPapers();
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req9, new FileRefController$$Lambda$7(this, locationKey, parentKey));
             } else if ("gif".equals(string)) {
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_messages_getSavedGifs(), new FileRefController$$Lambda$7(this, locationKey, parentKey));
+                TL_messages_getSavedGifs req10 = new TL_messages_getSavedGifs();
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req10, new FileRefController$$Lambda$8(this, locationKey, parentKey));
             } else if ("recent".equals(string)) {
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_messages_getRecentStickers(), new FileRefController$$Lambda$8(this, locationKey, parentKey));
+                TL_messages_getRecentStickers req11 = new TL_messages_getRecentStickers();
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req11, new FileRefController$$Lambda$9(this, locationKey, parentKey));
             } else if ("fav".equals(string)) {
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_messages_getFavedStickers(), new FileRefController$$Lambda$9(this, locationKey, parentKey));
+                TL_messages_getFavedStickers req12 = new TL_messages_getFavedStickers();
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req12, new FileRefController$$Lambda$10(this, locationKey, parentKey));
             } else if (string.startsWith("avatar_")) {
                 int id = Utilities.parseInt(string).intValue();
                 if (id > 0) {
-                    TL_photos_getUserPhotos req8 = new TL_photos_getUserPhotos();
-                    req8.limit = 80;
-                    req8.offset = 0;
-                    req8.max_id = 0;
-                    req8.user_id = MessagesController.getInstance(this.currentAccount).getInputUser(id);
-                    ConnectionsManager.getInstance(this.currentAccount).sendRequest(req8, new FileRefController$$Lambda$10(this, locationKey, parentKey));
+                    TL_photos_getUserPhotos req13 = new TL_photos_getUserPhotos();
+                    req13.limit = 80;
+                    req13.offset = 0;
+                    req13.max_id = 0;
+                    req13.user_id = MessagesController.getInstance(this.currentAccount).getInputUser(id);
+                    ConnectionsManager.getInstance(this.currentAccount).sendRequest(req13, new FileRefController$$Lambda$11(this, locationKey, parentKey));
                     return;
                 }
-                TL_messages_search req9 = new TL_messages_search();
-                req9.filter = new TL_inputMessagesFilterChatPhotos();
-                req9.limit = 80;
-                req9.offset_id = 0;
-                req9.var_q = TtmlNode.ANONYMOUS_REGION_ID;
-                req9.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(id);
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req9, new FileRefController$$Lambda$11(this, locationKey, parentKey));
+                TL_messages_search req14 = new TL_messages_search();
+                req14.filter = new TL_inputMessagesFilterChatPhotos();
+                req14.limit = 80;
+                req14.offset_id = 0;
+                req14.q = "";
+                req14.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(id);
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req14, new FileRefController$$Lambda$12(this, locationKey, parentKey));
             } else if (string.startsWith("sent_")) {
                 String[] params = string.split("_");
                 if (params.length == 3) {
@@ -386,13 +400,13 @@ public class FileRefController {
                     if (channelId != 0) {
                         req = new TL_channels_getMessages();
                         req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(channelId);
-                        req.var_id.add(Utilities.parseInt(params[2]));
-                        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new FileRefController$$Lambda$12(this, locationKey, parentKey));
+                        req.id.add(Utilities.parseInt(params[2]));
+                        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new FileRefController$$Lambda$13(this, locationKey, parentKey));
                         return;
                     }
                     req2 = new TL_messages_getMessages();
-                    req2.var_id.add(Utilities.parseInt(params[2]));
-                    ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, new FileRefController$$Lambda$13(this, locationKey, parentKey));
+                    req2.id.add(Utilities.parseInt(params[2]));
+                    ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, new FileRefController$$Lambda$14(this, locationKey, parentKey));
                     return;
                 }
                 sendErrorToObject(args, 0);
@@ -403,20 +417,20 @@ public class FileRefController {
             TL_messages_stickerSet stickerSet = (TL_messages_stickerSet) parentObject;
             req3 = new TL_messages_getStickerSet();
             req3.stickerset = new TL_inputStickerSetID();
-            req3.stickerset.var_id = stickerSet.set.var_id;
+            req3.stickerset.id = stickerSet.set.id;
             req3.stickerset.access_hash = stickerSet.set.access_hash;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req3, new FileRefController$$Lambda$14(this, locationKey, parentKey));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req3, new FileRefController$$Lambda$15(this, locationKey, parentKey));
         } else if (parentObject instanceof StickerSetCovered) {
             StickerSetCovered stickerSet2 = (StickerSetCovered) parentObject;
             req3 = new TL_messages_getStickerSet();
             req3.stickerset = new TL_inputStickerSetID();
-            req3.stickerset.var_id = stickerSet2.set.var_id;
+            req3.stickerset.id = stickerSet2.set.id;
             req3.stickerset.access_hash = stickerSet2.set.access_hash;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req3, new FileRefController$$Lambda$15(this, locationKey, parentKey));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req3, new FileRefController$$Lambda$16(this, locationKey, parentKey));
         } else if (parentObject instanceof InputStickerSet) {
             req3 = new TL_messages_getStickerSet();
             req3.stickerset = (InputStickerSet) parentObject;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req3, new FileRefController$$Lambda$16(this, locationKey, parentKey));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req3, new FileRefController$$Lambda$17(this, locationKey, parentKey));
         } else {
             sendErrorToObject(args, 0);
         }
@@ -471,7 +485,7 @@ public class FileRefController {
     }
 
     final /* synthetic */ void lambda$requestReferenceFromServer$12$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
-        onRequestComplete(locationKey, parentKey, response, false);
+        onRequestComplete(locationKey, parentKey, response, true);
     }
 
     final /* synthetic */ void lambda$requestReferenceFromServer$13$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
@@ -479,7 +493,7 @@ public class FileRefController {
     }
 
     final /* synthetic */ void lambda$requestReferenceFromServer$14$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
-        onRequestComplete(locationKey, parentKey, response, true);
+        onRequestComplete(locationKey, parentKey, response, false);
     }
 
     final /* synthetic */ void lambda$requestReferenceFromServer$15$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
@@ -490,9 +504,13 @@ public class FileRefController {
         onRequestComplete(locationKey, parentKey, response, true);
     }
 
+    final /* synthetic */ void lambda$requestReferenceFromServer$17$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
+        onRequestComplete(locationKey, parentKey, response, true);
+    }
+
     private void onUpdateObjectReference(Requester requester, byte[] file_reference) {
         if (BuildVars.DEBUG_VERSION) {
-            FileLog.m10d("fileref updated for " + requester.args[0] + " " + requester.locationKey);
+            FileLog.d("fileref updated for " + requester.args[0] + " " + requester.locationKey);
         }
         TLObject req;
         if (requester.args[0] instanceof TL_inputSingleMedia) {
@@ -501,9 +519,9 @@ public class FileRefController {
             if (objects != null) {
                 TL_inputSingleMedia req2 = requester.args[0];
                 if (req2.media instanceof TL_inputMediaDocument) {
-                    req2.media.var_id.file_reference = file_reference;
+                    req2.media.id.file_reference = file_reference;
                 } else if (req2.media instanceof TL_inputMediaPhoto) {
-                    ((TL_inputMediaPhoto) req2.media).var_id.file_reference = file_reference;
+                    ((TL_inputMediaPhoto) req2.media).id.file_reference = file_reference;
                 }
                 int index = multiMedia.multi_media.indexOf(req2);
                 if (index >= 0) {
@@ -524,37 +542,37 @@ public class FileRefController {
         } else if (requester.args[0] instanceof TL_messages_sendMedia) {
             TL_messages_sendMedia req3 = requester.args[0];
             if (req3.media instanceof TL_inputMediaDocument) {
-                ((TL_inputMediaDocument) req3.media).var_id.file_reference = file_reference;
+                ((TL_inputMediaDocument) req3.media).id.file_reference = file_reference;
             } else if (req3.media instanceof TL_inputMediaPhoto) {
-                ((TL_inputMediaPhoto) req3.media).var_id.file_reference = file_reference;
+                ((TL_inputMediaPhoto) req3.media).id.file_reference = file_reference;
             }
             SendMessagesHelper.getInstance(this.currentAccount).performSendMessageRequest((TLObject) requester.args[0], (MessageObject) requester.args[1], (String) requester.args[2], (DelayedMessage) requester.args[3], ((Boolean) requester.args[4]).booleanValue(), (DelayedMessage) requester.args[5], null);
         } else if (requester.args[0] instanceof TL_messages_editMessage) {
             TL_messages_editMessage req4 = requester.args[0];
             if (req4.media instanceof TL_inputMediaDocument) {
-                ((TL_inputMediaDocument) req4.media).var_id.file_reference = file_reference;
+                ((TL_inputMediaDocument) req4.media).id.file_reference = file_reference;
             } else if (req4.media instanceof TL_inputMediaPhoto) {
-                ((TL_inputMediaPhoto) req4.media).var_id.file_reference = file_reference;
+                ((TL_inputMediaPhoto) req4.media).id.file_reference = file_reference;
             }
             SendMessagesHelper.getInstance(this.currentAccount).performSendMessageRequest((TLObject) requester.args[0], (MessageObject) requester.args[1], (String) requester.args[2], (DelayedMessage) requester.args[3], ((Boolean) requester.args[4]).booleanValue(), (DelayedMessage) requester.args[5], null);
         } else if (requester.args[0] instanceof TL_messages_saveGif) {
             req = requester.args[0];
-            req.var_id.file_reference = file_reference;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, FileRefController$$Lambda$17.$instance);
+            req.id.file_reference = file_reference;
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, FileRefController$$Lambda$18.$instance);
         } else if (requester.args[0] instanceof TL_messages_saveRecentSticker) {
             req = requester.args[0];
-            req.var_id.file_reference = file_reference;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, FileRefController$$Lambda$18.$instance);
+            req.id.file_reference = file_reference;
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, FileRefController$$Lambda$19.$instance);
         } else if (requester.args[0] instanceof TL_messages_faveSticker) {
             req = requester.args[0];
-            req.var_id.file_reference = file_reference;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, FileRefController$$Lambda$19.$instance);
+            req.id.file_reference = file_reference;
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, FileRefController$$Lambda$20.$instance);
         } else if (requester.args[0] instanceof TL_messages_getAttachedStickers) {
             req = requester.args[0];
             if (req.media instanceof TL_inputStickeredMediaDocument) {
-                req.media.var_id.file_reference = file_reference;
+                req.media.id.file_reference = file_reference;
             } else if (req.media instanceof TL_inputStickeredMediaPhoto) {
-                ((TL_inputStickeredMediaPhoto) req.media).var_id.file_reference = file_reference;
+                ((TL_inputStickeredMediaPhoto) req.media).id.file_reference = file_reference;
             }
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, (RequestDelegate) requester.args[1]);
         } else if (requester.args[1] instanceof FileLoadOperation) {
@@ -565,13 +583,13 @@ public class FileRefController {
         }
     }
 
-    static final /* synthetic */ void lambda$onUpdateObjectReference$17$FileRefController(TLObject response, TL_error error) {
-    }
-
     static final /* synthetic */ void lambda$onUpdateObjectReference$18$FileRefController(TLObject response, TL_error error) {
     }
 
     static final /* synthetic */ void lambda$onUpdateObjectReference$19$FileRefController(TLObject response, TL_error error) {
+    }
+
+    static final /* synthetic */ void lambda$onUpdateObjectReference$20$FileRefController(TLObject response, TL_error error) {
     }
 
     private void sendErrorToObject(Object[] args, int reason) {
@@ -646,11 +664,9 @@ public class FileRefController {
             if (!requester.completed) {
                 requester.completed = true;
                 int i;
-                int a;
                 Chat chat;
                 int size10;
                 ArrayList<Chat> arrayList1;
-                int size;
                 int size2;
                 int b;
                 if (response instanceof messages_Messages) {
@@ -680,11 +696,11 @@ public class FileRefController {
                                 i++;
                             } else if (cache) {
                                 if (!(message.to_id == null || message.to_id.channel_id == 0)) {
-                                    a = 0;
+                                    int a = 0;
                                     int N2 = res.chats.size();
                                     while (a < N2) {
                                         chat = (Chat) res.chats.get(a);
-                                        if (chat.var_id != message.to_id.channel_id) {
+                                        if (chat.id != message.to_id.channel_id) {
                                             a++;
                                         } else if (chat.megagroup) {
                                             message.flags |= Integer.MIN_VALUE;
@@ -697,20 +713,40 @@ public class FileRefController {
                     }
                 } else if (response instanceof WebPage) {
                     result = getFileReference((WebPage) response, requester.location);
+                } else if (response instanceof TL_account_wallPapers) {
+                    TL_account_wallPapers accountWallPapers = (TL_account_wallPapers) response;
+                    size10 = accountWallPapers.wallpapers.size();
+                    for (i = 0; i < size10; i++) {
+                        result = getFileReference(((TL_wallPaper) accountWallPapers.wallpapers.get(i)).document, requester.location);
+                        if (result != null) {
+                            break;
+                        }
+                    }
+                    if (result != null && cache) {
+                        MessagesStorage.getInstance(this.currentAccount).putWallpapers(accountWallPapers.wallpapers, true);
+                    }
+                } else if (response instanceof TL_wallPaper) {
+                    TL_wallPaper wallPaper = (TL_wallPaper) response;
+                    result = getFileReference(wallPaper.document, requester.location);
+                    if (result != null && cache) {
+                        ArrayList<TL_wallPaper> wallpapers = new ArrayList();
+                        wallpapers.add(wallPaper);
+                        MessagesStorage.getInstance(this.currentAccount).putWallpapers(wallpapers, false);
+                    }
                 } else if (response instanceof Vector) {
                     Vector vector = (Vector) response;
                     if (!vector.objects.isEmpty()) {
                         size10 = vector.objects.size();
                         for (i = 0; i < size10; i++) {
-                            TLObject object = vector.objects.get(i);
+                            User object = vector.objects.get(i);
                             if (object instanceof User) {
-                                User user = (User) object;
+                                User user = object;
                                 result = getFileReference(user.photo, requester.location);
                                 if (cache && result != null) {
                                     ArrayList<User> arrayList12 = new ArrayList();
                                     arrayList12.add(user);
                                     MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(arrayList12, null, true, true);
-                                    AndroidUtilities.runOnUIThread(new FileRefController$$Lambda$20(this, user));
+                                    AndroidUtilities.runOnUIThread(new FileRefController$$Lambda$21(this, user));
                                 }
                             } else if (object instanceof Chat) {
                                 chat = (Chat) object;
@@ -719,23 +755,7 @@ public class FileRefController {
                                     arrayList1 = new ArrayList();
                                     arrayList1.add(chat);
                                     MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(null, arrayList1, true, true);
-                                    AndroidUtilities.runOnUIThread(new FileRefController$$Lambda$21(this, chat));
-                                }
-                            } else if (object instanceof WallPaper) {
-                                WallPaper wallPaper = (WallPaper) object;
-                                a = 0;
-                                size = wallPaper.sizes.size();
-                                while (a < size) {
-                                    result = getFileReference((PhotoSize) wallPaper.sizes.get(a), requester.location);
-                                    if (result == null) {
-                                        a++;
-                                    } else if (cache) {
-                                        ArrayList<WallPaper> wallPapers = new ArrayList();
-                                        for (int n = 0; n < size10; n++) {
-                                            wallPapers.add((WallPaper) vector.objects.get(n));
-                                        }
-                                        MessagesStorage.getInstance(this.currentAccount).putWallpapers(wallPapers);
-                                    }
+                                    AndroidUtilities.runOnUIThread(new FileRefController$$Lambda$22(this, chat));
                                 }
                             }
                             if (result != null) {
@@ -757,7 +777,7 @@ public class FileRefController {
                                 arrayList1 = new ArrayList();
                                 arrayList1.add(chat);
                                 MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(null, arrayList1, true, true);
-                                AndroidUtilities.runOnUIThread(new FileRefController$$Lambda$22(this, chat));
+                                AndroidUtilities.runOnUIThread(new FileRefController$$Lambda$23(this, chat));
                             }
                         }
                     }
@@ -783,7 +803,7 @@ public class FileRefController {
                         }
                     }
                     if (cache) {
-                        AndroidUtilities.runOnUIThread(new FileRefController$$Lambda$23(this, stickerSet));
+                        AndroidUtilities.runOnUIThread(new FileRefController$$Lambda$24(this, stickerSet));
                     }
                 } else if (response instanceof TL_messages_recentStickers) {
                     TL_messages_recentStickers recentStickers = (TL_messages_recentStickers) response;
@@ -811,7 +831,7 @@ public class FileRefController {
                     }
                 } else if (response instanceof photos_Photos) {
                     photos_Photos res3 = (photos_Photos) response;
-                    size = res3.photos.size();
+                    int size = res3.photos.size();
                     for (b = 0; b < size; b++) {
                         result = getFileReference((Photo) res3.photos.get(b), requester.location);
                         if (result != null) {
@@ -835,19 +855,19 @@ public class FileRefController {
         return found;
     }
 
-    final /* synthetic */ void lambda$onRequestComplete$20$FileRefController(User user) {
+    final /* synthetic */ void lambda$onRequestComplete$21$FileRefController(User user) {
         MessagesController.getInstance(this.currentAccount).putUser(user, false);
-    }
-
-    final /* synthetic */ void lambda$onRequestComplete$21$FileRefController(Chat chat) {
-        MessagesController.getInstance(this.currentAccount).putChat(chat, false);
     }
 
     final /* synthetic */ void lambda$onRequestComplete$22$FileRefController(Chat chat) {
         MessagesController.getInstance(this.currentAccount).putChat(chat, false);
     }
 
-    final /* synthetic */ void lambda$onRequestComplete$23$FileRefController(TL_messages_stickerSet stickerSet) {
+    final /* synthetic */ void lambda$onRequestComplete$23$FileRefController(Chat chat) {
+        MessagesController.getInstance(this.currentAccount).putChat(chat, false);
+    }
+
+    final /* synthetic */ void lambda$onRequestComplete$24$FileRefController(TL_messages_stickerSet stickerSet) {
         DataQuery.getInstance(this.currentAccount).replaceStickerSet(stickerSet);
     }
 
@@ -897,9 +917,14 @@ public class FileRefController {
             return null;
         }
         if (!(location instanceof TL_inputDocumentFileLocation)) {
-            return getFileReference(document.thumb, location);
-        }
-        if (document.var_id == location.var_id) {
+            int size = document.thumbs.size();
+            for (int a = 0; a < size; a++) {
+                byte[] result = getFileReference((PhotoSize) document.thumbs.get(a), location);
+                if (result != null) {
+                    return result;
+                }
+            }
+        } else if (document.id == location.id) {
             return document.file_reference;
         }
         return null;
@@ -932,7 +957,7 @@ public class FileRefController {
             return null;
         }
         if (location instanceof TL_inputSecureFileLocation) {
-            return photo.var_id == location.var_id ? photo.file_reference : null;
+            return photo.id == location.id ? photo.file_reference : null;
         } else if (!(location instanceof TL_inputFileLocation)) {
             return null;
         } else {

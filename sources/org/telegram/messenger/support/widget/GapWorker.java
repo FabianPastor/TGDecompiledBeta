@@ -1,6 +1,6 @@
 package org.telegram.messenger.support.widget;
 
-import android.support.p000v4.p001os.TraceCompat;
+import android.support.v4.os.TraceCompat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,17 +13,7 @@ import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 
 final class GapWorker implements Runnable {
     static final ThreadLocal<GapWorker> sGapWorker = new ThreadLocal();
-    static Comparator<Task> sTaskComparator = new CLASSNAME();
-    long mFrameIntervalNs;
-    long mPostTimeNs;
-    ArrayList<RecyclerView> mRecyclerViews = new ArrayList();
-    private ArrayList<Task> mTasks = new ArrayList();
-
-    /* renamed from: org.telegram.messenger.support.widget.GapWorker$1 */
-    static class CLASSNAME implements Comparator<Task> {
-        CLASSNAME() {
-        }
-
+    static Comparator<Task> sTaskComparator = new Comparator<Task>() {
         public int compare(Task lhs, Task rhs) {
             int i = -1;
             if ((lhs.view == null ? 1 : 0) != (rhs.view == null ? 1 : 0)) {
@@ -43,7 +33,11 @@ final class GapWorker implements Runnable {
                 return deltaDistanceToItem != 0 ? deltaDistanceToItem : 0;
             }
         }
-    }
+    };
+    long mFrameIntervalNs;
+    long mPostTimeNs;
+    ArrayList<RecyclerView> mRecyclerViews = new ArrayList();
+    private ArrayList<Task> mTasks = new ArrayList();
 
     static class LayoutPrefetchRegistryImpl implements LayoutPrefetchRegistry {
         int mCount;

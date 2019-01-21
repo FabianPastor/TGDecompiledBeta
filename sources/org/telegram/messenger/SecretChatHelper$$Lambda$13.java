@@ -1,11 +1,11 @@
 package org.telegram.messenger;
 
 import android.content.Context;
-import org.telegram.p005ui.ActionBar.AlertDialog;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.User;
+import org.telegram.ui.ActionBar.AlertDialog;
 
 final /* synthetic */ class SecretChatHelper$$Lambda$13 implements RequestDelegate {
     private final SecretChatHelper arg$1;

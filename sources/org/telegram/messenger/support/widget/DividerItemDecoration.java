@@ -23,7 +23,7 @@ public class DividerItemDecoration extends ItemDecoration {
         TypedArray a = context.obtainStyledAttributes(ATTRS);
         this.mDivider = a.getDrawable(0);
         if (this.mDivider == null) {
-            Log.w(TAG, "@android:attr/listDivider was not set in the theme used for this DividerItemDecoration. Please set that attribute all call setDrawable()");
+            Log.w("DividerItem", "@android:attr/listDivider was not set in the theme used for this DividerItemDecoration. Please set that attribute all call setDrawable()");
         }
         a.recycle();
         setOrientation(orientation);

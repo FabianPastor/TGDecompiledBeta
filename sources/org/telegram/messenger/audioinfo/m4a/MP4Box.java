@@ -49,7 +49,7 @@ public class MP4Box<I extends PositionInputStream> {
         int atomLength = this.data.readInt();
         byte[] typeBytes = new byte[4];
         this.data.readFully(typeBytes);
-        String atomType = new String(typeBytes, ASCII);
+        String atomType = new String(typeBytes, "ISO8859_1");
         if (atomLength == 1) {
             atomInput = new RangeInputStream(this.input, 16, this.data.readLong() - 16);
         } else {

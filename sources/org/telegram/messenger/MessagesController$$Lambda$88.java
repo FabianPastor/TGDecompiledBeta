@@ -12,6 +12,6 @@ final /* synthetic */ class MessagesController$$Lambda$88 implements RequestDele
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$completeReadTask$132$MessagesController(tLObject, tL_error);
+        this.arg$1.lambda$markMentionMessageAsRead$136$MessagesController(tLObject, tL_error);
     }
 }

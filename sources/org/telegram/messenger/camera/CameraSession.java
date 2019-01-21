@@ -19,7 +19,12 @@ import org.telegram.messenger.FileLog;
 
 public class CameraSession {
     public static final int ORIENTATION_HYSTERESIS = 5;
-    private AutoFocusCallback autoFocusCallback = new CLASSNAME();
+    private AutoFocusCallback autoFocusCallback = new AutoFocusCallback() {
+        public void onAutoFocus(boolean success, Camera camera) {
+            if (success) {
+            }
+        }
+    };
     protected CameraInfo cameraInfo;
     private String currentFlashMode;
     private int currentOrientation;
@@ -36,17 +41,6 @@ public class CameraSession {
     private final Size pictureSize;
     private final Size previewSize;
     private boolean sameTakePictureOrientation;
-
-    /* renamed from: org.telegram.messenger.camera.CameraSession$1 */
-    class CLASSNAME implements AutoFocusCallback {
-        CLASSNAME() {
-        }
-
-        public void onAutoFocus(boolean success, Camera camera) {
-            if (success) {
-            }
-        }
-    }
 
     public CameraSession(CameraInfo info, Size preview, Size picture, int format) {
         this.previewSize = preview;
@@ -163,9 +157,9 @@ public class CameraSession {
             try {
                 params = camera.getParameters();
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
             } catch (Throwable e2) {
-                FileLog.m13e(e2);
+                FileLog.e(e2);
                 return;
             }
             Camera.getCameraInfo(this.cameraInfo.getCameraId(), info);
@@ -204,11 +198,11 @@ public class CameraSession {
             this.diffOrientation = this.currentOrientation - displayOrientation;
             if (params != null) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m10d("set preview size = " + this.previewSize.getWidth() + " " + this.previewSize.getHeight());
+                    FileLog.d("set preview size = " + this.previewSize.getWidth() + " " + this.previewSize.getHeight());
                 }
                 params.setPreviewSize(this.previewSize.getWidth(), this.previewSize.getHeight());
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m10d("set picture size = " + this.pictureSize.getWidth() + " " + this.pictureSize.getHeight());
+                    FileLog.d("set picture size = " + this.pictureSize.getWidth() + " " + this.pictureSize.getHeight());
                 }
                 params.setPictureSize(this.pictureSize.getWidth(), this.pictureSize.getHeight());
                 params.setPictureFormat(this.pictureFormat);
@@ -267,9 +261,9 @@ public class CameraSession {
             try {
                 params = camera.getParameters();
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
             } catch (Throwable e2) {
-                FileLog.m13e(e2);
+                FileLog.e(e2);
                 return;
             }
             Camera.getCameraInfo(this.cameraInfo.getCameraId(), info);
@@ -357,7 +351,7 @@ public class CameraSession {
                 try {
                     parameters = camera.getParameters();
                 } catch (Throwable e) {
-                    FileLog.m13e(e);
+                    FileLog.e(e);
                 }
                 if (parameters != null) {
                     parameters.setFocusMode("auto");
@@ -373,12 +367,12 @@ public class CameraSession {
                         camera.setParameters(parameters);
                         camera.autoFocus(this.autoFocusCallback);
                     } catch (Throwable e2) {
-                        FileLog.m13e(e2);
+                        FileLog.e(e2);
                     }
                 }
             }
         } catch (Throwable e22) {
-            FileLog.m13e(e22);
+            FileLog.e(e22);
         }
     }
 
@@ -455,7 +449,7 @@ public class CameraSession {
             Camera.getCameraInfo(this.cameraInfo.getCameraId(), info);
             return getDisplayOrientation(info, true);
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return 0;
         }
     }

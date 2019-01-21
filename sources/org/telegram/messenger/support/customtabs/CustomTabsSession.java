@@ -37,10 +37,10 @@ public final class CustomTabsSession {
 
     public boolean setActionButton(Bitmap icon, String description) {
         Bundle bundle = new Bundle();
-        bundle.putParcelable(CustomTabsIntent.KEY_ICON, icon);
-        bundle.putString(CustomTabsIntent.KEY_DESCRIPTION, description);
+        bundle.putParcelable("android.support.customtabs.customaction.ICON", icon);
+        bundle.putString("android.support.customtabs.customaction.DESCRIPTION", description);
         Bundle metaBundle = new Bundle();
-        metaBundle.putBundle(CustomTabsIntent.EXTRA_ACTION_BUTTON_BUNDLE, bundle);
+        metaBundle.putBundle("android.support.customtabs.extra.ACTION_BUTTON_BUNDLE", bundle);
         try {
             return this.mService.updateVisuals(this.mCallback, metaBundle);
         } catch (RemoteException e) {
@@ -50,9 +50,9 @@ public final class CustomTabsSession {
 
     public boolean setSecondaryToolbarViews(RemoteViews remoteViews, int[] clickableIDs, PendingIntent pendingIntent) {
         Bundle bundle = new Bundle();
-        bundle.putParcelable(CustomTabsIntent.EXTRA_REMOTEVIEWS, remoteViews);
-        bundle.putIntArray(CustomTabsIntent.EXTRA_REMOTEVIEWS_VIEW_IDS, clickableIDs);
-        bundle.putParcelable(CustomTabsIntent.EXTRA_REMOTEVIEWS_PENDINGINTENT, pendingIntent);
+        bundle.putParcelable("android.support.customtabs.extra.EXTRA_REMOTEVIEWS", remoteViews);
+        bundle.putIntArray("android.support.customtabs.extra.EXTRA_REMOTEVIEWS_VIEW_IDS", clickableIDs);
+        bundle.putParcelable("android.support.customtabs.extra.EXTRA_REMOTEVIEWS_PENDINGINTENT", pendingIntent);
         try {
             return this.mService.updateVisuals(this.mCallback, bundle);
         } catch (RemoteException e) {
@@ -63,11 +63,11 @@ public final class CustomTabsSession {
     @Deprecated
     public boolean setToolbarItem(int id, Bitmap icon, String description) {
         Bundle bundle = new Bundle();
-        bundle.putInt(CustomTabsIntent.KEY_ID, id);
-        bundle.putParcelable(CustomTabsIntent.KEY_ICON, icon);
-        bundle.putString(CustomTabsIntent.KEY_DESCRIPTION, description);
+        bundle.putInt("android.support.customtabs.customaction.ID", id);
+        bundle.putParcelable("android.support.customtabs.customaction.ICON", icon);
+        bundle.putString("android.support.customtabs.customaction.DESCRIPTION", description);
         Bundle metaBundle = new Bundle();
-        metaBundle.putBundle(CustomTabsIntent.EXTRA_ACTION_BUTTON_BUNDLE, bundle);
+        metaBundle.putBundle("android.support.customtabs.extra.ACTION_BUTTON_BUNDLE", bundle);
         try {
             return this.mService.updateVisuals(this.mCallback, metaBundle);
         } catch (RemoteException e) {

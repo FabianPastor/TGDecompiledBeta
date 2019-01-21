@@ -6,8 +6,6 @@ import android.os.Environment;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Base64;
-import com.google.android.exoplayer2.CLASSNAMEC;
-import com.google.android.exoplayer2.DefaultRenderersFactory;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +25,7 @@ public class SharedConfig {
     public static ProxyInfo currentProxy;
     public static boolean customTabs = true;
     public static boolean directShare = true;
-    public static int fontSize = AndroidUtilities.m9dp(16.0f);
+    public static int fontSize = AndroidUtilities.dp(16.0f);
     public static boolean groupPhotosEnabled = true;
     public static boolean hasCameraCache;
     public static boolean inappCamera = true;
@@ -39,19 +37,19 @@ public class SharedConfig {
     public static long lastUptimeMillis;
     private static final Object localIdSync = new Object();
     public static int mapPreviewType = 2;
-    public static String passcodeHash = TtmlNode.ANONYMOUS_REGION_ID;
+    public static String passcodeHash = "";
     public static long passcodeRetryInMs;
     public static byte[] passcodeSalt = new byte[0];
     public static int passcodeType;
     public static int passportConfigHash;
-    private static String passportConfigJson = TtmlNode.ANONYMOUS_REGION_ID;
+    private static String passportConfigJson = "";
     private static HashMap<String, String> passportConfigMap;
     public static boolean playOrderReversed;
     public static ArrayList<ProxyInfo> proxyList = new ArrayList();
     private static boolean proxyListLoaded;
     public static byte[] pushAuthKey;
     public static byte[] pushAuthKeyId;
-    public static String pushString = TtmlNode.ANONYMOUS_REGION_ID;
+    public static String pushString = "";
     public static boolean raiseToSpeak = true;
     public static int repeatMode;
     public static boolean roundCamera16to9 = true;
@@ -59,6 +57,7 @@ public class SharedConfig {
     public static boolean saveStreamMedia = true;
     public static boolean saveToGallery;
     public static boolean shuffleMusic;
+    public static boolean sortContactsByName;
     public static boolean streamAllVideo = false;
     public static boolean streamMedia = true;
     public static int suggestStickers;
@@ -85,16 +84,16 @@ public class SharedConfig {
             this.password = pw;
             this.secret = s;
             if (this.address == null) {
-                this.address = TtmlNode.ANONYMOUS_REGION_ID;
+                this.address = "";
             }
             if (this.password == null) {
-                this.password = TtmlNode.ANONYMOUS_REGION_ID;
+                this.password = "";
             }
             if (this.username == null) {
-                this.username = TtmlNode.ANONYMOUS_REGION_ID;
+                this.username = "";
             }
             if (this.secret == null) {
-                this.secret = TtmlNode.ANONYMOUS_REGION_ID;
+                this.secret = "";
             }
         }
     }
@@ -109,7 +108,7 @@ public class SharedConfig {
                 Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", 0).edit();
                 editor.putBoolean("saveIncomingPhotos", saveIncomingPhotos);
                 editor.putString("passcodeHash1", passcodeHash);
-                editor.putString("passcodeSalt", passcodeSalt.length > 0 ? Base64.encodeToString(passcodeSalt, 0) : TtmlNode.ANONYMOUS_REGION_ID);
+                editor.putString("passcodeSalt", passcodeSalt.length > 0 ? Base64.encodeToString(passcodeSalt, 0) : "");
                 editor.putBoolean("appLocked", appLocked);
                 editor.putInt("passcodeType", passcodeType);
                 editor.putLong("passcodeRetryInMs", passcodeRetryInMs);
@@ -122,13 +121,14 @@ public class SharedConfig {
                 editor.putBoolean("useFingerprint", useFingerprint);
                 editor.putBoolean("allowScreenCapture", allowScreenCapture);
                 editor.putString("pushString2", pushString);
-                editor.putString("pushAuthKey", pushAuthKey != null ? Base64.encodeToString(pushAuthKey, 0) : TtmlNode.ANONYMOUS_REGION_ID);
+                editor.putString("pushAuthKey", pushAuthKey != null ? Base64.encodeToString(pushAuthKey, 0) : "");
                 editor.putInt("lastLocalId", lastLocalId);
                 editor.putString("passportConfigJson", passportConfigJson);
                 editor.putInt("passportConfigHash", passportConfigHash);
+                editor.putBoolean("sortContactsByName", sortContactsByName);
                 editor.commit();
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
             }
         }
     }
@@ -149,7 +149,7 @@ public class SharedConfig {
             }
             SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", 0);
             saveIncomingPhotos = preferences.getBoolean("saveIncomingPhotos", false);
-            passcodeHash = preferences.getString("passcodeHash1", TtmlNode.ANONYMOUS_REGION_ID);
+            passcodeHash = preferences.getString("passcodeHash1", "");
             appLocked = preferences.getBoolean("appLocked", false);
             passcodeType = preferences.getInt("passcodeType", 0);
             passcodeRetryInMs = preferences.getLong("passcodeRetryInMs", 0);
@@ -162,8 +162,8 @@ public class SharedConfig {
             lastUpdateVersion = preferences.getString("lastUpdateVersion2", "3.5");
             allowScreenCapture = preferences.getBoolean("allowScreenCapture", false);
             lastLocalId = preferences.getInt("lastLocalId", -210000);
-            pushString = preferences.getString("pushString2", TtmlNode.ANONYMOUS_REGION_ID);
-            passportConfigJson = preferences.getString("passportConfigJson", TtmlNode.ANONYMOUS_REGION_ID);
+            pushString = preferences.getString("pushString2", "");
+            passportConfigJson = preferences.getString("passportConfigJson", "");
             passportConfigHash = preferences.getInt("passportConfigHash", 0);
             String authKeyString = preferences.getString("pushAuthKey", null);
             if (!TextUtils.isEmpty(authKeyString)) {
@@ -172,7 +172,7 @@ public class SharedConfig {
             if (passcodeHash.length() > 0 && lastPauseTime == 0) {
                 lastPauseTime = (int) ((System.currentTimeMillis() / 1000) - 600);
             }
-            String passcodeSaltString = preferences.getString("passcodeSalt", TtmlNode.ANONYMOUS_REGION_ID);
+            String passcodeSaltString = preferences.getString("passcodeSalt", "");
             if (passcodeSaltString.length() > 0) {
                 passcodeSalt = Base64.decode(passcodeSaltString, 0);
             } else {
@@ -199,6 +199,7 @@ public class SharedConfig {
             saveStreamMedia = preferences.getBoolean("saveStreamMedia", true);
             streamAllVideo = preferences.getBoolean("streamAllVideo", BuildVars.DEBUG_VERSION);
             suggestStickers = preferences.getInt("suggestStickers", 0);
+            sortContactsByName = preferences.getBoolean("sortContactsByName", false);
             configLoaded = true;
         }
     }
@@ -208,7 +209,7 @@ public class SharedConfig {
         if (badPasscodeTries >= 3) {
             switch (badPasscodeTries) {
                 case 3:
-                    passcodeRetryInMs = DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS;
+                    passcodeRetryInMs = 5000;
                     break;
                 case 4:
                     passcodeRetryInMs = 10000;
@@ -254,7 +255,7 @@ public class SharedConfig {
                     passportConfigMap.put(key.toUpperCase(), object.getString(key).toUpperCase());
                 }
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
             }
         }
         return passportConfigMap;
@@ -272,7 +273,7 @@ public class SharedConfig {
             try {
                 passcodeSalt = new byte[16];
                 Utilities.random.nextBytes(passcodeSalt);
-                passcodeBytes = passcode.getBytes(CLASSNAMEC.UTF8_NAME);
+                passcodeBytes = passcode.getBytes("UTF-8");
                 bytes = new byte[(passcodeBytes.length + 32)];
                 System.arraycopy(passcodeSalt, 0, bytes, 0, 16);
                 System.arraycopy(passcodeBytes, 0, bytes, 16, passcodeBytes.length);
@@ -281,19 +282,19 @@ public class SharedConfig {
                 saveConfig();
                 return result;
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
                 return result;
             }
         }
         try {
-            passcodeBytes = passcode.getBytes(CLASSNAMEC.UTF8_NAME);
+            passcodeBytes = passcode.getBytes("UTF-8");
             bytes = new byte[(passcodeBytes.length + 32)];
             System.arraycopy(passcodeSalt, 0, bytes, 0, 16);
             System.arraycopy(passcodeBytes, 0, bytes, 16, passcodeBytes.length);
             System.arraycopy(passcodeSalt, 0, bytes, passcodeBytes.length + 16, 16);
             return passcodeHash.equals(Utilities.bytesToHex(Utilities.computeSHA256(bytes, 0, bytes.length)));
         } catch (Throwable e2) {
-            FileLog.m13e(e2);
+            FileLog.e(e2);
             return result;
         }
     }
@@ -305,7 +306,7 @@ public class SharedConfig {
         passcodeRetryInMs = 0;
         lastUptimeMillis = 0;
         badPasscodeTries = 0;
-        passcodeHash = TtmlNode.ANONYMOUS_REGION_ID;
+        passcodeHash = "";
         passcodeSalt = new byte[0];
         autoLockIn = 3600;
         lastPauseTime = 0;
@@ -407,6 +408,13 @@ public class SharedConfig {
         editor.commit();
     }
 
+    public static void toggleSortContactsByName() {
+        sortContactsByName = !sortContactsByName;
+        Editor editor = MessagesController.getGlobalMainSettings().edit();
+        editor.putBoolean("sortContactsByName", sortContactsByName);
+        editor.commit();
+    }
+
     public static void toggleStreamAllVideo() {
         streamAllVideo = !streamAllVideo;
         Editor editor = MessagesController.getGlobalMainSettings().edit();
@@ -446,10 +454,10 @@ public class SharedConfig {
         if (!proxyListLoaded) {
             ProxyInfo info;
             SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
-            String proxyAddress = preferences.getString("proxy_ip", TtmlNode.ANONYMOUS_REGION_ID);
-            String proxyUsername = preferences.getString("proxy_user", TtmlNode.ANONYMOUS_REGION_ID);
-            String proxyPassword = preferences.getString("proxy_pass", TtmlNode.ANONYMOUS_REGION_ID);
-            String proxySecret = preferences.getString("proxy_secret", TtmlNode.ANONYMOUS_REGION_ID);
+            String proxyAddress = preferences.getString("proxy_ip", "");
+            String proxyUsername = preferences.getString("proxy_user", "");
+            String proxyPassword = preferences.getString("proxy_pass", "");
+            String proxySecret = preferences.getString("proxy_secret", "");
             int proxyPort = preferences.getInt("proxy_port", 1080);
             proxyListLoaded = true;
             proxyList.clear();
@@ -484,14 +492,14 @@ public class SharedConfig {
         for (int a = 0; a < count; a++) {
             String str;
             ProxyInfo info = (ProxyInfo) proxyList.get(a);
-            serializedData.writeString(info.address != null ? info.address : TtmlNode.ANONYMOUS_REGION_ID);
+            serializedData.writeString(info.address != null ? info.address : "");
             serializedData.writeInt32(info.port);
-            serializedData.writeString(info.username != null ? info.username : TtmlNode.ANONYMOUS_REGION_ID);
-            serializedData.writeString(info.password != null ? info.password : TtmlNode.ANONYMOUS_REGION_ID);
+            serializedData.writeString(info.username != null ? info.username : "");
+            serializedData.writeString(info.password != null ? info.password : "");
             if (info.secret != null) {
                 str = info.secret;
             } else {
-                str = TtmlNode.ANONYMOUS_REGION_ID;
+                str = "";
             }
             serializedData.writeString(str);
         }
@@ -519,16 +527,16 @@ public class SharedConfig {
             SharedPreferences preferences = MessagesController.getGlobalMainSettings();
             boolean enabled = preferences.getBoolean("proxy_enabled", false);
             Editor editor = preferences.edit();
-            editor.putString("proxy_ip", TtmlNode.ANONYMOUS_REGION_ID);
-            editor.putString("proxy_pass", TtmlNode.ANONYMOUS_REGION_ID);
-            editor.putString("proxy_user", TtmlNode.ANONYMOUS_REGION_ID);
-            editor.putString("proxy_secret", TtmlNode.ANONYMOUS_REGION_ID);
+            editor.putString("proxy_ip", "");
+            editor.putString("proxy_pass", "");
+            editor.putString("proxy_user", "");
+            editor.putString("proxy_secret", "");
             editor.putInt("proxy_port", 1080);
             editor.putBoolean("proxy_enabled", false);
             editor.putBoolean("proxy_enabled_calls", false);
             editor.commit();
             if (enabled) {
-                ConnectionsManager.setProxySettings(false, TtmlNode.ANONYMOUS_REGION_ID, 0, TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID, TtmlNode.ANONYMOUS_REGION_ID);
+                ConnectionsManager.setProxySettings(false, "", 0, "", "", "");
             }
         }
         proxyList.remove(proxyInfo);
@@ -559,7 +567,7 @@ public class SharedConfig {
                 new File(videoPath, ".nomedia").createNewFile();
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 }

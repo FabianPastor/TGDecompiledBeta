@@ -65,7 +65,7 @@ public class LinearSmoothScroller extends SmoothScroller {
     }
 
     protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
-        return MILLISECONDS_PER_INCH / ((float) displayMetrics.densityDpi);
+        return 25.0f / ((float) displayMetrics.densityDpi);
     }
 
     protected int calculateTimeForDeceleration(int dx) {
@@ -101,7 +101,7 @@ public class LinearSmoothScroller extends SmoothScroller {
         this.mTargetVector = scrollVector;
         this.mInterimTargetDx = (int) (scrollVector.x * 10000.0f);
         this.mInterimTargetDy = (int) (scrollVector.y * 10000.0f);
-        action.update((int) (((float) this.mInterimTargetDx) * TARGET_SEEK_EXTRA_SCROLL_RATIO), (int) (((float) this.mInterimTargetDy) * TARGET_SEEK_EXTRA_SCROLL_RATIO), (int) (((float) calculateTimeForScrolling(10000)) * TARGET_SEEK_EXTRA_SCROLL_RATIO), this.mLinearInterpolator);
+        action.update((int) (((float) this.mInterimTargetDx) * 1.2f), (int) (((float) this.mInterimTargetDy) * 1.2f), (int) (((float) calculateTimeForScrolling(10000)) * 1.2f), this.mLinearInterpolator);
     }
 
     private int clampApplyScroll(int tmpDt, int dt) {
@@ -157,7 +157,7 @@ public class LinearSmoothScroller extends SmoothScroller {
         if (layoutManager instanceof ScrollVectorProvider) {
             return ((ScrollVectorProvider) layoutManager).computeScrollVectorForPosition(targetPosition);
         }
-        Log.w(TAG, "You should override computeScrollVectorForPosition when the LayoutManager does not implement " + ScrollVectorProvider.class.getCanonicalName());
+        Log.w("LinearSmoothScroller", "You should override computeScrollVectorForPosition when the LayoutManager does not implement " + ScrollVectorProvider.class.getCanonicalName());
         return null;
     }
 }

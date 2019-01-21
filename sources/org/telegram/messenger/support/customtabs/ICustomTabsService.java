@@ -33,7 +33,7 @@ public interface ICustomTabsService extends IInterface {
             }
 
             public String getInterfaceDescriptor() {
-                return Stub.DESCRIPTOR;
+                return "android.support.customtabs.ICustomTabsService";
             }
 
             public boolean warmup(long flags) throws RemoteException {
@@ -41,7 +41,7 @@ public interface ICustomTabsService extends IInterface {
                 Parcel _data = Parcel.obtain();
                 Parcel _reply = Parcel.obtain();
                 try {
-                    _data.writeInterfaceToken(Stub.DESCRIPTOR);
+                    _data.writeInterfaceToken("android.support.customtabs.ICustomTabsService");
                     _data.writeLong(flags);
                     this.mRemote.transact(2, _data, _reply, 0);
                     _reply.readException();
@@ -62,7 +62,7 @@ public interface ICustomTabsService extends IInterface {
                 Parcel _data = Parcel.obtain();
                 Parcel _reply = Parcel.obtain();
                 try {
-                    _data.writeInterfaceToken(Stub.DESCRIPTOR);
+                    _data.writeInterfaceToken("android.support.customtabs.ICustomTabsService");
                     _data.writeStrongBinder(callback != null ? callback.asBinder() : null);
                     this.mRemote.transact(3, _data, _reply, 0);
                     _reply.readException();
@@ -83,7 +83,7 @@ public interface ICustomTabsService extends IInterface {
                 Parcel _data = Parcel.obtain();
                 Parcel _reply = Parcel.obtain();
                 try {
-                    _data.writeInterfaceToken(Stub.DESCRIPTOR);
+                    _data.writeInterfaceToken("android.support.customtabs.ICustomTabsService");
                     _data.writeStrongBinder(callback != null ? callback.asBinder() : null);
                     if (url != null) {
                         _data.writeInt(1);
@@ -117,7 +117,7 @@ public interface ICustomTabsService extends IInterface {
                 Parcel _reply = Parcel.obtain();
                 try {
                     Bundle _result;
-                    _data.writeInterfaceToken(Stub.DESCRIPTOR);
+                    _data.writeInterfaceToken("android.support.customtabs.ICustomTabsService");
                     _data.writeString(commandName);
                     if (args != null) {
                         _data.writeInt(1);
@@ -146,7 +146,7 @@ public interface ICustomTabsService extends IInterface {
                 Parcel _data = Parcel.obtain();
                 Parcel _reply = Parcel.obtain();
                 try {
-                    _data.writeInterfaceToken(Stub.DESCRIPTOR);
+                    _data.writeInterfaceToken("android.support.customtabs.ICustomTabsService");
                     _data.writeStrongBinder(callback != null ? callback.asBinder() : null);
                     if (bundle != null) {
                         _data.writeInt(1);
@@ -173,7 +173,7 @@ public interface ICustomTabsService extends IInterface {
                 Parcel _data = Parcel.obtain();
                 Parcel _reply = Parcel.obtain();
                 try {
-                    _data.writeInterfaceToken(Stub.DESCRIPTOR);
+                    _data.writeInterfaceToken("android.support.customtabs.ICustomTabsService");
                     _data.writeStrongBinder(callback != null ? callback.asBinder() : null);
                     if (postMessageOrigin != null) {
                         _data.writeInt(1);
@@ -199,7 +199,7 @@ public interface ICustomTabsService extends IInterface {
                 Parcel _data = Parcel.obtain();
                 Parcel _reply = Parcel.obtain();
                 try {
-                    _data.writeInterfaceToken(Stub.DESCRIPTOR);
+                    _data.writeInterfaceToken("android.support.customtabs.ICustomTabsService");
                     _data.writeStrongBinder(callback != null ? callback.asBinder() : null);
                     _data.writeString(message);
                     if (extras != null) {
@@ -220,14 +220,14 @@ public interface ICustomTabsService extends IInterface {
         }
 
         public Stub() {
-            attachInterface(this, DESCRIPTOR);
+            attachInterface(this, "android.support.customtabs.ICustomTabsService");
         }
 
         public static ICustomTabsService asInterface(IBinder obj) {
             if (obj == null) {
                 return null;
             }
-            IInterface iin = obj.queryLocalInterface(DESCRIPTOR);
+            IInterface iin = obj.queryLocalInterface("android.support.customtabs.ICustomTabsService");
             return (iin == null || !(iin instanceof ICustomTabsService)) ? new Proxy(obj) : (ICustomTabsService) iin;
         }
 
@@ -243,19 +243,19 @@ public interface ICustomTabsService extends IInterface {
             Bundle _arg12;
             switch (code) {
                 case 2:
-                    data.enforceInterface(DESCRIPTOR);
+                    data.enforceInterface("android.support.customtabs.ICustomTabsService");
                     _arg21 = warmup(data.readLong());
                     reply.writeNoException();
                     reply.writeInt(_arg21 ? 1 : 0);
                     return true;
                 case 3:
-                    data.enforceInterface(DESCRIPTOR);
+                    data.enforceInterface("android.support.customtabs.ICustomTabsService");
                     boolean _arg13 = newSession(org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder()));
                     reply.writeNoException();
                     reply.writeInt(_arg13 ? 1 : 0);
                     return true;
                 case 4:
-                    data.enforceInterface(DESCRIPTOR);
+                    data.enforceInterface("android.support.customtabs.ICustomTabsService");
                     _arg0 = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder());
                     if (data.readInt() != 0) {
                         _arg11 = (Uri) Uri.CREATOR.createFromParcel(data);
@@ -272,7 +272,7 @@ public interface ICustomTabsService extends IInterface {
                     reply.writeInt(_result1 ? 1 : 0);
                     return true;
                 case 5:
-                    data.enforceInterface(DESCRIPTOR);
+                    data.enforceInterface("android.support.customtabs.ICustomTabsService");
                     String _arg01 = data.readString();
                     if (data.readInt() != 0) {
                         _arg12 = (Bundle) Bundle.CREATOR.createFromParcel(data);
@@ -289,7 +289,7 @@ public interface ICustomTabsService extends IInterface {
                     }
                     return true;
                 case 6:
-                    data.enforceInterface(DESCRIPTOR);
+                    data.enforceInterface("android.support.customtabs.ICustomTabsService");
                     _arg0 = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder());
                     if (data.readInt() != 0) {
                         _arg12 = (Bundle) Bundle.CREATOR.createFromParcel(data);
@@ -301,7 +301,7 @@ public interface ICustomTabsService extends IInterface {
                     reply.writeInt(_arg21 ? 1 : 0);
                     return true;
                 case 7:
-                    data.enforceInterface(DESCRIPTOR);
+                    data.enforceInterface("android.support.customtabs.ICustomTabsService");
                     _arg0 = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder());
                     if (data.readInt() != 0) {
                         _arg11 = (Uri) Uri.CREATOR.createFromParcel(data);
@@ -313,7 +313,7 @@ public interface ICustomTabsService extends IInterface {
                     reply.writeInt(_arg21 ? 1 : 0);
                     return true;
                 case 8:
-                    data.enforceInterface(DESCRIPTOR);
+                    data.enforceInterface("android.support.customtabs.ICustomTabsService");
                     _arg0 = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder());
                     String _arg1 = data.readString();
                     if (data.readInt() != 0) {
@@ -326,7 +326,7 @@ public interface ICustomTabsService extends IInterface {
                     reply.writeInt(_result);
                     return true;
                 case 1598968902:
-                    reply.writeString(DESCRIPTOR);
+                    reply.writeString("android.support.customtabs.ICustomTabsService");
                     return true;
                 default:
                     return super.onTransact(code, data, reply, flags);

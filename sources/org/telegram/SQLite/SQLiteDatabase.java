@@ -64,7 +64,7 @@ public class SQLiteDatabase {
                 closedb(this.sqliteHandle);
             } catch (SQLiteException e) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m12e(e.getMessage(), e);
+                    FileLog.e(e.getMessage(), e);
                 }
             }
             this.isOpen = false;

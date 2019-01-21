@@ -1,7 +1,5 @@
 package org.telegram.messenger.time;
 
-import com.google.android.exoplayer2.extractor.p003ts.TsExtractor;
-import com.googlecode.mp4parser.boxes.microsoft.XtraBox;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
@@ -515,10 +513,10 @@ public class FastDatePrinter implements Serializable, DatePrinter {
                 case 'F':
                     rule = selectNumberRule(8, tokenLen);
                     break;
-                case TsExtractor.TS_SYNC_BYTE /*71*/:
+                case 'G':
                     rule = new TextField(0, ERAs);
                     break;
-                case XtraBox.MP4_XTRA_BT_GUID /*72*/:
+                case 'H':
                     rule = selectNumberRule(11, tokenLen);
                     break;
                 case 'K':

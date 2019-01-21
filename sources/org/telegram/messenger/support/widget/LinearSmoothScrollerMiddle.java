@@ -24,7 +24,7 @@ public class LinearSmoothScrollerMiddle extends SmoothScroller {
     protected PointF mTargetVector;
 
     public LinearSmoothScrollerMiddle(Context context) {
-        this.MILLISECONDS_PER_PX = MILLISECONDS_PER_INCH / ((float) context.getResources().getDisplayMetrics().densityDpi);
+        this.MILLISECONDS_PER_PX = 25.0f / ((float) context.getResources().getDisplayMetrics().densityDpi);
     }
 
     protected void onStart() {
@@ -75,7 +75,7 @@ public class LinearSmoothScrollerMiddle extends SmoothScroller {
         this.mTargetVector = scrollVector;
         this.mInterimTargetDx = (int) (scrollVector.x * 10000.0f);
         this.mInterimTargetDy = (int) (scrollVector.y * 10000.0f);
-        action.update((int) (((float) this.mInterimTargetDx) * TARGET_SEEK_EXTRA_SCROLL_RATIO), (int) (((float) this.mInterimTargetDy) * TARGET_SEEK_EXTRA_SCROLL_RATIO), (int) (((float) calculateTimeForScrolling(10000)) * TARGET_SEEK_EXTRA_SCROLL_RATIO), this.mLinearInterpolator);
+        action.update((int) (((float) this.mInterimTargetDx) * 1.2f), (int) (((float) this.mInterimTargetDy) * 1.2f), (int) (((float) calculateTimeForScrolling(10000)) * 1.2f), this.mLinearInterpolator);
     }
 
     private int clampApplyScroll(int tmpDt, int dt) {

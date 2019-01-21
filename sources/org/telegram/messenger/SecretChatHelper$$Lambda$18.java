@@ -1,9 +1,9 @@
 package org.telegram.messenger;
 
 import android.content.Context;
-import org.telegram.p005ui.ActionBar.AlertDialog;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.User;
+import org.telegram.ui.ActionBar.AlertDialog;
 
 final /* synthetic */ class SecretChatHelper$$Lambda$18 implements Runnable {
     private final SecretChatHelper arg$1;

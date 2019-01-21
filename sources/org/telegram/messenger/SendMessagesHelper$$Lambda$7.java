@@ -1,10 +1,10 @@
 package org.telegram.messenger;
 
-import org.telegram.p005ui.ChatActivity;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.KeyboardButton;
 import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.ui.ChatActivity;
 
 final /* synthetic */ class SendMessagesHelper$$Lambda$7 implements RequestDelegate {
     private final SendMessagesHelper arg$1;

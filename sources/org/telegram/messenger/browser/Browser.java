@@ -32,14 +32,14 @@ import org.telegram.messenger.support.customtabs.CustomTabsSession;
 import org.telegram.messenger.support.customtabsclient.shared.CustomTabsHelper;
 import org.telegram.messenger.support.customtabsclient.shared.ServiceConnection;
 import org.telegram.messenger.support.customtabsclient.shared.ServiceConnectionCallback;
-import org.telegram.p005ui.ActionBar.AlertDialog;
-import org.telegram.p005ui.ActionBar.Theme;
-import org.telegram.p005ui.LaunchActivity;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
 import org.telegram.tgnet.TLRPC.TL_messages_getWebPagePreview;
 import org.telegram.tgnet.TLRPC.TL_webPage;
+import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.LaunchActivity;
 
 public class Browser {
     private static WeakReference<Activity> currentCustomTabsActivity;
@@ -49,32 +49,11 @@ public class Browser {
     private static CustomTabsServiceConnection customTabsServiceConnection;
     private static CustomTabsSession customTabsSession;
 
-    /* renamed from: org.telegram.messenger.browser.Browser$1 */
-    static class CLASSNAME implements ServiceConnectionCallback {
-        CLASSNAME() {
-        }
-
-        public void onServiceConnected(CustomTabsClient client) {
-            Browser.customTabsClient = client;
-            if (SharedConfig.customTabs && Browser.customTabsClient != null) {
-                try {
-                    Browser.customTabsClient.warmup(0);
-                } catch (Throwable e) {
-                    FileLog.m13e(e);
-                }
-            }
-        }
-
-        public void onServiceDisconnected() {
-            Browser.customTabsClient = null;
-        }
-    }
-
     private static class NavigationCallback extends CustomTabsCallback {
         private NavigationCallback() {
         }
 
-        /* synthetic */ NavigationCallback(CLASSNAME x0) {
+        /* synthetic */ NavigationCallback(AnonymousClass1 x0) {
             this();
         }
 
@@ -117,12 +96,27 @@ public class Browser {
                         return;
                     }
                 }
-                customTabsServiceConnection = new ServiceConnection(new CLASSNAME());
+                customTabsServiceConnection = new ServiceConnection(new ServiceConnectionCallback() {
+                    public void onServiceConnected(CustomTabsClient client) {
+                        Browser.customTabsClient = client;
+                        if (SharedConfig.customTabs && Browser.customTabsClient != null) {
+                            try {
+                                Browser.customTabsClient.warmup(0);
+                            } catch (Throwable e) {
+                                FileLog.e(e);
+                            }
+                        }
+                    }
+
+                    public void onServiceDisconnected() {
+                        Browser.customTabsClient = null;
+                    }
+                });
                 if (!CustomTabsClient.bindCustomTabsService(activity, customTabsPackageToBind, customTabsServiceConnection)) {
                     customTabsServiceConnection = null;
                 }
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
             }
         }
     }
@@ -184,7 +178,7 @@ public class Browser {
                 }
             }
             try {
-                String scheme = uri.getScheme() != null ? uri.getScheme().toLowerCase() : TtmlNode.ANONYMOUS_REGION_ID;
+                String scheme = uri.getScheme() != null ? uri.getScheme().toLowerCase() : "";
                 if (allowCustom && SharedConfig.customTabs && !internalUri) {
                     if (!scheme.equals("tel")) {
                         int a;
@@ -196,7 +190,7 @@ public class Browser {
                                 for (a = 0; a < list.size(); a++) {
                                     browserPackageNames[a] = ((ResolveInfo) list.get(a)).activityInfo.packageName;
                                     if (BuildVars.LOGS_ENABLED) {
-                                        FileLog.m10d("default browser name = " + browserPackageNames[a]);
+                                        FileLog.d("default browser name = " + browserPackageNames[a]);
                                     }
                                 }
                             }
@@ -229,7 +223,7 @@ public class Browser {
                             }
                             if (BuildVars.LOGS_ENABLED) {
                                 for (a = 0; a < allActivities.size(); a++) {
-                                    FileLog.m10d("device has " + ((ResolveInfo) allActivities.get(a)).activityInfo.packageName + " to open " + uri.toString());
+                                    FileLog.d("device has " + ((ResolveInfo) allActivities.get(a)).activityInfo.packageName + " to open " + uri.toString());
                                 }
                             }
                         } catch (Exception e3) {
@@ -240,7 +234,7 @@ public class Browser {
                             PendingIntent copy = PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, new Intent(ApplicationLoader.applicationContext, CustomTabsCopyReceiver.class), NUM);
                             Builder builder = new Builder(getSession());
                             builder.addMenuItem(LocaleController.getString("CopyLink", R.string.CopyLink), copy);
-                            builder.setToolbarColor(Theme.getColor(Theme.key_actionBarDefault));
+                            builder.setToolbarColor(Theme.getColor("actionBarDefault"));
                             builder.setShowTitle(true);
                             builder.setActionButton(BitmapFactory.decodeResource(context.getResources(), R.drawable.abc_ic_menu_share_mtrl_alpha), LocaleController.getString("ShareFile", R.string.ShareFile), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, intent, 0), false);
                             CustomTabsIntent intent2 = builder.build();
@@ -251,7 +245,7 @@ public class Browser {
                     }
                 }
             } catch (Throwable e4) {
-                FileLog.m13e(e4);
+                FileLog.e(e4);
             }
             try {
                 intent = new Intent("android.intent.action.VIEW", uri);
@@ -262,7 +256,7 @@ public class Browser {
                 intent.putExtra("com.android.browser.application_id", context.getPackageName());
                 context.startActivity(intent);
             } catch (Throwable e42) {
-                FileLog.m13e(e42);
+                FileLog.e(e42);
             }
         }
     }
@@ -313,7 +307,7 @@ public class Browser {
 
     public static boolean isInternalUri(Uri uri, boolean[] forceBrowser) {
         String host = uri.getHost();
-        host = host != null ? host.toLowerCase() : TtmlNode.ANONYMOUS_REGION_ID;
+        host = host != null ? host.toLowerCase() : "";
         if ("tg".equals(uri.getScheme())) {
             return true;
         }

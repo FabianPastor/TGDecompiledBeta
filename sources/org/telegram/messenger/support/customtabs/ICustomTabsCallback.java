@@ -28,14 +28,14 @@ public interface ICustomTabsCallback extends IInterface {
             }
 
             public String getInterfaceDescriptor() {
-                return Stub.DESCRIPTOR;
+                return "android.support.customtabs.ICustomTabsCallback";
             }
 
             public void onNavigationEvent(int navigationEvent, Bundle extras) throws RemoteException {
                 Parcel _data = Parcel.obtain();
                 Parcel _reply = Parcel.obtain();
                 try {
-                    _data.writeInterfaceToken(Stub.DESCRIPTOR);
+                    _data.writeInterfaceToken("android.support.customtabs.ICustomTabsCallback");
                     _data.writeInt(navigationEvent);
                     if (extras != null) {
                         _data.writeInt(1);
@@ -55,7 +55,7 @@ public interface ICustomTabsCallback extends IInterface {
                 Parcel _data = Parcel.obtain();
                 Parcel _reply = Parcel.obtain();
                 try {
-                    _data.writeInterfaceToken(Stub.DESCRIPTOR);
+                    _data.writeInterfaceToken("android.support.customtabs.ICustomTabsCallback");
                     _data.writeString(callbackName);
                     if (args != null) {
                         _data.writeInt(1);
@@ -75,7 +75,7 @@ public interface ICustomTabsCallback extends IInterface {
                 Parcel _data = Parcel.obtain();
                 Parcel _reply = Parcel.obtain();
                 try {
-                    _data.writeInterfaceToken(Stub.DESCRIPTOR);
+                    _data.writeInterfaceToken("android.support.customtabs.ICustomTabsCallback");
                     if (extras != null) {
                         _data.writeInt(1);
                         extras.writeToParcel(_data, 0);
@@ -94,7 +94,7 @@ public interface ICustomTabsCallback extends IInterface {
                 Parcel _data = Parcel.obtain();
                 Parcel _reply = Parcel.obtain();
                 try {
-                    _data.writeInterfaceToken(Stub.DESCRIPTOR);
+                    _data.writeInterfaceToken("android.support.customtabs.ICustomTabsCallback");
                     _data.writeString(message);
                     if (extras != null) {
                         _data.writeInt(1);
@@ -112,14 +112,14 @@ public interface ICustomTabsCallback extends IInterface {
         }
 
         public Stub() {
-            attachInterface(this, DESCRIPTOR);
+            attachInterface(this, "android.support.customtabs.ICustomTabsCallback");
         }
 
         public static ICustomTabsCallback asInterface(IBinder obj) {
             if (obj == null) {
                 return null;
             }
-            IInterface iin = obj.queryLocalInterface(DESCRIPTOR);
+            IInterface iin = obj.queryLocalInterface("android.support.customtabs.ICustomTabsCallback");
             return (iin == null || !(iin instanceof ICustomTabsCallback)) ? new Proxy(obj) : (ICustomTabsCallback) iin;
         }
 
@@ -132,7 +132,7 @@ public interface ICustomTabsCallback extends IInterface {
             String _arg0;
             switch (code) {
                 case 2:
-                    data.enforceInterface(DESCRIPTOR);
+                    data.enforceInterface("android.support.customtabs.ICustomTabsCallback");
                     int _arg02 = data.readInt();
                     if (data.readInt() != 0) {
                         _arg1 = (Bundle) Bundle.CREATOR.createFromParcel(data);
@@ -143,7 +143,7 @@ public interface ICustomTabsCallback extends IInterface {
                     reply.writeNoException();
                     return true;
                 case 3:
-                    data.enforceInterface(DESCRIPTOR);
+                    data.enforceInterface("android.support.customtabs.ICustomTabsCallback");
                     _arg0 = data.readString();
                     if (data.readInt() != 0) {
                         _arg1 = (Bundle) Bundle.CREATOR.createFromParcel(data);
@@ -155,7 +155,7 @@ public interface ICustomTabsCallback extends IInterface {
                     return true;
                 case 4:
                     Bundle _arg01;
-                    data.enforceInterface(DESCRIPTOR);
+                    data.enforceInterface("android.support.customtabs.ICustomTabsCallback");
                     if (data.readInt() != 0) {
                         _arg01 = (Bundle) Bundle.CREATOR.createFromParcel(data);
                     } else {
@@ -165,7 +165,7 @@ public interface ICustomTabsCallback extends IInterface {
                     reply.writeNoException();
                     return true;
                 case 5:
-                    data.enforceInterface(DESCRIPTOR);
+                    data.enforceInterface("android.support.customtabs.ICustomTabsCallback");
                     _arg0 = data.readString();
                     if (data.readInt() != 0) {
                         _arg1 = (Bundle) Bundle.CREATOR.createFromParcel(data);
@@ -176,7 +176,7 @@ public interface ICustomTabsCallback extends IInterface {
                     reply.writeNoException();
                     return true;
                 case 1598968902:
-                    reply.writeString(DESCRIPTOR);
+                    reply.writeString("android.support.customtabs.ICustomTabsCallback");
                     return true;
                 default:
                     return super.onTransact(code, data, reply, flags);

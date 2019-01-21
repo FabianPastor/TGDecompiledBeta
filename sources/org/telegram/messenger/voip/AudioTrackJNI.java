@@ -15,57 +15,6 @@ public class AudioTrackJNI {
     private boolean running;
     private Thread thread;
 
-    /* renamed from: org.telegram.messenger.voip.AudioTrackJNI$1 */
-    class CLASSNAME implements Runnable {
-        CLASSNAME() {
-        }
-
-        public void run() {
-            try {
-                ByteBuffer tmp48;
-                ByteBuffer tmp44;
-                AudioTrackJNI.this.audioTrack.play();
-                if (AudioTrackJNI.this.needResampling) {
-                    tmp48 = ByteBuffer.allocateDirect(1920);
-                } else {
-                    tmp48 = null;
-                }
-                if (AudioTrackJNI.this.needResampling) {
-                    tmp44 = ByteBuffer.allocateDirect(1764);
-                } else {
-                    tmp44 = null;
-                }
-                while (AudioTrackJNI.this.running) {
-                    try {
-                        if (AudioTrackJNI.this.needResampling) {
-                            AudioTrackJNI.this.nativeCallback(AudioTrackJNI.this.buffer);
-                            tmp48.rewind();
-                            tmp48.put(AudioTrackJNI.this.buffer);
-                            Resampler.convert48to44(tmp48, tmp44);
-                            tmp44.rewind();
-                            tmp44.get(AudioTrackJNI.this.buffer, 0, 1764);
-                            AudioTrackJNI.this.audioTrack.write(AudioTrackJNI.this.buffer, 0, 1764);
-                        } else {
-                            AudioTrackJNI.this.nativeCallback(AudioTrackJNI.this.buffer);
-                            AudioTrackJNI.this.audioTrack.write(AudioTrackJNI.this.buffer, 0, 1920);
-                        }
-                        if (!AudioTrackJNI.this.running) {
-                            AudioTrackJNI.this.audioTrack.stop();
-                            break;
-                        }
-                    } catch (Throwable e) {
-                        FileLog.m13e(e);
-                    }
-                }
-                Log.i("tg-voip", "audiotrack thread exits");
-            } catch (Exception x) {
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.m12e("error starting AudioTrack", x);
-                }
-            }
-        }
-    }
-
     private native void nativeCallback(byte[] bArr);
 
     public AudioTrackJNI(long nativeInst) {
@@ -91,7 +40,7 @@ public class AudioTrackJNI {
             }
             size = getBufferSize(bufferSize * 6, 44100);
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m10d("buffer size: " + size);
+                FileLog.d("buffer size: " + size);
             }
             if (channels == 1) {
                 i = 4;
@@ -118,7 +67,7 @@ public class AudioTrackJNI {
             try {
                 this.thread.join();
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
             }
             this.thread = null;
         }
@@ -141,7 +90,52 @@ public class AudioTrackJNI {
             throw new IllegalStateException("thread already started");
         }
         this.running = true;
-        this.thread = new Thread(new CLASSNAME());
+        this.thread = new Thread(new Runnable() {
+            public void run() {
+                try {
+                    ByteBuffer tmp48;
+                    ByteBuffer tmp44;
+                    AudioTrackJNI.this.audioTrack.play();
+                    if (AudioTrackJNI.this.needResampling) {
+                        tmp48 = ByteBuffer.allocateDirect(1920);
+                    } else {
+                        tmp48 = null;
+                    }
+                    if (AudioTrackJNI.this.needResampling) {
+                        tmp44 = ByteBuffer.allocateDirect(1764);
+                    } else {
+                        tmp44 = null;
+                    }
+                    while (AudioTrackJNI.this.running) {
+                        try {
+                            if (AudioTrackJNI.this.needResampling) {
+                                AudioTrackJNI.this.nativeCallback(AudioTrackJNI.this.buffer);
+                                tmp48.rewind();
+                                tmp48.put(AudioTrackJNI.this.buffer);
+                                Resampler.convert48to44(tmp48, tmp44);
+                                tmp44.rewind();
+                                tmp44.get(AudioTrackJNI.this.buffer, 0, 1764);
+                                AudioTrackJNI.this.audioTrack.write(AudioTrackJNI.this.buffer, 0, 1764);
+                            } else {
+                                AudioTrackJNI.this.nativeCallback(AudioTrackJNI.this.buffer);
+                                AudioTrackJNI.this.audioTrack.write(AudioTrackJNI.this.buffer, 0, 1920);
+                            }
+                            if (!AudioTrackJNI.this.running) {
+                                AudioTrackJNI.this.audioTrack.stop();
+                                break;
+                            }
+                        } catch (Throwable e) {
+                            FileLog.e(e);
+                        }
+                    }
+                    Log.i("tg-voip", "audiotrack thread exits");
+                } catch (Exception x) {
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.e("error starting AudioTrack", x);
+                    }
+                }
+            }
+        });
         this.thread.start();
     }
 }

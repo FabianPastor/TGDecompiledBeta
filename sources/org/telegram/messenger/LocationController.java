@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.LongSparseArray;
 import android.util.SparseIntArray;
-import com.google.android.exoplayer2.DefaultRenderersFactory;
 import java.util.ArrayList;
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLitePreparedStatement;
@@ -68,7 +67,7 @@ public class LocationController implements NotificationCenterDelegate {
                     LocationController.this.lastKnownLocation = location;
                 } else if (!LocationController.this.started && location.distanceTo(LocationController.this.lastKnownLocation) > 20.0f) {
                     LocationController.this.lastKnownLocation = location;
-                    LocationController.this.lastLocationSendTime = (System.currentTimeMillis() - 90000) + DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS;
+                    LocationController.this.lastLocationSendTime = (System.currentTimeMillis() - 90000) + 5000;
                 }
             }
         }
@@ -234,13 +233,13 @@ public class LocationController implements NotificationCenterDelegate {
                 if (!(info.messageObject.messageOwner.media == null || info.messageObject.messageOwner.media.geo == null)) {
                     int messageDate = info.messageObject.messageOwner.edit_date != 0 ? info.messageObject.messageOwner.edit_date : info.messageObject.messageOwner.date;
                     GeoPoint point = info.messageObject.messageOwner.media.geo;
-                    if (Math.abs(date - messageDate) < 30 && Math.abs(point.lat - this.lastKnownLocation.getLatitude()) <= eps && Math.abs(point._long - this.lastKnownLocation.getLongitude()) <= eps) {
+                    if (Math.abs(date - messageDate) < 30 && Math.abs(point.lat - this.lastKnownLocation.getLatitude()) <= 1.0E-4d && Math.abs(point._long - this.lastKnownLocation.getLongitude()) <= 1.0E-4d) {
                     }
                 }
                 TL_messages_editMessage req = new TL_messages_editMessage();
                 req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer((int) info.did);
-                req.var_id = info.mid;
-                req.flags |= MessagesController.UPDATE_MASK_CHAT_ADMINS;
+                req.id = info.mid;
+                req.flags |= 16384;
                 req.media = new TL_inputMediaGeoLive();
                 req.media.stopped = false;
                 req.media.geo_point = new TL_inputGeoPoint();
@@ -357,7 +356,7 @@ public class LocationController implements NotificationCenterDelegate {
         }
         this.sharingLocations.add(info);
         saveSharingLocation(info, 0);
-        this.lastLocationSendTime = (System.currentTimeMillis() - 90000) + DefaultRenderersFactory.DEFAULT_ALLOWED_VIDEO_JOINING_TIME_MS;
+        this.lastLocationSendTime = (System.currentTimeMillis() - 90000) + 5000;
         AndroidUtilities.runOnUIThread(new LocationController$$Lambda$4(this, old, info));
     }
 
@@ -424,7 +423,7 @@ public class LocationController implements NotificationCenterDelegate {
                 MessagesStorage.getInstance(this.currentAccount).getUsersInternal(TextUtils.join(",", usersToLoad), users);
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
         if (!result.isEmpty()) {
             AndroidUtilities.runOnUIThread(new LocationController$$Lambda$15(this, users, chats, result));
@@ -465,7 +464,7 @@ public class LocationController implements NotificationCenterDelegate {
             try {
                 MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("DELETE FROM sharing_locations WHERE 1").stepThis().dispose();
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
             }
         } else if (remove == 1) {
             if (info != null) {
@@ -497,8 +496,8 @@ public class LocationController implements NotificationCenterDelegate {
         if (info != null) {
             TL_messages_editMessage req = new TL_messages_editMessage();
             req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer((int) info.did);
-            req.var_id = info.mid;
-            req.flags |= MessagesController.UPDATE_MASK_CHAT_ADMINS;
+            req.id = info.mid;
+            req.flags |= 16384;
             req.media = new TL_inputMediaGeoLive();
             req.media.stopped = true;
             req.media.geo_point = new TL_inputGeoPointEmpty();
@@ -531,7 +530,7 @@ public class LocationController implements NotificationCenterDelegate {
         try {
             ApplicationLoader.applicationContext.startService(new Intent(ApplicationLoader.applicationContext, LocationSharingService.class));
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
     }
 
@@ -548,8 +547,8 @@ public class LocationController implements NotificationCenterDelegate {
             SharingLocationInfo info = (SharingLocationInfo) this.sharingLocations.get(a);
             TL_messages_editMessage req = new TL_messages_editMessage();
             req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer((int) info.did);
-            req.var_id = info.mid;
-            req.flags |= MessagesController.UPDATE_MASK_CHAT_ADMINS;
+            req.id = info.mid;
+            req.flags |= 16384;
             req.media = new TL_inputMediaGeoLive();
             req.media.stopped = true;
             req.media.geo_point = new TL_inputGeoPointEmpty();
@@ -596,17 +595,17 @@ public class LocationController implements NotificationCenterDelegate {
             try {
                 this.locationManager.requestLocationUpdates("gps", 1, 0.0f, this.gpsLocationListener);
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
             }
             try {
                 this.locationManager.requestLocationUpdates("network", 1, 0.0f, this.networkLocationListener);
             } catch (Throwable e2) {
-                FileLog.m13e(e2);
+                FileLog.e(e2);
             }
             try {
                 this.locationManager.requestLocationUpdates("passive", 1, 0.0f, this.passiveLocationListener);
             } catch (Throwable e22) {
-                FileLog.m13e(e22);
+                FileLog.e(e22);
             }
             if (this.lastKnownLocation == null) {
                 try {
@@ -615,7 +614,7 @@ public class LocationController implements NotificationCenterDelegate {
                         this.lastKnownLocation = this.locationManager.getLastKnownLocation("network");
                     }
                 } catch (Throwable e222) {
-                    FileLog.m13e(e222);
+                    FileLog.e(e222);
                 }
             }
         }

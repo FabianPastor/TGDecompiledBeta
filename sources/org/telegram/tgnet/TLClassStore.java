@@ -69,7 +69,7 @@ public class TLClassStore {
             response.readParams(stream, exception);
             return response;
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return null;
         }
     }

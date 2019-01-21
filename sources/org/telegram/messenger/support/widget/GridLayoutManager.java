@@ -2,8 +2,8 @@ package org.telegram.messenger.support.widget;
 
 import android.content.Context;
 import android.graphics.Rect;
-import android.support.p000v4.view.accessibility.AccessibilityNodeInfoCompat;
-import android.support.p000v4.view.accessibility.AccessibilityNodeInfoCompat.CollectionItemInfoCompat;
+import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
+import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat.CollectionItemInfoCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseIntArray;
@@ -462,7 +462,7 @@ public class GridLayoutManager extends LinearLayoutManager {
         if (adapterPosition != -1) {
             return this.mSpanSizeLookup.getSpanGroupIndex(adapterPosition, this.mSpanCount);
         }
-        Log.w(TAG, "Cannot find span size for pre layout position. " + viewPosition);
+        Log.w("GridLayoutManager", "Cannot find span size for pre layout position. " + viewPosition);
         return 0;
     }
 
@@ -478,7 +478,7 @@ public class GridLayoutManager extends LinearLayoutManager {
         if (adapterPosition != -1) {
             return this.mSpanSizeLookup.getCachedSpanIndex(adapterPosition, this.mSpanCount);
         }
-        Log.w(TAG, "Cannot find span size for pre layout position. It is not cached, not in the adapter. Pos:" + pos);
+        Log.w("GridLayoutManager", "Cannot find span size for pre layout position. It is not cached, not in the adapter. Pos:" + pos);
         return 0;
     }
 
@@ -494,7 +494,7 @@ public class GridLayoutManager extends LinearLayoutManager {
         if (adapterPosition != -1) {
             return this.mSpanSizeLookup.getSpanSize(adapterPosition);
         }
-        Log.w(TAG, "Cannot find span size for pre layout position. It is not cached, not in the adapter. Pos:" + pos);
+        Log.w("GridLayoutManager", "Cannot find span size for pre layout position. It is not cached, not in the adapter. Pos:" + pos);
         return 1;
     }
 

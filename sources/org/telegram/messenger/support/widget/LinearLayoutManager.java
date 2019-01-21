@@ -8,7 +8,6 @@ import android.os.Parcelable.Creator;
 import android.util.Log;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
-import com.google.android.exoplayer2.extractor.p003ts.TsExtractor;
 import java.util.List;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager.LayoutPrefetchRegistry;
@@ -18,7 +17,6 @@ import org.telegram.messenger.support.widget.RecyclerView.SmoothScroller.ScrollV
 import org.telegram.messenger.support.widget.RecyclerView.State;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.ViewDropHandler;
-import org.telegram.tgnet.ConnectionsManager;
 
 public class LinearLayoutManager extends LayoutManager implements ScrollVectorProvider, ViewDropHandler {
     static final boolean DEBUG = false;
@@ -208,7 +206,7 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
         public View nextViewInLimitedList(View ignore) {
             int size = this.mScrapList.size();
             View closest = null;
-            int closestDistance = ConnectionsManager.DEFAULT_DATACENTER_ID;
+            int closestDistance = Integer.MAX_VALUE;
             for (int i = 0; i < size; i++) {
                 View view = ((ViewHolder) this.mScrapList.get(i)).itemView;
                 LayoutParams lp = (LayoutParams) view.getLayoutParams();
@@ -227,21 +225,12 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
         }
 
         void log() {
-            Log.d(TAG, "avail:" + this.mAvailable + ", ind:" + this.mCurrentPosition + ", dir:" + this.mItemDirection + ", offset:" + this.mOffset + ", layoutDir:" + this.mLayoutDirection);
+            Log.d("LLM#LayoutState", "avail:" + this.mAvailable + ", ind:" + this.mCurrentPosition + ", dir:" + this.mItemDirection + ", offset:" + this.mOffset + ", layoutDir:" + this.mLayoutDirection);
         }
     }
 
     public static class SavedState implements Parcelable {
-        public static final Creator<SavedState> CREATOR = new CLASSNAME();
-        boolean mAnchorLayoutFromEnd;
-        int mAnchorOffset;
-        int mAnchorPosition;
-
-        /* renamed from: org.telegram.messenger.support.widget.LinearLayoutManager$SavedState$1 */
-        static class CLASSNAME implements Creator<SavedState> {
-            CLASSNAME() {
-            }
-
+        public static final Creator<SavedState> CREATOR = new Creator<SavedState>() {
             public SavedState createFromParcel(Parcel in) {
                 return new SavedState(in);
             }
@@ -249,7 +238,10 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
             public SavedState[] newArray(int size) {
                 return new SavedState[size];
             }
-        }
+        };
+        boolean mAnchorLayoutFromEnd;
+        int mAnchorOffset;
+        int mAnchorPosition;
 
         SavedState(Parcel in) {
             boolean z = true;
@@ -1311,7 +1303,7 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
                     i2 = Integer.MIN_VALUE;
                 }
                 return i2;
-            case TsExtractor.TS_STREAM_TYPE_HDMV_DTS /*130*/:
+            case 130:
                 if (this.mOrientation == 1) {
                     i = 1;
                 }
@@ -1495,7 +1487,7 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
         View nextFocus;
         ensureLayoutState();
         ensureLayoutState();
-        updateLayoutState(layoutDir, (int) (MAX_SCROLL_FACTOR * ((float) this.mOrientationHelper.getTotalSpace())), false, state);
+        updateLayoutState(layoutDir, (int) (0.33333334f * ((float) this.mOrientationHelper.getTotalSpace())), false, state);
         this.mLayoutState.mScrollingOffset = Integer.MIN_VALUE;
         this.mLayoutState.mRecycle = false;
         fill(recycler, this.mLayoutState, state, true);
@@ -1519,17 +1511,17 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
     }
 
     private void logChildren() {
-        Log.d(TAG, "internal representation of views on the screen");
+        Log.d("LinearLayoutManager", "internal representation of views on the screen");
         for (int i = 0; i < getChildCount(); i++) {
             View child = getChildAt(i);
-            Log.d(TAG, "item " + getPosition(child) + ", coord:" + this.mOrientationHelper.getDecoratedStart(child));
+            Log.d("LinearLayoutManager", "item " + getPosition(child) + ", coord:" + this.mOrientationHelper.getDecoratedStart(child));
         }
-        Log.d(TAG, "==============");
+        Log.d("LinearLayoutManager", "==============");
     }
 
     void validateChildOrder() {
         boolean z = true;
-        Log.d(TAG, "validating child count " + getChildCount());
+        Log.d("LinearLayoutManager", "validating child count " + getChildCount());
         if (getChildCount() >= 1) {
             int lastPos = getPosition(getChildAt(0));
             int lastScreenLoc = this.mOrientationHelper.getDecoratedStart(getChildAt(0));

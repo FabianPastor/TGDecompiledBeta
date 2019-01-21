@@ -1,7 +1,7 @@
 package org.telegram.messenger;
 
-import org.telegram.p005ui.ActionBar.BaseFragment;
 import org.telegram.tgnet.TLObject;
+import org.telegram.ui.ActionBar.BaseFragment;
 
 final /* synthetic */ class DataQuery$$Lambda$95 implements Runnable {
     private final DataQuery arg$1;

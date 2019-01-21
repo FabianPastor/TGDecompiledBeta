@@ -3,21 +3,7 @@ package org.telegram.messenger.audioinfo.m4a;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
-import com.coremedia.iso.boxes.CopyrightBox;
-import com.coremedia.iso.boxes.FileTypeBox;
-import com.coremedia.iso.boxes.GenreBox;
-import com.coremedia.iso.boxes.MediaBox;
-import com.coremedia.iso.boxes.MediaHeaderBox;
-import com.coremedia.iso.boxes.MetaBox;
-import com.coremedia.iso.boxes.MovieBox;
-import com.coremedia.iso.boxes.MovieHeaderBox;
-import com.coremedia.iso.boxes.RatingBox;
-import com.coremedia.iso.boxes.TrackBox;
-import com.coremedia.iso.boxes.UserDataBox;
-import com.coremedia.iso.boxes.apple.AppleItemListBox;
-import com.google.android.exoplayer2.upstream.DataSchemeDataSource;
 import com.google.devtools.build.android.desugar.runtime.ThrowableExtension;
-import com.googlecode.mp4parser.boxes.apple.AppleNameBox;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -46,15 +32,15 @@ public class M4AInfo extends AudioInfo {
         if (LOGGER.isLoggable(debugLevel)) {
             LOGGER.log(debugLevel, mp4.toString());
         }
-        ftyp(mp4.nextChild(FileTypeBox.TYPE));
-        moov(mp4.nextChildUpTo(MovieBox.TYPE));
+        ftyp(mp4.nextChild("ftyp"));
+        moov(mp4.nextChildUpTo("moov"));
     }
 
     void ftyp(MP4Atom atom) throws IOException {
         if (LOGGER.isLoggable(this.debugLevel)) {
             LOGGER.log(this.debugLevel, atom.toString());
         }
-        this.brand = atom.readString(4, ASCII).trim();
+        this.brand = atom.readString(4, "ISO8859_1").trim();
         if (this.brand.matches("M4V|MP4|mp42|isom")) {
             LOGGER.warning(atom.getPath() + ": brand=" + this.brand + " (experimental)");
         } else if (!this.brand.matches("M4A|M4P")) {
@@ -73,19 +59,19 @@ public class M4AInfo extends AudioInfo {
             Object obj = -1;
             switch (type.hashCode()) {
                 case 3363941:
-                    if (type.equals(MovieHeaderBox.TYPE)) {
+                    if (type.equals("mvhd")) {
                         obj = null;
                         break;
                     }
                     break;
                 case 3568424:
-                    if (type.equals(TrackBox.TYPE)) {
+                    if (type.equals("trak")) {
                         obj = 1;
                         break;
                     }
                     break;
                 case 3585340:
-                    if (type.equals(UserDataBox.TYPE)) {
+                    if (type.equals("udta")) {
                         obj = 2;
                         break;
                     }
@@ -129,14 +115,14 @@ public class M4AInfo extends AudioInfo {
         if (LOGGER.isLoggable(this.debugLevel)) {
             LOGGER.log(this.debugLevel, atom.toString());
         }
-        mdia(atom.nextChildUpTo(MediaBox.TYPE));
+        mdia(atom.nextChildUpTo("mdia"));
     }
 
     void mdia(MP4Atom atom) throws IOException {
         if (LOGGER.isLoggable(this.debugLevel)) {
             LOGGER.log(this.debugLevel, atom.toString());
         }
-        mdhd(atom.nextChild(MediaHeaderBox.TYPE));
+        mdhd(atom.nextChild("mdhd"));
     }
 
     void mdhd(MP4Atom atom) throws IOException {
@@ -161,7 +147,7 @@ public class M4AInfo extends AudioInfo {
         }
         while (atom.hasMoreChildren()) {
             MP4Atom child = atom.nextChild();
-            if (MetaBox.TYPE.equals(child.getType())) {
+            if ("meta".equals(child.getType())) {
                 meta(child);
                 return;
             }
@@ -175,7 +161,7 @@ public class M4AInfo extends AudioInfo {
         atom.skip(4);
         while (atom.hasMoreChildren()) {
             MP4Atom child = atom.nextChild();
-            if (AppleItemListBox.TYPE.equals(child.getType())) {
+            if ("ilst".equals(child.getType())) {
                 ilst(child);
                 return;
             }
@@ -192,7 +178,7 @@ public class M4AInfo extends AudioInfo {
                 LOGGER.log(this.debugLevel, child.toString());
             }
             if (child.getRemaining() != 0) {
-                data(child.nextChildUpTo(DataSchemeDataSource.SCHEME_DATA));
+                data(child.nextChildUpTo("data"));
             } else if (LOGGER.isLoggable(this.debugLevel)) {
                 LOGGER.log(this.debugLevel, child.getPath() + ": contains no value");
             }
@@ -227,7 +213,7 @@ public class M4AInfo extends AudioInfo {
                 }
                 break;
             case 3060591:
-                if (type.equals(CopyrightBox.TYPE)) {
+                if (type.equals("cprt")) {
                     obj = 8;
                     break;
                 }
@@ -239,13 +225,13 @@ public class M4AInfo extends AudioInfo {
                 }
                 break;
             case 3177818:
-                if (type.equals(GenreBox.TYPE)) {
+                if (type.equals("gnre")) {
                     obj = 12;
                     break;
                 }
                 break;
             case 3511163:
-                if (type.equals(RatingBox.TYPE)) {
+                if (type.equals("rtng")) {
                     obj = 17;
                     break;
                 }
@@ -263,67 +249,67 @@ public class M4AInfo extends AudioInfo {
                 }
                 break;
             case 5099770:
-                if (type.equals("\u00a9ART")) {
+                if (type.equals("©ART")) {
                     obj = 2;
                     break;
                 }
                 break;
             case 5131342:
-                if (type.equals("\u00a9alb")) {
+                if (type.equals("©alb")) {
                     obj = null;
                     break;
                 }
                 break;
             case 5133313:
-                if (type.equals("\u00a9cmt")) {
+                if (type.equals("©cmt")) {
                     obj = 3;
                     break;
                 }
                 break;
             case 5133368:
-                if (type.equals("\u00a9com")) {
+                if (type.equals("©com")) {
                     obj = 4;
                     break;
                 }
                 break;
             case 5133411:
-                if (type.equals("\u00a9cpy")) {
+                if (type.equals("©cpy")) {
                     obj = 9;
                     break;
                 }
                 break;
             case 5133907:
-                if (type.equals("\u00a9day")) {
+                if (type.equals("©day")) {
                     obj = 10;
                     break;
                 }
                 break;
             case 5136903:
-                if (type.equals("\u00a9gen")) {
+                if (type.equals("©gen")) {
                     obj = 13;
                     break;
                 }
                 break;
             case 5137308:
-                if (type.equals("\u00a9grp")) {
+                if (type.equals("©grp")) {
                     obj = 14;
                     break;
                 }
                 break;
             case 5142332:
-                if (type.equals("\u00a9lyr")) {
+                if (type.equals("©lyr")) {
                     obj = 15;
                     break;
                 }
                 break;
             case 5143505:
-                if (type.equals(AppleNameBox.TYPE)) {
+                if (type.equals("©nam")) {
                     obj = 16;
                     break;
                 }
                 break;
             case 5152688:
-                if (type.equals("\u00a9wrt")) {
+                if (type.equals("©wrt")) {
                     obj = 5;
                     break;
                 }

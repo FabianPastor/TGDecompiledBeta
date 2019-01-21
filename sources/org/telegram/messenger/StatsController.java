@@ -1,7 +1,6 @@
 package org.telegram.messenger;
 
 import android.content.SharedPreferences;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.lang.reflect.Array;
@@ -19,7 +18,11 @@ public class StatsController {
     public static final int TYPE_TOTAL = 6;
     public static final int TYPE_VIDEOS = 2;
     public static final int TYPE_WIFI = 1;
-    private static final ThreadLocal<Long> lastStatsSaveTime = new CLASSNAME();
+    private static final ThreadLocal<Long> lastStatsSaveTime = new ThreadLocal<Long>() {
+        protected Long initialValue() {
+            return Long.valueOf(System.currentTimeMillis() - 1000);
+        }
+    };
     private static DispatchQueue statsSaveQueue = new DispatchQueue("statsSaveQueue");
     private byte[] buffer = new byte[8];
     private int[] callsTotalTime = new int[3];
@@ -27,29 +30,10 @@ public class StatsController {
     private long[][] receivedBytes = ((long[][]) Array.newInstance(Long.TYPE, new int[]{3, 7}));
     private int[][] receivedItems = ((int[][]) Array.newInstance(Integer.TYPE, new int[]{3, 7}));
     private long[] resetStatsDate = new long[3];
-    private Runnable saveRunnable = new CLASSNAME();
-    private long[][] sentBytes = ((long[][]) Array.newInstance(Long.TYPE, new int[]{3, 7}));
-    private int[][] sentItems = ((int[][]) Array.newInstance(Integer.TYPE, new int[]{3, 7}));
-    private RandomAccessFile statsFile;
-
-    /* renamed from: org.telegram.messenger.StatsController$1 */
-    static class CLASSNAME extends ThreadLocal<Long> {
-        CLASSNAME() {
-        }
-
-        protected Long initialValue() {
-            return Long.valueOf(System.currentTimeMillis() - 1000);
-        }
-    }
-
-    /* renamed from: org.telegram.messenger.StatsController$2 */
-    class CLASSNAME implements Runnable {
-        CLASSNAME() {
-        }
-
+    private Runnable saveRunnable = new Runnable() {
         public void run() {
             long newTime = System.currentTimeMillis();
-            if (Math.abs(newTime - StatsController.this.lastInternalStatsSaveTime) >= AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS) {
+            if (Math.abs(newTime - StatsController.this.lastInternalStatsSaveTime) >= 2000) {
                 StatsController.this.lastInternalStatsSaveTime = newTime;
                 try {
                     StatsController.this.statsFile.seek(0);
@@ -68,7 +52,10 @@ public class StatsController {
                 }
             }
         }
-    }
+    };
+    private long[][] sentBytes = ((long[][]) Array.newInstance(Long.TYPE, new int[]{3, 7}));
+    private int[][] sentItems = ((int[][]) Array.newInstance(Integer.TYPE, new int[]{3, 7}));
+    private RandomAccessFile statsFile;
 
     private byte[] intToBytes(int value) {
         this.buffer[0] = (byte) (value >>> 24);
@@ -269,7 +256,7 @@ public class StatsController {
 
     private void saveStats() {
         long newTime = System.currentTimeMillis();
-        if (Math.abs(newTime - ((Long) lastStatsSaveTime.get()).longValue()) >= AdaptiveTrackSelection.DEFAULT_MIN_TIME_BETWEEN_BUFFER_REEVALUTATION_MS) {
+        if (Math.abs(newTime - ((Long) lastStatsSaveTime.get()).longValue()) >= 2000) {
             lastStatsSaveTime.set(Long.valueOf(newTime));
             statsSaveQueue.postRunnable(this.saveRunnable);
         }

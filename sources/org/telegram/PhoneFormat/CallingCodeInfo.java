@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class CallingCodeInfo {
-    public String callingCode = TtmlNode.ANONYMOUS_REGION_ID;
+    public String callingCode = "";
     public ArrayList<String> countries = new ArrayList();
     public ArrayList<String> intlPrefixes = new ArrayList();
     public ArrayList<RuleSet> ruleSets = new ArrayList();

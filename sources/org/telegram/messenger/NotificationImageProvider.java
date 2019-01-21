@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.text.TextUtils;
-import com.google.android.exoplayer2.CLASSNAMEC;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
@@ -23,7 +22,7 @@ public class NotificationImageProvider extends ContentProvider implements Notifi
     private HashSet<String> waitingForFiles = new HashSet();
 
     static {
-        matcher.addURI(AUTHORITY, "msg_media_raw/#/*", 1);
+        matcher.addURI("org.telegram.messenger.beta.notification_image_provider", "msg_media_raw/#/*", 1);
     }
 
     public boolean onCreate() {
@@ -77,8 +76,8 @@ public class NotificationImageProvider extends ContentProvider implements Notifi
                     String fallbackPath = uri.getQueryParameter("fallback");
                     File finalFile = new File(finalPath);
                     if (finalFile.exists()) {
-                        FileLog.m10d(finalFile + " already exists");
-                        return ParcelFileDescriptor.open(finalFile, CLASSNAMEC.ENCODING_PCM_MU_LAW);
+                        FileLog.d(finalFile + " already exists");
+                        return ParcelFileDescriptor.open(finalFile, NUM);
                     }
                     Long _startTime = (Long) this.fileStartTimes.get(name);
                     long startTime = _startTime != null ? _startTime.longValue() : System.currentTimeMillis();
@@ -88,10 +87,10 @@ public class NotificationImageProvider extends ContentProvider implements Notifi
                     while (!finalFile.exists()) {
                         if (System.currentTimeMillis() - startTime >= 3000) {
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.m14w("Waiting for " + name + " to download timed out");
+                                FileLog.w("Waiting for " + name + " to download timed out");
                             }
                             if (!TextUtils.isEmpty(fallbackPath)) {
-                                return ParcelFileDescriptor.open(new File(fallbackPath), CLASSNAMEC.ENCODING_PCM_MU_LAW);
+                                return ParcelFileDescriptor.open(new File(fallbackPath), NUM);
                             }
                             throw new FileNotFoundException("Download timed out");
                         }
@@ -103,7 +102,7 @@ public class NotificationImageProvider extends ContentProvider implements Notifi
                             }
                         }
                     }
-                    return ParcelFileDescriptor.open(finalFile, CLASSNAMEC.ENCODING_PCM_MU_LAW);
+                    return ParcelFileDescriptor.open(finalFile, NUM);
                 default:
                     throw new FileNotFoundException("Invalid URI");
             }

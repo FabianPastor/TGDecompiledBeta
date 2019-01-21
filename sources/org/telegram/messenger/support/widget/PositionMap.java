@@ -106,8 +106,7 @@ class PositionMap<E> implements Cloneable {
     public void removeKeyRange(ArrayList<E> arrayList, int keyStart, int count) {
     }
 
-    /* renamed from: gc */
-    private void m20gc() {
+    private void gc() {
         int n = this.mSize;
         int o = 0;
         int[] keys = this.mKeys;
@@ -136,7 +135,7 @@ class PositionMap<E> implements Cloneable {
         i ^= -1;
         if (i >= this.mSize || this.mValues[i] != DELETED) {
             if (this.mGarbage && this.mSize >= this.mKeys.length) {
-                m20gc();
+                gc();
                 i = ContainerHelpers.binarySearch(this.mKeys, this.mSize, key) ^ -1;
             }
             if (this.mSize >= this.mKeys.length) {
@@ -163,42 +162,42 @@ class PositionMap<E> implements Cloneable {
 
     public int size() {
         if (this.mGarbage) {
-            m20gc();
+            gc();
         }
         return this.mSize;
     }
 
     public int keyAt(int index) {
         if (this.mGarbage) {
-            m20gc();
+            gc();
         }
         return this.mKeys[index];
     }
 
     public E valueAt(int index) {
         if (this.mGarbage) {
-            m20gc();
+            gc();
         }
         return this.mValues[index];
     }
 
     public void setValueAt(int index, E value) {
         if (this.mGarbage) {
-            m20gc();
+            gc();
         }
         this.mValues[index] = value;
     }
 
     public int indexOfKey(int key) {
         if (this.mGarbage) {
-            m20gc();
+            gc();
         }
         return ContainerHelpers.binarySearch(this.mKeys, this.mSize, key);
     }
 
     public int indexOfValue(E value) {
         if (this.mGarbage) {
-            m20gc();
+            gc();
         }
         for (int i = 0; i < this.mSize; i++) {
             if (this.mValues[i] == value) {
@@ -221,7 +220,7 @@ class PositionMap<E> implements Cloneable {
     public void append(int key, E value) {
         if (this.mSize == 0 || key > this.mKeys[this.mSize - 1]) {
             if (this.mGarbage && this.mSize >= this.mKeys.length) {
-                m20gc();
+                gc();
             }
             int pos = this.mSize;
             if (pos >= this.mKeys.length) {

@@ -1,9 +1,9 @@
 package org.telegram.messenger;
 
-import org.telegram.p005ui.ActionBar.AlertDialog;
-import org.telegram.p005ui.ActionBar.BaseFragment;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.BaseFragment;
 
 final /* synthetic */ class MessagesController$$Lambda$152 implements Runnable {
     private final MessagesController arg$1;
@@ -23,6 +23,6 @@ final /* synthetic */ class MessagesController$$Lambda$152 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$null$245$MessagesController(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6);
+        this.arg$1.lambda$null$251$MessagesController(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6);
     }
 }

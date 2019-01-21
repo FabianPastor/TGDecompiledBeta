@@ -39,13 +39,13 @@ import java.util.Locale;
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.audioinfo.AudioInfo;
-import org.telegram.p005ui.LaunchActivity;
 import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.FileLocation;
 import org.telegram.tgnet.TLRPC.TL_fileLocation;
 import org.telegram.tgnet.TLRPC.User;
+import org.telegram.ui.LaunchActivity;
 
 @TargetApi(21)
 public class MusicBrowserService extends MediaBrowserService implements NotificationCenterDelegate {
@@ -147,7 +147,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                         MusicBrowserService.this.handlePlayRequest();
                     }
                 } catch (Throwable e) {
-                    FileLog.m13e(e);
+                    FileLog.e(e);
                 }
             }
         }
@@ -201,9 +201,9 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
         Context context = getApplicationContext();
         this.mediaSession.setSessionActivity(PendingIntent.getActivity(context, 99, new Intent(context, LaunchActivity.class), NUM));
         Bundle extras = new Bundle();
-        extras.putBoolean(SLOT_RESERVATION_QUEUE, true);
-        extras.putBoolean(SLOT_RESERVATION_SKIP_TO_PREV, true);
-        extras.putBoolean(SLOT_RESERVATION_SKIP_TO_NEXT, true);
+        extras.putBoolean("com.google.android.gms.car.media.ALWAYS_RESERVE_SPACE_FOR.ACTION_QUEUE", true);
+        extras.putBoolean("com.google.android.gms.car.media.ALWAYS_RESERVE_SPACE_FOR.ACTION_SKIP_TO_PREVIOUS", true);
+        extras.putBoolean("com.google.android.gms.car.media.ALWAYS_RESERVE_SPACE_FOR.ACTION_SKIP_TO_NEXT", true);
         this.mediaSession.setExtras(extras);
         updatePlaybackState(null);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
@@ -225,7 +225,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
         if (clientPackageName == null || (1000 != clientUid && Process.myUid() != clientUid && !clientPackageName.equals("com.google.android.mediasimulator") && !clientPackageName.equals("com.google.android.projection.gearhead"))) {
             return null;
         }
-        return new BrowserRoot(MEDIA_ID_ROOT, null);
+        return new BrowserRoot("__ROOT__", null);
     }
 
     public void onLoadChildren(String parentMediaId, Result<List<MediaItem>> result) {
@@ -270,7 +270,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                         data.reuse();
                         if (MessageObject.isMusicMessage(message)) {
                             int did = cursor.intValue(0);
-                            message.var_id = cursor.intValue(2);
+                            message.id = cursor.intValue(2);
                             message.dialog_id = (long) did;
                             ArrayList<MessageObject> arrayList = (ArrayList) this.musicObjects.get(did);
                             ArrayList<QueueItem> arrayList1 = (ArrayList) this.musicQueues.get(did);
@@ -295,7 +295,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                     messagesStorage.getUsersInternal(TextUtils.join(",", usersToLoad), usersArrayList);
                     for (a = 0; a < usersArrayList.size(); a++) {
                         User user = (User) usersArrayList.get(a);
-                        this.users.put(user.var_id, user);
+                        this.users.put(user.id, user);
                     }
                 }
                 if (!chatsToLoad.isEmpty()) {
@@ -303,12 +303,12 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                     messagesStorage.getChatsInternal(TextUtils.join(",", chatsToLoad), chatsArrayList);
                     for (a = 0; a < chatsArrayList.size(); a++) {
                         Chat chat = (Chat) chatsArrayList.get(a);
-                        this.chats.put(chat.var_id, chat);
+                        this.chats.put(chat.id, chat);
                     }
                 }
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
         AndroidUtilities.runOnUIThread(new MusicBrowserService$$Lambda$1(this, parentMediaId, result));
     }
@@ -356,7 +356,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
         int a;
         int did;
         Builder builder;
-        if (MEDIA_ID_ROOT.equals(parentMediaId)) {
+        if ("__ROOT__".equals(parentMediaId)) {
             for (a = 0; a < this.dialogs.size(); a++) {
                 did = ((Integer) this.dialogs.get(a)).intValue();
                 builder = new Builder().setMediaId("__CHAT_" + did);
@@ -398,9 +398,9 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
             if (parentMediaId.startsWith("__CHAT_")) {
                 did = 0;
                 try {
-                    did = Integer.parseInt(parentMediaId.replace("__CHAT_", TtmlNode.ANONYMOUS_REGION_ID));
+                    did = Integer.parseInt(parentMediaId.replace("__CHAT_", ""));
                 } catch (Throwable e) {
-                    FileLog.m13e(e);
+                    FileLog.e(e);
                 }
                 ArrayList<MessageObject> arrayList = (ArrayList) this.musicObjects.get(did);
                 if (arrayList != null) {
@@ -437,7 +437,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                 return result;
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
         return null;
     }
@@ -491,7 +491,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
             try {
                 startService(new Intent(getApplicationContext(), MusicBrowserService.class));
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
             }
             this.serviceStarted = true;
         }
@@ -516,7 +516,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
     }
 
     private void handlePauseRequest() {
-        MediaController.getInstance().lambda$startAudioAgain$6$MediaController(MediaController.getInstance().getPlayingMessageObject());
+        MediaController.getInstance().lambda$startAudioAgain$5$MediaController(MediaController.getInstance().getPlayingMessageObject());
         this.delayedStopHandler.removeCallbacksAndMessages(null);
         this.delayedStopHandler.sendEmptyMessageDelayed(0, 30000);
     }

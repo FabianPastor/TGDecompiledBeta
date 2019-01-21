@@ -5,10 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.support.p000v4.content.ContextCompat;
+import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import com.google.android.exoplayer2.CLASSNAMEC;
 import com.google.devtools.build.android.desugar.runtime.ThrowableExtension;
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,14 +17,13 @@ import java.util.List;
 
 public class EmuDetector {
     private static final String[] ANDY_FILES = new String[]{"fstab.andy", "ueventd.andy.rc"};
-    private static final String[] DEVICE_IDS = new String[]{"000000000000000", "e21833235b6eevar_", "012345678912345"};
+    private static final String[] DEVICE_IDS = new String[]{"NUM", "e21833235b6eevar_", "NUM"};
     private static final String[] GENY_FILES = new String[]{"/dev/socket/genyd", "/dev/socket/baseband_genyd"};
-    private static final String[] IMSI_IDS = new String[]{"310260000000000"};
-    /* renamed from: IP */
-    private static final String var_IP = "10.0.2.15";
+    private static final String[] IMSI_IDS = new String[]{"NUM"};
+    private static final String IP = "10.0.2.15";
     private static final int MIN_PROPERTIES_THRESHOLD = 5;
     private static final String[] NOX_FILES = new String[]{"fstab.nox", "init.nox.rc", "ueventd.nox.rc"};
-    private static final String[] PHONE_NUMBERS = new String[]{"15555215554", "15555215556", "15555215558", "15555215560", "15555215562", "15555215564", "15555215566", "15555215568", "15555215570", "15555215572", "15555215574", "15555215576", "15555215578", "15555215580", "15555215582", "15555215584"};
+    private static final String[] PHONE_NUMBERS = new String[]{"NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM"};
     private static final String[] PIPES = new String[]{"/dev/socket/qemud", "/dev/qemu_pipe"};
     private static final Property[] PROPERTIES = new Property[]{new Property("init.svc.qemud", null), new Property("init.svc.qemu-props", null), new Property("qemu.hw.mainkeys", null), new Property("qemu.sf.fake_camera", null), new Property("qemu.sf.lcd_density", null), new Property("ro.bootloader", "unknown"), new Property("ro.bootmode", "unknown"), new Property("ro.hardware", "goldfish"), new Property("ro.kernel.android.qemud", null), new Property("ro.kernel.qemu.gles", null), new Property("ro.kernel.qemu", "1"), new Property("ro.product.device", "generic"), new Property("ro.product.model", "sdk"), new Property("ro.product.name", "sdk"), new Property("ro.serialno", null)};
     private static final String[] QEMU_DRIVERS = new String[]{"goldfish"};
@@ -158,7 +156,7 @@ public class EmuDetector {
         PackageManager packageManager = this.mContext.getPackageManager();
         for (String pkgName : this.mListPackageName) {
             Intent tryIntent = packageManager.getLaunchIntentForPackage(pkgName);
-            if (tryIntent != null && !packageManager.queryIntentActivities(tryIntent, CLASSNAMEC.DEFAULT_BUFFER_SEGMENT_SIZE).isEmpty()) {
+            if (tryIntent != null && !packageManager.queryIntentActivities(tryIntent, 65536).isEmpty()) {
                 return true;
             }
         }
@@ -279,7 +277,7 @@ public class EmuDetector {
         int length = array.length;
         while (i < length) {
             String lan = array[i];
-            if ((lan.contains("wlan0") || lan.contains("tunl0") || lan.contains("eth0")) && lan.contains(var_IP)) {
+            if ((lan.contains("wlan0") || lan.contains("tunl0") || lan.contains("eth0")) && lan.contains("10.0.2.15")) {
                 return true;
             }
             i++;

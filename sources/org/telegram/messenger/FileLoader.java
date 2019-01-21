@@ -3,8 +3,6 @@ package org.telegram.messenger;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
-import com.google.android.exoplayer2.upstream.TransferListener;
-import com.google.android.exoplayer2.util.MimeTypes;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +29,8 @@ import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto;
 import org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
 import org.telegram.tgnet.TLRPC.TL_messageService;
 import org.telegram.tgnet.TLRPC.TL_photoCachedSize;
+import org.telegram.tgnet.TLRPC.TL_photoSizeEmpty;
+import org.telegram.tgnet.TLRPC.TL_photoStrippedSize;
 import org.telegram.tgnet.TLRPC.TL_secureFile;
 import org.telegram.tgnet.TLRPC.WebDocument;
 
@@ -490,9 +490,9 @@ public class FileLoader {
             fileName = getAttachFileName(webDocument);
         }
         if (fileName != null) {
-            if (!fileName.contains("-2147483648")) {
+            if (!fileName.contains("-NUM")) {
                 if (!TextUtils.isEmpty(fileName)) {
-                    if (!fileName.contains("-2147483648")) {
+                    if (!fileName.contains("-NUM")) {
                         this.loadOperationPathsUI.put(fileName, Boolean.valueOf(true));
                     }
                 }
@@ -709,7 +709,7 @@ public class FileLoader {
         } else {
             fileName = null;
         }
-        if (!(TextUtils.isEmpty(fileName) || fileName.contains("-2147483648"))) {
+        if (!(TextUtils.isEmpty(fileName) || fileName.contains("-NUM"))) {
             this.loadOperationPathsUI.put(fileName, Boolean.valueOf(true));
         }
         fileLoaderQueue.postRunnable(new FileLoader$$Lambda$5(this, document, secureDocument, webDocument, location, parentObject, locationExt, locationSize, priority, cacheType));
@@ -726,7 +726,7 @@ public class FileLoader {
         try {
             semaphore.await();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
         return result[0];
     }
@@ -833,7 +833,7 @@ public class FileLoader {
 
     public static String getMessageFileName(Message message) {
         if (message == null) {
-            return TtmlNode.ANONYMOUS_REGION_ID;
+            return "";
         }
         ArrayList<PhotoSize> sizes;
         PhotoSize sizeFull;
@@ -880,14 +880,14 @@ public class FileLoader {
                 }
             }
         }
-        return TtmlNode.ANONYMOUS_REGION_ID;
+        return "";
     }
 
     public static File getPathToMessage(Message message) {
         boolean z = false;
         boolean z2 = true;
         if (message == null) {
-            return new File(TtmlNode.ANONYMOUS_REGION_ID);
+            return new File("");
         }
         ArrayList<PhotoSize> sizes;
         PhotoSize sizeFull;
@@ -934,7 +934,7 @@ public class FileLoader {
         } else if (message.media instanceof TL_messageMediaInvoice) {
             return getPathToAttach(((TL_messageMediaInvoice) message.media).photo, true);
         }
-        return new File(TtmlNode.ANONYMOUS_REGION_ID);
+        return new File("");
     }
 
     public static File getPathToAttach(TLObject attach) {
@@ -965,7 +965,9 @@ public class FileLoader {
         } else {
             if (attach instanceof PhotoSize) {
                 PhotoSize photoSize = (PhotoSize) attach;
-                if (photoSize.location == null || photoSize.location.key != null || ((photoSize.location.volume_id == -2147483648L && photoSize.location.local_id < 0) || photoSize.size < 0)) {
+                if (photoSize instanceof TL_photoStrippedSize) {
+                    dir = null;
+                } else if (photoSize.location == null || photoSize.location.key != null || ((photoSize.location.volume_id == -2147483648L && photoSize.location.local_id < 0) || photoSize.size < 0)) {
                     dir = getDirectory(4);
                 } else {
                     dir = getDirectory(0);
@@ -993,13 +995,9 @@ public class FileLoader {
             }
         }
         if (dir == null) {
-            return new File(TtmlNode.ANONYMOUS_REGION_ID);
+            return new File("");
         }
         return new File(dir, getAttachFileName(attach, ext));
-    }
-
-    public static FileStreamLoadOperation getStreamLoadOperation(TransferListener listener) {
-        return new FileStreamLoadOperation(listener);
     }
 
     public static PhotoSize getClosestPhotoSizeWithSize(ArrayList<PhotoSize> sizes, int side) {
@@ -1014,16 +1012,16 @@ public class FileLoader {
         PhotoSize closestObject = null;
         for (int a = 0; a < sizes.size(); a++) {
             PhotoSize obj = (PhotoSize) sizes.get(a);
-            if (obj != null) {
+            if (!(obj == null || (obj instanceof TL_photoSizeEmpty))) {
                 int currentSide;
                 if (byMinSide) {
-                    currentSide = obj.var_h >= obj.var_w ? obj.var_w : obj.var_h;
+                    currentSide = obj.h >= obj.w ? obj.w : obj.h;
                     if (closestObject == null || ((side > 100 && closestObject.location != null && closestObject.location.dc_id == Integer.MIN_VALUE) || (obj instanceof TL_photoCachedSize) || (side > lastSide && lastSide < currentSide))) {
                         closestObject = obj;
                         lastSide = currentSide;
                     }
                 } else {
-                    currentSide = obj.var_w >= obj.var_h ? obj.var_w : obj.var_h;
+                    currentSide = obj.w >= obj.h ? obj.w : obj.h;
                     if (closestObject == null || ((side > 100 && closestObject.location != null && closestObject.location.dc_id == Integer.MIN_VALUE) || (obj instanceof TL_photoCachedSize) || (currentSide <= side && lastSide < currentSide))) {
                         closestObject = obj;
                         lastSide = currentSide;
@@ -1039,13 +1037,13 @@ public class FileLoader {
         try {
             return name.substring(name.lastIndexOf(46) + 1);
         } catch (Exception e) {
-            return TtmlNode.ANONYMOUS_REGION_ID;
+            return "";
         }
     }
 
     public static String fixFileName(String fileName) {
         if (fileName != null) {
-            return fileName.replaceAll("[\u0001-\u001f<>:\"/\\\\|?*\u007f]+", TtmlNode.ANONYMOUS_REGION_ID).trim();
+            return fileName.replaceAll("[\u0001-\u001f<>:\"/\\\\|?*]+", "").trim();
         }
         return fileName;
     }
@@ -1065,7 +1063,7 @@ public class FileLoader {
             }
         }
         fileName = fixFileName(fileName);
-        return fileName != null ? fileName : TtmlNode.ANONYMOUS_REGION_ID;
+        return fileName != null ? fileName : "";
     }
 
     public static String getExtensionByMime(String mime) {
@@ -1073,7 +1071,7 @@ public class FileLoader {
         if (index != -1) {
             return mime.substring(index + 1);
         }
-        return TtmlNode.ANONYMOUS_REGION_ID;
+        return "";
     }
 
     public static File getInternalCacheDir() {
@@ -1091,7 +1089,7 @@ public class FileLoader {
             ext = document.mime_type;
         }
         if (ext == null) {
-            ext = TtmlNode.ANONYMOUS_REGION_ID;
+            ext = "";
         }
         return ext.toUpperCase();
     }
@@ -1115,7 +1113,7 @@ public class FileLoader {
                         docExt = docExt.substring(idx);
                     }
                 }
-                docExt = TtmlNode.ANONYMOUS_REGION_ID;
+                docExt = "";
             }
             if (docExt.length() <= 1) {
                 if (document.mime_type != null) {
@@ -1128,7 +1126,7 @@ public class FileLoader {
                             }
                             break;
                         case 1331848029:
-                            if (str.equals(MimeTypes.VIDEO_MP4)) {
+                            if (str.equals("video/mp4")) {
                                 obj2 = null;
                                 break;
                             }
@@ -1142,29 +1140,29 @@ public class FileLoader {
                             docExt = ".ogg";
                             break;
                         default:
-                            docExt = TtmlNode.ANONYMOUS_REGION_ID;
+                            docExt = "";
                             break;
                     }
                 }
-                docExt = TtmlNode.ANONYMOUS_REGION_ID;
+                docExt = "";
             }
             if (docExt.length() > 1) {
-                return document.dc_id + "_" + document.var_id + docExt;
+                return document.dc_id + "_" + document.id + docExt;
             }
-            return document.dc_id + "_" + document.var_id;
+            return document.dc_id + "_" + document.id;
         } else if (attach instanceof SecureDocument) {
             SecureDocument secureDocument = (SecureDocument) attach;
-            return secureDocument.secureFile.dc_id + "_" + secureDocument.secureFile.var_id + ".jpg";
+            return secureDocument.secureFile.dc_id + "_" + secureDocument.secureFile.id + ".jpg";
         } else if (attach instanceof TL_secureFile) {
             TL_secureFile secureFile = (TL_secureFile) attach;
-            return secureFile.dc_id + "_" + secureFile.var_id + ".jpg";
+            return secureFile.dc_id + "_" + secureFile.id + ".jpg";
         } else if (attach instanceof WebFile) {
             WebFile document2 = (WebFile) attach;
             return Utilities.MD5(document2.url) + "." + ImageLoader.getHttpUrlExtension(document2.url, getExtensionByMime(document2.mime_type));
         } else if (attach instanceof PhotoSize) {
             PhotoSize photo = (PhotoSize) attach;
             if (photo.location == null || (photo.location instanceof TL_fileLocationUnavailable)) {
-                return TtmlNode.ANONYMOUS_REGION_ID;
+                return "";
             }
             append = new StringBuilder().append(photo.location.volume_id).append("_").append(photo.location.local_id).append(".");
             if (ext == null) {
@@ -1173,7 +1171,7 @@ public class FileLoader {
             return append.append(ext).toString();
         } else if (attach instanceof FileLocation) {
             if (attach instanceof TL_fileLocationUnavailable) {
-                return TtmlNode.ANONYMOUS_REGION_ID;
+                return "";
             }
             location = (FileLocation) attach;
             append = new StringBuilder().append(location.volume_id).append("_").append(location.local_id).append(".");
@@ -1182,7 +1180,7 @@ public class FileLoader {
             }
             return append.append(ext).toString();
         } else if (!(attach instanceof Photo)) {
-            return TtmlNode.ANONYMOUS_REGION_ID;
+            return "";
         } else {
             location = (FileLocation) attach;
             append = new StringBuilder().append(location.volume_id).append("_").append(location.local_id).append(".");
@@ -1209,7 +1207,7 @@ public class FileLoader {
                         encrypted.deleteOnExit();
                     }
                 } catch (Throwable e) {
-                    FileLog.m13e(e);
+                    FileLog.e(e);
                 }
                 try {
                     File key = new File(getInternalCacheDir(), file.getName() + ".enc.key");
@@ -1217,7 +1215,7 @@ public class FileLoader {
                         key.deleteOnExit();
                     }
                 } catch (Throwable e2) {
-                    FileLog.m13e(e2);
+                    FileLog.e(e2);
                 }
             } else if (file.exists()) {
                 try {
@@ -1225,7 +1223,7 @@ public class FileLoader {
                         file.deleteOnExit();
                     }
                 } catch (Throwable e22) {
-                    FileLog.m13e(e22);
+                    FileLog.e(e22);
                 }
             }
             try {
@@ -1234,7 +1232,7 @@ public class FileLoader {
                     qFile.deleteOnExit();
                 }
             } catch (Throwable e222) {
-                FileLog.m13e(e222);
+                FileLog.e(e222);
             }
         }
         if (type == 2) {

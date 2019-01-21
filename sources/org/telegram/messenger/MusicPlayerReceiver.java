@@ -18,7 +18,7 @@ public class MusicPlayerReceiver extends BroadcastReceiver {
                                 MediaController.getInstance().playMessage(MediaController.getInstance().getPlayingMessageObject());
                                 return;
                             } else {
-                                MediaController.getInstance().lambda$startAudioAgain$6$MediaController(MediaController.getInstance().getPlayingMessageObject());
+                                MediaController.getInstance().lambda$startAudioAgain$5$MediaController(MediaController.getInstance().getPlayingMessageObject());
                                 return;
                             }
                         case 87:
@@ -31,22 +31,22 @@ public class MusicPlayerReceiver extends BroadcastReceiver {
                             MediaController.getInstance().playMessage(MediaController.getInstance().getPlayingMessageObject());
                             return;
                         case 127:
-                            MediaController.getInstance().lambda$startAudioAgain$6$MediaController(MediaController.getInstance().getPlayingMessageObject());
+                            MediaController.getInstance().lambda$startAudioAgain$5$MediaController(MediaController.getInstance().getPlayingMessageObject());
                             return;
                         default:
                             return;
                     }
                 }
             }
-        } else if (intent.getAction().equals(MusicPlayerService.NOTIFY_PLAY)) {
+        } else if (intent.getAction().equals("org.telegram.android.musicplayer.play")) {
             MediaController.getInstance().playMessage(MediaController.getInstance().getPlayingMessageObject());
-        } else if (intent.getAction().equals(MusicPlayerService.NOTIFY_PAUSE) || intent.getAction().equals("android.media.AUDIO_BECOMING_NOISY")) {
-            MediaController.getInstance().lambda$startAudioAgain$6$MediaController(MediaController.getInstance().getPlayingMessageObject());
-        } else if (intent.getAction().equals(MusicPlayerService.NOTIFY_NEXT)) {
+        } else if (intent.getAction().equals("org.telegram.android.musicplayer.pause") || intent.getAction().equals("android.media.AUDIO_BECOMING_NOISY")) {
+            MediaController.getInstance().lambda$startAudioAgain$5$MediaController(MediaController.getInstance().getPlayingMessageObject());
+        } else if (intent.getAction().equals("org.telegram.android.musicplayer.next")) {
             MediaController.getInstance().playNextMessage();
-        } else if (intent.getAction().equals(MusicPlayerService.NOTIFY_CLOSE)) {
+        } else if (intent.getAction().equals("org.telegram.android.musicplayer.close")) {
             MediaController.getInstance().cleanupPlayer(true, true);
-        } else if (intent.getAction().equals(MusicPlayerService.NOTIFY_PREVIOUS)) {
+        } else if (intent.getAction().equals("org.telegram.android.musicplayer.previous")) {
             MediaController.getInstance().playPreviousMessage();
         }
     }

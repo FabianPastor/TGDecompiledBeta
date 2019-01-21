@@ -1,7 +1,11 @@
 package org.telegram.messenger;
 
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory.Options;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import java.io.File;
 import java.io.FileInputStream;
 import java.math.BigInteger;
@@ -52,6 +56,8 @@ public class Utilities {
 
     public static native String readlink(String str);
 
+    public static native void stackBlurBitmap(Bitmap bitmap, int i);
+
     public static native void unpinBitmap(Bitmap bitmap);
 
     static {
@@ -62,8 +68,21 @@ public class Utilities {
             sUrandomIn.close();
             random.setSeed(buffer);
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
+    }
+
+    public static Bitmap blurWallpaper(Bitmap src) {
+        Bitmap b;
+        if (src.getHeight() > src.getWidth()) {
+            b = Bitmap.createBitmap(Math.round((((float) src.getWidth()) * 450.0f) / ((float) src.getHeight())), 450, Config.ARGB_8888);
+        } else {
+            b = Bitmap.createBitmap(450, Math.round((((float) src.getHeight()) * 450.0f) / ((float) src.getWidth())), Config.ARGB_8888);
+        }
+        Paint paint = new Paint(2);
+        new Canvas(b).drawBitmap(src, null, new Rect(0, 0, b.getWidth(), b.getHeight()), paint);
+        stackBlurBitmap(b, 12);
+        return b;
     }
 
     public static void aesIgeEncryption(ByteBuffer buffer, byte[] key, byte[] iv, boolean encrypt, boolean changeIv, int offset, int length) {
@@ -86,7 +105,7 @@ public class Utilities {
             }
             return val;
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return val;
         }
     }
@@ -103,7 +122,7 @@ public class Utilities {
             }
             return val;
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return val;
         }
     }
@@ -118,7 +137,7 @@ public class Utilities {
 
     public static String bytesToHex(byte[] bytes) {
         if (bytes == null) {
-            return TtmlNode.ANONYMOUS_REGION_ID;
+            return "";
         }
         char[] hexChars = new char[(bytes.length * 2)];
         for (int j = 0; j < bytes.length; j++) {
@@ -205,7 +224,7 @@ public class Utilities {
             md.update(convertme, offset, len);
             return md.digest();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return new byte[20];
         }
     }
@@ -221,7 +240,7 @@ public class Utilities {
             byte[] digest = md.digest();
             return digest;
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return new byte[20];
         } finally {
             convertme.limit(oldl);
@@ -247,7 +266,7 @@ public class Utilities {
             md.update(convertme, offset, len);
             return md.digest();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return new byte[32];
         }
     }
@@ -260,7 +279,7 @@ public class Utilities {
             }
             return md.digest();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return new byte[32];
         }
     }
@@ -271,7 +290,7 @@ public class Utilities {
             md.update(convertme, 0, convertme.length);
             return md.digest();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return new byte[64];
         }
     }
@@ -283,14 +302,14 @@ public class Utilities {
             md.update(convertme2, 0, convertme2.length);
             return md.digest();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return new byte[64];
         }
     }
 
     public static byte[] computePBKDF2(byte[] password, byte[] salt) {
         byte[] dst = new byte[64];
-        pbkdf2(password, salt, dst, DefaultOggSeeker.MATCH_BYTE_RANGE);
+        pbkdf2(password, salt, dst, 100000);
         return dst;
     }
 
@@ -302,7 +321,7 @@ public class Utilities {
             md.update(convertme3, 0, convertme3.length);
             return md.digest();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return new byte[64];
         }
     }
@@ -319,7 +338,7 @@ public class Utilities {
             byte[] digest = md.digest();
             return digest;
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return new byte[32];
         } finally {
             b2.limit(oldl);
@@ -343,7 +362,7 @@ public class Utilities {
             }
             return sb.toString();
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
             return null;
         }
     }

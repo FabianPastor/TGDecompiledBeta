@@ -23,9 +23,9 @@ import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.messenger.beta.R;
-import org.telegram.p005ui.LaunchActivity;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.User;
+import org.telegram.ui.LaunchActivity;
 
 @TargetApi(23)
 public class TgChooserTargetService extends ChooserTargetService {
@@ -42,7 +42,7 @@ public class TgChooserTargetService extends ChooserTargetService {
             try {
                 countDownLatch.await();
             } catch (Throwable e) {
-                FileLog.m13e(e);
+                FileLog.e(e);
             }
         }
         return targets;
@@ -83,7 +83,7 @@ public class TgChooserTargetService extends ChooserTargetService {
                 MessagesStorage.getInstance(currentAccount).getUsersInternal(TextUtils.join(",", usersToLoad), users);
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
         for (int a = 0; a < dialogs.size(); a++) {
             Bundle extras = new Bundle();
@@ -95,7 +95,7 @@ public class TgChooserTargetService extends ChooserTargetService {
                 b = 0;
                 while (b < users.size()) {
                     User user = (User) users.get(b);
-                    if (user.var_id != id2) {
+                    if (user.id != id2) {
                         b++;
                     } else if (!user.bot) {
                         extras.putLong("dialogId", (long) id2);
@@ -109,7 +109,7 @@ public class TgChooserTargetService extends ChooserTargetService {
                 b = 0;
                 while (b < chats.size()) {
                     Chat chat = (Chat) chats.get(b);
-                    if (chat.var_id != (-id2)) {
+                    if (chat.id != (-id2)) {
                         b++;
                     } else if (!ChatObject.isNotInChat(chat) && (!ChatObject.isChannel(chat) || chat.megagroup)) {
                         extras.putLong("dialogId", (long) id2);
@@ -148,7 +148,7 @@ public class TgChooserTargetService extends ChooserTargetService {
                 return Icon.createWithBitmap(result);
             }
         } catch (Throwable e) {
-            FileLog.m13e(e);
+            FileLog.e(e);
         }
         return null;
     }

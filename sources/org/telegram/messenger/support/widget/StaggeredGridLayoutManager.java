@@ -6,14 +6,13 @@ import android.graphics.Rect;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.Parcelable.Creator;
-import android.support.p000v4.view.accessibility.AccessibilityNodeInfoCompat;
-import android.support.p000v4.view.accessibility.AccessibilityNodeInfoCompat.CollectionItemInfoCompat;
+import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
+import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat.CollectionItemInfoCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.ViewGroup.MarginLayoutParams;
 import android.view.accessibility.AccessibilityEvent;
-import com.google.android.exoplayer2.extractor.p003ts.TsExtractor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
@@ -23,7 +22,6 @@ import org.telegram.messenger.support.widget.RecyclerView.LayoutManager.LayoutPr
 import org.telegram.messenger.support.widget.RecyclerView.Recycler;
 import org.telegram.messenger.support.widget.RecyclerView.SmoothScroller.ScrollVectorProvider;
 import org.telegram.messenger.support.widget.RecyclerView.State;
-import org.telegram.tgnet.ConnectionsManager;
 
 public class StaggeredGridLayoutManager extends LayoutManager implements ScrollVectorProvider {
     static final boolean DEBUG = false;
@@ -37,7 +35,11 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
     private static final String TAG = "StaggeredGridLManager";
     public static final int VERTICAL = 1;
     private final AnchorInfo mAnchorInfo = new AnchorInfo();
-    private final Runnable mCheckForGapsRunnable = new CLASSNAME();
+    private final Runnable mCheckForGapsRunnable = new Runnable() {
+        public void run() {
+            StaggeredGridLayoutManager.this.checkForGaps();
+        }
+    };
     private int mFullSizeSpec;
     private int mGapStrategy = 2;
     private boolean mLaidOutInvalidFullSpan = false;
@@ -60,16 +62,6 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
     private int mSpanCount = -1;
     Span[] mSpans;
     private final Rect mTmpRect = new Rect();
-
-    /* renamed from: org.telegram.messenger.support.widget.StaggeredGridLayoutManager$1 */
-    class CLASSNAME implements Runnable {
-        CLASSNAME() {
-        }
-
-        public void run() {
-            StaggeredGridLayoutManager.this.checkForGaps();
-        }
-    }
 
     class AnchorInfo {
         boolean mInvalidateOffsets;
@@ -170,17 +162,7 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
         List<FullSpanItem> mFullSpanItems;
 
         static class FullSpanItem implements Parcelable {
-            public static final Creator<FullSpanItem> CREATOR = new CLASSNAME();
-            int mGapDir;
-            int[] mGapPerSpan;
-            boolean mHasUnwantedGapAfter;
-            int mPosition;
-
-            /* renamed from: org.telegram.messenger.support.widget.StaggeredGridLayoutManager$LazySpanLookup$FullSpanItem$1 */
-            static class CLASSNAME implements Creator<FullSpanItem> {
-                CLASSNAME() {
-                }
-
+            public static final Creator<FullSpanItem> CREATOR = new Creator<FullSpanItem>() {
                 public FullSpanItem createFromParcel(Parcel in) {
                     return new FullSpanItem(in);
                 }
@@ -188,7 +170,11 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
                 public FullSpanItem[] newArray(int size) {
                     return new FullSpanItem[size];
                 }
-            }
+            };
+            int mGapDir;
+            int[] mGapPerSpan;
+            boolean mHasUnwantedGapAfter;
+            int mPosition;
 
             FullSpanItem(Parcel in) {
                 boolean z = true;
@@ -423,7 +409,15 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
     }
 
     public static class SavedState implements Parcelable {
-        public static final Creator<SavedState> CREATOR = new CLASSNAME();
+        public static final Creator<SavedState> CREATOR = new Creator<SavedState>() {
+            public SavedState createFromParcel(Parcel in) {
+                return new SavedState(in);
+            }
+
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
         boolean mAnchorLayoutFromEnd;
         int mAnchorPosition;
         List<FullSpanItem> mFullSpanItems;
@@ -434,20 +428,6 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
         int[] mSpanOffsets;
         int mSpanOffsetsSize;
         int mVisibleAnchorPosition;
-
-        /* renamed from: org.telegram.messenger.support.widget.StaggeredGridLayoutManager$SavedState$1 */
-        static class CLASSNAME implements Creator<SavedState> {
-            CLASSNAME() {
-            }
-
-            public SavedState createFromParcel(Parcel in) {
-                return new SavedState(in);
-            }
-
-            public SavedState[] newArray(int size) {
-                return new SavedState[size];
-            }
-        }
 
         SavedState(Parcel in) {
             boolean z;
@@ -1707,8 +1687,8 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
     }
 
     private void fixStartGap(Recycler recycler, State state, boolean canOffsetChildren) {
-        int minStartLine = getMinStart(ConnectionsManager.DEFAULT_DATACENTER_ID);
-        if (minStartLine != ConnectionsManager.DEFAULT_DATACENTER_ID) {
+        int minStartLine = getMinStart(Integer.MAX_VALUE);
+        if (minStartLine != Integer.MAX_VALUE) {
             int gap = minStartLine - this.mPrimaryOrientation.getStartAfterPadding();
             if (gap > 0) {
                 gap -= scrollBy(gap, recycler, state);
@@ -1844,7 +1824,7 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
         this.mRemainingSpans.set(0, this.mSpanCount, true);
         if (this.mLayoutState.mInfinite) {
             if (layoutState.mLayoutDirection == 1) {
-                targetLine = ConnectionsManager.DEFAULT_DATACENTER_ID;
+                targetLine = Integer.MAX_VALUE;
             } else {
                 targetLine = Integer.MIN_VALUE;
             }
@@ -2228,7 +2208,7 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
         int otherLine;
         if (layoutState.mLayoutDirection == 1) {
             Span min = null;
-            int minLine = ConnectionsManager.DEFAULT_DATACENTER_ID;
+            int minLine = Integer.MAX_VALUE;
             defaultLine = this.mPrimaryOrientation.getStartAfterPadding();
             for (i = startIndex; i != endIndex; i += diff) {
                 other = this.mSpans[i];
@@ -2485,7 +2465,7 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
         updateLayoutState(referenceChildPosition, state);
         setLayoutStateDirection(layoutDir);
         this.mLayoutState.mCurrentPosition = this.mLayoutState.mItemDirection + referenceChildPosition;
-        this.mLayoutState.mAvailable = (int) (MAX_SCROLL_FACTOR * ((float) this.mPrimaryOrientation.getTotalSpace()));
+        this.mLayoutState.mAvailable = (int) (0.33333334f * ((float) this.mPrimaryOrientation.getTotalSpace()));
         this.mLayoutState.mStopInFocusable = true;
         this.mLayoutState.mRecycle = false;
         fill(recycler, this.mLayoutState, state);
@@ -2585,7 +2565,7 @@ public class StaggeredGridLayoutManager extends LayoutManager implements ScrollV
                     i2 = Integer.MIN_VALUE;
                 }
                 return i2;
-            case TsExtractor.TS_STREAM_TYPE_HDMV_DTS /*130*/:
+            case 130:
                 if (this.mOrientation == 1) {
                     i = 1;
                 }

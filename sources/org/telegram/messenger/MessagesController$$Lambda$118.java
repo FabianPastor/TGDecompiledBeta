@@ -11,6 +11,6 @@ final /* synthetic */ class MessagesController$$Lambda$118 implements Comparator
     }
 
     public int compare(Object obj, Object obj2) {
-        return this.arg$1.lambda$processUpdatesQueue$181$MessagesController((Updates) obj, (Updates) obj2);
+        return this.arg$1.lambda$processUpdatesQueue$186$MessagesController((Updates) obj, (Updates) obj2);
     }
 }

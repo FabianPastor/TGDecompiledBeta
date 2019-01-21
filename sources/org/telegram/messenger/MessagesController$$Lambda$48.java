@@ -1,26 +1,22 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
-import org.telegram.tgnet.TLRPC.ChatFull;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.tgnet.TLRPC.TL_messages_saveGif;
 
-final /* synthetic */ class MessagesController$$Lambda$48 implements Runnable {
+final /* synthetic */ class MessagesController$$Lambda$48 implements RequestDelegate {
     private final MessagesController arg$1;
-    private final ArrayList arg$2;
-    private final boolean arg$3;
-    private final ChatFull arg$4;
-    private final boolean arg$5;
-    private final MessageObject arg$6;
+    private final Object arg$2;
+    private final TL_messages_saveGif arg$3;
 
-    MessagesController$$Lambda$48(MessagesController messagesController, ArrayList arrayList, boolean z, ChatFull chatFull, boolean z2, MessageObject messageObject) {
+    MessagesController$$Lambda$48(MessagesController messagesController, Object obj, TL_messages_saveGif tL_messages_saveGif) {
         this.arg$1 = messagesController;
-        this.arg$2 = arrayList;
-        this.arg$3 = z;
-        this.arg$4 = chatFull;
-        this.arg$5 = z2;
-        this.arg$6 = messageObject;
+        this.arg$2 = obj;
+        this.arg$3 = tL_messages_saveGif;
     }
 
-    public void run() {
-        this.arg$1.lambda$processChatInfo$64$MessagesController(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6);
+    public void run(TLObject tLObject, TL_error tL_error) {
+        this.arg$1.lambda$saveGif$67$MessagesController(this.arg$2, this.arg$3, tLObject, tL_error);
     }
 }

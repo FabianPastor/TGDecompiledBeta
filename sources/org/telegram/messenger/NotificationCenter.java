@@ -84,13 +84,13 @@ public class NotificationCenter {
     public static final int messageReceivedByAck;
     public static final int messageReceivedByServer;
     public static final int messageSendError;
-    public static final int messageThumbGenerated;
     public static final int messagesDeleted;
     public static final int messagesDidLoad;
     public static final int messagesRead;
     public static final int messagesReadContent;
     public static final int messagesReadEncrypted;
     public static final int musicDidLoad;
+    public static final int needDeleteDialog;
     public static final int needReloadArchivedStickers;
     public static final int needReloadRecentDialogsSearch;
     public static final int needSetDayNightTheme;
@@ -147,11 +147,10 @@ public class NotificationCenter {
 
     private class DelayedPost {
         private Object[] args;
-        /* renamed from: id */
-        private int var_id;
+        private int id;
 
         private DelayedPost(int id, Object[] args) {
-            this.var_id = id;
+            this.id = id;
             this.args = args;
         }
     }
@@ -466,6 +465,9 @@ public class NotificationCenter {
         configLoaded = i;
         i = totalEvents;
         totalEvents = i + 1;
+        needDeleteDialog = i;
+        i = totalEvents;
+        totalEvents = i + 1;
         pushMessagesUpdated = i;
         i = totalEvents;
         totalEvents = i + 1;
@@ -491,9 +493,6 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         didReplacedPhotoInMemCache = i;
-        i = totalEvents;
-        totalEvents = i + 1;
-        messageThumbGenerated = i;
         i = totalEvents;
         totalEvents = i + 1;
         didSetNewTheme = i;
@@ -603,7 +602,7 @@ public class NotificationCenter {
         if (!this.animationInProgress && !this.delayedPosts.isEmpty()) {
             for (int a = 0; a < this.delayedPosts.size(); a++) {
                 DelayedPost delayedPost = (DelayedPost) this.delayedPosts.get(a);
-                postNotificationNameInternal(delayedPost.var_id, true, delayedPost.args);
+                postNotificationNameInternal(delayedPost.id, true, delayedPost.args);
             }
             this.delayedPosts.clear();
         }
@@ -667,7 +666,7 @@ public class NotificationCenter {
         } else {
             this.delayedPosts.add(new DelayedPost(id, args));
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.m11e("delay post notification " + id + " with args count = " + args.length);
+                FileLog.e("delay post notification " + id + " with args count = " + args.length);
             }
         }
     }

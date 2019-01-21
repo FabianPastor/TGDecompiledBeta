@@ -1,17 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.messenger.MessagesStorage.IntCallback;
+import java.util.Comparator;
+import org.telegram.tgnet.TLRPC.Message;
 
-final /* synthetic */ class MessagesStorage$$Lambda$111 implements Runnable {
-    private final IntCallback arg$1;
-    private final int arg$2;
+final /* synthetic */ class MessagesStorage$$Lambda$111 implements Comparator {
+    static final Comparator $instance = new MessagesStorage$$Lambda$111();
 
-    MessagesStorage$$Lambda$111(IntCallback intCallback, int i) {
-        this.arg$1 = intCallback;
-        this.arg$2 = i;
+    private MessagesStorage$$Lambda$111() {
     }
 
-    public void run() {
-        this.arg$1.lambda$null$87$MessagesStorage(this.arg$2);
+    public int compare(Object obj, Object obj2) {
+        return MessagesStorage.lambda$null$89$MessagesStorage((Message) obj, (Message) obj2);
     }
 }

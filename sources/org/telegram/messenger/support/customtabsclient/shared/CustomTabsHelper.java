@@ -28,7 +28,7 @@ public class CustomTabsHelper {
     }
 
     public static void addKeepAliveExtra(Context context, Intent intent) {
-        intent.putExtra(EXTRA_CUSTOM_TABS_KEEP_ALIVE, new Intent().setClassName(context.getPackageName(), KeepAliveService.class.getCanonicalName()));
+        intent.putExtra("android.support.customtabs.extra.KEEP_ALIVE", new Intent().setClassName(context.getPackageName(), KeepAliveService.class.getCanonicalName()));
     }
 
     public static String getPackageNameToUse(Context context) {
@@ -58,22 +58,22 @@ public class CustomTabsHelper {
             sPackageNameToUse = (String) packagesSupportingCustomTabs.get(0);
         } else if (!TextUtils.isEmpty(defaultViewHandlerPackageName) && !hasSpecializedHandlerIntents(context, activityIntent) && packagesSupportingCustomTabs.contains(defaultViewHandlerPackageName)) {
             sPackageNameToUse = defaultViewHandlerPackageName;
-        } else if (packagesSupportingCustomTabs.contains(STABLE_PACKAGE)) {
-            sPackageNameToUse = STABLE_PACKAGE;
-        } else if (packagesSupportingCustomTabs.contains(BETA_PACKAGE)) {
-            sPackageNameToUse = BETA_PACKAGE;
-        } else if (packagesSupportingCustomTabs.contains(DEV_PACKAGE)) {
-            sPackageNameToUse = DEV_PACKAGE;
-        } else if (packagesSupportingCustomTabs.contains(LOCAL_PACKAGE)) {
-            sPackageNameToUse = LOCAL_PACKAGE;
+        } else if (packagesSupportingCustomTabs.contains("com.android.chrome")) {
+            sPackageNameToUse = "com.android.chrome";
+        } else if (packagesSupportingCustomTabs.contains("com.chrome.beta")) {
+            sPackageNameToUse = "com.chrome.beta";
+        } else if (packagesSupportingCustomTabs.contains("com.chrome.dev")) {
+            sPackageNameToUse = "com.chrome.dev";
+        } else if (packagesSupportingCustomTabs.contains("com.google.android.apps.chrome")) {
+            sPackageNameToUse = "com.google.android.apps.chrome";
         }
         try {
             if ("com.sec.android.app.sbrowser".equalsIgnoreCase(sPackageNameToUse)) {
                 pm = ApplicationLoader.applicationContext.getPackageManager();
-                ApplicationInfo applicationInfo = pm.getApplicationInfo(STABLE_PACKAGE, 0);
+                ApplicationInfo applicationInfo = pm.getApplicationInfo("com.android.chrome", 0);
                 if (applicationInfo != null && applicationInfo.enabled) {
-                    PackageInfo packageInfo = pm.getPackageInfo(STABLE_PACKAGE, 1);
-                    sPackageNameToUse = STABLE_PACKAGE;
+                    PackageInfo packageInfo = pm.getPackageInfo("com.android.chrome", 1);
+                    sPackageNameToUse = "com.android.chrome";
                 }
             }
         } catch (Throwable th) {
@@ -95,12 +95,12 @@ public class CustomTabsHelper {
             }
             return false;
         } catch (RuntimeException e) {
-            Log.e(TAG, "Runtime exception while getting specialized handlers");
+            Log.e("CustomTabsHelper", "Runtime exception while getting specialized handlers");
             return false;
         }
     }
 
     public static String[] getPackages() {
-        return new String[]{TtmlNode.ANONYMOUS_REGION_ID, STABLE_PACKAGE, BETA_PACKAGE, DEV_PACKAGE, LOCAL_PACKAGE};
+        return new String[]{"", "com.android.chrome", "com.chrome.beta", "com.chrome.dev", "com.google.android.apps.chrome"};
     }
 }

@@ -1,21 +1,21 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC.InputPeer;
+import org.telegram.tgnet.TLObject;
 
 final /* synthetic */ class MessagesStorage$$Lambda$133 implements Runnable {
     private final MessagesStorage arg$1;
-    private final long arg$2;
-    private final InputPeer arg$3;
-    private final long arg$4;
+    private final int arg$2;
+    private final long arg$3;
+    private final TLObject arg$4;
 
-    MessagesStorage$$Lambda$133(MessagesStorage messagesStorage, long j, InputPeer inputPeer, long j2) {
+    MessagesStorage$$Lambda$133(MessagesStorage messagesStorage, int i, long j, TLObject tLObject) {
         this.arg$1 = messagesStorage;
-        this.arg$2 = j;
-        this.arg$3 = inputPeer;
-        this.arg$4 = j2;
+        this.arg$2 = i;
+        this.arg$3 = j;
+        this.arg$4 = tLObject;
     }
 
     public void run() {
-        this.arg$1.lambda$null$14$MessagesStorage(this.arg$2, this.arg$3, this.arg$4);
+        this.arg$1.lambda$null$13$MessagesStorage(this.arg$2, this.arg$3, this.arg$4);
     }
 }

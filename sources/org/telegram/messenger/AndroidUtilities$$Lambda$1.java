@@ -1,17 +1,14 @@
 package org.telegram.messenger;
 
-import android.app.Activity;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
-final /* synthetic */ class AndroidUtilities$$Lambda$1 implements OnClickListener {
-    private final Activity arg$1;
+final /* synthetic */ class AndroidUtilities$$Lambda$1 implements OnSuccessListener {
+    static final OnSuccessListener $instance = new AndroidUtilities$$Lambda$1();
 
-    AndroidUtilities$$Lambda$1(Activity activity) {
-        this.arg$1 = activity;
+    private AndroidUtilities$$Lambda$1() {
     }
 
-    public void onClick(DialogInterface dialogInterface, int i) {
-        AndroidUtilities.lambda$openForView$1$AndroidUtilities(this.arg$1, dialogInterface, i);
+    public void onSuccess(Object obj) {
+        AndroidUtilities.lambda$setWaitingForSms$1$AndroidUtilities((Void) obj);
     }
 }

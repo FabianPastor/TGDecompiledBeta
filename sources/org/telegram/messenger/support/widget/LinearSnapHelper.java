@@ -4,7 +4,6 @@ import android.graphics.PointF;
 import android.view.View;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.SmoothScroller.ScrollVectorProvider;
-import org.telegram.tgnet.ConnectionsManager;
 
 public class LinearSnapHelper extends SnapHelper {
     private static final float INVALID_DISTANCE = 1.0f;
@@ -125,7 +124,7 @@ public class LinearSnapHelper extends SnapHelper {
         } else {
             center = helper.getEnd() / 2;
         }
-        int absClosest = ConnectionsManager.DEFAULT_DATACENTER_ID;
+        int absClosest = Integer.MAX_VALUE;
         for (int i = 0; i < childCount; i++) {
             View child = layoutManager.getChildAt(i);
             int absDistance = Math.abs((helper.getDecoratedStart(child) + (helper.getDecoratedMeasurement(child) / 2)) - center);
@@ -140,11 +139,11 @@ public class LinearSnapHelper extends SnapHelper {
     private float computeDistancePerChild(LayoutManager layoutManager, OrientationHelper helper) {
         View minPosView = null;
         View maxPosView = null;
-        int minPos = ConnectionsManager.DEFAULT_DATACENTER_ID;
+        int minPos = Integer.MAX_VALUE;
         int maxPos = Integer.MIN_VALUE;
         int childCount = layoutManager.getChildCount();
         if (childCount == 0) {
-            return INVALID_DISTANCE;
+            return 1.0f;
         }
         for (int i = 0; i < childCount; i++) {
             View child = layoutManager.getChildAt(i);
@@ -161,13 +160,13 @@ public class LinearSnapHelper extends SnapHelper {
             }
         }
         if (minPosView == null || maxPosView == null) {
-            return INVALID_DISTANCE;
+            return 1.0f;
         }
         int distance = Math.max(helper.getDecoratedEnd(minPosView), helper.getDecoratedEnd(maxPosView)) - Math.min(helper.getDecoratedStart(minPosView), helper.getDecoratedStart(maxPosView));
         if (distance == 0) {
-            return INVALID_DISTANCE;
+            return 1.0f;
         }
-        return (INVALID_DISTANCE * ((float) distance)) / ((float) ((maxPos - minPos) + 1));
+        return (1.0f * ((float) distance)) / ((float) ((maxPos - minPos) + 1));
     }
 
     private OrientationHelper getVerticalHelper(LayoutManager layoutManager) {

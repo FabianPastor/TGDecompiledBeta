@@ -26,14 +26,14 @@ public interface IPostMessageService extends IInterface {
             }
 
             public String getInterfaceDescriptor() {
-                return Stub.DESCRIPTOR;
+                return "android.support.customtabs.IPostMessageService";
             }
 
             public void onMessageChannelReady(ICustomTabsCallback callback, Bundle extras) throws RemoteException {
                 Parcel _data = Parcel.obtain();
                 Parcel _reply = Parcel.obtain();
                 try {
-                    _data.writeInterfaceToken(Stub.DESCRIPTOR);
+                    _data.writeInterfaceToken("android.support.customtabs.IPostMessageService");
                     _data.writeStrongBinder(callback != null ? callback.asBinder() : null);
                     if (extras != null) {
                         _data.writeInt(1);
@@ -53,7 +53,7 @@ public interface IPostMessageService extends IInterface {
                 Parcel _data = Parcel.obtain();
                 Parcel _reply = Parcel.obtain();
                 try {
-                    _data.writeInterfaceToken(Stub.DESCRIPTOR);
+                    _data.writeInterfaceToken("android.support.customtabs.IPostMessageService");
                     _data.writeStrongBinder(callback != null ? callback.asBinder() : null);
                     _data.writeString(message);
                     if (extras != null) {
@@ -72,14 +72,14 @@ public interface IPostMessageService extends IInterface {
         }
 
         public Stub() {
-            attachInterface(this, DESCRIPTOR);
+            attachInterface(this, "android.support.customtabs.IPostMessageService");
         }
 
         public static IPostMessageService asInterface(IBinder obj) {
             if (obj == null) {
                 return null;
             }
-            IInterface iin = obj.queryLocalInterface(DESCRIPTOR);
+            IInterface iin = obj.queryLocalInterface("android.support.customtabs.IPostMessageService");
             return (iin == null || !(iin instanceof IPostMessageService)) ? new Proxy(obj) : (IPostMessageService) iin;
         }
 
@@ -92,7 +92,7 @@ public interface IPostMessageService extends IInterface {
             switch (code) {
                 case 2:
                     Bundle _arg11;
-                    data.enforceInterface(DESCRIPTOR);
+                    data.enforceInterface("android.support.customtabs.IPostMessageService");
                     _arg0 = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder());
                     if (data.readInt() != 0) {
                         _arg11 = (Bundle) Bundle.CREATOR.createFromParcel(data);
@@ -104,7 +104,7 @@ public interface IPostMessageService extends IInterface {
                     return true;
                 case 3:
                     Bundle _arg2;
-                    data.enforceInterface(DESCRIPTOR);
+                    data.enforceInterface("android.support.customtabs.IPostMessageService");
                     _arg0 = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder());
                     String _arg1 = data.readString();
                     if (data.readInt() != 0) {
@@ -116,7 +116,7 @@ public interface IPostMessageService extends IInterface {
                     reply.writeNoException();
                     return true;
                 case 1598968902:
-                    reply.writeString(DESCRIPTOR);
+                    reply.writeString("android.support.customtabs.IPostMessageService");
                     return true;
                 default:
                     return super.onTransact(code, data, reply, flags);

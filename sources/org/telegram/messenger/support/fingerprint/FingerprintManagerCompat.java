@@ -3,7 +3,7 @@ package org.telegram.messenger.support.fingerprint;
 import android.content.Context;
 import android.os.Build.VERSION;
 import android.os.Handler;
-import android.support.p000v4.p001os.CancellationSignal;
+import android.support.v4.os.CancellationSignal;
 import java.security.Signature;
 import javax.crypto.Cipher;
 import javax.crypto.Mac;

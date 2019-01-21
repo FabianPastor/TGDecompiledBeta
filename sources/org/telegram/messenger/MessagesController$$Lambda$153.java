@@ -1,9 +1,9 @@
 package org.telegram.messenger;
 
 import android.os.Bundle;
-import org.telegram.p005ui.ActionBar.AlertDialog;
-import org.telegram.p005ui.ActionBar.BaseFragment;
 import org.telegram.tgnet.TLObject;
+import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.BaseFragment;
 
 final /* synthetic */ class MessagesController$$Lambda$153 implements Runnable {
     private final MessagesController arg$1;
@@ -21,6 +21,6 @@ final /* synthetic */ class MessagesController$$Lambda$153 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$null$242$MessagesController(this.arg$2, this.arg$3, this.arg$4, this.arg$5);
+        this.arg$1.lambda$null$248$MessagesController(this.arg$2, this.arg$3, this.arg$4, this.arg$5);
     }
 }

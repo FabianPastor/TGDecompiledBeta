@@ -13,11 +13,11 @@ public class SunDate {
     }
 
     private static double revolution(double x) {
-        return x - (360.0d * Math.floor(INV360 * x));
+        return x - (360.0d * Math.floor(0.002777777777777778d * x));
     }
 
     private static double rev180(double x) {
-        return x - (360.0d * Math.floor((INV360 * x) + 0.5d));
+        return x - (360.0d * Math.floor((0.002777777777777778d * x) + 0.5d));
     }
 
     private static double GMST0(double d) {
@@ -25,30 +25,30 @@ public class SunDate {
     }
 
     private static double sind(double x) {
-        return Math.sin(DEGRAD * x);
+        return Math.sin(0.017453292519943295d * x);
     }
 
     private static double cosd(double x) {
-        return Math.cos(DEGRAD * x);
+        return Math.cos(0.017453292519943295d * x);
     }
 
     private static double tand(double x) {
-        return Math.tan(DEGRAD * x);
+        return Math.tan(0.017453292519943295d * x);
     }
 
     private static double acosd(double x) {
-        return RADEG * Math.acos(x);
+        return 57.29577951308232d * Math.acos(x);
     }
 
     private static double atan2d(double y, double x) {
-        return RADEG * Math.atan2(y, x);
+        return 57.29577951308232d * Math.atan2(y, x);
     }
 
     private static void sunposAtDay(double p, double[] ot, double[] d) {
         double S = revolution(356.047d + (0.9856002585d * p));
         double l = 282.9404d + (4.70935E-5d * p);
         double a = 0.016709d - (1.151E-9d * p);
-        double V = (((RADEG * a) * sind(S)) * (1.0d + (cosd(S) * a))) + S;
+        double V = (((57.29577951308232d * a) * sind(S)) * (1.0d + (cosd(S) * a))) + S;
         double k = cosd(V) - a;
         double i = Math.sqrt(1.0d - (a * a)) * sind(V);
         d[0] = Math.sqrt((k * k) + (i * i));

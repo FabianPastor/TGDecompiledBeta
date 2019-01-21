@@ -4,25 +4,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.support.p000v4.app.BundleCompat;
+import android.support.v4.app.BundleCompat;
 import android.util.Log;
 import org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub;
 
 public class CustomTabsSessionToken {
     private static final String TAG = "CustomTabsSessionToken";
-    private final CustomTabsCallback mCallback = new CLASSNAME();
-    private final ICustomTabsCallback mCallbackBinder;
-
-    /* renamed from: org.telegram.messenger.support.customtabs.CustomTabsSessionToken$1 */
-    class CLASSNAME extends CustomTabsCallback {
-        CLASSNAME() {
-        }
-
+    private final CustomTabsCallback mCallback = new CustomTabsCallback() {
         public void onNavigationEvent(int navigationEvent, Bundle extras) {
             try {
                 CustomTabsSessionToken.this.mCallbackBinder.onNavigationEvent(navigationEvent, extras);
             } catch (RemoteException e) {
-                Log.e(CustomTabsSessionToken.TAG, "RemoteException during ICustomTabsCallback transaction");
+                Log.e("CustomTabsSessionToken", "RemoteException during ICustomTabsCallback transaction");
             }
         }
 
@@ -30,7 +23,7 @@ public class CustomTabsSessionToken {
             try {
                 CustomTabsSessionToken.this.mCallbackBinder.extraCallback(callbackName, args);
             } catch (RemoteException e) {
-                Log.e(CustomTabsSessionToken.TAG, "RemoteException during ICustomTabsCallback transaction");
+                Log.e("CustomTabsSessionToken", "RemoteException during ICustomTabsCallback transaction");
             }
         }
 
@@ -38,7 +31,7 @@ public class CustomTabsSessionToken {
             try {
                 CustomTabsSessionToken.this.mCallbackBinder.onMessageChannelReady(extras);
             } catch (RemoteException e) {
-                Log.e(CustomTabsSessionToken.TAG, "RemoteException during ICustomTabsCallback transaction");
+                Log.e("CustomTabsSessionToken", "RemoteException during ICustomTabsCallback transaction");
             }
         }
 
@@ -46,10 +39,11 @@ public class CustomTabsSessionToken {
             try {
                 CustomTabsSessionToken.this.mCallbackBinder.onPostMessage(message, extras);
             } catch (RemoteException e) {
-                Log.e(CustomTabsSessionToken.TAG, "RemoteException during ICustomTabsCallback transaction");
+                Log.e("CustomTabsSessionToken", "RemoteException during ICustomTabsCallback transaction");
             }
         }
-    }
+    };
+    private final ICustomTabsCallback mCallbackBinder;
 
     static class DummyCallback extends Stub {
         DummyCallback() {
@@ -73,7 +67,7 @@ public class CustomTabsSessionToken {
     }
 
     public static CustomTabsSessionToken getSessionTokenFromIntent(Intent intent) {
-        IBinder binder = BundleCompat.getBinder(intent.getExtras(), CustomTabsIntent.EXTRA_SESSION);
+        IBinder binder = BundleCompat.getBinder(intent.getExtras(), "android.support.customtabs.extra.SESSION");
         if (binder == null) {
             return null;
         }

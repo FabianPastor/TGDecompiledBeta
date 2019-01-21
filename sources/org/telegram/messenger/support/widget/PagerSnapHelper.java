@@ -7,7 +7,6 @@ import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.SmoothScroller.Action;
 import org.telegram.messenger.support.widget.RecyclerView.SmoothScroller.ScrollVectorProvider;
 import org.telegram.messenger.support.widget.RecyclerView.State;
-import org.telegram.tgnet.ConnectionsManager;
 
 public class PagerSnapHelper extends SnapHelper {
     private static final int MAX_SCROLL_ON_FLING_DURATION = 100;
@@ -86,7 +85,7 @@ public class PagerSnapHelper extends SnapHelper {
                 }
 
                 protected int calculateTimeForScrolling(int dx) {
-                    return Math.min(PagerSnapHelper.MAX_SCROLL_ON_FLING_DURATION, super.calculateTimeForScrolling(dx));
+                    return Math.min(100, super.calculateTimeForScrolling(dx));
                 }
             };
         }
@@ -116,7 +115,7 @@ public class PagerSnapHelper extends SnapHelper {
         } else {
             center = helper.getEnd() / 2;
         }
-        int absClosest = ConnectionsManager.DEFAULT_DATACENTER_ID;
+        int absClosest = Integer.MAX_VALUE;
         for (int i = 0; i < childCount; i++) {
             View child = layoutManager.getChildAt(i);
             int absDistance = Math.abs((helper.getDecoratedStart(child) + (helper.getDecoratedMeasurement(child) / 2)) - center);
@@ -134,7 +133,7 @@ public class PagerSnapHelper extends SnapHelper {
             return null;
         }
         View closestChild = null;
-        int startest = ConnectionsManager.DEFAULT_DATACENTER_ID;
+        int startest = Integer.MAX_VALUE;
         for (int i = 0; i < childCount; i++) {
             View child = layoutManager.getChildAt(i);
             int childStart = helper.getDecoratedStart(child);

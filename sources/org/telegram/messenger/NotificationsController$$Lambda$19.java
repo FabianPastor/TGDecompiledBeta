@@ -11,6 +11,6 @@ final /* synthetic */ class NotificationsController$$Lambda$19 implements Reques
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        NotificationsController.m17x2e794ca2(tLObject, tL_error);
+        NotificationsController.lambda$updateServerNotificationsSettings$33$NotificationsController(tLObject, tL_error);
     }
 }
