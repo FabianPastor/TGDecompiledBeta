@@ -654,7 +654,7 @@
     <string name="EditAdminGroupDeleteMessages">Delete Messages</string>
     <string name="EditAdminPinMessages">Pin Messages</string>
     <string name="EditAdminPostMessages">Post Messages</string>
-    <string name="EditAdminPromotedBy">Added by %1$s</string>
+    <string name="EditAdminPromotedBy">Promoted by %1$s</string>
     <string name="EditAdminRemoveAdmin">Dismiss Admin</string>
     <string name="EditAdminRights">Edit admin rights</string>
     <string name="EditAdminWhatCanDo">What can this admin do?</string>

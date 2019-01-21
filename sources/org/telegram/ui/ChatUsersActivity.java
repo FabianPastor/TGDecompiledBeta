@@ -164,6 +164,9 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             boolean z = false;
             int type = holder.getItemViewType();
             if (type == 7) {
+                if (!ChatObject.canBlockUsers(ChatUsersActivity.this.currentChat)) {
+                    return false;
+                }
                 if (TextUtils.isEmpty(ChatUsersActivity.this.currentChat.username)) {
                     return true;
                 }
@@ -420,7 +423,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                         return;
                     }
                 case 3:
-                    if (position == ChatUsersActivity.this.addNewSectionRow) {
+                    if (position == ChatUsersActivity.this.addNewSectionRow || (ChatUsersActivity.this.type == 3 && position == ChatUsersActivity.this.participantsDividerRow && ChatUsersActivity.this.addNewRow == -1 && ChatUsersActivity.this.participantsStartRow == -1)) {
                         holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
                         return;
                     } else {

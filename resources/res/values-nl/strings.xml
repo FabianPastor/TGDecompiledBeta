@@ -1511,7 +1511,7 @@
     <string name="PassportIdentityID">Upload een scan van je identiteitskaart</string>
     <string name="PassportIdentityInternalPassport">Upload een scan van je nationaal paspoort</string>
     <string name="PassportIdentityPassport">Upload een scan van je paspoort</string>
-    <string name="PassportInfo2">With Telegram Passport you can easily sign up for websites and services that require identity verification.\10\10Your information, personal data, and documents are protected by end-to-end encryption. Nobody, including Telegram, can access them without your permission.\10\10You can visit our *FAQ* to learn more.</string>
+    <string name="PassportInfo2">Met Telegram Passport kun je je makkelijk aanmelden voor diensten en websites die identiteitsverificatie vereisen.\10\10Je informatie, persoonsgegevens en bestanden worden beschermd middels end-to-end-versleuteling. Niemand, ook Telegram niet, heeft toegang tot deze gegevens zonder je toestemming.\10\10Je kunt onze *Veelgestelde vragen* bekijken voor meer informatie.</string>
     <string name="PassportInfoTitle">Wat is Telegram Passport?</string>
     <string name="PassportInfoUrl">https://telegram.org/faq#passport</string>
     <string name="PassportLanguage_AR">Arabisch</string>
@@ -1883,7 +1883,7 @@
     <string name="SavedMessages">Bewaarde berichten</string>
     <string name="SavedMessagesInfo">Hierheen doorsturen om op te slaan</string>
     <string name="ScreenCapture">App-inhoud weergeven in taakbeheer</string>
-    <string name="ScreenCaptureAlert">This will hide the contents of your chats or chat list from the task switcher, but you will not be able to take screenshots on Telegram.\10\10You may need to restart the app for this to take effect.</string>
+    <string name="ScreenCaptureAlert">Hiermee verberg je de inhoud van je chats of chatoverzicht in je taakbeheer, ook kun je geen schermafdrukken maken in Telegram.\10\10Het kan zijn dat je de app moet herstarten voordat dit actief is.</string>
     <string name="ScreenCaptureInfo">Indien uitgeschakeld kun je geen in-app schermafdrukken maken, chats zijn dan ook niet zichtbaar in taakbeheer.</string>
     <string name="SdCard">SD-kaart</string>
     <string name="Search">Zoeken</string>

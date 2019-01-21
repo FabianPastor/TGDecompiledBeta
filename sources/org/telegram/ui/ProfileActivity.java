@@ -475,33 +475,33 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     } else if (position == ProfileActivity.this.subscribersRow) {
                         if (ProfileActivity.this.chatInfo != null) {
                             if (!ChatObject.isChannel(ProfileActivity.this.currentChat) || ProfileActivity.this.currentChat.megagroup) {
-                                textCell.setTextAndValueAndIcon(LocaleController.getString("ChannelMembers", R.string.ChannelMembers), String.format("%d", new Object[]{Integer.valueOf(ProfileActivity.this.chatInfo.participants_count)}), R.drawable.menu_newgroup, position != ProfileActivity.this.membersSectionRow + -1);
+                                textCell.setTextAndValueAndIcon(LocaleController.getString("ChannelMembers", R.string.ChannelMembers), String.format("%d", new Object[]{Integer.valueOf(ProfileActivity.this.chatInfo.participants_count)}), R.drawable.actions_viewmembers, position != ProfileActivity.this.membersSectionRow + -1);
                                 return;
                             } else {
-                                textCell.setTextAndValueAndIcon(LocaleController.getString("ChannelSubscribers", R.string.ChannelSubscribers), String.format("%d", new Object[]{Integer.valueOf(ProfileActivity.this.chatInfo.participants_count)}), R.drawable.menu_newgroup, position != ProfileActivity.this.membersSectionRow + -1);
+                                textCell.setTextAndValueAndIcon(LocaleController.getString("ChannelSubscribers", R.string.ChannelSubscribers), String.format("%d", new Object[]{Integer.valueOf(ProfileActivity.this.chatInfo.participants_count)}), R.drawable.actions_viewmembers, position != ProfileActivity.this.membersSectionRow + -1);
                                 return;
                             }
                         } else if (!ChatObject.isChannel(ProfileActivity.this.currentChat) || ProfileActivity.this.currentChat.megagroup) {
-                            textCell.setTextAndIcon(LocaleController.getString("ChannelMembers", R.string.ChannelMembers), R.drawable.menu_newgroup, position != ProfileActivity.this.membersSectionRow + -1);
+                            textCell.setTextAndIcon(LocaleController.getString("ChannelMembers", R.string.ChannelMembers), R.drawable.actions_viewmembers, position != ProfileActivity.this.membersSectionRow + -1);
                             return;
                         } else {
-                            textCell.setTextAndIcon(LocaleController.getString("ChannelSubscribers", R.string.ChannelSubscribers), R.drawable.menu_newgroup, position != ProfileActivity.this.membersSectionRow + -1);
+                            textCell.setTextAndIcon(LocaleController.getString("ChannelSubscribers", R.string.ChannelSubscribers), R.drawable.actions_viewmembers, position != ProfileActivity.this.membersSectionRow + -1);
                             return;
                         }
                     } else if (position == ProfileActivity.this.administratorsRow) {
                         if (ProfileActivity.this.chatInfo != null) {
-                            textCell.setTextAndValueAndIcon(LocaleController.getString("ChannelAdministrators", R.string.ChannelAdministrators), String.format("%d", new Object[]{Integer.valueOf(ProfileActivity.this.chatInfo.admins_count)}), R.drawable.profile_admin, position != ProfileActivity.this.membersSectionRow + -1);
+                            textCell.setTextAndValueAndIcon(LocaleController.getString("ChannelAdministrators", R.string.ChannelAdministrators), String.format("%d", new Object[]{Integer.valueOf(ProfileActivity.this.chatInfo.admins_count)}), R.drawable.actions_addadmin, position != ProfileActivity.this.membersSectionRow + -1);
                             return;
                         } else {
-                            textCell.setTextAndIcon(LocaleController.getString("ChannelAdministrators", R.string.ChannelAdministrators), R.drawable.profile_admin, position != ProfileActivity.this.membersSectionRow + -1);
+                            textCell.setTextAndIcon(LocaleController.getString("ChannelAdministrators", R.string.ChannelAdministrators), R.drawable.actions_addadmin, position != ProfileActivity.this.membersSectionRow + -1);
                             return;
                         }
                     } else if (position == ProfileActivity.this.blockedUsersRow) {
                         if (ProfileActivity.this.chatInfo != null) {
-                            textCell.setTextAndValueAndIcon(LocaleController.getString("ChannelBlacklist", R.string.ChannelBlacklist), String.format("%d", new Object[]{Integer.valueOf(Math.max(ProfileActivity.this.chatInfo.banned_count, ProfileActivity.this.chatInfo.kicked_count))}), R.drawable.profile_ban, position != ProfileActivity.this.membersSectionRow + -1);
+                            textCell.setTextAndValueAndIcon(LocaleController.getString("ChannelBlacklist", R.string.ChannelBlacklist), String.format("%d", new Object[]{Integer.valueOf(Math.max(ProfileActivity.this.chatInfo.banned_count, ProfileActivity.this.chatInfo.kicked_count))}), R.drawable.actions_removed, position != ProfileActivity.this.membersSectionRow + -1);
                             return;
                         } else {
-                            textCell.setTextAndIcon(LocaleController.getString("ChannelBlacklist", R.string.ChannelBlacklist), R.drawable.profile_ban, position != ProfileActivity.this.membersSectionRow + -1);
+                            textCell.setTextAndIcon(LocaleController.getString("ChannelBlacklist", R.string.ChannelBlacklist), R.drawable.actions_removed, position != ProfileActivity.this.membersSectionRow + -1);
                             return;
                         }
                     } else if (position == ProfileActivity.this.addMemberRow) {
@@ -3334,7 +3334,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         } else if (this.chat_id != 0 && this.chat_id > 0) {
             Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.chat_id));
             if (ChatObject.isChannel(chat)) {
-                if (ChatObject.canChangeChatInfo(chat)) {
+                if (ChatObject.hasAdminRights(chat)) {
                     this.editItem = menu.addItem(12, (int) R.drawable.group_edit_profile);
                 }
                 if (!(chat.megagroup || this.chatInfo == null || !this.chatInfo.can_view_stats)) {

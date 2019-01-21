@@ -962,6 +962,9 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
         if (this.historyCell != null) {
             this.historyCell.setVisibility(isPrivate ? 0 : 8);
         }
+        if (this.settingsSectionCell != null && this.signCell == null && (this.historyCell == null || this.historyCell.getVisibility() != 0)) {
+            this.settingsSectionCell.setVisibility(8);
+        }
         if (this.logCell != null) {
             textCell = this.logCell;
             if (!this.currentChat.megagroup || (this.info != null && this.info.participants_count > 200)) {

@@ -1338,7 +1338,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 AndroidUtilities.cancelRunOnUIThread(this.recordAudioVideoRunnable);
                 this.delegate.onSwitchRecordMode(this.videoSendButton.getTag() == null);
                 setRecordVideoButtonVisible(this.videoSendButton.getTag() == null, true);
-                performHapticFeedback(3, 2);
+                performHapticFeedback(3);
             } else if (!this.hasRecordVideo || this.calledRecordRunnable) {
                 this.startedDraggingX = -1.0f;
                 if (!this.hasRecordVideo || this.videoSendButton.getTag() == null) {

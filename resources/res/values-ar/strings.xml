@@ -1074,7 +1074,7 @@
     <string name="LiveLocationAlertPrivate">اختر المدة التي سيتمكن خلالها %1$s من مشاهدة موقعك الفعلي.</string>
     <string name="LiveLocations">المواقع الحية</string>
     <string name="Loading">يتم التحميل...</string>
-    <string name="LoadingFullImage">loading full image...</string>
+    <string name="LoadingFullImage">يتم تحميل الصورة...</string>
     <string name="LocalAudioCache">الرسائل الصوتية/المرئية</string>
     <string name="LocalCache">الملفات الأخرى</string>
     <string name="LocalDatabase">قاعدة البيانات على الجهاز</string>
@@ -1923,7 +1923,7 @@
     <string name="SelectContact">اختر جهة اتصال</string>
     <string name="SelectFile">اختر ملف</string>
     <string name="SelectFromGallery">اختيار من المعرض</string>
-    <string name="SelectImage">Select image</string>
+    <string name="SelectImage">تحديد صورة</string>
     <string name="Send">إرسال</string>
     <string name="SendAsFile">إرسال كملف</string>
     <string name="SendAsFiles">إرسال كملفات</string>
@@ -2084,7 +2084,7 @@
     <string name="SyncContactsOn">ستتم إضافة جهات اتصال هذا الجهاز إلى هذا الحساب.</string>
     <string name="SystemRoot">جذر النظام</string>
     <string name="TapHereGifs">اضغط هنا للوصول للصور المتحركة المحفوظة</string>
-    <string name="TapToChange">Tap to change</string>
+    <string name="TapToChange">انقر للتغيير</string>
     <string name="TapToChangePhone">انقر لتغيير رقم الهاتف</string>
     <string name="TapToDownload">انقر للتحميل</string>
     <string name="TelegramContacts_few">%1$d جهات اتصال على تيليجرام</string>
@@ -2183,7 +2183,7 @@
     <string name="UpdatedMinutes_zero">تم تحديثه قبل %1$d دقيقة</string>
     <string name="Updating">يتم التحديث...</string>
     <string name="UpgradeGroup">قم بالتحديث لمجموعة خارقة</string>
-    <string name="UploadImage">Upload image</string>
+    <string name="UploadImage">رفع صورة</string>
     <string name="UploadItems">رفع %1$s</string>
     <string name="UsbActive">نقل USB مفعل</string>
     <string name="UseLessDataAlways">دائمًا</string>

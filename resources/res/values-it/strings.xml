@@ -108,7 +108,7 @@
     <string name="AddToTheGroupForwardCount">Numero di ultimi messaggi da inoltrare:</string>
     <string name="AddToTheGroupTitle">Aggiungere %1$s alla chat %2$s?</string>
     <string name="AddedToFavorites">Sticker aggiunto ai preferiti</string>
-    <string name="AdminWillBeRemoved">%1$s will be removed from admins if you restrict them.</string>
+    <string name="AdminWillBeRemoved">%1$s sarà rimosso dagli amministratori se lo limiti.</string>
     <string name="Agree">Accetta</string>
     <string name="Alert">Mostra notifiche</string>
     <string name="AllMedia">Tutti i media</string>
@@ -256,7 +256,7 @@
     <string name="BackgroundBlurred">Sfocato</string>
     <string name="BackgroundMotion">Prospettiva</string>
     <string name="BackgroundPreview">Anteprima sfondo</string>
-    <string name="BackgroundPreviewLine1">Suggerimento: alcuni sfondi appaiono migliori con l\'effetto sfocatura.</string>
+    <string name="BackgroundPreviewLine1">Suggerimento: alcuni sfondi appaiono migliori con l\'effetto sfocato.</string>
     <string name="BackgroundPreviewLine2">Grazie!</string>
     <string name="BackgroundRestricted">Dati in background disattivati.</string>
     <string name="BadgeNumber">Contatore badge</string>
@@ -331,7 +331,7 @@
     <string name="ChangePasscode">Cambia codice</string>
     <string name="ChangePasscodeInfo">Quando imposti un codice aggiuntivo, apparirà un\'icona col lucchetto nella pagina delle chat. Premila per bloccare e sbloccare l\'app.\10\10Nota: se ti dimentichi il codice, dovrai eliminare e reinstallare l\'app. Tutte le chat segrete verranno perse.</string>
     <string name="ChangePassword">Cambia password</string>
-    <string name="ChangePermissions">Change permissions</string>
+    <string name="ChangePermissions">Cambia permessi</string>
     <string name="ChangePhoneHelp">Invieremo un SMS con un codice di conferma al tuo nuovo numero.</string>
     <string name="ChangePhoneNewNumber">Nuovo numero</string>
     <string name="ChangePhoneNumberOccupied">Il numero %1$s è già connesso a un account Telegram. Per favore elimina quell\'account prima di migrare ad un nuovo numero.</string>
@@ -641,7 +641,7 @@
     <string name="Done">Fatto</string>
     <string name="Draft">Bozza</string>
     <string name="Edit">Modifica</string>
-    <string name="EditAdmin">Privilegi amministratore</string>
+    <string name="EditAdmin">Permessi amministratore</string>
     <string name="EditAdminAddAdmins">Aggiungere amministratori</string>
     <string name="EditAdminAddUsers">Aggiungere utenti</string>
     <string name="EditAdminAddUsersViaLink">Invitare utenti tramite link</string>
@@ -654,7 +654,7 @@
     <string name="EditAdminGroupDeleteMessages">Eliminare messaggi</string>
     <string name="EditAdminPinMessages">Fissare messaggi</string>
     <string name="EditAdminPostMessages">Pubblicare messaggi</string>
-    <string name="EditAdminPromotedBy">Aggiunto da %1$s</string>
+    <string name="EditAdminPromotedBy">Promosso da %1$s</string>
     <string name="EditAdminRemoveAdmin">Rimuovi amministratore</string>
     <string name="EditAdminRights">Modifica permessi amministratore</string>
     <string name="EditAdminWhatCanDo">Cosa può fare questo amministratore?</string>
@@ -704,7 +704,7 @@
     <string name="ErrorOccurred">Si è verificato un errore.</string>
     <string name="ErrorSendRestrictedMedia">Spiacenti, gli amministratori di questo gruppo ti hanno vietato di inviare media.</string>
     <string name="ErrorSendRestrictedMediaAll">Spiacenti, non è consentito inviare media in questo gruppo.</string>
-    <string name="ErrorSendRestrictedPolls">Sorry, the admins of this group have restricted you from sending polls.</string>
+    <string name="ErrorSendRestrictedPolls">Spiacenti, gli amministratori di questo gruppo ti hanno vietato di inviare sondaggi.</string>
     <string name="ErrorSendRestrictedPollsAll">Spiacenti, non è permesso inviare sondaggi in questo gruppo.</string>
     <string name="ErrorSendRestrictedStickers">Spiacenti, gli amministratori di questo gruppo ti hanno vietato di inviare sticker.</string>
     <string name="ErrorSendRestrictedStickersAll">Spiacenti, non è consentito inviare sticker in questo gruppo.</string>
@@ -1074,7 +1074,7 @@
     <string name="LiveLocationAlertPrivate">Scegli per quanto tempo %1$s vedrà la tua posizione precisa.</string>
     <string name="LiveLocations">Posizioni attuali</string>
     <string name="Loading">Carico...</string>
-    <string name="LoadingFullImage">loading full image...</string>
+    <string name="LoadingFullImage">carico l\'immagine completa...</string>
     <string name="LocalAudioCache">Messaggi vocali/video</string>
     <string name="LocalCache">Altri file</string>
     <string name="LocalDatabase">Database locale</string>
@@ -1725,7 +1725,7 @@
     <string name="PinMessageAlertChat">Vuoi fissare questo messaggio nella parte superiore della chat?</string>
     <string name="PinNotify">Notifica tutti i membri</string>
     <string name="PinToTop">Fissa in alto</string>
-    <string name="PinToTopLimitReached">Sorry, you can pin no more than %1$s to the top.</string>
+    <string name="PinToTopLimitReached">Spiacenti, non puoi fissare più di %1$s in alto.</string>
     <string name="Ping">Ping: %1$d ms</string>
     <string name="PinnedMessage">Messaggio fissato</string>
     <string name="PinnedMessages">Messaggi fissati</string>
@@ -1786,10 +1786,10 @@
     <string name="RateCallDistorted">La voce era distorta</string>
     <string name="RateCallDropped">La chiamata è terminata inaspettatamente</string>
     <string name="RateCallEcho">Sentivo la mia stessa voce</string>
-    <string name="RateCallInterruptions">The other side kept disappearing</string>
+    <string name="RateCallInterruptions">Gli altri continuavano a sparire</string>
     <string name="RateCallNoise">Sentivo dei rumori di fondo</string>
-    <string name="RateCallSilentLocal">I couldn\'t hear the other side</string>
-    <string name="RateCallSilentRemote">The other side couldn\'t hear me</string>
+    <string name="RateCallSilentLocal">Non riuscivo a sentire gli altri</string>
+    <string name="RateCallSilentRemote">Gli altri non riuscivano a sentirmi</string>
     <string name="ReEnterYourPasscode">Reinserisci il nuovo codice</string>
     <string name="Recent">Recenti</string>
     <string name="RecentStickers">Usati di recente</string>
@@ -1884,7 +1884,7 @@
     <string name="SavedMessagesInfo">Inoltra qui per salvare.</string>
     <string name="ScreenCapture">Consenti cattura schermo</string>
     <string name="ScreenCaptureAlert">This will hide the contents of your chats or chat list from the task switcher, but you will not be able to take screenshots on Telegram.\10\10You may need to restart the app for this to take effect.</string>
-    <string name="ScreenCaptureInfo">Se disattivata, non potrai fare screenshot dell\'app, ma il sistema nasconderà le tue chat nella lista delle app recenti.</string>
+    <string name="ScreenCaptureInfo">Se disattivata, non potrai fare screenshot nell\'app, ma il sistema nasconderà il contenuto delle chat nella lista delle app recenti.</string>
     <string name="SdCard">Scheda SD</string>
     <string name="Search">Cerca</string>
     <string name="SearchFriends">Cerca contatti</string>
@@ -2213,11 +2213,11 @@
     <string name="UserRestricted">Spiacenti, questa azione non ti è permessa.</string>
     <string name="UserRestrictions">Permessi utente</string>
     <string name="UserRestrictionsApplyChanges">Applicare le modifiche?</string>
-    <string name="UserRestrictionsApplyChangesText">You have changed this user\'s rights in **%1$s**. Apply changes?</string>
+    <string name="UserRestrictionsApplyChangesText">Hai cambiato i permessi di questo utente in **%1$s**. Applicare le modifiche?</string>
     <string name="UserRestrictionsBlock">Blocca e rimuovi dal gruppo</string>
     <string name="UserRestrictionsCanDo">Cosa può fare questo utente?</string>
     <string name="UserRestrictionsChangeInfo">Change Chat Info</string>
-    <string name="UserRestrictionsDisabled">This option is disabled for all members in Group Permissions</string>
+    <string name="UserRestrictionsDisabled">Questa opzione è disattivata per tutti i membri nei permessi del gruppo.</string>
     <string name="UserRestrictionsDuration">Durata</string>
     <string name="UserRestrictionsEmbedLinks">Inviare link con anteprima</string>
     <string name="UserRestrictionsInviteUsers">Aggiungere utenti</string>

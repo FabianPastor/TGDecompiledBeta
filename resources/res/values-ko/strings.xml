@@ -253,7 +253,7 @@
     <string name="Available">사용 가능</string>
     <string name="AwaitingEncryption">%s 님을 기다리고 있습니다...</string>
     <string name="Back">뒤로</string>
-    <string name="BackgroundBlurred">Blurred</string>
+    <string name="BackgroundBlurred">흐림 효과가 적용됨</string>
     <string name="BackgroundMotion">모션 효과</string>
     <string name="BackgroundPreview">배경 미리보기</string>
     <string name="BackgroundPreviewLine1">팁: 몇몇 배경에는 흐림 효과가 잘 어울립니다.</string>
@@ -331,7 +331,7 @@
     <string name="ChangePasscode">암호 바꾸기</string>
     <string name="ChangePasscodeInfo">암호를 설정하시면 대화창에 잠금 아이콘이 표시됩니다. 텔레그램을 잠그거나 잠금 해제하려면 이 아이콘을 누르세요.\10\10주의: 암호를 잊어버리면 앱을 지우고 재설치하셔야 합니다. 이 경우 모든 비밀 대화가 사라집니다.</string>
     <string name="ChangePassword">비밀번호 바꾸기</string>
-    <string name="ChangePermissions">Change permissions</string>
+    <string name="ChangePermissions">권한 바꾸기</string>
     <string name="ChangePhoneHelp">회원님의 새 번호로 인증 코드가 담긴 SMS를 보내겠습니다.</string>
     <string name="ChangePhoneNewNumber">새 번호</string>
     <string name="ChangePhoneNumberOccupied">그 번호는 이미 텔레그램 계정에 연결되어 있습니다. 새 번호로 이동하기 전에 %1$s 계정에서 탈퇴해 주세요.</string>
@@ -907,15 +907,15 @@
     <string name="General">일반</string>
     <string name="GettingLinkInfo">링크 정보를 가져오는 중...</string>
     <string name="GifCaption">GIF 설명</string>
-    <string name="GlobalAttachInlineRestricted">Inline bots aren’t allowed in this group.</string>
-    <string name="GlobalAttachMediaRestricted">Sending media isn’t allowed in this group.</string>
-    <string name="GlobalAttachStickersRestricted">Stickers aren’t allowed in this group.</string>
+    <string name="GlobalAttachInlineRestricted">이 그룹에서는 인라인 봇이 금지됩니다.</string>
+    <string name="GlobalAttachMediaRestricted">이 그룹에서는 미디어를 보내실 수 없습니다.</string>
+    <string name="GlobalAttachStickersRestricted">이 그룹에서는 스티커가 금지됩니다.</string>
     <string name="GlobalSearch">전체 검색</string>
-    <string name="GlobalSendMessageRestricted">Writing messages isn’t allowed in this group.</string>
+    <string name="GlobalSendMessageRestricted">이 그룹에서는 메시지를 작성하실 수 없습니다.</string>
     <string name="GotAQuestion">텔레그램에 관해\10궁금한 점이 있으신가요?</string>
     <string name="GpsDisabledAlert">GPS가 꺼져 있습니다. 위치 기반 서비스를 사용하려면 GPS를 켜 주세요.</string>
     <string name="Grain">그레인</string>
-    <string name="GroupDeletedUndo">Group deleted.</string>
+    <string name="GroupDeletedUndo">그룹이 삭제되었습니다.</string>
     <string name="GroupDescription1">Up to 100,000 members</string>
     <string name="GroupDescription2">Persistent chat history</string>
     <string name="GroupDescription3">Public links such as t.me/title</string>
@@ -1125,7 +1125,7 @@
     <string name="MegaDeleteAlert">잠깐! 그룹을 삭제하면 참가자가 모두 추방되고 메시지는 모두 사라집니다. 그래도 그룹을 삭제할까요?</string>
     <string name="MegaDeleteInfo">그룹에 있는 메시지가 모두 사라집니다.</string>
     <string name="MegaLeaveAlert">정말 그룹에서 나가시겠습니까?</string>
-    <string name="MegaLeaveAlertWithName">Are you sure you want to leave **%1$s**?</string>
+    <string name="MegaLeaveAlertWithName">정말 **%1$s** 그룹을 나가시겠습니까?</string>
     <string name="MegaPrivate">비공개 그룹</string>
     <string name="MegaPrivateInfo">비공개 그룹에는 초대되거나 초대 링크가 있는 경우에만 들어올 수 있습니다.</string>
     <string name="MegaPrivateLinkHelp">사람들이 위 링크를 따라 그룹에 들어올 수 있습니다. 링크는 언제든지 폐기하실 수 있습니다.</string>
@@ -2025,8 +2025,8 @@
     <string name="SortBy">정렬</string>
     <string name="SortFirstName">이름</string>
     <string name="SortLastName">성</string>
-    <string name="SortedByLastSeen">Sorted by last seen time</string>
-    <string name="SortedByName">Sorted by name</string>
+    <string name="SortedByLastSeen">마지막 접속 시간순으로 정렬</string>
+    <string name="SortedByName">이름순으로 정렬</string>
     <string name="Sound">소리</string>
     <string name="SoundDefault">기본</string>
     <string name="StartEncryptedChat">비밀 대화 시작</string>
@@ -2155,7 +2155,7 @@
     <string name="UnbanText">차단을 해제하려면 사용자를 길게 누르세요.</string>
     <string name="Unblock">차단 해제</string>
     <string name="UnblockText">차단을 해제하려면 사용자를 길게 누르세요.</string>
-    <string name="Undo">UNDO</string>
+    <string name="Undo">되돌리기</string>
     <string name="UndoAllCustom">연락처와 그룹, 채널에 대한 모든 맞춤 알림 설정을 처음 상태로 돌립니다.</string>
     <string name="UnknownError">알 수 없는 오류</string>
     <string name="UnlockFingerprint">지문으로 잠금 해제</string>
