@@ -1216,7 +1216,11 @@ public class ChangePhoneActivity extends BaseFragment {
                     boolean z = simcardAvailable && allowCall;
                     tL_codeSettings.allow_flashcall = z;
                     if (VERSION.SDK_INT >= 26) {
-                        req.settings.app_hash = SmsManager.getDefault().createAppSpecificSmsToken(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, new Intent(ApplicationLoader.applicationContext, SmsReceiver.class), NUM));
+                        try {
+                            req.settings.app_hash = SmsManager.getDefault().createAppSpecificSmsToken(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, new Intent(ApplicationLoader.applicationContext, SmsReceiver.class), NUM));
+                        } catch (Throwable e) {
+                            FileLog.e(e);
+                        }
                     } else {
                         req.settings.app_hash = BuildVars.SMS_HASH;
                         req.settings.app_hash_persistent = true;
@@ -1242,17 +1246,17 @@ public class ChangePhoneActivity extends BaseFragment {
                                     req.settings.allow_flashcall = false;
                                 }
                             }
-                        } catch (Throwable e) {
+                        } catch (Throwable e2) {
                             req.settings.allow_flashcall = false;
-                            FileLog.e(e);
+                            FileLog.e(e2);
                         }
                     }
                     Bundle params = new Bundle();
                     params.putString("phone", "+" + this.codeField.getText() + " " + this.phoneField.getText());
                     try {
                         params.putString("ephone", "+" + PhoneFormat.stripExceptNumbers(this.codeField.getText().toString()) + " " + PhoneFormat.stripExceptNumbers(this.phoneField.getText().toString()));
-                    } catch (Throwable e2) {
-                        FileLog.e(e2);
+                    } catch (Throwable e22) {
+                        FileLog.e(e22);
                         params.putString("ephone", "+" + phone);
                     }
                     params.putString("phoneFormated", phone);

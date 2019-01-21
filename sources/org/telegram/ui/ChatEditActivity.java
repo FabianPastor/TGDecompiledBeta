@@ -222,10 +222,6 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
                 }
             }
         });
-        ActionBarMenu menu = this.actionBar.createMenu();
-        if (ChatObject.canChangeChatInfo(this.currentChat)) {
-            this.doneButton = menu.addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
-        }
         SizeNotifierFrameLayout sizeNotifierFrameLayout = new SizeNotifierFrameLayout(context) {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int widthSize = MeasureSpec.getSize(widthMeasureSpec);
@@ -474,6 +470,10 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
             this.signCell.setTextAndValueAndCheck(LocaleController.getString("ChannelSignMessages", R.string.ChannelSignMessages), LocaleController.getString("ChannelSignMessagesInfo", R.string.ChannelSignMessagesInfo), this.signMessages, true, false);
             this.typeEditContainer.addView(this.signCell, LayoutHelper.createFrame(-1, -2.0f));
             this.signCell.setOnClickListener(new ChatEditActivity$$Lambda$6(this));
+        }
+        ActionBarMenu menu = this.actionBar.createMenu();
+        if (!(!ChatObject.canChangeChatInfo(this.currentChat) && this.signCell == null && this.historyCell == null)) {
+            this.doneButton = menu.addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         }
         if (!(this.signCell == null && this.historyCell == null)) {
             this.settingsSectionCell = new ShadowSectionCell(context);
