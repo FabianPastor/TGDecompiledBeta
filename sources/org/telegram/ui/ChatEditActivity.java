@@ -769,7 +769,8 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
     }
 
     private boolean checkDiscard() {
-        if ((this.info == null || !ChatObject.isChannel(this.currentChat) || this.info.hidden_prehistory == this.historyHidden) && this.imageUpdater.uploadingImage == null && this.currentChat.title.equals(this.nameTextView.getText().toString()) && ((this.descriptionTextView == null || this.info == null || this.info.about.equals(this.descriptionTextView.getText().toString())) && this.signMessages == this.currentChat.signatures && this.uploadedAvatar == null && (this.avatar != null || !(this.currentChat.photo instanceof TL_chatPhoto)))) {
+        String about = (this.info == null || this.info.about == null) ? "" : this.info.about;
+        if ((this.info == null || !ChatObject.isChannel(this.currentChat) || this.info.hidden_prehistory == this.historyHidden) && this.imageUpdater.uploadingImage == null && ((this.nameTextView == null || this.currentChat.title.equals(this.nameTextView.getText().toString())) && ((this.descriptionTextView == null || about.equals(this.descriptionTextView.getText().toString())) && this.signMessages == this.currentChat.signatures && this.uploadedAvatar == null && (this.avatar != null || !(this.currentChat.photo instanceof TL_chatPhoto))))) {
             return true;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
@@ -826,7 +827,8 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
                 if (!this.currentChat.title.equals(this.nameTextView.getText().toString())) {
                     MessagesController.getInstance(this.currentAccount).changeChatTitle(this.chatId, this.nameTextView.getText().toString());
                 }
-                if (!(this.descriptionTextView == null || this.info == null || this.info.about.equals(this.descriptionTextView.getText().toString()))) {
+                String about = (this.info == null || this.info.about == null) ? "" : this.info.about;
+                if (!(this.descriptionTextView == null || about.equals(this.descriptionTextView.getText().toString()))) {
                     MessagesController.getInstance(this.currentAccount).updateChatAbout(this.chatId, this.descriptionTextView.getText().toString(), this.info);
                 }
                 if (this.signMessages != this.currentChat.signatures) {

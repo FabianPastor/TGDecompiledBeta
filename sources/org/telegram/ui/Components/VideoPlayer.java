@@ -535,12 +535,14 @@ public class VideoPlayer implements EventListener, VideoListener, NotificationCe
     }
 
     private void maybeReportPlayerState() {
-        boolean playWhenReady = this.player.getPlayWhenReady();
-        int playbackState = this.player.getPlaybackState();
-        if (this.lastReportedPlayWhenReady != playWhenReady || this.lastReportedPlaybackState != playbackState) {
-            this.delegate.onStateChanged(playWhenReady, playbackState);
-            this.lastReportedPlayWhenReady = playWhenReady;
-            this.lastReportedPlaybackState = playbackState;
+        if (this.player != null) {
+            boolean playWhenReady = this.player.getPlayWhenReady();
+            int playbackState = this.player.getPlaybackState();
+            if (this.lastReportedPlayWhenReady != playWhenReady || this.lastReportedPlaybackState != playbackState) {
+                this.delegate.onStateChanged(playWhenReady, playbackState);
+                this.lastReportedPlayWhenReady = playWhenReady;
+                this.lastReportedPlaybackState = playbackState;
+            }
         }
     }
 }

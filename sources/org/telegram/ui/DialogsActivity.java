@@ -656,9 +656,18 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                             DialogsActivity.this.showDialog(sheet);
                             sheet.setItemColor(3, Theme.getColor("dialogTextRed2"), Theme.getColor("dialogRedIcon"));
                         } else {
+                            User user;
                             boolean isChat = lower_id < 0 && high_id != 1;
                             chat = isChat ? MessagesController.getInstance(DialogsActivity.this.currentAccount).getChat(Integer.valueOf(-lower_id)) : null;
-                            User user = lower_id == 0 ? MessagesController.getInstance(DialogsActivity.this.currentAccount).getUser(Integer.valueOf(MessagesController.getInstance(DialogsActivity.this.currentAccount).getEncryptedChat(Integer.valueOf(high_id)).user_id)) : (isChat || lower_id <= 0 || high_id == 1) ? null : MessagesController.getInstance(DialogsActivity.this.currentAccount).getUser(Integer.valueOf(lower_id));
+                            if (lower_id == 0) {
+                                EncryptedChat encryptedChat = MessagesController.getInstance(DialogsActivity.this.currentAccount).getEncryptedChat(Integer.valueOf(high_id));
+                                if (encryptedChat == null) {
+                                    return false;
+                                }
+                                user = MessagesController.getInstance(DialogsActivity.this.currentAccount).getUser(Integer.valueOf(encryptedChat.user_id));
+                            } else {
+                                user = (isChat || lower_id <= 0 || high_id == 1) ? null : MessagesController.getInstance(DialogsActivity.this.currentAccount).getUser(Integer.valueOf(lower_id));
+                            }
                             boolean isBot = user != null && user.bot;
                             CharSequence[] charSequenceArr = new CharSequence[4];
                             charSequenceArr[0] = dialog.pinned ? LocaleController.getString("UnpinFromTop", R.string.UnpinFromTop) : LocaleController.getString("PinToTop", R.string.PinToTop);

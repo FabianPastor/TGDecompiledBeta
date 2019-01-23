@@ -5460,11 +5460,11 @@ public class ImageLoader {
         r4 = r0.id;
         r12 = 0;
         r4 = (r4 > r12 ? 1 : (r4 == r12 ? 0 : -1));
-        if (r4 == 0) goto L_0x0002;
+        if (r4 == 0) goto L_0x01d7;
     L_0x0346:
         r0 = r34;
         r4 = r0.dc_id;
-        if (r4 == 0) goto L_0x0002;
+        if (r4 == 0) goto L_0x01d7;
     L_0x034c:
         if (r41 == 0) goto L_0x03f1;
     L_0x034e:

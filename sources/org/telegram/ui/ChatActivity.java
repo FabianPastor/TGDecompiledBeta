@@ -1015,7 +1015,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                 Context parentActivity = ChatActivity.this.getParentActivity();
                                 BaseFragment baseFragment = ChatActivity.this;
                                 InputStickerSet inputStickerSet = message.getInputStickerSet();
-                                StickersAlertDelegate stickersAlertDelegate = (ChatActivity.this.bottomOverlayChat.getVisibility() == 0 || !ChatObject.canSendStickers(ChatActivity.this.currentChat)) ? null : ChatActivity.this.chatActivityEnterView;
+                                StickersAlertDelegate stickersAlertDelegate = (ChatActivity.this.bottomOverlayChat.getVisibility() == 0 || !(ChatActivity.this.currentChat == null || ChatObject.canSendStickers(ChatActivity.this.currentChat))) ? null : ChatActivity.this.chatActivityEnterView;
                                 chatActivity.showDialog(new StickersAlert(parentActivity, baseFragment, inputStickerSet, null, stickersAlertDelegate));
                             } else if (message.isVideo() || message.type == 1 || ((message.type == 0 && !message.isWebpageDocument()) || message.isGif())) {
                                 if (message.isVideo()) {
@@ -2800,6 +2800,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                         ChatActivity.this.updatePinnedMessageView(true);
                     }
                     MessagesController.getInstance(ChatActivity.this.currentAccount).deleteDialog(ChatActivity.this.dialog_id, 1);
+                    ChatActivity.this.clearingHistory = false;
+                    ChatActivity.this.chatAdapter.notifyDataSetChanged();
                     return;
                 }
                 if (!isChat) {
@@ -21049,7 +21051,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 case 9:
                     Context parentActivity = getParentActivity();
                     InputStickerSet inputStickerSet = this.selectedObject.getInputStickerSet();
-                    StickersAlertDelegate stickersAlertDelegate = (this.bottomOverlayChat.getVisibility() == 0 || !ChatObject.canSendStickers(this.currentChat)) ? null : this.chatActivityEnterView;
+                    StickersAlertDelegate stickersAlertDelegate = (this.bottomOverlayChat.getVisibility() == 0 || !(this.currentChat == null || ChatObject.canSendStickers(this.currentChat))) ? null : this.chatActivityEnterView;
                     showDialog(new StickersAlert(parentActivity, this, inputStickerSet, null, stickersAlertDelegate));
                     break;
                 case 10:

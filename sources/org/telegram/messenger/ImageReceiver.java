@@ -251,7 +251,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
             this.currentKeyQuality = false;
             if (key == null && this.needsQualityThumb && (parentObject instanceof MessageObject)) {
                 Document document2 = ((MessageObject) parentObject).getDocument();
-                if (document2 != null) {
+                if (!(document2 == null || document2.dc_id == 0 || document2.id == 0)) {
                     key = "q_" + document2.dc_id + "_" + document2.id;
                     this.currentKeyQuality = true;
                 }
