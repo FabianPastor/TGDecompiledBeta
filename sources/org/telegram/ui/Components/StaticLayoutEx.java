@@ -47,10 +47,14 @@ public class StaticLayoutEx {
     }
 
     public static StaticLayout createStaticLayout(CharSequence source, TextPaint paint, int width, Alignment align, float spacingmult, float spacingadd, boolean includepad, TruncateAt ellipsize, int ellipsisWidth, int maxLines) {
-        return createStaticLayout(source, 0, source.length(), paint, width, align, spacingmult, spacingadd, includepad, ellipsize, ellipsisWidth, maxLines);
+        return createStaticLayout(source, 0, source.length(), paint, width, align, spacingmult, spacingadd, includepad, ellipsize, ellipsisWidth, maxLines, true);
     }
 
-    public static StaticLayout createStaticLayout(CharSequence source, int bufstart, int bufend, TextPaint paint, int outerWidth, Alignment align, float spacingMult, float spacingAdd, boolean includePad, TruncateAt ellipsize, int ellipsisWidth, int maxLines) {
+    public static StaticLayout createStaticLayout(CharSequence source, TextPaint paint, int width, Alignment align, float spacingmult, float spacingadd, boolean includepad, TruncateAt ellipsize, int ellipsisWidth, int maxLines, boolean canContainUrl) {
+        return createStaticLayout(source, 0, source.length(), paint, width, align, spacingmult, spacingadd, includepad, ellipsize, ellipsisWidth, maxLines, canContainUrl);
+    }
+
+    public static StaticLayout createStaticLayout(CharSequence source, int bufstart, int bufend, TextPaint paint, int outerWidth, Alignment align, float spacingMult, float spacingAdd, boolean includePad, TruncateAt ellipsize, int ellipsisWidth, int maxLines, boolean canContainUrl) {
         if (maxLines == 1) {
             try {
                 CharSequence text = TextUtils.ellipsize(source, paint, (float) ellipsisWidth, TruncateAt.END);
@@ -76,11 +80,11 @@ public class StaticLayoutEx {
         } else {
             off = layout.getOffsetForHorizontal(maxLines - 1, layout.getLineWidth(maxLines - 1));
         }
-        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(source.subSequence(0, Math.max(0, off - 2)));
+        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(source.subSequence(0, Math.max(0, off - 3)));
         stringBuilder.append("…");
-        if (VERSION.SDK_INT >= 23) {
-            return Builder.obtain(stringBuilder, 0, stringBuilder.length(), paint, outerWidth).setAlignment(align).setLineSpacing(spacingAdd, spacingMult).setIncludePad(includePad).setEllipsize(null).setEllipsizedWidth(ellipsisWidth).setBreakStrategy(1).setHyphenationFrequency(0).build();
+        if (VERSION.SDK_INT < 23) {
+            return new StaticLayout(stringBuilder, paint, outerWidth, align, spacingMult, spacingAdd, includePad);
         }
-        return new StaticLayout(stringBuilder, paint, outerWidth, align, spacingMult, spacingAdd, includePad);
+        return Builder.obtain(stringBuilder, 0, stringBuilder.length(), paint, outerWidth).setAlignment(align).setLineSpacing(spacingAdd, spacingMult).setIncludePad(includePad).setEllipsize(null).setEllipsizedWidth(ellipsisWidth).setBreakStrategy(canContainUrl ? 1 : 0).setHyphenationFrequency(0).build();
     }
 }

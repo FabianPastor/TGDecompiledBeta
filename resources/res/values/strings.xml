@@ -145,7 +145,7 @@
     <string name="AnonymousPoll">Anonymous Poll</string>
     <string name="ApkRestricted">APK installation is restricted for this app. You can enable this in system settings.</string>
     <string name="AppName">Telegram</string>
-    <string name="AppNameBeta">Telegram</string>
+    <string name="AppNameBeta">Telegram Beta</string>
     <string name="Appearance">Appearance</string>
     <string name="ApplyLocalizationFile">Apply localization file</string>
     <string name="ApplyTheme">APPLY</string>
@@ -658,6 +658,8 @@
     <string name="EditAdminRemoveAdmin">Dismiss Admin</string>
     <string name="EditAdminRights">Edit admin rights</string>
     <string name="EditAdminWhatCanDo">What can this admin do?</string>
+    <string name="EditCantEditPermissions">You cannot edit this permission.</string>
+    <string name="EditCantEditPermissionsPublic">This permission is not available in public groups.</string>
     <string name="EditCaption">Edit Caption</string>
     <string name="EditContact">Edit contact</string>
     <string name="EditMessage">Edit Message</string>

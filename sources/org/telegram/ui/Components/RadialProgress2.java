@@ -54,6 +54,7 @@ public class RadialProgress2 {
         parentView.getClass();
         mediaActionDrawable.setDelegate(RadialProgress2$$Lambda$1.get$Lambda(parentView));
         this.miniMediaActionDrawable.setMini(true);
+        this.miniMediaActionDrawable.setIcon(4, false);
         this.circleRadius = AndroidUtilities.dp(22.0f);
         this.overlayImageView.setRoundRadius(this.circleRadius);
         this.overlayPaint.setColor(NUM);

@@ -1563,6 +1563,8 @@ public final class R {
         public static final int EditAdminRemoveAdmin = NUM;
         public static final int EditAdminRights = NUM;
         public static final int EditAdminWhatCanDo = NUM;
+        public static final int EditCantEditPermissions = NUM;
+        public static final int EditCantEditPermissionsPublic = NUM;
         public static final int EditCaption = NUM;
         public static final int EditContact = NUM;
         public static final int EditMessage = NUM;

@@ -475,7 +475,7 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
         if (!(!ChatObject.canChangeChatInfo(this.currentChat) && this.signCell == null && this.historyCell == null)) {
             this.doneButton = menu.addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         }
-        if (!(this.signCell == null && this.historyCell == null)) {
+        if (!(this.signCell == null && this.historyCell == null && this.typeCell == null)) {
             this.settingsSectionCell = new ShadowSectionCell(context);
             linearLayout1.addView(this.settingsSectionCell, LayoutHelper.createLinear(-1, -2));
         }
@@ -952,8 +952,8 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
     }
 
     private void updateFields(boolean updateChat) {
-        TextCell textCell;
         int i;
+        TextCell textCell;
         if (updateChat) {
             Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.chatId));
             if (chat != null) {
@@ -964,8 +964,14 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
         if (this.historyCell != null) {
             this.historyCell.setVisibility(isPrivate ? 0 : 8);
         }
-        if (this.settingsSectionCell != null && this.signCell == null && (this.historyCell == null || this.historyCell.getVisibility() != 0)) {
-            this.settingsSectionCell.setVisibility(8);
+        if (this.settingsSectionCell != null) {
+            ShadowSectionCell shadowSectionCell = this.settingsSectionCell;
+            if (this.signCell == null && this.typeCell == null && (this.historyCell == null || this.historyCell.getVisibility() != 0)) {
+                i = 8;
+            } else {
+                i = 0;
+            }
+            shadowSectionCell.setVisibility(i);
         }
         if (this.logCell != null) {
             textCell = this.logCell;

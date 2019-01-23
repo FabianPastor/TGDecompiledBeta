@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -164,29 +165,19 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             boolean z = false;
             int type = holder.getItemViewType();
             if (type == 7) {
-                if (!ChatObject.canBlockUsers(ChatUsersActivity.this.currentChat)) {
-                    return false;
-                }
-                if (TextUtils.isEmpty(ChatUsersActivity.this.currentChat.username)) {
-                    return true;
-                }
-                int position = holder.getAdapterPosition();
-                if (position == ChatUsersActivity.this.pinMessagesRow || position == ChatUsersActivity.this.changeInfoRow) {
-                    return false;
-                }
-                return true;
-            } else if (type == 0) {
+                return ChatObject.canBlockUsers(ChatUsersActivity.this.currentChat);
+            }
+            if (type == 0) {
                 User user = holder.itemView.getCurrentUser();
                 if (user == null || user.self) {
                     return false;
                 }
                 return true;
-            } else {
-                if (type == 0 || type == 2 || type == 6) {
-                    z = true;
-                }
-                return z;
             }
+            if (type == 0 || type == 2 || type == 6) {
+                z = true;
+            }
+            return z;
         }
 
         public int getItemCount() {
@@ -487,17 +478,19 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                         checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsSendPolls", R.string.UserRestrictionsSendPolls), !ChatUsersActivity.this.defaultBannedRights.send_polls, true);
                     }
                     if (position == ChatUsersActivity.this.sendMediaRow || position == ChatUsersActivity.this.sendStickersRow || position == ChatUsersActivity.this.embedLinksRow || position == ChatUsersActivity.this.sendPollsRow) {
-                        if (ChatUsersActivity.this.defaultBannedRights.send_messages || ChatUsersActivity.this.defaultBannedRights.view_messages) {
-                            z = false;
-                        } else {
-                            z = true;
-                        }
+                        z = (ChatUsersActivity.this.defaultBannedRights.send_messages || ChatUsersActivity.this.defaultBannedRights.view_messages) ? false : true;
                         checkCell.setEnabled(z);
-                        return;
                     } else if (position == ChatUsersActivity.this.sendMessagesRow) {
                         checkCell.setEnabled(!ChatUsersActivity.this.defaultBannedRights.view_messages);
+                    }
+                    if (!ChatObject.canBlockUsers(ChatUsersActivity.this.currentChat)) {
+                        checkCell.setIcon(0);
+                        return;
+                    } else if ((position != ChatUsersActivity.this.addUsersRow || ChatObject.canUserDoAdminAction(ChatUsersActivity.this.currentChat, 3)) && ((position != ChatUsersActivity.this.pinMessagesRow || ChatObject.canUserDoAdminAction(ChatUsersActivity.this.currentChat, 0)) && ((position != ChatUsersActivity.this.changeInfoRow || ChatObject.canUserDoAdminAction(ChatUsersActivity.this.currentChat, 1)) && (TextUtils.isEmpty(ChatUsersActivity.this.currentChat.username) || !(position == ChatUsersActivity.this.pinMessagesRow || position == ChatUsersActivity.this.changeInfoRow))))) {
+                        checkCell.setIcon(0);
                         return;
                     } else {
+                        checkCell.setIcon(R.drawable.permission_locked);
                         return;
                     }
                 default:
@@ -1147,12 +1140,14 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 this.participantsInfoRow = i2;
             } else if (this.type == 2) {
                 if (this.selectType == 0 && ChatObject.canAddUsers(this.currentChat)) {
-                    i2 = this.rowCount;
-                    this.rowCount = i2 + 1;
-                    this.addNew2Row = i2;
-                    i2 = this.rowCount;
-                    this.rowCount = i2 + 1;
-                    this.addNewSectionRow = i2;
+                    if (!ChatObject.isChannel(this.currentChat) || this.currentChat.megagroup || TextUtils.isEmpty(this.currentChat.username)) {
+                        i2 = this.rowCount;
+                        this.rowCount = i2 + 1;
+                        this.addNew2Row = i2;
+                        i2 = this.rowCount;
+                        this.rowCount = i2 + 1;
+                        this.addNewSectionRow = i2;
+                    }
                     i2 = this.rowCount;
                     this.rowCount = i2 + 1;
                     this.addNewRow = i2;
@@ -1398,7 +1393,10 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 return;
             } else if (position > this.permissionsSectionRow && position <= this.changeInfoRow) {
                 TextCheckCell2 checkCell = (TextCheckCell2) view;
-                if (checkCell.isEnabled()) {
+                if (!checkCell.isEnabled()) {
+                    return;
+                }
+                if (!checkCell.hasIcon()) {
                     checkCell.setChecked(!checkCell.isChecked());
                     if (position == this.changeInfoRow) {
                         this.defaultBannedRights.change_info = !this.defaultBannedRights.change_info;
@@ -1490,8 +1488,13 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                             return;
                         }
                     }
+                } else if (TextUtils.isEmpty(this.currentChat.username) || !(position == this.pinMessagesRow || position == this.changeInfoRow)) {
+                    Toast.makeText(getParentActivity(), LocaleController.getString("EditCantEditPermissions", R.string.EditCantEditPermissions), 0).show();
+                    return;
+                } else {
+                    Toast.makeText(getParentActivity(), LocaleController.getString("EditCantEditPermissionsPublic", R.string.EditCantEditPermissionsPublic), 0).show();
+                    return;
                 }
-                return;
             }
         }
         TL_chatBannedRights bannedRights = null;
@@ -2209,15 +2212,17 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             int a;
             ChatParticipant participant;
             if (this.type == 1) {
-                size = this.info.participants.participants.size();
-                for (a = 0; a < size; a++) {
-                    participant = (ChatParticipant) this.info.participants.participants.get(a);
-                    if ((participant instanceof TL_chatParticipantCreator) || (participant instanceof TL_chatParticipantAdmin)) {
-                        this.participants.add(participant);
+                if (this.info != null) {
+                    size = this.info.participants.participants.size();
+                    for (a = 0; a < size; a++) {
+                        participant = (ChatParticipant) this.info.participants.participants.get(a);
+                        if ((participant instanceof TL_chatParticipantCreator) || (participant instanceof TL_chatParticipantAdmin)) {
+                            this.participants.add(participant);
+                        }
+                        this.participantsMap.put(participant.user_id, participant);
                     }
-                    this.participantsMap.put(participant.user_id, participant);
                 }
-            } else if (this.type == 2) {
+            } else if (this.type == 2 && this.info != null) {
                 int selfUserId = UserConfig.getInstance(this.currentAccount).clientUserId;
                 size = this.info.participants.participants.size();
                 for (a = 0; a < size; a++) {

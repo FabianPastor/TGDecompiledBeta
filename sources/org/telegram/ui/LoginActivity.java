@@ -39,6 +39,7 @@ import android.text.style.ClickableSpan;
 import android.util.Base64;
 import android.util.Property;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
@@ -2444,7 +2445,16 @@ public class LoginActivity extends BaseFragment {
                 }
             });
             this.codeField.setOnEditorActionListener(new LoginActivity$PhoneView$$Lambda$1(this));
-            this.phoneField = new HintEditText(context);
+            final LoginActivity loginActivity2 = LoginActivity.this;
+            this.phoneField = new HintEditText(context) {
+                public boolean onTouchEvent(MotionEvent event) {
+                    if (event.getAction() == 0 && !AndroidUtilities.showKeyboard(this)) {
+                        clearFocus();
+                        requestFocus();
+                    }
+                    return super.onTouchEvent(event);
+                }
+            };
             this.phoneField.setInputType(3);
             this.phoneField.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
             this.phoneField.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
@@ -2458,7 +2468,7 @@ public class LoginActivity extends BaseFragment {
             this.phoneField.setGravity(19);
             this.phoneField.setImeOptions(NUM);
             linearLayout.addView(this.phoneField, LayoutHelper.createFrame(-1, 36.0f));
-            final LoginActivity loginActivity2 = LoginActivity.this;
+            final LoginActivity loginActivity22 = LoginActivity.this;
             this.phoneField.addTextChangedListener(new TextWatcher() {
                 private int actionPosition;
                 private int characterAction = -1;
@@ -2544,7 +2554,7 @@ public class LoginActivity extends BaseFragment {
                 this.checkBoxCell = new CheckBoxCell(context, 2);
                 this.checkBoxCell.setText(LocaleController.getString("SyncContacts", R.string.SyncContacts), "", LoginActivity.this.syncContacts, false);
                 addView(this.checkBoxCell, LayoutHelper.createLinear(-2, -1, 51, 0, 0, 0, 0));
-                final LoginActivity loginActivity22 = LoginActivity.this;
+                final LoginActivity loginActivity222 = LoginActivity.this;
                 this.checkBoxCell.setOnClickListener(new OnClickListener() {
                     private Toast visibleToast;
 
@@ -2948,13 +2958,13 @@ public class LoginActivity extends BaseFragment {
                 return;
             }
             if (this.codeField.length() != 0) {
-                AndroidUtilities.showKeyboard(this.phoneField);
                 this.phoneField.requestFocus();
                 this.phoneField.setSelection(this.phoneField.length());
+                AndroidUtilities.showKeyboard(this.phoneField);
                 return;
             }
-            AndroidUtilities.showKeyboard(this.codeField);
             this.codeField.requestFocus();
+            AndroidUtilities.showKeyboard(this.codeField);
         }
 
         public String getHeaderName() {
@@ -3278,10 +3288,6 @@ public class LoginActivity extends BaseFragment {
                 }
             }
             clearCurrentState();
-            if (!this.newAccount) {
-                return true;
-            }
-            lambda$createView$1$PhotoAlbumPickerActivity();
             return true;
         }
         if (this.currentViewNum == 6) {

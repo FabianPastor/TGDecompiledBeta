@@ -75,9 +75,11 @@ public class StickerPreviewViewer {
                         icons.add(Integer.valueOf(R.drawable.stickers_send));
                         actions.add(Integer.valueOf(0));
                     }
-                    items.add(LocaleController.formatString("ViewPackPreview", R.string.ViewPackPreview, new Object[0]));
-                    icons.add(Integer.valueOf(R.drawable.stickers_pack));
-                    actions.add(Integer.valueOf(1));
+                    if (StickerPreviewViewer.this.delegate.needOpen()) {
+                        items.add(LocaleController.formatString("ViewPackPreview", R.string.ViewPackPreview, new Object[0]));
+                        icons.add(Integer.valueOf(R.drawable.stickers_pack));
+                        actions.add(Integer.valueOf(1));
+                    }
                 }
                 if (!MessageObject.isMaskDocument(StickerPreviewViewer.this.currentSticker) && (inFavs || DataQuery.getInstance(StickerPreviewViewer.this.currentAccount).canAddStickerToFavorites())) {
                     items.add(inFavs ? LocaleController.getString("DeleteFromFavorites", R.string.DeleteFromFavorites) : LocaleController.getString("AddToFavorites", R.string.AddToFavorites));
@@ -127,6 +129,8 @@ public class StickerPreviewViewer {
     private FrameLayout windowView;
 
     public interface StickerPreviewViewerDelegate {
+        boolean needOpen();
+
         boolean needSend();
 
         void openSet(InputStickerSet inputStickerSet);

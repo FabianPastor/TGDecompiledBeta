@@ -145,7 +145,7 @@
     <string name="AnonymousPoll">익명 투표</string>
     <string name="ApkRestricted">이 앱에서는 APK 설치가 제한됩니다. 시스템 설정에서 이를 허용하실 수 있습니다.</string>
     <string name="AppName">텔레그램</string>
-    <string name="AppNameBeta">텔레그램</string>
+    <string name="AppNameBeta">Telegram Beta</string>
     <string name="Appearance">외관</string>
     <string name="ApplyLocalizationFile">언어 파일 적용</string>
     <string name="ApplyTheme">적용</string>
