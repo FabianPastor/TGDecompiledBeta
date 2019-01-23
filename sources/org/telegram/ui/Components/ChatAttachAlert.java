@@ -1564,7 +1564,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             if (this.editingMessageObject != null) {
                 allowPoll = false;
             } else {
-                allowPoll = ChatObject.canSendPolls(((ChatActivity) this.baseFragment).getCurrentChat());
+                Chat currentChat = ((ChatActivity) this.baseFragment).getCurrentChat();
+                allowPoll = currentChat != null && ChatObject.canSendPolls(currentChat);
             }
             String text = allowPoll ? LocaleController.getString("Poll", R.string.Poll) : LocaleController.getString("AttachMusic", R.string.AttachMusic);
             AttachButton attachButton = (AttachButton) this.attachButtons.get(3);
