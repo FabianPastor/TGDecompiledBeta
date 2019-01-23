@@ -1236,6 +1236,11 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             }
                         }
                     }
+                    if (newDocument.thumbs.isEmpty()) {
+                        PhotoSize thumb2 = new TL_photoSizeEmpty();
+                        thumb2.type = "s";
+                        newDocument.thumbs.add(thumb2);
+                    }
                     document = newDocument;
                 } else {
                     return;

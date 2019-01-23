@@ -2918,7 +2918,7 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     public void saveGif(Object parentObject, Document document) {
-        if (parentObject != null && document != null) {
+        if (parentObject != null && document != null && MessageObject.isGifDocument(document)) {
             TL_messages_saveGif req = new TL_messages_saveGif();
             req.id = new TL_inputDocument();
             req.id.id = document.id;
