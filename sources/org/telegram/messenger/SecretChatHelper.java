@@ -534,6 +534,11 @@ public class SecretChatHelper {
             newMsg.media.document.iv = decryptedMessage.media.iv;
             newMsg.media.document.thumbs = document.thumbs;
             newMsg.media.document.dc_id = file.dc_id;
+            if (newMsg.media.document.thumbs.isEmpty()) {
+                PhotoSize thumb = new TL_photoSizeEmpty();
+                thumb.type = "s";
+                newMsg.media.document.thumbs.add(thumb);
+            }
             if (newMsg.attachPath != null && newMsg.attachPath.startsWith(FileLoader.getDirectory(4).getAbsolutePath()) && new File(newMsg.attachPath).renameTo(FileLoader.getPathToAttach(newMsg.media.document))) {
                 newMsgObj.mediaExists = newMsgObj.attachPathExists;
                 newMsgObj.attachPathExists = false;
@@ -1052,6 +1057,11 @@ public class SecretChatHelper {
                     newMessage.media.document.attributes.add(attributeAudio);
                     if (newMessage.ttl != 0) {
                         newMessage.ttl = Math.max(decryptedMessage.media.duration + 1, newMessage.ttl);
+                    }
+                    if (newMessage.media.document.thumbs.isEmpty()) {
+                        PhotoSize thumb2 = new TL_photoSizeEmpty();
+                        thumb2.type = "s";
+                        newMessage.media.document.thumbs.add(thumb2);
                     }
                 } else if (!(decryptedMessage.media instanceof TL_decryptedMessageMediaVenue)) {
                     return null;
