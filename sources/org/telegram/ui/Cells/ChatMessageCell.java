@@ -13845,6 +13845,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         }
         boolean fromBot = this.currentMessageObject.messageOwner.params != null && this.currentMessageObject.messageOwner.params.containsKey("query_id");
         Float progress;
+        RadialProgress2 radialProgress2;
         if (this.documentAttachType == 3 || this.documentAttachType == 5) {
             boolean playing;
             if ((this.currentMessageObject.isOut() && (this.currentMessageObject.isSending() || this.currentMessageObject.isEditing())) || (this.currentMessageObject.isSendError() && fromBot)) {
@@ -13865,7 +13866,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                         if (progress == null && SendMessagesHelper.getInstance(this.currentAccount).isSendingMessage(this.currentMessageObject.getId())) {
                             progress = Float.valueOf(1.0f);
                         }
-                        RadialProgress2 radialProgress2 = this.radialProgress;
+                        radialProgress2 = this.radialProgress;
                         if (progress != null) {
                             floatValue = progress.floatValue();
                         } else {
@@ -13998,7 +13999,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             } else if (TextUtils.isEmpty(this.currentMessageObject.messageOwner.attachPath)) {
                 this.buttonState = -1;
                 getIconForCurrentState();
-                this.radialProgress.setIcon(12, ifSame, false);
+                radialProgress2 = this.radialProgress;
+                int i = (this.currentMessageObject.isSticker() || this.currentMessageObject.isLocation()) ? 4 : 12;
+                radialProgress2.setIcon(i, ifSame, false);
                 this.radialProgress.setProgress(0.0f, false);
             } else {
                 DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(this.currentMessageObject.messageOwner.attachPath, this.currentMessageObject, this);

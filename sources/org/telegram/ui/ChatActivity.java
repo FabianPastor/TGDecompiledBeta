@@ -8161,7 +8161,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     private void updateSecretStatus() {
         if (this.bottomOverlay != null) {
             boolean hideKeyboard = false;
-            if (this.currentChat != null && !ChatObject.canSendMessages(this.currentChat)) {
+            if (this.currentChat != null && !ChatObject.canSendMessages(this.currentChat) && (!ChatObject.isChannel(this.currentChat) || this.currentChat.megagroup)) {
                 if (this.currentChat.default_banned_rights != null && this.currentChat.default_banned_rights.send_messages) {
                     this.bottomOverlayText.setText(LocaleController.getString("GlobalSendMessageRestricted", R.string.GlobalSendMessageRestricted));
                 } else if (AndroidUtilities.isBannedForever(this.currentChat.banned_rights)) {

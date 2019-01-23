@@ -4596,6 +4596,10 @@ public class MessageObject {
         return message.media != null && isStickerDocument(message.media.document);
     }
 
+    public static boolean isLocationMessage(Message message) {
+        return (message.media instanceof TL_messageMediaGeo) || (message.media instanceof TL_messageMediaGeoLive) || (message.media instanceof TL_messageMediaVenue);
+    }
+
     public static boolean isMaskMessage(Message message) {
         return message.media != null && isMaskDocument(message.media.document);
     }
@@ -4827,6 +4831,10 @@ public class MessageObject {
         } else {
             return isStickerMessage(this.messageOwner);
         }
+    }
+
+    public boolean isLocation() {
+        return isLocationMessage(this.messageOwner);
     }
 
     public boolean isMask() {
