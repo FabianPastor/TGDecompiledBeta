@@ -105,6 +105,7 @@ import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.ui.StickerPreviewViewer;
+import org.telegram.ui.StickerPreviewViewer$StickerPreviewViewerDelegate$$CC;
 import org.telegram.ui.StickerPreviewViewer.StickerPreviewViewerDelegate;
 
 public class EmojiView extends FrameLayout implements NotificationCenterDelegate {
@@ -169,6 +170,10 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     private View shadowLine;
     private boolean showGifs;
     private StickerPreviewViewerDelegate stickerPreviewViewerDelegate = new StickerPreviewViewerDelegate() {
+        public boolean needOpen() {
+            return StickerPreviewViewer$StickerPreviewViewerDelegate$$CC.needOpen(this);
+        }
+
         public void sendSticker(Document sticker, Object parent) {
             EmojiView.this.listener.onStickerSelected(sticker, parent);
         }

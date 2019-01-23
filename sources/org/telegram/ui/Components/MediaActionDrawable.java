@@ -70,7 +70,7 @@ public class MediaActionDrawable extends Drawable {
     private float scale = 1.0f;
     private TextPaint textPaint = new TextPaint(1);
     private float transitionAnimationTime = 400.0f;
-    private float transitionProgress;
+    private float transitionProgress = 1.0f;
 
     public interface MediaActionDrawableDelegate {
         void invalidate();
@@ -138,12 +138,16 @@ public class MediaActionDrawable extends Drawable {
             }
             this.animatingTransition = true;
             this.nextIcon = icon;
+            this.savedTransitionProgress = this.transitionProgress;
+            this.transitionProgress = 0.0f;
         } else if (this.currentIcon == icon) {
             return false;
         } else {
             this.animatingTransition = false;
             this.nextIcon = icon;
             this.currentIcon = icon;
+            this.savedTransitionProgress = this.transitionProgress;
+            this.transitionProgress = 1.0f;
         }
         if (icon == 3) {
             this.downloadRadOffset = 112.0f;
@@ -151,8 +155,6 @@ public class MediaActionDrawable extends Drawable {
             this.downloadProgressAnimationStart = 0.0f;
             this.downloadProgressTime = 0.0f;
         }
-        this.savedTransitionProgress = this.transitionProgress;
-        this.transitionProgress = 0.0f;
         invalidateSelf();
         return true;
     }
@@ -432,6 +434,34 @@ public class MediaActionDrawable extends Drawable {
             }
             canvas.drawLine((float) (x - AndroidUtilities.dp(6.0f)), (float) (y - AndroidUtilities.dp(6.0f)), (float) x, (float) y, this.paint);
             canvas.drawLine((float) x, (float) y, (float) (AndroidUtilities.dp(12.0f) + x), (float) (y - AndroidUtilities.dp(12.0f)), this.paint);
+            if (this.currentIcon != this.nextIcon) {
+                canvas.restore();
+            }
+        }
+        if (this.currentIcon == 12 || this.nextIcon == 12) {
+            if (this.currentIcon == this.nextIcon) {
+                transition = 1.0f;
+            } else if (this.nextIcon == 13) {
+                transition = this.transitionProgress;
+            } else {
+                transition = 1.0f - this.transitionProgress;
+            }
+            paint = this.paint;
+            if (this.currentIcon == this.nextIcon) {
+                i = 255;
+            } else {
+                i = (int) (255.0f * transition);
+            }
+            paint.setAlpha(i);
+            y = cy + AndroidUtilities.dp(7.0f);
+            x = cx - AndroidUtilities.dp(3.0f);
+            if (this.currentIcon != this.nextIcon) {
+                canvas.save();
+                canvas.scale(transition, transition, (float) cx, (float) cy);
+            }
+            d = ((float) AndroidUtilities.dp(7.0f)) * this.scale;
+            canvas.drawLine(((float) cx) - d, ((float) cy) - d, ((float) cx) + d, ((float) cy) + d, this.paint);
+            canvas.drawLine(((float) cx) + d, ((float) cy) - d, ((float) cx) - d, ((float) cy) + d, this.paint);
             if (this.currentIcon != this.nextIcon) {
                 canvas.restore();
             }

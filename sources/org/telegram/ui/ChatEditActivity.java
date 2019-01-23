@@ -475,7 +475,7 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
         if (!(!ChatObject.canChangeChatInfo(this.currentChat) && this.signCell == null && this.historyCell == null)) {
             this.doneButton = menu.addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
         }
-        if (!(this.signCell == null && this.historyCell == null)) {
+        if (!(this.signCell == null && this.historyCell == null && this.typeCell == null)) {
             this.settingsSectionCell = new ShadowSectionCell(context);
             linearLayout1.addView(this.settingsSectionCell, LayoutHelper.createLinear(-1, -2));
         }
@@ -769,7 +769,8 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
     }
 
     private boolean checkDiscard() {
-        if ((this.info == null || !ChatObject.isChannel(this.currentChat) || this.info.hidden_prehistory == this.historyHidden) && this.imageUpdater.uploadingImage == null && this.currentChat.title.equals(this.nameTextView.getText().toString()) && ((this.descriptionTextView == null || this.info == null || this.info.about.equals(this.descriptionTextView.getText().toString())) && this.signMessages == this.currentChat.signatures && this.uploadedAvatar == null && (this.avatar != null || !(this.currentChat.photo instanceof TL_chatPhoto)))) {
+        String about = (this.info == null || this.info.about == null) ? "" : this.info.about;
+        if ((this.info == null || !ChatObject.isChannel(this.currentChat) || this.info.hidden_prehistory == this.historyHidden) && this.imageUpdater.uploadingImage == null && ((this.nameTextView == null || this.currentChat.title.equals(this.nameTextView.getText().toString())) && ((this.descriptionTextView == null || about.equals(this.descriptionTextView.getText().toString())) && this.signMessages == this.currentChat.signatures && this.uploadedAvatar == null && (this.avatar != null || !(this.currentChat.photo instanceof TL_chatPhoto))))) {
             return true;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
@@ -826,7 +827,8 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
                 if (!this.currentChat.title.equals(this.nameTextView.getText().toString())) {
                     MessagesController.getInstance(this.currentAccount).changeChatTitle(this.chatId, this.nameTextView.getText().toString());
                 }
-                if (!(this.descriptionTextView == null || this.info == null || this.info.about.equals(this.descriptionTextView.getText().toString()))) {
+                String about = (this.info == null || this.info.about == null) ? "" : this.info.about;
+                if (!(this.descriptionTextView == null || about.equals(this.descriptionTextView.getText().toString()))) {
                     MessagesController.getInstance(this.currentAccount).updateChatAbout(this.chatId, this.descriptionTextView.getText().toString(), this.info);
                 }
                 if (this.signMessages != this.currentChat.signatures) {
@@ -950,8 +952,8 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
     }
 
     private void updateFields(boolean updateChat) {
-        TextCell textCell;
         int i;
+        TextCell textCell;
         if (updateChat) {
             Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.chatId));
             if (chat != null) {
@@ -962,8 +964,14 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
         if (this.historyCell != null) {
             this.historyCell.setVisibility(isPrivate ? 0 : 8);
         }
-        if (this.settingsSectionCell != null && this.signCell == null && (this.historyCell == null || this.historyCell.getVisibility() != 0)) {
-            this.settingsSectionCell.setVisibility(8);
+        if (this.settingsSectionCell != null) {
+            ShadowSectionCell shadowSectionCell = this.settingsSectionCell;
+            if (this.signCell == null && this.typeCell == null && (this.historyCell == null || this.historyCell.getVisibility() != 0)) {
+                i = 8;
+            } else {
+                i = 0;
+            }
+            shadowSectionCell.setVisibility(i);
         }
         if (this.logCell != null) {
             textCell = this.logCell;

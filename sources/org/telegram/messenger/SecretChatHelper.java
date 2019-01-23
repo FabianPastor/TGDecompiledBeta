@@ -93,6 +93,7 @@ import org.telegram.tgnet.TLRPC.TL_peerUser;
 import org.telegram.tgnet.TLRPC.TL_photo;
 import org.telegram.tgnet.TLRPC.TL_photoCachedSize;
 import org.telegram.tgnet.TLRPC.TL_photoSize;
+import org.telegram.tgnet.TLRPC.TL_photoSizeEmpty;
 import org.telegram.tgnet.TLRPC.TL_updateEncryption;
 import org.telegram.tgnet.TLRPC.TL_webPageUrlPending;
 import org.telegram.tgnet.TLRPC.Update;
@@ -846,7 +847,7 @@ public class SecretChatHelper {
                     newMessage.flags |= 8;
                 }
                 byte[] thumb;
-                TL_photoCachedSize photoSize;
+                PhotoSize photoSize;
                 Document document;
                 if (decryptedMessage.media == null || (decryptedMessage.media instanceof TL_decryptedMessageMediaEmpty)) {
                     newMessage.media = new TL_messageMediaEmpty();
@@ -926,17 +927,20 @@ public class SecretChatHelper {
                         newMessage.media.document.mime_type = "video/mp4";
                     }
                     thumb = ((TL_decryptedMessageMediaVideo) decryptedMessage.media).thumb;
-                    if (thumb != null && thumb.length != 0 && thumb.length <= 6000 && decryptedMessage.media.thumb_w <= 100 && decryptedMessage.media.thumb_h <= 100) {
+                    if (thumb == null || thumb.length == 0 || thumb.length > 6000 || decryptedMessage.media.thumb_w > 100 || decryptedMessage.media.thumb_h > 100) {
+                        photoSize = new TL_photoSizeEmpty();
+                        photoSize.type = "s";
+                    } else {
                         photoSize = new TL_photoCachedSize();
                         photoSize.bytes = thumb;
                         photoSize.w = decryptedMessage.media.thumb_w;
                         photoSize.h = decryptedMessage.media.thumb_h;
                         photoSize.type = "s";
                         photoSize.location = new TL_fileLocationUnavailable();
-                        newMessage.media.document.thumbs.add(photoSize);
-                        document = newMessage.media.document;
-                        document.flags |= 1;
                     }
+                    newMessage.media.document.thumbs.add(photoSize);
+                    document = newMessage.media.document;
+                    document.flags |= 1;
                     TL_documentAttributeVideo attributeVideo = new TL_documentAttributeVideo();
                     attributeVideo.w = decryptedMessage.media.w;
                     attributeVideo.h = decryptedMessage.media.h;
@@ -984,17 +988,20 @@ public class SecretChatHelper {
                         newMessage.media.document.mime_type = "";
                     }
                     thumb = ((TL_decryptedMessageMediaDocument) decryptedMessage.media).thumb;
-                    if (thumb != null && thumb.length != 0 && thumb.length <= 6000 && decryptedMessage.media.thumb_w <= 100 && decryptedMessage.media.thumb_h <= 100) {
+                    if (thumb == null || thumb.length == 0 || thumb.length > 6000 || decryptedMessage.media.thumb_w > 100 || decryptedMessage.media.thumb_h > 100) {
+                        photoSize = new TL_photoSizeEmpty();
+                        photoSize.type = "s";
+                    } else {
                         photoSize = new TL_photoCachedSize();
                         photoSize.bytes = thumb;
                         photoSize.w = decryptedMessage.media.thumb_w;
                         photoSize.h = decryptedMessage.media.thumb_h;
                         photoSize.type = "s";
                         photoSize.location = new TL_fileLocationUnavailable();
-                        newMessage.media.document.thumbs.add(photoSize);
-                        document = newMessage.media.document;
-                        document.flags |= 1;
                     }
+                    newMessage.media.document.thumbs.add(photoSize);
+                    document = newMessage.media.document;
+                    document.flags |= 1;
                     newMessage.media.document.dc_id = file.dc_id;
                     if (MessageObject.isVoiceMessage(newMessage) || MessageObject.isRoundVideoMessage(newMessage)) {
                         newMessage.media_unread = true;

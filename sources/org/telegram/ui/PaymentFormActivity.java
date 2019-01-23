@@ -438,7 +438,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r0 = r48;
         r4 = r0.actionBar;
         r5 = "PaymentShippingInfo";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.8612585E38 double:1.053098225E-314;
+        r6 = NUM; // 0x7f0CLASSNAMEb float:1.861259E38 double:1.053098226E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setTitle(r5);
     L_0x0017:
@@ -701,7 +701,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r5 = 0;
         r4 = r4[r5];
         r5 = "PaymentShippingAddress";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.8612573E38 double:1.053098222E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612577E38 double:1.053098223E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setText(r5);
         r0 = r48;
@@ -984,7 +984,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r0 = r48;
         r4 = r0.actionBar;
         r5 = "PaymentShippingMethod";
-        r6 = NUM; // 0x7f0CLASSNAMEa float:1.8612587E38 double:1.0530982255E-314;
+        r6 = NUM; // 0x7f0CLASSNAMEc float:1.8612591E38 double:1.0530982265E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setTitle(r5);
         goto L_0x0017;
@@ -997,7 +997,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r0 = r48;
         r4 = r0.actionBar;
         r5 = "PaymentCardInfo";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.8612504E38 double:1.0530982053E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612508E38 double:1.0530982063E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setTitle(r5);
         goto L_0x0017;
@@ -1010,7 +1010,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r0 = r48;
         r4 = r0.actionBar;
         r5 = "PaymentCardInfo";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.8612504E38 double:1.0530982053E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612508E38 double:1.0530982063E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setTitle(r5);
         goto L_0x0017;
@@ -1033,7 +1033,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r6 = "Test ";
         r5 = r5.append(r6);
         r6 = "PaymentCheckout";
-        r7 = NUM; // 0x7f0CLASSNAME float:1.8612518E38 double:1.0530982087E-314;
+        r7 = NUM; // 0x7f0CLASSNAMEa float:1.8612522E38 double:1.0530982097E-314;
         r6 = org.telegram.messenger.LocaleController.getString(r6, r7);
         r5 = r5.append(r6);
         r5 = r5.toString();
@@ -1043,7 +1043,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r0 = r48;
         r4 = r0.actionBar;
         r5 = "PaymentCheckout";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.8612518E38 double:1.0530982087E-314;
+        r6 = NUM; // 0x7f0CLASSNAMEa float:1.8612522E38 double:1.0530982097E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setTitle(r5);
         goto L_0x0017;
@@ -1066,7 +1066,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r6 = "Test ";
         r5 = r5.append(r6);
         r6 = "PaymentReceipt";
-        r7 = NUM; // 0x7f0CLASSNAME float:1.861257E38 double:1.0530982216E-314;
+        r7 = NUM; // 0x7f0CLASSNAME float:1.8612575E38 double:1.0530982226E-314;
         r6 = org.telegram.messenger.LocaleController.getString(r6, r7);
         r5 = r5.append(r6);
         r5 = r5.toString();
@@ -1076,7 +1076,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r0 = r48;
         r4 = r0.actionBar;
         r5 = "PaymentReceipt";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.861257E38 double:1.0530982216E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612575E38 double:1.0530982226E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setTitle(r5);
         goto L_0x0017;
@@ -1089,7 +1089,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r0 = r48;
         r4 = r0.actionBar;
         r5 = "PaymentPassword";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.8612549E38 double:1.053098216E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612553E38 double:1.053098217E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setTitle(r5);
         goto L_0x0017;
@@ -1139,7 +1139,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r5 = 1;
         r4 = r4[r5];
         r5 = "PaymentShippingReceiver";
-        r6 = NUM; // 0x7f0CLASSNAMEd float:1.8612593E38 double:1.053098227E-314;
+        r6 = NUM; // 0x7f0CLASSNAMEf float:1.8612597E38 double:1.053098228E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setText(r5);
         r0 = r48;
@@ -1276,7 +1276,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentShippingName";
-        r6 = NUM; // 0x7f0CLASSNAMEb float:1.861259E38 double:1.053098226E-314;
+        r6 = NUM; // 0x7f0CLASSNAMEd float:1.8612593E38 double:1.053098227E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         r0 = r48;
@@ -1304,7 +1304,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentShippingEmailPlaceholder";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.8612583E38 double:1.0530982245E-314;
+        r6 = NUM; // 0x7f0CLASSNAMEa float:1.8612587E38 double:1.0530982255E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         r0 = r48;
@@ -1332,7 +1332,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentShippingAddress1Placeholder";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.8612575E38 double:1.0530982226E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.861258E38 double:1.0530982235E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         r0 = r48;
@@ -1361,7 +1361,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentShippingAddress2Placeholder";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.8612577E38 double:1.053098223E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612581E38 double:1.053098224E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         r0 = r48;
@@ -1390,7 +1390,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentShippingCityPlaceholder";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.861258E38 double:1.0530982235E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612583E38 double:1.0530982245E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         r0 = r48;
@@ -1419,7 +1419,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentShippingStatePlaceholder";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.86126E38 double:1.0530982285E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612603E38 double:1.0530982295E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         r0 = r48;
@@ -1448,7 +1448,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentShippingCountry";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.8612581E38 double:1.053098224E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612585E38 double:1.053098225E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         r0 = r48;
@@ -1495,7 +1495,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentShippingZipPlaceholder";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.8612601E38 double:1.053098229E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612605E38 double:1.05309823E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         r0 = r48;
@@ -1645,7 +1645,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r5 = 1;
         r4 = r4[r5];
         r5 = "PaymentPhoneEmailToProvider";
-        r6 = NUM; // 0x7f0CLASSNAMEf float:1.8612565E38 double:1.05309822E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612569E38 double:1.053098221E-314;
         r7 = 1;
         r7 = new java.lang.Object[r7];
         r8 = 0;
@@ -1666,7 +1666,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r0 = r48;
         r4 = r0.checkCell1;
         r5 = "PaymentShippingSave";
-        r6 = NUM; // 0x7f0CLASSNAMEe float:1.8612595E38 double:1.0530982275E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.86126E38 double:1.0530982285E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r0 = r48;
         r6 = r0.saveShippingInfo;
@@ -1707,7 +1707,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r5 = 0;
         r4 = r4[r5];
         r5 = "PaymentShippingSaveInfo";
-        r6 = NUM; // 0x7f0CLASSNAMEf float:1.8612597E38 double:1.053098228E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612601E38 double:1.053098229E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setText(r5);
         r0 = r48;
@@ -1738,7 +1738,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r5 = 1;
         r4 = r4[r5];
         r5 = "PaymentEmailToProvider";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.861254E38 double:1.053098214E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612545E38 double:1.053098215E-314;
         r7 = 1;
         r7 = new java.lang.Object[r7];
         r8 = 0;
@@ -1752,7 +1752,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r5 = 1;
         r4 = r4[r5];
         r5 = "PaymentPhoneToProvider";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.8612567E38 double:1.0530982206E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.861257E38 double:1.0530982216E-314;
         r7 = 1;
         r7 = new java.lang.Object[r7];
         r8 = 0;
@@ -2319,7 +2319,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r0 = r48;
         r4 = r0.checkCell1;
         r5 = "PaymentCardSavePaymentInformation";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.861251E38 double:1.0530982067E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612514E38 double:1.0530982077E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r0 = r48;
         r6 = r0.saveCardInfo;
@@ -2457,7 +2457,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r5 = 0;
         r4 = r4[r5];
         r5 = "PaymentCardTitle";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.8612516E38 double:1.053098208E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.861252E38 double:1.053098209E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setText(r5);
         r0 = r48;
@@ -2772,7 +2772,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r5 = 1;
         r4 = r4[r5];
         r5 = "PaymentBillingAddress";
-        r6 = NUM; // 0x7f0CLASSNAMEe float:1.8612498E38 double:1.053098204E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612502E38 double:1.053098205E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setText(r5);
         r0 = r48;
@@ -2847,7 +2847,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentCardNumber";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.8612508E38 double:1.0530982063E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612512E38 double:1.053098207E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         goto L_0x108e;
@@ -2856,7 +2856,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentCardCvv";
-        r6 = NUM; // 0x7f0CLASSNAMEf float:1.86125E38 double:1.0530982043E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612504E38 double:1.0530982053E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         goto L_0x108e;
@@ -2865,7 +2865,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentCardExpireDate";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.8612502E38 double:1.053098205E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612506E38 double:1.053098206E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         goto L_0x108e;
@@ -2874,7 +2874,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentCardName";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.8612506E38 double:1.053098206E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.861251E38 double:1.0530982067E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         goto L_0x108e;
@@ -2883,7 +2883,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentShippingZipPlaceholder";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.8612601E38 double:1.053098229E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612605E38 double:1.05309823E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         goto L_0x108e;
@@ -2892,7 +2892,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentShippingCountry";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.8612581E38 double:1.053098224E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612585E38 double:1.053098225E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         goto L_0x108e;
@@ -2945,7 +2945,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r0 = r48;
         r4 = r0.checkCell1;
         r5 = "PaymentCardSavePaymentInformation";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.861251E38 double:1.0530982067E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612514E38 double:1.0530982077E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r0 = r48;
         r6 = r0.saveCardInfo;
@@ -3225,7 +3225,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r5 = 0;
         r4 = r4[r5];
         r5 = "PaymentCardTitle";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.8612516E38 double:1.053098208E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.861252E38 double:1.053098209E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setText(r5);
         r0 = r48;
@@ -3425,7 +3425,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r5 = 0;
         r4 = r4[r5];
         r5 = "PaymentConfirmationMessage";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.8612534E38 double:1.0530982127E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612539E38 double:1.0530982137E-314;
         r7 = 1;
         r7 = new java.lang.Object[r7];
         r8 = 0;
@@ -3474,7 +3474,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r5 = 0;
         r4 = r4[r5];
         r5 = "PaymentConfirmationNewCard";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.8612537E38 double:1.053098213E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.861254E38 double:1.053098214E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r6 = 0;
         r4.setText(r5, r6);
@@ -3573,7 +3573,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "LoginPassword";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.8611405E38 double:1.0530979375E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8611409E38 double:1.0530979385E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         r0 = r48;
@@ -3705,7 +3705,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r0 = r36;
         r0.setBackgroundColor(r4);
         r4 = "PaymentTransactionTotal";
-        r5 = NUM; // 0x7f0CLASSNAME float:1.8612614E38 double:1.053098232E-314;
+        r5 = NUM; // 0x7f0CLASSNAME float:1.8612618E38 double:1.053098233E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r5);
         r5 = 1;
         r0 = r36;
@@ -3758,7 +3758,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r0 = r48;
         r5 = r0.cardName;
         r6 = "PaymentCheckoutMethod";
-        r7 = NUM; // 0x7f0CLASSNAMEa float:1.8612522E38 double:1.0530982097E-314;
+        r7 = NUM; // 0x7f0CLASSNAMEc float:1.8612526E38 double:1.0530982107E-314;
         r6 = org.telegram.messenger.LocaleController.getString(r6, r7);
         r7 = 1;
         r4.setTextAndValue(r5, r6, r7);
@@ -3835,7 +3835,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r6 = r0.last_name;
         r37 = org.telegram.messenger.ContactsController.formatName(r5, r6);
         r5 = "PaymentCheckoutProvider";
-        r6 = NUM; // 0x7f0CLASSNAMEe float:1.861253E38 double:1.0530982117E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612534E38 double:1.0530982127E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r6 = 1;
         r0 = r37;
@@ -3923,7 +3923,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r5 = 2;
         r4 = r4[r5];
         r5 = "PaymentShippingAddress";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.8612573E38 double:1.053098222E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612577E38 double:1.053098223E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r6 = 1;
         r4.setTextAndValue(r12, r5, r6);
@@ -3964,7 +3964,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r5 = r5.info;
         r5 = r5.name;
         r6 = "PaymentCheckoutName";
-        r7 = NUM; // 0x7f0CLASSNAMEb float:1.8612524E38 double:1.05309821E-314;
+        r7 = NUM; // 0x7f0CLASSNAMEd float:1.8612528E38 double:1.053098211E-314;
         r6 = org.telegram.messenger.LocaleController.getString(r6, r7);
         r7 = 1;
         r4.setTextAndValue(r5, r6, r7);
@@ -4007,7 +4007,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r6 = r6.phone;
         r5 = r5.format(r6);
         r6 = "PaymentCheckoutPhoneNumber";
-        r7 = NUM; // 0x7f0CLASSNAMEd float:1.8612528E38 double:1.053098211E-314;
+        r7 = NUM; // 0x7f0CLASSNAMEf float:1.8612532E38 double:1.053098212E-314;
         r6 = org.telegram.messenger.LocaleController.getString(r6, r7);
         r7 = 1;
         r4.setTextAndValue(r5, r6, r7);
@@ -4048,7 +4048,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r5 = r5.info;
         r5 = r5.email;
         r6 = "PaymentCheckoutEmail";
-        r7 = NUM; // 0x7f0CLASSNAME float:1.861252E38 double:1.053098209E-314;
+        r7 = NUM; // 0x7f0CLASSNAMEb float:1.8612524E38 double:1.05309821E-314;
         r6 = org.telegram.messenger.LocaleController.getString(r6, r7);
         r7 = 1;
         r4.setTextAndValue(r5, r6, r7);
@@ -4086,7 +4086,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r5 = r0.shippingOption;
         r5 = r5.title;
         r6 = "PaymentCheckoutShippingMethod";
-        r7 = NUM; // 0x7f0CLASSNAMEf float:1.8612532E38 double:1.053098212E-314;
+        r7 = NUM; // 0x7f0CLASSNAME float:1.8612537E38 double:1.053098213E-314;
         r6 = org.telegram.messenger.LocaleController.getString(r6, r7);
         r7 = 0;
         r4.setTextAndValue(r5, r6, r7);
@@ -4142,7 +4142,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r0 = r48;
         r4 = r0.payTextView;
         r5 = "PaymentCheckoutPay";
-        r6 = NUM; // 0x7f0CLASSNAMEc float:1.8612526E38 double:1.0530982107E-314;
+        r6 = NUM; // 0x7f0CLASSNAMEe float:1.861253E38 double:1.0530982117E-314;
         r7 = 1;
         r7 = new java.lang.Object[r7];
         r8 = 0;
@@ -4315,7 +4315,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r4 = r0.codeFieldCell;
         r5 = "";
         r6 = "PasswordCode";
-        r7 = NUM; // 0x7f0CLASSNAME float:1.8612484E38 double:1.0530982003E-314;
+        r7 = NUM; // 0x7f0CLASSNAME float:1.8612488E38 double:1.0530982013E-314;
         r6 = org.telegram.messenger.LocaleController.getString(r6, r7);
         r7 = 0;
         r4.setTextAndHint(r5, r6, r7);
@@ -4409,7 +4409,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r5 = 1;
         r4 = r4[r5];
         r5 = "ResendCode";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.861291E38 double:1.053098304E-314;
+        r6 = NUM; // 0x7f0CLASSNAMEb float:1.8612914E38 double:1.053098305E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r6 = 1;
         r4.setText(r5, r6);
@@ -4515,7 +4515,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r5 = 0;
         r4 = r4[r5];
         r5 = "PaymentPasswordTitle";
-        r6 = NUM; // 0x7f0CLASSNAMEe float:1.8612563E38 double:1.0530982196E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612567E38 double:1.0530982206E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setText(r5);
         r0 = r48;
@@ -4701,7 +4701,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r5 = 0;
         r4 = r4[r5];
         r5 = "PaymentPasswordInfo";
-        r6 = NUM; // 0x7f0CLASSNAMEc float:1.8612559E38 double:1.0530982186E-314;
+        r6 = NUM; // 0x7f0CLASSNAMEe float:1.8612563E38 double:1.0530982196E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setText(r5);
         r0 = r48;
@@ -4749,7 +4749,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r5 = 1;
         r4 = r4[r5];
         r5 = "PaymentPasswordEmailTitle";
-        r6 = NUM; // 0x7f0CLASSNAMEa float:1.8612555E38 double:1.0530982176E-314;
+        r6 = NUM; // 0x7f0CLASSNAMEc float:1.8612559E38 double:1.0530982186E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setText(r5);
         r0 = r48;
@@ -4780,7 +4780,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentPasswordEnter";
-        r6 = NUM; // 0x7f0CLASSNAMEb float:1.8612557E38 double:1.053098218E-314;
+        r6 = NUM; // 0x7f0CLASSNAMEd float:1.861256E38 double:1.053098219E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         r0 = r48;
@@ -4793,7 +4793,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentPasswordReEnter";
-        r6 = NUM; // 0x7f0CLASSNAMEd float:1.861256E38 double:1.053098219E-314;
+        r6 = NUM; // 0x7f0CLASSNAMEf float:1.8612565E38 double:1.05309822E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         goto L_0x20b5;
@@ -4802,7 +4802,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r4 = r0.inputFields;
         r4 = r4[r11];
         r5 = "PaymentPasswordEmail";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.861255E38 double:1.0530982166E-314;
+        r6 = NUM; // 0x7f0CLASSNAMEa float:1.8612555E38 double:1.0530982176E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setHint(r5);
         goto L_0x20b5;
@@ -4825,7 +4825,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         r5 = 1;
         r4 = r4[r5];
         r5 = "PaymentPasswordEmailInfo";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.8612553E38 double:1.053098217E-314;
+        r6 = NUM; // 0x7f0CLASSNAMEb float:1.8612557E38 double:1.053098218E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r6);
         r4.setText(r5);
         r0 = r48;

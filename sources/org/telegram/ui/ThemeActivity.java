@@ -334,7 +334,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         L_0x00de:
             r11 = org.telegram.ui.ThemeActivity.this;	 Catch:{ Exception -> 0x00f4 }
             r12 = "ShareFile";
-            r13 = NUM; // 0x7f0CLASSNAMEba float:1.8613204E38 double:1.0530983757E-314;
+            r13 = NUM; // 0x7f0CLASSNAMEbc float:1.8613208E38 double:1.0530983767E-314;
             r12 = org.telegram.messenger.LocaleController.getString(r12, r13);	 Catch:{ Exception -> 0x00f4 }
             r12 = android.content.Intent.createChooser(r7, r12);	 Catch:{ Exception -> 0x00f4 }
             r13 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;

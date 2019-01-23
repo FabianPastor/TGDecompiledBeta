@@ -1527,6 +1527,8 @@
     <public type="string" name="EditAdminRemoveAdmin" id="NUM" />
     <public type="string" name="EditAdminRights" id="NUM" />
     <public type="string" name="EditAdminWhatCanDo" id="NUM" />
+    <public type="string" name="EditCantEditPermissions" id="NUM" />
+    <public type="string" name="EditCantEditPermissionsPublic" id="NUM" />
     <public type="string" name="EditCaption" id="NUM" />
     <public type="string" name="EditContact" id="NUM" />
     <public type="string" name="EditMessage" id="NUM" />

@@ -175,10 +175,10 @@ public class Switch extends View {
 
     public void setIcon(int icon) {
         if (icon != 0) {
-            this.iconDrawable = getResources().getDrawable(icon);
+            this.iconDrawable = getResources().getDrawable(icon).mutate();
             if (this.iconDrawable != null) {
                 Drawable drawable = this.iconDrawable;
-                int color = Theme.getColor(this.trackColorKey);
+                int color = Theme.getColor(this.isChecked ? this.trackCheckedColorKey : this.trackColorKey);
                 this.lastIconColor = color;
                 drawable.setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
                 return;
@@ -205,12 +205,26 @@ public class Switch extends View {
             int tx = (AndroidUtilities.dp(7.0f) + x) + ((int) (((float) AndroidUtilities.dp(17.0f)) * this.progress));
             int ty = getMeasuredHeight() / 2;
             int color1 = Theme.getColor(this.trackColorKey);
-            if (!(this.iconDrawable == null || color1 == this.lastIconColor)) {
-                Drawable drawable = this.iconDrawable;
-                this.lastIconColor = color1;
-                drawable.setColorFilter(new PorterDuffColorFilter(color1, Mode.MULTIPLY));
-            }
             int color2 = Theme.getColor(this.trackCheckedColorKey);
+            if (this.iconDrawable != null) {
+                int i;
+                int i2 = this.lastIconColor;
+                if (this.isChecked) {
+                    i = color2;
+                } else {
+                    i = color1;
+                }
+                if (i2 != i) {
+                    Drawable drawable = this.iconDrawable;
+                    if (this.isChecked) {
+                        i = color2;
+                    } else {
+                        i = color1;
+                    }
+                    this.lastIconColor = i;
+                    drawable.setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
+                }
+            }
             int r1 = Color.red(color1);
             int r2 = Color.red(color2);
             int g1 = Color.green(color1);

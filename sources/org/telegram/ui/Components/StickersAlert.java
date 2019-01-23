@@ -74,6 +74,7 @@ import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.ui.StickerPreviewViewer;
+import org.telegram.ui.StickerPreviewViewer.StickerPreviewViewerDelegate;
 
 public class StickersAlert extends BottomSheet implements NotificationCenterDelegate {
     private GridAdapter adapter;
@@ -88,6 +89,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     private Activity parentActivity;
     private BaseFragment parentFragment;
     private PickerBottomLayout pickerBottomLayout;
+    private StickerPreviewViewerDelegate previewDelegate;
     private ImageView previewFavButton;
     private TextView previewSendButton;
     private View previewSendButtonShadow;
@@ -267,6 +269,23 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         super(context, false);
         this.shadowAnimation = new AnimatorSet[2];
         this.shadow = new View[2];
+        this.previewDelegate = new StickerPreviewViewerDelegate() {
+            public void sendSticker(Document sticker, Object parent) {
+                StickersAlert.this.delegate.onStickerSelected(sticker, parent);
+                StickersAlert.this.lambda$init$8$StickersAlert();
+            }
+
+            public void openSet(InputStickerSet set) {
+            }
+
+            public boolean needSend() {
+                return StickersAlert.this.previewSendButton.getVisibility() == 0;
+            }
+
+            public boolean needOpen() {
+                return false;
+            }
+        };
         this.parentActivity = (Activity) context;
         TL_messages_getAttachedStickers req = new TL_messages_getAttachedStickers();
         TL_inputStickeredMediaPhoto inputStickeredMediaPhoto = new TL_inputStickeredMediaPhoto();
@@ -328,6 +347,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         super(context, false);
         this.shadowAnimation = new AnimatorSet[2];
         this.shadow = new View[2];
+        this.previewDelegate = /* anonymous class already generated */;
         this.delegate = stickersAlertDelegate;
         this.inputStickerSet = set;
         this.stickerSet = loadedSet;
@@ -463,7 +483,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         this.containerView.addView(this.shadow[0], LayoutHelper.createFrame(-1, 3.0f, 51, 0.0f, 48.0f, 0.0f, 0.0f));
         this.gridView = new RecyclerListView(context) {
             public boolean onInterceptTouchEvent(MotionEvent event) {
-                boolean result = StickerPreviewViewer.getInstance().onInterceptTouchEvent(event, StickersAlert.this.gridView, 0, null);
+                boolean result = StickerPreviewViewer.getInstance().onInterceptTouchEvent(event, StickersAlert.this.gridView, 0, StickersAlert.this.previewDelegate);
                 if (super.onInterceptTouchEvent(event) || result) {
                     return true;
                 }
@@ -593,7 +613,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     }
 
     final /* synthetic */ boolean lambda$init$5$StickersAlert(View v, MotionEvent event) {
-        return StickerPreviewViewer.getInstance().onTouch(event, this.gridView, 0, this.stickersOnItemClickListener, null);
+        return StickerPreviewViewer.getInstance().onTouch(event, this.gridView, 0, this.stickersOnItemClickListener, this.previewDelegate);
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:21:0x00c2  */
@@ -930,7 +950,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     L_0x005a:
         r3 = r3 + 1;
     L_0x005c:
-        r6 = new org.telegram.ui.Components.StickersAlert$7;	 Catch:{ Exception -> 0x00c6 }
+        r6 = new org.telegram.ui.Components.StickersAlert$8;	 Catch:{ Exception -> 0x00c6 }
         r7 = r11.stickerSet;	 Catch:{ Exception -> 0x00c6 }
         r7 = r7.set;	 Catch:{ Exception -> 0x00c6 }
         r7 = r7.title;	 Catch:{ Exception -> 0x00c6 }
@@ -1010,7 +1030,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r7 = new org.telegram.ui.Components.StickersAlert$$Lambda$12;
         r7.<init>(r11);
         r8 = "StickersRemove";
-        r9 = NUM; // 0x7f0CLASSNAMEf3 float:1.861332E38 double:1.053098404E-314;
+        r9 = NUM; // 0x7f0CLASSNAMEf5 float:1.8613323E38 double:1.053098405E-314;
         r8 = org.telegram.messenger.LocaleController.getString(r8, r9);
         r9 = "dialogTextRed";
         r9 = org.telegram.ui.ActionBar.Theme.getColor(r9);
@@ -1020,7 +1040,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r7 = new org.telegram.ui.Components.StickersAlert$$Lambda$13;
         r7.<init>(r11);
         r8 = "StickersRemove";
-        r9 = NUM; // 0x7f0CLASSNAMEf5 float:1.8613323E38 double:1.053098405E-314;
+        r9 = NUM; // 0x7f0CLASSNAMEf7 float:1.8613328E38 double:1.053098406E-314;
         r8 = org.telegram.messenger.LocaleController.getString(r8, r9);
         r9 = "dialogTextRed";
         r9 = org.telegram.ui.ActionBar.Theme.getColor(r9);

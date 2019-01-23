@@ -3145,7 +3145,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         ChatActivityEnterView.this.setStickersExpanded(false, true, false);
                     }
                     ChatActivityEnterView.this.onStickerSelected(sticker, parent);
-                    if (((int) ChatActivityEnterView.this.dialog_id) == 0) {
+                    if (((int) ChatActivityEnterView.this.dialog_id) == 0 && MessageObject.isGifDocument(sticker)) {
                         MessagesController.getInstance(ChatActivityEnterView.this.currentAccount).saveGif(parent, sticker);
                     }
                 }

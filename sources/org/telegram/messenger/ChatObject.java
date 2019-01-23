@@ -152,13 +152,13 @@ public class ChatObject {
     }
 
     public static boolean canUserDoAction(Chat chat, int action) {
-        if (chat == null) {
-            return false;
-        }
-        if (canUserDoAdminAction(chat, action)) {
+        if (chat == null || canUserDoAdminAction(chat, action)) {
             return true;
         }
-        if (getBannedRight(chat.banned_rights, action) || !isBannableAction(action)) {
+        if (getBannedRight(chat.banned_rights, action)) {
+            return false;
+        }
+        if (!isBannableAction(action)) {
             return false;
         }
         if (chat.admin_rights != null && !isAdminAction(action)) {

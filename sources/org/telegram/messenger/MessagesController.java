@@ -2917,7 +2917,7 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     public void saveGif(Object parentObject, Document document) {
-        if (parentObject != null && document != null) {
+        if (parentObject != null && document != null && MessageObject.isGifDocument(document)) {
             TL_messages_saveGif req = new TL_messages_saveGif();
             req.id = new TL_inputDocument();
             req.id.id = document.id;
@@ -14509,8 +14509,8 @@ public class MessagesController implements NotificationCenterDelegate {
                     chat = getChat(Integer.valueOf(chatId));
                     if (chat != null) {
                         chat.default_banned_rights = update9.default_banned_rights;
+                        AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$157(this, chat));
                     }
-                    AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$157(this, chat));
                 } else if (baseUpdate instanceof TL_updateStickerSets) {
                     TL_updateStickerSets update10 = (TL_updateStickerSets) baseUpdate;
                     DataQuery.getInstance(this.currentAccount).loadStickers(0, false, true);

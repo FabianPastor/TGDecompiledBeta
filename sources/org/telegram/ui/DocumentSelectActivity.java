@@ -618,7 +618,7 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:70:0x029b  */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x031c A:{Splitter: B:11:0x0094, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x031c A:{ExcHandler: all (th java.lang.Throwable), Splitter: B:11:0x0094} */
     /* JADX WARNING: Removed duplicated region for block: B:64:0x0223 A:{Catch:{ Exception -> 0x033e }} */
     /* JADX WARNING: Removed duplicated region for block: B:70:0x029b  */
     /* JADX WARNING: Removed duplicated region for block: B:70:0x029b  */
@@ -672,7 +672,7 @@ public class DocumentSelectActivity extends BaseFragment {
         if (r21 == 0) goto L_0x02f5;
     L_0x004d:
         r21 = "SdCard";
-        r22 = NUM; // 0x7f0CLASSNAMEd float:1.8613015E38 double:1.05309833E-314;
+        r22 = NUM; // 0x7f0CLASSNAMEf float:1.861302E38 double:1.053098331E-314;
         r21 = org.telegram.messenger.LocaleController.getString(r21, r22);
         r0 = r21;
         r8.title = r0;
@@ -810,7 +810,7 @@ public class DocumentSelectActivity extends BaseFragment {
         if (r21 == 0) goto L_0x030c;
     L_0x0182:
         r21 = "SdCard";
-        r22 = NUM; // 0x7f0CLASSNAMEd float:1.8613015E38 double:1.05309833E-314;
+        r22 = NUM; // 0x7f0CLASSNAMEf float:1.861302E38 double:1.053098331E-314;
         r21 = org.telegram.messenger.LocaleController.getString(r21, r22);	 Catch:{ Exception -> 0x01bd, all -> 0x031c }
         r0 = r21;
         r13.title = r0;	 Catch:{ Exception -> 0x01bd, all -> 0x031c }
@@ -857,7 +857,7 @@ public class DocumentSelectActivity extends BaseFragment {
         r0 = r21;
         r9.title = r0;
         r21 = "SystemRoot";
-        r22 = NUM; // 0x7f0CLASSNAME float:1.8613415E38 double:1.053098427E-314;
+        r22 = NUM; // 0x7f0CLASSNAME float:1.8613419E38 double:1.053098428E-314;
         r21 = org.telegram.messenger.LocaleController.getString(r21, r22);
         r0 = r21;
         r9.subtitle = r0;
@@ -913,12 +913,12 @@ public class DocumentSelectActivity extends BaseFragment {
         r1 = r21;
         r9.<init>(r0, r1);
         r21 = "Gallery";
-        r22 = NUM; // 0x7f0CLASSNAME float:1.8611021E38 double:1.053097844E-314;
+        r22 = NUM; // 0x7f0CLASSNAME float:1.8611025E38 double:1.053097845E-314;
         r21 = org.telegram.messenger.LocaleController.getString(r21, r22);
         r0 = r21;
         r9.title = r0;
         r21 = "GalleryInfo";
-        r22 = NUM; // 0x7f0CLASSNAME float:1.8611023E38 double:1.0530978446E-314;
+        r22 = NUM; // 0x7f0CLASSNAME float:1.8611027E38 double:1.0530978456E-314;
         r21 = org.telegram.messenger.LocaleController.getString(r21, r22);
         r0 = r21;
         r9.subtitle = r0;
@@ -949,7 +949,7 @@ public class DocumentSelectActivity extends BaseFragment {
         r0 = r21;
         r9.title = r0;
         r21 = "MusicInfo";
-        r22 = NUM; // 0x7f0CLASSNAMEc float:1.8611585E38 double:1.0530979815E-314;
+        r22 = NUM; // 0x7f0CLASSNAMEe float:1.861159E38 double:1.0530979824E-314;
         r21 = org.telegram.messenger.LocaleController.getString(r21, r22);
         r0 = r21;
         r9.subtitle = r0;
@@ -980,7 +980,7 @@ public class DocumentSelectActivity extends BaseFragment {
         return;
     L_0x02f5:
         r21 = "InternalStorage";
-        r22 = NUM; // 0x7f0CLASSNAMEd5 float:1.8611182E38 double:1.053097883E-314;
+        r22 = NUM; // 0x7f0CLASSNAMEd7 float:1.8611186E38 double:1.053097884E-314;
         r21 = org.telegram.messenger.LocaleController.getString(r21, r22);
         r0 = r21;
         r8.title = r0;
@@ -990,7 +990,7 @@ public class DocumentSelectActivity extends BaseFragment {
         goto L_0x0062;
     L_0x030c:
         r21 = "ExternalStorage";
-        r22 = NUM; // 0x7f0CLASSNAMEe float:1.861081E38 double:1.0530977927E-314;
+        r22 = NUM; // 0x7f0CLASSNAME float:1.8610815E38 double:1.0530977937E-314;
         r21 = org.telegram.messenger.LocaleController.getString(r21, r22);	 Catch:{ Exception -> 0x01bd, all -> 0x031c }
         r0 = r21;
         r13.title = r0;	 Catch:{ Exception -> 0x01bd, all -> 0x031c }

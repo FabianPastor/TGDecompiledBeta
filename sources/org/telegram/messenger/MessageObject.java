@@ -4595,6 +4595,10 @@ public class MessageObject {
         return message.media != null && isStickerDocument(message.media.document);
     }
 
+    public static boolean isLocationMessage(Message message) {
+        return (message.media instanceof TL_messageMediaGeo) || (message.media instanceof TL_messageMediaGeoLive) || (message.media instanceof TL_messageMediaVenue);
+    }
+
     public static boolean isMaskMessage(Message message) {
         return message.media != null && isMaskDocument(message.media.document);
     }
@@ -4828,6 +4832,10 @@ public class MessageObject {
         }
     }
 
+    public boolean isLocation() {
+        return isLocationMessage(this.messageOwner);
+    }
+
     public boolean isMask() {
         return isMaskMessage(this.messageOwner);
     }
@@ -4892,12 +4900,7 @@ public class MessageObject {
     }
 
     public String getMusicTitle(boolean unknown) {
-        Document document;
-        if (this.type == 0) {
-            document = this.messageOwner.media.webpage.document;
-        } else {
-            document = this.messageOwner.media.document;
-        }
+        Document document = getDocument();
         if (document != null) {
             int a = 0;
             while (a < document.attributes.size()) {
@@ -4992,14 +4995,7 @@ public class MessageObject {
     }
 
     public String getMusicAuthor(boolean unknown) {
-        Document document;
-        if (this.type != 0) {
-            document = this.messageOwner.media.document;
-        } else if (this.messageOwner.media.webpage != null) {
-            document = this.messageOwner.media.webpage.document;
-        } else {
-            document = null;
-        }
+        Document document = getDocument();
         if (document != null) {
             boolean isVoice = false;
             for (int a = 0; a < document.attributes.size(); a++) {
