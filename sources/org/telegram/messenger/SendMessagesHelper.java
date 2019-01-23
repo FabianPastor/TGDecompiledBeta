@@ -102,6 +102,7 @@ import org.telegram.tgnet.TLRPC.TL_documentAttributeVideo_layer65;
 import org.telegram.tgnet.TLRPC.TL_document_layer82;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_fileLocationUnavailable;
+import org.telegram.tgnet.TLRPC.TL_fileLocation_layer82;
 import org.telegram.tgnet.TLRPC.TL_game;
 import org.telegram.tgnet.TLRPC.TL_geoPoint;
 import org.telegram.tgnet.TLRPC.TL_inputDocument;
@@ -1222,7 +1223,12 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 byte[] arr = new byte[((int) file.length())];
                                 new RandomAccessFile(file, "r").readFully(arr);
                                 PhotoSize newThumb = new TL_photoCachedSize();
-                                newThumb.location = thumb.location;
+                                FileLocation fileLocation = new TL_fileLocation_layer82();
+                                fileLocation.dc_id = thumb.location.dc_id;
+                                fileLocation.volume_id = thumb.location.volume_id;
+                                fileLocation.local_id = thumb.location.local_id;
+                                fileLocation.secret = thumb.location.secret;
+                                newThumb.location = fileLocation;
                                 newThumb.size = thumb.size;
                                 newThumb.w = thumb.w;
                                 newThumb.h = thumb.h;
@@ -2742,30 +2748,30 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r79 = new org.telegram.tgnet.TLRPC$TL_userRequest_old2;	 Catch:{ Exception -> 0x021a }
         r79.<init>();	 Catch:{ Exception -> 0x021a }
         r0 = r57;
-        r4 = r0.media;	 Catch:{ Exception -> 0x1bb1 }
-        r4 = r4.phone_number;	 Catch:{ Exception -> 0x1bb1 }
+        r4 = r0.media;	 Catch:{ Exception -> 0x1bb4 }
+        r4 = r4.phone_number;	 Catch:{ Exception -> 0x1bb4 }
         r0 = r79;
-        r0.phone = r4;	 Catch:{ Exception -> 0x1bb1 }
+        r0.phone = r4;	 Catch:{ Exception -> 0x1bb4 }
         r0 = r57;
-        r4 = r0.media;	 Catch:{ Exception -> 0x1bb1 }
-        r4 = r4.first_name;	 Catch:{ Exception -> 0x1bb1 }
+        r4 = r0.media;	 Catch:{ Exception -> 0x1bb4 }
+        r4 = r4.first_name;	 Catch:{ Exception -> 0x1bb4 }
         r0 = r79;
-        r0.first_name = r4;	 Catch:{ Exception -> 0x1bb1 }
+        r0.first_name = r4;	 Catch:{ Exception -> 0x1bb4 }
         r0 = r57;
-        r4 = r0.media;	 Catch:{ Exception -> 0x1bb1 }
-        r4 = r4.last_name;	 Catch:{ Exception -> 0x1bb1 }
+        r4 = r0.media;	 Catch:{ Exception -> 0x1bb4 }
+        r4 = r4.last_name;	 Catch:{ Exception -> 0x1bb4 }
         r0 = r79;
-        r0.last_name = r4;	 Catch:{ Exception -> 0x1bb1 }
+        r0.last_name = r4;	 Catch:{ Exception -> 0x1bb4 }
         r0 = r57;
-        r4 = r0.media;	 Catch:{ Exception -> 0x1bb1 }
-        r4 = r4.vcard;	 Catch:{ Exception -> 0x1bb1 }
+        r4 = r0.media;	 Catch:{ Exception -> 0x1bb4 }
+        r4 = r4.vcard;	 Catch:{ Exception -> 0x1bb4 }
         r0 = r79;
-        r0.restriction_reason = r4;	 Catch:{ Exception -> 0x1bb1 }
+        r0.restriction_reason = r4;	 Catch:{ Exception -> 0x1bb4 }
         r0 = r57;
-        r4 = r0.media;	 Catch:{ Exception -> 0x1bb1 }
-        r4 = r4.user_id;	 Catch:{ Exception -> 0x1bb1 }
+        r4 = r0.media;	 Catch:{ Exception -> 0x1bb4 }
+        r4 = r4.user_id;	 Catch:{ Exception -> 0x1bb4 }
         r0 = r79;
-        r0.id = r4;	 Catch:{ Exception -> 0x1bb1 }
+        r0.id = r4;	 Catch:{ Exception -> 0x1bb4 }
         r75 = 6;
         r88 = r79;
         goto L_0x0270;
@@ -3093,20 +3099,20 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     L_0x053a:
         r58 = new org.telegram.tgnet.TLRPC$TL_message;	 Catch:{ Exception -> 0x021a }
         r58.<init>();	 Catch:{ Exception -> 0x021a }
-        r4 = new org.telegram.tgnet.TLRPC$TL_messageMediaGame;	 Catch:{ Exception -> 0x1bb8 }
-        r4.<init>();	 Catch:{ Exception -> 0x1bb8 }
+        r4 = new org.telegram.tgnet.TLRPC$TL_messageMediaGame;	 Catch:{ Exception -> 0x1bbb }
+        r4.<init>();	 Catch:{ Exception -> 0x1bbb }
         r0 = r58;
-        r0.media = r4;	 Catch:{ Exception -> 0x1bb8 }
+        r0.media = r4;	 Catch:{ Exception -> 0x1bbb }
         r0 = r58;
-        r4 = r0.media;	 Catch:{ Exception -> 0x1bb8 }
+        r4 = r0.media;	 Catch:{ Exception -> 0x1bbb }
         r0 = r90;
-        r4.game = r0;	 Catch:{ Exception -> 0x1bb8 }
-        if (r101 == 0) goto L_0x1bdb;
+        r4.game = r0;	 Catch:{ Exception -> 0x1bbb }
+        if (r101 == 0) goto L_0x1bde;
     L_0x0552:
         r4 = "query_id";
         r0 = r101;
-        r4 = r0.containsKey(r4);	 Catch:{ Exception -> 0x1bb8 }
-        if (r4 == 0) goto L_0x1bdb;
+        r4 = r0.containsKey(r4);	 Catch:{ Exception -> 0x1bbb }
+        if (r4 == 0) goto L_0x1bde;
     L_0x055d:
         r75 = 9;
         r57 = r58;
@@ -3878,7 +3884,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r0 = r51;
         r31 = r4.get(r0);	 Catch:{ Exception -> 0x0e36 }
         r31 = (java.util.ArrayList) r31;	 Catch:{ Exception -> 0x0e36 }
-        if (r31 == 0) goto L_0x1bd7;
+        if (r31 == 0) goto L_0x1bda;
     L_0x0b06:
         r4 = 0;
         r0 = r31;
@@ -3888,7 +3894,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r10 = r0;
         r37 = r10;
     L_0x0b13:
-        if (r37 != 0) goto L_0x1bd3;
+        if (r37 != 0) goto L_0x1bd6;
     L_0x0b15:
         r10 = new org.telegram.messenger.SendMessagesHelper$DelayedMessage;	 Catch:{ Exception -> 0x0ca9 }
         r0 = r82;
@@ -4146,7 +4152,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     L_0x0ccb:
         r4 = 10;
         r0 = r75;
-        if (r0 != r4) goto L_0x1a28;
+        if (r0 != r4) goto L_0x1a2b;
     L_0x0cd1:
         if (r20 != 0) goto L_0x1403;
     L_0x0cd3:
@@ -4315,7 +4321,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r46 = r78;
         r65 = 1;
     L_0x0e01:
-        if (r37 != 0) goto L_0x1bcf;
+        if (r37 != 0) goto L_0x1bd2;
     L_0x0e03:
         r10 = new org.telegram.messenger.SendMessagesHelper$DelayedMessage;	 Catch:{ Exception -> 0x0ca9 }
         r0 = r82;
@@ -4454,7 +4460,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r46 = r76;
         r65 = 1;
     L_0x0ef6:
-        if (r37 != 0) goto L_0x1bcb;
+        if (r37 != 0) goto L_0x1bce;
     L_0x0ef8:
         r10 = new org.telegram.messenger.SendMessagesHelper$DelayedMessage;	 Catch:{ Exception -> 0x0ca9 }
         r0 = r82;
@@ -4641,9 +4647,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_inputMediaUploadedDocument;	 Catch:{ Exception -> 0x0ca9 }
         r65 = r0;
     L_0x1042:
-        if (r45 != 0) goto L_0x1bc7;
+        if (r45 != 0) goto L_0x1bca;
     L_0x1044:
-        if (r77 == 0) goto L_0x1bc7;
+        if (r77 == 0) goto L_0x1bca;
     L_0x1046:
         r10 = new org.telegram.messenger.SendMessagesHelper$DelayedMessage;	 Catch:{ Exception -> 0x0ca9 }
         r0 = r82;
@@ -4838,7 +4844,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     L_0x11a5:
         r4 = 10;
         r0 = r75;
-        if (r0 != r4) goto L_0x1bc7;
+        if (r0 != r4) goto L_0x1bca;
     L_0x11ab:
         r47 = new org.telegram.tgnet.TLRPC$TL_inputMediaPoll;	 Catch:{ Exception -> 0x0ca9 }
         r47.<init>();	 Catch:{ Exception -> 0x0ca9 }
@@ -5297,7 +5303,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         if (r4 == 0) goto L_0x152e;
     L_0x14e9:
         r4 = r10.sendEncryptedRequest;	 Catch:{ Exception -> 0x0e36 }
-        if (r4 == 0) goto L_0x1a19;
+        if (r4 == 0) goto L_0x1a1c;
     L_0x14ed:
         r0 = r10.sendEncryptedRequest;	 Catch:{ Exception -> 0x0e36 }
         r67 = r0;
@@ -5320,7 +5326,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r21.<init>();	 Catch:{ Exception -> 0x0e36 }
         r4 = 3;
         r0 = r75;
-        if (r0 != r4) goto L_0x1a24;
+        if (r0 != r4) goto L_0x1a27;
     L_0x151a:
         r8 = 1;
     L_0x151c:
@@ -5421,7 +5427,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r4 = (r42 > r8 ? 1 : (r42 == r8 ? 0 : -1));
         if (r4 == 0) goto L_0x1639;
     L_0x15d2:
-        if (r37 != 0) goto L_0x1bc3;
+        if (r37 != 0) goto L_0x1bc6;
     L_0x15d4:
         r10 = new org.telegram.messenger.SendMessagesHelper$DelayedMessage;	 Catch:{ Exception -> 0x0ca9 }
         r0 = r82;
@@ -5603,7 +5609,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r4 = (r42 > r8 ? 1 : (r42 == r8 ? 0 : -1));
         if (r4 == 0) goto L_0x178e;
     L_0x1727:
-        if (r37 != 0) goto L_0x1bbf;
+        if (r37 != 0) goto L_0x1bc2;
     L_0x1729:
         r10 = new org.telegram.messenger.SendMessagesHelper$DelayedMessage;	 Catch:{ Exception -> 0x0ca9 }
         r0 = r82;
@@ -5962,8 +5968,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r4 = r0.thumbs;	 Catch:{ Exception -> 0x0e36 }
         r0 = r82;
         r74 = r0.getThumbForSecretChat(r4);	 Catch:{ Exception -> 0x0e36 }
-        if (r74 == 0) goto L_0x1a05;
+        if (r74 == 0) goto L_0x1a08;
     L_0x19d0:
+        org.telegram.messenger.ImageLoader.fillPhotoSizeWithBytes(r74);	 Catch:{ Exception -> 0x0e36 }
         r4 = r7.media;	 Catch:{ Exception -> 0x0e36 }
         r4 = (org.telegram.tgnet.TLRPC.TL_decryptedMessageMediaDocument) r4;	 Catch:{ Exception -> 0x0e36 }
         r0 = r74;
@@ -5977,7 +5984,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r0 = r74;
         r6 = r0.w;	 Catch:{ Exception -> 0x0e36 }
         r4.thumb_w = r6;	 Catch:{ Exception -> 0x0e36 }
-    L_0x19ea:
+    L_0x19ed:
         r4 = r7.media;	 Catch:{ Exception -> 0x0e36 }
         r0 = r89;
         r6 = r0.mime_type;	 Catch:{ Exception -> 0x0e36 }
@@ -5991,7 +5998,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r0 = r82;
         r0.performSendDelayedMessage(r10);	 Catch:{ Exception -> 0x0e36 }
         goto L_0x14e3;
-    L_0x1a05:
+    L_0x1a08:
         r4 = r7.media;	 Catch:{ Exception -> 0x0e36 }
         r4 = (org.telegram.tgnet.TLRPC.TL_decryptedMessageMediaDocument) r4;	 Catch:{ Exception -> 0x0e36 }
         r6 = 0;
@@ -6003,21 +6010,21 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r4 = r7.media;	 Catch:{ Exception -> 0x0e36 }
         r6 = 0;
         r4.thumb_w = r6;	 Catch:{ Exception -> 0x0e36 }
-        goto L_0x19ea;
-    L_0x1a19:
+        goto L_0x19ed;
+    L_0x1a1c:
         r67 = new org.telegram.tgnet.TLRPC$TL_messages_sendEncryptedMultiMedia;	 Catch:{ Exception -> 0x0e36 }
         r67.<init>();	 Catch:{ Exception -> 0x0e36 }
         r0 = r67;
         r10.sendEncryptedRequest = r0;	 Catch:{ Exception -> 0x0e36 }
         goto L_0x14f3;
-    L_0x1a24:
+    L_0x1a27:
         r8 = 0;
         goto L_0x151c;
-    L_0x1a28:
+    L_0x1a2b:
         r4 = 4;
         r0 = r75;
-        if (r0 != r4) goto L_0x1b15;
-    L_0x1a2d:
+        if (r0 != r4) goto L_0x1b18;
+    L_0x1a30:
         r7 = new org.telegram.tgnet.TLRPC$TL_messages_forwardMessages;	 Catch:{ Exception -> 0x0ca9 }
         r7.<init>();	 Catch:{ Exception -> 0x0ca9 }
         r0 = r68;
@@ -6029,8 +6036,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r0 = r98;
         r4 = r0.messageOwner;	 Catch:{ Exception -> 0x0ca9 }
         r4 = r4.ttl;	 Catch:{ Exception -> 0x0ca9 }
-        if (r4 == 0) goto L_0x1adb;
-    L_0x1a46:
+        if (r4 == 0) goto L_0x1ade;
+    L_0x1a49:
         r0 = r82;
         r4 = r0.currentAccount;	 Catch:{ Exception -> 0x0ca9 }
         r4 = org.telegram.messenger.MessagesController.getInstance(r4);	 Catch:{ Exception -> 0x0ca9 }
@@ -6049,19 +6056,19 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r6 = r6.ttl;	 Catch:{ Exception -> 0x0ca9 }
         r6 = -r6;
         r4.channel_id = r6;	 Catch:{ Exception -> 0x0ca9 }
-        if (r35 == 0) goto L_0x1a79;
-    L_0x1a71:
+        if (r35 == 0) goto L_0x1a7c;
+    L_0x1a74:
         r4 = r7.from_peer;	 Catch:{ Exception -> 0x0ca9 }
         r0 = r35;
         r8 = r0.access_hash;	 Catch:{ Exception -> 0x0ca9 }
         r4.access_hash = r8;	 Catch:{ Exception -> 0x0ca9 }
-    L_0x1a79:
+    L_0x1a7c:
         r0 = r98;
         r4 = r0.messageOwner;	 Catch:{ Exception -> 0x0ca9 }
         r4 = r4.to_id;	 Catch:{ Exception -> 0x0ca9 }
         r4 = r4 instanceof org.telegram.tgnet.TLRPC.TL_peerChannel;	 Catch:{ Exception -> 0x0ca9 }
-        if (r4 == 0) goto L_0x1aa8;
-    L_0x1a83:
+        if (r4 == 0) goto L_0x1aab;
+    L_0x1a86:
         r0 = r82;
         r4 = r0.currentAccount;	 Catch:{ Exception -> 0x0ca9 }
         r4 = org.telegram.messenger.MessagesController.getNotificationsSettings(r4);	 Catch:{ Exception -> 0x0ca9 }
@@ -6075,20 +6082,20 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r8 = 0;
         r4 = r4.getBoolean(r6, r8);	 Catch:{ Exception -> 0x0ca9 }
         r7.silent = r4;	 Catch:{ Exception -> 0x0ca9 }
-    L_0x1aa8:
+    L_0x1aab:
         r4 = r7.random_id;	 Catch:{ Exception -> 0x0ca9 }
         r0 = r57;
         r8 = r0.random_id;	 Catch:{ Exception -> 0x0ca9 }
         r6 = java.lang.Long.valueOf(r8);	 Catch:{ Exception -> 0x0ca9 }
         r4.add(r6);	 Catch:{ Exception -> 0x0ca9 }
         r4 = r98.getId();	 Catch:{ Exception -> 0x0ca9 }
-        if (r4 < 0) goto L_0x1ae3;
-    L_0x1abb:
+        if (r4 < 0) goto L_0x1ae6;
+    L_0x1abe:
         r4 = r7.id;	 Catch:{ Exception -> 0x0ca9 }
         r6 = r98.getId();	 Catch:{ Exception -> 0x0ca9 }
         r6 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x0ca9 }
         r4.add(r6);	 Catch:{ Exception -> 0x0ca9 }
-    L_0x1ac8:
+    L_0x1acb:
         r25 = 0;
         r26 = 0;
         r22 = r82;
@@ -6098,30 +6105,30 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r22.performSendMessageRequest(r23, r24, r25, r26, r27);	 Catch:{ Exception -> 0x0ca9 }
         r10 = r37;
         goto L_0x0008;
-    L_0x1adb:
+    L_0x1ade:
         r4 = new org.telegram.tgnet.TLRPC$TL_inputPeerEmpty;	 Catch:{ Exception -> 0x0ca9 }
         r4.<init>();	 Catch:{ Exception -> 0x0ca9 }
         r7.from_peer = r4;	 Catch:{ Exception -> 0x0ca9 }
-        goto L_0x1a79;
-    L_0x1ae3:
+        goto L_0x1a7c;
+    L_0x1ae6:
         r0 = r98;
         r4 = r0.messageOwner;	 Catch:{ Exception -> 0x0ca9 }
         r4 = r4.fwd_msg_id;	 Catch:{ Exception -> 0x0ca9 }
-        if (r4 == 0) goto L_0x1afb;
-    L_0x1aeb:
+        if (r4 == 0) goto L_0x1afe;
+    L_0x1aee:
         r4 = r7.id;	 Catch:{ Exception -> 0x0ca9 }
         r0 = r98;
         r6 = r0.messageOwner;	 Catch:{ Exception -> 0x0ca9 }
         r6 = r6.fwd_msg_id;	 Catch:{ Exception -> 0x0ca9 }
         r6 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x0ca9 }
         r4.add(r6);	 Catch:{ Exception -> 0x0ca9 }
-        goto L_0x1ac8;
-    L_0x1afb:
+        goto L_0x1acb;
+    L_0x1afe:
         r0 = r98;
         r4 = r0.messageOwner;	 Catch:{ Exception -> 0x0ca9 }
         r4 = r4.fwd_from;	 Catch:{ Exception -> 0x0ca9 }
-        if (r4 == 0) goto L_0x1ac8;
-    L_0x1b03:
+        if (r4 == 0) goto L_0x1acb;
+    L_0x1b06:
         r4 = r7.id;	 Catch:{ Exception -> 0x0ca9 }
         r0 = r98;
         r6 = r0.messageOwner;	 Catch:{ Exception -> 0x0ca9 }
@@ -6129,12 +6136,12 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r6 = r6.channel_post;	 Catch:{ Exception -> 0x0ca9 }
         r6 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x0ca9 }
         r4.add(r6);	 Catch:{ Exception -> 0x0ca9 }
-        goto L_0x1ac8;
-    L_0x1b15:
+        goto L_0x1acb;
+    L_0x1b18:
         r4 = 9;
         r0 = r75;
-        if (r0 != r4) goto L_0x1bad;
-    L_0x1b1b:
+        if (r0 != r4) goto L_0x1bb0;
+    L_0x1b1e:
         r7 = new org.telegram.tgnet.TLRPC$TL_messages_sendInlineBotResult;	 Catch:{ Exception -> 0x0ca9 }
         r7.<init>();	 Catch:{ Exception -> 0x0ca9 }
         r0 = r68;
@@ -6144,20 +6151,20 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r7.random_id = r8;	 Catch:{ Exception -> 0x0ca9 }
         r0 = r57;
         r4 = r0.reply_to_msg_id;	 Catch:{ Exception -> 0x0ca9 }
-        if (r4 == 0) goto L_0x1b3c;
-    L_0x1b30:
+        if (r4 == 0) goto L_0x1b3f;
+    L_0x1b33:
         r4 = r7.flags;	 Catch:{ Exception -> 0x0ca9 }
         r4 = r4 | 1;
         r7.flags = r4;	 Catch:{ Exception -> 0x0ca9 }
         r0 = r57;
         r4 = r0.reply_to_msg_id;	 Catch:{ Exception -> 0x0ca9 }
         r7.reply_to_msg_id = r4;	 Catch:{ Exception -> 0x0ca9 }
-    L_0x1b3c:
+    L_0x1b3f:
         r0 = r57;
         r4 = r0.to_id;	 Catch:{ Exception -> 0x0ca9 }
         r4 = r4 instanceof org.telegram.tgnet.TLRPC.TL_peerChannel;	 Catch:{ Exception -> 0x0ca9 }
-        if (r4 == 0) goto L_0x1b69;
-    L_0x1b44:
+        if (r4 == 0) goto L_0x1b6c;
+    L_0x1b47:
         r0 = r82;
         r4 = r0.currentAccount;	 Catch:{ Exception -> 0x0ca9 }
         r4 = org.telegram.messenger.MessagesController.getNotificationsSettings(r4);	 Catch:{ Exception -> 0x0ca9 }
@@ -6171,7 +6178,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r8 = 0;
         r4 = r4.getBoolean(r6, r8);	 Catch:{ Exception -> 0x0ca9 }
         r7.silent = r4;	 Catch:{ Exception -> 0x0ca9 }
-    L_0x1b69:
+    L_0x1b6c:
         r4 = "query_id";
         r0 = r101;
         r4 = r0.get(r4);	 Catch:{ Exception -> 0x0ca9 }
@@ -6184,8 +6191,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r4 = r0.get(r4);	 Catch:{ Exception -> 0x0ca9 }
         r4 = (java.lang.String) r4;	 Catch:{ Exception -> 0x0ca9 }
         r7.id = r4;	 Catch:{ Exception -> 0x0ca9 }
-        if (r98 != 0) goto L_0x1b9e;
-    L_0x1b8d:
+        if (r98 != 0) goto L_0x1ba1;
+    L_0x1b90:
         r4 = 1;
         r7.clear_draft = r4;	 Catch:{ Exception -> 0x0ca9 }
         r0 = r82;
@@ -6194,7 +6201,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r6 = 0;
         r0 = r92;
         r4.cleanDraft(r0, r6);	 Catch:{ Exception -> 0x0ca9 }
-    L_0x1b9e:
+    L_0x1ba1:
         r25 = 0;
         r26 = 0;
         r22 = r82;
@@ -6202,41 +6209,41 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r24 = r12;
         r27 = r103;
         r22.performSendMessageRequest(r23, r24, r25, r26, r27);	 Catch:{ Exception -> 0x0ca9 }
-    L_0x1bad:
+    L_0x1bb0:
         r10 = r37;
         goto L_0x0008;
-    L_0x1bb1:
+    L_0x1bb4:
         r39 = move-exception;
         r12 = r59;
         r88 = r79;
         goto L_0x021d;
-    L_0x1bb8:
+    L_0x1bbb:
         r39 = move-exception;
         r12 = r59;
         r57 = r58;
         goto L_0x021d;
-    L_0x1bbf:
+    L_0x1bc2:
         r10 = r37;
         goto L_0x1748;
-    L_0x1bc3:
+    L_0x1bc6:
         r10 = r37;
         goto L_0x15f3;
-    L_0x1bc7:
+    L_0x1bca:
         r10 = r37;
         goto L_0x0d2f;
-    L_0x1bcb:
+    L_0x1bce:
         r10 = r37;
         goto L_0x0f0e;
-    L_0x1bcf:
+    L_0x1bd2:
         r10 = r37;
         goto L_0x0e15;
-    L_0x1bd3:
+    L_0x1bd6:
         r10 = r37;
         goto L_0x0b27;
-    L_0x1bd7:
+    L_0x1bda:
         r37 = r10;
         goto L_0x0b13;
-    L_0x1bdb:
+    L_0x1bde:
         r57 = r58;
         goto L_0x03c2;
         */
@@ -6248,17 +6255,33 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     }
 
     private PhotoSize getThumbForSecretChat(ArrayList<PhotoSize> arrayList) {
-        if (arrayList == null || arrayList.isEmpty()) {
-            return null;
-        }
-        int N = arrayList.size();
-        for (int a = 0; a < N; a++) {
-            PhotoSize size = (PhotoSize) arrayList.get(a);
-            if (size != null && !(size instanceof TL_photoStrippedSize)) {
-                return size;
+        PhotoSize photoSize = null;
+        if (!(arrayList == null || arrayList.isEmpty())) {
+            int a = 0;
+            int N = arrayList.size();
+            while (a < N) {
+                PhotoSize size = (PhotoSize) arrayList.get(a);
+                if (size == null || (size instanceof TL_photoStrippedSize) || (size instanceof TL_photoSizeEmpty) || size.location == null) {
+                    a++;
+                } else {
+                    photoSize = new TL_photoSize();
+                    photoSize.type = size.type;
+                    photoSize.w = size.w;
+                    photoSize.h = size.h;
+                    photoSize.size = size.size;
+                    photoSize.bytes = size.bytes;
+                    if (photoSize.bytes == null) {
+                        photoSize.bytes = new byte[0];
+                    }
+                    photoSize.location = new TL_fileLocation_layer82();
+                    photoSize.location.dc_id = size.location.dc_id;
+                    photoSize.location.volume_id = size.location.volume_id;
+                    photoSize.location.local_id = size.location.local_id;
+                    photoSize.location.secret = size.location.secret;
+                }
             }
         }
-        return null;
+        return photoSize;
     }
 
     private void performSendDelayedMessage(DelayedMessage message, int index) {
@@ -7145,17 +7168,17 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             TLObject strippedOld2;
             if (newMsg.media.photo != null) {
                 strippedOld2 = FileLoader.getClosestPhotoSizeWithSize(newMsg.media.photo.sizes, 40);
-                strippedNew = (sentMessage == null || sentMessage.media == null) ? strippedOld2 : FileLoader.getClosestPhotoSizeWithSize(sentMessage.media.photo.sizes, 40);
+                strippedNew = (sentMessage == null || sentMessage.media == null || sentMessage.media.photo == null) ? strippedOld2 : FileLoader.getClosestPhotoSizeWithSize(sentMessage.media.photo.sizes, 40);
             } else if (newMsg.media.document != null) {
                 strippedOld2 = FileLoader.getClosestPhotoSizeWithSize(newMsg.media.document.thumbs, 40);
-                strippedNew = (sentMessage == null || sentMessage.media == null) ? strippedOld2 : FileLoader.getClosestPhotoSizeWithSize(sentMessage.media.document.thumbs, 40);
+                strippedNew = (sentMessage == null || sentMessage.media == null || sentMessage.media.document == null) ? strippedOld2 : FileLoader.getClosestPhotoSizeWithSize(sentMessage.media.document.thumbs, 40);
             } else if (newMsg.media.webpage != null) {
                 if (newMsg.media.webpage.photo != null) {
                     strippedOld2 = FileLoader.getClosestPhotoSizeWithSize(newMsg.media.webpage.photo.sizes, 40);
-                    strippedNew = (sentMessage == null || sentMessage.media == null) ? strippedOld2 : FileLoader.getClosestPhotoSizeWithSize(sentMessage.media.webpage.photo.sizes, 40);
+                    strippedNew = (sentMessage == null || sentMessage.media == null || sentMessage.media.webpage == null || sentMessage.media.webpage.photo == null) ? strippedOld2 : FileLoader.getClosestPhotoSizeWithSize(sentMessage.media.webpage.photo.sizes, 40);
                 } else if (newMsg.media.webpage.document != null) {
                     strippedOld2 = FileLoader.getClosestPhotoSizeWithSize(newMsg.media.webpage.document.thumbs, 40);
-                    strippedNew = (sentMessage == null || sentMessage.media == null) ? strippedOld2 : FileLoader.getClosestPhotoSizeWithSize(sentMessage.media.webpage.document.thumbs, 40);
+                    strippedNew = (sentMessage == null || sentMessage.media == null || sentMessage.media.webpage == null || sentMessage.media.webpage.document == null) ? strippedOld2 : FileLoader.getClosestPhotoSizeWithSize(sentMessage.media.webpage.document.thumbs, 40);
                 }
             }
             if ((strippedNew instanceof TL_photoStrippedSize) && (strippedOld2 instanceof TL_photoStrippedSize)) {

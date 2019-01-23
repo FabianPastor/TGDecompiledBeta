@@ -298,7 +298,7 @@ public class ChatSettingsActivity extends BaseFragment {
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    ChatSettingsActivity.this.lambda$checkDiscard$9$ChatRightsEditActivity();
+                    ChatSettingsActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
                 }
             }
         });

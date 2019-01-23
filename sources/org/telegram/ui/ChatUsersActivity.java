@@ -1216,7 +1216,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             public void onItemClick(int id) {
                 if (id == -1) {
                     if (ChatUsersActivity.this.checkDiscard()) {
-                        ChatUsersActivity.this.lambda$checkDiscard$18$ChatUsersActivity();
+                        ChatUsersActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
                     }
                 } else if (id == 1) {
                     ChatUsersActivity.this.processDone();
@@ -1766,13 +1766,13 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 this.delegate.didAddParticipantToList(user_id, p);
             }
         }
-        removeSelfFromStack();
+        lambda$null$9$ProfileActivity();
     }
 
     private void removeUser(int userId) {
         if (ChatObject.isChannel(this.currentChat)) {
             MessagesController.getInstance(this.currentAccount).deleteUserFromChat(this.chatId, MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(userId)), null);
-            lambda$checkDiscard$18$ChatUsersActivity();
+            lambda$createView$1$PhotoAlbumPickerActivity();
         }
     }
 
@@ -2159,7 +2159,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     chat.default_banned_rights = this.defaultBannedRights;
                 }
             }
-            lambda$checkDiscard$18$ChatUsersActivity();
+            lambda$createView$1$PhotoAlbumPickerActivity();
         }
     }
 

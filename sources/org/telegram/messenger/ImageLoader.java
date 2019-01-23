@@ -6144,7 +6144,10 @@ public class ImageLoader {
     }
 
     public static void fillPhotoSizeWithBytes(PhotoSize photoSize) {
-        if (photoSize != null && photoSize.bytes == null) {
+        if (photoSize == null) {
+            return;
+        }
+        if (photoSize.bytes == null || photoSize.bytes.length == 0) {
             try {
                 RandomAccessFile f = new RandomAccessFile(FileLoader.getPathToAttach(photoSize, true), "r");
                 if (((int) f.length()) < 20000) {

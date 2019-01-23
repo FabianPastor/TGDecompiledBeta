@@ -487,6 +487,7 @@ public class MessagesController implements NotificationCenterDelegate {
         }
     };
     private LongSparseArray<SparseArray<MessageObject>> pollsToCheck = new LongSparseArray();
+    private int pollsToCheckSize;
     public boolean preloadFeaturedStickers;
     public LongSparseArray<CharSequence> printingStrings = new LongSparseArray();
     public LongSparseArray<Integer> printingStringsTypes = new LongSparseArray();
@@ -1039,6 +1040,7 @@ public class MessagesController implements NotificationCenterDelegate {
         this.migratedChats.clear();
         this.channelViewsToSend.clear();
         this.pollsToCheck.clear();
+        this.pollsToCheckSize = 0;
         this.dialogsServerOnly.clear();
         this.dialogsForward.clear();
         this.dialogsGroupsOnly.clear();
@@ -3091,7 +3093,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 this.channelViewsToSend.clear();
             }
-            if (this.pollsToCheck.size() != 0) {
+            if (this.pollsToCheckSize > 0) {
                 AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$56(this));
             }
         }
@@ -3249,30 +3251,33 @@ public class MessagesController implements NotificationCenterDelegate {
         int N = this.pollsToCheck.size();
         while (a < N) {
             SparseArray<MessageObject> array = (SparseArray) this.pollsToCheck.valueAt(a);
-            int b = 0;
-            int N2 = array.size();
-            while (b < N2) {
-                MessageObject messageObject = (MessageObject) array.valueAt(b);
-                if (Math.abs(time - messageObject.pollLastCheckTime) >= 30000) {
-                    messageObject.pollLastCheckTime = time;
-                    TL_messages_getPollResults req = new TL_messages_getPollResults();
-                    req.peer = getInputPeer((int) messageObject.getDialogId());
-                    req.msg_id = messageObject.getId();
-                    ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$233(this));
-                } else if (!messageObject.pollVisibleOnScreen) {
-                    array.remove(messageObject.getId());
-                    N2--;
-                    b--;
+            if (array != null) {
+                int b = 0;
+                int N2 = array.size();
+                while (b < N2) {
+                    MessageObject messageObject = (MessageObject) array.valueAt(b);
+                    if (Math.abs(time - messageObject.pollLastCheckTime) >= 30000) {
+                        messageObject.pollLastCheckTime = time;
+                        TL_messages_getPollResults req = new TL_messages_getPollResults();
+                        req.peer = getInputPeer((int) messageObject.getDialogId());
+                        req.msg_id = messageObject.getId();
+                        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$233(this));
+                    } else if (!messageObject.pollVisibleOnScreen) {
+                        array.remove(messageObject.getId());
+                        N2--;
+                        b--;
+                    }
+                    b++;
                 }
-                b++;
-            }
-            if (array.size() == 0) {
-                this.pollsToCheck.remove(this.pollsToCheck.keyAt(a));
-                N--;
-                a--;
+                if (array.size() == 0) {
+                    this.pollsToCheck.remove(this.pollsToCheck.keyAt(a));
+                    N--;
+                    a--;
+                }
             }
             a++;
         }
+        this.pollsToCheckSize = this.pollsToCheck.size();
     }
 
     final /* synthetic */ void lambda$null$77$MessagesController(TLObject response, TL_error error) {
@@ -5688,6 +5693,7 @@ public class MessagesController implements NotificationCenterDelegate {
         if (array == null) {
             array = new SparseArray();
             this.pollsToCheck.put(dialogId, array);
+            this.pollsToCheckSize++;
         }
         int N = array.size();
         for (a = 0; a < N; a++) {
@@ -7311,9 +7317,11 @@ public class MessagesController implements NotificationCenterDelegate {
         if (this.shortPollChannels.indexOfKey(chat.id) < 0) {
             getChannelDifference(chat.id, 3, 0, null);
         }
-        this.needShortPollOnlines.put(chat.id, 0);
-        if (this.shortPollOnlines.indexOfKey(chat.id) < 0) {
-            this.shortPollOnlines.put(chat.id, 0);
+        if (chat.megagroup) {
+            this.needShortPollOnlines.put(chat.id, 0);
+            if (this.shortPollOnlines.indexOfKey(chat.id) < 0) {
+                this.shortPollOnlines.put(chat.id, 0);
+            }
         }
     }
 
