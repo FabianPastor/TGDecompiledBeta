@@ -1,21 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_error;
+import android.util.LongSparseArray;
 
-final /* synthetic */ class MessagesController$$Lambda$66 implements RequestDelegate {
+final /* synthetic */ class MessagesController$$Lambda$66 implements Runnable {
     private final MessagesController arg$1;
-    private final int arg$2;
-    private final long arg$3;
+    private final LongSparseArray arg$2;
+    private final LongSparseArray arg$3;
 
-    MessagesController$$Lambda$66(MessagesController messagesController, int i, long j) {
+    MessagesController$$Lambda$66(MessagesController messagesController, LongSparseArray longSparseArray, LongSparseArray longSparseArray2) {
         this.arg$1 = messagesController;
-        this.arg$2 = i;
-        this.arg$3 = j;
+        this.arg$2 = longSparseArray;
+        this.arg$3 = longSparseArray2;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$sendTyping$97$MessagesController(this.arg$2, this.arg$3, tLObject, tL_error);
+    public void run() {
+        this.arg$1.lambda$updatePrintingStrings$96$MessagesController(this.arg$2, this.arg$3);
     }
 }

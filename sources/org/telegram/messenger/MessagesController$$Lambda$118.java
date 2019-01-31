@@ -1,16 +1,17 @@
 package org.telegram.messenger;
 
-import java.util.Comparator;
-import org.telegram.tgnet.TLRPC.Updates;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
 
-final /* synthetic */ class MessagesController$$Lambda$118 implements Comparator {
+final /* synthetic */ class MessagesController$$Lambda$118 implements RequestDelegate {
     private final MessagesController arg$1;
 
     MessagesController$$Lambda$118(MessagesController messagesController) {
         this.arg$1 = messagesController;
     }
 
-    public int compare(Object obj, Object obj2) {
-        return this.arg$1.lambda$processUpdatesQueue$186$MessagesController((Updates) obj, (Updates) obj2);
+    public void run(TLObject tLObject, TL_error tL_error) {
+        this.arg$1.lambda$loadCurrentState$187$MessagesController(tLObject, tL_error);
     }
 }

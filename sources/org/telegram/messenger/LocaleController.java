@@ -66,8 +66,6 @@ public class LocaleController {
     public FastDateFormat formatterBannedUntilThisYear;
     public FastDateFormat formatterDay;
     public FastDateFormat formatterDayMonth;
-    public FastDateFormat formatterMonth;
-    public FastDateFormat formatterMonthYear;
     public FastDateFormat formatterScheduleDay;
     public FastDateFormat formatterStats;
     public FastDateFormat formatterWeek;
@@ -2260,14 +2258,12 @@ public class LocaleController {
         }
         nameDisplayOrder = i;
         this.formatterDayMonth = createFormatter(locale, getStringInternal("formatterMonth", R.string.formatterMonth), "dd MMM");
-        this.formatterMonth = createFormatter(locale, getStringInternal("formatterMonthName", R.string.formatterMonthName), "LLLL");
         this.formatterYear = createFormatter(locale, getStringInternal("formatterYear", R.string.formatterYear), "dd.MM.yy");
         this.formatterYearMax = createFormatter(locale, getStringInternal("formatterYearMax", R.string.formatterYearMax), "dd.MM.yyyy");
         this.chatDate = createFormatter(locale, getStringInternal("chatDate", R.string.chatDate), "d MMMM");
         this.chatFullDate = createFormatter(locale, getStringInternal("chatFullDate", R.string.chatFullDate), "d MMMM yyyy");
         this.formatterWeek = createFormatter(locale, getStringInternal("formatterWeek", R.string.formatterWeek), "EEE");
         this.formatterScheduleDay = createFormatter(locale, getStringInternal("formatDateScheduleDay", R.string.formatDateScheduleDay), "EEE MMM d");
-        this.formatterMonthYear = createFormatter(locale, getStringInternal("formatterMonthYear2", R.string.formatterMonthYear2), "LLLL yyyy");
         Locale locale2 = (lang.toLowerCase().equals("ar") || lang.toLowerCase().equals("ko")) ? locale : Locale.US;
         this.formatterDay = createFormatter(locale2, is24HourFormat ? getStringInternal("formatterDay24H", R.string.formatterDay24H) : getStringInternal("formatterDay12H", R.string.formatterDay12H), is24HourFormat ? "HH:mm" : "h:mm a");
         this.formatterStats = createFormatter(locale, is24HourFormat ? getStringInternal("formatterStats24H", R.string.formatterStats24H) : getStringInternal("formatterStats12H", R.string.formatterStats12H), is24HourFormat ? "MMM dd yyyy, HH:mm" : "MMM dd yyyy, h:mm a");
@@ -2285,10 +2281,13 @@ public class LocaleController {
             Calendar rightNow = Calendar.getInstance();
             int year = rightNow.get(1);
             rightNow.setTimeInMillis(date);
-            if (year == rightNow.get(1)) {
-                return getInstance().formatterMonth.format(new Date(date));
+            int dateYear = rightNow.get(1);
+            int month = rightNow.get(2);
+            String[] months = new String[]{getString("January", R.string.January), getString("February", R.string.February), getString("March", R.string.March), getString("April", R.string.April), getString("May", R.string.May), getString("June", R.string.June), getString("July", R.string.July), getString("August", R.string.August), getString("September", R.string.September), getString("October", R.string.October), getString("November", R.string.November), getString("December", R.string.December)};
+            if (year == dateYear) {
+                return months[month];
             }
-            return getInstance().formatterMonthYear.format(new Date(date));
+            return months[month] + " " + dateYear;
         } catch (Throwable e) {
             FileLog.e(e);
             return "LOC_ERR";

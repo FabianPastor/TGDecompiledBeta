@@ -176,7 +176,7 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
     L_0x001b:
         r13 = 1;
     L_0x001c:
-        if (r13 == 0) goto L_0x026e;
+        if (r13 == 0) goto L_0x026a;
     L_0x001e:
         r10 = r20.toString();
         r8 = r20.length();
@@ -281,21 +281,20 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
         goto L_0x00ad;
     L_0x00ef:
         r15 = r20.toString();
-        r15 = r15.trim();
         r0 = r19;
         r0.lastSticker = r15;
         r15 = org.telegram.messenger.Emoji.isValidEmoji(r10);
-        if (r15 != 0) goto L_0x0124;
-    L_0x0101:
+        if (r15 != 0) goto L_0x0120;
+    L_0x00fd:
         r0 = r19;
         r15 = r0.lastSticker;
         r15 = org.telegram.messenger.Emoji.isValidEmoji(r15);
-        if (r15 != 0) goto L_0x0124;
-    L_0x010b:
+        if (r15 != 0) goto L_0x0120;
+    L_0x0107:
         r0 = r19;
         r15 = r0.visible;
         if (r15 == 0) goto L_0x0008;
-    L_0x0111:
+    L_0x010d:
         r15 = 0;
         r0 = r19;
         r0.visible = r15;
@@ -305,7 +304,7 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
         r15.needChangePanelVisibility(r16);
         r19.notifyDataSetChanged();
         goto L_0x0008;
-    L_0x0124:
+    L_0x0120:
         r15 = 0;
         r0 = r19;
         r0.stickers = r15;
@@ -331,105 +330,105 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
         r12 = 0;
         r3 = 0;
         r14 = r11.size();
-    L_0x015a:
-        if (r3 >= r14) goto L_0x017b;
-    L_0x015c:
+    L_0x0156:
+        if (r3 >= r14) goto L_0x0177;
+    L_0x0158:
         r6 = r11.get(r3);
         r6 = (org.telegram.tgnet.TLRPC.Document) r6;
         r0 = r19;
         r15 = r0.lastSticker;
         r0 = r19;
         r15 = r0.isValidSticker(r6, r15);
-        if (r15 == 0) goto L_0x019f;
-    L_0x016e:
+        if (r15 == 0) goto L_0x019b;
+    L_0x016a:
         r15 = "recent";
         r0 = r19;
         r0.addStickerToResult(r6, r15);
         r12 = r12 + 1;
         r15 = 5;
-        if (r12 < r15) goto L_0x019f;
-    L_0x017b:
+        if (r12 < r15) goto L_0x019b;
+    L_0x0177:
         r3 = 0;
         r14 = r7.size();
-    L_0x0180:
-        if (r3 >= r14) goto L_0x01a2;
-    L_0x0182:
+    L_0x017c:
+        if (r3 >= r14) goto L_0x019e;
+    L_0x017e:
         r6 = r7.get(r3);
         r6 = (org.telegram.tgnet.TLRPC.Document) r6;
         r0 = r19;
         r15 = r0.lastSticker;
         r0 = r19;
         r15 = r0.isValidSticker(r6, r15);
-        if (r15 == 0) goto L_0x019c;
-    L_0x0194:
+        if (r15 == 0) goto L_0x0198;
+    L_0x0190:
         r15 = "fav";
         r0 = r19;
         r0.addStickerToResult(r6, r15);
-    L_0x019c:
+    L_0x0198:
         r3 = r3 + 1;
-        goto L_0x0180;
-    L_0x019f:
+        goto L_0x017c;
+    L_0x019b:
         r3 = r3 + 1;
-        goto L_0x015a;
-    L_0x01a2:
+        goto L_0x0156;
+    L_0x019e:
         r0 = r19;
         r15 = r0.currentAccount;
         r15 = org.telegram.messenger.DataQuery.getInstance(r15);
         r4 = r15.getAllStickers();
-        if (r4 == 0) goto L_0x0225;
-    L_0x01b0:
+        if (r4 == 0) goto L_0x0221;
+    L_0x01ac:
         r0 = r19;
         r15 = r0.lastSticker;
         r15 = r4.get(r15);
         r15 = (java.util.ArrayList) r15;
         r9 = r15;
-    L_0x01bb:
-        if (r9 == 0) goto L_0x01de;
-    L_0x01bd:
+    L_0x01b7:
+        if (r9 == 0) goto L_0x01da;
+    L_0x01b9:
         r15 = r9.isEmpty();
-        if (r15 != 0) goto L_0x01de;
-    L_0x01c3:
+        if (r15 != 0) goto L_0x01da;
+    L_0x01bf:
         r5 = new java.util.ArrayList;
         r5.<init>(r9);
         r15 = r11.isEmpty();
-        if (r15 != 0) goto L_0x01d8;
-    L_0x01ce:
+        if (r15 != 0) goto L_0x01d4;
+    L_0x01ca:
         r15 = new org.telegram.ui.Adapters.StickersAdapter$1;
         r0 = r19;
         r15.<init>(r7, r11);
         java.util.Collections.sort(r5, r15);
-    L_0x01d8:
+    L_0x01d4:
         r15 = 0;
         r0 = r19;
         r0.addStickersToResult(r5, r15);
-    L_0x01de:
+    L_0x01da:
         r15 = org.telegram.messenger.SharedConfig.suggestStickers;
-        if (r15 != 0) goto L_0x01eb;
-    L_0x01e2:
+        if (r15 != 0) goto L_0x01e7;
+    L_0x01de:
         r0 = r19;
         r15 = r0.lastSticker;
         r0 = r19;
         r0.searchServerStickers(r15, r10);
-    L_0x01eb:
+    L_0x01e7:
         r0 = r19;
         r15 = r0.stickers;
-        if (r15 == 0) goto L_0x0258;
-    L_0x01f1:
+        if (r15 == 0) goto L_0x0254;
+    L_0x01ed:
         r0 = r19;
         r15 = r0.stickers;
         r15 = r15.isEmpty();
-        if (r15 != 0) goto L_0x0258;
-    L_0x01fb:
+        if (r15 != 0) goto L_0x0254;
+    L_0x01f7:
         r15 = org.telegram.messenger.SharedConfig.suggestStickers;
-        if (r15 != 0) goto L_0x0227;
-    L_0x01ff:
+        if (r15 != 0) goto L_0x0223;
+    L_0x01fb:
         r0 = r19;
         r15 = r0.stickers;
         r15 = r15.size();
         r16 = 5;
         r0 = r16;
-        if (r15 >= r0) goto L_0x0227;
-    L_0x020d:
+        if (r15 >= r0) goto L_0x0223;
+    L_0x0209:
         r15 = 1;
         r0 = r19;
         r0.delayLocalResults = r15;
@@ -440,47 +439,47 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
         r15 = 0;
         r0 = r19;
         r0.visible = r15;
-    L_0x0220:
+    L_0x021c:
         r19.notifyDataSetChanged();
         goto L_0x0008;
-    L_0x0225:
+    L_0x0221:
         r9 = 0;
-        goto L_0x01bb;
-    L_0x0227:
+        goto L_0x01b7;
+    L_0x0223:
         r19.checkStickerFilesExistAndDownload();
         r0 = r19;
         r0 = r0.delegate;
         r16 = r0;
         r0 = r19;
         r15 = r0.stickers;
-        if (r15 == 0) goto L_0x0256;
-    L_0x0236:
+        if (r15 == 0) goto L_0x0252;
+    L_0x0232:
         r0 = r19;
         r15 = r0.stickers;
         r15 = r15.isEmpty();
-        if (r15 != 0) goto L_0x0256;
-    L_0x0240:
+        if (r15 != 0) goto L_0x0252;
+    L_0x023c:
         r0 = r19;
         r15 = r0.stickersToLoad;
         r15 = r15.isEmpty();
-        if (r15 == 0) goto L_0x0256;
-    L_0x024a:
+        if (r15 == 0) goto L_0x0252;
+    L_0x0246:
         r15 = 1;
-    L_0x024b:
+    L_0x0247:
         r0 = r16;
         r0.needChangePanelVisibility(r15);
         r15 = 1;
         r0 = r19;
         r0.visible = r15;
-        goto L_0x0220;
-    L_0x0256:
+        goto L_0x021c;
+    L_0x0252:
         r15 = 0;
-        goto L_0x024b;
-    L_0x0258:
+        goto L_0x0247;
+    L_0x0254:
         r0 = r19;
         r15 = r0.visible;
         if (r15 == 0) goto L_0x0008;
-    L_0x025e:
+    L_0x025a:
         r0 = r19;
         r15 = r0.delegate;
         r16 = 0;
@@ -489,18 +488,18 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
         r0 = r19;
         r0.visible = r15;
         goto L_0x0008;
-    L_0x026e:
+    L_0x026a:
         r15 = "";
         r0 = r19;
         r0.lastSticker = r15;
         r0 = r19;
         r15 = r0.visible;
         if (r15 == 0) goto L_0x0008;
-    L_0x027b:
+    L_0x0277:
         r0 = r19;
         r15 = r0.stickers;
         if (r15 == 0) goto L_0x0008;
-    L_0x0281:
+    L_0x027d:
         r15 = 0;
         r0 = r19;
         r0.visible = r15;

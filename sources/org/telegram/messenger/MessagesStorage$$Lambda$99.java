@@ -12,6 +12,6 @@ final /* synthetic */ class MessagesStorage$$Lambda$99 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$unpinAllDialogsExceptNew$129$MessagesStorage(this.arg$2);
+        this.arg$1.lambda$unpinAllDialogsExceptNew$130$MessagesStorage(this.arg$2);
     }
 }

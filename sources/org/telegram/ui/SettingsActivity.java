@@ -795,7 +795,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         } else if (position == this.dataRow) {
             presentFragment(new DataSettingsActivity());
         } else if (position == this.chatRow) {
-            presentFragment(new ChatSettingsActivity());
+            presentFragment(new ThemeActivity(0));
         } else if (position == this.helpRow) {
             BottomSheet.Builder builder = new BottomSheet.Builder(context);
             builder.setApplyTopPadding(false);

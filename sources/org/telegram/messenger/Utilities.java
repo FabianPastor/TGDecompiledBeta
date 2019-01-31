@@ -73,6 +73,9 @@ public class Utilities {
     }
 
     public static Bitmap blurWallpaper(Bitmap src) {
+        if (src == null) {
+            return null;
+        }
         Bitmap b;
         if (src.getHeight() > src.getWidth()) {
             b = Bitmap.createBitmap(Math.round((((float) src.getWidth()) * 450.0f) / ((float) src.getHeight())), 450, Config.ARGB_8888);

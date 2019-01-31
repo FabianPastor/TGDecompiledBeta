@@ -10,6 +10,6 @@ final /* synthetic */ class WallpaperActivity$$Lambda$3 implements Callback {
     }
 
     public void onOffsetsChanged(int i, int i2) {
-        this.arg$1.lambda$createView$4$WallpaperActivity(i, i2);
+        this.arg$1.lambda$createView$3$WallpaperActivity(i, i2);
     }
 }

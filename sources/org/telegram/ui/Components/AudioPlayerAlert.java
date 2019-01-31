@@ -1063,7 +1063,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
                 ArrayList<MessageObject> fmessages = new ArrayList();
                 fmessages.add(messageObject);
                 dialogsActivity.setDelegate(new AudioPlayerAlert$$Lambda$11(this, fmessages));
-                this.parentActivity.presentFragment(dialogsActivity);
+                this.parentActivity.lambda$runLinkRequest$27$LaunchActivity(dialogsActivity);
                 dismiss();
                 return;
             } else if (id == 2) {

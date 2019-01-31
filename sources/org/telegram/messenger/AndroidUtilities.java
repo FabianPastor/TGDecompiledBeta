@@ -99,6 +99,7 @@ import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.TL_chatBannedRights;
 import org.telegram.tgnet.TLRPC.TL_document;
 import org.telegram.tgnet.TLRPC.TL_userContact_old2;
+import org.telegram.tgnet.TLRPC.TL_wallPaper;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -111,6 +112,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.PickerBottomLayout;
 import org.telegram.ui.Components.TypefaceSpan;
 import org.telegram.ui.ThemePreviewActivity;
+import org.telegram.ui.WallpapersListActivity.ColorWallpaper;
 
 public class AndroidUtilities {
     public static final int FLAG_TAG_ALL = 11;
@@ -2473,5 +2475,159 @@ public class AndroidUtilities {
             i++;
         }
         return sb.toString();
+    }
+
+    public static float[] RGBtoHSB(int r, int g, int b) {
+        int cmax;
+        int cmin;
+        float saturation;
+        float hue;
+        float[] hsbvals = new float[3];
+        if (r > g) {
+            cmax = r;
+        } else {
+            cmax = g;
+        }
+        if (b > cmax) {
+            cmax = b;
+        }
+        if (r < g) {
+            cmin = r;
+        } else {
+            cmin = g;
+        }
+        if (b < cmin) {
+            cmin = b;
+        }
+        float brightness = ((float) cmax) / 255.0f;
+        if (cmax != 0) {
+            saturation = ((float) (cmax - cmin)) / ((float) cmax);
+        } else {
+            saturation = 0.0f;
+        }
+        if (saturation == 0.0f) {
+            hue = 0.0f;
+        } else {
+            float redc = ((float) (cmax - r)) / ((float) (cmax - cmin));
+            float greenc = ((float) (cmax - g)) / ((float) (cmax - cmin));
+            float bluec = ((float) (cmax - b)) / ((float) (cmax - cmin));
+            if (r == cmax) {
+                hue = bluec - greenc;
+            } else if (g == cmax) {
+                hue = (2.0f + redc) - bluec;
+            } else {
+                hue = (4.0f + greenc) - redc;
+            }
+            hue /= 6.0f;
+            if (hue < 0.0f) {
+                hue += 1.0f;
+            }
+        }
+        hsbvals[0] = hue;
+        hsbvals[1] = saturation;
+        hsbvals[2] = brightness;
+        return hsbvals;
+    }
+
+    public static int HSBtoRGB(float hue, float saturation, float brightness) {
+        int r = 0;
+        int g = 0;
+        int b = 0;
+        if (saturation != 0.0f) {
+            float h = (hue - ((float) Math.floor((double) hue))) * 6.0f;
+            float f = h - ((float) Math.floor((double) h));
+            float p = brightness * (1.0f - saturation);
+            float q = brightness * (1.0f - (saturation * f));
+            float t = brightness * (1.0f - ((1.0f - f) * saturation));
+            switch ((int) h) {
+                case 0:
+                    r = (int) ((brightness * 255.0f) + 0.5f);
+                    g = (int) ((t * 255.0f) + 0.5f);
+                    b = (int) ((p * 255.0f) + 0.5f);
+                    break;
+                case 1:
+                    r = (int) ((q * 255.0f) + 0.5f);
+                    g = (int) ((brightness * 255.0f) + 0.5f);
+                    b = (int) ((p * 255.0f) + 0.5f);
+                    break;
+                case 2:
+                    r = (int) ((p * 255.0f) + 0.5f);
+                    g = (int) ((brightness * 255.0f) + 0.5f);
+                    b = (int) ((t * 255.0f) + 0.5f);
+                    break;
+                case 3:
+                    r = (int) ((p * 255.0f) + 0.5f);
+                    g = (int) ((q * 255.0f) + 0.5f);
+                    b = (int) ((brightness * 255.0f) + 0.5f);
+                    break;
+                case 4:
+                    r = (int) ((t * 255.0f) + 0.5f);
+                    g = (int) ((p * 255.0f) + 0.5f);
+                    b = (int) ((brightness * 255.0f) + 0.5f);
+                    break;
+                case 5:
+                    r = (int) ((brightness * 255.0f) + 0.5f);
+                    g = (int) ((p * 255.0f) + 0.5f);
+                    b = (int) ((q * 255.0f) + 0.5f);
+                    break;
+            }
+        }
+        b = (int) ((brightness * 255.0f) + 0.5f);
+        g = b;
+        r = b;
+        return ((-16777216 | ((r & 255) << 16)) | ((g & 255) << 8)) | (b & 255);
+    }
+
+    public static int getPatternColor(int color) {
+        float[] hsb = RGBtoHSB(Color.red(color), Color.green(color), Color.blue(color));
+        if (hsb[1] > 0.0f || (hsb[2] < 1.0f && hsb[2] > 0.0f)) {
+            hsb[1] = Math.min(1.0f, (hsb[1] + 0.05f) + (0.1f * (1.0f - hsb[1])));
+        }
+        if (hsb[2] > 0.5f) {
+            hsb[2] = Math.max(0.0f, hsb[2] * 0.65f);
+        } else {
+            hsb[2] = Math.max(0.0f, Math.min(1.0f, 1.0f - (hsb[2] * 0.65f)));
+        }
+        return HSBtoRGB(hsb[0], hsb[1], hsb[2]) & NUM;
+    }
+
+    public static int getPatternSideColor(int color) {
+        float[] hsb = RGBtoHSB(Color.red(color), Color.green(color), Color.blue(color));
+        hsb[1] = Math.min(1.0f, hsb[1] + 0.05f);
+        if (hsb[2] > 0.5f) {
+            hsb[2] = Math.max(0.0f, hsb[2] * 0.9f);
+        } else {
+            hsb[2] = Math.max(0.0f, Math.min(1.0f, 1.0f - (hsb[2] * 0.9f)));
+        }
+        return HSBtoRGB(hsb[0], hsb[1], hsb[2]) | -16777216;
+    }
+
+    public static String getWallPaperUrl(Object object, int currentAccount) {
+        if (object instanceof TL_wallPaper) {
+            TL_wallPaper wallPaper = (TL_wallPaper) object;
+            String link = "https://" + MessagesController.getInstance(currentAccount).linkPrefix + "/bg/" + wallPaper.slug;
+            StringBuilder modes = new StringBuilder();
+            if (wallPaper.settings != null) {
+                if (wallPaper.settings.blur) {
+                    modes.append("blur");
+                }
+                if (wallPaper.settings.motion) {
+                    if (modes.length() > 0) {
+                        modes.append("+");
+                    }
+                    modes.append("motion");
+                }
+            }
+            return modes.length() > 0 ? link + "?mode=" + modes.toString() : link;
+        } else if (!(object instanceof ColorWallpaper)) {
+            return null;
+        } else {
+            ColorWallpaper wallPaper2 = (ColorWallpaper) object;
+            String color = String.format("%02x%02x%02x", new Object[]{Integer.valueOf(((byte) (wallPaper2.color >> 16)) & 255), Integer.valueOf(((byte) (wallPaper2.color >> 8)) & 255), Byte.valueOf((byte) (wallPaper2.color & 255))}).toLowerCase();
+            if (wallPaper2.pattern != null) {
+                return "https://" + MessagesController.getInstance(currentAccount).linkPrefix + "/bg/" + wallPaper2.pattern.slug + "?intensity=" + ((int) (wallPaper2.intensity * 100.0f)) + "&bg_color=" + color;
+            }
+            return "https://" + MessagesController.getInstance(currentAccount).linkPrefix + "/bg/" + color;
+        }
     }
 }

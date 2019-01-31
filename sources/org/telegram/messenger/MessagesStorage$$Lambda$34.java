@@ -12,6 +12,6 @@ final /* synthetic */ class MessagesStorage$$Lambda$34 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$resetMentionsCount$52$MessagesStorage(this.arg$2, this.arg$3);
+        this.arg$1.lambda$resetMentionsCount$53$MessagesStorage(this.arg$2, this.arg$3);
     }
 }

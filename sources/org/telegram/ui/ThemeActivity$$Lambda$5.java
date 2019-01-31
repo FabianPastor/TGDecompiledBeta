@@ -4,12 +4,13 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 
 final /* synthetic */ class ThemeActivity$$Lambda$5 implements OnClickListener {
-    static final OnClickListener $instance = new ThemeActivity$$Lambda$5();
+    private final ThemeActivity arg$1;
 
-    private ThemeActivity$$Lambda$5() {
+    ThemeActivity$$Lambda$5(ThemeActivity themeActivity) {
+        this.arg$1 = themeActivity;
     }
 
     public void onClick(DialogInterface dialogInterface, int i) {
-        ThemeActivity.lambda$null$0$ThemeActivity(dialogInterface, i);
+        this.arg$1.lambda$updateSunTime$10$ThemeActivity(dialogInterface, i);
     }
 }

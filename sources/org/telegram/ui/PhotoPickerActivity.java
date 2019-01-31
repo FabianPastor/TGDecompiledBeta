@@ -1153,14 +1153,13 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     final /* synthetic */ void lambda$null$6$PhotoPickerActivity(int token, TLObject response, String query) {
         if (token == this.lastSearchToken) {
             int addedCount = 0;
+            int oldCount = this.searchResult.size();
             if (response != null) {
-                boolean added = false;
                 TL_messages_foundGifs res = (TL_messages_foundGifs) response;
                 this.nextGiphySearchOffset = res.next_offset;
                 for (int a = 0; a < res.results.size(); a++) {
                     FoundGif gif = (FoundGif) res.results.get(a);
                     if (!this.searchResultKeys.containsKey(gif.url)) {
-                        added = true;
                         SearchImage bingImage = new SearchImage();
                         bingImage.id = gif.url;
                         if (gif.document != null) {
@@ -1195,11 +1194,11 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                         this.searchResultKeys.put(bingImage.id, bingImage);
                     }
                 }
-                this.giphySearchEndReached = !added;
+                this.giphySearchEndReached = oldCount == this.searchResult.size();
             }
             this.searching = false;
             if (addedCount != 0) {
-                this.listAdapter.notifyItemRangeInserted(this.searchResult.size(), addedCount);
+                this.listAdapter.notifyItemRangeInserted(oldCount, addedCount);
             } else if (this.giphySearchEndReached) {
                 this.listAdapter.notifyItemRemoved(this.searchResult.size() - 1);
             }
@@ -1288,15 +1287,14 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     final /* synthetic */ void lambda$null$10$PhotoPickerActivity(int token, TLObject response) {
         if (token == this.lastSearchToken) {
             int addedCount = 0;
+            int oldCount = this.searchResult.size();
             if (response != null) {
                 messages_BotResults res = (messages_BotResults) response;
                 this.nextImagesSearchOffset = res.next_offset;
-                boolean added = false;
                 int count = res.results.size();
                 for (int a = 0; a < count; a++) {
                     BotInlineResult result = (BotInlineResult) res.results.get(a);
                     if ("photo".equals(result.type) && !this.searchResultKeys.containsKey(result.id)) {
-                        added = true;
                         SearchImage bingImage = new SearchImage();
                         if (result.photo != null) {
                             PhotoSize size = FileLoader.getClosestPhotoSizeWithSize(result.photo.sizes, AndroidUtilities.getPhotoSize());
@@ -1332,15 +1330,14 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                         this.searchResult.add(bingImage);
                         this.searchResultKeys.put(bingImage.id, bingImage);
                         addedCount++;
-                        added = true;
                     }
                 }
-                boolean z = !added || this.nextImagesSearchOffset == null;
+                boolean z = oldCount == this.searchResult.size() || this.nextImagesSearchOffset == null;
                 this.bingSearchEndReached = z;
             }
             this.searching = false;
             if (addedCount != 0) {
-                this.listAdapter.notifyItemRangeInserted(this.searchResult.size(), addedCount);
+                this.listAdapter.notifyItemRangeInserted(oldCount, addedCount);
             } else if (this.bingSearchEndReached) {
                 this.listAdapter.notifyItemRemoved(this.searchResult.size() - 1);
             }

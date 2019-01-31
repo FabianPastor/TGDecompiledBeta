@@ -1,15 +1,17 @@
 package org.telegram.messenger;
 
+import android.util.SparseArray;
+
 final /* synthetic */ class MessagesController$$Lambda$236 implements Runnable {
     private final MessagesController arg$1;
-    private final long arg$2;
+    private final SparseArray arg$2;
 
-    MessagesController$$Lambda$236(MessagesController messagesController, long j) {
+    MessagesController$$Lambda$236(MessagesController messagesController, SparseArray sparseArray) {
         this.arg$1 = messagesController;
-        this.arg$2 = j;
+        this.arg$2 = sparseArray;
     }
 
     public void run() {
-        this.arg$1.lambda$null$63$MessagesController(this.arg$2);
+        this.arg$1.lambda$null$78$MessagesController(this.arg$2);
     }
 }

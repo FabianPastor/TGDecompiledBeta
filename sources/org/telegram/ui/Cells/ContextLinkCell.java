@@ -29,7 +29,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.WebFile;
-import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.BotInlineResult;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
@@ -115,9 +114,9 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         int width;
         int viewWidth = MeasureSpec.getSize(widthMeasureSpec);
         int maxWidth = (viewWidth - AndroidUtilities.dp((float) AndroidUtilities.leftBaseline)) - AndroidUtilities.dp(8.0f);
-        TLObject currentPhotoObjectThumb = null;
+        PhotoSize currentPhotoObjectThumb = null;
         ArrayList<PhotoSize> photoThumbs = null;
-        TLObject webFile = null;
+        WebFile webFile = null;
         TL_webDocument webDocument = null;
         String urlLocation = null;
         ArrayList<PhotoSize> arrayList;
@@ -244,14 +243,28 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             this.linkImageView.setAspectFit(this.documentAttachType == 6);
             if (this.documentAttachType == 2) {
                 if (this.documentAttach != null) {
-                    this.linkImageView.setImage(this.documentAttach, null, this.currentPhotoObject, currentPhotoFilter, this.documentAttach.size, ext, this.parentObject, null);
+                    this.linkImageView.setImage(this.documentAttach, null, this.currentPhotoObject, currentPhotoFilter, this.documentAttach.size, ext, this.parentObject, 0);
                 } else {
-                    this.linkImageView.setImage(webFile, urlLocation, null, null, this.currentPhotoObject, currentPhotoFilter, -1, ext, this.parentObject, 1);
+                    Object obj;
+                    ImageReceiver imageReceiver = this.linkImageView;
+                    if (webFile != null) {
+                        obj = webFile;
+                    } else {
+                        String obj2 = urlLocation;
+                    }
+                    imageReceiver.setImage(obj2, null, null, this.currentPhotoObject, currentPhotoFilter, -1, ext, this.parentObject, 1);
                 }
             } else if (this.currentPhotoObject != null) {
                 this.linkImageView.setImage(this.currentPhotoObject, currentPhotoFilter, currentPhotoObjectThumb, currentPhotoFilterThumb, this.currentPhotoObject.size, ext, this.parentObject, 0);
             } else {
-                this.linkImageView.setImage(webFile, urlLocation, currentPhotoFilter, null, currentPhotoObjectThumb, currentPhotoFilterThumb, -1, ext, this.parentObject, 1);
+                Object obj3;
+                ImageReceiver imageReceiver2 = this.linkImageView;
+                if (webFile != null) {
+                    obj3 = webFile;
+                } else {
+                    String obj32 = urlLocation;
+                }
+                imageReceiver2.setImage(obj32, currentPhotoFilter, null, currentPhotoObjectThumb, currentPhotoFilterThumb, -1, ext, this.parentObject, 1);
             }
             this.drawLinkImageView = true;
         }

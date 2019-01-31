@@ -12,6 +12,6 @@ final /* synthetic */ class MessagesStorage$$Lambda$101 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$setDialogPinned$131$MessagesStorage(this.arg$2, this.arg$3);
+        this.arg$1.lambda$setDialogPinned$132$MessagesStorage(this.arg$2, this.arg$3);
     }
 }

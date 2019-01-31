@@ -1,26 +1,23 @@
 package org.telegram.messenger;
 
-import android.content.Context;
-import org.telegram.messenger.MessagesStorage.IntCallback;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_error;
-import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.tgnet.TLRPC.TL_messages_createChat;
+import org.telegram.ui.ActionBar.BaseFragment;
 
 final /* synthetic */ class MessagesController$$Lambda$100 implements RequestDelegate {
     private final MessagesController arg$1;
-    private final Context arg$2;
-    private final AlertDialog arg$3;
-    private final IntCallback arg$4;
+    private final BaseFragment arg$2;
+    private final TL_messages_createChat arg$3;
 
-    MessagesController$$Lambda$100(MessagesController messagesController, Context context, AlertDialog alertDialog, IntCallback intCallback) {
+    MessagesController$$Lambda$100(MessagesController messagesController, BaseFragment baseFragment, TL_messages_createChat tL_messages_createChat) {
         this.arg$1 = messagesController;
-        this.arg$2 = context;
-        this.arg$3 = alertDialog;
-        this.arg$4 = intCallback;
+        this.arg$2 = baseFragment;
+        this.arg$3 = tL_messages_createChat;
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$convertToMegaGroup$157$MessagesController(this.arg$2, this.arg$3, this.arg$4, tLObject, tL_error);
+        this.arg$1.lambda$createChat$153$MessagesController(this.arg$2, this.arg$3, tLObject, tL_error);
     }
 }

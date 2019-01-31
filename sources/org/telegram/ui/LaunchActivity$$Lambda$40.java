@@ -1,25 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_error;
-import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.tgnet.TLRPC.TL_help_appUpdate;
 
 final /* synthetic */ class LaunchActivity$$Lambda$40 implements Runnable {
     private final LaunchActivity arg$1;
-    private final AlertDialog arg$2;
-    private final TLObject arg$3;
-    private final int arg$4;
-    private final TL_error arg$5;
+    private final TL_help_appUpdate arg$2;
+    private final int arg$3;
 
-    LaunchActivity$$Lambda$40(LaunchActivity launchActivity, AlertDialog alertDialog, TLObject tLObject, int i, TL_error tL_error) {
+    LaunchActivity$$Lambda$40(LaunchActivity launchActivity, TL_help_appUpdate tL_help_appUpdate, int i) {
         this.arg$1 = launchActivity;
-        this.arg$2 = alertDialog;
-        this.arg$3 = tLObject;
-        this.arg$4 = i;
-        this.arg$5 = tL_error;
+        this.arg$2 = tL_help_appUpdate;
+        this.arg$3 = i;
     }
 
     public void run() {
-        this.arg$1.lambda$null$27$LaunchActivity(this.arg$2, this.arg$3, this.arg$4, this.arg$5);
+        this.arg$1.lambda$null$31$LaunchActivity(this.arg$2, this.arg$3);
     }
 }

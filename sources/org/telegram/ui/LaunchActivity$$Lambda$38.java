@@ -1,19 +1,13 @@
 package org.telegram.ui;
 
-import java.util.HashMap;
-import org.telegram.tgnet.TLRPC.MessageMedia;
-import org.telegram.ui.LocationActivity.LocationActivityDelegate;
+final /* synthetic */ class LaunchActivity$$Lambda$38 implements Runnable {
+    private final LaunchActivity arg$1;
 
-final /* synthetic */ class LaunchActivity$$Lambda$38 implements LocationActivityDelegate {
-    private final HashMap arg$1;
-    private final int arg$2;
-
-    LaunchActivity$$Lambda$38(HashMap hashMap, int i) {
-        this.arg$1 = hashMap;
-        this.arg$2 = i;
+    LaunchActivity$$Lambda$38(LaunchActivity launchActivity) {
+        this.arg$1 = launchActivity;
     }
 
-    public void didSelectLocation(MessageMedia messageMedia, int i) {
-        LaunchActivity.lambda$null$38$LaunchActivity(this.arg$1, this.arg$2, messageMedia, i);
+    public void run() {
+        this.arg$1.lambda$null$44$LaunchActivity();
     }
 }

@@ -20,6 +20,6 @@ final /* synthetic */ class MessagesController$$Lambda$27 implements RequestDele
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$loadDialogPhotos$36$MessagesController(this.arg$2, this.arg$3, this.arg$4, this.arg$5, tLObject, tL_error);
+        this.arg$1.lambda$loadDialogPhotos$37$MessagesController(this.arg$2, this.arg$3, this.arg$4, this.arg$5, tLObject, tL_error);
     }
 }

@@ -1,16 +1,16 @@
 package org.telegram.ui;
 
+import android.view.MotionEvent;
 import android.view.View;
-import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
+import android.view.View.OnTouchListener;
 
-final /* synthetic */ class WallpapersListActivity$$Lambda$0 implements OnItemClickListener {
-    private final WallpapersListActivity arg$1;
+final /* synthetic */ class WallpapersListActivity$$Lambda$0 implements OnTouchListener {
+    static final OnTouchListener $instance = new WallpapersListActivity$$Lambda$0();
 
-    WallpapersListActivity$$Lambda$0(WallpapersListActivity wallpapersListActivity) {
-        this.arg$1 = wallpapersListActivity;
+    private WallpapersListActivity$$Lambda$0() {
     }
 
-    public void onItemClick(View view, int i) {
-        this.arg$1.lambda$createView$0$WallpapersListActivity(view, i);
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        return true;
     }
 }

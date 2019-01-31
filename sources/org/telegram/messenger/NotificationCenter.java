@@ -131,6 +131,7 @@ public class NotificationCenter {
     public static final int updateMessageMedia;
     public static final int userInfoDidLoad;
     public static final int wallpapersDidLoad;
+    public static final int wallpapersNeedReload;
     public static final int wasUnableToFindCurrentLocation;
     private SparseArray<ArrayList<Object>> addAfterBroadcast = new SparseArray();
     private int[] allowedNotifications;
@@ -475,6 +476,9 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         wallpapersDidLoad = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        wallpapersNeedReload = i;
         i = totalEvents;
         totalEvents = i + 1;
         didReceiveSmsCode = i;

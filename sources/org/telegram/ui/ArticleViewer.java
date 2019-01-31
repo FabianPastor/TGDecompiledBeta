@@ -6373,7 +6373,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             this.circleSize = AndroidUtilities.dp(5.0f);
             this.gapSize = AndroidUtilities.dp(2.0f);
             this.sideSide = AndroidUtilities.dp(17.0f);
-            this.lineSize = (((getMeasuredWidth() - (this.circleSize * 5)) - (this.gapSize * 8)) - (this.sideSide * 2)) / 4;
+            this.lineSize = (((getMeasuredWidth() - (this.circleSize * 5)) - ((this.gapSize * 2) * 4)) - (this.sideSide * 2)) / 4;
         }
 
         protected void onDraw(Canvas canvas) {
@@ -11944,7 +11944,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     private void setIndexToImage(ImageReceiver imageReceiver, int index) {
         imageReceiver.setOrientation(0, false);
         int[] size = new int[1];
-        TLObject fileLocation = getFileLocation(index, size);
+        PhotoSize fileLocation = getFileLocation(index, size);
         if (fileLocation != null) {
             TLObject media = getMedia(index);
             BitmapHolder placeHolder;
@@ -11964,7 +11964,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 } else {
                     bitmapDrawable = null;
                 }
-                imageReceiver.setImage(fileLocation, null, null, bitmapDrawable, thumbLocation, "b", size[0], null, this.currentPage, 1);
+                imageReceiver.setImage(fileLocation, null, bitmapDrawable, thumbLocation, "b", size[0], null, this.currentPage, 1);
             } else if (isMediaVideo(index)) {
                 if (fileLocation.location instanceof TL_fileLocationUnavailable) {
                     imageReceiver.setImageBitmap(this.parentActivity.getResources().getDrawable(R.drawable.photoview_placeholder));
@@ -11974,7 +11974,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 if (this.currentThumb != null && imageReceiver == this.centerImage) {
                     placeHolder = this.currentThumb;
                 }
-                imageReceiver.setImage(null, null, null, placeHolder != null ? new BitmapDrawable(placeHolder.bitmap) : null, fileLocation, "b", 0, null, this.currentPage, 1);
+                imageReceiver.setImage(null, null, placeHolder != null ? new BitmapDrawable(placeHolder.bitmap) : null, fileLocation, "b", 0, null, this.currentPage, 1);
             } else if (this.currentAnimation != null) {
                 imageReceiver.setImageBitmap(this.currentAnimation);
                 this.currentAnimation.setSecondParentView(this.photoContainerView);

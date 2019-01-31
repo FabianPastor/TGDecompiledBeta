@@ -344,7 +344,7 @@ public class GroupedPhotosListView extends View implements OnGestureListener {
                     } else {
                         parent = "avatar_" + this.delegate.getAvatarsDialogId();
                     }
-                    receiver.setImage(null, null, null, null, location, "80_80", 0, null, parent, 1);
+                    receiver.setImage(null, null, null, location, "80_80", 0, null, parent, 1);
                     receiver.setParam(a);
                 }
             }
@@ -363,7 +363,7 @@ public class GroupedPhotosListView extends View implements OnGestureListener {
                         } else {
                             parent = "avatar_" + this.delegate.getAvatarsDialogId();
                         }
-                        receiver.setImage(null, null, null, null, location, "80_80", 0, null, parent, 1);
+                        receiver.setImage(null, null, null, location, "80_80", 0, null, parent, 1);
                         receiver.setParam(a);
                         a--;
                     } else {

@@ -43,7 +43,6 @@ public class WallpaperUpdater {
         this.parentActivity = activity;
         this.parentFragment = fragment;
         this.delegate = wallpaperUpdaterDelegate;
-        this.currentWallpaperPath = new File(FileLoader.getDirectory(4), Utilities.random.nextInt() + ".jpg");
     }
 
     public void showAlert(boolean fromTheme) {
@@ -131,6 +130,7 @@ public class WallpaperUpdater {
             if (!photos.isEmpty()) {
                 SendingMediaInfo info = (SendingMediaInfo) photos.get(0);
                 if (info.path != null) {
+                    this.currentWallpaperPath = new File(FileLoader.getDirectory(4), Utilities.random.nextInt() + ".jpg");
                     Point screenSize = AndroidUtilities.getRealScreenSize();
                     Bitmap bitmap = ImageLoader.loadBitmap(info.path, null, (float) screenSize.x, (float) screenSize.y, true);
                     bitmap.compress(CompressFormat.JPEG, 87, new FileOutputStream(this.currentWallpaperPath));
@@ -143,11 +143,6 @@ public class WallpaperUpdater {
     }
 
     public void cleanup() {
-        this.currentWallpaperPath.delete();
-    }
-
-    public File getCurrentWallpaperPath() {
-        return this.currentWallpaperPath;
     }
 
     public String getCurrentPicturePath() {
@@ -158,119 +153,145 @@ public class WallpaperUpdater {
         this.currentPicturePath = value;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:26:0x0057 A:{SYNTHETIC, Splitter: B:26:0x0057} */
-    /* JADX WARNING: Removed duplicated region for block: B:20:0x004b A:{SYNTHETIC, Splitter: B:20:0x004b} */
+    /* JADX WARNING: Removed duplicated region for block: B:20:0x0071 A:{SYNTHETIC, Splitter: B:20:0x0071} */
+    /* JADX WARNING: Removed duplicated region for block: B:26:0x007d A:{SYNTHETIC, Splitter: B:26:0x007d} */
     public void onActivityResult(int r12, int r13, android.content.Intent r14) {
         /*
         r11 = this;
         r10 = 0;
         r5 = -1;
-        if (r13 != r5) goto L_0x003e;
+        if (r13 != r5) goto L_0x0064;
     L_0x0004:
         r5 = 10;
-        if (r12 != r5) goto L_0x0060;
+        if (r12 != r5) goto L_0x0086;
     L_0x0008:
         r5 = r11.currentPicturePath;
         org.telegram.messenger.AndroidUtilities.addMediaToGallery(r5);
         r3 = 0;
-        r2 = org.telegram.messenger.AndroidUtilities.getRealScreenSize();	 Catch:{ Exception -> 0x0045 }
-        r5 = r11.currentPicturePath;	 Catch:{ Exception -> 0x0045 }
+        r5 = new java.io.File;	 Catch:{ Exception -> 0x006b }
+        r6 = 4;
+        r6 = org.telegram.messenger.FileLoader.getDirectory(r6);	 Catch:{ Exception -> 0x006b }
+        r7 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x006b }
+        r7.<init>();	 Catch:{ Exception -> 0x006b }
+        r8 = org.telegram.messenger.Utilities.random;	 Catch:{ Exception -> 0x006b }
+        r8 = r8.nextInt();	 Catch:{ Exception -> 0x006b }
+        r7 = r7.append(r8);	 Catch:{ Exception -> 0x006b }
+        r8 = ".jpg";
+        r7 = r7.append(r8);	 Catch:{ Exception -> 0x006b }
+        r7 = r7.toString();	 Catch:{ Exception -> 0x006b }
+        r5.<init>(r6, r7);	 Catch:{ Exception -> 0x006b }
+        r11.currentWallpaperPath = r5;	 Catch:{ Exception -> 0x006b }
+        r2 = org.telegram.messenger.AndroidUtilities.getRealScreenSize();	 Catch:{ Exception -> 0x006b }
+        r5 = r11.currentPicturePath;	 Catch:{ Exception -> 0x006b }
         r6 = 0;
-        r7 = r2.x;	 Catch:{ Exception -> 0x0045 }
-        r7 = (float) r7;	 Catch:{ Exception -> 0x0045 }
-        r8 = r2.y;	 Catch:{ Exception -> 0x0045 }
-        r8 = (float) r8;	 Catch:{ Exception -> 0x0045 }
+        r7 = r2.x;	 Catch:{ Exception -> 0x006b }
+        r7 = (float) r7;	 Catch:{ Exception -> 0x006b }
+        r8 = r2.y;	 Catch:{ Exception -> 0x006b }
+        r8 = (float) r8;	 Catch:{ Exception -> 0x006b }
         r9 = 1;
-        r0 = org.telegram.messenger.ImageLoader.loadBitmap(r5, r6, r7, r8, r9);	 Catch:{ Exception -> 0x0045 }
-        r4 = new java.io.FileOutputStream;	 Catch:{ Exception -> 0x0045 }
-        r5 = r11.currentWallpaperPath;	 Catch:{ Exception -> 0x0045 }
-        r4.<init>(r5);	 Catch:{ Exception -> 0x0045 }
-        r5 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Exception -> 0x009f, all -> 0x009c }
+        r0 = org.telegram.messenger.ImageLoader.loadBitmap(r5, r6, r7, r8, r9);	 Catch:{ Exception -> 0x006b }
+        r4 = new java.io.FileOutputStream;	 Catch:{ Exception -> 0x006b }
+        r5 = r11.currentWallpaperPath;	 Catch:{ Exception -> 0x006b }
+        r4.<init>(r5);	 Catch:{ Exception -> 0x006b }
+        r5 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Exception -> 0x00ec, all -> 0x00e9 }
         r6 = 87;
-        r0.compress(r5, r6, r4);	 Catch:{ Exception -> 0x009f, all -> 0x009c }
-        r5 = r11.delegate;	 Catch:{ Exception -> 0x009f, all -> 0x009c }
-        r6 = r11.currentWallpaperPath;	 Catch:{ Exception -> 0x009f, all -> 0x009c }
+        r0.compress(r5, r6, r4);	 Catch:{ Exception -> 0x00ec, all -> 0x00e9 }
+        r5 = r11.delegate;	 Catch:{ Exception -> 0x00ec, all -> 0x00e9 }
+        r6 = r11.currentWallpaperPath;	 Catch:{ Exception -> 0x00ec, all -> 0x00e9 }
         r7 = 0;
-        r5.didSelectWallpaper(r6, r0, r7);	 Catch:{ Exception -> 0x009f, all -> 0x009c }
-        if (r4 == 0) goto L_0x003b;
-    L_0x0038:
-        r4.close();	 Catch:{ Exception -> 0x003f }
-    L_0x003b:
+        r5.didSelectWallpaper(r6, r0, r7);	 Catch:{ Exception -> 0x00ec, all -> 0x00e9 }
+        if (r4 == 0) goto L_0x0061;
+    L_0x005e:
+        r4.close();	 Catch:{ Exception -> 0x0065 }
+    L_0x0061:
         r3 = r4;
-    L_0x003c:
+    L_0x0062:
         r11.currentPicturePath = r10;
-    L_0x003e:
-        return;
-    L_0x003f:
-        r1 = move-exception;
-        org.telegram.messenger.FileLog.e(r1);
-        r3 = r4;
-        goto L_0x003c;
-    L_0x0045:
-        r1 = move-exception;
-    L_0x0046:
-        org.telegram.messenger.FileLog.e(r1);	 Catch:{ all -> 0x0054 }
-        if (r3 == 0) goto L_0x003c;
-    L_0x004b:
-        r3.close();	 Catch:{ Exception -> 0x004f }
-        goto L_0x003c;
-    L_0x004f:
-        r1 = move-exception;
-        org.telegram.messenger.FileLog.e(r1);
-        goto L_0x003c;
-    L_0x0054:
-        r5 = move-exception;
-    L_0x0055:
-        if (r3 == 0) goto L_0x005a;
-    L_0x0057:
-        r3.close();	 Catch:{ Exception -> 0x005b }
-    L_0x005a:
-        throw r5;
-    L_0x005b:
-        r1 = move-exception;
-        org.telegram.messenger.FileLog.e(r1);
-        goto L_0x005a;
-    L_0x0060:
-        r5 = 11;
-        if (r12 != r5) goto L_0x003e;
     L_0x0064:
-        if (r14 == 0) goto L_0x003e;
-    L_0x0066:
-        r5 = r14.getData();
-        if (r5 == 0) goto L_0x003e;
-    L_0x006c:
-        r2 = org.telegram.messenger.AndroidUtilities.getRealScreenSize();	 Catch:{ Exception -> 0x0097 }
-        r5 = 0;
-        r6 = r14.getData();	 Catch:{ Exception -> 0x0097 }
-        r7 = r2.x;	 Catch:{ Exception -> 0x0097 }
-        r7 = (float) r7;	 Catch:{ Exception -> 0x0097 }
-        r8 = r2.y;	 Catch:{ Exception -> 0x0097 }
-        r8 = (float) r8;	 Catch:{ Exception -> 0x0097 }
-        r9 = 1;
-        r0 = org.telegram.messenger.ImageLoader.loadBitmap(r5, r6, r7, r8, r9);	 Catch:{ Exception -> 0x0097 }
-        r3 = new java.io.FileOutputStream;	 Catch:{ Exception -> 0x0097 }
-        r5 = r11.currentWallpaperPath;	 Catch:{ Exception -> 0x0097 }
-        r3.<init>(r5);	 Catch:{ Exception -> 0x0097 }
-        r5 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Exception -> 0x0097 }
-        r6 = 87;
-        r0.compress(r5, r6, r3);	 Catch:{ Exception -> 0x0097 }
-        r5 = r11.delegate;	 Catch:{ Exception -> 0x0097 }
-        r6 = r11.currentWallpaperPath;	 Catch:{ Exception -> 0x0097 }
-        r7 = 0;
-        r5.didSelectWallpaper(r6, r0, r7);	 Catch:{ Exception -> 0x0097 }
-        goto L_0x003e;
-    L_0x0097:
+        return;
+    L_0x0065:
         r1 = move-exception;
         org.telegram.messenger.FileLog.e(r1);
-        goto L_0x003e;
-    L_0x009c:
+        r3 = r4;
+        goto L_0x0062;
+    L_0x006b:
+        r1 = move-exception;
+    L_0x006c:
+        org.telegram.messenger.FileLog.e(r1);	 Catch:{ all -> 0x007a }
+        if (r3 == 0) goto L_0x0062;
+    L_0x0071:
+        r3.close();	 Catch:{ Exception -> 0x0075 }
+        goto L_0x0062;
+    L_0x0075:
+        r1 = move-exception;
+        org.telegram.messenger.FileLog.e(r1);
+        goto L_0x0062;
+    L_0x007a:
+        r5 = move-exception;
+    L_0x007b:
+        if (r3 == 0) goto L_0x0080;
+    L_0x007d:
+        r3.close();	 Catch:{ Exception -> 0x0081 }
+    L_0x0080:
+        throw r5;
+    L_0x0081:
+        r1 = move-exception;
+        org.telegram.messenger.FileLog.e(r1);
+        goto L_0x0080;
+    L_0x0086:
+        r5 = 11;
+        if (r12 != r5) goto L_0x0064;
+    L_0x008a:
+        if (r14 == 0) goto L_0x0064;
+    L_0x008c:
+        r5 = r14.getData();
+        if (r5 == 0) goto L_0x0064;
+    L_0x0092:
+        r5 = new java.io.File;	 Catch:{ Exception -> 0x00e3 }
+        r6 = 4;
+        r6 = org.telegram.messenger.FileLoader.getDirectory(r6);	 Catch:{ Exception -> 0x00e3 }
+        r7 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x00e3 }
+        r7.<init>();	 Catch:{ Exception -> 0x00e3 }
+        r8 = org.telegram.messenger.Utilities.random;	 Catch:{ Exception -> 0x00e3 }
+        r8 = r8.nextInt();	 Catch:{ Exception -> 0x00e3 }
+        r7 = r7.append(r8);	 Catch:{ Exception -> 0x00e3 }
+        r8 = ".jpg";
+        r7 = r7.append(r8);	 Catch:{ Exception -> 0x00e3 }
+        r7 = r7.toString();	 Catch:{ Exception -> 0x00e3 }
+        r5.<init>(r6, r7);	 Catch:{ Exception -> 0x00e3 }
+        r11.currentWallpaperPath = r5;	 Catch:{ Exception -> 0x00e3 }
+        r2 = org.telegram.messenger.AndroidUtilities.getRealScreenSize();	 Catch:{ Exception -> 0x00e3 }
+        r5 = 0;
+        r6 = r14.getData();	 Catch:{ Exception -> 0x00e3 }
+        r7 = r2.x;	 Catch:{ Exception -> 0x00e3 }
+        r7 = (float) r7;	 Catch:{ Exception -> 0x00e3 }
+        r8 = r2.y;	 Catch:{ Exception -> 0x00e3 }
+        r8 = (float) r8;	 Catch:{ Exception -> 0x00e3 }
+        r9 = 1;
+        r0 = org.telegram.messenger.ImageLoader.loadBitmap(r5, r6, r7, r8, r9);	 Catch:{ Exception -> 0x00e3 }
+        r3 = new java.io.FileOutputStream;	 Catch:{ Exception -> 0x00e3 }
+        r5 = r11.currentWallpaperPath;	 Catch:{ Exception -> 0x00e3 }
+        r3.<init>(r5);	 Catch:{ Exception -> 0x00e3 }
+        r5 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Exception -> 0x00e3 }
+        r6 = 87;
+        r0.compress(r5, r6, r3);	 Catch:{ Exception -> 0x00e3 }
+        r5 = r11.delegate;	 Catch:{ Exception -> 0x00e3 }
+        r6 = r11.currentWallpaperPath;	 Catch:{ Exception -> 0x00e3 }
+        r7 = 0;
+        r5.didSelectWallpaper(r6, r0, r7);	 Catch:{ Exception -> 0x00e3 }
+        goto L_0x0064;
+    L_0x00e3:
+        r1 = move-exception;
+        org.telegram.messenger.FileLog.e(r1);
+        goto L_0x0064;
+    L_0x00e9:
         r5 = move-exception;
         r3 = r4;
-        goto L_0x0055;
-    L_0x009f:
+        goto L_0x007b;
+    L_0x00ec:
         r1 = move-exception;
         r3 = r4;
-        goto L_0x0046;
+        goto L_0x006c;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.WallpaperUpdater.onActivityResult(int, int, android.content.Intent):void");
     }

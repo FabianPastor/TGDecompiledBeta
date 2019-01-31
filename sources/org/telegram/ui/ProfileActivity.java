@@ -3335,7 +3335,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         } else if (this.chat_id != 0 && this.chat_id > 0) {
             Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.chat_id));
             if (ChatObject.isChannel(chat)) {
-                if (ChatObject.hasAdminRights(chat)) {
+                if (ChatObject.hasAdminRights(chat) || ChatObject.canChangeChatInfo(chat)) {
                     this.editItem = menu.addItem(12, (int) R.drawable.group_edit_profile);
                 }
                 if (!(chat.megagroup || this.chatInfo == null || !this.chatInfo.can_view_stats)) {

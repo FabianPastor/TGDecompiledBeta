@@ -1,6 +1,7 @@
 package org.telegram.ui;
 
 import java.util.HashMap;
+import org.telegram.tgnet.TLRPC.TL_wallPaper;
 import org.telegram.ui.Components.AlertsCreator.AccountSelectDelegate;
 
 final /* synthetic */ class LaunchActivity$$Lambda$7 implements AccountSelectDelegate {
@@ -12,8 +13,7 @@ final /* synthetic */ class LaunchActivity$$Lambda$7 implements AccountSelectDel
     private final String arg$14;
     private final String arg$15;
     private final String arg$16;
-    private final String arg$17;
-    private final int arg$18;
+    private final TL_wallPaper arg$17;
     private final int arg$2;
     private final String arg$3;
     private final String arg$4;
@@ -23,7 +23,7 @@ final /* synthetic */ class LaunchActivity$$Lambda$7 implements AccountSelectDel
     private final String arg$8;
     private final boolean arg$9;
 
-    LaunchActivity$$Lambda$7(LaunchActivity launchActivity, int i, String str, String str2, String str3, String str4, String str5, String str6, boolean z, Integer num, String str7, String[] strArr, HashMap hashMap, String str8, String str9, String str10, String str11, int i2) {
+    LaunchActivity$$Lambda$7(LaunchActivity launchActivity, int i, String str, String str2, String str3, String str4, String str5, String str6, boolean z, Integer num, String str7, String[] strArr, HashMap hashMap, String str8, String str9, String str10, TL_wallPaper tL_wallPaper) {
         this.arg$1 = launchActivity;
         this.arg$2 = i;
         this.arg$3 = str;
@@ -40,11 +40,10 @@ final /* synthetic */ class LaunchActivity$$Lambda$7 implements AccountSelectDel
         this.arg$14 = str8;
         this.arg$15 = str9;
         this.arg$16 = str10;
-        this.arg$17 = str11;
-        this.arg$18 = i2;
+        this.arg$17 = tL_wallPaper;
     }
 
     public void didSelectAccount(int i) {
-        this.arg$1.lambda$runLinkRequest$8$LaunchActivity(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6, this.arg$7, this.arg$8, this.arg$9, this.arg$10, this.arg$11, this.arg$12, this.arg$13, this.arg$14, this.arg$15, this.arg$16, this.arg$17, this.arg$18, i);
+        this.arg$1.lambda$runLinkRequest$8$LaunchActivity(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6, this.arg$7, this.arg$8, this.arg$9, this.arg$10, this.arg$11, this.arg$12, this.arg$13, this.arg$14, this.arg$15, this.arg$16, this.arg$17, i);
     }
 }

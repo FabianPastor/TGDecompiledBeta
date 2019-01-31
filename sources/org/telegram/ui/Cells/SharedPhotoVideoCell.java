@@ -23,7 +23,6 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.beta.R;
-import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto;
 import org.telegram.ui.ActionBar.Theme;
@@ -171,7 +170,7 @@ public class SharedPhotoVideoCell extends FrameLayout {
                 this.videoTextView.setText(String.format("%d:%02d", new Object[]{Integer.valueOf(minutes), Integer.valueOf(seconds)}));
                 PhotoSize thumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.getDocument().thumbs, 90);
                 if (thumb != null) {
-                    this.imageView.setImage(null, null, null, ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.photo_placeholder_in), null, thumb, "b", null, 0, messageObject);
+                    this.imageView.setImage(null, null, ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.photo_placeholder_in), null, thumb, "b", null, 0, messageObject);
                 } else {
                     this.imageView.setImageResource(R.drawable.photo_placeholder_in);
                 }
@@ -180,17 +179,16 @@ public class SharedPhotoVideoCell extends FrameLayout {
                 this.imageView.setImageResource(R.drawable.photo_placeholder_in);
             } else {
                 this.videoInfoContainer.setVisibility(4);
-                TLObject currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 320);
-                TLObject currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
+                PhotoSize currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 320);
+                PhotoSize currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
                 if (messageObject.mediaExists || DownloadController.getInstance(SharedPhotoVideoCell.this.currentAccount).canDownloadMedia(messageObject)) {
-                    PhotoSize currentPhotoObjectThumb2;
-                    if (currentPhotoObject == currentPhotoObjectThumb2) {
-                        currentPhotoObjectThumb2 = null;
+                    if (currentPhotoObject == currentPhotoObjectThumb) {
+                        currentPhotoObjectThumb = null;
                     }
-                    this.imageView.getImageReceiver().setImage(currentPhotoObject, "100_100", currentPhotoObjectThumb2, "b", currentPhotoObject.size, null, messageObject, messageObject.shouldEncryptPhotoOrVideo() ? 2 : 0);
+                    this.imageView.getImageReceiver().setImage(currentPhotoObject, "100_100", currentPhotoObjectThumb, "b", currentPhotoObject.size, null, messageObject, messageObject.shouldEncryptPhotoOrVideo() ? 2 : 0);
                     return;
                 }
-                this.imageView.setImage(null, null, null, ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.photo_placeholder_in), null, currentPhotoObjectThumb2, "b", null, 0, messageObject);
+                this.imageView.setImage(null, null, ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.photo_placeholder_in), null, currentPhotoObjectThumb, "b", null, 0, messageObject);
             }
         }
 

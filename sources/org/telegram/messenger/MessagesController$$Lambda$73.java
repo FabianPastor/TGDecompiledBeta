@@ -6,14 +6,12 @@ import org.telegram.tgnet.TLRPC.TL_error;
 
 final /* synthetic */ class MessagesController$$Lambda$73 implements RequestDelegate {
     private final MessagesController arg$1;
-    private final int arg$2;
 
-    MessagesController$$Lambda$73(MessagesController messagesController, int i) {
+    MessagesController$$Lambda$73(MessagesController messagesController) {
         this.arg$1 = messagesController;
-        this.arg$2 = i;
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$loadGlobalNotificationsSettings$109$MessagesController(this.arg$2, tLObject, tL_error);
+        this.arg$1.lambda$loadHintDialogs$109$MessagesController(tLObject, tL_error);
     }
 }

@@ -1,17 +1,19 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
 
-final /* synthetic */ class MessagesController$$Lambda$129 implements Runnable {
+final /* synthetic */ class MessagesController$$Lambda$129 implements RequestDelegate {
     private final MessagesController arg$1;
-    private final ArrayList arg$2;
+    private final long arg$2;
 
-    MessagesController$$Lambda$129(MessagesController messagesController, ArrayList arrayList) {
+    MessagesController$$Lambda$129(MessagesController messagesController, long j) {
         this.arg$1 = messagesController;
-        this.arg$2 = arrayList;
+        this.arg$2 = j;
     }
 
-    public void run() {
-        this.arg$1.lambda$generateJoinMessage$217$MessagesController(this.arg$2);
+    public void run(TLObject tLObject, TL_error tL_error) {
+        this.arg$1.lambda$pinDialog$215$MessagesController(this.arg$2, tLObject, tL_error);
     }
 }

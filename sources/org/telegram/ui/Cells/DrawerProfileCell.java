@@ -105,7 +105,7 @@ public class DrawerProfileCell extends FrameLayout {
             this.shadowView.getDrawable().setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
         }
         this.nameTextView.setTextColor(Theme.getColor("chats_menuName"));
-        if (!Theme.isCustomTheme() || backgroundDrawable == null) {
+        if (!Theme.isCustomTheme() || Theme.isPatternWallpaper() || backgroundDrawable == null) {
             this.shadowView.setVisibility(4);
             this.phoneTextView.setTextColor(Theme.getColor("chats_menuPhoneCats"));
             super.onDraw(canvas);

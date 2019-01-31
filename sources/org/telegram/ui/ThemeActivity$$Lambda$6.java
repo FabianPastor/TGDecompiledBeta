@@ -1,17 +1,13 @@
 package org.telegram.ui;
 
-import android.view.KeyEvent;
-import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
-import org.telegram.messenger.AndroidUtilities;
+final /* synthetic */ class ThemeActivity$$Lambda$6 implements Runnable {
+    private final ThemeActivity arg$1;
 
-final /* synthetic */ class ThemeActivity$$Lambda$6 implements OnEditorActionListener {
-    static final OnEditorActionListener $instance = new ThemeActivity$$Lambda$6();
-
-    private ThemeActivity$$Lambda$6() {
+    ThemeActivity$$Lambda$6(ThemeActivity themeActivity) {
+        this.arg$1 = themeActivity;
     }
 
-    public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        return AndroidUtilities.hideKeyboard(textView);
+    public void run() {
+        this.arg$1.lambda$updateSunTime$12$ThemeActivity();
     }
 }

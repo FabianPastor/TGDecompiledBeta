@@ -8,6 +8,6 @@ final /* synthetic */ class MessagesStorage$$Lambda$19 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$getBlockedUsers$31$MessagesStorage();
+        this.arg$1.lambda$getBlockedUsers$32$MessagesStorage();
     }
 }

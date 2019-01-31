@@ -1,17 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLObject;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 
-final /* synthetic */ class WallpapersListActivity$$Lambda$6 implements Runnable {
+final /* synthetic */ class WallpapersListActivity$$Lambda$6 implements OnClickListener {
     private final WallpapersListActivity arg$1;
-    private final TLObject arg$2;
 
-    WallpapersListActivity$$Lambda$6(WallpapersListActivity wallpapersListActivity, TLObject tLObject) {
+    WallpapersListActivity$$Lambda$6(WallpapersListActivity wallpapersListActivity) {
         this.arg$1 = wallpapersListActivity;
-        this.arg$2 = tLObject;
     }
 
-    public void run() {
-        this.arg$1.lambda$null$1$WallpapersListActivity(this.arg$2);
+    public void onClick(DialogInterface dialogInterface, int i) {
+        this.arg$1.lambda$null$2$WallpapersListActivity(dialogInterface, i);
     }
 }

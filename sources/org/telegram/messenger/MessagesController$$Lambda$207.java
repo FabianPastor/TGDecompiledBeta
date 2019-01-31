@@ -1,24 +1,23 @@
 package org.telegram.messenger;
 
-import android.util.LongSparseArray;
-import org.telegram.tgnet.TLRPC.messages_Dialogs;
-
 final /* synthetic */ class MessagesController$$Lambda$207 implements Runnable {
     private final MessagesController arg$1;
-    private final messages_Dialogs arg$2;
-    private final LongSparseArray arg$3;
-    private final LongSparseArray arg$4;
-    private final LongSparseArray arg$5;
+    private final long arg$2;
+    private final int arg$3;
+    private final boolean arg$4;
+    private final int arg$5;
+    private final int arg$6;
 
-    MessagesController$$Lambda$207(MessagesController messagesController, messages_Dialogs messages_dialogs, LongSparseArray longSparseArray, LongSparseArray longSparseArray2, LongSparseArray longSparseArray3) {
+    MessagesController$$Lambda$207(MessagesController messagesController, long j, int i, boolean z, int i2, int i3) {
         this.arg$1 = messagesController;
-        this.arg$2 = messages_dialogs;
-        this.arg$3 = longSparseArray;
-        this.arg$4 = longSparseArray2;
-        this.arg$5 = longSparseArray3;
+        this.arg$2 = j;
+        this.arg$3 = i;
+        this.arg$4 = z;
+        this.arg$5 = i2;
+        this.arg$6 = i3;
     }
 
     public void run() {
-        this.arg$1.lambda$null$130$MessagesController(this.arg$2, this.arg$3, this.arg$4, this.arg$5);
+        this.arg$1.lambda$null$148$MessagesController(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6);
     }
 }

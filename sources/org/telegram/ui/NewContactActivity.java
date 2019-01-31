@@ -13,8 +13,6 @@ import android.net.Uri;
 import android.os.Vibrator;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
-import android.text.InputFilter;
-import android.text.InputFilter.LengthFilter;
 import android.text.TextUtils.TruncateAt;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -269,7 +267,6 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         this.codeField.setMaxLines(1);
         this.codeField.setGravity(19);
         this.codeField.setImeOptions(NUM);
-        this.codeField.setFilters(new InputFilter[]{new LengthFilter(5)});
         linearLayout.addView(this.codeField, LayoutHelper.createLinear(55, 36, -9.0f, 0.0f, 16.0f, 0.0f));
         this.codeField.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -430,6 +427,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
             }
         });
         this.phoneField.setOnEditorActionListener(new NewContactActivity$$Lambda$5(this));
+        this.phoneField.setOnKeyListener(new NewContactActivity$$Lambda$6(this));
         HashMap<String, String> languageMap = new HashMap();
         try {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(context.getResources().getAssets().open("countries.txt")));
@@ -451,7 +449,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         } catch (Throwable e) {
             FileLog.e(e);
         }
-        Collections.sort(this.countriesArray, NewContactActivity$$Lambda$6.$instance);
+        Collections.sort(this.countriesArray, NewContactActivity$$Lambda$7.$instance);
         String country = null;
         try {
             TelephonyManager telephonyManager = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
@@ -496,13 +494,13 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
 
     final /* synthetic */ void lambda$createView$5$NewContactActivity(View view) {
         CountrySelectActivity fragment = new CountrySelectActivity(true);
-        fragment.setCountrySelectActivityDelegate(new NewContactActivity$$Lambda$8(this));
+        fragment.setCountrySelectActivityDelegate(new NewContactActivity$$Lambda$9(this));
         presentFragment(fragment);
     }
 
     final /* synthetic */ void lambda$null$4$NewContactActivity(String name, String shortName) {
         selectCountry(name);
-        AndroidUtilities.runOnUIThread(new NewContactActivity$$Lambda$9(this), 300);
+        AndroidUtilities.runOnUIThread(new NewContactActivity$$Lambda$10(this), 300);
         this.phoneField.requestFocus();
         this.phoneField.setSelection(this.phoneField.length());
     }
@@ -525,6 +523,16 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
             return false;
         }
         this.editDoneItem.performClick();
+        return true;
+    }
+
+    final /* synthetic */ boolean lambda$createView$8$NewContactActivity(View v, int keyCode, KeyEvent event) {
+        if (keyCode != 67 || this.phoneField.length() != 0) {
+            return false;
+        }
+        this.codeField.requestFocus();
+        this.codeField.setSelection(this.codeField.length());
+        this.codeField.dispatchKeyEvent(event);
         return true;
     }
 
@@ -645,7 +653,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate cellDelegate = new NewContactActivity$$Lambda$7(this);
+        ThemeDescriptionDelegate cellDelegate = new NewContactActivity$$Lambda$8(this);
         ThemeDescription[] themeDescriptionArr = new ThemeDescription[34];
         themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite");
         themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault");
@@ -687,7 +695,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         return themeDescriptionArr;
     }
 
-    final /* synthetic */ void lambda$getThemeDescriptions$8$NewContactActivity() {
+    final /* synthetic */ void lambda$getThemeDescriptions$9$NewContactActivity() {
         if (this.avatarImage != null) {
             this.avatarDrawable.setInfo(5, this.firstNameField.getText().toString(), this.lastNameField.getText().toString(), false);
             this.avatarImage.invalidate();

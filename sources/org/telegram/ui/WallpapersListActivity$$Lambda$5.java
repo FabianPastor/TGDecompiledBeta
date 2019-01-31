@@ -12,6 +12,6 @@ final /* synthetic */ class WallpapersListActivity$$Lambda$5 implements Runnable
     }
 
     public void run() {
-        this.arg$1.lambda$null$3$WallpapersListActivity(this.arg$2);
+        this.arg$1.lambda$null$4$WallpapersListActivity(this.arg$2);
     }
 }

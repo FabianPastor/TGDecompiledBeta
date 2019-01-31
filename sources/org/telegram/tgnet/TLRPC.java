@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 
 public class TLRPC {
     public static final int CHAT_FLAG_IS_PUBLIC = 64;
-    public static final int LAYER = 94;
+    public static final int LAYER = 95;
     public static final int MESSAGE_FLAG_EDITED = 32768;
     public static final int MESSAGE_FLAG_FWD = 4;
     public static final int MESSAGE_FLAG_HAS_BOT_ID = 2048;
@@ -4517,7 +4517,7 @@ public class TLRPC {
         public InputWallPaper wallpaper;
 
         public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
-            return TL_wallPaper.TLdeserialize(stream, constructor, exception);
+            return WallPaper.TLdeserialize(stream, constructor, exception);
         }
 
         public void serializeToStream(AbstractSerializedData stream) {
@@ -4553,7 +4553,8 @@ public class TLRPC {
     }
 
     public static class TL_account_installWallPaper extends TLObject {
-        public static int constructor = NUM;
+        public static int constructor = -18000023;
+        public TL_wallPaperSettings settings;
         public InputWallPaper wallpaper;
 
         public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
@@ -4563,6 +4564,7 @@ public class TLRPC {
         public void serializeToStream(AbstractSerializedData stream) {
             stream.writeInt32(constructor);
             this.wallpaper.serializeToStream(stream);
+            this.settings.serializeToStream(stream);
         }
     }
 
@@ -4905,6 +4907,18 @@ public class TLRPC {
         }
     }
 
+    public static class TL_account_resetWallPapers extends TLObject {
+        public static int constructor = -NUM;
+
+        public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
+            return Bool.TLdeserialize(stream, constructor, exception);
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+        }
+    }
+
     public static class TL_account_resetWebAuthorization extends TLObject {
         public static int constructor = NUM;
         public long hash;
@@ -4949,6 +4963,7 @@ public class TLRPC {
 
     public static class TL_account_saveWallPaper extends TLObject {
         public static int constructor = NUM;
+        public TL_wallPaperSettings settings;
         public boolean unsave;
         public InputWallPaper wallpaper;
 
@@ -4960,6 +4975,7 @@ public class TLRPC {
             stream.writeInt32(constructor);
             this.wallpaper.serializeToStream(stream);
             stream.writeBool(this.unsave);
+            this.settings.serializeToStream(stream);
         }
     }
 
@@ -5259,15 +5275,17 @@ public class TLRPC {
         public static int constructor = -NUM;
         public InputFile file;
         public String mime_type;
+        public TL_wallPaperSettings settings;
 
         public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
-            return TL_wallPaper.TLdeserialize(stream, constructor, exception);
+            return WallPaper.TLdeserialize(stream, constructor, exception);
         }
 
         public void serializeToStream(AbstractSerializedData stream) {
             stream.writeInt32(constructor);
             this.file.serializeToStream(stream);
             stream.writeString(this.mime_type);
+            this.settings.serializeToStream(stream);
         }
     }
 
@@ -5329,7 +5347,7 @@ public class TLRPC {
     public static class TL_account_wallPapers extends account_WallPapers {
         public static int constructor = NUM;
         public int hash;
-        public ArrayList<TL_wallPaper> wallpapers = new ArrayList();
+        public ArrayList<WallPaper> wallpapers = new ArrayList();
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             this.hash = stream.readInt32(exception);
@@ -5337,7 +5355,7 @@ public class TLRPC {
                 int count = stream.readInt32(exception);
                 int a = 0;
                 while (a < count) {
-                    TL_wallPaper object = TL_wallPaper.TLdeserialize(stream, stream.readInt32(exception), exception);
+                    WallPaper object = WallPaper.TLdeserialize(stream, stream.readInt32(exception), exception);
                     if (object != null) {
                         this.wallpapers.add(object);
                         a++;
@@ -5357,7 +5375,7 @@ public class TLRPC {
             int count = this.wallpapers.size();
             stream.writeInt32(count);
             for (int a = 0; a < count; a++) {
-                ((TL_wallPaper) this.wallpapers.get(a)).serializeToStream(stream);
+                ((WallPaper) this.wallpapers.get(a)).serializeToStream(stream);
             }
         }
     }
@@ -36469,27 +36487,139 @@ public class TLRPC {
         }
     }
 
-    public static class TL_wallPaper extends TLObject {
+    public static abstract class WallPaper extends TLObject {
+        public static WallPaper TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
+            WallPaper result = null;
+            switch (constructor) {
+                case -1539849235:
+                    result = new TL_wallPaper();
+                    break;
+                case -263220756:
+                    result = new TL_wallPaper_layer94();
+                    break;
+            }
+            if (result == null && exception) {
+                throw new RuntimeException(String.format("can't parse magic %x in WallPaper", new Object[]{Integer.valueOf(constructor)}));
+            }
+            if (result != null) {
+                result.readParams(stream, exception);
+            }
+            return result;
+        }
+    }
+
+    public static class TL_wallPaper extends WallPaper {
         public static int constructor = -NUM;
         public long access_hash;
         public boolean creator;
+        public boolean dark;
         public Document document;
         public int flags;
         public long id;
         public boolean isDefault;
+        public boolean pattern;
+        public TL_wallPaperSettings settings;
         public String slug;
 
-        public static TL_wallPaper TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
+        public void readParams(AbstractSerializedData stream, boolean exception) {
+            boolean z;
+            boolean z2 = true;
+            this.id = stream.readInt64(exception);
+            this.flags = stream.readInt32(exception);
+            this.creator = (this.flags & 1) != 0;
+            if ((this.flags & 2) != 0) {
+                z = true;
+            } else {
+                z = false;
+            }
+            this.isDefault = z;
+            if ((this.flags & 8) != 0) {
+                z = true;
+            } else {
+                z = false;
+            }
+            this.pattern = z;
+            if ((this.flags & 16) == 0) {
+                z2 = false;
+            }
+            this.dark = z2;
+            this.access_hash = stream.readInt64(exception);
+            this.slug = stream.readString(exception);
+            this.document = Document.TLdeserialize(stream, stream.readInt32(exception), exception);
+            if ((this.flags & 4) != 0) {
+                this.settings = TL_wallPaperSettings.TLdeserialize(stream, stream.readInt32(exception), exception);
+            }
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+            stream.writeInt64(this.id);
+            this.flags = this.creator ? this.flags | 1 : this.flags & -2;
+            this.flags = this.isDefault ? this.flags | 2 : this.flags & -3;
+            this.flags = this.pattern ? this.flags | 8 : this.flags & -9;
+            this.flags = this.dark ? this.flags | 16 : this.flags & -17;
+            stream.writeInt32(this.flags);
+            stream.writeInt64(this.access_hash);
+            stream.writeString(this.slug);
+            this.document.serializeToStream(stream);
+            if ((this.flags & 4) != 0) {
+                this.settings.serializeToStream(stream);
+            }
+        }
+    }
+
+    public static class TL_wallPaperSettings extends TLObject {
+        public static int constructor = -NUM;
+        public int background_color;
+        public boolean blur;
+        public int flags;
+        public int intensity;
+        public boolean motion;
+
+        public static TL_wallPaperSettings TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
             if (constructor == constructor) {
-                TL_wallPaper result = new TL_wallPaper();
+                TL_wallPaperSettings result = new TL_wallPaperSettings();
                 result.readParams(stream, exception);
                 return result;
             } else if (!exception) {
                 return null;
             } else {
-                throw new RuntimeException(String.format("can't parse magic %x in TL_wallPaper", new Object[]{Integer.valueOf(constructor)}));
+                throw new RuntimeException(String.format("can't parse magic %x in TL_wallPaperSettings", new Object[]{Integer.valueOf(constructor)}));
             }
         }
+
+        public void readParams(AbstractSerializedData stream, boolean exception) {
+            boolean z = true;
+            this.flags = stream.readInt32(exception);
+            this.blur = (this.flags & 2) != 0;
+            if ((this.flags & 4) == 0) {
+                z = false;
+            }
+            this.motion = z;
+            if ((this.flags & 1) != 0) {
+                this.background_color = stream.readInt32(exception);
+            }
+            if ((this.flags & 8) != 0) {
+                this.intensity = stream.readInt32(exception);
+            }
+        }
+
+        public void serializeToStream(AbstractSerializedData stream) {
+            stream.writeInt32(constructor);
+            this.flags = this.blur ? this.flags | 2 : this.flags & -3;
+            this.flags = this.motion ? this.flags | 4 : this.flags & -5;
+            stream.writeInt32(this.flags);
+            if ((this.flags & 1) != 0) {
+                stream.writeInt32(this.background_color);
+            }
+            if ((this.flags & 8) != 0) {
+                stream.writeInt32(this.intensity);
+            }
+        }
+    }
+
+    public static class TL_wallPaper_layer94 extends TL_wallPaper {
+        public static int constructor = -NUM;
 
         public void readParams(AbstractSerializedData stream, boolean exception) {
             boolean z = true;

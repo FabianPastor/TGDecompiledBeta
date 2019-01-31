@@ -1,6 +1,7 @@
 package org.telegram.messenger;
 
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.text.Layout.Alignment;
 import android.text.Spannable;
 import android.text.Spannable.Factory;
@@ -2705,6 +2706,10 @@ public class MessageObject {
         return true;
     }
 
+    public void resetLayout() {
+        this.layoutCreated = false;
+    }
+
     public String getMimeType() {
         if (this.messageOwner.media instanceof TL_messageMediaDocument) {
             return this.messageOwner.media.document.mime_type;
@@ -3503,10 +3508,25 @@ public class MessageObject {
     }
 
     public int getMaxMessageTextWidth() {
+        int maxWidth = 0;
         this.generatedWithMinSize = AndroidUtilities.isTablet() ? AndroidUtilities.getMinTabletSide() : AndroidUtilities.displaySize.x;
+        if ((this.messageOwner.media instanceof TL_messageMediaWebPage) && this.messageOwner.media.webpage != null && "telegram_background".equals(this.messageOwner.media.webpage.type)) {
+            try {
+                Uri uri = Uri.parse(this.messageOwner.media.webpage.url);
+                if (uri.getQueryParameter("bg_color") != null) {
+                    maxWidth = AndroidUtilities.dp(220.0f);
+                } else if (uri.getLastPathSegment().length() == 6) {
+                    maxWidth = AndroidUtilities.dp(200.0f);
+                }
+            } catch (Exception e) {
+            }
+        }
+        if (maxWidth != 0) {
+            return maxWidth;
+        }
         int i = this.generatedWithMinSize;
         float f = (!needDrawAvatarInternal() || isOutOwner()) ? 80.0f : 132.0f;
-        int maxWidth = i - AndroidUtilities.dp(f);
+        maxWidth = i - AndroidUtilities.dp(f);
         if (needDrawShareButton() && !isOutOwner()) {
             maxWidth -= AndroidUtilities.dp(10.0f);
         }

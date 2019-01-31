@@ -1,17 +1,22 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_error;
+import android.util.SparseIntArray;
+import java.util.ArrayList;
 
-final /* synthetic */ class MessagesController$$Lambda$37 implements RequestDelegate {
+final /* synthetic */ class MessagesController$$Lambda$37 implements Runnable {
     private final MessagesController arg$1;
+    private final ArrayList arg$2;
+    private final boolean arg$3;
+    private final SparseIntArray arg$4;
 
-    MessagesController$$Lambda$37(MessagesController messagesController) {
+    MessagesController$$Lambda$37(MessagesController messagesController, ArrayList arrayList, boolean z, SparseIntArray sparseIntArray) {
         this.arg$1 = messagesController;
+        this.arg$2 = arrayList;
+        this.arg$3 = z;
+        this.arg$4 = sparseIntArray;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$deleteUserPhoto$55$MessagesController(tLObject, tL_error);
+    public void run() {
+        this.arg$1.lambda$processLoadedBlockedUsers$55$MessagesController(this.arg$2, this.arg$3, this.arg$4);
     }
 }

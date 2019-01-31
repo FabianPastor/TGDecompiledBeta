@@ -12,6 +12,6 @@ final /* synthetic */ class MessagesStorage$$Lambda$86 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$markMessageAsSendError$115$MessagesStorage(this.arg$2);
+        this.arg$1.lambda$markMessageAsSendError$116$MessagesStorage(this.arg$2);
     }
 }

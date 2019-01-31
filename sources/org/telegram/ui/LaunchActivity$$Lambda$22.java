@@ -1,16 +1,12 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
+final /* synthetic */ class LaunchActivity$$Lambda$22 implements Runnable {
+    static final Runnable $instance = new LaunchActivity$$Lambda$22();
 
-final /* synthetic */ class LaunchActivity$$Lambda$22 implements OnClickListener {
-    private final int arg$1;
-
-    LaunchActivity$$Lambda$22(int i) {
-        this.arg$1 = i;
+    private LaunchActivity$$Lambda$22() {
     }
 
-    public void onClick(DialogInterface dialogInterface, int i) {
-        LaunchActivity.lambda$didReceivedNotification$36$LaunchActivity(this.arg$1, dialogInterface, i);
+    public void run() {
+        LaunchActivity.lambda$onResume$36$LaunchActivity();
     }
 }

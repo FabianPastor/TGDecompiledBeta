@@ -59,6 +59,7 @@ public class MediaActionDrawable extends Drawable {
     private long lastAnimationTime;
     private int lastPercent = -1;
     private int nextIcon;
+    private float overrideAlpha = 1.0f;
     private Paint paint = new Paint(1);
     private Paint paint2 = new Paint(1);
     private Path path1 = new Path();
@@ -89,9 +90,10 @@ public class MediaActionDrawable extends Drawable {
     }
 
     public void setAlpha(int alpha) {
-        this.paint.setAlpha(alpha);
-        this.paint2.setAlpha(alpha);
-        this.textPaint.setAlpha(alpha);
+    }
+
+    public void setOverrideAlpha(float alpha) {
+        this.overrideAlpha = alpha;
     }
 
     public void setColorFilter(ColorFilter colorFilter) {
@@ -131,10 +133,10 @@ public class MediaActionDrawable extends Drawable {
             }
             if (icon == 3) {
                 this.transitionAnimationTime = 400.0f;
-            } else if (icon == 6) {
-                this.transitionAnimationTime = 360.0f;
-            } else {
+            } else if (this.currentIcon == 4 || icon != 6) {
                 this.transitionAnimationTime = 220.0f;
+            } else {
+                this.transitionAnimationTime = 360.0f;
             }
             this.animatingTransition = true;
             this.nextIcon = icon;
@@ -161,6 +163,10 @@ public class MediaActionDrawable extends Drawable {
 
     public int getCurrentIcon() {
         return this.nextIcon;
+    }
+
+    public int getPreviousIcon() {
+        return this.currentIcon;
     }
 
     public void setProgress(float value, boolean animated) {
@@ -226,6 +232,9 @@ public class MediaActionDrawable extends Drawable {
             progress = 1.0f - this.transitionProgress;
             canvas.save();
             canvas.scale(progress, progress, (float) cx, (float) cy);
+        } else if ((this.nextIcon == 6 || this.nextIcon == 10) && this.currentIcon == 4) {
+            canvas.save();
+            canvas.scale(this.transitionProgress, this.transitionProgress, (float) cx, (float) cy);
         }
         int width = AndroidUtilities.dp(3.0f);
         if (this.currentIcon == 2 || this.nextIcon == 2) {
@@ -380,14 +389,14 @@ public class MediaActionDrawable extends Drawable {
                 this.rect.set((float) (bounds.left + diff), (float) (bounds.top + diff), (float) (bounds.right - diff), (float) (bounds.bottom - diff));
                 canvas.drawArc(this.rect, this.downloadRadOffset, rad, false, this.paint);
             }
-        } else if (this.currentIcon == 10 || this.currentIcon == 13) {
-            if (this.nextIcon == 4) {
+        } else if (this.currentIcon == 10 || this.nextIcon == 10 || this.currentIcon == 13) {
+            if (this.nextIcon == 4 || this.nextIcon == 6) {
                 alpha = (int) (255.0f * (1.0f - this.transitionProgress));
             } else {
                 alpha = 255;
             }
             if (alpha != 0) {
-                this.paint.setAlpha(alpha);
+                this.paint.setAlpha((int) (((float) alpha) * this.overrideAlpha));
                 rad = Math.max(4.0f, 360.0f * this.animatedDownloadProgress);
                 diff = AndroidUtilities.dp(this.isMini ? 2.0f : 4.0f);
                 this.rect.set((float) (bounds.left + diff), (float) (bounds.top + diff), (float) (bounds.right - diff), (float) (bounds.bottom - diff));
@@ -674,7 +683,7 @@ public class MediaActionDrawable extends Drawable {
             }
             invalidateSelf();
         }
-        if (this.nextIcon == 4) {
+        if (this.nextIcon == 4 || ((this.nextIcon == 6 || this.nextIcon == 10) && this.currentIcon == 4)) {
             canvas.restore();
         }
     }

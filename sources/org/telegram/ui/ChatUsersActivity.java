@@ -1882,7 +1882,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     return true;
                 }
                 items2 = new CharSequence[2];
-                items2[0] = this.isChannel ? LocaleController.getString("ChannelAddToChannel", R.string.ChannelAddToChannel) : LocaleController.getString("ChannelAddToGroup", R.string.ChannelAddToGroup);
+                String string = ChatObject.canAddUsers(this.currentChat) ? this.isChannel ? LocaleController.getString("ChannelAddToChannel", R.string.ChannelAddToChannel) : LocaleController.getString("ChannelAddToGroup", R.string.ChannelAddToGroup) : null;
+                items2[0] = string;
                 items2[1] = LocaleController.getString("ChannelDeleteFromList", R.string.ChannelDeleteFromList);
                 iArr = new int[2];
                 iArr = new int[]{R.drawable.actions_addmember2, R.drawable.chats_delete};

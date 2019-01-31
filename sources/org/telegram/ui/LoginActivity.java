@@ -3061,8 +3061,8 @@ public class LoginActivity extends BaseFragment {
                         builder.setNegativeButton(LocaleController.getString("Stop", R.string.Stop), new LoginActivity$1$$Lambda$0(this));
                         LoginActivity.this.showDialog(builder.create());
                     }
-                } else if (id == -1) {
-                    LoginActivity.this.onBackPressed();
+                } else if (id == -1 && LoginActivity.this.onBackPressed()) {
+                    LoginActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
                 }
             }
 
