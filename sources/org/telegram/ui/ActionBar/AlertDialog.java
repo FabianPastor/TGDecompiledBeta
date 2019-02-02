@@ -1046,7 +1046,10 @@ public class AlertDialog extends Dialog implements Callback {
     }
 
     public View getButton(int type) {
-        return this.buttonsLayout.findViewWithTag(Integer.valueOf(type));
+        if (this.buttonsLayout != null) {
+            return this.buttonsLayout.findViewWithTag(Integer.valueOf(type));
+        }
+        return null;
     }
 
     public void invalidateDrawable(Drawable who) {

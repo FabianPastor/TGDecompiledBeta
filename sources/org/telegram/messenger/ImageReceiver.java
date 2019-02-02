@@ -25,6 +25,8 @@ import org.telegram.tgnet.TLRPC.TL_document;
 import org.telegram.tgnet.TLRPC.TL_documentEncrypted;
 import org.telegram.tgnet.TLRPC.TL_fileEncryptedLocation;
 import org.telegram.tgnet.TLRPC.TL_fileLocation;
+import org.telegram.tgnet.TLRPC.TL_photoCachedSize;
+import org.telegram.tgnet.TLRPC.TL_photoSize;
 import org.telegram.tgnet.TLRPC.TL_photoStrippedSize;
 import org.telegram.ui.Components.AnimatedFileDrawable;
 import org.telegram.ui.Components.RecyclableDrawable;
@@ -229,7 +231,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
             } else if (fileLocation instanceof TL_photoStrippedSize) {
                 location2 = (TL_photoStrippedSize) fileLocation;
                 key = "stripped" + FileRefController.getKeyForParentObject(parentObject);
-            } else if (fileLocation instanceof PhotoSize) {
+            } else if ((fileLocation instanceof TL_photoSize) || (fileLocation instanceof TL_photoCachedSize)) {
                 photoSize = (PhotoSize) fileLocation;
                 key = photoSize.location.volume_id + "_" + photoSize.location.local_id;
             } else if (fileLocation instanceof WebFile) {
@@ -277,7 +279,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
             } else if (thumbLocation2 instanceof TL_photoStrippedSize) {
                 location2 = (TL_photoStrippedSize) thumbLocation2;
                 thumbKey = "stripped" + FileRefController.getKeyForParentObject(parentObject);
-            } else if (thumbLocation2 instanceof PhotoSize) {
+            } else if ((thumbLocation2 instanceof TL_photoSize) || (thumbLocation2 instanceof TL_photoCachedSize)) {
                 photoSize = (PhotoSize) thumbLocation2;
                 thumbKey = photoSize.location.volume_id + "_" + photoSize.location.local_id;
             } else if (thumbLocation2 instanceof String) {
@@ -687,19 +689,21 @@ public class ImageReceiver implements NotificationCenterDelegate {
                 bitmapH = (int) (((float) bitmapH) / scale);
                 this.drawRegion.set(this.imageX + ((this.imageW - bitmapW) / 2), this.imageY + ((this.imageH - bitmapH) / 2), this.imageX + ((this.imageW + bitmapW) / 2), this.imageY + ((this.imageH + bitmapH) / 2));
                 bitmapDrawable.setBounds(this.drawRegion);
-                try {
-                    bitmapDrawable.setAlpha(alpha);
-                    bitmapDrawable.draw(canvas);
-                } catch (Throwable e) {
-                    if (bitmapDrawable == this.currentImage && this.currentKey != null) {
-                        ImageLoader.getInstance().removeImage(this.currentKey);
-                        this.currentKey = null;
-                    } else if (bitmapDrawable == this.currentThumb && this.currentThumbKey != null) {
-                        ImageLoader.getInstance().removeImage(this.currentThumbKey);
-                        this.currentThumbKey = null;
+                if (this.isVisible) {
+                    try {
+                        bitmapDrawable.setAlpha(alpha);
+                        bitmapDrawable.draw(canvas);
+                    } catch (Throwable e) {
+                        if (bitmapDrawable == this.currentImage && this.currentKey != null) {
+                            ImageLoader.getInstance().removeImage(this.currentKey);
+                            this.currentKey = null;
+                        } else if (bitmapDrawable == this.currentThumb && this.currentThumbKey != null) {
+                            ImageLoader.getInstance().removeImage(this.currentThumbKey);
+                            this.currentThumbKey = null;
+                        }
+                        setImage(this.currentImageLocation, this.currentFilter, this.currentThumb, this.currentThumbLocation, this.currentThumbFilter, this.currentSize, this.currentExt, this.currentParentObject, this.currentCacheType);
+                        FileLog.e(e);
                     }
-                    setImage(this.currentImageLocation, this.currentFilter, this.currentThumb, this.currentThumbLocation, this.currentThumbFilter, this.currentSize, this.currentExt, this.currentParentObject, this.currentCacheType);
-                    FileLog.e(e);
                 }
                 canvas.restore();
                 return;
@@ -1083,6 +1087,10 @@ public class ImageReceiver implements NotificationCenterDelegate {
         this.isAspectFit = value;
     }
 
+    public boolean isAspectFit() {
+        return this.isAspectFit;
+    }
+
     public void setParentView(View view) {
         this.parentView = view;
         if (this.currentImage instanceof AnimatedFileDrawable) {
@@ -1233,7 +1241,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
         return this.currentKeyQuality;
     }
 
-    public int getcurrentAccount() {
+    public int getCurrentAccount() {
         return this.currentAccount;
     }
 

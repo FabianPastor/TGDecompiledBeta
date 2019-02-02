@@ -1577,9 +1577,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 ArrayList<Message> sentMessages = new ArrayList();
                                 sentMessages.add(message);
                                 updateMediaPaths(msgObj1, message, message.id, null, true);
+                                int existFlags = msgObj1.getMediaExistanceFlags();
                                 newMsgObj1.id = message.id;
                                 sentCount++;
-                                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new SendMessagesHelper$$Lambda$57(this, newMsgObj1, oldId, to_id, sentMessages, peer, message));
+                                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new SendMessagesHelper$$Lambda$57(this, newMsgObj1, oldId, to_id, sentMessages, peer, message, existFlags));
                             }
                         }
                     }
@@ -1600,16 +1601,16 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
     }
 
-    final /* synthetic */ void lambda$null$6$SendMessagesHelper(Message newMsgObj1, int oldId, Peer to_id, ArrayList sentMessages, long peer, Message message) {
+    final /* synthetic */ void lambda$null$6$SendMessagesHelper(Message newMsgObj1, int oldId, Peer to_id, ArrayList sentMessages, long peer, Message message, int existFlags) {
         MessagesStorage.getInstance(this.currentAccount).updateMessageStateAndId(newMsgObj1.random_id, Integer.valueOf(oldId), newMsgObj1.id, 0, false, to_id.channel_id);
         MessagesStorage.getInstance(this.currentAccount).putMessages(sentMessages, true, false, false, 0);
-        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$60(this, newMsgObj1, peer, oldId, message));
+        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$60(this, newMsgObj1, peer, oldId, message, existFlags));
     }
 
-    final /* synthetic */ void lambda$null$5$SendMessagesHelper(Message newMsgObj1, long peer, int oldId, Message message) {
+    final /* synthetic */ void lambda$null$5$SendMessagesHelper(Message newMsgObj1, long peer, int oldId, Message message, int existFlags) {
         newMsgObj1.send_state = 0;
         DataQuery.getInstance(this.currentAccount).increasePeerRaiting(peer);
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(oldId), Integer.valueOf(message.id), message, Long.valueOf(peer), Long.valueOf(0));
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(oldId), Integer.valueOf(message.id), message, Long.valueOf(peer), Long.valueOf(0), Integer.valueOf(existFlags));
         processSentMessage(oldId);
         removeFromSendingMessages(oldId);
     }
@@ -6780,6 +6781,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 }
                 sentMessages.add(message);
                 updateMediaPaths(msgObj, message, message.id, originalPath, false);
+                int existFlags = msgObj.getMediaExistanceFlags();
                 newMsgObj.id = message.id;
                 if ((newMsgObj.flags & Integer.MIN_VALUE) != 0) {
                     message.flags |= Integer.MIN_VALUE;
@@ -6794,8 +6796,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 if (null == null) {
                     StatsController.getInstance(this.currentAccount).incrementSentItemsCount(ApplicationLoader.getCurrentNetworkType(), 1, 1);
                     newMsgObj.send_state = 0;
-                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(oldId), Integer.valueOf(newMsgObj.id), newMsgObj, Long.valueOf(newMsgObj.dialog_id), Long.valueOf(grouped_id));
-                    MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new SendMessagesHelper$$Lambda$48(this, newMsgObj, oldId, sentMessages, grouped_id));
+                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(oldId), Integer.valueOf(newMsgObj.id), newMsgObj, Long.valueOf(newMsgObj.dialog_id), Long.valueOf(grouped_id), Integer.valueOf(existFlags));
+                    MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new SendMessagesHelper$$Lambda$48(this, newMsgObj, oldId, sentMessages, grouped_id, existFlags));
                 }
             }
             Utilities.stageQueue.postRunnable(new SendMessagesHelper$$Lambda$49(this, updates));
@@ -6823,15 +6825,15 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         MessagesController.getInstance(this.currentAccount).processNewChannelDifferenceParams(newMessage.pts, newMessage.pts_count, newMessage.message.to_id.channel_id);
     }
 
-    final /* synthetic */ void lambda$null$26$SendMessagesHelper(Message newMsgObj, int oldId, ArrayList sentMessages, long grouped_id) {
+    final /* synthetic */ void lambda$null$26$SendMessagesHelper(Message newMsgObj, int oldId, ArrayList sentMessages, long grouped_id, int existFlags) {
         MessagesStorage.getInstance(this.currentAccount).updateMessageStateAndId(newMsgObj.random_id, Integer.valueOf(oldId), newMsgObj.id, 0, false, newMsgObj.to_id.channel_id);
         MessagesStorage.getInstance(this.currentAccount).putMessages(sentMessages, true, false, false, 0);
-        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$50(this, newMsgObj, oldId, grouped_id));
+        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$50(this, newMsgObj, oldId, grouped_id, existFlags));
     }
 
-    final /* synthetic */ void lambda$null$25$SendMessagesHelper(Message newMsgObj, int oldId, long grouped_id) {
+    final /* synthetic */ void lambda$null$25$SendMessagesHelper(Message newMsgObj, int oldId, long grouped_id, int existFlags) {
         DataQuery.getInstance(this.currentAccount).increasePeerRaiting(newMsgObj.dialog_id);
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(oldId), Integer.valueOf(newMsgObj.id), newMsgObj, Long.valueOf(newMsgObj.dialog_id), Long.valueOf(grouped_id));
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(oldId), Integer.valueOf(newMsgObj.id), newMsgObj, Long.valueOf(newMsgObj.dialog_id), Long.valueOf(grouped_id), Integer.valueOf(existFlags));
         processSentMessage(oldId);
         removeFromSendingMessages(oldId);
     }
@@ -6989,6 +6991,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     final /* synthetic */ void lambda$null$39$SendMessagesHelper(TL_error error, Message newMsgObj, TLObject req, TLObject response, MessageObject msgObj, String originalPath) {
         boolean isSentError = false;
         if (error == null) {
+            int existFlags;
             int i;
             int oldId = newMsgObj.id;
             boolean isBroadcast = req instanceof TL_messages_sendBroadcast;
@@ -6997,6 +7000,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             if (response instanceof TL_updateShortSentMessage) {
                 TL_updateShortSentMessage res = (TL_updateShortSentMessage) response;
                 updateMediaPaths(msgObj, null, res.id, null, false);
+                existFlags = msgObj.getMediaExistanceFlags();
                 i = res.id;
                 newMsgObj.id = i;
                 newMsgObj.local_id = i;
@@ -7053,11 +7057,15 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                     }
                     message.unread = value.intValue() < message.id;
                     updateMediaPaths(msgObj, message, message.id, originalPath, false);
+                    existFlags = msgObj.getMediaExistanceFlags();
                     newMsgObj.id = message.id;
                 } else {
                     isSentError = true;
+                    existFlags = 0;
                 }
                 Utilities.stageQueue.postRunnable(new SendMessagesHelper$$Lambda$40(this, updates));
+            } else {
+                existFlags = 0;
             }
             if (MessageObject.isLiveLocationMessage(newMsgObj)) {
                 LocationController.getInstance(this.currentAccount).addSharingLocation(newMsgObj.dialog_id, newMsgObj.id, newMsgObj.media.period, newMsgObj);
@@ -7067,7 +7075,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 newMsgObj.send_state = 0;
                 NotificationCenter instance = NotificationCenter.getInstance(this.currentAccount);
                 int i2 = NotificationCenter.messageReceivedByServer;
-                Object[] objArr = new Object[5];
+                Object[] objArr = new Object[6];
                 objArr[0] = Integer.valueOf(oldId);
                 if (isBroadcast) {
                     i = oldId;
@@ -7078,8 +7086,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                 objArr[2] = newMsgObj;
                 objArr[3] = Long.valueOf(newMsgObj.dialog_id);
                 objArr[4] = Long.valueOf(0);
+                objArr[5] = Integer.valueOf(existFlags);
                 instance.postNotificationName(i2, objArr);
-                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new SendMessagesHelper$$Lambda$41(this, newMsgObj, oldId, isBroadcast, sentMessages, attachPath));
+                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new SendMessagesHelper$$Lambda$41(this, newMsgObj, oldId, isBroadcast, sentMessages, existFlags, attachPath));
             }
         } else {
             AlertsCreator.processError(this.currentAccount, error, null, req, new Object[0]);
@@ -7113,7 +7122,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         MessagesController.getInstance(this.currentAccount).processUpdates(updates, false);
     }
 
-    final /* synthetic */ void lambda$null$38$SendMessagesHelper(Message newMsgObj, int oldId, boolean isBroadcast, ArrayList sentMessages, String attachPath) {
+    final /* synthetic */ void lambda$null$38$SendMessagesHelper(Message newMsgObj, int oldId, boolean isBroadcast, ArrayList sentMessages, int existFlags, String attachPath) {
         MessagesStorage.getInstance(this.currentAccount).updateMessageStateAndId(newMsgObj.random_id, Integer.valueOf(oldId), isBroadcast ? oldId : newMsgObj.id, 0, false, newMsgObj.to_id.channel_id);
         MessagesStorage.getInstance(this.currentAccount).putMessages(sentMessages, true, false, isBroadcast, 0);
         if (isBroadcast) {
@@ -7121,13 +7130,13 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             currentMessage.add(newMsgObj);
             MessagesStorage.getInstance(this.currentAccount).putMessages(currentMessage, true, false, false, 0);
         }
-        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$42(this, isBroadcast, sentMessages, newMsgObj, oldId));
+        AndroidUtilities.runOnUIThread(new SendMessagesHelper$$Lambda$42(this, isBroadcast, sentMessages, newMsgObj, oldId, existFlags));
         if (MessageObject.isVideoMessage(newMsgObj) || MessageObject.isRoundVideoMessage(newMsgObj) || MessageObject.isNewGifMessage(newMsgObj)) {
             stopVideoService(attachPath);
         }
     }
 
-    final /* synthetic */ void lambda$null$37$SendMessagesHelper(boolean isBroadcast, ArrayList sentMessages, Message newMsgObj, int oldId) {
+    final /* synthetic */ void lambda$null$37$SendMessagesHelper(boolean isBroadcast, ArrayList sentMessages, Message newMsgObj, int oldId, int existFlags) {
         if (isBroadcast) {
             for (int a = 0; a < sentMessages.size(); a++) {
                 Message message = (Message) sentMessages.get(a);
@@ -7141,12 +7150,13 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         DataQuery.getInstance(this.currentAccount).increasePeerRaiting(newMsgObj.dialog_id);
         NotificationCenter instance = NotificationCenter.getInstance(this.currentAccount);
         int i = NotificationCenter.messageReceivedByServer;
-        Object[] objArr = new Object[5];
+        Object[] objArr = new Object[6];
         objArr[0] = Integer.valueOf(oldId);
         objArr[1] = Integer.valueOf(isBroadcast ? oldId : newMsgObj.id);
         objArr[2] = newMsgObj;
         objArr[3] = Long.valueOf(newMsgObj.dialog_id);
         objArr[4] = Long.valueOf(0);
+        objArr[5] = Integer.valueOf(existFlags);
         instance.postNotificationName(i, objArr);
         processSentMessage(oldId);
         removeFromSendingMessages(oldId);

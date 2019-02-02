@@ -126,6 +126,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
     private Bitmap currentWallpaperBitmap;
     private WallpaperActivityDelegate delegate;
     private Paint eraserPaint;
+    private String imageFilter = "640_360";
     private HeaderCell intensityCell;
     private SeekBarView intensitySeekBar;
     private boolean isBlurred;
@@ -134,6 +135,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
     private String loadingFile = null;
     private File loadingFileObject = null;
     private PhotoSize loadingSize = null;
+    private int maxWallpaperSize = 1920;
     private AnimatorSet motionAnimation;
     private WallpaperParallaxEffect parallaxEffect;
     private float parallaxScale = 1.0f;
@@ -589,7 +591,10 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
             message.out = true;
             message.to_id = new TL_peerUser();
             message.to_id.user_id = 0;
-            this.messages.add(new MessageObject(WallpaperActivity.this.currentAccount, message, true));
+            MessageObject messageObject = new MessageObject(WallpaperActivity.this.currentAccount, message, true);
+            messageObject.eventId = 1;
+            messageObject.resetLayout();
+            this.messages.add(messageObject);
             message = new TL_message();
             if (WallpaperActivity.this.currentWallpaper instanceof ColorWallpaper) {
                 message.message = LocaleController.getString("BackgroundColorSinglePreviewLine1", R.string.BackgroundColorSinglePreviewLine1);
@@ -606,12 +611,15 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
             message.out = false;
             message.to_id = new TL_peerUser();
             message.to_id.user_id = UserConfig.getInstance(WallpaperActivity.this.currentAccount).getClientUserId();
-            this.messages.add(new MessageObject(WallpaperActivity.this.currentAccount, message, true));
+            messageObject = new MessageObject(WallpaperActivity.this.currentAccount, message, true);
+            messageObject.eventId = 1;
+            messageObject.resetLayout();
+            this.messages.add(messageObject);
             message = new TL_message();
             message.message = LocaleController.formatDateChat((long) date);
             message.id = 0;
             message.date = date;
-            MessageObject messageObject = new MessageObject(WallpaperActivity.this.currentAccount, message, false);
+            messageObject = new MessageObject(WallpaperActivity.this.currentAccount, message, false);
             messageObject.type = 10;
             messageObject.contentType = 1;
             messageObject.isDateObject = true;
@@ -909,6 +917,8 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
 
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
+        this.imageFilter = ((int) (1920.0f / AndroidUtilities.density)) + "_" + ((int) (1080.0f / AndroidUtilities.density));
+        this.maxWallpaperSize = Math.min(1920, Math.max(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y));
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.wallpapersNeedReload);
         this.TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
         this.textPaint = new TextPaint(1);
@@ -1297,7 +1307,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
             File f;
             SearchImage wallpaper2 = this.currentWallpaper;
             if (wallpaper2.photo != null) {
-                f = FileLoader.getPathToAttach(FileLoader.getClosestPhotoSizeWithSize(wallpaper2.photo.sizes, Math.max(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y), true), true);
+                f = FileLoader.getPathToAttach(FileLoader.getClosestPhotoSizeWithSize(wallpaper2.photo.sizes, this.maxWallpaperSize, true), true);
             } else {
                 f = ImageLoader.getHttpFilePath(wallpaper2.imageUrl, "jpg");
             }
@@ -1353,7 +1363,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         } else if (this.currentWallpaper instanceof SearchImage) {
             SearchImage wallPaper4 = this.currentWallpaper;
             if (wallPaper4.photo != null) {
-                path = FileLoader.getPathToAttach(FileLoader.getClosestPhotoSizeWithSize(wallPaper4.photo.sizes, Math.max(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y), true), true);
+                path = FileLoader.getPathToAttach(FileLoader.getClosestPhotoSizeWithSize(wallPaper4.photo.sizes, this.maxWallpaperSize, true), true);
             } else {
                 path = ImageLoader.getHttpFilePath(wallPaper4.imageUrl, "jpg");
             }
@@ -1450,7 +1460,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
             if (this.selectedPattern == null) {
                 this.backgroundImage.setImageDrawable(null);
             } else {
-                this.backgroundImage.setImage(this.selectedPattern.document, "640_360", null, null, "jpg", this.selectedPattern.document.size, 1, this.selectedPattern);
+                this.backgroundImage.setImage(this.selectedPattern.document, this.imageFilter, null, null, "jpg", this.selectedPattern.document.size, 1, this.selectedPattern);
             }
             CheckBoxView checkBoxView = this.checkBoxView[1];
             if (this.selectedPattern != null) {
@@ -1481,7 +1491,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
             updateButtonState(this.radialProgress, null, this, false, true);
         } else {
             TL_wallPaper wallPaper = (TL_wallPaper) this.patterns.get(position - 1);
-            this.backgroundImage.setImage(wallPaper.document, "640_360", null, null, "jpg", wallPaper.document.size, 1, wallPaper);
+            this.backgroundImage.setImage(wallPaper.document, this.imageFilter, null, null, "jpg", wallPaper.document.size, 1, wallPaper);
             this.selectedPattern = wallPaper;
             this.isMotion = this.checkBoxView[2].isChecked();
             updateButtonState(this.radialProgress, null, this, false, true);
@@ -1594,7 +1604,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
             }
             SearchImage wallPaper2 = (SearchImage) object;
             if (wallPaper2.photo != null) {
-                PhotoSize photoSize = FileLoader.getClosestPhotoSizeWithSize(wallPaper2.photo.sizes, Math.max(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y), true);
+                PhotoSize photoSize = FileLoader.getClosestPhotoSizeWithSize(wallPaper2.photo.sizes, this.maxWallpaperSize, true);
                 path = FileLoader.getPathToAttach(photoSize, true);
                 fileName = FileLoader.getAttachFileName(photoSize);
                 size = photoSize.size;
@@ -1856,11 +1866,11 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
     private void setCurrentImage(boolean setThumb) {
         if (this.currentWallpaper instanceof TL_wallPaper) {
             TL_wallPaper wallPaper = this.currentWallpaper;
-            this.backgroundImage.setImage(wallPaper.document, "640_360", setThumb ? FileLoader.getClosestPhotoSizeWithSize(wallPaper.document.thumbs, 100) : null, "100_100_b", "jpg", wallPaper.document.size, 1, wallPaper);
+            this.backgroundImage.setImage(wallPaper.document, this.imageFilter, setThumb ? FileLoader.getClosestPhotoSizeWithSize(wallPaper.document.thumbs, 100) : null, "100_100_b", "jpg", wallPaper.document.size, 1, wallPaper);
         } else if (this.currentWallpaper instanceof ColorWallpaper) {
             setBackgroundColor(this.currentWallpaper.color);
             if (this.selectedPattern != null) {
-                this.backgroundImage.setImage(this.selectedPattern.document, "640_360", null, null, "jpg", this.selectedPattern.document.size, 1, this.selectedPattern);
+                this.backgroundImage.setImage(this.selectedPattern.document, this.imageFilter, null, null, "jpg", this.selectedPattern.document.size, 1, this.selectedPattern);
             }
         } else if (this.currentWallpaper instanceof FileWallpaper) {
             if (this.currentWallpaperBitmap != null) {
@@ -1869,9 +1879,9 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
             }
             FileWallpaper wallPaper2 = this.currentWallpaper;
             if (wallPaper2.originalPath != null) {
-                this.backgroundImage.setImage(wallPaper2.originalPath.getAbsolutePath(), "640_360", null);
+                this.backgroundImage.setImage(wallPaper2.originalPath.getAbsolutePath(), this.imageFilter, null);
             } else if (wallPaper2.path != null) {
-                this.backgroundImage.setImage(wallPaper2.path.getAbsolutePath(), "640_360", null);
+                this.backgroundImage.setImage(wallPaper2.path.getAbsolutePath(), this.imageFilter, null);
             } else if (((long) wallPaper2.resId) == -2) {
                 this.backgroundImage.setImageDrawable(Theme.getThemedWallpaper(false));
             } else if (wallPaper2.resId != 0) {
@@ -1881,14 +1891,14 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
             SearchImage wallPaper3 = this.currentWallpaper;
             if (wallPaper3.photo != null) {
                 PhotoSize thumb = FileLoader.getClosestPhotoSizeWithSize(wallPaper3.photo.sizes, 100);
-                PhotoSize image = FileLoader.getClosestPhotoSizeWithSize(wallPaper3.photo.sizes, Math.max(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y), true);
+                PhotoSize image = FileLoader.getClosestPhotoSizeWithSize(wallPaper3.photo.sizes, this.maxWallpaperSize, true);
                 if (image == thumb) {
                     image = null;
                 }
-                this.backgroundImage.setImage(image, "640_360", thumb, "100_100_b", "jpg", image != null ? image.size : 0, 1, wallPaper3);
+                this.backgroundImage.setImage(image, this.imageFilter, thumb, "100_100_b", "jpg", image != null ? image.size : 0, 1, wallPaper3);
                 return;
             }
-            this.backgroundImage.setImage(wallPaper3.imageUrl, "640_640", wallPaper3.thumbUrl, "100_100_b");
+            this.backgroundImage.setImage(wallPaper3.imageUrl, this.imageFilter, wallPaper3.thumbUrl, "100_100_b");
         }
     }
 

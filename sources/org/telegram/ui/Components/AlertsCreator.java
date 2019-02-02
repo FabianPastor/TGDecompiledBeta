@@ -1254,7 +1254,10 @@ public class AlertsCreator {
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 AlertDialog alertDialog = builder.create();
                 fragment.showDialog(alertDialog);
-                ((TextView) alertDialog.getButton(-1)).setTextColor(Theme.getColor("dialogTextRed2"));
+                TextView button = (TextView) alertDialog.getButton(-1);
+                if (button != null) {
+                    button.setTextColor(Theme.getColor("dialogTextRed2"));
+                }
             }
         }
     }

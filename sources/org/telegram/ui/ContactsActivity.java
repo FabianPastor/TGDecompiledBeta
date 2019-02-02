@@ -135,7 +135,6 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.updateInterfaces);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.encryptedChatCreated);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.closeChats);
-        MessagesController.getGlobalNotificationsSettings().getBoolean("askAboutContacts", true);
         this.checkPermission = UserConfig.getInstance(this.currentAccount).syncContacts;
         if (this.arguments != null) {
             this.onlyUsers = getArguments().getBoolean("onlyUsers", false);
@@ -697,15 +696,10 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     }
 
     final /* synthetic */ void lambda$onResume$5$ContactsActivity(int param) {
-        boolean z;
+        this.askAboutContacts = param != 0;
         if (param != 0) {
-            z = true;
-        } else {
-            z = false;
+            askForPermissons(false);
         }
-        this.askAboutContacts = z;
-        MessagesController.getGlobalNotificationsSettings().edit().putBoolean("askAboutContacts", this.askAboutContacts).commit();
-        askForPermissons(false);
     }
 
     public void onConfigurationChanged(Configuration newConfig) {
@@ -730,7 +724,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
 
     protected void onDialogDismiss(Dialog dialog) {
         super.onDialogDismiss(dialog);
-        if (this.permissionDialog != null && dialog == this.permissionDialog && getParentActivity() != null) {
+        if (this.permissionDialog != null && dialog == this.permissionDialog && getParentActivity() != null && this.askAboutContacts) {
             askForPermissons(false);
         }
     }
@@ -752,15 +746,10 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     }
 
     final /* synthetic */ void lambda$askForPermissons$6$ContactsActivity(int param) {
-        boolean z;
+        this.askAboutContacts = param != 0;
         if (param != 0) {
-            z = true;
-        } else {
-            z = false;
+            askForPermissons(false);
         }
-        this.askAboutContacts = z;
-        MessagesController.getGlobalNotificationsSettings().edit().putBoolean("askAboutContacts", this.askAboutContacts).commit();
-        askForPermissons(false);
     }
 
     public void onRequestPermissionsResultFragment(int requestCode, String[] permissions, int[] grantResults) {

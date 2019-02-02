@@ -1270,7 +1270,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 this.checkPermission = false;
                 if (activity.checkSelfPermission("android.permission.READ_CONTACTS") != 0 || activity.checkSelfPermission("android.permission.WRITE_EXTERNAL_STORAGE") != 0) {
                     Dialog create;
-                    if (UserConfig.getInstance(this.currentAccount).syncContacts && activity.shouldShowRequestPermissionRationale("android.permission.READ_CONTACTS")) {
+                    if (this.askAboutContacts && UserConfig.getInstance(this.currentAccount).syncContacts && activity.shouldShowRequestPermissionRationale("android.permission.READ_CONTACTS")) {
                         create = AlertsCreator.createContactsPermissionDialog(activity, new DialogsActivity$$Lambda$4(this)).create();
                         this.permissionDialog = create;
                         showDialog(create);
@@ -1334,6 +1334,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         super.onPause();
         if (this.commentView != null) {
             this.commentView.onResume();
+        }
+        if (this.undoView != null) {
+            this.undoView.hide(true, false);
         }
     }
 
@@ -1490,7 +1493,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
 
     protected void onDialogDismiss(Dialog dialog) {
         super.onDialogDismiss(dialog);
-        if (this.permissionDialog != null && dialog == this.permissionDialog && getParentActivity() != null) {
+        if (this.permissionDialog != null && dialog == this.permissionDialog && getParentActivity() != null && this.askAboutContacts) {
             askForPermissons(false);
         }
     }

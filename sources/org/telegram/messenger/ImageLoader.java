@@ -4304,7 +4304,7 @@ public class ImageLoader {
             }
             int finalTag = TAG;
             boolean finalIsNeedsQualityThumb = imageReceiver.isNeedsQualityThumb();
-            this.imageLoadQueue.postRunnable(new ImageLoader$$Lambda$4(this, thumb, url, key, finalTag, imageReceiver, filter, imageLocation, imageReceiver.isCurrentKeyQuality(), imageReceiver.getParentObject(), finalIsNeedsQualityThumb, imageReceiver.isShouldGenerateQualityThumb(), cacheType, size, ext, imageReceiver.getcurrentAccount()));
+            this.imageLoadQueue.postRunnable(new ImageLoader$$Lambda$4(this, thumb, url, key, finalTag, imageReceiver, filter, imageLocation, imageReceiver.isCurrentKeyQuality(), imageReceiver.getParentObject(), finalIsNeedsQualityThumb, imageReceiver.isShouldGenerateQualityThumb(), cacheType, size, ext, imageReceiver.getCurrentAccount()));
         }
     }
 

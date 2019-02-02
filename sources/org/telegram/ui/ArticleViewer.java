@@ -4478,7 +4478,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             if (this.currentType == 0) {
             }
             if (this.currentBlock != null) {
-                if (!(this.imageView.hasBitmapImage() && ((float) this.imageView.getcurrentAccount()) == 1.0f)) {
+                if (!(this.imageView.hasBitmapImage() && this.imageView.getCurrentAlpha() == 1.0f)) {
                     canvas.drawRect((float) this.imageView.getImageX(), (float) this.imageView.getImageY(), (float) this.imageView.getImageX2(), (float) this.imageView.getImageY2(), ArticleViewer.photoBackgroundPaint);
                 }
                 this.imageView.draw(canvas);
@@ -5706,6 +5706,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     } else {
                         this.imageView.setImage(null, null, thumb, "80_80_b", 0, null, ArticleViewer.this.currentPage, 1);
                     }
+                    this.imageView.setAspectFit(this.isGif);
                     this.buttonX = (int) (((float) this.imageView.getImageX()) + (((float) (this.imageView.getImageWidth() - size)) / 2.0f));
                     this.buttonY = (int) (((float) this.imageView.getImageY()) + (((float) (this.imageView.getImageHeight() - size)) / 2.0f));
                     this.radialProgress.setProgressRect(this.buttonX, this.buttonY, this.buttonX + size, this.buttonY + size);
@@ -5740,8 +5741,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             if (this.currentType == 0) {
             }
             if (this.currentBlock != null) {
-                if (!(this.imageView.hasBitmapImage() && ((float) this.imageView.getcurrentAccount()) == 1.0f)) {
-                    canvas.drawRect((float) this.imageView.getImageX(), (float) this.imageView.getImageY(), (float) this.imageView.getImageX2(), (float) this.imageView.getImageY2(), ArticleViewer.photoBackgroundPaint);
+                if (!(this.imageView.hasBitmapImage() && this.imageView.getCurrentAlpha() == 1.0f)) {
+                    canvas.drawRect(this.imageView.getDrawRegion(), ArticleViewer.photoBackgroundPaint);
                 }
                 this.imageView.draw(canvas);
                 if (this.imageView.getVisible()) {
@@ -8264,6 +8265,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     animatorArr[1] = ObjectAnimator.ofFloat(this.listView[0], View.ALPHA, new float[]{0.0f, 1.0f});
                     animatorSet.playTogether(animatorArr);
                 } else if (order == -1) {
+                    this.listView[0].setAlpha(1.0f);
+                    this.listView[0].setTranslationX(0.0f);
                     animatorSet = this.pageSwitchAnimation;
                     animatorArr = new Animator[2];
                     animatorArr[0] = ObjectAnimator.ofFloat(this.listView[1], View.TRANSLATION_X, new float[]{0.0f, (float) AndroidUtilities.dp(56.0f)});
@@ -9128,6 +9131,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             int start;
             int end;
             int shift;
+            int dp;
             Spanned spanned = (Spanned) finalText;
             try {
                 AnchorSpan[] innerSpans = (AnchorSpan[]) spanned.getSpans(0, spanned.length(), AnchorSpan.class);
@@ -9155,8 +9159,11 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                             linkPath.setCurrentLayout(result, start, 0.0f);
                             shift = innerSpans2[a].getTextPaint() != null ? innerSpans2[a].getTextPaint().baselineShift : 0;
                             if (shift != 0) {
-                                null.setBaselineShift(AndroidUtilities.dp(shift > 0 ? 5.0f : -2.0f) + shift);
+                                dp = AndroidUtilities.dp(shift > 0 ? 5.0f : -2.0f) + shift;
+                            } else {
+                                dp = 0;
                             }
+                            linkPath.setBaselineShift(dp);
                             result.getSelectionPath(start, end, linkPath);
                         }
                         linkPath.setAllowReset(true);
@@ -9179,8 +9186,11 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                             linkPath.setCurrentLayout(result, start, 0.0f);
                             shift = innerSpans3[a].getTextPaint() != null ? innerSpans3[a].getTextPaint().baselineShift : 0;
                             if (shift != 0) {
-                                linkPath.setBaselineShift(AndroidUtilities.dp(shift > 0 ? 5.0f : -2.0f) + shift);
+                                dp = AndroidUtilities.dp(shift > 0 ? 5.0f : -2.0f) + shift;
+                            } else {
+                                dp = 0;
                             }
+                            linkPath.setBaselineShift(dp);
                             result.getSelectionPath(start, end, linkPath);
                         }
                         linkPath.setAllowReset(true);
@@ -10653,6 +10663,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.containerView.setTranslationX(0.0f);
         this.containerView.setTranslationY(0.0f);
         this.listView[0].setTranslationY(0.0f);
+        this.listView[0].setTranslationX(0.0f);
+        this.listView[1].setTranslationX(0.0f);
         this.listView[0].setAlpha(1.0f);
         this.windowView.setInnerTranslationX(0.0f);
         this.actionBar.setVisibility(8);
@@ -12013,6 +12025,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             return false;
         }
         float scale;
+        int clipHorizontal;
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidFailedLoad);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidLoad);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileLoadProgressChanged);
@@ -12077,7 +12090,11 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             xPos += (float) ((WindowInsets) this.lastInsets).getSystemWindowInsetLeft();
         }
         float yPos = (((float) (AndroidUtilities.displaySize.y + AndroidUtilities.statusBarHeight)) - height) / 2.0f;
-        int clipHorizontal = Math.abs(drawRegion.left - object.imageReceiver.getImageX());
+        if (object.imageReceiver.isAspectFit()) {
+            clipHorizontal = 0;
+        } else {
+            clipHorizontal = Math.abs(drawRegion.left - object.imageReceiver.getImageX());
+        }
         int clipVertical = Math.abs(drawRegion.top - object.imageReceiver.getImageY());
         int[] coords2 = new int[2];
         object.parentView.getLocationInWindow(coords2);
@@ -12241,8 +12258,13 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 this.animatingImageView.setScaleX(this.scale * scale2);
                 this.animatingImageView.setScaleY(this.scale * scale2);
                 if (object != null) {
+                    int clipHorizontal;
                     object.imageReceiver.setVisible(false, true);
-                    int clipHorizontal = Math.abs(drawRegion.left - object.imageReceiver.getImageX());
+                    if (object.imageReceiver.isAspectFit()) {
+                        clipHorizontal = 0;
+                    } else {
+                        clipHorizontal = Math.abs(drawRegion.left - object.imageReceiver.getImageX());
+                    }
                     int clipVertical = Math.abs(drawRegion.top - object.imageReceiver.getImageY());
                     int[] coords2 = new int[2];
                     object.parentView.getLocationInWindow(coords2);

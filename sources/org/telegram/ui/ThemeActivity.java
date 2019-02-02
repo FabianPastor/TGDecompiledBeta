@@ -960,6 +960,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             message.to_id = new TL_peerUser();
             message.to_id.user_id = 0;
             MessageObject message1 = new MessageObject(ThemeActivity.this.currentAccount, message, true);
+            message1.resetLayout();
+            message1.eventId = 1;
             message = new TL_message();
             message.message = LocaleController.getString("FontSizePreviewLine1", R.string.FontSizePreviewLine1);
             message.date = date + 60;
@@ -974,6 +976,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             message.to_id.user_id = UserConfig.getInstance(ThemeActivity.this.currentAccount).getClientUserId();
             MessageObject message2 = new MessageObject(ThemeActivity.this.currentAccount, message, true);
             message2.customReplyName = "Lucio";
+            message2.eventId = 1;
+            message2.resetLayout();
             message2.replyMessageObject = messageObject;
             for (int a = 0; a < this.cells.length; a++) {
                 MessageObject messageObject2;

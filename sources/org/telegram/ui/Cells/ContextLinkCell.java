@@ -437,6 +437,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         if (this.drawLinkImageView) {
             this.linkImageView.onDetachedFromWindow();
         }
+        this.radialProgress.onDetachedFromWindow();
         DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
     }
 
@@ -445,6 +446,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         if (this.drawLinkImageView && this.linkImageView.onAttachedToWindow()) {
             updateButtonState(false, false);
         }
+        this.radialProgress.onAttachedToWindow();
     }
 
     public MessageObject getMessageObject() {
