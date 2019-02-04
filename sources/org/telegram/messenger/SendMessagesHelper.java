@@ -7437,7 +7437,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     /* JADX WARNING: Removed duplicated region for block: B:78:0x0168  */
     /* JADX WARNING: Removed duplicated region for block: B:81:0x016f  */
     /* JADX WARNING: Removed duplicated region for block: B:84:0x0185  */
-    /* JADX WARNING: Removed duplicated region for block: B:203:0x047b  */
+    /* JADX WARNING: Removed duplicated region for block: B:211:0x04a5  */
     /* JADX WARNING: Removed duplicated region for block: B:124:0x02d3  */
     /* JADX WARNING: Removed duplicated region for block: B:127:0x02de  */
     /* JADX WARNING: Removed duplicated region for block: B:129:0x02e8  */
@@ -7451,7 +7451,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     /* JADX WARNING: Removed duplicated region for block: B:81:0x016f  */
     /* JADX WARNING: Removed duplicated region for block: B:84:0x0185  */
     /* JADX WARNING: Removed duplicated region for block: B:124:0x02d3  */
-    /* JADX WARNING: Removed duplicated region for block: B:203:0x047b  */
+    /* JADX WARNING: Removed duplicated region for block: B:211:0x04a5  */
     /* JADX WARNING: Removed duplicated region for block: B:127:0x02de  */
     /* JADX WARNING: Removed duplicated region for block: B:129:0x02e8  */
     /* JADX WARNING: Removed duplicated region for block: B:171:0x03bc A:{SYNTHETIC, Splitter: B:171:0x03bc} */
@@ -7465,7 +7465,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     /* JADX WARNING: Removed duplicated region for block: B:78:0x0168  */
     /* JADX WARNING: Removed duplicated region for block: B:81:0x016f  */
     /* JADX WARNING: Removed duplicated region for block: B:84:0x0185  */
-    /* JADX WARNING: Removed duplicated region for block: B:203:0x047b  */
+    /* JADX WARNING: Removed duplicated region for block: B:211:0x04a5  */
     /* JADX WARNING: Removed duplicated region for block: B:124:0x02d3  */
     /* JADX WARNING: Removed duplicated region for block: B:127:0x02de  */
     /* JADX WARNING: Removed duplicated region for block: B:129:0x02e8  */
@@ -7737,30 +7737,34 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r3.add(r0);
     L_0x01c2:
         r3 = r30.length();
-        if (r3 == 0) goto L_0x0468;
+        if (r3 == 0) goto L_0x0492;
     L_0x01c8:
         r3 = -1;
         r6 = r31.hashCode();
         switch(r6) {
-            case 109967: goto L_0x0429;
-            case 3145576: goto L_0x0437;
+            case 106458: goto L_0x0437;
+            case 108272: goto L_0x0429;
+            case 109967: goto L_0x0445;
+            case 3145576: goto L_0x0453;
             case 3418175: goto L_0x041b;
             case 3645340: goto L_0x040d;
             default: goto L_0x01d0;
         };
     L_0x01d0:
         switch(r3) {
-            case 0: goto L_0x0445;
-            case 1: goto L_0x044c;
-            case 2: goto L_0x0453;
-            case 3: goto L_0x045a;
+            case 0: goto L_0x0461;
+            case 1: goto L_0x0468;
+            case 2: goto L_0x046f;
+            case 3: goto L_0x0476;
+            case 4: goto L_0x047d;
+            case 5: goto L_0x0484;
             default: goto L_0x01d3;
         };
     L_0x01d3:
         r0 = r42;
         r1 = r31;
         r41 = r0.getMimeTypeFromExtension(r1);
-        if (r41 == 0) goto L_0x0461;
+        if (r41 == 0) goto L_0x048b;
     L_0x01dd:
         r0 = r41;
         r5.mime_type = r0;
@@ -7777,36 +7781,36 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r3 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
         if (r3 != 0) goto L_0x0237;
     L_0x01f8:
-        r3 = r33.getAbsolutePath();	 Catch:{ Exception -> 0x046f }
+        r3 = r33.getAbsolutePath();	 Catch:{ Exception -> 0x0499 }
         r6 = 0;
         r7 = NUM; // 0x42b40000 float:90.0 double:5.529052754E-315;
         r8 = NUM; // 0x42b40000 float:90.0 double:5.529052754E-315;
         r9 = 1;
-        r23 = org.telegram.messenger.ImageLoader.loadBitmap(r3, r6, r7, r8, r9);	 Catch:{ Exception -> 0x046f }
+        r23 = org.telegram.messenger.ImageLoader.loadBitmap(r3, r6, r7, r8, r9);	 Catch:{ Exception -> 0x0499 }
         if (r23 == 0) goto L_0x0237;
     L_0x0208:
         r3 = "animation.gif";
         r0 = r35;
-        r0.file_name = r3;	 Catch:{ Exception -> 0x046f }
-        r3 = r5.attributes;	 Catch:{ Exception -> 0x046f }
-        r6 = new org.telegram.tgnet.TLRPC$TL_documentAttributeAnimated;	 Catch:{ Exception -> 0x046f }
-        r6.<init>();	 Catch:{ Exception -> 0x046f }
-        r3.add(r6);	 Catch:{ Exception -> 0x046f }
+        r0.file_name = r3;	 Catch:{ Exception -> 0x0499 }
+        r3 = r5.attributes;	 Catch:{ Exception -> 0x0499 }
+        r6 = new org.telegram.tgnet.TLRPC$TL_documentAttributeAnimated;	 Catch:{ Exception -> 0x0499 }
+        r6.<init>();	 Catch:{ Exception -> 0x0499 }
+        r3.add(r6);	 Catch:{ Exception -> 0x0499 }
         r3 = NUM; // 0x42b40000 float:90.0 double:5.529052754E-315;
         r6 = NUM; // 0x42b40000 float:90.0 double:5.529052754E-315;
         r7 = 55;
         r0 = r23;
-        r48 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r0, r3, r6, r7, r4);	 Catch:{ Exception -> 0x046f }
+        r48 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r0, r3, r6, r7, r4);	 Catch:{ Exception -> 0x0499 }
         if (r48 == 0) goto L_0x0234;
     L_0x0227:
-        r3 = r5.thumbs;	 Catch:{ Exception -> 0x046f }
+        r3 = r5.thumbs;	 Catch:{ Exception -> 0x0499 }
         r0 = r48;
-        r3.add(r0);	 Catch:{ Exception -> 0x046f }
-        r3 = r5.flags;	 Catch:{ Exception -> 0x046f }
+        r3.add(r0);	 Catch:{ Exception -> 0x0499 }
+        r3 = r5.flags;	 Catch:{ Exception -> 0x0499 }
         r3 = r3 | 1;
-        r5.flags = r3;	 Catch:{ Exception -> 0x046f }
+        r5.flags = r3;	 Catch:{ Exception -> 0x0499 }
     L_0x0234:
-        r23.recycle();	 Catch:{ Exception -> 0x046f }
+        r23.recycle();	 Catch:{ Exception -> 0x0499 }
     L_0x0237:
         r3 = r5.mime_type;
         r6 = "image/webp";
@@ -7821,25 +7825,25 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r24.<init>();
         r3 = 1;
         r0 = r24;
-        r0.inJustDecodeBounds = r3;	 Catch:{ Exception -> 0x0475 }
-        r34 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x0475 }
+        r0.inJustDecodeBounds = r3;	 Catch:{ Exception -> 0x049f }
+        r34 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x049f }
         r3 = "r";
         r0 = r34;
         r1 = r52;
-        r0.<init>(r1, r3);	 Catch:{ Exception -> 0x0475 }
-        r6 = r34.getChannel();	 Catch:{ Exception -> 0x0475 }
-        r7 = java.nio.channels.FileChannel.MapMode.READ_ONLY;	 Catch:{ Exception -> 0x0475 }
+        r0.<init>(r1, r3);	 Catch:{ Exception -> 0x049f }
+        r6 = r34.getChannel();	 Catch:{ Exception -> 0x049f }
+        r7 = java.nio.channels.FileChannel.MapMode.READ_ONLY;	 Catch:{ Exception -> 0x049f }
         r8 = 0;
-        r3 = r52.length();	 Catch:{ Exception -> 0x0475 }
-        r10 = (long) r3;	 Catch:{ Exception -> 0x0475 }
-        r25 = r6.map(r7, r8, r10);	 Catch:{ Exception -> 0x0475 }
+        r3 = r52.length();	 Catch:{ Exception -> 0x049f }
+        r10 = (long) r3;	 Catch:{ Exception -> 0x049f }
+        r25 = r6.map(r7, r8, r10);	 Catch:{ Exception -> 0x049f }
         r3 = 0;
-        r6 = r25.limit();	 Catch:{ Exception -> 0x0475 }
+        r6 = r25.limit();	 Catch:{ Exception -> 0x049f }
         r7 = 1;
         r0 = r25;
         r1 = r24;
-        org.telegram.messenger.Utilities.loadWebpImage(r3, r0, r6, r1, r7);	 Catch:{ Exception -> 0x0475 }
-        r34.close();	 Catch:{ Exception -> 0x0475 }
+        org.telegram.messenger.Utilities.loadWebpImage(r3, r0, r6, r1, r7);	 Catch:{ Exception -> 0x049f }
+        r34.close();	 Catch:{ Exception -> 0x049f }
     L_0x027d:
         r0 = r24;
         r3 = r0.outWidth;
@@ -7885,7 +7889,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r0 = r20;
         r3.add(r0);
     L_0x02d1:
-        if (r59 == 0) goto L_0x047b;
+        if (r59 == 0) goto L_0x04a5;
     L_0x02d3:
         r17 = r59.toString();
     L_0x02d7:
@@ -7953,38 +7957,38 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r39 = 0;
         r40 = new android.media.MediaMetadataRetriever;	 Catch:{ Exception -> 0x03a8 }
         r40.<init>();	 Catch:{ Exception -> 0x03a8 }
-        r3 = r33.getAbsolutePath();	 Catch:{ Exception -> 0x0485, all -> 0x0480 }
+        r3 = r33.getAbsolutePath();	 Catch:{ Exception -> 0x04af, all -> 0x04aa }
         r0 = r40;
-        r0.setDataSource(r3);	 Catch:{ Exception -> 0x0485, all -> 0x0480 }
+        r0.setDataSource(r3);	 Catch:{ Exception -> 0x04af, all -> 0x04aa }
         r3 = 9;
         r0 = r40;
-        r26 = r0.extractMetadata(r3);	 Catch:{ Exception -> 0x0485, all -> 0x0480 }
+        r26 = r0.extractMetadata(r3);	 Catch:{ Exception -> 0x04af, all -> 0x04aa }
         if (r26 == 0) goto L_0x0381;
     L_0x0363:
-        r6 = java.lang.Long.parseLong(r26);	 Catch:{ Exception -> 0x0485, all -> 0x0480 }
-        r3 = (float) r6;	 Catch:{ Exception -> 0x0485, all -> 0x0480 }
+        r6 = java.lang.Long.parseLong(r26);	 Catch:{ Exception -> 0x04af, all -> 0x04aa }
+        r3 = (float) r6;	 Catch:{ Exception -> 0x04af, all -> 0x04aa }
         r6 = NUM; // 0x447a0000 float:1000.0 double:5.676053805E-315;
         r3 = r3 / r6;
-        r6 = (double) r3;	 Catch:{ Exception -> 0x0485, all -> 0x0480 }
-        r6 = java.lang.Math.ceil(r6);	 Catch:{ Exception -> 0x0485, all -> 0x0480 }
-        r0 = (int) r6;	 Catch:{ Exception -> 0x0485, all -> 0x0480 }
+        r6 = (double) r3;	 Catch:{ Exception -> 0x04af, all -> 0x04aa }
+        r6 = java.lang.Math.ceil(r6);	 Catch:{ Exception -> 0x04af, all -> 0x04aa }
+        r0 = (int) r6;	 Catch:{ Exception -> 0x04af, all -> 0x04aa }
         r28 = r0;
         r3 = 7;
         r0 = r40;
-        r49 = r0.extractMetadata(r3);	 Catch:{ Exception -> 0x0485, all -> 0x0480 }
+        r49 = r0.extractMetadata(r3);	 Catch:{ Exception -> 0x04af, all -> 0x04aa }
         r3 = 2;
         r0 = r40;
-        r45 = r0.extractMetadata(r3);	 Catch:{ Exception -> 0x0485, all -> 0x0480 }
+        r45 = r0.extractMetadata(r3);	 Catch:{ Exception -> 0x04af, all -> 0x04aa }
     L_0x0381:
         if (r61 != 0) goto L_0x039b;
     L_0x0383:
         r3 = "ogg";
         r0 = r31;
-        r3 = r0.equals(r3);	 Catch:{ Exception -> 0x0485, all -> 0x0480 }
+        r3 = r0.equals(r3);	 Catch:{ Exception -> 0x04af, all -> 0x04aa }
         if (r3 == 0) goto L_0x039b;
     L_0x038e:
-        r3 = r33.getAbsolutePath();	 Catch:{ Exception -> 0x0485, all -> 0x0480 }
-        r3 = org.telegram.messenger.MediaController.isOpusFile(r3);	 Catch:{ Exception -> 0x0485, all -> 0x0480 }
+        r3 = r33.getAbsolutePath();	 Catch:{ Exception -> 0x04af, all -> 0x04aa }
+        r3 = org.telegram.messenger.MediaController.isOpusFile(r3);	 Catch:{ Exception -> 0x04af, all -> 0x04aa }
         r6 = 1;
         if (r3 != r6) goto L_0x039b;
     L_0x0399:
@@ -8069,7 +8073,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r3 = 1;
         goto L_0x01d0;
     L_0x0429:
-        r6 = "ogg";
+        r6 = "mp3";
         r0 = r31;
         r6 = r0.equals(r6);
         if (r6 == 0) goto L_0x01d0;
@@ -8077,7 +8081,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r3 = 2;
         goto L_0x01d0;
     L_0x0437:
-        r6 = "flac";
+        r6 = "m4a";
         r0 = r31;
         r6 = r0.equals(r6);
         if (r6 == 0) goto L_0x01d0;
@@ -8085,45 +8089,69 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r3 = 3;
         goto L_0x01d0;
     L_0x0445:
+        r6 = "ogg";
+        r0 = r31;
+        r6 = r0.equals(r6);
+        if (r6 == 0) goto L_0x01d0;
+    L_0x0450:
+        r3 = 4;
+        goto L_0x01d0;
+    L_0x0453:
+        r6 = "flac";
+        r0 = r31;
+        r6 = r0.equals(r6);
+        if (r6 == 0) goto L_0x01d0;
+    L_0x045e:
+        r3 = 5;
+        goto L_0x01d0;
+    L_0x0461:
         r3 = "image/webp";
         r5.mime_type = r3;
         goto L_0x01e1;
-    L_0x044c:
+    L_0x0468:
         r3 = "audio/opus";
         r5.mime_type = r3;
         goto L_0x01e1;
-    L_0x0453:
+    L_0x046f:
+        r3 = "audio/mpeg";
+        r5.mime_type = r3;
+        goto L_0x01e1;
+    L_0x0476:
+        r3 = "audio/m4a";
+        r5.mime_type = r3;
+        goto L_0x01e1;
+    L_0x047d:
         r3 = "audio/ogg";
         r5.mime_type = r3;
         goto L_0x01e1;
-    L_0x045a:
+    L_0x0484:
         r3 = "audio/flac";
         r5.mime_type = r3;
         goto L_0x01e1;
-    L_0x0461:
+    L_0x048b:
         r3 = "application/octet-stream";
         r5.mime_type = r3;
         goto L_0x01e1;
-    L_0x0468:
+    L_0x0492:
         r3 = "application/octet-stream";
         r5.mime_type = r3;
         goto L_0x01e1;
-    L_0x046f:
+    L_0x0499:
         r29 = move-exception;
         org.telegram.messenger.FileLog.e(r29);
         goto L_0x0237;
-    L_0x0475:
+    L_0x049f:
         r29 = move-exception;
         org.telegram.messenger.FileLog.e(r29);
         goto L_0x027d;
-    L_0x047b:
+    L_0x04a5:
         r17 = "";
         goto L_0x02d7;
-    L_0x0480:
+    L_0x04aa:
         r3 = move-exception;
         r39 = r40;
         goto L_0x03ba;
-    L_0x0485:
+    L_0x04af:
         r29 = move-exception;
         r39 = r40;
         goto L_0x03a9;

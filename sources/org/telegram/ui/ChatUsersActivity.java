@@ -1576,56 +1576,52 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             return;
         }
         boolean canEdit;
-        if (this.selectType != 0) {
-            if (this.selectType != 3 && this.selectType != 1) {
-                removeUser(user_id);
-            } else if (canEditAdmin && ((participant instanceof TL_channelParticipantAdmin) || (participant instanceof TL_chatParticipantAdmin))) {
-                user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(user_id));
-                TL_chatBannedRights br = bannedRights;
-                TL_chatAdminRights ar = adminRights;
-                canEdit = canEditAdmin;
-                Builder builder = new Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder.setMessage(LocaleController.formatString("AdminWillBeRemoved", R.string.AdminWillBeRemoved, ContactsController.formatName(user.first_name, user.last_name)));
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new ChatUsersActivity$$Lambda$21(this, user, participant, ar, br, canEdit));
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                showDialog(builder.create());
-            } else {
-                openRightsEdit(user_id, participant, adminRights, bannedRights, canEditAdmin, this.selectType == 1 ? 0 : 1, false);
-            }
-        } else if (this.type == 0) {
-            createMenuForParticipant(this.listViewAdapter.getItem(position), false);
-        } else {
+        if (this.selectType == 0) {
             canEdit = false;
             if (this.type == 1) {
                 canEdit = user_id != UserConfig.getInstance(this.currentAccount).getClientUserId() && (this.currentChat.creator || canEditAdmin);
             } else if (this.type == 0 || this.type == 3) {
                 canEdit = ChatObject.canBlockUsers(this.currentChat);
             }
-            if ((this.type == 1 || !this.isChannel) && !(this.type == 2 && this.selectType == 0)) {
-                if (bannedRights == null) {
-                    bannedRights = new TL_chatBannedRights();
-                    bannedRights.view_messages = true;
-                    bannedRights.send_stickers = true;
-                    bannedRights.send_media = true;
-                    bannedRights.embed_links = true;
-                    bannedRights.send_messages = true;
-                    bannedRights.send_games = true;
-                    bannedRights.send_inline = true;
-                    bannedRights.send_gifs = true;
-                    bannedRights.pin_messages = true;
-                    bannedRights.send_polls = true;
-                    bannedRights.invite_users = true;
-                    bannedRights.change_info = true;
-                }
-                ChatRightsEditActivity fragment3 = new ChatRightsEditActivity(user_id, this.chatId, adminRights, this.defaultBannedRights, bannedRights, this.type == 1 ? 0 : 1, canEdit, participant == null);
-                fragment3.setDelegate(new ChatUsersActivity$$Lambda$22(this, participant));
-                presentFragment(fragment3);
+            if (this.type == 0 || ((this.type != 1 && this.isChannel) || (this.type == 2 && this.selectType == 0))) {
+                args = new Bundle();
+                args.putInt("user_id", user_id);
+                presentFragment(new ProfileActivity(args));
                 return;
             }
-            args = new Bundle();
-            args.putInt("user_id", user_id);
-            presentFragment(new ProfileActivity(args));
+            if (bannedRights == null) {
+                bannedRights = new TL_chatBannedRights();
+                bannedRights.view_messages = true;
+                bannedRights.send_stickers = true;
+                bannedRights.send_media = true;
+                bannedRights.embed_links = true;
+                bannedRights.send_messages = true;
+                bannedRights.send_games = true;
+                bannedRights.send_inline = true;
+                bannedRights.send_gifs = true;
+                bannedRights.pin_messages = true;
+                bannedRights.send_polls = true;
+                bannedRights.invite_users = true;
+                bannedRights.change_info = true;
+            }
+            ChatRightsEditActivity fragment3 = new ChatRightsEditActivity(user_id, this.chatId, adminRights, this.defaultBannedRights, bannedRights, this.type == 1 ? 0 : 1, canEdit, participant == null);
+            fragment3.setDelegate(new ChatUsersActivity$$Lambda$22(this, participant));
+            presentFragment(fragment3);
+        } else if (this.selectType != 3 && this.selectType != 1) {
+            removeUser(user_id);
+        } else if (canEditAdmin && ((participant instanceof TL_channelParticipantAdmin) || (participant instanceof TL_chatParticipantAdmin))) {
+            user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(user_id));
+            TL_chatBannedRights br = bannedRights;
+            TL_chatAdminRights ar = adminRights;
+            canEdit = canEditAdmin;
+            Builder builder = new Builder(getParentActivity());
+            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+            builder.setMessage(LocaleController.formatString("AdminWillBeRemoved", R.string.AdminWillBeRemoved, ContactsController.formatName(user.first_name, user.last_name)));
+            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new ChatUsersActivity$$Lambda$21(this, user, participant, ar, br, canEdit));
+            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            showDialog(builder.create());
+        } else {
+            openRightsEdit(user_id, participant, adminRights, bannedRights, canEditAdmin, this.selectType == 1 ? 0 : 1, false);
         }
     }
 

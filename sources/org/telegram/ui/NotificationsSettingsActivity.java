@@ -687,20 +687,18 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     try {
                         preferences = MessagesController.getNotificationsSettings(this.currentAccount);
                         Intent intent = new Intent("android.intent.action.RINGTONE_PICKER");
-                        intent.putExtra("android.intent.extra.ringtone.TYPE", position == this.callsRingtoneRow ? 1 : 2);
+                        intent.putExtra("android.intent.extra.ringtone.TYPE", 1);
                         intent.putExtra("android.intent.extra.ringtone.SHOW_DEFAULT", true);
-                        intent.putExtra("android.intent.extra.ringtone.DEFAULT_URI", RingtoneManager.getDefaultUri(position == this.callsRingtoneRow ? 1 : 2));
+                        intent.putExtra("android.intent.extra.ringtone.DEFAULT_URI", RingtoneManager.getDefaultUri(1));
                         Uri currentSound = null;
                         String defaultPath = null;
-                        Uri defaultUri = position == this.callsRingtoneRow ? System.DEFAULT_RINGTONE_URI : System.DEFAULT_NOTIFICATION_URI;
+                        Uri defaultUri = System.DEFAULT_RINGTONE_URI;
                         if (defaultUri != null) {
                             defaultPath = defaultUri.getPath();
                         }
-                        if (position == this.callsRingtoneRow) {
-                            String path = preferences.getString("CallsRingtonfePath", defaultPath);
-                            if (!(path == null || path.equals("NoSound"))) {
-                                currentSound = path.equals(defaultPath) ? defaultUri : Uri.parse(path);
-                            }
+                        String path = preferences.getString("CallsRingtonePath", defaultPath);
+                        if (!(path == null || path.equals("NoSound"))) {
+                            currentSound = path.equals(defaultPath) ? defaultUri : Uri.parse(path);
                         }
                         intent.putExtra("android.intent.extra.ringtone.EXISTING_URI", currentSound);
                         startActivityForResult(intent, position);

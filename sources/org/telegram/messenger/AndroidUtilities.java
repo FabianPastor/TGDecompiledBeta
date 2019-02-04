@@ -2597,7 +2597,7 @@ public class AndroidUtilities {
         if (hsb[2] > 0.5f) {
             hsb[2] = Math.max(0.0f, hsb[2] * 0.9f);
         } else {
-            hsb[2] = Math.max(0.0f, Math.min(1.0f, 1.0f - (hsb[2] * 0.9f)));
+            hsb[2] = Math.max(0.0f, hsb[2] * 0.8f);
         }
         return HSBtoRGB(hsb[0], hsb[1], hsb[2]) | -16777216;
     }

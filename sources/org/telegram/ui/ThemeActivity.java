@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -85,6 +84,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
+import org.telegram.ui.Components.SeekBarView;
 import org.telegram.ui.Components.ThemeEditorView;
 
 public class ThemeActivity extends BaseFragment implements NotificationCenterDelegate {
@@ -658,219 +658,30 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         }
     }
 
-    private class SizeChooseView extends View {
-        private int circleSize;
-        private SizeChooseViewDelegate delegate;
-        private int fontSizeCount = 7;
-        private int gapSize;
-        private int lineSize;
-        private boolean moving;
-        private Paint paint = new Paint(1);
-        private int selectedFontSize;
-        private int sideSide;
-        private boolean startMoving;
-        private int startMovingQuality;
-        private float startX;
-        private TextPaint textPaint = new TextPaint(1);
-
-        public SizeChooseView(Context context) {
-            super(context);
-            this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            switch (SharedConfig.fontSize) {
-                case 14:
-                    this.selectedFontSize = 0;
-                    return;
-                case 15:
-                    this.selectedFontSize = 1;
-                    return;
-                case 16:
-                    this.selectedFontSize = 2;
-                    return;
-                case 17:
-                    this.selectedFontSize = 3;
-                    return;
-                case 18:
-                    this.selectedFontSize = 4;
-                    return;
-                case 20:
-                    this.selectedFontSize = 5;
-                    return;
-                case 22:
-                    this.selectedFontSize = 6;
-                    break;
-            }
-            if (SharedConfig.fontSize < 14) {
-                this.selectedFontSize = 0;
-            } else if (SharedConfig.fontSize < 20) {
-                this.selectedFontSize = 4;
-            } else if (SharedConfig.fontSize < 22) {
-                this.selectedFontSize = 5;
-            } else {
-                this.selectedFontSize = 6;
-            }
-        }
-
-        public boolean onTouchEvent(MotionEvent event) {
-            boolean z = false;
-            float x = event.getX();
-            int a;
-            int cx;
-            if (event.getAction() == 0) {
-                getParent().requestDisallowInterceptTouchEvent(true);
-                a = 0;
-                while (a < this.fontSizeCount) {
-                    cx = (this.sideSide + (((this.lineSize + (this.gapSize * 2)) + this.circleSize) * a)) + (this.circleSize / 2);
-                    if (x <= ((float) (cx - AndroidUtilities.dp(15.0f))) || x >= ((float) (AndroidUtilities.dp(15.0f) + cx))) {
-                        a++;
-                    } else {
-                        if (a == this.selectedFontSize) {
-                            z = true;
-                        }
-                        this.startMoving = z;
-                        this.startX = x;
-                        this.startMovingQuality = this.selectedFontSize;
-                    }
-                }
-            } else if (event.getAction() == 2) {
-                if (this.startMoving) {
-                    if (Math.abs(this.startX - x) >= AndroidUtilities.getPixelsInCM(0.5f, true)) {
-                        this.moving = true;
-                        this.startMoving = false;
-                    }
-                } else if (this.moving) {
-                    a = 0;
-                    while (a < this.fontSizeCount) {
-                        cx = (this.sideSide + (((this.lineSize + (this.gapSize * 2)) + this.circleSize) * a)) + (this.circleSize / 2);
-                        int diff = ((this.lineSize / 2) + (this.circleSize / 2)) + this.gapSize;
-                        if (x <= ((float) (cx - diff)) || x >= ((float) (cx + diff))) {
-                            a++;
-                        } else if (this.selectedFontSize != a) {
-                            setFontSize(a);
-                        }
-                    }
-                }
-            } else if (event.getAction() == 1 || event.getAction() == 3) {
-                if (!this.moving) {
-                    a = 0;
-                    while (a < 5) {
-                        cx = (this.sideSide + (((this.lineSize + (this.gapSize * 2)) + this.circleSize) * a)) + (this.circleSize / 2);
-                        if (x <= ((float) (cx - AndroidUtilities.dp(15.0f))) || x >= ((float) (AndroidUtilities.dp(15.0f) + cx))) {
-                            a++;
-                        } else if (this.selectedFontSize != a) {
-                            setFontSize(a);
-                        }
-                    }
-                } else if (this.selectedFontSize != this.startMovingQuality) {
-                    setFontSize(this.selectedFontSize);
-                }
-                this.startMoving = false;
-                this.moving = false;
-            }
-            return true;
-        }
-
-        public void setDelegate(SizeChooseViewDelegate sizeChooseViewDelegate) {
-            this.delegate = sizeChooseViewDelegate;
-        }
-
-        private void setFontSize(int index) {
-            this.selectedFontSize = index;
-            invalidate();
-            switch (index) {
-                case 0:
-                    SharedConfig.fontSize = 14;
-                    break;
-                case 1:
-                    SharedConfig.fontSize = 15;
-                    break;
-                case 2:
-                    SharedConfig.fontSize = 16;
-                    break;
-                case 3:
-                    SharedConfig.fontSize = 17;
-                    break;
-                case 4:
-                    SharedConfig.fontSize = 18;
-                    break;
-                case 5:
-                    SharedConfig.fontSize = 20;
-                    break;
-                default:
-                    SharedConfig.fontSize = 22;
-                    break;
-            }
-            Editor editor = MessagesController.getGlobalMainSettings().edit();
-            editor.putInt("fons_size", SharedConfig.fontSize);
-            editor.commit();
-            Theme.chat_msgTextPaint.setTextSize((float) AndroidUtilities.dp((float) SharedConfig.fontSize));
-            this.delegate.onSizeChanged();
-        }
-
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-            int width = MeasureSpec.getSize(widthMeasureSpec);
-            this.circleSize = AndroidUtilities.dp(6.0f);
-            this.gapSize = AndroidUtilities.dp(2.0f);
-            this.sideSide = AndroidUtilities.dp(43.0f);
-            this.lineSize = (((getMeasuredWidth() - (this.circleSize * this.fontSizeCount)) - ((this.gapSize * 2) * (this.fontSizeCount - 1))) - (this.sideSide * 2)) / (this.fontSizeCount - 1);
-        }
-
-        protected void onDraw(Canvas canvas) {
-            int cy = getMeasuredHeight() / 2;
-            int a = 0;
-            while (a < this.fontSizeCount) {
-                float dp;
-                int cx = (this.sideSide + (((this.lineSize + (this.gapSize * 2)) + this.circleSize) * a)) + (this.circleSize / 2);
-                if (a <= this.selectedFontSize) {
-                    this.paint.setColor(Theme.getColor("switchTrackChecked"));
-                } else {
-                    this.paint.setColor(Theme.getColor("switchTrack"));
-                }
-                float f = (float) cx;
-                float f2 = (float) cy;
-                if (a == this.selectedFontSize) {
-                    dp = (float) AndroidUtilities.dp(6.0f);
-                } else {
-                    dp = (float) (this.circleSize / 2);
-                }
-                canvas.drawCircle(f, f2, dp, this.paint);
-                if (a != 0) {
-                    int x = ((cx - (this.circleSize / 2)) - this.gapSize) - this.lineSize;
-                    int width = this.lineSize;
-                    if (a == this.selectedFontSize || a == this.selectedFontSize + 1) {
-                        width -= AndroidUtilities.dp(3.0f);
-                    }
-                    if (a == this.selectedFontSize + 1) {
-                        x += AndroidUtilities.dp(3.0f);
-                    }
-                    canvas.drawRect((float) x, (float) (cy - AndroidUtilities.dp(1.0f)), (float) (x + width), (float) (AndroidUtilities.dp(1.0f) + cy), this.paint);
-                }
-                a++;
-            }
-            this.textPaint.setColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-            this.textPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
-            canvas.drawText("A", (float) AndroidUtilities.dp(20.0f), (float) AndroidUtilities.dp(23.0f), this.textPaint);
-            this.textPaint.setTextSize((float) AndroidUtilities.dp(18.0f));
-            canvas.drawText("A", (float) (getMeasuredWidth() - AndroidUtilities.dp(30.0f)), (float) AndroidUtilities.dp(23.0f), this.textPaint);
-        }
-    }
-
     public interface SizeChooseViewDelegate {
         void onSizeChanged();
     }
 
     private class TextSizeCell extends FrameLayout {
         private ChatMessageCell[] cells = new ChatMessageCell[2];
+        private int endFontSize = 30;
+        private int lastWidth;
         private LinearLayout messagesContainer;
         private Drawable shadowDrawable;
-        private SizeChooseView sizeChooseView;
+        private SeekBarView sizeBar;
+        private int startFontSize = 12;
+        private TextPaint textPaint;
 
         public TextSizeCell(Context context) {
             super(context);
+            setWillNotDraw(false);
+            this.textPaint = new TextPaint(1);
+            this.textPaint.setTextSize((float) AndroidUtilities.dp(16.0f));
             this.shadowDrawable = Theme.getThemedDrawable(context, (int) R.drawable.greydivider_bottom, "windowBackgroundGrayShadow");
-            this.sizeChooseView = new SizeChooseView(context);
-            addView(this.sizeChooseView, LayoutHelper.createFrame(-1, 38.0f, 51, 0.0f, 8.0f, 0.0f, 0.0f));
-            this.sizeChooseView.setDelegate(new ThemeActivity$TextSizeCell$$Lambda$0(this));
+            this.sizeBar = new SeekBarView(context);
+            this.sizeBar.setReportChanges(true);
+            this.sizeBar.setDelegate(new ThemeActivity$TextSizeCell$$Lambda$0(this));
+            addView(this.sizeBar, LayoutHelper.createFrame(-1, 38.0f, 51, 9.0f, 5.0f, 43.0f, 0.0f));
             final ThemeActivity themeActivity = ThemeActivity.this;
             this.messagesContainer = new LinearLayout(context) {
                 private Drawable backgroundDrawable;
@@ -1065,17 +876,39 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             }
         }
 
-        final /* synthetic */ void lambda$new$0$ThemeActivity$TextSizeCell() {
-            for (int a = 0; a < this.cells.length; a++) {
-                this.cells[a].getMessageObject().resetLayout();
-                this.cells[a].requestLayout();
+        final /* synthetic */ void lambda$new$0$ThemeActivity$TextSizeCell(float progress) {
+            int fontSize = Math.round(((float) this.startFontSize) + (((float) (this.endFontSize - this.startFontSize)) * progress));
+            if (fontSize != SharedConfig.fontSize) {
+                SharedConfig.fontSize = fontSize;
+                Editor editor = MessagesController.getGlobalMainSettings().edit();
+                editor.putInt("fons_size", SharedConfig.fontSize);
+                editor.commit();
+                Theme.chat_msgTextPaint.setTextSize((float) AndroidUtilities.dp((float) SharedConfig.fontSize));
+                for (int a = 0; a < this.cells.length; a++) {
+                    this.cells[a].getMessageObject().resetLayout();
+                    this.cells[a].requestLayout();
+                }
+            }
+        }
+
+        protected void onDraw(Canvas canvas) {
+            this.textPaint.setColor(Theme.getColor("windowBackgroundWhiteValueText"));
+            canvas.drawText("" + SharedConfig.fontSize, (float) (getMeasuredWidth() - AndroidUtilities.dp(39.0f)), (float) AndroidUtilities.dp(28.0f), this.textPaint);
+        }
+
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            int w = MeasureSpec.getSize(widthMeasureSpec);
+            if (this.lastWidth != w) {
+                this.sizeBar.setProgress(((float) (SharedConfig.fontSize - this.startFontSize)) / ((float) (this.endFontSize - this.startFontSize)));
+                this.lastWidth = w;
             }
         }
 
         public void invalidate() {
             super.invalidate();
             this.messagesContainer.invalidate();
-            this.sizeChooseView.invalidate();
+            this.sizeBar.invalidate();
             for (ChatMessageCell invalidate : this.cells) {
                 invalidate.invalidate();
             }
@@ -1855,8 +1688,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         themeDescriptionArr[24] = new ThemeDescription(this.listView, ThemeDescription.FLAG_PROGRESSBAR, new Class[]{BrightnessControlCell.class}, new String[]{"seekBarView"}, null, null, null, "player_progress");
         themeDescriptionArr[25] = new ThemeDescription(this.listView, 0, new Class[]{ThemeTypeCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
         themeDescriptionArr[26] = new ThemeDescription(this.listView, 0, new Class[]{ThemeTypeCell.class}, new String[]{"checkImage"}, null, null, null, "featuredStickers_addedIcon");
-        themeDescriptionArr[27] = new ThemeDescription(this.listView, 0, null, null, null, null, "switchTrackChecked");
-        themeDescriptionArr[28] = new ThemeDescription(this.listView, 0, null, null, null, null, "switchTrack");
+        themeDescriptionArr[27] = new ThemeDescription(this.listView, ThemeDescription.FLAG_PROGRESSBAR, new Class[]{TextSizeCell.class}, new String[]{"sizeBar"}, null, null, null, "player_progress");
+        themeDescriptionArr[28] = new ThemeDescription(this.listView, 0, new Class[]{TextSizeCell.class}, new String[]{"sizeBar"}, null, null, null, "player_progressBackground");
         themeDescriptionArr[29] = new ThemeDescription(this.listView, 0, null, null, new Drawable[]{Theme.chat_msgInDrawable, Theme.chat_msgInMediaDrawable}, null, "chat_inBubble");
         themeDescriptionArr[30] = new ThemeDescription(this.listView, 0, null, null, new Drawable[]{Theme.chat_msgInSelectedDrawable, Theme.chat_msgInMediaSelectedDrawable}, null, "chat_inBubbleSelected");
         themeDescriptionArr[31] = new ThemeDescription(this.listView, 0, null, null, new Drawable[]{Theme.chat_msgInShadowDrawable, Theme.chat_msgInMediaShadowDrawable}, null, "chat_inBubbleShadow");
