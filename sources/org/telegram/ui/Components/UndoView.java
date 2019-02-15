@@ -89,7 +89,7 @@ public class UndoView extends FrameLayout {
     }
 
     public void hide(boolean apply, boolean animated) {
-        if (getVisibility() == 0) {
+        if (getVisibility() == 0 && this.currentActionRunnable != null) {
             if (this.currentActionRunnable != null) {
                 if (apply) {
                     this.currentActionRunnable.run();
@@ -144,6 +144,9 @@ public class UndoView extends FrameLayout {
                     this.infoTextView.setText(LocaleController.getString("ChatDeletedUndo", R.string.ChatDeletedUndo));
                 }
             }
+            if (this.currentActionRunnable != null) {
+                this.currentActionRunnable.run();
+            }
             this.currentActionRunnable = actionRunnable;
             this.currentCancelRunnable = cancelRunnable;
             this.currentDialogId = did;
@@ -151,15 +154,17 @@ public class UndoView extends FrameLayout {
             this.timeLeft = 5000;
             this.lastUpdateTime = SystemClock.uptimeMillis();
             MessagesController.getInstance(this.currentAccount).addDialogAction(did, clear);
-            setVisibility(0);
-            setTranslationY((float) AndroidUtilities.dp(48.0f));
-            AnimatorSet animatorSet = new AnimatorSet();
-            Animator[] animatorArr = new Animator[1];
-            animatorArr[0] = ObjectAnimator.ofFloat(this, View.TRANSLATION_Y, new float[]{(float) AndroidUtilities.dp(48.0f), 0.0f});
-            animatorSet.playTogether(animatorArr);
-            animatorSet.setInterpolator(new DecelerateInterpolator());
-            animatorSet.setDuration(180);
-            animatorSet.start();
+            if (getVisibility() != 0) {
+                setVisibility(0);
+                setTranslationY((float) AndroidUtilities.dp(48.0f));
+                AnimatorSet animatorSet = new AnimatorSet();
+                Animator[] animatorArr = new Animator[1];
+                animatorArr[0] = ObjectAnimator.ofFloat(this, View.TRANSLATION_Y, new float[]{(float) AndroidUtilities.dp(48.0f), 0.0f});
+                animatorSet.playTogether(animatorArr);
+                animatorSet.setInterpolator(new DecelerateInterpolator());
+                animatorSet.setDuration(180);
+                animatorSet.start();
+            }
         }
     }
 

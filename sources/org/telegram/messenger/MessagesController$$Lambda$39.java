@@ -1,25 +1,16 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC.photos_Photos;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
 
-final /* synthetic */ class MessagesController$$Lambda$39 implements Runnable {
-    private final MessagesController arg$1;
-    private final photos_Photos arg$2;
-    private final boolean arg$3;
-    private final int arg$4;
-    private final int arg$5;
-    private final int arg$6;
+final /* synthetic */ class MessagesController$$Lambda$39 implements RequestDelegate {
+    static final RequestDelegate $instance = new MessagesController$$Lambda$39();
 
-    MessagesController$$Lambda$39(MessagesController messagesController, photos_Photos photos_photos, boolean z, int i, int i2, int i3) {
-        this.arg$1 = messagesController;
-        this.arg$2 = photos_photos;
-        this.arg$3 = z;
-        this.arg$4 = i;
-        this.arg$5 = i2;
-        this.arg$6 = i3;
+    private MessagesController$$Lambda$39() {
     }
 
-    public void run() {
-        this.arg$1.lambda$processLoadedUserPhotos$57$MessagesController(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6);
+    public void run(TLObject tLObject, TL_error tL_error) {
+        MessagesController.lambda$deleteUserPhoto$58$MessagesController(tLObject, tL_error);
     }
 }

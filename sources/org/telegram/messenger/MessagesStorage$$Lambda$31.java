@@ -12,6 +12,6 @@ final /* synthetic */ class MessagesStorage$$Lambda$31 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$getNewTask$49$MessagesStorage(this.arg$2);
+        this.arg$1.lambda$getNewTask$50$MessagesStorage(this.arg$2);
     }
 }

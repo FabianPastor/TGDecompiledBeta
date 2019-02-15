@@ -8,6 +8,6 @@ final /* synthetic */ class NotificationsSettingsActivity$$Lambda$0 implements R
     }
 
     public void run() {
-        this.arg$1.lambda$onFragmentCreate$1$NotificationsSettingsActivity();
+        this.arg$1.lambda$loadExceptions$1$NotificationsSettingsActivity();
     }
 }

@@ -1,15 +1,24 @@
 package org.telegram.messenger;
 
-final /* synthetic */ class MessagesController$$Lambda$84 implements Runnable {
-    private final MessagesController arg$1;
-    private final MessageObject arg$2;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_dialog;
+import org.telegram.tgnet.TLRPC.TL_error;
 
-    MessagesController$$Lambda$84(MessagesController messagesController, MessageObject messageObject) {
+final /* synthetic */ class MessagesController$$Lambda$84 implements RequestDelegate {
+    private final MessagesController arg$1;
+    private final TL_dialog arg$2;
+    private final long arg$3;
+    private final int arg$4;
+
+    MessagesController$$Lambda$84(MessagesController messagesController, TL_dialog tL_dialog, long j, int i) {
         this.arg$1 = messagesController;
-        this.arg$2 = messageObject;
+        this.arg$2 = tL_dialog;
+        this.arg$3 = j;
+        this.arg$4 = i;
     }
 
-    public void run() {
-        this.arg$1.lambda$addToViewsQueue$132$MessagesController(this.arg$2);
+    public void run(TLObject tLObject, TL_error tL_error) {
+        this.arg$1.lambda$checkLastDialogMessage$132$MessagesController(this.arg$2, this.arg$3, this.arg$4, tLObject, tL_error);
     }
 }

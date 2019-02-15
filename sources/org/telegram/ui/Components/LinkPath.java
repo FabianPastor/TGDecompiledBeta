@@ -3,6 +3,7 @@ package org.telegram.ui.Components;
 import android.graphics.Path;
 import android.graphics.Path.Direction;
 import android.graphics.RectF;
+import android.os.Build.VERSION;
 import android.text.StaticLayout;
 import org.telegram.messenger.AndroidUtilities;
 
@@ -13,6 +14,7 @@ public class LinkPath extends Path {
     private int currentLine;
     private float heightOffset;
     private float lastTop = -1.0f;
+    private int lineHeight;
     private RectF rect;
     private boolean useRoundRect;
 
@@ -25,6 +27,12 @@ public class LinkPath extends Path {
         this.currentLine = layout.getLineForOffset(start);
         this.lastTop = -1.0f;
         this.heightOffset = yOffset;
+        if (VERSION.SDK_INT >= 28) {
+            int lineCount = layout.getLineCount();
+            if (lineCount > 0) {
+                this.lineHeight = layout.getLineBottom(lineCount - 1) - layout.getLineTop(lineCount - 1);
+            }
+        }
     }
 
     public void setAllowReset(boolean value) {
@@ -44,6 +52,7 @@ public class LinkPath extends Path {
     }
 
     public void addRect(float left, float top, float right, float bottom, Direction dir) {
+        float f = 0.0f;
         top += this.heightOffset;
         bottom += this.heightOffset;
         if (this.lastTop == -1.0f) {
@@ -58,6 +67,7 @@ public class LinkPath extends Path {
             return;
         }
         if (left > lineLeft || right > lineLeft) {
+            float y2;
             if (right > lineRight) {
                 right = lineRight;
             }
@@ -65,7 +75,20 @@ public class LinkPath extends Path {
                 left = lineLeft;
             }
             float y = top;
-            float y2 = bottom - (bottom != ((float) this.currentLayout.getHeight()) ? this.currentLayout.getSpacingAdd() : 0.0f);
+            if (VERSION.SDK_INT >= 28) {
+                y2 = bottom;
+                if (bottom - top > ((float) this.lineHeight)) {
+                    if (bottom != ((float) this.currentLayout.getHeight())) {
+                        f = this.currentLayout.getSpacingAdd();
+                    }
+                    y2 -= f;
+                }
+            } else {
+                if (bottom != ((float) this.currentLayout.getHeight())) {
+                    f = this.currentLayout.getSpacingAdd();
+                }
+                y2 = bottom - f;
+            }
             if (this.baselineShift < 0) {
                 y2 += (float) this.baselineShift;
             } else if (this.baselineShift > 0) {

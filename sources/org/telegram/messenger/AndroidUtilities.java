@@ -98,6 +98,7 @@ import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.TL_chatBannedRights;
 import org.telegram.tgnet.TLRPC.TL_document;
 import org.telegram.tgnet.TLRPC.TL_userContact_old2;
+import org.telegram.tgnet.TLRPC.TL_wallPaper;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -110,6 +111,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.PickerBottomLayout;
 import org.telegram.ui.Components.TypefaceSpan;
 import org.telegram.ui.ThemePreviewActivity;
+import org.telegram.ui.WallpapersListActivity.ColorWallpaper;
 
 public class AndroidUtilities {
     public static final int FLAG_TAG_ALL = 11;
@@ -553,73 +555,40 @@ public class AndroidUtilities {
         return ret;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:9:0x0046 A:{SYNTHETIC, Splitter: B:9:0x0046} */
-    public static boolean isInternalUri(android.net.Uri r9) {
-        /*
-        r4 = 0;
-        r3 = r9.getPath();
-        if (r3 != 0) goto L_0x0008;
-    L_0x0007:
-        return r4;
-    L_0x0008:
-        r5 = new java.lang.StringBuilder;
-        r5.<init>();
-        r6 = new java.io.File;
-        r7 = org.telegram.messenger.ApplicationLoader.applicationContext;
-        r7 = r7.getCacheDir();
-        r8 = "voip_logs";
-        r6.<init>(r7, r8);
-        r6 = r6.getAbsolutePath();
-        r6 = java.util.regex.Pattern.quote(r6);
-        r5 = r5.append(r6);
-        r6 = "/\\d+\\.log";
-        r5 = r5.append(r6);
-        r5 = r5.toString();
-        r5 = r3.matches(r5);
-        if (r5 != 0) goto L_0x0007;
-    L_0x0038:
-        r1 = org.telegram.messenger.Utilities.readlink(r3);
-        if (r1 == 0) goto L_0x0044;
-    L_0x003e:
-        r5 = r1.equals(r3);
-        if (r5 == 0) goto L_0x007a;
-    L_0x0044:
-        if (r3 == 0) goto L_0x0052;
-    L_0x0046:
-        r5 = new java.io.File;	 Catch:{ Exception -> 0x007c }
-        r5.<init>(r3);	 Catch:{ Exception -> 0x007c }
-        r2 = r5.getCanonicalPath();	 Catch:{ Exception -> 0x007c }
-        if (r2 == 0) goto L_0x0052;
-    L_0x0051:
-        r3 = r2;
-    L_0x0052:
-        if (r3 == 0) goto L_0x0007;
-    L_0x0054:
-        r5 = r3.toLowerCase();
-        r6 = new java.lang.StringBuilder;
-        r6.<init>();
-        r7 = "/data/data/";
-        r6 = r6.append(r7);
-        r7 = org.telegram.messenger.ApplicationLoader.applicationContext;
-        r7 = r7.getPackageName();
-        r6 = r6.append(r7);
-        r6 = r6.toString();
-        r5 = r5.contains(r6);
-        if (r5 == 0) goto L_0x0007;
-    L_0x0078:
-        r4 = 1;
-        goto L_0x0007;
-    L_0x007a:
-        r3 = r1;
-        goto L_0x0038;
-    L_0x007c:
-        r0 = move-exception;
-        r5 = "/./";
-        r6 = "/";
-        r3.replace(r5, r6);
-        goto L_0x0052;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.isInternalUri(android.net.Uri):boolean");
+    public static boolean isInternalUri(Uri uri) {
+        String pathString = uri.getPath();
+        if (pathString == null) {
+            return false;
+        }
+        if (pathString.matches(Pattern.quote(new File(ApplicationLoader.applicationContext.getCacheDir(), "voip_logs").getAbsolutePath()) + "/\\d+\\.log")) {
+            return false;
+        }
+        int tries = 0;
+        do {
+            if (pathString != null && pathString.length() > 4096) {
+                return true;
+            }
+            String newPath = Utilities.readlink(pathString);
+            if (newPath == null || newPath.equals(pathString)) {
+                if (pathString != null) {
+                    try {
+                        String path = new File(pathString).getCanonicalPath();
+                        if (path != null) {
+                            pathString = path;
+                        }
+                    } catch (Exception e) {
+                        pathString.replace("/./", "/");
+                    }
+                }
+                if (pathString == null || !pathString.toLowerCase().contains("/data/data/" + ApplicationLoader.applicationContext.getPackageName())) {
+                    return false;
+                }
+                return true;
+            }
+            pathString = newPath;
+            tries++;
+        } while (tries < 10);
+        return true;
     }
 
     public static void lockOrientation(Activity activity) {
@@ -2472,5 +2441,159 @@ public class AndroidUtilities {
             i++;
         }
         return sb.toString();
+    }
+
+    public static float[] RGBtoHSB(int r, int g, int b) {
+        int cmax;
+        int cmin;
+        float saturation;
+        float hue;
+        float[] hsbvals = new float[3];
+        if (r > g) {
+            cmax = r;
+        } else {
+            cmax = g;
+        }
+        if (b > cmax) {
+            cmax = b;
+        }
+        if (r < g) {
+            cmin = r;
+        } else {
+            cmin = g;
+        }
+        if (b < cmin) {
+            cmin = b;
+        }
+        float brightness = ((float) cmax) / 255.0f;
+        if (cmax != 0) {
+            saturation = ((float) (cmax - cmin)) / ((float) cmax);
+        } else {
+            saturation = 0.0f;
+        }
+        if (saturation == 0.0f) {
+            hue = 0.0f;
+        } else {
+            float redc = ((float) (cmax - r)) / ((float) (cmax - cmin));
+            float greenc = ((float) (cmax - g)) / ((float) (cmax - cmin));
+            float bluec = ((float) (cmax - b)) / ((float) (cmax - cmin));
+            if (r == cmax) {
+                hue = bluec - greenc;
+            } else if (g == cmax) {
+                hue = (2.0f + redc) - bluec;
+            } else {
+                hue = (4.0f + greenc) - redc;
+            }
+            hue /= 6.0f;
+            if (hue < 0.0f) {
+                hue += 1.0f;
+            }
+        }
+        hsbvals[0] = hue;
+        hsbvals[1] = saturation;
+        hsbvals[2] = brightness;
+        return hsbvals;
+    }
+
+    public static int HSBtoRGB(float hue, float saturation, float brightness) {
+        int r = 0;
+        int g = 0;
+        int b = 0;
+        if (saturation != 0.0f) {
+            float h = (hue - ((float) Math.floor((double) hue))) * 6.0f;
+            float f = h - ((float) Math.floor((double) h));
+            float p = brightness * (1.0f - saturation);
+            float q = brightness * (1.0f - (saturation * f));
+            float t = brightness * (1.0f - ((1.0f - f) * saturation));
+            switch ((int) h) {
+                case 0:
+                    r = (int) ((brightness * 255.0f) + 0.5f);
+                    g = (int) ((t * 255.0f) + 0.5f);
+                    b = (int) ((p * 255.0f) + 0.5f);
+                    break;
+                case 1:
+                    r = (int) ((q * 255.0f) + 0.5f);
+                    g = (int) ((brightness * 255.0f) + 0.5f);
+                    b = (int) ((p * 255.0f) + 0.5f);
+                    break;
+                case 2:
+                    r = (int) ((p * 255.0f) + 0.5f);
+                    g = (int) ((brightness * 255.0f) + 0.5f);
+                    b = (int) ((t * 255.0f) + 0.5f);
+                    break;
+                case 3:
+                    r = (int) ((p * 255.0f) + 0.5f);
+                    g = (int) ((q * 255.0f) + 0.5f);
+                    b = (int) ((brightness * 255.0f) + 0.5f);
+                    break;
+                case 4:
+                    r = (int) ((t * 255.0f) + 0.5f);
+                    g = (int) ((p * 255.0f) + 0.5f);
+                    b = (int) ((brightness * 255.0f) + 0.5f);
+                    break;
+                case 5:
+                    r = (int) ((brightness * 255.0f) + 0.5f);
+                    g = (int) ((p * 255.0f) + 0.5f);
+                    b = (int) ((q * 255.0f) + 0.5f);
+                    break;
+            }
+        }
+        b = (int) ((brightness * 255.0f) + 0.5f);
+        g = b;
+        r = b;
+        return ((-16777216 | ((r & 255) << 16)) | ((g & 255) << 8)) | (b & 255);
+    }
+
+    public static int getPatternColor(int color) {
+        float[] hsb = RGBtoHSB(Color.red(color), Color.green(color), Color.blue(color));
+        if (hsb[1] > 0.0f || (hsb[2] < 1.0f && hsb[2] > 0.0f)) {
+            hsb[1] = Math.min(1.0f, (hsb[1] + 0.05f) + (0.1f * (1.0f - hsb[1])));
+        }
+        if (hsb[2] > 0.5f) {
+            hsb[2] = Math.max(0.0f, hsb[2] * 0.65f);
+        } else {
+            hsb[2] = Math.max(0.0f, Math.min(1.0f, 1.0f - (hsb[2] * 0.65f)));
+        }
+        return HSBtoRGB(hsb[0], hsb[1], hsb[2]) & NUM;
+    }
+
+    public static int getPatternSideColor(int color) {
+        float[] hsb = RGBtoHSB(Color.red(color), Color.green(color), Color.blue(color));
+        hsb[1] = Math.min(1.0f, hsb[1] + 0.05f);
+        if (hsb[2] > 0.5f) {
+            hsb[2] = Math.max(0.0f, hsb[2] * 0.9f);
+        } else {
+            hsb[2] = Math.max(0.0f, hsb[2] * 0.9f);
+        }
+        return HSBtoRGB(hsb[0], hsb[1], hsb[2]) | -16777216;
+    }
+
+    public static String getWallPaperUrl(Object object, int currentAccount) {
+        if (object instanceof TL_wallPaper) {
+            TL_wallPaper wallPaper = (TL_wallPaper) object;
+            String link = "https://" + MessagesController.getInstance(currentAccount).linkPrefix + "/bg/" + wallPaper.slug;
+            StringBuilder modes = new StringBuilder();
+            if (wallPaper.settings != null) {
+                if (wallPaper.settings.blur) {
+                    modes.append("blur");
+                }
+                if (wallPaper.settings.motion) {
+                    if (modes.length() > 0) {
+                        modes.append("+");
+                    }
+                    modes.append("motion");
+                }
+            }
+            return modes.length() > 0 ? link + "?mode=" + modes.toString() : link;
+        } else if (!(object instanceof ColorWallpaper)) {
+            return null;
+        } else {
+            ColorWallpaper wallPaper2 = (ColorWallpaper) object;
+            String color = String.format("%02x%02x%02x", new Object[]{Integer.valueOf(((byte) (wallPaper2.color >> 16)) & 255), Integer.valueOf(((byte) (wallPaper2.color >> 8)) & 255), Byte.valueOf((byte) (wallPaper2.color & 255))}).toLowerCase();
+            if (wallPaper2.pattern != null) {
+                return "https://" + MessagesController.getInstance(currentAccount).linkPrefix + "/bg/" + wallPaper2.pattern.slug + "?intensity=" + ((int) (wallPaper2.intensity * 100.0f)) + "&bg_color=" + color;
+            }
+            return "https://" + MessagesController.getInstance(currentAccount).linkPrefix + "/bg/" + color;
+        }
     }
 }

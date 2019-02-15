@@ -7,6 +7,6 @@ final /* synthetic */ class LaunchActivity$$Lambda$21 implements Runnable {
     }
 
     public void run() {
-        LaunchActivity.lambda$onResume$35$LaunchActivity();
+        LaunchActivity.lambda$onPause$35$LaunchActivity();
     }
 }

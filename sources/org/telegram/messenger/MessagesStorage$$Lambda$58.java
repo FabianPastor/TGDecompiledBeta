@@ -10,6 +10,6 @@ final /* synthetic */ class MessagesStorage$$Lambda$58 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$getCachedPhoneBook$82$MessagesStorage(this.arg$2);
+        this.arg$1.lambda$getCachedPhoneBook$83$MessagesStorage(this.arg$2);
     }
 }

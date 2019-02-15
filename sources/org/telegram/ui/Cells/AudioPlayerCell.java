@@ -103,7 +103,13 @@ public class AudioPlayerCell extends View implements FileDownloadProgressListene
 
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        this.radialProgress.onDetachedFromWindow();
         DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
+    }
+
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        this.radialProgress.onAttachedToWindow();
     }
 
     public MessageObject getMessageObject() {

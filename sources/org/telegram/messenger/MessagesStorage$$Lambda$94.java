@@ -14,6 +14,6 @@ final /* synthetic */ class MessagesStorage$$Lambda$94 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$markMessagesAsDeleted$124$MessagesStorage(this.arg$2, this.arg$3);
+        this.arg$1.lambda$markMessagesAsDeleted$125$MessagesStorage(this.arg$2, this.arg$3);
     }
 }

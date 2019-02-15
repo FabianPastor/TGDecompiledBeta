@@ -34,7 +34,9 @@ public class TermsOfServiceView extends FrameLayout {
     private int currentAccount;
     private TL_help_termsOfService currentTos;
     private TermsOfServiceViewDelegate delegate;
+    private ScrollView scrollView;
     private TextView textView;
+    private TextView titleTextView;
 
     public interface TermsOfServiceViewDelegate {
         void onAcceptTerms(int i);
@@ -54,16 +56,16 @@ public class TermsOfServiceView extends FrameLayout {
         ImageView imageView = new ImageView(context);
         imageView.setImageResource(R.drawable.logo_middle);
         addView(imageView, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, (float) (top + 30), 0.0f, 0.0f));
-        TextView titleTextView = new TextView(context);
-        titleTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-        titleTextView.setTextSize(1, 17.0f);
-        titleTextView.setGravity(51);
-        titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        titleTextView.setText(LocaleController.getString("PrivacyPolicyAndTerms", R.string.PrivacyPolicyAndTerms));
-        addView(titleTextView, LayoutHelper.createFrame(-2, -2.0f, 51, 27.0f, (float) (top + 126), 27.0f, 75.0f));
-        ScrollView scrollView = new ScrollView(context);
-        AndroidUtilities.setScrollViewEdgeEffectColor(scrollView, Theme.getColor("actionBarDefault"));
-        addView(scrollView, LayoutHelper.createFrame(-2, -1.0f, 51, 27.0f, (float) (top + 160), 27.0f, 75.0f));
+        this.titleTextView = new TextView(context);
+        this.titleTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        this.titleTextView.setTextSize(1, 17.0f);
+        this.titleTextView.setGravity(51);
+        this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        this.titleTextView.setText(LocaleController.getString("PrivacyPolicyAndTerms", R.string.PrivacyPolicyAndTerms));
+        addView(this.titleTextView, LayoutHelper.createFrame(-2, -2.0f, 51, 27.0f, (float) (top + 126), 27.0f, 75.0f));
+        this.scrollView = new ScrollView(context);
+        AndroidUtilities.setScrollViewEdgeEffectColor(this.scrollView, Theme.getColor("actionBarDefault"));
+        addView(this.scrollView, LayoutHelper.createFrame(-2, -1.0f, 51, 27.0f, (float) (top + 160), 27.0f, 75.0f));
         this.textView = new TextView(context);
         this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.textView.setLinkTextColor(Theme.getColor("windowBackgroundWhiteLinkText"));
@@ -71,7 +73,7 @@ public class TermsOfServiceView extends FrameLayout {
         this.textView.setMovementMethod(new LinkMovementMethodMy());
         this.textView.setGravity(51);
         this.textView.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
-        scrollView.addView(this.textView, new LayoutParams(-2, -2));
+        this.scrollView.addView(this.textView, new LayoutParams(-2, -2));
         TextView declineTextView = new TextView(context);
         declineTextView.setText(LocaleController.getString("Decline", R.string.Decline).toUpperCase());
         declineTextView.setGravity(17);
@@ -183,6 +185,12 @@ public class TermsOfServiceView extends FrameLayout {
         this.textView.setText(builder);
         this.currentTos = tos;
         this.currentAccount = account;
+    }
+
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        measureChildWithMargins(this.titleTextView, widthMeasureSpec, 0, heightMeasureSpec, 0);
+        ((LayoutParams) this.scrollView.getLayoutParams()).topMargin = AndroidUtilities.dp(156.0f) + this.titleTextView.getMeasuredHeight();
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
     public void setDelegate(TermsOfServiceViewDelegate termsOfServiceViewDelegate) {

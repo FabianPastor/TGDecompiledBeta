@@ -1,12 +1,16 @@
 package org.telegram.ui;
 
-final /* synthetic */ class LaunchActivity$$Lambda$20 implements Runnable {
-    static final Runnable $instance = new LaunchActivity$$Lambda$20();
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 
-    private LaunchActivity$$Lambda$20() {
+final /* synthetic */ class LaunchActivity$$Lambda$20 implements OnClickListener {
+    private final LaunchActivity arg$1;
+
+    LaunchActivity$$Lambda$20(LaunchActivity launchActivity) {
+        this.arg$1 = launchActivity;
     }
 
-    public void run() {
-        LaunchActivity.lambda$onPause$34$LaunchActivity();
+    public void onClick(DialogInterface dialogInterface, int i) {
+        this.arg$1.lambda$onRequestPermissionsResult$34$LaunchActivity(dialogInterface, i);
     }
 }

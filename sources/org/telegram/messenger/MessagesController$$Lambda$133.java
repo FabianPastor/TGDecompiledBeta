@@ -1,22 +1,15 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
-import org.telegram.tgnet.TLRPC.Updates;
-
 final /* synthetic */ class MessagesController$$Lambda$133 implements Runnable {
     private final MessagesController arg$1;
-    private final boolean arg$2;
-    private final Updates arg$3;
-    private final ArrayList arg$4;
+    private final int arg$2;
 
-    MessagesController$$Lambda$133(MessagesController messagesController, boolean z, Updates updates, ArrayList arrayList) {
+    MessagesController$$Lambda$133(MessagesController messagesController, int i) {
         this.arg$1 = messagesController;
-        this.arg$2 = z;
-        this.arg$3 = updates;
-        this.arg$4 = arrayList;
+        this.arg$2 = i;
     }
 
     public void run() {
-        this.arg$1.lambda$processUpdates$226$MessagesController(this.arg$2, this.arg$3, this.arg$4);
+        this.arg$1.lambda$checkChannelInviter$227$MessagesController(this.arg$2);
     }
 }

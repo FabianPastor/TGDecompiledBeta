@@ -51,10 +51,11 @@ public class WallpaperParallaxEffect implements SensorEventListener {
     }
 
     public void onSensorChanged(SensorEvent event) {
+        float x = event.values[0] / 9.80665f;
         float y = event.values[1] / 9.80665f;
         float z = event.values[2] / 9.80665f;
-        float roll = (float) ((Math.atan2((double) y, (double) z) / 3.141592653589793d) * 2.0d);
-        float pitch = (float) ((Math.atan2((double) (-(event.values[0] / 9.80665f)), Math.sqrt((double) ((y * y) + (z * z)))) / 3.141592653589793d) * 2.0d);
+        float pitch = (float) ((Math.atan2((double) x, Math.sqrt((double) ((y * y) + (z * z)))) / 3.141592653589793d) * 2.0d);
+        float roll = (float) ((Math.atan2((double) y, Math.sqrt((double) ((x * x) + (z * z)))) / 3.141592653589793d) * 2.0d);
         float tmp;
         switch (this.wm.getDefaultDisplay().getRotation()) {
             case 1:

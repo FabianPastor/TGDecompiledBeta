@@ -9,18 +9,20 @@ final /* synthetic */ class SendMessagesHelper$$Lambda$41 implements Runnable {
     private final int arg$3;
     private final boolean arg$4;
     private final ArrayList arg$5;
-    private final String arg$6;
+    private final int arg$6;
+    private final String arg$7;
 
-    SendMessagesHelper$$Lambda$41(SendMessagesHelper sendMessagesHelper, Message message, int i, boolean z, ArrayList arrayList, String str) {
+    SendMessagesHelper$$Lambda$41(SendMessagesHelper sendMessagesHelper, Message message, int i, boolean z, ArrayList arrayList, int i2, String str) {
         this.arg$1 = sendMessagesHelper;
         this.arg$2 = message;
         this.arg$3 = i;
         this.arg$4 = z;
         this.arg$5 = arrayList;
-        this.arg$6 = str;
+        this.arg$6 = i2;
+        this.arg$7 = str;
     }
 
     public void run() {
-        this.arg$1.lambda$null$38$SendMessagesHelper(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6);
+        this.arg$1.lambda$null$38$SendMessagesHelper(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6, this.arg$7);
     }
 }

@@ -13,6 +13,6 @@ final /* synthetic */ class AlertsCreator$$Lambda$27 implements OnClickListener 
     }
 
     public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.presentFragment(new CacheControlActivity());
+        this.arg$1.lambda$runLinkRequest$27$LaunchActivity(new CacheControlActivity());
     }
 }

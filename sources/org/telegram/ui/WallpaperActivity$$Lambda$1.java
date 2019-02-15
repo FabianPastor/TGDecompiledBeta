@@ -11,6 +11,6 @@ final /* synthetic */ class WallpaperActivity$$Lambda$1 implements OnClickListen
     }
 
     public void onClick(View view) {
-        this.arg$1.lambda$createView$2$WallpaperActivity(view);
+        this.arg$1.lambda$createView$1$WallpaperActivity(view);
     }
 }

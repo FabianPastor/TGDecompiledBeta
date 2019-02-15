@@ -1003,7 +1003,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    ChannelAdminLogActivity.this.lambda$checkDiscard$18$ChatUsersActivity();
+                    ChannelAdminLogActivity.this.lambda$createView$1$AudioSelectActivity();
                 }
             }
         });

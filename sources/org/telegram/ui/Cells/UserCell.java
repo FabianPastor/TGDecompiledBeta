@@ -21,6 +21,7 @@ import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
+import org.telegram.tgnet.TLRPC.EncryptedChat;
 import org.telegram.tgnet.TLRPC.FileLocation;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.SimpleTextView;
@@ -30,6 +31,7 @@ import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox;
 import org.telegram.ui.Components.CheckBoxSquare;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.NotificationsSettingsActivity.NotificationException;
 
 public class UserCell extends FrameLayout {
     private TextView adminTextView;
@@ -43,6 +45,7 @@ public class UserCell extends FrameLayout {
     private CharSequence currentName;
     private TLObject currentObject;
     private CharSequence currrntStatus;
+    private EncryptedChat encryptedChat;
     private ImageView imageView;
     private FileLocation lastAvatar;
     private String lastName;
@@ -188,10 +191,14 @@ public class UserCell extends FrameLayout {
     }
 
     public void setData(TLObject object, CharSequence name, CharSequence status, int resId) {
-        setData(object, name, status, resId, false);
+        setData(object, null, name, status, resId, false);
     }
 
     public void setData(TLObject object, CharSequence name, CharSequence status, int resId, boolean divider) {
+        setData(object, null, name, status, resId, divider);
+    }
+
+    public void setData(TLObject object, EncryptedChat ec, CharSequence name, CharSequence status, int resId, boolean divider) {
         if (object == null && name == null && status == null) {
             this.currrntStatus = null;
             this.currentName = null;
@@ -202,6 +209,7 @@ public class UserCell extends FrameLayout {
             return;
         }
         boolean z;
+        this.encryptedChat = ec;
         this.currrntStatus = status;
         this.currentName = name;
         this.currentObject = object;
@@ -214,6 +222,73 @@ public class UserCell extends FrameLayout {
         }
         setWillNotDraw(z);
         update(0);
+    }
+
+    public void setException(NotificationException exception, CharSequence name, boolean divider) {
+        String text;
+        boolean custom = exception.hasCustom;
+        int value = exception.notify;
+        int delta = exception.muteUntil;
+        if (value != 3 || delta == Integer.MAX_VALUE) {
+            boolean enabled;
+            if (value == 0) {
+                enabled = true;
+            } else if (value == 1) {
+                enabled = true;
+            } else if (value == 2) {
+                enabled = false;
+            } else {
+                enabled = false;
+            }
+            if (enabled && custom) {
+                text = LocaleController.getString("NotificationsCustom", R.string.NotificationsCustom);
+            } else if (enabled) {
+                text = LocaleController.getString("NotificationsUnmuted", R.string.NotificationsUnmuted);
+            } else {
+                text = LocaleController.getString("NotificationsMuted", R.string.NotificationsMuted);
+            }
+        } else {
+            delta -= ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
+            if (delta <= 0) {
+                if (custom) {
+                    text = LocaleController.getString("NotificationsCustom", R.string.NotificationsCustom);
+                } else {
+                    text = LocaleController.getString("NotificationsUnmuted", R.string.NotificationsUnmuted);
+                }
+            } else if (delta < 3600) {
+                text = LocaleController.formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Minutes", delta / 60));
+            } else if (delta < 86400) {
+                text = LocaleController.formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Hours", (int) Math.ceil((double) ((((float) delta) / 60.0f) / 60.0f))));
+            } else if (delta < 31536000) {
+                text = LocaleController.formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Days", (int) Math.ceil((double) (((((float) delta) / 60.0f) / 60.0f) / 24.0f))));
+            } else {
+                text = null;
+            }
+        }
+        if (text == null) {
+            text = LocaleController.getString("NotificationsOff", R.string.NotificationsOff);
+        }
+        int lower_id = (int) exception.did;
+        int high_id = (int) (exception.did >> 32);
+        if (lower_id == 0) {
+            EncryptedChat encryptedChat = MessagesController.getInstance(this.currentAccount).getEncryptedChat(Integer.valueOf(high_id));
+            if (encryptedChat != null) {
+                TLObject user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(encryptedChat.user_id));
+                if (user != null) {
+                    setData(user, encryptedChat, name, text, 0, false);
+                }
+            }
+        } else if (lower_id > 0) {
+            User user2 = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(lower_id));
+            if (user2 != null) {
+                setData(user2, null, name, text, 0, divider);
+            }
+        } else {
+            Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-lower_id));
+            if (chat != null) {
+                setData(chat, null, name, text, 0, divider);
+            }
+        }
     }
 
     public void setNameTypeface(Typeface typeface) {

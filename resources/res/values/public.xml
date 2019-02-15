@@ -982,6 +982,7 @@
     <public type="string" name="Alert" id="NUM" />
     <public type="string" name="AllMedia" id="NUM" />
     <public type="string" name="AllPhotos" id="NUM" />
+    <public type="string" name="AllVideos" id="NUM" />
     <public type="string" name="AllowCustomQuickReply" id="NUM" />
     <public type="string" name="AllowFillNumber" id="NUM" />
     <public type="string" name="AllowReadCall" id="NUM" />
@@ -1019,6 +1020,7 @@
     <public type="string" name="ApplyLocalizationFile" id="NUM" />
     <public type="string" name="ApplyTheme" id="NUM" />
     <public type="string" name="ApplyThemeFile" id="NUM" />
+    <public type="string" name="April" id="NUM" />
     <public type="string" name="ArchivedMasks" id="NUM" />
     <public type="string" name="ArchivedMasksAlertInfo" id="NUM" />
     <public type="string" name="ArchivedMasksAlertTitle" id="NUM" />
@@ -1093,6 +1095,7 @@
     <public type="string" name="AudioTitle" id="NUM" />
     <public type="string" name="AudioUnknownArtist" id="NUM" />
     <public type="string" name="AudioUnknownTitle" id="NUM" />
+    <public type="string" name="August" id="NUM" />
     <public type="string" name="AutoDownloadMedia" id="NUM" />
     <public type="string" name="AutoLock" id="NUM" />
     <public type="string" name="AutoLockDisabled" id="NUM" />
@@ -1108,6 +1111,7 @@
     <public type="string" name="AutoNightSchedule" id="NUM" />
     <public type="string" name="AutoNightScheduled" id="NUM" />
     <public type="string" name="AutoNightTheme" id="NUM" />
+    <public type="string" name="AutoNightThemeOff" id="NUM" />
     <public type="string" name="AutoNightTo" id="NUM" />
     <public type="string" name="AutoNightUpdateLocation" id="NUM" />
     <public type="string" name="AutoNightUpdateLocationInfo" id="NUM" />
@@ -1123,19 +1127,31 @@
     <public type="string" name="AwaitingEncryption" id="NUM" />
     <public type="string" name="Back" id="NUM" />
     <public type="string" name="BackgroundBlurred" id="NUM" />
+    <public type="string" name="BackgroundBrightness" id="NUM" />
+    <public type="string" name="BackgroundColor" id="NUM" />
+    <public type="string" name="BackgroundColorPreviewLine1" id="NUM" />
+    <public type="string" name="BackgroundColorPreviewLine2" id="NUM" />
+    <public type="string" name="BackgroundColorSinglePreviewLine1" id="NUM" />
+    <public type="string" name="BackgroundColorSinglePreviewLine2" id="NUM" />
+    <public type="string" name="BackgroundHexColorCode" id="NUM" />
+    <public type="string" name="BackgroundIntensity" id="NUM" />
     <public type="string" name="BackgroundMotion" id="NUM" />
+    <public type="string" name="BackgroundPattern" id="NUM" />
     <public type="string" name="BackgroundPreview" id="NUM" />
     <public type="string" name="BackgroundPreviewLine1" id="NUM" />
     <public type="string" name="BackgroundPreviewLine2" id="NUM" />
     <public type="string" name="BackgroundRestricted" id="NUM" />
+    <public type="string" name="BackgroundSearchColor" id="NUM" />
     <public type="string" name="BadgeNumber" id="NUM" />
     <public type="string" name="BadgeNumberMutedChats" id="NUM" />
     <public type="string" name="BadgeNumberShow" id="NUM" />
     <public type="string" name="BadgeNumberUnread" id="NUM" />
     <public type="string" name="BanFromTheGroup" id="NUM" />
     <public type="string" name="BannedPhoneNumber" id="NUM" />
+    <public type="string" name="Black" id="NUM" />
     <public type="string" name="BlockContact" id="NUM" />
     <public type="string" name="BlockedUsers" id="NUM" />
+    <public type="string" name="Blue" id="NUM" />
     <public type="string" name="BlurLinear" id="NUM" />
     <public type="string" name="BlurOff" id="NUM" />
     <public type="string" name="BlurRadial" id="NUM" />
@@ -1154,6 +1170,7 @@
     <public type="string" name="BotStatusRead" id="NUM" />
     <public type="string" name="BotStop" id="NUM" />
     <public type="string" name="BotUnblock" id="NUM" />
+    <public type="string" name="Brown" id="NUM" />
     <public type="string" name="BytesReceived" id="NUM" />
     <public type="string" name="BytesSent" id="NUM" />
     <public type="string" name="CacheClear" id="NUM" />
@@ -1376,6 +1393,7 @@
     <public type="string" name="ColorPink" id="NUM" />
     <public type="string" name="ColorRed" id="NUM" />
     <public type="string" name="ColorSepia" id="NUM" />
+    <public type="string" name="ColorTheme" id="NUM" />
     <public type="string" name="ColorViolet" id="NUM" />
     <public type="string" name="ColorWhite" id="NUM" />
     <public type="string" name="ColorYellow" id="NUM" />
@@ -1414,9 +1432,10 @@
     <public type="string" name="CreateGroupError" id="NUM" />
     <public type="string" name="CreateLink" id="NUM" />
     <public type="string" name="CreateNewContact" id="NUM" />
-    <public type="string" name="CreateNewTheme" id="NUM" />
+    <public type="string" name="CreateNewThemeAlert" id="NUM" />
     <public type="string" name="CreateNewThemeHelp" id="NUM" />
-    <public type="string" name="CreateNewThemeInfo" id="NUM" />
+    <public type="string" name="CreateNewThemeMenu" id="NUM" />
+    <public type="string" name="CreateTheme" id="NUM" />
     <public type="string" name="Crop" id="NUM" />
     <public type="string" name="CropImage" id="NUM" />
     <public type="string" name="CropOriginal" id="NUM" />
@@ -1462,6 +1481,7 @@
     <public type="string" name="DebugMenuResetContacts" id="NUM" />
     <public type="string" name="DebugMenuResetDialogs" id="NUM" />
     <public type="string" name="DebugSendLogs" id="NUM" />
+    <public type="string" name="December" id="NUM" />
     <public type="string" name="Decline" id="NUM" />
     <public type="string" name="DeclineDeactivate" id="NUM" />
     <public type="string" name="Default" id="NUM" />
@@ -1475,6 +1495,7 @@
     <public type="string" name="DeleteAndStop" id="NUM" />
     <public type="string" name="DeleteBanUser" id="NUM" />
     <public type="string" name="DeleteChat" id="NUM" />
+    <public type="string" name="DeleteChatBackgroundsAlert" id="NUM" />
     <public type="string" name="DeleteChatUser" id="NUM" />
     <public type="string" name="DeleteContact" id="NUM" />
     <public type="string" name="DeleteForAll" id="NUM" />
@@ -1674,6 +1695,7 @@
     <public type="string" name="FavoriteStickers" id="NUM" />
     <public type="string" name="FeaturedStickers" id="NUM" />
     <public type="string" name="FeaturedStickersInfo" id="NUM" />
+    <public type="string" name="February" id="NUM" />
     <public type="string" name="FileUploadLimit" id="NUM" />
     <public type="string" name="FilesDataUsage" id="NUM" />
     <public type="string" name="Files_few" id="NUM" />
@@ -1691,6 +1713,9 @@
     <public type="string" name="FloodWaitTime" id="NUM" />
     <public type="string" name="Folder" id="NUM" />
     <public type="string" name="FontSize" id="NUM" />
+    <public type="string" name="FontSizePreviewLine1" id="NUM" />
+    <public type="string" name="FontSizePreviewLine2" id="NUM" />
+    <public type="string" name="FontSizePreviewReply" id="NUM" />
     <public type="string" name="ForgotPassword" id="NUM" />
     <public type="string" name="Forward" id="NUM" />
     <public type="string" name="ForwardTo" id="NUM" />
@@ -1786,6 +1811,8 @@
     <public type="string" name="GotAQuestion" id="NUM" />
     <public type="string" name="GpsDisabledAlert" id="NUM" />
     <public type="string" name="Grain" id="NUM" />
+    <public type="string" name="Gray" id="NUM" />
+    <public type="string" name="Green" id="NUM" />
     <public type="string" name="GroupDeletedUndo" id="NUM" />
     <public type="string" name="GroupDescription1" id="NUM" />
     <public type="string" name="GroupDescription2" id="NUM" />
@@ -1884,10 +1911,13 @@
     <public type="string" name="IsTyping" id="NUM" />
     <public type="string" name="IsTypingGroup" id="NUM" />
     <public type="string" name="Italic" id="NUM" />
+    <public type="string" name="January" id="NUM" />
     <public type="string" name="JoinGroup" id="NUM" />
     <public type="string" name="JoinToGroupErrorFull" id="NUM" />
     <public type="string" name="JoinToGroupErrorNotExist" id="NUM" />
+    <public type="string" name="July" id="NUM" />
     <public type="string" name="JumpToDate" id="NUM" />
+    <public type="string" name="June" id="NUM" />
     <public type="string" name="KMetersAway" id="NUM" />
     <public type="string" name="KeepMedia" id="NUM" />
     <public type="string" name="KeepMediaForever" id="NUM" />
@@ -1980,11 +2010,13 @@
     <public type="string" name="MapPreviewProviderNobody" id="NUM" />
     <public type="string" name="MapPreviewProviderTelegram" id="NUM" />
     <public type="string" name="MapPreviewProviderYandex" id="NUM" />
+    <public type="string" name="March" id="NUM" />
     <public type="string" name="MarkAsRead" id="NUM" />
     <public type="string" name="MarkAsUnread" id="NUM" />
     <public type="string" name="Masks" id="NUM" />
     <public type="string" name="MasksInfo" id="NUM" />
     <public type="string" name="MasksRemoved" id="NUM" />
+    <public type="string" name="May" id="NUM" />
     <public type="string" name="Media_few" id="NUM" />
     <public type="string" name="Media_many" id="NUM" />
     <public type="string" name="Media_one" id="NUM" />
@@ -2213,6 +2245,7 @@
     <public type="string" name="NotificationMessagesPeopleDisplayOrder" id="NUM" />
     <public type="string" name="NotificationUnrecognizedDevice" id="NUM" />
     <public type="string" name="Notifications" id="NUM" />
+    <public type="string" name="NotificationsAddAnException" id="NUM" />
     <public type="string" name="NotificationsAndSounds" id="NUM" />
     <public type="string" name="NotificationsChannels" id="NUM" />
     <public type="string" name="NotificationsCustom" id="NUM" />
@@ -2233,6 +2266,7 @@
     <public type="string" name="NotificationsLedColor" id="NUM" />
     <public type="string" name="NotificationsLedInfo" id="NUM" />
     <public type="string" name="NotificationsMuted" id="NUM" />
+    <public type="string" name="NotificationsNewException" id="NUM" />
     <public type="string" name="NotificationsOff" id="NUM" />
     <public type="string" name="NotificationsOffUntil" id="NUM" />
     <public type="string" name="NotificationsOn" id="NUM" />
@@ -2250,8 +2284,10 @@
     <public type="string" name="NotificationsTurnOff" id="NUM" />
     <public type="string" name="NotificationsTurnOn" id="NUM" />
     <public type="string" name="NotificationsUnmuted" id="NUM" />
+    <public type="string" name="November" id="NUM" />
     <public type="string" name="NumberUnknown" id="NUM" />
     <public type="string" name="OK" id="NUM" />
+    <public type="string" name="October" id="NUM" />
     <public type="string" name="Of" id="NUM" />
     <public type="string" name="Online" id="NUM" />
     <public type="string" name="OnlineCount_few" id="NUM" />
@@ -2279,6 +2315,7 @@
     <public type="string" name="Option_other" id="NUM" />
     <public type="string" name="Option_two" id="NUM" />
     <public type="string" name="Option_zero" id="NUM" />
+    <public type="string" name="Orange" id="NUM" />
     <public type="string" name="OtherLoginCode" id="NUM" />
     <public type="string" name="OtherSessions" id="NUM" />
     <public type="string" name="OtherWebSessions" id="NUM" />
@@ -2598,6 +2635,7 @@
     <public type="string" name="PinToTop" id="NUM" />
     <public type="string" name="PinToTopLimitReached" id="NUM" />
     <public type="string" name="Ping" id="NUM" />
+    <public type="string" name="Pink" id="NUM" />
     <public type="string" name="PinnedMessage" id="NUM" />
     <public type="string" name="PinnedMessages" id="NUM" />
     <public type="string" name="PinnedPoll" id="NUM" />
@@ -2646,6 +2684,7 @@
     <public type="string" name="ProxyConnections" id="NUM" />
     <public type="string" name="ProxyDetails" id="NUM" />
     <public type="string" name="ProxySettings" id="NUM" />
+    <public type="string" name="Purple" id="NUM" />
     <public type="string" name="Question" id="NUM" />
     <public type="string" name="QuestionHint" id="NUM" />
     <public type="string" name="QuickReplyCustom" id="NUM" />
@@ -2675,6 +2714,7 @@
     <public type="string" name="RecordingAudio" id="NUM" />
     <public type="string" name="RecordingRound" id="NUM" />
     <public type="string" name="RecoveryEmail" id="NUM" />
+    <public type="string" name="Red" id="NUM" />
     <public type="string" name="RegisterText2" id="NUM" />
     <public type="string" name="Regular" id="NUM" />
     <public type="string" name="RemoveFromListText" id="NUM" />
@@ -2715,6 +2755,9 @@
     <public type="string" name="ResetAllNotifications" id="NUM" />
     <public type="string" name="ResetAutomaticMediaDownload" id="NUM" />
     <public type="string" name="ResetAutomaticMediaDownloadAlert" id="NUM" />
+    <public type="string" name="ResetChatBackgrounds" id="NUM" />
+    <public type="string" name="ResetChatBackgroundsAlert" id="NUM" />
+    <public type="string" name="ResetChatBackgroundsInfo" id="NUM" />
     <public type="string" name="ResetMyAccount" id="NUM" />
     <public type="string" name="ResetMyAccountText" id="NUM" />
     <public type="string" name="ResetMyAccountWarning" id="NUM" />
@@ -2758,6 +2801,8 @@
     <public type="string" name="ScreenCaptureInfo" id="NUM" />
     <public type="string" name="SdCard" id="NUM" />
     <public type="string" name="Search" id="NUM" />
+    <public type="string" name="SearchBackgrounds" id="NUM" />
+    <public type="string" name="SearchByColor" id="NUM" />
     <public type="string" name="SearchFriends" id="NUM" />
     <public type="string" name="SearchFrom" id="NUM" />
     <public type="string" name="SearchGifs" id="NUM" />
@@ -2832,6 +2877,7 @@
     <public type="string" name="SentCallOnly" id="NUM" />
     <public type="string" name="SentSmsCode" id="NUM" />
     <public type="string" name="SentSmsCodeTitle" id="NUM" />
+    <public type="string" name="September" id="NUM" />
     <public type="string" name="ServiceNotifications" id="NUM" />
     <public type="string" name="SessionsInfo" id="NUM" />
     <public type="string" name="SessionsTitle" id="NUM" />
@@ -2958,6 +3004,7 @@
     <public type="string" name="TapToChange" id="NUM" />
     <public type="string" name="TapToChangePhone" id="NUM" />
     <public type="string" name="TapToDownload" id="NUM" />
+    <public type="string" name="Teal" id="NUM" />
     <public type="string" name="TelegramContacts_few" id="NUM" />
     <public type="string" name="TelegramContacts_many" id="NUM" />
     <public type="string" name="TelegramContacts_one" id="NUM" />
@@ -2983,7 +3030,7 @@
     <public type="string" name="TermsOfService" id="NUM" />
     <public type="string" name="TermsOfServiceLogin" id="NUM" />
     <public type="string" name="TextCopied" id="NUM" />
-    <public type="string" name="TextSize" id="NUM" />
+    <public type="string" name="TextSizeHeader" id="NUM" />
     <public type="string" name="Theme" id="NUM" />
     <public type="string" name="ThemeBlue" id="NUM" />
     <public type="string" name="ThemeDark" id="NUM" />
@@ -3194,6 +3241,7 @@
     <public type="string" name="WhenConnectedOnWiFi" id="NUM" />
     <public type="string" name="WhenRoaming" id="NUM" />
     <public type="string" name="WhenUsingMobileData" id="NUM" />
+    <public type="string" name="White" id="NUM" />
     <public type="string" name="WhoCanAddMe" id="NUM" />
     <public type="string" name="WhoCanAddMeInfo" id="NUM" />
     <public type="string" name="WhoCanAddMembers" id="NUM" />
@@ -3213,6 +3261,7 @@
     <public type="string" name="Years_other" id="NUM" />
     <public type="string" name="Years_two" id="NUM" />
     <public type="string" name="Years_zero" id="NUM" />
+    <public type="string" name="Yellow" id="NUM" />
     <public type="string" name="Yesterday" id="NUM" />
     <public type="string" name="YesterdayAt" id="NUM" />
     <public type="string" name="YesterdayAtFormatted" id="NUM" />

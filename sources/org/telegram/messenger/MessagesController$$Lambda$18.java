@@ -11,6 +11,6 @@ final /* synthetic */ class MessagesController$$Lambda$18 implements RequestDele
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        MessagesController.lambda$reportSpam$23$MessagesController(tLObject, tL_error);
+        MessagesController.lambda$reportSpam$24$MessagesController(tLObject, tL_error);
     }
 }

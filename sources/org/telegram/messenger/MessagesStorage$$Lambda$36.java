@@ -20,6 +20,6 @@ final /* synthetic */ class MessagesStorage$$Lambda$36 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$createTaskForSecretChat$56$MessagesStorage(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6);
+        this.arg$1.lambda$createTaskForSecretChat$57$MessagesStorage(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6);
     }
 }

@@ -851,7 +851,9 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
         this.chatId = param;
         this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(param));
         this.donePressed = false;
-        this.info.hidden_prehistory = true;
+        if (this.info != null) {
+            this.info.hidden_prehistory = true;
+        }
         processDone();
     }
 

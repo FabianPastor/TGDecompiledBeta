@@ -1,15 +1,14 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
+import java.util.Comparator;
 
-final /* synthetic */ class NewContactActivity$$Lambda$7 implements ThemeDescriptionDelegate {
-    private final NewContactActivity arg$1;
+final /* synthetic */ class NewContactActivity$$Lambda$7 implements Comparator {
+    static final Comparator $instance = new NewContactActivity$$Lambda$7();
 
-    NewContactActivity$$Lambda$7(NewContactActivity newContactActivity) {
-        this.arg$1 = newContactActivity;
+    private NewContactActivity$$Lambda$7() {
     }
 
-    public void didSetColor() {
-        this.arg$1.lambda$getThemeDescriptions$8$NewContactActivity();
+    public int compare(Object obj, Object obj2) {
+        return ((String) obj).compareTo((String) obj2);
     }
 }

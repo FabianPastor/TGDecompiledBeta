@@ -1,16 +1,18 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_error;
+import android.view.View;
+import android.view.View.OnClickListener;
 
-final /* synthetic */ class WallpaperActivity$$Lambda$4 implements RequestDelegate {
-    static final RequestDelegate $instance = new WallpaperActivity$$Lambda$4();
+final /* synthetic */ class WallpaperActivity$$Lambda$4 implements OnClickListener {
+    private final WallpaperActivity arg$1;
+    private final int arg$2;
 
-    private WallpaperActivity$$Lambda$4() {
+    WallpaperActivity$$Lambda$4(WallpaperActivity wallpaperActivity, int i) {
+        this.arg$1 = wallpaperActivity;
+        this.arg$2 = i;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        WallpaperActivity.lambda$null$1$WallpaperActivity(tLObject, tL_error);
+    public void onClick(View view) {
+        this.arg$1.lambda$createView$4$WallpaperActivity(this.arg$2, view);
     }
 }

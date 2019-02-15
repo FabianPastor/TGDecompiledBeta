@@ -16,6 +16,6 @@ final /* synthetic */ class MessagesStorage$$Lambda$82 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$overwriteChannel$111$MessagesStorage(this.arg$2, this.arg$3, this.arg$4);
+        this.arg$1.lambda$overwriteChannel$112$MessagesStorage(this.arg$2, this.arg$3, this.arg$4);
     }
 }

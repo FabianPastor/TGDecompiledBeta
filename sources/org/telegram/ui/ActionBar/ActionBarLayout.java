@@ -47,6 +47,7 @@ public class ActionBarLayout extends FrameLayout {
     private AccelerateDecelerateInterpolator accelerateDecelerateInterpolator = new AccelerateDecelerateInterpolator();
     private int[][] animateEndColors = new int[2][];
     private ThemeInfo animateSetThemeAfterAnimation;
+    private boolean animateSetThemeNightAfterAnimation;
     private int[][] animateStartColors = new int[2][];
     private boolean animateThemeAfterAnimation;
     protected boolean animationInProgress;
@@ -1245,11 +1246,12 @@ public class ActionBarLayout extends FrameLayout {
         return this.themeAnimationValue;
     }
 
-    public void animateThemedValues(ThemeInfo theme) {
+    public void animateThemedValues(ThemeInfo theme, boolean nightTheme) {
         int i = 1;
         if (this.transitionAnimationInProgress || this.startedTracking) {
             this.animateThemeAfterAnimation = true;
             this.animateSetThemeAfterAnimation = theme;
+            this.animateSetThemeNightAfterAnimation = nightTheme;
             return;
         }
         BaseFragment fragment;
@@ -1282,7 +1284,7 @@ public class ActionBarLayout extends FrameLayout {
                     }
                 }
                 if (i2 == 0) {
-                    Theme.applyTheme(theme, true);
+                    Theme.applyTheme(theme, nightTheme);
                 }
                 this.animateEndColors[i2] = new int[this.themeAnimatorDescriptions[i2].length];
                 for (a = 0; a < this.themeAnimatorDescriptions[i2].length; a++) {
@@ -1396,7 +1398,7 @@ public class ActionBarLayout extends FrameLayout {
             rebuildAllFragmentViews(this.rebuildLastAfterAnimation, this.showLastAfterAnimation);
             this.rebuildAfterAnimation = false;
         } else if (this.animateThemeAfterAnimation) {
-            animateThemedValues(this.animateSetThemeAfterAnimation);
+            animateThemedValues(this.animateSetThemeAfterAnimation, this.animateSetThemeNightAfterAnimation);
             this.animateSetThemeAfterAnimation = null;
             this.animateThemeAfterAnimation = false;
         }

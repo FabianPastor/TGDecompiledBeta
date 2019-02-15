@@ -135,7 +135,6 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.updateInterfaces);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.encryptedChatCreated);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.closeChats);
-        MessagesController.getGlobalNotificationsSettings().getBoolean("askAboutContacts", true);
         this.checkPermission = UserConfig.getInstance(this.currentAccount).syncContacts;
         if (this.arguments != null) {
             this.onlyUsers = getArguments().getBoolean("onlyUsers", false);
@@ -335,7 +334,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         recyclerListView.setLayoutManager(linearLayoutManager);
         this.listView.setAdapter(this.listViewAdapter);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new ContactsActivity$$Lambda$0(this));
+        this.listView.setOnItemClickListener(new ContactsActivity$$Lambda$0(this, inviteViaLink));
         this.listView.setOnScrollListener(new OnScrollListener() {
             private boolean scrollingManually;
 
@@ -441,7 +440,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         return this.fragmentView;
     }
 
-    final /* synthetic */ void lambda$createView$1$ContactsActivity(View view, int position) {
+    final /* synthetic */ void lambda$createView$1$ContactsActivity(boolean inviteViaLink, View view, int position) {
         User user;
         Bundle args;
         if (this.searching && this.searchWas) {
@@ -480,7 +479,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         int section = this.listViewAdapter.getSectionForPosition(position);
         int row = this.listViewAdapter.getPositionInSectionForPosition(position);
         if (row >= 0 && section >= 0) {
-            if ((this.onlyUsers && this.chat_id == 0) || section != 0) {
+            if ((this.onlyUsers && (this.chat_id == 0 || !inviteViaLink)) || section != 0) {
                 Contact item1 = this.listViewAdapter.getItem(section, row);
                 if (item1 instanceof User) {
                     user = (User) item1;
@@ -697,15 +696,10 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     }
 
     final /* synthetic */ void lambda$onResume$5$ContactsActivity(int param) {
-        boolean z;
+        this.askAboutContacts = param != 0;
         if (param != 0) {
-            z = true;
-        } else {
-            z = false;
+            askForPermissons(false);
         }
-        this.askAboutContacts = z;
-        MessagesController.getGlobalNotificationsSettings().edit().putBoolean("askAboutContacts", this.askAboutContacts).commit();
-        askForPermissons(false);
     }
 
     public void onConfigurationChanged(Configuration newConfig) {
@@ -730,7 +724,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
 
     protected void onDialogDismiss(Dialog dialog) {
         super.onDialogDismiss(dialog);
-        if (this.permissionDialog != null && dialog == this.permissionDialog && getParentActivity() != null) {
+        if (this.permissionDialog != null && dialog == this.permissionDialog && getParentActivity() != null && this.askAboutContacts) {
             askForPermissons(false);
         }
     }
@@ -752,15 +746,10 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     }
 
     final /* synthetic */ void lambda$askForPermissons$6$ContactsActivity(int param) {
-        boolean z;
+        this.askAboutContacts = param != 0;
         if (param != 0) {
-            z = true;
-        } else {
-            z = false;
+            askForPermissons(false);
         }
-        this.askAboutContacts = z;
-        MessagesController.getGlobalNotificationsSettings().edit().putBoolean("askAboutContacts", this.askAboutContacts).commit();
-        askForPermissons(false);
     }
 
     public void onRequestPermissionsResultFragment(int requestCode, String[] permissions, int[] grantResults) {

@@ -298,7 +298,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                 }
                 PhotoCropActivity photoCropActivity = new PhotoCropActivity(args);
                 photoCropActivity.setDelegate(this);
-                activity.presentFragment(photoCropActivity);
+                activity.lambda$runLinkRequest$27$LaunchActivity(photoCropActivity);
             }
         } catch (Throwable e) {
             FileLog.e(e);

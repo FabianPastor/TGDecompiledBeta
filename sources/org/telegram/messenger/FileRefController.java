@@ -63,6 +63,7 @@ import org.telegram.tgnet.TLRPC.TL_wallPaper;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.tgnet.TLRPC.UserProfilePhoto;
 import org.telegram.tgnet.TLRPC.Vector;
+import org.telegram.tgnet.TLRPC.WallPaper;
 import org.telegram.tgnet.TLRPC.WebPage;
 import org.telegram.tgnet.TLRPC.messages_Messages;
 import org.telegram.tgnet.TLRPC.photos_Photos;
@@ -149,7 +150,7 @@ public class FileRefController {
         } else if (parentObject instanceof InputStickerSet) {
             return "set" + ((InputStickerSet) parentObject).id;
         } else if (!(parentObject instanceof TL_wallPaper)) {
-            return null;
+            return parentObject != null ? "" + parentObject : null;
         } else {
             return "wallpaper" + ((TL_wallPaper) parentObject).id;
         }
@@ -726,15 +727,15 @@ public class FileRefController {
                         }
                     }
                     if (result != null && cache) {
-                        MessagesStorage.getInstance(this.currentAccount).putWallpapers(accountWallPapers.wallpapers, true);
+                        MessagesStorage.getInstance(this.currentAccount).putWallpapers(accountWallPapers.wallpapers, 1);
                     }
                 } else if (response instanceof TL_wallPaper) {
                     TL_wallPaper wallPaper = (TL_wallPaper) response;
                     result = getFileReference(wallPaper.document, requester.location);
                     if (result != null && cache) {
-                        ArrayList<TL_wallPaper> wallpapers = new ArrayList();
+                        ArrayList<WallPaper> wallpapers = new ArrayList();
                         wallpapers.add(wallPaper);
-                        MessagesStorage.getInstance(this.currentAccount).putWallpapers(wallpapers, false);
+                        MessagesStorage.getInstance(this.currentAccount).putWallpapers(wallpapers, 0);
                     }
                 } else if (response instanceof Vector) {
                     Vector vector = (Vector) response;

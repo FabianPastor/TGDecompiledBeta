@@ -1,21 +1,15 @@
 package org.telegram.ui;
 
-import android.app.TimePickerDialog.OnTimeSetListener;
-import android.widget.TimePicker;
-import org.telegram.ui.Cells.TextSettingsCell;
+import org.telegram.ui.Components.EditTextBoldCursor;
 
-final /* synthetic */ class ThemeActivity$$Lambda$9 implements OnTimeSetListener {
-    private final ThemeActivity arg$1;
-    private final int arg$2;
-    private final TextSettingsCell arg$3;
+final /* synthetic */ class ThemeActivity$$Lambda$9 implements Runnable {
+    private final EditTextBoldCursor arg$1;
 
-    ThemeActivity$$Lambda$9(ThemeActivity themeActivity, int i, TextSettingsCell textSettingsCell) {
-        this.arg$1 = themeActivity;
-        this.arg$2 = i;
-        this.arg$3 = textSettingsCell;
+    ThemeActivity$$Lambda$9(EditTextBoldCursor editTextBoldCursor) {
+        this.arg$1 = editTextBoldCursor;
     }
 
-    public void onTimeSet(TimePicker timePicker, int i, int i2) {
-        this.arg$1.lambda$null$5$ThemeActivity(this.arg$2, this.arg$3, timePicker, i, i2);
+    public void run() {
+        ThemeActivity.lambda$null$7$ThemeActivity(this.arg$1);
     }
 }

@@ -11,6 +11,6 @@ final /* synthetic */ class ThemeActivity$$Lambda$0 implements OnItemClickListen
     }
 
     public void onItemClick(View view, int i) {
-        this.arg$1.lambda$createView$6$ThemeActivity(view, i);
+        this.arg$1.lambda$createView$4$ThemeActivity(view, i);
     }
 }

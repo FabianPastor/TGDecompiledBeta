@@ -12,8 +12,9 @@ final /* synthetic */ class SendMessagesHelper$$Lambda$57 implements Runnable {
     private final ArrayList arg$5;
     private final long arg$6;
     private final Message arg$7;
+    private final int arg$8;
 
-    SendMessagesHelper$$Lambda$57(SendMessagesHelper sendMessagesHelper, Message message, int i, Peer peer, ArrayList arrayList, long j, Message message2) {
+    SendMessagesHelper$$Lambda$57(SendMessagesHelper sendMessagesHelper, Message message, int i, Peer peer, ArrayList arrayList, long j, Message message2, int i2) {
         this.arg$1 = sendMessagesHelper;
         this.arg$2 = message;
         this.arg$3 = i;
@@ -21,9 +22,10 @@ final /* synthetic */ class SendMessagesHelper$$Lambda$57 implements Runnable {
         this.arg$5 = arrayList;
         this.arg$6 = j;
         this.arg$7 = message2;
+        this.arg$8 = i2;
     }
 
     public void run() {
-        this.arg$1.lambda$null$6$SendMessagesHelper(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6, this.arg$7);
+        this.arg$1.lambda$null$6$SendMessagesHelper(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6, this.arg$7, this.arg$8);
     }
 }

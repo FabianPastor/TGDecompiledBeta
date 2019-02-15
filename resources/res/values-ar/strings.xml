@@ -82,7 +82,7 @@
     <string name="AddAnOptionInfo">يمكنك إضافة %1$s.</string>
     <string name="AddAnOptionInfoMax">لقد قمت بإضافة الحد الأقصى من الخيارات.</string>
     <string name="AddBannedErrorAdmin">المعذرة، لا يمكنك حظر هذا المستخدم لأنه مشرف في هذه المجموعة ولا يمكنك تغيير ذلك.</string>
-    <string name="AddBotAsAdmin">Bots can only be added as administrators.</string>
+    <string name="AddBotAsAdmin">يمكن إضافة البوتات فقط كمشرفين.</string>
     <string name="AddCaption">إضافة وصف...</string>
     <string name="AddContact">إضافة</string>
     <string name="AddContactChat">إضافة جهة اتصال</string>
@@ -95,7 +95,7 @@
     <string name="AddProxy">إضافة بروكسي</string>
     <string name="AddRecipient">إضافة مستلم</string>
     <string name="AddShortcut">إضافة إلى الشاشة الرئيسية</string>
-    <string name="AddStickers">إضافة ملصق</string>
+    <string name="AddStickers">إضافة الملصقات</string>
     <string name="AddStickersInstalled">تمت إضافة ملصقات جديدة</string>
     <string name="AddStickersNotFound">لم يُعثر على الملصقات</string>
     <string name="AddSubscriber">إضافة مشترك </string>
@@ -108,11 +108,12 @@
     <string name="AddToTheGroupForwardCount">عدد الرسائل اﻷخيرة المراد تحويلها:</string>
     <string name="AddToTheGroupTitle">هل ترغب بإضافة %1$s للمحادثة %2$s؟</string>
     <string name="AddedToFavorites">تمت إضافة الملصق للمفضلة</string>
-    <string name="AdminWillBeRemoved">%1$s will be removed from admins if you restrict them.</string>
+    <string name="AdminWillBeRemoved">سيتم إزالة %1$s من المشرفين إذا قمت بتقييده.</string>
     <string name="Agree">موافق</string>
     <string name="Alert">عرض الإشعارات</string>
     <string name="AllMedia">كافة الوسائط</string>
     <string name="AllPhotos">كافة الصور</string>
+    <string name="AllVideos">جميع المقاطع المرئية</string>
     <string name="AllowCustomQuickReply">السماح برسائل مخصصة</string>
     <string name="AllowFillNumber">فضلًا قم بالسماح لتيليجرام بتلقي المكالمات ليتمكن من التحقق من رقم هاتفك تلقائيًا.</string>
     <string name="AllowReadCall">فصلًا قم بالسماح لتيليجرام باستقبال اتصالات ليتمكن من إدخال الرمز لك تلقائيًا.</string>
@@ -150,6 +151,7 @@
     <string name="ApplyLocalizationFile">تطبيق ملف التعريب</string>
     <string name="ApplyTheme">تطبيق</string>
     <string name="ApplyThemeFile">تطبيق النمط من الملف</string>
+    <string name="April">أبريل</string>
     <string name="ArchivedMasks">الأقنعة المؤرشفة</string>
     <string name="ArchivedMasksAlertInfo">تمت أرشفة بعض من حزم الأقنعة الخاصة بك. يمكنك إعادة تفعيل هذه الحزم عن طريق إعدادات الأقنعة.</string>
     <string name="ArchivedMasksAlertTitle">الأقنعة المؤرشفة</string>
@@ -168,9 +170,9 @@
     <string name="AreYouSureClearHistory">هل ترغب حقًا في مسح محتوى المحادثة؟</string>
     <string name="AreYouSureClearHistoryChannel">حذف كافة المحادثات والوسائط المتعلقة بهذه القناة من الذاكرة المؤقتة؟</string>
     <string name="AreYouSureClearHistoryGroup">حذف جميع الرسائل والوسائط المخزنة مؤقتًا من هذه المجموعة؟</string>
-    <string name="AreYouSureClearHistoryWithChat">Are you sure you want to clear the chat history in **%1$s**?</string>
-    <string name="AreYouSureClearHistoryWithSecretUser">Are you sure you want to clear your secret chat history with **%1$s**?</string>
-    <string name="AreYouSureClearHistoryWithUser">هل ترغب حقًا في حذف محتوى المحادثة مع **%1$s**؟</string>
+    <string name="AreYouSureClearHistoryWithChat">هل ترغب حقًا في مسح محتوى محادثة **%1$s**؟</string>
+    <string name="AreYouSureClearHistoryWithSecretUser">هل ترغب حقًا في مسح محتوى المحادثة السرية مع **%1$s**؟</string>
+    <string name="AreYouSureClearHistoryWithUser">هل ترغب حقًا في مسح محتوى المحادثة مع **%1$s**؟</string>
     <string name="AreYouSureDeleteAndExit">هل ترغب حقًا في حذف هذه المجموعة والخروج منها؟</string>
     <string name="AreYouSureDeleteAndExitName">هل ترغب حقًا في حذف ومغادرة المجموعة **%1$s**؟</string>
     <string name="AreYouSureDeleteContact">هل ترغب حقًا في حذف جهة الاتصال هذه؟</string>
@@ -224,6 +226,7 @@
     <string name="AudioTitle">الصوتيات المتبادلة</string>
     <string name="AudioUnknownArtist">المؤدي غير معروف</string>
     <string name="AudioUnknownTitle">عنوان غير معروف</string>
+    <string name="August">أغسطس</string>
     <string name="AutoDownloadMedia">تنزيل الوسائط تلقائيًا</string>
     <string name="AutoLock">القفل التلقائي</string>
     <string name="AutoLockDisabled">معطّل</string>
@@ -239,6 +242,7 @@
     <string name="AutoNightSchedule">الجدولة</string>
     <string name="AutoNightScheduled">مجدول</string>
     <string name="AutoNightTheme">الوضع الليلي الآلي</string>
+    <string name="AutoNightThemeOff">Off</string>
     <string name="AutoNightTo">حتى</string>
     <string name="AutoNightUpdateLocation">تحديث الموقع</string>
     <string name="AutoNightUpdateLocationInfo">يتطلب حساب مواعيد الشروق والغروب التحقق لمرة واحدة من موقعك التقريبي. يرجى العلم أن موقعك يتم حفظه في جهازك فقط.\10\10الغروب: %1$s\10الشروق: %2$s</string>
@@ -253,20 +257,32 @@
     <string name="Available">متاح</string>
     <string name="AwaitingEncryption">في انتظار اتصال %s بالإنترنت...</string>
     <string name="Back">رجوع</string>
-    <string name="BackgroundBlurred">Blurred</string>
-    <string name="BackgroundMotion">Motion</string>
+    <string name="BackgroundBlurred">تأثير ضبابي</string>
+    <string name="BackgroundBrightness">Brightness</string>
+    <string name="BackgroundColor">Color</string>
+    <string name="BackgroundColorPreviewLine1">اسحب لليمين أو لليسار لرؤية المزيد من الألوان.</string>
+    <string name="BackgroundColorPreviewLine2">يابدع الورد .. يا جمال الورد</string>
+    <string name="BackgroundColorSinglePreviewLine1">Press \'Set\' to apply the background.</string>
+    <string name="BackgroundColorSinglePreviewLine2">Enjoy the view.</string>
+    <string name="BackgroundHexColorCode">Hex color code</string>
+    <string name="BackgroundIntensity">Intensity</string>
+    <string name="BackgroundMotion">تأثير حركي</string>
+    <string name="BackgroundPattern">نقش</string>
     <string name="BackgroundPreview">معاينة الخلفية</string>
-    <string name="BackgroundPreviewLine1">Hint: some background images look better with blur effect.</string>
+    <string name="BackgroundPreviewLine1">ملحوظة: بعض الخلفيات تصبح أجمل عند إضافة التأثير الضبابي.</string>
     <string name="BackgroundPreviewLine2">شكرًا لك!</string>
     <string name="BackgroundRestricted">تم تقييد البيانات الخلفية</string>
+    <string name="BackgroundSearchColor">اللون:</string>
     <string name="BadgeNumber">شارةُ عدّاد الرسائل</string>
     <string name="BadgeNumberMutedChats">تضمين المحادثات المكتومة</string>
     <string name="BadgeNumberShow">مفعلة</string>
     <string name="BadgeNumberUnread">عَدُّ الرسائل غير المقروءة</string>
     <string name="BanFromTheGroup">حظر من المجموعة</string>
     <string name="BannedPhoneNumber">تم حظر هذا الرقم.</string>
+    <string name="Black">الأسود</string>
     <string name="BlockContact">حظر</string>
     <string name="BlockedUsers">المستخدمون المحظورون</string>
+    <string name="Blue">الأزرق</string>
     <string name="BlurLinear">طولي</string>
     <string name="BlurOff">إيقاف</string>
     <string name="BlurRadial">قُطري</string>
@@ -285,6 +301,7 @@
     <string name="BotStatusRead">يمكنه الوصول للرسائل</string>
     <string name="BotStop">إيقاف البوت</string>
     <string name="BotUnblock">إعادة تشغيل</string>
+    <string name="Brown">البني</string>
     <string name="BytesReceived">البايتات الواردة</string>
     <string name="BytesSent">البايتات المرسلة</string>
     <string name="CacheClear">مسح</string>
@@ -304,7 +321,7 @@
     <string name="CallNotAvailable">المعذرة، **%1$s** لا يستقبل مكالمات.</string>
     <string name="CallReportHint">ماذا حدث؟</string>
     <string name="CallReportIncludeLogs">تضمين المعلومات التقنية</string>
-    <string name="CallReportLogsExplain">هذا لن يفصح عن محتوى محادثتك، لكن سيساعد في حل المشكلة بشكل أسرع.</string>
+    <string name="CallReportLogsExplain">لن تفصح عن محتوى محادثتك وستساعدنا على حل المشكلة بشكل أسرع.</string>
     <string name="CallReportSent">شكرًا لمساهمتك في تحسين مكالمات تيليجرام.</string>
     <string name="CallText">سيتصل بك تيليجرام خلال %2$02d:%1$d</string>
     <string name="CallViaTelegram">مكالمة تيليجرام</string>
@@ -323,7 +340,7 @@
     <string name="CancelPollAlertTitle">تجاهل الاستفتاء؟</string>
     <string name="CancelRegistration">إلغاء التسجيل</string>
     <string name="CancelSending">إلغاء الإرسال</string>
-    <string name="CantAddBotAsAdmin">Sorry, bots can only be added to channels as administrators.</string>
+    <string name="CantAddBotAsAdmin">المعذرة، يمكن إضافة البوتات إلى القنوات فقط كمشرفين.</string>
     <string name="CantPlayVideo">لم يتمكن التطبيق من تشغيل هذا المقطع المرئي، هل ترغب في تشغيله بمشغل خارجي؟</string>
     <string name="Caption">الوصف</string>
     <string name="Change">تغيير</string>
@@ -331,7 +348,7 @@
     <string name="ChangePasscode">تغيير رمز القفل</string>
     <string name="ChangePasscodeInfo">عندما تقوم بتعيين رمز قفل إضافي ستظهر أيقونة قفل أعلى صفحةِ المحادثات. اضغط عليها لإقفال تيليجرام أو فتْحِه.\10\10ملحوظة: إذا نسيت رمز القفل فستحتاج لحذف التطبيق وإعادة تنزيله، ستفقد كافة محادثاتك السرية.</string>
     <string name="ChangePassword">تغيير كلمة المرور</string>
-    <string name="ChangePermissions">Change permissions</string>
+    <string name="ChangePermissions">تغيير صلاحيات العضو</string>
     <string name="ChangePhoneHelp">سيتم إرسال رسالة SMS قصيرة تحوي رمز التأكيد إلى رقمك الجديد.</string>
     <string name="ChangePhoneNewNumber">الرقم الجديد</string>
     <string name="ChangePhoneNumberOccupied">الرقم %1$s مرتبط بالفعل بحساب آخَر على تيليجرام. يرجى حذف ذلك الحساب قبل محاولة تغيير رقمك.</string>
@@ -341,7 +358,7 @@
     <string name="ChannelAddException">إضافة استثناء</string>
     <string name="ChannelAddMembers">إضافة أعضاء</string>
     <string name="ChannelAddTo">هل ترغب بإضافة %1$s إلى القناة؟</string>
-    <string name="ChannelAddToChannel">Add to channel</string>
+    <string name="ChannelAddToChannel">إضافة إلى القناة</string>
     <string name="ChannelAddToGroup">إضافة إلى المجموعة</string>
     <string name="ChannelAddedBy">un1 أضافك لهذه القناة</string>
     <string name="ChannelAddedByNotification">%1$s أضافك لقناة %2$s </string>
@@ -351,9 +368,9 @@
     <string name="ChannelAlertCreate">إنشاء قناة</string>
     <string name="ChannelAlertText">القنوات هي أداة جديدة لإيصال رسائلك لجمهور غير محدود.</string>
     <string name="ChannelAlertTitle">ما هي القنوات؟</string>
-    <string name="ChannelBlacklist">المحظورون</string>
-    <string name="ChannelBlockUser">حظر مستخدم</string>
-    <string name="ChannelBlockedUsers">المستخدمون المحظورون</string>
+    <string name="ChannelBlacklist">مستخدمون تمت إزالتهم</string>
+    <string name="ChannelBlockUser">إزالة مستخدم</string>
+    <string name="ChannelBlockedUsers">مستخدمون تمت إزالتهم</string>
     <string name="ChannelBroadcast">المنشور</string>
     <string name="ChannelCantOpenBanned">للأسف، تم حظرك من المشاركة في المجموعات العامة.</string>
     <string name="ChannelCantOpenNa">المعذرة، لا يمكن الوصول إلى هذه المحادثة.</string>
@@ -367,16 +384,16 @@
     <string name="ChannelDeleteMenu">حذف القناة</string>
     <string name="ChannelDeletedUndo">تم حذف القناة.</string>
     <string name="ChannelEdit">تعديل</string>
-    <string name="ChannelEditPermissions">Edit permissions</string>
+    <string name="ChannelEditPermissions">تعديل الصلاحيات</string>
     <string name="ChannelInviteLinkTitle">رابط الدعوة</string>
     <string name="ChannelInviteViaLink">الدعوة عبر رابط خاص</string>
     <string name="ChannelJoin">انضمام</string>
     <string name="ChannelJoinTo">هل ترغب في الانضمام لقناة \'%1$s\'؟</string>
     <string name="ChannelJoined">انضممتَ إلى القناة</string>
     <string name="ChannelLeaveAlert">هل ترغب حقًا في مغادرة القناة؟</string>
-    <string name="ChannelLeaveAlertWithName">Are you sure you want to leave **%1$s**?</string>
+    <string name="ChannelLeaveAlertWithName">هل ترغب حقًا في مغادرة **%1$s**؟</string>
     <string name="ChannelLinkInfo">يمكن لمستخدمي تيليجرام الانضمام إلى قناتك عبر هذا الرابط.</string>
-    <string name="ChannelLinkTitle">الرابط</string>
+    <string name="ChannelLinkTitle">رابط دائم</string>
     <string name="ChannelMegaJoined">قمتَ بالانضمام لهذه المجموعة</string>
     <string name="ChannelMembers">أعضاء</string>
     <string name="ChannelMembersInfo">يمكن لمشرفي القناة فقط مشاهدة هذه القائمة.</string>
@@ -410,9 +427,9 @@
     <string name="ChannelRemoveUser">الإزالة من القناة</string>
     <string name="ChannelRemoveUserAdmin">إزالة المشرف</string>
     <string name="ChannelRestrictedUsers">المستخدمون المقيدون</string>
-    <string name="ChannelSearchException">Search Exceptions</string>
+    <string name="ChannelSearchException">بحث في الاستثناءات</string>
     <string name="ChannelSettings">الإعدادات</string>
-    <string name="ChannelSettingsChangedAlert">You have changed some settings in this channel. Apply changes?</string>
+    <string name="ChannelSettingsChangedAlert">لقد قمت بتغيير بعض الإعدادات في هذه القناة. تطبيق التغييرات؟</string>
     <string name="ChannelSettingsTitle">إعدادات القناة</string>
     <string name="ChannelSignMessages">توقيع الرسائل</string>
     <string name="ChannelSignMessagesInfo">إضافة أسماء المشرفين للمنشورات التي ينشرونها.</string>
@@ -435,7 +452,7 @@
     <string name="Channels_two">قناتان</string>
     <string name="Channels_zero" />
     <string name="ChatAdmin">مشرف</string>
-    <string name="ChatBackground">خلفية الدردشة</string>
+    <string name="ChatBackground">خلفية المحادثة</string>
     <string name="ChatCamera">الكاميرا</string>
     <string name="ChatDeletedUndo">تم حذف المحادثة.</string>
     <string name="ChatDocument">ملف</string>
@@ -507,6 +524,7 @@
     <string name="ColorPink">زهري</string>
     <string name="ColorRed">أحمر</string>
     <string name="ColorSepia">بني</string>
+    <string name="ColorTheme">لون النمط</string>
     <string name="ColorViolet">بنفسجي</string>
     <string name="ColorWhite">أبيض</string>
     <string name="ColorYellow">أصفر</string>
@@ -545,9 +563,10 @@
     <string name="CreateGroupError">المعذرة، لا يمكنك إنشاء مجموعة مع هؤلاء المستخدمين نظرًا لإعدادات خصوصيتهم.</string>
     <string name="CreateLink">إنشاء رابط</string>
     <string name="CreateNewContact">إنشاء جهة اتصال جديدة</string>
-    <string name="CreateNewTheme">إنشاء نمط جديد</string>
+    <string name="CreateNewThemeAlert">You can create your own theme by changing colors within the app.\10\10You can always switch back to the default Telegram theme here.</string>
     <string name="CreateNewThemeHelp">اضغط على أيقونة الألوان لاستعراض قائمة الخيارات في كل شاشة - ثم قم بتعديلها.</string>
-    <string name="CreateNewThemeInfo">يمكنك إنشاء نمطك الخاص لتغيير الألوان داخل التطبيق. يمكنك العودةُ دائمًا لنمط تيليجرام الافتراضي من هنا.</string>
+    <string name="CreateNewThemeMenu">Create new theme</string>
+    <string name="CreateTheme">CREATE THEME</string>
     <string name="Crop">قطع</string>
     <string name="CropImage">قص الصورة</string>
     <string name="CropOriginal">الأصلي</string>
@@ -593,6 +612,7 @@
     <string name="DebugMenuResetContacts">إعادة ضبط جهات الاتصال المستوردة</string>
     <string name="DebugMenuResetDialogs">إعادة تعيين الحوارات</string>
     <string name="DebugSendLogs">إرسال السجلات</string>
+    <string name="December">ديسمبر</string>
     <string name="Decline">رفض</string>
     <string name="DeclineDeactivate">رفض وحذف الحساب</string>
     <string name="Default">افتراضي</string>
@@ -606,6 +626,7 @@
     <string name="DeleteAndStop">حذف وإيقاف</string>
     <string name="DeleteBanUser">حظر المستخدم</string>
     <string name="DeleteChat">حذف وخروج</string>
+    <string name="DeleteChatBackgroundsAlert">Are you sure you want to delete the selected backgrounds?</string>
     <string name="DeleteChatUser">حذف المحادثة</string>
     <string name="DeleteContact">حذف الجهة</string>
     <string name="DeleteForAll">حذف من عند كافة الأعضاء</string>
@@ -644,7 +665,7 @@
     <string name="EditAdmin">صلاحيات المشرف</string>
     <string name="EditAdminAddAdmins">إضافة مشرفين جدد</string>
     <string name="EditAdminAddUsers">إضافة مستخدمين</string>
-    <string name="EditAdminAddUsersViaLink">دعوة مستخدمين من خلال الرابط</string>
+    <string name="EditAdminAddUsersViaLink">دعوة المستخدمين عبر الرابط</string>
     <string name="EditAdminBanUsers">حظر المستخدمين</string>
     <string name="EditAdminCantEdit">لا يمكنك تعديل صلاحيات هذا المشرف.</string>
     <string name="EditAdminChangeChannelInfo">تغيير معلومات القناة</string>
@@ -654,10 +675,12 @@
     <string name="EditAdminGroupDeleteMessages">حذف الرسائل</string>
     <string name="EditAdminPinMessages">تثبيت الرسائل</string>
     <string name="EditAdminPostMessages">نشر الرسائل</string>
-    <string name="EditAdminPromotedBy">قام %1$s بإضافته</string>
+    <string name="EditAdminPromotedBy">تمت ترقيته من قبل %1$s</string>
     <string name="EditAdminRemoveAdmin">إزالة المشرف</string>
     <string name="EditAdminRights">تعديل صلاحيات المشرف</string>
     <string name="EditAdminWhatCanDo">ما هي صلاحيات هذا المشرف؟</string>
+    <string name="EditCantEditPermissions">لا يمكنك تعديل هذه الصلاحية.</string>
+    <string name="EditCantEditPermissionsPublic">هذه الصلاحية ليست متوفرة في المجموعات العامة.</string>
     <string name="EditCaption">تعديل الوصف</string>
     <string name="EditContact">تعديل جهة الاتصال</string>
     <string name="EditMessage">تعديل الرسالة</string>
@@ -703,11 +726,11 @@
     <string name="EnterYourPasscode">قم بإدخال رمز قفلك</string>
     <string name="ErrorOccurred">حدث خطأ ما.</string>
     <string name="ErrorSendRestrictedMedia">المعذرة، قام مشرفو هذه المجموعة بتقييدك من إرسال الوسائط.</string>
-    <string name="ErrorSendRestrictedMediaAll">Sorry, sending media is not allowed in this group.</string>
+    <string name="ErrorSendRestrictedMediaAll">المعذرة، ليس من المسموح إرسال الوسائط إلى هذه المجموعة.</string>
     <string name="ErrorSendRestrictedPolls">Sorry, the admins of this group have restricted you from sending polls.</string>
-    <string name="ErrorSendRestrictedPollsAll">Sorry, sending polls is not allowed in this group.</string>
+    <string name="ErrorSendRestrictedPollsAll">المعذرة، ليس من المسموح إرسال الاستفتاءات إلى هذه المجموعة.</string>
     <string name="ErrorSendRestrictedStickers">المعذرة، مشرفو هذه المجموعة قيدوك من إرسال الملصقات.</string>
-    <string name="ErrorSendRestrictedStickersAll">Sorry, sending stickers is not allowed in this group.</string>
+    <string name="ErrorSendRestrictedStickersAll">المعذرة، ليس من المسموح إرسال الملصقات إلى هذه المجموعة.</string>
     <string name="EventLog">آخر الأحداث</string>
     <string name="EventLogAdded">un1 أضاف un2</string>
     <string name="EventLogAllAdmins">كافة المشرفين</string>
@@ -718,7 +741,7 @@
     <string name="EventLogChannelJoined">un1 انضم للقناة</string>
     <string name="EventLogChannelRestricted">حظر %1$s</string>
     <string name="EventLogChannelUnrestricted">ألغى حظر %1$s</string>
-    <string name="EventLogDefaultPermissions">changed default permissions</string>
+    <string name="EventLogDefaultPermissions">غيّر الصلاحيات الافتراضية</string>
     <string name="EventLogDeletedMessages">حذف un1 هذه الرسالة:</string>
     <string name="EventLogEditedCaption">عدّل un1 الوصف:</string>
     <string name="EventLogEditedChannelDescription">عدّل un1 وصف القناة:</string>
@@ -742,7 +765,7 @@
     <string name="EventLogFilterLeavingMembers">الأعضاء المغادرون</string>
     <string name="EventLogFilterNewAdmins">مشرفون جدد</string>
     <string name="EventLogFilterNewMembers">أعضاء جدد</string>
-    <string name="EventLogFilterNewRestrictions">قيود جديدة</string>
+    <string name="EventLogFilterNewRestrictions">استثناءات جديدة</string>
     <string name="EventLogFilterPinnedMessages">رسائل مثبتة</string>
     <string name="EventLogGroupJoined">un1 انضم للمجموعة</string>
     <string name="EventLogInfoDetail">هي قائمة تحوي جميع الأحداث التي قام بها أعضاء المجموعة ومشرفوها خلال آخِر 48 ساعة.</string>
@@ -772,7 +795,7 @@
     <string name="EventLogRemovedStickersSet">\10un1 أزال حزمة ملصقات المجموعة</string>
     <string name="EventLogRemovedWGroupPhoto">أزال un1 صورة المجموعة</string>
     <string name="EventLogRestrictedChangeInfo">تغيير المعلومات</string>
-    <string name="EventLogRestrictedInviteUsers">Add users</string>
+    <string name="EventLogRestrictedInviteUsers">إضافة مستخدمين</string>
     <string name="EventLogRestrictedPinMessages">تثبيت الرسائل</string>
     <string name="EventLogRestrictedReadMessages">قراءة الرسائل</string>
     <string name="EventLogRestrictedSendEmbed">تضمين روابط</string>
@@ -780,7 +803,7 @@
     <string name="EventLogRestrictedSendMessages">إرسال الرسائل</string>
     <string name="EventLogRestrictedSendPolls">إرسال الاستفتاءات</string>
     <string name="EventLogRestrictedSendStickers">إرسال الملصقات والصور المتحركة</string>
-    <string name="EventLogRestrictedUntil">غير القيود الخاصة بـ %1$s\10\10لمدة: %2$s</string>
+    <string name="EventLogRestrictedUntil">غيّر صلاحيات %1$s\10\10المدة: %2$s</string>
     <string name="EventLogSelectedEvents">الأحداث المحددة</string>
     <string name="EventLogStopPoll">أوقف un1 الاستفتاء:</string>
     <string name="EventLogToggledInvitesHistoryOff">جعل un1 سجل محادثة المجموعة مخفيًا للأعضاء الجدد</string>
@@ -803,6 +826,7 @@
     <string name="FavoriteStickers">المفضلة</string>
     <string name="FeaturedStickers">الملصقات الشائعة</string>
     <string name="FeaturedStickersInfo">هذه الملصقات شائعة حاليًا على تيليجرام. يمكنك إضافة ملصقات مخصصة من خلال البوت @stickers.</string>
+    <string name="February">فبراير</string>
     <string name="FileUploadLimit">لا يمكن أن يتجاوز حجم الملف %1$s</string>
     <string name="FilesDataUsage">الملفات</string>
     <string name="Files_few">%1$d ملفات</string>
@@ -820,6 +844,9 @@
     <string name="FloodWaitTime">محاولات كثيرة خاطئة، يرجى المحاولة خلال %1$s</string>
     <string name="Folder">مجلد</string>
     <string name="FontSize">مقاس الخط</string>
+    <string name="FontSizePreviewLine1">Ah, you kids today with techno music! You should enjoy the classics, like Hasselhoff!</string>
+    <string name="FontSizePreviewLine2">I can\'t even take you seriously right now.</string>
+    <string name="FontSizePreviewReply">Reinhardt, we need to find you some new tunes 🎶.</string>
     <string name="ForgotPassword">هل نسيت كلمة المرور؟</string>
     <string name="Forward">تحويل</string>
     <string name="ForwardTo">تحويل إلى...</string>
@@ -907,16 +934,18 @@
     <string name="General">عام</string>
     <string name="GettingLinkInfo">يتم جلب معلومات الرابط...</string>
     <string name="GifCaption">وصف الصورة المتحركة</string>
-    <string name="GlobalAttachInlineRestricted">Inline bots aren’t allowed in this group.</string>
-    <string name="GlobalAttachMediaRestricted">Sending media isn’t allowed in this group.</string>
-    <string name="GlobalAttachStickersRestricted">Stickers aren’t allowed in this group.</string>
+    <string name="GlobalAttachInlineRestricted">ليس من المسموح إرسال أي محتوى استعلامي إلى هذه المجموعة.</string>
+    <string name="GlobalAttachMediaRestricted">ليس من المسموح إرسال الوسائط إلى هذه المجموعة.</string>
+    <string name="GlobalAttachStickersRestricted">ليس من المسموح إرسال الملصقات إلى هذه المجموعة.</string>
     <string name="GlobalSearch">البحث العام</string>
     <string name="GlobalSendMessageRestricted">ليس من المسموح إرسال الرسائل إلى هذه المجموعة.</string>
     <string name="GotAQuestion">هل لديك سؤالٌ ما\10حول تيليجرام؟</string>
     <string name="GpsDisabledAlert">يبدو أن تحديد المواقع معطّل لديك، يرجى تفعيله لاستخدام ميزات تيليجرام التي تحتاجه.</string>
     <string name="Grain">حبوب</string>
+    <string name="Gray">الرمادي</string>
+    <string name="Green">الأخضر</string>
     <string name="GroupDeletedUndo">تم حذف المجموعة.</string>
-    <string name="GroupDescription1">إحتواء حتى 100,000 عضو</string>
+    <string name="GroupDescription1">إحتواء حتى 200,000 عضو</string>
     <string name="GroupDescription2">إمتلاك سجل محادثة موحّد</string>
     <string name="GroupDescription3">إمتلاك روابط t.me عامة</string>
     <string name="GroupDescription4">إمتلاك مشرفين بصلاحيات مختلفة</string>
@@ -926,7 +955,7 @@
     <string name="GroupName">اسم المجموعة</string>
     <string name="GroupNotifications">إشعارات المجموعات</string>
     <string name="GroupPhotosHelp">تجميع الوسائط في رسالة واحدة</string>
-    <string name="GroupSettingsChangedAlert">You have changed some settings in this group. Apply changes?</string>
+    <string name="GroupSettingsChangedAlert">لقد قمت بتغيير بعض الإعدادات في هذه المجموعة. تطبيق التغييرات؟</string>
     <string name="GroupSettingsTitle">إعدادات المجموعة</string>
     <string name="GroupStickers">ملصقات المجموعة</string>
     <string name="GroupStickersInfo">يمكنك اختيار حزمة لتكون متوفرة لكل أعضاء هذه المجموعة أثناء المراسلة فيها.</string>
@@ -951,7 +980,7 @@
     <string name="HiddenName">حساب محذوف</string>
     <string name="Highlights">التفتيح</string>
     <string name="HistoryCleared">تم مسح السجل</string>
-    <string name="HistoryClearedUndo">History cleared.</string>
+    <string name="HistoryClearedUndo">تم مسح المحتوى.</string>
     <string name="HoldToAudio">اضغط مطولًا لتسجيل الصوت، انقر للتحويل للمرئي.</string>
     <string name="HoldToVideo">اضغط مطولًا لتسجيل مرئي، انقر للتحويل للصوتي.</string>
     <string name="HoursBold_few">**%1$d** ساعة</string>
@@ -1013,10 +1042,13 @@
     <string name="IsTyping">يكتب… </string>
     <string name="IsTypingGroup">%1$s يكتب...</string>
     <string name="Italic">مائل</string>
+    <string name="January">يناير</string>
     <string name="JoinGroup">انضمام للمجموعة</string>
     <string name="JoinToGroupErrorFull">المعذرة، هذه المجموعة ممتلئة.</string>
     <string name="JoinToGroupErrorNotExist">المعذرة، هذه المحادثة غير موجودة.</string>
+    <string name="July">يوليو</string>
     <string name="JumpToDate">اذهب لهذا التاريخ</string>
+    <string name="June">يونيو</string>
     <string name="KMetersAway">ك.مترًا من هنا</string>
     <string name="KeepMedia">الإحتفاظ بالوسائط</string>
     <string name="KeepMediaForever">للأبد</string>
@@ -1098,7 +1130,7 @@
     <string name="LowDiskSpaceNeverRemove">عدم الإزالة</string>
     <string name="LowDiskSpaceTitle">ملحوظة</string>
     <string name="LowDiskSpaceTitle2">احذف الوسائط بعد</string>
-    <string name="MakeAdmin">MAKE ADMIN</string>
+    <string name="MakeAdmin">جعله مشرفًا</string>
     <string name="ManageChannel">إدارة القناة</string>
     <string name="ManageChannelMenu">إدارة القناة</string>
     <string name="ManageGroup">إدارة المجموعة</string>
@@ -1109,11 +1141,13 @@
     <string name="MapPreviewProviderNobody">بلا معاينات</string>
     <string name="MapPreviewProviderTelegram">تيليجرام</string>
     <string name="MapPreviewProviderYandex">ياندكس</string>
+    <string name="March">مارس</string>
     <string name="MarkAsRead">تعليم كمقروء</string>
     <string name="MarkAsUnread">تعليم كغير مقروء</string>
     <string name="Masks">الأقنعة</string>
     <string name="MasksInfo">يمكنك إضافة أقنعة للصور التي ترسلها، لعمل ذلك قم بفتح محرر الصور قبل إرسال الصورة.</string>
     <string name="MasksRemoved">تم حذف الأقنعة</string>
+    <string name="May">مايو</string>
     <string name="Media_few">%1$d ملفات</string>
     <string name="Media_many">%1$d ملفًا</string>
     <string name="Media_one">ملف واحد</string>
@@ -1208,9 +1242,9 @@
     <string name="Next">التالي</string>
     <string name="NoAudio">فضلًا قم بإضافة ملفات لمكتبتك الصوتية على جهازك لتتمكن من مشاهدتها هنا.</string>
     <string name="NoBlocked">لا يوجد مستخدمون محظورون بعد</string>
-    <string name="NoBlockedChannel2">Users removed from the channel by the admins can\'t rejoin via invite links.</string>
-    <string name="NoBlockedGroup2">Users removed from the group by the admins can\'t rejoin via invite links.</string>
-    <string name="NoBlockedUsers">لا يوجد مستخدمون محظورون</string>
+    <string name="NoBlockedChannel2">لن يتمكن المستخدمون الذين أزالهم المشرفون من القناة إعادة الإنضمام عبر روابط الدعوة.</string>
+    <string name="NoBlockedGroup2">لن يتمكن المستخدمون الذين أزالهم المشرفون من المجموعة إعادة الإنضمام عبر روابط الدعوة.</string>
+    <string name="NoBlockedUsers">ما من مستخدمين تمت إزالتهم</string>
     <string name="NoCallLog">لم تقم بإجراء أي مكالمة بعد.</string>
     <string name="NoChats">لا توجد محادثات بعد...</string>
     <string name="NoChatsContactsHelp">ابدأ المراسلة عبر الضغط على زر القلم في الزاوية السفلية للشاشة.</string>
@@ -1379,8 +1413,10 @@
     <string name="NotificationsTurnOff">إيقاف</string>
     <string name="NotificationsTurnOn">تشغيل</string>
     <string name="NotificationsUnmuted">مُلغى كتمها</string>
+    <string name="November">نوفمبر</string>
     <string name="NumberUnknown">غير معروف</string>
     <string name="OK">حسنًا</string>
+    <string name="October">أكتوبر</string>
     <string name="Of">%1$d من %2$d</string>
     <string name="Online">متصل</string>
     <string name="OnlineCount_few">%1$d متصل</string>
@@ -1408,6 +1444,7 @@
     <string name="Option_other">%1$d خيار إضافي</string>
     <string name="Option_two">خيارين إضافيين</string>
     <string name="Option_zero">%1$d خيار إضافي</string>
+    <string name="Orange">البرتقالي</string>
     <string name="OtherLoginCode">رمز الدخول هو **%1$s**. قم بإدخاله في تطبيق تيليجرام الذي تحاول تسجيل الدخول منه.\10\10لا تعطِ هذا الرمز لأي شخص كان.</string>
     <string name="OtherSessions">الجلسات النشطة</string>
     <string name="OtherWebSessions">المواقع المتصلة</string>
@@ -1511,7 +1548,7 @@
     <string name="PassportIdentityID">قم برفع نسخة من بطاقة هويتك الشخصية</string>
     <string name="PassportIdentityInternalPassport">قم برفع نسخة من جوازك الداخلي</string>
     <string name="PassportIdentityPassport">قم برفع نسخة من جوازك</string>
-    <string name="PassportInfo2">With Telegram Passport you can easily sign up for websites and services that require identity verification.\10\10Your information, personal data, and documents are protected by end-to-end encryption. Nobody, including Telegram, can access them without your permission.\10\10You can visit our *FAQ* to learn more.</string>
+    <string name="PassportInfo2">مع جواز تيليجرام يمْكنك التسجيل في المواقع والخدمات التي تتطلب توثيق الهوية الشخصية بسهولة.\10\10معلوماتك، بياناتك الشخصية ووثائقك محمية ومشفرة من البداية للنهاية. لا أحد بما فيهم تيليجرام ذاتُه يمكنه الوصول إليها دون إذنك. \10\10لمزيد من التفاصيل يمكنك زيارة *الأسئلة الشائعة*.</string>
     <string name="PassportInfoTitle">ماهو جواز تيليجرام؟</string>
     <string name="PassportInfoUrl">https://telegram.org/faq/ar#i7</string>
     <string name="PassportLanguage_AR">العربية</string>
@@ -1727,6 +1764,7 @@
     <string name="PinToTop">تثبيت في الأعلى</string>
     <string name="PinToTopLimitReached">المعذرة، لا يمكنك تثبيت أكثر من %1$s محادثات بالأعلى.</string>
     <string name="Ping">التماس: %1$d ج.ث</string>
+    <string name="Pink">الزهري</string>
     <string name="PinnedMessage">رسالة مثبتة</string>
     <string name="PinnedMessages">الرسائل المثبتة</string>
     <string name="PinnedPoll">استفتاء مثبت</string>
@@ -1775,6 +1813,7 @@
     <string name="ProxyConnections">الاتصالات</string>
     <string name="ProxyDetails">تفاصيل البروكسي</string>
     <string name="ProxySettings">إعدادات البروكسي</string>
+    <string name="Purple">القرمزي</string>
     <string name="Question">السؤال</string>
     <string name="QuestionHint">اطرح سؤالًا</string>
     <string name="QuickReplyCustom">رسالة مخصصة...</string>
@@ -1783,13 +1822,13 @@
     <string name="QuickReplyDefault3">سأتصل بك لاحقًا.</string>
     <string name="QuickReplyDefault4">لا يمكنني التحدث الآن، نتحدث لاحقًا؟</string>
     <string name="RaiseToSpeak">الرفع للتحدث</string>
-    <string name="RateCallDistorted">Speech was distorted</string>
-    <string name="RateCallDropped">Call ended unexpectedly</string>
-    <string name="RateCallEcho">I heard my own voice</string>
-    <string name="RateCallInterruptions">The other side kept disappearing</string>
-    <string name="RateCallNoise">I heard background noise</string>
+    <string name="RateCallDistorted">لم يكن الكلام واضحًا</string>
+    <string name="RateCallDropped">انتهت المكالمة فجأة</string>
+    <string name="RateCallEcho">سمعتُ صوتي</string>
+    <string name="RateCallInterruptions">كان صوت الشخص الآخر يختفي</string>
+    <string name="RateCallNoise">سمعت ضوضاء في الخلفية</string>
     <string name="RateCallSilentLocal">لم أتمكن من سماع الطرف الآخر</string>
-    <string name="RateCallSilentRemote">The other side couldn\'t hear me</string>
+    <string name="RateCallSilentRemote">لم يسمعني الطرف الآخر</string>
     <string name="ReEnterYourPasscode">أعد إدخالَ رمز قفلك الجديد</string>
     <string name="Recent">الأخيرة</string>
     <string name="RecentStickers">مستخدمة حديثًا</string>
@@ -1804,16 +1843,17 @@
     <string name="RecordingAudio">يسجل رسالةً صوتية...</string>
     <string name="RecordingRound">يسجل رسالةً مرئية...</string>
     <string name="RecoveryEmail">بريد الاسترداد</string>
-    <string name="RegisterText2">Please enter your full name and upload your profile picture.</string>
+    <string name="Red">الأحمر</string>
+    <string name="RegisterText2">يرجى إدخال اسمك الكامل ورفع صورتك الشخصية.</string>
     <string name="Regular">عادي</string>
     <string name="RemoveFromListText">اضغط باستمرار على المستخدم لإزالته</string>
     <string name="RemovedFromFavorites">تم إزالة الملصق من المفضلة</string>
-    <string name="RemovedUser_few">%1$d removed users</string>
-    <string name="RemovedUser_many">%1$d removed users</string>
-    <string name="RemovedUser_one">%1$d removed user</string>
-    <string name="RemovedUser_other">%1$d removed users</string>
-    <string name="RemovedUser_two">%1$d removed users</string>
-    <string name="RemovedUser_zero">%1$d removed users</string>
+    <string name="RemovedUser_few">%1$d مستخدمين تمت إزالتهم</string>
+    <string name="RemovedUser_many">%1$d مستخدمًا تمت إزالتهم</string>
+    <string name="RemovedUser_one">مستخدمٌ واحد تمت إزالته</string>
+    <string name="RemovedUser_other">%1$d مستخدم تمت إزالته</string>
+    <string name="RemovedUser_two">مستخدمين إثنين تمت إزالتهم</string>
+    <string name="RemovedUser_zero">%1$d مستخدم تمت إزالته</string>
     <string name="RepeatDisabled">إيقاف</string>
     <string name="RepeatNotifications">إعادة الإشعارات</string>
     <string name="RepeatNotificationsNever">مطلقًا</string>
@@ -1844,6 +1884,9 @@
     <string name="ResetAllNotifications">إعادة تعيين كافة الإشعارات</string>
     <string name="ResetAutomaticMediaDownload">إعادة تعيين إعدادات التنزيل التلقائي </string>
     <string name="ResetAutomaticMediaDownloadAlert">هل ترغب حقًا في إعادة تعيين إعدادات التنزيل التلقائي؟ </string>
+    <string name="ResetChatBackgrounds">إعادة تعيين الخلفيات</string>
+    <string name="ResetChatBackgroundsAlert">هل ترغب حقًا في إعادة تعيين كافة خلفيات المحادثة؟</string>
+    <string name="ResetChatBackgroundsInfo">لإزالة جميع الخلفيات المرفوعة وإستعادة الخلفيات الإفتراضية لجميع الأنماط.</string>
     <string name="ResetMyAccount">إعادة تعيين حسابي</string>
     <string name="ResetMyAccountText">إذا قمت بإعادة تعيين حسابك، ستفقد كافّة محادثاتك ورسائلك، بالإضافة إلى الوسائط والملفات التي تمت مشاركتها.</string>
     <string name="ResetMyAccountWarning">تحذير</string>
@@ -1883,10 +1926,12 @@
     <string name="SavedMessages">الرسائل المحفوظة</string>
     <string name="SavedMessagesInfo">قم بتحويل الرسائل إلى هنا لحفظها.</string>
     <string name="ScreenCapture">عرض المحتوى عند التبديل بين التطبيقات</string>
-    <string name="ScreenCaptureAlert">This will hide the contents of your chats or chat list from the task switcher, but you will not be able to take screenshots on Telegram.\10\10You may need to restart the app for this to take effect.</string>
-    <string name="ScreenCaptureInfo">إن تم التفعيل، ستتمكن من تصوير الشاشة داخل التطبيق، لكن سيعرض النظام محادثاتك في شاشة تعدد المهام حتى في حال تفعيل رمز القفل.\10\10قد تحتاج لإعادة تشغيل التطبيق ليتم تفعيل هذا الخيار.</string>
+    <string name="ScreenCaptureAlert">سيؤدي هذا لإخفاء محتوى محادثاتك من شاشة تعدد المهام، لكن بالمقابل لن تتمكن من أخذ لقطات الشاشة في تيليجرام.\10\10قد تحتاج لإعادة تشغيل التطبيق ليتم تفعيل هذا الخيار.</string>
+    <string name="ScreenCaptureInfo">إن تم التعطيل، لن تتمكن من تصوير الشاشة داخل التطبيق، لكن سيتم إخفاء محتوى المحادثات في شاشة تعدد المهام.</string>
     <string name="SdCard">بطاقة التخزين الخارجية</string>
     <string name="Search">بحث</string>
+    <string name="SearchBackgrounds">البحث عن خلفيات</string>
+    <string name="SearchByColor">بحث بواسطة اللون</string>
     <string name="SearchFriends">بحث جهات الاتصال</string>
     <string name="SearchFrom">من:</string>
     <string name="SearchGifs">بحث الصور المتحركة</string>
@@ -1919,7 +1964,7 @@
     <string name="SelectAccount">اختيار حساب</string>
     <string name="SelectChat">اختر محادثة</string>
     <string name="SelectColor">اختر لونًا</string>
-    <string name="SelectColorTitle">Select a color</string>
+    <string name="SelectColorTitle">اختيار لون</string>
     <string name="SelectContact">اختر جهة اتصال</string>
     <string name="SelectFile">اختر ملف</string>
     <string name="SelectFromGallery">اختيار من المعرض</string>
@@ -1961,6 +2006,7 @@
     <string name="SentCallOnly">يتم الاتصال برقمك **%1$s** لإملاء الرمز عليك صوتيًا.</string>
     <string name="SentSmsCode">تم إرسال رسالة SMS قصيرة تحتوي على رمز التفعيل لرقمك **%1$s**.</string>
     <string name="SentSmsCodeTitle">أدخل الرمز</string>
+    <string name="September">سبتمبر</string>
     <string name="ServiceNotifications">إشعارات الخدمة</string>
     <string name="SessionsInfo">تحكم بجلساتك على الأجهزة الأخرى.</string>
     <string name="SessionsTitle">الجلسات النشطة</string>
@@ -1969,7 +2015,7 @@
     <string name="SetAdditionalPasswordInfo">يمكنك تعيين كلمة مرور إضافية يتم طلبها عند تسجيل الدخول من جهاز غير معروف، إضافةً إلى الرمز الذي يصلك في رسالة SMS قصيرة.</string>
     <string name="SetAdmins">تعيين المشرفين</string>
     <string name="SetAsAdmin">ترقية إلى مشرف</string>
-    <string name="SetBackground">SET BACKGROUND</string>
+    <string name="SetBackground">تعيين كخلفية</string>
     <string name="SetColor">تعيين لون</string>
     <string name="SetRecoveryEmail">تعيين بريد استرداد</string>
     <string name="SetTimer">تعيين عداد التدمير</string>
@@ -2022,11 +2068,11 @@
     <string name="SmartNotificationsInfo">%1$d / %2$s</string>
     <string name="SmsText">سنقوم بإرسال رسالة SMS قصيرة خلال %1$d:%2$02d</string>
     <string name="SoftUserLimitAlert">ستتمكن من إضافة أعضاء أكثر إذا انتهيت من إنشاء المجموعة وقمت بتحويلها إلى مجموعة خارقة.</string>
-    <string name="SortBy">فرز حسب</string>
+    <string name="SortBy">ترتيب حسب</string>
     <string name="SortFirstName">الاسم الأول</string>
     <string name="SortLastName">اسم العائلة</string>
-    <string name="SortedByLastSeen">مفروزة حسب تاريخ آخر ظهور</string>
-    <string name="SortedByName">مفروزة حسب الاسم</string>
+    <string name="SortedByLastSeen">مرتبة حسب تاريخ آخر ظهور</string>
+    <string name="SortedByName">مرتبة حسب الاسم</string>
     <string name="Sound">الصوت</string>
     <string name="SoundDefault">افتراضي</string>
     <string name="StartEncryptedChat">إنشاء محادثة سرية</string>
@@ -2087,6 +2133,7 @@
     <string name="TapToChange">انقر للتغيير</string>
     <string name="TapToChangePhone">انقر لتغيير رقم الهاتف</string>
     <string name="TapToDownload">انقر للتحميل</string>
+    <string name="Teal">الأخضر الفاتح</string>
     <string name="TelegramContacts_few">%1$d جهات اتصال على تيليجرام</string>
     <string name="TelegramContacts_many">%1$d جهة اتصال على تيليجرام</string>
     <string name="TelegramContacts_one">جهة اتصال واحدة على تيليجرام</string>
@@ -2112,7 +2159,7 @@
     <string name="TermsOfService">شروط الخدمة</string>
     <string name="TermsOfServiceLogin">من خلال تسجيلك،\10أنت توافق على *شروط الخدمة*.</string>
     <string name="TextCopied">تم نسخ النص للحافظة</string>
-    <string name="TextSize">حجم خط الرسائل</string>
+    <string name="TextSizeHeader">حجم خط الرسائل</string>
     <string name="Theme">النمط</string>
     <string name="ThemeBlue">أزرق</string>
     <string name="ThemeDark">مظلم</string>
@@ -2209,28 +2256,28 @@
     <string name="UserBioDetail">أضف بضعَ كلمات عن نفسِك</string>
     <string name="UserBioEmpty">لا شيء</string>
     <string name="UserBioInfo">بإمكانك إضافة بعض المعلومات عن نفسك. يمكن لمن يستعرض حسابك رؤية هذه المعلومات.</string>
-    <string name="UserRemovedBy">Removed by %1$s</string>
+    <string name="UserRemovedBy">تمت إزالته من قبل %1$s</string>
     <string name="UserRestricted">المعذرة، لا يمكنك القيام بذلك.</string>
     <string name="UserRestrictions">صلاحيات المستخدم</string>
     <string name="UserRestrictionsApplyChanges">تطبيق التغييرات؟</string>
     <string name="UserRestrictionsApplyChangesText">لقد قمت بتغيير حقوق هذا المستخدم في **%1$s**. تطبيق التغييرات؟</string>
     <string name="UserRestrictionsBlock">حظر وإزالة من المجموعة</string>
     <string name="UserRestrictionsCanDo">ما هي صلاحيات هذا المستخدم؟</string>
-    <string name="UserRestrictionsChangeInfo">Change Chat Info</string>
-    <string name="UserRestrictionsDisabled">This option is disabled for all members in Group Permissions</string>
+    <string name="UserRestrictionsChangeInfo">تغيير معلومات المحادثة</string>
+    <string name="UserRestrictionsDisabled">تم تعطيل هذا الخيار لجميع الأعضاء في صلاحيات المجموعة.</string>
     <string name="UserRestrictionsDuration">المدة</string>
     <string name="UserRestrictionsEmbedLinks">تضمين روابط</string>
-    <string name="UserRestrictionsInviteUsers">Add Users</string>
-    <string name="UserRestrictionsNoChangeInfo">can\'t change Info</string>
-    <string name="UserRestrictionsNoEmbedLinks">no embed links</string>
-    <string name="UserRestrictionsNoInviteUsers">can\'t add users</string>
-    <string name="UserRestrictionsNoPinMessages">no pins</string>
-    <string name="UserRestrictionsNoRead">can\'t read</string>
-    <string name="UserRestrictionsNoSend">can\'t send messages</string>
+    <string name="UserRestrictionsInviteUsers">إضافة مستخدمين</string>
+    <string name="UserRestrictionsNoChangeInfo">لا يمكنه تغيير معلومات المجموعة</string>
+    <string name="UserRestrictionsNoEmbedLinks">لا يمكنه تضمين روابط</string>
+    <string name="UserRestrictionsNoInviteUsers">لا يمكنه إضافة مستخدمين</string>
+    <string name="UserRestrictionsNoPinMessages">بلا تثبيت</string>
+    <string name="UserRestrictionsNoRead">لا يمكنه قراءة الرسائل</string>
+    <string name="UserRestrictionsNoSend">لا يمكنه إرسال الرسائل</string>
     <string name="UserRestrictionsNoSendMedia">بلا وسائط</string>
     <string name="UserRestrictionsNoSendPolls">بلا استفتاءات</string>
-    <string name="UserRestrictionsNoSendStickers">no stickers &amp; GIFs</string>
-    <string name="UserRestrictionsPinMessages">Pin Messages</string>
+    <string name="UserRestrictionsNoSendStickers">بلا ملصقات وصور متحركة</string>
+    <string name="UserRestrictionsPinMessages">تثبيت الرسائل</string>
     <string name="UserRestrictionsRead">قراءة الرسائل</string>
     <string name="UserRestrictionsSend">إرسال الرسائل</string>
     <string name="UserRestrictionsSendMedia">إرسال الوسائط</string>
@@ -2323,6 +2370,7 @@
     <string name="WhenConnectedOnWiFi">عند الاتصال بالـ Wi-Fi</string>
     <string name="WhenRoaming">عند تواجدك خارج البلاد</string>
     <string name="WhenUsingMobileData">عند استخدام البيانات الخلوية</string>
+    <string name="White">الأبيض</string>
     <string name="WhoCanAddMe">من يمْكنه إضافتي للمجموعات؟</string>
     <string name="WhoCanAddMeInfo">بإمكانك تحديد الأشخاص المسموح لهم بإضافتك إلى المجموعات والقنوات بشكل تفصيلي.</string>
     <string name="WhoCanAddMembers">من يمْكنه إضافة أعضاء؟</string>
@@ -2342,6 +2390,7 @@
     <string name="Years_other">%1$d سنة</string>
     <string name="Years_two">سنتان</string>
     <string name="Years_zero">%1$d سنة</string>
+    <string name="Yellow">الأصفر</string>
     <string name="Yesterday">يوم أمس</string>
     <string name="YesterdayAt">يوم أمس عند</string>
     <string name="YesterdayAtFormatted">يوم أمس عند %1$s</string>

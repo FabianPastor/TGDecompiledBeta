@@ -5396,7 +5396,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         r0 = r24;
         r3 = r0.allMediaItem;
         r4 = "ShowAllMedia";
-        r5 = NUM; // 0x7f0CLASSNAMEda float:1.8613269E38 double:1.0530983915E-314;
+        r5 = NUM; // 0x7f0CLASSNAME float:1.8613362E38 double:1.0530984143E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r5);
         r3.setText(r4);
         r0 = r24;
@@ -5780,7 +5780,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         r0 = r24;
         r3 = r0.allMediaItem;
         r4 = "ShowAllFiles";
-        r5 = NUM; // 0x7f0CLASSNAMEd9 float:1.8613267E38 double:1.053098391E-314;
+        r5 = NUM; // 0x7f0CLASSNAME float:1.861336E38 double:1.053098414E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r5);
         r3.setText(r4);
     L_0x041e:
@@ -6076,7 +6076,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         r0 = r24;
         r3 = r0.allMediaItem;
         r4 = "ShowAllFiles";
-        r5 = NUM; // 0x7f0CLASSNAMEd9 float:1.8613267E38 double:1.053098391E-314;
+        r5 = NUM; // 0x7f0CLASSNAME float:1.861336E38 double:1.053098414E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r5);
         r3.setText(r4);
     L_0x0637:
@@ -7319,16 +7319,17 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         imageReceiver.setOrientation(0, false);
         BitmapHolder placeHolder;
         int size;
-        String path;
         int imageSize;
+        String str;
         Drawable bitmapDrawable;
         if (this.secureDocuments.isEmpty()) {
             Drawable bitmapDrawable2;
+            Document document;
             if (this.imagesArrLocals.isEmpty()) {
                 MessageObject messageObject;
-                TLObject thumbLocation;
+                PhotoSize thumbLocation;
                 Drawable drawable;
-                TLObject tLObject;
+                Object obj;
                 if (this.imagesArr.isEmpty() || index < 0 || index >= this.imagesArr.size()) {
                     messageObject = null;
                 } else {
@@ -7353,11 +7354,11 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                             drawable = null;
                         }
                         if (placeHolder == null) {
-                            tLObject = thumbLocation;
+                            obj = thumbLocation;
                         } else {
-                            tLObject = null;
+                            obj = null;
                         }
-                        imageReceiver.setImage(null, null, null, drawable, tLObject, "b", 0, null, messageObject, 1);
+                        imageReceiver.setImage(null, null, drawable, obj, "b", 0, null, messageObject, 1);
                         return;
                     } else if (this.currentAnimation != null) {
                         imageReceiver.setImageBitmap(this.currentAnimation);
@@ -7365,7 +7366,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         return;
                     } else if (this.sharedMediaType == 1) {
                         if (messageObject.canPreviewDocument()) {
-                            TLObject document = messageObject.getDocument();
+                            document = messageObject.getDocument();
                             imageReceiver.setNeedsQualityThumb(true);
                             placeHolder = null;
                             if (this.currentThumb != null && imageReceiver == this.centerImage) {
@@ -7377,7 +7378,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                             } else {
                                 drawable = null;
                             }
-                            imageReceiver.setImage(document, null, null, drawable, placeHolder == null ? thumbLocation : null, "b", document.size, null, messageObject, 0);
+                            imageReceiver.setImage(document, null, drawable, placeHolder == null ? thumbLocation : null, "b", document.size, null, messageObject, 0);
                             return;
                         }
                         imageReceiver.setImageBitmap(new OtherDocumentPlaceholderDrawable(this.parentActivity, this.containerView, messageObject));
@@ -7407,18 +7408,18 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         drawable = null;
                     }
                     if (placeHolder == null) {
-                        tLObject = thumbLocation;
+                        obj = thumbLocation;
                     } else {
-                        tLObject = null;
+                        obj = null;
                     }
-                    String str = "b";
+                    String str2 = "b";
                     int i2 = size2[0];
                     if (cacheOnly) {
                         i = 1;
                     } else {
                         i = 0;
                     }
-                    imageReceiver.setImage(fileLocation, null, null, drawable, tLObject, str, i2, null, messageObject, i);
+                    imageReceiver.setImage(fileLocation, null, drawable, obj, str2, i2, null, messageObject, i);
                     return;
                 }
                 imageReceiver.setNeedsQualityThumb(true);
@@ -7439,8 +7440,8 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 if (placeHolder == null) {
                     placeHolder = this.placeProvider.getThumbForPhoto(null, null, index);
                 }
-                path = null;
-                Document document2 = null;
+                String path = null;
+                document = null;
                 WebFile webDocument = null;
                 PhotoSize photo = null;
                 imageSize = 0;
@@ -7471,7 +7472,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                             webDocument = WebFile.createWithWebDocument(botInlineResult.thumb);
                         }
                     } else if (botInlineResult.type.equals("gif") && botInlineResult.document != null) {
-                        document2 = botInlineResult.document;
+                        document = botInlineResult.document;
                         imageSize = botInlineResult.document.size;
                         filter = "d";
                     } else if (botInlineResult.photo != null) {
@@ -7496,7 +7497,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     } else if (photoEntry2.imagePath != null) {
                         path = photoEntry2.imagePath;
                     } else if (photoEntry2.document != null) {
-                        document2 = photoEntry2.document;
+                        document = photoEntry2.document;
                         imageSize = photoEntry2.document.size;
                     } else {
                         path = photoEntry2.imageUrl;
@@ -7504,21 +7505,21 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     }
                     filter = "d";
                 }
-                if (document2 != null) {
-                    TLObject tLObject2;
-                    TLObject thumb = FileLoader.getClosestPhotoSizeWithSize(document2.thumbs, 90);
-                    path = "d";
+                if (document != null) {
+                    Object obj2;
+                    PhotoSize thumb = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90);
+                    str = "d";
                     if (placeHolder != null) {
                         bitmapDrawable = new BitmapDrawable(placeHolder.bitmap);
                     } else {
                         bitmapDrawable = null;
                     }
                     if (placeHolder == null) {
-                        tLObject2 = thumb;
+                        obj2 = thumb;
                     } else {
-                        tLObject2 = null;
+                        obj2 = null;
                     }
-                    imageReceiver.setImage(document2, null, path, bitmapDrawable, tLObject2, String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(size), Integer.valueOf(size)}), imageSize, null, object, cacheType);
+                    imageReceiver.setImage(document, str, bitmapDrawable, obj2, String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(size), Integer.valueOf(size)}), imageSize, null, object, cacheType);
                 } else if (photo != null) {
                     Drawable drawable2;
                     if (placeHolder != null) {
@@ -7526,18 +7527,23 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     } else {
                         drawable2 = null;
                     }
-                    imageReceiver.setImage(photo, null, filter, drawable2, null, String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(size), Integer.valueOf(size)}), imageSize, null, object, cacheType);
+                    imageReceiver.setImage(photo, filter, drawable2, null, String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(size), Integer.valueOf(size)}), imageSize, null, object, cacheType);
                 } else if (webDocument != null) {
+                    Drawable path2;
+                    if (placeHolder != null) {
+                        bitmapDrawable2 = new BitmapDrawable(placeHolder.bitmap);
+                    } else {
+                        path2 = (!isVideo || this.parentActivity == null) ? null : this.parentActivity.getResources().getDrawable(R.drawable.nophotos);
+                    }
+                    imageReceiver.setImage(webDocument, filter, path2, null, object, cacheType);
+                } else {
                     Drawable drawable3;
                     if (placeHolder != null) {
                         bitmapDrawable2 = new BitmapDrawable(placeHolder.bitmap);
                     } else {
                         drawable3 = (!isVideo || this.parentActivity == null) ? null : this.parentActivity.getResources().getDrawable(R.drawable.nophotos);
                     }
-                    imageReceiver.setImage(webDocument, filter, drawable3, null, object, cacheType);
-                } else {
-                    Drawable bitmapDrawable3 = placeHolder != null ? new BitmapDrawable(placeHolder.bitmap) : (!isVideo || this.parentActivity == null) ? null : this.parentActivity.getResources().getDrawable(R.drawable.nophotos);
-                    imageReceiver.setImage(path, filter, bitmapDrawable3, null, imageSize);
+                    imageReceiver.setImage(path, filter, drawable3, null, imageSize);
                 }
             }
         } else if (index >= 0 && index < this.secureDocuments.size()) {
@@ -7550,15 +7556,15 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             if (placeHolder == null) {
                 placeHolder = this.placeProvider.getThumbForPhoto(null, null, index);
             }
-            SecureDocument document3 = (SecureDocument) this.secureDocuments.get(index);
-            imageSize = document3.secureFile.size;
-            path = "d";
+            SecureDocument document2 = (SecureDocument) this.secureDocuments.get(index);
+            imageSize = document2.secureFile.size;
+            str = "d";
             if (placeHolder != null) {
                 bitmapDrawable = new BitmapDrawable(placeHolder.bitmap);
             } else {
                 bitmapDrawable = null;
             }
-            imageReceiver.setImage(document3, null, path, bitmapDrawable, null, null, imageSize, null, null, 0);
+            imageReceiver.setImage(document2, str, bitmapDrawable, null, null, imageSize, null, null, 0);
         }
     }
 

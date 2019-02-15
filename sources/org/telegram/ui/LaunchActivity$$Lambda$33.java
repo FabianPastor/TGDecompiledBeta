@@ -17,6 +17,6 @@ final /* synthetic */ class LaunchActivity$$Lambda$33 implements RequestDelegate
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$showLanguageAlert$51$LaunchActivity(this.arg$2, this.arg$3, tLObject, tL_error);
+        this.arg$1.lambda$showLanguageAlert$50$LaunchActivity(this.arg$2, this.arg$3, tLObject, tL_error);
     }
 }

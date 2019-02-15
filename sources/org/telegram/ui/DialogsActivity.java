@@ -73,6 +73,7 @@ import org.telegram.tgnet.TLRPC.TL_recentMeUrlChatInvite;
 import org.telegram.tgnet.TLRPC.TL_recentMeUrlStickerSet;
 import org.telegram.tgnet.TLRPC.TL_recentMeUrlUnknown;
 import org.telegram.tgnet.TLRPC.TL_recentMeUrlUser;
+import org.telegram.tgnet.TLRPC.TL_userEmpty;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.ActionBarMenu;
@@ -661,10 +662,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                             chat = isChat ? MessagesController.getInstance(DialogsActivity.this.currentAccount).getChat(Integer.valueOf(-lower_id)) : null;
                             if (lower_id == 0) {
                                 EncryptedChat encryptedChat = MessagesController.getInstance(DialogsActivity.this.currentAccount).getEncryptedChat(Integer.valueOf(high_id));
-                                if (encryptedChat == null) {
-                                    return false;
-                                }
-                                user = MessagesController.getInstance(DialogsActivity.this.currentAccount).getUser(Integer.valueOf(encryptedChat.user_id));
+                                user = encryptedChat != null ? MessagesController.getInstance(DialogsActivity.this.currentAccount).getUser(Integer.valueOf(encryptedChat.user_id)) : new TL_userEmpty();
                             } else {
                                 user = (isChat || lower_id <= 0 || high_id == 1) ? null : MessagesController.getInstance(DialogsActivity.this.currentAccount).getUser(Integer.valueOf(lower_id));
                             }
@@ -1270,7 +1268,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 this.checkPermission = false;
                 if (activity.checkSelfPermission("android.permission.READ_CONTACTS") != 0 || activity.checkSelfPermission("android.permission.WRITE_EXTERNAL_STORAGE") != 0) {
                     Dialog create;
-                    if (UserConfig.getInstance(this.currentAccount).syncContacts && activity.shouldShowRequestPermissionRationale("android.permission.READ_CONTACTS")) {
+                    if (this.askAboutContacts && UserConfig.getInstance(this.currentAccount).syncContacts && activity.shouldShowRequestPermissionRationale("android.permission.READ_CONTACTS")) {
                         create = AlertsCreator.createContactsPermissionDialog(activity, new DialogsActivity$$Lambda$4(this)).create();
                         this.permissionDialog = create;
                         showDialog(create);
@@ -1334,6 +1332,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         super.onPause();
         if (this.commentView != null) {
             this.commentView.onResume();
+        }
+        if (this.undoView != null) {
+            this.undoView.hide(true, false);
         }
     }
 
@@ -1490,7 +1491,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
 
     protected void onDialogDismiss(Dialog dialog) {
         super.onDialogDismiss(dialog);
-        if (this.permissionDialog != null && dialog == this.permissionDialog && getParentActivity() != null) {
+        if (this.permissionDialog != null && dialog == this.permissionDialog && getParentActivity() != null && this.askAboutContacts) {
             askForPermissons(false);
         }
     }
@@ -1668,6 +1669,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         }
         if (this.dialogsType == 3) {
             return MessagesController.getInstance(this.currentAccount).dialogsForward;
+        }
+        if (this.dialogsType == 4) {
+            return MessagesController.getInstance(this.currentAccount).dialogsUsersOnly;
+        }
+        if (this.dialogsType == 5) {
+            return MessagesController.getInstance(this.currentAccount).dialogsChannelsOnly;
         }
         return null;
     }

@@ -26,7 +26,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AndroidUtilities.LinkMovementMethodMy;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatObject;
-import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocaleController.LocaleInfo;
 import org.telegram.messenger.MessagesController;
@@ -91,9 +90,9 @@ public class AlertsCreator {
      */
     public static android.app.Dialog processError(int r7, org.telegram.tgnet.TLRPC.TL_error r8, org.telegram.ui.ActionBar.BaseFragment r9, org.telegram.tgnet.TLObject r10, java.lang.Object... r11) {
         /*
-        r6 = NUM; // 0x7f0CLASSNAMEf2 float:1.8610202E38 double:1.0530976445E-314;
-        r5 = NUM; // 0x7f0CLASSNAMEbf float:1.8610618E38 double:1.053097746E-314;
-        r4 = NUM; // 0x7f0CLASSNAME float:1.8610851E38 double:1.0530978026E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8610236E38 double:1.053097653E-314;
+        r5 = NUM; // 0x7f0CLASSNAMEd4 float:1.861066E38 double:1.053097756E-314;
+        r4 = NUM; // 0x7f0CLASSNAME float:1.8610896E38 double:1.0530978135E-314;
         r2 = 1;
         r1 = 0;
         r0 = r8.code;
@@ -119,7 +118,7 @@ public class AlertsCreator {
         if (r0 == 0) goto L_0x0039;
     L_0x002a:
         r0 = "InvalidPhoneNumber";
-        r1 = NUM; // 0x7f0CLASSNAMEdb float:1.8611194E38 double:1.053097886E-314;
+        r1 = NUM; // 0x7f0CLASSNAMEf6 float:1.8611249E38 double:1.0530978994E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleAlert(r9, r0);
     L_0x0037:
@@ -143,7 +142,7 @@ public class AlertsCreator {
     L_0x005a:
         r0 = r9.getParentActivity();
         r1 = "UpdateAppAlert";
-        r3 = NUM; // 0x7f0CLASSNAMEc float:1.8613597E38 double:1.0530984716E-314;
+        r3 = NUM; // 0x7f0CLASSNAMEab float:1.8613693E38 double:1.053098495E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r3);
         showUpdateAppAlert(r0, r1, r2);
         goto L_0x0037;
@@ -250,13 +249,13 @@ public class AlertsCreator {
         if (r9 == 0) goto L_0x013a;
     L_0x012b:
         r0 = "EditMessageError";
-        r1 = NUM; // 0x7f0CLASSNAME float:1.8610537E38 double:1.053097726E-314;
+        r1 = NUM; // 0x7f0CLASSNAMEac float:1.861058E38 double:1.0530977364E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleAlert(r9, r0);
         goto L_0x0037;
     L_0x013a:
         r0 = "EditMessageError";
-        r1 = NUM; // 0x7f0CLASSNAME float:1.8610537E38 double:1.053097726E-314;
+        r1 = NUM; // 0x7f0CLASSNAMEac float:1.861058E38 double:1.0530977364E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleToast(r9, r0);
         goto L_0x0037;
@@ -325,13 +324,13 @@ public class AlertsCreator {
         if (r0 == 0) goto L_0x01d3;
     L_0x01c4:
         r0 = "JoinToGroupErrorFull";
-        r1 = NUM; // 0x7f0CLASSNAMEf8 float:1.8611253E38 double:1.0530979004E-314;
+        r1 = NUM; // 0x7f0CLASSNAME float:1.861131E38 double:1.0530979143E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleAlert(r9, r0);
         goto L_0x0037;
     L_0x01d3:
         r0 = "JoinToGroupErrorNotExist";
-        r1 = NUM; // 0x7f0CLASSNAMEf9 float:1.8611255E38 double:1.053097901E-314;
+        r1 = NUM; // 0x7f0CLASSNAME float:1.8611311E38 double:1.053097915E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleAlert(r9, r0);
         goto L_0x0037;
@@ -389,7 +388,7 @@ public class AlertsCreator {
         if (r0 == 0) goto L_0x0264;
     L_0x0254:
         r0 = "InvalidCode";
-        r1 = NUM; // 0x7f0CLASSNAMEd8 float:1.8611188E38 double:1.0530978846E-314;
+        r1 = NUM; // 0x7f0CLASSNAMEf3 float:1.8611242E38 double:1.053097898E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         r0 = showSimpleAlert(r9, r0);
         goto L_0x0016;
@@ -432,7 +431,7 @@ public class AlertsCreator {
         if (r0 == 0) goto L_0x02c6;
     L_0x02b6:
         r0 = "InvalidPhoneNumber";
-        r1 = NUM; // 0x7f0CLASSNAMEdb float:1.8611194E38 double:1.053097886E-314;
+        r1 = NUM; // 0x7f0CLASSNAMEf6 float:1.8611249E38 double:1.0530978994E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         r0 = showSimpleAlert(r9, r0);
         goto L_0x0016;
@@ -448,7 +447,7 @@ public class AlertsCreator {
         if (r0 == 0) goto L_0x02ec;
     L_0x02dc:
         r0 = "InvalidCode";
-        r1 = NUM; // 0x7f0CLASSNAMEd8 float:1.8611188E38 double:1.0530978846E-314;
+        r1 = NUM; // 0x7f0CLASSNAMEf3 float:1.8611242E38 double:1.053097898E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         r0 = showSimpleAlert(r9, r0);
         goto L_0x0016;
@@ -498,7 +497,7 @@ public class AlertsCreator {
         if (r0 != r1) goto L_0x0363;
     L_0x0353:
         r0 = "CancelLinkExpired";
-        r1 = NUM; // 0x7f0CLASSNAMEc float:1.8609833E38 double:1.0530975546E-314;
+        r1 = NUM; // 0x7f0CLASSNAMEd float:1.8609867E38 double:1.053097563E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         r0 = showSimpleAlert(r9, r0);
         goto L_0x0016;
@@ -530,7 +529,7 @@ public class AlertsCreator {
         if (r0 == 0) goto L_0x03aa;
     L_0x039b:
         r0 = "InvalidPhoneNumber";
-        r1 = NUM; // 0x7f0CLASSNAMEdb float:1.8611194E38 double:1.053097886E-314;
+        r1 = NUM; // 0x7f0CLASSNAMEf6 float:1.8611249E38 double:1.0530978994E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleAlert(r9, r0);
         goto L_0x0037;
@@ -546,7 +545,7 @@ public class AlertsCreator {
         if (r0 == 0) goto L_0x03cf;
     L_0x03c0:
         r0 = "InvalidCode";
-        r1 = NUM; // 0x7f0CLASSNAMEd8 float:1.8611188E38 double:1.0530978846E-314;
+        r1 = NUM; // 0x7f0CLASSNAMEf3 float:1.8611242E38 double:1.053097898E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleAlert(r9, r0);
         goto L_0x0037;
@@ -584,7 +583,7 @@ public class AlertsCreator {
         if (r0 == 0) goto L_0x0422;
     L_0x0413:
         r0 = "InvalidPhoneNumber";
-        r1 = NUM; // 0x7f0CLASSNAMEdb float:1.8611194E38 double:1.053097886E-314;
+        r1 = NUM; // 0x7f0CLASSNAMEf6 float:1.8611249E38 double:1.0530978994E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleAlert(r9, r0);
         goto L_0x0037;
@@ -600,7 +599,7 @@ public class AlertsCreator {
         if (r0 == 0) goto L_0x0447;
     L_0x0438:
         r0 = "InvalidCode";
-        r1 = NUM; // 0x7f0CLASSNAMEd8 float:1.8611188E38 double:1.0530978846E-314;
+        r1 = NUM; // 0x7f0CLASSNAMEf3 float:1.8611242E38 double:1.053097898E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleAlert(r9, r0);
         goto L_0x0037;
@@ -631,7 +630,7 @@ public class AlertsCreator {
         if (r0 == 0) goto L_0x0497;
     L_0x0480:
         r3 = "ChangePhoneNumberOccupied";
-        r4 = NUM; // 0x7f0CLASSNAMEe float:1.860987E38 double:1.0530975635E-314;
+        r4 = NUM; // 0x7f0CLASSNAMEf float:1.8609904E38 double:1.053097572E-314;
         r2 = new java.lang.Object[r2];
         r0 = r11[r1];
         r0 = (java.lang.String) r0;
@@ -684,13 +683,13 @@ public class AlertsCreator {
         goto L_0x04b2;
     L_0x04d6:
         r0 = "UsernameInvalid";
-        r1 = NUM; // 0x7f0CLASSNAMEc6 float:1.8613747E38 double:1.053098508E-314;
+        r1 = NUM; // 0x7f0CLASSNAMEf5 float:1.8613843E38 double:1.0530985314E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleAlert(r9, r0);
         goto L_0x0037;
     L_0x04e5:
         r0 = "UsernameInUse";
-        r1 = NUM; // 0x7f0CLASSNAMEc5 float:1.8613745E38 double:1.0530985076E-314;
+        r1 = NUM; // 0x7f0CLASSNAMEf4 float:1.861384E38 double:1.053098531E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleAlert(r9, r0);
         goto L_0x0037;
@@ -781,13 +780,13 @@ public class AlertsCreator {
         goto L_0x056b;
     L_0x058a:
         r0 = "PaymentPrecheckoutFailed";
-        r1 = NUM; // 0x7f0CLASSNAME float:1.8612573E38 double:1.053098222E-314;
+        r1 = NUM; // 0x7f0CLASSNAMEa8 float:1.8612648E38 double:1.0530982403E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleToast(r9, r0);
         goto L_0x0037;
     L_0x0599:
         r0 = "PaymentFailed";
-        r1 = NUM; // 0x7f0CLASSNAME float:1.8612547E38 double:1.0530982156E-314;
+        r1 = NUM; // 0x7f0CLASSNAMEb float:1.8612622E38 double:1.053098234E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleToast(r9, r0);
         goto L_0x0037;
@@ -820,7 +819,7 @@ public class AlertsCreator {
         goto L_0x05b6;
     L_0x05cb:
         r0 = "PaymentNoShippingMethod";
-        r1 = NUM; // 0x7f0CLASSNAME float:1.861255E38 double:1.0530982166E-314;
+        r1 = NUM; // 0x7f0CLASSNAMEd float:1.8612626E38 double:1.053098235E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleToast(r9, r0);
         goto L_0x0037;
@@ -1042,9 +1041,9 @@ public class AlertsCreator {
                 NotificationsController.getInstance(currentAccount).updateServerNotificationsSettings(did);
                 if (resultCallback != null) {
                     if (defaultEnabled) {
-                        resultCallback.lambda$null$87$MessagesStorage(0);
+                        resultCallback.lambda$null$88$MessagesStorage(0);
                     } else {
-                        resultCallback.lambda$null$87$MessagesStorage(1);
+                        resultCallback.lambda$null$88$MessagesStorage(1);
                     }
                 }
             } else {
@@ -1086,9 +1085,9 @@ public class AlertsCreator {
                 NotificationsController.getInstance(currentAccount).updateServerNotificationsSettings(did);
                 if (resultCallback != null) {
                     if (i != 4 || defaultEnabled) {
-                        resultCallback.lambda$null$87$MessagesStorage(1);
+                        resultCallback.lambda$null$88$MessagesStorage(1);
                     } else {
-                        resultCallback.lambda$null$87$MessagesStorage(0);
+                        resultCallback.lambda$null$88$MessagesStorage(0);
                     }
                 }
             } else if (i == 4) {
@@ -1104,7 +1103,7 @@ public class AlertsCreator {
             parentFragment.presentFragment(new NotificationsCustomSettingsActivity(globalType, exceptions));
         }
         if (callback != null) {
-            callback.lambda$null$87$MessagesStorage(i);
+            callback.lambda$null$88$MessagesStorage(i);
         }
         builder.getDismissRunnable().run();
     }
@@ -1216,9 +1215,9 @@ public class AlertsCreator {
                 if (clear) {
                     if (user != null) {
                         if (secret) {
-                            frameLayout.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureClearHistoryWithSecretUser", R.string.AreYouSureClearHistoryWithSecretUser, ContactsController.formatName(user.first_name, user.last_name))));
+                            frameLayout.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureClearHistoryWithSecretUser", R.string.AreYouSureClearHistoryWithSecretUser, UserObject.getUserName(user))));
                         } else {
-                            frameLayout.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureClearHistoryWithUser", R.string.AreYouSureClearHistoryWithUser, ContactsController.formatName(user.first_name, user.last_name))));
+                            frameLayout.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureClearHistoryWithUser", R.string.AreYouSureClearHistoryWithUser, UserObject.getUserName(user))));
                         }
                     } else if (chat != null) {
                         if (!ChatObject.isChannel(chat) || (chat.megagroup && TextUtils.isEmpty(chat.username))) {
@@ -1231,9 +1230,9 @@ public class AlertsCreator {
                     }
                 } else if (user != null) {
                     if (secret) {
-                        frameLayout.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureDeleteThisChatWithSecretUser", R.string.AreYouSureDeleteThisChatWithSecretUser, ContactsController.formatName(user.first_name, user.last_name))));
+                        frameLayout.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureDeleteThisChatWithSecretUser", R.string.AreYouSureDeleteThisChatWithSecretUser, UserObject.getUserName(user))));
                     } else {
-                        frameLayout.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureDeleteThisChatWithUser", R.string.AreYouSureDeleteThisChatWithUser, ContactsController.formatName(user.first_name, user.last_name))));
+                        frameLayout.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureDeleteThisChatWithUser", R.string.AreYouSureDeleteThisChatWithUser, UserObject.getUserName(user))));
                     }
                 } else if (!ChatObject.isChannel(chat)) {
                     frameLayout.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureDeleteAndExitName", R.string.AreYouSureDeleteAndExitName, chat.title)));
@@ -1255,7 +1254,10 @@ public class AlertsCreator {
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 AlertDialog alertDialog = builder.create();
                 fragment.showDialog(alertDialog);
-                ((TextView) alertDialog.getButton(-1)).setTextColor(Theme.getColor("dialogTextRed2"));
+                TextView button = (TextView) alertDialog.getButton(-1);
+                if (button != null) {
+                    button.setTextColor(Theme.getColor("dialogTextRed2"));
+                }
             }
         }
     }
@@ -1920,7 +1922,7 @@ public class AlertsCreator {
         } else {
             time = 28800;
         }
-        callback.lambda$null$87$MessagesStorage(time);
+        callback.lambda$null$88$MessagesStorage(time);
     }
 
     public static Builder createContactsPermissionDialog(Activity parentActivity, IntCallback callback) {

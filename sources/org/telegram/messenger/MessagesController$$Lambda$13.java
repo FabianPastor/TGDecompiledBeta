@@ -1,26 +1,21 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.Chat;
-import org.telegram.tgnet.TLRPC.TL_error;
+import java.util.ArrayList;
 
-final /* synthetic */ class MessagesController$$Lambda$13 implements RequestDelegate {
+final /* synthetic */ class MessagesController$$Lambda$13 implements Runnable {
     private final MessagesController arg$1;
-    private final Chat arg$2;
-    private final long arg$3;
-    private final int arg$4;
-    private final int arg$5;
+    private final int arg$2;
+    private final ArrayList arg$3;
+    private final boolean arg$4;
 
-    MessagesController$$Lambda$13(MessagesController messagesController, Chat chat, long j, int i, int i2) {
+    MessagesController$$Lambda$13(MessagesController messagesController, int i, ArrayList arrayList, boolean z) {
         this.arg$1 = messagesController;
-        this.arg$2 = chat;
-        this.arg$3 = j;
-        this.arg$4 = i;
-        this.arg$5 = i2;
+        this.arg$2 = i;
+        this.arg$3 = arrayList;
+        this.arg$4 = z;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$loadFullChat$15$MessagesController(this.arg$2, this.arg$3, this.arg$4, this.arg$5, tLObject, tL_error);
+    public void run() {
+        this.arg$1.lambda$processLoadedChannelAdmins$14$MessagesController(this.arg$2, this.arg$3, this.arg$4);
     }
 }

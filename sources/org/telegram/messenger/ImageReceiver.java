@@ -25,6 +25,8 @@ import org.telegram.tgnet.TLRPC.TL_document;
 import org.telegram.tgnet.TLRPC.TL_documentEncrypted;
 import org.telegram.tgnet.TLRPC.TL_fileEncryptedLocation;
 import org.telegram.tgnet.TLRPC.TL_fileLocation;
+import org.telegram.tgnet.TLRPC.TL_photoCachedSize;
+import org.telegram.tgnet.TLRPC.TL_photoSize;
 import org.telegram.tgnet.TLRPC.TL_photoStrippedSize;
 import org.telegram.ui.Components.AnimatedFileDrawable;
 import org.telegram.ui.Components.RecyclableDrawable;
@@ -52,9 +54,8 @@ public class ImageReceiver implements NotificationCenterDelegate {
     private int currentCacheType;
     private String currentExt;
     private String currentFilter;
-    private String currentHttpUrl;
     private Drawable currentImage;
-    private TLObject currentImageLocation;
+    private Object currentImageLocation;
     private String currentKey;
     private boolean currentKeyQuality;
     private Object currentParentObject;
@@ -62,7 +63,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
     private Drawable currentThumb;
     private String currentThumbFilter;
     private String currentThumbKey;
-    private TLObject currentThumbLocation;
+    private Object currentThumbLocation;
     private ImageReceiverDelegate delegate;
     private Rect drawRegion;
     private boolean forceCrossfade;
@@ -139,14 +140,13 @@ public class ImageReceiver implements NotificationCenterDelegate {
     private class SetImageBackup {
         public int cacheType;
         public String ext;
-        public TLObject fileLocation;
+        public Object fileLocation;
         public String filter;
-        public String httpUrl;
         public Object parentObject;
         public int size;
         public Drawable thumb;
         public String thumbFilter;
-        public TLObject thumbLocation;
+        public Object thumbLocation;
 
         private SetImageBackup() {
         }
@@ -185,68 +185,66 @@ public class ImageReceiver implements NotificationCenterDelegate {
     }
 
     public void setImage(TLObject path, String filter, Drawable thumb, String ext, Object parentObject, int cacheType) {
-        setImage(path, null, filter, thumb, null, null, 0, ext, parentObject, cacheType);
+        setImage(path, filter, thumb, null, null, 0, ext, parentObject, cacheType);
     }
 
     public void setImage(TLObject path, String filter, Drawable thumb, int size, String ext, Object parentObject, int cacheType) {
-        setImage(path, null, filter, thumb, null, null, size, ext, parentObject, cacheType);
+        setImage(path, filter, thumb, null, null, size, ext, parentObject, cacheType);
     }
 
     public void setImage(String httpUrl, String filter, Drawable thumb, String ext, int size) {
-        setImage(null, httpUrl, filter, thumb, null, null, size, ext, null, 1);
+        setImage(httpUrl, filter, thumb, null, null, size, ext, null, 1);
     }
 
     public void setImage(TLObject fileLocation, String filter, TLObject thumbLocation, String thumbFilter, String ext, Object parentObject, int cacheType) {
-        setImage(fileLocation, null, filter, null, thumbLocation, thumbFilter, 0, ext, parentObject, cacheType);
+        setImage(fileLocation, filter, null, thumbLocation, thumbFilter, 0, ext, parentObject, cacheType);
     }
 
     public void setImage(TLObject fileLocation, String filter, TLObject thumbLocation, String thumbFilter, int size, String ext, Object parentObject, int cacheType) {
-        setImage(fileLocation, null, filter, null, thumbLocation, thumbFilter, size, ext, parentObject, cacheType);
+        setImage(fileLocation, filter, null, thumbLocation, thumbFilter, size, ext, parentObject, cacheType);
     }
 
-    public void setImage(TLObject fileLocation, String httpUrl, String filter, Drawable thumb, TLObject thumbLocation, String thumbFilter, int size, String ext, Object parentObject, int cacheType) {
+    public void setImage(Object fileLocation, String filter, Drawable thumb, Object thumbLocation, String thumbFilter, int size, String ext, Object parentObject, int cacheType) {
         if (this.setImageBackup != null) {
             this.setImageBackup.fileLocation = null;
-            this.setImageBackup.httpUrl = null;
             this.setImageBackup.thumbLocation = null;
             this.setImageBackup.thumb = null;
         }
         ImageReceiverDelegate imageReceiverDelegate;
         boolean z;
         boolean z2;
-        if (!(fileLocation == null && httpUrl == null && thumbLocation == null) && (fileLocation == null || (fileLocation instanceof TL_fileLocation) || (fileLocation instanceof TL_fileEncryptedLocation) || (fileLocation instanceof TL_document) || (fileLocation instanceof WebFile) || (fileLocation instanceof TL_documentEncrypted) || (fileLocation instanceof PhotoSize) || (fileLocation instanceof SecureDocument))) {
+        if (!(fileLocation == null && thumbLocation == null) && (fileLocation == null || (fileLocation instanceof TL_fileLocation) || (fileLocation instanceof TL_fileEncryptedLocation) || (fileLocation instanceof TL_document) || (fileLocation instanceof WebFile) || (fileLocation instanceof TL_documentEncrypted) || (fileLocation instanceof PhotoSize) || (fileLocation instanceof SecureDocument) || (fileLocation instanceof String))) {
+            TLObject thumbLocation2;
             FileLocation location;
             TL_photoStrippedSize location2;
             PhotoSize photoSize;
-            if (!((thumbLocation instanceof PhotoSize) || (thumbLocation instanceof TL_fileLocation) || (thumbLocation instanceof TL_fileEncryptedLocation))) {
-                thumbLocation = null;
+            if (!((thumbLocation2 instanceof String) || (thumbLocation2 instanceof PhotoSize) || (thumbLocation2 instanceof TL_fileLocation) || (thumbLocation2 instanceof TL_fileEncryptedLocation))) {
+                thumbLocation2 = null;
             }
             String key = null;
-            if (fileLocation != null) {
-                if (fileLocation instanceof SecureDocument) {
-                    SecureDocument document = (SecureDocument) fileLocation;
-                    key = document.secureFile.dc_id + "_" + document.secureFile.id;
-                } else if (fileLocation instanceof FileLocation) {
-                    location = (FileLocation) fileLocation;
-                    key = location.volume_id + "_" + location.local_id;
-                } else if (fileLocation instanceof TL_photoStrippedSize) {
-                    location2 = (TL_photoStrippedSize) fileLocation;
-                    key = "stripped" + FileRefController.getKeyForParentObject(parentObject);
-                } else if (fileLocation instanceof PhotoSize) {
-                    photoSize = (PhotoSize) fileLocation;
-                    key = photoSize.location.volume_id + "_" + photoSize.location.local_id;
-                } else if (fileLocation instanceof WebFile) {
-                    key = Utilities.MD5(((WebFile) fileLocation).url);
+            if (fileLocation instanceof SecureDocument) {
+                SecureDocument document = (SecureDocument) fileLocation;
+                key = document.secureFile.dc_id + "_" + document.secureFile.id;
+            } else if (fileLocation instanceof FileLocation) {
+                location = (FileLocation) fileLocation;
+                key = location.volume_id + "_" + location.local_id;
+            } else if (fileLocation instanceof TL_photoStrippedSize) {
+                location2 = (TL_photoStrippedSize) fileLocation;
+                key = "stripped" + FileRefController.getKeyForParentObject(parentObject);
+            } else if ((fileLocation instanceof TL_photoSize) || (fileLocation instanceof TL_photoCachedSize)) {
+                photoSize = (PhotoSize) fileLocation;
+                key = photoSize.location.volume_id + "_" + photoSize.location.local_id;
+            } else if (fileLocation instanceof WebFile) {
+                key = Utilities.MD5(((WebFile) fileLocation).url);
+            } else if (fileLocation instanceof Document) {
+                Document location3 = (Document) fileLocation;
+                if (location3.dc_id != 0) {
+                    key = location3.dc_id + "_" + location3.id;
                 } else {
-                    Document location3 = (Document) fileLocation;
-                    if (location3.dc_id != 0) {
-                        key = location3.dc_id + "_" + location3.id;
-                    } else {
-                        fileLocation = null;
-                    }
+                    fileLocation = null;
                 }
-            } else if (httpUrl != null) {
-                key = Utilities.MD5(httpUrl);
+            } else if (fileLocation instanceof String) {
+                key = Utilities.MD5((String) fileLocation);
             }
             this.currentKeyQuality = false;
             if (key == null && this.needsQualityThumb && (parentObject instanceof MessageObject)) {
@@ -275,15 +273,17 @@ public class ImageReceiver implements NotificationCenterDelegate {
                 }
             }
             String thumbKey = null;
-            if (thumbLocation instanceof FileLocation) {
-                location = (FileLocation) thumbLocation;
+            if (thumbLocation2 instanceof FileLocation) {
+                location = (FileLocation) thumbLocation2;
                 thumbKey = location.volume_id + "_" + location.local_id;
-            } else if (thumbLocation instanceof TL_photoStrippedSize) {
-                location2 = (TL_photoStrippedSize) thumbLocation;
+            } else if (thumbLocation2 instanceof TL_photoStrippedSize) {
+                location2 = (TL_photoStrippedSize) thumbLocation2;
                 thumbKey = "stripped" + FileRefController.getKeyForParentObject(parentObject);
-            } else if (thumbLocation instanceof PhotoSize) {
-                photoSize = (PhotoSize) thumbLocation;
+            } else if ((thumbLocation2 instanceof TL_photoSize) || (thumbLocation2 instanceof TL_photoCachedSize)) {
+                photoSize = (PhotoSize) thumbLocation2;
                 thumbKey = photoSize.location.volume_id + "_" + photoSize.location.local_id;
+            } else if (thumbLocation2 instanceof String) {
+                thumbKey = Utilities.MD5((String) thumbLocation2);
             }
             if (!(thumbKey == null || thumbFilter == null)) {
                 thumbKey = thumbKey + "@" + thumbFilter;
@@ -332,12 +332,11 @@ public class ImageReceiver implements NotificationCenterDelegate {
             this.currentKey = key;
             this.currentExt = ext;
             this.currentImageLocation = fileLocation;
-            this.currentHttpUrl = httpUrl;
             this.currentFilter = filter;
             this.currentThumbFilter = thumbFilter;
             this.currentSize = size;
             this.currentCacheType = cacheType;
-            this.currentThumbLocation = thumbLocation;
+            this.currentThumbLocation = thumbLocation2;
             this.staticThumb = thumb;
             this.bitmapShader = null;
             this.bitmapShaderThumb = null;
@@ -367,7 +366,6 @@ public class ImageReceiver implements NotificationCenterDelegate {
         this.currentThumbKey = null;
         this.currentThumbFilter = null;
         this.currentImageLocation = null;
-        this.currentHttpUrl = null;
         this.currentFilter = null;
         this.currentParentObject = null;
         this.currentCacheType = 0;
@@ -523,14 +521,12 @@ public class ImageReceiver implements NotificationCenterDelegate {
         this.currentImage = null;
         this.currentThumbFilter = null;
         this.currentImageLocation = null;
-        this.currentHttpUrl = null;
         this.currentFilter = null;
         this.currentSize = 0;
         this.currentCacheType = 0;
         this.bitmapShader = null;
         if (this.setImageBackup != null) {
             this.setImageBackup.fileLocation = null;
-            this.setImageBackup.httpUrl = null;
             this.setImageBackup.thumbLocation = null;
             this.setImageBackup.thumb = null;
         }
@@ -570,12 +566,11 @@ public class ImageReceiver implements NotificationCenterDelegate {
     }
 
     public void onDetachedFromWindow() {
-        if (!(this.currentImageLocation == null && this.currentHttpUrl == null && this.currentThumbLocation == null && this.staticThumb == null)) {
+        if (!(this.currentImageLocation == null && this.currentThumbLocation == null && this.staticThumb == null)) {
             if (this.setImageBackup == null) {
                 this.setImageBackup = new SetImageBackup();
             }
             this.setImageBackup.fileLocation = this.currentImageLocation;
-            this.setImageBackup.httpUrl = this.currentHttpUrl;
             this.setImageBackup.filter = this.currentFilter;
             this.setImageBackup.thumb = this.staticThumb;
             this.setImageBackup.thumbLocation = this.currentThumbLocation;
@@ -591,10 +586,10 @@ public class ImageReceiver implements NotificationCenterDelegate {
 
     public boolean onAttachedToWindow() {
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didReplacedPhotoInMemCache);
-        if (this.setImageBackup == null || (this.setImageBackup.fileLocation == null && this.setImageBackup.httpUrl == null && this.setImageBackup.thumbLocation == null && this.setImageBackup.thumb == null)) {
+        if (this.setImageBackup == null || (this.setImageBackup.fileLocation == null && this.setImageBackup.thumbLocation == null && this.setImageBackup.thumb == null)) {
             return false;
         }
-        setImage(this.setImageBackup.fileLocation, this.setImageBackup.httpUrl, this.setImageBackup.filter, this.setImageBackup.thumb, this.setImageBackup.thumbLocation, this.setImageBackup.thumbFilter, this.setImageBackup.size, this.setImageBackup.ext, this.setImageBackup.parentObject, this.setImageBackup.cacheType);
+        setImage(this.setImageBackup.fileLocation, this.setImageBackup.filter, this.setImageBackup.thumb, this.setImageBackup.thumbLocation, this.setImageBackup.thumbFilter, this.setImageBackup.size, this.setImageBackup.ext, this.setImageBackup.parentObject, this.setImageBackup.cacheType);
         return true;
     }
 
@@ -694,19 +689,21 @@ public class ImageReceiver implements NotificationCenterDelegate {
                 bitmapH = (int) (((float) bitmapH) / scale);
                 this.drawRegion.set(this.imageX + ((this.imageW - bitmapW) / 2), this.imageY + ((this.imageH - bitmapH) / 2), this.imageX + ((this.imageW + bitmapW) / 2), this.imageY + ((this.imageH + bitmapH) / 2));
                 bitmapDrawable.setBounds(this.drawRegion);
-                try {
-                    bitmapDrawable.setAlpha(alpha);
-                    bitmapDrawable.draw(canvas);
-                } catch (Throwable e) {
-                    if (bitmapDrawable == this.currentImage && this.currentKey != null) {
-                        ImageLoader.getInstance().removeImage(this.currentKey);
-                        this.currentKey = null;
-                    } else if (bitmapDrawable == this.currentThumb && this.currentThumbKey != null) {
-                        ImageLoader.getInstance().removeImage(this.currentThumbKey);
-                        this.currentThumbKey = null;
+                if (this.isVisible) {
+                    try {
+                        bitmapDrawable.setAlpha(alpha);
+                        bitmapDrawable.draw(canvas);
+                    } catch (Throwable e) {
+                        if (bitmapDrawable == this.currentImage && this.currentKey != null) {
+                            ImageLoader.getInstance().removeImage(this.currentKey);
+                            this.currentKey = null;
+                        } else if (bitmapDrawable == this.currentThumb && this.currentThumbKey != null) {
+                            ImageLoader.getInstance().removeImage(this.currentThumbKey);
+                            this.currentThumbKey = null;
+                        }
+                        setImage(this.currentImageLocation, this.currentFilter, this.currentThumb, this.currentThumbLocation, this.currentThumbFilter, this.currentSize, this.currentExt, this.currentParentObject, this.currentCacheType);
+                        FileLog.e(e);
                     }
-                    setImage(this.currentImageLocation, this.currentHttpUrl, this.currentFilter, this.currentThumb, this.currentThumbLocation, this.currentThumbFilter, this.currentSize, this.currentExt, this.currentParentObject, this.currentCacheType);
-                    FileLog.e(e);
                 }
                 canvas.restore();
                 return;
@@ -751,7 +748,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                             ImageLoader.getInstance().removeImage(this.currentThumbKey);
                             this.currentThumbKey = null;
                         }
-                        setImage(this.currentImageLocation, this.currentHttpUrl, this.currentFilter, this.currentThumb, this.currentThumbLocation, this.currentThumbFilter, this.currentSize, this.currentExt, this.currentParentObject, this.currentCacheType);
+                        setImage(this.currentImageLocation, this.currentFilter, this.currentThumb, this.currentThumbLocation, this.currentThumbFilter, this.currentSize, this.currentExt, this.currentParentObject, this.currentCacheType);
                         FileLog.e(e2);
                     }
                 }
@@ -791,7 +788,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                             ImageLoader.getInstance().removeImage(this.currentThumbKey);
                             this.currentThumbKey = null;
                         }
-                        setImage(this.currentImageLocation, this.currentHttpUrl, this.currentFilter, this.currentThumb, this.currentThumbLocation, this.currentThumbFilter, this.currentSize, this.currentExt, this.currentParentObject, this.currentCacheType);
+                        setImage(this.currentImageLocation, this.currentFilter, this.currentThumb, this.currentThumbLocation, this.currentThumbFilter, this.currentSize, this.currentExt, this.currentParentObject, this.currentCacheType);
                         FileLog.e(e22);
                     }
                 }
@@ -1071,7 +1068,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
     }
 
     public boolean hasImage() {
-        return (this.currentImage == null && this.currentThumb == null && this.currentKey == null && this.currentHttpUrl == null && this.staticThumb == null) ? false : true;
+        return (this.currentImage == null && this.currentThumb == null && this.currentKey == null && this.staticThumb == null) ? false : true;
     }
 
     public boolean hasBitmapImage() {
@@ -1082,8 +1079,16 @@ public class ImageReceiver implements NotificationCenterDelegate {
         return this.currentImage != null;
     }
 
+    public boolean hasStaticThumb() {
+        return this.staticThumb != null;
+    }
+
     public void setAspectFit(boolean value) {
         this.isAspectFit = value;
+    }
+
+    public boolean isAspectFit() {
+        return this.isAspectFit;
     }
 
     public void setParentView(View view) {
@@ -1180,16 +1185,12 @@ public class ImageReceiver implements NotificationCenterDelegate {
         return this.currentSize;
     }
 
-    public TLObject getImageLocation() {
+    public Object getImageLocation() {
         return this.currentImageLocation;
     }
 
-    public TLObject getThumbLocation() {
+    public Object getThumbLocation() {
         return this.currentThumbLocation;
-    }
-
-    public String getHttpImageLocation() {
-        return this.currentHttpUrl;
     }
 
     public int getCacheType() {
@@ -1240,7 +1241,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
         return this.currentKeyQuality;
     }
 
-    public int getcurrentAccount() {
+    public int getCurrentAccount() {
         return this.currentAccount;
     }
 
@@ -1458,20 +1459,20 @@ public class ImageReceiver implements NotificationCenterDelegate {
             String oldKey = args[0];
             if (this.currentKey != null && this.currentKey.equals(oldKey)) {
                 this.currentKey = (String) args[1];
-                this.currentImageLocation = (TLObject) args[2];
+                this.currentImageLocation = args[2];
             }
             if (this.currentThumbKey != null && this.currentThumbKey.equals(oldKey)) {
                 this.currentThumbKey = (String) args[1];
-                this.currentThumbLocation = (TLObject) args[2];
+                this.currentThumbLocation = args[2];
             }
             if (this.setImageBackup != null) {
                 if (this.currentKey != null && this.currentKey.equals(oldKey)) {
                     this.currentKey = (String) args[1];
-                    this.currentImageLocation = (TLObject) args[2];
+                    this.currentImageLocation = args[2];
                 }
                 if (this.currentThumbKey != null && this.currentThumbKey.equals(oldKey)) {
                     this.currentThumbKey = (String) args[1];
-                    this.currentThumbLocation = (TLObject) args[2];
+                    this.currentThumbLocation = args[2];
                 }
             }
         }

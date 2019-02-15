@@ -188,7 +188,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    ChatEditTypeActivity.this.lambda$checkDiscard$18$ChatUsersActivity();
+                    ChatEditTypeActivity.this.lambda$checkDiscard$18$ChatEditActivity();
                 } else if (id == 1) {
                     ChatEditTypeActivity.this.processDone();
                 }
@@ -435,7 +435,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
                     return;
                 }
             }
-            lambda$checkDiscard$18$ChatUsersActivity();
+            lambda$checkDiscard$18$ChatEditActivity();
             return;
         }
         Vibrator v = (Vibrator) getParentActivity().getSystemService("vibrator");

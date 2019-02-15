@@ -4,18 +4,16 @@ import java.util.ArrayList;
 
 final /* synthetic */ class MessagesController$$Lambda$132 implements Runnable {
     private final MessagesController arg$1;
-    private final boolean arg$2;
-    private final int arg$3;
-    private final ArrayList arg$4;
+    private final int arg$2;
+    private final ArrayList arg$3;
 
-    MessagesController$$Lambda$132(MessagesController messagesController, boolean z, int i, ArrayList arrayList) {
+    MessagesController$$Lambda$132(MessagesController messagesController, int i, ArrayList arrayList) {
         this.arg$1 = messagesController;
-        this.arg$2 = z;
-        this.arg$3 = i;
-        this.arg$4 = arrayList;
+        this.arg$2 = i;
+        this.arg$3 = arrayList;
     }
 
     public void run() {
-        this.arg$1.lambda$processUpdates$225$MessagesController(this.arg$2, this.arg$3, this.arg$4);
+        this.arg$1.lambda$generateJoinMessage$221$MessagesController(this.arg$2, this.arg$3);
     }
 }

@@ -1,22 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_error;
-import org.telegram.ui.ActionBar.AlertDialog;
-
-final /* synthetic */ class LaunchActivity$$Lambda$15 implements RequestDelegate {
+final /* synthetic */ class LaunchActivity$$Lambda$15 implements Runnable {
     private final LaunchActivity arg$1;
-    private final AlertDialog arg$2;
-    private final int arg$3;
+    private final WallpaperActivity arg$2;
 
-    LaunchActivity$$Lambda$15(LaunchActivity launchActivity, AlertDialog alertDialog, int i) {
+    LaunchActivity$$Lambda$15(LaunchActivity launchActivity, WallpaperActivity wallpaperActivity) {
         this.arg$1 = launchActivity;
-        this.arg$2 = alertDialog;
-        this.arg$3 = i;
+        this.arg$2 = wallpaperActivity;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$runLinkRequest$28$LaunchActivity(this.arg$2, this.arg$3, tLObject, tL_error);
+    public void run() {
+        this.arg$1.lambda$runLinkRequest$27$LaunchActivity(this.arg$2);
     }
 }

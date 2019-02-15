@@ -718,32 +718,36 @@ public class SecretChatHelper {
             return;
         }
         if (error == null) {
+            int existFlags;
             String attachPath = newMsgObj.attachPath;
             messages_SentEncryptedMessage res = (messages_SentEncryptedMessage) response;
             if (isSecretVisibleMessage(newMsgObj)) {
                 newMsgObj.date = res.date;
             }
-            if (newMsg != null && (res.file instanceof TL_encryptedFile)) {
+            if (newMsg == null || !(res.file instanceof TL_encryptedFile)) {
+                existFlags = 0;
+            } else {
                 updateMediaPaths(newMsg, res.file, req, originalPath);
+                existFlags = newMsg.getMediaExistanceFlags();
             }
-            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new SecretChatHelper$$Lambda$28(this, newMsgObj, res, attachPath));
+            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new SecretChatHelper$$Lambda$28(this, newMsgObj, res, existFlags, attachPath));
             return;
         }
         MessagesStorage.getInstance(this.currentAccount).markMessageAsSendError(newMsgObj);
         AndroidUtilities.runOnUIThread(new SecretChatHelper$$Lambda$29(this, newMsgObj));
     }
 
-    final /* synthetic */ void lambda$null$4$SecretChatHelper(Message newMsgObj, messages_SentEncryptedMessage res, String attachPath) {
+    final /* synthetic */ void lambda$null$4$SecretChatHelper(Message newMsgObj, messages_SentEncryptedMessage res, int existFlags, String attachPath) {
         if (isSecretInvisibleMessage(newMsgObj)) {
             res.date = 0;
         }
         MessagesStorage.getInstance(this.currentAccount).updateMessageStateAndId(newMsgObj.random_id, Integer.valueOf(newMsgObj.id), newMsgObj.id, res.date, false, 0);
-        AndroidUtilities.runOnUIThread(new SecretChatHelper$$Lambda$30(this, newMsgObj, attachPath));
+        AndroidUtilities.runOnUIThread(new SecretChatHelper$$Lambda$30(this, newMsgObj, existFlags, attachPath));
     }
 
-    final /* synthetic */ void lambda$null$3$SecretChatHelper(Message newMsgObj, String attachPath) {
+    final /* synthetic */ void lambda$null$3$SecretChatHelper(Message newMsgObj, int existFlags, String attachPath) {
         newMsgObj.send_state = 0;
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(newMsgObj.id), Integer.valueOf(newMsgObj.id), newMsgObj, Long.valueOf(newMsgObj.dialog_id), Long.valueOf(0));
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(newMsgObj.id), Integer.valueOf(newMsgObj.id), newMsgObj, Long.valueOf(newMsgObj.dialog_id), Long.valueOf(0), Integer.valueOf(existFlags));
         SendMessagesHelper.getInstance(this.currentAccount).processSentMessage(newMsgObj.id);
         if (MessageObject.isVideoMessage(newMsgObj) || MessageObject.isNewGifMessage(newMsgObj) || MessageObject.isRoundVideoMessage(newMsgObj)) {
             SendMessagesHelper.getInstance(this.currentAccount).stopVideoService(attachPath);

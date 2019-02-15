@@ -21,6 +21,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     private boolean occupyStatusBar = true;
     private WallpaperParallaxEffect parallaxEffect;
     private float parallaxScale = 1.0f;
+    private boolean paused = true;
     private Rect rect = new Rect();
     private float translationX;
     private float translationY;
@@ -44,10 +45,13 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                     this.parallaxScale = this.parallaxEffect.getScale(getMeasuredWidth(), getMeasuredHeight());
                 }
             }
+            if (!this.paused) {
+                this.parallaxEffect.setEnabled(true);
+            }
         } else if (this.parallaxEffect != null) {
             this.parallaxEffect.setEnabled(false);
             this.parallaxEffect = null;
-            this.parallaxScale = 0.0f;
+            this.parallaxScale = 1.0f;
             this.translationX = 0.0f;
             this.translationY = 0.0f;
         }
@@ -76,12 +80,14 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         if (this.parallaxEffect != null) {
             this.parallaxEffect.setEnabled(false);
         }
+        this.paused = true;
     }
 
     public void onResume() {
         if (this.parallaxEffect != null) {
             this.parallaxEffect.setEnabled(true);
         }
+        this.paused = false;
     }
 
     protected void onLayout(boolean changed, int l, int t, int r, int b) {

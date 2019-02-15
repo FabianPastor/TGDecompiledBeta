@@ -1,15 +1,18 @@
 package org.telegram.ui;
 
-import org.telegram.ui.Components.EditTextBoldCursor;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 
-final /* synthetic */ class ThemeActivity$$Lambda$10 implements Runnable {
-    private final EditTextBoldCursor arg$1;
+final /* synthetic */ class ThemeActivity$$Lambda$10 implements OnClickListener {
+    private final ThemeActivity arg$1;
+    private final int arg$2;
 
-    ThemeActivity$$Lambda$10(EditTextBoldCursor editTextBoldCursor) {
-        this.arg$1 = editTextBoldCursor;
+    ThemeActivity$$Lambda$10(ThemeActivity themeActivity, int i) {
+        this.arg$1 = themeActivity;
+        this.arg$2 = i;
     }
 
-    public void run() {
-        ThemeActivity.lambda$null$2$ThemeActivity(this.arg$1);
+    public void onClick(DialogInterface dialogInterface, int i) {
+        this.arg$1.lambda$null$0$ThemeActivity(this.arg$2, dialogInterface, i);
     }
 }
