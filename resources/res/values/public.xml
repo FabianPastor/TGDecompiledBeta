@@ -2245,6 +2245,7 @@
     <public type="string" name="NotificationMessagesPeopleDisplayOrder" id="NUM" />
     <public type="string" name="NotificationUnrecognizedDevice" id="NUM" />
     <public type="string" name="Notifications" id="NUM" />
+    <public type="string" name="NotificationsAddAnException" id="NUM" />
     <public type="string" name="NotificationsAndSounds" id="NUM" />
     <public type="string" name="NotificationsChannels" id="NUM" />
     <public type="string" name="NotificationsCustom" id="NUM" />
@@ -2265,6 +2266,7 @@
     <public type="string" name="NotificationsLedColor" id="NUM" />
     <public type="string" name="NotificationsLedInfo" id="NUM" />
     <public type="string" name="NotificationsMuted" id="NUM" />
+    <public type="string" name="NotificationsNewException" id="NUM" />
     <public type="string" name="NotificationsOff" id="NUM" />
     <public type="string" name="NotificationsOffUntil" id="NUM" />
     <public type="string" name="NotificationsOn" id="NUM" />

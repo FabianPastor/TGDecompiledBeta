@@ -142,7 +142,7 @@ public class AlertsCreator {
     L_0x005a:
         r0 = r9.getParentActivity();
         r1 = "UpdateAppAlert";
-        r3 = NUM; // 0x7f0CLASSNAMEa9 float:1.8613689E38 double:1.053098494E-314;
+        r3 = NUM; // 0x7f0CLASSNAMEab float:1.8613693E38 double:1.053098495E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r3);
         showUpdateAppAlert(r0, r1, r2);
         goto L_0x0037;
@@ -683,13 +683,13 @@ public class AlertsCreator {
         goto L_0x04b2;
     L_0x04d6:
         r0 = "UsernameInvalid";
-        r1 = NUM; // 0x7f0CLASSNAMEf3 float:1.8613839E38 double:1.0530985304E-314;
+        r1 = NUM; // 0x7f0CLASSNAMEf5 float:1.8613843E38 double:1.0530985314E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleAlert(r9, r0);
         goto L_0x0037;
     L_0x04e5:
         r0 = "UsernameInUse";
-        r1 = NUM; // 0x7f0CLASSNAMEf2 float:1.8613837E38 double:1.05309853E-314;
+        r1 = NUM; // 0x7f0CLASSNAMEf4 float:1.861384E38 double:1.053098531E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleAlert(r9, r0);
         goto L_0x0037;
@@ -780,13 +780,13 @@ public class AlertsCreator {
         goto L_0x056b;
     L_0x058a:
         r0 = "PaymentPrecheckoutFailed";
-        r1 = NUM; // 0x7f0CLASSNAMEa6 float:1.8612644E38 double:1.0530982394E-314;
+        r1 = NUM; // 0x7f0CLASSNAMEa8 float:1.8612648E38 double:1.0530982403E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleToast(r9, r0);
         goto L_0x0037;
     L_0x0599:
         r0 = "PaymentFailed";
-        r1 = NUM; // 0x7f0CLASSNAME float:1.8612618E38 double:1.053098233E-314;
+        r1 = NUM; // 0x7f0CLASSNAMEb float:1.8612622E38 double:1.053098234E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleToast(r9, r0);
         goto L_0x0037;
@@ -819,7 +819,7 @@ public class AlertsCreator {
         goto L_0x05b6;
     L_0x05cb:
         r0 = "PaymentNoShippingMethod";
-        r1 = NUM; // 0x7f0CLASSNAMEb float:1.8612622E38 double:1.053098234E-314;
+        r1 = NUM; // 0x7f0CLASSNAMEd float:1.8612626E38 double:1.053098235E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleToast(r9, r0);
         goto L_0x0037;

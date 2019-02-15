@@ -369,7 +369,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
 
     public boolean onFragmentCreate() {
         MessagesController.getInstance(this.currentAccount).loadSignUpNotificationsSettings();
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new NotificationsSettingsActivity$$Lambda$0(this));
+        loadExceptions();
         int i = this.rowCount;
         this.rowCount = i + 1;
         this.notificationsSectionRow = i;
@@ -475,7 +475,11 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         return super.onFragmentCreate();
     }
 
-    final /* synthetic */ void lambda$onFragmentCreate$1$NotificationsSettingsActivity() {
+    private void loadExceptions() {
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new NotificationsSettingsActivity$$Lambda$0(this));
+    }
+
+    final /* synthetic */ void lambda$loadExceptions$1$NotificationsSettingsActivity() {
         NotificationException exception;
         User user;
         Chat chat;

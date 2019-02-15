@@ -103,6 +103,12 @@ public class DialogsAdapter extends SelectionAdapter {
         if (this.dialogsType == 3) {
             return MessagesController.getInstance(this.currentAccount).dialogsForward;
         }
+        if (this.dialogsType == 4) {
+            return MessagesController.getInstance(this.currentAccount).dialogsUsersOnly;
+        }
+        if (this.dialogsType == 5) {
+            return MessagesController.getInstance(this.currentAccount).dialogsChannelsOnly;
+        }
         return null;
     }
 

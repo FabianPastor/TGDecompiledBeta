@@ -1376,6 +1376,7 @@
     <string name="NotificationMessagesPeopleDisplayOrder">%1$s %2$s</string>
     <string name="NotificationUnrecognizedDevice">%1$s,\10We detected a login into your account from a new device on %2$s\10\10Device: %3$s\10Location: %4$s\10\10If this wasn\'t you, you can go to Settings - Privacy and Security - Sessions and terminate that session.\10\10If you think that somebody logged in to your account against your will, you can enable two-step verification in Privacy and Security settings.\10\10Sincerely,\10The Telegram Team</string>
     <string name="Notifications">Notifications</string>
+    <string name="NotificationsAddAnException">Add an Exception</string>
     <string name="NotificationsAndSounds">Notifications and Sounds</string>
     <string name="NotificationsChannels">Channels</string>
     <string name="NotificationsCustom">Custom</string>
@@ -1396,6 +1397,7 @@
     <string name="NotificationsLedColor">Color</string>
     <string name="NotificationsLedInfo">LED is a small blinking light on some devices that is used to indicate new messages.</string>
     <string name="NotificationsMuted">Muted</string>
+    <string name="NotificationsNewException">New Exception</string>
     <string name="NotificationsOff">Off</string>
     <string name="NotificationsOffUntil">Off until %1$s</string>
     <string name="NotificationsOn">On</string>

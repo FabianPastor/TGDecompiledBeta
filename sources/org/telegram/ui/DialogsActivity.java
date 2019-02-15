@@ -73,6 +73,7 @@ import org.telegram.tgnet.TLRPC.TL_recentMeUrlChatInvite;
 import org.telegram.tgnet.TLRPC.TL_recentMeUrlStickerSet;
 import org.telegram.tgnet.TLRPC.TL_recentMeUrlUnknown;
 import org.telegram.tgnet.TLRPC.TL_recentMeUrlUser;
+import org.telegram.tgnet.TLRPC.TL_userEmpty;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.ActionBarMenu;
@@ -661,10 +662,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                             chat = isChat ? MessagesController.getInstance(DialogsActivity.this.currentAccount).getChat(Integer.valueOf(-lower_id)) : null;
                             if (lower_id == 0) {
                                 EncryptedChat encryptedChat = MessagesController.getInstance(DialogsActivity.this.currentAccount).getEncryptedChat(Integer.valueOf(high_id));
-                                if (encryptedChat == null) {
-                                    return false;
-                                }
-                                user = MessagesController.getInstance(DialogsActivity.this.currentAccount).getUser(Integer.valueOf(encryptedChat.user_id));
+                                user = encryptedChat != null ? MessagesController.getInstance(DialogsActivity.this.currentAccount).getUser(Integer.valueOf(encryptedChat.user_id)) : new TL_userEmpty();
                             } else {
                                 user = (isChat || lower_id <= 0 || high_id == 1) ? null : MessagesController.getInstance(DialogsActivity.this.currentAccount).getUser(Integer.valueOf(lower_id));
                             }
@@ -1671,6 +1669,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         }
         if (this.dialogsType == 3) {
             return MessagesController.getInstance(this.currentAccount).dialogsForward;
+        }
+        if (this.dialogsType == 4) {
+            return MessagesController.getInstance(this.currentAccount).dialogsUsersOnly;
+        }
+        if (this.dialogsType == 5) {
+            return MessagesController.getInstance(this.currentAccount).dialogsChannelsOnly;
         }
         return null;
     }

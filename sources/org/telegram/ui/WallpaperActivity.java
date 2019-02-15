@@ -917,7 +917,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
 
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
-        this.imageFilter = ((int) (1920.0f / AndroidUtilities.density)) + "_" + ((int) (1080.0f / AndroidUtilities.density));
+        this.imageFilter = ((int) (1080.0f / AndroidUtilities.density)) + "_" + ((int) (1920.0f / AndroidUtilities.density)) + "_f";
         this.maxWallpaperSize = Math.min(1920, Math.max(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y));
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.wallpapersNeedReload);
         this.TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
@@ -1255,18 +1255,32 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         long id;
         boolean sameFile = false;
         File file = new File(ApplicationLoader.getFilesDirFixed(), this.isBlurred ? "wallpaper_original.jpg" : "wallpaper.jpg");
+        Bitmap bitmap;
+        OutputStream stream;
         if (this.currentWallpaper instanceof TL_wallPaper) {
             try {
-                done = AndroidUtilities.copyFile(FileLoader.getPathToAttach(this.currentWallpaper.document, true), file);
+                bitmap = this.backgroundImage.getImageReceiver().getBitmap();
+                stream = new FileOutputStream(file);
+                bitmap.compress(CompressFormat.JPEG, 87, stream);
+                stream.close();
+                done = true;
             } catch (Throwable e) {
                 done = false;
                 FileLog.e(e);
+            }
+            if (!done) {
+                try {
+                    done = AndroidUtilities.copyFile(FileLoader.getPathToAttach(this.currentWallpaper.document, true), file);
+                } catch (Throwable e2) {
+                    done = false;
+                    FileLog.e(e2);
+                }
             }
         } else if (this.currentWallpaper instanceof ColorWallpaper) {
             if (this.selectedPattern != null) {
                 try {
                     wallPaper = this.currentWallpaper;
-                    Bitmap bitmap = this.backgroundImage.getImageReceiver().getBitmap();
+                    bitmap = this.backgroundImage.getImageReceiver().getBitmap();
                     Bitmap dst = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Config.ARGB_8888);
                     Canvas canvas = new Canvas(dst);
                     canvas.drawColor(this.backgroundColor);
@@ -1274,12 +1288,12 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
                     paint.setColorFilter(new PorterDuffColorFilter(this.patternColor, this.blendMode));
                     paint.setAlpha((int) (255.0f * this.currentIntensity));
                     canvas.drawBitmap(bitmap, 0.0f, 0.0f, paint);
-                    OutputStream stream = new FileOutputStream(file);
+                    stream = new FileOutputStream(file);
                     dst.compress(CompressFormat.JPEG, 87, stream);
                     stream.close();
                     done = true;
-                } catch (Throwable e2) {
-                    FileLog.e(e2);
+                } catch (Throwable e22) {
+                    FileLog.e(e22);
                     done = false;
                 }
             } else {
@@ -1298,9 +1312,9 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
                     } else {
                         done = AndroidUtilities.copyFile(fromFile, file);
                     }
-                } catch (Throwable e22) {
+                } catch (Throwable e222) {
                     done = false;
-                    FileLog.e(e22);
+                    FileLog.e(e222);
                 }
             }
         } else if (this.currentWallpaper instanceof SearchImage) {
@@ -1313,9 +1327,9 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
             }
             try {
                 done = AndroidUtilities.copyFile(f, file);
-            } catch (Throwable e222) {
+            } catch (Throwable e2222) {
                 done = false;
-                FileLog.e(e222);
+                FileLog.e(e2222);
             }
         } else {
             done = false;
@@ -1326,8 +1340,8 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
                 this.blurredBitmap.compress(CompressFormat.JPEG, 87, fileOutputStream);
                 fileOutputStream.close();
                 done = true;
-            } catch (Throwable e2222) {
-                FileLog.e(e2222);
+            } catch (Throwable e22222) {
+                FileLog.e(e22222);
                 done = false;
             }
         }

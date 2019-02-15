@@ -2457,14 +2457,22 @@ public class TLRPC {
         }
 
         protected void writeAttachPath(AbstractSerializedData stream) {
+            String path;
             if ((this instanceof TL_message_secret) || (this instanceof TL_message_secret_layer72)) {
-                stream.writeString(this.attachPath);
+                path = this.attachPath != null ? this.attachPath : "";
+                if (this.send_state == 1 && this.params != null && this.params.size() > 0) {
+                    for (Entry<String, String> entry : this.params.entrySet()) {
+                        path = ((String) entry.getKey()) + "|=|" + ((String) entry.getValue()) + "||" + path;
+                    }
+                    path = "||" + path;
+                }
+                stream.writeString(path);
                 return;
             }
-            String path = this.attachPath != null ? this.attachPath : "";
+            path = this.attachPath != null ? this.attachPath : "";
             if ((this.id < 0 || this.send_state == 3) && this.params != null && this.params.size() > 0) {
-                for (Entry<String, String> entry : this.params.entrySet()) {
-                    path = ((String) entry.getKey()) + "|=|" + ((String) entry.getValue()) + "||" + path;
+                for (Entry<String, String> entry2 : this.params.entrySet()) {
+                    path = ((String) entry2.getKey()) + "|=|" + ((String) entry2.getValue()) + "||" + path;
                 }
                 path = "||" + path;
             }

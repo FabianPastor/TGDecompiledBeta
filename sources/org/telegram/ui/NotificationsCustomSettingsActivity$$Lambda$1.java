@@ -10,6 +10,6 @@ final /* synthetic */ class NotificationsCustomSettingsActivity$$Lambda$1 implem
     }
 
     public void didSetColor() {
-        this.arg$1.lambda$getThemeDescriptions$7$NotificationsCustomSettingsActivity();
+        this.arg$1.lambda$getThemeDescriptions$9$NotificationsCustomSettingsActivity();
     }
 }

@@ -5396,7 +5396,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         r0 = r24;
         r3 = r0.allMediaItem;
         r4 = "ShowAllMedia";
-        r5 = NUM; // 0x7f0CLASSNAME float:1.8613358E38 double:1.0530984133E-314;
+        r5 = NUM; // 0x7f0CLASSNAME float:1.8613362E38 double:1.0530984143E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r5);
         r3.setText(r4);
         r0 = r24;
@@ -5780,7 +5780,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         r0 = r24;
         r3 = r0.allMediaItem;
         r4 = "ShowAllFiles";
-        r5 = NUM; // 0x7f0CLASSNAME float:1.8613356E38 double:1.053098413E-314;
+        r5 = NUM; // 0x7f0CLASSNAME float:1.861336E38 double:1.053098414E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r5);
         r3.setText(r4);
     L_0x041e:
@@ -6076,7 +6076,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         r0 = r24;
         r3 = r0.allMediaItem;
         r4 = "ShowAllFiles";
-        r5 = NUM; // 0x7f0CLASSNAME float:1.8613356E38 double:1.053098413E-314;
+        r5 = NUM; // 0x7f0CLASSNAME float:1.861336E38 double:1.053098414E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r5);
         r3.setText(r4);
     L_0x0637:

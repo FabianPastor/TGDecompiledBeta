@@ -423,10 +423,12 @@ public class MessagesController implements NotificationCenterDelegate {
     public SparseArray<MessageObject> dialogMessagesByIds = new SparseArray();
     public LongSparseArray<MessageObject> dialogMessagesByRandomIds = new LongSparseArray();
     public ArrayList<TL_dialog> dialogs = new ArrayList();
+    public ArrayList<TL_dialog> dialogsChannelsOnly = new ArrayList();
     public boolean dialogsEndReached;
     public ArrayList<TL_dialog> dialogsForward = new ArrayList();
     public ArrayList<TL_dialog> dialogsGroupsOnly = new ArrayList();
     public ArrayList<TL_dialog> dialogsServerOnly = new ArrayList();
+    public ArrayList<TL_dialog> dialogsUsersOnly = new ArrayList();
     public LongSparseArray<TL_dialog> dialogs_dict = new LongSparseArray();
     public ConcurrentHashMap<Long, Integer> dialogs_read_inbox_max = new ConcurrentHashMap(100, 1.0f, 2);
     public ConcurrentHashMap<Long, Integer> dialogs_read_outbox_max = new ConcurrentHashMap(100, 1.0f, 2);
@@ -1098,6 +1100,8 @@ public class MessagesController implements NotificationCenterDelegate {
         this.dialogsServerOnly.clear();
         this.dialogsForward.clear();
         this.dialogsGroupsOnly.clear();
+        this.dialogsChannelsOnly.clear();
+        this.dialogsUsersOnly.clear();
         this.dialogMessagesByIds.clear();
         this.dialogMessagesByRandomIds.clear();
         this.channelAdmins.clear();
@@ -2933,6 +2937,8 @@ public class MessagesController implements NotificationCenterDelegate {
                             Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$46(this, did));
                         }
                         this.dialogsGroupsOnly.remove(dialog);
+                        this.dialogsChannelsOnly.remove(dialog);
+                        this.dialogsUsersOnly.remove(dialog);
                         this.dialogsForward.remove(dialog);
                         this.dialogs_dict.remove(did);
                         this.dialogs_read_inbox_max.remove(Long.valueOf(did));
@@ -5033,10 +5039,10 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     public void processLoadedDialogs(messages_Dialogs dialogsRes, ArrayList<EncryptedChat> encChats, int offset, int count, int loadType, boolean resetEnd, boolean migrate, boolean fromCache) {
-        Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$81(this, loadType, dialogsRes, resetEnd, count, offset, fromCache, migrate, encChats));
+        Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$81(this, loadType, dialogsRes, resetEnd, count, encChats, offset, fromCache, migrate));
     }
 
-    final /* synthetic */ void lambda$processLoadedDialogs$125$MessagesController(int loadType, messages_Dialogs dialogsRes, boolean resetEnd, int count, int offset, boolean fromCache, boolean migrate, ArrayList encChats) {
+    final /* synthetic */ void lambda$processLoadedDialogs$125$MessagesController(int loadType, messages_Dialogs dialogsRes, boolean resetEnd, int count, ArrayList encChats, int offset, boolean fromCache, boolean migrate) {
         if (!this.firstGettingTask) {
             getNewDeleteTask(null, 0);
             this.firstGettingTask = true;
@@ -5064,6 +5070,17 @@ public class MessagesController implements NotificationCenterDelegate {
         for (a = 0; a < dialogsRes.chats.size(); a++) {
             Chat c = (Chat) dialogsRes.chats.get(a);
             chatsDict.put(c.id, c);
+        }
+        SparseArray<EncryptedChat> enc_chats_dict;
+        if (encChats != null) {
+            enc_chats_dict = new SparseArray();
+            int N = encChats.size();
+            for (a = 0; a < N; a++) {
+                EncryptedChat encryptedChat = (EncryptedChat) encChats.get(a);
+                enc_chats_dict.put(encryptedChat.id, encryptedChat);
+            }
+        } else {
+            enc_chats_dict = null;
         }
         if (loadType == 1) {
             this.nextDialogsCacheOffset = offset + count;
@@ -5152,49 +5169,52 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
             }
             if (d.id != 0) {
-                if (this.proxyDialogId != 0 && this.proxyDialogId == d.id) {
-                    this.proxyDialog = d;
-                }
-                if (d.last_message_date == 0) {
-                    MessageObject mess = (MessageObject) new_dialogMessage.get(d.id);
-                    if (mess != null) {
-                        d.last_message_date = mess.messageOwner.date;
+                int high_id = (int) (d.id >> 32);
+                if (((int) d.id) != 0 || enc_chats_dict == null || enc_chats_dict.get(high_id) != null) {
+                    if (this.proxyDialogId != 0 && this.proxyDialogId == d.id) {
+                        this.proxyDialog = d;
                     }
-                }
-                boolean allowCheck = true;
-                if (DialogObject.isChannel(d)) {
-                    chat = (Chat) chatsDict.get(-((int) d.id));
-                    if (chat != null) {
-                        if (!chat.megagroup) {
-                            allowCheck = false;
+                    if (d.last_message_date == 0) {
+                        MessageObject mess = (MessageObject) new_dialogMessage.get(d.id);
+                        if (mess != null) {
+                            d.last_message_date = mess.messageOwner.date;
                         }
-                        if (chat.left) {
-                            if (this.proxyDialogId != 0) {
-                                if (this.proxyDialogId != d.id) {
+                    }
+                    boolean allowCheck = true;
+                    if (DialogObject.isChannel(d)) {
+                        chat = (Chat) chatsDict.get(-((int) d.id));
+                        if (chat != null) {
+                            if (!chat.megagroup) {
+                                allowCheck = false;
+                            }
+                            if (chat.left) {
+                                if (this.proxyDialogId != 0) {
+                                    if (this.proxyDialogId != d.id) {
+                                    }
                                 }
                             }
                         }
+                        this.channelsPts.put(-((int) d.id), d.pts);
+                    } else if (((int) d.id) < 0) {
+                        chat = (Chat) chatsDict.get(-((int) d.id));
+                        if (!(chat == null || chat.migrated_to == null)) {
+                        }
                     }
-                    this.channelsPts.put(-((int) d.id), d.pts);
-                } else if (((int) d.id) < 0) {
-                    chat = (Chat) chatsDict.get(-((int) d.id));
-                    if (!(chat == null || chat.migrated_to == null)) {
+                    new_dialogs_dict.put(d.id, d);
+                    if (allowCheck && loadType == 1 && ((d.read_outbox_max_id == 0 || d.read_inbox_max_id == 0) && d.top_message != 0)) {
+                        dialogsToReload.add(d);
                     }
+                    value = (Integer) this.dialogs_read_inbox_max.get(Long.valueOf(d.id));
+                    if (value == null) {
+                        value = Integer.valueOf(0);
+                    }
+                    this.dialogs_read_inbox_max.put(Long.valueOf(d.id), Integer.valueOf(Math.max(value.intValue(), d.read_inbox_max_id)));
+                    value = (Integer) this.dialogs_read_outbox_max.get(Long.valueOf(d.id));
+                    if (value == null) {
+                        value = Integer.valueOf(0);
+                    }
+                    this.dialogs_read_outbox_max.put(Long.valueOf(d.id), Integer.valueOf(Math.max(value.intValue(), d.read_outbox_max_id)));
                 }
-                new_dialogs_dict.put(d.id, d);
-                if (allowCheck && loadType == 1 && ((d.read_outbox_max_id == 0 || d.read_inbox_max_id == 0) && d.top_message != 0)) {
-                    dialogsToReload.add(d);
-                }
-                value = (Integer) this.dialogs_read_inbox_max.get(Long.valueOf(d.id));
-                if (value == null) {
-                    value = Integer.valueOf(0);
-                }
-                this.dialogs_read_inbox_max.put(Long.valueOf(d.id), Integer.valueOf(Math.max(value.intValue(), d.read_inbox_max_id)));
-                value = (Integer) this.dialogs_read_outbox_max.get(Long.valueOf(d.id));
-                if (value == null) {
-                    value = Integer.valueOf(0);
-                }
-                this.dialogs_read_outbox_max.put(Long.valueOf(d.id), Integer.valueOf(Math.max(value.intValue(), d.read_outbox_max_id)));
             }
         }
         if (loadType != 1) {
@@ -15178,6 +15198,8 @@ public class MessagesController implements NotificationCenterDelegate {
                     this.dialogs.remove(dialog);
                     this.dialogsServerOnly.remove(dialog);
                     this.dialogsGroupsOnly.remove(dialog);
+                    this.dialogsChannelsOnly.remove(dialog);
+                    this.dialogsUsersOnly.remove(dialog);
                     this.dialogsForward.remove(dialog);
                     this.dialogs_dict.remove(dialog.id);
                     this.dialogs_read_inbox_max.remove(Long.valueOf(dialog.id));
@@ -15237,6 +15259,8 @@ public class MessagesController implements NotificationCenterDelegate {
         Chat chat;
         this.dialogsServerOnly.clear();
         this.dialogsGroupsOnly.clear();
+        this.dialogsChannelsOnly.clear();
+        this.dialogsUsersOnly.clear();
         this.dialogsForward.clear();
         this.unreadUnmutedDialogs = 0;
         boolean selfAdded = false;
@@ -15267,6 +15291,9 @@ public class MessagesController implements NotificationCenterDelegate {
                     if (chat != null && ((chat.megagroup && chat.admin_rights != null && (chat.admin_rights.post_messages || chat.admin_rights.add_admins)) || chat.creator)) {
                         this.dialogsGroupsOnly.add(d);
                     }
+                    if (chat == null || !chat.megagroup) {
+                        this.dialogsChannelsOnly.add(d);
+                    }
                 } else if (lower_id < 0) {
                     if (chatsDict != null) {
                         chat = (Chat) chatsDict.get(-lower_id);
@@ -15277,6 +15304,8 @@ public class MessagesController implements NotificationCenterDelegate {
                         }
                     }
                     this.dialogsGroupsOnly.add(d);
+                } else if (lower_id > 0) {
+                    this.dialogsUsersOnly.add(d);
                 }
             }
             if (this.proxyDialog != null && d.id == this.proxyDialog.id && this.isLeftProxyChannel) {

@@ -2291,20 +2291,20 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     /* JADX WARNING: Removed duplicated region for block: B:601:0x1184  */
     /* JADX WARNING: Removed duplicated region for block: B:979:0x2000  */
     /* JADX WARNING: Removed duplicated region for block: B:607:0x11e2  */
-    /* JADX WARNING: Removed duplicated region for block: B:2030:0x44e5 A:{SYNTHETIC, Splitter: B:2030:0x44e5} */
-    /* JADX WARNING: Removed duplicated region for block: B:638:0x1351 A:{Catch:{ Exception -> 0x4504 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:2035:0x44ff A:{SYNTHETIC, Splitter: B:2035:0x44ff} */
+    /* JADX WARNING: Removed duplicated region for block: B:638:0x1351 A:{Catch:{ Exception -> 0x451e }} */
     /* JADX WARNING: Removed duplicated region for block: B:641:0x1384 A:{SYNTHETIC, Splitter: B:641:0x1384} */
-    /* JADX WARNING: Removed duplicated region for block: B:2037:0x4513  */
-    /* JADX WARNING: Removed duplicated region for block: B:670:0x14f1 A:{Catch:{ Exception -> 0x4516 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:676:0x1527 A:{Catch:{ Exception -> 0x452d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:680:0x1591 A:{Catch:{ Exception -> 0x452d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:2046:0x4542  */
-    /* JADX WARNING: Removed duplicated region for block: B:2051:0x456e  */
-    /* JADX WARNING: Removed duplicated region for block: B:2142:0x48d9  */
-    /* JADX WARNING: Removed duplicated region for block: B:2141:0x48c8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2125:0x4870  */
-    /* JADX WARNING: Removed duplicated region for block: B:2155:0x4926  */
-    /* JADX WARNING: Removed duplicated region for block: B:2128:0x4881  */
+    /* JADX WARNING: Removed duplicated region for block: B:2042:0x452d  */
+    /* JADX WARNING: Removed duplicated region for block: B:670:0x14f1 A:{Catch:{ Exception -> 0x4530 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:676:0x1527 A:{Catch:{ Exception -> 0x4547 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:680:0x1591 A:{Catch:{ Exception -> 0x4547 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:2051:0x455c  */
+    /* JADX WARNING: Removed duplicated region for block: B:2056:0x4588  */
+    /* JADX WARNING: Removed duplicated region for block: B:2147:0x48f3  */
+    /* JADX WARNING: Removed duplicated region for block: B:2146:0x48e2  */
+    /* JADX WARNING: Removed duplicated region for block: B:2130:0x488a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2160:0x4940  */
+    /* JADX WARNING: Removed duplicated region for block: B:2133:0x489b  */
     /* JADX WARNING: Removed duplicated region for block: B:476:0x0e3f  */
     /* JADX WARNING: Removed duplicated region for block: B:534:0x0fa7  */
     /* JADX WARNING: Removed duplicated region for block: B:717:0x1667  */
@@ -2329,23 +2329,23 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     /* JADX WARNING: Removed duplicated region for block: B:601:0x1184  */
     /* JADX WARNING: Removed duplicated region for block: B:979:0x2000  */
     /* JADX WARNING: Removed duplicated region for block: B:607:0x11e2  */
-    /* JADX WARNING: Removed duplicated region for block: B:638:0x1351 A:{Catch:{ Exception -> 0x4504 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:2030:0x44e5 A:{SYNTHETIC, Splitter: B:2030:0x44e5} */
+    /* JADX WARNING: Removed duplicated region for block: B:638:0x1351 A:{Catch:{ Exception -> 0x451e }} */
+    /* JADX WARNING: Removed duplicated region for block: B:2035:0x44ff A:{SYNTHETIC, Splitter: B:2035:0x44ff} */
     /* JADX WARNING: Removed duplicated region for block: B:641:0x1384 A:{SYNTHETIC, Splitter: B:641:0x1384} */
-    /* JADX WARNING: Removed duplicated region for block: B:670:0x14f1 A:{Catch:{ Exception -> 0x4516 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:2037:0x4513  */
-    /* JADX WARNING: Removed duplicated region for block: B:676:0x1527 A:{Catch:{ Exception -> 0x452d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:680:0x1591 A:{Catch:{ Exception -> 0x452d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:2046:0x4542  */
-    /* JADX WARNING: Removed duplicated region for block: B:2051:0x456e  */
-    /* JADX WARNING: Removed duplicated region for block: B:2054:0x4587  */
-    /* JADX WARNING: Removed duplicated region for block: B:2115:0x4837  */
-    /* JADX WARNING: Removed duplicated region for block: B:2141:0x48c8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2142:0x48d9  */
-    /* JADX WARNING: Removed duplicated region for block: B:2125:0x4870  */
-    /* JADX WARNING: Removed duplicated region for block: B:2128:0x4881  */
-    /* JADX WARNING: Removed duplicated region for block: B:2155:0x4926  */
-    /* JADX WARNING: Removed duplicated region for block: B:2133:0x48a8  */
+    /* JADX WARNING: Removed duplicated region for block: B:670:0x14f1 A:{Catch:{ Exception -> 0x4530 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:2042:0x452d  */
+    /* JADX WARNING: Removed duplicated region for block: B:676:0x1527 A:{Catch:{ Exception -> 0x4547 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:680:0x1591 A:{Catch:{ Exception -> 0x4547 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:2051:0x455c  */
+    /* JADX WARNING: Removed duplicated region for block: B:2056:0x4588  */
+    /* JADX WARNING: Removed duplicated region for block: B:2059:0x45a1  */
+    /* JADX WARNING: Removed duplicated region for block: B:2120:0x4851  */
+    /* JADX WARNING: Removed duplicated region for block: B:2146:0x48e2  */
+    /* JADX WARNING: Removed duplicated region for block: B:2147:0x48f3  */
+    /* JADX WARNING: Removed duplicated region for block: B:2130:0x488a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2133:0x489b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2160:0x4940  */
+    /* JADX WARNING: Removed duplicated region for block: B:2138:0x48c2  */
     /* JADX WARNING: Removed duplicated region for block: B:476:0x0e3f  */
     /* JADX WARNING: Removed duplicated region for block: B:717:0x1667  */
     /* JADX WARNING: Removed duplicated region for block: B:534:0x0fa7  */
@@ -2370,23 +2370,23 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     /* JADX WARNING: Removed duplicated region for block: B:601:0x1184  */
     /* JADX WARNING: Removed duplicated region for block: B:979:0x2000  */
     /* JADX WARNING: Removed duplicated region for block: B:607:0x11e2  */
-    /* JADX WARNING: Removed duplicated region for block: B:2030:0x44e5 A:{SYNTHETIC, Splitter: B:2030:0x44e5} */
-    /* JADX WARNING: Removed duplicated region for block: B:638:0x1351 A:{Catch:{ Exception -> 0x4504 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:2035:0x44ff A:{SYNTHETIC, Splitter: B:2035:0x44ff} */
+    /* JADX WARNING: Removed duplicated region for block: B:638:0x1351 A:{Catch:{ Exception -> 0x451e }} */
     /* JADX WARNING: Removed duplicated region for block: B:641:0x1384 A:{SYNTHETIC, Splitter: B:641:0x1384} */
-    /* JADX WARNING: Removed duplicated region for block: B:2037:0x4513  */
-    /* JADX WARNING: Removed duplicated region for block: B:670:0x14f1 A:{Catch:{ Exception -> 0x4516 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:676:0x1527 A:{Catch:{ Exception -> 0x452d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:680:0x1591 A:{Catch:{ Exception -> 0x452d }} */
-    /* JADX WARNING: Removed duplicated region for block: B:2046:0x4542  */
-    /* JADX WARNING: Removed duplicated region for block: B:2051:0x456e  */
-    /* JADX WARNING: Removed duplicated region for block: B:2054:0x4587  */
-    /* JADX WARNING: Removed duplicated region for block: B:2115:0x4837  */
-    /* JADX WARNING: Removed duplicated region for block: B:2142:0x48d9  */
-    /* JADX WARNING: Removed duplicated region for block: B:2141:0x48c8  */
-    /* JADX WARNING: Removed duplicated region for block: B:2125:0x4870  */
-    /* JADX WARNING: Removed duplicated region for block: B:2155:0x4926  */
-    /* JADX WARNING: Removed duplicated region for block: B:2128:0x4881  */
-    /* JADX WARNING: Removed duplicated region for block: B:2133:0x48a8  */
+    /* JADX WARNING: Removed duplicated region for block: B:2042:0x452d  */
+    /* JADX WARNING: Removed duplicated region for block: B:670:0x14f1 A:{Catch:{ Exception -> 0x4530 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:676:0x1527 A:{Catch:{ Exception -> 0x4547 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:680:0x1591 A:{Catch:{ Exception -> 0x4547 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:2051:0x455c  */
+    /* JADX WARNING: Removed duplicated region for block: B:2056:0x4588  */
+    /* JADX WARNING: Removed duplicated region for block: B:2059:0x45a1  */
+    /* JADX WARNING: Removed duplicated region for block: B:2120:0x4851  */
+    /* JADX WARNING: Removed duplicated region for block: B:2147:0x48f3  */
+    /* JADX WARNING: Removed duplicated region for block: B:2146:0x48e2  */
+    /* JADX WARNING: Removed duplicated region for block: B:2130:0x488a  */
+    /* JADX WARNING: Removed duplicated region for block: B:2160:0x4940  */
+    /* JADX WARNING: Removed duplicated region for block: B:2133:0x489b  */
+    /* JADX WARNING: Removed duplicated region for block: B:2138:0x48c2  */
     /* JADX WARNING: Missing block: B:259:0x077b, code:
             if (r176.equals("article") != false) goto L_0x077d;
      */
@@ -2617,7 +2617,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0 = r188;
         r4 = r0.pinnedTop;
         r0 = r192;
-        if (r4 == r0) goto L_0x48a2;
+        if (r4 == r0) goto L_0x48bc;
     L_0x0159:
         r0 = r191;
         r1 = r188;
@@ -3648,52 +3648,52 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r121 = java.lang.Math.max(r0, r4);	 Catch:{ Exception -> 0x0d46 }
     L_0x0873:
         r174 = 0;
-        if (r173 == 0) goto L_0x494e;
+        if (r173 == 0) goto L_0x4968;
     L_0x0877:
         r4 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
         r0 = r188;
-        r0.titleX = r4;	 Catch:{ Exception -> 0x4937 }
+        r0.titleX = r4;	 Catch:{ Exception -> 0x4951 }
         r0 = r188;
-        r4 = r0.linkPreviewHeight;	 Catch:{ Exception -> 0x4937 }
+        r4 = r0.linkPreviewHeight;	 Catch:{ Exception -> 0x4951 }
         if (r4 == 0) goto L_0x08a2;
     L_0x0884:
         r0 = r188;
-        r4 = r0.linkPreviewHeight;	 Catch:{ Exception -> 0x4937 }
+        r4 = r0.linkPreviewHeight;	 Catch:{ Exception -> 0x4951 }
         r6 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x4937 }
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x4951 }
         r4 = r4 + r6;
         r0 = r188;
-        r0.linkPreviewHeight = r4;	 Catch:{ Exception -> 0x4937 }
+        r0.linkPreviewHeight = r4;	 Catch:{ Exception -> 0x4951 }
         r0 = r188;
-        r4 = r0.totalHeight;	 Catch:{ Exception -> 0x4937 }
+        r4 = r0.totalHeight;	 Catch:{ Exception -> 0x4951 }
         r6 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x4937 }
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x4951 }
         r4 = r4 + r6;
         r0 = r188;
-        r0.totalHeight = r4;	 Catch:{ Exception -> 0x4937 }
+        r0.totalHeight = r4;	 Catch:{ Exception -> 0x4951 }
     L_0x08a2:
         r152 = 0;
         r0 = r188;
-        r4 = r0.isSmallImage;	 Catch:{ Exception -> 0x4937 }
+        r4 = r0.isSmallImage;	 Catch:{ Exception -> 0x4951 }
         if (r4 == 0) goto L_0x08ac;
     L_0x08aa:
         if (r85 != 0) goto L_0x0d4c;
     L_0x08ac:
-        r9 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint;	 Catch:{ Exception -> 0x4937 }
-        r11 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x4937 }
+        r9 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint;	 Catch:{ Exception -> 0x4951 }
+        r11 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x4951 }
         r12 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r4 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x4937 }
-        r13 = (float) r4;	 Catch:{ Exception -> 0x4937 }
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x4951 }
+        r13 = (float) r4;	 Catch:{ Exception -> 0x4951 }
         r14 = 0;
-        r15 = android.text.TextUtils.TruncateAt.END;	 Catch:{ Exception -> 0x4937 }
+        r15 = android.text.TextUtils.TruncateAt.END;	 Catch:{ Exception -> 0x4951 }
         r17 = 4;
         r8 = r173;
         r10 = r111;
         r16 = r111;
-        r4 = org.telegram.ui.Components.StaticLayoutEx.createStaticLayout(r8, r9, r10, r11, r12, r13, r14, r15, r16, r17);	 Catch:{ Exception -> 0x4937 }
+        r4 = org.telegram.ui.Components.StaticLayoutEx.createStaticLayout(r8, r9, r10, r11, r12, r13, r14, r15, r16, r17);	 Catch:{ Exception -> 0x4951 }
         r0 = r188;
-        r0.titleLayout = r4;	 Catch:{ Exception -> 0x4937 }
+        r0.titleLayout = r4;	 Catch:{ Exception -> 0x4951 }
         r13 = r153;
     L_0x08ce:
         r0 = r188;
@@ -4116,7 +4116,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         goto L_0x0bbc;
     L_0x0bd2:
         r4 = "Of";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.8612066E38 double:1.0530980985E-314;
+        r6 = NUM; // 0x7f0CLASSNAMEb float:1.861207E38 double:1.0530980995E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];
         r9 = 0;
@@ -4324,20 +4324,20 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         goto L_0x0873;
     L_0x0d4c:
         r152 = r153;
-        r9 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint;	 Catch:{ Exception -> 0x4937 }
+        r9 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint;	 Catch:{ Exception -> 0x4951 }
         r4 = NUM; // 0x42500000 float:52.0 double:5.496673668E-315;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x4937 }
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x4951 }
         r11 = r111 - r4;
         r13 = 4;
         r8 = r173;
         r10 = r111;
         r12 = r153;
-        r4 = generateStaticLayout(r8, r9, r10, r11, r12, r13);	 Catch:{ Exception -> 0x4937 }
+        r4 = generateStaticLayout(r8, r9, r10, r11, r12, r13);	 Catch:{ Exception -> 0x4951 }
         r0 = r188;
-        r0.titleLayout = r4;	 Catch:{ Exception -> 0x4937 }
+        r0.titleLayout = r4;	 Catch:{ Exception -> 0x4951 }
         r0 = r188;
-        r4 = r0.titleLayout;	 Catch:{ Exception -> 0x4937 }
-        r4 = r4.getLineCount();	 Catch:{ Exception -> 0x4937 }
+        r4 = r0.titleLayout;	 Catch:{ Exception -> 0x4951 }
+        r4 = r4.getLineCount();	 Catch:{ Exception -> 0x4951 }
         r13 = r153 - r4;
         goto L_0x08ce;
     L_0x0d73:
@@ -4354,11 +4354,11 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     L_0x0d85:
         org.telegram.messenger.FileLog.e(r90);
     L_0x0d88:
-        if (r174 == 0) goto L_0x4948;
+        if (r174 == 0) goto L_0x4962;
     L_0x0d8a:
         r0 = r188;
         r4 = r0.isSmallImage;
-        if (r4 == 0) goto L_0x4948;
+        if (r4 == 0) goto L_0x4962;
     L_0x0d90:
         r4 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
@@ -4366,9 +4366,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r153 = r13;
     L_0x0d9a:
         r66 = 0;
-        if (r65 == 0) goto L_0x4944;
+        if (r65 == 0) goto L_0x495e;
     L_0x0d9e:
-        if (r173 != 0) goto L_0x4944;
+        if (r173 != 0) goto L_0x495e;
     L_0x0da0:
         r0 = r188;
         r4 = r0.linkPreviewHeight;	 Catch:{ Exception -> 0x0var_ }
@@ -4412,46 +4412,46 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r13 = r153;
     L_0x0de6:
         r0 = r188;
-        r4 = r0.authorLayout;	 Catch:{ Exception -> 0x4934 }
+        r4 = r0.authorLayout;	 Catch:{ Exception -> 0x494e }
         r0 = r188;
-        r6 = r0.authorLayout;	 Catch:{ Exception -> 0x4934 }
-        r6 = r6.getLineCount();	 Catch:{ Exception -> 0x4934 }
+        r6 = r0.authorLayout;	 Catch:{ Exception -> 0x494e }
+        r6 = r6.getLineCount();	 Catch:{ Exception -> 0x494e }
         r6 = r6 + -1;
-        r101 = r4.getLineBottom(r6);	 Catch:{ Exception -> 0x4934 }
+        r101 = r4.getLineBottom(r6);	 Catch:{ Exception -> 0x494e }
         r0 = r188;
-        r4 = r0.linkPreviewHeight;	 Catch:{ Exception -> 0x4934 }
+        r4 = r0.linkPreviewHeight;	 Catch:{ Exception -> 0x494e }
         r4 = r4 + r101;
         r0 = r188;
-        r0.linkPreviewHeight = r4;	 Catch:{ Exception -> 0x4934 }
+        r0.linkPreviewHeight = r4;	 Catch:{ Exception -> 0x494e }
         r0 = r188;
-        r4 = r0.totalHeight;	 Catch:{ Exception -> 0x4934 }
+        r4 = r0.totalHeight;	 Catch:{ Exception -> 0x494e }
         r4 = r4 + r101;
         r0 = r188;
-        r0.totalHeight = r4;	 Catch:{ Exception -> 0x4934 }
+        r0.totalHeight = r4;	 Catch:{ Exception -> 0x494e }
         r0 = r188;
-        r4 = r0.authorLayout;	 Catch:{ Exception -> 0x4934 }
+        r4 = r0.authorLayout;	 Catch:{ Exception -> 0x494e }
         r6 = 0;
-        r4 = r4.getLineLeft(r6);	 Catch:{ Exception -> 0x4934 }
-        r0 = (int) r4;	 Catch:{ Exception -> 0x4934 }
+        r4 = r4.getLineLeft(r6);	 Catch:{ Exception -> 0x494e }
+        r0 = (int) r4;	 Catch:{ Exception -> 0x494e }
         r110 = r0;
         r0 = r110;
         r4 = -r0;
         r0 = r188;
-        r0.authorX = r4;	 Catch:{ Exception -> 0x4934 }
+        r0.authorX = r4;	 Catch:{ Exception -> 0x494e }
         if (r110 == 0) goto L_0x0var_;
     L_0x0e21:
         r0 = r188;
-        r4 = r0.authorLayout;	 Catch:{ Exception -> 0x4934 }
-        r4 = r4.getWidth();	 Catch:{ Exception -> 0x4934 }
+        r4 = r0.authorLayout;	 Catch:{ Exception -> 0x494e }
+        r4 = r4.getWidth();	 Catch:{ Exception -> 0x494e }
         r184 = r4 - r110;
         r66 = 1;
     L_0x0e2d:
         r4 = r184 + r57;
         r0 = r116;
-        r116 = java.lang.Math.max(r0, r4);	 Catch:{ Exception -> 0x4934 }
+        r116 = java.lang.Math.max(r0, r4);	 Catch:{ Exception -> 0x494e }
         r4 = r184 + r57;
         r0 = r121;
-        r121 = java.lang.Math.max(r0, r4);	 Catch:{ Exception -> 0x4934 }
+        r121 = java.lang.Math.max(r0, r4);	 Catch:{ Exception -> 0x494e }
     L_0x0e3d:
         if (r85 == 0) goto L_0x0var_;
     L_0x0e3f:
@@ -4592,11 +4592,11 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         goto L_0x0de6;
     L_0x0var_:
         r0 = r188;
-        r4 = r0.authorLayout;	 Catch:{ Exception -> 0x4934 }
+        r4 = r0.authorLayout;	 Catch:{ Exception -> 0x494e }
         r6 = 0;
-        r4 = r4.getLineWidth(r6);	 Catch:{ Exception -> 0x4934 }
-        r8 = (double) r4;	 Catch:{ Exception -> 0x4934 }
-        r8 = java.lang.Math.ceil(r8);	 Catch:{ Exception -> 0x4934 }
+        r4 = r4.getLineWidth(r6);	 Catch:{ Exception -> 0x494e }
+        r8 = (double) r4;	 Catch:{ Exception -> 0x494e }
+        r8 = java.lang.Math.ceil(r8);	 Catch:{ Exception -> 0x494e }
         r0 = (int) r8;
         r184 = r0;
         goto L_0x0e2d;
@@ -4974,7 +4974,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         if (r4 == 0) goto L_0x2067;
     L_0x11ee:
         r4 = "PaymentReceipt";
-        r6 = NUM; // 0x7f0CLASSNAMEa7 float:1.8612646E38 double:1.05309824E-314;
+        r6 = NUM; // 0x7f0CLASSNAMEa9 float:1.861265E38 double:1.053098241E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r6);
         r5 = r4.toUpperCase();
     L_0x11fc:
@@ -5129,127 +5129,127 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         if (r4 == 0) goto L_0x137e;
     L_0x132f:
         r0 = r189;
-        r4 = r0.caption;	 Catch:{ Exception -> 0x4504 }
+        r4 = r0.caption;	 Catch:{ Exception -> 0x451e }
         r0 = r188;
-        r0.currentCaption = r4;	 Catch:{ Exception -> 0x4504 }
+        r0.currentCaption = r4;	 Catch:{ Exception -> 0x451e }
         r0 = r188;
-        r4 = r0.backgroundWidth;	 Catch:{ Exception -> 0x4504 }
+        r4 = r0.backgroundWidth;	 Catch:{ Exception -> 0x451e }
         r6 = NUM; // 0x41var_ float:31.0 double:5.46818007E-315;
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x4504 }
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x451e }
         r184 = r4 - r6;
         r4 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x4504 }
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x451e }
         r27 = r184 - r4;
-        r4 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x4504 }
+        r4 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x451e }
         r6 = 24;
-        if (r4 < r6) goto L_0x44e5;
+        if (r4 < r6) goto L_0x44ff;
     L_0x1351:
         r0 = r189;
-        r4 = r0.caption;	 Catch:{ Exception -> 0x4504 }
+        r4 = r0.caption;	 Catch:{ Exception -> 0x451e }
         r6 = 0;
         r0 = r189;
-        r8 = r0.caption;	 Catch:{ Exception -> 0x4504 }
-        r8 = r8.length();	 Catch:{ Exception -> 0x4504 }
-        r9 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint;	 Catch:{ Exception -> 0x4504 }
+        r8 = r0.caption;	 Catch:{ Exception -> 0x451e }
+        r8 = r8.length();	 Catch:{ Exception -> 0x451e }
+        r9 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint;	 Catch:{ Exception -> 0x451e }
         r0 = r27;
-        r4 = android.text.StaticLayout.Builder.obtain(r4, r6, r8, r9, r0);	 Catch:{ Exception -> 0x4504 }
+        r4 = android.text.StaticLayout.Builder.obtain(r4, r6, r8, r9, r0);	 Catch:{ Exception -> 0x451e }
         r6 = 1;
-        r4 = r4.setBreakStrategy(r6);	 Catch:{ Exception -> 0x4504 }
+        r4 = r4.setBreakStrategy(r6);	 Catch:{ Exception -> 0x451e }
         r6 = 0;
-        r4 = r4.setHyphenationFrequency(r6);	 Catch:{ Exception -> 0x4504 }
-        r6 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x4504 }
-        r4 = r4.setAlignment(r6);	 Catch:{ Exception -> 0x4504 }
-        r4 = r4.build();	 Catch:{ Exception -> 0x4504 }
+        r4 = r4.setHyphenationFrequency(r6);	 Catch:{ Exception -> 0x451e }
+        r6 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x451e }
+        r4 = r4.setAlignment(r6);	 Catch:{ Exception -> 0x451e }
+        r4 = r4.build();	 Catch:{ Exception -> 0x451e }
         r0 = r188;
-        r0.captionLayout = r4;	 Catch:{ Exception -> 0x4504 }
+        r0.captionLayout = r4;	 Catch:{ Exception -> 0x451e }
     L_0x137e:
         r0 = r188;
         r4 = r0.captionLayout;
         if (r4 == 0) goto L_0x1438;
     L_0x1384:
         r0 = r188;
-        r4 = r0.backgroundWidth;	 Catch:{ Exception -> 0x450d }
+        r4 = r0.backgroundWidth;	 Catch:{ Exception -> 0x4527 }
         r6 = NUM; // 0x41var_ float:31.0 double:5.46818007E-315;
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x450d }
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x4527 }
         r184 = r4 - r6;
         r4 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x450d }
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x4527 }
         r27 = r184 - r4;
         r0 = r188;
-        r4 = r0.captionLayout;	 Catch:{ Exception -> 0x450d }
+        r4 = r0.captionLayout;	 Catch:{ Exception -> 0x4527 }
         if (r4 == 0) goto L_0x1438;
     L_0x139e:
         r0 = r188;
-        r4 = r0.captionLayout;	 Catch:{ Exception -> 0x450d }
-        r4 = r4.getLineCount();	 Catch:{ Exception -> 0x450d }
+        r4 = r0.captionLayout;	 Catch:{ Exception -> 0x4527 }
+        r4 = r4.getLineCount();	 Catch:{ Exception -> 0x4527 }
         if (r4 <= 0) goto L_0x1438;
     L_0x13a8:
         r0 = r27;
         r1 = r188;
-        r1.captionWidth = r0;	 Catch:{ Exception -> 0x450d }
+        r1.captionWidth = r0;	 Catch:{ Exception -> 0x4527 }
         r0 = r188;
-        r6 = r0.timeWidth;	 Catch:{ Exception -> 0x450d }
-        r4 = r189.isOutOwner();	 Catch:{ Exception -> 0x450d }
-        if (r4 == 0) goto L_0x450a;
+        r6 = r0.timeWidth;	 Catch:{ Exception -> 0x4527 }
+        r4 = r189.isOutOwner();	 Catch:{ Exception -> 0x4527 }
+        if (r4 == 0) goto L_0x4524;
     L_0x13b8:
         r4 = NUM; // 0x41a00000 float:20.0 double:5.439686476E-315;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x450d }
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x4527 }
     L_0x13be:
         r172 = r6 + r4;
         r0 = r188;
-        r4 = r0.captionLayout;	 Catch:{ Exception -> 0x450d }
-        r4 = r4.getHeight();	 Catch:{ Exception -> 0x450d }
+        r4 = r0.captionLayout;	 Catch:{ Exception -> 0x4527 }
+        r4 = r4.getHeight();	 Catch:{ Exception -> 0x4527 }
         r0 = r188;
-        r0.captionHeight = r4;	 Catch:{ Exception -> 0x450d }
+        r0.captionHeight = r4;	 Catch:{ Exception -> 0x4527 }
         r0 = r188;
-        r4 = r0.totalHeight;	 Catch:{ Exception -> 0x450d }
+        r4 = r0.totalHeight;	 Catch:{ Exception -> 0x4527 }
         r0 = r188;
-        r6 = r0.captionHeight;	 Catch:{ Exception -> 0x450d }
+        r6 = r0.captionHeight;	 Catch:{ Exception -> 0x4527 }
         r8 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
-        r8 = org.telegram.messenger.AndroidUtilities.dp(r8);	 Catch:{ Exception -> 0x450d }
+        r8 = org.telegram.messenger.AndroidUtilities.dp(r8);	 Catch:{ Exception -> 0x4527 }
         r6 = r6 + r8;
         r4 = r4 + r6;
         r0 = r188;
-        r0.totalHeight = r4;	 Catch:{ Exception -> 0x450d }
+        r0.totalHeight = r4;	 Catch:{ Exception -> 0x4527 }
         r0 = r188;
-        r4 = r0.captionLayout;	 Catch:{ Exception -> 0x450d }
+        r4 = r0.captionLayout;	 Catch:{ Exception -> 0x4527 }
         r0 = r188;
-        r6 = r0.captionLayout;	 Catch:{ Exception -> 0x450d }
-        r6 = r6.getLineCount();	 Catch:{ Exception -> 0x450d }
+        r6 = r0.captionLayout;	 Catch:{ Exception -> 0x4527 }
+        r6 = r6.getLineCount();	 Catch:{ Exception -> 0x4527 }
         r6 = r6 + -1;
-        r4 = r4.getLineWidth(r6);	 Catch:{ Exception -> 0x450d }
+        r4 = r4.getLineWidth(r6);	 Catch:{ Exception -> 0x4527 }
         r0 = r188;
-        r6 = r0.captionLayout;	 Catch:{ Exception -> 0x450d }
+        r6 = r0.captionLayout;	 Catch:{ Exception -> 0x4527 }
         r0 = r188;
-        r8 = r0.captionLayout;	 Catch:{ Exception -> 0x450d }
-        r8 = r8.getLineCount();	 Catch:{ Exception -> 0x450d }
+        r8 = r0.captionLayout;	 Catch:{ Exception -> 0x4527 }
+        r8 = r8.getLineCount();	 Catch:{ Exception -> 0x4527 }
         r8 = r8 + -1;
-        r6 = r6.getLineLeft(r8);	 Catch:{ Exception -> 0x450d }
+        r6 = r6.getLineLeft(r8);	 Catch:{ Exception -> 0x4527 }
         r108 = r4 + r6;
         r4 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x450d }
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x4527 }
         r4 = r184 - r4;
-        r4 = (float) r4;	 Catch:{ Exception -> 0x450d }
+        r4 = (float) r4;	 Catch:{ Exception -> 0x4527 }
         r4 = r4 - r108;
         r0 = r172;
-        r6 = (float) r0;	 Catch:{ Exception -> 0x450d }
+        r6 = (float) r0;	 Catch:{ Exception -> 0x4527 }
         r4 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1));
         if (r4 >= 0) goto L_0x1438;
     L_0x1418:
         r0 = r188;
-        r4 = r0.totalHeight;	 Catch:{ Exception -> 0x450d }
+        r4 = r0.totalHeight;	 Catch:{ Exception -> 0x4527 }
         r6 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x450d }
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x4527 }
         r4 = r4 + r6;
         r0 = r188;
-        r0.totalHeight = r4;	 Catch:{ Exception -> 0x450d }
+        r0.totalHeight = r4;	 Catch:{ Exception -> 0x4527 }
         r0 = r188;
-        r4 = r0.captionHeight;	 Catch:{ Exception -> 0x450d }
+        r4 = r0.captionHeight;	 Catch:{ Exception -> 0x4527 }
         r6 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x450d }
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x4527 }
         r4 = r4 + r6;
         r0 = r188;
-        r0.captionHeight = r4;	 Catch:{ Exception -> 0x450d }
+        r0.captionHeight = r4;	 Catch:{ Exception -> 0x4527 }
         r77 = 2;
     L_0x1438:
         r0 = r188;
@@ -5283,19 +5283,19 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r8 = r4.eventId;
         r20 = 0;
         r4 = (r8 > r20 ? 1 : (r8 == r20 ? 0 : -1));
-        if (r4 == 0) goto L_0x4565;
+        if (r4 == 0) goto L_0x457f;
     L_0x146f:
         r0 = r188;
         r4 = r0.currentMessageObject;
         r4 = r4.isMediaEmpty();
-        if (r4 != 0) goto L_0x4565;
+        if (r4 != 0) goto L_0x457f;
     L_0x1479:
         r0 = r188;
         r4 = r0.currentMessageObject;
         r4 = r4.messageOwner;
         r4 = r4.media;
         r4 = r4.webpage;
-        if (r4 == 0) goto L_0x4565;
+        if (r4 == 0) goto L_0x457f;
     L_0x1485:
         r0 = r188;
         r4 = r0.backgroundWidth;
@@ -5314,140 +5314,140 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = r4.media;
         r0 = r4.webpage;
         r182 = r0;
-        r4 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint;	 Catch:{ Exception -> 0x4516 }
+        r4 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint;	 Catch:{ Exception -> 0x4530 }
         r0 = r182;
-        r6 = r0.site_name;	 Catch:{ Exception -> 0x4516 }
-        r4 = r4.measureText(r6);	 Catch:{ Exception -> 0x4516 }
+        r6 = r0.site_name;	 Catch:{ Exception -> 0x4530 }
+        r4 = r4.measureText(r6);	 Catch:{ Exception -> 0x4530 }
         r6 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r4 = r4 + r6;
-        r8 = (double) r4;	 Catch:{ Exception -> 0x4516 }
-        r8 = java.lang.Math.ceil(r8);	 Catch:{ Exception -> 0x4516 }
-        r0 = (int) r8;	 Catch:{ Exception -> 0x4516 }
+        r8 = (double) r4;	 Catch:{ Exception -> 0x4530 }
+        r8 = java.lang.Math.ceil(r8);	 Catch:{ Exception -> 0x4530 }
+        r0 = (int) r8;	 Catch:{ Exception -> 0x4530 }
         r184 = r0;
         r0 = r184;
         r1 = r188;
-        r1.siteNameWidth = r0;	 Catch:{ Exception -> 0x4516 }
-        r44 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x4516 }
+        r1.siteNameWidth = r0;	 Catch:{ Exception -> 0x4530 }
+        r44 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x4530 }
         r0 = r182;
-        r0 = r0.site_name;	 Catch:{ Exception -> 0x4516 }
+        r0 = r0.site_name;	 Catch:{ Exception -> 0x4530 }
         r45 = r0;
-        r46 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint;	 Catch:{ Exception -> 0x4516 }
+        r46 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint;	 Catch:{ Exception -> 0x4530 }
         r0 = r184;
-        r47 = java.lang.Math.min(r0, r11);	 Catch:{ Exception -> 0x4516 }
-        r48 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x4516 }
+        r47 = java.lang.Math.min(r0, r11);	 Catch:{ Exception -> 0x4530 }
+        r48 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x4530 }
         r49 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r50 = 0;
         r51 = 0;
-        r44.<init>(r45, r46, r47, r48, r49, r50, r51);	 Catch:{ Exception -> 0x4516 }
+        r44.<init>(r45, r46, r47, r48, r49, r50, r51);	 Catch:{ Exception -> 0x4530 }
         r0 = r44;
         r1 = r188;
-        r1.siteNameLayout = r0;	 Catch:{ Exception -> 0x4516 }
+        r1.siteNameLayout = r0;	 Catch:{ Exception -> 0x4530 }
         r0 = r188;
-        r4 = r0.siteNameLayout;	 Catch:{ Exception -> 0x4516 }
+        r4 = r0.siteNameLayout;	 Catch:{ Exception -> 0x4530 }
         r6 = 0;
-        r4 = r4.getLineLeft(r6);	 Catch:{ Exception -> 0x4516 }
+        r4 = r4.getLineLeft(r6);	 Catch:{ Exception -> 0x4530 }
         r6 = 0;
         r4 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1));
-        if (r4 == 0) goto L_0x4513;
+        if (r4 == 0) goto L_0x452d;
     L_0x14f1:
         r4 = 1;
     L_0x14f2:
         r0 = r188;
-        r0.siteNameRtl = r4;	 Catch:{ Exception -> 0x4516 }
+        r0.siteNameRtl = r4;	 Catch:{ Exception -> 0x4530 }
         r0 = r188;
-        r4 = r0.siteNameLayout;	 Catch:{ Exception -> 0x4516 }
+        r4 = r0.siteNameLayout;	 Catch:{ Exception -> 0x4530 }
         r0 = r188;
-        r6 = r0.siteNameLayout;	 Catch:{ Exception -> 0x4516 }
-        r6 = r6.getLineCount();	 Catch:{ Exception -> 0x4516 }
+        r6 = r0.siteNameLayout;	 Catch:{ Exception -> 0x4530 }
+        r6 = r6.getLineCount();	 Catch:{ Exception -> 0x4530 }
         r6 = r6 + -1;
-        r101 = r4.getLineBottom(r6);	 Catch:{ Exception -> 0x4516 }
+        r101 = r4.getLineBottom(r6);	 Catch:{ Exception -> 0x4530 }
         r0 = r188;
-        r4 = r0.linkPreviewHeight;	 Catch:{ Exception -> 0x4516 }
+        r4 = r0.linkPreviewHeight;	 Catch:{ Exception -> 0x4530 }
         r4 = r4 + r101;
         r0 = r188;
-        r0.linkPreviewHeight = r4;	 Catch:{ Exception -> 0x4516 }
+        r0.linkPreviewHeight = r4;	 Catch:{ Exception -> 0x4530 }
         r0 = r188;
-        r4 = r0.totalHeight;	 Catch:{ Exception -> 0x4516 }
+        r4 = r0.totalHeight;	 Catch:{ Exception -> 0x4530 }
         r4 = r4 + r101;
         r0 = r188;
-        r0.totalHeight = r4;	 Catch:{ Exception -> 0x4516 }
+        r0.totalHeight = r4;	 Catch:{ Exception -> 0x4530 }
     L_0x151c:
         r4 = 0;
         r0 = r188;
-        r0.descriptionX = r4;	 Catch:{ Exception -> 0x452d }
+        r0.descriptionX = r4;	 Catch:{ Exception -> 0x4547 }
         r0 = r188;
-        r4 = r0.linkPreviewHeight;	 Catch:{ Exception -> 0x452d }
+        r4 = r0.linkPreviewHeight;	 Catch:{ Exception -> 0x4547 }
         if (r4 == 0) goto L_0x1536;
     L_0x1527:
         r0 = r188;
-        r4 = r0.totalHeight;	 Catch:{ Exception -> 0x452d }
+        r4 = r0.totalHeight;	 Catch:{ Exception -> 0x4547 }
         r6 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x452d }
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x4547 }
         r4 = r4 + r6;
         r0 = r188;
-        r0.totalHeight = r4;	 Catch:{ Exception -> 0x452d }
+        r0.totalHeight = r4;	 Catch:{ Exception -> 0x4547 }
     L_0x1536:
         r0 = r182;
-        r0 = r0.description;	 Catch:{ Exception -> 0x452d }
+        r0 = r0.description;	 Catch:{ Exception -> 0x4547 }
         r44 = r0;
-        r45 = org.telegram.ui.ActionBar.Theme.chat_replyTextPaint;	 Catch:{ Exception -> 0x452d }
-        r47 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x452d }
+        r45 = org.telegram.ui.ActionBar.Theme.chat_replyTextPaint;	 Catch:{ Exception -> 0x4547 }
+        r47 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x4547 }
         r48 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r4 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x452d }
-        r0 = (float) r4;	 Catch:{ Exception -> 0x452d }
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x4547 }
+        r0 = (float) r4;	 Catch:{ Exception -> 0x4547 }
         r49 = r0;
         r50 = 0;
-        r51 = android.text.TextUtils.TruncateAt.END;	 Catch:{ Exception -> 0x452d }
+        r51 = android.text.TextUtils.TruncateAt.END;	 Catch:{ Exception -> 0x4547 }
         r53 = 6;
         r46 = r11;
         r52 = r11;
-        r4 = org.telegram.ui.Components.StaticLayoutEx.createStaticLayout(r44, r45, r46, r47, r48, r49, r50, r51, r52, r53);	 Catch:{ Exception -> 0x452d }
+        r4 = org.telegram.ui.Components.StaticLayoutEx.createStaticLayout(r44, r45, r46, r47, r48, r49, r50, r51, r52, r53);	 Catch:{ Exception -> 0x4547 }
         r0 = r188;
-        r0.descriptionLayout = r4;	 Catch:{ Exception -> 0x452d }
+        r0.descriptionLayout = r4;	 Catch:{ Exception -> 0x4547 }
         r0 = r188;
-        r4 = r0.descriptionLayout;	 Catch:{ Exception -> 0x452d }
+        r4 = r0.descriptionLayout;	 Catch:{ Exception -> 0x4547 }
         r0 = r188;
-        r6 = r0.descriptionLayout;	 Catch:{ Exception -> 0x452d }
-        r6 = r6.getLineCount();	 Catch:{ Exception -> 0x452d }
+        r6 = r0.descriptionLayout;	 Catch:{ Exception -> 0x4547 }
+        r6 = r6.getLineCount();	 Catch:{ Exception -> 0x4547 }
         r6 = r6 + -1;
-        r101 = r4.getLineBottom(r6);	 Catch:{ Exception -> 0x452d }
+        r101 = r4.getLineBottom(r6);	 Catch:{ Exception -> 0x4547 }
         r0 = r188;
-        r4 = r0.linkPreviewHeight;	 Catch:{ Exception -> 0x452d }
+        r4 = r0.linkPreviewHeight;	 Catch:{ Exception -> 0x4547 }
         r4 = r4 + r101;
         r0 = r188;
-        r0.linkPreviewHeight = r4;	 Catch:{ Exception -> 0x452d }
+        r0.linkPreviewHeight = r4;	 Catch:{ Exception -> 0x4547 }
         r0 = r188;
-        r4 = r0.totalHeight;	 Catch:{ Exception -> 0x452d }
+        r4 = r0.totalHeight;	 Catch:{ Exception -> 0x4547 }
         r4 = r4 + r101;
         r0 = r188;
-        r0.totalHeight = r4;	 Catch:{ Exception -> 0x452d }
+        r0.totalHeight = r4;	 Catch:{ Exception -> 0x4547 }
         r56 = 0;
     L_0x1585:
         r0 = r188;
-        r4 = r0.descriptionLayout;	 Catch:{ Exception -> 0x452d }
-        r4 = r4.getLineCount();	 Catch:{ Exception -> 0x452d }
+        r4 = r0.descriptionLayout;	 Catch:{ Exception -> 0x4547 }
+        r4 = r4.getLineCount();	 Catch:{ Exception -> 0x4547 }
         r0 = r56;
-        if (r0 >= r4) goto L_0x4531;
+        if (r0 >= r4) goto L_0x454b;
     L_0x1591:
         r0 = r188;
-        r4 = r0.descriptionLayout;	 Catch:{ Exception -> 0x452d }
+        r4 = r0.descriptionLayout;	 Catch:{ Exception -> 0x4547 }
         r0 = r56;
-        r4 = r4.getLineLeft(r0);	 Catch:{ Exception -> 0x452d }
-        r8 = (double) r4;	 Catch:{ Exception -> 0x452d }
-        r8 = java.lang.Math.ceil(r8);	 Catch:{ Exception -> 0x452d }
-        r0 = (int) r8;	 Catch:{ Exception -> 0x452d }
+        r4 = r4.getLineLeft(r0);	 Catch:{ Exception -> 0x4547 }
+        r8 = (double) r4;	 Catch:{ Exception -> 0x4547 }
+        r8 = java.lang.Math.ceil(r8);	 Catch:{ Exception -> 0x4547 }
+        r0 = (int) r8;	 Catch:{ Exception -> 0x4547 }
         r110 = r0;
         if (r110 == 0) goto L_0x15b2;
     L_0x15a5:
         r0 = r188;
-        r4 = r0.descriptionX;	 Catch:{ Exception -> 0x452d }
-        if (r4 != 0) goto L_0x451c;
+        r4 = r0.descriptionX;	 Catch:{ Exception -> 0x4547 }
+        if (r4 != 0) goto L_0x4536;
     L_0x15ab:
         r0 = r110;
         r4 = -r0;
         r0 = r188;
-        r0.descriptionX = r4;	 Catch:{ Exception -> 0x452d }
+        r0.descriptionX = r4;	 Catch:{ Exception -> 0x4547 }
     L_0x15b2:
         r56 = r56 + 1;
         goto L_0x1585;
@@ -6276,13 +6276,13 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0.linkPreviewHeight = r4;
         r0 = r188;
         r4 = r0.docTitleLayout;
-        if (r4 == 0) goto L_0x4940;
+        if (r4 == 0) goto L_0x495a;
     L_0x1bb2:
         r0 = r188;
         r4 = r0.docTitleLayout;
         r4 = r4.getLineCount();
         r6 = 1;
-        if (r4 <= r6) goto L_0x4940;
+        if (r4 <= r6) goto L_0x495a;
     L_0x1bbd:
         r0 = r188;
         r4 = r0.docTitleLayout;
@@ -6368,13 +6368,13 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = 0;
         goto L_0x1CLASSNAME;
     L_0x1CLASSNAME:
-        if (r181 == 0) goto L_0x4940;
+        if (r181 == 0) goto L_0x495a;
     L_0x1CLASSNAME:
         r0 = r181;
         r4 = r0.mime_type;
         r6 = "image/";
         r4 = r4.startsWith(r6);
-        if (r4 != 0) goto L_0x493c;
+        if (r4 != 0) goto L_0x4956;
     L_0x1CLASSNAME:
         r15 = 0;
     L_0x1CLASSNAME:
@@ -6950,13 +6950,13 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         if (r4 == 0) goto L_0x2081;
     L_0x2071:
         r4 = "PaymentTestInvoice";
-        r6 = NUM; // 0x7f0CLASSNAMEb9 float:1.8612683E38 double:1.0530982487E-314;
+        r6 = NUM; // 0x7f0CLASSNAMEbb float:1.8612687E38 double:1.0530982497E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r6);
         r5 = r4.toUpperCase();
         goto L_0x11fc;
     L_0x2081:
         r4 = "PaymentInvoice";
-        r6 = NUM; // 0x7f0CLASSNAMEa float:1.861262E38 double:1.0530982334E-314;
+        r6 = NUM; // 0x7f0CLASSNAMEc float:1.8612624E38 double:1.0530982344E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r6);
         r5 = r4.toUpperCase();
         goto L_0x11fc;
@@ -7481,7 +7481,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         goto L_0x2354;
     L_0x249b:
         r4 = "NumberUnknown";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.861206E38 double:1.053098097E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612064E38 double:1.053098098E-314;
         r138 = org.telegram.messenger.LocaleController.getString(r4, r6);
         goto L_0x2354;
     L_0x24a7:
@@ -8848,10 +8848,10 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r188.setMessageObjectInternal(r189);
         r0 = r188;
         r4 = r0.drawForwardedName;
-        if (r4 == 0) goto L_0x44c6;
+        if (r4 == 0) goto L_0x44e0;
     L_0x2eca:
         r4 = r189.needDrawForwarded();
-        if (r4 == 0) goto L_0x44c6;
+        if (r4 == 0) goto L_0x44e0;
     L_0x2ed0:
         r0 = r188;
         r4 = r0.currentPosition;
@@ -8860,7 +8860,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0 = r188;
         r4 = r0.currentPosition;
         r4 = r4.minY;
-        if (r4 != 0) goto L_0x44c6;
+        if (r4 != 0) goto L_0x44e0;
     L_0x2ede:
         r0 = r189;
         r4 = r0.type;
@@ -10009,7 +10009,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0 = r189;
         r4 = r0.type;
         r6 = 5;
-        if (r4 != r6) goto L_0x3977;
+        if (r4 != r6) goto L_0x3991;
     L_0x3787:
         r142 = org.telegram.messenger.AndroidUtilities.roundMessageSize;
         r118 = r142;
@@ -10054,7 +10054,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0 = r189;
         r4 = r0.type;
         r6 = 1;
-        if (r4 != r6) goto L_0x39a5;
+        if (r4 != r6) goto L_0x39bf;
     L_0x37e1:
         r188.updateSecretTimeText(r189);
         r0 = r189;
@@ -10069,67 +10069,82 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0 = r189;
         r4 = r0.type;
         r6 = 5;
-        if (r4 != r6) goto L_0x3a38;
+        if (r4 != r6) goto L_0x3a52;
     L_0x37fd:
         r97 = org.telegram.messenger.AndroidUtilities.roundMessageSize;
         r23 = r97;
     L_0x3801:
         r0 = r188;
         r4 = r0.currentPhotoObject;
-        if (r4 == 0) goto L_0x381d;
+        if (r4 == 0) goto L_0x381b;
     L_0x3807:
+        r4 = "s";
+        r0 = r188;
+        r6 = r0.currentPhotoObject;
+        r6 = r6.type;
+        r4 = r4.equals(r6);
+        if (r4 == 0) goto L_0x381b;
+    L_0x3816:
+        r4 = 0;
+        r0 = r188;
+        r0.currentPhotoObject = r4;
+    L_0x381b:
+        r0 = r188;
+        r4 = r0.currentPhotoObject;
+        if (r4 == 0) goto L_0x3837;
+    L_0x3821:
         r0 = r188;
         r4 = r0.currentPhotoObject;
         r0 = r188;
         r6 = r0.currentPhotoObjectThumb;
-        if (r4 != r6) goto L_0x381d;
-    L_0x3811:
+        if (r4 != r6) goto L_0x3837;
+    L_0x382b:
         r0 = r189;
         r4 = r0.type;
         r6 = 1;
-        if (r4 != r6) goto L_0x3acb;
-    L_0x3818:
+        if (r4 != r6) goto L_0x3ae5;
+    L_0x3832:
         r4 = 0;
         r0 = r188;
         r0.currentPhotoObjectThumb = r4;
-    L_0x381d:
-        if (r128 == 0) goto L_0x386f;
-    L_0x381f:
+    L_0x3837:
+        if (r128 == 0) goto L_0x3889;
+    L_0x3839:
         r0 = r188;
         r4 = r0.currentAccount;
         r4 = org.telegram.messenger.DownloadController.getInstance(r4);
         r4 = r4.getAutodownloadMask();
         r4 = r4 & 1;
-        if (r4 != 0) goto L_0x3834;
-    L_0x382f:
+        if (r4 != 0) goto L_0x384e;
+    L_0x3849:
         r4 = 0;
         r0 = r188;
         r0.currentPhotoObject = r4;
-    L_0x3834:
+    L_0x384e:
         r4 = r189.needDrawBluredPreview();
-        if (r4 != 0) goto L_0x386f;
-    L_0x383a:
+        if (r4 != 0) goto L_0x3889;
+    L_0x3854:
         r0 = r188;
         r4 = r0.currentPhotoObject;
-        if (r4 == 0) goto L_0x384a;
-    L_0x3840:
+        if (r4 == 0) goto L_0x3864;
+    L_0x385a:
         r0 = r188;
         r4 = r0.currentPhotoObject;
         r0 = r188;
         r6 = r0.currentPhotoObjectThumb;
-        if (r4 != r6) goto L_0x386f;
-    L_0x384a:
+        if (r4 != r6) goto L_0x3889;
+    L_0x3864:
         r0 = r188;
         r4 = r0.currentPhotoObjectThumb;
-        if (r4 == 0) goto L_0x385f;
-    L_0x3850:
+        if (r4 == 0) goto L_0x3879;
+    L_0x386a:
         r4 = "m";
         r0 = r188;
         r6 = r0.currentPhotoObjectThumb;
         r6 = r6.type;
         r4 = r4.equals(r6);
-        if (r4 != 0) goto L_0x386f;
-    L_0x385f:
+        if (r4 != 0) goto L_0x3889;
+    L_0x3879:
         r0 = r188;
         r4 = r0.photoImage;
         r6 = 1;
@@ -10138,30 +10153,30 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = r0.photoImage;
         r6 = 1;
         r4.setShouldGenerateQualityThumb(r6);
-    L_0x386f:
+    L_0x3889:
         r0 = r188;
         r4 = r0.currentMessagesGroup;
-        if (r4 != 0) goto L_0x3880;
-    L_0x3875:
+        if (r4 != 0) goto L_0x389a;
+    L_0x388f:
         r0 = r189;
         r4 = r0.caption;
-        if (r4 == 0) goto L_0x3880;
-    L_0x387b:
+        if (r4 == 0) goto L_0x389a;
+    L_0x3895:
         r4 = 0;
         r0 = r188;
         r0.mediaBackground = r4;
-    L_0x3880:
-        if (r23 == 0) goto L_0x3884;
-    L_0x3882:
-        if (r97 != 0) goto L_0x38f6;
-    L_0x3884:
+    L_0x389a:
+        if (r23 == 0) goto L_0x389e;
+    L_0x389c:
+        if (r97 != 0) goto L_0x3910;
+    L_0x389e:
         r0 = r189;
         r4 = r0.type;
         r6 = 8;
-        if (r4 != r6) goto L_0x38f6;
-    L_0x388c:
+        if (r4 != r6) goto L_0x3910;
+    L_0x38a6:
         r56 = 0;
-    L_0x388e:
+    L_0x38a8:
         r0 = r189;
         r4 = r0.messageOwner;
         r4 = r4.media;
@@ -10169,8 +10184,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = r4.attributes;
         r4 = r4.size();
         r0 = r56;
-        if (r0 >= r4) goto L_0x38f6;
-    L_0x38a0:
+        if (r0 >= r4) goto L_0x3910;
+    L_0x38ba:
         r0 = r189;
         r4 = r0.messageOwner;
         r4 = r4.media;
@@ -10181,12 +10196,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r64 = (org.telegram.tgnet.TLRPC.DocumentAttribute) r64;
         r0 = r64;
         r4 = r0 instanceof org.telegram.tgnet.TLRPC.TL_documentAttributeImageSize;
-        if (r4 != 0) goto L_0x38be;
-    L_0x38b8:
+        if (r4 != 0) goto L_0x38d8;
+    L_0x38d2:
         r0 = r64;
         r4 = r0 instanceof org.telegram.tgnet.TLRPC.TL_documentAttributeVideo;
-        if (r4 == 0) goto L_0x3b06;
-    L_0x38be:
+        if (r4 == 0) goto L_0x3b20;
+    L_0x38d8:
         r0 = r64;
         r4 = r0.w;
         r4 = (float) r4;
@@ -10207,8 +10222,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r97 = r0;
         r0 = r97;
         r1 = r141;
-        if (r0 <= r1) goto L_0x3ad2;
-    L_0x38e2:
+        if (r0 <= r1) goto L_0x3aec;
+    L_0x38fc:
         r0 = r97;
         r0 = (float) r0;
         r159 = r0;
@@ -10221,49 +10236,49 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = r4 / r159;
         r0 = (int) r4;
         r23 = r0;
-    L_0x38f6:
-        if (r23 == 0) goto L_0x38fa;
-    L_0x38f8:
-        if (r97 != 0) goto L_0x3902;
-    L_0x38fa:
+    L_0x3910:
+        if (r23 == 0) goto L_0x3914;
+    L_0x3912:
+        if (r97 != 0) goto L_0x391c;
+    L_0x3914:
         r4 = NUM; // 0x43160000 float:150.0 double:5.56078426E-315;
         r97 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r23 = r97;
-    L_0x3902:
+    L_0x391c:
         r0 = r189;
         r4 = r0.type;
         r6 = 3;
-        if (r4 != r6) goto L_0x3924;
-    L_0x3909:
+        if (r4 != r6) goto L_0x393e;
+    L_0x3923:
         r0 = r188;
         r4 = r0.infoWidth;
         r6 = NUM; // 0x42200000 float:40.0 double:5.481131706E-315;
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r4 = r4 + r6;
         r0 = r23;
-        if (r0 >= r4) goto L_0x3924;
-    L_0x3918:
+        if (r0 >= r4) goto L_0x393e;
+    L_0x3932:
         r0 = r188;
         r4 = r0.infoWidth;
         r6 = NUM; // 0x42200000 float:40.0 double:5.481131706E-315;
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r23 = r4 + r6;
-    L_0x3924:
+    L_0x393e:
         r0 = r188;
         r4 = r0.currentMessagesGroup;
-        if (r4 == 0) goto L_0x3c3e;
-    L_0x392a:
+        if (r4 == 0) goto L_0x3CLASSNAME;
+    L_0x3944:
         r92 = 0;
         r83 = r188.getGroupPhotosWidth();
         r56 = 0;
-    L_0x3932:
+    L_0x394c:
         r0 = r188;
         r4 = r0.currentMessagesGroup;
         r4 = r4.posArray;
         r4 = r4.size();
         r0 = r56;
-        if (r0 >= r4) goto L_0x3b0a;
-    L_0x3940:
+        if (r0 >= r4) goto L_0x3b24;
+    L_0x395a:
         r0 = r188;
         r4 = r0.currentMessagesGroup;
         r4 = r4.posArray;
@@ -10272,8 +10287,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r145 = (org.telegram.messenger.MessageObject.GroupedMessagePosition) r145;
         r0 = r145;
         r4 = r0.minY;
-        if (r4 != 0) goto L_0x3b0a;
-    L_0x3954:
+        if (r4 != 0) goto L_0x3b24;
+    L_0x396e:
         r0 = r92;
         r8 = (double) r0;
         r0 = r145;
@@ -10294,11 +10309,11 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0 = (int) r8;
         r92 = r0;
         r56 = r56 + 1;
-        goto L_0x3932;
-    L_0x3977:
+        goto L_0x394c;
+    L_0x3991:
         r4 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r4 == 0) goto L_0x398d;
-    L_0x397d:
+        if (r4 == 0) goto L_0x39a7;
+    L_0x3997:
         r4 = org.telegram.messenger.AndroidUtilities.getMinTabletSide();
         r4 = (float) r4;
         r6 = NUM; // 0x3var_ float:0.7 double:5.23867711E-315;
@@ -10307,7 +10322,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r142 = r0;
         r118 = r142;
         goto L_0x378b;
-    L_0x398d:
+    L_0x39a7:
         r4 = org.telegram.messenger.AndroidUtilities.displaySize;
         r4 = r4.x;
         r6 = org.telegram.messenger.AndroidUtilities.displaySize;
@@ -10320,12 +10335,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r142 = r0;
         r118 = r142;
         goto L_0x378b;
-    L_0x39a5:
+    L_0x39bf:
         r0 = r189;
         r4 = r0.type;
         r6 = 3;
-        if (r4 != r6) goto L_0x39c9;
-    L_0x39ac:
+        if (r4 != r6) goto L_0x39e3;
+    L_0x39c6:
         r4 = 0;
         r0 = r188;
         r1 = r189;
@@ -10339,12 +10354,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r188.updateSecretTimeText(r189);
         r128 = 1;
         goto L_0x37f2;
-    L_0x39c9:
+    L_0x39e3:
         r0 = r189;
         r4 = r0.type;
         r6 = 5;
-        if (r4 != r6) goto L_0x39e2;
-    L_0x39d0:
+        if (r4 != r6) goto L_0x39fc;
+    L_0x39ea:
         r0 = r189;
         r4 = r0.photoThumbs;
         r6 = 40;
@@ -10353,12 +10368,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0.currentPhotoObjectThumb = r4;
         r128 = 1;
         goto L_0x37f2;
-    L_0x39e2:
+    L_0x39fc:
         r0 = r189;
         r4 = r0.type;
         r6 = 8;
         if (r4 != r6) goto L_0x37f2;
-    L_0x39ea:
+    L_0x3a04:
         r0 = r189;
         r4 = r0.photoThumbs;
         r6 = 40;
@@ -10395,17 +10410,17 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r1.infoLayout = r0;
         r128 = 1;
         goto L_0x37f2;
-    L_0x3a38:
+    L_0x3a52:
         r0 = r188;
         r4 = r0.currentPhotoObject;
-        if (r4 == 0) goto L_0x3a90;
-    L_0x3a3e:
+        if (r4 == 0) goto L_0x3aaa;
+    L_0x3a58:
         r0 = r188;
         r0 = r0.currentPhotoObject;
         r162 = r0;
-    L_0x3a44:
+    L_0x3a5e:
         if (r162 == 0) goto L_0x3801;
-    L_0x3a46:
+    L_0x3a60:
         r0 = r162;
         r4 = r0.w;
         r4 = (float) r4;
@@ -10424,20 +10439,20 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = r4 / r158;
         r0 = (int) r4;
         r97 = r0;
-        if (r23 != 0) goto L_0x3a6c;
-    L_0x3a66:
+        if (r23 != 0) goto L_0x3a86;
+    L_0x3a80:
         r4 = NUM; // 0x43160000 float:150.0 double:5.56078426E-315;
         r23 = org.telegram.messenger.AndroidUtilities.dp(r4);
-    L_0x3a6c:
-        if (r97 != 0) goto L_0x3a74;
-    L_0x3a6e:
+    L_0x3a86:
+        if (r97 != 0) goto L_0x3a8e;
+    L_0x3a88:
         r4 = NUM; // 0x43160000 float:150.0 double:5.56078426E-315;
         r97 = org.telegram.messenger.AndroidUtilities.dp(r4);
-    L_0x3a74:
+    L_0x3a8e:
         r0 = r97;
         r1 = r141;
-        if (r0 <= r1) goto L_0x3a97;
-    L_0x3a7a:
+        if (r0 <= r1) goto L_0x3ab1;
+    L_0x3a94:
         r0 = r97;
         r0 = (float) r0;
         r159 = r0;
@@ -10451,17 +10466,17 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0 = (int) r4;
         r23 = r0;
         goto L_0x3801;
-    L_0x3a90:
+    L_0x3aaa:
         r0 = r188;
         r0 = r0.currentPhotoObjectThumb;
         r162 = r0;
-        goto L_0x3a44;
-    L_0x3a97:
+        goto L_0x3a5e;
+    L_0x3ab1:
         r4 = NUM; // 0x42var_ float:120.0 double:5.548480205E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r0 = r97;
         if (r0 >= r4) goto L_0x3801;
-    L_0x3aa1:
+    L_0x3abb:
         r4 = NUM; // 0x42var_ float:120.0 double:5.548480205E-315;
         r97 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r0 = r162;
@@ -10478,7 +10493,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r6 = (float) r0;
         r4 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1));
         if (r4 >= 0) goto L_0x3801;
-    L_0x3abf:
+    L_0x3ad9:
         r0 = r162;
         r4 = r0.w;
         r4 = (float) r4;
@@ -10486,17 +10501,17 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0 = (int) r4;
         r23 = r0;
         goto L_0x3801;
-    L_0x3acb:
+    L_0x3ae5:
         r4 = 0;
         r0 = r188;
         r0.currentPhotoObject = r4;
-        goto L_0x381d;
-    L_0x3ad2:
+        goto L_0x3837;
+    L_0x3aec:
         r4 = NUM; // 0x42var_ float:120.0 double:5.548480205E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r0 = r97;
-        if (r0 >= r4) goto L_0x38f6;
-    L_0x3adc:
+        if (r0 >= r4) goto L_0x3910;
+    L_0x3af6:
         r4 = NUM; // 0x42var_ float:120.0 double:5.548480205E-315;
         r97 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r0 = r64;
@@ -10512,30 +10527,30 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0 = r142;
         r6 = (float) r0;
         r4 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1));
-        if (r4 >= 0) goto L_0x38f6;
-    L_0x3afa:
+        if (r4 >= 0) goto L_0x3910;
+    L_0x3b14:
         r0 = r64;
         r4 = r0.w;
         r4 = (float) r4;
         r4 = r4 / r98;
         r0 = (int) r4;
         r23 = r0;
-        goto L_0x38f6;
-    L_0x3b06:
+        goto L_0x3910;
+    L_0x3b20:
         r56 = r56 + 1;
-        goto L_0x388e;
-    L_0x3b0a:
+        goto L_0x38a8;
+    L_0x3b24:
         r4 = NUM; // 0x420CLASSNAME float:35.0 double:5.47465589E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r4 = r92 - r4;
         r0 = r188;
         r0.availableTimeWidth = r4;
-    L_0x3b16:
+    L_0x3b30:
         r0 = r189;
         r4 = r0.type;
         r6 = 5;
-        if (r4 != r6) goto L_0x3b44;
-    L_0x3b1d:
+        if (r4 != r6) goto L_0x3b5e;
+    L_0x3b37:
         r0 = r188;
         r4 = r0.availableTimeWidth;
         r8 = (double) r4;
@@ -10554,28 +10569,28 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = (int) r8;
         r0 = r188;
         r0.availableTimeWidth = r4;
-    L_0x3b44:
+    L_0x3b5e:
         r188.measureTime(r189);
         r0 = r188;
         r6 = r0.timeWidth;
         r4 = r189.isOutOwner();
-        if (r4 == 0) goto L_0x3c4c;
-    L_0x3b51:
+        if (r4 == 0) goto L_0x3CLASSNAME;
+    L_0x3b6b:
         r4 = 20;
-    L_0x3b53:
+    L_0x3b6d:
         r4 = r4 + 14;
         r4 = (float) r4;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r172 = r6 + r4;
         r0 = r23;
         r1 = r172;
-        if (r0 >= r1) goto L_0x3b64;
-    L_0x3b62:
+        if (r0 >= r1) goto L_0x3b7e;
+    L_0x3b7c:
         r23 = r172;
-    L_0x3b64:
+    L_0x3b7e:
         r4 = r189.isRoundVideo();
-        if (r4 == 0) goto L_0x3c4f;
-    L_0x3b6a:
+        if (r4 == 0) goto L_0x3CLASSNAME;
+    L_0x3b84:
         r0 = r23;
         r1 = r97;
         r97 = java.lang.Math.min(r0, r1);
@@ -10587,13 +10602,13 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = r0.photoImage;
         r6 = r23 / 2;
         r4.setRoundRadius(r6);
-    L_0x3b82:
+    L_0x3b9c:
         r27 = 0;
         r93 = 0;
         r0 = r188;
         r4 = r0.currentMessagesGroup;
-        if (r4 == 0) goto L_0x41aa;
-    L_0x3b8c:
+        if (r4 == 0) goto L_0x41c4;
+    L_0x3ba6:
         r4 = org.telegram.messenger.AndroidUtilities.displaySize;
         r4 = r4.x;
         r6 = org.telegram.messenger.AndroidUtilities.displaySize;
@@ -10619,37 +10634,37 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0 = r188;
         r4 = r0.currentPosition;
         r4 = r4.minY;
-        if (r4 == 0) goto L_0x3cd9;
-    L_0x3bbf:
+        if (r4 == 0) goto L_0x3cf3;
+    L_0x3bd9:
         r4 = r189.isOutOwner();
-        if (r4 == 0) goto L_0x3bcf;
-    L_0x3bc5:
+        if (r4 == 0) goto L_0x3be9;
+    L_0x3bdf:
         r0 = r188;
         r4 = r0.currentPosition;
         r4 = r4.flags;
         r4 = r4 & 1;
-        if (r4 != 0) goto L_0x3bdf;
-    L_0x3bcf:
+        if (r4 != 0) goto L_0x3bf9;
+    L_0x3be9:
         r4 = r189.isOutOwner();
-        if (r4 != 0) goto L_0x3cd9;
-    L_0x3bd5:
+        if (r4 != 0) goto L_0x3cf3;
+    L_0x3bef:
         r0 = r188;
         r4 = r0.currentPosition;
         r4 = r4.flags;
         r4 = r4 & 2;
-        if (r4 == 0) goto L_0x3cd9;
-    L_0x3bdf:
+        if (r4 == 0) goto L_0x3cf3;
+    L_0x3bf9:
         r92 = 0;
         r81 = 0;
         r56 = 0;
-    L_0x3be5:
+    L_0x3bff:
         r0 = r188;
         r4 = r0.currentMessagesGroup;
         r4 = r4.posArray;
         r4 = r4.size();
         r0 = r56;
-        if (r0 >= r4) goto L_0x3cd5;
-    L_0x3bf3:
+        if (r0 >= r4) goto L_0x3cef;
+    L_0x3c0d:
         r0 = r188;
         r4 = r0.currentMessagesGroup;
         r4 = r4.posArray;
@@ -10658,7 +10673,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r145 = (org.telegram.messenger.MessageObject.GroupedMessagePosition) r145;
         r0 = r145;
         r4 = r0.minY;
-        if (r4 != 0) goto L_0x3CLASSNAME;
+        if (r4 != 0) goto L_0x3c9e;
     L_0x3CLASSNAME:
         r0 = r92;
         r0 = (double) r0;
@@ -10675,8 +10690,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r24 = java.lang.Math.ceil(r8);
         r0 = r145;
         r4 = r0.leftSpanOffset;
-        if (r4 == 0) goto L_0x3CLASSNAME;
-    L_0x3CLASSNAME:
+        if (r4 == 0) goto L_0x3c9b;
+    L_0x3c3d:
         r0 = r145;
         r4 = r0.leftSpanOffset;
         r4 = (float) r4;
@@ -10687,31 +10702,31 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = r4 * r6;
         r8 = (double) r4;
         r8 = java.lang.Math.ceil(r8);
-    L_0x3CLASSNAME:
+    L_0x3c4e:
         r8 = r8 + r24;
         r8 = r8 + r20;
         r0 = (int) r8;
         r92 = r0;
-    L_0x3c3b:
+    L_0x3CLASSNAME:
         r56 = r56 + 1;
-        goto L_0x3be5;
-    L_0x3c3e:
+        goto L_0x3bff;
+    L_0x3CLASSNAME:
         r4 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r4 = r118 - r4;
         r0 = r188;
         r0.availableTimeWidth = r4;
-        goto L_0x3b16;
-    L_0x3c4c:
-        r4 = 0;
-        goto L_0x3b53;
-    L_0x3c4f:
-        r4 = r189.needDrawBluredPreview();
-        if (r4 == 0) goto L_0x3b82;
+        goto L_0x3b30;
     L_0x3CLASSNAME:
+        r4 = 0;
+        goto L_0x3b6d;
+    L_0x3CLASSNAME:
+        r4 = r189.needDrawBluredPreview();
+        if (r4 == 0) goto L_0x3b9c;
+    L_0x3c6f:
         r4 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r4 == 0) goto L_0x3c6a;
-    L_0x3c5b:
+        if (r4 == 0) goto L_0x3CLASSNAME;
+    L_0x3CLASSNAME:
         r4 = org.telegram.messenger.AndroidUtilities.getMinTabletSide();
         r4 = (float) r4;
         r6 = NUM; // 0x3var_ float:0.5 double:5.222099017E-315;
@@ -10719,8 +10734,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0 = (int) r4;
         r97 = r0;
         r23 = r97;
-        goto L_0x3b82;
-    L_0x3c6a:
+        goto L_0x3b9c;
+    L_0x3CLASSNAME:
         r4 = org.telegram.messenger.AndroidUtilities.displaySize;
         r4 = r4.x;
         r6 = org.telegram.messenger.AndroidUtilities.displaySize;
@@ -10732,18 +10747,18 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0 = (int) r4;
         r97 = r0;
         r23 = r97;
-        goto L_0x3b82;
-    L_0x3CLASSNAME:
+        goto L_0x3b9c;
+    L_0x3c9b:
         r8 = 0;
-        goto L_0x3CLASSNAME;
-    L_0x3CLASSNAME:
+        goto L_0x3c4e;
+    L_0x3c9e:
         r0 = r145;
         r4 = r0.minY;
         r0 = r188;
         r6 = r0.currentPosition;
         r6 = r6.minY;
-        if (r4 != r6) goto L_0x3cc9;
-    L_0x3CLASSNAME:
+        if (r4 != r6) goto L_0x3ce3;
+    L_0x3caa:
         r0 = r81;
         r0 = (double) r0;
         r20 = r0;
@@ -10759,8 +10774,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r24 = java.lang.Math.ceil(r8);
         r0 = r145;
         r4 = r0.leftSpanOffset;
-        if (r4 == 0) goto L_0x3cc6;
-    L_0x3cac:
+        if (r4 == 0) goto L_0x3ce0;
+    L_0x3cc6:
         r0 = r145;
         r4 = r0.leftSpanOffset;
         r4 = (float) r4;
@@ -10771,52 +10786,52 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = r4 * r6;
         r8 = (double) r4;
         r8 = java.lang.Math.ceil(r8);
-    L_0x3cbd:
+    L_0x3cd7:
         r8 = r8 + r24;
         r8 = r8 + r20;
         r0 = (int) r8;
         r81 = r0;
-        goto L_0x3c3b;
-    L_0x3cc6:
+        goto L_0x3CLASSNAME;
+    L_0x3ce0:
         r8 = 0;
-        goto L_0x3cbd;
-    L_0x3cc9:
+        goto L_0x3cd7;
+    L_0x3ce3:
         r0 = r145;
         r4 = r0.minY;
         r0 = r188;
         r6 = r0.currentPosition;
         r6 = r6.minY;
-        if (r4 <= r6) goto L_0x3c3b;
-    L_0x3cd5:
+        if (r4 <= r6) goto L_0x3CLASSNAME;
+    L_0x3cef:
         r4 = r92 - r81;
         r23 = r23 + r4;
-    L_0x3cd9:
+    L_0x3cf3:
         r4 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r23 = r23 - r4;
         r0 = r188;
         r4 = r0.isAvatarVisible;
-        if (r4 == 0) goto L_0x3cef;
-    L_0x3ce7:
+        if (r4 == 0) goto L_0x3d09;
+    L_0x3d01:
         r4 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r23 = r23 - r4;
-    L_0x3cef:
+    L_0x3d09:
         r0 = r188;
         r4 = r0.currentPosition;
         r4 = r4.siblingHeights;
-        if (r4 == 0) goto L_0x3e58;
-    L_0x3cf7:
+        if (r4 == 0) goto L_0x3e72;
+    L_0x3d11:
         r97 = 0;
         r56 = 0;
-    L_0x3cfb:
+    L_0x3d15:
         r0 = r188;
         r4 = r0.currentPosition;
         r4 = r4.siblingHeights;
         r4 = r4.length;
         r0 = r56;
-        if (r0 >= r4) goto L_0x3d1b;
-    L_0x3d06:
+        if (r0 >= r4) goto L_0x3d35;
+    L_0x3d20:
         r0 = r188;
         r4 = r0.currentPosition;
         r4 = r4.siblingHeights;
@@ -10827,8 +10842,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = (int) r8;
         r97 = r97 + r4;
         r56 = r56 + 1;
-        goto L_0x3cfb;
-    L_0x3d1b:
+        goto L_0x3d15;
+    L_0x3d35:
         r0 = r188;
         r4 = r0.currentPosition;
         r4 = r4.maxY;
@@ -10840,7 +10855,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r4 = r4 * r6;
         r97 = r97 + r4;
-    L_0x3d31:
+    L_0x3d4b:
         r0 = r23;
         r1 = r188;
         r1.backgroundWidth = r0;
@@ -10851,12 +10866,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0 = r188;
         r4 = r0.currentPosition;
         r4 = r4.edge;
-        if (r4 != 0) goto L_0x3d51;
-    L_0x3d49:
+        if (r4 != 0) goto L_0x3d6b;
+    L_0x3d63:
         r4 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r142 = r142 + r4;
-    L_0x3d51:
+    L_0x3d6b:
         r141 = r97;
         r4 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
@@ -10866,19 +10881,19 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = r0.currentPosition;
         r4 = r4.flags;
         r4 = r4 & 8;
-        if (r4 != 0) goto L_0x3d79;
-    L_0x3d67:
+        if (r4 != 0) goto L_0x3d93;
+    L_0x3d81:
         r0 = r188;
         r4 = r0.currentMessagesGroup;
         r4 = r4.hasSibling;
-        if (r4 == 0) goto L_0x3f3a;
-    L_0x3d6f:
+        if (r4 == 0) goto L_0x3var_;
+    L_0x3d89:
         r0 = r188;
         r4 = r0.currentPosition;
         r4 = r4.flags;
         r4 = r4 & 4;
-        if (r4 != 0) goto L_0x3f3a;
-    L_0x3d79:
+        if (r4 != 0) goto L_0x3var_;
+    L_0x3d93:
         r0 = r188;
         r4 = r0.currentPosition;
         r0 = r188;
@@ -10889,11 +10904,11 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = r4.messages;
         r80 = r4.size();
         r102 = 0;
-    L_0x3d91:
+    L_0x3dab:
         r0 = r102;
         r1 = r80;
-        if (r0 >= r1) goto L_0x3f3a;
-    L_0x3d97:
+        if (r0 >= r1) goto L_0x3var_;
+    L_0x3db1:
         r0 = r188;
         r4 = r0.currentMessagesGroup;
         r4 = r4.messages;
@@ -10910,12 +10925,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = r0.currentPosition;
         r0 = r156;
         if (r0 == r4) goto L_0x3var_;
-    L_0x3dbb:
+    L_0x3dd5:
         r0 = r156;
         r4 = r0.flags;
         r4 = r4 & 8;
         if (r4 == 0) goto L_0x3var_;
-    L_0x3dc3:
+    L_0x3ddd:
         r0 = r156;
         r4 = r0.pw;
         r4 = (float) r4;
@@ -10930,35 +10945,35 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r23 = r0;
         r0 = r156;
         r4 = r0.minY;
-        if (r4 == 0) goto L_0x3ebd;
-    L_0x3ddd:
+        if (r4 == 0) goto L_0x3ed7;
+    L_0x3df7:
         r4 = r189.isOutOwner();
-        if (r4 == 0) goto L_0x3deb;
-    L_0x3de3:
+        if (r4 == 0) goto L_0x3e05;
+    L_0x3dfd:
         r0 = r156;
         r4 = r0.flags;
         r4 = r4 & 1;
-        if (r4 != 0) goto L_0x3df9;
-    L_0x3deb:
+        if (r4 != 0) goto L_0x3e13;
+    L_0x3e05:
         r4 = r189.isOutOwner();
-        if (r4 != 0) goto L_0x3ebd;
-    L_0x3df1:
+        if (r4 != 0) goto L_0x3ed7;
+    L_0x3e0b:
         r0 = r156;
         r4 = r0.flags;
         r4 = r4 & 2;
-        if (r4 == 0) goto L_0x3ebd;
-    L_0x3df9:
+        if (r4 == 0) goto L_0x3ed7;
+    L_0x3e13:
         r92 = 0;
         r81 = 0;
         r56 = 0;
-    L_0x3dff:
+    L_0x3e19:
         r0 = r188;
         r4 = r0.currentMessagesGroup;
         r4 = r4.posArray;
         r4 = r4.size();
         r0 = r56;
-        if (r0 >= r4) goto L_0x3eb9;
-    L_0x3e0d:
+        if (r0 >= r4) goto L_0x3ed3;
+    L_0x3e27:
         r0 = r188;
         r4 = r0.currentMessagesGroup;
         r4 = r4.posArray;
@@ -10967,8 +10982,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r145 = (org.telegram.messenger.MessageObject.GroupedMessagePosition) r145;
         r0 = r145;
         r4 = r0.minY;
-        if (r4 != 0) goto L_0x3e6d;
-    L_0x3e21:
+        if (r4 != 0) goto L_0x3e87;
+    L_0x3e3b:
         r0 = r92;
         r0 = (double) r0;
         r20 = r0;
@@ -10984,8 +10999,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r24 = java.lang.Math.ceil(r8);
         r0 = r145;
         r4 = r0.leftSpanOffset;
-        if (r4 == 0) goto L_0x3e6a;
-    L_0x3e3d:
+        if (r4 == 0) goto L_0x3e84;
+    L_0x3e57:
         r0 = r145;
         r4 = r0.leftSpanOffset;
         r4 = (float) r4;
@@ -10996,15 +11011,15 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = r4 * r6;
         r8 = (double) r4;
         r8 = java.lang.Math.ceil(r8);
-    L_0x3e4e:
+    L_0x3e68:
         r8 = r8 + r24;
         r8 = r8 + r20;
         r0 = (int) r8;
         r92 = r0;
-    L_0x3e55:
+    L_0x3e6f:
         r56 = r56 + 1;
-        goto L_0x3dff;
-    L_0x3e58:
+        goto L_0x3e19;
+    L_0x3e72:
         r0 = r188;
         r4 = r0.currentPosition;
         r4 = r4.ph;
@@ -11013,17 +11028,17 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r8 = java.lang.Math.ceil(r8);
         r0 = (int) r8;
         r97 = r0;
-        goto L_0x3d31;
-    L_0x3e6a:
+        goto L_0x3d4b;
+    L_0x3e84:
         r8 = 0;
-        goto L_0x3e4e;
-    L_0x3e6d:
+        goto L_0x3e68;
+    L_0x3e87:
         r0 = r145;
         r4 = r0.minY;
         r0 = r156;
         r6 = r0.minY;
-        if (r4 != r6) goto L_0x3eaf;
-    L_0x3e77:
+        if (r4 != r6) goto L_0x3ec9;
+    L_0x3e91:
         r0 = r81;
         r0 = (double) r0;
         r20 = r0;
@@ -11039,8 +11054,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r24 = java.lang.Math.ceil(r8);
         r0 = r145;
         r4 = r0.leftSpanOffset;
-        if (r4 == 0) goto L_0x3eac;
-    L_0x3e93:
+        if (r4 == 0) goto L_0x3ec6;
+    L_0x3ead:
         r0 = r145;
         r4 = r0.leftSpanOffset;
         r4 = (float) r4;
@@ -11051,79 +11066,79 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = r4 * r6;
         r8 = (double) r4;
         r8 = java.lang.Math.ceil(r8);
-    L_0x3ea4:
+    L_0x3ebe:
         r8 = r8 + r24;
         r8 = r8 + r20;
         r0 = (int) r8;
         r81 = r0;
-        goto L_0x3e55;
-    L_0x3eac:
+        goto L_0x3e6f;
+    L_0x3ec6:
         r8 = 0;
-        goto L_0x3ea4;
-    L_0x3eaf:
+        goto L_0x3ebe;
+    L_0x3ec9:
         r0 = r145;
         r4 = r0.minY;
         r0 = r156;
         r6 = r0.minY;
-        if (r4 <= r6) goto L_0x3e55;
-    L_0x3eb9:
+        if (r4 <= r6) goto L_0x3e6f;
+    L_0x3ed3:
         r4 = r92 - r81;
         r23 = r23 + r4;
-    L_0x3ebd:
+    L_0x3ed7:
         r4 = NUM; // 0x41900000 float:18.0 double:5.43450582E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r23 = r23 - r4;
         r0 = r188;
         r4 = r0.isChat;
-        if (r4 == 0) goto L_0x3ee7;
-    L_0x3ecb:
+        if (r4 == 0) goto L_0x3var_;
+    L_0x3ee5:
         r4 = r113.isOutOwner();
-        if (r4 != 0) goto L_0x3ee7;
-    L_0x3ed1:
+        if (r4 != 0) goto L_0x3var_;
+    L_0x3eeb:
         r4 = r113.needDrawAvatar();
-        if (r4 == 0) goto L_0x3ee7;
-    L_0x3ed7:
-        if (r156 == 0) goto L_0x3edf;
-    L_0x3ed9:
+        if (r4 == 0) goto L_0x3var_;
+    L_0x3ef1:
+        if (r156 == 0) goto L_0x3ef9;
+    L_0x3ef3:
         r0 = r156;
         r4 = r0.edge;
-        if (r4 == 0) goto L_0x3ee7;
-    L_0x3edf:
+        if (r4 == 0) goto L_0x3var_;
+    L_0x3ef9:
         r4 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r23 = r23 - r4;
-    L_0x3ee7:
+    L_0x3var_:
         r0 = r188;
         r1 = r156;
         r4 = r0.getAdditionalWidthForPosition(r1);
         r23 = r23 + r4;
         r0 = r156;
         r4 = r0.edge;
-        if (r4 != 0) goto L_0x3eff;
-    L_0x3ef7:
+        if (r4 != 0) goto L_0x3var_;
+    L_0x3var_:
         r4 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r23 = r23 + r4;
-    L_0x3eff:
+    L_0x3var_:
         r27 = r27 + r23;
         r0 = r156;
         r4 = r0.minX;
         r0 = r188;
         r6 = r0.currentPosition;
         r6 = r6.minX;
-        if (r4 < r6) goto L_0x3f1f;
-    L_0x3f0d:
+        if (r4 < r6) goto L_0x3var_;
+    L_0x3var_:
         r0 = r188;
         r4 = r0.currentMessagesGroup;
         r4 = r4.hasSibling;
         if (r4 == 0) goto L_0x3var_;
-    L_0x3var_:
+    L_0x3f2f:
         r0 = r156;
         r4 = r0.minY;
         r0 = r156;
         r6 = r0.maxY;
         if (r4 == r6) goto L_0x3var_;
-    L_0x3f1f:
+    L_0x3var_:
         r0 = r188;
         r4 = r0.captionOffsetX;
         r4 = r4 - r23;
@@ -11132,173 +11147,173 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     L_0x3var_:
         r0 = r113;
         r4 = r0.caption;
-        if (r4 == 0) goto L_0x41a6;
-    L_0x3f2f:
+        if (r4 == 0) goto L_0x41c0;
+    L_0x3var_:
         r0 = r188;
         r4 = r0.currentCaption;
-        if (r4 == 0) goto L_0x419e;
-    L_0x3var_:
+        if (r4 == 0) goto L_0x41b8;
+    L_0x3f4f:
         r4 = 0;
         r0 = r188;
         r0.currentCaption = r4;
-    L_0x3f3a:
+    L_0x3var_:
         r0 = r188;
         r4 = r0.currentCaption;
-        if (r4 == 0) goto L_0x4062;
-    L_0x3var_:
-        r4 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x423e }
+        if (r4 == 0) goto L_0x407c;
+    L_0x3f5a:
+        r4 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x4258 }
         r6 = 24;
-        if (r4 < r6) goto L_0x421f;
+        if (r4 < r6) goto L_0x4239;
     L_0x3var_:
         r0 = r188;
-        r4 = r0.currentCaption;	 Catch:{ Exception -> 0x423e }
+        r4 = r0.currentCaption;	 Catch:{ Exception -> 0x4258 }
         r6 = 0;
         r0 = r188;
-        r8 = r0.currentCaption;	 Catch:{ Exception -> 0x423e }
-        r8 = r8.length();	 Catch:{ Exception -> 0x423e }
-        r9 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint;	 Catch:{ Exception -> 0x423e }
+        r8 = r0.currentCaption;	 Catch:{ Exception -> 0x4258 }
+        r8 = r8.length();	 Catch:{ Exception -> 0x4258 }
+        r9 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint;	 Catch:{ Exception -> 0x4258 }
         r0 = r27;
-        r4 = android.text.StaticLayout.Builder.obtain(r4, r6, r8, r9, r0);	 Catch:{ Exception -> 0x423e }
+        r4 = android.text.StaticLayout.Builder.obtain(r4, r6, r8, r9, r0);	 Catch:{ Exception -> 0x4258 }
         r6 = 1;
-        r4 = r4.setBreakStrategy(r6);	 Catch:{ Exception -> 0x423e }
+        r4 = r4.setBreakStrategy(r6);	 Catch:{ Exception -> 0x4258 }
         r6 = 0;
-        r4 = r4.setHyphenationFrequency(r6);	 Catch:{ Exception -> 0x423e }
-        r6 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x423e }
-        r4 = r4.setAlignment(r6);	 Catch:{ Exception -> 0x423e }
-        r4 = r4.build();	 Catch:{ Exception -> 0x423e }
+        r4 = r4.setHyphenationFrequency(r6);	 Catch:{ Exception -> 0x4258 }
+        r6 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x4258 }
+        r4 = r4.setAlignment(r6);	 Catch:{ Exception -> 0x4258 }
+        r4 = r4.build();	 Catch:{ Exception -> 0x4258 }
         r0 = r188;
-        r0.captionLayout = r4;	 Catch:{ Exception -> 0x423e }
+        r0.captionLayout = r4;	 Catch:{ Exception -> 0x4258 }
+    L_0x3f8d:
+        r0 = r188;
+        r4 = r0.captionLayout;	 Catch:{ Exception -> 0x4258 }
+        r109 = r4.getLineCount();	 Catch:{ Exception -> 0x4258 }
+        if (r109 <= 0) goto L_0x407c;
     L_0x3var_:
-        r0 = r188;
-        r4 = r0.captionLayout;	 Catch:{ Exception -> 0x423e }
-        r109 = r4.getLineCount();	 Catch:{ Exception -> 0x423e }
-        if (r109 <= 0) goto L_0x4062;
-    L_0x3f7d:
-        if (r93 == 0) goto L_0x4248;
-    L_0x3f7f:
+        if (r93 == 0) goto L_0x4262;
+    L_0x3var_:
         r4 = 0;
         r0 = r188;
-        r0.captionWidth = r4;	 Catch:{ Exception -> 0x423e }
+        r0.captionWidth = r4;	 Catch:{ Exception -> 0x4258 }
         r56 = 0;
-    L_0x3var_:
+    L_0x3fa0:
         r0 = r56;
         r1 = r109;
-        if (r0 >= r1) goto L_0x3fc2;
-    L_0x3f8c:
+        if (r0 >= r1) goto L_0x3fdc;
+    L_0x3fa6:
         r0 = r188;
-        r4 = r0.captionWidth;	 Catch:{ Exception -> 0x423e }
-        r8 = (double) r4;	 Catch:{ Exception -> 0x423e }
+        r4 = r0.captionWidth;	 Catch:{ Exception -> 0x4258 }
+        r8 = (double) r4;	 Catch:{ Exception -> 0x4258 }
         r0 = r188;
-        r4 = r0.captionLayout;	 Catch:{ Exception -> 0x423e }
+        r4 = r0.captionLayout;	 Catch:{ Exception -> 0x4258 }
         r0 = r56;
-        r4 = r4.getLineWidth(r0);	 Catch:{ Exception -> 0x423e }
-        r0 = (double) r4;	 Catch:{ Exception -> 0x423e }
+        r4 = r4.getLineWidth(r0);	 Catch:{ Exception -> 0x4258 }
+        r0 = (double) r4;	 Catch:{ Exception -> 0x4258 }
         r20 = r0;
-        r20 = java.lang.Math.ceil(r20);	 Catch:{ Exception -> 0x423e }
+        r20 = java.lang.Math.ceil(r20);	 Catch:{ Exception -> 0x4258 }
         r0 = r20;
-        r8 = java.lang.Math.max(r8, r0);	 Catch:{ Exception -> 0x423e }
-        r4 = (int) r8;	 Catch:{ Exception -> 0x423e }
+        r8 = java.lang.Math.max(r8, r0);	 Catch:{ Exception -> 0x4258 }
+        r4 = (int) r8;	 Catch:{ Exception -> 0x4258 }
         r0 = r188;
-        r0.captionWidth = r4;	 Catch:{ Exception -> 0x423e }
+        r0.captionWidth = r4;	 Catch:{ Exception -> 0x4258 }
         r0 = r188;
-        r4 = r0.captionLayout;	 Catch:{ Exception -> 0x423e }
+        r4 = r0.captionLayout;	 Catch:{ Exception -> 0x4258 }
         r0 = r56;
-        r4 = r4.getLineLeft(r0);	 Catch:{ Exception -> 0x423e }
+        r4 = r4.getLineLeft(r0);	 Catch:{ Exception -> 0x4258 }
         r6 = 0;
         r4 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1));
-        if (r4 == 0) goto L_0x4244;
-    L_0x3fbc:
+        if (r4 == 0) goto L_0x425e;
+    L_0x3fd6:
         r0 = r27;
         r1 = r188;
-        r1.captionWidth = r0;	 Catch:{ Exception -> 0x423e }
-    L_0x3fc2:
+        r1.captionWidth = r0;	 Catch:{ Exception -> 0x4258 }
+    L_0x3fdc:
         r0 = r188;
-        r4 = r0.captionWidth;	 Catch:{ Exception -> 0x423e }
+        r4 = r0.captionWidth;	 Catch:{ Exception -> 0x4258 }
         r0 = r27;
-        if (r4 <= r0) goto L_0x3fd0;
-    L_0x3fca:
+        if (r4 <= r0) goto L_0x3fea;
+    L_0x3fe4:
         r0 = r27;
         r1 = r188;
-        r1.captionWidth = r0;	 Catch:{ Exception -> 0x423e }
-    L_0x3fd0:
+        r1.captionWidth = r0;	 Catch:{ Exception -> 0x4258 }
+    L_0x3fea:
         r0 = r188;
-        r4 = r0.captionLayout;	 Catch:{ Exception -> 0x423e }
-        r4 = r4.getHeight();	 Catch:{ Exception -> 0x423e }
+        r4 = r0.captionLayout;	 Catch:{ Exception -> 0x4258 }
+        r4 = r4.getHeight();	 Catch:{ Exception -> 0x4258 }
         r0 = r188;
-        r0.captionHeight = r4;	 Catch:{ Exception -> 0x423e }
+        r0.captionHeight = r4;	 Catch:{ Exception -> 0x4258 }
         r0 = r188;
-        r4 = r0.captionHeight;	 Catch:{ Exception -> 0x423e }
+        r4 = r0.captionHeight;	 Catch:{ Exception -> 0x4258 }
         r6 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x423e }
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x4258 }
         r4 = r4 + r6;
         r0 = r188;
-        r0.addedCaptionHeight = r4;	 Catch:{ Exception -> 0x423e }
+        r0.addedCaptionHeight = r4;	 Catch:{ Exception -> 0x4258 }
         r0 = r188;
-        r4 = r0.currentPosition;	 Catch:{ Exception -> 0x423e }
-        if (r4 == 0) goto L_0x3ffb;
-    L_0x3ff1:
+        r4 = r0.currentPosition;	 Catch:{ Exception -> 0x4258 }
+        if (r4 == 0) goto L_0x4015;
+    L_0x400b:
         r0 = r188;
-        r4 = r0.currentPosition;	 Catch:{ Exception -> 0x423e }
-        r4 = r4.flags;	 Catch:{ Exception -> 0x423e }
+        r4 = r0.currentPosition;	 Catch:{ Exception -> 0x4258 }
+        r4 = r4.flags;	 Catch:{ Exception -> 0x4258 }
         r4 = r4 & 8;
-        if (r4 == 0) goto L_0x4250;
-    L_0x3ffb:
+        if (r4 == 0) goto L_0x426a;
+    L_0x4015:
         r0 = r188;
-        r4 = r0.addedCaptionHeight;	 Catch:{ Exception -> 0x423e }
+        r4 = r0.addedCaptionHeight;	 Catch:{ Exception -> 0x4258 }
         r58 = r58 + r4;
         r0 = r188;
-        r4 = r0.captionWidth;	 Catch:{ Exception -> 0x423e }
+        r4 = r0.captionWidth;	 Catch:{ Exception -> 0x4258 }
         r6 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x423e }
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x4258 }
         r6 = r142 - r6;
-        r185 = java.lang.Math.max(r4, r6);	 Catch:{ Exception -> 0x423e }
+        r185 = java.lang.Math.max(r4, r6);	 Catch:{ Exception -> 0x4258 }
         r0 = r188;
-        r4 = r0.captionLayout;	 Catch:{ Exception -> 0x423e }
+        r4 = r0.captionLayout;	 Catch:{ Exception -> 0x4258 }
         r0 = r188;
-        r6 = r0.captionLayout;	 Catch:{ Exception -> 0x423e }
-        r6 = r6.getLineCount();	 Catch:{ Exception -> 0x423e }
+        r6 = r0.captionLayout;	 Catch:{ Exception -> 0x4258 }
+        r6 = r6.getLineCount();	 Catch:{ Exception -> 0x4258 }
         r6 = r6 + -1;
-        r4 = r4.getLineWidth(r6);	 Catch:{ Exception -> 0x423e }
+        r4 = r4.getLineWidth(r6);	 Catch:{ Exception -> 0x4258 }
         r0 = r188;
-        r6 = r0.captionLayout;	 Catch:{ Exception -> 0x423e }
+        r6 = r0.captionLayout;	 Catch:{ Exception -> 0x4258 }
         r0 = r188;
-        r8 = r0.captionLayout;	 Catch:{ Exception -> 0x423e }
-        r8 = r8.getLineCount();	 Catch:{ Exception -> 0x423e }
+        r8 = r0.captionLayout;	 Catch:{ Exception -> 0x4258 }
+        r8 = r8.getLineCount();	 Catch:{ Exception -> 0x4258 }
         r8 = r8 + -1;
-        r6 = r6.getLineLeft(r8);	 Catch:{ Exception -> 0x423e }
+        r6 = r6.getLineLeft(r8);	 Catch:{ Exception -> 0x4258 }
         r108 = r4 + r6;
         r4 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x423e }
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x4258 }
         r4 = r4 + r185;
-        r4 = (float) r4;	 Catch:{ Exception -> 0x423e }
+        r4 = (float) r4;	 Catch:{ Exception -> 0x4258 }
         r4 = r4 - r108;
         r0 = r172;
-        r6 = (float) r0;	 Catch:{ Exception -> 0x423e }
+        r6 = (float) r0;	 Catch:{ Exception -> 0x4258 }
         r4 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1));
-        if (r4 >= 0) goto L_0x4062;
-    L_0x4049:
+        if (r4 >= 0) goto L_0x407c;
+    L_0x4063:
         r4 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x423e }
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x4258 }
         r58 = r58 + r4;
         r0 = r188;
-        r4 = r0.addedCaptionHeight;	 Catch:{ Exception -> 0x423e }
+        r4 = r0.addedCaptionHeight;	 Catch:{ Exception -> 0x4258 }
         r6 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x423e }
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x4258 }
         r4 = r4 + r6;
         r0 = r188;
-        r0.addedCaptionHeight = r4;	 Catch:{ Exception -> 0x423e }
+        r0.addedCaptionHeight = r4;	 Catch:{ Exception -> 0x4258 }
         r77 = 1;
-    L_0x4062:
-        if (r93 == 0) goto L_0x40a0;
-    L_0x4064:
+    L_0x407c:
+        if (r93 == 0) goto L_0x40ba;
+    L_0x407e:
         r0 = r188;
         r4 = r0.captionWidth;
         r6 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r4 = r4 + r6;
         r0 = r142;
-        if (r0 >= r4) goto L_0x40a0;
-    L_0x4073:
+        if (r0 >= r4) goto L_0x40ba;
+    L_0x408d:
         r0 = r188;
         r4 = r0.captionWidth;
         r6 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
@@ -11311,8 +11326,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0.backgroundWidth = r4;
         r0 = r188;
         r4 = r0.mediaBackground;
-        if (r4 != 0) goto L_0x40a0;
-    L_0x4091:
+        if (r4 != 0) goto L_0x40ba;
+    L_0x40ab:
         r0 = r188;
         r4 = r0.backgroundWidth;
         r6 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
@@ -11320,7 +11335,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = r4 + r6;
         r0 = r188;
         r0.backgroundWidth = r4;
-    L_0x40a0:
+    L_0x40ba:
         r4 = java.util.Locale.US;
         r6 = "%d_%d";
         r8 = 2;
@@ -11348,32 +11363,32 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0.currentPhotoFilter = r4;
         r0 = r189;
         r4 = r0.photoThumbs;
-        if (r4 == 0) goto L_0x40e1;
-    L_0x40d6:
+        if (r4 == 0) goto L_0x40fb;
+    L_0x40f0:
         r0 = r189;
         r4 = r0.photoThumbs;
         r4 = r4.size();
         r6 = 1;
-        if (r4 > r6) goto L_0x40f7;
-    L_0x40e1:
+        if (r4 > r6) goto L_0x4111;
+    L_0x40fb:
         r0 = r189;
         r4 = r0.type;
         r6 = 3;
-        if (r4 == r6) goto L_0x40f7;
-    L_0x40e8:
+        if (r4 == r6) goto L_0x4111;
+    L_0x4102:
         r0 = r189;
         r4 = r0.type;
         r6 = 8;
-        if (r4 == r6) goto L_0x40f7;
-    L_0x40f0:
+        if (r4 == r6) goto L_0x4111;
+    L_0x410a:
         r0 = r189;
         r4 = r0.type;
         r6 = 5;
-        if (r4 != r6) goto L_0x4135;
-    L_0x40f7:
+        if (r4 != r6) goto L_0x414f;
+    L_0x4111:
         r4 = r189.needDrawBluredPreview();
-        if (r4 == 0) goto L_0x4257;
-    L_0x40fd:
+        if (r4 == 0) goto L_0x4271;
+    L_0x4117:
         r4 = new java.lang.StringBuilder;
         r4.<init>();
         r0 = r188;
@@ -11394,66 +11409,66 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = r4.toString();
         r0 = r188;
         r0.currentPhotoFilterThumb = r4;
-    L_0x4135:
+    L_0x414f:
         r133 = 0;
         r0 = r189;
         r4 = r0.type;
         r6 = 3;
-        if (r4 == r6) goto L_0x414d;
-    L_0x413e:
+        if (r4 == r6) goto L_0x4167;
+    L_0x4158:
         r0 = r189;
         r4 = r0.type;
         r6 = 8;
-        if (r4 == r6) goto L_0x414d;
-    L_0x4146:
+        if (r4 == r6) goto L_0x4167;
+    L_0x4160:
         r0 = r189;
         r4 = r0.type;
         r6 = 5;
-        if (r4 != r6) goto L_0x414f;
-    L_0x414d:
+        if (r4 != r6) goto L_0x4169;
+    L_0x4167:
         r133 = 1;
-    L_0x414f:
+    L_0x4169:
         r0 = r188;
         r4 = r0.currentPhotoObject;
-        if (r4 == 0) goto L_0x4166;
-    L_0x4155:
-        if (r133 != 0) goto L_0x4166;
-    L_0x4157:
+        if (r4 == 0) goto L_0x4180;
+    L_0x416f:
+        if (r133 != 0) goto L_0x4180;
+    L_0x4171:
         r0 = r188;
         r4 = r0.currentPhotoObject;
         r4 = r4.size;
-        if (r4 != 0) goto L_0x4166;
-    L_0x415f:
+        if (r4 != 0) goto L_0x4180;
+    L_0x4179:
         r0 = r188;
         r4 = r0.currentPhotoObject;
         r6 = -1;
         r4.size = r6;
-    L_0x4166:
+    L_0x4180:
         r0 = r188;
         r4 = r0.currentPhotoObjectThumb;
-        if (r4 == 0) goto L_0x417d;
-    L_0x416c:
-        if (r133 != 0) goto L_0x417d;
-    L_0x416e:
+        if (r4 == 0) goto L_0x4197;
+    L_0x4186:
+        if (r133 != 0) goto L_0x4197;
+    L_0x4188:
         r0 = r188;
         r4 = r0.currentPhotoObjectThumb;
         r4 = r4.size;
-        if (r4 != 0) goto L_0x417d;
-    L_0x4176:
+        if (r4 != 0) goto L_0x4197;
+    L_0x4190:
         r0 = r188;
         r4 = r0.currentPhotoObjectThumb;
         r6 = -1;
         r4.size = r6;
-    L_0x417d:
+    L_0x4197:
         r0 = r189;
         r4 = r0.type;
         r6 = 1;
-        if (r4 != r6) goto L_0x435d;
-    L_0x4184:
+        if (r4 != r6) goto L_0x4377;
+    L_0x419e:
         r0 = r189;
         r4 = r0.useCustomPhoto;
-        if (r4 == 0) goto L_0x4275;
-    L_0x418a:
+        if (r4 == 0) goto L_0x428f;
+    L_0x41a4:
         r0 = r188;
         r4 = r0.photoImage;
         r6 = r188.getResources();
@@ -11461,15 +11476,15 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r6 = r6.getDrawable(r8);
         r4.setImageBitmap(r6);
         goto L_0x2ec1;
-    L_0x419e:
+    L_0x41b8:
         r0 = r113;
         r4 = r0.caption;
         r0 = r188;
         r0.currentCaption = r4;
-    L_0x41a6:
+    L_0x41c0:
         r102 = r102 + 1;
-        goto L_0x3d91;
-    L_0x41aa:
+        goto L_0x3dab;
+    L_0x41c4:
         r141 = r97;
         r142 = r23;
         r0 = r189;
@@ -11477,29 +11492,29 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0 = r188;
         r0.currentCaption = r4;
         r4 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r4 == 0) goto L_0x4201;
-    L_0x41bc:
+        if (r4 == 0) goto L_0x421b;
+    L_0x41d6:
         r4 = org.telegram.messenger.AndroidUtilities.getMinTabletSide();
         r4 = (float) r4;
         r6 = NUM; // 0x3var_ float:0.65 double:5.234532584E-315;
         r4 = r4 * r6;
         r0 = (int) r4;
         r126 = r0;
-    L_0x41c8:
+    L_0x41e2:
         r4 = r189.needDrawBluredPreview();
-        if (r4 != 0) goto L_0x4216;
-    L_0x41ce:
+        if (r4 != 0) goto L_0x4230;
+    L_0x41e8:
         r0 = r188;
         r4 = r0.currentCaption;
-        if (r4 == 0) goto L_0x4216;
-    L_0x41d4:
+        if (r4 == 0) goto L_0x4230;
+    L_0x41ee:
         r0 = r142;
         r1 = r126;
-        if (r0 >= r1) goto L_0x4216;
-    L_0x41da:
+        if (r0 >= r1) goto L_0x4230;
+    L_0x41f4:
         r27 = r126;
         r93 = 1;
-    L_0x41de:
+    L_0x41f8:
         r4 = NUM; // 0x41400000 float:12.0 double:5.408602553E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r4 = r4 + r142;
@@ -11507,8 +11522,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0.backgroundWidth = r4;
         r0 = r188;
         r4 = r0.mediaBackground;
-        if (r4 != 0) goto L_0x3f3a;
-    L_0x41f0:
+        if (r4 != 0) goto L_0x3var_;
+    L_0x420a:
         r0 = r188;
         r4 = r0.backgroundWidth;
         r6 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
@@ -11516,8 +11531,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = r4 + r6;
         r0 = r188;
         r0.backgroundWidth = r4;
-        goto L_0x3f3a;
-    L_0x4201:
+        goto L_0x3var_;
+    L_0x421b:
         r4 = org.telegram.messenger.AndroidUtilities.displaySize;
         r4 = r4.x;
         r6 = org.telegram.messenger.AndroidUtilities.displaySize;
@@ -11528,46 +11543,46 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = r4 * r6;
         r0 = (int) r4;
         r126 = r0;
-        goto L_0x41c8;
-    L_0x4216:
+        goto L_0x41e2;
+    L_0x4230:
         r4 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r27 = r142 - r4;
-        goto L_0x41de;
-    L_0x421f:
-        r44 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x423e }
+        goto L_0x41f8;
+    L_0x4239:
+        r44 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x4258 }
         r0 = r188;
-        r0 = r0.currentCaption;	 Catch:{ Exception -> 0x423e }
+        r0 = r0.currentCaption;	 Catch:{ Exception -> 0x4258 }
         r45 = r0;
-        r46 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint;	 Catch:{ Exception -> 0x423e }
-        r48 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x423e }
+        r46 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint;	 Catch:{ Exception -> 0x4258 }
+        r48 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x4258 }
         r49 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r50 = 0;
         r51 = 0;
         r47 = r27;
-        r44.<init>(r45, r46, r47, r48, r49, r50, r51);	 Catch:{ Exception -> 0x423e }
+        r44.<init>(r45, r46, r47, r48, r49, r50, r51);	 Catch:{ Exception -> 0x4258 }
         r0 = r44;
         r1 = r188;
-        r1.captionLayout = r0;	 Catch:{ Exception -> 0x423e }
-        goto L_0x3var_;
-    L_0x423e:
+        r1.captionLayout = r0;	 Catch:{ Exception -> 0x4258 }
+        goto L_0x3f8d;
+    L_0x4258:
         r90 = move-exception;
         org.telegram.messenger.FileLog.e(r90);
-        goto L_0x4062;
-    L_0x4244:
+        goto L_0x407c;
+    L_0x425e:
         r56 = r56 + 1;
-        goto L_0x3var_;
-    L_0x4248:
+        goto L_0x3fa0;
+    L_0x4262:
         r0 = r27;
         r1 = r188;
-        r1.captionWidth = r0;	 Catch:{ Exception -> 0x423e }
-        goto L_0x3fd0;
-    L_0x4250:
+        r1.captionWidth = r0;	 Catch:{ Exception -> 0x4258 }
+        goto L_0x3fea;
+    L_0x426a:
         r4 = 0;
         r0 = r188;
-        r0.captionLayout = r4;	 Catch:{ Exception -> 0x423e }
-        goto L_0x4062;
-    L_0x4257:
+        r0.captionLayout = r4;	 Catch:{ Exception -> 0x4258 }
+        goto L_0x407c;
+    L_0x4271:
         r4 = new java.lang.StringBuilder;
         r4.<init>();
         r0 = r188;
@@ -11578,43 +11593,43 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = r4.toString();
         r0 = r188;
         r0.currentPhotoFilterThumb = r4;
-        goto L_0x4135;
-    L_0x4275:
+        goto L_0x414f;
+    L_0x428f:
         r0 = r188;
         r4 = r0.currentPhotoObject;
-        if (r4 == 0) goto L_0x4351;
-    L_0x427b:
+        if (r4 == 0) goto L_0x436b;
+    L_0x4295:
         r140 = 1;
         r0 = r188;
         r4 = r0.currentPhotoObject;
         r91 = org.telegram.messenger.FileLoader.getAttachFileName(r4);
         r0 = r189;
         r4 = r0.mediaExists;
-        if (r4 == 0) goto L_0x42f7;
-    L_0x428b:
+        if (r4 == 0) goto L_0x4311;
+    L_0x42a5:
         r0 = r188;
         r4 = r0.currentAccount;
         r4 = org.telegram.messenger.DownloadController.getInstance(r4);
         r0 = r188;
         r4.removeLoadingFileObserver(r0);
-    L_0x4298:
-        if (r140 != 0) goto L_0x42bc;
-    L_0x429a:
+    L_0x42b2:
+        if (r140 != 0) goto L_0x42d6;
+    L_0x42b4:
         r0 = r188;
         r4 = r0.currentAccount;
         r4 = org.telegram.messenger.DownloadController.getInstance(r4);
         r0 = r188;
         r6 = r0.currentMessageObject;
         r4 = r4.canDownloadMedia(r6);
-        if (r4 != 0) goto L_0x42bc;
-    L_0x42ac:
+        if (r4 != 0) goto L_0x42d6;
+    L_0x42c6:
         r0 = r188;
         r4 = r0.currentAccount;
         r4 = org.telegram.messenger.FileLoader.getInstance(r4);
         r0 = r91;
         r4 = r4.isLoadingFile(r0);
-        if (r4 == 0) goto L_0x4306;
-    L_0x42bc:
+        if (r4 == 0) goto L_0x4320;
+    L_0x42d6:
         r0 = r188;
         r0 = r0.photoImage;
         r44 = r0;
@@ -11630,10 +11645,10 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0 = r188;
         r0 = r0.currentPhotoFilterThumb;
         r48 = r0;
-        if (r133 == 0) goto L_0x42fa;
-    L_0x42dc:
+        if (r133 == 0) goto L_0x4314;
+    L_0x42f6:
         r49 = 0;
-    L_0x42de:
+    L_0x42f8:
         r50 = 0;
         r0 = r188;
         r0 = r0.currentMessageObject;
@@ -11641,32 +11656,32 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0 = r188;
         r4 = r0.currentMessageObject;
         r4 = r4.shouldEncryptPhotoOrVideo();
-        if (r4 == 0) goto L_0x4303;
-    L_0x42f0:
+        if (r4 == 0) goto L_0x431d;
+    L_0x430a:
         r52 = 2;
-    L_0x42f2:
+    L_0x430c:
         r44.setImage(r45, r46, r47, r48, r49, r50, r51, r52);
         goto L_0x2ec1;
-    L_0x42f7:
+    L_0x4311:
         r140 = 0;
-        goto L_0x4298;
-    L_0x42fa:
+        goto L_0x42b2;
+    L_0x4314:
         r0 = r188;
         r4 = r0.currentPhotoObject;
         r0 = r4.size;
         r49 = r0;
-        goto L_0x42de;
-    L_0x4303:
+        goto L_0x42f8;
+    L_0x431d:
         r52 = 0;
-        goto L_0x42f2;
-    L_0x4306:
+        goto L_0x430c;
+    L_0x4320:
         r4 = 1;
         r0 = r188;
         r0.photoNotSet = r4;
         r0 = r188;
         r4 = r0.currentPhotoObjectThumb;
-        if (r4 == 0) goto L_0x4345;
-    L_0x4311:
+        if (r4 == 0) goto L_0x435f;
+    L_0x432b:
         r0 = r188;
         r0 = r0.photoImage;
         r44 = r0;
@@ -11686,40 +11701,40 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0 = r188;
         r4 = r0.currentMessageObject;
         r4 = r4.shouldEncryptPhotoOrVideo();
-        if (r4 == 0) goto L_0x4342;
-    L_0x433b:
+        if (r4 == 0) goto L_0x435c;
+    L_0x4355:
         r52 = 2;
-    L_0x433d:
+    L_0x4357:
         r44.setImage(r45, r46, r47, r48, r49, r50, r51, r52);
         goto L_0x2ec1;
-    L_0x4342:
+    L_0x435c:
         r52 = 0;
-        goto L_0x433d;
-    L_0x4345:
+        goto L_0x4357;
+    L_0x435f:
         r0 = r188;
         r6 = r0.photoImage;
         r4 = 0;
         r4 = (android.graphics.drawable.Drawable) r4;
         r6.setImageBitmap(r4);
         goto L_0x2ec1;
-    L_0x4351:
+    L_0x436b:
         r0 = r188;
         r6 = r0.photoImage;
         r4 = 0;
         r4 = (android.graphics.drawable.Drawable) r4;
         r6.setImageBitmap(r4);
         goto L_0x2ec1;
-    L_0x435d:
+    L_0x4377:
         r0 = r189;
         r4 = r0.type;
         r6 = 8;
-        if (r4 == r6) goto L_0x436c;
-    L_0x4365:
+        if (r4 == r6) goto L_0x4386;
+    L_0x437f:
         r0 = r189;
         r4 = r0.type;
         r6 = 5;
-        if (r4 != r6) goto L_0x448e;
-    L_0x436c:
+        if (r4 != r6) goto L_0x44a8;
+    L_0x4386:
         r0 = r189;
         r4 = r0.messageOwner;
         r4 = r4.media;
@@ -11728,59 +11743,59 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r112 = 0;
         r0 = r189;
         r4 = r0.attachPathExists;
-        if (r4 == 0) goto L_0x43ff;
-    L_0x4380:
+        if (r4 == 0) goto L_0x4419;
+    L_0x439a:
         r0 = r188;
         r4 = r0.currentAccount;
         r4 = org.telegram.messenger.DownloadController.getInstance(r4);
         r0 = r188;
         r4.removeLoadingFileObserver(r0);
         r112 = 1;
-    L_0x438f:
+    L_0x43a9:
         r67 = 0;
         r0 = r189;
         r4 = r0.messageOwner;
         r4 = r4.media;
         r4 = r4.document;
         r4 = org.telegram.messenger.MessageObject.isNewGifDocument(r4);
-        if (r4 == 0) goto L_0x4408;
-    L_0x439f:
+        if (r4 == 0) goto L_0x4422;
+    L_0x43b9:
         r0 = r188;
         r4 = r0.currentAccount;
         r4 = org.telegram.messenger.DownloadController.getInstance(r4);
         r0 = r188;
         r6 = r0.currentMessageObject;
         r67 = r4.canDownloadMedia(r6);
-    L_0x43af:
+    L_0x43c9:
         r4 = r189.isSending();
-        if (r4 != 0) goto L_0x445e;
-    L_0x43b5:
+        if (r4 != 0) goto L_0x4478;
+    L_0x43cf:
         r4 = r189.isEditing();
-        if (r4 != 0) goto L_0x445e;
-    L_0x43bb:
-        if (r112 != 0) goto L_0x43cf;
-    L_0x43bd:
+        if (r4 != 0) goto L_0x4478;
+    L_0x43d5:
+        if (r112 != 0) goto L_0x43e9;
+    L_0x43d7:
         r0 = r188;
         r4 = r0.currentAccount;
         r4 = org.telegram.messenger.FileLoader.getInstance(r4);
         r0 = r91;
         r4 = r4.isLoadingFile(r0);
-        if (r4 != 0) goto L_0x43cf;
-    L_0x43cd:
-        if (r67 == 0) goto L_0x445e;
-    L_0x43cf:
+        if (r4 != 0) goto L_0x43e9;
+    L_0x43e7:
+        if (r67 == 0) goto L_0x4478;
+    L_0x43e9:
         r4 = 1;
         r0 = r112;
-        if (r0 != r4) goto L_0x4429;
-    L_0x43d4:
+        if (r0 != r4) goto L_0x4443;
+    L_0x43ee:
         r0 = r188;
         r0 = r0.photoImage;
         r44 = r0;
         r4 = r189.isSendError();
-        if (r4 == 0) goto L_0x4420;
-    L_0x43e0:
+        if (r4 == 0) goto L_0x443a;
+    L_0x43fa:
         r45 = 0;
-    L_0x43e2:
+    L_0x43fc:
         r46 = 0;
         r47 = 0;
         r0 = r188;
@@ -11795,33 +11810,33 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r52 = r189;
         r44.setImage(r45, r46, r47, r48, r49, r50, r51, r52, r53);
         goto L_0x2ec1;
-    L_0x43ff:
+    L_0x4419:
         r0 = r189;
         r4 = r0.mediaExists;
-        if (r4 == 0) goto L_0x438f;
-    L_0x4405:
+        if (r4 == 0) goto L_0x43a9;
+    L_0x441f:
         r112 = 2;
-        goto L_0x438f;
-    L_0x4408:
+        goto L_0x43a9;
+    L_0x4422:
         r0 = r189;
         r4 = r0.type;
         r6 = 5;
-        if (r4 != r6) goto L_0x43af;
-    L_0x440f:
+        if (r4 != r6) goto L_0x43c9;
+    L_0x4429:
         r0 = r188;
         r4 = r0.currentAccount;
         r4 = org.telegram.messenger.DownloadController.getInstance(r4);
         r0 = r188;
         r6 = r0.currentMessageObject;
         r67 = r4.canDownloadMedia(r6);
-        goto L_0x43af;
-    L_0x4420:
+        goto L_0x43c9;
+    L_0x443a:
         r0 = r189;
         r4 = r0.messageOwner;
         r0 = r4.attachPath;
         r45 = r0;
-        goto L_0x43e2;
-    L_0x4429:
+        goto L_0x43fc;
+    L_0x4443:
         r0 = r188;
         r0 = r0.photoImage;
         r44 = r0;
@@ -11848,7 +11863,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r51 = r189;
         r44.setImage(r45, r46, r47, r48, r49, r50, r51, r52);
         goto L_0x2ec1;
-    L_0x445e:
+    L_0x4478:
         r4 = 1;
         r0 = r188;
         r0.photoNotSet = r4;
@@ -11873,7 +11888,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r51 = r189;
         r44.setImage(r45, r46, r47, r48, r49, r50, r51, r52);
         goto L_0x2ec1;
-    L_0x448e:
+    L_0x44a8:
         r0 = r188;
         r0 = r0.photoImage;
         r44 = r0;
@@ -11894,26 +11909,26 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0 = r188;
         r4 = r0.currentMessageObject;
         r4 = r4.shouldEncryptPhotoOrVideo();
-        if (r4 == 0) goto L_0x44c3;
-    L_0x44ba:
+        if (r4 == 0) goto L_0x44dd;
+    L_0x44d4:
         r52 = 2;
-    L_0x44bc:
+    L_0x44d6:
         r51 = r189;
         r44.setImage(r45, r46, r47, r48, r49, r50, r51, r52);
         goto L_0x2ec1;
-    L_0x44c3:
+    L_0x44dd:
         r52 = 0;
-        goto L_0x44bc;
-    L_0x44c6:
+        goto L_0x44d6;
+    L_0x44e0:
         r0 = r188;
         r4 = r0.drawNameLayout;
         if (r4 == 0) goto L_0x2ef4;
-    L_0x44cc:
+    L_0x44e6:
         r0 = r189;
         r4 = r0.messageOwner;
         r4 = r4.reply_to_msg_id;
         if (r4 != 0) goto L_0x2ef4;
-    L_0x44d4:
+    L_0x44ee:
         r0 = r188;
         r4 = r0.namesOffset;
         r6 = NUM; // 0x40e00000 float:7.0 double:5.37751863E-315;
@@ -11922,53 +11937,53 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0 = r188;
         r0.namesOffset = r4;
         goto L_0x2ef4;
-    L_0x44e5:
-        r44 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x4504 }
+    L_0x44ff:
+        r44 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x451e }
         r0 = r189;
-        r0 = r0.caption;	 Catch:{ Exception -> 0x4504 }
+        r0 = r0.caption;	 Catch:{ Exception -> 0x451e }
         r45 = r0;
-        r46 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint;	 Catch:{ Exception -> 0x4504 }
-        r48 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x4504 }
+        r46 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint;	 Catch:{ Exception -> 0x451e }
+        r48 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x451e }
         r49 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r50 = 0;
         r51 = 0;
         r47 = r27;
-        r44.<init>(r45, r46, r47, r48, r49, r50, r51);	 Catch:{ Exception -> 0x4504 }
+        r44.<init>(r45, r46, r47, r48, r49, r50, r51);	 Catch:{ Exception -> 0x451e }
         r0 = r44;
         r1 = r188;
-        r1.captionLayout = r0;	 Catch:{ Exception -> 0x4504 }
+        r1.captionLayout = r0;	 Catch:{ Exception -> 0x451e }
         goto L_0x137e;
-    L_0x4504:
+    L_0x451e:
         r90 = move-exception;
         org.telegram.messenger.FileLog.e(r90);
         goto L_0x137e;
-    L_0x450a:
+    L_0x4524:
         r4 = 0;
         goto L_0x13be;
-    L_0x450d:
+    L_0x4527:
         r90 = move-exception;
         org.telegram.messenger.FileLog.e(r90);
         goto L_0x1438;
-    L_0x4513:
+    L_0x452d:
         r4 = 0;
         goto L_0x14f2;
-    L_0x4516:
+    L_0x4530:
         r90 = move-exception;
         org.telegram.messenger.FileLog.e(r90);
         goto L_0x151c;
-    L_0x451c:
+    L_0x4536:
         r0 = r188;
-        r4 = r0.descriptionX;	 Catch:{ Exception -> 0x452d }
+        r4 = r0.descriptionX;	 Catch:{ Exception -> 0x4547 }
         r0 = r110;
         r6 = -r0;
-        r4 = java.lang.Math.max(r4, r6);	 Catch:{ Exception -> 0x452d }
+        r4 = java.lang.Math.max(r4, r6);	 Catch:{ Exception -> 0x4547 }
         r0 = r188;
-        r0.descriptionX = r4;	 Catch:{ Exception -> 0x452d }
+        r0.descriptionX = r4;	 Catch:{ Exception -> 0x4547 }
         goto L_0x15b2;
-    L_0x452d:
+    L_0x4547:
         r90 = move-exception;
         org.telegram.messenger.FileLog.e(r90);
-    L_0x4531:
+    L_0x454b:
         r0 = r188;
         r4 = r0.totalHeight;
         r6 = NUM; // 0x41880000 float:17.0 double:5.431915495E-315;
@@ -11976,8 +11991,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = r4 + r6;
         r0 = r188;
         r0.totalHeight = r4;
-        if (r77 == 0) goto L_0x4565;
-    L_0x4542:
+        if (r77 == 0) goto L_0x457f;
+    L_0x455c:
         r0 = r188;
         r4 = r0.totalHeight;
         r6 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
@@ -11987,8 +12002,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0.totalHeight = r4;
         r4 = 2;
         r0 = r77;
-        if (r0 != r4) goto L_0x4565;
-    L_0x4556:
+        if (r0 != r4) goto L_0x457f;
+    L_0x4570:
         r0 = r188;
         r4 = r0.captionHeight;
         r6 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
@@ -11996,12 +12011,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = r4 - r6;
         r0 = r188;
         r0.captionHeight = r4;
-    L_0x4565:
+    L_0x457f:
         r0 = r188;
         r4 = r0.botButtons;
         r4.clear();
-        if (r125 == 0) goto L_0x4581;
-    L_0x456e:
+        if (r125 == 0) goto L_0x459b;
+    L_0x4588:
         r0 = r188;
         r4 = r0.botButtonsByData;
         r4.clear();
@@ -12011,17 +12026,17 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = 0;
         r0 = r188;
         r0.botButtonsLayout = r4;
-    L_0x4581:
+    L_0x459b:
         r0 = r188;
         r4 = r0.currentPosition;
-        if (r4 != 0) goto L_0x48b6;
-    L_0x4587:
+        if (r4 != 0) goto L_0x48d0;
+    L_0x45a1:
         r0 = r189;
         r4 = r0.messageOwner;
         r4 = r4.reply_markup;
         r4 = r4 instanceof org.telegram.tgnet.TLRPC.TL_replyInlineMarkup;
-        if (r4 == 0) goto L_0x48b6;
-    L_0x4591:
+        if (r4 == 0) goto L_0x48d0;
+    L_0x45ab:
         r0 = r189;
         r4 = r0.messageOwner;
         r4 = r4.reply_markup;
@@ -12041,10 +12056,10 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r6 = r0.backgroundWidth;
         r0 = r188;
         r4 = r0.mediaBackground;
-        if (r4 == 0) goto L_0x4674;
-    L_0x45be:
+        if (r4 == 0) goto L_0x468e;
+    L_0x45d8:
         r4 = 0;
-    L_0x45bf:
+    L_0x45d9:
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r4 = r6 - r4;
         r0 = r188;
@@ -12054,29 +12069,29 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = r0.wantedBotKeyboardWidth;
         r0 = r188;
         r6 = r0.widthForButtons;
-        if (r4 <= r6) goto L_0x4612;
-    L_0x45d5:
+        if (r4 <= r6) goto L_0x462c;
+    L_0x45ef:
         r0 = r188;
         r4 = r0.isChat;
-        if (r4 == 0) goto L_0x4678;
-    L_0x45db:
+        if (r4 == 0) goto L_0x4692;
+    L_0x45f5:
         r4 = r189.needDrawAvatar();
-        if (r4 == 0) goto L_0x4678;
-    L_0x45e1:
+        if (r4 == 0) goto L_0x4692;
+    L_0x45fb:
         r4 = r189.isOutOwner();
-        if (r4 != 0) goto L_0x4678;
-    L_0x45e7:
+        if (r4 != 0) goto L_0x4692;
+    L_0x4601:
         r4 = NUM; // 0x42780000 float:62.0 double:5.5096253E-315;
-    L_0x45e9:
+    L_0x4603:
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r0 = -r4;
         r114 = r0;
         r4 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r4 == 0) goto L_0x467c;
-    L_0x45f6:
+        if (r4 == 0) goto L_0x4696;
+    L_0x4610:
         r4 = org.telegram.messenger.AndroidUtilities.getMinTabletSide();
         r114 = r114 + r4;
-    L_0x45fc:
+    L_0x4616:
         r0 = r188;
         r4 = r0.backgroundWidth;
         r0 = r189;
@@ -12086,7 +12101,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = java.lang.Math.max(r4, r6);
         r0 = r188;
         r0.widthForButtons = r4;
-    L_0x4612:
+    L_0x462c:
         r115 = 0;
         r136 = new java.util.HashMap;
         r0 = r188;
@@ -12095,35 +12110,35 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0.<init>(r4);
         r0 = r189;
         r4 = r0.botButtonsLayout;
-        if (r4 == 0) goto L_0x4693;
-    L_0x4625:
+        if (r4 == 0) goto L_0x46ad;
+    L_0x463f:
         r0 = r188;
         r4 = r0.botButtonsLayout;
-        if (r4 == 0) goto L_0x4693;
-    L_0x462b:
+        if (r4 == 0) goto L_0x46ad;
+    L_0x4645:
         r0 = r188;
         r4 = r0.botButtonsLayout;
         r0 = r189;
         r6 = r0.botButtonsLayout;
         r6 = r6.toString();
         r4 = r4.equals(r6);
-        if (r4 == 0) goto L_0x4693;
-    L_0x463d:
+        if (r4 == 0) goto L_0x46ad;
+    L_0x4657:
         r137 = new java.util.HashMap;
         r0 = r188;
         r4 = r0.botButtonsByPosition;
         r0 = r137;
         r0.<init>(r4);
-    L_0x4648:
+    L_0x4662:
         r0 = r188;
         r4 = r0.botButtonsByData;
         r4.clear();
         r56 = 0;
-    L_0x4651:
+    L_0x466b:
         r0 = r56;
         r1 = r157;
-        if (r0 >= r1) goto L_0x482b;
-    L_0x4657:
+        if (r0 >= r1) goto L_0x4845;
+    L_0x4671:
         r0 = r189;
         r4 = r0.messageOwner;
         r4 = r4.reply_markup;
@@ -12134,17 +12149,17 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0 = r155;
         r4 = r0.buttons;
         r75 = r4.size();
-        if (r75 != 0) goto L_0x46a8;
-    L_0x4671:
+        if (r75 != 0) goto L_0x46c2;
+    L_0x468b:
         r56 = r56 + 1;
-        goto L_0x4651;
-    L_0x4674:
+        goto L_0x466b;
+    L_0x468e:
         r4 = NUM; // 0x41100000 float:9.0 double:5.39306059E-315;
-        goto L_0x45bf;
-    L_0x4678:
+        goto L_0x45d9;
+    L_0x4692:
         r4 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
-        goto L_0x45e9;
-    L_0x467c:
+        goto L_0x4603;
+    L_0x4696:
         r4 = org.telegram.messenger.AndroidUtilities.displaySize;
         r4 = r4.x;
         r6 = org.telegram.messenger.AndroidUtilities.displaySize;
@@ -12154,21 +12169,21 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r4 = r4 - r6;
         r114 = r114 + r4;
-        goto L_0x45fc;
-    L_0x4693:
+        goto L_0x4616;
+    L_0x46ad:
         r0 = r189;
         r4 = r0.botButtonsLayout;
-        if (r4 == 0) goto L_0x46a5;
-    L_0x4699:
+        if (r4 == 0) goto L_0x46bf;
+    L_0x46b3:
         r0 = r189;
         r4 = r0.botButtonsLayout;
         r4 = r4.toString();
         r0 = r188;
         r0.botButtonsLayout = r4;
-    L_0x46a5:
+    L_0x46bf:
         r137 = 0;
-        goto L_0x4648;
-    L_0x46a8:
+        goto L_0x4662;
+    L_0x46c2:
         r0 = r188;
         r4 = r0.widthForButtons;
         r6 = NUM; // 0x40a00000 float:5.0 double:5.356796015E-315;
@@ -12181,13 +12196,13 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = r4 - r6;
         r74 = r4 / r75;
         r68 = 0;
-    L_0x46c1:
+    L_0x46db:
         r0 = r155;
         r4 = r0.buttons;
         r4 = r4.size();
         r0 = r68;
-        if (r0 >= r4) goto L_0x4671;
-    L_0x46cd:
+        if (r0 >= r4) goto L_0x468b;
+    L_0x46e7:
         r72 = new org.telegram.ui.Cells.ChatMessageCell$BotButton;
         r4 = 0;
         r0 = r72;
@@ -12212,15 +12227,15 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0 = r68;
         r4 = r4.append(r0);
         r145 = r4.toString();
-        if (r137 == 0) goto L_0x47e8;
-    L_0x4710:
+        if (r137 == 0) goto L_0x4802;
+    L_0x472a:
         r0 = r137;
         r1 = r145;
         r135 = r0.get(r1);
         r135 = (org.telegram.ui.Cells.ChatMessageCell.BotButton) r135;
-    L_0x471a:
-        if (r135 == 0) goto L_0x47f4;
-    L_0x471c:
+    L_0x4734:
+        if (r135 == 0) goto L_0x480e;
+    L_0x4736:
         r4 = r135.progressAlpha;
         r0 = r72;
         r0.progressAlpha = r4;
@@ -12230,7 +12245,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r8 = r135.lastUpdateTime;
         r0 = r72;
         r0.lastUpdateTime = r8;
-    L_0x4737:
+    L_0x4751:
         r0 = r188;
         r4 = r0.botButtonsByData;
         r0 = r107;
@@ -12264,19 +12279,19 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0.height = r4;
         r4 = r72.button;
         r4 = r4 instanceof org.telegram.tgnet.TLRPC.TL_keyboardButtonBuy;
-        if (r4 == 0) goto L_0x47ff;
-    L_0x478a:
+        if (r4 == 0) goto L_0x4819;
+    L_0x47a4:
         r0 = r189;
         r4 = r0.messageOwner;
         r4 = r4.media;
         r4 = r4.flags;
         r4 = r4 & 4;
-        if (r4 == 0) goto L_0x47ff;
-    L_0x4796:
+        if (r4 == 0) goto L_0x4819;
+    L_0x47b0:
         r4 = "PaymentReceipt";
-        r6 = NUM; // 0x7f0CLASSNAMEa7 float:1.8612646E38 double:1.05309824E-314;
+        r6 = NUM; // 0x7f0CLASSNAMEa9 float:1.861265E38 double:1.053098241E-314;
         r45 = org.telegram.messenger.LocaleController.getString(r4, r6);
-    L_0x47a0:
+    L_0x47ba:
         r44 = new android.text.StaticLayout;
         r46 = org.telegram.ui.ActionBar.Theme.chat_botButtonPaint;
         r4 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
@@ -12299,28 +12314,28 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = r4.size();
         r4 = r4 + -1;
         r0 = r68;
-        if (r0 != r4) goto L_0x47e4;
-    L_0x47d5:
+        if (r0 != r4) goto L_0x47fe;
+    L_0x47ef:
         r4 = r72.x;
         r6 = r72.width;
         r4 = r4 + r6;
         r0 = r115;
         r115 = java.lang.Math.max(r0, r4);
-    L_0x47e4:
+    L_0x47fe:
         r68 = r68 + 1;
-        goto L_0x46c1;
-    L_0x47e8:
+        goto L_0x46db;
+    L_0x4802:
         r0 = r136;
         r1 = r107;
         r135 = r0.get(r1);
         r135 = (org.telegram.ui.Cells.ChatMessageCell.BotButton) r135;
-        goto L_0x471a;
-    L_0x47f4:
+        goto L_0x4734;
+    L_0x480e:
         r8 = java.lang.System.currentTimeMillis();
         r0 = r72;
         r0.lastUpdateTime = r8;
-        goto L_0x4737;
-    L_0x47ff:
+        goto L_0x4751;
+    L_0x4819:
         r4 = r72.button;
         r4 = r4.text;
         r6 = org.telegram.ui.ActionBar.Theme.chat_botButtonPaint;
@@ -12337,20 +12352,20 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r8 = android.text.TextUtils.TruncateAt.END;
         r0 = r45;
         r45 = android.text.TextUtils.ellipsize(r0, r4, r6, r8);
-        goto L_0x47a0;
-    L_0x482b:
+        goto L_0x47ba;
+    L_0x4845:
         r0 = r115;
         r1 = r188;
         r1.widthForButtons = r0;
-    L_0x4831:
+    L_0x484b:
         r0 = r188;
         r4 = r0.drawPinnedBottom;
-        if (r4 == 0) goto L_0x48c2;
-    L_0x4837:
+        if (r4 == 0) goto L_0x48dc;
+    L_0x4851:
         r0 = r188;
         r4 = r0.drawPinnedTop;
-        if (r4 == 0) goto L_0x48c2;
-    L_0x483d:
+        if (r4 == 0) goto L_0x48dc;
+    L_0x4857:
         r0 = r188;
         r4 = r0.totalHeight;
         r6 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
@@ -12358,43 +12373,43 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = r4 - r6;
         r0 = r188;
         r0.totalHeight = r4;
-    L_0x484c:
+    L_0x4866:
         r0 = r189;
         r4 = r0.type;
         r6 = 13;
-        if (r4 != r6) goto L_0x486a;
-    L_0x4854:
+        if (r4 != r6) goto L_0x4884;
+    L_0x486e:
         r0 = r188;
         r4 = r0.totalHeight;
         r6 = NUM; // 0x428CLASSNAME float:70.0 double:5.51610112E-315;
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        if (r4 >= r6) goto L_0x486a;
-    L_0x4860:
+        if (r4 >= r6) goto L_0x4884;
+    L_0x487a:
         r4 = NUM; // 0x428CLASSNAME float:70.0 double:5.51610112E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r0 = r188;
         r0.totalHeight = r4;
-    L_0x486a:
+    L_0x4884:
         r0 = r188;
         r4 = r0.drawPhotoImage;
-        if (r4 != 0) goto L_0x487a;
-    L_0x4870:
+        if (r4 != 0) goto L_0x4894;
+    L_0x488a:
         r0 = r188;
         r6 = r0.photoImage;
         r4 = 0;
         r4 = (android.graphics.drawable.Drawable) r4;
         r6.setImageBitmap(r4);
-    L_0x487a:
+    L_0x4894:
         r0 = r188;
         r4 = r0.documentAttachType;
         r6 = 5;
-        if (r4 != r6) goto L_0x4926;
-    L_0x4881:
+        if (r4 != r6) goto L_0x4940;
+    L_0x489b:
         r0 = r188;
         r4 = r0.documentAttach;
         r4 = org.telegram.messenger.MessageObject.isDocumentHasThumb(r4);
-        if (r4 == 0) goto L_0x4904;
-    L_0x488b:
+        if (r4 == 0) goto L_0x491e;
+    L_0x48a5:
         r0 = r188;
         r4 = r0.documentAttach;
         r4 = r4.thumbs;
@@ -12405,34 +12420,34 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r0 = r168;
         r1 = r189;
         r4.setImageOverlay(r0, r1);
-    L_0x48a2:
+    L_0x48bc:
         r188.updateWaveform();
         r6 = 0;
-        if (r84 == 0) goto L_0x4931;
-    L_0x48a8:
+        if (r84 == 0) goto L_0x494b;
+    L_0x48c2:
         r0 = r189;
         r4 = r0.cancelEditing;
-        if (r4 != 0) goto L_0x4931;
-    L_0x48ae:
+        if (r4 != 0) goto L_0x494b;
+    L_0x48c8:
         r4 = 1;
-    L_0x48af:
+    L_0x48c9:
         r8 = 1;
         r0 = r188;
         r0.updateButtonState(r6, r4, r8);
         return;
-    L_0x48b6:
+    L_0x48d0:
         r4 = 0;
         r0 = r188;
         r0.substractBackgroundHeight = r4;
         r4 = 0;
         r0 = r188;
         r0.keyboardHeight = r4;
-        goto L_0x4831;
-    L_0x48c2:
+        goto L_0x484b;
+    L_0x48dc:
         r0 = r188;
         r4 = r0.drawPinnedBottom;
-        if (r4 == 0) goto L_0x48d9;
-    L_0x48c8:
+        if (r4 == 0) goto L_0x48f3;
+    L_0x48e2:
         r0 = r188;
         r4 = r0.totalHeight;
         r6 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
@@ -12440,25 +12455,25 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = r4 - r6;
         r0 = r188;
         r0.totalHeight = r4;
-        goto L_0x484c;
-    L_0x48d9:
+        goto L_0x4866;
+    L_0x48f3:
         r0 = r188;
         r4 = r0.drawPinnedTop;
-        if (r4 == 0) goto L_0x484c;
-    L_0x48df:
+        if (r4 == 0) goto L_0x4866;
+    L_0x48f9:
         r0 = r188;
         r4 = r0.pinnedBottom;
-        if (r4 == 0) goto L_0x484c;
-    L_0x48e5:
+        if (r4 == 0) goto L_0x4866;
+    L_0x48ff:
         r0 = r188;
         r4 = r0.currentPosition;
-        if (r4 == 0) goto L_0x484c;
-    L_0x48eb:
+        if (r4 == 0) goto L_0x4866;
+    L_0x4905:
         r0 = r188;
         r4 = r0.currentPosition;
         r4 = r4.siblingHeights;
-        if (r4 != 0) goto L_0x484c;
-    L_0x48f3:
+        if (r4 != 0) goto L_0x4866;
+    L_0x490d:
         r0 = r188;
         r4 = r0.totalHeight;
         r6 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
@@ -12466,57 +12481,57 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         r4 = r4 - r6;
         r0 = r188;
         r0.totalHeight = r4;
-        goto L_0x484c;
-    L_0x4904:
+        goto L_0x4866;
+    L_0x491e:
         r4 = 1;
         r0 = r189;
         r63 = r0.getArtworkUrl(r4);
         r4 = android.text.TextUtils.isEmpty(r63);
-        if (r4 != 0) goto L_0x491b;
-    L_0x4911:
+        if (r4 != 0) goto L_0x4935;
+    L_0x492b:
         r0 = r188;
         r4 = r0.radialProgress;
         r0 = r63;
         r4.setImageOverlay(r0);
-        goto L_0x48a2;
-    L_0x491b:
+        goto L_0x48bc;
+    L_0x4935:
         r0 = r188;
         r4 = r0.radialProgress;
         r6 = 0;
         r8 = 0;
         r4.setImageOverlay(r6, r8);
-        goto L_0x48a2;
-    L_0x4926:
+        goto L_0x48bc;
+    L_0x4940:
         r0 = r188;
         r4 = r0.radialProgress;
         r6 = 0;
         r8 = 0;
         r4.setImageOverlay(r6, r8);
-        goto L_0x48a2;
-    L_0x4931:
+        goto L_0x48bc;
+    L_0x494b:
         r4 = 0;
-        goto L_0x48af;
-    L_0x4934:
+        goto L_0x48c9;
+    L_0x494e:
         r90 = move-exception;
         goto L_0x0var_;
-    L_0x4937:
+    L_0x4951:
         r90 = move-exception;
         r13 = r153;
         goto L_0x0d85;
-    L_0x493c:
+    L_0x4956:
         r15 = r181;
         goto L_0x1CLASSNAME;
-    L_0x4940:
+    L_0x495a:
         r15 = r181;
         goto L_0x0fd0;
-    L_0x4944:
+    L_0x495e:
         r13 = r153;
         goto L_0x0e3d;
-    L_0x4948:
+    L_0x4962:
         r153 = r13;
         r11 = r111;
         goto L_0x0d9a;
-    L_0x494e:
+    L_0x4968:
         r11 = r111;
         goto L_0x0d9a;
         */

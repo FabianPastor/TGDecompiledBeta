@@ -12,6 +12,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build.VERSION;
+import android.os.Bundle;
 import android.provider.Settings.System;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,11 +42,12 @@ import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.NotificationsCheckCell;
-import org.telegram.ui.Cells.ProfileSearchCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
+import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextColorCell;
 import org.telegram.ui.Cells.TextSettingsCell;
+import org.telegram.ui.Cells.UserCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.LayoutHelper;
@@ -63,9 +65,9 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
     private int currentType;
     private EmptyTextProgressView emptyView;
     private ArrayList<NotificationException> exceptions;
+    private int exceptionsAddRow;
     private int exceptionsEndRow;
     private int exceptionsSection2Row;
-    private int exceptionsSectionRow;
     private int exceptionsStartRow;
     private int groupSection2Row;
     private RecyclerListView listView;
@@ -109,8 +111,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                     view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                     break;
                 case 2:
-                    view = new ProfileSearchCell(this.mContext);
-                    view.setPadding(AndroidUtilities.dp(6.0f), 0, AndroidUtilities.dp(6.0f), 0);
+                    view = new UserCell(this.mContext, 6, 0, false);
                     view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                     break;
                 case 3:
@@ -124,8 +125,12 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                     view = new TextSettingsCell(this.mContext);
                     view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                     break;
-                default:
+                case 6:
                     view = new NotificationsCheckCell(this.mContext);
+                    view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                    break;
+                default:
+                    view = new TextCell(this.mContext);
                     view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                     break;
             }
@@ -141,12 +146,8 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                     if (position == NotificationsCustomSettingsActivity.this.messageSectionRow) {
                         headerCell.setText(LocaleController.getString("SETTINGS", R.string.SETTINGS));
                         return;
-                    } else if (position == NotificationsCustomSettingsActivity.this.exceptionsSectionRow) {
-                        headerCell.setText(LocaleController.getString("NotificationsExceptions", R.string.NotificationsExceptions));
-                        return;
-                    } else {
-                        return;
                     }
+                    return;
                 case 1:
                     TextCheckCell checkCell = holder.itemView;
                     preferences = MessagesController.getNotificationsSettings(NotificationsCustomSettingsActivity.this.currentAccount);
@@ -163,7 +164,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                     }
                     return;
                 case 2:
-                    holder.itemView.setException((NotificationException) NotificationsCustomSettingsActivity.this.exceptions.get(position - NotificationsCustomSettingsActivity.this.exceptionsStartRow), null);
+                    holder.itemView.setException((NotificationException) NotificationsCustomSettingsActivity.this.exceptions.get(position - NotificationsCustomSettingsActivity.this.exceptionsStartRow), null, position != NotificationsCustomSettingsActivity.this.exceptionsEndRow + -1);
                     return;
                 case 3:
                     int color;
@@ -315,6 +316,14 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                     }
                     checkCell2.setTextAndValueAndCheck(text, builder, enabled, iconType, false);
                     return;
+                case 7:
+                    TextCell textCell2 = (TextCell) holder.itemView;
+                    textCell2.setColors("windowBackgroundWhiteBlueIcon", "windowBackgroundWhiteBlueButton");
+                    if (position == NotificationsCustomSettingsActivity.this.exceptionsAddRow) {
+                        textCell2.setTextAndIcon(LocaleController.getString("NotificationsAddAnException", R.string.NotificationsAddAnException), R.drawable.actions_addmember2, NotificationsCustomSettingsActivity.this.exceptionsStartRow != -1);
+                        return;
+                    }
+                    return;
                 default:
                     return;
             }
@@ -349,7 +358,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         }
 
         public int getItemViewType(int position) {
-            if (position == NotificationsCustomSettingsActivity.this.messageSectionRow || position == NotificationsCustomSettingsActivity.this.exceptionsSectionRow) {
+            if (position == NotificationsCustomSettingsActivity.this.messageSectionRow) {
                 return 0;
             }
             if (position == NotificationsCustomSettingsActivity.this.previewRow) {
@@ -366,6 +375,9 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
             }
             if (position == NotificationsCustomSettingsActivity.this.alertRow) {
                 return 6;
+            }
+            if (position == NotificationsCustomSettingsActivity.this.exceptionsAddRow) {
+                return 7;
             }
             return 5;
         }
@@ -756,14 +768,14 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         }
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = new ProfileSearchCell(this.mContext);
+            View view = new UserCell(this.mContext, 9, 0, false);
             view.setPadding(AndroidUtilities.dp(6.0f), 0, AndroidUtilities.dp(6.0f), 0);
             view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             return new Holder(view);
         }
 
         public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.itemView.setException((NotificationException) this.searchResult.get(position), (CharSequence) this.searchResultNames.get(position));
+            holder.itemView.setException((NotificationException) this.searchResult.get(position), (CharSequence) this.searchResultNames.get(position), position != this.searchResult.size() + -1);
         }
 
         public int getItemViewType(int i) {
@@ -868,7 +880,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         return this.fragmentView;
     }
 
-    final /* synthetic */ void lambda$createView$6$NotificationsCustomSettingsActivity(View view, int position, float x, float y) {
+    final /* synthetic */ void lambda$createView$8$NotificationsCustomSettingsActivity(View view, int position, float x, float y) {
         boolean enabled = false;
         if (getParentActivity() != null) {
             if (this.listView.getAdapter() == this.searchListViewAdapter || (position >= this.exceptionsStartRow && position < this.exceptionsEndRow)) {
@@ -888,12 +900,25 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 return;
             }
             SharedPreferences preferences;
-            if (position == this.alertRow) {
+            if (position == this.exceptionsAddRow) {
+                Bundle args = new Bundle();
+                args.putBoolean("onlySelect", true);
+                if (this.currentType == 0) {
+                    args.putInt("dialogsType", 2);
+                } else if (this.currentType == 2) {
+                    args.putInt("dialogsType", 5);
+                } else {
+                    args.putInt("dialogsType", 4);
+                }
+                DialogsActivity activity = new DialogsActivity(args);
+                activity.setDelegate(new NotificationsCustomSettingsActivity$$Lambda$3(this));
+                presentFragment(activity);
+            } else if (position == this.alertRow) {
                 enabled = NotificationsController.getInstance(this.currentAccount).isGlobalNotificationsEnabled(this.currentType);
                 NotificationsCheckCell checkCell = (NotificationsCheckCell) view;
                 ViewHolder holder = this.listView.findViewHolderForAdapterPosition(position);
                 if (enabled) {
-                    AlertsCreator.showCustomNotificationsDialog(this, 0, this.currentType, this.exceptions, this.currentAccount, new NotificationsCustomSettingsActivity$$Lambda$3(this, checkCell, holder, position));
+                    AlertsCreator.showCustomNotificationsDialog(this, 0, this.currentType, this.exceptions, this.currentAccount, new NotificationsCustomSettingsActivity$$Lambda$4(this, checkCell, holder, position));
                 } else {
                     NotificationsController.getInstance(this.currentAccount).setGlobalNotificationsEnabled(this.currentType, 0);
                     checkCell.setChecked(!enabled);
@@ -958,13 +983,13 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 }
             } else if (position == this.messageLedRow) {
                 if (view.isEnabled()) {
-                    showDialog(AlertsCreator.createColorSelectDialog(getParentActivity(), 0, this.currentType, new NotificationsCustomSettingsActivity$$Lambda$4(this, position)));
+                    showDialog(AlertsCreator.createColorSelectDialog(getParentActivity(), 0, this.currentType, new NotificationsCustomSettingsActivity$$Lambda$5(this, position)));
                 } else {
                     return;
                 }
             } else if (position == this.messagePopupNotificationRow) {
                 if (view.isEnabled()) {
-                    showDialog(AlertsCreator.createPopupSelectDialog(getParentActivity(), this.currentType, new NotificationsCustomSettingsActivity$$Lambda$5(this, position)));
+                    showDialog(AlertsCreator.createPopupSelectDialog(getParentActivity(), this.currentType, new NotificationsCustomSettingsActivity$$Lambda$6(this, position)));
                 } else {
                     return;
                 }
@@ -978,13 +1003,13 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                     } else {
                         key = "vibrate_channel";
                     }
-                    showDialog(AlertsCreator.createVibrationSelectDialog(getParentActivity(), 0, key, new NotificationsCustomSettingsActivity$$Lambda$6(this, position)));
+                    showDialog(AlertsCreator.createVibrationSelectDialog(getParentActivity(), 0, key, new NotificationsCustomSettingsActivity$$Lambda$7(this, position)));
                 } else {
                     return;
                 }
             } else if (position == this.messagePriorityRow) {
                 if (view.isEnabled()) {
-                    showDialog(AlertsCreator.createPrioritySelectDialog(getParentActivity(), 0, this.currentType, new NotificationsCustomSettingsActivity$$Lambda$7(this, position)));
+                    showDialog(AlertsCreator.createPrioritySelectDialog(getParentActivity(), 0, this.currentType, new NotificationsCustomSettingsActivity$$Lambda$8(this, position)));
                 } else {
                     return;
                 }
@@ -1011,14 +1036,10 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 }
             }
             arrayList.remove(exception);
-            if (arrayList.isEmpty() && arrayList == this.exceptions) {
-                this.listView.getAdapter().notifyItemRemoved(this.exceptionsSection2Row);
-                this.listView.getAdapter().notifyItemChanged(this.groupSection2Row);
+            if (this.exceptionsAddRow != -1 && arrayList.isEmpty() && arrayList == this.exceptions) {
+                this.listView.getAdapter().notifyItemChanged(this.exceptionsAddRow);
             }
             this.listView.getAdapter().notifyItemRemoved(position);
-            if (arrayList.isEmpty() && arrayList == this.exceptions) {
-                this.listView.getAdapter().notifyItemRemoved(this.exceptionsSectionRow);
-            }
             updateRows();
             checkRowsEnabled();
             return;
@@ -1035,7 +1056,21 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         this.listView.getAdapter().notifyItemChanged(position);
     }
 
-    final /* synthetic */ void lambda$null$1$NotificationsCustomSettingsActivity(NotificationsCheckCell checkCell, ViewHolder holder, int position, int param) {
+    final /* synthetic */ void lambda$null$2$NotificationsCustomSettingsActivity(DialogsActivity fragment, ArrayList dids, CharSequence message, boolean param) {
+        Bundle args2 = new Bundle();
+        args2.putLong("dialog_id", ((Long) dids.get(0)).longValue());
+        args2.putBoolean("exception", true);
+        ProfileNotificationsActivity profileNotificationsActivity = new ProfileNotificationsActivity(args2);
+        profileNotificationsActivity.setDelegate(new NotificationsCustomSettingsActivity$$Lambda$9(this));
+        presentFragment(profileNotificationsActivity, true);
+    }
+
+    final /* synthetic */ void lambda$null$1$NotificationsCustomSettingsActivity(NotificationException exception) {
+        this.exceptions.add(0, exception);
+        updateRows();
+    }
+
+    final /* synthetic */ void lambda$null$3$NotificationsCustomSettingsActivity(NotificationsCheckCell checkCell, ViewHolder holder, int position, int param) {
         int offUntil;
         int iconType;
         SharedPreferences preferences = MessagesController.getNotificationsSettings(this.currentAccount);
@@ -1061,20 +1096,6 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         checkRowsEnabled();
     }
 
-    final /* synthetic */ void lambda$null$2$NotificationsCustomSettingsActivity(int position) {
-        ViewHolder holder = this.listView.findViewHolderForAdapterPosition(position);
-        if (holder != null) {
-            this.adapter.onBindViewHolder(holder, position);
-        }
-    }
-
-    final /* synthetic */ void lambda$null$3$NotificationsCustomSettingsActivity(int position) {
-        ViewHolder holder = this.listView.findViewHolderForAdapterPosition(position);
-        if (holder != null) {
-            this.adapter.onBindViewHolder(holder, position);
-        }
-    }
-
     final /* synthetic */ void lambda$null$4$NotificationsCustomSettingsActivity(int position) {
         ViewHolder holder = this.listView.findViewHolderForAdapterPosition(position);
         if (holder != null) {
@@ -1083,6 +1104,20 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
     }
 
     final /* synthetic */ void lambda$null$5$NotificationsCustomSettingsActivity(int position) {
+        ViewHolder holder = this.listView.findViewHolderForAdapterPosition(position);
+        if (holder != null) {
+            this.adapter.onBindViewHolder(holder, position);
+        }
+    }
+
+    final /* synthetic */ void lambda$null$6$NotificationsCustomSettingsActivity(int position) {
+        ViewHolder holder = this.listView.findViewHolderForAdapterPosition(position);
+        if (holder != null) {
+            this.adapter.onBindViewHolder(holder, position);
+        }
+    }
+
+    final /* synthetic */ void lambda$null$7$NotificationsCustomSettingsActivity(int position) {
         ViewHolder holder = this.listView.findViewHolderForAdapterPosition(position);
         if (holder != null) {
             this.adapter.onBindViewHolder(holder, position);
@@ -1178,6 +1213,9 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
             i = this.rowCount;
             this.rowCount = i + 1;
             this.groupSection2Row = i;
+            i = this.rowCount;
+            this.rowCount = i + 1;
+            this.exceptionsAddRow = i;
         } else {
             this.alertRow = -1;
             this.alertSection2Row = -1;
@@ -1189,24 +1227,20 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
             this.messageSoundRow = -1;
             this.messagePriorityRow = -1;
             this.groupSection2Row = -1;
+            this.exceptionsAddRow = -1;
         }
         if (this.exceptions == null || this.exceptions.isEmpty()) {
-            this.exceptionsSectionRow = -1;
             this.exceptionsStartRow = -1;
             this.exceptionsEndRow = -1;
+        } else {
+            this.exceptionsStartRow = this.rowCount;
+            this.rowCount += this.exceptions.size();
+            this.exceptionsEndRow = this.rowCount;
+        }
+        if (this.currentType == -1 && (this.exceptions == null || this.exceptions.isEmpty())) {
             this.exceptionsSection2Row = -1;
             return;
         }
-        if (this.currentType != -1) {
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.exceptionsSectionRow = i;
-        } else {
-            this.exceptionsSectionRow = -1;
-        }
-        this.exceptionsStartRow = this.rowCount;
-        this.rowCount += this.exceptions.size();
-        this.exceptionsEndRow = this.rowCount;
         i = this.rowCount;
         this.rowCount = i + 1;
         this.exceptionsSection2Row = i;
@@ -1271,8 +1305,8 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
 
     public ThemeDescription[] getThemeDescriptions() {
         ThemeDescriptionDelegate cellDelegate = new NotificationsCustomSettingsActivity$$Lambda$1(this);
-        r10 = new ThemeDescription[27];
-        r10[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{HeaderCell.class, TextCheckCell.class, TextColorCell.class, TextSettingsCell.class, ProfileSearchCell.class, NotificationsCheckCell.class}, null, null, null, "windowBackgroundWhite");
+        r10 = new ThemeDescription[36];
+        r10[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{HeaderCell.class, TextCheckCell.class, TextColorCell.class, TextSettingsCell.class, UserCell.class, NotificationsCheckCell.class}, null, null, null, "windowBackgroundWhite");
         r10[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundGray");
         r10[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault");
         r10[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault");
@@ -1286,29 +1320,38 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         r10[11] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"valueTextView"}, null, null, null, "windowBackgroundWhiteGrayText2");
         r10[12] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, null, null, null, "switchTrack");
         r10[13] = new ThemeDescription(this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, null, null, null, "switchTrackChecked");
-        r10[14] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, Theme.dialogs_namePaint, null, cellDelegate, "chats_name");
-        r10[15] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, Theme.dialogs_nameEncryptedPaint, null, cellDelegate, "chats_secretName");
-        r10[16] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Drawable[]{Theme.dialogs_lockDrawable}, cellDelegate, "chats_secretIcon");
-        r10[17] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Drawable[]{Theme.dialogs_groupDrawable, Theme.dialogs_broadcastDrawable, Theme.dialogs_botDrawable}, cellDelegate, "chats_nameIcon");
-        r10[18] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, Theme.dialogs_offlinePaint, null, cellDelegate, "windowBackgroundWhiteGrayText3");
-        r10[19] = new ThemeDescription(this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
-        r10[20] = new ThemeDescription(this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"valueTextView"}, null, null, null, "windowBackgroundWhiteGrayText2");
-        r10[21] = new ThemeDescription(this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, null, null, null, "switchTrack");
-        r10[22] = new ThemeDescription(this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, null, null, null, "switchTrackChecked");
-        r10[23] = new ThemeDescription(this.listView, 0, new Class[]{TextColorCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
-        r10[24] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
-        r10[25] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, "windowBackgroundWhiteValueText");
-        r10[26] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, "windowBackgroundGrayShadow");
+        r10[14] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"imageView"}, null, null, null, "windowBackgroundWhiteGrayIcon");
+        r10[15] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, null, null, null, "windowBackgroundWhiteBlackText");
+        r10[16] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, null, null, cellDelegate, "windowBackgroundWhiteGrayText");
+        r10[17] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusOnlineColor"}, null, null, cellDelegate, "windowBackgroundWhiteBlueText");
+        r10[18] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, "avatar_text");
+        r10[19] = new ThemeDescription(null, 0, null, null, null, cellDelegate, "avatar_backgroundRed");
+        r10[20] = new ThemeDescription(null, 0, null, null, null, cellDelegate, "avatar_backgroundOrange");
+        r10[21] = new ThemeDescription(null, 0, null, null, null, cellDelegate, "avatar_backgroundViolet");
+        r10[22] = new ThemeDescription(null, 0, null, null, null, cellDelegate, "avatar_backgroundGreen");
+        r10[23] = new ThemeDescription(null, 0, null, null, null, cellDelegate, "avatar_backgroundCyan");
+        r10[24] = new ThemeDescription(null, 0, null, null, null, cellDelegate, "avatar_backgroundBlue");
+        r10[25] = new ThemeDescription(null, 0, null, null, null, cellDelegate, "avatar_backgroundPink");
+        r10[26] = new ThemeDescription(this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
+        r10[27] = new ThemeDescription(this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"valueTextView"}, null, null, null, "windowBackgroundWhiteGrayText2");
+        r10[28] = new ThemeDescription(this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, null, null, null, "switchTrack");
+        r10[29] = new ThemeDescription(this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, null, null, null, "switchTrackChecked");
+        r10[30] = new ThemeDescription(this.listView, 0, new Class[]{TextColorCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
+        r10[31] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
+        r10[32] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, "windowBackgroundWhiteValueText");
+        r10[33] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, "windowBackgroundGrayShadow");
+        r10[34] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlueButton");
+        r10[35] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKTAG, new Class[]{TextCell.class}, new String[]{"imageView"}, null, null, null, "windowBackgroundWhiteBlueIcon");
         return r10;
     }
 
-    final /* synthetic */ void lambda$getThemeDescriptions$7$NotificationsCustomSettingsActivity() {
+    final /* synthetic */ void lambda$getThemeDescriptions$9$NotificationsCustomSettingsActivity() {
         if (this.listView != null) {
             int count = this.listView.getChildCount();
             for (int a = 0; a < count; a++) {
                 View child = this.listView.getChildAt(a);
-                if (child instanceof ProfileSearchCell) {
-                    ((ProfileSearchCell) child).update(0);
+                if (child instanceof UserCell) {
+                    ((UserCell) child).update(0);
                 }
             }
         }

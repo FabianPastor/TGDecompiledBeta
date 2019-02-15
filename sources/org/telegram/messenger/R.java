@@ -2281,6 +2281,7 @@ public final class R {
         public static final int NotificationMessagesPeopleDisplayOrder = NUM;
         public static final int NotificationUnrecognizedDevice = NUM;
         public static final int Notifications = NUM;
+        public static final int NotificationsAddAnException = NUM;
         public static final int NotificationsAndSounds = NUM;
         public static final int NotificationsChannels = NUM;
         public static final int NotificationsCustom = NUM;
@@ -2301,6 +2302,7 @@ public final class R {
         public static final int NotificationsLedColor = NUM;
         public static final int NotificationsLedInfo = NUM;
         public static final int NotificationsMuted = NUM;
+        public static final int NotificationsNewException = NUM;
         public static final int NotificationsOff = NUM;
         public static final int NotificationsOffUntil = NUM;
         public static final int NotificationsOn = NUM;

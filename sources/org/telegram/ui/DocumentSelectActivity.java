@@ -618,7 +618,7 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:70:0x029b  */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x031c A:{Splitter: B:11:0x0094, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x031c A:{ExcHandler: all (th java.lang.Throwable), Splitter: B:11:0x0094} */
     /* JADX WARNING: Removed duplicated region for block: B:64:0x0223 A:{Catch:{ Exception -> 0x033e }} */
     /* JADX WARNING: Removed duplicated region for block: B:70:0x029b  */
     /* JADX WARNING: Removed duplicated region for block: B:70:0x029b  */
@@ -672,7 +672,7 @@ public class DocumentSelectActivity extends BaseFragment {
         if (r21 == 0) goto L_0x02f5;
     L_0x004d:
         r21 = "SdCard";
-        r22 = NUM; // 0x7f0CLASSNAME float:1.8613102E38 double:1.053098351E-314;
+        r22 = NUM; // 0x7f0CLASSNAMEa float:1.8613106E38 double:1.053098352E-314;
         r21 = org.telegram.messenger.LocaleController.getString(r21, r22);
         r0 = r21;
         r8.title = r0;
@@ -810,7 +810,7 @@ public class DocumentSelectActivity extends BaseFragment {
         if (r21 == 0) goto L_0x030c;
     L_0x0182:
         r21 = "SdCard";
-        r22 = NUM; // 0x7f0CLASSNAME float:1.8613102E38 double:1.053098351E-314;
+        r22 = NUM; // 0x7f0CLASSNAMEa float:1.8613106E38 double:1.053098352E-314;
         r21 = org.telegram.messenger.LocaleController.getString(r21, r22);	 Catch:{ Exception -> 0x01bd, all -> 0x031c }
         r0 = r21;
         r13.title = r0;	 Catch:{ Exception -> 0x01bd, all -> 0x031c }
@@ -857,7 +857,7 @@ public class DocumentSelectActivity extends BaseFragment {
         r0 = r21;
         r9.title = r0;
         r21 = "SystemRoot";
-        r22 = NUM; // 0x7f0CLASSNAME float:1.8613508E38 double:1.05309845E-314;
+        r22 = NUM; // 0x7f0CLASSNAME float:1.8613512E38 double:1.053098451E-314;
         r21 = org.telegram.messenger.LocaleController.getString(r21, r22);
         r0 = r21;
         r9.subtitle = r0;

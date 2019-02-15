@@ -556,73 +556,40 @@ public class AndroidUtilities {
         return ret;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:9:0x0046 A:{SYNTHETIC, Splitter: B:9:0x0046} */
-    public static boolean isInternalUri(android.net.Uri r9) {
-        /*
-        r4 = 0;
-        r3 = r9.getPath();
-        if (r3 != 0) goto L_0x0008;
-    L_0x0007:
-        return r4;
-    L_0x0008:
-        r5 = new java.lang.StringBuilder;
-        r5.<init>();
-        r6 = new java.io.File;
-        r7 = org.telegram.messenger.ApplicationLoader.applicationContext;
-        r7 = r7.getCacheDir();
-        r8 = "voip_logs";
-        r6.<init>(r7, r8);
-        r6 = r6.getAbsolutePath();
-        r6 = java.util.regex.Pattern.quote(r6);
-        r5 = r5.append(r6);
-        r6 = "/\\d+\\.log";
-        r5 = r5.append(r6);
-        r5 = r5.toString();
-        r5 = r3.matches(r5);
-        if (r5 != 0) goto L_0x0007;
-    L_0x0038:
-        r1 = org.telegram.messenger.Utilities.readlink(r3);
-        if (r1 == 0) goto L_0x0044;
-    L_0x003e:
-        r5 = r1.equals(r3);
-        if (r5 == 0) goto L_0x007a;
-    L_0x0044:
-        if (r3 == 0) goto L_0x0052;
-    L_0x0046:
-        r5 = new java.io.File;	 Catch:{ Exception -> 0x007c }
-        r5.<init>(r3);	 Catch:{ Exception -> 0x007c }
-        r2 = r5.getCanonicalPath();	 Catch:{ Exception -> 0x007c }
-        if (r2 == 0) goto L_0x0052;
-    L_0x0051:
-        r3 = r2;
-    L_0x0052:
-        if (r3 == 0) goto L_0x0007;
-    L_0x0054:
-        r5 = r3.toLowerCase();
-        r6 = new java.lang.StringBuilder;
-        r6.<init>();
-        r7 = "/data/data/";
-        r6 = r6.append(r7);
-        r7 = org.telegram.messenger.ApplicationLoader.applicationContext;
-        r7 = r7.getPackageName();
-        r6 = r6.append(r7);
-        r6 = r6.toString();
-        r5 = r5.contains(r6);
-        if (r5 == 0) goto L_0x0007;
-    L_0x0078:
-        r4 = 1;
-        goto L_0x0007;
-    L_0x007a:
-        r3 = r1;
-        goto L_0x0038;
-    L_0x007c:
-        r0 = move-exception;
-        r5 = "/./";
-        r6 = "/";
-        r3.replace(r5, r6);
-        goto L_0x0052;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.isInternalUri(android.net.Uri):boolean");
+    public static boolean isInternalUri(Uri uri) {
+        String pathString = uri.getPath();
+        if (pathString == null) {
+            return false;
+        }
+        if (pathString.matches(Pattern.quote(new File(ApplicationLoader.applicationContext.getCacheDir(), "voip_logs").getAbsolutePath()) + "/\\d+\\.log")) {
+            return false;
+        }
+        int tries = 0;
+        do {
+            if (pathString != null && pathString.length() > 4096) {
+                return true;
+            }
+            String newPath = Utilities.readlink(pathString);
+            if (newPath == null || newPath.equals(pathString)) {
+                if (pathString != null) {
+                    try {
+                        String path = new File(pathString).getCanonicalPath();
+                        if (path != null) {
+                            pathString = path;
+                        }
+                    } catch (Exception e) {
+                        pathString.replace("/./", "/");
+                    }
+                }
+                if (pathString == null || !pathString.toLowerCase().contains("/data/data/" + ApplicationLoader.applicationContext.getPackageName())) {
+                    return false;
+                }
+                return true;
+            }
+            pathString = newPath;
+            tries++;
+        } while (tries < 10);
+        return true;
     }
 
     public static void lockOrientation(Activity activity) {
@@ -2597,7 +2564,7 @@ public class AndroidUtilities {
         if (hsb[2] > 0.5f) {
             hsb[2] = Math.max(0.0f, hsb[2] * 0.9f);
         } else {
-            hsb[2] = Math.max(0.0f, hsb[2] * 0.8f);
+            hsb[2] = Math.max(0.0f, hsb[2] * 0.9f);
         }
         return HSBtoRGB(hsb[0], hsb[1], hsb[2]) | -16777216;
     }

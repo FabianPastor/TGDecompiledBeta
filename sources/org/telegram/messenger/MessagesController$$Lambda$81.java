@@ -9,21 +9,21 @@ final /* synthetic */ class MessagesController$$Lambda$81 implements Runnable {
     private final messages_Dialogs arg$3;
     private final boolean arg$4;
     private final int arg$5;
-    private final int arg$6;
-    private final boolean arg$7;
+    private final ArrayList arg$6;
+    private final int arg$7;
     private final boolean arg$8;
-    private final ArrayList arg$9;
+    private final boolean arg$9;
 
-    MessagesController$$Lambda$81(MessagesController messagesController, int i, messages_Dialogs messages_dialogs, boolean z, int i2, int i3, boolean z2, boolean z3, ArrayList arrayList) {
+    MessagesController$$Lambda$81(MessagesController messagesController, int i, messages_Dialogs messages_dialogs, boolean z, int i2, ArrayList arrayList, int i3, boolean z2, boolean z3) {
         this.arg$1 = messagesController;
         this.arg$2 = i;
         this.arg$3 = messages_dialogs;
         this.arg$4 = z;
         this.arg$5 = i2;
-        this.arg$6 = i3;
-        this.arg$7 = z2;
-        this.arg$8 = z3;
-        this.arg$9 = arrayList;
+        this.arg$6 = arrayList;
+        this.arg$7 = i3;
+        this.arg$8 = z2;
+        this.arg$9 = z3;
     }
 
     public void run() {

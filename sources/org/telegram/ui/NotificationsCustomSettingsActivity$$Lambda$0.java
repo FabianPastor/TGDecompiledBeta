@@ -11,6 +11,6 @@ final /* synthetic */ class NotificationsCustomSettingsActivity$$Lambda$0 implem
     }
 
     public void onItemClick(View view, int i, float f, float f2) {
-        this.arg$1.lambda$createView$6$NotificationsCustomSettingsActivity(view, i, f, f2);
+        this.arg$1.lambda$createView$8$NotificationsCustomSettingsActivity(view, i, f, f2);
     }
 }
