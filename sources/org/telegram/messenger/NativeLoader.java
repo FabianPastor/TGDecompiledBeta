@@ -6,10 +6,10 @@ import com.google.devtools.build.android.desugar.runtime.ThrowableExtension;
 import java.io.File;
 
 public class NativeLoader {
-    private static final String LIB_NAME = "tmessages.29";
-    private static final String LIB_SO_NAME = "libtmessages.29.so";
-    private static final int LIB_VERSION = 29;
-    private static final String LOCALE_LIB_SO_NAME = "libtmessages.29loc.so";
+    private static final String LIB_NAME = "tmessages.30";
+    private static final String LIB_SO_NAME = "libtmessages.30.so";
+    private static final int LIB_VERSION = 30;
+    private static final String LOCALE_LIB_SO_NAME = "libtmessages.30loc.so";
     private static volatile boolean nativeLoaded = false;
     private String crashPath = "";
 
@@ -62,7 +62,7 @@ public class NativeLoader {
         r9 = r9.append(r15);	 Catch:{ Exception -> 0x0071, all -> 0x009d }
         r10 = "/";
         r9 = r9.append(r10);	 Catch:{ Exception -> 0x0071, all -> 0x009d }
-        r10 = "libtmessages.29.so";
+        r10 = "libtmessages.30.so";
         r9 = r9.append(r10);	 Catch:{ Exception -> 0x0071, all -> 0x009d }
         r9 = r9.toString();	 Catch:{ Exception -> 0x0071, all -> 0x009d }
         r2 = r8.getEntry(r9);	 Catch:{ Exception -> 0x0071, all -> 0x009d }
@@ -76,7 +76,7 @@ public class NativeLoader {
         r10 = r10.append(r15);	 Catch:{ Exception -> 0x0071, all -> 0x009d }
         r11 = "/";
         r10 = r10.append(r11);	 Catch:{ Exception -> 0x0071, all -> 0x009d }
-        r11 = "tmessages.29";
+        r11 = "tmessages.30";
         r10 = r10.append(r11);	 Catch:{ Exception -> 0x0071, all -> 0x009d }
         r10 = r10.toString();	 Catch:{ Exception -> 0x0071, all -> 0x009d }
         r9.<init>(r10);	 Catch:{ Exception -> 0x0071, all -> 0x009d }
@@ -204,7 +204,7 @@ public class NativeLoader {
         return;
     L_0x0009:
         net.hockeyapp.android.Constants.loadFromContext(r9);	 Catch:{ all -> 0x00b4 }
-        r6 = "tmessages.29";
+        r6 = "tmessages.30";
         java.lang.System.loadLibrary(r6);	 Catch:{ Error -> 0x0020 }
         r6 = 1;
         nativeLoaded = r6;	 Catch:{ Error -> 0x0020 }
@@ -241,7 +241,7 @@ public class NativeLoader {
         r0.<init>(r6, r8);	 Catch:{ Throwable -> 0x0132 }
         r0.mkdirs();	 Catch:{ Throwable -> 0x0132 }
         r1 = new java.io.File;	 Catch:{ Throwable -> 0x0132 }
-        r6 = "libtmessages.29loc.so";
+        r6 = "libtmessages.30loc.so";
         r1.<init>(r0, r6);	 Catch:{ Throwable -> 0x0132 }
         r6 = r1.exists();	 Catch:{ Throwable -> 0x0132 }
         if (r6 == 0) goto L_0x0082;
@@ -276,7 +276,7 @@ public class NativeLoader {
         r6 = loadFromZip(r9, r0, r1, r3);	 Catch:{ Throwable -> 0x0132 }
         if (r6 != 0) goto L_0x0007;
     L_0x00a3:
-        r6 = "tmessages.29";
+        r6 = "tmessages.30";
         java.lang.System.loadLibrary(r6);	 Catch:{ Error -> 0x00ae }
         r6 = 1;
         nativeLoaded = r6;	 Catch:{ Error -> 0x00ae }

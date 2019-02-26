@@ -395,7 +395,7 @@ public class PollCreateActivity extends BaseFragment {
                             TL_pollAnswer answer = new TL_pollAnswer();
                             answer.text = PollCreateActivity.this.getFixedString(PollCreateActivity.this.answers[a]);
                             answer.option = new byte[1];
-                            answer.option[0] = (byte) poll.poll.answers.size();
+                            answer.option[0] = (byte) (poll.poll.answers.size() + 48);
                             poll.poll.answers.add(answer);
                         }
                     }

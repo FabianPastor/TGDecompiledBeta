@@ -1,19 +1,20 @@
 package org.telegram.ui.Components;
 
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import org.telegram.tgnet.TLRPC.EncryptedChat;
+import android.view.View;
+import android.view.View.OnClickListener;
+import org.telegram.ui.ActionBar.AlertDialog.Builder;
 
 final /* synthetic */ class AlertsCreator$$Lambda$32 implements OnClickListener {
-    private final EncryptedChat arg$1;
-    private final NumberPicker arg$2;
+    private final Builder arg$1;
+    private final DialogInterface.OnClickListener arg$2;
 
-    AlertsCreator$$Lambda$32(EncryptedChat encryptedChat, NumberPicker numberPicker) {
-        this.arg$1 = encryptedChat;
-        this.arg$2 = numberPicker;
+    AlertsCreator$$Lambda$32(Builder builder, DialogInterface.OnClickListener onClickListener) {
+        this.arg$1 = builder;
+        this.arg$2 = onClickListener;
     }
 
-    public void onClick(DialogInterface dialogInterface, int i) {
-        AlertsCreator.lambda$createTTLAlert$33$AlertsCreator(this.arg$1, this.arg$2, dialogInterface, i);
+    public void onClick(View view) {
+        AlertsCreator.lambda$createSingleChoiceDialog$35$AlertsCreator(this.arg$1, this.arg$2, view);
     }
 }

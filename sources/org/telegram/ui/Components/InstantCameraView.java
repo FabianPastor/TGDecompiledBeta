@@ -2331,7 +2331,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         if (this.textureView != null) {
             stopProgressTimer();
             if (this.videoPlayer != null) {
-                this.videoPlayer.releasePlayer();
+                this.videoPlayer.releasePlayer(true);
                 this.videoPlayer = null;
             }
             if (state == 4) {
@@ -2416,7 +2416,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     public void cancel() {
         stopProgressTimer();
         if (this.videoPlayer != null) {
-            this.videoPlayer.releasePlayer();
+            this.videoPlayer.releasePlayer(true);
             this.videoPlayer = null;
         }
         if (this.textureView != null) {

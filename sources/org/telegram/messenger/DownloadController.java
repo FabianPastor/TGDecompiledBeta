@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
 import java.lang.ref.WeakReference;
@@ -13,45 +14,57 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.Message;
 import org.telegram.tgnet.TLRPC.Peer;
 import org.telegram.tgnet.TLRPC.PhotoSize;
+import org.telegram.tgnet.TLRPC.TL_account_autoDownloadSettings;
+import org.telegram.tgnet.TLRPC.TL_account_getAutoDownloadSettings;
+import org.telegram.tgnet.TLRPC.TL_account_saveAutoDownloadSettings;
+import org.telegram.tgnet.TLRPC.TL_autoDownloadSettings;
+import org.telegram.tgnet.TLRPC.TL_error;
 
 public class DownloadController implements NotificationCenterDelegate {
-    public static final int AUTODOWNLOAD_MASK_AUDIO = 2;
-    public static final int AUTODOWNLOAD_MASK_DOCUMENT = 8;
-    public static final int AUTODOWNLOAD_MASK_GIF = 32;
-    public static final int AUTODOWNLOAD_MASK_MUSIC = 16;
-    public static final int AUTODOWNLOAD_MASK_PHOTO = 1;
-    public static final int AUTODOWNLOAD_MASK_VIDEO = 4;
-    public static final int AUTODOWNLOAD_MASK_VIDEOMESSAGE = 64;
+    public static final int AUTODOWNLOAD_TYPE_AUDIO = 2;
+    public static final int AUTODOWNLOAD_TYPE_DOCUMENT = 8;
+    public static final int AUTODOWNLOAD_TYPE_PHOTO = 1;
+    public static final int AUTODOWNLOAD_TYPE_VIDEO = 4;
     private static volatile DownloadController[] Instance = new DownloadController[3];
+    public static final int PRESET_NUM_CHANNEL = 3;
+    public static final int PRESET_NUM_CONTACT = 0;
+    public static final int PRESET_NUM_GROUP = 2;
+    public static final int PRESET_NUM_PM = 1;
+    public static final int PRESET_SIZE_NUM_AUDIO = 3;
+    public static final int PRESET_SIZE_NUM_DOCUMENT = 2;
+    public static final int PRESET_SIZE_NUM_PHOTO = 0;
+    public static final int PRESET_SIZE_NUM_VIDEO = 1;
     private HashMap<String, FileDownloadProgressListener> addLaterArray = new HashMap();
     private ArrayList<DownloadObject> audioDownloadQueue = new ArrayList();
     private int currentAccount;
+    public int currentMobilePreset;
+    public int currentRoamingPreset;
+    public int currentWifiPreset;
     private ArrayList<FileDownloadProgressListener> deleteLaterArray = new ArrayList();
     private ArrayList<DownloadObject> documentDownloadQueue = new ArrayList();
     private HashMap<String, DownloadObject> downloadQueueKeys = new HashMap();
-    private ArrayList<DownloadObject> gifDownloadQueue = new ArrayList();
-    public boolean globalAutodownloadEnabled;
+    public Preset highPreset;
     private int lastCheckMask = 0;
     private int lastTag = 0;
     private boolean listenerInProgress = false;
+    private boolean loadingAutoDownloadConfig;
     private HashMap<String, ArrayList<MessageObject>> loadingFileMessagesObservers = new HashMap();
     private HashMap<String, ArrayList<WeakReference<FileDownloadProgressListener>>> loadingFileObservers = new HashMap();
-    public int[] mobileDataDownloadMask = new int[4];
-    public int[] mobileMaxFileSize = new int[7];
-    private ArrayList<DownloadObject> musicDownloadQueue = new ArrayList();
+    public Preset lowPreset;
+    public Preset mediumPreset;
+    public Preset mobilePreset;
     private SparseArray<String> observersByTag = new SparseArray();
     private ArrayList<DownloadObject> photoDownloadQueue = new ArrayList();
-    public int[] roamingDownloadMask = new int[4];
-    public int[] roamingMaxFileSize = new int[7];
+    public Preset roamingPreset;
     private LongSparseArray<Long> typingTimes = new LongSparseArray();
     private ArrayList<DownloadObject> videoDownloadQueue = new ArrayList();
-    private ArrayList<DownloadObject> videoMessageDownloadQueue = new ArrayList();
-    public int[] wifiDownloadMask = new int[4];
-    public int[] wifiMaxFileSize = new int[7];
+    public Preset wifiPreset;
 
     public interface FileDownloadProgressListener {
         int getObserverTag();
@@ -63,6 +76,136 @@ public class DownloadController implements NotificationCenterDelegate {
         void onProgressUpload(String str, float f, boolean z);
 
         void onSuccessDownload(String str);
+    }
+
+    public static class Preset {
+        public boolean enabled;
+        public boolean lessCallData;
+        public int[] mask;
+        public boolean preloadMusic;
+        public boolean preloadVideo;
+        public int[] sizes;
+
+        public Preset(int m, int p, int v, int f, boolean pv, boolean pm, boolean e, boolean l) {
+            this.mask = new int[4];
+            this.sizes = new int[4];
+            for (int a = 0; a < this.mask.length; a++) {
+                this.mask[a] = m;
+            }
+            this.sizes[0] = p;
+            this.sizes[1] = v;
+            this.sizes[2] = f;
+            this.sizes[3] = 524288;
+            this.preloadVideo = pv;
+            this.preloadMusic = pm;
+            this.lessCallData = l;
+            this.enabled = e;
+        }
+
+        public Preset(int[] m, int p, int v, int f, boolean pv, boolean pm, boolean e, boolean l) {
+            this.mask = new int[4];
+            this.sizes = new int[4];
+            System.arraycopy(m, 0, this.mask, 0, this.mask.length);
+            this.sizes[0] = p;
+            this.sizes[1] = v;
+            this.sizes[2] = f;
+            this.sizes[3] = 524288;
+            this.preloadVideo = pv;
+            this.preloadMusic = pm;
+            this.lessCallData = l;
+            this.enabled = e;
+        }
+
+        public Preset(String str) {
+            boolean z = true;
+            this.mask = new int[4];
+            this.sizes = new int[4];
+            String[] args = str.split("_");
+            if (args.length >= 11) {
+                boolean z2;
+                this.mask[0] = Utilities.parseInt(args[0]).intValue();
+                this.mask[1] = Utilities.parseInt(args[1]).intValue();
+                this.mask[2] = Utilities.parseInt(args[2]).intValue();
+                this.mask[3] = Utilities.parseInt(args[3]).intValue();
+                this.sizes[0] = Utilities.parseInt(args[4]).intValue();
+                this.sizes[1] = Utilities.parseInt(args[5]).intValue();
+                this.sizes[2] = Utilities.parseInt(args[6]).intValue();
+                this.sizes[3] = Utilities.parseInt(args[7]).intValue();
+                this.preloadVideo = Utilities.parseInt(args[8]).intValue() == 1;
+                if (Utilities.parseInt(args[9]).intValue() == 1) {
+                    z2 = true;
+                } else {
+                    z2 = false;
+                }
+                this.preloadMusic = z2;
+                if (Utilities.parseInt(args[10]).intValue() == 1) {
+                    z2 = true;
+                } else {
+                    z2 = false;
+                }
+                this.enabled = z2;
+                if (args.length >= 12) {
+                    if (Utilities.parseInt(args[11]).intValue() != 1) {
+                        z = false;
+                    }
+                    this.lessCallData = z;
+                }
+            }
+        }
+
+        public void set(Preset preset) {
+            System.arraycopy(preset.mask, 0, this.mask, 0, this.mask.length);
+            System.arraycopy(preset.sizes, 0, this.sizes, 0, this.sizes.length);
+            this.preloadVideo = preset.preloadVideo;
+            this.preloadMusic = preset.preloadMusic;
+            this.lessCallData = preset.lessCallData;
+        }
+
+        public void set(TL_autoDownloadSettings settings) {
+            this.preloadMusic = settings.audio_preload_next;
+            this.preloadVideo = settings.video_preload_large;
+            this.lessCallData = settings.phonecalls_less_data;
+            this.sizes[0] = Math.max(512000, settings.photo_size_max);
+            this.sizes[1] = Math.max(512000, settings.video_size_max);
+            this.sizes[2] = Math.max(512000, settings.file_size_max);
+            for (int a = 0; a < this.mask.length; a++) {
+                int[] iArr;
+                if (settings.photo_size_max == 0 || settings.disabled) {
+                    iArr = this.mask;
+                    iArr[a] = iArr[a] & -2;
+                } else {
+                    iArr = this.mask;
+                    iArr[a] = iArr[a] | 1;
+                }
+                if (settings.video_size_max == 0 || settings.disabled) {
+                    iArr = this.mask;
+                    iArr[a] = iArr[a] & -5;
+                } else {
+                    iArr = this.mask;
+                    iArr[a] = iArr[a] | 4;
+                }
+                if (settings.file_size_max == 0 || settings.disabled) {
+                    iArr = this.mask;
+                    iArr[a] = iArr[a] & -9;
+                } else {
+                    iArr = this.mask;
+                    iArr[a] = iArr[a] | 8;
+                }
+            }
+        }
+
+        public String toString() {
+            int i = 1;
+            StringBuilder append = new StringBuilder().append(this.mask[0]).append("_").append(this.mask[1]).append("_").append(this.mask[2]).append("_").append(this.mask[3]).append("_").append(this.sizes[0]).append("_").append(this.sizes[1]).append("_").append(this.sizes[2]).append("_").append(this.sizes[3]).append("_").append(this.preloadVideo ? 1 : 0).append("_").append(this.preloadMusic ? 1 : 0).append("_").append(this.enabled ? 1 : 0).append("_");
+            if (!this.lessCallData) {
+                i = 0;
+            }
+            return append.append(i).toString();
+        }
+
+        public boolean equals(Preset obj) {
+            return this.mask[0] == obj.mask[0] && this.mask[1] == obj.mask[1] && this.mask[2] == obj.mask[2] && this.mask[3] == obj.mask[3] && this.sizes[0] == obj.sizes[0] && this.sizes[1] == obj.sizes[1] && this.sizes[2] == obj.sizes[2] && this.sizes[3] == obj.sizes[3] && this.preloadVideo == obj.preloadVideo && this.preloadMusic == obj.preloadMusic;
+        }
     }
 
     public static DownloadController getInstance(int num) {
@@ -96,42 +239,71 @@ public class DownloadController implements NotificationCenterDelegate {
     public DownloadController(int instance) {
         this.currentAccount = instance;
         SharedPreferences preferences = MessagesController.getMainSettings(this.currentAccount);
-        int a = 0;
-        while (a < 4) {
-            String key = "mobileDataDownloadMask" + (a == 0 ? "" : Integer.valueOf(a));
-            if (a == 0 || preferences.contains(key)) {
-                Object obj;
-                this.mobileDataDownloadMask[a] = preferences.getInt(key, 115);
-                this.wifiDownloadMask[a] = preferences.getInt("wifiDownloadMask" + (a == 0 ? "" : Integer.valueOf(a)), 115);
-                int[] iArr = this.roamingDownloadMask;
-                StringBuilder append = new StringBuilder().append("roamingDownloadMask");
-                if (a == 0) {
-                    obj = "";
+        this.lowPreset = new Preset(preferences.getString("preset0", "1_1_1_1_1048576_512000_512000_524288_0_0_1_1"));
+        this.mediumPreset = new Preset(preferences.getString("preset1", "13_13_13_13_1048576_10485760_1048576_524288_1_1_1_0"));
+        this.highPreset = new Preset(preferences.getString("preset2", "13_13_13_13_1048576_15728640_3145728_524288_1_1_1_0"));
+        boolean newConfig = preferences.contains("newConfig") || !UserConfig.getInstance(this.currentAccount).isClientActivated();
+        if (newConfig) {
+            this.mobilePreset = new Preset(preferences.getString("mobilePreset", this.mediumPreset.toString()));
+            this.wifiPreset = new Preset(preferences.getString("wifiPreset", this.highPreset.toString()));
+            this.roamingPreset = new Preset(preferences.getString("roamingPreset", this.lowPreset.toString()));
+            this.currentMobilePreset = preferences.getInt("currentMobilePreset", 3);
+            this.currentWifiPreset = preferences.getInt("currentWifiPreset", 3);
+            this.currentRoamingPreset = preferences.getInt("currentRoamingPreset", 3);
+            if (!newConfig) {
+                preferences.edit().putBoolean("newConfig", true).commit();
+            }
+        } else {
+            int[] mobileDataDownloadMask = new int[4];
+            int[] wifiDownloadMask = new int[4];
+            int[] roamingDownloadMask = new int[4];
+            int[] mobileMaxFileSize = new int[7];
+            int[] wifiMaxFileSize = new int[7];
+            int[] roamingMaxFileSize = new int[7];
+            int a = 0;
+            while (a < 4) {
+                String key = "mobileDataDownloadMask" + (a == 0 ? "" : Integer.valueOf(a));
+                if (a == 0 || preferences.contains(key)) {
+                    Object obj;
+                    mobileDataDownloadMask[a] = preferences.getInt(key, 13);
+                    wifiDownloadMask[a] = preferences.getInt("wifiDownloadMask" + (a == 0 ? "" : Integer.valueOf(a)), 13);
+                    StringBuilder append = new StringBuilder().append("roamingDownloadMask");
+                    if (a == 0) {
+                        obj = "";
+                    } else {
+                        obj = Integer.valueOf(a);
+                    }
+                    roamingDownloadMask[a] = preferences.getInt(append.append(obj).toString(), 1);
                 } else {
-                    obj = Integer.valueOf(a);
+                    mobileDataDownloadMask[a] = mobileDataDownloadMask[0];
+                    wifiDownloadMask[a] = wifiDownloadMask[0];
+                    roamingDownloadMask[a] = roamingDownloadMask[0];
                 }
-                iArr[a] = preferences.getInt(append.append(obj).toString(), 0);
-            } else {
-                this.mobileDataDownloadMask[a] = this.mobileDataDownloadMask[0];
-                this.wifiDownloadMask[a] = this.wifiDownloadMask[0];
-                this.roamingDownloadMask[a] = this.roamingDownloadMask[0];
+                a++;
             }
-            a++;
+            mobileMaxFileSize[2] = preferences.getInt("mobileMaxDownloadSize2", this.mediumPreset.sizes[1]);
+            mobileMaxFileSize[3] = preferences.getInt("mobileMaxDownloadSize3", this.mediumPreset.sizes[2]);
+            wifiMaxFileSize[2] = preferences.getInt("wifiMaxDownloadSize2", this.highPreset.sizes[1]);
+            wifiMaxFileSize[3] = preferences.getInt("wifiMaxDownloadSize3", this.highPreset.sizes[2]);
+            roamingMaxFileSize[2] = preferences.getInt("roamingMaxDownloadSize2", this.lowPreset.sizes[1]);
+            roamingMaxFileSize[3] = preferences.getInt("roamingMaxDownloadSize3", this.lowPreset.sizes[2]);
+            boolean globalAutodownloadEnabled = preferences.getBoolean("globalAutodownloadEnabled", true);
+            this.mobilePreset = new Preset(mobileDataDownloadMask, this.mediumPreset.sizes[0], mobileMaxFileSize[2], mobileMaxFileSize[3], true, true, globalAutodownloadEnabled, false);
+            this.wifiPreset = new Preset(wifiDownloadMask, this.highPreset.sizes[0], wifiMaxFileSize[2], wifiMaxFileSize[3], true, true, globalAutodownloadEnabled, false);
+            this.roamingPreset = new Preset(roamingDownloadMask, this.lowPreset.sizes[0], roamingMaxFileSize[2], roamingMaxFileSize[3], false, false, globalAutodownloadEnabled, true);
+            Editor editor = preferences.edit();
+            editor.putBoolean("newConfig", true);
+            editor.putString("mobilePreset", this.mobilePreset.toString());
+            editor.putString("wifiPreset", this.wifiPreset.toString());
+            editor.putString("roamingPreset", this.roamingPreset.toString());
+            this.currentMobilePreset = 3;
+            editor.putInt("currentMobilePreset", 3);
+            this.currentWifiPreset = 3;
+            editor.putInt("currentWifiPreset", 3);
+            this.currentRoamingPreset = 3;
+            editor.putInt("currentRoamingPreset", 3);
+            editor.commit();
         }
-        for (a = 0; a < 7; a++) {
-            int sdefault;
-            if (a == 1) {
-                sdefault = 2097152;
-            } else if (a == 6) {
-                sdefault = 5242880;
-            } else {
-                sdefault = 10485760;
-            }
-            this.mobileMaxFileSize[a] = preferences.getInt("mobileMaxDownloadSize" + a, sdefault);
-            this.wifiMaxFileSize[a] = preferences.getInt("wifiMaxDownloadSize" + a, sdefault);
-            this.roamingMaxFileSize[a] = preferences.getInt("roamingMaxDownloadSize" + a, sdefault);
-        }
-        this.globalAutodownloadEnabled = preferences.getBoolean("globalAutodownloadEnabled", true);
         AndroidUtilities.runOnUIThread(new DownloadController$$Lambda$0(this));
         ApplicationLoader.applicationContext.registerReceiver(new BroadcastReceiver() {
             public void onReceive(Context context, Intent intent) {
@@ -150,29 +322,114 @@ public class DownloadController implements NotificationCenterDelegate {
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileUploadProgressChanged);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.httpFileDidLoad);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.httpFileDidFailedLoad);
+        loadAutoDownloadConfig(false);
     }
 
-    public static int maskToIndex(int mask) {
-        if (mask == 1) {
+    public void loadAutoDownloadConfig(boolean force) {
+        if (!this.loadingAutoDownloadConfig) {
+            if (force || Math.abs(System.currentTimeMillis() - UserConfig.getInstance(this.currentAccount).autoDownloadConfigLoadTime) >= 86400000) {
+                this.loadingAutoDownloadConfig = true;
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getAutoDownloadSettings(), new DownloadController$$Lambda$1(this));
+            }
+        }
+    }
+
+    final /* synthetic */ void lambda$loadAutoDownloadConfig$2$DownloadController(TLObject response, TL_error error) {
+        AndroidUtilities.runOnUIThread(new DownloadController$$Lambda$3(this, response));
+    }
+
+    final /* synthetic */ void lambda$null$1$DownloadController(TLObject response) {
+        this.loadingAutoDownloadConfig = false;
+        UserConfig.getInstance(this.currentAccount).autoDownloadConfigLoadTime = System.currentTimeMillis();
+        UserConfig.getInstance(this.currentAccount).saveConfig(false);
+        if (response != null) {
+            TL_account_autoDownloadSettings res = (TL_account_autoDownloadSettings) response;
+            this.lowPreset.set(res.low);
+            this.mediumPreset.set(res.medium);
+            this.highPreset.set(res.high);
+            for (int a = 0; a < 3; a++) {
+                Preset preset;
+                if (a == 0) {
+                    preset = this.mobilePreset;
+                } else if (a == 1) {
+                    preset = this.wifiPreset;
+                } else {
+                    preset = this.roamingPreset;
+                }
+                if (preset.equals(this.lowPreset)) {
+                    preset.set(res.low);
+                } else if (preset.equals(this.mediumPreset)) {
+                    preset.set(res.medium);
+                } else if (preset.equals(this.highPreset)) {
+                    preset.set(res.high);
+                }
+            }
+            Editor editor = MessagesController.getMainSettings(this.currentAccount).edit();
+            editor.putString("mobilePreset", this.mobilePreset.toString());
+            editor.putString("wifiPreset", this.wifiPreset.toString());
+            editor.putString("roamingPreset", this.roamingPreset.toString());
+            editor.putString("preset0", this.lowPreset.toString());
+            editor.putString("preset1", this.mediumPreset.toString());
+            editor.putString("preset2", this.highPreset.toString());
+            editor.commit();
+            String str1 = this.lowPreset.toString();
+            String str2 = this.mediumPreset.toString();
+            String str3 = this.highPreset.toString();
+            checkAutodownloadSettings();
+        }
+    }
+
+    public Preset getCurrentMobilePreset() {
+        if (this.currentMobilePreset == 0) {
+            return this.lowPreset;
+        }
+        if (this.currentMobilePreset == 1) {
+            return this.mediumPreset;
+        }
+        if (this.currentMobilePreset == 2) {
+            return this.highPreset;
+        }
+        return this.mobilePreset;
+    }
+
+    public Preset getCurrentWiFiPreset() {
+        if (this.currentWifiPreset == 0) {
+            return this.lowPreset;
+        }
+        if (this.currentWifiPreset == 1) {
+            return this.mediumPreset;
+        }
+        if (this.currentWifiPreset == 2) {
+            return this.highPreset;
+        }
+        return this.wifiPreset;
+    }
+
+    public Preset getCurrentRoamingPreset() {
+        if (this.currentRoamingPreset == 0) {
+            return this.lowPreset;
+        }
+        if (this.currentRoamingPreset == 1) {
+            return this.mediumPreset;
+        }
+        if (this.currentRoamingPreset == 2) {
+            return this.highPreset;
+        }
+        return this.roamingPreset;
+    }
+
+    public static int typeToIndex(int type) {
+        if (type == 1) {
             return 0;
         }
-        if (mask == 2) {
-            return 1;
-        }
-        if (mask == 4) {
-            return 2;
-        }
-        if (mask == 8) {
+        if (type == 2) {
             return 3;
         }
-        if (mask == 16) {
-            return 4;
+        if (type == 4) {
+            return 1;
         }
-        if (mask == 32) {
-            return 5;
-        }
-        if (mask == 64) {
-            return 6;
+        if (type == 8) {
+            return 2;
         }
         return 0;
     }
@@ -180,29 +437,37 @@ public class DownloadController implements NotificationCenterDelegate {
     public void cleanup() {
         this.photoDownloadQueue.clear();
         this.audioDownloadQueue.clear();
-        this.videoMessageDownloadQueue.clear();
         this.documentDownloadQueue.clear();
         this.videoDownloadQueue.clear();
-        this.musicDownloadQueue.clear();
-        this.gifDownloadQueue.clear();
         this.downloadQueueKeys.clear();
         this.typingTimes.clear();
     }
 
     public int getAutodownloadMask() {
-        if (!this.globalAutodownloadEnabled) {
+        int[] masksArray;
+        int result;
+        int result2 = 0;
+        if (ApplicationLoader.isConnectedToWiFi()) {
+            if (this.wifiPreset.enabled) {
+                masksArray = getCurrentWiFiPreset().mask;
+            } else {
+                result = 0;
+                return 0;
+            }
+        } else if (ApplicationLoader.isRoaming()) {
+            if (this.roamingPreset.enabled) {
+                masksArray = getCurrentRoamingPreset().mask;
+            } else {
+                result = 0;
+                return 0;
+            }
+        } else if (this.mobilePreset.enabled) {
+            masksArray = getCurrentMobilePreset().mask;
+        } else {
+            result = 0;
             return 0;
         }
-        int[] masksArray;
-        int result = 0;
-        if (ApplicationLoader.isConnectedToWiFi()) {
-            masksArray = this.wifiDownloadMask;
-        } else if (ApplicationLoader.isRoaming()) {
-            masksArray = this.roamingDownloadMask;
-        } else {
-            masksArray = this.mobileDataDownloadMask;
-        }
-        for (int a = 0; a < 4; a++) {
+        for (int a = 0; a < masksArray.length; a++) {
             int mask = 0;
             if ((masksArray[a] & 1) != 0) {
                 mask = 0 | 1;
@@ -210,53 +475,36 @@ public class DownloadController implements NotificationCenterDelegate {
             if ((masksArray[a] & 2) != 0) {
                 mask |= 2;
             }
-            if ((masksArray[a] & 64) != 0) {
-                mask |= 64;
-            }
             if ((masksArray[a] & 4) != 0) {
                 mask |= 4;
             }
             if ((masksArray[a] & 8) != 0) {
                 mask |= 8;
             }
-            if ((masksArray[a] & 16) != 0) {
-                mask |= 16;
-            }
-            if ((masksArray[a] & 32) != 0) {
-                mask |= 32;
-            }
-            result |= mask << (a * 8);
+            result2 |= mask << (a * 8);
         }
-        return result;
+        result = result2;
+        return result2;
     }
 
     protected int getAutodownloadMaskAll() {
-        if (!this.globalAutodownloadEnabled) {
+        if (!this.mobilePreset.enabled && !this.roamingPreset.enabled && !this.wifiPreset.enabled) {
             return 0;
         }
         int mask = 0;
         int a = 0;
         while (a < 4) {
-            if (!((this.mobileDataDownloadMask[a] & 1) == 0 && (this.wifiDownloadMask[a] & 1) == 0 && (this.roamingDownloadMask[a] & 1) == 0)) {
+            if (!((getCurrentMobilePreset().mask[a] & 1) == 0 && (getCurrentWiFiPreset().mask[a] & 1) == 0 && (getCurrentRoamingPreset().mask[a] & 1) == 0)) {
                 mask |= 1;
             }
-            if (!((this.mobileDataDownloadMask[a] & 2) == 0 && (this.wifiDownloadMask[a] & 2) == 0 && (this.roamingDownloadMask[a] & 2) == 0)) {
+            if (!((getCurrentMobilePreset().mask[a] & 2) == 0 && (getCurrentWiFiPreset().mask[a] & 2) == 0 && (getCurrentRoamingPreset().mask[a] & 2) == 0)) {
                 mask |= 2;
             }
-            if (!((this.mobileDataDownloadMask[a] & 64) == 0 && (this.wifiDownloadMask[a] & 64) == 0 && (this.roamingDownloadMask[a] & 64) == 0)) {
-                mask |= 64;
-            }
-            if (!((this.mobileDataDownloadMask[a] & 4) == 0 && (this.wifiDownloadMask[a] & 4) == 0 && (this.roamingDownloadMask[a] & 4) == 0)) {
+            if (!((getCurrentMobilePreset().mask[a] & 4) == 0 && (getCurrentWiFiPreset().mask[a] & 4) == 0 && (getCurrentRoamingPreset().mask[a] & 4) == 0)) {
                 mask |= 4;
             }
-            if (!((this.mobileDataDownloadMask[a] & 8) == 0 && (this.wifiDownloadMask[a] & 8) == 0 && (this.roamingDownloadMask[a] & 8) == 0)) {
+            if ((getCurrentMobilePreset().mask[a] & 8) != 0 || (getCurrentWiFiPreset().mask[a] & 8) != 0 || (getCurrentRoamingPreset().mask[a] & 8) != 0) {
                 mask |= 8;
-            }
-            if (!((this.mobileDataDownloadMask[a] & 16) == 0 && (this.wifiDownloadMask[a] & 16) == 0 && (this.roamingDownloadMask[a] & 16) == 0)) {
-                mask |= 16;
-            }
-            if ((this.mobileDataDownloadMask[a] & 32) != 0 || (this.wifiDownloadMask[a] & 32) != 0 || (this.roamingDownloadMask[a] & 32) != 0) {
-                mask |= 32;
             }
             a++;
         }
@@ -289,14 +537,6 @@ public class DownloadController implements NotificationCenterDelegate {
             } else if (this.audioDownloadQueue.isEmpty()) {
                 newDownloadObjectsAvailable(2);
             }
-            if ((currentMask & 64) == 0) {
-                for (a = 0; a < this.videoMessageDownloadQueue.size(); a++) {
-                    FileLoader.getInstance(this.currentAccount).cancelLoadFile((Document) ((DownloadObject) this.videoMessageDownloadQueue.get(a)).object);
-                }
-                this.videoMessageDownloadQueue.clear();
-            } else if (this.videoMessageDownloadQueue.isEmpty()) {
-                newDownloadObjectsAvailable(64);
-            }
             if ((currentMask & 8) == 0) {
                 for (a = 0; a < this.documentDownloadQueue.size(); a++) {
                     FileLoader.getInstance(this.currentAccount).cancelLoadFile(((DownloadObject) this.documentDownloadQueue.get(a)).object);
@@ -313,22 +553,6 @@ public class DownloadController implements NotificationCenterDelegate {
             } else if (this.videoDownloadQueue.isEmpty()) {
                 newDownloadObjectsAvailable(4);
             }
-            if ((currentMask & 16) == 0) {
-                for (a = 0; a < this.musicDownloadQueue.size(); a++) {
-                    FileLoader.getInstance(this.currentAccount).cancelLoadFile((Document) ((DownloadObject) this.musicDownloadQueue.get(a)).object);
-                }
-                this.musicDownloadQueue.clear();
-            } else if (this.musicDownloadQueue.isEmpty()) {
-                newDownloadObjectsAvailable(16);
-            }
-            if ((currentMask & 32) == 0) {
-                for (a = 0; a < this.gifDownloadQueue.size(); a++) {
-                    FileLoader.getInstance(this.currentAccount).cancelLoadFile((Document) ((DownloadObject) this.gifDownloadQueue.get(a)).object);
-                }
-                this.gifDownloadQueue.clear();
-            } else if (this.gifDownloadQueue.isEmpty()) {
-                newDownloadObjectsAvailable(32);
-            }
             int mask = getAutodownloadMaskAll();
             if (mask == 0) {
                 MessagesStorage.getInstance(this.currentAccount).clearDownloadQueue(0);
@@ -340,48 +564,35 @@ public class DownloadController implements NotificationCenterDelegate {
             if ((mask & 2) == 0) {
                 MessagesStorage.getInstance(this.currentAccount).clearDownloadQueue(2);
             }
-            if ((mask & 64) == 0) {
-                MessagesStorage.getInstance(this.currentAccount).clearDownloadQueue(64);
-            }
             if ((mask & 4) == 0) {
                 MessagesStorage.getInstance(this.currentAccount).clearDownloadQueue(4);
             }
             if ((mask & 8) == 0) {
                 MessagesStorage.getInstance(this.currentAccount).clearDownloadQueue(8);
             }
-            if ((mask & 16) == 0) {
-                MessagesStorage.getInstance(this.currentAccount).clearDownloadQueue(16);
-            }
-            if ((mask & 32) == 0) {
-                MessagesStorage.getInstance(this.currentAccount).clearDownloadQueue(32);
-            }
         }
     }
 
     public boolean canDownloadMedia(MessageObject messageObject) {
-        return canDownloadMedia(messageObject.messageOwner);
+        return canDownloadMedia(messageObject.messageOwner) == 1;
     }
 
-    public boolean canDownloadMedia(Message message) {
-        if (!this.globalAutodownloadEnabled) {
-            return false;
-        }
+    public int canDownloadMedia(Message message) {
         int type;
         int index;
+        Preset preset;
+        boolean isVideo = false;
         if (MessageObject.isPhoto(message) || MessageObject.isStickerMessage(message)) {
             type = 1;
         } else if (MessageObject.isVoiceMessage(message)) {
             type = 2;
-        } else if (MessageObject.isRoundVideoMessage(message)) {
-            type = 64;
-        } else if (MessageObject.isVideoMessage(message)) {
-            type = 4;
-        } else if (MessageObject.isMusicMessage(message)) {
-            type = 16;
-        } else if (MessageObject.isGifMessage(message)) {
-            type = 32;
         } else {
-            type = 8;
+            isVideo = MessageObject.isVideoMessage(message);
+            if (isVideo || MessageObject.isGifMessage(message) || MessageObject.isRoundVideoMessage(message)) {
+                type = 4;
+            } else {
+                type = 8;
+            }
         }
         Peer peer = message.to_id;
         if (peer == null) {
@@ -393,55 +604,154 @@ public class DownloadController implements NotificationCenterDelegate {
                 index = 1;
             }
         } else if (peer.chat_id != 0) {
-            index = 2;
-        } else if (MessageObject.isMegagroup(message)) {
-            index = 2;
-        } else {
+            if (message.from_id == 0 || !ContactsController.getInstance(this.currentAccount).contactsDict.containsKey(Integer.valueOf(message.from_id))) {
+                index = 2;
+            } else {
+                index = 0;
+            }
+        } else if (!MessageObject.isMegagroup(message)) {
             index = 3;
-        }
-        int mask;
-        int maxSize;
-        if (ApplicationLoader.isConnectedToWiFi()) {
-            mask = this.wifiDownloadMask[index];
-            maxSize = this.wifiMaxFileSize[maskToIndex(type)];
-        } else if (ApplicationLoader.isRoaming()) {
-            mask = this.roamingDownloadMask[index];
-            maxSize = this.roamingMaxFileSize[maskToIndex(type)];
+        } else if (message.from_id == 0 || !ContactsController.getInstance(this.currentAccount).contactsDict.containsKey(Integer.valueOf(message.from_id))) {
+            index = 2;
         } else {
-            mask = this.mobileDataDownloadMask[index];
-            maxSize = this.mobileMaxFileSize[maskToIndex(type)];
+            index = 0;
         }
-        if ((type == 1 || MessageObject.getMessageSize(message) <= maxSize) && (mask & type) != 0) {
+        if (ApplicationLoader.isConnectedToWiFi()) {
+            if (!this.wifiPreset.enabled) {
+                return 0;
+            }
+            preset = getCurrentWiFiPreset();
+        } else if (ApplicationLoader.isRoaming()) {
+            if (!this.roamingPreset.enabled) {
+                return 0;
+            }
+            preset = getCurrentRoamingPreset();
+        } else if (!this.mobilePreset.enabled) {
+            return 0;
+        } else {
+            preset = getCurrentMobilePreset();
+        }
+        int mask = preset.mask[index];
+        int maxSize = preset.sizes[typeToIndex(type)];
+        int size = MessageObject.getMessageSize(message);
+        if (!isVideo || !preset.preloadVideo || size <= maxSize || maxSize <= 2097152) {
+            if ((type == 1 || (size != 0 && size <= maxSize)) && (mask & type) != 0) {
+                return 1;
+            }
+            return 0;
+        } else if ((mask & type) != 0) {
+            return 2;
+        } else {
+            return 0;
+        }
+    }
+
+    protected boolean canDownloadNextTrack() {
+        if (ApplicationLoader.isConnectedToWiFi()) {
+            if (this.wifiPreset.enabled && getCurrentWiFiPreset().preloadMusic) {
+                return true;
+            }
+            return false;
+        } else if (ApplicationLoader.isRoaming()) {
+            if (this.roamingPreset.enabled && getCurrentRoamingPreset().preloadMusic) {
+                return true;
+            }
+            return false;
+        } else if (this.mobilePreset.enabled && getCurrentMobilePreset().preloadMusic) {
             return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
     protected int getCurrentDownloadMask() {
-        if (!this.globalAutodownloadEnabled) {
-            return 0;
-        }
-        int mask;
+        int mask = 0;
         int a;
         if (ApplicationLoader.isConnectedToWiFi()) {
-            mask = 0;
-            for (a = 0; a < 4; a++) {
-                mask |= this.wifiDownloadMask[a];
+            if (this.wifiPreset.enabled) {
+                mask = 0;
+                for (a = 0; a < 4; a++) {
+                    mask |= getCurrentWiFiPreset().mask[a];
+                }
             }
-            return mask;
         } else if (ApplicationLoader.isRoaming()) {
+            if (this.roamingPreset.enabled) {
+                mask = 0;
+                for (a = 0; a < 4; a++) {
+                    mask |= getCurrentRoamingPreset().mask[a];
+                }
+            }
+        } else if (this.mobilePreset.enabled) {
             mask = 0;
             for (a = 0; a < 4; a++) {
-                mask |= this.roamingDownloadMask[a];
+                mask |= getCurrentMobilePreset().mask[a];
             }
-            return mask;
-        } else {
-            mask = 0;
-            for (a = 0; a < 4; a++) {
-                mask |= this.mobileDataDownloadMask[a];
-            }
-            return mask;
         }
+        return mask;
+    }
+
+    public void savePresetToServer(int type) {
+        Preset preset;
+        boolean enabled;
+        boolean z;
+        int i;
+        int i2 = 0;
+        TL_account_saveAutoDownloadSettings req = new TL_account_saveAutoDownloadSettings();
+        if (type == 0) {
+            preset = getCurrentMobilePreset();
+            enabled = this.mobilePreset.enabled;
+        } else if (type == 1) {
+            preset = getCurrentWiFiPreset();
+            enabled = this.wifiPreset.enabled;
+        } else {
+            preset = getCurrentRoamingPreset();
+            enabled = this.roamingPreset.enabled;
+        }
+        req.settings = new TL_autoDownloadSettings();
+        req.settings.audio_preload_next = preset.preloadMusic;
+        req.settings.video_preload_large = preset.preloadVideo;
+        req.settings.phonecalls_less_data = preset.lessCallData;
+        TL_autoDownloadSettings tL_autoDownloadSettings = req.settings;
+        if (enabled) {
+            z = false;
+        } else {
+            z = true;
+        }
+        tL_autoDownloadSettings.disabled = z;
+        boolean photo = false;
+        boolean video = false;
+        boolean document = false;
+        for (int a = 0; a < preset.mask.length; a++) {
+            if ((preset.mask[a] & 1) != 0) {
+                photo = true;
+            }
+            if ((preset.mask[a] & 4) != 0) {
+                video = true;
+            }
+            if ((preset.mask[a] & 8) != 0) {
+                document = true;
+            }
+            if (photo && video && document) {
+                break;
+            }
+        }
+        req.settings.photo_size_max = photo ? preset.sizes[0] : 0;
+        tL_autoDownloadSettings = req.settings;
+        if (video) {
+            i = preset.sizes[1];
+        } else {
+            i = 0;
+        }
+        tL_autoDownloadSettings.video_size_max = i;
+        TL_autoDownloadSettings tL_autoDownloadSettings2 = req.settings;
+        if (document) {
+            i2 = preset.sizes[2];
+        }
+        tL_autoDownloadSettings2.file_size_max = i2;
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, DownloadController$$Lambda$2.$instance);
+    }
+
+    static final /* synthetic */ void lambda$savePresetToServer$3$DownloadController(TLObject response, TL_error error) {
     }
 
     protected void processDownloadObjects(int type, ArrayList<DownloadObject> objects) {
@@ -451,16 +761,10 @@ public class DownloadController implements NotificationCenterDelegate {
                 queue = this.photoDownloadQueue;
             } else if (type == 2) {
                 queue = this.audioDownloadQueue;
-            } else if (type == 64) {
-                queue = this.videoMessageDownloadQueue;
             } else if (type == 4) {
                 queue = this.videoDownloadQueue;
             } else if (type == 8) {
                 queue = this.documentDownloadQueue;
-            } else if (type == 16) {
-                queue = this.musicDownloadQueue;
-            } else if (type == 32) {
-                queue = this.gifDownloadQueue;
             }
             for (int a = 0; a < objects.size(); a++) {
                 String path;
@@ -496,20 +800,11 @@ public class DownloadController implements NotificationCenterDelegate {
         if (!((mask & 2) == 0 || (downloadMask & 2) == 0 || !this.audioDownloadQueue.isEmpty())) {
             MessagesStorage.getInstance(this.currentAccount).getDownloadQueue(2);
         }
-        if (!((mask & 64) == 0 || (downloadMask & 64) == 0 || !this.videoMessageDownloadQueue.isEmpty())) {
-            MessagesStorage.getInstance(this.currentAccount).getDownloadQueue(64);
-        }
         if (!((mask & 4) == 0 || (downloadMask & 4) == 0 || !this.videoDownloadQueue.isEmpty())) {
             MessagesStorage.getInstance(this.currentAccount).getDownloadQueue(4);
         }
-        if (!((mask & 8) == 0 || (downloadMask & 8) == 0 || !this.documentDownloadQueue.isEmpty())) {
+        if ((mask & 8) != 0 && (downloadMask & 8) != 0 && this.documentDownloadQueue.isEmpty()) {
             MessagesStorage.getInstance(this.currentAccount).getDownloadQueue(8);
-        }
-        if (!((mask & 16) == 0 || (downloadMask & 16) == 0 || !this.musicDownloadQueue.isEmpty())) {
-            MessagesStorage.getInstance(this.currentAccount).getDownloadQueue(16);
-        }
-        if ((mask & 32) != 0 && (downloadMask & 32) != 0 && this.gifDownloadQueue.isEmpty()) {
-            MessagesStorage.getInstance(this.currentAccount).getDownloadQueue(32);
         }
     }
 
@@ -530,11 +825,6 @@ public class DownloadController implements NotificationCenterDelegate {
                 if (this.audioDownloadQueue.isEmpty()) {
                     newDownloadObjectsAvailable(2);
                 }
-            } else if (downloadObject.type == 64) {
-                this.videoMessageDownloadQueue.remove(downloadObject);
-                if (this.videoMessageDownloadQueue.isEmpty()) {
-                    newDownloadObjectsAvailable(64);
-                }
             } else if (downloadObject.type == 4) {
                 this.videoDownloadQueue.remove(downloadObject);
                 if (this.videoDownloadQueue.isEmpty()) {
@@ -544,16 +834,6 @@ public class DownloadController implements NotificationCenterDelegate {
                 this.documentDownloadQueue.remove(downloadObject);
                 if (this.documentDownloadQueue.isEmpty()) {
                     newDownloadObjectsAvailable(8);
-                }
-            } else if (downloadObject.type == 16) {
-                this.musicDownloadQueue.remove(downloadObject);
-                if (this.musicDownloadQueue.isEmpty()) {
-                    newDownloadObjectsAvailable(16);
-                }
-            } else if (downloadObject.type == 32) {
-                this.gifDownloadQueue.remove(downloadObject);
-                if (this.gifDownloadQueue.isEmpty()) {
-                    newDownloadObjectsAvailable(32);
                 }
             }
         }

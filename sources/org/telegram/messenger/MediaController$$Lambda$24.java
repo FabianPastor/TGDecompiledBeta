@@ -1,22 +1,15 @@
 package org.telegram.messenger;
 
-import java.io.File;
-import org.telegram.tgnet.TLRPC.TL_document;
-
 final /* synthetic */ class MediaController$$Lambda$24 implements Runnable {
     private final MediaController arg$1;
-    private final TL_document arg$2;
-    private final File arg$3;
-    private final int arg$4;
+    private final int arg$2;
 
-    MediaController$$Lambda$24(MediaController mediaController, TL_document tL_document, File file, int i) {
+    MediaController$$Lambda$24(MediaController mediaController, int i) {
         this.arg$1 = mediaController;
-        this.arg$2 = tL_document;
-        this.arg$3 = file;
-        this.arg$4 = i;
+        this.arg$2 = i;
     }
 
     public void run() {
-        this.arg$1.lambda$null$18$MediaController(this.arg$2, this.arg$3, this.arg$4);
+        this.arg$1.lambda$null$21$MediaController(this.arg$2);
     }
 }

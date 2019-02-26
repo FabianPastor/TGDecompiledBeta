@@ -11,9 +11,14 @@ import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
+import android.text.style.URLSpan;
+import android.util.Base64;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -26,6 +31,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AndroidUtilities.LinkMovementMethodMy;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatObject;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocaleController.LocaleInfo;
 import org.telegram.messenger.MessagesController;
@@ -39,6 +45,7 @@ import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.EncryptedChat;
@@ -46,6 +53,8 @@ import org.telegram.tgnet.TLRPC.InputPeer;
 import org.telegram.tgnet.TLRPC.TL_account_reportPeer;
 import org.telegram.tgnet.TLRPC.TL_dialog;
 import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.tgnet.TLRPC.TL_help_getSupport;
+import org.telegram.tgnet.TLRPC.TL_help_support;
 import org.telegram.tgnet.TLRPC.TL_inputReportReasonChildAbuse;
 import org.telegram.tgnet.TLRPC.TL_inputReportReasonPornography;
 import org.telegram.tgnet.TLRPC.TL_inputReportReasonSpam;
@@ -62,6 +71,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.AccountSelectCell;
 import org.telegram.ui.Cells.RadioColorCell;
 import org.telegram.ui.Cells.TextColorCell;
+import org.telegram.ui.ChatActivity;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.NotificationsCustomSettingsActivity;
 import org.telegram.ui.NotificationsSettingsActivity.NotificationException;
@@ -90,9 +100,9 @@ public class AlertsCreator {
      */
     public static android.app.Dialog processError(int r7, org.telegram.tgnet.TLRPC.TL_error r8, org.telegram.ui.ActionBar.BaseFragment r9, org.telegram.tgnet.TLObject r10, java.lang.Object... r11) {
         /*
-        r6 = NUM; // 0x7f0CLASSNAME float:1.8610236E38 double:1.053097653E-314;
-        r5 = NUM; // 0x7f0CLASSNAMEd4 float:1.861066E38 double:1.053097756E-314;
-        r4 = NUM; // 0x7f0CLASSNAME float:1.8610896E38 double:1.0530978135E-314;
+        r6 = NUM; // 0x7f0CLASSNAMEf float:1.8610326E38 double:1.0530976746E-314;
+        r5 = NUM; // 0x7f0CLASSNAME float:1.8610754E38 double:1.053097779E-314;
+        r4 = NUM; // 0x7f0CLASSNAME float:1.8610989E38 double:1.053097836E-314;
         r2 = 1;
         r1 = 0;
         r0 = r8.code;
@@ -118,7 +128,7 @@ public class AlertsCreator {
         if (r0 == 0) goto L_0x0039;
     L_0x002a:
         r0 = "InvalidPhoneNumber";
-        r1 = NUM; // 0x7f0CLASSNAMEf6 float:1.8611249E38 double:1.0530978994E-314;
+        r1 = NUM; // 0x7f0CLASSNAME float:1.8611344E38 double:1.0530979227E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleAlert(r9, r0);
     L_0x0037:
@@ -142,7 +152,7 @@ public class AlertsCreator {
     L_0x005a:
         r0 = r9.getParentActivity();
         r1 = "UpdateAppAlert";
-        r3 = NUM; // 0x7f0CLASSNAMEab float:1.8613693E38 double:1.053098495E-314;
+        r3 = NUM; // 0x7f0CLASSNAMEe1 float:1.8613802E38 double:1.0530985215E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r3);
         showUpdateAppAlert(r0, r1, r2);
         goto L_0x0037;
@@ -249,13 +259,13 @@ public class AlertsCreator {
         if (r9 == 0) goto L_0x013a;
     L_0x012b:
         r0 = "EditMessageError";
-        r1 = NUM; // 0x7f0CLASSNAMEac float:1.861058E38 double:1.0530977364E-314;
+        r1 = NUM; // 0x7f0CLASSNAMEda float:1.8610673E38 double:1.053097759E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleAlert(r9, r0);
         goto L_0x0037;
     L_0x013a:
         r0 = "EditMessageError";
-        r1 = NUM; // 0x7f0CLASSNAMEac float:1.861058E38 double:1.0530977364E-314;
+        r1 = NUM; // 0x7f0CLASSNAMEda float:1.8610673E38 double:1.053097759E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleToast(r9, r0);
         goto L_0x0037;
@@ -324,13 +334,13 @@ public class AlertsCreator {
         if (r0 == 0) goto L_0x01d3;
     L_0x01c4:
         r0 = "JoinToGroupErrorFull";
-        r1 = NUM; // 0x7f0CLASSNAME float:1.861131E38 double:1.0530979143E-314;
+        r1 = NUM; // 0x7f0CLASSNAME float:1.8611405E38 double:1.0530979375E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleAlert(r9, r0);
         goto L_0x0037;
     L_0x01d3:
         r0 = "JoinToGroupErrorNotExist";
-        r1 = NUM; // 0x7f0CLASSNAME float:1.8611311E38 double:1.053097915E-314;
+        r1 = NUM; // 0x7f0CLASSNAME float:1.8611407E38 double:1.053097938E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleAlert(r9, r0);
         goto L_0x0037;
@@ -388,7 +398,7 @@ public class AlertsCreator {
         if (r0 == 0) goto L_0x0264;
     L_0x0254:
         r0 = "InvalidCode";
-        r1 = NUM; // 0x7f0CLASSNAMEf3 float:1.8611242E38 double:1.053097898E-314;
+        r1 = NUM; // 0x7f0CLASSNAME float:1.8611338E38 double:1.053097921E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         r0 = showSimpleAlert(r9, r0);
         goto L_0x0016;
@@ -431,7 +441,7 @@ public class AlertsCreator {
         if (r0 == 0) goto L_0x02c6;
     L_0x02b6:
         r0 = "InvalidPhoneNumber";
-        r1 = NUM; // 0x7f0CLASSNAMEf6 float:1.8611249E38 double:1.0530978994E-314;
+        r1 = NUM; // 0x7f0CLASSNAME float:1.8611344E38 double:1.0530979227E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         r0 = showSimpleAlert(r9, r0);
         goto L_0x0016;
@@ -447,7 +457,7 @@ public class AlertsCreator {
         if (r0 == 0) goto L_0x02ec;
     L_0x02dc:
         r0 = "InvalidCode";
-        r1 = NUM; // 0x7f0CLASSNAMEf3 float:1.8611242E38 double:1.053097898E-314;
+        r1 = NUM; // 0x7f0CLASSNAME float:1.8611338E38 double:1.053097921E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         r0 = showSimpleAlert(r9, r0);
         goto L_0x0016;
@@ -497,7 +507,7 @@ public class AlertsCreator {
         if (r0 != r1) goto L_0x0363;
     L_0x0353:
         r0 = "CancelLinkExpired";
-        r1 = NUM; // 0x7f0CLASSNAMEd float:1.8609867E38 double:1.053097563E-314;
+        r1 = NUM; // 0x7f0CLASSNAME float:1.8609948E38 double:1.0530975827E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         r0 = showSimpleAlert(r9, r0);
         goto L_0x0016;
@@ -529,7 +539,7 @@ public class AlertsCreator {
         if (r0 == 0) goto L_0x03aa;
     L_0x039b:
         r0 = "InvalidPhoneNumber";
-        r1 = NUM; // 0x7f0CLASSNAMEf6 float:1.8611249E38 double:1.0530978994E-314;
+        r1 = NUM; // 0x7f0CLASSNAME float:1.8611344E38 double:1.0530979227E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleAlert(r9, r0);
         goto L_0x0037;
@@ -545,7 +555,7 @@ public class AlertsCreator {
         if (r0 == 0) goto L_0x03cf;
     L_0x03c0:
         r0 = "InvalidCode";
-        r1 = NUM; // 0x7f0CLASSNAMEf3 float:1.8611242E38 double:1.053097898E-314;
+        r1 = NUM; // 0x7f0CLASSNAME float:1.8611338E38 double:1.053097921E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleAlert(r9, r0);
         goto L_0x0037;
@@ -583,7 +593,7 @@ public class AlertsCreator {
         if (r0 == 0) goto L_0x0422;
     L_0x0413:
         r0 = "InvalidPhoneNumber";
-        r1 = NUM; // 0x7f0CLASSNAMEf6 float:1.8611249E38 double:1.0530978994E-314;
+        r1 = NUM; // 0x7f0CLASSNAME float:1.8611344E38 double:1.0530979227E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleAlert(r9, r0);
         goto L_0x0037;
@@ -599,7 +609,7 @@ public class AlertsCreator {
         if (r0 == 0) goto L_0x0447;
     L_0x0438:
         r0 = "InvalidCode";
-        r1 = NUM; // 0x7f0CLASSNAMEf3 float:1.8611242E38 double:1.053097898E-314;
+        r1 = NUM; // 0x7f0CLASSNAME float:1.8611338E38 double:1.053097921E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleAlert(r9, r0);
         goto L_0x0037;
@@ -630,7 +640,7 @@ public class AlertsCreator {
         if (r0 == 0) goto L_0x0497;
     L_0x0480:
         r3 = "ChangePhoneNumberOccupied";
-        r4 = NUM; // 0x7f0CLASSNAMEf float:1.8609904E38 double:1.053097572E-314;
+        r4 = NUM; // 0x7f0CLASSNAME float:1.860999E38 double:1.0530975926E-314;
         r2 = new java.lang.Object[r2];
         r0 = r11[r1];
         r0 = (java.lang.String) r0;
@@ -683,13 +693,13 @@ public class AlertsCreator {
         goto L_0x04b2;
     L_0x04d6:
         r0 = "UsernameInvalid";
-        r1 = NUM; // 0x7f0CLASSNAMEf5 float:1.8613843E38 double:1.0530985314E-314;
+        r1 = NUM; // 0x7f0CLASSNAMEc float:1.8613954E38 double:1.0530985585E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleAlert(r9, r0);
         goto L_0x0037;
     L_0x04e5:
         r0 = "UsernameInUse";
-        r1 = NUM; // 0x7f0CLASSNAMEf4 float:1.861384E38 double:1.053098531E-314;
+        r1 = NUM; // 0x7f0CLASSNAMEb float:1.8613952E38 double:1.053098558E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleAlert(r9, r0);
         goto L_0x0037;
@@ -780,13 +790,13 @@ public class AlertsCreator {
         goto L_0x056b;
     L_0x058a:
         r0 = "PaymentPrecheckoutFailed";
-        r1 = NUM; // 0x7f0CLASSNAMEa8 float:1.8612648E38 double:1.0530982403E-314;
+        r1 = NUM; // 0x7f0CLASSNAMEdc float:1.8612754E38 double:1.053098266E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleToast(r9, r0);
         goto L_0x0037;
     L_0x0599:
         r0 = "PaymentFailed";
-        r1 = NUM; // 0x7f0CLASSNAMEb float:1.8612622E38 double:1.053098234E-314;
+        r1 = NUM; // 0x7f0CLASSNAMEcf float:1.8612727E38 double:1.0530982596E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleToast(r9, r0);
         goto L_0x0037;
@@ -819,7 +829,7 @@ public class AlertsCreator {
         goto L_0x05b6;
     L_0x05cb:
         r0 = "PaymentNoShippingMethod";
-        r1 = NUM; // 0x7f0CLASSNAMEd float:1.8612626E38 double:1.053098235E-314;
+        r1 = NUM; // 0x7f0CLASSNAMEd1 float:1.8612731E38 double:1.0530982606E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r1);
         showSimpleToast(r9, r0);
         goto L_0x0037;
@@ -1166,6 +1176,117 @@ public class AlertsCreator {
         }
     }
 
+    public static AlertDialog createSupportAlert(final BaseFragment fragment) {
+        if (fragment == null || fragment.getParentActivity() == null) {
+            return null;
+        }
+        TextView message = new TextView(fragment.getParentActivity());
+        Spannable spanned = new SpannableString(Html.fromHtml(LocaleController.getString("AskAQuestionInfo", R.string.AskAQuestionInfo).replace("\n", "<br>")));
+        URLSpan[] spans = (URLSpan[]) spanned.getSpans(0, spanned.length(), URLSpan.class);
+        for (URLSpan span : spans) {
+            int start = spanned.getSpanStart(span);
+            int end = spanned.getSpanEnd(span);
+            spanned.removeSpan(span);
+            spanned.setSpan(new URLSpanNoUnderline(span.getURL()) {
+                public void onClick(View widget) {
+                    fragment.dismissCurrentDialig();
+                    super.onClick(widget);
+                }
+            }, start, end, 0);
+        }
+        message.setText(spanned);
+        message.setTextSize(1, 16.0f);
+        message.setLinkTextColor(Theme.getColor("dialogTextLink"));
+        message.setHighlightColor(Theme.getColor("dialogLinkSelection"));
+        message.setPadding(AndroidUtilities.dp(23.0f), 0, AndroidUtilities.dp(23.0f), 0);
+        message.setMovementMethod(new LinkMovementMethodMy());
+        message.setTextColor(Theme.getColor("dialogTextBlack"));
+        Builder builder1 = new Builder(fragment.getParentActivity());
+        builder1.setView(message);
+        builder1.setTitle(LocaleController.getString("AskAQuestion", R.string.AskAQuestion));
+        builder1.setPositiveButton(LocaleController.getString("AskButton", R.string.AskButton), new AlertsCreator$$Lambda$5(fragment));
+        builder1.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        return builder1.create();
+    }
+
+    private static void performAskAQuestion(BaseFragment fragment) {
+        int currentAccount = fragment.getCurrentAccount();
+        SharedPreferences preferences = MessagesController.getMainSettings(currentAccount);
+        int uid = preferences.getInt("support_id", 0);
+        User supportUser = null;
+        if (uid != 0) {
+            supportUser = MessagesController.getInstance(currentAccount).getUser(Integer.valueOf(uid));
+            if (supportUser == null) {
+                String userString = preferences.getString("support_user", null);
+                if (userString != null) {
+                    try {
+                        byte[] datacentersBytes = Base64.decode(userString, 0);
+                        if (datacentersBytes != null) {
+                            SerializedData data = new SerializedData(datacentersBytes);
+                            supportUser = User.TLdeserialize(data, data.readInt32(false), false);
+                            if (supportUser != null && supportUser.id == 333000) {
+                                supportUser = null;
+                            }
+                            data.cleanup();
+                        }
+                    } catch (Throwable e) {
+                        FileLog.e(e);
+                        supportUser = null;
+                    }
+                }
+            }
+        }
+        if (supportUser == null) {
+            AlertDialog progressDialog = new AlertDialog(fragment.getParentActivity(), 3);
+            progressDialog.setCanCacnel(false);
+            progressDialog.show();
+            ConnectionsManager.getInstance(currentAccount).sendRequest(new TL_help_getSupport(), new AlertsCreator$$Lambda$6(preferences, progressDialog, currentAccount, fragment));
+            return;
+        }
+        MessagesController.getInstance(currentAccount).putUser(supportUser, true);
+        Bundle args = new Bundle();
+        args.putInt("user_id", supportUser.id);
+        fragment.presentFragment(new ChatActivity(args));
+    }
+
+    static final /* synthetic */ void lambda$performAskAQuestion$8$AlertsCreator(SharedPreferences preferences, AlertDialog progressDialog, int currentAccount, BaseFragment fragment, TLObject response, TL_error error) {
+        if (error == null) {
+            AndroidUtilities.runOnUIThread(new AlertsCreator$$Lambda$37(preferences, (TL_help_support) response, progressDialog, currentAccount, fragment));
+            return;
+        }
+        AndroidUtilities.runOnUIThread(new AlertsCreator$$Lambda$38(progressDialog));
+    }
+
+    static final /* synthetic */ void lambda$null$6$AlertsCreator(SharedPreferences preferences, TL_help_support res, AlertDialog progressDialog, int currentAccount, BaseFragment fragment) {
+        Editor editor = preferences.edit();
+        editor.putInt("support_id", res.user.id);
+        SerializedData data = new SerializedData();
+        res.user.serializeToStream(data);
+        editor.putString("support_user", Base64.encodeToString(data.toByteArray(), 0));
+        editor.commit();
+        data.cleanup();
+        try {
+            progressDialog.dismiss();
+        } catch (Throwable e) {
+            FileLog.e(e);
+        }
+        ArrayList<User> users = new ArrayList();
+        users.add(res.user);
+        MessagesStorage.getInstance(currentAccount).putUsersAndChats(users, null, true, true);
+        MessagesController.getInstance(currentAccount).putUser(res.user, false);
+        Bundle args = new Bundle();
+        args.putInt("user_id", res.user.id);
+        fragment.presentFragment(new ChatActivity(args));
+    }
+
+    static final /* synthetic */ void lambda$null$7$AlertsCreator(AlertDialog progressDialog) {
+        try {
+            progressDialog.dismiss();
+        } catch (Throwable e) {
+            FileLog.e(e);
+        }
+    }
+
     public static void createClearOrDeleteDialogAlert(BaseFragment fragment, boolean clear, Chat chat, User user, boolean secret, Runnable onProcessRunnable) {
         if (fragment != null && fragment.getParentActivity() != null) {
             if (chat != null || user != null) {
@@ -1250,7 +1371,7 @@ public class AlertsCreator {
                 } else {
                     actionText = LocaleController.getString("LeaveChannelMenu", R.string.LeaveChannelMenu);
                 }
-                builder.setPositiveButton(actionText, new AlertsCreator$$Lambda$5(onProcessRunnable));
+                builder.setPositiveButton(actionText, new AlertsCreator$$Lambda$7(onProcessRunnable));
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 AlertDialog alertDialog = builder.create();
                 fragment.showDialog(alertDialog);
@@ -1262,7 +1383,7 @@ public class AlertsCreator {
         }
     }
 
-    static final /* synthetic */ void lambda$createClearOrDeleteDialogAlert$5$AlertsCreator(Runnable onProcessRunnable, DialogInterface dialogInterface, int i) {
+    static final /* synthetic */ void lambda$createClearOrDeleteDialogAlert$9$AlertsCreator(Runnable onProcessRunnable, DialogInterface dialogInterface, int i) {
         if (onProcessRunnable != null) {
             onProcessRunnable.run();
         }
@@ -1279,13 +1400,13 @@ public class AlertsCreator {
         NumberPicker dayPicker = new NumberPicker(context);
         NumberPicker yearPicker = new NumberPicker(context);
         linearLayout.addView(dayPicker, LayoutHelper.createLinear(0, -2, 0.3f));
-        dayPicker.setOnScrollListener(new AlertsCreator$$Lambda$6(checkMinDate, dayPicker, monthPicker, yearPicker));
+        dayPicker.setOnScrollListener(new AlertsCreator$$Lambda$8(checkMinDate, dayPicker, monthPicker, yearPicker));
         monthPicker.setMinValue(0);
         monthPicker.setMaxValue(11);
         linearLayout.addView(monthPicker, LayoutHelper.createLinear(0, -2, 0.3f));
-        monthPicker.setFormatter(AlertsCreator$$Lambda$7.$instance);
-        monthPicker.setOnValueChangedListener(new AlertsCreator$$Lambda$8(dayPicker, monthPicker, yearPicker));
-        monthPicker.setOnScrollListener(new AlertsCreator$$Lambda$9(checkMinDate, dayPicker, monthPicker, yearPicker));
+        monthPicker.setFormatter(AlertsCreator$$Lambda$9.$instance);
+        monthPicker.setOnValueChangedListener(new AlertsCreator$$Lambda$10(dayPicker, monthPicker, yearPicker));
+        monthPicker.setOnScrollListener(new AlertsCreator$$Lambda$11(checkMinDate, dayPicker, monthPicker, yearPicker));
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         int currentYear = calendar.get(1);
@@ -1293,8 +1414,8 @@ public class AlertsCreator {
         yearPicker.setMaxValue(currentYear + maxYear);
         yearPicker.setValue(currentYear + currentYearDiff);
         linearLayout.addView(yearPicker, LayoutHelper.createLinear(0, -2, 0.4f));
-        yearPicker.setOnValueChangedListener(new AlertsCreator$$Lambda$10(dayPicker, monthPicker, yearPicker));
-        yearPicker.setOnScrollListener(new AlertsCreator$$Lambda$11(checkMinDate, dayPicker, monthPicker, yearPicker));
+        yearPicker.setOnValueChangedListener(new AlertsCreator$$Lambda$12(dayPicker, monthPicker, yearPicker));
+        yearPicker.setOnScrollListener(new AlertsCreator$$Lambda$13(checkMinDate, dayPicker, monthPicker, yearPicker));
         updateDayPicker(dayPicker, monthPicker, yearPicker);
         if (checkMinDate) {
             checkPickerDate(dayPicker, monthPicker, yearPicker);
@@ -1307,37 +1428,37 @@ public class AlertsCreator {
         Builder builder = new Builder(context);
         builder.setTitle(title);
         builder.setView(linearLayout);
-        builder.setPositiveButton(LocaleController.getString("Set", R.string.Set), new AlertsCreator$$Lambda$12(checkMinDate, dayPicker, monthPicker, yearPicker, datePickerDelegate));
+        builder.setPositiveButton(LocaleController.getString("Set", R.string.Set), new AlertsCreator$$Lambda$14(checkMinDate, dayPicker, monthPicker, yearPicker, datePickerDelegate));
         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
         return builder;
     }
 
-    static final /* synthetic */ void lambda$createDatePickerDialog$6$AlertsCreator(boolean checkMinDate, NumberPicker dayPicker, NumberPicker monthPicker, NumberPicker yearPicker, NumberPicker view, int scrollState) {
+    static final /* synthetic */ void lambda$createDatePickerDialog$10$AlertsCreator(boolean checkMinDate, NumberPicker dayPicker, NumberPicker monthPicker, NumberPicker yearPicker, NumberPicker view, int scrollState) {
         if (checkMinDate && scrollState == 0) {
             checkPickerDate(dayPicker, monthPicker, yearPicker);
         }
     }
 
-    static final /* synthetic */ String lambda$createDatePickerDialog$7$AlertsCreator(int value) {
+    static final /* synthetic */ String lambda$createDatePickerDialog$11$AlertsCreator(int value) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(5, 1);
         calendar.set(2, value);
         return calendar.getDisplayName(2, 1, Locale.getDefault());
     }
 
-    static final /* synthetic */ void lambda$createDatePickerDialog$9$AlertsCreator(boolean checkMinDate, NumberPicker dayPicker, NumberPicker monthPicker, NumberPicker yearPicker, NumberPicker view, int scrollState) {
+    static final /* synthetic */ void lambda$createDatePickerDialog$13$AlertsCreator(boolean checkMinDate, NumberPicker dayPicker, NumberPicker monthPicker, NumberPicker yearPicker, NumberPicker view, int scrollState) {
         if (checkMinDate && scrollState == 0) {
             checkPickerDate(dayPicker, monthPicker, yearPicker);
         }
     }
 
-    static final /* synthetic */ void lambda$createDatePickerDialog$11$AlertsCreator(boolean checkMinDate, NumberPicker dayPicker, NumberPicker monthPicker, NumberPicker yearPicker, NumberPicker view, int scrollState) {
+    static final /* synthetic */ void lambda$createDatePickerDialog$15$AlertsCreator(boolean checkMinDate, NumberPicker dayPicker, NumberPicker monthPicker, NumberPicker yearPicker, NumberPicker view, int scrollState) {
         if (checkMinDate && scrollState == 0) {
             checkPickerDate(dayPicker, monthPicker, yearPicker);
         }
     }
 
-    static final /* synthetic */ void lambda$createDatePickerDialog$12$AlertsCreator(boolean checkMinDate, NumberPicker dayPicker, NumberPicker monthPicker, NumberPicker yearPicker, DatePickerDelegate datePickerDelegate, DialogInterface dialog, int which) {
+    static final /* synthetic */ void lambda$createDatePickerDialog$16$AlertsCreator(boolean checkMinDate, NumberPicker dayPicker, NumberPicker monthPicker, NumberPicker yearPicker, DatePickerDelegate datePickerDelegate, DialogInterface dialog, int which) {
         if (checkMinDate) {
             checkPickerDate(dayPicker, monthPicker, yearPicker);
         }
@@ -1355,11 +1476,11 @@ public class AlertsCreator {
         items[1] = LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Hours", 8));
         items[2] = LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Days", 2));
         items[3] = LocaleController.getString("MuteDisable", R.string.MuteDisable);
-        builder.setItems(items, new AlertsCreator$$Lambda$13(dialog_id));
+        builder.setItems(items, new AlertsCreator$$Lambda$15(dialog_id));
         return builder.create();
     }
 
-    static final /* synthetic */ void lambda$createMuteAlert$13$AlertsCreator(long dialog_id, DialogInterface dialogInterface, int i) {
+    static final /* synthetic */ void lambda$createMuteAlert$17$AlertsCreator(long dialog_id, DialogInterface dialogInterface, int i) {
         long flags;
         int untilTime = ConnectionsManager.getInstance(UserConfig.selectedAccount).getCurrentTime();
         if (i == 0) {
@@ -1395,12 +1516,12 @@ public class AlertsCreator {
         if (context != null && parentFragment != null) {
             BottomSheet.Builder builder = new BottomSheet.Builder(context);
             builder.setTitle(LocaleController.getString("ReportChat", R.string.ReportChat));
-            builder.setItems(new CharSequence[]{LocaleController.getString("ReportChatSpam", R.string.ReportChatSpam), LocaleController.getString("ReportChatViolence", R.string.ReportChatViolence), LocaleController.getString("ReportChatChild", R.string.ReportChatChild), LocaleController.getString("ReportChatPornography", R.string.ReportChatPornography), LocaleController.getString("ReportChatOther", R.string.ReportChatOther)}, new AlertsCreator$$Lambda$14(dialog_id, messageId, parentFragment, context));
+            builder.setItems(new CharSequence[]{LocaleController.getString("ReportChatSpam", R.string.ReportChatSpam), LocaleController.getString("ReportChatViolence", R.string.ReportChatViolence), LocaleController.getString("ReportChatChild", R.string.ReportChatChild), LocaleController.getString("ReportChatPornography", R.string.ReportChatPornography), LocaleController.getString("ReportChatOther", R.string.ReportChatOther)}, new AlertsCreator$$Lambda$16(dialog_id, messageId, parentFragment, context));
             parentFragment.showDialog(builder.create());
         }
     }
 
-    static final /* synthetic */ void lambda$createReportAlert$15$AlertsCreator(long dialog_id, int messageId, BaseFragment parentFragment, Context context, DialogInterface dialogInterface, int i) {
+    static final /* synthetic */ void lambda$createReportAlert$19$AlertsCreator(long dialog_id, int messageId, BaseFragment parentFragment, Context context, DialogInterface dialogInterface, int i) {
         if (i == 4) {
             Bundle args = new Bundle();
             args.putLong("dialog_id", dialog_id);
@@ -1439,11 +1560,11 @@ public class AlertsCreator {
             }
             req = request;
         }
-        ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(req, AlertsCreator$$Lambda$34.$instance);
+        ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(req, AlertsCreator$$Lambda$36.$instance);
         Toast.makeText(context, LocaleController.getString("ReportChatSent", R.string.ReportChatSent), 0).show();
     }
 
-    static final /* synthetic */ void lambda$null$14$AlertsCreator(TLObject response, TL_error error) {
+    static final /* synthetic */ void lambda$null$18$AlertsCreator(TLObject response, TL_error error) {
     }
 
     private static String getFloodWaitString(String error) {
@@ -1602,7 +1723,7 @@ public class AlertsCreator {
             switch (z) {
                 case false:
                     builder.setMessage(LocaleController.getString("NobodyLikesSpam2", R.string.NobodyLikesSpam2));
-                    builder.setNegativeButton(LocaleController.getString("MoreInfo", R.string.MoreInfo), new AlertsCreator$$Lambda$15(fragment));
+                    builder.setNegativeButton(LocaleController.getString("MoreInfo", R.string.MoreInfo), new AlertsCreator$$Lambda$17(fragment));
                     break;
                 case true:
                 case true:
@@ -1711,20 +1832,20 @@ public class AlertsCreator {
             cell.setCheckColor(TextColorCell.colors[a], TextColorCell.colors[a]);
             cell.setTextAndValue(descriptions[a], currentColor == TextColorCell.colorsToSave[a]);
             linearLayout.addView(cell);
-            cell.setOnClickListener(new AlertsCreator$$Lambda$16(linearLayout, selectedColor));
+            cell.setOnClickListener(new AlertsCreator$$Lambda$18(linearLayout, selectedColor));
         }
         Builder builder = new Builder((Context) parentActivity);
         builder.setTitle(LocaleController.getString("LedColor", R.string.LedColor));
         builder.setView(linearLayout);
-        builder.setPositiveButton(LocaleController.getString("Set", R.string.Set), new AlertsCreator$$Lambda$17(dialog_id, selectedColor, globalType, onSelect));
-        builder.setNeutralButton(LocaleController.getString("LedDisabled", R.string.LedDisabled), new AlertsCreator$$Lambda$18(dialog_id, globalType, onSelect));
+        builder.setPositiveButton(LocaleController.getString("Set", R.string.Set), new AlertsCreator$$Lambda$19(dialog_id, selectedColor, globalType, onSelect));
+        builder.setNeutralButton(LocaleController.getString("LedDisabled", R.string.LedDisabled), new AlertsCreator$$Lambda$20(dialog_id, globalType, onSelect));
         if (dialog_id != 0) {
-            builder.setNegativeButton(LocaleController.getString("Default", R.string.Default), new AlertsCreator$$Lambda$19(dialog_id, onSelect));
+            builder.setNegativeButton(LocaleController.getString("Default", R.string.Default), new AlertsCreator$$Lambda$21(dialog_id, onSelect));
         }
         return builder.create();
     }
 
-    static final /* synthetic */ void lambda$createColorSelectDialog$17$AlertsCreator(LinearLayout linearLayout, int[] selectedColor, View v) {
+    static final /* synthetic */ void lambda$createColorSelectDialog$21$AlertsCreator(LinearLayout linearLayout, int[] selectedColor, View v) {
         int count = linearLayout.getChildCount();
         for (int a1 = 0; a1 < count; a1++) {
             boolean z;
@@ -1739,7 +1860,7 @@ public class AlertsCreator {
         selectedColor[0] = TextColorCell.colorsToSave[((Integer) v.getTag()).intValue()];
     }
 
-    static final /* synthetic */ void lambda$createColorSelectDialog$18$AlertsCreator(long dialog_id, int[] selectedColor, int globalType, Runnable onSelect, DialogInterface dialogInterface, int which) {
+    static final /* synthetic */ void lambda$createColorSelectDialog$22$AlertsCreator(long dialog_id, int[] selectedColor, int globalType, Runnable onSelect, DialogInterface dialogInterface, int which) {
         Editor editor = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
         if (dialog_id != 0) {
             editor.putInt("color_" + dialog_id, selectedColor[0]);
@@ -1756,7 +1877,7 @@ public class AlertsCreator {
         }
     }
 
-    static final /* synthetic */ void lambda$createColorSelectDialog$19$AlertsCreator(long dialog_id, int globalType, Runnable onSelect, DialogInterface dialog, int which) {
+    static final /* synthetic */ void lambda$createColorSelectDialog$23$AlertsCreator(long dialog_id, int globalType, Runnable onSelect, DialogInterface dialog, int which) {
         Editor editor = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
         if (dialog_id != 0) {
             editor.putInt("color_" + dialog_id, 0);
@@ -1773,7 +1894,7 @@ public class AlertsCreator {
         }
     }
 
-    static final /* synthetic */ void lambda$createColorSelectDialog$20$AlertsCreator(long dialog_id, Runnable onSelect, DialogInterface dialog, int which) {
+    static final /* synthetic */ void lambda$createColorSelectDialog$24$AlertsCreator(long dialog_id, Runnable onSelect, DialogInterface dialog, int which) {
         Editor editor = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
         editor.remove("color_" + dialog_id);
         editor.commit();
@@ -1821,7 +1942,7 @@ public class AlertsCreator {
             cell.setCheckColor(Theme.getColor("radioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
             cell.setTextAndValue(descriptions[a], selected[0] == a);
             linearLayout.addView(cell);
-            cell.setOnClickListener(new AlertsCreator$$Lambda$20(selected, dialog_id, prefKeyPrefix, builder, onSelect));
+            cell.setOnClickListener(new AlertsCreator$$Lambda$22(selected, dialog_id, prefKeyPrefix, builder, onSelect));
             a++;
         }
         builder.setTitle(LocaleController.getString("Vibrate", R.string.Vibrate));
@@ -1830,7 +1951,7 @@ public class AlertsCreator {
         return builder.create();
     }
 
-    static final /* synthetic */ void lambda$createVibrationSelectDialog$21$AlertsCreator(int[] selected, long dialog_id, String prefKeyPrefix, Builder builder, Runnable onSelect, View v) {
+    static final /* synthetic */ void lambda$createVibrationSelectDialog$25$AlertsCreator(int[] selected, long dialog_id, String prefKeyPrefix, Builder builder, Runnable onSelect, View v) {
         selected[0] = ((Integer) v.getTag()).intValue();
         Editor editor = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
         if (dialog_id != 0) {
@@ -1884,18 +2005,18 @@ public class AlertsCreator {
             cell.setCheckColor(Theme.getColor("radioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
             cell.setTextAndValue(descriptions[a], selected[0] == a);
             linearLayout.addView(cell);
-            cell.setOnClickListener(new AlertsCreator$$Lambda$21(selected, linearLayout));
+            cell.setOnClickListener(new AlertsCreator$$Lambda$23(selected, linearLayout));
             a++;
         }
         Builder builder = new Builder((Context) parentActivity);
         builder.setTopImage(new ShareLocationDrawable(parentActivity, false), Theme.getColor("dialogTopBackground"));
         builder.setView(linearLayout);
-        builder.setPositiveButton(LocaleController.getString("ShareFile", R.string.ShareFile), new AlertsCreator$$Lambda$22(selected, callback));
+        builder.setPositiveButton(LocaleController.getString("ShareFile", R.string.ShareFile), new AlertsCreator$$Lambda$24(selected, callback));
         builder.setNeutralButton(LocaleController.getString("Cancel", R.string.Cancel), null);
         return builder.create();
     }
 
-    static final /* synthetic */ void lambda$createLocationUpdateDialog$22$AlertsCreator(int[] selected, LinearLayout linearLayout, View v) {
+    static final /* synthetic */ void lambda$createLocationUpdateDialog$26$AlertsCreator(int[] selected, LinearLayout linearLayout, View v) {
         selected[0] = ((Integer) v.getTag()).intValue();
         int count = linearLayout.getChildCount();
         for (int a1 = 0; a1 < count; a1++) {
@@ -1913,7 +2034,7 @@ public class AlertsCreator {
         }
     }
 
-    static final /* synthetic */ void lambda$createLocationUpdateDialog$23$AlertsCreator(int[] selected, IntCallback callback, DialogInterface dialog, int which) {
+    static final /* synthetic */ void lambda$createLocationUpdateDialog$27$AlertsCreator(int[] selected, IntCallback callback, DialogInterface dialog, int which) {
         int time;
         if (selected[0] == 0) {
             time = 900;
@@ -1929,8 +2050,8 @@ public class AlertsCreator {
         Builder builder = new Builder((Context) parentActivity);
         builder.setTopImage((int) R.drawable.permissions_contacts, Theme.getColor("dialogTopBackground"));
         builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString("ContactsPermissionAlert", R.string.ContactsPermissionAlert)));
-        builder.setPositiveButton(LocaleController.getString("ContactsPermissionAlertContinue", R.string.ContactsPermissionAlertContinue), new AlertsCreator$$Lambda$23(callback));
-        builder.setNegativeButton(LocaleController.getString("ContactsPermissionAlertNotNow", R.string.ContactsPermissionAlertNotNow), new AlertsCreator$$Lambda$24(callback));
+        builder.setPositiveButton(LocaleController.getString("ContactsPermissionAlertContinue", R.string.ContactsPermissionAlertContinue), new AlertsCreator$$Lambda$25(callback));
+        builder.setNegativeButton(LocaleController.getString("ContactsPermissionAlertNotNow", R.string.ContactsPermissionAlertNotNow), new AlertsCreator$$Lambda$26(callback));
         return builder;
     }
 
@@ -1964,19 +2085,19 @@ public class AlertsCreator {
             cell.setCheckColor(Theme.getColor("radioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
             cell.setTextAndValue(descriptions[a], selected[0] == a);
             linearLayout.addView(cell);
-            cell.setOnClickListener(new AlertsCreator$$Lambda$25(selected, linearLayout));
+            cell.setOnClickListener(new AlertsCreator$$Lambda$27(selected, linearLayout));
             a++;
         }
         Builder builder = new Builder((Context) parentActivity);
         builder.setTitle(LocaleController.getString("LowDiskSpaceTitle", R.string.LowDiskSpaceTitle));
         builder.setMessage(LocaleController.getString("LowDiskSpaceMessage", R.string.LowDiskSpaceMessage));
         builder.setView(linearLayout);
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new AlertsCreator$$Lambda$26(selected));
-        builder.setNeutralButton(LocaleController.getString("ClearMediaCache", R.string.ClearMediaCache), new AlertsCreator$$Lambda$27(parentActivity));
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new AlertsCreator$$Lambda$28(selected));
+        builder.setNeutralButton(LocaleController.getString("ClearMediaCache", R.string.ClearMediaCache), new AlertsCreator$$Lambda$29(parentActivity));
         return builder.create();
     }
 
-    static final /* synthetic */ void lambda$createFreeSpaceDialog$26$AlertsCreator(int[] selected, LinearLayout linearLayout, View v) {
+    static final /* synthetic */ void lambda$createFreeSpaceDialog$30$AlertsCreator(int[] selected, LinearLayout linearLayout, View v) {
         int num = ((Integer) v.getTag()).intValue();
         if (num == 0) {
             selected[0] = 3;
@@ -2053,7 +2174,7 @@ public class AlertsCreator {
             cell.setCheckColor(Theme.getColor("radioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
             cell.setTextAndValue(descriptions[a], selected[0] == a);
             linearLayout.addView(cell);
-            cell.setOnClickListener(new AlertsCreator$$Lambda$28(selected, dialog_id, globalType, preferences, builder, onSelect));
+            cell.setOnClickListener(new AlertsCreator$$Lambda$30(selected, dialog_id, globalType, preferences, builder, onSelect));
             a++;
         }
         builder.setTitle(LocaleController.getString("NotificationsImportance", R.string.NotificationsImportance));
@@ -2062,7 +2183,7 @@ public class AlertsCreator {
         return builder.create();
     }
 
-    static final /* synthetic */ void lambda$createPrioritySelectDialog$29$AlertsCreator(int[] selected, long dialog_id, int globalType, SharedPreferences preferences, Builder builder, Runnable onSelect, View v) {
+    static final /* synthetic */ void lambda$createPrioritySelectDialog$33$AlertsCreator(int[] selected, long dialog_id, int globalType, SharedPreferences preferences, Builder builder, Runnable onSelect, View v) {
         selected[0] = ((Integer) v.getTag()).intValue();
         Editor editor = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
         int option;
@@ -2135,7 +2256,7 @@ public class AlertsCreator {
             }
             cell.setTextAndValue(str, z);
             linearLayout.addView(cell);
-            cell.setOnClickListener(new AlertsCreator$$Lambda$29(selected, globalType, builder, onSelect));
+            cell.setOnClickListener(new AlertsCreator$$Lambda$31(selected, globalType, builder, onSelect));
         }
         builder.setTitle(LocaleController.getString("PopupNotification", R.string.PopupNotification));
         builder.setView(linearLayout);
@@ -2143,7 +2264,7 @@ public class AlertsCreator {
         return builder.create();
     }
 
-    static final /* synthetic */ void lambda$createPopupSelectDialog$30$AlertsCreator(int[] selected, int globalType, Builder builder, Runnable onSelect, View v) {
+    static final /* synthetic */ void lambda$createPopupSelectDialog$34$AlertsCreator(int[] selected, int globalType, Builder builder, Runnable onSelect, View v) {
         selected[0] = ((Integer) v.getTag()).intValue();
         Editor editor = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
         if (globalType == 1) {
@@ -2178,7 +2299,7 @@ public class AlertsCreator {
             }
             cell.setTextAndValue(str, z);
             linearLayout.addView(cell);
-            cell.setOnClickListener(new AlertsCreator$$Lambda$30(builder, listener));
+            cell.setOnClickListener(new AlertsCreator$$Lambda$32(builder, listener));
         }
         builder.setTitle(title);
         builder.setView(linearLayout);
@@ -2186,7 +2307,7 @@ public class AlertsCreator {
         return builder.create();
     }
 
-    static final /* synthetic */ void lambda$createSingleChoiceDialog$31$AlertsCreator(Builder builder, OnClickListener listener, View v) {
+    static final /* synthetic */ void lambda$createSingleChoiceDialog$35$AlertsCreator(Builder builder, OnClickListener listener, View v) {
         int sel = ((Integer) v.getTag()).intValue();
         builder.getDismissRunnable().run();
         listener.onClick(null, sel);
@@ -2213,13 +2334,13 @@ public class AlertsCreator {
         } else if (encryptedChat.ttl == 0) {
             numberPicker.setValue(0);
         }
-        numberPicker.setFormatter(AlertsCreator$$Lambda$31.$instance);
+        numberPicker.setFormatter(AlertsCreator$$Lambda$33.$instance);
         builder.setView(numberPicker);
-        builder.setNegativeButton(LocaleController.getString("Done", R.string.Done), new AlertsCreator$$Lambda$32(encryptedChat, numberPicker));
+        builder.setNegativeButton(LocaleController.getString("Done", R.string.Done), new AlertsCreator$$Lambda$34(encryptedChat, numberPicker));
         return builder;
     }
 
-    static final /* synthetic */ String lambda$createTTLAlert$32$AlertsCreator(int value) {
+    static final /* synthetic */ String lambda$createTTLAlert$36$AlertsCreator(int value) {
         if (value == 0) {
             return LocaleController.getString("ShortMessageLifetimeForever", R.string.ShortMessageLifetimeForever);
         }
@@ -2244,7 +2365,7 @@ public class AlertsCreator {
         return "";
     }
 
-    static final /* synthetic */ void lambda$createTTLAlert$33$AlertsCreator(EncryptedChat encryptedChat, NumberPicker numberPicker, DialogInterface dialog, int which) {
+    static final /* synthetic */ void lambda$createTTLAlert$37$AlertsCreator(EncryptedChat encryptedChat, NumberPicker numberPicker, DialogInterface dialog, int which) {
         int oldValue = encryptedChat.ttl;
         which = numberPicker.getValue();
         if (which >= 0 && which < 16) {
@@ -2282,7 +2403,7 @@ public class AlertsCreator {
                 cell.setPadding(AndroidUtilities.dp(14.0f), 0, AndroidUtilities.dp(14.0f), 0);
                 cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                 linearLayout.addView(cell, LayoutHelper.createLinear(-1, 50));
-                cell.setOnClickListener(new AlertsCreator$$Lambda$33(alertDialog, dismissRunnable, delegate));
+                cell.setOnClickListener(new AlertsCreator$$Lambda$35(alertDialog, dismissRunnable, delegate));
             }
         }
         builder.setTitle(LocaleController.getString("SelectAccount", R.string.SelectAccount));
@@ -2293,7 +2414,7 @@ public class AlertsCreator {
         return create;
     }
 
-    static final /* synthetic */ void lambda$createAccountSelectDialog$34$AlertsCreator(AlertDialog[] alertDialog, Runnable dismissRunnable, AccountSelectDelegate delegate, View v) {
+    static final /* synthetic */ void lambda$createAccountSelectDialog$38$AlertsCreator(AlertDialog[] alertDialog, Runnable dismissRunnable, AccountSelectDelegate delegate, View v) {
         if (alertDialog[0] != null) {
             alertDialog[0].setOnDismissListener(null);
         }

@@ -21,6 +21,7 @@ public class RadialProgress2 {
     private int circlePressedColor;
     private String circlePressedColorKey;
     private int circleRadius;
+    private boolean drawBackground = true;
     private boolean drawMiniIcon;
     private int iconColor;
     private String iconColorKey;
@@ -111,6 +112,10 @@ public class RadialProgress2 {
         this.circlePressedColorKey = circlePressed;
         this.iconColorKey = icon;
         this.iconPressedColorKey = iconPressed;
+    }
+
+    public void setDrawBackground(boolean value) {
+        this.drawBackground = value;
     }
 
     public void setProgressRect(int left, int top, int right, int bottom) {
@@ -299,7 +304,7 @@ public class RadialProgress2 {
                 this.mediaActionDrawable.setColor(c);
                 this.overlayImageView.setImageCoords(centerX - this.circleRadius, centerY - this.circleRadius, this.circleRadius * 2, this.circleRadius * 2);
             }
-            if (drawCircle) {
+            if (drawCircle && this.drawBackground) {
                 if (this.drawMiniIcon && this.miniDrawCanvas != null) {
                     this.miniDrawCanvas.drawCircle((float) centerX, (float) centerY, (float) this.circleRadius, this.circlePaint);
                 } else if (!(currentIcon == 4 && wholeAlpha == 0.0f)) {

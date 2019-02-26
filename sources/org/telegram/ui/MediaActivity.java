@@ -546,7 +546,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                             if (!messageObject.isRoundVideo()) {
                                 return result;
                             }
-                            MediaController.getInstance().setCurrentRoundVisible(false);
+                            MediaController.getInstance().setCurrentVideoVisible(false);
                             return result;
                         }
                     }
@@ -1185,7 +1185,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             }
         };
         this.provider = new EmptyPhotoViewerProvider() {
-            public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
+            public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index, boolean needPreview) {
                 if (messageObject == null || (MediaActivity.this.mediaPages[0].selectedType != 0 && MediaActivity.this.mediaPages[0].selectedType != 1)) {
                     return null;
                 }
@@ -1992,7 +1992,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                         MediaActivity.this.tabsAnimation.setInterpolator(MediaActivity.interpolator);
                         int width = getMeasuredWidth();
                         int halfWidth = width / 2;
-                        float distance = ((float) halfWidth) + (((float) halfWidth) * MediaActivity.this.distanceInfluenceForSnapDuration(Math.min(1.0f, (1.0f * dx2) / ((float) width))));
+                        float distance = ((float) halfWidth) + (((float) halfWidth) * AndroidUtilities.distanceInfluenceForSnapDuration(Math.min(1.0f, (1.0f * dx2) / ((float) width))));
                         velX = Math.abs(velX);
                         if (velX > 0.0f) {
                             duration = Math.round(1000.0f * Math.abs(distance / velX)) * 4;
@@ -2246,10 +2246,6 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             access$200.listView.setPinnedSectionOffsetY((int) value);
         }
         this.fragmentView.invalidate();
-    }
-
-    private float distanceInfluenceForSnapDuration(float f) {
-        return (float) Math.sin((double) ((f - 0.5f) * 0.47123894f));
     }
 
     private void resetScroll() {

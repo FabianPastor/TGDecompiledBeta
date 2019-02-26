@@ -121,7 +121,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             return false;
         }
 
-        public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
+        public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index, boolean needPreview) {
             PhotoPickerPhotoCell cell = PhotoPickerActivity.this.getCellForIndex(index);
             if (cell == null) {
                 return null;

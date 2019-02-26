@@ -79,6 +79,7 @@ public class NotificationCenter {
     public static final int messagePlayingDidReset;
     public static final int messagePlayingDidSeek;
     public static final int messagePlayingDidStart;
+    public static final int messagePlayingGoingToStop;
     public static final int messagePlayingPlayStateChanged;
     public static final int messagePlayingProgressDidChanged;
     public static final int messageReceivedByAck;
@@ -130,6 +131,7 @@ public class NotificationCenter {
     public static final int updateMentionsCount;
     public static final int updateMessageMedia;
     public static final int userInfoDidLoad;
+    public static final int videoLoadingStateChanged;
     public static final int wallpapersDidLoad;
     public static final int wallpapersNeedReload;
     public static final int wasUnableToFindCurrentLocation;
@@ -370,6 +372,9 @@ public class NotificationCenter {
         chatOnlineCountDidLoad = i;
         i = totalEvents;
         totalEvents = i + 1;
+        videoLoadingStateChanged = i;
+        i = totalEvents;
+        totalEvents = i + 1;
         httpFileDidLoad = i;
         i = totalEvents;
         totalEvents = i + 1;
@@ -422,6 +427,9 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         messagePlayingDidSeek = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        messagePlayingGoingToStop = i;
         i = totalEvents;
         totalEvents = i + 1;
         recordProgressChanged = i;

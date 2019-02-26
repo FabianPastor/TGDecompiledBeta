@@ -149,7 +149,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     private boolean paused;
     private PhotoAttachAdapter photoAttachAdapter;
     private PhotoViewerProvider photoViewerProvider = new BasePhotoProvider() {
-        public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
+        public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index, boolean needPreview) {
             PhotoAttachPhotoCell cell = ChatAttachAlert.this.getCellForIndex(index);
             if (cell == null) {
                 return null;

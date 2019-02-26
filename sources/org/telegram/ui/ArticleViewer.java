@@ -353,7 +353,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
     private int animationInProgress;
     private long animationStartTime;
     private float animationValue;
-    private float[][] animationValues = ((float[][]) Array.newInstance(Float.TYPE, new int[]{2, 8}));
+    private float[][] animationValues = ((float[][]) Array.newInstance(Float.TYPE, new int[]{2, 10}));
     private AspectRatioFrameLayout aspectRatioFrameLayout;
     private boolean attachedToWindow;
     private ImageView backButton;
@@ -2996,6 +2996,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         private int textX;
         private int textY;
         private WebPlayerView videoView;
+        private boolean wasUserInteraction;
         private TouchyWebView webView;
 
         private class TelegramWebviewProxy {
@@ -3043,6 +3044,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             }
 
             public boolean onTouchEvent(MotionEvent event) {
+                BlockEmbedCell.this.wasUserInteraction = true;
                 if (BlockEmbedCell.this.currentBlock != null) {
                     if (BlockEmbedCell.this.currentBlock.allow_scrolling) {
                         requestDisallowInterceptTouchEvent(true);
@@ -3196,6 +3198,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 }
 
                 public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    if (!BlockEmbedCell.this.wasUserInteraction) {
+                        return false;
+                    }
                     Browser.openUrl(ArticleViewer.this.parentActivity, url);
                     return true;
                 }
@@ -3222,6 +3227,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             TL_pageBlockEmbed previousBlock = this.currentBlock;
             this.currentBlock = block;
             if (previousBlock != this.currentBlock) {
+                this.wasUserInteraction = false;
                 if (this.currentBlock.allow_scrolling) {
                     this.webView.setVerticalScrollBarEnabled(true);
                     this.webView.setHorizontalScrollBarEnabled(true);
@@ -3440,7 +3446,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                         this.avatarImageView.setImage(FileLoader.getClosestPhotoSizeWithSize(photo.sizes, AndroidUtilities.dp(40.0f), true), String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(40), Integer.valueOf(40)}), this.avatarDrawable, 0, null, ArticleViewer.this.currentPage, 1);
                     }
                 }
-                this.nameLayout = ArticleViewer.this.createLayoutForText(this, this.currentBlock.author, null, width - AndroidUtilities.dp((float) ((this.avatarVisible ? 54 : 0) + 50)), this.currentBlock, this.parentAdapter);
+                this.nameLayout = ArticleViewer.this.createLayoutForText(this, this.currentBlock.author, null, width - AndroidUtilities.dp((float) ((this.avatarVisible ? 54 : 0) + 50)), 0, this.currentBlock, Alignment.ALIGN_NORMAL, 1, this.parentAdapter);
                 if (this.currentBlock.date != 0) {
                     this.dateLayout = ArticleViewer.this.createLayoutForText(this, LocaleController.getInstance().chatFullDate.format(((long) this.currentBlock.date) * 1000), null, width - AndroidUtilities.dp((float) ((this.avatarVisible ? 54 : 0) + 50)), this.currentBlock, this.parentAdapter);
                 } else {
@@ -5551,6 +5557,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
             super(context);
             this.parentAdapter = adapter;
             setWillNotDraw(false);
+            this.imageView.setNeedsQualityThumb(true);
+            this.imageView.setShouldGenerateQualityThumb(true);
             this.currentType = type;
             this.radialProgress = new RadialProgress(this);
             this.radialProgress.setAlphaForPrevious(true);
@@ -5657,7 +5665,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                 }
                 if (this.currentDocument != null) {
                     int size = AndroidUtilities.dp(48.0f);
-                    TLObject thumb = FileLoader.getClosestPhotoSizeWithSize(this.currentDocument.thumbs, 48);
+                    PhotoSize thumb = FileLoader.getClosestPhotoSizeWithSize(this.currentDocument.thumbs, 48);
                     if (this.currentType == 0) {
                         boolean found = false;
                         int count = this.currentDocument.attributes.size();
@@ -5698,15 +5706,17 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                             photoHeight -= AndroidUtilities.dp(2.0f);
                         }
                     }
+                    this.imageView.setQualityThumbDocument(this.currentDocument);
                     ImageReceiver imageReceiver = this.imageView;
                     int dp = (this.isFirst || this.currentType == 1 || this.currentType == 2 || this.currentBlock.level > 0) ? 0 : AndroidUtilities.dp(8.0f);
                     imageReceiver.setImageCoords(photoX, dp, photoWidth, photoHeight);
                     if (this.isGif) {
-                        this.imageView.setImage(this.currentDocument, String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(photoWidth), Integer.valueOf(photoHeight)}), thumb, "80_80_b", this.currentDocument.size, null, ArticleViewer.this.currentPage, 1);
+                        String filter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(photoWidth), Integer.valueOf(photoHeight)});
+                        this.imageView.setImage(this.currentDocument, null, null, null, null, thumb, "80_80_b", this.currentDocument.size, null, ArticleViewer.this.currentPage, 1);
                     } else {
                         this.imageView.setImage(null, null, thumb, "80_80_b", 0, null, ArticleViewer.this.currentPage, 1);
                     }
-                    this.imageView.setAspectFit(this.isGif);
+                    this.imageView.setAspectFit(true);
                     this.buttonX = (int) (((float) this.imageView.getImageX()) + (((float) (this.imageView.getImageWidth() - size)) / 2.0f));
                     this.buttonY = (int) (((float) this.imageView.getImageY()) + (((float) (this.imageView.getImageHeight() - size)) / 2.0f));
                     this.radialProgress.setProgressRect(this.buttonX, this.buttonY, this.buttonX + size, this.buttonY + size);
@@ -11446,7 +11456,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
 
     private void releasePlayer() {
         if (this.videoPlayer != null) {
-            this.videoPlayer.releasePlayer();
+            this.videoPlayer.releasePlayer(true);
             this.videoPlayer = null;
         }
         try {
@@ -12116,6 +12126,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.animationValues[0][5] = ((float) clipTop) * object.scale;
         this.animationValues[0][6] = ((float) clipBottom) * object.scale;
         this.animationValues[0][7] = (float) this.animatingImageView.getRadius();
+        this.animationValues[0][8] = ((float) clipVertical) * object.scale;
+        this.animationValues[0][9] = ((float) clipHorizontal) * object.scale;
         this.animationValues[1][0] = scale;
         this.animationValues[1][1] = scale;
         this.animationValues[1][2] = xPos;
@@ -12124,6 +12136,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         this.animationValues[1][5] = 0.0f;
         this.animationValues[1][6] = 0.0f;
         this.animationValues[1][7] = 0.0f;
+        this.animationValues[1][8] = 0.0f;
+        this.animationValues[1][9] = 0.0f;
         this.photoContainerView.setVisibility(0);
         this.photoContainerBackground.setVisibility(0);
         this.animatingImageView.setAnimationProgress(0.0f);
@@ -12286,6 +12300,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     this.animationValues[0][5] = 0.0f;
                     this.animationValues[0][6] = 0.0f;
                     this.animationValues[0][7] = 0.0f;
+                    this.animationValues[0][8] = 0.0f;
+                    this.animationValues[0][9] = 0.0f;
                     this.animationValues[1][0] = object.scale;
                     this.animationValues[1][1] = object.scale;
                     this.animationValues[1][2] = ((float) object.viewX) + (((float) drawRegion.left) * object.scale);
@@ -12294,6 +12310,8 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     this.animationValues[1][5] = ((float) clipTop) * object.scale;
                     this.animationValues[1][6] = ((float) clipBottom) * object.scale;
                     this.animationValues[1][7] = (float) object.radius;
+                    this.animationValues[1][8] = ((float) clipVertical) * object.scale;
+                    this.animationValues[1][9] = ((float) clipHorizontal) * object.scale;
                     r23 = new Animator[6];
                     float[] fArr = new float[2];
                     r23[0] = ObjectAnimator.ofFloat(this.animatingImageView, "animationProgress", new float[]{0.0f, 1.0f});
@@ -12521,7 +12539,7 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                         this.moveStartX = ev.getX();
                         this.moveStartY = ev.getY();
                         updateMinMax(this.scale);
-                        if ((this.translationX < this.minX && !this.rightImage.hasImage()) || (this.translationX > this.maxX && !this.leftImage.hasImage())) {
+                        if ((this.translationX < this.minX && !this.rightImage.hasImageSet()) || (this.translationX > this.maxX && !this.leftImage.hasImageSet())) {
                             moveDx /= 3.0f;
                         }
                         if (this.maxY == 0.0f && this.minY == 0.0f) {
@@ -12586,10 +12604,10 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
                     this.velocityTracker.computeCurrentVelocity(1000);
                     velocity = this.velocityTracker.getXVelocity();
                 }
-                if ((this.translationX < this.minX - ((float) (getContainerViewWidth() / 3)) || velocity < ((float) (-AndroidUtilities.dp(650.0f)))) && this.rightImage.hasImage()) {
+                if ((this.translationX < this.minX - ((float) (getContainerViewWidth() / 3)) || velocity < ((float) (-AndroidUtilities.dp(650.0f)))) && this.rightImage.hasImageSet()) {
                     goToNext();
                     return true;
-                } else if ((this.translationX > this.maxX + ((float) (getContainerViewWidth() / 3)) || velocity > ((float) AndroidUtilities.dp(650.0f))) && this.leftImage.hasImage()) {
+                } else if ((this.translationX > this.maxX + ((float) (getContainerViewWidth() / 3)) || velocity > ((float) AndroidUtilities.dp(650.0f))) && this.leftImage.hasImageSet()) {
                     goToPrev();
                     return true;
                 } else {

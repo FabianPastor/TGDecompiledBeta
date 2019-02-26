@@ -16,6 +16,6 @@ final /* synthetic */ class AlertsCreator$$Lambda$11 implements OnScrollListener
     }
 
     public void onScrollStateChange(NumberPicker numberPicker, int i) {
-        AlertsCreator.lambda$createDatePickerDialog$11$AlertsCreator(this.arg$1, this.arg$2, this.arg$3, this.arg$4, numberPicker, i);
+        AlertsCreator.lambda$createDatePickerDialog$13$AlertsCreator(this.arg$1, this.arg$2, this.arg$3, this.arg$4, numberPicker, i);
     }
 }

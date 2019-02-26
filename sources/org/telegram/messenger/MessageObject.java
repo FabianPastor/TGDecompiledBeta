@@ -204,6 +204,7 @@ public class MessageObject {
     public boolean attachPathExists;
     public int audioPlayerDuration;
     public float audioProgress;
+    public int audioProgressMs;
     public int audioProgressSec;
     public StringBuilder botButtonsLayout;
     public float bufferedProgress;
@@ -221,6 +222,7 @@ public class MessageObject {
     public boolean forceUpdate;
     private int generatedWithMinSize;
     public float gifState;
+    public boolean hadAnimationNotReadyLoading;
     public boolean hasRtl;
     public boolean isDateObject;
     private int isRoundVideoCached;
@@ -372,6 +374,7 @@ public class MessageObject {
                 int paddingsWidth = (int) (((float) AndroidUtilities.dp(40.0f)) / (((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) / ((float) this.maxSizeWidth)));
                 float maxAspectRatio = ((float) this.maxSizeWidth) / 814.0f;
                 averageAspectRatio /= (float) count;
+                float minH = ((float) AndroidUtilities.dp(100.0f)) / 814.0f;
                 float height;
                 int width;
                 GroupedMessagePosition position1;
@@ -479,7 +482,7 @@ public class MessageObject {
                                         posToFix = pos;
                                     }
                                 }
-                                pos.set(k, k, i, i, width, lineHeight / 814.0f, flags);
+                                pos.set(k, k, i, i, width, Math.max(minH, lineHeight / 814.0f), flags);
                                 index++;
                             }
                             posToFix.pw += spanLeft;
@@ -547,6 +550,9 @@ public class MessageObject {
                         position1.set(0, 1, 0, 0, this.maxSizeWidth, firstHeight, 7);
                         width = this.maxSizeWidth / 2;
                         secondHeight = Math.min(814.0f - firstHeight, (float) Math.round(Math.min(((float) width) / position2.aspectRatio, ((float) width) / position3.aspectRatio))) / 814.0f;
+                        if (secondHeight < minH) {
+                            secondHeight = minH;
+                        }
                         position2.set(0, 0, 1, 1, width, secondHeight, 9);
                         position3.set(1, 1, 1, 1, width, secondHeight, 10);
                         maxX = (byte) 1;
@@ -572,6 +578,9 @@ public class MessageObject {
                             w2 -= diff - (diff / 2);
                         }
                         h = Math.min(814.0f - h0, h) / 814.0f;
+                        if (h < minH) {
+                            h = minH;
+                        }
                         position2.set(0, 0, 1, 1, w0, h, 9);
                         position3.set(1, 1, 1, 1, w1, h, 8);
                         position4.set(2, 2, 1, 1, w2, h, 10);
@@ -2483,6 +2492,7 @@ public class MessageObject {
             message.media.document = getDocumentWithId(webPage, pageBlockVideo.video_id);
         }
         message.message = "";
+        message.realId = getId();
         message.id = Utilities.random.nextInt();
         message.date = this.messageOwner.date;
         message.to_id = this.messageOwner.to_id;
@@ -2785,7 +2795,7 @@ public class MessageObject {
     }
 
     public static boolean isRoundVideoDocument(Document document) {
-        if (!(document == null || document.mime_type == null || !document.mime_type.equals("video/mp4"))) {
+        if (document != null && "video/mp4".equals(document.mime_type)) {
             int width = 0;
             int height = 0;
             boolean round = false;
@@ -2805,7 +2815,7 @@ public class MessageObject {
     }
 
     public static boolean isNewGifDocument(WebFile document) {
-        if (!(document == null || document.mime_type == null || !document.mime_type.equals("video/mp4"))) {
+        if (document != null && "video/mp4".equals(document.mime_type)) {
             int width = 0;
             int height = 0;
             for (int a = 0; a < document.attributes.size(); a++) {
@@ -2825,7 +2835,7 @@ public class MessageObject {
     }
 
     public static boolean isNewGifDocument(Document document) {
-        if (!(document == null || document.mime_type == null || !document.mime_type.equals("video/mp4"))) {
+        if (document != null && "video/mp4".equals(document.mime_type)) {
             int width = 0;
             int height = 0;
             boolean animated = false;
@@ -4211,10 +4221,10 @@ public class MessageObject {
         }
         int selfUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
         if (getDialogId() == ((long) selfUserId)) {
-            if (this.messageOwner.fwd_from.from_id == selfUserId || (this.messageOwner.fwd_from.saved_from_peer != null && this.messageOwner.fwd_from.saved_from_peer.user_id == selfUserId)) {
-                return true;
+            if ((this.messageOwner.fwd_from.from_id != selfUserId || (this.messageOwner.fwd_from.saved_from_peer != null && this.messageOwner.fwd_from.saved_from_peer.user_id != selfUserId)) && (this.messageOwner.fwd_from.saved_from_peer == null || this.messageOwner.fwd_from.saved_from_peer.user_id != selfUserId)) {
+                return false;
             }
-            return false;
+            return true;
         } else if (this.messageOwner.fwd_from.saved_from_peer == null || this.messageOwner.fwd_from.saved_from_peer.user_id == selfUserId) {
             return true;
         } else {
@@ -4286,11 +4296,16 @@ public class MessageObject {
         return this.messageOwner.id;
     }
 
+    public int getRealId() {
+        return this.messageOwner.realId != 0 ? this.messageOwner.realId : this.messageOwner.id;
+    }
+
     public static int getMessageSize(Message message) {
-        if (message.media == null || message.media.document == null) {
-            return 0;
+        Document document = message.media instanceof TL_messageMediaWebPage ? message.media.webpage.document : message.media != null ? message.media.document : null;
+        if (document != null) {
+            return document.size;
         }
-        return message.media.document.size;
+        return 0;
     }
 
     public int getSize() {
@@ -4438,6 +4453,9 @@ public class MessageObject {
             if (attribute instanceof TL_documentAttributeVideo) {
                 return attribute.supports_streaming;
             }
+        }
+        if (SharedConfig.streamMkv && "video/x-matroska".equals(document.mime_type)) {
+            return true;
         }
         return false;
     }
@@ -4603,6 +4621,9 @@ public class MessageObject {
         if (isAnimated && (width > 1280 || height > 1280)) {
             isAnimated = false;
         }
+        if (SharedConfig.streamMkv && !isVideo && "video/x-matroska".equals(document.mime_type)) {
+            isVideo = true;
+        }
         if (!isVideo || isAnimated) {
             return false;
         }
@@ -4612,6 +4633,9 @@ public class MessageObject {
     public Document getDocument() {
         if (this.messageOwner.media instanceof TL_messageMediaWebPage) {
             return this.messageOwner.media.webpage.document;
+        }
+        if (this.messageOwner.media instanceof TL_messageMediaGame) {
+            return this.messageOwner.media.game.document;
         }
         return this.messageOwner.media != null ? this.messageOwner.media.document : null;
     }
@@ -4961,12 +4985,7 @@ public class MessageObject {
     }
 
     public int getDuration() {
-        Document document;
-        if (this.type == 0) {
-            document = this.messageOwner.media.webpage.document;
-        } else {
-            document = this.messageOwner.media.document;
-        }
+        Document document = getDocument();
         if (document == null) {
             return 0;
         }

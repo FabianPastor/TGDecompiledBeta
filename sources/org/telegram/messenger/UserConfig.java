@@ -17,6 +17,7 @@ public class UserConfig {
     private static volatile UserConfig[] Instance = new UserConfig[3];
     public static final int MAX_ACCOUNT_COUNT = 3;
     public static int selectedAccount;
+    public long autoDownloadConfigLoadTime;
     public boolean blockedUsersLoaded;
     public int botRatingLoadTime;
     public int clientUserId;
@@ -151,6 +152,7 @@ public class UserConfig {
             editor.putBoolean("hasSecureData", this.hasSecureData);
             editor.putBoolean("notificationsSettingsLoaded3", this.notificationsSettingsLoaded);
             editor.putBoolean("notificationsSignUpSettingsLoaded", this.notificationsSignUpSettingsLoaded);
+            editor.putLong("autoDownloadConfigLoadTime", this.autoDownloadConfigLoadTime);
             editor.putInt("3migrateOffsetId", this.migrateOffsetId);
             if (this.migrateOffsetId != -1) {
                 editor.putInt("3migrateOffsetDate", this.migrateOffsetDate);
@@ -294,6 +296,7 @@ public class UserConfig {
             this.hasSecureData = preferences.getBoolean("hasSecureData", false);
             this.notificationsSettingsLoaded = preferences.getBoolean("notificationsSettingsLoaded3", false);
             this.notificationsSignUpSettingsLoaded = preferences.getBoolean("notificationsSignUpSettingsLoaded", false);
+            this.autoDownloadConfigLoadTime = preferences.getLong("autoDownloadConfigLoadTime", 0);
             try {
                 String terms = preferences.getString("terms", null);
                 if (terms != null) {

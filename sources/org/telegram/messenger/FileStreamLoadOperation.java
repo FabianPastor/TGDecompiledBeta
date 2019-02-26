@@ -14,7 +14,7 @@ import org.telegram.tgnet.TLRPC.TL_documentAttributeAudio;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeFilename;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeVideo;
 
-public class FileStreamLoadOperation extends BaseDataSource {
+public class FileStreamLoadOperation extends BaseDataSource implements FileLoadOperationStream {
     private long bytesRemaining;
     private CountDownLatch countDownLatch;
     private int currentAccount;
@@ -69,8 +69,10 @@ public class FileStreamLoadOperation extends BaseDataSource {
         }
         this.opened = true;
         transferStarted(dataSpec);
-        this.file = new RandomAccessFile(this.loadOperation.getCurrentFile(), "r");
-        this.file.seek((long) this.currentOffset);
+        if (this.loadOperation != null) {
+            this.file = new RandomAccessFile(this.loadOperation.getCurrentFile(), "r");
+            this.file.seek((long) this.currentOffset);
+        }
         return this.bytesRemaining;
     }
 
@@ -89,9 +91,8 @@ public class FileStreamLoadOperation extends BaseDataSource {
             while (availableLength == 0) {
                 availableLength = this.loadOperation.getDownloadedLengthFromOffset(this.currentOffset, readLength);
                 if (availableLength == 0) {
-                    if (this.loadOperation.isPaused()) {
-                        FileLoader.getInstance(this.currentAccount).loadStreamFile(this, this.document, this.parentObject, this.currentOffset);
-                    }
+                    FileLog.d("not found bytes " + offset);
+                    FileLoader.getInstance(this.currentAccount).loadStreamFile(this, this.document, this.parentObject, this.currentOffset);
                     this.countDownLatch = new CountDownLatch(1);
                     this.countDownLatch.await();
                 }
@@ -132,7 +133,7 @@ public class FileStreamLoadOperation extends BaseDataSource {
         }
     }
 
-    protected void newDataAvailable() {
+    public void newDataAvailable() {
         if (this.countDownLatch != null) {
             this.countDownLatch.countDown();
         }

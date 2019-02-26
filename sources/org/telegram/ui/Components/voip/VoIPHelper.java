@@ -25,6 +25,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -491,5 +492,28 @@ public class VoIPHelper {
             ll.addView(connectionServiceCell);
         }
         new Builder(context).setTitle(LocaleController.getString("DebugMenuCallSettings", R.string.DebugMenuCallSettings)).setView(ll).show();
+    }
+
+    public static int getDataSavingDefault() {
+        boolean low = DownloadController.getInstance(0).lowPreset.lessCallData;
+        boolean medium = DownloadController.getInstance(0).mediumPreset.lessCallData;
+        boolean high = DownloadController.getInstance(0).highPreset.lessCallData;
+        if (!low && !medium && !high) {
+            return 0;
+        }
+        if (low && !medium && !high) {
+            return 3;
+        }
+        if (low && medium && !high) {
+            return 1;
+        }
+        if (low && medium && high) {
+            return 2;
+        }
+        if (!BuildVars.LOGS_ENABLED) {
+            return 0;
+        }
+        FileLog.w("Invalid call data saving preset configuration: " + low + "/" + medium + "/" + high);
+        return 0;
     }
 }

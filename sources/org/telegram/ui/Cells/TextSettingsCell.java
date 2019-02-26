@@ -20,6 +20,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class TextSettingsCell extends FrameLayout {
+    private boolean canDisable;
     private boolean needDivider;
     private TextView textView;
     private ImageView valueImageView;
@@ -99,6 +100,10 @@ public class TextSettingsCell extends FrameLayout {
 
     public TextView getTextView() {
         return this.textView;
+    }
+
+    public void setCanDisable(boolean value) {
+        this.canDisable = value;
     }
 
     public TextView getValueTextView() {
@@ -207,6 +212,30 @@ public class TextSettingsCell extends FrameLayout {
             imageView = this.valueImageView;
             if (!value) {
                 f = 0.5f;
+            }
+            imageView.setAlpha(f);
+        }
+    }
+
+    public void setEnabled(boolean value) {
+        float f = 0.5f;
+        super.setEnabled(value);
+        TextView textView = this.textView;
+        float f2 = (value || !this.canDisable) ? 1.0f : 0.5f;
+        textView.setAlpha(f2);
+        if (this.valueTextView.getVisibility() == 0) {
+            textView = this.valueTextView;
+            if (value || !this.canDisable) {
+                f2 = 1.0f;
+            } else {
+                f2 = 0.5f;
+            }
+            textView.setAlpha(f2);
+        }
+        if (this.valueImageView.getVisibility() == 0) {
+            ImageView imageView = this.valueImageView;
+            if (value || !this.canDisable) {
+                f = 1.0f;
             }
             imageView.setAlpha(f);
         }

@@ -1,15 +1,15 @@
 package org.telegram.messenger;
 
-final /* synthetic */ class MediaController$$Lambda$23 implements Runnable {
-    private final MediaController arg$1;
-    private final int arg$2;
+import org.telegram.ui.ActionBar.AlertDialog;
 
-    MediaController$$Lambda$23(MediaController mediaController, int i) {
-        this.arg$1 = mediaController;
-        this.arg$2 = i;
+final /* synthetic */ class MediaController$$Lambda$23 implements Runnable {
+    private final AlertDialog arg$1;
+
+    MediaController$$Lambda$23(AlertDialog alertDialog) {
+        this.arg$1 = alertDialog;
     }
 
     public void run() {
-        this.arg$1.lambda$null$20$MediaController(this.arg$2);
+        MediaController.lambda$null$25$MediaController(this.arg$1);
     }
 }

@@ -1,28 +1,17 @@
 package org.telegram.ui.Components;
 
-import android.content.SharedPreferences;
-import android.view.View;
-import android.view.View.OnClickListener;
-import org.telegram.ui.ActionBar.AlertDialog.Builder;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import org.telegram.messenger.MessagesController;
 
 final /* synthetic */ class AlertsCreator$$Lambda$28 implements OnClickListener {
     private final int[] arg$1;
-    private final long arg$2;
-    private final int arg$3;
-    private final SharedPreferences arg$4;
-    private final Builder arg$5;
-    private final Runnable arg$6;
 
-    AlertsCreator$$Lambda$28(int[] iArr, long j, int i, SharedPreferences sharedPreferences, Builder builder, Runnable runnable) {
+    AlertsCreator$$Lambda$28(int[] iArr) {
         this.arg$1 = iArr;
-        this.arg$2 = j;
-        this.arg$3 = i;
-        this.arg$4 = sharedPreferences;
-        this.arg$5 = builder;
-        this.arg$6 = runnable;
     }
 
-    public void onClick(View view) {
-        AlertsCreator.lambda$createPrioritySelectDialog$29$AlertsCreator(this.arg$1, this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6, view);
+    public void onClick(DialogInterface dialogInterface, int i) {
+        MessagesController.getGlobalMainSettings().edit().putInt("keep_media", this.arg$1[0]).commit();
     }
 }

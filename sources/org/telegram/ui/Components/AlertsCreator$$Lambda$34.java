@@ -1,16 +1,19 @@
 package org.telegram.ui.Components;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_error;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import org.telegram.tgnet.TLRPC.EncryptedChat;
 
-final /* synthetic */ class AlertsCreator$$Lambda$34 implements RequestDelegate {
-    static final RequestDelegate $instance = new AlertsCreator$$Lambda$34();
+final /* synthetic */ class AlertsCreator$$Lambda$34 implements OnClickListener {
+    private final EncryptedChat arg$1;
+    private final NumberPicker arg$2;
 
-    private AlertsCreator$$Lambda$34() {
+    AlertsCreator$$Lambda$34(EncryptedChat encryptedChat, NumberPicker numberPicker) {
+        this.arg$1 = encryptedChat;
+        this.arg$2 = numberPicker;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        AlertsCreator.lambda$null$14$AlertsCreator(tLObject, tL_error);
+    public void onClick(DialogInterface dialogInterface, int i) {
+        AlertsCreator.lambda$createTTLAlert$37$AlertsCreator(this.arg$1, this.arg$2, dialogInterface, i);
     }
 }

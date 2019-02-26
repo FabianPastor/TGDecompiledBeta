@@ -25,6 +25,7 @@ public class MediaActionDrawable extends Drawable {
     private static final float DOWNLOAD_TO_CANCEL_STAGE3 = 0.3f;
     private static final float EPS = 0.001f;
     public static final int ICON_CANCEL = 3;
+    public static final int ICON_CANCEL_FILL = 14;
     public static final int ICON_CANCEL_NOPROFRESS = 12;
     public static final int ICON_CANCEL_PERCENT = 13;
     public static final int ICON_CHECK = 6;
@@ -127,16 +128,22 @@ public class MediaActionDrawable extends Drawable {
     }
 
     public boolean setIcon(int icon, boolean animated) {
+        if (animated && this.currentIcon == icon && this.nextIcon != icon) {
+            this.currentIcon = this.nextIcon;
+            this.transitionProgress = 1.0f;
+        }
         if (animated) {
             if (this.currentIcon == icon || this.nextIcon == icon) {
                 return false;
             }
-            if (icon == 3) {
+            if (this.currentIcon == 2 && (icon == 3 || icon == 14)) {
                 this.transitionAnimationTime = 400.0f;
-            } else if (this.currentIcon == 4 || icon != 6) {
-                this.transitionAnimationTime = 220.0f;
-            } else {
+            } else if (this.currentIcon != 4 && icon == 6) {
                 this.transitionAnimationTime = 360.0f;
+            } else if ((this.currentIcon == 4 && icon == 14) || (this.currentIcon == 14 && icon == 4)) {
+                this.transitionAnimationTime = 160.0f;
+            } else {
+                this.transitionAnimationTime = 220.0f;
             }
             this.animatingTransition = true;
             this.nextIcon = icon;
@@ -151,7 +158,7 @@ public class MediaActionDrawable extends Drawable {
             this.savedTransitionProgress = this.transitionProgress;
             this.transitionProgress = 1.0f;
         }
-        if (icon == 3) {
+        if (icon == 3 || icon == 14) {
             this.downloadRadOffset = 112.0f;
             this.animatedDownloadProgress = 0.0f;
             this.downloadProgressAnimationStart = 0.0f;
@@ -202,6 +209,9 @@ public class MediaActionDrawable extends Drawable {
     public void setBounds(int left, int top, int right, int bottom) {
         super.setBounds(left, top, right, bottom);
         this.scale = ((float) (right - left)) / ((float) getIntrinsicWidth());
+        if (this.scale < 0.7f) {
+            this.paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
+        }
     }
 
     public void invalidateSelf() {
@@ -217,6 +227,7 @@ public class MediaActionDrawable extends Drawable {
         float d;
         float rotation;
         int alpha;
+        int diff;
         float previowsDrawableScale;
         float drawableScale;
         Paint paint;
@@ -247,12 +258,12 @@ public class MediaActionDrawable extends Drawable {
             float yStart = ((float) cy) - (((float) AndroidUtilities.dp(9.0f)) * this.scale);
             float yEnd = ((float) cy) + (((float) AndroidUtilities.dp(9.0f)) * this.scale);
             float yEnd2 = ((float) cy) + (((float) AndroidUtilities.dp(12.0f)) * this.scale);
-            if (this.currentIcon == 3 && this.nextIcon == 2) {
+            if ((this.currentIcon == 3 || this.currentIcon == 14) && this.nextIcon == 2) {
                 this.paint.setAlpha((int) (255.0f * Math.min(1.0f, this.transitionProgress / 0.5f)));
                 transition = this.transitionProgress;
                 yStart2 = ((float) cy) + (((float) AndroidUtilities.dp(12.0f)) * this.scale);
             } else {
-                if (this.nextIcon == 3 || this.nextIcon == 2) {
+                if (this.nextIcon == 3 || this.nextIcon == 14 || this.nextIcon == 2) {
                     this.paint.setAlpha(255);
                     transition = this.transitionProgress;
                 } else {
@@ -302,7 +313,7 @@ public class MediaActionDrawable extends Drawable {
                         rotation = -45.0f * (1.0f - currentProgress2);
                         d = (((float) AndroidUtilities.dp(7.0f)) * currentProgress2) * this.scale;
                         alpha = (int) (255.0f * currentProgress2);
-                        if (!(this.nextIcon == 3 || this.nextIcon == 2)) {
+                        if (!(this.nextIcon == 3 || this.nextIcon == 14 || this.nextIcon == 2)) {
                             alpha = (int) (((float) alpha) * (1.0f - Math.min(1.0f, this.transitionProgress / 0.5f)));
                         }
                         if (rotation != 0.0f) {
@@ -313,6 +324,13 @@ public class MediaActionDrawable extends Drawable {
                             this.paint.setAlpha(alpha);
                             canvas.drawLine(((float) cx) - d, ((float) cy) - d, ((float) cx) + d, ((float) cy) + d, this.paint);
                             canvas.drawLine(((float) cx) + d, ((float) cy) - d, ((float) cx) - d, ((float) cy) + d, this.paint);
+                            if (this.nextIcon == 14) {
+                                this.paint.setAlpha((int) (((float) alpha) * 0.15f));
+                                diff = AndroidUtilities.dp(this.isMini ? 2.0f : 4.0f);
+                                this.rect.set((float) (bounds.left + diff), (float) (bounds.top + diff), (float) (bounds.right - diff), (float) (bounds.bottom - diff));
+                                canvas.drawArc(this.rect, 0.0f, 360.0f, false, this.paint);
+                                this.paint.setAlpha(alpha);
+                            }
                         }
                         if (rotation != 0.0f) {
                             canvas.restore();
@@ -336,9 +354,8 @@ public class MediaActionDrawable extends Drawable {
                 canvas.drawLine(x2, y3, (float) cx, y2, this.paint);
             }
         }
-        float rad;
-        int diff;
-        if (this.currentIcon == 3) {
+        if (this.currentIcon == 3 || this.currentIcon == 14 || (this.currentIcon == 4 && this.nextIcon == 14)) {
+            float iconScale = 1.0f;
             float backProgress;
             if (this.nextIcon == 2) {
                 if (this.transitionProgress <= 0.5f) {
@@ -362,32 +379,62 @@ public class MediaActionDrawable extends Drawable {
                 d = (((float) AndroidUtilities.dp(7.0f)) * backProgress) * this.scale;
                 alpha = (int) (255.0f * Math.min(1.0f, 2.0f * backProgress));
             } else if (this.nextIcon == 4) {
-                progress = this.transitionProgress;
-                rotation = 45.0f * progress;
+                backProgress = 1.0f - this.transitionProgress;
                 d = ((float) AndroidUtilities.dp(7.0f)) * this.scale;
-                alpha = (int) (255.0f * (1.0f - progress));
+                alpha = (int) (255.0f * backProgress);
+                if (this.currentIcon == 14) {
+                    rotation = 0.0f;
+                    iconScale = backProgress;
+                } else {
+                    rotation = 45.0f * backProgress;
+                    iconScale = 1.0f;
+                }
+            } else if (this.nextIcon == 14) {
+                progress = this.transitionProgress;
+                backProgress = 1.0f - progress;
+                if (this.currentIcon == 4) {
+                    rotation = 0.0f;
+                    iconScale = progress;
+                } else {
+                    rotation = 45.0f * backProgress;
+                    iconScale = 1.0f;
+                }
+                d = ((float) AndroidUtilities.dp(7.0f)) * this.scale;
+                alpha = (int) (255.0f * progress);
             } else {
                 rotation = 0.0f;
                 d = ((float) AndroidUtilities.dp(7.0f)) * this.scale;
                 alpha = 255;
+            }
+            if (iconScale != 1.0f) {
+                canvas.save();
+                canvas.scale(iconScale, iconScale, (float) bounds.left, (float) bounds.top);
             }
             if (rotation != 0.0f) {
                 canvas.save();
                 canvas.rotate(rotation, (float) cx, (float) cy);
             }
             if (alpha != 0) {
-                this.paint.setAlpha(alpha);
+                this.paint.setAlpha((int) (((float) alpha) * this.overrideAlpha));
                 canvas.drawLine(((float) cx) - d, ((float) cy) - d, ((float) cx) + d, ((float) cy) + d, this.paint);
                 canvas.drawLine(((float) cx) + d, ((float) cy) - d, ((float) cx) - d, ((float) cy) + d, this.paint);
             }
             if (rotation != 0.0f) {
                 canvas.restore();
             }
-            if (this.currentIcon == 3 && alpha != 0) {
-                rad = Math.max(4.0f, 360.0f * this.animatedDownloadProgress);
+            if ((this.currentIcon == 3 || this.currentIcon == 14 || (this.currentIcon == 4 && this.nextIcon == 14)) && alpha != 0) {
+                float rad = Math.max(4.0f, 360.0f * this.animatedDownloadProgress);
                 diff = AndroidUtilities.dp(this.isMini ? 2.0f : 4.0f);
                 this.rect.set((float) (bounds.left + diff), (float) (bounds.top + diff), (float) (bounds.right - diff), (float) (bounds.bottom - diff));
+                if (this.currentIcon == 14 || (this.currentIcon == 4 && this.nextIcon == 14)) {
+                    this.paint.setAlpha((int) ((((float) alpha) * 0.15f) * this.overrideAlpha));
+                    canvas.drawArc(this.rect, 0.0f, 360.0f, false, this.paint);
+                    this.paint.setAlpha(alpha);
+                }
                 canvas.drawArc(this.rect, this.downloadRadOffset, rad, false, this.paint);
+            }
+            if (iconScale != 1.0f) {
+                canvas.restore();
             }
         } else if (this.currentIcon == 10 || this.nextIcon == 10 || this.currentIcon == 13) {
             if (this.nextIcon == 4 || this.nextIcon == 6) {
@@ -397,10 +444,10 @@ public class MediaActionDrawable extends Drawable {
             }
             if (alpha != 0) {
                 this.paint.setAlpha((int) (((float) alpha) * this.overrideAlpha));
-                rad = Math.max(4.0f, 360.0f * this.animatedDownloadProgress);
+                float rad2 = Math.max(4.0f, 360.0f * this.animatedDownloadProgress);
                 diff = AndroidUtilities.dp(this.isMini ? 2.0f : 4.0f);
                 this.rect.set((float) (bounds.left + diff), (float) (bounds.top + diff), (float) (bounds.right - diff), (float) (bounds.bottom - diff));
-                canvas.drawArc(this.rect, this.downloadRadOffset, rad, false, this.paint);
+                canvas.drawArc(this.rect, this.downloadRadOffset, rad2, false, this.paint);
             }
         }
         Drawable nextDrawable = null;
@@ -656,7 +703,7 @@ public class MediaActionDrawable extends Drawable {
             dt = 17;
         }
         this.lastAnimationTime = newTime;
-        if (this.currentIcon == 3 || this.currentIcon == 10 || this.currentIcon == 13) {
+        if (this.currentIcon == 3 || this.currentIcon == 14 || ((this.currentIcon == 4 && this.nextIcon == 14) || this.currentIcon == 10 || this.currentIcon == 13)) {
             this.downloadRadOffset += ((float) (360 * dt)) / 2500.0f;
             this.downloadRadOffset = getCircleValue(this.downloadRadOffset);
             if (this.nextIcon != 2) {

@@ -828,7 +828,10 @@ public class NotificationsController {
         if (popupFinal == 3 || ((popupFinal == 1 && ApplicationLoader.isScreenOn) || (popupFinal == 2 && !ApplicationLoader.isScreenOn))) {
             Intent popupIntent = new Intent(ApplicationLoader.applicationContext, PopupNotificationActivity.class);
             popupIntent.setFlags(NUM);
-            ApplicationLoader.applicationContext.startActivity(popupIntent);
+            try {
+                ApplicationLoader.applicationContext.startActivity(popupIntent);
+            } catch (Throwable th) {
+            }
         }
     }
 

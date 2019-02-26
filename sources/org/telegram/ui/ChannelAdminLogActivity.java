@@ -54,7 +54,6 @@ import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DataQuery;
-import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
@@ -118,6 +117,7 @@ import org.telegram.ui.Cells.ChatActionCell;
 import org.telegram.ui.Cells.ChatActionCell.ChatActionCellDelegate;
 import org.telegram.ui.Cells.ChatLoadingCell;
 import org.telegram.ui.Cells.ChatMessageCell;
+import org.telegram.ui.Cells.ChatMessageCell$ChatMessageCellDelegate$$CC;
 import org.telegram.ui.Cells.ChatMessageCell.ChatMessageCellDelegate;
 import org.telegram.ui.Cells.ChatUnreadCell;
 import org.telegram.ui.Components.AdminLogFilterAlert;
@@ -177,7 +177,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     private FrameLayout progressView;
     private View progressView2;
     private PhotoViewerProvider provider = new EmptyPhotoViewerProvider() {
-        public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
+        public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index, boolean needPreview) {
             int count = ChannelAdminLogActivity.this.chatListView.getChildCount();
             for (int a = 0; a < count; a++) {
                 ImageReceiver imageReceiver = null;
@@ -295,6 +295,10 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 }
                 ChatMessageCell chatMessageCell = (ChatMessageCell) view;
                 chatMessageCell.setDelegate(new ChatMessageCellDelegate() {
+                    public void videoTimerReached() {
+                        ChatMessageCell$ChatMessageCellDelegate$$CC.videoTimerReached(this);
+                    }
+
                     public void didPressShare(ChatMessageCell cell) {
                         if (ChannelAdminLogActivity.this.getParentActivity() != null) {
                             ChannelAdminLogActivity channelAdminLogActivity = ChannelAdminLogActivity.this;
@@ -623,9 +627,6 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         pinnedTop = false;
                     }
                     messageCell.setMessageObject(message, null, pinnedBotton, pinnedTop);
-                    if ((view instanceof ChatMessageCell) && DownloadController.getInstance(ChannelAdminLogActivity.this.currentAccount).canDownloadMedia(message)) {
-                        ((ChatMessageCell) view).downloadAudioIfNeed();
-                    }
                     messageCell.setHighlighted(false);
                     messageCell.setHighlightedText(null);
                 } else if (view instanceof ChatActionCell) {
@@ -922,7 +923,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                             if (messageObject1.isVoice() || messageObject1.isMusic()) {
                                 cell.updateButtonState(false, true, false);
                             } else if (messageObject1.isRoundVideo()) {
-                                cell.checkRoundVideoPlayback(false);
+                                cell.checkVideoPlayback(false);
                                 if (!(MediaController.getInstance().isPlayingMessage(messageObject1) || messageObject1.audioProgress == 0.0f)) {
                                     messageObject1.resetPlayingProgress();
                                     cell.invalidate();
@@ -944,7 +945,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                             if (messageObject.isVoice() || messageObject.isMusic()) {
                                 cell.updateButtonState(false, true, false);
                             } else if (messageObject.isRoundVideo() && !MediaController.getInstance().isPlayingMessage(messageObject)) {
-                                cell.checkRoundVideoPlayback(true);
+                                cell.checkVideoPlayback(true);
                             }
                         }
                     }
@@ -1003,7 +1004,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    ChannelAdminLogActivity.this.lambda$createView$1$AudioSelectActivity();
+                    ChannelAdminLogActivity.this.lambda$checkDiscard$18$ChatEditActivity();
                 }
             }
         });
@@ -1980,14 +1981,14 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         if (this.roundVideoContainer != null) {
             messageObject = MediaController.getInstance().getPlayingMessageObject();
             if (foundTextureViewMessage) {
-                MediaController.getInstance().setCurrentRoundVisible(true);
+                MediaController.getInstance().setCurrentVideoVisible(true);
                 return;
             }
             this.roundVideoContainer.setTranslationY((float) ((-AndroidUtilities.roundMessageSize) - 100));
             this.fragmentView.invalidate();
             if (messageObject != null && messageObject.isRoundVideo()) {
                 if (this.checkTextureViewPosition || PipRoundVideoView.getInstance() != null) {
-                    MediaController.getInstance().setCurrentRoundVisible(false);
+                    MediaController.getInstance().setCurrentVideoVisible(false);
                 }
             }
         }
@@ -2053,13 +2054,13 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             }
             if (this.roundVideoContainer != null) {
                 if (foundTextureViewMessage) {
-                    MediaController.getInstance().setCurrentRoundVisible(true);
+                    MediaController.getInstance().setCurrentVideoVisible(true);
                 } else {
                     this.roundVideoContainer.setTranslationY((float) ((-AndroidUtilities.roundMessageSize) - 100));
                     this.fragmentView.invalidate();
                     messageObject = MediaController.getInstance().getPlayingMessageObject();
                     if (messageObject != null && messageObject.isRoundVideo() && this.checkTextureViewPosition) {
-                        MediaController.getInstance().setCurrentRoundVisible(false);
+                        MediaController.getInstance().setCurrentVideoVisible(false);
                     }
                 }
             }

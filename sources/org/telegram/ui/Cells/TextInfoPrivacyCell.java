@@ -16,6 +16,7 @@ import org.telegram.ui.Components.LayoutHelper;
 
 public class TextInfoPrivacyCell extends FrameLayout {
     private int bottomPadding;
+    private int fixedSize;
     private String linkTextColorKey;
     private TextView textView;
 
@@ -47,11 +48,19 @@ public class TextInfoPrivacyCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(0, 0));
+        if (this.fixedSize != 0) {
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) this.fixedSize), NUM));
+        } else {
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(0, 0));
+        }
     }
 
     public void setBottomPadding(int value) {
         this.bottomPadding = value;
+    }
+
+    public void setFixedSize(int size) {
+        this.fixedSize = size;
     }
 
     public void setText(CharSequence text) {

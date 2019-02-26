@@ -210,6 +210,7 @@ public class Theme {
     public static Drawable chat_msgMediaHalfCheckDrawable = null;
     public static Drawable chat_msgMediaMenuDrawable = null;
     public static Drawable chat_msgMediaViewsDrawable = null;
+    public static Drawable chat_msgNoSoundDrawable = null;
     public static Drawable chat_msgOutBroadcastDrawable = null;
     public static Drawable chat_msgOutCallDrawable = null;
     public static Drawable chat_msgOutCallSelectedDrawable = null;
@@ -417,8 +418,8 @@ public class Theme {
     public static final String key_chat_inAudioCacheSeekbar = "chat_inAudioCacheSeekbar";
     public static final String key_chat_inAudioDurationSelectedText = "chat_inAudioDurationSelectedText";
     public static final String key_chat_inAudioDurationText = "chat_inAudioDurationText";
-    public static final String key_chat_inAudioPerfomerSelectedText = "chat_inAudioPerfomerSelectedText";
-    public static final String key_chat_inAudioPerfomerText = "chat_inAudioPerfomerText";
+    public static final String key_chat_inAudioPerformerSelectedText = "chat_inAudioPerfomerSelectedText";
+    public static final String key_chat_inAudioPerformerText = "chat_inAudioPerfomerText";
     public static final String key_chat_inAudioProgress = "chat_inAudioProgress";
     public static final String key_chat_inAudioSeekbar = "chat_inAudioSeekbar";
     public static final String key_chat_inAudioSeekbarFill = "chat_inAudioSeekbarFill";
@@ -517,8 +518,8 @@ public class Theme {
     public static final String key_chat_outAudioCacheSeekbar = "chat_outAudioCacheSeekbar";
     public static final String key_chat_outAudioDurationSelectedText = "chat_outAudioDurationSelectedText";
     public static final String key_chat_outAudioDurationText = "chat_outAudioDurationText";
-    public static final String key_chat_outAudioPerfomerSelectedText = "chat_outAudioPerfomerSelectedText";
-    public static final String key_chat_outAudioPerfomerText = "chat_outAudioPerfomerText";
+    public static final String key_chat_outAudioPerformerSelectedText = "chat_outAudioPerfomerSelectedText";
+    public static final String key_chat_outAudioPerformerText = "chat_outAudioPerfomerText";
     public static final String key_chat_outAudioProgress = "chat_outAudioProgress";
     public static final String key_chat_outAudioSeekbar = "chat_outAudioSeekbar";
     public static final String key_chat_outAudioSeekbarFill = "chat_outAudioSeekbarFill";
@@ -681,9 +682,11 @@ public class Theme {
     public static final String key_contextProgressInner1 = "contextProgressInner1";
     public static final String key_contextProgressInner2 = "contextProgressInner2";
     public static final String key_contextProgressInner3 = "contextProgressInner3";
+    public static final String key_contextProgressInner4 = "contextProgressInner4";
     public static final String key_contextProgressOuter1 = "contextProgressOuter1";
     public static final String key_contextProgressOuter2 = "contextProgressOuter2";
     public static final String key_contextProgressOuter3 = "contextProgressOuter3";
+    public static final String key_contextProgressOuter4 = "contextProgressOuter4";
     public static final String key_dialogBackground = "dialogBackground";
     public static final String key_dialogBackgroundGray = "dialogBackgroundGray";
     public static final String key_dialogBadgeBackground = "dialogBadgeBackground";
@@ -816,12 +819,21 @@ public class Theme {
     public static final String key_switch2Track = "switch2Track";
     public static final String key_switch2TrackChecked = "switch2TrackChecked";
     public static final String key_switchTrack = "switchTrack";
+    public static final String key_switchTrackBlue = "switchTrackBlue";
+    public static final String key_switchTrackBlueChecked = "switchTrackBlueChecked";
+    public static final String key_switchTrackBlueSelector = "switchTrackBlueSelector";
+    public static final String key_switchTrackBlueSelectorChecked = "switchTrackBlueSelectorChecked";
+    public static final String key_switchTrackBlueThumb = "switchTrackBlueThumb";
+    public static final String key_switchTrackBlueThumbChecked = "switchTrackBlueThumbChecked";
     public static final String key_switchTrackChecked = "switchTrackChecked";
     public static final String key_undo_background = "undo_background";
     public static final String key_undo_cancelColor = "undo_cancelColor";
     public static final String key_undo_infoColor = "undo_infoColor";
+    public static final String key_windowBackgroundCheckText = "windowBackgroundCheckText";
+    public static final String key_windowBackgroundChecked = "windowBackgroundChecked";
     public static final String key_windowBackgroundGray = "windowBackgroundGray";
     public static final String key_windowBackgroundGrayShadow = "windowBackgroundGrayShadow";
+    public static final String key_windowBackgroundUnchecked = "windowBackgroundUnchecked";
     public static final String key_windowBackgroundWhite = "windowBackgroundWhite";
     public static final String key_windowBackgroundWhiteBlackText = "windowBackgroundWhiteBlackText";
     public static final String key_windowBackgroundWhiteBlueButton = "windowBackgroundWhiteBlueButton";
@@ -1100,6 +1112,9 @@ public class Theme {
         defaultColors.put("dialog_inlineProgressBackground", Integer.valueOf(-NUM));
         defaultColors.put("dialog_inlineProgress", Integer.valueOf(-9735304));
         defaultColors.put("windowBackgroundWhite", Integer.valueOf(-1));
+        defaultColors.put("windowBackgroundUnchecked", Integer.valueOf(-6445135));
+        defaultColors.put("windowBackgroundChecked", Integer.valueOf(-11034919));
+        defaultColors.put("windowBackgroundCheckText", Integer.valueOf(-1));
         defaultColors.put("progressCircle", Integer.valueOf(-11371101));
         defaultColors.put("windowBackgroundWhiteGrayIcon", Integer.valueOf(-8288629));
         defaultColors.put("windowBackgroundWhiteBlueText", Integer.valueOf(-12545331));
@@ -1138,6 +1153,12 @@ public class Theme {
         defaultColors.put("windowBackgroundWhiteInputFieldActivated", Integer.valueOf(-13129232));
         defaultColors.put("switchTrack", Integer.valueOf(-5196358));
         defaultColors.put("switchTrackChecked", Integer.valueOf(-11358743));
+        defaultColors.put("switchTrackBlue", Integer.valueOf(-8221031));
+        defaultColors.put("switchTrackBlueChecked", Integer.valueOf(-12810041));
+        defaultColors.put("switchTrackBlueThumb", Integer.valueOf(-1));
+        defaultColors.put("switchTrackBlueThumbChecked", Integer.valueOf(-1));
+        defaultColors.put("switchTrackBlueSelector", Integer.valueOf(NUM));
+        defaultColors.put("switchTrackBlueSelectorChecked", Integer.valueOf(NUM));
         defaultColors.put("switch2Track", Integer.valueOf(-688514));
         defaultColors.put("switch2TrackChecked", Integer.valueOf(-11358743));
         defaultColors.put("checkboxSquareBackground", Integer.valueOf(-12345121));
@@ -1159,6 +1180,8 @@ public class Theme {
         defaultColors.put("contextProgressOuter2", Integer.valueOf(-1));
         defaultColors.put("contextProgressInner3", Integer.valueOf(-5000269));
         defaultColors.put("contextProgressOuter3", Integer.valueOf(-1));
+        defaultColors.put("contextProgressInner4", Integer.valueOf(-3486256));
+        defaultColors.put("contextProgressOuter4", Integer.valueOf(-13683656));
         defaultColors.put("fastScrollActive", Integer.valueOf(-11361317));
         defaultColors.put("fastScrollInactive", Integer.valueOf(-3551791));
         defaultColors.put("fastScrollText", Integer.valueOf(-1));
@@ -1626,6 +1649,17 @@ public class Theme {
         fallbackKeys.put("undo_background", "chat_gifSaveHintBackground");
         fallbackKeys.put("undo_cancelColor", "chat_gifSaveHintText");
         fallbackKeys.put("undo_infoColor", "chat_gifSaveHintText");
+        fallbackKeys.put("windowBackgroundUnchecked", "windowBackgroundWhite");
+        fallbackKeys.put("windowBackgroundChecked", "windowBackgroundWhite");
+        fallbackKeys.put("switchTrackBlue", "switchTrack");
+        fallbackKeys.put("switchTrackBlueChecked", "switchTrackChecked");
+        fallbackKeys.put("switchTrackBlueThumb", "windowBackgroundWhite");
+        fallbackKeys.put("switchTrackBlueThumbChecked", "windowBackgroundWhite");
+        fallbackKeys.put("windowBackgroundCheckText", "windowBackgroundWhiteBlackText");
+        fallbackKeys.put("contextProgressInner4", "contextProgressInner1");
+        fallbackKeys.put("contextProgressOuter4", "contextProgressOuter1");
+        fallbackKeys.put("switchTrackBlueSelector", "listSelectorSDK21");
+        fallbackKeys.put("switchTrackBlueSelectorChecked", "listSelectorSDK21");
         ThemeInfo themeInfo = new ThemeInfo();
         themeInfo.name = "Default";
         ArrayList arrayList = themes;
@@ -1923,7 +1957,7 @@ public class Theme {
     L_0x0058:
         r5 = org.telegram.messenger.ApplicationLoader.applicationContext;
         r5 = r5.getResources();
-        r6 = NUM; // 0x7var_b float:1.7945347E38 double:1.0529356903E-314;
+        r6 = NUM; // 0x7var_f float:1.7945355E38 double:1.0529356923E-314;
         r5 = r5.getDrawable(r6);
         dialogs_holidayDrawable = r5;
         r5 = NUM; // 0x40400000 float:3.0 double:5.325712093E-315;
@@ -3068,6 +3102,7 @@ public class Theme {
             Resources resources = context.getResources();
             chat_msgInDrawable = resources.getDrawable(R.drawable.msg_in).mutate();
             chat_msgInSelectedDrawable = resources.getDrawable(R.drawable.msg_in).mutate();
+            chat_msgNoSoundDrawable = resources.getDrawable(R.drawable.video_muted);
             chat_msgOutDrawable = resources.getDrawable(R.drawable.msg_out).mutate();
             chat_msgOutSelectedDrawable = resources.getDrawable(R.drawable.msg_out).mutate();
             chat_msgInMediaDrawable = resources.getDrawable(R.drawable.msg_photo).mutate();
@@ -3320,6 +3355,7 @@ public class Theme {
             chat_contextResult_titleTextPaint.setColor(getColor("windowBackgroundWhiteBlackText"));
             chat_composeBackgroundPaint.setColor(getColor("chat_messagePanelBackground"));
             chat_timeBackgroundPaint.setColor(getColor("chat_mediaTimeBackground"));
+            setDrawableColorByKey(chat_msgNoSoundDrawable, "chat_mediaTimeText");
             setDrawableColorByKey(chat_msgInDrawable, "chat_inBubble");
             setDrawableColorByKey(chat_msgInSelectedDrawable, "chat_inBubbleSelected");
             setDrawableColorByKey(chat_msgInShadowDrawable, "chat_inBubbleShadow");

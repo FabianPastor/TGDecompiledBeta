@@ -1140,7 +1140,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 this.participantsInfoRow = i2;
             } else if (this.type == 2) {
                 if (this.selectType == 0 && ChatObject.canAddUsers(this.currentChat)) {
-                    if (!ChatObject.isChannel(this.currentChat) || this.currentChat.megagroup || TextUtils.isEmpty(this.currentChat.username)) {
+                    if (ChatObject.canUserDoAdminAction(this.currentChat, 3) && (!ChatObject.isChannel(this.currentChat) || this.currentChat.megagroup || TextUtils.isEmpty(this.currentChat.username))) {
                         i2 = this.rowCount;
                         this.rowCount = i2 + 1;
                         this.addNew2Row = i2;

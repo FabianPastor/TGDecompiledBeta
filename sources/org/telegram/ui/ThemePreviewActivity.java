@@ -64,6 +64,7 @@ import org.telegram.ui.ActionBar.Theme.ThemeInfo;
 import org.telegram.ui.Cells.ChatActionCell;
 import org.telegram.ui.Cells.ChatActionCell.ChatActionCellDelegate;
 import org.telegram.ui.Cells.ChatMessageCell;
+import org.telegram.ui.Cells.ChatMessageCell$ChatMessageCellDelegate$$CC;
 import org.telegram.ui.Cells.ChatMessageCell.ChatMessageCellDelegate;
 import org.telegram.ui.Cells.DialogCell;
 import org.telegram.ui.Cells.DialogCell.CustomDialog;
@@ -385,6 +386,10 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             if (viewType == 0) {
                 view = new ChatMessageCell(this.mContext);
                 ((ChatMessageCell) view).setDelegate(new ChatMessageCellDelegate() {
+                    public void videoTimerReached() {
+                        ChatMessageCell$ChatMessageCellDelegate$$CC.videoTimerReached(this);
+                    }
+
                     public void didPressShare(ChatMessageCell cell) {
                     }
 

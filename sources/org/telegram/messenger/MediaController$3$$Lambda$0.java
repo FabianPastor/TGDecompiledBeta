@@ -4,14 +4,14 @@ import org.telegram.messenger.MediaController.AnonymousClass3;
 
 final /* synthetic */ class MediaController$3$$Lambda$0 implements Runnable {
     private final AnonymousClass3 arg$1;
-    private final MessageObject arg$2;
+    private final int arg$2;
 
-    MediaController$3$$Lambda$0(AnonymousClass3 anonymousClass3, MessageObject messageObject) {
+    MediaController$3$$Lambda$0(AnonymousClass3 anonymousClass3, int i) {
         this.arg$1 = anonymousClass3;
-        this.arg$2 = messageObject;
+        this.arg$2 = i;
     }
 
     public void run() {
-        this.arg$1.lambda$run$0$MediaController$3(this.arg$2);
+        this.arg$1.lambda$onCallStateChanged$0$MediaController$3(this.arg$2);
     }
 }

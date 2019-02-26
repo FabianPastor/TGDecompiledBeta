@@ -529,7 +529,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
 
     private void releasePlayer() {
         if (this.videoPlayer != null) {
-            this.videoPlayer.releasePlayer();
+            this.videoPlayer.releasePlayer(true);
             this.videoPlayer = null;
         }
         try {
@@ -668,7 +668,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
 
     public void openMedia(MessageObject messageObject, PhotoViewerProvider provider) {
         if (this.parentActivity != null && messageObject != null && messageObject.needDrawBluredPreview() && provider != null) {
-            PlaceProviderObject object = provider.getPlaceForPhoto(messageObject, null, 0);
+            PlaceProviderObject object = provider.getPlaceForPhoto(messageObject, null, 0, true);
             if (object != null) {
                 this.currentProvider = provider;
                 this.openTime = System.currentTimeMillis();
@@ -1092,7 +1092,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
             if (this.currentProvider == null || (this.currentMessageObject.messageOwner.media.photo instanceof TL_photoEmpty) || (this.currentMessageObject.messageOwner.media.document instanceof TL_documentEmpty)) {
                 object = null;
             } else {
-                object = this.currentProvider.getPlaceForPhoto(this.currentMessageObject, null, 0);
+                object = this.currentProvider.getPlaceForPhoto(this.currentMessageObject, null, 0, true);
             }
             if (this.videoPlayer != null) {
                 this.videoPlayer.pause();

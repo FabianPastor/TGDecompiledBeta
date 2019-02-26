@@ -5,7 +5,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.MediaCodecInfo;
 import android.media.MediaMetadataRetriever;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
@@ -18,21 +17,10 @@ import android.util.Base64;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
 import android.widget.Toast;
-import com.coremedia.iso.IsoFile;
-import com.coremedia.iso.boxes.Box;
-import com.coremedia.iso.boxes.Container;
-import com.coremedia.iso.boxes.MediaBox;
-import com.coremedia.iso.boxes.MediaHeaderBox;
-import com.coremedia.iso.boxes.TimeToSampleBox;
-import com.coremedia.iso.boxes.TrackBox;
-import com.coremedia.iso.boxes.TrackHeaderBox;
-import com.googlecode.mp4parser.util.Matrix;
-import com.googlecode.mp4parser.util.Path;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -8538,7 +8526,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                         bitmap = ImageLoader.loadBitmap(finalPath, null, (float) side, (float) side, true);
                                     }
                                     if (bitmap != null) {
-                                        thumb = ImageLoader.scaleAndSaveImage(bitmap, (float) side, (float) side, 55, false);
+                                        thumb = ImageLoader.scaleAndSaveImage(bitmap, (float) side, (float) side, side > 90 ? 70 : 55, false);
                                         if (thumb != null) {
                                             document.thumbs.add(thumb);
                                             document.flags |= 1;
@@ -8789,7 +8777,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                         thumb = ThumbnailUtils.createVideoThumbnail(path, 1);
                     }
                     int side = isEncrypted ? 90 : 320;
-                    document.thumbs.set(0, ImageLoader.scaleAndSaveImage(photoSize, thumb, (float) side, (float) side, 55, false));
+                    document.thumbs.set(0, ImageLoader.scaleAndSaveImage(photoSize, thumb, (float) side, (float) side, side > 90 ? 70 : 55, false));
                 }
             }
         }
@@ -8801,11 +8789,14 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
     }
 
-    /* JADX WARNING: Missing block: B:295:0x098f, code:
-            if (r109.endsWith(".webp") != false) goto L_0x0991;
+    /* JADX WARNING: Removed duplicated region for block: B:138:0x03f9 A:{SYNTHETIC, Splitter: B:138:0x03f9} */
+    /* JADX WARNING: Removed duplicated region for block: B:113:0x02e9 A:{Catch:{ Exception -> 0x040f }} */
+    /* JADX WARNING: Removed duplicated region for block: B:115:0x02f4 A:{Catch:{ Exception -> 0x040f }} */
+    /* JADX WARNING: Missing block: B:307:0x09af, code:
+            if (r109.endsWith(".webp") != false) goto L_0x09b1;
      */
-    /* JADX WARNING: Missing block: B:368:0x0b6c, code:
-            if (r117.size() == 1) goto L_0x0b6e;
+    /* JADX WARNING: Missing block: B:380:0x0b8c, code:
+            if (r117.size() == 1) goto L_0x0b8e;
      */
     static final /* synthetic */ void lambda$prepareSendingMedia$60$SendMessagesHelper(java.util.ArrayList r117, long r118, int r120, boolean r121, boolean r122, org.telegram.messenger.MessageObject r123, org.telegram.messenger.MessageObject r124, android.support.v13.view.inputmethod.InputContentInfoCompat r125) {
         /*
@@ -9049,7 +9040,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     L_0x01a7:
         r0 = r55;
         r1 = r62;
-        if (r0 >= r1) goto L_0x0da8;
+        if (r0 >= r1) goto L_0x0dc8;
     L_0x01ad:
         r0 = r117;
         r1 = r55;
@@ -9077,13 +9068,13 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     L_0x01d4:
         r0 = r19;
         r5 = r0.searchImage;
-        if (r5 == 0) goto L_0x0599;
+        if (r5 == 0) goto L_0x05a9;
     L_0x01da:
         r0 = r19;
         r5 = r0.searchImage;
         r5 = r5.type;
         r8 = 1;
-        if (r5 != r8) goto L_0x040b;
+        if (r5 != r8) goto L_0x041b;
     L_0x01e3:
         r14 = new java.util.HashMap;
         r14.<init>();
@@ -9093,7 +9084,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r5 = r0.searchImage;
         r5 = r5.document;
         r5 = r5 instanceof org.telegram.tgnet.TLRPC.TL_document;
-        if (r5 == 0) goto L_0x039d;
+        if (r5 == 0) goto L_0x03a9;
     L_0x01f6:
         r0 = r19;
         r5 = r0.searchImage;
@@ -9104,7 +9095,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r0 = r27;
         r61 = org.telegram.messenger.FileLoader.getPathToAttach(r0, r5);
     L_0x0207:
-        if (r27 != 0) goto L_0x035f;
+        if (r27 != 0) goto L_0x036b;
     L_0x0209:
         r0 = r19;
         r5 = r0.searchImage;
@@ -9151,7 +9142,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r5 = r61.toString();
         r8 = "mp4";
         r5 = r5.endsWith(r8);
-        if (r5 == 0) goto L_0x03dc;
+        if (r5 == 0) goto L_0x03e8;
     L_0x026e:
         r5 = "video/mp4";
         r0 = r27;
@@ -9163,7 +9154,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r5.add(r8);
     L_0x0281:
         r5 = r61.exists();
-        if (r5 == 0) goto L_0x03e5;
+        if (r5 == 0) goto L_0x03f1;
     L_0x0287:
         r111 = r61;
     L_0x0289:
@@ -9196,49 +9187,58 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     L_0x02ce:
         r111 = 0;
     L_0x02d0:
-        if (r111 == 0) goto L_0x0314;
+        if (r111 == 0) goto L_0x0320;
     L_0x02d2:
-        if (r6 == 0) goto L_0x03e9;
+        if (r6 != 0) goto L_0x02da;
     L_0x02d4:
+        r0 = r19;
+        r5 = r0.ttl;	 Catch:{ Exception -> 0x040f }
+        if (r5 == 0) goto L_0x03f5;
+    L_0x02da:
         r106 = 90;
-    L_0x02d6:
-        r5 = r111.getAbsolutePath();	 Catch:{ Exception -> 0x03ff }
+    L_0x02dc:
+        r5 = r111.getAbsolutePath();	 Catch:{ Exception -> 0x040f }
         r8 = "mp4";
-        r5 = r5.endsWith(r8);	 Catch:{ Exception -> 0x03ff }
-        if (r5 == 0) goto L_0x03ed;
-    L_0x02e3:
-        r5 = r111.getAbsolutePath();	 Catch:{ Exception -> 0x03ff }
+        r5 = r5.endsWith(r8);	 Catch:{ Exception -> 0x040f }
+        if (r5 == 0) goto L_0x03f9;
+    L_0x02e9:
+        r5 = r111.getAbsolutePath();	 Catch:{ Exception -> 0x040f }
         r8 = 1;
-        r60 = android.media.ThumbnailUtils.createVideoThumbnail(r5, r8);	 Catch:{ Exception -> 0x03ff }
-    L_0x02ec:
-        if (r60 == 0) goto L_0x0314;
-    L_0x02ee:
+        r60 = android.media.ThumbnailUtils.createVideoThumbnail(r5, r8);	 Catch:{ Exception -> 0x040f }
+    L_0x02f2:
+        if (r60 == 0) goto L_0x0320;
+    L_0x02f4:
         r0 = r106;
-        r5 = (float) r0;	 Catch:{ Exception -> 0x03ff }
+        r8 = (float) r0;	 Catch:{ Exception -> 0x040f }
         r0 = r106;
-        r8 = (float) r0;	 Catch:{ Exception -> 0x03ff }
-        r9 = 55;
+        r9 = (float) r0;	 Catch:{ Exception -> 0x040f }
+        r5 = 90;
+        r0 = r106;
+        if (r0 <= r5) goto L_0x040b;
+    L_0x0300:
+        r5 = 70;
+    L_0x0302:
         r0 = r60;
-        r110 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r0, r5, r8, r9, r6);	 Catch:{ Exception -> 0x03ff }
-        if (r110 == 0) goto L_0x0311;
-    L_0x02fe:
+        r110 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r0, r8, r9, r5, r6);	 Catch:{ Exception -> 0x040f }
+        if (r110 == 0) goto L_0x031d;
+    L_0x030a:
         r0 = r27;
-        r5 = r0.thumbs;	 Catch:{ Exception -> 0x03ff }
+        r5 = r0.thumbs;	 Catch:{ Exception -> 0x040f }
         r0 = r110;
-        r5.add(r0);	 Catch:{ Exception -> 0x03ff }
+        r5.add(r0);	 Catch:{ Exception -> 0x040f }
         r0 = r27;
-        r5 = r0.flags;	 Catch:{ Exception -> 0x03ff }
+        r5 = r0.flags;	 Catch:{ Exception -> 0x040f }
         r5 = r5 | 1;
         r0 = r27;
-        r0.flags = r5;	 Catch:{ Exception -> 0x03ff }
-    L_0x0311:
-        r60.recycle();	 Catch:{ Exception -> 0x03ff }
-    L_0x0314:
+        r0.flags = r5;	 Catch:{ Exception -> 0x040f }
+    L_0x031d:
+        r60.recycle();	 Catch:{ Exception -> 0x040f }
+    L_0x0320:
         r0 = r27;
         r5 = r0.thumbs;
         r5 = r5.isEmpty();
-        if (r5 == 0) goto L_0x035f;
-    L_0x031e:
+        if (r5 == 0) goto L_0x036b;
+    L_0x032a:
         r110 = new org.telegram.tgnet.TLRPC$TL_photoSize;
         r110.<init>();
         r0 = r19;
@@ -9270,32 +9270,32 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r5 = r5 | 1;
         r0 = r27;
         r0.flags = r5;
-    L_0x035f:
+    L_0x036b:
         r12 = r27;
         r15 = r89;
         r0 = r19;
         r5 = r0.searchImage;
         r0 = r5.imageUrl;
         r88 = r0;
-        if (r61 != 0) goto L_0x0405;
-    L_0x036d:
+        if (r61 != 0) goto L_0x0415;
+    L_0x0379:
         r0 = r19;
         r5 = r0.searchImage;
         r13 = r5.imageUrl;
-    L_0x0373:
-        if (r14 == 0) goto L_0x0389;
-    L_0x0375:
+    L_0x037f:
+        if (r14 == 0) goto L_0x0395;
+    L_0x0381:
         r0 = r19;
         r5 = r0.searchImage;
         r5 = r5.imageUrl;
-        if (r5 == 0) goto L_0x0389;
-    L_0x037d:
+        if (r5 == 0) goto L_0x0395;
+    L_0x0389:
         r5 = "originalPath";
         r0 = r19;
         r8 = r0.searchImage;
         r8 = r8.imageUrl;
         r14.put(r5, r8);
-    L_0x0389:
+    L_0x0395:
         r9 = new org.telegram.messenger.SendMessagesHelper$$Lambda$24;
         r10 = r123;
         r11 = r120;
@@ -9303,10 +9303,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r18 = r124;
         r9.<init>(r10, r11, r12, r13, r14, r15, r16, r18, r19);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r9);
-    L_0x0399:
+    L_0x03a5:
         r55 = r55 + 1;
         goto L_0x01a7;
-    L_0x039d:
+    L_0x03a9:
         r5 = new java.lang.StringBuilder;
         r5.<init>();
         r0 = r19;
@@ -9330,35 +9330,38 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r1 = r83;
         r0.<init>(r5, r1);
         goto L_0x0207;
-    L_0x03dc:
+    L_0x03e8:
         r5 = "image/gif";
         r0 = r27;
         r0.mime_type = r5;
         goto L_0x0281;
-    L_0x03e5:
+    L_0x03f1:
         r61 = 0;
         goto L_0x0289;
-    L_0x03e9:
+    L_0x03f5:
         r106 = 320; // 0x140 float:4.48E-43 double:1.58E-321;
-        goto L_0x02d6;
-    L_0x03ed:
-        r5 = r111.getAbsolutePath();	 Catch:{ Exception -> 0x03ff }
+        goto L_0x02dc;
+    L_0x03f9:
+        r5 = r111.getAbsolutePath();	 Catch:{ Exception -> 0x040f }
         r8 = 0;
         r0 = r106;
-        r9 = (float) r0;	 Catch:{ Exception -> 0x03ff }
+        r9 = (float) r0;	 Catch:{ Exception -> 0x040f }
         r0 = r106;
-        r10 = (float) r0;	 Catch:{ Exception -> 0x03ff }
+        r10 = (float) r0;	 Catch:{ Exception -> 0x040f }
         r11 = 1;
-        r60 = org.telegram.messenger.ImageLoader.loadBitmap(r5, r8, r9, r10, r11);	 Catch:{ Exception -> 0x03ff }
-        goto L_0x02ec;
-    L_0x03ff:
+        r60 = org.telegram.messenger.ImageLoader.loadBitmap(r5, r8, r9, r10, r11);	 Catch:{ Exception -> 0x040f }
+        goto L_0x02f2;
+    L_0x040b:
+        r5 = 55;
+        goto L_0x0302;
+    L_0x040f:
         r64 = move-exception;
         org.telegram.messenger.FileLog.e(r64);
-        goto L_0x0314;
-    L_0x0405:
+        goto L_0x0320;
+    L_0x0415:
         r13 = r61.toString();
-        goto L_0x0373;
-    L_0x040b:
+        goto L_0x037f;
+    L_0x041b:
         r85 = 1;
         r7 = 0;
         r89 = 0;
@@ -9366,15 +9369,15 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r5 = r0.searchImage;
         r5 = r5.photo;
         r5 = r5 instanceof org.telegram.tgnet.TLRPC.TL_photo;
-        if (r5 == 0) goto L_0x058f;
-    L_0x041a:
+        if (r5 == 0) goto L_0x059f;
+    L_0x042a:
         r0 = r19;
         r5 = r0.searchImage;
         r7 = r5.photo;
         r7 = (org.telegram.tgnet.TLRPC.TL_photo) r7;
-    L_0x0422:
-        if (r7 != 0) goto L_0x051f;
-    L_0x0424:
+    L_0x0432:
+        if (r7 != 0) goto L_0x052f;
+    L_0x0434:
         r5 = new java.lang.StringBuilder;
         r5.<init>();
         r0 = r19;
@@ -9398,23 +9401,23 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r1 = r83;
         r0.<init>(r5, r1);
         r5 = r61.exists();
-        if (r5 == 0) goto L_0x0482;
-    L_0x0467:
+        if (r5 == 0) goto L_0x0492;
+    L_0x0477:
         r8 = r61.length();
         r10 = 0;
         r5 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1));
-        if (r5 == 0) goto L_0x0482;
-    L_0x0471:
+        if (r5 == 0) goto L_0x0492;
+    L_0x0481:
         r5 = getInstance(r120);
         r8 = r61.toString();
         r9 = 0;
         r7 = r5.generatePhotoSizes(r8, r9);
-        if (r7 == 0) goto L_0x0482;
-    L_0x0480:
+        if (r7 == 0) goto L_0x0492;
+    L_0x0490:
         r85 = 0;
-    L_0x0482:
-        if (r7 != 0) goto L_0x051f;
-    L_0x0484:
+    L_0x0492:
+        if (r7 != 0) goto L_0x052f;
+    L_0x0494:
         r5 = new java.lang.StringBuilder;
         r5.<init>();
         r0 = r19;
@@ -9438,15 +9441,15 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r1 = r83;
         r0.<init>(r5, r1);
         r5 = r61.exists();
-        if (r5 == 0) goto L_0x04d4;
-    L_0x04c7:
+        if (r5 == 0) goto L_0x04e4;
+    L_0x04d7:
         r5 = getInstance(r120);
         r8 = r61.toString();
         r9 = 0;
         r7 = r5.generatePhotoSizes(r8, r9);
-    L_0x04d4:
-        if (r7 != 0) goto L_0x051f;
-    L_0x04d6:
+    L_0x04e4:
+        if (r7 != 0) goto L_0x052f;
+    L_0x04e6:
         r7 = new org.telegram.tgnet.TLRPC$TL_photo;
         r7.<init>();
         r5 = org.telegram.tgnet.ConnectionsManager.getInstance(r120);
@@ -9480,9 +9483,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r5 = r7.sizes;
         r0 = r93;
         r5.add(r0);
-    L_0x051f:
-        if (r7 == 0) goto L_0x0399;
-    L_0x0521:
+    L_0x052f:
+        if (r7 == 0) goto L_0x03a5;
+    L_0x0531:
         r23 = r7;
         r15 = r89;
         r24 = r85;
@@ -9491,16 +9494,16 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r0 = r19;
         r5 = r0.searchImage;
         r5 = r5.imageUrl;
-        if (r5 == 0) goto L_0x0540;
-    L_0x0534:
+        if (r5 == 0) goto L_0x0550;
+    L_0x0544:
         r5 = "originalPath";
         r0 = r19;
         r8 = r0.searchImage;
         r8 = r8.imageUrl;
         r14.put(r5, r8);
-    L_0x0540:
-        if (r122 == 0) goto L_0x0577;
-    L_0x0542:
+    L_0x0550:
+        if (r122 == 0) goto L_0x0587;
+    L_0x0552:
         r96 = r96 + 1;
         r5 = "groupId";
         r8 = new java.lang.StringBuilder;
@@ -9513,17 +9516,17 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r14.put(r5, r8);
         r5 = 10;
         r0 = r96;
-        if (r0 == r5) goto L_0x056c;
-    L_0x0566:
+        if (r0 == r5) goto L_0x057c;
+    L_0x0576:
         r5 = r62 + -1;
         r0 = r55;
-        if (r0 != r5) goto L_0x0577;
-    L_0x056c:
+        if (r0 != r5) goto L_0x0587;
+    L_0x057c:
         r5 = "final";
         r8 = "1";
         r14.put(r5, r8);
         r78 = 0;
-    L_0x0577:
+    L_0x0587:
         r20 = new org.telegram.messenger.SendMessagesHelper$$Lambda$25;
         r21 = r123;
         r22 = r120;
@@ -9534,36 +9537,36 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r30 = r124;
         r20.<init>(r21, r22, r23, r24, r25, r26, r27, r28, r30);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r20);
-        goto L_0x0399;
-    L_0x058f:
-        if (r6 != 0) goto L_0x0422;
-    L_0x0591:
+        goto L_0x03a5;
+    L_0x059f:
+        if (r6 != 0) goto L_0x0432;
+    L_0x05a1:
         r0 = r19;
         r5 = r0.ttl;
-        if (r5 != 0) goto L_0x0422;
-    L_0x0597:
-        goto L_0x0422;
-    L_0x0599:
+        if (r5 != 0) goto L_0x0432;
+    L_0x05a7:
+        goto L_0x0432;
+    L_0x05a9:
         r0 = r19;
         r5 = r0.isVideo;
-        if (r5 == 0) goto L_0x08f6;
-    L_0x059f:
+        if (r5 == 0) goto L_0x0916;
+    L_0x05af:
         r110 = 0;
         r112 = 0;
-        if (r121 == 0) goto L_0x0852;
-    L_0x05a5:
+        if (r121 == 0) goto L_0x086e;
+    L_0x05b5:
         r37 = 0;
-    L_0x05a7:
-        if (r121 != 0) goto L_0x08cb;
-    L_0x05a9:
-        if (r37 != 0) goto L_0x05b8;
-    L_0x05ab:
+    L_0x05b7:
+        if (r121 != 0) goto L_0x08eb;
+    L_0x05b9:
+        if (r37 != 0) goto L_0x05c8;
+    L_0x05bb:
         r0 = r19;
         r5 = r0.path;
         r8 = "mp4";
         r5 = r5.endsWith(r8);
-        if (r5 == 0) goto L_0x08cb;
-    L_0x05b8:
+        if (r5 == 0) goto L_0x08eb;
+    L_0x05c8:
         r0 = r19;
         r0 = r0.path;
         r90 = r0;
@@ -9587,8 +9590,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r8 = r108.lastModified();
         r5 = r5.append(r8);
         r87 = r5.toString();
-        if (r37 == 0) goto L_0x0679;
-    L_0x05f9:
+        if (r37 == 0) goto L_0x0689;
+    L_0x0609:
         r0 = r37;
         r0 = r0.muted;
         r84 = r0;
@@ -9611,18 +9614,18 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r8 = r5.append(r8);
         r0 = r37;
         r5 = r0.muted;
-        if (r5 == 0) goto L_0x0869;
-    L_0x0636:
+        if (r5 == 0) goto L_0x0885;
+    L_0x0646:
         r5 = "_m";
-    L_0x0639:
+    L_0x0649:
         r5 = r8.append(r5);
         r87 = r5.toString();
         r0 = r37;
         r5 = r0.resultWidth;
         r0 = r37;
         r8 = r0.originalWidth;
-        if (r5 == r8) goto L_0x0669;
-    L_0x064b:
+        if (r5 == r8) goto L_0x0679;
+    L_0x065b:
         r5 = new java.lang.StringBuilder;
         r5.<init>();
         r0 = r87;
@@ -9633,34 +9636,34 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r8 = r0.resultWidth;
         r5 = r5.append(r8);
         r87 = r5.toString();
-    L_0x0669:
+    L_0x0679:
         r0 = r37;
         r8 = r0.startTime;
         r10 = 0;
         r5 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1));
-        if (r5 < 0) goto L_0x086e;
-    L_0x0673:
+        if (r5 < 0) goto L_0x088a;
+    L_0x0683:
         r0 = r37;
         r0 = r0.startTime;
         r30 = r0;
-    L_0x0679:
+    L_0x0689:
         r27 = 0;
         r89 = 0;
-        if (r6 != 0) goto L_0x06ad;
-    L_0x067f:
+        if (r6 != 0) goto L_0x06bd;
+    L_0x068f:
         r0 = r19;
         r5 = r0.ttl;
-        if (r5 != 0) goto L_0x06ad;
-    L_0x0685:
+        if (r5 != 0) goto L_0x06bd;
+    L_0x0695:
         r8 = org.telegram.messenger.MessagesStorage.getInstance(r120);
-        if (r6 != 0) goto L_0x0872;
-    L_0x068b:
+        if (r6 != 0) goto L_0x088e;
+    L_0x069b:
         r5 = 2;
-    L_0x068c:
+    L_0x069c:
         r0 = r87;
         r104 = r8.getSentFile(r0, r5);
-        if (r104 == 0) goto L_0x06ad;
-    L_0x0694:
+        if (r104 == 0) goto L_0x06bd;
+    L_0x06a4:
         r5 = 0;
         r27 = r104[r5];
         r27 = (org.telegram.tgnet.TLRPC.TL_document) r27;
@@ -9674,45 +9677,54 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r25 = r120;
         r26 = r6;
         ensureMediaThumbExists(r25, r26, r27, r28, r29, r30);
-    L_0x06ad:
-        if (r27 != 0) goto L_0x0774;
-    L_0x06af:
+    L_0x06bd:
+        if (r27 != 0) goto L_0x0790;
+    L_0x06bf:
         r0 = r19;
         r5 = r0.path;
         r0 = r30;
         r110 = createVideoThumbnail(r5, r0);
-        if (r110 != 0) goto L_0x06c4;
-    L_0x06bb:
+        if (r110 != 0) goto L_0x06d4;
+    L_0x06cb:
         r0 = r19;
         r5 = r0.path;
         r8 = 1;
         r110 = android.media.ThumbnailUtils.createVideoThumbnail(r5, r8);
-    L_0x06c4:
-        if (r6 == 0) goto L_0x0875;
-    L_0x06c6:
+    L_0x06d4:
+        if (r6 != 0) goto L_0x06dc;
+    L_0x06d6:
+        r0 = r19;
+        r5 = r0.ttl;
+        if (r5 == 0) goto L_0x0891;
+    L_0x06dc:
         r106 = 90;
-    L_0x06c8:
-        r0 = r106;
-        r5 = (float) r0;
+    L_0x06de:
         r0 = r106;
         r8 = (float) r0;
-        r9 = 55;
+        r0 = r106;
+        r9 = (float) r0;
+        r5 = 90;
+        r0 = r106;
+        if (r0 <= r5) goto L_0x0895;
+    L_0x06ea:
+        r5 = 70;
+    L_0x06ec:
         r0 = r110;
-        r107 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r0, r5, r8, r9, r6);
-        if (r110 == 0) goto L_0x06dc;
-    L_0x06d8:
-        if (r107 == 0) goto L_0x06dc;
-    L_0x06da:
+        r107 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r0, r8, r9, r5, r6);
+        if (r110 == 0) goto L_0x06f8;
+    L_0x06f4:
+        if (r107 == 0) goto L_0x06f8;
+    L_0x06f6:
         r110 = 0;
-    L_0x06dc:
+    L_0x06f8:
         r27 = new org.telegram.tgnet.TLRPC$TL_document;
         r27.<init>();
         r5 = 0;
         r5 = new byte[r5];
         r0 = r27;
         r0.file_reference = r5;
-        if (r107 == 0) goto L_0x06fd;
-    L_0x06ea:
+        if (r107 == 0) goto L_0x0719;
+    L_0x0706:
         r0 = r27;
         r5 = r0.thumbs;
         r0 = r107;
@@ -9722,35 +9734,35 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r5 = r5 | 1;
         r0 = r27;
         r0.flags = r5;
-    L_0x06fd:
+    L_0x0719:
         r5 = "video/mp4";
         r0 = r27;
         r0.mime_type = r5;
         r5 = org.telegram.messenger.UserConfig.getInstance(r120);
         r8 = 0;
         r5.saveConfig(r8);
-        if (r6 == 0) goto L_0x0880;
-    L_0x070e:
+        if (r6 == 0) goto L_0x08a0;
+    L_0x072a:
         r5 = 66;
         r0 = r66;
-        if (r0 < r5) goto L_0x0879;
-    L_0x0714:
+        if (r0 < r5) goto L_0x0899;
+    L_0x0730:
         r56 = new org.telegram.tgnet.TLRPC$TL_documentAttributeVideo;
         r56.<init>();
-    L_0x0719:
+    L_0x0735:
         r0 = r27;
         r5 = r0.attributes;
         r0 = r56;
         r5.add(r0);
-        if (r37 == 0) goto L_0x08ac;
-    L_0x0724:
+        if (r37 == 0) goto L_0x08cc;
+    L_0x0740:
         r5 = r37.needConvert();
-        if (r5 == 0) goto L_0x08ac;
-    L_0x072a:
+        if (r5 == 0) goto L_0x08cc;
+    L_0x0746:
         r0 = r37;
         r5 = r0.muted;
-        if (r5 == 0) goto L_0x088c;
-    L_0x0730:
+        if (r5 == 0) goto L_0x08ac;
+    L_0x074c:
         r0 = r19;
         r5 = r0.path;
         r0 = r56;
@@ -9764,17 +9776,17 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r5 = r0.h;
         r0 = r37;
         r0.originalHeight = r5;
-    L_0x074b:
+    L_0x0767:
         r0 = r37;
         r5 = r0.rotationValue;
         r8 = 90;
-        if (r5 == r8) goto L_0x075b;
-    L_0x0753:
+        if (r5 == r8) goto L_0x0777;
+    L_0x076f:
         r0 = r37;
         r5 = r0.rotationValue;
         r8 = 270; // 0x10e float:3.78E-43 double:1.334E-321;
-        if (r5 != r8) goto L_0x089a;
-    L_0x075b:
+        if (r5 != r8) goto L_0x08ba;
+    L_0x0777:
         r0 = r37;
         r5 = r0.resultHeight;
         r0 = r56;
@@ -9783,50 +9795,50 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r5 = r0.resultWidth;
         r0 = r56;
         r0.h = r5;
-    L_0x076b:
+    L_0x0787:
         r0 = r37;
         r8 = r0.estimatedSize;
         r5 = (int) r8;
         r0 = r27;
         r0.size = r5;
-    L_0x0774:
-        if (r37 == 0) goto L_0x07aa;
-    L_0x0776:
+    L_0x0790:
+        if (r37 == 0) goto L_0x07c6;
+    L_0x0792:
         r0 = r37;
         r5 = r0.muted;
-        if (r5 == 0) goto L_0x07aa;
-    L_0x077c:
+        if (r5 == 0) goto L_0x07c6;
+    L_0x0798:
         r70 = 0;
         r57 = 0;
         r0 = r27;
         r5 = r0.attributes;
         r4 = r5.size();
-    L_0x0788:
+    L_0x07a4:
         r0 = r57;
-        if (r0 >= r4) goto L_0x079c;
-    L_0x078c:
+        if (r0 >= r4) goto L_0x07b8;
+    L_0x07a8:
         r0 = r27;
         r5 = r0.attributes;
         r0 = r57;
         r5 = r5.get(r0);
         r5 = r5 instanceof org.telegram.tgnet.TLRPC.TL_documentAttributeAnimated;
-        if (r5 == 0) goto L_0x08c7;
-    L_0x079a:
+        if (r5 == 0) goto L_0x08e7;
+    L_0x07b6:
         r70 = 1;
-    L_0x079c:
-        if (r70 != 0) goto L_0x07aa;
-    L_0x079e:
+    L_0x07b8:
+        if (r70 != 0) goto L_0x07c6;
+    L_0x07ba:
         r0 = r27;
         r5 = r0.attributes;
         r8 = new org.telegram.tgnet.TLRPC$TL_documentAttributeAnimated;
         r8.<init>();
         r5.add(r8);
-    L_0x07aa:
-        if (r37 == 0) goto L_0x07e6;
-    L_0x07ac:
+    L_0x07c6:
+        if (r37 == 0) goto L_0x0802;
+    L_0x07c8:
         r5 = r37.needConvert();
-        if (r5 == 0) goto L_0x07e6;
-    L_0x07b2:
+        if (r5 == 0) goto L_0x0802;
+    L_0x07ce:
         r5 = new java.lang.StringBuilder;
         r5.<init>();
         r8 = "-2147483648_";
@@ -9844,7 +9856,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r0.<init>(r5, r1);
         org.telegram.messenger.SharedConfig.saveConfig();
         r90 = r61.getAbsolutePath();
-    L_0x07e6:
+    L_0x0802:
         r38 = r27;
         r15 = r89;
         r88 = r87;
@@ -9853,16 +9865,16 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r14.<init>();
         r33 = r110;
         r34 = r112;
-        if (r87 == 0) goto L_0x0801;
-    L_0x07f9:
+        if (r87 == 0) goto L_0x081d;
+    L_0x0815:
         r5 = "originalPath";
         r0 = r87;
         r14.put(r5, r0);
-    L_0x0801:
-        if (r84 != 0) goto L_0x083a;
-    L_0x0803:
-        if (r122 == 0) goto L_0x083a;
-    L_0x0805:
+    L_0x081d:
+        if (r84 != 0) goto L_0x0856;
+    L_0x081f:
+        if (r122 == 0) goto L_0x0856;
+    L_0x0821:
         r96 = r96 + 1;
         r5 = "groupId";
         r8 = new java.lang.StringBuilder;
@@ -9875,17 +9887,17 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r14.put(r5, r8);
         r5 = 10;
         r0 = r96;
-        if (r0 == r5) goto L_0x082f;
-    L_0x0829:
+        if (r0 == r5) goto L_0x084b;
+    L_0x0845:
         r5 = r62 + -1;
         r0 = r55;
-        if (r0 != r5) goto L_0x083a;
-    L_0x082f:
+        if (r0 != r5) goto L_0x0856;
+    L_0x084b:
         r5 = "final";
         r8 = "1";
         r14.put(r5, r8);
         r78 = 0;
-    L_0x083a:
+    L_0x0856:
         r32 = new org.telegram.messenger.SendMessagesHelper$$Lambda$26;
         r35 = r123;
         r36 = r120;
@@ -9896,46 +9908,49 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r45 = r19;
         r32.<init>(r33, r34, r35, r36, r37, r38, r39, r40, r41, r42, r44, r45);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r32);
-        goto L_0x0399;
-    L_0x0852:
+        goto L_0x03a5;
+    L_0x086e:
         r0 = r19;
         r5 = r0.videoEditedInfo;
-        if (r5 == 0) goto L_0x0860;
-    L_0x0858:
+        if (r5 == 0) goto L_0x087c;
+    L_0x0874:
         r0 = r19;
         r0 = r0.videoEditedInfo;
         r37 = r0;
-    L_0x085e:
-        goto L_0x05a7;
-    L_0x0860:
+    L_0x087a:
+        goto L_0x05b7;
+    L_0x087c:
         r0 = r19;
         r5 = r0.path;
         r37 = createCompressionSettings(r5);
-        goto L_0x085e;
-    L_0x0869:
+        goto L_0x087a;
+    L_0x0885:
         r5 = "";
-        goto L_0x0639;
-    L_0x086e:
+        goto L_0x0649;
+    L_0x088a:
         r30 = 0;
-        goto L_0x0679;
-    L_0x0872:
+        goto L_0x0689;
+    L_0x088e:
         r5 = 5;
-        goto L_0x068c;
-    L_0x0875:
+        goto L_0x069c;
+    L_0x0891:
         r106 = 320; // 0x140 float:4.48E-43 double:1.58E-321;
-        goto L_0x06c8;
-    L_0x0879:
+        goto L_0x06de;
+    L_0x0895:
+        r5 = 55;
+        goto L_0x06ec;
+    L_0x0899:
         r56 = new org.telegram.tgnet.TLRPC$TL_documentAttributeVideo_layer65;
         r56.<init>();
-        goto L_0x0719;
-    L_0x0880:
+        goto L_0x0735;
+    L_0x08a0:
         r56 = new org.telegram.tgnet.TLRPC$TL_documentAttributeVideo;
         r56.<init>();
         r5 = 1;
         r0 = r56;
         r0.supports_streaming = r5;
-        goto L_0x0719;
-    L_0x088c:
+        goto L_0x0735;
+    L_0x08ac:
         r0 = r37;
         r8 = r0.estimatedDuration;
         r10 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
@@ -9943,8 +9958,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r5 = (int) r8;
         r0 = r56;
         r0.duration = r5;
-        goto L_0x074b;
-    L_0x089a:
+        goto L_0x0767;
+    L_0x08ba:
         r0 = r37;
         r5 = r0.resultWidth;
         r0 = r56;
@@ -9953,26 +9968,26 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r5 = r0.resultHeight;
         r0 = r56;
         r0.h = r5;
-        goto L_0x076b;
-    L_0x08ac:
+        goto L_0x0787;
+    L_0x08cc:
         r5 = r108.exists();
-        if (r5 == 0) goto L_0x08bb;
-    L_0x08b2:
+        if (r5 == 0) goto L_0x08db;
+    L_0x08d2:
         r8 = r108.length();
         r5 = (int) r8;
         r0 = r27;
         r0.size = r5;
-    L_0x08bb:
+    L_0x08db:
         r0 = r19;
         r5 = r0.path;
         r8 = 0;
         r0 = r56;
         fillVideoAttribute(r5, r0, r8);
-        goto L_0x0774;
-    L_0x08c7:
+        goto L_0x0790;
+    L_0x08e7:
         r57 = r57 + 1;
-        goto L_0x0788;
-    L_0x08cb:
+        goto L_0x07a4;
+    L_0x08eb:
         r0 = r19;
         r0 = r0.path;
         r42 = r0;
@@ -9993,49 +10008,49 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r51 = r123;
         r52 = r121;
         prepareSendingDocumentInternal(r41, r42, r43, r44, r45, r46, r48, r49, r50, r51, r52);
-        goto L_0x0399;
-    L_0x08f6:
+        goto L_0x03a5;
+    L_0x0916:
         r0 = r19;
         r0 = r0.path;
         r87 = r0;
         r0 = r19;
         r0 = r0.path;
         r109 = r0;
-        if (r109 != 0) goto L_0x091a;
-    L_0x0904:
+        if (r109 != 0) goto L_0x093a;
+    L_0x0924:
         r0 = r19;
         r5 = r0.uri;
-        if (r5 == 0) goto L_0x091a;
-    L_0x090a:
+        if (r5 == 0) goto L_0x093a;
+    L_0x092a:
         r0 = r19;
         r5 = r0.uri;
         r109 = org.telegram.messenger.AndroidUtilities.getPath(r5);
         r0 = r19;
         r5 = r0.uri;
         r87 = r5.toString();
-    L_0x091a:
+    L_0x093a:
         r77 = 0;
-        if (r121 != 0) goto L_0x092c;
-    L_0x091e:
+        if (r121 != 0) goto L_0x094c;
+    L_0x093e:
         r0 = r19;
         r5 = r0.path;
         r0 = r19;
         r8 = r0.uri;
         r5 = org.telegram.messenger.ImageLoader.shouldSendImageAsDocument(r5, r8);
-        if (r5 == 0) goto L_0x0979;
-    L_0x092c:
+        if (r5 == 0) goto L_0x0999;
+    L_0x094c:
         r77 = 1;
-        if (r109 == 0) goto L_0x0975;
-    L_0x0930:
+        if (r109 == 0) goto L_0x0995;
+    L_0x0950:
         r5 = new java.io.File;
         r0 = r109;
         r5.<init>(r0);
         r67 = org.telegram.messenger.FileLoader.getFileExtension(r5);
-    L_0x093b:
-        if (r77 == 0) goto L_0x09f6;
-    L_0x093d:
-        if (r100 != 0) goto L_0x0953;
-    L_0x093f:
+    L_0x095b:
+        if (r77 == 0) goto L_0x0a16;
+    L_0x095d:
+        if (r100 != 0) goto L_0x0973;
+    L_0x095f:
         r100 = new java.util.ArrayList;
         r100.<init>();
         r103 = new java.util.ArrayList;
@@ -10044,7 +10059,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r101.<init>();
         r102 = new java.util.ArrayList;
         r102.<init>();
-    L_0x0953:
+    L_0x0973:
         r0 = r100;
         r1 = r109;
         r0.add(r1);
@@ -10059,47 +10074,47 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r5 = r0.entities;
         r0 = r102;
         r0.add(r5);
-        goto L_0x0399;
-    L_0x0975:
+        goto L_0x03a5;
+    L_0x0995:
         r67 = "";
-        goto L_0x093b;
-    L_0x0979:
-        if (r109 == 0) goto L_0x09a6;
-    L_0x097b:
+        goto L_0x095b;
+    L_0x0999:
+        if (r109 == 0) goto L_0x09c6;
+    L_0x099b:
         r5 = ".gif";
         r0 = r109;
         r5 = r0.endsWith(r5);
-        if (r5 != 0) goto L_0x0991;
-    L_0x0986:
+        if (r5 != 0) goto L_0x09b1;
+    L_0x09a6:
         r5 = ".webp";
         r0 = r109;
         r5 = r0.endsWith(r5);
-        if (r5 == 0) goto L_0x09a6;
-    L_0x0991:
+        if (r5 == 0) goto L_0x09c6;
+    L_0x09b1:
         r5 = ".gif";
         r0 = r109;
         r5 = r0.endsWith(r5);
-        if (r5 == 0) goto L_0x09a2;
-    L_0x099c:
+        if (r5 == 0) goto L_0x09c2;
+    L_0x09bc:
         r67 = "gif";
-    L_0x099f:
+    L_0x09bf:
         r77 = 1;
-        goto L_0x093b;
-    L_0x09a2:
+        goto L_0x095b;
+    L_0x09c2:
         r67 = "webp";
-        goto L_0x099f;
-    L_0x09a6:
-        if (r109 != 0) goto L_0x093b;
-    L_0x09a8:
+        goto L_0x09bf;
+    L_0x09c6:
+        if (r109 != 0) goto L_0x095b;
+    L_0x09c8:
         r0 = r19;
         r5 = r0.uri;
-        if (r5 == 0) goto L_0x093b;
-    L_0x09ae:
+        if (r5 == 0) goto L_0x095b;
+    L_0x09ce:
         r0 = r19;
         r5 = r0.uri;
         r5 = org.telegram.messenger.MediaController.isGif(r5);
-        if (r5 == 0) goto L_0x09d2;
-    L_0x09b8:
+        if (r5 == 0) goto L_0x09f2;
+    L_0x09d8:
         r77 = 1;
         r0 = r19;
         r5 = r0.uri;
@@ -10109,13 +10124,13 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r8 = "gif";
         r109 = org.telegram.messenger.MediaController.copyFileToCache(r5, r8);
         r67 = "gif";
-        goto L_0x093b;
-    L_0x09d2:
+        goto L_0x095b;
+    L_0x09f2:
         r0 = r19;
         r5 = r0.uri;
         r5 = org.telegram.messenger.MediaController.isWebp(r5);
-        if (r5 == 0) goto L_0x093b;
-    L_0x09dc:
+        if (r5 == 0) goto L_0x095b;
+    L_0x09fc:
         r77 = 1;
         r0 = r19;
         r5 = r0.uri;
@@ -10125,10 +10140,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r8 = "webp";
         r109 = org.telegram.messenger.MediaController.copyFileToCache(r5, r8);
         r67 = "webp";
-        goto L_0x093b;
-    L_0x09f6:
-        if (r109 == 0) goto L_0x0abb;
-    L_0x09f8:
+        goto L_0x095b;
+    L_0x0a16:
+        if (r109 == 0) goto L_0x0adb;
+    L_0x0a18:
         r108 = new java.io.File;
         r108.<init>(r109);
         r5 = new java.lang.StringBuilder;
@@ -10142,11 +10157,11 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r8 = r108.lastModified();
         r5 = r5.append(r8);
         r87 = r5.toString();
-    L_0x0a23:
+    L_0x0a43:
         r7 = 0;
         r89 = 0;
-        if (r115 == 0) goto L_0x0ac4;
-    L_0x0a28:
+        if (r115 == 0) goto L_0x0ae4;
+    L_0x0a48:
         r0 = r115;
         r1 = r19;
         r114 = r0.get(r1);
@@ -10156,20 +10171,20 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r0 = r114;
         r0 = r0.parentObject;
         r89 = r0;
-        if (r7 != 0) goto L_0x0a4f;
-    L_0x0a3e:
+        if (r7 != 0) goto L_0x0a6f;
+    L_0x0a5e:
         r0 = r114;
-        r5 = r0.sync;	 Catch:{ Exception -> 0x0abf }
-        r5.await();	 Catch:{ Exception -> 0x0abf }
-    L_0x0a45:
+        r5 = r0.sync;	 Catch:{ Exception -> 0x0adf }
+        r5.await();	 Catch:{ Exception -> 0x0adf }
+    L_0x0a65:
         r0 = r114;
         r7 = r0.photo;
         r0 = r114;
         r0 = r0.parentObject;
         r89 = r0;
-    L_0x0a4f:
-        if (r7 == 0) goto L_0x0d70;
-    L_0x0a51:
+    L_0x0a6f:
+        if (r7 == 0) goto L_0x0d90;
+    L_0x0a71:
         r23 = r7;
         r15 = r89;
         r14 = new java.util.HashMap;
@@ -10182,18 +10197,18 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r42 = r0;
         r0 = r19;
         r5 = r0.masks;
-        if (r5 == 0) goto L_0x0b47;
-    L_0x0a6a:
+        if (r5 == 0) goto L_0x0b67;
+    L_0x0a8a:
         r0 = r19;
         r5 = r0.masks;
         r5 = r5.isEmpty();
-        if (r5 != 0) goto L_0x0b47;
-    L_0x0a74:
+        if (r5 != 0) goto L_0x0b67;
+    L_0x0a94:
         r5 = 1;
-    L_0x0a75:
+    L_0x0a95:
         r7.has_stickers = r5;
-        if (r5 == 0) goto L_0x0b5b;
-    L_0x0a79:
+        if (r5 == 0) goto L_0x0b7b;
+    L_0x0a99:
         r105 = new org.telegram.tgnet.SerializedData;
         r0 = r19;
         r5 = r0.masks;
@@ -10208,13 +10223,13 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r0 = r105;
         r0.writeInt32(r5);
         r57 = 0;
-    L_0x0a9b:
+    L_0x0abb:
         r0 = r19;
         r5 = r0.masks;
         r5 = r5.size();
         r0 = r57;
-        if (r0 >= r5) goto L_0x0b4a;
-    L_0x0aa7:
+        if (r0 >= r5) goto L_0x0b6a;
+    L_0x0ac7:
         r0 = r19;
         r5 = r0.masks;
         r0 = r57;
@@ -10223,61 +10238,61 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r0 = r105;
         r5.serializeToStream(r0);
         r57 = r57 + 1;
-        goto L_0x0a9b;
-    L_0x0abb:
+        goto L_0x0abb;
+    L_0x0adb:
         r87 = 0;
-        goto L_0x0a23;
-    L_0x0abf:
+        goto L_0x0a43;
+    L_0x0adf:
         r64 = move-exception;
         org.telegram.messenger.FileLog.e(r64);
-        goto L_0x0a45;
-    L_0x0ac4:
-        if (r6 != 0) goto L_0x0b1b;
-    L_0x0ac6:
+        goto L_0x0a65;
+    L_0x0ae4:
+        if (r6 != 0) goto L_0x0b3b;
+    L_0x0ae6:
         r0 = r19;
         r5 = r0.ttl;
-        if (r5 != 0) goto L_0x0b1b;
-    L_0x0acc:
+        if (r5 != 0) goto L_0x0b3b;
+    L_0x0aec:
         r8 = org.telegram.messenger.MessagesStorage.getInstance(r120);
-        if (r6 != 0) goto L_0x0b43;
-    L_0x0ad2:
+        if (r6 != 0) goto L_0x0b63;
+    L_0x0af2:
         r5 = 0;
-    L_0x0ad3:
+    L_0x0af3:
         r0 = r87;
         r104 = r8.getSentFile(r0, r5);
-        if (r104 == 0) goto L_0x0ae5;
-    L_0x0adb:
+        if (r104 == 0) goto L_0x0b05;
+    L_0x0afb:
         r5 = 0;
         r7 = r104[r5];
         r7 = (org.telegram.tgnet.TLRPC.TL_photo) r7;
         r5 = 1;
         r89 = r104[r5];
         r89 = (java.lang.String) r89;
-    L_0x0ae5:
-        if (r7 != 0) goto L_0x0b0c;
-    L_0x0ae7:
+    L_0x0b05:
+        if (r7 != 0) goto L_0x0b2c;
+    L_0x0b07:
         r0 = r19;
         r5 = r0.uri;
-        if (r5 == 0) goto L_0x0b0c;
-    L_0x0aed:
+        if (r5 == 0) goto L_0x0b2c;
+    L_0x0b0d:
         r8 = org.telegram.messenger.MessagesStorage.getInstance(r120);
         r0 = r19;
         r5 = r0.uri;
         r9 = org.telegram.messenger.AndroidUtilities.getPath(r5);
-        if (r6 != 0) goto L_0x0b45;
-    L_0x0afb:
+        if (r6 != 0) goto L_0x0b65;
+    L_0x0b1b:
         r5 = 0;
-    L_0x0afc:
+    L_0x0b1c:
         r104 = r8.getSentFile(r9, r5);
-        if (r104 == 0) goto L_0x0b0c;
-    L_0x0b02:
+        if (r104 == 0) goto L_0x0b2c;
+    L_0x0b22:
         r5 = 0;
         r7 = r104[r5];
         r7 = (org.telegram.tgnet.TLRPC.TL_photo) r7;
         r5 = 1;
         r89 = r104[r5];
         r89 = (java.lang.String) r89;
-    L_0x0b0c:
+    L_0x0b2c:
         r0 = r19;
         r8 = r0.path;
         r0 = r19;
@@ -10285,243 +10300,243 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r10 = 0;
         r5 = r120;
         ensureMediaThumbExists(r5, r6, r7, r8, r9, r10);
-    L_0x0b1b:
-        if (r7 != 0) goto L_0x0a4f;
-    L_0x0b1d:
+    L_0x0b3b:
+        if (r7 != 0) goto L_0x0a6f;
+    L_0x0b3d:
         r5 = getInstance(r120);
         r0 = r19;
         r8 = r0.path;
         r0 = r19;
         r9 = r0.uri;
         r7 = r5.generatePhotoSizes(r8, r9);
-        if (r6 == 0) goto L_0x0a4f;
-    L_0x0b2f:
+        if (r6 == 0) goto L_0x0a6f;
+    L_0x0b4f:
         r0 = r19;
         r5 = r0.canDeleteAfter;
-        if (r5 == 0) goto L_0x0a4f;
-    L_0x0b35:
+        if (r5 == 0) goto L_0x0a6f;
+    L_0x0b55:
         r5 = new java.io.File;
         r0 = r19;
         r8 = r0.path;
         r5.<init>(r8);
         r5.delete();
-        goto L_0x0a4f;
-    L_0x0b43:
+        goto L_0x0a6f;
+    L_0x0b63:
         r5 = 3;
-        goto L_0x0ad3;
-    L_0x0b45:
+        goto L_0x0af3;
+    L_0x0b65:
         r5 = 3;
-        goto L_0x0afc;
-    L_0x0b47:
+        goto L_0x0b1c;
+    L_0x0b67:
         r5 = 0;
-        goto L_0x0a75;
-    L_0x0b4a:
+        goto L_0x0a95;
+    L_0x0b6a:
         r5 = "masks";
         r8 = r105.toByteArray();
         r8 = org.telegram.messenger.Utilities.bytesToHex(r8);
         r14.put(r5, r8);
         r105.cleanup();
-    L_0x0b5b:
-        if (r87 == 0) goto L_0x0b65;
-    L_0x0b5d:
+    L_0x0b7b:
+        if (r87 == 0) goto L_0x0b85;
+    L_0x0b7d:
         r5 = "originalPath";
         r0 = r87;
         r14.put(r5, r0);
-    L_0x0b65:
-        if (r122 == 0) goto L_0x0b6e;
-    L_0x0b67:
-        r5 = r117.size();	 Catch:{ Exception -> 0x0d6a }
+    L_0x0b85:
+        if (r122 == 0) goto L_0x0b8e;
+    L_0x0b87:
+        r5 = r117.size();	 Catch:{ Exception -> 0x0d8a }
         r8 = 1;
-        if (r5 != r8) goto L_0x0ccd;
-    L_0x0b6e:
+        if (r5 != r8) goto L_0x0ced;
+    L_0x0b8e:
         r0 = r23;
-        r5 = r0.sizes;	 Catch:{ Exception -> 0x0d6a }
-        r8 = org.telegram.messenger.AndroidUtilities.getPhotoSize();	 Catch:{ Exception -> 0x0d6a }
-        r63 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r5, r8);	 Catch:{ Exception -> 0x0d6a }
-        if (r63 == 0) goto L_0x0ccd;
-    L_0x0b7c:
-        r5 = org.telegram.messenger.AndroidUtilities.isTablet();	 Catch:{ Exception -> 0x0d6a }
-        if (r5 == 0) goto L_0x0d1e;
-    L_0x0b82:
-        r5 = org.telegram.messenger.AndroidUtilities.getMinTabletSide();	 Catch:{ Exception -> 0x0d6a }
-        r5 = (float) r5;	 Catch:{ Exception -> 0x0d6a }
+        r5 = r0.sizes;	 Catch:{ Exception -> 0x0d8a }
+        r8 = org.telegram.messenger.AndroidUtilities.getPhotoSize();	 Catch:{ Exception -> 0x0d8a }
+        r63 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r5, r8);	 Catch:{ Exception -> 0x0d8a }
+        if (r63 == 0) goto L_0x0ced;
+    L_0x0b9c:
+        r5 = org.telegram.messenger.AndroidUtilities.isTablet();	 Catch:{ Exception -> 0x0d8a }
+        if (r5 == 0) goto L_0x0d3e;
+    L_0x0ba2:
+        r5 = org.telegram.messenger.AndroidUtilities.getMinTabletSide();	 Catch:{ Exception -> 0x0d8a }
+        r5 = (float) r5;	 Catch:{ Exception -> 0x0d8a }
         r8 = NUM; // 0x3var_ float:0.7 double:5.23867711E-315;
         r5 = r5 * r8;
-        r0 = (int) r5;	 Catch:{ Exception -> 0x0d6a }
+        r0 = (int) r5;	 Catch:{ Exception -> 0x0d8a }
         r95 = r0;
         r82 = r95;
-    L_0x0b90:
-        r5 = NUM; // 0x42CLASSNAME float:100.0 double:5.53552857E-315;
-        r5 = org.telegram.messenger.AndroidUtilities.dp(r5);	 Catch:{ Exception -> 0x0d6a }
-        r92 = r95 + r5;
-        r5 = org.telegram.messenger.AndroidUtilities.getPhotoSize();	 Catch:{ Exception -> 0x0d6a }
-        r0 = r95;
-        if (r0 <= r5) goto L_0x0ba4;
-    L_0x0ba0:
-        r95 = org.telegram.messenger.AndroidUtilities.getPhotoSize();	 Catch:{ Exception -> 0x0d6a }
-    L_0x0ba4:
-        r5 = org.telegram.messenger.AndroidUtilities.getPhotoSize();	 Catch:{ Exception -> 0x0d6a }
-        r0 = r92;
-        if (r0 <= r5) goto L_0x0bb0;
-    L_0x0bac:
-        r92 = org.telegram.messenger.AndroidUtilities.getPhotoSize();	 Catch:{ Exception -> 0x0d6a }
     L_0x0bb0:
-        r0 = r63;
-        r5 = r0.w;	 Catch:{ Exception -> 0x0d6a }
-        r5 = (float) r5;	 Catch:{ Exception -> 0x0d6a }
+        r5 = NUM; // 0x42CLASSNAME float:100.0 double:5.53552857E-315;
+        r5 = org.telegram.messenger.AndroidUtilities.dp(r5);	 Catch:{ Exception -> 0x0d8a }
+        r92 = r95 + r5;
+        r5 = org.telegram.messenger.AndroidUtilities.getPhotoSize();	 Catch:{ Exception -> 0x0d8a }
         r0 = r95;
-        r8 = (float) r0;	 Catch:{ Exception -> 0x0d6a }
+        if (r0 <= r5) goto L_0x0bc4;
+    L_0x0bc0:
+        r95 = org.telegram.messenger.AndroidUtilities.getPhotoSize();	 Catch:{ Exception -> 0x0d8a }
+    L_0x0bc4:
+        r5 = org.telegram.messenger.AndroidUtilities.getPhotoSize();	 Catch:{ Exception -> 0x0d8a }
+        r0 = r92;
+        if (r0 <= r5) goto L_0x0bd0;
+    L_0x0bcc:
+        r92 = org.telegram.messenger.AndroidUtilities.getPhotoSize();	 Catch:{ Exception -> 0x0d8a }
+    L_0x0bd0:
+        r0 = r63;
+        r5 = r0.w;	 Catch:{ Exception -> 0x0d8a }
+        r5 = (float) r5;	 Catch:{ Exception -> 0x0d8a }
+        r0 = r95;
+        r8 = (float) r0;	 Catch:{ Exception -> 0x0d8a }
         r97 = r5 / r8;
         r0 = r63;
-        r5 = r0.w;	 Catch:{ Exception -> 0x0d6a }
-        r5 = (float) r5;	 Catch:{ Exception -> 0x0d6a }
+        r5 = r0.w;	 Catch:{ Exception -> 0x0d8a }
+        r5 = (float) r5;	 Catch:{ Exception -> 0x0d8a }
         r5 = r5 / r97;
-        r0 = (int) r5;	 Catch:{ Exception -> 0x0d6a }
+        r0 = (int) r5;	 Catch:{ Exception -> 0x0d8a }
         r113 = r0;
         r0 = r63;
-        r5 = r0.h;	 Catch:{ Exception -> 0x0d6a }
-        r5 = (float) r5;	 Catch:{ Exception -> 0x0d6a }
+        r5 = r0.h;	 Catch:{ Exception -> 0x0d8a }
+        r5 = (float) r5;	 Catch:{ Exception -> 0x0d8a }
         r5 = r5 / r97;
-        r0 = (int) r5;	 Catch:{ Exception -> 0x0d6a }
+        r0 = (int) r5;	 Catch:{ Exception -> 0x0d8a }
         r71 = r0;
-        if (r113 != 0) goto L_0x0bd6;
-    L_0x0bd0:
+        if (r113 != 0) goto L_0x0bf6;
+    L_0x0bf0:
         r5 = NUM; // 0x43160000 float:150.0 double:5.56078426E-315;
-        r113 = org.telegram.messenger.AndroidUtilities.dp(r5);	 Catch:{ Exception -> 0x0d6a }
-    L_0x0bd6:
-        if (r71 != 0) goto L_0x0bde;
-    L_0x0bd8:
+        r113 = org.telegram.messenger.AndroidUtilities.dp(r5);	 Catch:{ Exception -> 0x0d8a }
+    L_0x0bf6:
+        if (r71 != 0) goto L_0x0bfe;
+    L_0x0bf8:
         r5 = NUM; // 0x43160000 float:150.0 double:5.56078426E-315;
-        r71 = org.telegram.messenger.AndroidUtilities.dp(r5);	 Catch:{ Exception -> 0x0d6a }
-    L_0x0bde:
+        r71 = org.telegram.messenger.AndroidUtilities.dp(r5);	 Catch:{ Exception -> 0x0d8a }
+    L_0x0bfe:
         r0 = r71;
         r1 = r92;
-        if (r0 <= r1) goto L_0x0d36;
-    L_0x0be4:
+        if (r0 <= r1) goto L_0x0d56;
+    L_0x0CLASSNAME:
         r0 = r71;
-        r0 = (float) r0;	 Catch:{ Exception -> 0x0d6a }
+        r0 = (float) r0;	 Catch:{ Exception -> 0x0d8a }
         r98 = r0;
         r71 = r92;
         r0 = r71;
-        r5 = (float) r0;	 Catch:{ Exception -> 0x0d6a }
+        r5 = (float) r0;	 Catch:{ Exception -> 0x0d8a }
         r98 = r98 / r5;
         r0 = r113;
-        r5 = (float) r0;	 Catch:{ Exception -> 0x0d6a }
+        r5 = (float) r0;	 Catch:{ Exception -> 0x0d8a }
         r5 = r5 / r98;
-        r0 = (int) r5;	 Catch:{ Exception -> 0x0d6a }
+        r0 = (int) r5;	 Catch:{ Exception -> 0x0d8a }
         r113 = r0;
-    L_0x0bf8:
+    L_0x0CLASSNAME:
         r5 = 0;
-        r8 = java.util.Locale.US;	 Catch:{ Exception -> 0x0d6a }
+        r8 = java.util.Locale.US;	 Catch:{ Exception -> 0x0d8a }
         r9 = "%d_%d@%d_%d";
         r10 = 4;
-        r10 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x0d6a }
+        r10 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x0d8a }
         r11 = 0;
         r0 = r63;
-        r0 = r0.location;	 Catch:{ Exception -> 0x0d6a }
+        r0 = r0.location;	 Catch:{ Exception -> 0x0d8a }
         r16 = r0;
         r0 = r16;
-        r0 = r0.volume_id;	 Catch:{ Exception -> 0x0d6a }
+        r0 = r0.volume_id;	 Catch:{ Exception -> 0x0d8a }
         r16 = r0;
-        r16 = java.lang.Long.valueOf(r16);	 Catch:{ Exception -> 0x0d6a }
-        r10[r11] = r16;	 Catch:{ Exception -> 0x0d6a }
+        r16 = java.lang.Long.valueOf(r16);	 Catch:{ Exception -> 0x0d8a }
+        r10[r11] = r16;	 Catch:{ Exception -> 0x0d8a }
         r11 = 1;
         r0 = r63;
-        r0 = r0.location;	 Catch:{ Exception -> 0x0d6a }
+        r0 = r0.location;	 Catch:{ Exception -> 0x0d8a }
         r16 = r0;
         r0 = r16;
-        r0 = r0.local_id;	 Catch:{ Exception -> 0x0d6a }
+        r0 = r0.local_id;	 Catch:{ Exception -> 0x0d8a }
         r16 = r0;
-        r16 = java.lang.Integer.valueOf(r16);	 Catch:{ Exception -> 0x0d6a }
-        r10[r11] = r16;	 Catch:{ Exception -> 0x0d6a }
+        r16 = java.lang.Integer.valueOf(r16);	 Catch:{ Exception -> 0x0d8a }
+        r10[r11] = r16;	 Catch:{ Exception -> 0x0d8a }
         r11 = 2;
         r0 = r113;
-        r0 = (float) r0;	 Catch:{ Exception -> 0x0d6a }
+        r0 = (float) r0;	 Catch:{ Exception -> 0x0d8a }
         r16 = r0;
-        r17 = org.telegram.messenger.AndroidUtilities.density;	 Catch:{ Exception -> 0x0d6a }
+        r17 = org.telegram.messenger.AndroidUtilities.density;	 Catch:{ Exception -> 0x0d8a }
         r16 = r16 / r17;
         r0 = r16;
-        r0 = (int) r0;	 Catch:{ Exception -> 0x0d6a }
+        r0 = (int) r0;	 Catch:{ Exception -> 0x0d8a }
         r16 = r0;
-        r16 = java.lang.Integer.valueOf(r16);	 Catch:{ Exception -> 0x0d6a }
-        r10[r11] = r16;	 Catch:{ Exception -> 0x0d6a }
+        r16 = java.lang.Integer.valueOf(r16);	 Catch:{ Exception -> 0x0d8a }
+        r10[r11] = r16;	 Catch:{ Exception -> 0x0d8a }
         r11 = 3;
         r0 = r71;
-        r0 = (float) r0;	 Catch:{ Exception -> 0x0d6a }
+        r0 = (float) r0;	 Catch:{ Exception -> 0x0d8a }
         r16 = r0;
-        r17 = org.telegram.messenger.AndroidUtilities.density;	 Catch:{ Exception -> 0x0d6a }
+        r17 = org.telegram.messenger.AndroidUtilities.density;	 Catch:{ Exception -> 0x0d8a }
         r16 = r16 / r17;
         r0 = r16;
-        r0 = (int) r0;	 Catch:{ Exception -> 0x0d6a }
+        r0 = (int) r0;	 Catch:{ Exception -> 0x0d8a }
         r16 = r0;
-        r16 = java.lang.Integer.valueOf(r16);	 Catch:{ Exception -> 0x0d6a }
-        r10[r11] = r16;	 Catch:{ Exception -> 0x0d6a }
-        r8 = java.lang.String.format(r8, r9, r10);	 Catch:{ Exception -> 0x0d6a }
-        r42[r5] = r8;	 Catch:{ Exception -> 0x0d6a }
-        r86 = new android.graphics.BitmapFactory$Options;	 Catch:{ Exception -> 0x0d6a }
-        r86.<init>();	 Catch:{ Exception -> 0x0d6a }
+        r16 = java.lang.Integer.valueOf(r16);	 Catch:{ Exception -> 0x0d8a }
+        r10[r11] = r16;	 Catch:{ Exception -> 0x0d8a }
+        r8 = java.lang.String.format(r8, r9, r10);	 Catch:{ Exception -> 0x0d8a }
+        r42[r5] = r8;	 Catch:{ Exception -> 0x0d8a }
+        r86 = new android.graphics.BitmapFactory$Options;	 Catch:{ Exception -> 0x0d8a }
+        r86.<init>();	 Catch:{ Exception -> 0x0d8a }
         r5 = 1;
         r0 = r86;
-        r0.inJustDecodeBounds = r5;	 Catch:{ Exception -> 0x0d6a }
-        r68 = org.telegram.messenger.FileLoader.getPathToAttach(r63);	 Catch:{ Exception -> 0x0d6a }
-        r76 = new java.io.FileInputStream;	 Catch:{ Exception -> 0x0d6a }
+        r0.inJustDecodeBounds = r5;	 Catch:{ Exception -> 0x0d8a }
+        r68 = org.telegram.messenger.FileLoader.getPathToAttach(r63);	 Catch:{ Exception -> 0x0d8a }
+        r76 = new java.io.FileInputStream;	 Catch:{ Exception -> 0x0d8a }
         r0 = r76;
         r1 = r68;
-        r0.<init>(r1);	 Catch:{ Exception -> 0x0d6a }
+        r0.<init>(r1);	 Catch:{ Exception -> 0x0d8a }
         r5 = 0;
         r0 = r76;
         r1 = r86;
-        android.graphics.BitmapFactory.decodeStream(r0, r5, r1);	 Catch:{ Exception -> 0x0d6a }
-        r76.close();	 Catch:{ Exception -> 0x0d6a }
+        android.graphics.BitmapFactory.decodeStream(r0, r5, r1);	 Catch:{ Exception -> 0x0d8a }
+        r76.close();	 Catch:{ Exception -> 0x0d8a }
         r0 = r86;
-        r5 = r0.outWidth;	 Catch:{ Exception -> 0x0d6a }
-        r0 = (float) r5;	 Catch:{ Exception -> 0x0d6a }
+        r5 = r0.outWidth;	 Catch:{ Exception -> 0x0d8a }
+        r0 = (float) r5;	 Catch:{ Exception -> 0x0d8a }
         r94 = r0;
         r0 = r86;
-        r5 = r0.outHeight;	 Catch:{ Exception -> 0x0d6a }
-        r0 = (float) r5;	 Catch:{ Exception -> 0x0d6a }
+        r5 = r0.outHeight;	 Catch:{ Exception -> 0x0d8a }
+        r0 = (float) r5;	 Catch:{ Exception -> 0x0d8a }
         r91 = r0;
         r0 = r113;
-        r5 = (float) r0;	 Catch:{ Exception -> 0x0d6a }
+        r5 = (float) r0;	 Catch:{ Exception -> 0x0d8a }
         r5 = r94 / r5;
         r0 = r71;
-        r8 = (float) r0;	 Catch:{ Exception -> 0x0d6a }
+        r8 = (float) r0;	 Catch:{ Exception -> 0x0d8a }
         r8 = r91 / r8;
-        r99 = java.lang.Math.max(r5, r8);	 Catch:{ Exception -> 0x0d6a }
+        r99 = java.lang.Math.max(r5, r8);	 Catch:{ Exception -> 0x0d8a }
         r5 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r5 = (r99 > r5 ? 1 : (r99 == r5 ? 0 : -1));
-        if (r5 >= 0) goto L_0x0c9d;
-    L_0x0c9b:
+        if (r5 >= 0) goto L_0x0cbd;
+    L_0x0cbb:
         r99 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-    L_0x0c9d:
+    L_0x0cbd:
         r5 = 0;
         r0 = r86;
-        r0.inJustDecodeBounds = r5;	 Catch:{ Exception -> 0x0d6a }
+        r0.inJustDecodeBounds = r5;	 Catch:{ Exception -> 0x0d8a }
         r0 = r99;
-        r5 = (int) r0;	 Catch:{ Exception -> 0x0d6a }
+        r5 = (int) r0;	 Catch:{ Exception -> 0x0d8a }
         r0 = r86;
-        r0.inSampleSize = r5;	 Catch:{ Exception -> 0x0d6a }
-        r5 = android.graphics.Bitmap.Config.RGB_565;	 Catch:{ Exception -> 0x0d6a }
+        r0.inSampleSize = r5;	 Catch:{ Exception -> 0x0d8a }
+        r5 = android.graphics.Bitmap.Config.RGB_565;	 Catch:{ Exception -> 0x0d8a }
         r0 = r86;
-        r0.inPreferredConfig = r5;	 Catch:{ Exception -> 0x0d6a }
-        r5 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0d6a }
+        r0.inPreferredConfig = r5;	 Catch:{ Exception -> 0x0d8a }
+        r5 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0d8a }
         r8 = 21;
-        if (r5 < r8) goto L_0x0ccd;
-    L_0x0cb5:
-        r76 = new java.io.FileInputStream;	 Catch:{ Exception -> 0x0d6a }
+        if (r5 < r8) goto L_0x0ced;
+    L_0x0cd5:
+        r76 = new java.io.FileInputStream;	 Catch:{ Exception -> 0x0d8a }
         r0 = r76;
         r1 = r68;
-        r0.<init>(r1);	 Catch:{ Exception -> 0x0d6a }
+        r0.<init>(r1);	 Catch:{ Exception -> 0x0d8a }
         r5 = 0;
         r8 = 0;
         r0 = r76;
         r1 = r86;
-        r8 = android.graphics.BitmapFactory.decodeStream(r0, r8, r1);	 Catch:{ Exception -> 0x0d6a }
-        r41[r5] = r8;	 Catch:{ Exception -> 0x0d6a }
-        r76.close();	 Catch:{ Exception -> 0x0d6a }
-    L_0x0ccd:
-        if (r122 == 0) goto L_0x0d04;
-    L_0x0ccf:
+        r8 = android.graphics.BitmapFactory.decodeStream(r0, r8, r1);	 Catch:{ Exception -> 0x0d8a }
+        r41[r5] = r8;	 Catch:{ Exception -> 0x0d8a }
+        r76.close();	 Catch:{ Exception -> 0x0d8a }
+    L_0x0ced:
+        if (r122 == 0) goto L_0x0d24;
+    L_0x0cef:
         r96 = r96 + 1;
         r5 = "groupId";
         r8 = new java.lang.StringBuilder;
@@ -10534,17 +10549,17 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r14.put(r5, r8);
         r5 = 10;
         r0 = r96;
-        if (r0 == r5) goto L_0x0cf9;
-    L_0x0cf3:
+        if (r0 == r5) goto L_0x0d19;
+    L_0x0d13:
         r5 = r62 + -1;
         r0 = r55;
-        if (r0 != r5) goto L_0x0d04;
-    L_0x0cf9:
+        if (r0 != r5) goto L_0x0d24;
+    L_0x0d19:
         r5 = "final";
         r8 = "1";
         r14.put(r5, r8);
         r78 = 0;
-    L_0x0d04:
+    L_0x0d24:
         r40 = new org.telegram.messenger.SendMessagesHelper$$Lambda$27;
         r43 = r123;
         r44 = r120;
@@ -10556,57 +10571,57 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r51 = r19;
         r40.<init>(r41, r42, r43, r44, r45, r46, r47, r48, r50, r51);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r40);
-        goto L_0x0399;
-    L_0x0d1e:
-        r5 = org.telegram.messenger.AndroidUtilities.displaySize;	 Catch:{ Exception -> 0x0d6a }
-        r5 = r5.x;	 Catch:{ Exception -> 0x0d6a }
-        r8 = org.telegram.messenger.AndroidUtilities.displaySize;	 Catch:{ Exception -> 0x0d6a }
-        r8 = r8.y;	 Catch:{ Exception -> 0x0d6a }
-        r5 = java.lang.Math.min(r5, r8);	 Catch:{ Exception -> 0x0d6a }
-        r5 = (float) r5;	 Catch:{ Exception -> 0x0d6a }
+        goto L_0x03a5;
+    L_0x0d3e:
+        r5 = org.telegram.messenger.AndroidUtilities.displaySize;	 Catch:{ Exception -> 0x0d8a }
+        r5 = r5.x;	 Catch:{ Exception -> 0x0d8a }
+        r8 = org.telegram.messenger.AndroidUtilities.displaySize;	 Catch:{ Exception -> 0x0d8a }
+        r8 = r8.y;	 Catch:{ Exception -> 0x0d8a }
+        r5 = java.lang.Math.min(r5, r8);	 Catch:{ Exception -> 0x0d8a }
+        r5 = (float) r5;	 Catch:{ Exception -> 0x0d8a }
         r8 = NUM; // 0x3var_ float:0.7 double:5.23867711E-315;
         r5 = r5 * r8;
-        r0 = (int) r5;	 Catch:{ Exception -> 0x0d6a }
+        r0 = (int) r5;	 Catch:{ Exception -> 0x0d8a }
         r95 = r0;
         r82 = r95;
-        goto L_0x0b90;
-    L_0x0d36:
+        goto L_0x0bb0;
+    L_0x0d56:
         r5 = NUM; // 0x42var_ float:120.0 double:5.548480205E-315;
-        r5 = org.telegram.messenger.AndroidUtilities.dp(r5);	 Catch:{ Exception -> 0x0d6a }
+        r5 = org.telegram.messenger.AndroidUtilities.dp(r5);	 Catch:{ Exception -> 0x0d8a }
         r0 = r71;
-        if (r0 >= r5) goto L_0x0bf8;
-    L_0x0d40:
+        if (r0 >= r5) goto L_0x0CLASSNAME;
+    L_0x0d60:
         r5 = NUM; // 0x42var_ float:120.0 double:5.548480205E-315;
-        r71 = org.telegram.messenger.AndroidUtilities.dp(r5);	 Catch:{ Exception -> 0x0d6a }
+        r71 = org.telegram.messenger.AndroidUtilities.dp(r5);	 Catch:{ Exception -> 0x0d8a }
         r0 = r63;
-        r5 = r0.h;	 Catch:{ Exception -> 0x0d6a }
-        r5 = (float) r5;	 Catch:{ Exception -> 0x0d6a }
+        r5 = r0.h;	 Catch:{ Exception -> 0x0d8a }
+        r5 = (float) r5;	 Catch:{ Exception -> 0x0d8a }
         r0 = r71;
-        r8 = (float) r0;	 Catch:{ Exception -> 0x0d6a }
+        r8 = (float) r0;	 Catch:{ Exception -> 0x0d8a }
         r74 = r5 / r8;
         r0 = r63;
-        r5 = r0.w;	 Catch:{ Exception -> 0x0d6a }
-        r5 = (float) r5;	 Catch:{ Exception -> 0x0d6a }
+        r5 = r0.w;	 Catch:{ Exception -> 0x0d8a }
+        r5 = (float) r5;	 Catch:{ Exception -> 0x0d8a }
         r5 = r5 / r74;
         r0 = r95;
-        r8 = (float) r0;	 Catch:{ Exception -> 0x0d6a }
+        r8 = (float) r0;	 Catch:{ Exception -> 0x0d8a }
         r5 = (r5 > r8 ? 1 : (r5 == r8 ? 0 : -1));
-        if (r5 >= 0) goto L_0x0bf8;
-    L_0x0d5e:
+        if (r5 >= 0) goto L_0x0CLASSNAME;
+    L_0x0d7e:
         r0 = r63;
-        r5 = r0.w;	 Catch:{ Exception -> 0x0d6a }
+        r5 = r0.w;	 Catch:{ Exception -> 0x0d8a }
         r5 = (float) r5;
         r5 = r5 / r74;
         r0 = (int) r5;
         r113 = r0;
-        goto L_0x0bf8;
-    L_0x0d6a:
+        goto L_0x0CLASSNAME;
+    L_0x0d8a:
         r64 = move-exception;
         org.telegram.messenger.FileLog.e(r64);
-        goto L_0x0ccd;
-    L_0x0d70:
-        if (r100 != 0) goto L_0x0d86;
-    L_0x0d72:
+        goto L_0x0ced;
+    L_0x0d90:
+        if (r100 != 0) goto L_0x0da6;
+    L_0x0d92:
         r100 = new java.util.ArrayList;
         r100.<init>();
         r103 = new java.util.ArrayList;
@@ -10615,7 +10630,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r101.<init>();
         r102 = new java.util.ArrayList;
         r102.<init>();
-    L_0x0d86:
+    L_0x0da6:
         r0 = r100;
         r1 = r109;
         r0.add(r1);
@@ -10630,34 +10645,34 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r5 = r0.entities;
         r0 = r102;
         r0.add(r5);
-        goto L_0x0399;
-    L_0x0da8:
+        goto L_0x03a5;
+    L_0x0dc8:
         r8 = 0;
         r5 = (r78 > r8 ? 1 : (r78 == r8 ? 0 : -1));
-        if (r5 == 0) goto L_0x0dbc;
-    L_0x0dae:
+        if (r5 == 0) goto L_0x0ddc;
+    L_0x0dce:
         r80 = r78;
         r5 = new org.telegram.messenger.SendMessagesHelper$$Lambda$28;
         r0 = r120;
         r1 = r80;
         r5.<init>(r0, r1);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r5);
-    L_0x0dbc:
-        if (r125 == 0) goto L_0x0dc1;
-    L_0x0dbe:
+    L_0x0ddc:
+        if (r125 == 0) goto L_0x0de1;
+    L_0x0dde:
         r125.releasePermission();
-    L_0x0dc1:
-        if (r100 == 0) goto L_0x0e0f;
-    L_0x0dc3:
+    L_0x0de1:
+        if (r100 == 0) goto L_0x0e2f;
+    L_0x0de3:
         r5 = r100.isEmpty();
-        if (r5 != 0) goto L_0x0e0f;
-    L_0x0dc9:
+        if (r5 != 0) goto L_0x0e2f;
+    L_0x0de9:
         r55 = 0;
-    L_0x0dcb:
+    L_0x0deb:
         r5 = r100.size();
         r0 = r55;
-        if (r0 >= r5) goto L_0x0e0f;
-    L_0x0dd3:
+        if (r0 >= r5) goto L_0x0e2f;
+    L_0x0df3:
         r0 = r100;
         r1 = r55;
         r44 = r0.get(r1);
@@ -10683,11 +10698,11 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r54 = r121;
         prepareSendingDocumentInternal(r43, r44, r45, r46, r47, r48, r50, r51, r52, r53, r54);
         r55 = r55 + 1;
-        goto L_0x0dcb;
-    L_0x0e0f:
+        goto L_0x0deb;
+    L_0x0e2f:
         r5 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r5 == 0) goto L_0x0e30;
-    L_0x0e13:
+        if (r5 == 0) goto L_0x0e50;
+    L_0x0e33:
         r5 = new java.lang.StringBuilder;
         r5.<init>();
         r8 = "total send time = ";
@@ -10697,7 +10712,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r5 = r5.append(r8);
         r5 = r5.toString();
         org.telegram.messenger.FileLog.d(r5);
-    L_0x0e30:
+    L_0x0e50:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.lambda$prepareSendingMedia$60$SendMessagesHelper(java.util.ArrayList, long, int, boolean, boolean, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, android.support.v13.view.inputmethod.InputContentInfoCompat):void");
@@ -10956,195 +10971,760 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         return bitmap;
     }
 
-    private static VideoEditedInfo createCompressionSettings(String videoPath) {
-        TrackHeaderBox trackHeaderBox = null;
-        int originalBitrate = 0;
-        int bitrate = 0;
-        float videoDuration = 0.0f;
-        long videoFramesSize = 0;
-        long audioFramesSize = 0;
-        int videoFramerate = 25;
-        try {
-            IsoFile isoFile = new IsoFile(videoPath);
-            List<Box> boxes = Path.getPaths((Container) isoFile, "/moov/trak/");
-            if (Path.getPath((Container) isoFile, "/moov/trak/mdia/minf/stbl/stsd/mp4a/") == null && BuildVars.LOGS_ENABLED) {
-                FileLog.d("video hasn't mp4a atom");
-            }
-            if (Path.getPath((Container) isoFile, "/moov/trak/mdia/minf/stbl/stsd/avc1/") == null) {
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d("video hasn't avc1 atom");
-                }
-                return null;
-            }
-            for (int b = 0; b < boxes.size(); b++) {
-                int a;
-                TrackBox trackBox = (TrackBox) ((Box) boxes.get(b));
-                long sampleSizes = 0;
-                long trackBitrate = 0;
-                MediaBox mediaBox = null;
-                MediaHeaderBox mediaHeaderBox = null;
-                try {
-                    mediaBox = trackBox.getMediaBox();
-                    mediaHeaderBox = mediaBox.getMediaHeaderBox();
-                    for (long j : mediaBox.getMediaInformationBox().getSampleTableBox().getSampleSizeBox().getSampleSizes()) {
-                        sampleSizes += j;
-                    }
-                    videoDuration = ((float) mediaHeaderBox.getDuration()) / ((float) mediaHeaderBox.getTimescale());
-                    trackBitrate = (long) ((int) (((float) (8 * sampleSizes)) / videoDuration));
-                } catch (Throwable e) {
-                    FileLog.e(e);
-                }
-                TrackHeaderBox headerBox = trackBox.getTrackHeaderBox();
-                if (headerBox.getWidth() == 0.0d || headerBox.getHeight() == 0.0d) {
-                    audioFramesSize += sampleSizes;
-                } else if (trackHeaderBox == null || trackHeaderBox.getWidth() < headerBox.getWidth() || trackHeaderBox.getHeight() < headerBox.getHeight()) {
-                    trackHeaderBox = headerBox;
-                    bitrate = (int) ((trackBitrate / 100000) * 100000);
-                    originalBitrate = bitrate;
-                    if (bitrate > 900000) {
-                        bitrate = 900000;
-                    }
-                    videoFramesSize += sampleSizes;
-                    if (!(mediaBox == null || mediaHeaderBox == null)) {
-                        TimeToSampleBox timeToSampleBox = mediaBox.getMediaInformationBox().getSampleTableBox().getTimeToSampleBox();
-                        if (timeToSampleBox != null) {
-                            List<TimeToSampleBox.Entry> entries = timeToSampleBox.getEntries();
-                            long delta = 0;
-                            int size = Math.min(entries.size(), 11);
-                            for (a = 1; a < size; a++) {
-                                delta += ((TimeToSampleBox.Entry) entries.get(a)).getDelta();
-                            }
-                            if (delta != 0) {
-                                videoFramerate = (int) (((double) mediaHeaderBox.getTimescale()) / ((double) (delta / ((long) (size - 1)))));
-                            } else {
-                                continue;
-                            }
-                        } else {
-                            continue;
-                        }
-                    }
-                }
-            }
-            if (trackHeaderBox == null) {
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d("video hasn't trackHeaderBox atom");
-                }
-                return null;
-            }
-            int compressionsCount;
-            if (VERSION.SDK_INT < 18) {
-                try {
-                    MediaCodecInfo codecInfo = MediaController.selectCodec("video/avc");
-                    if (codecInfo == null) {
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.d("no codec info for video/avc");
-                        }
-                        return null;
-                    }
-                    String name = codecInfo.getName();
-                    if (name.equals("OMX.google.h264.encoder") || name.equals("OMX.ST.VFM.H264Enc") || name.equals("OMX.Exynos.avc.enc") || name.equals("OMX.MARVELL.VIDEO.HW.CODA7542ENCODER") || name.equals("OMX.MARVELL.VIDEO.H264ENCODER") || name.equals("OMX.k3.video.encoder.avc") || name.equals("OMX.TI.DUCATI1.VIDEO.H264E")) {
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.d("unsupported encoder = " + name);
-                        }
-                        return null;
-                    } else if (MediaController.selectColorFormat(codecInfo, "video/avc") == 0) {
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.d("no color format for video/avc");
-                        }
-                        return null;
-                    }
-                } catch (Exception e2) {
-                    return null;
-                }
-            }
-            videoDuration *= 1000.0f;
-            VideoEditedInfo videoEditedInfo = new VideoEditedInfo();
-            videoEditedInfo.startTime = -1;
-            videoEditedInfo.endTime = -1;
-            videoEditedInfo.bitrate = bitrate;
-            videoEditedInfo.originalPath = videoPath;
-            videoEditedInfo.framerate = videoFramerate;
-            videoEditedInfo.estimatedDuration = (long) Math.ceil((double) videoDuration);
-            int width = (int) trackHeaderBox.getWidth();
-            videoEditedInfo.originalWidth = width;
-            videoEditedInfo.resultWidth = width;
-            width = (int) trackHeaderBox.getHeight();
-            videoEditedInfo.originalHeight = width;
-            videoEditedInfo.resultHeight = width;
-            Matrix matrix = trackHeaderBox.getMatrix();
-            if (matrix.equals(Matrix.ROTATE_90)) {
-                videoEditedInfo.rotationValue = 90;
-            } else if (matrix.equals(Matrix.ROTATE_180)) {
-                videoEditedInfo.rotationValue = 180;
-            } else if (matrix.equals(Matrix.ROTATE_270)) {
-                videoEditedInfo.rotationValue = 270;
-            } else {
-                videoEditedInfo.rotationValue = 0;
-            }
-            int selectedCompression = MessagesController.getGlobalMainSettings().getInt("compress_video2", 1);
-            if (videoEditedInfo.originalWidth > 1280 || videoEditedInfo.originalHeight > 1280) {
-                compressionsCount = 5;
-            } else if (videoEditedInfo.originalWidth > 848 || videoEditedInfo.originalHeight > 848) {
-                compressionsCount = 4;
-            } else if (videoEditedInfo.originalWidth > 640 || videoEditedInfo.originalHeight > 640) {
-                compressionsCount = 3;
-            } else if (videoEditedInfo.originalWidth > 480 || videoEditedInfo.originalHeight > 480) {
-                compressionsCount = 2;
-            } else {
-                compressionsCount = 1;
-            }
-            if (selectedCompression >= compressionsCount) {
-                selectedCompression = compressionsCount - 1;
-            }
-            if (selectedCompression != compressionsCount - 1) {
-                float maxSize;
-                int targetBitrate;
-                float scale;
-                switch (selectedCompression) {
-                    case 0:
-                        maxSize = 432.0f;
-                        targetBitrate = 400000;
-                        break;
-                    case 1:
-                        maxSize = 640.0f;
-                        targetBitrate = 900000;
-                        break;
-                    case 2:
-                        maxSize = 848.0f;
-                        targetBitrate = 1100000;
-                        break;
-                    default:
-                        targetBitrate = 2500000;
-                        maxSize = 1280.0f;
-                        break;
-                }
-                if (videoEditedInfo.originalWidth > videoEditedInfo.originalHeight) {
-                    scale = maxSize / ((float) videoEditedInfo.originalWidth);
-                } else {
-                    scale = maxSize / ((float) videoEditedInfo.originalHeight);
-                }
-                videoEditedInfo.resultWidth = Math.round((((float) videoEditedInfo.originalWidth) * scale) / 2.0f) * 2;
-                videoEditedInfo.resultHeight = Math.round((((float) videoEditedInfo.originalHeight) * scale) / 2.0f) * 2;
-                if (bitrate != 0) {
-                    bitrate = Math.min(targetBitrate, (int) (((float) originalBitrate) / scale));
-                    videoFramesSize = (long) ((((float) (bitrate / 8)) * videoDuration) / 1000.0f);
-                }
-            }
-            if (selectedCompression == compressionsCount - 1) {
-                videoEditedInfo.resultWidth = videoEditedInfo.originalWidth;
-                videoEditedInfo.resultHeight = videoEditedInfo.originalHeight;
-                videoEditedInfo.bitrate = originalBitrate;
-                videoEditedInfo.estimatedSize = (long) ((int) new File(videoPath).length());
-                return videoEditedInfo;
-            }
-            videoEditedInfo.bitrate = bitrate;
-            videoEditedInfo.estimatedSize = (long) ((int) (audioFramesSize + videoFramesSize));
-            videoEditedInfo.estimatedSize += (videoEditedInfo.estimatedSize / 32768) * 16;
-            return videoEditedInfo;
-        } catch (Throwable e3) {
-            FileLog.e(e3);
-            return null;
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:81:0x01a8  */
+    /* JADX WARNING: Removed duplicated region for block: B:41:0x00e8  */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x018b A:{SYNTHETIC, Splitter: B:67:0x018b} */
+    /* JADX WARNING: Removed duplicated region for block: B:41:0x00e8  */
+    /* JADX WARNING: Removed duplicated region for block: B:81:0x01a8  */
+    /* JADX WARNING: Removed duplicated region for block: B:45:0x010b A:{Catch:{ Exception -> 0x01a0 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x0196 A:{SYNTHETIC, Splitter: B:72:0x0196} */
+    private static org.telegram.messenger.VideoEditedInfo createCompressionSettings(java.lang.String r54) {
+        /*
+        r41 = 0;
+        r25 = 0;
+        r8 = 0;
+        r42 = 0;
+        r46 = 0;
+        r6 = 0;
+        r44 = 25;
+        r19 = new com.coremedia.iso.IsoFile;	 Catch:{ Exception -> 0x01a0 }
+        r0 = r19;
+        r1 = r54;
+        r0.<init>(r1);	 Catch:{ Exception -> 0x01a0 }
+        r45 = "/moov/trak/";
+        r0 = r19;
+        r1 = r45;
+        r11 = com.googlecode.mp4parser.util.Path.getPaths(r0, r1);	 Catch:{ Exception -> 0x01a0 }
+        r45 = "/moov/trak/mdia/minf/stbl/stsd/mp4a/";
+        r0 = r19;
+        r1 = r45;
+        r10 = com.googlecode.mp4parser.util.Path.getPath(r0, r1);	 Catch:{ Exception -> 0x01a0 }
+        if (r10 != 0) goto L_0x0038;
+    L_0x002e:
+        r45 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x01a0 }
+        if (r45 == 0) goto L_0x0038;
+    L_0x0032:
+        r45 = "video hasn't mp4a atom";
+        org.telegram.messenger.FileLog.d(r45);	 Catch:{ Exception -> 0x01a0 }
+    L_0x0038:
+        r45 = "/moov/trak/mdia/minf/stbl/stsd/avc1/";
+        r0 = r19;
+        r1 = r45;
+        r10 = com.googlecode.mp4parser.util.Path.getPath(r0, r1);	 Catch:{ Exception -> 0x01a0 }
+        if (r10 != 0) goto L_0x0052;
+    L_0x0045:
+        r45 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x01a0 }
+        if (r45 == 0) goto L_0x004f;
+    L_0x0049:
+        r45 = "video hasn't avc1 atom";
+        org.telegram.messenger.FileLog.d(r45);	 Catch:{ Exception -> 0x01a0 }
+    L_0x004f:
+        r43 = 0;
+    L_0x0051:
+        return r43;
+    L_0x0052:
+        r5 = 0;
+    L_0x0053:
+        r45 = r11.size();	 Catch:{ Exception -> 0x01a0 }
+        r0 = r45;
+        if (r5 >= r0) goto L_0x01d8;
+    L_0x005b:
+        r9 = r11.get(r5);	 Catch:{ Exception -> 0x01a0 }
+        r9 = (com.coremedia.iso.boxes.Box) r9;	 Catch:{ Exception -> 0x01a0 }
+        r0 = r9;
+        r0 = (com.coremedia.iso.boxes.TrackBox) r0;	 Catch:{ Exception -> 0x01a0 }
+        r40 = r0;
+        r30 = 0;
+        r38 = 0;
+        r22 = 0;
+        r23 = 0;
+        r22 = r40.getMediaBox();	 Catch:{ Exception -> 0x019a }
+        r23 = r22.getMediaHeaderBox();	 Catch:{ Exception -> 0x019a }
+        r45 = r22.getMediaInformationBox();	 Catch:{ Exception -> 0x019a }
+        r45 = r45.getSampleTableBox();	 Catch:{ Exception -> 0x019a }
+        r29 = r45.getSampleSizeBox();	 Catch:{ Exception -> 0x019a }
+        r35 = r29.getSampleSizes();	 Catch:{ Exception -> 0x019a }
+        r4 = 0;
+    L_0x0087:
+        r0 = r35;
+        r0 = r0.length;	 Catch:{ Exception -> 0x019a }
+        r45 = r0;
+        r0 = r45;
+        if (r4 >= r0) goto L_0x0097;
+    L_0x0090:
+        r48 = r35[r4];	 Catch:{ Exception -> 0x019a }
+        r30 = r30 + r48;
+        r4 = r4 + 1;
+        goto L_0x0087;
+    L_0x0097:
+        r45 = 0;
+        r45 = (r42 > r45 ? 1 : (r42 == r45 ? 0 : -1));
+        if (r45 != 0) goto L_0x00e2;
+    L_0x009d:
+        r48 = r23.getDuration();	 Catch:{ Exception -> 0x019a }
+        r0 = r48;
+        r0 = (float) r0;	 Catch:{ Exception -> 0x019a }
+        r45 = r0;
+        r48 = r23.getTimescale();	 Catch:{ Exception -> 0x019a }
+        r0 = r48;
+        r0 = (float) r0;
+        r48 = r0;
+        r42 = r45 / r48;
+        r45 = 0;
+        r45 = (r42 > r45 ? 1 : (r42 == r45 ? 0 : -1));
+        if (r45 != 0) goto L_0x00e2;
+    L_0x00b7:
+        r26 = 0;
+        r27 = new android.media.MediaPlayer;	 Catch:{ Throwable -> 0x0188, all -> 0x0193 }
+        r27.<init>();	 Catch:{ Throwable -> 0x0188, all -> 0x0193 }
+        r0 = r27;
+        r1 = r54;
+        r0.setDataSource(r1);	 Catch:{ Throwable -> 0x0546, all -> 0x0541 }
+        r27.prepare();	 Catch:{ Throwable -> 0x0546, all -> 0x0541 }
+        r45 = r27.getDuration();	 Catch:{ Throwable -> 0x0546, all -> 0x0541 }
+        r0 = r45;
+        r0 = (float) r0;
+        r45 = r0;
+        r48 = NUM; // 0x447a0000 float:1000.0 double:5.676053805E-315;
+        r42 = r45 / r48;
+        r45 = 0;
+        r45 = (r42 > r45 ? 1 : (r42 == r45 ? 0 : -1));
+        if (r45 >= 0) goto L_0x00dd;
+    L_0x00db:
+        r42 = 0;
+    L_0x00dd:
+        if (r27 == 0) goto L_0x00e2;
+    L_0x00df:
+        r27.release();	 Catch:{ Throwable -> 0x053b }
+    L_0x00e2:
+        r45 = 0;
+        r45 = (r42 > r45 ? 1 : (r42 == r45 ? 0 : -1));
+        if (r45 == 0) goto L_0x01a8;
+    L_0x00e8:
+        r48 = 8;
+        r48 = r48 * r30;
+        r0 = r48;
+        r0 = (float) r0;
+        r45 = r0;
+        r45 = r45 / r42;
+        r0 = r45;
+        r0 = (int) r0;
+        r45 = r0;
+        r0 = r45;
+        r0 = (long) r0;
+        r38 = r0;
+    L_0x00fd:
+        r18 = r40.getTrackHeaderBox();	 Catch:{ Exception -> 0x01a0 }
+        r48 = r18.getWidth();	 Catch:{ Exception -> 0x01a0 }
+        r50 = 0;
+        r45 = (r48 > r50 ? 1 : (r48 == r50 ? 0 : -1));
+        if (r45 == 0) goto L_0x01d5;
+    L_0x010b:
+        r48 = r18.getHeight();	 Catch:{ Exception -> 0x01a0 }
+        r50 = 0;
+        r45 = (r48 > r50 ? 1 : (r48 == r50 ? 0 : -1));
+        if (r45 == 0) goto L_0x01d5;
+    L_0x0115:
+        if (r41 == 0) goto L_0x012f;
+    L_0x0117:
+        r48 = r41.getWidth();	 Catch:{ Exception -> 0x01a0 }
+        r50 = r18.getWidth();	 Catch:{ Exception -> 0x01a0 }
+        r45 = (r48 > r50 ? 1 : (r48 == r50 ? 0 : -1));
+        if (r45 < 0) goto L_0x012f;
+    L_0x0123:
+        r48 = r41.getHeight();	 Catch:{ Exception -> 0x01a0 }
+        r50 = r18.getHeight();	 Catch:{ Exception -> 0x01a0 }
+        r45 = (r48 > r50 ? 1 : (r48 == r50 ? 0 : -1));
+        if (r45 >= 0) goto L_0x01d1;
+    L_0x012f:
+        r41 = r18;
+        r48 = 100000; // 0x186a0 float:1.4013E-40 double:4.94066E-319;
+        r48 = r38 / r48;
+        r50 = 100000; // 0x186a0 float:1.4013E-40 double:4.94066E-319;
+        r48 = r48 * r50;
+        r0 = r48;
+        r8 = (int) r0;	 Catch:{ Exception -> 0x01a0 }
+        r25 = r8;
+        r45 = 900000; // 0xdbba0 float:1.261169E-39 double:4.44659E-318;
+        r0 = r45;
+        if (r8 <= r0) goto L_0x014a;
+    L_0x0147:
+        r8 = 900000; // 0xdbba0 float:1.261169E-39 double:4.44659E-318;
+    L_0x014a:
+        r46 = r46 + r30;
+        if (r22 == 0) goto L_0x01d1;
+    L_0x014e:
+        if (r23 == 0) goto L_0x01d1;
+    L_0x0150:
+        r45 = r22.getMediaInformationBox();	 Catch:{ Exception -> 0x01a0 }
+        r45 = r45.getSampleTableBox();	 Catch:{ Exception -> 0x01a0 }
+        r37 = r45.getTimeToSampleBox();	 Catch:{ Exception -> 0x01a0 }
+        if (r37 == 0) goto L_0x01d1;
+    L_0x015e:
+        r17 = r37.getEntries();	 Catch:{ Exception -> 0x01a0 }
+        r14 = 0;
+        r45 = r17.size();	 Catch:{ Exception -> 0x01a0 }
+        r48 = 11;
+        r0 = r45;
+        r1 = r48;
+        r34 = java.lang.Math.min(r0, r1);	 Catch:{ Exception -> 0x01a0 }
+        r4 = 1;
+    L_0x0173:
+        r0 = r34;
+        if (r4 >= r0) goto L_0x01ad;
+    L_0x0177:
+        r0 = r17;
+        r45 = r0.get(r4);	 Catch:{ Exception -> 0x01a0 }
+        r45 = (com.coremedia.iso.boxes.TimeToSampleBox.Entry) r45;	 Catch:{ Exception -> 0x01a0 }
+        r48 = r45.getDelta();	 Catch:{ Exception -> 0x01a0 }
+        r14 = r14 + r48;
+        r4 = r4 + 1;
+        goto L_0x0173;
+    L_0x0188:
+        r45 = move-exception;
+    L_0x0189:
+        if (r26 == 0) goto L_0x00e2;
+    L_0x018b:
+        r26.release();	 Catch:{ Throwable -> 0x0190 }
+        goto L_0x00e2;
+    L_0x0190:
+        r45 = move-exception;
+        goto L_0x00e2;
+    L_0x0193:
+        r45 = move-exception;
+    L_0x0194:
+        if (r26 == 0) goto L_0x0199;
+    L_0x0196:
+        r26.release();	 Catch:{ Throwable -> 0x053e }
+    L_0x0199:
+        throw r45;	 Catch:{ Exception -> 0x019a }
+    L_0x019a:
+        r16 = move-exception;
+        org.telegram.messenger.FileLog.e(r16);	 Catch:{ Exception -> 0x01a0 }
+        goto L_0x00fd;
+    L_0x01a0:
+        r16 = move-exception;
+        org.telegram.messenger.FileLog.e(r16);
+        r43 = 0;
+        goto L_0x0051;
+    L_0x01a8:
+        r38 = 400000; // 0x61a80 float:5.6052E-40 double:1.976263E-318;
+        goto L_0x00fd;
+    L_0x01ad:
+        r48 = 0;
+        r45 = (r14 > r48 ? 1 : (r14 == r48 ? 0 : -1));
+        if (r45 == 0) goto L_0x01d1;
+    L_0x01b3:
+        r48 = r23.getTimescale();	 Catch:{ Exception -> 0x01a0 }
+        r0 = r48;
+        r0 = (double) r0;	 Catch:{ Exception -> 0x01a0 }
+        r48 = r0;
+        r45 = r34 + -1;
+        r0 = r45;
+        r0 = (long) r0;	 Catch:{ Exception -> 0x01a0 }
+        r50 = r0;
+        r50 = r14 / r50;
+        r0 = r50;
+        r0 = (double) r0;
+        r50 = r0;
+        r48 = r48 / r50;
+        r0 = r48;
+        r0 = (int) r0;
+        r44 = r0;
+    L_0x01d1:
+        r5 = r5 + 1;
+        goto L_0x0053;
+    L_0x01d5:
+        r6 = r6 + r30;
+        goto L_0x01d1;
+    L_0x01d8:
+        if (r41 != 0) goto L_0x01e8;
+    L_0x01da:
+        r45 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
+        if (r45 == 0) goto L_0x01e4;
+    L_0x01de:
+        r45 = "video hasn't trackHeaderBox atom";
+        org.telegram.messenger.FileLog.d(r45);
+    L_0x01e4:
+        r43 = 0;
+        goto L_0x0051;
+    L_0x01e8:
+        r45 = android.os.Build.VERSION.SDK_INT;
+        r48 = 18;
+        r0 = r45;
+        r1 = r48;
+        if (r0 >= r1) goto L_0x02ad;
+    L_0x01f2:
+        r45 = "video/avc";
+        r12 = org.telegram.messenger.MediaController.selectCodec(r45);	 Catch:{ Exception -> 0x02a8 }
+        if (r12 != 0) goto L_0x0209;
+    L_0x01fb:
+        r45 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x02a8 }
+        if (r45 == 0) goto L_0x0205;
+    L_0x01ff:
+        r45 = "no codec info for video/avc";
+        org.telegram.messenger.FileLog.d(r45);	 Catch:{ Exception -> 0x02a8 }
+    L_0x0205:
+        r43 = 0;
+        goto L_0x0051;
+    L_0x0209:
+        r24 = r12.getName();	 Catch:{ Exception -> 0x02a8 }
+        r45 = "OMX.google.h264.encoder";
+        r0 = r24;
+        r1 = r45;
+        r45 = r0.equals(r1);	 Catch:{ Exception -> 0x02a8 }
+        if (r45 != 0) goto L_0x0268;
+    L_0x021a:
+        r45 = "OMX.ST.VFM.H264Enc";
+        r0 = r24;
+        r1 = r45;
+        r45 = r0.equals(r1);	 Catch:{ Exception -> 0x02a8 }
+        if (r45 != 0) goto L_0x0268;
+    L_0x0227:
+        r45 = "OMX.Exynos.avc.enc";
+        r0 = r24;
+        r1 = r45;
+        r45 = r0.equals(r1);	 Catch:{ Exception -> 0x02a8 }
+        if (r45 != 0) goto L_0x0268;
+    L_0x0234:
+        r45 = "OMX.MARVELL.VIDEO.HW.CODA7542ENCODER";
+        r0 = r24;
+        r1 = r45;
+        r45 = r0.equals(r1);	 Catch:{ Exception -> 0x02a8 }
+        if (r45 != 0) goto L_0x0268;
+    L_0x0241:
+        r45 = "OMX.MARVELL.VIDEO.H264ENCODER";
+        r0 = r24;
+        r1 = r45;
+        r45 = r0.equals(r1);	 Catch:{ Exception -> 0x02a8 }
+        if (r45 != 0) goto L_0x0268;
+    L_0x024e:
+        r45 = "OMX.k3.video.encoder.avc";
+        r0 = r24;
+        r1 = r45;
+        r45 = r0.equals(r1);	 Catch:{ Exception -> 0x02a8 }
+        if (r45 != 0) goto L_0x0268;
+    L_0x025b:
+        r45 = "OMX.TI.DUCATI1.VIDEO.H264E";
+        r0 = r24;
+        r1 = r45;
+        r45 = r0.equals(r1);	 Catch:{ Exception -> 0x02a8 }
+        if (r45 == 0) goto L_0x028f;
+    L_0x0268:
+        r45 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x02a8 }
+        if (r45 == 0) goto L_0x028b;
+    L_0x026c:
+        r45 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x02a8 }
+        r45.<init>();	 Catch:{ Exception -> 0x02a8 }
+        r48 = "unsupported encoder = ";
+        r0 = r45;
+        r1 = r48;
+        r45 = r0.append(r1);	 Catch:{ Exception -> 0x02a8 }
+        r0 = r45;
+        r1 = r24;
+        r45 = r0.append(r1);	 Catch:{ Exception -> 0x02a8 }
+        r45 = r45.toString();	 Catch:{ Exception -> 0x02a8 }
+        org.telegram.messenger.FileLog.d(r45);	 Catch:{ Exception -> 0x02a8 }
+    L_0x028b:
+        r43 = 0;
+        goto L_0x0051;
+    L_0x028f:
+        r45 = "video/avc";
+        r0 = r45;
+        r45 = org.telegram.messenger.MediaController.selectColorFormat(r12, r0);	 Catch:{ Exception -> 0x02a8 }
+        if (r45 != 0) goto L_0x02ad;
+    L_0x029a:
+        r45 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x02a8 }
+        if (r45 == 0) goto L_0x02a4;
+    L_0x029e:
+        r45 = "no color format for video/avc";
+        org.telegram.messenger.FileLog.d(r45);	 Catch:{ Exception -> 0x02a8 }
+    L_0x02a4:
+        r43 = 0;
+        goto L_0x0051;
+    L_0x02a8:
+        r16 = move-exception;
+        r43 = 0;
+        goto L_0x0051;
+    L_0x02ad:
+        r45 = NUM; // 0x447a0000 float:1000.0 double:5.676053805E-315;
+        r42 = r42 * r45;
+        r43 = new org.telegram.messenger.VideoEditedInfo;
+        r43.<init>();
+        r48 = -1;
+        r0 = r48;
+        r2 = r43;
+        r2.startTime = r0;
+        r48 = -1;
+        r0 = r48;
+        r2 = r43;
+        r2.endTime = r0;
+        r0 = r43;
+        r0.bitrate = r8;
+        r0 = r54;
+        r1 = r43;
+        r1.originalPath = r0;
+        r0 = r44;
+        r1 = r43;
+        r1.framerate = r0;
+        r0 = r42;
+        r0 = (double) r0;
+        r48 = r0;
+        r48 = java.lang.Math.ceil(r48);
+        r0 = r48;
+        r0 = (long) r0;
+        r48 = r0;
+        r0 = r48;
+        r2 = r43;
+        r2.estimatedDuration = r0;
+        r48 = r41.getWidth();
+        r0 = r48;
+        r0 = (int) r0;
+        r45 = r0;
+        r0 = r45;
+        r1 = r43;
+        r1.originalWidth = r0;
+        r0 = r45;
+        r1 = r43;
+        r1.resultWidth = r0;
+        r48 = r41.getHeight();
+        r0 = r48;
+        r0 = (int) r0;
+        r45 = r0;
+        r0 = r45;
+        r1 = r43;
+        r1.originalHeight = r0;
+        r0 = r45;
+        r1 = r43;
+        r1.resultHeight = r0;
+        r20 = r41.getMatrix();
+        r45 = com.googlecode.mp4parser.util.Matrix.ROTATE_90;
+        r0 = r20;
+        r1 = r45;
+        r45 = r0.equals(r1);
+        if (r45 == 0) goto L_0x044c;
+    L_0x0324:
+        r45 = 90;
+        r0 = r45;
+        r1 = r43;
+        r1.rotationValue = r0;
+    L_0x032c:
+        r28 = org.telegram.messenger.MessagesController.getGlobalMainSettings();
+        r45 = "compress_video2";
+        r48 = 1;
+        r0 = r28;
+        r1 = r45;
+        r2 = r48;
+        r33 = r0.getInt(r1, r2);
+        r0 = r43;
+        r0 = r0.originalWidth;
+        r45 = r0;
+        r48 = 1280; // 0x500 float:1.794E-42 double:6.324E-321;
+        r0 = r45;
+        r1 = r48;
+        if (r0 > r1) goto L_0x035b;
+    L_0x034d:
+        r0 = r43;
+        r0 = r0.originalHeight;
+        r45 = r0;
+        r48 = 1280; // 0x500 float:1.794E-42 double:6.324E-321;
+        r0 = r45;
+        r1 = r48;
+        if (r0 <= r1) goto L_0x0482;
+    L_0x035b:
+        r13 = 5;
+    L_0x035c:
+        r0 = r33;
+        if (r0 < r13) goto L_0x0362;
+    L_0x0360:
+        r33 = r13 + -1;
+    L_0x0362:
+        r45 = r13 + -1;
+        r0 = r33;
+        r1 = r45;
+        if (r0 == r1) goto L_0x03f3;
+    L_0x036a:
+        switch(r33) {
+            case 0: goto L_0x04e2;
+            case 1: goto L_0x04e9;
+            case 2: goto L_0x04f0;
+            default: goto L_0x036d;
+        };
+    L_0x036d:
+        r36 = 2500000; // 0x2625a0 float:3.503246E-39 double:1.235164E-317;
+        r21 = NUM; // 0x44a00000 float:1280.0 double:5.68835786E-315;
+    L_0x0372:
+        r0 = r43;
+        r0 = r0.originalWidth;
+        r45 = r0;
+        r0 = r43;
+        r0 = r0.originalHeight;
+        r48 = r0;
+        r0 = r45;
+        r1 = r48;
+        if (r0 <= r1) goto L_0x04f7;
+    L_0x0384:
+        r0 = r43;
+        r0 = r0.originalWidth;
+        r45 = r0;
+        r0 = r45;
+        r0 = (float) r0;
+        r45 = r0;
+        r32 = r21 / r45;
+    L_0x0391:
+        r0 = r43;
+        r0 = r0.originalWidth;
+        r45 = r0;
+        r0 = r45;
+        r0 = (float) r0;
+        r45 = r0;
+        r45 = r45 * r32;
+        r48 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+        r45 = r45 / r48;
+        r45 = java.lang.Math.round(r45);
+        r45 = r45 * 2;
+        r0 = r45;
+        r1 = r43;
+        r1.resultWidth = r0;
+        r0 = r43;
+        r0 = r0.originalHeight;
+        r45 = r0;
+        r0 = r45;
+        r0 = (float) r0;
+        r45 = r0;
+        r45 = r45 * r32;
+        r48 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+        r45 = r45 / r48;
+        r45 = java.lang.Math.round(r45);
+        r45 = r45 * 2;
+        r0 = r45;
+        r1 = r43;
+        r1.resultHeight = r0;
+        if (r8 == 0) goto L_0x03f3;
+    L_0x03cd:
+        r0 = r25;
+        r0 = (float) r0;
+        r45 = r0;
+        r45 = r45 / r32;
+        r0 = r45;
+        r0 = (int) r0;
+        r45 = r0;
+        r0 = r36;
+        r1 = r45;
+        r8 = java.lang.Math.min(r0, r1);
+        r45 = r8 / 8;
+        r0 = r45;
+        r0 = (float) r0;
+        r45 = r0;
+        r45 = r45 * r42;
+        r48 = NUM; // 0x447a0000 float:1000.0 double:5.676053805E-315;
+        r45 = r45 / r48;
+        r0 = r45;
+        r0 = (long) r0;
+        r46 = r0;
+    L_0x03f3:
+        r45 = r13 + -1;
+        r0 = r33;
+        r1 = r45;
+        if (r0 != r1) goto L_0x0506;
+    L_0x03fb:
+        r0 = r43;
+        r0 = r0.originalWidth;
+        r45 = r0;
+        r0 = r45;
+        r1 = r43;
+        r1.resultWidth = r0;
+        r0 = r43;
+        r0 = r0.originalHeight;
+        r45 = r0;
+        r0 = r45;
+        r1 = r43;
+        r1.resultHeight = r0;
+        r0 = r25;
+        r1 = r43;
+        r1.bitrate = r0;
+        r45 = new java.io.File;
+        r0 = r45;
+        r1 = r54;
+        r0.<init>(r1);
+        r48 = r45.length();
+        r0 = r48;
+        r0 = (int) r0;
+        r45 = r0;
+        r0 = r45;
+        r0 = (long) r0;
+        r48 = r0;
+        r0 = r48;
+        r2 = r43;
+        r2.estimatedSize = r0;
+    L_0x0436:
+        r0 = r43;
+        r0 = r0.estimatedSize;
+        r48 = r0;
+        r50 = 0;
+        r45 = (r48 > r50 ? 1 : (r48 == r50 ? 0 : -1));
+        if (r45 != 0) goto L_0x0051;
+    L_0x0442:
+        r48 = 1;
+        r0 = r48;
+        r2 = r43;
+        r2.estimatedSize = r0;
+        goto L_0x0051;
+    L_0x044c:
+        r45 = com.googlecode.mp4parser.util.Matrix.ROTATE_180;
+        r0 = r20;
+        r1 = r45;
+        r45 = r0.equals(r1);
+        if (r45 == 0) goto L_0x0462;
+    L_0x0458:
+        r45 = 180; // 0xb4 float:2.52E-43 double:8.9E-322;
+        r0 = r45;
+        r1 = r43;
+        r1.rotationValue = r0;
+        goto L_0x032c;
+    L_0x0462:
+        r45 = com.googlecode.mp4parser.util.Matrix.ROTATE_270;
+        r0 = r20;
+        r1 = r45;
+        r45 = r0.equals(r1);
+        if (r45 == 0) goto L_0x0478;
+    L_0x046e:
+        r45 = 270; // 0x10e float:3.78E-43 double:1.334E-321;
+        r0 = r45;
+        r1 = r43;
+        r1.rotationValue = r0;
+        goto L_0x032c;
+    L_0x0478:
+        r45 = 0;
+        r0 = r45;
+        r1 = r43;
+        r1.rotationValue = r0;
+        goto L_0x032c;
+    L_0x0482:
+        r0 = r43;
+        r0 = r0.originalWidth;
+        r45 = r0;
+        r48 = 848; // 0x350 float:1.188E-42 double:4.19E-321;
+        r0 = r45;
+        r1 = r48;
+        if (r0 > r1) goto L_0x049e;
+    L_0x0490:
+        r0 = r43;
+        r0 = r0.originalHeight;
+        r45 = r0;
+        r48 = 848; // 0x350 float:1.188E-42 double:4.19E-321;
+        r0 = r45;
+        r1 = r48;
+        if (r0 <= r1) goto L_0x04a1;
+    L_0x049e:
+        r13 = 4;
+        goto L_0x035c;
+    L_0x04a1:
+        r0 = r43;
+        r0 = r0.originalWidth;
+        r45 = r0;
+        r48 = 640; // 0x280 float:8.97E-43 double:3.16E-321;
+        r0 = r45;
+        r1 = r48;
+        if (r0 > r1) goto L_0x04bd;
+    L_0x04af:
+        r0 = r43;
+        r0 = r0.originalHeight;
+        r45 = r0;
+        r48 = 640; // 0x280 float:8.97E-43 double:3.16E-321;
+        r0 = r45;
+        r1 = r48;
+        if (r0 <= r1) goto L_0x04c0;
+    L_0x04bd:
+        r13 = 3;
+        goto L_0x035c;
+    L_0x04c0:
+        r0 = r43;
+        r0 = r0.originalWidth;
+        r45 = r0;
+        r48 = 480; // 0x1e0 float:6.73E-43 double:2.37E-321;
+        r0 = r45;
+        r1 = r48;
+        if (r0 > r1) goto L_0x04dc;
+    L_0x04ce:
+        r0 = r43;
+        r0 = r0.originalHeight;
+        r45 = r0;
+        r48 = 480; // 0x1e0 float:6.73E-43 double:2.37E-321;
+        r0 = r45;
+        r1 = r48;
+        if (r0 <= r1) goto L_0x04df;
+    L_0x04dc:
+        r13 = 2;
+        goto L_0x035c;
+    L_0x04df:
+        r13 = 1;
+        goto L_0x035c;
+    L_0x04e2:
+        r21 = NUM; // 0x43d80000 float:432.0 double:5.623599685E-315;
+        r36 = 400000; // 0x61a80 float:5.6052E-40 double:1.976263E-318;
+        goto L_0x0372;
+    L_0x04e9:
+        r21 = NUM; // 0x44200000 float:640.0 double:5.646912627E-315;
+        r36 = 900000; // 0xdbba0 float:1.261169E-39 double:4.44659E-318;
+        goto L_0x0372;
+    L_0x04f0:
+        r21 = NUM; // 0x44540000 float:848.0 double:5.66374975E-315;
+        r36 = 1100000; // 0x10c8e0 float:1.541428E-39 double:5.43472E-318;
+        goto L_0x0372;
+    L_0x04f7:
+        r0 = r43;
+        r0 = r0.originalHeight;
+        r45 = r0;
+        r0 = r45;
+        r0 = (float) r0;
+        r45 = r0;
+        r32 = r21 / r45;
+        goto L_0x0391;
+    L_0x0506:
+        r0 = r43;
+        r0.bitrate = r8;
+        r48 = r6 + r46;
+        r0 = r48;
+        r0 = (int) r0;
+        r45 = r0;
+        r0 = r45;
+        r0 = (long) r0;
+        r48 = r0;
+        r0 = r48;
+        r2 = r43;
+        r2.estimatedSize = r0;
+        r0 = r43;
+        r0 = r0.estimatedSize;
+        r48 = r0;
+        r0 = r43;
+        r0 = r0.estimatedSize;
+        r50 = r0;
+        r52 = 32768; // 0x8000 float:4.5918E-41 double:1.61895E-319;
+        r50 = r50 / r52;
+        r52 = 16;
+        r50 = r50 * r52;
+        r48 = r48 + r50;
+        r0 = r48;
+        r2 = r43;
+        r2.estimatedSize = r0;
+        goto L_0x0436;
+    L_0x053b:
+        r45 = move-exception;
+        goto L_0x00e2;
+    L_0x053e:
+        r48 = move-exception;
+        goto L_0x0199;
+    L_0x0541:
+        r45 = move-exception;
+        r26 = r27;
+        goto L_0x0194;
+    L_0x0546:
+        r45 = move-exception;
+        r26 = r27;
+        goto L_0x0189;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.createCompressionSettings(java.lang.String):org.telegram.messenger.VideoEditedInfo");
     }
 
     public static void prepareSendingVideo(String videoPath, long estimatedSize, long duration, int width, int height, VideoEditedInfo info, long dialog_id, MessageObject reply_to_msg, CharSequence caption, ArrayList<MessageEntity> entities, int ttl, MessageObject editingMessageObject) {
@@ -11195,8 +11775,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
             if (thumb == null) {
                 thumb = ThumbnailUtils.createVideoThumbnail(videoPath, 1);
             }
-            int side = isEncrypted ? 90 : 320;
-            PhotoSize size = ImageLoader.scaleAndSaveImage(thumb, (float) side, (float) side, 55, isEncrypted);
+            int side = (isEncrypted || ttl != 0) ? 90 : 320;
+            PhotoSize size = ImageLoader.scaleAndSaveImage(thumb, (float) side, (float) side, side > 90 ? 70 : 55, isEncrypted);
             if (!(thumb == null || size == null)) {
                 if (!isRound) {
                     thumb = null;

@@ -33,6 +33,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.AudioTrack;
@@ -49,7 +50,6 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.Vibrator;
-import android.provider.Settings.Global;
 import android.telecom.CallAudioState;
 import android.telecom.Connection;
 import android.telecom.DisconnectCause;
@@ -325,6 +325,8 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     protected abstract void showNotification();
 
     protected abstract void startRinging();
+
+    public abstract void startRingtoneAndVibration();
 
     protected abstract void updateServerConfig();
 
@@ -621,17 +623,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     protected void startRingtoneAndVibration(int chatID) {
         SharedPreferences prefs = MessagesController.getNotificationsSettings(this.currentAccount);
         AudioManager am = (AudioManager) getSystemService("audio");
-        boolean needRing = am.getRingerMode() != 0;
-        if (VERSION.SDK_INT >= 21) {
-            try {
-                int mode = Global.getInt(getContentResolver(), "zen_mode");
-                if (needRing) {
-                    needRing = mode == 0;
-                }
-            } catch (Exception e) {
-            }
-        }
-        if (needRing) {
+        if (am.getRingerMode() != 0) {
             int vibrate;
             if (!USE_CONNECTION_SERVICE) {
                 am.requestAudioFocus(this, 2, 1);
@@ -653,8 +645,8 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                 }
                 this.ringtonePlayer.setDataSource(this, Uri.parse(notificationUri));
                 this.ringtonePlayer.prepareAsync();
-            } catch (Throwable e2) {
-                FileLog.e(e2);
+            } catch (Throwable e) {
+                FileLog.e(e);
                 if (this.ringtonePlayer != null) {
                     this.ringtonePlayer.release();
                     this.ringtonePlayer = null;
@@ -1117,39 +1109,49 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         Intent intent = new Intent(this, activityOnClick);
         intent.addFlags(NUM);
         Notification.Builder builder = new Notification.Builder(this).setContentTitle(LocaleController.getString("VoipInCallBranding", R.string.VoipInCallBranding)).setContentText(name).setSmallIcon(R.drawable.notification).setSubText(subText).setContentIntent(PendingIntent.getActivity(this, 0, intent, 0));
+        Uri soundProviderUri = Uri.parse("content://org.telegram.messenger.beta.call_sound_provider/start_ringing");
         if (VERSION.SDK_INT >= 26) {
             SharedPreferences nprefs = MessagesController.getGlobalNotificationsSettings();
             int chanIndex = nprefs.getInt("calls_notification_channel", 0);
             NotificationManager nm = (NotificationManager) getSystemService("notification");
-            NotificationChannel existingChannel = nm.getNotificationChannel("incoming_calls" + chanIndex);
+            NotificationChannel oldChannel = nm.getNotificationChannel("incoming_calls" + chanIndex);
+            if (oldChannel != null) {
+                nm.deleteNotificationChannel(oldChannel.getId());
+            }
+            NotificationChannel existingChannel = nm.getNotificationChannel("incoming_calls2" + chanIndex);
             boolean needCreate = true;
             if (existingChannel != null) {
-                if (existingChannel.getImportance() >= 4 && existingChannel.getSound() == null && existingChannel.getVibrationPattern() == null) {
+                if (existingChannel.getImportance() >= 4 && soundProviderUri.equals(existingChannel.getSound()) && existingChannel.getVibrationPattern() == null) {
                     needCreate = false;
                 } else {
-                    FileLog.d("User messed up the notification channel; deleting it and creating a proper one");
-                    nm.deleteNotificationChannel("incoming_calls" + chanIndex);
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.d("User messed up the notification channel; deleting it and creating a proper one");
+                    }
+                    nm.deleteNotificationChannel("incoming_calls2" + chanIndex);
                     chanIndex++;
                     nprefs.edit().putInt("calls_notification_channel", chanIndex).commit();
                 }
             }
             if (needCreate) {
-                NotificationChannel chan = new NotificationChannel("incoming_calls" + chanIndex, LocaleController.getString("IncomingCalls", R.string.IncomingCalls), 4);
-                chan.setSound(null, null);
+                AudioAttributes attrs = new AudioAttributes.Builder().setUsage(6).build();
+                NotificationChannel chan = new NotificationChannel("incoming_calls2" + chanIndex, LocaleController.getString("IncomingCalls", R.string.IncomingCalls), 4);
+                chan.setSound(soundProviderUri, attrs);
                 chan.enableVibration(false);
                 chan.enableLights(false);
                 nm.createNotificationChannel(chan);
             }
-            builder.setChannelId("incoming_calls" + chanIndex);
+            builder.setChannelId("incoming_calls2" + chanIndex);
+        } else if (VERSION.SDK_INT >= 21) {
+            builder.setSound(soundProviderUri, 2);
         }
         Intent endIntent = new Intent(this, VoIPActionsReceiver.class);
         endIntent.setAction(getPackageName() + ".DECLINE_CALL");
         endIntent.putExtra("call_id", getCallID());
         CharSequence endTitle = LocaleController.getString("VoipDeclineCall", R.string.VoipDeclineCall);
         if (VERSION.SDK_INT >= 24) {
-            CharSequence endTitle2 = new SpannableString(endTitle);
-            ((SpannableString) endTitle2).setSpan(new ForegroundColorSpan(-769226), 0, endTitle2.length(), 0);
-            endTitle = endTitle2;
+            CharSequence spannableString = new SpannableString(endTitle);
+            ((SpannableString) spannableString).setSpan(new ForegroundColorSpan(-769226), 0, spannableString.length(), 0);
+            endTitle = spannableString;
         }
         PendingIntent endPendingIntent = PendingIntent.getBroadcast(this, 0, endIntent, NUM);
         builder.addAction(R.drawable.ic_call_end_white_24dp, endTitle, endPendingIntent);
@@ -1173,6 +1175,12 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             builder.setVibrate(new long[0]);
             builder.setCategory("call");
             builder.setFullScreenIntent(PendingIntent.getActivity(this, 0, intent, 0), true);
+            if (userOrChat instanceof User) {
+                User user = (User) userOrChat;
+                if (!TextUtils.isEmpty(user.phone)) {
+                    builder.addPerson("tel:" + user.phone);
+                }
+            }
         }
         Notification incomingNotification = builder.getNotification();
         if (VERSION.SDK_INT >= 21) {
@@ -1196,11 +1204,13 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                 }
                 customView.setTextViewText(R.id.title, subText);
             }
+            Bitmap avatar = getRoundAvatarBitmap(userOrChat);
             customView.setTextViewText(R.id.answer_text, LocaleController.getString("VoipAnswerCall", R.string.VoipAnswerCall));
             customView.setTextViewText(R.id.decline_text, LocaleController.getString("VoipDeclineCall", R.string.VoipDeclineCall));
-            customView.setImageViewBitmap(R.id.photo, getRoundAvatarBitmap(userOrChat));
+            customView.setImageViewBitmap(R.id.photo, avatar);
             customView.setOnClickPendingIntent(R.id.answer_btn, answerPendingIntent);
             customView.setOnClickPendingIntent(R.id.decline_btn, endPendingIntent);
+            builder.setLargeIcon(avatar);
             incomingNotification.bigContentView = customView;
             incomingNotification.headsUpContentView = customView;
         }

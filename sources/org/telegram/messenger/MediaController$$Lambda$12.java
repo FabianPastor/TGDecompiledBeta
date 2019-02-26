@@ -2,16 +2,18 @@ package org.telegram.messenger;
 
 final /* synthetic */ class MediaController$$Lambda$12 implements Runnable {
     private final MediaController arg$1;
-    private final String arg$2;
-    private final String arg$3;
+    private final int arg$2;
+    private final long arg$3;
+    private final MessageObject arg$4;
 
-    MediaController$$Lambda$12(MediaController mediaController, String str, String str2) {
+    MediaController$$Lambda$12(MediaController mediaController, int i, long j, MessageObject messageObject) {
         this.arg$1 = mediaController;
-        this.arg$2 = str;
-        this.arg$3 = str2;
+        this.arg$2 = i;
+        this.arg$3 = j;
+        this.arg$4 = messageObject;
     }
 
     public void run() {
-        this.arg$1.lambda$generateWaveform$17$MediaController(this.arg$2, this.arg$3);
+        this.arg$1.lambda$startRecording$16$MediaController(this.arg$2, this.arg$3, this.arg$4);
     }
 }

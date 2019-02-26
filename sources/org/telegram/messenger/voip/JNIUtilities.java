@@ -5,6 +5,8 @@ import android.net.ConnectivityManager;
 import android.net.LinkAddress;
 import android.net.LinkProperties;
 import android.net.Network;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build.VERSION;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
@@ -107,5 +109,14 @@ public class JNIUtilities {
             mnc = carrierID.substring(3);
         }
         return new String[]{tm.getNetworkOperatorName(), tm.getNetworkCountryIso().toUpperCase(), mcc, mnc};
+    }
+
+    public static int[] getWifiInfo() {
+        try {
+            WifiInfo info = ((WifiManager) ApplicationLoader.applicationContext.getSystemService("wifi")).getConnectionInfo();
+            return new int[]{info.getRssi(), info.getLinkSpeed()};
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
