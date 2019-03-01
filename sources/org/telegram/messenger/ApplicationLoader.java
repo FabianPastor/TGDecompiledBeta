@@ -69,7 +69,10 @@ public class ApplicationLoader extends Application {
                 connectivityManager = (ConnectivityManager) applicationContext.getSystemService("connectivity");
                 applicationContext.registerReceiver(new BroadcastReceiver() {
                     public void onReceive(Context context, Intent intent) {
-                        ApplicationLoader.currentNetworkInfo = ApplicationLoader.connectivityManager.getActiveNetworkInfo();
+                        try {
+                            ApplicationLoader.currentNetworkInfo = ApplicationLoader.connectivityManager.getActiveNetworkInfo();
+                        } catch (Throwable th) {
+                        }
                         boolean isSlow = ApplicationLoader.isConnectionSlow();
                         for (int a = 0; a < 3; a++) {
                             ConnectionsManager.getInstance(a).checkConnection();

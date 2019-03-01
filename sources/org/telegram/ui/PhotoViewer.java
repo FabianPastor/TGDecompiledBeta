@@ -4107,7 +4107,10 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             }
         }
         if (this.aspectRatioFrameLayout != null) {
-            this.containerView.removeView(this.aspectRatioFrameLayout);
+            try {
+                this.containerView.removeView(this.aspectRatioFrameLayout);
+            } catch (Throwable th) {
+            }
             this.aspectRatioFrameLayout = null;
         }
         if (this.videoTextureView != null) {

@@ -3075,7 +3075,10 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
 
     public void updateUIColors() {
         if (AndroidUtilities.isInMultiwindow || this.forseMultiwindowLayout) {
-            getBackground().setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_emojiPanelBackground"), Mode.MULTIPLY));
+            Drawable background = getBackground();
+            if (background != null) {
+                background.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_emojiPanelBackground"), Mode.MULTIPLY));
+            }
         } else {
             setBackgroundColor(Theme.getColor("chat_emojiPanelBackground"));
             this.emojiTab.setBackgroundColor(Theme.getColor("chat_emojiPanelBackground"));

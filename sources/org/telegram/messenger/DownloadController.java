@@ -581,6 +581,7 @@ public class DownloadController implements NotificationCenterDelegate {
         int type;
         int index;
         Preset preset;
+        int i = 2;
         boolean isVideo = false;
         if (MessageObject.isPhoto(message) || MessageObject.isStickerMessage(message)) {
             type = 1;
@@ -634,14 +635,17 @@ public class DownloadController implements NotificationCenterDelegate {
         int mask = preset.mask[index];
         int maxSize = preset.sizes[typeToIndex(type)];
         int size = MessageObject.getMessageSize(message);
-        if (!isVideo || !preset.preloadVideo || size <= maxSize || maxSize <= 2097152) {
-            if ((type == 1 || (size != 0 && size <= maxSize)) && (mask & type) != 0) {
+        if (isVideo && preset.preloadVideo && size > maxSize && maxSize > 2097152) {
+            if ((mask & type) == 0) {
+                i = 0;
+            }
+            return i;
+        } else if (type != 1 && (size == 0 || size > maxSize)) {
+            return 0;
+        } else {
+            if (type == 2 || (mask & type) != 0) {
                 return 1;
             }
-            return 0;
-        } else if ((mask & type) != 0) {
-            return 2;
-        } else {
             return 0;
         }
     }

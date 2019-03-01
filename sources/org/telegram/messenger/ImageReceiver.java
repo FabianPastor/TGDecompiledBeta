@@ -1524,9 +1524,8 @@ public class ImageReceiver implements NotificationCenterDelegate {
             fileDrawable.setParentView(this.parentView);
             if (this.allowStartAnimation) {
                 fileDrawable.start();
-            } else {
-                fileDrawable.setAllowDecodeSingleFrame(this.allowDecodeSingleFrame);
             }
+            fileDrawable.setAllowDecodeSingleFrame(this.allowDecodeSingleFrame);
         }
         if (this.parentView != null) {
             if (this.invalidateAll) {
