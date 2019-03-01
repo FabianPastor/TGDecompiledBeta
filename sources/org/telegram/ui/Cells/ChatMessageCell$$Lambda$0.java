@@ -9,6 +9,6 @@ final /* synthetic */ class ChatMessageCell$$Lambda$0 implements Comparator {
     }
 
     public int compare(Object obj, Object obj2) {
-        return ChatMessageCell.lambda$setMessageObject$0$ChatMessageCell((PollButton) obj, (PollButton) obj2);
+        return ChatMessageCell.lambda$setMessageContent$0$ChatMessageCell((PollButton) obj, (PollButton) obj2);
     }
 }

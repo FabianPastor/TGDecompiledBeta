@@ -8,6 +8,7 @@ import android.view.TextureView;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player.EventListener;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -28,6 +29,7 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.upstream.DataSource.Factory;
+import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import org.telegram.messenger.ApplicationLoader;
@@ -88,15 +90,16 @@ public class VideoPlayer implements EventListener, VideoListener, NotificationCe
     }
 
     private void ensurePleyaerCreated() {
+        LoadControl loadControl = new DefaultLoadControl(new DefaultAllocator(true, 65536), 15000, 50000, 100, 5000, -1, true);
         if (this.player == null) {
-            this.player = ExoPlayerFactory.newSimpleInstance(ApplicationLoader.applicationContext, this.trackSelector, new DefaultLoadControl(), null, 2);
+            this.player = ExoPlayerFactory.newSimpleInstance(ApplicationLoader.applicationContext, this.trackSelector, loadControl, null, 2);
             this.player.addListener(this);
             this.player.setVideoListener(this);
             this.player.setVideoTextureView(this.textureView);
             this.player.setPlayWhenReady(this.autoplay);
         }
         if (this.mixedAudio && this.audioPlayer == null) {
-            this.audioPlayer = ExoPlayerFactory.newSimpleInstance(ApplicationLoader.applicationContext, this.trackSelector, new DefaultLoadControl(), null, 2);
+            this.audioPlayer = ExoPlayerFactory.newSimpleInstance(ApplicationLoader.applicationContext, this.trackSelector, loadControl, null, 2);
             this.audioPlayer.addListener(new EventListener() {
                 public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
                 }
@@ -305,13 +308,13 @@ public class VideoPlayer implements EventListener, VideoListener, NotificationCe
         return this.player != null;
     }
 
-    public void releasePlayer() {
+    public void releasePlayer(boolean async) {
         if (this.player != null) {
-            this.player.release();
+            this.player.release(async);
             this.player = null;
         }
         if (this.audioPlayer != null) {
-            this.audioPlayer.release();
+            this.audioPlayer.release(async);
             this.audioPlayer = null;
         }
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.playerDidStartPlaying);
@@ -324,6 +327,14 @@ public class VideoPlayer implements EventListener, VideoListener, NotificationCe
                 this.player.setVideoTextureView(this.textureView);
             }
         }
+    }
+
+    public boolean getPlayWhenReady() {
+        return this.player.getPlayWhenReady();
+    }
+
+    public int getPlaybackState() {
+        return this.player.getPlaybackState();
     }
 
     public void play() {

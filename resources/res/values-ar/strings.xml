@@ -81,6 +81,8 @@
     <string name="AddAnOption">إضافة خيار آخر...</string>
     <string name="AddAnOptionInfo">يمكنك إضافة %1$s.</string>
     <string name="AddAnOptionInfoMax">لقد قمت بإضافة الحد الأقصى من الخيارات.</string>
+    <string name="AddAnotherAccount">إضافة حساب آخر</string>
+    <string name="AddAnotherAccountInfo">إضافة حسابات تيليجرام أخرى والتبديل بينها بسهولة. </string>
     <string name="AddBannedErrorAdmin">المعذرة، لا يمكنك حظر هذا المستخدم لأنه مشرف في هذه المجموعة ولا يمكنك تغيير ذلك.</string>
     <string name="AddBotAsAdmin">يمكن إضافة البوتات فقط كمشرفين.</string>
     <string name="AddCaption">إضافة وصف...</string>
@@ -119,6 +121,7 @@
     <string name="AllowReadCall">فصلًا قم بالسماح لتيليجرام باستقبال اتصالات ليتمكن من إدخال الرمز لك تلقائيًا.</string>
     <string name="AllowReadCallAndSms">فضلًا قم بالسماح لتيليجرام بتلقي المكالمات ليتمكن من التحقق من رقم هاتفك تلقائيًا.</string>
     <string name="AllowReadSms">فضلًا قم بالسماح لتيليجرام بتلقي رسائل SMS القصيرة ليتمكن من تفعيل حسابك تلقائيًا.</string>
+    <string name="AlternativeOptions">خيارات بديلة</string>
     <string name="AlwaysAllow">السماح دائمًا</string>
     <string name="AlwaysAllowPlaceholder">السماح دائمًا لـ...</string>
     <string name="AlwaysShareWith">المشاركة دائمًا مع</string>
@@ -227,7 +230,41 @@
     <string name="AudioUnknownArtist">المؤدي غير معروف</string>
     <string name="AudioUnknownTitle">عنوان غير معروف</string>
     <string name="August">أغسطس</string>
+    <string name="AutoDownloadAudioInfo">الرسائل الصوتية صغيرة للغاية، لذا يتم تنزيلها دائمًا.</string>
+    <string name="AutoDownloadChannels">القنوات</string>
+    <string name="AutoDownloadContacts">جهات الاتصال</string>
+    <string name="AutoDownloadCustom">مخصص</string>
+    <string name="AutoDownloadDataUsage">استهلاك البيانات</string>
+    <string name="AutoDownloadFiles">الملفات</string>
+    <string name="AutoDownloadFilesTitle">تنزيل الملفات والمقاطع الصوتية تلقائيًا</string>
+    <string name="AutoDownloadGroups">المجموعات</string>
+    <string name="AutoDownloadHigh">عالٍ</string>
+    <string name="AutoDownloadLow">منخفض</string>
+    <string name="AutoDownloadMaxFileSize">الحجم الأقصى للملف</string>
+    <string name="AutoDownloadMaxVideoSize">الحجم الأقصى للمقطع المرئي</string>
     <string name="AutoDownloadMedia">تنزيل الوسائط تلقائيًا</string>
+    <string name="AutoDownloadMedium">متوسط</string>
+    <string name="AutoDownloadOff">معطّل</string>
+    <string name="AutoDownloadOnAllChats">مفعّل في جميع المحادثات</string>
+    <string name="AutoDownloadOnFor">مفعّل في %1$s</string>
+    <string name="AutoDownloadOnMobileData">على البيانات الخلوية</string>
+    <string name="AutoDownloadOnMobileDataInfo">قم بتفعيل هذا الخيار إذا كنت تريد أن تتحمل الوسائط تلقائيًا على البيانات الخلوية.</string>
+    <string name="AutoDownloadOnRoamingData">عند التجوال</string>
+    <string name="AutoDownloadOnRoamingDataInfo">قم بتفعيل هذا الخيار إذا كنت تريد أن تتحمل الوسائط تلقائيًا عند التجوال.</string>
+    <string name="AutoDownloadOnUpToFor">حتى %1$s في %2$s</string>
+    <string name="AutoDownloadOnWiFiData">على الـ Wi-Fi</string>
+    <string name="AutoDownloadOnWiFiDataInfo">Turn this ON if you want media to be automatically downloaded on Wi-Fi.</string>
+    <string name="AutoDownloadPhotos">الصور</string>
+    <string name="AutoDownloadPhotosTitle">تنزيل الصور تلقائيًا</string>
+    <string name="AutoDownloadPm">الرسائل الخاصة</string>
+    <string name="AutoDownloadPreloadMusic">تجهيز المقطع التالي</string>
+    <string name="AutoDownloadPreloadMusicInfo">Start downloading the next track while you are listening to an audio file.</string>
+    <string name="AutoDownloadPreloadVideo">تجهيز المرئيات الكبيرة</string>
+    <string name="AutoDownloadPreloadVideoInfo">تحميل الثواني الأولى (1-2 م.ب) من المقاطع المرئية الأكبر من %1$s لمشاهدتها فورَ الضغط عليها.</string>
+    <string name="AutoDownloadTypes">أنواع الوسائط</string>
+    <string name="AutoDownloadUpToOnAllChats">حتى %1$s في جميع المحادثات</string>
+    <string name="AutoDownloadVideos">المقاطع المرئية</string>
+    <string name="AutoDownloadVideosTitle">تنزيل المقاطع المرئية والصور المتحركة تلقائيًا</string>
     <string name="AutoLock">القفل التلقائي</string>
     <string name="AutoLockDisabled">معطّل</string>
     <string name="AutoLockInTime">خلال %1$s</string>
@@ -242,7 +279,7 @@
     <string name="AutoNightSchedule">الجدولة</string>
     <string name="AutoNightScheduled">مجدول</string>
     <string name="AutoNightTheme">الوضع الليلي الآلي</string>
-    <string name="AutoNightThemeOff">Off</string>
+    <string name="AutoNightThemeOff">معطّل</string>
     <string name="AutoNightTo">حتى</string>
     <string name="AutoNightUpdateLocation">تحديث الموقع</string>
     <string name="AutoNightUpdateLocationInfo">يتطلب حساب مواعيد الشروق والغروب التحقق لمرة واحدة من موقعك التقريبي. يرجى العلم أن موقعك يتم حفظه في جهازك فقط.\10\10الغروب: %1$s\10الشروق: %2$s</string>
@@ -253,24 +290,27 @@
     <string name="AutodownloadSizeLimit">تقييد بالحجم</string>
     <string name="AutodownloadSizeLimitUpTo">حتى %1$s</string>
     <string name="AutomaticMediaDownload">تنزيل الوسائط تلقائيًا</string>
-    <string name="AutoplayGifs">تشغيل الصور المتحركة تلقائيًا</string>
+    <string name="AutoplayGIF">الصور المتحركة</string>
+    <string name="AutoplayMedia">تشغيل الوسائط تلقائيًا</string>
+    <string name="AutoplayVideo">المقاطع المرئية</string>
+    <string name="AutoplayVideoInfo">Press the volume buttons to turn sound on.</string>
     <string name="Available">متاح</string>
     <string name="AwaitingEncryption">في انتظار اتصال %s بالإنترنت...</string>
     <string name="Back">رجوع</string>
     <string name="BackgroundBlurred">تأثير ضبابي</string>
-    <string name="BackgroundBrightness">Brightness</string>
-    <string name="BackgroundColor">Color</string>
+    <string name="BackgroundBrightness">السطوع</string>
+    <string name="BackgroundColor">لون</string>
     <string name="BackgroundColorPreviewLine1">اسحب لليمين أو لليسار لرؤية المزيد من الألوان.</string>
     <string name="BackgroundColorPreviewLine2">يابدع الورد .. يا جمال الورد</string>
-    <string name="BackgroundColorSinglePreviewLine1">Press \'Set\' to apply the background.</string>
-    <string name="BackgroundColorSinglePreviewLine2">Enjoy the view.</string>
-    <string name="BackgroundHexColorCode">Hex color code</string>
-    <string name="BackgroundIntensity">Intensity</string>
+    <string name="BackgroundColorSinglePreviewLine1">اضغط على \'تعيين\' لتطبيق الخلفية.</string>
+    <string name="BackgroundColorSinglePreviewLine2">طلعت يا محلا نورها يا شمس الشموسة</string>
+    <string name="BackgroundHexColorCode">رمز اللون Hex</string>
+    <string name="BackgroundIntensity">الشدة</string>
     <string name="BackgroundMotion">تأثير حركي</string>
     <string name="BackgroundPattern">نقش</string>
     <string name="BackgroundPreview">معاينة الخلفية</string>
     <string name="BackgroundPreviewLine1">ملحوظة: بعض الخلفيات تصبح أجمل عند إضافة التأثير الضبابي.</string>
-    <string name="BackgroundPreviewLine2">شكرًا لك!</string>
+    <string name="BackgroundPreviewLine2">وااو! شكرًا لك</string>
     <string name="BackgroundRestricted">تم تقييد البيانات الخلفية</string>
     <string name="BackgroundSearchColor">اللون:</string>
     <string name="BadgeNumber">شارةُ عدّاد الرسائل</string>
@@ -351,6 +391,8 @@
     <string name="ChangePermissions">تغيير صلاحيات العضو</string>
     <string name="ChangePhoneHelp">سيتم إرسال رسالة SMS قصيرة تحوي رمز التأكيد إلى رقمك الجديد.</string>
     <string name="ChangePhoneNewNumber">الرقم الجديد</string>
+    <string name="ChangePhoneNumber">تغيير رقم الهاتف</string>
+    <string name="ChangePhoneNumberInfo">نقل حسابك ومحادثاتك مع وسائطها لرقمٍ آخر. </string>
     <string name="ChangePhoneNumberOccupied">الرقم %1$s مرتبط بالفعل بحساب آخَر على تيليجرام. يرجى حذف ذلك الحساب قبل محاولة تغيير رقمك.</string>
     <string name="ChangePublicLimitReached">المعذرة، لقد قمت بحجز أسماء مستخدمين كثيرة. يمكنك تعطيل بعض روابط مجموعاتك وقنواتك القديمة, أو قم بإنشاء واحدة خاصة عوضًا عن ذلك.</string>
     <string name="ChangeRecoveryEmail">تغيير بريد الاسترداد</string>
@@ -505,6 +547,8 @@
     <string name="ChromeCustomTabs">المتصفح الداخلي</string>
     <string name="ChromeCustomTabsInfo">فتح الروابط الخارجية داخل التطبيق</string>
     <string name="ClearButton">مسح</string>
+    <string name="ClearCache">مسح الذاكرة المؤقتة</string>
+    <string name="ClearCacheInfo">تفريغ بعض المساحة من جهازك؛ ستبقى وسائطك في السحابة. </string>
     <string name="ClearHistory">مسح محتوى المحادثة</string>
     <string name="ClearHistoryCache">حذف من الذاكرة المؤقتة</string>
     <string name="ClearMediaCache">مسح الذاكرة المؤقتة</string>
@@ -541,6 +585,8 @@
     <string name="ContactJoined">انضمام جهة اتصال لتيليجرام</string>
     <string name="ContactNotRegistered">لم يقم %1$s بالتسجيل في تيليجرام بعد. هل ترغب في دعوتهم؟</string>
     <string name="ContactShare">مشاركة جهة الاتصال</string>
+    <string name="ContactSupport">التواصل مع الدعم</string>
+    <string name="ContactSupportInfo">أخبرنا عن أي مشاكل تواجهك لأن تسجيل الخروج غالبًا لا ينفع.</string>
     <string name="Contacts">جهات الاتصال</string>
     <string name="ContactsPermissionAlert">يحتاج **تيليجرام** إلى الوصول لجهات اتصالك لكي تتمكن من التواصل مع أصدقائك عبر جميع أجهزتك، ستتم مزامنة جهات اتصالك باستمرار مع خوادم تيليجرام السحابية شديدة التشفير.</string>
     <string name="ContactsPermissionAlertContinue">الاستمرار</string>
@@ -563,10 +609,10 @@
     <string name="CreateGroupError">المعذرة، لا يمكنك إنشاء مجموعة مع هؤلاء المستخدمين نظرًا لإعدادات خصوصيتهم.</string>
     <string name="CreateLink">إنشاء رابط</string>
     <string name="CreateNewContact">إنشاء جهة اتصال جديدة</string>
-    <string name="CreateNewThemeAlert">You can create your own theme by changing colors within the app.\10\10You can always switch back to the default Telegram theme here.</string>
+    <string name="CreateNewThemeAlert">يمكنك إنشاء النمط الخاص بك عبر تغيير الألوان داخل التطبيق.\10\10يمكنك العودة إلى نمط تيليجرام الافتراضي في أي وقت من هنا.</string>
     <string name="CreateNewThemeHelp">اضغط على أيقونة الألوان لاستعراض قائمة الخيارات في كل شاشة - ثم قم بتعديلها.</string>
-    <string name="CreateNewThemeMenu">Create new theme</string>
-    <string name="CreateTheme">CREATE THEME</string>
+    <string name="CreateNewThemeMenu">إنشاء نمط جديد</string>
+    <string name="CreateTheme">إنشاء نمط</string>
     <string name="Crop">قطع</string>
     <string name="CropImage">قص الصورة</string>
     <string name="CropOriginal">الأصلي</string>
@@ -585,7 +631,7 @@
     <string name="CustomShareInfo">هؤلاء المستخدمون سيتم السماح لهم بإضافتك للمجموعات والقنوات أو منعُهم من ذلك بغض النظر عن الإعدادات أعلاه.</string>
     <string name="CustomShareSettingsHelp">ستتجاوز هذه الإعدادات القيم في الأعلى.</string>
     <string name="DataSettings">البيانات والتخزين</string>
-    <string name="DataUsage">استخدام الشبكة والتخزين</string>
+    <string name="DataUsage">استخدام التخزين والشبكة</string>
     <string name="DaysBold_few">**%1$d** يوم</string>
     <string name="DaysBold_many">**%1$d** يوم</string>
     <string name="DaysBold_one">**%1$d** يوم</string>
@@ -626,7 +672,7 @@
     <string name="DeleteAndStop">حذف وإيقاف</string>
     <string name="DeleteBanUser">حظر المستخدم</string>
     <string name="DeleteChat">حذف وخروج</string>
-    <string name="DeleteChatBackgroundsAlert">Are you sure you want to delete the selected backgrounds?</string>
+    <string name="DeleteChatBackgroundsAlert">هل ترغب حقًا في حذف الخلفيات المحددة؟</string>
     <string name="DeleteChatUser">حذف المحادثة</string>
     <string name="DeleteContact">حذف الجهة</string>
     <string name="DeleteForAll">حذف من عند كافة الأعضاء</string>
@@ -727,7 +773,7 @@
     <string name="ErrorOccurred">حدث خطأ ما.</string>
     <string name="ErrorSendRestrictedMedia">المعذرة، قام مشرفو هذه المجموعة بتقييدك من إرسال الوسائط.</string>
     <string name="ErrorSendRestrictedMediaAll">المعذرة، ليس من المسموح إرسال الوسائط إلى هذه المجموعة.</string>
-    <string name="ErrorSendRestrictedPolls">Sorry, the admins of this group have restricted you from sending polls.</string>
+    <string name="ErrorSendRestrictedPolls">المعذرة، قام مشرفو هذه المجموعة بتقييدك من إرسال الاستفتاءات.</string>
     <string name="ErrorSendRestrictedPollsAll">المعذرة، ليس من المسموح إرسال الاستفتاءات إلى هذه المجموعة.</string>
     <string name="ErrorSendRestrictedStickers">المعذرة، مشرفو هذه المجموعة قيدوك من إرسال الملصقات.</string>
     <string name="ErrorSendRestrictedStickersAll">المعذرة، ليس من المسموح إرسال الملصقات إلى هذه المجموعة.</string>
@@ -756,7 +802,7 @@
     <string name="EventLogEmpty">**لا توجد أحداث هنا بعد**\10\10لم يَقم أعضاءُ المجموعة أو\10مشرفوها باتخاذ أيِّ إجراءات\10خلال الـ 48 ساعة الماضية.</string>
     <string name="EventLogEmptyChannel">**ما من أحداث هنا بعد**\10\10لم يقم مشرفو القناة\10باتخاذ أي إجراءات خلال\10الـ 48 ساعة الماضية.</string>
     <string name="EventLogEmptySearch">**لم يتم العثور على أحداث**\10\10لا توجد نتائج تطابق ما بحثت عنه\10ضمن الأحداث الأخيرة.</string>
-    <string name="EventLogEmptyTextSearch">لا توجد أحداث حصلت مؤخرًأ تحوي \'**%1$s**\' تم العثور عليها.</string>
+    <string name="EventLogEmptyTextSearch">لم يتم العثور على أحداث أخيرة تحوي «**%1$s**».</string>
     <string name="EventLogFilterAll">كافة الأحداث</string>
     <string name="EventLogFilterChannelInfo">معلومات القناة</string>
     <string name="EventLogFilterDeletedMessages">رسائل محذوفة</string>
@@ -844,9 +890,10 @@
     <string name="FloodWaitTime">محاولات كثيرة خاطئة، يرجى المحاولة خلال %1$s</string>
     <string name="Folder">مجلد</string>
     <string name="FontSize">مقاس الخط</string>
-    <string name="FontSizePreviewLine1">Ah, you kids today with techno music! You should enjoy the classics, like Hasselhoff!</string>
-    <string name="FontSizePreviewLine2">I can\'t even take you seriously right now.</string>
-    <string name="FontSizePreviewReply">Reinhardt, we need to find you some new tunes 🎶.</string>
+    <string name="FontSizePreviewLine1">بلى، أنا جاهز للانطلاق في أي وقت! هل سنخبرهم بقدومنا أم نجعلها مفاجأة؟</string>
+    <string name="FontSizePreviewLine2">سنخبرهم بالطبع! هل تتذكر كيف انتهت آخر مفاجأة؟</string>
+    <string name="FontSizePreviewName">أيمن</string>
+    <string name="FontSizePreviewReply">أحمد، هل أحضرت كافة الأشياء المطلوبة...</string>
     <string name="ForgotPassword">هل نسيت كلمة المرور؟</string>
     <string name="Forward">تحويل</string>
     <string name="ForwardTo">تحويل إلى...</string>
@@ -1121,6 +1168,8 @@
     <string name="LocationUpdatedFormatted">تم تحديث الموقع %1$s</string>
     <string name="LocationUpdatedJustNow">تم تحديثه الآن</string>
     <string name="LogOut">تسجيل الخروج</string>
+    <string name="LogOutInfo">لا تنسَ أن تسجيل الخروج سيحذف كل محادثاتك السرية.</string>
+    <string name="LogOutTitle">تسجيل الخروج</string>
     <string name="LoginAttempts">محاولات تسجيل الدخول غير المكتملة</string>
     <string name="LoginAttemptsInfo">لا تملك هذه الأجهزة إمكانية الوصول إلى حسابك، تم إدخال رمز الدخول المطلوب، لكن لم يتم تقديم كلمة مرور صحيحة.</string>
     <string name="LoginPassword">كلمة المرور</string>
@@ -1205,7 +1254,6 @@
     <string name="Minutes_other">%1$d دقيقة</string>
     <string name="Minutes_two">دقيقتان</string>
     <string name="Minutes_zero">%1$d دقيقة</string>
-    <string name="MobileUsage">استخدام بيانات الجوال</string>
     <string name="Mono">رمز</string>
     <string name="Months_few">%1$d أشهر</string>
     <string name="Months_many">%1$d شهرًا</string>
@@ -1219,7 +1267,11 @@
     <string name="MuteFor">كتم لمدة %1$s</string>
     <string name="MuteNotifications">كتم الإشعارات</string>
     <string name="NearbyPlaces">أو اختر مكانًا</string>
-    <string name="NetworkUsageSince">إحصاءات الاستخدام منذ %1$s</string>
+    <string name="NetworkUsage">استهلاك البيانات</string>
+    <string name="NetworkUsageMobile">الخلوية</string>
+    <string name="NetworkUsageRoaming">التجوال</string>
+    <string name="NetworkUsageSince">إحصاءات الاستهلاك منذ %1$s</string>
+    <string name="NetworkUsageWiFi">WI-FI</string>
     <string name="NeverAllow">عدم السماح أبدًا</string>
     <string name="NeverAllowPlaceholder">عدم السماح مطلقًا لـ...</string>
     <string name="NeverShareWith">عدم المشاركة مع</string>
@@ -1242,7 +1294,7 @@
     <string name="Next">التالي</string>
     <string name="NoAudio">فضلًا قم بإضافة ملفات لمكتبتك الصوتية على جهازك لتتمكن من مشاهدتها هنا.</string>
     <string name="NoBlocked">لا يوجد مستخدمون محظورون بعد</string>
-    <string name="NoBlockedChannel2">لن يتمكن المستخدمون الذين أزالهم المشرفون من القناة إعادة الإنضمام عبر روابط الدعوة.</string>
+    <string name="NoBlockedChannel2">لن يتمكن المستخدمون الذين أزالهم المشرفون من القناة من الانضمام إليها حتى عبر روابط الدعوة الخاصة.</string>
     <string name="NoBlockedGroup2">لن يتمكن المستخدمون الذين أزالهم المشرفون من المجموعة إعادة الإنضمام عبر روابط الدعوة.</string>
     <string name="NoBlockedUsers">ما من مستخدمين تمت إزالتهم</string>
     <string name="NoCallLog">لم تقم بإجراء أي مكالمة بعد.</string>
@@ -1376,6 +1428,7 @@
     <string name="NotificationMessagesPeopleDisplayOrder">%1$s %2$s</string>
     <string name="NotificationUnrecognizedDevice">%1$s، \10لقد تم تسجيل الدخول لحسابك هذا من جهاز جديد في: %2$s\10\10الجهاز: %3$s\10الموقع: %4$s\10\10إن لم تكن أنت من قام بتسجيل الدخول فيمكنك الذهاب للإعدادات - الخصوصية والأمان - الجلسات النشطة - ومن ثم إنهاء الجلسات المريبة.\10\10إذا كنت تعتقد أن شخصًا ما قام بتسجيل الدخول دون إذنك فيمكنك تفعيل التحقق بخطوتين من خلال قسم الخصوصية واﻷمان في الإعدادات.\10\10شكرًا، \10فريق تيليجرام</string>
     <string name="Notifications">الإشعارات</string>
+    <string name="NotificationsAddAnException">إضافة استثناء</string>
     <string name="NotificationsAndSounds">الإشعارات والأصوات</string>
     <string name="NotificationsChannels">القنوات</string>
     <string name="NotificationsCustom">مخصص</string>
@@ -1396,6 +1449,7 @@
     <string name="NotificationsLedColor">اللون</string>
     <string name="NotificationsLedInfo">الـ LED هو إضاءة صغيرة تومض في بعض الأجهزة كإشعار مرئي بالرسائل الجديدة.</string>
     <string name="NotificationsMuted">مكتومة</string>
+    <string name="NotificationsNewException">استثناء جديد</string>
     <string name="NotificationsOff">إيقاف</string>
     <string name="NotificationsOffUntil">معطّلة حتى %1$s</string>
     <string name="NotificationsOn">تشغيل</string>
@@ -1895,7 +1949,7 @@
     <string name="ResetNotificationsAlert">هل ترغب حقًا في إعادة تعيين جميع إعدادات الإشعارات إلى الوضع الافتراضي؟</string>
     <string name="ResetNotificationsText">تم تعيين كل الإشعارات إلى الوضع الافتراضي</string>
     <string name="ResetStatistics">إعادة تعيين الإحصائيات</string>
-    <string name="ResetStatisticsAlert">هل ترغب في مسح إحصائيات استخدامك؟</string>
+    <string name="ResetStatisticsAlert">هل ترغب في إعادة تعيين إحصائيات استهلاكك؟</string>
     <string name="RestoreEmailSent">لقد قمنا بإرسال رمز الاسترداد إلى بريدك الإلكتروني الذي اخترته مسبقًا:\10\10%1$s</string>
     <string name="RestoreEmailSentInfo">يرجى تفقُّدُ بريدك وإدخال الرمز المرسَل إليك والمكون من 6 أرقام.</string>
     <string name="RestoreEmailTrouble">هل تواجه صعوبة في الوصول إلى بريدك %1$s؟</string>
@@ -1912,7 +1966,6 @@
     <string name="RevokeLink">استبدال الرابط</string>
     <string name="RevokeLinkAlert">هل ترغب حقًا في تعطيل الرابط **%1$s**؟\10\10ستصبح المجموعة «**%2$s**» خاصة.</string>
     <string name="RevokeLinkAlertChannel">هل ترغب حقًا في تعطيل الرابط **%1$s**؟\10\10ستصبح القناة «**%2$s**» خاصة.</string>
-    <string name="RoamingUsage">استخدام بيانات التجوال</string>
     <string name="SETTINGS">الإعدادات</string>
     <string name="Satellite">قمر صناعي</string>
     <string name="Saturation">التشبع</string>
@@ -2017,6 +2070,8 @@
     <string name="SetAsAdmin">ترقية إلى مشرف</string>
     <string name="SetBackground">تعيين كخلفية</string>
     <string name="SetColor">تعيين لون</string>
+    <string name="SetPasscode">تعيين رمز قفل</string>
+    <string name="SetPasscodeInfo">قفل التطبيق برمز لمنع الآخرين من فتحه. </string>
     <string name="SetRecoveryEmail">تعيين بريد استرداد</string>
     <string name="SetTimer">تعيين عداد التدمير</string>
     <string name="Settings">الإعدادات</string>
@@ -2120,6 +2175,7 @@
     <string name="SuggestStickersInstalled">حزمي</string>
     <string name="SuggestStickersNone">إيقاف</string>
     <string name="Support">الدعم</string>
+    <string name="SupportStatus">الدعم</string>
     <string name="SyncContacts">مزامنة جهات الاتصال</string>
     <string name="SyncContactsAdded">تمت إضافة جهات اتصال جهازك إلى حسابك.</string>
     <string name="SyncContactsDelete">حذف الجهات المزامَنة</string>
@@ -2236,6 +2292,7 @@
     <string name="UseLessDataAlways">دائمًا</string>
     <string name="UseLessDataNever">مطلقًا</string>
     <string name="UseLessDataOnMobile">فقط على البيانات الخلوية</string>
+    <string name="UseLessDataOnRoaming">فقط عند التجوال</string>
     <string name="UseProxyAddress">الخادم</string>
     <string name="UseProxyForCalls">استخدام البروكسي للمكالمات</string>
     <string name="UseProxyForCallsInfo">قد تقلل خوادم البروكسي من جودة مكالماتك.</string>
@@ -2368,7 +2425,7 @@
     <string name="Weeks_two">أسبوعان</string>
     <string name="Weeks_zero">%1$d أسبوع</string>
     <string name="WhenConnectedOnWiFi">عند الاتصال بالـ Wi-Fi</string>
-    <string name="WhenRoaming">عند تواجدك خارج البلاد</string>
+    <string name="WhenRoaming">عند التجوال</string>
     <string name="WhenUsingMobileData">عند استخدام البيانات الخلوية</string>
     <string name="White">الأبيض</string>
     <string name="WhoCanAddMe">من يمْكنه إضافتي للمجموعات؟</string>
@@ -2378,7 +2435,6 @@
     <string name="WhoCanAddMembersAllMembers">جميع الأعضاء</string>
     <string name="WhoCanCallMe">من يمْكنه الاتصال بي؟</string>
     <string name="WhoCanCallMeInfo">بإمكانك تخصيص من يمكنه الاتصال بك.</string>
-    <string name="WiFiUsage">استخدام بيانات Wi-Fi</string>
     <string name="WillUnmuteIn">خلال %1$s</string>
     <string name="WithinAMonth">آخر ظهور خلال شهر</string>
     <string name="WithinAWeek">آخر ظهور خلال أسبوع</string>
@@ -2445,7 +2501,7 @@
     <string name="formatterBannedUntilThisYear24H">dd MMM, HH:mm</string>
     <string name="formatterDay12H">h:mm a</string>
     <string name="formatterDay24H">HH:mm</string>
-    <string name="formatterMonth">MMM dd</string>
+    <string name="formatterMonth">dd MMM</string>
     <string name="formatterMonthName">LLLL</string>
     <string name="formatterMonthYear2">LLLL yyyy</string>
     <string name="formatterStats12H">MMM dd yyyy, h:mm a</string>

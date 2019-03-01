@@ -1,18 +1,19 @@
 package org.telegram.ui.Components;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import org.telegram.ui.CacheControlActivity;
-import org.telegram.ui.LaunchActivity;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
 
 final /* synthetic */ class AlertsCreator$$Lambda$27 implements OnClickListener {
-    private final LaunchActivity arg$1;
+    private final int[] arg$1;
+    private final LinearLayout arg$2;
 
-    AlertsCreator$$Lambda$27(LaunchActivity launchActivity) {
-        this.arg$1 = launchActivity;
+    AlertsCreator$$Lambda$27(int[] iArr, LinearLayout linearLayout) {
+        this.arg$1 = iArr;
+        this.arg$2 = linearLayout;
     }
 
-    public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$runLinkRequest$27$LaunchActivity(new CacheControlActivity());
+    public void onClick(View view) {
+        AlertsCreator.lambda$createFreeSpaceDialog$30$AlertsCreator(this.arg$1, this.arg$2, view);
     }
 }

@@ -14,6 +14,6 @@ final /* synthetic */ class SettingsActivity$$Lambda$0 implements OnItemClickLis
     }
 
     public void onItemClick(View view, int i) {
-        this.arg$1.lambda$createView$3$SettingsActivity(this.arg$2, view, i);
+        this.arg$1.lambda$createView$2$SettingsActivity(this.arg$2, view, i);
     }
 }

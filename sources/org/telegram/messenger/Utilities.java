@@ -19,7 +19,7 @@ public class Utilities {
     public static volatile DispatchQueue globalQueue = new DispatchQueue("globalQueue");
     protected static final char[] hexArray = "0123456789ABCDEF".toCharArray();
     public static Pattern pattern = Pattern.compile("[\\-0-9]+");
-    public static volatile DispatchQueue phoneBookQueue = new DispatchQueue("photoBookQueue");
+    public static volatile DispatchQueue phoneBookQueue = new DispatchQueue("phoneBookQueue");
     public static SecureRandom random = new SecureRandom();
     public static volatile DispatchQueue searchQueue = new DispatchQueue("searchQueue");
     public static volatile DispatchQueue stageQueue = new DispatchQueue("stageQueue");
@@ -351,6 +351,10 @@ public class Utilities {
 
     public static long bytesToLong(byte[] bytes) {
         return (((((((((long) bytes[7]) << 56) + ((((long) bytes[6]) & 255) << 48)) + ((((long) bytes[5]) & 255) << 40)) + ((((long) bytes[4]) & 255) << 32)) + ((((long) bytes[3]) & 255) << 24)) + ((((long) bytes[2]) & 255) << 16)) + ((((long) bytes[1]) & 255) << 8)) + (((long) bytes[0]) & 255);
+    }
+
+    public static int bytesToInt(byte[] bytes) {
+        return ((((bytes[3] & 255) << 24) + ((bytes[2] & 255) << 16)) + ((bytes[1] & 255) << 8)) + (bytes[0] & 255);
     }
 
     public static String MD5(String md5) {

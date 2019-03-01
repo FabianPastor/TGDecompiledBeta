@@ -2838,7 +2838,7 @@ public class WebPlayerView extends ViewGroup implements OnAudioFocusChangeListen
     }
 
     public void destroy() {
-        this.videoPlayer.releasePlayer();
+        this.videoPlayer.releasePlayer(false);
         if (this.currentTask != null) {
             this.currentTask.cancel(true);
             this.currentTask = null;

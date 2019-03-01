@@ -1609,7 +1609,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         this.mainErrorsMap = new HashMap();
         this.errorsValues = new HashMap();
         this.provider = new EmptyPhotoViewerProvider() {
-            public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
+            public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index, boolean needPreview) {
                 int i = 0;
                 if (index < 0 || index >= PassportActivity.this.currentPhotoViewerLayout.getChildCount()) {
                     return null;
@@ -3021,14 +3021,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r0 = r43;
         r4 = r0.actionBar;
         r5 = "TelegramPassport";
-        r9 = NUM; // 0x7f0CLASSNAME float:1.8613543E38 double:1.053098458E-314;
+        r9 = NUM; // 0x7f0CLASSNAME float:1.8613652E38 double:1.053098485E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r9);
         r4.setTitle(r5);
         r0 = r43;
         r4 = r0.actionBar;
         r4 = r4.createMenu();
         r5 = 1;
-        r9 = NUM; // 0x7var_d1 float:1.7945521E38 double:1.052935733E-314;
+        r9 = NUM; // 0x7var_d5 float:1.794553E38 double:1.0529357347E-314;
         r4.addItem(r5, r9);
         if (r23 == 0) goto L_0x0131;
     L_0x005c:
@@ -3097,7 +3097,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r0 = r43;
         r4 = r0.bottomCell;
         r5 = "PassportRequest";
-        r9 = NUM; // 0x7f0CLASSNAMEf float:1.86125E38 double:1.0530982043E-314;
+        r9 = NUM; // 0x7f0CLASSNAME float:1.8612605E38 double:1.05309823E-314;
         r10 = 1;
         r10 = new java.lang.Object[r10];
         r11 = 0;
@@ -3135,7 +3135,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r0 = r43;
         r4 = r0.headerCell;
         r5 = "PassportRequestedInformation";
-        r9 = NUM; // 0x7f0CLASSNAME float:1.8612504E38 double:1.0530982053E-314;
+        r9 = NUM; // 0x7f0CLASSNAME float:1.861261E38 double:1.053098231E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r9);
         r4.setText(r5);
         r0 = r43;
@@ -3557,7 +3557,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         if (r4 != 0) goto L_0x05cf;
     L_0x0416:
         r4 = "PassportPolicy";
-        r5 = NUM; // 0x7f0CLASSNAMEc float:1.8612494E38 double:1.053098203E-314;
+        r5 = NUM; // 0x7f0CLASSNAME float:1.86126E38 double:1.0530982285E-314;
         r9 = 2;
         r9 = new java.lang.Object[r9];
         r10 = 0;
@@ -3688,7 +3688,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r0 = r43;
         r4 = r0.acceptTextView;
         r5 = "PassportAuthorize";
-        r9 = NUM; // 0x7f0CLASSNAMEe6 float:1.8612255E38 double:1.0530981445E-314;
+        r9 = NUM; // 0x7f0CLASSNAMEa float:1.861236E38 double:1.05309817E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r9);
         r4.setText(r5);
         r0 = r43;
@@ -3755,7 +3755,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r0 = r43;
         r4 = r0.bottomCell;
         r5 = "PassportNoPolicy";
-        r9 = NUM; // 0x7f0CLASSNAME float:1.861247E38 double:1.053098197E-314;
+        r9 = NUM; // 0x7f0CLASSNAME float:1.8612575E38 double:1.0530982226E-314;
         r10 = 2;
         r10 = new java.lang.Object[r10];
         r11 = 0;
@@ -7403,7 +7403,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r0.onError(r2, r3);
     L_0x000e:
         r2 = "AppName";
-        r3 = NUM; // 0x7f0CLASSNAME float:1.8609486E38 double:1.05309747E-314;
+        r3 = NUM; // 0x7f0CLASSNAME float:1.8609492E38 double:1.0530974716E-314;
         r2 = org.telegram.messenger.LocaleController.getString(r2, r3);
         r0 = r18;
         r3 = r0.text;

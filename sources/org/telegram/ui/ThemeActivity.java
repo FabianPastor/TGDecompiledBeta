@@ -94,7 +94,6 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
     private int automaticBrightnessInfoRow;
     private int automaticBrightnessRow;
     private int automaticHeaderRow;
-    private int autoplayGifsRow;
     private int backgroundRow;
     private int contactsReimportRow;
     private int contactsSortRow;
@@ -383,7 +382,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         L_0x00de:
             r11 = org.telegram.ui.ThemeActivity.this;	 Catch:{ Exception -> 0x00f4 }
             r12 = "ShareFile";
-            r13 = NUM; // 0x7f0CLASSNAMEea float:1.8613301E38 double:1.0530983994E-314;
+            r13 = NUM; // 0x7f0CLASSNAMEf float:1.8613409E38 double:1.0530984256E-314;
             r12 = org.telegram.messenger.LocaleController.getString(r12, r13);	 Catch:{ Exception -> 0x00f4 }
             r12 = android.content.Intent.createChooser(r7, r12);	 Catch:{ Exception -> 0x00f4 }
             r13 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
@@ -436,21 +435,21 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             r11 = r11.getParentActivity();
             r1.<init>(r11);
             r11 = "DeleteThemeAlert";
-            r12 = NUM; // 0x7f0CLASSNAMEf float:1.8610488E38 double:1.053097714E-314;
+            r12 = NUM; // 0x7f0CLASSNAMEad float:1.8610581E38 double:1.053097737E-314;
             r11 = org.telegram.messenger.LocaleController.getString(r11, r12);
             r1.setMessage(r11);
             r11 = "AppName";
-            r12 = NUM; // 0x7f0CLASSNAME float:1.8609486E38 double:1.05309747E-314;
+            r12 = NUM; // 0x7f0CLASSNAME float:1.8609492E38 double:1.0530974716E-314;
             r11 = org.telegram.messenger.LocaleController.getString(r11, r12);
             r1.setTitle(r11);
             r11 = "Delete";
-            r12 = NUM; // 0x7f0CLASSNAME float:1.8610443E38 double:1.0530977033E-314;
+            r12 = NUM; // 0x7f0CLASSNAME float:1.8610537E38 double:1.053097726E-314;
             r11 = org.telegram.messenger.LocaleController.getString(r11, r12);
             r12 = new org.telegram.ui.ThemeActivity$ListAdapter$$Lambda$2;
             r12.<init>(r14, r15);
             r1.setPositiveButton(r11, r12);
             r11 = "Cancel";
-            r12 = NUM; // 0x7f0CLASSNAME float:1.860986E38 double:1.053097561E-314;
+            r12 = NUM; // 0x7f0CLASSNAME float:1.860994E38 double:1.053097581E-314;
             r11 = org.telegram.messenger.LocaleController.getString(r11, r12);
             r12 = 0;
             r1.setNegativeButton(r11, r12);
@@ -597,9 +596,6 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                     } else if (position == ThemeActivity.this.saveToGalleryRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("SaveToGallerySettings", R.string.SaveToGallerySettings), SharedConfig.saveToGallery, false);
                         return;
-                    } else if (position == ThemeActivity.this.autoplayGifsRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("AutoplayGifs", R.string.AutoplayGifs), SharedConfig.autoplayGifs, true);
-                        return;
                     } else if (position == ThemeActivity.this.raiseToSpeakRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("RaiseToSpeak", R.string.RaiseToSpeak), SharedConfig.raiseToSpeak, true);
                         return;
@@ -648,7 +644,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             if (position == ThemeActivity.this.automaticBrightnessRow) {
                 return 6;
             }
-            if (position == ThemeActivity.this.scheduleLocationRow || position == ThemeActivity.this.enableAnimationsRow || position == ThemeActivity.this.sendByEnterRow || position == ThemeActivity.this.saveToGalleryRow || position == ThemeActivity.this.autoplayGifsRow || position == ThemeActivity.this.raiseToSpeakRow || position == ThemeActivity.this.customTabsRow || position == ThemeActivity.this.directShareRow) {
+            if (position == ThemeActivity.this.scheduleLocationRow || position == ThemeActivity.this.enableAnimationsRow || position == ThemeActivity.this.sendByEnterRow || position == ThemeActivity.this.saveToGalleryRow || position == ThemeActivity.this.raiseToSpeakRow || position == ThemeActivity.this.customTabsRow || position == ThemeActivity.this.directShareRow) {
                 return 7;
             }
             if (position == ThemeActivity.this.textSizeRow) {
@@ -786,7 +782,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             message.to_id = new TL_peerUser();
             message.to_id.user_id = UserConfig.getInstance(ThemeActivity.this.currentAccount).getClientUserId();
             MessageObject message2 = new MessageObject(ThemeActivity.this.currentAccount, message, true);
-            message2.customReplyName = "Lucio";
+            message2.customReplyName = LocaleController.getString("FontSizePreviewName", R.string.FontSizePreviewName);
             message2.eventId = 1;
             message2.resetLayout();
             message2.replyMessageObject = messageObject;
@@ -861,6 +857,10 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
 
                     public boolean needPlayMessage(MessageObject messageObject) {
                         return ChatMessageCell$ChatMessageCellDelegate$$CC.needPlayMessage(this, messageObject);
+                    }
+
+                    public void videoTimerReached() {
+                        ChatMessageCell$ChatMessageCellDelegate$$CC.videoTimerReached(this);
                     }
                 });
                 this.cells[a].isChat = false;
@@ -958,7 +958,6 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         this.enableAnimationsRow = -1;
         this.raiseToSpeakRow = -1;
         this.sendByEnterRow = -1;
-        this.autoplayGifsRow = -1;
         this.saveToGalleryRow = -1;
         this.settings2Row = -1;
         this.stickersRow = -1;
@@ -1006,9 +1005,6 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             i = this.rowCount;
             this.rowCount = i + 1;
             this.sendByEnterRow = i;
-            i = this.rowCount;
-            this.rowCount = i + 1;
-            this.autoplayGifsRow = i;
             i = this.rowCount;
             this.rowCount = i + 1;
             this.saveToGalleryRow = i;
@@ -1237,11 +1233,6 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             SharedConfig.toogleRaiseToSpeak();
             if (view instanceof TextCheckCell) {
                 ((TextCheckCell) view).setChecked(SharedConfig.raiseToSpeak);
-            }
-        } else if (position == this.autoplayGifsRow) {
-            SharedConfig.toggleAutoplayGifs();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(SharedConfig.autoplayGifs);
             }
         } else if (position == this.saveToGalleryRow) {
             SharedConfig.toggleSaveToGallery();

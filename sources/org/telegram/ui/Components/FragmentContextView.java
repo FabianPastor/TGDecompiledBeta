@@ -592,7 +592,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         }
         AnimatorSet animatorSet;
         Animator[] animatorArr;
-        if (messageObject == null || messageObject.getId() == 0) {
+        if (messageObject == null || messageObject.getId() == 0 || messageObject.isVideo()) {
             this.lastMessageObject = null;
             boolean callAvailable = (VoIPService.getSharedInstance() == null || VoIPService.getSharedInstance().getCallState() == 15) ? false : true;
             if (callAvailable) {

@@ -2,10 +2,14 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
 import android.text.TextUtils.TruncateAt;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
@@ -14,6 +18,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class TextDetailSettingsCell extends FrameLayout {
+    private ImageView imageView;
     private boolean multiline;
     private boolean needDivider;
     private TextView textView;
@@ -54,10 +59,21 @@ public class TextDetailSettingsCell extends FrameLayout {
         this.valueTextView.setSingleLine(true);
         this.valueTextView.setPadding(0, 0, 0, 0);
         view = this.valueTextView;
+        if (LocaleController.isRTL) {
+            i = 5;
+        } else {
+            i = 3;
+        }
+        addView(view, LayoutHelper.createFrame(-2, -2.0f, i | 48, 21.0f, 35.0f, 21.0f, 0.0f));
+        this.imageView = new ImageView(context);
+        this.imageView.setScaleType(ScaleType.CENTER);
+        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), Mode.MULTIPLY));
+        this.imageView.setVisibility(8);
+        view = this.imageView;
         if (!LocaleController.isRTL) {
             i3 = 3;
         }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i3 | 48, 21.0f, 35.0f, 21.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(52, 52.0f, i3 | 48, 8.0f, 6.0f, 8.0f, 0.0f));
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -101,14 +117,30 @@ public class TextDetailSettingsCell extends FrameLayout {
         this.textView.setText(text);
         this.valueTextView.setText(value);
         this.needDivider = divider;
+        this.imageView.setVisibility(8);
         setWillNotDraw(!divider);
+    }
+
+    public void setTextAndValueAndIcon(String text, CharSequence value, int resId, boolean divider) {
+        boolean z = false;
+        this.textView.setText(text);
+        this.valueTextView.setText(value);
+        this.imageView.setImageResource(resId);
+        this.imageView.setVisibility(0);
+        this.textView.setPadding(LocaleController.isRTL ? 0 : AndroidUtilities.dp(50.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(50.0f) : 0, 0);
+        this.valueTextView.setPadding(LocaleController.isRTL ? 0 : AndroidUtilities.dp(50.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(50.0f) : 0, this.multiline ? AndroidUtilities.dp(12.0f) : 0);
+        this.needDivider = divider;
+        if (!divider) {
+            z = true;
+        }
+        setWillNotDraw(z);
     }
 
     public void setValue(CharSequence value) {
         this.valueTextView.setText(value);
     }
 
-    public void setTextWithEmojiAndValue(String text, CharSequence value, boolean divider) {
+    public void setTextWithEmojiAnd21Value(String text, CharSequence value, boolean divider) {
         boolean z = false;
         this.textView.setText(Emoji.replaceEmoji(text, this.textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14.0f), false));
         this.valueTextView.setText(value);
@@ -125,8 +157,26 @@ public class TextDetailSettingsCell extends FrameLayout {
     }
 
     protected void onDraw(Canvas canvas) {
+        float f = 71.0f;
         if (this.needDivider) {
-            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
+            float f2;
+            int dp;
+            if (LocaleController.isRTL) {
+                f2 = 0.0f;
+            } else {
+                f2 = (float) AndroidUtilities.dp(this.imageView.getVisibility() == 0 ? 71.0f : 20.0f);
+            }
+            float measuredHeight = (float) (getMeasuredHeight() - 1);
+            int measuredWidth = getMeasuredWidth();
+            if (LocaleController.isRTL) {
+                if (this.imageView.getVisibility() != 0) {
+                    f = 20.0f;
+                }
+                dp = AndroidUtilities.dp(f);
+            } else {
+                dp = 0;
+            }
+            canvas.drawLine(f2, measuredHeight, (float) (measuredWidth - dp), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }
     }
 }

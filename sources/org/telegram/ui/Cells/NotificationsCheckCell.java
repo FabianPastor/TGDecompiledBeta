@@ -16,6 +16,7 @@ import org.telegram.ui.Components.Switch;
 public class NotificationsCheckCell extends FrameLayout {
     private Switch checkBox;
     private boolean drawLine;
+    private boolean isMultiline;
     private boolean needDivider;
     private TextView textView;
     private TextView valueTextView;
@@ -78,19 +79,41 @@ public class NotificationsCheckCell extends FrameLayout {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(70.0f), NUM));
+        if (this.isMultiline) {
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(0, 0));
+        } else {
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(70.0f), NUM));
+        }
     }
 
     public void setTextAndValueAndCheck(String text, CharSequence value, boolean checked, boolean divider) {
-        setTextAndValueAndCheck(text, value, checked, 0, divider);
+        setTextAndValueAndCheck(text, value, checked, 0, false, divider);
     }
 
     public void setTextAndValueAndCheck(String text, CharSequence value, boolean checked, int iconType, boolean divider) {
+        setTextAndValueAndCheck(text, value, checked, iconType, false, divider);
+    }
+
+    public void setTextAndValueAndCheck(String text, CharSequence value, boolean checked, int iconType, boolean multiline, boolean divider) {
         this.textView.setText(text);
         this.valueTextView.setText(value);
         this.checkBox.setChecked(checked, iconType, false);
         this.valueTextView.setVisibility(0);
         this.needDivider = divider;
+        this.isMultiline = multiline;
+        if (multiline) {
+            this.valueTextView.setLines(0);
+            this.valueTextView.setMaxLines(0);
+            this.valueTextView.setSingleLine(false);
+            this.valueTextView.setEllipsize(null);
+            this.valueTextView.setPadding(0, 0, 0, AndroidUtilities.dp(14.0f));
+            return;
+        }
+        this.valueTextView.setLines(1);
+        this.valueTextView.setMaxLines(1);
+        this.valueTextView.setSingleLine(true);
+        this.valueTextView.setEllipsize(TruncateAt.END);
+        this.valueTextView.setPadding(0, 0, 0, 0);
     }
 
     public void setDrawLine(boolean value) {
@@ -115,7 +138,8 @@ public class NotificationsCheckCell extends FrameLayout {
         }
         if (this.drawLine) {
             int x = LocaleController.isRTL ? AndroidUtilities.dp(76.0f) : (getMeasuredWidth() - AndroidUtilities.dp(76.0f)) - 1;
-            canvas.drawRect((float) x, (float) AndroidUtilities.dp(24.0f), (float) (x + 2), (float) AndroidUtilities.dp(46.0f), Theme.dividerPaint);
+            int y = (getMeasuredHeight() - AndroidUtilities.dp(22.0f)) / 2;
+            canvas.drawRect((float) x, (float) y, (float) (x + 2), (float) (AndroidUtilities.dp(22.0f) + y), Theme.dividerPaint);
         }
     }
 }

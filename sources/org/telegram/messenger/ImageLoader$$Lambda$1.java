@@ -2,12 +2,12 @@ package org.telegram.messenger;
 
 final /* synthetic */ class ImageLoader$$Lambda$1 implements Runnable {
     private final ImageLoader arg$1;
-    private final int arg$2;
+    private final boolean arg$2;
     private final ImageReceiver arg$3;
 
-    ImageLoader$$Lambda$1(ImageLoader imageLoader, int i, ImageReceiver imageReceiver) {
+    ImageLoader$$Lambda$1(ImageLoader imageLoader, boolean z, ImageReceiver imageReceiver) {
         this.arg$1 = imageLoader;
-        this.arg$2 = i;
+        this.arg$2 = z;
         this.arg$3 = imageReceiver;
     }
 

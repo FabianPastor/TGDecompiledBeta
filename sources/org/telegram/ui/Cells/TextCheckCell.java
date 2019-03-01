@@ -1,10 +1,15 @@
 package org.telegram.ui.Cells;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.text.TextUtils.TruncateAt;
+import android.util.Property;
+import android.view.MotionEvent;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
@@ -13,12 +18,31 @@ import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.AnimationProperties.FloatProperty;
+import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Switch;
 
 public class TextCheckCell extends FrameLayout {
+    public static final Property<TextCheckCell, Float> ANIMATION_PROGRESS = new FloatProperty<TextCheckCell>("animationProgress") {
+        public void setValue(TextCheckCell object, float value) {
+            object.setAnimationProgress(value);
+            object.invalidate();
+        }
+
+        public Float get(TextCheckCell object) {
+            return Float.valueOf(object.animationProgress);
+        }
+    };
+    private int animatedColorBackground;
+    private Paint animationPaint;
+    private float animationProgress;
+    private ObjectAnimator animator;
     private Switch checkBox;
+    private boolean drawCheckRipple;
+    private int height;
     private boolean isMultiline;
+    private float lastTouchX;
     private boolean needDivider;
     private TextView textView;
     private TextView valueTextView;
@@ -28,9 +52,14 @@ public class TextCheckCell extends FrameLayout {
     }
 
     public TextCheckCell(Context context, int padding) {
+        this(context, padding, false);
+    }
+
+    public TextCheckCell(Context context, int padding, boolean dialog) {
         super(context);
+        this.height = 50;
         this.textView = new TextView(context);
-        this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        this.textView.setTextColor(Theme.getColor(dialog ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -39,7 +68,7 @@ public class TextCheckCell extends FrameLayout {
         this.textView.setEllipsize(TruncateAt.END);
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 70.0f : (float) padding, 0.0f, LocaleController.isRTL ? (float) padding : 70.0f, 0.0f));
         this.valueTextView = new TextView(context);
-        this.valueTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
+        this.valueTextView.setTextColor(Theme.getColor(dialog ? "dialogIcon" : "windowBackgroundWhiteGrayText2"));
         this.valueTextView.setTextSize(1, 13.0f);
         this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.valueTextView.setLines(1);
@@ -50,7 +79,8 @@ public class TextCheckCell extends FrameLayout {
         addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 64.0f : (float) padding, 36.0f, LocaleController.isRTL ? (float) padding : 64.0f, 0.0f));
         this.checkBox = new Switch(context);
         this.checkBox.setColors("switchTrack", "switchTrackChecked", "windowBackgroundWhite", "windowBackgroundWhite");
-        addView(this.checkBox, LayoutHelper.createFrame(37, 40.0f, (LocaleController.isRTL ? 3 : 5) | 16, 22.0f, 0.0f, 22.0f, 0.0f));
+        addView(this.checkBox, LayoutHelper.createFrame(37, 20.0f, (LocaleController.isRTL ? 3 : 5) | 16, 22.0f, 0.0f, 22.0f, 0.0f));
+        setClipChildren(false);
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -58,7 +88,12 @@ public class TextCheckCell extends FrameLayout {
             super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(0, 0));
             return;
         }
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(this.valueTextView.getVisibility() == 0 ? 64.0f : 50.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(this.valueTextView.getVisibility() == 0 ? 64.0f : (float) this.height), NUM));
+    }
+
+    public boolean onTouchEvent(MotionEvent event) {
+        this.lastTouchX = event.getX();
+        return super.onTouchEvent(event);
     }
 
     public void setTextAndCheck(String text, boolean checked, boolean divider) {
@@ -76,6 +111,31 @@ public class TextCheckCell extends FrameLayout {
             z = true;
         }
         setWillNotDraw(z);
+    }
+
+    public void setColors(String key, String switchKey, String switchKeyChecked, String switchThumb, String switchThumbChecked) {
+        this.textView.setTextColor(Theme.getColor(key));
+        this.checkBox.setColors(switchKey, switchKeyChecked, switchThumb, switchThumbChecked);
+        this.textView.setTag(key);
+    }
+
+    public void setTypeface(Typeface typeface) {
+        this.textView.setTypeface(typeface);
+    }
+
+    public void setHeight(int value) {
+        this.height = value;
+    }
+
+    public void setDrawCheckRipple(boolean value) {
+        this.drawCheckRipple = value;
+    }
+
+    public void setPressed(boolean pressed) {
+        if (this.drawCheckRipple) {
+            this.checkBox.setDrawRipple(pressed);
+        }
+        super.setPressed(pressed);
     }
 
     public void setTextAndValueAndCheck(String text, String value, boolean checked, boolean multiline, boolean divider) {
@@ -176,7 +236,55 @@ public class TextCheckCell extends FrameLayout {
         return this.checkBox.isChecked();
     }
 
+    public void setBackgroundColor(int color) {
+        clearAnimation();
+        this.animatedColorBackground = 0;
+        super.setBackgroundColor(color);
+    }
+
+    public void setBackgroundColorAnimated(boolean checked, int color) {
+        int i = 1;
+        if (this.animator != null) {
+            this.animator.cancel();
+            this.animator = null;
+        }
+        if (this.animatedColorBackground != 0) {
+            setBackgroundColor(this.animatedColorBackground);
+        }
+        if (this.animationPaint == null) {
+            this.animationPaint = new Paint(1);
+        }
+        Switch switchR = this.checkBox;
+        if (!checked) {
+            i = 2;
+        }
+        switchR.setOverrideColor(i);
+        this.animatedColorBackground = color;
+        this.animationPaint.setColor(this.animatedColorBackground);
+        this.animationProgress = 0.0f;
+        this.animator = ObjectAnimator.ofFloat(this, ANIMATION_PROGRESS, new float[]{0.0f, 1.0f});
+        this.animator.addListener(new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator animation) {
+                TextCheckCell.this.setBackgroundColor(TextCheckCell.this.animatedColorBackground);
+                TextCheckCell.this.animatedColorBackground = 0;
+                TextCheckCell.this.invalidate();
+            }
+        });
+        this.animator.setInterpolator(CubicBezierInterpolator.EASE_OUT);
+        this.animator.setDuration(240).start();
+    }
+
+    private void setAnimationProgress(float value) {
+        this.animationProgress = value;
+        float rad = Math.max(this.lastTouchX, ((float) getMeasuredWidth()) - this.lastTouchX) + ((float) AndroidUtilities.dp(40.0f));
+        float animatedRad = rad * this.animationProgress;
+        this.checkBox.setOverrideColorProgress(this.lastTouchX, (float) (getMeasuredHeight() / 2), animatedRad);
+    }
+
     protected void onDraw(Canvas canvas) {
+        if (this.animatedColorBackground != 0) {
+            canvas.drawCircle(this.lastTouchX, (float) (getMeasuredHeight() / 2), (Math.max(this.lastTouchX, ((float) getMeasuredWidth()) - this.lastTouchX) + ((float) AndroidUtilities.dp(40.0f))) * this.animationProgress, this.animationPaint);
+        }
         if (this.needDivider) {
             canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }

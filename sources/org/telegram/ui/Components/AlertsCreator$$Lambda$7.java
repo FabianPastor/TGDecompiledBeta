@@ -1,14 +1,16 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.Components.NumberPicker.Formatter;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 
-final /* synthetic */ class AlertsCreator$$Lambda$7 implements Formatter {
-    static final Formatter $instance = new AlertsCreator$$Lambda$7();
+final /* synthetic */ class AlertsCreator$$Lambda$7 implements OnClickListener {
+    private final Runnable arg$1;
 
-    private AlertsCreator$$Lambda$7() {
+    AlertsCreator$$Lambda$7(Runnable runnable) {
+        this.arg$1 = runnable;
     }
 
-    public String format(int i) {
-        return AlertsCreator.lambda$createDatePickerDialog$7$AlertsCreator(i);
+    public void onClick(DialogInterface dialogInterface, int i) {
+        AlertsCreator.lambda$createClearOrDeleteDialogAlert$9$AlertsCreator(this.arg$1, dialogInterface, i);
     }
 }

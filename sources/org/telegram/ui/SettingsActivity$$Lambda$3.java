@@ -17,6 +17,6 @@ final /* synthetic */ class SettingsActivity$$Lambda$3 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$didUploadPhoto$9$SettingsActivity(this.arg$2, this.arg$3, this.arg$4);
+        this.arg$1.lambda$didUploadPhoto$8$SettingsActivity(this.arg$2, this.arg$3, this.arg$4);
     }
 }

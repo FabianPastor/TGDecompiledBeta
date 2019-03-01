@@ -43,13 +43,13 @@ public class DispatchQueue extends Thread {
     public void postRunnable(Runnable runnable, long delay) {
         try {
             this.syncLatch.await();
-            if (delay <= 0) {
-                this.handler.post(runnable);
-            } else {
-                this.handler.postDelayed(runnable, delay);
-            }
         } catch (Throwable e) {
             FileLog.e(e);
+        }
+        if (delay <= 0) {
+            this.handler.post(runnable);
+        } else {
+            this.handler.postDelayed(runnable, delay);
         }
     }
 
@@ -63,6 +63,10 @@ public class DispatchQueue extends Thread {
     }
 
     public void handleMessage(Message inputMessage) {
+    }
+
+    public void recycle() {
+        this.handler.getLooper().quit();
     }
 
     public void run() {

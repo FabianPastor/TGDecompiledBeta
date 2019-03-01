@@ -9,6 +9,7 @@ import android.content.SharedPreferences.Editor;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.v4.app.NotificationManagerCompat;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.LongSparseArray;
@@ -503,6 +504,7 @@ public class MessagesController implements NotificationCenterDelegate {
     public LongSparseArray<Integer> printingStringsTypes = new LongSparseArray();
     public ConcurrentHashMap<Long, ArrayList<PrintingUser>> printingUsers = new ConcurrentHashMap(20, 1.0f, 2);
     private TL_dialog proxyDialog;
+    private String proxyDialogAddress;
     private long proxyDialogId;
     public int ratingDecay;
     private ArrayList<ReadTask> readTasks = new ArrayList();
@@ -702,6 +704,7 @@ public class MessagesController implements NotificationCenterDelegate {
         this.canRevokePmInbox = this.mainPreferences.getBoolean("canRevokePmInbox", this.canRevokePmInbox);
         this.preloadFeaturedStickers = this.mainPreferences.getBoolean("preloadFeaturedStickers", false);
         this.proxyDialogId = this.mainPreferences.getLong("proxy_dialog", 0);
+        this.proxyDialogAddress = this.mainPreferences.getString("proxyDialogAddress", null);
         this.nextTosCheckTime = this.notificationsPreferences.getInt("nextTosCheckTime", 0);
         this.venueSearchBot = this.mainPreferences.getString("venueSearchBot", "foursquare");
         this.gifSearchBot = this.mainPreferences.getString("gifSearchBot", "gif");
@@ -727,6 +730,7 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     final /* synthetic */ void lambda$updateConfig$2$MessagesController(TL_config config) {
+        DownloadController.getInstance(this.currentAccount).loadAutoDownloadConfig(false);
         LocaleController.getInstance().loadRemoteLanguages(this.currentAccount);
         this.maxMegagroupCount = config.megagroup_size_max;
         this.maxGroupCount = config.chat_size_max;
@@ -1081,7 +1085,7 @@ public class MessagesController implements NotificationCenterDelegate {
         DialogsActivity.dialogsLoaded[this.currentAccount] = false;
         this.notificationsPreferences.edit().clear().commit();
         this.emojiPreferences.edit().putLong("lastGifLoadTime", 0).putLong("lastStickersLoadTime", 0).putLong("lastStickersLoadTimeMask", 0).putLong("lastStickersLoadTimeFavs", 0).commit();
-        this.mainPreferences.edit().remove("gifhint").remove("dcDomainName").remove("webFileDatacenterId").commit();
+        this.mainPreferences.edit().remove("gifhint").remove("soundHint").remove("dcDomainName").remove("webFileDatacenterId").commit();
         this.reloadingWebpages.clear();
         this.reloadingWebpagesPending.clear();
         this.dialogs_dict.clear();
@@ -3489,28 +3493,42 @@ public class MessagesController implements NotificationCenterDelegate {
             this.checkingProxyInfo = false;
         }
         if ((reset || this.nextProxyInfoCheckTime <= ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) && !this.checkingProxyInfo) {
+            if (this.checkingProxyInfoRequestId != 0) {
+                ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.checkingProxyInfoRequestId, true);
+                this.checkingProxyInfoRequestId = 0;
+            }
             SharedPreferences preferences = getGlobalMainSettings();
             boolean enabled = preferences.getBoolean("proxy_enabled", false);
             String proxyAddress = preferences.getString("proxy_ip", "");
             String proxySecret = preferences.getString("proxy_secret", "");
+            int removeCurrent = 0;
+            if (!(this.proxyDialogId == 0 || this.proxyDialogAddress == null || this.proxyDialogAddress.equals(proxyAddress + proxySecret))) {
+                removeCurrent = 1;
+            }
             if (!enabled || TextUtils.isEmpty(proxyAddress) || TextUtils.isEmpty(proxySecret)) {
+                removeCurrent = 2;
+            } else {
+                this.checkingProxyInfo = true;
+                this.checkingProxyInfoRequestId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_help_getProxyData(), new MessagesController$$Lambda$64(this, proxyAddress, proxySecret));
+            }
+            if (removeCurrent != 0) {
                 this.proxyDialogId = 0;
-                getGlobalMainSettings().edit().putLong("proxy_dialog", this.proxyDialogId).commit();
+                this.proxyDialogAddress = null;
+                getGlobalMainSettings().edit().putLong("proxy_dialog", this.proxyDialogId).remove("proxyDialogAddress").commit();
                 this.nextProxyInfoCheckTime = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime() + 3600;
-                this.checkingProxyInfo = false;
-                if (this.checkingProxyInfoRequestId != 0) {
-                    ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.checkingProxyInfoRequestId, true);
-                    this.checkingProxyInfoRequestId = 0;
+                if (removeCurrent == 2) {
+                    this.checkingProxyInfo = false;
+                    if (this.checkingProxyInfoRequestId != 0) {
+                        ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.checkingProxyInfoRequestId, true);
+                        this.checkingProxyInfoRequestId = 0;
+                    }
                 }
                 AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$65(this));
-                return;
             }
-            this.checkingProxyInfo = true;
-            this.checkingProxyInfoRequestId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_help_getProxyData(), new MessagesController$$Lambda$64(this));
         }
     }
 
-    final /* synthetic */ void lambda$checkProxyInfoInternal$94$MessagesController(TLObject response, TL_error error) {
+    final /* synthetic */ void lambda$checkProxyInfoInternal$94$MessagesController(String proxyAddress, String proxySecret, TLObject response, TL_error error) {
         if (this.checkingProxyInfoRequestId != 0) {
             boolean noDialog = false;
             if (response instanceof TL_help_proxyDataEmpty) {
@@ -3547,7 +3565,8 @@ public class MessagesController implements NotificationCenterDelegate {
                     }
                 }
                 this.proxyDialogId = did;
-                getGlobalMainSettings().edit().putLong("proxy_dialog", this.proxyDialogId).commit();
+                this.proxyDialogAddress = proxyAddress + proxySecret;
+                getGlobalMainSettings().edit().putLong("proxy_dialog", this.proxyDialogId).putString("proxyDialogAddress", this.proxyDialogAddress).commit();
                 this.nextProxyInfoCheckTime = res.expires;
                 if (!noDialog) {
                     AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$228(this, did, res));
@@ -3558,7 +3577,7 @@ public class MessagesController implements NotificationCenterDelegate {
             }
             if (noDialog) {
                 this.proxyDialogId = 0;
-                getGlobalMainSettings().edit().putLong("proxy_dialog", this.proxyDialogId).commit();
+                getGlobalMainSettings().edit().putLong("proxy_dialog", this.proxyDialogId).remove("proxyDialogAddress").commit();
                 this.checkingProxyInfoRequestId = 0;
                 this.checkingProxyInfo = false;
                 AndroidUtilities.runOnUIThread(new MessagesController$$Lambda$229(this));
@@ -4175,7 +4194,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 objects.add(messageObject);
                 if (isCache) {
                     if (message.media instanceof TL_messageMediaUnsupported) {
-                        if (message.media.bytes != null && (message.media.bytes.length == 0 || (message.media.bytes.length == 1 && message.media.bytes[0] < (byte) 95))) {
+                        if (message.media.bytes != null && (message.media.bytes.length == 0 || (message.media.bytes.length == 1 && message.media.bytes[0] < (byte) 96))) {
                             messagesToReload.add(Integer.valueOf(message.id));
                         }
                     } else if (message.media instanceof TL_messageMediaWebPage) {
@@ -7492,8 +7511,8 @@ public class MessagesController implements NotificationCenterDelegate {
         getChannelDifference(channelId, 0, 0, null);
     }
 
-    public static boolean isSupportId(int id) {
-        return id / 1000 == 777 || id == 333000 || id == 4240000 || id == 4240000 || id == 4244000 || id == 4245000 || id == 4246000 || id == 410000 || id == 420000 || id == 431000 || id == NUM || id == 434000 || id == 4243000 || id == 439000 || id == 449000 || id == 450000 || id == 452000 || id == 454000 || id == 4254000 || id == 455000 || id == 460000 || id == 470000 || id == 479000 || id == 796000 || id == 482000 || id == 490000 || id == 496000 || id == 497000 || id == 498000 || id == 4298000;
+    public static boolean isSupportUser(User user) {
+        return user != null && (user.support || user.id / 1000 == 777 || user.id == 333000 || user.id == 4240000 || user.id == 4240000 || user.id == 4244000 || user.id == 4245000 || user.id == 4246000 || user.id == 410000 || user.id == 420000 || user.id == 431000 || user.id == NUM || user.id == 434000 || user.id == 4243000 || user.id == 439000 || user.id == 449000 || user.id == 450000 || user.id == 452000 || user.id == 454000 || user.id == 4254000 || user.id == 455000 || user.id == 460000 || user.id == 470000 || user.id == 479000 || user.id == 796000 || user.id == 482000 || user.id == 490000 || user.id == 496000 || user.id == 497000 || user.id == 498000 || user.id == 4298000);
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:51:0x0141  */
@@ -14719,7 +14738,11 @@ public class MessagesController implements NotificationCenterDelegate {
                         FileLog.d("call id " + call.id);
                     }
                     if (call instanceof TL_phoneCallRequested) {
-                        if (call.date + (this.callRingTimeout / 1000) >= ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) {
+                        if (call.date + (this.callRingTimeout / 1000) < ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) {
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.d("ignoring too old call");
+                            }
+                        } else if (VERSION.SDK_INT < 21 || NotificationManagerCompat.from(ApplicationLoader.applicationContext).areNotificationsEnabled()) {
                             TelephonyManager tm = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
                             if (svc == null && VoIPService.callIShouldHavePutIntoIntent == null && tm.getCallState() == 0) {
                                 if (BuildVars.LOGS_ENABLED) {
@@ -14751,7 +14774,7 @@ public class MessagesController implements NotificationCenterDelegate {
                                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$160(this));
                             }
                         } else if (BuildVars.LOGS_ENABLED) {
-                            FileLog.d("ignoring too old call");
+                            FileLog.d("Ignoring incoming call because notifications are disabled in system");
                         }
                     } else if (svc != null && call != null) {
                         svc.onCallUpdated(call);

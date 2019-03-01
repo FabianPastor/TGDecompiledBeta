@@ -131,7 +131,7 @@ public class FileRefController {
     public static String getKeyForParentObject(Object parentObject) {
         if (parentObject instanceof MessageObject) {
             MessageObject messageObject = (MessageObject) parentObject;
-            return "message" + messageObject.getId() + "_" + messageObject.getChannelId();
+            return "message" + messageObject.getRealId() + "_" + messageObject.getChannelId();
         } else if (parentObject instanceof Message) {
             Message message = (Message) parentObject;
             return "message" + message.id + "_" + (message.to_id != null ? message.to_id.channel_id : 0);
@@ -268,7 +268,7 @@ public class FileRefController {
         }
         if (parentObject instanceof MessageObject) {
             MessageObject messageObject = (MessageObject) parentObject;
-            if (messageObject.getId() < 0 && messageObject.messageOwner.media.webpage != null) {
+            if (messageObject.getRealId() < 0 && messageObject.messageOwner.media.webpage != null) {
                 parentObject = messageObject.messageOwner.media.webpage;
             }
         }
@@ -328,12 +328,12 @@ public class FileRefController {
             if (channelId != 0) {
                 req = new TL_channels_getMessages();
                 req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(channelId);
-                req.id.add(Integer.valueOf(messageObject.getId()));
+                req.id.add(Integer.valueOf(messageObject.getRealId()));
                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new FileRefController$$Lambda$0(this, locationKey, parentKey));
                 return;
             }
             req2 = new TL_messages_getMessages();
-            req2.id.add(Integer.valueOf(messageObject.getId()));
+            req2.id.add(Integer.valueOf(messageObject.getRealId()));
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, new FileRefController$$Lambda$1(this, locationKey, parentKey));
         } else if (parentObject instanceof TL_wallPaper) {
             TL_wallPaper wallPaper = (TL_wallPaper) parentObject;
@@ -1025,6 +1025,6 @@ public class FileRefController {
     }
 
     public static boolean isFileRefError(String error) {
-        return "FILEREF_EXPIRED".equals(error) || "FILE_REFERENCE_EXPIRED".equals(error) || "FILE_REFERENCE_EMPTY".equals(error);
+        return "FILEREF_EXPIRED".equals(error) || "FILE_REFERENCE_EXPIRED".equals(error) || "FILE_REFERENCE_EMPTY".equals(error) || (error != null && error.startsWith("FILE_REFERENCE_"));
     }
 }

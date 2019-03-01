@@ -457,6 +457,7 @@
     <public type="drawable" name="menu_camera_av" id="NUM" />
     <public type="drawable" name="menu_channel_ny" id="NUM" />
     <public type="drawable" name="menu_chats" id="NUM" />
+    <public type="drawable" name="menu_clearcache" id="NUM" />
     <public type="drawable" name="menu_contacts" id="NUM" />
     <public type="drawable" name="menu_contacts_ny" id="NUM" />
     <public type="drawable" name="menu_copy" id="NUM" />
@@ -468,8 +469,10 @@
     <public type="drawable" name="menu_invite_ny" id="NUM" />
     <public type="drawable" name="menu_language" id="NUM" />
     <public type="drawable" name="menu_newgroup" id="NUM" />
+    <public type="drawable" name="menu_newphone" id="NUM" />
     <public type="drawable" name="menu_notifications" id="NUM" />
     <public type="drawable" name="menu_palette" id="NUM" />
+    <public type="drawable" name="menu_passcode" id="NUM" />
     <public type="drawable" name="menu_read" id="NUM" />
     <public type="drawable" name="menu_saved" id="NUM" />
     <public type="drawable" name="menu_search" id="NUM" />
@@ -479,6 +482,7 @@
     <public type="drawable" name="menu_settings_filled" id="NUM" />
     <public type="drawable" name="menu_settings_ny" id="NUM" />
     <public type="drawable" name="menu_shadow" id="NUM" />
+    <public type="drawable" name="menu_support" id="NUM" />
     <public type="drawable" name="menu_unread" id="NUM" />
     <public type="drawable" name="message_arrow" id="NUM" />
     <public type="drawable" name="mic" id="NUM" />
@@ -680,6 +684,8 @@
     <public type="drawable" name="tool_cropfix" id="NUM" />
     <public type="drawable" name="tool_curve" id="NUM" />
     <public type="drawable" name="tool_rotate" id="NUM" />
+    <public type="drawable" name="tooltip_arrow" id="NUM" />
+    <public type="drawable" name="tooltip_sound" id="NUM" />
     <public type="drawable" name="transparent" id="NUM" />
     <public type="drawable" name="update" id="NUM" />
     <public type="drawable" name="usersearch" id="NUM" />
@@ -697,6 +703,7 @@
     <public type="drawable" name="video_mini_arrow" id="NUM" />
     <public type="drawable" name="video_mini_cancel" id="NUM" />
     <public type="drawable" name="video_mute" id="NUM" />
+    <public type="drawable" name="video_muted" id="NUM" />
     <public type="drawable" name="video_pip" id="NUM" />
     <public type="drawable" name="video_png" id="NUM" />
     <public type="drawable" name="voice2x" id="NUM" />
@@ -950,6 +957,8 @@
     <public type="string" name="AddAnOption" id="NUM" />
     <public type="string" name="AddAnOptionInfo" id="NUM" />
     <public type="string" name="AddAnOptionInfoMax" id="NUM" />
+    <public type="string" name="AddAnotherAccount" id="NUM" />
+    <public type="string" name="AddAnotherAccountInfo" id="NUM" />
     <public type="string" name="AddBannedErrorAdmin" id="NUM" />
     <public type="string" name="AddBotAsAdmin" id="NUM" />
     <public type="string" name="AddCaption" id="NUM" />
@@ -988,6 +997,7 @@
     <public type="string" name="AllowReadCall" id="NUM" />
     <public type="string" name="AllowReadCallAndSms" id="NUM" />
     <public type="string" name="AllowReadSms" id="NUM" />
+    <public type="string" name="AlternativeOptions" id="NUM" />
     <public type="string" name="AlwaysAllow" id="NUM" />
     <public type="string" name="AlwaysAllowPlaceholder" id="NUM" />
     <public type="string" name="AlwaysShareWith" id="NUM" />
@@ -1096,7 +1106,41 @@
     <public type="string" name="AudioUnknownArtist" id="NUM" />
     <public type="string" name="AudioUnknownTitle" id="NUM" />
     <public type="string" name="August" id="NUM" />
+    <public type="string" name="AutoDownloadAudioInfo" id="NUM" />
+    <public type="string" name="AutoDownloadChannels" id="NUM" />
+    <public type="string" name="AutoDownloadContacts" id="NUM" />
+    <public type="string" name="AutoDownloadCustom" id="NUM" />
+    <public type="string" name="AutoDownloadDataUsage" id="NUM" />
+    <public type="string" name="AutoDownloadFiles" id="NUM" />
+    <public type="string" name="AutoDownloadFilesTitle" id="NUM" />
+    <public type="string" name="AutoDownloadGroups" id="NUM" />
+    <public type="string" name="AutoDownloadHigh" id="NUM" />
+    <public type="string" name="AutoDownloadLow" id="NUM" />
+    <public type="string" name="AutoDownloadMaxFileSize" id="NUM" />
+    <public type="string" name="AutoDownloadMaxVideoSize" id="NUM" />
     <public type="string" name="AutoDownloadMedia" id="NUM" />
+    <public type="string" name="AutoDownloadMedium" id="NUM" />
+    <public type="string" name="AutoDownloadOff" id="NUM" />
+    <public type="string" name="AutoDownloadOnAllChats" id="NUM" />
+    <public type="string" name="AutoDownloadOnFor" id="NUM" />
+    <public type="string" name="AutoDownloadOnMobileData" id="NUM" />
+    <public type="string" name="AutoDownloadOnMobileDataInfo" id="NUM" />
+    <public type="string" name="AutoDownloadOnRoamingData" id="NUM" />
+    <public type="string" name="AutoDownloadOnRoamingDataInfo" id="NUM" />
+    <public type="string" name="AutoDownloadOnUpToFor" id="NUM" />
+    <public type="string" name="AutoDownloadOnWiFiData" id="NUM" />
+    <public type="string" name="AutoDownloadOnWiFiDataInfo" id="NUM" />
+    <public type="string" name="AutoDownloadPhotos" id="NUM" />
+    <public type="string" name="AutoDownloadPhotosTitle" id="NUM" />
+    <public type="string" name="AutoDownloadPm" id="NUM" />
+    <public type="string" name="AutoDownloadPreloadMusic" id="NUM" />
+    <public type="string" name="AutoDownloadPreloadMusicInfo" id="NUM" />
+    <public type="string" name="AutoDownloadPreloadVideo" id="NUM" />
+    <public type="string" name="AutoDownloadPreloadVideoInfo" id="NUM" />
+    <public type="string" name="AutoDownloadTypes" id="NUM" />
+    <public type="string" name="AutoDownloadUpToOnAllChats" id="NUM" />
+    <public type="string" name="AutoDownloadVideos" id="NUM" />
+    <public type="string" name="AutoDownloadVideosTitle" id="NUM" />
     <public type="string" name="AutoLock" id="NUM" />
     <public type="string" name="AutoLockDisabled" id="NUM" />
     <public type="string" name="AutoLockInTime" id="NUM" />
@@ -1122,7 +1166,10 @@
     <public type="string" name="AutodownloadSizeLimit" id="NUM" />
     <public type="string" name="AutodownloadSizeLimitUpTo" id="NUM" />
     <public type="string" name="AutomaticMediaDownload" id="NUM" />
-    <public type="string" name="AutoplayGifs" id="NUM" />
+    <public type="string" name="AutoplayGIF" id="NUM" />
+    <public type="string" name="AutoplayMedia" id="NUM" />
+    <public type="string" name="AutoplayVideo" id="NUM" />
+    <public type="string" name="AutoplayVideoInfo" id="NUM" />
     <public type="string" name="Available" id="NUM" />
     <public type="string" name="AwaitingEncryption" id="NUM" />
     <public type="string" name="Back" id="NUM" />
@@ -1220,6 +1267,8 @@
     <public type="string" name="ChangePermissions" id="NUM" />
     <public type="string" name="ChangePhoneHelp" id="NUM" />
     <public type="string" name="ChangePhoneNewNumber" id="NUM" />
+    <public type="string" name="ChangePhoneNumber" id="NUM" />
+    <public type="string" name="ChangePhoneNumberInfo" id="NUM" />
     <public type="string" name="ChangePhoneNumberOccupied" id="NUM" />
     <public type="string" name="ChangePublicLimitReached" id="NUM" />
     <public type="string" name="ChangeRecoveryEmail" id="NUM" />
@@ -1374,6 +1423,8 @@
     <public type="string" name="ChromeCustomTabs" id="NUM" />
     <public type="string" name="ChromeCustomTabsInfo" id="NUM" />
     <public type="string" name="ClearButton" id="NUM" />
+    <public type="string" name="ClearCache" id="NUM" />
+    <public type="string" name="ClearCacheInfo" id="NUM" />
     <public type="string" name="ClearHistory" id="NUM" />
     <public type="string" name="ClearHistoryCache" id="NUM" />
     <public type="string" name="ClearMediaCache" id="NUM" />
@@ -1410,6 +1461,8 @@
     <public type="string" name="ContactJoined" id="NUM" />
     <public type="string" name="ContactNotRegistered" id="NUM" />
     <public type="string" name="ContactShare" id="NUM" />
+    <public type="string" name="ContactSupport" id="NUM" />
+    <public type="string" name="ContactSupportInfo" id="NUM" />
     <public type="string" name="Contacts" id="NUM" />
     <public type="string" name="ContactsPermissionAlert" id="NUM" />
     <public type="string" name="ContactsPermissionAlertContinue" id="NUM" />
@@ -1715,6 +1768,7 @@
     <public type="string" name="FontSize" id="NUM" />
     <public type="string" name="FontSizePreviewLine1" id="NUM" />
     <public type="string" name="FontSizePreviewLine2" id="NUM" />
+    <public type="string" name="FontSizePreviewName" id="NUM" />
     <public type="string" name="FontSizePreviewReply" id="NUM" />
     <public type="string" name="ForgotPassword" id="NUM" />
     <public type="string" name="Forward" id="NUM" />
@@ -1990,6 +2044,8 @@
     <public type="string" name="LocationUpdatedFormatted" id="NUM" />
     <public type="string" name="LocationUpdatedJustNow" id="NUM" />
     <public type="string" name="LogOut" id="NUM" />
+    <public type="string" name="LogOutInfo" id="NUM" />
+    <public type="string" name="LogOutTitle" id="NUM" />
     <public type="string" name="LoginAttempts" id="NUM" />
     <public type="string" name="LoginAttemptsInfo" id="NUM" />
     <public type="string" name="LoginPassword" id="NUM" />
@@ -2074,7 +2130,6 @@
     <public type="string" name="Minutes_other" id="NUM" />
     <public type="string" name="Minutes_two" id="NUM" />
     <public type="string" name="Minutes_zero" id="NUM" />
-    <public type="string" name="MobileUsage" id="NUM" />
     <public type="string" name="Mono" id="NUM" />
     <public type="string" name="Months_few" id="NUM" />
     <public type="string" name="Months_many" id="NUM" />
@@ -2088,7 +2143,11 @@
     <public type="string" name="MuteFor" id="NUM" />
     <public type="string" name="MuteNotifications" id="NUM" />
     <public type="string" name="NearbyPlaces" id="NUM" />
+    <public type="string" name="NetworkUsage" id="NUM" />
+    <public type="string" name="NetworkUsageMobile" id="NUM" />
+    <public type="string" name="NetworkUsageRoaming" id="NUM" />
     <public type="string" name="NetworkUsageSince" id="NUM" />
+    <public type="string" name="NetworkUsageWiFi" id="NUM" />
     <public type="string" name="NeverAllow" id="NUM" />
     <public type="string" name="NeverAllowPlaceholder" id="NUM" />
     <public type="string" name="NeverShareWith" id="NUM" />
@@ -2783,7 +2842,6 @@
     <public type="string" name="RevokeLink" id="NUM" />
     <public type="string" name="RevokeLinkAlert" id="NUM" />
     <public type="string" name="RevokeLinkAlertChannel" id="NUM" />
-    <public type="string" name="RoamingUsage" id="NUM" />
     <public type="string" name="SETTINGS" id="NUM" />
     <public type="string" name="Satellite" id="NUM" />
     <public type="string" name="Saturation" id="NUM" />
@@ -2888,6 +2946,8 @@
     <public type="string" name="SetAsAdmin" id="NUM" />
     <public type="string" name="SetBackground" id="NUM" />
     <public type="string" name="SetColor" id="NUM" />
+    <public type="string" name="SetPasscode" id="NUM" />
+    <public type="string" name="SetPasscodeInfo" id="NUM" />
     <public type="string" name="SetRecoveryEmail" id="NUM" />
     <public type="string" name="SetTimer" id="NUM" />
     <public type="string" name="Settings" id="NUM" />
@@ -2991,6 +3051,7 @@
     <public type="string" name="SuggestStickersInstalled" id="NUM" />
     <public type="string" name="SuggestStickersNone" id="NUM" />
     <public type="string" name="Support" id="NUM" />
+    <public type="string" name="SupportStatus" id="NUM" />
     <public type="string" name="SyncContacts" id="NUM" />
     <public type="string" name="SyncContactsAdded" id="NUM" />
     <public type="string" name="SyncContactsDelete" id="NUM" />
@@ -3107,6 +3168,7 @@
     <public type="string" name="UseLessDataAlways" id="NUM" />
     <public type="string" name="UseLessDataNever" id="NUM" />
     <public type="string" name="UseLessDataOnMobile" id="NUM" />
+    <public type="string" name="UseLessDataOnRoaming" id="NUM" />
     <public type="string" name="UseProxyAddress" id="NUM" />
     <public type="string" name="UseProxyForCalls" id="NUM" />
     <public type="string" name="UseProxyForCallsInfo" id="NUM" />
@@ -3249,7 +3311,6 @@
     <public type="string" name="WhoCanAddMembersAllMembers" id="NUM" />
     <public type="string" name="WhoCanCallMe" id="NUM" />
     <public type="string" name="WhoCanCallMeInfo" id="NUM" />
-    <public type="string" name="WiFiUsage" id="NUM" />
     <public type="string" name="WillUnmuteIn" id="NUM" />
     <public type="string" name="WithinAMonth" id="NUM" />
     <public type="string" name="WithinAWeek" id="NUM" />

@@ -1,25 +1,19 @@
 package org.telegram.ui.Components;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import org.telegram.ui.Components.AlertsCreator.DatePickerDelegate;
+import org.telegram.ui.Components.NumberPicker.OnValueChangeListener;
 
-final /* synthetic */ class AlertsCreator$$Lambda$12 implements OnClickListener {
-    private final boolean arg$1;
+final /* synthetic */ class AlertsCreator$$Lambda$12 implements OnValueChangeListener {
+    private final NumberPicker arg$1;
     private final NumberPicker arg$2;
     private final NumberPicker arg$3;
-    private final NumberPicker arg$4;
-    private final DatePickerDelegate arg$5;
 
-    AlertsCreator$$Lambda$12(boolean z, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, DatePickerDelegate datePickerDelegate) {
-        this.arg$1 = z;
-        this.arg$2 = numberPicker;
-        this.arg$3 = numberPicker2;
-        this.arg$4 = numberPicker3;
-        this.arg$5 = datePickerDelegate;
+    AlertsCreator$$Lambda$12(NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3) {
+        this.arg$1 = numberPicker;
+        this.arg$2 = numberPicker2;
+        this.arg$3 = numberPicker3;
     }
 
-    public void onClick(DialogInterface dialogInterface, int i) {
-        AlertsCreator.lambda$createDatePickerDialog$12$AlertsCreator(this.arg$1, this.arg$2, this.arg$3, this.arg$4, this.arg$5, dialogInterface, i);
+    public void onValueChange(NumberPicker numberPicker, int i, int i2) {
+        AlertsCreator.updateDayPicker(this.arg$1, this.arg$2, this.arg$3);
     }
 }

@@ -62,4 +62,7 @@ public abstract /* synthetic */ class ChatMessageCell$ChatMessageCellDelegate$$C
     public static boolean canPerformActions(ChatMessageCellDelegate this_) {
         return false;
     }
+
+    public static void videoTimerReached(ChatMessageCellDelegate this_) {
+    }
 }

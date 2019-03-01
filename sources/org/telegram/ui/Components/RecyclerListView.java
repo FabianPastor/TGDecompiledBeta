@@ -580,6 +580,7 @@ public class RecyclerListView extends RecyclerView {
                     }
                 }
             });
+            RecyclerListView.this.gestureDetector.setIsLongpressEnabled(false);
         }
 
         public boolean onInterceptTouchEvent(RecyclerView view, MotionEvent event) {
@@ -1015,10 +1016,12 @@ public class RecyclerListView extends RecyclerView {
 
     public void setOnItemLongClickListener(OnItemLongClickListener listener) {
         this.onItemLongClickListener = listener;
+        this.gestureDetector.setIsLongpressEnabled(listener != null);
     }
 
     public void setOnItemLongClickListener(OnItemLongClickListenerExtended listener) {
         this.onItemLongClickListenerExtended = listener;
+        this.gestureDetector.setIsLongpressEnabled(listener != null);
     }
 
     public void setEmptyView(View view) {

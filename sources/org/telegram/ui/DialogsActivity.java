@@ -666,7 +666,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                             } else {
                                 user = (isChat || lower_id <= 0 || high_id == 1) ? null : MessagesController.getInstance(DialogsActivity.this.currentAccount).getUser(Integer.valueOf(lower_id));
                             }
-                            boolean isBot = user != null && user.bot;
+                            boolean isBot = (user == null || !user.bot || MessagesController.isSupportUser(user)) ? false : true;
                             CharSequence[] charSequenceArr = new CharSequence[4];
                             charSequenceArr[0] = dialog.pinned ? LocaleController.getString("UnpinFromTop", R.string.UnpinFromTop) : LocaleController.getString("PinToTop", R.string.PinToTop);
                             charSequenceArr[1] = hasUnread ? LocaleController.getString("MarkAsRead", R.string.MarkAsRead) : LocaleController.getString("MarkAsUnread", R.string.MarkAsUnread);

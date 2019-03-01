@@ -3409,7 +3409,7 @@ public class MessagesStorage {
         this.storageQueue.postRunnable(new MessagesStorage$$Lambda$52(this, chat_id, countDownLatch, force, byChannelUsers));
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x020c A:{ExcHandler: all (r2_53 'th' java.lang.Throwable), Splitter: B:8:0x0052} */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x020c A:{Splitter: B:8:0x0052, ExcHandler: all (r2_53 'th' java.lang.Throwable)} */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Missing block: B:58:0x01a3, code:
             r16 = e;
@@ -6436,19 +6436,13 @@ public class MessagesStorage {
                 state_webpage.step();
             }
             data.reuse();
-            if (downloadMask != 0 && ((message.to_id.channel_id == 0 || message.post) && message.date >= ConnectionsManager.getInstance(this.currentAccount).getCurrentTime() - 3600 && DownloadController.getInstance(this.currentAccount).canDownloadMedia(message) && ((message.media instanceof TL_messageMediaPhoto) || (message.media instanceof TL_messageMediaDocument)))) {
+            if (downloadMask != 0 && ((message.to_id.channel_id == 0 || message.post) && message.date >= ConnectionsManager.getInstance(this.currentAccount).getCurrentTime() - 3600 && DownloadController.getInstance(this.currentAccount).canDownloadMedia(message) == 1 && ((message.media instanceof TL_messageMediaPhoto) || (message.media instanceof TL_messageMediaDocument)))) {
                 type = 0;
                 long id = 0;
                 MessageMedia object = null;
                 if (MessageObject.isVoiceMessage(message)) {
                     id = message.media.document.id;
                     type = 2;
-                    object = new TL_messageMediaDocument();
-                    object.document = message.media.document;
-                    object.flags |= 1;
-                } else if (MessageObject.isRoundVideoMessage(message)) {
-                    id = message.media.document.id;
-                    type = 64;
                     object = new TL_messageMediaDocument();
                     object.document = message.media.document;
                     object.flags |= 1;
@@ -6466,7 +6460,7 @@ public class MessagesStorage {
                         object.photo = message.media.photo;
                         object.flags |= 1;
                     }
-                } else if (MessageObject.isVideoMessage(message)) {
+                } else if (MessageObject.isVideoMessage(message) || MessageObject.isRoundVideoMessage(message)) {
                     id = message.media.document.id;
                     type = 4;
                     object = new TL_messageMediaDocument();
@@ -7459,12 +7453,12 @@ public class MessagesStorage {
             if (message.media instanceof TL_messageMediaUnsupported_old) {
                 if (message.media.bytes.length == 0) {
                     message.media.bytes = new byte[1];
-                    message.media.bytes[0] = (byte) 95;
+                    message.media.bytes[0] = (byte) 96;
                 }
             } else if (message.media instanceof TL_messageMediaUnsupported) {
                 message.media = new TL_messageMediaUnsupported_old();
                 message.media.bytes = new byte[1];
-                message.media.bytes[0] = (byte) 95;
+                message.media.bytes[0] = (byte) 96;
                 message.flags |= 512;
             }
         }

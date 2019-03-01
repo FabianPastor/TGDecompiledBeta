@@ -19,34 +19,45 @@ public class TextCheckBoxCell extends FrameLayout {
     private TextView textView;
 
     public TextCheckBoxCell(Context context) {
+        this(context, false);
+    }
+
+    public TextCheckBoxCell(Context context, boolean dialog) {
         int i;
-        int i2 = 3;
+        int i2;
+        int i3 = 3;
         super(context);
         this.textView = new TextView(context);
-        this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        this.textView.setTextColor(Theme.getColor(dialog ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
-        this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        this.textView.setEllipsize(TruncateAt.END);
-        View view = this.textView;
+        TextView textView = this.textView;
         if (LocaleController.isRTL) {
             i = 5;
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, LocaleController.isRTL ? 66.0f : 21.0f, 0.0f, LocaleController.isRTL ? 21.0f : 66.0f, 0.0f));
-        this.checkBox = new CheckBoxSquare(context, false);
+        textView.setGravity(i | 16);
+        this.textView.setEllipsize(TruncateAt.END);
+        View view = this.textView;
+        if (LocaleController.isRTL) {
+            i2 = 5;
+        } else {
+            i2 = 3;
+        }
+        addView(view, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, LocaleController.isRTL ? 66.0f : 21.0f, 0.0f, LocaleController.isRTL ? 21.0f : 66.0f, 0.0f));
+        this.checkBox = new CheckBoxSquare(context, dialog);
         this.checkBox.setDuplicateParentStateEnabled(false);
         this.checkBox.setFocusable(false);
         this.checkBox.setFocusableInTouchMode(false);
         this.checkBox.setClickable(false);
         view = this.checkBox;
         if (!LocaleController.isRTL) {
-            i2 = 5;
+            i3 = 5;
         }
-        addView(view, LayoutHelper.createFrame(18, 18.0f, i2 | 16, 21.0f, 0.0f, 21.0f, 0.0f));
+        addView(view, LayoutHelper.createFrame(18, 18.0f, i3 | 16, 21.0f, 0.0f, 21.0f, 0.0f));
     }
 
     public void invalidate() {

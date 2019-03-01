@@ -20,6 +20,7 @@ public class SharedConfig {
     public static boolean appLocked;
     public static int autoLockIn = 3600;
     public static boolean autoplayGifs = true;
+    public static boolean autoplayVideo = true;
     public static int badPasscodeTries;
     private static boolean configLoaded;
     public static ProxyInfo currentProxy;
@@ -37,6 +38,7 @@ public class SharedConfig {
     public static long lastUptimeMillis;
     private static final Object localIdSync = new Object();
     public static int mapPreviewType = 2;
+    public static boolean noSoundHintShowed = false;
     public static String passcodeHash = "";
     public static long passcodeRetryInMs;
     public static byte[] passcodeSalt = new byte[0];
@@ -60,6 +62,7 @@ public class SharedConfig {
     public static boolean sortContactsByName;
     public static boolean streamAllVideo = false;
     public static boolean streamMedia = true;
+    public static boolean streamMkv = false;
     public static int suggestStickers;
     private static final Object sync = new Object();
     public static boolean useFingerprint = true;
@@ -181,6 +184,7 @@ public class SharedConfig {
             preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
             saveToGallery = preferences.getBoolean("save_gallery", false);
             autoplayGifs = preferences.getBoolean("autoplay_gif", true);
+            autoplayVideo = preferences.getBoolean("autoplay_video", true);
             mapPreviewType = preferences.getInt("mapPreviewType", 2);
             raiseToSpeak = preferences.getBoolean("raise_to_speak", true);
             customTabs = preferences.getBoolean("custom_tabs", true);
@@ -198,8 +202,10 @@ public class SharedConfig {
             streamMedia = preferences.getBoolean("streamMedia", true);
             saveStreamMedia = preferences.getBoolean("saveStreamMedia", true);
             streamAllVideo = preferences.getBoolean("streamAllVideo", BuildVars.DEBUG_VERSION);
+            streamMkv = preferences.getBoolean("streamMkv", false);
             suggestStickers = preferences.getInt("suggestStickers", 0);
             sortContactsByName = preferences.getBoolean("sortContactsByName", false);
+            noSoundHintShowed = preferences.getBoolean("noSoundHintShowed", false);
             configLoaded = true;
         }
     }
@@ -369,6 +375,13 @@ public class SharedConfig {
         editor.commit();
     }
 
+    public static void toggleAutoplayVideo() {
+        autoplayVideo = !autoplayVideo;
+        Editor editor = MessagesController.getGlobalMainSettings().edit();
+        editor.putBoolean("autoplay_video", autoplayVideo);
+        editor.commit();
+    }
+
     public static boolean isSecretMapPreviewSet() {
         return MessagesController.getGlobalMainSettings().contains("mapPreviewType");
     }
@@ -378,6 +391,15 @@ public class SharedConfig {
         Editor editor = MessagesController.getGlobalMainSettings().edit();
         editor.putInt("mapPreviewType", mapPreviewType);
         editor.commit();
+    }
+
+    public static void setNoSoundHintShowed(boolean value) {
+        if (noSoundHintShowed != value) {
+            noSoundHintShowed = value;
+            Editor editor = MessagesController.getGlobalMainSettings().edit();
+            editor.putBoolean("noSoundHintShowed", noSoundHintShowed);
+            editor.commit();
+        }
     }
 
     public static void toogleRaiseToSpeak() {
@@ -419,6 +441,13 @@ public class SharedConfig {
         streamAllVideo = !streamAllVideo;
         Editor editor = MessagesController.getGlobalMainSettings().edit();
         editor.putBoolean("streamAllVideo", streamAllVideo);
+        editor.commit();
+    }
+
+    public static void toggleStreamMkv() {
+        streamMkv = !streamMkv;
+        Editor editor = MessagesController.getGlobalMainSettings().edit();
+        editor.putBoolean("streamMkv", streamMkv);
         editor.commit();
     }
 

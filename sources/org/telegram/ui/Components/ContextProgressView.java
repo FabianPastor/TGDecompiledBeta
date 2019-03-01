@@ -13,8 +13,10 @@ import org.telegram.ui.ActionBar.Theme;
 public class ContextProgressView extends View {
     private RectF cicleRect = new RectF();
     private int currentColorType;
+    private String innerKey;
     private Paint innerPaint = new Paint(1);
     private long lastUpdateTime;
+    private String outerKey;
     private Paint outerPaint = new Paint(1);
     private int radOffset = 0;
 
@@ -25,21 +27,25 @@ public class ContextProgressView extends View {
         this.outerPaint.setStyle(Style.STROKE);
         this.outerPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
         this.outerPaint.setStrokeCap(Cap.ROUND);
-        this.currentColorType = colorType;
+        if (colorType == 0) {
+            this.innerKey = "contextProgressInner1";
+            this.outerKey = "contextProgressOuter1";
+        } else if (colorType == 1) {
+            this.innerKey = "contextProgressInner2";
+            this.outerKey = "contextProgressOuter2";
+        } else if (colorType == 2) {
+            this.innerKey = "contextProgressInner3";
+            this.outerKey = "contextProgressOuter3";
+        } else if (colorType == 3) {
+            this.innerKey = "contextProgressInner4";
+            this.outerKey = "contextProgressOuter4";
+        }
         updateColors();
     }
 
     public void updateColors() {
-        if (this.currentColorType == 0) {
-            this.innerPaint.setColor(Theme.getColor("contextProgressInner1"));
-            this.outerPaint.setColor(Theme.getColor("contextProgressOuter1"));
-        } else if (this.currentColorType == 1) {
-            this.innerPaint.setColor(Theme.getColor("contextProgressInner2"));
-            this.outerPaint.setColor(Theme.getColor("contextProgressOuter2"));
-        } else if (this.currentColorType == 2) {
-            this.innerPaint.setColor(Theme.getColor("contextProgressInner3"));
-            this.outerPaint.setColor(Theme.getColor("contextProgressOuter3"));
-        }
+        this.innerPaint.setColor(Theme.getColor(this.innerKey));
+        this.outerPaint.setColor(Theme.getColor(this.outerKey));
         invalidate();
     }
 

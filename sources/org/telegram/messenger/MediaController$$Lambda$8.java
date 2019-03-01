@@ -8,6 +8,6 @@ final /* synthetic */ class MediaController$$Lambda$8 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$setCurrentRoundVisible$8$MediaController();
+        this.arg$1.lambda$setCurrentVideoVisible$8$MediaController();
     }
 }

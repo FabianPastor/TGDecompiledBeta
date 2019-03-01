@@ -706,6 +706,10 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
                     public boolean needPlayMessage(MessageObject messageObject) {
                         return ChatMessageCell$ChatMessageCellDelegate$$CC.needPlayMessage(this, messageObject);
                     }
+
+                    public void videoTimerReached() {
+                        ChatMessageCell$ChatMessageCellDelegate$$CC.videoTimerReached(this);
+                    }
                 });
             } else if (viewType == 1) {
                 view = new ChatActionCell(this.mContext);

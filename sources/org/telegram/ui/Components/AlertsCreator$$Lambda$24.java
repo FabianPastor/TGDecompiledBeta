@@ -5,13 +5,15 @@ import android.content.DialogInterface.OnClickListener;
 import org.telegram.messenger.MessagesStorage.IntCallback;
 
 final /* synthetic */ class AlertsCreator$$Lambda$24 implements OnClickListener {
-    private final IntCallback arg$1;
+    private final int[] arg$1;
+    private final IntCallback arg$2;
 
-    AlertsCreator$$Lambda$24(IntCallback intCallback) {
-        this.arg$1 = intCallback;
+    AlertsCreator$$Lambda$24(int[] iArr, IntCallback intCallback) {
+        this.arg$1 = iArr;
+        this.arg$2 = intCallback;
     }
 
     public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$null$88$MessagesStorage(0);
+        AlertsCreator.lambda$createLocationUpdateDialog$27$AlertsCreator(this.arg$1, this.arg$2, dialogInterface, i);
     }
 }

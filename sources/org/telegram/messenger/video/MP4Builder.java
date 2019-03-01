@@ -405,6 +405,9 @@ public class MP4Builder {
         stbl.addBox(stsz);
     }
 
+    protected void createSidx(Track track, SampleTableBox stbl) {
+    }
+
     protected void createStco(Track track, SampleTableBox stbl) {
         ArrayList<Long> chunksOffsets = new ArrayList();
         long lastOffset = -1;
