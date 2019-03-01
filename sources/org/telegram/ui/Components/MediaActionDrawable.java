@@ -379,14 +379,15 @@ public class MediaActionDrawable extends Drawable {
                 d = (((float) AndroidUtilities.dp(7.0f)) * backProgress) * this.scale;
                 alpha = (int) (255.0f * Math.min(1.0f, 2.0f * backProgress));
             } else if (this.nextIcon == 4) {
-                backProgress = 1.0f - this.transitionProgress;
+                progress = this.transitionProgress;
+                backProgress = 1.0f - progress;
                 d = ((float) AndroidUtilities.dp(7.0f)) * this.scale;
                 alpha = (int) (255.0f * backProgress);
                 if (this.currentIcon == 14) {
                     rotation = 0.0f;
                     iconScale = backProgress;
                 } else {
-                    rotation = 45.0f * backProgress;
+                    rotation = 45.0f * progress;
                     iconScale = 1.0f;
                 }
             } else if (this.nextIcon == 14) {

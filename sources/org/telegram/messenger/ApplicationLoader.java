@@ -124,8 +124,14 @@ public class ApplicationLoader extends Application {
     }
 
     public void onCreate() {
+        try {
+            applicationContext = getApplicationContext();
+        } catch (Throwable th) {
+        }
         super.onCreate();
-        applicationContext = getApplicationContext();
+        if (applicationContext == null) {
+            applicationContext = getApplicationContext();
+        }
         NativeLoader.initNativeLibs(applicationContext);
         ConnectionsManager.native_setJava(false);
         ForegroundDetector foregroundDetector = new ForegroundDetector(this);

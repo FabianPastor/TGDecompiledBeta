@@ -1762,7 +1762,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 this.delegate.didAddParticipantToList(user_id, p);
             }
         }
-        removeSelfFromStack();
+        lambda$null$9$ProfileActivity();
     }
 
     private void removeUser(int userId) {

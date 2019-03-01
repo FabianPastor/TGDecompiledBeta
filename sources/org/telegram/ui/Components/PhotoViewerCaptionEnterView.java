@@ -513,7 +513,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     public CharSequence getFieldCharSequence() {
-        return this.messageEditText.getText();
+        return AndroidUtilities.getTrimmedString(this.messageEditText.getText());
     }
 
     public int getEmojiPadding() {

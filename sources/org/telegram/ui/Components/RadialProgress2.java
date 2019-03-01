@@ -151,6 +151,10 @@ public class RadialProgress2 {
         return this.mediaActionDrawable.getCurrentIcon();
     }
 
+    public int getMiniIcon() {
+        return this.miniMediaActionDrawable.getCurrentIcon();
+    }
+
     public void setIcon(int icon, boolean ifSame, boolean animated) {
         if (!ifSame || icon != this.mediaActionDrawable.getCurrentIcon()) {
             this.mediaActionDrawable.setIcon(icon, animated);

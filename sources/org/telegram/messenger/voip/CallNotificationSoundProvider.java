@@ -8,6 +8,7 @@ import android.os.ParcelFileDescriptor;
 import android.os.ParcelFileDescriptor.AutoCloseOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import org.telegram.messenger.ApplicationLoader;
 
 public class CallNotificationSoundProvider extends ContentProvider {
     public boolean onCreate() {
@@ -35,7 +36,11 @@ public class CallNotificationSoundProvider extends ContentProvider {
     }
 
     public ParcelFileDescriptor openFile(Uri uri, String mode) throws FileNotFoundException {
-        if ("r".equals(mode)) {
+        if (!"r".equals(mode)) {
+            throw new SecurityException("Unexpected file mode " + mode);
+        } else if (ApplicationLoader.applicationContext == null) {
+            throw new FileNotFoundException("Unexpected application state");
+        } else {
             VoIPBaseService srv = VoIPBaseService.getSharedInstance();
             if (srv != null) {
                 srv.startRingtoneAndVibration();
@@ -50,6 +55,5 @@ public class CallNotificationSoundProvider extends ContentProvider {
                 throw new FileNotFoundException(x.getMessage());
             }
         }
-        throw new SecurityException("Unexpected file mode " + mode);
     }
 }

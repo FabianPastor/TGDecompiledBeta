@@ -6425,14 +6425,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     View child = this.chatListView.getChildAt(a);
                     if (child instanceof ChatMessageCell) {
                         ChatMessageCell messageCell = (ChatMessageCell) child;
-                        if (messageCell.getMessageObject().isVideo()) {
+                        MessageObject messageObject = messageCell.getMessageObject();
+                        if (messageObject != null && messageObject.isVideo()) {
                             AnimatedFileDrawable animation = messageCell.getPhotoImage().getAnimation();
                             if (animation != null && animation.getCurrentProgressMs() >= 3000 && this.noSoundHintView.showForMessageCell(messageCell)) {
                                 SharedConfig.setNoSoundHintShowed(true);
                                 return;
                             }
                         }
-                        continue;
                     }
                 }
             }
@@ -7956,28 +7956,30 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                 View view = this.chatListView.getChildAt(a);
                 messageObject = null;
                 if (view instanceof ChatMessageCell) {
-                    int viewTop;
                     ChatMessageCell messageCell = (ChatMessageCell) view;
                     int top = messageCell.getTop();
                     int bottom = messageCell.getBottom();
-                    if (top >= 0) {
-                        viewTop = 0;
-                    } else {
-                        viewTop = -top;
-                    }
+                    int viewTop = top >= 0 ? 0 : -top;
                     int viewBottom = messageCell.getMeasuredHeight();
                     if (viewBottom > height) {
                         viewBottom = viewTop + height;
                     }
                     messageCell.setVisiblePart(viewTop, viewBottom - viewTop);
                     messageObject = messageCell.getMessageObject();
-                    if (this.videoPlayerContainer != null && ((messageObject.isRoundVideo() || messageObject.isVideo()) && MediaController.getInstance().isPlayingMessage(messageObject))) {
-                        ImageReceiver imageReceiver = messageCell.getPhotoImage();
-                        this.videoPlayerContainer.setTranslationX(((float) imageReceiver.getImageX()) + messageCell.getX());
-                        this.videoPlayerContainer.setTranslationY((float) ((this.inPreviewMode ? AndroidUtilities.statusBarHeight : 0) + (((this.fragmentView.getPaddingTop() + top) + imageReceiver.getImageY()) - additionalTop)));
-                        this.fragmentView.invalidate();
-                        this.videoPlayerContainer.invalidate();
-                        foundTextureViewMessage = true;
+                    if (this.videoPlayerContainer != null) {
+                        boolean isVideo = messageObject.isVideo() || messageObject.isRoundVideo();
+                        if (isVideo && MediaController.getInstance().isPlayingMessage(messageObject)) {
+                            ImageReceiver imageReceiver = messageCell.getPhotoImage();
+                            if (!isVideo || imageReceiver.getImageY2() + top >= 0) {
+                                this.videoPlayerContainer.setTranslationX(((float) imageReceiver.getImageX()) + messageCell.getX());
+                                this.videoPlayerContainer.setTranslationY((float) ((this.inPreviewMode ? AndroidUtilities.statusBarHeight : 0) + (((this.fragmentView.getPaddingTop() + top) + imageReceiver.getImageY()) - additionalTop)));
+                                this.fragmentView.invalidate();
+                                this.videoPlayerContainer.invalidate();
+                                foundTextureViewMessage = true;
+                            } else {
+                                foundTextureViewMessage = false;
+                            }
+                        }
                     }
                 } else if (view instanceof ChatActionCell) {
                     messageObject = ((ChatActionCell) view).getMessageObject();
@@ -19312,6 +19314,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
 
     public boolean maybePlayVisibleVideo() {
         if (this.chatListView == null) {
+            return false;
+        }
+        MessageObject playingMessage = MediaController.getInstance().getPlayingMessageObject();
+        if (playingMessage != null && !playingMessage.isVideo()) {
             return false;
         }
         ImageReceiver imageReceiver;

@@ -934,11 +934,11 @@ public class ImageReceiver implements NotificationCenterDelegate {
                             if (this.crossfadeImage != null) {
                                 thumbDrawable = this.crossfadeImage;
                                 thumbShaderToUse = this.crossfadeShader;
-                            } else if (this.staticThumbDrawable != null) {
-                                thumbDrawable = this.staticThumbDrawable;
-                                thumbShaderToUse = this.thumbShader;
                             } else if (this.currentThumbDrawable != null) {
                                 thumbDrawable = this.currentThumbDrawable;
+                                thumbShaderToUse = this.thumbShader;
+                            } else if (this.staticThumbDrawable != null) {
+                                thumbDrawable = this.staticThumbDrawable;
                                 thumbShaderToUse = this.thumbShader;
                             }
                         } else if (drawable == this.currentThumbDrawable || drawable == this.crossfadeImage) {

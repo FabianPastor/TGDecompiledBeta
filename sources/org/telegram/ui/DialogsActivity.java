@@ -130,6 +130,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     private AnimatedArrowDrawable arrowDrawable;
     private boolean askAboutContacts = true;
     private boolean cantSendToChannels;
+    private boolean checkCanWrite;
     private boolean checkPermission = true;
     private boolean closeSearchFieldOnHide;
     private ChatActivityEnterView commentView;
@@ -185,6 +186,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             this.selectAlertStringGroup = this.arguments.getString("selectAlertStringGroup");
             this.addToGroupAlertString = this.arguments.getString("addToGroupAlertString");
             this.allowSwitchAccount = this.arguments.getBoolean("allowSwitchAccount");
+            this.checkCanWrite = this.arguments.getBoolean("checkCanWrite", true);
         }
         if (this.dialogsType == 0) {
             this.askAboutContacts = MessagesController.getGlobalNotificationsSettings().getBoolean("askAboutContacts", true);
@@ -606,7 +608,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     }
                 }
                 if (DialogsActivity.this.listView.getAdapter() != DialogsActivity.this.dialogsSearchAdapter) {
-                    ArrayList<TL_dialog> dialogs = DialogsActivity.this.getDialogsArray();
+                    ArrayList<TL_dialog> dialogs = DialogsActivity.getDialogsArray(DialogsActivity.this.dialogsType, DialogsActivity.this.currentAccount);
                     if (position < 0 || position >= dialogs.size()) {
                         return false;
                     }
@@ -902,7 +904,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 int visibleItemCount = Math.abs(DialogsActivity.this.layoutManager.findLastVisibleItemPosition() - firstVisibleItem) + 1;
                 int totalItemCount = recyclerView.getAdapter().getItemCount();
                 if (!DialogsActivity.this.searching || !DialogsActivity.this.searchWas) {
-                    if (visibleItemCount > 0 && DialogsActivity.this.layoutManager.findLastVisibleItemPosition() >= DialogsActivity.this.getDialogsArray().size() - 10) {
+                    if (visibleItemCount > 0 && DialogsActivity.this.layoutManager.findLastVisibleItemPosition() >= DialogsActivity.getDialogsArray(DialogsActivity.this.dialogsType, DialogsActivity.this.currentAccount).size() - 10) {
                         boolean fromCache = !MessagesController.getInstance(DialogsActivity.this.currentAccount).dialogsEndReached;
                         if (fromCache || !MessagesController.getInstance(DialogsActivity.this.currentAccount).serverDialogsEndReached) {
                             MessagesController.getInstance(DialogsActivity.this.currentAccount).loadDialogs(-1, 100, fromCache);
@@ -1657,24 +1659,27 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         }
     }
 
-    private ArrayList<TL_dialog> getDialogsArray() {
-        if (this.dialogsType == 0) {
-            return MessagesController.getInstance(this.currentAccount).dialogs;
+    public static ArrayList<TL_dialog> getDialogsArray(int dialogsType, int currentAccount) {
+        if (dialogsType == 0) {
+            return MessagesController.getInstance(currentAccount).dialogs;
         }
-        if (this.dialogsType == 1) {
-            return MessagesController.getInstance(this.currentAccount).dialogsServerOnly;
+        if (dialogsType == 1) {
+            return MessagesController.getInstance(currentAccount).dialogsServerOnly;
         }
-        if (this.dialogsType == 2) {
-            return MessagesController.getInstance(this.currentAccount).dialogsGroupsOnly;
+        if (dialogsType == 2) {
+            return MessagesController.getInstance(currentAccount).dialogsCanAddUsers;
         }
-        if (this.dialogsType == 3) {
-            return MessagesController.getInstance(this.currentAccount).dialogsForward;
+        if (dialogsType == 3) {
+            return MessagesController.getInstance(currentAccount).dialogsForward;
         }
-        if (this.dialogsType == 4) {
-            return MessagesController.getInstance(this.currentAccount).dialogsUsersOnly;
+        if (dialogsType == 4) {
+            return MessagesController.getInstance(currentAccount).dialogsUsersOnly;
         }
-        if (this.dialogsType == 5) {
-            return MessagesController.getInstance(this.currentAccount).dialogsChannelsOnly;
+        if (dialogsType == 5) {
+            return MessagesController.getInstance(currentAccount).dialogsChannelsOnly;
+        }
+        if (dialogsType == 6) {
+            return MessagesController.getInstance(currentAccount).dialogsGroupsOnly;
         }
         return null;
     }
@@ -1783,7 +1788,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     private void didSelectResult(long dialog_id, boolean useAlert, boolean param) {
         Chat chat;
         AlertDialog.Builder builder;
-        if (this.addToGroupAlertString == null && ((int) dialog_id) < 0) {
+        if (this.addToGroupAlertString == null && this.checkCanWrite && ((int) dialog_id) < 0) {
             chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-((int) dialog_id)));
             if (ChatObject.isChannel(chat) && !chat.megagroup && (this.cantSendToChannels || !ChatObject.isCanWriteToChannel(-((int) dialog_id), this.currentAccount))) {
                 builder = new AlertDialog.Builder(getParentActivity());

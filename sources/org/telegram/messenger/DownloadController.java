@@ -582,18 +582,15 @@ public class DownloadController implements NotificationCenterDelegate {
         int index;
         Preset preset;
         int i = 2;
-        boolean isVideo = false;
-        if (MessageObject.isPhoto(message) || MessageObject.isStickerMessage(message)) {
-            type = 1;
+        boolean isVideo = MessageObject.isVideoMessage(message);
+        if (isVideo || MessageObject.isGifMessage(message) || MessageObject.isRoundVideoMessage(message)) {
+            type = 4;
         } else if (MessageObject.isVoiceMessage(message)) {
             type = 2;
+        } else if (MessageObject.isPhoto(message) || MessageObject.isStickerMessage(message)) {
+            type = 1;
         } else {
-            isVideo = MessageObject.isVideoMessage(message);
-            if (isVideo || MessageObject.isGifMessage(message) || MessageObject.isRoundVideoMessage(message)) {
-                type = 4;
-            } else {
-                type = 8;
-            }
+            type = 8;
         }
         Peer peer = message.to_id;
         if (peer == null) {

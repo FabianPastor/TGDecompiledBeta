@@ -9040,7 +9040,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     L_0x01a7:
         r0 = r55;
         r1 = r62;
-        if (r0 >= r1) goto L_0x0dc8;
+        if (r0 >= r1) goto L_0x0dea;
     L_0x01ad:
         r0 = r117;
         r1 = r55;
@@ -10183,7 +10183,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r0 = r0.parentObject;
         r89 = r0;
     L_0x0a6f:
-        if (r7 == 0) goto L_0x0d90;
+        if (r7 == 0) goto L_0x0db2;
     L_0x0a71:
         r23 = r7;
         r15 = r89;
@@ -10345,164 +10345,164 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     L_0x0b85:
         if (r122 == 0) goto L_0x0b8e;
     L_0x0b87:
-        r5 = r117.size();	 Catch:{ Exception -> 0x0d8a }
+        r5 = r117.size();	 Catch:{ Exception -> 0x0dac }
         r8 = 1;
         if (r5 != r8) goto L_0x0ced;
     L_0x0b8e:
         r0 = r23;
-        r5 = r0.sizes;	 Catch:{ Exception -> 0x0d8a }
-        r8 = org.telegram.messenger.AndroidUtilities.getPhotoSize();	 Catch:{ Exception -> 0x0d8a }
-        r63 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r5, r8);	 Catch:{ Exception -> 0x0d8a }
+        r5 = r0.sizes;	 Catch:{ Exception -> 0x0dac }
+        r8 = org.telegram.messenger.AndroidUtilities.getPhotoSize();	 Catch:{ Exception -> 0x0dac }
+        r63 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r5, r8);	 Catch:{ Exception -> 0x0dac }
         if (r63 == 0) goto L_0x0ced;
     L_0x0b9c:
-        r5 = org.telegram.messenger.AndroidUtilities.isTablet();	 Catch:{ Exception -> 0x0d8a }
+        r5 = org.telegram.messenger.AndroidUtilities.isTablet();	 Catch:{ Exception -> 0x0dac }
         if (r5 == 0) goto L_0x0d3e;
     L_0x0ba2:
-        r5 = org.telegram.messenger.AndroidUtilities.getMinTabletSide();	 Catch:{ Exception -> 0x0d8a }
-        r5 = (float) r5;	 Catch:{ Exception -> 0x0d8a }
+        r5 = org.telegram.messenger.AndroidUtilities.getMinTabletSide();	 Catch:{ Exception -> 0x0dac }
+        r5 = (float) r5;	 Catch:{ Exception -> 0x0dac }
         r8 = NUM; // 0x3var_ float:0.7 double:5.23867711E-315;
         r5 = r5 * r8;
-        r0 = (int) r5;	 Catch:{ Exception -> 0x0d8a }
+        r0 = (int) r5;	 Catch:{ Exception -> 0x0dac }
         r95 = r0;
         r82 = r95;
     L_0x0bb0:
         r5 = NUM; // 0x42CLASSNAME float:100.0 double:5.53552857E-315;
-        r5 = org.telegram.messenger.AndroidUtilities.dp(r5);	 Catch:{ Exception -> 0x0d8a }
+        r5 = org.telegram.messenger.AndroidUtilities.dp(r5);	 Catch:{ Exception -> 0x0dac }
         r92 = r95 + r5;
-        r5 = org.telegram.messenger.AndroidUtilities.getPhotoSize();	 Catch:{ Exception -> 0x0d8a }
+        r5 = org.telegram.messenger.AndroidUtilities.getPhotoSize();	 Catch:{ Exception -> 0x0dac }
         r0 = r95;
         if (r0 <= r5) goto L_0x0bc4;
     L_0x0bc0:
-        r95 = org.telegram.messenger.AndroidUtilities.getPhotoSize();	 Catch:{ Exception -> 0x0d8a }
+        r95 = org.telegram.messenger.AndroidUtilities.getPhotoSize();	 Catch:{ Exception -> 0x0dac }
     L_0x0bc4:
-        r5 = org.telegram.messenger.AndroidUtilities.getPhotoSize();	 Catch:{ Exception -> 0x0d8a }
+        r5 = org.telegram.messenger.AndroidUtilities.getPhotoSize();	 Catch:{ Exception -> 0x0dac }
         r0 = r92;
         if (r0 <= r5) goto L_0x0bd0;
     L_0x0bcc:
-        r92 = org.telegram.messenger.AndroidUtilities.getPhotoSize();	 Catch:{ Exception -> 0x0d8a }
+        r92 = org.telegram.messenger.AndroidUtilities.getPhotoSize();	 Catch:{ Exception -> 0x0dac }
     L_0x0bd0:
         r0 = r63;
-        r5 = r0.w;	 Catch:{ Exception -> 0x0d8a }
-        r5 = (float) r5;	 Catch:{ Exception -> 0x0d8a }
+        r5 = r0.w;	 Catch:{ Exception -> 0x0dac }
+        r5 = (float) r5;	 Catch:{ Exception -> 0x0dac }
         r0 = r95;
-        r8 = (float) r0;	 Catch:{ Exception -> 0x0d8a }
+        r8 = (float) r0;	 Catch:{ Exception -> 0x0dac }
         r97 = r5 / r8;
         r0 = r63;
-        r5 = r0.w;	 Catch:{ Exception -> 0x0d8a }
-        r5 = (float) r5;	 Catch:{ Exception -> 0x0d8a }
+        r5 = r0.w;	 Catch:{ Exception -> 0x0dac }
+        r5 = (float) r5;	 Catch:{ Exception -> 0x0dac }
         r5 = r5 / r97;
-        r0 = (int) r5;	 Catch:{ Exception -> 0x0d8a }
+        r0 = (int) r5;	 Catch:{ Exception -> 0x0dac }
         r113 = r0;
         r0 = r63;
-        r5 = r0.h;	 Catch:{ Exception -> 0x0d8a }
-        r5 = (float) r5;	 Catch:{ Exception -> 0x0d8a }
+        r5 = r0.h;	 Catch:{ Exception -> 0x0dac }
+        r5 = (float) r5;	 Catch:{ Exception -> 0x0dac }
         r5 = r5 / r97;
-        r0 = (int) r5;	 Catch:{ Exception -> 0x0d8a }
+        r0 = (int) r5;	 Catch:{ Exception -> 0x0dac }
         r71 = r0;
         if (r113 != 0) goto L_0x0bf6;
     L_0x0bf0:
         r5 = NUM; // 0x43160000 float:150.0 double:5.56078426E-315;
-        r113 = org.telegram.messenger.AndroidUtilities.dp(r5);	 Catch:{ Exception -> 0x0d8a }
+        r113 = org.telegram.messenger.AndroidUtilities.dp(r5);	 Catch:{ Exception -> 0x0dac }
     L_0x0bf6:
         if (r71 != 0) goto L_0x0bfe;
     L_0x0bf8:
         r5 = NUM; // 0x43160000 float:150.0 double:5.56078426E-315;
-        r71 = org.telegram.messenger.AndroidUtilities.dp(r5);	 Catch:{ Exception -> 0x0d8a }
+        r71 = org.telegram.messenger.AndroidUtilities.dp(r5);	 Catch:{ Exception -> 0x0dac }
     L_0x0bfe:
         r0 = r71;
         r1 = r92;
-        if (r0 <= r1) goto L_0x0d56;
+        if (r0 <= r1) goto L_0x0d78;
     L_0x0CLASSNAME:
         r0 = r71;
-        r0 = (float) r0;	 Catch:{ Exception -> 0x0d8a }
+        r0 = (float) r0;	 Catch:{ Exception -> 0x0dac }
         r98 = r0;
         r71 = r92;
         r0 = r71;
-        r5 = (float) r0;	 Catch:{ Exception -> 0x0d8a }
+        r5 = (float) r0;	 Catch:{ Exception -> 0x0dac }
         r98 = r98 / r5;
         r0 = r113;
-        r5 = (float) r0;	 Catch:{ Exception -> 0x0d8a }
+        r5 = (float) r0;	 Catch:{ Exception -> 0x0dac }
         r5 = r5 / r98;
-        r0 = (int) r5;	 Catch:{ Exception -> 0x0d8a }
+        r0 = (int) r5;	 Catch:{ Exception -> 0x0dac }
         r113 = r0;
     L_0x0CLASSNAME:
         r5 = 0;
-        r8 = java.util.Locale.US;	 Catch:{ Exception -> 0x0d8a }
+        r8 = java.util.Locale.US;	 Catch:{ Exception -> 0x0dac }
         r9 = "%d_%d@%d_%d";
         r10 = 4;
-        r10 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x0d8a }
+        r10 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x0dac }
         r11 = 0;
         r0 = r63;
-        r0 = r0.location;	 Catch:{ Exception -> 0x0d8a }
+        r0 = r0.location;	 Catch:{ Exception -> 0x0dac }
         r16 = r0;
         r0 = r16;
-        r0 = r0.volume_id;	 Catch:{ Exception -> 0x0d8a }
+        r0 = r0.volume_id;	 Catch:{ Exception -> 0x0dac }
         r16 = r0;
-        r16 = java.lang.Long.valueOf(r16);	 Catch:{ Exception -> 0x0d8a }
-        r10[r11] = r16;	 Catch:{ Exception -> 0x0d8a }
+        r16 = java.lang.Long.valueOf(r16);	 Catch:{ Exception -> 0x0dac }
+        r10[r11] = r16;	 Catch:{ Exception -> 0x0dac }
         r11 = 1;
         r0 = r63;
-        r0 = r0.location;	 Catch:{ Exception -> 0x0d8a }
+        r0 = r0.location;	 Catch:{ Exception -> 0x0dac }
         r16 = r0;
         r0 = r16;
-        r0 = r0.local_id;	 Catch:{ Exception -> 0x0d8a }
+        r0 = r0.local_id;	 Catch:{ Exception -> 0x0dac }
         r16 = r0;
-        r16 = java.lang.Integer.valueOf(r16);	 Catch:{ Exception -> 0x0d8a }
-        r10[r11] = r16;	 Catch:{ Exception -> 0x0d8a }
+        r16 = java.lang.Integer.valueOf(r16);	 Catch:{ Exception -> 0x0dac }
+        r10[r11] = r16;	 Catch:{ Exception -> 0x0dac }
         r11 = 2;
         r0 = r113;
-        r0 = (float) r0;	 Catch:{ Exception -> 0x0d8a }
+        r0 = (float) r0;	 Catch:{ Exception -> 0x0dac }
         r16 = r0;
-        r17 = org.telegram.messenger.AndroidUtilities.density;	 Catch:{ Exception -> 0x0d8a }
+        r17 = org.telegram.messenger.AndroidUtilities.density;	 Catch:{ Exception -> 0x0dac }
         r16 = r16 / r17;
         r0 = r16;
-        r0 = (int) r0;	 Catch:{ Exception -> 0x0d8a }
+        r0 = (int) r0;	 Catch:{ Exception -> 0x0dac }
         r16 = r0;
-        r16 = java.lang.Integer.valueOf(r16);	 Catch:{ Exception -> 0x0d8a }
-        r10[r11] = r16;	 Catch:{ Exception -> 0x0d8a }
+        r16 = java.lang.Integer.valueOf(r16);	 Catch:{ Exception -> 0x0dac }
+        r10[r11] = r16;	 Catch:{ Exception -> 0x0dac }
         r11 = 3;
         r0 = r71;
-        r0 = (float) r0;	 Catch:{ Exception -> 0x0d8a }
+        r0 = (float) r0;	 Catch:{ Exception -> 0x0dac }
         r16 = r0;
-        r17 = org.telegram.messenger.AndroidUtilities.density;	 Catch:{ Exception -> 0x0d8a }
+        r17 = org.telegram.messenger.AndroidUtilities.density;	 Catch:{ Exception -> 0x0dac }
         r16 = r16 / r17;
         r0 = r16;
-        r0 = (int) r0;	 Catch:{ Exception -> 0x0d8a }
+        r0 = (int) r0;	 Catch:{ Exception -> 0x0dac }
         r16 = r0;
-        r16 = java.lang.Integer.valueOf(r16);	 Catch:{ Exception -> 0x0d8a }
-        r10[r11] = r16;	 Catch:{ Exception -> 0x0d8a }
-        r8 = java.lang.String.format(r8, r9, r10);	 Catch:{ Exception -> 0x0d8a }
-        r42[r5] = r8;	 Catch:{ Exception -> 0x0d8a }
-        r86 = new android.graphics.BitmapFactory$Options;	 Catch:{ Exception -> 0x0d8a }
-        r86.<init>();	 Catch:{ Exception -> 0x0d8a }
+        r16 = java.lang.Integer.valueOf(r16);	 Catch:{ Exception -> 0x0dac }
+        r10[r11] = r16;	 Catch:{ Exception -> 0x0dac }
+        r8 = java.lang.String.format(r8, r9, r10);	 Catch:{ Exception -> 0x0dac }
+        r42[r5] = r8;	 Catch:{ Exception -> 0x0dac }
+        r86 = new android.graphics.BitmapFactory$Options;	 Catch:{ Exception -> 0x0dac }
+        r86.<init>();	 Catch:{ Exception -> 0x0dac }
         r5 = 1;
         r0 = r86;
-        r0.inJustDecodeBounds = r5;	 Catch:{ Exception -> 0x0d8a }
-        r68 = org.telegram.messenger.FileLoader.getPathToAttach(r63);	 Catch:{ Exception -> 0x0d8a }
-        r76 = new java.io.FileInputStream;	 Catch:{ Exception -> 0x0d8a }
+        r0.inJustDecodeBounds = r5;	 Catch:{ Exception -> 0x0dac }
+        r68 = org.telegram.messenger.FileLoader.getPathToAttach(r63);	 Catch:{ Exception -> 0x0dac }
+        r76 = new java.io.FileInputStream;	 Catch:{ Exception -> 0x0dac }
         r0 = r76;
         r1 = r68;
-        r0.<init>(r1);	 Catch:{ Exception -> 0x0d8a }
+        r0.<init>(r1);	 Catch:{ Exception -> 0x0dac }
         r5 = 0;
         r0 = r76;
         r1 = r86;
-        android.graphics.BitmapFactory.decodeStream(r0, r5, r1);	 Catch:{ Exception -> 0x0d8a }
-        r76.close();	 Catch:{ Exception -> 0x0d8a }
+        android.graphics.BitmapFactory.decodeStream(r0, r5, r1);	 Catch:{ Exception -> 0x0dac }
+        r76.close();	 Catch:{ Exception -> 0x0dac }
         r0 = r86;
-        r5 = r0.outWidth;	 Catch:{ Exception -> 0x0d8a }
-        r0 = (float) r5;	 Catch:{ Exception -> 0x0d8a }
+        r5 = r0.outWidth;	 Catch:{ Exception -> 0x0dac }
+        r0 = (float) r5;	 Catch:{ Exception -> 0x0dac }
         r94 = r0;
         r0 = r86;
-        r5 = r0.outHeight;	 Catch:{ Exception -> 0x0d8a }
-        r0 = (float) r5;	 Catch:{ Exception -> 0x0d8a }
+        r5 = r0.outHeight;	 Catch:{ Exception -> 0x0dac }
+        r0 = (float) r5;	 Catch:{ Exception -> 0x0dac }
         r91 = r0;
         r0 = r113;
-        r5 = (float) r0;	 Catch:{ Exception -> 0x0d8a }
+        r5 = (float) r0;	 Catch:{ Exception -> 0x0dac }
         r5 = r94 / r5;
         r0 = r71;
-        r8 = (float) r0;	 Catch:{ Exception -> 0x0d8a }
+        r8 = (float) r0;	 Catch:{ Exception -> 0x0dac }
         r8 = r91 / r8;
-        r99 = java.lang.Math.max(r5, r8);	 Catch:{ Exception -> 0x0d8a }
+        r99 = java.lang.Math.max(r5, r8);	 Catch:{ Exception -> 0x0dac }
         r5 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r5 = (r99 > r5 ? 1 : (r99 == r5 ? 0 : -1));
         if (r5 >= 0) goto L_0x0cbd;
@@ -10511,29 +10511,29 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     L_0x0cbd:
         r5 = 0;
         r0 = r86;
-        r0.inJustDecodeBounds = r5;	 Catch:{ Exception -> 0x0d8a }
+        r0.inJustDecodeBounds = r5;	 Catch:{ Exception -> 0x0dac }
         r0 = r99;
-        r5 = (int) r0;	 Catch:{ Exception -> 0x0d8a }
+        r5 = (int) r0;	 Catch:{ Exception -> 0x0dac }
         r0 = r86;
-        r0.inSampleSize = r5;	 Catch:{ Exception -> 0x0d8a }
-        r5 = android.graphics.Bitmap.Config.RGB_565;	 Catch:{ Exception -> 0x0d8a }
+        r0.inSampleSize = r5;	 Catch:{ Exception -> 0x0dac }
+        r5 = android.graphics.Bitmap.Config.RGB_565;	 Catch:{ Exception -> 0x0dac }
         r0 = r86;
-        r0.inPreferredConfig = r5;	 Catch:{ Exception -> 0x0d8a }
-        r5 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0d8a }
+        r0.inPreferredConfig = r5;	 Catch:{ Exception -> 0x0dac }
+        r5 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0dac }
         r8 = 21;
         if (r5 < r8) goto L_0x0ced;
     L_0x0cd5:
-        r76 = new java.io.FileInputStream;	 Catch:{ Exception -> 0x0d8a }
+        r76 = new java.io.FileInputStream;	 Catch:{ Exception -> 0x0dac }
         r0 = r76;
         r1 = r68;
-        r0.<init>(r1);	 Catch:{ Exception -> 0x0d8a }
+        r0.<init>(r1);	 Catch:{ Exception -> 0x0dac }
         r5 = 0;
         r8 = 0;
         r0 = r76;
         r1 = r86;
-        r8 = android.graphics.BitmapFactory.decodeStream(r0, r8, r1);	 Catch:{ Exception -> 0x0d8a }
-        r41[r5] = r8;	 Catch:{ Exception -> 0x0d8a }
-        r76.close();	 Catch:{ Exception -> 0x0d8a }
+        r8 = android.graphics.BitmapFactory.decodeStream(r0, r8, r1);	 Catch:{ Exception -> 0x0dac }
+        r41[r5] = r8;	 Catch:{ Exception -> 0x0dac }
+        r76.close();	 Catch:{ Exception -> 0x0dac }
     L_0x0ced:
         if (r122 == 0) goto L_0x0d24;
     L_0x0cef:
@@ -10573,55 +10573,72 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r40);
         goto L_0x03a5;
     L_0x0d3e:
-        r5 = org.telegram.messenger.AndroidUtilities.displaySize;	 Catch:{ Exception -> 0x0d8a }
-        r5 = r5.x;	 Catch:{ Exception -> 0x0d8a }
-        r8 = org.telegram.messenger.AndroidUtilities.displaySize;	 Catch:{ Exception -> 0x0d8a }
-        r8 = r8.y;	 Catch:{ Exception -> 0x0d8a }
-        r5 = java.lang.Math.min(r5, r8);	 Catch:{ Exception -> 0x0d8a }
-        r5 = (float) r5;	 Catch:{ Exception -> 0x0d8a }
+        r0 = r63;
+        r5 = r0.w;	 Catch:{ Exception -> 0x0dac }
+        r0 = r63;
+        r8 = r0.h;	 Catch:{ Exception -> 0x0dac }
+        if (r5 < r8) goto L_0x0d60;
+    L_0x0d48:
+        r5 = org.telegram.messenger.AndroidUtilities.displaySize;	 Catch:{ Exception -> 0x0dac }
+        r5 = r5.x;	 Catch:{ Exception -> 0x0dac }
+        r8 = org.telegram.messenger.AndroidUtilities.displaySize;	 Catch:{ Exception -> 0x0dac }
+        r8 = r8.y;	 Catch:{ Exception -> 0x0dac }
+        r5 = java.lang.Math.min(r5, r8);	 Catch:{ Exception -> 0x0dac }
+        r8 = NUM; // 0x42800000 float:64.0 double:5.51221563E-315;
+        r8 = org.telegram.messenger.AndroidUtilities.dp(r8);	 Catch:{ Exception -> 0x0dac }
+        r95 = r5 - r8;
+        r82 = r95;
+        goto L_0x0bb0;
+    L_0x0d60:
+        r5 = org.telegram.messenger.AndroidUtilities.displaySize;	 Catch:{ Exception -> 0x0dac }
+        r5 = r5.x;	 Catch:{ Exception -> 0x0dac }
+        r8 = org.telegram.messenger.AndroidUtilities.displaySize;	 Catch:{ Exception -> 0x0dac }
+        r8 = r8.y;	 Catch:{ Exception -> 0x0dac }
+        r5 = java.lang.Math.min(r5, r8);	 Catch:{ Exception -> 0x0dac }
+        r5 = (float) r5;	 Catch:{ Exception -> 0x0dac }
         r8 = NUM; // 0x3var_ float:0.7 double:5.23867711E-315;
         r5 = r5 * r8;
-        r0 = (int) r5;	 Catch:{ Exception -> 0x0d8a }
+        r0 = (int) r5;	 Catch:{ Exception -> 0x0dac }
         r95 = r0;
         r82 = r95;
         goto L_0x0bb0;
-    L_0x0d56:
+    L_0x0d78:
         r5 = NUM; // 0x42var_ float:120.0 double:5.548480205E-315;
-        r5 = org.telegram.messenger.AndroidUtilities.dp(r5);	 Catch:{ Exception -> 0x0d8a }
+        r5 = org.telegram.messenger.AndroidUtilities.dp(r5);	 Catch:{ Exception -> 0x0dac }
         r0 = r71;
         if (r0 >= r5) goto L_0x0CLASSNAME;
-    L_0x0d60:
+    L_0x0d82:
         r5 = NUM; // 0x42var_ float:120.0 double:5.548480205E-315;
-        r71 = org.telegram.messenger.AndroidUtilities.dp(r5);	 Catch:{ Exception -> 0x0d8a }
+        r71 = org.telegram.messenger.AndroidUtilities.dp(r5);	 Catch:{ Exception -> 0x0dac }
         r0 = r63;
-        r5 = r0.h;	 Catch:{ Exception -> 0x0d8a }
-        r5 = (float) r5;	 Catch:{ Exception -> 0x0d8a }
+        r5 = r0.h;	 Catch:{ Exception -> 0x0dac }
+        r5 = (float) r5;	 Catch:{ Exception -> 0x0dac }
         r0 = r71;
-        r8 = (float) r0;	 Catch:{ Exception -> 0x0d8a }
+        r8 = (float) r0;	 Catch:{ Exception -> 0x0dac }
         r74 = r5 / r8;
         r0 = r63;
-        r5 = r0.w;	 Catch:{ Exception -> 0x0d8a }
-        r5 = (float) r5;	 Catch:{ Exception -> 0x0d8a }
+        r5 = r0.w;	 Catch:{ Exception -> 0x0dac }
+        r5 = (float) r5;	 Catch:{ Exception -> 0x0dac }
         r5 = r5 / r74;
         r0 = r95;
-        r8 = (float) r0;	 Catch:{ Exception -> 0x0d8a }
+        r8 = (float) r0;	 Catch:{ Exception -> 0x0dac }
         r5 = (r5 > r8 ? 1 : (r5 == r8 ? 0 : -1));
         if (r5 >= 0) goto L_0x0CLASSNAME;
-    L_0x0d7e:
+    L_0x0da0:
         r0 = r63;
-        r5 = r0.w;	 Catch:{ Exception -> 0x0d8a }
+        r5 = r0.w;	 Catch:{ Exception -> 0x0dac }
         r5 = (float) r5;
         r5 = r5 / r74;
         r0 = (int) r5;
         r113 = r0;
         goto L_0x0CLASSNAME;
-    L_0x0d8a:
+    L_0x0dac:
         r64 = move-exception;
         org.telegram.messenger.FileLog.e(r64);
         goto L_0x0ced;
-    L_0x0d90:
-        if (r100 != 0) goto L_0x0da6;
-    L_0x0d92:
+    L_0x0db2:
+        if (r100 != 0) goto L_0x0dc8;
+    L_0x0db4:
         r100 = new java.util.ArrayList;
         r100.<init>();
         r103 = new java.util.ArrayList;
@@ -10630,7 +10647,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r101.<init>();
         r102 = new java.util.ArrayList;
         r102.<init>();
-    L_0x0da6:
+    L_0x0dc8:
         r0 = r100;
         r1 = r109;
         r0.add(r1);
@@ -10646,33 +10663,33 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r0 = r102;
         r0.add(r5);
         goto L_0x03a5;
-    L_0x0dc8:
+    L_0x0dea:
         r8 = 0;
         r5 = (r78 > r8 ? 1 : (r78 == r8 ? 0 : -1));
-        if (r5 == 0) goto L_0x0ddc;
-    L_0x0dce:
+        if (r5 == 0) goto L_0x0dfe;
+    L_0x0df0:
         r80 = r78;
         r5 = new org.telegram.messenger.SendMessagesHelper$$Lambda$28;
         r0 = r120;
         r1 = r80;
         r5.<init>(r0, r1);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r5);
-    L_0x0ddc:
-        if (r125 == 0) goto L_0x0de1;
-    L_0x0dde:
+    L_0x0dfe:
+        if (r125 == 0) goto L_0x0e03;
+    L_0x0e00:
         r125.releasePermission();
-    L_0x0de1:
-        if (r100 == 0) goto L_0x0e2f;
-    L_0x0de3:
+    L_0x0e03:
+        if (r100 == 0) goto L_0x0e51;
+    L_0x0e05:
         r5 = r100.isEmpty();
-        if (r5 != 0) goto L_0x0e2f;
-    L_0x0de9:
+        if (r5 != 0) goto L_0x0e51;
+    L_0x0e0b:
         r55 = 0;
-    L_0x0deb:
+    L_0x0e0d:
         r5 = r100.size();
         r0 = r55;
-        if (r0 >= r5) goto L_0x0e2f;
-    L_0x0df3:
+        if (r0 >= r5) goto L_0x0e51;
+    L_0x0e15:
         r0 = r100;
         r1 = r55;
         r44 = r0.get(r1);
@@ -10698,11 +10715,11 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r54 = r121;
         prepareSendingDocumentInternal(r43, r44, r45, r46, r47, r48, r50, r51, r52, r53, r54);
         r55 = r55 + 1;
-        goto L_0x0deb;
-    L_0x0e2f:
+        goto L_0x0e0d;
+    L_0x0e51:
         r5 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r5 == 0) goto L_0x0e50;
-    L_0x0e33:
+        if (r5 == 0) goto L_0x0e72;
+    L_0x0e55:
         r5 = new java.lang.StringBuilder;
         r5.<init>();
         r8 = "total send time = ";
@@ -10712,7 +10729,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r5 = r5.append(r8);
         r5 = r5.toString();
         org.telegram.messenger.FileLog.d(r5);
-    L_0x0e50:
+    L_0x0e72:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.lambda$prepareSendingMedia$60$SendMessagesHelper(java.util.ArrayList, long, int, boolean, boolean, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, android.support.v13.view.inputmethod.InputContentInfoCompat):void");

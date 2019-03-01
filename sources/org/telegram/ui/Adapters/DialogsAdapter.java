@@ -32,6 +32,7 @@ import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
+import org.telegram.ui.DialogsActivity;
 
 public class DialogsAdapter extends SelectionAdapter {
     private int currentAccount = UserConfig.selectedAccount;
@@ -90,31 +91,9 @@ public class DialogsAdapter extends SelectionAdapter {
         return false;
     }
 
-    private ArrayList<TL_dialog> getDialogsArray() {
-        if (this.dialogsType == 0) {
-            return MessagesController.getInstance(this.currentAccount).dialogs;
-        }
-        if (this.dialogsType == 1) {
-            return MessagesController.getInstance(this.currentAccount).dialogsServerOnly;
-        }
-        if (this.dialogsType == 2) {
-            return MessagesController.getInstance(this.currentAccount).dialogsGroupsOnly;
-        }
-        if (this.dialogsType == 3) {
-            return MessagesController.getInstance(this.currentAccount).dialogsForward;
-        }
-        if (this.dialogsType == 4) {
-            return MessagesController.getInstance(this.currentAccount).dialogsUsersOnly;
-        }
-        if (this.dialogsType == 5) {
-            return MessagesController.getInstance(this.currentAccount).dialogsChannelsOnly;
-        }
-        return null;
-    }
-
     public int getItemCount() {
         this.showContacts = false;
-        int dialogsCount = getDialogsArray().size();
+        int dialogsCount = DialogsActivity.getDialogsArray(this.dialogsType, this.currentAccount).size();
         if (dialogsCount == 0 && MessagesController.getInstance(this.currentAccount).loadingDialogs) {
             return 0;
         }
@@ -145,7 +124,7 @@ public class DialogsAdapter extends SelectionAdapter {
             }
             return MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(((TL_contact) ContactsController.getInstance(this.currentAccount).contacts.get(i)).user_id));
         }
-        ArrayList<TL_dialog> arrayList = getDialogsArray();
+        ArrayList<TL_dialog> arrayList = DialogsActivity.getDialogsArray(this.dialogsType, this.currentAccount);
         if (this.hasHints) {
             int count = MessagesController.getInstance(this.currentAccount).hintDialogs.size();
             if (i < count + 2) {
@@ -308,7 +287,7 @@ public class DialogsAdapter extends SelectionAdapter {
                     return 4;
                 }
             }
-            if (i != getDialogsArray().size()) {
+            if (i != DialogsActivity.getDialogsArray(this.dialogsType, this.currentAccount).size()) {
                 return 0;
             }
             if (MessagesController.getInstance(this.currentAccount).dialogsEndReached) {
