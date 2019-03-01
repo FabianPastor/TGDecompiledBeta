@@ -2069,9 +2069,9 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         return this.currentPlaybackSpeed;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:142:0x04c1 A:{SYNTHETIC, Splitter: B:142:0x04c1} */
+    /* JADX WARNING: Removed duplicated region for block: B:144:0x04c9 A:{SYNTHETIC, Splitter: B:144:0x04c9} */
     /* JADX WARNING: Removed duplicated region for block: B:99:0x0313  */
-    /* JADX WARNING: Removed duplicated region for block: B:153:0x05d8  */
+    /* JADX WARNING: Removed duplicated region for block: B:155:0x05e0  */
     /* JADX WARNING: Removed duplicated region for block: B:106:0x033f  */
     public boolean playMessage(org.telegram.messenger.MessageObject r30) {
         /*
@@ -2338,7 +2338,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         r1 = r29;
         r1.downloadingCurrentMessage = r0;
         r24 = r30.isMusic();
-        if (r24 == 0) goto L_0x0487;
+        if (r24 == 0) goto L_0x048f;
     L_0x01df:
         r0 = r30;
         r0 = r0.currentAccount;
@@ -2366,7 +2366,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         r24 = r30.isRoundVideo();
         if (r24 != 0) goto L_0x0213;
     L_0x0211:
-        if (r17 == 0) goto L_0x05e5;
+        if (r17 == 0) goto L_0x05ed;
     L_0x0213:
         if (r17 == 0) goto L_0x0228;
     L_0x0215:
@@ -2393,24 +2393,24 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         r0 = r24;
         r0 = r0.channel_id;
         r24 = r0;
-        if (r24 != 0) goto L_0x0496;
+        if (r24 != 0) goto L_0x049e;
     L_0x0246:
         r0 = r30;
         r0 = r0.audioProgress;
         r24 = r0;
         r25 = NUM; // 0x3dcccccd float:0.1 double:5.122630465E-315;
         r24 = (r24 > r25 ? 1 : (r24 == r25 ? 0 : -1));
-        if (r24 > 0) goto L_0x0496;
+        if (r24 > 0) goto L_0x049e;
     L_0x0253:
         r8 = 1;
     L_0x0254:
-        if (r17 == 0) goto L_0x0499;
+        if (r17 == 0) goto L_0x04a1;
     L_0x0256:
         r24 = r30.getDuration();
         r25 = 30;
         r0 = r24;
         r1 = r25;
-        if (r0 > r1) goto L_0x0499;
+        if (r0 > r1) goto L_0x04a1;
     L_0x0262:
         r24 = 1;
         r0 = r24;
@@ -2460,29 +2460,29 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         r0 = r24;
         r1 = r26;
         r24 = r0.isDialogVisible(r1);
-        if (r24 != 0) goto L_0x04a8;
+        if (r24 != 0) goto L_0x04b0;
     L_0x02cb:
         r0 = r29;
         r0 = r0.pipRoundVideoView;
         r24 = r0;
         if (r24 != 0) goto L_0x02f6;
     L_0x02d3:
-        r24 = new org.telegram.ui.Components.PipRoundVideoView;	 Catch:{ Exception -> 0x049d }
-        r24.<init>();	 Catch:{ Exception -> 0x049d }
+        r24 = new org.telegram.ui.Components.PipRoundVideoView;	 Catch:{ Exception -> 0x04a5 }
+        r24.<init>();	 Catch:{ Exception -> 0x04a5 }
         r0 = r24;
         r1 = r29;
-        r1.pipRoundVideoView = r0;	 Catch:{ Exception -> 0x049d }
+        r1.pipRoundVideoView = r0;	 Catch:{ Exception -> 0x04a5 }
         r0 = r29;
-        r0 = r0.pipRoundVideoView;	 Catch:{ Exception -> 0x049d }
+        r0 = r0.pipRoundVideoView;	 Catch:{ Exception -> 0x04a5 }
         r24 = r0;
         r0 = r29;
-        r0 = r0.baseActivity;	 Catch:{ Exception -> 0x049d }
+        r0 = r0.baseActivity;	 Catch:{ Exception -> 0x04a5 }
         r25 = r0;
-        r26 = new org.telegram.messenger.MediaController$$Lambda$9;	 Catch:{ Exception -> 0x049d }
+        r26 = new org.telegram.messenger.MediaController$$Lambda$9;	 Catch:{ Exception -> 0x04a5 }
         r0 = r26;
         r1 = r29;
-        r0.<init>(r1);	 Catch:{ Exception -> 0x049d }
-        r24.show(r25, r26);	 Catch:{ Exception -> 0x049d }
+        r0.<init>(r1);	 Catch:{ Exception -> 0x04a5 }
+        r24.show(r25, r26);	 Catch:{ Exception -> 0x04a5 }
     L_0x02f6:
         r0 = r29;
         r0 = r0.pipRoundVideoView;
@@ -2498,7 +2498,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         r25 = r25.getTextureView();
         r24.setTextureView(r25);
     L_0x0311:
-        if (r14 == 0) goto L_0x04c1;
+        if (r14 == 0) goto L_0x04c9;
     L_0x0313:
         r0 = r30;
         r0 = r0.mediaExists;
@@ -2521,7 +2521,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         r24.preparePlayer(r25, r26);
     L_0x0339:
         r24 = r30.isRoundVideo();
-        if (r24 == 0) goto L_0x05d8;
+        if (r24 == 0) goto L_0x05e0;
     L_0x033f:
         r0 = r29;
         r0 = r0.videoPlayer;
@@ -2529,7 +2529,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         r0 = r29;
         r0 = r0.useFrontSpeaker;
         r24 = r0;
-        if (r24 == 0) goto L_0x05d4;
+        if (r24 == 0) goto L_0x05dc;
     L_0x034d:
         r24 = 0;
     L_0x034f:
@@ -2595,79 +2595,79 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         r0 = r29;
         r0 = r0.videoPlayer;
         r24 = r0;
-        if (r24 == 0) goto L_0x088c;
+        if (r24 == 0) goto L_0x0894;
     L_0x03ce:
         r0 = r29;
-        r0 = r0.playingMessageObject;	 Catch:{ Exception -> 0x0837 }
+        r0 = r0.playingMessageObject;	 Catch:{ Exception -> 0x083f }
         r24 = r0;
         r0 = r24;
-        r0 = r0.audioProgress;	 Catch:{ Exception -> 0x0837 }
+        r0 = r0.audioProgress;	 Catch:{ Exception -> 0x083f }
         r24 = r0;
         r25 = 0;
         r24 = (r24 > r25 ? 1 : (r24 == r25 ? 0 : -1));
         if (r24 == 0) goto L_0x0456;
     L_0x03e0:
         r0 = r29;
-        r0 = r0.videoPlayer;	 Catch:{ Exception -> 0x0837 }
+        r0 = r0.videoPlayer;	 Catch:{ Exception -> 0x083f }
         r24 = r0;
-        r10 = r24.getDuration();	 Catch:{ Exception -> 0x0837 }
+        r10 = r24.getDuration();	 Catch:{ Exception -> 0x083f }
         r24 = -NUM; // 0xNUM float:1.4E-45 double:-4.9E-324;
         r24 = (r10 > r24 ? 1 : (r10 == r24 ? 0 : -1));
         if (r24 != 0) goto L_0x0406;
     L_0x03f3:
         r0 = r29;
-        r0 = r0.playingMessageObject;	 Catch:{ Exception -> 0x0837 }
+        r0 = r0.playingMessageObject;	 Catch:{ Exception -> 0x083f }
         r24 = r0;
-        r24 = r24.getDuration();	 Catch:{ Exception -> 0x0837 }
+        r24 = r24.getDuration();	 Catch:{ Exception -> 0x083f }
         r0 = r24;
-        r0 = (long) r0;	 Catch:{ Exception -> 0x0837 }
+        r0 = (long) r0;	 Catch:{ Exception -> 0x083f }
         r24 = r0;
         r26 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
         r10 = r24 * r26;
     L_0x0406:
-        r0 = (float) r10;	 Catch:{ Exception -> 0x0837 }
+        r0 = (float) r10;	 Catch:{ Exception -> 0x083f }
         r24 = r0;
         r0 = r29;
-        r0 = r0.playingMessageObject;	 Catch:{ Exception -> 0x0837 }
+        r0 = r0.playingMessageObject;	 Catch:{ Exception -> 0x083f }
         r25 = r0;
         r0 = r25;
-        r0 = r0.audioProgress;	 Catch:{ Exception -> 0x0837 }
+        r0 = r0.audioProgress;	 Catch:{ Exception -> 0x083f }
         r25 = r0;
         r24 = r24 * r25;
         r0 = r24;
-        r0 = (int) r0;	 Catch:{ Exception -> 0x0837 }
+        r0 = (int) r0;	 Catch:{ Exception -> 0x083f }
         r22 = r0;
         r0 = r29;
-        r0 = r0.playingMessageObject;	 Catch:{ Exception -> 0x0837 }
+        r0 = r0.playingMessageObject;	 Catch:{ Exception -> 0x083f }
         r24 = r0;
         r0 = r24;
-        r0 = r0.audioProgressMs;	 Catch:{ Exception -> 0x0837 }
+        r0 = r0.audioProgressMs;	 Catch:{ Exception -> 0x083f }
         r24 = r0;
         if (r24 == 0) goto L_0x0444;
     L_0x042a:
         r0 = r29;
-        r0 = r0.playingMessageObject;	 Catch:{ Exception -> 0x0837 }
+        r0 = r0.playingMessageObject;	 Catch:{ Exception -> 0x083f }
         r24 = r0;
         r0 = r24;
-        r0 = r0.audioProgressMs;	 Catch:{ Exception -> 0x0837 }
+        r0 = r0.audioProgressMs;	 Catch:{ Exception -> 0x083f }
         r22 = r0;
         r0 = r29;
-        r0 = r0.playingMessageObject;	 Catch:{ Exception -> 0x0837 }
+        r0 = r0.playingMessageObject;	 Catch:{ Exception -> 0x083f }
         r24 = r0;
         r25 = 0;
         r0 = r25;
         r1 = r24;
-        r1.audioProgressMs = r0;	 Catch:{ Exception -> 0x0837 }
+        r1.audioProgressMs = r0;	 Catch:{ Exception -> 0x083f }
     L_0x0444:
         r0 = r29;
-        r0 = r0.videoPlayer;	 Catch:{ Exception -> 0x0837 }
+        r0 = r0.videoPlayer;	 Catch:{ Exception -> 0x083f }
         r24 = r0;
         r0 = r22;
-        r0 = (long) r0;	 Catch:{ Exception -> 0x0837 }
+        r0 = (long) r0;	 Catch:{ Exception -> 0x083f }
         r26 = r0;
         r0 = r24;
         r1 = r26;
-        r0.seekTo(r1);	 Catch:{ Exception -> 0x0837 }
+        r0.seekTo(r1);	 Catch:{ Exception -> 0x083f }
     L_0x0456:
         r0 = r29;
         r0 = r0.videoPlayer;
@@ -2677,9 +2677,14 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         r0 = r29;
         r0 = r0.playingMessageObject;
         r24 = r0;
+        if (r24 == 0) goto L_0x0946;
+    L_0x0467:
+        r0 = r29;
+        r0 = r0.playingMessageObject;
+        r24 = r0;
         r24 = r24.isMusic();
-        if (r24 == 0) goto L_0x093e;
-    L_0x046b:
+        if (r24 == 0) goto L_0x0946;
+    L_0x0473:
         r16 = new android.content.Intent;
         r24 = org.telegram.messenger.ApplicationLoader.applicationContext;
         r25 = org.telegram.messenger.MusicPlayerService.class;
@@ -2687,14 +2692,14 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         r1 = r24;
         r2 = r25;
         r0.<init>(r1, r2);
-        r24 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x0938 }
+        r24 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x0940 }
         r0 = r24;
         r1 = r16;
-        r0.startService(r1);	 Catch:{ Throwable -> 0x0938 }
-    L_0x0483:
+        r0.startService(r1);	 Catch:{ Throwable -> 0x0940 }
+    L_0x048b:
         r24 = 1;
         goto L_0x0004;
-    L_0x0487:
+    L_0x048f:
         r0 = r30;
         r0 = r0.currentAccount;
         r24 = r0;
@@ -2702,25 +2707,25 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         r1 = r24;
         r0.checkIsNextVoiceFileDownloaded(r1);
         goto L_0x01ec;
-    L_0x0496:
+    L_0x049e:
         r8 = 0;
         goto L_0x0254;
-    L_0x0499:
+    L_0x04a1:
         r20 = 0;
         goto L_0x0270;
-    L_0x049d:
+    L_0x04a5:
         r12 = move-exception;
         r24 = 0;
         r0 = r24;
         r1 = r29;
         r1.pipRoundVideoView = r0;
         goto L_0x02f6;
-    L_0x04a8:
+    L_0x04b0:
         r0 = r29;
         r0 = r0.currentTextureView;
         r24 = r0;
         if (r24 == 0) goto L_0x0311;
-    L_0x04b0:
+    L_0x04b8:
         r0 = r29;
         r0 = r0.videoPlayer;
         r24 = r0;
@@ -2729,125 +2734,125 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         r25 = r0;
         r24.setTextureView(r25);
         goto L_0x0311;
-    L_0x04c1:
+    L_0x04c9:
         r0 = r30;
-        r0 = r0.currentAccount;	 Catch:{ Exception -> 0x05c5 }
+        r0 = r0.currentAccount;	 Catch:{ Exception -> 0x05cd }
         r24 = r0;
-        r24 = org.telegram.messenger.FileLoader.getInstance(r24);	 Catch:{ Exception -> 0x05c5 }
+        r24 = org.telegram.messenger.FileLoader.getInstance(r24);	 Catch:{ Exception -> 0x05cd }
         r0 = r24;
         r1 = r30;
-        r21 = r0.getFileReference(r1);	 Catch:{ Exception -> 0x05c5 }
-        r9 = r30.getDocument();	 Catch:{ Exception -> 0x05c5 }
-        r24 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x05c5 }
-        r24.<init>();	 Catch:{ Exception -> 0x05c5 }
+        r21 = r0.getFileReference(r1);	 Catch:{ Exception -> 0x05cd }
+        r9 = r30.getDocument();	 Catch:{ Exception -> 0x05cd }
+        r24 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x05cd }
+        r24.<init>();	 Catch:{ Exception -> 0x05cd }
         r25 = "?account=";
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05c5 }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05cd }
         r0 = r30;
-        r0 = r0.currentAccount;	 Catch:{ Exception -> 0x05c5 }
+        r0 = r0.currentAccount;	 Catch:{ Exception -> 0x05cd }
         r25 = r0;
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05c5 }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05cd }
         r25 = "&id=";
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05c5 }
-        r0 = r9.id;	 Catch:{ Exception -> 0x05c5 }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05cd }
+        r0 = r9.id;	 Catch:{ Exception -> 0x05cd }
         r26 = r0;
         r0 = r24;
         r1 = r26;
-        r24 = r0.append(r1);	 Catch:{ Exception -> 0x05c5 }
+        r24 = r0.append(r1);	 Catch:{ Exception -> 0x05cd }
         r25 = "&hash=";
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05c5 }
-        r0 = r9.access_hash;	 Catch:{ Exception -> 0x05c5 }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05cd }
+        r0 = r9.access_hash;	 Catch:{ Exception -> 0x05cd }
         r26 = r0;
         r0 = r24;
         r1 = r26;
-        r24 = r0.append(r1);	 Catch:{ Exception -> 0x05c5 }
+        r24 = r0.append(r1);	 Catch:{ Exception -> 0x05cd }
         r25 = "&dc=";
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05c5 }
-        r0 = r9.dc_id;	 Catch:{ Exception -> 0x05c5 }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05cd }
+        r0 = r9.dc_id;	 Catch:{ Exception -> 0x05cd }
         r25 = r0;
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05c5 }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05cd }
         r25 = "&size=";
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05c5 }
-        r0 = r9.size;	 Catch:{ Exception -> 0x05c5 }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05cd }
+        r0 = r9.size;	 Catch:{ Exception -> 0x05cd }
         r25 = r0;
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05c5 }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05cd }
         r25 = "&mime=";
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05c5 }
-        r0 = r9.mime_type;	 Catch:{ Exception -> 0x05c5 }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05cd }
+        r0 = r9.mime_type;	 Catch:{ Exception -> 0x05cd }
         r25 = r0;
         r26 = "UTF-8";
-        r25 = java.net.URLEncoder.encode(r25, r26);	 Catch:{ Exception -> 0x05c5 }
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05c5 }
+        r25 = java.net.URLEncoder.encode(r25, r26);	 Catch:{ Exception -> 0x05cd }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05cd }
         r25 = "&rid=";
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05c5 }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05cd }
         r0 = r24;
         r1 = r21;
-        r24 = r0.append(r1);	 Catch:{ Exception -> 0x05c5 }
+        r24 = r0.append(r1);	 Catch:{ Exception -> 0x05cd }
         r25 = "&name=";
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05c5 }
-        r25 = org.telegram.messenger.FileLoader.getDocumentFileName(r9);	 Catch:{ Exception -> 0x05c5 }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05cd }
+        r25 = org.telegram.messenger.FileLoader.getDocumentFileName(r9);	 Catch:{ Exception -> 0x05cd }
         r26 = "UTF-8";
-        r25 = java.net.URLEncoder.encode(r25, r26);	 Catch:{ Exception -> 0x05c5 }
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05c5 }
+        r25 = java.net.URLEncoder.encode(r25, r26);	 Catch:{ Exception -> 0x05cd }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05cd }
         r25 = "&reference=";
-        r25 = r24.append(r25);	 Catch:{ Exception -> 0x05c5 }
-        r0 = r9.file_reference;	 Catch:{ Exception -> 0x05c5 }
+        r25 = r24.append(r25);	 Catch:{ Exception -> 0x05cd }
+        r0 = r9.file_reference;	 Catch:{ Exception -> 0x05cd }
         r24 = r0;
-        if (r24 == 0) goto L_0x05cb;
-    L_0x0579:
-        r0 = r9.file_reference;	 Catch:{ Exception -> 0x05c5 }
+        if (r24 == 0) goto L_0x05d3;
+    L_0x0581:
+        r0 = r9.file_reference;	 Catch:{ Exception -> 0x05cd }
         r24 = r0;
-    L_0x057d:
-        r24 = org.telegram.messenger.Utilities.bytesToHex(r24);	 Catch:{ Exception -> 0x05c5 }
+    L_0x0585:
+        r24 = org.telegram.messenger.Utilities.bytesToHex(r24);	 Catch:{ Exception -> 0x05cd }
         r0 = r25;
         r1 = r24;
-        r24 = r0.append(r1);	 Catch:{ Exception -> 0x05c5 }
-        r19 = r24.toString();	 Catch:{ Exception -> 0x05c5 }
-        r24 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x05c5 }
-        r24.<init>();	 Catch:{ Exception -> 0x05c5 }
+        r24 = r0.append(r1);	 Catch:{ Exception -> 0x05cd }
+        r19 = r24.toString();	 Catch:{ Exception -> 0x05cd }
+        r24 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x05cd }
+        r24.<init>();	 Catch:{ Exception -> 0x05cd }
         r25 = "tg://";
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05c5 }
-        r25 = r30.getFileName();	 Catch:{ Exception -> 0x05c5 }
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05c5 }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05cd }
+        r25 = r30.getFileName();	 Catch:{ Exception -> 0x05cd }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x05cd }
         r0 = r24;
         r1 = r19;
-        r24 = r0.append(r1);	 Catch:{ Exception -> 0x05c5 }
-        r24 = r24.toString();	 Catch:{ Exception -> 0x05c5 }
-        r23 = android.net.Uri.parse(r24);	 Catch:{ Exception -> 0x05c5 }
+        r24 = r0.append(r1);	 Catch:{ Exception -> 0x05cd }
+        r24 = r24.toString();	 Catch:{ Exception -> 0x05cd }
+        r23 = android.net.Uri.parse(r24);	 Catch:{ Exception -> 0x05cd }
         r0 = r29;
-        r0 = r0.videoPlayer;	 Catch:{ Exception -> 0x05c5 }
+        r0 = r0.videoPlayer;	 Catch:{ Exception -> 0x05cd }
         r24 = r0;
         r25 = "other";
         r0 = r24;
         r1 = r23;
         r2 = r25;
-        r0.preparePlayer(r1, r2);	 Catch:{ Exception -> 0x05c5 }
+        r0.preparePlayer(r1, r2);	 Catch:{ Exception -> 0x05cd }
         goto L_0x0339;
-    L_0x05c5:
+    L_0x05cd:
         r12 = move-exception;
         org.telegram.messenger.FileLog.e(r12);
         goto L_0x0339;
-    L_0x05cb:
+    L_0x05d3:
         r24 = 0;
         r0 = r24;
-        r0 = new byte[r0];	 Catch:{ Exception -> 0x05c5 }
+        r0 = new byte[r0];	 Catch:{ Exception -> 0x05cd }
         r24 = r0;
-        goto L_0x057d;
-    L_0x05d4:
+        goto L_0x0585;
+    L_0x05dc:
         r24 = 3;
         goto L_0x034f;
-    L_0x05d8:
+    L_0x05e0:
         r0 = r29;
         r0 = r0.videoPlayer;
         r24 = r0;
         r25 = 3;
         r24.setStreamType(r25);
         goto L_0x0371;
-    L_0x05e5:
+    L_0x05ed:
         r0 = r29;
         r0 = r0.pipRoundVideoView;
         r24 = r0;
-        if (r24 == 0) goto L_0x0600;
-    L_0x05ed:
+        if (r24 == 0) goto L_0x0608;
+    L_0x05f5:
         r0 = r29;
         r0 = r0.pipRoundVideoView;
         r24 = r0;
@@ -2857,93 +2862,93 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         r0 = r24;
         r1 = r29;
         r1.pipRoundVideoView = r0;
-    L_0x0600:
-        r24 = new org.telegram.ui.Components.VideoPlayer;	 Catch:{ Exception -> 0x06a4 }
-        r24.<init>();	 Catch:{ Exception -> 0x06a4 }
+    L_0x0608:
+        r24 = new org.telegram.ui.Components.VideoPlayer;	 Catch:{ Exception -> 0x06ac }
+        r24.<init>();	 Catch:{ Exception -> 0x06ac }
         r0 = r24;
         r1 = r29;
-        r1.audioPlayer = r0;	 Catch:{ Exception -> 0x06a4 }
+        r1.audioPlayer = r0;	 Catch:{ Exception -> 0x06ac }
         r0 = r29;
-        r0 = r0.audioPlayer;	 Catch:{ Exception -> 0x06a4 }
+        r0 = r0.audioPlayer;	 Catch:{ Exception -> 0x06ac }
         r24 = r0;
-        r25 = new org.telegram.messenger.MediaController$6;	 Catch:{ Exception -> 0x06a4 }
+        r25 = new org.telegram.messenger.MediaController$6;	 Catch:{ Exception -> 0x06ac }
         r0 = r25;
         r1 = r29;
         r2 = r30;
-        r0.<init>(r2);	 Catch:{ Exception -> 0x06a4 }
-        r24.setDelegate(r25);	 Catch:{ Exception -> 0x06a4 }
-        if (r14 == 0) goto L_0x0710;
-    L_0x0621:
-        r0 = r30;
-        r0 = r0.mediaExists;	 Catch:{ Exception -> 0x06a4 }
-        r24 = r0;
-        if (r24 != 0) goto L_0x0637;
+        r0.<init>(r2);	 Catch:{ Exception -> 0x06ac }
+        r24.setDelegate(r25);	 Catch:{ Exception -> 0x06ac }
+        if (r14 == 0) goto L_0x0718;
     L_0x0629:
-        if (r6 == r15) goto L_0x0637;
-    L_0x062b:
-        r24 = new org.telegram.messenger.MediaController$$Lambda$11;	 Catch:{ Exception -> 0x06a4 }
+        r0 = r30;
+        r0 = r0.mediaExists;	 Catch:{ Exception -> 0x06ac }
+        r24 = r0;
+        if (r24 != 0) goto L_0x063f;
+    L_0x0631:
+        if (r6 == r15) goto L_0x063f;
+    L_0x0633:
+        r24 = new org.telegram.messenger.MediaController$$Lambda$11;	 Catch:{ Exception -> 0x06ac }
         r0 = r24;
         r1 = r30;
-        r0.<init>(r1);	 Catch:{ Exception -> 0x06a4 }
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r24);	 Catch:{ Exception -> 0x06a4 }
-    L_0x0637:
+        r0.<init>(r1);	 Catch:{ Exception -> 0x06ac }
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r24);	 Catch:{ Exception -> 0x06ac }
+    L_0x063f:
         r0 = r29;
-        r0 = r0.audioPlayer;	 Catch:{ Exception -> 0x06a4 }
+        r0 = r0.audioPlayer;	 Catch:{ Exception -> 0x06ac }
         r24 = r0;
-        r25 = android.net.Uri.fromFile(r6);	 Catch:{ Exception -> 0x06a4 }
+        r25 = android.net.Uri.fromFile(r6);	 Catch:{ Exception -> 0x06ac }
         r26 = "other";
-        r24.preparePlayer(r25, r26);	 Catch:{ Exception -> 0x06a4 }
-    L_0x0647:
-        r24 = r30.isVoice();	 Catch:{ Exception -> 0x06a4 }
-        if (r24 == 0) goto L_0x081d;
-    L_0x064d:
+        r24.preparePlayer(r25, r26);	 Catch:{ Exception -> 0x06ac }
+    L_0x064f:
+        r24 = r30.isVoice();	 Catch:{ Exception -> 0x06ac }
+        if (r24 == 0) goto L_0x0825;
+    L_0x0655:
         r0 = r29;
-        r0 = r0.currentPlaybackSpeed;	 Catch:{ Exception -> 0x06a4 }
+        r0 = r0.currentPlaybackSpeed;	 Catch:{ Exception -> 0x06ac }
         r24 = r0;
         r25 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r24 = (r24 > r25 ? 1 : (r24 == r25 ? 0 : -1));
-        if (r24 <= 0) goto L_0x0668;
-    L_0x0659:
+        if (r24 <= 0) goto L_0x0670;
+    L_0x0661:
         r0 = r29;
-        r0 = r0.audioPlayer;	 Catch:{ Exception -> 0x06a4 }
+        r0 = r0.audioPlayer;	 Catch:{ Exception -> 0x06ac }
         r24 = r0;
         r0 = r29;
-        r0 = r0.currentPlaybackSpeed;	 Catch:{ Exception -> 0x06a4 }
+        r0 = r0.currentPlaybackSpeed;	 Catch:{ Exception -> 0x06ac }
         r25 = r0;
-        r24.setPlaybackSpeed(r25);	 Catch:{ Exception -> 0x06a4 }
-    L_0x0668:
+        r24.setPlaybackSpeed(r25);	 Catch:{ Exception -> 0x06ac }
+    L_0x0670:
         r24 = 0;
         r0 = r24;
         r1 = r29;
-        r1.audioInfo = r0;	 Catch:{ Exception -> 0x06a4 }
+        r1.audioInfo = r0;	 Catch:{ Exception -> 0x06ac }
         r0 = r29;
-        r0 = r0.playlist;	 Catch:{ Exception -> 0x06a4 }
+        r0 = r0.playlist;	 Catch:{ Exception -> 0x06ac }
         r24 = r0;
-        r24.clear();	 Catch:{ Exception -> 0x06a4 }
+        r24.clear();	 Catch:{ Exception -> 0x06ac }
         r0 = r29;
-        r0 = r0.shuffledPlaylist;	 Catch:{ Exception -> 0x06a4 }
+        r0 = r0.shuffledPlaylist;	 Catch:{ Exception -> 0x06ac }
         r24 = r0;
-        r24.clear();	 Catch:{ Exception -> 0x06a4 }
-    L_0x0682:
+        r24.clear();	 Catch:{ Exception -> 0x06ac }
+    L_0x068a:
         r0 = r29;
-        r0 = r0.audioPlayer;	 Catch:{ Exception -> 0x06a4 }
+        r0 = r0.audioPlayer;	 Catch:{ Exception -> 0x06ac }
         r25 = r0;
         r0 = r29;
-        r0 = r0.useFrontSpeaker;	 Catch:{ Exception -> 0x06a4 }
+        r0 = r0.useFrontSpeaker;	 Catch:{ Exception -> 0x06ac }
         r24 = r0;
-        if (r24 == 0) goto L_0x082f;
-    L_0x0690:
+        if (r24 == 0) goto L_0x0837;
+    L_0x0698:
         r24 = 0;
-    L_0x0692:
+    L_0x069a:
         r0 = r25;
         r1 = r24;
-        r0.setStreamType(r1);	 Catch:{ Exception -> 0x06a4 }
+        r0.setStreamType(r1);	 Catch:{ Exception -> 0x06ac }
         r0 = r29;
-        r0 = r0.audioPlayer;	 Catch:{ Exception -> 0x06a4 }
+        r0 = r0.audioPlayer;	 Catch:{ Exception -> 0x06ac }
         r24 = r0;
-        r24.play();	 Catch:{ Exception -> 0x06a4 }
+        r24.play();	 Catch:{ Exception -> 0x06ac }
         goto L_0x0371;
-    L_0x06a4:
+    L_0x06ac:
         r12 = move-exception;
         org.telegram.messenger.FileLog.e(r12);
         r0 = r30;
@@ -2959,21 +2964,21 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         r0 = r29;
         r0 = r0.playingMessageObject;
         r24 = r0;
-        if (r24 == 0) goto L_0x0833;
-    L_0x06c6:
+        if (r24 == 0) goto L_0x083b;
+    L_0x06ce:
         r0 = r29;
         r0 = r0.playingMessageObject;
         r24 = r0;
         r24 = r24.getId();
-    L_0x06d0:
+    L_0x06d8:
         r24 = java.lang.Integer.valueOf(r24);
         r27[r28] = r24;
         r25.postNotificationName(r26, r27);
         r0 = r29;
         r0 = r0.audioPlayer;
         r24 = r0;
-        if (r24 == 0) goto L_0x070c;
-    L_0x06e1:
+        if (r24 == 0) goto L_0x0714;
+    L_0x06e9:
         r0 = r29;
         r0 = r0.audioPlayer;
         r24 = r0;
@@ -2995,125 +3000,125 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         r0 = r24;
         r1 = r29;
         r1.downloadingCurrentMessage = r0;
-    L_0x070c:
+    L_0x0714:
         r24 = 0;
         goto L_0x0004;
-    L_0x0710:
+    L_0x0718:
         r0 = r30;
-        r0 = r0.currentAccount;	 Catch:{ Exception -> 0x06a4 }
+        r0 = r0.currentAccount;	 Catch:{ Exception -> 0x06ac }
         r24 = r0;
-        r24 = org.telegram.messenger.FileLoader.getInstance(r24);	 Catch:{ Exception -> 0x06a4 }
+        r24 = org.telegram.messenger.FileLoader.getInstance(r24);	 Catch:{ Exception -> 0x06ac }
         r0 = r24;
         r1 = r30;
-        r21 = r0.getFileReference(r1);	 Catch:{ Exception -> 0x06a4 }
-        r9 = r30.getDocument();	 Catch:{ Exception -> 0x06a4 }
-        r24 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x06a4 }
-        r24.<init>();	 Catch:{ Exception -> 0x06a4 }
+        r21 = r0.getFileReference(r1);	 Catch:{ Exception -> 0x06ac }
+        r9 = r30.getDocument();	 Catch:{ Exception -> 0x06ac }
+        r24 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x06ac }
+        r24.<init>();	 Catch:{ Exception -> 0x06ac }
         r25 = "?account=";
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06a4 }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06ac }
         r0 = r30;
-        r0 = r0.currentAccount;	 Catch:{ Exception -> 0x06a4 }
+        r0 = r0.currentAccount;	 Catch:{ Exception -> 0x06ac }
         r25 = r0;
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06a4 }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06ac }
         r25 = "&id=";
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06a4 }
-        r0 = r9.id;	 Catch:{ Exception -> 0x06a4 }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06ac }
+        r0 = r9.id;	 Catch:{ Exception -> 0x06ac }
         r26 = r0;
         r0 = r24;
         r1 = r26;
-        r24 = r0.append(r1);	 Catch:{ Exception -> 0x06a4 }
+        r24 = r0.append(r1);	 Catch:{ Exception -> 0x06ac }
         r25 = "&hash=";
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06a4 }
-        r0 = r9.access_hash;	 Catch:{ Exception -> 0x06a4 }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06ac }
+        r0 = r9.access_hash;	 Catch:{ Exception -> 0x06ac }
         r26 = r0;
         r0 = r24;
         r1 = r26;
-        r24 = r0.append(r1);	 Catch:{ Exception -> 0x06a4 }
+        r24 = r0.append(r1);	 Catch:{ Exception -> 0x06ac }
         r25 = "&dc=";
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06a4 }
-        r0 = r9.dc_id;	 Catch:{ Exception -> 0x06a4 }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06ac }
+        r0 = r9.dc_id;	 Catch:{ Exception -> 0x06ac }
         r25 = r0;
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06a4 }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06ac }
         r25 = "&size=";
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06a4 }
-        r0 = r9.size;	 Catch:{ Exception -> 0x06a4 }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06ac }
+        r0 = r9.size;	 Catch:{ Exception -> 0x06ac }
         r25 = r0;
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06a4 }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06ac }
         r25 = "&mime=";
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06a4 }
-        r0 = r9.mime_type;	 Catch:{ Exception -> 0x06a4 }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06ac }
+        r0 = r9.mime_type;	 Catch:{ Exception -> 0x06ac }
         r25 = r0;
         r26 = "UTF-8";
-        r25 = java.net.URLEncoder.encode(r25, r26);	 Catch:{ Exception -> 0x06a4 }
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06a4 }
+        r25 = java.net.URLEncoder.encode(r25, r26);	 Catch:{ Exception -> 0x06ac }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06ac }
         r25 = "&rid=";
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06a4 }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06ac }
         r0 = r24;
         r1 = r21;
-        r24 = r0.append(r1);	 Catch:{ Exception -> 0x06a4 }
+        r24 = r0.append(r1);	 Catch:{ Exception -> 0x06ac }
         r25 = "&name=";
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06a4 }
-        r25 = org.telegram.messenger.FileLoader.getDocumentFileName(r9);	 Catch:{ Exception -> 0x06a4 }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06ac }
+        r25 = org.telegram.messenger.FileLoader.getDocumentFileName(r9);	 Catch:{ Exception -> 0x06ac }
         r26 = "UTF-8";
-        r25 = java.net.URLEncoder.encode(r25, r26);	 Catch:{ Exception -> 0x06a4 }
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06a4 }
+        r25 = java.net.URLEncoder.encode(r25, r26);	 Catch:{ Exception -> 0x06ac }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06ac }
         r25 = "&reference=";
-        r25 = r24.append(r25);	 Catch:{ Exception -> 0x06a4 }
-        r0 = r9.file_reference;	 Catch:{ Exception -> 0x06a4 }
+        r25 = r24.append(r25);	 Catch:{ Exception -> 0x06ac }
+        r0 = r9.file_reference;	 Catch:{ Exception -> 0x06ac }
         r24 = r0;
-        if (r24 == 0) goto L_0x0814;
-    L_0x07c8:
-        r0 = r9.file_reference;	 Catch:{ Exception -> 0x06a4 }
+        if (r24 == 0) goto L_0x081c;
+    L_0x07d0:
+        r0 = r9.file_reference;	 Catch:{ Exception -> 0x06ac }
         r24 = r0;
-    L_0x07cc:
-        r24 = org.telegram.messenger.Utilities.bytesToHex(r24);	 Catch:{ Exception -> 0x06a4 }
+    L_0x07d4:
+        r24 = org.telegram.messenger.Utilities.bytesToHex(r24);	 Catch:{ Exception -> 0x06ac }
         r0 = r25;
         r1 = r24;
-        r24 = r0.append(r1);	 Catch:{ Exception -> 0x06a4 }
-        r19 = r24.toString();	 Catch:{ Exception -> 0x06a4 }
-        r24 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x06a4 }
-        r24.<init>();	 Catch:{ Exception -> 0x06a4 }
+        r24 = r0.append(r1);	 Catch:{ Exception -> 0x06ac }
+        r19 = r24.toString();	 Catch:{ Exception -> 0x06ac }
+        r24 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x06ac }
+        r24.<init>();	 Catch:{ Exception -> 0x06ac }
         r25 = "tg://";
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06a4 }
-        r25 = r30.getFileName();	 Catch:{ Exception -> 0x06a4 }
-        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06a4 }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06ac }
+        r25 = r30.getFileName();	 Catch:{ Exception -> 0x06ac }
+        r24 = r24.append(r25);	 Catch:{ Exception -> 0x06ac }
         r0 = r24;
         r1 = r19;
-        r24 = r0.append(r1);	 Catch:{ Exception -> 0x06a4 }
-        r24 = r24.toString();	 Catch:{ Exception -> 0x06a4 }
-        r23 = android.net.Uri.parse(r24);	 Catch:{ Exception -> 0x06a4 }
+        r24 = r0.append(r1);	 Catch:{ Exception -> 0x06ac }
+        r24 = r24.toString();	 Catch:{ Exception -> 0x06ac }
+        r23 = android.net.Uri.parse(r24);	 Catch:{ Exception -> 0x06ac }
         r0 = r29;
-        r0 = r0.audioPlayer;	 Catch:{ Exception -> 0x06a4 }
+        r0 = r0.audioPlayer;	 Catch:{ Exception -> 0x06ac }
         r24 = r0;
         r25 = "other";
         r0 = r24;
         r1 = r23;
         r2 = r25;
-        r0.preparePlayer(r1, r2);	 Catch:{ Exception -> 0x06a4 }
-        goto L_0x0647;
-    L_0x0814:
+        r0.preparePlayer(r1, r2);	 Catch:{ Exception -> 0x06ac }
+        goto L_0x064f;
+    L_0x081c:
         r24 = 0;
         r0 = r24;
-        r0 = new byte[r0];	 Catch:{ Exception -> 0x06a4 }
+        r0 = new byte[r0];	 Catch:{ Exception -> 0x06ac }
         r24 = r0;
-        goto L_0x07cc;
-    L_0x081d:
-        r24 = org.telegram.messenger.audioinfo.AudioInfo.getAudioInfo(r6);	 Catch:{ Exception -> 0x0829 }
+        goto L_0x07d4;
+    L_0x0825:
+        r24 = org.telegram.messenger.audioinfo.AudioInfo.getAudioInfo(r6);	 Catch:{ Exception -> 0x0831 }
         r0 = r24;
         r1 = r29;
-        r1.audioInfo = r0;	 Catch:{ Exception -> 0x0829 }
-        goto L_0x0682;
-    L_0x0829:
+        r1.audioInfo = r0;	 Catch:{ Exception -> 0x0831 }
+        goto L_0x068a;
+    L_0x0831:
         r12 = move-exception;
-        org.telegram.messenger.FileLog.e(r12);	 Catch:{ Exception -> 0x06a4 }
-        goto L_0x0682;
-    L_0x082f:
-        r24 = 3;
-        goto L_0x0692;
-    L_0x0833:
-        r24 = 0;
-        goto L_0x06d0;
+        org.telegram.messenger.FileLog.e(r12);	 Catch:{ Exception -> 0x06ac }
+        goto L_0x068a;
     L_0x0837:
+        r24 = 3;
+        goto L_0x069a;
+    L_0x083b:
+        r24 = 0;
+        goto L_0x06d8;
+    L_0x083f:
         r13 = move-exception;
         r0 = r29;
         r0 = r0.playingMessageObject;
@@ -3152,63 +3157,63 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         r24.postNotificationName(r25, r26);
         org.telegram.messenger.FileLog.e(r13);
         goto L_0x0456;
-    L_0x088c:
+    L_0x0894:
         r0 = r29;
         r0 = r0.audioPlayer;
         r24 = r0;
         if (r24 == 0) goto L_0x045f;
-    L_0x0894:
+    L_0x089c:
         r0 = r29;
-        r0 = r0.playingMessageObject;	 Catch:{ Exception -> 0x08f6 }
+        r0 = r0.playingMessageObject;	 Catch:{ Exception -> 0x08fe }
         r24 = r0;
         r0 = r24;
-        r0 = r0.audioProgress;	 Catch:{ Exception -> 0x08f6 }
+        r0 = r0.audioProgress;	 Catch:{ Exception -> 0x08fe }
         r24 = r0;
         r25 = 0;
         r24 = (r24 > r25 ? 1 : (r24 == r25 ? 0 : -1));
         if (r24 == 0) goto L_0x045f;
-    L_0x08a6:
+    L_0x08ae:
         r0 = r29;
-        r0 = r0.audioPlayer;	 Catch:{ Exception -> 0x08f6 }
+        r0 = r0.audioPlayer;	 Catch:{ Exception -> 0x08fe }
         r24 = r0;
-        r10 = r24.getDuration();	 Catch:{ Exception -> 0x08f6 }
+        r10 = r24.getDuration();	 Catch:{ Exception -> 0x08fe }
         r24 = -NUM; // 0xNUM float:1.4E-45 double:-4.9E-324;
         r24 = (r10 > r24 ? 1 : (r10 == r24 ? 0 : -1));
-        if (r24 != 0) goto L_0x08cc;
-    L_0x08b9:
+        if (r24 != 0) goto L_0x08d4;
+    L_0x08c1:
         r0 = r29;
-        r0 = r0.playingMessageObject;	 Catch:{ Exception -> 0x08f6 }
+        r0 = r0.playingMessageObject;	 Catch:{ Exception -> 0x08fe }
         r24 = r0;
-        r24 = r24.getDuration();	 Catch:{ Exception -> 0x08f6 }
+        r24 = r24.getDuration();	 Catch:{ Exception -> 0x08fe }
         r0 = r24;
-        r0 = (long) r0;	 Catch:{ Exception -> 0x08f6 }
+        r0 = (long) r0;	 Catch:{ Exception -> 0x08fe }
         r24 = r0;
         r26 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
         r10 = r24 * r26;
-    L_0x08cc:
-        r0 = (float) r10;	 Catch:{ Exception -> 0x08f6 }
+    L_0x08d4:
+        r0 = (float) r10;	 Catch:{ Exception -> 0x08fe }
         r24 = r0;
         r0 = r29;
-        r0 = r0.playingMessageObject;	 Catch:{ Exception -> 0x08f6 }
+        r0 = r0.playingMessageObject;	 Catch:{ Exception -> 0x08fe }
         r25 = r0;
         r0 = r25;
-        r0 = r0.audioProgress;	 Catch:{ Exception -> 0x08f6 }
+        r0 = r0.audioProgress;	 Catch:{ Exception -> 0x08fe }
         r25 = r0;
         r24 = r24 * r25;
         r0 = r24;
-        r0 = (int) r0;	 Catch:{ Exception -> 0x08f6 }
+        r0 = (int) r0;	 Catch:{ Exception -> 0x08fe }
         r22 = r0;
         r0 = r29;
-        r0 = r0.audioPlayer;	 Catch:{ Exception -> 0x08f6 }
+        r0 = r0.audioPlayer;	 Catch:{ Exception -> 0x08fe }
         r24 = r0;
         r0 = r22;
-        r0 = (long) r0;	 Catch:{ Exception -> 0x08f6 }
+        r0 = (long) r0;	 Catch:{ Exception -> 0x08fe }
         r26 = r0;
         r0 = r24;
         r1 = r26;
-        r0.seekTo(r1);	 Catch:{ Exception -> 0x08f6 }
+        r0.seekTo(r1);	 Catch:{ Exception -> 0x08fe }
         goto L_0x045f;
-    L_0x08f6:
+    L_0x08fe:
         r13 = move-exception;
         r0 = r29;
         r0 = r0.playingMessageObject;
@@ -3237,11 +3242,11 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         r24.postNotificationName(r25, r26);
         org.telegram.messenger.FileLog.e(r13);
         goto L_0x045f;
-    L_0x0938:
+    L_0x0940:
         r12 = move-exception;
         org.telegram.messenger.FileLog.e(r12);
-        goto L_0x0483;
-    L_0x093e:
+        goto L_0x048b;
+    L_0x0946:
         r16 = new android.content.Intent;
         r24 = org.telegram.messenger.ApplicationLoader.applicationContext;
         r25 = org.telegram.messenger.MusicPlayerService.class;
@@ -3253,7 +3258,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         r0 = r24;
         r1 = r16;
         r0.stopService(r1);
-        goto L_0x0483;
+        goto L_0x048b;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaController.playMessage(org.telegram.messenger.MessageObject):boolean");
     }
@@ -4953,7 +4958,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:193:0x0528 A:{Splitter: B:126:0x03c1, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:193:0x0528 A:{ExcHandler: all (th java.lang.Throwable), Splitter: B:126:0x03c1} */
     /* JADX WARNING: Removed duplicated region for block: B:68:0x01f4 A:{Catch:{ Exception -> 0x092e, all -> 0x0528 }} */
     /* JADX WARNING: Removed duplicated region for block: B:70:0x01f9 A:{Catch:{ Exception -> 0x092e, all -> 0x0528 }} */
     /* JADX WARNING: Removed duplicated region for block: B:72:0x01fe A:{Catch:{ Exception -> 0x092e, all -> 0x0528 }} */
@@ -4962,7 +4967,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     /* JADX WARNING: Removed duplicated region for block: B:79:0x0216 A:{SYNTHETIC, Splitter: B:79:0x0216} */
     /* JADX WARNING: Removed duplicated region for block: B:385:0x099e  */
     /* JADX WARNING: Removed duplicated region for block: B:83:0x021d  */
-    /* JADX WARNING: Removed duplicated region for block: B:193:0x0528 A:{Splitter: B:126:0x03c1, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:193:0x0528 A:{ExcHandler: all (th java.lang.Throwable), Splitter: B:126:0x03c1} */
     /* JADX WARNING: Removed duplicated region for block: B:68:0x01f4 A:{Catch:{ Exception -> 0x092e, all -> 0x0528 }} */
     /* JADX WARNING: Removed duplicated region for block: B:70:0x01f9 A:{Catch:{ Exception -> 0x092e, all -> 0x0528 }} */
     /* JADX WARNING: Removed duplicated region for block: B:72:0x01fe A:{Catch:{ Exception -> 0x092e, all -> 0x0528 }} */
@@ -4971,7 +4976,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     /* JADX WARNING: Removed duplicated region for block: B:79:0x0216 A:{SYNTHETIC, Splitter: B:79:0x0216} */
     /* JADX WARNING: Removed duplicated region for block: B:83:0x021d  */
     /* JADX WARNING: Removed duplicated region for block: B:385:0x099e  */
-    /* JADX WARNING: Removed duplicated region for block: B:193:0x0528 A:{Splitter: B:126:0x03c1, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:193:0x0528 A:{ExcHandler: all (th java.lang.Throwable), Splitter: B:126:0x03c1} */
     /* JADX WARNING: Missing block: B:94:0x0289, code:
             if (r61.equals("nokia") != false) goto L_0x028b;
      */

@@ -4107,7 +4107,10 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             }
         }
         if (this.aspectRatioFrameLayout != null) {
-            this.containerView.removeView(this.aspectRatioFrameLayout);
+            try {
+                this.containerView.removeView(this.aspectRatioFrameLayout);
+            } catch (Throwable th) {
+            }
             this.aspectRatioFrameLayout = null;
         }
         if (this.videoTextureView != null) {
@@ -7194,6 +7197,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             } catch (Throwable e) {
                 FileLog.e(e);
             }
+            this.captionTextView.setScrollY(0);
             this.captionTextView.setTextColor(-1);
             boolean visible = this.isActionBarVisible && (this.bottomLayout.getVisibility() == 0 || this.pickerView.getVisibility() == 0);
             if (visible) {

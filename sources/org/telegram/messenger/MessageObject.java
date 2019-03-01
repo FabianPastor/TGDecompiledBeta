@@ -69,6 +69,7 @@ import org.telegram.tgnet.TLRPC.TL_chatBannedRights;
 import org.telegram.tgnet.TLRPC.TL_chatPhotoEmpty;
 import org.telegram.tgnet.TLRPC.TL_decryptedMessageActionScreenshotMessages;
 import org.telegram.tgnet.TLRPC.TL_decryptedMessageActionSetMessageTTL;
+import org.telegram.tgnet.TLRPC.TL_document;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeAnimated;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeAudio;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeImageSize;
@@ -4671,9 +4672,10 @@ public class MessageObject {
 
     public static boolean isPhoto(Message message) {
         if (message.media instanceof TL_messageMediaWebPage) {
-            return message.media.webpage.photo instanceof TL_photo;
+            return (message.media.webpage.photo instanceof TL_photo) && !(message.media.webpage.document instanceof TL_document);
+        } else {
+            return message.media instanceof TL_messageMediaPhoto;
         }
-        return message.media instanceof TL_messageMediaPhoto;
     }
 
     public static boolean isVoiceMessage(Message message) {

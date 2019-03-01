@@ -427,7 +427,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
             if (this.isRunning) {
                 if (this.renderingBitmap == null && this.nextRenderingBitmap == null) {
                     scheduleNextGetFrame();
-                } else if (Math.abs(now - this.lastFrameTime) >= ((long) this.invalidateAfter) && this.nextRenderingBitmap != null) {
+                } else if (this.nextRenderingBitmap != null && (this.renderingBitmap == null || Math.abs(now - this.lastFrameTime) >= ((long) this.invalidateAfter))) {
                     this.renderingBitmap = this.nextRenderingBitmap;
                     this.renderingBitmapTime = this.nextRenderingBitmapTime;
                     this.renderingShader = this.nextRenderingShader;

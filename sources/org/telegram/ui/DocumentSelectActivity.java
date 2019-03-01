@@ -618,7 +618,7 @@ public class DocumentSelectActivity extends BaseFragment {
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:70:0x029b  */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x031c A:{Splitter: B:11:0x0094, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x031c A:{ExcHandler: all (th java.lang.Throwable), Splitter: B:11:0x0094} */
     /* JADX WARNING: Removed duplicated region for block: B:64:0x0223 A:{Catch:{ Exception -> 0x033e }} */
     /* JADX WARNING: Removed duplicated region for block: B:70:0x029b  */
     /* JADX WARNING: Removed duplicated region for block: B:70:0x029b  */

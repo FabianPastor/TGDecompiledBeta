@@ -1148,24 +1148,26 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     private void updateUserData() {
         boolean z = true;
         Object user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
-        TLObject photo = null;
-        FileLocation photoBig = null;
-        if (user.photo != null) {
-            photo = user.photo.photo_small;
-            photoBig = user.photo.photo_big;
-        }
-        this.avatarDrawable = new AvatarDrawable((User) user, true);
-        this.avatarDrawable.setColor(Theme.getColor("avatar_backgroundInProfileBlue"));
-        if (this.avatarImage != null) {
-            this.avatarImage.setImage(photo, "50_50", this.avatarDrawable, user);
-            this.avatarImage.getImageReceiver().setVisible(!PhotoViewer.isShowingImage(photoBig), false);
-            this.nameTextView.setText(UserObject.getUserName(user));
-            this.onlineTextView.setText(LocaleController.getString("Online", R.string.Online));
-            ImageReceiver imageReceiver = this.avatarImage.getImageReceiver();
-            if (PhotoViewer.isShowingImage(photoBig)) {
-                z = false;
+        if (user != null) {
+            TLObject photo = null;
+            FileLocation photoBig = null;
+            if (user.photo != null) {
+                photo = user.photo.photo_small;
+                photoBig = user.photo.photo_big;
             }
-            imageReceiver.setVisible(z, false);
+            this.avatarDrawable = new AvatarDrawable((User) user, true);
+            this.avatarDrawable.setColor(Theme.getColor("avatar_backgroundInProfileBlue"));
+            if (this.avatarImage != null) {
+                this.avatarImage.setImage(photo, "50_50", this.avatarDrawable, user);
+                this.avatarImage.getImageReceiver().setVisible(!PhotoViewer.isShowingImage(photoBig), false);
+                this.nameTextView.setText(UserObject.getUserName(user));
+                this.onlineTextView.setText(LocaleController.getString("Online", R.string.Online));
+                ImageReceiver imageReceiver = this.avatarImage.getImageReceiver();
+                if (PhotoViewer.isShowingImage(photoBig)) {
+                    z = false;
+                }
+                imageReceiver.setVisible(z, false);
+            }
         }
     }
 

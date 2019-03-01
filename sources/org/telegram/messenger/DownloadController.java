@@ -581,18 +581,16 @@ public class DownloadController implements NotificationCenterDelegate {
         int type;
         int index;
         Preset preset;
-        boolean isVideo = false;
-        if (MessageObject.isPhoto(message) || MessageObject.isStickerMessage(message)) {
-            type = 1;
+        int i = 2;
+        boolean isVideo = MessageObject.isVideoMessage(message);
+        if (isVideo || MessageObject.isGifMessage(message) || MessageObject.isRoundVideoMessage(message)) {
+            type = 4;
         } else if (MessageObject.isVoiceMessage(message)) {
             type = 2;
+        } else if (MessageObject.isPhoto(message) || MessageObject.isStickerMessage(message)) {
+            type = 1;
         } else {
-            isVideo = MessageObject.isVideoMessage(message);
-            if (isVideo || MessageObject.isGifMessage(message) || MessageObject.isRoundVideoMessage(message)) {
-                type = 4;
-            } else {
-                type = 8;
-            }
+            type = 8;
         }
         Peer peer = message.to_id;
         if (peer == null) {
@@ -634,14 +632,17 @@ public class DownloadController implements NotificationCenterDelegate {
         int mask = preset.mask[index];
         int maxSize = preset.sizes[typeToIndex(type)];
         int size = MessageObject.getMessageSize(message);
-        if (!isVideo || !preset.preloadVideo || size <= maxSize || maxSize <= 2097152) {
-            if ((type == 1 || (size != 0 && size <= maxSize)) && (mask & type) != 0) {
+        if (isVideo && preset.preloadVideo && size > maxSize && maxSize > 2097152) {
+            if ((mask & type) == 0) {
+                i = 0;
+            }
+            return i;
+        } else if (type != 1 && (size == 0 || size > maxSize)) {
+            return 0;
+        } else {
+            if (type == 2 || (mask & type) != 0) {
                 return 1;
             }
-            return 0;
-        } else if ((mask & type) != 0) {
-            return 2;
-        } else {
             return 0;
         }
     }

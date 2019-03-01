@@ -423,6 +423,7 @@ public class MessagesController implements NotificationCenterDelegate {
     public SparseArray<MessageObject> dialogMessagesByIds = new SparseArray();
     public LongSparseArray<MessageObject> dialogMessagesByRandomIds = new LongSparseArray();
     public ArrayList<TL_dialog> dialogs = new ArrayList();
+    public ArrayList<TL_dialog> dialogsCanAddUsers = new ArrayList();
     public ArrayList<TL_dialog> dialogsChannelsOnly = new ArrayList();
     public boolean dialogsEndReached;
     public ArrayList<TL_dialog> dialogsForward = new ArrayList();
@@ -1102,8 +1103,9 @@ public class MessagesController implements NotificationCenterDelegate {
         this.pollsToCheckSize = 0;
         this.dialogsServerOnly.clear();
         this.dialogsForward.clear();
-        this.dialogsGroupsOnly.clear();
+        this.dialogsCanAddUsers.clear();
         this.dialogsChannelsOnly.clear();
+        this.dialogsGroupsOnly.clear();
         this.dialogsUsersOnly.clear();
         this.dialogMessagesByIds.clear();
         this.dialogMessagesByRandomIds.clear();
@@ -2939,8 +2941,9 @@ public class MessagesController implements NotificationCenterDelegate {
                         if (this.dialogsServerOnly.remove(dialog) && DialogObject.isChannel(dialog)) {
                             Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$46(this, did));
                         }
-                        this.dialogsGroupsOnly.remove(dialog);
+                        this.dialogsCanAddUsers.remove(dialog);
                         this.dialogsChannelsOnly.remove(dialog);
+                        this.dialogsGroupsOnly.remove(dialog);
                         this.dialogsUsersOnly.remove(dialog);
                         this.dialogsForward.remove(dialog);
                         this.dialogs_dict.remove(did);
@@ -15219,8 +15222,9 @@ public class MessagesController implements NotificationCenterDelegate {
                 } else if (dialog != null) {
                     this.dialogs.remove(dialog);
                     this.dialogsServerOnly.remove(dialog);
-                    this.dialogsGroupsOnly.remove(dialog);
+                    this.dialogsCanAddUsers.remove(dialog);
                     this.dialogsChannelsOnly.remove(dialog);
+                    this.dialogsGroupsOnly.remove(dialog);
                     this.dialogsUsersOnly.remove(dialog);
                     this.dialogsForward.remove(dialog);
                     this.dialogs_dict.remove(dialog.id);
@@ -15280,8 +15284,9 @@ public class MessagesController implements NotificationCenterDelegate {
     public void sortDialogs(SparseArray<Chat> chatsDict) {
         Chat chat;
         this.dialogsServerOnly.clear();
-        this.dialogsGroupsOnly.clear();
+        this.dialogsCanAddUsers.clear();
         this.dialogsChannelsOnly.clear();
+        this.dialogsGroupsOnly.clear();
         this.dialogsUsersOnly.clear();
         this.dialogsForward.clear();
         this.unreadUnmutedDialogs = 0;
@@ -15311,10 +15316,12 @@ public class MessagesController implements NotificationCenterDelegate {
                 if (DialogObject.isChannel(d)) {
                     chat = getChat(Integer.valueOf(-lower_id));
                     if (chat != null && ((chat.megagroup && chat.admin_rights != null && (chat.admin_rights.post_messages || chat.admin_rights.add_admins)) || chat.creator)) {
-                        this.dialogsGroupsOnly.add(d);
+                        this.dialogsCanAddUsers.add(d);
                     }
                     if (chat == null || !chat.megagroup) {
                         this.dialogsChannelsOnly.add(d);
+                    } else {
+                        this.dialogsGroupsOnly.add(d);
                     }
                 } else if (lower_id < 0) {
                     if (chatsDict != null) {
@@ -15325,6 +15332,7 @@ public class MessagesController implements NotificationCenterDelegate {
                             a++;
                         }
                     }
+                    this.dialogsCanAddUsers.add(d);
                     this.dialogsGroupsOnly.add(d);
                 } else if (lower_id > 0) {
                     this.dialogsUsersOnly.add(d);

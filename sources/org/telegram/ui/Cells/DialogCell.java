@@ -48,6 +48,7 @@ import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.GroupCreateCheckBox;
+import org.telegram.ui.DialogsActivity;
 
 public class DialogCell extends BaseCell {
     private AvatarDrawable avatarDrawable = new AvatarDrawable();
@@ -855,31 +856,9 @@ public class DialogCell extends BaseCell {
         this.isSelected = value;
     }
 
-    private ArrayList<TL_dialog> getDialogsArray() {
-        if (this.dialogsType == 0) {
-            return MessagesController.getInstance(this.currentAccount).dialogs;
-        }
-        if (this.dialogsType == 1) {
-            return MessagesController.getInstance(this.currentAccount).dialogsServerOnly;
-        }
-        if (this.dialogsType == 2) {
-            return MessagesController.getInstance(this.currentAccount).dialogsGroupsOnly;
-        }
-        if (this.dialogsType == 3) {
-            return MessagesController.getInstance(this.currentAccount).dialogsForward;
-        }
-        if (this.dialogsType == 4) {
-            return MessagesController.getInstance(this.currentAccount).dialogsUsersOnly;
-        }
-        if (this.dialogsType == 5) {
-            return MessagesController.getInstance(this.currentAccount).dialogsChannelsOnly;
-        }
-        return null;
-    }
-
     public void checkCurrentDialogIndex() {
-        if (this.index < getDialogsArray().size()) {
-            ArrayList<TL_dialog> dialogsArray = getDialogsArray();
+        ArrayList<TL_dialog> dialogsArray = DialogsActivity.getDialogsArray(this.dialogsType, this.currentAccount);
+        if (this.index < dialogsArray.size()) {
             TL_dialog dialog = (TL_dialog) dialogsArray.get(this.index);
             TL_dialog nextDialog = this.index + 1 < dialogsArray.size() ? (TL_dialog) dialogsArray.get(this.index + 1) : null;
             DraftMessage newDraftMessage = DataQuery.getInstance(this.currentAccount).getDraft(this.currentDialogId);

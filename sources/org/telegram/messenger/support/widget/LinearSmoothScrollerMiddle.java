@@ -92,11 +92,17 @@ public class LinearSmoothScrollerMiddle extends SmoothScroller {
         if (layoutManager == null || !layoutManager.canScrollVertically()) {
             return 0;
         }
+        int start;
         LayoutParams params = (LayoutParams) view.getLayoutParams();
         int top = layoutManager.getDecoratedTop(view) - params.topMargin;
         int bottom = layoutManager.getDecoratedBottom(view) + params.bottomMargin;
+        int boxSize = (layoutManager.getHeight() - layoutManager.getPaddingBottom()) - layoutManager.getPaddingTop();
         int viewSize = bottom - top;
-        int start = (((layoutManager.getHeight() - layoutManager.getPaddingBottom()) - layoutManager.getPaddingTop()) - viewSize) / 2;
+        if (viewSize > boxSize) {
+            start = 0;
+        } else {
+            start = (boxSize - viewSize) / 2;
+        }
         int end = start + viewSize;
         int dtStart = start - top;
         if (dtStart > 0) {

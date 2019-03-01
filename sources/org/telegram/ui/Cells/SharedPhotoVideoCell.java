@@ -23,6 +23,7 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
+import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto;
 import org.telegram.ui.ActionBar.Theme;
@@ -168,9 +169,14 @@ public class SharedPhotoVideoCell extends FrameLayout {
                 int duration = messageObject.getDuration();
                 int seconds = duration - ((duration / 60) * 60);
                 this.videoTextView.setText(String.format("%d:%02d", new Object[]{Integer.valueOf(minutes), Integer.valueOf(seconds)}));
-                PhotoSize thumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.getDocument().thumbs, 90);
+                Document document = messageObject.getDocument();
+                PhotoSize thumb = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 50);
+                PhotoSize qualityThumb = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 320);
+                if (thumb == qualityThumb) {
+                    qualityThumb = null;
+                }
                 if (thumb != null) {
-                    this.imageView.setImage(null, null, ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.photo_placeholder_in), null, thumb, "b", null, 0, messageObject);
+                    this.imageView.setImage(qualityThumb, "100_100", ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.photo_placeholder_in), null, thumb, "b", null, 0, messageObject);
                 } else {
                     this.imageView.setImageResource(R.drawable.photo_placeholder_in);
                 }
@@ -180,7 +186,7 @@ public class SharedPhotoVideoCell extends FrameLayout {
             } else {
                 this.videoInfoContainer.setVisibility(4);
                 PhotoSize currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 320);
-                PhotoSize currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 80);
+                PhotoSize currentPhotoObjectThumb = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 50);
                 if (messageObject.mediaExists || DownloadController.getInstance(SharedPhotoVideoCell.this.currentAccount).canDownloadMedia(messageObject)) {
                     if (currentPhotoObject == currentPhotoObjectThumb) {
                         currentPhotoObjectThumb = null;
