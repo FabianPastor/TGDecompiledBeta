@@ -115,6 +115,9 @@ public class HintView extends FrameLayout {
             }
             measure(MeasureSpec.makeMeasureSpec(1000, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(1000, Integer.MIN_VALUE));
             top += AndroidUtilities.dp(22.0f);
+            if (!messageObject.isOutOwner() && cell.isDrawNameLayout()) {
+                top += AndroidUtilities.dp(20.0f);
+            }
             if (!this.isTopArrow && top <= getMeasuredHeight() + AndroidUtilities.dp(10.0f)) {
                 return false;
             }

@@ -10,6 +10,8 @@
     <string name="AccActionOpenFile">Open file</string>
     <string name="AccActionPause">Pause</string>
     <string name="AccActionPlay">Play</string>
+    <string name="AccActionRecordVideo">Record video</string>
+    <string name="AccActionTakePicture">Take a picture</string>
     <string name="AccDescrAspectRatio">Aspect ratio</string>
     <string name="AccDescrAttachButton">Attach media</string>
     <string name="AccDescrBackspace">Backspace</string>

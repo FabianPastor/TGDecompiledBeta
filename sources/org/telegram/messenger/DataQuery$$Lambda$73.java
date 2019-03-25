@@ -6,18 +6,18 @@ import org.telegram.messenger.DataQuery.KeywordResultCallback;
 
 final /* synthetic */ class DataQuery$$Lambda$73 implements Runnable {
     private final DataQuery arg$1;
-    private final String arg$2;
+    private final String[] arg$2;
     private final KeywordResultCallback arg$3;
     private final String arg$4;
     private final boolean arg$5;
     private final ArrayList arg$6;
     private final CountDownLatch arg$7;
 
-    DataQuery$$Lambda$73(DataQuery dataQuery, String str, KeywordResultCallback keywordResultCallback, String str2, boolean z, ArrayList arrayList, CountDownLatch countDownLatch) {
+    DataQuery$$Lambda$73(DataQuery dataQuery, String[] strArr, KeywordResultCallback keywordResultCallback, String str, boolean z, ArrayList arrayList, CountDownLatch countDownLatch) {
         this.arg$1 = dataQuery;
-        this.arg$2 = str;
+        this.arg$2 = strArr;
         this.arg$3 = keywordResultCallback;
-        this.arg$4 = str2;
+        this.arg$4 = str;
         this.arg$5 = z;
         this.arg$6 = arrayList;
         this.arg$7 = countDownLatch;

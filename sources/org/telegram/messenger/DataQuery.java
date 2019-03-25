@@ -413,7 +413,7 @@ public class DataQuery {
     L_0x0045:
         r2 = org.telegram.messenger.ApplicationLoader.applicationContext;
         r3 = "RemovedFromFavorites";
-        r5 = NUM; // 0x7f0CLASSNAMEe3 float:1.8613287E38 double:1.053098396E-314;
+        r5 = NUM; // 0x7f0CLASSNAMEe5 float:1.8613291E38 double:1.053098397E-314;
         r3 = org.telegram.messenger.LocaleController.getString(r3, r5);
         r5 = 0;
         r2 = android.widget.Toast.makeText(r2, r3, r5);
@@ -512,7 +512,7 @@ public class DataQuery {
     L_0x0102:
         r2 = org.telegram.messenger.ApplicationLoader.applicationContext;
         r3 = "AddedToFavorites";
-        r5 = NUM; // 0x7f0CLASSNAMEb6 float:1.8609561E38 double:1.0530974884E-314;
+        r5 = NUM; // 0x7f0CLASSNAMEb8 float:1.8609565E38 double:1.0530974894E-314;
         r3 = org.telegram.messenger.LocaleController.getString(r3, r5);
         r5 = 0;
         r2 = android.widget.Toast.makeText(r2, r3, r5);
@@ -3064,11 +3064,11 @@ public class DataQuery {
         r31 = "compose";
         r29.<init>(r30, r31);	 Catch:{ Throwable -> 0x01db }
         r30 = "NewConversationShortcut";
-        r31 = NUM; // 0x7f0CLASSNAME float:1.8611995E38 double:1.0530980813E-314;
+        r31 = NUM; // 0x7f0CLASSNAME float:1.8612E38 double:1.053098082E-314;
         r30 = org.telegram.messenger.LocaleController.getString(r30, r31);	 Catch:{ Throwable -> 0x01db }
         r29 = r29.setShortLabel(r30);	 Catch:{ Throwable -> 0x01db }
         r30 = "NewConversationShortcut";
-        r31 = NUM; // 0x7f0CLASSNAME float:1.8611995E38 double:1.0530980813E-314;
+        r31 = NUM; // 0x7f0CLASSNAME float:1.8612E38 double:1.053098082E-314;
         r30 = org.telegram.messenger.LocaleController.getString(r30, r31);	 Catch:{ Throwable -> 0x01db }
         r29 = r29.setLongLabel(r30);	 Catch:{ Throwable -> 0x01db }
         r30 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x01db }
@@ -5131,10 +5131,19 @@ public class DataQuery {
         }
     }
 
-    public void fetchNewEmojiKeywords(String langCode) {
-        if (!TextUtils.isEmpty(langCode) && this.currentFetchingEmoji.get(langCode) == null) {
-            this.currentFetchingEmoji.put(langCode, Boolean.valueOf(true));
-            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$71(this, langCode));
+    public void fetchNewEmojiKeywords(String[] langCodes) {
+        if (langCodes != null) {
+            int a = 0;
+            while (a < langCodes.length) {
+                String langCode = langCodes[a];
+                if (!TextUtils.isEmpty(langCode) && this.currentFetchingEmoji.get(langCode) == null) {
+                    this.currentFetchingEmoji.put(langCode, Boolean.valueOf(true));
+                    MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$71(this, langCode));
+                    a++;
+                } else {
+                    return;
+                }
+            }
         }
     }
 
@@ -5210,7 +5219,7 @@ public class DataQuery {
     /* Access modifiers changed, original: final|synthetic */
     public final /* synthetic */ void lambda$null$112$DataQuery(String langCode) {
         this.currentFetchingEmoji.remove(langCode);
-        fetchNewEmojiKeywords(langCode);
+        fetchNewEmojiKeywords(new String[]{langCode});
     }
 
     /* Access modifiers changed, original: final|synthetic */
@@ -5284,17 +5293,17 @@ public class DataQuery {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.newEmojiSuggestionsAvailable, lang);
     }
 
-    public void getEmojiSuggestions(String langCode, String keyword, boolean fullMatch, KeywordResultCallback callback) {
-        getEmojiSuggestions(langCode, keyword, fullMatch, callback, null);
+    public void getEmojiSuggestions(String[] langCodes, String keyword, boolean fullMatch, KeywordResultCallback callback) {
+        getEmojiSuggestions(langCodes, keyword, fullMatch, callback, null);
     }
 
-    public void getEmojiSuggestions(String langCode, String keyword, boolean fullMatch, KeywordResultCallback callback, CountDownLatch sync) {
+    public void getEmojiSuggestions(String[] langCodes, String keyword, boolean fullMatch, KeywordResultCallback callback, CountDownLatch sync) {
         if (callback != null) {
-            if (TextUtils.isEmpty(keyword) || TextUtils.isEmpty(langCode)) {
-                callback.run(null, null);
+            if (TextUtils.isEmpty(keyword) || langCodes == null) {
+                callback.run(new ArrayList(), null);
                 return;
             }
-            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$73(this, langCode, callback, keyword, fullMatch, new ArrayList(Emoji.recentEmoji), sync));
+            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$73(this, langCodes, callback, keyword, fullMatch, new ArrayList(Emoji.recentEmoji), sync));
             if (sync != null) {
                 try {
                     sync.await();
@@ -5305,22 +5314,31 @@ public class DataQuery {
     }
 
     /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$getEmojiSuggestions$122$DataQuery(String langCode, KeywordResultCallback callback, String keyword, boolean fullMatch, ArrayList recentEmoji, CountDownLatch sync) {
+    public final /* synthetic */ void lambda$getEmojiSuggestions$122$DataQuery(String[] langCodes, KeywordResultCallback callback, String keyword, boolean fullMatch, ArrayList recentEmoji, CountDownLatch sync) {
+        SQLiteCursor cursor;
         ArrayList<KeywordResult> result = new ArrayList();
         HashMap<String, Boolean> resultMap = new HashMap();
         String alias = null;
-        try {
-            SQLiteCursor cursor = MessagesStorage.getInstance(this.currentAccount).getDatabase().queryFinalized("SELECT alias FROM emoji_keywords_info_v2 WHERE lang = ?", langCode);
-            if (cursor.next()) {
-                alias = cursor.stringValue(0);
+        boolean hasAny = false;
+        int a = 0;
+        while (a < langCodes.length) {
+            try {
+                cursor = MessagesStorage.getInstance(this.currentAccount).getDatabase().queryFinalized("SELECT alias FROM emoji_keywords_info_v2 WHERE lang = ?", langCodes[a]);
+                if (cursor.next()) {
+                    alias = cursor.stringValue(0);
+                }
+                cursor.dispose();
+                if (alias != null) {
+                    hasAny = true;
+                }
+                a++;
+            } catch (Exception e) {
+                FileLog.e(e);
             }
-            cursor.dispose();
-            if (alias == null) {
-                AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$74(this, langCode, callback, result));
-                return;
-            }
+        }
+        if (hasAny) {
             String key = keyword.toLowerCase();
-            for (int a = 0; a < 2; a++) {
+            for (a = 0; a < 2; a++) {
                 if (a == 1) {
                     String translitKey = LocaleController.getInstance().getTranslitString(key);
                     if (translitKey.equals(key)) {
@@ -5368,16 +5386,22 @@ public class DataQuery {
                 return;
             }
             AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$76(callback, result, aliasFinal));
-        } catch (Exception e) {
-            FileLog.e(e);
+            return;
         }
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$74(this, langCodes, callback, result));
     }
 
     /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$null$119$DataQuery(String langCode, KeywordResultCallback callback, ArrayList result) {
-        if (this.currentFetchingEmoji.get(langCode) == null) {
-            callback.run(result, null);
+    public final /* synthetic */ void lambda$null$119$DataQuery(String[] langCodes, KeywordResultCallback callback, ArrayList result) {
+        int a = 0;
+        while (a < langCodes.length) {
+            if (this.currentFetchingEmoji.get(langCodes[a]) == null) {
+                a++;
+            } else {
+                return;
+            }
         }
+        callback.run(result, null);
     }
 
     static final /* synthetic */ int lambda$null$120$DataQuery(ArrayList recentEmoji, KeywordResult o1, KeywordResult o2) {
@@ -5404,9 +5428,5 @@ public class DataQuery {
             return 1;
         }
         return 0;
-    }
-
-    public String getCurrentKeyboardLanguage() {
-        return AndroidUtilities.getCurrentKeyboardLanguage().replace('_', '-').toLowerCase();
     }
 }

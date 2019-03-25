@@ -3083,7 +3083,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r0 = r43;
         r4 = r0.actionBar;
         r5 = "TelegramPassport";
-        r9 = NUM; // 0x7f0CLASSNAME float:1.8613912E38 double:1.053098548E-314;
+        r9 = NUM; // 0x7f0CLASSNAME float:1.8613916E38 double:1.053098549E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r9);
         r4.setTitle(r5);
         r0 = r43;
@@ -3159,7 +3159,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r0 = r43;
         r4 = r0.bottomCell;
         r5 = "PassportRequest";
-        r9 = NUM; // 0x7f0CLASSNAMEfc float:1.8612818E38 double:1.053098282E-314;
+        r9 = NUM; // 0x7f0CLASSNAMEfe float:1.8612822E38 double:1.053098283E-314;
         r10 = 1;
         r10 = new java.lang.Object[r10];
         r11 = 0;
@@ -3197,7 +3197,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r0 = r43;
         r4 = r0.headerCell;
         r5 = "PassportRequestedInformation";
-        r9 = NUM; // 0x7f0CLASSNAMEfe float:1.8612822E38 double:1.053098283E-314;
+        r9 = NUM; // 0x7f0CLASSNAME float:1.8612827E38 double:1.053098284E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r9);
         r4.setText(r5);
         r0 = r43;
@@ -3619,7 +3619,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         if (r4 != 0) goto L_0x05cf;
     L_0x0416:
         r4 = "PassportPolicy";
-        r5 = NUM; // 0x7f0CLASSNAMEf9 float:1.8612812E38 double:1.0530982804E-314;
+        r5 = NUM; // 0x7f0CLASSNAMEfb float:1.8612816E38 double:1.0530982814E-314;
         r9 = 2;
         r9 = new java.lang.Object[r9];
         r10 = 0;
@@ -3750,7 +3750,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r0 = r43;
         r4 = r0.acceptTextView;
         r5 = "PassportAuthorize";
-        r9 = NUM; // 0x7f0CLASSNAME float:1.8612573E38 double:1.053098222E-314;
+        r9 = NUM; // 0x7f0CLASSNAME float:1.8612577E38 double:1.053098223E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r5, r9);
         r4.setText(r5);
         r0 = r43;
@@ -3817,7 +3817,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r0 = r43;
         r4 = r0.bottomCell;
         r5 = "PassportNoPolicy";
-        r9 = NUM; // 0x7f0CLASSNAMEed float:1.8612788E38 double:1.0530982744E-314;
+        r9 = NUM; // 0x7f0CLASSNAMEef float:1.8612792E38 double:1.0530982754E-314;
         r10 = 2;
         r10 = new java.lang.Object[r10];
         r11 = 0;
@@ -7542,7 +7542,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r0.onError(r2, r3);
     L_0x000e:
         r2 = "AppName";
-        r3 = NUM; // 0x7f0CLASSNAMEde float:1.8609642E38 double:1.053097508E-314;
+        r3 = NUM; // 0x7f0CLASSNAMEe0 float:1.8609646E38 double:1.053097509E-314;
         r2 = org.telegram.messenger.LocaleController.getString(r2, r3);
         r0 = r18;
         r3 = r0.text;

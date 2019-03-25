@@ -912,6 +912,8 @@
     <public type="string" name="AccActionOpenFile" id="NUM" />
     <public type="string" name="AccActionPause" id="NUM" />
     <public type="string" name="AccActionPlay" id="NUM" />
+    <public type="string" name="AccActionRecordVideo" id="NUM" />
+    <public type="string" name="AccActionTakePicture" id="NUM" />
     <public type="string" name="AccDescrAspectRatio" id="NUM" />
     <public type="string" name="AccDescrAttachButton" id="NUM" />
     <public type="string" name="AccDescrBackspace" id="NUM" />

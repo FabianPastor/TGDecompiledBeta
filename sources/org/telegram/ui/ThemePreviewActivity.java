@@ -203,7 +203,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         }
 
         public int getItemCount() {
-            return this.dialogs.size() + 1;
+            return this.dialogs.size();
         }
 
         public boolean isEnabled(ViewHolder holder) {

@@ -1028,7 +1028,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         if (r7 == 0) goto L_0x00d2;
     L_0x00aa:
         r7 = "AddMasks";
-        r9 = NUM; // 0x7f0CLASSNAMEa3 float:1.8609523E38 double:1.053097479E-314;
+        r9 = NUM; // 0x7f0CLASSNAMEa5 float:1.8609527E38 double:1.05309748E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r9);
     L_0x00b4:
         r9 = "dialogTextBlue2";
@@ -1051,7 +1051,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         goto L_0x007e;
     L_0x00d2:
         r7 = "AddStickers";
-        r9 = NUM; // 0x7f0CLASSNAMEaa float:1.8609537E38 double:1.0530974824E-314;
+        r9 = NUM; // 0x7f0CLASSNAMEac float:1.860954E38 double:1.0530974834E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r7, r9);
         goto L_0x00b4;
     L_0x00dd:
@@ -1063,7 +1063,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r7 = new org.telegram.ui.Components.StickersAlert$$Lambda$12;
         r7.<init>(r11);
         r8 = "StickersRemove";
-        r9 = NUM; // 0x7f0CLASSNAMEd8 float:1.8613784E38 double:1.053098517E-314;
+        r9 = NUM; // 0x7f0CLASSNAMEda float:1.8613788E38 double:1.053098518E-314;
         r8 = org.telegram.messenger.LocaleController.getString(r8, r9);
         r9 = "dialogTextRed";
         r9 = org.telegram.ui.ActionBar.Theme.getColor(r9);
@@ -1073,7 +1073,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r7 = new org.telegram.ui.Components.StickersAlert$$Lambda$13;
         r7.<init>(r11);
         r8 = "StickersRemove";
-        r9 = NUM; // 0x7f0CLASSNAMEda float:1.8613788E38 double:1.053098518E-314;
+        r9 = NUM; // 0x7f0CLASSNAMEdc float:1.8613792E38 double:1.053098519E-314;
         r8 = org.telegram.messenger.LocaleController.getString(r8, r9);
         r9 = "dialogTextRed";
         r9 = org.telegram.ui.ActionBar.Theme.getColor(r9);

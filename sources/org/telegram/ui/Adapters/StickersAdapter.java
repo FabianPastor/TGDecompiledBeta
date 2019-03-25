@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -39,7 +40,7 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
     private StickersAdapterDelegate delegate;
     private ArrayList<KeywordResult> keywordResults;
     private int lastReqId;
-    private String lastSearchKeyboardLanguage;
+    private String[] lastSearchKeyboardLanguage;
     private String lastSticker;
     private Context mContext;
     private Runnable searchRunnable;
@@ -188,8 +189,8 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
     }
 
     private void searchEmojiByKeyword() {
-        String newLanguage = DataQuery.getInstance(this.currentAccount).getCurrentKeyboardLanguage();
-        if (!newLanguage.equals(this.lastSearchKeyboardLanguage)) {
+        String[] newLanguage = AndroidUtilities.getCurrentKeyboardLanguage();
+        if (!Arrays.equals(newLanguage, this.lastSearchKeyboardLanguage)) {
             DataQuery.getInstance(this.currentAccount).fetchNewEmojiKeywords(newLanguage);
         }
         this.lastSearchKeyboardLanguage = newLanguage;

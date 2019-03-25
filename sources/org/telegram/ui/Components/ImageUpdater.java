@@ -101,9 +101,11 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
             BottomSheet sheet = builder.create();
             this.parentFragment.showDialog(sheet);
             TextView titleView = sheet.getTitleView();
-            titleView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            titleView.setTextSize(1, 18.0f);
-            titleView.setTextColor(Theme.getColor("dialogTextBlack"));
+            if (titleView != null) {
+                titleView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                titleView.setTextSize(1, 18.0f);
+                titleView.setTextColor(Theme.getColor("dialogTextBlack"));
+            }
             if (!this.searchAvailable) {
                 i = 2;
             }
@@ -389,10 +391,8 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
     }
 
     public void didReceivedNotification(int id, int account, Object... args) {
-        String location;
         if (id == NotificationCenter.FileDidUpload) {
-            location = args[0];
-            if (this.uploadingImage != null && location.equals(this.uploadingImage)) {
+            if (args[0].equals(this.uploadingImage)) {
                 NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidUpload);
                 NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidFailUpload);
                 if (this.delegate != null) {
@@ -406,8 +406,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                 }
             }
         } else if (id == NotificationCenter.FileDidFailUpload) {
-            location = (String) args[0];
-            if (this.uploadingImage != null && location.equals(this.uploadingImage)) {
+            if (((String) args[0]).equals(this.uploadingImage)) {
                 NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidUpload);
                 NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidFailUpload);
                 this.uploadingImage = null;
@@ -417,19 +416,16 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                     this.delegate = null;
                 }
             }
-        } else if (id == NotificationCenter.fileDidLoad || id == NotificationCenter.fileDidFailedLoad || id == NotificationCenter.httpFileDidLoad || id == NotificationCenter.httpFileDidFailedLoad) {
-            String path = args[0];
-            if (this.uploadingImage != null && path.equals(this.uploadingImage)) {
-                NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileDidLoad);
-                NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileDidFailedLoad);
-                NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.httpFileDidLoad);
-                NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.httpFileDidFailedLoad);
-                this.uploadingImage = null;
-                if (id == NotificationCenter.fileDidLoad || id == NotificationCenter.httpFileDidLoad) {
-                    processBitmap(ImageLoader.loadBitmap(this.finalPath, null, 800.0f, 800.0f, true));
-                } else {
-                    this.imageReceiver.setImageBitmap((Drawable) null);
-                }
+        } else if ((id == NotificationCenter.fileDidLoad || id == NotificationCenter.fileDidFailedLoad || id == NotificationCenter.httpFileDidLoad || id == NotificationCenter.httpFileDidFailedLoad) && args[0].equals(this.uploadingImage)) {
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileDidLoad);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileDidFailedLoad);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.httpFileDidLoad);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.httpFileDidFailedLoad);
+            this.uploadingImage = null;
+            if (id == NotificationCenter.fileDidLoad || id == NotificationCenter.httpFileDidLoad) {
+                processBitmap(ImageLoader.loadBitmap(this.finalPath, null, 800.0f, 800.0f, true));
+            } else {
+                this.imageReceiver.setImageBitmap((Drawable) null);
             }
         }
     }

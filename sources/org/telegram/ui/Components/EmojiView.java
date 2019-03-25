@@ -52,6 +52,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
@@ -220,7 +221,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     private int lastNotifyHeight;
     private int lastNotifyHeight2;
     private int lastNotifyWidth;
-    private String lastSearchKeyboardLanguage;
+    private String[] lastSearchKeyboardLanguage;
     private int[] location = new int[2];
     private TextView mediaBanTooltip;
     private boolean needEmojiSearch;
@@ -783,7 +784,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                                         loadingUrl[0] = true;
                                         AlertDialog[] progressDialog = new AlertDialog[]{new AlertDialog(EmojiView.this.getContext(), 3)};
                                         TL_messages_getEmojiURL req = new TL_messages_getEmojiURL();
-                                        req.lang_code = EmojiSearchAdapter.this.lastSearchAlias != null ? EmojiSearchAdapter.this.lastSearchAlias : EmojiView.this.lastSearchKeyboardLanguage;
+                                        req.lang_code = EmojiSearchAdapter.this.lastSearchAlias != null ? EmojiSearchAdapter.this.lastSearchAlias : EmojiView.this.lastSearchKeyboardLanguage[0];
                                         AndroidUtilities.runOnUIThread(new EmojiView$EmojiSearchAdapter$2$1$$Lambda$1(this, progressDialog, ConnectionsManager.getInstance(EmojiView.this.currentAccount).sendRequest(req, new EmojiView$EmojiSearchAdapter$2$1$$Lambda$0(this, progressDialog, builder))), 1000);
                                     }
                                 }
@@ -884,8 +885,8 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                     public void run() {
                         EmojiView.this.emojiSearchField.progressDrawable.startAnimation();
                         final String query = EmojiSearchAdapter.this.lastSearchEmojiString;
-                        String newLanguage = DataQuery.getInstance(EmojiView.this.currentAccount).getCurrentKeyboardLanguage();
-                        if (!(TextUtils.isEmpty(EmojiView.this.lastSearchKeyboardLanguage) || EmojiView.this.lastSearchKeyboardLanguage.equals(newLanguage))) {
+                        String[] newLanguage = AndroidUtilities.getCurrentKeyboardLanguage();
+                        if (!Arrays.equals(EmojiView.this.lastSearchKeyboardLanguage, newLanguage)) {
                             DataQuery.getInstance(EmojiView.this.currentAccount).fetchNewEmojiKeywords(newLanguage);
                         }
                         EmojiView.this.lastSearchKeyboardLanguage = newLanguage;
@@ -1811,8 +1812,8 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                         }
                     }
                     if (!(allStickers == null || allStickers.isEmpty() || StickersSearchGridAdapter.this.searchQuery.length() <= 1)) {
-                        String newLanguage = DataQuery.getInstance(EmojiView.this.currentAccount).getCurrentKeyboardLanguage();
-                        if (!(TextUtils.isEmpty(EmojiView.this.lastSearchKeyboardLanguage) || EmojiView.this.lastSearchKeyboardLanguage.equals(newLanguage))) {
+                        String[] newLanguage = AndroidUtilities.getCurrentKeyboardLanguage();
+                        if (!Arrays.equals(EmojiView.this.lastSearchKeyboardLanguage, newLanguage)) {
                             DataQuery.getInstance(EmojiView.this.currentAccount).fetchNewEmojiKeywords(newLanguage);
                         }
                         EmojiView.this.lastSearchKeyboardLanguage = newLanguage;
@@ -2847,7 +2848,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             this.emojiSearchField.searchEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
                 public void onFocusChange(View v, boolean hasFocus) {
                     if (hasFocus) {
-                        EmojiView.this.lastSearchKeyboardLanguage = DataQuery.getInstance(EmojiView.this.currentAccount).getCurrentKeyboardLanguage();
+                        EmojiView.this.lastSearchKeyboardLanguage = AndroidUtilities.getCurrentKeyboardLanguage();
                         DataQuery.getInstance(EmojiView.this.currentAccount).fetchNewEmojiKeywords(EmojiView.this.lastSearchKeyboardLanguage);
                     }
                 }

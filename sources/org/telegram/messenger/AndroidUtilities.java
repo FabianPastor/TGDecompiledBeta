@@ -195,7 +195,7 @@ public class AndroidUtilities {
             }
             int a;
             String valueType = this.fullData.substring(0, idx);
-            String value = this.fullData.substring(idx + 1, this.fullData.length());
+            String value = this.fullData.substring(idx + 1);
             String nameEncoding = null;
             String nameCharset = "UTF-8";
             String[] params = valueType.split(";");
@@ -235,7 +235,7 @@ public class AndroidUtilities {
                 result.append(", ");
             }
             String valueType = this.fullData.substring(0, idx);
-            String value = this.fullData.substring(idx + 1, this.fullData.length());
+            String value = this.fullData.substring(idx + 1);
             String nameEncoding = null;
             String nameCharset = "UTF-8";
             String[] params = valueType.split(";");
@@ -942,7 +942,7 @@ public class AndroidUtilities {
         }
     }
 
-    public static String getCurrentKeyboardLanguage() {
+    public static String[] getCurrentKeyboardLanguage() {
         try {
             InputMethodManager inputManager = (InputMethodManager) ApplicationLoader.applicationContext.getSystemService("input_method");
             InputMethodSubtype inputMethodSubtype = inputManager.getCurrentInputMethodSubtype();
@@ -967,10 +967,26 @@ public class AndroidUtilities {
             }
             if (TextUtils.isEmpty(locale)) {
                 locale = LocaleController.getSystemLocaleStringIso639();
+                LocaleInfo localeInfo = LocaleController.getInstance().getCurrentLocaleInfo();
+                String locale2 = localeInfo.getBaseLangCode();
+                if (TextUtils.isEmpty(locale2)) {
+                    locale2 = localeInfo.getLangCode();
+                }
+                if (locale.contains(locale2) || locale2.contains(locale)) {
+                    if (locale.contains("en")) {
+                        locale2 = null;
+                    } else {
+                        locale2 = "en";
+                    }
+                }
+                if (TextUtils.isEmpty(locale2)) {
+                    return new String[]{locale.replace('_', '-')};
+                }
+                return new String[]{locale.replace('_', '-'), locale2};
             }
-            return locale.replace('_', '-');
+            return new String[]{locale.replace('_', '-')};
         } catch (Exception e) {
-            return "en";
+            return new String[]{"en"};
         }
     }
 

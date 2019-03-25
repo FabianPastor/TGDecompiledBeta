@@ -4052,9 +4052,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         if (this.emojiView == null) {
             return;
         }
-        if (expanded && !this.emojiView.areThereAnyStickers()) {
-            return;
-        }
         if (byDrag || this.stickersExpanded != expanded) {
             this.stickersExpanded = expanded;
             if (this.delegate != null) {

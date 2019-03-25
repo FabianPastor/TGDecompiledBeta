@@ -4362,7 +4362,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         r24 = new org.telegram.messenger.MediaController$AlbumEntry;	 Catch:{ Throwable -> 0x03c5, all -> 0x03b9 }
         r4 = 0;
         r12 = "AllPhotos";
-        r13 = NUM; // 0x7f0CLASSNAMEbc float:1.8609573E38 double:1.0530974913E-314;
+        r13 = NUM; // 0x7f0CLASSNAMEbe float:1.8609577E38 double:1.0530974923E-314;
         r12 = org.telegram.messenger.LocaleController.getString(r12, r13);	 Catch:{ Throwable -> 0x03c5, all -> 0x03b9 }
         r0 = r24;
         r0.<init>(r4, r12, r5);	 Catch:{ Throwable -> 0x03c5, all -> 0x03b9 }
@@ -4376,7 +4376,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         r16 = new org.telegram.messenger.MediaController$AlbumEntry;	 Catch:{ Throwable -> 0x03cc, all -> 0x03c0 }
         r4 = 0;
         r12 = "AllMedia";
-        r13 = NUM; // 0x7f0CLASSNAMEbb float:1.8609571E38 double:1.053097491E-314;
+        r13 = NUM; // 0x7f0CLASSNAMEbd float:1.8609575E38 double:1.053097492E-314;
         r12 = org.telegram.messenger.LocaleController.getString(r12, r13);	 Catch:{ Throwable -> 0x03cc, all -> 0x03c0 }
         r0 = r16;
         r0.<init>(r4, r12, r5);	 Catch:{ Throwable -> 0x03cc, all -> 0x03c0 }
@@ -4555,7 +4555,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         r18 = new org.telegram.messenger.MediaController$AlbumEntry;	 Catch:{ Throwable -> 0x03ab, all -> 0x039d }
         r4 = 0;
         r12 = "AllVideos";
-        r13 = NUM; // 0x7f0CLASSNAMEbd float:1.8609575E38 double:1.053097492E-314;
+        r13 = NUM; // 0x7f0CLASSNAMEbf float:1.860958E38 double:1.053097493E-314;
         r12 = org.telegram.messenger.LocaleController.getString(r12, r13);	 Catch:{ Throwable -> 0x03ab, all -> 0x039d }
         r0 = r18;
         r0.<init>(r4, r12, r5);	 Catch:{ Throwable -> 0x03ab, all -> 0x039d }
@@ -4578,7 +4578,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
         r16 = new org.telegram.messenger.MediaController$AlbumEntry;	 Catch:{ Throwable -> 0x036c, all -> 0x037f }
         r4 = 0;
         r12 = "AllMedia";
-        r13 = NUM; // 0x7f0CLASSNAMEbb float:1.8609571E38 double:1.053097491E-314;
+        r13 = NUM; // 0x7f0CLASSNAMEbd float:1.8609575E38 double:1.053097492E-314;
         r12 = org.telegram.messenger.LocaleController.getString(r12, r13);	 Catch:{ Throwable -> 0x036c, all -> 0x037f }
         r0 = r16;
         r0.<init>(r4, r12, r5);	 Catch:{ Throwable -> 0x036c, all -> 0x037f }
@@ -5160,8 +5160,8 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     /* JADX WARNING: Removed duplicated region for block: B:81:0x0212 A:{SYNTHETIC, Splitter:B:81:0x0212} */
     /* JADX WARNING: Removed duplicated region for block: B:397:0x09d2  */
     /* JADX WARNING: Removed duplicated region for block: B:85:0x0219  */
-    /* JADX WARNING: Removed duplicated region for block: B:195:0x052a A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:128:0x03be} */
-    /* JADX WARNING: Removed duplicated region for block: B:195:0x052a A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:128:0x03be} */
+    /* JADX WARNING: Removed duplicated region for block: B:195:0x052a A:{Splitter:B:128:0x03be, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:195:0x052a A:{Splitter:B:128:0x03be, ExcHandler: all (th java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:70:0x01f0 A:{Catch:{ Exception -> 0x09c9, all -> 0x09bb }} */
     /* JADX WARNING: Removed duplicated region for block: B:72:0x01f5 A:{Catch:{ Exception -> 0x09c9, all -> 0x09bb }} */
     /* JADX WARNING: Removed duplicated region for block: B:74:0x01fa A:{Catch:{ Exception -> 0x09c9, all -> 0x09bb }} */
@@ -5170,7 +5170,7 @@ public class MediaController implements SensorEventListener, OnAudioFocusChangeL
     /* JADX WARNING: Removed duplicated region for block: B:81:0x0212 A:{SYNTHETIC, Splitter:B:81:0x0212} */
     /* JADX WARNING: Removed duplicated region for block: B:85:0x0219  */
     /* JADX WARNING: Removed duplicated region for block: B:397:0x09d2  */
-    /* JADX WARNING: Removed duplicated region for block: B:195:0x052a A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:128:0x03be} */
+    /* JADX WARNING: Removed duplicated region for block: B:195:0x052a A:{Splitter:B:128:0x03be, ExcHandler: all (th java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:374:0x095f  */
     /* JADX WARNING: Removed duplicated region for block: B:376:0x0964 A:{SYNTHETIC, Splitter:B:376:0x0964} */
     /* JADX WARNING: Removed duplicated region for block: B:380:0x096b  */

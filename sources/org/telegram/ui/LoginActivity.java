@@ -2458,14 +2458,14 @@ public class LoginActivity extends BaseFragment {
                                     String sub = text.substring(0, a);
                                     if (((String) PhoneView.this.codesMap.get(sub)) != null) {
                                         ok = true;
-                                        textToSet = text.substring(a, text.length()) + PhoneView.this.phoneField.getText().toString();
+                                        textToSet = text.substring(a) + PhoneView.this.phoneField.getText().toString();
                                         text = sub;
                                         PhoneView.this.codeField.setText(sub);
                                         break;
                                     }
                                 }
                                 if (!ok) {
-                                    textToSet = text.substring(1, text.length()) + PhoneView.this.phoneField.getText().toString();
+                                    textToSet = text.substring(1) + PhoneView.this.phoneField.getText().toString();
                                     EditTextBoldCursor access$1300 = PhoneView.this.codeField;
                                     text = text.substring(0, 1);
                                     access$1300.setText(text);
@@ -2555,7 +2555,7 @@ public class LoginActivity extends BaseFragment {
                         String phoneChars = "NUM";
                         String str = PhoneView.this.phoneField.getText().toString();
                         if (this.characterAction == 3) {
-                            str = str.substring(0, this.actionPosition) + str.substring(this.actionPosition + 1, str.length());
+                            str = str.substring(0, this.actionPosition) + str.substring(this.actionPosition + 1);
                             start--;
                         }
                         StringBuilder builder = new StringBuilder(str.length());
@@ -2797,7 +2797,7 @@ public class LoginActivity extends BaseFragment {
                         if (!LoginActivity.this.permissionsItems.isEmpty()) {
                             preferences = MessagesController.getGlobalMainSettings();
                             if (!allowCancelCall && allowCall) {
-                                LoginActivity.this.getParentActivity().requestPermissions((String[]) LoginActivity.this.permissionsItems.toArray(new String[LoginActivity.this.permissionsItems.size()]), 6);
+                                LoginActivity.this.getParentActivity().requestPermissions((String[]) LoginActivity.this.permissionsItems.toArray(new String[0]), 6);
                             } else if (preferences.getBoolean("firstlogin", true) || LoginActivity.this.getParentActivity().shouldShowRequestPermissionRationale("android.permission.READ_PHONE_STATE")) {
                                 preferences.edit().putBoolean("firstlogin", false).commit();
                                 builder = new Builder(LoginActivity.this.getParentActivity());
@@ -2807,7 +2807,7 @@ public class LoginActivity extends BaseFragment {
                                 LoginActivity.this.permissionsDialog = LoginActivity.this.showDialog(builder.create());
                             } else {
                                 try {
-                                    LoginActivity.this.getParentActivity().requestPermissions((String[]) LoginActivity.this.permissionsItems.toArray(new String[LoginActivity.this.permissionsItems.size()]), 6);
+                                    LoginActivity.this.getParentActivity().requestPermissions((String[]) LoginActivity.this.permissionsItems.toArray(new String[0]), 6);
                                 } catch (Exception e) {
                                     ok = false;
                                 }
@@ -2973,7 +2973,7 @@ public class LoginActivity extends BaseFragment {
                                     LoginActivity.this.permissionsShowDialog = LoginActivity.this.showDialog(builder.create());
                                     return;
                                 }
-                                LoginActivity.this.getParentActivity().requestPermissions((String[]) LoginActivity.this.permissionsShowItems.toArray(new String[LoginActivity.this.permissionsShowItems.size()]), 7);
+                                LoginActivity.this.getParentActivity().requestPermissions((String[]) LoginActivity.this.permissionsShowItems.toArray(new String[0]), 7);
                                 return;
                             }
                             return;
@@ -2989,13 +2989,13 @@ public class LoginActivity extends BaseFragment {
                                     String sub = number.substring(0, a);
                                     if (((String) this.codesMap.get(sub)) != null) {
                                         ok = true;
-                                        textToSet = number.substring(a, number.length());
+                                        textToSet = number.substring(a);
                                         this.codeField.setText(sub);
                                         break;
                                     }
                                 }
                                 if (!ok) {
-                                    textToSet = number.substring(1, number.length());
+                                    textToSet = number.substring(1);
                                     this.codeField.setText(number.substring(0, 1));
                                 }
                             }
@@ -3343,12 +3343,12 @@ public class LoginActivity extends BaseFragment {
         }
         if (dialog == this.permissionsDialog && !this.permissionsItems.isEmpty() && getParentActivity() != null) {
             try {
-                getParentActivity().requestPermissions((String[]) this.permissionsItems.toArray(new String[this.permissionsItems.size()]), 6);
+                getParentActivity().requestPermissions((String[]) this.permissionsItems.toArray(new String[0]), 6);
             } catch (Exception e) {
             }
         } else if (dialog == this.permissionsShowDialog && !this.permissionsShowItems.isEmpty() && getParentActivity() != null) {
             try {
-                getParentActivity().requestPermissions((String[]) this.permissionsShowItems.toArray(new String[this.permissionsShowItems.size()]), 7);
+                getParentActivity().requestPermissions((String[]) this.permissionsShowItems.toArray(new String[0]), 7);
             } catch (Exception e2) {
             }
         }
@@ -3666,6 +3666,11 @@ public class LoginActivity extends BaseFragment {
 
     public ThemeDescription[] getThemeDescriptions() {
         int a;
+        for (SlideView slideView : this.views) {
+            if (slideView == null) {
+                return new ThemeDescription[0];
+            }
+        }
         PhoneView phoneView = this.views[0];
         LoginActivitySmsView smsView1 = this.views[1];
         LoginActivitySmsView smsView2 = this.views[2];
@@ -3780,6 +3785,6 @@ public class LoginActivity extends BaseFragment {
         arrayList.add(new ThemeDescription(smsView4.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, null, null, null, "login_progressOuter"));
         arrayList.add(new ThemeDescription(smsView4.blackImageView, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription(smsView4.blueImageView, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chats_actionBackground"));
-        return (ThemeDescription[]) arrayList.toArray(new ThemeDescription[arrayList.size()]);
+        return (ThemeDescription[]) arrayList.toArray(new ThemeDescription[0]);
     }
 }

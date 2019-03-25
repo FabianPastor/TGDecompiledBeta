@@ -948,6 +948,8 @@ public final class R {
         public static final int AccActionOpenFile = NUM;
         public static final int AccActionPause = NUM;
         public static final int AccActionPlay = NUM;
+        public static final int AccActionRecordVideo = NUM;
+        public static final int AccActionTakePicture = NUM;
         public static final int AccDescrAspectRatio = NUM;
         public static final int AccDescrAttachButton = NUM;
         public static final int AccDescrBackspace = NUM;

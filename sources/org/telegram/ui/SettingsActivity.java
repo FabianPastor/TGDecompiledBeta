@@ -1036,28 +1036,31 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             Set<String> set = MessagesController.getGlobalMainSettings().getStringSet("settingsSearchRecent2", null);
             if (set != null) {
                 for (String value : set) {
-                    SerializedData serializedData = new SerializedData(Utilities.hexToBytes(value));
-                    int num = serializedData.readInt32(false);
-                    int type = serializedData.readInt32(false);
-                    if (type == 0) {
-                        String title = serializedData.readString(false);
-                        int count = serializedData.readInt32(false);
-                        String[] path = null;
-                        if (count > 0) {
-                            path = new String[count];
-                            for (a = 0; a < count; a++) {
-                                path[a] = serializedData.readString(false);
+                    try {
+                        SerializedData serializedData = new SerializedData(Utilities.hexToBytes(value));
+                        int num = serializedData.readInt32(false);
+                        int type = serializedData.readInt32(false);
+                        if (type == 0) {
+                            String title = serializedData.readString(false);
+                            int count = serializedData.readInt32(false);
+                            String[] path = null;
+                            if (count > 0) {
+                                path = new String[count];
+                                for (a = 0; a < count; a++) {
+                                    path[a] = serializedData.readString(false);
+                                }
+                            }
+                            FaqSearchResult faqSearchResult = new FaqSearchResult(title, path, serializedData.readString(false));
+                            faqSearchResult.num = num;
+                            this.recentSearches.add(faqSearchResult);
+                        } else if (type == 1) {
+                            SearchResult result = (SearchResult) resultHashMap.get(Integer.valueOf(serializedData.readInt32(false)));
+                            if (result != null) {
+                                result.num = num;
+                                this.recentSearches.add(result);
                             }
                         }
-                        FaqSearchResult faqSearchResult = new FaqSearchResult(title, path, serializedData.readString(false));
-                        faqSearchResult.num = num;
-                        this.recentSearches.add(faqSearchResult);
-                    } else if (type == 1) {
-                        SearchResult result = (SearchResult) resultHashMap.get(Integer.valueOf(serializedData.readInt32(false)));
-                        if (result != null) {
-                            result.num = num;
-                            this.recentSearches.add(result);
-                        }
+                    } catch (Exception e) {
                     }
                 }
             }
@@ -1091,35 +1094,37 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         public final /* synthetic */ void lambda$loadFaqWebPage$81$SettingsActivity$SearchAdapter(TLObject response2, TL_error error2) {
             if (response2 instanceof WebPage) {
                 WebPage page = (WebPage) response2;
-                int N = page.cached_page.blocks.size();
-                for (int a = 0; a < N; a++) {
-                    PageBlock block = (PageBlock) page.cached_page.blocks.get(a);
-                    if (block instanceof TL_pageBlockList) {
-                        String paragraph = null;
-                        if (a != 0) {
-                            PageBlock prevBlock = (PageBlock) page.cached_page.blocks.get(a - 1);
-                            if (prevBlock instanceof TL_pageBlockParagraph) {
-                                paragraph = ArticleViewer.getPlainText(((TL_pageBlockParagraph) prevBlock).text).toString();
-                            }
-                        }
-                        TL_pageBlockList list = (TL_pageBlockList) block;
-                        int N2 = list.items.size();
-                        for (int b = 0; b < N2; b++) {
-                            PageListItem item = (PageListItem) list.items.get(b);
-                            if (item instanceof TL_pageListItemText) {
-                                TL_pageListItemText itemText = (TL_pageListItemText) item;
-                                String url = ArticleViewer.getUrl(itemText.text);
-                                String text = ArticleViewer.getPlainText(itemText.text).toString();
-                                if (!(TextUtils.isEmpty(url) || TextUtils.isEmpty(text))) {
-                                    this.faqSearchArray.add(new FaqSearchResult(text, paragraph != null ? new String[]{LocaleController.getString("SettingsSearchFaq", NUM), paragraph} : new String[]{LocaleController.getString("SettingsSearchFaq", NUM)}, url));
+                if (page.cached_page != null) {
+                    int N = page.cached_page.blocks.size();
+                    for (int a = 0; a < N; a++) {
+                        PageBlock block = (PageBlock) page.cached_page.blocks.get(a);
+                        if (block instanceof TL_pageBlockList) {
+                            String paragraph = null;
+                            if (a != 0) {
+                                PageBlock prevBlock = (PageBlock) page.cached_page.blocks.get(a - 1);
+                                if (prevBlock instanceof TL_pageBlockParagraph) {
+                                    paragraph = ArticleViewer.getPlainText(((TL_pageBlockParagraph) prevBlock).text).toString();
                                 }
                             }
+                            TL_pageBlockList list = (TL_pageBlockList) block;
+                            int N2 = list.items.size();
+                            for (int b = 0; b < N2; b++) {
+                                PageListItem item = (PageListItem) list.items.get(b);
+                                if (item instanceof TL_pageListItemText) {
+                                    TL_pageListItemText itemText = (TL_pageListItemText) item;
+                                    String url = ArticleViewer.getUrl(itemText.text);
+                                    String text = ArticleViewer.getPlainText(itemText.text).toString();
+                                    if (!(TextUtils.isEmpty(url) || TextUtils.isEmpty(text))) {
+                                        this.faqSearchArray.add(new FaqSearchResult(text, paragraph != null ? new String[]{LocaleController.getString("SettingsSearchFaq", NUM), paragraph} : new String[]{LocaleController.getString("SettingsSearchFaq", NUM)}, url));
+                                    }
+                                }
+                            }
+                        } else if (block instanceof TL_pageBlockAnchor) {
+                            break;
                         }
-                    } else if (block instanceof TL_pageBlockAnchor) {
-                        break;
                     }
+                    this.faqWebPage = page;
                 }
-                this.faqWebPage = page;
             }
             this.loadingFaqPage = false;
         }
