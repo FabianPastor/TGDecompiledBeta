@@ -17,12 +17,14 @@ public class CloseProgressDrawable2 extends Drawable {
     private long lastFrameTime;
     private Paint paint = new Paint(1);
     private RectF rect = new RectF();
+    private int side;
 
     public CloseProgressDrawable2() {
         this.paint.setColor(-1);
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
         this.paint.setStrokeCap(Cap.ROUND);
         this.paint.setStyle(Style.STROKE);
+        this.side = AndroidUtilities.dp(8.0f);
     }
 
     public void startAnimation() {
@@ -35,8 +37,16 @@ public class CloseProgressDrawable2 extends Drawable {
         this.animating = false;
     }
 
+    public boolean isAnimating() {
+        return this.animating;
+    }
+
     public void setColor(int value) {
         this.paint.setColor(value);
+    }
+
+    public void setSide(int value) {
+        this.side = value;
     }
 
     public void draw(Canvas canvas) {
@@ -90,21 +100,21 @@ public class CloseProgressDrawable2 extends Drawable {
             progress3 = (this.angle - 630.0f) / 90.0f;
         }
         if (progress1 != 0.0f) {
-            canvas.drawLine(0.0f, 0.0f, 0.0f, ((float) AndroidUtilities.dp(8.0f)) * progress1, this.paint);
+            canvas.drawLine(0.0f, 0.0f, 0.0f, ((float) this.side) * progress1, this.paint);
         }
         if (progress2 != 0.0f) {
-            canvas.drawLine(((float) (-AndroidUtilities.dp(8.0f))) * progress2, 0.0f, 0.0f, 0.0f, this.paint);
+            canvas.drawLine(((float) (-this.side)) * progress2, 0.0f, 0.0f, 0.0f, this.paint);
         }
         if (progress3 != 0.0f) {
-            canvas.drawLine(0.0f, ((float) (-AndroidUtilities.dp(8.0f))) * progress3, 0.0f, 0.0f, this.paint);
+            canvas.drawLine(0.0f, ((float) (-this.side)) * progress3, 0.0f, 0.0f, this.paint);
         }
         if (progress4 != 1.0f) {
-            canvas.drawLine(((float) AndroidUtilities.dp(8.0f)) * progress4, 0.0f, (float) AndroidUtilities.dp(8.0f), 0.0f, this.paint);
+            canvas.drawLine(((float) this.side) * progress4, 0.0f, (float) this.side, 0.0f, this.paint);
         }
         canvas.restore();
         int cx = getBounds().centerX();
         int cy = getBounds().centerY();
-        this.rect.set((float) (cx - AndroidUtilities.dp(8.0f)), (float) (cy - AndroidUtilities.dp(8.0f)), (float) (AndroidUtilities.dp(8.0f) + cx), (float) (AndroidUtilities.dp(8.0f) + cy));
+        this.rect.set((float) (cx - this.side), (float) (cy - this.side), (float) (this.side + cx), (float) (this.side + cy));
         canvas.drawArc(this.rect, (this.angle < 360.0f ? 0.0f : this.angle - 360.0f) - 45.0f, this.angle < 360.0f ? this.angle : 720.0f - this.angle, false, this.paint);
         this.lastFrameTime = newTime;
     }

@@ -14,7 +14,6 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.TL_contact;
@@ -73,7 +72,7 @@ public class ContactsAdapter extends SectionsAdapter {
             int currentTime = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
             Collections.sort(this.onlineContacts, new ContactsAdapter$$Lambda$0(MessagesController.getInstance(this.currentAccount), currentTime));
             notifyDataSetChanged();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
@@ -372,19 +371,19 @@ public class ContactsAdapter extends SectionsAdapter {
                         return;
                     }
                 } else if (this.needPhonebook) {
-                    textCell.setTextAndIcon(LocaleController.getString("InviteFriends", R.string.InviteFriends), R.drawable.menu_invite, false);
+                    textCell.setTextAndIcon(LocaleController.getString("InviteFriends", NUM), NUM, false);
                     return;
                 } else if (this.isAdmin) {
-                    textCell.setTextAndIcon(LocaleController.getString("InviteToGroupByLink", R.string.InviteToGroupByLink), R.drawable.profile_link, false);
+                    textCell.setTextAndIcon(LocaleController.getString("InviteToGroupByLink", NUM), NUM, false);
                     return;
                 } else if (position == 0) {
-                    textCell.setTextAndIcon(LocaleController.getString("NewGroup", R.string.NewGroup), R.drawable.menu_newgroup, false);
+                    textCell.setTextAndIcon(LocaleController.getString("NewGroup", NUM), NUM, false);
                     return;
                 } else if (position == 1) {
-                    textCell.setTextAndIcon(LocaleController.getString("NewSecretChat", R.string.NewSecretChat), R.drawable.menu_secret, false);
+                    textCell.setTextAndIcon(LocaleController.getString("NewSecretChat", NUM), NUM, false);
                     return;
                 } else if (position == 2) {
-                    textCell.setTextAndIcon(LocaleController.getString("NewChannel", R.string.NewChannel), R.drawable.menu_broadcast, false);
+                    textCell.setTextAndIcon(LocaleController.getString("NewChannel", NUM), NUM, false);
                     return;
                 } else {
                     return;
@@ -392,13 +391,13 @@ public class ContactsAdapter extends SectionsAdapter {
             case 2:
                 GraySectionCell sectionCell = holder.itemView;
                 if (this.sortType == 0) {
-                    sectionCell.setText(LocaleController.getString("Contacts", R.string.Contacts));
+                    sectionCell.setText(LocaleController.getString("Contacts", NUM));
                     return;
                 } else if (this.sortType == 1) {
-                    sectionCell.setText(LocaleController.getString("SortedByName", R.string.SortedByName));
+                    sectionCell.setText(LocaleController.getString("SortedByName", NUM));
                     return;
                 } else {
-                    sectionCell.setText(LocaleController.getString("SortedByLastSeen", R.string.SortedByLastSeen));
+                    sectionCell.setText(LocaleController.getString("SortedByLastSeen", NUM));
                     return;
                 }
             default:

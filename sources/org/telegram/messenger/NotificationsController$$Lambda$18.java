@@ -1,16 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_error;
+import android.net.Uri;
 
-final /* synthetic */ class NotificationsController$$Lambda$18 implements RequestDelegate {
-    static final RequestDelegate $instance = new NotificationsController$$Lambda$18();
+final /* synthetic */ class NotificationsController$$Lambda$18 implements Runnable {
+    private final Uri arg$1;
 
-    private NotificationsController$$Lambda$18() {
+    NotificationsController$$Lambda$18(Uri uri) {
+        this.arg$1 = uri;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        NotificationsController.lambda$updateServerNotificationsSettings$32$NotificationsController(tLObject, tL_error);
+    public void run() {
+        ApplicationLoader.applicationContext.revokeUriPermission(this.arg$1, 1);
     }
 }

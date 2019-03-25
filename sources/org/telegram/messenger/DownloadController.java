@@ -86,22 +86,6 @@ public class DownloadController implements NotificationCenterDelegate {
         public boolean preloadVideo;
         public int[] sizes;
 
-        public Preset(int m, int p, int v, int f, boolean pv, boolean pm, boolean e, boolean l) {
-            this.mask = new int[4];
-            this.sizes = new int[4];
-            for (int a = 0; a < this.mask.length; a++) {
-                this.mask[a] = m;
-            }
-            this.sizes[0] = p;
-            this.sizes[1] = v;
-            this.sizes[2] = f;
-            this.sizes[3] = 524288;
-            this.preloadVideo = pv;
-            this.preloadMusic = pm;
-            this.lessCallData = l;
-            this.enabled = e;
-        }
-
         public Preset(int[] m, int p, int v, int f, boolean pv, boolean pm, boolean e, boolean l) {
             this.mask = new int[4];
             this.sizes = new int[4];
@@ -205,6 +189,15 @@ public class DownloadController implements NotificationCenterDelegate {
 
         public boolean equals(Preset obj) {
             return this.mask[0] == obj.mask[0] && this.mask[1] == obj.mask[1] && this.mask[2] == obj.mask[2] && this.mask[3] == obj.mask[3] && this.sizes[0] == obj.sizes[0] && this.sizes[1] == obj.sizes[1] && this.sizes[2] == obj.sizes[2] && this.sizes[3] == obj.sizes[3] && this.preloadVideo == obj.preloadVideo && this.preloadMusic == obj.preloadMusic;
+        }
+
+        public boolean isEnabled() {
+            for (int i : this.mask) {
+                if (i != 0) {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 
@@ -315,7 +308,8 @@ public class DownloadController implements NotificationCenterDelegate {
         }
     }
 
-    final /* synthetic */ void lambda$new$0$DownloadController() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$0$DownloadController() {
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidFailedLoad);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidLoad);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileLoadProgressChanged);
@@ -334,11 +328,13 @@ public class DownloadController implements NotificationCenterDelegate {
         }
     }
 
-    final /* synthetic */ void lambda$loadAutoDownloadConfig$2$DownloadController(TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$loadAutoDownloadConfig$2$DownloadController(TLObject response, TL_error error) {
         AndroidUtilities.runOnUIThread(new DownloadController$$Lambda$3(this, response));
     }
 
-    final /* synthetic */ void lambda$null$1$DownloadController(TLObject response) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$1$DownloadController(TLObject response) {
         this.loadingAutoDownloadConfig = false;
         UserConfig.getInstance(this.currentAccount).autoDownloadConfigLoadTime = System.currentTimeMillis();
         UserConfig.getInstance(this.currentAccount).saveConfig(false);
@@ -487,7 +483,8 @@ public class DownloadController implements NotificationCenterDelegate {
         return result2;
     }
 
-    protected int getAutodownloadMaskAll() {
+    /* Access modifiers changed, original: protected */
+    public int getAutodownloadMaskAll() {
         if (!this.mobilePreset.enabled && !this.roamingPreset.enabled && !this.wifiPreset.enabled) {
             return 0;
         }
@@ -578,10 +575,13 @@ public class DownloadController implements NotificationCenterDelegate {
     }
 
     public int canDownloadMedia(Message message) {
+        int i = 2;
+        if (message == null) {
+            return 0;
+        }
         int type;
         int index;
         Preset preset;
-        int i = 2;
         boolean isVideo = MessageObject.isVideoMessage(message);
         if (isVideo || MessageObject.isGifMessage(message) || MessageObject.isRoundVideoMessage(message)) {
             type = 4;
@@ -589,6 +589,8 @@ public class DownloadController implements NotificationCenterDelegate {
             type = 2;
         } else if (MessageObject.isPhoto(message) || MessageObject.isStickerMessage(message)) {
             type = 1;
+        } else if (MessageObject.getDocument(message) == null) {
+            return 0;
         } else {
             type = 8;
         }
@@ -647,7 +649,8 @@ public class DownloadController implements NotificationCenterDelegate {
         }
     }
 
-    protected boolean canDownloadNextTrack() {
+    /* Access modifiers changed, original: protected */
+    public boolean canDownloadNextTrack() {
         if (ApplicationLoader.isConnectedToWiFi()) {
             if (this.wifiPreset.enabled && getCurrentWiFiPreset().preloadMusic) {
                 return true;
@@ -665,7 +668,8 @@ public class DownloadController implements NotificationCenterDelegate {
         }
     }
 
-    protected int getCurrentDownloadMask() {
+    /* Access modifiers changed, original: protected */
+    public int getCurrentDownloadMask() {
         int mask = 0;
         int a;
         if (ApplicationLoader.isConnectedToWiFi()) {
@@ -755,7 +759,8 @@ public class DownloadController implements NotificationCenterDelegate {
     static final /* synthetic */ void lambda$savePresetToServer$3$DownloadController(TLObject response, TL_error error) {
     }
 
-    protected void processDownloadObjects(int type, ArrayList<DownloadObject> objects) {
+    /* Access modifiers changed, original: protected */
+    public void processDownloadObjects(int type, ArrayList<DownloadObject> objects) {
         if (!objects.isEmpty()) {
             ArrayList<DownloadObject> queue = null;
             if (type == 1) {
@@ -778,7 +783,15 @@ public class DownloadController implements NotificationCenterDelegate {
                 if (!this.downloadQueueKeys.containsKey(path)) {
                     boolean added = true;
                     if (downloadObject.object instanceof PhotoSize) {
-                        FileLoader.getInstance(this.currentAccount).loadFile((PhotoSize) downloadObject.object, null, downloadObject.secret ? 2 : 0);
+                        int cacheType;
+                        if (downloadObject.secret) {
+                            cacheType = 2;
+                        } else if (downloadObject.forceCache) {
+                            cacheType = 1;
+                        } else {
+                            cacheType = 0;
+                        }
+                        FileLoader.getInstance(this.currentAccount).loadFile((PhotoSize) downloadObject.object, downloadObject.parent, null, cacheType);
                     } else if (downloadObject.object instanceof Document) {
                         FileLoader.getInstance(this.currentAccount).loadFile((Document) downloadObject.object, downloadObject.parent, 0, downloadObject.secret ? 2 : 0);
                     } else {
@@ -793,7 +806,8 @@ public class DownloadController implements NotificationCenterDelegate {
         }
     }
 
-    protected void newDownloadObjectsAvailable(int downloadMask) {
+    /* Access modifiers changed, original: protected */
+    public void newDownloadObjectsAvailable(int downloadMask) {
         int mask = getCurrentDownloadMask();
         if (!((mask & 1) == 0 || (downloadMask & 1) == 0 || !this.photoDownloadQueue.isEmpty())) {
             MessagesStorage.getInstance(this.currentAccount).getDownloadQueue(1);
@@ -1040,7 +1054,7 @@ public class DownloadController implements NotificationCenterDelegate {
                         }
                     }
                 }
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
         }

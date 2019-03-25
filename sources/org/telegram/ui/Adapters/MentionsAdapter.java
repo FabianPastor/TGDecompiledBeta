@@ -26,7 +26,6 @@ import org.telegram.messenger.SendMessagesHelper.LocationProvider;
 import org.telegram.messenger.SendMessagesHelper.LocationProvider.LocationProviderDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
@@ -277,11 +276,11 @@ public class MentionsAdapter extends SelectionAdapter {
                 } else {
                     User foundContextBotFinal = this.foundContextBot;
                     Builder builder = new Builder(this.parentFragment.getParentActivity());
-                    builder.setTitle(LocaleController.getString("ShareYouLocationTitle", R.string.ShareYouLocationTitle));
-                    builder.setMessage(LocaleController.getString("ShareYouLocationInline", R.string.ShareYouLocationInline));
+                    builder.setTitle(LocaleController.getString("ShareYouLocationTitle", NUM));
+                    builder.setMessage(LocaleController.getString("ShareYouLocationInline", NUM));
                     boolean[] buttonClicked = new boolean[1];
-                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new MentionsAdapter$$Lambda$0(this, buttonClicked, foundContextBotFinal));
-                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), new MentionsAdapter$$Lambda$1(this, buttonClicked));
+                    builder.setPositiveButton(LocaleController.getString("OK", NUM), new MentionsAdapter$$Lambda$0(this, buttonClicked, foundContextBotFinal));
+                    builder.setNegativeButton(LocaleController.getString("Cancel", NUM), new MentionsAdapter$$Lambda$1(this, buttonClicked));
                     this.parentFragment.showDialog(builder.create(), new MentionsAdapter$$Lambda$2(this, buttonClicked));
                 }
             }
@@ -296,7 +295,8 @@ public class MentionsAdapter extends SelectionAdapter {
         searchForContextBotResults(true, this.foundContextBot, this.searchingContextQuery, "");
     }
 
-    final /* synthetic */ void lambda$processFoundUser$0$MentionsAdapter(boolean[] buttonClicked, User foundContextBotFinal, DialogInterface dialogInterface, int i) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$processFoundUser$0$MentionsAdapter(boolean[] buttonClicked, User foundContextBotFinal, DialogInterface dialogInterface, int i) {
         buttonClicked[0] = true;
         if (foundContextBotFinal != null) {
             MessagesController.getNotificationsSettings(this.currentAccount).edit().putBoolean("inlinegeo_" + foundContextBotFinal.id, true).commit();
@@ -304,12 +304,14 @@ public class MentionsAdapter extends SelectionAdapter {
         }
     }
 
-    final /* synthetic */ void lambda$processFoundUser$1$MentionsAdapter(boolean[] buttonClicked, DialogInterface dialog, int which) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$processFoundUser$1$MentionsAdapter(boolean[] buttonClicked, DialogInterface dialog, int which) {
         buttonClicked[0] = true;
         onLocationUnavailable();
     }
 
-    final /* synthetic */ void lambda$processFoundUser$2$MentionsAdapter(boolean[] buttonClicked, DialogInterface dialog) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$processFoundUser$2$MentionsAdapter(boolean[] buttonClicked, DialogInterface dialog) {
         if (!buttonClicked[0]) {
             onLocationUnavailable();
         }
@@ -398,11 +400,13 @@ public class MentionsAdapter extends SelectionAdapter {
                     }
                 }
 
-                final /* synthetic */ void lambda$run$1$MentionsAdapter$4(String username, MessagesController messagesController, MessagesStorage messagesStorage, TLObject response, TL_error error) {
+                /* Access modifiers changed, original: final|synthetic */
+                public final /* synthetic */ void lambda$run$1$MentionsAdapter$4(String username, MessagesController messagesController, MessagesStorage messagesStorage, TLObject response, TL_error error) {
                     AndroidUtilities.runOnUIThread(new MentionsAdapter$4$$Lambda$1(this, username, error, response, messagesController, messagesStorage));
                 }
 
-                final /* synthetic */ void lambda$null$0$MentionsAdapter$4(String username, TL_error error, TLObject response, MessagesController messagesController, MessagesStorage messagesStorage) {
+                /* Access modifiers changed, original: final|synthetic */
+                public final /* synthetic */ void lambda$null$0$MentionsAdapter$4(String username, TL_error error, TLObject response, MessagesController messagesController, MessagesStorage messagesStorage) {
                     if (MentionsAdapter.this.searchingContextUsername != null && MentionsAdapter.this.searchingContextUsername.equals(username)) {
                         User user = null;
                         if (error == null) {
@@ -502,11 +506,13 @@ public class MentionsAdapter extends SelectionAdapter {
         }
     }
 
-    final /* synthetic */ void lambda$searchForContextBotResults$4$MentionsAdapter(String query, boolean cache, User user, String offset, MessagesStorage messagesStorage, String key, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$searchForContextBotResults$4$MentionsAdapter(String query, boolean cache, User user, String offset, MessagesStorage messagesStorage, String key, TLObject response, TL_error error) {
         AndroidUtilities.runOnUIThread(new MentionsAdapter$$Lambda$7(this, query, cache, response, user, offset, messagesStorage, key));
     }
 
-    final /* synthetic */ void lambda$null$3$MentionsAdapter(String query, boolean cache, TLObject response, User user, String offset, MessagesStorage messagesStorage, String key) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$3$MentionsAdapter(String query, boolean cache, TLObject response, User user, String offset, MessagesStorage messagesStorage, String key) {
         if (this.searchingContextQuery != null && query.equals(this.searchingContextQuery)) {
             this.contextQueryReqid = 0;
             if (cache && response == null) {
@@ -527,7 +533,7 @@ public class MentionsAdapter extends SelectionAdapter {
                 int a = 0;
                 while (a < res.results.size()) {
                     BotInlineResult result = (BotInlineResult) res.results.get(a);
-                    if (!(result.document instanceof TL_document) && !(result.photo instanceof TL_photo) && result.content == null && (result.send_message instanceof TL_botInlineMessageMediaAuto)) {
+                    if (!((result.document instanceof TL_document) || (result.photo instanceof TL_photo) || "game".equals(result.type) || result.content != null || !(result.send_message instanceof TL_botInlineMessageMediaAuto))) {
                         res.results.remove(a);
                         a--;
                     }
@@ -780,11 +786,13 @@ public class MentionsAdapter extends SelectionAdapter {
                             }
                         }
 
-                        final /* synthetic */ void lambda$run$1$MentionsAdapter$5(int currentReqId, MessagesController messagesController, TLObject response, TL_error error) {
+                        /* Access modifiers changed, original: final|synthetic */
+                        public final /* synthetic */ void lambda$run$1$MentionsAdapter$5(int currentReqId, MessagesController messagesController, TLObject response, TL_error error) {
                             AndroidUtilities.runOnUIThread(new MentionsAdapter$5$$Lambda$1(this, currentReqId, error, response, messagesController));
                         }
 
-                        final /* synthetic */ void lambda$null$0$MentionsAdapter$5(int currentReqId, TL_error error, TLObject response, MessagesController messagesController) {
+                        /* Access modifiers changed, original: final|synthetic */
+                        public final /* synthetic */ void lambda$null$0$MentionsAdapter$5(int currentReqId, TL_error error, TLObject response, MessagesController messagesController) {
                             if (!(MentionsAdapter.this.channelReqId == 0 || currentReqId != MentionsAdapter.this.channelLastReqId || MentionsAdapter.this.searchResultUsernamesMap == null || MentionsAdapter.this.searchResultUsernames == null || error != null)) {
                                 TL_channels_channelParticipants res = (TL_channels_channelParticipants) response;
                                 messagesController.putUsers(res.users, false);
@@ -1077,7 +1085,8 @@ public class MentionsAdapter extends SelectionAdapter {
         return new Holder(view);
     }
 
-    final /* synthetic */ void lambda$onCreateViewHolder$7$MentionsAdapter(ContextLinkCell cell) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onCreateViewHolder$7$MentionsAdapter(ContextLinkCell cell) {
         this.delegate.onContextClick(cell.getResult());
     }
 
@@ -1090,11 +1099,11 @@ public class MentionsAdapter extends SelectionAdapter {
                 return;
             }
             if (!ChatObject.hasAdminRights(chat) && chat.default_banned_rights != null && chat.default_banned_rights.send_inline) {
-                textView.setText(LocaleController.getString("GlobalAttachInlineRestricted", R.string.GlobalAttachInlineRestricted));
+                textView.setText(LocaleController.getString("GlobalAttachInlineRestricted", NUM));
             } else if (AndroidUtilities.isBannedForever(chat.banned_rights)) {
-                textView.setText(LocaleController.getString("AttachInlineRestrictedForever", R.string.AttachInlineRestrictedForever));
+                textView.setText(LocaleController.getString("AttachInlineRestrictedForever", NUM));
             } else {
-                textView.setText(LocaleController.formatString("AttachInlineRestricted", R.string.AttachInlineRestricted, LocaleController.formatDateForBan((long) chat.banned_rights.until_date)));
+                textView.setText(LocaleController.formatString("AttachInlineRestricted", NUM, LocaleController.formatDateForBan((long) chat.banned_rights.until_date)));
             }
         } else if (this.searchResultBotContext != null) {
             boolean hasTop;

@@ -64,7 +64,7 @@ public class TimerDrawable extends Drawable {
         try {
             this.timeLayout = new StaticLayout(timeString, this.timePaint, (int) Math.ceil((double) this.timeWidth), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             this.timeHeight = this.timeLayout.getHeight();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             this.timeLayout = null;
             FileLog.e(e);
         }

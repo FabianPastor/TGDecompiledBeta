@@ -13,7 +13,8 @@ public class PhoneRule {
     public int otherFlag;
     public int prefixLen;
 
-    String format(String str, String intlPrefix, String trunkPrefix) {
+    /* Access modifiers changed, original: 0000 */
+    public String format(String str, String intlPrefix, String trunkPrefix) {
         boolean hadC = false;
         boolean hadN = false;
         boolean hasOpen = false;
@@ -71,11 +72,13 @@ public class PhoneRule {
         return res.toString();
     }
 
-    boolean hasIntlPrefix() {
+    /* Access modifiers changed, original: 0000 */
+    public boolean hasIntlPrefix() {
         return (this.flag12 & 2) != 0;
     }
 
-    boolean hasTrunkPrefix() {
+    /* Access modifiers changed, original: 0000 */
+    public boolean hasTrunkPrefix() {
         return (this.flag12 & 1) != 0;
     }
 }

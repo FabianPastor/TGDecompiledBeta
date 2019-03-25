@@ -30,7 +30,8 @@ public class HintEditText extends EditTextBoldCursor {
         setText(getText());
     }
 
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+    /* Access modifiers changed, original: protected */
+    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         onTextChange();
     }
@@ -42,7 +43,8 @@ public class HintEditText extends EditTextBoldCursor {
         invalidate();
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (this.hintText != null && length() < this.hintText.length()) {
             int top = getMeasuredHeight() / 2;

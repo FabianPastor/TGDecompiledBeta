@@ -83,7 +83,7 @@ public final class FingerprintManagerCompatApi23 {
     public static boolean hasEnrolledFingerprints(Context context) {
         try {
             return getFingerprintManager(context).hasEnrolledFingerprints();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
             return false;
         }
@@ -92,7 +92,7 @@ public final class FingerprintManagerCompatApi23 {
     public static boolean isHardwareDetected(Context context) {
         try {
             return getFingerprintManager(context).isHardwareDetected();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
             return false;
         }
@@ -101,7 +101,7 @@ public final class FingerprintManagerCompatApi23 {
     public static void authenticate(Context context, CryptoObject crypto, int flags, Object cancel, AuthenticationCallback callback, Handler handler) {
         try {
             getFingerprintManager(context).authenticate(wrapCryptoObject(crypto), (CancellationSignal) cancel, flags, wrapCallback(callback), handler);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }

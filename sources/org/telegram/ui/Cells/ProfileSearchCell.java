@@ -9,6 +9,7 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.view.View.MeasureSpec;
+import android.view.accessibility.AccessibilityNodeInfo;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
@@ -17,7 +18,6 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
-import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
@@ -104,32 +104,32 @@ public class ProfileSearchCell extends BaseCell {
                 enabled = false;
             }
             if (enabled && custom) {
-                text = LocaleController.getString("NotificationsCustom", R.string.NotificationsCustom);
+                text = LocaleController.getString("NotificationsCustom", NUM);
             } else if (enabled) {
-                text = LocaleController.getString("NotificationsUnmuted", R.string.NotificationsUnmuted);
+                text = LocaleController.getString("NotificationsUnmuted", NUM);
             } else {
-                text = LocaleController.getString("NotificationsMuted", R.string.NotificationsMuted);
+                text = LocaleController.getString("NotificationsMuted", NUM);
             }
         } else {
             delta -= ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
             if (delta <= 0) {
                 if (custom) {
-                    text = LocaleController.getString("NotificationsCustom", R.string.NotificationsCustom);
+                    text = LocaleController.getString("NotificationsCustom", NUM);
                 } else {
-                    text = LocaleController.getString("NotificationsUnmuted", R.string.NotificationsUnmuted);
+                    text = LocaleController.getString("NotificationsUnmuted", NUM);
                 }
             } else if (delta < 3600) {
-                text = LocaleController.formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Minutes", delta / 60));
+                text = LocaleController.formatString("WillUnmuteIn", NUM, LocaleController.formatPluralString("Minutes", delta / 60));
             } else if (delta < 86400) {
-                text = LocaleController.formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Hours", (int) Math.ceil((double) ((((float) delta) / 60.0f) / 60.0f))));
+                text = LocaleController.formatString("WillUnmuteIn", NUM, LocaleController.formatPluralString("Hours", (int) Math.ceil((double) ((((float) delta) / 60.0f) / 60.0f))));
             } else if (delta < 31536000) {
-                text = LocaleController.formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Days", (int) Math.ceil((double) (((((float) delta) / 60.0f) / 60.0f) / 24.0f))));
+                text = LocaleController.formatString("WillUnmuteIn", NUM, LocaleController.formatPluralString("Days", (int) Math.ceil((double) (((((float) delta) / 60.0f) / 60.0f) / 24.0f))));
             } else {
                 text = null;
             }
         }
         if (text == null) {
-            text = LocaleController.getString("NotificationsOff", R.string.NotificationsOff);
+            text = LocaleController.getString("NotificationsOff", NUM);
         }
         int lower_id = (int) exception.did;
         int high_id = (int) (exception.did >> 32);
@@ -154,21 +154,25 @@ public class ProfileSearchCell extends BaseCell {
         }
     }
 
-    protected void onDetachedFromWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.avatarImage.onDetachedFromWindow();
     }
 
-    protected void onAttachedToWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.avatarImage.onAttachedToWindow();
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(72.0f));
     }
 
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+    /* Access modifiers changed, original: protected */
+    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
         if (!(this.user == null && this.chat == null && this.encryptedChat == null) && changed) {
             buildLayout();
         }
@@ -260,7 +264,7 @@ public class ProfileSearchCell extends BaseCell {
         }
         if (nameString.length() == 0) {
             if (this.user == null || this.user.phone == null || this.user.phone.length() == 0) {
-                nameString = LocaleController.getString("HiddenName", R.string.HiddenName);
+                nameString = LocaleController.getString("HiddenName", NUM);
             } else {
                 nameString = PhoneFormat.getInstance().format("+" + this.user.phone);
             }
@@ -324,14 +328,14 @@ public class ProfileSearchCell extends BaseCell {
                 onlineString = this.subLabel;
             } else if (this.user != null) {
                 if (this.user.bot) {
-                    onlineString = LocaleController.getString("Bot", R.string.Bot);
+                    onlineString = LocaleController.getString("Bot", NUM);
                 } else if (this.user.id == 333000 || this.user.id == 777000) {
-                    onlineString = LocaleController.getString("ServiceNotifications", R.string.ServiceNotifications);
+                    onlineString = LocaleController.getString("ServiceNotifications", NUM);
                 } else {
                     onlineString = LocaleController.formatUserStatus(this.currentAccount, this.user);
                     if (this.user != null && (this.user.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || (this.user.status != null && this.user.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()))) {
                         currentOnlinePaint = Theme.dialogs_onlinePaint;
-                        onlineString = LocaleController.getString("Online", R.string.Online);
+                        onlineString = LocaleController.getString("Online", NUM);
                     }
                 }
             }
@@ -463,7 +467,8 @@ public class ProfileSearchCell extends BaseCell {
         postInvalidate();
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (this.user != null || this.chat != null || this.encryptedChat != null) {
             int x;
             if (this.useSeparator) {
@@ -522,5 +527,10 @@ public class ProfileSearchCell extends BaseCell {
             }
             this.avatarImage.draw(canvas);
         }
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
+        info.setText(this.nameLayout.getText() + ", " + this.subLabel);
     }
 }

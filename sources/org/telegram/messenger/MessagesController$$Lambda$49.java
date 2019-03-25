@@ -9,15 +9,17 @@ final /* synthetic */ class MessagesController$$Lambda$49 implements RequestDele
     private final long arg$2;
     private final int arg$3;
     private final int arg$4;
+    private final boolean arg$5;
 
-    MessagesController$$Lambda$49(MessagesController messagesController, long j, int i, int i2) {
+    MessagesController$$Lambda$49(MessagesController messagesController, long j, int i, int i2, boolean z) {
         this.arg$1 = messagesController;
         this.arg$2 = j;
         this.arg$3 = i;
         this.arg$4 = i2;
+        this.arg$5 = z;
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$deleteDialog$69$MessagesController(this.arg$2, this.arg$3, this.arg$4, tLObject, tL_error);
+        this.arg$1.lambda$deleteDialog$69$MessagesController(this.arg$2, this.arg$3, this.arg$4, this.arg$5, tLObject, tL_error);
     }
 }

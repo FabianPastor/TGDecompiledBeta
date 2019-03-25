@@ -222,7 +222,7 @@ public class RadialProgress2 {
             int centerY;
             float alpha;
             int currentIcon = this.mediaActionDrawable.getCurrentIcon();
-            float wholeAlpha = ((currentIcon == 6 || currentIcon == 10) && this.mediaActionDrawable.getPreviousIcon() == 4) ? this.mediaActionDrawable.getTransitionProgress() : currentIcon != 4 ? 1.0f : 1.0f - this.mediaActionDrawable.getTransitionProgress();
+            float wholeAlpha = ((currentIcon == 3 || currentIcon == 6 || currentIcon == 10 || currentIcon == 8 || currentIcon == 0) && this.mediaActionDrawable.getPreviousIcon() == 4) ? this.mediaActionDrawable.getTransitionProgress() : currentIcon != 4 ? 1.0f : 1.0f - this.mediaActionDrawable.getTransitionProgress();
             if (this.isPressedMini) {
                 if (this.iconPressedColorKey != null) {
                     this.miniMediaActionDrawable.setColor(Theme.getColor(this.iconPressedColorKey));

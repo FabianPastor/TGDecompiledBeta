@@ -1,19 +1,17 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.LinearLayout;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import org.telegram.messenger.MessagesStorage.IntCallback;
 
 final /* synthetic */ class AlertsCreator$$Lambda$27 implements OnClickListener {
-    private final int[] arg$1;
-    private final LinearLayout arg$2;
+    private final IntCallback arg$1;
 
-    AlertsCreator$$Lambda$27(int[] iArr, LinearLayout linearLayout) {
-        this.arg$1 = iArr;
-        this.arg$2 = linearLayout;
+    AlertsCreator$$Lambda$27(IntCallback intCallback) {
+        this.arg$1 = intCallback;
     }
 
-    public void onClick(View view) {
-        AlertsCreator.lambda$createFreeSpaceDialog$30$AlertsCreator(this.arg$1, this.arg$2, view);
+    public void onClick(DialogInterface dialogInterface, int i) {
+        this.arg$1.run(0);
     }
 }

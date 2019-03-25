@@ -40,7 +40,6 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.XiaomiUtilities;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.voip.VoIPBaseService.CallConnection;
 import org.telegram.messenger.voip.VoIPBaseService.StateListener;
 import org.telegram.tgnet.ConnectionsManager;
@@ -176,11 +175,12 @@ public class VoIPService extends VoIPBaseService {
         super.onCreate();
         if (callIShouldHavePutIntoIntent != null && VERSION.SDK_INT >= 26) {
             NotificationsController.checkOtherNotificationsChannel();
-            startForeground(201, new Builder(this, NotificationsController.OTHER_NOTIFICATIONS_CHANNEL).setSmallIcon(R.drawable.notification).setContentTitle(LocaleController.getString("VoipOutgoingCall", R.string.VoipOutgoingCall)).setShowWhen(false).build());
+            startForeground(201, new Builder(this, NotificationsController.OTHER_NOTIFICATIONS_CHANNEL).setSmallIcon(NUM).setContentTitle(LocaleController.getString("VoipOutgoingCall", NUM)).setShowWhen(false).build());
         }
     }
 
-    protected void updateServerConfig() {
+    /* Access modifiers changed, original: protected */
+    public void updateServerConfig() {
         final SharedPreferences preferences = MessagesController.getMainSettings(this.currentAccount);
         VoIPServerConfig.setConfig(preferences.getString("voip_server_config", "{}"));
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_phone_getCallConfig(), new RequestDelegate() {
@@ -194,7 +194,8 @@ public class VoIPService extends VoIPBaseService {
         });
     }
 
-    protected void onControllerPreRelease() {
+    /* Access modifiers changed, original: protected */
+    public void onControllerPreRelease() {
         if (this.debugLog == null) {
             this.debugLog = this.controller.getDebugLog();
         }
@@ -395,7 +396,8 @@ public class VoIPService extends VoIPBaseService {
         }
     }
 
-    protected void startRinging() {
+    /* Access modifiers changed, original: protected */
+    public void startRinging() {
         if (this.currentState != 15) {
             if (USE_CONNECTION_SERVICE && this.systemCallConnection != null) {
                 this.systemCallConnection.setRinging();
@@ -433,7 +435,8 @@ public class VoIPService extends VoIPBaseService {
         }
     }
 
-    protected boolean isRinging() {
+    /* Access modifiers changed, original: protected */
+    public boolean isRinging() {
         return this.currentState == 15;
     }
 
@@ -535,7 +538,8 @@ public class VoIPService extends VoIPBaseService {
         declineIncomingCall(1, null);
     }
 
-    protected Class<? extends Activity> getUIActivityClass() {
+    /* Access modifiers changed, original: protected */
+    public Class<? extends Activity> getUIActivityClass() {
         return VoIPActivity.class;
     }
 
@@ -655,7 +659,7 @@ public class VoIPService extends VoIPBaseService {
                     FileLog.d(f.getName() + " = " + f.get(this.call));
                 }
             }
-        } catch (Throwable x) {
+        } catch (Exception x) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.e(x);
             }
@@ -951,7 +955,7 @@ public class VoIPService extends VoIPBaseService {
                     }
                 }
             }, 5000);
-        } catch (Throwable x) {
+        } catch (Exception x) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.e("error starting call", x);
             }
@@ -959,7 +963,8 @@ public class VoIPService extends VoIPBaseService {
         }
     }
 
-    protected void showNotification() {
+    /* Access modifiers changed, original: protected */
+    public void showNotification() {
         showNotification(ContactsController.formatName(this.user.first_name, this.user.last_name), this.user.photo != null ? this.user.photo.photo_small : null, VoIPActivity.class);
     }
 
@@ -969,7 +974,7 @@ public class VoIPService extends VoIPBaseService {
         }
         this.spPlayID = this.soundPool.play(this.spConnectingId, 1.0f, 1.0f, 0, -1, 1.0f);
         if (this.spPlayID == 0) {
-            Runnable anonymousClass16 = new Runnable() {
+            AnonymousClass16 anonymousClass16 = new Runnable() {
                 public void run() {
                     if (VoIPBaseService.sharedInstance != null) {
                         if (VoIPService.this.spPlayID == 0) {
@@ -988,7 +993,8 @@ public class VoIPService extends VoIPBaseService {
         }
     }
 
-    protected void callFailed(int errorCode) {
+    /* Access modifiers changed, original: protected */
+    public void callFailed(int errorCode) {
         if (this.call != null) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("Discarding failed call");
@@ -1052,7 +1058,8 @@ public class VoIPService extends VoIPBaseService {
         }
     }
 
-    void onMediaButtonEvent(KeyEvent ev) {
+    /* Access modifiers changed, original: 0000 */
+    public void onMediaButtonEvent(KeyEvent ev) {
         boolean z = true;
         if ((ev.getKeyCode() != 79 && ev.getKeyCode() != 127 && ev.getKeyCode() != 85) || ev.getAction() != 1) {
             return;

@@ -53,7 +53,6 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.XiaomiUtilities;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.LinearSmoothScrollerMiddle;
 import org.telegram.messenger.support.widget.RecyclerView;
@@ -278,11 +277,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         if (!this.onlySelect && this.searchString == null) {
             this.proxyDrawable = new ProxyDrawable(context);
             this.proxyItem = menu.addItem(2, this.proxyDrawable);
-            this.passcodeItem = menu.addItem(1, (int) R.drawable.lock_close);
+            this.proxyItem.setContentDescription(LocaleController.getString("ProxySettings", NUM));
+            this.passcodeItem = menu.addItem(1, NUM);
             updatePasscodeButton();
             updateProxyButton(false);
         }
-        menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItemSearchListener() {
+        ActionBarMenuItem item = menu.addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItemSearchListener() {
             public void onSearchExpand() {
                 DialogsActivity.this.searching = true;
                 if (DialogsActivity.this.switchItem != null) {
@@ -301,6 +301,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     }
                 }
                 DialogsActivity.this.updatePasscodeButton();
+                DialogsActivity.this.actionBar.setBackButtonContentDescription(LocaleController.getString("AccDescrGoBack", NUM));
             }
 
             public boolean canCollapseSearch() {
@@ -313,7 +314,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 if (DialogsActivity.this.searchString == null) {
                     return true;
                 }
-                DialogsActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
+                DialogsActivity.this.finishFragment();
                 return false;
             }
 
@@ -338,6 +339,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     DialogsActivity.this.dialogsSearchAdapter.searchDialogs(null);
                 }
                 DialogsActivity.this.updatePasscodeButton();
+                DialogsActivity.this.actionBar.setBackButtonContentDescription(LocaleController.getString("AccDescrOpenMenu", NUM));
             }
 
             public void onTextChanged(EditText editText) {
@@ -358,24 +360,27 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     DialogsActivity.this.dialogsSearchAdapter.searchDialogs(text);
                 }
             }
-        }).setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
+        });
+        item.setSearchFieldHint(LocaleController.getString("Search", NUM));
+        item.setContentDescription(LocaleController.getString("Search", NUM));
         if (this.onlySelect) {
-            this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+            this.actionBar.setBackButtonImage(NUM);
             if (this.dialogsType == 3 && this.selectAlertString == null) {
-                this.actionBar.setTitle(LocaleController.getString("ForwardTo", R.string.ForwardTo));
+                this.actionBar.setTitle(LocaleController.getString("ForwardTo", NUM));
             } else {
-                this.actionBar.setTitle(LocaleController.getString("SelectChat", R.string.SelectChat));
+                this.actionBar.setTitle(LocaleController.getString("SelectChat", NUM));
             }
         } else {
             if (this.searchString != null) {
-                this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+                this.actionBar.setBackButtonImage(NUM);
             } else {
                 this.actionBar.setBackButtonDrawable(new MenuDrawable());
+                this.actionBar.setBackButtonContentDescription(LocaleController.getString("AccDescrOpenMenu", NUM));
             }
             if (BuildVars.DEBUG_VERSION) {
                 this.actionBar.setTitle("Telegram Beta");
             } else {
-                this.actionBar.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                this.actionBar.setTitle(LocaleController.getString("AppName", NUM));
             }
             this.actionBar.setSupportsHolidayImage(true);
         }
@@ -411,7 +416,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 boolean z = true;
                 if (id == -1) {
                     if (DialogsActivity.this.onlySelect) {
-                        DialogsActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
+                        DialogsActivity.this.finishFragment();
                     } else if (DialogsActivity.this.parentLayout != null) {
                         DialogsActivity.this.parentLayout.getDrawerLayoutContainer().openDrawer(false);
                     }
@@ -442,7 +447,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         backupImageView = new SizeNotifierFrameLayout(context) {
             int inputFieldHeight = 0;
 
-            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            /* Access modifiers changed, original: protected */
+            public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int widthSize = MeasureSpec.getSize(widthMeasureSpec);
                 int heightSize = MeasureSpec.getSize(heightMeasureSpec);
                 setMeasuredDimension(widthSize, heightSize);
@@ -480,7 +486,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 }
             }
 
-            protected void onLayout(boolean changed, int l, int t, int r, int b) {
+            /* Access modifiers changed, original: protected */
+            public void onLayout(boolean changed, int l, int t, int r, int b) {
                 int count = getChildCount();
                 Object tag = DialogsActivity.this.commentView != null ? DialogsActivity.this.commentView.getTag() : null;
                 int paddingBottom = (tag == null || !tag.equals(Integer.valueOf(2))) ? 0 : (getKeyboardHeight() > AndroidUtilities.dp(20.0f) || AndroidUtilities.isInMultiwindow) ? 0 : DialogsActivity.this.commentView.getEmojiPadding();
@@ -626,33 +633,33 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                             CharSequence[] items;
                             chat = MessagesController.getInstance(DialogsActivity.this.currentAccount).getChat(Integer.valueOf(-lower_id));
                             int[] icons = new int[4];
-                            icons[0] = dialog.pinned ? R.drawable.chats_unpin : R.drawable.chats_pin;
-                            icons[1] = hasUnread ? R.drawable.menu_read : R.drawable.menu_unread;
-                            icons[2] = R.drawable.chats_clear;
-                            icons[3] = R.drawable.chats_leave;
+                            icons[0] = dialog.pinned ? NUM : NUM;
+                            icons[1] = hasUnread ? NUM : NUM;
+                            icons[2] = NUM;
+                            icons[3] = NUM;
                             if (MessagesController.getInstance(DialogsActivity.this.currentAccount).isProxyDialog(dialog.id)) {
                                 items = new CharSequence[4];
                                 items[0] = null;
-                                items[1] = hasUnread ? LocaleController.getString("MarkAsRead", R.string.MarkAsRead) : LocaleController.getString("MarkAsUnread", R.string.MarkAsUnread);
-                                items[2] = LocaleController.getString("ClearHistoryCache", R.string.ClearHistoryCache);
+                                items[1] = hasUnread ? LocaleController.getString("MarkAsRead", NUM) : LocaleController.getString("MarkAsUnread", NUM);
+                                items[2] = LocaleController.getString("ClearHistoryCache", NUM);
                                 items[3] = null;
                             } else if (chat == null || !chat.megagroup) {
                                 items = new CharSequence[4];
-                                items[0] = dialog.pinned ? LocaleController.getString("UnpinFromTop", R.string.UnpinFromTop) : LocaleController.getString("PinToTop", R.string.PinToTop);
+                                items[0] = dialog.pinned ? LocaleController.getString("UnpinFromTop", NUM) : LocaleController.getString("PinToTop", NUM);
                                 if (hasUnread) {
-                                    string = LocaleController.getString("MarkAsRead", R.string.MarkAsRead);
+                                    string = LocaleController.getString("MarkAsRead", NUM);
                                 } else {
-                                    string = LocaleController.getString("MarkAsUnread", R.string.MarkAsUnread);
+                                    string = LocaleController.getString("MarkAsUnread", NUM);
                                 }
                                 items[1] = string;
-                                items[2] = LocaleController.getString("ClearHistoryCache", R.string.ClearHistoryCache);
-                                items[3] = LocaleController.getString("LeaveChannelMenu", R.string.LeaveChannelMenu);
+                                items[2] = LocaleController.getString("ClearHistoryCache", NUM);
+                                items[3] = LocaleController.getString("LeaveChannelMenu", NUM);
                             } else {
                                 items = new CharSequence[4];
-                                items[0] = dialog.pinned ? LocaleController.getString("UnpinFromTop", R.string.UnpinFromTop) : LocaleController.getString("PinToTop", R.string.PinToTop);
-                                items[1] = hasUnread ? LocaleController.getString("MarkAsRead", R.string.MarkAsRead) : LocaleController.getString("MarkAsUnread", R.string.MarkAsUnread);
-                                items[2] = TextUtils.isEmpty(chat.username) ? LocaleController.getString("ClearHistory", R.string.ClearHistory) : LocaleController.getString("ClearHistoryCache", R.string.ClearHistoryCache);
-                                items[3] = LocaleController.getString("LeaveMegaMenu", R.string.LeaveMegaMenu);
+                                items[0] = dialog.pinned ? LocaleController.getString("UnpinFromTop", NUM) : LocaleController.getString("PinToTop", NUM);
+                                items[1] = hasUnread ? LocaleController.getString("MarkAsRead", NUM) : LocaleController.getString("MarkAsUnread", NUM);
+                                items[2] = TextUtils.isEmpty(chat.username) ? LocaleController.getString("ClearHistory", NUM) : LocaleController.getString("ClearHistoryCache", NUM);
+                                items[3] = LocaleController.getString("LeaveMegaMenu", NUM);
                             }
                             builder.setItems(items, icons, new DialogsActivity$5$$Lambda$1(this, dialog, selectedDialog, pinned, hasUnread, chat, lower_id));
                             sheet = builder.create();
@@ -670,16 +677,16 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                             }
                             boolean isBot = (user == null || !user.bot || MessagesController.isSupportUser(user)) ? false : true;
                             CharSequence[] charSequenceArr = new CharSequence[4];
-                            charSequenceArr[0] = dialog.pinned ? LocaleController.getString("UnpinFromTop", R.string.UnpinFromTop) : LocaleController.getString("PinToTop", R.string.PinToTop);
-                            charSequenceArr[1] = hasUnread ? LocaleController.getString("MarkAsRead", R.string.MarkAsRead) : LocaleController.getString("MarkAsUnread", R.string.MarkAsUnread);
-                            charSequenceArr[2] = LocaleController.getString("ClearHistory", R.string.ClearHistory);
-                            string = isChat ? LocaleController.getString("DeleteChat", R.string.DeleteChat) : isBot ? LocaleController.getString("DeleteAndStop", R.string.DeleteAndStop) : LocaleController.getString("Delete", R.string.Delete);
+                            charSequenceArr[0] = dialog.pinned ? LocaleController.getString("UnpinFromTop", NUM) : LocaleController.getString("PinToTop", NUM);
+                            charSequenceArr[1] = hasUnread ? LocaleController.getString("MarkAsRead", NUM) : LocaleController.getString("MarkAsUnread", NUM);
+                            charSequenceArr[2] = LocaleController.getString("ClearHistory", NUM);
+                            string = isChat ? LocaleController.getString("DeleteChat", NUM) : isBot ? LocaleController.getString("DeleteAndStop", NUM) : LocaleController.getString("Delete", NUM);
                             charSequenceArr[3] = string;
                             int[] iArr = new int[4];
-                            iArr[0] = dialog.pinned ? R.drawable.chats_unpin : R.drawable.chats_pin;
-                            iArr[1] = hasUnread ? R.drawable.menu_read : R.drawable.menu_unread;
-                            iArr[2] = R.drawable.chats_clear;
-                            iArr[3] = isChat ? R.drawable.chats_leave : R.drawable.chats_delete;
+                            iArr[0] = dialog.pinned ? NUM : NUM;
+                            iArr[1] = hasUnread ? NUM : NUM;
+                            iArr[2] = NUM;
+                            iArr[3] = isChat ? NUM : NUM;
                             builder.setItems(charSequenceArr, iArr, new DialogsActivity$5$$Lambda$2(this, dialog, lower_id, selectedDialog, pinned, hasUnread, chat, user, isChat, isBot));
                             sheet = builder.create();
                             DialogsActivity.this.showDialog(sheet);
@@ -696,16 +703,17 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     return false;
                 } else {
                     AlertDialog.Builder builder2 = new AlertDialog.Builder(DialogsActivity.this.getParentActivity());
-                    builder2.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                    builder2.setMessage(LocaleController.getString("ClearSearch", R.string.ClearSearch));
-                    builder2.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), new DialogsActivity$5$$Lambda$0(this));
-                    builder2.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                    builder2.setTitle(LocaleController.getString("AppName", NUM));
+                    builder2.setMessage(LocaleController.getString("ClearSearch", NUM));
+                    builder2.setPositiveButton(LocaleController.getString("ClearButton", NUM).toUpperCase(), new DialogsActivity$5$$Lambda$0(this));
+                    builder2.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
                     DialogsActivity.this.showDialog(builder2.create());
                     return true;
                 }
             }
 
-            final /* synthetic */ void lambda$onItemClick$0$DialogsActivity$5(DialogInterface dialogInterface, int i) {
+            /* Access modifiers changed, original: final|synthetic */
+            public final /* synthetic */ void lambda$onItemClick$0$DialogsActivity$5(DialogInterface dialogInterface, int i) {
                 if (DialogsActivity.this.dialogsSearchAdapter.isRecentSearchDisplayed()) {
                     DialogsActivity.this.dialogsSearchAdapter.clearRecentSearch();
                 } else {
@@ -713,7 +721,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 }
             }
 
-            final /* synthetic */ void lambda$onItemClick$3$DialogsActivity$5(TL_dialog dialog, long selectedDialog, boolean pinned, boolean hasUnread, Chat chat, int lower_id, DialogInterface d, int which) {
+            /* Access modifiers changed, original: final|synthetic */
+            public final /* synthetic */ void lambda$onItemClick$3$DialogsActivity$5(TL_dialog dialog, long selectedDialog, boolean pinned, boolean hasUnread, Chat chat, int lower_id, DialogInterface d, int which) {
                 if (which == 0) {
                     if (dialog.pinned || MessagesController.getInstance(DialogsActivity.this.currentAccount).canPinDialog(false)) {
                         if (MessagesController.getInstance(DialogsActivity.this.currentAccount).pinDialog(selectedDialog, !pinned, null, 0) && !pinned) {
@@ -723,7 +732,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                         }
                         return;
                     }
-                    AlertsCreator.showSimpleAlert(DialogsActivity.this, LocaleController.formatString("PinToTopLimitReached", R.string.PinToTopLimitReached, LocaleController.formatPluralString("Chats", MessagesController.getInstance(DialogsActivity.this.currentAccount).maxPinnedDialogsCount)));
+                    AlertsCreator.showSimpleAlert(DialogsActivity.this, LocaleController.formatString("PinToTopLimitReached", NUM, LocaleController.formatPluralString("Chats", MessagesController.getInstance(DialogsActivity.this.currentAccount).maxPinnedDialogsCount)));
                 } else if (which != 1) {
                     AlertsCreator.createClearOrDeleteDialogAlert(DialogsActivity.this, which == 2, chat, null, lower_id == 0, new DialogsActivity$5$$Lambda$5(this, which, chat, selectedDialog));
                 } else if (hasUnread) {
@@ -734,17 +743,19 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 }
             }
 
-            final /* synthetic */ void lambda$null$2$DialogsActivity$5(int which, Chat chat, long selectedDialog) {
+            /* Access modifiers changed, original: final|synthetic */
+            public final /* synthetic */ void lambda$null$2$DialogsActivity$5(int which, Chat chat, long selectedDialog, boolean param) {
                 if (which != 2 || (chat.megagroup && TextUtils.isEmpty(chat.username))) {
-                    DialogsActivity.this.undoView.showWithAction(selectedDialog, which == 2, new DialogsActivity$5$$Lambda$6(this, which, selectedDialog));
+                    DialogsActivity.this.undoView.showWithAction(selectedDialog, which == 2, new DialogsActivity$5$$Lambda$6(this, which, selectedDialog, param));
                 } else {
-                    MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteDialog(selectedDialog, 2);
+                    MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteDialog(selectedDialog, 2, param);
                 }
             }
 
-            final /* synthetic */ void lambda$null$1$DialogsActivity$5(int which, long selectedDialog) {
+            /* Access modifiers changed, original: final|synthetic */
+            public final /* synthetic */ void lambda$null$1$DialogsActivity$5(int which, long selectedDialog, boolean param) {
                 if (which == 2) {
-                    MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteDialog(selectedDialog, 1);
+                    MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteDialog(selectedDialog, 1, param);
                     return;
                 }
                 MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteUserFromChat((int) (-selectedDialog), UserConfig.getInstance(DialogsActivity.this.currentAccount).getCurrentUser(), null);
@@ -753,11 +764,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 }
             }
 
-            final /* synthetic */ void lambda$onItemClick$6$DialogsActivity$5(TL_dialog dialog, int lower_id, long selectedDialog, boolean pinned, boolean hasUnread, Chat chat, User user, boolean isChat, boolean isBot, DialogInterface d, int which) {
+            /* Access modifiers changed, original: final|synthetic */
+            public final /* synthetic */ void lambda$onItemClick$6$DialogsActivity$5(TL_dialog dialog, int lower_id, long selectedDialog, boolean pinned, boolean hasUnread, Chat chat, User user, boolean isChat, boolean isBot, DialogInterface d, int which) {
                 if (which == 0) {
                     if (!dialog.pinned) {
                         if (!MessagesController.getInstance(DialogsActivity.this.currentAccount).canPinDialog(lower_id == 0)) {
-                            AlertsCreator.showSimpleAlert(DialogsActivity.this, LocaleController.formatString("PinToTopLimitReached", R.string.PinToTopLimitReached, LocaleController.formatPluralString("Chats", MessagesController.getInstance(DialogsActivity.this.currentAccount).maxPinnedDialogsCount)));
+                            AlertsCreator.showSimpleAlert(DialogsActivity.this, LocaleController.formatString("PinToTopLimitReached", NUM, LocaleController.formatPluralString("Chats", MessagesController.getInstance(DialogsActivity.this.currentAccount).maxPinnedDialogsCount)));
                             return;
                         }
                     }
@@ -775,21 +787,23 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 }
             }
 
-            final /* synthetic */ void lambda$null$5$DialogsActivity$5(long selectedDialog, int which, boolean isChat, boolean isBot) {
-                DialogsActivity.this.undoView.showWithAction(selectedDialog, which == 2, new DialogsActivity$5$$Lambda$4(this, which, isChat, selectedDialog, isBot));
+            /* Access modifiers changed, original: final|synthetic */
+            public final /* synthetic */ void lambda$null$5$DialogsActivity$5(long selectedDialog, int which, boolean isChat, boolean isBot, boolean param) {
+                DialogsActivity.this.undoView.showWithAction(selectedDialog, which == 2, new DialogsActivity$5$$Lambda$4(this, which, isChat, selectedDialog, param, isBot));
             }
 
-            final /* synthetic */ void lambda$null$4$DialogsActivity$5(int which, boolean isChat, long selectedDialog, boolean isBot) {
+            /* Access modifiers changed, original: final|synthetic */
+            public final /* synthetic */ void lambda$null$4$DialogsActivity$5(int which, boolean isChat, long selectedDialog, boolean param, boolean isBot) {
                 if (which != 2) {
                     if (isChat) {
                         Chat currentChat = MessagesController.getInstance(DialogsActivity.this.currentAccount).getChat(Integer.valueOf((int) (-selectedDialog)));
                         if (currentChat == null || !ChatObject.isNotInChat(currentChat)) {
                             MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteUserFromChat((int) (-selectedDialog), MessagesController.getInstance(DialogsActivity.this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(DialogsActivity.this.currentAccount).getClientUserId())), null);
                         } else {
-                            MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteDialog(selectedDialog, 0);
+                            MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteDialog(selectedDialog, 0, param);
                         }
                     } else {
-                        MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteDialog(selectedDialog, 0);
+                        MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteDialog(selectedDialog, 0, param);
                     }
                     if (isBot) {
                         MessagesController.getInstance(DialogsActivity.this.currentAccount).blockUser((int) selectedDialog);
@@ -800,7 +814,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     }
                     return;
                 }
-                MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteDialog(selectedDialog, 1);
+                MessagesController.getInstance(DialogsActivity.this.currentAccount).deleteDialog(selectedDialog, 1, param);
             }
 
             public void onLongClickRelease() {
@@ -814,7 +828,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         this.searchEmptyView = new EmptyTextProgressView(context);
         this.searchEmptyView.setVisibility(8);
         this.searchEmptyView.setShowAtCenter(true);
-        this.searchEmptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
+        this.searchEmptyView.setText(LocaleController.getString("NoResult", NUM));
         backupImageView.addView(this.searchEmptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.progressView = new RadialProgressView(context);
         this.progressView.setVisibility(8);
@@ -851,7 +865,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         this.floatingButton.setScaleType(ScaleType.CENTER);
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor("chats_actionBackground"), Theme.getColor("chats_actionPressedBackground"));
         if (VERSION.SDK_INT < 21) {
-            Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow).mutate();
+            Drawable shadowDrawable = context.getResources().getDrawable(NUM).mutate();
             shadowDrawable.setColorFilter(new PorterDuffColorFilter(-16777216, Mode.MULTIPLY));
             Drawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
@@ -859,7 +873,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         }
         this.floatingButton.setBackgroundDrawable(drawable);
         this.floatingButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_actionIcon"), Mode.MULTIPLY));
-        this.floatingButton.setImageResource(R.drawable.floating_pencil);
+        this.floatingButton.setImageResource(NUM);
         if (VERSION.SDK_INT >= 21) {
             StateListAnimator animator = new StateListAnimator();
             animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.floatingButton, View.TRANSLATION_Z, new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
@@ -872,6 +886,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 }
             });
         }
+        this.floatingButtonContainer.setContentDescription(LocaleController.getString("NewMessageTitle", NUM));
         FrameLayout frameLayout = this.floatingButtonContainer;
         View view2 = this.floatingButton;
         if (VERSION.SDK_INT >= 21) {
@@ -997,15 +1012,16 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             public void needRemoveHint(int did) {
                 if (DialogsActivity.this.getParentActivity() != null && MessagesController.getInstance(DialogsActivity.this.currentAccount).getUser(Integer.valueOf(did)) != null) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(DialogsActivity.this.getParentActivity());
-                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                    builder.setMessage(LocaleController.formatString("ChatHintsDelete", R.string.ChatHintsDelete, ContactsController.formatName(user.first_name, user.last_name)));
-                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new DialogsActivity$8$$Lambda$0(this, did));
-                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                    builder.setTitle(LocaleController.getString("AppName", NUM));
+                    builder.setMessage(LocaleController.formatString("ChatHintsDelete", NUM, ContactsController.formatName(user.first_name, user.last_name)));
+                    builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogsActivity$8$$Lambda$0(this, did));
+                    builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
                     DialogsActivity.this.showDialog(builder.create());
                 }
             }
 
-            final /* synthetic */ void lambda$needRemoveHint$0$DialogsActivity$8(int did, DialogInterface dialogInterface, int i) {
+            /* Access modifiers changed, original: final|synthetic */
+            public final /* synthetic */ void lambda$needRemoveHint$0$DialogsActivity$8(int did, DialogInterface dialogInterface, int i) {
                 DataQuery.getInstance(DialogsActivity.this.currentAccount).removePeer(did);
             }
         });
@@ -1105,12 +1121,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         return this.fragmentView;
     }
 
-    final /* synthetic */ void lambda$createView$1$DialogsActivity() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$1$DialogsActivity() {
         hideFloatingButton(false);
         this.listView.smoothScrollToPosition(0);
     }
 
-    final /* synthetic */ void lambda$createView$2$DialogsActivity(View view, int position) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$2$DialogsActivity(View view, int position) {
         if (this.listView != null && this.listView.getAdapter() != null && getParentActivity() != null) {
             long dialog_id = 0;
             int message_id = 0;
@@ -1247,7 +1265,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         }
     }
 
-    final /* synthetic */ void lambda$createView$3$DialogsActivity(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$3$DialogsActivity(View v) {
         Bundle args = new Bundle();
         args.putBoolean("destroyAfterSelect", true);
         presentFragment(new ContactsActivity(args));
@@ -1267,32 +1286,46 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         if (this.checkPermission && !this.onlySelect && VERSION.SDK_INT >= 23) {
             Context activity = getParentActivity();
             if (activity != null) {
+                boolean hasNotContactsPermission;
+                boolean hasNotStoragePermission;
                 this.checkPermission = false;
-                if (activity.checkSelfPermission("android.permission.READ_CONTACTS") != 0 || activity.checkSelfPermission("android.permission.WRITE_EXTERNAL_STORAGE") != 0) {
-                    Dialog create;
-                    if (this.askAboutContacts && UserConfig.getInstance(this.currentAccount).syncContacts && activity.shouldShowRequestPermissionRationale("android.permission.READ_CONTACTS")) {
-                        create = AlertsCreator.createContactsPermissionDialog(activity, new DialogsActivity$$Lambda$4(this)).create();
-                        this.permissionDialog = create;
-                        showDialog(create);
-                    } else if (activity.shouldShowRequestPermissionRationale("android.permission.WRITE_EXTERNAL_STORAGE")) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                        builder.setMessage(LocaleController.getString("PermissionStorage", R.string.PermissionStorage));
-                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-                        create = builder.create();
-                        this.permissionDialog = create;
-                        showDialog(create);
-                    } else {
-                        askForPermissons(true);
-                    }
+                if (activity.checkSelfPermission("android.permission.READ_CONTACTS") != 0) {
+                    hasNotContactsPermission = true;
+                } else {
+                    hasNotContactsPermission = false;
+                }
+                if (activity.checkSelfPermission("android.permission.WRITE_EXTERNAL_STORAGE") != 0) {
+                    hasNotStoragePermission = true;
+                } else {
+                    hasNotStoragePermission = false;
+                }
+                if (!hasNotContactsPermission && !hasNotStoragePermission) {
+                    return;
+                }
+                AlertDialog create;
+                if (hasNotContactsPermission && this.askAboutContacts && UserConfig.getInstance(this.currentAccount).syncContacts && activity.shouldShowRequestPermissionRationale("android.permission.READ_CONTACTS")) {
+                    create = AlertsCreator.createContactsPermissionDialog(activity, new DialogsActivity$$Lambda$4(this)).create();
+                    this.permissionDialog = create;
+                    showDialog(create);
+                } else if (hasNotStoragePermission && activity.shouldShowRequestPermissionRationale("android.permission.WRITE_EXTERNAL_STORAGE")) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                    builder.setTitle(LocaleController.getString("AppName", NUM));
+                    builder.setMessage(LocaleController.getString("PermissionStorage", NUM));
+                    builder.setPositiveButton(LocaleController.getString("OK", NUM), null);
+                    create = builder.create();
+                    this.permissionDialog = create;
+                    showDialog(create);
+                } else {
+                    askForPermissons(true);
                 }
             }
         } else if (!this.onlySelect && XiaomiUtilities.isMIUI() && VERSION.SDK_INT >= 19 && !XiaomiUtilities.isCustomPermissionGranted(10020) && getParentActivity() != null && !MessagesController.getGlobalNotificationsSettings().getBoolean("askedAboutMiuiLockscreen", false)) {
-            showDialog(new AlertDialog.Builder(getParentActivity()).setTitle(LocaleController.getString("AppName", R.string.AppName)).setMessage(LocaleController.getString("PermissionXiaomiLockscreen", R.string.PermissionXiaomiLockscreen)).setPositiveButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), new DialogsActivity$$Lambda$5(this)).setNegativeButton(LocaleController.getString("ContactsPermissionAlertNotNow", R.string.ContactsPermissionAlertNotNow), DialogsActivity$$Lambda$6.$instance).create());
+            showDialog(new AlertDialog.Builder(getParentActivity()).setTitle(LocaleController.getString("AppName", NUM)).setMessage(LocaleController.getString("PermissionXiaomiLockscreen", NUM)).setPositiveButton(LocaleController.getString("PermissionOpenSettings", NUM), new DialogsActivity$$Lambda$5(this)).setNegativeButton(LocaleController.getString("ContactsPermissionAlertNotNow", NUM), DialogsActivity$$Lambda$6.$instance).create());
         }
     }
 
-    final /* synthetic */ void lambda$onResume$4$DialogsActivity(int param) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onResume$4$DialogsActivity(int param) {
         boolean z;
         if (param != 0) {
             z = true;
@@ -1304,7 +1337,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         askForPermissons(false);
     }
 
-    final /* synthetic */ void lambda$onResume$5$DialogsActivity(DialogInterface dialog, int which) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onResume$5$DialogsActivity(DialogInterface dialog, int which) {
         Throwable xx;
         Intent intent = XiaomiUtilities.getPermissionManagerIntent();
         if (intent != null) {
@@ -1340,7 +1374,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         }
     }
 
-    protected void onBecomeFullyHidden() {
+    /* Access modifiers changed, original: protected */
+    public void onBecomeFullyHidden() {
         if (this.closeSearchFieldOnHide) {
             if (this.actionBar != null) {
                 this.actionBar.closeSearchField();
@@ -1425,9 +1460,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 return;
             }
             if (this.dialogsType == 3 && this.selectAlertString == null) {
-                this.actionBar.setTitle(LocaleController.getString("ForwardTo", R.string.ForwardTo));
+                this.actionBar.setTitle(LocaleController.getString("ForwardTo", NUM));
             } else {
-                this.actionBar.setTitle(LocaleController.getString("SelectChat", R.string.SelectChat));
+                this.actionBar.setTitle(LocaleController.getString("SelectChat", NUM));
             }
             if (this.commentView.getTag() != null) {
                 this.commentView.hidePopup(false);
@@ -1457,7 +1492,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             ArrayList<String> permissons = new ArrayList();
             if (UserConfig.getInstance(this.currentAccount).syncContacts && this.askAboutContacts && activity.checkSelfPermission("android.permission.READ_CONTACTS") != 0) {
                 if (alert) {
-                    Dialog create = AlertsCreator.createContactsPermissionDialog(activity, new DialogsActivity$$Lambda$7(this)).create();
+                    AlertDialog create = AlertsCreator.createContactsPermissionDialog(activity, new DialogsActivity$$Lambda$7(this)).create();
                     this.permissionDialog = create;
                     showDialog(create);
                     return;
@@ -1472,14 +1507,15 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             }
             if (!permissons.isEmpty()) {
                 try {
-                    activity.requestPermissions((String[]) permissons.toArray(new String[permissons.size()]), 1);
+                    activity.requestPermissions((String[]) permissons.toArray(new String[0]), 1);
                 } catch (Exception e) {
                 }
             }
         }
     }
 
-    final /* synthetic */ void lambda$askForPermissons$7$DialogsActivity(int param) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$askForPermissons$7$DialogsActivity(int param) {
         boolean z;
         if (param != 0) {
             z = true;
@@ -1491,9 +1527,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         askForPermissons(false);
     }
 
-    protected void onDialogDismiss(Dialog dialog) {
+    /* Access modifiers changed, original: protected */
+    public void onDialogDismiss(Dialog dialog) {
         super.onDialogDismiss(dialog);
-        if (this.permissionDialog != null && dialog == this.permissionDialog && getParentActivity() != null && this.askAboutContacts) {
+        if (this.permissionDialog != null && dialog == this.permissionDialog && getParentActivity() != null) {
             askForPermissons(false);
         }
     }
@@ -1579,7 +1616,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                         this.listView.setEmptyView(null);
                     }
                     this.progressView.setVisibility(8);
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
             }
@@ -1645,17 +1682,20 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         } else if (id != NotificationCenter.dialogsUnreadCounterChanged && id == NotificationCenter.needDeleteDialog && this.undoView != null) {
             long dialogId = ((Long) args[0]).longValue();
             User user = args[1];
-            this.undoView.showWithAction(dialogId, false, new DialogsActivity$$Lambda$8(this, args[2], dialogId));
+            Chat chat = args[2];
+            boolean revoke = ((Boolean) args[3]).booleanValue();
+            this.undoView.showWithAction(dialogId, false, new DialogsActivity$$Lambda$8(this, chat, dialogId, revoke));
         }
     }
 
-    final /* synthetic */ void lambda$didReceivedNotification$8$DialogsActivity(Chat chat, long dialogId) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$didReceivedNotification$8$DialogsActivity(Chat chat, long dialogId, boolean revoke) {
         if (chat == null) {
-            MessagesController.getInstance(this.currentAccount).deleteDialog(dialogId, 0);
+            MessagesController.getInstance(this.currentAccount).deleteDialog(dialogId, 0, revoke);
         } else if (ChatObject.isNotInChat(chat)) {
-            MessagesController.getInstance(this.currentAccount).deleteDialog(dialogId, 0);
+            MessagesController.getInstance(this.currentAccount).deleteDialog(dialogId, 0, revoke);
         } else {
-            MessagesController.getInstance(this.currentAccount).deleteUserFromChat((int) (-dialogId), MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId())), null);
+            MessagesController.getInstance(this.currentAccount).deleteUserFromChat((int) (-dialogId), MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId())), null, false, revoke);
         }
     }
 
@@ -1698,10 +1738,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             }
             this.passcodeItem.setVisibility(0);
             if (SharedConfig.appLocked) {
-                this.passcodeItem.setIcon((int) R.drawable.lock_close);
-            } else {
-                this.passcodeItem.setIcon((int) R.drawable.lock_open);
+                this.passcodeItem.setIcon(NUM);
+                this.passcodeItem.setContentDescription(LocaleController.getString("AccDescrPasscodeUnlock", NUM));
+                return;
             }
+            this.passcodeItem.setIcon(NUM);
+            this.passcodeItem.setContentDescription(LocaleController.getString("AccDescrPasscodeLock", NUM));
         }
     }
 
@@ -1792,9 +1834,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-((int) dialog_id)));
             if (ChatObject.isChannel(chat) && !chat.megagroup && (this.cantSendToChannels || !ChatObject.isCanWriteToChannel(-((int) dialog_id), this.currentAccount))) {
                 builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder.setMessage(LocaleController.getString("ChannelCantSendMessage", R.string.ChannelCantSendMessage));
-                builder.setNegativeButton(LocaleController.getString("OK", R.string.OK), null);
+                builder.setTitle(LocaleController.getString("AppName", NUM));
+                builder.setMessage(LocaleController.getString("ChannelCantSendMessage", NUM));
+                builder.setNegativeButton(LocaleController.getString("OK", NUM), null);
                 showDialog(builder.create());
                 return;
             }
@@ -1807,10 +1849,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 this.delegate = null;
                 return;
             }
-            lambda$createView$1$PhotoAlbumPickerActivity();
+            finishFragment();
         } else if (getParentActivity() != null) {
             builder = new AlertDialog.Builder(getParentActivity());
-            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+            builder.setTitle(LocaleController.getString("AppName", NUM));
             int lower_part = (int) dialog_id;
             int high_id = (int) (dialog_id >> 32);
             if (lower_part == 0) {
@@ -1826,7 +1868,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     return;
                 }
             } else if (lower_part == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
-                builder.setMessage(LocaleController.formatStringSimple(this.selectAlertStringGroup, LocaleController.getString("SavedMessages", R.string.SavedMessages)));
+                builder.setMessage(LocaleController.formatStringSimple(this.selectAlertStringGroup, LocaleController.getString("SavedMessages", NUM)));
             } else if (lower_part > 0) {
                 if (MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(lower_part)) != null) {
                     builder.setMessage(LocaleController.formatStringSimple(this.selectAlertString, UserObject.getUserName(user)));
@@ -1843,13 +1885,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     builder.setMessage(LocaleController.formatStringSimple(this.selectAlertStringGroup, chat.title));
                 }
             }
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new DialogsActivity$$Lambda$9(this, dialog_id));
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogsActivity$$Lambda$9(this, dialog_id));
+            builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
             showDialog(builder.create());
         }
     }
 
-    final /* synthetic */ void lambda$didSelectResult$9$DialogsActivity(long dialog_id, DialogInterface dialogInterface, int i) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$didSelectResult$9$DialogsActivity(long dialog_id, DialogInterface dialogInterface, int i) {
         didSelectResult(dialog_id, false, false);
     }
 
@@ -2001,7 +2044,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         return r10;
     }
 
-    final /* synthetic */ void lambda$getThemeDescriptions$10$DialogsActivity() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$getThemeDescriptions$10$DialogsActivity() {
         int count;
         int a;
         View child;

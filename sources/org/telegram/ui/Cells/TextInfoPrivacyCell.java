@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.text.method.LinkMovementMethod;
-import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -36,18 +35,19 @@ public class TextInfoPrivacyCell extends FrameLayout {
         this.textView.setMovementMethod(LinkMovementMethod.getInstance());
         this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
         this.textView.setLinkTextColor(Theme.getColor(this.linkTextColorKey));
-        View view = this.textView;
+        TextView textView = this.textView;
         if (!LocaleController.isRTL) {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, -2.0f, i | 48, (float) padding, 0.0f, (float) padding, 0.0f));
+        addView(textView, LayoutHelper.createFrame(-1, -2.0f, i | 48, (float) padding, 0.0f, (float) padding, 0.0f));
     }
 
     public void setLinkTextColorKey(String key) {
         this.linkTextColorKey = key;
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         if (this.fixedSize != 0) {
             super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) this.fixedSize), NUM));
         } else {

@@ -22,7 +22,7 @@ public class DispatchQueue extends Thread {
             } else {
                 this.handler.sendMessageDelayed(msg, (long) delay);
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
@@ -31,7 +31,7 @@ public class DispatchQueue extends Thread {
         try {
             this.syncLatch.await();
             this.handler.removeCallbacks(runnable);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
@@ -43,7 +43,7 @@ public class DispatchQueue extends Thread {
     public void postRunnable(Runnable runnable, long delay) {
         try {
             this.syncLatch.await();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         if (delay <= 0) {
@@ -57,7 +57,7 @@ public class DispatchQueue extends Thread {
         try {
             this.syncLatch.await();
             this.handler.removeCallbacksAndMessages(null);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }

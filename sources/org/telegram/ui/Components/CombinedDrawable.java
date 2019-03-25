@@ -81,7 +81,8 @@ public class CombinedDrawable extends Drawable implements Callback {
         return this.icon.getState();
     }
 
-    protected boolean onStateChange(int[] state) {
+    /* Access modifiers changed, original: protected */
+    public boolean onStateChange(int[] state) {
         return true;
     }
 

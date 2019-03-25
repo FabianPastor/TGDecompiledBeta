@@ -1,21 +1,19 @@
 package org.telegram.ui.Components;
 
-import org.telegram.ui.Components.NumberPicker.OnScrollListener;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import org.telegram.messenger.MessagesStorage.BooleanCallback;
 
-final /* synthetic */ class AlertsCreator$$Lambda$8 implements OnScrollListener {
-    private final boolean arg$1;
-    private final NumberPicker arg$2;
-    private final NumberPicker arg$3;
-    private final NumberPicker arg$4;
+final /* synthetic */ class AlertsCreator$$Lambda$8 implements OnClickListener {
+    private final BooleanCallback arg$1;
+    private final boolean[] arg$2;
 
-    AlertsCreator$$Lambda$8(boolean z, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3) {
-        this.arg$1 = z;
-        this.arg$2 = numberPicker;
-        this.arg$3 = numberPicker2;
-        this.arg$4 = numberPicker3;
+    AlertsCreator$$Lambda$8(BooleanCallback booleanCallback, boolean[] zArr) {
+        this.arg$1 = booleanCallback;
+        this.arg$2 = zArr;
     }
 
-    public void onScrollStateChange(NumberPicker numberPicker, int i) {
-        AlertsCreator.lambda$createDatePickerDialog$10$AlertsCreator(this.arg$1, this.arg$2, this.arg$3, this.arg$4, numberPicker, i);
+    public void onClick(DialogInterface dialogInterface, int i) {
+        AlertsCreator.lambda$createClearOrDeleteDialogAlert$10$AlertsCreator(this.arg$1, this.arg$2, dialogInterface, i);
     }
 }

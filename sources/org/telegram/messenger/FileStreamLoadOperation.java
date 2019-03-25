@@ -121,7 +121,7 @@ public class FileStreamLoadOperation extends BaseDataSource implements FileLoadO
         if (this.file != null) {
             try {
                 this.file.close();
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
             this.file = null;

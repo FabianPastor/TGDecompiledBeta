@@ -1,17 +1,15 @@
 package org.telegram.ui.Components;
 
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.View.OnKeyListener;
-
-final /* synthetic */ class EmojiView$$Lambda$7 implements OnKeyListener {
+final /* synthetic */ class EmojiView$$Lambda$7 implements Runnable {
     private final EmojiView arg$1;
+    private final int arg$2;
 
-    EmojiView$$Lambda$7(EmojiView emojiView) {
+    EmojiView$$Lambda$7(EmojiView emojiView, int i) {
         this.arg$1 = emojiView;
+        this.arg$2 = i;
     }
 
-    public boolean onKey(View view, int i, KeyEvent keyEvent) {
-        return this.arg$1.lambda$new$9$EmojiView(view, i, keyEvent);
+    public void run() {
+        this.arg$1.lambda$postBackspaceRunnable$8$EmojiView(this.arg$2);
     }
 }

@@ -35,7 +35,6 @@ import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.beta.R;
 import org.telegram.ui.ActionBar.Theme.ThemeInfo;
 import org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
 import org.telegram.ui.Components.CubicBezierInterpolator;
@@ -117,7 +116,8 @@ public class ActionBarLayout extends FrameLayout {
             setOrientation(1);
         }
 
-        protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+        /* Access modifiers changed, original: protected */
+        public boolean drawChild(Canvas canvas, View child, long drawingTime) {
             if (child instanceof ActionBar) {
                 return super.drawChild(canvas, child, drawingTime);
             }
@@ -149,7 +149,8 @@ public class ActionBarLayout extends FrameLayout {
             return false;
         }
 
-        protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        /* Access modifiers changed, original: protected */
+        public void onLayout(boolean changed, int l, int t, int r, int b) {
             int i;
             boolean z = false;
             super.onLayout(changed, l, t, r, b);
@@ -192,8 +193,8 @@ public class ActionBarLayout extends FrameLayout {
         super(context);
         this.parentActivity = (Activity) context;
         if (layerShadowDrawable == null) {
-            layerShadowDrawable = getResources().getDrawable(R.drawable.layer_shadow);
-            headerShadowDrawable = getResources().getDrawable(R.drawable.header_shadow).mutate();
+            layerShadowDrawable = getResources().getDrawable(NUM);
+            headerShadowDrawable = getResources().getDrawable(NUM).mutate();
             scrimPaint = new Paint();
         }
     }
@@ -297,7 +298,8 @@ public class ActionBarLayout extends FrameLayout {
         return true;
     }
 
-    protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+    /* Access modifiers changed, original: protected */
+    public boolean drawChild(Canvas canvas, View child, long drawingTime) {
         int width = (getWidth() - getPaddingLeft()) - getPaddingRight();
         int translationX = ((int) this.innerTranslationX) + getPaddingRight();
         int clipLeft = getPaddingLeft();
@@ -443,18 +445,22 @@ public class ActionBarLayout extends FrameLayout {
                     int dx = Math.max(0, (int) (ev.getX() - ((float) this.startedTrackingX)));
                     int dy = Math.abs(((int) ev.getY()) - this.startedTrackingY);
                     this.velocityTracker.addMovement(ev);
-                    if (this.maybeStartTracking && !this.startedTracking && ((float) dx) >= AndroidUtilities.getPixelsInCM(0.4f, true) && Math.abs(dx) / 3 > dy) {
-                        prepareForMoving(ev);
-                    } else if (this.startedTracking) {
-                        if (!this.beginTrackingSent) {
-                            if (this.parentActivity.getCurrentFocus() != null) {
-                                AndroidUtilities.hideKeyboard(this.parentActivity.getCurrentFocus());
+                    if (!this.maybeStartTracking || this.startedTracking || ((float) dx) < AndroidUtilities.getPixelsInCM(0.4f, true) || Math.abs(dx) / 3 <= dy) {
+                        if (this.startedTracking) {
+                            if (!this.beginTrackingSent) {
+                                if (this.parentActivity.getCurrentFocus() != null) {
+                                    AndroidUtilities.hideKeyboard(this.parentActivity.getCurrentFocus());
+                                }
+                                ((BaseFragment) this.fragmentsStack.get(this.fragmentsStack.size() - 1)).onBeginSlide();
+                                this.beginTrackingSent = true;
                             }
-                            ((BaseFragment) this.fragmentsStack.get(this.fragmentsStack.size() - 1)).onBeginSlide();
-                            this.beginTrackingSent = true;
+                            this.containerView.setTranslationX((float) dx);
+                            setInnerTranslationX((float) dx);
                         }
-                        this.containerView.setTranslationX((float) dx);
-                        setInnerTranslationX((float) dx);
+                    } else if (((BaseFragment) this.fragmentsStack.get(this.fragmentsStack.size() - 1)).canBeginSlide()) {
+                        prepareForMoving(ev);
+                    } else {
+                        this.maybeStartTracking = false;
                     }
                 } else if (ev != null && ev.getPointerId(0) == this.startedTrackingPointerId && (ev.getAction() == 3 || ev.getAction() == 1 || ev.getAction() == 6)) {
                     float velX;
@@ -639,7 +645,7 @@ public class ActionBarLayout extends FrameLayout {
             this.animationProgress = 0.0f;
             this.lastFrameTime = System.nanoTime() / 1000000;
         }
-        Runnable anonymousClass2 = new Runnable() {
+        AnonymousClass2 anonymousClass2 = new Runnable() {
             public void run() {
                 if (ActionBarLayout.this.animationRunnable == this) {
                     ActionBarLayout.this.animationRunnable = null;
@@ -881,7 +887,8 @@ public class ActionBarLayout extends FrameLayout {
         fragment.onBecomeFullyVisible();
     }
 
-    final /* synthetic */ void lambda$presentFragment$1$ActionBarLayout(boolean preview, boolean removeLast, BaseFragment currentFragment, BaseFragment fragment) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$presentFragment$1$ActionBarLayout(boolean preview, boolean removeLast, BaseFragment currentFragment, BaseFragment fragment) {
         if (preview) {
             this.inPreviewMode = true;
             this.transitionAnimationPreviewMode = false;
@@ -895,7 +902,8 @@ public class ActionBarLayout extends FrameLayout {
         fragment.onBecomeFullyVisible();
     }
 
-    final /* synthetic */ void lambda$presentFragment$2$ActionBarLayout() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$presentFragment$2$ActionBarLayout() {
         onAnimationEndCheck(false);
     }
 
@@ -1111,7 +1119,8 @@ public class ActionBarLayout extends FrameLayout {
         }
     }
 
-    final /* synthetic */ void lambda$closeLastFragment$3$ActionBarLayout(BaseFragment currentFragment, BaseFragment previousFragmentFinal) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$closeLastFragment$3$ActionBarLayout(BaseFragment currentFragment, BaseFragment previousFragmentFinal) {
         if (this.inPreviewMode || this.transitionAnimationPreviewMode) {
             this.containerViewBack.setScaleX(1.0f);
             this.containerViewBack.setScaleY(1.0f);
@@ -1126,11 +1135,13 @@ public class ActionBarLayout extends FrameLayout {
         previousFragmentFinal.onBecomeFullyVisible();
     }
 
-    final /* synthetic */ void lambda$closeLastFragment$4$ActionBarLayout() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$closeLastFragment$4$ActionBarLayout() {
         onAnimationEndCheck(false);
     }
 
-    final /* synthetic */ void lambda$closeLastFragment$5$ActionBarLayout(BaseFragment currentFragment) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$closeLastFragment$5$ActionBarLayout(BaseFragment currentFragment) {
         removeFragmentFromStackInternal(currentFragment);
         setVisibility(8);
         if (this.backgroundView != null) {

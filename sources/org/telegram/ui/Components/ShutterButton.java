@@ -12,7 +12,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.beta.R;
 
 public class ShutterButton extends View {
     private static final int LONG_PRESS_TIME = 800;
@@ -30,7 +29,7 @@ public class ShutterButton extends View {
     private boolean processRelease;
     private Paint redPaint;
     private float redProgress;
-    private Drawable shadowDrawable = getResources().getDrawable(R.drawable.camera_btn);
+    private Drawable shadowDrawable = getResources().getDrawable(NUM);
     private State state;
     private long totalTime;
     private Paint whitePaint = new Paint(1);
@@ -95,7 +94,8 @@ public class ShutterButton extends View {
         return this.state;
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         int cx = getMeasuredWidth() / 2;
         int cy = getMeasuredHeight() / 2;
         this.shadowDrawable.setBounds(cx - AndroidUtilities.dp(36.0f), cy - AndroidUtilities.dp(36.0f), AndroidUtilities.dp(36.0f) + cx, AndroidUtilities.dp(36.0f) + cy);
@@ -126,7 +126,8 @@ public class ShutterButton extends View {
         }
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension(AndroidUtilities.dp(84.0f), AndroidUtilities.dp(84.0f));
     }
 

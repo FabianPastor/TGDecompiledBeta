@@ -24,7 +24,6 @@ import android.widget.FrameLayout.LayoutParams;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.beta.R;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -81,16 +80,17 @@ public class EditTextCaption extends EditTextBoldCursor {
         int start;
         int end;
         Builder builder = new Builder(getContext());
-        builder.setTitle(LocaleController.getString("CreateLink", R.string.CreateLink));
+        builder.setTitle(LocaleController.getString("CreateLink", NUM));
         EditTextBoldCursor editText = new EditTextBoldCursor(getContext()) {
-            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            /* Access modifiers changed, original: protected */
+            public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f), NUM));
             }
         };
         editText.setTextSize(1, 18.0f);
         editText.setText("http://");
         editText.setTextColor(Theme.getColor("dialogTextBlack"));
-        editText.setHintText(LocaleController.getString("URL", R.string.URL));
+        editText.setHintText(LocaleController.getString("URL", NUM));
         editText.setHeaderHintColor(Theme.getColor("windowBackgroundWhiteBlueHeader"));
         editText.setSingleLine(true);
         editText.setFocusable(true);
@@ -110,8 +110,8 @@ public class EditTextCaption extends EditTextBoldCursor {
             this.selectionEnd = -1;
             this.selectionStart = -1;
         }
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new EditTextCaption$$Lambda$0(this, start, end, editText));
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.setPositiveButton(LocaleController.getString("OK", NUM), new EditTextCaption$$Lambda$0(this, start, end, editText));
+        builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
         builder.show().setOnShowListener(new EditTextCaption$$Lambda$1(editText));
         if (editText != null) {
             MarginLayoutParams layoutParams = (MarginLayoutParams) editText.getLayoutParams();
@@ -129,7 +129,8 @@ public class EditTextCaption extends EditTextBoldCursor {
         }
     }
 
-    final /* synthetic */ void lambda$makeSelectedUrl$0$EditTextCaption(int start, int end, EditTextBoldCursor editText, DialogInterface dialogInterface, int i) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$makeSelectedUrl$0$EditTextCaption(int start, int end, EditTextBoldCursor editText, DialogInterface dialogInterface, int i) {
         Editable editable = getText();
         CharacterStyle[] spans = (CharacterStyle[]) editable.getSpans(start, end, CharacterStyle.class);
         if (spans != null && spans.length > 0) {
@@ -222,23 +223,23 @@ public class EditTextCaption extends EditTextBoldCursor {
 
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 boolean z = true;
-                if (item.getItemId() == R.id.menu_regular) {
+                if (item.getItemId() == NUM) {
                     EditTextCaption.this.makeSelectedRegular();
                     mode.finish();
                     return z;
-                } else if (item.getItemId() == R.id.menu_bold) {
+                } else if (item.getItemId() == NUM) {
                     EditTextCaption.this.makeSelectedBold();
                     mode.finish();
                     return z;
-                } else if (item.getItemId() == R.id.menu_italic) {
+                } else if (item.getItemId() == NUM) {
                     EditTextCaption.this.makeSelectedItalic();
                     mode.finish();
                     return z;
-                } else if (item.getItemId() == R.id.menu_mono) {
+                } else if (item.getItemId() == NUM) {
                     EditTextCaption.this.makeSelectedMono();
                     mode.finish();
                     return z;
-                } else if (item.getItemId() == R.id.menu_link) {
+                } else if (item.getItemId() == NUM) {
                     EditTextCaption.this.makeSelectedUrl();
                     mode.finish();
                     return z;
@@ -266,11 +267,12 @@ public class EditTextCaption extends EditTextBoldCursor {
         return super.startActionMode(overrideCallback(callback));
     }
 
+    /* Access modifiers changed, original: protected */
     @SuppressLint({"DrawAllocation"})
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         try {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(51.0f));
             FileLog.e(e);
         }
@@ -292,7 +294,7 @@ public class EditTextCaption extends EditTextBoldCursor {
                             this.xOffset = (int) (((float) this.xOffset) + (-this.captionLayout.getLineLeft(0)));
                         }
                         this.yOffset = ((getMeasuredHeight() - this.captionLayout.getLineBottom(0)) / 2) + AndroidUtilities.dp(0.5f);
-                    } catch (Throwable e2) {
+                    } catch (Exception e2) {
                         FileLog.e(e2);
                     }
                 }
@@ -310,7 +312,8 @@ public class EditTextCaption extends EditTextBoldCursor {
         invalidate();
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         try {
             if (this.captionLayout != null && this.userNameLength == length()) {
@@ -323,7 +326,7 @@ public class EditTextCaption extends EditTextBoldCursor {
                 canvas.restore();
                 paint.setColor(oldColor);
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }

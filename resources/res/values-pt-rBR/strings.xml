@@ -180,7 +180,6 @@
     <string name="AreYouSureDeleteAndExitName">Tem certeza de que deseja apagar e sair do grupo **%1$s**?</string>
     <string name="AreYouSureDeleteContact">Você tem certeza de que deseja apagar este contato?</string>
     <string name="AreYouSureDeleteGIF">Tem certeza de que deseja apagar esse GIF?</string>
-    <string name="AreYouSureDeleteMessages">Você tem certeza de que deseja apagar %1$s?</string>
     <string name="AreYouSureDeletePhoto">Você tem certeza de que deseja apagar esta foto?</string>
     <string name="AreYouSureDeleteThisChat">Você tem certeza de que deseja apagar essa conversa?</string>
     <string name="AreYouSureDeleteThisChatWithGroup">Tem certeza de que deseja apagar o histórico do chat **%1$s**?</string>

@@ -11,11 +11,8 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
-import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.ConnectionsManager;
@@ -86,7 +83,7 @@ public class CommonGroupsActivity extends BaseFragment {
                     break;
                 default:
                     view = new TextInfoPrivacyCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                     break;
             }
             return new Holder(view);
@@ -127,13 +124,13 @@ public class CommonGroupsActivity extends BaseFragment {
 
     public View createView(Context context) {
         int i = 1;
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("GroupsInCommonTitle", R.string.GroupsInCommonTitle));
+        this.actionBar.setTitle(LocaleController.getString("GroupsInCommonTitle", NUM));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    CommonGroupsActivity.this.lambda$checkDiscard$18$ChatUsersActivity();
+                    CommonGroupsActivity.this.finishFragment();
                 }
             }
         });
@@ -141,16 +138,16 @@ public class CommonGroupsActivity extends BaseFragment {
         this.fragmentView.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
         FrameLayout frameLayout = this.fragmentView;
         this.emptyView = new EmptyTextProgressView(context);
-        this.emptyView.setText(LocaleController.getString("NoGroupsInCommon", R.string.NoGroupsInCommon));
+        this.emptyView.setText(LocaleController.getString("NoGroupsInCommon", NUM));
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView = new RecyclerListView(context);
         this.listView.setEmptyView(this.emptyView);
         RecyclerListView recyclerListView = this.listView;
-        LayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
         this.layoutManager = linearLayoutManager;
         recyclerListView.setLayoutManager(linearLayoutManager);
         recyclerListView = this.listView;
-        Adapter listAdapter = new ListAdapter(context);
+        ListAdapter listAdapter = new ListAdapter(context);
         this.listViewAdapter = listAdapter;
         recyclerListView.setAdapter(listAdapter);
         recyclerListView = this.listView;
@@ -180,7 +177,8 @@ public class CommonGroupsActivity extends BaseFragment {
         return this.fragmentView;
     }
 
-    final /* synthetic */ void lambda$createView$0$CommonGroupsActivity(View view, int position) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$0$CommonGroupsActivity(View view, int position) {
         if (position >= 0 && position < this.chats.size()) {
             Chat chat = (Chat) this.chats.get(position);
             Bundle args = new Bundle();
@@ -211,11 +209,13 @@ public class CommonGroupsActivity extends BaseFragment {
         }
     }
 
-    final /* synthetic */ void lambda$getChats$2$CommonGroupsActivity(int count, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$getChats$2$CommonGroupsActivity(int count, TLObject response, TL_error error) {
         AndroidUtilities.runOnUIThread(new CommonGroupsActivity$$Lambda$3(this, error, response, count));
     }
 
-    final /* synthetic */ void lambda$null$1$CommonGroupsActivity(TL_error error, TLObject response, int count) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$1$CommonGroupsActivity(TL_error error, TLObject response, int count) {
         if (error == null) {
             boolean z;
             messages_Chats res = (messages_Chats) response;
@@ -276,7 +276,8 @@ public class CommonGroupsActivity extends BaseFragment {
         return r10;
     }
 
-    final /* synthetic */ void lambda$getThemeDescriptions$3$CommonGroupsActivity() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$getThemeDescriptions$3$CommonGroupsActivity() {
         if (this.listView != null) {
             int count = this.listView.getChildCount();
             for (int a = 0; a < count; a++) {

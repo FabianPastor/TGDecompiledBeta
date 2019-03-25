@@ -2,8 +2,6 @@ package org.telegram.messenger;
 
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.BitmapFactory.Options;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
@@ -13,29 +11,25 @@ import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.text.Spannable;
 import android.text.Spannable.Factory;
-import android.text.TextPaint;
 import android.text.style.ImageSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import java.io.File;
-import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map.Entry;
 
 public class Emoji {
-    private static int bigImgSize = AndroidUtilities.dp(AndroidUtilities.isTablet() ? 40.0f : 32.0f);
-    private static final int[][] cols = new int[][]{new int[]{16, 16, 16, 16}, new int[]{6, 6, 6, 6}, new int[]{9, 9, 9, 9}, new int[]{9, 9, 9, 9}, new int[]{10, 10, 10, 10}};
+    private static int bigImgSize = AndroidUtilities.dp(AndroidUtilities.isTablet() ? 40.0f : 34.0f);
+    private static final int[][] cols = new int[][]{new int[]{16, 16, 16, 16}, new int[]{6, 6, 6, 6}, new int[]{5, 5, 5, 5}, new int[]{7, 7, 7, 7}, new int[]{5, 5, 5, 5}, new int[]{7, 7, 7, 7}, new int[]{8, 8, 8, 8}, new int[]{8, 8, 8, 8}};
     private static int drawImgSize = AndroidUtilities.dp(20.0f);
-    private static Bitmap[][] emojiBmp = ((Bitmap[][]) Array.newInstance(Bitmap.class, new int[]{5, 4}));
+    private static Bitmap[][] emojiBmp = ((Bitmap[][]) Array.newInstance(Bitmap.class, new int[]{8, 4}));
     public static HashMap<String, String> emojiColor = new HashMap();
     public static HashMap<String, Integer> emojiUseHistory = new HashMap();
     private static boolean inited = false;
-    private static boolean[][] loadingEmoji = ((boolean[][]) Array.newInstance(Boolean.TYPE, new int[]{5, 4}));
+    private static boolean[][] loadingEmoji = ((boolean[][]) Array.newInstance(Boolean.TYPE, new int[]{8, 4}));
     private static Paint placeholderPaint = new Paint();
     public static ArrayList<String> recentEmoji = new ArrayList();
     private static boolean recentEmojiLoaded = false;
@@ -59,7 +53,6 @@ public class Emoji {
     public static class EmojiDrawable extends Drawable {
         private static Paint paint = new Paint(2);
         private static Rect rect = new Rect();
-        private static TextPaint textPaint = new TextPaint(1);
         private boolean fullSize = false;
         private DrawableInfo info;
 
@@ -98,7 +91,8 @@ public class Emoji {
             }
         }
 
-        final /* synthetic */ void lambda$draw$0$Emoji$EmojiDrawable() {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$draw$0$Emoji$EmojiDrawable() {
             Emoji.loadEmoji(this.info.page, this.info.page2);
             Emoji.loadingEmoji[this.info.page][this.info.page2] = false;
         }
@@ -168,14 +162,14 @@ public class Emoji {
         int emojiFullSize;
         int add = 2;
         if (AndroidUtilities.density <= 1.0f) {
-            emojiFullSize = 32;
+            emojiFullSize = 33;
             add = 1;
         } else if (AndroidUtilities.density <= 1.5f) {
-            emojiFullSize = 64;
+            emojiFullSize = 66;
         } else if (AndroidUtilities.density <= 2.0f) {
-            emojiFullSize = 64;
+            emojiFullSize = 66;
         } else {
-            emojiFullSize = 64;
+            emojiFullSize = 66;
         }
         for (int j = 0; j < EmojiData.data.length; j++) {
             int count2 = (int) Math.ceil((double) (((float) EmojiData.data[j].length) / 4.0f));
@@ -190,59 +184,134 @@ public class Emoji {
         placeholderPaint.setColor(0);
     }
 
-    private static void loadEmoji(int page, int page2) {
-        float scale;
-        int imageResize = 1;
-        try {
-            int a;
-            File imageFile;
-            if (AndroidUtilities.density <= 1.0f) {
-                scale = 2.0f;
-                imageResize = 2;
-            } else if (AndroidUtilities.density <= 1.5f) {
-                scale = 2.0f;
-            } else if (AndroidUtilities.density <= 2.0f) {
-                scale = 2.0f;
-            } else {
-                scale = 2.0f;
-            }
-            for (a = 4; a < 7; a++) {
-                imageFile = ApplicationLoader.applicationContext.getFileStreamPath(String.format(Locale.US, "v%d_emoji%.01fx_%d.jpg", new Object[]{Integer.valueOf(a), Float.valueOf(scale), Integer.valueOf(page)}));
-                if (imageFile.exists()) {
-                    imageFile.delete();
-                }
-                imageFile = ApplicationLoader.applicationContext.getFileStreamPath(String.format(Locale.US, "v%d_emoji%.01fx_a_%d.jpg", new Object[]{Integer.valueOf(a), Float.valueOf(scale), Integer.valueOf(page)}));
-                if (imageFile.exists()) {
-                    imageFile.delete();
-                }
-            }
-            for (a = 8; a < 12; a++) {
-                imageFile = ApplicationLoader.applicationContext.getFileStreamPath(String.format(Locale.US, "v%d_emoji%.01fx_%d.png", new Object[]{Integer.valueOf(a), Float.valueOf(scale), Integer.valueOf(page)}));
-                if (imageFile.exists()) {
-                    imageFile.delete();
-                }
-            }
-        } catch (Throwable e) {
-            FileLog.e(e);
-        } catch (Throwable x) {
-            if (BuildVars.LOGS_ENABLED) {
-                FileLog.e("Error loading emoji", x);
-                return;
-            }
-            return;
-        }
-        Bitmap bitmap = null;
-        try {
-            InputStream is = ApplicationLoader.applicationContext.getAssets().open("emoji/" + String.format(Locale.US, "v13_emoji%.01fx_%d_%d.png", new Object[]{Float.valueOf(scale), Integer.valueOf(page), Integer.valueOf(page2)}));
-            Options opts = new Options();
-            opts.inJustDecodeBounds = false;
-            opts.inSampleSize = imageResize;
-            bitmap = BitmapFactory.decodeStream(is, null, opts);
-            is.close();
-        } catch (Throwable e2) {
-            FileLog.e(e2);
-        }
-        AndroidUtilities.runOnUIThread(new Emoji$$Lambda$0(page, page2, bitmap));
+    /* JADX WARNING: No exception handlers in catch block: Catch:{  } */
+    private static void loadEmoji(int r20, int r21) {
+        /*
+        r8 = 1;
+        r13 = org.telegram.messenger.AndroidUtilities.density;	 Catch:{ Throwable -> 0x00df }
+        r14 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r13 = (r13 > r14 ? 1 : (r13 == r14 ? 0 : -1));
+        if (r13 > 0) goto L_0x0048;
+    L_0x0009:
+        r11 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+        r8 = 2;
+    L_0x000c:
+        r2 = 12;
+    L_0x000e:
+        r13 = 14;
+        if (r2 >= r13) goto L_0x0065;
+    L_0x0012:
+        r13 = java.util.Locale.US;	 Catch:{ Exception -> 0x0061 }
+        r14 = "v%d_emoji%.01fx_%d.png";
+        r15 = 3;
+        r15 = new java.lang.Object[r15];	 Catch:{ Exception -> 0x0061 }
+        r16 = 0;
+        r17 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x0061 }
+        r15[r16] = r17;	 Catch:{ Exception -> 0x0061 }
+        r16 = 1;
+        r17 = java.lang.Float.valueOf(r11);	 Catch:{ Exception -> 0x0061 }
+        r15[r16] = r17;	 Catch:{ Exception -> 0x0061 }
+        r16 = 2;
+        r17 = java.lang.Integer.valueOf(r20);	 Catch:{ Exception -> 0x0061 }
+        r15[r16] = r17;	 Catch:{ Exception -> 0x0061 }
+        r7 = java.lang.String.format(r13, r14, r15);	 Catch:{ Exception -> 0x0061 }
+        r13 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0061 }
+        r6 = r13.getFileStreamPath(r7);	 Catch:{ Exception -> 0x0061 }
+        r13 = r6.exists();	 Catch:{ Exception -> 0x0061 }
+        if (r13 == 0) goto L_0x0045;
+    L_0x0042:
+        r6.delete();	 Catch:{ Exception -> 0x0061 }
+    L_0x0045:
+        r2 = r2 + 1;
+        goto L_0x000e;
+    L_0x0048:
+        r13 = org.telegram.messenger.AndroidUtilities.density;	 Catch:{ Throwable -> 0x00df }
+        r14 = NUM; // 0x3fCLASSNAME float:1.5 double:5.28426686E-315;
+        r13 = (r13 > r14 ? 1 : (r13 == r14 ? 0 : -1));
+        if (r13 > 0) goto L_0x0053;
+    L_0x0050:
+        r11 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+        goto L_0x000c;
+    L_0x0053:
+        r13 = org.telegram.messenger.AndroidUtilities.density;	 Catch:{ Throwable -> 0x00df }
+        r14 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+        r13 = (r13 > r14 ? 1 : (r13 == r14 ? 0 : -1));
+        if (r13 > 0) goto L_0x005e;
+    L_0x005b:
+        r11 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+        goto L_0x000c;
+    L_0x005e:
+        r11 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+        goto L_0x000c;
+    L_0x0061:
+        r4 = move-exception;
+        org.telegram.messenger.FileLog.e(r4);	 Catch:{ Throwable -> 0x00df }
+    L_0x0065:
+        r3 = 0;
+        r13 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x00da }
+        r13 = r13.getAssets();	 Catch:{ Throwable -> 0x00da }
+        r14 = new java.lang.StringBuilder;	 Catch:{ Throwable -> 0x00da }
+        r14.<init>();	 Catch:{ Throwable -> 0x00da }
+        r15 = "emoji/";
+        r14 = r14.append(r15);	 Catch:{ Throwable -> 0x00da }
+        r15 = java.util.Locale.US;	 Catch:{ Throwable -> 0x00da }
+        r16 = "v14_emoji%.01fx_%d_%d.png";
+        r17 = 3;
+        r0 = r17;
+        r0 = new java.lang.Object[r0];	 Catch:{ Throwable -> 0x00da }
+        r17 = r0;
+        r18 = 0;
+        r19 = java.lang.Float.valueOf(r11);	 Catch:{ Throwable -> 0x00da }
+        r17[r18] = r19;	 Catch:{ Throwable -> 0x00da }
+        r18 = 1;
+        r19 = java.lang.Integer.valueOf(r20);	 Catch:{ Throwable -> 0x00da }
+        r17[r18] = r19;	 Catch:{ Throwable -> 0x00da }
+        r18 = 2;
+        r19 = java.lang.Integer.valueOf(r21);	 Catch:{ Throwable -> 0x00da }
+        r17[r18] = r19;	 Catch:{ Throwable -> 0x00da }
+        r15 = java.lang.String.format(r15, r16, r17);	 Catch:{ Throwable -> 0x00da }
+        r14 = r14.append(r15);	 Catch:{ Throwable -> 0x00da }
+        r14 = r14.toString();	 Catch:{ Throwable -> 0x00da }
+        r9 = r13.open(r14);	 Catch:{ Throwable -> 0x00da }
+        r10 = new android.graphics.BitmapFactory$Options;	 Catch:{ Throwable -> 0x00da }
+        r10.<init>();	 Catch:{ Throwable -> 0x00da }
+        r13 = 0;
+        r10.inJustDecodeBounds = r13;	 Catch:{ Throwable -> 0x00da }
+        r10.inSampleSize = r8;	 Catch:{ Throwable -> 0x00da }
+        r13 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Throwable -> 0x00da }
+        r14 = 26;
+        if (r13 < r14) goto L_0x00c1;
+    L_0x00bd:
+        r13 = android.graphics.Bitmap.Config.HARDWARE;	 Catch:{ Throwable -> 0x00da }
+        r10.inPreferredConfig = r13;	 Catch:{ Throwable -> 0x00da }
+    L_0x00c1:
+        r13 = 0;
+        r3 = android.graphics.BitmapFactory.decodeStream(r9, r13, r10);	 Catch:{ Throwable -> 0x00da }
+        r9.close();	 Catch:{ Throwable -> 0x00da }
+        r3.prepareToDraw();	 Catch:{ Throwable -> 0x00da }
+    L_0x00cc:
+        r5 = r3;
+        r13 = new org.telegram.messenger.Emoji$$Lambda$0;	 Catch:{ Throwable -> 0x00df }
+        r0 = r20;
+        r1 = r21;
+        r13.<init>(r0, r1, r5);	 Catch:{ Throwable -> 0x00df }
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r13);	 Catch:{ Throwable -> 0x00df }
+    L_0x00d9:
+        return;
+    L_0x00da:
+        r4 = move-exception;
+        org.telegram.messenger.FileLog.e(r4);	 Catch:{ Throwable -> 0x00df }
+        goto L_0x00cc;
+    L_0x00df:
+        r12 = move-exception;
+        r13 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
+        if (r13 == 0) goto L_0x00d9;
+    L_0x00e4:
+        r13 = "Error loading emoji";
+        org.telegram.messenger.FileLog.e(r13, r12);
+        goto L_0x00d9;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.Emoji.loadEmoji(int, int):void");
     }
 
     static final /* synthetic */ void lambda$loadEmoji$0$Emoji(int page, int page2, Bitmap finalBitmap) {
@@ -484,7 +553,7 @@ public class Emoji {
                     break;
                 }
                 i++;
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
                 return cs;
             }
@@ -607,7 +676,7 @@ public class Emoji {
                     saveRecentEmoji();
                 }
                 sortEmoji();
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
             try {
@@ -619,7 +688,7 @@ public class Emoji {
                         emojiColor.put(args2[0], args2[1]);
                     }
                 }
-            } catch (Throwable e2) {
+            } catch (Exception e2) {
                 FileLog.e(e2);
             }
         }

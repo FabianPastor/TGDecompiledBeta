@@ -26,7 +26,6 @@ import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -59,14 +58,14 @@ public class UndoView extends FrameLayout {
         addView(undoButton, LayoutHelper.createFrame(-2, -1.0f, 21, 0.0f, 0.0f, 19.0f, 0.0f));
         undoButton.setOnClickListener(new UndoView$$Lambda$0(this));
         this.undoImageView = new ImageView(context);
-        this.undoImageView.setImageResource(R.drawable.chats_undo);
+        this.undoImageView.setImageResource(NUM);
         this.undoImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("undo_cancelColor"), Mode.MULTIPLY));
         undoButton.addView(this.undoImageView, LayoutHelper.createLinear(-2, -2, 19));
         this.undoTextView = new TextView(context);
         this.undoTextView.setTextSize(1, 14.0f);
         this.undoTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.undoTextView.setTextColor(Theme.getColor("undo_cancelColor"));
-        this.undoTextView.setText(LocaleController.getString("Undo", R.string.Undo));
+        this.undoTextView.setText(LocaleController.getString("Undo", NUM));
         this.undoTextView.setCompoundDrawablePadding(AndroidUtilities.dp(6.0f));
         undoButton.addView(this.undoTextView, LayoutHelper.createLinear(-2, -2, 19, 6, 0, 0, 0));
         this.rect = new RectF((float) AndroidUtilities.dp(15.0f), (float) AndroidUtilities.dp(15.0f), (float) AndroidUtilities.dp(33.0f), (float) AndroidUtilities.dp(33.0f));
@@ -84,7 +83,8 @@ public class UndoView extends FrameLayout {
         setVisibility(4);
     }
 
-    final /* synthetic */ void lambda$new$0$UndoView(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$0$UndoView(View v) {
         hide(false, true);
     }
 
@@ -130,18 +130,18 @@ public class UndoView extends FrameLayout {
     public void showWithAction(long did, boolean clear, Runnable actionRunnable, Runnable cancelRunnable) {
         if (actionRunnable != null) {
             if (clear) {
-                this.infoTextView.setText(LocaleController.getString("HistoryClearedUndo", R.string.HistoryClearedUndo));
+                this.infoTextView.setText(LocaleController.getString("HistoryClearedUndo", NUM));
             } else {
                 int lowerId = (int) did;
                 if (lowerId < 0) {
                     Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-lowerId));
                     if (!ChatObject.isChannel(chat) || chat.megagroup) {
-                        this.infoTextView.setText(LocaleController.getString("GroupDeletedUndo", R.string.GroupDeletedUndo));
+                        this.infoTextView.setText(LocaleController.getString("GroupDeletedUndo", NUM));
                     } else {
-                        this.infoTextView.setText(LocaleController.getString("ChannelDeletedUndo", R.string.ChannelDeletedUndo));
+                        this.infoTextView.setText(LocaleController.getString("ChannelDeletedUndo", NUM));
                     }
                 } else {
-                    this.infoTextView.setText(LocaleController.getString("ChatDeletedUndo", R.string.ChatDeletedUndo));
+                    this.infoTextView.setText(LocaleController.getString("ChatDeletedUndo", NUM));
                 }
             }
             if (this.currentActionRunnable != null) {
@@ -168,11 +168,13 @@ public class UndoView extends FrameLayout {
         }
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         int newSeconds = this.timeLeft > 0 ? (int) Math.ceil((double) (((float) this.timeLeft) / 1000.0f)) : 0;
         if (this.prevSeconds != newSeconds) {
             this.prevSeconds = newSeconds;

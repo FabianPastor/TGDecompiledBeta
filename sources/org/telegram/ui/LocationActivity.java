@@ -64,11 +64,8 @@ import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
-import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -194,14 +191,14 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             if (this.googleMap != null) {
                 this.googleMap.setMyLocationEnabled(false);
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         try {
             if (this.mapView != null) {
                 this.mapView.onDestroy();
             }
-        } catch (Throwable e2) {
+        } catch (Exception e2) {
             FileLog.e(e2);
         }
         if (this.adapter != null) {
@@ -220,7 +217,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         Drawable shadowDrawable;
         Drawable combinedDrawable;
         StateListAnimator animator;
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
         if (AndroidUtilities.isTablet()) {
             this.actionBar.setOccupyStatusBar(false);
@@ -229,7 +226,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    LocationActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
+                    LocationActivity.this.finishFragment();
                 } else if (id == 2) {
                     if (LocationActivity.this.googleMap != null) {
                         LocationActivity.this.googleMap.setMapType(1);
@@ -247,7 +244,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                         double lat = LocationActivity.this.messageObject.messageOwner.media.geo.lat;
                         double lon = LocationActivity.this.messageObject.messageOwner.media.geo._long;
                         LocationActivity.this.getParentActivity().startActivity(new Intent("android.intent.action.VIEW", Uri.parse("geo:" + lat + "," + lon + "?q=" + lat + "," + lon)));
-                    } catch (Throwable e) {
+                    } catch (Exception e) {
                         FileLog.e(e);
                     }
                 }
@@ -255,8 +252,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         });
         ActionBarMenu menu = this.actionBar.createMenu();
         if (this.messageObject == null) {
-            this.actionBar.setTitle(LocaleController.getString("ShareLocation", R.string.ShareLocation));
-            menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItemSearchListener() {
+            this.actionBar.setTitle(LocaleController.getString("ShareLocation", NUM));
+            menu.addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItemSearchListener() {
                 public void onSearchExpand() {
                     LocationActivity.this.searching = true;
                     LocationActivity.this.otherItem.setVisibility(8);
@@ -289,25 +286,27 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                         LocationActivity.this.searchAdapter.searchDelayed(text, LocationActivity.this.userLocation);
                     }
                 }
-            }).setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
+            }).setSearchFieldHint(LocaleController.getString("Search", NUM));
         } else if (this.messageObject.isLiveLocation()) {
-            this.actionBar.setTitle(LocaleController.getString("AttachLiveLocation", R.string.AttachLiveLocation));
+            this.actionBar.setTitle(LocaleController.getString("AttachLiveLocation", NUM));
         } else {
             if (this.messageObject.messageOwner.media.title == null || this.messageObject.messageOwner.media.title.length() <= 0) {
-                this.actionBar.setTitle(LocaleController.getString("ChatLocation", R.string.ChatLocation));
+                this.actionBar.setTitle(LocaleController.getString("ChatLocation", NUM));
             } else {
-                this.actionBar.setTitle(LocaleController.getString("SharedPlace", R.string.SharedPlace));
+                this.actionBar.setTitle(LocaleController.getString("SharedPlace", NUM));
             }
-            menu.addItem(1, (int) R.drawable.share);
+            menu.addItem(1, NUM).setContentDescription(LocaleController.getString("ShareFile", NUM));
         }
-        this.otherItem = menu.addItem(0, (int) R.drawable.ic_ab_other);
-        this.otherItem.addSubItem(2, LocaleController.getString("Map", R.string.Map));
-        this.otherItem.addSubItem(3, LocaleController.getString("Satellite", R.string.Satellite));
-        this.otherItem.addSubItem(4, LocaleController.getString("Hybrid", R.string.Hybrid));
+        this.otherItem = menu.addItem(0, NUM);
+        this.otherItem.addSubItem(2, LocaleController.getString("Map", NUM));
+        this.otherItem.addSubItem(3, LocaleController.getString("Satellite", NUM));
+        this.otherItem.addSubItem(4, LocaleController.getString("Hybrid", NUM));
+        this.otherItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
         this.fragmentView = new FrameLayout(context) {
             private boolean first = true;
 
-            protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+            /* Access modifiers changed, original: protected */
+            public void onLayout(boolean changed, int left, int top, int right, int bottom) {
                 super.onLayout(changed, left, top, right, bottom);
                 if (changed) {
                     LocationActivity.this.fixLayoutInternal(this.first);
@@ -319,16 +318,17 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         this.locationButton = new ImageView(context);
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor("profile_actionBackground"), Theme.getColor("profile_actionPressedBackground"));
         if (VERSION.SDK_INT < 21) {
-            shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow_profile).mutate();
+            shadowDrawable = context.getResources().getDrawable(NUM).mutate();
             shadowDrawable.setColorFilter(new PorterDuffColorFilter(-16777216, Mode.MULTIPLY));
             combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
             drawable = combinedDrawable;
         }
         this.locationButton.setBackgroundDrawable(drawable);
-        this.locationButton.setImageResource(R.drawable.myloc_on);
+        this.locationButton.setImageResource(NUM);
         this.locationButton.setScaleType(ScaleType.CENTER);
         this.locationButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("profile_actionIcon"), Mode.MULTIPLY));
+        this.locationButton.setContentDescription(LocaleController.getString("AccDescrMyLocation", NUM));
         if (VERSION.SDK_INT >= 21) {
             animator = new StateListAnimator();
             animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.locationButton, "translationZ", new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
@@ -360,12 +360,12 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         this.listView.setItemAnimator(null);
         this.listView.setLayoutAnimation(null);
         RecyclerListView recyclerListView = this.listView;
-        Adapter locationActivityAdapter = new LocationActivityAdapter(context, this.liveLocationType, this.dialogId);
+        LocationActivityAdapter locationActivityAdapter = new LocationActivityAdapter(context, this.liveLocationType, this.dialogId);
         this.adapter = locationActivityAdapter;
         recyclerListView.setAdapter(locationActivityAdapter);
         this.listView.setVerticalScrollBarEnabled(false);
         recyclerListView = this.listView;
-        LayoutManager anonymousClass5 = new LinearLayoutManager(context, 1, false) {
+        AnonymousClass5 anonymousClass5 = new LinearLayoutManager(context, 1, false) {
             public boolean supportsPredictiveItemAnimations() {
                 return false;
             }
@@ -389,7 +389,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 }
             }
 
-            final /* synthetic */ void lambda$onScrolled$0$LocationActivity$6() {
+            /* Access modifiers changed, original: final|synthetic */
+            public final /* synthetic */ void lambda$onScrolled$0$LocationActivity$6() {
                 LocationActivity.this.adapter.searchPlacesWithQuery(null, LocationActivity.this.myLocation, true);
             }
         });
@@ -447,19 +448,19 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         };
         new Thread(new LocationActivity$$Lambda$2(this, this.mapView)).start();
         View view = new View(context);
-        view.setBackgroundResource(R.drawable.header_shadow_reverse);
+        view.setBackgroundResource(NUM);
         this.mapViewClip.addView(view, LayoutHelper.createFrame(-1, 3, 83));
         if (this.messageObject == null) {
             this.markerImageView = new ImageView(context);
-            this.markerImageView.setImageResource(R.drawable.map_pin);
+            this.markerImageView.setImageResource(NUM);
             this.mapViewClip.addView(this.markerImageView, LayoutHelper.createFrame(24, 42, 49));
             this.markerXImageView = new ImageView(context);
             this.markerXImageView.setAlpha(0.0f);
             this.markerXImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("location_markerX"), Mode.MULTIPLY));
-            this.markerXImageView.setImageResource(R.drawable.place_x);
+            this.markerXImageView.setImageResource(NUM);
             this.mapViewClip.addView(this.markerXImageView, LayoutHelper.createFrame(14, 14, 49));
             this.emptyView = new EmptyTextProgressView(context);
-            this.emptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
+            this.emptyView.setText(LocaleController.getString("NoResult", NUM));
             this.emptyView.setShowAtCenter(true);
             this.emptyView.setVisibility(8);
             frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
@@ -467,9 +468,9 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             this.searchListView.setVisibility(8);
             this.searchListView.setLayoutManager(new LinearLayoutManager(context, 1, false));
             recyclerListView = this.searchListView;
-            locationActivityAdapter = new LocationActivitySearchAdapter(context);
-            this.searchAdapter = locationActivityAdapter;
-            recyclerListView.setAdapter(locationActivityAdapter);
+            LocationActivitySearchAdapter locationActivitySearchAdapter = new LocationActivitySearchAdapter(context);
+            this.searchAdapter = locationActivitySearchAdapter;
+            recyclerListView.setAdapter(locationActivitySearchAdapter);
             frameLayout.addView(this.searchListView, LayoutHelper.createFrame(-1, -1, 51));
             this.searchListView.setOnScrollListener(new OnScrollListener() {
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -487,7 +488,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             this.routeButton = new ImageView(context);
             drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor("chats_actionBackground"), Theme.getColor("chats_actionPressedBackground"));
             if (VERSION.SDK_INT < 21) {
-                shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow).mutate();
+                shadowDrawable = context.getResources().getDrawable(NUM).mutate();
                 shadowDrawable.setColorFilter(new PorterDuffColorFilter(-16777216, Mode.MULTIPLY));
                 combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
                 combinedDrawable.setIconSize(AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
@@ -495,7 +496,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             }
             this.routeButton.setBackgroundDrawable(drawable);
             this.routeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_actionIcon"), Mode.MULTIPLY));
-            this.routeButton.setImageResource(R.drawable.navigate);
+            this.routeButton.setImageResource(NUM);
             this.routeButton.setScaleType(ScaleType.CENTER);
             if (VERSION.SDK_INT >= 21) {
                 animator = new StateListAnimator();
@@ -549,7 +550,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         return this.fragmentView;
     }
 
-    final /* synthetic */ void lambda$createView$1$LocationActivity(View view, int position) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$1$LocationActivity(View view, int position) {
         if (position != 1 || this.messageObject == null || this.messageObject.isLiveLocation()) {
             if (position == 1 && this.liveLocationType != 2) {
                 if (!(this.delegate == null || this.userLocation == null)) {
@@ -559,20 +561,20 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     location.geo._long = AndroidUtilities.fixLocationCoord(this.userLocation.getLongitude());
                     this.delegate.didSelectLocation(location, this.liveLocationType);
                 }
-                lambda$createView$1$PhotoAlbumPickerActivity();
+                finishFragment();
             } else if ((position != 2 || this.liveLocationType != 1) && ((position != 1 || this.liveLocationType != 2) && (position != 3 || this.liveLocationType != 3))) {
                 Object object = this.adapter.getItem(position);
                 if (object instanceof TL_messageMediaVenue) {
                     if (!(object == null || this.delegate == null)) {
                         this.delegate.didSelectLocation((TL_messageMediaVenue) object, this.liveLocationType);
                     }
-                    lambda$createView$1$PhotoAlbumPickerActivity();
+                    finishFragment();
                 } else if (object instanceof LiveLocation) {
                     this.googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(((LiveLocation) object).marker.getPosition(), this.googleMap.getMaxZoomLevel() - 4.0f));
                 }
             } else if (LocationController.getInstance(this.currentAccount).isSharingLocation(this.dialogId)) {
                 LocationController.getInstance(this.currentAccount).removeSharingLocation(this.dialogId);
-                lambda$createView$1$PhotoAlbumPickerActivity();
+                finishFragment();
             } else if (this.delegate != null && getParentActivity() != null && this.myLocation != null) {
                 User user = null;
                 if (((int) this.dialogId) > 0) {
@@ -585,24 +587,27 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    final /* synthetic */ void lambda$null$0$LocationActivity(int param) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$0$LocationActivity(int param) {
         TL_messageMediaGeoLive location = new TL_messageMediaGeoLive();
         location.geo = new TL_geoPoint();
         location.geo.lat = AndroidUtilities.fixLocationCoord(this.myLocation.getLatitude());
         location.geo._long = AndroidUtilities.fixLocationCoord(this.myLocation.getLongitude());
         location.period = param;
         this.delegate.didSelectLocation(location, this.liveLocationType);
-        lambda$createView$1$PhotoAlbumPickerActivity();
+        finishFragment();
     }
 
-    final /* synthetic */ void lambda$createView$2$LocationActivity(ArrayList places) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$2$LocationActivity(ArrayList places) {
         if (!(this.wasResults || places.isEmpty())) {
             this.wasResults = true;
         }
         this.emptyView.showTextView();
     }
 
-    final /* synthetic */ void lambda$createView$5$LocationActivity(MapView map) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$5$LocationActivity(MapView map) {
         try {
             map.onCreate(null);
         } catch (Exception e) {
@@ -610,7 +615,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         AndroidUtilities.runOnUIThread(new LocationActivity$$Lambda$13(this, map));
     }
 
-    final /* synthetic */ void lambda$null$4$LocationActivity(MapView map) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$4$LocationActivity(MapView map) {
         if (this.mapView != null && getParentActivity() != null) {
             try {
                 map.onCreate(null);
@@ -620,27 +626,30 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 if (this.onResumeCalled) {
                     this.mapView.onResume();
                 }
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
         }
     }
 
-    final /* synthetic */ void lambda$null$3$LocationActivity(GoogleMap map1) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$3$LocationActivity(GoogleMap map1) {
         this.googleMap = map1;
         this.googleMap.setPadding(AndroidUtilities.dp(70.0f), 0, AndroidUtilities.dp(70.0f), AndroidUtilities.dp(10.0f));
         onMapInit();
     }
 
-    final /* synthetic */ void lambda$createView$6$LocationActivity(View view, int position) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$6$LocationActivity(View view, int position) {
         TL_messageMediaVenue object = this.searchAdapter.getItem(position);
         if (!(object == null || this.delegate == null)) {
             this.delegate.didSelectLocation(object, this.liveLocationType);
         }
-        lambda$createView$1$PhotoAlbumPickerActivity();
+        finishFragment();
     }
 
-    final /* synthetic */ void lambda$createView$7$LocationActivity(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$7$LocationActivity(View v) {
         if (VERSION.SDK_INT >= 23) {
             Activity activity = getParentActivity();
             if (!(activity == null || activity.checkSelfPermission("android.permission.ACCESS_COARSE_LOCATION") == 0)) {
@@ -651,13 +660,14 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         if (this.myLocation != null) {
             try {
                 getParentActivity().startActivity(new Intent("android.intent.action.VIEW", Uri.parse(String.format(Locale.US, "http://maps.google.com/maps?saddr=%f,%f&daddr=%f,%f", new Object[]{Double.valueOf(this.myLocation.getLatitude()), Double.valueOf(this.myLocation.getLongitude()), Double.valueOf(this.messageObject.messageOwner.media.geo.lat), Double.valueOf(this.messageObject.messageOwner.media.geo._long)}))));
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
         }
     }
 
-    final /* synthetic */ void lambda$createView$8$LocationActivity(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$8$LocationActivity(View v) {
         if (VERSION.SDK_INT >= 23) {
             Activity activity = getParentActivity();
             if (!(activity == null || activity.checkSelfPermission("android.permission.ACCESS_COARSE_LOCATION") == 0)) {
@@ -692,7 +702,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             result = Bitmap.createBitmap(AndroidUtilities.dp(62.0f), AndroidUtilities.dp(76.0f), Config.ARGB_8888);
             result.eraseColor(0);
             Canvas canvas = new Canvas(result);
-            Drawable drawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.livepin);
+            Drawable drawable = ApplicationLoader.applicationContext.getResources().getDrawable(NUM);
             drawable.setBounds(0, 0, AndroidUtilities.dp(62.0f), AndroidUtilities.dp(76.0f));
             drawable.draw(canvas);
             Paint roundPaint = new Paint(1);
@@ -773,7 +783,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                         liveLocation.marker.setPosition(new LatLng(this.myLocation.getLatitude(), this.myLocation.getLongitude()));
                     }
                 }
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
         } else {
@@ -797,8 +807,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             } else {
                 LatLng latLng = new LatLng(this.userLocation.getLatitude(), this.userLocation.getLongitude());
                 try {
-                    this.googleMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin)));
-                } catch (Throwable e) {
+                    this.googleMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(NUM)));
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
                 this.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, this.googleMap.getMaxZoomLevel() - 4.0f));
@@ -807,7 +817,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             }
             try {
                 this.googleMap.setMyLocationEnabled(true);
-            } catch (Throwable e2) {
+            } catch (Exception e2) {
                 FileLog.e(e2);
             }
             this.googleMap.getUiSettings().setMyLocationButtonEnabled(false);
@@ -823,13 +833,13 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     try {
                         if (!((LocationManager) ApplicationLoader.applicationContext.getSystemService("location")).isProviderEnabled("gps")) {
                             Builder builder = new Builder(getParentActivity());
-                            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                            builder.setMessage(LocaleController.getString("GpsDisabledAlert", R.string.GpsDisabledAlert));
-                            builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", R.string.ConnectingToProxyEnable), new LocationActivity$$Lambda$7(this));
-                            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                            builder.setTitle(LocaleController.getString("AppName", NUM));
+                            builder.setMessage(LocaleController.getString("GpsDisabledAlert", NUM));
+                            builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", NUM), new LocationActivity$$Lambda$7(this));
+                            builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
                             showDialog(builder.create());
                         }
-                    } catch (Throwable e22) {
+                    } catch (Exception e22) {
                         FileLog.e(e22);
                     }
                 }
@@ -837,13 +847,15 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    final /* synthetic */ void lambda$onMapInit$9$LocationActivity(Location location) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onMapInit$9$LocationActivity(Location location) {
         positionMarker(location);
         LocationController.getInstance(this.currentAccount).setGoogleMapLocation(location, this.isFirstLocation);
         this.isFirstLocation = false;
     }
 
-    final /* synthetic */ void lambda$onMapInit$10$LocationActivity(DialogInterface dialog, int id) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onMapInit$10$LocationActivity(DialogInterface dialog, int id) {
         if (getParentActivity() != null) {
             try {
                 getParentActivity().startActivity(new Intent("android.settings.LOCATION_SOURCE_SETTINGS"));
@@ -855,25 +867,26 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     private void showPermissionAlert(boolean byButton) {
         if (getParentActivity() != null) {
             Builder builder = new Builder(getParentActivity());
-            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+            builder.setTitle(LocaleController.getString("AppName", NUM));
             if (byButton) {
-                builder.setMessage(LocaleController.getString("PermissionNoLocationPosition", R.string.PermissionNoLocationPosition));
+                builder.setMessage(LocaleController.getString("PermissionNoLocationPosition", NUM));
             } else {
-                builder.setMessage(LocaleController.getString("PermissionNoLocation", R.string.PermissionNoLocation));
+                builder.setMessage(LocaleController.getString("PermissionNoLocation", NUM));
             }
-            builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), new LocationActivity$$Lambda$8(this));
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+            builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new LocationActivity$$Lambda$8(this));
+            builder.setPositiveButton(LocaleController.getString("OK", NUM), null);
             showDialog(builder.create());
         }
     }
 
-    final /* synthetic */ void lambda$showPermissionAlert$11$LocationActivity(DialogInterface dialog, int which) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$showPermissionAlert$11$LocationActivity(DialogInterface dialog, int which) {
         if (getParentActivity() != null) {
             try {
                 Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
                 intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
                 getParentActivity().startActivity(intent);
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
         }
@@ -885,7 +898,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 if (this.mapView.getParent() instanceof ViewGroup) {
                     ((ViewGroup) this.mapView.getParent()).removeView(this.mapView);
                 }
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
             if (this.mapViewClip != null) {
@@ -996,7 +1009,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    final /* synthetic */ void lambda$fixLayoutInternal$12$LocationActivity() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$fixLayoutInternal$12$LocationActivity() {
         int i;
         LinearLayoutManager linearLayoutManager = this.layoutManager;
         if (this.liveLocationType == 1 || this.liveLocationType == 2) {
@@ -1085,7 +1099,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     if (messages.size() > 1) {
                         try {
                             this.googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, AndroidUtilities.dp(60.0f)));
-                        } catch (Throwable e) {
+                        } catch (Exception e) {
                             FileLog.e(e);
                         }
                     }
@@ -1120,13 +1134,15 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         return false;
     }
 
-    final /* synthetic */ void lambda$getRecentLocations$14$LocationActivity(long dialog_id, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$getRecentLocations$14$LocationActivity(long dialog_id, TLObject response, TL_error error) {
         if (response != null) {
             AndroidUtilities.runOnUIThread(new LocationActivity$$Lambda$12(this, response, dialog_id));
         }
     }
 
-    final /* synthetic */ void lambda$null$13$LocationActivity(TLObject response, long dialog_id) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$13$LocationActivity(TLObject response, long dialog_id) {
         if (this.googleMap != null) {
             messages_Messages res = (messages_Messages) response;
             int a = 0;
@@ -1150,12 +1166,12 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         int a;
         MessageObject messageObject;
         if (id == NotificationCenter.closeChats) {
-            lambda$null$9$ProfileActivity();
+            removeSelfFromStack();
         } else if (id == NotificationCenter.locationPermissionGranted) {
             if (this.googleMap != null) {
                 try {
                     this.googleMap.setMyLocationEnabled(true);
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
             }
@@ -1204,7 +1220,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         if (this.mapView != null && this.mapsInitialized) {
             try {
                 this.mapView.onPause();
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
         }
@@ -1226,7 +1242,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         if (this.googleMap != null) {
             try {
                 this.googleMap.setMyLocationEnabled(true);
-            } catch (Throwable e2) {
+            } catch (Exception e2) {
                 FileLog.e(e2);
             }
         }

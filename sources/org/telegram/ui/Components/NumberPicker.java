@@ -13,6 +13,8 @@ import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View.MeasureSpec;
 import android.view.ViewConfiguration;
+import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -80,6 +82,10 @@ public class NumberPicker extends LinearLayout {
     private VelocityTracker mVelocityTracker;
     private boolean mWrapSelectorWheel;
 
+    public interface Formatter {
+        String format(int i);
+    }
+
     public interface OnValueChangeListener {
         void onValueChange(NumberPicker numberPicker, int i, int i2);
     }
@@ -90,10 +96,6 @@ public class NumberPicker extends LinearLayout {
         public static final int SCROLL_STATE_TOUCH_SCROLL = 1;
 
         void onScrollStateChange(NumberPicker numberPicker, int i);
-    }
-
-    public interface Formatter {
-        String format(int i);
     }
 
     class ChangeCurrentByOneFromLongPressCommand implements Runnable {
@@ -283,7 +285,8 @@ public class NumberPicker extends LinearLayout {
         init();
     }
 
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+    /* Access modifiers changed, original: protected */
+    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
         int msrdWdth = getMeasuredWidth();
         int msrdHght = getMeasuredHeight();
         int inptTxtMsrdWdth = this.mInputText.getMeasuredWidth();
@@ -299,7 +302,8 @@ public class NumberPicker extends LinearLayout {
         }
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(makeMeasureSpec(widthMeasureSpec, this.mMaxWidth), makeMeasureSpec(heightMeasureSpec, this.mMaxHeight));
         setMeasuredDimension(resolveSizeAndStateRespectingMinSize(this.mMinWidth, getMeasuredWidth(), widthMeasureSpec), resolveSizeAndStateRespectingMinSize(this.mMinHeight, getMeasuredHeight(), heightMeasureSpec));
     }
@@ -539,15 +543,18 @@ public class NumberPicker extends LinearLayout {
         }
     }
 
-    protected int computeVerticalScrollOffset() {
+    /* Access modifiers changed, original: protected */
+    public int computeVerticalScrollOffset() {
         return this.mCurrentScrollOffset;
     }
 
-    protected int computeVerticalScrollRange() {
+    /* Access modifiers changed, original: protected */
+    public int computeVerticalScrollRange() {
         return ((this.mMaxValue - this.mMinValue) + 1) * this.mSelectorElementHeight;
     }
 
-    protected int computeVerticalScrollExtent() {
+    /* Access modifiers changed, original: protected */
+    public int computeVerticalScrollExtent() {
         return getHeight();
     }
 
@@ -685,20 +692,24 @@ public class NumberPicker extends LinearLayout {
         }
     }
 
-    protected float getTopFadingEdgeStrength() {
+    /* Access modifiers changed, original: protected */
+    public float getTopFadingEdgeStrength() {
         return 0.9f;
     }
 
-    protected float getBottomFadingEdgeStrength() {
+    /* Access modifiers changed, original: protected */
+    public float getBottomFadingEdgeStrength() {
         return 0.9f;
     }
 
-    protected void onDetachedFromWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         removeAllCallbacks();
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         float x = (float) ((getRight() - getLeft()) / 2);
         float y = (float) this.mCurrentScrollOffset;
         int[] selectorIndices = this.mSelectorIndices;
@@ -840,6 +851,16 @@ public class NumberPicker extends LinearLayout {
             this.mScrollState = scrollState;
             if (this.mOnScrollListener != null) {
                 this.mOnScrollListener.onScrollStateChange(this, scrollState);
+            }
+            if (scrollState == 0) {
+                AccessibilityManager am = (AccessibilityManager) getContext().getSystemService("accessibility");
+                if (am.isTouchExplorationEnabled()) {
+                    String text = this.mDisplayedValues == null ? formatNumber(this.mValue) : this.mDisplayedValues[this.mValue - this.mMinValue];
+                    AccessibilityEvent event = AccessibilityEvent.obtain();
+                    event.setEventType(16384);
+                    event.getText().add(text);
+                    am.sendAccessibilityEvent(event);
+                }
             }
         }
     }

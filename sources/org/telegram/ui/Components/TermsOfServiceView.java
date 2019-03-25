@@ -18,7 +18,6 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_account_deleteAccount;
@@ -54,14 +53,14 @@ public class TermsOfServiceView extends FrameLayout {
             addView(view, new LayoutParams(-1, AndroidUtilities.statusBarHeight));
         }
         ImageView imageView = new ImageView(context);
-        imageView.setImageResource(R.drawable.logo_middle);
+        imageView.setImageResource(NUM);
         addView(imageView, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, (float) (top + 30), 0.0f, 0.0f));
         this.titleTextView = new TextView(context);
         this.titleTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.titleTextView.setTextSize(1, 17.0f);
         this.titleTextView.setGravity(51);
         this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.titleTextView.setText(LocaleController.getString("PrivacyPolicyAndTerms", R.string.PrivacyPolicyAndTerms));
+        this.titleTextView.setText(LocaleController.getString("PrivacyPolicyAndTerms", NUM));
         addView(this.titleTextView, LayoutHelper.createFrame(-2, -2.0f, 51, 27.0f, (float) (top + 126), 27.0f, 75.0f));
         this.scrollView = new ScrollView(context);
         AndroidUtilities.setScrollViewEdgeEffectColor(this.scrollView, Theme.getColor("actionBarDefault"));
@@ -75,7 +74,7 @@ public class TermsOfServiceView extends FrameLayout {
         this.textView.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
         this.scrollView.addView(this.textView, new LayoutParams(-2, -2));
         TextView declineTextView = new TextView(context);
-        declineTextView.setText(LocaleController.getString("Decline", R.string.Decline).toUpperCase());
+        declineTextView.setText(LocaleController.getString("Decline", NUM).toUpperCase());
         declineTextView.setGravity(17);
         declineTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         declineTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText"));
@@ -84,12 +83,12 @@ public class TermsOfServiceView extends FrameLayout {
         addView(declineTextView, LayoutHelper.createFrame(-2, -2.0f, 83, 16.0f, 0.0f, 16.0f, 16.0f));
         declineTextView.setOnClickListener(new TermsOfServiceView$$Lambda$0(this));
         TextView acceptTextView = new TextView(context);
-        acceptTextView.setText(LocaleController.getString("Accept", R.string.Accept).toUpperCase());
+        acceptTextView.setText(LocaleController.getString("Accept", NUM).toUpperCase());
         acceptTextView.setGravity(17);
         acceptTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         acceptTextView.setTextColor(-1);
         acceptTextView.setTextSize(1, 16.0f);
-        acceptTextView.setBackgroundResource(R.drawable.regbtn_states);
+        acceptTextView.setBackgroundResource(NUM);
         if (VERSION.SDK_INT >= 21) {
             StateListAnimator animator = new StateListAnimator();
             animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(acceptTextView, "translationZ", new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
@@ -101,25 +100,28 @@ public class TermsOfServiceView extends FrameLayout {
         acceptTextView.setOnClickListener(new TermsOfServiceView$$Lambda$1(this));
     }
 
-    final /* synthetic */ void lambda$new$4$TermsOfServiceView(View view) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$4$TermsOfServiceView(View view) {
         Builder builder = new Builder(view.getContext());
-        builder.setTitle(LocaleController.getString("TermsOfService", R.string.TermsOfService));
-        builder.setPositiveButton(LocaleController.getString("DeclineDeactivate", R.string.DeclineDeactivate), new TermsOfServiceView$$Lambda$4(this));
-        builder.setNegativeButton(LocaleController.getString("Back", R.string.Back), null);
-        builder.setMessage(LocaleController.getString("TosUpdateDecline", R.string.TosUpdateDecline));
+        builder.setTitle(LocaleController.getString("TermsOfService", NUM));
+        builder.setPositiveButton(LocaleController.getString("DeclineDeactivate", NUM), new TermsOfServiceView$$Lambda$4(this));
+        builder.setNegativeButton(LocaleController.getString("Back", NUM), null);
+        builder.setMessage(LocaleController.getString("TosUpdateDecline", NUM));
         builder.show();
     }
 
-    final /* synthetic */ void lambda$null$3$TermsOfServiceView(DialogInterface dialog, int which) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$3$TermsOfServiceView(DialogInterface dialog, int which) {
         Builder builder12 = new Builder(getContext());
-        builder12.setMessage(LocaleController.getString("TosDeclineDeleteAccount", R.string.TosDeclineDeleteAccount));
-        builder12.setTitle(LocaleController.getString("AppName", R.string.AppName));
-        builder12.setPositiveButton(LocaleController.getString("Deactivate", R.string.Deactivate), new TermsOfServiceView$$Lambda$5(this));
-        builder12.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder12.setMessage(LocaleController.getString("TosDeclineDeleteAccount", NUM));
+        builder12.setTitle(LocaleController.getString("AppName", NUM));
+        builder12.setPositiveButton(LocaleController.getString("Deactivate", NUM), new TermsOfServiceView$$Lambda$5(this));
+        builder12.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
         builder12.show();
     }
 
-    final /* synthetic */ void lambda$null$2$TermsOfServiceView(DialogInterface dialogInterface, int i) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$2$TermsOfServiceView(DialogInterface dialogInterface, int i) {
         AlertDialog progressDialog = new AlertDialog(getContext(), 3);
         progressDialog.setCanCacnel(false);
         TL_account_deleteAccount req = new TL_account_deleteAccount();
@@ -128,41 +130,49 @@ public class TermsOfServiceView extends FrameLayout {
         progressDialog.show();
     }
 
-    final /* synthetic */ void lambda$null$1$TermsOfServiceView(AlertDialog progressDialog, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$1$TermsOfServiceView(AlertDialog progressDialog, TLObject response, TL_error error) {
         AndroidUtilities.runOnUIThread(new TermsOfServiceView$$Lambda$7(this, progressDialog, response, error));
     }
 
-    final /* synthetic */ void lambda$null$0$TermsOfServiceView(AlertDialog progressDialog, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$0$TermsOfServiceView(AlertDialog progressDialog, TLObject response, TL_error error) {
         try {
             progressDialog.dismiss();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         if (response instanceof TL_boolTrue) {
             MessagesController.getInstance(this.currentAccount).performLogout(0);
             return;
         }
-        String errorText = LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred);
+        String errorText = LocaleController.getString("ErrorOccurred", NUM);
         if (error != null) {
             errorText = errorText + "\n" + error.text;
         }
         Builder builder1 = new Builder(getContext());
-        builder1.setTitle(LocaleController.getString("AppName", R.string.AppName));
+        builder1.setTitle(LocaleController.getString("AppName", NUM));
         builder1.setMessage(errorText);
-        builder1.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+        builder1.setPositiveButton(LocaleController.getString("OK", NUM), null);
         builder1.show();
     }
 
-    final /* synthetic */ void lambda$new$6$TermsOfServiceView(View view) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$6$TermsOfServiceView(View view) {
         if (this.currentTos.min_age_confirm != 0) {
             Builder builder = new Builder(view.getContext());
-            builder.setTitle(LocaleController.getString("TosAgeTitle", R.string.TosAgeTitle));
-            builder.setPositiveButton(LocaleController.getString("Agree", R.string.Agree), new TermsOfServiceView$$Lambda$3(this));
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-            builder.setMessage(LocaleController.formatString("TosAgeText", R.string.TosAgeText, LocaleController.formatPluralString("Years", this.currentTos.min_age_confirm)));
+            builder.setTitle(LocaleController.getString("TosAgeTitle", NUM));
+            builder.setPositiveButton(LocaleController.getString("Agree", NUM), new TermsOfServiceView$$Lambda$3(this));
+            builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
+            builder.setMessage(LocaleController.formatString("TosAgeText", NUM, LocaleController.formatPluralString("Years", this.currentTos.min_age_confirm)));
             builder.show();
             return;
         }
+        accept();
+    }
+
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$5$TermsOfServiceView(DialogInterface dialog, int which) {
         accept();
     }
 
@@ -187,7 +197,8 @@ public class TermsOfServiceView extends FrameLayout {
         this.currentAccount = account;
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         measureChildWithMargins(this.titleTextView, widthMeasureSpec, 0, heightMeasureSpec, 0);
         ((LayoutParams) this.scrollView.getLayoutParams()).topMargin = AndroidUtilities.dp(156.0f) + this.titleTextView.getMeasuredHeight();
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);

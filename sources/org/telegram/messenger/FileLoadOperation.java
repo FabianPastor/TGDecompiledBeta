@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.FileLocation;
 import org.telegram.tgnet.TLRPC.InputFileLocation;
 import org.telegram.tgnet.TLRPC.InputWebFileLocation;
@@ -66,6 +66,7 @@ public class FileLoadOperation {
     private int datacenterId;
     private ArrayList<RequestInfo> delayedRequestInfos;
     private FileLoadOperationDelegate delegate;
+    private Document document;
     private int downloadedBytes;
     private boolean encryptFile;
     private byte[] encryptIv;
@@ -238,10 +239,10 @@ public class FileLoadOperation {
         this.ext = ImageLoader.getHttpUrlExtension(webDocument.url, defaultExt);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:36:0x00f9 A:{Catch:{ Exception -> 0x00e5 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:17:0x0085 A:{Catch:{ Exception -> 0x00e5 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:43:? A:{SYNTHETIC, RETURN, Catch:{ Exception -> 0x00e5 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:20:0x0091 A:{Catch:{ Exception -> 0x00e5 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:36:0x00fb A:{Catch:{ Exception -> 0x00e7 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:17:0x0087 A:{Catch:{ Exception -> 0x00e7 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:43:? A:{SYNTHETIC, RETURN, Catch:{ Exception -> 0x00e7 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:20:0x0093 A:{Catch:{ Exception -> 0x00e7 }} */
     public FileLoadOperation(org.telegram.tgnet.TLRPC.Document r13, java.lang.Object r14) {
         /*
         r12 = this;
@@ -252,154 +253,155 @@ public class FileLoadOperation {
         r5 = new byte[r5];
         r12.preloadTempBuffer = r5;
         r12.state = r10;
-        r12.parentObject = r14;	 Catch:{ Exception -> 0x00e5 }
-        r5 = r13 instanceof org.telegram.tgnet.TLRPC.TL_documentEncrypted;	 Catch:{ Exception -> 0x00e5 }
-        if (r5 == 0) goto L_0x009a;
+        r12.parentObject = r14;	 Catch:{ Exception -> 0x00e7 }
+        r5 = r13 instanceof org.telegram.tgnet.TLRPC.TL_documentEncrypted;	 Catch:{ Exception -> 0x00e7 }
+        if (r5 == 0) goto L_0x009c;
     L_0x0013:
-        r5 = new org.telegram.tgnet.TLRPC$TL_inputEncryptedFileLocation;	 Catch:{ Exception -> 0x00e5 }
-        r5.<init>();	 Catch:{ Exception -> 0x00e5 }
-        r12.location = r5;	 Catch:{ Exception -> 0x00e5 }
-        r5 = r12.location;	 Catch:{ Exception -> 0x00e5 }
-        r6 = r13.id;	 Catch:{ Exception -> 0x00e5 }
-        r5.id = r6;	 Catch:{ Exception -> 0x00e5 }
-        r5 = r12.location;	 Catch:{ Exception -> 0x00e5 }
-        r6 = r13.access_hash;	 Catch:{ Exception -> 0x00e5 }
-        r5.access_hash = r6;	 Catch:{ Exception -> 0x00e5 }
-        r5 = r13.dc_id;	 Catch:{ Exception -> 0x00e5 }
-        r12.datacenterId = r5;	 Catch:{ Exception -> 0x00e5 }
-        r12.initialDatacenterId = r5;	 Catch:{ Exception -> 0x00e5 }
+        r5 = new org.telegram.tgnet.TLRPC$TL_inputEncryptedFileLocation;	 Catch:{ Exception -> 0x00e7 }
+        r5.<init>();	 Catch:{ Exception -> 0x00e7 }
+        r12.location = r5;	 Catch:{ Exception -> 0x00e7 }
+        r5 = r12.location;	 Catch:{ Exception -> 0x00e7 }
+        r6 = r13.id;	 Catch:{ Exception -> 0x00e7 }
+        r5.id = r6;	 Catch:{ Exception -> 0x00e7 }
+        r5 = r12.location;	 Catch:{ Exception -> 0x00e7 }
+        r6 = r13.access_hash;	 Catch:{ Exception -> 0x00e7 }
+        r5.access_hash = r6;	 Catch:{ Exception -> 0x00e7 }
+        r5 = r13.dc_id;	 Catch:{ Exception -> 0x00e7 }
+        r12.datacenterId = r5;	 Catch:{ Exception -> 0x00e7 }
+        r12.initialDatacenterId = r5;	 Catch:{ Exception -> 0x00e7 }
         r5 = 32;
-        r5 = new byte[r5];	 Catch:{ Exception -> 0x00e5 }
-        r12.iv = r5;	 Catch:{ Exception -> 0x00e5 }
-        r5 = r13.iv;	 Catch:{ Exception -> 0x00e5 }
+        r5 = new byte[r5];	 Catch:{ Exception -> 0x00e7 }
+        r12.iv = r5;	 Catch:{ Exception -> 0x00e7 }
+        r5 = r13.iv;	 Catch:{ Exception -> 0x00e7 }
         r6 = 0;
-        r7 = r12.iv;	 Catch:{ Exception -> 0x00e5 }
+        r7 = r12.iv;	 Catch:{ Exception -> 0x00e7 }
         r8 = 0;
-        r9 = r12.iv;	 Catch:{ Exception -> 0x00e5 }
-        r9 = r9.length;	 Catch:{ Exception -> 0x00e5 }
-        java.lang.System.arraycopy(r5, r6, r7, r8, r9);	 Catch:{ Exception -> 0x00e5 }
-        r5 = r13.key;	 Catch:{ Exception -> 0x00e5 }
-        r12.key = r5;	 Catch:{ Exception -> 0x00e5 }
+        r9 = r12.iv;	 Catch:{ Exception -> 0x00e7 }
+        r9 = r9.length;	 Catch:{ Exception -> 0x00e7 }
+        java.lang.System.arraycopy(r5, r6, r7, r8, r9);	 Catch:{ Exception -> 0x00e7 }
+        r5 = r13.key;	 Catch:{ Exception -> 0x00e7 }
+        r12.key = r5;	 Catch:{ Exception -> 0x00e7 }
     L_0x0042:
-        r5 = r13.size;	 Catch:{ Exception -> 0x00e5 }
-        r12.totalBytesCount = r5;	 Catch:{ Exception -> 0x00e5 }
-        r5 = r12.key;	 Catch:{ Exception -> 0x00e5 }
-        if (r5 == 0) goto L_0x0060;
-    L_0x004a:
+        r12.document = r13;	 Catch:{ Exception -> 0x00e7 }
+        r5 = r13.size;	 Catch:{ Exception -> 0x00e7 }
+        r12.totalBytesCount = r5;	 Catch:{ Exception -> 0x00e7 }
+        r5 = r12.key;	 Catch:{ Exception -> 0x00e7 }
+        if (r5 == 0) goto L_0x0062;
+    L_0x004c:
         r4 = 0;
-        r5 = r12.totalBytesCount;	 Catch:{ Exception -> 0x00e5 }
+        r5 = r12.totalBytesCount;	 Catch:{ Exception -> 0x00e7 }
         r5 = r5 % 16;
-        if (r5 == 0) goto L_0x0060;
-    L_0x0051:
-        r5 = r12.totalBytesCount;	 Catch:{ Exception -> 0x00e5 }
+        if (r5 == 0) goto L_0x0062;
+    L_0x0053:
+        r5 = r12.totalBytesCount;	 Catch:{ Exception -> 0x00e7 }
         r5 = r5 % 16;
         r5 = 16 - r5;
-        r12.bytesCountPadding = r5;	 Catch:{ Exception -> 0x00e5 }
-        r5 = r12.totalBytesCount;	 Catch:{ Exception -> 0x00e5 }
-        r6 = r12.bytesCountPadding;	 Catch:{ Exception -> 0x00e5 }
+        r12.bytesCountPadding = r5;	 Catch:{ Exception -> 0x00e7 }
+        r5 = r12.totalBytesCount;	 Catch:{ Exception -> 0x00e7 }
+        r6 = r12.bytesCountPadding;	 Catch:{ Exception -> 0x00e7 }
         r5 = r5 + r6;
-        r12.totalBytesCount = r5;	 Catch:{ Exception -> 0x00e5 }
-    L_0x0060:
-        r5 = org.telegram.messenger.FileLoader.getDocumentFileName(r13);	 Catch:{ Exception -> 0x00e5 }
-        r12.ext = r5;	 Catch:{ Exception -> 0x00e5 }
-        r5 = r12.ext;	 Catch:{ Exception -> 0x00e5 }
-        if (r5 == 0) goto L_0x0075;
-    L_0x006a:
-        r5 = r12.ext;	 Catch:{ Exception -> 0x00e5 }
+        r12.totalBytesCount = r5;	 Catch:{ Exception -> 0x00e7 }
+    L_0x0062:
+        r5 = org.telegram.messenger.FileLoader.getDocumentFileName(r13);	 Catch:{ Exception -> 0x00e7 }
+        r12.ext = r5;	 Catch:{ Exception -> 0x00e7 }
+        r5 = r12.ext;	 Catch:{ Exception -> 0x00e7 }
+        if (r5 == 0) goto L_0x0077;
+    L_0x006c:
+        r5 = r12.ext;	 Catch:{ Exception -> 0x00e7 }
         r6 = 46;
-        r3 = r5.lastIndexOf(r6);	 Catch:{ Exception -> 0x00e5 }
+        r3 = r5.lastIndexOf(r6);	 Catch:{ Exception -> 0x00e7 }
         r5 = -1;
-        if (r3 != r5) goto L_0x00f0;
-    L_0x0075:
+        if (r3 != r5) goto L_0x00f2;
+    L_0x0077:
         r5 = "";
-        r12.ext = r5;	 Catch:{ Exception -> 0x00e5 }
-    L_0x007a:
+        r12.ext = r5;	 Catch:{ Exception -> 0x00e7 }
+    L_0x007c:
         r5 = "audio/ogg";
-        r6 = r13.mime_type;	 Catch:{ Exception -> 0x00e5 }
-        r5 = r5.equals(r6);	 Catch:{ Exception -> 0x00e5 }
-        if (r5 == 0) goto L_0x00f9;
-    L_0x0085:
+        r6 = r13.mime_type;	 Catch:{ Exception -> 0x00e7 }
+        r5 = r5.equals(r6);	 Catch:{ Exception -> 0x00e7 }
+        if (r5 == 0) goto L_0x00fb;
+    L_0x0087:
         r5 = 50331648; // 0x3000000 float:3.761582E-37 double:2.4867138E-316;
-        r12.currentType = r5;	 Catch:{ Exception -> 0x00e5 }
-    L_0x0089:
-        r5 = r12.ext;	 Catch:{ Exception -> 0x00e5 }
-        r5 = r5.length();	 Catch:{ Exception -> 0x00e5 }
-        if (r5 > r11) goto L_0x0099;
-    L_0x0091:
-        r5 = r13.mime_type;	 Catch:{ Exception -> 0x00e5 }
-        r5 = org.telegram.messenger.FileLoader.getExtensionByMimeType(r5);	 Catch:{ Exception -> 0x00e5 }
-        r12.ext = r5;	 Catch:{ Exception -> 0x00e5 }
-    L_0x0099:
+        r12.currentType = r5;	 Catch:{ Exception -> 0x00e7 }
+    L_0x008b:
+        r5 = r12.ext;	 Catch:{ Exception -> 0x00e7 }
+        r5 = r5.length();	 Catch:{ Exception -> 0x00e7 }
+        if (r5 > r11) goto L_0x009b;
+    L_0x0093:
+        r5 = r13.mime_type;	 Catch:{ Exception -> 0x00e7 }
+        r5 = org.telegram.messenger.FileLoader.getExtensionByMimeType(r5);	 Catch:{ Exception -> 0x00e7 }
+        r12.ext = r5;	 Catch:{ Exception -> 0x00e7 }
+    L_0x009b:
         return;
-    L_0x009a:
-        r5 = r13 instanceof org.telegram.tgnet.TLRPC.TL_document;	 Catch:{ Exception -> 0x00e5 }
+    L_0x009c:
+        r5 = r13 instanceof org.telegram.tgnet.TLRPC.TL_document;	 Catch:{ Exception -> 0x00e7 }
         if (r5 == 0) goto L_0x0042;
-    L_0x009e:
-        r5 = new org.telegram.tgnet.TLRPC$TL_inputDocumentFileLocation;	 Catch:{ Exception -> 0x00e5 }
-        r5.<init>();	 Catch:{ Exception -> 0x00e5 }
-        r12.location = r5;	 Catch:{ Exception -> 0x00e5 }
-        r5 = r12.location;	 Catch:{ Exception -> 0x00e5 }
-        r6 = r13.id;	 Catch:{ Exception -> 0x00e5 }
-        r5.id = r6;	 Catch:{ Exception -> 0x00e5 }
-        r5 = r12.location;	 Catch:{ Exception -> 0x00e5 }
-        r6 = r13.access_hash;	 Catch:{ Exception -> 0x00e5 }
-        r5.access_hash = r6;	 Catch:{ Exception -> 0x00e5 }
-        r5 = r12.location;	 Catch:{ Exception -> 0x00e5 }
-        r6 = r13.file_reference;	 Catch:{ Exception -> 0x00e5 }
-        r5.file_reference = r6;	 Catch:{ Exception -> 0x00e5 }
-        r5 = r12.location;	 Catch:{ Exception -> 0x00e5 }
-        r5 = r5.file_reference;	 Catch:{ Exception -> 0x00e5 }
-        if (r5 != 0) goto L_0x00c4;
-    L_0x00bd:
-        r5 = r12.location;	 Catch:{ Exception -> 0x00e5 }
+    L_0x00a0:
+        r5 = new org.telegram.tgnet.TLRPC$TL_inputDocumentFileLocation;	 Catch:{ Exception -> 0x00e7 }
+        r5.<init>();	 Catch:{ Exception -> 0x00e7 }
+        r12.location = r5;	 Catch:{ Exception -> 0x00e7 }
+        r5 = r12.location;	 Catch:{ Exception -> 0x00e7 }
+        r6 = r13.id;	 Catch:{ Exception -> 0x00e7 }
+        r5.id = r6;	 Catch:{ Exception -> 0x00e7 }
+        r5 = r12.location;	 Catch:{ Exception -> 0x00e7 }
+        r6 = r13.access_hash;	 Catch:{ Exception -> 0x00e7 }
+        r5.access_hash = r6;	 Catch:{ Exception -> 0x00e7 }
+        r5 = r12.location;	 Catch:{ Exception -> 0x00e7 }
+        r6 = r13.file_reference;	 Catch:{ Exception -> 0x00e7 }
+        r5.file_reference = r6;	 Catch:{ Exception -> 0x00e7 }
+        r5 = r12.location;	 Catch:{ Exception -> 0x00e7 }
+        r5 = r5.file_reference;	 Catch:{ Exception -> 0x00e7 }
+        if (r5 != 0) goto L_0x00c6;
+    L_0x00bf:
+        r5 = r12.location;	 Catch:{ Exception -> 0x00e7 }
         r6 = 0;
-        r6 = new byte[r6];	 Catch:{ Exception -> 0x00e5 }
-        r5.file_reference = r6;	 Catch:{ Exception -> 0x00e5 }
-    L_0x00c4:
-        r5 = r13.dc_id;	 Catch:{ Exception -> 0x00e5 }
-        r12.datacenterId = r5;	 Catch:{ Exception -> 0x00e5 }
-        r12.initialDatacenterId = r5;	 Catch:{ Exception -> 0x00e5 }
+        r6 = new byte[r6];	 Catch:{ Exception -> 0x00e7 }
+        r5.file_reference = r6;	 Catch:{ Exception -> 0x00e7 }
+    L_0x00c6:
+        r5 = r13.dc_id;	 Catch:{ Exception -> 0x00e7 }
+        r12.datacenterId = r5;	 Catch:{ Exception -> 0x00e7 }
+        r12.initialDatacenterId = r5;	 Catch:{ Exception -> 0x00e7 }
         r5 = 1;
-        r12.allowDisordererFileSave = r5;	 Catch:{ Exception -> 0x00e5 }
+        r12.allowDisordererFileSave = r5;	 Catch:{ Exception -> 0x00e7 }
         r1 = 0;
-        r5 = r13.attributes;	 Catch:{ Exception -> 0x00e5 }
-        r0 = r5.size();	 Catch:{ Exception -> 0x00e5 }
-    L_0x00d4:
-        if (r1 >= r0) goto L_0x0042;
+        r5 = r13.attributes;	 Catch:{ Exception -> 0x00e7 }
+        r0 = r5.size();	 Catch:{ Exception -> 0x00e7 }
     L_0x00d6:
-        r5 = r13.attributes;	 Catch:{ Exception -> 0x00e5 }
-        r5 = r5.get(r1);	 Catch:{ Exception -> 0x00e5 }
-        r5 = r5 instanceof org.telegram.tgnet.TLRPC.TL_documentAttributeVideo;	 Catch:{ Exception -> 0x00e5 }
-        if (r5 == 0) goto L_0x00ed;
-    L_0x00e0:
+        if (r1 >= r0) goto L_0x0042;
+    L_0x00d8:
+        r5 = r13.attributes;	 Catch:{ Exception -> 0x00e7 }
+        r5 = r5.get(r1);	 Catch:{ Exception -> 0x00e7 }
+        r5 = r5 instanceof org.telegram.tgnet.TLRPC.TL_documentAttributeVideo;	 Catch:{ Exception -> 0x00e7 }
+        if (r5 == 0) goto L_0x00ef;
+    L_0x00e2:
         r5 = 1;
-        r12.supportsPreloading = r5;	 Catch:{ Exception -> 0x00e5 }
+        r12.supportsPreloading = r5;	 Catch:{ Exception -> 0x00e7 }
         goto L_0x0042;
-    L_0x00e5:
+    L_0x00e7:
         r2 = move-exception;
         org.telegram.messenger.FileLog.e(r2);
         r12.onFail(r11, r10);
-        goto L_0x0099;
-    L_0x00ed:
+        goto L_0x009b;
+    L_0x00ef:
         r1 = r1 + 1;
-        goto L_0x00d4;
-    L_0x00f0:
-        r5 = r12.ext;	 Catch:{ Exception -> 0x00e5 }
-        r5 = r5.substring(r3);	 Catch:{ Exception -> 0x00e5 }
-        r12.ext = r5;	 Catch:{ Exception -> 0x00e5 }
-        goto L_0x007a;
-    L_0x00f9:
-        r5 = r13.mime_type;	 Catch:{ Exception -> 0x00e5 }
-        r5 = org.telegram.messenger.FileLoader.isVideoMimeType(r5);	 Catch:{ Exception -> 0x00e5 }
-        if (r5 == 0) goto L_0x0106;
-    L_0x0101:
+        goto L_0x00d6;
+    L_0x00f2:
+        r5 = r12.ext;	 Catch:{ Exception -> 0x00e7 }
+        r5 = r5.substring(r3);	 Catch:{ Exception -> 0x00e7 }
+        r12.ext = r5;	 Catch:{ Exception -> 0x00e7 }
+        goto L_0x007c;
+    L_0x00fb:
+        r5 = r13.mime_type;	 Catch:{ Exception -> 0x00e7 }
+        r5 = org.telegram.messenger.FileLoader.isVideoMimeType(r5);	 Catch:{ Exception -> 0x00e7 }
+        if (r5 == 0) goto L_0x0108;
+    L_0x0103:
         r5 = 33554432; // 0x2000000 float:9.403955E-38 double:1.6578092E-316;
-        r12.currentType = r5;	 Catch:{ Exception -> 0x00e5 }
-        goto L_0x0089;
-    L_0x0106:
+        r12.currentType = r5;	 Catch:{ Exception -> 0x00e7 }
+        goto L_0x008b;
+    L_0x0108:
         r5 = 67108864; // 0x4000000 float:1.5046328E-36 double:3.31561842E-316;
-        r12.currentType = r5;	 Catch:{ Exception -> 0x00e5 }
-        goto L_0x0089;
+        r12.currentType = r5;	 Catch:{ Exception -> 0x00e7 }
+        goto L_0x008b;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.FileLoadOperation.<init>(org.telegram.tgnet.TLRPC$Document, java.lang.Object):void");
     }
@@ -512,7 +514,7 @@ public class FileLoadOperation {
                         this.filePartsStream.writeInt(range.start);
                         this.filePartsStream.writeInt(range.end);
                     }
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
                 if (this.streamListeners != null) {
@@ -527,19 +529,21 @@ public class FileLoadOperation {
         }
     }
 
-    protected File getCurrentFile() {
+    /* Access modifiers changed, original: protected */
+    public File getCurrentFile() {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         File[] result = new File[1];
         Utilities.stageQueue.postRunnable(new FileLoadOperation$$Lambda$0(this, result, countDownLatch));
         try {
             countDownLatch.await();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         return result[0];
     }
 
-    final /* synthetic */ void lambda$getCurrentFile$0$FileLoadOperation(File[] result, CountDownLatch countDownLatch) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$getCurrentFile$0$FileLoadOperation(File[] result, CountDownLatch countDownLatch) {
         if (this.state == 3) {
             result[0] = this.cacheFileFinal;
         } else {
@@ -576,7 +580,8 @@ public class FileLoadOperation {
         }
     }
 
-    protected float getDownloadedLengthFromOffset(float progress) {
+    /* Access modifiers changed, original: protected */
+    public float getDownloadedLengthFromOffset(float progress) {
         ArrayList<Range> ranges = this.notLoadedBytesRangesCopy;
         if (this.totalBytesCount == 0 || ranges == null) {
             return 0.0f;
@@ -584,7 +589,8 @@ public class FileLoadOperation {
         return (((float) getDownloadedLengthFromOffsetInternal(ranges, (int) (((float) this.totalBytesCount) * progress), this.totalBytesCount)) / ((float) this.totalBytesCount)) + progress;
     }
 
-    protected int getDownloadedLengthFromOffset(int offset, int length) {
+    /* Access modifiers changed, original: protected */
+    public int getDownloadedLengthFromOffset(int offset, int length) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         int[] result = new int[1];
         Utilities.stageQueue.postRunnable(new FileLoadOperation$$Lambda$1(this, result, offset, length, countDownLatch));
@@ -595,7 +601,8 @@ public class FileLoadOperation {
         return result[0];
     }
 
-    final /* synthetic */ void lambda$getDownloadedLengthFromOffset$1$FileLoadOperation(int[] result, int offset, int length, CountDownLatch countDownLatch) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$getDownloadedLengthFromOffset$1$FileLoadOperation(int[] result, int offset, int length, CountDownLatch countDownLatch) {
         result[0] = getDownloadedLengthFromOffsetInternal(this.notLoadedBytesRanges, offset, length);
         countDownLatch.countDown();
     }
@@ -607,11 +614,13 @@ public class FileLoadOperation {
         return Utilities.MD5(this.webFile.url) + "." + this.ext;
     }
 
-    protected void removeStreamListener(FileStreamLoadOperation operation) {
+    /* Access modifiers changed, original: protected */
+    public void removeStreamListener(FileStreamLoadOperation operation) {
         Utilities.stageQueue.postRunnable(new FileLoadOperation$$Lambda$2(this, operation));
     }
 
-    final /* synthetic */ void lambda$removeStreamListener$2$FileLoadOperation(FileStreamLoadOperation operation) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$removeStreamListener$2$FileLoadOperation(FileStreamLoadOperation operation) {
         if (this.streamListeners != null) {
             this.streamListeners.remove(operation);
         }
@@ -754,7 +763,7 @@ public class FileLoadOperation {
                         file2.write(this.encryptKey);
                         file2.write(this.encryptIv);
                         newKeyGenerated = true;
-                    } catch (Throwable e2) {
+                    } catch (Exception e2) {
                         FileLog.e(e2);
                     }
                 } else {
@@ -763,7 +772,7 @@ public class FileLoadOperation {
                 }
                 try {
                     file2.getChannel().close();
-                } catch (Throwable e22) {
+                } catch (Exception e22) {
                     FileLog.e(e22);
                 }
                 file2.close();
@@ -816,7 +825,7 @@ public class FileLoadOperation {
                         }
                     }
                     this.preloadStream.seek((long) this.preloadStreamFileOffset);
-                } catch (Throwable e222) {
+                } catch (Exception e222) {
                     FileLog.e(e222);
                 }
                 if (!this.isPreloadVideoOperation && this.preloadedBytesRanges == null) {
@@ -825,13 +834,13 @@ public class FileLoadOperation {
                         if (this.preloadStream != null) {
                             try {
                                 this.preloadStream.getChannel().close();
-                            } catch (Throwable e2222) {
+                            } catch (Exception e2222) {
                                 FileLog.e(e2222);
                             }
                             this.preloadStream.close();
                             this.preloadStream = null;
                         }
-                    } catch (Throwable e22222) {
+                    } catch (Exception e22222) {
                         FileLog.e(e22222);
                     }
                 }
@@ -853,7 +862,7 @@ public class FileLoadOperation {
                             }
                         }
                     }
-                } catch (Throwable e222222) {
+                } catch (Exception e222222) {
                     FileLog.e(e222222);
                 }
             }
@@ -908,7 +917,7 @@ public class FileLoadOperation {
                             this.fiv.read(this.iv, 0, 32);
                         }
                     }
-                } catch (Throwable e2222222) {
+                } catch (Exception e2222222) {
                     FileLog.e(e2222222);
                     this.downloadedBytes = 0;
                     this.requestedBytesCount = 0;
@@ -923,7 +932,7 @@ public class FileLoadOperation {
                 if (this.downloadedBytes != 0) {
                     this.fileOutputStream.seek((long) this.downloadedBytes);
                 }
-            } catch (Throwable e22222222) {
+            } catch (Exception e22222222) {
                 FileLog.e(e22222222);
             }
             if (this.fileOutputStream == null) {
@@ -936,7 +945,8 @@ public class FileLoadOperation {
         return true;
     }
 
-    final /* synthetic */ void lambda$start$3$FileLoadOperation(int streamOffset, FileLoadOperationStream stream, boolean alreadyStarted) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$start$3$FileLoadOperation(int streamOffset, FileLoadOperationStream stream, boolean alreadyStarted) {
         if (this.streamListeners == null) {
             this.streamListeners = new ArrayList();
         }
@@ -951,7 +961,8 @@ public class FileLoadOperation {
         }
     }
 
-    final /* synthetic */ void lambda$start$4$FileLoadOperation(boolean[] preloaded) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$start$4$FileLoadOperation(boolean[] preloaded) {
         if (this.totalBytesCount == 0 || !((this.isPreloadVideoOperation && preloaded[0]) || this.downloadedBytes == this.totalBytesCount)) {
             startDownloadRequest();
             return;
@@ -988,7 +999,8 @@ public class FileLoadOperation {
         }
     }
 
-    final /* synthetic */ void lambda$setIsPreloadVideoOperation$5$FileLoadOperation(boolean value) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$setIsPreloadVideoOperation$5$FileLoadOperation(boolean value) {
         this.requestedBytesCount = 0;
         clearOperaion(null, true);
         this.isPreloadVideoOperation = value;
@@ -1007,7 +1019,8 @@ public class FileLoadOperation {
         Utilities.stageQueue.postRunnable(new FileLoadOperation$$Lambda$7(this));
     }
 
-    final /* synthetic */ void lambda$cancel$6$FileLoadOperation() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$cancel$6$FileLoadOperation() {
         if (this.state != 3 && this.state != 2) {
             if (this.requestInfos != null) {
                 for (int a = 0; a < this.requestInfos.size(); a++) {
@@ -1026,52 +1039,52 @@ public class FileLoadOperation {
             if (this.fileOutputStream != null) {
                 try {
                     this.fileOutputStream.getChannel().close();
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
                 this.fileOutputStream.close();
                 this.fileOutputStream = null;
             }
-        } catch (Throwable e2) {
+        } catch (Exception e2) {
             FileLog.e(e2);
         }
         try {
             if (this.preloadStream != null) {
                 try {
                     this.preloadStream.getChannel().close();
-                } catch (Throwable e22) {
+                } catch (Exception e22) {
                     FileLog.e(e22);
                 }
                 this.preloadStream.close();
                 this.preloadStream = null;
             }
-        } catch (Throwable e222) {
+        } catch (Exception e222) {
             FileLog.e(e222);
         }
         try {
             if (this.fileReadStream != null) {
                 try {
                     this.fileReadStream.getChannel().close();
-                } catch (Throwable e2222) {
+                } catch (Exception e2222) {
                     FileLog.e(e2222);
                 }
                 this.fileReadStream.close();
                 this.fileReadStream = null;
             }
-        } catch (Throwable e22222) {
+        } catch (Exception e22222) {
             FileLog.e(e22222);
         }
         try {
             if (this.filePartsStream != null) {
                 try {
                     this.filePartsStream.getChannel().close();
-                } catch (Throwable e222222) {
+                } catch (Exception e222222) {
                     FileLog.e(e222222);
                 }
                 this.filePartsStream.close();
                 this.filePartsStream = null;
             }
-        } catch (Throwable e2222222) {
+        } catch (Exception e2222222) {
             FileLog.e(e2222222);
         }
         try {
@@ -1079,7 +1092,7 @@ public class FileLoadOperation {
                 this.fiv.close();
                 this.fiv = null;
             }
-        } catch (Throwable e22222222) {
+        } catch (Exception e22222222) {
             FileLog.e(e22222222);
         }
         if (this.delayedRequestInfos != null) {
@@ -1153,7 +1166,8 @@ public class FileLoadOperation {
         }
     }
 
-    final /* synthetic */ void lambda$onFinishLoadingFile$7$FileLoadOperation(boolean increment) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onFinishLoadingFile$7$FileLoadOperation(boolean increment) {
         try {
             onFinishLoadingFile(increment);
         } catch (Exception e) {
@@ -1225,7 +1239,8 @@ public class FileLoadOperation {
         }
     }
 
-    final /* synthetic */ void lambda$requestFileOffsets$8$FileLoadOperation(TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$requestFileOffsets$8$FileLoadOperation(TLObject response, TL_error error) {
         if (error != null) {
             onFail(false, 0);
             return;
@@ -1268,9 +1283,10 @@ public class FileLoadOperation {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:179:0x0641 A:{Catch:{ Exception -> 0x02d7 }} */
+    /* Access modifiers changed, original: protected */
+    /* JADX WARNING: Removed duplicated region for block: B:180:0x0641 A:{Catch:{ Exception -> 0x02d7 }} */
     /* JADX WARNING: Removed duplicated region for block: B:82:0x02bd A:{Catch:{ Exception -> 0x02d7 }} */
-    protected boolean processRequestResult(org.telegram.messenger.FileLoadOperation.RequestInfo r29, org.telegram.tgnet.TLRPC.TL_error r30) {
+    public boolean processRequestResult(org.telegram.messenger.FileLoadOperation.RequestInfo r29, org.telegram.tgnet.TLRPC.TL_error r30) {
         /*
         r28 = this;
         r0 = r28;
@@ -2274,7 +2290,8 @@ public class FileLoadOperation {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.FileLoadOperation.processRequestResult(org.telegram.messenger.FileLoadOperation$RequestInfo, org.telegram.tgnet.TLRPC$TL_error):boolean");
     }
 
-    protected void onFail(boolean thread, int reason) {
+    /* Access modifiers changed, original: protected */
+    public void onFail(boolean thread, int reason) {
         cleanup();
         this.state = 2;
         if (thread) {
@@ -2284,7 +2301,8 @@ public class FileLoadOperation {
         }
     }
 
-    final /* synthetic */ void lambda$onFail$9$FileLoadOperation(int reason) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onFail$9$FileLoadOperation(int reason) {
         this.delegate.didFailedLoadingFile(this, reason);
     }
 
@@ -2348,7 +2366,8 @@ public class FileLoadOperation {
         }
     }
 
-    protected void startDownloadRequest() {
+    /* Access modifiers changed, original: protected */
+    public void startDownloadRequest() {
         if (!this.paused && this.state == 1) {
             if (this.nextPartWasPreloaded || this.requestInfos.size() + this.delayedRequestInfos.size() < this.currentMaxDownloadRequests) {
                 if (this.isPreloadVideoOperation) {
@@ -2485,7 +2504,7 @@ public class FileLoadOperation {
                             }
                         }
                         ConnectionsManager instance = ConnectionsManager.getInstance(this.currentAccount);
-                        RequestDelegate fileLoadOperation$$Lambda$12 = new FileLoadOperation$$Lambda$12(this, requestInfo, request);
+                        FileLoadOperation$$Lambda$12 fileLoadOperation$$Lambda$12 = new FileLoadOperation$$Lambda$12(this, requestInfo, request);
                         if (this.isCdn) {
                             i = this.cdnDatacenterId;
                         } else {
@@ -2502,12 +2521,14 @@ public class FileLoadOperation {
         }
     }
 
-    final /* synthetic */ void lambda$startDownloadRequest$10$FileLoadOperation(RequestInfo requestInfo) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$startDownloadRequest$10$FileLoadOperation(RequestInfo requestInfo) {
         processRequestResult(requestInfo, null);
         requestInfo.response.freeResources();
     }
 
-    final /* synthetic */ void lambda$startDownloadRequest$12$FileLoadOperation(RequestInfo requestInfo, TLObject request, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$startDownloadRequest$12$FileLoadOperation(RequestInfo requestInfo, TLObject request, TLObject response, TL_error error) {
         if (this.requestInfos.contains(requestInfo)) {
             if (error != null) {
                 if (FileRefController.isFileRefError(error.text)) {
@@ -2584,7 +2605,8 @@ public class FileLoadOperation {
         }
     }
 
-    final /* synthetic */ void lambda$null$11$FileLoadOperation(RequestInfo requestInfo, TLObject response1, TL_error error1) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$11$FileLoadOperation(RequestInfo requestInfo, TLObject response1, TL_error error1) {
         this.reuploadingCdn = false;
         if (error1 == null) {
             Vector vector = (Vector) response1;

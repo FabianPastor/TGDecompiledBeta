@@ -1,16 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.ui.NotificationsSettingsActivity.NotificationException;
-import org.telegram.ui.ProfileNotificationsActivity.ProfileNotificationsActivityDelegate;
-
-final /* synthetic */ class NotificationsCustomSettingsActivity$$Lambda$9 implements ProfileNotificationsActivityDelegate {
+final /* synthetic */ class NotificationsCustomSettingsActivity$$Lambda$9 implements Runnable {
     private final NotificationsCustomSettingsActivity arg$1;
+    private final int arg$2;
 
-    NotificationsCustomSettingsActivity$$Lambda$9(NotificationsCustomSettingsActivity notificationsCustomSettingsActivity) {
+    NotificationsCustomSettingsActivity$$Lambda$9(NotificationsCustomSettingsActivity notificationsCustomSettingsActivity, int i) {
         this.arg$1 = notificationsCustomSettingsActivity;
+        this.arg$2 = i;
     }
 
-    public void didCreateNewException(NotificationException notificationException) {
-        this.arg$1.lambda$null$1$NotificationsCustomSettingsActivity(notificationException);
+    public void run() {
+        this.arg$1.lambda$null$6$NotificationsCustomSettingsActivity(this.arg$2);
     }
 }

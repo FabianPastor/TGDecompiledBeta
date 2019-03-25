@@ -48,12 +48,14 @@ final class GapWorker implements Runnable {
         LayoutPrefetchRegistryImpl() {
         }
 
-        void setPrefetchVector(int dx, int dy) {
+        /* Access modifiers changed, original: 0000 */
+        public void setPrefetchVector(int dx, int dy) {
             this.mPrefetchDx = dx;
             this.mPrefetchDy = dy;
         }
 
-        void collectPrefetchPositionsFromView(RecyclerView view, boolean nested) {
+        /* Access modifiers changed, original: 0000 */
+        public void collectPrefetchPositionsFromView(RecyclerView view, boolean nested) {
             this.mCount = 0;
             if (this.mPrefetchArray != null) {
                 Arrays.fill(this.mPrefetchArray, -1);
@@ -96,7 +98,8 @@ final class GapWorker implements Runnable {
             }
         }
 
-        boolean lastPrefetchIncludedPosition(int position) {
+        /* Access modifiers changed, original: 0000 */
+        public boolean lastPrefetchIncludedPosition(int position) {
             if (this.mPrefetchArray != null) {
                 int count = this.mCount * 2;
                 for (int i = 0; i < count; i += 2) {
@@ -108,7 +111,8 @@ final class GapWorker implements Runnable {
             return false;
         }
 
-        void clearPrefetchPositions() {
+        /* Access modifiers changed, original: 0000 */
+        public void clearPrefetchPositions() {
             if (this.mPrefetchArray != null) {
                 Arrays.fill(this.mPrefetchArray, -1);
             }
@@ -146,7 +150,8 @@ final class GapWorker implements Runnable {
         boolean removeSuccess = this.mRecyclerViews.remove(recyclerView);
     }
 
-    void postFromTraversal(RecyclerView recyclerView, int prefetchDx, int prefetchDy) {
+    /* Access modifiers changed, original: 0000 */
+    public void postFromTraversal(RecyclerView recyclerView, int prefetchDx, int prefetchDy) {
         if (recyclerView.isAttachedToWindow() && this.mPostTimeNs == 0) {
             this.mPostTimeNs = recyclerView.getNanoTime();
             recyclerView.post(this);
@@ -281,7 +286,8 @@ final class GapWorker implements Runnable {
         }
     }
 
-    void prefetch(long deadlineNs) {
+    /* Access modifiers changed, original: 0000 */
+    public void prefetch(long deadlineNs) {
         buildTaskList();
         flushTasksWithDeadline(deadlineNs);
     }

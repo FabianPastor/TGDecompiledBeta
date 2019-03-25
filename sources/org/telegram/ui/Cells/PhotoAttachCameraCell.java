@@ -9,7 +9,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -21,12 +20,14 @@ public class PhotoAttachCameraCell extends FrameLayout {
         super(context);
         this.imageView = new ImageView(context);
         this.imageView.setScaleType(ScaleType.CENTER);
-        this.imageView.setImageResource(R.drawable.instant_camera);
+        this.imageView.setImageResource(NUM);
         this.imageView.setBackgroundColor(-16777216);
         addView(this.imageView, LayoutHelper.createFrame(80, 80.0f));
+        setFocusable(true);
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(86.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(80.0f), NUM));
     }
 
@@ -34,7 +35,8 @@ public class PhotoAttachCameraCell extends FrameLayout {
         return this.imageView;
     }
 
-    protected void onAttachedToWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogCameraIcon"), Mode.MULTIPLY));
     }

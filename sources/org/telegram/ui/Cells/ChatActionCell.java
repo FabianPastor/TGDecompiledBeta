@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.text.style.URLSpan;
 import android.view.MotionEvent;
 import android.view.View.MeasureSpec;
+import android.view.accessibility.AccessibilityNodeInfo;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
@@ -17,7 +18,6 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.TLRPC.KeyboardButton;
 import org.telegram.tgnet.TLRPC.PhotoSize;
@@ -136,13 +136,15 @@ public class ChatActionCell extends BaseCell {
         return this.imageReceiver;
     }
 
-    protected void onLongPress() {
+    /* Access modifiers changed, original: protected */
+    public void onLongPress() {
         if (this.delegate != null) {
             this.delegate.didLongPressed(this);
         }
     }
 
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+    /* Access modifiers changed, original: protected */
+    public void onLayout(boolean changed, int l, int t, int r, int b) {
     }
 
     public boolean onTouchEvent(MotionEvent event) {
@@ -234,12 +236,12 @@ public class ChatActionCell extends BaseCell {
                     this.textHeight = (int) Math.max((double) this.textHeight, Math.ceil((double) this.textLayout.getLineBottom(a)));
                     this.textWidth = (int) Math.max((double) this.textWidth, Math.ceil((double) lineWidth));
                     a++;
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                     return;
                 }
             }
-        } catch (Throwable e2) {
+        } catch (Exception e2) {
             FileLog.e(e2);
         }
         this.textX = (width - this.textWidth) / 2;
@@ -247,7 +249,8 @@ public class ChatActionCell extends BaseCell {
         this.textXLeft = (width - this.textLayout.getWidth()) / 2;
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         if (this.currentMessageObject == null && this.customText == null) {
             setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), this.textHeight + AndroidUtilities.dp(14.0f));
             return;
@@ -261,9 +264,9 @@ public class ChatActionCell extends BaseCell {
             } else if (this.currentMessageObject.messageOwner == null || this.currentMessageObject.messageOwner.media == null || this.currentMessageObject.messageOwner.media.ttl_seconds == 0) {
                 text = this.currentMessageObject.messageText;
             } else if (this.currentMessageObject.messageOwner.media.photo instanceof TL_photoEmpty) {
-                text = LocaleController.getString("AttachPhotoExpired", R.string.AttachPhotoExpired);
+                text = LocaleController.getString("AttachPhotoExpired", NUM);
             } else if (this.currentMessageObject.messageOwner.media.document instanceof TL_documentEmpty) {
-                text = LocaleController.getString("AttachVideoExpired", R.string.AttachVideoExpired);
+                text = LocaleController.getString("AttachVideoExpired", NUM);
             } else {
                 text = this.currentMessageObject.messageText;
             }
@@ -316,7 +319,8 @@ public class ChatActionCell extends BaseCell {
         return line == count + -1 || (line >= 0 && line <= count - 1 && findMaxWidthAroundLine(line + 1) + (cornerRest * 3) < nextWidth);
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (this.currentMessageObject != null && this.currentMessageObject.type == 11) {
             this.imageReceiver.draw(canvas);
         }
@@ -486,6 +490,14 @@ public class ChatActionCell extends BaseCell {
             canvas.translate((float) this.textXLeft, (float) this.textY);
             this.textLayout.draw(canvas);
             canvas.restore();
+        }
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
+        if (!TextUtils.isEmpty(this.customText) || this.currentMessageObject != null) {
+            info.setText(!TextUtils.isEmpty(this.customText) ? this.customText : this.currentMessageObject.messageText);
+            info.setEnabled(true);
         }
     }
 }

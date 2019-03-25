@@ -49,7 +49,6 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Document;
@@ -129,6 +128,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
     private float pinchStartScale = 1.0f;
     private float pinchStartX;
     private float pinchStartY;
+    private int playerRetryPlayCount;
     private float scale = 1.0f;
     private Scroller scroller;
     private SecretDeleteTimer secretDeleteTimer;
@@ -159,11 +159,13 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
             return true;
         }
 
-        protected void onDraw(Canvas canvas) {
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
             SecretMediaViewer.this.onDraw(canvas);
         }
 
-        protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+        /* Access modifiers changed, original: protected */
+        public boolean drawChild(Canvas canvas, View child, long drawingTime) {
             return child != SecretMediaViewer.this.aspectRatioFrameLayout && super.drawChild(canvas, child, drawingTime);
         }
     }
@@ -249,7 +251,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
             this.afterDeleteProgressPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
             this.circlePaint = new Paint(1);
             this.circlePaint.setColor(NUM);
-            this.drawable = context.getResources().getDrawable(R.drawable.flame_small);
+            this.drawable = context.getResources().getDrawable(NUM);
             for (int a = 0; a < 40; a++) {
                 this.freeParticles.add(new Particle(this, null));
             }
@@ -285,14 +287,16 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
             }
         }
 
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        /* Access modifiers changed, original: protected */
+        public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
             int y = (getMeasuredHeight() / 2) - (AndroidUtilities.dp(28.0f) / 2);
             this.deleteProgressRect.set((float) (getMeasuredWidth() - AndroidUtilities.dp(49.0f)), (float) y, (float) (getMeasuredWidth() - AndroidUtilities.dp(21.0f)), (float) (AndroidUtilities.dp(28.0f) + y));
         }
 
+        /* Access modifiers changed, original: protected */
         @SuppressLint({"DrawAllocation"})
-        protected void onDraw(Canvas canvas) {
+        public void onDraw(Canvas canvas) {
             if (SecretMediaViewer.this.currentMessageObject != null && SecretMediaViewer.this.currentMessageObject.messageOwner.destroyTime != 0) {
                 float progress;
                 int a;
@@ -435,7 +439,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
         }
     }
 
-    private void preparePlayer(File file) {
+    private void preparePlayer(final File file) {
         if (this.parentActivity != null) {
             releasePlayer();
             if (this.videoTextureView == null) {
@@ -460,13 +464,13 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
                             if (playbackState == 4 || playbackState == 1) {
                                 try {
                                     SecretMediaViewer.this.parentActivity.getWindow().clearFlags(128);
-                                } catch (Throwable e) {
+                                } catch (Exception e) {
                                     FileLog.e(e);
                                 }
                             } else {
                                 try {
                                     SecretMediaViewer.this.parentActivity.getWindow().addFlags(128);
-                                } catch (Throwable e2) {
+                                } catch (Exception e2) {
                                     FileLog.e(e2);
                                 }
                             }
@@ -493,7 +497,17 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
                     }
 
                     public void onError(Exception e) {
+                        if (SecretMediaViewer.this.playerRetryPlayCount > 0) {
+                            SecretMediaViewer.this.playerRetryPlayCount = SecretMediaViewer.this.playerRetryPlayCount - 1;
+                            AndroidUtilities.runOnUIThread(new SecretMediaViewer$1$$Lambda$0(this, file), 100);
+                            return;
+                        }
                         FileLog.e((Throwable) e);
+                    }
+
+                    /* Access modifiers changed, original: final|synthetic */
+                    public final /* synthetic */ void lambda$onError$0$SecretMediaViewer$1(File file) {
+                        SecretMediaViewer.this.preparePlayer(file);
                     }
 
                     public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
@@ -529,6 +543,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
 
     private void releasePlayer() {
         if (this.videoPlayer != null) {
+            this.playerRetryPlayCount = 0;
             this.videoPlayer.releasePlayer(true);
             this.videoPlayer = null;
         }
@@ -536,7 +551,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
             if (this.parentActivity != null) {
                 this.parentActivity.getWindow().clearFlags(128);
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         if (this.aspectRatioFrameLayout != null) {
@@ -556,7 +571,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
             this.parentActivity = activity;
             this.scroller = new Scroller(activity);
             this.windowView = new FrameLayout(activity) {
-                protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                /* Access modifiers changed, original: protected */
+                public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                     int widthSize = MeasureSpec.getSize(widthMeasureSpec);
                     int heightSize = MeasureSpec.getSize(heightMeasureSpec);
                     if (VERSION.SDK_INT >= 21 && SecretMediaViewer.this.lastInsets != null) {
@@ -579,7 +595,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
                     SecretMediaViewer.this.containerView.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(heightSize, NUM));
                 }
 
-                protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+                /* Access modifiers changed, original: protected */
+                public void onLayout(boolean changed, int left, int top, int right, int bottom) {
                     int x = 0;
                     if (VERSION.SDK_INT >= 21 && SecretMediaViewer.this.lastInsets != null) {
                         x = 0 + ((WindowInsets) SecretMediaViewer.this.lastInsets).getSystemWindowInsetLeft();
@@ -599,7 +616,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
             this.windowView.setFocusable(true);
             this.windowView.setFocusableInTouchMode(true);
             this.containerView = new FrameLayoutDrawer(activity) {
-                protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+                /* Access modifiers changed, original: protected */
+                public void onLayout(boolean changed, int left, int top, int right, int bottom) {
                     super.onLayout(changed, left, top, right, bottom);
                     if (SecretMediaViewer.this.secretDeleteTimer != null) {
                         int y = ((ActionBar.getCurrentActionBarHeight() - SecretMediaViewer.this.secretDeleteTimer.getMeasuredHeight()) / 2) + (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
@@ -627,7 +645,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
             this.actionBar.setBackgroundColor(NUM);
             this.actionBar.setOccupyStatusBar(VERSION.SDK_INT >= 21);
             this.actionBar.setItemsBackgroundColor(NUM, false);
-            this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+            this.actionBar.setBackButtonImage(NUM);
             this.actionBar.setTitleRightMargin(AndroidUtilities.dp(70.0f));
             this.containerView.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f));
             this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
@@ -657,7 +675,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
         }
     }
 
-    final /* synthetic */ WindowInsets lambda$setParentActivity$0$SecretMediaViewer(View v, WindowInsets insets) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ WindowInsets lambda$setParentActivity$0$SecretMediaViewer(View v, WindowInsets insets) {
         WindowInsets oldInsets = this.lastInsets;
         this.lastInsets = insets;
         if (oldInsets == null || !oldInsets.toString().equals(insets.toString())) {
@@ -746,15 +765,16 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
                 }
                 this.currentThumb = object.imageReceiver.getThumbBitmapSafe();
                 if (document == null) {
-                    this.actionBar.setTitle(LocaleController.getString("DisappearingPhoto", R.string.DisappearingPhoto));
+                    this.actionBar.setTitle(LocaleController.getString("DisappearingPhoto", NUM));
                     this.centerImage.setImage(FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, AndroidUtilities.getPhotoSize()), null, this.currentThumb != null ? new BitmapDrawable(this.currentThumb.bitmap) : null, -1, null, (Object) messageObject, 2);
                     this.secretDeleteTimer.setDestroyTime(((long) messageObject.messageOwner.destroyTime) * 1000, (long) messageObject.messageOwner.ttl, false);
                 } else if (MessageObject.isGifDocument((Document) document)) {
-                    this.actionBar.setTitle(LocaleController.getString("DisappearingGif", R.string.DisappearingGif));
+                    this.actionBar.setTitle(LocaleController.getString("DisappearingGif", NUM));
                     this.centerImage.setImage(document, null, this.currentThumb != null ? new BitmapDrawable(this.currentThumb.bitmap) : null, -1, null, (Object) messageObject, 1);
                     this.secretDeleteTimer.setDestroyTime(((long) messageObject.messageOwner.destroyTime) * 1000, (long) messageObject.messageOwner.ttl, false);
                 } else {
-                    this.actionBar.setTitle(LocaleController.getString("DisappearingVideo", R.string.DisappearingVideo));
+                    this.playerRetryPlayCount = 1;
+                    this.actionBar.setTitle(LocaleController.getString("DisappearingVideo", NUM));
                     File file = new File(messageObject.messageOwner.attachPath);
                     if (file.exists()) {
                         preparePlayer(file);
@@ -778,7 +798,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
                     if (this.windowView.getParent() != null) {
                         ((WindowManager) this.parentActivity.getSystemService("window")).removeView(this.windowView);
                     }
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
                 ((WindowManager) this.parentActivity.getSystemService("window")).addView(this.windowView, this.windowLayoutParams);
@@ -816,7 +836,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
         }
     }
 
-    final /* synthetic */ void lambda$openMedia$1$SecretMediaViewer() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$openMedia$1$SecretMediaViewer() {
         this.photoAnimationInProgress = 0;
         this.imageMoveAnimation = null;
         if (this.containerView != null) {
@@ -827,7 +848,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
         }
     }
 
-    final /* synthetic */ void lambda$openMedia$2$SecretMediaViewer(PlaceProviderObject object) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$openMedia$2$SecretMediaViewer(PlaceProviderObject object) {
         this.disableShowCheck = false;
         object.imageReceiver.setVisible(false, true);
     }
@@ -901,7 +923,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
                     ((WindowManager) this.parentActivity.getSystemService("window")).removeViewImmediate(this.windowView);
                 }
                 this.windowView = null;
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
         }
@@ -1176,7 +1198,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
                         AndroidUtilities.runOnUIThread(new SecretMediaViewer$7$$Lambda$0(this));
                     }
 
-                    final /* synthetic */ void lambda$onAnimationEnd$0$SecretMediaViewer$7() {
+                    /* Access modifiers changed, original: final|synthetic */
+                    public final /* synthetic */ void lambda$onAnimationEnd$0$SecretMediaViewer$7() {
                         if (SecretMediaViewer.this.photoAnimationEndRunnable != null) {
                             SecretMediaViewer.this.photoAnimationEndRunnable.run();
                             SecretMediaViewer.this.photoAnimationEndRunnable = null;
@@ -1216,7 +1239,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
         }
     }
 
-    final /* synthetic */ void lambda$closePhoto$3$SecretMediaViewer(PlaceProviderObject object) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$closePhoto$3$SecretMediaViewer(PlaceProviderObject object) {
         this.imageMoveAnimation = null;
         this.photoAnimationInProgress = 0;
         if (VERSION.SDK_INT >= 18) {
@@ -1226,7 +1250,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
         onPhotoClosed(object);
     }
 
-    final /* synthetic */ void lambda$closePhoto$4$SecretMediaViewer(PlaceProviderObject object) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$closePhoto$4$SecretMediaViewer(PlaceProviderObject object) {
         if (this.containerView != null) {
             if (VERSION.SDK_INT >= 18) {
                 this.containerView.setLayerType(0, null);
@@ -1248,7 +1273,8 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
         AndroidUtilities.runOnUIThread(new SecretMediaViewer$$Lambda$5(this), 50);
     }
 
-    final /* synthetic */ void lambda$onPhotoClosed$5$SecretMediaViewer() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onPhotoClosed$5$SecretMediaViewer() {
         if (this.currentThumb != null) {
             this.currentThumb.release();
             this.currentThumb = null;
@@ -1258,7 +1284,7 @@ public class SecretMediaViewer implements OnDoubleTapListener, OnGestureListener
             if (this.windowView.getParent() != null) {
                 ((WindowManager) this.parentActivity.getSystemService("window")).removeView(this.windowView);
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         this.isPhotoVisible = false;

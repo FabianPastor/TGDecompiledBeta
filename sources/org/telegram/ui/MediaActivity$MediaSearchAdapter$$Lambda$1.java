@@ -12,6 +12,6 @@ final /* synthetic */ class MediaActivity$MediaSearchAdapter$$Lambda$1 implement
     }
 
     public void run() {
-        this.arg$1.lambda$processSearch$3$MediaActivity$MediaSearchAdapter(this.arg$2);
+        this.arg$1.lambda$search$3$MediaActivity$MediaSearchAdapter(this.arg$2);
     }
 }

@@ -40,10 +40,8 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
@@ -123,7 +121,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             switch (viewType) {
                 case 0:
                     view = new ShadowSectionCell(this.context);
-                    CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(this.context, (int) R.drawable.greydivider_top, "windowBackgroundGrayShadow"));
+                    CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(this.context, NUM, "windowBackgroundGrayShadow"));
                     combinedDrawable.setFullsize(true);
                     view.setBackgroundDrawable(combinedDrawable);
                     break;
@@ -196,7 +194,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new GroupCreateFinalActivity$$Lambda$0(this, users, usersToLoad, countDownLatch));
             try {
                 countDownLatch.await();
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
             if (usersToLoad.size() != users.size() || users.isEmpty()) {
@@ -210,7 +208,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         return super.onFragmentCreate();
     }
 
-    final /* synthetic */ void lambda$onFragmentCreate$0$GroupCreateFinalActivity(ArrayList users, ArrayList usersToLoad, CountDownLatch countDownLatch) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onFragmentCreate$0$GroupCreateFinalActivity(ArrayList users, ArrayList usersToLoad, CountDownLatch countDownLatch) {
         users.addAll(MessagesStorage.getInstance(this.currentAccount).getUsers(usersToLoad));
         countDownLatch.countDown();
     }
@@ -263,18 +262,19 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         if (this.editText != null) {
             this.editText.onDestroy();
         }
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("NewGroup", R.string.NewGroup));
+        this.actionBar.setTitle(LocaleController.getString("NewGroup", NUM));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    GroupCreateFinalActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
+                    GroupCreateFinalActivity.this.finishFragment();
                 }
             }
         });
         View anonymousClass2 = new SizeNotifierFrameLayout(context) {
-            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            /* Access modifiers changed, original: protected */
+            public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int widthSize = MeasureSpec.getSize(widthMeasureSpec);
                 int heightSize = MeasureSpec.getSize(heightMeasureSpec);
                 setMeasuredDimension(widthSize, heightSize);
@@ -298,7 +298,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 }
             }
 
-            protected void onLayout(boolean changed, int l, int t, int r, int b) {
+            /* Access modifiers changed, original: protected */
+            public void onLayout(boolean changed, int l, int t, int r, int b) {
                 int count = getChildCount();
                 int paddingBottom = (getKeyboardHeight() > AndroidUtilities.dp(20.0f) || AndroidUtilities.isInMultiwindow || AndroidUtilities.isTablet()) ? 0 : GroupCreateFinalActivity.this.editText.getEmojiPadding();
                 setBottomClip(paddingBottom);
@@ -356,9 +357,10 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         this.fragmentView = anonymousClass2;
         this.fragmentView.setLayoutParams(new ViewGroup.LayoutParams(-1, -1));
         this.fragmentView.setOnTouchListener(GroupCreateFinalActivity$$Lambda$1.$instance);
-        this.shadowDrawable = context.getResources().getDrawable(R.drawable.greydivider_top).mutate();
+        this.shadowDrawable = context.getResources().getDrawable(NUM).mutate();
         anonymousClass2 = new LinearLayout(context) {
-            protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+            /* Access modifiers changed, original: protected */
+            public boolean drawChild(Canvas canvas, View child, long drawingTime) {
                 boolean result = super.drawChild(canvas, child, drawingTime);
                 if (child == GroupCreateFinalActivity.this.listView && GroupCreateFinalActivity.this.shadowDrawable != null) {
                     int y = GroupCreateFinalActivity.this.editTextContainer.getMeasuredHeight();
@@ -390,6 +392,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         this.avatarImage.setRoundRadius(AndroidUtilities.dp(32.0f));
         this.avatarDrawable.setInfo(5, null, null, this.chatType == 1);
         this.avatarImage.setImageDrawable(this.avatarDrawable);
+        this.avatarImage.setContentDescription(LocaleController.getString("ChoosePhoto", NUM));
         FrameLayout frameLayout = this.editTextContainer;
         View view = this.avatarImage;
         int i = (LocaleController.isRTL ? 5 : 3) | 48;
@@ -408,7 +411,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         paint.setColor(NUM);
         final Paint paint2 = paint;
         this.avatarOverlay = new View(context) {
-            protected void onDraw(Canvas canvas) {
+            /* Access modifiers changed, original: protected */
+            public void onDraw(Canvas canvas) {
                 if (GroupCreateFinalActivity.this.avatarImage != null && GroupCreateFinalActivity.this.avatarProgressView.getVisibility() == 0) {
                     paint2.setAlpha((int) ((85.0f * GroupCreateFinalActivity.this.avatarImage.getImageReceiver().getCurrentAlpha()) * GroupCreateFinalActivity.this.avatarProgressView.getAlpha()));
                     canvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.dp(32.0f), paint2);
@@ -442,7 +446,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             }
         };
         this.avatarEditor.setScaleType(ScaleType.CENTER);
-        this.avatarEditor.setImageResource(R.drawable.actions_setphoto);
+        this.avatarEditor.setImageResource(NUM);
         this.avatarEditor.setEnabled(false);
         this.avatarEditor.setClickable(false);
         this.avatarEditor.setPadding(AndroidUtilities.dp(2.0f), 0, 0, 0);
@@ -471,7 +475,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         this.editTextContainer.addView(this.avatarProgressView, LayoutHelper.createFrame(64, 64.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 16.0f, LocaleController.isRTL ? 16.0f : 0.0f, 16.0f));
         showAvatarProgress(false, false);
         this.editText = new EditTextEmoji((Activity) context, anonymousClass2, this);
-        this.editText.setHint(this.chatType == 0 ? LocaleController.getString("EnterGroupNamePlaceholder", R.string.EnterGroupNamePlaceholder) : LocaleController.getString("EnterListName", R.string.EnterListName));
+        this.editText.setHint(this.chatType == 0 ? LocaleController.getString("EnterGroupNamePlaceholder", NUM) : LocaleController.getString("EnterListName", NUM));
         if (this.nameToSet != null) {
             this.editText.setText(this.nameToSet);
             this.nameToSet = null;
@@ -481,7 +485,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         LayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
         this.listView = new RecyclerListView(context);
         RecyclerView recyclerView = this.listView;
-        Adapter groupCreateAdapter = new GroupCreateAdapter(context);
+        GroupCreateAdapter groupCreateAdapter = new GroupCreateAdapter(context);
         this.adapter = groupCreateAdapter;
         recyclerView.setAdapter(groupCreateAdapter);
         this.listView.setLayoutManager(linearLayoutManager);
@@ -501,7 +505,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         this.floatingButtonContainer = new FrameLayout(context);
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor("chats_actionBackground"), Theme.getColor("chats_actionPressedBackground"));
         if (VERSION.SDK_INT < 21) {
-            Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow).mutate();
+            Drawable shadowDrawable = context.getResources().getDrawable(NUM).mutate();
             shadowDrawable.setColorFilter(new PorterDuffColorFilter(-16777216, Mode.MULTIPLY));
             Drawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
@@ -548,8 +552,9 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         this.floatingButtonIcon = new ImageView(context);
         this.floatingButtonIcon.setScaleType(ScaleType.CENTER);
         this.floatingButtonIcon.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_actionIcon"), Mode.MULTIPLY));
-        this.floatingButtonIcon.setImageResource(R.drawable.checkbig);
+        this.floatingButtonIcon.setImageResource(NUM);
         this.floatingButtonIcon.setPadding(0, AndroidUtilities.dp(2.0f), 0, 0);
+        this.floatingButtonContainer.setContentDescription(LocaleController.getString("Done", NUM));
         this.floatingButtonContainer.addView(this.floatingButtonIcon, LayoutHelper.createFrame(VERSION.SDK_INT >= 21 ? 56 : 60, VERSION.SDK_INT >= 21 ? 56.0f : 60.0f));
         this.progressView = new ContextProgressView(context, 1);
         this.progressView.setAlpha(0.0f);
@@ -560,20 +565,23 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         return this.fragmentView;
     }
 
-    final /* synthetic */ void lambda$createView$3$GroupCreateFinalActivity(View view) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$3$GroupCreateFinalActivity(View view) {
         this.imageUpdater.openMenu(this.avatar != null, new GroupCreateFinalActivity$$Lambda$6(this));
     }
 
-    final /* synthetic */ void lambda$null$2$GroupCreateFinalActivity() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$2$GroupCreateFinalActivity() {
         this.avatar = null;
         this.avatarBig = null;
         this.uploadedAvatar = null;
         showAvatarProgress(false, true);
         this.avatarImage.setImage(this.avatar, "50_50", this.avatarDrawable, null);
-        this.avatarEditor.setImageResource(R.drawable.actions_setphoto);
+        this.avatarEditor.setImageResource(NUM);
     }
 
-    final /* synthetic */ void lambda$createView$4$GroupCreateFinalActivity(View view) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$4$GroupCreateFinalActivity(View view) {
         if (!this.donePressed) {
             if (this.editText.length() == 0) {
                 Vibrator v = (Vibrator) getParentActivity().getSystemService("vibrator");
@@ -599,7 +607,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         AndroidUtilities.runOnUIThread(new GroupCreateFinalActivity$$Lambda$4(this, file, smallSize, bigSize));
     }
 
-    final /* synthetic */ void lambda$didUploadPhoto$5$GroupCreateFinalActivity(InputFile file, PhotoSize smallSize, PhotoSize bigSize) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$didUploadPhoto$5$GroupCreateFinalActivity(InputFile file, PhotoSize smallSize, PhotoSize bigSize) {
         if (file != null) {
             this.uploadedAvatar = file;
             if (this.createAfterUpload) {
@@ -830,7 +839,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         return r10;
     }
 
-    final /* synthetic */ void lambda$getThemeDescriptions$6$GroupCreateFinalActivity() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$getThemeDescriptions$6$GroupCreateFinalActivity() {
         if (this.listView != null) {
             int count = this.listView.getChildCount();
             for (int a = 0; a < count; a++) {

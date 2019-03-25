@@ -11,6 +11,6 @@ final /* synthetic */ class ChatActivity$$Lambda$57 implements OnClickListener {
     }
 
     public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$processSelectedOption$71$ChatActivity(dialogInterface, i);
+        this.arg$1.lambda$checkRecordLocked$75$ChatActivity(dialogInterface, i);
     }
 }

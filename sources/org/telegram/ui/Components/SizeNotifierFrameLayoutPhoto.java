@@ -30,7 +30,8 @@ public class SizeNotifierFrameLayoutPhoto extends FrameLayout {
         this.withoutWindow = value;
     }
 
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+    /* Access modifiers changed, original: protected */
+    public void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
         notifyHeightChanged();
     }

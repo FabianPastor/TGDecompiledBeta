@@ -2,17 +2,16 @@ package org.telegram.ui.Components;
 
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import org.telegram.ui.CacheControlActivity;
-import org.telegram.ui.LaunchActivity;
+import org.telegram.messenger.MessagesController;
 
 final /* synthetic */ class AlertsCreator$$Lambda$29 implements OnClickListener {
-    private final LaunchActivity arg$1;
+    private final int[] arg$1;
 
-    AlertsCreator$$Lambda$29(LaunchActivity launchActivity) {
-        this.arg$1 = launchActivity;
+    AlertsCreator$$Lambda$29(int[] iArr) {
+        this.arg$1 = iArr;
     }
 
     public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$runLinkRequest$27$LaunchActivity(new CacheControlActivity());
+        MessagesController.getGlobalMainSettings().edit().putInt("keep_media", this.arg$1[0]).commit();
     }
 }

@@ -47,7 +47,8 @@ public class GridLayoutManager extends LinearLayoutManager {
             return this.mCacheSpanIndices;
         }
 
-        int getCachedSpanIndex(int position, int spanCount) {
+        /* Access modifiers changed, original: 0000 */
+        public int getCachedSpanIndex(int position, int spanCount) {
             if (!this.mCacheSpanIndices) {
                 return getSpanIndex(position, spanCount);
             }
@@ -89,7 +90,8 @@ public class GridLayoutManager extends LinearLayoutManager {
             return span;
         }
 
-        int findReferenceIndexFromCache(int position) {
+        /* Access modifiers changed, original: 0000 */
+        public int findReferenceIndexFromCache(int position) {
             int lo = 0;
             int hi = this.mSpanIndexCache.size() - 1;
             while (lo <= hi) {
@@ -337,11 +339,13 @@ public class GridLayoutManager extends LinearLayoutManager {
         setMeasuredDimension(width, height);
     }
 
-    protected void calculateItemBorders(int totalSpace) {
+    /* Access modifiers changed, original: protected */
+    public void calculateItemBorders(int totalSpace) {
         this.mCachedBorders = calculateItemBorders(this.mCachedBorders, this.mSpanCount, totalSpace);
     }
 
-    protected int[] calculateItemBorders(int[] cachedBorders, int spanCount, int totalSpace) {
+    /* Access modifiers changed, original: protected */
+    public int[] calculateItemBorders(int[] cachedBorders, int spanCount, int totalSpace) {
         if (!(cachedBorders != null && cachedBorders.length == spanCount + 1 && cachedBorders[cachedBorders.length - 1] == totalSpace)) {
             cachedBorders = new int[(spanCount + 1)];
         }
@@ -363,14 +367,16 @@ public class GridLayoutManager extends LinearLayoutManager {
         return cachedBorders;
     }
 
-    int getSpaceForSpanRange(int startSpan, int spanSize) {
+    /* Access modifiers changed, original: 0000 */
+    public int getSpaceForSpanRange(int startSpan, int spanSize) {
         if (this.mOrientation == 1 && isLayoutRTL()) {
             return this.mCachedBorders[this.mSpanCount - startSpan] - this.mCachedBorders[(this.mSpanCount - startSpan) - spanSize];
         }
         return this.mCachedBorders[startSpan + spanSize] - this.mCachedBorders[startSpan];
     }
 
-    void onAnchorReady(Recycler recycler, State state, AnchorInfo anchorInfo, int itemDirection) {
+    /* Access modifiers changed, original: 0000 */
+    public void onAnchorReady(Recycler recycler, State state, AnchorInfo anchorInfo, int itemDirection) {
         super.onAnchorReady(recycler, state, anchorInfo, itemDirection);
         updateMeasurements();
         if (state.getItemCount() > 0 && !state.isPreLayout()) {
@@ -424,7 +430,8 @@ public class GridLayoutManager extends LinearLayoutManager {
         anchorInfo.mPosition = pos;
     }
 
-    View findReferenceChild(Recycler recycler, State state, int start, int end, int itemCount) {
+    /* Access modifiers changed, original: 0000 */
+    public View findReferenceChild(Recycler recycler, State state, int start, int end, int itemCount) {
         ensureLayoutState();
         View invalidMatch = null;
         View outOfBoundsMatch = null;
@@ -482,7 +489,8 @@ public class GridLayoutManager extends LinearLayoutManager {
         return 0;
     }
 
-    protected int getSpanSize(Recycler recycler, State state, int pos) {
+    /* Access modifiers changed, original: protected */
+    public int getSpanSize(Recycler recycler, State state, int pos) {
         if (!state.isPreLayout()) {
             return this.mSpanSizeLookup.getSpanSize(pos);
         }
@@ -498,7 +506,8 @@ public class GridLayoutManager extends LinearLayoutManager {
         return 1;
     }
 
-    void collectPrefetchPositionsForLayoutState(State state, LayoutState layoutState, LayoutPrefetchRegistry layoutPrefetchRegistry) {
+    /* Access modifiers changed, original: 0000 */
+    public void collectPrefetchPositionsForLayoutState(State state, LayoutState layoutState, LayoutPrefetchRegistry layoutPrefetchRegistry) {
         int remainingSpan = this.mSpanCount;
         for (int count = 0; count < this.mSpanCount && layoutState.hasMore(state) && remainingSpan > 0; count++) {
             int pos = layoutState.mCurrentPosition;
@@ -508,7 +517,8 @@ public class GridLayoutManager extends LinearLayoutManager {
         }
     }
 
-    void layoutChunk(Recycler recycler, State state, LayoutState layoutState, LayoutChunkResult result) {
+    /* Access modifiers changed, original: 0000 */
+    public void layoutChunk(Recycler recycler, State state, LayoutState layoutState, LayoutChunkResult result) {
         View view;
         int otherDirSpecMode = this.mOrientationHelper.getModeInOther();
         boolean flexibleInOtherDir = otherDirSpecMode != NUM;
@@ -649,7 +659,8 @@ public class GridLayoutManager extends LinearLayoutManager {
         Arrays.fill(this.mSet, null);
     }
 
-    protected void measureChild(View view, int otherDirParentSpecMode, boolean alreadyMeasured) {
+    /* Access modifiers changed, original: protected */
+    public void measureChild(View view, int otherDirParentSpecMode, boolean alreadyMeasured) {
         int wSpec;
         int hSpec;
         LayoutParams lp = (LayoutParams) view.getLayoutParams();
@@ -671,7 +682,8 @@ public class GridLayoutManager extends LinearLayoutManager {
         calculateItemBorders(Math.max(Math.round(((float) this.mSpanCount) * maxSizeInOther), currentOtherDirSize));
     }
 
-    protected void measureChildWithDecorationsAndMargin(View child, int widthSpec, int heightSpec, boolean alreadyMeasured) {
+    /* Access modifiers changed, original: protected */
+    public void measureChildWithDecorationsAndMargin(View child, int widthSpec, int heightSpec, boolean alreadyMeasured) {
         boolean measure;
         org.telegram.messenger.support.widget.RecyclerView.LayoutParams lp = (org.telegram.messenger.support.widget.RecyclerView.LayoutParams) child.getLayoutParams();
         if (alreadyMeasured) {
@@ -684,7 +696,8 @@ public class GridLayoutManager extends LinearLayoutManager {
         }
     }
 
-    protected void assignSpans(Recycler recycler, State state, int count, int consumedSpanCount, boolean layingOutInPrimaryDirection) {
+    /* Access modifiers changed, original: protected */
+    public void assignSpans(Recycler recycler, State state, int count, int consumedSpanCount, boolean layingOutInPrimaryDirection) {
         int start;
         int end;
         int diff;

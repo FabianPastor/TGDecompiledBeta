@@ -12,7 +12,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.InputPeer;
@@ -41,13 +40,13 @@ public class ReportOtherActivity extends BaseFragment {
 
     public View createView(Context context) {
         int i = 3;
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("ReportChat", R.string.ReportChat));
+        this.actionBar.setTitle(LocaleController.getString("ReportChat", NUM));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    ReportOtherActivity.this.lambda$checkDiscard$70$PassportActivity();
+                    ReportOtherActivity.this.finishFragment();
                 } else if (id == 1 && ReportOtherActivity.this.firstNameField.getText().length() != 0) {
                     TLObject req;
                     InputPeer peer = MessagesController.getInstance(UserConfig.selectedAccount).getInputPeer((int) ReportOtherActivity.this.dialog_id);
@@ -71,16 +70,16 @@ public class ReportOtherActivity extends BaseFragment {
                     }
                     ConnectionsManager.getInstance(ReportOtherActivity.this.currentAccount).sendRequest(req, ReportOtherActivity$1$$Lambda$0.$instance);
                     if (ReportOtherActivity.this.getParentActivity() != null) {
-                        Toast.makeText(ReportOtherActivity.this.getParentActivity(), LocaleController.getString("ReportChatSent", R.string.ReportChatSent), 0).show();
+                        Toast.makeText(ReportOtherActivity.this.getParentActivity(), LocaleController.getString("ReportChatSent", NUM), 0).show();
                     }
-                    ReportOtherActivity.this.lambda$checkDiscard$70$PassportActivity();
+                    ReportOtherActivity.this.finishFragment();
                 }
             }
 
             static final /* synthetic */ void lambda$onItemClick$0$ReportOtherActivity$1(TLObject response, TL_error error) {
             }
         });
-        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
+        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f));
         LinearLayout linearLayout = new LinearLayout(context);
         this.fragmentView = linearLayout;
         this.fragmentView.setLayoutParams(new LayoutParams(-1, -1));
@@ -106,12 +105,13 @@ public class ReportOtherActivity extends BaseFragment {
         this.firstNameField.setCursorWidth(1.5f);
         this.firstNameField.setOnEditorActionListener(new ReportOtherActivity$$Lambda$1(this));
         linearLayout.addView(this.firstNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 24.0f, 24.0f, 0.0f));
-        this.firstNameField.setHint(LocaleController.getString("ReportChatDescription", R.string.ReportChatDescription));
+        this.firstNameField.setHint(LocaleController.getString("ReportChatDescription", NUM));
         this.firstNameField.setSelection(this.firstNameField.length());
         return this.fragmentView;
     }
 
-    final /* synthetic */ boolean lambda$createView$1$ReportOtherActivity(TextView textView, int i, KeyEvent keyEvent) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ boolean lambda$createView$1$ReportOtherActivity(TextView textView, int i, KeyEvent keyEvent) {
         if (i != 6 || this.doneButton == null) {
             return false;
         }
@@ -133,7 +133,8 @@ public class ReportOtherActivity extends BaseFragment {
         }
     }
 
-    final /* synthetic */ void lambda$onTransitionAnimationEnd$2$ReportOtherActivity() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onTransitionAnimationEnd$2$ReportOtherActivity() {
         if (this.firstNameField != null) {
             this.firstNameField.requestFocus();
             AndroidUtilities.showKeyboard(this.firstNameField);

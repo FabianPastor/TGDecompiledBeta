@@ -276,7 +276,8 @@ public class DiffUtil {
             updateCallback.onRemoved(start, count);
         }
 
-        List<Snake> getSnakes() {
+        /* Access modifiers changed, original: 0000 */
+        public List<Snake> getSnakes() {
             return this.mSnakes;
         }
     }

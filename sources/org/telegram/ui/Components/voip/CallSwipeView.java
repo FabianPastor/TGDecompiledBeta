@@ -10,8 +10,10 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.accessibility.AccessibilityNodeInfo;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
@@ -106,7 +108,8 @@ public class CallSwipeView extends View {
         });
     }
 
-    protected void onDetachedFromWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         if (this.arrowAnim != null) {
             this.canceled = true;
@@ -198,7 +201,8 @@ public class CallSwipeView extends View {
         }
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (this.viewToDrag.getTranslationX() != 0.0f) {
             if (this.dragFromRight) {
                 this.tmpRect.set((((float) getWidth()) + this.viewToDrag.getTranslationX()) - ((float) getDraggedViewWidth()), 0.0f, (float) getWidth(), (float) getHeight());
@@ -245,5 +249,17 @@ public class CallSwipeView extends View {
         this.arrow.moveTo(0.0f, (float) (-size));
         this.arrow.lineTo((float) size, 0.0f);
         this.arrow.lineTo(0.0f, (float) size);
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
+        info.addAction(16);
+    }
+
+    public boolean performAccessibilityAction(int action, Bundle arguments) {
+        if (action == 16 && isEnabled()) {
+            this.listener.onDragComplete();
+        }
+        return super.performAccessibilityAction(action, arguments);
     }
 }

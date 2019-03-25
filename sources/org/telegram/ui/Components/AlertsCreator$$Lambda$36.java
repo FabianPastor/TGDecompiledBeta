@@ -1,16 +1,22 @@
 package org.telegram.ui.Components;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_error;
+import android.view.View;
+import android.view.View.OnClickListener;
+import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.Components.AlertsCreator.AccountSelectDelegate;
 
-final /* synthetic */ class AlertsCreator$$Lambda$36 implements RequestDelegate {
-    static final RequestDelegate $instance = new AlertsCreator$$Lambda$36();
+final /* synthetic */ class AlertsCreator$$Lambda$36 implements OnClickListener {
+    private final AlertDialog[] arg$1;
+    private final Runnable arg$2;
+    private final AccountSelectDelegate arg$3;
 
-    private AlertsCreator$$Lambda$36() {
+    AlertsCreator$$Lambda$36(AlertDialog[] alertDialogArr, Runnable runnable, AccountSelectDelegate accountSelectDelegate) {
+        this.arg$1 = alertDialogArr;
+        this.arg$2 = runnable;
+        this.arg$3 = accountSelectDelegate;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        AlertsCreator.lambda$null$18$AlertsCreator(tLObject, tL_error);
+    public void onClick(View view) {
+        AlertsCreator.lambda$createAccountSelectDialog$39$AlertsCreator(this.arg$1, this.arg$2, this.arg$3, view);
     }
 }

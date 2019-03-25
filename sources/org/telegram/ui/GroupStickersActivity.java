@@ -33,7 +33,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
@@ -138,7 +137,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                     return;
                 case 1:
                     if (position == GroupStickersActivity.this.infoRow) {
-                        String text = LocaleController.getString("ChooseStickerSetMy", R.string.ChooseStickerSetMy);
+                        String text = LocaleController.getString("ChooseStickerSetMy", NUM);
                         String botName = "@stickers";
                         int index = text.indexOf(botName);
                         if (index != -1) {
@@ -151,7 +150,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                                 }, index, botName.length() + index, 18);
                                 ((TextInfoPrivacyCell) holder.itemView).setText(stringBuilder);
                                 return;
-                            } catch (Throwable e) {
+                            } catch (Exception e) {
                                 FileLog.e(e);
                                 ((TextInfoPrivacyCell) holder.itemView).setText(text);
                                 return;
@@ -162,7 +161,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                     }
                     return;
                 case 4:
-                    ((HeaderCell) holder.itemView).setText(LocaleController.getString("ChooseFromYourStickers", R.string.ChooseFromYourStickers));
+                    ((HeaderCell) holder.itemView).setText(LocaleController.getString("ChooseFromYourStickers", NUM));
                     return;
                 case 5:
                     cell = (StickerSetCell) holder.itemView;
@@ -170,10 +169,10 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                         cell.setStickersSet(GroupStickersActivity.this.selectedStickerSet, false);
                         return;
                     } else if (GroupStickersActivity.this.searching) {
-                        cell.setText(LocaleController.getString("Loading", R.string.Loading), null, 0, false);
+                        cell.setText(LocaleController.getString("Loading", NUM), null, 0, false);
                         return;
                     } else {
-                        cell.setText(LocaleController.getString("ChooseStickerSetNotFound", R.string.ChooseStickerSetNotFound), LocaleController.getString("ChooseStickerSetNotFoundInfo", R.string.ChooseStickerSetNotFoundInfo), R.drawable.ic_smiles2_sad, false);
+                        cell.setText(LocaleController.getString("ChooseStickerSetNotFound", NUM), LocaleController.getString("ChooseStickerSetNotFoundInfo", NUM), NUM, false);
                         return;
                     }
                 default:
@@ -196,14 +195,14 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                     break;
                 case 1:
                     view = new TextInfoPrivacyCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                     break;
                 case 2:
                     view = GroupStickersActivity.this.nameContainer;
                     break;
                 case 3:
                     view = new ShadowSectionCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                     break;
                 case 4:
                     view = new HeaderCell(this.mContext);
@@ -259,13 +258,13 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
     }
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("GroupStickers", R.string.GroupStickers));
+        this.actionBar.setTitle(LocaleController.getString("GroupStickers", NUM));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    GroupStickersActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
+                    GroupStickersActivity.this.finishFragment();
                 } else if (id == 1 && !GroupStickersActivity.this.donePressed) {
                     GroupStickersActivity.this.donePressed = true;
                     if (GroupStickersActivity.this.searching) {
@@ -276,7 +275,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                 }
             }
         });
-        this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
+        this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f));
         this.progressView = new ContextProgressView(context, 1);
         this.progressView.setAlpha(0.0f);
         this.progressView.setScaleX(0.1f);
@@ -284,11 +283,13 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         this.progressView.setVisibility(4);
         this.doneItem.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
         this.nameContainer = new LinearLayout(context) {
-            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            /* Access modifiers changed, original: protected */
+            public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
             }
 
-            protected void onDraw(Canvas canvas) {
+            /* Access modifiers changed, original: protected */
+            public void onDraw(Canvas canvas) {
                 if (GroupStickersActivity.this.selectedStickerSet != null) {
                     canvas.drawLine(0.0f, (float) (getHeight() - 1), (float) getWidth(), (float) (getHeight() - 1), Theme.dividerPaint);
                 }
@@ -330,7 +331,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         this.usernameTextView.setGravity(16);
         this.usernameTextView.setInputType(163872);
         this.usernameTextView.setImeOptions(6);
-        this.usernameTextView.setHint(LocaleController.getString("ChooseStickerSetPlaceholder", R.string.ChooseStickerSetPlaceholder));
+        this.usernameTextView.setHint(LocaleController.getString("ChooseStickerSetPlaceholder", NUM));
         this.usernameTextView.addTextChangedListener(new TextWatcher() {
             boolean ignoreTextChange;
 
@@ -367,7 +368,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         this.nameContainer.addView(this.usernameTextView, LayoutHelper.createLinear(0, 42, 1.0f));
         this.eraseImageView = new ImageView(context);
         this.eraseImageView.setScaleType(ScaleType.CENTER);
-        this.eraseImageView.setImageResource(R.drawable.ic_close_white);
+        this.eraseImageView.setImageResource(NUM);
         this.eraseImageView.setPadding(AndroidUtilities.dp(16.0f), 0, 0, 0);
         this.eraseImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayText3"), Mode.MULTIPLY));
         this.eraseImageView.setVisibility(4);
@@ -519,7 +520,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                 this.searching = false;
                 return;
             }
-            Runnable anonymousClass8 = new Runnable() {
+            AnonymousClass8 anonymousClass8 = new Runnable() {
                 public void run() {
                     if (GroupStickersActivity.this.queryRunnable != null) {
                         TL_messages_getStickerSet req = new TL_messages_getStickerSet();
@@ -547,7 +548,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                                                 GroupStickersActivity.this.donePressed = false;
                                                 GroupStickersActivity.this.showEditDoneProgress(false);
                                                 if (GroupStickersActivity.this.getParentActivity() != null) {
-                                                    Toast.makeText(GroupStickersActivity.this.getParentActivity(), LocaleController.getString("AddStickersNotFound", R.string.AddStickersNotFound), 0).show();
+                                                    Toast.makeText(GroupStickersActivity.this.getParentActivity(), LocaleController.getString("AddStickersNotFound", NUM), 0).show();
                                                 }
                                             }
                                         }
@@ -579,7 +580,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
 
     private void saveStickerSet() {
         if (this.info == null || (!(this.info.stickerset == null || this.selectedStickerSet == null || this.selectedStickerSet.set.id != this.info.stickerset.id) || (this.info.stickerset == null && this.selectedStickerSet == null))) {
-            lambda$createView$1$PhotoAlbumPickerActivity();
+            finishFragment();
             return;
         }
         showEditDoneProgress(true);
@@ -612,10 +613,10 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                             }
                             MessagesStorage.getInstance(GroupStickersActivity.this.currentAccount).updateChatInfo(GroupStickersActivity.this.info, false);
                             NotificationCenter.getInstance(GroupStickersActivity.this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoad, GroupStickersActivity.this.info, Integer.valueOf(0), Boolean.valueOf(true), null);
-                            GroupStickersActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
+                            GroupStickersActivity.this.finishFragment();
                             return;
                         }
-                        Toast.makeText(GroupStickersActivity.this.getParentActivity(), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text, 0).show();
+                        Toast.makeText(GroupStickersActivity.this.getParentActivity(), LocaleController.getString("ErrorOccurred", NUM) + "\n" + error.text, 0).show();
                         GroupStickersActivity.this.donePressed = false;
                         GroupStickersActivity.this.showEditDoneProgress(false);
                     }

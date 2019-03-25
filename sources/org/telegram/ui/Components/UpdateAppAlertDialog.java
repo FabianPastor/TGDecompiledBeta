@@ -15,7 +15,6 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.TLRPC.TL_document;
 import org.telegram.tgnet.TLRPC.TL_help_appUpdate;
@@ -39,18 +38,19 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
             this.fileName = FileLoader.getAttachFileName(update.document);
         }
         this.parentActivity = activity;
-        setTopImage((int) R.drawable.update, Theme.getColor("dialogTopBackground"));
+        setTopImage(NUM, Theme.getColor("dialogTopBackground"));
         setTopHeight(175);
         setMessage(this.appUpdate.text);
         if (this.appUpdate.document instanceof TL_document) {
             setSecondTitle(AndroidUtilities.formatFileSize((long) this.appUpdate.document.size));
         }
         setDismissDialogByButtons(false);
-        setTitle(LocaleController.getString("UpdateTelegram", R.string.UpdateTelegram));
-        setPositiveButton(LocaleController.getString("UpdateNow", R.string.UpdateNow), new UpdateAppAlertDialog$$Lambda$0(this));
-        setNeutralButton(LocaleController.getString("Later", R.string.Later), new UpdateAppAlertDialog$$Lambda$1(this));
+        setTitle(LocaleController.getString("UpdateTelegram", NUM));
+        setPositiveButton(LocaleController.getString("UpdateNow", NUM), new UpdateAppAlertDialog$$Lambda$0(this));
+        setNeutralButton(LocaleController.getString("Later", NUM), new UpdateAppAlertDialog$$Lambda$1(this));
         this.radialProgressView = new FrameLayout(this.parentActivity) {
-            protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+            /* Access modifiers changed, original: protected */
+            public void onLayout(boolean changed, int left, int top, int right, int bottom) {
                 super.onLayout(changed, left, top, right, bottom);
                 int width = right - left;
                 int height = bottom - top;
@@ -60,7 +60,8 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
                 UpdateAppAlertDialog.this.radialProgress.setProgressRect(l, t, l + w, t + w);
             }
 
-            protected void onDraw(Canvas canvas) {
+            /* Access modifiers changed, original: protected */
+            public void onDraw(Canvas canvas) {
                 UpdateAppAlertDialog.this.radialProgress.draw(canvas);
             }
         };
@@ -75,13 +76,14 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
         this.radialProgress.setProgressColor(Theme.getColor("dialogButton"));
     }
 
-    final /* synthetic */ void lambda$new$0$UpdateAppAlertDialog(DialogInterface dialog, int which) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$0$UpdateAppAlertDialog(DialogInterface dialog, int which) {
         if (!BlockingUpdateView.checkApkInstallPermissions(getContext())) {
             return;
         }
         if (this.appUpdate.document instanceof TL_document) {
             if (!BlockingUpdateView.openApkInstall(this.parentActivity, this.appUpdate.document)) {
-                FileLoader.getInstance(this.accountNum).loadFile(this.appUpdate.document, "update", 1, 1);
+                FileLoader.getInstance(this.accountNum).loadFile(this.appUpdate.document, (Object) "update", 1, 1);
                 showProgress(true);
             }
         } else if (this.appUpdate.url != null) {
@@ -90,7 +92,8 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
         }
     }
 
-    final /* synthetic */ void lambda$new$1$UpdateAppAlertDialog(DialogInterface dialog, int which) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$1$UpdateAppAlertDialog(DialogInterface dialog, int which) {
         if (this.appUpdate.document instanceof TL_document) {
             FileLoader.getInstance(this.accountNum).cancelLoadFile(this.appUpdate.document);
         }
@@ -118,7 +121,8 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
         }
     }
 
-    protected void onCreate(Bundle savedInstanceState) {
+    /* Access modifiers changed, original: protected */
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileDidLoad);
         NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileDidFailedLoad);

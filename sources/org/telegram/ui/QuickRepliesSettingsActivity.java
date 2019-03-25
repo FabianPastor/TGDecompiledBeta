@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
@@ -51,14 +50,14 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
             switch (holder.getItemViewType()) {
                 case 0:
                     TextInfoPrivacyCell cell = holder.itemView;
-                    cell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
-                    cell.setText(LocaleController.getString("VoipQuickRepliesExplain", R.string.VoipQuickRepliesExplain));
+                    cell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                    cell.setText(LocaleController.getString("VoipQuickRepliesExplain", NUM));
                     return;
                 case 1:
                     TextSettingsCell textCell = holder.itemView;
                     return;
                 case 4:
-                    holder.itemView.setTextAndCheck(LocaleController.getString("AllowCustomQuickReply", R.string.AllowCustomQuickReply), QuickRepliesSettingsActivity.this.getParentActivity().getSharedPreferences("mainconfig", 0).getBoolean("quick_reply_allow_custom", true), false);
+                    holder.itemView.setTextAndCheck(LocaleController.getString("AllowCustomQuickReply", NUM), QuickRepliesSettingsActivity.this.getParentActivity().getSharedPreferences("mainconfig", 0).getBoolean("quick_reply_allow_custom", true), false);
                     return;
                 case 9:
                 case 10:
@@ -69,16 +68,16 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
                     String defValue = null;
                     if (position == QuickRepliesSettingsActivity.this.reply1Row) {
                         settingsKey = "quick_reply_msg1";
-                        defValue = LocaleController.getString("QuickReplyDefault1", R.string.QuickReplyDefault1);
+                        defValue = LocaleController.getString("QuickReplyDefault1", NUM);
                     } else if (position == QuickRepliesSettingsActivity.this.reply2Row) {
                         settingsKey = "quick_reply_msg2";
-                        defValue = LocaleController.getString("QuickReplyDefault2", R.string.QuickReplyDefault2);
+                        defValue = LocaleController.getString("QuickReplyDefault2", NUM);
                     } else if (position == QuickRepliesSettingsActivity.this.reply3Row) {
                         settingsKey = "quick_reply_msg3";
-                        defValue = LocaleController.getString("QuickReplyDefault3", R.string.QuickReplyDefault3);
+                        defValue = LocaleController.getString("QuickReplyDefault3", NUM);
                     } else if (position == QuickRepliesSettingsActivity.this.reply4Row) {
                         settingsKey = "quick_reply_msg4";
-                        defValue = LocaleController.getString("QuickReplyDefault4", R.string.QuickReplyDefault4);
+                        defValue = LocaleController.getString("QuickReplyDefault4", NUM);
                     }
                     textCell2.setTextAndHint(QuickRepliesSettingsActivity.this.getParentActivity().getSharedPreferences("mainconfig", 0).getString(settingsKey, ""), defValue, true);
                     return;
@@ -152,8 +151,8 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
     }
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        this.actionBar.setTitle(LocaleController.getString("VoipQuickReplies", R.string.VoipQuickReplies));
+        this.actionBar.setBackButtonImage(NUM);
+        this.actionBar.setTitle(LocaleController.getString("VoipQuickReplies", NUM));
         if (AndroidUtilities.isTablet()) {
             this.actionBar.setOccupyStatusBar(false);
         }
@@ -161,7 +160,7 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    QuickRepliesSettingsActivity.this.lambda$checkDiscard$70$PassportActivity();
+                    QuickRepliesSettingsActivity.this.finishFragment();
                 }
             }
         });

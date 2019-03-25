@@ -182,7 +182,8 @@ public class VoIPController {
         return nativeGetDebugString(this.nativeInst);
     }
 
-    protected void ensureNativeInstance() {
+    /* Access modifiers changed, original: protected */
+    public void ensureNativeInstance() {
         if (this.nativeInst == 0) {
             throw new IllegalStateException("Native instance is not valid");
         }

@@ -1,26 +1,18 @@
 package org.telegram.ui;
 
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import org.telegram.messenger.MessageObject;
-import org.telegram.tgnet.TLRPC.TL_game;
+import android.content.DialogInterface.OnCancelListener;
 
-final /* synthetic */ class ChatActivity$$Lambda$64 implements OnClickListener {
+final /* synthetic */ class ChatActivity$$Lambda$64 implements OnCancelListener {
     private final ChatActivity arg$1;
-    private final TL_game arg$2;
-    private final MessageObject arg$3;
-    private final String arg$4;
-    private final int arg$5;
+    private final int arg$2;
 
-    ChatActivity$$Lambda$64(ChatActivity chatActivity, TL_game tL_game, MessageObject messageObject, String str, int i) {
+    ChatActivity$$Lambda$64(ChatActivity chatActivity, int i) {
         this.arg$1 = chatActivity;
-        this.arg$2 = tL_game;
-        this.arg$3 = messageObject;
-        this.arg$4 = str;
-        this.arg$5 = i;
+        this.arg$2 = i;
     }
 
-    public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$showOpenGameAlert$84$ChatActivity(this.arg$2, this.arg$3, this.arg$4, this.arg$5, dialogInterface, i);
+    public void onCancel(DialogInterface dialogInterface) {
+        this.arg$1.lambda$null$72$ChatActivity(this.arg$2, dialogInterface);
     }
 }

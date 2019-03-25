@@ -1,19 +1,18 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 
-final /* synthetic */ class ChatActivity$$Lambda$60 implements Runnable {
+final /* synthetic */ class ChatActivity$$Lambda$60 implements OnClickListener {
     private final ChatActivity arg$1;
-    private final AlertDialog[] arg$2;
-    private final int arg$3;
+    private final String arg$2;
 
-    ChatActivity$$Lambda$60(ChatActivity chatActivity, AlertDialog[] alertDialogArr, int i) {
+    ChatActivity$$Lambda$60(ChatActivity chatActivity, String str) {
         this.arg$1 = chatActivity;
-        this.arg$2 = alertDialogArr;
-        this.arg$3 = i;
+        this.arg$2 = str;
     }
 
-    public void run() {
-        this.arg$1.lambda$processSelectedOption$76$ChatActivity(this.arg$2, this.arg$3);
+    public void onClick(DialogInterface dialogInterface, int i) {
+        this.arg$1.lambda$showOpenUrlAlert$77$ChatActivity(this.arg$2, dialogInterface, i);
     }
 }

@@ -41,14 +41,16 @@ public class CubicBezierInterpolator implements Interpolator {
         return getBezierCoordinateY(getXForTime(time));
     }
 
-    protected float getBezierCoordinateY(float time) {
+    /* Access modifiers changed, original: protected */
+    public float getBezierCoordinateY(float time) {
         this.c.y = this.start.y * 3.0f;
         this.b.y = ((this.end.y - this.start.y) * 3.0f) - this.c.y;
         this.a.y = (1.0f - this.c.y) - this.b.y;
         return (this.c.y + ((this.b.y + (this.a.y * time)) * time)) * time;
     }
 
-    protected float getXForTime(float time) {
+    /* Access modifiers changed, original: protected */
+    public float getXForTime(float time) {
         float x = time;
         for (int i = 1; i < 14; i++) {
             float z = getBezierCoordinateX(x) - time;

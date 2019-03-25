@@ -18,7 +18,6 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaController.AudioEntry;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CheckBox;
 import org.telegram.ui.Components.CombinedDrawable;
@@ -47,7 +46,7 @@ public class AudioCell extends FrameLayout {
         int i2 = 3;
         super(context);
         this.playButton = new ImageView(context);
-        View view = this.playButton;
+        ImageView imageView = this.playButton;
         int i3 = (LocaleController.isRTL ? 5 : 3) | 48;
         if (LocaleController.isRTL) {
             f = 0.0f;
@@ -59,7 +58,7 @@ public class AudioCell extends FrameLayout {
         } else {
             f2 = 0.0f;
         }
-        addView(view, LayoutHelper.createFrame(46, 46.0f, i3, f, 13.0f, f2, 0.0f));
+        addView(imageView, LayoutHelper.createFrame(46, 46.0f, i3, f, 13.0f, f2, 0.0f));
         this.playButton.setOnClickListener(new AudioCell$$Lambda$0(this));
         this.titleTextView = new TextView(context);
         this.titleTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
@@ -70,13 +69,13 @@ public class AudioCell extends FrameLayout {
         this.titleTextView.setSingleLine(true);
         this.titleTextView.setEllipsize(TruncateAt.END);
         this.titleTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        view = this.titleTextView;
+        TextView textView = this.titleTextView;
         if (LocaleController.isRTL) {
             i3 = 5;
         } else {
             i3 = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, -2.0f, i3 | 48, LocaleController.isRTL ? 50.0f : 72.0f, 7.0f, LocaleController.isRTL ? 72.0f : 50.0f, 0.0f));
+        addView(textView, LayoutHelper.createFrame(-1, -2.0f, i3 | 48, LocaleController.isRTL ? 50.0f : 72.0f, 7.0f, LocaleController.isRTL ? 72.0f : 50.0f, 0.0f));
         this.genreTextView = new TextView(context);
         this.genreTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
         this.genreTextView.setTextSize(1, 14.0f);
@@ -84,20 +83,20 @@ public class AudioCell extends FrameLayout {
         this.genreTextView.setMaxLines(1);
         this.genreTextView.setSingleLine(true);
         this.genreTextView.setEllipsize(TruncateAt.END);
-        TextView textView = this.genreTextView;
+        TextView textView2 = this.genreTextView;
         if (LocaleController.isRTL) {
             i = 5;
         } else {
             i = 3;
         }
-        textView.setGravity(i | 48);
-        view = this.genreTextView;
+        textView2.setGravity(i | 48);
+        textView = this.genreTextView;
         if (LocaleController.isRTL) {
             i3 = 5;
         } else {
             i3 = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, -2.0f, i3 | 48, LocaleController.isRTL ? 50.0f : 72.0f, 28.0f, LocaleController.isRTL ? 72.0f : 50.0f, 0.0f));
+        addView(textView, LayoutHelper.createFrame(-1, -2.0f, i3 | 48, LocaleController.isRTL ? 50.0f : 72.0f, 28.0f, LocaleController.isRTL ? 72.0f : 50.0f, 0.0f));
         this.authorTextView = new TextView(context);
         this.authorTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
         this.authorTextView.setTextSize(1, 14.0f);
@@ -105,20 +104,20 @@ public class AudioCell extends FrameLayout {
         this.authorTextView.setMaxLines(1);
         this.authorTextView.setSingleLine(true);
         this.authorTextView.setEllipsize(TruncateAt.END);
-        textView = this.authorTextView;
+        textView2 = this.authorTextView;
         if (LocaleController.isRTL) {
             i = 5;
         } else {
             i = 3;
         }
-        textView.setGravity(i | 48);
-        view = this.authorTextView;
+        textView2.setGravity(i | 48);
+        textView = this.authorTextView;
         if (LocaleController.isRTL) {
             i3 = 5;
         } else {
             i3 = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, -2.0f, i3 | 48, LocaleController.isRTL ? 50.0f : 72.0f, 44.0f, LocaleController.isRTL ? 72.0f : 50.0f, 0.0f));
+        addView(textView, LayoutHelper.createFrame(-1, -2.0f, i3 | 48, LocaleController.isRTL ? 50.0f : 72.0f, 44.0f, LocaleController.isRTL ? 72.0f : 50.0f, 0.0f));
         this.timeTextView = new TextView(context);
         this.timeTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText3"));
         this.timeTextView.setTextSize(1, 13.0f);
@@ -126,31 +125,32 @@ public class AudioCell extends FrameLayout {
         this.timeTextView.setMaxLines(1);
         this.timeTextView.setSingleLine(true);
         this.timeTextView.setEllipsize(TruncateAt.END);
-        textView = this.timeTextView;
+        textView2 = this.timeTextView;
         if (LocaleController.isRTL) {
             i = 3;
         } else {
             i = 5;
         }
-        textView.setGravity(i | 48);
-        View view2 = this.timeTextView;
+        textView2.setGravity(i | 48);
+        TextView textView3 = this.timeTextView;
         if (LocaleController.isRTL) {
             i3 = 3;
         } else {
             i3 = 5;
         }
-        addView(view2, LayoutHelper.createFrame(-2, -2.0f, i3 | 48, LocaleController.isRTL ? 18.0f : 0.0f, 11.0f, LocaleController.isRTL ? 0.0f : 18.0f, 0.0f));
-        this.checkBox = new CheckBox(context, R.drawable.round_check2);
+        addView(textView3, LayoutHelper.createFrame(-2, -2.0f, i3 | 48, LocaleController.isRTL ? 18.0f : 0.0f, 11.0f, LocaleController.isRTL ? 0.0f : 18.0f, 0.0f));
+        this.checkBox = new CheckBox(context, NUM);
         this.checkBox.setVisibility(0);
         this.checkBox.setColor(Theme.getColor("musicPicker_checkbox"), Theme.getColor("musicPicker_checkboxCheck"));
-        view2 = this.checkBox;
+        CheckBox checkBox = this.checkBox;
         if (!LocaleController.isRTL) {
             i2 = 5;
         }
-        addView(view2, LayoutHelper.createFrame(22, 22.0f, i2 | 48, LocaleController.isRTL ? 18.0f : 0.0f, 39.0f, LocaleController.isRTL ? 0.0f : 18.0f, 0.0f));
+        addView(checkBox, LayoutHelper.createFrame(22, 22.0f, i2 | 48, LocaleController.isRTL ? 18.0f : 0.0f, 39.0f, LocaleController.isRTL ? 0.0f : 18.0f, 0.0f));
     }
 
-    final /* synthetic */ void lambda$new$0$AudioCell(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$0$AudioCell(View v) {
         if (this.audioEntry == null) {
             return;
         }
@@ -173,11 +173,12 @@ public class AudioCell extends FrameLayout {
 
     private void setPlayDrawable(boolean play) {
         Drawable circle = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(46.0f), Theme.getColor("musicPicker_buttonBackground"), Theme.getColor("musicPicker_buttonBackground"));
-        Drawable drawable = getResources().getDrawable(play ? R.drawable.audiosend_pause : R.drawable.audiosend_play);
+        Drawable drawable = getResources().getDrawable(play ? NUM : NUM);
         drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("musicPicker_buttonIcon"), Mode.MULTIPLY));
         CombinedDrawable combinedDrawable = new CombinedDrawable(circle, drawable);
         combinedDrawable.setCustomSize(AndroidUtilities.dp(46.0f), AndroidUtilities.dp(46.0f));
         this.playButton.setBackgroundDrawable(combinedDrawable);
+        this.playButton.setContentDescription(play ? LocaleController.getString("AccActionPause", NUM) : LocaleController.getString("AccActionPlay", NUM));
     }
 
     public ImageView getPlayButton() {
@@ -204,7 +205,8 @@ public class AudioCell extends FrameLayout {
         return this.checkBox;
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(72.0f), NUM));
     }
 
@@ -237,7 +239,8 @@ public class AudioCell extends FrameLayout {
         return this.audioEntry;
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (this.needDivider) {
             canvas.drawLine((float) AndroidUtilities.dp(72.0f), (float) (getHeight() - 1), (float) getWidth(), (float) (getHeight() - 1), Theme.dividerPaint);
         }

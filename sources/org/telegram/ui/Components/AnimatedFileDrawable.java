@@ -1,10 +1,10 @@
 package org.telegram.ui.Components;
 
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader.TileMode;
@@ -14,25 +14,29 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import java.io.File;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.ThreadPoolExecutor.DiscardPolicy;
-import java.util.concurrent.TimeUnit;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AnimatedFileDrawableStream;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLoader;
-import org.telegram.messenger.FileLog;
 import org.telegram.tgnet.TLRPC.Document;
 
 public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
-    private static ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(2, new DiscardPolicy());
+    public static final int PARAM_NUM_AUDIO_FRAME_SIZE = 5;
+    public static final int PARAM_NUM_BITRATE = 3;
+    public static final int PARAM_NUM_COUNT = 9;
+    public static final int PARAM_NUM_DURATION = 4;
+    public static final int PARAM_NUM_FRAMERATE = 7;
+    public static final int PARAM_NUM_HEIGHT = 2;
+    public static final int PARAM_NUM_IS_AVC = 0;
+    public static final int PARAM_NUM_ROTATION = 8;
+    public static final int PARAM_NUM_VIDEO_FRAME_SIZE = 6;
+    public static final int PARAM_NUM_WIDTH = 1;
     private static final Handler uiHandler = new Handler(Looper.getMainLooper());
     private RectF actualDrawRect = new RectF();
     private boolean applyTransformation;
     private Bitmap backgroundBitmap;
     private int backgroundBitmapTime;
     private BitmapShader backgroundShader;
-    private RectF bitmapRect = new RectF();
     private int currentAccount;
     private DispatchQueue decodeQueue;
     private boolean decodeSingleFrame;
@@ -46,51 +50,208 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     private long lastFrameTime;
     private int lastTimeStamp;
     private Runnable loadFrameRunnable = new Runnable() {
+        /* JADX WARNING: No exception handlers in catch block: Catch:{  } */
         public void run() {
-            if (!AnimatedFileDrawable.this.isRecycled) {
-                if (!AnimatedFileDrawable.this.decoderCreated && AnimatedFileDrawable.this.nativePtr == 0) {
-                    AnimatedFileDrawable.this.nativePtr = AnimatedFileDrawable.createDecoder(AnimatedFileDrawable.this.path.getAbsolutePath(), AnimatedFileDrawable.this.metaData, AnimatedFileDrawable.this.currentAccount, AnimatedFileDrawable.this.streamFileSize, AnimatedFileDrawable.this.stream);
-                    AnimatedFileDrawable.this.decoderCreated = true;
-                }
-                try {
-                    if (AnimatedFileDrawable.this.nativePtr != 0 || AnimatedFileDrawable.this.metaData[0] == 0 || AnimatedFileDrawable.this.metaData[1] == 0) {
-                        if (AnimatedFileDrawable.this.backgroundBitmap == null && AnimatedFileDrawable.this.metaData[0] > 0 && AnimatedFileDrawable.this.metaData[1] > 0) {
-                            AnimatedFileDrawable.this.backgroundBitmap = Bitmap.createBitmap(AnimatedFileDrawable.this.metaData[0], AnimatedFileDrawable.this.metaData[1], Config.ARGB_8888);
-                            if (!(AnimatedFileDrawable.this.backgroundShader != null || AnimatedFileDrawable.this.backgroundBitmap == null || AnimatedFileDrawable.this.roundRadius == 0)) {
-                                AnimatedFileDrawable.this.backgroundShader = new BitmapShader(AnimatedFileDrawable.this.backgroundBitmap, TileMode.CLAMP, TileMode.CLAMP);
-                            }
-                        }
-                        boolean seekWas = false;
-                        if (AnimatedFileDrawable.this.pendingSeekTo >= 0) {
-                            AnimatedFileDrawable.this.metaData[3] = (int) AnimatedFileDrawable.this.pendingSeekTo;
-                            long seekTo = AnimatedFileDrawable.this.pendingSeekTo;
-                            synchronized (AnimatedFileDrawable.this.sync) {
-                                AnimatedFileDrawable.this.pendingSeekTo = -1;
-                            }
-                            seekWas = true;
-                            AnimatedFileDrawable.this.stream.reset();
-                            AnimatedFileDrawable.seekToMs(AnimatedFileDrawable.this.nativePtr, seekTo);
-                        }
-                        if (AnimatedFileDrawable.this.backgroundBitmap != null) {
-                            AnimatedFileDrawable.this.lastFrameDecodeTime = System.currentTimeMillis();
-                            if (AnimatedFileDrawable.getVideoFrame(AnimatedFileDrawable.this.nativePtr, AnimatedFileDrawable.this.backgroundBitmap, AnimatedFileDrawable.this.metaData, AnimatedFileDrawable.this.backgroundBitmap.getRowBytes()) == 0) {
-                                AndroidUtilities.runOnUIThread(AnimatedFileDrawable.this.uiRunnableNoFrame);
-                                return;
-                            }
-                            if (seekWas) {
-                                AnimatedFileDrawable.this.lastTimeStamp = AnimatedFileDrawable.this.metaData[3];
-                            }
-                            AnimatedFileDrawable.this.backgroundBitmapTime = AnimatedFileDrawable.this.metaData[3];
-                        }
-                    } else {
-                        AndroidUtilities.runOnUIThread(AnimatedFileDrawable.this.uiRunnableNoFrame);
-                        return;
-                    }
-                } catch (Throwable e) {
-                    FileLog.e(e);
-                }
-            }
-            AndroidUtilities.runOnUIThread(AnimatedFileDrawable.this.uiRunnable);
+            /*
+            r14 = this;
+            r12 = 0;
+            r11 = 1;
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;
+            r1 = r1.isRecycled;
+            if (r1 != 0) goto L_0x015d;
+        L_0x000b:
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;
+            r1 = r1.decoderCreated;
+            if (r1 != 0) goto L_0x004a;
+        L_0x0013:
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;
+            r2 = r1.nativePtr;
+            r1 = (r2 > r12 ? 1 : (r2 == r12 ? 0 : -1));
+            if (r1 != 0) goto L_0x004a;
+        L_0x001b:
+            r10 = org.telegram.ui.Components.AnimatedFileDrawable.this;
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;
+            r1 = r1.path;
+            r1 = r1.getAbsolutePath();
+            r2 = org.telegram.ui.Components.AnimatedFileDrawable.this;
+            r2 = r2.metaData;
+            r3 = org.telegram.ui.Components.AnimatedFileDrawable.this;
+            r3 = r3.currentAccount;
+            r4 = org.telegram.ui.Components.AnimatedFileDrawable.this;
+            r4 = r4.streamFileSize;
+            r6 = org.telegram.ui.Components.AnimatedFileDrawable.this;
+            r6 = r6.stream;
+            r2 = org.telegram.ui.Components.AnimatedFileDrawable.createDecoder(r1, r2, r3, r4, r6);
+            r10.nativePtr = r2;
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;
+            r1.decoderCreated = r11;
+        L_0x004a:
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r2 = r1.nativePtr;	 Catch:{ Throwable -> 0x0159 }
+            r1 = (r2 > r12 ? 1 : (r2 == r12 ? 0 : -1));
+            if (r1 != 0) goto L_0x0068;
+        L_0x0052:
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r1 = r1.metaData;	 Catch:{ Throwable -> 0x0159 }
+            r2 = 0;
+            r1 = r1[r2];	 Catch:{ Throwable -> 0x0159 }
+            if (r1 == 0) goto L_0x0068;
+        L_0x005d:
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r1 = r1.metaData;	 Catch:{ Throwable -> 0x0159 }
+            r2 = 1;
+            r1 = r1[r2];	 Catch:{ Throwable -> 0x0159 }
+            if (r1 != 0) goto L_0x0189;
+        L_0x0068:
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r1 = r1.backgroundBitmap;	 Catch:{ Throwable -> 0x0159 }
+            if (r1 != 0) goto L_0x00cf;
+        L_0x0070:
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r1 = r1.metaData;	 Catch:{ Throwable -> 0x0159 }
+            r2 = 0;
+            r1 = r1[r2];	 Catch:{ Throwable -> 0x0159 }
+            if (r1 <= 0) goto L_0x00cf;
+        L_0x007b:
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r1 = r1.metaData;	 Catch:{ Throwable -> 0x0159 }
+            r2 = 1;
+            r1 = r1[r2];	 Catch:{ Throwable -> 0x0159 }
+            if (r1 <= 0) goto L_0x00cf;
+        L_0x0086:
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0153 }
+            r2 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0153 }
+            r2 = r2.metaData;	 Catch:{ Throwable -> 0x0153 }
+            r3 = 0;
+            r2 = r2[r3];	 Catch:{ Throwable -> 0x0153 }
+            r3 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0153 }
+            r3 = r3.metaData;	 Catch:{ Throwable -> 0x0153 }
+            r4 = 1;
+            r3 = r3[r4];	 Catch:{ Throwable -> 0x0153 }
+            r4 = android.graphics.Bitmap.Config.ARGB_8888;	 Catch:{ Throwable -> 0x0153 }
+            r2 = android.graphics.Bitmap.createBitmap(r2, r3, r4);	 Catch:{ Throwable -> 0x0153 }
+            r1.backgroundBitmap = r2;	 Catch:{ Throwable -> 0x0153 }
+        L_0x00a3:
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r1 = r1.backgroundShader;	 Catch:{ Throwable -> 0x0159 }
+            if (r1 != 0) goto L_0x00cf;
+        L_0x00ab:
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r1 = r1.backgroundBitmap;	 Catch:{ Throwable -> 0x0159 }
+            if (r1 == 0) goto L_0x00cf;
+        L_0x00b3:
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r1 = r1.roundRadius;	 Catch:{ Throwable -> 0x0159 }
+            if (r1 == 0) goto L_0x00cf;
+        L_0x00bb:
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r2 = new android.graphics.BitmapShader;	 Catch:{ Throwable -> 0x0159 }
+            r3 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r3 = r3.backgroundBitmap;	 Catch:{ Throwable -> 0x0159 }
+            r4 = android.graphics.Shader.TileMode.CLAMP;	 Catch:{ Throwable -> 0x0159 }
+            r5 = android.graphics.Shader.TileMode.CLAMP;	 Catch:{ Throwable -> 0x0159 }
+            r2.<init>(r3, r4, r5);	 Catch:{ Throwable -> 0x0159 }
+            r1.backgroundShader = r2;	 Catch:{ Throwable -> 0x0159 }
+        L_0x00cf:
+            r7 = 0;
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r2 = r1.pendingSeekTo;	 Catch:{ Throwable -> 0x0159 }
+            r1 = (r2 > r12 ? 1 : (r2 == r12 ? 0 : -1));
+            if (r1 < 0) goto L_0x0118;
+        L_0x00da:
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r1 = r1.metaData;	 Catch:{ Throwable -> 0x0159 }
+            r2 = 3;
+            r3 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r4 = r3.pendingSeekTo;	 Catch:{ Throwable -> 0x0159 }
+            r3 = (int) r4;	 Catch:{ Throwable -> 0x0159 }
+            r1[r2] = r3;	 Catch:{ Throwable -> 0x0159 }
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r8 = r1.pendingSeekTo;	 Catch:{ Throwable -> 0x0159 }
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r2 = r1.sync;	 Catch:{ Throwable -> 0x0159 }
+            monitor-enter(r2);	 Catch:{ Throwable -> 0x0159 }
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ all -> 0x0167 }
+            r4 = -1;
+            r1.pendingSeekTo = r4;	 Catch:{ all -> 0x0167 }
+            monitor-exit(r2);	 Catch:{ all -> 0x0167 }
+            r7 = 1;
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r1 = r1.stream;	 Catch:{ Throwable -> 0x0159 }
+            if (r1 == 0) goto L_0x0111;
+        L_0x0108:
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r1 = r1.stream;	 Catch:{ Throwable -> 0x0159 }
+            r1.reset();	 Catch:{ Throwable -> 0x0159 }
+        L_0x0111:
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r2 = r1.nativePtr;	 Catch:{ Throwable -> 0x0159 }
+            org.telegram.ui.Components.AnimatedFileDrawable.seekToMs(r2, r8);	 Catch:{ Throwable -> 0x0159 }
+        L_0x0118:
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r1 = r1.backgroundBitmap;	 Catch:{ Throwable -> 0x0159 }
+            if (r1 == 0) goto L_0x015d;
+        L_0x0120:
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r2 = java.lang.System.currentTimeMillis();	 Catch:{ Throwable -> 0x0159 }
+            r1.lastFrameDecodeTime = r2;	 Catch:{ Throwable -> 0x0159 }
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r2 = r1.nativePtr;	 Catch:{ Throwable -> 0x0159 }
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r1 = r1.backgroundBitmap;	 Catch:{ Throwable -> 0x0159 }
+            r4 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r4 = r4.metaData;	 Catch:{ Throwable -> 0x0159 }
+            r5 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r5 = r5.backgroundBitmap;	 Catch:{ Throwable -> 0x0159 }
+            r5 = r5.getRowBytes();	 Catch:{ Throwable -> 0x0159 }
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.getVideoFrame(r2, r1, r4, r5);	 Catch:{ Throwable -> 0x0159 }
+            if (r1 != 0) goto L_0x016a;
+        L_0x0149:
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r1 = r1.uiRunnableNoFrame;	 Catch:{ Throwable -> 0x0159 }
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r1);	 Catch:{ Throwable -> 0x0159 }
+        L_0x0152:
+            return;
+        L_0x0153:
+            r0 = move-exception;
+            org.telegram.messenger.FileLog.e(r0);	 Catch:{ Throwable -> 0x0159 }
+            goto L_0x00a3;
+        L_0x0159:
+            r0 = move-exception;
+            org.telegram.messenger.FileLog.e(r0);
+        L_0x015d:
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;
+            r1 = r1.uiRunnable;
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r1);
+            goto L_0x0152;
+        L_0x0167:
+            r1 = move-exception;
+            monitor-exit(r2);	 Catch:{ all -> 0x0167 }
+            throw r1;	 Catch:{ Throwable -> 0x0159 }
+        L_0x016a:
+            if (r7 == 0) goto L_0x017a;
+        L_0x016c:
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r2 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r2 = r2.metaData;	 Catch:{ Throwable -> 0x0159 }
+            r3 = 3;
+            r2 = r2[r3];	 Catch:{ Throwable -> 0x0159 }
+            r1.lastTimeStamp = r2;	 Catch:{ Throwable -> 0x0159 }
+        L_0x017a:
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r2 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r2 = r2.metaData;	 Catch:{ Throwable -> 0x0159 }
+            r3 = 3;
+            r2 = r2[r3];	 Catch:{ Throwable -> 0x0159 }
+            r1.backgroundBitmapTime = r2;	 Catch:{ Throwable -> 0x0159 }
+            goto L_0x015d;
+        L_0x0189:
+            r1 = org.telegram.ui.Components.AnimatedFileDrawable.this;	 Catch:{ Throwable -> 0x0159 }
+            r1 = r1.uiRunnableNoFrame;	 Catch:{ Throwable -> 0x0159 }
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r1);	 Catch:{ Throwable -> 0x0159 }
+            goto L_0x0152;
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AnimatedFileDrawable$AnonymousClass3.run():void");
         }
     };
     private Runnable loadFrameTask;
@@ -106,12 +267,12 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     private boolean pendingRemoveLoading;
     private int pendingRemoveLoadingFramesReset;
     private volatile long pendingSeekTo = -1;
+    private volatile long pendingSeekToUI = -1;
     private boolean recycleWithSecond;
     private Bitmap renderingBitmap;
     private int renderingBitmapTime;
     private BitmapShader renderingShader;
     private int roundRadius;
-    private RectF roundRect = new RectF();
     private float scaleX = 1.0f;
     private float scaleY = 1.0f;
     private View secondParentView = null;
@@ -160,9 +321,10 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
             }
             if (AnimatedFileDrawable.this.metaData[3] - AnimatedFileDrawable.this.lastTimeStamp != 0) {
                 AnimatedFileDrawable.this.invalidateAfter = AnimatedFileDrawable.this.metaData[3] - AnimatedFileDrawable.this.lastTimeStamp;
-                if (AnimatedFileDrawable.this.invalidateAfter > 1000) {
-                    AnimatedFileDrawable.this.invalidateAfter = 0;
-                }
+            }
+            if (AnimatedFileDrawable.this.pendingSeekToUI >= 0 && AnimatedFileDrawable.this.pendingSeekTo == -1) {
+                AnimatedFileDrawable.this.pendingSeekToUI = -1;
+                AnimatedFileDrawable.this.invalidateAfter = 0;
             }
             AnimatedFileDrawable.this.lastTimeStamp = AnimatedFileDrawable.this.metaData[3];
             if (AnimatedFileDrawable.this.secondParentView != null) {
@@ -206,13 +368,16 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
 
     private static native int getVideoFrame(long j, Bitmap bitmap, int[] iArr, int i);
 
+    public static native void getVideoInfo(String str, int[] iArr);
+
     private static native void prepareToSeek(long j);
 
     private static native void seekToMs(long j, long j2);
 
     private static native void stopDecoder(long j);
 
-    final /* synthetic */ void lambda$new$0$AnimatedFileDrawable() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$0$AnimatedFileDrawable() {
         if (this.secondParentView != null) {
             this.secondParentView.invalidate();
         } else if (this.parentView != null) {
@@ -220,7 +385,8 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         }
     }
 
-    final /* synthetic */ void lambda$new$1$AnimatedFileDrawable() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$1$AnimatedFileDrawable() {
         if (this.secondParentView != null) {
             this.secondParentView.invalidate();
         } else if (this.parentView != null) {
@@ -232,6 +398,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         this.path = file;
         this.streamFileSize = streamSize;
         this.currentAccount = account;
+        getPaint().setFlags(2);
         if (!(streamSize == 0 || document == null)) {
             this.stream = new AnimatedFileDrawableStream(document, parentObject, account);
         }
@@ -264,6 +431,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     public void seekTo(long ms, boolean removeLoading) {
         synchronized (this.sync) {
             this.pendingSeekTo = ms;
+            this.pendingSeekToUI = ms;
             prepareToSeek(this.nativePtr);
             if (this.decoderCreated && this.stream != null) {
                 this.stream.cancel(removeLoading);
@@ -313,7 +481,8 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         }
     }
 
-    protected void finalize() throws Throwable {
+    /* Access modifiers changed, original: protected */
+    public void finalize() throws Throwable {
         try {
             recycle();
         } finally {
@@ -337,13 +506,16 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         if (this.metaData[4] == 0) {
             return 0.0f;
         }
-        if (this.pendingSeekTo >= 0) {
-            return ((float) this.pendingSeekTo) / ((float) this.metaData[4]);
+        if (this.pendingSeekToUI >= 0) {
+            return ((float) this.pendingSeekToUI) / ((float) this.metaData[4]);
         }
         return ((float) this.metaData[3]) / ((float) this.metaData[4]);
     }
 
     public int getCurrentProgressMs() {
+        if (this.pendingSeekToUI >= 0) {
+            return (int) this.pendingSeekToUI;
+        }
         return this.nextRenderingBitmapTime != 0 ? this.nextRenderingBitmapTime : this.renderingBitmapTime;
     }
 
@@ -368,22 +540,18 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
             if (this.lastFrameDecodeTime != 0) {
                 ms = Math.min((long) this.invalidateAfter, Math.max(0, ((long) this.invalidateAfter) - (System.currentTimeMillis() - this.lastFrameDecodeTime)));
             }
-            Runnable runnable;
-            if (this.streamFileSize != 0) {
-                if (this.decodeQueue == null) {
-                    this.decodeQueue = new DispatchQueue("decodeQueue" + this);
-                }
-                DispatchQueue dispatchQueue = this.decodeQueue;
-                runnable = this.loadFrameRunnable;
-                this.loadFrameTask = runnable;
-                dispatchQueue.postRunnable(runnable, ms);
-                return;
+            if (this.decodeQueue == null) {
+                this.decodeQueue = new DispatchQueue("decodeQueue" + this);
             }
-            ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = executor;
-            runnable = this.loadFrameRunnable;
+            DispatchQueue dispatchQueue = this.decodeQueue;
+            Runnable runnable = this.loadFrameRunnable;
             this.loadFrameTask = runnable;
-            scheduledThreadPoolExecutor.schedule(runnable, ms, TimeUnit.MILLISECONDS);
+            dispatchQueue.postRunnable(runnable, ms);
         }
+    }
+
+    public boolean isLoadingStream() {
+        return this.stream != null && this.stream.isWaitingForLoad();
     }
 
     public void stop() {
@@ -416,7 +584,8 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         return width;
     }
 
-    protected void onBoundsChange(Rect bounds) {
+    /* Access modifiers changed, original: protected */
+    public void onBoundsChange(Rect bounds) {
         super.onBoundsChange(bounds);
         this.applyTransformation = true;
     }
@@ -464,13 +633,23 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
                     if (this.renderingShader == null) {
                         this.renderingShader = new BitmapShader(this.backgroundBitmap, TileMode.CLAMP, TileMode.CLAMP);
                     }
-                    getPaint().setShader(this.renderingShader);
-                    this.roundRect.set(this.dstRect);
+                    Paint paint = getPaint();
+                    paint.setShader(this.renderingShader);
                     this.shaderMatrix.reset();
-                    this.bitmapRect.set(0.0f, 0.0f, (float) this.renderingBitmap.getWidth(), (float) this.renderingBitmap.getHeight());
-                    AndroidUtilities.setRectToRect(this.shaderMatrix, this.bitmapRect, this.roundRect, this.metaData[2], true);
+                    this.shaderMatrix.setTranslate((float) this.dstRect.left, (float) this.dstRect.top);
+                    if (this.metaData[2] == 90) {
+                        this.shaderMatrix.preRotate(90.0f);
+                        this.shaderMatrix.preTranslate(0.0f, (float) (-this.dstRect.width()));
+                    } else if (this.metaData[2] == 180) {
+                        this.shaderMatrix.preRotate(180.0f);
+                        this.shaderMatrix.preTranslate((float) (-this.dstRect.width()), (float) (-this.dstRect.height()));
+                    } else if (this.metaData[2] == 270) {
+                        this.shaderMatrix.preRotate(270.0f);
+                        this.shaderMatrix.preTranslate((float) (-this.dstRect.height()), 0.0f);
+                    }
+                    this.shaderMatrix.preScale(this.scaleX, this.scaleY);
                     this.renderingShader.setLocalMatrix(this.shaderMatrix);
-                    canvas.drawRoundRect(this.actualDrawRect, (float) this.roundRadius, (float) this.roundRadius, getPaint());
+                    canvas.drawRoundRect(this.actualDrawRect, (float) this.roundRadius, (float) this.roundRadius, paint);
                 } else {
                     canvas.translate((float) this.dstRect.left, (float) this.dstRect.top);
                     if (this.metaData[2] == 90) {
@@ -545,7 +724,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
 
     public void setRoundRadius(int value) {
         this.roundRadius = value;
-        getPaint().setFlags(1);
+        getPaint().setFlags(3);
     }
 
     public boolean hasBitmap() {

@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.text.TextUtils.TruncateAt;
-import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocaleController.LocaleInfo;
-import org.telegram.messenger.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -46,13 +44,13 @@ public class LanguageCell extends FrameLayout {
             i = 3;
         }
         textView.setGravity(i | 48);
-        View view = this.textView;
+        TextView textView2 = this.textView;
         if (LocaleController.isRTL) {
             i2 = 5;
         } else {
             i2 = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, LocaleController.isRTL ? 71.0f : 23.0f, (float) (this.isDialog ? 4 : 7), LocaleController.isRTL ? 23.0f : 71.0f, 0.0f));
+        addView(textView2, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, LocaleController.isRTL ? 71.0f : 23.0f, (float) (this.isDialog ? 4 : 7), LocaleController.isRTL ? 23.0f : 71.0f, 0.0f));
         this.textView2 = new TextView(context);
         this.textView2.setTextColor(Theme.getColor(dialog ? "dialogTextGray3" : "windowBackgroundWhiteGrayText3"));
         this.textView2.setTextSize(1, 13.0f);
@@ -67,24 +65,25 @@ public class LanguageCell extends FrameLayout {
             i = 3;
         }
         textView.setGravity(i | 48);
-        view = this.textView2;
+        textView2 = this.textView2;
         if (LocaleController.isRTL) {
             i2 = 5;
         } else {
             i2 = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, LocaleController.isRTL ? 71.0f : 23.0f, (float) (this.isDialog ? 25 : 29), LocaleController.isRTL ? 23.0f : 71.0f, 0.0f));
+        addView(textView2, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, LocaleController.isRTL ? 71.0f : 23.0f, (float) (this.isDialog ? 25 : 29), LocaleController.isRTL ? 23.0f : 71.0f, 0.0f));
         this.checkImage = new ImageView(context);
         this.checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor("featuredStickers_addedIcon"), Mode.MULTIPLY));
-        this.checkImage.setImageResource(R.drawable.sticker_added);
-        View view2 = this.checkImage;
+        this.checkImage.setImageResource(NUM);
+        ImageView imageView = this.checkImage;
         if (!LocaleController.isRTL) {
             i3 = 5;
         }
-        addView(view2, LayoutHelper.createFrame(19, 14.0f, i3 | 16, 23.0f, 0.0f, 23.0f, 0.0f));
+        addView(imageView, LayoutHelper.createFrame(19, 14.0f, i3 | 16, 23.0f, 0.0f, 23.0f, 0.0f));
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(this.isDialog ? 50.0f : 54.0f), NUM));
     }
 
@@ -115,7 +114,8 @@ public class LanguageCell extends FrameLayout {
         this.checkImage.setVisibility(value ? 0 : 4);
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (this.needDivider) {
             canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }

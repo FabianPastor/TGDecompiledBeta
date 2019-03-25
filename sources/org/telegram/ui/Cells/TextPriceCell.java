@@ -3,7 +3,6 @@ package org.telegram.ui.Cells;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.text.TextUtils.TruncateAt;
-import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -29,13 +28,13 @@ public class TextPriceCell extends FrameLayout {
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TruncateAt.END);
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        View view = this.textView;
+        TextView textView = this.textView;
         if (LocaleController.isRTL) {
             i = 5;
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-2, -1.0f, i | 48, 21.0f, 0.0f, 21.0f, 0.0f));
+        addView(textView, LayoutHelper.createFrame(-2, -1.0f, i | 48, 21.0f, 0.0f, 21.0f, 0.0f));
         this.valueTextView = new TextView(context);
         this.valueTextView.setTextSize(1, 16.0f);
         this.valueTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -43,21 +42,22 @@ public class TextPriceCell extends FrameLayout {
         this.valueTextView.setMaxLines(1);
         this.valueTextView.setSingleLine(true);
         this.valueTextView.setEllipsize(TruncateAt.END);
-        TextView textView = this.valueTextView;
+        TextView textView2 = this.valueTextView;
         if (LocaleController.isRTL) {
             i2 = 3;
         } else {
             i2 = 5;
         }
-        textView.setGravity(i2 | 16);
-        view = this.valueTextView;
+        textView2.setGravity(i2 | 16);
+        textView = this.valueTextView;
         if (!LocaleController.isRTL) {
             i3 = 5;
         }
-        addView(view, LayoutHelper.createFrame(-2, -1.0f, i3 | 48, 21.0f, 0.0f, 21.0f, 0.0f));
+        addView(textView, LayoutHelper.createFrame(-2, -1.0f, i3 | 48, 21.0f, 0.0f, 21.0f, 0.0f));
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(40.0f));
         int availableWidth = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(34.0f);
         this.valueTextView.measure(MeasureSpec.makeMeasureSpec(availableWidth / 2, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));

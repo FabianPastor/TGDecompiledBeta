@@ -1,17 +1,13 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_error;
+final /* synthetic */ class ChatActivity$$Lambda$58 implements Runnable {
+    private final ChatActivity arg$1;
 
-final /* synthetic */ class ChatActivity$$Lambda$58 implements RequestDelegate {
-    static final RequestDelegate $instance = new ChatActivity$$Lambda$58();
-
-    private ChatActivity$$Lambda$58() {
+    ChatActivity$$Lambda$58(ChatActivity chatActivity) {
+        this.arg$1 = chatActivity;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new ChatActivity$$Lambda$74(tLObject));
+    public void run() {
+        this.arg$1.bridge$lambda$4$ChatActivity();
     }
 }

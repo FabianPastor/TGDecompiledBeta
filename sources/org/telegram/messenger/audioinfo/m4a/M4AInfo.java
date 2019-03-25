@@ -36,7 +36,8 @@ public class M4AInfo extends AudioInfo {
         moov(mp4.nextChildUpTo("moov"));
     }
 
-    void ftyp(MP4Atom atom) throws IOException {
+    /* Access modifiers changed, original: 0000 */
+    public void ftyp(MP4Atom atom) throws IOException {
         if (LOGGER.isLoggable(this.debugLevel)) {
             LOGGER.log(this.debugLevel, atom.toString());
         }
@@ -49,7 +50,8 @@ public class M4AInfo extends AudioInfo {
         this.version = String.valueOf(atom.readInt());
     }
 
-    void moov(MP4Atom atom) throws IOException {
+    /* Access modifiers changed, original: 0000 */
+    public void moov(MP4Atom atom) throws IOException {
         if (LOGGER.isLoggable(this.debugLevel)) {
             LOGGER.log(this.debugLevel, atom.toString());
         }
@@ -93,7 +95,8 @@ public class M4AInfo extends AudioInfo {
         }
     }
 
-    void mvhd(MP4Atom atom) throws IOException {
+    /* Access modifiers changed, original: 0000 */
+    public void mvhd(MP4Atom atom) throws IOException {
         if (LOGGER.isLoggable(this.debugLevel)) {
             LOGGER.log(this.debugLevel, atom.toString());
         }
@@ -111,21 +114,24 @@ public class M4AInfo extends AudioInfo {
         this.volume = atom.readShortFixedPoint();
     }
 
-    void trak(MP4Atom atom) throws IOException {
+    /* Access modifiers changed, original: 0000 */
+    public void trak(MP4Atom atom) throws IOException {
         if (LOGGER.isLoggable(this.debugLevel)) {
             LOGGER.log(this.debugLevel, atom.toString());
         }
         mdia(atom.nextChildUpTo("mdia"));
     }
 
-    void mdia(MP4Atom atom) throws IOException {
+    /* Access modifiers changed, original: 0000 */
+    public void mdia(MP4Atom atom) throws IOException {
         if (LOGGER.isLoggable(this.debugLevel)) {
             LOGGER.log(this.debugLevel, atom.toString());
         }
         mdhd(atom.nextChild("mdhd"));
     }
 
-    void mdhd(MP4Atom atom) throws IOException {
+    /* Access modifiers changed, original: 0000 */
+    public void mdhd(MP4Atom atom) throws IOException {
         if (LOGGER.isLoggable(this.debugLevel)) {
             LOGGER.log(this.debugLevel, atom.toString());
         }
@@ -141,7 +147,8 @@ public class M4AInfo extends AudioInfo {
         }
     }
 
-    void udta(MP4Atom atom) throws IOException {
+    /* Access modifiers changed, original: 0000 */
+    public void udta(MP4Atom atom) throws IOException {
         if (LOGGER.isLoggable(this.debugLevel)) {
             LOGGER.log(this.debugLevel, atom.toString());
         }
@@ -154,7 +161,8 @@ public class M4AInfo extends AudioInfo {
         }
     }
 
-    void meta(MP4Atom atom) throws IOException {
+    /* Access modifiers changed, original: 0000 */
+    public void meta(MP4Atom atom) throws IOException {
         if (LOGGER.isLoggable(this.debugLevel)) {
             LOGGER.log(this.debugLevel, atom.toString());
         }
@@ -168,7 +176,8 @@ public class M4AInfo extends AudioInfo {
         }
     }
 
-    void ilst(MP4Atom atom) throws IOException {
+    /* Access modifiers changed, original: 0000 */
+    public void ilst(MP4Atom atom) throws IOException {
         if (LOGGER.isLoggable(this.debugLevel)) {
             LOGGER.log(this.debugLevel, atom.toString());
         }
@@ -185,7 +194,8 @@ public class M4AInfo extends AudioInfo {
         }
     }
 
-    void data(MP4Atom atom) throws IOException {
+    /* Access modifiers changed, original: 0000 */
+    public void data(MP4Atom atom) throws IOException {
         if (LOGGER.isLoggable(this.debugLevel)) {
             LOGGER.log(this.debugLevel, atom.toString());
         }

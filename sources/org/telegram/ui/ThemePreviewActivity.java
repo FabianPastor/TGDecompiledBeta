@@ -33,7 +33,6 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
@@ -386,6 +385,10 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             if (viewType == 0) {
                 view = new ChatMessageCell(this.mContext);
                 ((ChatMessageCell) view).setDelegate(new ChatMessageCellDelegate() {
+                    public void didPressHiddenForward(ChatMessageCell chatMessageCell) {
+                        ChatMessageCell$ChatMessageCellDelegate$$CC.didPressHiddenForward(this, chatMessageCell);
+                    }
+
                     public void videoTimerReached() {
                         ChatMessageCell$ChatMessageCellDelegate$$CC.videoTimerReached(this);
                     }
@@ -518,7 +521,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         float f2;
         float f3;
         this.page1 = new FrameLayout(context);
-        this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItemSearchListener() {
+        this.actionBar.createMenu().addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItemSearchListener() {
             public void onSearchExpand() {
             }
 
@@ -531,12 +534,13 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
 
             public void onTextChanged(EditText editText) {
             }
-        }).setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
+        }).setSearchFieldHint(LocaleController.getString("Search", NUM));
         this.actionBar.setBackButtonDrawable(new MenuDrawable());
         this.actionBar.setAddToContainer(false);
-        this.actionBar.setTitle(LocaleController.getString("ThemePreview", R.string.ThemePreview));
+        this.actionBar.setTitle(LocaleController.getString("ThemePreview", NUM));
         this.page1 = new FrameLayout(context) {
-            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            /* Access modifiers changed, original: protected */
+            public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int widthSize = MeasureSpec.getSize(widthMeasureSpec);
                 int heightSize = MeasureSpec.getSize(heightMeasureSpec);
                 setMeasuredDimension(widthSize, heightSize);
@@ -550,7 +554,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
                 measureChildWithMargins(ThemePreviewActivity.this.floatingButton, widthMeasureSpec, 0, heightMeasureSpec, 0);
             }
 
-            protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+            /* Access modifiers changed, original: protected */
+            public boolean drawChild(Canvas canvas, View child, long drawingTime) {
                 boolean result = super.drawChild(canvas, child, drawingTime);
                 if (child == ThemePreviewActivity.this.actionBar && ThemePreviewActivity.this.parentLayout != null) {
                     ThemePreviewActivity.this.parentLayout.drawHeaderShadow(canvas, ThemePreviewActivity.this.actionBar.getVisibility() == 0 ? ThemePreviewActivity.this.actionBar.getMeasuredHeight() : 0);
@@ -570,7 +575,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         this.floatingButton.setScaleType(ScaleType.CENTER);
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor("chats_actionBackground"), Theme.getColor("chats_actionPressedBackground"));
         if (VERSION.SDK_INT < 21) {
-            Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow).mutate();
+            Drawable shadowDrawable = context.getResources().getDrawable(NUM).mutate();
             shadowDrawable.setColorFilter(new PorterDuffColorFilter(-16777216, Mode.MULTIPLY));
             Drawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
@@ -578,7 +583,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         }
         this.floatingButton.setBackgroundDrawable(drawable);
         this.floatingButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_actionIcon"), Mode.MULTIPLY));
-        this.floatingButton.setImageResource(R.drawable.floating_pencil);
+        this.floatingButton.setImageResource(NUM);
         if (VERSION.SDK_INT >= 21) {
             StateListAnimator animator = new StateListAnimator();
             animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.floatingButton, "translationZ", new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
@@ -619,7 +624,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         this.dialogsAdapter = new DialogsAdapter(context);
         this.listView.setAdapter(this.dialogsAdapter);
         this.page2 = new SizeNotifierFrameLayout(context) {
-            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            /* Access modifiers changed, original: protected */
+            public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int widthSize = MeasureSpec.getSize(widthMeasureSpec);
                 int heightSize = MeasureSpec.getSize(heightMeasureSpec);
                 setMeasuredDimension(widthSize, heightSize);
@@ -632,7 +638,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
                 ThemePreviewActivity.this.listView2.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(heightSize, NUM));
             }
 
-            protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+            /* Access modifiers changed, original: protected */
+            public boolean drawChild(Canvas canvas, View child, long drawingTime) {
                 boolean result = super.drawChild(canvas, child, drawingTime);
                 if (child == ThemePreviewActivity.this.actionBar2 && ThemePreviewActivity.this.parentLayout != null) {
                     ThemePreviewActivity.this.parentLayout.drawHeaderShadow(canvas, ThemePreviewActivity.this.actionBar2.getVisibility() == 0 ? ThemePreviewActivity.this.actionBar2.getMeasuredHeight() : 0);
@@ -703,7 +710,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         AndroidUtilities.setViewPagerEdgeEffectColor(viewPager, Theme.getColor("actionBarDefault"));
         frameLayout2.addView(viewPager, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
         viewPager = new View(context);
-        viewPager.setBackgroundResource(R.drawable.header_shadow_reverse);
+        viewPager.setBackgroundResource(NUM);
         frameLayout2.addView(viewPager, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
         FrameLayout bottomLayout = new FrameLayout(context);
         bottomLayout.setBackgroundColor(-1);
@@ -712,7 +719,8 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         this.dotsContainer = new View(context) {
             private Paint paint = new Paint(1);
 
-            protected void onDraw(Canvas canvas) {
+            /* Access modifiers changed, original: protected */
+            public void onDraw(Canvas canvas) {
                 int selected = view2.getCurrentItem();
                 int a = 0;
                 while (a < 2) {
@@ -729,7 +737,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         cancelButton.setGravity(17);
         cancelButton.setBackgroundDrawable(Theme.createSelectorDrawable(NUM, 0));
         cancelButton.setPadding(AndroidUtilities.dp(29.0f), 0, AndroidUtilities.dp(29.0f), 0);
-        cancelButton.setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
+        cancelButton.setText(LocaleController.getString("Cancel", NUM).toUpperCase());
         cancelButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         bottomLayout.addView(cancelButton, LayoutHelper.createFrame(-2, -1, 51));
         cancelButton.setOnClickListener(new ThemePreviewActivity$$Lambda$0(this));
@@ -739,24 +747,26 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         doneButton.setGravity(17);
         doneButton.setBackgroundDrawable(Theme.createSelectorDrawable(NUM, 0));
         doneButton.setPadding(AndroidUtilities.dp(29.0f), 0, AndroidUtilities.dp(29.0f), 0);
-        doneButton.setText(LocaleController.getString("ApplyTheme", R.string.ApplyTheme).toUpperCase());
+        doneButton.setText(LocaleController.getString("ApplyTheme", NUM).toUpperCase());
         doneButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         bottomLayout.addView(doneButton, LayoutHelper.createFrame(-2, -1, 53));
         doneButton.setOnClickListener(new ThemePreviewActivity$$Lambda$1(this));
         return this.fragmentView;
     }
 
-    final /* synthetic */ void lambda$createView$0$ThemePreviewActivity(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$0$ThemePreviewActivity(View v) {
         Theme.applyPreviousTheme();
         this.parentLayout.rebuildAllFragmentViews(false, false);
-        lambda$checkDiscard$70$PassportActivity();
+        finishFragment();
     }
 
-    final /* synthetic */ void lambda$createView$1$ThemePreviewActivity(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$1$ThemePreviewActivity(View v) {
         this.applied = true;
         this.parentLayout.rebuildAllFragmentViews(false, false);
         Theme.applyThemeFile(this.themeFile, this.applyingTheme.name, false);
-        lambda$checkDiscard$70$PassportActivity();
+        finishFragment();
     }
 
     public boolean onFragmentCreate() {

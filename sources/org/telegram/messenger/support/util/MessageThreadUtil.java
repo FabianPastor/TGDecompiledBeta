@@ -18,7 +18,8 @@ class MessageThreadUtil<T> implements ThreadUtil<T> {
         MessageQueue() {
         }
 
-        synchronized SyncQueueItem next() {
+        /* Access modifiers changed, original: declared_synchronized */
+        public synchronized SyncQueueItem next() {
             SyncQueueItem next;
             if (this.mRoot == null) {
                 next = null;
@@ -29,12 +30,14 @@ class MessageThreadUtil<T> implements ThreadUtil<T> {
             return next;
         }
 
-        synchronized void sendMessageAtFrontOfQueue(SyncQueueItem item) {
+        /* Access modifiers changed, original: declared_synchronized */
+        public synchronized void sendMessageAtFrontOfQueue(SyncQueueItem item) {
             item.next = this.mRoot;
             this.mRoot = item;
         }
 
-        synchronized void sendMessage(SyncQueueItem item) {
+        /* Access modifiers changed, original: declared_synchronized */
+        public synchronized void sendMessage(SyncQueueItem item) {
             if (this.mRoot == null) {
                 this.mRoot = item;
             } else {
@@ -46,7 +49,8 @@ class MessageThreadUtil<T> implements ThreadUtil<T> {
             }
         }
 
-        synchronized void removeMessages(int what) {
+        /* Access modifiers changed, original: declared_synchronized */
+        public synchronized void removeMessages(int what) {
             SyncQueueItem item;
             while (this.mRoot != null && this.mRoot.what == what) {
                 item = this.mRoot;
@@ -85,7 +89,8 @@ class MessageThreadUtil<T> implements ThreadUtil<T> {
         SyncQueueItem() {
         }
 
-        void recycle() {
+        /* Access modifiers changed, original: 0000 */
+        public void recycle() {
             this.next = null;
             this.arg5 = 0;
             this.arg4 = 0;

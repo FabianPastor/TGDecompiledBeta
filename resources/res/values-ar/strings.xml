@@ -180,7 +180,6 @@
     <string name="AreYouSureDeleteAndExitName">هل ترغب حقًا في حذف ومغادرة المجموعة **%1$s**؟</string>
     <string name="AreYouSureDeleteContact">هل ترغب حقًا في حذف جهة الاتصال هذه؟</string>
     <string name="AreYouSureDeleteGIF">هل ترغب حقًا في حذف هذه الصورة المتحركة؟</string>
-    <string name="AreYouSureDeleteMessages">هل ترغب حقًا في حذف %1$s؟</string>
     <string name="AreYouSureDeletePhoto">هل ترغب حقًا في حذف هذه الصورة؟</string>
     <string name="AreYouSureDeleteThisChat">هل ترغب حقًا في حذف هذه المحادثة؟</string>
     <string name="AreYouSureDeleteThisChatWithGroup">هل ترغب حقًا في حذف المحادثة **%1$s**؟</string>

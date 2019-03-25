@@ -32,7 +32,8 @@ class JoinPointImpl implements ProceedingJoinPoint {
             return this.signature;
         }
 
-        String toString(StringMaker sm) {
+        /* Access modifiers changed, original: 0000 */
+        public String toString(StringMaker sm) {
             StringBuffer buf = new StringBuffer();
             buf.append(sm.makeKindName(getKind()));
             buf.append("(");

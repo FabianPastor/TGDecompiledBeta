@@ -3,6 +3,8 @@ package org.telegram.ui.Components;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
+import android.graphics.Paint.Cap;
+import android.graphics.Paint.Join;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.drawable.Drawable;
@@ -22,6 +24,8 @@ public class AnimatedArrowDrawable extends Drawable {
         this.paint.setStyle(Style.STROKE);
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
         this.paint.setColor(color);
+        this.paint.setStrokeCap(Cap.ROUND);
+        this.paint.setStrokeJoin(Join.ROUND);
         this.isSmall = small;
         updatePath();
     }
@@ -40,9 +44,9 @@ public class AnimatedArrowDrawable extends Drawable {
             this.path.lineTo((float) AndroidUtilities.dp(13.0f), ((float) AndroidUtilities.dp(6.0f)) - (((float) AndroidUtilities.dp(2.0f)) * p));
             return;
         }
-        this.path.moveTo((float) AndroidUtilities.dp(3.0f), ((float) AndroidUtilities.dp(12.0f)) - (((float) AndroidUtilities.dp(4.0f)) * p));
+        this.path.moveTo((float) AndroidUtilities.dp(4.5f), ((float) AndroidUtilities.dp(12.0f)) - (((float) AndroidUtilities.dp(4.0f)) * p));
         this.path.lineTo((float) AndroidUtilities.dp(13.0f), ((float) AndroidUtilities.dp(12.0f)) + (((float) AndroidUtilities.dp(4.0f)) * p));
-        this.path.lineTo((float) AndroidUtilities.dp(23.0f), ((float) AndroidUtilities.dp(12.0f)) - (((float) AndroidUtilities.dp(4.0f)) * p));
+        this.path.lineTo((float) AndroidUtilities.dp(21.5f), ((float) AndroidUtilities.dp(12.0f)) - (((float) AndroidUtilities.dp(4.0f)) * p));
     }
 
     @Keep

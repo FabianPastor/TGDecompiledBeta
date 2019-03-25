@@ -66,7 +66,7 @@ public class AudioTrackJNI {
         if (this.thread != null) {
             try {
                 this.thread.join();
-            } catch (Throwable e) {
+            } catch (InterruptedException e) {
                 FileLog.e(e);
             }
             this.thread = null;
@@ -124,7 +124,7 @@ public class AudioTrackJNI {
                                 AudioTrackJNI.this.audioTrack.stop();
                                 break;
                             }
-                        } catch (Throwable e) {
+                        } catch (Exception e) {
                             FileLog.e(e);
                         }
                     }

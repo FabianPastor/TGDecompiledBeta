@@ -145,6 +145,7 @@ public class VideoPlayer implements EventListener, VideoListener, NotificationCe
         this.videoPlayerReady = false;
         ensurePleyaerCreated();
         MediaSource mediaSource1 = null;
+        MediaSource mediaSource2 = null;
         for (int a = 0; a < 2; a++) {
             String type;
             Uri uri;
@@ -191,16 +192,18 @@ public class VideoPlayer implements EventListener, VideoListener, NotificationCe
                     mediaSource = new ExtractorMediaSource(uri, this.mediaDataSourceFactory, new DefaultExtractorsFactory(), this.mainHandler, null);
                     break;
             }
-            MediaSource mediaSource2 = new LoopingMediaSource(mediaSource);
+            MediaSource mediaSource3 = new LoopingMediaSource(mediaSource);
             if (a == 0) {
+                mediaSource1 = mediaSource3;
+            } else {
+                mediaSource2 = mediaSource3;
             }
-            mediaSource1 = mediaSource2;
         }
         this.player.prepare(mediaSource1, true, true);
-        this.audioPlayer.prepare(null, true, true);
+        this.audioPlayer.prepare(mediaSource2, true, true);
     }
 
-    /* JADX WARNING: Missing block: B:14:0x0046, code:
+    /* JADX WARNING: Missing block: B:14:0x0046, code skipped:
             if (r10.equals("dash") != false) goto L_0x0025;
      */
     public void preparePlayer(android.net.Uri r9, java.lang.String r10) {

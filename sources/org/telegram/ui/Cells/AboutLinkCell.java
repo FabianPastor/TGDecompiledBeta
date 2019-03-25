@@ -13,7 +13,6 @@ import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -55,15 +54,16 @@ public class AboutLinkCell extends FrameLayout {
             i = 3;
         }
         textView.setGravity(i);
-        View view = this.valueTextView;
+        TextView textView2 = this.valueTextView;
         if (!LocaleController.isRTL) {
             i2 = 3;
         }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i2 | 80, 23.0f, 0.0f, 23.0f, 10.0f));
+        addView(textView2, LayoutHelper.createFrame(-2, -2.0f, i2 | 80, 23.0f, 0.0f, 23.0f, 10.0f));
         setWillNotDraw(false);
     }
 
-    protected void didPressUrl(String url) {
+    /* Access modifiers changed, original: protected */
+    public void didPressUrl(String url) {
     }
 
     private void resetPressedLink() {
@@ -123,14 +123,14 @@ public class AboutLinkCell extends FrameLayout {
                                     int start = buffer.getSpanStart(this.pressedLink);
                                     this.urlPath.setCurrentLayout(this.textLayout, start, 0.0f);
                                     this.textLayout.getSelectionPath(start, buffer.getSpanEnd(this.pressedLink), this.urlPath);
-                                } catch (Throwable e) {
+                                } catch (Exception e) {
                                     FileLog.e(e);
                                 }
                             } else {
                                 resetPressedLink();
                             }
                         }
-                    } catch (Throwable e2) {
+                    } catch (Exception e2) {
                         resetPressedLink();
                         FileLog.e(e2);
                     }
@@ -146,7 +146,7 @@ public class AboutLinkCell extends FrameLayout {
                         } else {
                             this.pressedLink.onClick(this);
                         }
-                    } catch (Throwable e22) {
+                    } catch (Exception e22) {
                         FileLog.e(e22);
                     }
                     resetPressedLink();
@@ -162,8 +162,9 @@ public class AboutLinkCell extends FrameLayout {
         return false;
     }
 
+    /* Access modifiers changed, original: protected */
     @SuppressLint({"DrawAllocation"})
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         if (this.stringBuilder != null) {
             int maxWidth = MeasureSpec.getSize(widthMeasureSpec) - AndroidUtilities.dp(46.0f);
             if (VERSION.SDK_INT >= 24) {
@@ -179,7 +180,8 @@ public class AboutLinkCell extends FrameLayout {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(height, NUM));
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         canvas.save();
         int dp = AndroidUtilities.dp(23.0f);
         this.textX = dp;
@@ -194,7 +196,7 @@ public class AboutLinkCell extends FrameLayout {
             if (this.textLayout != null) {
                 this.textLayout.draw(canvas);
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         canvas.restore();

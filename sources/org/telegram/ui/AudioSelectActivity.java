@@ -21,9 +21,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.Message;
@@ -92,7 +90,8 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             return new Holder(view);
         }
 
-        final /* synthetic */ void lambda$onCreateViewHolder$0$AudioSelectActivity$ListAdapter(MessageObject messageObject) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$onCreateViewHolder$0$AudioSelectActivity$ListAdapter(MessageObject messageObject) {
             AudioSelectActivity.this.playingAudio = messageObject;
         }
 
@@ -141,27 +140,27 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
 
     public View createView(Context context) {
         int i = 1;
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("AttachMusic", R.string.AttachMusic));
+        this.actionBar.setTitle(LocaleController.getString("AttachMusic", NUM));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    AudioSelectActivity.this.lambda$createView$1$AudioSelectActivity();
+                    AudioSelectActivity.this.finishFragment();
                 }
             }
         });
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         this.progressView = new EmptyTextProgressView(context);
-        this.progressView.setText(LocaleController.getString("NoAudio", R.string.NoAudio));
+        this.progressView.setText(LocaleController.getString("NoAudio", NUM));
         frameLayout.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView = new RecyclerListView(context);
         this.listView.setEmptyView(this.progressView);
         this.listView.setVerticalScrollBarEnabled(false);
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         RecyclerListView recyclerListView = this.listView;
-        Adapter listAdapter = new ListAdapter(context);
+        ListAdapter listAdapter = new ListAdapter(context);
         this.listViewAdapter = listAdapter;
         recyclerListView.setAdapter(listAdapter);
         recyclerListView = this.listView;
@@ -176,7 +175,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         this.bottomLayout.cancelButton.setOnClickListener(new AudioSelectActivity$$Lambda$1(this));
         this.bottomLayout.doneButton.setOnClickListener(new AudioSelectActivity$$Lambda$2(this));
         View shadow = new View(context);
-        shadow.setBackgroundResource(R.drawable.header_shadow_reverse);
+        shadow.setBackgroundResource(NUM);
         frameLayout.addView(shadow, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
         if (this.loadingAudio) {
             this.progressView.showProgress();
@@ -187,7 +186,8 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         return this.fragmentView;
     }
 
-    final /* synthetic */ void lambda$createView$0$AudioSelectActivity(View view, int position) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$0$AudioSelectActivity(View view, int position) {
         AudioCell audioCell = (AudioCell) view;
         AudioEntry audioEntry = audioCell.getAudioEntry();
         if (this.selectedAudios.indexOfKey(audioEntry.id) >= 0) {
@@ -200,7 +200,13 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         updateBottomLayoutCount();
     }
 
-    final /* synthetic */ void lambda$createView$2$AudioSelectActivity(View view) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$1$AudioSelectActivity(View view) {
+        finishFragment();
+    }
+
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$2$AudioSelectActivity(View view) {
         if (this.delegate != null) {
             ArrayList<MessageObject> audios = new ArrayList();
             for (int a = 0; a < this.selectedAudios.size(); a++) {
@@ -208,7 +214,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             }
             this.delegate.didSelectAudio(audios);
         }
-        lambda$createView$1$AudioSelectActivity();
+        finishFragment();
     }
 
     public void didReceivedNotification(int id, int account, Object... args) {
@@ -235,7 +241,8 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         Utilities.globalQueue.postRunnable(new AudioSelectActivity$$Lambda$3(this));
     }
 
-    final /* synthetic */ void lambda$loadAudio$4$AudioSelectActivity() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$loadAudio$4$AudioSelectActivity() {
         String[] projection = new String[]{"_id", "artist", "title", "_data", "duration", "album"};
         ArrayList<AudioEntry> newAudioEntries = new ArrayList();
         Cursor cursor = null;
@@ -296,7 +303,7 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             if (cursor != null) {
                 cursor.close();
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
             if (cursor != null) {
                 cursor.close();
@@ -309,7 +316,8 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
         AndroidUtilities.runOnUIThread(new AudioSelectActivity$$Lambda$4(this, newAudioEntries));
     }
 
-    final /* synthetic */ void lambda$null$3$AudioSelectActivity(ArrayList newAudioEntries) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$3$AudioSelectActivity(ArrayList newAudioEntries) {
         this.audioEntries = newAudioEntries;
         this.progressView.showTextView();
         this.listViewAdapter.notifyDataSetChanged();

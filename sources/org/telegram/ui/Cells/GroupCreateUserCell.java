@@ -1,7 +1,6 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
-import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
@@ -9,7 +8,6 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
-import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.FileLocation;
@@ -55,13 +53,13 @@ public class GroupCreateUserCell extends FrameLayout {
             i = 3;
         }
         simpleTextView.setGravity(i | 48);
-        View view = this.nameTextView;
+        SimpleTextView simpleTextView2 = this.nameTextView;
         if (LocaleController.isRTL) {
             i2 = 5;
         } else {
             i2 = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, 20.0f, i2 | 48, (float) ((LocaleController.isRTL ? 28 : 72) + padding), 10.0f, (float) ((LocaleController.isRTL ? 72 : 28) + padding), 0.0f));
+        addView(simpleTextView2, LayoutHelper.createFrame(-1, 20.0f, i2 | 48, (float) ((LocaleController.isRTL ? 28 : 72) + padding), 10.0f, (float) ((LocaleController.isRTL ? 72 : 28) + padding), 0.0f));
         this.statusTextView = new SimpleTextView(context);
         this.statusTextView.setTextSize(15);
         simpleTextView = this.statusTextView;
@@ -71,7 +69,7 @@ public class GroupCreateUserCell extends FrameLayout {
             i = 3;
         }
         simpleTextView.setGravity(i | 48);
-        view = this.statusTextView;
+        simpleTextView2 = this.statusTextView;
         if (LocaleController.isRTL) {
             i2 = 5;
         } else {
@@ -82,15 +80,15 @@ public class GroupCreateUserCell extends FrameLayout {
         if (!LocaleController.isRTL) {
             i3 = 28;
         }
-        addView(view, LayoutHelper.createFrame(-1, 20.0f, i2, f, 32.0f, (float) (i3 + padding), 0.0f));
+        addView(simpleTextView2, LayoutHelper.createFrame(-1, 20.0f, i2, f, 32.0f, (float) (i3 + padding), 0.0f));
         if (needCheck) {
             this.checkBox = new GroupCreateCheckBox(context);
             this.checkBox.setVisibility(0);
-            View view2 = this.checkBox;
+            GroupCreateCheckBox groupCreateCheckBox = this.checkBox;
             if (!LocaleController.isRTL) {
                 i4 = 3;
             }
-            addView(view2, LayoutHelper.createFrame(24, 24.0f, i4 | 48, LocaleController.isRTL ? 0.0f : 40.0f, 31.0f, LocaleController.isRTL ? 40.0f : 0.0f, 0.0f));
+            addView(groupCreateCheckBox, LayoutHelper.createFrame(24, 24.0f, i4 | 48, LocaleController.isRTL ? 0.0f : 40.0f, 31.0f, LocaleController.isRTL ? 40.0f : 0.0f, 0.0f));
         }
     }
 
@@ -109,7 +107,8 @@ public class GroupCreateUserCell extends FrameLayout {
         return this.currentUser;
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(58.0f), NUM));
     }
 
@@ -167,11 +166,11 @@ public class GroupCreateUserCell extends FrameLayout {
             } else if (this.currentUser.bot) {
                 this.statusTextView.setTag("windowBackgroundWhiteGrayText");
                 this.statusTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText"));
-                this.statusTextView.setText(LocaleController.getString("Bot", R.string.Bot));
+                this.statusTextView.setText(LocaleController.getString("Bot", NUM));
             } else if (this.currentUser.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((this.currentUser.status != null && this.currentUser.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(this.currentUser.id)))) {
                 this.statusTextView.setTag("windowBackgroundWhiteBlueText");
                 this.statusTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlueText"));
-                this.statusTextView.setText(LocaleController.getString("Online", R.string.Online));
+                this.statusTextView.setText(LocaleController.getString("Online", NUM));
             } else {
                 this.statusTextView.setTag("windowBackgroundWhiteGrayText");
                 this.statusTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText"));

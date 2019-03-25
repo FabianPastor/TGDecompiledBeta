@@ -12,6 +12,7 @@ import android.text.TextUtils.TruncateAt;
 import android.view.MotionEvent;
 import android.view.View.MeasureSpec;
 import android.view.ViewConfiguration;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -21,7 +22,6 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.MessageEntity;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.TL_messageEntityEmail;
@@ -110,7 +110,8 @@ public class SharedLinkCell extends FrameLayout {
         return i;
     }
 
-    protected void startCheckLongPress() {
+    /* Access modifiers changed, original: protected */
+    public void startCheckLongPress() {
         if (!this.checkingForLongPress) {
             this.checkingForLongPress = true;
             if (this.pendingCheckForTap == null) {
@@ -120,7 +121,8 @@ public class SharedLinkCell extends FrameLayout {
         }
     }
 
-    protected void cancelCheckLongPress() {
+    /* Access modifiers changed, original: protected */
+    public void cancelCheckLongPress() {
         this.checkingForLongPress = false;
         if (this.pendingCheckForLongPress != null) {
             removeCallbacks(this.pendingCheckForLongPress);
@@ -143,14 +145,16 @@ public class SharedLinkCell extends FrameLayout {
         this.linkImageView = new ImageReceiver(this);
         this.linkImageView.setRoundRadius(AndroidUtilities.dp(4.0f));
         this.letterDrawable = new LetterDrawable();
-        this.checkBox = new CheckBox(context, R.drawable.round_check2);
+        this.checkBox = new CheckBox(context, NUM);
         this.checkBox.setVisibility(4);
         this.checkBox.setColor(Theme.getColor("checkbox"), Theme.getColor("checkboxCheck"));
         addView(this.checkBox, LayoutHelper.createFrame(22, 22.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 44.0f, 44.0f, LocaleController.isRTL ? 44.0f : 0.0f, 0.0f));
+        setFocusable(true);
     }
 
+    /* Access modifiers changed, original: protected */
     @SuppressLint({"DrawAllocation"})
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int a;
         String link;
         StaticLayout layout;
@@ -236,7 +240,7 @@ public class SharedLinkCell extends FrameLayout {
                                 this.links.add("http://" + link);
                             }
                         }
-                    } catch (Throwable e) {
+                    } catch (Exception e) {
                         FileLog.e(e);
                     }
                 }
@@ -251,7 +255,7 @@ public class SharedLinkCell extends FrameLayout {
                 if (this.titleLayout.getLineCount() > 0) {
                     this.descriptionY = (this.titleY + this.titleLayout.getLineBottom(this.titleLayout.getLineCount() - 1)) + AndroidUtilities.dp(4.0f);
                 }
-            } catch (Throwable e2) {
+            } catch (Exception e2) {
                 FileLog.e(e2);
             }
             this.letterDrawable.setTitle(title);
@@ -264,7 +268,7 @@ public class SharedLinkCell extends FrameLayout {
                 if (this.descriptionLayout.getLineCount() > 0) {
                     this.description2Y = (this.descriptionY + this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1)) + AndroidUtilities.dp(5.0f);
                 }
-            } catch (Throwable e22) {
+            } catch (Exception e22) {
                 FileLog.e(e22);
             }
         }
@@ -274,7 +278,7 @@ public class SharedLinkCell extends FrameLayout {
                 if (this.descriptionLayout != null) {
                     this.description2Y += AndroidUtilities.dp(10.0f);
                 }
-            } catch (Throwable e222) {
+            } catch (Exception e222) {
                 FileLog.e(e222);
             }
         }
@@ -288,7 +292,7 @@ public class SharedLinkCell extends FrameLayout {
                         this.linkY += this.descriptionLayout2.getLineBottom(this.descriptionLayout2.getLineCount() - 1) + AndroidUtilities.dp(5.0f);
                     }
                     this.linkLayout.add(layout);
-                } catch (Throwable e2222) {
+                } catch (Exception e2222) {
                     FileLog.e(e2222);
                 }
             }
@@ -353,14 +357,16 @@ public class SharedLinkCell extends FrameLayout {
         return this.message;
     }
 
-    protected void onDetachedFromWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         if (this.drawLinkImageView) {
             this.linkImageView.onDetachedFromWindow();
         }
     }
 
-    protected void onAttachedToWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (this.drawLinkImageView) {
             this.linkImageView.onAttachedToWindow();
@@ -565,7 +571,8 @@ public class SharedLinkCell extends FrameLayout {
         return (String) this.links.get(num);
     }
 
-    protected void resetPressedLink() {
+    /* Access modifiers changed, original: protected */
+    public void resetPressedLink() {
         this.pressedLink = -1;
         this.linkPreviewPressed = false;
         cancelCheckLongPress();
@@ -579,7 +586,8 @@ public class SharedLinkCell extends FrameLayout {
         this.checkBox.setChecked(checked, animated);
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         float f;
         if (this.titleLayout != null) {
             canvas.save();
@@ -639,6 +647,23 @@ public class SharedLinkCell extends FrameLayout {
             canvas.drawLine(0.0f, (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - AndroidUtilities.dp((float) AndroidUtilities.leftBaseline)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         } else {
             canvas.drawLine((float) AndroidUtilities.dp((float) AndroidUtilities.leftBaseline), (float) (getMeasuredHeight() - 1), (float) getMeasuredWidth(), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
+        }
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
+        StringBuilder sb = new StringBuilder(this.titleLayout.getText());
+        if (this.descriptionLayout != null) {
+            sb.append(", ");
+            sb.append(this.descriptionLayout.getText());
+        }
+        if (this.descriptionLayout2 != null) {
+            sb.append(", ");
+            sb.append(this.descriptionLayout2.getText());
+        }
+        if (this.checkBox.isChecked()) {
+            info.setChecked(true);
+            info.setCheckable(true);
         }
     }
 }

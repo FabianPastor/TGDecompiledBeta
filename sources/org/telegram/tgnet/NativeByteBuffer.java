@@ -7,7 +7,8 @@ import org.telegram.messenger.FileLog;
 
 public class NativeByteBuffer extends AbstractSerializedData {
     private static final ThreadLocal<NativeByteBuffer> addressWrapper = new ThreadLocal<NativeByteBuffer>() {
-        protected NativeByteBuffer initialValue() {
+        /* Access modifiers changed, original: protected */
+        public NativeByteBuffer initialValue() {
             return new NativeByteBuffer(0, true, null);
         }
     };
@@ -327,7 +328,7 @@ public class NativeByteBuffer extends AbstractSerializedData {
                 }
                 i++;
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }

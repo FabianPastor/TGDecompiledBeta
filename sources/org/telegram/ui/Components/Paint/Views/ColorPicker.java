@@ -20,7 +20,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.beta.R;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Paint.Swatch;
 
@@ -60,13 +59,13 @@ public class ColorPicker extends FrameLayout {
     public ColorPicker(Context context) {
         super(context);
         setWillNotDraw(false);
-        this.shadowDrawable = getResources().getDrawable(R.drawable.knob_shadow);
+        this.shadowDrawable = getResources().getDrawable(NUM);
         this.backgroundPaint.setColor(-1);
         this.swatchStrokePaint.setStyle(Style.STROKE);
         this.swatchStrokePaint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
         this.settingsButton = new ImageView(context);
         this.settingsButton.setScaleType(ScaleType.CENTER);
-        this.settingsButton.setImageResource(R.drawable.photo_paint_brush);
+        this.settingsButton.setImageResource(NUM);
         addView(this.settingsButton, LayoutHelper.createFrame(60, 52.0f));
         this.settingsButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -77,7 +76,7 @@ public class ColorPicker extends FrameLayout {
         });
         this.undoButton = new ImageView(context);
         this.undoButton.setScaleType(ScaleType.CENTER);
-        this.undoButton.setImageResource(R.drawable.photo_undo);
+        this.undoButton.setImageResource(NUM);
         addView(this.undoButton, LayoutHelper.createFrame(60, 52.0f));
         this.undoButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -208,8 +207,9 @@ public class ColorPicker extends FrameLayout {
         }
     }
 
+    /* Access modifiers changed, original: protected */
     @SuppressLint({"DrawAllocation"})
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
         int width = right - left;
         int height = bottom - top;
         this.gradientPaint.setShader(new LinearGradient((float) AndroidUtilities.dp(56.0f), 0.0f, (float) (width - AndroidUtilities.dp(56.0f)), 0.0f, COLORS, LOCATIONS, TileMode.REPEAT));
@@ -219,7 +219,8 @@ public class ColorPicker extends FrameLayout {
         this.undoButton.layout(0, height - AndroidUtilities.dp(52.0f), this.settingsButton.getMeasuredWidth(), height);
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         canvas.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp(6.0f), this.gradientPaint);
         int cx = (int) (this.rectF.left + (this.rectF.width() * this.location));
         int cy = (int) (((this.draggingFactor * ((float) (-AndroidUtilities.dp(70.0f)))) + this.rectF.centerY()) - (this.changingWeight ? this.weight * ((float) AndroidUtilities.dp(190.0f)) : 0.0f));

@@ -9,13 +9,13 @@ public class SQLiteDatabase {
     private boolean isOpen = true;
     private final long sqliteHandle;
 
-    native void beginTransaction(long j);
+    public native void beginTransaction(long j);
 
-    native void closedb(long j) throws SQLiteException;
+    public native void closedb(long j) throws SQLiteException;
 
-    native void commitTransaction(long j);
+    public native void commitTransaction(long j);
 
-    native long opendb(String str, String str2) throws SQLiteException;
+    public native long opendb(String str, String str2) throws SQLiteException;
 
     public long getSQLiteHandle() {
         return this.sqliteHandle;
@@ -52,6 +52,20 @@ public class SQLiteDatabase {
         }
     }
 
+    public void explainQuery(String sql, Object... args) throws SQLiteException {
+        checkOpened();
+        SQLiteCursor cursor = new SQLitePreparedStatement(this, "EXPLAIN QUERY PLAN " + sql, true).query(args);
+        while (cursor.next()) {
+            int count = cursor.getColumnCount();
+            StringBuilder builder = new StringBuilder();
+            for (int a = 0; a < count; a++) {
+                builder.append(cursor.stringValue(a)).append(", ");
+            }
+            FileLog.d("EXPLAIN QUERY PLAN " + builder.toString());
+        }
+        cursor.dispose();
+    }
+
     public SQLiteCursor queryFinalized(String sql, Object... args) throws SQLiteException {
         checkOpened();
         return new SQLitePreparedStatement(this, sql, true).query(args);
@@ -71,7 +85,8 @@ public class SQLiteDatabase {
         }
     }
 
-    void checkOpened() throws SQLiteException {
+    /* Access modifiers changed, original: 0000 */
+    public void checkOpened() throws SQLiteException {
         if (!this.isOpen) {
             throw new SQLiteException("Database closed");
         }

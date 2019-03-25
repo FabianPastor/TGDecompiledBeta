@@ -1,16 +1,16 @@
 package org.telegram.ui.Components;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
+import android.view.View;
+import android.view.View.OnClickListener;
 
 final /* synthetic */ class AlertsCreator$$Lambda$7 implements OnClickListener {
-    private final Runnable arg$1;
+    private final boolean[] arg$1;
 
-    AlertsCreator$$Lambda$7(Runnable runnable) {
-        this.arg$1 = runnable;
+    AlertsCreator$$Lambda$7(boolean[] zArr) {
+        this.arg$1 = zArr;
     }
 
-    public void onClick(DialogInterface dialogInterface, int i) {
-        AlertsCreator.lambda$createClearOrDeleteDialogAlert$9$AlertsCreator(this.arg$1, dialogInterface, i);
+    public void onClick(View view) {
+        AlertsCreator.lambda$createClearOrDeleteDialogAlert$9$AlertsCreator(this.arg$1, view);
     }
 }

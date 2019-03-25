@@ -165,7 +165,8 @@ public class CropAreaView extends View {
         invalidate();
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (this.freeform) {
             int lineThickness = AndroidUtilities.dp(2.0f);
             int handleSize = AndroidUtilities.dp(16.0f);

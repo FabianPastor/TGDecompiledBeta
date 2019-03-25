@@ -1,13 +1,14 @@
 package org.telegram.ui.Components;
 
-final /* synthetic */ class EmojiView$$Lambda$9 implements Runnable {
-    private final EmojiView arg$1;
+import android.view.ViewTreeObserver.OnScrollChangedListener;
 
-    EmojiView$$Lambda$9(EmojiView emojiView) {
-        this.arg$1 = emojiView;
+final /* synthetic */ class EmojiView$$Lambda$9 implements OnScrollChangedListener {
+    static final OnScrollChangedListener $instance = new EmojiView$$Lambda$9();
+
+    private EmojiView$$Lambda$9() {
     }
 
-    public void run() {
-        this.arg$1.lambda$onAttachedToWindow$11$EmojiView();
+    public void onScrollChanged() {
+        EmojiView.lambda$static$0$EmojiView();
     }
 }

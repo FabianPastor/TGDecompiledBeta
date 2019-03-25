@@ -67,10 +67,12 @@ public class PagerSnapHelper extends SnapHelper {
         return reverseLayout ? forwardDirection ? centerPosition - 1 : centerPosition : forwardDirection ? centerPosition + 1 : centerPosition;
     }
 
-    protected LinearSmoothScroller createSnapScroller(LayoutManager layoutManager) {
+    /* Access modifiers changed, original: protected */
+    public LinearSmoothScroller createSnapScroller(LayoutManager layoutManager) {
         if (layoutManager instanceof ScrollVectorProvider) {
             return new LinearSmoothScroller(this.mRecyclerView.getContext()) {
-                protected void onTargetFound(View targetView, State state, Action action) {
+                /* Access modifiers changed, original: protected */
+                public void onTargetFound(View targetView, State state, Action action) {
                     int[] snapDistances = PagerSnapHelper.this.calculateDistanceToFinalSnap(PagerSnapHelper.this.mRecyclerView.getLayoutManager(), targetView);
                     int dx = snapDistances[0];
                     int dy = snapDistances[1];
@@ -80,11 +82,13 @@ public class PagerSnapHelper extends SnapHelper {
                     }
                 }
 
-                protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
+                /* Access modifiers changed, original: protected */
+                public float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
                     return 100.0f / ((float) displayMetrics.densityDpi);
                 }
 
-                protected int calculateTimeForScrolling(int dx) {
+                /* Access modifiers changed, original: protected */
+                public int calculateTimeForScrolling(int dx) {
                     return Math.min(100, super.calculateTimeForScrolling(dx));
                 }
             };

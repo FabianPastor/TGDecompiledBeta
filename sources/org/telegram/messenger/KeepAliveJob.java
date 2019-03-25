@@ -58,19 +58,20 @@ public class KeepAliveJob extends JobIntentService {
         });
     }
 
-    /* JADX WARNING: Missing block: B:9:0x0014, code:
+    /* Access modifiers changed, original: protected */
+    /* JADX WARNING: Missing block: B:9:0x0014, code skipped:
             if (org.telegram.messenger.BuildVars.LOGS_ENABLED == false) goto L_0x001c;
      */
-    /* JADX WARNING: Missing block: B:10:0x0016, code:
+    /* JADX WARNING: Missing block: B:10:0x0016, code skipped:
             org.telegram.messenger.FileLog.d("started keep-alive job");
      */
-    /* JADX WARNING: Missing block: B:11:0x001c, code:
+    /* JADX WARNING: Missing block: B:11:0x001c, code skipped:
             org.telegram.messenger.Utilities.globalQueue.postRunnable(finishJobByTimeoutRunnable, 60000);
      */
-    /* JADX WARNING: Missing block: B:13:?, code:
+    /* JADX WARNING: Missing block: B:13:?, code skipped:
             countDownLatch.await();
      */
-    protected void onHandleWork(android.content.Intent r5) {
+    public void onHandleWork(android.content.Intent r5) {
         /*
         r4 = this;
         r1 = sync;

@@ -1,25 +1,17 @@
 package org.telegram.messenger;
 
-import android.content.Context;
-import org.telegram.tgnet.TLRPC.StickerSet;
-import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.tgnet.TLRPC.TL_contacts_topPeers;
 
 final /* synthetic */ class DataQuery$$Lambda$94 implements Runnable {
     private final DataQuery arg$1;
-    private final TL_error arg$2;
-    private final StickerSet arg$3;
-    private final Context arg$4;
-    private final int arg$5;
+    private final TL_contacts_topPeers arg$2;
 
-    DataQuery$$Lambda$94(DataQuery dataQuery, TL_error tL_error, StickerSet stickerSet, Context context, int i) {
+    DataQuery$$Lambda$94(DataQuery dataQuery, TL_contacts_topPeers tL_contacts_topPeers) {
         this.arg$1 = dataQuery;
-        this.arg$2 = tL_error;
-        this.arg$3 = stickerSet;
-        this.arg$4 = context;
-        this.arg$5 = i;
+        this.arg$2 = tL_contacts_topPeers;
     }
 
     public void run() {
-        this.arg$1.lambda$null$45$DataQuery(this.arg$2, this.arg$3, this.arg$4, this.arg$5);
+        this.arg$1.lambda$null$71$DataQuery(this.arg$2);
     }
 }

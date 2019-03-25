@@ -100,7 +100,8 @@ public class PhotoEditorSeekBar extends View {
         this.maxValue = max;
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         int y = (getMeasuredHeight() - this.thumbSize) / 2;
         int thumbX = (int) (((float) (getMeasuredWidth() - this.thumbSize)) * this.progress);
         canvas.drawRect((float) (this.thumbSize / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.dp(1.0f)), (float) (getMeasuredWidth() - (this.thumbSize / 2)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(1.0f)), this.innerPaint);

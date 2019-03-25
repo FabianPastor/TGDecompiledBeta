@@ -3,7 +3,6 @@ package org.telegram.ui.Cells;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.text.TextUtils.TruncateAt;
-import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -40,45 +39,47 @@ public class NotificationsCheckCell extends FrameLayout {
         this.textView.setSingleLine(true);
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.textView.setEllipsize(TruncateAt.END);
-        View view = this.textView;
+        TextView textView = this.textView;
         if (LocaleController.isRTL) {
             i = 5;
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, -2.0f, i | 48, LocaleController.isRTL ? 80.0f : 23.0f, 13.0f, LocaleController.isRTL ? 23.0f : 80.0f, 0.0f));
+        addView(textView, LayoutHelper.createFrame(-1, -2.0f, i | 48, LocaleController.isRTL ? 80.0f : 23.0f, 13.0f, LocaleController.isRTL ? 23.0f : 80.0f, 0.0f));
         this.valueTextView = new TextView(context);
         this.valueTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
         this.valueTextView.setTextSize(1, 13.0f);
-        TextView textView = this.valueTextView;
+        TextView textView2 = this.valueTextView;
         if (LocaleController.isRTL) {
             i2 = 5;
         } else {
             i2 = 3;
         }
-        textView.setGravity(i2);
+        textView2.setGravity(i2);
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);
         this.valueTextView.setSingleLine(true);
         this.valueTextView.setPadding(0, 0, 0, 0);
         this.valueTextView.setEllipsize(TruncateAt.END);
-        view = this.valueTextView;
+        textView = this.valueTextView;
         if (LocaleController.isRTL) {
             i = 5;
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i | 48, LocaleController.isRTL ? 80.0f : 23.0f, 38.0f, LocaleController.isRTL ? 23.0f : 80.0f, 0.0f));
+        addView(textView, LayoutHelper.createFrame(-2, -2.0f, i | 48, LocaleController.isRTL ? 80.0f : 23.0f, 38.0f, LocaleController.isRTL ? 23.0f : 80.0f, 0.0f));
         this.checkBox = new Switch(context);
         this.checkBox.setColors("switchTrack", "switchTrackChecked", "windowBackgroundWhite", "windowBackgroundWhite");
-        View view2 = this.checkBox;
+        Switch switchR = this.checkBox;
         if (!LocaleController.isRTL) {
             i3 = 5;
         }
-        addView(view2, LayoutHelper.createFrame(37, 40.0f, i3 | 16, 21.0f, 0.0f, 21.0f, 0.0f));
+        addView(switchR, LayoutHelper.createFrame(37, 40.0f, i3 | 16, 21.0f, 0.0f, 21.0f, 0.0f));
+        this.checkBox.setFocusable(true);
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         if (this.isMultiline) {
             super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(0, 0));
         } else {
@@ -107,13 +108,14 @@ public class NotificationsCheckCell extends FrameLayout {
             this.valueTextView.setSingleLine(false);
             this.valueTextView.setEllipsize(null);
             this.valueTextView.setPadding(0, 0, 0, AndroidUtilities.dp(14.0f));
-            return;
+        } else {
+            this.valueTextView.setLines(1);
+            this.valueTextView.setMaxLines(1);
+            this.valueTextView.setSingleLine(true);
+            this.valueTextView.setEllipsize(TruncateAt.END);
+            this.valueTextView.setPadding(0, 0, 0, 0);
         }
-        this.valueTextView.setLines(1);
-        this.valueTextView.setMaxLines(1);
-        this.valueTextView.setSingleLine(true);
-        this.valueTextView.setEllipsize(TruncateAt.END);
-        this.valueTextView.setPadding(0, 0, 0, 0);
+        this.checkBox.setContentDescription(text);
     }
 
     public void setDrawLine(boolean value) {
@@ -132,7 +134,8 @@ public class NotificationsCheckCell extends FrameLayout {
         return this.checkBox.isChecked();
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (this.needDivider) {
             canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }

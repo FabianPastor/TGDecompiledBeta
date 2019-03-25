@@ -50,7 +50,7 @@ public class ApplicationLoader extends Application {
             path = new File(applicationContext.getApplicationInfo().dataDir, "files");
             path.mkdirs();
             return path;
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
             return new File("/data/data/org.telegram.messenger/files");
         }
@@ -95,7 +95,7 @@ public class ApplicationLoader extends Application {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.d("screen state = " + isScreenOn);
                 }
-            } catch (Throwable e3) {
+            } catch (Exception e3) {
                 FileLog.e(e3);
             }
             SharedConfig.loadConfig();
@@ -170,7 +170,8 @@ public class ApplicationLoader extends Application {
         AndroidUtilities.runOnUIThread(new ApplicationLoader$$Lambda$1(this), 1000);
     }
 
-    final /* synthetic */ void lambda$initPlayServices$2$ApplicationLoader() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$initPlayServices$2$ApplicationLoader() {
         if (checkPlayServices()) {
             String currentPushString = SharedConfig.pushString;
             if (TextUtils.isEmpty(currentPushString)) {
@@ -207,7 +208,7 @@ public class ApplicationLoader extends Application {
                 return true;
             }
             return false;
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
             return true;
         }
@@ -219,7 +220,7 @@ public class ApplicationLoader extends Application {
             if (netInfo != null) {
                 return netInfo.isRoaming();
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         return false;
@@ -232,7 +233,7 @@ public class ApplicationLoader extends Application {
             if (netInfo != null && (state == State.CONNECTED || state == State.CONNECTING || state == State.SUSPENDED)) {
                 return true;
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         return false;
@@ -244,7 +245,7 @@ public class ApplicationLoader extends Application {
             if (netInfo != null && netInfo.getState() == State.CONNECTED) {
                 return true;
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         return false;
@@ -294,7 +295,7 @@ public class ApplicationLoader extends Application {
                 return false;
             }
             return true;
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
             return true;
         }

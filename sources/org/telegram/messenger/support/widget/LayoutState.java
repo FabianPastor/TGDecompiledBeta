@@ -24,11 +24,13 @@ class LayoutState {
     LayoutState() {
     }
 
-    boolean hasMore(State state) {
+    /* Access modifiers changed, original: 0000 */
+    public boolean hasMore(State state) {
         return this.mCurrentPosition >= 0 && this.mCurrentPosition < state.getItemCount();
     }
 
-    View next(Recycler recycler) {
+    /* Access modifiers changed, original: 0000 */
+    public View next(Recycler recycler) {
         View view = recycler.getViewForPosition(this.mCurrentPosition);
         this.mCurrentPosition += this.mItemDirection;
         return view;

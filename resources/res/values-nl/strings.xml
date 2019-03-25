@@ -180,7 +180,6 @@
     <string name="AreYouSureDeleteAndExitName">Groep **%1$s** echt verwijderen en verlaten?</string>
     <string name="AreYouSureDeleteContact">Contact echt verwijderen?</string>
     <string name="AreYouSureDeleteGIF">Echt deze GIF verwijderen?</string>
-    <string name="AreYouSureDeleteMessages">%1$s echt verwijderen?</string>
     <string name="AreYouSureDeletePhoto">Foto echt verwijderen?</string>
     <string name="AreYouSureDeleteThisChat">Chat echt verwijderen?</string>
     <string name="AreYouSureDeleteThisChatWithGroup">Chat **%1$s** echt wissen?</string>

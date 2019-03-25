@@ -1,13 +1,17 @@
 package org.telegram.messenger;
 
-final /* synthetic */ class DataQuery$$Lambda$75 implements Runnable {
-    private final DataQuery arg$1;
+import java.util.ArrayList;
+import java.util.Comparator;
+import org.telegram.messenger.DataQuery.KeywordResult;
 
-    DataQuery$$Lambda$75(DataQuery dataQuery) {
-        this.arg$1 = dataQuery;
+final /* synthetic */ class DataQuery$$Lambda$75 implements Comparator {
+    private final ArrayList arg$1;
+
+    DataQuery$$Lambda$75(ArrayList arrayList) {
+        this.arg$1 = arrayList;
     }
 
-    public void run() {
-        this.arg$1.lambda$null$97$DataQuery();
+    public int compare(Object obj, Object obj2) {
+        return DataQuery.lambda$null$119$DataQuery(this.arg$1, (KeywordResult) obj, (KeywordResult) obj2);
     }
 }

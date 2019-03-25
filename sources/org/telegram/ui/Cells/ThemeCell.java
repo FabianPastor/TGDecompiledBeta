@@ -6,16 +6,15 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.text.TextUtils.TruncateAt;
-import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.Theme.ThemeInfo;
 import org.telegram.ui.Components.LayoutHelper;
@@ -44,51 +43,55 @@ public class ThemeCell extends FrameLayout {
         this.textView.setPadding(0, 0, 0, AndroidUtilities.dp(1.0f));
         this.textView.setEllipsize(TruncateAt.END);
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        View view = this.textView;
+        TextView textView = this.textView;
         if (LocaleController.isRTL) {
             i = 5;
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, LocaleController.isRTL ? 105.0f : 60.0f, 0.0f, LocaleController.isRTL ? 60.0f : 105.0f, 0.0f));
+        addView(textView, LayoutHelper.createFrame(-1, -1.0f, i | 48, LocaleController.isRTL ? 105.0f : 60.0f, 0.0f, LocaleController.isRTL ? 60.0f : 105.0f, 0.0f));
         this.checkImage = new ImageView(context);
         this.checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor("featuredStickers_addedIcon"), Mode.MULTIPLY));
-        this.checkImage.setImageResource(R.drawable.sticker_added);
+        this.checkImage.setImageResource(NUM);
+        ImageView imageView;
         if (this.isNightTheme) {
-            view = this.checkImage;
+            imageView = this.checkImage;
             if (!LocaleController.isRTL) {
                 i2 = 5;
             }
-            addView(view, LayoutHelper.createFrame(19, 14.0f, i2 | 16, 21.0f, 0.0f, 21.0f, 0.0f));
+            addView(imageView, LayoutHelper.createFrame(19, 14.0f, i2 | 16, 21.0f, 0.0f, 21.0f, 0.0f));
             return;
         }
-        view = this.checkImage;
+        imageView = this.checkImage;
         if (LocaleController.isRTL) {
             i = 3;
         } else {
             i = 5;
         }
-        addView(view, LayoutHelper.createFrame(19, 14.0f, i | 16, 59.0f, 0.0f, 59.0f, 0.0f));
+        addView(imageView, LayoutHelper.createFrame(19, 14.0f, i | 16, 59.0f, 0.0f, 59.0f, 0.0f));
         this.optionsButton = new ImageView(context);
         this.optionsButton.setFocusable(false);
         this.optionsButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("stickers_menuSelector")));
-        this.optionsButton.setImageResource(R.drawable.ic_ab_other);
+        this.optionsButton.setImageResource(NUM);
         this.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("stickers_menu"), Mode.MULTIPLY));
         this.optionsButton.setScaleType(ScaleType.CENTER);
-        View view2 = this.optionsButton;
+        this.optionsButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
+        ImageView imageView2 = this.optionsButton;
         if (!LocaleController.isRTL) {
             i2 = 5;
         }
-        addView(view2, LayoutHelper.createFrame(48, 48, i2 | 48));
+        addView(imageView2, LayoutHelper.createFrame(48, 48, i2 | 48));
     }
 
-    protected void onAttachedToWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor("featuredStickers_addedIcon"), Mode.MULTIPLY));
         this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(50.0f), NUM));
     }
 
@@ -108,7 +111,8 @@ public class ThemeCell extends FrameLayout {
         return this.currentThemeInfo;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:92:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x0184 A:{SYNTHETIC, Splitter:B:72:0x0184} */
+    /* JADX WARNING: Removed duplicated region for block: B:90:? A:{SYNTHETIC, RETURN} */
     /* JADX WARNING: Removed duplicated region for block: B:32:0x00ce  */
     public void setTheme(org.telegram.ui.ActionBar.Theme.ThemeInfo r27, boolean r28) {
         /*
@@ -356,7 +360,8 @@ public class ThemeCell extends FrameLayout {
         }
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (this.needDivider) {
             canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }
@@ -365,5 +370,10 @@ public class ThemeCell extends FrameLayout {
             x = getWidth() - x;
         }
         canvas.drawCircle((float) x, (float) AndroidUtilities.dp(24.0f), (float) AndroidUtilities.dp(11.0f), this.paint);
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
+        setSelected(this.checkImage.getVisibility() == 0);
     }
 }

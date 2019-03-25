@@ -1,16 +1,20 @@
 package org.telegram.ui;
 
-import android.view.View;
-import android.view.View.OnClickListener;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 
 final /* synthetic */ class ChatActivity$$Lambda$51 implements OnClickListener {
-    private final boolean[] arg$1;
+    private final ChatActivity arg$1;
+    private final int arg$2;
+    private final boolean[] arg$3;
 
-    ChatActivity$$Lambda$51(boolean[] zArr) {
-        this.arg$1 = zArr;
+    ChatActivity$$Lambda$51(ChatActivity chatActivity, int i, boolean[] zArr) {
+        this.arg$1 = chatActivity;
+        this.arg$2 = i;
+        this.arg$3 = zArr;
     }
 
-    public void onClick(View view) {
-        ChatActivity.lambda$createDeleteMessagesAlert$63$ChatActivity(this.arg$1, view);
+    public void onClick(DialogInterface dialogInterface, int i) {
+        this.arg$1.lambda$processSelectedOption$62$ChatActivity(this.arg$2, this.arg$3, dialogInterface, i);
     }
 }

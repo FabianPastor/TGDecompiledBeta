@@ -3,15 +3,15 @@ package org.telegram.ui;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import org.telegram.ui.StickerPreviewViewer.StickerPreviewViewerDelegate;
+import org.telegram.ui.ContentPreviewViewer.ContentPreviewViewerDelegate;
 
 final /* synthetic */ class ChatActivity$$Lambda$20 implements OnTouchListener {
     private final ChatActivity arg$1;
-    private final StickerPreviewViewerDelegate arg$2;
+    private final ContentPreviewViewerDelegate arg$2;
 
-    ChatActivity$$Lambda$20(ChatActivity chatActivity, StickerPreviewViewerDelegate stickerPreviewViewerDelegate) {
+    ChatActivity$$Lambda$20(ChatActivity chatActivity, ContentPreviewViewerDelegate contentPreviewViewerDelegate) {
         this.arg$1 = chatActivity;
-        this.arg$2 = stickerPreviewViewerDelegate;
+        this.arg$2 = contentPreviewViewerDelegate;
     }
 
     public boolean onTouch(View view, MotionEvent motionEvent) {

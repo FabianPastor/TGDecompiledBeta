@@ -2,7 +2,6 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -29,11 +28,11 @@ public class TextBlockCell extends FrameLayout {
             i = 3;
         }
         textView.setGravity(i | 16);
-        View view = this.textView;
+        TextView textView2 = this.textView;
         if (!LocaleController.isRTL) {
             i2 = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, -2.0f, i2 | 48, 23.0f, 10.0f, 23.0f, 10.0f));
+        addView(textView2, LayoutHelper.createFrame(-1, -2.0f, i2 | 48, 23.0f, 10.0f, 23.0f, 10.0f));
     }
 
     public void setTextColor(int color) {
@@ -46,11 +45,13 @@ public class TextBlockCell extends FrameLayout {
         setWillNotDraw(!divider);
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), heightMeasureSpec);
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (this.needDivider) {
             canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(19.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(19.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }

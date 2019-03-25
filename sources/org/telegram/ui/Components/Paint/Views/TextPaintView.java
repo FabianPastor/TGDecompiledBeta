@@ -25,7 +25,8 @@ public class TextPaintView extends EntityView {
             super(context);
         }
 
-        protected int pointInsideHandle(float x, float y) {
+        /* Access modifiers changed, original: protected */
+        public int pointInsideHandle(float x, float y) {
             float radius = (float) AndroidUtilities.dp(19.5f);
             float inset = radius + ((float) AndroidUtilities.dp(1.0f));
             float width = ((float) getWidth()) - (inset * 2.0f);
@@ -43,7 +44,8 @@ public class TextPaintView extends EntityView {
             return 3;
         }
 
-        protected void onDraw(Canvas canvas) {
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
             int i;
             super.onDraw(canvas);
             float space = (float) AndroidUtilities.dp(3.0f);
@@ -131,7 +133,8 @@ public class TextPaintView extends EntityView {
         this.editText.setMaxWidth(maxWidth);
     }
 
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+    /* Access modifiers changed, original: protected */
+    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         updatePosition();
     }
@@ -188,14 +191,16 @@ public class TextPaintView extends EntityView {
         this.editText.setShadowLayer(8.0f, 0.0f, 2.0f, -NUM);
     }
 
-    protected Rect getSelectionBounds() {
+    /* Access modifiers changed, original: protected */
+    public Rect getSelectionBounds() {
         float scale = ((ViewGroup) getParent()).getScaleX();
         float width = (((float) getWidth()) * getScale()) + (((float) AndroidUtilities.dp(46.0f)) / scale);
         float height = (((float) getHeight()) * getScale()) + (((float) AndroidUtilities.dp(20.0f)) / scale);
         return new Rect((this.position.x - (width / 2.0f)) * scale, (this.position.y - (height / 2.0f)) * scale, width * scale, height * scale);
     }
 
-    protected TextViewSelectionView createSelectionView() {
+    /* Access modifiers changed, original: protected */
+    public TextViewSelectionView createSelectionView() {
         return new TextViewSelectionView(getContext());
     }
 }

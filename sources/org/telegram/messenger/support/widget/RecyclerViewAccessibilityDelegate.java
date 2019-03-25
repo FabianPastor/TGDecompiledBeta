@@ -39,7 +39,8 @@ public class RecyclerViewAccessibilityDelegate extends AccessibilityDelegateComp
         this.mRecyclerView = recyclerView;
     }
 
-    boolean shouldIgnore() {
+    /* Access modifiers changed, original: 0000 */
+    public boolean shouldIgnore() {
         return this.mRecyclerView.hasPendingAdapterUpdates();
     }
 

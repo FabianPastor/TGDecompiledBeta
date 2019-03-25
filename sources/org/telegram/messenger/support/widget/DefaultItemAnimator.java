@@ -182,7 +182,8 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
         return true;
     }
 
-    void animateAddImpl(final ViewHolder holder) {
+    /* Access modifiers changed, original: 0000 */
+    public void animateAddImpl(final ViewHolder holder) {
         final View view = holder.itemView;
         final ViewPropertyAnimator animation = view.animate();
         this.mAddAnimations.add(holder);
@@ -225,7 +226,8 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
         return true;
     }
 
-    void animateMoveImpl(ViewHolder holder, int fromX, int fromY, int toX, int toY) {
+    /* Access modifiers changed, original: 0000 */
+    public void animateMoveImpl(ViewHolder holder, int fromX, int fromY, int toX, int toY) {
         final View view = holder.itemView;
         final int deltaX = toX - fromX;
         final int deltaY = toY - fromY;
@@ -284,7 +286,8 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
         return true;
     }
 
-    void animateChangeImpl(final ChangeInfo changeInfo) {
+    /* Access modifiers changed, original: 0000 */
+    public void animateChangeImpl(final ChangeInfo changeInfo) {
         View newView;
         ViewHolder holder = changeInfo.oldHolder;
         final View view = holder == null ? null : holder.itemView;
@@ -452,7 +455,8 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
         return true;
     }
 
-    void dispatchFinishedWhenDone() {
+    /* Access modifiers changed, original: 0000 */
+    public void dispatchFinishedWhenDone() {
         if (!isRunning()) {
             dispatchAnimationsFinished();
         }
@@ -529,7 +533,8 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
         }
     }
 
-    void cancelAll(List<ViewHolder> viewHolders) {
+    /* Access modifiers changed, original: 0000 */
+    public void cancelAll(List<ViewHolder> viewHolders) {
         for (int i = viewHolders.size() - 1; i >= 0; i--) {
             ((ViewHolder) viewHolders.get(i)).itemView.animate().cancel();
         }

@@ -8,7 +8,6 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.text.TextUtils;
-import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import com.google.android.gms.maps.model.LatLng;
@@ -19,7 +18,6 @@ import org.telegram.messenger.LocationController.SharingLocationInfo;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserObject;
-import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
@@ -60,66 +58,69 @@ public class SharingLiveLocationCell extends FrameLayout {
         this.nameTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.nameTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-        View view;
+        BackupImageView backupImageView;
         int i2;
         if (distance) {
             int i3;
-            view = this.avatarImageView;
+            backupImageView = this.avatarImageView;
             if (LocaleController.isRTL) {
                 i2 = 5;
             } else {
                 i2 = 3;
             }
-            addView(view, LayoutHelper.createFrame(40, 40.0f, i2 | 48, LocaleController.isRTL ? 0.0f : 17.0f, 13.0f, LocaleController.isRTL ? 17.0f : 0.0f, 0.0f));
-            View view2 = this.nameTextView;
+            addView(backupImageView, LayoutHelper.createFrame(40, 40.0f, i2 | 48, LocaleController.isRTL ? 0.0f : 17.0f, 13.0f, LocaleController.isRTL ? 17.0f : 0.0f, 0.0f));
+            SimpleTextView simpleTextView = this.nameTextView;
             if (LocaleController.isRTL) {
                 i2 = 5;
             } else {
                 i2 = 3;
             }
-            addView(view2, LayoutHelper.createFrame(-1, 20.0f, i2 | 48, LocaleController.isRTL ? 54.0f : 73.0f, 12.0f, LocaleController.isRTL ? 73.0f : 54.0f, 0.0f));
+            addView(simpleTextView, LayoutHelper.createFrame(-1, 20.0f, i2 | 48, LocaleController.isRTL ? 54.0f : 73.0f, 12.0f, LocaleController.isRTL ? 73.0f : 54.0f, 0.0f));
             this.distanceTextView = new SimpleTextView(context);
             this.distanceTextView.setTextSize(14);
             this.distanceTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
-            SimpleTextView simpleTextView = this.distanceTextView;
+            SimpleTextView simpleTextView2 = this.distanceTextView;
             if (LocaleController.isRTL) {
                 i3 = 5;
             } else {
                 i3 = 3;
             }
-            simpleTextView.setGravity(i3);
-            view2 = this.distanceTextView;
+            simpleTextView2.setGravity(i3);
+            simpleTextView = this.distanceTextView;
             if (!LocaleController.isRTL) {
                 i = 3;
             }
-            addView(view2, LayoutHelper.createFrame(-1, 20.0f, i | 48, LocaleController.isRTL ? 54.0f : 73.0f, 37.0f, LocaleController.isRTL ? 73.0f : 54.0f, 0.0f));
+            addView(simpleTextView, LayoutHelper.createFrame(-1, 20.0f, i | 48, LocaleController.isRTL ? 54.0f : 73.0f, 37.0f, LocaleController.isRTL ? 73.0f : 54.0f, 0.0f));
         } else {
-            view = this.avatarImageView;
+            backupImageView = this.avatarImageView;
             if (LocaleController.isRTL) {
                 i2 = 5;
             } else {
                 i2 = 3;
             }
-            addView(view, LayoutHelper.createFrame(40, 40.0f, i2 | 48, LocaleController.isRTL ? 0.0f : 17.0f, 7.0f, LocaleController.isRTL ? 17.0f : 0.0f, 0.0f));
-            view = this.nameTextView;
+            addView(backupImageView, LayoutHelper.createFrame(40, 40.0f, i2 | 48, LocaleController.isRTL ? 0.0f : 17.0f, 7.0f, LocaleController.isRTL ? 17.0f : 0.0f, 0.0f));
+            SimpleTextView simpleTextView3 = this.nameTextView;
             if (!LocaleController.isRTL) {
                 i = 3;
             }
-            addView(view, LayoutHelper.createFrame(-2, -2.0f, i | 48, LocaleController.isRTL ? 54.0f : 74.0f, 17.0f, LocaleController.isRTL ? 74.0f : 54.0f, 0.0f));
+            addView(simpleTextView3, LayoutHelper.createFrame(-2, -2.0f, i | 48, LocaleController.isRTL ? 54.0f : 74.0f, 17.0f, LocaleController.isRTL ? 74.0f : 54.0f, 0.0f));
         }
         setWillNotDraw(false);
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(this.distanceTextView != null ? 66.0f : 54.0f), NUM));
     }
 
-    protected void onDetachedFromWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         AndroidUtilities.cancelRunOnUIThread(this.invalidateRunnable);
     }
 
-    protected void onAttachedToWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onAttachedToWindow() {
         super.onAttachedToWindow();
         AndroidUtilities.runOnUIThread(this.invalidateRunnable);
     }
@@ -168,7 +169,7 @@ public class SharingLiveLocationCell extends FrameLayout {
             this.avatarImageView.setImage(photo, null, this.avatarDrawable, parentObject2);
         } else {
             name = messageObject.messageOwner.media.title;
-            Drawable drawable = getResources().getDrawable(R.drawable.pin);
+            Drawable drawable = getResources().getDrawable(NUM);
             drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("location_sendLocationIcon"), Mode.MULTIPLY));
             int color = Theme.getColor("location_placeLocationBackground");
             CombinedDrawable combinedDrawable = new CombinedDrawable(Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(40.0f), color, color), drawable);
@@ -183,19 +184,19 @@ public class SharingLiveLocationCell extends FrameLayout {
             float distance = this.location.distanceTo(userLocation);
             if (address != null) {
                 if (distance < 1000.0f) {
-                    this.distanceTextView.setText(String.format("%s - %d %s", new Object[]{address, Integer.valueOf((int) distance), LocaleController.getString("MetersAway", R.string.MetersAway)}));
+                    this.distanceTextView.setText(String.format("%s - %d %s", new Object[]{address, Integer.valueOf((int) distance), LocaleController.getString("MetersAway", NUM)}));
                     return;
                 }
-                this.distanceTextView.setText(String.format("%s - %.2f %s", new Object[]{address, Float.valueOf(distance / 1000.0f), LocaleController.getString("KMetersAway", R.string.KMetersAway)}));
+                this.distanceTextView.setText(String.format("%s - %.2f %s", new Object[]{address, Float.valueOf(distance / 1000.0f), LocaleController.getString("KMetersAway", NUM)}));
             } else if (distance < 1000.0f) {
-                this.distanceTextView.setText(String.format("%d %s", new Object[]{Integer.valueOf((int) distance), LocaleController.getString("MetersAway", R.string.MetersAway)}));
+                this.distanceTextView.setText(String.format("%d %s", new Object[]{Integer.valueOf((int) distance), LocaleController.getString("MetersAway", NUM)}));
             } else {
-                this.distanceTextView.setText(String.format("%.2f %s", new Object[]{Float.valueOf(distance / 1000.0f), LocaleController.getString("KMetersAway", R.string.KMetersAway)}));
+                this.distanceTextView.setText(String.format("%.2f %s", new Object[]{Float.valueOf(distance / 1000.0f), LocaleController.getString("KMetersAway", NUM)}));
             }
         } else if (address != null) {
             this.distanceTextView.setText(address);
         } else {
-            this.distanceTextView.setText(LocaleController.getString("Loading", R.string.Loading));
+            this.distanceTextView.setText(LocaleController.getString("Loading", NUM));
         }
     }
 
@@ -231,9 +232,9 @@ public class SharingLiveLocationCell extends FrameLayout {
         String time = LocaleController.formatLocationUpdateDate(info.object.edit_date != 0 ? (long) info.object.edit_date : (long) info.object.date);
         if (userLocation != null) {
             if (this.location.distanceTo(userLocation) < 1000.0f) {
-                this.distanceTextView.setText(String.format("%s - %d %s", new Object[]{time, Integer.valueOf((int) this.location.distanceTo(userLocation)), LocaleController.getString("MetersAway", R.string.MetersAway)}));
+                this.distanceTextView.setText(String.format("%s - %d %s", new Object[]{time, Integer.valueOf((int) this.location.distanceTo(userLocation)), LocaleController.getString("MetersAway", NUM)}));
             } else {
-                this.distanceTextView.setText(String.format("%s - %.2f %s", new Object[]{time, Float.valueOf(this.location.distanceTo(userLocation) / 1000.0f), LocaleController.getString("KMetersAway", R.string.KMetersAway)}));
+                this.distanceTextView.setText(String.format("%s - %.2f %s", new Object[]{time, Float.valueOf(this.location.distanceTo(userLocation) / 1000.0f), LocaleController.getString("KMetersAway", NUM)}));
             }
         } else {
             this.distanceTextView.setText(time);
@@ -270,7 +271,8 @@ public class SharingLiveLocationCell extends FrameLayout {
         this.avatarImageView.setImage(photo, null, this.avatarDrawable, parentObject2);
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (this.currentInfo != null || this.liveLocation != null) {
             int stopTime;
             int period;

@@ -185,6 +185,11 @@ public class FileLoader {
         }
     }
 
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$removeLoadingVideo$1$FileLoader(Document document, boolean player) {
+        removeLoadingVideoInternal(document, player);
+    }
+
     public boolean isLoadingVideo(Document document, boolean player) {
         if (document != null) {
             if (this.loadingVideos.containsKey(getAttachFileName(document) + (player ? "p" : ""))) {
@@ -202,7 +207,8 @@ public class FileLoader {
         fileLoaderQueue.postRunnable(new FileLoader$$Lambda$2(this, enc, location));
     }
 
-    final /* synthetic */ void lambda$cancelUploadFile$2$FileLoader(boolean enc, String location) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$cancelUploadFile$2$FileLoader(boolean enc, String location) {
         FileUploadOperation operation;
         if (enc) {
             operation = (FileUploadOperation) this.uploadOperationPathsEnc.get(location);
@@ -222,7 +228,8 @@ public class FileLoader {
         fileLoaderQueue.postRunnable(new FileLoader$$Lambda$3(this, encrypted, location, newAvailableSize, finalSize));
     }
 
-    final /* synthetic */ void lambda$checkUploadNewDataAvailable$3$FileLoader(boolean encrypted, String location, long newAvailableSize, long finalSize) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$checkUploadNewDataAvailable$3$FileLoader(boolean encrypted, String location, long newAvailableSize, long finalSize) {
         FileUploadOperation operation;
         if (encrypted) {
             operation = (FileUploadOperation) this.uploadOperationPathsEnc.get(location);
@@ -240,7 +247,8 @@ public class FileLoader {
         fileLoaderQueue.postRunnable(new FileLoader$$Lambda$4(this, slow));
     }
 
-    final /* synthetic */ void lambda$onNetworkChanged$4$FileLoader(boolean slow) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onNetworkChanged$4$FileLoader(boolean slow) {
         for (Entry<String, FileUploadOperation> entry : this.uploadOperationPaths.entrySet()) {
             ((FileUploadOperation) entry.getValue()).onNetworkChanged(slow);
         }
@@ -259,7 +267,8 @@ public class FileLoader {
         }
     }
 
-    final /* synthetic */ void lambda$uploadFile$5$FileLoader(final boolean encrypted, final String location, int estimatedSize, int type, final boolean small) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$uploadFile$5$FileLoader(final boolean encrypted, final String location, int estimatedSize, int type, final boolean small) {
         if (encrypted) {
             if (this.uploadOperationPathsEnc.containsKey(location)) {
                 return;
@@ -283,7 +292,8 @@ public class FileLoader {
                 FileLoader.fileLoaderQueue.postRunnable(new FileLoader$1$$Lambda$0(this, encrypted, location, small, inputFile, inputEncryptedFile, key, iv, operation));
             }
 
-            final /* synthetic */ void lambda$didFinishUploadingFile$0$FileLoader$1(boolean encrypted, String location, boolean small, InputFile inputFile, InputEncryptedFile inputEncryptedFile, byte[] key, byte[] iv, FileUploadOperation operation) {
+            /* Access modifiers changed, original: final|synthetic */
+            public final /* synthetic */ void lambda$didFinishUploadingFile$0$FileLoader$1(boolean encrypted, String location, boolean small, InputFile inputFile, InputEncryptedFile inputEncryptedFile, byte[] key, byte[] iv, FileUploadOperation operation) {
                 if (encrypted) {
                     FileLoader.this.uploadOperationPathsEnc.remove(location);
                 } else {
@@ -318,7 +328,8 @@ public class FileLoader {
                 FileLoader.fileLoaderQueue.postRunnable(new FileLoader$1$$Lambda$1(this, encrypted, location, small));
             }
 
-            final /* synthetic */ void lambda$didFailedUploadingFile$1$FileLoader$1(boolean encrypted, String location, boolean small) {
+            /* Access modifiers changed, original: final|synthetic */
+            public final /* synthetic */ void lambda$didFailedUploadingFile$1$FileLoader$1(boolean encrypted, String location, boolean small) {
                 if (encrypted) {
                     FileLoader.this.uploadOperationPathsEnc.remove(location);
                 } else {
@@ -443,7 +454,8 @@ public class FileLoader {
         }
     }
 
-    final /* synthetic */ void lambda$cancelLoadFile$6$FileLoader(String fileName, Document document, WebFile webDocument, SecureDocument secureDocument, FileLocation location) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$cancelLoadFile$6$FileLoader(String fileName, Document document, WebFile webDocument, SecureDocument secureDocument, FileLocation location) {
         FileLoadOperation operation = (FileLoadOperation) this.loadOperationPaths.remove(fileName);
         if (operation != null) {
             int datacenterId = operation.getDatacenterId();
@@ -478,12 +490,12 @@ public class FileLoader {
         return 0.0f;
     }
 
-    public void loadFile(PhotoSize photo, String ext, int cacheType) {
+    public void loadFile(PhotoSize photo, Object parentObject, String ext, int cacheType) {
         if (photo != null) {
             if (cacheType == 0 && photo != null && (photo.size == 0 || photo.location.key != null)) {
                 cacheType = 1;
             }
-            loadFile(null, null, null, photo.location, null, ext, photo.size, 0, cacheType);
+            loadFile(null, null, null, photo.location, parentObject, ext, photo.size, 0, cacheType);
         }
     }
 
@@ -780,23 +792,26 @@ public class FileLoader {
         fileLoaderQueue.postRunnable(new FileLoader$$Lambda$7(this, document, secureDocument, webDocument, location, parentObject, locationExt, locationSize, priority, cacheType));
     }
 
-    final /* synthetic */ void lambda$loadFile$7$FileLoader(Document document, SecureDocument secureDocument, WebFile webDocument, FileLocation location, Object parentObject, String locationExt, int locationSize, int priority, int cacheType) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$loadFile$7$FileLoader(Document document, SecureDocument secureDocument, WebFile webDocument, FileLocation location, Object parentObject, String locationExt, int locationSize, int priority, int cacheType) {
         loadFileInternal(document, secureDocument, webDocument, location, parentObject, locationExt, locationSize, priority, null, 0, cacheType);
     }
 
-    protected FileLoadOperation loadStreamFile(FileLoadOperationStream stream, Document document, Object parentObject, int offset) {
+    /* Access modifiers changed, original: protected */
+    public FileLoadOperation loadStreamFile(FileLoadOperationStream stream, Document document, Object parentObject, int offset) {
         CountDownLatch semaphore = new CountDownLatch(1);
         FileLoadOperation[] result = new FileLoadOperation[1];
         fileLoaderQueue.postRunnable(new FileLoader$$Lambda$8(this, result, document, parentObject, stream, offset, semaphore));
         try {
             semaphore.await();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         return result[0];
     }
 
-    final /* synthetic */ void lambda$loadStreamFile$8$FileLoader(FileLoadOperation[] result, Document document, Object parentObject, FileLoadOperationStream stream, int offset, CountDownLatch semaphore) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$loadStreamFile$8$FileLoader(FileLoadOperation[] result, Document document, Object parentObject, FileLoadOperationStream stream, int offset, CountDownLatch semaphore) {
         result[0] = loadFileInternal(document, null, null, null, parentObject, null, 0, 1, stream, offset, 0);
         semaphore.countDown();
     }
@@ -805,7 +820,8 @@ public class FileLoader {
         fileLoaderQueue.postRunnable(new FileLoader$$Lambda$9(this, datacenterId, arg1, document, webDocument, location));
     }
 
-    final /* synthetic */ void lambda$checkDownloadQueue$9$FileLoader(int datacenterId, String arg1, Document document, WebFile webDocument, FileLocation location) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$checkDownloadQueue$9$FileLoader(int datacenterId, String arg1, Document document, WebFile webDocument, FileLocation location) {
         LinkedList<FileLoadOperation> audioLoadOperationQueue = getAudioLoadOperationQueue(datacenterId);
         LinkedList<FileLoadOperation> photoLoadOperationQueue = getPhotoLoadOperationQueue(datacenterId);
         LinkedList<FileLoadOperation> loadOperationQueue = getLoadOperationQueue(datacenterId);
@@ -967,11 +983,11 @@ public class FileLoader {
                 }
             }
         } else if (message.media instanceof TL_messageMediaDocument) {
-            TLObject tLObject = message.media.document;
+            Document document = message.media.document;
             if (message.media.ttl_seconds != 0) {
                 z = true;
             }
-            return getPathToAttach(tLObject, z);
+            return getPathToAttach(document, z);
         } else if (message.media instanceof TL_messageMediaPhoto) {
             sizes = message.media.photo.sizes;
             if (sizes.size() > 0) {
@@ -1277,7 +1293,7 @@ public class FileLoader {
                     if (!encrypted.delete()) {
                         encrypted.deleteOnExit();
                     }
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
                 try {
@@ -1285,7 +1301,7 @@ public class FileLoader {
                     if (!key.delete()) {
                         key.deleteOnExit();
                     }
-                } catch (Throwable e2) {
+                } catch (Exception e2) {
                     FileLog.e(e2);
                 }
             } else if (file.exists()) {
@@ -1293,7 +1309,7 @@ public class FileLoader {
                     if (!file.delete()) {
                         file.deleteOnExit();
                     }
-                } catch (Throwable e22) {
+                } catch (Exception e22) {
                     FileLog.e(e22);
                 }
             }
@@ -1302,7 +1318,7 @@ public class FileLoader {
                 if (qFile.exists() && !qFile.delete()) {
                     qFile.deleteOnExit();
                 }
-            } catch (Throwable e222) {
+            } catch (Exception e222) {
                 FileLog.e(e222);
             }
         }

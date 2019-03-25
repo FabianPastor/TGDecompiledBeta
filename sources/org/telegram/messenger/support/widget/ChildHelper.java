@@ -22,7 +22,8 @@ class ChildHelper {
         Bucket() {
         }
 
-        void set(int index) {
+        /* Access modifiers changed, original: 0000 */
+        public void set(int index) {
             if (index >= 64) {
                 ensureNext();
                 this.mNext.set(index - 64);
@@ -37,7 +38,8 @@ class ChildHelper {
             }
         }
 
-        void clear(int index) {
+        /* Access modifiers changed, original: 0000 */
+        public void clear(int index) {
             if (index < 64) {
                 this.mData &= (1 << index) ^ -1;
             } else if (this.mNext != null) {
@@ -45,7 +47,8 @@ class ChildHelper {
             }
         }
 
-        boolean get(int index) {
+        /* Access modifiers changed, original: 0000 */
+        public boolean get(int index) {
             if (index < 64) {
                 return (this.mData & (1 << index)) != 0;
             } else {
@@ -54,14 +57,16 @@ class ChildHelper {
             }
         }
 
-        void reset() {
+        /* Access modifiers changed, original: 0000 */
+        public void reset() {
             this.mData = 0;
             if (this.mNext != null) {
                 this.mNext.reset();
             }
         }
 
-        void insert(int index, boolean value) {
+        /* Access modifiers changed, original: 0000 */
+        public void insert(int index, boolean value) {
             if (index >= 64) {
                 ensureNext();
                 this.mNext.insert(index - 64, value);
@@ -81,7 +86,8 @@ class ChildHelper {
             }
         }
 
-        boolean remove(int index) {
+        /* Access modifiers changed, original: 0000 */
+        public boolean remove(int index) {
             if (index >= 64) {
                 ensureNext();
                 return this.mNext.remove(index - 64);
@@ -101,7 +107,8 @@ class ChildHelper {
             return value;
         }
 
-        int countOnesBefore(int index) {
+        /* Access modifiers changed, original: 0000 */
+        public int countOnesBefore(int index) {
             if (this.mNext == null) {
                 if (index >= 64) {
                     return Long.bitCount(this.mData);
@@ -163,7 +170,8 @@ class ChildHelper {
         return true;
     }
 
-    protected int getHiddenChildCount() {
+    /* Access modifiers changed, original: protected */
+    public int getHiddenChildCount() {
         return this.mHiddenViews.size();
     }
 
@@ -174,11 +182,13 @@ class ChildHelper {
         return (View) this.mHiddenViews.get(index);
     }
 
-    void addView(View child, boolean hidden) {
+    /* Access modifiers changed, original: 0000 */
+    public void addView(View child, boolean hidden) {
         addView(child, -1, hidden);
     }
 
-    void addView(View child, int index, boolean hidden) {
+    /* Access modifiers changed, original: 0000 */
+    public void addView(View child, int index, boolean hidden) {
         int offset;
         if (index < 0) {
             offset = this.mCallback.getChildCount();
@@ -211,7 +221,8 @@ class ChildHelper {
         return -1;
     }
 
-    void removeView(View view) {
+    /* Access modifiers changed, original: 0000 */
+    public void removeView(View view) {
         int index = this.mCallback.indexOfChild(view);
         if (index >= 0) {
             if (this.mBucket.remove(index)) {
@@ -221,7 +232,8 @@ class ChildHelper {
         }
     }
 
-    void removeViewAt(int index) {
+    /* Access modifiers changed, original: 0000 */
+    public void removeViewAt(int index) {
         int offset = getOffset(index);
         View view = this.mCallback.getChildAt(offset);
         if (view != null) {
@@ -232,11 +244,13 @@ class ChildHelper {
         }
     }
 
-    View getChildAt(int index) {
+    /* Access modifiers changed, original: 0000 */
+    public View getChildAt(int index) {
         return this.mCallback.getChildAt(getOffset(index));
     }
 
-    void removeAllViewsUnfiltered() {
+    /* Access modifiers changed, original: 0000 */
+    public void removeAllViewsUnfiltered() {
         this.mBucket.reset();
         for (int i = this.mHiddenViews.size() - 1; i >= 0; i--) {
             this.mCallback.onLeftHiddenState((View) this.mHiddenViews.get(i));
@@ -245,7 +259,8 @@ class ChildHelper {
         this.mCallback.removeAllViews();
     }
 
-    View findHiddenNonRemovedView(int position) {
+    /* Access modifiers changed, original: 0000 */
+    public View findHiddenNonRemovedView(int position) {
         int count = this.mHiddenViews.size();
         for (int i = 0; i < count; i++) {
             View view = (View) this.mHiddenViews.get(i);
@@ -257,7 +272,8 @@ class ChildHelper {
         return null;
     }
 
-    void attachViewToParent(View child, int index, LayoutParams layoutParams, boolean hidden) {
+    /* Access modifiers changed, original: 0000 */
+    public void attachViewToParent(View child, int index, LayoutParams layoutParams, boolean hidden) {
         int offset;
         if (index < 0) {
             offset = this.mCallback.getChildCount();
@@ -271,25 +287,30 @@ class ChildHelper {
         this.mCallback.attachViewToParent(child, offset, layoutParams);
     }
 
-    int getChildCount() {
+    /* Access modifiers changed, original: 0000 */
+    public int getChildCount() {
         return this.mCallback.getChildCount() - this.mHiddenViews.size();
     }
 
-    int getUnfilteredChildCount() {
+    /* Access modifiers changed, original: 0000 */
+    public int getUnfilteredChildCount() {
         return this.mCallback.getChildCount();
     }
 
-    View getUnfilteredChildAt(int index) {
+    /* Access modifiers changed, original: 0000 */
+    public View getUnfilteredChildAt(int index) {
         return this.mCallback.getChildAt(index);
     }
 
-    void detachViewFromParent(int index) {
+    /* Access modifiers changed, original: 0000 */
+    public void detachViewFromParent(int index) {
         int offset = getOffset(index);
         this.mBucket.remove(offset);
         this.mCallback.detachViewFromParent(offset);
     }
 
-    int indexOfChild(View child) {
+    /* Access modifiers changed, original: 0000 */
+    public int indexOfChild(View child) {
         int index = this.mCallback.indexOfChild(child);
         if (index == -1 || this.mBucket.get(index)) {
             return -1;
@@ -297,11 +318,13 @@ class ChildHelper {
         return index - this.mBucket.countOnesBefore(index);
     }
 
-    boolean isHidden(View view) {
+    /* Access modifiers changed, original: 0000 */
+    public boolean isHidden(View view) {
         return this.mHiddenViews.contains(view);
     }
 
-    void hide(View view) {
+    /* Access modifiers changed, original: 0000 */
+    public void hide(View view) {
         int offset = this.mCallback.indexOfChild(view);
         if (offset < 0) {
             throw new IllegalArgumentException("view is not a child, cannot hide " + view);
@@ -310,7 +333,8 @@ class ChildHelper {
         hideViewInternal(view);
     }
 
-    void unhide(View view) {
+    /* Access modifiers changed, original: 0000 */
+    public void unhide(View view) {
         int offset = this.mCallback.indexOfChild(view);
         if (offset < 0) {
             throw new IllegalArgumentException("view is not a child, cannot hide " + view);
@@ -326,7 +350,8 @@ class ChildHelper {
         return this.mBucket.toString() + ", hidden list:" + this.mHiddenViews.size();
     }
 
-    boolean removeViewIfHidden(View view) {
+    /* Access modifiers changed, original: 0000 */
+    public boolean removeViewIfHidden(View view) {
         int index = this.mCallback.indexOfChild(view);
         if (index == -1) {
             if (unhideViewInternal(view)) {

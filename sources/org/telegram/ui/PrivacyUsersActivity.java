@@ -14,9 +14,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
@@ -74,7 +72,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                     break;
                 default:
                     view = new TextInfoCell(this.mContext);
-                    ((TextInfoCell) view).setText(LocaleController.getString("RemoveFromListText", R.string.RemoveFromListText));
+                    ((TextInfoCell) view).setText(LocaleController.getString("RemoveFromListText", NUM));
                     break;
             }
             return new Holder(view);
@@ -84,7 +82,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             if (holder.getItemViewType() == 0) {
                 User user = MessagesController.getInstance(PrivacyUsersActivity.this.currentAccount).getUser((Integer) PrivacyUsersActivity.this.uidArray.get(position));
                 UserCell userCell = (UserCell) holder.itemView;
-                CharSequence string = (user.phone == null || user.phone.length() == 0) ? LocaleController.getString("NumberUnknown", R.string.NumberUnknown) : PhoneFormat.getInstance().format("+" + user.phone);
+                CharSequence string = (user.phone == null || user.phone.length() == 0) ? LocaleController.getString("NumberUnknown", NUM) : PhoneFormat.getInstance().format("+" + user.phone);
                 userCell.setData(user, null, string, 0);
             }
         }
@@ -116,23 +114,23 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
 
     public View createView(Context context) {
         int i = 1;
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
         if (this.isGroup) {
             if (this.isAlwaysShare) {
-                this.actionBar.setTitle(LocaleController.getString("AlwaysAllow", R.string.AlwaysAllow));
+                this.actionBar.setTitle(LocaleController.getString("AlwaysAllow", NUM));
             } else {
-                this.actionBar.setTitle(LocaleController.getString("NeverAllow", R.string.NeverAllow));
+                this.actionBar.setTitle(LocaleController.getString("NeverAllow", NUM));
             }
         } else if (this.isAlwaysShare) {
-            this.actionBar.setTitle(LocaleController.getString("AlwaysShareWithTitle", R.string.AlwaysShareWithTitle));
+            this.actionBar.setTitle(LocaleController.getString("AlwaysShareWithTitle", NUM));
         } else {
-            this.actionBar.setTitle(LocaleController.getString("NeverShareWithTitle", R.string.NeverShareWithTitle));
+            this.actionBar.setTitle(LocaleController.getString("NeverShareWithTitle", NUM));
         }
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    PrivacyUsersActivity.this.lambda$checkDiscard$70$PassportActivity();
+                    PrivacyUsersActivity.this.finishFragment();
                 } else if (id == 1) {
                     Bundle args = new Bundle();
                     args.putBoolean(PrivacyUsersActivity.this.isAlwaysShare ? "isAlwaysShare" : "isNeverShare", true);
@@ -143,7 +141,8 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                 }
             }
 
-            final /* synthetic */ void lambda$onItemClick$0$PrivacyUsersActivity$1(ArrayList ids) {
+            /* Access modifiers changed, original: final|synthetic */
+            public final /* synthetic */ void lambda$onItemClick$0$PrivacyUsersActivity$1(ArrayList ids) {
                 Iterator it = ids.iterator();
                 while (it.hasNext()) {
                     Integer id1 = (Integer) it.next();
@@ -157,19 +156,19 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                 }
             }
         });
-        this.actionBar.createMenu().addItem(1, (int) R.drawable.plus);
+        this.actionBar.createMenu().addItem(1, NUM);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         this.emptyView = new EmptyTextProgressView(context);
         this.emptyView.showTextView();
-        this.emptyView.setText(LocaleController.getString("NoContacts", R.string.NoContacts));
+        this.emptyView.setText(LocaleController.getString("NoContacts", NUM));
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView = new RecyclerListView(context);
         this.listView.setEmptyView(this.emptyView);
         this.listView.setVerticalScrollBarEnabled(false);
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         RecyclerListView recyclerListView = this.listView;
-        Adapter listAdapter = new ListAdapter(context);
+        ListAdapter listAdapter = new ListAdapter(context);
         this.listViewAdapter = listAdapter;
         recyclerListView.setAdapter(listAdapter);
         recyclerListView = this.listView;
@@ -183,7 +182,8 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         return this.fragmentView;
     }
 
-    final /* synthetic */ void lambda$createView$0$PrivacyUsersActivity(View view, int position) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$0$PrivacyUsersActivity(View view, int position) {
         if (position < this.uidArray.size()) {
             Bundle args = new Bundle();
             args.putInt("user_id", ((Integer) this.uidArray.get(position)).intValue());
@@ -191,18 +191,20 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         }
     }
 
-    final /* synthetic */ boolean lambda$createView$2$PrivacyUsersActivity(View view, int position) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ boolean lambda$createView$2$PrivacyUsersActivity(View view, int position) {
         if (position < 0 || position >= this.uidArray.size() || getParentActivity() == null) {
             return false;
         }
         this.selectedUserId = ((Integer) this.uidArray.get(position)).intValue();
         Builder builder = new Builder(getParentActivity());
-        builder.setItems(new CharSequence[]{LocaleController.getString("Delete", R.string.Delete)}, new PrivacyUsersActivity$$Lambda$3(this));
+        builder.setItems(new CharSequence[]{LocaleController.getString("Delete", NUM)}, new PrivacyUsersActivity$$Lambda$3(this));
         showDialog(builder.create());
         return true;
     }
 
-    final /* synthetic */ void lambda$null$1$PrivacyUsersActivity(DialogInterface dialogInterface, int i) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$1$PrivacyUsersActivity(DialogInterface dialogInterface, int i) {
         if (i == 0) {
             this.uidArray.remove(Integer.valueOf(this.selectedUserId));
             this.listViewAdapter.notifyDataSetChanged();
@@ -261,7 +263,8 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         return r10;
     }
 
-    final /* synthetic */ void lambda$getThemeDescriptions$3$PrivacyUsersActivity() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$getThemeDescriptions$3$PrivacyUsersActivity() {
         if (this.listView != null) {
             int count = this.listView.getChildCount();
             for (int a = 0; a < count; a++) {

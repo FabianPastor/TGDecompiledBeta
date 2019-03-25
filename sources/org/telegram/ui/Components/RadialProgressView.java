@@ -98,7 +98,8 @@ public class RadialProgressView extends View {
         this.progressPaint.setColor(this.progressColor);
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         int x = (getMeasuredWidth() - this.size) / 2;
         int y = (getMeasuredHeight() - this.size) / 2;
         this.cicleRect.set((float) x, (float) y, (float) (this.size + x), (float) (this.size + y));

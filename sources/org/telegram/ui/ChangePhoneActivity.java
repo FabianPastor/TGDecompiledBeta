@@ -59,7 +59,6 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.SmsReceiver;
 import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_account_changePhone;
@@ -154,17 +153,17 @@ public class ChangePhoneActivity extends BaseFragment {
                 frameLayout = new FrameLayout(context);
                 addView(frameLayout, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3));
                 ImageView imageView = new ImageView(context);
-                imageView.setImageResource(R.drawable.phone_activate);
+                imageView.setImageResource(NUM);
                 if (LocaleController.isRTL) {
                     int i;
                     frameLayout.addView(imageView, LayoutHelper.createFrame(64, 76.0f, 19, 2.0f, 2.0f, 0.0f, 0.0f));
-                    View view = this.confirmTextView;
+                    TextView textView = this.confirmTextView;
                     if (LocaleController.isRTL) {
                         i = 5;
                     } else {
                         i = 3;
                     }
-                    frameLayout.addView(view, LayoutHelper.createFrame(-1, -2.0f, i, 82.0f, 0.0f, 0.0f, 0.0f));
+                    frameLayout.addView(textView, LayoutHelper.createFrame(-1, -2.0f, i, 82.0f, 0.0f, 0.0f, 0.0f));
                 } else {
                     frameLayout.addView(this.confirmTextView, LayoutHelper.createFrame(-1, -2.0f, LocaleController.isRTL ? 5 : 3, 0.0f, 0.0f, 82.0f, 0.0f));
                     frameLayout.addView(imageView, LayoutHelper.createFrame(64, 76.0f, 21, 0.0f, 2.0f, 0.0f, 2.0f));
@@ -175,20 +174,20 @@ public class ChangePhoneActivity extends BaseFragment {
                 addView(frameLayout, LayoutHelper.createLinear(-2, -2, 49));
                 if (this.currentType == 1) {
                     this.blackImageView = new ImageView(context);
-                    this.blackImageView.setImageResource(R.drawable.sms_devices);
+                    this.blackImageView.setImageResource(NUM);
                     this.blackImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteBlackText"), Mode.MULTIPLY));
                     frameLayout.addView(this.blackImageView, LayoutHelper.createFrame(-2, -2.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
                     this.blueImageView = new ImageView(context);
-                    this.blueImageView.setImageResource(R.drawable.sms_bubble);
+                    this.blueImageView.setImageResource(NUM);
                     this.blueImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_actionBackground"), Mode.MULTIPLY));
                     frameLayout.addView(this.blueImageView, LayoutHelper.createFrame(-2, -2.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
-                    this.titleTextView.setText(LocaleController.getString("SentAppCodeTitle", R.string.SentAppCodeTitle));
+                    this.titleTextView.setText(LocaleController.getString("SentAppCodeTitle", NUM));
                 } else {
                     this.blueImageView = new ImageView(context);
-                    this.blueImageView.setImageResource(R.drawable.sms_code);
+                    this.blueImageView.setImageResource(NUM);
                     this.blueImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_actionBackground"), Mode.MULTIPLY));
                     frameLayout.addView(this.blueImageView, LayoutHelper.createFrame(-2, -2.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
-                    this.titleTextView.setText(LocaleController.getString("SentSmsCodeTitle", R.string.SentSmsCodeTitle));
+                    this.titleTextView.setText(LocaleController.getString("SentSmsCodeTitle", NUM));
                 }
                 addView(this.titleTextView, LayoutHelper.createLinear(-2, -2, 49, 0, 18, 0, 0));
                 addView(this.confirmTextView, LayoutHelper.createLinear(-2, -2, 49, 0, 17, 0, 0));
@@ -200,7 +199,8 @@ public class ChangePhoneActivity extends BaseFragment {
                 this.codeFieldContainer.setVisibility(8);
             }
             this.timeText = new TextView(context, ChangePhoneActivity.this) {
-                protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                /* Access modifiers changed, original: protected */
+                public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                     super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), Integer.MIN_VALUE));
                 }
             };
@@ -219,7 +219,8 @@ public class ChangePhoneActivity extends BaseFragment {
                 addView(this.timeText, LayoutHelper.createLinear(-2, -2, 49));
             }
             this.problemText = new TextView(context, ChangePhoneActivity.this) {
-                protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                /* Access modifiers changed, original: protected */
+                public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                     super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), Integer.MIN_VALUE));
                 }
             };
@@ -229,15 +230,16 @@ public class ChangePhoneActivity extends BaseFragment {
             this.problemText.setTextSize(1, 15.0f);
             this.problemText.setGravity(49);
             if (this.currentType == 1) {
-                this.problemText.setText(LocaleController.getString("DidNotGetTheCodeSms", R.string.DidNotGetTheCodeSms));
+                this.problemText.setText(LocaleController.getString("DidNotGetTheCodeSms", NUM));
             } else {
-                this.problemText.setText(LocaleController.getString("DidNotGetTheCode", R.string.DidNotGetTheCode));
+                this.problemText.setText(LocaleController.getString("DidNotGetTheCode", NUM));
             }
             addView(this.problemText, LayoutHelper.createLinear(-2, -2, 49));
             this.problemText.setOnClickListener(new ChangePhoneActivity$LoginActivitySmsView$$Lambda$0(this));
         }
 
-        final /* synthetic */ void lambda$new$0$ChangePhoneActivity$LoginActivitySmsView(View v) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$new$0$ChangePhoneActivity$LoginActivitySmsView(View v) {
             boolean email = false;
             if (!this.nextPressed) {
                 if ((this.nextType == 4 && this.currentType == 2) || this.nextType == 0) {
@@ -255,7 +257,7 @@ public class ChangePhoneActivity extends BaseFragment {
                         getContext().startActivity(Intent.createChooser(mailer, "Send email..."));
                         return;
                     } catch (Exception e) {
-                        AlertsCreator.showSimpleAlert(ChangePhoneActivity.this, LocaleController.getString("NoMailInstalled", R.string.NoMailInstalled));
+                        AlertsCreator.showSimpleAlert(ChangePhoneActivity.this, LocaleController.getString("NoMailInstalled", NUM));
                         return;
                     }
                 }
@@ -263,7 +265,8 @@ public class ChangePhoneActivity extends BaseFragment {
             }
         }
 
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        /* Access modifiers changed, original: protected */
+        public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
             if (this.currentType != 3 && this.blueImageView != null) {
                 int innerHeight = ((this.blueImageView.getMeasuredHeight() + this.titleTextView.getMeasuredHeight()) + this.confirmTextView.getMeasuredHeight()) + AndroidUtilities.dp(35.0f);
@@ -279,7 +282,8 @@ public class ChangePhoneActivity extends BaseFragment {
             }
         }
 
-        protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        /* Access modifiers changed, original: protected */
+        public void onLayout(boolean changed, int l, int t, int r, int b) {
             super.onLayout(changed, l, t, r, b);
             if (this.currentType != 3 && this.blueImageView != null) {
                 int h;
@@ -316,11 +320,13 @@ public class ChangePhoneActivity extends BaseFragment {
             ConnectionsManager.getInstance(ChangePhoneActivity.this.currentAccount).sendRequest(req, new ChangePhoneActivity$LoginActivitySmsView$$Lambda$1(this, params, req), 2);
         }
 
-        final /* synthetic */ void lambda$resendCode$3$ChangePhoneActivity$LoginActivitySmsView(Bundle params, TL_auth_resendCode req, TLObject response, TL_error error) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$resendCode$3$ChangePhoneActivity$LoginActivitySmsView(Bundle params, TL_auth_resendCode req, TLObject response, TL_error error) {
             AndroidUtilities.runOnUIThread(new ChangePhoneActivity$LoginActivitySmsView$$Lambda$9(this, error, params, response, req));
         }
 
-        final /* synthetic */ void lambda$null$2$ChangePhoneActivity$LoginActivitySmsView(TL_error error, Bundle params, TLObject response, TL_auth_resendCode req) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$null$2$ChangePhoneActivity$LoginActivitySmsView(TL_error error, Bundle params, TLObject response, TL_auth_resendCode req) {
             this.nextPressed = false;
             if (error == null) {
                 ChangePhoneActivity.this.fillNextCodeParams(params, (TL_auth_sentCode) response);
@@ -333,16 +339,17 @@ public class ChangePhoneActivity extends BaseFragment {
             ChangePhoneActivity.this.needHideProgress();
         }
 
-        final /* synthetic */ void lambda$null$1$ChangePhoneActivity$LoginActivitySmsView(DialogInterface dialog1, int which) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$null$1$ChangePhoneActivity$LoginActivitySmsView(DialogInterface dialog1, int which) {
             onBackPressed(true);
-            ChangePhoneActivity.this.lambda$createView$1$AudioSelectActivity();
+            ChangePhoneActivity.this.finishFragment();
         }
 
         public String getHeaderName() {
             if (this.currentType == 1) {
                 return this.phone;
             }
-            return LocaleController.getString("YourCode", R.string.YourCode);
+            return LocaleController.getString("YourCode", NUM);
         }
 
         public boolean needBackButton() {
@@ -389,7 +396,7 @@ public class ChangePhoneActivity extends BaseFragment {
                         this.codeField[a].setCursorColor(Theme.getColor("windowBackgroundWhiteBlackText"));
                         this.codeField[a].setCursorSize(AndroidUtilities.dp(20.0f));
                         this.codeField[a].setCursorWidth(1.5f);
-                        Drawable pressedDrawable = getResources().getDrawable(R.drawable.search_dark_activated).mutate();
+                        Drawable pressedDrawable = getResources().getDrawable(NUM).mutate();
                         pressedDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteInputFieldActivated"), Mode.MULTIPLY));
                         this.codeField[a].setBackgroundDrawable(pressedDrawable);
                         this.codeField[a].setImeOptions(NUM);
@@ -456,13 +463,13 @@ public class ChangePhoneActivity extends BaseFragment {
                     String number = PhoneFormat.getInstance().format(this.phone);
                     CharSequence str = "";
                     if (this.currentType == 1) {
-                        str = AndroidUtilities.replaceTags(LocaleController.getString("SentAppCode", R.string.SentAppCode));
+                        str = AndroidUtilities.replaceTags(LocaleController.getString("SentAppCode", NUM));
                     } else if (this.currentType == 2) {
-                        str = AndroidUtilities.replaceTags(LocaleController.formatString("SentSmsCode", R.string.SentSmsCode, LocaleController.addNbsp(number)));
+                        str = AndroidUtilities.replaceTags(LocaleController.formatString("SentSmsCode", NUM, LocaleController.addNbsp(number)));
                     } else if (this.currentType == 3) {
-                        str = AndroidUtilities.replaceTags(LocaleController.formatString("SentCallCode", R.string.SentCallCode, LocaleController.addNbsp(number)));
+                        str = AndroidUtilities.replaceTags(LocaleController.formatString("SentCallCode", NUM, LocaleController.addNbsp(number)));
                     } else if (this.currentType == 4) {
-                        str = AndroidUtilities.replaceTags(LocaleController.formatString("SentCallOnly", R.string.SentCallOnly, LocaleController.addNbsp(number)));
+                        str = AndroidUtilities.replaceTags(LocaleController.formatString("SentCallOnly", NUM, LocaleController.addNbsp(number)));
                     }
                     this.confirmTextView.setText(str);
                     if (this.currentType != 3) {
@@ -481,18 +488,18 @@ public class ChangePhoneActivity extends BaseFragment {
                         this.problemText.setVisibility(8);
                         this.timeText.setVisibility(0);
                         if (this.nextType == 4) {
-                            this.timeText.setText(LocaleController.formatString("CallText", R.string.CallText, Integer.valueOf(1), Integer.valueOf(0)));
+                            this.timeText.setText(LocaleController.formatString("CallText", NUM, Integer.valueOf(1), Integer.valueOf(0)));
                         } else if (this.nextType == 2) {
-                            this.timeText.setText(LocaleController.formatString("SmsText", R.string.SmsText, Integer.valueOf(1), Integer.valueOf(0)));
+                            this.timeText.setText(LocaleController.formatString("SmsText", NUM, Integer.valueOf(1), Integer.valueOf(0)));
                         }
                         createTimer();
                     } else if (this.currentType == 2 && (this.nextType == 4 || this.nextType == 3)) {
-                        this.timeText.setText(LocaleController.formatString("CallText", R.string.CallText, Integer.valueOf(2), Integer.valueOf(0)));
+                        this.timeText.setText(LocaleController.formatString("CallText", NUM, Integer.valueOf(2), Integer.valueOf(0)));
                         this.problemText.setVisibility(this.time < 1000 ? 0 : 8);
                         this.timeText.setVisibility(this.time < 1000 ? 8 : 0);
                         createTimer();
                     } else if (this.currentType == 4 && this.nextType == 2) {
-                        this.timeText.setText(LocaleController.formatString("SmsText", R.string.SmsText, Integer.valueOf(2), Integer.valueOf(0)));
+                        this.timeText.setText(LocaleController.formatString("SmsText", NUM, Integer.valueOf(2), Integer.valueOf(0)));
                         this.problemText.setVisibility(this.time < 1000 ? 0 : 8);
                         this.timeText.setVisibility(this.time < 1000 ? 8 : 0);
                         createTimer();
@@ -505,7 +512,8 @@ public class ChangePhoneActivity extends BaseFragment {
             }
         }
 
-        final /* synthetic */ boolean lambda$setParams$4$ChangePhoneActivity$LoginActivitySmsView(int num, View v, int keyCode, KeyEvent event) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ boolean lambda$setParams$4$ChangePhoneActivity$LoginActivitySmsView(int num, View v, int keyCode, KeyEvent event) {
             if (keyCode != 67 || this.codeField[num].length() != 0 || num <= 0) {
                 return false;
             }
@@ -515,7 +523,8 @@ public class ChangePhoneActivity extends BaseFragment {
             return true;
         }
 
-        final /* synthetic */ boolean lambda$setParams$5$ChangePhoneActivity$LoginActivitySmsView(TextView textView, int i, KeyEvent keyEvent) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ boolean lambda$setParams$5$ChangePhoneActivity$LoginActivitySmsView(TextView textView, int i, KeyEvent keyEvent) {
             if (i != 5) {
                 return false;
             }
@@ -533,7 +542,8 @@ public class ChangePhoneActivity extends BaseFragment {
                         AndroidUtilities.runOnUIThread(new ChangePhoneActivity$LoginActivitySmsView$4$$Lambda$0(this));
                     }
 
-                    final /* synthetic */ void lambda$run$0$ChangePhoneActivity$LoginActivitySmsView$4() {
+                    /* Access modifiers changed, original: final|synthetic */
+                    public final /* synthetic */ void lambda$run$0$ChangePhoneActivity$LoginActivitySmsView$4() {
                         double currentTime = (double) System.currentTimeMillis();
                         double diff = currentTime - LoginActivitySmsView.this.lastCodeTime;
                         LoginActivitySmsView.this.lastCodeTime = currentTime;
@@ -556,7 +566,7 @@ public class ChangePhoneActivity extends BaseFragment {
                         this.codeTimer = null;
                     }
                 }
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
         }
@@ -575,9 +585,9 @@ public class ChangePhoneActivity extends BaseFragment {
                                     if (LoginActivitySmsView.this.time >= 1000) {
                                         int seconds = (LoginActivitySmsView.this.time / 1000) - (((LoginActivitySmsView.this.time / 1000) / 60) * 60);
                                         if (LoginActivitySmsView.this.nextType == 4 || LoginActivitySmsView.this.nextType == 3) {
-                                            LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("CallText", R.string.CallText, Integer.valueOf(minutes), Integer.valueOf(seconds)));
+                                            LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("CallText", NUM, Integer.valueOf(minutes), Integer.valueOf(seconds)));
                                         } else if (LoginActivitySmsView.this.nextType == 2) {
-                                            LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("SmsText", R.string.SmsText, Integer.valueOf(minutes), Integer.valueOf(seconds)));
+                                            LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("SmsText", NUM, Integer.valueOf(minutes), Integer.valueOf(seconds)));
                                         }
                                         if (LoginActivitySmsView.this.progressView != null) {
                                             LoginActivitySmsView.this.progressView.setProgress(1.0f - (((float) LoginActivitySmsView.this.time) / ((float) LoginActivitySmsView.this.timeout)));
@@ -599,9 +609,9 @@ public class ChangePhoneActivity extends BaseFragment {
                                     } else {
                                         if (LoginActivitySmsView.this.nextType == 4 || LoginActivitySmsView.this.nextType == 2) {
                                             if (LoginActivitySmsView.this.nextType == 4) {
-                                                LoginActivitySmsView.this.timeText.setText(LocaleController.getString("Calling", R.string.Calling));
+                                                LoginActivitySmsView.this.timeText.setText(LocaleController.getString("Calling", NUM));
                                             } else {
-                                                LoginActivitySmsView.this.timeText.setText(LocaleController.getString("SendingSms", R.string.SendingSms));
+                                                LoginActivitySmsView.this.timeText.setText(LocaleController.getString("SendingSms", NUM));
                                             }
                                             LoginActivitySmsView.this.createCodeTimer();
                                             TL_auth_resendCode req = new TL_auth_resendCode();
@@ -618,13 +628,15 @@ public class ChangePhoneActivity extends BaseFragment {
                                     }
                                 }
 
-                                final /* synthetic */ void lambda$run$1$ChangePhoneActivity$LoginActivitySmsView$5$1(TLObject response, TL_error error) {
+                                /* Access modifiers changed, original: final|synthetic */
+                                public final /* synthetic */ void lambda$run$1$ChangePhoneActivity$LoginActivitySmsView$5$1(TLObject response, TL_error error) {
                                     if (error != null && error.text != null) {
                                         AndroidUtilities.runOnUIThread(new ChangePhoneActivity$LoginActivitySmsView$5$1$$Lambda$1(this, error));
                                     }
                                 }
 
-                                final /* synthetic */ void lambda$null$0$ChangePhoneActivity$LoginActivitySmsView$5$1(TL_error error) {
+                                /* Access modifiers changed, original: final|synthetic */
+                                public final /* synthetic */ void lambda$null$0$ChangePhoneActivity$LoginActivitySmsView$5$1(TL_error error) {
                                     LoginActivitySmsView.this.lastError = error.text;
                                 }
                             });
@@ -642,7 +654,7 @@ public class ChangePhoneActivity extends BaseFragment {
                         this.timeTimer = null;
                     }
                 }
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
         }
@@ -684,11 +696,13 @@ public class ChangePhoneActivity extends BaseFragment {
             }
         }
 
-        final /* synthetic */ void lambda$onNextPressed$7$ChangePhoneActivity$LoginActivitySmsView(TL_account_changePhone req, TLObject response, TL_error error) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$onNextPressed$7$ChangePhoneActivity$LoginActivitySmsView(TL_account_changePhone req, TLObject response, TL_error error) {
             AndroidUtilities.runOnUIThread(new ChangePhoneActivity$LoginActivitySmsView$$Lambda$8(this, error, response, req));
         }
 
-        final /* synthetic */ void lambda$null$6$ChangePhoneActivity$LoginActivitySmsView(TL_error error, TLObject response, TL_account_changePhone req) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$null$6$ChangePhoneActivity$LoginActivitySmsView(TL_error error, TLObject response, TL_account_changePhone req) {
             ChangePhoneActivity.this.needHideProgress();
             this.nextPressed = false;
             if (error == null) {
@@ -701,7 +715,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 users.add(user);
                 MessagesStorage.getInstance(ChangePhoneActivity.this.currentAccount).putUsersAndChats(users, null, true, true);
                 MessagesController.getInstance(ChangePhoneActivity.this.currentAccount).putUser(user, false);
-                ChangePhoneActivity.this.lambda$createView$1$AudioSelectActivity();
+                ChangePhoneActivity.this.finishFragment();
                 NotificationCenter.getInstance(ChangePhoneActivity.this.currentAccount).postNotificationName(NotificationCenter.mainUserInfoChanged, new Object[0]);
                 return;
             }
@@ -751,15 +765,16 @@ public class ChangePhoneActivity extends BaseFragment {
                 return true;
             }
             Builder builder = new Builder(ChangePhoneActivity.this.getParentActivity());
-            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-            builder.setMessage(LocaleController.getString("StopVerification", R.string.StopVerification));
-            builder.setPositiveButton(LocaleController.getString("Continue", R.string.Continue), null);
-            builder.setNegativeButton(LocaleController.getString("Stop", R.string.Stop), new ChangePhoneActivity$LoginActivitySmsView$$Lambda$5(this));
+            builder.setTitle(LocaleController.getString("AppName", NUM));
+            builder.setMessage(LocaleController.getString("StopVerification", NUM));
+            builder.setPositiveButton(LocaleController.getString("Continue", NUM), null);
+            builder.setNegativeButton(LocaleController.getString("Stop", NUM), new ChangePhoneActivity$LoginActivitySmsView$$Lambda$5(this));
             ChangePhoneActivity.this.showDialog(builder.create());
             return false;
         }
 
-        final /* synthetic */ void lambda$onBackPressed$8$ChangePhoneActivity$LoginActivitySmsView(DialogInterface dialogInterface, int i) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$onBackPressed$8$ChangePhoneActivity$LoginActivitySmsView(DialogInterface dialogInterface, int i) {
             onBackPressed(true);
             ChangePhoneActivity.this.setPage(0, true, null, true);
         }
@@ -788,7 +803,8 @@ public class ChangePhoneActivity extends BaseFragment {
             }
         }
 
-        final /* synthetic */ void lambda$onShow$10$ChangePhoneActivity$LoginActivitySmsView() {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$onShow$10$ChangePhoneActivity$LoginActivitySmsView() {
             if (this.codeField != null) {
                 int a = this.codeField.length - 1;
                 while (a >= 0) {
@@ -849,7 +865,7 @@ public class ChangePhoneActivity extends BaseFragment {
             this.countryButton.setSingleLine(true);
             this.countryButton.setEllipsize(TruncateAt.END);
             this.countryButton.setGravity((LocaleController.isRTL ? 5 : 3) | 1);
-            this.countryButton.setBackgroundResource(R.drawable.spinner_states);
+            this.countryButton.setBackgroundResource(NUM);
             addView(this.countryButton, LayoutHelper.createLinear(-1, 36, 0.0f, 0.0f, 0.0f, 14.0f));
             this.countryButton.setOnClickListener(new ChangePhoneActivity$PhoneView$$Lambda$0(this));
             this.view = new View(context);
@@ -892,7 +908,7 @@ public class ChangePhoneActivity extends BaseFragment {
                         String text = PhoneFormat.stripExceptNumbers(PhoneView.this.codeField.getText().toString());
                         PhoneView.this.codeField.setText(text);
                         if (text.length() == 0) {
-                            PhoneView.this.countryButton.setText(LocaleController.getString("ChooseCountry", R.string.ChooseCountry));
+                            PhoneView.this.countryButton.setText(LocaleController.getString("ChooseCountry", NUM));
                             PhoneView.this.phoneField.setHintText(null);
                             PhoneView.this.countryState = 1;
                         } else {
@@ -928,12 +944,12 @@ public class ChangePhoneActivity extends BaseFragment {
                                     PhoneView.this.phoneField.setHintText(hint != null ? hint.replace('X', 8211) : null);
                                     PhoneView.this.countryState = 0;
                                 } else {
-                                    PhoneView.this.countryButton.setText(LocaleController.getString("WrongCountry", R.string.WrongCountry));
+                                    PhoneView.this.countryButton.setText(LocaleController.getString("WrongCountry", NUM));
                                     PhoneView.this.phoneField.setHintText(null);
                                     PhoneView.this.countryState = 2;
                                 }
                             } else {
-                                PhoneView.this.countryButton.setText(LocaleController.getString("WrongCountry", R.string.WrongCountry));
+                                PhoneView.this.countryButton.setText(LocaleController.getString("WrongCountry", NUM));
                                 PhoneView.this.phoneField.setHintText(null);
                                 PhoneView.this.countryState = 2;
                             }
@@ -1041,7 +1057,7 @@ public class ChangePhoneActivity extends BaseFragment {
             this.phoneField.setOnEditorActionListener(new ChangePhoneActivity$PhoneView$$Lambda$2(this));
             this.phoneField.setOnKeyListener(new ChangePhoneActivity$PhoneView$$Lambda$3(this));
             this.textView2 = new TextView(context);
-            this.textView2.setText(LocaleController.getString("ChangePhoneHelp", R.string.ChangePhoneHelp));
+            this.textView2.setText(LocaleController.getString("ChangePhoneHelp", NUM));
             this.textView2.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText6"));
             this.textView2.setTextSize(1, 14.0f);
             this.textView2.setGravity(LocaleController.isRTL ? 5 : 3);
@@ -1065,7 +1081,7 @@ public class ChangePhoneActivity extends BaseFragment {
                     languageMap.put(args[1], args[2]);
                 }
                 bufferedReader.close();
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
             Collections.sort(this.countriesArray, ChangePhoneActivity$PhoneView$$Lambda$4.$instance);
@@ -1075,7 +1091,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 if (telephonyManager != null) {
                     country = telephonyManager.getSimCountryIso().toUpperCase();
                 }
-            } catch (Throwable e2) {
+            } catch (Exception e2) {
                 FileLog.e(e2);
             }
             if (country != null) {
@@ -1086,7 +1102,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 }
             }
             if (this.codeField.length() == 0) {
-                this.countryButton.setText(LocaleController.getString("ChooseCountry", R.string.ChooseCountry));
+                this.countryButton.setText(LocaleController.getString("ChooseCountry", NUM));
                 this.phoneField.setHintText(null);
                 this.countryState = 1;
             }
@@ -1100,24 +1116,28 @@ public class ChangePhoneActivity extends BaseFragment {
             this.codeField.requestFocus();
         }
 
-        final /* synthetic */ void lambda$new$2$ChangePhoneActivity$PhoneView(View view) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$new$2$ChangePhoneActivity$PhoneView(View view) {
             CountrySelectActivity fragment = new CountrySelectActivity(true);
             fragment.setCountrySelectActivityDelegate(new ChangePhoneActivity$PhoneView$$Lambda$7(this));
             ChangePhoneActivity.this.presentFragment(fragment);
         }
 
-        final /* synthetic */ void lambda$null$1$ChangePhoneActivity$PhoneView(String name, String shortName) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$null$1$ChangePhoneActivity$PhoneView(String name, String shortName) {
             selectCountry(name);
             AndroidUtilities.runOnUIThread(new ChangePhoneActivity$PhoneView$$Lambda$8(this), 300);
             this.phoneField.requestFocus();
             this.phoneField.setSelection(this.phoneField.length());
         }
 
-        final /* synthetic */ void lambda$null$0$ChangePhoneActivity$PhoneView() {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$null$0$ChangePhoneActivity$PhoneView() {
             AndroidUtilities.showKeyboard(this.phoneField);
         }
 
-        final /* synthetic */ boolean lambda$new$3$ChangePhoneActivity$PhoneView(TextView textView, int i, KeyEvent keyEvent) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ boolean lambda$new$3$ChangePhoneActivity$PhoneView(TextView textView, int i, KeyEvent keyEvent) {
             if (i != 5) {
                 return false;
             }
@@ -1126,7 +1146,8 @@ public class ChangePhoneActivity extends BaseFragment {
             return true;
         }
 
-        final /* synthetic */ boolean lambda$new$4$ChangePhoneActivity$PhoneView(TextView textView, int i, KeyEvent keyEvent) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ boolean lambda$new$4$ChangePhoneActivity$PhoneView(TextView textView, int i, KeyEvent keyEvent) {
             if (i != 5) {
                 return false;
             }
@@ -1134,7 +1155,8 @@ public class ChangePhoneActivity extends BaseFragment {
             return true;
         }
 
-        final /* synthetic */ boolean lambda$new$5$ChangePhoneActivity$PhoneView(View v, int keyCode, KeyEvent event) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ boolean lambda$new$5$ChangePhoneActivity$PhoneView(View v, int keyCode, KeyEvent event) {
             if (keyCode != 67 || this.phoneField.length() != 0) {
                 return false;
             }
@@ -1192,9 +1214,9 @@ public class ChangePhoneActivity extends BaseFragment {
                             if (preferences.getBoolean("firstlogin", true) || ChangePhoneActivity.this.getParentActivity().shouldShowRequestPermissionRationale("android.permission.READ_PHONE_STATE")) {
                                 preferences.edit().putBoolean("firstlogin", false).commit();
                                 Builder builder = new Builder(ChangePhoneActivity.this.getParentActivity());
-                                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-                                builder.setMessage(LocaleController.getString("AllowReadCall", R.string.AllowReadCall));
+                                builder.setTitle(LocaleController.getString("AppName", NUM));
+                                builder.setPositiveButton(LocaleController.getString("OK", NUM), null);
+                                builder.setMessage(LocaleController.getString("AllowReadCall", NUM));
                                 ChangePhoneActivity.this.permissionsDialog = ChangePhoneActivity.this.showDialog(builder.create());
                                 return;
                             }
@@ -1204,9 +1226,9 @@ public class ChangePhoneActivity extends BaseFragment {
                     }
                 }
                 if (this.countryState == 1) {
-                    AlertsCreator.showSimpleAlert(ChangePhoneActivity.this, LocaleController.getString("ChooseCountry", R.string.ChooseCountry));
+                    AlertsCreator.showSimpleAlert(ChangePhoneActivity.this, LocaleController.getString("ChooseCountry", NUM));
                 } else if (this.codeField.length() == 0) {
-                    AlertsCreator.showSimpleAlert(ChangePhoneActivity.this, LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
+                    AlertsCreator.showSimpleAlert(ChangePhoneActivity.this, LocaleController.getString("InvalidPhoneNumber", NUM));
                 } else {
                     TL_account_sendChangePhoneCode req = new TL_account_sendChangePhoneCode();
                     String phone = PhoneFormat.stripExceptNumbers("" + this.codeField.getText() + this.phoneField.getText());
@@ -1246,7 +1268,7 @@ public class ChangePhoneActivity extends BaseFragment {
                                     req.settings.allow_flashcall = false;
                                 }
                             }
-                        } catch (Throwable e2) {
+                        } catch (Exception e2) {
                             req.settings.allow_flashcall = false;
                             FileLog.e(e2);
                         }
@@ -1255,7 +1277,7 @@ public class ChangePhoneActivity extends BaseFragment {
                     params.putString("phone", "+" + this.codeField.getText() + " " + this.phoneField.getText());
                     try {
                         params.putString("ephone", "+" + PhoneFormat.stripExceptNumbers(this.codeField.getText().toString()) + " " + PhoneFormat.stripExceptNumbers(this.phoneField.getText().toString()));
-                    } catch (Throwable e22) {
+                    } catch (Exception e22) {
                         FileLog.e(e22);
                         params.putString("ephone", "+" + phone);
                     }
@@ -1267,11 +1289,13 @@ public class ChangePhoneActivity extends BaseFragment {
             }
         }
 
-        final /* synthetic */ void lambda$onNextPressed$7$ChangePhoneActivity$PhoneView(Bundle params, TL_account_sendChangePhoneCode req, TLObject response, TL_error error) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$onNextPressed$7$ChangePhoneActivity$PhoneView(Bundle params, TL_account_sendChangePhoneCode req, TLObject response, TL_error error) {
             AndroidUtilities.runOnUIThread(new ChangePhoneActivity$PhoneView$$Lambda$6(this, error, params, response, req));
         }
 
-        final /* synthetic */ void lambda$null$6$ChangePhoneActivity$PhoneView(TL_error error, Bundle params, TLObject response, TL_account_sendChangePhoneCode req) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$null$6$ChangePhoneActivity$PhoneView(TL_error error, Bundle params, TLObject response, TL_account_sendChangePhoneCode req) {
             this.nextPressed = false;
             if (error == null) {
                 ChangePhoneActivity.this.fillNextCodeParams(params, (TL_auth_sentCode) response);
@@ -1297,7 +1321,7 @@ public class ChangePhoneActivity extends BaseFragment {
         }
 
         public String getHeaderName() {
-            return LocaleController.getString("ChangePhoneNewNumber", R.string.ChangePhoneNewNumber);
+            return LocaleController.getString("ChangePhoneNewNumber", NUM);
         }
     }
 
@@ -1317,7 +1341,8 @@ public class ChangePhoneActivity extends BaseFragment {
             invalidate();
         }
 
-        protected void onDraw(Canvas canvas) {
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
             int start = (int) (((float) getMeasuredWidth()) * this.progress);
             canvas.drawRect(0.0f, 0.0f, (float) start, (float) getMeasuredHeight(), this.paint2);
             canvas.drawRect((float) start, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.paint);
@@ -1334,7 +1359,7 @@ public class ChangePhoneActivity extends BaseFragment {
         if (this.progressDialog != null) {
             try {
                 this.progressDialog.dismiss();
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
             this.progressDialog = null;
@@ -1343,18 +1368,18 @@ public class ChangePhoneActivity extends BaseFragment {
     }
 
     public View createView(Context context) {
-        this.actionBar.setTitle(LocaleController.getString("AppName", R.string.AppName));
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setTitle(LocaleController.getString("AppName", NUM));
+        this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == 1) {
                     ChangePhoneActivity.this.views[ChangePhoneActivity.this.currentViewNum].onNextPressed();
                 } else if (id == -1) {
-                    ChangePhoneActivity.this.lambda$createView$1$AudioSelectActivity();
+                    ChangePhoneActivity.this.finishFragment();
                 }
             }
         });
-        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
+        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f));
         ScrollView scrollView = new ScrollView(context) {
             public boolean requestChildRectangleOnScreen(View child, Rect rectangle, boolean immediate) {
                 if (ChangePhoneActivity.this.currentViewNum == 1 || ChangePhoneActivity.this.currentViewNum == 2 || ChangePhoneActivity.this.currentViewNum == 4) {
@@ -1363,7 +1388,8 @@ public class ChangePhoneActivity extends BaseFragment {
                 return super.requestChildRectangleOnScreen(child, rectangle, immediate);
             }
 
-            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            /* Access modifiers changed, original: protected */
+            public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 ChangePhoneActivity.this.scrollHeight = MeasureSpec.getSize(heightMeasureSpec) - AndroidUtilities.dp(30.0f);
                 super.onMeasure(widthMeasureSpec, heightMeasureSpec);
             }
@@ -1401,7 +1427,8 @@ public class ChangePhoneActivity extends BaseFragment {
         }
     }
 
-    protected void onDialogDismiss(Dialog dialog) {
+    /* Access modifiers changed, original: protected */
+    public void onDialogDismiss(Dialog dialog) {
         if (VERSION.SDK_INT >= 23 && dialog == this.permissionsDialog && !this.permissionsItems.isEmpty()) {
             getParentActivity().requestPermissions((String[]) this.permissionsItems.toArray(new String[this.permissionsItems.size()]), 6);
         }
@@ -1440,7 +1467,7 @@ public class ChangePhoneActivity extends BaseFragment {
         if (this.progressDialog != null) {
             try {
                 this.progressDialog.dismiss();
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
             this.progressDialog = null;

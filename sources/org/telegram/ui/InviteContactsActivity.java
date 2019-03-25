@@ -42,11 +42,8 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
-import org.telegram.messenger.support.widget.RecyclerView.ItemDecoration;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
@@ -118,7 +115,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
             switch (viewType) {
                 case 1:
                     view = new InviteTextCell(this.context);
-                    ((InviteTextCell) view).setTextAndIcon(LocaleController.getString("ShareTelegram", R.string.ShareTelegram), R.drawable.share);
+                    ((InviteTextCell) view).setTextAndIcon(LocaleController.getString("ShareTelegram", NUM), NUM);
                     break;
                 default:
                     view = new InviteUserCell(this.context, true);
@@ -170,7 +167,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
                 if (this.searchTimer != null) {
                     this.searchTimer.cancel();
                 }
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
             if (query == null) {
@@ -185,17 +182,19 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
                     try {
                         InviteAdapter.this.searchTimer.cancel();
                         InviteAdapter.this.searchTimer = null;
-                    } catch (Throwable e) {
+                    } catch (Exception e) {
                         FileLog.e(e);
                     }
                     AndroidUtilities.runOnUIThread(new InviteContactsActivity$InviteAdapter$1$$Lambda$0(this, query));
                 }
 
-                final /* synthetic */ void lambda$run$1$InviteContactsActivity$InviteAdapter$1(String query) {
+                /* Access modifiers changed, original: final|synthetic */
+                public final /* synthetic */ void lambda$run$1$InviteContactsActivity$InviteAdapter$1(String query) {
                     Utilities.searchQueue.postRunnable(new InviteContactsActivity$InviteAdapter$1$$Lambda$1(this, query));
                 }
 
-                final /* synthetic */ void lambda$null$0$InviteContactsActivity$InviteAdapter$1(String query) {
+                /* Access modifiers changed, original: final|synthetic */
+                public final /* synthetic */ void lambda$null$0$InviteContactsActivity$InviteAdapter$1(String query) {
                     String search1 = query.trim().toLowerCase();
                     if (search1.length() == 0) {
                         InviteAdapter.this.updateSearchResults(new ArrayList(), new ArrayList());
@@ -240,7 +239,8 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
             AndroidUtilities.runOnUIThread(new InviteContactsActivity$InviteAdapter$$Lambda$0(this, users, names));
         }
 
-        final /* synthetic */ void lambda$updateSearchResults$0$InviteContactsActivity$InviteAdapter(ArrayList users, ArrayList names) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$updateSearchResults$0$InviteContactsActivity$InviteAdapter(ArrayList users, ArrayList names) {
             this.searchResult = users;
             this.searchResultNames = names;
             notifyDataSetChanged();
@@ -270,7 +270,8 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
             super(context);
         }
 
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        /* Access modifiers changed, original: protected */
+        public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             int minWidth;
             int count = getChildCount();
             int width = MeasureSpec.getSize(widthMeasureSpec);
@@ -356,7 +357,8 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
             setMeasuredDimension(width, InviteContactsActivity.this.containerHeight);
         }
 
-        protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        /* Access modifiers changed, original: protected */
+        public void onLayout(boolean changed, int left, int top, int right, int bottom) {
             int count = getChildCount();
             for (int a = 0; a < count; a++) {
                 View child = getChildAt(a);
@@ -462,18 +464,19 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         this.allSpans.clear();
         this.selectedContacts.clear();
         this.currentDeletingSpan = null;
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("InviteFriends", R.string.InviteFriends));
+        this.actionBar.setTitle(LocaleController.getString("InviteFriends", NUM));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    InviteContactsActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
+                    InviteContactsActivity.this.finishFragment();
                 }
             }
         });
         this.fragmentView = new ViewGroup(context) {
-            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            /* Access modifiers changed, original: protected */
+            public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int maxSize;
                 int h;
                 int width = MeasureSpec.getSize(widthMeasureSpec);
@@ -496,7 +499,8 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
                 InviteContactsActivity.this.emptyView.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec((height - InviteContactsActivity.this.scrollView.getMeasuredHeight()) - AndroidUtilities.dp(72.0f), NUM));
             }
 
-            protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+            /* Access modifiers changed, original: protected */
+            public void onLayout(boolean changed, int left, int top, int right, int bottom) {
                 InviteContactsActivity.this.scrollView.layout(0, 0, InviteContactsActivity.this.scrollView.getMeasuredWidth(), InviteContactsActivity.this.scrollView.getMeasuredHeight());
                 InviteContactsActivity.this.listView.layout(0, InviteContactsActivity.this.scrollView.getMeasuredHeight(), InviteContactsActivity.this.listView.getMeasuredWidth(), InviteContactsActivity.this.scrollView.getMeasuredHeight() + InviteContactsActivity.this.listView.getMeasuredHeight());
                 InviteContactsActivity.this.emptyView.layout(0, InviteContactsActivity.this.scrollView.getMeasuredHeight() + AndroidUtilities.dp(72.0f), InviteContactsActivity.this.emptyView.getMeasuredWidth(), InviteContactsActivity.this.scrollView.getMeasuredHeight() + InviteContactsActivity.this.emptyView.getMeasuredHeight());
@@ -506,7 +510,8 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
                 InviteContactsActivity.this.counterView.layout(0, y, InviteContactsActivity.this.counterView.getMeasuredWidth(), InviteContactsActivity.this.counterView.getMeasuredHeight() + y);
             }
 
-            protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+            /* Access modifiers changed, original: protected */
+            public boolean drawChild(Canvas canvas, View child, long drawingTime) {
                 boolean result = super.drawChild(canvas, child, drawingTime);
                 if (child == InviteContactsActivity.this.listView || child == InviteContactsActivity.this.emptyView) {
                     InviteContactsActivity.this.parentLayout.drawHeaderShadow(canvas, InviteContactsActivity.this.scrollView.getMeasuredHeight());
@@ -556,7 +561,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         this.editText.setImeOptions(NUM);
         this.editText.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.spansContainer.addView(this.editText);
-        this.editText.setHintText(LocaleController.getString("SearchFriends", R.string.SearchFriends));
+        this.editText.setHintText(LocaleController.getString("SearchFriends", NUM));
         this.editText.setCustomSelectionActionModeCallback(new Callback() {
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
                 return false;
@@ -603,7 +608,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
                     InviteContactsActivity.this.adapter.searchDialogs(InviteContactsActivity.this.editText.getText().toString());
                     InviteContactsActivity.this.listView.setFastScrollVisible(false);
                     InviteContactsActivity.this.listView.setVerticalScrollBarEnabled(true);
-                    InviteContactsActivity.this.emptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
+                    InviteContactsActivity.this.emptyView.setText(LocaleController.getString("NoResult", NUM));
                     return;
                 }
                 InviteContactsActivity.this.closeSearch();
@@ -615,20 +620,20 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         } else {
             this.emptyView.showTextView();
         }
-        this.emptyView.setText(LocaleController.getString("NoContacts", R.string.NoContacts));
+        this.emptyView.setText(LocaleController.getString("NoContacts", NUM));
         frameLayout.addView(this.emptyView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
         this.listView = new RecyclerListView(context);
         this.listView.setEmptyView(this.emptyView);
         RecyclerListView recyclerListView = this.listView;
-        Adapter inviteAdapter = new InviteAdapter(context);
+        InviteAdapter inviteAdapter = new InviteAdapter(context);
         this.adapter = inviteAdapter;
         recyclerListView.setAdapter(inviteAdapter);
         this.listView.setLayoutManager(linearLayoutManager);
         this.listView.setVerticalScrollBarEnabled(true);
         this.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
         recyclerListView = this.listView;
-        ItemDecoration groupCreateDividerItemDecoration = new GroupCreateDividerItemDecoration();
+        GroupCreateDividerItemDecoration groupCreateDividerItemDecoration = new GroupCreateDividerItemDecoration();
         this.decoration = groupCreateDividerItemDecoration;
         recyclerListView.addItemDecoration(groupCreateDividerItemDecoration);
         frameLayout.addView(this.listView);
@@ -644,7 +649,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         this.infoTextView.setBackgroundColor(Theme.getColor("contacts_inviteBackground"));
         this.infoTextView.setTextColor(Theme.getColor("contacts_inviteText"));
         this.infoTextView.setGravity(17);
-        this.infoTextView.setText(LocaleController.getString("InviteFriendsHelp", R.string.InviteFriendsHelp));
+        this.infoTextView.setText(LocaleController.getString("InviteFriendsHelp", NUM));
         this.infoTextView.setTextSize(1, 13.0f);
         this.infoTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.infoTextView.setPadding(AndroidUtilities.dp(17.0f), AndroidUtilities.dp(9.0f), AndroidUtilities.dp(17.0f), AndroidUtilities.dp(9.0f));
@@ -671,7 +676,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         this.textView.setTextColor(Theme.getColor("contacts_inviteText"));
         this.textView.setGravity(17);
         this.textView.setCompoundDrawablePadding(AndroidUtilities.dp(8.0f));
-        this.textView.setText(LocaleController.getString("InviteToTelegram", R.string.InviteToTelegram).toUpperCase());
+        this.textView.setText(LocaleController.getString("InviteToTelegram", NUM).toUpperCase());
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         linearLayout.addView(this.textView, LayoutHelper.createLinear(-2, -2, 16));
         updateHint();
@@ -679,7 +684,8 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         return this.fragmentView;
     }
 
-    final /* synthetic */ void lambda$createView$0$InviteContactsActivity(View view, int position) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$0$InviteContactsActivity(View view, int position) {
         boolean z = false;
         if (position == 0 && !this.searching) {
             try {
@@ -688,7 +694,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
                 String text = ContactsController.getInstance(this.currentAccount).getInviteText(0);
                 intent.putExtra("android.intent.extra.TEXT", text);
                 getParentActivity().startActivityForResult(Intent.createChooser(intent, text), 500);
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
         } else if (view instanceof InviteUserCell) {
@@ -719,7 +725,8 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         }
     }
 
-    final /* synthetic */ void lambda$createView$1$InviteContactsActivity(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$1$InviteContactsActivity(View v) {
         try {
             StringBuilder builder = new StringBuilder();
             int num = 0;
@@ -736,10 +743,10 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
             Intent intent = new Intent("android.intent.action.SENDTO", Uri.parse("smsto:" + builder.toString()));
             intent.putExtra("sms_body", ContactsController.getInstance(this.currentAccount).getInviteText(num));
             getParentActivity().startActivityForResult(intent, 500);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
-        lambda$createView$1$PhotoAlbumPickerActivity();
+        finishFragment();
     }
 
     public void onResume() {
@@ -799,7 +806,7 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         this.adapter.searchDialogs(null);
         this.listView.setFastScrollVisible(true);
         this.listView.setVerticalScrollBarEnabled(false);
-        this.emptyView.setText(LocaleController.getString("NoContacts", R.string.NoContacts));
+        this.emptyView.setText(LocaleController.getString("NoContacts", NUM));
     }
 
     private void fetchContacts() {
@@ -875,7 +882,8 @@ public class InviteContactsActivity extends BaseFragment implements OnClickListe
         return themeDescriptionArr;
     }
 
-    final /* synthetic */ void lambda$getThemeDescriptions$3$InviteContactsActivity() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$getThemeDescriptions$3$InviteContactsActivity() {
         if (this.listView != null) {
             int count = this.listView.getChildCount();
             for (int a = 0; a < count; a++) {

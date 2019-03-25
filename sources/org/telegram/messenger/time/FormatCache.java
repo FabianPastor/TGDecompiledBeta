@@ -40,7 +40,7 @@ abstract class FormatCache<F extends Format> {
         }
     }
 
-    protected abstract F createInstance(String str, TimeZone timeZone, Locale locale);
+    public abstract F createInstance(String str, TimeZone timeZone, Locale locale);
 
     FormatCache() {
     }
@@ -79,15 +79,18 @@ abstract class FormatCache<F extends Format> {
         return getInstance(getPatternForStyle(dateStyle, timeStyle, locale), timeZone, locale);
     }
 
-    F getDateTimeInstance(int dateStyle, int timeStyle, TimeZone timeZone, Locale locale) {
+    /* Access modifiers changed, original: 0000 */
+    public F getDateTimeInstance(int dateStyle, int timeStyle, TimeZone timeZone, Locale locale) {
         return getDateTimeInstance(Integer.valueOf(dateStyle), Integer.valueOf(timeStyle), timeZone, locale);
     }
 
-    F getDateInstance(int dateStyle, TimeZone timeZone, Locale locale) {
+    /* Access modifiers changed, original: 0000 */
+    public F getDateInstance(int dateStyle, TimeZone timeZone, Locale locale) {
         return getDateTimeInstance(Integer.valueOf(dateStyle), null, timeZone, locale);
     }
 
-    F getTimeInstance(int timeStyle, TimeZone timeZone, Locale locale) {
+    /* Access modifiers changed, original: 0000 */
+    public F getTimeInstance(int timeStyle, TimeZone timeZone, Locale locale) {
         return getDateTimeInstance(null, Integer.valueOf(timeStyle), timeZone, locale);
     }
 

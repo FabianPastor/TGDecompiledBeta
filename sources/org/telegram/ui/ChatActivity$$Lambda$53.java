@@ -1,19 +1,17 @@
 package org.telegram.ui;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import java.util.ArrayList;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
 
-final /* synthetic */ class ChatActivity$$Lambda$53 implements OnClickListener {
-    private final ChatActivity arg$1;
-    private final ArrayList arg$2;
+final /* synthetic */ class ChatActivity$$Lambda$53 implements RequestDelegate {
+    static final RequestDelegate $instance = new ChatActivity$$Lambda$53();
 
-    ChatActivity$$Lambda$53(ChatActivity chatActivity, ArrayList arrayList) {
-        this.arg$1 = chatActivity;
-        this.arg$2 = arrayList;
+    private ChatActivity$$Lambda$53() {
     }
 
-    public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$createMenu$66$ChatActivity(this.arg$2, dialogInterface, i);
+    public void run(TLObject tLObject, TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new ChatActivity$$Lambda$68(tLObject));
     }
 }

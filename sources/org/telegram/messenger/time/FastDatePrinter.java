@@ -434,7 +434,8 @@ public class FastDatePrinter implements Serializable, DatePrinter {
         }
     }
 
-    protected List<Rule> parsePattern() {
+    /* Access modifiers changed, original: protected */
+    public List<Rule> parsePattern() {
         DateFormatSymbols symbols = new DateFormatSymbols(this.mLocale);
         List<Rule> rules = new ArrayList();
         String[] ERAs = symbols.getEras();
@@ -578,7 +579,8 @@ public class FastDatePrinter implements Serializable, DatePrinter {
         return rules;
     }
 
-    protected String parseToken(String pattern, int[] indexRef) {
+    /* Access modifiers changed, original: protected */
+    public String parseToken(String pattern, int[] indexRef) {
         StringBuilder buf = new StringBuilder();
         int i = indexRef[0];
         int length = pattern.length();
@@ -613,7 +615,8 @@ public class FastDatePrinter implements Serializable, DatePrinter {
         return buf.toString();
     }
 
-    protected NumberRule selectNumberRule(int field, int padding) {
+    /* Access modifiers changed, original: protected */
+    public NumberRule selectNumberRule(int field, int padding) {
         switch (padding) {
             case 1:
                 return new UnpaddedNumberField(field);
@@ -682,7 +685,8 @@ public class FastDatePrinter implements Serializable, DatePrinter {
         return applyRules(calendar, buf);
     }
 
-    protected StringBuffer applyRules(Calendar calendar, StringBuffer buf) {
+    /* Access modifiers changed, original: protected */
+    public StringBuffer applyRules(Calendar calendar, StringBuffer buf) {
         for (Rule rule : this.mRules) {
             rule.appendTo(buf, calendar);
         }

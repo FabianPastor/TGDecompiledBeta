@@ -54,7 +54,8 @@ public class AuthenticatorService extends Service {
         }
     }
 
-    protected Authenticator getAuthenticator() {
+    /* Access modifiers changed, original: protected */
+    public Authenticator getAuthenticator() {
         if (authenticator == null) {
             authenticator = new Authenticator(this);
         }

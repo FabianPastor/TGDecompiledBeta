@@ -1,13 +1,17 @@
 package org.telegram.ui;
 
-final /* synthetic */ class ChatActivity$$Lambda$80 implements Runnable {
-    private final ChatActivity arg$1;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnShowListener;
+import android.widget.DatePicker;
 
-    ChatActivity$$Lambda$80(ChatActivity chatActivity) {
-        this.arg$1 = chatActivity;
+final /* synthetic */ class ChatActivity$$Lambda$80 implements OnShowListener {
+    private final DatePicker arg$1;
+
+    ChatActivity$$Lambda$80(DatePicker datePicker) {
+        this.arg$1 = datePicker;
     }
 
-    public void run() {
-        this.arg$1.lambda$null$42$ChatActivity();
+    public void onShow(DialogInterface dialogInterface) {
+        ChatActivity.lambda$null$30$ChatActivity(this.arg$1, dialogInterface);
     }
 }

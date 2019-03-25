@@ -25,12 +25,14 @@ public class EditTextOutline extends EditText {
         this.mPaint.setStyle(Style.FILL_AND_STROKE);
     }
 
-    protected void onTextChanged(CharSequence text, int start, int before, int after) {
+    /* Access modifiers changed, original: protected */
+    public void onTextChanged(CharSequence text, int start, int before, int after) {
         super.onTextChanged(text, start, before, after);
         this.mUpdateCachedBitmap = true;
     }
 
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+    /* Access modifiers changed, original: protected */
+    public void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         if (w <= 0 || h <= 0) {
             this.mCache = null;
@@ -52,7 +54,8 @@ public class EditTextOutline extends EditText {
         invalidate();
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (!(this.mCache == null || this.mStrokeColor == 0)) {
             if (this.mUpdateCachedBitmap) {
                 int w = (getMeasuredWidth() - getPaddingLeft()) - getPaddingRight();

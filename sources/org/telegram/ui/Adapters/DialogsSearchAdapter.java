@@ -29,7 +29,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
@@ -265,11 +264,13 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         }
     }
 
-    final /* synthetic */ void lambda$searchMessagesInternal$1$DialogsSearchAdapter(int currentReqId, TL_messages_searchGlobal req, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$searchMessagesInternal$1$DialogsSearchAdapter(int currentReqId, TL_messages_searchGlobal req, TLObject response, TL_error error) {
         AndroidUtilities.runOnUIThread(new DialogsSearchAdapter$$Lambda$11(this, currentReqId, error, response, req));
     }
 
-    final /* synthetic */ void lambda$null$0$DialogsSearchAdapter(int currentReqId, TL_error error, TLObject response, TL_messages_searchGlobal req) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$0$DialogsSearchAdapter(int currentReqId, TL_error error, TLObject response, TL_messages_searchGlobal req) {
         if (currentReqId == this.lastReqId && error == null) {
             messages_Messages res = (messages_Messages) response;
             MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(res.users, res.chats, true, true);
@@ -317,7 +318,8 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DialogsSearchAdapter$$Lambda$1(this));
     }
 
-    final /* synthetic */ void lambda$loadRecentSearch$4$DialogsSearchAdapter() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$loadRecentSearch$4$DialogsSearchAdapter() {
         try {
             long did;
             RecentSearchObject recentSearchObject;
@@ -403,7 +405,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             }
             Collections.sort(arrayList, DialogsSearchAdapter$$Lambda$9.$instance);
             AndroidUtilities.runOnUIThread(new DialogsSearchAdapter$$Lambda$10(this, arrayList, hashMap));
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
@@ -416,6 +418,11 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             return -1;
         }
         return 0;
+    }
+
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$3$DialogsSearchAdapter(ArrayList arrayList, LongSparseArray hashMap) {
+        setRecentSearch(arrayList, hashMap);
     }
 
     public void putRecentSearch(long did, TLObject object) {
@@ -434,7 +441,8 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DialogsSearchAdapter$$Lambda$2(this, did));
     }
 
-    final /* synthetic */ void lambda$putRecentSearch$5$DialogsSearchAdapter(long did) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$putRecentSearch$5$DialogsSearchAdapter(long did) {
         try {
             SQLitePreparedStatement state = MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("REPLACE INTO search_recent VALUES(?, ?)");
             state.requery();
@@ -442,7 +450,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             state.bindInteger(2, (int) (System.currentTimeMillis() / 1000));
             state.step();
             state.dispose();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
@@ -454,10 +462,11 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DialogsSearchAdapter$$Lambda$3(this));
     }
 
-    final /* synthetic */ void lambda$clearRecentSearch$6$DialogsSearchAdapter() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$clearRecentSearch$6$DialogsSearchAdapter() {
         try {
             MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("DELETE FROM search_recent WHERE 1").stepThis().dispose();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
@@ -488,9 +497,10 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         }
     }
 
-    final /* synthetic */ void lambda$searchDialogsInternal$8$DialogsSearchAdapter(String query, int searchId) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$searchDialogsInternal$8$DialogsSearchAdapter(String query, int searchId) {
         try {
-            String savedMessages = LocaleController.getString("SavedMessages", R.string.SavedMessages).toLowerCase();
+            String savedMessages = LocaleController.getString("SavedMessages", NUM).toLowerCase();
             String search1 = query.trim().toLowerCase();
             if (search1.length() == 0) {
                 this.lastSearchId = -1;
@@ -786,7 +796,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                 cursor.dispose();
             }
             updateSearchResults(resultArray, resultArrayNames, encUsers, searchId);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
@@ -805,7 +815,8 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         AndroidUtilities.runOnUIThread(new DialogsSearchAdapter$$Lambda$5(this, searchId, result, encUsers, names));
     }
 
-    final /* synthetic */ void lambda$updateSearchResults$9$DialogsSearchAdapter(int searchId, ArrayList result, ArrayList encUsers, ArrayList names) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$updateSearchResults$9$DialogsSearchAdapter(int searchId, ArrayList result, ArrayList encUsers, ArrayList names) {
         if (searchId == this.lastSearchId) {
             for (int a = 0; a < result.size(); a++) {
                 TLObject obj = (TLObject) result.get(a);
@@ -839,7 +850,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                     this.searchTimer.cancel();
                     this.searchTimer = null;
                 }
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
             if (TextUtils.isEmpty(query)) {
@@ -884,14 +895,15 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                         cancel();
                         DialogsSearchAdapter.this.searchTimer.cancel();
                         DialogsSearchAdapter.this.searchTimer = null;
-                    } catch (Throwable e) {
+                    } catch (Exception e) {
                         FileLog.e(e);
                     }
                     DialogsSearchAdapter.this.searchDialogsInternal(query, searchId);
                     AndroidUtilities.runOnUIThread(new DialogsSearchAdapter$2$$Lambda$0(this, query));
                 }
 
-                final /* synthetic */ void lambda$run$0$DialogsSearchAdapter$2(String query) {
+                /* Access modifiers changed, original: final|synthetic */
+                public final /* synthetic */ void lambda$run$0$DialogsSearchAdapter$2(String query) {
                     if (DialogsSearchAdapter.this.needMessagesSearch != 2) {
                         DialogsSearchAdapter.this.searchAdapterHelper.queryServerSearch(query, true, true, true, true, 0, 0);
                     }
@@ -1073,13 +1085,15 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         return new Holder(view);
     }
 
-    final /* synthetic */ void lambda$onCreateViewHolder$10$DialogsSearchAdapter(View view1, int position) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onCreateViewHolder$10$DialogsSearchAdapter(View view1, int position) {
         if (this.delegate != null) {
             this.delegate.didPressedOnSubDialog((long) ((Integer) view1.getTag()).intValue());
         }
     }
 
-    final /* synthetic */ boolean lambda$onCreateViewHolder$11$DialogsSearchAdapter(View view12, int position) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ boolean lambda$onCreateViewHolder$11$DialogsSearchAdapter(View view12, int position) {
         if (this.delegate != null) {
             this.delegate.needRemoveHint(((Integer) view12.getTag()).intValue());
         }
@@ -1174,7 +1188,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                                         spannableStringBuilder2.setSpan(new ForegroundColorSpan(Theme.getColor("windowBackgroundWhiteBlueText4")), index, index + len, 33);
                                     }
                                     username2 = spannableStringBuilder2;
-                                } catch (Throwable e) {
+                                } catch (Exception e) {
                                     username2 = un;
                                     FileLog.e(e);
                                 }
@@ -1184,7 +1198,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                 }
                 boolean savedMessages = false;
                 if (user != null && user.id == this.selfUserId) {
-                    name2 = LocaleController.getString("SavedMessages", R.string.SavedMessages);
+                    name2 = LocaleController.getString("SavedMessages", NUM);
                     username2 = null;
                     savedMessages = true;
                 }
@@ -1214,20 +1228,20 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                 GraySectionCell cell2 = holder.itemView;
                 if (isRecentSearchDisplayed()) {
                     if (position < (!DataQuery.getInstance(this.currentAccount).hints.isEmpty() ? 2 : 0)) {
-                        cell2.setText(LocaleController.getString("ChatHints", R.string.ChatHints));
+                        cell2.setText(LocaleController.getString("ChatHints", NUM));
                         return;
                     } else {
-                        cell2.setText(LocaleController.getString("Recent", R.string.Recent));
+                        cell2.setText(LocaleController.getString("Recent", NUM));
                         return;
                     }
                 } else if (!this.searchResultHashtags.isEmpty()) {
-                    cell2.setText(LocaleController.getString("Hashtags", R.string.Hashtags));
+                    cell2.setText(LocaleController.getString("Hashtags", NUM));
                     return;
                 } else if (this.searchAdapterHelper.getGlobalSearch().isEmpty() || position != this.searchResult.size() + this.searchAdapterHelper.getLocalServerSearch().size()) {
-                    cell2.setText(LocaleController.getString("SearchMessages", R.string.SearchMessages));
+                    cell2.setText(LocaleController.getString("SearchMessages", NUM));
                     return;
                 } else {
-                    cell2.setText(LocaleController.getString("GlobalSearch", R.string.GlobalSearch));
+                    cell2.setText(LocaleController.getString("GlobalSearch", NUM));
                     return;
                 }
             case 2:

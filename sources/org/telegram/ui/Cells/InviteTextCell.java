@@ -33,7 +33,8 @@ public class InviteTextCell extends FrameLayout {
         return this.textView;
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = AndroidUtilities.dp(72.0f);
         this.textView.measure(MeasureSpec.makeMeasureSpec(width - AndroidUtilities.dp(95.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
@@ -41,7 +42,8 @@ public class InviteTextCell extends FrameLayout {
         setMeasuredDimension(width, AndroidUtilities.dp(72.0f));
     }
 
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+    /* Access modifiers changed, original: protected */
+    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
         int height = bottom - top;
         int width = right - left;
         int viewTop = (height - this.textView.getTextHeight()) / 2;

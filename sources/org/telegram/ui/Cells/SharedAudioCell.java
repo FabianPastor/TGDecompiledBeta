@@ -8,8 +8,8 @@ import android.text.StaticLayout;
 import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.View.MeasureSpec;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DownloadController;
@@ -22,7 +22,6 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.TL_photoSize;
@@ -56,33 +55,35 @@ public class SharedAudioCell extends FrameLayout implements FileDownloadProgress
         this.radialProgress.setColors("chat_inLoader", "chat_inLoaderSelected", "chat_inMediaIcon", "chat_inMediaIconSelected");
         this.TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
         setWillNotDraw(false);
-        this.checkBox = new CheckBox(context, R.drawable.round_check2);
+        this.checkBox = new CheckBox(context, NUM);
         this.checkBox.setVisibility(4);
         this.checkBox.setColor(Theme.getColor("checkbox"), Theme.getColor("checkboxCheck"));
-        View view = this.checkBox;
+        CheckBox checkBox = this.checkBox;
         int i = (LocaleController.isRTL ? 5 : 3) | 48;
         float f2 = LocaleController.isRTL ? 0.0f : 40.0f;
         if (!LocaleController.isRTL) {
             f = 0.0f;
         }
-        addView(view, LayoutHelper.createFrame(20, 20.0f, i, f2, 34.0f, f, 0.0f));
+        addView(checkBox, LayoutHelper.createFrame(20, 20.0f, i, f2, 34.0f, f, 0.0f));
+        setFocusable(true);
     }
 
+    /* Access modifiers changed, original: protected */
     @SuppressLint({"DrawAllocation"})
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         this.descriptionLayout = null;
         this.titleLayout = null;
         int maxWidth = (MeasureSpec.getSize(widthMeasureSpec) - AndroidUtilities.dp((float) AndroidUtilities.leftBaseline)) - AndroidUtilities.dp(28.0f);
         try {
             String title = this.currentMessageObject.getMusicTitle();
             this.titleLayout = new StaticLayout(TextUtils.ellipsize(title.replace(10, ' '), Theme.chat_contextResult_titleTextPaint, (float) Math.min((int) Math.ceil((double) Theme.chat_contextResult_titleTextPaint.measureText(title)), maxWidth), TruncateAt.END), Theme.chat_contextResult_titleTextPaint, maxWidth + AndroidUtilities.dp(4.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         try {
             String author = this.currentMessageObject.getMusicAuthor();
             this.descriptionLayout = new StaticLayout(TextUtils.ellipsize(author.replace(10, ' '), Theme.chat_contextResult_descriptionTextPaint, (float) Math.min((int) Math.ceil((double) Theme.chat_contextResult_descriptionTextPaint.measureText(author)), maxWidth), TruncateAt.END), Theme.chat_contextResult_descriptionTextPaint, maxWidth + AndroidUtilities.dp(4.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-        } catch (Throwable e2) {
+        } catch (Exception e2) {
             FileLog.e(e2);
         }
         setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (this.needDivider ? 1 : 0) + AndroidUtilities.dp(56.0f));
@@ -127,13 +128,15 @@ public class SharedAudioCell extends FrameLayout implements FileDownloadProgress
         this.checkBox.setChecked(checked, animated);
     }
 
-    protected void onAttachedToWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.radialProgress.onAttachedToWindow();
         updateButtonState(false, false);
     }
 
-    protected void onDetachedFromWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
         this.radialProgress.onDetachedFromWindow();
@@ -256,7 +259,8 @@ public class SharedAudioCell extends FrameLayout implements FileDownloadProgress
         }
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         float f = 8.0f;
         if (this.titleLayout != null) {
             canvas.save();
@@ -417,7 +421,21 @@ public class SharedAudioCell extends FrameLayout implements FileDownloadProgress
         return this.TAG;
     }
 
-    protected boolean needPlayMessage(MessageObject messageObject) {
+    /* Access modifiers changed, original: protected */
+    public boolean needPlayMessage(MessageObject messageObject) {
         return false;
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
+        if (this.currentMessageObject.isMusic()) {
+            info.setText(LocaleController.formatString("AccDescrMusicInfo", NUM, this.currentMessageObject.getMusicAuthor(), this.currentMessageObject.getMusicTitle()));
+        } else {
+            info.setText(this.titleLayout.getText() + ", " + this.descriptionLayout.getText());
+        }
+        if (this.checkBox.isChecked()) {
+            info.setCheckable(true);
+            info.setChecked(true);
+        }
     }
 }

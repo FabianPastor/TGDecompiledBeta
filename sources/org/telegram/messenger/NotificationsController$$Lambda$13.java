@@ -8,6 +8,6 @@ final /* synthetic */ class NotificationsController$$Lambda$13 implements Runnab
     }
 
     public void run() {
-        this.arg$1.lambda$playInChatSound$25$NotificationsController();
+        this.arg$1.lambda$hideNotifications$24$NotificationsController();
     }
 }

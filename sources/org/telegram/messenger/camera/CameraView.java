@@ -65,7 +65,8 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         this.innerPaint.setColor(Integer.MAX_VALUE);
     }
 
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+    /* Access modifiers changed, original: protected */
+    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         checkPreviewMatrix();
     }
@@ -297,7 +298,8 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         }
     }
 
-    protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+    /* Access modifiers changed, original: protected */
+    public boolean drawChild(Canvas canvas, View child, long drawingTime) {
         boolean result = super.drawChild(canvas, child, drawingTime);
         if (!(this.focusProgress == 1.0f && this.innerAlpha == 0.0f && this.outerAlpha == 0.0f)) {
             int baseRad = AndroidUtilities.dp(30.0f);

@@ -6,7 +6,8 @@ import org.telegram.messenger.audioinfo.util.RangeInputStream;
 
 public class ID3v2FrameBody {
     static final ThreadLocal<Buffer> textBuffer = new ThreadLocal<Buffer>() {
-        protected Buffer initialValue() {
+        /* Access modifiers changed, original: protected */
+        public Buffer initialValue() {
             return new Buffer(4096);
         }
     };
@@ -22,7 +23,8 @@ public class ID3v2FrameBody {
             this.bytes = new byte[initialLength];
         }
 
-        byte[] bytes(int minLength) {
+        /* Access modifiers changed, original: 0000 */
+        public byte[] bytes(int minLength) {
             if (minLength > this.bytes.length) {
                 int length = this.bytes.length * 2;
                 while (minLength > length) {

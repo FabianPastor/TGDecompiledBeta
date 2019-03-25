@@ -10,6 +10,6 @@ final /* synthetic */ class NotificationsController$$Lambda$22 implements OnLoad
     }
 
     public void onLoadComplete(SoundPool soundPool, int i, int i2) {
-        NotificationsController.lambda$null$24$NotificationsController(soundPool, i, i2);
+        NotificationsController.lambda$null$32$NotificationsController(soundPool, i, i2);
     }
 }

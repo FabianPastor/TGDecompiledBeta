@@ -35,7 +35,6 @@ import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_contacts_importContacts;
@@ -83,13 +82,13 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
     private TextView textView;
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("AddContactTitle", R.string.AddContactTitle));
+        this.actionBar.setTitle(LocaleController.getString("AddContactTitle", NUM));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    NewContactActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
+                    NewContactActivity.this.finishFragment();
                 } else if (id == 1 && !NewContactActivity.this.donePressed) {
                     Vibrator v;
                     if (NewContactActivity.this.firstNameField.length() == 0) {
@@ -124,11 +123,13 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
                 }
             }
 
-            final /* synthetic */ void lambda$onItemClick$2$NewContactActivity$1(TL_inputPhoneContact inputPhoneContact, TL_contacts_importContacts req, TLObject response, TL_error error) {
+            /* Access modifiers changed, original: final|synthetic */
+            public final /* synthetic */ void lambda$onItemClick$2$NewContactActivity$1(TL_inputPhoneContact inputPhoneContact, TL_contacts_importContacts req, TLObject response, TL_error error) {
                 AndroidUtilities.runOnUIThread(new NewContactActivity$1$$Lambda$1(this, (TL_contacts_importedContacts) response, inputPhoneContact, error, req));
             }
 
-            final /* synthetic */ void lambda$null$1$NewContactActivity$1(TL_contacts_importedContacts res, TL_inputPhoneContact inputPhoneContact, TL_error error, TL_contacts_importContacts req) {
+            /* Access modifiers changed, original: final|synthetic */
+            public final /* synthetic */ void lambda$null$1$NewContactActivity$1(TL_contacts_importedContacts res, TL_inputPhoneContact inputPhoneContact, TL_error error, TL_contacts_importContacts req) {
                 NewContactActivity.this.donePressed = false;
                 if (res == null) {
                     NewContactActivity.this.showEditDoneProgress(false, true);
@@ -139,27 +140,29 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
                 } else if (NewContactActivity.this.getParentActivity() != null) {
                     NewContactActivity.this.showEditDoneProgress(false, true);
                     Builder builder = new Builder(NewContactActivity.this.getParentActivity());
-                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                    builder.setMessage(LocaleController.formatString("ContactNotRegistered", R.string.ContactNotRegistered, ContactsController.formatName(inputPhoneContact.first_name, inputPhoneContact.last_name)));
-                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                    builder.setPositiveButton(LocaleController.getString("Invite", R.string.Invite), new NewContactActivity$1$$Lambda$2(this, inputPhoneContact));
+                    builder.setTitle(LocaleController.getString("AppName", NUM));
+                    builder.setMessage(LocaleController.formatString("ContactNotRegistered", NUM, ContactsController.formatName(inputPhoneContact.first_name, inputPhoneContact.last_name)));
+                    builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
+                    builder.setPositiveButton(LocaleController.getString("Invite", NUM), new NewContactActivity$1$$Lambda$2(this, inputPhoneContact));
                     NewContactActivity.this.showDialog(builder.create());
                 }
             }
 
-            final /* synthetic */ void lambda$null$0$NewContactActivity$1(TL_inputPhoneContact inputPhoneContact, DialogInterface dialog, int which) {
+            /* Access modifiers changed, original: final|synthetic */
+            public final /* synthetic */ void lambda$null$0$NewContactActivity$1(TL_inputPhoneContact inputPhoneContact, DialogInterface dialog, int which) {
                 try {
                     Intent intent = new Intent("android.intent.action.VIEW", Uri.fromParts("sms", inputPhoneContact.phone, null));
                     intent.putExtra("sms_body", ContactsController.getInstance(NewContactActivity.this.currentAccount).getInviteText(1));
                     NewContactActivity.this.getParentActivity().startActivityForResult(intent, 500);
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
             }
         });
         this.avatarDrawable = new AvatarDrawable();
         this.avatarDrawable.setInfo(5, "", "", false);
-        this.editDoneItem = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
+        this.editDoneItem = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f));
+        this.editDoneItem.setContentDescription(LocaleController.getString("Done", NUM));
         this.editDoneItemProgress = new ContextProgressView(context, 1);
         this.editDoneItem.addView(this.editDoneItemProgress, LayoutHelper.createFrame(-1, -1.0f));
         this.editDoneItemProgress.setVisibility(4);
@@ -185,7 +188,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         this.firstNameField.setGravity(3);
         this.firstNameField.setInputType(49152);
         this.firstNameField.setImeOptions(5);
-        this.firstNameField.setHint(LocaleController.getString("FirstName", R.string.FirstName));
+        this.firstNameField.setHint(LocaleController.getString("FirstName", NUM));
         this.firstNameField.setCursorColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         this.firstNameField.setCursorWidth(1.5f);
@@ -214,7 +217,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         this.lastNameField.setGravity(3);
         this.lastNameField.setInputType(49152);
         this.lastNameField.setImeOptions(5);
-        this.lastNameField.setHint(LocaleController.getString("LastName", R.string.LastName));
+        this.lastNameField.setHint(LocaleController.getString("LastName", NUM));
         this.lastNameField.setCursorColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.lastNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         this.lastNameField.setCursorWidth(1.5f);
@@ -240,7 +243,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         this.countryButton.setSingleLine(true);
         this.countryButton.setEllipsize(TruncateAt.END);
         this.countryButton.setGravity(3);
-        this.countryButton.setBackgroundResource(R.drawable.spinner_states);
+        this.countryButton.setBackgroundResource(NUM);
         linearLayout.addView(this.countryButton, LayoutHelper.createLinear(-1, 36, 0.0f, 24.0f, 0.0f, 14.0f));
         this.countryButton.setOnClickListener(new NewContactActivity$$Lambda$3(this));
         this.lineView = new View(context);
@@ -254,6 +257,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         this.textView.setText("+");
         this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.textView.setTextSize(1, 18.0f);
+        this.textView.setImportantForAccessibility(2);
         linearLayout.addView(this.textView, LayoutHelper.createLinear(-2, -2));
         this.codeField = new EditTextBoldCursor(context);
         this.codeField.setInputType(3);
@@ -281,7 +285,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
                     String text = PhoneFormat.stripExceptNumbers(NewContactActivity.this.codeField.getText().toString());
                     NewContactActivity.this.codeField.setText(text);
                     if (text.length() == 0) {
-                        NewContactActivity.this.countryButton.setText(LocaleController.getString("ChooseCountry", R.string.ChooseCountry));
+                        NewContactActivity.this.countryButton.setText(LocaleController.getString("ChooseCountry", NUM));
                         NewContactActivity.this.phoneField.setHintText(null);
                         NewContactActivity.this.countryState = 1;
                     } else {
@@ -317,12 +321,12 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
                                 NewContactActivity.this.phoneField.setHintText(hint != null ? hint.replace('X', 8211) : null);
                                 NewContactActivity.this.countryState = 0;
                             } else {
-                                NewContactActivity.this.countryButton.setText(LocaleController.getString("WrongCountry", R.string.WrongCountry));
+                                NewContactActivity.this.countryButton.setText(LocaleController.getString("WrongCountry", NUM));
                                 NewContactActivity.this.phoneField.setHintText(null);
                                 NewContactActivity.this.countryState = 2;
                             }
                         } else {
-                            NewContactActivity.this.countryButton.setText(LocaleController.getString("WrongCountry", R.string.WrongCountry));
+                            NewContactActivity.this.countryButton.setText(LocaleController.getString("WrongCountry", NUM));
                             NewContactActivity.this.phoneField.setHintText(null);
                             NewContactActivity.this.countryState = 2;
                         }
@@ -446,7 +450,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
                 languageMap.put(args[1], args[2]);
             }
             bufferedReader.close();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         Collections.sort(this.countriesArray, NewContactActivity$$Lambda$7.$instance);
@@ -456,7 +460,7 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
             if (telephonyManager != null) {
                 country = telephonyManager.getSimCountryIso().toUpperCase();
             }
-        } catch (Throwable e2) {
+        } catch (Exception e2) {
             FileLog.e(e2);
         }
         if (country != null) {
@@ -467,14 +471,15 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
             }
         }
         if (this.codeField.length() == 0) {
-            this.countryButton.setText(LocaleController.getString("ChooseCountry", R.string.ChooseCountry));
+            this.countryButton.setText(LocaleController.getString("ChooseCountry", NUM));
             this.phoneField.setHintText(null);
             this.countryState = 1;
         }
         return this.fragmentView;
     }
 
-    final /* synthetic */ boolean lambda$createView$1$NewContactActivity(TextView textView, int i, KeyEvent keyEvent) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ boolean lambda$createView$1$NewContactActivity(TextView textView, int i, KeyEvent keyEvent) {
         if (i != 5) {
             return false;
         }
@@ -483,7 +488,8 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         return true;
     }
 
-    final /* synthetic */ boolean lambda$createView$2$NewContactActivity(TextView textView, int i, KeyEvent keyEvent) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ boolean lambda$createView$2$NewContactActivity(TextView textView, int i, KeyEvent keyEvent) {
         if (i != 5) {
             return false;
         }
@@ -492,24 +498,28 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         return true;
     }
 
-    final /* synthetic */ void lambda$createView$5$NewContactActivity(View view) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$5$NewContactActivity(View view) {
         CountrySelectActivity fragment = new CountrySelectActivity(true);
         fragment.setCountrySelectActivityDelegate(new NewContactActivity$$Lambda$9(this));
         presentFragment(fragment);
     }
 
-    final /* synthetic */ void lambda$null$4$NewContactActivity(String name, String shortName) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$4$NewContactActivity(String name, String shortName) {
         selectCountry(name);
         AndroidUtilities.runOnUIThread(new NewContactActivity$$Lambda$10(this), 300);
         this.phoneField.requestFocus();
         this.phoneField.setSelection(this.phoneField.length());
     }
 
-    final /* synthetic */ void lambda$null$3$NewContactActivity() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$3$NewContactActivity() {
         AndroidUtilities.showKeyboard(this.phoneField);
     }
 
-    final /* synthetic */ boolean lambda$createView$6$NewContactActivity(TextView textView, int i, KeyEvent keyEvent) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ boolean lambda$createView$6$NewContactActivity(TextView textView, int i, KeyEvent keyEvent) {
         if (i != 5) {
             return false;
         }
@@ -518,7 +528,8 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         return true;
     }
 
-    final /* synthetic */ boolean lambda$createView$7$NewContactActivity(TextView textView, int i, KeyEvent keyEvent) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ boolean lambda$createView$7$NewContactActivity(TextView textView, int i, KeyEvent keyEvent) {
         if (i != 6) {
             return false;
         }
@@ -526,7 +537,8 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         return true;
     }
 
-    final /* synthetic */ boolean lambda$createView$8$NewContactActivity(View v, int keyCode, KeyEvent event) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ boolean lambda$createView$8$NewContactActivity(View v, int keyCode, KeyEvent event) {
         if (keyCode != 67 || this.phoneField.length() != 0) {
             return false;
         }
@@ -695,7 +707,8 @@ public class NewContactActivity extends BaseFragment implements OnItemSelectedLi
         return themeDescriptionArr;
     }
 
-    final /* synthetic */ void lambda$getThemeDescriptions$9$NewContactActivity() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$getThemeDescriptions$9$NewContactActivity() {
         if (this.avatarImage != null) {
             this.avatarDrawable.setInfo(5, this.firstNameField.getText().toString(), this.lastNameField.getText().toString(), false);
             this.avatarImage.invalidate();

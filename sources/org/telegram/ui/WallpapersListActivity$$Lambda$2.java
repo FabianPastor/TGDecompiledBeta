@@ -10,6 +10,6 @@ final /* synthetic */ class WallpapersListActivity$$Lambda$2 implements Wallpape
     }
 
     public void didSetNewBackground() {
-        this.arg$1.lambda$null$9$ProfileActivity();
+        this.arg$1.removeSelfFromStack();
     }
 }

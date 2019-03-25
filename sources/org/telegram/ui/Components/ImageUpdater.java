@@ -29,7 +29,6 @@ import org.telegram.messenger.SendMessagesHelper.SendingMediaInfo;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.VideoEditedInfo;
-import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.InputFile;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -82,21 +81,21 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
             CharSequence[] items;
             int[] icons;
             Builder builder = new Builder(this.parentFragment.getParentActivity());
-            builder.setTitle(LocaleController.getString("ChoosePhoto", R.string.ChoosePhoto));
+            builder.setTitle(LocaleController.getString("ChoosePhoto", NUM));
             if (this.searchAvailable) {
                 if (hasAvatar) {
-                    items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto), LocaleController.getString("ChooseFromGallery", R.string.ChooseFromGallery), LocaleController.getString("ChooseFromSearch", R.string.ChooseFromSearch), LocaleController.getString("DeletePhoto", R.string.DeletePhoto)};
-                    icons = new int[]{R.drawable.menu_camera, R.drawable.profile_photos, R.drawable.menu_search, R.drawable.chats_delete};
+                    items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", NUM), LocaleController.getString("ChooseFromGallery", NUM), LocaleController.getString("ChooseFromSearch", NUM), LocaleController.getString("DeletePhoto", NUM)};
+                    icons = new int[]{NUM, NUM, NUM, NUM};
                 } else {
-                    items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto), LocaleController.getString("ChooseFromGallery", R.string.ChooseFromGallery), LocaleController.getString("ChooseFromSearch", R.string.ChooseFromSearch)};
-                    icons = new int[]{R.drawable.menu_camera, R.drawable.profile_photos, R.drawable.menu_search};
+                    items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", NUM), LocaleController.getString("ChooseFromGallery", NUM), LocaleController.getString("ChooseFromSearch", NUM)};
+                    icons = new int[]{NUM, NUM, NUM};
                 }
             } else if (hasAvatar) {
-                items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto), LocaleController.getString("ChooseFromGallery", R.string.ChooseFromGallery), LocaleController.getString("DeletePhoto", R.string.DeletePhoto)};
-                icons = new int[]{R.drawable.menu_camera, R.drawable.profile_photos, R.drawable.chats_delete};
+                items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", NUM), LocaleController.getString("ChooseFromGallery", NUM), LocaleController.getString("DeletePhoto", NUM)};
+                icons = new int[]{NUM, NUM, NUM};
             } else {
-                items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto), LocaleController.getString("ChooseFromGallery", R.string.ChooseFromGallery)};
-                icons = new int[]{R.drawable.menu_camera, R.drawable.profile_photos};
+                items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", NUM), LocaleController.getString("ChooseFromGallery", NUM)};
+                icons = new int[]{NUM, NUM};
             }
             builder.setItems(items, icons, new ImageUpdater$$Lambda$0(this, onDeleteAvatar));
             BottomSheet sheet = builder.create();
@@ -112,7 +111,8 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
         }
     }
 
-    final /* synthetic */ void lambda$openMenu$0$ImageUpdater(Runnable onDeleteAvatar, DialogInterface dialogInterface, int i) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$openMenu$0$ImageUpdater(Runnable onDeleteAvatar, DialogInterface dialogInterface, int i) {
         if (i == 0) {
             openCamera();
         } else if (i == 1) {
@@ -254,7 +254,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                     return;
                 }
                 this.parentFragment.getParentActivity().requestPermissions(new String[]{"android.permission.CAMERA"}, 19);
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
         }
@@ -274,7 +274,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                             Intent photoPickerIntent = new Intent("android.intent.action.GET_CONTENT");
                             photoPickerIntent.setType("image/*");
                             ImageUpdater.this.parentFragment.startActivityForResult(photoPickerIntent, 14);
-                        } catch (Throwable e) {
+                        } catch (Exception e) {
                             FileLog.e(e);
                         }
                     }
@@ -300,7 +300,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                 photoCropActivity.setDelegate(this);
                 activity.lambda$runLinkRequest$27$LaunchActivity(photoCropActivity);
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
             processBitmap(ImageLoader.loadBitmap(path, uri, 800.0f, 800.0f, true));
         }
@@ -325,7 +325,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                         orientation = 270;
                         break;
                 }
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
             final ArrayList<Object> arrayList = new ArrayList();

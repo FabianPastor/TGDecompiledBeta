@@ -22,8 +22,8 @@ import android.widget.TextView;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.UserObject;
-import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.Theme;
@@ -50,7 +50,7 @@ public class DrawerProfileCell extends FrameLayout {
         this.shadowView = new ImageView(context);
         this.shadowView.setVisibility(4);
         this.shadowView.setScaleType(ScaleType.FIT_XY);
-        this.shadowView.setImageResource(R.drawable.bottom_shadow);
+        this.shadowView.setImageResource(NUM);
         addView(this.shadowView, LayoutHelper.createFrame(-1, 70, 83));
         this.avatarImageView = new BackupImageView(context);
         this.avatarImageView.getImageReceiver().setRoundRadius(AndroidUtilities.dp(32.0f));
@@ -73,26 +73,29 @@ public class DrawerProfileCell extends FrameLayout {
         addView(this.phoneTextView, LayoutHelper.createFrame(-1, -2.0f, 83, 16.0f, 0.0f, 76.0f, 9.0f));
         this.arrowView = new ImageView(context);
         this.arrowView.setScaleType(ScaleType.CENTER);
+        this.arrowView.setContentDescription(this.accountsShowed ? LocaleController.getString("AccDescrHideAccounts", NUM) : LocaleController.getString("AccDescrShowAccounts", NUM));
         addView(this.arrowView, LayoutHelper.createFrame(59, 59, 85));
         if (Theme.getEventType() == 0) {
             this.snowflakesEffect = new SnowflakesEffect();
         }
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         if (VERSION.SDK_INT >= 21) {
             super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(148.0f) + AndroidUtilities.statusBarHeight, NUM));
             return;
         }
         try {
             super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(148.0f), NUM));
-        } catch (Throwable e) {
+        } catch (Exception e) {
             setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(148.0f));
             FileLog.e(e);
         }
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         int color;
         Drawable backgroundDrawable = Theme.getCachedWallpaper();
         if (Theme.hasThemeKey("chats_menuTopShadow")) {
@@ -150,7 +153,7 @@ public class DrawerProfileCell extends FrameLayout {
     public void setAccountsShowed(boolean value) {
         if (this.accountsShowed != value) {
             this.accountsShowed = value;
-            this.arrowView.setImageResource(this.accountsShowed ? R.drawable.collapse_up : R.drawable.collapse_down);
+            this.arrowView.setImageResource(this.accountsShowed ? NUM : NUM);
         }
     }
 
@@ -158,10 +161,12 @@ public class DrawerProfileCell extends FrameLayout {
         this.arrowView.setOnClickListener(new DrawerProfileCell$$Lambda$0(this, onClickListener));
     }
 
-    final /* synthetic */ void lambda$setOnArrowClickListener$0$DrawerProfileCell(OnClickListener onClickListener, View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$setOnArrowClickListener$0$DrawerProfileCell(OnClickListener onClickListener, View v) {
         this.accountsShowed = !this.accountsShowed;
-        this.arrowView.setImageResource(this.accountsShowed ? R.drawable.collapse_up : R.drawable.collapse_down);
+        this.arrowView.setImageResource(this.accountsShowed ? NUM : NUM);
         onClickListener.onClick(this);
+        this.arrowView.setContentDescription(this.accountsShowed ? LocaleController.getString("AccDescrHideAccounts", NUM) : LocaleController.getString("AccDescrShowAccounts", NUM));
     }
 
     public void setUser(User user, boolean accounts) {
@@ -171,7 +176,7 @@ public class DrawerProfileCell extends FrameLayout {
                 photo = user.photo.photo_small;
             }
             this.accountsShowed = accounts;
-            this.arrowView.setImageResource(this.accountsShowed ? R.drawable.collapse_up : R.drawable.collapse_down);
+            this.arrowView.setImageResource(this.accountsShowed ? NUM : NUM);
             this.nameTextView.setText(UserObject.getUserName(user));
             this.phoneTextView.setText(PhoneFormat.getInstance().format("+" + user.phone));
             Drawable avatarDrawable = new AvatarDrawable(user);

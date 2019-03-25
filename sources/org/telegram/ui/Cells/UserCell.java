@@ -5,8 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
-import android.view.View;
 import android.view.View.MeasureSpec;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
@@ -17,7 +17,6 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
-import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
@@ -44,7 +43,7 @@ public class UserCell extends FrameLayout {
     private int currentId;
     private CharSequence currentName;
     private TLObject currentObject;
-    private CharSequence currrntStatus;
+    private CharSequence currentStatus;
     private EncryptedChat encryptedChat;
     private ImageView imageView;
     private FileLocation lastAvatar;
@@ -68,7 +67,7 @@ public class UserCell extends FrameLayout {
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.nameTextView.setTextSize(16);
         this.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        View view = this.nameTextView;
+        SimpleTextView simpleTextView = this.nameTextView;
         int i = (LocaleController.isRTL ? 5 : 3) | 48;
         if (LocaleController.isRTL) {
             f = (float) ((checkbox == 2 ? 18 : 0) + 28);
@@ -80,7 +79,7 @@ public class UserCell extends FrameLayout {
         } else {
             f2 = (float) ((checkbox == 2 ? 18 : 0) + 28);
         }
-        addView(view, LayoutHelper.createFrame(-1, 20.0f, i, f, 10.0f, f2, 0.0f));
+        addView(simpleTextView, LayoutHelper.createFrame(-1, 20.0f, i, f, 10.0f, f2, 0.0f));
         this.statusTextView = new SimpleTextView(context);
         this.statusTextView.setTextSize(15);
         this.statusTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
@@ -94,7 +93,7 @@ public class UserCell extends FrameLayout {
             this.checkBoxBig = new CheckBoxSquare(context, false);
             addView(this.checkBoxBig, LayoutHelper.createFrame(18, 18.0f, (LocaleController.isRTL ? 3 : 5) | 16, LocaleController.isRTL ? 19.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 19.0f, 0.0f));
         } else if (checkbox == 1) {
-            this.checkBox = new CheckBox(context, R.drawable.round_check2);
+            this.checkBox = new CheckBox(context, NUM);
             this.checkBox.setVisibility(4);
             this.checkBox.setColor(Theme.getColor("checkbox"), Theme.getColor("checkboxCheck"));
             addView(this.checkBox, LayoutHelper.createFrame(22, 22.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : (float) (padding + 37), 40.0f, LocaleController.isRTL ? (float) (padding + 37) : 0.0f, 0.0f));
@@ -105,6 +104,7 @@ public class UserCell extends FrameLayout {
             this.adminTextView.setTextColor(Theme.getColor("profile_creatorIcon"));
             addView(this.adminTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 3 : 5) | 48, LocaleController.isRTL ? 23.0f : 0.0f, 15.0f, LocaleController.isRTL ? 0.0f : 23.0f, 0.0f));
         }
+        setFocusable(true);
     }
 
     public void setAvatarPadding(int padding) {
@@ -163,9 +163,9 @@ public class UserCell extends FrameLayout {
         if (this.adminTextView != null) {
             this.adminTextView.setVisibility(value != 0 ? 0 : 8);
             if (value == 1) {
-                this.adminTextView.setText(LocaleController.getString("ChannelCreator", R.string.ChannelCreator));
+                this.adminTextView.setText(LocaleController.getString("ChannelCreator", NUM));
             } else if (value == 2) {
-                this.adminTextView.setText(LocaleController.getString("ChannelAdmin", R.string.ChannelAdmin));
+                this.adminTextView.setText(LocaleController.getString("ChannelAdmin", NUM));
             }
             if (value != 0) {
                 int dp;
@@ -200,7 +200,7 @@ public class UserCell extends FrameLayout {
 
     public void setData(TLObject object, EncryptedChat ec, CharSequence name, CharSequence status, int resId, boolean divider) {
         if (object == null && name == null && status == null) {
-            this.currrntStatus = null;
+            this.currentStatus = null;
             this.currentName = null;
             this.currentObject = null;
             this.nameTextView.setText("");
@@ -210,7 +210,7 @@ public class UserCell extends FrameLayout {
         }
         boolean z;
         this.encryptedChat = ec;
-        this.currrntStatus = status;
+        this.currentStatus = status;
         this.currentName = name;
         this.currentObject = object;
         this.currentDrawable = resId;
@@ -241,32 +241,32 @@ public class UserCell extends FrameLayout {
                 enabled = false;
             }
             if (enabled && custom) {
-                text = LocaleController.getString("NotificationsCustom", R.string.NotificationsCustom);
+                text = LocaleController.getString("NotificationsCustom", NUM);
             } else if (enabled) {
-                text = LocaleController.getString("NotificationsUnmuted", R.string.NotificationsUnmuted);
+                text = LocaleController.getString("NotificationsUnmuted", NUM);
             } else {
-                text = LocaleController.getString("NotificationsMuted", R.string.NotificationsMuted);
+                text = LocaleController.getString("NotificationsMuted", NUM);
             }
         } else {
             delta -= ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
             if (delta <= 0) {
                 if (custom) {
-                    text = LocaleController.getString("NotificationsCustom", R.string.NotificationsCustom);
+                    text = LocaleController.getString("NotificationsCustom", NUM);
                 } else {
-                    text = LocaleController.getString("NotificationsUnmuted", R.string.NotificationsUnmuted);
+                    text = LocaleController.getString("NotificationsUnmuted", NUM);
                 }
             } else if (delta < 3600) {
-                text = LocaleController.formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Minutes", delta / 60));
+                text = LocaleController.formatString("WillUnmuteIn", NUM, LocaleController.formatPluralString("Minutes", delta / 60));
             } else if (delta < 86400) {
-                text = LocaleController.formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Hours", (int) Math.ceil((double) ((((float) delta) / 60.0f) / 60.0f))));
+                text = LocaleController.formatString("WillUnmuteIn", NUM, LocaleController.formatPluralString("Hours", (int) Math.ceil((double) ((((float) delta) / 60.0f) / 60.0f))));
             } else if (delta < 31536000) {
-                text = LocaleController.formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Days", (int) Math.ceil((double) (((((float) delta) / 60.0f) / 60.0f) / 24.0f))));
+                text = LocaleController.formatString("WillUnmuteIn", NUM, LocaleController.formatPluralString("Days", (int) Math.ceil((double) (((((float) delta) / 60.0f) / 60.0f) / 24.0f))));
             } else {
                 text = null;
             }
         }
         if (text == null) {
-            text = LocaleController.getString("NotificationsOff", R.string.NotificationsOff);
+            text = LocaleController.getString("NotificationsOff", NUM);
         }
         int lower_id = (int) exception.did;
         int high_id = (int) (exception.did >> 32);
@@ -319,7 +319,8 @@ public class UserCell extends FrameLayout {
         }
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(58.0f), NUM));
     }
 
@@ -410,20 +411,20 @@ public class UserCell extends FrameLayout {
             }
             this.nameTextView.setText(this.lastName);
         }
-        if (this.currrntStatus != null) {
+        if (this.currentStatus != null) {
             this.statusTextView.setTextColor(this.statusColor);
-            this.statusTextView.setText(this.currrntStatus);
+            this.statusTextView.setText(this.currentStatus);
         } else if (currentUser != null) {
             if (currentUser.bot) {
                 this.statusTextView.setTextColor(this.statusColor);
                 if (currentUser.bot_chat_history || (this.adminTextView != null && this.adminTextView.getVisibility() == 0)) {
-                    this.statusTextView.setText(LocaleController.getString("BotStatusRead", R.string.BotStatusRead));
+                    this.statusTextView.setText(LocaleController.getString("BotStatusRead", NUM));
                 } else {
-                    this.statusTextView.setText(LocaleController.getString("BotStatusCantRead", R.string.BotStatusCantRead));
+                    this.statusTextView.setText(LocaleController.getString("BotStatusCantRead", NUM));
                 }
             } else if (currentUser.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((currentUser.status != null && currentUser.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(currentUser.id)))) {
                 this.statusTextView.setTextColor(this.statusOnlineColor);
-                this.statusTextView.setText(LocaleController.getString("Online", R.string.Online));
+                this.statusTextView.setText(LocaleController.getString("Online", NUM));
             } else {
                 this.statusTextView.setTextColor(this.statusColor);
                 this.statusTextView.setText(LocaleController.formatUserStatus(this.currentAccount, currentUser));
@@ -440,9 +441,23 @@ public class UserCell extends FrameLayout {
         return false;
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (this.needDivider) {
             canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(68.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(68.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
+        }
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
+        if (this.checkBoxBig != null && this.checkBoxBig.getVisibility() == 0) {
+            info.setCheckable(true);
+            info.setChecked(this.checkBoxBig.isChecked());
+            info.setClassName("android.widget.CheckBox");
+        } else if (this.checkBox != null && this.checkBox.getVisibility() == 0) {
+            info.setCheckable(true);
+            info.setChecked(this.checkBox.isChecked());
+            info.setClassName("android.widget.CheckBox");
         }
     }
 }

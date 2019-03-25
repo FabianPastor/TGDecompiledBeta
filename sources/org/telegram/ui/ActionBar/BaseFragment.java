@@ -10,9 +10,12 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityManager;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
@@ -73,7 +76,8 @@ public class BaseFragment {
         return this.currentAccount;
     }
 
-    protected void setInPreviewMode(boolean value) {
+    /* Access modifiers changed, original: protected */
+    public void setInPreviewMode(boolean value) {
         boolean z = false;
         this.inPreviewMode = value;
         if (this.actionBar == null) {
@@ -90,7 +94,8 @@ public class BaseFragment {
         actionBar.setOccupyStatusBar(z);
     }
 
-    protected void clearViews() {
+    /* Access modifiers changed, original: protected */
+    public void clearViews() {
         ViewGroup parent;
         if (this.fragmentView != null) {
             parent = (ViewGroup) this.fragmentView.getParent();
@@ -98,7 +103,7 @@ public class BaseFragment {
                 try {
                     onRemoveFromParent();
                     parent.removeView(this.fragmentView);
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
             }
@@ -109,7 +114,7 @@ public class BaseFragment {
             if (parent != null) {
                 try {
                     parent.removeView(this.actionBar);
-                } catch (Throwable e2) {
+                } catch (Exception e2) {
                     FileLog.e(e2);
                 }
             }
@@ -118,10 +123,12 @@ public class BaseFragment {
         this.parentLayout = null;
     }
 
-    protected void onRemoveFromParent() {
+    /* Access modifiers changed, original: protected */
+    public void onRemoveFromParent() {
     }
 
-    protected void setParentLayout(ActionBarLayout layout) {
+    /* Access modifiers changed, original: protected */
+    public void setParentLayout(ActionBarLayout layout) {
         if (this.parentLayout != layout) {
             ViewGroup parent;
             this.parentLayout = layout;
@@ -131,7 +138,7 @@ public class BaseFragment {
                     try {
                         onRemoveFromParent();
                         parent.removeView(this.fragmentView);
-                    } catch (Throwable e) {
+                    } catch (Exception e) {
                         FileLog.e(e);
                     }
                 }
@@ -146,7 +153,7 @@ public class BaseFragment {
                     if (parent != null) {
                         try {
                             parent.removeView(this.actionBar);
-                        } catch (Throwable e2) {
+                        } catch (Exception e2) {
                             FileLog.e(e2);
                         }
                     }
@@ -162,7 +169,8 @@ public class BaseFragment {
         }
     }
 
-    protected ActionBar createActionBar(Context context) {
+    /* Access modifiers changed, original: protected */
+    public ActionBar createActionBar(Context context) {
         ActionBar actionBar = new ActionBar(context);
         actionBar.setBackgroundColor(Theme.getColor("actionBarDefault"));
         actionBar.setItemsBackgroundColor(Theme.getColor("actionBarDefaultSelector"), false);
@@ -200,7 +208,8 @@ public class BaseFragment {
         }
     }
 
-    protected boolean isFinishing() {
+    /* Access modifiers changed, original: protected */
+    public boolean isFinishing() {
         return this.finishing;
     }
 
@@ -232,7 +241,7 @@ public class BaseFragment {
                 this.visibleDialog.dismiss();
                 this.visibleDialog = null;
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
@@ -297,7 +306,7 @@ public class BaseFragment {
             try {
                 this.visibleDialog.dismiss();
                 this.visibleDialog = null;
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
         }
@@ -307,13 +316,17 @@ public class BaseFragment {
         return true;
     }
 
+    public boolean canBeginSlide() {
+        return true;
+    }
+
     public void onBeginSlide() {
         try {
             if (this.visibleDialog != null && this.visibleDialog.isShowing()) {
                 this.visibleDialog.dismiss();
                 this.visibleDialog = null;
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         if (this.actionBar != null) {
@@ -321,19 +334,33 @@ public class BaseFragment {
         }
     }
 
-    protected void onTransitionAnimationStart(boolean isOpen, boolean backward) {
+    /* Access modifiers changed, original: protected */
+    public void onTransitionAnimationStart(boolean isOpen, boolean backward) {
     }
 
-    protected void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
+    /* Access modifiers changed, original: protected */
+    public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
     }
 
-    protected void onBecomeFullyVisible() {
+    /* Access modifiers changed, original: protected */
+    public void onBecomeFullyVisible() {
+        if (((AccessibilityManager) ApplicationLoader.applicationContext.getSystemService("accessibility")).isEnabled()) {
+            ActionBar actionBar = getActionBar();
+            if (actionBar != null) {
+                String title = actionBar.getTitle();
+                if (!TextUtils.isEmpty(title)) {
+                    getParentActivity().setTitle(title);
+                }
+            }
+        }
     }
 
-    protected void onBecomeFullyHidden() {
+    /* Access modifiers changed, original: protected */
+    public void onBecomeFullyHidden() {
     }
 
-    protected AnimatorSet onCustomTransitionAnimation(boolean isOpen, Runnable callback) {
+    /* Access modifiers changed, original: protected */
+    public AnimatorSet onCustomTransitionAnimation(boolean isOpen, Runnable callback) {
         return null;
     }
 
@@ -361,7 +388,7 @@ public class BaseFragment {
                 this.visibleDialog.dismiss();
                 this.visibleDialog = null;
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         try {
@@ -370,13 +397,14 @@ public class BaseFragment {
             this.visibleDialog.setOnDismissListener(new BaseFragment$$Lambda$0(this, onDismissListener));
             this.visibleDialog.show();
             return this.visibleDialog;
-        } catch (Throwable e2) {
+        } catch (Exception e2) {
             FileLog.e(e2);
             return dialog2;
         }
     }
 
-    final /* synthetic */ void lambda$showDialog$0$BaseFragment(OnDismissListener onDismissListener, DialogInterface dialog1) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$showDialog$0$BaseFragment(OnDismissListener onDismissListener, DialogInterface dialog1) {
         if (onDismissListener != null) {
             onDismissListener.onDismiss(dialog1);
         }
@@ -384,7 +412,8 @@ public class BaseFragment {
         this.visibleDialog = null;
     }
 
-    protected void onDialogDismiss(Dialog dialog) {
+    /* Access modifiers changed, original: protected */
+    public void onDialogDismiss(Dialog dialog) {
     }
 
     public Dialog getVisibleDialog() {

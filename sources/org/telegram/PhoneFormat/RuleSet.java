@@ -12,7 +12,8 @@ public class RuleSet {
     public int matchLen;
     public ArrayList<PhoneRule> rules = new ArrayList();
 
-    String format(String str, String intlPrefix, String trunkPrefix, boolean prefixRequired) {
+    /* Access modifiers changed, original: 0000 */
+    public String format(String str, String intlPrefix, String trunkPrefix, boolean prefixRequired) {
         if (str.length() < this.matchLen) {
             return null;
         }
@@ -65,7 +66,8 @@ public class RuleSet {
         }
     }
 
-    boolean isValid(String str, String intlPrefix, String trunkPrefix, boolean prefixRequired) {
+    /* Access modifiers changed, original: 0000 */
+    public boolean isValid(String str, String intlPrefix, String trunkPrefix, boolean prefixRequired) {
         if (str.length() < this.matchLen) {
             return false;
         }

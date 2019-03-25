@@ -13,21 +13,23 @@ public class SQLiteCursor {
     private boolean inRow = false;
     private SQLitePreparedStatement preparedStatement;
 
-    native byte[] columnByteArrayValue(long j, int i);
+    public native byte[] columnByteArrayValue(long j, int i);
 
-    native long columnByteBufferValue(long j, int i);
+    public native long columnByteBufferValue(long j, int i);
 
-    native double columnDoubleValue(long j, int i);
+    public native int columnCount(long j);
 
-    native int columnIntValue(long j, int i);
+    public native double columnDoubleValue(long j, int i);
 
-    native int columnIsNull(long j, int i);
+    public native int columnIntValue(long j, int i);
 
-    native long columnLongValue(long j, int i);
+    public native int columnIsNull(long j, int i);
 
-    native String columnStringValue(long j, int i);
+    public native long columnLongValue(long j, int i);
 
-    native int columnType(long j, int i);
+    public native String columnStringValue(long j, int i);
+
+    public native int columnType(long j, int i);
 
     public SQLiteCursor(SQLitePreparedStatement stmt) {
         this.preparedStatement = stmt;
@@ -39,6 +41,10 @@ public class SQLiteCursor {
             return true;
         }
         return false;
+    }
+
+    public SQLitePreparedStatement getPreparedStatement() {
+        return this.preparedStatement;
     }
 
     public int intValue(int columnIndex) throws SQLiteException {
@@ -99,7 +105,7 @@ public class SQLiteCursor {
                     if (res == 0) {
                         break;
                     }
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
             }
@@ -115,11 +121,16 @@ public class SQLiteCursor {
         return this.preparedStatement.getStatementHandle();
     }
 
+    public int getColumnCount() {
+        return columnCount(this.preparedStatement.getStatementHandle());
+    }
+
     public void dispose() {
         this.preparedStatement.dispose();
     }
 
-    void checkRow() throws SQLiteException {
+    /* Access modifiers changed, original: 0000 */
+    public void checkRow() throws SQLiteException {
         if (!this.inRow) {
             throw new SQLiteException("You must call next before");
         }

@@ -20,7 +20,6 @@ import android.widget.ImageView.ScaleType;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.MediaController.SearchImage;
-import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.TL_wallPaper;
@@ -56,7 +55,8 @@ public class WallpaperCell extends FrameLayout {
             super(context);
             setWillNotDraw(false);
             this.imageView = new BackupImageView(context, WallpaperCell.this) {
-                protected void onDraw(Canvas canvas) {
+                /* Access modifiers changed, original: protected */
+                public void onDraw(Canvas canvas) {
                     super.onDraw(canvas);
                     if (WallpaperView.this.currentWallpaper instanceof ColorWallpaper) {
                         canvas.drawLine(1.0f, 0.0f, (float) (getMeasuredWidth() - 1), 0.0f, WallpaperCell.this.framePaint);
@@ -76,13 +76,13 @@ public class WallpaperCell extends FrameLayout {
             };
             addView(this.imageView, LayoutHelper.createFrame(-1, -1, 51));
             this.imageView2 = new ImageView(context);
-            this.imageView2.setImageResource(R.drawable.ic_gallery_background);
+            this.imageView2.setImageResource(NUM);
             this.imageView2.setScaleType(ScaleType.CENTER);
             addView(this.imageView2, LayoutHelper.createFrame(-1, -1, 51));
             this.selector = new View(context);
             this.selector.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             addView(this.selector, LayoutHelper.createFrame(-1, -1.0f));
-            this.checkBox = new CheckBox(context, R.drawable.round_check2);
+            this.checkBox = new CheckBox(context, NUM);
             this.checkBox.setVisibility(4);
             this.checkBox.setColor(Theme.getColor("checkbox"), Theme.getColor("checkboxCheck"));
             addView(this.checkBox, LayoutHelper.createFrame(22, 22.0f, 53, 0.0f, 2.0f, 2.0f, 0.0f));
@@ -109,7 +109,7 @@ public class WallpaperCell extends FrameLayout {
                 int i = (selectedBackground == -1 || selectedBackground == 1000001) ? NUM : NUM;
                 imageView.setBackgroundColor(i);
                 this.imageView2.setScaleType(ScaleType.CENTER);
-                this.imageView2.setImageResource(R.drawable.ic_gallery_background);
+                this.imageView2.setImageResource(NUM);
                 return;
             }
             this.imageView.setVisibility(0);
@@ -250,7 +250,8 @@ public class WallpaperCell extends FrameLayout {
             }
         }
 
-        protected void onDraw(Canvas canvas) {
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
             if (this.checkBox.isChecked() || !this.imageView.getImageReceiver().hasBitmapImage() || this.imageView.getImageReceiver().getCurrentAlpha() != 1.0f) {
                 canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), WallpaperCell.this.backgroundPaint);
             }
@@ -271,27 +272,32 @@ public class WallpaperCell extends FrameLayout {
         this.framePaint = new Paint();
         this.framePaint.setColor(NUM);
         this.circlePaint = new Paint(1);
-        this.checkDrawable = context.getResources().getDrawable(R.drawable.background_selected).mutate();
+        this.checkDrawable = context.getResources().getDrawable(NUM).mutate();
         this.backgroundPaint = new Paint();
         this.backgroundPaint.setColor(Theme.getColor("sharedMedia_photoPlaceholder"));
     }
 
-    final /* synthetic */ void lambda$new$0$WallpaperCell(WallpaperView wallpaperView, int num, View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$0$WallpaperCell(WallpaperView wallpaperView, int num, View v) {
         onWallpaperClick(wallpaperView.currentWallpaper, num);
     }
 
-    final /* synthetic */ boolean lambda$new$1$WallpaperCell(WallpaperView wallpaperView, int num, View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ boolean lambda$new$1$WallpaperCell(WallpaperView wallpaperView, int num, View v) {
         return onWallpaperLongClick(wallpaperView.currentWallpaper, num);
     }
 
-    protected void onWallpaperClick(Object wallPaper, int index) {
+    /* Access modifiers changed, original: protected */
+    public void onWallpaperClick(Object wallPaper, int index) {
     }
 
-    protected boolean onWallpaperLongClick(Object wallPaper, int index) {
+    /* Access modifiers changed, original: protected */
+    public boolean onWallpaperLongClick(Object wallPaper, int index) {
         return false;
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int height;
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int availableWidth = width - AndroidUtilities.dp((float) (((this.spanCount - 1) * 6) + 28));
@@ -315,7 +321,8 @@ public class WallpaperCell extends FrameLayout {
         }
     }
 
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+    /* Access modifiers changed, original: protected */
+    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
         int l = AndroidUtilities.dp(14.0f);
         int t = this.isTop ? AndroidUtilities.dp(14.0f) : 0;
         for (int a = 0; a < this.spanCount; a++) {

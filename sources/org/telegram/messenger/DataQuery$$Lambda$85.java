@@ -1,23 +1,19 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
 
-final /* synthetic */ class DataQuery$$Lambda$85 implements Runnable {
+final /* synthetic */ class DataQuery$$Lambda$85 implements RequestDelegate {
     private final DataQuery arg$1;
-    private final ArrayList arg$2;
-    private final ArrayList arg$3;
-    private final ArrayList arg$4;
-    private final ArrayList arg$5;
+    private final long arg$2;
 
-    DataQuery$$Lambda$85(DataQuery dataQuery, ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3, ArrayList arrayList4) {
+    DataQuery$$Lambda$85(DataQuery dataQuery, long j) {
         this.arg$1 = dataQuery;
-        this.arg$2 = arrayList;
-        this.arg$3 = arrayList2;
-        this.arg$4 = arrayList3;
-        this.arg$5 = arrayList4;
+        this.arg$2 = j;
     }
 
-    public void run() {
-        this.arg$1.lambda$null$68$DataQuery(this.arg$2, this.arg$3, this.arg$4, this.arg$5);
+    public void run(TLObject tLObject, TL_error tL_error) {
+        this.arg$1.lambda$null$101$DataQuery(this.arg$2, tLObject, tL_error);
     }
 }

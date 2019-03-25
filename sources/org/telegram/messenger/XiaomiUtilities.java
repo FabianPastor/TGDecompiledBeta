@@ -43,7 +43,7 @@ public class XiaomiUtilities {
                 return true;
             }
             return false;
-        } catch (Throwable x) {
+        } catch (Exception x) {
             FileLog.e(x);
             return true;
         }

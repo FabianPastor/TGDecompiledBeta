@@ -180,7 +180,6 @@
     <string name="AreYouSureDeleteAndExitName">정말 **%1$s** 그룹을 삭제하고 나가시겠습니까?</string>
     <string name="AreYouSureDeleteContact">이 연락처를 정말 삭제하시겠습니까?</string>
     <string name="AreYouSureDeleteGIF">정말 이 GIF를 삭제하시겠습니까?</string>
-    <string name="AreYouSureDeleteMessages">정말 %1$s를 삭제하시겠습니까?</string>
     <string name="AreYouSureDeletePhoto">정말 사진을 삭제하시겠습니까?</string>
     <string name="AreYouSureDeleteThisChat">정말 이 대화방을 삭제하시겠습니까?</string>
     <string name="AreYouSureDeleteThisChatWithGroup">정말 **%1$s** 대화방을 삭제하시겠습니까?</string>

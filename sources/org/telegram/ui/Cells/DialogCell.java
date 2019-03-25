@@ -12,6 +12,8 @@ import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.text.style.ForegroundColorSpan;
 import android.view.View.MeasureSpec;
+import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityNodeInfo;
 import java.util.ArrayList;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
@@ -26,7 +28,6 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
-import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.DraftMessage;
 import org.telegram.tgnet.TLRPC.EncryptedChat;
@@ -197,24 +198,28 @@ public class DialogCell extends BaseCell {
         return this.messageId;
     }
 
-    protected void onDetachedFromWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.avatarImage.onDetachedFromWindow();
     }
 
-    protected void onAttachedToWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.avatarImage.onAttachedToWindow();
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         if (this.checkBox != null) {
             this.checkBox.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(24.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(24.0f), NUM));
         }
         setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (this.useSeparator ? 1 : 0) + AndroidUtilities.dp(72.0f));
     }
 
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+    /* Access modifiers changed, original: protected */
+    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
         if (this.currentDialogId != 0 || this.customDialog != null) {
             if (this.checkBox != null) {
                 int x = LocaleController.isRTL ? (right - left) - AndroidUtilities.dp(42.0f) : AndroidUtilities.dp(42.0f);
@@ -224,7 +229,7 @@ public class DialogCell extends BaseCell {
             if (changed) {
                 try {
                     buildLayout();
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
             }
@@ -302,7 +307,7 @@ public class DialogCell extends BaseCell {
                 }
             }
             if (this.customDialog.type == 1) {
-                name = LocaleController.getString("FromYou", R.string.FromYou);
+                name = LocaleController.getString("FromYou", NUM);
                 checkMessage = false;
                 if (this.customDialog.isMedia) {
                     currentMessagePaint = Theme.dialogs_messagePrintingPaint;
@@ -424,7 +429,7 @@ public class DialogCell extends BaseCell {
                     checkMessage = false;
                     String draftString;
                     if (TextUtils.isEmpty(this.draftMessage.message)) {
-                        draftString = LocaleController.getString("Draft", R.string.Draft);
+                        draftString = LocaleController.getString("Draft", NUM);
                         stringBuilder = SpannableStringBuilder.valueOf(draftString);
                         stringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor("chats_draft")), 0, draftString.length(), 33);
                         messageString2 = stringBuilder;
@@ -433,13 +438,13 @@ public class DialogCell extends BaseCell {
                         if (mess.length() > 150) {
                             mess = mess.substring(0, 150);
                         }
-                        stringBuilder = SpannableStringBuilder.valueOf(String.format(messageFormat, new Object[]{LocaleController.getString("Draft", R.string.Draft), mess.replace(10, ' ')}));
+                        stringBuilder = SpannableStringBuilder.valueOf(String.format(messageFormat, new Object[]{LocaleController.getString("Draft", NUM), mess.replace(10, ' ')}));
                         stringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor("chats_draft")), 0, draftString.length() + 1, 33);
                         messageString = Emoji.replaceEmoji(stringBuilder, Theme.dialogs_messagePaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
                     }
                 } else if (this.clearingDialog) {
                     currentMessagePaint = Theme.dialogs_messagePrintingPaint;
-                    messageString = LocaleController.getString("HistoryCleared", R.string.HistoryCleared);
+                    messageString = LocaleController.getString("HistoryCleared", NUM);
                 } else if (this.message != null) {
                     User fromUser = null;
                     Chat fromChat = null;
@@ -449,7 +454,7 @@ public class DialogCell extends BaseCell {
                         fromChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.message.messageOwner.to_id.channel_id));
                     }
                     if (this.dialogsType == 3 && UserObject.isUserSelf(this.user)) {
-                        messageString = LocaleController.getString("SavedMessagesInfo", R.string.SavedMessagesInfo);
+                        messageString = LocaleController.getString("SavedMessagesInfo", NUM);
                         showChecks = false;
                         drawTime = false;
                     } else if (this.message.messageOwner instanceof TL_messageService) {
@@ -462,7 +467,7 @@ public class DialogCell extends BaseCell {
                         currentMessagePaint = Theme.dialogs_messagePrintingPaint;
                     } else if (this.chat != null && this.chat.id > 0 && fromChat == null) {
                         if (this.message.isOutOwner()) {
-                            name = LocaleController.getString("FromYou", R.string.FromYou);
+                            name = LocaleController.getString("FromYou", NUM);
                         } else if (fromUser != null) {
                             name = UserObject.getFirstName(fromUser).replace("\n", "");
                         } else if (fromChat != null) {
@@ -507,9 +512,9 @@ public class DialogCell extends BaseCell {
                         }
                         messageString = Emoji.replaceEmoji(stringBuilder, Theme.dialogs_messagePaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
                     } else if ((this.message.messageOwner.media instanceof TL_messageMediaPhoto) && (this.message.messageOwner.media.photo instanceof TL_photoEmpty) && this.message.messageOwner.media.ttl_seconds != 0) {
-                        messageString = LocaleController.getString("AttachPhotoExpired", R.string.AttachPhotoExpired);
+                        messageString = LocaleController.getString("AttachPhotoExpired", NUM);
                     } else if ((this.message.messageOwner.media instanceof TL_messageMediaDocument) && (this.message.messageOwner.media.document instanceof TL_documentEmpty) && this.message.messageOwner.media.ttl_seconds != 0) {
-                        messageString = LocaleController.getString("AttachVideoExpired", R.string.AttachVideoExpired);
+                        messageString = LocaleController.getString("AttachVideoExpired", NUM);
                     } else if (this.message.caption != null) {
                         messageString = this.message.caption;
                     } else {
@@ -527,22 +532,22 @@ public class DialogCell extends BaseCell {
                 } else if (this.encryptedChat != null) {
                     currentMessagePaint = Theme.dialogs_messagePrintingPaint;
                     if (this.encryptedChat instanceof TL_encryptedChatRequested) {
-                        messageString = LocaleController.getString("EncryptionProcessing", R.string.EncryptionProcessing);
+                        messageString = LocaleController.getString("EncryptionProcessing", NUM);
                     } else if (this.encryptedChat instanceof TL_encryptedChatWaiting) {
                         if (this.user == null || this.user.first_name == null) {
-                            messageString = LocaleController.formatString("AwaitingEncryption", R.string.AwaitingEncryption, "");
+                            messageString = LocaleController.formatString("AwaitingEncryption", NUM, "");
                         } else {
-                            messageString = LocaleController.formatString("AwaitingEncryption", R.string.AwaitingEncryption, this.user.first_name);
+                            messageString = LocaleController.formatString("AwaitingEncryption", NUM, this.user.first_name);
                         }
                     } else if (this.encryptedChat instanceof TL_encryptedChatDiscarded) {
-                        messageString = LocaleController.getString("EncryptionRejected", R.string.EncryptionRejected);
+                        messageString = LocaleController.getString("EncryptionRejected", NUM);
                     } else if (this.encryptedChat instanceof TL_encryptedChat) {
                         if (this.encryptedChat.admin_id != UserConfig.getInstance(this.currentAccount).getClientUserId()) {
-                            messageString = LocaleController.getString("EncryptedChatStartedIncoming", R.string.EncryptedChatStartedIncoming);
+                            messageString = LocaleController.getString("EncryptedChatStartedIncoming", NUM);
                         } else if (this.user == null || this.user.first_name == null) {
-                            messageString = LocaleController.formatString("EncryptedChatStartedOutgoing", R.string.EncryptedChatStartedOutgoing, "");
+                            messageString = LocaleController.formatString("EncryptedChatStartedOutgoing", NUM, "");
                         } else {
-                            messageString = LocaleController.formatString("EncryptedChatStartedOutgoing", R.string.EncryptedChatStartedOutgoing, this.user.first_name);
+                            messageString = LocaleController.formatString("EncryptedChatStartedOutgoing", NUM, this.user.first_name);
                         }
                     }
                 } else {
@@ -609,7 +614,7 @@ public class DialogCell extends BaseCell {
             }
             if (this.dialogsType == 0 && MessagesController.getInstance(this.currentAccount).isProxyDialog(this.currentDialogId)) {
                 this.drawPinBackground = true;
-                timeString = LocaleController.getString("UseProxySponsor", R.string.UseProxySponsor);
+                timeString = LocaleController.getString("UseProxySponsor", NUM);
             }
             if (this.chat != null) {
                 nameString = this.chat.title;
@@ -618,7 +623,7 @@ public class DialogCell extends BaseCell {
                     if (this.dialogsType == 3) {
                         this.drawPinBackground = true;
                     }
-                    nameString = LocaleController.getString("SavedMessages", R.string.SavedMessages);
+                    nameString = LocaleController.getString("SavedMessages", NUM);
                 } else if (this.user.id / 1000 == 777 || this.user.id / 1000 == 333 || ContactsController.getInstance(this.currentAccount).contactsDict.get(Integer.valueOf(this.user.id)) != null) {
                     nameString = UserObject.getUserName(this.user);
                 } else if (ContactsController.getInstance(this.currentAccount).contactsDict.size() == 0 && (!ContactsController.getInstance(this.currentAccount).contactsLoaded || ContactsController.getInstance(this.currentAccount).isLoadingContacts())) {
@@ -633,7 +638,7 @@ public class DialogCell extends BaseCell {
                 }
             }
             if (nameString.length() == 0) {
-                nameString = LocaleController.getString("HiddenName", R.string.HiddenName);
+                nameString = LocaleController.getString("HiddenName", NUM);
             }
         }
         if (drawTime) {
@@ -709,7 +714,7 @@ public class DialogCell extends BaseCell {
         nameWidth = Math.max(AndroidUtilities.dp(12.0f), nameWidth);
         try {
             this.nameLayout = new StaticLayout(TextUtils.ellipsize(nameString.replace(10, ' '), currentNamePaint, (float) (nameWidth - AndroidUtilities.dp(12.0f)), TruncateAt.END), currentNamePaint, nameWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         int messageWidth2 = getMeasuredWidth() - AndroidUtilities.dp((float) (AndroidUtilities.leftBaseline + 16));
@@ -788,7 +793,7 @@ public class DialogCell extends BaseCell {
         messageWidth = Math.max(AndroidUtilities.dp(12.0f), messageWidth);
         try {
             this.messageLayout = new StaticLayout(TextUtils.ellipsize(messageString, currentMessagePaint, (float) (messageWidth - AndroidUtilities.dp(12.0f)), TruncateAt.END), currentMessagePaint, messageWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-        } catch (Throwable e2) {
+        } catch (Exception e2) {
             FileLog.e(e2);
         }
         float left;
@@ -897,7 +902,13 @@ public class DialogCell extends BaseCell {
             boolean z;
             if (this.isDialogCell) {
                 dialog = (TL_dialog) MessagesController.getInstance(this.currentAccount).dialogs_dict.get(this.currentDialogId);
-                if (dialog != null && mask == 0) {
+                if (dialog == null) {
+                    this.unreadCount = 0;
+                    this.mentionCount = 0;
+                    this.currentEditDate = 0;
+                    this.lastMessageDate = 0;
+                    this.clearingDialog = false;
+                } else if (mask == 0) {
                     this.clearingDialog = MessagesController.getInstance(this.currentAccount).isClearingDialog(dialog.id);
                     this.message = (MessageObject) MessagesController.getInstance(this.currentAccount).dialogMessage.get(dialog.id);
                     z = this.message != null && this.message.isUnread();
@@ -1013,7 +1024,8 @@ public class DialogCell extends BaseCell {
         invalidate();
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (this.currentDialogId != 0 || this.customDialog != null) {
             if (this.isSelected) {
                 canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), Theme.dialogs_tabletSeletedPaint);
@@ -1051,7 +1063,7 @@ public class DialogCell extends BaseCell {
                 canvas.translate((float) this.messageLeft, (float) this.messageTop);
                 try {
                     this.messageLayout.draw(canvas);
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
                 canvas.restore();
@@ -1127,5 +1139,75 @@ public class DialogCell extends BaseCell {
 
     public boolean hasOverlappingRendering() {
         return false;
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
+        info.addAction(16);
+        info.addAction(32);
+    }
+
+    public void onPopulateAccessibilityEvent(AccessibilityEvent event) {
+        super.onPopulateAccessibilityEvent(event);
+        StringBuilder sb = new StringBuilder();
+        if (this.encryptedChat != null) {
+            sb.append(LocaleController.getString("AccDescrSecretChat", NUM));
+            sb.append(". ");
+        }
+        if (this.user != null) {
+            if (this.user.bot) {
+                sb.append(LocaleController.getString("Bot", NUM));
+                sb.append(". ");
+            }
+            if (this.user.self) {
+                sb.append(LocaleController.getString("SavedMessages", NUM));
+            } else {
+                sb.append(ContactsController.formatName(this.user.first_name, this.user.last_name));
+            }
+            sb.append(". ");
+        } else if (this.chat != null) {
+            if (this.chat.broadcast) {
+                sb.append(LocaleController.getString("AccDescrChannel", NUM));
+            } else {
+                sb.append(LocaleController.getString("AccDescrGroup", NUM));
+            }
+            sb.append(". ");
+            sb.append(this.chat.title);
+            sb.append(". ");
+        }
+        if (this.unreadCount > 0) {
+            sb.append(LocaleController.formatPluralString("NewMessages", this.unreadCount));
+            sb.append(". ");
+        }
+        if (this.message == null) {
+            event.setContentDescription(sb.toString());
+            return;
+        }
+        int lastDate = this.lastMessageDate;
+        if (this.lastMessageDate == 0 && this.message != null) {
+            lastDate = this.message.messageOwner.date;
+        }
+        String date = LocaleController.formatDateAudio((long) lastDate);
+        if (this.message.isOut()) {
+            sb.append(LocaleController.formatString("AccDescrSentDate", NUM, date));
+        } else {
+            sb.append(LocaleController.formatString("AccDescrReceivedDate", NUM, date));
+        }
+        sb.append(". ");
+        if (this.chat != null && !this.message.isOut() && this.message.isFromUser() && this.message.messageOwner.action == null) {
+            User fromUser = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.message.messageOwner.from_id));
+            if (fromUser != null) {
+                sb.append(ContactsController.formatName(fromUser.first_name, fromUser.last_name));
+                sb.append(". ");
+            }
+        }
+        if (this.encryptedChat == null) {
+            sb.append(this.message.messageText);
+            if (!(this.message.isMediaEmpty() || TextUtils.isEmpty(this.message.caption))) {
+                sb.append(". ");
+                sb.append(this.message.caption);
+            }
+        }
+        event.setContentDescription(sb.toString());
     }
 }

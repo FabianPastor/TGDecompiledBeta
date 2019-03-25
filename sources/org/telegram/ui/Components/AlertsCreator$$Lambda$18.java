@@ -1,19 +1,18 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.LinearLayout;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import org.telegram.messenger.MessagesController;
+import org.telegram.ui.ActionBar.BaseFragment;
 
 final /* synthetic */ class AlertsCreator$$Lambda$18 implements OnClickListener {
-    private final LinearLayout arg$1;
-    private final int[] arg$2;
+    private final BaseFragment arg$1;
 
-    AlertsCreator$$Lambda$18(LinearLayout linearLayout, int[] iArr) {
-        this.arg$1 = linearLayout;
-        this.arg$2 = iArr;
+    AlertsCreator$$Lambda$18(BaseFragment baseFragment) {
+        this.arg$1 = baseFragment;
     }
 
-    public void onClick(View view) {
-        AlertsCreator.lambda$createColorSelectDialog$21$AlertsCreator(this.arg$1, this.arg$2, view);
+    public void onClick(DialogInterface dialogInterface, int i) {
+        MessagesController.getInstance(this.arg$1.getCurrentAccount()).openByUserName("spambot", this.arg$1, 1);
     }
 }

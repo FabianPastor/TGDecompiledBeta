@@ -18,7 +18,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.StickerSetCovered;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.ColorSpanUnderline;
@@ -63,7 +62,8 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         this.infoTextView.setSingleLine(true);
         addView(this.infoTextView, LayoutHelper.createFrame(-2, -2.0f, 51, (float) left, 30.0f, 100.0f, 0.0f));
         this.addButton = new TextView(context) {
-            protected void onDraw(Canvas canvas) {
+            /* Access modifiers changed, original: protected */
+            public void onDraw(Canvas canvas) {
                 super.onDraw(canvas);
                 if (FeaturedStickerSetInfoCell.this.drawProgress || !(FeaturedStickerSetInfoCell.this.drawProgress || FeaturedStickerSetInfoCell.this.progressAlpha == 0.0f)) {
                     FeaturedStickerSetInfoCell.this.botProgressPaint.setAlpha(Math.min(255, (int) (FeaturedStickerSetInfoCell.this.progressAlpha * 255.0f)));
@@ -103,7 +103,8 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         setWillNotDraw(false);
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(60.0f), NUM));
         measureChildWithMargins(this.nameTextView, widthMeasureSpec, this.addButton.getMeasuredWidth(), heightMeasureSpec, 0);
     }
@@ -137,10 +138,10 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
             this.isInstalled = isStickerPackInstalled;
             if (isStickerPackInstalled) {
                 this.addButton.setBackgroundDrawable(this.delDrawable);
-                this.addButton.setText(LocaleController.getString("StickersRemove", R.string.StickersRemove).toUpperCase());
+                this.addButton.setText(LocaleController.getString("StickersRemove", NUM).toUpperCase());
             } else {
                 this.addButton.setBackgroundDrawable(this.addDrawable);
-                this.addButton.setText(LocaleController.getString("Add", R.string.Add).toUpperCase());
+                this.addButton.setText(LocaleController.getString("Add", NUM).toUpperCase());
             }
             this.addButton.setPadding(AndroidUtilities.dp(17.0f), 0, AndroidUtilities.dp(17.0f), 0);
         } else {
@@ -175,7 +176,8 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         return this.set;
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (this.isUnread) {
             this.paint.setColor(Theme.getColor("featuredStickers_unread"));
             canvas.drawCircle((float) (this.nameTextView.getRight() + AndroidUtilities.dp(12.0f)), (float) AndroidUtilities.dp(20.0f), (float) AndroidUtilities.dp(4.0f), this.paint);

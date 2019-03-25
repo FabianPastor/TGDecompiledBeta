@@ -18,11 +18,13 @@ class TileList<T> {
             this.mItems = (Object[]) Array.newInstance(klass, size);
         }
 
-        boolean containsPosition(int pos) {
+        /* Access modifiers changed, original: 0000 */
+        public boolean containsPosition(int pos) {
             return this.mStartPosition <= pos && pos < this.mStartPosition + this.mItemCount;
         }
 
-        T getByPosition(int pos) {
+        /* Access modifiers changed, original: 0000 */
+        public T getByPosition(int pos) {
             return this.mItems[pos - this.mStartPosition];
         }
     }

@@ -104,7 +104,8 @@ public abstract class SnapHelper extends OnFlingListener {
         return true;
     }
 
-    void snapToTargetExistingView() {
+    /* Access modifiers changed, original: 0000 */
+    public void snapToTargetExistingView() {
         if (this.mRecyclerView != null) {
             LayoutManager layoutManager = this.mRecyclerView.getLayoutManager();
             if (layoutManager != null) {
@@ -119,15 +120,18 @@ public abstract class SnapHelper extends OnFlingListener {
         }
     }
 
-    protected SmoothScroller createScroller(LayoutManager layoutManager) {
+    /* Access modifiers changed, original: protected */
+    public SmoothScroller createScroller(LayoutManager layoutManager) {
         return createSnapScroller(layoutManager);
     }
 
+    /* Access modifiers changed, original: protected */
     @Deprecated
-    protected LinearSmoothScroller createSnapScroller(LayoutManager layoutManager) {
+    public LinearSmoothScroller createSnapScroller(LayoutManager layoutManager) {
         if (layoutManager instanceof ScrollVectorProvider) {
             return new LinearSmoothScroller(this.mRecyclerView.getContext()) {
-                protected void onTargetFound(View targetView, State state, Action action) {
+                /* Access modifiers changed, original: protected */
+                public void onTargetFound(View targetView, State state, Action action) {
                     if (SnapHelper.this.mRecyclerView != null) {
                         int[] snapDistances = SnapHelper.this.calculateDistanceToFinalSnap(SnapHelper.this.mRecyclerView.getLayoutManager(), targetView);
                         int dx = snapDistances[0];
@@ -139,7 +143,8 @@ public abstract class SnapHelper extends OnFlingListener {
                     }
                 }
 
-                protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
+                /* Access modifiers changed, original: protected */
+                public float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
                     return 100.0f / ((float) displayMetrics.densityDpi);
                 }
             };

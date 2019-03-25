@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.text.TextUtils.TruncateAt;
 import android.text.TextWatcher;
-import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import java.util.ArrayList;
@@ -34,14 +33,15 @@ public class EditTextSettingsCell extends FrameLayout {
         this.textView.setBackgroundDrawable(null);
         this.textView.setPadding(0, 0, 0, 0);
         this.textView.setInputType(this.textView.getInputType() | 16384);
-        View view = this.textView;
+        EditTextBoldCursor editTextBoldCursor = this.textView;
         if (LocaleController.isRTL) {
             i = 5;
         }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, 21.0f, 0.0f, 21.0f, 0.0f));
+        addView(editTextBoldCursor, LayoutHelper.createFrame(-1, -1.0f, i | 48, 21.0f, 0.0f, 21.0f, 0.0f));
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (this.needDivider ? 1 : 0) + AndroidUtilities.dp(50.0f));
         this.textView.measure(MeasureSpec.makeMeasureSpec(((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(42.0f), NUM), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
     }
@@ -83,7 +83,8 @@ public class EditTextSettingsCell extends FrameLayout {
         setEnabled(value);
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (this.needDivider) {
             canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }

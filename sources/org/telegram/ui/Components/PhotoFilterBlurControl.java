@@ -361,7 +361,8 @@ public class PhotoFilterBlurControl extends FrameLayout {
         this.actualAreaSize.height = height;
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         Point centerPoint = getActualCenterPoint();
         float innerRadius = getActualInnerRadius();

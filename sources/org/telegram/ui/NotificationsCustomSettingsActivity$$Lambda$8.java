@@ -10,6 +10,6 @@ final /* synthetic */ class NotificationsCustomSettingsActivity$$Lambda$8 implem
     }
 
     public void run() {
-        this.arg$1.lambda$null$7$NotificationsCustomSettingsActivity(this.arg$2);
+        this.arg$1.lambda$null$5$NotificationsCustomSettingsActivity(this.arg$2);
     }
 }

@@ -57,7 +57,8 @@ class AdapterHelper implements Callback {
             this.payload = payload;
         }
 
-        String cmdToString() {
+        /* Access modifiers changed, original: 0000 */
+        public String cmdToString() {
             switch (this.cmd) {
                 case 1:
                     return "add";
@@ -127,18 +128,21 @@ class AdapterHelper implements Callback {
         this.mOpReorderer = new OpReorderer(this);
     }
 
-    AdapterHelper addUpdateOp(UpdateOp... ops) {
+    /* Access modifiers changed, original: varargs */
+    public AdapterHelper addUpdateOp(UpdateOp... ops) {
         Collections.addAll(this.mPendingUpdates, ops);
         return this;
     }
 
-    void reset() {
+    /* Access modifiers changed, original: 0000 */
+    public void reset() {
         recycleUpdateOpsAndClearList(this.mPendingUpdates);
         recycleUpdateOpsAndClearList(this.mPostponedList);
         this.mExistingUpdateTypes = 0;
     }
 
-    void preProcess() {
+    /* Access modifiers changed, original: 0000 */
+    public void preProcess() {
         this.mOpReorderer.reorderOps(this.mPendingUpdates);
         int count = this.mPendingUpdates.size();
         for (int i = 0; i < count; i++) {
@@ -164,7 +168,8 @@ class AdapterHelper implements Callback {
         this.mPendingUpdates.clear();
     }
 
-    void consumePostponedUpdates() {
+    /* Access modifiers changed, original: 0000 */
+    public void consumePostponedUpdates() {
         int count = this.mPostponedList.size();
         for (int i = 0; i < count; i++) {
             this.mCallback.onDispatchSecondPass((UpdateOp) this.mPostponedList.get(i));
@@ -317,7 +322,8 @@ class AdapterHelper implements Callback {
         }
     }
 
-    void dispatchFirstPassAndUpdateViewHolders(UpdateOp op, int offsetStart) {
+    /* Access modifiers changed, original: 0000 */
+    public void dispatchFirstPassAndUpdateViewHolders(UpdateOp op, int offsetStart) {
         this.mCallback.onDispatchFirstPass(op);
         switch (op.cmd) {
             case 2:
@@ -444,19 +450,23 @@ class AdapterHelper implements Callback {
         }
     }
 
-    boolean hasPendingUpdates() {
+    /* Access modifiers changed, original: 0000 */
+    public boolean hasPendingUpdates() {
         return this.mPendingUpdates.size() > 0;
     }
 
-    boolean hasAnyUpdateTypes(int updateTypes) {
+    /* Access modifiers changed, original: 0000 */
+    public boolean hasAnyUpdateTypes(int updateTypes) {
         return (this.mExistingUpdateTypes & updateTypes) != 0;
     }
 
-    int findPositionOffset(int position) {
+    /* Access modifiers changed, original: 0000 */
+    public int findPositionOffset(int position) {
         return findPositionOffset(position, 0);
     }
 
-    int findPositionOffset(int position, int firstPostponedItem) {
+    /* Access modifiers changed, original: 0000 */
+    public int findPositionOffset(int position, int firstPostponedItem) {
         int count = this.mPostponedList.size();
         for (int i = firstPostponedItem; i < count; i++) {
             UpdateOp op = (UpdateOp) this.mPostponedList.get(i);
@@ -485,7 +495,8 @@ class AdapterHelper implements Callback {
         return position;
     }
 
-    boolean onItemRangeChanged(int positionStart, int itemCount, Object payload) {
+    /* Access modifiers changed, original: 0000 */
+    public boolean onItemRangeChanged(int positionStart, int itemCount, Object payload) {
         boolean z = true;
         if (itemCount < 1) {
             return false;
@@ -498,7 +509,8 @@ class AdapterHelper implements Callback {
         return z;
     }
 
-    boolean onItemRangeInserted(int positionStart, int itemCount) {
+    /* Access modifiers changed, original: 0000 */
+    public boolean onItemRangeInserted(int positionStart, int itemCount) {
         boolean z = true;
         if (itemCount < 1) {
             return false;
@@ -511,7 +523,8 @@ class AdapterHelper implements Callback {
         return z;
     }
 
-    boolean onItemRangeRemoved(int positionStart, int itemCount) {
+    /* Access modifiers changed, original: 0000 */
+    public boolean onItemRangeRemoved(int positionStart, int itemCount) {
         boolean z = true;
         if (itemCount < 1) {
             return false;
@@ -524,7 +537,8 @@ class AdapterHelper implements Callback {
         return z;
     }
 
-    boolean onItemRangeMoved(int from, int to, int itemCount) {
+    /* Access modifiers changed, original: 0000 */
+    public boolean onItemRangeMoved(int from, int to, int itemCount) {
         boolean z = true;
         if (from == to) {
             return false;
@@ -540,7 +554,8 @@ class AdapterHelper implements Callback {
         return z;
     }
 
-    void consumeUpdatesInOnePass() {
+    /* Access modifiers changed, original: 0000 */
+    public void consumeUpdatesInOnePass() {
         consumePostponedUpdates();
         int count = this.mPendingUpdates.size();
         for (int i = 0; i < count; i++) {
@@ -611,7 +626,8 @@ class AdapterHelper implements Callback {
         return position;
     }
 
-    boolean hasUpdates() {
+    /* Access modifiers changed, original: 0000 */
+    public boolean hasUpdates() {
         return (this.mPostponedList.isEmpty() || this.mPendingUpdates.isEmpty()) ? false : true;
     }
 
@@ -634,7 +650,8 @@ class AdapterHelper implements Callback {
         }
     }
 
-    void recycleUpdateOpsAndClearList(List<UpdateOp> ops) {
+    /* Access modifiers changed, original: 0000 */
+    public void recycleUpdateOpsAndClearList(List<UpdateOp> ops) {
         int count = ops.size();
         for (int i = 0; i < count; i++) {
             recycleUpdateOp((UpdateOp) ops.get(i));

@@ -148,7 +148,8 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
                     return true;
                 }
 
-                protected void onDraw(Canvas canvas) {
+                /* Access modifiers changed, original: protected */
+                public void onDraw(Canvas canvas) {
                     if (Theme.chat_roundVideoShadow != null) {
                         Theme.chat_roundVideoShadow.setAlpha((int) (getAlpha() * 255.0f));
                         Theme.chat_roundVideoShadow.setBounds(AndroidUtilities.dp(1.0f), AndroidUtilities.dp(2.0f), AndroidUtilities.dp(125.0f), AndroidUtilities.dp(125.0f));
@@ -163,7 +164,8 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
             this.videoHeight = AndroidUtilities.dp(126.0f);
             if (VERSION.SDK_INT >= 21) {
                 this.aspectRatioFrameLayout = new AspectRatioFrameLayout(activity) {
-                    protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+                    /* Access modifiers changed, original: protected */
+                    public boolean drawChild(Canvas canvas, View child, long drawingTime) {
                         boolean result = super.drawChild(canvas, child, drawingTime);
                         if (child == PipRoundVideoView.this.textureView) {
                             MessageObject currentMessageObject = MediaController.getInstance().getPlayingMessageObject();
@@ -189,19 +191,22 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
                 this.aspectRatioFrameLayout = new AspectRatioFrameLayout(activity) {
                     private Path aspectPath = new Path();
 
-                    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+                    /* Access modifiers changed, original: protected */
+                    public void onSizeChanged(int w, int h, int oldw, int oldh) {
                         super.onSizeChanged(w, h, oldw, oldh);
                         this.aspectPath.reset();
                         this.aspectPath.addCircle((float) (w / 2), (float) (h / 2), (float) (w / 2), Direction.CW);
                         this.aspectPath.toggleInverseFillType();
                     }
 
-                    protected void dispatchDraw(Canvas canvas) {
+                    /* Access modifiers changed, original: protected */
+                    public void dispatchDraw(Canvas canvas) {
                         super.dispatchDraw(canvas);
                         canvas.drawPath(this.aspectPath, aspectPaint);
                     }
 
-                    protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+                    /* Access modifiers changed, original: protected */
+                    public boolean drawChild(Canvas canvas, View child, long drawingTime) {
                         boolean result;
                         try {
                             result = super.drawChild(canvas, child, drawingTime);
@@ -251,7 +256,7 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
                 this.currentAccount = UserConfig.selectedAccount;
                 NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
                 runShowHideAnimation(true);
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
         }

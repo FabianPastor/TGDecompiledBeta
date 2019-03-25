@@ -50,7 +50,8 @@ public class ManageChatTextCell extends FrameLayout {
         return this.valueTextView;
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = AndroidUtilities.dp(48.0f);
         this.valueTextView.measure(MeasureSpec.makeMeasureSpec(width - AndroidUtilities.dp(24.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
@@ -59,7 +60,8 @@ public class ManageChatTextCell extends FrameLayout {
         setMeasuredDimension(width, (this.divider ? 1 : 0) + AndroidUtilities.dp(56.0f));
     }
 
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+    /* Access modifiers changed, original: protected */
+    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
         int height = bottom - top;
         int width = right - left;
         int viewTop = (height - this.valueTextView.getTextHeight()) / 2;
@@ -102,7 +104,8 @@ public class ManageChatTextCell extends FrameLayout {
         setWillNotDraw(z);
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (this.divider) {
             canvas.drawLine((float) AndroidUtilities.dp(71.0f), (float) (getMeasuredHeight() - 1), (float) getMeasuredWidth(), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }

@@ -103,13 +103,15 @@ public class GroupCreateCheckBox extends View {
         this.checkAnimator.start();
     }
 
-    protected void onAttachedToWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onAttachedToWindow() {
         super.onAttachedToWindow();
         updateColors();
         this.attachedToWindow = true;
     }
 
-    protected void onDetachedFromWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.attachedToWindow = false;
     }
@@ -134,7 +136,8 @@ public class GroupCreateCheckBox extends View {
         this.innerRadDiff = value;
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (getVisibility() == 0 && this.progress != 0.0f) {
             float radDiff;
             int cx = getMeasuredWidth() / 2;

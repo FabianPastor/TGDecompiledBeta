@@ -1,16 +1,27 @@
 package org.telegram.ui;
 
 import java.util.ArrayList;
-import org.telegram.ui.DialogsActivity.DialogsActivityDelegate;
 
-final /* synthetic */ class NotificationsCustomSettingsActivity$$Lambda$3 implements DialogsActivityDelegate {
+final /* synthetic */ class NotificationsCustomSettingsActivity$$Lambda$3 implements Runnable {
     private final NotificationsCustomSettingsActivity arg$1;
+    private final ArrayList arg$2;
+    private final ArrayList arg$3;
+    private final ArrayList arg$4;
+    private final ArrayList arg$5;
+    private final ArrayList arg$6;
+    private final ArrayList arg$7;
 
-    NotificationsCustomSettingsActivity$$Lambda$3(NotificationsCustomSettingsActivity notificationsCustomSettingsActivity) {
+    NotificationsCustomSettingsActivity$$Lambda$3(NotificationsCustomSettingsActivity notificationsCustomSettingsActivity, ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3, ArrayList arrayList4, ArrayList arrayList5, ArrayList arrayList6) {
         this.arg$1 = notificationsCustomSettingsActivity;
+        this.arg$2 = arrayList;
+        this.arg$3 = arrayList2;
+        this.arg$4 = arrayList3;
+        this.arg$5 = arrayList4;
+        this.arg$6 = arrayList5;
+        this.arg$7 = arrayList6;
     }
 
-    public void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
-        this.arg$1.lambda$null$2$NotificationsCustomSettingsActivity(dialogsActivity, arrayList, charSequence, z);
+    public void run() {
+        this.arg$1.lambda$null$9$NotificationsCustomSettingsActivity(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6, this.arg$7);
     }
 }

@@ -49,7 +49,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.LangPackString;
@@ -102,7 +101,8 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
             invalidate();
         }
 
-        protected void onDraw(Canvas canvas) {
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
             int x;
             float d = (float) AndroidUtilities.dp(5.0f);
             this.paint.setColor(-4473925);
@@ -147,7 +147,8 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
                 }
             }
 
-            final /* synthetic */ void lambda$run$0$IntroActivity$EGLThread$1() {
+            /* Access modifiers changed, original: final|synthetic */
+            public final /* synthetic */ void lambda$run$0$IntroActivity$EGLThread$1() {
                 EGLThread.this.drawRunnable.run();
             }
         };
@@ -209,29 +210,29 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
                         } else if (this.egl10.eglMakeCurrent(this.eglDisplay, this.eglSurface, this.eglSurface, this.eglContext)) {
                             this.gl = this.eglContext.getGL();
                             GLES20.glGenTextures(23, this.textures, 0);
-                            loadTexture(R.drawable.intro_fast_arrow_shadow, 0);
-                            loadTexture(R.drawable.intro_fast_arrow, 1);
-                            loadTexture(R.drawable.intro_fast_body, 2);
-                            loadTexture(R.drawable.intro_fast_spiral, 3);
-                            loadTexture(R.drawable.intro_ic_bubble_dot, 4);
-                            loadTexture(R.drawable.intro_ic_bubble, 5);
-                            loadTexture(R.drawable.intro_ic_cam_lens, 6);
-                            loadTexture(R.drawable.intro_ic_cam, 7);
-                            loadTexture(R.drawable.intro_ic_pencil, 8);
-                            loadTexture(R.drawable.intro_ic_pin, 9);
-                            loadTexture(R.drawable.intro_ic_smile_eye, 10);
-                            loadTexture(R.drawable.intro_ic_smile, 11);
-                            loadTexture(R.drawable.intro_ic_videocam, 12);
-                            loadTexture(R.drawable.intro_knot_down, 13);
-                            loadTexture(R.drawable.intro_knot_up, 14);
-                            loadTexture(R.drawable.intro_powerful_infinity_white, 15);
-                            loadTexture(R.drawable.intro_powerful_infinity, 16);
-                            loadTexture(R.drawable.intro_powerful_mask, 17);
-                            loadTexture(R.drawable.intro_powerful_star, 18);
-                            loadTexture(R.drawable.intro_private_door, 19);
-                            loadTexture(R.drawable.intro_private_screw, 20);
-                            loadTexture(R.drawable.intro_tg_plane, 21);
-                            loadTexture(R.drawable.intro_tg_sphere, 22);
+                            loadTexture(NUM, 0);
+                            loadTexture(NUM, 1);
+                            loadTexture(NUM, 2);
+                            loadTexture(NUM, 3);
+                            loadTexture(NUM, 4);
+                            loadTexture(NUM, 5);
+                            loadTexture(NUM, 6);
+                            loadTexture(NUM, 7);
+                            loadTexture(NUM, 8);
+                            loadTexture(NUM, 9);
+                            loadTexture(NUM, 10);
+                            loadTexture(NUM, 11);
+                            loadTexture(NUM, 12);
+                            loadTexture(NUM, 13);
+                            loadTexture(NUM, 14);
+                            loadTexture(NUM, 15);
+                            loadTexture(NUM, 16);
+                            loadTexture(NUM, 17);
+                            loadTexture(NUM, 18);
+                            loadTexture(NUM, 19);
+                            loadTexture(NUM, 20);
+                            loadTexture(NUM, 21);
+                            loadTexture(NUM, 22);
                             Intro.setTelegramTextures(this.textures[22], this.textures[21]);
                             Intro.setPowerfulTextures(this.textures[17], this.textures[18], this.textures[16], this.textures[15]);
                             Intro.setPrivateTextures(this.textures[19], this.textures[20]);
@@ -300,7 +301,8 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
             postRunnable(new IntroActivity$EGLThread$$Lambda$0(this));
         }
 
-        final /* synthetic */ void lambda$shutdown$0$IntroActivity$EGLThread() {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$shutdown$0$IntroActivity$EGLThread() {
             finish();
             Looper looper = Looper.myLooper();
             if (looper != null) {
@@ -378,13 +380,14 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         }
     }
 
-    protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.Theme.TMessages);
+    /* Access modifiers changed, original: protected */
+    public void onCreate(Bundle savedInstanceState) {
+        setTheme(NUM);
         super.onCreate(savedInstanceState);
         requestWindowFeature(1);
         MessagesController.getGlobalMainSettings().edit().putLong("intro_crashed_time", System.currentTimeMillis()).commit();
-        this.titles = new String[]{LocaleController.getString("Page1Title", R.string.Page1Title), LocaleController.getString("Page2Title", R.string.Page2Title), LocaleController.getString("Page3Title", R.string.Page3Title), LocaleController.getString("Page5Title", R.string.Page5Title), LocaleController.getString("Page4Title", R.string.Page4Title), LocaleController.getString("Page6Title", R.string.Page6Title)};
-        this.messages = new String[]{LocaleController.getString("Page1Message", R.string.Page1Message), LocaleController.getString("Page2Message", R.string.Page2Message), LocaleController.getString("Page3Message", R.string.Page3Message), LocaleController.getString("Page5Message", R.string.Page5Message), LocaleController.getString("Page4Message", R.string.Page4Message), LocaleController.getString("Page6Message", R.string.Page6Message)};
+        this.titles = new String[]{LocaleController.getString("Page1Title", NUM), LocaleController.getString("Page2Title", NUM), LocaleController.getString("Page3Title", NUM), LocaleController.getString("Page5Title", NUM), LocaleController.getString("Page4Title", NUM), LocaleController.getString("Page6Title", NUM)};
+        this.messages = new String[]{LocaleController.getString("Page1Message", NUM), LocaleController.getString("Page2Message", NUM), LocaleController.getString("Page3Message", NUM), LocaleController.getString("Page5Message", NUM), LocaleController.getString("Page4Message", NUM), LocaleController.getString("Page6Message", NUM)};
         View scrollView = new ScrollView(this);
         scrollView.setFillViewport(true);
         FrameLayout frameLayout = new FrameLayout(this);
@@ -403,7 +406,8 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
                 }
             }
 
-            final /* synthetic */ void lambda$onSurfaceTextureAvailable$0$IntroActivity$1() {
+            /* Access modifiers changed, original: final|synthetic */
+            public final /* synthetic */ void lambda$onSurfaceTextureAvailable$0$IntroActivity$1() {
                 IntroActivity.this.eglThread.drawRunnable.run();
             }
 
@@ -458,11 +462,11 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
             }
         });
         scrollView = new TextView(this);
-        scrollView.setText(LocaleController.getString("StartMessaging", R.string.StartMessaging).toUpperCase());
+        scrollView.setText(LocaleController.getString("StartMessaging", NUM).toUpperCase());
         scrollView.setGravity(17);
         scrollView.setTextColor(-1);
         scrollView.setTextSize(1, 16.0f);
-        scrollView.setBackgroundResource(R.drawable.regbtn_states);
+        scrollView.setBackgroundResource(NUM);
         if (VERSION.SDK_INT >= 21) {
             StateListAnimator animator = new StateListAnimator();
             scrollView = scrollView;
@@ -489,12 +493,12 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
             FrameLayout frameLayout3 = new FrameLayout(this);
             setContentView(frameLayout3);
             View imageView = new ImageView(this);
-            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.catstile);
+            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(NUM);
             drawable.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
             imageView.setBackgroundDrawable(drawable);
             frameLayout3.addView(imageView, LayoutHelper.createFrame(-1, -1.0f));
             FrameLayout frameLayout4 = new FrameLayout(this);
-            frameLayout4.setBackgroundResource(R.drawable.btnshadow);
+            frameLayout4.setBackgroundResource(NUM);
             frameLayout4.addView(scrollView, LayoutHelper.createFrame(-1, -1.0f));
             frameLayout3.addView(frameLayout4, LayoutHelper.createFrame(498, 528, 17));
         } else {
@@ -508,7 +512,8 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         AndroidUtilities.handleProxyIntent(this, getIntent());
     }
 
-    final /* synthetic */ void lambda$onCreate$0$IntroActivity(View view) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onCreate$0$IntroActivity(View view) {
         if (!this.startPressed) {
             this.startPressed = true;
             Intent intent2 = new Intent(this, LaunchActivity.class);
@@ -519,12 +524,14 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         }
     }
 
-    final /* synthetic */ boolean lambda$onCreate$1$IntroActivity(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ boolean lambda$onCreate$1$IntroActivity(View v) {
         ConnectionsManager.getInstance(this.currentAccount).switchBackend();
         return true;
     }
 
-    final /* synthetic */ void lambda$onCreate$2$IntroActivity(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onCreate$2$IntroActivity(View v) {
         if (!this.startPressed && this.localeInfo != null) {
             LocaleController.getInstance().applyLanguage(this.localeInfo, true, false, this.currentAccount);
             this.startPressed = true;
@@ -536,7 +543,8 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         }
     }
 
-    protected void onResume() {
+    /* Access modifiers changed, original: protected */
+    public void onResume() {
         super.onResume();
         if (this.justCreated) {
             if (LocaleController.isRTL) {
@@ -553,13 +561,15 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         ConnectionsManager.getInstance(this.currentAccount).setAppPaused(false, false);
     }
 
-    protected void onPause() {
+    /* Access modifiers changed, original: protected */
+    public void onPause() {
         super.onPause();
         AndroidUtilities.unregisterUpdates();
         ConnectionsManager.getInstance(this.currentAccount).setAppPaused(true, false);
     }
 
-    protected void onDestroy() {
+    /* Access modifiers changed, original: protected */
+    public void onDestroy() {
         super.onDestroy();
         this.destroyed = true;
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.suggestedLangpack);
@@ -604,7 +614,8 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         }
     }
 
-    final /* synthetic */ void lambda$checkContinueText$4$IntroActivity(String systemLang, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$checkContinueText$4$IntroActivity(String systemLang, TLObject response, TL_error error) {
         if (response != null) {
             Vector vector = (Vector) response;
             if (!vector.objects.isEmpty()) {
@@ -616,7 +627,8 @@ public class IntroActivity extends Activity implements NotificationCenterDelegat
         }
     }
 
-    final /* synthetic */ void lambda$null$3$IntroActivity(LangPackString string, String systemLang) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$3$IntroActivity(LangPackString string, String systemLang) {
         if (!this.destroyed) {
             this.textView.setText(string.value);
             MessagesController.getGlobalMainSettings().edit().putString("language_showed2", systemLang.toLowerCase()).commit();

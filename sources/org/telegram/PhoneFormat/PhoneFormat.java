@@ -85,11 +85,11 @@ public class PhoneFormat {
         init(countryCode);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:43:0x009f A:{SYNTHETIC, Splitter: B:43:0x009f} */
-    /* JADX WARNING: Removed duplicated region for block: B:46:0x00a4 A:{SYNTHETIC, Splitter: B:46:0x00a4} */
-    /* JADX WARNING: Removed duplicated region for block: B:15:0x0030 A:{SYNTHETIC, Splitter: B:15:0x0030} */
+    /* JADX WARNING: Removed duplicated region for block: B:43:0x009f A:{SYNTHETIC, Splitter:B:43:0x009f} */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x00a4 A:{SYNTHETIC, Splitter:B:46:0x00a4} */
+    /* JADX WARNING: Removed duplicated region for block: B:15:0x0030 A:{SYNTHETIC, Splitter:B:15:0x0030} */
     /* JADX WARNING: Removed duplicated region for block: B:58:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:18:0x0035 A:{SYNTHETIC, Splitter: B:18:0x0035} */
+    /* JADX WARNING: Removed duplicated region for block: B:18:0x0035 A:{SYNTHETIC, Splitter:B:18:0x0035} */
     public void init(java.lang.String r11) {
         /*
         r10 = this;
@@ -286,7 +286,7 @@ public class PhoneFormat {
                 return accessCode;
             }
             return String.format("%s %s", new Object[]{accessCode, phone});
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
             return orig;
         }
@@ -326,7 +326,8 @@ public class PhoneFormat {
         return true;
     }
 
-    int value32(int offset) {
+    /* Access modifiers changed, original: 0000 */
+    public int value32(int offset) {
         if (offset + 4 > this.data.length) {
             return 0;
         }
@@ -334,7 +335,8 @@ public class PhoneFormat {
         return this.buffer.getInt();
     }
 
-    short value16(int offset) {
+    /* Access modifiers changed, original: 0000 */
+    public short value16(int offset) {
         if (offset + 2 > this.data.length) {
             return (short) 0;
         }

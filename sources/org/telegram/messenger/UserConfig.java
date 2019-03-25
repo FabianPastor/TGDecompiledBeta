@@ -2,7 +2,6 @@ package org.telegram.messenger;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.content.pm.PackageInfo;
 import android.os.SystemClock;
 import android.util.Base64;
 import java.io.File;
@@ -11,7 +10,6 @@ import org.telegram.tgnet.TLRPC.TL_account_tmpPassword;
 import org.telegram.tgnet.TLRPC.TL_help_appUpdate;
 import org.telegram.tgnet.TLRPC.TL_help_termsOfService;
 import org.telegram.tgnet.TLRPC.User;
-import org.telegram.tgnet.TLRPC.help_AppUpdate;
 
 public class UserConfig {
     private static volatile UserConfig[] Instance = new UserConfig[3];
@@ -217,7 +215,7 @@ public class UserConfig {
                 if (oldFile != null) {
                     oldFile.delete();
                 }
-            } catch (Throwable e3) {
+            } catch (Exception e3) {
                 FileLog.e(e3);
             }
         }
@@ -262,127 +260,463 @@ public class UserConfig {
         }
     }
 
+    /* JADX WARNING: No exception handlers in catch block: Catch:{  } */
     public void loadConfig() {
-        synchronized (this.sync) {
-            if (this.configLoaded) {
-                return;
-            }
-            SharedPreferences preferences;
-            byte[] arr;
-            SerializedData data;
-            byte[] bytes;
-            if (this.currentAccount == 0) {
-                preferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", 0);
-                selectedAccount = preferences.getInt("selectedAccount", 0);
-            } else {
-                preferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfig" + this.currentAccount, 0);
-            }
-            this.registeredForPush = preferences.getBoolean("registeredForPush", false);
-            this.lastSendMessageId = preferences.getInt("lastSendMessageId", -210000);
-            this.contactsSavedCount = preferences.getInt("contactsSavedCount", 0);
-            this.lastBroadcastId = preferences.getInt("lastBroadcastId", -1);
-            this.blockedUsersLoaded = preferences.getBoolean("blockedUsersLoaded", false);
-            this.lastContactsSyncTime = preferences.getInt("lastContactsSyncTime", ((int) (System.currentTimeMillis() / 1000)) - 82800);
-            this.lastHintsSyncTime = preferences.getInt("lastHintsSyncTime", ((int) (System.currentTimeMillis() / 1000)) - 90000);
-            this.draftsLoaded = preferences.getBoolean("draftsLoaded", false);
-            this.pinnedDialogsLoaded = preferences.getBoolean("pinnedDialogsLoaded", false);
-            this.unreadDialogsLoaded = preferences.getBoolean("unreadDialogsLoaded", false);
-            this.contactsReimported = preferences.getBoolean("contactsReimported", false);
-            this.ratingLoadTime = preferences.getInt("ratingLoadTime", 0);
-            this.botRatingLoadTime = preferences.getInt("botRatingLoadTime", 0);
-            this.loginTime = preferences.getInt("loginTime", this.currentAccount);
-            this.syncContacts = preferences.getBoolean("syncContacts", true);
-            this.suggestContacts = preferences.getBoolean("suggestContacts", true);
-            this.hasSecureData = preferences.getBoolean("hasSecureData", false);
-            this.notificationsSettingsLoaded = preferences.getBoolean("notificationsSettingsLoaded3", false);
-            this.notificationsSignUpSettingsLoaded = preferences.getBoolean("notificationsSignUpSettingsLoaded", false);
-            this.autoDownloadConfigLoadTime = preferences.getLong("autoDownloadConfigLoadTime", 0);
-            try {
-                String terms = preferences.getString("terms", null);
-                if (terms != null) {
-                    arr = Base64.decode(terms, 0);
-                    if (arr != null) {
-                        data = new SerializedData(arr);
-                        this.unacceptedTermsOfService = TL_help_termsOfService.TLdeserialize(data, data.readInt32(false), false);
-                        data.cleanup();
-                    }
-                }
-            } catch (Throwable e) {
-                FileLog.e(e);
-            }
-            if (this.currentAccount == 0) {
-                this.lastUpdateCheckTime = preferences.getLong("appUpdateCheckTime", System.currentTimeMillis());
-                try {
-                    String update = preferences.getString("appUpdate", null);
-                    if (update != null) {
-                        this.pendingAppUpdateBuildVersion = preferences.getInt("appUpdateBuild", BuildVars.BUILD_VERSION);
-                        this.pendingAppUpdateInstallTime = preferences.getLong("appUpdateTime", System.currentTimeMillis());
-                        arr = Base64.decode(update, 0);
-                        if (arr != null) {
-                            data = new SerializedData(arr);
-                            this.pendingAppUpdate = (TL_help_appUpdate) help_AppUpdate.TLdeserialize(data, data.readInt32(false), false);
-                            data.cleanup();
-                        }
-                    }
-                    if (this.pendingAppUpdate != null) {
-                        long updateTime = 0;
-                        try {
-                            PackageInfo packageInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
-                            updateTime = Math.max(packageInfo.lastUpdateTime, packageInfo.firstInstallTime);
-                        } catch (Throwable e2) {
-                            FileLog.e(e2);
-                        }
-                        if (this.pendingAppUpdateBuildVersion != BuildVars.BUILD_VERSION || this.pendingAppUpdateInstallTime < updateTime) {
-                            this.pendingAppUpdate = null;
-                            AndroidUtilities.runOnUIThread(new UserConfig$$Lambda$0(this));
-                        }
-                    }
-                } catch (Throwable e22) {
-                    FileLog.e(e22);
-                }
-            }
-            this.migrateOffsetId = preferences.getInt("3migrateOffsetId", 0);
-            if (this.migrateOffsetId != -1) {
-                this.migrateOffsetDate = preferences.getInt("3migrateOffsetDate", 0);
-                this.migrateOffsetUserId = preferences.getInt("3migrateOffsetUserId", 0);
-                this.migrateOffsetChatId = preferences.getInt("3migrateOffsetChatId", 0);
-                this.migrateOffsetChannelId = preferences.getInt("3migrateOffsetChannelId", 0);
-                this.migrateOffsetAccess = preferences.getLong("3migrateOffsetAccess", 0);
-            }
-            this.dialogsLoadOffsetId = preferences.getInt("2dialogsLoadOffsetId", -1);
-            this.totalDialogsLoadCount = preferences.getInt("2totalDialogsLoadCount", 0);
-            this.dialogsLoadOffsetDate = preferences.getInt("2dialogsLoadOffsetDate", -1);
-            this.dialogsLoadOffsetUserId = preferences.getInt("2dialogsLoadOffsetUserId", -1);
-            this.dialogsLoadOffsetChatId = preferences.getInt("2dialogsLoadOffsetChatId", -1);
-            this.dialogsLoadOffsetChannelId = preferences.getInt("2dialogsLoadOffsetChannelId", -1);
-            this.dialogsLoadOffsetAccess = preferences.getLong("2dialogsLoadOffsetAccess", -1);
-            String string = preferences.getString("tmpPassword", null);
-            if (string != null) {
-                bytes = Base64.decode(string, 0);
-                if (bytes != null) {
-                    data = new SerializedData(bytes);
-                    this.tmpPassword = TL_account_tmpPassword.TLdeserialize(data, data.readInt32(false), false);
-                    data.cleanup();
-                }
-            }
-            string = preferences.getString("user", null);
-            if (string != null) {
-                bytes = Base64.decode(string, 0);
-                if (bytes != null) {
-                    data = new SerializedData(bytes);
-                    this.currentUser = User.TLdeserialize(data, data.readInt32(false), false);
-                    data.cleanup();
-                }
-            }
-            if (this.currentUser != null) {
-                this.clientUserId = this.currentUser.id;
-            }
-            this.configLoaded = true;
-            return;
-        }
+        /*
+        r22 = this;
+        r0 = r22;
+        r0 = r0.sync;
+        r16 = r0;
+        monitor-enter(r16);
+        r0 = r22;
+        r13 = r0.configLoaded;	 Catch:{ all -> 0x03ab }
+        if (r13 == 0) goto L_0x000f;
+    L_0x000d:
+        monitor-exit(r16);	 Catch:{ all -> 0x03ab }
+    L_0x000e:
+        return;
+    L_0x000f:
+        r0 = r22;
+        r13 = r0.currentAccount;	 Catch:{ all -> 0x03ab }
+        if (r13 != 0) goto L_0x03ae;
+    L_0x0015:
+        r13 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x03ab }
+        r17 = "userconfing";
+        r18 = 0;
+        r0 = r17;
+        r1 = r18;
+        r9 = r13.getSharedPreferences(r0, r1);	 Catch:{ all -> 0x03ab }
+        r13 = "selectedAccount";
+        r17 = 0;
+        r0 = r17;
+        r13 = r9.getInt(r13, r0);	 Catch:{ all -> 0x03ab }
+        selectedAccount = r13;	 Catch:{ all -> 0x03ab }
+    L_0x0031:
+        r13 = "registeredForPush";
+        r17 = 0;
+        r0 = r17;
+        r13 = r9.getBoolean(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.registeredForPush = r13;	 Catch:{ all -> 0x03ab }
+        r13 = "lastSendMessageId";
+        r17 = -210000; // 0xfffffffffffccbb0 float:NaN double:NaN;
+        r0 = r17;
+        r13 = r9.getInt(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.lastSendMessageId = r13;	 Catch:{ all -> 0x03ab }
+        r13 = "contactsSavedCount";
+        r17 = 0;
+        r0 = r17;
+        r13 = r9.getInt(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.contactsSavedCount = r13;	 Catch:{ all -> 0x03ab }
+        r13 = "lastBroadcastId";
+        r17 = -1;
+        r0 = r17;
+        r13 = r9.getInt(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.lastBroadcastId = r13;	 Catch:{ all -> 0x03ab }
+        r13 = "blockedUsersLoaded";
+        r17 = 0;
+        r0 = r17;
+        r13 = r9.getBoolean(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.blockedUsersLoaded = r13;	 Catch:{ all -> 0x03ab }
+        r13 = "lastContactsSyncTime";
+        r18 = java.lang.System.currentTimeMillis();	 Catch:{ all -> 0x03ab }
+        r20 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
+        r18 = r18 / r20;
+        r0 = r18;
+        r0 = (int) r0;	 Catch:{ all -> 0x03ab }
+        r17 = r0;
+        r18 = 82800; // 0x14370 float:1.16028E-40 double:4.09086E-319;
+        r17 = r17 - r18;
+        r0 = r17;
+        r13 = r9.getInt(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.lastContactsSyncTime = r13;	 Catch:{ all -> 0x03ab }
+        r13 = "lastHintsSyncTime";
+        r18 = java.lang.System.currentTimeMillis();	 Catch:{ all -> 0x03ab }
+        r20 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
+        r18 = r18 / r20;
+        r0 = r18;
+        r0 = (int) r0;	 Catch:{ all -> 0x03ab }
+        r17 = r0;
+        r18 = 90000; // 0x15var_ float:1.26117E-40 double:4.4466E-319;
+        r17 = r17 - r18;
+        r0 = r17;
+        r13 = r9.getInt(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.lastHintsSyncTime = r13;	 Catch:{ all -> 0x03ab }
+        r13 = "draftsLoaded";
+        r17 = 0;
+        r0 = r17;
+        r13 = r9.getBoolean(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.draftsLoaded = r13;	 Catch:{ all -> 0x03ab }
+        r13 = "pinnedDialogsLoaded";
+        r17 = 0;
+        r0 = r17;
+        r13 = r9.getBoolean(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.pinnedDialogsLoaded = r13;	 Catch:{ all -> 0x03ab }
+        r13 = "unreadDialogsLoaded";
+        r17 = 0;
+        r0 = r17;
+        r13 = r9.getBoolean(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.unreadDialogsLoaded = r13;	 Catch:{ all -> 0x03ab }
+        r13 = "contactsReimported";
+        r17 = 0;
+        r0 = r17;
+        r13 = r9.getBoolean(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.contactsReimported = r13;	 Catch:{ all -> 0x03ab }
+        r13 = "ratingLoadTime";
+        r17 = 0;
+        r0 = r17;
+        r13 = r9.getInt(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.ratingLoadTime = r13;	 Catch:{ all -> 0x03ab }
+        r13 = "botRatingLoadTime";
+        r17 = 0;
+        r0 = r17;
+        r13 = r9.getInt(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.botRatingLoadTime = r13;	 Catch:{ all -> 0x03ab }
+        r13 = "loginTime";
+        r0 = r22;
+        r0 = r0.currentAccount;	 Catch:{ all -> 0x03ab }
+        r17 = r0;
+        r0 = r17;
+        r13 = r9.getInt(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.loginTime = r13;	 Catch:{ all -> 0x03ab }
+        r13 = "syncContacts";
+        r17 = 1;
+        r0 = r17;
+        r13 = r9.getBoolean(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.syncContacts = r13;	 Catch:{ all -> 0x03ab }
+        r13 = "suggestContacts";
+        r17 = 1;
+        r0 = r17;
+        r13 = r9.getBoolean(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.suggestContacts = r13;	 Catch:{ all -> 0x03ab }
+        r13 = "hasSecureData";
+        r17 = 0;
+        r0 = r17;
+        r13 = r9.getBoolean(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.hasSecureData = r13;	 Catch:{ all -> 0x03ab }
+        r13 = "notificationsSettingsLoaded3";
+        r17 = 0;
+        r0 = r17;
+        r13 = r9.getBoolean(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.notificationsSettingsLoaded = r13;	 Catch:{ all -> 0x03ab }
+        r13 = "notificationsSignUpSettingsLoaded";
+        r17 = 0;
+        r0 = r17;
+        r13 = r9.getBoolean(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.notificationsSignUpSettingsLoaded = r13;	 Catch:{ all -> 0x03ab }
+        r13 = "autoDownloadConfigLoadTime";
+        r18 = 0;
+        r0 = r18;
+        r18 = r9.getLong(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r18;
+        r2 = r22;
+        r2.autoDownloadConfigLoadTime = r0;	 Catch:{ all -> 0x03ab }
+        r13 = "terms";
+        r17 = 0;
+        r0 = r17;
+        r11 = r9.getString(r13, r0);	 Catch:{ Exception -> 0x03d6 }
+        if (r11 == 0) goto L_0x01b1;
+    L_0x0191:
+        r13 = 0;
+        r4 = android.util.Base64.decode(r11, r13);	 Catch:{ Exception -> 0x03d6 }
+        if (r4 == 0) goto L_0x01b1;
+    L_0x0198:
+        r6 = new org.telegram.tgnet.SerializedData;	 Catch:{ Exception -> 0x03d6 }
+        r6.<init>(r4);	 Catch:{ Exception -> 0x03d6 }
+        r13 = 0;
+        r13 = r6.readInt32(r13);	 Catch:{ Exception -> 0x03d6 }
+        r17 = 0;
+        r0 = r17;
+        r13 = org.telegram.tgnet.TLRPC.TL_help_termsOfService.TLdeserialize(r6, r13, r0);	 Catch:{ Exception -> 0x03d6 }
+        r0 = r22;
+        r0.unacceptedTermsOfService = r13;	 Catch:{ Exception -> 0x03d6 }
+        r6.cleanup();	 Catch:{ Exception -> 0x03d6 }
+    L_0x01b1:
+        r0 = r22;
+        r13 = r0.currentAccount;	 Catch:{ all -> 0x03ab }
+        if (r13 != 0) goto L_0x0268;
+    L_0x01b7:
+        r13 = "appUpdateCheckTime";
+        r18 = java.lang.System.currentTimeMillis();	 Catch:{ all -> 0x03ab }
+        r0 = r18;
+        r18 = r9.getLong(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r18;
+        r2 = r22;
+        r2.lastUpdateCheckTime = r0;	 Catch:{ all -> 0x03ab }
+        r13 = "appUpdate";
+        r17 = 0;
+        r0 = r17;
+        r12 = r9.getString(r13, r0);	 Catch:{ Exception -> 0x03e2 }
+        if (r12 == 0) goto L_0x021b;
+    L_0x01d7:
+        r13 = "appUpdateBuild";
+        r17 = org.telegram.messenger.BuildVars.BUILD_VERSION;	 Catch:{ Exception -> 0x03e2 }
+        r0 = r17;
+        r13 = r9.getInt(r13, r0);	 Catch:{ Exception -> 0x03e2 }
+        r0 = r22;
+        r0.pendingAppUpdateBuildVersion = r13;	 Catch:{ Exception -> 0x03e2 }
+        r13 = "appUpdateTime";
+        r18 = java.lang.System.currentTimeMillis();	 Catch:{ Exception -> 0x03e2 }
+        r0 = r18;
+        r18 = r9.getLong(r13, r0);	 Catch:{ Exception -> 0x03e2 }
+        r0 = r18;
+        r2 = r22;
+        r2.pendingAppUpdateInstallTime = r0;	 Catch:{ Exception -> 0x03e2 }
+        r13 = 0;
+        r4 = android.util.Base64.decode(r12, r13);	 Catch:{ Exception -> 0x03e2 }
+        if (r4 == 0) goto L_0x021b;
+    L_0x0200:
+        r6 = new org.telegram.tgnet.SerializedData;	 Catch:{ Exception -> 0x03e2 }
+        r6.<init>(r4);	 Catch:{ Exception -> 0x03e2 }
+        r13 = 0;
+        r13 = r6.readInt32(r13);	 Catch:{ Exception -> 0x03e2 }
+        r17 = 0;
+        r0 = r17;
+        r13 = org.telegram.tgnet.TLRPC.help_AppUpdate.TLdeserialize(r6, r13, r0);	 Catch:{ Exception -> 0x03e2 }
+        r13 = (org.telegram.tgnet.TLRPC.TL_help_appUpdate) r13;	 Catch:{ Exception -> 0x03e2 }
+        r0 = r22;
+        r0.pendingAppUpdate = r13;	 Catch:{ Exception -> 0x03e2 }
+        r6.cleanup();	 Catch:{ Exception -> 0x03e2 }
+    L_0x021b:
+        r0 = r22;
+        r13 = r0.pendingAppUpdate;	 Catch:{ Exception -> 0x03e2 }
+        if (r13 == 0) goto L_0x0268;
+    L_0x0221:
+        r14 = 0;
+        r13 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x03dc }
+        r13 = r13.getPackageManager();	 Catch:{ Exception -> 0x03dc }
+        r17 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x03dc }
+        r17 = r17.getPackageName();	 Catch:{ Exception -> 0x03dc }
+        r18 = 0;
+        r0 = r17;
+        r1 = r18;
+        r8 = r13.getPackageInfo(r0, r1);	 Catch:{ Exception -> 0x03dc }
+        r0 = r8.lastUpdateTime;	 Catch:{ Exception -> 0x03dc }
+        r18 = r0;
+        r0 = r8.firstInstallTime;	 Catch:{ Exception -> 0x03dc }
+        r20 = r0;
+        r14 = java.lang.Math.max(r18, r20);	 Catch:{ Exception -> 0x03dc }
+    L_0x0245:
+        r0 = r22;
+        r13 = r0.pendingAppUpdateBuildVersion;	 Catch:{ Exception -> 0x03e2 }
+        r17 = org.telegram.messenger.BuildVars.BUILD_VERSION;	 Catch:{ Exception -> 0x03e2 }
+        r0 = r17;
+        if (r13 != r0) goto L_0x0259;
+    L_0x024f:
+        r0 = r22;
+        r0 = r0.pendingAppUpdateInstallTime;	 Catch:{ Exception -> 0x03e2 }
+        r18 = r0;
+        r13 = (r18 > r14 ? 1 : (r18 == r14 ? 0 : -1));
+        if (r13 >= 0) goto L_0x0268;
+    L_0x0259:
+        r13 = 0;
+        r0 = r22;
+        r0.pendingAppUpdate = r13;	 Catch:{ Exception -> 0x03e2 }
+        r13 = new org.telegram.messenger.UserConfig$$Lambda$0;	 Catch:{ Exception -> 0x03e2 }
+        r0 = r22;
+        r13.<init>(r0);	 Catch:{ Exception -> 0x03e2 }
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r13);	 Catch:{ Exception -> 0x03e2 }
+    L_0x0268:
+        r13 = "3migrateOffsetId";
+        r17 = 0;
+        r0 = r17;
+        r13 = r9.getInt(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.migrateOffsetId = r13;	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r13 = r0.migrateOffsetId;	 Catch:{ all -> 0x03ab }
+        r17 = -1;
+        r0 = r17;
+        if (r13 == r0) goto L_0x02ce;
+    L_0x0281:
+        r13 = "3migrateOffsetDate";
+        r17 = 0;
+        r0 = r17;
+        r13 = r9.getInt(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.migrateOffsetDate = r13;	 Catch:{ all -> 0x03ab }
+        r13 = "3migrateOffsetUserId";
+        r17 = 0;
+        r0 = r17;
+        r13 = r9.getInt(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.migrateOffsetUserId = r13;	 Catch:{ all -> 0x03ab }
+        r13 = "3migrateOffsetChatId";
+        r17 = 0;
+        r0 = r17;
+        r13 = r9.getInt(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.migrateOffsetChatId = r13;	 Catch:{ all -> 0x03ab }
+        r13 = "3migrateOffsetChannelId";
+        r17 = 0;
+        r0 = r17;
+        r13 = r9.getInt(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.migrateOffsetChannelId = r13;	 Catch:{ all -> 0x03ab }
+        r13 = "3migrateOffsetAccess";
+        r18 = 0;
+        r0 = r18;
+        r18 = r9.getLong(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r18;
+        r2 = r22;
+        r2.migrateOffsetAccess = r0;	 Catch:{ all -> 0x03ab }
+    L_0x02ce:
+        r13 = "2dialogsLoadOffsetId";
+        r17 = -1;
+        r0 = r17;
+        r13 = r9.getInt(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.dialogsLoadOffsetId = r13;	 Catch:{ all -> 0x03ab }
+        r13 = "2totalDialogsLoadCount";
+        r17 = 0;
+        r0 = r17;
+        r13 = r9.getInt(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.totalDialogsLoadCount = r13;	 Catch:{ all -> 0x03ab }
+        r13 = "2dialogsLoadOffsetDate";
+        r17 = -1;
+        r0 = r17;
+        r13 = r9.getInt(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.dialogsLoadOffsetDate = r13;	 Catch:{ all -> 0x03ab }
+        r13 = "2dialogsLoadOffsetUserId";
+        r17 = -1;
+        r0 = r17;
+        r13 = r9.getInt(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.dialogsLoadOffsetUserId = r13;	 Catch:{ all -> 0x03ab }
+        r13 = "2dialogsLoadOffsetChatId";
+        r17 = -1;
+        r0 = r17;
+        r13 = r9.getInt(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.dialogsLoadOffsetChatId = r13;	 Catch:{ all -> 0x03ab }
+        r13 = "2dialogsLoadOffsetChannelId";
+        r17 = -1;
+        r0 = r17;
+        r13 = r9.getInt(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.dialogsLoadOffsetChannelId = r13;	 Catch:{ all -> 0x03ab }
+        r13 = "2dialogsLoadOffsetAccess";
+        r18 = -1;
+        r0 = r18;
+        r18 = r9.getLong(r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r18;
+        r2 = r22;
+        r2.dialogsLoadOffsetAccess = r0;	 Catch:{ all -> 0x03ab }
+        r13 = "tmpPassword";
+        r17 = 0;
+        r0 = r17;
+        r10 = r9.getString(r13, r0);	 Catch:{ all -> 0x03ab }
+        if (r10 == 0) goto L_0x0366;
+    L_0x0346:
+        r13 = 0;
+        r5 = android.util.Base64.decode(r10, r13);	 Catch:{ all -> 0x03ab }
+        if (r5 == 0) goto L_0x0366;
+    L_0x034d:
+        r6 = new org.telegram.tgnet.SerializedData;	 Catch:{ all -> 0x03ab }
+        r6.<init>(r5);	 Catch:{ all -> 0x03ab }
+        r13 = 0;
+        r13 = r6.readInt32(r13);	 Catch:{ all -> 0x03ab }
+        r17 = 0;
+        r0 = r17;
+        r13 = org.telegram.tgnet.TLRPC.TL_account_tmpPassword.TLdeserialize(r6, r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.tmpPassword = r13;	 Catch:{ all -> 0x03ab }
+        r6.cleanup();	 Catch:{ all -> 0x03ab }
+    L_0x0366:
+        r13 = "user";
+        r17 = 0;
+        r0 = r17;
+        r10 = r9.getString(r13, r0);	 Catch:{ all -> 0x03ab }
+        if (r10 == 0) goto L_0x0393;
+    L_0x0373:
+        r13 = 0;
+        r5 = android.util.Base64.decode(r10, r13);	 Catch:{ all -> 0x03ab }
+        if (r5 == 0) goto L_0x0393;
+    L_0x037a:
+        r6 = new org.telegram.tgnet.SerializedData;	 Catch:{ all -> 0x03ab }
+        r6.<init>(r5);	 Catch:{ all -> 0x03ab }
+        r13 = 0;
+        r13 = r6.readInt32(r13);	 Catch:{ all -> 0x03ab }
+        r17 = 0;
+        r0 = r17;
+        r13 = org.telegram.tgnet.TLRPC.User.TLdeserialize(r6, r13, r0);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.currentUser = r13;	 Catch:{ all -> 0x03ab }
+        r6.cleanup();	 Catch:{ all -> 0x03ab }
+    L_0x0393:
+        r0 = r22;
+        r13 = r0.currentUser;	 Catch:{ all -> 0x03ab }
+        if (r13 == 0) goto L_0x03a3;
+    L_0x0399:
+        r0 = r22;
+        r13 = r0.currentUser;	 Catch:{ all -> 0x03ab }
+        r13 = r13.id;	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0.clientUserId = r13;	 Catch:{ all -> 0x03ab }
+    L_0x03a3:
+        r13 = 1;
+        r0 = r22;
+        r0.configLoaded = r13;	 Catch:{ all -> 0x03ab }
+        monitor-exit(r16);	 Catch:{ all -> 0x03ab }
+        goto L_0x000e;
+    L_0x03ab:
+        r13 = move-exception;
+        monitor-exit(r16);	 Catch:{ all -> 0x03ab }
+        throw r13;
+    L_0x03ae:
+        r13 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ all -> 0x03ab }
+        r17 = new java.lang.StringBuilder;	 Catch:{ all -> 0x03ab }
+        r17.<init>();	 Catch:{ all -> 0x03ab }
+        r18 = "userconfig";
+        r17 = r17.append(r18);	 Catch:{ all -> 0x03ab }
+        r0 = r22;
+        r0 = r0.currentAccount;	 Catch:{ all -> 0x03ab }
+        r18 = r0;
+        r17 = r17.append(r18);	 Catch:{ all -> 0x03ab }
+        r17 = r17.toString();	 Catch:{ all -> 0x03ab }
+        r18 = 0;
+        r0 = r17;
+        r1 = r18;
+        r9 = r13.getSharedPreferences(r0, r1);	 Catch:{ all -> 0x03ab }
+        goto L_0x0031;
+    L_0x03d6:
+        r7 = move-exception;
+        org.telegram.messenger.FileLog.e(r7);	 Catch:{ all -> 0x03ab }
+        goto L_0x01b1;
+    L_0x03dc:
+        r7 = move-exception;
+        org.telegram.messenger.FileLog.e(r7);	 Catch:{ Exception -> 0x03e2 }
+        goto L_0x0245;
+    L_0x03e2:
+        r7 = move-exception;
+        org.telegram.messenger.FileLog.e(r7);	 Catch:{ all -> 0x03ab }
+        goto L_0x0268;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.UserConfig.loadConfig():void");
     }
 
-    final /* synthetic */ void lambda$loadConfig$0$UserConfig() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$loadConfig$0$UserConfig() {
         saveConfig(false);
     }
 

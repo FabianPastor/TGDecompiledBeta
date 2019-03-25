@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -67,7 +68,7 @@ public class Utilities {
             sUrandomIn.read(buffer);
             sUrandomIn.close();
             random.setSeed(buffer);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
@@ -107,7 +108,7 @@ public class Utilities {
                 return Integer.valueOf(Integer.parseInt(matcher.group(0)));
             }
             return val;
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
             return val;
         }
@@ -124,7 +125,7 @@ public class Utilities {
                 return Long.valueOf(Long.parseLong(matcher.group(0)));
             }
             return val;
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
             return val;
         }
@@ -226,7 +227,7 @@ public class Utilities {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
             md.update(convertme, offset, len);
             return md.digest();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
             return new byte[20];
         }
@@ -242,7 +243,7 @@ public class Utilities {
             md.update(convertme);
             byte[] digest = md.digest();
             return digest;
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
             return new byte[20];
         } finally {
@@ -268,7 +269,7 @@ public class Utilities {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             md.update(convertme, offset, len);
             return md.digest();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
             return new byte[32];
         }
@@ -281,7 +282,7 @@ public class Utilities {
                 md.update(args[a], 0, args[a].length);
             }
             return md.digest();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
             return new byte[32];
         }
@@ -292,7 +293,7 @@ public class Utilities {
             MessageDigest md = MessageDigest.getInstance("SHA-512");
             md.update(convertme, 0, convertme.length);
             return md.digest();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
             return new byte[64];
         }
@@ -304,7 +305,7 @@ public class Utilities {
             md.update(convertme, 0, convertme.length);
             md.update(convertme2, 0, convertme2.length);
             return md.digest();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
             return new byte[64];
         }
@@ -323,7 +324,7 @@ public class Utilities {
             md.update(convertme2, 0, convertme2.length);
             md.update(convertme3, 0, convertme3.length);
             return md.digest();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
             return new byte[64];
         }
@@ -340,7 +341,7 @@ public class Utilities {
             md.update(b2);
             byte[] digest = md.digest();
             return digest;
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
             return new byte[32];
         } finally {
@@ -368,7 +369,7 @@ public class Utilities {
                 sb.append(Integer.toHexString((b & 255) | 256).substring(1, 3));
             }
             return sb.toString();
-        } catch (Throwable e) {
+        } catch (NoSuchAlgorithmException e) {
             FileLog.e(e);
             return null;
         }

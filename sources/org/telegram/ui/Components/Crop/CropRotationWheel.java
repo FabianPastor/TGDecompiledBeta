@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.beta.R;
+import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -55,16 +55,18 @@ public class CropRotationWheel extends FrameLayout {
         this.bluePaint.setAlpha(255);
         this.bluePaint.setAntiAlias(true);
         this.aspectRatioButton = new ImageView(context);
-        this.aspectRatioButton.setImageResource(R.drawable.tool_cropfix);
+        this.aspectRatioButton.setImageResource(NUM);
         this.aspectRatioButton.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
         this.aspectRatioButton.setScaleType(ScaleType.CENTER);
         this.aspectRatioButton.setOnClickListener(new CropRotationWheel$$Lambda$0(this));
+        this.aspectRatioButton.setContentDescription(LocaleController.getString("AccDescrAspectRatio", NUM));
         addView(this.aspectRatioButton, LayoutHelper.createFrame(70, 64, 19));
         ImageView rotation90Button = new ImageView(context);
-        rotation90Button.setImageResource(R.drawable.tool_rotate);
+        rotation90Button.setImageResource(NUM);
         rotation90Button.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
         rotation90Button.setScaleType(ScaleType.CENTER);
         rotation90Button.setOnClickListener(new CropRotationWheel$$Lambda$1(this));
+        rotation90Button.setContentDescription(LocaleController.getString("AccDescrRotate", NUM));
         addView(rotation90Button, LayoutHelper.createFrame(70, 64, 21));
         this.degreesLabel = new TextView(context);
         this.degreesLabel.setTextColor(-1);
@@ -73,13 +75,15 @@ public class CropRotationWheel extends FrameLayout {
         setRotation(0.0f, false);
     }
 
-    final /* synthetic */ void lambda$new$0$CropRotationWheel(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$0$CropRotationWheel(View v) {
         if (this.rotationListener != null) {
             this.rotationListener.aspectRatioPressed();
         }
     }
 
-    final /* synthetic */ void lambda$new$1$CropRotationWheel(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$1$CropRotationWheel(View v) {
         if (this.rotationListener != null) {
             this.rotationListener.rotate90Pressed();
         }
@@ -89,7 +93,8 @@ public class CropRotationWheel extends FrameLayout {
         this.aspectRatioButton.setVisibility(freeform ? 0 : 8);
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(Math.min(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(400.0f)), NUM), heightMeasureSpec);
     }
 
@@ -127,6 +132,7 @@ public class CropRotationWheel extends FrameLayout {
             if (this.rotationListener != null) {
                 this.rotationListener.onEnd(this.rotation);
             }
+            AndroidUtilities.makeAccessibilityAnnouncement(String.format("%.1f°", new Object[]{Float.valueOf(this.rotation)}));
         } else if (action == 2) {
             float newAngle = Math.max(-45.0f, Math.min(45.0f, this.rotation + ((float) ((((double) ((this.prevX - x) / AndroidUtilities.density)) / 3.141592653589793d) / 1.649999976158142d))));
             if (((double) Math.abs(newAngle - this.rotation)) > 0.001d) {
@@ -143,7 +149,8 @@ public class CropRotationWheel extends FrameLayout {
         return true;
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         int width = getWidth();
         int height = getHeight();
@@ -177,7 +184,8 @@ public class CropRotationWheel extends FrameLayout {
         canvas.drawRoundRect(this.tempRect, (float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(2.0f), this.bluePaint);
     }
 
-    protected void drawLine(Canvas canvas, int i, float delta, int width, int height, boolean center, Paint paint) {
+    /* Access modifiers changed, original: protected */
+    public void drawLine(Canvas canvas, int i, float delta, int width, int height, boolean center, Paint paint) {
         int radius = (int) ((((float) width) / 2.0f) - ((float) AndroidUtilities.dp(70.0f)));
         int val = (int) (((double) radius) * Math.cos(Math.toRadians((double) (90.0f - (((float) (i * 5)) + delta)))));
         int x = (width / 2) + val;

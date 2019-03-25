@@ -140,11 +140,13 @@ public class SearchAdapterHelper {
         this.delegate.onDataSetChanged();
     }
 
-    final /* synthetic */ void lambda$queryServerSearch$1$SearchAdapterHelper(int currentReqId, String query, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$queryServerSearch$1$SearchAdapterHelper(int currentReqId, String query, TLObject response, TL_error error) {
         AndroidUtilities.runOnUIThread(new SearchAdapterHelper$$Lambda$8(this, currentReqId, error, response, query));
     }
 
-    final /* synthetic */ void lambda$null$0$SearchAdapterHelper(int currentReqId, TL_error error, TLObject response, String query) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$0$SearchAdapterHelper(int currentReqId, TL_error error, TLObject response, String query) {
         if (currentReqId == this.channelLastReqId && error == null) {
             TL_channels_channelParticipants res = (TL_channels_channelParticipants) response;
             this.lastFoundChannel = query.toLowerCase();
@@ -165,12 +167,14 @@ public class SearchAdapterHelper {
         this.channelReqId = 0;
     }
 
-    final /* synthetic */ void lambda$queryServerSearch$3$SearchAdapterHelper(int currentReqId, boolean allowChats, boolean allowBots, boolean allowSelf, String query, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$queryServerSearch$3$SearchAdapterHelper(int currentReqId, boolean allowChats, boolean allowBots, boolean allowSelf, String query, TLObject response, TL_error error) {
         AndroidUtilities.runOnUIThread(new SearchAdapterHelper$$Lambda$7(this, currentReqId, error, response, allowChats, allowBots, allowSelf, query));
     }
 
+    /* Access modifiers changed, original: final|synthetic */
     /* JADX WARNING: Removed duplicated region for block: B:22:0x0092  */
-    final /* synthetic */ void lambda$null$2$SearchAdapterHelper(int r15, org.telegram.tgnet.TLRPC.TL_error r16, org.telegram.tgnet.TLObject r17, boolean r18, boolean r19, boolean r20, java.lang.String r21) {
+    public final /* synthetic */ void lambda$null$2$SearchAdapterHelper(int r15, org.telegram.tgnet.TLRPC.TL_error r16, org.telegram.tgnet.TLObject r17, boolean r18, boolean r19, boolean r20, java.lang.String r21) {
         /*
         r14 = this;
         r9 = r14.lastReqId;
@@ -408,7 +412,8 @@ public class SearchAdapterHelper {
         return false;
     }
 
-    final /* synthetic */ void lambda$loadRecentHashtags$6$SearchAdapterHelper() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$loadRecentHashtags$6$SearchAdapterHelper() {
         try {
             SQLiteCursor cursor = MessagesStorage.getInstance(this.currentAccount).getDatabase().queryFinalized("SELECT id, date FROM hashtag_recent_v2 WHERE 1", new Object[0]);
             ArrayList<HashtagObject> arrayList = new ArrayList();
@@ -423,7 +428,7 @@ public class SearchAdapterHelper {
             cursor.dispose();
             Collections.sort(arrayList, SearchAdapterHelper$$Lambda$5.$instance);
             AndroidUtilities.runOnUIThread(new SearchAdapterHelper$$Lambda$6(this, arrayList, hashMap));
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
@@ -527,7 +532,8 @@ public class SearchAdapterHelper {
         MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new SearchAdapterHelper$$Lambda$3(this, arrayList));
     }
 
-    final /* synthetic */ void lambda$putRecentHashtags$7$SearchAdapterHelper(ArrayList arrayList) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$putRecentHashtags$7$SearchAdapterHelper(ArrayList arrayList) {
         try {
             MessagesStorage.getInstance(this.currentAccount).getDatabase().beginTransaction();
             SQLitePreparedStatement state = MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("REPLACE INTO hashtag_recent_v2 VALUES(?, ?)");
@@ -549,7 +555,7 @@ public class SearchAdapterHelper {
                 }
                 MessagesStorage.getInstance(this.currentAccount).getDatabase().commitTransaction();
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
@@ -584,10 +590,11 @@ public class SearchAdapterHelper {
         MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new SearchAdapterHelper$$Lambda$4(this));
     }
 
-    final /* synthetic */ void lambda$clearRecentHashtags$8$SearchAdapterHelper() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$clearRecentHashtags$8$SearchAdapterHelper() {
         try {
             MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("DELETE FROM hashtag_recent_v2 WHERE 1").stepThis().dispose();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }

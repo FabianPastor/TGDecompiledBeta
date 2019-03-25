@@ -51,7 +51,8 @@ public class CropGestureDetector {
         });
     }
 
-    float getActiveX(MotionEvent ev) {
+    /* Access modifiers changed, original: 0000 */
+    public float getActiveX(MotionEvent ev) {
         try {
             return ev.getX(this.mActivePointerIndex);
         } catch (Exception e) {
@@ -59,7 +60,8 @@ public class CropGestureDetector {
         }
     }
 
-    float getActiveY(MotionEvent ev) {
+    /* Access modifiers changed, original: 0000 */
+    public float getActiveY(MotionEvent ev) {
         try {
             return ev.getY(this.mActivePointerIndex);
         } catch (Exception e) {

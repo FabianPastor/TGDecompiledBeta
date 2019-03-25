@@ -157,7 +157,8 @@ public class PhotoCropView extends FrameLayout {
         this.delegate = delegate;
     }
 
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+    /* Access modifiers changed, original: protected */
+    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         if (this.cropView != null) {
             this.cropView.updateLayout();

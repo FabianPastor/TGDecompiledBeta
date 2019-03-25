@@ -187,8 +187,9 @@ public class PhotoFilterCurvesControl extends View {
         }
     }
 
+    /* Access modifiers changed, original: protected */
     @SuppressLint({"DrawAllocation"})
-    protected void onDraw(Canvas canvas) {
+    public void onDraw(Canvas canvas) {
         Canvas canvas2;
         int a;
         float segmentWidth = this.actualArea.width / 5.0f;

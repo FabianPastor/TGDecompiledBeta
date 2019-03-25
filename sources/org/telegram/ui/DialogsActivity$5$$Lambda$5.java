@@ -1,9 +1,10 @@
 package org.telegram.ui;
 
+import org.telegram.messenger.MessagesStorage.BooleanCallback;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.ui.DialogsActivity.AnonymousClass5;
 
-final /* synthetic */ class DialogsActivity$5$$Lambda$5 implements Runnable {
+final /* synthetic */ class DialogsActivity$5$$Lambda$5 implements BooleanCallback {
     private final AnonymousClass5 arg$1;
     private final int arg$2;
     private final Chat arg$3;
@@ -16,7 +17,7 @@ final /* synthetic */ class DialogsActivity$5$$Lambda$5 implements Runnable {
         this.arg$4 = j;
     }
 
-    public void run() {
-        this.arg$1.lambda$null$2$DialogsActivity$5(this.arg$2, this.arg$3, this.arg$4);
+    public void run(boolean z) {
+        this.arg$1.lambda$null$2$DialogsActivity$5(this.arg$2, this.arg$3, this.arg$4, z);
     }
 }

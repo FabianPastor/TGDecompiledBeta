@@ -11,6 +11,6 @@ final /* synthetic */ class ChatActivity$$Lambda$50 implements OnClickListener {
     }
 
     public void onClick(View view) {
-        ChatActivity.lambda$createDeleteMessagesAlert$62$ChatActivity(this.arg$1, view);
+        ChatActivity.lambda$processSelectedOption$61$ChatActivity(this.arg$1, view);
     }
 }

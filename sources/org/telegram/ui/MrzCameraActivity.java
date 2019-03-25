@@ -20,7 +20,6 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MrzRecognizer;
 import org.telegram.messenger.MrzRecognizer.Result;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.camera.CameraView;
 import org.telegram.messenger.camera.CameraView.CameraViewDelegate;
 import org.telegram.messenger.camera.Size;
@@ -55,7 +54,7 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
     public View createView(Context context) {
         getParentActivity().setRequestedOrientation(1);
         this.actionBar.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setItemsColor(Theme.getColor("windowBackgroundWhiteGrayText2"), false);
         this.actionBar.setItemsBackgroundColor(Theme.getColor("actionBarWhiteSelector"), false);
         this.actionBar.setCastShadows(false);
@@ -65,12 +64,13 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    MrzCameraActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
+                    MrzCameraActivity.this.finishFragment();
                 }
             }
         });
         this.fragmentView = new ViewGroup(context) {
-            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            /* Access modifiers changed, original: protected */
+            public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int width = MeasureSpec.getSize(widthMeasureSpec);
                 int height = MeasureSpec.getSize(heightMeasureSpec);
                 MrzCameraActivity.this.cameraView.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.704f), NUM));
@@ -79,7 +79,8 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
                 setMeasuredDimension(width, height);
             }
 
-            protected void onLayout(boolean changed, int l, int t, int r, int b) {
+            /* Access modifiers changed, original: protected */
+            public void onLayout(boolean changed, int l, int t, int r, int b) {
                 int width = r - l;
                 int height = b - t;
                 MrzCameraActivity.this.cameraView.layout(0, 0, MrzCameraActivity.this.cameraView.getMeasuredWidth(), MrzCameraActivity.this.cameraView.getMeasuredHeight() + 0);
@@ -117,13 +118,13 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
         this.titleTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.titleTextView.setGravity(1);
         this.titleTextView.setTextSize(1, 24.0f);
-        this.titleTextView.setText(LocaleController.getString("PassportScanPassport", R.string.PassportScanPassport));
+        this.titleTextView.setText(LocaleController.getString("PassportScanPassport", NUM));
         viewGroup.addView(this.titleTextView);
         this.descriptionText = new TextView(context);
         this.descriptionText.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText6"));
         this.descriptionText.setGravity(1);
         this.descriptionText.setTextSize(1, 16.0f);
-        this.descriptionText.setText(LocaleController.getString("PassportScanPassportInfo", R.string.PassportScanPassportInfo));
+        this.descriptionText.setText(LocaleController.getString("PassportScanPassportInfo", NUM));
         viewGroup.addView(this.descriptionText);
         this.recognizedMrzView = new TextView(context);
         this.recognizedMrzView.setTypeface(Typeface.MONOSPACE);
@@ -186,7 +187,7 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
                                     }
                                     AndroidUtilities.runOnUIThread(new Runnable() {
                                         public void run() {
-                                            MrzCameraActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
+                                            MrzCameraActivity.this.finishFragment();
                                         }
                                     }, 1200);
                                 }

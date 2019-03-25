@@ -20,7 +20,6 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.beta.R;
 import org.telegram.tgnet.TLRPC.Document;
 
 public class OtherDocumentPlaceholderDrawable extends RecyclableDrawable implements FileDownloadProgressListener {
@@ -135,14 +134,14 @@ public class OtherDocumentPlaceholderDrawable extends RecyclableDrawable impleme
         canvas2 = canvas;
         canvas2.drawText(this.fileSize, (float) ((width - ((int) Math.ceil((double) sizePaint.measureText(this.fileSize)))) / 2), (float) (AndroidUtilities.dp(125.0f) + y), sizePaint);
         if (this.loaded) {
-            button = LocaleController.getString("OpenFile", R.string.OpenFile);
+            button = LocaleController.getString("OpenFile", NUM);
             paint = openPaint;
             offsetY = 0;
         } else {
             if (this.loading) {
-                button = LocaleController.getString("Cancel", R.string.Cancel).toUpperCase();
+                button = LocaleController.getString("Cancel", NUM).toUpperCase();
             } else {
-                button = LocaleController.getString("TapToDownload", R.string.TapToDownload);
+                button = LocaleController.getString("TapToDownload", NUM);
             }
             offsetY = AndroidUtilities.dp(28.0f);
             paint = buttonPaint;

@@ -54,26 +54,31 @@ class ViewBoundsCheck {
         BoundFlags() {
         }
 
-        void setBounds(int rvStart, int rvEnd, int childStart, int childEnd) {
+        /* Access modifiers changed, original: 0000 */
+        public void setBounds(int rvStart, int rvEnd, int childStart, int childEnd) {
             this.mRvStart = rvStart;
             this.mRvEnd = rvEnd;
             this.mChildStart = childStart;
             this.mChildEnd = childEnd;
         }
 
-        void setFlags(int flags, int mask) {
+        /* Access modifiers changed, original: 0000 */
+        public void setFlags(int flags, int mask) {
             this.mBoundFlags = (this.mBoundFlags & (mask ^ -1)) | (flags & mask);
         }
 
-        void addFlags(int flags) {
+        /* Access modifiers changed, original: 0000 */
+        public void addFlags(int flags) {
             this.mBoundFlags |= flags;
         }
 
-        void resetFlags() {
+        /* Access modifiers changed, original: 0000 */
+        public void resetFlags() {
             this.mBoundFlags = 0;
         }
 
-        int compare(int x, int y) {
+        /* Access modifiers changed, original: 0000 */
+        public int compare(int x, int y) {
             if (x > y) {
                 return 1;
             }
@@ -83,7 +88,8 @@ class ViewBoundsCheck {
             return 4;
         }
 
-        boolean boundsMatch() {
+        /* Access modifiers changed, original: 0000 */
+        public boolean boundsMatch() {
             if ((this.mBoundFlags & 7) != 0 && (this.mBoundFlags & (compare(this.mChildStart, this.mRvStart) << 0)) == 0) {
                 return false;
             }
@@ -108,7 +114,8 @@ class ViewBoundsCheck {
         this.mCallback = callback;
     }
 
-    View findOneViewWithinBoundFlags(int fromIndex, int toIndex, int preferredBoundFlags, int acceptableBoundFlags) {
+    /* Access modifiers changed, original: 0000 */
+    public View findOneViewWithinBoundFlags(int fromIndex, int toIndex, int preferredBoundFlags, int acceptableBoundFlags) {
         int start = this.mCallback.getParentStart();
         int end = this.mCallback.getParentEnd();
         int next = toIndex > fromIndex ? 1 : -1;
@@ -134,7 +141,8 @@ class ViewBoundsCheck {
         return acceptableMatch;
     }
 
-    boolean isViewWithinBoundFlags(View child, int boundsFlags) {
+    /* Access modifiers changed, original: 0000 */
+    public boolean isViewWithinBoundFlags(View child, int boundsFlags) {
         this.mBoundFlags.setBounds(this.mCallback.getParentStart(), this.mCallback.getParentEnd(), this.mCallback.getChildStart(child), this.mCallback.getChildEnd(child));
         if (boundsFlags == 0) {
             return false;

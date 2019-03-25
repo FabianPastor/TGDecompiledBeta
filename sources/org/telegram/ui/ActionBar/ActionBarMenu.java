@@ -21,7 +21,8 @@ public class ActionBarMenu extends LinearLayout {
         super(context);
     }
 
-    protected void updateItemsBackgroundColor() {
+    /* Access modifiers changed, original: protected */
+    public void updateItemsBackgroundColor() {
         int count = getChildCount();
         for (int a = 0; a < count; a++) {
             View view = getChildAt(a);
@@ -31,7 +32,8 @@ public class ActionBarMenu extends LinearLayout {
         }
     }
 
-    protected void updateItemsColor() {
+    /* Access modifiers changed, original: protected */
+    public void updateItemsColor() {
         int count = getChildCount();
         for (int a = 0; a < count; a++) {
             View view = getChildAt(a);
@@ -42,7 +44,7 @@ public class ActionBarMenu extends LinearLayout {
     }
 
     public ActionBarMenuItem addItem(int id, Drawable drawable) {
-        return addItem(id, 0, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor, drawable, AndroidUtilities.dp(48.0f));
+        return addItem(id, 0, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor, drawable, AndroidUtilities.dp(48.0f), null);
     }
 
     public ActionBarMenuItem addItem(int id, int icon) {
@@ -50,14 +52,18 @@ public class ActionBarMenu extends LinearLayout {
     }
 
     public ActionBarMenuItem addItem(int id, int icon, int backgroundColor) {
-        return addItem(id, icon, backgroundColor, null, AndroidUtilities.dp(48.0f));
+        return addItem(id, icon, backgroundColor, null, AndroidUtilities.dp(48.0f), null);
     }
 
     public ActionBarMenuItem addItemWithWidth(int id, int icon, int width) {
-        return addItem(id, icon, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor, null, width);
+        return addItem(id, icon, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor, null, width, null);
     }
 
-    public ActionBarMenuItem addItem(int id, int icon, int backgroundColor, Drawable drawable, int width) {
+    public ActionBarMenuItem addItemWithWidth(int id, int icon, int width, CharSequence title) {
+        return addItem(id, icon, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor, null, width, title);
+    }
+
+    public ActionBarMenuItem addItem(int id, int icon, int backgroundColor, Drawable drawable, int width, CharSequence title) {
         ActionBarMenuItem menuItem = new ActionBarMenuItem(getContext(), this, backgroundColor, this.isActionMode ? this.parentActionBar.itemsActionModeColor : this.parentActionBar.itemsColor);
         menuItem.setTag(Integer.valueOf(id));
         if (drawable != null) {
@@ -67,10 +73,14 @@ public class ActionBarMenu extends LinearLayout {
         }
         addView(menuItem, new LayoutParams(width, -1));
         menuItem.setOnClickListener(new ActionBarMenu$$Lambda$0(this));
+        if (title != null) {
+            menuItem.setContentDescription(title);
+        }
         return menuItem;
     }
 
-    final /* synthetic */ void lambda$addItem$0$ActionBarMenu(View view) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$addItem$0$ActionBarMenu(View view) {
         ActionBarMenuItem item = (ActionBarMenuItem) view;
         if (item.hasSubMenu()) {
             if (this.parentActionBar.actionBarMenuOnItemClick.canOpenMenu()) {
@@ -93,7 +103,8 @@ public class ActionBarMenu extends LinearLayout {
         }
     }
 
-    protected void setPopupItemsColor(int color) {
+    /* Access modifiers changed, original: protected */
+    public void setPopupItemsColor(int color) {
         int count = getChildCount();
         for (int a = 0; a < count; a++) {
             View view = getChildAt(a);
@@ -103,7 +114,8 @@ public class ActionBarMenu extends LinearLayout {
         }
     }
 
-    protected void redrawPopup(int color) {
+    /* Access modifiers changed, original: protected */
+    public void redrawPopup(int color) {
         int count = getChildCount();
         for (int a = 0; a < count; a++) {
             View view = getChildAt(a);

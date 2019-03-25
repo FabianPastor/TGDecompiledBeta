@@ -1,16 +1,16 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_error;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 
-final /* synthetic */ class ChatActivity$$Lambda$76 implements RequestDelegate {
-    static final RequestDelegate $instance = new ChatActivity$$Lambda$76();
+final /* synthetic */ class ChatActivity$$Lambda$76 implements OnClickListener {
+    private final ChatActivity arg$1;
 
-    private ChatActivity$$Lambda$76() {
+    ChatActivity$$Lambda$76(ChatActivity chatActivity) {
+        this.arg$1 = chatActivity;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        ChatActivity.lambda$null$64$ChatActivity(tLObject, tL_error);
+    public void onClick(DialogInterface dialogInterface, int i) {
+        this.arg$1.lambda$null$32$ChatActivity(dialogInterface, i);
     }
 }

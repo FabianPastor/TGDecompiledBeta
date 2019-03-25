@@ -10,7 +10,8 @@ public class ClearCacheService extends IntentService {
         super("ClearCacheService");
     }
 
-    protected void onHandleIntent(Intent intent) {
+    /* Access modifiers changed, original: protected */
+    public void onHandleIntent(Intent intent) {
         ApplicationLoader.postInitApplication();
         int keepMedia = MessagesController.getGlobalMainSettings().getInt("keep_media", 2);
         if (keepMedia != 2) {

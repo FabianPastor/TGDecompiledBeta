@@ -55,13 +55,15 @@ public class ContextProgressView extends View {
         invalidate();
     }
 
-    protected void onAttachedToWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.lastUpdateTime = System.currentTimeMillis();
         invalidate();
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (getVisibility() == 0) {
             long newTime = System.currentTimeMillis();
             long dt = newTime - this.lastUpdateTime;

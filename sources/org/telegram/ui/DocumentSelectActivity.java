@@ -23,11 +23,8 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.beta.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
-import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
@@ -70,14 +67,15 @@ public class DocumentSelectActivity extends BaseFragment {
             }
         }
 
-        final /* synthetic */ void lambda$onReceive$0$DocumentSelectActivity$1() {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$onReceive$0$DocumentSelectActivity$1() {
             try {
                 if (DocumentSelectActivity.this.currentDir == null) {
                     DocumentSelectActivity.this.listRoots();
                 } else {
                     DocumentSelectActivity.this.listFiles(DocumentSelectActivity.this.currentDir);
                 }
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
         }
@@ -152,7 +150,7 @@ public class DocumentSelectActivity extends BaseFragment {
             switch (viewType) {
                 case 0:
                     view = new GraySectionCell(this.mContext);
-                    ((GraySectionCell) view).setText(LocaleController.getString("Recent", R.string.Recent));
+                    ((GraySectionCell) view).setText(LocaleController.getString("Recent", NUM));
                     break;
                 default:
                     view = new SharedDocumentCell(this.mContext);
@@ -223,7 +221,7 @@ public class DocumentSelectActivity extends BaseFragment {
             if (this.receiverRegistered) {
                 ApplicationLoader.applicationContext.unregisterReceiver(this.receiver);
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         super.onFragmentDestroy();
@@ -247,7 +245,7 @@ public class DocumentSelectActivity extends BaseFragment {
         }
         this.actionBar.setBackButtonDrawable(new BackDrawable(false));
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("SelectFile", R.string.SelectFile));
+        this.actionBar.setTitle(LocaleController.getString("SelectFile", NUM));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
@@ -263,7 +261,7 @@ public class DocumentSelectActivity extends BaseFragment {
                         }
                         return;
                     }
-                    DocumentSelectActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
+                    DocumentSelectActivity.this.finishFragment();
                 } else if (id == 3 && DocumentSelectActivity.this.delegate != null) {
                     DocumentSelectActivity.this.delegate.didSelectFiles(DocumentSelectActivity.this, new ArrayList(DocumentSelectActivity.this.selectedFiles.keySet()));
                     for (ListItem item : DocumentSelectActivity.this.selectedFiles.values()) {
@@ -281,7 +279,7 @@ public class DocumentSelectActivity extends BaseFragment {
         this.selectedMessagesCountTextView.setTextColor(Theme.getColor("actionBarActionModeDefaultIcon"));
         this.selectedMessagesCountTextView.setOnTouchListener(DocumentSelectActivity$$Lambda$0.$instance);
         actionMode.addView(this.selectedMessagesCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 65, 0, 0, 0));
-        this.actionModeViews.add(actionMode.addItemWithWidth(3, R.drawable.ic_ab_done, AndroidUtilities.dp(54.0f)));
+        this.actionModeViews.add(actionMode.addItemWithWidth(3, NUM, AndroidUtilities.dp(54.0f)));
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         this.emptyView = new EmptyTextProgressView(context);
@@ -290,12 +288,12 @@ public class DocumentSelectActivity extends BaseFragment {
         this.listView = new RecyclerListView(context);
         this.listView.setVerticalScrollBarEnabled(false);
         RecyclerListView recyclerListView = this.listView;
-        LayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
         this.layoutManager = linearLayoutManager;
         recyclerListView.setLayoutManager(linearLayoutManager);
         this.listView.setEmptyView(this.emptyView);
         RecyclerListView recyclerListView2 = this.listView;
-        Adapter listAdapter = new ListAdapter(context);
+        ListAdapter listAdapter = new ListAdapter(context);
         this.listAdapter = listAdapter;
         recyclerListView2.setAdapter(listAdapter);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
@@ -310,7 +308,8 @@ public class DocumentSelectActivity extends BaseFragment {
         return this.fragmentView;
     }
 
-    final /* synthetic */ boolean lambda$createView$1$DocumentSelectActivity(View view, int position) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ boolean lambda$createView$1$DocumentSelectActivity(View view, int position) {
         if (this.actionBar.isActionModeShowed()) {
             return false;
         }
@@ -321,16 +320,16 @@ public class DocumentSelectActivity extends BaseFragment {
         File file = item.file;
         if (!(file == null || file.isDirectory())) {
             if (!file.canRead()) {
-                showErrorBox(LocaleController.getString("AccessError", R.string.AccessError));
+                showErrorBox(LocaleController.getString("AccessError", NUM));
                 return false;
             } else if (this.canSelectOnlyImageFiles && item.thumb == null) {
-                showErrorBox(LocaleController.formatString("PassportUploadNotImage", R.string.PassportUploadNotImage, new Object[0]));
+                showErrorBox(LocaleController.formatString("PassportUploadNotImage", NUM, new Object[0]));
                 return false;
             } else if (this.sizeLimit != 0 && file.length() > this.sizeLimit) {
-                showErrorBox(LocaleController.formatString("FileUploadLimit", R.string.FileUploadLimit, AndroidUtilities.formatFileSize(this.sizeLimit)));
+                showErrorBox(LocaleController.formatString("FileUploadLimit", NUM, AndroidUtilities.formatFileSize(this.sizeLimit)));
                 return false;
             } else if (this.maxSelectedFiles >= 0 && this.selectedFiles.size() >= this.maxSelectedFiles) {
-                showErrorBox(LocaleController.formatString("PassportUploadMaxReached", R.string.PassportUploadMaxReached, LocaleController.formatPluralString("Files", this.maxSelectedFiles)));
+                showErrorBox(LocaleController.formatString("PassportUploadMaxReached", NUM, LocaleController.formatPluralString("Files", this.maxSelectedFiles)));
                 return false;
             } else if (file.length() == 0) {
                 return false;
@@ -357,18 +356,19 @@ public class DocumentSelectActivity extends BaseFragment {
         return true;
     }
 
-    final /* synthetic */ void lambda$createView$2$DocumentSelectActivity(View view, int position) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$2$DocumentSelectActivity(View view, int position) {
         ListItem item = this.listAdapter.getItem(position);
         if (item != null) {
             File file = item.file;
             HistoryEntry he;
             if (file == null) {
-                if (item.icon == R.drawable.ic_storage_gallery) {
+                if (item.icon == NUM) {
                     if (this.delegate != null) {
                         this.delegate.startDocumentSelectActivity();
                     }
                     finishFragment(false);
-                } else if (item.icon != R.drawable.ic_storage_music) {
+                } else if (item.icon != NUM) {
                     he = (HistoryEntry) this.history.remove(this.history.size() - 1);
                     this.actionBar.setTitle(he.title);
                     if (he.dir != null) {
@@ -397,13 +397,13 @@ public class DocumentSelectActivity extends BaseFragment {
                 }
             } else {
                 if (!file.canRead()) {
-                    showErrorBox(LocaleController.getString("AccessError", R.string.AccessError));
+                    showErrorBox(LocaleController.getString("AccessError", NUM));
                     file = new File("/mnt/sdcard");
                 }
                 if (this.canSelectOnlyImageFiles && item.thumb == null) {
-                    showErrorBox(LocaleController.formatString("PassportUploadNotImage", R.string.PassportUploadNotImage, new Object[0]));
+                    showErrorBox(LocaleController.formatString("PassportUploadNotImage", NUM, new Object[0]));
                 } else if (this.sizeLimit != 0 && file.length() > this.sizeLimit) {
-                    showErrorBox(LocaleController.formatString("FileUploadLimit", R.string.FileUploadLimit, AndroidUtilities.formatFileSize(this.sizeLimit)));
+                    showErrorBox(LocaleController.formatString("FileUploadLimit", NUM, AndroidUtilities.formatFileSize(this.sizeLimit)));
                 } else if (file.length() == 0) {
                 } else {
                     if (this.actionBar.isActionModeShowed()) {
@@ -412,7 +412,7 @@ public class DocumentSelectActivity extends BaseFragment {
                         } else if (this.maxSelectedFiles < 0 || this.selectedFiles.size() < this.maxSelectedFiles) {
                             this.selectedFiles.put(file.toString(), item);
                         } else {
-                            showErrorBox(LocaleController.formatString("PassportUploadMaxReached", R.string.PassportUploadMaxReached, LocaleController.formatPluralString("Files", this.maxSelectedFiles)));
+                            showErrorBox(LocaleController.formatString("PassportUploadMaxReached", NUM, LocaleController.formatPluralString("Files", this.maxSelectedFiles)));
                             return;
                         }
                         if (this.selectedFiles.isEmpty()) {
@@ -462,7 +462,7 @@ public class DocumentSelectActivity extends BaseFragment {
                 }
             }
             Collections.sort(this.recentItems, DocumentSelectActivity$$Lambda$3.$instance);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
@@ -534,7 +534,7 @@ public class DocumentSelectActivity extends BaseFragment {
             try {
                 File[] files = dir.listFiles();
                 if (files == null) {
-                    showErrorBox(LocaleController.getString("UnknownError", R.string.UnknownError));
+                    showErrorBox(LocaleController.getString("UnknownError", NUM));
                     return false;
                 }
                 ListItem item;
@@ -547,8 +547,8 @@ public class DocumentSelectActivity extends BaseFragment {
                         item.title = file.getName();
                         item.file = file;
                         if (file.isDirectory()) {
-                            item.icon = R.drawable.ic_directory;
-                            item.subtitle = LocaleController.getString("Folder", R.string.Folder);
+                            item.icon = NUM;
+                            item.subtitle = LocaleController.getString("Folder", NUM);
                         } else {
                             String fname = file.getName();
                             String[] sp = fname.split("\\.");
@@ -567,14 +567,14 @@ public class DocumentSelectActivity extends BaseFragment {
                 if (this.history.size() > 0) {
                     HistoryEntry entry = (HistoryEntry) this.history.get(this.history.size() - 1);
                     if (entry.dir == null) {
-                        item.subtitle = LocaleController.getString("Folder", R.string.Folder);
+                        item.subtitle = LocaleController.getString("Folder", NUM);
                     } else {
                         item.subtitle = entry.dir.toString();
                     }
                 } else {
-                    item.subtitle = LocaleController.getString("Folder", R.string.Folder);
+                    item.subtitle = LocaleController.getString("Folder", NUM);
                 }
-                item.icon = R.drawable.ic_directory;
+                item.icon = NUM;
                 item.file = null;
                 this.items.add(0, item);
                 AndroidUtilities.clearDrawableAnimation(this.listView);
@@ -586,15 +586,15 @@ public class DocumentSelectActivity extends BaseFragment {
                 return false;
             }
         } else if ((!dir.getAbsolutePath().startsWith(Environment.getExternalStorageDirectory().toString()) && !dir.getAbsolutePath().startsWith("/sdcard") && !dir.getAbsolutePath().startsWith("/mnt/sdcard")) || Environment.getExternalStorageState().equals("mounted") || Environment.getExternalStorageState().equals("mounted_ro")) {
-            showErrorBox(LocaleController.getString("AccessError", R.string.AccessError));
+            showErrorBox(LocaleController.getString("AccessError", NUM));
             return false;
         } else {
             this.currentDir = dir;
             this.items.clear();
             if ("shared".equals(Environment.getExternalStorageState())) {
-                this.emptyView.setText(LocaleController.getString("UsbActive", R.string.UsbActive));
+                this.emptyView.setText(LocaleController.getString("UsbActive", NUM));
             } else {
-                this.emptyView.setText(LocaleController.getString("NotMounted", R.string.NotMounted));
+                this.emptyView.setText(LocaleController.getString("NotMounted", NUM));
             }
             AndroidUtilities.clearDrawableAnimation(this.listView);
             this.scrolling = true;
@@ -613,27 +613,49 @@ public class DocumentSelectActivity extends BaseFragment {
 
     private void showErrorBox(String error) {
         if (getParentActivity() != null) {
-            new Builder(getParentActivity()).setTitle(LocaleController.getString("AppName", R.string.AppName)).setMessage(error).setPositiveButton(LocaleController.getString("OK", R.string.OK), null).show();
+            new Builder(getParentActivity()).setTitle(LocaleController.getString("AppName", NUM)).setMessage(error).setPositiveButton(LocaleController.getString("OK", NUM), null).show();
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x029b  */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x031c A:{ExcHandler: all (th java.lang.Throwable), Splitter: B:11:0x0094} */
     /* JADX WARNING: Removed duplicated region for block: B:64:0x0223 A:{Catch:{ Exception -> 0x033e }} */
     /* JADX WARNING: Removed duplicated region for block: B:70:0x029b  */
     /* JADX WARNING: Removed duplicated region for block: B:70:0x029b  */
+    /* JADX WARNING: Removed duplicated region for block: B:79:0x0320 A:{SYNTHETIC, Splitter:B:79:0x0320} */
+    /* JADX WARNING: Removed duplicated region for block: B:58:0x01ca A:{SYNTHETIC, Splitter:B:58:0x01ca} */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x0223 A:{Catch:{ Exception -> 0x033e }} */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x029b  */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x031c A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:11:0x0094} */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x029b  */
     /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Missing block: B:53:0x01c3, code:
+    /* JADX WARNING: Missing block: B:53:0x01c3, code skipped:
             r7 = e;
      */
-    /* JADX WARNING: Missing block: B:54:0x01c4, code:
+    /* JADX WARNING: Missing block: B:54:0x01c4, code skipped:
             r3 = r4;
      */
-    /* JADX WARNING: Missing block: B:76:0x031c, code:
+    /* JADX WARNING: Missing block: B:59:?, code skipped:
+            r3.close();
+     */
+    /* JADX WARNING: Missing block: B:76:0x031c, code skipped:
             r21 = th;
      */
-    /* JADX WARNING: Missing block: B:77:0x031d, code:
+    /* JADX WARNING: Missing block: B:77:0x031d, code skipped:
             r3 = r4;
+     */
+    /* JADX WARNING: Missing block: B:80:?, code skipped:
+            r3.close();
+     */
+    /* JADX WARNING: Missing block: B:88:0x0333, code skipped:
+            r7 = move-exception;
+     */
+    /* JADX WARNING: Missing block: B:89:0x0334, code skipped:
+            org.telegram.messenger.FileLog.e(r7);
+     */
+    /* JADX WARNING: Missing block: B:90:0x0339, code skipped:
+            r7 = move-exception;
+     */
+    /* JADX WARNING: Missing block: B:91:0x033a, code skipped:
+            org.telegram.messenger.FileLog.e(r7);
      */
     @android.annotation.SuppressLint({"NewApi"})
     private void listRoots() {
@@ -672,11 +694,11 @@ public class DocumentSelectActivity extends BaseFragment {
         if (r21 == 0) goto L_0x02f5;
     L_0x004d:
         r21 = "SdCard";
-        r22 = NUM; // 0x7f0CLASSNAMEbd float:1.861321E38 double:1.053098377E-314;
+        r22 = NUM; // 0x7f0CLASSNAME float:1.8613451E38 double:1.053098436E-314;
         r21 = org.telegram.messenger.LocaleController.getString(r21, r22);
         r0 = r21;
         r8.title = r0;
-        r21 = NUM; // 0x7var_bd float:1.7944961E38 double:1.0529355964E-314;
+        r21 = NUM; // 0x7var_ba float:1.7944955E38 double:1.052935595E-314;
         r0 = r21;
         r8.icon = r0;
     L_0x0062:
@@ -810,12 +832,12 @@ public class DocumentSelectActivity extends BaseFragment {
         if (r21 == 0) goto L_0x030c;
     L_0x0182:
         r21 = "SdCard";
-        r22 = NUM; // 0x7f0CLASSNAMEbd float:1.861321E38 double:1.053098377E-314;
+        r22 = NUM; // 0x7f0CLASSNAME float:1.8613451E38 double:1.053098436E-314;
         r21 = org.telegram.messenger.LocaleController.getString(r21, r22);	 Catch:{ Exception -> 0x01bd, all -> 0x031c }
         r0 = r21;
         r13.title = r0;	 Catch:{ Exception -> 0x01bd, all -> 0x031c }
     L_0x0190:
-        r21 = NUM; // 0x7var_bd float:1.7944961E38 double:1.0529355964E-314;
+        r21 = NUM; // 0x7var_ba float:1.7944955E38 double:1.052935595E-314;
         r0 = r21;
         r13.icon = r0;	 Catch:{ Exception -> 0x01bd, all -> 0x031c }
         r0 = r23;
@@ -857,11 +879,11 @@ public class DocumentSelectActivity extends BaseFragment {
         r0 = r21;
         r9.title = r0;
         r21 = "SystemRoot";
-        r22 = NUM; // 0x7f0CLASSNAME float:1.8613622E38 double:1.0530984775E-314;
+        r22 = NUM; // 0x7f0CLASSNAME float:1.8613883E38 double:1.053098541E-314;
         r21 = org.telegram.messenger.LocaleController.getString(r21, r22);
         r0 = r21;
         r9.subtitle = r0;
-        r21 = NUM; // 0x7var_bb float:1.7944957E38 double:1.0529355954E-314;
+        r21 = NUM; // 0x7var_b8 float:1.7944951E38 double:1.052935594E-314;
         r0 = r21;
         r9.icon = r0;
         r21 = new java.io.File;
@@ -895,7 +917,7 @@ public class DocumentSelectActivity extends BaseFragment {
         r21 = r18.toString();	 Catch:{ Exception -> 0x0344 }
         r0 = r21;
         r10.subtitle = r0;	 Catch:{ Exception -> 0x0344 }
-        r21 = NUM; // 0x7var_bb float:1.7944957E38 double:1.0529355954E-314;
+        r21 = NUM; // 0x7var_b8 float:1.7944951E38 double:1.052935594E-314;
         r0 = r21;
         r10.icon = r0;	 Catch:{ Exception -> 0x0344 }
         r0 = r18;
@@ -913,16 +935,16 @@ public class DocumentSelectActivity extends BaseFragment {
         r1 = r21;
         r9.<init>(r0, r1);
         r21 = "Gallery";
-        r22 = NUM; // 0x7f0CLASSNAMEd0 float:1.8611172E38 double:1.0530978807E-314;
+        r22 = NUM; // 0x7f0CLASSNAME float:1.8611378E38 double:1.053097931E-314;
         r21 = org.telegram.messenger.LocaleController.getString(r21, r22);
         r0 = r21;
         r9.title = r0;
         r21 = "GalleryInfo";
-        r22 = NUM; // 0x7f0CLASSNAMEd1 float:1.8611174E38 double:1.053097881E-314;
+        r22 = NUM; // 0x7f0CLASSNAME float:1.861138E38 double:1.0530979316E-314;
         r21 = org.telegram.messenger.LocaleController.getString(r21, r22);
         r0 = r21;
         r9.subtitle = r0;
-        r21 = NUM; // 0x7var_ed float:1.7945059E38 double:1.05293562E-314;
+        r21 = NUM; // 0x7var_d7 float:1.7945014E38 double:1.0529356093E-314;
         r0 = r21;
         r9.icon = r0;
         r21 = 0;
@@ -944,16 +966,16 @@ public class DocumentSelectActivity extends BaseFragment {
         r1 = r21;
         r9.<init>(r0, r1);
         r21 = "AttachMusic";
-        r22 = NUM; // 0x7f0CLASSNAMEd8 float:1.860963E38 double:1.053097505E-314;
+        r22 = NUM; // 0x7f0CLASSNAMEa float:1.8609796E38 double:1.0530975457E-314;
         r21 = org.telegram.messenger.LocaleController.getString(r21, r22);
         r0 = r21;
         r9.title = r0;
         r21 = "MusicInfo";
-        r22 = NUM; // 0x7f0CLASSNAMEee float:1.8611752E38 double:1.053098022E-314;
+        r22 = NUM; // 0x7f0CLASSNAME float:1.8611963E38 double:1.0530980734E-314;
         r21 = org.telegram.messenger.LocaleController.getString(r21, r22);
         r0 = r21;
         r9.subtitle = r0;
-        r21 = NUM; // 0x7var_ee float:1.794506E38 double:1.0529356206E-314;
+        r21 = NUM; // 0x7var_d8 float:1.7945016E38 double:1.0529356097E-314;
         r0 = r21;
         r9.icon = r0;
         r21 = 0;
@@ -980,17 +1002,17 @@ public class DocumentSelectActivity extends BaseFragment {
         return;
     L_0x02f5:
         r21 = "InternalStorage";
-        r22 = NUM; // 0x7f0CLASSNAME float:1.8611336E38 double:1.0530979207E-314;
+        r22 = NUM; // 0x7f0CLASSNAME float:1.8611547E38 double:1.053097972E-314;
         r21 = org.telegram.messenger.LocaleController.getString(r21, r22);
         r0 = r21;
         r8.title = r0;
-        r21 = NUM; // 0x7var_ec float:1.7945057E38 double:1.0529356196E-314;
+        r21 = NUM; // 0x7var_d6 float:1.7945012E38 double:1.052935609E-314;
         r0 = r21;
         r8.icon = r0;
         goto L_0x0062;
     L_0x030c:
         r21 = "ExternalStorage";
-        r22 = NUM; // 0x7f0CLASSNAME float:1.861095E38 double:1.053097827E-314;
+        r22 = NUM; // 0x7f0CLASSNAMEc9 float:1.8611157E38 double:1.053097877E-314;
         r21 = org.telegram.messenger.LocaleController.getString(r21, r22);	 Catch:{ Exception -> 0x01bd, all -> 0x031c }
         r0 = r21;
         r13.title = r0;	 Catch:{ Exception -> 0x01bd, all -> 0x031c }
@@ -1052,8 +1074,8 @@ public class DocumentSelectActivity extends BaseFragment {
             if (((long) stat.getBlockCount()) * ((long) stat.getBlockSize()) == 0) {
                 return "";
             }
-            return LocaleController.formatString("FreeOfTotal", R.string.FreeOfTotal, AndroidUtilities.formatFileSize(free), AndroidUtilities.formatFileSize(((long) stat.getBlockCount()) * ((long) stat.getBlockSize())));
-        } catch (Throwable e) {
+            return LocaleController.formatString("FreeOfTotal", NUM, AndroidUtilities.formatFileSize(free), AndroidUtilities.formatFileSize(((long) stat.getBlockCount()) * ((long) stat.getBlockSize())));
+        } catch (Exception e) {
             FileLog.e(e);
             return path;
         }

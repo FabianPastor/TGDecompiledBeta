@@ -662,6 +662,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
             Paint paint;
             int bitmapW;
             int bitmapH;
+            float scaleH;
             BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
             if (shader != null) {
                 paint = this.roundPaint;
@@ -710,14 +711,36 @@ public class ImageReceiver implements NotificationCenterDelegate {
                 bitmapW = bitmapDrawable.getBitmap().getWidth();
                 bitmapH = bitmapDrawable.getBitmap().getHeight();
             }
-            float scaleW = ((float) bitmapW) / ((float) this.imageW);
-            float scaleH = ((float) bitmapH) / ((float) this.imageH);
+            float scaleW = this.imageW == 0 ? 1.0f : ((float) bitmapW) / ((float) this.imageW);
+            if (this.imageH == 0) {
+                scaleH = 1.0f;
+            } else {
+                scaleH = ((float) bitmapH) / ((float) this.imageH);
+            }
             float scale;
             int width;
             int height;
             int centerX;
             int centerY;
             if (shader != null) {
+                if (this.isAspectFit) {
+                    scale = Math.max(scaleW, scaleH);
+                    bitmapW = (int) (((float) bitmapW) / scale);
+                    bitmapH = (int) (((float) bitmapH) / scale);
+                    this.drawRegion.set(this.imageX + ((this.imageW - bitmapW) / 2), this.imageY + ((this.imageH - bitmapH) / 2), this.imageX + ((this.imageW + bitmapW) / 2), this.imageY + ((this.imageH + bitmapH) / 2));
+                    if (this.isVisible) {
+                        this.roundPaint.setShader(shader);
+                        this.shaderMatrix.reset();
+                        this.shaderMatrix.setTranslate((float) this.drawRegion.left, (float) this.drawRegion.top);
+                        this.shaderMatrix.preScale(1.0f / scale, 1.0f / scale);
+                        shader.setLocalMatrix(this.shaderMatrix);
+                        this.roundPaint.setAlpha(alpha);
+                        this.roundRect.set(this.drawRegion);
+                        canvas.drawRoundRect(this.roundRect, (float) this.roundRadius, (float) this.roundRadius, this.roundPaint);
+                        return;
+                    }
+                    return;
+                }
                 this.roundPaint.setShader(shader);
                 scale = Math.min(scaleW, scaleH);
                 this.roundRect.set((float) this.imageX, (float) this.imageY, (float) (this.imageX + this.imageW), (float) (this.imageY + this.imageH));
@@ -752,11 +775,14 @@ public class ImageReceiver implements NotificationCenterDelegate {
                 bitmapH = (int) (((float) bitmapH) / scale);
                 this.drawRegion.set(this.imageX + ((this.imageW - bitmapW) / 2), this.imageY + ((this.imageH - bitmapH) / 2), this.imageX + ((this.imageW + bitmapW) / 2), this.imageY + ((this.imageH + bitmapH) / 2));
                 bitmapDrawable.setBounds(this.drawRegion);
+                if (bitmapDrawable instanceof AnimatedFileDrawable) {
+                    ((AnimatedFileDrawable) bitmapDrawable).setActualDrawRect(this.drawRegion.left, this.drawRegion.top, this.drawRegion.width(), this.drawRegion.height());
+                }
                 if (this.isVisible) {
                     try {
                         bitmapDrawable.setAlpha(alpha);
                         bitmapDrawable.draw(canvas);
-                    } catch (Throwable e) {
+                    } catch (Exception e) {
                         onBitmapException(bitmapDrawable);
                         FileLog.e(e);
                     }
@@ -796,7 +822,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                     try {
                         bitmapDrawable.setAlpha(alpha);
                         bitmapDrawable.draw(canvas);
-                    } catch (Throwable e2) {
+                    } catch (Exception e2) {
                         onBitmapException(bitmapDrawable);
                         FileLog.e(e2);
                     }
@@ -829,7 +855,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                     try {
                         bitmapDrawable.setAlpha(alpha);
                         bitmapDrawable.draw(canvas);
-                    } catch (Throwable e22) {
+                    } catch (Exception e22) {
                         onBitmapException(bitmapDrawable);
                         FileLog.e(e22);
                     }
@@ -844,7 +870,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
             try {
                 drawable.setAlpha(alpha);
                 drawable.draw(canvas);
-            } catch (Throwable e222) {
+            } catch (Exception e222) {
                 FileLog.e(e222);
             }
         }
@@ -967,7 +993,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                 checkAlphaAnimation(animationNotReady);
                 return false;
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
@@ -1382,7 +1408,8 @@ public class ImageReceiver implements NotificationCenterDelegate {
         return null;
     }
 
-    protected int getTag(int type) {
+    /* Access modifiers changed, original: protected */
+    public int getTag(int type) {
         if (type == 1) {
             return this.thumbTag;
         }
@@ -1392,7 +1419,8 @@ public class ImageReceiver implements NotificationCenterDelegate {
         return this.imageTag;
     }
 
-    protected void setTag(int value, int type) {
+    /* Access modifiers changed, original: protected */
+    public void setTag(int value, int type) {
         if (type == 1) {
             this.thumbTag = value;
         } else if (type == 3) {
@@ -1410,7 +1438,8 @@ public class ImageReceiver implements NotificationCenterDelegate {
         return this.param;
     }
 
-    protected boolean setImageBitmapByKey(BitmapDrawable bitmap, String key, int type, boolean memCache) {
+    /* Access modifiers changed, original: protected */
+    public boolean setImageBitmapByKey(BitmapDrawable bitmap, String key, int type, boolean memCache) {
         if (bitmap == null || key == null) {
             return false;
         }

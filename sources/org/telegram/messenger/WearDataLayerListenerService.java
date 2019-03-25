@@ -528,7 +528,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
                                 MessagesController.getInstance(currentAccount).markDialogAsRead(dialog_id, max_id, max_id, 0, false, 0, true);
                             }
                         }
-                    } catch (Throwable x) {
+                    } catch (Exception x) {
                         if (BuildVars.LOGS_ENABLED) {
                             FileLog.e(x);
                         }
