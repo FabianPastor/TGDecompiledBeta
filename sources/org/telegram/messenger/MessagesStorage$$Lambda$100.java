@@ -1,17 +1,17 @@
 package org.telegram.messenger;
 
+import java.util.ArrayList;
+
 final /* synthetic */ class MessagesStorage$$Lambda$100 implements Runnable {
     private final MessagesStorage arg$1;
-    private final long arg$2;
-    private final boolean arg$3;
+    private final ArrayList arg$2;
 
-    MessagesStorage$$Lambda$100(MessagesStorage messagesStorage, long j, boolean z) {
+    MessagesStorage$$Lambda$100(MessagesStorage messagesStorage, ArrayList arrayList) {
         this.arg$1 = messagesStorage;
-        this.arg$2 = j;
-        this.arg$3 = z;
+        this.arg$2 = arrayList;
     }
 
     public void run() {
-        this.arg$1.lambda$setDialogUnread$131$MessagesStorage(this.arg$2, this.arg$3);
+        this.arg$1.lambda$unpinAllDialogsExceptNew$132$MessagesStorage(this.arg$2);
     }
 }

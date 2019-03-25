@@ -10,10 +10,8 @@ import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
-import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
@@ -93,18 +91,19 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
                     break;
                 case 1:
                     view = new LoadingCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                     break;
                 case 2:
                     view = new TextInfoPrivacyCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                     break;
             }
             view.setLayoutParams(new LayoutParams(-1, -2));
             return new Holder(view);
         }
 
-        final /* synthetic */ void lambda$onCreateViewHolder$0$ArchivedStickersActivity$ListAdapter(Switch buttonView, boolean isChecked) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$onCreateViewHolder$0$ArchivedStickersActivity$ListAdapter(Switch buttonView, boolean isChecked) {
             int num = ((Integer) ((ArchivedStickerSetCell) buttonView.getParent()).getTag()).intValue();
             if (num < ArchivedStickersActivity.this.sets.size()) {
                 DataQuery.getInstance(ArchivedStickersActivity.this.currentAccount).removeStickersSet(ArchivedStickersActivity.this.getParentActivity(), ((StickerSetCovered) ArchivedStickersActivity.this.sets.get(num)).set, !isChecked ? 1 : 2, ArchivedStickersActivity.this, false);
@@ -143,12 +142,12 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
     }
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
         if (this.currentType == 0) {
-            this.actionBar.setTitle(LocaleController.getString("ArchivedStickers", R.string.ArchivedStickers));
+            this.actionBar.setTitle(LocaleController.getString("ArchivedStickers", NUM));
         } else {
-            this.actionBar.setTitle(LocaleController.getString("ArchivedMasks", R.string.ArchivedMasks));
+            this.actionBar.setTitle(LocaleController.getString("ArchivedMasks", NUM));
         }
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
@@ -163,9 +162,9 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
         frameLayout.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
         this.emptyView = new EmptyTextProgressView(context);
         if (this.currentType == 0) {
-            this.emptyView.setText(LocaleController.getString("ArchivedStickersEmpty", R.string.ArchivedStickersEmpty));
+            this.emptyView.setText(LocaleController.getString("ArchivedStickersEmpty", NUM));
         } else {
-            this.emptyView.setText(LocaleController.getString("ArchivedMasksEmpty", R.string.ArchivedMasksEmpty));
+            this.emptyView.setText(LocaleController.getString("ArchivedMasksEmpty", NUM));
         }
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         if (this.loadingStickers) {
@@ -177,7 +176,7 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
         this.listView.setFocusable(true);
         this.listView.setEmptyView(this.emptyView);
         RecyclerListView recyclerListView = this.listView;
-        LayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
         this.layoutManager = linearLayoutManager;
         recyclerListView.setLayoutManager(linearLayoutManager);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
@@ -193,7 +192,8 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
         return this.fragmentView;
     }
 
-    final /* synthetic */ void lambda$createView$0$ArchivedStickersActivity(final View view, int position) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$0$ArchivedStickersActivity(final View view, int position) {
         if (position >= this.stickersStartRow && position < this.stickersEndRow && getParentActivity() != null) {
             InputStickerSet inputStickerSet;
             StickerSetCovered stickerSet = (StickerSetCovered) this.sets.get(position);
@@ -265,11 +265,13 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
         }
     }
 
-    final /* synthetic */ void lambda$getStickers$2$ArchivedStickersActivity(TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$getStickers$2$ArchivedStickersActivity(TLObject response, TL_error error) {
         AndroidUtilities.runOnUIThread(new ArchivedStickersActivity$$Lambda$2(this, error, response));
     }
 
-    final /* synthetic */ void lambda$null$1$ArchivedStickersActivity(TL_error error, TLObject response) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$1$ArchivedStickersActivity(TL_error error, TLObject response) {
         if (error == null) {
             boolean z;
             TL_messages_archivedStickers res = (TL_messages_archivedStickers) response;

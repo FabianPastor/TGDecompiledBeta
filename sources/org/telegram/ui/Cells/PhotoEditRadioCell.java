@@ -77,7 +77,8 @@ public class PhotoEditRadioCell extends FrameLayout {
         this.onClickListener = l;
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(40.0f), NUM));
     }
 

@@ -35,7 +35,8 @@ public abstract class JobIntentService extends Service {
         CommandProcessor() {
         }
 
-        protected Void doInBackground(Void... params) {
+        /* Access modifiers changed, original: protected|varargs */
+        public Void doInBackground(Void... params) {
             while (true) {
                 GenericWorkItem work = JobIntentService.this.dequeueWork();
                 if (work == null) {
@@ -46,11 +47,13 @@ public abstract class JobIntentService extends Service {
             }
         }
 
-        protected void onCancelled(Void aVoid) {
+        /* Access modifiers changed, original: protected */
+        public void onCancelled(Void aVoid) {
             JobIntentService.this.processorFinished();
         }
 
-        protected void onPostExecute(Void aVoid) {
+        /* Access modifiers changed, original: protected */
+        public void onPostExecute(Void aVoid) {
             JobIntentService.this.processorFinished();
         }
     }
@@ -66,13 +69,14 @@ public abstract class JobIntentService extends Service {
         boolean mHasJobId;
         int mJobId;
 
-        abstract void enqueueWork(Intent intent);
+        public abstract void enqueueWork(Intent intent);
 
         WorkEnqueuer(Context context, ComponentName cn) {
             this.mComponentName = cn;
         }
 
-        void ensureJobId(int jobId) {
+        /* Access modifiers changed, original: 0000 */
+        public void ensureJobId(int jobId) {
             if (!this.mHasJobId) {
                 this.mHasJobId = true;
                 this.mJobId = jobId;
@@ -108,7 +112,8 @@ public abstract class JobIntentService extends Service {
             this.mRunWakeLock.setReferenceCounted(false);
         }
 
-        void enqueueWork(Intent work) {
+        /* Access modifiers changed, original: 0000 */
+        public void enqueueWork(Intent work) {
             Intent intent = new Intent(work);
             intent.setComponent(this.mComponentName);
             if (this.mContext.startService(intent) != null) {
@@ -226,16 +231,16 @@ public abstract class JobIntentService extends Service {
             return result;
         }
 
-        /* JADX WARNING: Missing block: B:10:0x0012, code:
+        /* JADX WARNING: Missing block: B:10:0x0012, code skipped:
             if (r0 == null) goto L_?;
      */
-        /* JADX WARNING: Missing block: B:11:0x0014, code:
+        /* JADX WARNING: Missing block: B:11:0x0014, code skipped:
             r0.getIntent().setExtrasClassLoader(r4.mService.getClassLoader());
      */
-        /* JADX WARNING: Missing block: B:21:?, code:
+        /* JADX WARNING: Missing block: B:21:?, code skipped:
             return null;
      */
-        /* JADX WARNING: Missing block: B:22:?, code:
+        /* JADX WARNING: Missing block: B:22:?, code skipped:
             return new org.telegram.messenger.support.JobIntentService.JobServiceEngineImpl.WrapperWorkItem(r4, r0);
      */
         public org.telegram.messenger.support.JobIntentService.GenericWorkItem dequeueWork() {
@@ -273,7 +278,7 @@ public abstract class JobIntentService extends Service {
             r3 = move-exception;
             goto L_0x0011;
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.support.JobIntentService.JobServiceEngineImpl.dequeueWork():org.telegram.messenger.support.JobIntentService$GenericWorkItem");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.support.JobIntentService$JobServiceEngineImpl.dequeueWork():org.telegram.messenger.support.JobIntentService$GenericWorkItem");
         }
     }
 
@@ -288,12 +293,13 @@ public abstract class JobIntentService extends Service {
             this.mJobScheduler = (JobScheduler) context.getApplicationContext().getSystemService("jobscheduler");
         }
 
-        void enqueueWork(Intent work) {
+        /* Access modifiers changed, original: 0000 */
+        public void enqueueWork(Intent work) {
             this.mJobScheduler.enqueue(this.mJobInfo, new JobWorkItem(work));
         }
     }
 
-    protected abstract void onHandleWork(Intent intent);
+    public abstract void onHandleWork(Intent intent);
 
     public JobIntentService() {
         if (VERSION.SDK_INT >= 26) {
@@ -389,7 +395,8 @@ public abstract class JobIntentService extends Service {
         return true;
     }
 
-    boolean doStopCurrentWork() {
+    /* Access modifiers changed, original: 0000 */
+    public boolean doStopCurrentWork() {
         if (this.mCurProcessor != null) {
             this.mCurProcessor.cancel(this.mInterruptIfStopped);
         }
@@ -397,7 +404,8 @@ public abstract class JobIntentService extends Service {
         return onStopCurrentWork();
     }
 
-    void ensureProcessorRunningLocked(boolean reportStarted) {
+    /* Access modifiers changed, original: 0000 */
+    public void ensureProcessorRunningLocked(boolean reportStarted) {
         if (this.mCurProcessor == null) {
             this.mCurProcessor = new CommandProcessor();
             if (this.mCompatWorkEnqueuer != null && reportStarted) {
@@ -407,7 +415,8 @@ public abstract class JobIntentService extends Service {
         }
     }
 
-    void processorFinished() {
+    /* Access modifiers changed, original: 0000 */
+    public void processorFinished() {
         if (this.mCompatQueue != null) {
             synchronized (this.mCompatQueue) {
                 this.mCurProcessor = null;
@@ -420,7 +429,8 @@ public abstract class JobIntentService extends Service {
         }
     }
 
-    GenericWorkItem dequeueWork() {
+    /* Access modifiers changed, original: 0000 */
+    public GenericWorkItem dequeueWork() {
         if (this.mJobImpl != null) {
             return this.mJobImpl.dequeueWork();
         }

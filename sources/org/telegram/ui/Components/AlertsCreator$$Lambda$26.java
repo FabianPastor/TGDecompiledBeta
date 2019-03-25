@@ -12,6 +12,6 @@ final /* synthetic */ class AlertsCreator$$Lambda$26 implements OnClickListener 
     }
 
     public void onClick(DialogInterface dialogInterface, int i) {
-        this.arg$1.lambda$null$88$MessagesStorage(0);
+        this.arg$1.run(1);
     }
 }

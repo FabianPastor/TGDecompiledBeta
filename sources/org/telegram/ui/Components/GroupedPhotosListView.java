@@ -538,12 +538,14 @@ public class GroupedPhotosListView extends View implements OnGestureListener {
         return this.currentImage * (this.itemWidth + (this.itemSpacing * 2));
     }
 
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+    /* Access modifiers changed, original: protected */
+    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         fillImages(false, 0);
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (!this.imagesToDraw.isEmpty()) {
             PhotoSize photoSize;
             int trueWidth;

@@ -188,7 +188,8 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
         this.tabsContainer.addView(tab, LayoutHelper.createLinear(0, -1));
     }
 
-    final /* synthetic */ void lambda$addTextTab$0$ScrollSlidingTextTabStrip(int id, View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$addTextTab$0$ScrollSlidingTextTabStrip(int id, View v) {
         int position1 = this.tabsContainer.indexOfChild(v);
         if (position1 >= 0 && position1 != this.currentPosition) {
             boolean scrollingForward;
@@ -242,7 +243,8 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
         return this.positionToId.get(0, 0);
     }
 
-    protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+    /* Access modifiers changed, original: protected */
+    public boolean drawChild(Canvas canvas, View child, long drawingTime) {
         boolean result = super.drawChild(canvas, child, drawingTime);
         if (child == this.tabsContainer) {
             int height = getMeasuredHeight();
@@ -251,7 +253,8 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
         return result;
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int count = this.tabsContainer.getChildCount();
         for (int a = 0; a < count; a++) {
@@ -291,7 +294,8 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
         }
     }
 
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+    /* Access modifiers changed, original: protected */
+    public void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
         if (this.prevLayoutWidth != r - l) {
             this.prevLayoutWidth = r - l;

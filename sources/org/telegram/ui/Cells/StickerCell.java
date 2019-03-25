@@ -11,7 +11,6 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
-import org.telegram.messenger.R;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.ui.ActionBar.Theme;
@@ -34,7 +33,8 @@ public class StickerCell extends FrameLayout {
         addView(this.imageView, LayoutHelper.createFrame(66, 66.0f, 1, 0.0f, 5.0f, 0.0f, 0.0f));
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec((AndroidUtilities.dp(76.0f) + getPaddingLeft()) + getPaddingRight(), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(78.0f), NUM));
     }
 
@@ -55,16 +55,16 @@ public class StickerCell extends FrameLayout {
         }
         this.sticker = document;
         if (side == -1) {
-            setBackgroundResource(R.drawable.stickers_back_left);
+            setBackgroundResource(NUM);
             setPadding(AndroidUtilities.dp(7.0f), 0, 0, 0);
         } else if (side == 0) {
-            setBackgroundResource(R.drawable.stickers_back_center);
+            setBackgroundResource(NUM);
             setPadding(0, 0, 0, 0);
         } else if (side == 1) {
-            setBackgroundResource(R.drawable.stickers_back_right);
+            setBackgroundResource(NUM);
             setPadding(0, 0, AndroidUtilities.dp(7.0f), 0);
         } else if (side == 2) {
-            setBackgroundResource(R.drawable.stickers_back_all);
+            setBackgroundResource(NUM);
             setPadding(AndroidUtilities.dp(3.0f), 0, AndroidUtilities.dp(3.0f), 0);
         }
         Drawable background = getBackground();
@@ -88,7 +88,8 @@ public class StickerCell extends FrameLayout {
         return this.imageView.getImageReceiver().getBitmap() != null;
     }
 
-    protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+    /* Access modifiers changed, original: protected */
+    public boolean drawChild(Canvas canvas, View child, long drawingTime) {
         boolean result = super.drawChild(canvas, child, drawingTime);
         if (child == this.imageView && ((this.scaled && this.scale != 0.8f) || !(this.scaled || this.scale == 1.0f))) {
             long newTime = System.currentTimeMillis();

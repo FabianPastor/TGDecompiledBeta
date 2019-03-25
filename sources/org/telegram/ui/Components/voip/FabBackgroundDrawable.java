@@ -39,7 +39,8 @@ public class FabBackgroundDrawable extends Drawable {
         return 0;
     }
 
-    protected void onBoundsChange(Rect bounds) {
+    /* Access modifiers changed, original: protected */
+    public void onBoundsChange(Rect bounds) {
         int size = Math.min(bounds.width(), bounds.height());
         if (size <= 0) {
             this.shadowBitmap = null;

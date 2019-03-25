@@ -64,7 +64,8 @@ public class SeekBarView extends FrameLayout {
         this.delegate = seekBarViewDelegate;
     }
 
-    boolean onTouch(MotionEvent ev) {
+    /* Access modifiers changed, original: 0000 */
+    public boolean onTouch(MotionEvent ev) {
         if (ev.getAction() == 0) {
             getParent().requestDisallowInterceptTouchEvent(true);
             int additionWidth = (getMeasuredHeight() - this.thumbWidth) / 2;
@@ -129,7 +130,8 @@ public class SeekBarView extends FrameLayout {
         this.bufferedProgress = progress;
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         if (this.progressToSet >= 0.0f && getMeasuredWidth() > 0) {
             setProgress(this.progressToSet);
@@ -141,7 +143,8 @@ public class SeekBarView extends FrameLayout {
         return this.pressed;
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         int y = (getMeasuredHeight() - this.thumbHeight) / 2;
         canvas.drawRect((float) (this.thumbWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.dp(1.0f)), (float) (getMeasuredWidth() - (this.thumbWidth / 2)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(1.0f)), this.innerPaint1);
         if (this.bufferedProgress > 0.0f) {

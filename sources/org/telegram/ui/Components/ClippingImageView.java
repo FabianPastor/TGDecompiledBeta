@@ -129,7 +129,7 @@ public class ClippingImageView extends View {
                 canvas.clipRect(((float) this.clipLeft) / scaleY, ((float) this.clipTop) / scaleY, ((float) getWidth()) - (((float) this.clipRight) / scaleY), ((float) getHeight()) - (((float) this.clipBottom) / scaleY));
                 try {
                     canvas.drawBitmap(this.bmp.bitmap, this.matrix, this.paint);
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
             }

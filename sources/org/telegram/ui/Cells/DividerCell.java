@@ -13,11 +13,13 @@ public class DividerCell extends View {
         setPadding(0, AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f));
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (getPaddingTop() + getPaddingBottom()) + 1);
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         canvas.drawLine((float) getPaddingLeft(), (float) getPaddingTop(), (float) (getWidth() - getPaddingRight()), (float) getPaddingTop(), Theme.dividerPaint);
     }
 }

@@ -95,11 +95,13 @@ public final class CustomTabsSession {
         return postMessage;
     }
 
-    IBinder getBinder() {
+    /* Access modifiers changed, original: 0000 */
+    public IBinder getBinder() {
         return this.mCallback.asBinder();
     }
 
-    ComponentName getComponentName() {
+    /* Access modifiers changed, original: 0000 */
+    public ComponentName getComponentName() {
         return this.mComponentName;
     }
 }

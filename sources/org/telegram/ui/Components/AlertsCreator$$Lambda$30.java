@@ -1,28 +1,18 @@
 package org.telegram.ui.Components;
 
-import android.content.SharedPreferences;
-import android.view.View;
-import android.view.View.OnClickListener;
-import org.telegram.ui.ActionBar.AlertDialog.Builder;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import org.telegram.ui.CacheControlActivity;
+import org.telegram.ui.LaunchActivity;
 
 final /* synthetic */ class AlertsCreator$$Lambda$30 implements OnClickListener {
-    private final int[] arg$1;
-    private final long arg$2;
-    private final int arg$3;
-    private final SharedPreferences arg$4;
-    private final Builder arg$5;
-    private final Runnable arg$6;
+    private final LaunchActivity arg$1;
 
-    AlertsCreator$$Lambda$30(int[] iArr, long j, int i, SharedPreferences sharedPreferences, Builder builder, Runnable runnable) {
-        this.arg$1 = iArr;
-        this.arg$2 = j;
-        this.arg$3 = i;
-        this.arg$4 = sharedPreferences;
-        this.arg$5 = builder;
-        this.arg$6 = runnable;
+    AlertsCreator$$Lambda$30(LaunchActivity launchActivity) {
+        this.arg$1 = launchActivity;
     }
 
-    public void onClick(View view) {
-        AlertsCreator.lambda$createPrioritySelectDialog$33$AlertsCreator(this.arg$1, this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6, view);
+    public void onClick(DialogInterface dialogInterface, int i) {
+        this.arg$1.lambda$runLinkRequest$27$LaunchActivity(new CacheControlActivity());
     }
 }

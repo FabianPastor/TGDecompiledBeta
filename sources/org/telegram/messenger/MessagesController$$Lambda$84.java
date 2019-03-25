@@ -7,15 +7,15 @@ import org.telegram.tgnet.TLRPC.TL_error;
 
 final /* synthetic */ class MessagesController$$Lambda$84 implements RequestDelegate {
     private final MessagesController arg$1;
-    private final TL_dialog arg$2;
-    private final long arg$3;
-    private final int arg$4;
+    private final int arg$2;
+    private final TL_dialog arg$3;
+    private final long arg$4;
 
-    MessagesController$$Lambda$84(MessagesController messagesController, TL_dialog tL_dialog, long j, int i) {
+    MessagesController$$Lambda$84(MessagesController messagesController, int i, TL_dialog tL_dialog, long j) {
         this.arg$1 = messagesController;
-        this.arg$2 = tL_dialog;
-        this.arg$3 = j;
-        this.arg$4 = i;
+        this.arg$2 = i;
+        this.arg$3 = tL_dialog;
+        this.arg$4 = j;
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {

@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.text.TextWatcher;
-import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
@@ -17,7 +16,6 @@ import android.widget.ImageView.ScaleType;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.EditTextBoldCursor;
@@ -53,7 +51,7 @@ public class PollEditTextCell extends FrameLayout {
         this.textView.setPadding(0, AndroidUtilities.dp(14.0f), 0, AndroidUtilities.dp(14.0f));
         this.textView.setImeOptions(this.textView.getImeOptions() | NUM);
         this.textView.setInputType(this.textView.getInputType() | 16384);
-        View view = this.textView;
+        EditTextBoldCursor editTextBoldCursor = this.textView;
         if (LocaleController.isRTL) {
             i = 5;
         } else {
@@ -70,7 +68,7 @@ public class PollEditTextCell extends FrameLayout {
         } else {
             f2 = 58.0f;
         }
-        addView(view, LayoutHelper.createFrame(-1, -2.0f, i, f, 0.0f, f2, 0.0f));
+        addView(editTextBoldCursor, LayoutHelper.createFrame(-1, -2.0f, i, f, 0.0f, f2, 0.0f));
         if (onDelete != null) {
             int i3;
             this.deleteImageView = new ImageView(context);
@@ -78,9 +76,10 @@ public class PollEditTextCell extends FrameLayout {
             this.deleteImageView.setScaleType(ScaleType.CENTER);
             this.deleteImageView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("stickers_menuSelector")));
             this.deleteImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("stickers_menu"), Mode.MULTIPLY));
-            this.deleteImageView.setImageResource(R.drawable.msg_panel_clear);
+            this.deleteImageView.setImageResource(NUM);
             this.deleteImageView.setOnClickListener(onDelete);
             this.deleteImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayText"), Mode.MULTIPLY));
+            this.deleteImageView.setContentDescription(LocaleController.getString("Delete", NUM));
             addView(this.deleteImageView, LayoutHelper.createFrame(48, 50.0f, (LocaleController.isRTL ? 3 : 5) | 48, LocaleController.isRTL ? 3.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 3.0f, 0.0f));
             this.textView2 = new SimpleTextView(getContext());
             this.textView2.setTextSize(13);
@@ -91,15 +90,16 @@ public class PollEditTextCell extends FrameLayout {
                 i3 = 5;
             }
             simpleTextView.setGravity(i3 | 48);
-            View view2 = this.textView2;
+            SimpleTextView simpleTextView2 = this.textView2;
             if (!LocaleController.isRTL) {
                 i2 = 5;
             }
-            addView(view2, LayoutHelper.createFrame(48, 24.0f, i2 | 48, LocaleController.isRTL ? 20.0f : 0.0f, 43.0f, LocaleController.isRTL ? 0.0f : 20.0f, 0.0f));
+            addView(simpleTextView2, LayoutHelper.createFrame(48, 24.0f, i2 | 48, LocaleController.isRTL ? 20.0f : 0.0f, 43.0f, LocaleController.isRTL ? 0.0f : 20.0f, 0.0f));
         }
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int i;
         int width = MeasureSpec.getSize(widthMeasureSpec);
         if (this.deleteImageView != null) {
@@ -138,7 +138,8 @@ public class PollEditTextCell extends FrameLayout {
         this.textView.addTextChangedListener(watcher);
     }
 
-    protected boolean drawDivider() {
+    /* Access modifiers changed, original: protected */
+    public boolean drawDivider() {
         return true;
     }
 
@@ -182,7 +183,8 @@ public class PollEditTextCell extends FrameLayout {
         return this.textView2;
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (this.needDivider && drawDivider()) {
             canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }

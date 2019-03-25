@@ -1,15 +1,20 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
+import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.tgnet.TLRPC.TL_messages_editMessage;
 
-final /* synthetic */ class ChatActivity$$Lambda$66 implements ThemeDescriptionDelegate {
+final /* synthetic */ class ChatActivity$$Lambda$66 implements Runnable {
     private final ChatActivity arg$1;
+    private final TL_error arg$2;
+    private final TL_messages_editMessage arg$3;
 
-    ChatActivity$$Lambda$66(ChatActivity chatActivity) {
+    ChatActivity$$Lambda$66(ChatActivity chatActivity, TL_error tL_error, TL_messages_editMessage tL_messages_editMessage) {
         this.arg$1 = chatActivity;
+        this.arg$2 = tL_error;
+        this.arg$3 = tL_messages_editMessage;
     }
 
-    public void didSetColor() {
-        this.arg$1.lambda$getThemeDescriptions$86$ChatActivity();
+    public void run() {
+        this.arg$1.lambda$null$70$ChatActivity(this.arg$2, this.arg$3);
     }
 }

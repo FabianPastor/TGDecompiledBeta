@@ -44,50 +44,50 @@ public class ArchivedStickerSetCell extends FrameLayout {
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TruncateAt.END);
         this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
-        View view = this.textView;
+        TextView textView = this.textView;
         if (LocaleController.isRTL) {
             i = 5;
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i, 71.0f, 10.0f, needCheckBox ? 71.0f : 21.0f, 0.0f));
+        addView(textView, LayoutHelper.createFrame(-2, -2.0f, i, 71.0f, 10.0f, needCheckBox ? 71.0f : 21.0f, 0.0f));
         this.valueTextView = new TextView(context);
         this.valueTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
         this.valueTextView.setTextSize(1, 13.0f);
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);
         this.valueTextView.setSingleLine(true);
-        TextView textView = this.valueTextView;
+        TextView textView2 = this.valueTextView;
         if (LocaleController.isRTL) {
             i2 = 5;
         } else {
             i2 = 3;
         }
-        textView.setGravity(i2);
-        view = this.valueTextView;
+        textView2.setGravity(i2);
+        textView = this.valueTextView;
         if (LocaleController.isRTL) {
             i = 5;
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i, 71.0f, 35.0f, needCheckBox ? 71.0f : 21.0f, 0.0f));
+        addView(textView, LayoutHelper.createFrame(-2, -2.0f, i, 71.0f, 35.0f, needCheckBox ? 71.0f : 21.0f, 0.0f));
         this.imageView = new BackupImageView(context);
         this.imageView.setAspectFit(true);
-        view = this.imageView;
+        BackupImageView backupImageView = this.imageView;
         if (LocaleController.isRTL) {
             i = 5;
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(48, 48.0f, i | 48, LocaleController.isRTL ? 0.0f : 12.0f, 8.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
+        addView(backupImageView, LayoutHelper.createFrame(48, 48.0f, i | 48, LocaleController.isRTL ? 0.0f : 12.0f, 8.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
         if (needCheckBox) {
             this.checkBox = new Switch(context);
             this.checkBox.setColors("switchTrack", "switchTrackChecked", "windowBackgroundWhite", "windowBackgroundWhite");
-            View view2 = this.checkBox;
+            Switch switchR = this.checkBox;
             if (!LocaleController.isRTL) {
                 i3 = 5;
             }
-            addView(view2, LayoutHelper.createFrame(37, 40.0f, i3 | 16, 16.0f, 0.0f, 16.0f, 0.0f));
+            addView(switchR, LayoutHelper.createFrame(37, 40.0f, i3 | 16, 16.0f, 0.0f, 16.0f, 0.0f));
         }
     }
 
@@ -103,7 +103,8 @@ public class ArchivedStickerSetCell extends FrameLayout {
         return this.checkBox;
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(64.0f), NUM));
     }
 
@@ -147,7 +148,8 @@ public class ArchivedStickerSetCell extends FrameLayout {
         this.checkBox.setOnClickListener(new ArchivedStickerSetCell$$Lambda$0(this));
     }
 
-    final /* synthetic */ void lambda$setOnCheckClick$0$ArchivedStickerSetCell(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$setOnCheckClick$0$ArchivedStickerSetCell(View v) {
         this.checkBox.setChecked(!this.checkBox.isChecked(), true);
     }
 
@@ -176,7 +178,8 @@ public class ArchivedStickerSetCell extends FrameLayout {
         return super.onTouchEvent(event);
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (this.needDivider) {
             canvas.drawLine(0.0f, (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
         }

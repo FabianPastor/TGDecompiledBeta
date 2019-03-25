@@ -52,6 +52,7 @@ public abstract class BaseCell extends ViewGroup {
     public BaseCell(Context context) {
         super(context);
         setWillNotDraw(false);
+        setFocusable(true);
     }
 
     public static void setDrawableBounds(Drawable drawable, int x, int y) {
@@ -68,7 +69,8 @@ public abstract class BaseCell extends ViewGroup {
         }
     }
 
-    protected void startCheckLongPress() {
+    /* Access modifiers changed, original: protected */
+    public void startCheckLongPress() {
         if (!this.checkingForLongPress) {
             this.checkingForLongPress = true;
             if (this.pendingCheckForTap == null) {
@@ -78,7 +80,8 @@ public abstract class BaseCell extends ViewGroup {
         }
     }
 
-    protected void cancelCheckLongPress() {
+    /* Access modifiers changed, original: protected */
+    public void cancelCheckLongPress() {
         this.checkingForLongPress = false;
         if (this.pendingCheckForLongPress != null) {
             removeCallbacks(this.pendingCheckForLongPress);
@@ -92,6 +95,7 @@ public abstract class BaseCell extends ViewGroup {
         return false;
     }
 
-    protected void onLongPress() {
+    /* Access modifiers changed, original: protected */
+    public void onLongPress() {
     }
 }

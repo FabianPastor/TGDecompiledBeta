@@ -51,7 +51,8 @@ public class HintDialogCell extends FrameLayout {
         addView(this.nameTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 6.0f, 64.0f, 6.0f, 0.0f));
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(86.0f), NUM));
     }
 
@@ -136,7 +137,8 @@ public class HintDialogCell extends FrameLayout {
         }
     }
 
-    protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+    /* Access modifiers changed, original: protected */
+    public boolean drawChild(Canvas canvas, View child, long drawingTime) {
         boolean result = super.drawChild(canvas, child, drawingTime);
         if (child == this.imageView) {
             int top;

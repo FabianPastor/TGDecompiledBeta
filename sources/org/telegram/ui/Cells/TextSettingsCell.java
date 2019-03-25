@@ -7,8 +7,8 @@ import android.graphics.Canvas;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.text.TextUtils.TruncateAt;
-import android.view.View;
 import android.view.View.MeasureSpec;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
@@ -43,46 +43,47 @@ public class TextSettingsCell extends FrameLayout {
         this.textView.setEllipsize(TruncateAt.END);
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-        View view = this.textView;
+        TextView textView = this.textView;
         if (LocaleController.isRTL) {
             i = 5;
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, (float) padding, 0.0f, (float) padding, 0.0f));
+        addView(textView, LayoutHelper.createFrame(-1, -1.0f, i | 48, (float) padding, 0.0f, (float) padding, 0.0f));
         this.valueTextView = new TextView(context);
         this.valueTextView.setTextSize(1, 16.0f);
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);
         this.valueTextView.setSingleLine(true);
         this.valueTextView.setEllipsize(TruncateAt.END);
-        TextView textView = this.valueTextView;
+        TextView textView2 = this.valueTextView;
         if (LocaleController.isRTL) {
             i2 = 3;
         } else {
             i2 = 5;
         }
-        textView.setGravity(i2 | 16);
+        textView2.setGravity(i2 | 16);
         this.valueTextView.setTextColor(Theme.getColor("windowBackgroundWhiteValueText"));
-        view = this.valueTextView;
+        textView = this.valueTextView;
         if (LocaleController.isRTL) {
             i = 3;
         } else {
             i = 5;
         }
-        addView(view, LayoutHelper.createFrame(-2, -1.0f, i | 48, (float) padding, 0.0f, (float) padding, 0.0f));
+        addView(textView, LayoutHelper.createFrame(-2, -1.0f, i | 48, (float) padding, 0.0f, (float) padding, 0.0f));
         this.valueImageView = new ImageView(context);
         this.valueImageView.setScaleType(ScaleType.CENTER);
         this.valueImageView.setVisibility(4);
         this.valueImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), Mode.MULTIPLY));
-        view = this.valueImageView;
+        ImageView imageView = this.valueImageView;
         if (!LocaleController.isRTL) {
             i3 = 5;
         }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i3 | 16, (float) padding, 0.0f, (float) padding, 0.0f));
+        addView(imageView, LayoutHelper.createFrame(-2, -2.0f, i3 | 16, (float) padding, 0.0f, (float) padding, 0.0f));
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (this.needDivider ? 1 : 0) + AndroidUtilities.dp(50.0f));
         int availableWidth = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(34.0f);
         int width = availableWidth / 2;
@@ -241,9 +242,15 @@ public class TextSettingsCell extends FrameLayout {
         }
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (this.needDivider) {
             canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
+        info.setEnabled(isEnabled());
     }
 }

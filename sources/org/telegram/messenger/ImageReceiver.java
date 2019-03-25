@@ -27,6 +27,7 @@ import org.telegram.tgnet.TLRPC.TL_fileLocation;
 import org.telegram.tgnet.TLRPC.TL_photoCachedSize;
 import org.telegram.tgnet.TLRPC.TL_photoSize;
 import org.telegram.tgnet.TLRPC.TL_photoStrippedSize;
+import org.telegram.tgnet.TLRPC.WebPage;
 import org.telegram.ui.Components.AnimatedFileDrawable;
 import org.telegram.ui.Components.RecyclableDrawable;
 
@@ -229,7 +230,25 @@ public class ImageReceiver implements NotificationCenterDelegate {
         setImage(null, null, fileLocation, filter, thumb, thumbLocation, thumbFilter, size, ext, parentObject, cacheType);
     }
 
-    private String getLocationKey(Object fileLocation, Object parentObject) {
+    public static String getStippedKey(Object parentObject, Object fullObject) {
+        if (parentObject instanceof WebPage) {
+            if (fullObject instanceof Document) {
+                return "stripped" + FileRefController.getKeyForParentObject(parentObject) + "_" + ((Document) fullObject).id;
+            } else if (fullObject instanceof PhotoSize) {
+                PhotoSize size = (PhotoSize) fullObject;
+                if (size.location != null) {
+                    return "stripped" + FileRefController.getKeyForParentObject(parentObject) + "_" + size.location.local_id + "_" + size.location.volume_id;
+                }
+                return "stripped" + FileRefController.getKeyForParentObject(parentObject);
+            } else if (fullObject instanceof FileLocation) {
+                FileLocation loc = (FileLocation) fullObject;
+                return "stripped" + FileRefController.getKeyForParentObject(parentObject) + "_" + loc.local_id + "_" + loc.volume_id;
+            }
+        }
+        return "stripped" + FileRefController.getKeyForParentObject(parentObject);
+    }
+
+    private String getLocationKey(Object fileLocation, Object parentObject, Object fullObject) {
         if (fileLocation instanceof SecureDocument) {
             SecureDocument document = (SecureDocument) fileLocation;
             return document.secureFile.dc_id + "_" + document.secureFile.id;
@@ -239,7 +258,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
         } else {
             if (fileLocation instanceof TL_photoStrippedSize) {
                 if (((TL_photoStrippedSize) fileLocation).bytes.length > 0) {
-                    return "stripped" + FileRefController.getKeyForParentObject(parentObject);
+                    return getStippedKey(parentObject, fullObject);
                 }
             } else if ((fileLocation instanceof TL_photoSize) || (fileLocation instanceof TL_photoCachedSize)) {
                 PhotoSize photoSize = (PhotoSize) fileLocation;
@@ -324,10 +343,11 @@ public class ImageReceiver implements NotificationCenterDelegate {
             }
             return;
         }
+        Object obj;
         if (isInvalidLocation(thumbLocation)) {
             thumbLocation = null;
         }
-        String imageKey = getLocationKey(fileLocation, parentObject);
+        String imageKey = getLocationKey(fileLocation, parentObject, null);
         if (imageKey == null && fileLocation != null) {
             fileLocation = null;
         }
@@ -347,7 +367,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
         if (!(imageKey == null || imageFilter == null)) {
             imageKey = imageKey + "@" + imageFilter;
         }
-        String mediaKey = getLocationKey(mediaLocation, parentObject);
+        String mediaKey = getLocationKey(mediaLocation, parentObject, null);
         if (mediaKey == null && mediaLocation != null) {
             mediaLocation = null;
         }
@@ -358,18 +378,19 @@ public class ImageReceiver implements NotificationCenterDelegate {
             if (this.delegate != null) {
                 imageReceiverDelegate = this.delegate;
                 z = (this.currentImageDrawable == null && this.currentThumbDrawable == null && this.staticThumbDrawable == null && this.currentMediaDrawable == null) ? false : true;
-                if (this.currentImageDrawable == null && this.currentMediaDrawable == null) {
-                    z2 = true;
-                } else {
-                    z2 = false;
-                }
+                z2 = this.currentImageDrawable == null && this.currentMediaDrawable == null;
                 imageReceiverDelegate.didSetImage(this, z, z2);
             }
             if (!(this.canceledLoading || this.forcePreview)) {
                 return;
             }
         }
-        String thumbKey = getLocationKey(thumbLocation, parentObject);
+        if (mediaLocation != null) {
+            obj = mediaLocation;
+        } else {
+            obj = fileLocation;
+        }
+        String thumbKey = getLocationKey(thumbLocation, parentObject, obj);
         if (!(thumbKey == null || thumbFilter == null)) {
             thumbKey = thumbKey + "@" + thumbFilter;
         }
@@ -662,6 +683,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
             Paint paint;
             int bitmapW;
             int bitmapH;
+            float scaleH;
             BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
             if (shader != null) {
                 paint = this.roundPaint;
@@ -710,14 +732,36 @@ public class ImageReceiver implements NotificationCenterDelegate {
                 bitmapW = bitmapDrawable.getBitmap().getWidth();
                 bitmapH = bitmapDrawable.getBitmap().getHeight();
             }
-            float scaleW = ((float) bitmapW) / ((float) this.imageW);
-            float scaleH = ((float) bitmapH) / ((float) this.imageH);
+            float scaleW = this.imageW == 0 ? 1.0f : ((float) bitmapW) / ((float) this.imageW);
+            if (this.imageH == 0) {
+                scaleH = 1.0f;
+            } else {
+                scaleH = ((float) bitmapH) / ((float) this.imageH);
+            }
             float scale;
             int width;
             int height;
             int centerX;
             int centerY;
             if (shader != null) {
+                if (this.isAspectFit) {
+                    scale = Math.max(scaleW, scaleH);
+                    bitmapW = (int) (((float) bitmapW) / scale);
+                    bitmapH = (int) (((float) bitmapH) / scale);
+                    this.drawRegion.set(this.imageX + ((this.imageW - bitmapW) / 2), this.imageY + ((this.imageH - bitmapH) / 2), this.imageX + ((this.imageW + bitmapW) / 2), this.imageY + ((this.imageH + bitmapH) / 2));
+                    if (this.isVisible) {
+                        this.roundPaint.setShader(shader);
+                        this.shaderMatrix.reset();
+                        this.shaderMatrix.setTranslate((float) this.drawRegion.left, (float) this.drawRegion.top);
+                        this.shaderMatrix.preScale(1.0f / scale, 1.0f / scale);
+                        shader.setLocalMatrix(this.shaderMatrix);
+                        this.roundPaint.setAlpha(alpha);
+                        this.roundRect.set(this.drawRegion);
+                        canvas.drawRoundRect(this.roundRect, (float) this.roundRadius, (float) this.roundRadius, this.roundPaint);
+                        return;
+                    }
+                    return;
+                }
                 this.roundPaint.setShader(shader);
                 scale = Math.min(scaleW, scaleH);
                 this.roundRect.set((float) this.imageX, (float) this.imageY, (float) (this.imageX + this.imageW), (float) (this.imageY + this.imageH));
@@ -752,11 +796,14 @@ public class ImageReceiver implements NotificationCenterDelegate {
                 bitmapH = (int) (((float) bitmapH) / scale);
                 this.drawRegion.set(this.imageX + ((this.imageW - bitmapW) / 2), this.imageY + ((this.imageH - bitmapH) / 2), this.imageX + ((this.imageW + bitmapW) / 2), this.imageY + ((this.imageH + bitmapH) / 2));
                 bitmapDrawable.setBounds(this.drawRegion);
+                if (bitmapDrawable instanceof AnimatedFileDrawable) {
+                    ((AnimatedFileDrawable) bitmapDrawable).setActualDrawRect(this.drawRegion.left, this.drawRegion.top, this.drawRegion.width(), this.drawRegion.height());
+                }
                 if (this.isVisible) {
                     try {
                         bitmapDrawable.setAlpha(alpha);
                         bitmapDrawable.draw(canvas);
-                    } catch (Throwable e) {
+                    } catch (Exception e) {
                         onBitmapException(bitmapDrawable);
                         FileLog.e(e);
                     }
@@ -796,7 +843,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                     try {
                         bitmapDrawable.setAlpha(alpha);
                         bitmapDrawable.draw(canvas);
-                    } catch (Throwable e2) {
+                    } catch (Exception e2) {
                         onBitmapException(bitmapDrawable);
                         FileLog.e(e2);
                     }
@@ -829,7 +876,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                     try {
                         bitmapDrawable.setAlpha(alpha);
                         bitmapDrawable.draw(canvas);
-                    } catch (Throwable e22) {
+                    } catch (Exception e22) {
                         onBitmapException(bitmapDrawable);
                         FileLog.e(e22);
                     }
@@ -844,7 +891,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
             try {
                 drawable.setAlpha(alpha);
                 drawable.draw(canvas);
-            } catch (Throwable e222) {
+            } catch (Exception e222) {
                 FileLog.e(e222);
             }
         }
@@ -967,7 +1014,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
                 checkAlphaAnimation(animationNotReady);
                 return false;
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
@@ -1382,7 +1429,8 @@ public class ImageReceiver implements NotificationCenterDelegate {
         return null;
     }
 
-    protected int getTag(int type) {
+    /* Access modifiers changed, original: protected */
+    public int getTag(int type) {
         if (type == 1) {
             return this.thumbTag;
         }
@@ -1392,7 +1440,8 @@ public class ImageReceiver implements NotificationCenterDelegate {
         return this.imageTag;
     }
 
-    protected void setTag(int value, int type) {
+    /* Access modifiers changed, original: protected */
+    public void setTag(int value, int type) {
         if (type == 1) {
             this.thumbTag = value;
         } else if (type == 3) {
@@ -1410,7 +1459,8 @@ public class ImageReceiver implements NotificationCenterDelegate {
         return this.param;
     }
 
-    protected boolean setImageBitmapByKey(BitmapDrawable bitmap, String key, int type, boolean memCache) {
+    /* Access modifiers changed, original: protected */
+    public boolean setImageBitmapByKey(BitmapDrawable bitmap, String key, int type, boolean memCache) {
         if (bitmap == null || key == null) {
             return false;
         }

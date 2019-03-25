@@ -146,7 +146,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                         }
                         MusicBrowserService.this.handlePlayRequest();
                     }
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
             }
@@ -241,7 +241,8 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
         }
     }
 
-    final /* synthetic */ void lambda$onLoadChildren$1$MusicBrowserService(MessagesStorage messagesStorage, String parentMediaId, Result result) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onLoadChildren$1$MusicBrowserService(MessagesStorage messagesStorage, String parentMediaId, Result result) {
         try {
             ArrayList<Integer> usersToLoad = new ArrayList();
             ArrayList<Integer> chatsToLoad = new ArrayList();
@@ -307,13 +308,14 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                     }
                 }
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         AndroidUtilities.runOnUIThread(new MusicBrowserService$$Lambda$1(this, parentMediaId, result));
     }
 
-    final /* synthetic */ void lambda$null$0$MusicBrowserService(String parentMediaId, Result result) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$0$MusicBrowserService(String parentMediaId, Result result) {
         this.chatsLoaded = true;
         this.loadingChats = false;
         loadChildrenImpl(parentMediaId, result);
@@ -399,7 +401,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                 did = 0;
                 try {
                     did = Integer.parseInt(parentMediaId.replace("__CHAT_", ""));
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
                 ArrayList<MessageObject> arrayList = (ArrayList) this.musicObjects.get(did);

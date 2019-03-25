@@ -15,7 +15,6 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -71,9 +70,9 @@ public class PhotoPickerSearchCell extends LinearLayout {
         super(context);
         setOrientation(0);
         SearchButton searchButton = new SearchButton(context);
-        searchButton.textView1.setText(LocaleController.getString("SearchImages", R.string.SearchImages));
-        searchButton.textView2.setText(LocaleController.getString("SearchImagesInfo", R.string.SearchImagesInfo));
-        searchButton.imageView.setImageResource(R.drawable.search_web);
+        searchButton.textView1.setText(LocaleController.getString("SearchImages", NUM));
+        searchButton.textView2.setText(LocaleController.getString("SearchImagesInfo", NUM));
+        searchButton.imageView.setImageResource(NUM);
         addView(searchButton);
         LayoutParams layoutParams = (LayoutParams) searchButton.getLayoutParams();
         layoutParams.weight = 0.5f;
@@ -97,9 +96,9 @@ public class PhotoPickerSearchCell extends LinearLayout {
         layoutParams.width = AndroidUtilities.dp(4.0f);
         frameLayout.setLayoutParams(layoutParams);
         searchButton = new SearchButton(context);
-        searchButton.textView1.setText(LocaleController.getString("SearchGifs", R.string.SearchGifs));
+        searchButton.textView1.setText(LocaleController.getString("SearchGifs", NUM));
         searchButton.textView2.setText("GIPHY");
-        searchButton.imageView.setImageResource(R.drawable.search_gif);
+        searchButton.imageView.setImageResource(NUM);
         addView(searchButton);
         layoutParams = (LayoutParams) searchButton.getLayoutParams();
         layoutParams.weight = 0.5f;
@@ -124,7 +123,8 @@ public class PhotoPickerSearchCell extends LinearLayout {
         this.delegate = delegate;
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(52.0f), NUM));
     }
 }

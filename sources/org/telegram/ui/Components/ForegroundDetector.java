@@ -64,7 +64,7 @@ public class ForegroundDetector implements ActivityLifecycleCallbacks {
             while (it.hasNext()) {
                 try {
                     ((Listener) it.next()).onBecameForeground();
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
             }
@@ -95,7 +95,7 @@ public class ForegroundDetector implements ActivityLifecycleCallbacks {
             while (it.hasNext()) {
                 try {
                     ((Listener) it.next()).onBecameBackground();
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
             }

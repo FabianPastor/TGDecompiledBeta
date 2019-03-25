@@ -11,7 +11,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
@@ -64,26 +63,26 @@ public class LogoutActivity extends BaseFragment {
                 case 0:
                     HeaderCell view = holder.itemView;
                     if (position == LogoutActivity.this.alternativeHeaderRow) {
-                        view.setText(LocaleController.getString("AlternativeOptions", R.string.AlternativeOptions));
+                        view.setText(LocaleController.getString("AlternativeOptions", NUM));
                         return;
                     }
                     return;
                 case 1:
                     TextDetailSettingsCell view2 = holder.itemView;
                     if (position == LogoutActivity.this.addAccountRow) {
-                        view2.setTextAndValueAndIcon(LocaleController.getString("AddAnotherAccount", R.string.AddAnotherAccount), LocaleController.getString("AddAnotherAccountInfo", R.string.AddAnotherAccountInfo), R.drawable.actions_addmember2, true);
+                        view2.setTextAndValueAndIcon(LocaleController.getString("AddAnotherAccount", NUM), LocaleController.getString("AddAnotherAccountInfo", NUM), NUM, true);
                         return;
                     } else if (position == LogoutActivity.this.passcodeRow) {
-                        view2.setTextAndValueAndIcon(LocaleController.getString("SetPasscode", R.string.SetPasscode), LocaleController.getString("SetPasscodeInfo", R.string.SetPasscodeInfo), R.drawable.menu_passcode, true);
+                        view2.setTextAndValueAndIcon(LocaleController.getString("SetPasscode", NUM), LocaleController.getString("SetPasscodeInfo", NUM), NUM, true);
                         return;
                     } else if (position == LogoutActivity.this.cacheRow) {
-                        view2.setTextAndValueAndIcon(LocaleController.getString("ClearCache", R.string.ClearCache), LocaleController.getString("ClearCacheInfo", R.string.ClearCacheInfo), R.drawable.menu_clearcache, true);
+                        view2.setTextAndValueAndIcon(LocaleController.getString("ClearCache", NUM), LocaleController.getString("ClearCacheInfo", NUM), NUM, true);
                         return;
                     } else if (position == LogoutActivity.this.phoneRow) {
-                        view2.setTextAndValueAndIcon(LocaleController.getString("ChangePhoneNumber", R.string.ChangePhoneNumber), LocaleController.getString("ChangePhoneNumberInfo", R.string.ChangePhoneNumberInfo), R.drawable.menu_newphone, true);
+                        view2.setTextAndValueAndIcon(LocaleController.getString("ChangePhoneNumber", NUM), LocaleController.getString("ChangePhoneNumberInfo", NUM), NUM, true);
                         return;
                     } else if (position == LogoutActivity.this.supportRow) {
-                        view2.setTextAndValueAndIcon(LocaleController.getString("ContactSupport", R.string.ContactSupport), LocaleController.getString("ContactSupportInfo", R.string.ContactSupportInfo), R.drawable.menu_support, false);
+                        view2.setTextAndValueAndIcon(LocaleController.getString("ContactSupport", NUM), LocaleController.getString("ContactSupportInfo", NUM), NUM, false);
                         return;
                     } else {
                         return;
@@ -92,14 +91,14 @@ public class LogoutActivity extends BaseFragment {
                     TextSettingsCell view3 = holder.itemView;
                     if (position == LogoutActivity.this.logoutRow) {
                         view3.setTextColor(Theme.getColor("windowBackgroundWhiteRedText5"));
-                        view3.setText(LocaleController.getString("LogOutTitle", R.string.LogOutTitle), false);
+                        view3.setText(LocaleController.getString("LogOutTitle", NUM), false);
                         return;
                     }
                     return;
                 case 4:
                     TextInfoPrivacyCell view4 = holder.itemView;
                     if (position == LogoutActivity.this.logoutSectionRow) {
-                        view4.setText(LocaleController.getString("LogOutInfo", R.string.LogOutInfo));
+                        view4.setText(LocaleController.getString("LogOutInfo", NUM));
                         return;
                     }
                     return;
@@ -135,7 +134,7 @@ public class LogoutActivity extends BaseFragment {
                     break;
                 default:
                     view = new TextInfoPrivacyCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) R.drawable.greydivider, "windowBackgroundGrayShadow"));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                     break;
             }
             view.setLayoutParams(new LayoutParams(-1, -2));
@@ -201,8 +200,8 @@ public class LogoutActivity extends BaseFragment {
     }
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        this.actionBar.setTitle(LocaleController.getString("LogOutTitle", R.string.LogOutTitle));
+        this.actionBar.setBackButtonImage(NUM);
+        this.actionBar.setTitle(LocaleController.getString("LogOutTitle", NUM));
         if (AndroidUtilities.isTablet()) {
             this.actionBar.setOccupyStatusBar(false);
         }
@@ -210,7 +209,7 @@ public class LogoutActivity extends BaseFragment {
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    LogoutActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
+                    LogoutActivity.this.finishFragment();
                 }
             }
         });
@@ -227,7 +226,8 @@ public class LogoutActivity extends BaseFragment {
         return this.fragmentView;
     }
 
-    final /* synthetic */ void lambda$createView$1$LogoutActivity(View view, int position, float x, float y) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$1$LogoutActivity(View view, int position, float x, float y) {
         if (position == this.addAccountRow) {
             int freeAccount = -1;
             for (int a = 0; a < 3; a++) {
@@ -249,19 +249,21 @@ public class LogoutActivity extends BaseFragment {
             showDialog(AlertsCreator.createSupportAlert(this));
         } else if (position == this.logoutRow && getParentActivity() != null) {
             Builder builder = new Builder(getParentActivity());
-            builder.setMessage(LocaleController.getString("AreYouSureLogout", R.string.AreYouSureLogout));
-            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new LogoutActivity$$Lambda$1(this));
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            builder.setMessage(LocaleController.getString("AreYouSureLogout", NUM));
+            builder.setTitle(LocaleController.getString("AppName", NUM));
+            builder.setPositiveButton(LocaleController.getString("OK", NUM), new LogoutActivity$$Lambda$1(this));
+            builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
             showDialog(builder.create());
         }
     }
 
-    final /* synthetic */ void lambda$null$0$LogoutActivity(DialogInterface dialogInterface, int i) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$0$LogoutActivity(DialogInterface dialogInterface, int i) {
         MessagesController.getInstance(this.currentAccount).performLogout(1);
     }
 
-    protected void onDialogDismiss(Dialog dialog) {
+    /* Access modifiers changed, original: protected */
+    public void onDialogDismiss(Dialog dialog) {
         DownloadController.getInstance(this.currentAccount).checkAutodownloadSettings();
     }
 

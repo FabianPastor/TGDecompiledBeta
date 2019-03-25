@@ -18,7 +18,6 @@ import android.view.View.MeasureSpec;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.R;
 
 @TargetApi(10)
 public class VideoTimelinePlayView extends View {
@@ -69,9 +68,9 @@ public class VideoTimelinePlayView extends View {
         this.paint.setColor(-1);
         this.paint2 = new Paint();
         this.paint2.setColor(NUM);
-        this.drawableLeft = context.getResources().getDrawable(R.drawable.video_cropleft);
+        this.drawableLeft = context.getResources().getDrawable(NUM);
         this.drawableLeft.setColorFilter(new PorterDuffColorFilter(-16777216, Mode.MULTIPLY));
-        this.drawableRight = context.getResources().getDrawable(R.drawable.video_cropright);
+        this.drawableRight = context.getResources().getDrawable(NUM);
         this.drawableRight.setColorFilter(new PorterDuffColorFilter(-16777216, Mode.MULTIPLY));
     }
 
@@ -242,7 +241,7 @@ public class VideoTimelinePlayView extends View {
         try {
             this.mediaMetadataRetriever.setDataSource(path);
             this.videoLength = Long.parseLong(this.mediaMetadataRetriever.extractMetadata(9));
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         invalidate();
@@ -270,7 +269,8 @@ public class VideoTimelinePlayView extends View {
             this.currentTask = new AsyncTask<Integer, Integer, Bitmap>() {
                 private int frameNum = 0;
 
-                protected Bitmap doInBackground(Integer... objects) {
+                /* Access modifiers changed, original: protected|varargs */
+                public Bitmap doInBackground(Integer... objects) {
                     this.frameNum = objects[0].intValue();
                     Bitmap bitmap = null;
                     Bitmap bitmap2;
@@ -303,12 +303,13 @@ public class VideoTimelinePlayView extends View {
                         }
                         bitmap2 = bitmap;
                         return bitmap;
-                    } catch (Throwable e) {
+                    } catch (Exception e) {
                         FileLog.e(e);
                     }
                 }
 
-                protected void onPostExecute(Bitmap bitmap) {
+                /* Access modifiers changed, original: protected */
+                public void onPostExecute(Bitmap bitmap) {
                     if (!isCancelled()) {
                         VideoTimelinePlayView.this.frames.add(bitmap);
                         VideoTimelinePlayView.this.invalidate();
@@ -329,7 +330,7 @@ public class VideoTimelinePlayView extends View {
                     this.mediaMetadataRetriever.release();
                     this.mediaMetadataRetriever = null;
                 }
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
         }
@@ -370,7 +371,8 @@ public class VideoTimelinePlayView extends View {
         invalidate();
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         if (this.lastWidth != widthSize) {
@@ -379,7 +381,8 @@ public class VideoTimelinePlayView extends View {
         }
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         int width = getMeasuredWidth() - AndroidUtilities.dp(36.0f);
         int startX = ((int) (((float) width) * this.progressLeft)) + AndroidUtilities.dp(16.0f);
         int endX = ((int) (((float) width) * this.progressRight)) + AndroidUtilities.dp(16.0f);

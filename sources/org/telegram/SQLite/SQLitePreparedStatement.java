@@ -10,25 +10,25 @@ public class SQLitePreparedStatement {
     private boolean isFinalized = false;
     private long sqliteStatementHandle;
 
-    native void bindByteBuffer(long j, int i, ByteBuffer byteBuffer, int i2) throws SQLiteException;
+    public native void bindByteBuffer(long j, int i, ByteBuffer byteBuffer, int i2) throws SQLiteException;
 
-    native void bindDouble(long j, int i, double d) throws SQLiteException;
+    public native void bindDouble(long j, int i, double d) throws SQLiteException;
 
-    native void bindInt(long j, int i, int i2) throws SQLiteException;
+    public native void bindInt(long j, int i, int i2) throws SQLiteException;
 
-    native void bindLong(long j, int i, long j2) throws SQLiteException;
+    public native void bindLong(long j, int i, long j2) throws SQLiteException;
 
-    native void bindNull(long j, int i) throws SQLiteException;
+    public native void bindNull(long j, int i) throws SQLiteException;
 
-    native void bindString(long j, int i, String str) throws SQLiteException;
+    public native void bindString(long j, int i, String str) throws SQLiteException;
 
-    native void finalize(long j) throws SQLiteException;
+    public native void finalize(long j) throws SQLiteException;
 
-    native long prepare(long j, String str) throws SQLiteException;
+    public native long prepare(long j, String str) throws SQLiteException;
 
-    native void reset(long j) throws SQLiteException;
+    public native void reset(long j) throws SQLiteException;
 
-    native int step(long j) throws SQLiteException;
+    public native int step(long j) throws SQLiteException;
 
     public long getStatementHandle() {
         return this.sqliteStatementHandle;
@@ -83,7 +83,8 @@ public class SQLitePreparedStatement {
         }
     }
 
-    void checkFinalized() throws SQLiteException {
+    /* Access modifiers changed, original: 0000 */
+    public void checkFinalized() throws SQLiteException {
         if (this.isFinalized) {
             throw new SQLiteException("Prepared query finalized");
         }

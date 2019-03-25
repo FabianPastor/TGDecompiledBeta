@@ -82,14 +82,6 @@ public final class Factory {
         return new JoinPointImpl(staticPart, _this, target, new Object[]{arg0});
     }
 
-    public static JoinPoint makeJP(StaticPart staticPart, Object _this, Object target, Object arg0, Object arg1) {
-        return new JoinPointImpl(staticPart, _this, target, new Object[]{arg0, arg1});
-    }
-
-    public static JoinPoint makeJP(StaticPart staticPart, Object _this, Object target, Object[] args) {
-        return new JoinPointImpl(staticPart, _this, target, args);
-    }
-
     public MethodSignature makeMethodSig(String modifiers, String methodName, String declaringType, String paramTypes, String paramNames, String exceptionTypes, String returnType) {
         int i;
         int modifiersAsInt = Integer.parseInt(modifiers, 16);

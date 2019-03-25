@@ -59,14 +59,11 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.ItemDecoration;
-import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.State;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
@@ -194,11 +191,13 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
             this.maxTextSize = max;
         }
 
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        /* Access modifiers changed, original: protected */
+        public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             super.onMeasure(MeasureSpec.makeMeasureSpec(this.maxTextSize + AndroidUtilities.dp(56.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(32.0f), NUM));
         }
 
-        protected void onDraw(Canvas canvas) {
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
             this.rect.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
             canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), Theme.chat_actionBackgroundPaint);
             int x = ((getMeasuredWidth() - this.currentTextSize) - AndroidUtilities.dp(28.0f)) / 2;
@@ -260,7 +259,8 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
             this.checkAnimator.start();
         }
 
-        protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        /* Access modifiers changed, original: protected */
+        public void onLayout(boolean changed, int left, int top, int right, int bottom) {
             super.onLayout(changed, left, top, right, bottom);
         }
 
@@ -307,7 +307,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
             super(context);
             setWillNotDraw(false);
             this.circlePaint = new Paint(1);
-            this.circleDrawable = context.getResources().getDrawable(R.drawable.knob_shadow).mutate();
+            this.circleDrawable = context.getResources().getDrawable(NUM).mutate();
             this.colorWheelPaint = new Paint();
             this.colorWheelPaint.setAntiAlias(true);
             this.colorWheelPaint.setDither(true);
@@ -337,10 +337,10 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
                 this.colorEditText[a].setPadding(0, 0, 0, 0);
                 if (a == 0) {
                     this.colorEditText[a].setInputType(1);
-                    this.colorEditText[a].setHintText(LocaleController.getString("BackgroundHexColorCode", R.string.BackgroundHexColorCode));
+                    this.colorEditText[a].setHintText(LocaleController.getString("BackgroundHexColorCode", NUM));
                 } else {
                     this.colorEditText[a].setInputType(2);
-                    this.colorEditText[a].setHintText(LocaleController.getString("BackgroundBrightness", R.string.BackgroundBrightness));
+                    this.colorEditText[a].setHintText(LocaleController.getString("BackgroundBrightness", NUM));
                 }
                 this.colorEditText[a].setImeOptions(NUM);
                 InputFilter[] inputFilters = new InputFilter[1];
@@ -422,14 +422,16 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
             return true;
         }
 
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        /* Access modifiers changed, original: protected */
+        public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             int widthSize = MeasureSpec.getSize(widthMeasureSpec);
             int size = Math.min(widthSize, MeasureSpec.getSize(heightMeasureSpec));
             measureChild(this.linearLayout, MeasureSpec.makeMeasureSpec(widthSize - AndroidUtilities.dp(42.0f), NUM), heightMeasureSpec);
             setMeasuredDimension(size, size);
         }
 
-        protected void onDraw(Canvas canvas) {
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
             this.centerX = ((getWidth() / 2) - (this.paramValueSliderWidth * 2)) + AndroidUtilities.dp(11.0f);
             this.centerY = (getHeight() / 2) + AndroidUtilities.dp(34.0f);
             canvas.drawBitmap(this.colorWheelBitmap, (float) (this.centerX - this.colorWheelRadius), (float) (this.centerY - this.colorWheelRadius), null);
@@ -463,7 +465,8 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
             canvas.drawCircle((float) x, (float) y, (float) AndroidUtilities.dp(9.0f), this.circlePaint);
         }
 
-        protected void onSizeChanged(int width, int height, int oldw, int oldh) {
+        /* Access modifiers changed, original: protected */
+        public void onSizeChanged(int width, int height, int oldw, int oldh) {
             if (this.colorWheelRadius != AndroidUtilities.dp(120.0f)) {
                 this.colorWheelRadius = AndroidUtilities.dp(120.0f);
                 this.colorWheelBitmap = createColorWheelBitmap(this.colorWheelRadius * 2, this.colorWheelRadius * 2);
@@ -578,9 +581,9 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
             int date = ((int) (System.currentTimeMillis() / 1000)) - 3600;
             Message message = new TL_message();
             if (WallpaperActivity.this.currentWallpaper instanceof ColorWallpaper) {
-                message.message = LocaleController.getString("BackgroundColorSinglePreviewLine2", R.string.BackgroundColorSinglePreviewLine2);
+                message.message = LocaleController.getString("BackgroundColorSinglePreviewLine2", NUM);
             } else {
-                message.message = LocaleController.getString("BackgroundPreviewLine2", R.string.BackgroundPreviewLine2);
+                message.message = LocaleController.getString("BackgroundPreviewLine2", NUM);
             }
             message.date = date + 60;
             message.dialog_id = 1;
@@ -597,9 +600,9 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
             this.messages.add(messageObject);
             message = new TL_message();
             if (WallpaperActivity.this.currentWallpaper instanceof ColorWallpaper) {
-                message.message = LocaleController.getString("BackgroundColorSinglePreviewLine1", R.string.BackgroundColorSinglePreviewLine1);
+                message.message = LocaleController.getString("BackgroundColorSinglePreviewLine1", NUM);
             } else {
-                message.message = LocaleController.getString("BackgroundPreviewLine1", R.string.BackgroundPreviewLine1);
+                message.message = LocaleController.getString("BackgroundPreviewLine1", NUM);
             }
             message.date = date + 60;
             message.dialog_id = 1;
@@ -657,6 +660,10 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
 
                     public void didPressChannelAvatar(ChatMessageCell chatMessageCell, Chat chat, int i) {
                         ChatMessageCell$ChatMessageCellDelegate$$CC.didPressChannelAvatar(this, chatMessageCell, chat, i);
+                    }
+
+                    public void didPressHiddenForward(ChatMessageCell chatMessageCell) {
+                        ChatMessageCell$ChatMessageCellDelegate$$CC.didPressHiddenForward(this, chatMessageCell);
                     }
 
                     public void didPressImage(ChatMessageCell chatMessageCell) {
@@ -803,7 +810,8 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
             updateSelected(false);
         }
 
-        protected void onAttachedToWindow() {
+        /* Access modifiers changed, original: protected */
+        public void onAttachedToWindow() {
             super.onAttachedToWindow();
             updateSelected(false);
         }
@@ -823,7 +831,8 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
             invalidate();
         }
 
-        protected void onDraw(Canvas canvas) {
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
             getImageReceiver().setAlpha(0.8f);
             WallpaperActivity.this.backgroundPaint.setColor(WallpaperActivity.this.backgroundColor);
             this.rect.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
@@ -833,7 +842,8 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
             this.radialProgress.draw(canvas);
         }
 
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        /* Access modifiers changed, original: protected */
+        public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             setMeasuredDimension(AndroidUtilities.dp(100.0f), AndroidUtilities.dp(100.0f));
         }
 
@@ -958,13 +968,13 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         boolean buttonsAvailable;
         int a;
         int num;
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("BackgroundPreview", R.string.BackgroundPreview));
+        this.actionBar.setTitle(LocaleController.getString("BackgroundPreview", NUM));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    WallpaperActivity.this.lambda$checkDiscard$70$PassportActivity();
+                    WallpaperActivity.this.finishFragment();
                 } else if (id == 1 && WallpaperActivity.this.getParentActivity() != null) {
                     String link;
                     StringBuilder modes = new StringBuilder();
@@ -1001,13 +1011,14 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
             }
         });
         if ((this.currentWallpaper instanceof ColorWallpaper) || (this.currentWallpaper instanceof TL_wallPaper)) {
-            this.actionBar.createMenu().addItem(1, (int) R.drawable.ic_share_video);
+            this.actionBar.createMenu().addItem(1, NUM);
         }
         FrameLayout frameLayout = new FrameLayout(context);
         this.fragmentView = frameLayout;
         this.hasOwnBackground = true;
         this.backgroundImage = new BackupImageView(context) {
-            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            /* Access modifiers changed, original: protected */
+            public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 super.onMeasure(widthMeasureSpec, heightMeasureSpec);
                 WallpaperActivity.this.parallaxScale = WallpaperActivity.this.parallaxEffect.getScale(getMeasuredWidth(), getMeasuredHeight());
                 if (WallpaperActivity.this.isMotion) {
@@ -1023,7 +1034,8 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
                 WallpaperActivity.this.progressVisible = getMeasuredWidth() <= getMeasuredHeight();
             }
 
-            protected void onDraw(Canvas canvas) {
+            /* Access modifiers changed, original: protected */
+            public void onDraw(Canvas canvas) {
                 super.onDraw(canvas);
                 if (WallpaperActivity.this.progressVisible && WallpaperActivity.this.radialProgress != null) {
                     WallpaperActivity.this.radialProgress.draw(canvas);
@@ -1069,7 +1081,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         this.bottomOverlayChatText.setTextSize(1, 15.0f);
         this.bottomOverlayChatText.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.bottomOverlayChatText.setTextColor(Theme.getColor("chat_fieldOverlayText"));
-        this.bottomOverlayChatText.setText(LocaleController.getString("SetBackground", R.string.SetBackground));
+        this.bottomOverlayChatText.setText(LocaleController.getString("SetBackground", NUM));
         this.bottomOverlayChat.addView(this.bottomOverlayChatText, LayoutHelper.createFrame(-2, -2, 17));
         this.buttonsContainer = new FrameLayout(context);
         frameLayout.addView(this.buttonsContainer, LayoutHelper.createFrame(-2, 32.0f, 81, 0.0f, 0.0f, 0.0f, 66.0f));
@@ -1077,12 +1089,12 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         int[] textSizes = new int[textsCount];
         this.checkBoxView = new CheckBoxView[textsCount];
         if (this.currentWallpaper instanceof ColorWallpaper) {
-            texts[0] = LocaleController.getString("BackgroundColor", R.string.BackgroundColor);
-            texts[1] = LocaleController.getString("BackgroundPattern", R.string.BackgroundPattern);
-            texts[2] = LocaleController.getString("BackgroundMotion", R.string.BackgroundMotion);
+            texts[0] = LocaleController.getString("BackgroundColor", NUM);
+            texts[1] = LocaleController.getString("BackgroundPattern", NUM);
+            texts[2] = LocaleController.getString("BackgroundMotion", NUM);
         } else {
-            texts[0] = LocaleController.getString("BackgroundBlurred", R.string.BackgroundBlurred);
-            texts[1] = LocaleController.getString("BackgroundMotion", R.string.BackgroundMotion);
+            texts[0] = LocaleController.getString("BackgroundBlurred", NUM);
+            texts[1] = LocaleController.getString("BackgroundMotion", NUM);
         }
         int maxTextSize = 0;
         for (a = 0; a < texts.length; a++) {
@@ -1151,7 +1163,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
                 this.patternsCancelButton[a].setTextSize(1, 15.0f);
                 this.patternsCancelButton[a].setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 this.patternsCancelButton[a].setTextColor(Theme.getColor("chat_fieldOverlayText"));
-                this.patternsCancelButton[a].setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
+                this.patternsCancelButton[a].setText(LocaleController.getString("Cancel", NUM).toUpperCase());
                 this.patternsCancelButton[a].setGravity(17);
                 this.patternsCancelButton[a].setPadding(AndroidUtilities.dp(21.0f), 0, AndroidUtilities.dp(21.0f), 0);
                 this.patternsCancelButton[a].setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21"), 0));
@@ -1161,7 +1173,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
                 this.patternsSaveButton[a].setTextSize(1, 15.0f);
                 this.patternsSaveButton[a].setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 this.patternsSaveButton[a].setTextColor(Theme.getColor("chat_fieldOverlayText"));
-                this.patternsSaveButton[a].setText(LocaleController.getString("Save", R.string.Save).toUpperCase());
+                this.patternsSaveButton[a].setText(LocaleController.getString("Save", NUM).toUpperCase());
                 this.patternsSaveButton[a].setGravity(17);
                 this.patternsSaveButton[a].setPadding(AndroidUtilities.dp(21.0f), 0, AndroidUtilities.dp(21.0f), 0);
                 this.patternsSaveButton[a].setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21"), 0));
@@ -1177,11 +1189,11 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
                         }
                     };
                     RecyclerListView recyclerListView = this.patternsListView;
-                    LayoutManager linearLayoutManager = new LinearLayoutManager(context, 0, false);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, 0, false);
                     this.patternsLayoutManager = linearLayoutManager;
                     recyclerListView.setLayoutManager(linearLayoutManager);
                     recyclerListView = this.patternsListView;
-                    Adapter patternsAdapter = new PatternsAdapter(context);
+                    PatternsAdapter patternsAdapter = new PatternsAdapter(context);
                     this.patternsAdapter = patternsAdapter;
                     recyclerListView.setAdapter(patternsAdapter);
                     this.patternsListView.addItemDecoration(new ItemDecoration() {
@@ -1198,7 +1210,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
                     this.patternLayout[a].addView(this.patternsListView, LayoutHelper.createFrame(-1, 100.0f, 51, 0.0f, 14.0f, 0.0f, 0.0f));
                     this.patternsListView.setOnItemClickListener(new WallpaperActivity$$Lambda$6(this));
                     this.intensityCell = new HeaderCell(context);
-                    this.intensityCell.setText(LocaleController.getString("BackgroundIntensity", R.string.BackgroundIntensity));
+                    this.intensityCell.setText(LocaleController.getString("BackgroundIntensity", NUM));
                     this.patternLayout[a].addView(this.intensityCell, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 113.0f, 0.0f, 0.0f));
                     this.intensitySeekBar = new SeekBarView(context) {
                         public boolean onTouchEvent(MotionEvent event) {
@@ -1231,7 +1243,8 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         return this.fragmentView;
     }
 
-    final /* synthetic */ void lambda$createView$0$WallpaperActivity(ImageReceiver imageReceiver, boolean set, boolean thumb) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$0$WallpaperActivity(ImageReceiver imageReceiver, boolean set, boolean thumb) {
         if (!(this.currentWallpaper instanceof ColorWallpaper)) {
             Drawable drawable = imageReceiver.getDrawable();
             if (set && drawable != null) {
@@ -1253,7 +1266,8 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         }
     }
 
-    final /* synthetic */ void lambda$createView$1$WallpaperActivity(View view) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$1$WallpaperActivity(View view) {
         boolean done;
         ColorWallpaper wallPaper;
         long id;
@@ -1268,14 +1282,14 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
                 bitmap.compress(CompressFormat.JPEG, 87, stream);
                 stream.close();
                 done = true;
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 done = false;
                 FileLog.e(e);
             }
             if (!done) {
                 try {
                     done = AndroidUtilities.copyFile(FileLoader.getPathToAttach(this.currentWallpaper.document, true), file);
-                } catch (Throwable e2) {
+                } catch (Exception e2) {
                     done = false;
                     FileLog.e(e2);
                 }
@@ -1316,7 +1330,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
                     } else {
                         done = AndroidUtilities.copyFile(fromFile, file);
                     }
-                } catch (Throwable e222) {
+                } catch (Exception e222) {
                     done = false;
                     FileLog.e(e222);
                 }
@@ -1331,7 +1345,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
             }
             try {
                 done = AndroidUtilities.copyFile(f, file);
-            } catch (Throwable e2222) {
+            } catch (Exception e2222) {
                 done = false;
                 FileLog.e(e2222);
             }
@@ -1410,10 +1424,11 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         if (this.delegate != null) {
             this.delegate.didSetNewBackground();
         }
-        lambda$checkDiscard$70$PassportActivity();
+        finishFragment();
     }
 
-    final /* synthetic */ void lambda$createView$2$WallpaperActivity(int num, CheckBoxView view, View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$2$WallpaperActivity(int num, CheckBoxView view, View v) {
         boolean z = false;
         boolean z2 = true;
         if (this.buttonsContainer.getAlpha() == 1.0f) {
@@ -1456,7 +1471,8 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         }
     }
 
-    final /* synthetic */ void lambda$createView$3$WallpaperActivity(int offsetX, int offsetY) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$3$WallpaperActivity(int offsetX, int offsetY) {
         if (this.isMotion) {
             float progress;
             if (this.motionAnimation != null) {
@@ -1469,7 +1485,8 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         }
     }
 
-    final /* synthetic */ void lambda$createView$4$WallpaperActivity(int num, View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$4$WallpaperActivity(int num, View v) {
         if (num == 0) {
             setBackgroundColor(this.previousBackgroundColor);
         } else {
@@ -1496,11 +1513,13 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         showPatternsView(num, false);
     }
 
-    final /* synthetic */ void lambda$createView$5$WallpaperActivity(int num, View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$5$WallpaperActivity(int num, View v) {
         showPatternsView(num, false);
     }
 
-    final /* synthetic */ void lambda$createView$6$WallpaperActivity(View view, int position) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$6$WallpaperActivity(View view, int position) {
         boolean previousMotion = this.selectedPattern != null;
         if (position == 0) {
             this.backgroundImage.setImageDrawable(null);
@@ -1523,7 +1542,8 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         this.patternsListView.invalidateViews();
     }
 
-    final /* synthetic */ void lambda$createView$7$WallpaperActivity(float progress) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$7$WallpaperActivity(float progress) {
         this.currentIntensity = progress;
         this.backgroundImage.getImageReceiver().setAlpha(this.currentIntensity);
         this.backgroundImage.invalidate();
@@ -1658,7 +1678,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
                 }
                 radial.setIcon(10, ifSame, animated);
                 if (image == null) {
-                    this.actionBar.setSubtitle(LocaleController.getString("LoadingFullImage", R.string.LoadingFullImage));
+                    this.actionBar.setSubtitle(LocaleController.getString("LoadingFullImage", NUM));
                     this.backgroundImage.invalidate();
                 }
             }

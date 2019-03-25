@@ -42,7 +42,8 @@ public class ID3v1Info extends AudioInfo {
         }
     }
 
-    byte[] readBytes(InputStream input, int len) throws IOException {
+    /* Access modifiers changed, original: 0000 */
+    public byte[] readBytes(InputStream input, int len) throws IOException {
         int total = 0;
         byte[] bytes = new byte[len];
         while (total < len) {
@@ -56,7 +57,8 @@ public class ID3v1Info extends AudioInfo {
         return bytes;
     }
 
-    String extractString(byte[] bytes, int offset, int length) {
+    /* Access modifiers changed, original: 0000 */
+    public String extractString(byte[] bytes, int offset, int length) {
         try {
             String text = new String(bytes, offset, length, "ISO-8859-1");
             int zeroIndex = text.indexOf(0);

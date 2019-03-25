@@ -20,6 +20,7 @@ import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.view.View;
 import android.view.View.MeasureSpec;
+import android.view.accessibility.AccessibilityNodeInfo;
 import org.telegram.messenger.AndroidUtilities;
 
 public class SimpleTextView extends View implements Callback {
@@ -55,6 +56,7 @@ public class SimpleTextView extends View implements Callback {
 
     public SimpleTextView(Context context) {
         super(context);
+        setImportantForAccessibility(1);
     }
 
     public void setTextColor(int color) {
@@ -67,7 +69,8 @@ public class SimpleTextView extends View implements Callback {
         invalidate();
     }
 
-    protected void onDetachedFromWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.wasLayout = false;
     }
@@ -169,7 +172,8 @@ public class SimpleTextView extends View implements Callback {
         return true;
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int finalHeight;
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
@@ -187,7 +191,8 @@ public class SimpleTextView extends View implements Callback {
         setMeasuredDimension(width, finalHeight);
     }
 
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+    /* Access modifiers changed, original: protected */
+    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
         this.wasLayout = true;
     }
 
@@ -250,7 +255,7 @@ public class SimpleTextView extends View implements Callback {
     }
 
     public boolean setText(CharSequence value, boolean force) {
-        if ((this.text == null && value == null) || (!force && this.text != null && value != null && this.text.equals(value))) {
+        if ((this.text == null && value == null) || (!force && this.text != null && this.text.equals(value))) {
             return false;
         }
         this.text = value;
@@ -306,7 +311,8 @@ public class SimpleTextView extends View implements Callback {
         return (int) getY();
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         int x;
         int y;
         int textOffsetX = 0;
@@ -358,7 +364,7 @@ public class SimpleTextView extends View implements Callback {
             if (!(this.offsetX + textOffsetX == 0 && this.offsetY == 0 && this.scrollingOffset == 0.0f)) {
                 canvas.restore();
             }
-            if (this.scrollNonFitText && this.textDoesNotFit) {
+            if (this.scrollNonFitText && (this.textDoesNotFit || this.scrollingOffset != 0.0f)) {
                 if (this.scrollingOffset < ((float) AndroidUtilities.dp(10.0f))) {
                     this.fadeDrawable.setAlpha((int) (255.0f * (this.scrollingOffset / ((float) AndroidUtilities.dp(10.0f)))));
                 } else if (this.scrollingOffset > ((float) ((this.totalWidth + AndroidUtilities.dp(16.0f)) - AndroidUtilities.dp(10.0f)))) {
@@ -385,7 +391,10 @@ public class SimpleTextView extends View implements Callback {
     }
 
     private void updateScrollAnimation() {
-        if (this.scrollNonFitText && this.textDoesNotFit) {
+        if (!this.scrollNonFitText) {
+            return;
+        }
+        if (this.textDoesNotFit || this.scrollingOffset != 0.0f) {
             long newUpdateTime = SystemClock.uptimeMillis();
             long dt = newUpdateTime - this.lastUpdateTime;
             if (dt > 17) {
@@ -424,5 +433,12 @@ public class SimpleTextView extends View implements Callback {
 
     public boolean hasOverlappingRendering() {
         return false;
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
+        info.setVisibleToUser(true);
+        info.setClassName("android.widget.TextView");
+        info.setText(this.text);
     }
 }

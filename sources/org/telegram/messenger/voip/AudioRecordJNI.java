@@ -153,7 +153,7 @@ public class AudioRecordJNI {
         if (this.thread != null) {
             try {
                 this.thread.join();
-            } catch (Throwable e) {
+            } catch (InterruptedException e) {
                 FileLog.e(e);
             }
             this.thread = null;
@@ -220,7 +220,7 @@ public class AudioRecordJNI {
                             break;
                         }
                         AudioRecordJNI.this.nativeCallback(AudioRecordJNI.this.buffer);
-                    } catch (Throwable e) {
+                    } catch (Exception e) {
                         FileLog.e(e);
                     }
                 }
@@ -251,7 +251,7 @@ public class AudioRecordJNI {
         }
         try {
             return Pattern.compile(r);
-        } catch (Throwable x) {
+        } catch (Exception x) {
             FileLog.e(x);
             return pattern;
         }

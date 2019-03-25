@@ -45,7 +45,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.NotificationsController;
-import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
@@ -145,7 +144,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         }
     }
 
-    protected void onCreate(Bundle savedInstanceState) {
+    /* Access modifiers changed, original: protected */
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Theme.createChatResources(this, false);
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
@@ -168,7 +168,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         this.statusDrawables[3] = new PlayingGameDrawable();
         this.statusDrawables[4] = new RoundStatusDrawable();
         SizeNotifierFrameLayout contentView = new SizeNotifierFrameLayout(this) {
-            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            /* Access modifiers changed, original: protected */
+            public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int widthMode = MeasureSpec.getMode(widthMeasureSpec);
                 int heightMode = MeasureSpec.getMode(heightMeasureSpec);
                 int widthSize = MeasureSpec.getSize(widthMeasureSpec);
@@ -192,7 +193,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 }
             }
 
-            protected void onLayout(boolean changed, int l, int t, int r, int b) {
+            /* Access modifiers changed, original: protected */
+            public void onLayout(boolean changed, int l, int t, int r, int b) {
                 int count = getChildCount();
                 int paddingBottom = getKeyboardHeight() <= AndroidUtilities.dp(20.0f) ? PopupNotificationActivity.this.chatActivityEnterView.getEmojiPadding() : 0;
                 for (int i = 0; i < count; i++) {
@@ -250,7 +252,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         RelativeLayout relativeLayout = new RelativeLayout(this);
         contentView.addView(relativeLayout, LayoutHelper.createFrame(-1, -1.0f));
         this.popupContainer = new RelativeLayout(this) {
-            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            /* Access modifiers changed, original: protected */
+            public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 super.onMeasure(widthMeasureSpec, heightMeasureSpec);
                 int w = PopupNotificationActivity.this.chatActivityEnterView.getMeasuredWidth();
                 int h = PopupNotificationActivity.this.chatActivityEnterView.getMeasuredHeight();
@@ -262,7 +265,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 }
             }
 
-            protected void onLayout(boolean changed, int l, int t, int r, int b) {
+            /* Access modifiers changed, original: protected */
+            public void onLayout(boolean changed, int l, int t, int r, int b) {
                 super.onLayout(changed, l, t, r, b);
                 for (int a = 0; a < getChildCount(); a++) {
                     View v = getChildAt(a);
@@ -350,7 +354,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         this.popupContainer.addView(this.messageContainer, 0);
         this.actionBar = new ActionBar(this);
         this.actionBar.setOccupyStatusBar(false);
-        this.actionBar.setBackButtonImage(R.drawable.ic_close_white);
+        this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setBackgroundColor(Theme.getColor("actionBarDefault"));
         this.actionBar.setItemsBackgroundColor(Theme.getColor("actionBarDefaultSelector"), false);
         this.popupContainer.addView(this.actionBar);
@@ -437,7 +441,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         fixLayout();
     }
 
-    protected void onNewIntent(Intent intent) {
+    /* Access modifiers changed, original: protected */
+    public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         handleIntent(intent);
     }
@@ -446,20 +451,21 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 3 && grantResults[0] != 0) {
             Builder builder = new Builder((Context) this);
-            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-            builder.setMessage(LocaleController.getString("PermissionNoAudio", R.string.PermissionNoAudio));
-            builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), new PopupNotificationActivity$$Lambda$0(this));
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+            builder.setTitle(LocaleController.getString("AppName", NUM));
+            builder.setMessage(LocaleController.getString("PermissionNoAudio", NUM));
+            builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new PopupNotificationActivity$$Lambda$0(this));
+            builder.setPositiveButton(LocaleController.getString("OK", NUM), null);
             builder.show();
         }
     }
 
-    final /* synthetic */ void lambda$onRequestPermissionsResult$0$PopupNotificationActivity(DialogInterface dialog, int which) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onRequestPermissionsResult$0$PopupNotificationActivity(DialogInterface dialog, int which) {
         try {
             Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
             intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
             startActivity(intent);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
@@ -611,19 +617,22 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         return this.startedMoving;
     }
 
-    final /* synthetic */ void lambda$onTouchEventMy$1$PopupNotificationActivity() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onTouchEventMy$1$PopupNotificationActivity() {
         this.animationInProgress = false;
         switchToPreviousMessage();
         AndroidUtilities.unlockOrientation(this);
     }
 
-    final /* synthetic */ void lambda$onTouchEventMy$2$PopupNotificationActivity() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onTouchEventMy$2$PopupNotificationActivity() {
         this.animationInProgress = false;
         switchToNextMessage();
         AndroidUtilities.unlockOrientation(this);
     }
 
-    final /* synthetic */ void lambda$onTouchEventMy$3$PopupNotificationActivity() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onTouchEventMy$3$PopupNotificationActivity() {
         this.animationInProgress = false;
         applyViewsLayoutParams(0);
         AndroidUtilities.unlockOrientation(this);
@@ -913,6 +922,21 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         return view;
     }
 
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$getViewForMessage$6$PopupNotificationActivity(View v) {
+        openCurrentMessage();
+    }
+
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$getViewForMessage$7$PopupNotificationActivity(View v) {
+        openCurrentMessage();
+    }
+
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$getViewForMessage$8$PopupNotificationActivity(View v) {
+        openCurrentMessage();
+    }
+
     private void reuseButtonsView(ViewGroup view) {
         if (view != null) {
             this.popupContainer.removeView(view);
@@ -938,6 +962,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         float offset;
         ViewGroup viewForMessage;
         LayoutParams layoutParams;
+        LinearLayout buttonsViewForMessage;
         if (move == 0) {
             reuseView(this.centerView);
             reuseView(this.leftView);
@@ -992,9 +1017,9 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             if (this.rightButtonsView != null) {
                 offset = this.rightButtonsView.getTranslationX();
                 reuseButtonsView(this.rightButtonsView);
-                viewForMessage = getButtonsViewForMessage(this.currentMessageNum + 1, false);
-                this.rightButtonsView = viewForMessage;
-                if (viewForMessage != null) {
+                buttonsViewForMessage = getButtonsViewForMessage(this.currentMessageNum + 1, false);
+                this.rightButtonsView = buttonsViewForMessage;
+                if (buttonsViewForMessage != null) {
                     this.rightButtonsView.setTranslationX(offset);
                 }
             }
@@ -1015,9 +1040,9 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             if (this.leftButtonsView != null) {
                 offset = this.leftButtonsView.getTranslationX();
                 reuseButtonsView(this.leftButtonsView);
-                viewForMessage = getButtonsViewForMessage(0, false);
-                this.leftButtonsView = viewForMessage;
-                if (viewForMessage != null) {
+                buttonsViewForMessage = getButtonsViewForMessage(0, false);
+                this.leftButtonsView = buttonsViewForMessage;
+                if (buttonsViewForMessage != null) {
                     this.leftButtonsView.setTranslationX(offset);
                 }
             }
@@ -1173,7 +1198,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             } else if (this.currentUser != null) {
                 this.nameTextView.setText(UserObject.getUserName(this.currentUser));
                 if (((int) dialog_id) == 0) {
-                    this.nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_white, 0, 0, 0);
+                    this.nameTextView.setCompoundDrawablesWithIntrinsicBounds(NUM, 0, 0, 0);
                     this.nameTextView.setCompoundDrawablePadding(AndroidUtilities.dp(4.0f));
                 } else {
                     this.nameTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
@@ -1213,7 +1238,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 setTypingAnimation(true);
                 return;
             }
-            this.onlineTextView.setText(LocaleController.getString("ServiceNotifications", R.string.ServiceNotifications));
+            this.onlineTextView.setText(LocaleController.getString("ServiceNotifications", NUM));
         }
     }
 
@@ -1269,7 +1294,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                         }
                     }
                     return;
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                     return;
                 }
@@ -1290,7 +1315,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         }
     }
 
-    protected void onResume() {
+    /* Access modifiers changed, original: protected */
+    public void onResume() {
         super.onResume();
         MediaController.getInstance().setFeedbackView(this.chatActivityEnterView, true);
         if (this.chatActivityEnterView != null) {
@@ -1301,7 +1327,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         this.wakeLock.acquire(7000);
     }
 
-    protected void onPause() {
+    /* Access modifiers changed, original: protected */
+    public void onPause() {
         super.onPause();
         overridePendingTransition(0, 0);
         if (this.chatActivityEnterView != null) {
@@ -1401,7 +1428,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         }
     }
 
-    protected void onDestroy() {
+    /* Access modifiers changed, original: protected */
+    public void onDestroy() {
         super.onDestroy();
         onFinish();
         MediaController.getInstance().setFeedbackView(this.chatActivityEnterView, false);
@@ -1413,7 +1441,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         }
     }
 
-    protected void onFinish() {
+    /* Access modifiers changed, original: protected */
+    public void onFinish() {
         if (!this.finished) {
             this.finished = true;
             if (this.isReply) {

@@ -8,11 +8,14 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.drawable.Drawable;
+import android.os.Build.VERSION;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.accessibility.AccessibilityNodeInfo;
+import android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction;
 import android.view.animation.DecelerateInterpolator;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.R;
+import org.telegram.messenger.LocaleController;
 
 public class ShutterButton extends View {
     private static final int LONG_PRESS_TIME = 800;
@@ -30,7 +33,7 @@ public class ShutterButton extends View {
     private boolean processRelease;
     private Paint redPaint;
     private float redProgress;
-    private Drawable shadowDrawable = getResources().getDrawable(R.drawable.camera_btn);
+    private Drawable shadowDrawable = getResources().getDrawable(NUM);
     private State state;
     private long totalTime;
     private Paint whitePaint = new Paint(1);
@@ -95,7 +98,8 @@ public class ShutterButton extends View {
         return this.state;
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         int cx = getMeasuredWidth() / 2;
         int cy = getMeasuredHeight() / 2;
         this.shadowDrawable.setBounds(cx - AndroidUtilities.dp(36.0f), cy - AndroidUtilities.dp(36.0f), AndroidUtilities.dp(36.0f) + cx, AndroidUtilities.dp(36.0f) + cy);
@@ -126,7 +130,8 @@ public class ShutterButton extends View {
         }
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension(AndroidUtilities.dp(84.0f), AndroidUtilities.dp(84.0f));
     }
 
@@ -181,6 +186,17 @@ public class ShutterButton extends View {
                 this.redProgress = 0.0f;
             }
             invalidate();
+        }
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
+        info.setClassName("android.widget.Button");
+        info.setClickable(true);
+        info.setLongClickable(true);
+        if (VERSION.SDK_INT >= 21) {
+            info.addAction(new AccessibilityAction(AccessibilityAction.ACTION_CLICK.getId(), LocaleController.getString("AccActionTakePicture", NUM)));
+            info.addAction(new AccessibilityAction(AccessibilityAction.ACTION_LONG_CLICK.getId(), LocaleController.getString("AccActionRecordVideo", NUM)));
         }
     }
 }

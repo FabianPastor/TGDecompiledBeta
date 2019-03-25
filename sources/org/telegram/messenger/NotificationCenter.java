@@ -97,6 +97,7 @@ public class NotificationCenter {
     public static final int needSetDayNightTheme;
     public static final int needShowAlert;
     public static final int newDraftReceived;
+    public static final int newEmojiSuggestionsAvailable;
     public static final int newSessionReceived;
     public static final int notificationsCountUpdated;
     public static final int notificationsSettingsUpdated;
@@ -475,6 +476,9 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         needDeleteDialog = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        newEmojiSuggestionsAvailable = i;
         i = totalEvents;
         totalEvents = i + 1;
         pushMessagesUpdated = i;

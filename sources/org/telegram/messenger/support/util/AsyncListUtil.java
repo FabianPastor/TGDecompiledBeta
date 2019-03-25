@@ -241,7 +241,8 @@ public class AsyncListUtil<T> {
         }
     }
 
-    void log(String s, Object... args) {
+    /* Access modifiers changed, original: varargs */
+    public void log(String s, Object... args) {
         Log.d("AsyncListUtil", "[MAIN] " + String.format(s, args));
     }
 
@@ -291,7 +292,8 @@ public class AsyncListUtil<T> {
         return this.mItemCount;
     }
 
-    void updateRange() {
+    /* Access modifiers changed, original: 0000 */
+    public void updateRange() {
         this.mViewCallback.getItemRangeInto(this.mTmpRange);
         if (this.mTmpRange[0] <= this.mTmpRange[1] && this.mTmpRange[0] >= 0 && this.mTmpRange[1] < this.mItemCount) {
             if (!this.mAllowScrollHints) {

@@ -3,7 +3,6 @@ package org.telegram.ui.Cells;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -39,11 +38,11 @@ public class TextColorThemeCell extends FrameLayout {
         }
         textView.setGravity(i | 16);
         this.textView.setPadding(0, 0, 0, AndroidUtilities.dp(3.0f));
-        View view = this.textView;
+        TextView textView2 = this.textView;
         if (!LocaleController.isRTL) {
             i2 = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, (float) (LocaleController.isRTL ? 21 : 57), 0.0f, (float) (LocaleController.isRTL ? 57 : 21), 0.0f));
+        addView(textView2, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, (float) (LocaleController.isRTL ? 21 : 57), 0.0f, (float) (LocaleController.isRTL ? 57 : 21), 0.0f));
     }
 
     public void setAlpha(float value) {
@@ -55,7 +54,8 @@ public class TextColorThemeCell extends FrameLayout {
         return this.alpha;
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(50.0f), NUM));
     }
 
@@ -67,7 +67,8 @@ public class TextColorThemeCell extends FrameLayout {
         invalidate();
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (this.currentColor != 0) {
             colorPaint.setColor(this.currentColor);
             colorPaint.setAlpha((int) (255.0f * this.alpha));

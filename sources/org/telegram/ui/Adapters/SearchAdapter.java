@@ -15,7 +15,6 @@ import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
@@ -83,7 +82,7 @@ public class SearchAdapter extends SelectionAdapter {
             if (this.searchTimer != null) {
                 this.searchTimer.cancel();
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         if (query == null) {
@@ -101,7 +100,7 @@ public class SearchAdapter extends SelectionAdapter {
                 try {
                     SearchAdapter.this.searchTimer.cancel();
                     SearchAdapter.this.searchTimer = null;
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
                 SearchAdapter.this.processSearch(query);
@@ -113,7 +112,8 @@ public class SearchAdapter extends SelectionAdapter {
         AndroidUtilities.runOnUIThread(new SearchAdapter$$Lambda$0(this, query));
     }
 
-    final /* synthetic */ void lambda$processSearch$1$SearchAdapter(String query) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$processSearch$1$SearchAdapter(String query) {
         if (this.allowUsernameSearch) {
             this.searchAdapterHelper.queryServerSearch(query, true, this.allowChats, this.allowBots, true, this.channelId, -1);
         }
@@ -121,7 +121,8 @@ public class SearchAdapter extends SelectionAdapter {
         Utilities.searchQueue.postRunnable(new SearchAdapter$$Lambda$2(this, query, new ArrayList(ContactsController.getInstance(currentAccount).contacts), currentAccount));
     }
 
-    final /* synthetic */ void lambda$null$0$SearchAdapter(String query, ArrayList contactsCopy, int currentAccount) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$0$SearchAdapter(String query, ArrayList contactsCopy, int currentAccount) {
         String search1 = query.trim().toLowerCase();
         if (search1.length() == 0) {
             updateSearchResults(new ArrayList(), new ArrayList());
@@ -177,7 +178,8 @@ public class SearchAdapter extends SelectionAdapter {
         AndroidUtilities.runOnUIThread(new SearchAdapter$$Lambda$1(this, users, names));
     }
 
-    final /* synthetic */ void lambda$updateSearchResults$2$SearchAdapter(ArrayList users, ArrayList names) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$updateSearchResults$2$SearchAdapter(ArrayList users, ArrayList names) {
         this.searchResult = users;
         this.searchResultNames = names;
         this.searchAdapterHelper.mergeResults(users);
@@ -234,7 +236,7 @@ public class SearchAdapter extends SelectionAdapter {
                 break;
             default:
                 view = new GraySectionCell(this.mContext);
-                ((GraySectionCell) view).setText(LocaleController.getString("GlobalSearch", R.string.GlobalSearch));
+                ((GraySectionCell) view).setText(LocaleController.getString("GlobalSearch", NUM));
                 break;
         }
         return new Holder(view);
@@ -282,7 +284,7 @@ public class SearchAdapter extends SelectionAdapter {
                             spannableStringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor("windowBackgroundWhiteBlueText4")), index, index + len, 33);
                         }
                         username2 = spannableStringBuilder;
-                    } catch (Throwable e) {
+                    } catch (Exception e) {
                         username2 = un;
                         FileLog.e(e);
                     }

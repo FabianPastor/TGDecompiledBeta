@@ -17,7 +17,6 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocaleController.LocaleInfo;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.R;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
@@ -115,7 +114,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                     }
                     if (localeInfo.isLocal()) {
                         boolean z2;
-                        String format = String.format("%1$s (%2$s)", new Object[]{localeInfo.name, LocaleController.getString("LanguageCustom", R.string.LanguageCustom)});
+                        String format = String.format("%1$s (%2$s)", new Object[]{localeInfo.name, LocaleController.getString("LanguageCustom", NUM)});
                         if (last) {
                             z2 = false;
                         } else {
@@ -133,10 +132,10 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 case 1:
                     ShadowSectionCell sectionCell = holder.itemView;
                     if (LanguageSelectActivity.this.unofficialLanguages.isEmpty() || position != LanguageSelectActivity.this.unofficialLanguages.size()) {
-                        sectionCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
+                        sectionCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                         return;
                     } else {
-                        sectionCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) R.drawable.greydivider, "windowBackgroundGrayShadow"));
+                        sectionCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                         return;
                     }
                 default:
@@ -167,17 +166,17 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     public View createView(Context context) {
         this.searching = false;
         this.searchWas = false;
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("Language", R.string.Language));
+        this.actionBar.setTitle(LocaleController.getString("Language", NUM));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    LanguageSelectActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
+                    LanguageSelectActivity.this.finishFragment();
                 }
             }
         });
-        this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItemSearchListener() {
+        this.actionBar.createMenu().addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItemSearchListener() {
             public void onSearchExpand() {
                 LanguageSelectActivity.this.searching = true;
             }
@@ -202,14 +201,14 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                     }
                 }
             }
-        }).setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
+        }).setSearchFieldHint(LocaleController.getString("Search", NUM));
         this.listAdapter = new ListAdapter(context, false);
         this.searchListViewAdapter = new ListAdapter(context, true);
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
         FrameLayout frameLayout = this.fragmentView;
         this.emptyView = new EmptyTextProgressView(context);
-        this.emptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
+        this.emptyView.setText(LocaleController.getString("NoResult", NUM));
         this.emptyView.showTextView();
         this.emptyView.setShowAtCenter(true);
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
@@ -231,18 +230,20 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         return this.fragmentView;
     }
 
-    final /* synthetic */ void lambda$createView$0$LanguageSelectActivity(View view, int position) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$0$LanguageSelectActivity(View view, int position) {
         if (getParentActivity() != null && this.parentLayout != null && (view instanceof LanguageCell)) {
             LocaleInfo localeInfo = ((LanguageCell) view).getCurrentLocale();
             if (localeInfo != null) {
                 LocaleController.getInstance().applyLanguage(localeInfo, true, false, false, true, this.currentAccount);
                 this.parentLayout.rebuildAllFragmentViews(false, false);
             }
-            lambda$createView$1$PhotoAlbumPickerActivity();
+            finishFragment();
         }
     }
 
-    final /* synthetic */ boolean lambda$createView$2$LanguageSelectActivity(View view, int position) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ boolean lambda$createView$2$LanguageSelectActivity(View view, int position) {
         if (getParentActivity() == null || this.parentLayout == null || !(view instanceof LanguageCell)) {
             return false;
         }
@@ -255,15 +256,16 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         }
         LocaleInfo finalLocaleInfo = localeInfo;
         Builder builder = new Builder(getParentActivity());
-        builder.setMessage(LocaleController.getString("DeleteLocalization", R.string.DeleteLocalization));
-        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-        builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), new LanguageSelectActivity$$Lambda$5(this, finalLocaleInfo));
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.setMessage(LocaleController.getString("DeleteLocalization", NUM));
+        builder.setTitle(LocaleController.getString("AppName", NUM));
+        builder.setPositiveButton(LocaleController.getString("Delete", NUM), new LanguageSelectActivity$$Lambda$5(this, finalLocaleInfo));
+        builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
         showDialog(builder.create());
         return true;
     }
 
-    final /* synthetic */ void lambda$null$1$LanguageSelectActivity(LocaleInfo finalLocaleInfo, DialogInterface dialogInterface, int i) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$1$LanguageSelectActivity(LocaleInfo finalLocaleInfo, DialogInterface dialogInterface, int i) {
         if (LocaleController.getInstance().deleteLanguage(finalLocaleInfo, this.currentAccount)) {
             fillLanguages();
             if (this.searchResult != null) {
@@ -338,7 +340,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             if (this.searchTimer != null) {
                 this.searchTimer.cancel();
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         this.searchTimer = new Timer();
@@ -347,7 +349,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 try {
                     LanguageSelectActivity.this.searchTimer.cancel();
                     LanguageSelectActivity.this.searchTimer = null;
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
                 LanguageSelectActivity.this.processSearch(query);
@@ -359,7 +361,8 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         Utilities.searchQueue.postRunnable(new LanguageSelectActivity$$Lambda$3(this, query));
     }
 
-    final /* synthetic */ void lambda$processSearch$4$LanguageSelectActivity(String query) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$processSearch$4$LanguageSelectActivity(String query) {
         if (query.trim().toLowerCase().length() == 0) {
             updateSearchResults(new ArrayList());
             return;
@@ -389,7 +392,8 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         AndroidUtilities.runOnUIThread(new LanguageSelectActivity$$Lambda$4(this, arrCounties));
     }
 
-    final /* synthetic */ void lambda$updateSearchResults$5$LanguageSelectActivity(ArrayList arrCounties) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$updateSearchResults$5$LanguageSelectActivity(ArrayList arrCounties) {
         this.searchResult = arrCounties;
         this.searchListViewAdapter.notifyDataSetChanged();
     }

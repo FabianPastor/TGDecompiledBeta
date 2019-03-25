@@ -14,7 +14,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.SerializedData;
@@ -24,11 +23,12 @@ import org.telegram.ui.Components.ShareAlert;
 public class ShareActivity extends Activity {
     private Dialog visibleDialog;
 
-    protected void onCreate(Bundle savedInstanceState) {
+    /* Access modifiers changed, original: protected */
+    public void onCreate(Bundle savedInstanceState) {
         ApplicationLoader.postInitApplication();
         AndroidUtilities.checkDisplaySize(this, getResources().getConfiguration());
         requestWindowFeature(1);
-        setTheme(R.style.Theme.TMessages.Transparent);
+        setTheme(NUM);
         super.onCreate(savedInstanceState);
         setContentView(new View(this), new LayoutParams(-1, -1));
         Intent intent = getIntent();
@@ -64,7 +64,7 @@ public class ShareActivity extends Activity {
                 this.visibleDialog.setOnDismissListener(new ShareActivity$$Lambda$0(this));
                 this.visibleDialog.show();
                 return;
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
                 finish();
                 return;
@@ -73,7 +73,8 @@ public class ShareActivity extends Activity {
         finish();
     }
 
-    final /* synthetic */ void lambda$onCreate$0$ShareActivity(DialogInterface dialog) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onCreate$0$ShareActivity(DialogInterface dialog) {
         if (!isFinishing()) {
             finish();
         }
@@ -87,7 +88,7 @@ public class ShareActivity extends Activity {
                 this.visibleDialog.dismiss();
                 this.visibleDialog = null;
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }

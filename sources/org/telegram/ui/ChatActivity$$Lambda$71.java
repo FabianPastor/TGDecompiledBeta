@@ -1,15 +1,13 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.AlertDialog;
-
 final /* synthetic */ class ChatActivity$$Lambda$71 implements Runnable {
-    private final AlertDialog[] arg$1;
+    private final ChatActivity arg$1;
 
-    ChatActivity$$Lambda$71(AlertDialog[] alertDialogArr) {
-        this.arg$1 = alertDialogArr;
+    ChatActivity$$Lambda$71(ChatActivity chatActivity) {
+        this.arg$1 = chatActivity;
     }
 
     public void run() {
-        ChatActivity.lambda$null$77$ChatActivity(this.arg$1);
+        this.arg$1.lambda$null$42$ChatActivity();
     }
 }

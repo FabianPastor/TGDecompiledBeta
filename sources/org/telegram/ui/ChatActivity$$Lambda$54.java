@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_error;
+import org.telegram.ui.ActionBar.AlertDialog;
 
-final /* synthetic */ class ChatActivity$$Lambda$54 implements RequestDelegate {
-    private final ChatActivity arg$1;
+final /* synthetic */ class ChatActivity$$Lambda$54 implements Runnable {
+    private final AlertDialog[] arg$1;
 
-    ChatActivity$$Lambda$54(ChatActivity chatActivity) {
-        this.arg$1 = chatActivity;
+    ChatActivity$$Lambda$54(AlertDialog[] alertDialogArr) {
+        this.arg$1 = alertDialogArr;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$startEditingMessageObject$68$ChatActivity(tLObject, tL_error);
+    public void run() {
+        ChatActivity.lambda$processSelectedOption$66$ChatActivity(this.arg$1);
     }
 }

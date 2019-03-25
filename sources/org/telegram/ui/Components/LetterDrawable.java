@@ -55,7 +55,7 @@ public class LetterDrawable extends Drawable {
                     return;
                 }
                 return;
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
                 return;
             }

@@ -1,19 +1,21 @@
 package org.telegram.messenger;
 
-import android.util.SparseArray;
+import org.telegram.tgnet.TLRPC.TL_updates_channelDifferenceTooLong;
 
 final /* synthetic */ class MessagesStorage$$Lambda$83 implements Runnable {
     private final MessagesStorage arg$1;
-    private final SparseArray arg$2;
-    private final boolean arg$3;
+    private final int arg$2;
+    private final int arg$3;
+    private final TL_updates_channelDifferenceTooLong arg$4;
 
-    MessagesStorage$$Lambda$83(MessagesStorage messagesStorage, SparseArray sparseArray, boolean z) {
+    MessagesStorage$$Lambda$83(MessagesStorage messagesStorage, int i, int i2, TL_updates_channelDifferenceTooLong tL_updates_channelDifferenceTooLong) {
         this.arg$1 = messagesStorage;
-        this.arg$2 = sparseArray;
-        this.arg$3 = z;
+        this.arg$2 = i;
+        this.arg$3 = i2;
+        this.arg$4 = tL_updates_channelDifferenceTooLong;
     }
 
     public void run() {
-        this.arg$1.lambda$putChannelViews$113$MessagesStorage(this.arg$2, this.arg$3);
+        this.arg$1.lambda$overwriteChannel$114$MessagesStorage(this.arg$2, this.arg$3, this.arg$4);
     }
 }

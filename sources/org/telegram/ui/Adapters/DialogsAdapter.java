@@ -12,7 +12,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
@@ -170,12 +169,12 @@ public class DialogsAdapter extends SelectionAdapter {
                 break;
             case 2:
                 headerCell = new HeaderCell(this.mContext);
-                headerCell.setText(LocaleController.getString("RecentlyViewed", R.string.RecentlyViewed));
+                headerCell.setText(LocaleController.getString("RecentlyViewed", NUM));
                 TextView textView = new TextView(this.mContext);
                 textView.setTextSize(1, 15.0f);
                 textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlueHeader"));
-                textView.setText(LocaleController.getString("RecentlyViewedHide", R.string.RecentlyViewedHide));
+                textView.setText(LocaleController.getString("RecentlyViewedHide", NUM));
                 textView.setGravity((LocaleController.isRTL ? 3 : 5) | 16);
                 headerCell.addView(textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 3 : 5) | 48, 17.0f, 15.0f, 17.0f, 0.0f));
                 textView.setOnClickListener(new DialogsAdapter$$Lambda$0(this));
@@ -183,13 +182,14 @@ public class DialogsAdapter extends SelectionAdapter {
                 break;
             case 3:
                 View frameLayout = new FrameLayout(this.mContext) {
-                    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                    /* Access modifiers changed, original: protected */
+                    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(12.0f), NUM));
                     }
                 };
                 frameLayout.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
                 View v = new View(this.mContext);
-                v.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) R.drawable.greydivider, "windowBackgroundGrayShadow"));
+                v.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                 frameLayout.addView(v, LayoutHelper.createFrame(-1, -1.0f));
                 view = frameLayout;
                 break;
@@ -204,12 +204,12 @@ public class DialogsAdapter extends SelectionAdapter {
                 break;
             case 7:
                 headerCell = new HeaderCell(this.mContext);
-                headerCell.setText(LocaleController.getString("YourContacts", R.string.YourContacts));
+                headerCell.setText(LocaleController.getString("YourContacts", NUM));
                 view = headerCell;
                 break;
             default:
                 view = new ShadowSectionCell(this.mContext);
-                CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(this.mContext, (int) R.drawable.greydivider, "windowBackgroundGrayShadow"));
+                CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                 combinedDrawable.setFullsize(true);
                 view.setBackgroundDrawable(combinedDrawable);
                 break;
@@ -218,7 +218,8 @@ public class DialogsAdapter extends SelectionAdapter {
         return new Holder(view);
     }
 
-    final /* synthetic */ void lambda$onCreateViewHolder$0$DialogsAdapter(View view1) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onCreateViewHolder$0$DialogsAdapter(View view1) {
         MessagesController.getInstance(this.currentAccount).hintDialogs.clear();
         MessagesController.getGlobalMainSettings().edit().remove("installReferer").commit();
         notifyDataSetChanged();

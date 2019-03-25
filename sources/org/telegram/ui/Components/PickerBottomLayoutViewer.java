@@ -5,7 +5,6 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 
 public class PickerBottomLayoutViewer extends FrameLayout {
@@ -28,7 +27,7 @@ public class PickerBottomLayoutViewer extends FrameLayout {
         this.cancelButton.setGravity(17);
         this.cancelButton.setBackgroundDrawable(Theme.createSelectorDrawable(this.isDarkTheme ? -12763843 : NUM, 0));
         this.cancelButton.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
-        this.cancelButton.setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
+        this.cancelButton.setText(LocaleController.getString("Cancel", NUM).toUpperCase());
         this.cancelButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         addView(this.cancelButton, LayoutHelper.createFrame(-2, -1, 51));
         this.doneButton = new TextView(context);
@@ -37,7 +36,7 @@ public class PickerBottomLayoutViewer extends FrameLayout {
         this.doneButton.setGravity(17);
         this.doneButton.setBackgroundDrawable(Theme.createSelectorDrawable(this.isDarkTheme ? -12763843 : NUM, 0));
         this.doneButton.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
-        this.doneButton.setText(LocaleController.getString("Send", R.string.Send).toUpperCase());
+        this.doneButton.setText(LocaleController.getString("Send", NUM).toUpperCase());
         this.doneButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         addView(this.doneButton, LayoutHelper.createFrame(-2, -1, 53));
         this.doneButtonBadgeTextView = new TextView(context);
@@ -45,7 +44,7 @@ public class PickerBottomLayoutViewer extends FrameLayout {
         this.doneButtonBadgeTextView.setTextSize(1, 13.0f);
         this.doneButtonBadgeTextView.setTextColor(-1);
         this.doneButtonBadgeTextView.setGravity(17);
-        this.doneButtonBadgeTextView.setBackgroundResource(this.isDarkTheme ? R.drawable.photobadge : R.drawable.bluecounter);
+        this.doneButtonBadgeTextView.setBackgroundResource(this.isDarkTheme ? NUM : NUM);
         this.doneButtonBadgeTextView.setMinWidth(AndroidUtilities.dp(23.0f));
         this.doneButtonBadgeTextView.setPadding(AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f), AndroidUtilities.dp(1.0f));
         addView(this.doneButtonBadgeTextView, LayoutHelper.createFrame(-2, 23.0f, 53, 0.0f, 0.0f, 7.0f, 0.0f));

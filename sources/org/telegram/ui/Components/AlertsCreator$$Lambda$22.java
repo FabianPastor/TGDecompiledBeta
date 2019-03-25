@@ -1,25 +1,18 @@
 package org.telegram.ui.Components;
 
-import android.view.View;
-import android.view.View.OnClickListener;
-import org.telegram.ui.ActionBar.AlertDialog.Builder;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 
 final /* synthetic */ class AlertsCreator$$Lambda$22 implements OnClickListener {
-    private final int[] arg$1;
-    private final long arg$2;
-    private final String arg$3;
-    private final Builder arg$4;
-    private final Runnable arg$5;
+    private final long arg$1;
+    private final Runnable arg$2;
 
-    AlertsCreator$$Lambda$22(int[] iArr, long j, String str, Builder builder, Runnable runnable) {
-        this.arg$1 = iArr;
-        this.arg$2 = j;
-        this.arg$3 = str;
-        this.arg$4 = builder;
-        this.arg$5 = runnable;
+    AlertsCreator$$Lambda$22(long j, Runnable runnable) {
+        this.arg$1 = j;
+        this.arg$2 = runnable;
     }
 
-    public void onClick(View view) {
-        AlertsCreator.lambda$createVibrationSelectDialog$25$AlertsCreator(this.arg$1, this.arg$2, this.arg$3, this.arg$4, this.arg$5, view);
+    public void onClick(DialogInterface dialogInterface, int i) {
+        AlertsCreator.lambda$createColorSelectDialog$25$AlertsCreator(this.arg$1, this.arg$2, dialogInterface, i);
     }
 }

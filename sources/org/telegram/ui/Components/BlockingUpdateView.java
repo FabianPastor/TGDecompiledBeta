@@ -32,7 +32,6 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.TLRPC.Document;
@@ -61,7 +60,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         view.setBackgroundColor(-11556378);
         addView(view, new LayoutParams(-1, (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0) + AndroidUtilities.dp(176.0f)));
         ImageView imageView = new ImageView(context);
-        imageView.setImageResource(R.drawable.intro_tg_plane);
+        imageView.setImageResource(NUM);
         imageView.setScaleType(ScaleType.CENTER);
         imageView.setPadding(0, 0, 0, AndroidUtilities.dp(14.0f));
         view.addView(imageView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, (float) top, 0.0f, 0.0f));
@@ -76,7 +75,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         titleTextView.setTextSize(1, 20.0f);
         titleTextView.setGravity(49);
         titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        titleTextView.setText(LocaleController.getString("UpdateTelegram", R.string.UpdateTelegram));
+        titleTextView.setText(LocaleController.getString("UpdateTelegram", NUM));
         container.addView(titleTextView, LayoutHelper.createFrame(-2, -2, 49));
         this.textView = new TextView(context);
         this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
@@ -87,7 +86,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         this.textView.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
         container.addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, 51, 0.0f, 44.0f, 0.0f, 0.0f));
         this.acceptButton = new FrameLayout(context);
-        this.acceptButton.setBackgroundResource(R.drawable.regbtn_states);
+        this.acceptButton.setBackgroundResource(NUM);
         if (VERSION.SDK_INT >= 21) {
             StateListAnimator animator = new StateListAnimator();
             animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.acceptButton, "translationZ", new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
@@ -104,7 +103,8 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         this.acceptTextView.setTextSize(1, 16.0f);
         this.acceptButton.addView(this.acceptTextView, LayoutHelper.createFrame(-2, -2, 17));
         this.radialProgressView = new FrameLayout(context) {
-            protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+            /* Access modifiers changed, original: protected */
+            public void onLayout(boolean changed, int left, int top, int right, int bottom) {
                 super.onLayout(changed, left, top, right, bottom);
                 int width = right - left;
                 int height = bottom - top;
@@ -114,7 +114,8 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
                 BlockingUpdateView.this.radialProgress.setProgressRect(l, t, l + w, t + w);
             }
 
-            protected void onDraw(Canvas canvas) {
+            /* Access modifiers changed, original: protected */
+            public void onDraw(Canvas canvas) {
                 BlockingUpdateView.this.radialProgress.draw(canvas);
             }
         };
@@ -129,7 +130,8 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         this.acceptButton.addView(this.radialProgressView, LayoutHelper.createFrame(36, 36, 17));
     }
 
-    final /* synthetic */ void lambda$new$0$BlockingUpdateView(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$0$BlockingUpdateView(View v) {
         this.pressCount++;
         if (this.pressCount >= 10) {
             setVisibility(8);
@@ -138,13 +140,14 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         }
     }
 
-    final /* synthetic */ void lambda$new$1$BlockingUpdateView(View view1) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$1$BlockingUpdateView(View view1) {
         if (!checkApkInstallPermissions(getContext())) {
             return;
         }
         if (this.appUpdate.document instanceof TL_document) {
             if (!openApkInstall((Activity) getContext(), this.appUpdate.document)) {
-                FileLoader.getInstance(this.accountNum).loadFile(this.appUpdate.document, "update", 2, 1);
+                FileLoader.getInstance(this.accountNum).loadFile(this.appUpdate.document, (Object) "update", 2, 1);
                 showProgress(true);
             }
         } else if (this.appUpdate.url != null) {
@@ -187,10 +190,10 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
             return true;
         }
         Builder builder = new Builder(context);
-        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-        builder.setMessage(LocaleController.getString("ApkRestricted", R.string.ApkRestricted));
-        builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), new BlockingUpdateView$$Lambda$2(context));
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.setTitle(LocaleController.getString("AppName", NUM));
+        builder.setMessage(LocaleController.getString("ApkRestricted", NUM));
+        builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", NUM), new BlockingUpdateView$$Lambda$2(context));
+        builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
         builder.show();
         return false;
     }
@@ -198,7 +201,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
     static final /* synthetic */ void lambda$checkApkInstallPermissions$2$BlockingUpdateView(Context context, DialogInterface dialogInterface, int i) {
         try {
             context.startActivity(new Intent("android.settings.MANAGE_UNKNOWN_APP_SOURCES", Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName())));
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
@@ -219,11 +222,11 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
                 }
                 try {
                     activity.startActivityForResult(intent, 500);
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
             }
-        } catch (Throwable e2) {
+        } catch (Exception e2) {
             FileLog.e(e2);
         }
         return exists;
@@ -296,9 +299,9 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         MessageObject.addEntitiesToText(builder, update.entities, false, 0, false, false, false);
         this.textView.setText(builder);
         if (update.document instanceof TL_document) {
-            this.acceptTextView.setText(LocaleController.getString("Update", R.string.Update).toUpperCase() + String.format(Locale.US, " (%1$s)", new Object[]{AndroidUtilities.formatFileSize((long) update.document.size)}));
+            this.acceptTextView.setText(LocaleController.getString("Update", NUM).toUpperCase() + String.format(Locale.US, " (%1$s)", new Object[]{AndroidUtilities.formatFileSize((long) update.document.size)}));
         } else {
-            this.acceptTextView.setText(LocaleController.getString("Update", R.string.Update).toUpperCase());
+            this.acceptTextView.setText(LocaleController.getString("Update", NUM).toUpperCase());
         }
         NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileDidLoad);
         NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileDidFailedLoad);

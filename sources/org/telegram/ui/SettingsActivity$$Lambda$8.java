@@ -1,13 +1,17 @@
 package org.telegram.ui;
 
-final /* synthetic */ class SettingsActivity$$Lambda$8 implements Runnable {
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
+
+final /* synthetic */ class SettingsActivity$$Lambda$8 implements RequestDelegate {
     private final SettingsActivity arg$1;
 
     SettingsActivity$$Lambda$8(SettingsActivity settingsActivity) {
         this.arg$1 = settingsActivity;
     }
 
-    public void run() {
-        this.arg$1.lambda$null$4$SettingsActivity();
+    public void run(TLObject tLObject, TL_error tL_error) {
+        this.arg$1.lambda$null$5$SettingsActivity(tLObject, tL_error);
     }
 }

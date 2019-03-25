@@ -19,7 +19,6 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -44,19 +43,19 @@ public class ChangeBioActivity extends BaseFragment {
     private TextView helpTextView;
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("UserBio", R.string.UserBio));
+        this.actionBar.setTitle(LocaleController.getString("UserBio", NUM));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    ChangeBioActivity.this.lambda$createView$1$AudioSelectActivity();
+                    ChangeBioActivity.this.finishFragment();
                 } else if (id == 1) {
                     ChangeBioActivity.this.saveName();
                 }
             }
         });
-        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
+        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f));
         this.fragmentView = new LinearLayout(context);
         LinearLayout linearLayout = this.fragmentView;
         linearLayout.setOrientation(1);
@@ -93,7 +92,7 @@ public class ChangeBioActivity extends BaseFragment {
             }
         }});
         this.firstNameField.setMinHeight(AndroidUtilities.dp(36.0f));
-        this.firstNameField.setHint(LocaleController.getString("UserBio", R.string.UserBio));
+        this.firstNameField.setHint(LocaleController.getString("UserBio", NUM));
         this.firstNameField.setCursorColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         this.firstNameField.setCursorWidth(1.5f);
@@ -119,7 +118,7 @@ public class ChangeBioActivity extends BaseFragment {
         this.helpTextView.setTextSize(1, 15.0f);
         this.helpTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText8"));
         this.helpTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-        this.helpTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("UserBioInfo", R.string.UserBioInfo)));
+        this.helpTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("UserBioInfo", NUM)));
         linearLayout.addView(this.helpTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 24, 10, 24, 0));
         TL_userFull userFull = MessagesController.getInstance(this.currentAccount).getUserFull(UserConfig.getInstance(this.currentAccount).getClientUserId());
         if (!(userFull == null || userFull.about == null)) {
@@ -129,7 +128,8 @@ public class ChangeBioActivity extends BaseFragment {
         return this.fragmentView;
     }
 
-    final /* synthetic */ boolean lambda$createView$1$ChangeBioActivity(TextView textView, int i, KeyEvent keyEvent) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ boolean lambda$createView$1$ChangeBioActivity(TextView textView, int i, KeyEvent keyEvent) {
         if (i != 6 || this.doneButton == null) {
             return false;
         }
@@ -154,7 +154,7 @@ public class ChangeBioActivity extends BaseFragment {
             }
             String newName = this.firstNameField.getText().toString().replace("\n", "");
             if (currentName.equals(newName)) {
-                lambda$createView$1$AudioSelectActivity();
+                finishFragment();
                 return;
             }
             AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
@@ -168,7 +168,8 @@ public class ChangeBioActivity extends BaseFragment {
         }
     }
 
-    final /* synthetic */ void lambda$saveName$4$ChangeBioActivity(AlertDialog progressDialog, TL_userFull userFull, String newName, TL_account_updateProfile req, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$saveName$4$ChangeBioActivity(AlertDialog progressDialog, TL_userFull userFull, String newName, TL_account_updateProfile req, TLObject response, TL_error error) {
         if (error == null) {
             AndroidUtilities.runOnUIThread(new ChangeBioActivity$$Lambda$4(this, progressDialog, userFull, newName, (User) response));
             return;
@@ -176,27 +177,30 @@ public class ChangeBioActivity extends BaseFragment {
         AndroidUtilities.runOnUIThread(new ChangeBioActivity$$Lambda$5(this, progressDialog, error, req));
     }
 
-    final /* synthetic */ void lambda$null$2$ChangeBioActivity(AlertDialog progressDialog, TL_userFull userFull, String newName, User user) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$2$ChangeBioActivity(AlertDialog progressDialog, TL_userFull userFull, String newName, User user) {
         try {
             progressDialog.dismiss();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         userFull.about = newName;
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.userInfoDidLoad, Integer.valueOf(user.id), userFull, null);
-        lambda$createView$1$AudioSelectActivity();
+        finishFragment();
     }
 
-    final /* synthetic */ void lambda$null$3$ChangeBioActivity(AlertDialog progressDialog, TL_error error, TL_account_updateProfile req) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$3$ChangeBioActivity(AlertDialog progressDialog, TL_error error, TL_account_updateProfile req) {
         try {
             progressDialog.dismiss();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         AlertsCreator.processError(this.currentAccount, error, this, req, new Object[0]);
     }
 
-    final /* synthetic */ void lambda$saveName$5$ChangeBioActivity(int reqId, DialogInterface dialog) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$saveName$5$ChangeBioActivity(int reqId, DialogInterface dialog) {
         ConnectionsManager.getInstance(this.currentAccount).cancelRequest(reqId, true);
     }
 

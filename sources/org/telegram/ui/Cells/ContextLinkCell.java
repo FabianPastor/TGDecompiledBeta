@@ -66,6 +66,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
     private int TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
     private boolean buttonPressed;
     private int buttonState;
+    private boolean canPreviewGif;
     private int currentAccount = UserConfig.selectedAccount;
     private MessageObject currentMessageObject;
     private PhotoSize currentPhotoObject;
@@ -97,10 +98,12 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
 
     public ContextLinkCell(Context context) {
         super(context);
+        setFocusable(true);
     }
 
+    /* Access modifiers changed, original: protected */
     @SuppressLint({"DrawAllocation"})
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         this.drawLinkImageView = false;
         this.descriptionLayout = null;
         this.titleLayout = null;
@@ -129,7 +132,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
             if (this.inlineResult.title != null) {
                 try {
                     this.titleLayout = new StaticLayout(TextUtils.ellipsize(Emoji.replaceEmoji(this.inlineResult.title.replace(10, ' '), Theme.chat_contextResult_titleTextPaint.getFontMetricsInt(), AndroidUtilities.dp(15.0f), false), Theme.chat_contextResult_titleTextPaint, (float) Math.min((int) Math.ceil((double) Theme.chat_contextResult_titleTextPaint.measureText(this.inlineResult.title)), maxWidth), TruncateAt.END), Theme.chat_contextResult_titleTextPaint, maxWidth + AndroidUtilities.dp(4.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
                 this.letterDrawable.setTitle(this.inlineResult.title);
@@ -140,14 +143,14 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
                     if (this.descriptionLayout.getLineCount() > 0) {
                         this.linkY = (this.descriptionY + this.descriptionLayout.getLineBottom(this.descriptionLayout.getLineCount() - 1)) + AndroidUtilities.dp(1.0f);
                     }
-                } catch (Throwable e2) {
+                } catch (Exception e2) {
                     FileLog.e(e2);
                 }
             }
             if (this.inlineResult.url != null) {
                 try {
                     this.linkLayout = new StaticLayout(TextUtils.ellipsize(this.inlineResult.url.replace(10, ' '), Theme.chat_contextResult_descriptionTextPaint, (float) Math.min((int) Math.ceil((double) Theme.chat_contextResult_descriptionTextPaint.measureText(this.inlineResult.url)), maxWidth), TruncateAt.MIDDLE), Theme.chat_contextResult_descriptionTextPaint, maxWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                } catch (Throwable e22) {
+                } catch (Exception e22) {
                     FileLog.e(e22);
                 }
             }
@@ -172,10 +175,8 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         if (this.inlineResult != null) {
             if ((this.inlineResult.content instanceof TL_webDocument) && this.inlineResult.type != null) {
                 if (this.inlineResult.type.startsWith("gif")) {
-                    if (this.documentAttachType != 2) {
-                        webDocument = (TL_webDocument) this.inlineResult.content;
-                        this.documentAttachType = 2;
-                    }
+                    webDocument = (TL_webDocument) this.inlineResult.content;
+                    this.documentAttachType = 2;
                 } else if (this.inlineResult.type.equals("photo")) {
                     webDocument = this.inlineResult.thumb instanceof TL_webDocument ? (TL_webDocument) this.inlineResult.thumb : (TL_webDocument) this.inlineResult.content;
                 }
@@ -402,7 +403,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         this.needDivider = divider;
         this.needShadow = false;
         this.inlineResult = null;
-        this.parentObject = "gif";
+        this.parentObject = "gif" + document;
         this.documentAttach = document;
         this.mediaWebpage = true;
         setAttachType();
@@ -412,6 +413,10 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
 
     public boolean isSticker() {
         return this.documentAttachType == 6;
+    }
+
+    public boolean isGif() {
+        return this.documentAttachType == 2 && this.canPreviewGif;
     }
 
     public boolean showingBitmap() {
@@ -432,7 +437,16 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         invalidate();
     }
 
-    protected void onDetachedFromWindow() {
+    public void setCanPreviewGif(boolean value) {
+        this.canPreviewGif = value;
+    }
+
+    public boolean isCanPreviewGif() {
+        return this.canPreviewGif;
+    }
+
+    /* Access modifiers changed, original: protected */
+    public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         if (this.drawLinkImageView) {
             this.linkImageView.onDetachedFromWindow();
@@ -441,7 +455,8 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
     }
 
-    protected void onAttachedToWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (this.drawLinkImageView && this.linkImageView.onAttachedToWindow()) {
             updateButtonState(false, false);
@@ -547,7 +562,8 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         }
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (this.titleLayout != null) {
             canvas.save();
             canvas.translate((float) AndroidUtilities.dp(LocaleController.isRTL ? 8.0f : (float) AndroidUtilities.leftBaseline), (float) this.titleY);

@@ -12,6 +12,6 @@ final /* synthetic */ class NotificationsController$$Lambda$33 implements Runnab
     }
 
     public void run() {
-        this.arg$1.lambda$null$4$NotificationsController(this.arg$2);
+        this.arg$1.lambda$null$6$NotificationsController(this.arg$2);
     }
 }

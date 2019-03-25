@@ -45,6 +45,7 @@ public class TextCell extends FrameLayout {
         this.valueImageView = new ImageView(context);
         this.valueImageView.setScaleType(ScaleType.CENTER);
         addView(this.valueImageView);
+        setFocusable(true);
     }
 
     public SimpleTextView getTextView() {
@@ -59,7 +60,8 @@ public class TextCell extends FrameLayout {
         return this.valueImageView;
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = AndroidUtilities.dp(48.0f);
         this.valueTextView.measure(MeasureSpec.makeMeasureSpec(width - AndroidUtilities.dp(23.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
@@ -73,7 +75,8 @@ public class TextCell extends FrameLayout {
         setMeasuredDimension(width, (this.needDivider ? 1 : 0) + AndroidUtilities.dp(50.0f));
     }
 
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+    /* Access modifiers changed, original: protected */
+    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
         float f = 71.0f;
         int height = bottom - top;
         int width = right - left;
@@ -191,7 +194,8 @@ public class TextCell extends FrameLayout {
         setWillNotDraw(z);
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         float f = 68.0f;
         if (this.needDivider) {
             float f2;

@@ -12,9 +12,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
@@ -65,7 +63,7 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
                     break;
                 default:
                     view = new TextInfoCell(this.mContext);
-                    ((TextInfoCell) view).setText(LocaleController.getString("UnblockText", R.string.UnblockText));
+                    ((TextInfoCell) view).setText(LocaleController.getString("UnblockText", NUM));
                     break;
             }
             return new Holder(view);
@@ -77,9 +75,9 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
                 if (user != null) {
                     String number;
                     if (user.bot) {
-                        number = LocaleController.getString("Bot", R.string.Bot).substring(0, 1).toUpperCase() + LocaleController.getString("Bot", R.string.Bot).substring(1);
+                        number = LocaleController.getString("Bot", NUM).substring(0, 1).toUpperCase() + LocaleController.getString("Bot", NUM).substring(1);
                     } else if (user.phone == null || user.phone.length() == 0) {
-                        number = LocaleController.getString("NumberUnknown", R.string.NumberUnknown);
+                        number = LocaleController.getString("NumberUnknown", NUM);
                     } else {
                         number = PhoneFormat.getInstance().format("+" + user.phone);
                     }
@@ -112,13 +110,13 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
 
     public View createView(Context context) {
         int i = 1;
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("BlockedUsers", R.string.BlockedUsers));
+        this.actionBar.setTitle(LocaleController.getString("BlockedUsers", NUM));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    BlockedUsersActivity.this.lambda$createView$1$AudioSelectActivity();
+                    BlockedUsersActivity.this.finishFragment();
                 } else if (id == 1) {
                     Bundle args = new Bundle();
                     args.putBoolean("onlyUsers", true);
@@ -130,18 +128,18 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
                 }
             }
         });
-        this.actionBar.createMenu().addItem(1, (int) R.drawable.plus);
+        this.actionBar.createMenu().addItem(1, NUM);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         this.emptyView = new EmptyTextProgressView(context);
-        this.emptyView.setText(LocaleController.getString("NoBlocked", R.string.NoBlocked));
+        this.emptyView.setText(LocaleController.getString("NoBlocked", NUM));
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView = new RecyclerListView(context);
         this.listView.setEmptyView(this.emptyView);
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         this.listView.setVerticalScrollBarEnabled(false);
         RecyclerListView recyclerListView = this.listView;
-        Adapter listAdapter = new ListAdapter(context);
+        ListAdapter listAdapter = new ListAdapter(context);
         this.listViewAdapter = listAdapter;
         recyclerListView.setAdapter(listAdapter);
         recyclerListView = this.listView;
@@ -160,7 +158,8 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
         return this.fragmentView;
     }
 
-    final /* synthetic */ void lambda$createView$0$BlockedUsersActivity(View view, int position) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$0$BlockedUsersActivity(View view, int position) {
         if (position < MessagesController.getInstance(this.currentAccount).blockedUsers.size()) {
             Bundle args = new Bundle();
             args.putInt("user_id", MessagesController.getInstance(this.currentAccount).blockedUsers.keyAt(position));
@@ -168,17 +167,19 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
         }
     }
 
-    final /* synthetic */ boolean lambda$createView$2$BlockedUsersActivity(View view, int position) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ boolean lambda$createView$2$BlockedUsersActivity(View view, int position) {
         if (position < MessagesController.getInstance(this.currentAccount).blockedUsers.size() && getParentActivity() != null) {
             this.selectedUserId = MessagesController.getInstance(this.currentAccount).blockedUsers.keyAt(position);
             Builder builder = new Builder(getParentActivity());
-            builder.setItems(new CharSequence[]{LocaleController.getString("Unblock", R.string.Unblock)}, new BlockedUsersActivity$$Lambda$3(this));
+            builder.setItems(new CharSequence[]{LocaleController.getString("Unblock", NUM)}, new BlockedUsersActivity$$Lambda$3(this));
             showDialog(builder.create());
         }
         return true;
     }
 
-    final /* synthetic */ void lambda$null$1$BlockedUsersActivity(DialogInterface dialogInterface, int i) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$1$BlockedUsersActivity(DialogInterface dialogInterface, int i) {
         if (i == 0) {
             MessagesController.getInstance(this.currentAccount).unblockUser(this.selectedUserId);
         }
@@ -240,7 +241,8 @@ public class BlockedUsersActivity extends BaseFragment implements NotificationCe
         return r10;
     }
 
-    final /* synthetic */ void lambda$getThemeDescriptions$3$BlockedUsersActivity() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$getThemeDescriptions$3$BlockedUsersActivity() {
         if (this.listView != null) {
             int count = this.listView.getChildCount();
             for (int a = 0; a < count; a++) {

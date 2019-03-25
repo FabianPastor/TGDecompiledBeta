@@ -23,7 +23,7 @@ public class UserObject {
 
     public static String getUserName(User user) {
         if (user == null || isDeleted(user)) {
-            return LocaleController.getString("HiddenName", R.string.HiddenName);
+            return LocaleController.getString("HiddenName", NUM);
         }
         String name = ContactsController.formatName(user.first_name, user.last_name);
         return (name.length() != 0 || user.phone == null || user.phone.length() == 0) ? name : PhoneFormat.getInstance().format("+" + user.phone);
@@ -43,6 +43,6 @@ public class UserObject {
         } else if (!allowShort && name.length() <= 2) {
             return ContactsController.formatName(user.first_name, user.last_name);
         }
-        return TextUtils.isEmpty(name) ? LocaleController.getString("HiddenName", R.string.HiddenName) : name;
+        return TextUtils.isEmpty(name) ? LocaleController.getString("HiddenName", NUM) : name;
     }
 }

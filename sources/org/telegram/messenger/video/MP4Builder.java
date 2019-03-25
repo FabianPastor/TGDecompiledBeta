@@ -51,7 +51,7 @@ public class MP4Builder {
     private boolean splitMdat;
     private HashMap<Track, long[]> track2SampleSizes = new HashMap();
     private boolean writeNewMdat = true;
-    private long writedSinceLastMdat = 0;
+    private long wroteSinceLastMdat = 0;
 
     private class InterleaveChunkMdat implements Box {
         private long contentSize;
@@ -128,7 +128,7 @@ public class MP4Builder {
         FileTypeBox fileTypeBox = createFileTypeBox();
         fileTypeBox.getBox(this.fc);
         this.dataOffset += fileTypeBox.getSize();
-        this.writedSinceLastMdat += this.dataOffset;
+        this.wroteSinceLastMdat += this.dataOffset;
         this.splitMdat = split;
         this.mdat = new InterleaveChunkMdat();
         this.sizeBuffer = ByteBuffer.allocateDirect(4);
@@ -146,25 +146,25 @@ public class MP4Builder {
         this.fos.getFD().sync();
     }
 
-    public boolean writeSampleData(int trackIndex, ByteBuffer byteBuf, BufferInfo bufferInfo, boolean writeLength) throws Exception {
+    public long writeSampleData(int trackIndex, ByteBuffer byteBuf, BufferInfo bufferInfo, boolean writeLength) throws Exception {
         if (this.writeNewMdat) {
             this.mdat.setContentSize(0);
             this.mdat.getBox(this.fc);
             this.mdat.setDataOffset(this.dataOffset);
             this.dataOffset += 16;
-            this.writedSinceLastMdat += 16;
+            this.wroteSinceLastMdat += 16;
             this.writeNewMdat = false;
         }
         this.mdat.setContentSize(this.mdat.getContentSize() + ((long) bufferInfo.size));
-        this.writedSinceLastMdat += (long) bufferInfo.size;
+        this.wroteSinceLastMdat += (long) bufferInfo.size;
         boolean flush = false;
-        if (this.writedSinceLastMdat >= 32768) {
+        if (this.wroteSinceLastMdat >= 32768) {
             if (this.splitMdat) {
                 flushCurrentMdat();
                 this.writeNewMdat = true;
             }
             flush = true;
-            this.writedSinceLastMdat = 0;
+            this.wroteSinceLastMdat = 0;
         }
         this.currentMp4Movie.addSample(trackIndex, this.dataOffset, bufferInfo);
         byteBuf.position((!writeLength ? 0 : 4) + bufferInfo.offset);
@@ -177,11 +177,12 @@ public class MP4Builder {
         }
         this.fc.write(byteBuf);
         this.dataOffset += (long) bufferInfo.size;
-        if (flush) {
-            this.fos.flush();
-            this.fos.getFD().sync();
+        if (!flush) {
+            return 0;
         }
-        return flush;
+        this.fos.flush();
+        this.fos.getFD().sync();
+        return this.fc.position();
     }
 
     public int addTrack(MediaFormat mediaFormat, boolean isAudio) {
@@ -209,7 +210,8 @@ public class MP4Builder {
         this.fos.close();
     }
 
-    protected FileTypeBox createFileTypeBox() {
+    /* Access modifiers changed, original: protected */
+    public FileTypeBox createFileTypeBox() {
         LinkedList<String> minorBrands = new LinkedList();
         minorBrands.add("isom");
         minorBrands.add("iso2");
@@ -234,7 +236,8 @@ public class MP4Builder {
         return timescale;
     }
 
-    protected MovieBox createMovieBox(Mp4Movie movie) {
+    /* Access modifiers changed, original: protected */
+    public MovieBox createMovieBox(Mp4Movie movie) {
         MovieBox movieBox = new MovieBox();
         MovieHeaderBox mvhd = new MovieHeaderBox();
         mvhd.setCreationTime(new Date());
@@ -262,7 +265,8 @@ public class MP4Builder {
         return movieBox;
     }
 
-    protected TrackBox createTrackBox(Track track, Mp4Movie movie) {
+    /* Access modifiers changed, original: protected */
+    public TrackBox createTrackBox(Track track, Mp4Movie movie) {
         TrackBox trackBox = new TrackBox();
         TrackHeaderBox tkhd = new TrackHeaderBox();
         tkhd.setEnabled(true);
@@ -309,7 +313,8 @@ public class MP4Builder {
         return trackBox;
     }
 
-    protected Box createStbl(Track track) {
+    /* Access modifiers changed, original: protected */
+    public Box createStbl(Track track) {
         SampleTableBox stbl = new SampleTableBox();
         createStsd(track, stbl);
         createStts(track, stbl);
@@ -321,11 +326,13 @@ public class MP4Builder {
         return stbl;
     }
 
-    protected void createStsd(Track track, SampleTableBox stbl) {
+    /* Access modifiers changed, original: protected */
+    public void createStsd(Track track, SampleTableBox stbl) {
         stbl.addBox(track.getSampleDescriptionBox());
     }
 
-    protected void createCtts(Track track, SampleTableBox stbl) {
+    /* Access modifiers changed, original: protected */
+    public void createCtts(Track track, SampleTableBox stbl) {
         int[] sampleCompositions = track.getSampleCompositions();
         if (sampleCompositions != null) {
             Entry lastEntry = null;
@@ -344,7 +351,8 @@ public class MP4Builder {
         }
     }
 
-    protected void createStts(Track track, SampleTableBox stbl) {
+    /* Access modifiers changed, original: protected */
+    public void createStts(Track track, SampleTableBox stbl) {
         TimeToSampleBox.Entry lastEntry = null;
         List<TimeToSampleBox.Entry> entries = new ArrayList();
         long[] deltas = track.getSampleDurations();
@@ -361,7 +369,8 @@ public class MP4Builder {
         stbl.addBox(stts);
     }
 
-    protected void createStss(Track track, SampleTableBox stbl) {
+    /* Access modifiers changed, original: protected */
+    public void createStss(Track track, SampleTableBox stbl) {
         long[] syncSamples = track.getSyncSamples();
         if (syncSamples != null && syncSamples.length > 0) {
             SyncSampleBox stss = new SyncSampleBox();
@@ -370,7 +379,8 @@ public class MP4Builder {
         }
     }
 
-    protected void createStsc(Track track, SampleTableBox stbl) {
+    /* Access modifiers changed, original: protected */
+    public void createStsc(Track track, SampleTableBox stbl) {
         SampleToChunkBox stsc = new SampleToChunkBox();
         stsc.setEntries(new LinkedList());
         int lastChunkNumber = 1;
@@ -399,16 +409,19 @@ public class MP4Builder {
         stbl.addBox(stsc);
     }
 
-    protected void createStsz(Track track, SampleTableBox stbl) {
+    /* Access modifiers changed, original: protected */
+    public void createStsz(Track track, SampleTableBox stbl) {
         SampleSizeBox stsz = new SampleSizeBox();
         stsz.setSampleSizes((long[]) this.track2SampleSizes.get(track));
         stbl.addBox(stsz);
     }
 
-    protected void createSidx(Track track, SampleTableBox stbl) {
+    /* Access modifiers changed, original: protected */
+    public void createSidx(Track track, SampleTableBox stbl) {
     }
 
-    protected void createStco(Track track, SampleTableBox stbl) {
+    /* Access modifiers changed, original: protected */
+    public void createStco(Track track, SampleTableBox stbl) {
         ArrayList<Long> chunksOffsets = new ArrayList();
         long lastOffset = -1;
         Iterator it = track.getSamples().iterator();

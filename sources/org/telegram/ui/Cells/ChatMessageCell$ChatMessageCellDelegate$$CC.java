@@ -12,6 +12,9 @@ public abstract /* synthetic */ class ChatMessageCell$ChatMessageCellDelegate$$C
     public static void didPressUserAvatar(ChatMessageCellDelegate this_, ChatMessageCell cell, User user) {
     }
 
+    public static void didPressHiddenForward(ChatMessageCellDelegate this_, ChatMessageCell cell) {
+    }
+
     public static void didPressViaBot(ChatMessageCellDelegate this_, ChatMessageCell cell, String username) {
     }
 

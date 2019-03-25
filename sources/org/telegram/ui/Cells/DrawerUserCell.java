@@ -52,11 +52,13 @@ public class DrawerUserCell extends FrameLayout {
         setWillNotDraw(false);
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
     }
 
-    protected void onAttachedToWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.textView.setTextColor(Theme.getColor("chats_menuItemText"));
     }
@@ -83,7 +85,8 @@ public class DrawerUserCell extends FrameLayout {
         return this.accountNumber;
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (UserConfig.getActivatedAccountsCount() > 1 && NotificationsController.getInstance(this.accountNumber).showBadgeNumber && NotificationsController.getInstance(this.accountNumber).getTotalUnreadCount() > 0) {
             String text = String.format("%d", new Object[]{Integer.valueOf(NotificationsController.getInstance(this.accountNumber).getTotalUnreadCount())});
             int countTop = AndroidUtilities.dp(12.5f);

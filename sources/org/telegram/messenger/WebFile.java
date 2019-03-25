@@ -36,7 +36,7 @@ public class WebFile extends TLObject {
         WebFile webFile = new WebFile();
         TL_inputWebFileGeoPointLocation location = new TL_inputWebFileGeoPointLocation();
         webFile.location = location;
-        InputGeoPoint tL_inputGeoPoint = new TL_inputGeoPoint();
+        TL_inputGeoPoint tL_inputGeoPoint = new TL_inputGeoPoint();
         webFile.geo_point = tL_inputGeoPoint;
         location.geo_point = tL_inputGeoPoint;
         location.access_hash = access_hash;

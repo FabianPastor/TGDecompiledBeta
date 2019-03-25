@@ -1,12 +1,13 @@
 package org.telegram.messenger;
 
 final /* synthetic */ class NotificationsController$$Lambda$12 implements Runnable {
-    static final Runnable $instance = new NotificationsController$$Lambda$12();
+    private final NotificationsController arg$1;
 
-    private NotificationsController$$Lambda$12() {
+    NotificationsController$$Lambda$12(NotificationsController notificationsController) {
+        this.arg$1 = notificationsController;
     }
 
     public void run() {
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.pushMessagesUpdated, new Object[0]);
+        this.arg$1.lambda$showNotifications$23$NotificationsController();
     }
 }

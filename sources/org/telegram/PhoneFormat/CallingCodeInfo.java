@@ -10,7 +10,8 @@ public class CallingCodeInfo {
     public ArrayList<RuleSet> ruleSets = new ArrayList();
     public ArrayList<String> trunkPrefixes = new ArrayList();
 
-    String matchingAccessCode(String str) {
+    /* Access modifiers changed, original: 0000 */
+    public String matchingAccessCode(String str) {
         Iterator it = this.intlPrefixes.iterator();
         while (it.hasNext()) {
             String code = (String) it.next();
@@ -21,7 +22,8 @@ public class CallingCodeInfo {
         return null;
     }
 
-    String matchingTrunkCode(String str) {
+    /* Access modifiers changed, original: 0000 */
+    public String matchingTrunkCode(String str) {
         Iterator it = this.trunkPrefixes.iterator();
         while (it.hasNext()) {
             String code = (String) it.next();
@@ -32,7 +34,8 @@ public class CallingCodeInfo {
         return null;
     }
 
-    String format(String orig) {
+    /* Access modifiers changed, original: 0000 */
+    public String format(String orig) {
         String phone;
         String str = orig;
         String trunkPrefix = null;
@@ -67,7 +70,8 @@ public class CallingCodeInfo {
         return String.format("%s %s", new Object[]{intlPrefix, str});
     }
 
-    boolean isValidPhoneNumber(String orig) {
+    /* Access modifiers changed, original: 0000 */
+    public boolean isValidPhoneNumber(String orig) {
         String str = orig;
         String trunkPrefix = null;
         String intlPrefix = null;

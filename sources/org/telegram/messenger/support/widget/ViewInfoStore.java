@@ -59,12 +59,14 @@ class ViewInfoStore {
     ViewInfoStore() {
     }
 
-    void clear() {
+    /* Access modifiers changed, original: 0000 */
+    public void clear() {
         this.mLayoutHolderMap.clear();
         this.mOldChangedHolders.clear();
     }
 
-    void addToPreLayout(ViewHolder holder, ItemHolderInfo info) {
+    /* Access modifiers changed, original: 0000 */
+    public void addToPreLayout(ViewHolder holder, ItemHolderInfo info) {
         InfoRecord record = (InfoRecord) this.mLayoutHolderMap.get(holder);
         if (record == null) {
             record = InfoRecord.obtain();
@@ -74,16 +76,19 @@ class ViewInfoStore {
         record.flags |= 4;
     }
 
-    boolean isDisappearing(ViewHolder holder) {
+    /* Access modifiers changed, original: 0000 */
+    public boolean isDisappearing(ViewHolder holder) {
         InfoRecord record = (InfoRecord) this.mLayoutHolderMap.get(holder);
         return (record == null || (record.flags & 1) == 0) ? false : true;
     }
 
-    ItemHolderInfo popFromPreLayout(ViewHolder vh) {
+    /* Access modifiers changed, original: 0000 */
+    public ItemHolderInfo popFromPreLayout(ViewHolder vh) {
         return popFromLayoutStep(vh, 4);
     }
 
-    ItemHolderInfo popFromPostLayout(ViewHolder vh) {
+    /* Access modifiers changed, original: 0000 */
+    public ItemHolderInfo popFromPostLayout(ViewHolder vh) {
         return popFromLayoutStep(vh, 8);
     }
 
@@ -110,11 +115,13 @@ class ViewInfoStore {
         return info;
     }
 
-    void addToOldChangeHolders(long key, ViewHolder holder) {
+    /* Access modifiers changed, original: 0000 */
+    public void addToOldChangeHolders(long key, ViewHolder holder) {
         this.mOldChangedHolders.put(key, holder);
     }
 
-    void addToAppearedInPreLayoutHolders(ViewHolder holder, ItemHolderInfo info) {
+    /* Access modifiers changed, original: 0000 */
+    public void addToAppearedInPreLayoutHolders(ViewHolder holder, ItemHolderInfo info) {
         InfoRecord record = (InfoRecord) this.mLayoutHolderMap.get(holder);
         if (record == null) {
             record = InfoRecord.obtain();
@@ -124,16 +131,19 @@ class ViewInfoStore {
         record.preInfo = info;
     }
 
-    boolean isInPreLayout(ViewHolder viewHolder) {
+    /* Access modifiers changed, original: 0000 */
+    public boolean isInPreLayout(ViewHolder viewHolder) {
         InfoRecord record = (InfoRecord) this.mLayoutHolderMap.get(viewHolder);
         return (record == null || (record.flags & 4) == 0) ? false : true;
     }
 
-    ViewHolder getFromOldChangeHolders(long key) {
+    /* Access modifiers changed, original: 0000 */
+    public ViewHolder getFromOldChangeHolders(long key) {
         return (ViewHolder) this.mOldChangedHolders.get(key);
     }
 
-    void addToPostLayout(ViewHolder holder, ItemHolderInfo info) {
+    /* Access modifiers changed, original: 0000 */
+    public void addToPostLayout(ViewHolder holder, ItemHolderInfo info) {
         InfoRecord record = (InfoRecord) this.mLayoutHolderMap.get(holder);
         if (record == null) {
             record = InfoRecord.obtain();
@@ -143,7 +153,8 @@ class ViewInfoStore {
         record.flags |= 8;
     }
 
-    void addToDisappearedInLayout(ViewHolder holder) {
+    /* Access modifiers changed, original: 0000 */
+    public void addToDisappearedInLayout(ViewHolder holder) {
         InfoRecord record = (InfoRecord) this.mLayoutHolderMap.get(holder);
         if (record == null) {
             record = InfoRecord.obtain();
@@ -152,14 +163,16 @@ class ViewInfoStore {
         record.flags |= 1;
     }
 
-    void removeFromDisappearedInLayout(ViewHolder holder) {
+    /* Access modifiers changed, original: 0000 */
+    public void removeFromDisappearedInLayout(ViewHolder holder) {
         InfoRecord record = (InfoRecord) this.mLayoutHolderMap.get(holder);
         if (record != null) {
             record.flags &= -2;
         }
     }
 
-    void process(ProcessCallback callback) {
+    /* Access modifiers changed, original: 0000 */
+    public void process(ProcessCallback callback) {
         for (int index = this.mLayoutHolderMap.size() - 1; index >= 0; index--) {
             ViewHolder viewHolder = (ViewHolder) this.mLayoutHolderMap.keyAt(index);
             InfoRecord record = (InfoRecord) this.mLayoutHolderMap.removeAt(index);
@@ -185,7 +198,8 @@ class ViewInfoStore {
         }
     }
 
-    void removeViewHolder(ViewHolder holder) {
+    /* Access modifiers changed, original: 0000 */
+    public void removeViewHolder(ViewHolder holder) {
         for (int i = this.mOldChangedHolders.size() - 1; i >= 0; i--) {
             if (holder == this.mOldChangedHolders.valueAt(i)) {
                 this.mOldChangedHolders.removeAt(i);
@@ -198,7 +212,8 @@ class ViewInfoStore {
         }
     }
 
-    void onDetach() {
+    /* Access modifiers changed, original: 0000 */
+    public void onDetach() {
         InfoRecord.drainCache();
     }
 

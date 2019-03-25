@@ -24,6 +24,7 @@ import android.os.Build.VERSION;
 import android.support.annotation.Keep;
 import android.util.StateSet;
 import android.view.View;
+import android.view.accessibility.AccessibilityNodeInfo;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -158,7 +159,8 @@ public class Switch extends View {
         }
     }
 
-    protected boolean verifyDrawable(Drawable who) {
+    /* Access modifiers changed, original: protected */
+    public boolean verifyDrawable(Drawable who) {
         return super.verifyDrawable(who) || (this.rippleDrawable != null && who == this.rippleDrawable);
     }
 
@@ -197,12 +199,14 @@ public class Switch extends View {
         this.iconAnimator.start();
     }
 
-    protected void onAttachedToWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.attachedToWindow = true;
     }
 
-    protected void onDetachedFromWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.attachedToWindow = false;
     }
@@ -304,7 +308,8 @@ public class Switch extends View {
         invalidate();
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (getVisibility() == 0) {
             float colorProgress;
             int color1;
@@ -434,5 +439,12 @@ public class Switch extends View {
                 canvas.drawBitmap(this.overlayBitmap[1], 0.0f, 0.0f, null);
             }
         }
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
+        info.setClassName("android.widget.Switch");
+        info.setCheckable(true);
+        info.setChecked(this.isChecked);
     }
 }

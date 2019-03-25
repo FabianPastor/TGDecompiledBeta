@@ -29,7 +29,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.SharedConfig.ProxyInfo;
 import org.telegram.messenger.Utilities;
@@ -87,24 +86,25 @@ public class ProxySettingsActivity extends BaseFragment {
             this.textView.setSingleLine(true);
             this.textView.setEllipsize(TruncateAt.END);
             this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-            View view = this.textView;
+            TextView textView = this.textView;
             if (LocaleController.isRTL) {
                 i = 5;
             } else {
                 i = 3;
             }
-            addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, LocaleController.isRTL ? 71.0f : 21.0f, 0.0f, LocaleController.isRTL ? 21.0f : 23.0f, 0.0f));
+            addView(textView, LayoutHelper.createFrame(-1, -1.0f, i | 48, LocaleController.isRTL ? 71.0f : 21.0f, 0.0f, LocaleController.isRTL ? 21.0f : 23.0f, 0.0f));
             this.checkImage = new ImageView(context);
             this.checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor("featuredStickers_addedIcon"), Mode.MULTIPLY));
-            this.checkImage.setImageResource(R.drawable.sticker_added);
-            view = this.checkImage;
+            this.checkImage.setImageResource(NUM);
+            ImageView imageView = this.checkImage;
             if (!LocaleController.isRTL) {
                 i2 = 5;
             }
-            addView(view, LayoutHelper.createFrame(19, 14.0f, i2 | 16, 21.0f, 0.0f, 21.0f, 0.0f));
+            addView(imageView, LayoutHelper.createFrame(19, 14.0f, i2 | 16, 21.0f, 0.0f, 21.0f, 0.0f));
         }
 
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        /* Access modifiers changed, original: protected */
+        public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(50.0f), NUM));
         }
 
@@ -118,7 +118,8 @@ public class ProxySettingsActivity extends BaseFragment {
             this.checkImage.setVisibility(value ? 0 : 4);
         }
 
-        protected void onDraw(Canvas canvas) {
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
             if (this.needDivider) {
                 canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
             }
@@ -145,8 +146,8 @@ public class ProxySettingsActivity extends BaseFragment {
     }
 
     public View createView(Context context) {
-        this.actionBar.setTitle(LocaleController.getString("ProxyDetails", R.string.ProxyDetails));
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setTitle(LocaleController.getString("ProxyDetails", NUM));
+        this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(false);
         if (AndroidUtilities.isTablet()) {
             this.actionBar.setOccupyStatusBar(false);
@@ -154,7 +155,7 @@ public class ProxySettingsActivity extends BaseFragment {
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    ProxySettingsActivity.this.lambda$checkDiscard$70$PassportActivity();
+                    ProxySettingsActivity.this.finishFragment();
                 } else if (id == 1 && ProxySettingsActivity.this.getParentActivity() != null) {
                     boolean enabled;
                     ProxySettingsActivity.this.currentProxyInfo.address = ProxySettingsActivity.this.inputFields[0].getText().toString();
@@ -189,11 +190,12 @@ public class ProxySettingsActivity extends BaseFragment {
                     }
                     editor.commit();
                     NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged, new Object[0]);
-                    ProxySettingsActivity.this.lambda$checkDiscard$70$PassportActivity();
+                    ProxySettingsActivity.this.finishFragment();
                 }
             }
         });
-        this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
+        this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f));
+        this.doneItem.setContentDescription(LocaleController.getString("Done", NUM));
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         this.fragmentView.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
@@ -210,9 +212,9 @@ public class ProxySettingsActivity extends BaseFragment {
             this.typeCell[a].setBackgroundDrawable(Theme.getSelectorDrawable(true));
             this.typeCell[a].setTag(Integer.valueOf(a));
             if (a == 0) {
-                this.typeCell[a].setValue(LocaleController.getString("UseProxySocks5", R.string.UseProxySocks5), a == this.currentType, true);
+                this.typeCell[a].setValue(LocaleController.getString("UseProxySocks5", NUM), a == this.currentType, true);
             } else if (a == 1) {
-                this.typeCell[a].setValue(LocaleController.getString("UseProxyTelegram", R.string.UseProxyTelegram), a == this.currentType, false);
+                this.typeCell[a].setValue(LocaleController.getString("UseProxyTelegram", NUM), a == this.currentType, false);
             }
             this.linearLayout2.addView(this.typeCell[a], LayoutHelper.createLinear(-1, 50));
             this.typeCell[a].setOnClickListener(new ProxySettingsActivity$$Lambda$0(this));
@@ -305,23 +307,23 @@ public class ProxySettingsActivity extends BaseFragment {
             this.inputFields[a].setImeOptions(NUM);
             switch (a) {
                 case 0:
-                    this.inputFields[a].setHintText(LocaleController.getString("UseProxyAddress", R.string.UseProxyAddress));
+                    this.inputFields[a].setHintText(LocaleController.getString("UseProxyAddress", NUM));
                     this.inputFields[a].setText(this.currentProxyInfo.address);
                     break;
                 case 1:
-                    this.inputFields[a].setHintText(LocaleController.getString("UseProxyPort", R.string.UseProxyPort));
+                    this.inputFields[a].setHintText(LocaleController.getString("UseProxyPort", NUM));
                     this.inputFields[a].setText("" + this.currentProxyInfo.port);
                     break;
                 case 2:
-                    this.inputFields[a].setHintText(LocaleController.getString("UseProxyUsername", R.string.UseProxyUsername));
+                    this.inputFields[a].setHintText(LocaleController.getString("UseProxyUsername", NUM));
                     this.inputFields[a].setText(this.currentProxyInfo.username);
                     break;
                 case 3:
-                    this.inputFields[a].setHintText(LocaleController.getString("UseProxyPassword", R.string.UseProxyPassword));
+                    this.inputFields[a].setHintText(LocaleController.getString("UseProxyPassword", NUM));
                     this.inputFields[a].setText(this.currentProxyInfo.password);
                     break;
                 case 4:
-                    this.inputFields[a].setHintText(LocaleController.getString("UseProxySecret", R.string.UseProxySecret));
+                    this.inputFields[a].setHintText(LocaleController.getString("UseProxySecret", NUM));
                     this.inputFields[a].setText(this.currentProxyInfo.secret);
                     break;
                 default:
@@ -333,29 +335,31 @@ public class ProxySettingsActivity extends BaseFragment {
             this.inputFields[a].setOnEditorActionListener(new ProxySettingsActivity$$Lambda$1(this));
         }
         this.bottomCell = new TextInfoPrivacyCell(context);
-        this.bottomCell.setBackgroundDrawable(Theme.getThemedDrawable(context, (int) R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
-        this.bottomCell.setText(LocaleController.getString("UseProxyInfo", R.string.UseProxyInfo));
+        this.bottomCell.setBackgroundDrawable(Theme.getThemedDrawable(context, NUM, "windowBackgroundGrayShadow"));
+        this.bottomCell.setText(LocaleController.getString("UseProxyInfo", NUM));
         this.linearLayout2.addView(this.bottomCell, LayoutHelper.createLinear(-1, -2));
         this.shareCell = new TextSettingsCell(context);
         this.shareCell.setBackgroundDrawable(Theme.getSelectorDrawable(true));
-        this.shareCell.setText(LocaleController.getString("ShareFile", R.string.ShareFile), false);
+        this.shareCell.setText(LocaleController.getString("ShareFile", NUM), false);
         this.shareCell.setTextColor(Theme.getColor("windowBackgroundWhiteBlueText4"));
         this.linearLayout2.addView(this.shareCell, LayoutHelper.createLinear(-1, -2));
         this.shareCell.setOnClickListener(new ProxySettingsActivity$$Lambda$2(this));
         this.sectionCell[1] = new ShadowSectionCell(context);
-        this.sectionCell[1].setBackgroundDrawable(Theme.getThemedDrawable(context, (int) R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
+        this.sectionCell[1].setBackgroundDrawable(Theme.getThemedDrawable(context, NUM, "windowBackgroundGrayShadow"));
         this.linearLayout2.addView(this.sectionCell[1], LayoutHelper.createLinear(-1, -2));
         checkShareButton();
         updateUiForType();
         return this.fragmentView;
     }
 
-    final /* synthetic */ void lambda$createView$0$ProxySettingsActivity(View view) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$0$ProxySettingsActivity(View view) {
         this.currentType = ((Integer) view.getTag()).intValue();
         updateUiForType();
     }
 
-    final /* synthetic */ boolean lambda$createView$1$ProxySettingsActivity(TextView textView, int i, KeyEvent keyEvent) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ boolean lambda$createView$1$ProxySettingsActivity(TextView textView, int i, KeyEvent keyEvent) {
         if (i == 5) {
             int num = ((Integer) textView.getTag()).intValue();
             if (num + 1 < this.inputFields.length) {
@@ -365,12 +369,13 @@ public class ProxySettingsActivity extends BaseFragment {
         } else if (i != 6) {
             return false;
         } else {
-            lambda$checkDiscard$70$PassportActivity();
+            finishFragment();
             return true;
         }
     }
 
-    final /* synthetic */ void lambda$createView$2$ProxySettingsActivity(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$2$ProxySettingsActivity(View v) {
         StringBuilder params = new StringBuilder("");
         String address = this.inputFields[0].getText().toString();
         String password = this.inputFields[3].getText().toString();
@@ -413,7 +418,7 @@ public class ProxySettingsActivity extends BaseFragment {
                 Intent shareIntent = new Intent("android.intent.action.SEND");
                 shareIntent.setType("text/plain");
                 shareIntent.putExtra("android.intent.extra.TEXT", url + params.toString());
-                Intent chooserIntent = Intent.createChooser(shareIntent, LocaleController.getString("ShareLink", R.string.ShareLink));
+                Intent chooserIntent = Intent.createChooser(shareIntent, LocaleController.getString("ShareLink", NUM));
                 chooserIntent.setFlags(NUM);
                 getParentActivity().startActivity(chooserIntent);
             }
@@ -441,12 +446,12 @@ public class ProxySettingsActivity extends BaseFragment {
         boolean z;
         boolean z2 = true;
         if (this.currentType == 0) {
-            this.bottomCell.setText(LocaleController.getString("UseProxyInfo", R.string.UseProxyInfo));
+            this.bottomCell.setText(LocaleController.getString("UseProxyInfo", NUM));
             ((View) this.inputFields[4].getParent()).setVisibility(8);
             ((View) this.inputFields[3].getParent()).setVisibility(0);
             ((View) this.inputFields[2].getParent()).setVisibility(0);
         } else if (this.currentType == 1) {
-            this.bottomCell.setText(LocaleController.getString("UseProxyTelegramInfo", R.string.UseProxyTelegramInfo) + "\n\n" + LocaleController.getString("UseProxyTelegramInfo2", R.string.UseProxyTelegramInfo2));
+            this.bottomCell.setText(LocaleController.getString("UseProxyTelegramInfo", NUM) + "\n\n" + LocaleController.getString("UseProxyTelegramInfo2", NUM));
             ((View) this.inputFields[4].getParent()).setVisibility(0);
             ((View) this.inputFields[3].getParent()).setVisibility(8);
             ((View) this.inputFields[2].getParent()).setVisibility(8);
@@ -465,7 +470,8 @@ public class ProxySettingsActivity extends BaseFragment {
         typeCell2.setTypeChecked(z2);
     }
 
-    protected void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
+    /* Access modifiers changed, original: protected */
+    public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
         if (isOpen && !backward && this.addingNewProxy) {
             this.inputFields[0].requestFocus();
             AndroidUtilities.showKeyboard(this.inputFields[0]);

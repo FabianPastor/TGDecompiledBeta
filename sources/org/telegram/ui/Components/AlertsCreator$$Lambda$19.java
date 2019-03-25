@@ -1,22 +1,19 @@
 package org.telegram.ui.Components;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
 
 final /* synthetic */ class AlertsCreator$$Lambda$19 implements OnClickListener {
-    private final long arg$1;
+    private final LinearLayout arg$1;
     private final int[] arg$2;
-    private final int arg$3;
-    private final Runnable arg$4;
 
-    AlertsCreator$$Lambda$19(long j, int[] iArr, int i, Runnable runnable) {
-        this.arg$1 = j;
+    AlertsCreator$$Lambda$19(LinearLayout linearLayout, int[] iArr) {
+        this.arg$1 = linearLayout;
         this.arg$2 = iArr;
-        this.arg$3 = i;
-        this.arg$4 = runnable;
     }
 
-    public void onClick(DialogInterface dialogInterface, int i) {
-        AlertsCreator.lambda$createColorSelectDialog$22$AlertsCreator(this.arg$1, this.arg$2, this.arg$3, this.arg$4, dialogInterface, i);
+    public void onClick(View view) {
+        AlertsCreator.lambda$createColorSelectDialog$22$AlertsCreator(this.arg$1, this.arg$2, view);
     }
 }

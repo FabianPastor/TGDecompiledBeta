@@ -8,12 +8,11 @@ import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.View;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 
 public class BetterRatingView extends View {
-    private Bitmap filledStar = BitmapFactory.decodeResource(getResources(), R.drawable.ic_rating_star_filled).extractAlpha();
-    private Bitmap hollowStar = BitmapFactory.decodeResource(getResources(), R.drawable.ic_rating_star).extractAlpha();
+    private Bitmap filledStar = BitmapFactory.decodeResource(getResources(), NUM).extractAlpha();
+    private Bitmap hollowStar = BitmapFactory.decodeResource(getResources(), NUM).extractAlpha();
     private OnRatingChangeListener listener;
     private int numStars = 5;
     private Paint paint = new Paint();
@@ -27,11 +26,13 @@ public class BetterRatingView extends View {
         super(context);
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension((this.numStars * AndroidUtilities.dp(32.0f)) + ((this.numStars - 1) * AndroidUtilities.dp(16.0f)), AndroidUtilities.dp(32.0f));
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         int i = 0;
         while (i < this.numStars) {
             this.paint.setColor(Theme.getColor(i < this.selectedRating ? "dialogTextBlue" : "dialogTextHint"));

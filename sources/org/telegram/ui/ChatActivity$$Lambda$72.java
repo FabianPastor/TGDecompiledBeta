@@ -1,20 +1,21 @@
 package org.telegram.ui;
 
-import org.telegram.tgnet.TLRPC.TL_error;
-import org.telegram.tgnet.TLRPC.TL_messages_editMessage;
+import org.telegram.messenger.MessagesController;
 
 final /* synthetic */ class ChatActivity$$Lambda$72 implements Runnable {
     private final ChatActivity arg$1;
-    private final TL_error arg$2;
-    private final TL_messages_editMessage arg$3;
+    private final MessagesController arg$2;
+    private final CharSequence arg$3;
+    private final boolean arg$4;
 
-    ChatActivity$$Lambda$72(ChatActivity chatActivity, TL_error tL_error, TL_messages_editMessage tL_messages_editMessage) {
+    ChatActivity$$Lambda$72(ChatActivity chatActivity, MessagesController messagesController, CharSequence charSequence, boolean z) {
         this.arg$1 = chatActivity;
-        this.arg$2 = tL_error;
-        this.arg$3 = tL_messages_editMessage;
+        this.arg$2 = messagesController;
+        this.arg$3 = charSequence;
+        this.arg$4 = z;
     }
 
     public void run() {
-        this.arg$1.lambda$null$78$ChatActivity(this.arg$2, this.arg$3);
+        this.arg$1.lambda$null$44$ChatActivity(this.arg$2, this.arg$3, this.arg$4);
     }
 }

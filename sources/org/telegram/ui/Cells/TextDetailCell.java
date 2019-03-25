@@ -3,7 +3,6 @@ package org.telegram.ui.Cells;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.text.TextUtils.TruncateAt;
-import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -30,36 +29,37 @@ public class TextDetailCell extends FrameLayout {
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TruncateAt.END);
-        View view = this.textView;
+        TextView textView = this.textView;
         if (LocaleController.isRTL) {
             i = 5;
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i, 23.0f, 8.0f, 23.0f, 0.0f));
+        addView(textView, LayoutHelper.createFrame(-2, -2.0f, i, 23.0f, 8.0f, 23.0f, 0.0f));
         this.valueTextView = new TextView(context);
         this.valueTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
         this.valueTextView.setTextSize(1, 13.0f);
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);
         this.valueTextView.setSingleLine(true);
-        TextView textView = this.valueTextView;
+        TextView textView2 = this.valueTextView;
         if (LocaleController.isRTL) {
             i2 = 5;
         } else {
             i2 = 3;
         }
-        textView.setGravity(i2);
-        view = this.valueTextView;
+        textView2.setGravity(i2);
+        textView = this.valueTextView;
         if (LocaleController.isRTL) {
             i = 5;
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i, 23.0f, 33.0f, 23.0f, 0.0f));
+        addView(textView, LayoutHelper.createFrame(-2, -2.0f, i, 23.0f, 33.0f, 23.0f, 0.0f));
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(60.0f), NUM));
     }
 
@@ -86,7 +86,8 @@ public class TextDetailCell extends FrameLayout {
         this.textView.invalidate();
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (this.needDivider) {
             canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }

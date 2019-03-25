@@ -2,8 +2,8 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.view.View;
 import android.view.View.MeasureSpec;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
@@ -35,13 +35,13 @@ public class RadioButtonCell extends FrameLayout {
         } else {
             this.radioButton.setColor(Theme.getColor("radioBackground"), Theme.getColor("radioBackgroundChecked"));
         }
-        View view = this.radioButton;
+        RadioButton radioButton = this.radioButton;
         if (LocaleController.isRTL) {
             i = 5;
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(22, 22.0f, i | 48, (float) (LocaleController.isRTL ? 0 : 20), 10.0f, (float) (LocaleController.isRTL ? 20 : 0), 0.0f));
+        addView(radioButton, LayoutHelper.createFrame(22, 22.0f, i | 48, (float) (LocaleController.isRTL ? 0 : 20), 10.0f, (float) (LocaleController.isRTL ? 20 : 0), 0.0f));
         this.textView = new TextView(context);
         if (dialog) {
             this.textView.setTextColor(Theme.getColor("dialogTextBlack"));
@@ -59,13 +59,13 @@ public class RadioButtonCell extends FrameLayout {
             i2 = 3;
         }
         textView.setGravity(i2 | 16);
-        view = this.textView;
+        TextView textView2 = this.textView;
         if (LocaleController.isRTL) {
             i = 5;
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i | 48, (float) (LocaleController.isRTL ? 23 : 61), 10.0f, (float) (LocaleController.isRTL ? 61 : 23), 0.0f));
+        addView(textView2, LayoutHelper.createFrame(-2, -2.0f, i | 48, (float) (LocaleController.isRTL ? 23 : 61), 10.0f, (float) (LocaleController.isRTL ? 61 : 23), 0.0f));
         this.valueTextView = new TextView(context);
         if (dialog) {
             this.valueTextView.setTextColor(Theme.getColor("dialogTextGray2"));
@@ -84,7 +84,7 @@ public class RadioButtonCell extends FrameLayout {
         this.valueTextView.setMaxLines(0);
         this.valueTextView.setSingleLine(false);
         this.valueTextView.setPadding(0, 0, 0, AndroidUtilities.dp(12.0f));
-        View view2 = this.valueTextView;
+        TextView textView3 = this.valueTextView;
         if (!LocaleController.isRTL) {
             i4 = 3;
         }
@@ -93,10 +93,11 @@ public class RadioButtonCell extends FrameLayout {
         if (!LocaleController.isRTL) {
             i3 = 17;
         }
-        addView(view2, LayoutHelper.createFrame(-2, -2.0f, i, f, 35.0f, (float) i3, 0.0f));
+        addView(textView3, LayoutHelper.createFrame(-2, -2.0f, i, f, 35.0f, (float) i3, 0.0f));
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(0, 0));
     }
 
@@ -111,7 +112,8 @@ public class RadioButtonCell extends FrameLayout {
         this.radioButton.setChecked(checked, animated);
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         float f = 60.0f;
         if (this.needDivider) {
             float f2;
@@ -128,5 +130,12 @@ public class RadioButtonCell extends FrameLayout {
             }
             canvas.drawLine(dp, height, (float) (measuredWidth - AndroidUtilities.dp(f)), (float) (getHeight() - 1), Theme.dividerPaint);
         }
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
+        info.setClassName("android.widget.RadioButton");
+        info.setCheckable(true);
+        info.setChecked(this.radioButton.isChecked());
     }
 }

@@ -57,6 +57,7 @@ import org.telegram.tgnet.TLRPC.TL_messages_search;
 import org.telegram.tgnet.TLRPC.TL_messages_sendMedia;
 import org.telegram.tgnet.TLRPC.TL_messages_sendMultiMedia;
 import org.telegram.tgnet.TLRPC.TL_messages_stickerSet;
+import org.telegram.tgnet.TLRPC.TL_photoSize;
 import org.telegram.tgnet.TLRPC.TL_photos_getUserPhotos;
 import org.telegram.tgnet.TLRPC.TL_users_getUsers;
 import org.telegram.tgnet.TLRPC.TL_wallPaper;
@@ -370,7 +371,7 @@ public class FileRefController {
             if ("wallpaper".equals(string)) {
                 TL_account_getWallPapers req9 = new TL_account_getWallPapers();
                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(req9, new FileRefController$$Lambda$7(this, locationKey, parentKey));
-            } else if ("gif".equals(string)) {
+            } else if (string.startsWith("gif")) {
                 TL_messages_getSavedGifs req10 = new TL_messages_getSavedGifs();
                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(req10, new FileRefController$$Lambda$8(this, locationKey, parentKey));
             } else if ("recent".equals(string)) {
@@ -440,75 +441,93 @@ public class FileRefController {
         }
     }
 
-    final /* synthetic */ void lambda$requestReferenceFromServer$0$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$requestReferenceFromServer$0$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
         onRequestComplete(locationKey, parentKey, response, true);
     }
 
-    final /* synthetic */ void lambda$requestReferenceFromServer$1$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$requestReferenceFromServer$1$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
         onRequestComplete(locationKey, parentKey, response, true);
     }
 
-    final /* synthetic */ void lambda$requestReferenceFromServer$2$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$requestReferenceFromServer$2$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
         onRequestComplete(locationKey, parentKey, response, true);
     }
 
-    final /* synthetic */ void lambda$requestReferenceFromServer$3$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$requestReferenceFromServer$3$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
         onRequestComplete(locationKey, parentKey, response, true);
     }
 
-    final /* synthetic */ void lambda$requestReferenceFromServer$4$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$requestReferenceFromServer$4$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
         onRequestComplete(locationKey, parentKey, response, true);
     }
 
-    final /* synthetic */ void lambda$requestReferenceFromServer$5$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$requestReferenceFromServer$5$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
         onRequestComplete(locationKey, parentKey, response, true);
     }
 
-    final /* synthetic */ void lambda$requestReferenceFromServer$6$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$requestReferenceFromServer$6$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
         onRequestComplete(locationKey, parentKey, response, true);
     }
 
-    final /* synthetic */ void lambda$requestReferenceFromServer$7$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$requestReferenceFromServer$7$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
         onRequestComplete(locationKey, parentKey, response, true);
     }
 
-    final /* synthetic */ void lambda$requestReferenceFromServer$8$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$requestReferenceFromServer$8$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
         onRequestComplete(locationKey, parentKey, response, true);
     }
 
-    final /* synthetic */ void lambda$requestReferenceFromServer$9$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$requestReferenceFromServer$9$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
         onRequestComplete(locationKey, parentKey, response, true);
     }
 
-    final /* synthetic */ void lambda$requestReferenceFromServer$10$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$requestReferenceFromServer$10$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
         onRequestComplete(locationKey, parentKey, response, true);
     }
 
-    final /* synthetic */ void lambda$requestReferenceFromServer$11$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$requestReferenceFromServer$11$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
         onRequestComplete(locationKey, parentKey, response, true);
     }
 
-    final /* synthetic */ void lambda$requestReferenceFromServer$12$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$requestReferenceFromServer$12$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
         onRequestComplete(locationKey, parentKey, response, true);
     }
 
-    final /* synthetic */ void lambda$requestReferenceFromServer$13$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$requestReferenceFromServer$13$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
         onRequestComplete(locationKey, parentKey, response, false);
     }
 
-    final /* synthetic */ void lambda$requestReferenceFromServer$14$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$requestReferenceFromServer$14$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
         onRequestComplete(locationKey, parentKey, response, false);
     }
 
-    final /* synthetic */ void lambda$requestReferenceFromServer$15$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$requestReferenceFromServer$15$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
         onRequestComplete(locationKey, parentKey, response, true);
     }
 
-    final /* synthetic */ void lambda$requestReferenceFromServer$16$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$requestReferenceFromServer$16$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
         onRequestComplete(locationKey, parentKey, response, true);
     }
 
-    final /* synthetic */ void lambda$requestReferenceFromServer$17$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$requestReferenceFromServer$17$FileRefController(String locationKey, String parentKey, TLObject response, TL_error error) {
         onRequestComplete(locationKey, parentKey, response, true);
     }
 
@@ -795,15 +814,20 @@ public class FileRefController {
                         }
                     }
                     if (cache) {
-                        DataQuery.getInstance(this.currentAccount).processLoadedRecentDocuments(0, savedGifs.gifs, true, 0);
+                        DataQuery.getInstance(this.currentAccount).processLoadedRecentDocuments(0, savedGifs.gifs, true, 0, true);
                     }
                 } else if (response instanceof TL_messages_stickerSet) {
                     TL_messages_stickerSet stickerSet = (TL_messages_stickerSet) response;
-                    size2 = stickerSet.documents.size();
-                    for (b = 0; b < size2; b++) {
-                        result = getFileReference((Document) stickerSet.documents.get(b), requester.location);
-                        if (result != null) {
-                            break;
+                    if (stickerSet.set.thumb instanceof TL_photoSize) {
+                        result = getFileReference(stickerSet.set.thumb, requester.location);
+                    }
+                    if (result == null) {
+                        size2 = stickerSet.documents.size();
+                        for (b = 0; b < size2; b++) {
+                            result = getFileReference((Document) stickerSet.documents.get(b), requester.location);
+                            if (result != null) {
+                                break;
+                            }
                         }
                     }
                     if (cache) {
@@ -819,7 +843,7 @@ public class FileRefController {
                         }
                     }
                     if (cache) {
-                        DataQuery.getInstance(this.currentAccount).processLoadedRecentDocuments(0, recentStickers.stickers, false, 0);
+                        DataQuery.getInstance(this.currentAccount).processLoadedRecentDocuments(0, recentStickers.stickers, false, 0, true);
                     }
                 } else if (response instanceof TL_messages_favedStickers) {
                     TL_messages_favedStickers favedStickers = (TL_messages_favedStickers) response;
@@ -831,7 +855,7 @@ public class FileRefController {
                         }
                     }
                     if (cache) {
-                        DataQuery.getInstance(this.currentAccount).processLoadedRecentDocuments(2, favedStickers.stickers, false, 0);
+                        DataQuery.getInstance(this.currentAccount).processLoadedRecentDocuments(2, favedStickers.stickers, false, 0, true);
                     }
                 } else if (response instanceof photos_Photos) {
                     photos_Photos res3 = (photos_Photos) response;
@@ -859,19 +883,23 @@ public class FileRefController {
         return found;
     }
 
-    final /* synthetic */ void lambda$onRequestComplete$21$FileRefController(User user) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onRequestComplete$21$FileRefController(User user) {
         MessagesController.getInstance(this.currentAccount).putUser(user, false);
     }
 
-    final /* synthetic */ void lambda$onRequestComplete$22$FileRefController(Chat chat) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onRequestComplete$22$FileRefController(Chat chat) {
         MessagesController.getInstance(this.currentAccount).putChat(chat, false);
     }
 
-    final /* synthetic */ void lambda$onRequestComplete$23$FileRefController(Chat chat) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onRequestComplete$23$FileRefController(Chat chat) {
         MessagesController.getInstance(this.currentAccount).putChat(chat, false);
     }
 
-    final /* synthetic */ void lambda$onRequestComplete$24$FileRefController(TL_messages_stickerSet stickerSet) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onRequestComplete$24$FileRefController(TL_messages_stickerSet stickerSet) {
         DataQuery.getInstance(this.currentAccount).replaceStickerSet(stickerSet);
     }
 

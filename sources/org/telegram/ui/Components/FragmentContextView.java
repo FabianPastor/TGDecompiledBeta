@@ -31,7 +31,6 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.voip.VoIPService;
@@ -75,6 +74,11 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     private boolean visible;
     private float yPosition;
 
+    /* Access modifiers changed, original: final|bridge|synthetic */
+    public final /* bridge */ /* synthetic */ void bridge$lambda$0$FragmentContextView(SharingLocationInfo sharingLocationInfo) {
+        openSharingLocation(sharingLocationInfo);
+    }
+
     public FragmentContextView(Context context, BaseFragment parentFragment, boolean location) {
         super(context);
         this.fragment = parentFragment;
@@ -86,7 +90,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         this.frameLayout.setWillNotDraw(false);
         addView(this.frameLayout, LayoutHelper.createFrame(-1, 36.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
         View shadow = new View(context);
-        shadow.setBackgroundResource(R.drawable.header_shadow);
+        shadow.setBackgroundResource(NUM);
         addView(shadow, LayoutHelper.createFrame(-1, 3.0f, 51, 0.0f, 36.0f, 0.0f, 0.0f));
         this.playButton = new ImageView(context);
         this.playButton.setScaleType(ScaleType.CENTER);
@@ -104,7 +108,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         if (!location) {
             this.playbackSpeedButton = new ImageView(context);
             this.playbackSpeedButton.setScaleType(ScaleType.CENTER);
-            this.playbackSpeedButton.setImageResource(R.drawable.voice2x);
+            this.playbackSpeedButton.setImageResource(NUM);
+            this.playbackSpeedButton.setContentDescription(LocaleController.getString("AccDescrPlayerSpeed", NUM));
             if (AndroidUtilities.density >= 3.0f) {
                 this.playbackSpeedButton.setPadding(0, 1, 0, 0);
             }
@@ -113,7 +118,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             updatePlaybackButton();
         }
         this.closeButton = new ImageView(context);
-        this.closeButton.setImageResource(R.drawable.miniplayer_close);
+        this.closeButton.setImageResource(NUM);
         this.closeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("inappPlayerClose"), Mode.MULTIPLY));
         this.closeButton.setScaleType(ScaleType.CENTER);
         addView(this.closeButton, LayoutHelper.createFrame(36, 36, 53));
@@ -121,7 +126,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         setOnClickListener(new FragmentContextView$$Lambda$3(this));
     }
 
-    final /* synthetic */ void lambda$new$0$FragmentContextView(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$0$FragmentContextView(View v) {
         if (this.currentStyle != 0) {
             return;
         }
@@ -132,7 +138,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         }
     }
 
-    final /* synthetic */ void lambda$new$1$FragmentContextView(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$1$FragmentContextView(View v) {
         if (MediaController.getInstance().getPlaybackSpeed() > 1.0f) {
             MediaController.getInstance().setPlaybackSpeed(1.0f);
         } else {
@@ -141,33 +148,35 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         updatePlaybackButton();
     }
 
-    final /* synthetic */ void lambda$new$3$FragmentContextView(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$3$FragmentContextView(View v) {
         if (this.currentStyle == 2) {
             Builder builder = new Builder(this.fragment.getParentActivity());
-            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+            builder.setTitle(LocaleController.getString("AppName", NUM));
             if (this.fragment instanceof DialogsActivity) {
-                builder.setMessage(LocaleController.getString("StopLiveLocationAlertAll", R.string.StopLiveLocationAlertAll));
+                builder.setMessage(LocaleController.getString("StopLiveLocationAlertAll", NUM));
             } else {
                 ChatActivity activity = this.fragment;
                 Chat chat = activity.getCurrentChat();
                 User user = activity.getCurrentUser();
                 if (chat != null) {
-                    builder.setMessage(LocaleController.formatString("StopLiveLocationAlertToGroup", R.string.StopLiveLocationAlertToGroup, chat.title));
+                    builder.setMessage(LocaleController.formatString("StopLiveLocationAlertToGroup", NUM, chat.title));
                 } else if (user != null) {
-                    builder.setMessage(LocaleController.formatString("StopLiveLocationAlertToUser", R.string.StopLiveLocationAlertToUser, UserObject.getFirstName(user)));
+                    builder.setMessage(LocaleController.formatString("StopLiveLocationAlertToUser", NUM, UserObject.getFirstName(user)));
                 } else {
-                    builder.setMessage(LocaleController.getString("AreYouSure", R.string.AreYouSure));
+                    builder.setMessage(LocaleController.getString("AreYouSure", NUM));
                 }
             }
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new FragmentContextView$$Lambda$6(this));
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            builder.setPositiveButton(LocaleController.getString("OK", NUM), new FragmentContextView$$Lambda$6(this));
+            builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
             builder.show();
             return;
         }
         MediaController.getInstance().cleanupPlayer(true, true);
     }
 
-    final /* synthetic */ void lambda$null$2$FragmentContextView(DialogInterface dialogInterface, int i) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$2$FragmentContextView(DialogInterface dialogInterface, int i) {
         if (this.fragment instanceof DialogsActivity) {
             for (int a = 0; a < 3; a++) {
                 LocationController.getInstance(a).removeAllLocationSharings();
@@ -177,7 +186,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         LocationController.getInstance(this.fragment.getCurrentAccount()).removeSharingLocation(((ChatActivity) this.fragment).getDialogId());
     }
 
-    final /* synthetic */ void lambda$new$4$FragmentContextView(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$4$FragmentContextView(View v) {
         if (this.currentStyle == 0) {
             MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
             if (this.fragment != null && messageObject != null) {
@@ -322,12 +332,14 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     if (this.playbackSpeedButton != null) {
                         this.playbackSpeedButton.setVisibility(0);
                     }
+                    this.closeButton.setContentDescription(LocaleController.getString("AccDescrClosePlayer", NUM));
                 } else if (style == 2) {
                     this.playButton.setLayoutParams(LayoutHelper.createFrame(36, 36.0f, 51, 8.0f, 0.0f, 0.0f, 0.0f));
                     this.titleTextView.setLayoutParams(LayoutHelper.createFrame(-1, 36.0f, 51, 51.0f, 0.0f, 36.0f, 0.0f));
+                    this.closeButton.setContentDescription(LocaleController.getString("AccDescrStopLiveLocation", NUM));
                 }
             } else if (style == 1) {
-                this.titleTextView.setText(LocaleController.getString("ReturnToCall", R.string.ReturnToCall));
+                this.titleTextView.setText(LocaleController.getString("ReturnToCall", NUM));
                 this.frameLayout.setBackgroundColor(Theme.getColor("returnToCallBackground"));
                 this.frameLayout.setTag("returnToCallBackground");
                 this.titleTextView.setTextColor(Theme.getColor("returnToCallText"));
@@ -345,7 +357,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         }
     }
 
-    protected void onDetachedFromWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.topPadding = 0.0f;
         if (this.isLocation) {
@@ -362,7 +375,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didEndedCall);
     }
 
-    protected void onAttachedToWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (this.isLocation) {
             NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.liveLocationsChanged);
@@ -391,7 +405,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         checkCall(true);
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, AndroidUtilities.dp2(39.0f));
     }
 
@@ -454,7 +469,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             }
             if (this.fragment instanceof DialogsActivity) {
                 String param;
-                String liveLocation = LocaleController.getString("AttachLiveLocation", R.string.AttachLiveLocation);
+                String liveLocation = LocaleController.getString("AttachLiveLocation", NUM);
                 ArrayList<SharingLocationInfo> infos = new ArrayList();
                 for (int a = 0; a < 3; a++) {
                     infos.addAll(LocationController.getInstance(a).sharingLocationsUI);
@@ -475,7 +490,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 } else {
                     param = LocaleController.formatPluralString("Chats", infos.size());
                 }
-                String fullString = String.format(LocaleController.getString("AttachLiveLocationIsSharing", R.string.AttachLiveLocationIsSharing), new Object[]{liveLocation, param});
+                String fullString = String.format(LocaleController.getString("AttachLiveLocationIsSharing", NUM), new Object[]{liveLocation, param});
                 int start = fullString.indexOf(liveLocation);
                 SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(fullString);
                 this.titleTextView.setEllipsize(TruncateAt.END);
@@ -548,20 +563,20 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             if (this.lastLocationSharingCount != locationSharingCount) {
                 String fullString;
                 this.lastLocationSharingCount = locationSharingCount;
-                String liveLocation = LocaleController.getString("AttachLiveLocation", R.string.AttachLiveLocation);
+                String liveLocation = LocaleController.getString("AttachLiveLocation", NUM);
                 if (locationSharingCount == 0) {
                     fullString = liveLocation;
                 } else {
                     int otherSharingCount = locationSharingCount - 1;
                     if (LocationController.getInstance(currentAccount).isSharingLocation(dialogId)) {
                         if (otherSharingCount == 0) {
-                            fullString = String.format("%1$s - %2$s", new Object[]{liveLocation, LocaleController.getString("ChatYourSelfName", R.string.ChatYourSelfName)});
+                            fullString = String.format("%1$s - %2$s", new Object[]{liveLocation, LocaleController.getString("ChatYourSelfName", NUM)});
                         } else if (otherSharingCount != 1 || notYouUser == null) {
-                            fullString = String.format("%1$s - %2$s %3$s", new Object[]{liveLocation, LocaleController.getString("ChatYourSelfName", R.string.ChatYourSelfName), LocaleController.formatPluralString("AndOther", otherSharingCount)});
+                            fullString = String.format("%1$s - %2$s %3$s", new Object[]{liveLocation, LocaleController.getString("ChatYourSelfName", NUM), LocaleController.formatPluralString("AndOther", otherSharingCount)});
                         } else {
                             Object[] objArr = new Object[2];
                             objArr[0] = liveLocation;
-                            objArr[1] = LocaleController.formatString("SharingYouAndOtherName", R.string.SharingYouAndOtherName, UserObject.getFirstName(notYouUser));
+                            objArr[1] = LocaleController.formatString("SharingYouAndOtherName", NUM, UserObject.getFirstName(notYouUser));
                             fullString = String.format("%1$s - %2$s", objArr);
                         }
                     } else if (otherSharingCount != 0) {
@@ -672,9 +687,11 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             setVisibility(0);
         }
         if (MediaController.getInstance().isMessagePaused()) {
-            this.playButton.setImageResource(R.drawable.miniplayer_play);
+            this.playButton.setImageResource(NUM);
+            this.playButton.setContentDescription(LocaleController.getString("AccActionPlay", NUM));
         } else {
-            this.playButton.setImageResource(R.drawable.miniplayer_pause);
+            this.playButton.setImageResource(NUM);
+            this.playButton.setContentDescription(LocaleController.getString("AccActionPause", NUM));
         }
         if (this.lastMessageObject != messageObject || prevStyle != 0) {
             SpannableStringBuilder stringBuilder;

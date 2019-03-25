@@ -14,7 +14,6 @@ import android.view.OrientationEventListener;
 import android.view.WindowManager;
 import java.util.ArrayList;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 
 public class CameraSession {
@@ -146,203 +145,405 @@ public class CameraSession {
         return this.sameTakePictureOrientation;
     }
 
-    protected void configureRoundCamera() {
-        boolean z = true;
-        this.isVideo = true;
-        Camera camera = this.cameraInfo.camera;
-        if (camera != null) {
-            int cameraDisplayOrientation;
-            CameraInfo info = new CameraInfo();
-            Parameters params = null;
-            try {
-                params = camera.getParameters();
-            } catch (Throwable e) {
-                FileLog.e(e);
-            } catch (Throwable e2) {
-                FileLog.e(e2);
-                return;
-            }
-            Camera.getCameraInfo(this.cameraInfo.getCameraId(), info);
-            int displayOrientation = getDisplayOrientation(info, true);
-            if ("samsung".equals(Build.MANUFACTURER) && "sf2wifixx".equals(Build.PRODUCT)) {
-                cameraDisplayOrientation = 0;
-            } else {
-                int temp;
-                int degrees = 0;
-                switch (displayOrientation) {
-                    case 0:
-                        degrees = 0;
-                        break;
-                    case 1:
-                        degrees = 90;
-                        break;
-                    case 2:
-                        degrees = 180;
-                        break;
-                    case 3:
-                        degrees = 270;
-                        break;
-                }
-                if (info.orientation % 90 != 0) {
-                    info.orientation = 0;
-                }
-                if (info.facing == 1) {
-                    temp = (360 - ((info.orientation + degrees) % 360)) % 360;
-                } else {
-                    temp = ((info.orientation - degrees) + 360) % 360;
-                }
-                cameraDisplayOrientation = temp;
-            }
-            this.currentOrientation = cameraDisplayOrientation;
-            camera.setDisplayOrientation(cameraDisplayOrientation);
-            this.diffOrientation = this.currentOrientation - displayOrientation;
-            if (params != null) {
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d("set preview size = " + this.previewSize.getWidth() + " " + this.previewSize.getHeight());
-                }
-                params.setPreviewSize(this.previewSize.getWidth(), this.previewSize.getHeight());
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d("set picture size = " + this.pictureSize.getWidth() + " " + this.pictureSize.getHeight());
-                }
-                params.setPictureSize(this.pictureSize.getWidth(), this.pictureSize.getHeight());
-                params.setPictureFormat(this.pictureFormat);
-                params.setRecordingHint(true);
-                String desiredMode = "continuous-video";
-                if (params.getSupportedFocusModes().contains(desiredMode)) {
-                    params.setFocusMode(desiredMode);
-                } else {
-                    desiredMode = "auto";
-                    if (params.getSupportedFocusModes().contains(desiredMode)) {
-                        params.setFocusMode(desiredMode);
-                    }
-                }
-                int outputOrientation = 0;
-                if (this.jpegOrientation != -1) {
-                    if (info.facing == 1) {
-                        outputOrientation = ((info.orientation - this.jpegOrientation) + 360) % 360;
-                    } else {
-                        outputOrientation = (info.orientation + this.jpegOrientation) % 360;
-                    }
-                }
-                try {
-                    params.setRotation(outputOrientation);
-                    if (info.facing == 1) {
-                        if ((360 - displayOrientation) % 360 != outputOrientation) {
-                            z = false;
-                        }
-                        this.sameTakePictureOrientation = z;
-                    } else {
-                        if (displayOrientation != outputOrientation) {
-                            z = false;
-                        }
-                        this.sameTakePictureOrientation = z;
-                    }
-                } catch (Exception e3) {
-                }
-                params.setFlashMode("off");
-                try {
-                    camera.setParameters(params);
-                } catch (Exception e4) {
-                }
-                if (params.getMaxNumMeteringAreas() > 0) {
-                    this.meteringAreaSupported = true;
-                }
-            }
-        }
+    /* Access modifiers changed, original: protected */
+    /* JADX WARNING: No exception handlers in catch block: Catch:{  } */
+    public void configureRoundCamera() {
+        /*
+        r14 = this;
+        r11 = 0;
+        r10 = 1;
+        r12 = 1;
+        r14.isVideo = r12;	 Catch:{ Throwable -> 0x011c }
+        r12 = r14.cameraInfo;	 Catch:{ Throwable -> 0x011c }
+        r0 = r12.camera;	 Catch:{ Throwable -> 0x011c }
+        if (r0 == 0) goto L_0x0115;
+    L_0x000b:
+        r6 = new android.hardware.Camera$CameraInfo;	 Catch:{ Throwable -> 0x011c }
+        r6.<init>();	 Catch:{ Throwable -> 0x011c }
+        r8 = 0;
+        r8 = r0.getParameters();	 Catch:{ Exception -> 0x0116 }
+    L_0x0015:
+        r12 = r14.cameraInfo;	 Catch:{ Throwable -> 0x011c }
+        r12 = r12.getCameraId();	 Catch:{ Throwable -> 0x011c }
+        android.hardware.Camera.getCameraInfo(r12, r6);	 Catch:{ Throwable -> 0x011c }
+        r12 = 1;
+        r4 = r14.getDisplayOrientation(r6, r12);	 Catch:{ Throwable -> 0x011c }
+        r12 = "samsung";
+        r13 = android.os.Build.MANUFACTURER;	 Catch:{ Throwable -> 0x011c }
+        r12 = r12.equals(r13);	 Catch:{ Throwable -> 0x011c }
+        if (r12 == 0) goto L_0x0121;
+    L_0x002e:
+        r12 = "sf2wifixx";
+        r13 = android.os.Build.PRODUCT;	 Catch:{ Throwable -> 0x011c }
+        r12 = r12.equals(r13);	 Catch:{ Throwable -> 0x011c }
+        if (r12 == 0) goto L_0x0121;
+    L_0x0039:
+        r1 = 0;
+    L_0x003a:
+        r14.currentOrientation = r1;	 Catch:{ Throwable -> 0x011c }
+        r0.setDisplayOrientation(r1);	 Catch:{ Throwable -> 0x011c }
+        r12 = r14.currentOrientation;	 Catch:{ Throwable -> 0x011c }
+        r12 = r12 - r4;
+        r14.diffOrientation = r12;	 Catch:{ Throwable -> 0x011c }
+        if (r8 == 0) goto L_0x0115;
+    L_0x0046:
+        r12 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Throwable -> 0x011c }
+        if (r12 == 0) goto L_0x0078;
+    L_0x004a:
+        r12 = new java.lang.StringBuilder;	 Catch:{ Throwable -> 0x011c }
+        r12.<init>();	 Catch:{ Throwable -> 0x011c }
+        r13 = "set preview size = ";
+        r12 = r12.append(r13);	 Catch:{ Throwable -> 0x011c }
+        r13 = r14.previewSize;	 Catch:{ Throwable -> 0x011c }
+        r13 = r13.getWidth();	 Catch:{ Throwable -> 0x011c }
+        r12 = r12.append(r13);	 Catch:{ Throwable -> 0x011c }
+        r13 = " ";
+        r12 = r12.append(r13);	 Catch:{ Throwable -> 0x011c }
+        r13 = r14.previewSize;	 Catch:{ Throwable -> 0x011c }
+        r13 = r13.getHeight();	 Catch:{ Throwable -> 0x011c }
+        r12 = r12.append(r13);	 Catch:{ Throwable -> 0x011c }
+        r12 = r12.toString();	 Catch:{ Throwable -> 0x011c }
+        org.telegram.messenger.FileLog.d(r12);	 Catch:{ Throwable -> 0x011c }
+    L_0x0078:
+        r12 = r14.previewSize;	 Catch:{ Throwable -> 0x011c }
+        r12 = r12.getWidth();	 Catch:{ Throwable -> 0x011c }
+        r13 = r14.previewSize;	 Catch:{ Throwable -> 0x011c }
+        r13 = r13.getHeight();	 Catch:{ Throwable -> 0x011c }
+        r8.setPreviewSize(r12, r13);	 Catch:{ Throwable -> 0x011c }
+        r12 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Throwable -> 0x011c }
+        if (r12 == 0) goto L_0x00b9;
+    L_0x008b:
+        r12 = new java.lang.StringBuilder;	 Catch:{ Throwable -> 0x011c }
+        r12.<init>();	 Catch:{ Throwable -> 0x011c }
+        r13 = "set picture size = ";
+        r12 = r12.append(r13);	 Catch:{ Throwable -> 0x011c }
+        r13 = r14.pictureSize;	 Catch:{ Throwable -> 0x011c }
+        r13 = r13.getWidth();	 Catch:{ Throwable -> 0x011c }
+        r12 = r12.append(r13);	 Catch:{ Throwable -> 0x011c }
+        r13 = " ";
+        r12 = r12.append(r13);	 Catch:{ Throwable -> 0x011c }
+        r13 = r14.pictureSize;	 Catch:{ Throwable -> 0x011c }
+        r13 = r13.getHeight();	 Catch:{ Throwable -> 0x011c }
+        r12 = r12.append(r13);	 Catch:{ Throwable -> 0x011c }
+        r12 = r12.toString();	 Catch:{ Throwable -> 0x011c }
+        org.telegram.messenger.FileLog.d(r12);	 Catch:{ Throwable -> 0x011c }
+    L_0x00b9:
+        r12 = r14.pictureSize;	 Catch:{ Throwable -> 0x011c }
+        r12 = r12.getWidth();	 Catch:{ Throwable -> 0x011c }
+        r13 = r14.pictureSize;	 Catch:{ Throwable -> 0x011c }
+        r13 = r13.getHeight();	 Catch:{ Throwable -> 0x011c }
+        r8.setPictureSize(r12, r13);	 Catch:{ Throwable -> 0x011c }
+        r12 = r14.pictureFormat;	 Catch:{ Throwable -> 0x011c }
+        r8.setPictureFormat(r12);	 Catch:{ Throwable -> 0x011c }
+        r12 = 1;
+        r8.setRecordingHint(r12);	 Catch:{ Throwable -> 0x011c }
+        r3 = "continuous-video";
+        r12 = r8.getSupportedFocusModes();	 Catch:{ Throwable -> 0x011c }
+        r12 = r12.contains(r3);	 Catch:{ Throwable -> 0x011c }
+        if (r12 == 0) goto L_0x0152;
+    L_0x00de:
+        r8.setFocusMode(r3);	 Catch:{ Throwable -> 0x011c }
+    L_0x00e1:
+        r7 = 0;
+        r12 = r14.jpegOrientation;	 Catch:{ Throwable -> 0x011c }
+        r13 = -1;
+        if (r12 == r13) goto L_0x00f4;
+    L_0x00e7:
+        r12 = r6.facing;	 Catch:{ Throwable -> 0x011c }
+        if (r12 != r10) goto L_0x0164;
+    L_0x00eb:
+        r12 = r6.orientation;	 Catch:{ Throwable -> 0x011c }
+        r13 = r14.jpegOrientation;	 Catch:{ Throwable -> 0x011c }
+        r12 = r12 - r13;
+        r12 = r12 + 360;
+        r7 = r12 % 360;
+    L_0x00f4:
+        r8.setRotation(r7);	 Catch:{ Exception -> 0x0173 }
+        r12 = r6.facing;	 Catch:{ Exception -> 0x0173 }
+        if (r12 != r10) goto L_0x016e;
+    L_0x00fb:
+        r12 = 360 - r4;
+        r12 = r12 % 360;
+        if (r12 != r7) goto L_0x016c;
+    L_0x0101:
+        r14.sameTakePictureOrientation = r10;	 Catch:{ Exception -> 0x0173 }
+    L_0x0103:
+        r10 = "off";
+        r8.setFlashMode(r10);	 Catch:{ Throwable -> 0x011c }
+        r0.setParameters(r8);	 Catch:{ Exception -> 0x0177 }
+    L_0x010c:
+        r10 = r8.getMaxNumMeteringAreas();	 Catch:{ Throwable -> 0x011c }
+        if (r10 <= 0) goto L_0x0115;
+    L_0x0112:
+        r10 = 1;
+        r14.meteringAreaSupported = r10;	 Catch:{ Throwable -> 0x011c }
+    L_0x0115:
+        return;
+    L_0x0116:
+        r5 = move-exception;
+        org.telegram.messenger.FileLog.e(r5);	 Catch:{ Throwable -> 0x011c }
+        goto L_0x0015;
+    L_0x011c:
+        r5 = move-exception;
+        org.telegram.messenger.FileLog.e(r5);
+        goto L_0x0115;
+    L_0x0121:
+        r2 = 0;
+        r9 = r4;
+        switch(r9) {
+            case 0: goto L_0x013f;
+            case 1: goto L_0x0141;
+            case 2: goto L_0x0144;
+            case 3: goto L_0x0147;
+            default: goto L_0x0126;
+        };
+    L_0x0126:
+        r12 = r6.orientation;	 Catch:{ Throwable -> 0x011c }
+        r12 = r12 % 90;
+        if (r12 == 0) goto L_0x012f;
+    L_0x012c:
+        r12 = 0;
+        r6.orientation = r12;	 Catch:{ Throwable -> 0x011c }
+    L_0x012f:
+        r12 = r6.facing;	 Catch:{ Throwable -> 0x011c }
+        if (r12 != r10) goto L_0x014a;
+    L_0x0133:
+        r12 = r6.orientation;	 Catch:{ Throwable -> 0x011c }
+        r12 = r12 + r2;
+        r9 = r12 % 360;
+        r12 = 360 - r9;
+        r9 = r12 % 360;
+    L_0x013c:
+        r1 = r9;
+        goto L_0x003a;
+    L_0x013f:
+        r2 = 0;
+        goto L_0x0126;
+    L_0x0141:
+        r2 = 90;
+        goto L_0x0126;
+    L_0x0144:
+        r2 = 180; // 0xb4 float:2.52E-43 double:8.9E-322;
+        goto L_0x0126;
+    L_0x0147:
+        r2 = 270; // 0x10e float:3.78E-43 double:1.334E-321;
+        goto L_0x0126;
+    L_0x014a:
+        r12 = r6.orientation;	 Catch:{ Throwable -> 0x011c }
+        r12 = r12 - r2;
+        r12 = r12 + 360;
+        r9 = r12 % 360;
+        goto L_0x013c;
+    L_0x0152:
+        r3 = "auto";
+        r12 = r8.getSupportedFocusModes();	 Catch:{ Throwable -> 0x011c }
+        r12 = r12.contains(r3);	 Catch:{ Throwable -> 0x011c }
+        if (r12 == 0) goto L_0x00e1;
+    L_0x015f:
+        r8.setFocusMode(r3);	 Catch:{ Throwable -> 0x011c }
+        goto L_0x00e1;
+    L_0x0164:
+        r12 = r6.orientation;	 Catch:{ Throwable -> 0x011c }
+        r13 = r14.jpegOrientation;	 Catch:{ Throwable -> 0x011c }
+        r12 = r12 + r13;
+        r7 = r12 % 360;
+        goto L_0x00f4;
+    L_0x016c:
+        r10 = r11;
+        goto L_0x0101;
+    L_0x016e:
+        if (r4 != r7) goto L_0x0175;
+    L_0x0170:
+        r14.sameTakePictureOrientation = r10;	 Catch:{ Exception -> 0x0173 }
+        goto L_0x0103;
+    L_0x0173:
+        r10 = move-exception;
+        goto L_0x0103;
+    L_0x0175:
+        r10 = r11;
+        goto L_0x0170;
+    L_0x0177:
+        r10 = move-exception;
+        goto L_0x010c;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.camera.CameraSession.configureRoundCamera():void");
     }
 
-    protected void configurePhotoCamera() {
-        boolean z = true;
-        Camera camera = this.cameraInfo.camera;
-        if (camera != null) {
-            int cameraDisplayOrientation;
-            CameraInfo info = new CameraInfo();
-            Parameters params = null;
-            try {
-                params = camera.getParameters();
-            } catch (Throwable e) {
-                FileLog.e(e);
-            } catch (Throwable e2) {
-                FileLog.e(e2);
-                return;
-            }
-            Camera.getCameraInfo(this.cameraInfo.getCameraId(), info);
-            int displayOrientation = getDisplayOrientation(info, true);
-            if ("samsung".equals(Build.MANUFACTURER) && "sf2wifixx".equals(Build.PRODUCT)) {
-                cameraDisplayOrientation = 0;
-            } else {
-                int temp;
-                int degrees = 0;
-                switch (displayOrientation) {
-                    case 0:
-                        degrees = 0;
-                        break;
-                    case 1:
-                        degrees = 90;
-                        break;
-                    case 2:
-                        degrees = 180;
-                        break;
-                    case 3:
-                        degrees = 270;
-                        break;
-                }
-                if (info.orientation % 90 != 0) {
-                    info.orientation = 0;
-                }
-                if (info.facing == 1) {
-                    temp = (360 - ((info.orientation + degrees) % 360)) % 360;
-                } else {
-                    temp = ((info.orientation - degrees) + 360) % 360;
-                }
-                cameraDisplayOrientation = temp;
-            }
-            this.currentOrientation = cameraDisplayOrientation;
-            camera.setDisplayOrientation(cameraDisplayOrientation);
-            if (params != null) {
-                params.setPreviewSize(this.previewSize.getWidth(), this.previewSize.getHeight());
-                params.setPictureSize(this.pictureSize.getWidth(), this.pictureSize.getHeight());
-                params.setPictureFormat(this.pictureFormat);
-                String desiredMode = "continuous-picture";
-                if (params.getSupportedFocusModes().contains(desiredMode)) {
-                    params.setFocusMode(desiredMode);
-                }
-                int outputOrientation = 0;
-                if (this.jpegOrientation != -1) {
-                    if (info.facing == 1) {
-                        outputOrientation = ((info.orientation - this.jpegOrientation) + 360) % 360;
-                    } else {
-                        outputOrientation = (info.orientation + this.jpegOrientation) % 360;
-                    }
-                }
-                try {
-                    params.setRotation(outputOrientation);
-                    if (info.facing == 1) {
-                        if ((360 - displayOrientation) % 360 != outputOrientation) {
-                            z = false;
-                        }
-                        this.sameTakePictureOrientation = z;
-                    } else {
-                        if (displayOrientation != outputOrientation) {
-                            z = false;
-                        }
-                        this.sameTakePictureOrientation = z;
-                    }
-                } catch (Exception e3) {
-                }
-                params.setFlashMode(this.currentFlashMode);
-                try {
-                    camera.setParameters(params);
-                } catch (Exception e4) {
-                }
-                if (params.getMaxNumMeteringAreas() > 0) {
-                    this.meteringAreaSupported = true;
-                }
-            }
-        }
+    /* Access modifiers changed, original: protected */
+    /* JADX WARNING: No exception handlers in catch block: Catch:{  } */
+    public void configurePhotoCamera() {
+        /*
+        r14 = this;
+        r11 = 0;
+        r10 = 1;
+        r12 = r14.cameraInfo;	 Catch:{ Throwable -> 0x00ab }
+        r0 = r12.camera;	 Catch:{ Throwable -> 0x00ab }
+        if (r0 == 0) goto L_0x00a4;
+    L_0x0008:
+        r6 = new android.hardware.Camera$CameraInfo;	 Catch:{ Throwable -> 0x00ab }
+        r6.<init>();	 Catch:{ Throwable -> 0x00ab }
+        r8 = 0;
+        r8 = r0.getParameters();	 Catch:{ Exception -> 0x00a5 }
+    L_0x0012:
+        r12 = r14.cameraInfo;	 Catch:{ Throwable -> 0x00ab }
+        r12 = r12.getCameraId();	 Catch:{ Throwable -> 0x00ab }
+        android.hardware.Camera.getCameraInfo(r12, r6);	 Catch:{ Throwable -> 0x00ab }
+        r12 = 1;
+        r4 = r14.getDisplayOrientation(r6, r12);	 Catch:{ Throwable -> 0x00ab }
+        r12 = "samsung";
+        r13 = android.os.Build.MANUFACTURER;	 Catch:{ Throwable -> 0x00ab }
+        r12 = r12.equals(r13);	 Catch:{ Throwable -> 0x00ab }
+        if (r12 == 0) goto L_0x00b0;
+    L_0x002b:
+        r12 = "sf2wifixx";
+        r13 = android.os.Build.PRODUCT;	 Catch:{ Throwable -> 0x00ab }
+        r12 = r12.equals(r13);	 Catch:{ Throwable -> 0x00ab }
+        if (r12 == 0) goto L_0x00b0;
+    L_0x0036:
+        r1 = 0;
+    L_0x0037:
+        r14.currentOrientation = r1;	 Catch:{ Throwable -> 0x00ab }
+        r0.setDisplayOrientation(r1);	 Catch:{ Throwable -> 0x00ab }
+        if (r8 == 0) goto L_0x00a4;
+    L_0x003e:
+        r12 = r14.previewSize;	 Catch:{ Throwable -> 0x00ab }
+        r12 = r12.getWidth();	 Catch:{ Throwable -> 0x00ab }
+        r13 = r14.previewSize;	 Catch:{ Throwable -> 0x00ab }
+        r13 = r13.getHeight();	 Catch:{ Throwable -> 0x00ab }
+        r8.setPreviewSize(r12, r13);	 Catch:{ Throwable -> 0x00ab }
+        r12 = r14.pictureSize;	 Catch:{ Throwable -> 0x00ab }
+        r12 = r12.getWidth();	 Catch:{ Throwable -> 0x00ab }
+        r13 = r14.pictureSize;	 Catch:{ Throwable -> 0x00ab }
+        r13 = r13.getHeight();	 Catch:{ Throwable -> 0x00ab }
+        r8.setPictureSize(r12, r13);	 Catch:{ Throwable -> 0x00ab }
+        r12 = r14.pictureFormat;	 Catch:{ Throwable -> 0x00ab }
+        r8.setPictureFormat(r12);	 Catch:{ Throwable -> 0x00ab }
+        r3 = "continuous-picture";
+        r12 = r8.getSupportedFocusModes();	 Catch:{ Throwable -> 0x00ab }
+        r12 = r12.contains(r3);	 Catch:{ Throwable -> 0x00ab }
+        if (r12 == 0) goto L_0x0071;
+    L_0x006e:
+        r8.setFocusMode(r3);	 Catch:{ Throwable -> 0x00ab }
+    L_0x0071:
+        r7 = 0;
+        r12 = r14.jpegOrientation;	 Catch:{ Throwable -> 0x00ab }
+        r13 = -1;
+        if (r12 == r13) goto L_0x0084;
+    L_0x0077:
+        r12 = r6.facing;	 Catch:{ Throwable -> 0x00ab }
+        if (r12 != r10) goto L_0x00e1;
+    L_0x007b:
+        r12 = r6.orientation;	 Catch:{ Throwable -> 0x00ab }
+        r13 = r14.jpegOrientation;	 Catch:{ Throwable -> 0x00ab }
+        r12 = r12 - r13;
+        r12 = r12 + 360;
+        r7 = r12 % 360;
+    L_0x0084:
+        r8.setRotation(r7);	 Catch:{ Exception -> 0x00f0 }
+        r12 = r6.facing;	 Catch:{ Exception -> 0x00f0 }
+        if (r12 != r10) goto L_0x00eb;
+    L_0x008b:
+        r12 = 360 - r4;
+        r12 = r12 % 360;
+        if (r12 != r7) goto L_0x00e9;
+    L_0x0091:
+        r14.sameTakePictureOrientation = r10;	 Catch:{ Exception -> 0x00f0 }
+    L_0x0093:
+        r10 = r14.currentFlashMode;	 Catch:{ Throwable -> 0x00ab }
+        r8.setFlashMode(r10);	 Catch:{ Throwable -> 0x00ab }
+        r0.setParameters(r8);	 Catch:{ Exception -> 0x00f4 }
+    L_0x009b:
+        r10 = r8.getMaxNumMeteringAreas();	 Catch:{ Throwable -> 0x00ab }
+        if (r10 <= 0) goto L_0x00a4;
+    L_0x00a1:
+        r10 = 1;
+        r14.meteringAreaSupported = r10;	 Catch:{ Throwable -> 0x00ab }
+    L_0x00a4:
+        return;
+    L_0x00a5:
+        r5 = move-exception;
+        org.telegram.messenger.FileLog.e(r5);	 Catch:{ Throwable -> 0x00ab }
+        goto L_0x0012;
+    L_0x00ab:
+        r5 = move-exception;
+        org.telegram.messenger.FileLog.e(r5);
+        goto L_0x00a4;
+    L_0x00b0:
+        r2 = 0;
+        r9 = r4;
+        switch(r9) {
+            case 0: goto L_0x00ce;
+            case 1: goto L_0x00d0;
+            case 2: goto L_0x00d3;
+            case 3: goto L_0x00d6;
+            default: goto L_0x00b5;
+        };
+    L_0x00b5:
+        r12 = r6.orientation;	 Catch:{ Throwable -> 0x00ab }
+        r12 = r12 % 90;
+        if (r12 == 0) goto L_0x00be;
+    L_0x00bb:
+        r12 = 0;
+        r6.orientation = r12;	 Catch:{ Throwable -> 0x00ab }
+    L_0x00be:
+        r12 = r6.facing;	 Catch:{ Throwable -> 0x00ab }
+        if (r12 != r10) goto L_0x00d9;
+    L_0x00c2:
+        r12 = r6.orientation;	 Catch:{ Throwable -> 0x00ab }
+        r12 = r12 + r2;
+        r9 = r12 % 360;
+        r12 = 360 - r9;
+        r9 = r12 % 360;
+    L_0x00cb:
+        r1 = r9;
+        goto L_0x0037;
+    L_0x00ce:
+        r2 = 0;
+        goto L_0x00b5;
+    L_0x00d0:
+        r2 = 90;
+        goto L_0x00b5;
+    L_0x00d3:
+        r2 = 180; // 0xb4 float:2.52E-43 double:8.9E-322;
+        goto L_0x00b5;
+    L_0x00d6:
+        r2 = 270; // 0x10e float:3.78E-43 double:1.334E-321;
+        goto L_0x00b5;
+    L_0x00d9:
+        r12 = r6.orientation;	 Catch:{ Throwable -> 0x00ab }
+        r12 = r12 - r2;
+        r12 = r12 + 360;
+        r9 = r12 % 360;
+        goto L_0x00cb;
+    L_0x00e1:
+        r12 = r6.orientation;	 Catch:{ Throwable -> 0x00ab }
+        r13 = r14.jpegOrientation;	 Catch:{ Throwable -> 0x00ab }
+        r12 = r12 + r13;
+        r7 = r12 % 360;
+        goto L_0x0084;
+    L_0x00e9:
+        r10 = r11;
+        goto L_0x0091;
+    L_0x00eb:
+        if (r4 != r7) goto L_0x00f2;
+    L_0x00ed:
+        r14.sameTakePictureOrientation = r10;	 Catch:{ Exception -> 0x00f0 }
+        goto L_0x0093;
+    L_0x00f0:
+        r10 = move-exception;
+        goto L_0x0093;
+    L_0x00f2:
+        r10 = r11;
+        goto L_0x00ed;
+    L_0x00f4:
+        r10 = move-exception;
+        goto L_0x009b;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.camera.CameraSession.configurePhotoCamera():void");
     }
 
-    protected void focusToRect(Rect focusRect, Rect meteringRect) {
+    /* Access modifiers changed, original: protected */
+    public void focusToRect(Rect focusRect, Rect meteringRect) {
         try {
             Camera camera = this.cameraInfo.camera;
             if (camera != null) {
@@ -350,7 +551,7 @@ public class CameraSession {
                 Parameters parameters = null;
                 try {
                     parameters = camera.getParameters();
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
                 if (parameters != null) {
@@ -366,17 +567,18 @@ public class CameraSession {
                     try {
                         camera.setParameters(parameters);
                         camera.autoFocus(this.autoFocusCallback);
-                    } catch (Throwable e2) {
+                    } catch (Exception e2) {
                         FileLog.e(e2);
                     }
                 }
             }
-        } catch (Throwable e22) {
+        } catch (Exception e22) {
             FileLog.e(e22);
         }
     }
 
-    protected void configureRecorder(int quality, MediaRecorder recorder) {
+    /* Access modifiers changed, original: protected */
+    public void configureRecorder(int quality, MediaRecorder recorder) {
         CameraInfo info = new CameraInfo();
         Camera.getCameraInfo(this.cameraInfo.cameraId, info);
         int displayOrientation = getDisplayOrientation(info, false);
@@ -402,7 +604,8 @@ public class CameraSession {
         this.isVideo = true;
     }
 
-    protected void stopVideoRecording() {
+    /* Access modifiers changed, original: protected */
+    public void stopVideoRecording() {
         this.isVideo = false;
         configurePhotoCamera();
     }
@@ -448,7 +651,7 @@ public class CameraSession {
             CameraInfo info = new CameraInfo();
             Camera.getCameraInfo(this.cameraInfo.getCameraId(), info);
             return getDisplayOrientation(info, true);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
             return 0;
         }

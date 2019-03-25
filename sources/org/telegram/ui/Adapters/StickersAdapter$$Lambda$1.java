@@ -1,19 +1,19 @@
 package org.telegram.ui.Adapters;
 
+import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.TL_error;
 
-final /* synthetic */ class StickersAdapter$$Lambda$1 implements Runnable {
+final /* synthetic */ class StickersAdapter$$Lambda$1 implements RequestDelegate {
     private final StickersAdapter arg$1;
     private final String arg$2;
-    private final TLObject arg$3;
 
-    StickersAdapter$$Lambda$1(StickersAdapter stickersAdapter, String str, TLObject tLObject) {
+    StickersAdapter$$Lambda$1(StickersAdapter stickersAdapter, String str) {
         this.arg$1 = stickersAdapter;
         this.arg$2 = str;
-        this.arg$3 = tLObject;
     }
 
-    public void run() {
-        this.arg$1.lambda$null$0$StickersAdapter(this.arg$2, this.arg$3);
+    public void run(TLObject tLObject, TL_error tL_error) {
+        this.arg$1.lambda$searchServerStickers$3$StickersAdapter(this.arg$2, tLObject, tL_error);
     }
 }

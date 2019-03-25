@@ -63,7 +63,7 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
             if (this.searchTimer != null) {
                 this.searchTimer.cancel();
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         this.searchTimer = new Timer();
@@ -72,13 +72,14 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
                 try {
                     BaseLocationAdapter.this.searchTimer.cancel();
                     BaseLocationAdapter.this.searchTimer = null;
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
                 AndroidUtilities.runOnUIThread(new BaseLocationAdapter$1$$Lambda$0(this, query, coordinate));
             }
 
-            final /* synthetic */ void lambda$run$0$BaseLocationAdapter$1(String query, Location coordinate) {
+            /* Access modifiers changed, original: final|synthetic */
+            public final /* synthetic */ void lambda$run$0$BaseLocationAdapter$1(String query, Location coordinate) {
                 BaseLocationAdapter.this.lastSearchLocation = null;
                 BaseLocationAdapter.this.searchPlacesWithQuery(query, coordinate, true);
             }
@@ -94,13 +95,15 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
         }
     }
 
-    final /* synthetic */ void lambda$searchBotUser$1$BaseLocationAdapter(TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$searchBotUser$1$BaseLocationAdapter(TLObject response, TL_error error) {
         if (response != null) {
             AndroidUtilities.runOnUIThread(new BaseLocationAdapter$$Lambda$3(this, response));
         }
     }
 
-    final /* synthetic */ void lambda$null$0$BaseLocationAdapter(TLObject response) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$0$BaseLocationAdapter(TLObject response) {
         TL_contacts_resolvedPeer res = (TL_contacts_resolvedPeer) response;
         MessagesController.getInstance(this.currentAccount).putUsers(res.users, false);
         MessagesController.getInstance(this.currentAccount).putChats(res.chats, false);
@@ -154,11 +157,13 @@ public abstract class BaseLocationAdapter extends SelectionAdapter {
         }
     }
 
-    final /* synthetic */ void lambda$searchPlacesWithQuery$3$BaseLocationAdapter(TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$searchPlacesWithQuery$3$BaseLocationAdapter(TLObject response, TL_error error) {
         AndroidUtilities.runOnUIThread(new BaseLocationAdapter$$Lambda$2(this, error, response));
     }
 
-    final /* synthetic */ void lambda$null$2$BaseLocationAdapter(TL_error error, TLObject response) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$2$BaseLocationAdapter(TL_error error, TLObject response) {
         this.currentRequestNum = 0;
         this.searching = false;
         this.places.clear();

@@ -2,16 +2,18 @@ package org.telegram.messenger;
 
 final /* synthetic */ class DataQuery$$Lambda$91 implements Runnable {
     private final DataQuery arg$1;
-    private final long arg$2;
-    private final int[] arg$3;
+    private final int arg$2;
+    private final double arg$3;
+    private final long arg$4;
 
-    DataQuery$$Lambda$91(DataQuery dataQuery, long j, int[] iArr) {
+    DataQuery$$Lambda$91(DataQuery dataQuery, int i, double d, long j) {
         this.arg$1 = dataQuery;
-        this.arg$2 = j;
-        this.arg$3 = iArr;
+        this.arg$2 = i;
+        this.arg$3 = d;
+        this.arg$4 = j;
     }
 
     public void run() {
-        this.arg$1.lambda$null$53$DataQuery(this.arg$2, this.arg$3);
+        this.arg$1.lambda$null$80$DataQuery(this.arg$2, this.arg$3, this.arg$4);
     }
 }

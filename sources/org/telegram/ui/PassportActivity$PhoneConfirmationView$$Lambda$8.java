@@ -8,6 +8,6 @@ final /* synthetic */ class PassportActivity$PhoneConfirmationView$$Lambda$8 imp
     }
 
     public void run() {
-        this.arg$1.lambda$checkDiscard$70$PassportActivity();
+        this.arg$1.finishFragment();
     }
 }

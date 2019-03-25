@@ -92,7 +92,8 @@ public class ExtendedGridLayoutManager extends GridLayoutManager {
         return size;
     }
 
-    protected Size getSizeForItem(int i) {
+    /* Access modifiers changed, original: protected */
+    public Size getSizeForItem(int i) {
         return new Size(100.0f, 100.0f);
     }
 
@@ -125,7 +126,8 @@ public class ExtendedGridLayoutManager extends GridLayoutManager {
         return i <= this.firstRowMax;
     }
 
-    protected int getFlowItemCount() {
+    /* Access modifiers changed, original: protected */
+    public int getFlowItemCount() {
         return getItemCount();
     }
 }

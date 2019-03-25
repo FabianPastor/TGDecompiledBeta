@@ -12,7 +12,6 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
@@ -158,26 +157,26 @@ public class JoinGroupAlert extends BottomSheet {
             linearLayout.addView(listView, LayoutHelper.createLinear(-2, 90, 49, 0, 0, 0, 0));
         }
         textView = new View(context);
-        textView.setBackgroundResource(R.drawable.header_shadow_reverse);
+        textView.setBackgroundResource(NUM);
         linearLayout.addView(textView, LayoutHelper.createLinear(-1, 3));
         PickerBottomLayout pickerBottomLayout = new PickerBottomLayout(context, false);
         linearLayout.addView(pickerBottomLayout, LayoutHelper.createFrame(-1, 48, 83));
         pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         pickerBottomLayout.cancelButton.setTextColor(Theme.getColor("dialogTextBlue2"));
-        pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
+        pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", NUM).toUpperCase());
         pickerBottomLayout.cancelButton.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
-                JoinGroupAlert.this.lambda$new$4$EmbedBottomSheet();
+                JoinGroupAlert.this.dismiss();
             }
         });
         pickerBottomLayout.doneButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         pickerBottomLayout.doneButton.setVisibility(0);
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(8);
         pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor("dialogTextBlue2"));
-        pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("JoinGroup", R.string.JoinGroup));
+        pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("JoinGroup", NUM));
         pickerBottomLayout.doneButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                JoinGroupAlert.this.lambda$new$4$EmbedBottomSheet();
+                JoinGroupAlert.this.dismiss();
                 final TL_messages_importChatInvite req = new TL_messages_importChatInvite();
                 req.hash = JoinGroupAlert.this.hash;
                 ConnectionsManager.getInstance(JoinGroupAlert.this.currentAccount).sendRequest(req, new RequestDelegate() {

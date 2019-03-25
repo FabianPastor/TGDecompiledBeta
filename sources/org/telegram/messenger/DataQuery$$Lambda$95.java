@@ -1,26 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLObject;
-import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.tgnet.TLRPC.TL_contacts_topPeers;
 
 final /* synthetic */ class DataQuery$$Lambda$95 implements Runnable {
     private final DataQuery arg$1;
-    private final TLObject arg$2;
-    private final int arg$3;
-    private final int arg$4;
-    private final BaseFragment arg$5;
-    private final boolean arg$6;
+    private final TL_contacts_topPeers arg$2;
 
-    DataQuery$$Lambda$95(DataQuery dataQuery, TLObject tLObject, int i, int i2, BaseFragment baseFragment, boolean z) {
+    DataQuery$$Lambda$95(DataQuery dataQuery, TL_contacts_topPeers tL_contacts_topPeers) {
         this.arg$1 = dataQuery;
-        this.arg$2 = tLObject;
-        this.arg$3 = i;
-        this.arg$4 = i2;
-        this.arg$5 = baseFragment;
-        this.arg$6 = z;
+        this.arg$2 = tL_contacts_topPeers;
     }
 
     public void run() {
-        this.arg$1.lambda$null$42$DataQuery(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6);
+        this.arg$1.lambda$null$71$DataQuery(this.arg$2);
     }
 }

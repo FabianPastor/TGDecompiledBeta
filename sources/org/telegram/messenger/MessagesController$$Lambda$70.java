@@ -12,21 +12,21 @@ final /* synthetic */ class MessagesController$$Lambda$70 implements RequestDele
     private final int arg$13;
     private final boolean arg$14;
     private final int arg$15;
-    private final int arg$2;
+    private final long arg$2;
     private final int arg$3;
     private final int arg$4;
-    private final long arg$5;
+    private final int arg$5;
     private final int arg$6;
     private final int arg$7;
     private final int arg$8;
     private final int arg$9;
 
-    MessagesController$$Lambda$70(MessagesController messagesController, int i, int i2, int i3, long j, int i4, int i5, int i6, int i7, int i8, int i9, boolean z, int i10, boolean z2, int i11) {
+    MessagesController$$Lambda$70(MessagesController messagesController, long j, int i, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9, boolean z, int i10, boolean z2, int i11) {
         this.arg$1 = messagesController;
-        this.arg$2 = i;
-        this.arg$3 = i2;
-        this.arg$4 = i3;
-        this.arg$5 = j;
+        this.arg$2 = j;
+        this.arg$3 = i;
+        this.arg$4 = i2;
+        this.arg$5 = i3;
         this.arg$6 = i4;
         this.arg$7 = i5;
         this.arg$8 = i6;

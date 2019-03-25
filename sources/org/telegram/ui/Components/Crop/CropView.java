@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.Components.Crop.CropGestureDetector.CropGestureListener;
@@ -54,7 +53,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         CropRectangle() {
         }
 
-        void setRect(RectF rect) {
+        /* Access modifiers changed, original: 0000 */
+        public void setRect(RectF rect) {
             this.coords[0] = rect.left;
             this.coords[1] = rect.top;
             this.coords[2] = rect.right;
@@ -65,11 +65,13 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
             this.coords[7] = rect.bottom;
         }
 
-        void applyMatrix(Matrix m) {
+        /* Access modifiers changed, original: 0000 */
+        public void applyMatrix(Matrix m) {
             m.mapPoints(this.coords);
         }
 
-        void getRect(RectF rect) {
+        /* Access modifiers changed, original: 0000 */
+        public void getRect(RectF rect) {
             rect.set(this.coords[0], this.coords[1], this.coords[2], this.coords[7]);
         }
     }
@@ -357,7 +359,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         this.initialAreaRect.set(targetRect);
     }
 
-    final /* synthetic */ void lambda$fillAreaView$0$CropView(float targetScale, float[] currentScale, float x, float y, ValueAnimator animation) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$fillAreaView$0$CropView(float targetScale, float[] currentScale, float x, float y, ValueAnimator animation) {
         float deltaScale = (((targetScale - 1.0f) * ((Float) animation.getAnimatedValue()).floatValue()) + 1.0f) / currentScale[0];
         currentScale[0] = currentScale[0] * deltaScale;
         this.state.scale(deltaScale, x, y);
@@ -496,7 +499,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         }
     }
 
-    final /* synthetic */ void lambda$fitContentInBounds$1$CropView(float animDX, float[] currentValues, float animDY, float animScale, ValueAnimator animation) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$fitContentInBounds$1$CropView(float animDX, float[] currentValues, float animDY, float animScale, ValueAnimator animation) {
         float value = ((Float) animation.getAnimatedValue()).floatValue();
         float deltaX = (animDX * value) - currentValues[1];
         currentValues[1] = currentValues[1] + deltaX;
@@ -686,8 +690,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
             ratios[3] = new Integer[]{Integer.valueOf(5), Integer.valueOf(4)};
             ratios[4] = new Integer[]{Integer.valueOf(7), Integer.valueOf(5)};
             ratios[5] = new Integer[]{Integer.valueOf(16), Integer.valueOf(9)};
-            actions[0] = LocaleController.getString("CropOriginal", R.string.CropOriginal);
-            actions[1] = LocaleController.getString("CropSquare", R.string.CropSquare);
+            actions[0] = LocaleController.getString("CropOriginal", NUM);
+            actions[1] = LocaleController.getString("CropSquare", NUM);
             int i = 2;
             for (Integer[] ratioPair : ratios) {
                 if (this.areaView.getAspectRatio() > 1.0f) {
@@ -704,7 +708,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         }
     }
 
-    final /* synthetic */ void lambda$showAspectRatioDialog$2$CropView(Integer[][] ratios, DialogInterface dialog12, int which) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$showAspectRatioDialog$2$CropView(Integer[][] ratios, DialogInterface dialog12, int which) {
         this.hasAspectRatioDialog = false;
         switch (which) {
             case 0:
@@ -725,7 +730,8 @@ public class CropView extends FrameLayout implements AreaViewListener, CropGestu
         }
     }
 
-    final /* synthetic */ void lambda$showAspectRatioDialog$3$CropView(DialogInterface dialog1) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$showAspectRatioDialog$3$CropView(DialogInterface dialog1) {
         this.hasAspectRatioDialog = false;
     }
 

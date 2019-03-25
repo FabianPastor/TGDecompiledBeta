@@ -5,7 +5,6 @@ import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
 import android.text.TextUtils;
-import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -14,7 +13,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
@@ -61,7 +59,7 @@ public class UserCell extends FrameLayout {
         this.nameTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.nameTextView.setTextSize(17);
         this.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        View view = this.nameTextView;
+        SimpleTextView simpleTextView = this.nameTextView;
         int i = (LocaleController.isRTL ? 5 : 3) | 48;
         if (LocaleController.isRTL) {
             f = (float) ((checkbox == 2 ? 18 : 0) + 28);
@@ -73,7 +71,7 @@ public class UserCell extends FrameLayout {
         } else {
             f2 = (float) ((checkbox == 2 ? 18 : 0) + 28);
         }
-        addView(view, LayoutHelper.createFrame(-1, 20.0f, i, f, 14.5f, f2, 0.0f));
+        addView(simpleTextView, LayoutHelper.createFrame(-1, 20.0f, i, f, 14.5f, f2, 0.0f));
         this.statusTextView = new SimpleTextView(context);
         this.statusTextView.setTextSize(14);
         this.statusTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
@@ -87,7 +85,7 @@ public class UserCell extends FrameLayout {
             this.checkBoxBig = new CheckBoxSquare(context, false);
             addView(this.checkBoxBig, LayoutHelper.createFrame(18, 18.0f, (LocaleController.isRTL ? 3 : 5) | 16, LocaleController.isRTL ? 19.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 19.0f, 0.0f));
         } else if (checkbox == 1) {
-            this.checkBox = new CheckBox(context, R.drawable.round_check2);
+            this.checkBox = new CheckBox(context, NUM);
             this.checkBox.setVisibility(4);
             this.checkBox.setColor(Theme.getColor("checkbox"), Theme.getColor("checkboxCheck"));
             addView(this.checkBox, LayoutHelper.createFrame(22, 22.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : (float) (padding + 37), 41.0f, LocaleController.isRTL ? (float) (padding + 37) : 0.0f, 0.0f));
@@ -139,7 +137,8 @@ public class UserCell extends FrameLayout {
         }
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(70.0f), NUM));
     }
 
@@ -237,32 +236,33 @@ public class UserCell extends FrameLayout {
             if (currentUser.bot) {
                 this.statusTextView.setTextColor(this.statusColor);
                 if (currentUser.bot_chat_history) {
-                    this.statusTextView.setText(LocaleController.getString("BotStatusRead", R.string.BotStatusRead));
+                    this.statusTextView.setText(LocaleController.getString("BotStatusRead", NUM));
                 } else {
-                    this.statusTextView.setText(LocaleController.getString("BotStatusCantRead", R.string.BotStatusCantRead));
+                    this.statusTextView.setText(LocaleController.getString("BotStatusCantRead", NUM));
                 }
             } else if (currentUser.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((currentUser.status != null && currentUser.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(currentUser.id)))) {
                 this.statusTextView.setTextColor(this.statusOnlineColor);
-                this.statusTextView.setText(LocaleController.getString("Online", R.string.Online));
+                this.statusTextView.setText(LocaleController.getString("Online", NUM));
             } else {
                 this.statusTextView.setTextColor(this.statusColor);
                 this.statusTextView.setText(LocaleController.formatUserStatus(this.currentAccount, currentUser));
             }
         } else if (currentChat != null) {
+            this.statusTextView.setTextColor(this.statusColor);
             if (!ChatObject.isChannel(currentChat) || currentChat.megagroup) {
                 if (currentChat.participants_count != 0) {
                     this.statusTextView.setText(LocaleController.formatPluralString("Members", currentChat.participants_count));
                 } else if (TextUtils.isEmpty(currentChat.username)) {
-                    this.statusTextView.setText(LocaleController.getString("MegaPrivate", R.string.MegaPrivate));
+                    this.statusTextView.setText(LocaleController.getString("MegaPrivate", NUM));
                 } else {
-                    this.statusTextView.setText(LocaleController.getString("MegaPublic", R.string.MegaPublic));
+                    this.statusTextView.setText(LocaleController.getString("MegaPublic", NUM));
                 }
             } else if (currentChat.participants_count != 0) {
                 this.statusTextView.setText(LocaleController.formatPluralString("Subscribers", currentChat.participants_count));
             } else if (TextUtils.isEmpty(currentChat.username)) {
-                this.statusTextView.setText(LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate));
+                this.statusTextView.setText(LocaleController.getString("ChannelPrivate", NUM));
             } else {
-                this.statusTextView.setText(LocaleController.getString("ChannelPublic", R.string.ChannelPublic));
+                this.statusTextView.setText(LocaleController.getString("ChannelPublic", NUM));
             }
         }
         if ((this.imageView.getVisibility() == 0 && this.currentDrawable == 0) || (this.imageView.getVisibility() == 8 && this.currentDrawable != 0)) {

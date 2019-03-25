@@ -12,6 +12,6 @@ final /* synthetic */ class PhotoViewer$$Lambda$48 implements OnClickListener {
     }
 
     public void onClick(View view) {
-        this.arg$1.lambda$new$4$EmbedBottomSheet();
+        this.arg$1.dismiss();
     }
 }

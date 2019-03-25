@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.text.Editable;
@@ -17,7 +18,6 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
 import org.telegram.messenger.support.widget.DefaultItemAnimator;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
@@ -92,39 +92,39 @@ public class PollCreateActivity extends BaseFragment {
                 case 0:
                     HeaderCell cell = holder.itemView;
                     if (position == PollCreateActivity.this.questionHeaderRow) {
-                        cell.setText(LocaleController.getString("Question", R.string.Question));
+                        cell.setText(LocaleController.getString("Question", NUM));
                         return;
                     } else if (position == PollCreateActivity.this.answerHeaderRow) {
-                        cell.setText(LocaleController.getString("PollOptions", R.string.PollOptions));
+                        cell.setText(LocaleController.getString("PollOptions", NUM));
                         return;
                     } else {
                         return;
                     }
                 case 2:
                     TextInfoPrivacyCell cell2 = holder.itemView;
-                    cell2.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
+                    cell2.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                     if (10 - PollCreateActivity.this.answersCount <= 0) {
-                        cell2.setText(LocaleController.getString("AddAnOptionInfoMax", R.string.AddAnOptionInfoMax));
+                        cell2.setText(LocaleController.getString("AddAnOptionInfoMax", NUM));
                         return;
                     } else {
-                        cell2.setText(LocaleController.formatString("AddAnOptionInfo", R.string.AddAnOptionInfo, LocaleController.formatPluralString("Option", 10 - PollCreateActivity.this.answersCount)));
+                        cell2.setText(LocaleController.formatString("AddAnOptionInfo", NUM, LocaleController.formatPluralString("Option", 10 - PollCreateActivity.this.answersCount)));
                         return;
                     }
                 case 3:
                     TextSettingsCell textCell2 = holder.itemView;
                     textCell2.setTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
-                    textCell2.setText(LocaleController.getString("AddAnOption", R.string.AddAnOption), false);
+                    textCell2.setText(LocaleController.getString("AddAnOption", NUM), false);
                     return;
                 case 4:
                     textCell = holder.itemView;
                     textCell.setTag(Integer.valueOf(1));
-                    textCell.setTextAndHint(PollCreateActivity.this.questionString != null ? PollCreateActivity.this.questionString : "", LocaleController.getString("QuestionHint", R.string.QuestionHint), false);
+                    textCell.setTextAndHint(PollCreateActivity.this.questionString != null ? PollCreateActivity.this.questionString : "", LocaleController.getString("QuestionHint", NUM), false);
                     textCell.setTag(null);
                     return;
                 case 5:
                     textCell = (PollEditTextCell) holder.itemView;
                     textCell.setTag(Integer.valueOf(1));
-                    textCell.setTextAndHint(PollCreateActivity.this.answers[position - PollCreateActivity.this.answerStartRow], LocaleController.getString("OptionHint", R.string.OptionHint), true);
+                    textCell.setTextAndHint(PollCreateActivity.this.answers[position - PollCreateActivity.this.answerStartRow], LocaleController.getString("OptionHint", NUM), true);
                     textCell.setTag(null);
                     if (PollCreateActivity.this.requestFieldFocusAtPosition == position) {
                         EditTextBoldCursor editText = textCell.getTextView();
@@ -196,7 +196,8 @@ public class PollCreateActivity extends BaseFragment {
                     break;
                 default:
                     cell = new PollEditTextCell(this.mContext, new PollCreateActivity$ListAdapter$$Lambda$0(this)) {
-                        protected boolean drawDivider() {
+                        /* Access modifiers changed, original: protected */
+                        public boolean drawDivider() {
                             ViewHolder holder = PollCreateActivity.this.listView.findContainingViewHolder(this);
                             if (holder != null) {
                                 int position = holder.getAdapterPosition();
@@ -239,7 +240,8 @@ public class PollCreateActivity extends BaseFragment {
             return new Holder(view);
         }
 
-        final /* synthetic */ void lambda$onCreateViewHolder$0$PollCreateActivity$ListAdapter(View v) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$onCreateViewHolder$0$PollCreateActivity$ListAdapter(View v) {
             if (v.getTag() == null) {
                 v.setTag(Integer.valueOf(1));
                 ViewHolder holder = PollCreateActivity.this.listView.findContainingViewHolder((View) v.getParent());
@@ -264,7 +266,8 @@ public class PollCreateActivity extends BaseFragment {
             }
         }
 
-        final /* synthetic */ boolean lambda$onCreateViewHolder$1$PollCreateActivity$ListAdapter(PollEditTextCell cell, TextView v, int actionId, KeyEvent event) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ boolean lambda$onCreateViewHolder$1$PollCreateActivity$ListAdapter(PollEditTextCell cell, TextView v, int actionId, KeyEvent event) {
             if (actionId != 5) {
                 return false;
             }
@@ -374,8 +377,8 @@ public class PollCreateActivity extends BaseFragment {
     }
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        this.actionBar.setTitle(LocaleController.getString("NewPoll", R.string.NewPoll));
+        this.actionBar.setBackButtonImage(NUM);
+        this.actionBar.setTitle(LocaleController.getString("NewPoll", NUM));
         if (AndroidUtilities.isTablet()) {
             this.actionBar.setOccupyStatusBar(false);
         }
@@ -384,7 +387,7 @@ public class PollCreateActivity extends BaseFragment {
             public void onItemClick(int id) {
                 if (id == -1) {
                     if (PollCreateActivity.this.checkDiscard()) {
-                        PollCreateActivity.this.lambda$checkDiscard$70$PassportActivity();
+                        PollCreateActivity.this.finishFragment();
                     }
                 } else if (id == 1) {
                     TL_messageMediaPoll poll = new TL_messageMediaPoll();
@@ -401,11 +404,11 @@ public class PollCreateActivity extends BaseFragment {
                     }
                     poll.results = new TL_pollResults();
                     PollCreateActivity.this.delegate.sendPoll(poll);
-                    PollCreateActivity.this.lambda$checkDiscard$70$PassportActivity();
+                    PollCreateActivity.this.finishFragment();
                 }
             }
         });
-        this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
+        this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f), LocaleController.getString("Done", NUM));
         this.progressView = new ContextProgressView(context, 1);
         this.progressView.setAlpha(0.0f);
         this.progressView.setScaleX(0.1f);
@@ -433,7 +436,8 @@ public class PollCreateActivity extends BaseFragment {
         return this.fragmentView;
     }
 
-    final /* synthetic */ void lambda$createView$0$PollCreateActivity(View view, int position) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$0$PollCreateActivity(View view, int position) {
         if (position == this.addAnswerRow) {
             addNewField();
         }
@@ -446,13 +450,15 @@ public class PollCreateActivity extends BaseFragment {
         }
     }
 
-    protected void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
+    /* Access modifiers changed, original: protected */
+    public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
         if (isOpen) {
             AndroidUtilities.runOnUIThread(new PollCreateActivity$$Lambda$1(this), 100);
         }
     }
 
-    final /* synthetic */ void lambda$onTransitionAnimationEnd$1$PollCreateActivity() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onTransitionAnimationEnd$1$PollCreateActivity() {
         if (this.listView != null) {
             ViewHolder holder = this.listView.findViewHolderForAdapterPosition(this.questionRow);
             if (holder != null) {
@@ -549,13 +555,18 @@ public class PollCreateActivity extends BaseFragment {
         }
         if (!allowDiscard) {
             Builder builder = new Builder(getParentActivity());
-            builder.setTitle(LocaleController.getString("CancelPollAlertTitle", R.string.CancelPollAlertTitle));
-            builder.setMessage(LocaleController.getString("CancelPollAlertText", R.string.CancelPollAlertText));
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new PollCreateActivity$$Lambda$2(this));
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            builder.setTitle(LocaleController.getString("CancelPollAlertTitle", NUM));
+            builder.setMessage(LocaleController.getString("CancelPollAlertText", NUM));
+            builder.setPositiveButton(LocaleController.getString("OK", NUM), new PollCreateActivity$$Lambda$2(this));
+            builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
             showDialog(builder.create());
         }
         return allowDiscard;
+    }
+
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$checkDiscard$2$PollCreateActivity(DialogInterface dialogInterface, int i) {
+        finishFragment();
     }
 
     public void setDelegate(PollCreateActivityDelegate pollCreateActivityDelegate) {

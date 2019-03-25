@@ -19,7 +19,8 @@ public class StatsController {
     public static final int TYPE_VIDEOS = 2;
     public static final int TYPE_WIFI = 1;
     private static final ThreadLocal<Long> lastStatsSaveTime = new ThreadLocal<Long>() {
-        protected Long initialValue() {
+        /* Access modifiers changed, original: protected */
+        public Long initialValue() {
             return Long.valueOf(System.currentTimeMillis() - 1000);
         }
     };

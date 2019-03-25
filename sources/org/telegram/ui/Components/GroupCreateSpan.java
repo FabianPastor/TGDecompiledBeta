@@ -8,16 +8,19 @@ import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.os.Build.VERSION;
 import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.view.View;
+import android.view.accessibility.AccessibilityNodeInfo;
+import android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController.Contact;
 import org.telegram.messenger.ImageReceiver;
-import org.telegram.messenger.R;
+import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC.FileLocation;
 import org.telegram.tgnet.TLRPC.User;
@@ -56,7 +59,7 @@ public class GroupCreateSpan extends View {
         this.rect = new RectF();
         this.colors = new int[8];
         this.currentContact = contact;
-        this.deleteDrawable = getResources().getDrawable(R.drawable.delete);
+        this.deleteDrawable = getResources().getDrawable(NUM);
         textPaint.setTextSize((float) AndroidUtilities.dp(14.0f));
         this.avatarDrawable = new AvatarDrawable();
         this.avatarDrawable.setTextSize(AndroidUtilities.dp(12.0f));
@@ -148,11 +151,13 @@ public class GroupCreateSpan extends View {
         return this.currentContact;
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension(AndroidUtilities.dp(57.0f) + this.textWidth, AndroidUtilities.dp(32.0f));
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if ((this.deleting && this.progress != 1.0f) || !(this.deleting || this.progress == 0.0f)) {
             long dt = System.currentTimeMillis() - this.lastUpdateTime;
             if (dt < 0 || dt > 17) {
@@ -192,5 +197,13 @@ public class GroupCreateSpan extends View {
         canvas.translate(this.textX + ((float) AndroidUtilities.dp(41.0f)), (float) AndroidUtilities.dp(8.0f));
         this.nameLayout.draw(canvas);
         canvas.restore();
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
+        info.setText(this.nameLayout.getText());
+        if (isDeleting() && VERSION.SDK_INT >= 21) {
+            info.addAction(new AccessibilityAction(AccessibilityAction.ACTION_CLICK.getId(), LocaleController.getString("Delete", NUM)));
+        }
     }
 }

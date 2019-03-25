@@ -1,19 +1,17 @@
 package org.telegram.messenger;
 
-import java.util.ArrayList;
-
 final /* synthetic */ class DataQuery$$Lambda$103 implements Runnable {
     private final DataQuery arg$1;
-    private final ArrayList arg$2;
-    private final int arg$3;
+    private final long arg$2;
+    private final int[] arg$3;
 
-    DataQuery$$Lambda$103(DataQuery dataQuery, ArrayList arrayList, int i) {
+    DataQuery$$Lambda$103(DataQuery dataQuery, long j, int[] iArr) {
         this.arg$1 = dataQuery;
-        this.arg$2 = arrayList;
-        this.arg$3 = i;
+        this.arg$2 = j;
+        this.arg$3 = iArr;
     }
 
     public void run() {
-        this.arg$1.lambda$null$21$DataQuery(this.arg$2, this.arg$3);
+        this.arg$1.lambda$null$53$DataQuery(this.arg$2, this.arg$3);
     }
 }

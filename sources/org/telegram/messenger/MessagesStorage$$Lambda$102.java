@@ -1,19 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC.messages_Dialogs;
-
 final /* synthetic */ class MessagesStorage$$Lambda$102 implements Runnable {
     private final MessagesStorage arg$1;
-    private final messages_Dialogs arg$2;
-    private final int arg$3;
+    private final int arg$2;
+    private final long arg$3;
 
-    MessagesStorage$$Lambda$102(MessagesStorage messagesStorage, messages_Dialogs messages_dialogs, int i) {
+    MessagesStorage$$Lambda$102(MessagesStorage messagesStorage, int i, long j) {
         this.arg$1 = messagesStorage;
-        this.arg$2 = messages_dialogs;
-        this.arg$3 = i;
+        this.arg$2 = i;
+        this.arg$3 = j;
     }
 
     public void run() {
-        this.arg$1.lambda$putDialogs$133$MessagesStorage(this.arg$2, this.arg$3);
+        this.arg$1.lambda$setDialogPinned$134$MessagesStorage(this.arg$2, this.arg$3);
     }
 }

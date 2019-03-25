@@ -22,10 +22,8 @@ import org.telegram.messenger.MediaController.SearchImage;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper.SendingMediaInfo;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -111,11 +109,13 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
             return new Holder(view);
         }
 
-        final /* synthetic */ void lambda$onCreateViewHolder$0$PhotoAlbumPickerActivity$ListAdapter(AlbumEntry albumEntry) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$onCreateViewHolder$0$PhotoAlbumPickerActivity$ListAdapter(AlbumEntry albumEntry) {
             PhotoAlbumPickerActivity.this.openPhotoPicker(albumEntry, 0);
         }
 
-        final /* synthetic */ void lambda$onCreateViewHolder$1$PhotoAlbumPickerActivity$ListAdapter(int index) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$onCreateViewHolder$1$PhotoAlbumPickerActivity$ListAdapter(int index) {
             PhotoAlbumPickerActivity.this.openPhotoPicker(null, index);
         }
 
@@ -175,22 +175,22 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         this.actionBar.setBackgroundColor(-13421773);
         this.actionBar.setTitleColor(-1);
         this.actionBar.setItemsBackgroundColor(-12763843, false);
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    PhotoAlbumPickerActivity.this.lambda$checkDiscard$70$PassportActivity();
+                    PhotoAlbumPickerActivity.this.finishFragment();
                 } else if (id == 1 && PhotoAlbumPickerActivity.this.delegate != null) {
                     PhotoAlbumPickerActivity.this.finishFragment(false);
                     PhotoAlbumPickerActivity.this.delegate.startPhotoSelectActivity();
                 }
             }
         });
-        this.actionBar.createMenu().addItem(1, (int) R.drawable.ic_ab_other);
+        this.actionBar.createMenu().addItem(1, NUM).setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = this.fragmentView;
         frameLayout.setBackgroundColor(-16777216);
-        this.actionBar.setTitle(LocaleController.getString("Gallery", R.string.Gallery));
+        this.actionBar.setTitle(LocaleController.getString("Gallery", NUM));
         this.listView = new RecyclerListView(context);
         this.listView.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f));
         this.listView.setClipToPadding(false);
@@ -205,7 +205,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         layoutParams.bottomMargin = AndroidUtilities.dp(48.0f);
         this.listView.setLayoutParams(layoutParams);
         RecyclerListView recyclerListView = this.listView;
-        Adapter listAdapter = new ListAdapter(context);
+        ListAdapter listAdapter = new ListAdapter(context);
         this.listAdapter = listAdapter;
         recyclerListView.setAdapter(listAdapter);
         this.listView.setGlowColor(-13421773);
@@ -214,7 +214,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         this.emptyView.setTextSize(20.0f);
         this.emptyView.setGravity(17);
         this.emptyView.setVisibility(8);
-        this.emptyView.setText(LocaleController.getString("NoPhotos", R.string.NoPhotos));
+        this.emptyView.setText(LocaleController.getString("NoPhotos", NUM));
         frameLayout.addView(this.emptyView);
         layoutParams = (LayoutParams) this.emptyView.getLayoutParams();
         layoutParams.width = -1;
@@ -256,9 +256,15 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         return this.fragmentView;
     }
 
-    final /* synthetic */ void lambda$createView$2$PhotoAlbumPickerActivity(View view) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$1$PhotoAlbumPickerActivity(View view) {
+        finishFragment();
+    }
+
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$2$PhotoAlbumPickerActivity(View view) {
         sendSelectedPhotos(this.selectedPhotos, this.selectedPhotosOrder);
-        lambda$checkDiscard$70$PassportActivity();
+        finishFragment();
     }
 
     public void onResume() {
@@ -294,7 +300,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 this.loading = false;
             }
         } else if (id == NotificationCenter.closeChats) {
-            lambda$null$9$ProfileActivity();
+            removeSelfFromStack();
         } else if (id == NotificationCenter.recentImagesDidLoad) {
             int type = ((Integer) args[0]).intValue();
             Iterator it;
@@ -445,7 +451,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 }
 
                 public void actionButtonPressed(boolean canceled) {
-                    PhotoAlbumPickerActivity.this.lambda$null$9$ProfileActivity();
+                    PhotoAlbumPickerActivity.this.removeSelfFromStack();
                     if (!canceled) {
                         PhotoAlbumPickerActivity.this.sendSelectedPhotos(PhotoAlbumPickerActivity.this.selectedPhotos, PhotoAlbumPickerActivity.this.selectedPhotosOrder);
                     }
@@ -460,7 +466,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 }
 
                 public void actionButtonPressed(boolean canceled) {
-                    PhotoAlbumPickerActivity.this.lambda$null$9$ProfileActivity();
+                    PhotoAlbumPickerActivity.this.removeSelfFromStack();
                     if (!canceled) {
                         PhotoAlbumPickerActivity.this.sendSelectedPhotos(photos, order);
                     }

@@ -14,7 +14,6 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLObject;
@@ -62,21 +61,25 @@ public class DialogMeUrlCell extends BaseCell {
         requestLayout();
     }
 
-    protected void onDetachedFromWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.avatarImage.onDetachedFromWindow();
     }
 
-    protected void onAttachedToWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.avatarImage.onAttachedToWindow();
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (this.useSeparator ? 1 : 0) + AndroidUtilities.dp(72.0f));
     }
 
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+    /* Access modifiers changed, original: protected */
+    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
         if (changed) {
             buildLayout();
         }
@@ -217,7 +220,7 @@ public class DialogMeUrlCell extends BaseCell {
         CharSequence messageString = MessagesController.getInstance(this.currentAccount).linkPrefix + "/" + this.recentMeUrl.url;
         this.avatarImage.setImage(image, "50_50", this.avatarDrawable, null, this.recentMeUrl, 0);
         if (TextUtils.isEmpty(nameString)) {
-            nameString = LocaleController.getString("HiddenName", R.string.HiddenName);
+            nameString = LocaleController.getString("HiddenName", NUM);
         }
         if (LocaleController.isRTL) {
             nameWidth = (getMeasuredWidth() - this.nameLeft) - AndroidUtilities.dp((float) AndroidUtilities.leftBaseline);
@@ -243,7 +246,7 @@ public class DialogMeUrlCell extends BaseCell {
         nameWidth = Math.max(AndroidUtilities.dp(12.0f), nameWidth);
         try {
             this.nameLayout = new StaticLayout(TextUtils.ellipsize(nameString.replace(10, ' '), currentNamePaint, (float) (nameWidth - AndroidUtilities.dp(12.0f)), TruncateAt.END), currentNamePaint, nameWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         int messageWidth = getMeasuredWidth() - AndroidUtilities.dp((float) (AndroidUtilities.leftBaseline + 16));
@@ -258,7 +261,7 @@ public class DialogMeUrlCell extends BaseCell {
         messageWidth = Math.max(AndroidUtilities.dp(12.0f), messageWidth);
         try {
             this.messageLayout = new StaticLayout(TextUtils.ellipsize(messageString, currentMessagePaint, (float) (messageWidth - AndroidUtilities.dp(12.0f)), TruncateAt.END), currentMessagePaint, messageWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-        } catch (Throwable e2) {
+        } catch (Exception e2) {
             FileLog.e(e2);
         }
         float left;
@@ -311,7 +314,8 @@ public class DialogMeUrlCell extends BaseCell {
         this.isSelected = value;
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (this.isSelected) {
             canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), Theme.dialogs_tabletSeletedPaint);
         }
@@ -339,7 +343,7 @@ public class DialogMeUrlCell extends BaseCell {
             canvas.translate((float) this.messageLeft, (float) this.messageTop);
             try {
                 this.messageLayout.draw(canvas);
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
             canvas.restore();

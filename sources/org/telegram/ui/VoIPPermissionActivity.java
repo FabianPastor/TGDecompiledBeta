@@ -7,7 +7,8 @@ import org.telegram.messenger.voip.VoIPService;
 import org.telegram.ui.Components.voip.VoIPHelper;
 
 public class VoIPPermissionActivity extends Activity {
-    protected void onCreate(Bundle savedInstanceState) {
+    /* Access modifiers changed, original: protected */
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestPermissions(new String[]{"android.permission.RECORD_AUDIO"}, 101);
     }

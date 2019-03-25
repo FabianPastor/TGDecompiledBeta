@@ -23,7 +23,8 @@ import java.util.regex.Pattern;
 
 public class FastDateParser implements Serializable, DateParser {
     private static final Strategy ABBREVIATED_YEAR_STRATEGY = new NumberStrategy(1) {
-        void setCalendar(FastDateParser parser, Calendar cal, String value) {
+        /* Access modifiers changed, original: 0000 */
+        public void setCalendar(FastDateParser parser, Calendar cal, String value) {
             int iValue = Integer.parseInt(value);
             if (iValue < 100) {
                 iValue = parser.adjustYear(iValue);
@@ -41,17 +42,20 @@ public class FastDateParser implements Serializable, DateParser {
     private static final Strategy MILLISECOND_STRATEGY = new NumberStrategy(14);
     private static final Strategy MINUTE_STRATEGY = new NumberStrategy(12);
     private static final Strategy MODULO_HOUR_OF_DAY_STRATEGY = new NumberStrategy(11) {
-        int modify(int iValue) {
+        /* Access modifiers changed, original: 0000 */
+        public int modify(int iValue) {
             return iValue % 24;
         }
     };
     private static final Strategy MODULO_HOUR_STRATEGY = new NumberStrategy(10) {
-        int modify(int iValue) {
+        /* Access modifiers changed, original: 0000 */
+        public int modify(int iValue) {
             return iValue % 12;
         }
     };
     private static final Strategy NUMBER_MONTH_STRATEGY = new NumberStrategy(2) {
-        int modify(int iValue) {
+        /* Access modifiers changed, original: 0000 */
+        public int modify(int iValue) {
             return iValue - 1;
         }
     };
@@ -72,7 +76,7 @@ public class FastDateParser implements Serializable, DateParser {
     private final TimeZone timeZone;
 
     private static abstract class Strategy {
-        abstract boolean addRegex(FastDateParser fastDateParser, StringBuilder stringBuilder);
+        public abstract boolean addRegex(FastDateParser fastDateParser, StringBuilder stringBuilder);
 
         private Strategy() {
         }
@@ -81,11 +85,13 @@ public class FastDateParser implements Serializable, DateParser {
             this();
         }
 
-        boolean isNumber() {
+        /* Access modifiers changed, original: 0000 */
+        public boolean isNumber() {
             return false;
         }
 
-        void setCalendar(FastDateParser parser, Calendar cal, String value) {
+        /* Access modifiers changed, original: 0000 */
+        public void setCalendar(FastDateParser parser, Calendar cal, String value) {
         }
     }
 
@@ -97,11 +103,13 @@ public class FastDateParser implements Serializable, DateParser {
             this.field = field;
         }
 
-        boolean isNumber() {
+        /* Access modifiers changed, original: 0000 */
+        public boolean isNumber() {
             return true;
         }
 
-        boolean addRegex(FastDateParser parser, StringBuilder regex) {
+        /* Access modifiers changed, original: 0000 */
+        public boolean addRegex(FastDateParser parser, StringBuilder regex) {
             if (parser.isNextNumber()) {
                 regex.append("(\\p{Nd}{").append(parser.getFieldWidth()).append("}+)");
             } else {
@@ -110,11 +118,13 @@ public class FastDateParser implements Serializable, DateParser {
             return true;
         }
 
-        void setCalendar(FastDateParser parser, Calendar cal, String value) {
+        /* Access modifiers changed, original: 0000 */
+        public void setCalendar(FastDateParser parser, Calendar cal, String value) {
             cal.set(this.field, modify(Integer.parseInt(value)));
         }
 
-        int modify(int iValue) {
+        /* Access modifiers changed, original: 0000 */
+        public int modify(int iValue) {
             return iValue;
         }
     }
@@ -127,7 +137,8 @@ public class FastDateParser implements Serializable, DateParser {
             this.formatField = formatField;
         }
 
-        boolean isNumber() {
+        /* Access modifiers changed, original: 0000 */
+        public boolean isNumber() {
             char c = this.formatField.charAt(0);
             if (c == '\'') {
                 c = this.formatField.charAt(1);
@@ -135,7 +146,8 @@ public class FastDateParser implements Serializable, DateParser {
             return Character.isDigit(c);
         }
 
-        boolean addRegex(FastDateParser parser, StringBuilder regex) {
+        /* Access modifiers changed, original: 0000 */
+        public boolean addRegex(FastDateParser parser, StringBuilder regex) {
             FastDateParser.escapeRegex(regex, this.formatField, true);
             return false;
         }
@@ -151,7 +163,8 @@ public class FastDateParser implements Serializable, DateParser {
             this.keyValues = FastDateParser.getDisplayNames(field, definingCalendar, locale);
         }
 
-        boolean addRegex(FastDateParser parser, StringBuilder regex) {
+        /* Access modifiers changed, original: 0000 */
+        public boolean addRegex(FastDateParser parser, StringBuilder regex) {
             regex.append('(');
             for (String textKeyValue : this.keyValues.keySet()) {
                 FastDateParser.escapeRegex(regex, textKeyValue, false).append('|');
@@ -160,7 +173,8 @@ public class FastDateParser implements Serializable, DateParser {
             return true;
         }
 
-        void setCalendar(FastDateParser parser, Calendar cal, String value) {
+        /* Access modifiers changed, original: 0000 */
+        public void setCalendar(FastDateParser parser, Calendar cal, String value) {
             Integer iVal = (Integer) this.keyValues.get(value);
             if (iVal == null) {
                 StringBuilder sb = new StringBuilder(value);
@@ -214,12 +228,14 @@ public class FastDateParser implements Serializable, DateParser {
             this.validTimeZoneChars = sb.toString();
         }
 
-        boolean addRegex(FastDateParser parser, StringBuilder regex) {
+        /* Access modifiers changed, original: 0000 */
+        public boolean addRegex(FastDateParser parser, StringBuilder regex) {
             regex.append(this.validTimeZoneChars);
             return true;
         }
 
-        void setCalendar(FastDateParser parser, Calendar cal, String value) {
+        /* Access modifiers changed, original: 0000 */
+        public void setCalendar(FastDateParser parser, Calendar cal, String value) {
             TimeZone tz;
             if (value.charAt(0) == '+' || value.charAt(0) == '-') {
                 tz = TimeZone.getTimeZone("GMT" + value);
@@ -306,7 +322,8 @@ public class FastDateParser implements Serializable, DateParser {
         return this.locale;
     }
 
-    Pattern getParsePattern() {
+    /* Access modifiers changed, original: 0000 */
+    public Pattern getParsePattern() {
         return this.parsePattern;
     }
 
@@ -371,7 +388,7 @@ public class FastDateParser implements Serializable, DateParser {
         return cal.getTime();
     }
 
-    /* JADX WARNING: Missing block: B:5:0x0014, code:
+    /* JADX WARNING: Missing block: B:5:0x0014, code skipped:
             r3.append(r0);
             r1 = r1 + 1;
      */
@@ -471,11 +488,13 @@ public class FastDateParser implements Serializable, DateParser {
         return twoDigitYear >= this.startYear ? trial : trial + 100;
     }
 
-    boolean isNextNumber() {
+    /* Access modifiers changed, original: 0000 */
+    public boolean isNextNumber() {
         return this.nextStrategy != null && this.nextStrategy.isNumber();
     }
 
-    int getFieldWidth() {
+    /* Access modifiers changed, original: 0000 */
+    public int getFieldWidth() {
         return this.currentFormatField.length();
     }
 

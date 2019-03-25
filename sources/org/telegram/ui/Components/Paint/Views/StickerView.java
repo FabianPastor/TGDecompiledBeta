@@ -36,7 +36,8 @@ public class StickerView extends EntityView {
             setWillNotDraw(false);
         }
 
-        protected void onDraw(Canvas canvas) {
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
             StickerView.this.stickerDraw(canvas);
         }
     }
@@ -52,7 +53,8 @@ public class StickerView extends EntityView {
             this.arcPaint.setStyle(Style.STROKE);
         }
 
-        protected int pointInsideHandle(float x, float y) {
+        /* Access modifiers changed, original: protected */
+        public int pointInsideHandle(float x, float y) {
             float radius = (float) AndroidUtilities.dp(19.5f);
             float inset = radius + ((float) AndroidUtilities.dp(1.0f));
             float middle = inset + ((((float) getHeight()) - (inset * 2.0f)) / 2.0f);
@@ -69,7 +71,8 @@ public class StickerView extends EntityView {
             return 0;
         }
 
-        protected void onDraw(Canvas canvas) {
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
             super.onDraw(canvas);
             float radius = (float) AndroidUtilities.dp(4.5f);
             float inset = (radius + ((float) AndroidUtilities.dp(1.0f))) + ((float) AndroidUtilities.dp(15.0f));
@@ -143,14 +146,16 @@ public class StickerView extends EntityView {
         this.containerView.invalidate();
     }
 
-    protected void updatePosition() {
+    /* Access modifiers changed, original: protected */
+    public void updatePosition() {
         float halfHeight = this.baseSize.height / 2.0f;
         setX(this.position.x - (this.baseSize.width / 2.0f));
         setY(this.position.y - halfHeight);
         updateSelectionView();
     }
 
-    protected void stickerDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void stickerDraw(Canvas canvas) {
         if (this.containerView != null) {
             canvas.save();
             if (this.centerImage.getBitmap() != null) {
@@ -165,17 +170,20 @@ public class StickerView extends EntityView {
         }
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec((int) this.baseSize.width, NUM), MeasureSpec.makeMeasureSpec((int) this.baseSize.height, NUM));
     }
 
-    protected Rect getSelectionBounds() {
+    /* Access modifiers changed, original: protected */
+    public Rect getSelectionBounds() {
         float scale = ((ViewGroup) getParent()).getScaleX();
         float side = ((float) getWidth()) * (getScale() + 0.4f);
         return new Rect((this.position.x - (side / 2.0f)) * scale, (this.position.y - (side / 2.0f)) * scale, side * scale, side * scale);
     }
 
-    protected SelectionView createSelectionView() {
+    /* Access modifiers changed, original: protected */
+    public SelectionView createSelectionView() {
         return new StickerViewSelectionView(getContext());
     }
 

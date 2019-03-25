@@ -87,7 +87,8 @@ public class VideoSeekBarView extends View {
         return this.progress;
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         int y = (getMeasuredHeight() - this.thumbHeight) / 2;
         int thumbX = (int) (((float) (getMeasuredWidth() - this.thumbWidth)) * this.progress);
         canvas.drawRect((float) (this.thumbWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.dp(1.0f)), (float) (getMeasuredWidth() - (this.thumbWidth / 2)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(1.0f)), this.paint);

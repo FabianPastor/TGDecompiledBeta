@@ -197,7 +197,7 @@ public class VideoTimelineView extends View {
         try {
             this.mediaMetadataRetriever.setDataSource(path);
             this.videoLength = Long.parseLong(this.mediaMetadataRetriever.extractMetadata(9));
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         invalidate();
@@ -225,7 +225,8 @@ public class VideoTimelineView extends View {
             this.currentTask = new AsyncTask<Integer, Integer, Bitmap>() {
                 private int frameNum = 0;
 
-                protected Bitmap doInBackground(Integer... objects) {
+                /* Access modifiers changed, original: protected|varargs */
+                public Bitmap doInBackground(Integer... objects) {
                     this.frameNum = objects[0].intValue();
                     Bitmap bitmap = null;
                     Bitmap bitmap2;
@@ -258,12 +259,13 @@ public class VideoTimelineView extends View {
                         }
                         bitmap2 = bitmap;
                         return bitmap;
-                    } catch (Throwable e) {
+                    } catch (Exception e) {
                         FileLog.e(e);
                     }
                 }
 
-                protected void onPostExecute(Bitmap bitmap) {
+                /* Access modifiers changed, original: protected */
+                public void onPostExecute(Bitmap bitmap) {
                     if (!isCancelled()) {
                         VideoTimelineView.this.frames.add(bitmap);
                         VideoTimelineView.this.invalidate();
@@ -284,7 +286,7 @@ public class VideoTimelineView extends View {
                     this.mediaMetadataRetriever.release();
                     this.mediaMetadataRetriever = null;
                 }
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
         }
@@ -316,7 +318,8 @@ public class VideoTimelineView extends View {
         invalidate();
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         int width = getMeasuredWidth() - AndroidUtilities.dp(36.0f);
         int startX = ((int) (((float) width) * this.progressLeft)) + AndroidUtilities.dp(16.0f);
         int endX = ((int) (((float) width) * this.progressRight)) + AndroidUtilities.dp(16.0f);

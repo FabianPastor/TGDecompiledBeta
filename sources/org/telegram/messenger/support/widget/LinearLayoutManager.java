@@ -53,14 +53,16 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
             reset();
         }
 
-        void reset() {
+        /* Access modifiers changed, original: 0000 */
+        public void reset() {
             this.mPosition = -1;
             this.mCoordinate = Integer.MIN_VALUE;
             this.mLayoutFromEnd = false;
             this.mValid = false;
         }
 
-        void assignCoordinateFromPadding() {
+        /* Access modifiers changed, original: 0000 */
+        public void assignCoordinateFromPadding() {
             int endAfterPadding;
             if (this.mLayoutFromEnd) {
                 endAfterPadding = this.mOrientationHelper.getEndAfterPadding();
@@ -74,7 +76,8 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
             return "AnchorInfo{mPosition=" + this.mPosition + ", mCoordinate=" + this.mCoordinate + ", mLayoutFromEnd=" + this.mLayoutFromEnd + ", mValid=" + this.mValid + '}';
         }
 
-        boolean isViewValidAsAnchor(View child, State state) {
+        /* Access modifiers changed, original: 0000 */
+        public boolean isViewValidAsAnchor(View child, State state) {
             LayoutParams lp = (LayoutParams) child.getLayoutParams();
             return !lp.isItemRemoved() && lp.getViewLayoutPosition() >= 0 && lp.getViewLayoutPosition() < state.getItemCount();
         }
@@ -132,7 +135,8 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
         protected LayoutChunkResult() {
         }
 
-        void resetInternal() {
+        /* Access modifiers changed, original: 0000 */
+        public void resetInternal() {
             this.mConsumed = 0;
             this.mFinished = false;
             this.mIgnoreConsumed = false;
@@ -164,11 +168,13 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
         LayoutState() {
         }
 
-        boolean hasMore(State state) {
+        /* Access modifiers changed, original: 0000 */
+        public boolean hasMore(State state) {
             return this.mCurrentPosition >= 0 && this.mCurrentPosition < state.getItemCount();
         }
 
-        View next(Recycler recycler) {
+        /* Access modifiers changed, original: 0000 */
+        public View next(Recycler recycler) {
             if (this.mScrapList != null) {
                 return nextViewFromScrapList();
             }
@@ -224,7 +230,8 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
             return closest;
         }
 
-        void log() {
+        /* Access modifiers changed, original: 0000 */
+        public void log() {
             Log.d("LLM#LayoutState", "avail:" + this.mAvailable + ", ind:" + this.mCurrentPosition + ", dir:" + this.mItemDirection + ", offset:" + this.mOffset + ", layoutDir:" + this.mLayoutDirection);
         }
     }
@@ -259,11 +266,13 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
             this.mAnchorLayoutFromEnd = other.mAnchorLayoutFromEnd;
         }
 
-        boolean hasValidAnchor() {
+        /* Access modifiers changed, original: 0000 */
+        public boolean hasValidAnchor() {
             return this.mAnchorPosition >= 0;
         }
 
-        void invalidateAnchor() {
+        /* Access modifiers changed, original: 0000 */
+        public void invalidateAnchor() {
             this.mAnchorPosition = -1;
         }
 
@@ -441,7 +450,8 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
         return super.findViewByPosition(position);
     }
 
-    protected int getExtraLayoutSpace(State state) {
+    /* Access modifiers changed, original: protected */
+    public int getExtraLayoutSpace(State state) {
         if (state.hasTargetScrollPosition()) {
             return this.mOrientationHelper.getTotalSpace();
         }
@@ -610,7 +620,8 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
         this.mAnchorInfo.reset();
     }
 
-    void onAnchorReady(Recycler recycler, State state, AnchorInfo anchorInfo, int firstLayoutItemDirection) {
+    /* Access modifiers changed, original: 0000 */
+    public void onAnchorReady(Recycler recycler, State state, AnchorInfo anchorInfo, int firstLayoutItemDirection) {
     }
 
     private void layoutForPredictiveAnimations(Recycler recycler, State state, int startOffset, int endOffset) {
@@ -828,17 +839,20 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
         this.mLayoutState.mScrollingOffset = Integer.MIN_VALUE;
     }
 
-    protected boolean isLayoutRTL() {
+    /* Access modifiers changed, original: protected */
+    public boolean isLayoutRTL() {
         return getLayoutDirection() == 1;
     }
 
-    void ensureLayoutState() {
+    /* Access modifiers changed, original: 0000 */
+    public void ensureLayoutState() {
         if (this.mLayoutState == null) {
             this.mLayoutState = createLayoutState();
         }
     }
 
-    LayoutState createLayoutState() {
+    /* Access modifiers changed, original: 0000 */
+    public LayoutState createLayoutState() {
         return new LayoutState();
     }
 
@@ -995,11 +1009,13 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
         this.mLayoutState.mScrollingOffset = scrollingOffset;
     }
 
-    boolean resolveIsInfinite() {
+    /* Access modifiers changed, original: 0000 */
+    public boolean resolveIsInfinite() {
         return this.mOrientationHelper.getMode() == 0 && this.mOrientationHelper.getEnd() == 0;
     }
 
-    void collectPrefetchPositionsForLayoutState(State state, LayoutState layoutState, LayoutPrefetchRegistry layoutPrefetchRegistry) {
+    /* Access modifiers changed, original: 0000 */
+    public void collectPrefetchPositionsForLayoutState(State state, LayoutState layoutState, LayoutPrefetchRegistry layoutPrefetchRegistry) {
         int pos = layoutState.mCurrentPosition;
         if (pos >= 0 && pos < state.getItemCount()) {
             layoutPrefetchRegistry.addPosition(pos, Math.max(0, layoutState.mScrollingOffset));
@@ -1050,7 +1066,8 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
         }
     }
 
-    int scrollBy(int dy, Recycler recycler, State state) {
+    /* Access modifiers changed, original: 0000 */
+    public int scrollBy(int dy, Recycler recycler, State state) {
         int scrolled = 0;
         if (!(getChildCount() == 0 || dy == 0)) {
             this.mLayoutState.mRecycle = true;
@@ -1078,7 +1095,8 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
         }
     }
 
-    protected void recycleChildren(Recycler recycler, int startIndex, int endIndex) {
+    /* Access modifiers changed, original: protected */
+    public void recycleChildren(Recycler recycler, int startIndex, int endIndex) {
         if (startIndex != endIndex) {
             int i;
             if (endIndex > startIndex) {
@@ -1093,7 +1111,8 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
         }
     }
 
-    protected void recycleViewsFromStart(Recycler recycler, int dt) {
+    /* Access modifiers changed, original: protected */
+    public void recycleViewsFromStart(Recycler recycler, int dt) {
         if (dt >= 0) {
             int limit = dt;
             int childCount = getChildCount();
@@ -1155,7 +1174,8 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
         }
     }
 
-    int fill(Recycler recycler, LayoutState layoutState, State state, boolean stopOnFocusable) {
+    /* Access modifiers changed, original: 0000 */
+    public int fill(Recycler recycler, LayoutState layoutState, State state, boolean stopOnFocusable) {
         int start = layoutState.mAvailable;
         if (layoutState.mScrollingOffset != Integer.MIN_VALUE) {
             if (layoutState.mAvailable < 0) {
@@ -1194,7 +1214,8 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
         return start - layoutState.mAvailable;
     }
 
-    void layoutChunk(Recycler recycler, State state, LayoutState layoutState, LayoutChunkResult result) {
+    /* Access modifiers changed, original: 0000 */
+    public void layoutChunk(Recycler recycler, State state, LayoutState layoutState, LayoutChunkResult result) {
         View view = layoutState.next(recycler);
         if (view == null) {
             result.mFinished = true;
@@ -1267,11 +1288,13 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
         result.mFocusable = view.hasFocusable();
     }
 
-    boolean shouldMeasureTwice() {
+    /* Access modifiers changed, original: 0000 */
+    public boolean shouldMeasureTwice() {
         return (getHeightMode() == NUM || getWidthMode() == NUM || !hasFlexibleChildInBothOrientations()) ? false : true;
     }
 
-    int convertFocusDirectionToLayoutDirection(int focusDirection) {
+    /* Access modifiers changed, original: 0000 */
+    public int convertFocusDirectionToLayoutDirection(int focusDirection) {
         int i = Integer.MIN_VALUE;
         int i2 = 1;
         switch (focusDirection) {
@@ -1357,7 +1380,8 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
         return findReferenceChild(recycler, state, getChildCount() - 1, -1, state.getItemCount());
     }
 
-    View findReferenceChild(Recycler recycler, State state, int start, int end, int itemCount) {
+    /* Access modifiers changed, original: 0000 */
+    public View findReferenceChild(Recycler recycler, State state, int start, int end, int itemCount) {
         ensureLayoutState();
         View invalidMatch = null;
         View outOfBoundsMatch = null;
@@ -1435,7 +1459,8 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
         return getPosition(child);
     }
 
-    View findOneVisibleChild(int fromIndex, int toIndex, boolean completelyVisible, boolean acceptPartiallyVisible) {
+    /* Access modifiers changed, original: 0000 */
+    public View findOneVisibleChild(int fromIndex, int toIndex, boolean completelyVisible, boolean acceptPartiallyVisible) {
         int preferredBoundsFlag;
         ensureLayoutState();
         int acceptableBoundsFlag = 0;
@@ -1453,7 +1478,8 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
         return this.mVerticalBoundCheck.findOneViewWithinBoundFlags(fromIndex, toIndex, preferredBoundsFlag, acceptableBoundsFlag);
     }
 
-    View findOnePartiallyOrCompletelyInvisibleChild(int fromIndex, int toIndex) {
+    /* Access modifiers changed, original: 0000 */
+    public View findOnePartiallyOrCompletelyInvisibleChild(int fromIndex, int toIndex) {
         ensureLayoutState();
         int next = toIndex > fromIndex ? 1 : toIndex < fromIndex ? -1 : 0;
         if (next == 0) {
@@ -1519,7 +1545,8 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
         Log.d("LinearLayoutManager", "==============");
     }
 
-    void validateChildOrder() {
+    /* Access modifiers changed, original: 0000 */
+    public void validateChildOrder() {
         boolean z = true;
         Log.d("LinearLayoutManager", "validating child count " + getChildCount());
         if (getChildCount() >= 1) {

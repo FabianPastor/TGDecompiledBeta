@@ -111,7 +111,8 @@ public class FileUploadOperation {
         }
     }
 
-    final /* synthetic */ void lambda$start$0$FileUploadOperation() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$start$0$FileUploadOperation() {
         this.preferences = ApplicationLoader.applicationContext.getSharedPreferences("uploadinfo", 0);
         this.slowNetwork = ApplicationLoader.isConnectionSlow();
         if (BuildVars.LOGS_ENABLED) {
@@ -125,13 +126,15 @@ public class FileUploadOperation {
         }
     }
 
-    protected void onNetworkChanged(boolean slow) {
+    /* Access modifiers changed, original: protected */
+    public void onNetworkChanged(boolean slow) {
         if (this.state == 1) {
             Utilities.stageQueue.postRunnable(new FileUploadOperation$$Lambda$1(this, slow));
         }
     }
 
-    final /* synthetic */ void lambda$onNetworkChanged$1$FileUploadOperation(boolean slow) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onNetworkChanged$1$FileUploadOperation(boolean slow) {
         int count = 1;
         if (this.slowNetwork != slow) {
             int a;
@@ -179,7 +182,8 @@ public class FileUploadOperation {
         }
     }
 
-    final /* synthetic */ void lambda$cancel$2$FileUploadOperation() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$cancel$2$FileUploadOperation() {
         for (int a = 0; a < this.requestTokens.size(); a++) {
             ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.requestTokens.valueAt(a), true);
         }
@@ -195,16 +199,18 @@ public class FileUploadOperation {
                 this.stream.close();
                 this.stream = null;
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
 
-    protected void checkNewDataAvailable(long newAvailableSize, long finalSize) {
+    /* Access modifiers changed, original: protected */
+    public void checkNewDataAvailable(long newAvailableSize, long finalSize) {
         Utilities.stageQueue.postRunnable(new FileUploadOperation$$Lambda$3(this, finalSize, newAvailableSize));
     }
 
-    final /* synthetic */ void lambda$checkNewDataAvailable$3$FileUploadOperation(long finalSize, long newAvailableSize) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$checkNewDataAvailable$3$FileUploadOperation(long finalSize, long newAvailableSize) {
         if (!(this.estimatedSize == 0 || finalSize == 0)) {
             this.estimatedSize = 0;
             this.totalFileSize = finalSize;
@@ -213,7 +219,10 @@ public class FileUploadOperation {
                 storeFileUploadInfo();
             }
         }
-        this.availableSize = newAvailableSize;
+        if (finalSize <= 0) {
+            finalSize = newAvailableSize;
+        }
+        this.availableSize = finalSize;
         if (this.currentUploadRequetsCount < this.maxRequestsCount) {
             startUploadRequest();
         }
@@ -388,7 +397,7 @@ public class FileUploadOperation {
                             for (a = 0; a < 4; a++) {
                                 this.fingerprint |= ((digest[a] ^ digest[a + 4]) & 255) << (a * 8);
                             }
-                        } catch (Throwable e) {
+                        } catch (Exception e) {
                             FileLog.e(e);
                         }
                     }
@@ -490,7 +499,7 @@ public class FileUploadOperation {
                         this.requestTokens.put(requestNumFinal, ConnectionsManager.getInstance(this.currentAccount).sendRequest(finalRequest, new FileUploadOperation$$Lambda$4(this, currentOperationGuid, requestSize, currentRequestIv, requestNumFinal, currentRequestBytes, currentRequestPartNum, currentRequestBytesOffset, finalRequest), null, new FileUploadOperation$$Lambda$5(this), 0, Integer.MAX_VALUE, connectionType, true));
                     }
                 }
-            } catch (Throwable e2) {
+            } catch (Exception e2) {
                 FileLog.e(e2);
                 this.state = 4;
                 this.delegate.didFailedUploadingFile(this);
@@ -499,7 +508,8 @@ public class FileUploadOperation {
         }
     }
 
-    final /* synthetic */ void lambda$startUploadRequest$4$FileUploadOperation(int currentOperationGuid, int requestSize, byte[] currentRequestIv, int requestNumFinal, int currentRequestBytes, int currentRequestPartNum, long currentRequestBytesOffset, TLObject finalRequest, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$startUploadRequest$4$FileUploadOperation(int currentOperationGuid, int requestSize, byte[] currentRequestIv, int requestNumFinal, int currentRequestBytes, int currentRequestPartNum, long currentRequestBytesOffset, TLObject finalRequest, TLObject response, TL_error error) {
         if (currentOperationGuid == this.operationGuid) {
             int networkType = response != null ? response.networkType : ApplicationLoader.getCurrentNetworkType();
             if (this.currentType == 50331648) {
@@ -615,11 +625,13 @@ public class FileUploadOperation {
         }
     }
 
-    final /* synthetic */ void lambda$startUploadRequest$6$FileUploadOperation() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$startUploadRequest$6$FileUploadOperation() {
         Utilities.stageQueue.postRunnable(new FileUploadOperation$$Lambda$6(this));
     }
 
-    final /* synthetic */ void lambda$null$5$FileUploadOperation() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$5$FileUploadOperation() {
         if (this.currentUploadRequetsCount < this.maxRequestsCount) {
             startUploadRequest();
         }

@@ -40,14 +40,15 @@ public class TgChooserTargetService extends ChooserTargetService {
             MessagesStorage.getInstance(currentAccount).getStorageQueue().postRunnable(new TgChooserTargetService$$Lambda$0(this, currentAccount, targets, new ComponentName(getPackageName(), LaunchActivity.class.getCanonicalName()), countDownLatch));
             try {
                 countDownLatch.await();
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
         }
         return targets;
     }
 
-    final /* synthetic */ void lambda$onGetChooserTargets$0$TgChooserTargetService(int currentAccount, List targets, ComponentName componentName, CountDownLatch countDownLatch) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onGetChooserTargets$0$TgChooserTargetService(int currentAccount, List targets, ComponentName componentName, CountDownLatch countDownLatch) {
         ArrayList<Integer> dialogs = new ArrayList();
         ArrayList<Chat> chats = new ArrayList();
         ArrayList<User> users = new ArrayList();
@@ -81,9 +82,11 @@ public class TgChooserTargetService extends ChooserTargetService {
             if (!usersToLoad.isEmpty()) {
                 MessagesStorage.getInstance(currentAccount).getUsersInternal(TextUtils.join(",", usersToLoad), users);
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
+        SharedConfig.directShareHash = Utilities.random.nextLong();
+        ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit().putLong("directShareHash", SharedConfig.directShareHash).commit();
         for (int a = 0; a < dialogs.size(); a++) {
             Bundle extras = new Bundle();
             Icon icon = null;
@@ -98,6 +101,7 @@ public class TgChooserTargetService extends ChooserTargetService {
                         b++;
                     } else if (!user.bot) {
                         extras.putLong("dialogId", (long) id2);
+                        extras.putLong("hash", SharedConfig.directShareHash);
                         if (!(user.photo == null || user.photo.photo_small == null)) {
                             icon = createRoundBitmap(FileLoader.getPathToAttach(user.photo.photo_small, true));
                         }
@@ -112,6 +116,7 @@ public class TgChooserTargetService extends ChooserTargetService {
                         b++;
                     } else if (!ChatObject.isNotInChat(chat) && (!ChatObject.isChannel(chat) || chat.megagroup)) {
                         extras.putLong("dialogId", (long) id2);
+                        extras.putLong("hash", SharedConfig.directShareHash);
                         if (!(chat.photo == null || chat.photo.photo_small == null)) {
                             icon = createRoundBitmap(FileLoader.getPathToAttach(chat.photo.photo_small, true));
                         }
@@ -121,7 +126,7 @@ public class TgChooserTargetService extends ChooserTargetService {
             }
             if (name != null) {
                 if (icon == null) {
-                    icon = Icon.createWithResource(ApplicationLoader.applicationContext, R.drawable.logo_avatar);
+                    icon = Icon.createWithResource(ApplicationLoader.applicationContext, NUM);
                 }
                 targets.add(new ChooserTarget(name, icon, 1.0f, componentName, extras));
             }

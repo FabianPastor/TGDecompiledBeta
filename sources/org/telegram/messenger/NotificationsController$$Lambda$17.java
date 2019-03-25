@@ -1,13 +1,17 @@
 package org.telegram.messenger;
 
-final /* synthetic */ class NotificationsController$$Lambda$17 implements Runnable {
-    private final NotificationsController arg$1;
+import android.graphics.ImageDecoder;
+import android.graphics.ImageDecoder.ImageInfo;
+import android.graphics.ImageDecoder.OnHeaderDecodedListener;
+import android.graphics.ImageDecoder.Source;
 
-    NotificationsController$$Lambda$17(NotificationsController notificationsController) {
-        this.arg$1 = notificationsController;
+final /* synthetic */ class NotificationsController$$Lambda$17 implements OnHeaderDecodedListener {
+    static final OnHeaderDecodedListener $instance = new NotificationsController$$Lambda$17();
+
+    private NotificationsController$$Lambda$17() {
     }
 
-    public void run() {
-        this.arg$1.lambda$playOutChatSound$31$NotificationsController();
+    public void onHeaderDecoded(ImageDecoder imageDecoder, ImageInfo imageInfo, Source source) {
+        imageDecoder.setPostProcessor(NotificationsController$$Lambda$23.$instance);
     }
 }

@@ -37,7 +37,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.ChatFull;
@@ -132,7 +131,7 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
             MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new ChatEditActivity$$Lambda$0(this, countDownLatch));
             try {
                 countDownLatch.await();
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
             if (this.currentChat == null) {
@@ -143,7 +142,7 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
                 MessagesStorage.getInstance(this.currentAccount).loadChatInfo(this.chatId, countDownLatch, false, false);
                 try {
                     countDownLatch.await();
-                } catch (Throwable e2) {
+                } catch (Exception e2) {
                     FileLog.e(e2);
                 }
                 if (this.info == null) {
@@ -162,7 +161,8 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
         return super.onFragmentCreate();
     }
 
-    final /* synthetic */ void lambda$onFragmentCreate$0$ChatEditActivity(CountDownLatch countDownLatch) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onFragmentCreate$0$ChatEditActivity(CountDownLatch countDownLatch) {
         this.currentChat = MessagesStorage.getInstance(this.currentAccount).getChat(this.chatId);
         countDownLatch.countDown();
     }
@@ -209,13 +209,13 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
         if (this.nameTextView != null) {
             this.nameTextView.onDestroy();
         }
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
                     if (ChatEditActivity.this.checkDiscard()) {
-                        ChatEditActivity.this.lambda$checkDiscard$18$ChatUsersActivity();
+                        ChatEditActivity.this.finishFragment();
                     }
                 } else if (id == 1) {
                     ChatEditActivity.this.processDone();
@@ -223,7 +223,8 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
             }
         });
         SizeNotifierFrameLayout sizeNotifierFrameLayout = new SizeNotifierFrameLayout(context) {
-            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            /* Access modifiers changed, original: protected */
+            public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int widthSize = MeasureSpec.getSize(widthMeasureSpec);
                 int heightSize = MeasureSpec.getSize(heightMeasureSpec);
                 setMeasuredDimension(widthSize, heightSize);
@@ -247,7 +248,8 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
                 }
             }
 
-            protected void onLayout(boolean changed, int l, int t, int r, int b) {
+            /* Access modifiers changed, original: protected */
+            public void onLayout(boolean changed, int l, int t, int r, int b) {
                 int count = getChildCount();
                 int paddingBottom = (getKeyboardHeight() > AndroidUtilities.dp(20.0f) || AndroidUtilities.isInMultiwindow || AndroidUtilities.isTablet()) ? 0 : ChatEditActivity.this.nameTextView.getEmojiPadding();
                 setBottomClip(paddingBottom);
@@ -311,7 +313,7 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
         LinearLayout linearLayout1 = new LinearLayout(context);
         scrollView.addView(linearLayout1, new LayoutParams(-1, -2));
         linearLayout1.setOrientation(1);
-        this.actionBar.setTitle(LocaleController.getString("ChannelEdit", R.string.ChannelEdit));
+        this.actionBar.setTitle(LocaleController.getString("ChannelEdit", NUM));
         this.avatarContainer = new LinearLayout(context);
         this.avatarContainer.setOrientation(1);
         this.avatarContainer.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
@@ -352,7 +354,8 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
             final Paint paint = new Paint(1);
             paint.setColor(NUM);
             this.avatarOverlay = new View(context) {
-                protected void onDraw(Canvas canvas) {
+                /* Access modifiers changed, original: protected */
+                public void onDraw(Canvas canvas) {
                     if (ChatEditActivity.this.avatarImage != null && ChatEditActivity.this.avatarImage.getImageReceiver().hasNotThumb()) {
                         paint.setAlpha((int) (85.0f * ChatEditActivity.this.avatarImage.getImageReceiver().getCurrentAlpha()));
                         canvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.dp(32.0f), paint);
@@ -373,6 +376,7 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
             }
             frameLayout.addView(view, LayoutHelper.createFrame(64, 64.0f, i, f, 12.0f, f2, 12.0f));
             this.avatarOverlay.setOnClickListener(new ChatEditActivity$$Lambda$2(this));
+            this.avatarOverlay.setContentDescription(LocaleController.getString("ChoosePhoto", NUM));
             this.avatarEditor = new ImageView(context) {
                 public void invalidate(int l, int t, int r, int b) {
                     super.invalidate(l, t, r, b);
@@ -385,7 +389,7 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
                 }
             };
             this.avatarEditor.setScaleType(ScaleType.CENTER);
-            this.avatarEditor.setImageResource(R.drawable.menu_camera_av);
+            this.avatarEditor.setImageResource(NUM);
             this.avatarEditor.setEnabled(false);
             this.avatarEditor.setClickable(false);
             frameLayout.addView(this.avatarEditor, LayoutHelper.createFrame(64, 64.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 12.0f, LocaleController.isRTL ? 16.0f : 0.0f, 12.0f));
@@ -399,9 +403,9 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
         }
         this.nameTextView = new EditTextEmoji((Activity) context, sizeNotifierFrameLayout, this);
         if (this.isChannel) {
-            this.nameTextView.setHint(LocaleController.getString("EnterChannelName", R.string.EnterChannelName));
+            this.nameTextView.setHint(LocaleController.getString("EnterChannelName", NUM));
         } else {
-            this.nameTextView.setHint(LocaleController.getString("GroupName", R.string.GroupName));
+            this.nameTextView.setHint(LocaleController.getString("GroupName", NUM));
         }
         this.nameTextView.setEnabled(ChatObject.canChangeChatInfo(this.currentChat));
         this.nameTextView.setFocusable(this.nameTextView.isEnabled());
@@ -430,7 +434,7 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
         this.descriptionTextView.setEnabled(ChatObject.canChangeChatInfo(this.currentChat));
         this.descriptionTextView.setFocusable(this.descriptionTextView.isEnabled());
         this.descriptionTextView.setFilters(new InputFilter[]{new LengthFilter(255)});
-        this.descriptionTextView.setHint(LocaleController.getString("DescriptionOptionalPlaceholder", R.string.DescriptionOptionalPlaceholder));
+        this.descriptionTextView.setHint(LocaleController.getString("DescriptionOptionalPlaceholder", NUM));
         this.descriptionTextView.setCursorColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.descriptionTextView.setCursorSize(AndroidUtilities.dp(20.0f));
         this.descriptionTextView.setCursorWidth(1.5f);
@@ -467,13 +471,14 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
         if (this.isChannel) {
             this.signCell = new TextCheckCell(context);
             this.signCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-            this.signCell.setTextAndValueAndCheck(LocaleController.getString("ChannelSignMessages", R.string.ChannelSignMessages), LocaleController.getString("ChannelSignMessagesInfo", R.string.ChannelSignMessagesInfo), this.signMessages, true, false);
+            this.signCell.setTextAndValueAndCheck(LocaleController.getString("ChannelSignMessages", NUM), LocaleController.getString("ChannelSignMessagesInfo", NUM), this.signMessages, true, false);
             this.typeEditContainer.addView(this.signCell, LayoutHelper.createFrame(-1, -2.0f));
             this.signCell.setOnClickListener(new ChatEditActivity$$Lambda$6(this));
         }
         ActionBarMenu menu = this.actionBar.createMenu();
         if (!(!ChatObject.canChangeChatInfo(this.currentChat) && this.signCell == null && this.historyCell == null)) {
-            this.doneButton = menu.addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
+            this.doneButton = menu.addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f));
+            this.doneButton.setContentDescription(LocaleController.getString("Done", NUM));
         }
         if (!(this.signCell == null && this.historyCell == null && this.typeCell == null)) {
             this.settingsSectionCell = new ShadowSectionCell(context);
@@ -497,7 +502,7 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
         this.membersCell.setOnClickListener(new ChatEditActivity$$Lambda$9(this));
         if (ChatObject.isChannel(this.currentChat)) {
             this.logCell = new TextCell(context);
-            this.logCell.setTextAndIcon(LocaleController.getString("EventLog", R.string.EventLog), R.drawable.group_log, false);
+            this.logCell.setTextAndIcon(LocaleController.getString("EventLog", NUM), NUM, false);
             this.logCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             this.logCell.setOnClickListener(new ChatEditActivity$$Lambda$10(this));
         }
@@ -528,7 +533,7 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
             this.stickersContainer.addView(this.stickersCell, LayoutHelper.createFrame(-1, -2.0f));
             this.stickersCell.setOnClickListener(new ChatEditActivity$$Lambda$11(this));
             this.stickersInfoCell3 = new TextInfoPrivacyCell(context);
-            this.stickersInfoCell3.setText(LocaleController.getString("GroupStickersInfo", R.string.GroupStickersInfo));
+            this.stickersInfoCell3.setText(LocaleController.getString("GroupStickersInfo", NUM));
             linearLayout1.addView(this.stickersInfoCell3, LayoutHelper.createLinear(-1, -2));
         }
         if (this.currentChat.creator) {
@@ -539,23 +544,25 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
             this.deleteCell.setTextColor(Theme.getColor("windowBackgroundWhiteRedText5"));
             this.deleteCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             if (this.isChannel) {
-                this.deleteCell.setText(LocaleController.getString("ChannelDelete", R.string.ChannelDelete), false);
+                this.deleteCell.setText(LocaleController.getString("ChannelDelete", NUM), false);
+            } else if (this.currentChat.megagroup) {
+                this.deleteCell.setText(LocaleController.getString("DeleteMega", NUM), false);
             } else {
-                this.deleteCell.setText(LocaleController.getString("DeleteMega", R.string.DeleteMega), false);
+                this.deleteCell.setText(LocaleController.getString("DeleteAndExitButton", NUM), false);
             }
             this.deleteContainer.addView(this.deleteCell, LayoutHelper.createFrame(-1, -2.0f));
             this.deleteCell.setOnClickListener(new ChatEditActivity$$Lambda$12(this));
             this.deleteInfoCell = new ShadowSectionCell(context);
-            this.deleteInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(context, (int) R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
+            this.deleteInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(context, NUM, "windowBackgroundGrayShadow"));
             linearLayout1.addView(this.deleteInfoCell, LayoutHelper.createLinear(-1, -2));
         } else if (!this.isChannel && this.stickersInfoCell3 == null) {
-            this.infoSectionCell.setBackgroundDrawable(Theme.getThemedDrawable(context, (int) R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
+            this.infoSectionCell.setBackgroundDrawable(Theme.getThemedDrawable(context, NUM, "windowBackgroundGrayShadow"));
         }
         if (this.stickersInfoCell3 != null) {
             if (this.deleteInfoCell == null) {
-                this.stickersInfoCell3.setBackgroundDrawable(Theme.getThemedDrawable(context, (int) R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
+                this.stickersInfoCell3.setBackgroundDrawable(Theme.getThemedDrawable(context, NUM, "windowBackgroundGrayShadow"));
             } else {
-                this.stickersInfoCell3.setBackgroundDrawable(Theme.getThemedDrawable(context, (int) R.drawable.greydivider, "windowBackgroundGrayShadow"));
+                this.stickersInfoCell3.setBackgroundDrawable(Theme.getThemedDrawable(context, NUM, "windowBackgroundGrayShadow"));
             }
         }
         this.nameTextView.setText(this.currentChat.title);
@@ -574,11 +581,13 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
         return this.fragmentView;
     }
 
-    final /* synthetic */ void lambda$createView$3$ChatEditActivity(View view) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$3$ChatEditActivity(View view) {
         this.imageUpdater.openMenu(this.avatar != null, new ChatEditActivity$$Lambda$21(this));
     }
 
-    final /* synthetic */ void lambda$null$2$ChatEditActivity() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$2$ChatEditActivity() {
         this.avatar = null;
         this.avatarBig = null;
         this.uploadedAvatar = null;
@@ -586,7 +595,8 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
         this.avatarImage.setImage(this.avatar, "50_50", this.avatarDrawable, this.currentChat);
     }
 
-    final /* synthetic */ boolean lambda$createView$4$ChatEditActivity(TextView textView, int i, KeyEvent keyEvent) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ boolean lambda$createView$4$ChatEditActivity(TextView textView, int i, KeyEvent keyEvent) {
         if (i != 6 || this.doneButton == null) {
             return false;
         }
@@ -594,20 +604,22 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
         return true;
     }
 
-    final /* synthetic */ void lambda$createView$5$ChatEditActivity(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$5$ChatEditActivity(View v) {
         ChatEditTypeActivity fragment = new ChatEditTypeActivity(this.chatId);
         fragment.setInfo(this.info);
         presentFragment(fragment);
     }
 
-    final /* synthetic */ void lambda$createView$7$ChatEditActivity(Context context, View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$7$ChatEditActivity(Context context, View v) {
         Builder builder = new Builder(context);
         builder.setApplyTopPadding(false);
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(1);
         HeaderCell headerCell = new HeaderCell(context, true, 23, 15, false);
         headerCell.setHeight(47);
-        headerCell.setText(LocaleController.getString("ChatHistory", R.string.ChatHistory));
+        headerCell.setText(LocaleController.getString("ChatHistory", NUM));
         linearLayout.addView(headerCell);
         LinearLayout linearLayoutInviteContainer = new LinearLayout(context);
         linearLayoutInviteContainer.setOrientation(1);
@@ -618,11 +630,11 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
             buttons[a].setTag(Integer.valueOf(a));
             buttons[a].setBackgroundDrawable(Theme.getSelectorDrawable(false));
             if (a == 0) {
-                buttons[a].setTextAndValue(LocaleController.getString("ChatHistoryVisible", R.string.ChatHistoryVisible), LocaleController.getString("ChatHistoryVisibleInfo", R.string.ChatHistoryVisibleInfo), true, !this.historyHidden);
+                buttons[a].setTextAndValue(LocaleController.getString("ChatHistoryVisible", NUM), LocaleController.getString("ChatHistoryVisibleInfo", NUM), true, !this.historyHidden);
             } else if (ChatObject.isChannel(this.currentChat)) {
-                buttons[a].setTextAndValue(LocaleController.getString("ChatHistoryHidden", R.string.ChatHistoryHidden), LocaleController.getString("ChatHistoryHiddenInfo", R.string.ChatHistoryHiddenInfo), false, this.historyHidden);
+                buttons[a].setTextAndValue(LocaleController.getString("ChatHistoryHidden", NUM), LocaleController.getString("ChatHistoryHiddenInfo", NUM), false, this.historyHidden);
             } else {
-                buttons[a].setTextAndValue(LocaleController.getString("ChatHistoryHidden", R.string.ChatHistoryHidden), LocaleController.getString("ChatHistoryHiddenInfo2", R.string.ChatHistoryHiddenInfo2), false, this.historyHidden);
+                buttons[a].setTextAndValue(LocaleController.getString("ChatHistoryHidden", NUM), LocaleController.getString("ChatHistoryHiddenInfo2", NUM), false, this.historyHidden);
             }
             linearLayoutInviteContainer.addView(buttons[a], LayoutHelper.createLinear(-1, -2));
             buttons[a].setOnClickListener(new ChatEditActivity$$Lambda$20(this, buttons, builder));
@@ -631,7 +643,8 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
         showDialog(builder.create());
     }
 
-    final /* synthetic */ void lambda$null$6$ChatEditActivity(RadioButtonCell[] buttons, Builder builder, View v2) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$6$ChatEditActivity(RadioButtonCell[] buttons, Builder builder, View v2) {
         boolean z;
         boolean z2 = false;
         Integer tag = (Integer) v2.getTag();
@@ -651,12 +664,14 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
         updateFields(true);
     }
 
-    final /* synthetic */ void lambda$createView$8$ChatEditActivity(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$8$ChatEditActivity(View v) {
         this.signMessages = !this.signMessages;
         ((TextCheckCell) v).setChecked(this.signMessages);
     }
 
-    final /* synthetic */ void lambda$createView$9$ChatEditActivity(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$9$ChatEditActivity(View v) {
         Bundle args = new Bundle();
         args.putInt("chat_id", this.chatId);
         args.putInt("type", !this.isChannel ? 3 : 0);
@@ -665,7 +680,8 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
         presentFragment(fragment);
     }
 
-    final /* synthetic */ void lambda$createView$10$ChatEditActivity(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$10$ChatEditActivity(View v) {
         Bundle args = new Bundle();
         args.putInt("chat_id", this.chatId);
         args.putInt("type", 1);
@@ -674,7 +690,8 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
         presentFragment(fragment);
     }
 
-    final /* synthetic */ void lambda$createView$11$ChatEditActivity(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$11$ChatEditActivity(View v) {
         Bundle args = new Bundle();
         args.putInt("chat_id", this.chatId);
         args.putInt("type", 2);
@@ -683,37 +700,43 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
         presentFragment(fragment);
     }
 
-    final /* synthetic */ void lambda$createView$12$ChatEditActivity(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$12$ChatEditActivity(View v) {
         presentFragment(new ChannelAdminLogActivity(this.currentChat));
     }
 
-    final /* synthetic */ void lambda$createView$13$ChatEditActivity(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$13$ChatEditActivity(View v) {
         GroupStickersActivity groupStickersActivity = new GroupStickersActivity(this.currentChat.id);
         groupStickersActivity.setInfo(this.info);
         presentFragment(groupStickersActivity);
     }
 
-    final /* synthetic */ void lambda$createView$15$ChatEditActivity(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$15$ChatEditActivity(View v) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
         if (this.isChannel) {
-            builder.setMessage(LocaleController.getString("ChannelDeleteAlert", R.string.ChannelDeleteAlert));
+            builder.setMessage(LocaleController.getString("ChannelDeleteAlert", NUM));
+        } else if (this.currentChat.megagroup) {
+            builder.setMessage(LocaleController.getString("MegaDeleteAlert", NUM));
         } else {
-            builder.setMessage(LocaleController.getString("MegaDeleteAlert", R.string.MegaDeleteAlert));
+            builder.setMessage(LocaleController.getString("AreYouSureDeleteAndExit", NUM));
         }
-        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new ChatEditActivity$$Lambda$19(this));
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.setTitle(LocaleController.getString("AppName", NUM));
+        builder.setPositiveButton(LocaleController.getString("OK", NUM), new ChatEditActivity$$Lambda$19(this));
+        builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
         showDialog(builder.create());
     }
 
-    final /* synthetic */ void lambda$null$14$ChatEditActivity(DialogInterface dialogInterface, int i) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$14$ChatEditActivity(DialogInterface dialogInterface, int i) {
         if (AndroidUtilities.isTablet()) {
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.closeChats, Long.valueOf(-((long) this.chatId)));
         } else {
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
         }
-        MessagesController.getInstance(this.currentAccount).deleteUserFromChat(this.chatId, MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId())), this.info, true);
-        lambda$checkDiscard$18$ChatUsersActivity();
+        MessagesController.getInstance(this.currentAccount).deleteUserFromChat(this.chatId, MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId())), this.info, true, false);
+        finishFragment();
     }
 
     public void didReceivedNotification(int id, int account, Object... args) {
@@ -740,7 +763,8 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
         AndroidUtilities.runOnUIThread(new ChatEditActivity$$Lambda$13(this, file, smallSize, bigSize));
     }
 
-    final /* synthetic */ void lambda$didUploadPhoto$16$ChatEditActivity(InputFile file, PhotoSize smallSize, PhotoSize bigSize) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$didUploadPhoto$16$ChatEditActivity(InputFile file, PhotoSize smallSize, PhotoSize bigSize) {
         if (file != null) {
             this.uploadedAvatar = file;
             if (this.createAfterUpload) {
@@ -749,7 +773,7 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
                         this.progressDialog.dismiss();
                         this.progressDialog = null;
                     }
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
                 this.donePressed = false;
@@ -774,16 +798,26 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
             return true;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-        builder.setTitle(LocaleController.getString("UserRestrictionsApplyChanges", R.string.UserRestrictionsApplyChanges));
+        builder.setTitle(LocaleController.getString("UserRestrictionsApplyChanges", NUM));
         if (this.isChannel) {
-            builder.setMessage(LocaleController.getString("ChannelSettingsChangedAlert", R.string.ChannelSettingsChangedAlert));
+            builder.setMessage(LocaleController.getString("ChannelSettingsChangedAlert", NUM));
         } else {
-            builder.setMessage(LocaleController.getString("GroupSettingsChangedAlert", R.string.GroupSettingsChangedAlert));
+            builder.setMessage(LocaleController.getString("GroupSettingsChangedAlert", NUM));
         }
-        builder.setPositiveButton(LocaleController.getString("ApplyTheme", R.string.ApplyTheme), new ChatEditActivity$$Lambda$14(this));
-        builder.setNegativeButton(LocaleController.getString("PassportDiscard", R.string.PassportDiscard), new ChatEditActivity$$Lambda$15(this));
+        builder.setPositiveButton(LocaleController.getString("ApplyTheme", NUM), new ChatEditActivity$$Lambda$14(this));
+        builder.setNegativeButton(LocaleController.getString("PassportDiscard", NUM), new ChatEditActivity$$Lambda$15(this));
         showDialog(builder.create());
         return false;
+    }
+
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$checkDiscard$17$ChatEditActivity(DialogInterface dialogInterface, int i) {
+        processDone();
+    }
+
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$checkDiscard$18$ChatEditActivity(DialogInterface dialog, int which) {
+        finishFragment();
     }
 
     private int getAdminCount() {
@@ -840,14 +874,15 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
                 } else if (this.avatar == null && (this.currentChat.photo instanceof TL_chatPhoto)) {
                     MessagesController.getInstance(this.currentAccount).changeChatAvatar(this.chatId, null, null, null);
                 }
-                lambda$checkDiscard$18$ChatUsersActivity();
+                finishFragment();
                 return;
             }
             MessagesController.getInstance(this.currentAccount).convertToMegaGroup(getParentActivity(), this.chatId, new ChatEditActivity$$Lambda$16(this));
         }
     }
 
-    final /* synthetic */ void lambda$processDone$19$ChatEditActivity(int param) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$processDone$19$ChatEditActivity(int param) {
         this.chatId = param;
         this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(param));
         this.donePressed = false;
@@ -857,7 +892,8 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
         processDone();
     }
 
-    final /* synthetic */ void lambda$processDone$20$ChatEditActivity(DialogInterface dialog) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$processDone$20$ChatEditActivity(DialogInterface dialog) {
         this.createAfterUpload = false;
         this.progressDialog = null;
         this.donePressed = false;
@@ -985,21 +1021,21 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
             textCell.setVisibility(i);
         }
         if (this.typeCell != null) {
-            String type = this.isChannel ? isPrivate ? LocaleController.getString("TypePrivate", R.string.TypePrivate) : LocaleController.getString("TypePublic", R.string.TypePublic) : isPrivate ? LocaleController.getString("TypePrivateGroup", R.string.TypePrivateGroup) : LocaleController.getString("TypePublicGroup", R.string.TypePublicGroup);
+            String type = this.isChannel ? isPrivate ? LocaleController.getString("TypePrivate", NUM) : LocaleController.getString("TypePublic", NUM) : isPrivate ? LocaleController.getString("TypePrivateGroup", NUM) : LocaleController.getString("TypePublicGroup", NUM);
             if (this.isChannel) {
-                this.typeCell.setTextAndValue(LocaleController.getString("ChannelType", R.string.ChannelType), type, true);
+                this.typeCell.setTextAndValue(LocaleController.getString("ChannelType", NUM), type, true);
             } else {
-                this.typeCell.setTextAndValue(LocaleController.getString("GroupType", R.string.GroupType), type, true);
+                this.typeCell.setTextAndValue(LocaleController.getString("GroupType", NUM), type, true);
             }
         }
         if (!(this.info == null || this.historyCell == null)) {
-            this.historyCell.setTextAndValue(LocaleController.getString("ChatHistory", R.string.ChatHistory), this.historyHidden ? LocaleController.getString("ChatHistoryHidden", R.string.ChatHistoryHidden) : LocaleController.getString("ChatHistoryVisible", R.string.ChatHistoryVisible), false);
+            this.historyCell.setTextAndValue(LocaleController.getString("ChatHistory", NUM), this.historyHidden ? LocaleController.getString("ChatHistoryHidden", NUM) : LocaleController.getString("ChatHistoryVisible", NUM), false);
         }
         if (this.stickersCell != null) {
             if (this.info.stickerset != null) {
-                this.stickersCell.setTextAndValue(LocaleController.getString("GroupStickers", R.string.GroupStickers), this.info.stickerset.title, false);
+                this.stickersCell.setTextAndValue(LocaleController.getString("GroupStickers", NUM), this.info.stickerset.title, false);
             } else {
-                this.stickersCell.setText(LocaleController.getString("GroupStickers", R.string.GroupStickers), false);
+                this.stickersCell.setText(LocaleController.getString("GroupStickers", NUM), false);
             }
         }
         if (this.membersCell != null) {
@@ -1009,34 +1045,34 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
             if (this.info != null) {
                 String format;
                 if (this.isChannel) {
-                    this.membersCell.setTextAndValueAndIcon(LocaleController.getString("ChannelSubscribers", R.string.ChannelSubscribers), String.format("%d", new Object[]{Integer.valueOf(this.info.participants_count)}), R.drawable.actions_viewmembers, true);
+                    this.membersCell.setTextAndValueAndIcon(LocaleController.getString("ChannelSubscribers", NUM), String.format("%d", new Object[]{Integer.valueOf(this.info.participants_count)}), NUM, true);
                     textCell2 = this.blockCell;
-                    string = LocaleController.getString("ChannelBlacklist", R.string.ChannelBlacklist);
+                    string = LocaleController.getString("ChannelBlacklist", NUM);
                     format = String.format("%d", new Object[]{Integer.valueOf(Math.max(this.info.banned_count, this.info.kicked_count))});
                     if (this.logCell == null || this.logCell.getVisibility() != 0) {
                         z = false;
                     } else {
                         z = true;
                     }
-                    textCell2.setTextAndValueAndIcon(string, format, R.drawable.actions_removed, z);
+                    textCell2.setTextAndValueAndIcon(string, format, NUM, z);
                 } else {
                     String format2;
                     if (ChatObject.isChannel(this.currentChat)) {
                         textCell = this.membersCell;
-                        format = LocaleController.getString("ChannelMembers", R.string.ChannelMembers);
+                        format = LocaleController.getString("ChannelMembers", NUM);
                         format2 = String.format("%d", new Object[]{Integer.valueOf(this.info.participants_count)});
                         if (this.logCell == null || this.logCell.getVisibility() != 0) {
                             z = false;
                         } else {
                             z = true;
                         }
-                        textCell.setTextAndValueAndIcon(format, format2, R.drawable.actions_viewmembers, z);
+                        textCell.setTextAndValueAndIcon(format, format2, NUM, z);
                     } else {
                         textCell = this.membersCell;
-                        format = LocaleController.getString("ChannelMembers", R.string.ChannelMembers);
+                        format = LocaleController.getString("ChannelMembers", NUM);
                         format2 = String.format("%d", new Object[]{Integer.valueOf(this.info.participants.participants.size())});
                         z = this.logCell != null && this.logCell.getVisibility() == 0;
-                        textCell.setTextAndValueAndIcon(format, format2, R.drawable.actions_viewmembers, z);
+                        textCell.setTextAndValueAndIcon(format, format2, NUM, z);
                     }
                     int count = 0;
                     if (this.currentChat.default_banned_rights != null) {
@@ -1067,10 +1103,10 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
                     } else {
                         count = 8;
                     }
-                    this.blockCell.setTextAndValueAndIcon(LocaleController.getString("ChannelPermissions", R.string.ChannelPermissions), String.format("%d/%d", new Object[]{Integer.valueOf(count), Integer.valueOf(8)}), R.drawable.actions_permissions, true);
+                    this.blockCell.setTextAndValueAndIcon(LocaleController.getString("ChannelPermissions", NUM), String.format("%d/%d", new Object[]{Integer.valueOf(count), Integer.valueOf(8)}), NUM, true);
                 }
                 textCell2 = this.adminCell;
-                string = LocaleController.getString("ChannelAdministrators", R.string.ChannelAdministrators);
+                string = LocaleController.getString("ChannelAdministrators", NUM);
                 format = "%d";
                 Object[] objArr = new Object[1];
                 if (ChatObject.isChannel(this.currentChat)) {
@@ -1079,33 +1115,33 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
                     i = getAdminCount();
                 }
                 objArr[0] = Integer.valueOf(i);
-                textCell2.setTextAndValueAndIcon(string, String.format(format, objArr), R.drawable.actions_addadmin, true);
+                textCell2.setTextAndValueAndIcon(string, String.format(format, objArr), NUM, true);
             } else {
                 if (this.isChannel) {
-                    this.membersCell.setTextAndIcon(LocaleController.getString("ChannelSubscribers", R.string.ChannelSubscribers), R.drawable.actions_viewmembers, true);
+                    this.membersCell.setTextAndIcon(LocaleController.getString("ChannelSubscribers", NUM), NUM, true);
                     textCell2 = this.blockCell;
-                    string = LocaleController.getString("ChannelBlacklist", R.string.ChannelBlacklist);
+                    string = LocaleController.getString("ChannelBlacklist", NUM);
                     z = this.logCell != null && this.logCell.getVisibility() == 0;
-                    textCell2.setTextAndIcon(string, R.drawable.actions_removed, z);
+                    textCell2.setTextAndIcon(string, NUM, z);
                 } else {
                     textCell2 = this.membersCell;
-                    string = LocaleController.getString("ChannelMembers", R.string.ChannelMembers);
+                    string = LocaleController.getString("ChannelMembers", NUM);
                     if (this.logCell == null || this.logCell.getVisibility() != 0) {
                         z = false;
                     } else {
                         z = true;
                     }
-                    textCell2.setTextAndIcon(string, R.drawable.actions_viewmembers, z);
-                    this.blockCell.setTextAndIcon(LocaleController.getString("ChannelPermissions", R.string.ChannelPermissions), R.drawable.actions_permissions, true);
+                    textCell2.setTextAndIcon(string, NUM, z);
+                    this.blockCell.setTextAndIcon(LocaleController.getString("ChannelPermissions", NUM), NUM, true);
                 }
-                this.adminCell.setTextAndIcon(LocaleController.getString("ChannelAdministrators", R.string.ChannelAdministrators), R.drawable.actions_addadmin, true);
+                this.adminCell.setTextAndIcon(LocaleController.getString("ChannelAdministrators", NUM), NUM, true);
             }
         }
         if (this.stickersCell != null && this.info != null) {
             if (this.info.stickerset != null) {
-                this.stickersCell.setTextAndValue(LocaleController.getString("GroupStickers", R.string.GroupStickers), this.info.stickerset.title, false);
+                this.stickersCell.setTextAndValue(LocaleController.getString("GroupStickers", NUM), this.info.stickerset.title, false);
             } else {
-                this.stickersCell.setText(LocaleController.getString("GroupStickers", R.string.GroupStickers), false);
+                this.stickersCell.setText(LocaleController.getString("GroupStickers", NUM), false);
             }
         }
     }
@@ -1173,7 +1209,8 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
         return themeDescriptionArr;
     }
 
-    final /* synthetic */ void lambda$getThemeDescriptions$21$ChatEditActivity() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$getThemeDescriptions$21$ChatEditActivity() {
         if (this.avatarImage != null) {
             this.avatarDrawable.setInfo(5, null, null, false);
             this.avatarImage.invalidate();

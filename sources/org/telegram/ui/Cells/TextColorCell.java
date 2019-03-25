@@ -6,7 +6,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.annotation.Keep;
-import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -45,11 +44,11 @@ public class TextColorCell extends FrameLayout {
             i = 3;
         }
         textView.setGravity(i | 16);
-        View view = this.textView;
+        TextView textView2 = this.textView;
         if (!LocaleController.isRTL) {
             i2 = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, 21.0f, 0.0f, 21.0f, 0.0f));
+        addView(textView2, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, 21.0f, 0.0f, 21.0f, 0.0f));
     }
 
     @Keep
@@ -62,7 +61,8 @@ public class TextColorCell extends FrameLayout {
         return this.alpha;
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(50.0f), NUM));
     }
 
@@ -108,7 +108,8 @@ public class TextColorCell extends FrameLayout {
         setAlpha(f);
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (this.needDivider) {
             canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }

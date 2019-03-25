@@ -30,7 +30,6 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
@@ -88,7 +87,8 @@ public class WebviewActivity extends BaseFragment {
             AndroidUtilities.runOnUIThread(new WebviewActivity$TelegramWebviewProxy$$Lambda$0(this, eventName));
         }
 
-        final /* synthetic */ void lambda$postEvent$0$WebviewActivity$TelegramWebviewProxy(String eventName) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$postEvent$0$WebviewActivity$TelegramWebviewProxy(String eventName) {
             if (WebviewActivity.this.getParentActivity() != null) {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.d(eventName);
@@ -151,7 +151,7 @@ public class WebviewActivity extends BaseFragment {
             this.webView.loadUrl("about:blank");
             this.webView.destroy();
             this.webView = null;
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
@@ -159,24 +159,26 @@ public class WebviewActivity extends BaseFragment {
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     public View createView(Context context) {
         this.swipeBackEnabled = false;
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    WebviewActivity.this.lambda$checkDiscard$70$PassportActivity();
+                    WebviewActivity.this.finishFragment();
                 } else if (id == 1) {
-                    WebviewActivity.this.currentMessageObject.messageOwner.with_my_score = false;
-                    WebviewActivity.this.showDialog(ShareAlert.createShareAlert(WebviewActivity.this.getParentActivity(), WebviewActivity.this.currentMessageObject, null, false, WebviewActivity.this.linkToCopy, false));
+                    if (WebviewActivity.this.currentMessageObject != null) {
+                        WebviewActivity.this.currentMessageObject.messageOwner.with_my_score = false;
+                        WebviewActivity.this.showDialog(ShareAlert.createShareAlert(WebviewActivity.this.getParentActivity(), WebviewActivity.this.currentMessageObject, null, false, WebviewActivity.this.linkToCopy, false));
+                    }
                 } else if (id == 2) {
                     WebviewActivity.openGameInBrowser(WebviewActivity.this.currentUrl, WebviewActivity.this.currentMessageObject, WebviewActivity.this.getParentActivity(), WebviewActivity.this.short_param, WebviewActivity.this.currentBot);
                 }
             }
         });
         ActionBarMenu menu = this.actionBar.createMenu();
-        this.progressItem = menu.addItemWithWidth(1, R.drawable.share, AndroidUtilities.dp(54.0f));
+        this.progressItem = menu.addItemWithWidth(1, NUM, AndroidUtilities.dp(54.0f));
         if (this.type == 0) {
-            menu.addItem(0, (int) R.drawable.ic_ab_other).addSubItem(2, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
+            menu.addItem(0, NUM).addSubItem(2, LocaleController.getString("OpenInExternalApp", NUM));
             this.actionBar.setTitle(this.currentGame);
             this.actionBar.setSubtitle("@" + this.currentBot);
             this.progressView = new ContextProgressView(context, 1);
@@ -191,7 +193,7 @@ public class WebviewActivity extends BaseFragment {
             this.actionBar.setItemsBackgroundColor(Theme.getColor("player_actionBarSelector"), false);
             this.actionBar.setTitleColor(Theme.getColor("player_actionBarTitle"));
             this.actionBar.setSubtitleColor(Theme.getColor("player_actionBarSubtitle"));
-            this.actionBar.setTitle(LocaleController.getString("Statistics", R.string.Statistics));
+            this.actionBar.setTitle(LocaleController.getString("Statistics", NUM));
             this.progressView = new ContextProgressView(context, 3);
             this.progressItem.addView(this.progressView, LayoutHelper.createFrame(-1, -1.0f));
             this.progressView.setAlpha(1.0f);
@@ -199,6 +201,7 @@ public class WebviewActivity extends BaseFragment {
             this.progressView.setScaleY(1.0f);
             this.progressView.setVisibility(0);
             this.progressItem.getImageView().setVisibility(8);
+            this.progressItem.setEnabled(false);
         }
         this.webView = new WebView(context);
         this.webView.getSettings().setJavaScriptEnabled(true);
@@ -237,7 +240,7 @@ public class WebviewActivity extends BaseFragment {
                         intent.setComponent(new ComponentName(ApplicationLoader.applicationContext.getPackageName(), LaunchActivity.class.getName()));
                         intent.putExtra("com.android.browser.application_id", ApplicationLoader.applicationContext.getPackageName());
                         ApplicationLoader.applicationContext.startActivity(intent);
-                    } catch (Throwable e2) {
+                    } catch (Exception e2) {
                         FileLog.e(e2);
                     }
                 }
@@ -289,7 +292,8 @@ public class WebviewActivity extends BaseFragment {
         this.typingRunnable.run();
     }
 
-    protected void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
+    /* Access modifiers changed, original: protected */
+    public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
         if (isOpen && !backward && this.webView != null) {
             this.webView.loadUrl(this.currentUrl);
         }
@@ -313,15 +317,18 @@ public class WebviewActivity extends BaseFragment {
                 params = "";
             }
             req.params = params;
+            req.dark = Theme.getCurrentTheme().isDark();
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new WebviewActivity$$Lambda$0(this));
         }
     }
 
-    final /* synthetic */ void lambda$reloadStats$1$WebviewActivity(TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$reloadStats$1$WebviewActivity(TLObject response, TL_error error) {
         AndroidUtilities.runOnUIThread(new WebviewActivity$$Lambda$1(this, response));
     }
 
-    final /* synthetic */ void lambda$null$0$WebviewActivity(TLObject response) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$0$WebviewActivity(TLObject response) {
         this.loadStats = false;
         if (response != null) {
             TL_statsURL url = (TL_statsURL) response;
@@ -368,7 +375,7 @@ public class WebviewActivity extends BaseFragment {
             editor.commit();
             Browser.openUrl((Context) parentActivity, url, false);
             serializedData.cleanup();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }

@@ -125,7 +125,8 @@ public class LocationController implements NotificationCenterDelegate {
         loadSharingLocations();
     }
 
-    final /* synthetic */ void lambda$new$0$LocationController() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$0$LocationController() {
         LocationController locationController = getInstance(this.currentAccount);
         NotificationCenter.getInstance(this.currentAccount).addObserver(locationController, NotificationCenter.didReceiveNewMessages);
         NotificationCenter.getInstance(this.currentAccount).addObserver(locationController, NotificationCenter.messagesDeleted);
@@ -252,7 +253,8 @@ public class LocationController implements NotificationCenterDelegate {
         }
     }
 
-    final /* synthetic */ void lambda$broadcastLastKnownLocation$2$LocationController(SharingLocationInfo info, int[] reqId, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$broadcastLastKnownLocation$2$LocationController(SharingLocationInfo info, int[] reqId, TLObject response, TL_error error) {
         if (error == null) {
             Updates updates = (Updates) response;
             boolean updated = false;
@@ -279,7 +281,8 @@ public class LocationController implements NotificationCenterDelegate {
         }
     }
 
-    final /* synthetic */ void lambda$null$1$LocationController(SharingLocationInfo info) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$1$LocationController(SharingLocationInfo info) {
         this.sharingLocationsUI.remove(info);
         this.sharingLocationsMapUI.remove(info.did);
         if (this.sharingLocationsUI.isEmpty()) {
@@ -288,7 +291,8 @@ public class LocationController implements NotificationCenterDelegate {
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.liveLocationsChanged, new Object[0]);
     }
 
-    protected void update() {
+    /* Access modifiers changed, original: protected */
+    public void update() {
         if (!this.sharingLocations.isEmpty()) {
             int a = 0;
             while (a < this.sharingLocations.size()) {
@@ -316,7 +320,8 @@ public class LocationController implements NotificationCenterDelegate {
         }
     }
 
-    final /* synthetic */ void lambda$update$3$LocationController(SharingLocationInfo info) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$update$3$LocationController(SharingLocationInfo info) {
         this.sharingLocationsUI.remove(info);
         this.sharingLocationsMapUI.remove(info.did);
         if (this.sharingLocationsUI.isEmpty()) {
@@ -334,7 +339,8 @@ public class LocationController implements NotificationCenterDelegate {
         Utilities.stageQueue.postRunnable(new LocationController$$Lambda$3(this));
     }
 
-    final /* synthetic */ void lambda$cleanup$4$LocationController() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$cleanup$4$LocationController() {
         this.requests.clear();
         this.sharingLocationsMap.clear();
         this.sharingLocations.clear();
@@ -342,7 +348,8 @@ public class LocationController implements NotificationCenterDelegate {
         stop(true);
     }
 
-    protected void addSharingLocation(long did, int mid, int period, Message message) {
+    /* Access modifiers changed, original: protected */
+    public void addSharingLocation(long did, int mid, int period, Message message) {
         SharingLocationInfo info = new SharingLocationInfo();
         info.did = did;
         info.mid = mid;
@@ -360,7 +367,8 @@ public class LocationController implements NotificationCenterDelegate {
         AndroidUtilities.runOnUIThread(new LocationController$$Lambda$4(this, old, info));
     }
 
-    final /* synthetic */ void lambda$addSharingLocation$5$LocationController(SharingLocationInfo old, SharingLocationInfo info) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$addSharingLocation$5$LocationController(SharingLocationInfo old, SharingLocationInfo info) {
         if (old != null) {
             this.sharingLocationsUI.remove(old);
         }
@@ -382,7 +390,8 @@ public class LocationController implements NotificationCenterDelegate {
         MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new LocationController$$Lambda$5(this));
     }
 
-    final /* synthetic */ void lambda$loadSharingLocations$9$LocationController() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$loadSharingLocations$9$LocationController() {
         ArrayList<SharingLocationInfo> result = new ArrayList();
         ArrayList<User> users = new ArrayList();
         ArrayList<Chat> chats = new ArrayList();
@@ -422,7 +431,7 @@ public class LocationController implements NotificationCenterDelegate {
             if (!usersToLoad.isEmpty()) {
                 MessagesStorage.getInstance(this.currentAccount).getUsersInternal(TextUtils.join(",", usersToLoad), users);
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         if (!result.isEmpty()) {
@@ -430,13 +439,15 @@ public class LocationController implements NotificationCenterDelegate {
         }
     }
 
-    final /* synthetic */ void lambda$null$8$LocationController(ArrayList users, ArrayList chats, ArrayList result) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$8$LocationController(ArrayList users, ArrayList chats, ArrayList result) {
         MessagesController.getInstance(this.currentAccount).putUsers(users, true);
         MessagesController.getInstance(this.currentAccount).putChats(chats, true);
         Utilities.stageQueue.postRunnable(new LocationController$$Lambda$16(this, result));
     }
 
-    final /* synthetic */ void lambda$null$7$LocationController(ArrayList result) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$7$LocationController(ArrayList result) {
         this.sharingLocations.addAll(result);
         for (int a = 0; a < this.sharingLocations.size(); a++) {
             SharingLocationInfo info = (SharingLocationInfo) this.sharingLocations.get(a);
@@ -445,7 +456,8 @@ public class LocationController implements NotificationCenterDelegate {
         AndroidUtilities.runOnUIThread(new LocationController$$Lambda$17(this, result));
     }
 
-    final /* synthetic */ void lambda$null$6$LocationController(ArrayList result) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$6$LocationController(ArrayList result) {
         this.sharingLocationsUI.addAll(result);
         for (int a = 0; a < result.size(); a++) {
             SharingLocationInfo info = (SharingLocationInfo) result.get(a);
@@ -459,11 +471,12 @@ public class LocationController implements NotificationCenterDelegate {
         MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new LocationController$$Lambda$6(this, remove, info));
     }
 
-    final /* synthetic */ void lambda$saveSharingLocation$10$LocationController(int remove, SharingLocationInfo info) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$saveSharingLocation$10$LocationController(int remove, SharingLocationInfo info) {
         if (remove == 2) {
             try {
                 MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("DELETE FROM sharing_locations WHERE 1").stepThis().dispose();
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
         } else if (remove == 1) {
@@ -490,7 +503,8 @@ public class LocationController implements NotificationCenterDelegate {
         Utilities.stageQueue.postRunnable(new LocationController$$Lambda$7(this, did));
     }
 
-    final /* synthetic */ void lambda$removeSharingLocation$13$LocationController(long did) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$removeSharingLocation$13$LocationController(long did) {
         SharingLocationInfo info = (SharingLocationInfo) this.sharingLocationsMap.get(did);
         this.sharingLocationsMap.remove(did);
         if (info != null) {
@@ -511,13 +525,15 @@ public class LocationController implements NotificationCenterDelegate {
         }
     }
 
-    final /* synthetic */ void lambda$null$11$LocationController(TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$11$LocationController(TLObject response, TL_error error) {
         if (error == null) {
             MessagesController.getInstance(this.currentAccount).processUpdates((Updates) response, false);
         }
     }
 
-    final /* synthetic */ void lambda$null$12$LocationController(SharingLocationInfo info) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$12$LocationController(SharingLocationInfo info) {
         this.sharingLocationsUI.remove(info);
         this.sharingLocationsMapUI.remove(info.did);
         if (this.sharingLocationsUI.isEmpty()) {
@@ -542,7 +558,8 @@ public class LocationController implements NotificationCenterDelegate {
         Utilities.stageQueue.postRunnable(new LocationController$$Lambda$8(this));
     }
 
-    final /* synthetic */ void lambda$removeAllLocationSharings$16$LocationController() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$removeAllLocationSharings$16$LocationController() {
         for (int a = 0; a < this.sharingLocations.size(); a++) {
             SharingLocationInfo info = (SharingLocationInfo) this.sharingLocations.get(a);
             TL_messages_editMessage req = new TL_messages_editMessage();
@@ -561,13 +578,15 @@ public class LocationController implements NotificationCenterDelegate {
         AndroidUtilities.runOnUIThread(new LocationController$$Lambda$12(this));
     }
 
-    final /* synthetic */ void lambda$null$14$LocationController(TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$14$LocationController(TLObject response, TL_error error) {
         if (error == null) {
             MessagesController.getInstance(this.currentAccount).processUpdates((Updates) response, false);
         }
     }
 
-    final /* synthetic */ void lambda$null$15$LocationController() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$15$LocationController() {
         this.sharingLocationsUI.clear();
         this.sharingLocationsMapUI.clear();
         stopService();
@@ -594,17 +613,17 @@ public class LocationController implements NotificationCenterDelegate {
             this.started = true;
             try {
                 this.locationManager.requestLocationUpdates("gps", 1, 0.0f, this.gpsLocationListener);
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
             try {
                 this.locationManager.requestLocationUpdates("network", 1, 0.0f, this.networkLocationListener);
-            } catch (Throwable e2) {
+            } catch (Exception e2) {
                 FileLog.e(e2);
             }
             try {
                 this.locationManager.requestLocationUpdates("passive", 1, 0.0f, this.passiveLocationListener);
-            } catch (Throwable e22) {
+            } catch (Exception e22) {
                 FileLog.e(e22);
             }
             if (this.lastKnownLocation == null) {
@@ -613,7 +632,7 @@ public class LocationController implements NotificationCenterDelegate {
                     if (this.lastKnownLocation == null) {
                         this.lastKnownLocation = this.locationManager.getLastKnownLocation("network");
                     }
-                } catch (Throwable e222) {
+                } catch (Exception e222) {
                     FileLog.e(e222);
                 }
             }
@@ -639,13 +658,15 @@ public class LocationController implements NotificationCenterDelegate {
         }
     }
 
-    final /* synthetic */ void lambda$loadLiveLocations$18$LocationController(long did, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$loadLiveLocations$18$LocationController(long did, TLObject response, TL_error error) {
         if (error == null) {
             AndroidUtilities.runOnUIThread(new LocationController$$Lambda$10(this, did, response));
         }
     }
 
-    final /* synthetic */ void lambda$null$17$LocationController(long did, TLObject response) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$17$LocationController(long did, TLObject response) {
         this.cacheRequests.delete(did);
         messages_Messages res = (messages_Messages) response;
         int a = 0;

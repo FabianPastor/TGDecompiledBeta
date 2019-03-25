@@ -72,25 +72,26 @@ public abstract class CustomTabsService extends Service {
     public @interface Result {
     }
 
-    protected abstract Bundle extraCommand(String str, Bundle bundle);
+    public abstract Bundle extraCommand(String str, Bundle bundle);
 
-    protected abstract boolean mayLaunchUrl(CustomTabsSessionToken customTabsSessionToken, Uri uri, Bundle bundle, List<Bundle> list);
+    public abstract boolean mayLaunchUrl(CustomTabsSessionToken customTabsSessionToken, Uri uri, Bundle bundle, List<Bundle> list);
 
-    protected abstract boolean newSession(CustomTabsSessionToken customTabsSessionToken);
+    public abstract boolean newSession(CustomTabsSessionToken customTabsSessionToken);
 
-    protected abstract int postMessage(CustomTabsSessionToken customTabsSessionToken, String str, Bundle bundle);
+    public abstract int postMessage(CustomTabsSessionToken customTabsSessionToken, String str, Bundle bundle);
 
-    protected abstract boolean requestPostMessageChannel(CustomTabsSessionToken customTabsSessionToken, Uri uri);
+    public abstract boolean requestPostMessageChannel(CustomTabsSessionToken customTabsSessionToken, Uri uri);
 
-    protected abstract boolean updateVisuals(CustomTabsSessionToken customTabsSessionToken, Bundle bundle);
+    public abstract boolean updateVisuals(CustomTabsSessionToken customTabsSessionToken, Bundle bundle);
 
-    protected abstract boolean warmup(long j);
+    public abstract boolean warmup(long j);
 
     public IBinder onBind(Intent intent) {
         return this.mBinder;
     }
 
-    protected boolean cleanUpSession(CustomTabsSessionToken sessionToken) {
+    /* Access modifiers changed, original: protected */
+    public boolean cleanUpSession(CustomTabsSessionToken sessionToken) {
         try {
             synchronized (this.mDeathRecipientMap) {
                 IBinder binder = sessionToken.getCallbackBinder();

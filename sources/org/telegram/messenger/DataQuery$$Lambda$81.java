@@ -1,17 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLObject;
-
 final /* synthetic */ class DataQuery$$Lambda$81 implements Runnable {
     private final DataQuery arg$1;
-    private final TLObject arg$2;
+    private final String arg$2;
 
-    DataQuery$$Lambda$81(DataQuery dataQuery, TLObject tLObject) {
+    DataQuery$$Lambda$81(DataQuery dataQuery, String str) {
         this.arg$1 = dataQuery;
-        this.arg$2 = tLObject;
+        this.arg$2 = str;
     }
 
     public void run() {
-        this.arg$1.lambda$null$72$DataQuery(this.arg$2);
+        this.arg$1.lambda$null$114$DataQuery(this.arg$2);
     }
 }

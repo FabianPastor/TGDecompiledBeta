@@ -186,7 +186,8 @@ public class SecretChatHelper {
         this.startingSecretChat = false;
     }
 
-    protected void processPendingEncMessages() {
+    /* Access modifiers changed, original: protected */
+    public void processPendingEncMessages() {
         if (!this.pendingEncMessagesToDelete.isEmpty()) {
             AndroidUtilities.runOnUIThread(new SecretChatHelper$$Lambda$0(this, new ArrayList(this.pendingEncMessagesToDelete)));
             MessagesStorage.getInstance(this.currentAccount).markMessagesAsDeletedByRandoms(new ArrayList(this.pendingEncMessagesToDelete));
@@ -194,7 +195,8 @@ public class SecretChatHelper {
         }
     }
 
-    final /* synthetic */ void lambda$processPendingEncMessages$0$SecretChatHelper(ArrayList pendingEncMessagesToDeleteCopy) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$processPendingEncMessages$0$SecretChatHelper(ArrayList pendingEncMessagesToDeleteCopy) {
         for (int a = 0; a < pendingEncMessagesToDeleteCopy.size(); a++) {
             MessageObject messageObject = (MessageObject) MessagesController.getInstance(this.currentAccount).dialogMessagesByRandomIds.get(((Long) pendingEncMessagesToDeleteCopy.get(a)).longValue());
             if (messageObject != null) {
@@ -252,7 +254,8 @@ public class SecretChatHelper {
         }
     }
 
-    protected void processUpdateEncryption(TL_updateEncryption update, ConcurrentHashMap<Integer, User> usersDict) {
+    /* Access modifiers changed, original: protected */
+    public void processUpdateEncryption(TL_updateEncryption update, ConcurrentHashMap<Integer, User> usersDict) {
         EncryptedChat newChat = update.chat;
         long dialog_id = ((long) newChat.id) << 32;
         EncryptedChat existingChat = MessagesController.getInstance(this.currentAccount).getEncryptedChatDB(newChat.id, false);
@@ -299,14 +302,16 @@ public class SecretChatHelper {
         }
     }
 
-    final /* synthetic */ void lambda$processUpdateEncryption$1$SecretChatHelper(TL_dialog dialog) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$processUpdateEncryption$1$SecretChatHelper(TL_dialog dialog) {
         MessagesController.getInstance(this.currentAccount).dialogs_dict.put(dialog.id, dialog);
         MessagesController.getInstance(this.currentAccount).dialogs.add(dialog);
         MessagesController.getInstance(this.currentAccount).sortDialogs(null);
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
     }
 
-    final /* synthetic */ void lambda$processUpdateEncryption$2$SecretChatHelper(EncryptedChat exist, EncryptedChat newChat) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$processUpdateEncryption$2$SecretChatHelper(EncryptedChat exist, EncryptedChat newChat) {
         if (exist != null) {
             MessagesController.getInstance(this.currentAccount).putEncryptedChat(newChat, false);
         }
@@ -558,20 +563,23 @@ public class SecretChatHelper {
         return (!(message.action instanceof TL_messageEncryptedAction) || (message.action.encryptedAction instanceof TL_decryptedMessageActionScreenshotMessages) || (message.action.encryptedAction instanceof TL_decryptedMessageActionSetMessageTTL)) ? false : true;
     }
 
-    protected void performSendEncryptedRequest(TL_messages_sendEncryptedMultiMedia req, DelayedMessage message) {
+    /* Access modifiers changed, original: protected */
+    public void performSendEncryptedRequest(TL_messages_sendEncryptedMultiMedia req, DelayedMessage message) {
         for (int a = 0; a < req.files.size(); a++) {
             performSendEncryptedRequest((DecryptedMessage) req.messages.get(a), (Message) message.messages.get(a), message.encryptedChat, (InputEncryptedFile) req.files.get(a), (String) message.originalPaths.get(a), (MessageObject) message.messageObjects.get(a));
         }
     }
 
-    protected void performSendEncryptedRequest(DecryptedMessage req, Message newMsgObj, EncryptedChat chat, InputEncryptedFile encryptedFile, String originalPath, MessageObject newMsg) {
+    /* Access modifiers changed, original: protected */
+    public void performSendEncryptedRequest(DecryptedMessage req, Message newMsgObj, EncryptedChat chat, InputEncryptedFile encryptedFile, String originalPath, MessageObject newMsg) {
         if (req != null && chat.auth_key != null && !(chat instanceof TL_encryptedChatRequested) && !(chat instanceof TL_encryptedChatWaiting)) {
             SendMessagesHelper.getInstance(this.currentAccount).putToSendingMessages(newMsgObj);
             Utilities.stageQueue.postRunnable(new SecretChatHelper$$Lambda$3(this, chat, req, newMsgObj, encryptedFile, newMsg, originalPath));
         }
     }
 
-    final /* synthetic */ void lambda$performSendEncryptedRequest$7$SecretChatHelper(EncryptedChat chat, DecryptedMessage req, Message newMsgObj, InputEncryptedFile encryptedFile, MessageObject newMsg, String originalPath) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$performSendEncryptedRequest$7$SecretChatHelper(EncryptedChat chat, DecryptedMessage req, Message newMsgObj, InputEncryptedFile encryptedFile, MessageObject newMsg, String originalPath) {
         try {
             TLObject reqToSend;
             TLObject layer = new TL_decryptedMessageLayer();
@@ -684,12 +692,13 @@ public class SecretChatHelper {
                 reqToSend = req2;
             }
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(reqToSend, new SecretChatHelper$$Lambda$27(this, req, chat, newMsgObj, newMsg, originalPath), 64);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
 
-    final /* synthetic */ void lambda$null$6$SecretChatHelper(DecryptedMessage req, EncryptedChat chat, Message newMsgObj, MessageObject newMsg, String originalPath, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$6$SecretChatHelper(DecryptedMessage req, EncryptedChat chat, Message newMsgObj, MessageObject newMsg, String originalPath, TLObject response, TL_error error) {
         if (error == null && (req.action instanceof TL_decryptedMessageActionNotifyLayer)) {
             EncryptedChat currentChat = MessagesController.getInstance(this.currentAccount).getEncryptedChat(Integer.valueOf(chat.id));
             if (currentChat == null) {
@@ -737,7 +746,8 @@ public class SecretChatHelper {
         AndroidUtilities.runOnUIThread(new SecretChatHelper$$Lambda$29(this, newMsgObj));
     }
 
-    final /* synthetic */ void lambda$null$4$SecretChatHelper(Message newMsgObj, messages_SentEncryptedMessage res, int existFlags, String attachPath) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$4$SecretChatHelper(Message newMsgObj, messages_SentEncryptedMessage res, int existFlags, String attachPath) {
         if (isSecretInvisibleMessage(newMsgObj)) {
             res.date = 0;
         }
@@ -745,7 +755,8 @@ public class SecretChatHelper {
         AndroidUtilities.runOnUIThread(new SecretChatHelper$$Lambda$30(this, newMsgObj, existFlags, attachPath));
     }
 
-    final /* synthetic */ void lambda$null$3$SecretChatHelper(Message newMsgObj, int existFlags, String attachPath) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$3$SecretChatHelper(Message newMsgObj, int existFlags, String attachPath) {
         newMsgObj.send_state = 0;
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(newMsgObj.id), Integer.valueOf(newMsgObj.id), newMsgObj, Long.valueOf(newMsgObj.dialog_id), Long.valueOf(0), Integer.valueOf(existFlags));
         SendMessagesHelper.getInstance(this.currentAccount).processSentMessage(newMsgObj.id);
@@ -755,7 +766,8 @@ public class SecretChatHelper {
         SendMessagesHelper.getInstance(this.currentAccount).removeFromSendingMessages(newMsgObj.id);
     }
 
-    final /* synthetic */ void lambda$null$5$SecretChatHelper(Message newMsgObj) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$5$SecretChatHelper(Message newMsgObj) {
         newMsgObj.send_state = 2;
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messageSendError, Integer.valueOf(newMsgObj.id));
         SendMessagesHelper.getInstance(this.currentAccount).processSentMessage(newMsgObj.id);
@@ -789,7 +801,8 @@ public class SecretChatHelper {
         }
     }
 
-    final /* synthetic */ void lambda$applyPeerLayer$8$SecretChatHelper(EncryptedChat chat) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$applyPeerLayer$8$SecretChatHelper(EncryptedChat chat) {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.encryptedChatUpdated, chat);
     }
 
@@ -1282,7 +1295,8 @@ public class SecretChatHelper {
         return null;
     }
 
-    final /* synthetic */ void lambda$processDecryptedObject$11$SecretChatHelper(long did) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$processDecryptedObject$11$SecretChatHelper(long did) {
         TL_dialog dialog = (TL_dialog) MessagesController.getInstance(this.currentAccount).dialogs_dict.get(did);
         if (dialog != null) {
             dialog.unread_count = 0;
@@ -1294,11 +1308,13 @@ public class SecretChatHelper {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.removeAllMessagesFromDialog, Long.valueOf(did), Boolean.valueOf(false));
     }
 
-    final /* synthetic */ void lambda$null$10$SecretChatHelper(long did) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$10$SecretChatHelper(long did) {
         AndroidUtilities.runOnUIThread(new SecretChatHelper$$Lambda$26(this, did));
     }
 
-    final /* synthetic */ void lambda$null$9$SecretChatHelper(long did) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$9$SecretChatHelper(long did) {
         NotificationsController.getInstance(this.currentAccount).processReadMessages(null, did, 0, Integer.MAX_VALUE, false);
         LongSparseArray<Integer> dialogsToUpdate = new LongSparseArray(1);
         dialogsToUpdate.put(did, Integer.valueOf(0));
@@ -1337,7 +1353,8 @@ public class SecretChatHelper {
         }
     }
 
-    final /* synthetic */ void lambda$resendMessages$14$SecretChatHelper(int startSeq, EncryptedChat encryptedChat, int endSeq) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$resendMessages$14$SecretChatHelper(int startSeq, EncryptedChat encryptedChat, int endSeq) {
         int sSeq = startSeq;
         try {
             if (encryptedChat.admin_id == UserConfig.getInstance(this.currentAccount).getClientUserId() && sSeq % 2 == 0) {
@@ -1395,12 +1412,13 @@ public class SecretChatHelper {
                 SendMessagesHelper.getInstance(this.currentAccount).processUnsentMessages(messages, new ArrayList(), new ArrayList(), encryptedChats);
                 MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast(String.format(Locale.US, "REPLACE INTO requested_holes VALUES(%d, %d, %d)", new Object[]{Integer.valueOf(encryptedChat.id), Integer.valueOf(sSeq), Integer.valueOf(endSeq)})).stepThis().dispose();
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
 
-    final /* synthetic */ void lambda$null$13$SecretChatHelper(ArrayList messages) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$13$SecretChatHelper(ArrayList messages) {
         for (int a = 0; a < messages.size(); a++) {
             MessageObject messageObject = new MessageObject(this.currentAccount, (Message) messages.get(a), false);
             messageObject.resendAsIs = true;
@@ -1491,7 +1509,8 @@ public class SecretChatHelper {
         return false;
     }
 
-    protected ArrayList<Message> decryptMessage(EncryptedMessage message) {
+    /* Access modifiers changed, original: protected */
+    public ArrayList<Message> decryptMessage(EncryptedMessage message) {
         EncryptedChat chat = MessagesController.getInstance(this.currentAccount).getEncryptedChatDB(message.chat_id, true);
         if (chat == null || (chat instanceof TL_encryptedChatDiscarded)) {
             return null;
@@ -1618,12 +1637,13 @@ public class SecretChatHelper {
                 FileLog.e(String.format("fingerprint mismatch %x", new Object[]{Long.valueOf(fingerprint)}));
             }
             return null;
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
 
-    final /* synthetic */ void lambda$decryptMessage$16$SecretChatHelper(TL_encryptedChatDiscarded newChat) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$decryptMessage$16$SecretChatHelper(TL_encryptedChatDiscarded newChat) {
         MessagesController.getInstance(this.currentAccount).putEncryptedChat(newChat, false);
         MessagesStorage.getInstance(this.currentAccount).updateEncryptedChat(newChat);
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.encryptedChatUpdated, newChat);
@@ -1697,12 +1717,14 @@ public class SecretChatHelper {
         declineSecretChat(encryptedChat.id);
     }
 
-    final /* synthetic */ void lambda$processAcceptedSecretChat$17$SecretChatHelper(EncryptedChat encryptedChat) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$processAcceptedSecretChat$17$SecretChatHelper(EncryptedChat encryptedChat) {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.encryptedChatUpdated, encryptedChat);
         sendNotifyLayerMessage(encryptedChat, null);
     }
 
-    final /* synthetic */ void lambda$processAcceptedSecretChat$18$SecretChatHelper(TL_encryptedChatDiscarded newChat) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$processAcceptedSecretChat$18$SecretChatHelper(TL_encryptedChatDiscarded newChat) {
         MessagesController.getInstance(this.currentAccount).putEncryptedChat(newChat, false);
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.encryptedChatUpdated, newChat);
     }
@@ -1726,7 +1748,8 @@ public class SecretChatHelper {
         }
     }
 
-    final /* synthetic */ void lambda$acceptSecretChat$22$SecretChatHelper(EncryptedChat encryptedChat, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$acceptSecretChat$22$SecretChatHelper(EncryptedChat encryptedChat, TLObject response, TL_error error) {
         if (error == null) {
             int a;
             messages_DhConfig res = (messages_DhConfig) response;
@@ -1794,7 +1817,8 @@ public class SecretChatHelper {
         this.acceptingChats.remove(encryptedChat.id);
     }
 
-    final /* synthetic */ void lambda$null$21$SecretChatHelper(EncryptedChat encryptedChat, TLObject response1, TL_error error1) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$21$SecretChatHelper(EncryptedChat encryptedChat, TLObject response1, TL_error error1) {
         this.acceptingChats.remove(encryptedChat.id);
         if (error1 == null) {
             EncryptedChat newChat = (EncryptedChat) response1;
@@ -1811,7 +1835,8 @@ public class SecretChatHelper {
         }
     }
 
-    final /* synthetic */ void lambda$null$20$SecretChatHelper(EncryptedChat newChat) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$20$SecretChatHelper(EncryptedChat newChat) {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.encryptedChatUpdated, newChat);
         sendNotifyLayerMessage(newChat, null);
     }
@@ -1831,7 +1856,8 @@ public class SecretChatHelper {
         }
     }
 
-    final /* synthetic */ void lambda$startSecretChat$29$SecretChatHelper(Context context, AlertDialog progressDialog, User user, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$startSecretChat$29$SecretChatHelper(Context context, AlertDialog progressDialog, User user, TLObject response, TL_error error) {
         if (error == null) {
             messages_DhConfig res = (messages_DhConfig) response;
             if (response instanceof TL_messages_dhConfig) {
@@ -1871,12 +1897,13 @@ public class SecretChatHelper {
             if (!((Activity) context).isFinishing()) {
                 progressDialog.dismiss();
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
 
-    final /* synthetic */ void lambda$null$27$SecretChatHelper(Context context, AlertDialog progressDialog, byte[] salt, User user, TLObject response1, TL_error error1) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$27$SecretChatHelper(Context context, AlertDialog progressDialog, byte[] salt, User user, TLObject response1, TL_error error1) {
         if (error1 == null) {
             AndroidUtilities.runOnUIThread(new SecretChatHelper$$Lambda$18(this, context, progressDialog, response1, salt, user));
             return;
@@ -1885,12 +1912,13 @@ public class SecretChatHelper {
         AndroidUtilities.runOnUIThread(new SecretChatHelper$$Lambda$19(this, context, progressDialog));
     }
 
-    final /* synthetic */ void lambda$null$25$SecretChatHelper(Context context, AlertDialog progressDialog, TLObject response1, byte[] salt, User user) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$25$SecretChatHelper(Context context, AlertDialog progressDialog, TLObject response1, byte[] salt, User user) {
         this.startingSecretChat = false;
         if (!((Activity) context).isFinishing()) {
             try {
                 progressDialog.dismiss();
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
         }
@@ -1914,41 +1942,45 @@ public class SecretChatHelper {
         Utilities.stageQueue.postRunnable(new SecretChatHelper$$Lambda$20(this));
     }
 
-    final /* synthetic */ void lambda$null$24$SecretChatHelper() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$24$SecretChatHelper() {
         if (!this.delayedEncryptedChatUpdates.isEmpty()) {
             MessagesController.getInstance(this.currentAccount).processUpdateArray(this.delayedEncryptedChatUpdates, null, null, false);
             this.delayedEncryptedChatUpdates.clear();
         }
     }
 
-    final /* synthetic */ void lambda$null$26$SecretChatHelper(Context context, AlertDialog progressDialog) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$26$SecretChatHelper(Context context, AlertDialog progressDialog) {
         if (!((Activity) context).isFinishing()) {
             this.startingSecretChat = false;
             try {
                 progressDialog.dismiss();
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
             Builder builder = new Builder(context);
-            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-            builder.setMessage(LocaleController.getString("CreateEncryptedChatError", R.string.CreateEncryptedChatError));
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+            builder.setTitle(LocaleController.getString("AppName", NUM));
+            builder.setMessage(LocaleController.getString("CreateEncryptedChatError", NUM));
+            builder.setPositiveButton(LocaleController.getString("OK", NUM), null);
             builder.show().setCanceledOnTouchOutside(true);
         }
     }
 
-    final /* synthetic */ void lambda$null$28$SecretChatHelper(Context context, AlertDialog progressDialog) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$28$SecretChatHelper(Context context, AlertDialog progressDialog) {
         this.startingSecretChat = false;
         if (!((Activity) context).isFinishing()) {
             try {
                 progressDialog.dismiss();
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
         }
     }
 
-    final /* synthetic */ void lambda$startSecretChat$30$SecretChatHelper(int reqId, DialogInterface dialog) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$startSecretChat$30$SecretChatHelper(int reqId, DialogInterface dialog) {
         ConnectionsManager.getInstance(this.currentAccount).cancelRequest(reqId, true);
     }
 }

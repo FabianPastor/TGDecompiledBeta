@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadialProgressView;
@@ -16,7 +15,7 @@ public class ChatLoadingCell extends FrameLayout {
     public ChatLoadingCell(Context context) {
         super(context);
         this.frameLayout = new FrameLayout(context);
-        this.frameLayout.setBackgroundResource(R.drawable.system_loader);
+        this.frameLayout.setBackgroundResource(NUM);
         this.frameLayout.getBackground().setColorFilter(Theme.colorFilter);
         addView(this.frameLayout, LayoutHelper.createFrame(36, 36, 17));
         this.progressBar = new RadialProgressView(context);
@@ -25,7 +24,8 @@ public class ChatLoadingCell extends FrameLayout {
         this.frameLayout.addView(this.progressBar, LayoutHelper.createFrame(32, 32, 17));
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(44.0f), NUM));
     }
 

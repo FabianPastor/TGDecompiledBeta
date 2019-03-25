@@ -1,22 +1,25 @@
 package org.telegram.messenger;
 
 import java.util.ArrayList;
-import org.telegram.messenger.support.SparseLongArray;
 
 final /* synthetic */ class MessagesStorage$$Lambda$37 implements Runnable {
     private final MessagesStorage arg$1;
-    private final SparseLongArray arg$2;
-    private final SparseLongArray arg$3;
-    private final ArrayList arg$4;
+    private final ArrayList arg$2;
+    private final int arg$3;
+    private final int arg$4;
+    private final int arg$5;
+    private final int arg$6;
 
-    MessagesStorage$$Lambda$37(MessagesStorage messagesStorage, SparseLongArray sparseLongArray, SparseLongArray sparseLongArray2, ArrayList arrayList) {
+    MessagesStorage$$Lambda$37(MessagesStorage messagesStorage, ArrayList arrayList, int i, int i2, int i3, int i4) {
         this.arg$1 = messagesStorage;
-        this.arg$2 = sparseLongArray;
-        this.arg$3 = sparseLongArray2;
-        this.arg$4 = arrayList;
+        this.arg$2 = arrayList;
+        this.arg$3 = i;
+        this.arg$4 = i2;
+        this.arg$5 = i3;
+        this.arg$6 = i4;
     }
 
     public void run() {
-        this.arg$1.lambda$updateDialogsWithReadMessages$58$MessagesStorage(this.arg$2, this.arg$3, this.arg$4);
+        this.arg$1.lambda$createTaskForSecretChat$59$MessagesStorage(this.arg$2, this.arg$3, this.arg$4, this.arg$5, this.arg$6);
     }
 }

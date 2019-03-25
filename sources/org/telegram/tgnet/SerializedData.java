@@ -58,7 +58,7 @@ public class SerializedData extends AbstractSerializedData {
                 this.inbuf.close();
                 this.inbuf = null;
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         try {
@@ -66,7 +66,7 @@ public class SerializedData extends AbstractSerializedData {
                 this.in.close();
                 this.in = null;
             }
-        } catch (Throwable e2) {
+        } catch (Exception e2) {
             FileLog.e(e2);
         }
         try {
@@ -74,7 +74,7 @@ public class SerializedData extends AbstractSerializedData {
                 this.outbuf.close();
                 this.outbuf = null;
             }
-        } catch (Throwable e22) {
+        } catch (Exception e22) {
             FileLog.e(e22);
         }
         try {
@@ -82,7 +82,7 @@ public class SerializedData extends AbstractSerializedData {
                 this.out.close();
                 this.out = null;
             }
-        } catch (Throwable e222) {
+        } catch (Exception e222) {
             FileLog.e(e222);
         }
     }
@@ -316,7 +316,8 @@ public class SerializedData extends AbstractSerializedData {
         return this.isOut ? this.outbuf.size() : this.inbuf.available();
     }
 
-    protected void set(byte[] newData) {
+    /* Access modifiers changed, original: protected */
+    public void set(byte[] newData) {
         this.isOut = false;
         this.inbuf = new ByteArrayInputStream(newData);
         this.in = new DataInputStream(this.inbuf);
@@ -333,7 +334,7 @@ public class SerializedData extends AbstractSerializedData {
             } else if (this.in != null) {
                 try {
                     this.in.skipBytes(count);
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
             }

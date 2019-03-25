@@ -1,17 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.AlertDialog;
+import android.view.View;
+import android.view.View.OnClickListener;
+import org.telegram.ui.ActionBar.BottomSheet.Builder;
 
-final /* synthetic */ class SettingsActivity$$Lambda$4 implements Runnable {
+final /* synthetic */ class SettingsActivity$$Lambda$4 implements OnClickListener {
     private final SettingsActivity arg$1;
-    private final AlertDialog arg$2;
+    private final Builder arg$2;
 
-    SettingsActivity$$Lambda$4(SettingsActivity settingsActivity, AlertDialog alertDialog) {
+    SettingsActivity$$Lambda$4(SettingsActivity settingsActivity, Builder builder) {
         this.arg$1 = settingsActivity;
-        this.arg$2 = alertDialog;
+        this.arg$2 = builder;
     }
 
-    public void run() {
-        this.arg$1.lambda$sendLogs$10$SettingsActivity(this.arg$2);
+    public void onClick(View view) {
+        this.arg$1.lambda$showHelpAlert$8$SettingsActivity(this.arg$2, view);
     }
 }

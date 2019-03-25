@@ -1,19 +1,19 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import java.util.ArrayList;
 
-final /* synthetic */ class ChatActivity$$Lambda$48 implements Runnable {
+final /* synthetic */ class ChatActivity$$Lambda$48 implements OnClickListener {
     private final ChatActivity arg$1;
-    private final AlertDialog[] arg$2;
-    private final int arg$3;
+    private final ArrayList arg$2;
 
-    ChatActivity$$Lambda$48(ChatActivity chatActivity, AlertDialog[] alertDialogArr, int i) {
+    ChatActivity$$Lambda$48(ChatActivity chatActivity, ArrayList arrayList) {
         this.arg$1 = chatActivity;
-        this.arg$2 = alertDialogArr;
-        this.arg$3 = i;
+        this.arg$2 = arrayList;
     }
 
-    public void run() {
-        this.arg$1.lambda$createDeleteMessagesAlert$60$ChatActivity(this.arg$2, this.arg$3);
+    public void onClick(DialogInterface dialogInterface, int i) {
+        this.arg$1.lambda$createMenu$58$ChatActivity(this.arg$2, dialogInterface, i);
     }
 }

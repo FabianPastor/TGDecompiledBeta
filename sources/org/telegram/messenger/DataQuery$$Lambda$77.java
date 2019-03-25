@@ -1,22 +1,15 @@
 package org.telegram.messenger;
 
-import android.util.SparseArray;
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_error;
-
-final /* synthetic */ class DataQuery$$Lambda$77 implements RequestDelegate {
+final /* synthetic */ class DataQuery$$Lambda$77 implements Runnable {
     private final DataQuery arg$1;
-    private final SparseArray arg$2;
-    private final long arg$3;
+    private final String arg$2;
 
-    DataQuery$$Lambda$77(DataQuery dataQuery, SparseArray sparseArray, long j) {
+    DataQuery$$Lambda$77(DataQuery dataQuery, String str) {
         this.arg$1 = dataQuery;
-        this.arg$2 = sparseArray;
-        this.arg$3 = j;
+        this.arg$2 = str;
     }
 
-    public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$null$93$DataQuery(this.arg$2, this.arg$3, tLObject, tL_error);
+    public void run() {
+        this.arg$1.lambda$null$117$DataQuery(this.arg$2);
     }
 }

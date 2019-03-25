@@ -1,7 +1,6 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
-import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
@@ -43,13 +42,13 @@ public class InviteUserCell extends FrameLayout {
             i = 3;
         }
         simpleTextView.setGravity(i | 48);
-        View view = this.nameTextView;
+        SimpleTextView simpleTextView2 = this.nameTextView;
         if (LocaleController.isRTL) {
             i2 = 5;
         } else {
             i2 = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, 20.0f, i2 | 48, LocaleController.isRTL ? 28.0f : 72.0f, 14.0f, LocaleController.isRTL ? 72.0f : 28.0f, 0.0f));
+        addView(simpleTextView2, LayoutHelper.createFrame(-1, 20.0f, i2 | 48, LocaleController.isRTL ? 28.0f : 72.0f, 14.0f, LocaleController.isRTL ? 72.0f : 28.0f, 0.0f));
         this.statusTextView = new SimpleTextView(context);
         this.statusTextView.setTextSize(16);
         simpleTextView = this.statusTextView;
@@ -59,21 +58,21 @@ public class InviteUserCell extends FrameLayout {
             i = 3;
         }
         simpleTextView.setGravity(i | 48);
-        view = this.statusTextView;
+        simpleTextView2 = this.statusTextView;
         if (LocaleController.isRTL) {
             i2 = 5;
         } else {
             i2 = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, 20.0f, i2 | 48, LocaleController.isRTL ? 28.0f : 72.0f, 39.0f, LocaleController.isRTL ? 72.0f : 28.0f, 0.0f));
+        addView(simpleTextView2, LayoutHelper.createFrame(-1, 20.0f, i2 | 48, LocaleController.isRTL ? 28.0f : 72.0f, 39.0f, LocaleController.isRTL ? 72.0f : 28.0f, 0.0f));
         if (needCheck) {
             this.checkBox = new GroupCreateCheckBox(context);
             this.checkBox.setVisibility(0);
-            View view2 = this.checkBox;
+            GroupCreateCheckBox groupCreateCheckBox = this.checkBox;
             if (!LocaleController.isRTL) {
                 i3 = 3;
             }
-            addView(view2, LayoutHelper.createFrame(24, 24.0f, i3 | 48, LocaleController.isRTL ? 0.0f : 41.0f, 41.0f, LocaleController.isRTL ? 41.0f : 0.0f, 0.0f));
+            addView(groupCreateCheckBox, LayoutHelper.createFrame(24, 24.0f, i3 | 48, LocaleController.isRTL ? 0.0f : 41.0f, 41.0f, LocaleController.isRTL ? 41.0f : 0.0f, 0.0f));
         }
     }
 
@@ -91,7 +90,8 @@ public class InviteUserCell extends FrameLayout {
         return this.currentContact;
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(72.0f), NUM));
     }
 

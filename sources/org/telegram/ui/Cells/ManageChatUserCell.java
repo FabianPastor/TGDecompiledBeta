@@ -12,7 +12,6 @@ import android.widget.ImageView.ScaleType;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
@@ -71,46 +70,48 @@ public class ManageChatUserCell extends FrameLayout {
             i = 3;
         }
         simpleTextView.setGravity(i | 48);
-        View view = this.nameTextView;
+        SimpleTextView simpleTextView2 = this.nameTextView;
         if (LocaleController.isRTL) {
             i2 = 5;
         } else {
             i2 = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, 20.0f, i2 | 48, LocaleController.isRTL ? 46.0f : (float) (this.namePadding + 68), 11.5f, LocaleController.isRTL ? (float) (this.namePadding + 68) : 46.0f, 0.0f));
+        addView(simpleTextView2, LayoutHelper.createFrame(-1, 20.0f, i2 | 48, LocaleController.isRTL ? 46.0f : (float) (this.namePadding + 68), 11.5f, LocaleController.isRTL ? (float) (this.namePadding + 68) : 46.0f, 0.0f));
         this.statusTextView = new SimpleTextView(context);
         this.statusTextView.setTextSize(14);
-        SimpleTextView simpleTextView2 = this.statusTextView;
+        SimpleTextView simpleTextView3 = this.statusTextView;
         if (LocaleController.isRTL) {
             i = 5;
         } else {
             i = 3;
         }
-        simpleTextView2.setGravity(i | 48);
-        view = this.statusTextView;
+        simpleTextView3.setGravity(i | 48);
+        simpleTextView2 = this.statusTextView;
         if (LocaleController.isRTL) {
             i3 = 5;
         } else {
             i3 = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, 20.0f, i3 | 48, LocaleController.isRTL ? 28.0f : (float) (this.namePadding + 68), 34.5f, LocaleController.isRTL ? (float) (this.namePadding + 68) : 28.0f, 0.0f));
+        addView(simpleTextView2, LayoutHelper.createFrame(-1, 20.0f, i3 | 48, LocaleController.isRTL ? 28.0f : (float) (this.namePadding + 68), 34.5f, LocaleController.isRTL ? (float) (this.namePadding + 68) : 28.0f, 0.0f));
         if (needOption) {
             this.optionsButton = new ImageView(context);
             this.optionsButton.setFocusable(false);
             this.optionsButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("stickers_menuSelector")));
-            this.optionsButton.setImageResource(R.drawable.ic_ab_other);
+            this.optionsButton.setImageResource(NUM);
             this.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("stickers_menu"), Mode.MULTIPLY));
             this.optionsButton.setScaleType(ScaleType.CENTER);
-            View view2 = this.optionsButton;
+            ImageView imageView = this.optionsButton;
             if (!LocaleController.isRTL) {
                 i4 = 5;
             }
-            addView(view2, LayoutHelper.createFrame(52, 64, i4 | 48));
+            addView(imageView, LayoutHelper.createFrame(52, 64, i4 | 48));
             this.optionsButton.setOnClickListener(new ManageChatUserCell$$Lambda$0(this));
+            this.optionsButton.setContentDescription(LocaleController.getString("AccDescrUserOptions", NUM));
         }
     }
 
-    final /* synthetic */ void lambda$new$0$ManageChatUserCell(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$0$ManageChatUserCell(View v) {
         this.delegate.onOptionsButtonCheck(this, true);
     }
 
@@ -165,7 +166,8 @@ public class ManageChatUserCell extends FrameLayout {
         update(0);
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(64.0f), NUM));
     }
 
@@ -232,13 +234,13 @@ public class ManageChatUserCell extends FrameLayout {
                 if (this.currentUser.bot) {
                     this.statusTextView.setTextColor(this.statusColor);
                     if (this.currentUser.bot_chat_history || this.isAdmin) {
-                        this.statusTextView.setText(LocaleController.getString("BotStatusRead", R.string.BotStatusRead));
+                        this.statusTextView.setText(LocaleController.getString("BotStatusRead", NUM));
                     } else {
-                        this.statusTextView.setText(LocaleController.getString("BotStatusCantRead", R.string.BotStatusCantRead));
+                        this.statusTextView.setText(LocaleController.getString("BotStatusCantRead", NUM));
                     }
                 } else if (this.currentUser.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((this.currentUser.status != null && this.currentUser.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(this.currentUser.id)))) {
                     this.statusTextView.setTextColor(this.statusOnlineColor);
-                    this.statusTextView.setText(LocaleController.getString("Online", R.string.Online));
+                    this.statusTextView.setText(LocaleController.getString("Online", NUM));
                 } else {
                     this.statusTextView.setTextColor(this.statusColor);
                     this.statusTextView.setText(LocaleController.formatUserStatus(this.currentAccount, this.currentUser));
@@ -264,7 +266,8 @@ public class ManageChatUserCell extends FrameLayout {
         return false;
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (this.needDivider) {
             canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(68.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(68.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
         }

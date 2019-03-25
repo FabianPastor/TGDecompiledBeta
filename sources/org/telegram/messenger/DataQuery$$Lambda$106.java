@@ -1,20 +1,25 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC.TL_messages_getFeaturedStickers;
+import android.content.Context;
+import org.telegram.tgnet.TLRPC.StickerSet;
+import org.telegram.tgnet.TLRPC.TL_error;
 
 final /* synthetic */ class DataQuery$$Lambda$106 implements Runnable {
     private final DataQuery arg$1;
-    private final TLObject arg$2;
-    private final TL_messages_getFeaturedStickers arg$3;
+    private final TL_error arg$2;
+    private final StickerSet arg$3;
+    private final Context arg$4;
+    private final int arg$5;
 
-    DataQuery$$Lambda$106(DataQuery dataQuery, TLObject tLObject, TL_messages_getFeaturedStickers tL_messages_getFeaturedStickers) {
+    DataQuery$$Lambda$106(DataQuery dataQuery, TL_error tL_error, StickerSet stickerSet, Context context, int i) {
         this.arg$1 = dataQuery;
-        this.arg$2 = tLObject;
-        this.arg$3 = tL_messages_getFeaturedStickers;
+        this.arg$2 = tL_error;
+        this.arg$3 = stickerSet;
+        this.arg$4 = context;
+        this.arg$5 = i;
     }
 
     public void run() {
-        this.arg$1.lambda$null$18$DataQuery(this.arg$2, this.arg$3);
+        this.arg$1.lambda$null$45$DataQuery(this.arg$2, this.arg$3, this.arg$4, this.arg$5);
     }
 }

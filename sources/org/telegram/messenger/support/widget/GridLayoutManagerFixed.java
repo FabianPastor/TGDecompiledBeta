@@ -23,7 +23,8 @@ public class GridLayoutManagerFixed extends GridLayoutManager {
         super(context, spanCount, orientation, reverseLayout);
     }
 
-    protected boolean hasSiblingChild(int position) {
+    /* Access modifiers changed, original: protected */
+    public boolean hasSiblingChild(int position) {
         return false;
     }
 
@@ -35,7 +36,8 @@ public class GridLayoutManagerFixed extends GridLayoutManager {
         return this.canScrollVertically;
     }
 
-    protected void recycleViewsFromStart(Recycler recycler, int dt) {
+    /* Access modifiers changed, original: protected */
+    public void recycleViewsFromStart(Recycler recycler, int dt) {
         if (dt >= 0) {
             int childCount = getChildCount();
             int i;
@@ -60,7 +62,8 @@ public class GridLayoutManagerFixed extends GridLayoutManager {
         }
     }
 
-    protected int[] calculateItemBorders(int[] cachedBorders, int spanCount, int totalSpace) {
+    /* Access modifiers changed, original: protected */
+    public int[] calculateItemBorders(int[] cachedBorders, int spanCount, int totalSpace) {
         if (!(cachedBorders != null && cachedBorders.length == spanCount + 1 && cachedBorders[cachedBorders.length - 1] == totalSpace)) {
             cachedBorders = new int[(spanCount + 1)];
         }
@@ -75,14 +78,16 @@ public class GridLayoutManagerFixed extends GridLayoutManager {
         return false;
     }
 
-    protected void measureChild(View view, int otherDirParentSpecMode, boolean alreadyMeasured) {
+    /* Access modifiers changed, original: protected */
+    public void measureChild(View view, int otherDirParentSpecMode, boolean alreadyMeasured) {
         GridLayoutManager.LayoutParams lp = (GridLayoutManager.LayoutParams) view.getLayoutParams();
         Rect decorInsets = lp.mDecorInsets;
         int horizontalInsets = ((decorInsets.left + decorInsets.right) + lp.leftMargin) + lp.rightMargin;
         measureChildWithDecorationsAndMargin(view, LayoutManager.getChildMeasureSpec(this.mCachedBorders[lp.mSpanSize], otherDirParentSpecMode, horizontalInsets, lp.width, false), LayoutManager.getChildMeasureSpec(this.mOrientationHelper.getTotalSpace(), getHeightMode(), ((decorInsets.top + decorInsets.bottom) + lp.topMargin) + lp.bottomMargin, lp.height, true), alreadyMeasured);
     }
 
-    void layoutChunk(Recycler recycler, State state, LayoutState layoutState, LayoutChunkResult result) {
+    /* Access modifiers changed, original: 0000 */
+    public void layoutChunk(Recycler recycler, State state, LayoutState layoutState, LayoutChunkResult result) {
         View view;
         int size;
         int otherDirSpecMode = this.mOrientationHelper.getModeInOther();

@@ -1,17 +1,15 @@
 package org.telegram.ui;
 
-import android.view.View;
-import android.view.View.OnClickListener;
 import org.telegram.ui.MediaActivity.AnonymousClass4;
 
-final /* synthetic */ class MediaActivity$4$$Lambda$0 implements OnClickListener {
-    private final boolean[] arg$1;
+final /* synthetic */ class MediaActivity$4$$Lambda$0 implements Runnable {
+    private final AnonymousClass4 arg$1;
 
-    MediaActivity$4$$Lambda$0(boolean[] zArr) {
-        this.arg$1 = zArr;
+    MediaActivity$4$$Lambda$0(AnonymousClass4 anonymousClass4) {
+        this.arg$1 = anonymousClass4;
     }
 
-    public void onClick(View view) {
-        AnonymousClass4.lambda$onItemClick$0$MediaActivity$4(this.arg$1, view);
+    public void run() {
+        this.arg$1.lambda$onItemClick$0$MediaActivity$4();
     }
 }

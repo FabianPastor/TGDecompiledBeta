@@ -25,7 +25,6 @@ import org.telegram.messenger.MediaController.PhotoEntry;
 import org.telegram.messenger.MediaController.SearchImage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper.SendingMediaInfo;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
@@ -82,29 +81,31 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
             CharSequence[] items;
             int[] icons;
             Builder builder = new Builder(this.parentFragment.getParentActivity());
-            builder.setTitle(LocaleController.getString("ChoosePhoto", R.string.ChoosePhoto));
+            builder.setTitle(LocaleController.getString("ChoosePhoto", NUM));
             if (this.searchAvailable) {
                 if (hasAvatar) {
-                    items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto), LocaleController.getString("ChooseFromGallery", R.string.ChooseFromGallery), LocaleController.getString("ChooseFromSearch", R.string.ChooseFromSearch), LocaleController.getString("DeletePhoto", R.string.DeletePhoto)};
-                    icons = new int[]{R.drawable.menu_camera, R.drawable.profile_photos, R.drawable.menu_search, R.drawable.chats_delete};
+                    items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", NUM), LocaleController.getString("ChooseFromGallery", NUM), LocaleController.getString("ChooseFromSearch", NUM), LocaleController.getString("DeletePhoto", NUM)};
+                    icons = new int[]{NUM, NUM, NUM, NUM};
                 } else {
-                    items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto), LocaleController.getString("ChooseFromGallery", R.string.ChooseFromGallery), LocaleController.getString("ChooseFromSearch", R.string.ChooseFromSearch)};
-                    icons = new int[]{R.drawable.menu_camera, R.drawable.profile_photos, R.drawable.menu_search};
+                    items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", NUM), LocaleController.getString("ChooseFromGallery", NUM), LocaleController.getString("ChooseFromSearch", NUM)};
+                    icons = new int[]{NUM, NUM, NUM};
                 }
             } else if (hasAvatar) {
-                items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto), LocaleController.getString("ChooseFromGallery", R.string.ChooseFromGallery), LocaleController.getString("DeletePhoto", R.string.DeletePhoto)};
-                icons = new int[]{R.drawable.menu_camera, R.drawable.profile_photos, R.drawable.chats_delete};
+                items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", NUM), LocaleController.getString("ChooseFromGallery", NUM), LocaleController.getString("DeletePhoto", NUM)};
+                icons = new int[]{NUM, NUM, NUM};
             } else {
-                items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto), LocaleController.getString("ChooseFromGallery", R.string.ChooseFromGallery)};
-                icons = new int[]{R.drawable.menu_camera, R.drawable.profile_photos};
+                items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", NUM), LocaleController.getString("ChooseFromGallery", NUM)};
+                icons = new int[]{NUM, NUM};
             }
             builder.setItems(items, icons, new ImageUpdater$$Lambda$0(this, onDeleteAvatar));
             BottomSheet sheet = builder.create();
             this.parentFragment.showDialog(sheet);
             TextView titleView = sheet.getTitleView();
-            titleView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            titleView.setTextSize(1, 18.0f);
-            titleView.setTextColor(Theme.getColor("dialogTextBlack"));
+            if (titleView != null) {
+                titleView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                titleView.setTextSize(1, 18.0f);
+                titleView.setTextColor(Theme.getColor("dialogTextBlack"));
+            }
             if (!this.searchAvailable) {
                 i = 2;
             }
@@ -112,7 +113,8 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
         }
     }
 
-    final /* synthetic */ void lambda$openMenu$0$ImageUpdater(Runnable onDeleteAvatar, DialogInterface dialogInterface, int i) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$openMenu$0$ImageUpdater(Runnable onDeleteAvatar, DialogInterface dialogInterface, int i) {
         if (i == 0) {
             openCamera();
         } else if (i == 1) {
@@ -254,7 +256,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                     return;
                 }
                 this.parentFragment.getParentActivity().requestPermissions(new String[]{"android.permission.CAMERA"}, 19);
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
         }
@@ -274,7 +276,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                             Intent photoPickerIntent = new Intent("android.intent.action.GET_CONTENT");
                             photoPickerIntent.setType("image/*");
                             ImageUpdater.this.parentFragment.startActivityForResult(photoPickerIntent, 14);
-                        } catch (Throwable e) {
+                        } catch (Exception e) {
                             FileLog.e(e);
                         }
                     }
@@ -300,7 +302,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                 photoCropActivity.setDelegate(this);
                 activity.lambda$runLinkRequest$27$LaunchActivity(photoCropActivity);
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
             processBitmap(ImageLoader.loadBitmap(path, uri, 800.0f, 800.0f, true));
         }
@@ -325,7 +327,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                         orientation = 270;
                         break;
                 }
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
             final ArrayList<Object> arrayList = new ArrayList();
@@ -389,10 +391,8 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
     }
 
     public void didReceivedNotification(int id, int account, Object... args) {
-        String location;
         if (id == NotificationCenter.FileDidUpload) {
-            location = args[0];
-            if (this.uploadingImage != null && location.equals(this.uploadingImage)) {
+            if (args[0].equals(this.uploadingImage)) {
                 NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidUpload);
                 NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidFailUpload);
                 if (this.delegate != null) {
@@ -406,8 +406,7 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                 }
             }
         } else if (id == NotificationCenter.FileDidFailUpload) {
-            location = (String) args[0];
-            if (this.uploadingImage != null && location.equals(this.uploadingImage)) {
+            if (((String) args[0]).equals(this.uploadingImage)) {
                 NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidUpload);
                 NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidFailUpload);
                 this.uploadingImage = null;
@@ -417,19 +416,16 @@ public class ImageUpdater implements NotificationCenterDelegate, PhotoEditActivi
                     this.delegate = null;
                 }
             }
-        } else if (id == NotificationCenter.fileDidLoad || id == NotificationCenter.fileDidFailedLoad || id == NotificationCenter.httpFileDidLoad || id == NotificationCenter.httpFileDidFailedLoad) {
-            String path = args[0];
-            if (this.uploadingImage != null && path.equals(this.uploadingImage)) {
-                NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileDidLoad);
-                NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileDidFailedLoad);
-                NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.httpFileDidLoad);
-                NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.httpFileDidFailedLoad);
-                this.uploadingImage = null;
-                if (id == NotificationCenter.fileDidLoad || id == NotificationCenter.httpFileDidLoad) {
-                    processBitmap(ImageLoader.loadBitmap(this.finalPath, null, 800.0f, 800.0f, true));
-                } else {
-                    this.imageReceiver.setImageBitmap((Drawable) null);
-                }
+        } else if ((id == NotificationCenter.fileDidLoad || id == NotificationCenter.fileDidFailedLoad || id == NotificationCenter.httpFileDidLoad || id == NotificationCenter.httpFileDidFailedLoad) && args[0].equals(this.uploadingImage)) {
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileDidLoad);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileDidFailedLoad);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.httpFileDidLoad);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.httpFileDidFailedLoad);
+            this.uploadingImage = null;
+            if (id == NotificationCenter.fileDidLoad || id == NotificationCenter.httpFileDidLoad) {
+                processBitmap(ImageLoader.loadBitmap(this.finalPath, null, 800.0f, 800.0f, true));
+            } else {
+                this.imageReceiver.setImageBitmap((Drawable) null);
             }
         }
     }

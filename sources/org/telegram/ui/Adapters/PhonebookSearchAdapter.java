@@ -38,7 +38,7 @@ public class PhonebookSearchAdapter extends SelectionAdapter {
             if (this.searchTimer != null) {
                 this.searchTimer.cancel();
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         if (query == null) {
@@ -53,7 +53,7 @@ public class PhonebookSearchAdapter extends SelectionAdapter {
                 try {
                     PhonebookSearchAdapter.this.searchTimer.cancel();
                     PhonebookSearchAdapter.this.searchTimer = null;
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
                 PhonebookSearchAdapter.this.processSearch(query);
@@ -65,12 +65,14 @@ public class PhonebookSearchAdapter extends SelectionAdapter {
         AndroidUtilities.runOnUIThread(new PhonebookSearchAdapter$$Lambda$0(this, query));
     }
 
-    final /* synthetic */ void lambda$processSearch$1$PhonebookSearchAdapter(String query) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$processSearch$1$PhonebookSearchAdapter(String query) {
         int currentAccount = UserConfig.selectedAccount;
         Utilities.searchQueue.postRunnable(new PhonebookSearchAdapter$$Lambda$2(this, query, new ArrayList(ContactsController.getInstance(currentAccount).contactsBook.values()), new ArrayList(ContactsController.getInstance(currentAccount).contacts), currentAccount));
     }
 
-    final /* synthetic */ void lambda$null$0$PhonebookSearchAdapter(String query, ArrayList contactsCopy, ArrayList contactsCopy2, int currentAccount) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$0$PhonebookSearchAdapter(String query, ArrayList contactsCopy, ArrayList contactsCopy2, int currentAccount) {
         String search1 = query.trim().toLowerCase();
         if (search1.length() == 0) {
             updateSearchResults(query, new ArrayList(), new ArrayList());
@@ -175,14 +177,16 @@ public class PhonebookSearchAdapter extends SelectionAdapter {
         updateSearchResults(query, resultArray, resultArrayNames);
     }
 
-    protected void onUpdateSearchResults(String query) {
+    /* Access modifiers changed, original: protected */
+    public void onUpdateSearchResults(String query) {
     }
 
     private void updateSearchResults(String query, ArrayList<Object> users, ArrayList<CharSequence> names) {
         AndroidUtilities.runOnUIThread(new PhonebookSearchAdapter$$Lambda$1(this, query, users, names));
     }
 
-    final /* synthetic */ void lambda$updateSearchResults$2$PhonebookSearchAdapter(String query, ArrayList users, ArrayList names) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$updateSearchResults$2$PhonebookSearchAdapter(String query, ArrayList users, ArrayList names) {
         onUpdateSearchResults(query);
         this.searchResult = users;
         this.searchResultNames = names;

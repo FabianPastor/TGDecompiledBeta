@@ -26,6 +26,7 @@ public class SharedConfig {
     public static ProxyInfo currentProxy;
     public static boolean customTabs = true;
     public static boolean directShare = true;
+    public static long directShareHash;
     public static int fontSize = AndroidUtilities.dp(16.0f);
     public static boolean groupPhotosEnabled = true;
     public static boolean hasCameraCache;
@@ -58,6 +59,7 @@ public class SharedConfig {
     public static boolean saveIncomingPhotos;
     public static boolean saveStreamMedia = true;
     public static boolean saveToGallery;
+    public static boolean showNotificationsForAllAccounts = true;
     public static boolean shuffleMusic;
     public static boolean sortContactsByName;
     public static boolean streamAllVideo = false;
@@ -130,7 +132,7 @@ public class SharedConfig {
                 editor.putInt("passportConfigHash", passportConfigHash);
                 editor.putBoolean("sortContactsByName", sortContactsByName);
                 editor.commit();
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
         }
@@ -197,7 +199,7 @@ public class SharedConfig {
             groupPhotosEnabled = preferences.getBoolean("groupPhotosEnabled", true);
             repeatMode = preferences.getInt("repeatMode", 0);
             fontSize = preferences.getInt("fons_size", AndroidUtilities.isTablet() ? 18 : 16);
-            allowBigEmoji = preferences.getBoolean("allowBigEmoji", false);
+            allowBigEmoji = preferences.getBoolean("allowBigEmoji", true);
             useSystemEmoji = preferences.getBoolean("useSystemEmoji", false);
             streamMedia = preferences.getBoolean("streamMedia", true);
             saveStreamMedia = preferences.getBoolean("saveStreamMedia", true);
@@ -206,6 +208,8 @@ public class SharedConfig {
             suggestStickers = preferences.getInt("suggestStickers", 0);
             sortContactsByName = preferences.getBoolean("sortContactsByName", false);
             noSoundHintShowed = preferences.getBoolean("noSoundHintShowed", false);
+            directShareHash = preferences.getLong("directShareHash", 0);
+            showNotificationsForAllAccounts = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).getBoolean("AllAccounts", true);
             configLoaded = true;
         }
     }
@@ -287,7 +291,7 @@ public class SharedConfig {
                 passcodeHash = Utilities.bytesToHex(Utilities.computeSHA256(bytes, 0, bytes.length));
                 saveConfig();
                 return result;
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
                 return result;
             }
@@ -299,7 +303,7 @@ public class SharedConfig {
             System.arraycopy(passcodeBytes, 0, bytes, 16, passcodeBytes.length);
             System.arraycopy(passcodeSalt, 0, bytes, passcodeBytes.length + 16, 16);
             return passcodeHash.equals(Utilities.bytesToHex(Utilities.computeSHA256(bytes, 0, bytes.length)));
-        } catch (Throwable e2) {
+        } catch (Exception e2) {
             FileLog.e(e2);
             return result;
         }
@@ -595,7 +599,7 @@ public class SharedConfig {
             if (videoPath.isDirectory()) {
                 new File(videoPath, ".nomedia").createNewFile();
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }

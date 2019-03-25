@@ -21,9 +21,7 @@ import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.Chat;
@@ -154,7 +152,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                     break;
                 case 1:
                     view = new TextInfoPrivacyCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                     break;
                 case 2:
                     view = new TextSettingsCell(this.mContext);
@@ -187,7 +185,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                 case 1:
                     TextInfoPrivacyCell privacyCell = holder.itemView;
                     if (position == ChatRightsEditActivity.this.cantEditInfoRow) {
-                        privacyCell.setText(LocaleController.getString("EditAdminCantEdit", R.string.EditAdminCantEdit));
+                        privacyCell.setText(LocaleController.getString("EditAdminCantEdit", NUM));
                         return;
                     }
                     return;
@@ -197,10 +195,10 @@ public class ChatRightsEditActivity extends BaseFragment {
                         actionCell.setTextColor(Theme.getColor("windowBackgroundWhiteRedText5"));
                         actionCell.setTag("windowBackgroundWhiteRedText5");
                         if (ChatRightsEditActivity.this.currentType == 0) {
-                            actionCell.setText(LocaleController.getString("EditAdminRemoveAdmin", R.string.EditAdminRemoveAdmin), false);
+                            actionCell.setText(LocaleController.getString("EditAdminRemoveAdmin", NUM), false);
                             return;
                         } else if (ChatRightsEditActivity.this.currentType == 1) {
-                            actionCell.setText(LocaleController.getString("UserRestrictionsBlock", R.string.UserRestrictionsBlock), false);
+                            actionCell.setText(LocaleController.getString("UserRestrictionsBlock", NUM), false);
                             return;
                         } else {
                             return;
@@ -210,10 +208,10 @@ public class ChatRightsEditActivity extends BaseFragment {
                 case 3:
                     HeaderCell headerCell = holder.itemView;
                     if (ChatRightsEditActivity.this.currentType == 0) {
-                        headerCell.setText(LocaleController.getString("EditAdminWhatCanDo", R.string.EditAdminWhatCanDo));
+                        headerCell.setText(LocaleController.getString("EditAdminWhatCanDo", NUM));
                         return;
                     } else if (ChatRightsEditActivity.this.currentType == 1) {
-                        headerCell.setText(LocaleController.getString("UserRestrictionsCanDo", R.string.UserRestrictionsCanDo));
+                        headerCell.setText(LocaleController.getString("UserRestrictionsCanDo", NUM));
                         return;
                     } else {
                         return;
@@ -225,77 +223,77 @@ public class ChatRightsEditActivity extends BaseFragment {
                     if (position == ChatRightsEditActivity.this.changeInfoRow) {
                         if (ChatRightsEditActivity.this.currentType == 0) {
                             if (ChatRightsEditActivity.this.isChannel) {
-                                checkCell.setTextAndCheck(LocaleController.getString("EditAdminChangeChannelInfo", R.string.EditAdminChangeChannelInfo), ChatRightsEditActivity.this.adminRights.change_info, true);
+                                checkCell.setTextAndCheck(LocaleController.getString("EditAdminChangeChannelInfo", NUM), ChatRightsEditActivity.this.adminRights.change_info, true);
                             } else {
-                                checkCell.setTextAndCheck(LocaleController.getString("EditAdminChangeGroupInfo", R.string.EditAdminChangeGroupInfo), ChatRightsEditActivity.this.adminRights.change_info, true);
+                                checkCell.setTextAndCheck(LocaleController.getString("EditAdminChangeGroupInfo", NUM), ChatRightsEditActivity.this.adminRights.change_info, true);
                             }
                         } else if (ChatRightsEditActivity.this.currentType == 1) {
-                            string = LocaleController.getString("UserRestrictionsChangeInfo", R.string.UserRestrictionsChangeInfo);
+                            string = LocaleController.getString("UserRestrictionsChangeInfo", NUM);
                             z = (ChatRightsEditActivity.this.bannedRights.change_info || ChatRightsEditActivity.this.defaultBannedRights.change_info) ? false : true;
                             checkCell.setTextAndCheck(string, z, false);
-                            checkCell.setIcon(ChatRightsEditActivity.this.defaultBannedRights.change_info ? R.drawable.permission_locked : 0);
+                            checkCell.setIcon(ChatRightsEditActivity.this.defaultBannedRights.change_info ? NUM : 0);
                         }
                     } else if (position == ChatRightsEditActivity.this.postMessagesRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("EditAdminPostMessages", R.string.EditAdminPostMessages), ChatRightsEditActivity.this.adminRights.post_messages, true);
+                        checkCell.setTextAndCheck(LocaleController.getString("EditAdminPostMessages", NUM), ChatRightsEditActivity.this.adminRights.post_messages, true);
                     } else if (position == ChatRightsEditActivity.this.editMesagesRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("EditAdminEditMessages", R.string.EditAdminEditMessages), ChatRightsEditActivity.this.adminRights.edit_messages, true);
+                        checkCell.setTextAndCheck(LocaleController.getString("EditAdminEditMessages", NUM), ChatRightsEditActivity.this.adminRights.edit_messages, true);
                     } else if (position == ChatRightsEditActivity.this.deleteMessagesRow) {
                         if (ChatRightsEditActivity.this.isChannel) {
-                            checkCell.setTextAndCheck(LocaleController.getString("EditAdminDeleteMessages", R.string.EditAdminDeleteMessages), ChatRightsEditActivity.this.adminRights.delete_messages, true);
+                            checkCell.setTextAndCheck(LocaleController.getString("EditAdminDeleteMessages", NUM), ChatRightsEditActivity.this.adminRights.delete_messages, true);
                         } else {
-                            checkCell.setTextAndCheck(LocaleController.getString("EditAdminGroupDeleteMessages", R.string.EditAdminGroupDeleteMessages), ChatRightsEditActivity.this.adminRights.delete_messages, true);
+                            checkCell.setTextAndCheck(LocaleController.getString("EditAdminGroupDeleteMessages", NUM), ChatRightsEditActivity.this.adminRights.delete_messages, true);
                         }
                     } else if (position == ChatRightsEditActivity.this.addAdminsRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("EditAdminAddAdmins", R.string.EditAdminAddAdmins), ChatRightsEditActivity.this.adminRights.add_admins, false);
+                        checkCell.setTextAndCheck(LocaleController.getString("EditAdminAddAdmins", NUM), ChatRightsEditActivity.this.adminRights.add_admins, false);
                     } else if (position == ChatRightsEditActivity.this.banUsersRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("EditAdminBanUsers", R.string.EditAdminBanUsers), ChatRightsEditActivity.this.adminRights.ban_users, true);
+                        checkCell.setTextAndCheck(LocaleController.getString("EditAdminBanUsers", NUM), ChatRightsEditActivity.this.adminRights.ban_users, true);
                     } else if (position == ChatRightsEditActivity.this.addUsersRow) {
                         if (ChatRightsEditActivity.this.currentType == 0) {
                             if (ChatObject.isActionBannedByDefault(ChatRightsEditActivity.this.currentChat, 3)) {
-                                checkCell.setTextAndCheck(LocaleController.getString("EditAdminAddUsers", R.string.EditAdminAddUsers), ChatRightsEditActivity.this.adminRights.invite_users, true);
+                                checkCell.setTextAndCheck(LocaleController.getString("EditAdminAddUsers", NUM), ChatRightsEditActivity.this.adminRights.invite_users, true);
                             } else {
-                                checkCell.setTextAndCheck(LocaleController.getString("EditAdminAddUsersViaLink", R.string.EditAdminAddUsersViaLink), ChatRightsEditActivity.this.adminRights.invite_users, true);
+                                checkCell.setTextAndCheck(LocaleController.getString("EditAdminAddUsersViaLink", NUM), ChatRightsEditActivity.this.adminRights.invite_users, true);
                             }
                         } else if (ChatRightsEditActivity.this.currentType == 1) {
-                            string = LocaleController.getString("UserRestrictionsInviteUsers", R.string.UserRestrictionsInviteUsers);
+                            string = LocaleController.getString("UserRestrictionsInviteUsers", NUM);
                             z = (ChatRightsEditActivity.this.bannedRights.invite_users || ChatRightsEditActivity.this.defaultBannedRights.invite_users) ? false : true;
                             checkCell.setTextAndCheck(string, z, true);
-                            checkCell.setIcon(ChatRightsEditActivity.this.defaultBannedRights.invite_users ? R.drawable.permission_locked : 0);
+                            checkCell.setIcon(ChatRightsEditActivity.this.defaultBannedRights.invite_users ? NUM : 0);
                         }
                     } else if (position == ChatRightsEditActivity.this.pinMessagesRow) {
                         if (ChatRightsEditActivity.this.currentType == 0) {
-                            checkCell.setTextAndCheck(LocaleController.getString("EditAdminPinMessages", R.string.EditAdminPinMessages), ChatRightsEditActivity.this.adminRights.pin_messages, true);
+                            checkCell.setTextAndCheck(LocaleController.getString("EditAdminPinMessages", NUM), ChatRightsEditActivity.this.adminRights.pin_messages, true);
                         } else if (ChatRightsEditActivity.this.currentType == 1) {
-                            string = LocaleController.getString("UserRestrictionsPinMessages", R.string.UserRestrictionsPinMessages);
+                            string = LocaleController.getString("UserRestrictionsPinMessages", NUM);
                             z = (ChatRightsEditActivity.this.bannedRights.pin_messages || ChatRightsEditActivity.this.defaultBannedRights.pin_messages) ? false : true;
                             checkCell.setTextAndCheck(string, z, true);
-                            checkCell.setIcon(ChatRightsEditActivity.this.defaultBannedRights.pin_messages ? R.drawable.permission_locked : 0);
+                            checkCell.setIcon(ChatRightsEditActivity.this.defaultBannedRights.pin_messages ? NUM : 0);
                         }
                     } else if (position == ChatRightsEditActivity.this.sendMessagesRow) {
-                        string = LocaleController.getString("UserRestrictionsSend", R.string.UserRestrictionsSend);
+                        string = LocaleController.getString("UserRestrictionsSend", NUM);
                         z = (ChatRightsEditActivity.this.bannedRights.send_messages || ChatRightsEditActivity.this.defaultBannedRights.send_messages) ? false : true;
                         checkCell.setTextAndCheck(string, z, true);
-                        checkCell.setIcon(ChatRightsEditActivity.this.defaultBannedRights.send_messages ? R.drawable.permission_locked : 0);
+                        checkCell.setIcon(ChatRightsEditActivity.this.defaultBannedRights.send_messages ? NUM : 0);
                     } else if (position == ChatRightsEditActivity.this.sendMediaRow) {
-                        string = LocaleController.getString("UserRestrictionsSendMedia", R.string.UserRestrictionsSendMedia);
+                        string = LocaleController.getString("UserRestrictionsSendMedia", NUM);
                         z = (ChatRightsEditActivity.this.bannedRights.send_media || ChatRightsEditActivity.this.defaultBannedRights.send_media) ? false : true;
                         checkCell.setTextAndCheck(string, z, true);
-                        checkCell.setIcon(ChatRightsEditActivity.this.defaultBannedRights.send_media ? R.drawable.permission_locked : 0);
+                        checkCell.setIcon(ChatRightsEditActivity.this.defaultBannedRights.send_media ? NUM : 0);
                     } else if (position == ChatRightsEditActivity.this.sendStickersRow) {
-                        string = LocaleController.getString("UserRestrictionsSendStickers", R.string.UserRestrictionsSendStickers);
+                        string = LocaleController.getString("UserRestrictionsSendStickers", NUM);
                         z = (ChatRightsEditActivity.this.bannedRights.send_stickers || ChatRightsEditActivity.this.defaultBannedRights.send_stickers) ? false : true;
                         checkCell.setTextAndCheck(string, z, true);
-                        checkCell.setIcon(ChatRightsEditActivity.this.defaultBannedRights.send_stickers ? R.drawable.permission_locked : 0);
+                        checkCell.setIcon(ChatRightsEditActivity.this.defaultBannedRights.send_stickers ? NUM : 0);
                     } else if (position == ChatRightsEditActivity.this.embedLinksRow) {
-                        string = LocaleController.getString("UserRestrictionsEmbedLinks", R.string.UserRestrictionsEmbedLinks);
+                        string = LocaleController.getString("UserRestrictionsEmbedLinks", NUM);
                         z = (ChatRightsEditActivity.this.bannedRights.embed_links || ChatRightsEditActivity.this.defaultBannedRights.embed_links) ? false : true;
                         checkCell.setTextAndCheck(string, z, true);
-                        checkCell.setIcon(ChatRightsEditActivity.this.defaultBannedRights.embed_links ? R.drawable.permission_locked : 0);
+                        checkCell.setIcon(ChatRightsEditActivity.this.defaultBannedRights.embed_links ? NUM : 0);
                     } else if (position == ChatRightsEditActivity.this.sendPollsRow) {
-                        string = LocaleController.getString("UserRestrictionsSendPolls", R.string.UserRestrictionsSendPolls);
+                        string = LocaleController.getString("UserRestrictionsSendPolls", NUM);
                         z = (ChatRightsEditActivity.this.bannedRights.send_polls || ChatRightsEditActivity.this.defaultBannedRights.send_polls) ? false : true;
                         checkCell.setTextAndCheck(string, z, true);
-                        checkCell.setIcon(ChatRightsEditActivity.this.defaultBannedRights.send_polls ? R.drawable.permission_locked : 0);
+                        checkCell.setIcon(ChatRightsEditActivity.this.defaultBannedRights.send_polls ? NUM : 0);
                     }
                     if (position == ChatRightsEditActivity.this.sendMediaRow || position == ChatRightsEditActivity.this.sendStickersRow || position == ChatRightsEditActivity.this.embedLinksRow || position == ChatRightsEditActivity.this.sendPollsRow) {
                         if (ChatRightsEditActivity.this.bannedRights.send_messages || ChatRightsEditActivity.this.bannedRights.view_messages || ChatRightsEditActivity.this.defaultBannedRights.send_messages || ChatRightsEditActivity.this.defaultBannedRights.view_messages) {
@@ -315,13 +313,13 @@ public class ChatRightsEditActivity extends BaseFragment {
                 case 5:
                     ShadowSectionCell shadowCell = holder.itemView;
                     if (position == ChatRightsEditActivity.this.rightsShadowRow) {
-                        shadowCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, ChatRightsEditActivity.this.removeAdminRow == -1 ? R.drawable.greydivider_bottom : R.drawable.greydivider, "windowBackgroundGrayShadow"));
+                        shadowCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, ChatRightsEditActivity.this.removeAdminRow == -1 ? NUM : NUM, "windowBackgroundGrayShadow"));
                         return;
                     } else if (position == ChatRightsEditActivity.this.removeAdminShadowRow) {
-                        shadowCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
+                        shadowCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                         return;
                     } else {
-                        shadowCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) R.drawable.greydivider, "windowBackgroundGrayShadow"));
+                        shadowCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                         return;
                     }
                 case 6:
@@ -329,11 +327,11 @@ public class ChatRightsEditActivity extends BaseFragment {
                     if (position == ChatRightsEditActivity.this.untilDateRow) {
                         String value;
                         if (ChatRightsEditActivity.this.bannedRights.until_date == 0 || Math.abs(((long) ChatRightsEditActivity.this.bannedRights.until_date) - (System.currentTimeMillis() / 1000)) > NUM) {
-                            value = LocaleController.getString("UserRestrictionsUntilForever", R.string.UserRestrictionsUntilForever);
+                            value = LocaleController.getString("UserRestrictionsUntilForever", NUM);
                         } else {
                             value = LocaleController.formatDateForBan((long) ChatRightsEditActivity.this.bannedRights.until_date);
                         }
-                        detailCell.setTextAndValue(LocaleController.getString("UserRestrictionsDuration", R.string.UserRestrictionsDuration), value, false);
+                        detailCell.setTextAndValue(LocaleController.getString("UserRestrictionsDuration", NUM), value, false);
                         return;
                     }
                     return;
@@ -637,18 +635,18 @@ public class ChatRightsEditActivity extends BaseFragment {
 
     public View createView(Context context) {
         int i = 1;
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
         if (this.currentType == 0) {
-            this.actionBar.setTitle(LocaleController.getString("EditAdmin", R.string.EditAdmin));
+            this.actionBar.setTitle(LocaleController.getString("EditAdmin", NUM));
         } else {
-            this.actionBar.setTitle(LocaleController.getString("UserRestrictions", R.string.UserRestrictions));
+            this.actionBar.setTitle(LocaleController.getString("UserRestrictions", NUM));
         }
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
                     if (ChatRightsEditActivity.this.checkDiscard()) {
-                        ChatRightsEditActivity.this.lambda$checkDiscard$9$ChatRightsEditActivity();
+                        ChatRightsEditActivity.this.finishFragment();
                     }
                 } else if (id == 1) {
                     ChatRightsEditActivity.this.onDonePressed();
@@ -656,7 +654,7 @@ public class ChatRightsEditActivity extends BaseFragment {
             }
         });
         if (this.canEdit) {
-            this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
+            this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f), LocaleController.getString("Done", NUM));
         }
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
@@ -671,7 +669,7 @@ public class ChatRightsEditActivity extends BaseFragment {
         this.listView.setLayoutAnimation(null);
         this.listView.setLayoutManager(linearLayoutManager);
         RecyclerListView recyclerListView = this.listView;
-        Adapter listAdapter = new ListAdapter(context);
+        ListAdapter listAdapter = new ListAdapter(context);
         this.listViewAdapter = listAdapter;
         recyclerListView.setAdapter(listAdapter);
         recyclerListView = this.listView;
@@ -684,7 +682,8 @@ public class ChatRightsEditActivity extends BaseFragment {
         return this.fragmentView;
     }
 
-    final /* synthetic */ void lambda$createView$6$ChatRightsEditActivity(Context context, View view, int position) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$6$ChatRightsEditActivity(Context context, View view, int position) {
         if (!this.canEdit) {
             return;
         }
@@ -715,7 +714,7 @@ public class ChatRightsEditActivity extends BaseFragment {
             if (this.delegate != null) {
                 this.delegate.didSetRights(0, this.adminRights, this.bannedRights);
             }
-            lambda$checkDiscard$9$ChatRightsEditActivity();
+            finishFragment();
         } else if (position == this.untilDateRow) {
             if (getParentActivity() != null) {
                 Builder builder = new Builder(context);
@@ -724,7 +723,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                 linearLayout.setOrientation(1);
                 HeaderCell headerCell = new HeaderCell(context, true, 23, 15, false);
                 headerCell.setHeight(47);
-                headerCell.setText(LocaleController.getString("UserRestrictionsDuration", R.string.UserRestrictionsDuration));
+                headerCell.setText(LocaleController.getString("UserRestrictionsDuration", NUM));
                 linearLayout.addView(headerCell);
                 linearLayout = new LinearLayout(context);
                 linearLayout.setOrientation(1);
@@ -738,7 +737,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                     buttons[a].setBackgroundDrawable(Theme.getSelectorDrawable(false));
                     switch (a) {
                         case 0:
-                            text = LocaleController.getString("UserRestrictionsUntilForever", R.string.UserRestrictionsUntilForever);
+                            text = LocaleController.getString("UserRestrictionsUntilForever", NUM);
                             break;
                         case 1:
                             text = LocaleController.formatPluralString("Days", 1);
@@ -750,7 +749,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                             text = LocaleController.formatPluralString("Months", 1);
                             break;
                         default:
-                            text = LocaleController.getString("NotificationsCustom", R.string.NotificationsCustom);
+                            text = LocaleController.getString("NotificationsCustom", NUM);
                             break;
                     }
                     buttons[a].setTextAndIcon(text, 0);
@@ -763,7 +762,7 @@ public class ChatRightsEditActivity extends BaseFragment {
         } else if (view instanceof TextCheckCell2) {
             TextCheckCell2 checkCell = (TextCheckCell2) view;
             if (checkCell.hasIcon()) {
-                Toast.makeText(getParentActivity(), LocaleController.getString("UserRestrictionsDisabled", R.string.UserRestrictionsDisabled), 0).show();
+                Toast.makeText(getParentActivity(), LocaleController.getString("UserRestrictionsDisabled", NUM), 0).show();
             } else if (checkCell.isEnabled()) {
                 checkCell.setChecked(!checkCell.isChecked());
                 if (position == this.changeInfoRow) {
@@ -879,7 +878,8 @@ public class ChatRightsEditActivity extends BaseFragment {
         }
     }
 
-    final /* synthetic */ void lambda$null$5$ChatRightsEditActivity(Builder builder, View v2) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$5$ChatRightsEditActivity(Builder builder, View v2) {
         switch (((Integer) v2.getTag()).intValue()) {
             case 0:
                 this.bannedRights.until_date = 0;
@@ -915,14 +915,14 @@ public class ChatRightsEditActivity extends BaseFragment {
                     date.set(13, date.getMaximum(13));
                     date.set(14, date.getMaximum(14));
                     datePicker.setMaxDate(date.getTimeInMillis());
-                    dialog.setButton(-1, LocaleController.getString("Set", R.string.Set), dialog);
-                    dialog.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), ChatRightsEditActivity$$Lambda$7.$instance);
+                    dialog.setButton(-1, LocaleController.getString("Set", NUM), dialog);
+                    dialog.setButton(-2, LocaleController.getString("Cancel", NUM), ChatRightsEditActivity$$Lambda$7.$instance);
                     if (VERSION.SDK_INT >= 21) {
                         dialog.setOnShowListener(new ChatRightsEditActivity$$Lambda$8(datePicker));
                     }
                     showDialog(dialog);
                     break;
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                     break;
                 }
@@ -930,21 +930,23 @@ public class ChatRightsEditActivity extends BaseFragment {
         builder.getDismissRunnable().run();
     }
 
-    final /* synthetic */ void lambda$null$2$ChatRightsEditActivity(DatePicker view1, int year1, int month, int dayOfMonth1) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$2$ChatRightsEditActivity(DatePicker view1, int year1, int month, int dayOfMonth1) {
         Calendar calendar1 = Calendar.getInstance();
         calendar1.clear();
         calendar1.set(year1, month, dayOfMonth1);
         try {
             TimePickerDialog dialog13 = new TimePickerDialog(getParentActivity(), new ChatRightsEditActivity$$Lambda$9(this, (int) (calendar1.getTime().getTime() / 1000)), 0, 0, true);
-            dialog13.setButton(-1, LocaleController.getString("Set", R.string.Set), dialog13);
-            dialog13.setButton(-2, LocaleController.getString("Cancel", R.string.Cancel), ChatRightsEditActivity$$Lambda$10.$instance);
+            dialog13.setButton(-1, LocaleController.getString("Set", NUM), dialog13);
+            dialog13.setButton(-2, LocaleController.getString("Cancel", NUM), ChatRightsEditActivity$$Lambda$10.$instance);
             showDialog(dialog13);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
 
-    final /* synthetic */ void lambda$null$0$ChatRightsEditActivity(int time, TimePicker view11, int hourOfDay, int minute) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$0$ChatRightsEditActivity(int time, TimePicker view11, int hourOfDay, int minute) {
         this.bannedRights.until_date = ((hourOfDay * 3600) + time) + (minute * 60);
         this.listViewAdapter.notifyItemChanged(this.untilDateRow);
     }
@@ -1013,13 +1015,14 @@ public class ChatRightsEditActivity extends BaseFragment {
                     this.delegate.didSetRights(rights, this.adminRights, this.bannedRights);
                 }
             }
-            lambda$checkDiscard$9$ChatRightsEditActivity();
+            finishFragment();
             return;
         }
         MessagesController.getInstance(this.currentAccount).convertToMegaGroup(getParentActivity(), this.chatId, new ChatRightsEditActivity$$Lambda$1(this));
     }
 
-    final /* synthetic */ void lambda$onDonePressed$7$ChatRightsEditActivity(int param) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onDonePressed$7$ChatRightsEditActivity(int param) {
         this.chatId = param;
         this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(param));
         onDonePressed();
@@ -1037,13 +1040,23 @@ public class ChatRightsEditActivity extends BaseFragment {
             return true;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-        builder.setTitle(LocaleController.getString("UserRestrictionsApplyChanges", R.string.UserRestrictionsApplyChanges));
+        builder.setTitle(LocaleController.getString("UserRestrictionsApplyChanges", NUM));
         Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.chatId));
-        builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("UserRestrictionsApplyChangesText", R.string.UserRestrictionsApplyChangesText, chat.title)));
-        builder.setPositiveButton(LocaleController.getString("ApplyTheme", R.string.ApplyTheme), new ChatRightsEditActivity$$Lambda$2(this));
-        builder.setNegativeButton(LocaleController.getString("PassportDiscard", R.string.PassportDiscard), new ChatRightsEditActivity$$Lambda$3(this));
+        builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("UserRestrictionsApplyChangesText", NUM, chat.title)));
+        builder.setPositiveButton(LocaleController.getString("ApplyTheme", NUM), new ChatRightsEditActivity$$Lambda$2(this));
+        builder.setNegativeButton(LocaleController.getString("PassportDiscard", NUM), new ChatRightsEditActivity$$Lambda$3(this));
         showDialog(builder.create());
         return false;
+    }
+
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$checkDiscard$8$ChatRightsEditActivity(DialogInterface dialogInterface, int i) {
+        onDonePressed();
+    }
+
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$checkDiscard$9$ChatRightsEditActivity(DialogInterface dialog, int which) {
+        finishFragment();
     }
 
     public boolean onBackPressed() {
@@ -1094,7 +1107,8 @@ public class ChatRightsEditActivity extends BaseFragment {
         return r10;
     }
 
-    final /* synthetic */ void lambda$getThemeDescriptions$10$ChatRightsEditActivity() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$getThemeDescriptions$10$ChatRightsEditActivity() {
         if (this.listView != null) {
             int count = this.listView.getChildCount();
             for (int a = 0; a < count; a++) {

@@ -89,7 +89,8 @@ public class MP3Info extends AudioInfo {
         }
     }
 
-    MP3Frame readFirstFrame(MP3Input data, StopReadCondition stopCondition) throws IOException {
+    /* Access modifiers changed, original: 0000 */
+    public MP3Frame readFirstFrame(MP3Input data, StopReadCondition stopCondition) throws IOException {
         int b0 = 0;
         int b1 = stopCondition.stopRead(data) ? -1 : data.read();
         while (b1 != -1) {
@@ -154,7 +155,8 @@ public class MP3Info extends AudioInfo {
         return null;
     }
 
-    MP3Frame readNextFrame(MP3Input data, StopReadCondition stopCondition, MP3Frame previousFrame) throws IOException {
+    /* Access modifiers changed, original: 0000 */
+    public MP3Frame readNextFrame(MP3Input data, StopReadCondition stopCondition, MP3Frame previousFrame) throws IOException {
         Header previousHeader = previousFrame.getHeader();
         data.mark(4);
         int b0 = stopCondition.stopRead(data) ? -1 : data.read();
@@ -191,7 +193,8 @@ public class MP3Info extends AudioInfo {
         return null;
     }
 
-    long calculateDuration(MP3Input data, long totalLength, StopReadCondition stopCondition) throws IOException, MP3Exception {
+    /* Access modifiers changed, original: 0000 */
+    public long calculateDuration(MP3Input data, long totalLength, StopReadCondition stopCondition) throws IOException, MP3Exception {
         MP3Frame frame = readFirstFrame(data, stopCondition);
         if (frame != null) {
             int numberOfFrames = frame.getNumberOfFrames();

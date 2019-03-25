@@ -1,17 +1,17 @@
 package org.telegram.messenger;
 
+import java.util.ArrayList;
+
 final /* synthetic */ class MessagesStorage$$Lambda$56 implements Runnable {
     private final MessagesStorage arg$1;
-    private final String arg$2;
-    private final String arg$3;
+    private final ArrayList arg$2;
 
-    MessagesStorage$$Lambda$56(MessagesStorage messagesStorage, String str, String str2) {
+    MessagesStorage$$Lambda$56(MessagesStorage messagesStorage, ArrayList arrayList) {
         this.arg$1 = messagesStorage;
-        this.arg$2 = str;
-        this.arg$3 = str2;
+        this.arg$2 = arrayList;
     }
 
     public void run() {
-        this.arg$1.lambda$applyPhoneBookUpdates$81$MessagesStorage(this.arg$2, this.arg$3);
+        this.arg$1.lambda$deleteContacts$82$MessagesStorage(this.arg$2);
     }
 }

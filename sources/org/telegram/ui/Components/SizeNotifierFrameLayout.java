@@ -58,7 +58,8 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         invalidate();
     }
 
-    final /* synthetic */ void lambda$setBackgroundImage$0$SizeNotifierFrameLayout(int offsetX, int offsetY) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$setBackgroundImage$0$SizeNotifierFrameLayout(int offsetX, int offsetY) {
         this.translationX = (float) offsetX;
         this.translationY = (float) offsetY;
         invalidate();
@@ -90,7 +91,8 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         this.paused = false;
     }
 
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+    /* Access modifiers changed, original: protected */
+    public void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
         notifyHeightChanged();
     }
@@ -111,7 +113,8 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         }
     }
 
-    final /* synthetic */ void lambda$notifyHeightChanged$1$SizeNotifierFrameLayout(boolean isWidthGreater) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$notifyHeightChanged$1$SizeNotifierFrameLayout(boolean isWidthGreater) {
         if (this.delegate != null) {
             this.delegate.onSizeChanged(this.keyboardHeight, isWidthGreater);
         }
@@ -121,7 +124,8 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         this.bottomClip = value;
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (this.backgroundDrawable == null) {
             super.onDraw(canvas);
         } else if (this.backgroundDrawable instanceof ColorDrawable) {
@@ -169,7 +173,8 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         }
     }
 
-    protected boolean isActionBarVisible() {
+    /* Access modifiers changed, original: protected */
+    public boolean isActionBarVisible() {
         return true;
     }
 }

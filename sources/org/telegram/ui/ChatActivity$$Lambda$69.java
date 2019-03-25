@@ -1,19 +1,17 @@
 package org.telegram.ui;
 
-import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.tgnet.TLObject;
 
 final /* synthetic */ class ChatActivity$$Lambda$69 implements Runnable {
     private final ChatActivity arg$1;
-    private final AlertDialog[] arg$2;
-    private final int arg$3;
+    private final TLObject arg$2;
 
-    ChatActivity$$Lambda$69(ChatActivity chatActivity, AlertDialog[] alertDialogArr, int i) {
+    ChatActivity$$Lambda$69(ChatActivity chatActivity, TLObject tLObject) {
         this.arg$1 = chatActivity;
-        this.arg$2 = alertDialogArr;
-        this.arg$3 = i;
+        this.arg$2 = tLObject;
     }
 
     public void run() {
-        this.arg$1.lambda$null$81$ChatActivity(this.arg$2, this.arg$3);
+        this.arg$1.lambda$null$59$ChatActivity(this.arg$2);
     }
 }

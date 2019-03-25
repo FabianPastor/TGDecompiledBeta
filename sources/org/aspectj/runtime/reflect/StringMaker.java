@@ -43,12 +43,14 @@ class StringMaker {
         longStringMaker.cacheOffset = 2;
     }
 
-    String makeKindName(String name) {
+    /* Access modifiers changed, original: 0000 */
+    public String makeKindName(String name) {
         int dash = name.lastIndexOf(45);
         return dash == -1 ? name : name.substring(dash + 1);
     }
 
-    String makeModifiersString(int modifiers) {
+    /* Access modifiers changed, original: 0000 */
+    public String makeModifiersString(int modifiers) {
         if (!this.includeModifiers) {
             return "";
         }
@@ -59,12 +61,14 @@ class StringMaker {
         return new StringBuffer().append(str).append(" ").toString();
     }
 
-    String stripPackageName(String name) {
+    /* Access modifiers changed, original: 0000 */
+    public String stripPackageName(String name) {
         int dot = name.lastIndexOf(46);
         return dot == -1 ? name : name.substring(dot + 1);
     }
 
-    String makeTypeName(Class type, String typeName, boolean shortName) {
+    /* Access modifiers changed, original: 0000 */
+    public String makeTypeName(Class type, String typeName, boolean shortName) {
         if (type == null) {
             return "ANONYMOUS";
         }

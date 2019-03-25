@@ -5,7 +5,6 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.text.TextUtils.TruncateAt;
-import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -48,13 +47,13 @@ public class DialogRadioCell extends FrameLayout {
             i = 3;
         }
         textView.setGravity(i | 16);
-        View view = this.textView;
+        TextView textView2 = this.textView;
         if (LocaleController.isRTL) {
             i2 = 5;
         } else {
             i2 = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, LocaleController.isRTL ? 23.0f : 61.0f, 0.0f, LocaleController.isRTL ? 61.0f : 23.0f, 0.0f));
+        addView(textView2, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, LocaleController.isRTL ? 23.0f : 61.0f, 0.0f, LocaleController.isRTL ? 61.0f : 23.0f, 0.0f));
         this.radioButton = new RadioButton(context);
         this.radioButton.setSize(AndroidUtilities.dp(20.0f));
         if (dialog) {
@@ -62,14 +61,15 @@ public class DialogRadioCell extends FrameLayout {
         } else {
             this.radioButton.setColor(Theme.getColor("radioBackground"), Theme.getColor("radioBackgroundChecked"));
         }
-        View view2 = this.radioButton;
+        RadioButton radioButton = this.radioButton;
         if (!LocaleController.isRTL) {
             i3 = 3;
         }
-        addView(view2, LayoutHelper.createFrame(22, 22.0f, i3 | 48, 20.0f, 15.0f, 20.0f, 0.0f));
+        addView(radioButton, LayoutHelper.createFrame(22, 22.0f, i3 | 48, 20.0f, 15.0f, 20.0f, 0.0f));
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (this.needDivider ? 1 : 0) + AndroidUtilities.dp(50.0f));
         int availableWidth = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(34.0f);
         this.radioButton.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(22.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(22.0f), NUM));
@@ -134,7 +134,8 @@ public class DialogRadioCell extends FrameLayout {
         radioButton.setAlpha(f);
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         float f = 60.0f;
         if (this.needDivider) {
             float f2;

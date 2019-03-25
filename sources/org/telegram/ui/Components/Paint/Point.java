@@ -38,33 +38,40 @@ public class Point {
         return z;
     }
 
-    Point multiplySum(Point point, double scalar) {
+    /* Access modifiers changed, original: 0000 */
+    public Point multiplySum(Point point, double scalar) {
         return new Point((this.x + point.x) * scalar, (this.y + point.y) * scalar, (this.z + point.z) * scalar);
     }
 
-    Point multiplyAndAdd(double scalar, Point point) {
+    /* Access modifiers changed, original: 0000 */
+    public Point multiplyAndAdd(double scalar, Point point) {
         return new Point((this.x * scalar) + point.x, (this.y * scalar) + point.y, (this.z * scalar) + point.z);
     }
 
-    void alteringAddMultiplication(Point point, double scalar) {
+    /* Access modifiers changed, original: 0000 */
+    public void alteringAddMultiplication(Point point, double scalar) {
         this.x += point.x * scalar;
         this.y += point.y * scalar;
         this.z += point.z * scalar;
     }
 
-    Point add(Point point) {
+    /* Access modifiers changed, original: 0000 */
+    public Point add(Point point) {
         return new Point(this.x + point.x, this.y + point.y, this.z + point.z);
     }
 
-    Point substract(Point point) {
+    /* Access modifiers changed, original: 0000 */
+    public Point substract(Point point) {
         return new Point(this.x - point.x, this.y - point.y, this.z - point.z);
     }
 
-    Point multiplyByScalar(double scalar) {
+    /* Access modifiers changed, original: 0000 */
+    public Point multiplyByScalar(double scalar) {
         return new Point(this.x * scalar, this.y * scalar, this.z * scalar);
     }
 
-    Point getNormalized() {
+    /* Access modifiers changed, original: 0000 */
+    public Point getNormalized() {
         return multiplyByScalar(1.0d / getMagnitude());
     }
 
@@ -72,11 +79,13 @@ public class Point {
         return Math.sqrt(((this.x * this.x) + (this.y * this.y)) + (this.z * this.z));
     }
 
-    float getDistanceTo(Point point) {
+    /* Access modifiers changed, original: 0000 */
+    public float getDistanceTo(Point point) {
         return (float) Math.sqrt((Math.pow(this.x - point.x, 2.0d) + Math.pow(this.y - point.y, 2.0d)) + Math.pow(this.z - point.z, 2.0d));
     }
 
-    PointF toPointF() {
+    /* Access modifiers changed, original: 0000 */
+    public PointF toPointF() {
         return new PointF((float) this.x, (float) this.y);
     }
 }

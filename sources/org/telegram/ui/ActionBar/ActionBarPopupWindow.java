@@ -25,7 +25,6 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.R;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ActionBarPopupWindow extends PopupWindow {
@@ -47,7 +46,7 @@ public class ActionBarPopupWindow extends PopupWindow {
         private int backAlpha = 255;
         private float backScaleX = 1.0f;
         private float backScaleY = 1.0f;
-        protected Drawable backgroundDrawable = getResources().getDrawable(R.drawable.popup_fixed).mutate();
+        protected Drawable backgroundDrawable = getResources().getDrawable(NUM).mutate();
         private int lastStartedChild = 0;
         protected LinearLayout linearLayout;
         private OnDispatchKeyEventListener mOnDispatchKeyEventListener;
@@ -190,7 +189,8 @@ public class ActionBarPopupWindow extends PopupWindow {
             return super.dispatchKeyEvent(event);
         }
 
-        protected void onDraw(Canvas canvas) {
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
             if (this.backgroundDrawable != null) {
                 this.backgroundDrawable.setAlpha(this.backAlpha);
                 int height = getMeasuredHeight();
@@ -308,7 +308,7 @@ public class ActionBarPopupWindow extends PopupWindow {
         try {
             super.showAsDropDown(anchor, xoff, yoff);
             registerListener(anchor);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }

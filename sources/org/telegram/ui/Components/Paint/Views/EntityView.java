@@ -58,7 +58,8 @@ public class EntityView extends FrameLayout {
             this.dotStrokePaint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
         }
 
-        protected void updatePosition() {
+        /* Access modifiers changed, original: protected */
+        public void updatePosition() {
             Rect bounds = EntityView.this.getSelectionBounds();
             LayoutParams layoutParams = (LayoutParams) getLayoutParams();
             layoutParams.leftMargin = ((int) bounds.x) + EntityView.this.offsetX;
@@ -69,7 +70,8 @@ public class EntityView extends FrameLayout {
             setRotation(EntityView.this.getRotation());
         }
 
-        protected int pointInsideHandle(float x, float y) {
+        /* Access modifiers changed, original: protected */
+        public int pointInsideHandle(float x, float y) {
             return 0;
         }
 
@@ -250,7 +252,8 @@ public class EntityView extends FrameLayout {
         updatePosition();
     }
 
-    protected void updatePosition() {
+    /* Access modifiers changed, original: protected */
+    public void updatePosition() {
         float halfHeight = ((float) getHeight()) / 2.0f;
         setX(this.position.x - (((float) getWidth()) / 2.0f));
         setY(this.position.y - halfHeight);
@@ -267,7 +270,8 @@ public class EntityView extends FrameLayout {
         updateSelectionView();
     }
 
-    protected Rect getSelectionBounds() {
+    /* Access modifiers changed, original: protected */
+    public Rect getSelectionBounds() {
         return new Rect(0.0f, 0.0f, 0.0f, 0.0f);
     }
 
@@ -275,7 +279,8 @@ public class EntityView extends FrameLayout {
         return this.selectionView != null;
     }
 
-    protected SelectionView createSelectionView() {
+    /* Access modifiers changed, original: protected */
+    public SelectionView createSelectionView() {
         return null;
     }
 

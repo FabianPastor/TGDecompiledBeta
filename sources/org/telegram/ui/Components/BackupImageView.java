@@ -132,17 +132,20 @@ public class BackupImageView extends View {
         this.height = h;
     }
 
-    protected void onDetachedFromWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.imageReceiver.onDetachedFromWindow();
     }
 
-    protected void onAttachedToWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.imageReceiver.onAttachedToWindow();
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (this.width == -1 || this.height == -1) {
             this.imageReceiver.setImageCoords(0, 0, getWidth(), getHeight());
         } else {

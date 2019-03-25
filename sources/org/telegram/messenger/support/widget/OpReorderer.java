@@ -15,7 +15,8 @@ class OpReorderer {
         this.mCallback = callback;
     }
 
-    void reorderOps(List<UpdateOp> ops) {
+    /* Access modifiers changed, original: 0000 */
+    public void reorderOps(List<UpdateOp> ops) {
         while (true) {
             int badMove = getLastMoveOutOfOrder(ops);
             if (badMove != -1) {
@@ -44,7 +45,8 @@ class OpReorderer {
         }
     }
 
-    void swapMoveRemove(List<UpdateOp> list, int movePos, UpdateOp moveOp, int removePos, UpdateOp removeOp) {
+    /* Access modifiers changed, original: 0000 */
+    public void swapMoveRemove(List<UpdateOp> list, int movePos, UpdateOp moveOp, int removePos, UpdateOp removeOp) {
         boolean moveIsBackwards;
         UpdateOp extraRm = null;
         boolean revertedMove = false;
@@ -145,7 +147,8 @@ class OpReorderer {
         list.set(add, moveOp);
     }
 
-    void swapMoveUpdate(List<UpdateOp> list, int move, UpdateOp moveOp, int update, UpdateOp updateOp) {
+    /* Access modifiers changed, original: 0000 */
+    public void swapMoveUpdate(List<UpdateOp> list, int move, UpdateOp moveOp, int update, UpdateOp updateOp) {
         UpdateOp extraUp1 = null;
         UpdateOp extraUp2 = null;
         if (moveOp.itemCount < updateOp.positionStart) {

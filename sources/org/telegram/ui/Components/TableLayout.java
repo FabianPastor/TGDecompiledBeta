@@ -24,7 +24,8 @@ public class TableLayout extends View {
     public static final int ALIGN_BOUNDS = 0;
     public static final int ALIGN_MARGINS = 1;
     public static final Alignment BASELINE = new Alignment() {
-        int getGravityOffset(Child view, int cellDelta) {
+        /* Access modifiers changed, original: 0000 */
+        public int getGravityOffset(Child view, int cellDelta) {
             return 0;
         }
 
@@ -36,21 +37,25 @@ public class TableLayout extends View {
             return new Bounds() {
                 private int size;
 
-                protected void reset() {
+                /* Access modifiers changed, original: protected */
+                public void reset() {
                     super.reset();
                     this.size = Integer.MIN_VALUE;
                 }
 
-                protected void include(int before, int after) {
+                /* Access modifiers changed, original: protected */
+                public void include(int before, int after) {
                     super.include(before, after);
                     this.size = Math.max(this.size, before + after);
                 }
 
-                protected int size(boolean min) {
+                /* Access modifiers changed, original: protected */
+                public int size(boolean min) {
                     return Math.max(super.size(min), this.size);
                 }
 
-                protected int getOffset(TableLayout gl, Child c, Alignment a, int size, boolean hrz) {
+                /* Access modifiers changed, original: protected */
+                public int getOffset(TableLayout gl, Child c, Alignment a, int size, boolean hrz) {
                     return Math.max(0, super.getOffset(gl, c, a, size, hrz));
                 }
             };
@@ -59,7 +64,8 @@ public class TableLayout extends View {
     public static final Alignment BOTTOM = TRAILING;
     private static final int CAN_STRETCH = 2;
     public static final Alignment CENTER = new Alignment() {
-        int getGravityOffset(Child view, int cellDelta) {
+        /* Access modifiers changed, original: 0000 */
+        public int getGravityOffset(Child view, int cellDelta) {
             return cellDelta >> 1;
         }
 
@@ -74,7 +80,8 @@ public class TableLayout extends View {
     private static final boolean DEFAULT_USE_DEFAULT_MARGINS = false;
     public static final Alignment END = TRAILING;
     public static final Alignment FILL = new Alignment() {
-        int getGravityOffset(Child view, int cellDelta) {
+        /* Access modifiers changed, original: 0000 */
+        public int getGravityOffset(Child view, int cellDelta) {
             return 0;
         }
 
@@ -89,7 +96,8 @@ public class TableLayout extends View {
     public static final int HORIZONTAL = 0;
     private static final int INFLEXIBLE = 0;
     private static final Alignment LEADING = new Alignment() {
-        int getGravityOffset(Child view, int cellDelta) {
+        /* Access modifiers changed, original: 0000 */
+        public int getGravityOffset(Child view, int cellDelta) {
             return 0;
         }
 
@@ -103,7 +111,8 @@ public class TableLayout extends View {
     public static final Alignment START = LEADING;
     public static final Alignment TOP = LEADING;
     private static final Alignment TRAILING = new Alignment() {
-        int getGravityOffset(Child view, int cellDelta) {
+        /* Access modifiers changed, original: 0000 */
+        public int getGravityOffset(Child view, int cellDelta) {
             return cellDelta;
         }
 
@@ -113,7 +122,8 @@ public class TableLayout extends View {
     };
     public static final int UNDEFINED = Integer.MIN_VALUE;
     static final Alignment UNDEFINED_ALIGNMENT = new Alignment() {
-        int getGravityOffset(Child view, int cellDelta) {
+        /* Access modifiers changed, original: 0000 */
+        public int getGravityOffset(Child view, int cellDelta) {
             return Integer.MIN_VALUE;
         }
 
@@ -158,18 +168,20 @@ public class TableLayout extends View {
     }
 
     public static abstract class Alignment {
-        abstract int getAlignmentValue(Child child, int i);
+        public abstract int getAlignmentValue(Child child, int i);
 
-        abstract int getGravityOffset(Child child, int i);
+        public abstract int getGravityOffset(Child child, int i);
 
         Alignment() {
         }
 
-        int getSizeInCell(Child view, int viewSize, int cellSize) {
+        /* Access modifiers changed, original: 0000 */
+        public int getSizeInCell(Child view, int viewSize, int cellSize) {
             return viewSize;
         }
 
-        Bounds getBounds() {
+        /* Access modifiers changed, original: 0000 */
+        public Bounds getBounds() {
             return new Bounds();
         }
     }
@@ -187,29 +199,34 @@ public class TableLayout extends View {
             reset();
         }
 
-        protected void reset() {
+        /* Access modifiers changed, original: protected */
+        public void reset() {
             this.before = Integer.MIN_VALUE;
             this.after = Integer.MIN_VALUE;
             this.flexibility = 2;
         }
 
-        protected void include(int before, int after) {
+        /* Access modifiers changed, original: protected */
+        public void include(int before, int after) {
             this.before = Math.max(this.before, before);
             this.after = Math.max(this.after, after);
         }
 
-        protected int size(boolean min) {
+        /* Access modifiers changed, original: protected */
+        public int size(boolean min) {
             if (min || !TableLayout.canStretch(this.flexibility)) {
                 return this.before + this.after;
             }
             return 100000;
         }
 
-        protected int getOffset(TableLayout gl, Child c, Alignment a, int size, boolean horizontal) {
+        /* Access modifiers changed, original: protected */
+        public int getOffset(TableLayout gl, Child c, Alignment a, int size, boolean horizontal) {
             return this.before - a.getAlignmentValue(c, size);
         }
 
-        protected final void include(TableLayout gl, Child c, Spec spec, Axis axis, int size) {
+        /* Access modifiers changed, original: protected|final */
+        public final void include(TableLayout gl, Child c, Spec spec, Axis axis, int size) {
             this.flexibility &= spec.getFlexibility();
             boolean horizontal = axis.horizontal;
             int before = spec.getAbsoluteAlignment(axis.horizontal).getAlignmentValue(c, size);
@@ -449,7 +466,8 @@ public class TableLayout extends View {
             include(arcs, key, size, true);
         }
 
-        Arc[][] groupArcsByFirstVertex(Arc[] arcs) {
+        /* Access modifiers changed, original: 0000 */
+        public Arc[][] groupArcsByFirstVertex(Arc[] arcs) {
             int i;
             Arc arc;
             int i2;
@@ -485,7 +503,8 @@ public class TableLayout extends View {
                 Arc[] result = new Arc[arcs.length];
                 int[] visited = new int[(Axis.this.getCount() + 1)];
 
-                void walk(int loc) {
+                /* Access modifiers changed, original: 0000 */
+                public void walk(int loc) {
                     switch (this.visited[loc]) {
                         case 0:
                             this.visited[loc] = 1;
@@ -503,7 +522,8 @@ public class TableLayout extends View {
                     }
                 }
 
-                Arc[] sort() {
+                /* Access modifiers changed, original: 0000 */
+                public Arc[] sort() {
                     int N = this.arcsByVertex.length;
                     for (int loc = 0; loc < N; loc++) {
                         walk(loc);
@@ -1092,11 +1112,13 @@ public class TableLayout extends View {
             this.max = max;
         }
 
-        int size() {
+        /* Access modifiers changed, original: 0000 */
+        public int size() {
             return this.max - this.min;
         }
 
-        Interval inverse() {
+        /* Access modifiers changed, original: 0000 */
+        public Interval inverse() {
             return new Interval(this.max, this.min);
         }
 
@@ -1173,11 +1195,13 @@ public class TableLayout extends View {
             this.columnSpec = this.columnSpec.copyWriteAlignment(TableLayout.getAlignment(gravity, true));
         }
 
-        final void setRowSpecSpan(Interval span) {
+        /* Access modifiers changed, original: final */
+        public final void setRowSpecSpan(Interval span) {
             this.rowSpec = this.rowSpec.copyWriteSpan(span);
         }
 
-        final void setColumnSpecSpan(Interval span) {
+        /* Access modifiers changed, original: final */
+        public final void setColumnSpecSpan(Interval span) {
             this.columnSpec = this.columnSpec.copyWriteSpan(span);
         }
 
@@ -1298,15 +1322,18 @@ public class TableLayout extends View {
             }
         }
 
-        final Spec copyWriteSpan(Interval span) {
+        /* Access modifiers changed, original: final */
+        public final Spec copyWriteSpan(Interval span) {
             return new Spec(this.startDefined, span, this.alignment, this.weight);
         }
 
-        final Spec copyWriteAlignment(Alignment alignment) {
+        /* Access modifiers changed, original: final */
+        public final Spec copyWriteAlignment(Alignment alignment) {
             return new Spec(this.startDefined, this.span, alignment, this.weight);
         }
 
-        final int getFlexibility() {
+        /* Access modifiers changed, original: final */
+        public final int getFlexibility() {
             return (this.alignment == TableLayout.UNDEFINED_ALIGNMENT && this.weight == 0.0f) ? 0 : 2;
         }
 
@@ -1536,7 +1563,8 @@ public class TableLayout extends View {
         return getDefaultMargin(c, isAtEdge, horizontal, leading);
     }
 
-    int getMargin1(Child view, boolean horizontal, boolean leading) {
+    /* Access modifiers changed, original: 0000 */
+    public int getMargin1(Child view, boolean horizontal, boolean leading) {
         LayoutParams lp = view.getLayoutParams();
         int margin = horizontal ? leading ? lp.leftMargin : lp.rightMargin : leading ? lp.topMargin : lp.bottomMargin;
         return margin == Integer.MIN_VALUE ? getDefaultMargin(view, lp, horizontal, leading) : margin;
@@ -1670,7 +1698,8 @@ public class TableLayout extends View {
         }
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         int N = getChildCount();
         for (int i = 0; i < N; i++) {
             getChildAt(i).draw(canvas);
@@ -1742,7 +1771,8 @@ public class TableLayout extends View {
         return MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(measureSpec + delta), MeasureSpec.getMode(measureSpec));
     }
 
-    protected void onMeasure(int widthSpec, int heightSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthSpec, int heightSpec) {
         int a;
         int widthSansPadding;
         int heightSansPadding;
@@ -1903,7 +1933,8 @@ public class TableLayout extends View {
         return horizontal ? c.getMeasuredWidth() : c.getMeasuredHeight();
     }
 
-    final int getMeasurementIncludingMargin(Child c, boolean horizontal) {
+    /* Access modifiers changed, original: final */
+    public final int getMeasurementIncludingMargin(Child c, boolean horizontal) {
         return getMeasurement(c, horizontal) + getTotalMargin(c, horizontal);
     }
 
@@ -1912,7 +1943,8 @@ public class TableLayout extends View {
         invalidateValues();
     }
 
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+    /* Access modifiers changed, original: protected */
+    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
         consistencyCheck();
     }
 
@@ -1950,7 +1982,8 @@ public class TableLayout extends View {
 
     private static Alignment createSwitchingAlignment(final Alignment ltr) {
         return new Alignment() {
-            int getGravityOffset(Child view, int cellDelta) {
+            /* Access modifiers changed, original: 0000 */
+            public int getGravityOffset(Child view, int cellDelta) {
                 return ltr.getGravityOffset(view, cellDelta);
             }
 

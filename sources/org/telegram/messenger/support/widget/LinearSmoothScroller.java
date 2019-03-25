@@ -34,10 +34,12 @@ public class LinearSmoothScroller extends SmoothScroller {
         this.MILLISECONDS_PER_PX = calculateSpeedPerPixel(context.getResources().getDisplayMetrics());
     }
 
-    protected void onStart() {
+    /* Access modifiers changed, original: protected */
+    public void onStart() {
     }
 
-    protected void onTargetFound(View targetView, State state, Action action) {
+    /* Access modifiers changed, original: protected */
+    public void onTargetFound(View targetView, State state, Action action) {
         int dx = calculateDxToMakeVisible(targetView, getHorizontalSnapPreference());
         int dy = calculateDyToMakeVisible(targetView, getVerticalSnapPreference());
         int time = calculateTimeForDeceleration((int) Math.sqrt((double) ((dx * dx) + (dy * dy))));
@@ -46,7 +48,8 @@ public class LinearSmoothScroller extends SmoothScroller {
         }
     }
 
-    protected void onSeekTargetStep(int dx, int dy, State state, Action action) {
+    /* Access modifiers changed, original: protected */
+    public void onSeekTargetStep(int dx, int dy, State state, Action action) {
         if (getChildCount() == 0) {
             stop();
             return;
@@ -58,39 +61,46 @@ public class LinearSmoothScroller extends SmoothScroller {
         }
     }
 
-    protected void onStop() {
+    /* Access modifiers changed, original: protected */
+    public void onStop() {
         this.mInterimTargetDy = 0;
         this.mInterimTargetDx = 0;
         this.mTargetVector = null;
     }
 
-    protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
+    /* Access modifiers changed, original: protected */
+    public float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
         return 25.0f / ((float) displayMetrics.densityDpi);
     }
 
-    protected int calculateTimeForDeceleration(int dx) {
+    /* Access modifiers changed, original: protected */
+    public int calculateTimeForDeceleration(int dx) {
         return (int) Math.ceil(((double) calculateTimeForScrolling(dx)) / 0.3356d);
     }
 
-    protected int calculateTimeForScrolling(int dx) {
+    /* Access modifiers changed, original: protected */
+    public int calculateTimeForScrolling(int dx) {
         return (int) Math.ceil((double) (((float) Math.abs(dx)) * this.MILLISECONDS_PER_PX));
     }
 
-    protected int getHorizontalSnapPreference() {
+    /* Access modifiers changed, original: protected */
+    public int getHorizontalSnapPreference() {
         if (this.mTargetVector == null || this.mTargetVector.x == 0.0f) {
             return 0;
         }
         return this.mTargetVector.x > 0.0f ? 1 : -1;
     }
 
-    protected int getVerticalSnapPreference() {
+    /* Access modifiers changed, original: protected */
+    public int getVerticalSnapPreference() {
         if (this.mTargetVector == null || this.mTargetVector.y == 0.0f) {
             return 0;
         }
         return this.mTargetVector.y > 0.0f ? 1 : -1;
     }
 
-    protected void updateActionForInterimTarget(Action action) {
+    /* Access modifiers changed, original: protected */
+    public void updateActionForInterimTarget(Action action) {
         PointF scrollVector = computeScrollVectorForPosition(getTargetPosition());
         if (scrollVector == null || (scrollVector.x == 0.0f && scrollVector.y == 0.0f)) {
             action.jumpTo(getTargetPosition());

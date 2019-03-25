@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -36,7 +35,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.DownloadController.FileDownloadProgressListener;
@@ -49,24 +47,18 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.audioinfo.AudioInfo;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
-import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
-import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.EncryptedChat;
-import org.telegram.tgnet.TLRPC.TL_messageActionEmpty;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
@@ -74,12 +66,10 @@ import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.ActionBarMenuItem.ActionBarMenuItemSearchListener;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
-import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.AudioPlayerCell;
-import org.telegram.ui.Cells.CheckBoxCell;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
@@ -210,7 +200,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
                 if (this.searchTimer != null) {
                     this.searchTimer.cancel();
                 }
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
             if (query == null) {
@@ -224,7 +214,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
                     try {
                         ListAdapter.this.searchTimer.cancel();
                         ListAdapter.this.searchTimer = null;
-                    } catch (Throwable e) {
+                    } catch (Exception e) {
                         FileLog.e(e);
                     }
                     ListAdapter.this.processSearch(query);
@@ -236,13 +226,15 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
             AndroidUtilities.runOnUIThread(new AudioPlayerAlert$ListAdapter$$Lambda$0(this, query));
         }
 
-        final /* synthetic */ void lambda$processSearch$1$AudioPlayerAlert$ListAdapter(String query) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$processSearch$1$AudioPlayerAlert$ListAdapter(String query) {
             Utilities.searchQueue.postRunnable(new AudioPlayerAlert$ListAdapter$$Lambda$2(this, query, new ArrayList(AudioPlayerAlert.this.playlist)));
         }
 
+        /* Access modifiers changed, original: final|synthetic */
         /* JADX WARNING: Removed duplicated region for block: B:57:0x0061 A:{SYNTHETIC} */
         /* JADX WARNING: Removed duplicated region for block: B:54:0x00b8 A:{SYNTHETIC} */
-        final /* synthetic */ void lambda$null$0$AudioPlayerAlert$ListAdapter(java.lang.String r16, java.util.ArrayList r17) {
+        public final /* synthetic */ void lambda$null$0$AudioPlayerAlert$ListAdapter(java.lang.String r16, java.util.ArrayList r17) {
             /*
             r15 = this;
             r14 = r16.trim();
@@ -369,19 +361,25 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
             r15.updateSearchResults(r10);
             goto L_0x0016;
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AudioPlayerAlert.ListAdapter.lambda$null$0$AudioPlayerAlert$ListAdapter(java.lang.String, java.util.ArrayList):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AudioPlayerAlert$ListAdapter.lambda$null$0$AudioPlayerAlert$ListAdapter(java.lang.String, java.util.ArrayList):void");
         }
 
         private void updateSearchResults(ArrayList<MessageObject> documents) {
             AndroidUtilities.runOnUIThread(new AudioPlayerAlert$ListAdapter$$Lambda$1(this, documents));
         }
 
-        final /* synthetic */ void lambda$updateSearchResults$2$AudioPlayerAlert$ListAdapter(ArrayList documents) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$updateSearchResults$2$AudioPlayerAlert$ListAdapter(ArrayList documents) {
             AudioPlayerAlert.this.searchWas = true;
             this.searchResult = documents;
             notifyDataSetChanged();
             AudioPlayerAlert.this.layoutManager.scrollToPosition(0);
         }
+    }
+
+    /* Access modifiers changed, original: final|bridge|synthetic */
+    public final /* bridge */ /* synthetic */ void bridge$lambda$0$AudioPlayerAlert(int i) {
+        onSubItemClick(i);
     }
 
     public AudioPlayerAlert(Context context) {
@@ -393,7 +391,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
             this.currentAccount = UserConfig.selectedAccount;
         }
         this.parentActivity = (LaunchActivity) context;
-        this.noCoverDrawable = context.getResources().getDrawable(R.drawable.nocover).mutate();
+        this.noCoverDrawable = context.getResources().getDrawable(NUM).mutate();
         this.noCoverDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("player_placeholder"), Mode.MULTIPLY));
         this.TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingDidReset);
@@ -401,7 +399,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingDidStart);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.musicDidLoad);
-        this.shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow).mutate();
+        this.shadowDrawable = context.getResources().getDrawable(NUM).mutate();
         this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("player_background"), Mode.MULTIPLY));
         this.paint.setColor(Theme.getColor("player_placeholderBackground"));
         this.containerView = new FrameLayout(context) {
@@ -419,7 +417,8 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
                 return !AudioPlayerAlert.this.isDismissed() && super.onTouchEvent(e);
             }
 
-            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            /* Access modifiers changed, original: protected */
+            public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 int padding;
                 int height = MeasureSpec.getSize(heightMeasureSpec);
                 int contentSize = (((AndroidUtilities.dp(178.0f) + (AudioPlayerAlert.this.playlist.size() * AndroidUtilities.dp(56.0f))) + AudioPlayerAlert.backgroundPaddingTop) + ActionBar.getCurrentActionBarHeight()) + AndroidUtilities.statusBarHeight;
@@ -443,14 +442,15 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
                 AudioPlayerAlert.this.thumbMaxY = AndroidUtilities.dp(19.0f);
                 AudioPlayerAlert.this.panelEndTranslation = (float) (getMeasuredHeight() - AudioPlayerAlert.this.playerLayout.getMeasuredHeight());
                 AudioPlayerAlert.this.thumbMaxScale = (((float) maxSize) / ((float) AudioPlayerAlert.this.placeholderImageView.getMeasuredWidth())) - 1.0f;
-                AudioPlayerAlert.this.endTranslation = (float) (ActionBar.getCurrentActionBarHeight() + AndroidUtilities.dp(5.0f));
+                AudioPlayerAlert.this.endTranslation = (float) (ActionBar.getCurrentActionBarHeight() + (AndroidUtilities.statusBarHeight - AndroidUtilities.dp(19.0f)));
                 int scaledHeight = (int) Math.ceil((double) (((float) AudioPlayerAlert.this.placeholderImageView.getMeasuredHeight()) * (1.0f + AudioPlayerAlert.this.thumbMaxScale)));
                 if (scaledHeight > availableHeight) {
                     AudioPlayerAlert.this.endTranslation = AudioPlayerAlert.this.endTranslation - ((float) (scaledHeight - availableHeight));
                 }
             }
 
-            protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+            /* Access modifiers changed, original: protected */
+            public void onLayout(boolean changed, int left, int top, int right, int bottom) {
                 super.onLayout(changed, left, top, right, bottom);
                 int y = AudioPlayerAlert.this.actionBar.getMeasuredHeight();
                 AudioPlayerAlert.this.shadow.layout(AudioPlayerAlert.this.shadow.getLeft(), y, AudioPlayerAlert.this.shadow.getRight(), AudioPlayerAlert.this.shadow.getMeasuredHeight() + y);
@@ -464,7 +464,8 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
                 }
             }
 
-            protected void onDraw(Canvas canvas) {
+            /* Access modifiers changed, original: protected */
+            public void onDraw(Canvas canvas) {
                 AudioPlayerAlert.this.shadowDrawable.setBounds(0, Math.max(AudioPlayerAlert.this.actionBar.getMeasuredHeight(), AudioPlayerAlert.this.scrollOffsetY) - AudioPlayerAlert.backgroundPaddingTop, getMeasuredWidth(), getMeasuredHeight());
                 AudioPlayerAlert.this.shadowDrawable.draw(canvas);
             }
@@ -473,7 +474,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         this.containerView.setPadding(backgroundPaddingLeft, 0, backgroundPaddingLeft, 0);
         this.actionBar = new ActionBar(context);
         this.actionBar.setBackgroundColor(Theme.getColor("player_actionBar"));
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setItemsColor(Theme.getColor("player_actionBarItems"), false);
         this.actionBar.setItemsBackgroundColor(Theme.getColor("player_actionBarSelector"), false);
         this.actionBar.setTitleColor(Theme.getColor("player_actionBarTitle"));
@@ -514,17 +515,18 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
                 }
             }
         }
-        this.avatarContainer.setSubtitle(LocaleController.getString("AudioTitle", R.string.AudioTitle));
+        this.avatarContainer.setSubtitle(LocaleController.getString("AudioTitle", NUM));
         ActionBar actionBar = this.actionBar;
         actionBar.addView(this.avatarContainer, 0, LayoutHelper.createFrame(-2, -1.0f, 51, 56.0f, 0.0f, 40.0f, 0.0f));
         ActionBarMenu menu = this.actionBar.createMenu();
-        this.menuItem = menu.addItem(0, (int) R.drawable.ic_ab_other);
-        this.menuItem.addSubItem(1, LocaleController.getString("Forward", R.string.Forward));
-        this.menuItem.addSubItem(2, LocaleController.getString("ShareFile", R.string.ShareFile));
-        this.menuItem.addSubItem(4, LocaleController.getString("ShowInChat", R.string.ShowInChat));
+        menu.setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
+        this.menuItem = menu.addItem(0, NUM);
+        this.menuItem.addSubItem(1, LocaleController.getString("Forward", NUM));
+        this.menuItem.addSubItem(2, LocaleController.getString("ShareFile", NUM));
+        this.menuItem.addSubItem(4, LocaleController.getString("ShowInChat", NUM));
         this.menuItem.setTranslationX((float) AndroidUtilities.dp(48.0f));
         this.menuItem.setAlpha(0.0f);
-        this.searchItem = menu.addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItemSearchListener() {
+        this.searchItem = menu.addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItemSearchListener() {
             public void onSearchCollapse() {
                 AudioPlayerAlert.this.avatarContainer.setVisibility(0);
                 if (AudioPlayerAlert.this.hasOptions) {
@@ -560,8 +562,9 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
                 AudioPlayerAlert.this.listAdapter.search(null);
             }
         });
+        this.searchItem.setContentDescription(LocaleController.getString("Search", NUM));
         EditTextBoldCursor editText = this.searchItem.getSearchField();
-        editText.setHint(LocaleController.getString("Search", R.string.Search));
+        editText.setHint(LocaleController.getString("Search", NUM));
         editText.setTextColor(Theme.getColor("player_actionBarTitle"));
         editText.setHintTextColor(Theme.getColor("player_time"));
         editText.setCursorColor(Theme.getColor("player_actionBarTitle"));
@@ -580,16 +583,17 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         });
         this.shadow = new View(context);
         this.shadow.setAlpha(0.0f);
-        this.shadow.setBackgroundResource(R.drawable.header_shadow);
+        this.shadow.setBackgroundResource(NUM);
         this.shadow2 = new View(context);
         this.shadow2.setAlpha(0.0f);
-        this.shadow2.setBackgroundResource(R.drawable.header_shadow);
+        this.shadow2.setBackgroundResource(NUM);
         this.playerLayout = new FrameLayout(context);
         this.playerLayout.setBackgroundColor(Theme.getColor("player_background"));
         this.placeholderImageView = new BackupImageView(context) {
             private RectF rect = new RectF();
 
-            protected void onDraw(Canvas canvas) {
+            /* Access modifiers changed, original: protected */
+            public void onDraw(Canvas canvas) {
                 if (AudioPlayerAlert.this.hasNoCover == 1 || (AudioPlayerAlert.this.hasNoCover == 2 && !(getImageReceiver().hasBitmapImage() && getImageReceiver().getCurrentAlpha() == 1.0f))) {
                     this.rect.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
                     canvas.drawRoundRect(this.rect, (float) getRoundRadius(), (float) getRoundRadius(), AudioPlayerAlert.this.paint);
@@ -625,15 +629,16 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         frameLayout.addView(this.authorTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 72.0f, 40.0f, 60.0f, 0.0f));
         this.optionsButton = new ActionBarMenuItem(context, null, 0, Theme.getColor("player_actionBarItems"));
         this.optionsButton.setLongClickEnabled(false);
-        this.optionsButton.setIcon((int) R.drawable.ic_ab_other);
+        this.optionsButton.setIcon(NUM);
         this.optionsButton.setAdditionalOffset(-AndroidUtilities.dp(120.0f));
         frameLayout = this.playerLayout;
         frameLayout.addView(this.optionsButton, LayoutHelper.createFrame(40, 40.0f, 53, 0.0f, 19.0f, 10.0f, 0.0f));
-        this.optionsButton.addSubItem(1, LocaleController.getString("Forward", R.string.Forward));
-        this.optionsButton.addSubItem(2, LocaleController.getString("ShareFile", R.string.ShareFile));
-        this.optionsButton.addSubItem(4, LocaleController.getString("ShowInChat", R.string.ShowInChat));
+        this.optionsButton.addSubItem(1, LocaleController.getString("Forward", NUM));
+        this.optionsButton.addSubItem(2, LocaleController.getString("ShareFile", NUM));
+        this.optionsButton.addSubItem(4, LocaleController.getString("ShowInChat", NUM));
         this.optionsButton.setOnClickListener(new AudioPlayerAlert$$Lambda$1(this));
         this.optionsButton.setDelegate(new AudioPlayerAlert$$Lambda$2(this));
+        this.optionsButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
         this.seekBarView = new SeekBarView(context);
         this.seekBarView.setDelegate(AudioPlayerAlert$$Lambda$3.$instance);
         frameLayout = this.playerLayout;
@@ -657,7 +662,8 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         frameLayout = this.playerLayout;
         frameLayout.addView(this.durationTextView, LayoutHelper.createFrame(-2, -2.0f, 53, 0.0f, 90.0f, 20.0f, 0.0f));
         FrameLayout bottomView = new FrameLayout(context) {
-            protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+            /* Access modifiers changed, original: protected */
+            public void onLayout(boolean changed, int left, int top, int right, int bottom) {
                 int dist = ((right - left) - AndroidUtilities.dp(248.0f)) / 4;
                 for (int a = 0; a < 5; a++) {
                     int l = AndroidUtilities.dp((float) ((a * 48) + 4)) + (dist * a);
@@ -675,14 +681,14 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         this.shuffleButton.setAdditionalOffset(-AndroidUtilities.dp(10.0f));
         bottomView.addView(this.shuffleButton, LayoutHelper.createFrame(48, 48, 51));
         this.shuffleButton.setOnClickListener(new AudioPlayerAlert$$Lambda$4(this));
-        TextView textView = this.shuffleButton.addSubItem(1, LocaleController.getString("ReverseOrder", R.string.ReverseOrder));
+        TextView textView = this.shuffleButton.addSubItem(1, LocaleController.getString("ReverseOrder", NUM));
         textView.setPadding(AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(16.0f), 0);
-        this.playOrderButtons[0] = context.getResources().getDrawable(R.drawable.music_reverse).mutate();
+        this.playOrderButtons[0] = context.getResources().getDrawable(NUM).mutate();
         textView.setCompoundDrawablePadding(AndroidUtilities.dp(8.0f));
         textView.setCompoundDrawablesWithIntrinsicBounds(this.playOrderButtons[0], null, null, null);
-        textView = this.shuffleButton.addSubItem(2, LocaleController.getString("Shuffle", R.string.Shuffle));
+        textView = this.shuffleButton.addSubItem(2, LocaleController.getString("Shuffle", NUM));
         textView.setPadding(AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(16.0f), 0);
-        this.playOrderButtons[1] = context.getResources().getDrawable(R.drawable.pl_shuffle).mutate();
+        this.playOrderButtons[1] = context.getResources().getDrawable(NUM).mutate();
         textView.setCompoundDrawablePadding(AndroidUtilities.dp(8.0f));
         textView.setCompoundDrawablesWithIntrinsicBounds(this.playOrderButtons[1], null, null, null);
         this.shuffleButton.setDelegate(new AudioPlayerAlert$$Lambda$5(this));
@@ -690,24 +696,26 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         View imageView = new ImageView(context);
         viewArr[1] = imageView;
         imageView.setScaleType(ScaleType.CENTER);
-        imageView.setImageDrawable(Theme.createSimpleSelectorDrawable(context, R.drawable.pl_previous, Theme.getColor("player_button"), Theme.getColor("player_buttonActive")));
+        imageView.setImageDrawable(Theme.createSimpleSelectorDrawable(context, NUM, Theme.getColor("player_button"), Theme.getColor("player_buttonActive")));
         bottomView.addView(imageView, LayoutHelper.createFrame(48, 48, 51));
         imageView.setOnClickListener(AudioPlayerAlert$$Lambda$6.$instance);
+        imageView.setContentDescription(LocaleController.getString("AccDescrPrevious", NUM));
         viewArr = this.buttons;
         ImageView imageView2 = new ImageView(context);
         this.playButton = imageView2;
         viewArr[2] = imageView2;
         this.playButton.setScaleType(ScaleType.CENTER);
-        this.playButton.setImageDrawable(Theme.createSimpleSelectorDrawable(context, R.drawable.pl_play, Theme.getColor("player_button"), Theme.getColor("player_buttonActive")));
+        this.playButton.setImageDrawable(Theme.createSimpleSelectorDrawable(context, NUM, Theme.getColor("player_button"), Theme.getColor("player_buttonActive")));
         bottomView.addView(this.playButton, LayoutHelper.createFrame(48, 48, 51));
         this.playButton.setOnClickListener(AudioPlayerAlert$$Lambda$7.$instance);
         viewArr = this.buttons;
         imageView = new ImageView(context);
         viewArr[3] = imageView;
         imageView.setScaleType(ScaleType.CENTER);
-        imageView.setImageDrawable(Theme.createSimpleSelectorDrawable(context, R.drawable.pl_next, Theme.getColor("player_button"), Theme.getColor("player_buttonActive")));
+        imageView.setImageDrawable(Theme.createSimpleSelectorDrawable(context, NUM, Theme.getColor("player_button"), Theme.getColor("player_buttonActive")));
         bottomView.addView(imageView, LayoutHelper.createFrame(48, 48, 51));
         imageView.setOnClickListener(AudioPlayerAlert$$Lambda$8.$instance);
+        imageView.setContentDescription(LocaleController.getString("Next", NUM));
         viewArr = this.buttons;
         imageView2 = new ImageView(context);
         this.repeatButton = imageView2;
@@ -719,9 +727,10 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         this.listView = new RecyclerListView(context) {
             boolean ignoreLayout;
 
+            /* Access modifiers changed, original: protected */
             /* JADX WARNING: Removed duplicated region for block: B:34:? A:{SYNTHETIC, RETURN} */
             /* JADX WARNING: Removed duplicated region for block: B:19:0x008f  */
-            protected void onLayout(boolean r13, int r14, int r15, int r16, int r17) {
+            public void onLayout(boolean r13, int r14, int r15, int r16, int r17) {
                 /*
                 r12 = this;
                 super.onLayout(r13, r14, r15, r16, r17);
@@ -834,7 +843,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
                 r0.scrollToPosition(r1);
                 goto L_0x00ab;
                 */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AudioPlayerAlert.7.onLayout(boolean, int, int, int, int):void");
+                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AudioPlayerAlert$AnonymousClass7.onLayout(boolean, int, int, int, int):void");
             }
 
             public void requestLayout() {
@@ -843,7 +852,8 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
                 }
             }
 
-            protected boolean allowSelectChildAtPosition(float x, float y) {
+            /* Access modifiers changed, original: protected */
+            public boolean allowSelectChildAtPosition(float x, float y) {
                 float p = AudioPlayerAlert.this.playerLayout.getY() + ((float) AudioPlayerAlert.this.playerLayout.getMeasuredHeight());
                 return AudioPlayerAlert.this.playerLayout == null || y > AudioPlayerAlert.this.playerLayout.getY() + ((float) AudioPlayerAlert.this.playerLayout.getMeasuredHeight());
             }
@@ -865,14 +875,14 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         this.listView.setPadding(0, 0, 0, AndroidUtilities.dp(8.0f));
         this.listView.setClipToPadding(false);
         RecyclerListView recyclerListView = this.listView;
-        LayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), 1, false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), 1, false);
         this.layoutManager = linearLayoutManager;
         recyclerListView.setLayoutManager(linearLayoutManager);
         this.listView.setHorizontalScrollBarEnabled(false);
         this.listView.setVerticalScrollBarEnabled(false);
         this.containerView.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         recyclerListView = this.listView;
-        Adapter listAdapter = new ListAdapter(context);
+        ListAdapter listAdapter = new ListAdapter(context);
         this.listAdapter = listAdapter;
         recyclerListView.setAdapter(listAdapter);
         this.listView.setGlowColor(Theme.getColor("dialogScrollGlow"));
@@ -901,7 +911,8 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         updateShuffleButton();
     }
 
-    final /* synthetic */ void lambda$new$0$AudioPlayerAlert(View view) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$0$AudioPlayerAlert(View view) {
         float f = 0.0f;
         if (this.animatorSet != null) {
             this.animatorSet.cancel();
@@ -987,15 +998,18 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         }
     }
 
-    final /* synthetic */ void lambda$new$1$AudioPlayerAlert(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$1$AudioPlayerAlert(View v) {
         this.optionsButton.toggleSubMenu();
     }
 
-    final /* synthetic */ void lambda$new$3$AudioPlayerAlert(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$3$AudioPlayerAlert(View v) {
         this.shuffleButton.toggleSubMenu();
     }
 
-    final /* synthetic */ void lambda$new$4$AudioPlayerAlert(int id) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$4$AudioPlayerAlert(int id) {
         MediaController.getInstance().toggleShuffleMusic(id);
         updateShuffleButton();
         this.listAdapter.notifyDataSetChanged();
@@ -1011,7 +1025,8 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         }
     }
 
-    final /* synthetic */ void lambda$new$8$AudioPlayerAlert(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$8$AudioPlayerAlert(View v) {
         SharedConfig.toggleRepeatMode();
         updateRepeatButton();
     }
@@ -1051,7 +1066,6 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
         if (messageObject != null && this.parentActivity != null) {
             Bundle args;
-            Builder builder;
             if (id == 1) {
                 if (UserConfig.selectedAccount != this.currentAccount) {
                     this.parentActivity.switchToAccount(this.currentAccount, true);
@@ -1059,27 +1073,27 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
                 args = new Bundle();
                 args.putBoolean("onlySelect", true);
                 args.putInt("dialogsType", 3);
-                BaseFragment dialogsActivity = new DialogsActivity(args);
+                DialogsActivity fragment = new DialogsActivity(args);
                 ArrayList<MessageObject> fmessages = new ArrayList();
                 fmessages.add(messageObject);
-                dialogsActivity.setDelegate(new AudioPlayerAlert$$Lambda$11(this, fmessages));
-                this.parentActivity.lambda$runLinkRequest$27$LaunchActivity(dialogsActivity);
+                fragment.setDelegate(new AudioPlayerAlert$$Lambda$11(this, fmessages));
+                this.parentActivity.lambda$runLinkRequest$27$LaunchActivity(fragment);
                 dismiss();
                 return;
             } else if (id == 2) {
                 File f = null;
                 try {
                     if (!TextUtils.isEmpty(messageObject.messageOwner.attachPath)) {
-                        File file = new File(messageObject.messageOwner.attachPath);
+                        File f2 = new File(messageObject.messageOwner.attachPath);
                         try {
-                            if (file.exists()) {
-                                f = file;
+                            if (f2.exists()) {
+                                f = f2;
                             } else {
                                 f = null;
                             }
                         } catch (Exception e2) {
                             e = e2;
-                            f = file;
+                            f = f2;
                         }
                     }
                     if (f == null) {
@@ -1094,7 +1108,6 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
                         }
                         if (VERSION.SDK_INT >= 24) {
                             try {
-                                intent = intent;
                                 intent.putExtra("android.intent.extra.STREAM", FileProvider.getUriForFile(ApplicationLoader.applicationContext, "org.telegram.messenger.provider", f));
                                 intent.setFlags(1);
                             } catch (Exception e3) {
@@ -1103,67 +1116,18 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
                         } else {
                             intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(f));
                         }
-                        this.parentActivity.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", R.string.ShareFile)), 500);
+                        this.parentActivity.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", NUM)), 500);
                         return;
                     }
-                    builder = new Builder(this.parentActivity);
-                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-                    builder.setMessage(LocaleController.getString("PleaseDownload", R.string.PleaseDownload));
+                    Builder builder = new Builder(this.parentActivity);
+                    builder.setTitle(LocaleController.getString("AppName", NUM));
+                    builder.setPositiveButton(LocaleController.getString("OK", NUM), null);
+                    builder.setMessage(LocaleController.getString("PleaseDownload", NUM));
                     builder.show();
                     return;
                 } catch (Exception e4) {
                     e = e4;
                 }
-            } else if (id == 3) {
-                builder = new Builder(this.parentActivity);
-                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                boolean[] deleteForAll = new boolean[1];
-                int lower_id = (int) messageObject.getDialogId();
-                if (lower_id != 0) {
-                    User currentUser;
-                    Chat currentChat;
-                    if (lower_id > 0) {
-                        currentUser = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(lower_id));
-                        currentChat = null;
-                    } else {
-                        currentUser = null;
-                        currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-lower_id));
-                    }
-                    if (!(currentUser == null && ChatObject.isChannel(currentChat))) {
-                        int currentDate = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
-                        if (!((currentUser == null || currentUser.id == UserConfig.getInstance(this.currentAccount).getClientUserId()) && currentChat == null) && ((messageObject.messageOwner.action == null || (messageObject.messageOwner.action instanceof TL_messageActionEmpty)) && messageObject.isOut() && currentDate - messageObject.messageOwner.date <= 172800)) {
-                            int dp;
-                            int dp2;
-                            View frameLayout = new FrameLayout(this.parentActivity);
-                            CheckBoxCell cell = new CheckBoxCell(this.parentActivity, 1);
-                            cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                            if (currentChat != null) {
-                                cell.setText(LocaleController.getString("DeleteForAll", R.string.DeleteForAll), "", false, false);
-                            } else {
-                                cell.setText(LocaleController.formatString("DeleteForUser", R.string.DeleteForUser, UserObject.getFirstName(currentUser)), "", false, false);
-                            }
-                            if (LocaleController.isRTL) {
-                                dp = AndroidUtilities.dp(16.0f);
-                            } else {
-                                dp = AndroidUtilities.dp(8.0f);
-                            }
-                            if (LocaleController.isRTL) {
-                                dp2 = AndroidUtilities.dp(8.0f);
-                            } else {
-                                dp2 = AndroidUtilities.dp(16.0f);
-                            }
-                            cell.setPadding(dp, 0, dp2, 0);
-                            frameLayout.addView(cell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
-                            cell.setOnClickListener(new AudioPlayerAlert$$Lambda$12(deleteForAll));
-                            builder.setView(frameLayout);
-                        }
-                    }
-                }
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new AudioPlayerAlert$$Lambda$13(this, messageObject, deleteForAll));
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                builder.show();
-                return;
             } else if (id == 4) {
                 if (UserConfig.selectedAccount != this.currentAccount) {
                     this.parentActivity.switchToAccount(this.currentAccount, true);
@@ -1199,7 +1163,8 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         FileLog.e(e);
     }
 
-    final /* synthetic */ void lambda$onSubItemClick$10$AudioPlayerAlert(ArrayList fmessages, DialogsActivity fragment1, ArrayList dids, CharSequence message, boolean param) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$onSubItemClick$10$AudioPlayerAlert(ArrayList fmessages, DialogsActivity fragment1, ArrayList dids, CharSequence message, boolean param) {
         long did;
         if (dids.size() > 1 || ((Long) dids.get(0)).longValue() == ((long) UserConfig.getInstance(this.currentAccount).getClientUserId()) || message != null) {
             for (int a = 0; a < dids.size(); a++) {
@@ -1209,7 +1174,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
                 }
                 SendMessagesHelper.getInstance(this.currentAccount).sendMessage(fmessages, did);
             }
-            fragment1.lambda$checkDiscard$18$ChatUsersActivity();
+            fragment1.finishFragment();
             return;
         }
         did = ((Long) dids.get(0)).longValue();
@@ -1229,34 +1194,8 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         if (this.parentActivity.presentFragment(chatActivity, true, false)) {
             chatActivity.showFieldPanelForForward(true, fmessages);
         } else {
-            fragment1.lambda$checkDiscard$18$ChatUsersActivity();
+            fragment1.finishFragment();
         }
-    }
-
-    static final /* synthetic */ void lambda$onSubItemClick$11$AudioPlayerAlert(boolean[] deleteForAll, View v) {
-        boolean z;
-        CheckBoxCell cell1 = (CheckBoxCell) v;
-        if (deleteForAll[0]) {
-            z = false;
-        } else {
-            z = true;
-        }
-        deleteForAll[0] = z;
-        cell1.setChecked(deleteForAll[0], true);
-    }
-
-    final /* synthetic */ void lambda$onSubItemClick$12$AudioPlayerAlert(MessageObject messageObject, boolean[] deleteForAll, DialogInterface dialogInterface, int i) {
-        dismiss();
-        ArrayList<Integer> arr = new ArrayList();
-        arr.add(Integer.valueOf(messageObject.getId()));
-        ArrayList<Long> random_ids = null;
-        EncryptedChat encryptedChat = null;
-        if (((int) messageObject.getDialogId()) == 0 && messageObject.messageOwner.random_id != 0) {
-            random_ids = new ArrayList();
-            random_ids.add(Long.valueOf(messageObject.messageOwner.random_id));
-            encryptedChat = MessagesController.getInstance(this.currentAccount).getEncryptedChat(Integer.valueOf((int) (messageObject.getDialogId() >> 32)));
-        }
-        MessagesController.getInstance(this.currentAccount).deleteMessages(arr, random_ids, encryptedChat, messageObject.messageOwner.to_id.channel_id, deleteForAll[0]);
     }
 
     private int getCurrentTop() {
@@ -1320,7 +1259,8 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
         }
     }
 
-    protected boolean canDismissWithSwipe() {
+    /* Access modifiers changed, original: protected */
+    public boolean canDismissWithSwipe() {
         return false;
     }
 
@@ -1386,7 +1326,7 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
     }
 
     public void dismiss() {
-        super.lambda$new$4$EmbedBottomSheet();
+        super.dismiss();
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidReset);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidStart);
@@ -1423,17 +1363,19 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
     private void updateShuffleButton() {
         Drawable drawable;
         if (SharedConfig.shuffleMusic) {
-            drawable = getContext().getResources().getDrawable(R.drawable.pl_shuffle).mutate();
+            drawable = getContext().getResources().getDrawable(NUM).mutate();
             drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("player_buttonActive"), Mode.MULTIPLY));
             this.shuffleButton.setIcon(drawable);
+            this.shuffleButton.setContentDescription(LocaleController.getString("Shuffle", NUM));
         } else {
-            drawable = getContext().getResources().getDrawable(R.drawable.music_reverse).mutate();
+            drawable = getContext().getResources().getDrawable(NUM).mutate();
             if (SharedConfig.playOrderReversed) {
                 drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("player_buttonActive"), Mode.MULTIPLY));
             } else {
                 drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("player_button"), Mode.MULTIPLY));
             }
             this.shuffleButton.setIcon(drawable);
+            this.shuffleButton.setContentDescription(LocaleController.getString("ReverseOrder", NUM));
         }
         this.playOrderButtons[0].setColorFilter(new PorterDuffColorFilter(Theme.getColor(SharedConfig.playOrderReversed ? "player_buttonActive" : "player_button"), Mode.MULTIPLY));
         this.playOrderButtons[1].setColorFilter(new PorterDuffColorFilter(Theme.getColor(SharedConfig.shuffleMusic ? "player_buttonActive" : "player_button"), Mode.MULTIPLY));
@@ -1442,17 +1384,20 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
     private void updateRepeatButton() {
         int mode = SharedConfig.repeatMode;
         if (mode == 0) {
-            this.repeatButton.setImageResource(R.drawable.pl_repeat);
+            this.repeatButton.setImageResource(NUM);
             this.repeatButton.setTag("player_button");
             this.repeatButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("player_button"), Mode.MULTIPLY));
+            this.repeatButton.setContentDescription(LocaleController.getString("AccDescrRepeatOff", NUM));
         } else if (mode == 1) {
-            this.repeatButton.setImageResource(R.drawable.pl_repeat);
+            this.repeatButton.setImageResource(NUM);
             this.repeatButton.setTag("player_buttonActive");
             this.repeatButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("player_buttonActive"), Mode.MULTIPLY));
+            this.repeatButton.setContentDescription(LocaleController.getString("AccDescrRepeatList", NUM));
         } else if (mode == 2) {
-            this.repeatButton.setImageResource(R.drawable.pl_repeat1);
+            this.repeatButton.setImageResource(NUM);
             this.repeatButton.setTag("player_buttonActive");
             this.repeatButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("player_buttonActive"), Mode.MULTIPLY));
+            this.repeatButton.setContentDescription(LocaleController.getString("AccDescrRepeatOne", NUM));
         }
     }
 
@@ -1521,9 +1466,11 @@ public class AudioPlayerAlert extends BottomSheet implements FileDownloadProgres
             checkIfMusicDownloaded(messageObject);
             updateProgress(messageObject);
             if (MediaController.getInstance().isMessagePaused()) {
-                this.playButton.setImageDrawable(Theme.createSimpleSelectorDrawable(this.playButton.getContext(), R.drawable.pl_play, Theme.getColor("player_button"), Theme.getColor("player_buttonActive")));
+                this.playButton.setImageDrawable(Theme.createSimpleSelectorDrawable(this.playButton.getContext(), NUM, Theme.getColor("player_button"), Theme.getColor("player_buttonActive")));
+                this.playButton.setContentDescription(LocaleController.getString("AccActionPlay", NUM));
             } else {
-                this.playButton.setImageDrawable(Theme.createSimpleSelectorDrawable(this.playButton.getContext(), R.drawable.pl_pause, Theme.getColor("player_button"), Theme.getColor("player_buttonActive")));
+                this.playButton.setImageDrawable(Theme.createSimpleSelectorDrawable(this.playButton.getContext(), NUM, Theme.getColor("player_button"), Theme.getColor("player_buttonActive")));
+                this.playButton.setContentDescription(LocaleController.getString("AccActionPause", NUM));
             }
             String title = messageObject.getMusicTitle();
             String author = messageObject.getMusicAuthor();

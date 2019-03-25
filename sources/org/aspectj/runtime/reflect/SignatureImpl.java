@@ -56,7 +56,7 @@ abstract class SignatureImpl implements Signature {
         }
     }
 
-    protected abstract String createToString(StringMaker stringMaker);
+    public abstract String createToString(StringMaker stringMaker);
 
     SignatureImpl(int modifiers, String name, Class declaringType) {
         this.modifiers = modifiers;
@@ -64,7 +64,8 @@ abstract class SignatureImpl implements Signature {
         this.declaringType = declaringType;
     }
 
-    String toString(StringMaker sm) {
+    /* Access modifiers changed, original: 0000 */
+    public String toString(StringMaker sm) {
         String result = null;
         if (useCache) {
             if (this.stringCache == null) {
@@ -125,7 +126,8 @@ abstract class SignatureImpl implements Signature {
         return this.lookupClassLoader;
     }
 
-    String extractString(int n) {
+    /* Access modifiers changed, original: 0000 */
+    public String extractString(int n) {
         int startIndex = 0;
         int endIndex = this.stringRep.indexOf(45);
         while (true) {
@@ -143,15 +145,18 @@ abstract class SignatureImpl implements Signature {
         return this.stringRep.substring(startIndex, endIndex);
     }
 
-    int extractInt(int n) {
+    /* Access modifiers changed, original: 0000 */
+    public int extractInt(int n) {
         return Integer.parseInt(extractString(n), 16);
     }
 
-    Class extractType(int n) {
+    /* Access modifiers changed, original: 0000 */
+    public Class extractType(int n) {
         return Factory.makeClass(extractString(n), getLookupClassLoader());
     }
 
-    Class[] extractTypes(int n) {
+    /* Access modifiers changed, original: 0000 */
+    public Class[] extractTypes(int n) {
         StringTokenizer st = new StringTokenizer(extractString(n), ":");
         int N = st.countTokens();
         Class[] ret = new Class[N];

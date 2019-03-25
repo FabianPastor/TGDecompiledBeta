@@ -129,7 +129,8 @@ public class LruCache {
         return this.map.containsKey(key);
     }
 
-    protected void entryRemoved(boolean evicted, String key, BitmapDrawable oldValue, BitmapDrawable newValue) {
+    /* Access modifiers changed, original: protected */
+    public void entryRemoved(boolean evicted, String key, BitmapDrawable oldValue, BitmapDrawable newValue) {
     }
 
     private int safeSizeOf(String key, BitmapDrawable value) {
@@ -140,7 +141,8 @@ public class LruCache {
         throw new IllegalStateException("Negative size: " + key + "=" + value);
     }
 
-    protected int sizeOf(String key, BitmapDrawable value) {
+    /* Access modifiers changed, original: protected */
+    public int sizeOf(String key, BitmapDrawable value) {
         return 1;
     }
 

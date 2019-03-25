@@ -97,12 +97,14 @@ public class RadioButton extends View {
         this.checkAnimator.start();
     }
 
-    protected void onAttachedToWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.attachedToWindow = true;
     }
 
-    protected void onDetachedFromWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.attachedToWindow = false;
     }
@@ -123,7 +125,8 @@ public class RadioButton extends View {
         return this.isChecked;
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         float circleProgress;
         if (this.bitmap == null || this.bitmap.getWidth() != getMeasuredWidth()) {
             if (this.bitmap != null) {

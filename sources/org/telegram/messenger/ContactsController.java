@@ -51,8 +51,10 @@ import org.telegram.tgnet.TLRPC.TL_help_inviteText;
 import org.telegram.tgnet.TLRPC.TL_importedContact;
 import org.telegram.tgnet.TLRPC.TL_inputPhoneContact;
 import org.telegram.tgnet.TLRPC.TL_inputPrivacyKeyChatInvite;
+import org.telegram.tgnet.TLRPC.TL_inputPrivacyKeyForwards;
 import org.telegram.tgnet.TLRPC.TL_inputPrivacyKeyPhoneCall;
 import org.telegram.tgnet.TLRPC.TL_inputPrivacyKeyPhoneP2P;
+import org.telegram.tgnet.TLRPC.TL_inputPrivacyKeyProfilePhoto;
 import org.telegram.tgnet.TLRPC.TL_inputPrivacyKeyStatusTimestamp;
 import org.telegram.tgnet.TLRPC.TL_popularContact;
 import org.telegram.tgnet.TLRPC.TL_user;
@@ -79,6 +81,7 @@ public class ContactsController {
     private int currentAccount;
     private ArrayList<Integer> delayedContactsUpdate = new ArrayList();
     private int deleteAccountTTL;
+    private ArrayList<PrivacyRule> forwardsPrivacyRules;
     private ArrayList<PrivacyRule> groupPrivacyRules;
     private boolean ignoreChanges;
     private String inviteLink;
@@ -86,7 +89,7 @@ public class ContactsController {
     private final Object loadContactsSync = new Object();
     private boolean loadingContacts;
     private int loadingDeleteInfo;
-    private int[] loadingPrivacyInfo = new int[4];
+    private int[] loadingPrivacyInfo = new int[6];
     private boolean migratingContacts;
     private final Object observerLock = new Object();
     private ArrayList<PrivacyRule> p2pPrivacyRules;
@@ -94,6 +97,7 @@ public class ContactsController {
     public ArrayList<String> phoneBookSectionsArray = new ArrayList();
     public HashMap<String, ArrayList<Object>> phoneBookSectionsDict = new HashMap();
     private ArrayList<PrivacyRule> privacyRules;
+    private ArrayList<PrivacyRule> profilePhotoPrivacyRules;
     private String[] projectionNames = new String[]{"lookup", "data2", "data3", "data5"};
     private String[] projectionPhones = new String[]{"lookup", "data1", "data2", "data3", "display_name", "account_type"};
     private HashMap<String, String> sectionsToReplace = new HashMap();
@@ -225,7 +229,8 @@ public class ContactsController {
         }
     }
 
-    final /* synthetic */ void lambda$new$0$ContactsController() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$0$ContactsController() {
         try {
             if (hasContactsPermission()) {
                 ApplicationLoader.applicationContext.getContentResolver().registerContentObserver(Contacts.CONTENT_URI, true, new MyContentObserver());
@@ -263,10 +268,13 @@ public class ContactsController {
         this.groupPrivacyRules = null;
         this.callPrivacyRules = null;
         this.p2pPrivacyRules = null;
+        this.profilePhotoPrivacyRules = null;
+        this.forwardsPrivacyRules = null;
         Utilities.globalQueue.postRunnable(new ContactsController$$Lambda$1(this));
     }
 
-    final /* synthetic */ void lambda$cleanup$1$ContactsController() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$cleanup$1$ContactsController() {
         this.migratingContacts = false;
         this.completedRequestsCount = 0;
     }
@@ -283,7 +291,8 @@ public class ContactsController {
         }
     }
 
-    final /* synthetic */ void lambda$checkInviteText$3$ContactsController(TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$checkInviteText$3$ContactsController(TLObject response, TL_error error) {
         if (response != null) {
             TL_help_inviteText res = (TL_help_inviteText) response;
             if (res.message.length() != 0) {
@@ -292,7 +301,8 @@ public class ContactsController {
         }
     }
 
-    final /* synthetic */ void lambda$null$2$ContactsController(TL_help_inviteText res) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$2$ContactsController(TL_help_inviteText res) {
         this.updatingInviteLink = false;
         Editor editor = MessagesController.getMainSettings(this.currentAccount).edit();
         String str = res.message;
@@ -305,17 +315,17 @@ public class ContactsController {
     public String getInviteText(int contacts) {
         String link = this.inviteLink == null ? "https://telegram.org/dl" : this.inviteLink;
         if (contacts <= 1) {
-            return LocaleController.formatString("InviteText2", R.string.InviteText2, link);
+            return LocaleController.formatString("InviteText2", NUM, link);
         }
         try {
             return String.format(LocaleController.getPluralString("InviteTextNum", contacts), new Object[]{Integer.valueOf(contacts), link});
         } catch (Exception e) {
-            return LocaleController.formatString("InviteText2", R.string.InviteText2, link);
+            return LocaleController.formatString("InviteText2", NUM, link);
         }
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:32:0x0053 A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:17:0x004c A:{SYNTHETIC, Splitter: B:17:0x004c} */
+    /* JADX WARNING: Removed duplicated region for block: B:17:0x004c A:{SYNTHETIC, Splitter:B:17:0x004c} */
     public void checkAppAccount() {
         /*
         r10 = this;
@@ -443,7 +453,8 @@ public class ContactsController {
         Utilities.globalQueue.postRunnable(new ContactsController$$Lambda$3(this));
     }
 
-    final /* synthetic */ void lambda$checkContacts$4$ContactsController() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$checkContacts$4$ContactsController() {
         if (checkContactsInternal()) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("detected contacts change");
@@ -456,7 +467,8 @@ public class ContactsController {
         Utilities.globalQueue.postRunnable(new ContactsController$$Lambda$4(this));
     }
 
-    final /* synthetic */ void lambda$forceImportContacts$5$ContactsController() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$forceImportContacts$5$ContactsController() {
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("force import contacts");
         }
@@ -467,7 +479,8 @@ public class ContactsController {
         Utilities.globalQueue.postRunnable(new ContactsController$$Lambda$5(this, contacts, first, schedule, cancel));
     }
 
-    final /* synthetic */ void lambda$syncPhoneBookByAlert$6$ContactsController(HashMap contacts, boolean first, boolean schedule, boolean cancel) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$syncPhoneBookByAlert$6$ContactsController(HashMap contacts, boolean first, boolean schedule, boolean cancel) {
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("sync contacts by alert");
         }
@@ -484,7 +497,8 @@ public class ContactsController {
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new ContactsController$$Lambda$6(this, runnable));
     }
 
-    final /* synthetic */ void lambda$deleteAllContacts$8$ContactsController(Runnable runnable, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$deleteAllContacts$8$ContactsController(Runnable runnable, TLObject response, TL_error error) {
         if (response instanceof TL_boolTrue) {
             this.contactsBookSPhones.clear();
             this.contactsBook.clear();
@@ -499,7 +513,8 @@ public class ContactsController {
         }
     }
 
-    final /* synthetic */ void lambda$null$7$ContactsController(Runnable runnable) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$7$ContactsController(Runnable runnable) {
         AccountManager am = AccountManager.get(ApplicationLoader.applicationContext);
         try {
             Account[] accounts = am.getAccountsByType("org.telegram.messenger");
@@ -546,47 +561,86 @@ public class ContactsController {
     static final /* synthetic */ void lambda$resetImportedContacts$9$ContactsController(TLObject response, TL_error error) {
     }
 
+    /* JADX WARNING: No exception handlers in catch block: Catch:{  } */
     private boolean checkContactsInternal() {
-        boolean reload = false;
-        try {
-            boolean z;
-            if (hasContactsPermission()) {
-                ContentResolver cr = ApplicationLoader.applicationContext.getContentResolver();
-                Cursor pCur = null;
-                try {
-                    pCur = cr.query(RawContacts.CONTENT_URI, new String[]{"version"}, null, null, null);
-                    if (pCur != null) {
-                        StringBuilder currentVersion = new StringBuilder();
-                        while (pCur.moveToNext()) {
-                            currentVersion.append(pCur.getString(pCur.getColumnIndex("version")));
-                        }
-                        String newContactsVersion = currentVersion.toString();
-                        if (!(this.lastContactsVersions.length() == 0 || this.lastContactsVersions.equals(newContactsVersion))) {
-                            reload = true;
-                        }
-                        this.lastContactsVersions = newContactsVersion;
-                    }
-                    if (pCur != null) {
-                        pCur.close();
-                    }
-                } catch (Throwable e) {
-                    FileLog.e(e);
-                    if (pCur != null) {
-                        pCur.close();
-                    }
-                } catch (Throwable th) {
-                    if (pCur != null) {
-                        pCur.close();
-                    }
-                }
-                z = reload;
-                return reload;
-            }
-            z = false;
-            return false;
-        } catch (Throwable e2) {
-            FileLog.e(e2);
-        }
+        /*
+        r12 = this;
+        r1 = 0;
+        r10 = 0;
+        r2 = r12.hasContactsPermission();	 Catch:{ Exception -> 0x0068 }
+        if (r2 != 0) goto L_0x000a;
+    L_0x0008:
+        r11 = r10;
+    L_0x0009:
+        return r1;
+    L_0x000a:
+        r1 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0068 }
+        r0 = r1.getContentResolver();	 Catch:{ Exception -> 0x0068 }
+        r9 = 0;
+        r1 = android.provider.ContactsContract.RawContacts.CONTENT_URI;	 Catch:{ Exception -> 0x003f }
+        r2 = 1;
+        r2 = new java.lang.String[r2];	 Catch:{ Exception -> 0x003f }
+        r3 = 0;
+        r4 = "version";
+        r2[r3] = r4;	 Catch:{ Exception -> 0x003f }
+        r3 = 0;
+        r4 = 0;
+        r5 = 0;
+        r9 = r0.query(r1, r2, r3, r4, r5);	 Catch:{ Exception -> 0x003f }
+        if (r9 == 0) goto L_0x0062;
+    L_0x0025:
+        r6 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x003f }
+        r6.<init>();	 Catch:{ Exception -> 0x003f }
+    L_0x002a:
+        r1 = r9.moveToNext();	 Catch:{ Exception -> 0x003f }
+        if (r1 == 0) goto L_0x004b;
+    L_0x0030:
+        r1 = "version";
+        r1 = r9.getColumnIndex(r1);	 Catch:{ Exception -> 0x003f }
+        r1 = r9.getString(r1);	 Catch:{ Exception -> 0x003f }
+        r6.append(r1);	 Catch:{ Exception -> 0x003f }
+        goto L_0x002a;
+    L_0x003f:
+        r7 = move-exception;
+        org.telegram.messenger.FileLog.e(r7);	 Catch:{ all -> 0x006d }
+        if (r9 == 0) goto L_0x0048;
+    L_0x0045:
+        r9.close();	 Catch:{ Exception -> 0x0068 }
+    L_0x0048:
+        r11 = r10;
+        r1 = r10;
+        goto L_0x0009;
+    L_0x004b:
+        r8 = r6.toString();	 Catch:{ Exception -> 0x003f }
+        r1 = r12.lastContactsVersions;	 Catch:{ Exception -> 0x003f }
+        r1 = r1.length();	 Catch:{ Exception -> 0x003f }
+        if (r1 == 0) goto L_0x0060;
+    L_0x0057:
+        r1 = r12.lastContactsVersions;	 Catch:{ Exception -> 0x003f }
+        r1 = r1.equals(r8);	 Catch:{ Exception -> 0x003f }
+        if (r1 != 0) goto L_0x0060;
+    L_0x005f:
+        r10 = 1;
+    L_0x0060:
+        r12.lastContactsVersions = r8;	 Catch:{ Exception -> 0x003f }
+    L_0x0062:
+        if (r9 == 0) goto L_0x0048;
+    L_0x0064:
+        r9.close();	 Catch:{ Exception -> 0x0068 }
+        goto L_0x0048;
+    L_0x0068:
+        r7 = move-exception;
+        org.telegram.messenger.FileLog.e(r7);
+        goto L_0x0048;
+    L_0x006d:
+        r1 = move-exception;
+        if (r9 == 0) goto L_0x0073;
+    L_0x0070:
+        r9.close();	 Catch:{ Exception -> 0x0068 }
+    L_0x0073:
+        throw r1;	 Catch:{ Exception -> 0x0068 }
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ContactsController.checkContactsInternal():boolean");
     }
 
     public void readContacts() {
@@ -599,7 +653,8 @@ public class ContactsController {
         }
     }
 
-    final /* synthetic */ void lambda$readContacts$10$ContactsController() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$readContacts$10$ContactsController() {
         if (!this.contacts.isEmpty() || this.contactsLoaded) {
             synchronized (this.loadContactsSync) {
                 this.loadingContacts = false;
@@ -632,10 +687,10 @@ public class ContactsController {
     /* JADX WARNING: Removed duplicated region for block: B:142:0x038d A:{Catch:{ Throwable -> 0x0117, all -> 0x01ea }} */
     /* JADX WARNING: Removed duplicated region for block: B:149:0x03c6 A:{Catch:{ Throwable -> 0x0117, all -> 0x01ea }} */
     /* JADX WARNING: Removed duplicated region for block: B:146:0x03b5 A:{Catch:{ Throwable -> 0x0117, all -> 0x01ea }} */
-    /* JADX WARNING: Missing block: B:131:0x0361, code:
+    /* JADX WARNING: Missing block: B:131:0x0361, code skipped:
             if (r18.contains(r9.first_name) == false) goto L_0x0363;
      */
-    /* JADX WARNING: Missing block: B:137:0x037f, code:
+    /* JADX WARNING: Missing block: B:137:0x037f, code skipped:
             if (r18.contains(r9.last_name) != false) goto L_0x0381;
      */
     private java.util.HashMap<java.lang.String, org.telegram.messenger.ContactsController.Contact> readContactsFromPhoneBook() {
@@ -909,7 +964,7 @@ public class ContactsController {
         goto L_0x0174;
     L_0x01fa:
         r4 = "PhoneMobile";
-        r5 = NUM; // 0x7f0CLASSNAME float:1.8612835E38 double:1.053098286E-314;
+        r5 = NUM; // 0x7f0CLASSNAMEf float:1.8613052E38 double:1.0530983387E-314;
         r13 = org.telegram.messenger.LocaleController.getString(r4, r5);	 Catch:{ Throwable -> 0x0117 }
         goto L_0x01ae;
     L_0x0205:
@@ -919,7 +974,7 @@ public class ContactsController {
     L_0x020a:
         r3 = r9.phoneTypes;	 Catch:{ Throwable -> 0x0117 }
         r4 = "PhoneHome";
-        r5 = NUM; // 0x7f0CLASSNAME float:1.861283E38 double:1.053098285E-314;
+        r5 = NUM; // 0x7f0CLASSNAMEd float:1.8613048E38 double:1.0530983377E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r5);	 Catch:{ Throwable -> 0x0117 }
         r3.add(r4);	 Catch:{ Throwable -> 0x0117 }
         goto L_0x01b1;
@@ -930,7 +985,7 @@ public class ContactsController {
     L_0x021f:
         r3 = r9.phoneTypes;	 Catch:{ Throwable -> 0x0117 }
         r4 = "PhoneMobile";
-        r5 = NUM; // 0x7f0CLASSNAME float:1.8612835E38 double:1.053098286E-314;
+        r5 = NUM; // 0x7f0CLASSNAMEf float:1.8613052E38 double:1.0530983387E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r5);	 Catch:{ Throwable -> 0x0117 }
         r3.add(r4);	 Catch:{ Throwable -> 0x0117 }
         goto L_0x01b1;
@@ -941,7 +996,7 @@ public class ContactsController {
     L_0x0234:
         r3 = r9.phoneTypes;	 Catch:{ Throwable -> 0x0117 }
         r4 = "PhoneWork";
-        r5 = NUM; // 0x7f0CLASSNAMEa float:1.8612847E38 double:1.053098289E-314;
+        r5 = NUM; // 0x7f0CLASSNAME float:1.8613064E38 double:1.0530983416E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r5);	 Catch:{ Throwable -> 0x0117 }
         r3.add(r4);	 Catch:{ Throwable -> 0x0117 }
         goto L_0x01b1;
@@ -952,14 +1007,14 @@ public class ContactsController {
     L_0x024b:
         r3 = r9.phoneTypes;	 Catch:{ Throwable -> 0x0117 }
         r4 = "PhoneMain";
-        r5 = NUM; // 0x7f0CLASSNAME float:1.8612833E38 double:1.0530982853E-314;
+        r5 = NUM; // 0x7f0CLASSNAMEe float:1.861305E38 double:1.053098338E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r5);	 Catch:{ Throwable -> 0x0117 }
         r3.add(r4);	 Catch:{ Throwable -> 0x0117 }
         goto L_0x01b1;
     L_0x025c:
         r3 = r9.phoneTypes;	 Catch:{ Throwable -> 0x0117 }
         r4 = "PhoneOther";
-        r5 = NUM; // 0x7f0CLASSNAME float:1.8612845E38 double:1.0530982883E-314;
+        r5 = NUM; // 0x7f0CLASSNAME float:1.8613062E38 double:1.053098341E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r5);	 Catch:{ Throwable -> 0x0117 }
         r3.add(r4);	 Catch:{ Throwable -> 0x0117 }
         goto L_0x01b1;
@@ -1172,7 +1227,7 @@ public class ContactsController {
         r24 = r23;
         goto L_0x006b;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ContactsController.readContactsFromPhoneBook():java.util.HashMap<java.lang.String, org.telegram.messenger.ContactsController$Contact>");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ContactsController.readContactsFromPhoneBook():java.util.HashMap");
     }
 
     public HashMap<String, Contact> getContactsCopy(HashMap<String, Contact> original) {
@@ -1193,11 +1248,13 @@ public class ContactsController {
         return ret;
     }
 
-    protected void migratePhoneBookToV7(SparseArray<Contact> contactHashMap) {
+    /* Access modifiers changed, original: protected */
+    public void migratePhoneBookToV7(SparseArray<Contact> contactHashMap) {
         Utilities.globalQueue.postRunnable(new ContactsController$$Lambda$9(this, contactHashMap));
     }
 
-    final /* synthetic */ void lambda$migratePhoneBookToV7$11$ContactsController(SparseArray contactHashMap) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$migratePhoneBookToV7$11$ContactsController(SparseArray contactHashMap) {
         if (!this.migratingContacts) {
             Contact value;
             int a;
@@ -1229,13 +1286,15 @@ public class ContactsController {
         }
     }
 
-    protected void performSyncPhoneBook(HashMap<String, Contact> contactHashMap, boolean request, boolean first, boolean schedule, boolean force, boolean checkCount, boolean canceled) {
+    /* Access modifiers changed, original: protected */
+    public void performSyncPhoneBook(HashMap<String, Contact> contactHashMap, boolean request, boolean first, boolean schedule, boolean force, boolean checkCount, boolean canceled) {
         if (first || this.contactsBookLoaded) {
             Utilities.globalQueue.postRunnable(new ContactsController$$Lambda$10(this, contactHashMap, schedule, request, first, force, checkCount, canceled));
         }
     }
 
-    final /* synthetic */ void lambda$performSyncPhoneBook$24$ContactsController(HashMap contactHashMap, boolean schedule, boolean request, boolean first, boolean force, boolean checkCount, boolean canceled) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$performSyncPhoneBook$24$ContactsController(HashMap contactHashMap, boolean schedule, boolean request, boolean first, boolean force, boolean checkCount, boolean canceled) {
         Contact c;
         int a;
         String key;
@@ -1504,7 +1563,8 @@ public class ContactsController {
         }
     }
 
-    final /* synthetic */ void lambda$null$12$ContactsController(HashMap contactHashMap) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$12$ContactsController(HashMap contactHashMap) {
         ArrayList<User> toDelete = new ArrayList();
         if (!(contactHashMap == null || contactHashMap.isEmpty())) {
             try {
@@ -1536,7 +1596,7 @@ public class ContactsController {
                         removed++;
                     }
                 }
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
         }
@@ -1545,11 +1605,13 @@ public class ContactsController {
         }
     }
 
-    final /* synthetic */ void lambda$null$13$ContactsController(int checkType, HashMap contactHashMap, boolean first, boolean schedule) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$13$ContactsController(int checkType, HashMap contactHashMap, boolean first, boolean schedule) {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.hasNewContactsToImport, Integer.valueOf(checkType), contactHashMap, Boolean.valueOf(first), Boolean.valueOf(schedule));
     }
 
-    final /* synthetic */ void lambda$null$15$ContactsController(HashMap contactsBookShort, HashMap contactsMap, boolean first, HashMap phoneBookSectionsDictFinal, ArrayList phoneBookSectionsArrayFinal, HashMap phoneBookByShortPhonesFinal) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$15$ContactsController(HashMap contactsBookShort, HashMap contactsMap, boolean first, HashMap phoneBookSectionsDictFinal, ArrayList phoneBookSectionsArrayFinal, HashMap phoneBookByShortPhonesFinal) {
         this.contactsBookSPhones = contactsBookShort;
         this.contactsBook = contactsMap;
         this.contactsSyncInProgress = false;
@@ -1565,14 +1627,16 @@ public class ContactsController {
         AndroidUtilities.runOnUIThread(new ContactsController$$Lambda$57(this, phoneBookSectionsDictFinal, phoneBookSectionsArrayFinal, phoneBookByShortPhonesFinal));
     }
 
-    final /* synthetic */ void lambda$null$14$ContactsController(HashMap phoneBookSectionsDictFinal, ArrayList phoneBookSectionsArrayFinal, HashMap phoneBookByShortPhonesFinal) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$14$ContactsController(HashMap phoneBookSectionsDictFinal, ArrayList phoneBookSectionsArrayFinal, HashMap phoneBookByShortPhonesFinal) {
         mergePhonebookAndTelegramContacts(phoneBookSectionsDictFinal, phoneBookSectionsArrayFinal, phoneBookByShortPhonesFinal);
         updateUnregisteredContacts();
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.contactsDidLoad, new Object[0]);
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.contactsImported, new Object[0]);
     }
 
-    final /* synthetic */ void lambda$null$19$ContactsController(HashMap contactsMapToSave, SparseArray contactIdToKey, boolean[] hasErrors, HashMap contactsMap, TL_contacts_importContacts req, int count, HashMap contactsBookShort, boolean first, HashMap phoneBookSectionsDictFinal, ArrayList phoneBookSectionsArrayFinal, HashMap phoneBookByShortPhonesFinal, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$19$ContactsController(HashMap contactsMapToSave, SparseArray contactIdToKey, boolean[] hasErrors, HashMap contactsMap, TL_contacts_importContacts req, int count, HashMap contactsBookShort, boolean first, HashMap phoneBookSectionsDictFinal, ArrayList phoneBookSectionsArrayFinal, HashMap phoneBookByShortPhonesFinal, TLObject response, TL_error error) {
         this.completedRequestsCount++;
         int a1;
         if (error == null) {
@@ -1621,7 +1685,8 @@ public class ContactsController {
         }
     }
 
-    final /* synthetic */ void lambda$null$18$ContactsController(HashMap contactsBookShort, HashMap contactsMap, boolean first, HashMap phoneBookSectionsDictFinal, ArrayList phoneBookSectionsArrayFinal, HashMap phoneBookByShortPhonesFinal, boolean[] hasErrors) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$18$ContactsController(HashMap contactsBookShort, HashMap contactsMap, boolean first, HashMap phoneBookSectionsDictFinal, ArrayList phoneBookSectionsArrayFinal, HashMap phoneBookByShortPhonesFinal, boolean[] hasErrors) {
         this.contactsBookSPhones = contactsBookShort;
         this.contactsBook = contactsMap;
         this.contactsSyncInProgress = false;
@@ -1639,16 +1704,19 @@ public class ContactsController {
         }
     }
 
-    final /* synthetic */ void lambda$null$16$ContactsController(HashMap phoneBookSectionsDictFinal, ArrayList phoneBookSectionsArrayFinal, HashMap phoneBookByShortPhonesFinal) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$16$ContactsController(HashMap phoneBookSectionsDictFinal, ArrayList phoneBookSectionsArrayFinal, HashMap phoneBookByShortPhonesFinal) {
         mergePhonebookAndTelegramContacts(phoneBookSectionsDictFinal, phoneBookSectionsArrayFinal, phoneBookByShortPhonesFinal);
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.contactsImported, new Object[0]);
     }
 
-    final /* synthetic */ void lambda$null$17$ContactsController() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$17$ContactsController() {
         MessagesStorage.getInstance(this.currentAccount).getCachedPhoneBook(true);
     }
 
-    final /* synthetic */ void lambda$null$21$ContactsController(HashMap contactsBookShort, HashMap contactsMap, boolean first, HashMap phoneBookSectionsDictFinal, ArrayList phoneBookSectionsArrayFinal, HashMap phoneBookByShortPhonesFinal) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$21$ContactsController(HashMap contactsBookShort, HashMap contactsMap, boolean first, HashMap phoneBookSectionsDictFinal, ArrayList phoneBookSectionsArrayFinal, HashMap phoneBookByShortPhonesFinal) {
         this.contactsBookSPhones = contactsBookShort;
         this.contactsBook = contactsMap;
         this.contactsSyncInProgress = false;
@@ -1663,14 +1731,16 @@ public class ContactsController {
         AndroidUtilities.runOnUIThread(new ContactsController$$Lambda$53(this, phoneBookSectionsDictFinal, phoneBookSectionsArrayFinal, phoneBookByShortPhonesFinal));
     }
 
-    final /* synthetic */ void lambda$null$20$ContactsController(HashMap phoneBookSectionsDictFinal, ArrayList phoneBookSectionsArrayFinal, HashMap phoneBookByShortPhonesFinal) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$20$ContactsController(HashMap phoneBookSectionsDictFinal, ArrayList phoneBookSectionsArrayFinal, HashMap phoneBookByShortPhonesFinal) {
         mergePhonebookAndTelegramContacts(phoneBookSectionsDictFinal, phoneBookSectionsArrayFinal, phoneBookByShortPhonesFinal);
         updateUnregisteredContacts();
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.contactsDidLoad, new Object[0]);
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.contactsImported, new Object[0]);
     }
 
-    final /* synthetic */ void lambda$null$23$ContactsController(HashMap contactsBookShort, HashMap contactsMap, boolean first, HashMap phoneBookSectionsDictFinal, ArrayList phoneBookSectionsArrayFinal, HashMap phoneBookByShortPhonesFinal) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$23$ContactsController(HashMap contactsBookShort, HashMap contactsMap, boolean first, HashMap phoneBookSectionsDictFinal, ArrayList phoneBookSectionsArrayFinal, HashMap phoneBookByShortPhonesFinal) {
         this.contactsBookSPhones = contactsBookShort;
         this.contactsBook = contactsMap;
         this.contactsSyncInProgress = false;
@@ -1683,6 +1753,11 @@ public class ContactsController {
             this.delayedContactsUpdate.clear();
         }
         AndroidUtilities.runOnUIThread(new ContactsController$$Lambda$52(this, phoneBookSectionsDictFinal, phoneBookSectionsArrayFinal, phoneBookByShortPhonesFinal));
+    }
+
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$22$ContactsController(HashMap phoneBookSectionsDictFinal, ArrayList phoneBookSectionsArrayFinal, HashMap phoneBookByShortPhonesFinal) {
+        mergePhonebookAndTelegramContacts(phoneBookSectionsDictFinal, phoneBookSectionsArrayFinal, phoneBookByShortPhonesFinal);
     }
 
     public boolean isLoadingContacts() {
@@ -1742,7 +1817,8 @@ public class ContactsController {
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new ContactsController$$Lambda$12(this, hash));
     }
 
-    final /* synthetic */ void lambda$loadContacts$27$ContactsController(int hash, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$loadContacts$27$ContactsController(int hash, TLObject response, TL_error error) {
         if (error == null) {
             contacts_Contacts res = (contacts_Contacts) response;
             if (hash == 0 || !(res instanceof TL_contacts_contactsNotModified)) {
@@ -1765,7 +1841,8 @@ public class ContactsController {
         }
     }
 
-    final /* synthetic */ void lambda$null$26$ContactsController() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$26$ContactsController() {
         synchronized (this.loadContactsSync) {
             this.loadingContacts = false;
         }
@@ -1776,7 +1853,8 @@ public class ContactsController {
         AndroidUtilities.runOnUIThread(new ContactsController$$Lambda$13(this, usersArr, from, contactsArr));
     }
 
-    final /* synthetic */ void lambda$processLoadedContacts$35$ContactsController(ArrayList usersArr, int from, ArrayList contactsArr) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$processLoadedContacts$35$ContactsController(ArrayList usersArr, int from, ArrayList contactsArr) {
         int a;
         boolean z = true;
         MessagesController instance = MessagesController.getInstance(this.currentAccount);
@@ -1806,7 +1884,8 @@ public class ContactsController {
         Utilities.stageQueue.postRunnable(new ContactsController$$Lambda$38(this, from, contactsArr, usersDict, usersArr, isEmpty));
     }
 
-    final /* synthetic */ void lambda$null$34$ContactsController(int from, ArrayList contactsArr, SparseArray usersDict, ArrayList usersArr, boolean isEmpty) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$34$ContactsController(int from, ArrayList contactsArr, SparseArray usersDict, ArrayList usersArr, boolean isEmpty) {
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("done loading contacts");
         }
@@ -1930,7 +2009,8 @@ public class ContactsController {
         return s.compareTo(s2);
     }
 
-    final /* synthetic */ void lambda$null$31$ContactsController(ArrayList contactsArr, ConcurrentHashMap contactsDictionary, HashMap sectionsDict, HashMap sectionsDictMutual, ArrayList sortedSectionsArray, ArrayList sortedSectionsArrayMutual, int from, boolean isEmpty) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$31$ContactsController(ArrayList contactsArr, ConcurrentHashMap contactsDictionary, HashMap sectionsDict, HashMap sectionsDictMutual, ArrayList sortedSectionsArray, ArrayList sortedSectionsArrayMutual, int from, boolean isEmpty) {
         this.contacts = contactsArr;
         this.contactsDict = contactsDictionary;
         this.usersSectionsDict = sectionsDict;
@@ -1952,7 +2032,8 @@ public class ContactsController {
         }
     }
 
-    final /* synthetic */ void lambda$null$33$ContactsController(HashMap contactsByPhonesDictFinal, HashMap contactsByPhonesShortDictFinal) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$33$ContactsController(HashMap contactsByPhonesDictFinal, HashMap contactsByPhonesShortDictFinal) {
         Utilities.globalQueue.postRunnable(new ContactsController$$Lambda$44(this, contactsByPhonesDictFinal, contactsByPhonesShortDictFinal));
         if (!this.contactsSyncInProgress) {
             this.contactsSyncInProgress = true;
@@ -1960,7 +2041,8 @@ public class ContactsController {
         }
     }
 
-    final /* synthetic */ void lambda$null$32$ContactsController(HashMap contactsByPhonesDictFinal, HashMap contactsByPhonesShortDictFinal) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$32$ContactsController(HashMap contactsByPhonesDictFinal, HashMap contactsByPhonesShortDictFinal) {
         this.contactsByPhone = contactsByPhonesDictFinal;
         this.contactsByShortPhone = contactsByPhonesShortDictFinal;
     }
@@ -1970,7 +2052,7 @@ public class ContactsController {
             if (MessagesController.getMainSettings(this.currentAccount).getLong("lastReloadStatusTime", 0) < System.currentTimeMillis() - 86400000) {
                 reloadContactsStatuses();
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
@@ -1978,7 +2060,7 @@ public class ContactsController {
     private void saveContactsLoadTime() {
         try {
             MessagesController.getMainSettings(this.currentAccount).edit().putLong("lastReloadStatusTime", System.currentTimeMillis()).commit();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
@@ -1987,7 +2069,8 @@ public class ContactsController {
         Utilities.globalQueue.postRunnable(new ContactsController$$Lambda$14(this, new ArrayList(this.contacts), phoneBookByShortPhonesFinal, phoneBookSectionsDictFinal, phoneBookSectionsArrayFinal));
     }
 
-    final /* synthetic */ void lambda$mergePhonebookAndTelegramContacts$39$ContactsController(ArrayList contactsCopy, HashMap phoneBookByShortPhonesFinal, HashMap phoneBookSectionsDictFinal, ArrayList phoneBookSectionsArrayFinal) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$mergePhonebookAndTelegramContacts$39$ContactsController(ArrayList contactsCopy, HashMap phoneBookByShortPhonesFinal, HashMap phoneBookSectionsDictFinal, ArrayList phoneBookSectionsArrayFinal) {
         ArrayList<Object> arrayList;
         int size = contactsCopy.size();
         for (int a = 0; a < size; a++) {
@@ -2061,7 +2144,8 @@ public class ContactsController {
         return s.compareTo(s2);
     }
 
-    final /* synthetic */ void lambda$null$38$ContactsController(ArrayList phoneBookSectionsArrayFinal, HashMap phoneBookSectionsDictFinal) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$38$ContactsController(ArrayList phoneBookSectionsArrayFinal, HashMap phoneBookSectionsDictFinal) {
         this.phoneBookSectionsArray = phoneBookSectionsArrayFinal;
         this.phoneBookSectionsDict = phoneBookSectionsDictFinal;
     }
@@ -2146,7 +2230,8 @@ public class ContactsController {
         this.sortedUsersSectionsArray = sortedSectionsArray;
     }
 
-    final /* synthetic */ int lambda$buildContactsSectionsArrays$41$ContactsController(TL_contact tl_contact, TL_contact tl_contact2) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ int lambda$buildContactsSectionsArrays$41$ContactsController(TL_contact tl_contact, TL_contact tl_contact2) {
         return UserObject.getFirstName(MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(tl_contact.user_id))).compareTo(UserObject.getFirstName(MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(tl_contact2.user_id))));
     }
 
@@ -2171,7 +2256,7 @@ public class ContactsController {
                     if (cursor != null) {
                         try {
                             cursor.close();
-                        } catch (Throwable e) {
+                        } catch (Exception e) {
                             FileLog.e(e);
                         }
                     }
@@ -2180,7 +2265,7 @@ public class ContactsController {
                 if (cursor != null) {
                     try {
                         cursor.close();
-                    } catch (Throwable e2) {
+                    } catch (Exception e2) {
                         FileLog.e(e2);
                     }
                 }
@@ -2189,7 +2274,7 @@ public class ContactsController {
                 if (cursor != null) {
                     try {
                         cursor.close();
-                    } catch (Throwable e22) {
+                    } catch (Exception e22) {
                         FileLog.e(e22);
                     }
                 }
@@ -2304,6 +2389,11 @@ public class ContactsController {
         Utilities.phoneBookQueue.postRunnable(new ContactsController$$Lambda$18(this, new ArrayList(this.contacts)));
     }
 
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$performWriteContactsToPhoneBook$43$ContactsController(ArrayList contactsArray) {
+        performWriteContactsToPhoneBookInternal(contactsArray);
+    }
+
     private void applyContactsUpdates(ArrayList<Integer> ids, ConcurrentHashMap<Integer, User> userDict, ArrayList<TL_contact> newC, ArrayList<Integer> contactsTD) {
         int a;
         Integer uid;
@@ -2395,15 +2485,18 @@ public class ContactsController {
         }
     }
 
-    final /* synthetic */ void lambda$applyContactsUpdates$44$ContactsController(Integer uid) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$applyContactsUpdates$44$ContactsController(Integer uid) {
         deleteContactFromPhoneBook(uid.intValue());
     }
 
-    final /* synthetic */ void lambda$applyContactsUpdates$45$ContactsController() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$applyContactsUpdates$45$ContactsController() {
         loadContacts(false, 0);
     }
 
-    final /* synthetic */ void lambda$applyContactsUpdates$46$ContactsController(ArrayList newContacts, ArrayList contactsToDelete) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$applyContactsUpdates$46$ContactsController(ArrayList newContacts, ArrayList contactsToDelete) {
         int a;
         TL_contact contact;
         boolean z = true;
@@ -2533,7 +2626,7 @@ public class ContactsController {
             }
             try {
                 ApplicationLoader.applicationContext.getContentResolver().delete(RawContacts.CONTENT_URI.buildUpon().appendQueryParameter("caller_is_syncadapter", "true").appendQueryParameter("account_name", this.systemAccount.name).appendQueryParameter("account_type", this.systemAccount.type).build(), "sync2 = " + uid, null);
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
             synchronized (this.observerLock) {
@@ -2542,7 +2635,8 @@ public class ContactsController {
         }
     }
 
-    protected void markAsContacted(String contactId) {
+    /* Access modifiers changed, original: protected */
+    public void markAsContacted(String contactId) {
         if (contactId != null) {
             Utilities.phoneBookQueue.postRunnable(new ContactsController$$Lambda$22(contactId));
         }
@@ -2573,7 +2667,8 @@ public class ContactsController {
         }
     }
 
-    final /* synthetic */ void lambda$addContact$50$ContactsController(TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$addContact$50$ContactsController(TLObject response, TL_error error) {
         if (error == null) {
             TL_contacts_importedContacts res = (TL_contacts_importedContacts) response;
             MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(res.users, null, true, true);
@@ -2601,11 +2696,13 @@ public class ContactsController {
         }
     }
 
-    final /* synthetic */ void lambda$null$48$ContactsController(User u) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$48$ContactsController(User u) {
         addContactToPhoneBook(u, true);
     }
 
-    final /* synthetic */ void lambda$null$49$ContactsController(TL_contacts_importedContacts res) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$49$ContactsController(TL_contacts_importedContacts res) {
         Iterator it = res.users.iterator();
         while (it.hasNext()) {
             User u = (User) it.next();
@@ -2638,7 +2735,8 @@ public class ContactsController {
         }
     }
 
-    final /* synthetic */ void lambda$deleteContact$53$ContactsController(ArrayList uids, ArrayList users, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$deleteContact$53$ContactsController(ArrayList uids, ArrayList users, TLObject response, TL_error error) {
         if (error == null) {
             MessagesStorage.getInstance(this.currentAccount).deleteContacts(uids);
             Utilities.phoneBookQueue.postRunnable(new ContactsController$$Lambda$31(this, users));
@@ -2660,14 +2758,16 @@ public class ContactsController {
         }
     }
 
-    final /* synthetic */ void lambda$null$51$ContactsController(ArrayList users) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$51$ContactsController(ArrayList users) {
         Iterator it = users.iterator();
         while (it.hasNext()) {
             deleteContactFromPhoneBook(((User) it.next()).id);
         }
     }
 
-    final /* synthetic */ void lambda$null$52$ContactsController(ArrayList users) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$52$ContactsController(ArrayList users) {
         boolean remove = false;
         Iterator it = users.iterator();
         while (it.hasNext()) {
@@ -2694,13 +2794,15 @@ public class ContactsController {
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_contacts_getStatuses(), new ContactsController$$Lambda$25(this, editor));
     }
 
-    final /* synthetic */ void lambda$reloadContactsStatuses$55$ContactsController(Editor editor, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$reloadContactsStatuses$55$ContactsController(Editor editor, TLObject response, TL_error error) {
         if (error == null) {
             AndroidUtilities.runOnUIThread(new ContactsController$$Lambda$30(this, editor, response));
         }
     }
 
-    final /* synthetic */ void lambda$null$54$ContactsController(Editor editor, TLObject response) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$54$ContactsController(Editor editor, TLObject response) {
         editor.remove("needGetStatuses").commit();
         Vector vector = (Vector) response;
         if (!vector.objects.isEmpty()) {
@@ -2751,8 +2853,14 @@ public class ContactsController {
                     case 2:
                         req.key = new TL_inputPrivacyKeyPhoneCall();
                         break;
-                    default:
+                    case 3:
                         req.key = new TL_inputPrivacyKeyPhoneP2P();
+                        break;
+                    case 4:
+                        req.key = new TL_inputPrivacyKeyProfilePhoto();
+                        break;
+                    default:
+                        req.key = new TL_inputPrivacyKeyForwards();
                         break;
                 }
                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new ContactsController$$Lambda$27(this, num));
@@ -2761,11 +2869,13 @@ public class ContactsController {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.privacyRulesUpdated, new Object[0]);
     }
 
-    final /* synthetic */ void lambda$loadPrivacySettings$57$ContactsController(TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$loadPrivacySettings$57$ContactsController(TLObject response, TL_error error) {
         AndroidUtilities.runOnUIThread(new ContactsController$$Lambda$29(this, error, response));
     }
 
-    final /* synthetic */ void lambda$null$56$ContactsController(TL_error error, TLObject response) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$56$ContactsController(TL_error error, TLObject response) {
         if (error == null) {
             this.deleteAccountTTL = ((TL_accountDaysTTL) response).days;
             this.loadingDeleteInfo = 2;
@@ -2775,11 +2885,13 @@ public class ContactsController {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.privacyRulesUpdated, new Object[0]);
     }
 
-    final /* synthetic */ void lambda$loadPrivacySettings$59$ContactsController(int num, TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$loadPrivacySettings$59$ContactsController(int num, TLObject response, TL_error error) {
         AndroidUtilities.runOnUIThread(new ContactsController$$Lambda$28(this, error, response, num));
     }
 
-    final /* synthetic */ void lambda$null$58$ContactsController(TL_error error, TLObject response, int num) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$58$ContactsController(TL_error error, TLObject response, int num) {
         if (error == null) {
             TL_account_privacyRules rules = (TL_account_privacyRules) response;
             MessagesController.getInstance(this.currentAccount).putUsers(rules.users, false);
@@ -2793,8 +2905,14 @@ public class ContactsController {
                 case 2:
                     this.callPrivacyRules = rules.rules;
                     break;
-                default:
+                case 3:
                     this.p2pPrivacyRules = rules.rules;
+                    break;
+                case 4:
+                    this.profilePhotoPrivacyRules = rules.rules;
+                    break;
+                default:
+                    this.forwardsPrivacyRules = rules.rules;
                     break;
             }
             this.loadingPrivacyInfo[num] = 2;
@@ -2821,6 +2939,12 @@ public class ContactsController {
     }
 
     public ArrayList<PrivacyRule> getPrivacyRules(int type) {
+        if (type == 5) {
+            return this.forwardsPrivacyRules;
+        }
+        if (type == 4) {
+            return this.profilePhotoPrivacyRules;
+        }
         if (type == 3) {
             return this.p2pPrivacyRules;
         }
@@ -2834,7 +2958,11 @@ public class ContactsController {
     }
 
     public void setPrivacyRules(ArrayList<PrivacyRule> rules, int type) {
-        if (type == 3) {
+        if (type == 5) {
+            this.forwardsPrivacyRules = rules;
+        } else if (type == 4) {
+            this.profilePhotoPrivacyRules = rules;
+        } else if (type == 3) {
             this.p2pPrivacyRules = rules;
         } else if (type == 2) {
             this.callPrivacyRules = rules;
@@ -2888,7 +3016,7 @@ public class ContactsController {
                     cursor.close();
                 }
                 resolver.applyBatch("com.android.contacts", ops);
-            } catch (Throwable x) {
+            } catch (Exception x) {
                 FileLog.e(x);
             }
         }
@@ -2913,7 +3041,7 @@ public class ContactsController {
                 } else if (cursor != null) {
                     cursor.close();
                 }
-            } catch (Throwable x) {
+            } catch (Exception x) {
                 FileLog.e(x);
             }
         }

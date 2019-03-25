@@ -8,7 +8,8 @@ public class NotificationRepeat extends IntentService {
         super("NotificationRepeat");
     }
 
-    protected void onHandleIntent(Intent intent) {
+    /* Access modifiers changed, original: protected */
+    public void onHandleIntent(Intent intent) {
         if (intent != null) {
             final int currentAccount = intent.getIntExtra("currentAccount", UserConfig.selectedAccount);
             AndroidUtilities.runOnUIThread(new Runnable() {

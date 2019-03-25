@@ -209,6 +209,8 @@
     </attr>
     <attr name="uiScrollGestures" format="boolean">
     </attr>
+    <attr name="uiScrollGesturesDuringRotateOrZoom" format="boolean">
+    </attr>
     <attr name="uiTiltGestures" format="boolean">
     </attr>
     <attr name="uiZoomControls" format="boolean">

@@ -6,18 +6,23 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Rect;
+import android.os.Build.VERSION;
+import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
+import android.view.accessibility.AccessibilityNodeInfo;
+import android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ImageReceiver;
+import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController.PhotoEntry;
-import org.telegram.messenger.R;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox;
 import org.telegram.ui.Components.LayoutHelper;
@@ -49,30 +54,33 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         this.checkFrame = new FrameLayout(context);
         addView(this.checkFrame, LayoutHelper.createFrame(42, 42.0f, 51, 38.0f, 0.0f, 0.0f, 0.0f));
         this.videoInfoContainer = new FrameLayout(context);
-        this.videoInfoContainer.setBackgroundResource(R.drawable.phototime);
+        this.videoInfoContainer.setBackgroundResource(NUM);
         this.videoInfoContainer.setPadding(AndroidUtilities.dp(3.0f), 0, AndroidUtilities.dp(3.0f), 0);
         addView(this.videoInfoContainer, LayoutHelper.createFrame(80, 16, 83));
         ImageView imageView1 = new ImageView(context);
-        imageView1.setImageResource(R.drawable.ic_video);
+        imageView1.setImageResource(NUM);
         this.videoInfoContainer.addView(imageView1, LayoutHelper.createFrame(-2, -2, 19));
         this.videoTextView = new TextView(context);
         this.videoTextView.setTextColor(-1);
         this.videoTextView.setTextSize(1, 12.0f);
+        this.videoTextView.setImportantForAccessibility(2);
         this.videoInfoContainer.addView(this.videoTextView, LayoutHelper.createFrame(-2, -2.0f, 19, 18.0f, -0.7f, 0.0f, 0.0f));
-        this.checkBox = new CheckBox(context, R.drawable.checkbig);
+        this.checkBox = new CheckBox(context, NUM);
         this.checkBox.setSize(30);
         this.checkBox.setCheckOffset(AndroidUtilities.dp(1.0f));
         this.checkBox.setDrawBackground(true);
         this.checkBox.setColor(-12793105, -1);
         addView(this.checkBox, LayoutHelper.createFrame(30, 30.0f, 51, 46.0f, 4.0f, 0.0f, 0.0f));
         this.checkBox.setVisibility(0);
+        setFocusable(true);
     }
 
     public void setIsVertical(boolean value) {
         this.isVertical = value;
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int i = 0;
         if (this.isVertical) {
             int makeMeasureSpec = MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(80.0f), NUM);
@@ -124,14 +132,14 @@ public class PhotoAttachPhotoCell extends FrameLayout {
             this.videoInfoContainer.setVisibility(4);
         }
         if (this.photoEntry.thumbPath != null) {
-            this.imageView.setImage(this.photoEntry.thumbPath, null, getResources().getDrawable(R.drawable.nophotos));
+            this.imageView.setImage(this.photoEntry.thumbPath, null, getResources().getDrawable(NUM));
         } else if (this.photoEntry.path == null) {
-            this.imageView.setImageResource(R.drawable.nophotos);
+            this.imageView.setImageResource(NUM);
         } else if (this.photoEntry.isVideo) {
-            this.imageView.setImage("vthumb://" + this.photoEntry.imageId + ":" + this.photoEntry.path, null, getResources().getDrawable(R.drawable.nophotos));
+            this.imageView.setImage("vthumb://" + this.photoEntry.imageId + ":" + this.photoEntry.path, null, getResources().getDrawable(NUM));
         } else {
             this.imageView.setOrientation(this.photoEntry.orientation, true);
-            this.imageView.setImage("thumb://" + this.photoEntry.imageId + ":" + this.photoEntry.path, null, getResources().getDrawable(R.drawable.nophotos));
+            this.imageView.setImage("thumb://" + this.photoEntry.imageId + ":" + this.photoEntry.path, null, getResources().getDrawable(NUM));
         }
         if (needCheckShow && PhotoViewer.isShowingImage(this.photoEntry.path)) {
             showing = true;
@@ -229,6 +237,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
                 getParent().requestDisallowInterceptTouchEvent(true);
                 this.pressed = false;
                 playSoundEffect(0);
+                sendAccessibilityEvent(1);
                 this.delegate.onCheckClick(this);
                 invalidate();
             } else if (event.getAction() == 3) {
@@ -243,5 +252,30 @@ public class PhotoAttachPhotoCell extends FrameLayout {
             return result;
         }
         return super.onTouchEvent(event);
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
+        info.setEnabled(true);
+        if (this.photoEntry.isVideo) {
+            info.setText(LocaleController.getString("AttachVideo", NUM) + ", " + LocaleController.formatCallDuration(this.photoEntry.duration));
+        } else {
+            info.setText(LocaleController.getString("AttachPhoto", NUM));
+        }
+        if (this.checkBox.isChecked()) {
+            info.setSelected(true);
+        }
+        if (VERSION.SDK_INT >= 21) {
+            info.addAction(new AccessibilityAction(NUM, LocaleController.getString("Open", NUM)));
+        }
+    }
+
+    public boolean performAccessibilityAction(int action, Bundle arguments) {
+        if (action == NUM) {
+            View parent = (View) getParent();
+            parent.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), 0, (float) getLeft(), (float) ((getTop() + getHeight()) - 1), 0));
+            parent.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), 1, (float) getLeft(), (float) ((getTop() + getHeight()) - 1), 0));
+        }
+        return super.performAccessibilityAction(action, arguments);
     }
 }

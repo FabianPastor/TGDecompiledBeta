@@ -168,7 +168,8 @@ public class MP3Frame {
         this.bytes = bytes;
     }
 
-    boolean isChecksumError() {
+    /* Access modifiers changed, original: 0000 */
+    public boolean isChecksumError() {
         if (this.header.getProtection() != 0 || this.header.getLayer() != 1) {
             return false;
         }
@@ -193,7 +194,8 @@ public class MP3Frame {
         return this.header;
     }
 
-    boolean isXingFrame() {
+    /* Access modifiers changed, original: 0000 */
+    public boolean isXingFrame() {
         int xingOffset = this.header.getXingOffset();
         if (this.bytes.length < xingOffset + 12 || xingOffset < 0 || this.bytes.length < xingOffset + 8) {
             return false;
@@ -207,7 +209,8 @@ public class MP3Frame {
         return false;
     }
 
-    boolean isVBRIFrame() {
+    /* Access modifiers changed, original: 0000 */
+    public boolean isVBRIFrame() {
         int vbriOffset = this.header.getVBRIOffset();
         if (this.bytes.length >= vbriOffset + 26 && this.bytes[vbriOffset] == (byte) 86 && this.bytes[vbriOffset + 1] == (byte) 66 && this.bytes[vbriOffset + 2] == (byte) 82 && this.bytes[vbriOffset + 3] == (byte) 73) {
             return true;

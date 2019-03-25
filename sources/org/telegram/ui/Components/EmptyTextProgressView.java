@@ -1,12 +1,14 @@
 package org.telegram.ui.Components;
 
 import android.content.Context;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 
 public class EmptyTextProgressView extends FrameLayout {
@@ -26,7 +28,7 @@ public class EmptyTextProgressView extends FrameLayout {
         this.textView.setGravity(17);
         this.textView.setVisibility(4);
         this.textView.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
-        this.textView.setText(LocaleController.getString("NoResult", R.string.NoResult));
+        this.textView.setText(LocaleController.getString("NoResult", NUM));
         addView(this.textView, LayoutHelper.createFrame(-2, -2.0f));
         setOnTouchListener(EmptyTextProgressView$$Lambda$0.$instance);
     }
@@ -53,6 +55,19 @@ public class EmptyTextProgressView extends FrameLayout {
         this.progressBar.setProgressColor(color);
     }
 
+    public void setTopImage(int resId) {
+        if (resId == 0) {
+            this.textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            return;
+        }
+        Drawable drawable = getContext().getResources().getDrawable(resId).mutate();
+        if (drawable != null) {
+            drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("emptyListPlaceholder"), Mode.MULTIPLY));
+        }
+        this.textView.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
+        this.textView.setCompoundDrawablePadding(AndroidUtilities.dp(1.0f));
+    }
+
     public void setTextSize(int size) {
         this.textView.setTextSize(1, (float) size);
     }
@@ -61,7 +76,8 @@ public class EmptyTextProgressView extends FrameLayout {
         this.showAtCenter = value;
     }
 
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+    /* Access modifiers changed, original: protected */
+    public void onLayout(boolean changed, int l, int t, int r, int b) {
         this.inLayout = true;
         int width = r - l;
         int height = b - t;

@@ -12,7 +12,6 @@ import org.telegram.messenger.ContactsController.Contact;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
@@ -61,17 +60,17 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
     public View createView(Context context) {
         this.searching = false;
         this.searchWas = false;
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("SelectContact", R.string.SelectContact));
+        this.actionBar.setTitle(LocaleController.getString("SelectContact", NUM));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    PhonebookSelectActivity.this.lambda$checkDiscard$70$PassportActivity();
+                    PhonebookSelectActivity.this.finishFragment();
                 }
             }
         });
-        this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItemSearchListener() {
+        this.actionBar.createMenu().addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItemSearchListener() {
             public void onSearchExpand() {
                 PhonebookSelectActivity.this.searching = true;
             }
@@ -85,7 +84,7 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
                 PhonebookSelectActivity.this.listViewAdapter.notifyDataSetChanged();
                 PhonebookSelectActivity.this.listView.setFastScrollVisible(true);
                 PhonebookSelectActivity.this.listView.setVerticalScrollBarEnabled(false);
-                PhonebookSelectActivity.this.emptyView.setText(LocaleController.getString("NoContacts", R.string.NoContacts));
+                PhonebookSelectActivity.this.emptyView.setText(LocaleController.getString("NoContacts", NUM));
             }
 
             public void onTextChanged(EditText editText) {
@@ -97,16 +96,17 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
                     PhonebookSelectActivity.this.searchListViewAdapter.search(text);
                 }
             }
-        }).setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
+        }).setSearchFieldHint(LocaleController.getString("Search", NUM));
         this.searchListViewAdapter = new PhonebookSearchAdapter(context) {
-            protected void onUpdateSearchResults(String query) {
+            /* Access modifiers changed, original: protected */
+            public void onUpdateSearchResults(String query) {
                 if (!TextUtils.isEmpty(query) && PhonebookSelectActivity.this.listView != null && PhonebookSelectActivity.this.listView.getAdapter() != PhonebookSelectActivity.this.searchListViewAdapter) {
                     PhonebookSelectActivity.this.listView.setAdapter(PhonebookSelectActivity.this.searchListViewAdapter);
                     PhonebookSelectActivity.this.listView.setSectionsType(0);
                     PhonebookSelectActivity.this.searchListViewAdapter.notifyDataSetChanged();
                     PhonebookSelectActivity.this.listView.setFastScrollVisible(false);
                     PhonebookSelectActivity.this.listView.setVerticalScrollBarEnabled(true);
-                    PhonebookSelectActivity.this.emptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
+                    PhonebookSelectActivity.this.emptyView.setText(LocaleController.getString("NoResult", NUM));
                 }
             }
         };
@@ -119,7 +119,8 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
             }
         };
         this.fragmentView = new FrameLayout(context) {
-            protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+            /* Access modifiers changed, original: protected */
+            public void onLayout(boolean changed, int left, int top, int right, int bottom) {
                 super.onLayout(changed, left, top, right, bottom);
                 if (PhonebookSelectActivity.this.listView.getAdapter() != PhonebookSelectActivity.this.listViewAdapter) {
                     PhonebookSelectActivity.this.emptyView.setTranslationY((float) AndroidUtilities.dp(0.0f));
@@ -131,7 +132,7 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
         FrameLayout frameLayout = this.fragmentView;
         this.emptyView = new EmptyTextProgressView(context);
         this.emptyView.setShowAtCenter(true);
-        this.emptyView.setText(LocaleController.getString("NoContacts", R.string.NoContacts));
+        this.emptyView.setText(LocaleController.getString("NoContacts", NUM));
         this.emptyView.showTextView();
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView = new RecyclerListView(context);
@@ -157,7 +158,8 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
         return this.fragmentView;
     }
 
-    final /* synthetic */ void lambda$createView$1$PhonebookSelectActivity(View view, int position) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$1$PhonebookSelectActivity(View view, int position) {
         Contact object;
         if (this.searching && this.searchWas) {
             object = this.searchListViewAdapter.getItem(position);
@@ -195,8 +197,9 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
         }
     }
 
-    final /* synthetic */ void lambda$null$0$PhonebookSelectActivity(User user) {
-        lambda$null$9$ProfileActivity();
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$0$PhonebookSelectActivity(User user) {
+        removeSelfFromStack();
         this.delegate.didSelectContact(user);
     }
 
@@ -220,7 +223,7 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
                 this.listViewAdapter.notifyDataSetChanged();
             }
         } else if (id == NotificationCenter.closeChats) {
-            lambda$null$9$ProfileActivity();
+            removeSelfFromStack();
         }
     }
 
@@ -260,7 +263,8 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
         return themeDescriptionArr;
     }
 
-    final /* synthetic */ void lambda$getThemeDescriptions$2$PhonebookSelectActivity() {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$getThemeDescriptions$2$PhonebookSelectActivity() {
         if (this.listView != null) {
             int count = this.listView.getChildCount();
             for (int a = 0; a < count; a++) {

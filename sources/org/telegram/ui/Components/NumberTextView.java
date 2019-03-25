@@ -101,7 +101,8 @@ public class NumberTextView extends View {
         setNumber(this.currentNumber, false);
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (!this.letters.isEmpty()) {
             float height = (float) ((StaticLayout) this.letters.get(0)).getHeight();
             canvas.save();

@@ -66,11 +66,13 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
         return this.currentMessageObject;
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(56.0f));
     }
 
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+    /* Access modifiers changed, original: protected */
+    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
         if (this.currentMessageObject != null) {
             this.seekBarX = AndroidUtilities.dp(54.0f);
             this.buttonX = AndroidUtilities.dp(10.0f);
@@ -87,7 +89,8 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
         }
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (this.currentMessageObject != null) {
             if (this.wasLayout) {
                 BaseCell.setDrawableBounds(Theme.chat_msgInMediaDrawable, 0, 0, getMeasuredWidth(), getMeasuredHeight());
@@ -120,7 +123,8 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
         }
     }
 
-    protected void onDetachedFromWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
     }

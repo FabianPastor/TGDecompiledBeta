@@ -82,7 +82,8 @@ public class CustomTabsSessionToken {
         this.mCallbackBinder = callbackBinder;
     }
 
-    IBinder getCallbackBinder() {
+    /* Access modifiers changed, original: 0000 */
+    public IBinder getCallbackBinder() {
         return this.mCallbackBinder.asBinder();
     }
 

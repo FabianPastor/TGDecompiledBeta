@@ -20,7 +20,7 @@ public class Slice {
         this.bounds = rect;
         try {
             this.file = File.createTempFile("paint", ".bin", ApplicationLoader.applicationContext.getCacheDir());
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
         if (this.file != null) {
@@ -48,7 +48,7 @@ public class Slice {
             }
             deflater.end();
             fos.close();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
@@ -81,7 +81,7 @@ public class Slice {
                 } else if (inflater.needsInput()) {
                 }
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
             return null;
         }

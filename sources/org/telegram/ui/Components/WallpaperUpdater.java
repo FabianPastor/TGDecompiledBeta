@@ -17,7 +17,6 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper.SendingMediaInfo;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -49,19 +48,20 @@ public class WallpaperUpdater {
         CharSequence[] items;
         int[] icons;
         Builder builder = new Builder(this.parentActivity);
-        builder.setTitle(LocaleController.getString("ChoosePhoto", R.string.ChoosePhoto));
+        builder.setTitle(LocaleController.getString("ChoosePhoto", NUM));
         if (fromTheme) {
-            items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto), LocaleController.getString("SelectFromGallery", R.string.SelectFromGallery), LocaleController.getString("SelectColor", R.string.SelectColor), LocaleController.getString("Default", R.string.Default)};
+            items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", NUM), LocaleController.getString("SelectFromGallery", NUM), LocaleController.getString("SelectColor", NUM), LocaleController.getString("Default", NUM)};
             icons = null;
         } else {
-            items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto), LocaleController.getString("SelectFromGallery", R.string.SelectFromGallery)};
-            icons = new int[]{R.drawable.menu_camera, R.drawable.profile_photos};
+            items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", NUM), LocaleController.getString("SelectFromGallery", NUM)};
+            icons = new int[]{NUM, NUM};
         }
         builder.setItems(items, icons, new WallpaperUpdater$$Lambda$0(this, fromTheme));
         builder.show();
     }
 
-    final /* synthetic */ void lambda$showAlert$0$WallpaperUpdater(boolean fromTheme, DialogInterface dialogInterface, int i) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$showAlert$0$WallpaperUpdater(boolean fromTheme, DialogInterface dialogInterface, int i) {
         if (i == 0) {
             try {
                 Intent takePictureIntent = new Intent("android.media.action.IMAGE_CAPTURE");
@@ -77,10 +77,10 @@ public class WallpaperUpdater {
                     this.currentPicturePath = image.getAbsolutePath();
                 }
                 this.parentActivity.startActivityForResult(takePictureIntent, 10);
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 try {
                     FileLog.e(e);
-                } catch (Throwable e2) {
+                } catch (Exception e2) {
                     FileLog.e(e2);
                 }
             }
@@ -114,7 +114,7 @@ public class WallpaperUpdater {
                         Intent photoPickerIntent = new Intent("android.intent.action.PICK");
                         photoPickerIntent.setType("image/*");
                         WallpaperUpdater.this.parentActivity.startActivityForResult(photoPickerIntent, 11);
-                    } catch (Throwable e) {
+                    } catch (Exception e) {
                         FileLog.e(e);
                     }
                 }
@@ -153,8 +153,8 @@ public class WallpaperUpdater {
         this.currentPicturePath = value;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:20:0x0071 A:{SYNTHETIC, Splitter: B:20:0x0071} */
-    /* JADX WARNING: Removed duplicated region for block: B:26:0x007d A:{SYNTHETIC, Splitter: B:26:0x007d} */
+    /* JADX WARNING: Removed duplicated region for block: B:20:0x0071 A:{SYNTHETIC, Splitter:B:20:0x0071} */
+    /* JADX WARNING: Removed duplicated region for block: B:26:0x007d A:{SYNTHETIC, Splitter:B:26:0x007d} */
     public void onActivityResult(int r12, int r13, android.content.Intent r14) {
         /*
         r11 = this;

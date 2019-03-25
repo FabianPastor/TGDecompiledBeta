@@ -89,7 +89,8 @@ public class SlidingTabView extends LinearLayout {
         invalidate();
     }
 
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+    /* Access modifiers changed, original: protected */
+    public void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
         this.tabWidth = ((float) (r - l)) / ((float) this.tabCount);
         float f = this.tabWidth * ((float) this.selectedTab);
@@ -97,7 +98,8 @@ public class SlidingTabView extends LinearLayout {
         this.animateTabXTo = f;
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (this.tabX != this.animateTabXTo) {
             long dt = System.currentTimeMillis() - this.startAnimationTime;
             this.startAnimationTime = System.currentTimeMillis();

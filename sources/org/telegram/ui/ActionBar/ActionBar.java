@@ -83,7 +83,8 @@ public class ActionBar extends FrameLayout {
         setOnClickListener(new ActionBar$$Lambda$0(this));
     }
 
-    final /* synthetic */ void lambda$new$0$ActionBar(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$0$ActionBar(View v) {
         if (this.titleActionRunnable != null) {
             this.titleActionRunnable.run();
         }
@@ -100,10 +101,12 @@ public class ActionBar extends FrameLayout {
             this.backButtonImageView.setPadding(AndroidUtilities.dp(1.0f), 0, 0, 0);
             addView(this.backButtonImageView, LayoutHelper.createFrame(54, 54, 51));
             this.backButtonImageView.setOnClickListener(new ActionBar$$Lambda$1(this));
+            this.backButtonImageView.setContentDescription(LocaleController.getString("AccDescrGoBack", NUM));
         }
     }
 
-    final /* synthetic */ void lambda$createBackButtonImage$1$ActionBar(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createBackButtonImage$1$ActionBar(View v) {
         if (!this.actionModeVisible && this.isSearchFieldVisible) {
             closeSearchField();
         } else if (this.actionBarMenuOnItemClick != null) {
@@ -122,6 +125,12 @@ public class ActionBar extends FrameLayout {
             backDrawable.setRotation(isActionModeShowed() ? 1.0f : 0.0f, false);
             backDrawable.setRotatedColor(this.itemsActionModeColor);
             backDrawable.setColor(this.itemsColor);
+        }
+    }
+
+    public void setBackButtonContentDescription(CharSequence description) {
+        if (this.backButtonImageView != null) {
+            this.backButtonImageView.setContentDescription(description);
         }
     }
 
@@ -155,7 +164,8 @@ public class ActionBar extends FrameLayout {
         return super.onInterceptTouchEvent(ev);
     }
 
-    protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+    /* Access modifiers changed, original: protected */
+    public boolean drawChild(Canvas canvas, View child, long drawingTime) {
         boolean clip = this.clipContent && (child == this.titleTextView || child == this.subtitleTextView || child == this.actionMode || child == this.menu || child == this.backButtonImageView);
         if (clip) {
             canvas.save();
@@ -520,7 +530,8 @@ public class ActionBar extends FrameLayout {
         return this.actionMode != null && this.actionModeVisible;
     }
 
-    protected void onSearchFieldVisibilityChanged(boolean visible) {
+    /* Access modifiers changed, original: protected */
+    public void onSearchFieldVisibilityChanged(boolean visible) {
         int i = 4;
         this.isSearchFieldVisible = visible;
         if (this.titleTextView != null) {
@@ -534,7 +545,7 @@ public class ActionBar extends FrameLayout {
             simpleTextView.setVisibility(i);
         }
         Drawable drawable = this.backButtonImageView.getDrawable();
-        if (drawable != null && (drawable instanceof MenuDrawable)) {
+        if (drawable instanceof MenuDrawable) {
             ((MenuDrawable) drawable).setRotation(visible ? 1.0f : 0.0f, true);
         }
     }
@@ -581,7 +592,8 @@ public class ActionBar extends FrameLayout {
         }
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int textLeft;
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
@@ -638,7 +650,8 @@ public class ActionBar extends FrameLayout {
         }
     }
 
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+    /* Access modifiers changed, original: protected */
+    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
         int textLeft;
         int textTop;
         int currentActionBarHeight;
@@ -725,7 +738,8 @@ public class ActionBar extends FrameLayout {
         }
     }
 
-    protected void onPause() {
+    /* Access modifiers changed, original: protected */
+    public void onPause() {
         if (this.menu != null) {
             this.menu.hideAllPopupMenus();
         }

@@ -30,8 +30,8 @@ public class NativeLoader {
         return f.isDirectory() ? f : null;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:35:0x00a1 A:{SYNTHETIC, Splitter: B:35:0x00a1} */
-    /* JADX WARNING: Removed duplicated region for block: B:38:0x00a6 A:{SYNTHETIC, Splitter: B:38:0x00a6} */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x00a1 A:{SYNTHETIC, Splitter:B:35:0x00a1} */
+    /* JADX WARNING: Removed duplicated region for block: B:38:0x00a6 A:{SYNTHETIC, Splitter:B:38:0x00a6} */
     @android.annotation.SuppressLint({"UnsafeDynamicallyLoadedCode", "SetWorldReadable"})
     private static boolean loadFromZip(android.content.Context r12, java.io.File r13, java.io.File r14, java.lang.String r15) {
         /*
@@ -189,7 +189,7 @@ public class NativeLoader {
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:38:0x0086 A:{Catch:{ Error -> 0x0020, Throwable -> 0x0132 }} */
-    /* JADX WARNING: Missing block: B:40:0x00a1, code:
+    /* JADX WARNING: Missing block: B:40:0x00a1, code skipped:
             if (loadFromZip(r9, r0, r1, r3) == false) goto L_0x00a3;
      */
     @android.annotation.SuppressLint({"UnsafeDynamicallyLoadedCode"})

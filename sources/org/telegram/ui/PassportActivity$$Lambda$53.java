@@ -8,6 +8,6 @@ final /* synthetic */ class PassportActivity$$Lambda$53 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$null$63$PassportActivity();
+        this.arg$1.needHideProgress();
     }
 }

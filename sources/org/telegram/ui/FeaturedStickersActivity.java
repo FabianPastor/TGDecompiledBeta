@@ -10,7 +10,6 @@ import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.R;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
@@ -96,14 +95,15 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
                     break;
                 case 1:
                     view = new TextInfoPrivacyCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, (int) R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                     break;
             }
             view.setLayoutParams(new LayoutParams(-1, -2));
             return new Holder(view);
         }
 
-        final /* synthetic */ void lambda$onCreateViewHolder$0$FeaturedStickersActivity$ListAdapter(View v) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$onCreateViewHolder$0$FeaturedStickersActivity$ListAdapter(View v) {
             FeaturedStickerSetCell parent1 = (FeaturedStickerSetCell) v.getParent();
             StickerSetCovered pack = parent1.getStickerSet();
             if (FeaturedStickersActivity.this.installingStickerSets.indexOfKey(pack.set.id) < 0) {
@@ -141,13 +141,13 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
     }
 
     public View createView(Context context) {
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("FeaturedStickers", R.string.FeaturedStickers));
+        this.actionBar.setTitle(LocaleController.getString("FeaturedStickers", NUM));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    FeaturedStickersActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
+                    FeaturedStickersActivity.this.finishFragment();
                 }
             }
         });
@@ -173,7 +173,8 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
         return this.fragmentView;
     }
 
-    final /* synthetic */ void lambda$createView$0$FeaturedStickersActivity(final View view, int position) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$0$FeaturedStickersActivity(final View view, int position) {
         if (position >= this.stickersStartRow && position < this.stickersEndRow && getParentActivity() != null) {
             InputStickerSet inputStickerSet;
             final StickerSetCovered stickerSet = (StickerSetCovered) DataQuery.getInstance(this.currentAccount).getFeaturedStickerSets().get(position);

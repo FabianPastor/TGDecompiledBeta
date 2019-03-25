@@ -19,7 +19,6 @@ import org.telegram.messenger.Bitmaps;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.BaseFragment;
 
@@ -294,7 +293,8 @@ public class PhotoCropActivity extends BaseFragment {
             }
         }
 
-        protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        /* Access modifiers changed, original: protected */
+        public void onLayout(boolean changed, int left, int top, int right, int bottom) {
             super.onLayout(changed, left, top, right, bottom);
             this.viewWidth = (right - left) - AndroidUtilities.dp(28.0f);
             this.viewHeight = (bottom - top) - AndroidUtilities.dp(28.0f);
@@ -326,7 +326,8 @@ public class PhotoCropActivity extends BaseFragment {
             }
         }
 
-        protected void onDraw(Canvas canvas) {
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
             if (PhotoCropActivity.this.drawable != null) {
                 try {
                     PhotoCropActivity.this.drawable.setBounds(this.bitmapX, this.bitmapY, this.bitmapX + this.bitmapWidth, this.bitmapY + this.bitmapHeight);
@@ -415,13 +416,13 @@ public class PhotoCropActivity extends BaseFragment {
         this.actionBar.setBackgroundColor(-13421773);
         this.actionBar.setItemsBackgroundColor(-12763843, false);
         this.actionBar.setTitleColor(-1);
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("CropImage", R.string.CropImage));
+        this.actionBar.setTitle(LocaleController.getString("CropImage", NUM));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    PhotoCropActivity.this.lambda$checkDiscard$70$PassportActivity();
+                    PhotoCropActivity.this.finishFragment();
                 } else if (id == 1) {
                     if (!(PhotoCropActivity.this.delegate == null || PhotoCropActivity.this.doneButtonPressed)) {
                         Bitmap bitmap = PhotoCropActivity.this.view.getBitmap();
@@ -431,12 +432,12 @@ public class PhotoCropActivity extends BaseFragment {
                         PhotoCropActivity.this.delegate.didFinishEdit(bitmap);
                         PhotoCropActivity.this.doneButtonPressed = true;
                     }
-                    PhotoCropActivity.this.lambda$checkDiscard$70$PassportActivity();
+                    PhotoCropActivity.this.finishFragment();
                 }
             }
         });
-        this.actionBar.createMenu().addItemWithWidth(1, R.drawable.ic_done, AndroidUtilities.dp(56.0f));
-        View photoCropView = new PhotoCropView(context);
+        this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f));
+        PhotoCropView photoCropView = new PhotoCropView(context);
         this.view = photoCropView;
         this.fragmentView = photoCropView;
         ((PhotoCropView) this.fragmentView).freeform = getArguments().getBoolean("freeform", false);

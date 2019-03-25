@@ -201,11 +201,13 @@ class FastScroller extends ItemDecoration implements OnItemTouchListener {
         return this.mState == 2;
     }
 
-    boolean isVisible() {
+    /* Access modifiers changed, original: 0000 */
+    public boolean isVisible() {
         return this.mState == 1;
     }
 
-    boolean isHidden() {
+    /* Access modifiers changed, original: 0000 */
+    public boolean isHidden() {
         return this.mState == 0;
     }
 
@@ -230,7 +232,8 @@ class FastScroller extends ItemDecoration implements OnItemTouchListener {
         hide(0);
     }
 
-    void hide(int duration) {
+    /* Access modifiers changed, original: 0000 */
+    public void hide(int duration) {
         switch (this.mAnimationState) {
             case 1:
                 this.mShowHideAnimator.cancel();
@@ -303,7 +306,8 @@ class FastScroller extends ItemDecoration implements OnItemTouchListener {
         canvas.translate((float) (-left), (float) (-top));
     }
 
-    void updateScrollPosition(int offsetX, int offsetY) {
+    /* Access modifiers changed, original: 0000 */
+    public void updateScrollPosition(int offsetX, int offsetY) {
         boolean z;
         int verticalContentLength = this.mRecyclerView.computeVerticalScrollRange();
         int verticalVisibleLength = this.mRecyclerViewHeight;
@@ -434,7 +438,8 @@ class FastScroller extends ItemDecoration implements OnItemTouchListener {
         return scrollingBy;
     }
 
-    boolean isPointInsideVerticalThumb(float x, float y) {
+    /* Access modifiers changed, original: 0000 */
+    public boolean isPointInsideVerticalThumb(float x, float y) {
         if (isLayoutRTL() ? x <= ((float) (this.mVerticalThumbWidth / 2)) : x >= ((float) (this.mRecyclerViewWidth - this.mVerticalThumbWidth))) {
             if (y >= ((float) (this.mVerticalThumbCenterY - (this.mVerticalThumbHeight / 2))) && y <= ((float) (this.mVerticalThumbCenterY + (this.mVerticalThumbHeight / 2)))) {
                 return true;
@@ -443,23 +448,28 @@ class FastScroller extends ItemDecoration implements OnItemTouchListener {
         return false;
     }
 
-    boolean isPointInsideHorizontalThumb(float x, float y) {
+    /* Access modifiers changed, original: 0000 */
+    public boolean isPointInsideHorizontalThumb(float x, float y) {
         return y >= ((float) (this.mRecyclerViewHeight - this.mHorizontalThumbHeight)) && x >= ((float) (this.mHorizontalThumbCenterX - (this.mHorizontalThumbWidth / 2))) && x <= ((float) (this.mHorizontalThumbCenterX + (this.mHorizontalThumbWidth / 2)));
     }
 
-    Drawable getHorizontalTrackDrawable() {
+    /* Access modifiers changed, original: 0000 */
+    public Drawable getHorizontalTrackDrawable() {
         return this.mHorizontalTrackDrawable;
     }
 
-    Drawable getHorizontalThumbDrawable() {
+    /* Access modifiers changed, original: 0000 */
+    public Drawable getHorizontalThumbDrawable() {
         return this.mHorizontalThumbDrawable;
     }
 
-    Drawable getVerticalTrackDrawable() {
+    /* Access modifiers changed, original: 0000 */
+    public Drawable getVerticalTrackDrawable() {
         return this.mVerticalTrackDrawable;
     }
 
-    Drawable getVerticalThumbDrawable() {
+    /* Access modifiers changed, original: 0000 */
+    public Drawable getVerticalThumbDrawable() {
         return this.mVerticalThumbDrawable;
     }
 

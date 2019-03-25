@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.PhotoViewer;
 
@@ -72,7 +71,8 @@ public class PipVideoView {
             }
         };
 
-        final /* synthetic */ void lambda$new$0$PipVideoView$MiniControlsView() {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$new$0$PipVideoView$MiniControlsView() {
             show(false, true);
         }
 
@@ -80,7 +80,7 @@ public class PipVideoView {
             super(context);
             this.inlineButton = new ImageView(context);
             this.inlineButton.setScaleType(ScaleType.CENTER);
-            this.inlineButton.setImageResource(R.drawable.ic_outinline);
+            this.inlineButton.setImageResource(NUM);
             addView(this.inlineButton, LayoutHelper.createFrame(56, 48, 53));
             this.inlineButton.setOnClickListener(new PipVideoView$MiniControlsView$$Lambda$1(this));
             if (fullControls) {
@@ -99,7 +99,8 @@ public class PipVideoView {
             show(false, false);
         }
 
-        final /* synthetic */ void lambda$new$1$PipVideoView$MiniControlsView(View v) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$new$1$PipVideoView$MiniControlsView(View v) {
             if (PipVideoView.this.parentSheet != null) {
                 PipVideoView.this.parentSheet.exitFromPip();
             } else if (PipVideoView.this.photoViewer != null) {
@@ -107,7 +108,8 @@ public class PipVideoView {
             }
         }
 
-        final /* synthetic */ void lambda$new$2$PipVideoView$MiniControlsView(View v) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$new$2$PipVideoView$MiniControlsView(View v) {
             if (PipVideoView.this.photoViewer != null) {
                 VideoPlayer videoPlayer = PipVideoView.this.photoViewer.getVideoPlayer();
                 if (videoPlayer != null) {
@@ -127,12 +129,12 @@ public class PipVideoView {
                 if (videoPlayer != null) {
                     AndroidUtilities.cancelRunOnUIThread(this.progressRunnable);
                     if (videoPlayer.isPlaying()) {
-                        this.playButton.setImageResource(R.drawable.ic_pauseinline);
+                        this.playButton.setImageResource(NUM);
                         AndroidUtilities.runOnUIThread(this.progressRunnable, 500);
                     } else if (this.isCompleted) {
-                        this.playButton.setImageResource(R.drawable.ic_againinline);
+                        this.playButton.setImageResource(NUM);
                     } else {
-                        this.playButton.setImageResource(R.drawable.ic_playinline);
+                        this.playButton.setImageResource(NUM);
                     }
                 }
             }
@@ -217,12 +219,14 @@ public class PipVideoView {
             checkNeedHide();
         }
 
-        protected void onAttachedToWindow() {
+        /* Access modifiers changed, original: protected */
+        public void onAttachedToWindow() {
             super.onAttachedToWindow();
             checkNeedHide();
         }
 
-        protected void onDraw(Canvas canvas) {
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
             int width = getMeasuredWidth();
             int height = getMeasuredHeight();
             int progressLineY = height - AndroidUtilities.dp(3.0f);
@@ -368,7 +372,7 @@ public class PipVideoView {
             this.windowLayoutParams.flags = 16777736;
             this.windowManager.addView(this.windowView, this.windowLayoutParams);
             return textureView;
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
             return null;
         }

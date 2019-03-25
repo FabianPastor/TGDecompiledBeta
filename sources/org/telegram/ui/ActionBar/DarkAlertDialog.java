@@ -18,7 +18,8 @@ public class DarkAlertDialog extends AlertDialog {
         super(context, progressStyle);
     }
 
-    protected int getThemeColor(java.lang.String r3) {
+    /* Access modifiers changed, original: protected */
+    public int getThemeColor(java.lang.String r3) {
         /*
         r2 = this;
         r0 = -1;

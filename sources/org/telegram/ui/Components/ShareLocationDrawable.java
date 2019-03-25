@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.R;
 
 public class ShareLocationDrawable extends Drawable {
     private Drawable drawable;
@@ -18,14 +17,14 @@ public class ShareLocationDrawable extends Drawable {
     public ShareLocationDrawable(Context context, boolean small) {
         this.isSmall = small;
         if (small) {
-            this.drawable = context.getResources().getDrawable(R.drawable.smallanimationpin);
-            this.drawableLeft = context.getResources().getDrawable(R.drawable.smallanimationpinleft);
-            this.drawableRight = context.getResources().getDrawable(R.drawable.smallanimationpinright);
+            this.drawable = context.getResources().getDrawable(NUM);
+            this.drawableLeft = context.getResources().getDrawable(NUM);
+            this.drawableRight = context.getResources().getDrawable(NUM);
             return;
         }
-        this.drawable = context.getResources().getDrawable(R.drawable.animationpin);
-        this.drawableLeft = context.getResources().getDrawable(R.drawable.animationpinleft);
-        this.drawableRight = context.getResources().getDrawable(R.drawable.animationpinright);
+        this.drawable = context.getResources().getDrawable(NUM);
+        this.drawableLeft = context.getResources().getDrawable(NUM);
+        this.drawableRight = context.getResources().getDrawable(NUM);
     }
 
     private void update() {

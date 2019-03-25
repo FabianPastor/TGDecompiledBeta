@@ -16,7 +16,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils.TruncateAt;
-import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
@@ -26,7 +25,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Document;
@@ -74,13 +72,13 @@ public class FeaturedStickerSetCell extends FrameLayout {
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TruncateAt.END);
         this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
-        View view = this.textView;
+        TextView textView = this.textView;
         if (LocaleController.isRTL) {
             i = 5;
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i, LocaleController.isRTL ? 22.0f : 71.0f, 10.0f, LocaleController.isRTL ? 71.0f : 22.0f, 0.0f));
+        addView(textView, LayoutHelper.createFrame(-2, -2.0f, i, LocaleController.isRTL ? 22.0f : 71.0f, 10.0f, LocaleController.isRTL ? 71.0f : 22.0f, 0.0f));
         this.valueTextView = new TextView(context);
         this.valueTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
         this.valueTextView.setTextSize(1, 13.0f);
@@ -88,23 +86,23 @@ public class FeaturedStickerSetCell extends FrameLayout {
         this.valueTextView.setMaxLines(1);
         this.valueTextView.setSingleLine(true);
         this.valueTextView.setEllipsize(TruncateAt.END);
-        TextView textView = this.valueTextView;
+        TextView textView2 = this.valueTextView;
         if (LocaleController.isRTL) {
             i2 = 5;
         } else {
             i2 = 3;
         }
-        textView.setGravity(i2);
-        view = this.valueTextView;
+        textView2.setGravity(i2);
+        textView = this.valueTextView;
         if (LocaleController.isRTL) {
             i = 5;
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-2, -2.0f, i, LocaleController.isRTL ? 100.0f : 71.0f, 35.0f, LocaleController.isRTL ? 71.0f : 100.0f, 0.0f));
+        addView(textView, LayoutHelper.createFrame(-2, -2.0f, i, LocaleController.isRTL ? 100.0f : 71.0f, 35.0f, LocaleController.isRTL ? 71.0f : 100.0f, 0.0f));
         this.imageView = new BackupImageView(context);
         this.imageView.setAspectFit(true);
-        view = this.imageView;
+        BackupImageView backupImageView = this.imageView;
         if (LocaleController.isRTL) {
             i = 5;
         } else {
@@ -121,9 +119,10 @@ public class FeaturedStickerSetCell extends FrameLayout {
         } else {
             f2 = 0.0f;
         }
-        addView(view, LayoutHelper.createFrame(48, 48.0f, i, f, 8.0f, f2, 0.0f));
+        addView(backupImageView, LayoutHelper.createFrame(48, 48.0f, i, f, 8.0f, f2, 0.0f));
         this.addButton = new TextView(context) {
-            protected void onDraw(Canvas canvas) {
+            /* Access modifiers changed, original: protected */
+            public void onDraw(Canvas canvas) {
                 super.onDraw(canvas);
                 if (FeaturedStickerSetCell.this.drawProgress || !(FeaturedStickerSetCell.this.drawProgress || FeaturedStickerSetCell.this.progressAlpha == 0.0f)) {
                     FeaturedStickerSetCell.this.progressPaint.setAlpha(Math.min(255, (int) (FeaturedStickerSetCell.this.progressAlpha * 255.0f)));
@@ -160,20 +159,21 @@ public class FeaturedStickerSetCell extends FrameLayout {
         this.addButton.setTextSize(1, 14.0f);
         this.addButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.addButton.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
-        this.addButton.setText(LocaleController.getString("Add", R.string.Add).toUpperCase());
+        this.addButton.setText(LocaleController.getString("Add", NUM).toUpperCase());
         this.addButton.setPadding(AndroidUtilities.dp(17.0f), 0, AndroidUtilities.dp(17.0f), 0);
-        view = this.addButton;
+        textView = this.addButton;
         if (!LocaleController.isRTL) {
             i3 = 5;
         }
-        addView(view, LayoutHelper.createFrame(-2, 28.0f, i3 | 48, LocaleController.isRTL ? 14.0f : 0.0f, 18.0f, LocaleController.isRTL ? 0.0f : 14.0f, 0.0f));
+        addView(textView, LayoutHelper.createFrame(-2, 28.0f, i3 | 48, LocaleController.isRTL ? 14.0f : 0.0f, 18.0f, LocaleController.isRTL ? 0.0f : 14.0f, 0.0f));
         this.checkImage = new ImageView(context);
         this.checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor("featuredStickers_addedIcon"), Mode.MULTIPLY));
-        this.checkImage.setImageResource(R.drawable.sticker_added);
+        this.checkImage.setImageResource(NUM);
         addView(this.checkImage, LayoutHelper.createFrame(19, 14.0f));
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int i;
         int makeMeasureSpec = MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM);
         int dp = AndroidUtilities.dp(64.0f);
@@ -186,7 +186,8 @@ public class FeaturedStickerSetCell extends FrameLayout {
         measureChildWithMargins(this.textView, widthMeasureSpec, this.addButton.getMeasuredWidth(), heightMeasureSpec, 0);
     }
 
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+    /* Access modifiers changed, original: protected */
+    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         int l = (this.addButton.getLeft() + (this.addButton.getMeasuredWidth() / 2)) - (this.checkImage.getMeasuredWidth() / 2);
         int t = (this.addButton.getTop() + (this.addButton.getMeasuredHeight() / 2)) - (this.checkImage.getMeasuredHeight() / 2);
@@ -194,7 +195,8 @@ public class FeaturedStickerSetCell extends FrameLayout {
         this.wasLayout = true;
     }
 
-    protected void onDetachedFromWindow() {
+    /* Access modifiers changed, original: protected */
+    public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.wasLayout = false;
     }
@@ -352,7 +354,8 @@ public class FeaturedStickerSetCell extends FrameLayout {
         return this.isInstalled;
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         if (this.needDivider) {
             canvas.drawLine(0.0f, (float) (getHeight() - 1), (float) (getWidth() - getPaddingRight()), (float) (getHeight() - 1), Theme.dividerPaint);
         }

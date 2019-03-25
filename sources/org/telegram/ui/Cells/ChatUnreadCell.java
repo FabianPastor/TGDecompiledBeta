@@ -8,7 +8,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -20,11 +19,11 @@ public class ChatUnreadCell extends FrameLayout {
     public ChatUnreadCell(Context context) {
         super(context);
         this.backgroundLayout = new FrameLayout(context);
-        this.backgroundLayout.setBackgroundResource(R.drawable.newmsg_divider);
+        this.backgroundLayout.setBackgroundResource(NUM);
         this.backgroundLayout.getBackground().setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_unreadMessagesStartBackground"), Mode.MULTIPLY));
         addView(this.backgroundLayout, LayoutHelper.createFrame(-1, 27.0f, 51, 0.0f, 7.0f, 0.0f, 0.0f));
         this.imageView = new ImageView(context);
-        this.imageView.setImageResource(R.drawable.ic_ab_new);
+        this.imageView.setImageResource(NUM);
         this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_unreadMessagesStartArrowIcon"), Mode.MULTIPLY));
         this.imageView.setPadding(0, AndroidUtilities.dp(2.0f), 0, 0);
         this.backgroundLayout.addView(this.imageView, LayoutHelper.createFrame(-2, -2.0f, 21, 0.0f, 0.0f, 10.0f, 0.0f));
@@ -52,7 +51,8 @@ public class ChatUnreadCell extends FrameLayout {
         return this.backgroundLayout;
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(40.0f), NUM));
     }
 }

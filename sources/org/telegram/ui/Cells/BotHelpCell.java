@@ -11,12 +11,12 @@ import android.text.style.URLSpan;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
+import android.view.accessibility.AccessibilityNodeInfo;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LinkPath;
@@ -56,7 +56,7 @@ public class BotHelpCell extends View {
     public void setText(String text) {
         if (text == null || text.length() == 0) {
             setVisibility(8);
-        } else if (text == null || this.oldText == null || !text.equals(this.oldText)) {
+        } else if (text == null || !text.equals(this.oldText)) {
             int maxWidth;
             int a;
             this.oldText = text;
@@ -68,7 +68,7 @@ public class BotHelpCell extends View {
             }
             String[] lines = text.split("\n");
             SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
-            String help = LocaleController.getString("BotInfoTitle", R.string.BotInfoTitle);
+            String help = LocaleController.getString("BotInfoTitle", NUM);
             stringBuilder.append(help);
             stringBuilder.append("\n\n");
             for (a = 0; a < lines.length; a++) {
@@ -91,7 +91,7 @@ public class BotHelpCell extends View {
                 if (this.width > maxWidth) {
                     this.width = maxWidth;
                 }
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
             this.width += AndroidUtilities.dp(22.0f);
@@ -124,14 +124,14 @@ public class BotHelpCell extends View {
                                     int start = buffer.getSpanStart(this.pressedLink);
                                     this.urlPath.setCurrentLayout(this.textLayout, start, 0.0f);
                                     this.textLayout.getSelectionPath(start, buffer.getSpanEnd(this.pressedLink), this.urlPath);
-                                } catch (Throwable e) {
+                                } catch (Exception e) {
                                     FileLog.e(e);
                                 }
                             } else {
                                 resetPressedLink();
                             }
                         }
-                    } catch (Throwable e2) {
+                    } catch (Exception e2) {
                         resetPressedLink();
                         FileLog.e(e2);
                     }
@@ -147,7 +147,7 @@ public class BotHelpCell extends View {
                         } else {
                             this.pressedLink.onClick(this);
                         }
-                    } catch (Throwable e22) {
+                    } catch (Exception e22) {
                         FileLog.e(e22);
                     }
                     resetPressedLink();
@@ -163,11 +163,13 @@ public class BotHelpCell extends View {
         return false;
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), this.height + AndroidUtilities.dp(8.0f));
     }
 
-    protected void onDraw(Canvas canvas) {
+    /* Access modifiers changed, original: protected */
+    public void onDraw(Canvas canvas) {
         int x = (canvas.getWidth() - this.width) / 2;
         int y = AndroidUtilities.dp(4.0f);
         Theme.chat_msgInMediaShadowDrawable.setBounds(x, y, this.width + x, this.height + y);
@@ -190,5 +192,10 @@ public class BotHelpCell extends View {
             this.textLayout.draw(canvas);
         }
         canvas.restore();
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
+        info.setText(this.textLayout.getText());
     }
 }

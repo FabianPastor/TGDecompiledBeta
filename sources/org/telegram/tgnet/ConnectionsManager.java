@@ -11,24 +11,17 @@ import android.util.Base64;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings.Builder;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.InputStream;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
@@ -73,7 +66,8 @@ public class ConnectionsManager {
     public static final int RequestFlagWithoutLogin = 8;
     private static AsyncTask currentTask;
     private static ThreadLocal<HashMap<String, ResolvedDomain>> dnsCache = new ThreadLocal<HashMap<String, ResolvedDomain>>() {
-        protected HashMap<String, ResolvedDomain> initialValue() {
+        /* Access modifiers changed, original: protected */
+        public HashMap<String, ResolvedDomain> initialValue() {
             return new HashMap();
         }
     };
@@ -94,9 +88,10 @@ public class ConnectionsManager {
             this.currentAccount = instance;
         }
 
-        /* JADX WARNING: Removed duplicated region for block: B:45:0x009d A:{SYNTHETIC, Splitter: B:45:0x009d} */
-        /* JADX WARNING: Removed duplicated region for block: B:48:0x00a2 A:{SYNTHETIC, Splitter: B:48:0x00a2} */
-        protected org.telegram.tgnet.NativeByteBuffer doInBackground(java.lang.Void... r13) {
+        /* Access modifiers changed, original: protected|varargs */
+        /* JADX WARNING: Removed duplicated region for block: B:45:0x009d A:{SYNTHETIC, Splitter:B:45:0x009d} */
+        /* JADX WARNING: Removed duplicated region for block: B:48:0x00a2 A:{SYNTHETIC, Splitter:B:48:0x00a2} */
+        public org.telegram.tgnet.NativeByteBuffer doInBackground(java.lang.Void... r13) {
             /*
             r12 = this;
             r7 = 0;
@@ -221,14 +216,16 @@ public class ConnectionsManager {
             r4 = move-exception;
             goto L_0x007d;
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.tgnet.ConnectionsManager.AzureLoadTask.doInBackground(java.lang.Void[]):org.telegram.tgnet.NativeByteBuffer");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.tgnet.ConnectionsManager$AzureLoadTask.doInBackground(java.lang.Void[]):org.telegram.tgnet.NativeByteBuffer");
         }
 
-        protected void onPostExecute(NativeByteBuffer result) {
+        /* Access modifiers changed, original: protected */
+        public void onPostExecute(NativeByteBuffer result) {
             Utilities.stageQueue.postRunnable(new ConnectionsManager$AzureLoadTask$$Lambda$0(this, result));
         }
 
-        final /* synthetic */ void lambda$onPostExecute$0$ConnectionsManager$AzureLoadTask(NativeByteBuffer result) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$onPostExecute$0$ConnectionsManager$AzureLoadTask(NativeByteBuffer result) {
             if (result != null) {
                 ConnectionsManager.native_applyDnsConfig(this.currentAccount, result.address, UserConfig.getInstance(this.currentAccount).getClientPhone());
             } else if (BuildVars.LOGS_ENABLED) {
@@ -245,109 +242,287 @@ public class ConnectionsManager {
             this.currentAccount = instance;
         }
 
-        protected NativeByteBuffer doInBackground(Void... voids) {
-            Throwable e;
-            Throwable th;
-            ByteArrayOutputStream outbuf = null;
-            InputStream httpConnectionStream = null;
-            int i = 0;
-            while (true) {
-                ByteArrayOutputStream outbuf2 = outbuf;
-                if (i < 3) {
-                    String googleDomain;
-                    int a;
-                    if (i == 0) {
-                        try {
-                            googleDomain = "www.google.com";
-                        } catch (Throwable th2) {
-                            th = th2;
-                            outbuf = outbuf2;
-                            if (httpConnectionStream != null) {
-                                try {
-                                    httpConnectionStream.close();
-                                } catch (Throwable e2) {
-                                    FileLog.e(e2);
-                                }
-                            }
-                            if (outbuf != null) {
-                                try {
-                                    outbuf.close();
-                                } catch (Exception e3) {
-                                }
-                            }
-                            throw th;
-                        }
-                    } else if (i == 1) {
-                        googleDomain = "www.google.ru";
-                    } else {
-                        googleDomain = "google.com";
-                    }
-                    String domain = ConnectionsManager.native_isTestBackend(this.currentAccount) != 0 ? "tapv2.stel.com" : MessagesController.getInstance(this.currentAccount).dcDomainName;
-                    int len = Utilities.random.nextInt(116) + 13;
-                    String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzNUM";
-                    StringBuilder stringBuilder = new StringBuilder(len);
-                    for (a = 0; a < len; a++) {
-                        stringBuilder.append("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzNUM".charAt(Utilities.random.nextInt("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzNUM".length())));
-                    }
-                    URLConnection httpConnection = new URL("https://" + googleDomain + "/resolve?name=" + domain + "&type=ANY&random_padding=" + stringBuilder).openConnection();
-                    httpConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 10_0 like Mac OS X) AppleWebKit/602.1.38 (KHTML, like Gecko) Version/10.0 Mobile/14A5297c Safari/602.1");
-                    httpConnection.addRequestProperty("Host", "dns.google.com");
-                    httpConnection.setConnectTimeout(5000);
-                    httpConnection.setReadTimeout(5000);
-                    httpConnection.connect();
-                    httpConnectionStream = httpConnection.getInputStream();
-                    outbuf = new ByteArrayOutputStream();
-                    try {
-                        byte[] data = new byte[32768];
-                        while (!isCancelled()) {
-                            int read = httpConnectionStream.read(data);
-                            if (read > 0) {
-                                outbuf.write(data, 0, read);
-                            } else if (read == -1) {
-                            }
-                        }
-                        JSONArray array = new JSONObject(new String(outbuf.toByteArray(), "UTF-8")).getJSONArray("Answer");
-                        len = array.length();
-                        ArrayList<String> arrayList = new ArrayList(len);
-                        for (a = 0; a < len; a++) {
-                            JSONObject object = array.getJSONObject(a);
-                            if (object.getInt("type") == 16) {
-                                arrayList.add(object.getString("data"));
-                            }
-                        }
-                        Collections.sort(arrayList, ConnectionsManager$DnsTxtLoadTask$$Lambda$0.$instance);
-                        StringBuilder builder = new StringBuilder();
-                        for (a = 0; a < arrayList.size(); a++) {
-                            builder.append(((String) arrayList.get(a)).replace("\"", ""));
-                        }
-                        byte[] bytes = Base64.decode(builder.toString(), 0);
-                        NativeByteBuffer buffer = new NativeByteBuffer(bytes.length);
-                        buffer.writeBytes(bytes);
-                        if (httpConnectionStream != null) {
-                            try {
-                                httpConnectionStream.close();
-                            } catch (Throwable e22) {
-                                FileLog.e(e22);
-                            }
-                        }
-                        if (outbuf == null) {
-                            return buffer;
-                        }
-                        try {
-                            outbuf.close();
-                            return buffer;
-                        } catch (Exception e4) {
-                            return buffer;
-                        }
-                    } catch (Throwable th3) {
-                        e22 = th3;
-                    }
-                } else {
-                    outbuf = outbuf2;
-                    return null;
-                }
-                i++;
-            }
+        /* Access modifiers changed, original: protected|varargs */
+        /* JADX WARNING: Removed duplicated region for block: B:50:0x0189 A:{SYNTHETIC, Splitter:B:50:0x0189} */
+        /* JADX WARNING: Removed duplicated region for block: B:53:0x018e A:{SYNTHETIC, Splitter:B:53:0x018e} */
+        public org.telegram.tgnet.NativeByteBuffer doInBackground(java.lang.Void... r30) {
+            /*
+            r29 = this;
+            r21 = 0;
+            r16 = 0;
+            r17 = 0;
+            r22 = r21;
+        L_0x0008:
+            r26 = 3;
+            r0 = r17;
+            r1 = r26;
+            if (r0 >= r1) goto L_0x01f1;
+        L_0x0010:
+            if (r17 != 0) goto L_0x005d;
+        L_0x0012:
+            r14 = "www.google.com";
+        L_0x0015:
+            r0 = r29;
+            r0 = r0.currentAccount;	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r26 = r0;
+            r26 = org.telegram.tgnet.ConnectionsManager.native_isTestBackend(r26);	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            if (r26 == 0) goto L_0x006d;
+        L_0x0021:
+            r11 = "tapv2.stel.com";
+        L_0x0024:
+            r26 = org.telegram.messenger.Utilities.random;	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r27 = 116; // 0x74 float:1.63E-43 double:5.73E-322;
+            r26 = r26.nextInt(r27);	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r19 = r26 + 13;
+            r9 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzNUM";
+            r23 = new java.lang.StringBuilder;	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r0 = r23;
+            r1 = r19;
+            r0.<init>(r1);	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r3 = 0;
+        L_0x003b:
+            r0 = r19;
+            if (r3 >= r0) goto L_0x007c;
+        L_0x003f:
+            r26 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzNUM";
+            r27 = org.telegram.messenger.Utilities.random;	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r28 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzNUM";
+            r28 = r28.length();	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r27 = r27.nextInt(r28);	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r26 = r26.charAt(r27);	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r0 = r23;
+            r1 = r26;
+            r0.append(r1);	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r3 = r3 + 1;
+            goto L_0x003b;
+        L_0x005d:
+            r26 = 1;
+            r0 = r17;
+            r1 = r26;
+            if (r0 != r1) goto L_0x0069;
+        L_0x0065:
+            r14 = "www.google.ru";
+            goto L_0x0015;
+        L_0x0069:
+            r14 = "google.com";
+            goto L_0x0015;
+        L_0x006d:
+            r0 = r29;
+            r0 = r0.currentAccount;	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r26 = r0;
+            r26 = org.telegram.messenger.MessagesController.getInstance(r26);	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r0 = r26;
+            r11 = r0.dcDomainName;	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            goto L_0x0024;
+        L_0x007c:
+            r12 = new java.net.URL;	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r26 = new java.lang.StringBuilder;	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r26.<init>();	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r27 = "https://";
+            r26 = r26.append(r27);	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r0 = r26;
+            r26 = r0.append(r14);	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r27 = "/resolve?name=";
+            r26 = r26.append(r27);	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r0 = r26;
+            r26 = r0.append(r11);	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r27 = "&type=ANY&random_padding=";
+            r26 = r26.append(r27);	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r0 = r26;
+            r1 = r23;
+            r26 = r0.append(r1);	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r26 = r26.toString();	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r0 = r26;
+            r12.<init>(r0);	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r15 = r12.openConnection();	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r26 = "User-Agent";
+            r27 = "Mozilla/5.0 (iPhone; CPU iPhone OS 10_0 like Mac OS X) AppleWebKit/602.1.38 (KHTML, like Gecko) Version/10.0 Mobile/14A5297c Safari/602.1";
+            r0 = r26;
+            r1 = r27;
+            r15.addRequestProperty(r0, r1);	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r26 = "Host";
+            r27 = "dns.google.com";
+            r0 = r26;
+            r1 = r27;
+            r15.addRequestProperty(r0, r1);	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r26 = 5000; // 0x1388 float:7.006E-42 double:2.4703E-320;
+            r0 = r26;
+            r15.setConnectTimeout(r0);	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r26 = 5000; // 0x1388 float:7.006E-42 double:2.4703E-320;
+            r0 = r26;
+            r15.setReadTimeout(r0);	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r15.connect();	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r16 = r15.getInputStream();	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r21 = new java.io.ByteArrayOutputStream;	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r21.<init>();	 Catch:{ Throwable -> 0x0200, all -> 0x01fc }
+            r26 = 32768; // 0x8000 float:4.5918E-41 double:1.61895E-319;
+            r0 = r26;
+            r10 = new byte[r0];	 Catch:{ Throwable -> 0x0158 }
+        L_0x00f4:
+            r26 = r29.isCancelled();	 Catch:{ Throwable -> 0x0158 }
+            if (r26 == 0) goto L_0x0144;
+        L_0x00fa:
+            r18 = new org.json.JSONObject;	 Catch:{ Throwable -> 0x0158 }
+            r26 = new java.lang.String;	 Catch:{ Throwable -> 0x0158 }
+            r27 = r21.toByteArray();	 Catch:{ Throwable -> 0x0158 }
+            r28 = "UTF-8";
+            r26.<init>(r27, r28);	 Catch:{ Throwable -> 0x0158 }
+            r0 = r18;
+            r1 = r26;
+            r0.<init>(r1);	 Catch:{ Throwable -> 0x0158 }
+            r26 = "Answer";
+            r0 = r18;
+            r1 = r26;
+            r4 = r0.getJSONArray(r1);	 Catch:{ Throwable -> 0x0158 }
+            r19 = r4.length();	 Catch:{ Throwable -> 0x0158 }
+            r5 = new java.util.ArrayList;	 Catch:{ Throwable -> 0x0158 }
+            r0 = r19;
+            r5.<init>(r0);	 Catch:{ Throwable -> 0x0158 }
+            r3 = 0;
+        L_0x0126:
+            r0 = r19;
+            if (r3 >= r0) goto L_0x0192;
+        L_0x012a:
+            r20 = r4.getJSONObject(r3);	 Catch:{ Throwable -> 0x0158 }
+            r26 = "type";
+            r0 = r20;
+            r1 = r26;
+            r25 = r0.getInt(r1);	 Catch:{ Throwable -> 0x0158 }
+            r26 = 16;
+            r0 = r25;
+            r1 = r26;
+            if (r0 == r1) goto L_0x0175;
+        L_0x0141:
+            r3 = r3 + 1;
+            goto L_0x0126;
+        L_0x0144:
+            r0 = r16;
+            r24 = r0.read(r10);	 Catch:{ Throwable -> 0x0158 }
+            if (r24 <= 0) goto L_0x016c;
+        L_0x014c:
+            r26 = 0;
+            r0 = r21;
+            r1 = r26;
+            r2 = r24;
+            r0.write(r10, r1, r2);	 Catch:{ Throwable -> 0x0158 }
+            goto L_0x00f4;
+        L_0x0158:
+            r13 = move-exception;
+        L_0x0159:
+            org.telegram.messenger.FileLog.e(r13);	 Catch:{ all -> 0x0186 }
+            if (r16 == 0) goto L_0x0161;
+        L_0x015e:
+            r16.close();	 Catch:{ Throwable -> 0x01e6 }
+        L_0x0161:
+            if (r21 == 0) goto L_0x0166;
+        L_0x0163:
+            r21.close();	 Catch:{ Exception -> 0x01f7 }
+        L_0x0166:
+            r17 = r17 + 1;
+            r22 = r21;
+            goto L_0x0008;
+        L_0x016c:
+            r26 = -1;
+            r0 = r24;
+            r1 = r26;
+            if (r0 != r1) goto L_0x00fa;
+        L_0x0174:
+            goto L_0x00fa;
+        L_0x0175:
+            r26 = "data";
+            r0 = r20;
+            r1 = r26;
+            r26 = r0.getString(r1);	 Catch:{ Throwable -> 0x0158 }
+            r0 = r26;
+            r5.add(r0);	 Catch:{ Throwable -> 0x0158 }
+            goto L_0x0141;
+        L_0x0186:
+            r26 = move-exception;
+        L_0x0187:
+            if (r16 == 0) goto L_0x018c;
+        L_0x0189:
+            r16.close();	 Catch:{ Throwable -> 0x01ec }
+        L_0x018c:
+            if (r21 == 0) goto L_0x0191;
+        L_0x018e:
+            r21.close();	 Catch:{ Exception -> 0x01fa }
+        L_0x0191:
+            throw r26;
+        L_0x0192:
+            r26 = org.telegram.tgnet.ConnectionsManager$DnsTxtLoadTask$$Lambda$0.$instance;	 Catch:{ Throwable -> 0x0158 }
+            r0 = r26;
+            java.util.Collections.sort(r5, r0);	 Catch:{ Throwable -> 0x0158 }
+            r7 = new java.lang.StringBuilder;	 Catch:{ Throwable -> 0x0158 }
+            r7.<init>();	 Catch:{ Throwable -> 0x0158 }
+            r3 = 0;
+        L_0x019f:
+            r26 = r5.size();	 Catch:{ Throwable -> 0x0158 }
+            r0 = r26;
+            if (r3 >= r0) goto L_0x01bf;
+        L_0x01a7:
+            r26 = r5.get(r3);	 Catch:{ Throwable -> 0x0158 }
+            r26 = (java.lang.String) r26;	 Catch:{ Throwable -> 0x0158 }
+            r27 = "\"";
+            r28 = "";
+            r26 = r26.replace(r27, r28);	 Catch:{ Throwable -> 0x0158 }
+            r0 = r26;
+            r7.append(r0);	 Catch:{ Throwable -> 0x0158 }
+            r3 = r3 + 1;
+            goto L_0x019f;
+        L_0x01bf:
+            r26 = r7.toString();	 Catch:{ Throwable -> 0x0158 }
+            r27 = 0;
+            r8 = android.util.Base64.decode(r26, r27);	 Catch:{ Throwable -> 0x0158 }
+            r6 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Throwable -> 0x0158 }
+            r0 = r8.length;	 Catch:{ Throwable -> 0x0158 }
+            r26 = r0;
+            r0 = r26;
+            r6.<init>(r0);	 Catch:{ Throwable -> 0x0158 }
+            r6.writeBytes(r8);	 Catch:{ Throwable -> 0x0158 }
+            if (r16 == 0) goto L_0x01db;
+        L_0x01d8:
+            r16.close();	 Catch:{ Throwable -> 0x01e1 }
+        L_0x01db:
+            if (r21 == 0) goto L_0x01e0;
+        L_0x01dd:
+            r21.close();	 Catch:{ Exception -> 0x01f5 }
+        L_0x01e0:
+            return r6;
+        L_0x01e1:
+            r13 = move-exception;
+            org.telegram.messenger.FileLog.e(r13);
+            goto L_0x01db;
+        L_0x01e6:
+            r13 = move-exception;
+            org.telegram.messenger.FileLog.e(r13);
+            goto L_0x0161;
+        L_0x01ec:
+            r13 = move-exception;
+            org.telegram.messenger.FileLog.e(r13);
+            goto L_0x018c;
+        L_0x01f1:
+            r6 = 0;
+            r21 = r22;
+            goto L_0x01e0;
+        L_0x01f5:
+            r26 = move-exception;
+            goto L_0x01e0;
+        L_0x01f7:
+            r26 = move-exception;
+            goto L_0x0166;
+        L_0x01fa:
+            r27 = move-exception;
+            goto L_0x0191;
+        L_0x01fc:
+            r26 = move-exception;
+            r21 = r22;
+            goto L_0x0187;
+        L_0x0200:
+            r13 = move-exception;
+            r21 = r22;
+            goto L_0x0159;
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.tgnet.ConnectionsManager$DnsTxtLoadTask.doInBackground(java.lang.Void[]):org.telegram.tgnet.NativeByteBuffer");
         }
 
         static final /* synthetic */ int lambda$doInBackground$0$ConnectionsManager$DnsTxtLoadTask(String o1, String o2) {
@@ -362,11 +537,13 @@ public class ConnectionsManager {
             return 0;
         }
 
-        protected void onPostExecute(NativeByteBuffer result) {
+        /* Access modifiers changed, original: protected */
+        public void onPostExecute(NativeByteBuffer result) {
             Utilities.stageQueue.postRunnable(new ConnectionsManager$DnsTxtLoadTask$$Lambda$1(this, result));
         }
 
-        final /* synthetic */ void lambda$onPostExecute$1$ConnectionsManager$DnsTxtLoadTask(NativeByteBuffer result) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$onPostExecute$1$ConnectionsManager$DnsTxtLoadTask(NativeByteBuffer result) {
             if (result != null) {
                 ConnectionsManager.currentTask = null;
                 ConnectionsManager.native_applyDnsConfig(this.currentAccount, result.address, UserConfig.getInstance(this.currentAccount).getClientPhone());
@@ -390,7 +567,8 @@ public class ConnectionsManager {
             this.currentAccount = instance;
         }
 
-        protected NativeByteBuffer doInBackground(Void... voids) {
+        /* Access modifiers changed, original: protected|varargs */
+        public NativeByteBuffer doInBackground(Void... voids) {
             try {
                 if (ConnectionsManager.native_isTestBackend(this.currentAccount) != 0) {
                     throw new Exception("test backend");
@@ -409,11 +587,13 @@ public class ConnectionsManager {
             }
         }
 
-        final /* synthetic */ void lambda$doInBackground$1$ConnectionsManager$FirebaseTask(Task finishedTask) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$doInBackground$1$ConnectionsManager$FirebaseTask(Task finishedTask) {
             Utilities.stageQueue.postRunnable(new ConnectionsManager$FirebaseTask$$Lambda$2(this, finishedTask.isSuccessful()));
         }
 
-        final /* synthetic */ void lambda$null$0$ConnectionsManager$FirebaseTask(boolean success) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$null$0$ConnectionsManager$FirebaseTask(boolean success) {
             ConnectionsManager.currentTask = null;
             String config = null;
             if (success) {
@@ -435,12 +615,13 @@ public class ConnectionsManager {
                 NativeByteBuffer buffer = new NativeByteBuffer(bytes.length);
                 buffer.writeBytes(bytes);
                 ConnectionsManager.native_applyDnsConfig(this.currentAccount, buffer.address, UserConfig.getInstance(this.currentAccount).getClientPhone());
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
         }
 
-        final /* synthetic */ void lambda$doInBackground$2$ConnectionsManager$FirebaseTask() {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$doInBackground$2$ConnectionsManager$FirebaseTask() {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("failed to get firebase result");
                 FileLog.d("start dns txt task");
@@ -450,7 +631,8 @@ public class ConnectionsManager {
             ConnectionsManager.currentTask = task;
         }
 
-        protected void onPostExecute(NativeByteBuffer result) {
+        /* Access modifiers changed, original: protected */
+        public void onPostExecute(NativeByteBuffer result) {
         }
     }
 
@@ -593,7 +775,7 @@ public class ConnectionsManager {
             systemVersion = "SDK Unknown";
         }
         UserConfig.getInstance(this.currentAccount).loadConfig();
-        init(BuildVars.BUILD_VERSION, 96, BuildVars.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), UserConfig.getInstance(this.currentAccount).getClientUserId(), enablePushConnection);
+        init(BuildVars.BUILD_VERSION, 97, BuildVars.APP_ID, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), UserConfig.getInstance(this.currentAccount).getClientUserId(), enablePushConnection);
     }
 
     public long getCurrentTimeMillis() {
@@ -630,7 +812,8 @@ public class ConnectionsManager {
         return requestToken;
     }
 
-    final /* synthetic */ void lambda$sendRequest$2$ConnectionsManager(TLObject object, int requestToken, RequestDelegate onComplete, QuickAckDelegate onQuickAck, WriteToSocketDelegate onWriteToSocket, int flags, int datacenterId, int connetionType, boolean immediate) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$sendRequest$2$ConnectionsManager(TLObject object, int requestToken, RequestDelegate onComplete, QuickAckDelegate onQuickAck, WriteToSocketDelegate onWriteToSocket, int flags, int datacenterId, int connetionType, boolean immediate) {
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("send request " + object + " with token = " + requestToken);
         }
@@ -639,7 +822,7 @@ public class ConnectionsManager {
             object.serializeToStream(buffer);
             object.freeResources();
             native_sendRequest(this.currentAccount, buffer.address, new ConnectionsManager$$Lambda$10(object, onComplete), onQuickAck, onWriteToSocket, flags, datacenterId, connetionType, immediate, requestToken);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
@@ -843,7 +1026,7 @@ public class ConnectionsManager {
             } else if (BuildVars.LOGS_ENABLED) {
                 FileLog.d(String.format("java received unknown constructor 0x%x", new Object[]{Integer.valueOf(constructor)}));
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
@@ -886,7 +1069,7 @@ public class ConnectionsManager {
     public static void onBytesSent(int amount, int networkType, int currentAccount) {
         try {
             StatsController.getInstance(currentAccount).incrementSentBytesCount(networkType, 6, (long) amount);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
@@ -929,10 +1112,10 @@ public class ConnectionsManager {
         AndroidUtilities.runOnUIThread(ConnectionsManager$$Lambda$7.$instance);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:20:0x00a8 A:{SYNTHETIC, Splitter: B:20:0x00a8} */
-    /* JADX WARNING: Removed duplicated region for block: B:23:0x00ad A:{SYNTHETIC, Splitter: B:23:0x00ad} */
-    /* JADX WARNING: Removed duplicated region for block: B:59:0x013d A:{SYNTHETIC, Splitter: B:59:0x013d} */
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x0142 A:{SYNTHETIC, Splitter: B:62:0x0142} */
+    /* JADX WARNING: Removed duplicated region for block: B:20:0x00a8 A:{SYNTHETIC, Splitter:B:20:0x00a8} */
+    /* JADX WARNING: Removed duplicated region for block: B:23:0x00ad A:{SYNTHETIC, Splitter:B:23:0x00ad} */
+    /* JADX WARNING: Removed duplicated region for block: B:59:0x013d A:{SYNTHETIC, Splitter:B:59:0x013d} */
+    /* JADX WARNING: Removed duplicated region for block: B:62:0x0142 A:{SYNTHETIC, Splitter:B:62:0x0142} */
     public static java.lang.String getHostByName(java.lang.String r22, int r23) {
         /*
         r18 = dnsCache;
@@ -1132,7 +1315,7 @@ public class ConnectionsManager {
     public static void onBytesReceived(int amount, int networkType, int currentAccount) {
         try {
             StatsController.getInstance(currentAccount).incrementReceivedBytesCount(networkType, 6, (long) amount);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
@@ -1145,7 +1328,7 @@ public class ConnectionsManager {
             if (message != null) {
                 Utilities.stageQueue.postRunnable(new ConnectionsManager$$Lambda$8(currentAccount, message));
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
@@ -1189,7 +1372,8 @@ public class ConnectionsManager {
         AndroidUtilities.runOnUIThread(new ConnectionsManager$$Lambda$9(this, value));
     }
 
-    final /* synthetic */ void lambda$setIsUpdating$11$ConnectionsManager(boolean value) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$setIsUpdating$11$ConnectionsManager(boolean value) {
         if (this.isUpdating != value) {
             this.isUpdating = value;
             if (this.connectionState == 3) {

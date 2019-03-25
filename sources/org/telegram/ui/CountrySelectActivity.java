@@ -18,7 +18,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
@@ -91,7 +90,7 @@ public class CountrySelectActivity extends BaseFragment {
                 }
                 reader.close();
                 stream.close();
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
             Collections.sort(this.sortedCountries, CountrySelectActivity$CountryAdapter$$Lambda$0.$instance);
@@ -217,7 +216,7 @@ public class CountrySelectActivity extends BaseFragment {
                 if (this.searchTimer != null) {
                     this.searchTimer.cancel();
                 }
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
             this.searchTimer = new Timer();
@@ -226,7 +225,7 @@ public class CountrySelectActivity extends BaseFragment {
                     try {
                         CountrySearchAdapter.this.searchTimer.cancel();
                         CountrySearchAdapter.this.searchTimer = null;
-                    } catch (Throwable e) {
+                    } catch (Exception e) {
                         FileLog.e(e);
                     }
                     CountrySearchAdapter.this.processSearch(query);
@@ -238,7 +237,8 @@ public class CountrySelectActivity extends BaseFragment {
             Utilities.searchQueue.postRunnable(new CountrySelectActivity$CountrySearchAdapter$$Lambda$0(this, query));
         }
 
-        final /* synthetic */ void lambda$processSearch$0$CountrySelectActivity$CountrySearchAdapter(String query) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$processSearch$0$CountrySelectActivity$CountrySearchAdapter(String query) {
             if (query.trim().toLowerCase().length() == 0) {
                 updateSearchResults(new ArrayList());
                 return;
@@ -261,7 +261,8 @@ public class CountrySelectActivity extends BaseFragment {
             AndroidUtilities.runOnUIThread(new CountrySelectActivity$CountrySearchAdapter$$Lambda$1(this, arrCounties));
         }
 
-        final /* synthetic */ void lambda$updateSearchResults$1$CountrySelectActivity$CountrySearchAdapter(ArrayList arrCounties) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$updateSearchResults$1$CountrySelectActivity$CountrySearchAdapter(ArrayList arrCounties) {
             this.searchResult = arrCounties;
             notifyDataSetChanged();
         }
@@ -312,17 +313,17 @@ public class CountrySelectActivity extends BaseFragment {
 
     public View createView(Context context) {
         int i = 1;
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("ChooseCountry", R.string.ChooseCountry));
+        this.actionBar.setTitle(LocaleController.getString("ChooseCountry", NUM));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
                 if (id == -1) {
-                    CountrySelectActivity.this.lambda$createView$1$PhotoAlbumPickerActivity();
+                    CountrySelectActivity.this.finishFragment();
                 }
             }
         });
-        this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItemSearchListener() {
+        this.actionBar.createMenu().addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItemSearchListener() {
             public void onSearchExpand() {
                 CountrySelectActivity.this.searching = true;
             }
@@ -333,7 +334,7 @@ public class CountrySelectActivity extends BaseFragment {
                 CountrySelectActivity.this.searchWas = false;
                 CountrySelectActivity.this.listView.setAdapter(CountrySelectActivity.this.listViewAdapter);
                 CountrySelectActivity.this.listView.setFastScrollVisible(true);
-                CountrySelectActivity.this.emptyView.setText(LocaleController.getString("ChooseCountry", R.string.ChooseCountry));
+                CountrySelectActivity.this.emptyView.setText(LocaleController.getString("ChooseCountry", NUM));
             }
 
             public void onTextChanged(EditText editText) {
@@ -349,7 +350,7 @@ public class CountrySelectActivity extends BaseFragment {
                     }
                 }
             }
-        }).setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
+        }).setSearchFieldHint(LocaleController.getString("Search", NUM));
         this.searching = false;
         this.searchWas = false;
         this.listViewAdapter = new CountryAdapter(context);
@@ -359,7 +360,7 @@ public class CountrySelectActivity extends BaseFragment {
         this.emptyView = new EmptyTextProgressView(context);
         this.emptyView.showTextView();
         this.emptyView.setShowAtCenter(true);
-        this.emptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
+        this.emptyView.setText(LocaleController.getString("NoResult", NUM));
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView = new RecyclerListView(context);
         this.listView.setSectionsType(1);
@@ -385,7 +386,8 @@ public class CountrySelectActivity extends BaseFragment {
         return this.fragmentView;
     }
 
-    final /* synthetic */ void lambda$createView$0$CountrySelectActivity(View view, int position) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$0$CountrySelectActivity(View view, int position) {
         Country country;
         if (this.searching && this.searchWas) {
             country = this.searchListViewAdapter.getItem(position);
@@ -399,7 +401,7 @@ public class CountrySelectActivity extends BaseFragment {
             }
         }
         if (position >= 0) {
-            lambda$createView$1$PhotoAlbumPickerActivity();
+            finishFragment();
             if (country != null && this.delegate != null) {
                 this.delegate.didSelectCountry(country.name, country.shortname);
             }

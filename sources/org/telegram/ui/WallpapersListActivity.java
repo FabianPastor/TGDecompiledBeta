@@ -40,13 +40,10 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
-import org.telegram.messenger.support.widget.RecyclerView.LayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
@@ -102,7 +99,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
     private static final int forward = 3;
     private static final int[] searchColors = new int[]{-16746753, -65536, -30208, -13824, -16718798, -14702165, -9240406, -409915, -9224159, -16777216, -10725281, -1};
     private static final String[] searchColorsNames = new String[]{"Blue", "Red", "Orange", "Yellow", "Green", "Teal", "Purple", "Pink", "Brown", "Black", "Gray", "White"};
-    private static final int[] searchColorsNamesR = new int[]{R.string.Blue, R.string.Red, R.string.Orange, R.string.Yellow, R.string.Green, R.string.Teal, R.string.Purple, R.string.Pink, R.string.Brown, R.string.Black, R.string.Gray, R.string.White};
+    private static final int[] searchColorsNamesR = new int[]{NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM};
     private ArrayList<View> actionModeViews = new ArrayList();
     private ColorWallpaper addedColorWallpaper;
     private FileWallpaper addedFileWallpaper;
@@ -151,7 +148,8 @@ public class WallpapersListActivity extends BaseFragment implements Notification
             super(context);
         }
 
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        /* Access modifiers changed, original: protected */
+        public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             setMeasuredDimension(AndroidUtilities.dp(50.0f), AndroidUtilities.dp(62.0f));
         }
 
@@ -159,7 +157,8 @@ public class WallpapersListActivity extends BaseFragment implements Notification
             this.color = value;
         }
 
-        protected void onDraw(Canvas canvas) {
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
             WallpapersListActivity.this.colorPaint.setColor(this.color);
             canvas.drawCircle((float) AndroidUtilities.dp(25.0f), (float) AndroidUtilities.dp(31.0f), (float) AndroidUtilities.dp(18.0f), WallpapersListActivity.this.colorPaint);
             if (this.color == Theme.getColor("windowBackgroundWhite")) {
@@ -235,7 +234,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
 
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view;
-            int i = R.drawable.greydivider_bottom;
+            int i = NUM;
             CombinedDrawable combinedDrawable;
             switch (viewType) {
                 case 0:
@@ -245,7 +244,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                     view = new ShadowSectionCell(this.mContext);
                     Context context = this.mContext;
                     if (WallpapersListActivity.this.wallPaperStartRow != -1) {
-                        i = R.drawable.greydivider;
+                        i = NUM;
                     }
                     combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(context, i, "windowBackgroundGrayShadow"));
                     combinedDrawable.setFullsize(true);
@@ -253,17 +252,19 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                     break;
                 case 3:
                     view = new TextInfoPrivacyCell(this.mContext);
-                    combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(this.mContext, (int) R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
+                    combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                     combinedDrawable.setFullsize(true);
                     view.setBackgroundDrawable(combinedDrawable);
                     break;
                 default:
                     view = new WallpaperCell(this.mContext) {
-                        protected void onWallpaperClick(Object wallPaper, int index) {
+                        /* Access modifiers changed, original: protected */
+                        public void onWallpaperClick(Object wallPaper, int index) {
                             WallpapersListActivity.this.onItemClick(this, wallPaper, index);
                         }
 
-                        protected boolean onWallpaperLongClick(Object wallPaper, int index) {
+                        /* Access modifiers changed, original: protected */
+                        public boolean onWallpaperLongClick(Object wallPaper, int index) {
                             return WallpapersListActivity.this.onItemLongClick(this, wallPaper, index);
                         }
                     };
@@ -277,13 +278,13 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 case 0:
                     TextCell textCell = holder.itemView;
                     if (position == WallpapersListActivity.this.uploadImageRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("SelectFromGallery", R.string.SelectFromGallery), R.drawable.profile_photos, true);
+                        textCell.setTextAndIcon(LocaleController.getString("SelectFromGallery", NUM), NUM, true);
                         return;
                     } else if (position == WallpapersListActivity.this.setColorRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("SetColor", R.string.SetColor), R.drawable.menu_palette, false);
+                        textCell.setTextAndIcon(LocaleController.getString("SetColor", NUM), NUM, false);
                         return;
                     } else if (position == WallpapersListActivity.this.resetRow) {
-                        textCell.setText(LocaleController.getString("ResetChatBackgrounds", R.string.ResetChatBackgrounds), false);
+                        textCell.setText(LocaleController.getString("ResetChatBackgrounds", NUM), false);
                         return;
                     } else {
                         return;
@@ -324,7 +325,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 case 3:
                     TextInfoPrivacyCell cell = holder.itemView;
                     if (position == WallpapersListActivity.this.resetInfoRow) {
-                        cell.setText(LocaleController.getString("ResetChatBackgroundsInfo", R.string.ResetChatBackgroundsInfo));
+                        cell.setText(LocaleController.getString("ResetChatBackgroundsInfo", NUM));
                         return;
                     }
                     return;
@@ -438,7 +439,8 @@ public class WallpapersListActivity extends BaseFragment implements Notification
             notifyDataSetChanged();
         }
 
-        final /* synthetic */ void lambda$processSearch$0$WallpapersListActivity$SearchAdapter(String textFinal) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$processSearch$0$WallpapersListActivity$SearchAdapter(String textFinal) {
             doSearch(textFinal);
             this.searchRunnable = null;
         }
@@ -461,13 +463,15 @@ public class WallpapersListActivity extends BaseFragment implements Notification
             }
         }
 
-        final /* synthetic */ void lambda$searchBotUser$2$WallpapersListActivity$SearchAdapter(TLObject response, TL_error error) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$searchBotUser$2$WallpapersListActivity$SearchAdapter(TLObject response, TL_error error) {
             if (response != null) {
                 AndroidUtilities.runOnUIThread(new WallpapersListActivity$SearchAdapter$$Lambda$5(this, response));
             }
         }
 
-        final /* synthetic */ void lambda$null$1$WallpapersListActivity$SearchAdapter(TLObject response) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$null$1$WallpapersListActivity$SearchAdapter(TLObject response) {
             TL_contacts_resolvedPeer res = (TL_contacts_resolvedPeer) response;
             MessagesController.getInstance(WallpapersListActivity.this.currentAccount).putUsers(res.users, false);
             MessagesController.getInstance(WallpapersListActivity.this.currentAccount).putChats(res.chats, false);
@@ -506,11 +510,13 @@ public class WallpapersListActivity extends BaseFragment implements Notification
             }
         }
 
-        final /* synthetic */ void lambda$searchImages$4$WallpapersListActivity$SearchAdapter(int token, TLObject response, TL_error error) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$searchImages$4$WallpapersListActivity$SearchAdapter(int token, TLObject response, TL_error error) {
             AndroidUtilities.runOnUIThread(new WallpapersListActivity$SearchAdapter$$Lambda$4(this, token, response));
         }
 
-        final /* synthetic */ void lambda$null$3$WallpapersListActivity$SearchAdapter(int token, TLObject response) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$null$3$WallpapersListActivity$SearchAdapter(int token, TLObject response) {
             if (token == this.lastSearchToken) {
                 this.imageReqId = 0;
                 int oldCount = this.searchResult.size();
@@ -587,7 +593,8 @@ public class WallpapersListActivity extends BaseFragment implements Notification
             switch (viewType) {
                 case 0:
                     view = new WallpaperCell(this.mContext) {
-                        protected void onWallpaperClick(Object wallPaper, int index) {
+                        /* Access modifiers changed, original: protected */
+                        public void onWallpaperClick(Object wallPaper, int index) {
                             WallpapersListActivity.this.presentFragment(new WallpaperActivity(wallPaper, null));
                         }
                     };
@@ -629,8 +636,9 @@ public class WallpapersListActivity extends BaseFragment implements Notification
             return new Holder(view);
         }
 
-        final /* synthetic */ void lambda$onCreateViewHolder$5$WallpapersListActivity$SearchAdapter(View view1, int position) {
-            String color = LocaleController.getString("BackgroundSearchColor", R.string.BackgroundSearchColor);
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$onCreateViewHolder$5$WallpapersListActivity$SearchAdapter(View view1, int position) {
+            String color = LocaleController.getString("BackgroundSearchColor", NUM);
             Spannable spannable = new SpannableString(color + " " + LocaleController.getString(WallpapersListActivity.searchColorsNames[position], WallpapersListActivity.searchColorsNamesR[position]));
             spannable.setSpan(new ForegroundColorSpan(Theme.getColor("actionBarDefaultSubtitle")), color.length(), spannable.length(), 33);
             WallpapersListActivity.this.searchItem.setSearchFieldCaption(spannable);
@@ -652,7 +660,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                     }
                     return;
                 case 2:
-                    holder.itemView.setText(LocaleController.getString("SearchByColor", R.string.SearchByColor));
+                    holder.itemView.setText(LocaleController.getString("SearchByColor", NUM));
                     return;
                 default:
                     return;
@@ -670,6 +678,11 @@ public class WallpapersListActivity extends BaseFragment implements Notification
         }
     }
 
+    /* Access modifiers changed, original: final|bridge|synthetic */
+    public final /* bridge */ /* synthetic */ void bridge$lambda$0$WallpapersListActivity() {
+        loadWallpapers();
+    }
+
     public WallpapersListActivity(int type) {
         this.currentType = type;
     }
@@ -684,6 +697,10 @@ public class WallpapersListActivity extends BaseFragment implements Notification
             for (int a = 0; a < defaultColors.length; a++) {
                 this.wallPapers.add(new ColorWallpaper((long) (-(a + 3)), defaultColors[a]));
             }
+            if (this.currentType == 1 && this.patterns.isEmpty()) {
+                NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.wallpapersDidLoad);
+                MessagesStorage.getInstance(this.currentAccount).getWallpapers();
+            }
         }
         return super.onFragmentCreate();
     }
@@ -694,6 +711,8 @@ public class WallpapersListActivity extends BaseFragment implements Notification
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.wallpapersDidLoad);
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didSetNewWallpapper);
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.wallpapersNeedReload);
+        } else if (this.currentType == 1) {
+            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.wallpapersDidLoad);
         }
         this.updater.cleanup();
         super.onFragmentDestroy();
@@ -714,12 +733,12 @@ public class WallpapersListActivity extends BaseFragment implements Notification
             }
         });
         this.hasOwnBackground = true;
-        this.actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
         if (this.currentType == 0) {
-            this.actionBar.setTitle(LocaleController.getString("ChatBackground", R.string.ChatBackground));
+            this.actionBar.setTitle(LocaleController.getString("ChatBackground", NUM));
         } else if (this.currentType == 1) {
-            this.actionBar.setTitle(LocaleController.getString("SelectColorTitle", R.string.SelectColorTitle));
+            this.actionBar.setTitle(LocaleController.getString("SelectColorTitle", NUM));
         }
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
             public void onItemClick(int id) {
@@ -730,14 +749,14 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                         WallpapersListActivity.this.updateRowsSelection();
                         return;
                     }
-                    WallpapersListActivity.this.lambda$checkDiscard$70$PassportActivity();
+                    WallpapersListActivity.this.finishFragment();
                 } else if (id == 4) {
                     if (WallpapersListActivity.this.getParentActivity() != null) {
                         Builder builder = new Builder(WallpapersListActivity.this.getParentActivity());
-                        builder.setMessage(LocaleController.formatString("DeleteChatBackgroundsAlert", R.string.DeleteChatBackgroundsAlert, new Object[0]));
-                        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), new WallpapersListActivity$2$$Lambda$0(this));
-                        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                        builder.setMessage(LocaleController.formatString("DeleteChatBackgroundsAlert", NUM, new Object[0]));
+                        builder.setTitle(LocaleController.getString("AppName", NUM));
+                        builder.setPositiveButton(LocaleController.getString("OK", NUM), new WallpapersListActivity$2$$Lambda$0(this));
+                        builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
                         WallpapersListActivity.this.showDialog(builder.create());
                     }
                 } else if (id == 3) {
@@ -750,7 +769,8 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 }
             }
 
-            final /* synthetic */ void lambda$onItemClick$2$WallpapersListActivity$2(DialogInterface dialogInterface, int i) {
+            /* Access modifiers changed, original: final|synthetic */
+            public final /* synthetic */ void lambda$onItemClick$2$WallpapersListActivity$2(DialogInterface dialogInterface, int i) {
                 WallpapersListActivity.this.progressDialog = new AlertDialog(WallpapersListActivity.this.getParentActivity(), 3);
                 WallpapersListActivity.this.progressDialog.setCanCacnel(false);
                 WallpapersListActivity.this.progressDialog.show();
@@ -785,18 +805,21 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 WallpapersListActivity.this.actionBar.closeSearchField();
             }
 
-            final /* synthetic */ void lambda$null$1$WallpapersListActivity$2(int[] deleteCount, TLObject response, TL_error error) {
+            /* Access modifiers changed, original: final|synthetic */
+            public final /* synthetic */ void lambda$null$1$WallpapersListActivity$2(int[] deleteCount, TLObject response, TL_error error) {
                 AndroidUtilities.runOnUIThread(new WallpapersListActivity$2$$Lambda$3(this, deleteCount));
             }
 
-            final /* synthetic */ void lambda$null$0$WallpapersListActivity$2(int[] deleteCount) {
+            /* Access modifiers changed, original: final|synthetic */
+            public final /* synthetic */ void lambda$null$0$WallpapersListActivity$2(int[] deleteCount) {
                 deleteCount[0] = deleteCount[0] - 1;
                 if (deleteCount[0] == 0) {
                     WallpapersListActivity.this.loadWallpapers();
                 }
             }
 
-            final /* synthetic */ void lambda$onItemClick$3$WallpapersListActivity$2(DialogsActivity fragment1, ArrayList dids, CharSequence message, boolean param) {
+            /* Access modifiers changed, original: final|synthetic */
+            public final /* synthetic */ void lambda$onItemClick$3$WallpapersListActivity$2(DialogsActivity fragment1, ArrayList dids, CharSequence message, boolean param) {
                 StringBuilder fmessage = new StringBuilder();
                 for (int b = 0; b < WallpapersListActivity.this.selectedWallPapers.size(); b++) {
                     String link = AndroidUtilities.getWallPaperUrl((TL_wallPaper) WallpapersListActivity.this.selectedWallPapers.valueAt(b), WallpapersListActivity.this.currentAccount);
@@ -820,7 +843,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                         }
                         SendMessagesHelper.getInstance(WallpapersListActivity.this.currentAccount).sendMessage(fmessage.toString(), did, null, null, true, null, null, null);
                     }
-                    fragment1.lambda$checkDiscard$70$PassportActivity();
+                    fragment1.finishFragment();
                     return;
                 }
                 did = ((Long) dids.get(0)).longValue();
@@ -843,7 +866,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
             }
         });
         if (this.currentType == 0) {
-            this.searchItem = this.actionBar.createMenu().addItem(0, (int) R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItemSearchListener() {
+            this.searchItem = this.actionBar.createMenu().addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItemSearchListener() {
                 public void onSearchExpand() {
                     WallpapersListActivity.this.listView.setAdapter(WallpapersListActivity.this.searchAdapter);
                     WallpapersListActivity.this.listView.invalidate();
@@ -863,10 +886,10 @@ public class WallpapersListActivity extends BaseFragment implements Notification
 
                 public void onCaptionCleared() {
                     WallpapersListActivity.this.searchAdapter.clearColor();
-                    WallpapersListActivity.this.searchItem.setSearchFieldHint(LocaleController.getString("SearchBackgrounds", R.string.SearchBackgrounds));
+                    WallpapersListActivity.this.searchItem.setSearchFieldHint(LocaleController.getString("SearchBackgrounds", NUM));
                 }
             });
-            this.searchItem.setSearchFieldHint(LocaleController.getString("SearchBackgrounds", R.string.SearchBackgrounds));
+            this.searchItem.setSearchFieldHint(LocaleController.getString("SearchBackgrounds", NUM));
             ActionBarMenu actionMode = this.actionBar.createActionMode(false);
             actionMode.setBackgroundColor(Theme.getColor("actionBarDefault"));
             this.actionBar.setItemsColor(Theme.getColor("actionBarDefaultIcon"), true);
@@ -877,8 +900,8 @@ public class WallpapersListActivity extends BaseFragment implements Notification
             this.selectedMessagesCountTextView.setTextColor(Theme.getColor("actionBarDefaultIcon"));
             this.selectedMessagesCountTextView.setOnTouchListener(WallpapersListActivity$$Lambda$0.$instance);
             actionMode.addView(this.selectedMessagesCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 65, 0, 0, 0));
-            this.actionModeViews.add(actionMode.addItemWithWidth(3, R.drawable.ic_ab_forward, AndroidUtilities.dp(54.0f)));
-            this.actionModeViews.add(actionMode.addItemWithWidth(4, R.drawable.ic_ab_delete, AndroidUtilities.dp(54.0f)));
+            this.actionModeViews.add(actionMode.addItemWithWidth(3, NUM, AndroidUtilities.dp(54.0f)));
+            this.actionModeViews.add(actionMode.addItemWithWidth(4, NUM, AndroidUtilities.dp(54.0f)));
             this.selectedWallPapers.clear();
         }
         this.fragmentView = new FrameLayout(context);
@@ -921,7 +944,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
         this.listView.setItemAnimator(null);
         this.listView.setLayoutAnimation(null);
         RecyclerListView recyclerListView = this.listView;
-        LayoutManager anonymousClass5 = new LinearLayoutManager(context, 1, false) {
+        AnonymousClass5 anonymousClass5 = new LinearLayoutManager(context, 1, false) {
             public boolean supportsPredictiveItemAnimations() {
                 return false;
             }
@@ -930,7 +953,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
         recyclerListView.setLayoutManager(anonymousClass5);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         RecyclerListView recyclerListView2 = this.listView;
-        Adapter listAdapter = new ListAdapter(context);
+        ListAdapter listAdapter = new ListAdapter(context);
         this.listAdapter = listAdapter;
         recyclerListView2.setAdapter(listAdapter);
         this.searchAdapter = new SearchAdapter(context);
@@ -966,14 +989,15 @@ public class WallpapersListActivity extends BaseFragment implements Notification
         this.searchEmptyView.setVisibility(8);
         this.searchEmptyView.setShowAtCenter(true);
         this.searchEmptyView.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-        this.searchEmptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
+        this.searchEmptyView.setText(LocaleController.getString("NoResult", NUM));
         this.listView.setEmptyView(this.searchEmptyView);
         frameLayout.addView(this.searchEmptyView, LayoutHelper.createFrame(-1, -1.0f));
         updateRows();
         return this.fragmentView;
     }
 
-    final /* synthetic */ void lambda$createView$3$WallpapersListActivity(View view, int position) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$createView$3$WallpapersListActivity(View view, int position) {
         if (getParentActivity() != null && this.listView.getAdapter() != this.searchAdapter) {
             if (position == this.uploadImageRow) {
                 this.updater.openGallery();
@@ -983,16 +1007,17 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 presentFragment(activity);
             } else if (position == this.resetRow) {
                 Builder builder = new Builder(getParentActivity());
-                builder.setMessage(LocaleController.getString("ResetChatBackgroundsAlert", R.string.ResetChatBackgroundsAlert));
-                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder.setPositiveButton(LocaleController.getString("Reset", R.string.Reset), new WallpapersListActivity$$Lambda$6(this));
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                builder.setMessage(LocaleController.getString("ResetChatBackgroundsAlert", NUM));
+                builder.setTitle(LocaleController.getString("AppName", NUM));
+                builder.setPositiveButton(LocaleController.getString("Reset", NUM), new WallpapersListActivity$$Lambda$6(this));
+                builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
                 showDialog(builder.create());
             }
         }
     }
 
-    final /* synthetic */ void lambda$null$2$WallpapersListActivity(DialogInterface dialogInterface, int i) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$2$WallpapersListActivity(DialogInterface dialogInterface, int i) {
         if (this.actionBar.isActionModeShowed()) {
             this.selectedWallPapers.clear();
             this.actionBar.hideActionMode();
@@ -1004,7 +1029,8 @@ public class WallpapersListActivity extends BaseFragment implements Notification
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_resetWallPapers(), new WallpapersListActivity$$Lambda$7(this));
     }
 
-    final /* synthetic */ void lambda$null$1$WallpapersListActivity(TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$1$WallpapersListActivity(TLObject response, TL_error error) {
         AndroidUtilities.runOnUIThread(new WallpapersListActivity$$Lambda$8(this));
     }
 
@@ -1136,19 +1162,21 @@ public class WallpapersListActivity extends BaseFragment implements Notification
     public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.wallpapersDidLoad) {
             ArrayList<TL_wallPaper> arrayList = args[0];
-            this.wallPapers.clear();
             this.patterns.clear();
-            this.allWallPapers.clear();
-            this.allWallPapersDict.clear();
-            this.allWallPapers.addAll(arrayList);
+            if (this.currentType != 1) {
+                this.wallPapers.clear();
+                this.allWallPapers.clear();
+                this.allWallPapersDict.clear();
+                this.allWallPapers.addAll(arrayList);
+            }
             int N = arrayList.size();
             for (int a = 0; a < N; a++) {
                 TL_wallPaper wallPaper = (TL_wallPaper) arrayList.get(a);
-                this.allWallPapersDict.put(wallPaper.id, wallPaper);
                 if (wallPaper.pattern) {
                     this.patterns.add(wallPaper);
                 }
-                if (!wallPaper.pattern || wallPaper.settings != null) {
+                if (!(this.currentType == 1 || (wallPaper.pattern && wallPaper.settings == null))) {
+                    this.allWallPapersDict.put(wallPaper.id, wallPaper);
                     this.wallPapers.add(wallPaper);
                 }
             }
@@ -1182,18 +1210,22 @@ public class WallpapersListActivity extends BaseFragment implements Notification
         ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new WallpapersListActivity$$Lambda$3(this)), this.classGuid);
     }
 
-    final /* synthetic */ void lambda$loadWallpapers$5$WallpapersListActivity(TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$loadWallpapers$5$WallpapersListActivity(TLObject response, TL_error error) {
         AndroidUtilities.runOnUIThread(new WallpapersListActivity$$Lambda$5(this, response));
     }
 
-    final /* synthetic */ void lambda$null$4$WallpapersListActivity(TLObject response) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$4$WallpapersListActivity(TLObject response) {
         if (response instanceof TL_account_wallPapers) {
             TL_account_wallPapers res = (TL_account_wallPapers) response;
-            this.wallPapers.clear();
             this.patterns.clear();
-            this.allWallPapersDict.clear();
-            this.allWallPapers.clear();
-            this.allWallPapers.addAll(res.wallpapers);
+            if (this.currentType != 1) {
+                this.wallPapers.clear();
+                this.allWallPapersDict.clear();
+                this.allWallPapers.clear();
+                this.allWallPapers.addAll(res.wallpapers);
+            }
             int N = res.wallpapers.size();
             for (int a = 0; a < N; a++) {
                 TL_wallPaper wallPaper = (TL_wallPaper) res.wallpapers.get(a);
@@ -1201,7 +1233,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 if (wallPaper.pattern) {
                     this.patterns.add(wallPaper);
                 }
-                if (!wallPaper.pattern || wallPaper.settings != null) {
+                if (!(this.currentType == 1 || (wallPaper.pattern && wallPaper.settings == null))) {
                     this.wallPapers.add(wallPaper);
                 }
             }
@@ -1226,7 +1258,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 this.addedFileWallpaper = null;
             }
             if (this.catsWallpaper == null) {
-                this.catsWallpaper = new FileWallpaper(1000001, (int) R.drawable.background_hd, (int) R.drawable.catstile);
+                this.catsWallpaper = new FileWallpaper(1000001, NUM, NUM);
             } else {
                 this.wallPapers.remove(this.catsWallpaper);
             }
@@ -1266,7 +1298,8 @@ public class WallpapersListActivity extends BaseFragment implements Notification
         }
     }
 
-    final /* synthetic */ int lambda$fillWallpapersWithCustom$6$WallpapersListActivity(boolean currentThemeDark, Object o1, Object o2) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ int lambda$fillWallpapersWithCustom$6$WallpapersListActivity(boolean currentThemeDark, Object o1, Object o2) {
         if (!(o1 instanceof TL_wallPaper) || !(o2 instanceof TL_wallPaper)) {
             return 0;
         }

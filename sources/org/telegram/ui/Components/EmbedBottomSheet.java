@@ -51,7 +51,6 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BringAppForegroundService;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
@@ -108,7 +107,8 @@ public class EmbedBottomSheet extends BottomSheet {
             AndroidUtilities.runOnUIThread(new EmbedBottomSheet$YoutubeProxy$$Lambda$0(this, eventName));
         }
 
-        final /* synthetic */ void lambda$postEvent$0$EmbedBottomSheet$YoutubeProxy(String eventName) {
+        /* Access modifiers changed, original: final|synthetic */
+        public final /* synthetic */ void lambda$postEvent$0$EmbedBottomSheet$YoutubeProxy(String eventName) {
             boolean z = true;
             switch (eventName.hashCode()) {
                 case -1097519099:
@@ -186,7 +186,8 @@ public class EmbedBottomSheet extends BottomSheet {
         this.fullscreenVideoContainer.setVisibility(4);
         this.fullscreenVideoContainer.setOnTouchListener(EmbedBottomSheet$$Lambda$1.$instance);
         this.containerLayout = new FrameLayout(context) {
-            protected void onDetachedFromWindow() {
+            /* Access modifiers changed, original: protected */
+            public void onDetachedFromWindow() {
                 super.onDetachedFromWindow();
                 try {
                     if ((EmbedBottomSheet.this.pipVideoView == null || EmbedBottomSheet.this.webView.getVisibility() != 0) && EmbedBottomSheet.this.webView.getParent() != null) {
@@ -201,12 +202,13 @@ public class EmbedBottomSheet extends BottomSheet {
                         }
                         EmbedBottomSheet.this.videoView.destroy();
                     }
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
             }
 
-            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            /* Access modifiers changed, original: protected */
+            public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec((AndroidUtilities.dp((float) ((EmbedBottomSheet.this.hasDescription ? 22 : 0) + 84)) + ((int) Math.min(((float) EmbedBottomSheet.this.height) / (((float) EmbedBottomSheet.this.width) / ((float) MeasureSpec.getSize(widthMeasureSpec))), (float) (AndroidUtilities.displaySize.y / 2)))) + 1, NUM));
             }
         };
@@ -297,7 +299,7 @@ public class EmbedBottomSheet extends BottomSheet {
                 args.put("Referer", "http://youtube.com");
                 try {
                     EmbedBottomSheet.this.webView.loadUrl(EmbedBottomSheet.this.embedUrl, args);
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
             }
@@ -320,7 +322,7 @@ public class EmbedBottomSheet extends BottomSheet {
                                 }
                             }
                             EmbedBottomSheet.this.containerView.setSystemUiVisibility(1028);
-                        } catch (Throwable e) {
+                        } catch (Exception e) {
                             FileLog.e(e);
                         }
                     }
@@ -331,7 +333,7 @@ public class EmbedBottomSheet extends BottomSheet {
                         try {
                             EmbedBottomSheet.this.containerView.setSystemUiVisibility(0);
                             EmbedBottomSheet.this.parentActivity.setRequestedOrientation(EmbedBottomSheet.this.prevOrientation);
-                        } catch (Throwable e2) {
+                        } catch (Exception e2) {
                             FileLog.e(e2);
                         }
                     }
@@ -360,7 +362,7 @@ public class EmbedBottomSheet extends BottomSheet {
                             if (EmbedBottomSheet.this.prevOrientation != -2) {
                                 EmbedBottomSheet.this.parentActivity.setRequestedOrientation(EmbedBottomSheet.this.prevOrientation);
                             }
-                        } catch (Throwable e) {
+                        } catch (Exception e) {
                             FileLog.e(e);
                         }
                     }
@@ -463,7 +465,7 @@ public class EmbedBottomSheet extends BottomSheet {
                     EmbedBottomSheet.this.animationInProgress = true;
                     EmbedBottomSheet.this.videoView.getAspectRatioView().getLocationInWindow(EmbedBottomSheet.this.position);
                     int[] access$3700 = EmbedBottomSheet.this.position;
-                    access$3700[0] = access$3700[0] - EmbedBottomSheet.this.access$1100();
+                    access$3700[0] = access$3700[0] - EmbedBottomSheet.this.getLeftInset();
                     access$3700 = EmbedBottomSheet.this.position;
                     access$3700[1] = (int) (((float) access$3700[1]) - EmbedBottomSheet.this.containerView.getTranslationY());
                     TextureView textureView = EmbedBottomSheet.this.videoView.getTextureView();
@@ -503,14 +505,14 @@ public class EmbedBottomSheet extends BottomSheet {
                     try {
                         EmbedBottomSheet.this.parentActivity.getWindow().addFlags(128);
                         return;
-                    } catch (Throwable e) {
+                    } catch (Exception e) {
                         FileLog.e(e);
                         return;
                     }
                 }
                 try {
                     EmbedBottomSheet.this.parentActivity.getWindow().clearFlags(128);
-                } catch (Throwable e2) {
+                } catch (Exception e2) {
                     FileLog.e(e2);
                 }
             }
@@ -570,7 +572,7 @@ public class EmbedBottomSheet extends BottomSheet {
         textView.setEllipsize(TruncateAt.END);
         textView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("dialogButtonSelector"), 0));
         textView.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
-        textView.setText(LocaleController.getString("Close", R.string.Close).toUpperCase());
+        textView.setText(LocaleController.getString("Close", NUM).toUpperCase());
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         frameLayout.addView(textView, LayoutHelper.createLinear(-2, -1, 51));
         textView.setOnClickListener(new EmbedBottomSheet$$Lambda$4(this));
@@ -579,7 +581,7 @@ public class EmbedBottomSheet extends BottomSheet {
         frameLayout.addView(this.imageButtonsContainer, LayoutHelper.createFrame(-2, -1, 17));
         this.pipButton = new ImageView(context);
         this.pipButton.setScaleType(ScaleType.CENTER);
-        this.pipButton.setImageResource(R.drawable.video_pip);
+        this.pipButton.setImageResource(NUM);
         this.pipButton.setEnabled(false);
         this.pipButton.setAlpha(0.5f);
         this.pipButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogTextBlue4"), Mode.MULTIPLY));
@@ -589,7 +591,7 @@ public class EmbedBottomSheet extends BottomSheet {
         OnClickListener copyClickListener = new EmbedBottomSheet$$Lambda$6(this);
         ImageView copyButton = new ImageView(context);
         copyButton.setScaleType(ScaleType.CENTER);
-        copyButton.setImageResource(R.drawable.video_copy);
+        copyButton.setImageResource(NUM);
         copyButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogTextBlue4"), Mode.MULTIPLY));
         copyButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("dialogButtonSelector"), 0));
         this.imageButtonsContainer.addView(copyButton, LayoutHelper.createFrame(48, 48, 51));
@@ -602,7 +604,7 @@ public class EmbedBottomSheet extends BottomSheet {
         this.copyTextButton.setEllipsize(TruncateAt.END);
         this.copyTextButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("dialogButtonSelector"), 0));
         this.copyTextButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
-        this.copyTextButton.setText(LocaleController.getString("Copy", R.string.Copy).toUpperCase());
+        this.copyTextButton.setText(LocaleController.getString("Copy", NUM).toUpperCase());
         this.copyTextButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         linearLayout.addView(this.copyTextButton, LayoutHelper.createFrame(-2, -1, 51));
         this.copyTextButton.setOnClickListener(copyClickListener);
@@ -614,7 +616,7 @@ public class EmbedBottomSheet extends BottomSheet {
         this.openInButton.setEllipsize(TruncateAt.END);
         this.openInButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("dialogButtonSelector"), 0));
         this.openInButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
-        this.openInButton.setText(LocaleController.getString("OpenInBrowser", R.string.OpenInBrowser).toUpperCase());
+        this.openInButton.setText(LocaleController.getString("OpenInBrowser", NUM).toUpperCase());
         this.openInButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         linearLayout.addView(this.openInButton, LayoutHelper.createFrame(-2, -1, 51));
         this.openInButton.setOnClickListener(new EmbedBottomSheet$$Lambda$7(this));
@@ -644,7 +646,7 @@ public class EmbedBottomSheet extends BottomSheet {
                     if (EmbedBottomSheet.this.videoView.getYoutubeId() != null) {
                         EmbedBottomSheet.this.progressBarBlackBackground.setVisibility(0);
                         EmbedBottomSheet.this.youtubeLogoImage.setVisibility(0);
-                        EmbedBottomSheet.this.youtubeLogoImage.setImageResource(R.drawable.ytlogo);
+                        EmbedBottomSheet.this.youtubeLogoImage.setImageResource(NUM);
                         EmbedBottomSheet.this.isYouTube = true;
                         if (VERSION.SDK_INT >= 17) {
                             EmbedBottomSheet.this.webView.addJavascriptInterface(new YoutubeProxy(EmbedBottomSheet.this, null), "YoutubeProxy");
@@ -665,7 +667,7 @@ public class EmbedBottomSheet extends BottomSheet {
                                         seekToTime = Utilities.parseInt(t).intValue();
                                     }
                                 }
-                            } catch (Throwable e) {
+                            } catch (Exception e) {
                                 FileLog.e(e);
                             }
                         }
@@ -673,7 +675,7 @@ public class EmbedBottomSheet extends BottomSheet {
                         return;
                     }
                     EmbedBottomSheet.this.webView.loadUrl(EmbedBottomSheet.this.embedUrl, args);
-                } catch (Throwable e2) {
+                } catch (Exception e2) {
                     FileLog.e(e2);
                 }
             }
@@ -685,7 +687,7 @@ public class EmbedBottomSheet extends BottomSheet {
                 }
                 try {
                     EmbedBottomSheet.this.parentActivity.getWindow().clearFlags(128);
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     FileLog.e(e);
                 }
                 return true;
@@ -717,13 +719,20 @@ public class EmbedBottomSheet extends BottomSheet {
         instance = this;
     }
 
-    final /* synthetic */ void lambda$new$3$EmbedBottomSheet(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$3$EmbedBottomSheet(View v) {
         if (this.youtubeLogoImage.getAlpha() != 0.0f) {
             this.openInButton.callOnClick();
         }
     }
 
-    final /* synthetic */ void lambda$new$5$EmbedBottomSheet(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$4$EmbedBottomSheet(View v) {
+        dismiss();
+    }
+
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$5$EmbedBottomSheet(View v) {
         if (checkInlinePermissions() && this.progressBar.getVisibility() != 0) {
             this.pipVideoView = new PipVideoView();
             PipVideoView pipVideoView = this.pipVideoView;
@@ -737,7 +746,7 @@ public class EmbedBottomSheet extends BottomSheet {
                 this.animationInProgress = true;
                 this.videoView.getAspectRatioView().getLocationInWindow(this.position);
                 int[] iArr = this.position;
-                iArr[0] = iArr[0] - access$1100();
+                iArr[0] = iArr[0] - getLeftInset();
                 iArr = this.position;
                 iArr[1] = (int) (((float) iArr[1]) - this.containerView.getTranslationY());
                 TextureView textureView = this.videoView.getTextureView();
@@ -770,19 +779,21 @@ public class EmbedBottomSheet extends BottomSheet {
         }
     }
 
-    final /* synthetic */ void lambda$new$6$EmbedBottomSheet(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$6$EmbedBottomSheet(View v) {
         try {
             ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", this.openUrl));
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
-        Toast.makeText(getContext(), LocaleController.getString("LinkCopied", R.string.LinkCopied), 0).show();
-        lambda$new$4$EmbedBottomSheet();
+        Toast.makeText(getContext(), LocaleController.getString("LinkCopied", NUM), 0).show();
+        dismiss();
     }
 
-    final /* synthetic */ void lambda$new$7$EmbedBottomSheet(View v) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$new$7$EmbedBottomSheet(View v) {
         Browser.openUrl(this.parentActivity, this.openUrl);
-        lambda$new$4$EmbedBottomSheet();
+        dismiss();
     }
 
     private void runJsCode(String code) {
@@ -792,7 +803,7 @@ public class EmbedBottomSheet extends BottomSheet {
         }
         try {
             this.webView.loadUrl("javascript:" + code);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             FileLog.e(e);
         }
     }
@@ -814,7 +825,7 @@ public class EmbedBottomSheet extends BottomSheet {
         if (VERSION.SDK_INT < 23 || Settings.canDrawOverlays(this.parentActivity)) {
             return true;
         }
-        new Builder(this.parentActivity).setTitle(LocaleController.getString("AppName", R.string.AppName)).setMessage(LocaleController.getString("PermissionDrawAboveOtherApps", R.string.PermissionDrawAboveOtherApps)).setPositiveButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), new DialogInterface.OnClickListener() {
+        new Builder(this.parentActivity).setTitle(LocaleController.getString("AppName", NUM)).setMessage(LocaleController.getString("PermissionDrawAboveOtherApps", NUM)).setPositiveButton(LocaleController.getString("PermissionOpenSettings", NUM), new DialogInterface.OnClickListener() {
             @TargetApi(23)
             public void onClick(DialogInterface dialog, int which) {
                 if (EmbedBottomSheet.this.parentActivity != null) {
@@ -825,7 +836,8 @@ public class EmbedBottomSheet extends BottomSheet {
         return false;
     }
 
-    protected boolean canDismissWithSwipe() {
+    /* Access modifiers changed, original: protected */
+    public boolean canDismissWithSwipe() {
         return (this.videoView.getVisibility() == 0 && this.videoView.isInFullscreen()) ? false : true;
     }
 
@@ -880,13 +892,13 @@ public class EmbedBottomSheet extends BottomSheet {
                 parent.removeView(this.webView);
             }
             FrameLayout frameLayout = this.containerLayout;
-            View view = this.webView;
+            WebView webView = this.webView;
             if (this.hasDescription) {
                 i = 22;
             } else {
                 i = 0;
             }
-            frameLayout.addView(view, 0, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, (float) (i + 84)));
+            frameLayout.addView(webView, 0, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, (float) (i + 84)));
             setShowWithoutAnimation(true);
             show();
             this.pipVideoView.close();
@@ -901,7 +913,7 @@ public class EmbedBottomSheet extends BottomSheet {
     public void updateTextureViewPosition() {
         this.videoView.getAspectRatioView().getLocationInWindow(this.position);
         int[] iArr = this.position;
-        iArr[0] = iArr[0] - access$1100();
+        iArr[0] = iArr[0] - getLeftInset();
         if (!(this.videoView.isInline() || this.animationInProgress)) {
             TextureView textureView = this.videoView.getTextureView();
             textureView.setTranslationX((float) this.position[0]);
@@ -920,15 +932,18 @@ public class EmbedBottomSheet extends BottomSheet {
         }
     }
 
-    protected boolean canDismissWithTouchOutside() {
+    /* Access modifiers changed, original: protected */
+    public boolean canDismissWithTouchOutside() {
         return this.fullscreenVideoContainer.getVisibility() != 0;
     }
 
-    protected void onContainerTranslationYChanged(float translationY) {
+    /* Access modifiers changed, original: protected */
+    public void onContainerTranslationYChanged(float translationY) {
         updateTextureViewPosition();
     }
 
-    protected boolean onCustomMeasure(View view, int width, int height) {
+    /* Access modifiers changed, original: protected */
+    public boolean onCustomMeasure(View view, int width, int height) {
         if (view == this.videoView.getControlsView()) {
             ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
             layoutParams.width = this.videoView.getMeasuredWidth();
@@ -937,7 +952,8 @@ public class EmbedBottomSheet extends BottomSheet {
         return false;
     }
 
-    protected boolean onCustomLayout(View view, int left, int top, int right, int bottom) {
+    /* Access modifiers changed, original: protected */
+    public boolean onCustomLayout(View view, int left, int top, int right, int bottom) {
         if (view == this.videoView.getControlsView()) {
             updateTextureViewPosition();
         }

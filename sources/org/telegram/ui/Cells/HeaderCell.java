@@ -3,10 +3,13 @@ package org.telegram.ui.Cells;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.os.Build.VERSION;
 import android.text.TextUtils.TruncateAt;
-import android.view.View;
 import android.view.View.MeasureSpec;
+import android.view.accessibility.AccessibilityNodeInfo;
+import android.view.accessibility.AccessibilityNodeInfo.CollectionItemInfo;
 import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
 import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
@@ -36,44 +39,41 @@ public class HeaderCell extends FrameLayout {
         this.textView = new TextView(getContext());
         this.textView.setTextSize(1, 15.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.textView.setLines(1);
-        this.textView.setMaxLines(1);
-        this.textView.setSingleLine(true);
         this.textView.setEllipsize(TruncateAt.END);
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
+        this.textView.setMinHeight(AndroidUtilities.dp((float) (this.height - topMargin)));
         if (dialog) {
             this.textView.setTextColor(Theme.getColor("dialogTextBlue2"));
         } else {
             this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlueHeader"));
         }
-        View view = this.textView;
+        TextView textView = this.textView;
         if (LocaleController.isRTL) {
             i = 5;
         } else {
             i = 3;
         }
-        addView(view, LayoutHelper.createFrame(-1, -1.0f, i | 48, (float) padding, (float) topMargin, (float) padding, 0.0f));
+        addView(textView, LayoutHelper.createFrame(-1, -1.0f, i | 48, (float) padding, (float) topMargin, (float) padding, 0.0f));
         if (text2) {
-            int i3;
             this.textView2 = new SimpleTextView(getContext());
             this.textView2.setTextSize(13);
             SimpleTextView simpleTextView = this.textView2;
             if (LocaleController.isRTL) {
-                i3 = 3;
+                i = 3;
             } else {
-                i3 = 5;
+                i = 5;
             }
-            simpleTextView.setGravity(i3 | 48);
-            view = this.textView2;
+            simpleTextView.setGravity(i | 48);
+            SimpleTextView simpleTextView2 = this.textView2;
             if (!LocaleController.isRTL) {
                 i2 = 5;
             }
-            addView(view, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, (float) padding, 21.0f, (float) padding, 0.0f));
+            addView(simpleTextView2, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, (float) padding, 21.0f, (float) padding, 0.0f));
         }
     }
 
     public void setHeight(int value) {
-        this.height = value;
+        this.textView.setMinHeight(AndroidUtilities.dp((float) this.height) - ((LayoutParams) this.textView.getLayoutParams()).topMargin);
     }
 
     public void setEnabled(boolean value, ArrayList<Animator> animators) {
@@ -97,8 +97,9 @@ public class HeaderCell extends FrameLayout {
         textView.setAlpha(f);
     }
 
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) this.height), NUM));
+    /* Access modifiers changed, original: protected */
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(0, 0));
     }
 
     public void setText(String text) {
@@ -113,5 +114,15 @@ public class HeaderCell extends FrameLayout {
 
     public SimpleTextView getTextView2() {
         return this.textView2;
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
+        if (VERSION.SDK_INT >= 19) {
+            CollectionItemInfo collection = info.getCollectionItemInfo();
+            if (collection != null) {
+                info.setCollectionItemInfo(CollectionItemInfo.obtain(collection.getRowIndex(), collection.getRowSpan(), collection.getColumnIndex(), collection.getColumnSpan(), true));
+            }
+        }
     }
 }
