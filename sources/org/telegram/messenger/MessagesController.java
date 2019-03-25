@@ -84,7 +84,6 @@ import org.telegram.tgnet.TLRPC.TL_channels_channelParticipant;
 import org.telegram.tgnet.TLRPC.TL_channels_channelParticipants;
 import org.telegram.tgnet.TLRPC.TL_channels_createChannel;
 import org.telegram.tgnet.TLRPC.TL_channels_deleteChannel;
-import org.telegram.tgnet.TLRPC.TL_channels_deleteHistory;
 import org.telegram.tgnet.TLRPC.TL_channels_deleteMessages;
 import org.telegram.tgnet.TLRPC.TL_channels_deleteUserHistory;
 import org.telegram.tgnet.TLRPC.TL_channels_editAdmin;
@@ -162,7 +161,6 @@ import org.telegram.tgnet.TLRPC.TL_messageActionChatDeleteUser;
 import org.telegram.tgnet.TLRPC.TL_messageActionChatEditPhoto;
 import org.telegram.tgnet.TLRPC.TL_messageActionChatMigrateTo;
 import org.telegram.tgnet.TLRPC.TL_messageActionCreatedBroadcastList;
-import org.telegram.tgnet.TLRPC.TL_messageActionHistoryClear;
 import org.telegram.tgnet.TLRPC.TL_messageActionPinMessage;
 import org.telegram.tgnet.TLRPC.TL_messageMediaUnsupported;
 import org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
@@ -173,7 +171,6 @@ import org.telegram.tgnet.TLRPC.TL_messages_channelMessages;
 import org.telegram.tgnet.TLRPC.TL_messages_chatFull;
 import org.telegram.tgnet.TLRPC.TL_messages_createChat;
 import org.telegram.tgnet.TLRPC.TL_messages_deleteChatUser;
-import org.telegram.tgnet.TLRPC.TL_messages_deleteHistory;
 import org.telegram.tgnet.TLRPC.TL_messages_deleteMessages;
 import org.telegram.tgnet.TLRPC.TL_messages_dialogs;
 import org.telegram.tgnet.TLRPC.TL_messages_editChatAbout;
@@ -2971,147 +2968,594 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     public void deleteDialog(long did, int onlyHistory, boolean revoke) {
-        deleteDialog(did, true, onlyHistory, 0, revoke);
+        deleteDialog(did, true, onlyHistory, 0, revoke, null, 0);
     }
 
-    private void deleteDialog(long did, boolean first, int onlyHistory, int max_id, boolean revoke) {
-        int lower_part = (int) did;
-        int high_id = (int) (did >> 32);
-        int max_id_delete = max_id;
-        if (onlyHistory == 2) {
-            MessagesStorage.getInstance(this.currentAccount).deleteDialog(did, onlyHistory);
-            return;
-        }
-        if (onlyHistory == 0 || onlyHistory == 3) {
-            DataQuery.getInstance(this.currentAccount).uninstallShortcut(did);
-        }
-        if (first) {
-            boolean isProxyDialog = false;
-            MessagesStorage.getInstance(this.currentAccount).deleteDialog(did, onlyHistory);
-            TL_dialog dialog = (TL_dialog) this.dialogs_dict.get(did);
-            if (dialog != null) {
-                if (max_id_delete == 0) {
-                    max_id_delete = Math.max(0, dialog.top_message);
-                }
-                if (onlyHistory == 0 || onlyHistory == 3) {
-                    isProxyDialog = this.proxyDialog != null && this.proxyDialog.id == did;
-                    if (isProxyDialog) {
-                        this.isLeftProxyChannel = true;
-                        if (this.proxyDialog.id < 0) {
-                            Chat chat = getChat(Integer.valueOf(-((int) this.proxyDialog.id)));
-                            if (chat != null) {
-                                chat.left = true;
-                            }
-                        }
-                        sortDialogs(null);
-                    } else {
-                        this.dialogs.remove(dialog);
-                        if (this.dialogsServerOnly.remove(dialog) && DialogObject.isChannel(dialog)) {
-                            Utilities.stageQueue.postRunnable(new MessagesController$$Lambda$46(this, did));
-                        }
-                        this.dialogsCanAddUsers.remove(dialog);
-                        this.dialogsChannelsOnly.remove(dialog);
-                        this.dialogsGroupsOnly.remove(dialog);
-                        this.dialogsUsersOnly.remove(dialog);
-                        this.dialogsForward.remove(dialog);
-                        this.dialogs_dict.remove(did);
-                        this.dialogs_read_inbox_max.remove(Long.valueOf(did));
-                        this.dialogs_read_outbox_max.remove(Long.valueOf(did));
-                        this.nextDialogsCacheOffset--;
-                    }
-                } else {
-                    dialog.unread_count = 0;
-                }
-                if (!isProxyDialog) {
-                    MessageObject object = (MessageObject) this.dialogMessage.get(dialog.id);
-                    this.dialogMessage.remove(dialog.id);
-                    int lastMessageId;
-                    if (object != null) {
-                        lastMessageId = object.getId();
-                        this.dialogMessagesByIds.remove(object.getId());
-                    } else {
-                        lastMessageId = dialog.top_message;
-                        object = (MessageObject) this.dialogMessagesByIds.get(dialog.top_message);
-                        this.dialogMessagesByIds.remove(dialog.top_message);
-                    }
-                    if (!(object == null || object.messageOwner.random_id == 0)) {
-                        this.dialogMessagesByRandomIds.remove(object.messageOwner.random_id);
-                    }
-                    if (onlyHistory != 1 || lower_part == 0 || lastMessageId <= 0) {
-                        dialog.top_message = 0;
-                    } else {
-                        Message message = new TL_messageService();
-                        message.id = dialog.top_message;
-                        message.out = ((long) UserConfig.getInstance(this.currentAccount).getClientUserId()) == did;
-                        message.from_id = UserConfig.getInstance(this.currentAccount).getClientUserId();
-                        message.flags |= 256;
-                        message.action = new TL_messageActionHistoryClear();
-                        message.date = dialog.last_message_date;
-                        message.dialog_id = (long) lower_part;
-                        if (lower_part > 0) {
-                            message.to_id = new TL_peerUser();
-                            message.to_id.user_id = lower_part;
-                        } else {
-                            if (ChatObject.isChannel(getChat(Integer.valueOf(-lower_part)))) {
-                                message.to_id = new TL_peerChannel();
-                                message.to_id.channel_id = -lower_part;
-                            } else {
-                                message.to_id = new TL_peerChat();
-                                message.to_id.chat_id = -lower_part;
-                            }
-                        }
-                        MessageObject messageObject = new MessageObject(this.currentAccount, message, this.createdDialogIds.contains(Long.valueOf(message.dialog_id)));
-                        ArrayList<MessageObject> objArr = new ArrayList();
-                        objArr.add(messageObject);
-                        ArrayList arr = new ArrayList();
-                        arr.add(message);
-                        updateInterfaceWithMessages(did, objArr);
-                        MessagesStorage.getInstance(this.currentAccount).putMessages(arr, false, true, false, 0);
-                    }
-                }
-            }
-            if (isProxyDialog) {
-                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload, Boolean.valueOf(true));
-            } else {
-                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
-                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.removeAllMessagesFromDialog, Long.valueOf(did), Boolean.valueOf(false));
-            }
-            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new MessagesController$$Lambda$47(this, did));
-        }
-        if (high_id != 1 && onlyHistory != 3) {
-            if (lower_part != 0) {
-                InputPeer peer = getInputPeer(lower_part);
-                if (peer == null) {
-                    return;
-                }
-                TLObject req;
-                if (!(peer instanceof TL_inputPeerChannel)) {
-                    int i;
-                    req = new TL_messages_deleteHistory();
-                    req.peer = peer;
-                    if (onlyHistory == 0) {
-                        i = Integer.MAX_VALUE;
-                    } else {
-                        i = max_id_delete;
-                    }
-                    req.max_id = i;
-                    req.just_clear = onlyHistory != 0;
-                    req.revoke = revoke;
-                    ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new MessagesController$$Lambda$49(this, did, onlyHistory, max_id_delete, revoke), 64);
-                } else if (onlyHistory != 0) {
-                    req = new TL_channels_deleteHistory();
-                    req.channel = new TL_inputChannel();
-                    req.channel.channel_id = peer.channel_id;
-                    req.channel.access_hash = peer.access_hash;
-                    req.max_id = max_id_delete > 0 ? max_id_delete : Integer.MAX_VALUE;
-                    ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, MessagesController$$Lambda$48.$instance, 64);
-                }
-            } else if (onlyHistory == 1) {
-                SecretChatHelper.getInstance(this.currentAccount).sendClearHistoryMessage(getEncryptedChat(Integer.valueOf(high_id)), null);
-            } else {
-                SecretChatHelper.getInstance(this.currentAccount).declineSecretChat(high_id);
-            }
-        }
+    /* Access modifiers changed, original: protected */
+    /* JADX WARNING: Removed duplicated region for block: B:94:0x03cd  */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x0257  */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x0257  */
+    /* JADX WARNING: Removed duplicated region for block: B:94:0x03cd  */
+    public void deleteDialog(long r32, boolean r34, int r35, int r36, boolean r37, org.telegram.tgnet.TLRPC.InputPeer r38, long r39) {
+        /*
+        r31 = this;
+        r4 = 2;
+        r0 = r35;
+        if (r0 != r4) goto L_0x0015;
+    L_0x0005:
+        r0 = r31;
+        r4 = r0.currentAccount;
+        r4 = org.telegram.messenger.MessagesStorage.getInstance(r4);
+        r0 = r32;
+        r2 = r35;
+        r4.deleteDialog(r0, r2);
+    L_0x0014:
+        return;
+    L_0x0015:
+        if (r35 == 0) goto L_0x001c;
+    L_0x0017:
+        r4 = 3;
+        r0 = r35;
+        if (r0 != r4) goto L_0x0029;
+    L_0x001c:
+        r0 = r31;
+        r4 = r0.currentAccount;
+        r4 = org.telegram.messenger.DataQuery.getInstance(r4);
+        r0 = r32;
+        r4.uninstallShortcut(r0);
+    L_0x0029:
+        r0 = r32;
+        r0 = (int) r0;
+        r24 = r0;
+        r4 = 32;
+        r6 = r32 >> r4;
+        r0 = (int) r6;
+        r21 = r0;
+        r25 = r36;
+        if (r34 == 0) goto L_0x01e3;
+    L_0x0039:
+        r22 = 0;
+        r0 = r31;
+        r4 = r0.currentAccount;
+        r4 = org.telegram.messenger.MessagesStorage.getInstance(r4);
+        r0 = r32;
+        r2 = r35;
+        r4.deleteDialog(r0, r2);
+        r0 = r31;
+        r4 = r0.dialogs_dict;
+        r0 = r32;
+        r19 = r4.get(r0);
+        r19 = (org.telegram.tgnet.TLRPC.TL_dialog) r19;
+        if (r19 == 0) goto L_0x01b1;
+    L_0x0058:
+        if (r25 != 0) goto L_0x0063;
+    L_0x005a:
+        r4 = 0;
+        r0 = r19;
+        r6 = r0.top_message;
+        r25 = java.lang.Math.max(r4, r6);
+    L_0x0063:
+        if (r35 == 0) goto L_0x006a;
+    L_0x0065:
+        r4 = 3;
+        r0 = r35;
+        if (r0 != r4) goto L_0x0320;
+    L_0x006a:
+        r0 = r31;
+        r4 = r0.proxyDialog;
+        if (r4 == 0) goto L_0x029b;
+    L_0x0070:
+        r0 = r31;
+        r4 = r0.proxyDialog;
+        r6 = r4.id;
+        r4 = (r6 > r32 ? 1 : (r6 == r32 ? 0 : -1));
+        if (r4 != 0) goto L_0x029b;
+    L_0x007a:
+        r22 = 1;
+    L_0x007c:
+        if (r22 == 0) goto L_0x029f;
+    L_0x007e:
+        r4 = 1;
+        r0 = r31;
+        r0.isLeftProxyChannel = r4;
+        r0 = r31;
+        r4 = r0.proxyDialog;
+        r6 = r4.id;
+        r10 = 0;
+        r4 = (r6 > r10 ? 1 : (r6 == r10 ? 0 : -1));
+        if (r4 >= 0) goto L_0x00a8;
+    L_0x008f:
+        r0 = r31;
+        r4 = r0.proxyDialog;
+        r6 = r4.id;
+        r4 = (int) r6;
+        r4 = -r4;
+        r4 = java.lang.Integer.valueOf(r4);
+        r0 = r31;
+        r16 = r0.getChat(r4);
+        if (r16 == 0) goto L_0x00a8;
+    L_0x00a3:
+        r4 = 1;
+        r0 = r16;
+        r0.left = r4;
+    L_0x00a8:
+        r4 = 0;
+        r0 = r31;
+        r0.sortDialogs(r4);
+    L_0x00ae:
+        if (r22 != 0) goto L_0x01b1;
+    L_0x00b0:
+        r0 = r31;
+        r4 = r0.dialogMessage;
+        r0 = r19;
+        r6 = r0.id;
+        r29 = r4.get(r6);
+        r29 = (org.telegram.messenger.MessageObject) r29;
+        r0 = r31;
+        r4 = r0.dialogMessage;
+        r0 = r19;
+        r6 = r0.id;
+        r4.remove(r6);
+        if (r29 == 0) goto L_0x0327;
+    L_0x00cb:
+        r23 = r29.getId();
+        r0 = r31;
+        r4 = r0.dialogMessagesByIds;
+        r6 = r29.getId();
+        r4.remove(r6);
+    L_0x00da:
+        if (r29 == 0) goto L_0x00f5;
+    L_0x00dc:
+        r0 = r29;
+        r4 = r0.messageOwner;
+        r6 = r4.random_id;
+        r10 = 0;
+        r4 = (r6 > r10 ? 1 : (r6 == r10 ? 0 : -1));
+        if (r4 == 0) goto L_0x00f5;
+    L_0x00e8:
+        r0 = r31;
+        r4 = r0.dialogMessagesByRandomIds;
+        r0 = r29;
+        r6 = r0.messageOwner;
+        r6 = r6.random_id;
+        r4.remove(r6);
+    L_0x00f5:
+        r4 = 1;
+        r0 = r35;
+        if (r0 != r4) goto L_0x0386;
+    L_0x00fa:
+        if (r24 == 0) goto L_0x0386;
+    L_0x00fc:
+        if (r23 <= 0) goto L_0x0386;
+    L_0x00fe:
+        r26 = new org.telegram.tgnet.TLRPC$TL_messageService;
+        r26.<init>();
+        r0 = r19;
+        r4 = r0.top_message;
+        r0 = r26;
+        r0.id = r4;
+        r0 = r31;
+        r4 = r0.currentAccount;
+        r4 = org.telegram.messenger.UserConfig.getInstance(r4);
+        r4 = r4.getClientUserId();
+        r6 = (long) r4;
+        r4 = (r6 > r32 ? 1 : (r6 == r32 ? 0 : -1));
+        if (r4 != 0) goto L_0x0348;
+    L_0x011c:
+        r4 = 1;
+    L_0x011d:
+        r0 = r26;
+        r0.out = r4;
+        r0 = r31;
+        r4 = r0.currentAccount;
+        r4 = org.telegram.messenger.UserConfig.getInstance(r4);
+        r4 = r4.getClientUserId();
+        r0 = r26;
+        r0.from_id = r4;
+        r0 = r26;
+        r4 = r0.flags;
+        r4 = r4 | 256;
+        r0 = r26;
+        r0.flags = r4;
+        r4 = new org.telegram.tgnet.TLRPC$TL_messageActionHistoryClear;
+        r4.<init>();
+        r0 = r26;
+        r0.action = r4;
+        r0 = r19;
+        r4 = r0.last_message_date;
+        r0 = r26;
+        r0.date = r4;
+        r0 = r24;
+        r6 = (long) r0;
+        r0 = r26;
+        r0.dialog_id = r6;
+        if (r24 <= 0) goto L_0x034b;
+    L_0x0155:
+        r4 = new org.telegram.tgnet.TLRPC$TL_peerUser;
+        r4.<init>();
+        r0 = r26;
+        r0.to_id = r4;
+        r0 = r26;
+        r4 = r0.to_id;
+        r0 = r24;
+        r4.user_id = r0;
+    L_0x0166:
+        r27 = new org.telegram.messenger.MessageObject;
+        r0 = r31;
+        r4 = r0.currentAccount;
+        r0 = r31;
+        r6 = r0.createdDialogIds;
+        r0 = r26;
+        r10 = r0.dialog_id;
+        r7 = java.lang.Long.valueOf(r10);
+        r6 = r6.contains(r7);
+        r0 = r27;
+        r1 = r26;
+        r0.<init>(r4, r1, r6);
+        r28 = new java.util.ArrayList;
+        r28.<init>();
+        r0 = r28;
+        r1 = r27;
+        r0.add(r1);
+        r5 = new java.util.ArrayList;
+        r5.<init>();
+        r0 = r26;
+        r5.add(r0);
+        r0 = r31;
+        r1 = r32;
+        r3 = r28;
+        r0.updateInterfaceWithMessages(r1, r3);
+        r0 = r31;
+        r4 = r0.currentAccount;
+        r4 = org.telegram.messenger.MessagesStorage.getInstance(r4);
+        r6 = 0;
+        r7 = 1;
+        r8 = 0;
+        r9 = 0;
+        r4.putMessages(r5, r6, r7, r8, r9);
+    L_0x01b1:
+        if (r22 == 0) goto L_0x038d;
+    L_0x01b3:
+        r0 = r31;
+        r4 = r0.currentAccount;
+        r4 = org.telegram.messenger.NotificationCenter.getInstance(r4);
+        r6 = org.telegram.messenger.NotificationCenter.dialogsNeedReload;
+        r7 = 1;
+        r7 = new java.lang.Object[r7];
+        r10 = 0;
+        r11 = 1;
+        r11 = java.lang.Boolean.valueOf(r11);
+        r7[r10] = r11;
+        r4.postNotificationName(r6, r7);
+    L_0x01cb:
+        r0 = r31;
+        r4 = r0.currentAccount;
+        r4 = org.telegram.messenger.MessagesStorage.getInstance(r4);
+        r4 = r4.getStorageQueue();
+        r6 = new org.telegram.messenger.MessagesController$$Lambda$47;
+        r0 = r31;
+        r1 = r32;
+        r6.<init>(r0, r1);
+        r4.postRunnable(r6);
+    L_0x01e3:
+        r4 = 1;
+        r0 = r21;
+        if (r0 == r4) goto L_0x0014;
+    L_0x01e8:
+        r4 = 3;
+        r0 = r35;
+        if (r0 == r4) goto L_0x0014;
+    L_0x01ed:
+        if (r24 == 0) goto L_0x0415;
+    L_0x01ef:
+        if (r38 != 0) goto L_0x01f9;
+    L_0x01f1:
+        r0 = r31;
+        r1 = r24;
+        r38 = r0.getInputPeer(r1);
+    L_0x01f9:
+        if (r38 == 0) goto L_0x0014;
+    L_0x01fb:
+        r6 = 0;
+        r4 = (r39 > r6 ? 1 : (r39 == r6 ? 0 : -1));
+        if (r4 != 0) goto L_0x03c4;
+    L_0x0201:
+        r17 = 0;
+        r18 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x03be }
+        r4 = r38.getObjectSize();	 Catch:{ Exception -> 0x03be }
+        r4 = r4 + 28;
+        r0 = r18;
+        r0.<init>(r4);	 Catch:{ Exception -> 0x03be }
+        r4 = 13;
+        r0 = r18;
+        r0.writeInt32(r4);	 Catch:{ Exception -> 0x0441 }
+        r0 = r18;
+        r1 = r32;
+        r0.writeInt64(r1);	 Catch:{ Exception -> 0x0441 }
+        r0 = r18;
+        r1 = r34;
+        r0.writeBool(r1);	 Catch:{ Exception -> 0x0441 }
+        r0 = r18;
+        r1 = r35;
+        r0.writeInt32(r1);	 Catch:{ Exception -> 0x0441 }
+        r0 = r18;
+        r1 = r25;
+        r0.writeInt32(r1);	 Catch:{ Exception -> 0x0441 }
+        r0 = r18;
+        r1 = r37;
+        r0.writeBool(r1);	 Catch:{ Exception -> 0x0441 }
+        r0 = r38;
+        r1 = r18;
+        r0.serializeToStream(r1);	 Catch:{ Exception -> 0x0441 }
+        r17 = r18;
+    L_0x0243:
+        r0 = r31;
+        r4 = r0.currentAccount;
+        r4 = org.telegram.messenger.MessagesStorage.getInstance(r4);
+        r0 = r17;
+        r8 = r4.createPendingTask(r0);
+    L_0x0251:
+        r0 = r38;
+        r4 = r0 instanceof org.telegram.tgnet.TLRPC.TL_inputPeerChannel;
+        if (r4 == 0) goto L_0x03cd;
+    L_0x0257:
+        if (r35 == 0) goto L_0x0014;
+    L_0x0259:
+        r30 = new org.telegram.tgnet.TLRPC$TL_channels_deleteHistory;
+        r30.<init>();
+        r4 = new org.telegram.tgnet.TLRPC$TL_inputChannel;
+        r4.<init>();
+        r0 = r30;
+        r0.channel = r4;
+        r0 = r30;
+        r4 = r0.channel;
+        r0 = r38;
+        r6 = r0.channel_id;
+        r4.channel_id = r6;
+        r0 = r30;
+        r4 = r0.channel;
+        r0 = r38;
+        r6 = r0.access_hash;
+        r4.access_hash = r6;
+        if (r25 <= 0) goto L_0x03c8;
+    L_0x027d:
+        r0 = r25;
+        r1 = r30;
+        r1.max_id = r0;
+        r0 = r31;
+        r4 = r0.currentAccount;
+        r4 = org.telegram.tgnet.ConnectionsManager.getInstance(r4);
+        r6 = new org.telegram.messenger.MessagesController$$Lambda$48;
+        r0 = r31;
+        r6.<init>(r0, r8);
+        r7 = 64;
+        r0 = r30;
+        r4.sendRequest(r0, r6, r7);
+        goto L_0x0014;
+    L_0x029b:
+        r22 = 0;
+        goto L_0x007c;
+    L_0x029f:
+        r0 = r31;
+        r4 = r0.dialogs;
+        r0 = r19;
+        r4.remove(r0);
+        r0 = r31;
+        r4 = r0.dialogsServerOnly;
+        r0 = r19;
+        r4 = r4.remove(r0);
+        if (r4 == 0) goto L_0x02c8;
+    L_0x02b4:
+        r4 = org.telegram.messenger.DialogObject.isChannel(r19);
+        if (r4 == 0) goto L_0x02c8;
+    L_0x02ba:
+        r4 = org.telegram.messenger.Utilities.stageQueue;
+        r6 = new org.telegram.messenger.MessagesController$$Lambda$46;
+        r0 = r31;
+        r1 = r32;
+        r6.<init>(r0, r1);
+        r4.postRunnable(r6);
+    L_0x02c8:
+        r0 = r31;
+        r4 = r0.dialogsCanAddUsers;
+        r0 = r19;
+        r4.remove(r0);
+        r0 = r31;
+        r4 = r0.dialogsChannelsOnly;
+        r0 = r19;
+        r4.remove(r0);
+        r0 = r31;
+        r4 = r0.dialogsGroupsOnly;
+        r0 = r19;
+        r4.remove(r0);
+        r0 = r31;
+        r4 = r0.dialogsUsersOnly;
+        r0 = r19;
+        r4.remove(r0);
+        r0 = r31;
+        r4 = r0.dialogsForward;
+        r0 = r19;
+        r4.remove(r0);
+        r0 = r31;
+        r4 = r0.dialogs_dict;
+        r0 = r32;
+        r4.remove(r0);
+        r0 = r31;
+        r4 = r0.dialogs_read_inbox_max;
+        r6 = java.lang.Long.valueOf(r32);
+        r4.remove(r6);
+        r0 = r31;
+        r4 = r0.dialogs_read_outbox_max;
+        r6 = java.lang.Long.valueOf(r32);
+        r4.remove(r6);
+        r0 = r31;
+        r4 = r0.nextDialogsCacheOffset;
+        r4 = r4 + -1;
+        r0 = r31;
+        r0.nextDialogsCacheOffset = r4;
+        goto L_0x00ae;
+    L_0x0320:
+        r4 = 0;
+        r0 = r19;
+        r0.unread_count = r4;
+        goto L_0x00ae;
+    L_0x0327:
+        r0 = r19;
+        r0 = r0.top_message;
+        r23 = r0;
+        r0 = r31;
+        r4 = r0.dialogMessagesByIds;
+        r0 = r19;
+        r6 = r0.top_message;
+        r29 = r4.get(r6);
+        r29 = (org.telegram.messenger.MessageObject) r29;
+        r0 = r31;
+        r4 = r0.dialogMessagesByIds;
+        r0 = r19;
+        r6 = r0.top_message;
+        r4.remove(r6);
+        goto L_0x00da;
+    L_0x0348:
+        r4 = 0;
+        goto L_0x011d;
+    L_0x034b:
+        r0 = r24;
+        r4 = -r0;
+        r4 = java.lang.Integer.valueOf(r4);
+        r0 = r31;
+        r16 = r0.getChat(r4);
+        r4 = org.telegram.messenger.ChatObject.isChannel(r16);
+        if (r4 == 0) goto L_0x0372;
+    L_0x035e:
+        r4 = new org.telegram.tgnet.TLRPC$TL_peerChannel;
+        r4.<init>();
+        r0 = r26;
+        r0.to_id = r4;
+        r0 = r26;
+        r4 = r0.to_id;
+        r0 = r24;
+        r6 = -r0;
+        r4.channel_id = r6;
+        goto L_0x0166;
+    L_0x0372:
+        r4 = new org.telegram.tgnet.TLRPC$TL_peerChat;
+        r4.<init>();
+        r0 = r26;
+        r0.to_id = r4;
+        r0 = r26;
+        r4 = r0.to_id;
+        r0 = r24;
+        r6 = -r0;
+        r4.chat_id = r6;
+        goto L_0x0166;
+    L_0x0386:
+        r4 = 0;
+        r0 = r19;
+        r0.top_message = r4;
+        goto L_0x01b1;
+    L_0x038d:
+        r0 = r31;
+        r4 = r0.currentAccount;
+        r4 = org.telegram.messenger.NotificationCenter.getInstance(r4);
+        r6 = org.telegram.messenger.NotificationCenter.dialogsNeedReload;
+        r7 = 0;
+        r7 = new java.lang.Object[r7];
+        r4.postNotificationName(r6, r7);
+        r0 = r31;
+        r4 = r0.currentAccount;
+        r4 = org.telegram.messenger.NotificationCenter.getInstance(r4);
+        r6 = org.telegram.messenger.NotificationCenter.removeAllMessagesFromDialog;
+        r7 = 2;
+        r7 = new java.lang.Object[r7];
+        r10 = 0;
+        r11 = java.lang.Long.valueOf(r32);
+        r7[r10] = r11;
+        r10 = 1;
+        r11 = 0;
+        r11 = java.lang.Boolean.valueOf(r11);
+        r7[r10] = r11;
+        r4.postNotificationName(r6, r7);
+        goto L_0x01cb;
+    L_0x03be:
+        r20 = move-exception;
+    L_0x03bf:
+        org.telegram.messenger.FileLog.e(r20);
+        goto L_0x0243;
+    L_0x03c4:
+        r8 = r39;
+        goto L_0x0251;
+    L_0x03c8:
+        r25 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
+        goto L_0x027d;
+    L_0x03cd:
+        r30 = new org.telegram.tgnet.TLRPC$TL_messages_deleteHistory;
+        r30.<init>();
+        r0 = r38;
+        r1 = r30;
+        r1.peer = r0;
+        if (r35 != 0) goto L_0x0410;
+    L_0x03da:
+        r4 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
+    L_0x03dd:
+        r0 = r30;
+        r0.max_id = r4;
+        if (r35 == 0) goto L_0x0413;
+    L_0x03e3:
+        r4 = 1;
+    L_0x03e4:
+        r0 = r30;
+        r0.just_clear = r4;
+        r0 = r37;
+        r1 = r30;
+        r1.revoke = r0;
+        r13 = r25;
+        r15 = r38;
+        r0 = r31;
+        r4 = r0.currentAccount;
+        r4 = org.telegram.tgnet.ConnectionsManager.getInstance(r4);
+        r6 = new org.telegram.messenger.MessagesController$$Lambda$49;
+        r7 = r31;
+        r10 = r32;
+        r12 = r35;
+        r14 = r37;
+        r6.<init>(r7, r8, r10, r12, r13, r14, r15);
+        r7 = 64;
+        r0 = r30;
+        r4.sendRequest(r0, r6, r7);
+        goto L_0x0014;
+    L_0x0410:
+        r4 = r25;
+        goto L_0x03dd;
+    L_0x0413:
+        r4 = 0;
+        goto L_0x03e4;
+    L_0x0415:
+        r4 = 1;
+        r0 = r35;
+        if (r0 != r4) goto L_0x0432;
+    L_0x041a:
+        r0 = r31;
+        r4 = r0.currentAccount;
+        r4 = org.telegram.messenger.SecretChatHelper.getInstance(r4);
+        r6 = java.lang.Integer.valueOf(r21);
+        r0 = r31;
+        r6 = r0.getEncryptedChat(r6);
+        r7 = 0;
+        r4.sendClearHistoryMessage(r6, r7);
+        goto L_0x0014;
+    L_0x0432:
+        r0 = r31;
+        r4 = r0.currentAccount;
+        r4 = org.telegram.messenger.SecretChatHelper.getInstance(r4);
+        r0 = r21;
+        r4.declineSecretChat(r0);
+        goto L_0x0014;
+    L_0x0441:
+        r20 = move-exception;
+        r17 = r18;
+        goto L_0x03bf;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.deleteDialog(long, boolean, int, int, boolean, org.telegram.tgnet.TLRPC$InputPeer, long):void");
     }
 
     /* Access modifiers changed, original: final|synthetic */
@@ -3133,15 +3577,22 @@ public class MessagesController implements NotificationCenterDelegate {
         NotificationsController.getInstance(this.currentAccount).removeNotificationsForDialog(did);
     }
 
-    static final /* synthetic */ void lambda$deleteDialog$68$MessagesController(TLObject response, TL_error error) {
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$deleteDialog$68$MessagesController(long newTaskId, TLObject response, TL_error error) {
+        if (newTaskId != 0) {
+            MessagesStorage.getInstance(this.currentAccount).removePendingTask(newTaskId);
+        }
     }
 
     /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$deleteDialog$69$MessagesController(long did, int onlyHistory, int max_id_delete_final, boolean revoke, TLObject response, TL_error error) {
+    public final /* synthetic */ void lambda$deleteDialog$69$MessagesController(long newTaskId, long did, int onlyHistory, int max_id_delete_final, boolean revoke, InputPeer peerFinal, TLObject response, TL_error error) {
+        if (newTaskId != 0) {
+            MessagesStorage.getInstance(this.currentAccount).removePendingTask(newTaskId);
+        }
         if (error == null) {
             TL_messages_affectedHistory res = (TL_messages_affectedHistory) response;
             if (res.offset > 0) {
-                deleteDialog(did, false, onlyHistory, max_id_delete_final, revoke);
+                deleteDialog(did, false, onlyHistory, max_id_delete_final, revoke, peerFinal, 0);
             }
             processNewDifferenceParams(-1, res.pts, -1, res.pts_count);
         }

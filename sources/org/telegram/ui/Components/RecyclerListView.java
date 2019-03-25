@@ -1264,6 +1264,15 @@ public class RecyclerListView extends RecyclerView {
         }
     }
 
+    public void hideSelector() {
+        if (this.currentChildView != null) {
+            View child = this.currentChildView;
+            onChildPressed(this.currentChildView, false);
+            this.currentChildView = null;
+            removeSelection(child, null);
+        }
+    }
+
     private void updateSelectorState() {
         if (this.selectorDrawable != null && this.selectorDrawable.isStateful()) {
             if (this.currentChildView != null) {

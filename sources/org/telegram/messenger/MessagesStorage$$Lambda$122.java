@@ -8,6 +8,6 @@ final /* synthetic */ class MessagesStorage$$Lambda$122 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$null$38$MessagesStorage();
+        this.arg$1.lambda$null$39$MessagesStorage();
     }
 }

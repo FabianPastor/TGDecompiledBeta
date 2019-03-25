@@ -966,11 +966,7 @@ public class AndroidUtilities {
                 }
             }
             if (TextUtils.isEmpty(locale)) {
-                LocaleInfo localeInfo = LocaleController.getInstance().getCurrentLocaleInfo();
-                locale = localeInfo.getBaseLangCode();
-                if (TextUtils.isEmpty(locale)) {
-                    locale = localeInfo.getLangCode();
-                }
+                locale = LocaleController.getSystemLocaleStringIso639();
             }
             return locale.replace('_', '-');
         } catch (Exception e) {

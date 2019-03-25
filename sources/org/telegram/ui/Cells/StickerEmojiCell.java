@@ -63,76 +63,88 @@ public class StickerEmojiCell extends FrameLayout {
         setSticker(document, parent, null, showEmoji);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:19:0x007e  */
+    /* JADX WARNING: Removed duplicated region for block: B:19:0x0090  */
     public void setSticker(org.telegram.tgnet.TLRPC.Document r12, java.lang.Object r13, java.lang.String r14, boolean r15) {
         /*
         r11 = this;
-        r2 = 0;
-        r10 = NUM; // 0x41800000 float:16.0 double:5.42932517E-315;
-        r9 = 0;
-        if (r12 == 0) goto L_0x003d;
-    L_0x0006:
+        if (r12 == 0) goto L_0x003e;
+    L_0x0002:
         r11.sticker = r12;
         r11.parentObject = r13;
         r0 = r12.thumbs;
-        r3 = 90;
-        r1 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r0, r3);
-        if (r1 == 0) goto L_0x001f;
-    L_0x0014:
+        r2 = 90;
+        r1 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r0, r2);
+        if (r1 == 0) goto L_0x003f;
+    L_0x0010:
         r0 = r11.imageView;
+        r2 = 0;
         r3 = "webp";
+        r4 = 0;
         r5 = r11.parentObject;
-        r4 = r2;
         r0.setImage(r1, r2, r3, r4, r5);
-    L_0x001f:
-        if (r14 == 0) goto L_0x003e;
-    L_0x0021:
+    L_0x001c:
+        if (r14 == 0) goto L_0x004d;
+    L_0x001e:
         r0 = r11.emojiTextView;
         r2 = r11.emojiTextView;
         r2 = r2.getPaint();
         r2 = r2.getFontMetricsInt();
-        r3 = org.telegram.messenger.AndroidUtilities.dp(r10);
-        r2 = org.telegram.messenger.Emoji.replaceEmoji(r14, r2, r3, r9);
+        r3 = NUM; // 0x41800000 float:16.0 double:5.42932517E-315;
+        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
+        r4 = 0;
+        r2 = org.telegram.messenger.Emoji.replaceEmoji(r14, r2, r3, r4);
         r0.setText(r2);
         r0 = r11.emojiTextView;
-        r0.setVisibility(r9);
-    L_0x003d:
-        return;
+        r2 = 0;
+        r0.setVisibility(r2);
     L_0x003e:
-        if (r15 == 0) goto L_0x00ac;
-    L_0x0040:
-        r8 = 0;
+        return;
+    L_0x003f:
+        r2 = r11.imageView;
+        r4 = 0;
+        r5 = "webp";
         r6 = 0;
-    L_0x0042:
+        r7 = r11.parentObject;
+        r3 = r12;
+        r2.setImage(r3, r4, r5, r6, r7);
+        goto L_0x001c;
+    L_0x004d:
+        if (r15 == 0) goto L_0x00c2;
+    L_0x004f:
+        r10 = 0;
+        r8 = 0;
+    L_0x0051:
         r0 = r12.attributes;
         r0 = r0.size();
-        if (r6 >= r0) goto L_0x007c;
-    L_0x004a:
+        if (r8 >= r0) goto L_0x008e;
+    L_0x0059:
         r0 = r12.attributes;
-        r7 = r0.get(r6);
-        r7 = (org.telegram.tgnet.TLRPC.DocumentAttribute) r7;
-        r0 = r7 instanceof org.telegram.tgnet.TLRPC.TL_documentAttributeSticker;
-        if (r0 == 0) goto L_0x00a9;
-    L_0x0056:
-        r0 = r7.alt;
-        if (r0 == 0) goto L_0x007c;
-    L_0x005a:
-        r0 = r7.alt;
+        r9 = r0.get(r8);
+        r9 = (org.telegram.tgnet.TLRPC.DocumentAttribute) r9;
+        r0 = r9 instanceof org.telegram.tgnet.TLRPC.TL_documentAttributeSticker;
+        if (r0 == 0) goto L_0x00bf;
+    L_0x0065:
+        r0 = r9.alt;
+        if (r0 == 0) goto L_0x008e;
+    L_0x0069:
+        r0 = r9.alt;
         r0 = r0.length();
-        if (r0 <= 0) goto L_0x007c;
-    L_0x0062:
+        if (r0 <= 0) goto L_0x008e;
+    L_0x0071:
         r0 = r11.emojiTextView;
-        r2 = r7.alt;
+        r2 = r9.alt;
         r3 = r11.emojiTextView;
         r3 = r3.getPaint();
         r3 = r3.getFontMetricsInt();
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r10);
-        r2 = org.telegram.messenger.Emoji.replaceEmoji(r2, r3, r4, r9);
+        r4 = NUM; // 0x41800000 float:16.0 double:5.42932517E-315;
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r5 = 0;
+        r2 = org.telegram.messenger.Emoji.replaceEmoji(r2, r3, r4, r5);
         r0.setText(r2);
-        r8 = 1;
-    L_0x007c:
-        if (r8 != 0) goto L_0x00a3;
-    L_0x007e:
+        r10 = 1;
+    L_0x008e:
+        if (r10 != 0) goto L_0x00b8;
+    L_0x0090:
         r0 = r11.emojiTextView;
         r2 = r11.currentAccount;
         r2 = org.telegram.messenger.DataQuery.getInstance(r2);
@@ -142,21 +154,24 @@ public class StickerEmojiCell extends FrameLayout {
         r3 = r11.emojiTextView;
         r3 = r3.getPaint();
         r3 = r3.getFontMetricsInt();
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r10);
-        r2 = org.telegram.messenger.Emoji.replaceEmoji(r2, r3, r4, r9);
+        r4 = NUM; // 0x41800000 float:16.0 double:5.42932517E-315;
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r5 = 0;
+        r2 = org.telegram.messenger.Emoji.replaceEmoji(r2, r3, r4, r5);
         r0.setText(r2);
-    L_0x00a3:
+    L_0x00b8:
         r0 = r11.emojiTextView;
-        r0.setVisibility(r9);
-        goto L_0x003d;
-    L_0x00a9:
-        r6 = r6 + 1;
-        goto L_0x0042;
-    L_0x00ac:
+        r2 = 0;
+        r0.setVisibility(r2);
+        goto L_0x003e;
+    L_0x00bf:
+        r8 = r8 + 1;
+        goto L_0x0051;
+    L_0x00c2:
         r0 = r11.emojiTextView;
         r2 = 4;
         r0.setVisibility(r2);
-        goto L_0x003d;
+        goto L_0x003e;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.StickerEmojiCell.setSticker(org.telegram.tgnet.TLRPC$Document, java.lang.Object, java.lang.String, boolean):void");
     }

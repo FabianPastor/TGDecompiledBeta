@@ -10,6 +10,6 @@ final /* synthetic */ class MessagesStorage$$Lambda$111 implements Comparator {
     }
 
     public int compare(Object obj, Object obj2) {
-        return MessagesStorage.lambda$null$90$MessagesStorage((Message) obj, (Message) obj2);
+        return MessagesStorage.lambda$null$91$MessagesStorage((Message) obj, (Message) obj2);
     }
 }

@@ -10,6 +10,6 @@ final /* synthetic */ class MessagesStorage$$Lambda$33 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$markMessageAsMention$52$MessagesStorage(this.arg$2);
+        this.arg$1.lambda$markMessageAsMention$53$MessagesStorage(this.arg$2);
     }
 }

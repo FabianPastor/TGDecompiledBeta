@@ -39,8 +39,11 @@ import android.util.Property;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.AccessibilityDelegate;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
+import android.view.accessibility.AccessibilityManager;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.EditorInfo;
@@ -195,6 +198,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     private Drawable lockDrawable;
     private Drawable lockShadowDrawable;
     private Drawable lockTopDrawable;
+    private AccessibilityDelegate mediaMessageButtonsDelegate = new AccessibilityDelegate() {
+        public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfo info) {
+            super.onInitializeAccessibilityNodeInfo(host, info);
+            info.setClassName("android.widget.ImageButton");
+            info.setClickable(true);
+            info.setLongClickable(true);
+        }
+    };
     private EditTextCaption messageEditText;
     private WebPage messageWebPage;
     private boolean messageWebPageSearch = true;
@@ -880,11 +891,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             public InputConnection onCreateInputConnection(EditorInfo editorInfo) {
                 InputConnection ic = super.onCreateInputConnection(editorInfo);
                 EditorInfoCompat.setContentMimeTypes(editorInfo, new String[]{"image/gif", "image/*", "image/jpg", "image/png"});
-                return InputConnectionCompat.createWrapper(ic, editorInfo, new ChatActivityEnterView$7$$Lambda$0(this));
+                return InputConnectionCompat.createWrapper(ic, editorInfo, new ChatActivityEnterView$8$$Lambda$0(this));
             }
 
             /* Access modifiers changed, original: final|synthetic */
-            public final /* synthetic */ boolean lambda$onCreateInputConnection$0$ChatActivityEnterView$7(InputContentInfoCompat inputContentInfo, int flags, Bundle opts) {
+            public final /* synthetic */ boolean lambda$onCreateInputConnection$0$ChatActivityEnterView$8(InputContentInfoCompat inputContentInfo, int flags, Bundle opts) {
                 if (BuildCompat.isAtLeastNMR1() && (flags & 1) != 0) {
                     try {
                         inputContentInfo.requestPermission();
@@ -1228,6 +1239,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.audioSendButton.setPadding(0, 0, AndroidUtilities.dp(4.0f), 0);
         this.audioSendButton.setContentDescription(LocaleController.getString("AccDescrVoiceMessage", NUM));
         this.audioSendButton.setFocusable(true);
+        this.audioSendButton.setAccessibilityDelegate(this.mediaMessageButtonsDelegate);
         this.audioVideoButtonContainer.addView(this.audioSendButton, LayoutHelper.createFrame(48, 48.0f));
         if (isChat) {
             this.videoSendButton = new ImageView(context);
@@ -1237,6 +1249,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.videoSendButton.setPadding(0, 0, AndroidUtilities.dp(4.0f), 0);
             this.videoSendButton.setContentDescription(LocaleController.getString("AccDescrVideoMessage", NUM));
             this.videoSendButton.setFocusable(true);
+            this.videoSendButton.setAccessibilityDelegate(this.mediaMessageButtonsDelegate);
             this.audioVideoButtonContainer.addView(this.videoSendButton, LayoutHelper.createFrame(48, 48.0f));
         }
         this.recordCircle = new RecordCircle(context);
@@ -2991,7 +3004,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     public void setFieldFocused() {
-        if (this.messageEditText != null) {
+        AccessibilityManager am = (AccessibilityManager) this.parentActivity.getSystemService("accessibility");
+        if (this.messageEditText != null && !am.isTouchExplorationEnabled()) {
             try {
                 this.messageEditText.requestFocus();
             } catch (Exception e) {
@@ -3001,7 +3015,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     public void setFieldFocused(boolean focus) {
-        if (this.messageEditText != null) {
+        AccessibilityManager am = (AccessibilityManager) this.parentActivity.getSystemService("accessibility");
+        if (this.messageEditText != null && !am.isTouchExplorationEnabled()) {
             if (focus) {
                 if (this.searchingType == 0 && !this.messageEditText.isFocused()) {
                     this.messageEditText.postDelayed(new ChatActivityEnterView$$Lambda$14(this), 600);
@@ -3358,14 +3373,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         Builder builder = new Builder(ChatActivityEnterView.this.parentActivity);
                         builder.setTitle(LocaleController.getString("AppName", NUM));
                         builder.setMessage(LocaleController.getString("ClearRecentEmoji", NUM));
-                        builder.setPositiveButton(LocaleController.getString("ClearButton", NUM).toUpperCase(), new ChatActivityEnterView$24$$Lambda$0(this));
+                        builder.setPositiveButton(LocaleController.getString("ClearButton", NUM).toUpperCase(), new ChatActivityEnterView$25$$Lambda$0(this));
                         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
                         ChatActivityEnterView.this.parentFragment.showDialog(builder.create());
                     }
                 }
 
                 /* Access modifiers changed, original: final|synthetic */
-                public final /* synthetic */ void lambda$onClearEmojiRecent$0$ChatActivityEnterView$24(DialogInterface dialogInterface, int i) {
+                public final /* synthetic */ void lambda$onClearEmojiRecent$0$ChatActivityEnterView$25(DialogInterface dialogInterface, int i) {
                     ChatActivityEnterView.this.emojiView.clearRecentEmoji();
                 }
 

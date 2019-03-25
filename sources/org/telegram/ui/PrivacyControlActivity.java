@@ -353,6 +353,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
         public MessageCell(Context context) {
             super(context);
             setWillNotDraw(false);
+            setClipToPadding(false);
             this.shadowDrawable = Theme.getThemedDrawable(context, NUM, "windowBackgroundGrayShadow");
             setPadding(0, AndroidUtilities.dp(11.0f), 0, AndroidUtilities.dp(11.0f));
             int date = ((int) (System.currentTimeMillis() / 1000)) - 3600;

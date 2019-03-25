@@ -960,7 +960,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
             super.onInitializeAccessibilityNodeInfo(info);
             info.setEnabled(true);
-            info.setText(this.textLayout.getText());
+            if (this.textLayout != null) {
+                info.setText(this.textLayout.getText());
+            }
         }
     }
 
@@ -3672,7 +3674,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
             super.onInitializeAccessibilityNodeInfo(info);
             info.setEnabled(true);
-            info.setText(this.textLayout.getText() + ", " + LocaleController.getString("AccDescrIVHeading", NUM));
+            if (this.textLayout != null) {
+                info.setText(this.textLayout.getText() + ", " + LocaleController.getString("AccDescrIVHeading", NUM));
+            }
         }
     }
 
@@ -3935,7 +3939,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
             super.onInitializeAccessibilityNodeInfo(info);
             info.setEnabled(true);
-            info.setText(this.textLayout.getText());
+            if (this.textLayout != null) {
+                info.setText(this.textLayout.getText());
+            }
         }
     }
 
@@ -4293,7 +4299,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
             super.onInitializeAccessibilityNodeInfo(info);
             info.setEnabled(true);
-            info.setText(this.textLayout.getText());
+            if (this.textLayout != null) {
+                info.setText(this.textLayout.getText());
+            }
         }
     }
 
@@ -4364,7 +4372,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
             super.onInitializeAccessibilityNodeInfo(info);
             info.setEnabled(true);
-            info.setText(this.textLayout.getText());
+            if (this.textLayout != null) {
+                info.setText(this.textLayout.getText());
+            }
         }
     }
 
@@ -5329,7 +5339,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
             super.onInitializeAccessibilityNodeInfo(info);
             info.setEnabled(true);
-            info.setText(this.textLayout.getText() + ", " + LocaleController.getString("AccDescrIVHeading", NUM));
+            if (this.textLayout != null) {
+                info.setText(this.textLayout.getText() + ", " + LocaleController.getString("AccDescrIVHeading", NUM));
+            }
         }
     }
 
@@ -5383,7 +5395,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
             super.onInitializeAccessibilityNodeInfo(info);
             info.setEnabled(true);
-            info.setText(this.textLayout.getText() + ", " + LocaleController.getString("AccDescrIVHeading", NUM));
+            if (this.textLayout != null) {
+                info.setText(this.textLayout.getText() + ", " + LocaleController.getString("AccDescrIVHeading", NUM));
+            }
         }
     }
 
@@ -5676,7 +5690,9 @@ public class ArticleViewer implements OnDoubleTapListener, OnGestureListener, No
         public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
             super.onInitializeAccessibilityNodeInfo(info);
             info.setEnabled(true);
-            info.setText(this.textLayout.getText() + ", " + LocaleController.getString("AccDescrIVTitle", NUM));
+            if (this.textLayout != null) {
+                info.setText(this.textLayout.getText() + ", " + LocaleController.getString("AccDescrIVTitle", NUM));
+            }
         }
     }
 

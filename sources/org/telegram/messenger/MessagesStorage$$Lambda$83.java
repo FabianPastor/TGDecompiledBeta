@@ -14,6 +14,6 @@ final /* synthetic */ class MessagesStorage$$Lambda$83 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$putChannelViews$113$MessagesStorage(this.arg$2, this.arg$3);
+        this.arg$1.lambda$putChannelViews$114$MessagesStorage(this.arg$2, this.arg$3);
     }
 }

@@ -2839,7 +2839,7 @@ public class NotificationsController {
                 } else {
                     replyToString = LocaleController.formatString("ReplyToUser", NUM, name);
                 }
-                wearReplyAction = new Action.Builder(NUM, replyToString, replyPendingIntent).setAllowGeneratedReplies(true).setSemanticAction(1).addRemoteInput(remoteInputWear).build();
+                wearReplyAction = new Action.Builder(NUM, replyToString, replyPendingIntent).setAllowGeneratedReplies(true).setSemanticAction(1).addRemoteInput(remoteInputWear).setShowsUserInterface(false).build();
             }
             Integer count = (Integer) this.pushDialogs.get(dialog_id);
             if (count == null) {
@@ -3013,7 +3013,7 @@ public class NotificationsController {
             intent.putExtra("dialog_id", dialog_id);
             intent.putExtra("max_id", max_id);
             intent.putExtra("currentAccount", this.currentAccount);
-            Action readAction = new Action.Builder(NUM, LocaleController.getString("MarkAsRead", NUM), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, internalId.intValue(), intent, NUM)).setSemanticAction(2).build();
+            Action readAction = new Action.Builder(NUM, LocaleController.getString("MarkAsRead", NUM), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, internalId.intValue(), intent, NUM)).setSemanticAction(2).setShowsUserInterface(false).build();
             if (lowerId != 0) {
                 if (lowerId > 0) {
                     dismissalID = "tguser" + lowerId + "_" + max_id;

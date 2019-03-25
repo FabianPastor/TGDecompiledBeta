@@ -2109,16 +2109,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             }
         } else if (this.currentMessageObject.type == 8) {
             if (this.buttonState == -1 || (this.buttonState == 1 && this.canStreamVideo && this.autoPlayingMedia)) {
-                if (SharedConfig.autoplayGifs) {
-                    this.delegate.didPressImage(this);
-                    return;
-                }
-                this.buttonState = 2;
-                this.currentMessageObject.gifState = 1.0f;
-                this.photoImage.setAllowStartAnimation(false);
-                this.photoImage.stopAnimation();
-                this.radialProgress.setIcon(getIconForCurrentState(), false, true);
-                invalidate();
+                this.delegate.didPressImage(this);
             } else if (this.buttonState == 2 || this.buttonState == 0) {
                 didPressButton(true, false);
             }
@@ -14977,7 +14968,8 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             fileName = FileLoader.getAttachFileName(this.currentPhotoObject);
             fileExists = this.currentMessageObject.mediaExists;
         }
-        boolean z = this.currentMessageObject.isSent() && ((this.documentAttachType == 4 || this.documentAttachType == 7 || this.documentAttachType == 2) && this.currentMessageObject.canStreamVideo() && !this.currentMessageObject.needDrawBluredPreview());
+        boolean autoDownload = DownloadController.getInstance(this.currentAccount).canDownloadMedia(this.currentMessageObject);
+        boolean z = this.currentMessageObject.isSent() && ((this.documentAttachType == 4 || this.documentAttachType == 7 || (this.documentAttachType == 2 && autoDownload)) && this.currentMessageObject.canStreamVideo() && !this.currentMessageObject.needDrawBluredPreview());
         this.canStreamVideo = z;
         if (SharedConfig.streamMedia && ((int) this.currentMessageObject.getDialogId()) != 0 && !this.currentMessageObject.isSecretMedia() && (this.documentAttachType == 5 || (this.canStreamVideo && this.currentPosition != null && ((this.currentPosition.flags & 1) == 0 || (this.currentPosition.flags & 2) == 0)))) {
             this.hasMiniProgress = fileExists ? 1 : 2;
@@ -15205,7 +15197,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     if (FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
                         this.buttonState = 1;
                         progress = ImageLoader.getInstance().getFileProgress(fileName);
-                        if ((this.documentAttachType == 4 || this.documentAttachType == 2) && this.canStreamVideo) {
+                        if ((this.documentAttachType == 4 || (this.documentAttachType == 2 && autoDownload)) && this.canStreamVideo) {
                             this.drawVideoImageButton = true;
                             getIconForCurrentState();
                             radialProgress2 = this.radialProgress;
@@ -15223,20 +15215,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                             }
                         }
                     } else {
-                        boolean autoDownload = false;
-                        if (this.currentMessageObject.type == 1) {
-                            autoDownload = DownloadController.getInstance(this.currentAccount).canDownloadMedia(this.currentMessageObject);
-                        } else if (this.currentMessageObject.type == 8 && MessageObject.isNewGifDocument(this.currentMessageObject.messageOwner.media.document)) {
-                            autoDownload = DownloadController.getInstance(this.currentAccount).canDownloadMedia(this.currentMessageObject);
-                        } else if (this.currentMessageObject.type == 5) {
-                            autoDownload = DownloadController.getInstance(this.currentAccount).canDownloadMedia(this.currentMessageObject);
-                        }
                         if (this.cancelLoading || !autoDownload) {
                             this.buttonState = 0;
                         } else {
                             this.buttonState = 1;
                         }
-                        if ((this.documentAttachType == 4 || this.documentAttachType == 2) && this.canStreamVideo) {
+                        if ((this.documentAttachType == 4 || (this.documentAttachType == 2 && autoDownload)) && this.canStreamVideo) {
                             this.drawVideoImageButton = true;
                             getIconForCurrentState();
                             this.radialProgress.setIcon(this.autoPlayingMedia ? 4 : 0, ifSame, animated);
@@ -15270,7 +15254,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     this.buttonState = 1;
                     progress = ImageLoader.getInstance().getFileProgress(fileName);
                     setProgress = progress != null ? progress.floatValue() : 0.0f;
-                } else if (this.cancelLoading || !((this.documentAttachType == 0 && DownloadController.getInstance(this.currentAccount).canDownloadMedia(this.currentMessageObject)) || (this.documentAttachType == 2 && MessageObject.isNewGifDocument(this.documentAttach) && DownloadController.getInstance(this.currentAccount).canDownloadMedia(this.currentMessageObject)))) {
+                } else if (this.cancelLoading || !((this.documentAttachType == 0 && autoDownload) || (this.documentAttachType == 2 && MessageObject.isNewGifDocument(this.documentAttach) && autoDownload))) {
                     this.buttonState = 0;
                 } else {
                     this.buttonState = 1;

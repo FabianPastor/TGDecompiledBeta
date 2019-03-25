@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 public class Emoji {
+    private static final int MAX_RECENT_EMOJI_COUNT = 48;
     private static int bigImgSize = AndroidUtilities.dp(AndroidUtilities.isTablet() ? 40.0f : 34.0f);
     private static final int[][] cols = new int[][]{new int[]{16, 16, 16, 16}, new int[]{6, 6, 6, 6}, new int[]{5, 5, 5, 5}, new int[]{7, 7, 7, 7}, new int[]{5, 5, 5, 5}, new int[]{7, 7, 7, 7}, new int[]{8, 8, 8, 8}, new int[]{8, 8, 8, 8}};
     private static int drawImgSize = AndroidUtilities.dp(20.0f);
@@ -566,14 +567,9 @@ public class Emoji {
         if (count == null) {
             count = Integer.valueOf(0);
         }
-        if (count.intValue() == 0 && emojiUseHistory.size() > 50) {
-            for (int a = recentEmoji.size() - 1; a >= 0; a--) {
-                emojiUseHistory.remove((String) recentEmoji.get(a));
-                recentEmoji.remove(a);
-                if (emojiUseHistory.size() <= 50) {
-                    break;
-                }
-            }
+        if (count.intValue() == 0 && emojiUseHistory.size() >= 48) {
+            emojiUseHistory.remove((String) recentEmoji.get(recentEmoji.size() - 1));
+            recentEmoji.set(recentEmoji.size() - 1, code);
         }
         emojiUseHistory.put(code, Integer.valueOf(count.intValue() + 1));
     }
@@ -584,7 +580,7 @@ public class Emoji {
             recentEmoji.add(entry.getKey());
         }
         Collections.sort(recentEmoji, Emoji$$Lambda$1.$instance);
-        while (recentEmoji.size() > 50) {
+        while (recentEmoji.size() > 48) {
             recentEmoji.remove(recentEmoji.size() - 1);
         }
     }
