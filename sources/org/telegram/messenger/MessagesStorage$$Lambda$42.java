@@ -1,19 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLObject;
+import java.util.ArrayList;
 
 final /* synthetic */ class MessagesStorage$$Lambda$42 implements Runnable {
     private final MessagesStorage arg$1;
-    private final TLObject arg$2;
-    private final String arg$3;
+    private final int arg$2;
+    private final ArrayList arg$3;
 
-    MessagesStorage$$Lambda$42(MessagesStorage messagesStorage, TLObject tLObject, String str) {
+    MessagesStorage$$Lambda$42(MessagesStorage messagesStorage, int i, ArrayList arrayList) {
         this.arg$1 = messagesStorage;
-        this.arg$2 = tLObject;
-        this.arg$3 = str;
+        this.arg$2 = i;
+        this.arg$3 = arrayList;
     }
 
     public void run() {
-        this.arg$1.lambda$saveBotCache$65$MessagesStorage(this.arg$2, this.arg$3);
+        this.arg$1.lambda$updateChannelUsers$65$MessagesStorage(this.arg$2, this.arg$3);
     }
 }

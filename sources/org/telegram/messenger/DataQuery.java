@@ -152,7 +152,7 @@ public class DataQuery {
     public static final int TYPE_IMAGE = 0;
     public static final int TYPE_MASK = 1;
     private static RectF bitmapRect;
-    private static Comparator<MessageEntity> entityComparator = DataQuery$$Lambda$121.$instance;
+    private static Comparator<MessageEntity> entityComparator = DataQuery$$Lambda$122.$instance;
     private static Paint erasePaint;
     private static Paint roundPaint;
     private static Path roundPath;
@@ -413,7 +413,7 @@ public class DataQuery {
     L_0x0045:
         r2 = org.telegram.messenger.ApplicationLoader.applicationContext;
         r3 = "RemovedFromFavorites";
-        r5 = NUM; // 0x7f0CLASSNAMEe4 float:1.861329E38 double:1.0530983965E-314;
+        r5 = NUM; // 0x7f0CLASSNAMEe3 float:1.8613287E38 double:1.053098396E-314;
         r3 = org.telegram.messenger.LocaleController.getString(r3, r5);
         r5 = 0;
         r2 = android.widget.Toast.makeText(r2, r3, r5);
@@ -743,7 +743,7 @@ public class DataQuery {
                 loadGroupStickerSet(stickerSet, false);
             }
             if (set != null && set.set != null) {
-                AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$120(this, set));
+                AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$121(this, set));
             }
         } catch (Throwable e) {
             FileLog.e(e);
@@ -759,7 +759,7 @@ public class DataQuery {
     /* Access modifiers changed, original: final|synthetic */
     public final /* synthetic */ void lambda$loadGroupStickerSet$8$DataQuery(TLObject response, TL_error error) {
         if (response != null) {
-            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$119(this, (TL_messages_stickerSet) response));
+            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$120(this, (TL_messages_stickerSet) response));
         }
     }
 
@@ -949,7 +949,7 @@ public class DataQuery {
                 }
             }
             cursor.dispose();
-            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$118(this, gif, arrayList, type));
+            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$119(this, gif, arrayList, type));
         } catch (Throwable e) {
             FileLog.e(e);
         }
@@ -1276,7 +1276,7 @@ public class DataQuery {
 
     /* Access modifiers changed, original: final|synthetic */
     public final /* synthetic */ void lambda$loadFeaturedStickers$19$DataQuery(TL_messages_getFeaturedStickers req, TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$117(this, response, req));
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$118(this, response, req));
     }
 
     /* Access modifiers changed, original: final|synthetic */
@@ -1303,9 +1303,9 @@ public class DataQuery {
     /* Access modifiers changed, original: final|synthetic */
     public final /* synthetic */ void lambda$processLoadedFeaturedStickers$24$DataQuery(boolean cache, ArrayList res, int date, int hash, ArrayList unreadStickers) {
         if ((cache && (res == null || Math.abs((System.currentTimeMillis() / 1000) - ((long) date)) >= 3600)) || (!cache && res == null && hash == 0)) {
-            DataQuery$$Lambda$114 dataQuery$$Lambda$114 = new DataQuery$$Lambda$114(this, res, hash);
+            DataQuery$$Lambda$115 dataQuery$$Lambda$115 = new DataQuery$$Lambda$115(this, res, hash);
             long j = (res != null || cache) ? 0 : 1000;
-            AndroidUtilities.runOnUIThread(dataQuery$$Lambda$114, j);
+            AndroidUtilities.runOnUIThread(dataQuery$$Lambda$115, j);
             if (res == null) {
                 return;
             }
@@ -1322,12 +1322,12 @@ public class DataQuery {
                 if (!cache) {
                     putFeaturedStickersToCache(stickerSetsNew, unreadStickers, date, hash);
                 }
-                AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$115(this, unreadStickers, stickerSetsByIdNew, stickerSetsNew, hash, date));
+                AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$116(this, unreadStickers, stickerSetsByIdNew, stickerSetsNew, hash, date));
             } catch (Throwable e) {
                 FileLog.e(e);
             }
         } else if (!cache) {
-            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$116(this, date));
+            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$117(this, date));
             putFeaturedStickersToCache(null, null, date, 0);
         }
     }
@@ -1493,7 +1493,7 @@ public class DataQuery {
 
     /* Access modifiers changed, original: final|synthetic */
     public final /* synthetic */ void lambda$loadArchivedStickersCount$30$DataQuery(int type, TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$113(this, error, response, type));
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$114(this, error, response, type));
     }
 
     /* Access modifiers changed, original: final|synthetic */
@@ -1539,7 +1539,7 @@ public class DataQuery {
 
     /* Access modifiers changed, original: final|synthetic */
     public final /* synthetic */ void lambda$processLoadStickersResponse$32$DataQuery(ArrayList newStickerArray, int index, LongSparseArray newStickerSets, StickerSet stickerSet, TL_messages_allStickers res, int type, TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$112(this, response, newStickerArray, index, newStickerSets, stickerSet, res, type));
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$113(this, response, newStickerArray, index, newStickerSets, stickerSet, res, type));
     }
 
     /* Access modifiers changed, original: final|synthetic */
@@ -1692,7 +1692,7 @@ public class DataQuery {
 
     /* Access modifiers changed, original: final|synthetic */
     public final /* synthetic */ void lambda$loadStickers$35$DataQuery(int type, int hash, TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$111(this, response, type, hash));
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$112(this, response, type, hash));
     }
 
     /* Access modifiers changed, original: final|synthetic */
@@ -1795,9 +1795,9 @@ public class DataQuery {
     /* Access modifiers changed, original: final|synthetic */
     public final /* synthetic */ void lambda$processLoadedStickers$41$DataQuery(boolean cache, ArrayList res, int date, int hash, int type) {
         if ((cache && (res == null || Math.abs((System.currentTimeMillis() / 1000) - ((long) date)) >= 3600)) || (!cache && res == null && hash == 0)) {
-            DataQuery$$Lambda$108 dataQuery$$Lambda$108 = new DataQuery$$Lambda$108(this, res, hash, type);
+            DataQuery$$Lambda$109 dataQuery$$Lambda$109 = new DataQuery$$Lambda$109(this, res, hash, type);
             long j = (res != null || cache) ? 0 : 1000;
-            AndroidUtilities.runOnUIThread(dataQuery$$Lambda$108, j);
+            AndroidUtilities.runOnUIThread(dataQuery$$Lambda$109, j);
             if (res == null) {
                 return;
             }
@@ -1851,12 +1851,12 @@ public class DataQuery {
                 if (!cache) {
                     putStickersToCache(type, stickerSetsNew, date, hash);
                 }
-                AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$109(this, type, stickerSetsByIdNew, stickerSetsByNameNew, stickerSetsNew, hash, date, allStickersNew, stickersByEmojiNew));
+                AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$110(this, type, stickerSetsByIdNew, stickerSetsByNameNew, stickerSetsNew, hash, date, allStickersNew, stickersByEmojiNew));
             } catch (Throwable e) {
                 FileLog.e(e);
             }
         } else if (!cache) {
-            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$110(this, type, date));
+            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$111(this, type, date));
             putStickersToCache(type, null, date, 0);
         }
     }
@@ -2037,8 +2037,8 @@ public class DataQuery {
 
     /* Access modifiers changed, original: final|synthetic */
     public final /* synthetic */ void lambda$removeStickersSet$44$DataQuery(int type, int hide, BaseFragment baseFragment, boolean showSettings, TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$106(this, response, type, hide, baseFragment, showSettings));
-        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$107(this, type), 1000);
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$107(this, response, type, hide, baseFragment, showSettings));
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$108(this, type), 1000);
     }
 
     /* Access modifiers changed, original: final|synthetic */
@@ -2058,7 +2058,7 @@ public class DataQuery {
 
     /* Access modifiers changed, original: final|synthetic */
     public final /* synthetic */ void lambda$removeStickersSet$46$DataQuery(StickerSet stickerSet, Context context, int type, TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$105(this, error, stickerSet, context, type));
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$106(this, error, stickerSet, context, type));
     }
 
     /* Access modifiers changed, original: final|synthetic */
@@ -2213,7 +2213,7 @@ public class DataQuery {
 
     /* Access modifiers changed, original: final|synthetic */
     public final /* synthetic */ void lambda$searchMessagesInChat$48$DataQuery(long mergeDialogId, TL_messages_search req, long dialog_id, int guid, int direction, User user, TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$104(this, mergeDialogId, response, req, dialog_id, guid, direction, user));
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$105(this, mergeDialogId, response, req, dialog_id, guid, direction, user));
     }
 
     /* Access modifiers changed, original: final|synthetic */
@@ -2231,7 +2231,7 @@ public class DataQuery {
 
     /* Access modifiers changed, original: final|synthetic */
     public final /* synthetic */ void lambda$searchMessagesInChat$50$DataQuery(int currentReqId, TL_messages_search req, long queryWithDialogFinal, long dialog_id, int guid, long mergeDialogId, User user, TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$103(this, currentReqId, response, req, queryWithDialogFinal, dialog_id, guid, mergeDialogId, user));
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$104(this, currentReqId, response, req, queryWithDialogFinal, dialog_id, guid, mergeDialogId, user));
     }
 
     /* Access modifiers changed, original: final|synthetic */
@@ -2331,6 +2331,7 @@ public class DataQuery {
     public final /* synthetic */ void lambda$loadMedia$51$DataQuery(long uid, int count, int max_id, int type, int classGuid, boolean isChannel, TLObject response, TL_error error) {
         if (error == null) {
             messages_Messages res = (messages_Messages) response;
+            MessagesController.getInstance(this.currentAccount).removeDeletedMessagesFromArray(uid, res.messages);
             processLoadedMedia(res, uid, count, max_id, type, 0, classGuid, isChannel, res.messages.size() == 0);
         }
     }
@@ -2373,7 +2374,7 @@ public class DataQuery {
                         putMediaCountDatabase(uid, a, counts[a]);
                     }
                 }
-                AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$99(this, uid, counts));
+                AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$100(this, uid, counts));
                 return;
             }
             boolean missing = false;
@@ -2400,7 +2401,7 @@ public class DataQuery {
                     if (req.peer == null) {
                         counts[a] = 0;
                     } else {
-                        ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$100(this, counts, type, uid)), classGuid);
+                        ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$101(this, counts, type, uid)), classGuid);
                         if (counts[a] == -1) {
                             missing = true;
                         } else if (iArr[a] == 1) {
@@ -2411,7 +2412,7 @@ public class DataQuery {
                 a++;
             }
             if (!missing) {
-                AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$101(this, uid, countsFinal));
+                AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$102(this, uid, countsFinal));
             }
         } catch (Exception e) {
             FileLog.e(e);
@@ -2444,7 +2445,7 @@ public class DataQuery {
             }
         }
         if (finished) {
-            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$102(this, uid, counts));
+            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$103(this, uid, counts));
         }
     }
 
@@ -2496,7 +2497,7 @@ public class DataQuery {
             } else {
                 count = res.count;
             }
-            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$98(this, res));
+            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$99(this, res));
             processLoadedMediaCount(count, uid, type, classGuid, false, 0);
         }
     }
@@ -2904,7 +2905,7 @@ public class DataQuery {
             }
         }
         cursor.dispose();
-        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$97(this, uid, arrayList));
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$98(this, uid, arrayList));
     }
 
     /* Access modifiers changed, original: final|synthetic */
@@ -3063,11 +3064,11 @@ public class DataQuery {
         r31 = "compose";
         r29.<init>(r30, r31);	 Catch:{ Throwable -> 0x01db }
         r30 = "NewConversationShortcut";
-        r31 = NUM; // 0x7f0CLASSNAME float:1.8611997E38 double:1.0530980818E-314;
+        r31 = NUM; // 0x7f0CLASSNAME float:1.8611995E38 double:1.0530980813E-314;
         r30 = org.telegram.messenger.LocaleController.getString(r30, r31);	 Catch:{ Throwable -> 0x01db }
         r29 = r29.setShortLabel(r30);	 Catch:{ Throwable -> 0x01db }
         r30 = "NewConversationShortcut";
-        r31 = NUM; // 0x7f0CLASSNAME float:1.8611997E38 double:1.0530980818E-314;
+        r31 = NUM; // 0x7f0CLASSNAME float:1.8611995E38 double:1.0530980813E-314;
         r30 = org.telegram.messenger.LocaleController.getString(r30, r31);	 Catch:{ Throwable -> 0x01db }
         r29 = r29.setLongLabel(r30);	 Catch:{ Throwable -> 0x01db }
         r30 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x01db }
@@ -3481,7 +3482,7 @@ public class DataQuery {
             if (!chatsToLoad.isEmpty()) {
                 MessagesStorage.getInstance(this.currentAccount).getChatsInternal(TextUtils.join(",", chatsToLoad), chats);
             }
-            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$96(this, users, chats, hintsNew, inlineBotsNew));
+            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$97(this, users, chats, hintsNew, inlineBotsNew));
         } catch (Exception e) {
             FileLog.e(e);
         }
@@ -3506,9 +3507,9 @@ public class DataQuery {
     /* Access modifiers changed, original: final|synthetic */
     public final /* synthetic */ void lambda$loadHints$74$DataQuery(TLObject response, TL_error error) {
         if (response instanceof TL_contacts_topPeers) {
-            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$92(this, response));
+            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$93(this, response));
         } else if (response instanceof TL_contacts_topPeersDisabled) {
-            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$93(this));
+            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$94(this));
         }
     }
 
@@ -3538,7 +3539,7 @@ public class DataQuery {
         buildShortcuts();
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.reloadHints, new Object[0]);
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.reloadInlineHints, new Object[0]);
-        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$94(this, topPeers));
+        MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$95(this, topPeers));
     }
 
     /* Access modifiers changed, original: final|synthetic */
@@ -3576,7 +3577,7 @@ public class DataQuery {
             }
             state.dispose();
             MessagesStorage.getInstance(this.currentAccount).getDatabase().commitTransaction();
-            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$95(this));
+            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$96(this));
         } catch (Exception e) {
             FileLog.e(e);
         }
@@ -3722,7 +3723,7 @@ public class DataQuery {
         } catch (Exception e) {
             FileLog.e(e);
         }
-        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$90(this, lower_id, dt, did));
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$91(this, lower_id, dt, did));
     }
 
     /* Access modifiers changed, original: final|synthetic */
@@ -3747,7 +3748,7 @@ public class DataQuery {
             this.hints.add(peer);
         }
         peer.rating += Math.exp(dtFinal / ((double) MessagesController.getInstance(this.currentAccount).ratingDecay));
-        Collections.sort(this.hints, DataQuery$$Lambda$91.$instance);
+        Collections.sort(this.hints, DataQuery$$Lambda$92.$instance);
         savePeer((int) did, 0, peer.rating);
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.reloadHints, new Object[0]);
     }
@@ -4308,7 +4309,7 @@ public class DataQuery {
                     }
                 }
             }
-            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$89(this, dialogId));
+            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$90(this, dialogId));
         } catch (Exception e) {
             FileLog.e(e);
         }
@@ -4356,12 +4357,12 @@ public class DataQuery {
                     req = new TL_channels_getMessages();
                     req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(channelIdFinal);
                     req.id = replyMessages;
-                    ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$87(this, replyMessageOwners, dialogId));
+                    ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$88(this, replyMessageOwners, dialogId));
                     return;
                 }
                 req = new TL_messages_getMessages();
                 req.id = replyMessages;
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$88(this, replyMessageOwners, dialogId));
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$89(this, replyMessageOwners, dialogId));
             }
         } catch (Exception e) {
             FileLog.e(e);
@@ -4746,7 +4747,7 @@ public class DataQuery {
     public final /* synthetic */ void lambda$loadDrafts$98$DataQuery(TLObject response, TL_error error) {
         if (error == null) {
             MessagesController.getInstance(this.currentAccount).processUpdates((Updates) response, false);
-            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$86(this));
+            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$87(this));
         }
     }
 
@@ -4895,11 +4896,11 @@ public class DataQuery {
                 TL_channels_getMessages req = new TL_channels_getMessages();
                 req.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(channelIdFinal);
                 req.id.add(Integer.valueOf((int) messageIdFinal));
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$84(this, did));
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new DataQuery$$Lambda$85(this, did));
             } else {
                 TL_messages_getMessages req2 = new TL_messages_getMessages();
                 req2.id.add(Integer.valueOf((int) messageIdFinal));
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, new DataQuery$$Lambda$85(this, did));
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(req2, new DataQuery$$Lambda$86(this, did));
             }
         } catch (Exception e) {
             FileLog.e(e);
@@ -5021,7 +5022,7 @@ public class DataQuery {
             }
             cursor.dispose();
             if (botKeyboard != null) {
-                AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$83(this, botKeyboard, did));
+                AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$84(this, botKeyboard, did));
             }
         } catch (Exception e) {
             FileLog.e(e);
@@ -5055,7 +5056,7 @@ public class DataQuery {
             }
             cursor.dispose();
             if (botInfo != null) {
-                AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$82(this, botInfo, classGuid));
+                AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$83(this, botInfo, classGuid));
             }
         } catch (Exception e) {
             FileLog.e(e);
@@ -5138,119 +5139,132 @@ public class DataQuery {
     }
 
     /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$fetchNewEmojiKeywords$115$DataQuery(String langCode) {
-        TLObject request;
+    public final /* synthetic */ void lambda$fetchNewEmojiKeywords$116$DataQuery(String langCode) {
         int version = -1;
         String alias = null;
+        long date = 0;
         try {
             SQLiteCursor cursor = MessagesStorage.getInstance(this.currentAccount).getDatabase().queryFinalized("SELECT alias, version, date FROM emoji_keywords_info_v2 WHERE lang = ?", langCode);
             if (cursor.next()) {
                 alias = cursor.stringValue(0);
                 version = cursor.intValue(1);
+                date = cursor.longValue(2);
             }
             cursor.dispose();
         } catch (Exception e) {
             FileLog.e(e);
         }
-        TLObject req;
-        if (version == -1) {
-            req = new TL_messages_getEmojiKeywords();
-            req.lang_code = langCode;
-            request = req;
-        } else {
-            req = new TL_messages_getEmojiKeywordsDifference();
-            req.lang_code = langCode;
-            req.from_version = version;
-            request = req;
+        if (BuildVars.DEBUG_VERSION || Math.abs(System.currentTimeMillis() - date) >= 3600000) {
+            TLObject request;
+            TLObject req;
+            if (version == -1) {
+                req = new TL_messages_getEmojiKeywords();
+                req.lang_code = langCode;
+                request = req;
+            } else {
+                req = new TL_messages_getEmojiKeywordsDifference();
+                req.lang_code = langCode;
+                req.from_version = version;
+                request = req;
+            }
+            int versionFinal = version;
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(request, new DataQuery$$Lambda$79(this, versionFinal, alias, langCode));
+            return;
         }
-        int versionFinal = version;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(request, new DataQuery$$Lambda$78(this, versionFinal, alias, langCode));
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$78(this, langCode));
     }
 
     /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$null$114$DataQuery(int versionFinal, String aliasFinal, String langCode, TLObject response, TL_error error) {
+    public final /* synthetic */ void lambda$null$111$DataQuery(String langCode) {
+        Boolean bool = (Boolean) this.currentFetchingEmoji.remove(langCode);
+    }
+
+    /* Access modifiers changed, original: final|synthetic */
+    public final /* synthetic */ void lambda$null$115$DataQuery(int versionFinal, String aliasFinal, String langCode, TLObject response, TL_error error) {
         if (response != null) {
             TL_emojiKeywordsDifference res = (TL_emojiKeywordsDifference) response;
             if (versionFinal == -1 || res.lang_code.equals(aliasFinal)) {
                 putEmojiKeywords(langCode, res);
                 return;
             } else {
-                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$79(this, langCode));
+                MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$80(this, langCode));
                 return;
             }
         }
-        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$80(this, langCode));
+        AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$81(this, langCode));
     }
 
     /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$null$112$DataQuery(String langCode) {
+    public final /* synthetic */ void lambda$null$113$DataQuery(String langCode) {
         try {
             SQLitePreparedStatement deleteState = MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("DELETE FROM emoji_keywords_info_v2 WHERE lang = ?");
             deleteState.bindString(1, langCode);
             deleteState.step();
             deleteState.dispose();
-            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$81(this, langCode));
+            AndroidUtilities.runOnUIThread(new DataQuery$$Lambda$82(this, langCode));
         } catch (Exception e) {
             FileLog.e(e);
         }
     }
 
     /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$null$111$DataQuery(String langCode) {
+    public final /* synthetic */ void lambda$null$112$DataQuery(String langCode) {
         this.currentFetchingEmoji.remove(langCode);
         fetchNewEmojiKeywords(langCode);
     }
 
     /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$null$113$DataQuery(String langCode) {
+    public final /* synthetic */ void lambda$null$114$DataQuery(String langCode) {
         Boolean bool = (Boolean) this.currentFetchingEmoji.remove(langCode);
     }
 
     private void putEmojiKeywords(String lang, TL_emojiKeywordsDifference res) {
-        if (res != null && !res.keywords.isEmpty()) {
+        if (res != null) {
             MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new DataQuery$$Lambda$72(this, res, lang));
         }
     }
 
     /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$putEmojiKeywords$117$DataQuery(TL_emojiKeywordsDifference res, String lang) {
+    public final /* synthetic */ void lambda$putEmojiKeywords$118$DataQuery(TL_emojiKeywordsDifference res, String lang) {
         try {
-            SQLitePreparedStatement insertState = MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("REPLACE INTO emoji_keywords_v2 VALUES(?, ?, ?)");
-            SQLitePreparedStatement deleteState = MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("DELETE FROM emoji_keywords_v2 WHERE lang = ? AND keyword = ? AND emoji = ?");
-            MessagesStorage.getInstance(this.currentAccount).getDatabase().beginTransaction();
-            int N = res.keywords.size();
-            for (int a = 0; a < N; a++) {
-                EmojiKeyword keyword = (EmojiKeyword) res.keywords.get(a);
-                String key;
-                int N2;
-                int b;
-                if (keyword instanceof TL_emojiKeyword) {
-                    TL_emojiKeyword emojiKeyword = (TL_emojiKeyword) keyword;
-                    key = emojiKeyword.keyword.toLowerCase();
-                    N2 = emojiKeyword.emoticons.size();
-                    for (b = 0; b < N2; b++) {
-                        insertState.requery();
-                        insertState.bindString(1, res.lang_code);
-                        insertState.bindString(2, key);
-                        insertState.bindString(3, (String) emojiKeyword.emoticons.get(b));
-                        insertState.step();
-                    }
-                } else if (keyword instanceof TL_emojiKeywordDeleted) {
-                    TL_emojiKeywordDeleted keywordDeleted = (TL_emojiKeywordDeleted) keyword;
-                    key = keywordDeleted.keyword.toLowerCase();
-                    N2 = keywordDeleted.emoticons.size();
-                    for (b = 0; b < N2; b++) {
-                        deleteState.requery();
-                        deleteState.bindString(1, res.lang_code);
-                        deleteState.bindString(2, key);
-                        deleteState.bindString(3, (String) keywordDeleted.emoticons.get(b));
-                        deleteState.step();
+            if (!res.keywords.isEmpty()) {
+                SQLitePreparedStatement insertState = MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("REPLACE INTO emoji_keywords_v2 VALUES(?, ?, ?)");
+                SQLitePreparedStatement deleteState = MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("DELETE FROM emoji_keywords_v2 WHERE lang = ? AND keyword = ? AND emoji = ?");
+                MessagesStorage.getInstance(this.currentAccount).getDatabase().beginTransaction();
+                int N = res.keywords.size();
+                for (int a = 0; a < N; a++) {
+                    EmojiKeyword keyword = (EmojiKeyword) res.keywords.get(a);
+                    String key;
+                    int N2;
+                    int b;
+                    if (keyword instanceof TL_emojiKeyword) {
+                        TL_emojiKeyword emojiKeyword = (TL_emojiKeyword) keyword;
+                        key = emojiKeyword.keyword.toLowerCase();
+                        N2 = emojiKeyword.emoticons.size();
+                        for (b = 0; b < N2; b++) {
+                            insertState.requery();
+                            insertState.bindString(1, res.lang_code);
+                            insertState.bindString(2, key);
+                            insertState.bindString(3, (String) emojiKeyword.emoticons.get(b));
+                            insertState.step();
+                        }
+                    } else if (keyword instanceof TL_emojiKeywordDeleted) {
+                        TL_emojiKeywordDeleted keywordDeleted = (TL_emojiKeywordDeleted) keyword;
+                        key = keywordDeleted.keyword.toLowerCase();
+                        N2 = keywordDeleted.emoticons.size();
+                        for (b = 0; b < N2; b++) {
+                            deleteState.requery();
+                            deleteState.bindString(1, res.lang_code);
+                            deleteState.bindString(2, key);
+                            deleteState.bindString(3, (String) keywordDeleted.emoticons.get(b));
+                            deleteState.step();
+                        }
                     }
                 }
+                MessagesStorage.getInstance(this.currentAccount).getDatabase().commitTransaction();
+                insertState.dispose();
+                deleteState.dispose();
             }
-            MessagesStorage.getInstance(this.currentAccount).getDatabase().commitTransaction();
-            insertState.dispose();
-            deleteState.dispose();
             SQLitePreparedStatement infoState = MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("REPLACE INTO emoji_keywords_info_v2 VALUES(?, ?, ?, ?)");
             infoState.bindString(1, lang);
             infoState.bindString(2, res.lang_code);
@@ -5265,7 +5279,7 @@ public class DataQuery {
     }
 
     /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$null$116$DataQuery(String lang) {
+    public final /* synthetic */ void lambda$null$117$DataQuery(String lang) {
         this.currentFetchingEmoji.remove(lang);
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.newEmojiSuggestionsAvailable, lang);
     }
@@ -5291,7 +5305,7 @@ public class DataQuery {
     }
 
     /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$getEmojiSuggestions$121$DataQuery(String langCode, KeywordResultCallback callback, String keyword, boolean fullMatch, ArrayList recentEmoji, CountDownLatch sync) {
+    public final /* synthetic */ void lambda$getEmojiSuggestions$122$DataQuery(String langCode, KeywordResultCallback callback, String keyword, boolean fullMatch, ArrayList recentEmoji, CountDownLatch sync) {
         ArrayList<KeywordResult> result = new ArrayList();
         HashMap<String, Boolean> resultMap = new HashMap();
         String alias = null;
@@ -5360,13 +5374,13 @@ public class DataQuery {
     }
 
     /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$null$118$DataQuery(String langCode, KeywordResultCallback callback, ArrayList result) {
+    public final /* synthetic */ void lambda$null$119$DataQuery(String langCode, KeywordResultCallback callback, ArrayList result) {
         if (this.currentFetchingEmoji.get(langCode) == null) {
             callback.run(result, null);
         }
     }
 
-    static final /* synthetic */ int lambda$null$119$DataQuery(ArrayList recentEmoji, KeywordResult o1, KeywordResult o2) {
+    static final /* synthetic */ int lambda$null$120$DataQuery(ArrayList recentEmoji, KeywordResult o1, KeywordResult o2) {
         int idx1 = recentEmoji.indexOf(o1.emoji);
         if (idx1 < 0) {
             idx1 = Integer.MAX_VALUE;

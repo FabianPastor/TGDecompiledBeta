@@ -3098,6 +3098,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
     }
 
+    public boolean isRtlText() {
+        try {
+            return this.messageEditText.getLayout().getParagraphDirection(0) == -1;
+        } catch (Throwable th) {
+            return false;
+        }
+    }
+
     public void setBotsCount(int count, boolean hasCommands) {
         this.botCount = count;
         if (this.hasBotCommands != hasCommands) {

@@ -386,7 +386,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         L_0x00de:
             r11 = org.telegram.ui.ThemeActivity.this;	 Catch:{ Exception -> 0x00f4 }
             r12 = "ShareFile";
-            r13 = NUM; // 0x7f0CLASSNAMEe float:1.8613666E38 double:1.0530984884E-314;
+            r13 = NUM; // 0x7f0CLASSNAMEd float:1.8613664E38 double:1.053098488E-314;
             r12 = org.telegram.messenger.LocaleController.getString(r12, r13);	 Catch:{ Exception -> 0x00f4 }
             r12 = android.content.Intent.createChooser(r7, r12);	 Catch:{ Exception -> 0x00f4 }
             r13 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
@@ -439,7 +439,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             r11 = r11.getParentActivity();
             r1.<init>(r11);
             r11 = "DeleteThemeAlert";
-            r12 = NUM; // 0x7f0CLASSNAME float:1.8610766E38 double:1.053097782E-314;
+            r12 = NUM; // 0x7f0CLASSNAME float:1.8610764E38 double:1.0530977814E-314;
             r11 = org.telegram.messenger.LocaleController.getString(r11, r12);
             r1.setMessage(r11);
             r11 = "AppName";
@@ -447,13 +447,13 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             r11 = org.telegram.messenger.LocaleController.getString(r11, r12);
             r1.setTitle(r11);
             r11 = "Delete";
-            r12 = NUM; // 0x7f0CLASSNAMEea float:1.8610705E38 double:1.053097767E-314;
+            r12 = NUM; // 0x7f0CLASSNAMEe9 float:1.8610703E38 double:1.0530977665E-314;
             r11 = org.telegram.messenger.LocaleController.getString(r11, r12);
             r12 = new org.telegram.ui.ThemeActivity$ListAdapter$$Lambda$2;
             r12.<init>(r14, r15);
             r1.setPositiveButton(r11, r12);
             r11 = "Cancel";
-            r12 = NUM; // 0x7f0CLASSNAMEc3 float:1.8610107E38 double:1.0530976213E-314;
+            r12 = NUM; // 0x7f0CLASSNAMEc2 float:1.8610105E38 double:1.053097621E-314;
             r11 = org.telegram.messenger.LocaleController.getString(r11, r12);
             r12 = 0;
             r1.setNegativeButton(r11, r12);

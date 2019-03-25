@@ -1,22 +1,21 @@
 package org.telegram.messenger;
 
 import java.util.concurrent.CountDownLatch;
-import org.telegram.tgnet.TLRPC.User;
 
 final /* synthetic */ class MessagesStorage$$Lambda$105 implements Runnable {
     private final MessagesStorage arg$1;
-    private final User[] arg$2;
-    private final int arg$3;
+    private final int arg$2;
+    private final Integer[] arg$3;
     private final CountDownLatch arg$4;
 
-    MessagesStorage$$Lambda$105(MessagesStorage messagesStorage, User[] userArr, int i, CountDownLatch countDownLatch) {
+    MessagesStorage$$Lambda$105(MessagesStorage messagesStorage, int i, Integer[] numArr, CountDownLatch countDownLatch) {
         this.arg$1 = messagesStorage;
-        this.arg$2 = userArr;
-        this.arg$3 = i;
+        this.arg$2 = i;
+        this.arg$3 = numArr;
         this.arg$4 = countDownLatch;
     }
 
     public void run() {
-        this.arg$1.lambda$getUserSync$137$MessagesStorage(this.arg$2, this.arg$3, this.arg$4);
+        this.arg$1.lambda$getChannelPtsSync$137$MessagesStorage(this.arg$2, this.arg$3, this.arg$4);
     }
 }

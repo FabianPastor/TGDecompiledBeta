@@ -479,6 +479,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         private final int INSTANT_VIEW;
         private final int LINK_IDS_START;
         private final int POLL_BUTTONS_START;
+        private final int REPLY;
         private final int SHARE;
         private Path linkPath;
         private Rect rect;
@@ -490,6 +491,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             this.POLL_BUTTONS_START = 500;
             this.INSTANT_VIEW = 499;
             this.SHARE = 498;
+            this.REPLY = 497;
             this.linkPath = new Path();
             this.rectF = new RectF();
             this.rect = new Rect();
@@ -504,14 +506,16 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             iArr = new int[]{0, 0};
             ChatMessageCell.this.getLocationOnScreen(iArr);
             AccessibilityNodeInfo info;
+            StringBuilder sb;
             Spannable buffer;
             Iterator it;
             BotButton button;
             PollButton button2;
             if (virtualViewId == -1) {
+                int i;
                 info = AccessibilityNodeInfo.obtain(ChatMessageCell.this);
                 ChatMessageCell.this.onInitializeAccessibilityNodeInfo(info);
-                StringBuilder sb = new StringBuilder();
+                sb = new StringBuilder();
                 if (!TextUtils.isEmpty(ChatMessageCell.this.currentNameString)) {
                     sb.append(ChatMessageCell.this.currentNameString);
                     sb.append(10);
@@ -583,11 +587,13 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     info.addAction(16);
                     info.addAction(32);
                 }
-                buffer = ChatMessageCell.this.currentMessageObject.messageText;
-                int i = 0;
-                for (CharacterStyle link : (CharacterStyle[]) buffer.getSpans(0, buffer.length(), ClickableSpan.class)) {
-                    info.addChild(ChatMessageCell.this, i + 2000);
-                    i++;
+                if (ChatMessageCell.this.currentMessageObject.messageText instanceof Spannable) {
+                    buffer = ChatMessageCell.this.currentMessageObject.messageText;
+                    i = 0;
+                    for (CharacterStyle link : (CharacterStyle[]) buffer.getSpans(0, buffer.length(), ClickableSpan.class)) {
+                        info.addChild(ChatMessageCell.this, i + 2000);
+                        i++;
+                    }
                 }
                 i = 0;
                 it = ChatMessageCell.this.botButtons.iterator();
@@ -608,6 +614,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 }
                 if (ChatMessageCell.this.drawShareButton) {
                     info.addChild(ChatMessageCell.this, 498);
+                }
+                if (ChatMessageCell.this.replyNameLayout != null) {
+                    info.addChild(ChatMessageCell.this, 497);
                 }
                 if (ChatMessageCell.this.getBackground() != null) {
                     info.setSelected(true);
@@ -739,6 +748,28 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                 this.rect.offset(iArr[0], iArr[1]);
                 info.setBoundsInScreen(this.rect);
                 info.setClickable(true);
+            } else if (virtualViewId == 497) {
+                info.setEnabled(true);
+                sb = new StringBuilder();
+                sb.append(LocaleController.getString("Reply", NUM));
+                sb.append(", ");
+                if (ChatMessageCell.this.replyNameLayout != null) {
+                    sb.append(ChatMessageCell.this.replyNameLayout.getText());
+                    sb.append(", ");
+                }
+                if (ChatMessageCell.this.replyTextLayout != null) {
+                    sb.append(ChatMessageCell.this.replyTextLayout.getText());
+                }
+                info.setContentDescription(sb.toString());
+                info.addAction(16);
+                this.rect.set(ChatMessageCell.this.replyStartX, ChatMessageCell.this.replyStartY, ChatMessageCell.this.replyStartX + Math.max(ChatMessageCell.this.replyNameWidth, ChatMessageCell.this.replyTextWidth), ChatMessageCell.this.replyStartY + AndroidUtilities.dp(35.0f));
+                info.setBoundsInParent(this.rect);
+                if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(virtualViewId) == null || !((Rect) ChatMessageCell.this.accessibilityVirtualViewBounds.get(virtualViewId)).equals(this.rect)) {
+                    ChatMessageCell.this.accessibilityVirtualViewBounds.put(virtualViewId, new Rect(this.rect));
+                }
+                this.rect.offset(iArr[0], iArr[1]);
+                info.setBoundsInScreen(this.rect);
+                info.setClickable(true);
             }
             info.setFocusable(true);
             info.setVisibleToUser(true);
@@ -784,8 +815,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
                     if (ChatMessageCell.this.delegate != null) {
                         ChatMessageCell.this.delegate.didPressInstantButton(ChatMessageCell.this, ChatMessageCell.this.drawInstantViewType);
                     }
-                } else if (virtualViewId == 498 && ChatMessageCell.this.delegate != null) {
-                    ChatMessageCell.this.delegate.didPressShare(ChatMessageCell.this);
+                } else if (virtualViewId == 498) {
+                    if (ChatMessageCell.this.delegate != null) {
+                        ChatMessageCell.this.delegate.didPressShare(ChatMessageCell.this);
+                    }
+                } else if (virtualViewId == 497 && ChatMessageCell.this.delegate != null) {
+                    ChatMessageCell.this.delegate.didPressReplyMessage(ChatMessageCell.this, ChatMessageCell.this.currentMessageObject.messageOwner.reply_to_msg_id);
                 }
             } else if (action == 32) {
                 link = getLinkById(virtualViewId);
@@ -799,12 +834,15 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
 
         private ClickableSpan getLinkById(int id) {
             id -= 2000;
-            Spannable buffer = ChatMessageCell.this.currentMessageObject.messageText;
-            ClickableSpan[] links = (ClickableSpan[]) buffer.getSpans(0, buffer.length(), ClickableSpan.class);
-            if (links.length <= id) {
+            if (!(ChatMessageCell.this.currentMessageObject.messageText instanceof Spannable)) {
                 return null;
             }
-            return links[id];
+            Spannable buffer = ChatMessageCell.this.currentMessageObject.messageText;
+            ClickableSpan[] links = (ClickableSpan[]) buffer.getSpans(0, buffer.length(), ClickableSpan.class);
+            if (links.length > id) {
+                return links[id];
+            }
+            return null;
         }
     }
 
@@ -3664,7 +3702,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         if (r4 != r6) goto L_0x07f2;
     L_0x07e8:
         r4 = "ChatBackground";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.861036E38 double:1.053097683E-314;
+        r6 = NUM; // 0x7f0CLASSNAMEf float:1.8610358E38 double:1.0530976825E-314;
         r7 = org.telegram.messenger.LocaleController.getString(r4, r6);
     L_0x07f2:
         r0 = r194;
@@ -4222,7 +4260,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         goto L_0x0be0;
     L_0x0bf6:
         r4 = "Of";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.861239E38 double:1.0530981776E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612388E38 double:1.053098177E-314;
         r8 = 2;
         r8 = new java.lang.Object[r8];
         r9 = 0;
@@ -5080,7 +5118,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         if (r4 == 0) goto L_0x21d5;
     L_0x1212:
         r4 = "PaymentReceipt";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.861297E38 double:1.053098319E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612969E38 double:1.0530983184E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r6);
         r5 = r4.toUpperCase();
     L_0x1220:
@@ -7178,7 +7216,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         if (r4 == 0) goto L_0x1200;
     L_0x216e:
         r4 = "AttachGame";
-        r6 = NUM; // 0x7f0CLASSNAMEf float:1.8609774E38 double:1.0530975403E-314;
+        r6 = NUM; // 0x7f0CLASSNAMEe float:1.8609772E38 double:1.05309754E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r6);
         r5 = r4.toUpperCase();
         r4 = org.telegram.ui.ActionBar.Theme.chat_gamePaint;
@@ -7232,13 +7270,13 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         if (r4 == 0) goto L_0x21ef;
     L_0x21df:
         r4 = "PaymentTestInvoice";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.8613007E38 double:1.053098328E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8613005E38 double:1.0530983273E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r6);
         r5 = r4.toUpperCase();
         goto L_0x1220;
     L_0x21ef:
         r4 = "PaymentInvoice";
-        r6 = NUM; // 0x7f0CLASSNAMEa float:1.8612944E38 double:1.0530983125E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612942E38 double:1.053098312E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r6);
         r5 = r4.toUpperCase();
         goto L_0x1220;
@@ -7343,7 +7381,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         if (r109 == 0) goto L_0x23a6;
     L_0x22c2:
         r4 = "CallMessageOutgoingMissed";
-        r6 = NUM; // 0x7f0CLASSNAMEb5 float:1.8610078E38 double:1.0530976144E-314;
+        r6 = NUM; // 0x7f0CLASSNAMEb4 float:1.8610076E38 double:1.053097614E-314;
         r171 = org.telegram.messenger.LocaleController.getString(r4, r6);
     L_0x22cc:
         r0 = r78;
@@ -7451,14 +7489,14 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         goto L_0x238d;
     L_0x23a6:
         r4 = "CallMessageOutgoing";
-        r6 = NUM; // 0x7f0CLASSNAMEb4 float:1.8610076E38 double:1.053097614E-314;
+        r6 = NUM; // 0x7f0CLASSNAMEb3 float:1.8610074E38 double:1.0530976134E-314;
         r171 = org.telegram.messenger.LocaleController.getString(r4, r6);
         goto L_0x22cc;
     L_0x23b2:
         if (r109 == 0) goto L_0x23c0;
     L_0x23b4:
         r4 = "CallMessageIncomingMissed";
-        r6 = NUM; // 0x7f0CLASSNAMEb3 float:1.8610074E38 double:1.0530976134E-314;
+        r6 = NUM; // 0x7f0CLASSNAMEb2 float:1.8610072E38 double:1.053097613E-314;
         r171 = org.telegram.messenger.LocaleController.getString(r4, r6);
         goto L_0x22cc;
     L_0x23c0:
@@ -7468,12 +7506,12 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         if (r4 == 0) goto L_0x23d4;
     L_0x23c8:
         r4 = "CallMessageIncomingDeclined";
-        r6 = NUM; // 0x7f0CLASSNAMEb2 float:1.8610072E38 double:1.053097613E-314;
+        r6 = NUM; // 0x7f0CLASSNAMEb1 float:1.861007E38 double:1.0530976124E-314;
         r171 = org.telegram.messenger.LocaleController.getString(r4, r6);
         goto L_0x22cc;
     L_0x23d4:
         r4 = "CallMessageIncoming";
-        r6 = NUM; // 0x7f0CLASSNAMEb1 float:1.861007E38 double:1.0530976124E-314;
+        r6 = NUM; // 0x7f0CLASSNAMEb0 float:1.8610068E38 double:1.053097612E-314;
         r171 = org.telegram.messenger.LocaleController.getString(r4, r6);
         goto L_0x22cc;
     L_0x23e0:
@@ -7763,7 +7801,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         goto L_0x24c2;
     L_0x2609:
         r4 = "NumberUnknown";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.8612384E38 double:1.053098176E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612382E38 double:1.0530981756E-314;
         r142 = org.telegram.messenger.LocaleController.getString(r4, r6);
         goto L_0x24c2;
     L_0x2615:
@@ -8089,7 +8127,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         if (r4 == 0) goto L_0x2a47;
     L_0x288c:
         r4 = "FinalResults";
-        r6 = NUM; // 0x7f0CLASSNAMEd7 float:1.8611186E38 double:1.053097884E-314;
+        r6 = NUM; // 0x7f0CLASSNAMEd6 float:1.8611184E38 double:1.0530978836E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r6);
     L_0x2896:
         r6 = org.telegram.ui.ActionBar.Theme.chat_timePaint;
@@ -8153,7 +8191,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         if (r4 != 0) goto L_0x2a73;
     L_0x2907:
         r4 = "NoVotes";
-        r6 = NUM; // 0x7f0CLASSNAMEa0 float:1.8612113E38 double:1.05309811E-314;
+        r6 = NUM; // 0x7f0CLASSNAMEf float:1.861211E38 double:1.0530981094E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r6);
     L_0x2911:
         r6 = org.telegram.ui.ActionBar.Theme.chat_livePaint;
@@ -9514,7 +9552,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
     L_0x3337:
         r34 = new android.text.StaticLayout;
         r4 = "AttachLiveLocation";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.8609786E38 double:1.053097543E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8609784E38 double:1.0530975427E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r6);
         r6 = org.telegram.ui.ActionBar.Theme.chat_locationTitlePaint;
         r0 = r43;
@@ -12961,7 +12999,7 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
         if (r4 == 0) goto L_0x4c3f;
     L_0x4bd6:
         r4 = "PaymentReceipt";
-        r6 = NUM; // 0x7f0CLASSNAME float:1.861297E38 double:1.053098319E-314;
+        r6 = NUM; // 0x7f0CLASSNAME float:1.8612969E38 double:1.0530983184E-314;
         r45 = org.telegram.messenger.LocaleController.getString(r4, r6);
     L_0x4be0:
         r44 = new android.text.StaticLayout;

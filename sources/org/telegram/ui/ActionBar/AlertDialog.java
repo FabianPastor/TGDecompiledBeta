@@ -1669,7 +1669,10 @@ public class AlertDialog extends Dialog implements Callback {
         if (this.cancelDialog != null) {
             this.cancelDialog.dismiss();
         }
-        super.dismiss();
+        try {
+            super.dismiss();
+        } catch (Throwable th) {
+        }
     }
 
     public void setCanceledOnTouchOutside(boolean cancel) {

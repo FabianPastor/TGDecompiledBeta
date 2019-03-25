@@ -1,15 +1,17 @@
 package org.telegram.messenger;
 
-import java.util.Comparator;
-import org.telegram.tgnet.TLRPC.MessageEntity;
+import org.telegram.tgnet.TLRPC.TL_messages_stickerSet;
 
-final /* synthetic */ class DataQuery$$Lambda$121 implements Comparator {
-    static final Comparator $instance = new DataQuery$$Lambda$121();
+final /* synthetic */ class DataQuery$$Lambda$121 implements Runnable {
+    private final DataQuery arg$1;
+    private final TL_messages_stickerSet arg$2;
 
-    private DataQuery$$Lambda$121() {
+    DataQuery$$Lambda$121(DataQuery dataQuery, TL_messages_stickerSet tL_messages_stickerSet) {
+        this.arg$1 = dataQuery;
+        this.arg$2 = tL_messages_stickerSet;
     }
 
-    public int compare(Object obj, Object obj2) {
-        return DataQuery.lambda$static$84$DataQuery((MessageEntity) obj, (MessageEntity) obj2);
+    public void run() {
+        this.arg$1.lambda$null$5$DataQuery(this.arg$2);
     }
 }

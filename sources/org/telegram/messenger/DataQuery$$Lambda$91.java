@@ -1,15 +1,19 @@
 package org.telegram.messenger;
 
-import java.util.Comparator;
-import org.telegram.tgnet.TLRPC.TL_topPeer;
+final /* synthetic */ class DataQuery$$Lambda$91 implements Runnable {
+    private final DataQuery arg$1;
+    private final int arg$2;
+    private final double arg$3;
+    private final long arg$4;
 
-final /* synthetic */ class DataQuery$$Lambda$91 implements Comparator {
-    static final Comparator $instance = new DataQuery$$Lambda$91();
-
-    private DataQuery$$Lambda$91() {
+    DataQuery$$Lambda$91(DataQuery dataQuery, int i, double d, long j) {
+        this.arg$1 = dataQuery;
+        this.arg$2 = i;
+        this.arg$3 = d;
+        this.arg$4 = j;
     }
 
-    public int compare(Object obj, Object obj2) {
-        return DataQuery.lambda$null$79$DataQuery((TL_topPeer) obj, (TL_topPeer) obj2);
+    public void run() {
+        this.arg$1.lambda$null$80$DataQuery(this.arg$2, this.arg$3, this.arg$4);
     }
 }

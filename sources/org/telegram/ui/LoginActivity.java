@@ -3525,7 +3525,7 @@ public class LoginActivity extends BaseFragment {
             actionBar.setBackButtonImage(i);
             newView.setParams(params, false);
             this.actionBar.setTitle(newView.getHeaderName());
-            getParentActivity().setTitle(newView.getHeaderName());
+            setParentActivityTitle(newView.getHeaderName());
             newView.onShow();
             if (back) {
                 f = (float) (-AndroidUtilities.displaySize.x);
@@ -3563,7 +3563,7 @@ public class LoginActivity extends BaseFragment {
         this.views[page].setParams(params, false);
         this.views[page].setVisibility(0);
         this.actionBar.setTitle(this.views[page].getHeaderName());
-        getParentActivity().setTitle(this.views[page].getHeaderName());
+        setParentActivityTitle(this.views[page].getHeaderName());
         this.views[page].onShow();
     }
 

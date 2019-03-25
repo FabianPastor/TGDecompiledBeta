@@ -28,7 +28,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.UserObject;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.ConnectionsManager;
@@ -362,7 +361,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             message.message = LocaleController.getString("PrivacyForwardsMessageLine", NUM);
             message.date = date + 60;
             message.fwd_from = new TL_messageFwdHeader();
-            message.fwd_from.from_name = UserObject.getFirstName(currentUser);
+            message.fwd_from.from_name = ContactsController.formatName(currentUser.first_name, currentUser.last_name);
             message.media = new TL_messageMediaEmpty();
             message.out = false;
             message.to_id = new TL_peerUser();

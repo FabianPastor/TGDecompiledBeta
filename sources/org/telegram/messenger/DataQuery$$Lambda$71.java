@@ -10,6 +10,6 @@ final /* synthetic */ class DataQuery$$Lambda$71 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$fetchNewEmojiKeywords$115$DataQuery(this.arg$2);
+        this.arg$1.lambda$fetchNewEmojiKeywords$116$DataQuery(this.arg$2);
     }
 }

@@ -2439,8 +2439,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
         }
         updateProfileData();
         fixLayout();
-        if (getParentActivity() != null && this.nameTextView[1] != null) {
-            getParentActivity().setTitle(this.nameTextView[1].getText());
+        if (this.nameTextView[1] != null) {
+            setParentActivityTitle(this.nameTextView[1].getText());
         }
     }
 

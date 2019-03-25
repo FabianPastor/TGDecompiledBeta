@@ -1,21 +1,23 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC.TL_chatBannedRights;
+import org.telegram.tgnet.TLRPC.EncryptedChat;
+import org.telegram.tgnet.TLRPC.TL_dialog;
+import org.telegram.tgnet.TLRPC.User;
 
 final /* synthetic */ class MessagesStorage$$Lambda$76 implements Runnable {
     private final MessagesStorage arg$1;
-    private final int arg$2;
-    private final int arg$3;
-    private final TL_chatBannedRights arg$4;
+    private final EncryptedChat arg$2;
+    private final User arg$3;
+    private final TL_dialog arg$4;
 
-    MessagesStorage$$Lambda$76(MessagesStorage messagesStorage, int i, int i2, TL_chatBannedRights tL_chatBannedRights) {
+    MessagesStorage$$Lambda$76(MessagesStorage messagesStorage, EncryptedChat encryptedChat, User user, TL_dialog tL_dialog) {
         this.arg$1 = messagesStorage;
-        this.arg$2 = i;
-        this.arg$3 = i2;
-        this.arg$4 = tL_chatBannedRights;
+        this.arg$2 = encryptedChat;
+        this.arg$3 = user;
+        this.arg$4 = tL_dialog;
     }
 
     public void run() {
-        this.arg$1.lambda$updateChatDefaultBannedRights$104$MessagesStorage(this.arg$2, this.arg$3, this.arg$4);
+        this.arg$1.lambda$putEncryptedChat$104$MessagesStorage(this.arg$2, this.arg$3, this.arg$4);
     }
 }

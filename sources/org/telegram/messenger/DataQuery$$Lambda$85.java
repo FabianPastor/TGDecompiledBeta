@@ -14,6 +14,6 @@ final /* synthetic */ class DataQuery$$Lambda$85 implements RequestDelegate {
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$null$101$DataQuery(this.arg$2, tLObject, tL_error);
+        this.arg$1.lambda$null$100$DataQuery(this.arg$2, tLObject, tL_error);
     }
 }

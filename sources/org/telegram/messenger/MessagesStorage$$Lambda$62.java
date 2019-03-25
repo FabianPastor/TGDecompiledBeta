@@ -5,19 +5,17 @@ import java.util.concurrent.CountDownLatch;
 final /* synthetic */ class MessagesStorage$$Lambda$62 implements Runnable {
     private final MessagesStorage arg$1;
     private final long arg$2;
-    private final int arg$3;
-    private final boolean[] arg$4;
-    private final CountDownLatch arg$5;
+    private final boolean[] arg$3;
+    private final CountDownLatch arg$4;
 
-    MessagesStorage$$Lambda$62(MessagesStorage messagesStorage, long j, int i, boolean[] zArr, CountDownLatch countDownLatch) {
+    MessagesStorage$$Lambda$62(MessagesStorage messagesStorage, long j, boolean[] zArr, CountDownLatch countDownLatch) {
         this.arg$1 = messagesStorage;
         this.arg$2 = j;
-        this.arg$3 = i;
-        this.arg$4 = zArr;
-        this.arg$5 = countDownLatch;
+        this.arg$3 = zArr;
+        this.arg$4 = countDownLatch;
     }
 
     public void run() {
-        this.arg$1.lambda$checkMessageId$88$MessagesStorage(this.arg$2, this.arg$3, this.arg$4, this.arg$5);
+        this.arg$1.lambda$checkMessageByRandomId$88$MessagesStorage(this.arg$2, this.arg$3, this.arg$4);
     }
 }

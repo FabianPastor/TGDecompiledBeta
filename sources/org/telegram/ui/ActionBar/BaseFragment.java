@@ -295,6 +295,14 @@ public class BaseFragment {
         return null;
     }
 
+    /* Access modifiers changed, original: protected */
+    public void setParentActivityTitle(CharSequence title) {
+        Activity activity = getParentActivity();
+        if (activity != null) {
+            activity.setTitle(title);
+        }
+    }
+
     public void startActivityForResult(Intent intent, int requestCode) {
         if (this.parentLayout != null) {
             this.parentLayout.startActivityForResult(intent, requestCode);
@@ -349,7 +357,7 @@ public class BaseFragment {
             if (actionBar != null) {
                 String title = actionBar.getTitle();
                 if (!TextUtils.isEmpty(title)) {
-                    getParentActivity().setTitle(title);
+                    setParentActivityTitle(title);
                 }
             }
         }

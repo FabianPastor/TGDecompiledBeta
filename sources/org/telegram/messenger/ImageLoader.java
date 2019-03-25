@@ -5635,7 +5635,7 @@ public class ImageLoader {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageLoader.lambda$createLoadOperationForImageReceiver$5$ImageLoader(int, java.lang.String, java.lang.String, int, org.telegram.messenger.ImageReceiver, java.lang.String, int, java.lang.Object, boolean, java.lang.Object, org.telegram.tgnet.TLRPC$Document, boolean, boolean, int, int, java.lang.String, int):void");
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:102:0x033e  */
+    /* JADX WARNING: Removed duplicated region for block: B:106:0x0333  */
     public void loadImageForImageReceiver(org.telegram.messenger.ImageReceiver r60) {
         /*
         r59 = this;
@@ -5760,7 +5760,7 @@ public class ImageLoader {
     L_0x00df:
         r4 = 2;
         r0 = r38;
-        if (r0 >= r4) goto L_0x03d1;
+        if (r0 >= r4) goto L_0x03c6;
     L_0x00e4:
         if (r38 != 0) goto L_0x00f4;
     L_0x00e6:
@@ -5801,7 +5801,7 @@ public class ImageLoader {
         r4 = r4.append(r5);
         r58 = r4.toString();
     L_0x012c:
-        if (r38 != 0) goto L_0x03c1;
+        if (r38 != 0) goto L_0x03b6;
     L_0x012e:
         r44 = r48;
         r47 = r58;
@@ -5809,7 +5809,7 @@ public class ImageLoader {
         r0 = r51;
         if (r0 != r9) goto L_0x00ea;
     L_0x0136:
-        if (r38 != 0) goto L_0x03c7;
+        if (r38 != 0) goto L_0x03bc;
     L_0x0138:
         r45 = 0;
         r44 = 0;
@@ -5864,17 +5864,16 @@ public class ImageLoader {
     L_0x01a5:
         r0 = r51;
         r4 = r0 instanceof org.telegram.tgnet.TLRPC.TL_photoStrippedSize;
-        if (r4 == 0) goto L_0x01e3;
+        if (r4 == 0) goto L_0x01d8;
     L_0x01ab:
         r49 = r51;
         r49 = (org.telegram.tgnet.TLRPC.TL_photoStrippedSize) r49;
-        r4 = new java.lang.StringBuilder;
-        r4.<init>();
-        r5 = "stripped";
-        r4 = r4.append(r5);
-        r5 = org.telegram.messenger.FileRefController.getKeyForParentObject(r52);
-        r4 = r4.append(r5);
-        r48 = r4.toString();
+        if (r32 == 0) goto L_0x01d5;
+    L_0x01b1:
+        r4 = r32;
+    L_0x01b3:
+        r0 = r52;
+        r48 = org.telegram.messenger.ImageReceiver.getStippedKey(r0, r4);
         r4 = new java.lang.StringBuilder;
         r4.<init>();
         r0 = r48;
@@ -5884,11 +5883,14 @@ public class ImageLoader {
         r4 = r4.append(r8);
         r58 = r4.toString();
         goto L_0x012c;
-    L_0x01e3:
+    L_0x01d5:
+        r4 = r16;
+        goto L_0x01b3;
+    L_0x01d8:
         r0 = r51;
         r4 = r0 instanceof org.telegram.tgnet.TLRPC.TL_photoSize;
-        if (r4 == 0) goto L_0x0252;
-    L_0x01e9:
+        if (r4 == 0) goto L_0x0247;
+    L_0x01de:
         r53 = r51;
         r53 = (org.telegram.tgnet.TLRPC.TL_photoSize) r53;
         r4 = new java.lang.StringBuilder;
@@ -5913,32 +5915,32 @@ public class ImageLoader {
         r4 = r4.append(r8);
         r58 = r4.toString();
         r4 = r60.getExt();
-        if (r4 != 0) goto L_0x024e;
-    L_0x0231:
+        if (r4 != 0) goto L_0x0243;
+    L_0x0226:
         r0 = r53;
         r4 = r0.location;
         r4 = r4.key;
-        if (r4 != 0) goto L_0x024e;
-    L_0x0239:
+        if (r4 != 0) goto L_0x0243;
+    L_0x022e:
         r0 = r53;
         r4 = r0.location;
         r4 = r4.volume_id;
         r14 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
         r4 = (r4 > r14 ? 1 : (r4 == r14 ? 0 : -1));
         if (r4 != 0) goto L_0x012c;
-    L_0x0246:
+    L_0x023b:
         r0 = r53;
         r4 = r0.location;
         r4 = r4.local_id;
         if (r4 >= 0) goto L_0x012c;
-    L_0x024e:
+    L_0x0243:
         r56 = 1;
         goto L_0x012c;
-    L_0x0252:
+    L_0x0247:
         r0 = r51;
         r4 = r0 instanceof org.telegram.messenger.WebFile;
-        if (r4 == 0) goto L_0x0292;
-    L_0x0258:
+        if (r4 == 0) goto L_0x0287;
+    L_0x024d:
         r42 = r51;
         r42 = (org.telegram.messenger.WebFile) r42;
         r0 = r42;
@@ -5960,11 +5962,11 @@ public class ImageLoader {
         r4 = r4.append(r5);
         r58 = r4.toString();
         goto L_0x012c;
-    L_0x0292:
+    L_0x0287:
         r0 = r51;
         r4 = r0 instanceof org.telegram.messenger.SecureDocument;
-        if (r4 == 0) goto L_0x02dc;
-    L_0x0298:
+        if (r4 == 0) goto L_0x02d1;
+    L_0x028d:
         r42 = r51;
         r42 = (org.telegram.messenger.SecureDocument) r42;
         r4 = new java.lang.StringBuilder;
@@ -5989,11 +5991,11 @@ public class ImageLoader {
         r4 = r4.append(r8);
         r58 = r4.toString();
         goto L_0x012c;
-    L_0x02dc:
+    L_0x02d1:
         r0 = r51;
         r4 = r0 instanceof org.telegram.tgnet.TLRPC.Document;
         if (r4 == 0) goto L_0x012c;
-    L_0x02e2:
+    L_0x02d7:
         r42 = r51;
         r42 = (org.telegram.tgnet.TLRPC.Document) r42;
         r0 = r42;
@@ -6001,15 +6003,15 @@ public class ImageLoader {
         r14 = 0;
         r4 = (r4 > r14 ? 1 : (r4 == r14 ? 0 : -1));
         if (r4 == 0) goto L_0x012c;
-    L_0x02f0:
+    L_0x02e5:
         r0 = r42;
         r4 = r0.dc_id;
         if (r4 == 0) goto L_0x012c;
-    L_0x02f6:
-        if (r38 != 0) goto L_0x037f;
-    L_0x02f8:
-        if (r55 == 0) goto L_0x037f;
-    L_0x02fa:
+    L_0x02eb:
+        if (r38 != 0) goto L_0x0374;
+    L_0x02ed:
+        if (r55 == 0) goto L_0x0374;
+    L_0x02ef:
         r4 = new java.lang.StringBuilder;
         r4.<init>();
         r5 = "q_";
@@ -6023,31 +6025,31 @@ public class ImageLoader {
         r14 = r0.id;
         r4 = r4.append(r14);
         r48 = r4.toString();
-    L_0x0321:
+    L_0x0316:
         r41 = org.telegram.messenger.FileLoader.getDocumentFileName(r42);
-        if (r41 == 0) goto L_0x0334;
-    L_0x0327:
+        if (r41 == 0) goto L_0x0329;
+    L_0x031c:
         r4 = 46;
         r0 = r41;
         r43 = r0.lastIndexOf(r4);
         r4 = -1;
         r0 = r43;
-        if (r0 != r4) goto L_0x03a0;
-    L_0x0334:
+        if (r0 != r4) goto L_0x0395;
+    L_0x0329:
         r41 = "";
-    L_0x0337:
+    L_0x032c:
         r4 = r41.length();
         r5 = 1;
-        if (r4 > r5) goto L_0x034e;
-    L_0x033e:
+        if (r4 > r5) goto L_0x0343;
+    L_0x0333:
         r4 = "video/mp4";
         r0 = r42;
         r5 = r0.mime_type;
         r4 = r4.equals(r5);
-        if (r4 == 0) goto L_0x03a9;
-    L_0x034b:
+        if (r4 == 0) goto L_0x039e;
+    L_0x0340:
         r41 = ".mp4";
-    L_0x034e:
+    L_0x0343:
         r4 = new java.lang.StringBuilder;
         r4.<init>();
         r0 = r48;
@@ -6056,21 +6058,21 @@ public class ImageLoader {
         r4 = r4.append(r0);
         r58 = r4.toString();
         r4 = org.telegram.messenger.MessageObject.isVideoDocument(r42);
-        if (r4 != 0) goto L_0x03be;
-    L_0x0369:
+        if (r4 != 0) goto L_0x03b3;
+    L_0x035e:
         r4 = org.telegram.messenger.MessageObject.isGifDocument(r42);
-        if (r4 != 0) goto L_0x03be;
-    L_0x036f:
+        if (r4 != 0) goto L_0x03b3;
+    L_0x0364:
         r4 = org.telegram.messenger.MessageObject.isRoundVideoDocument(r42);
-        if (r4 != 0) goto L_0x03be;
-    L_0x0375:
+        if (r4 != 0) goto L_0x03b3;
+    L_0x036a:
         r4 = org.telegram.messenger.MessageObject.canPreviewDocument(r42);
-        if (r4 != 0) goto L_0x03be;
-    L_0x037b:
+        if (r4 != 0) goto L_0x03b3;
+    L_0x0370:
         r56 = 1;
-    L_0x037d:
+    L_0x0372:
         goto L_0x012c;
-    L_0x037f:
+    L_0x0374:
         r4 = new java.lang.StringBuilder;
         r4.<init>();
         r0 = r42;
@@ -6082,41 +6084,41 @@ public class ImageLoader {
         r14 = r0.id;
         r4 = r4.append(r14);
         r48 = r4.toString();
-        goto L_0x0321;
-    L_0x03a0:
+        goto L_0x0316;
+    L_0x0395:
         r0 = r41;
         r1 = r43;
         r41 = r0.substring(r1);
-        goto L_0x0337;
-    L_0x03a9:
+        goto L_0x032c;
+    L_0x039e:
         r4 = "video/x-matroska";
         r0 = r42;
         r5 = r0.mime_type;
         r4 = r4.equals(r5);
-        if (r4 == 0) goto L_0x03ba;
-    L_0x03b6:
+        if (r4 == 0) goto L_0x03af;
+    L_0x03ab:
         r41 = ".mkv";
-        goto L_0x034e;
-    L_0x03ba:
+        goto L_0x0343;
+    L_0x03af:
         r41 = "";
-        goto L_0x034e;
-    L_0x03be:
+        goto L_0x0343;
+    L_0x03b3:
         r56 = 0;
-        goto L_0x037d;
-    L_0x03c1:
+        goto L_0x0372;
+    L_0x03b6:
         r29 = r48;
         r30 = r58;
         goto L_0x0132;
-    L_0x03c7:
+    L_0x03bc:
         r50 = 0;
         r29 = 0;
         r30 = 0;
         r32 = r50;
         goto L_0x00ea;
-    L_0x03d1:
+    L_0x03c6:
         r4 = r9 instanceof java.lang.String;
-        if (r4 == 0) goto L_0x0491;
-    L_0x03d5:
+        if (r4 == 0) goto L_0x0486;
+    L_0x03ca:
         r49 = r9;
         r49 = (java.lang.String) r49;
         r6 = org.telegram.messenger.Utilities.MD5(r49);
@@ -6130,14 +6132,14 @@ public class ImageLoader {
         r5 = getHttpUrlExtension(r0, r5);
         r4 = r4.append(r5);
         r7 = r4.toString();
-    L_0x03fe:
+    L_0x03f3:
         r33 = r60.getMediaFilter();
         r17 = r60.getImageFilter();
         r10 = r60.getThumbFilter();
-        if (r29 == 0) goto L_0x042a;
-    L_0x040c:
-        if (r33 == 0) goto L_0x042a;
-    L_0x040e:
+        if (r29 == 0) goto L_0x041f;
+    L_0x0401:
+        if (r33 == 0) goto L_0x041f;
+    L_0x0403:
         r4 = new java.lang.StringBuilder;
         r4.<init>();
         r0 = r29;
@@ -6147,11 +6149,11 @@ public class ImageLoader {
         r0 = r33;
         r4 = r4.append(r0);
         r29 = r4.toString();
-    L_0x042a:
-        if (r44 == 0) goto L_0x044a;
-    L_0x042c:
-        if (r17 == 0) goto L_0x044a;
-    L_0x042e:
+    L_0x041f:
+        if (r44 == 0) goto L_0x043f;
+    L_0x0421:
+        if (r17 == 0) goto L_0x043f;
+    L_0x0423:
         r4 = new java.lang.StringBuilder;
         r4.<init>();
         r0 = r44;
@@ -6161,11 +6163,11 @@ public class ImageLoader {
         r0 = r17;
         r4 = r4.append(r0);
         r44 = r4.toString();
-    L_0x044a:
-        if (r6 == 0) goto L_0x0466;
-    L_0x044c:
-        if (r10 == 0) goto L_0x0466;
-    L_0x044e:
+    L_0x043f:
+        if (r6 == 0) goto L_0x045b;
+    L_0x0441:
+        if (r10 == 0) goto L_0x045b;
+    L_0x0443:
         r4 = new java.lang.StringBuilder;
         r4.<init>();
         r4 = r4.append(r6);
@@ -6173,18 +6175,18 @@ public class ImageLoader {
         r4 = r4.append(r5);
         r4 = r4.append(r10);
         r6 = r4.toString();
-    L_0x0466:
+    L_0x045b:
         r0 = r16;
         r4 = r0 instanceof java.lang.String;
-        if (r4 == 0) goto L_0x0556;
-    L_0x046c:
+        if (r4 == 0) goto L_0x0540;
+    L_0x0461:
         r11 = 0;
         r12 = 1;
         r13 = 1;
-        if (r57 == 0) goto L_0x0553;
-    L_0x0471:
+        if (r57 == 0) goto L_0x053d;
+    L_0x0466:
         r14 = 2;
-    L_0x0472:
+    L_0x0467:
         r4 = r59;
         r5 = r60;
         r4.createLoadOperationForImageReceiver(r5, r6, r7, r8, r9, r10, r11, r12, r13, r14);
@@ -6199,10 +6201,10 @@ public class ImageLoader {
         r15 = r8;
         r11.createLoadOperationForImageReceiver(r12, r13, r14, r15, r16, r17, r18, r19, r20, r21);
         goto L_0x0002;
-    L_0x0491:
+    L_0x0486:
         r4 = r9 instanceof org.telegram.tgnet.TLRPC.FileLocation;
-        if (r4 == 0) goto L_0x04d3;
-    L_0x0495:
+        if (r4 == 0) goto L_0x04c8;
+    L_0x048a:
         r49 = r9;
         r49 = (org.telegram.tgnet.TLRPC.FileLocation) r49;
         r4 = new java.lang.StringBuilder;
@@ -6223,20 +6225,19 @@ public class ImageLoader {
         r4 = r4.append(r5);
         r4 = r4.append(r8);
         r7 = r4.toString();
-        goto L_0x03fe;
-    L_0x04d3:
+        goto L_0x03f3;
+    L_0x04c8:
         r4 = r9 instanceof org.telegram.tgnet.TLRPC.TL_photoStrippedSize;
-        if (r4 == 0) goto L_0x050d;
-    L_0x04d7:
+        if (r4 == 0) goto L_0x04f7;
+    L_0x04cc:
         r49 = r9;
         r49 = (org.telegram.tgnet.TLRPC.TL_photoStrippedSize) r49;
-        r4 = new java.lang.StringBuilder;
-        r4.<init>();
-        r5 = "stripped";
-        r4 = r4.append(r5);
-        r5 = org.telegram.messenger.FileRefController.getKeyForParentObject(r52);
-        r4 = r4.append(r5);
-        r6 = r4.toString();
+        if (r32 == 0) goto L_0x04f4;
+    L_0x04d2:
+        r4 = r32;
+    L_0x04d4:
+        r0 = r52;
+        r6 = org.telegram.messenger.ImageReceiver.getStippedKey(r0, r4);
         r4 = new java.lang.StringBuilder;
         r4.<init>();
         r4 = r4.append(r6);
@@ -6244,11 +6245,14 @@ public class ImageLoader {
         r4 = r4.append(r5);
         r4 = r4.append(r8);
         r7 = r4.toString();
-        goto L_0x03fe;
-    L_0x050d:
+        goto L_0x03f3;
+    L_0x04f4:
+        r4 = r16;
+        goto L_0x04d4;
+    L_0x04f7:
         r4 = r9 instanceof org.telegram.tgnet.TLRPC.TL_photoSize;
-        if (r4 == 0) goto L_0x03fe;
-    L_0x0511:
+        if (r4 == 0) goto L_0x03f3;
+    L_0x04fb:
         r53 = r9;
         r53 = (org.telegram.tgnet.TLRPC.TL_photoSize) r53;
         r4 = new java.lang.StringBuilder;
@@ -6271,39 +6275,39 @@ public class ImageLoader {
         r4 = r4.append(r5);
         r4 = r4.append(r8);
         r7 = r4.toString();
-        goto L_0x03fe;
-    L_0x0553:
+        goto L_0x03f3;
+    L_0x053d:
         r14 = 1;
-        goto L_0x0472;
-    L_0x0556:
-        if (r32 == 0) goto L_0x05a6;
-    L_0x0558:
+        goto L_0x0467;
+    L_0x0540:
+        if (r32 == 0) goto L_0x0590;
+    L_0x0542:
         r35 = r60.getCacheType();
         r26 = 1;
-        if (r35 != 0) goto L_0x0564;
-    L_0x0560:
-        if (r56 == 0) goto L_0x0564;
-    L_0x0562:
+        if (r35 != 0) goto L_0x054e;
+    L_0x054a:
+        if (r56 == 0) goto L_0x054e;
+    L_0x054c:
         r35 = 1;
-    L_0x0564:
-        if (r35 != 0) goto L_0x05a1;
-    L_0x0566:
+    L_0x054e:
+        if (r35 != 0) goto L_0x058b;
+    L_0x0550:
         r12 = 1;
-    L_0x0567:
-        if (r57 != 0) goto L_0x0575;
-    L_0x0569:
+    L_0x0551:
+        if (r57 != 0) goto L_0x055f;
+    L_0x0553:
         r11 = 0;
         r13 = 1;
-        if (r57 == 0) goto L_0x05a4;
-    L_0x056d:
+        if (r57 == 0) goto L_0x058e;
+    L_0x0557:
         r14 = 2;
-    L_0x056e:
+    L_0x0558:
         r4 = r59;
         r5 = r60;
         r4.createLoadOperationForImageReceiver(r5, r6, r7, r8, r9, r10, r11, r12, r13, r14);
-    L_0x0575:
-        if (r46 != 0) goto L_0x058e;
-    L_0x0577:
+    L_0x055f:
+        if (r46 != 0) goto L_0x0578;
+    L_0x0561:
         r25 = 0;
         r27 = 0;
         r28 = 0;
@@ -6315,7 +6319,7 @@ public class ImageLoader {
         r23 = r16;
         r24 = r17;
         r18.createLoadOperationForImageReceiver(r19, r20, r21, r22, r23, r24, r25, r26, r27, r28);
-    L_0x058e:
+    L_0x0578:
         r34 = r60.getSize();
         r36 = 3;
         r37 = 0;
@@ -6324,30 +6328,30 @@ public class ImageLoader {
         r31 = r8;
         r27.createLoadOperationForImageReceiver(r28, r29, r30, r31, r32, r33, r34, r35, r36, r37);
         goto L_0x0002;
-    L_0x05a1:
+    L_0x058b:
         r12 = r35;
-        goto L_0x0567;
-    L_0x05a4:
+        goto L_0x0551;
+    L_0x058e:
         r14 = 1;
-        goto L_0x056e;
-    L_0x05a6:
+        goto L_0x0558;
+    L_0x0590:
         r26 = r60.getCacheType();
-        if (r26 != 0) goto L_0x05b0;
-    L_0x05ac:
-        if (r56 == 0) goto L_0x05b0;
-    L_0x05ae:
+        if (r26 != 0) goto L_0x059a;
+    L_0x0596:
+        if (r56 == 0) goto L_0x059a;
+    L_0x0598:
         r26 = 1;
-    L_0x05b0:
-        if (r26 != 0) goto L_0x05da;
-    L_0x05b2:
+    L_0x059a:
+        if (r26 != 0) goto L_0x05c4;
+    L_0x059c:
         r12 = 1;
-    L_0x05b3:
+    L_0x059d:
         r11 = 0;
         r13 = 1;
-        if (r57 == 0) goto L_0x05dd;
-    L_0x05b7:
+        if (r57 == 0) goto L_0x05c7;
+    L_0x05a1:
         r14 = 2;
-    L_0x05b8:
+    L_0x05a2:
         r4 = r59;
         r5 = r60;
         r4.createLoadOperationForImageReceiver(r5, r6, r7, r8, r9, r10, r11, r12, r13, r14);
@@ -6363,12 +6367,12 @@ public class ImageLoader {
         r24 = r17;
         r18.createLoadOperationForImageReceiver(r19, r20, r21, r22, r23, r24, r25, r26, r27, r28);
         goto L_0x0002;
-    L_0x05da:
+    L_0x05c4:
         r12 = r26;
-        goto L_0x05b3;
-    L_0x05dd:
+        goto L_0x059d;
+    L_0x05c7:
         r14 = 1;
-        goto L_0x05b8;
+        goto L_0x05a2;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageLoader.loadImageForImageReceiver(org.telegram.messenger.ImageReceiver):void");
     }

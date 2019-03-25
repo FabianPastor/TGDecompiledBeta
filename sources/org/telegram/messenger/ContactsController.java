@@ -964,7 +964,7 @@ public class ContactsController {
         goto L_0x0174;
     L_0x01fa:
         r4 = "PhoneMobile";
-        r5 = NUM; // 0x7f0CLASSNAMEe float:1.861305E38 double:1.053098338E-314;
+        r5 = NUM; // 0x7f0CLASSNAMEd float:1.8613048E38 double:1.0530983377E-314;
         r13 = org.telegram.messenger.LocaleController.getString(r4, r5);	 Catch:{ Throwable -> 0x0117 }
         goto L_0x01ae;
     L_0x0205:
@@ -974,7 +974,7 @@ public class ContactsController {
     L_0x020a:
         r3 = r9.phoneTypes;	 Catch:{ Throwable -> 0x0117 }
         r4 = "PhoneHome";
-        r5 = NUM; // 0x7f0CLASSNAMEc float:1.8613046E38 double:1.053098337E-314;
+        r5 = NUM; // 0x7f0CLASSNAMEb float:1.8613044E38 double:1.0530983367E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r5);	 Catch:{ Throwable -> 0x0117 }
         r3.add(r4);	 Catch:{ Throwable -> 0x0117 }
         goto L_0x01b1;
@@ -985,7 +985,7 @@ public class ContactsController {
     L_0x021f:
         r3 = r9.phoneTypes;	 Catch:{ Throwable -> 0x0117 }
         r4 = "PhoneMobile";
-        r5 = NUM; // 0x7f0CLASSNAMEe float:1.861305E38 double:1.053098338E-314;
+        r5 = NUM; // 0x7f0CLASSNAMEd float:1.8613048E38 double:1.0530983377E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r5);	 Catch:{ Throwable -> 0x0117 }
         r3.add(r4);	 Catch:{ Throwable -> 0x0117 }
         goto L_0x01b1;
@@ -996,7 +996,7 @@ public class ContactsController {
     L_0x0234:
         r3 = r9.phoneTypes;	 Catch:{ Throwable -> 0x0117 }
         r4 = "PhoneWork";
-        r5 = NUM; // 0x7f0CLASSNAME float:1.8613062E38 double:1.053098341E-314;
+        r5 = NUM; // 0x7f0CLASSNAME float:1.861306E38 double:1.0530983406E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r5);	 Catch:{ Throwable -> 0x0117 }
         r3.add(r4);	 Catch:{ Throwable -> 0x0117 }
         goto L_0x01b1;
@@ -1007,14 +1007,14 @@ public class ContactsController {
     L_0x024b:
         r3 = r9.phoneTypes;	 Catch:{ Throwable -> 0x0117 }
         r4 = "PhoneMain";
-        r5 = NUM; // 0x7f0CLASSNAMEd float:1.8613048E38 double:1.0530983377E-314;
+        r5 = NUM; // 0x7f0CLASSNAMEc float:1.8613046E38 double:1.053098337E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r5);	 Catch:{ Throwable -> 0x0117 }
         r3.add(r4);	 Catch:{ Throwable -> 0x0117 }
         goto L_0x01b1;
     L_0x025c:
         r3 = r9.phoneTypes;	 Catch:{ Throwable -> 0x0117 }
         r4 = "PhoneOther";
-        r5 = NUM; // 0x7f0CLASSNAME float:1.861306E38 double:1.0530983406E-314;
+        r5 = NUM; // 0x7f0CLASSNAME float:1.8613058E38 double:1.05309834E-314;
         r4 = org.telegram.messenger.LocaleController.getString(r4, r5);	 Catch:{ Throwable -> 0x0117 }
         r3.add(r4);	 Catch:{ Throwable -> 0x0117 }
         goto L_0x01b1;

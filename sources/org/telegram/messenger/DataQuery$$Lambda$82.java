@@ -1,19 +1,15 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC.BotInfo;
-
 final /* synthetic */ class DataQuery$$Lambda$82 implements Runnable {
     private final DataQuery arg$1;
-    private final BotInfo arg$2;
-    private final int arg$3;
+    private final String arg$2;
 
-    DataQuery$$Lambda$82(DataQuery dataQuery, BotInfo botInfo, int i) {
+    DataQuery$$Lambda$82(DataQuery dataQuery, String str) {
         this.arg$1 = dataQuery;
-        this.arg$2 = botInfo;
-        this.arg$3 = i;
+        this.arg$2 = str;
     }
 
     public void run() {
-        this.arg$1.lambda$null$107$DataQuery(this.arg$2, this.arg$3);
+        this.arg$1.lambda$null$112$DataQuery(this.arg$2);
     }
 }

@@ -12,6 +12,6 @@ final /* synthetic */ class DataQuery$$Lambda$75 implements Comparator {
     }
 
     public int compare(Object obj, Object obj2) {
-        return DataQuery.lambda$null$119$DataQuery(this.arg$1, (KeywordResult) obj, (KeywordResult) obj2);
+        return DataQuery.lambda$null$120$DataQuery(this.arg$1, (KeywordResult) obj, (KeywordResult) obj2);
     }
 }

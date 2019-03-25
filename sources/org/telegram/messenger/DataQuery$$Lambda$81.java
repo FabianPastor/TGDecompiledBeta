@@ -10,6 +10,6 @@ final /* synthetic */ class DataQuery$$Lambda$81 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$null$111$DataQuery(this.arg$2);
+        this.arg$1.lambda$null$114$DataQuery(this.arg$2);
     }
 }

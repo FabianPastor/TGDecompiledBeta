@@ -1,19 +1,19 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC.ChatFull;
+import org.telegram.tgnet.TLRPC.TL_userFull;
 
 final /* synthetic */ class MessagesStorage$$Lambda$46 implements Runnable {
     private final MessagesStorage arg$1;
-    private final ChatFull arg$2;
-    private final boolean arg$3;
+    private final boolean arg$2;
+    private final TL_userFull arg$3;
 
-    MessagesStorage$$Lambda$46(MessagesStorage messagesStorage, ChatFull chatFull, boolean z) {
+    MessagesStorage$$Lambda$46(MessagesStorage messagesStorage, boolean z, TL_userFull tL_userFull) {
         this.arg$1 = messagesStorage;
-        this.arg$2 = chatFull;
-        this.arg$3 = z;
+        this.arg$2 = z;
+        this.arg$3 = tL_userFull;
     }
 
     public void run() {
-        this.arg$1.lambda$updateChatInfo$69$MessagesStorage(this.arg$2, this.arg$3);
+        this.arg$1.lambda$updateUserInfo$69$MessagesStorage(this.arg$2, this.arg$3);
     }
 }

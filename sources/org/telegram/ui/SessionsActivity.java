@@ -416,12 +416,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
     /* Access modifiers changed, original: final|synthetic */
     public final /* synthetic */ void lambda$null$0$SessionsActivity(TL_error error, TLObject response) {
-        if (getParentActivity() != null) {
-            if (error == null && (response instanceof TL_boolTrue)) {
-                Toast.makeText(getParentActivity(), LocaleController.getString("TerminateAllSessions", NUM), 0).show();
-            } else {
-                Toast.makeText(getParentActivity(), LocaleController.getString("UnknownError", NUM), 0).show();
-            }
+        if (getParentActivity() != null && error == null && (response instanceof TL_boolTrue)) {
+            Toast.makeText(getParentActivity(), LocaleController.getString("TerminateAllSessions", NUM), 0).show();
             finishFragment();
         }
     }

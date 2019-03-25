@@ -1,21 +1,17 @@
 package org.telegram.messenger;
 
-import java.util.concurrent.CountDownLatch;
+import org.telegram.tgnet.TLRPC.EncryptedChat;
 
 final /* synthetic */ class MessagesStorage$$Lambda$72 implements Runnable {
     private final MessagesStorage arg$1;
-    private final long arg$2;
-    private final boolean[] arg$3;
-    private final CountDownLatch arg$4;
+    private final EncryptedChat arg$2;
 
-    MessagesStorage$$Lambda$72(MessagesStorage messagesStorage, long j, boolean[] zArr, CountDownLatch countDownLatch) {
+    MessagesStorage$$Lambda$72(MessagesStorage messagesStorage, EncryptedChat encryptedChat) {
         this.arg$1 = messagesStorage;
-        this.arg$2 = j;
-        this.arg$3 = zArr;
-        this.arg$4 = countDownLatch;
+        this.arg$2 = encryptedChat;
     }
 
     public void run() {
-        this.arg$1.lambda$isDialogHasMessages$100$MessagesStorage(this.arg$2, this.arg$3, this.arg$4);
+        this.arg$1.lambda$updateEncryptedChat$100$MessagesStorage(this.arg$2);
     }
 }

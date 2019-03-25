@@ -27,6 +27,7 @@ import org.telegram.tgnet.TLRPC.TL_fileLocation;
 import org.telegram.tgnet.TLRPC.TL_photoCachedSize;
 import org.telegram.tgnet.TLRPC.TL_photoSize;
 import org.telegram.tgnet.TLRPC.TL_photoStrippedSize;
+import org.telegram.tgnet.TLRPC.WebPage;
 import org.telegram.ui.Components.AnimatedFileDrawable;
 import org.telegram.ui.Components.RecyclableDrawable;
 
@@ -229,7 +230,25 @@ public class ImageReceiver implements NotificationCenterDelegate {
         setImage(null, null, fileLocation, filter, thumb, thumbLocation, thumbFilter, size, ext, parentObject, cacheType);
     }
 
-    private String getLocationKey(Object fileLocation, Object parentObject) {
+    public static String getStippedKey(Object parentObject, Object fullObject) {
+        if (parentObject instanceof WebPage) {
+            if (fullObject instanceof Document) {
+                return "stripped" + FileRefController.getKeyForParentObject(parentObject) + "_" + ((Document) fullObject).id;
+            } else if (fullObject instanceof PhotoSize) {
+                PhotoSize size = (PhotoSize) fullObject;
+                if (size.location != null) {
+                    return "stripped" + FileRefController.getKeyForParentObject(parentObject) + "_" + size.location.local_id + "_" + size.location.volume_id;
+                }
+                return "stripped" + FileRefController.getKeyForParentObject(parentObject);
+            } else if (fullObject instanceof FileLocation) {
+                FileLocation loc = (FileLocation) fullObject;
+                return "stripped" + FileRefController.getKeyForParentObject(parentObject) + "_" + loc.local_id + "_" + loc.volume_id;
+            }
+        }
+        return "stripped" + FileRefController.getKeyForParentObject(parentObject);
+    }
+
+    private String getLocationKey(Object fileLocation, Object parentObject, Object fullObject) {
         if (fileLocation instanceof SecureDocument) {
             SecureDocument document = (SecureDocument) fileLocation;
             return document.secureFile.dc_id + "_" + document.secureFile.id;
@@ -239,7 +258,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
         } else {
             if (fileLocation instanceof TL_photoStrippedSize) {
                 if (((TL_photoStrippedSize) fileLocation).bytes.length > 0) {
-                    return "stripped" + FileRefController.getKeyForParentObject(parentObject);
+                    return getStippedKey(parentObject, fullObject);
                 }
             } else if ((fileLocation instanceof TL_photoSize) || (fileLocation instanceof TL_photoCachedSize)) {
                 PhotoSize photoSize = (PhotoSize) fileLocation;
@@ -324,10 +343,11 @@ public class ImageReceiver implements NotificationCenterDelegate {
             }
             return;
         }
+        Object obj;
         if (isInvalidLocation(thumbLocation)) {
             thumbLocation = null;
         }
-        String imageKey = getLocationKey(fileLocation, parentObject);
+        String imageKey = getLocationKey(fileLocation, parentObject, null);
         if (imageKey == null && fileLocation != null) {
             fileLocation = null;
         }
@@ -347,7 +367,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
         if (!(imageKey == null || imageFilter == null)) {
             imageKey = imageKey + "@" + imageFilter;
         }
-        String mediaKey = getLocationKey(mediaLocation, parentObject);
+        String mediaKey = getLocationKey(mediaLocation, parentObject, null);
         if (mediaKey == null && mediaLocation != null) {
             mediaLocation = null;
         }
@@ -358,18 +378,19 @@ public class ImageReceiver implements NotificationCenterDelegate {
             if (this.delegate != null) {
                 imageReceiverDelegate = this.delegate;
                 z = (this.currentImageDrawable == null && this.currentThumbDrawable == null && this.staticThumbDrawable == null && this.currentMediaDrawable == null) ? false : true;
-                if (this.currentImageDrawable == null && this.currentMediaDrawable == null) {
-                    z2 = true;
-                } else {
-                    z2 = false;
-                }
+                z2 = this.currentImageDrawable == null && this.currentMediaDrawable == null;
                 imageReceiverDelegate.didSetImage(this, z, z2);
             }
             if (!(this.canceledLoading || this.forcePreview)) {
                 return;
             }
         }
-        String thumbKey = getLocationKey(thumbLocation, parentObject);
+        if (mediaLocation != null) {
+            obj = mediaLocation;
+        } else {
+            obj = fileLocation;
+        }
+        String thumbKey = getLocationKey(thumbLocation, parentObject, obj);
         if (!(thumbKey == null || thumbFilter == null)) {
             thumbKey = thumbKey + "@" + thumbFilter;
         }

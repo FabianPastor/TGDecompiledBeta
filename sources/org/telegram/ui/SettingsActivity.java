@@ -2116,7 +2116,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         }
         updateUserData();
         fixLayout();
-        getParentActivity().setTitle(LocaleController.getString("Settings", NUM));
+        setParentActivityTitle(LocaleController.getString("Settings", NUM));
     }
 
     public void onConfigurationChanged(Configuration newConfig) {
