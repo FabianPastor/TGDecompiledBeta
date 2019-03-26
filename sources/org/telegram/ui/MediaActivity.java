@@ -1798,6 +1798,12 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                         if (!prepareForMoving(ev, dx < 0)) {
                             this.maybeStartTracking = true;
                             this.startedTracking = false;
+                            MediaActivity.this.mediaPages[0].setTranslationX(0.0f);
+                            if (MediaActivity.this.animatingForward) {
+                                MediaActivity.this.mediaPages[1].setTranslationX((float) MediaActivity.this.mediaPages[0].getMeasuredWidth());
+                            } else {
+                                MediaActivity.this.mediaPages[1].setTranslationX((float) (-MediaActivity.this.mediaPages[0].getMeasuredWidth()));
+                            }
                         }
                     }
                     if (this.maybeStartTracking && !this.startedTracking) {
@@ -1810,11 +1816,10 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                             prepareForMoving(ev, z);
                         }
                     } else if (this.startedTracking) {
+                        MediaActivity.this.mediaPages[0].setTranslationX((float) dx);
                         if (MediaActivity.this.animatingForward) {
-                            MediaActivity.this.mediaPages[0].setTranslationX((float) dx);
                             MediaActivity.this.mediaPages[1].setTranslationX((float) (MediaActivity.this.mediaPages[0].getMeasuredWidth() + dx));
                         } else {
-                            MediaActivity.this.mediaPages[0].setTranslationX((float) dx);
                             MediaActivity.this.mediaPages[1].setTranslationX((float) (dx - MediaActivity.this.mediaPages[0].getMeasuredWidth()));
                         }
                         float scrollProgress = ((float) Math.abs(dx)) / ((float) MediaActivity.this.mediaPages[0].getMeasuredWidth());

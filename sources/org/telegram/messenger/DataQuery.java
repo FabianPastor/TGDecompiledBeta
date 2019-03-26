@@ -825,6 +825,17 @@ public class DataQuery {
         return this.unreadStickerSets;
     }
 
+    public boolean areAllTrendingStickerSetsUnread() {
+        int N = this.featuredStickerSets.size();
+        for (int a = 0; a < N; a++) {
+            StickerSetCovered pack = (StickerSetCovered) this.featuredStickerSets.get(a);
+            if (!getInstance(this.currentAccount).isStickerPackInstalled(pack.set.id) && ((!pack.covers.isEmpty() || pack.cover != null) && !this.unreadStickerSets.contains(Long.valueOf(pack.set.id)))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public boolean isStickerPackInstalled(long id) {
         return this.installedStickerSetsById.indexOfKey(id) >= 0;
     }
@@ -5340,7 +5351,7 @@ public class DataQuery {
             String key = keyword.toLowerCase();
             for (a = 0; a < 2; a++) {
                 if (a == 1) {
-                    String translitKey = LocaleController.getInstance().getTranslitString(key);
+                    String translitKey = LocaleController.getInstance().getTranslitString(key, false, false);
                     if (translitKey.equals(key)) {
                     } else {
                         key = translitKey;

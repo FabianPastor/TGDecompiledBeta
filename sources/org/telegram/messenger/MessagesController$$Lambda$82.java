@@ -12,6 +12,6 @@ final /* synthetic */ class MessagesController$$Lambda$82 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$reloadMentionsCountForChannels$128$MessagesController(this.arg$2);
+        this.arg$1.lambda$reloadMentionsCountForChannels$129$MessagesController(this.arg$2);
     }
 }

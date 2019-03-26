@@ -1,21 +1,17 @@
 package org.telegram.messenger;
 
-import org.telegram.tgnet.TLRPC.TL_messages_chatFull;
+import org.telegram.tgnet.TLRPC.User;
 
 final /* synthetic */ class MessagesController$$Lambda$255 implements Runnable {
     private final MessagesController arg$1;
-    private final int arg$2;
-    private final TL_messages_chatFull arg$3;
-    private final int arg$4;
+    private final User arg$2;
 
-    MessagesController$$Lambda$255(MessagesController messagesController, int i, TL_messages_chatFull tL_messages_chatFull, int i2) {
+    MessagesController$$Lambda$255(MessagesController messagesController, User user) {
         this.arg$1 = messagesController;
-        this.arg$2 = i;
-        this.arg$3 = tL_messages_chatFull;
-        this.arg$4 = i2;
+        this.arg$2 = user;
     }
 
     public void run() {
-        this.arg$1.lambda$null$15$MessagesController(this.arg$2, this.arg$3, this.arg$4);
+        this.arg$1.lambda$null$19$MessagesController(this.arg$2);
     }
 }

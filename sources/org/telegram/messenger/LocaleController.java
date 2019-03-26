@@ -79,6 +79,7 @@ public class LocaleController {
     private boolean reloadLastFile;
     public ArrayList<LocaleInfo> remoteLanguages = new ArrayList();
     public HashMap<String, LocaleInfo> remoteLanguagesDict = new HashMap();
+    private HashMap<String, String> ruTranslitChars;
     private Locale systemDefaultLocale;
     private HashMap<String, String> translitChars;
     public ArrayList<LocaleInfo> unofficialLanguages = new ArrayList();
@@ -2693,15 +2694,55 @@ public class LocaleController {
     }
 
     public String getTranslitString(String src) {
-        return getTranslitString(src, false);
+        return getTranslitString(src, true, false);
     }
 
     public String getTranslitString(String src, boolean onlyEnglish) {
+        return getTranslitString(src, true, onlyEnglish);
+    }
+
+    public String getTranslitString(String src, boolean ru, boolean onlyEnglish) {
         if (src == null) {
             return null;
         }
+        if (this.ruTranslitChars == null) {
+            this.ruTranslitChars = new HashMap(33);
+            this.ruTranslitChars.put("а", "a");
+            this.ruTranslitChars.put("б", "b");
+            this.ruTranslitChars.put("в", "v");
+            this.ruTranslitChars.put("г", "g");
+            this.ruTranslitChars.put("д", "d");
+            this.ruTranslitChars.put("е", "e");
+            this.ruTranslitChars.put("ё", "yo");
+            this.ruTranslitChars.put("ж", "zh");
+            this.ruTranslitChars.put("з", "z");
+            this.ruTranslitChars.put("и", "i");
+            this.ruTranslitChars.put("й", "i");
+            this.ruTranslitChars.put("к", "k");
+            this.ruTranslitChars.put("л", "l");
+            this.ruTranslitChars.put("м", "m");
+            this.ruTranslitChars.put("н", "n");
+            this.ruTranslitChars.put("о", "o");
+            this.ruTranslitChars.put("п", "p");
+            this.ruTranslitChars.put("р", "r");
+            this.ruTranslitChars.put("с", "s");
+            this.ruTranslitChars.put("т", "t");
+            this.ruTranslitChars.put("у", "u");
+            this.ruTranslitChars.put("ф", "f");
+            this.ruTranslitChars.put("х", "h");
+            this.ruTranslitChars.put("ц", "ts");
+            this.ruTranslitChars.put("ч", "ch");
+            this.ruTranslitChars.put("ш", "sh");
+            this.ruTranslitChars.put("щ", "sch");
+            this.ruTranslitChars.put("ы", "i");
+            this.ruTranslitChars.put("ь", "");
+            this.ruTranslitChars.put("ъ", "");
+            this.ruTranslitChars.put("э", "e");
+            this.ruTranslitChars.put("ю", "yu");
+            this.ruTranslitChars.put("я", "ya");
+        }
         if (this.translitChars == null) {
-            this.translitChars = new HashMap(520);
+            this.translitChars = new HashMap(487);
             this.translitChars.put("ȼ", "c");
             this.translitChars.put("ᶇ", "n");
             this.translitChars.put("ɖ", "d");
@@ -2741,7 +2782,6 @@ public class LocaleController {
             this.translitChars.put("ɟ", "j");
             this.translitChars.put("ẚ", "a");
             this.translitChars.put("ɏ", "y");
-            this.translitChars.put("л", "l");
             this.translitChars.put("ʌ", "v");
             this.translitChars.put("ꝓ", "p");
             this.translitChars.put("ﬁ", "fi");
@@ -2749,7 +2789,6 @@ public class LocaleController {
             this.translitChars.put("ḏ", "d");
             this.translitChars.put("ᴌ", "l");
             this.translitChars.put("ė", "e");
-            this.translitChars.put("ё", "yo");
             this.translitChars.put("ᴋ", "k");
             this.translitChars.put("ċ", "c");
             this.translitChars.put("ʁ", "r");
@@ -2790,7 +2829,6 @@ public class LocaleController {
             this.translitChars.put("ṩ", "s");
             this.translitChars.put("ɽ", "r");
             this.translitChars.put("ĝ", "g");
-            this.translitChars.put("в", "v");
             this.translitChars.put("ᴝ", "u");
             this.translitChars.put("ḳ", "k");
             this.translitChars.put("ꝫ", "et");
@@ -2801,7 +2839,6 @@ public class LocaleController {
             this.translitChars.put("ꜹ", "av");
             this.translitChars.put("û", "u");
             this.translitChars.put("æ", "ae");
-            this.translitChars.put("и", "i");
             this.translitChars.put("ă", "a");
             this.translitChars.put("ǘ", "u");
             this.translitChars.put("ꞅ", "s");
@@ -2829,7 +2866,6 @@ public class LocaleController {
             this.translitChars.put("ū", "u");
             this.translitChars.put("ḃ", "b");
             this.translitChars.put("ṗ", "p");
-            this.translitChars.put("ь", "");
             this.translitChars.put("å", "a");
             this.translitChars.put("ɕ", "c");
             this.translitChars.put("ọ", "o");
@@ -2847,7 +2883,6 @@ public class LocaleController {
             this.translitChars.put("ḓ", "d");
             this.translitChars.put("ȇ", "e");
             this.translitChars.put("ȕ", "u");
-            this.translitChars.put("п", "p");
             this.translitChars.put("ȵ", "n");
             this.translitChars.put("ʠ", "q");
             this.translitChars.put("ấ", "a");
@@ -2860,11 +2895,9 @@ public class LocaleController {
             this.translitChars.put("ṫ", "t");
             this.translitChars.put("ꝗ", "q");
             this.translitChars.put("ậ", "a");
-            this.translitChars.put("н", "n");
             this.translitChars.put("ʄ", "j");
             this.translitChars.put("ƚ", "l");
             this.translitChars.put("ᶂ", "f");
-            this.translitChars.put("д", "d");
             this.translitChars.put("ᵴ", "s");
             this.translitChars.put("ꞃ", "r");
             this.translitChars.put("ᶌ", "v");
@@ -2909,7 +2942,6 @@ public class LocaleController {
             this.translitChars.put("ď", "d");
             this.translitChars.put("ᵯ", "m");
             this.translitChars.put("ỵ", "y");
-            this.translitChars.put("я", "ya");
             this.translitChars.put("ŵ", "w");
             this.translitChars.put("ề", "e");
             this.translitChars.put("ứ", "u");
@@ -2918,13 +2950,11 @@ public class LocaleController {
             this.translitChars.put("ḍ", "d");
             this.translitChars.put("ŭ", "u");
             this.translitChars.put("ʝ", "j");
-            this.translitChars.put("ж", "zh");
             this.translitChars.put("ê", "e");
             this.translitChars.put("ǚ", "u");
             this.translitChars.put("ġ", "g");
             this.translitChars.put("ṙ", "r");
             this.translitChars.put("ƞ", "n");
-            this.translitChars.put("ъ", "");
             this.translitChars.put("ḗ", "e");
             this.translitChars.put("ẝ", "s");
             this.translitChars.put("ᶁ", "d");
@@ -2934,12 +2964,10 @@ public class LocaleController {
             this.translitChars.put("ợ", "o");
             this.translitChars.put("ḿ", "m");
             this.translitChars.put("ꜰ", "f");
-            this.translitChars.put("а", "a");
             this.translitChars.put("ẵ", "a");
             this.translitChars.put("ꝏ", "oo");
             this.translitChars.put("ᶆ", "m");
             this.translitChars.put("ᵽ", "p");
-            this.translitChars.put("ц", "ts");
             this.translitChars.put("ữ", "u");
             this.translitChars.put("ⱪ", "k");
             this.translitChars.put("ḥ", "h");
@@ -2953,7 +2981,6 @@ public class LocaleController {
             this.translitChars.put("ᶎ", "z");
             this.translitChars.put("ꝺ", "d");
             this.translitChars.put("ᶈ", "p");
-            this.translitChars.put("м", "m");
             this.translitChars.put("ɫ", "l");
             this.translitChars.put("ᴢ", "z");
             this.translitChars.put("ɱ", "m");
@@ -2961,7 +2988,6 @@ public class LocaleController {
             this.translitChars.put("ṽ", "v");
             this.translitChars.put("ũ", "u");
             this.translitChars.put("ß", "ss");
-            this.translitChars.put("т", "t");
             this.translitChars.put("ĥ", "h");
             this.translitChars.put("ᵵ", "t");
             this.translitChars.put("ʐ", "z");
@@ -2971,7 +2997,6 @@ public class LocaleController {
             this.translitChars.put("ẙ", "y");
             this.translitChars.put("ỳ", "y");
             this.translitChars.put("ᴔ", "oe");
-            this.translitChars.put("ы", "i");
             this.translitChars.put("ₓ", "x");
             this.translitChars.put("ȗ", "u");
             this.translitChars.put("ⱼ", "j");
@@ -2990,12 +3015,10 @@ public class LocaleController {
             this.translitChars.put("ạ", "a");
             this.translitChars.put("ḅ", "b");
             this.translitChars.put("ụ", "u");
-            this.translitChars.put("к", "k");
             this.translitChars.put("ằ", "a");
             this.translitChars.put("ᴛ", "t");
             this.translitChars.put("ƴ", "y");
             this.translitChars.put("ⱦ", "t");
-            this.translitChars.put("з", "z");
             this.translitChars.put("ⱡ", "l");
             this.translitChars.put("ȷ", "j");
             this.translitChars.put("ᵶ", "z");
@@ -3008,7 +3031,6 @@ public class LocaleController {
             this.translitChars.put("ȅ", "e");
             this.translitChars.put("ȧ", "a");
             this.translitChars.put("ẳ", "a");
-            this.translitChars.put("щ", "sch");
             this.translitChars.put("ɋ", "q");
             this.translitChars.put("ṭ", "t");
             this.translitChars.put("ꝸ", "um");
@@ -3055,14 +3077,12 @@ public class LocaleController {
             this.translitChars.put("ɳ", "n");
             this.translitChars.put("ʛ", "g");
             this.translitChars.put("ᴜ", "u");
-            this.translitChars.put("ф", "f");
             this.translitChars.put("ẩ", "a");
             this.translitChars.put("ṅ", "n");
             this.translitChars.put("ɨ", "i");
             this.translitChars.put("ᴙ", "r");
             this.translitChars.put("ǎ", "a");
             this.translitChars.put("ſ", "s");
-            this.translitChars.put("у", "u");
             this.translitChars.put("ȫ", "o");
             this.translitChars.put("ɿ", "r");
             this.translitChars.put("ƭ", "t");
@@ -3085,7 +3105,6 @@ public class LocaleController {
             this.translitChars.put("ᴕ", "ou");
             this.translitChars.put("ʈ", "t");
             this.translitChars.put("ā", "a");
-            this.translitChars.put("э", "e");
             this.translitChars.put("ḙ", "e");
             this.translitChars.put("ᴑ", "o");
             this.translitChars.put("ç", "c");
@@ -3094,7 +3113,6 @@ public class LocaleController {
             this.translitChars.put("ų", "u");
             this.translitChars.put("ả", "a");
             this.translitChars.put("ǥ", "g");
-            this.translitChars.put("р", "r");
             this.translitChars.put("ꝁ", "k");
             this.translitChars.put("ẕ", "z");
             this.translitChars.put("ŝ", "s");
@@ -3103,7 +3121,6 @@ public class LocaleController {
             this.translitChars.put("ꝉ", "l");
             this.translitChars.put("ꝼ", "f");
             this.translitChars.put("ᶍ", "x");
-            this.translitChars.put("х", "h");
             this.translitChars.put("ǒ", "o");
             this.translitChars.put("ę", "e");
             this.translitChars.put("ổ", "o");
@@ -3116,7 +3133,6 @@ public class LocaleController {
             this.translitChars.put("ẅ", "w");
             this.translitChars.put("ḑ", "d");
             this.translitChars.put("ḹ", "l");
-            this.translitChars.put("ч", "ch");
             this.translitChars.put("œ", "oe");
             this.translitChars.put("ᵳ", "r");
             this.translitChars.put("ļ", "l");
@@ -3167,15 +3183,12 @@ public class LocaleController {
             this.translitChars.put("ử", "u");
             this.translitChars.put("í", "i");
             this.translitChars.put("ɔ", "o");
-            this.translitChars.put("с", "s");
-            this.translitChars.put("й", "i");
             this.translitChars.put("ɺ", "r");
             this.translitChars.put("ɢ", "g");
             this.translitChars.put("ř", "r");
             this.translitChars.put("ẖ", "h");
             this.translitChars.put("ű", "u");
             this.translitChars.put("ȍ", "o");
-            this.translitChars.put("ш", "sh");
             this.translitChars.put("ḻ", "l");
             this.translitChars.put("ḣ", "h");
             this.translitChars.put("ȶ", "t");
@@ -3183,7 +3196,6 @@ public class LocaleController {
             this.translitChars.put("ᶒ", "e");
             this.translitChars.put("ì", "i");
             this.translitChars.put("ẉ", "w");
-            this.translitChars.put("б", "b");
             this.translitChars.put("ē", "e");
             this.translitChars.put("ᴇ", "e");
             this.translitChars.put("ł", "l");
@@ -3202,17 +3214,14 @@ public class LocaleController {
             this.translitChars.put("ↄ", "c");
             this.translitChars.put("ᶓ", "e");
             this.translitChars.put("ɰ", "m");
-            this.translitChars.put("е", "e");
             this.translitChars.put("ᴡ", "w");
             this.translitChars.put("ȏ", "o");
             this.translitChars.put("č", "c");
             this.translitChars.put("ǵ", "g");
             this.translitChars.put("ĉ", "c");
-            this.translitChars.put("ю", "yu");
             this.translitChars.put("ᶗ", "o");
             this.translitChars.put("ꝃ", "k");
             this.translitChars.put("ꝙ", "q");
-            this.translitChars.put("г", "g");
             this.translitChars.put("ṑ", "o");
             this.translitChars.put("ꜱ", "s");
             this.translitChars.put("ṓ", "o");
@@ -3220,7 +3229,6 @@ public class LocaleController {
             this.translitChars.put("ő", "o");
             this.translitChars.put("ꜩ", "tz");
             this.translitChars.put("ẻ", "e");
-            this.translitChars.put("о", "o");
         }
         StringBuilder dst = new StringBuilder(src.length());
         int len = src.length();
@@ -3233,9 +3241,16 @@ public class LocaleController {
                 ch = lower;
             }
             String tch = (String) this.translitChars.get(ch);
+            if (tch == null && ru) {
+                tch = (String) this.ruTranslitChars.get(ch);
+            }
             if (tch != null) {
                 if (onlyEnglish && upperCase) {
-                    tch = tch.length() > 1 ? tch.substring(0, 1).toUpperCase() + tch.substring(1) : tch.toUpperCase();
+                    if (tch.length() > 1) {
+                        tch = tch.substring(0, 1).toUpperCase() + tch.substring(1);
+                    } else {
+                        tch = tch.toUpperCase();
+                    }
                 }
                 dst.append(tch);
             } else {

@@ -12,6 +12,6 @@ final /* synthetic */ class MessagesController$$Lambda$93 implements RequestDele
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$completeReadTask$142$MessagesController(tLObject, tL_error);
+        this.arg$1.lambda$completeReadTask$143$MessagesController(tLObject, tL_error);
     }
 }

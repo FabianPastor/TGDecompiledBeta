@@ -2845,13 +2845,15 @@ public class NotificationsController {
             if (count == null) {
                 count = Integer.valueOf(0);
             }
-            if (Math.max(count.intValue(), messageObjects.size()) <= 1) {
+            if (Math.max(count.intValue(), messageObjects.size()) <= 1 || VERSION.SDK_INT >= 28) {
                 conversationName = name;
             } else {
-                conversationName = String.format("%1$s (%2$d)", new Object[]{name, Integer.valueOf(Math.max(count.intValue(), messageObjects.size()))});
+                conversationName = String.format("%1$s (%2$d)", new Object[]{name, Integer.valueOf(n)});
             }
             Style messagingStyle = new MessagingStyle("");
-            messagingStyle.setConversationTitle(conversationName);
+            if (VERSION.SDK_INT < 28 || (lowerId < 0 && !isChannel)) {
+                messagingStyle.setConversationTitle(conversationName);
+            }
             boolean z = VERSION.SDK_INT < 28 || (!isChannel && lowerId < 0);
             messagingStyle.setGroupConversation(z);
             StringBuilder text = new StringBuilder();

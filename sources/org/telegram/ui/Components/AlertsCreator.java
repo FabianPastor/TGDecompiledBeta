@@ -2684,7 +2684,7 @@ public class AlertsCreator {
                         frameLayout.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                         if (canDeleteInbox) {
                             frameLayout.setText(LocaleController.formatString("DeleteMessagesOptionAlso", NUM, UserObject.getFirstName(user)), "", false, false);
-                        } else if (chat == null || !hasNotOut) {
+                        } else if (chat == null || !(hasNotOut || myMessagesCount == count)) {
                             frameLayout.setText(LocaleController.getString("DeleteMessagesOption", NUM), "", false, false);
                         } else {
                             frameLayout.setText(LocaleController.getString("DeleteForAll", NUM), "", false, false);
@@ -2730,7 +2730,7 @@ public class AlertsCreator {
                     } else {
                         builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("DeleteMessagesText", NUM, LocaleController.formatPluralString("messages", myMessagesCount), UserObject.getFirstName(user))));
                     }
-                } else if (myMessagesCount != count) {
+                } else if (hasDeleteForAllCheck && myMessagesCount != count) {
                     builder.setMessage(LocaleController.formatString("DeleteMessagesTextGroupPart", NUM, LocaleController.formatPluralString("messages", myMessagesCount)));
                 } else if (count == 1) {
                     builder.setMessage(LocaleController.getString("AreYouSureDeleteSingleMessage", NUM));

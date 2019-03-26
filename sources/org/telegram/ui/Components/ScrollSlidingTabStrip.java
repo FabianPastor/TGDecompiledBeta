@@ -322,6 +322,11 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         return this.currentPosition;
     }
 
+    public void cancelPositionAnimation() {
+        this.animateFromPosition = false;
+        this.positionAnimationProgress = 1.0f;
+    }
+
     public void onPageScrolled(int position, int first) {
         if (this.currentPosition != position) {
             View currentTab = this.tabsContainer.getChildAt(this.currentPosition);

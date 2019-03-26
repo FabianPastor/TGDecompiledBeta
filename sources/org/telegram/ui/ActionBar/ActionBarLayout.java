@@ -350,7 +350,26 @@ public class ActionBarLayout extends FrameLayout {
 
     private void onSlideAnimationEnd(boolean backAnimation) {
         BaseFragment lastFragment;
-        if (!backAnimation) {
+        if (backAnimation) {
+            if (this.fragmentsStack.size() >= 2) {
+                ViewGroup parent;
+                lastFragment = (BaseFragment) this.fragmentsStack.get(this.fragmentsStack.size() - 2);
+                lastFragment.onPause();
+                if (lastFragment.fragmentView != null) {
+                    parent = (ViewGroup) lastFragment.fragmentView.getParent();
+                    if (parent != null) {
+                        lastFragment.onRemoveFromParent();
+                        parent.removeView(lastFragment.fragmentView);
+                    }
+                }
+                if (lastFragment.actionBar != null && lastFragment.actionBar.getAddToContainer()) {
+                    parent = (ViewGroup) lastFragment.actionBar.getParent();
+                    if (parent != null) {
+                        parent.removeView(lastFragment.actionBar);
+                    }
+                }
+            }
+        } else if (!this.fragmentsStack.isEmpty()) {
             lastFragment = (BaseFragment) this.fragmentsStack.get(this.fragmentsStack.size() - 1);
             lastFragment.onPause();
             lastFragment.onFragmentDestroy();
@@ -364,23 +383,8 @@ public class ActionBarLayout extends FrameLayout {
             this.currentActionBar = lastFragment.actionBar;
             lastFragment.onResume();
             lastFragment.onBecomeFullyVisible();
-        } else if (this.fragmentsStack.size() >= 2) {
-            ViewGroup parent;
-            lastFragment = (BaseFragment) this.fragmentsStack.get(this.fragmentsStack.size() - 2);
-            lastFragment.onPause();
-            if (lastFragment.fragmentView != null) {
-                parent = (ViewGroup) lastFragment.fragmentView.getParent();
-                if (parent != null) {
-                    lastFragment.onRemoveFromParent();
-                    parent.removeView(lastFragment.fragmentView);
-                }
-            }
-            if (lastFragment.actionBar != null && lastFragment.actionBar.getAddToContainer()) {
-                parent = (ViewGroup) lastFragment.actionBar.getParent();
-                if (parent != null) {
-                    parent.removeView(lastFragment.actionBar);
-                }
-            }
+        } else {
+            return;
         }
         this.containerViewBack.setVisibility(8);
         this.startedTracking = false;

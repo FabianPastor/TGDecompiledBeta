@@ -2479,6 +2479,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 if (this.voiceRow != -1) {
                     newRowsCount++;
                 }
+                if (this.groupsInCommonRow != -1) {
+                    newRowsCount++;
+                }
                 this.listAdapter.notifyItemRangeInserted(this.sharedHeaderRow, newRowsCount);
             } else if (sharedHeaderRowPrev != -1 && this.sharedHeaderRow != -1) {
                 if (!(photosRowPrev == -1 || this.photosRow == -1 || this.prevMediaCount[0] == this.lastMediaCount[0])) {
@@ -2520,6 +2523,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                     this.listAdapter.notifyItemInserted(this.voiceRow);
                 } else if (voiceRowPrev != -1 && this.voiceRow == -1) {
                     this.listAdapter.notifyItemRemoved(voiceRowPrev);
+                }
+                if (groupsInCommonRowPrev == -1 && this.groupsInCommonRow != -1) {
+                    this.listAdapter.notifyItemInserted(this.groupsInCommonRow);
+                } else if (groupsInCommonRowPrev != -1 && this.groupsInCommonRow == -1) {
+                    this.listAdapter.notifyItemRemoved(groupsInCommonRowPrev);
                 }
             }
         }

@@ -226,7 +226,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                 } else {
                     Vibrator v;
                     if (ChannelCreateActivity.this.currentStep == 0) {
-                        if (!ChannelCreateActivity.this.donePressed) {
+                        if (!ChannelCreateActivity.this.donePressed && ChannelCreateActivity.this.getParentActivity() != null) {
                             if (ChannelCreateActivity.this.nameTextView.length() == 0) {
                                 v = (Vibrator) ChannelCreateActivity.this.getParentActivity().getSystemService("vibrator");
                                 if (v != null) {

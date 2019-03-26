@@ -10,6 +10,6 @@ final /* synthetic */ class MessagesController$$Lambda$95 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$markDialogAsReadNow$144$MessagesController(this.arg$2);
+        this.arg$1.lambda$markDialogAsReadNow$145$MessagesController(this.arg$2);
     }
 }

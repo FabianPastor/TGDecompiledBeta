@@ -12,6 +12,6 @@ final /* synthetic */ class MessagesController$$Lambda$116 implements RequestDel
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$generateUpdateMessage$184$MessagesController(tLObject, tL_error);
+        this.arg$1.lambda$generateUpdateMessage$185$MessagesController(tLObject, tL_error);
     }
 }

@@ -10,6 +10,6 @@ final /* synthetic */ class MessagesController$$Lambda$86 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$addToViewsQueue$135$MessagesController(this.arg$2);
+        this.arg$1.lambda$addToViewsQueue$136$MessagesController(this.arg$2);
     }
 }
