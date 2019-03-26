@@ -8,6 +8,6 @@ final /* synthetic */ class MessagesController$$Lambda$61 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$updateTimerProc$85$MessagesController();
+        this.arg$1.lambda$updateTimerProc$86$MessagesController();
     }
 }

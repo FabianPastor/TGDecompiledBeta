@@ -1783,18 +1783,16 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                         if ((mask & 2048) != 0) {
                             cell.checkCurrentDialogIndex();
                             if (this.dialogsType == 0 && AndroidUtilities.isTablet()) {
-                                boolean z;
-                                if (cell.getDialogId() == this.openedDialogId) {
-                                    z = true;
-                                } else {
-                                    z = false;
-                                }
-                                cell.setDialogSelected(z);
+                                cell.setDialogSelected(cell.getDialogId() == this.openedDialogId);
                             }
                         } else if ((mask & 512) == 0) {
                             cell.update(mask);
                         } else if (this.dialogsType == 0 && AndroidUtilities.isTablet()) {
                             cell.setDialogSelected(cell.getDialogId() == this.openedDialogId);
+                        }
+                        ArrayList<Long> selectedDialogs = this.dialogsAdapter.getSelectedDialogs();
+                        if (selectedDialogs != null) {
+                            cell.setChecked(selectedDialogs.contains(Long.valueOf(cell.getDialogId())), false);
                         }
                     }
                 } else if (child instanceof UserCell) {

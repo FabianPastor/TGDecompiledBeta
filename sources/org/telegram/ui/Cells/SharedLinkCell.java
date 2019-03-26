@@ -652,7 +652,10 @@ public class SharedLinkCell extends FrameLayout {
 
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
         super.onInitializeAccessibilityNodeInfo(info);
-        StringBuilder sb = new StringBuilder(this.titleLayout.getText());
+        StringBuilder sb = new StringBuilder();
+        if (this.titleLayout != null) {
+            sb.append(this.titleLayout.getText());
+        }
         if (this.descriptionLayout != null) {
             sb.append(", ");
             sb.append(this.descriptionLayout.getText());

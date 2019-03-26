@@ -12,6 +12,6 @@ final /* synthetic */ class MessagesController$$Lambda$76 implements RequestDele
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$loadSignUpNotificationsSettings$114$MessagesController(tLObject, tL_error);
+        this.arg$1.lambda$loadSignUpNotificationsSettings$115$MessagesController(tLObject, tL_error);
     }
 }

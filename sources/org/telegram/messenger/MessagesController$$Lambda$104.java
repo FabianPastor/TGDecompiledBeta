@@ -18,6 +18,6 @@ final /* synthetic */ class MessagesController$$Lambda$104 implements RequestDel
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$addUsersToChannel$163$MessagesController(this.arg$2, this.arg$3, tLObject, tL_error);
+        this.arg$1.lambda$addUsersToChannel$164$MessagesController(this.arg$2, this.arg$3, tLObject, tL_error);
     }
 }

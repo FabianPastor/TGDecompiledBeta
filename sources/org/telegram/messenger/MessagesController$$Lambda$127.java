@@ -14,6 +14,6 @@ final /* synthetic */ class MessagesController$$Lambda$127 implements RequestDel
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$markDialogAsUnread$212$MessagesController(this.arg$2, tLObject, tL_error);
+        this.arg$1.lambda$markDialogAsUnread$213$MessagesController(this.arg$2, tLObject, tL_error);
     }
 }

@@ -28,11 +28,15 @@ import android.widget.TextView;
 import java.io.File;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.BuildVars;
+import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.Utilities;
 import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
@@ -47,11 +51,13 @@ import org.telegram.tgnet.TLRPC.TL_message;
 import org.telegram.tgnet.TLRPC.TL_messageMediaDocument;
 import org.telegram.tgnet.TLRPC.TL_messageMediaEmpty;
 import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto;
+import org.telegram.tgnet.TLRPC.TL_peerChat;
 import org.telegram.tgnet.TLRPC.TL_peerUser;
 import org.telegram.tgnet.TLRPC.TL_photo;
 import org.telegram.tgnet.TLRPC.TL_photoSize;
 import org.telegram.tgnet.TLRPC.TL_pollAnswer;
 import org.telegram.tgnet.TLRPC.TL_replyInlineMarkup;
+import org.telegram.tgnet.TLRPC.TL_user;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuItem.ActionBarMenuItemSearchListener;
@@ -239,128 +245,188 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
 
     public class MessagesAdapter extends SelectionAdapter {
         private Context mContext;
-        private ArrayList<MessageObject> messages = new ArrayList();
+        private ArrayList<MessageObject> messages;
+        private boolean showSecretMessages;
 
         public MessagesAdapter(Context context) {
+            boolean z;
+            Message message;
+            MessageObject messageObject;
+            if (Utilities.random.nextInt(100) <= (BuildVars.DEBUG_VERSION ? 5 : 1)) {
+                z = true;
+            } else {
+                z = false;
+            }
+            this.showSecretMessages = z;
             this.mContext = context;
+            this.messages = new ArrayList();
             int date = ((int) (System.currentTimeMillis() / 1000)) - 3600;
-            Message message = new TL_message();
-            message.message = "Reinhardt, we need to find you some new tunes 🎶.";
-            message.date = date + 60;
-            message.dialog_id = 1;
-            message.flags = 259;
-            message.from_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
-            message.id = 1;
-            message.media = new TL_messageMediaEmpty();
-            message.out = true;
-            message.to_id = new TL_peerUser();
-            message.to_id.user_id = 0;
-            MessageObject replyMessageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, true);
-            message = new TL_message();
-            message.message = "I can't even take you seriously right now.";
-            message.date = date + 960;
-            message.dialog_id = 1;
-            message.flags = 259;
-            message.from_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
-            message.id = 1;
-            message.media = new TL_messageMediaEmpty();
-            message.out = true;
-            message.to_id = new TL_peerUser();
-            message.to_id.user_id = 0;
-            this.messages.add(new MessageObject(ThemePreviewActivity.this.currentAccount, message, true));
-            message = new TL_message();
-            message.date = date + 130;
-            message.dialog_id = 1;
-            message.flags = 259;
-            message.from_id = 0;
-            message.id = 5;
-            message.media = new TL_messageMediaDocument();
-            MessageMedia messageMedia = message.media;
-            messageMedia.flags |= 3;
-            message.media.document = new TL_document();
-            message.media.document.mime_type = "audio/mp4";
-            message.media.document.file_reference = new byte[0];
-            TL_documentAttributeAudio audio = new TL_documentAttributeAudio();
-            audio.duration = 243;
-            audio.performer = "David Hasselhoff";
-            audio.title = "True Survivor";
-            message.media.document.attributes.add(audio);
-            message.out = false;
-            message.to_id = new TL_peerUser();
-            message.to_id.user_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
-            this.messages.add(new MessageObject(ThemePreviewActivity.this.currentAccount, message, true));
-            message = new TL_message();
-            message.message = "Ah, you kids today with techno music! You should enjoy the classics, like Hasselhoff!";
-            message.date = date + 60;
-            message.dialog_id = 1;
-            message.flags = 265;
-            message.from_id = 0;
-            message.id = 1;
-            message.reply_to_msg_id = 5;
-            message.media = new TL_messageMediaEmpty();
-            message.out = false;
-            message.to_id = new TL_peerUser();
-            message.to_id.user_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
-            MessageObject messageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, true);
-            messageObject.customReplyName = "Lucio";
-            messageObject.replyMessageObject = replyMessageObject;
-            this.messages.add(messageObject);
-            message = new TL_message();
-            message.date = date + 120;
-            message.dialog_id = 1;
-            message.flags = 259;
-            message.from_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
-            message.id = 1;
-            message.media = new TL_messageMediaDocument();
-            messageMedia = message.media;
-            messageMedia.flags |= 3;
-            message.media.document = new TL_document();
-            message.media.document.mime_type = "audio/ogg";
-            message.media.document.file_reference = new byte[0];
-            audio = new TL_documentAttributeAudio();
-            audio.flags = 1028;
-            audio.duration = 3;
-            audio.voice = true;
-            audio.waveform = new byte[]{(byte) 0, (byte) 4, (byte) 17, (byte) -50, (byte) -93, (byte) 86, (byte) -103, (byte) -45, (byte) -12, (byte) -26, (byte) 63, (byte) -25, (byte) -3, (byte) 109, (byte) -114, (byte) -54, (byte) -4, (byte) -1, (byte) -1, (byte) -1, (byte) -1, (byte) -29, (byte) -1, (byte) -1, (byte) -25, (byte) -1, (byte) -1, (byte) -97, (byte) -43, (byte) 57, (byte) -57, (byte) -108, (byte) 1, (byte) -91, (byte) -4, (byte) -47, (byte) 21, (byte) 99, (byte) 10, (byte) 97, (byte) 43, (byte) 45, (byte) 115, (byte) -112, (byte) -77, (byte) 51, (byte) -63, (byte) 66, (byte) 40, (byte) 34, (byte) -122, (byte) -116, (byte) 48, (byte) -124, (byte) 16, (byte) 66, (byte) -120, (byte) 16, (byte) 68, (byte) 16, (byte) 33, (byte) 4, (byte) 1};
-            message.media.document.attributes.add(audio);
-            message.out = true;
-            message.to_id = new TL_peerUser();
-            message.to_id.user_id = 0;
-            messageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, true);
-            messageObject.audioProgressSec = 1;
-            messageObject.audioProgress = 0.3f;
-            messageObject.useCustomPhoto = true;
-            this.messages.add(messageObject);
-            this.messages.add(replyMessageObject);
-            message = new TL_message();
-            message.date = date + 10;
-            message.dialog_id = 1;
-            message.flags = 257;
-            message.from_id = 0;
-            message.id = 1;
-            message.media = new TL_messageMediaPhoto();
-            messageMedia = message.media;
-            messageMedia.flags |= 3;
-            message.media.photo = new TL_photo();
-            message.media.photo.file_reference = new byte[0];
-            message.media.photo.has_stickers = false;
-            message.media.photo.id = 1;
-            message.media.photo.access_hash = 0;
-            message.media.photo.date = date;
-            TL_photoSize photoSize = new TL_photoSize();
-            photoSize.size = 0;
-            photoSize.w = 500;
-            photoSize.h = 302;
-            photoSize.type = "s";
-            photoSize.location = new TL_fileLocationUnavailable();
-            message.media.photo.sizes.add(photoSize);
-            message.message = "Bring it on! I LIVE for this!";
-            message.out = false;
-            message.to_id = new TL_peerUser();
-            message.to_id.user_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
-            messageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, true);
-            messageObject.useCustomPhoto = true;
-            this.messages.add(messageObject);
+            if (this.showSecretMessages) {
+                TL_user user1 = new TL_user();
+                user1.id = Integer.MAX_VALUE;
+                user1.first_name = "Me";
+                TL_user user2 = new TL_user();
+                user2.id = NUM;
+                user2.first_name = "Serj";
+                ArrayList<User> users = new ArrayList();
+                users.add(user1);
+                users.add(user2);
+                MessagesController.getInstance(ThemePreviewActivity.this.currentAccount).putUsers(users, true);
+                message = new TL_message();
+                message.message = "Guess why Half-Life 3 was never released.";
+                message.date = date + 960;
+                message.dialog_id = -1;
+                message.flags = 259;
+                message.id = NUM;
+                message.media = new TL_messageMediaEmpty();
+                message.out = false;
+                message.to_id = new TL_peerChat();
+                message.to_id.chat_id = 1;
+                message.from_id = user2.id;
+                this.messages.add(new MessageObject(ThemePreviewActivity.this.currentAccount, message, true));
+                message = new TL_message();
+                message.message = "No.\nAnd every unnecessary ping of the dev delays the release for 10 days.\nEvery request for ETA delays the release for 2 weeks.";
+                message.date = date + 960;
+                message.dialog_id = -1;
+                message.flags = 259;
+                message.id = 1;
+                message.media = new TL_messageMediaEmpty();
+                message.out = false;
+                message.to_id = new TL_peerChat();
+                message.to_id.chat_id = 1;
+                message.from_id = user2.id;
+                this.messages.add(new MessageObject(ThemePreviewActivity.this.currentAccount, message, true));
+                message = new TL_message();
+                message.message = "Is source code for Android coming anytime soon?";
+                message.date = date + 600;
+                message.dialog_id = -1;
+                message.flags = 259;
+                message.id = 1;
+                message.media = new TL_messageMediaEmpty();
+                message.out = false;
+                message.to_id = new TL_peerChat();
+                message.to_id.chat_id = 1;
+                message.from_id = user1.id;
+                this.messages.add(new MessageObject(ThemePreviewActivity.this.currentAccount, message, true));
+            } else {
+                message = new TL_message();
+                message.message = "Reinhardt, we need to find you some new tunes 🎶.";
+                message.date = date + 60;
+                message.dialog_id = 1;
+                message.flags = 259;
+                message.from_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
+                message.id = 1;
+                message.media = new TL_messageMediaEmpty();
+                message.out = true;
+                message.to_id = new TL_peerUser();
+                message.to_id.user_id = 0;
+                MessageObject replyMessageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, true);
+                message = new TL_message();
+                message.message = "I can't even take you seriously right now.";
+                message.date = date + 960;
+                message.dialog_id = 1;
+                message.flags = 259;
+                message.from_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
+                message.id = 1;
+                message.media = new TL_messageMediaEmpty();
+                message.out = true;
+                message.to_id = new TL_peerUser();
+                message.to_id.user_id = 0;
+                this.messages.add(new MessageObject(ThemePreviewActivity.this.currentAccount, message, true));
+                message = new TL_message();
+                message.date = date + 130;
+                message.dialog_id = 1;
+                message.flags = 259;
+                message.from_id = 0;
+                message.id = 5;
+                message.media = new TL_messageMediaDocument();
+                MessageMedia messageMedia = message.media;
+                messageMedia.flags |= 3;
+                message.media.document = new TL_document();
+                message.media.document.mime_type = "audio/mp4";
+                message.media.document.file_reference = new byte[0];
+                TL_documentAttributeAudio audio = new TL_documentAttributeAudio();
+                audio.duration = 243;
+                audio.performer = "David Hasselhoff";
+                audio.title = "True Survivor";
+                message.media.document.attributes.add(audio);
+                message.out = false;
+                message.to_id = new TL_peerUser();
+                message.to_id.user_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
+                this.messages.add(new MessageObject(ThemePreviewActivity.this.currentAccount, message, true));
+                message = new TL_message();
+                message.message = "Ah, you kids today with techno music! You should enjoy the classics, like Hasselhoff!";
+                message.date = date + 60;
+                message.dialog_id = 1;
+                message.flags = 265;
+                message.from_id = 0;
+                message.id = 1;
+                message.reply_to_msg_id = 5;
+                message.media = new TL_messageMediaEmpty();
+                message.out = false;
+                message.to_id = new TL_peerUser();
+                message.to_id.user_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
+                messageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, true);
+                messageObject.customReplyName = "Lucio";
+                messageObject.replyMessageObject = replyMessageObject;
+                this.messages.add(messageObject);
+                message = new TL_message();
+                message.date = date + 120;
+                message.dialog_id = 1;
+                message.flags = 259;
+                message.from_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
+                message.id = 1;
+                message.media = new TL_messageMediaDocument();
+                messageMedia = message.media;
+                messageMedia.flags |= 3;
+                message.media.document = new TL_document();
+                message.media.document.mime_type = "audio/ogg";
+                message.media.document.file_reference = new byte[0];
+                audio = new TL_documentAttributeAudio();
+                audio.flags = 1028;
+                audio.duration = 3;
+                audio.voice = true;
+                audio.waveform = new byte[]{(byte) 0, (byte) 4, (byte) 17, (byte) -50, (byte) -93, (byte) 86, (byte) -103, (byte) -45, (byte) -12, (byte) -26, (byte) 63, (byte) -25, (byte) -3, (byte) 109, (byte) -114, (byte) -54, (byte) -4, (byte) -1, (byte) -1, (byte) -1, (byte) -1, (byte) -29, (byte) -1, (byte) -1, (byte) -25, (byte) -1, (byte) -1, (byte) -97, (byte) -43, (byte) 57, (byte) -57, (byte) -108, (byte) 1, (byte) -91, (byte) -4, (byte) -47, (byte) 21, (byte) 99, (byte) 10, (byte) 97, (byte) 43, (byte) 45, (byte) 115, (byte) -112, (byte) -77, (byte) 51, (byte) -63, (byte) 66, (byte) 40, (byte) 34, (byte) -122, (byte) -116, (byte) 48, (byte) -124, (byte) 16, (byte) 66, (byte) -120, (byte) 16, (byte) 68, (byte) 16, (byte) 33, (byte) 4, (byte) 1};
+                message.media.document.attributes.add(audio);
+                message.out = true;
+                message.to_id = new TL_peerUser();
+                message.to_id.user_id = 0;
+                messageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, true);
+                messageObject.audioProgressSec = 1;
+                messageObject.audioProgress = 0.3f;
+                messageObject.useCustomPhoto = true;
+                this.messages.add(messageObject);
+                this.messages.add(replyMessageObject);
+                message = new TL_message();
+                message.date = date + 10;
+                message.dialog_id = 1;
+                message.flags = 257;
+                message.from_id = 0;
+                message.id = 1;
+                message.media = new TL_messageMediaPhoto();
+                messageMedia = message.media;
+                messageMedia.flags |= 3;
+                message.media.photo = new TL_photo();
+                message.media.photo.file_reference = new byte[0];
+                message.media.photo.has_stickers = false;
+                message.media.photo.id = 1;
+                message.media.photo.access_hash = 0;
+                message.media.photo.date = date;
+                TL_photoSize photoSize = new TL_photoSize();
+                photoSize.size = 0;
+                photoSize.w = 500;
+                photoSize.h = 302;
+                photoSize.type = "s";
+                photoSize.location = new TL_fileLocationUnavailable();
+                message.media.photo.sizes.add(photoSize);
+                message.message = "Bring it on! I LIVE for this!";
+                message.out = false;
+                message.to_id = new TL_peerUser();
+                message.to_id.user_id = UserConfig.getInstance(ThemePreviewActivity.this.currentAccount).getClientUserId();
+                messageObject = new MessageObject(ThemePreviewActivity.this.currentAccount, message, true);
+                messageObject.useCustomPhoto = true;
+                this.messages.add(messageObject);
+            }
             message = new TL_message();
             message.message = LocaleController.formatDateChat((long) date);
             message.id = 0;
@@ -492,6 +558,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
                 } else {
                     pinnedTop = false;
                 }
+                messageCell.isChat = this.showSecretMessages;
                 messageCell.setFullyDraw(true);
                 messageCell.setMessageObject(message, null, pinnedBotton, pinnedTop);
             } else if (view instanceof ChatActionCell) {
@@ -648,12 +715,82 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
             }
         };
         this.page2.setBackgroundImage(Theme.getCachedWallpaper(), Theme.isWallpaperMotion());
+        this.messagesAdapter = new MessagesAdapter(context);
         this.actionBar2 = createActionBar(context);
         this.actionBar2.setBackButtonDrawable(new BackDrawable(false));
-        this.actionBar2.setTitle("Reinhardt");
-        this.actionBar2.setSubtitle(LocaleController.formatDateOnline((System.currentTimeMillis() / 1000) - 3600));
+        if (this.messagesAdapter.showSecretMessages) {
+            this.actionBar2.setTitle("Telegram Beta Chat");
+            this.actionBar2.setSubtitle(LocaleController.formatPluralString("Members", 505));
+        } else {
+            this.actionBar2.setTitle("Reinhardt");
+            this.actionBar2.setSubtitle(LocaleController.formatDateOnline((System.currentTimeMillis() / 1000) - 3600));
+        }
         this.page2.addView(this.actionBar2, LayoutHelper.createFrame(-1, -2.0f));
-        this.listView2 = new RecyclerListView(context);
+        this.listView2 = new RecyclerListView(context) {
+            public boolean drawChild(Canvas canvas, View child, long drawingTime) {
+                boolean result = super.drawChild(canvas, child, drawingTime);
+                if (child instanceof ChatMessageCell) {
+                    ChatMessageCell chatMessageCell = (ChatMessageCell) child;
+                    MessageObject message = chatMessageCell.getMessageObject();
+                    ImageReceiver imageReceiver = chatMessageCell.getAvatarImage();
+                    if (imageReceiver != null) {
+                        ViewHolder holder;
+                        int top = child.getTop();
+                        if (chatMessageCell.isPinnedBottom()) {
+                            holder = ThemePreviewActivity.this.listView2.getChildViewHolder(child);
+                            if (holder != null) {
+                                if (ThemePreviewActivity.this.listView2.findViewHolderForAdapterPosition(holder.getAdapterPosition() - 1) != null) {
+                                    imageReceiver.setImageY(-AndroidUtilities.dp(1000.0f));
+                                    imageReceiver.draw(canvas);
+                                }
+                            }
+                        }
+                        float tx = chatMessageCell.getTranslationX();
+                        int y = child.getTop() + chatMessageCell.getLayoutHeight();
+                        int maxY = ThemePreviewActivity.this.listView2.getMeasuredHeight() - ThemePreviewActivity.this.listView2.getPaddingBottom();
+                        if (y > maxY) {
+                            y = maxY;
+                        }
+                        if (chatMessageCell.isPinnedTop()) {
+                            holder = ThemePreviewActivity.this.listView2.getChildViewHolder(child);
+                            if (holder != null) {
+                                int tries = 0;
+                                while (tries < 20) {
+                                    tries++;
+                                    holder = ThemePreviewActivity.this.listView2.findViewHolderForAdapterPosition(holder.getAdapterPosition() + 1);
+                                    if (holder == null) {
+                                        break;
+                                    }
+                                    top = holder.itemView.getTop();
+                                    if (y - AndroidUtilities.dp(48.0f) < holder.itemView.getBottom()) {
+                                        tx = Math.min(holder.itemView.getTranslationX(), tx);
+                                    }
+                                    if (holder.itemView instanceof ChatMessageCell) {
+                                        if (!holder.itemView.isPinnedTop()) {
+                                            break;
+                                        }
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                        if (y - AndroidUtilities.dp(48.0f) < top) {
+                            y = top + AndroidUtilities.dp(48.0f);
+                        }
+                        if (tx != 0.0f) {
+                            canvas.save();
+                            canvas.translate(tx, 0.0f);
+                        }
+                        imageReceiver.setImageY(y - AndroidUtilities.dp(44.0f));
+                        imageReceiver.draw(canvas);
+                        if (tx != 0.0f) {
+                            canvas.restore();
+                        }
+                    }
+                }
+                return result;
+            }
+        };
         this.listView2.setVerticalScrollBarEnabled(true);
         this.listView2.setItemAnimator(null);
         this.listView2.setLayoutAnimation(null);
@@ -662,7 +799,6 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         this.listView2.setLayoutManager(new LinearLayoutManager(context, 1, true));
         this.listView2.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
         this.page2.addView(this.listView2, LayoutHelper.createFrame(-1, -1, 51));
-        this.messagesAdapter = new MessagesAdapter(context);
         this.listView2.setAdapter(this.messagesAdapter);
         this.fragmentView = new FrameLayout(context);
         FrameLayout frameLayout2 = (FrameLayout) this.fragmentView;

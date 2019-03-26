@@ -14,6 +14,6 @@ final /* synthetic */ class MessagesController$$Lambda$80 implements RequestDele
     }
 
     public void run(TLObject tLObject, TL_error tL_error) {
-        this.arg$1.lambda$migrateDialogs$122$MessagesController(this.arg$2, tLObject, tL_error);
+        this.arg$1.lambda$migrateDialogs$123$MessagesController(this.arg$2, tLObject, tL_error);
     }
 }

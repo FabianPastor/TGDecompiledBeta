@@ -721,7 +721,9 @@ public class ChatMessageCell extends BaseCell implements FileDownloadProgressLis
             } else if (virtualViewId == 499) {
                 info.setClassName("android.widget.Button");
                 info.setEnabled(true);
-                info.setText(ChatMessageCell.this.instantViewLayout.getText());
+                if (ChatMessageCell.this.instantViewLayout != null) {
+                    info.setText(ChatMessageCell.this.instantViewLayout.getText());
+                }
                 info.addAction(16);
                 int textX = ChatMessageCell.this.photoImage.getImageX();
                 int instantY = ChatMessageCell.this.getMeasuredHeight() - AndroidUtilities.dp(64.0f);

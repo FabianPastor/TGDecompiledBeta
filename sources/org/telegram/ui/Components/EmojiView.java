@@ -235,7 +235,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     private ArrayList<Document> recentStickers = new ArrayList();
     private int recentTabBum = -2;
     private LongSparseArray<StickerSetCovered> removingStickerSets = new LongSparseArray();
-    private boolean scrolledToTrending;
+    private int scrolledToTrending;
     private AnimatorSet searchAnimation;
     private ImageView searchButton;
     private int searchFieldHeight = AndroidUtilities.dp(64.0f);
@@ -2496,6 +2496,7 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
 
     public EmojiView(boolean needStickers, boolean needGif, Context context, boolean needSearch, ChatFull chatFull) {
         int i;
+        float f;
         super(context);
         this.needEmojiSearch = needSearch;
         Drawable[] drawableArr = new Drawable[3];
@@ -3488,7 +3489,12 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         EmojiColorPickerView emojiColorPickerView = this.pickerView;
         int dp = AndroidUtilities.dp((float) ((((AndroidUtilities.isTablet() ? 40 : 32) * 6) + 10) + 20));
         this.popupWidth = dp;
-        i = AndroidUtilities.dp(AndroidUtilities.isTablet() ? 64.0f : 56.0f);
+        if (AndroidUtilities.isTablet()) {
+            f = 64.0f;
+        } else {
+            f = 56.0f;
+        }
+        i = AndroidUtilities.dp(f);
         this.popupHeight = i;
         this.pickerViewPopup = new EmojiPopupWindow(emojiColorPickerView, dp, i);
         this.pickerViewPopup.setOutsideTouchable(true);
@@ -3500,6 +3506,14 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         this.currentPage = MessagesController.getGlobalEmojiSettings().getInt("selected_page", 0);
         Emoji.loadRecentEmoji();
         this.emojiAdapter.notifyDataSetChanged();
+        if (this.typeTabs == null) {
+            return;
+        }
+        if (this.views.size() == 1 && this.typeTabs.getVisibility() == 0) {
+            this.typeTabs.setVisibility(4);
+        } else if (this.views.size() != 1 && this.typeTabs.getVisibility() != 0) {
+            this.typeTabs.setVisibility(0);
+        }
     }
 
     /* Access modifiers changed, original: final|synthetic */
@@ -4488,14 +4502,15 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 this.stickersTab.onPageScrolled(lastPosition, lastPosition);
             }
             checkPanels();
-            if (hasStickers || this.trendingTabNum < 0) {
-                if (this.scrolledToTrending) {
-                    showTrendingTab(false);
-                    checkScroll();
+            if ((!hasStickers || (this.trendingTabNum == 0 && DataQuery.getInstance(this.currentAccount).areAllTrendingStickerSetsUnread())) && this.trendingTabNum >= 0) {
+                if (this.scrolledToTrending == 0) {
+                    showTrendingTab(true);
+                    this.scrolledToTrending = hasStickers ? 2 : 1;
                 }
-            } else if (!this.scrolledToTrending) {
-                showTrendingTab(true);
-                this.scrolledToTrending = true;
+            } else if (this.scrolledToTrending == 1) {
+                showTrendingTab(false);
+                checkScroll();
+                this.stickersTab.cancelPositionAnimation();
             }
         }
     }
@@ -4762,7 +4777,9 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 if (this.pager.getCurrentItem() != 2) {
                     this.pager.setCurrentItem(2, false);
                 }
-                if (this.recentTabBum >= 0) {
+                if (this.trendingTabNum == 0 && DataQuery.getInstance(this.currentAccount).areAllTrendingStickerSetsUnread()) {
+                    showTrendingTab(true);
+                } else if (this.recentTabBum >= 0) {
                     this.stickersTab.selectTab(this.recentTabBum);
                 } else if (this.favTabBum >= 0) {
                     this.stickersTab.selectTab(this.favTabBum);

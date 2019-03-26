@@ -159,7 +159,7 @@ public class TextDetailSettingsCell extends FrameLayout {
     /* Access modifiers changed, original: protected */
     public void onDraw(Canvas canvas) {
         float f = 71.0f;
-        if (this.needDivider) {
+        if (this.needDivider && Theme.dividerPaint != null) {
             float f2;
             int dp;
             if (LocaleController.isRTL) {

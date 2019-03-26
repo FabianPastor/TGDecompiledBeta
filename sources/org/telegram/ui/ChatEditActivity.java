@@ -836,7 +836,7 @@ public class ChatEditActivity extends BaseFragment implements NotificationCenter
     }
 
     private void processDone() {
-        if (!this.donePressed) {
+        if (!this.donePressed && this.nameTextView != null) {
             if (this.nameTextView.length() == 0) {
                 Vibrator v = (Vibrator) getParentActivity().getSystemService("vibrator");
                 if (v != null) {

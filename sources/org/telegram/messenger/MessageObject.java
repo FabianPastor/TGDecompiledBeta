@@ -1079,8 +1079,6 @@ public class MessageObject {
     }
 
     public MessageObject(int accountNum, Message message, AbstractMap<Integer, User> users, AbstractMap<Integer, Chat> chats, SparseArray<User> sUsers, SparseArray<Chat> sChats, boolean generateLayout, long eid) {
-        int size;
-        int a;
         this.type = 1000;
         Theme.createChatResources(null, true);
         this.currentAccount = accountNum;
@@ -1364,8 +1362,8 @@ public class MessageObject {
                 } else if (message.action instanceof TL_messageActionSecureValuesSent) {
                     TL_messageActionSecureValuesSent valuesSent = (TL_messageActionSecureValuesSent) message.action;
                     StringBuilder str = new StringBuilder();
-                    size = valuesSent.types.size();
-                    for (a = 0; a < size; a++) {
+                    int size = valuesSent.types.size();
+                    for (int a = 0; a < size; a++) {
                         SecureValueType type = (SecureValueType) valuesSent.types.get(a);
                         if (str.length() > 0) {
                             str.append(", ");
@@ -1491,32 +1489,7 @@ public class MessageObject {
             }
             int[] emojiOnly = SharedConfig.allowBigEmoji ? new int[1] : null;
             this.messageText = Emoji.replaceEmoji(this.messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false, emojiOnly);
-            if (emojiOnly != null && emojiOnly[0] >= 1 && emojiOnly[0] <= 3) {
-                TextPaint emojiPaint;
-                switch (emojiOnly[0]) {
-                    case 1:
-                        emojiPaint = Theme.chat_msgTextPaintOneEmoji;
-                        size = AndroidUtilities.dp(32.0f);
-                        this.emojiOnlyCount = 1;
-                        break;
-                    case 2:
-                        emojiPaint = Theme.chat_msgTextPaintTwoEmoji;
-                        size = AndroidUtilities.dp(28.0f);
-                        this.emojiOnlyCount = 2;
-                        break;
-                    default:
-                        emojiPaint = Theme.chat_msgTextPaintThreeEmoji;
-                        size = AndroidUtilities.dp(24.0f);
-                        this.emojiOnlyCount = 3;
-                        break;
-                }
-                EmojiSpan[] spans = (EmojiSpan[]) ((Spannable) this.messageText).getSpans(0, this.messageText.length(), EmojiSpan.class);
-                if (spans != null && spans.length > 0) {
-                    for (EmojiSpan replaceFontMetrics : spans) {
-                        replaceFontMetrics.replaceFontMetrics(emojiPaint.getFontMetricsInt(), size);
-                    }
-                }
-            }
+            checkEmojiOnly(emojiOnly);
             generateLayout(fromUser);
         }
         this.layoutCreated = generateLayout;
@@ -1539,8 +1512,37 @@ public class MessageObject {
         }
     }
 
+    private void checkEmojiOnly(int[] emojiOnly) {
+        if (emojiOnly != null && emojiOnly[0] >= 1 && emojiOnly[0] <= 3) {
+            TextPaint emojiPaint;
+            int size;
+            switch (emojiOnly[0]) {
+                case 1:
+                    emojiPaint = Theme.chat_msgTextPaintOneEmoji;
+                    size = AndroidUtilities.dp(32.0f);
+                    this.emojiOnlyCount = 1;
+                    break;
+                case 2:
+                    emojiPaint = Theme.chat_msgTextPaintTwoEmoji;
+                    size = AndroidUtilities.dp(28.0f);
+                    this.emojiOnlyCount = 2;
+                    break;
+                default:
+                    emojiPaint = Theme.chat_msgTextPaintThreeEmoji;
+                    size = AndroidUtilities.dp(24.0f);
+                    this.emojiOnlyCount = 3;
+                    break;
+            }
+            EmojiSpan[] spans = (EmojiSpan[]) ((Spannable) this.messageText).getSpans(0, this.messageText.length(), EmojiSpan.class);
+            if (spans != null && spans.length > 0) {
+                for (EmojiSpan replaceFontMetrics : spans) {
+                    replaceFontMetrics.replaceFontMetrics(emojiPaint.getFontMetricsInt(), size);
+                }
+            }
+        }
+    }
+
     public MessageObject(int accountNum, TL_channelAdminLogEvent event, ArrayList<MessageObject> messageObjects, HashMap<String, ArrayList<MessageObject>> messagesByDays, Chat chat, int[] mid) {
-        int a;
         MessageObject player;
         this.type = 1000;
         TLObject fromUser = null;
@@ -1784,7 +1786,7 @@ public class MessageObject {
                     int hours = (duration / 60) / 60;
                     int minutes = (duration - ((hours * 60) * 60)) / 60;
                     int count = 0;
-                    for (a = 0; a < 3; a++) {
+                    for (int a = 0; a < 3; a++) {
                         String addStr = null;
                         if (a == 0) {
                             if (days != 0) {
@@ -2114,30 +2116,7 @@ public class MessageObject {
             }
             int[] emojiOnly = SharedConfig.allowBigEmoji ? new int[1] : null;
             this.messageText = Emoji.replaceEmoji(this.messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false, emojiOnly);
-            if (emojiOnly != null && emojiOnly[0] >= 1 && emojiOnly[0] <= 3) {
-                TextPaint emojiPaint;
-                int size;
-                switch (emojiOnly[0]) {
-                    case 1:
-                        emojiPaint = Theme.chat_msgTextPaintOneEmoji;
-                        size = AndroidUtilities.dp(32.0f);
-                        break;
-                    case 2:
-                        emojiPaint = Theme.chat_msgTextPaintTwoEmoji;
-                        size = AndroidUtilities.dp(28.0f);
-                        break;
-                    default:
-                        emojiPaint = Theme.chat_msgTextPaintThreeEmoji;
-                        size = AndroidUtilities.dp(24.0f);
-                        break;
-                }
-                EmojiSpan[] spans = (EmojiSpan[]) ((Spannable) this.messageText).getSpans(0, this.messageText.length(), EmojiSpan.class);
-                if (spans != null && spans.length > 0) {
-                    for (EmojiSpan replaceFontMetrics : spans) {
-                        replaceFontMetrics.replaceFontMetrics(emojiPaint.getFontMetricsInt(), size);
-                    }
-                }
-            }
+            checkEmojiOnly(emojiOnly);
             if (mediaController.isPlayingMessage(this)) {
                 player = mediaController.getPlayingMessageObject();
                 this.audioProgress = player.audioProgress;
@@ -2191,7 +2170,9 @@ public class MessageObject {
             } else {
                 paint = Theme.chat_msgTextPaint;
             }
-            this.messageText = Emoji.replaceEmoji(this.messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+            int[] emojiOnly = SharedConfig.allowBigEmoji ? new int[1] : null;
+            this.messageText = Emoji.replaceEmoji(this.messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false, emojiOnly);
+            checkEmojiOnly(emojiOnly);
             generateLayout(fromUser);
         }
     }
@@ -2713,7 +2694,9 @@ public class MessageObject {
         } else {
             paint = Theme.chat_msgTextPaint;
         }
-        this.messageText = Emoji.replaceEmoji(this.messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+        int[] emojiOnly = SharedConfig.allowBigEmoji ? new int[1] : null;
+        this.messageText = Emoji.replaceEmoji(this.messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false, emojiOnly);
+        checkEmojiOnly(emojiOnly);
         generateLayout(fromUser);
         return true;
     }

@@ -10,6 +10,6 @@ final /* synthetic */ class MessagesController$$Lambda$63 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$checkProxyInfo$88$MessagesController(this.arg$2);
+        this.arg$1.lambda$checkProxyInfo$89$MessagesController(this.arg$2);
     }
 }

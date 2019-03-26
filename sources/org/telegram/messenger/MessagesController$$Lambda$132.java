@@ -14,6 +14,6 @@ final /* synthetic */ class MessagesController$$Lambda$132 implements Runnable {
     }
 
     public void run() {
-        this.arg$1.lambda$generateJoinMessage$221$MessagesController(this.arg$2, this.arg$3);
+        this.arg$1.lambda$generateJoinMessage$222$MessagesController(this.arg$2, this.arg$3);
     }
 }

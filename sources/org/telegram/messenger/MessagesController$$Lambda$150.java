@@ -16,6 +16,6 @@ final /* synthetic */ class MessagesController$$Lambda$150 implements OnCancelLi
     }
 
     public void onCancel(DialogInterface dialogInterface) {
-        this.arg$1.lambda$checkCanOpenChat$253$MessagesController(this.arg$2, this.arg$3, dialogInterface);
+        this.arg$1.lambda$checkCanOpenChat$254$MessagesController(this.arg$2, this.arg$3, dialogInterface);
     }
 }
