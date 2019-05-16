@@ -1,7 +1,6 @@
 package org.telegram.ui.Components;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
@@ -14,7 +13,6 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.MessageObject;
 import org.telegram.tgnet.TLRPC.PageBlock;
-import org.telegram.tgnet.TLRPC.PhotoSize;
 
 public class GroupedPhotosListView extends View implements OnGestureListener {
     private boolean animateAllLine;
@@ -780,163 +778,448 @@ public class GroupedPhotosListView extends View implements OnGestureListener {
     }
 
     /* Access modifiers changed, original: protected */
-    public void onDraw(Canvas canvas) {
-        if (!this.imagesToDraw.isEmpty()) {
-            canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.backgroundPaint);
-            int size = this.imagesToDraw.size();
-            int i = this.drawDx;
-            int i2 = (int) (((float) this.itemWidth) * 2.0f);
-            int dp = AndroidUtilities.dp(8.0f);
-            ImageLocation imageLocation = (ImageLocation) this.currentPhotos.get(this.currentImage);
-            if (imageLocation != null) {
-                int max;
-                float f;
-                PhotoSize photoSize = imageLocation.photoSize;
-                if (photoSize != null) {
-                    max = Math.max(this.itemWidth, (int) (((float) photoSize.w) * (((float) this.itemHeight) / ((float) photoSize.h))));
-                } else {
-                    max = this.itemHeight;
-                }
-                max = Math.min(i2, max);
-                float f2 = (float) (dp * 2);
-                float f3 = this.currentItemProgress;
-                int i3 = (int) (f2 * f3);
-                int i4 = this.itemWidth;
-                i4 = (i4 + ((int) (((float) (max - i4)) * f3))) + i3;
-                max = this.nextImage;
-                if (max < 0 || max >= this.currentPhotos.size()) {
-                    max = this.itemWidth;
-                } else {
-                    photoSize = ((ImageLocation) this.currentPhotos.get(this.nextImage)).photoSize;
-                    if (photoSize != null) {
-                        max = Math.max(this.itemWidth, (int) (((float) photoSize.w) * (((float) this.itemHeight) / ((float) photoSize.h))));
-                    } else {
-                        max = this.itemHeight;
-                    }
-                }
-                i2 = Math.min(i2, max);
-                float f4 = this.nextItemProgress;
-                dp = (int) (f2 * f4);
-                i = (int) (((float) i) + ((((float) (((i2 + dp) - this.itemWidth) / 2)) * f4) * ((float) (this.nextImage > this.currentImage ? -1 : 1))));
-                max = this.itemWidth;
-                max = (max + ((int) (((float) (i2 - max)) * this.nextItemProgress))) + dp;
-                i2 = (getMeasuredWidth() - i4) / 2;
-                for (int i5 = 0; i5 < size; i5++) {
-                    ImageReceiver imageReceiver = (ImageReceiver) this.imagesToDraw.get(i5);
-                    int param = imageReceiver.getParam();
-                    int i6 = this.currentImage;
-                    if (param == i6) {
-                        imageReceiver.setImageX((i2 + i) + (i3 / 2));
-                        imageReceiver.setImageWidth(i4 - i3);
-                    } else {
-                        int i7 = this.nextImage;
-                        int i8;
-                        if (i7 < i6) {
-                            if (param >= i6) {
-                                imageReceiver.setImageX((((i2 + i4) + this.itemSpacing) + (((imageReceiver.getParam() - this.currentImage) - 1) * (this.itemWidth + this.itemSpacing))) + i);
-                            } else if (param <= i7) {
-                                i6 = (imageReceiver.getParam() - this.currentImage) + 1;
-                                i7 = this.itemWidth;
-                                i8 = this.itemSpacing;
-                                imageReceiver.setImageX((((i6 * (i7 + i8)) + i2) - (i8 + max)) + i);
-                            } else {
-                                imageReceiver.setImageX((((imageReceiver.getParam() - this.currentImage) * (this.itemWidth + this.itemSpacing)) + i2) + i);
-                            }
-                        } else if (param < i6) {
-                            imageReceiver.setImageX((((imageReceiver.getParam() - this.currentImage) * (this.itemWidth + this.itemSpacing)) + i2) + i);
-                        } else if (param <= i7) {
-                            imageReceiver.setImageX((((i2 + i4) + this.itemSpacing) + (((imageReceiver.getParam() - this.currentImage) - 1) * (this.itemWidth + this.itemSpacing))) + i);
-                        } else {
-                            int i9 = (i2 + i4) + this.itemSpacing;
-                            i8 = (imageReceiver.getParam() - this.currentImage) - 2;
-                            i6 = this.itemWidth;
-                            i7 = this.itemSpacing;
-                            imageReceiver.setImageX(((i9 + (i8 * (i6 + i7))) + (i7 + max)) + i);
-                        }
-                        if (param == this.nextImage) {
-                            imageReceiver.setImageWidth(max - dp);
-                            imageReceiver.setImageX(imageReceiver.getImageX() + (dp / 2));
-                        } else {
-                            imageReceiver.setImageWidth(this.itemWidth);
-                        }
-                    }
-                    imageReceiver.draw(canvas);
-                }
-                long currentTimeMillis = System.currentTimeMillis();
-                long j = currentTimeMillis - this.lastUpdateTime;
-                if (j > 17) {
-                    j = 17;
-                }
-                this.lastUpdateTime = currentTimeMillis;
-                size = this.animateToItem;
-                if (size >= 0) {
-                    f3 = this.moveLineProgress;
-                    if (f3 > 0.0f) {
-                        float f5 = ((float) j) / 200.0f;
-                        this.moveLineProgress = f3 - f5;
-                        if (size == this.currentImage) {
-                            f = this.currentItemProgress;
-                            if (f < 1.0f) {
-                                this.currentItemProgress = f + f5;
-                                if (this.currentItemProgress > 1.0f) {
-                                    this.currentItemProgress = 1.0f;
-                                }
-                            }
-                            size = this.animateToDXStart;
-                            this.drawDx = size + ((int) Math.ceil((double) (this.currentItemProgress * ((float) (this.animateToDX - size)))));
-                        } else {
-                            this.nextItemProgress = CubicBezierInterpolator.EASE_OUT.getInterpolation(1.0f - this.moveLineProgress);
-                            if (this.stopedScrolling) {
-                                f = this.currentItemProgress;
-                                if (f > 0.0f) {
-                                    this.currentItemProgress = f - f5;
-                                    if (this.currentItemProgress < 0.0f) {
-                                        this.currentItemProgress = 0.0f;
-                                    }
-                                }
-                                size = this.animateToDXStart;
-                                this.drawDx = size + ((int) Math.ceil((double) (this.nextItemProgress * ((float) (this.animateToDX - size)))));
-                            } else {
-                                this.currentItemProgress = CubicBezierInterpolator.EASE_OUT.getInterpolation(this.moveLineProgress);
-                                this.drawDx = (int) Math.ceil((double) (this.nextItemProgress * ((float) this.animateToDX)));
-                            }
-                        }
-                        if (this.moveLineProgress <= 0.0f) {
-                            this.currentImage = this.animateToItem;
-                            this.moveLineProgress = 1.0f;
-                            this.currentItemProgress = 1.0f;
-                            this.nextItemProgress = 0.0f;
-                            this.moving = false;
-                            this.stopedScrolling = false;
-                            this.drawDx = 0;
-                            this.animateToItem = -1;
-                        }
-                    }
-                    fillImages(true, this.drawDx);
-                    invalidate();
-                }
-                if (this.scrolling) {
-                    f = this.currentItemProgress;
-                    if (f > 0.0f) {
-                        this.currentItemProgress = f - (((float) j) / 200.0f);
-                        if (this.currentItemProgress < 0.0f) {
-                            this.currentItemProgress = 0.0f;
-                        }
-                        invalidate();
-                    }
-                }
-                if (!this.scroll.isFinished()) {
-                    if (this.scroll.computeScrollOffset()) {
-                        this.drawDx = this.scroll.getCurrX();
-                        updateAfterScroll();
-                        invalidate();
-                    }
-                    if (this.scroll.isFinished()) {
-                        stopScrolling();
-                    }
-                }
-            }
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:23:0x00c1  */
+    /* JADX WARNING: Removed duplicated region for block: B:22:0x00bf  */
+    /* JADX WARNING: Removed duplicated region for block: B:26:0x00dc  */
+    /* JADX WARNING: Removed duplicated region for block: B:49:0x01ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:52:0x01d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x027e  */
+    /* JADX WARNING: Removed duplicated region for block: B:85:0x029c  */
+    public void onDraw(android.graphics.Canvas r17) {
+        /*
+        r16 = this;
+        r0 = r16;
+        r1 = r0.imagesToDraw;
+        r1 = r1.isEmpty();
+        if (r1 == 0) goto L_0x000b;
+    L_0x000a:
+        return;
+    L_0x000b:
+        r3 = 0;
+        r4 = 0;
+        r1 = r16.getMeasuredWidth();
+        r5 = (float) r1;
+        r1 = r16.getMeasuredHeight();
+        r6 = (float) r1;
+        r7 = r0.backgroundPaint;
+        r2 = r17;
+        r2.drawRect(r3, r4, r5, r6, r7);
+        r1 = r0.imagesToDraw;
+        r1 = r1.size();
+        r2 = r0.drawDx;
+        r3 = r0.itemWidth;
+        r3 = (float) r3;
+        r4 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+        r3 = r3 * r4;
+        r3 = (int) r3;
+        r4 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r5 = r0.currentPhotos;
+        r6 = r0.currentImage;
+        r5 = r5.get(r6);
+        r5 = (org.telegram.messenger.ImageLocation) r5;
+        if (r5 == 0) goto L_0x0058;
+    L_0x0040:
+        r5 = r5.photoSize;
+        if (r5 == 0) goto L_0x0058;
+    L_0x0044:
+        r6 = r0.itemWidth;
+        r7 = r5.w;
+        r7 = (float) r7;
+        r8 = r0.itemHeight;
+        r8 = (float) r8;
+        r5 = r5.h;
+        r5 = (float) r5;
+        r8 = r8 / r5;
+        r7 = r7 * r8;
+        r5 = (int) r7;
+        r5 = java.lang.Math.max(r6, r5);
+        goto L_0x005a;
+    L_0x0058:
+        r5 = r0.itemHeight;
+    L_0x005a:
+        r5 = java.lang.Math.min(r3, r5);
+        r4 = r4 * 2;
+        r4 = (float) r4;
+        r6 = r0.currentItemProgress;
+        r7 = r4 * r6;
+        r7 = (int) r7;
+        r8 = r0.itemWidth;
+        r5 = r5 - r8;
+        r5 = (float) r5;
+        r5 = r5 * r6;
+        r5 = (int) r5;
+        r8 = r8 + r5;
+        r8 = r8 + r7;
+        r5 = r0.nextImage;
+        if (r5 < 0) goto L_0x00a2;
+    L_0x0073:
+        r6 = r0.currentPhotos;
+        r6 = r6.size();
+        if (r5 >= r6) goto L_0x00a2;
+    L_0x007b:
+        r5 = r0.currentPhotos;
+        r6 = r0.nextImage;
+        r5 = r5.get(r6);
+        r5 = (org.telegram.messenger.ImageLocation) r5;
+        if (r5 == 0) goto L_0x009f;
+    L_0x0087:
+        r5 = r5.photoSize;
+        if (r5 == 0) goto L_0x009f;
+    L_0x008b:
+        r6 = r0.itemWidth;
+        r9 = r5.w;
+        r9 = (float) r9;
+        r10 = r0.itemHeight;
+        r10 = (float) r10;
+        r5 = r5.h;
+        r5 = (float) r5;
+        r10 = r10 / r5;
+        r9 = r9 * r10;
+        r5 = (int) r9;
+        r5 = java.lang.Math.max(r6, r5);
+        goto L_0x00a4;
+    L_0x009f:
+        r5 = r0.itemHeight;
+        goto L_0x00a4;
+    L_0x00a2:
+        r5 = r0.itemWidth;
+    L_0x00a4:
+        r3 = java.lang.Math.min(r3, r5);
+        r5 = r0.nextItemProgress;
+        r4 = r4 * r5;
+        r4 = (int) r4;
+        r2 = (float) r2;
+        r6 = r3 + r4;
+        r9 = r0.itemWidth;
+        r6 = r6 - r9;
+        r6 = r6 / 2;
+        r6 = (float) r6;
+        r6 = r6 * r5;
+        r5 = r0.nextImage;
+        r9 = r0.currentImage;
+        r11 = 1;
+        if (r5 <= r9) goto L_0x00c1;
+    L_0x00bf:
+        r5 = -1;
+        goto L_0x00c2;
+    L_0x00c1:
+        r5 = 1;
+    L_0x00c2:
+        r5 = (float) r5;
+        r6 = r6 * r5;
+        r2 = r2 + r6;
+        r2 = (int) r2;
+        r5 = r0.itemWidth;
+        r3 = r3 - r5;
+        r3 = (float) r3;
+        r6 = r0.nextItemProgress;
+        r3 = r3 * r6;
+        r3 = (int) r3;
+        r5 = r5 + r3;
+        r5 = r5 + r4;
+        r3 = r16.getMeasuredWidth();
+        r3 = r3 - r8;
+        r3 = r3 / 2;
+        r9 = 0;
+    L_0x00da:
+        if (r9 >= r1) goto L_0x01bc;
+    L_0x00dc:
+        r12 = r0.imagesToDraw;
+        r12 = r12.get(r9);
+        r12 = (org.telegram.messenger.ImageReceiver) r12;
+        r13 = r12.getParam();
+        r14 = r0.currentImage;
+        if (r13 != r14) goto L_0x00fd;
+    L_0x00ec:
+        r13 = r3 + r2;
+        r14 = r7 / 2;
+        r13 = r13 + r14;
+        r12.setImageX(r13);
+        r13 = r8 - r7;
+        r12.setImageWidth(r13);
+    L_0x00f9:
+        r6 = r17;
+        goto L_0x01b5;
+    L_0x00fd:
+        r15 = r0.nextImage;
+        if (r15 >= r14) goto L_0x014b;
+    L_0x0101:
+        if (r13 >= r14) goto L_0x0131;
+    L_0x0103:
+        if (r13 > r15) goto L_0x011d;
+    L_0x0105:
+        r14 = r12.getParam();
+        r15 = r0.currentImage;
+        r14 = r14 - r15;
+        r14 = r14 + r11;
+        r15 = r0.itemWidth;
+        r10 = r0.itemSpacing;
+        r15 = r15 + r10;
+        r14 = r14 * r15;
+        r14 = r14 + r3;
+        r10 = r10 + r5;
+        r14 = r14 - r10;
+        r14 = r14 + r2;
+        r12.setImageX(r14);
+        goto L_0x0199;
+    L_0x011d:
+        r10 = r12.getParam();
+        r14 = r0.currentImage;
+        r10 = r10 - r14;
+        r14 = r0.itemWidth;
+        r15 = r0.itemSpacing;
+        r14 = r14 + r15;
+        r10 = r10 * r14;
+        r10 = r10 + r3;
+        r10 = r10 + r2;
+        r12.setImageX(r10);
+        goto L_0x0199;
+    L_0x0131:
+        r10 = r3 + r8;
+        r14 = r0.itemSpacing;
+        r10 = r10 + r14;
+        r14 = r12.getParam();
+        r15 = r0.currentImage;
+        r14 = r14 - r15;
+        r14 = r14 - r11;
+        r15 = r0.itemWidth;
+        r6 = r0.itemSpacing;
+        r15 = r15 + r6;
+        r14 = r14 * r15;
+        r10 = r10 + r14;
+        r10 = r10 + r2;
+        r12.setImageX(r10);
+        goto L_0x0199;
+    L_0x014b:
+        if (r13 >= r14) goto L_0x0161;
+    L_0x014d:
+        r6 = r12.getParam();
+        r10 = r0.currentImage;
+        r6 = r6 - r10;
+        r10 = r0.itemWidth;
+        r14 = r0.itemSpacing;
+        r10 = r10 + r14;
+        r6 = r6 * r10;
+        r6 = r6 + r3;
+        r6 = r6 + r2;
+        r12.setImageX(r6);
+        goto L_0x0199;
+    L_0x0161:
+        if (r13 > r15) goto L_0x017d;
+    L_0x0163:
+        r6 = r3 + r8;
+        r10 = r0.itemSpacing;
+        r6 = r6 + r10;
+        r10 = r12.getParam();
+        r14 = r0.currentImage;
+        r10 = r10 - r14;
+        r10 = r10 - r11;
+        r14 = r0.itemWidth;
+        r15 = r0.itemSpacing;
+        r14 = r14 + r15;
+        r10 = r10 * r14;
+        r6 = r6 + r10;
+        r6 = r6 + r2;
+        r12.setImageX(r6);
+        goto L_0x0199;
+    L_0x017d:
+        r6 = r3 + r8;
+        r10 = r0.itemSpacing;
+        r6 = r6 + r10;
+        r10 = r12.getParam();
+        r14 = r0.currentImage;
+        r10 = r10 - r14;
+        r10 = r10 + -2;
+        r14 = r0.itemWidth;
+        r15 = r0.itemSpacing;
+        r14 = r14 + r15;
+        r10 = r10 * r14;
+        r6 = r6 + r10;
+        r15 = r15 + r5;
+        r6 = r6 + r15;
+        r6 = r6 + r2;
+        r12.setImageX(r6);
+    L_0x0199:
+        r6 = r0.nextImage;
+        if (r13 != r6) goto L_0x01ae;
+    L_0x019d:
+        r6 = r5 - r4;
+        r12.setImageWidth(r6);
+        r6 = r12.getImageX();
+        r10 = r4 / 2;
+        r6 = r6 + r10;
+        r12.setImageX(r6);
+        goto L_0x00f9;
+    L_0x01ae:
+        r6 = r0.itemWidth;
+        r12.setImageWidth(r6);
+        goto L_0x00f9;
+    L_0x01b5:
+        r12.draw(r6);
+        r9 = r9 + 1;
+        goto L_0x00da;
+    L_0x01bc:
+        r1 = java.lang.System.currentTimeMillis();
+        r3 = r0.lastUpdateTime;
+        r3 = r1 - r3;
+        r5 = 17;
+        r7 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1));
+        if (r7 <= 0) goto L_0x01cb;
+    L_0x01ca:
+        r3 = r5;
+    L_0x01cb:
+        r0.lastUpdateTime = r1;
+        r1 = r0.animateToItem;
+        r2 = NUM; // 0x43480000 float:200.0 double:5.5769738E-315;
+        r5 = 0;
+        if (r1 < 0) goto L_0x027a;
+    L_0x01d4:
+        r6 = r0.moveLineProgress;
+        r7 = (r6 > r5 ? 1 : (r6 == r5 ? 0 : -1));
+        if (r7 <= 0) goto L_0x0272;
+    L_0x01da:
+        r7 = (float) r3;
+        r7 = r7 / r2;
+        r6 = r6 - r7;
+        r0.moveLineProgress = r6;
+        r6 = r0.currentImage;
+        r8 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        if (r1 != r6) goto L_0x020a;
+    L_0x01e5:
+        r1 = r0.currentItemProgress;
+        r6 = (r1 > r8 ? 1 : (r1 == r8 ? 0 : -1));
+        if (r6 >= 0) goto L_0x01f6;
+    L_0x01eb:
+        r1 = r1 + r7;
+        r0.currentItemProgress = r1;
+        r1 = r0.currentItemProgress;
+        r1 = (r1 > r8 ? 1 : (r1 == r8 ? 0 : -1));
+        if (r1 <= 0) goto L_0x01f6;
+    L_0x01f4:
+        r0.currentItemProgress = r8;
+    L_0x01f6:
+        r1 = r0.animateToDXStart;
+        r6 = r0.currentItemProgress;
+        r7 = r0.animateToDX;
+        r7 = r7 - r1;
+        r7 = (float) r7;
+        r6 = r6 * r7;
+        r6 = (double) r6;
+        r6 = java.lang.Math.ceil(r6);
+        r6 = (int) r6;
+        r1 = r1 + r6;
+        r0.drawDx = r1;
+        goto L_0x0258;
+    L_0x020a:
+        r1 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_OUT;
+        r6 = r0.moveLineProgress;
+        r6 = r8 - r6;
+        r1 = r1.getInterpolation(r6);
+        r0.nextItemProgress = r1;
+        r1 = r0.stopedScrolling;
+        if (r1 == 0) goto L_0x023f;
+    L_0x021a:
+        r1 = r0.currentItemProgress;
+        r6 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1));
+        if (r6 <= 0) goto L_0x022b;
+    L_0x0220:
+        r1 = r1 - r7;
+        r0.currentItemProgress = r1;
+        r1 = r0.currentItemProgress;
+        r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1));
+        if (r1 >= 0) goto L_0x022b;
+    L_0x0229:
+        r0.currentItemProgress = r5;
+    L_0x022b:
+        r1 = r0.animateToDXStart;
+        r6 = r0.nextItemProgress;
+        r7 = r0.animateToDX;
+        r7 = r7 - r1;
+        r7 = (float) r7;
+        r6 = r6 * r7;
+        r6 = (double) r6;
+        r6 = java.lang.Math.ceil(r6);
+        r6 = (int) r6;
+        r1 = r1 + r6;
+        r0.drawDx = r1;
+        goto L_0x0258;
+    L_0x023f:
+        r1 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_OUT;
+        r6 = r0.moveLineProgress;
+        r1 = r1.getInterpolation(r6);
+        r0.currentItemProgress = r1;
+        r1 = r0.nextItemProgress;
+        r6 = r0.animateToDX;
+        r6 = (float) r6;
+        r1 = r1 * r6;
+        r6 = (double) r1;
+        r6 = java.lang.Math.ceil(r6);
+        r1 = (int) r6;
+        r0.drawDx = r1;
+    L_0x0258:
+        r1 = r0.moveLineProgress;
+        r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1));
+        if (r1 > 0) goto L_0x0272;
+    L_0x025e:
+        r1 = r0.animateToItem;
+        r0.currentImage = r1;
+        r0.moveLineProgress = r8;
+        r0.currentItemProgress = r8;
+        r0.nextItemProgress = r5;
+        r1 = 0;
+        r0.moving = r1;
+        r0.stopedScrolling = r1;
+        r0.drawDx = r1;
+        r1 = -1;
+        r0.animateToItem = r1;
+    L_0x0272:
+        r1 = r0.drawDx;
+        r0.fillImages(r11, r1);
+        r16.invalidate();
+    L_0x027a:
+        r1 = r0.scrolling;
+        if (r1 == 0) goto L_0x0294;
+    L_0x027e:
+        r1 = r0.currentItemProgress;
+        r6 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1));
+        if (r6 <= 0) goto L_0x0294;
+    L_0x0284:
+        r3 = (float) r3;
+        r3 = r3 / r2;
+        r1 = r1 - r3;
+        r0.currentItemProgress = r1;
+        r1 = r0.currentItemProgress;
+        r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1));
+        if (r1 >= 0) goto L_0x0291;
+    L_0x028f:
+        r0.currentItemProgress = r5;
+    L_0x0291:
+        r16.invalidate();
+    L_0x0294:
+        r1 = r0.scroll;
+        r1 = r1.isFinished();
+        if (r1 != 0) goto L_0x02bd;
+    L_0x029c:
+        r1 = r0.scroll;
+        r1 = r1.computeScrollOffset();
+        if (r1 == 0) goto L_0x02b2;
+    L_0x02a4:
+        r1 = r0.scroll;
+        r1 = r1.getCurrX();
+        r0.drawDx = r1;
+        r16.updateAfterScroll();
+        r16.invalidate();
+    L_0x02b2:
+        r1 = r0.scroll;
+        r1 = r1.isFinished();
+        if (r1 == 0) goto L_0x02bd;
+    L_0x02ba:
+        r16.stopScrolling();
+    L_0x02bd:
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.GroupedPhotosListView.onDraw(android.graphics.Canvas):void");
     }
 
     public void setDelegate(GroupedPhotosListViewDelegate groupedPhotosListViewDelegate) {

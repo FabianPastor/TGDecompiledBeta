@@ -382,32 +382,34 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
     public void animateChangeImpl(final ChangeInfo changeInfo) {
         final ViewHolder viewHolder = changeInfo.oldHolder;
         ViewHolder viewHolder2 = changeInfo.newHolder;
-        final AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.setDuration(180);
-        Animator[] animatorArr = new Animator[2];
-        animatorArr[0] = ObjectAnimator.ofFloat(viewHolder.itemView, View.ALPHA, new float[]{0.0f});
-        animatorArr[1] = ObjectAnimator.ofFloat(viewHolder2.itemView, View.ALPHA, new float[]{1.0f});
-        animatorSet.playTogether(animatorArr);
-        this.mChangeAnimations.add(changeInfo.oldHolder);
-        this.mChangeAnimations.add(changeInfo.newHolder);
-        animatorSet.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationStart(Animator animator) {
-                DialogsItemAnimator.this.dispatchChangeStarting(changeInfo.oldHolder, true);
-                DialogsItemAnimator.this.dispatchChangeStarting(changeInfo.newHolder, false);
-            }
+        if (viewHolder != null && viewHolder2 != null) {
+            final AnimatorSet animatorSet = new AnimatorSet();
+            animatorSet.setDuration(180);
+            Animator[] animatorArr = new Animator[2];
+            animatorArr[0] = ObjectAnimator.ofFloat(viewHolder.itemView, View.ALPHA, new float[]{0.0f});
+            animatorArr[1] = ObjectAnimator.ofFloat(viewHolder2.itemView, View.ALPHA, new float[]{1.0f});
+            animatorSet.playTogether(animatorArr);
+            this.mChangeAnimations.add(changeInfo.oldHolder);
+            this.mChangeAnimations.add(changeInfo.newHolder);
+            animatorSet.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationStart(Animator animator) {
+                    DialogsItemAnimator.this.dispatchChangeStarting(changeInfo.oldHolder, true);
+                    DialogsItemAnimator.this.dispatchChangeStarting(changeInfo.newHolder, false);
+                }
 
-            public void onAnimationEnd(Animator animator) {
-                viewHolder.itemView.setAlpha(1.0f);
-                animatorSet.removeAllListeners();
-                DialogsItemAnimator.this.dispatchChangeFinished(changeInfo.oldHolder, true);
-                DialogsItemAnimator.this.mChangeAnimations.remove(changeInfo.oldHolder);
-                DialogsItemAnimator.this.dispatchFinishedWhenDone();
-                DialogsItemAnimator.this.dispatchChangeFinished(changeInfo.newHolder, false);
-                DialogsItemAnimator.this.mChangeAnimations.remove(changeInfo.newHolder);
-                DialogsItemAnimator.this.dispatchFinishedWhenDone();
-            }
-        });
-        animatorSet.start();
+                public void onAnimationEnd(Animator animator) {
+                    viewHolder.itemView.setAlpha(1.0f);
+                    animatorSet.removeAllListeners();
+                    DialogsItemAnimator.this.dispatchChangeFinished(changeInfo.oldHolder, true);
+                    DialogsItemAnimator.this.mChangeAnimations.remove(changeInfo.oldHolder);
+                    DialogsItemAnimator.this.dispatchFinishedWhenDone();
+                    DialogsItemAnimator.this.dispatchChangeFinished(changeInfo.newHolder, false);
+                    DialogsItemAnimator.this.mChangeAnimations.remove(changeInfo.newHolder);
+                    DialogsItemAnimator.this.dispatchFinishedWhenDone();
+                }
+            });
+            animatorSet.start();
+        }
     }
 
     private void endChangeAnimation(List<ChangeInfo> list, ViewHolder viewHolder) {

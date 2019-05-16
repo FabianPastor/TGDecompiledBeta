@@ -63,6 +63,7 @@ public class NotificationCenter {
     public static final int fileNewChunkAvailable;
     public static final int filePreparingFailed;
     public static final int filePreparingStarted;
+    public static final int folderBecomeEmpty;
     private static volatile NotificationCenter globalInstance = null;
     public static final int groupStickersDidLoad;
     public static final int hasNewContactsToImport;
@@ -235,6 +236,9 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         dialogPhotosLoaded = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        folderBecomeEmpty = i;
         i = totalEvents;
         totalEvents = i + 1;
         removeAllMessagesFromDialog = i;

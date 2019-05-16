@@ -897,7 +897,7 @@ public final class R {
         public static final int ic_gallery_background = NUM;
         public static final int ic_gofullscreen = NUM;
         public static final int ic_goinline = NUM;
-        public static final int ic_launcher = NUM;
+        public static final int ic_launcher_dr = NUM;
         public static final int ic_lock_header = NUM;
         public static final int ic_lock_white = NUM;
         public static final int ic_masks_msk1 = NUM;
@@ -924,8 +924,6 @@ public final class R {
         public static final int ic_storage_music = NUM;
         public static final int ic_video = NUM;
         public static final int ic_volume_up_white_24dp = NUM;
-        public static final int icon_background = NUM;
-        public static final int icon_foreground = NUM;
         public static final int icplaceholder = NUM;
         public static final int inline_video_pause = NUM;
         public static final int inline_video_play = NUM;
@@ -1715,6 +1713,11 @@ public final class R {
 
     public static final class mipmap {
         public static final int ic_launcher = NUM;
+        public static final int ic_launcher_round = NUM;
+        public static final int icon_background = NUM;
+        public static final int icon_background_round = NUM;
+        public static final int icon_foreground = NUM;
+        public static final int icon_foreground_round = NUM;
     }
 
     public static final class raw {

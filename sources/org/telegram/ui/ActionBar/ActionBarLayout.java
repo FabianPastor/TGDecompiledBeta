@@ -397,7 +397,7 @@ public class ActionBarLayout extends FrameLayout {
                     }
                 }
             }
-        } else if (!this.fragmentsStack.isEmpty()) {
+        } else if (this.fragmentsStack.size() >= 2) {
             arrayList = this.fragmentsStack;
             baseFragment = (BaseFragment) arrayList.get(arrayList.size() - 1);
             baseFragment.onPause();

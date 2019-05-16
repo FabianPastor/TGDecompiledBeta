@@ -31,6 +31,7 @@ public class ContactsAdapter extends SectionsAdapter {
     private int currentAccount = UserConfig.selectedAccount;
     private SparseArray<User> ignoreUsers;
     private boolean isAdmin;
+    private boolean isChannel;
     private Context mContext;
     private boolean needPhonebook;
     private ArrayList<TL_contact> onlineContacts;
@@ -38,12 +39,17 @@ public class ContactsAdapter extends SectionsAdapter {
     private boolean scrolling;
     private int sortType;
 
-    public ContactsAdapter(Context context, int i, boolean z, SparseArray<User> sparseArray, boolean z2) {
+    public ContactsAdapter(Context context, int i, boolean z, SparseArray<User> sparseArray, int i2) {
         this.mContext = context;
         this.onlyUsers = i;
         this.needPhonebook = z;
         this.ignoreUsers = sparseArray;
-        this.isAdmin = z2;
+        boolean z2 = true;
+        this.isAdmin = i2 != 0;
+        if (i2 != 2) {
+            z2 = false;
+        }
+        this.isChannel = z2;
     }
 
     public void setSortType(int i) {
@@ -68,12 +74,14 @@ public class ContactsAdapter extends SectionsAdapter {
     }
 
     public void sortOnlineContacts() {
-        try {
-            int currentTime = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
-            Collections.sort(this.onlineContacts, new -$$Lambda$ContactsAdapter$AjIuF4bNE-A90essgyL0wfJ8HaU(MessagesController.getInstance(this.currentAccount), currentTime));
-            notifyDataSetChanged();
-        } catch (Exception e) {
-            FileLog.e(e);
+        if (this.onlineContacts != null) {
+            try {
+                int currentTime = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
+                Collections.sort(this.onlineContacts, new -$$Lambda$ContactsAdapter$AjIuF4bNE-A90essgyL0wfJ8HaU(MessagesController.getInstance(this.currentAccount), currentTime));
+                notifyDataSetChanged();
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
         }
     }
 
@@ -428,7 +436,11 @@ public class ContactsAdapter extends SectionsAdapter {
             } else if (this.needPhonebook) {
                 textCell.setTextAndIcon(LocaleController.getString("InviteFriends", NUM), NUM, false);
             } else if (this.isAdmin) {
-                textCell.setTextAndIcon(LocaleController.getString("InviteToGroupByLink", NUM), NUM, false);
+                if (this.isChannel) {
+                    textCell.setTextAndIcon(LocaleController.getString("ChannelInviteViaLink", NUM), NUM, false);
+                } else {
+                    textCell.setTextAndIcon(LocaleController.getString("InviteToGroupByLink", NUM), NUM, false);
+                }
             } else if (i2 == 0) {
                 textCell.setTextAndIcon(LocaleController.getString("NewGroup", NUM), NUM, false);
             } else if (i2 == 1) {

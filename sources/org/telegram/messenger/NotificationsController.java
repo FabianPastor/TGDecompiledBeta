@@ -7333,7 +7333,7 @@ public class NotificationsController {
         r1 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0afc }
         r10.<init>(r1);	 Catch:{ Exception -> 0x0afc }
         r10.setContentTitle(r4);	 Catch:{ Exception -> 0x0afc }
-        r1 = NUM; // 0x7var_b float:1.7945639E38 double:1.0529357614E-314;
+        r1 = NUM; // 0x7var_ float:1.7945635E38 double:1.0529357604E-314;
         r10.setSmallIcon(r1);	 Catch:{ Exception -> 0x0afc }
         r1 = 1;
         r10.setAutoCancel(r1);	 Catch:{ Exception -> 0x0afc }
@@ -9303,7 +9303,7 @@ public class NotificationsController {
         r14 = NUM; // 0x8000000 float:3.85186E-34 double:6.63123685E-316;
         r5 = android.app.PendingIntent.getBroadcast(r15, r6, r5, r14);
         r6 = new androidx.core.app.NotificationCompat$Action$Builder;
-        r14 = NUM; // 0x7var_a6 float:1.7945434E38 double:1.0529357115E-314;
+        r14 = NUM; // 0x7var_a4 float:1.794543E38 double:1.0529357105E-314;
         r15 = NUM; // 0x7f0d0550 float:1.8744873E38 double:1.0531304495E-314;
         r51 = r4;
         r4 = "MarkAsRead";
@@ -9399,7 +9399,7 @@ public class NotificationsController {
         r5 = r42;
         r3.setContentTitle(r5);
         r41 = r7;
-        r7 = NUM; // 0x7var_b float:1.7945639E38 double:1.0529357614E-314;
+        r7 = NUM; // 0x7var_ float:1.7945635E38 double:1.0529357604E-314;
         r3.setSmallIcon(r7);
         r7 = r56.toString();
         r3.setContentText(r7);

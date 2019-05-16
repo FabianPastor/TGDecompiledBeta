@@ -1299,11 +1299,19 @@ public class ImageReceiver implements NotificationCenterDelegate {
             boolean z2 = drawable2 instanceof LottieDrawable;
             if (z2) {
                 canvas.save();
-                if (getBitmapWidth() > this.imageW || getBitmapHeight() > this.imageH) {
-                    f = Math.min(((float) this.imageW) / ((float) getBitmapWidth()), ((float) this.imageH) / ((float) getBitmapHeight()));
-                    canvas3.scale(f, f);
+                i6 = this.imageX;
+                i6 = this.imageY;
+                i6 = getBitmapWidth();
+                i4 = getBitmapHeight();
+                if (i6 > this.imageW || i4 > this.imageH) {
+                    f = (float) i6;
+                    centerY = (float) i4;
+                    float min = Math.min(((float) this.imageW) / f, ((float) this.imageH) / centerY);
+                    i6 = (int) (f * min);
+                    i4 = (int) (centerY * min);
+                    canvas3.scale(min, min);
                 }
-                canvas3.translate((float) ((-getBitmapWidth()) / 2), (float) ((-getBitmapHeight()) / 2));
+                canvas3.translate((float) (this.imageX + ((this.imageW - i6) / 2)), (float) (this.imageY + ((this.imageH - i4) / 2)));
                 View view = this.parentView;
                 if (view != null) {
                     if (this.invalidateAll) {

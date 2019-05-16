@@ -614,16 +614,19 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                             inputEncryptedFile3 = inputEncryptedFile;
                             i6 = i5;
                             inputFile2 = inputFile;
+                            PhotoSize photoSize;
                             if (i7 != 1) {
                                 delayedMessage = delayedMessage2;
                                 if (i7 == i4) {
                                     if (inputMedia.file == null) {
                                         inputMedia.file = inputFile2;
-                                        if (inputMedia.thumb != null || delayedMessage.photoSize == null) {
-                                            performSendMessageRequest(delayedMessage.sendRequest, delayedMessage.obj, delayedMessage.originalPath, null, delayedMessage.parentObject);
-                                        } else {
-                                            performSendDelayedMessage(delayedMessage);
+                                        if (inputMedia.thumb == null) {
+                                            photoSize = delayedMessage.photoSize;
+                                            if (!(photoSize == null || photoSize.location == null)) {
+                                                performSendDelayedMessage(delayedMessage);
+                                            }
                                         }
+                                        performSendMessageRequest(delayedMessage.sendRequest, delayedMessage.obj, delayedMessage.originalPath, null, delayedMessage.parentObject);
                                     } else {
                                         inputMedia.thumb = inputFile2;
                                         inputMedia.flags |= 4;
@@ -669,7 +672,8 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
                                 inputMedia.file = inputFile2;
                                 if (inputMedia.thumb == null) {
                                     delayedMessage = delayedMessage2;
-                                    if (delayedMessage.photoSize != null) {
+                                    photoSize = delayedMessage.photoSize;
+                                    if (!(photoSize == null || photoSize.location == null)) {
                                         performSendDelayedMessage(delayedMessage);
                                     }
                                 } else {

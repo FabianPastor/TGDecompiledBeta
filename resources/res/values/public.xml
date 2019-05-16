@@ -876,7 +876,7 @@
     <public type="drawable" name="ic_gallery_background" id="NUM" />
     <public type="drawable" name="ic_gofullscreen" id="NUM" />
     <public type="drawable" name="ic_goinline" id="NUM" />
-    <public type="drawable" name="ic_launcher" id="NUM" />
+    <public type="drawable" name="ic_launcher_dr" id="NUM" />
     <public type="drawable" name="ic_lock_header" id="NUM" />
     <public type="drawable" name="ic_lock_white" id="NUM" />
     <public type="drawable" name="ic_masks_msk1" id="NUM" />
@@ -903,8 +903,6 @@
     <public type="drawable" name="ic_storage_music" id="NUM" />
     <public type="drawable" name="ic_video" id="NUM" />
     <public type="drawable" name="ic_volume_up_white_24dp" id="NUM" />
-    <public type="drawable" name="icon_background" id="NUM" />
-    <public type="drawable" name="icon_foreground" id="NUM" />
     <public type="drawable" name="icplaceholder" id="NUM" />
     <public type="drawable" name="inline_video_pause" id="NUM" />
     <public type="drawable" name="inline_video_play" id="NUM" />
@@ -1682,6 +1680,11 @@
     <public type="layout" name="support_simple_spinner_dropdown_item" id="NUM" />
     <public type="layout" name="wallet_test_layout" id="NUM" />
     <public type="mipmap" name="ic_launcher" id="NUM" />
+    <public type="mipmap" name="ic_launcher_round" id="NUM" />
+    <public type="mipmap" name="icon_background" id="NUM" />
+    <public type="mipmap" name="icon_background_round" id="NUM" />
+    <public type="mipmap" name="icon_foreground" id="NUM" />
+    <public type="mipmap" name="icon_foreground_round" id="NUM" />
     <public type="raw" name="chats_archive" id="NUM" />
     <public type="raw" name="chats_archiveavatar" id="NUM" />
     <public type="raw" name="chats_archived" id="NUM" />
