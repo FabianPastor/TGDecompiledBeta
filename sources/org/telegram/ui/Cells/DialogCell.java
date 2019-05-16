@@ -4511,7 +4511,7 @@ public class DialogCell extends BaseCell {
     L_0x02a7:
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r2 = (float) r2;
-        r4 = org.telegram.ui.ActionBar.Theme.dialogs_countTextPaint;
+        r4 = org.telegram.ui.ActionBar.Theme.dialogs_archiveTextPaint;
         r8.drawText(r3, r0, r2, r4);
         r25.restore();
     L_0x02b4:
