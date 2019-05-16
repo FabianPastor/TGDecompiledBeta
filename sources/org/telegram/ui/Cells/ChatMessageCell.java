@@ -14023,11 +14023,16 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         resetPressedLink(-1);
         if (!(this.buttonPressed == 0 && this.miniButtonPressed == 0 && this.videoButtonPressed == 0 && this.pressedBotButton == -1)) {
             this.buttonPressed = 0;
-            this.miniButtonState = 0;
+            this.miniButtonPressed = 0;
             this.videoButtonPressed = 0;
             this.pressedBotButton = -1;
             invalidate();
         }
+        this.linkPreviewPressed = false;
+        this.otherPressed = false;
+        this.sharePressed = false;
+        this.imagePressed = false;
+        this.gamePreviewPressed = false;
         if (this.instantPressed) {
             this.instantButtonPressed = false;
             this.instantPressed = false;

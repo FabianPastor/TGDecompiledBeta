@@ -5484,24 +5484,26 @@ public class MessagesStorage {
                 int i2 = (int) (longValue >> 32);
                 if (queryFinalized.isNull(2) || obj == null || (i2 != 0 && i2 < currentTime)) {
                     longValue = queryFinalized.longValue(0);
-                    longSparseArray2.put(longValue, Integer.valueOf(queryFinalized.intValue(1)));
-                    if (stringBuilder.length() != 0) {
-                        stringBuilder.append(str2);
-                    }
-                    stringBuilder.append(longValue);
-                    int i3 = (int) longValue;
-                    i = (int) (longValue >> 32);
-                    if (i3 != 0) {
-                        if (i3 < 0) {
-                            i3 = -i3;
-                            if (!arrayList7.contains(Integer.valueOf(i3))) {
-                                arrayList7.add(Integer.valueOf(i3));
-                            }
-                        } else if (!arrayList6.contains(Integer.valueOf(i3))) {
-                            arrayList6.add(Integer.valueOf(i3));
+                    if (!DialogObject.isFolderDialogId(longValue)) {
+                        longSparseArray2.put(longValue, Integer.valueOf(queryFinalized.intValue(1)));
+                        if (stringBuilder.length() != 0) {
+                            stringBuilder.append(str2);
                         }
-                    } else if (!arrayList8.contains(Integer.valueOf(i))) {
-                        arrayList8.add(Integer.valueOf(i));
+                        stringBuilder.append(longValue);
+                        int i3 = (int) longValue;
+                        i = (int) (longValue >> 32);
+                        if (i3 != 0) {
+                            if (i3 < 0) {
+                                i3 = -i3;
+                                if (!arrayList7.contains(Integer.valueOf(i3))) {
+                                    arrayList7.add(Integer.valueOf(i3));
+                                }
+                            } else if (!arrayList6.contains(Integer.valueOf(i3))) {
+                                arrayList6.add(Integer.valueOf(i3));
+                            }
+                        } else if (!arrayList8.contains(Integer.valueOf(i))) {
+                            arrayList8.add(Integer.valueOf(i));
+                        }
                     }
                 }
             }

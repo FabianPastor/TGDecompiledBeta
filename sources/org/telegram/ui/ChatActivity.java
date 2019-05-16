@@ -1039,7 +1039,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                                             if (!(webPage == null || webPage.cached_page == null)) {
                                                 url = url2.toLowerCase();
                                                 String toLowerCase2 = messageObject.messageOwner.media.webpage.url.toLowerCase();
-                                                if ((url.contains("telegra.ph") || url.contains("t.me/iv")) && (url.contains(toLowerCase2) || toLowerCase2.contains(url))) {
+                                                if ((url.contains("telegram.org/blog") || url.contains("telegra.ph") || url.contains("t.me/iv")) && (url.contains(toLowerCase2) || toLowerCase2.contains(url))) {
                                                     ArticleViewer.getInstance().setParentActivity(ChatActivity.this.getParentActivity(), ChatActivity.this);
                                                     ArticleViewer.getInstance().open(messageObject);
                                                     return;

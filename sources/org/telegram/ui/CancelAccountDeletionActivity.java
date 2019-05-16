@@ -5,9 +5,11 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -18,6 +20,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.telephony.PhoneNumberUtils;
+import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -38,10 +43,12 @@ import java.util.TimerTask;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.SmsReceiver;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_account_confirmPhone;
@@ -55,6 +62,7 @@ import org.telegram.tgnet.TLRPC.TL_auth_sentCodeTypeApp;
 import org.telegram.tgnet.TLRPC.TL_auth_sentCodeTypeCall;
 import org.telegram.tgnet.TLRPC.TL_auth_sentCodeTypeFlashCall;
 import org.telegram.tgnet.TLRPC.TL_auth_sentCodeTypeSms;
+import org.telegram.tgnet.TLRPC.TL_codeSettings;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.auth_CodeType;
 import org.telegram.tgnet.TLRPC.auth_SentCodeType;
@@ -992,151 +1000,60 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             frameLayout.addView(this.progressBar, LayoutHelper.createFrame(-2, -2, 17));
         }
 
-        /* JADX WARNING: Removed duplicated region for block: B:32:0x00da A:{Catch:{ Exception -> 0x00e4 }} */
         public void onNextPressed() {
-            /*
-            r11 = this;
-            r0 = org.telegram.ui.CancelAccountDeletionActivity.this;
-            r0 = r0.getParentActivity();
-            if (r0 == 0) goto L_0x010f;
-        L_0x0008:
-            r0 = r11.nextPressed;
-            if (r0 == 0) goto L_0x000e;
-        L_0x000c:
-            goto L_0x010f;
-        L_0x000e:
-            r0 = org.telegram.messenger.ApplicationLoader.applicationContext;
-            r1 = "phone";
-            r0 = r0.getSystemService(r1);
-            r0 = (android.telephony.TelephonyManager) r0;
-            r2 = r0.getSimState();
-            r3 = 1;
-            if (r2 == r3) goto L_0x0023;
-        L_0x001f:
-            r2 = r0.getPhoneType();
-        L_0x0023:
-            r2 = android.os.Build.VERSION.SDK_INT;
-            r4 = 23;
-            r2 = new org.telegram.tgnet.TLRPC$TL_account_sendConfirmPhoneCode;
-            r2.<init>();
-            r4 = org.telegram.ui.CancelAccountDeletionActivity.this;
-            r4 = r4.hash;
-            r2.hash = r4;
-            r4 = new org.telegram.tgnet.TLRPC$TL_codeSettings;
-            r4.<init>();
-            r2.settings = r4;
-            r4 = r2.settings;
-            r5 = 0;
-            r4.allow_flashcall = r5;
-            r6 = android.os.Build.VERSION.SDK_INT;
-            r7 = 26;
-            if (r6 < r7) goto L_0x0067;
-        L_0x0046:
-            r6 = android.telephony.SmsManager.getDefault();	 Catch:{ Throwable -> 0x0062 }
-            r7 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x0062 }
-            r8 = new android.content.Intent;	 Catch:{ Throwable -> 0x0062 }
-            r9 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x0062 }
-            r10 = org.telegram.messenger.SmsReceiver.class;
-            r8.<init>(r9, r10);	 Catch:{ Throwable -> 0x0062 }
-            r9 = NUM; // 0x8000000 float:3.85186E-34 double:6.63123685E-316;
-            r7 = android.app.PendingIntent.getBroadcast(r7, r5, r8, r9);	 Catch:{ Throwable -> 0x0062 }
-            r6 = r6.createAppSpecificSmsToken(r7);	 Catch:{ Throwable -> 0x0062 }
-            r4.app_hash = r6;	 Catch:{ Throwable -> 0x0062 }
-            goto L_0x006d;
-        L_0x0062:
-            r4 = move-exception;
-            org.telegram.messenger.FileLog.e(r4);
-            goto L_0x006d;
-        L_0x0067:
-            r6 = org.telegram.messenger.BuildVars.SMS_HASH;
-            r4.app_hash = r6;
-            r4.app_hash_persistent = r3;
-        L_0x006d:
-            r4 = org.telegram.messenger.ApplicationLoader.applicationContext;
-            r6 = "mainconfig";
-            r4 = r4.getSharedPreferences(r6, r5);
-            r6 = r2.settings;
-            r6 = r6.app_hash;
-            r6 = android.text.TextUtils.isEmpty(r6);
-            r7 = "sms_hash";
-            if (r6 != 0) goto L_0x0099;
-        L_0x0081:
-            r6 = r2.settings;
-            r8 = r6.flags;
-            r8 = r8 | 8;
-            r6.flags = r8;
-            r4 = r4.edit();
-            r6 = r2.settings;
-            r6 = r6.app_hash;
-            r4 = r4.putString(r7, r6);
-            r4.commit();
-            goto L_0x00a4;
-        L_0x0099:
-            r4 = r4.edit();
-            r4 = r4.remove(r7);
-            r4.commit();
-        L_0x00a4:
-            r4 = r2.settings;
-            r4 = r4.allow_flashcall;
-            if (r4 == 0) goto L_0x00ec;
-        L_0x00aa:
-            r0 = r0.getLine1Number();	 Catch:{ Exception -> 0x00e4 }
-            r4 = android.text.TextUtils.isEmpty(r0);	 Catch:{ Exception -> 0x00e4 }
-            if (r4 != 0) goto L_0x00df;
-        L_0x00b4:
-            r4 = r2.settings;	 Catch:{ Exception -> 0x00e4 }
-            r6 = org.telegram.ui.CancelAccountDeletionActivity.this;	 Catch:{ Exception -> 0x00e4 }
-            r6 = r6.phone;	 Catch:{ Exception -> 0x00e4 }
-            r6 = r6.contains(r0);	 Catch:{ Exception -> 0x00e4 }
-            if (r6 != 0) goto L_0x00d1;
-        L_0x00c2:
-            r6 = org.telegram.ui.CancelAccountDeletionActivity.this;	 Catch:{ Exception -> 0x00e4 }
-            r6 = r6.phone;	 Catch:{ Exception -> 0x00e4 }
-            r0 = r0.contains(r6);	 Catch:{ Exception -> 0x00e4 }
-            if (r0 == 0) goto L_0x00cf;
-        L_0x00ce:
-            goto L_0x00d1;
-        L_0x00cf:
-            r0 = 0;
-            goto L_0x00d2;
-        L_0x00d1:
-            r0 = 1;
-        L_0x00d2:
-            r4.current_number = r0;	 Catch:{ Exception -> 0x00e4 }
-            r0 = r2.settings;	 Catch:{ Exception -> 0x00e4 }
-            r0 = r0.current_number;	 Catch:{ Exception -> 0x00e4 }
-            if (r0 != 0) goto L_0x00ec;
-        L_0x00da:
-            r0 = r2.settings;	 Catch:{ Exception -> 0x00e4 }
-            r0.allow_flashcall = r5;	 Catch:{ Exception -> 0x00e4 }
-            goto L_0x00ec;
-        L_0x00df:
-            r0 = r2.settings;	 Catch:{ Exception -> 0x00e4 }
-            r0.current_number = r5;	 Catch:{ Exception -> 0x00e4 }
-            goto L_0x00ec;
-        L_0x00e4:
-            r0 = move-exception;
-            r4 = r2.settings;
-            r4.allow_flashcall = r5;
-            org.telegram.messenger.FileLog.e(r0);
-        L_0x00ec:
-            r0 = new android.os.Bundle;
-            r0.<init>();
-            r4 = org.telegram.ui.CancelAccountDeletionActivity.this;
-            r4 = r4.phone;
-            r0.putString(r1, r4);
-            r11.nextPressed = r3;
-            r1 = org.telegram.ui.CancelAccountDeletionActivity.this;
-            r1 = r1.currentAccount;
-            r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1);
-            r3 = new org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$PhoneView$k7vfL3HDSHw4EqLEYwRz3mk5u4I;
-            r3.<init>(r11, r0, r2);
-            r0 = 2;
-            r1.sendRequest(r2, r3, r0);
-        L_0x010f:
-            return;
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.CancelAccountDeletionActivity$PhoneView.onNextPressed():void");
+            if (CancelAccountDeletionActivity.this.getParentActivity() != null && !this.nextPressed) {
+                int phoneType;
+                String str = "phone";
+                TelephonyManager telephonyManager = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService(str);
+                if (telephonyManager.getSimState() != 1) {
+                    phoneType = telephonyManager.getPhoneType();
+                }
+                phoneType = VERSION.SDK_INT;
+                TL_account_sendConfirmPhoneCode tL_account_sendConfirmPhoneCode = new TL_account_sendConfirmPhoneCode();
+                tL_account_sendConfirmPhoneCode.hash = CancelAccountDeletionActivity.this.hash;
+                tL_account_sendConfirmPhoneCode.settings = new TL_codeSettings();
+                TL_codeSettings tL_codeSettings = tL_account_sendConfirmPhoneCode.settings;
+                tL_codeSettings.allow_flashcall = false;
+                if (VERSION.SDK_INT >= 26) {
+                    try {
+                        tL_codeSettings.app_hash = SmsManager.getDefault().createAppSpecificSmsToken(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, new Intent(ApplicationLoader.applicationContext, SmsReceiver.class), NUM));
+                    } catch (Throwable th) {
+                        FileLog.e(th);
+                    }
+                } else {
+                    tL_codeSettings.app_hash = BuildVars.SMS_HASH;
+                    tL_codeSettings.app_hash_persistent = true;
+                }
+                SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+                String str2 = "sms_hash";
+                if (TextUtils.isEmpty(tL_account_sendConfirmPhoneCode.settings.app_hash)) {
+                    sharedPreferences.edit().remove(str2).commit();
+                } else {
+                    TL_codeSettings tL_codeSettings2 = tL_account_sendConfirmPhoneCode.settings;
+                    tL_codeSettings2.flags |= 8;
+                    sharedPreferences.edit().putString(str2, tL_account_sendConfirmPhoneCode.settings.app_hash).commit();
+                }
+                if (tL_account_sendConfirmPhoneCode.settings.allow_flashcall) {
+                    try {
+                        String line1Number = telephonyManager.getLine1Number();
+                        if (TextUtils.isEmpty(line1Number)) {
+                            tL_account_sendConfirmPhoneCode.settings.current_number = false;
+                        } else {
+                            tL_account_sendConfirmPhoneCode.settings.current_number = PhoneNumberUtils.compare(CancelAccountDeletionActivity.this.phone, line1Number);
+                            if (!tL_account_sendConfirmPhoneCode.settings.current_number) {
+                                tL_account_sendConfirmPhoneCode.settings.allow_flashcall = false;
+                            }
+                        }
+                    } catch (Exception e) {
+                        tL_account_sendConfirmPhoneCode.settings.allow_flashcall = false;
+                        FileLog.e(e);
+                    }
+                }
+                Bundle bundle = new Bundle();
+                bundle.putString(str, CancelAccountDeletionActivity.this.phone);
+                this.nextPressed = true;
+                ConnectionsManager.getInstance(CancelAccountDeletionActivity.this.currentAccount).sendRequest(tL_account_sendConfirmPhoneCode, new -$$Lambda$CancelAccountDeletionActivity$PhoneView$k7vfL3HDSHw4EqLEYwRz3mk5u4I(this, bundle, tL_account_sendConfirmPhoneCode), 2);
+            }
         }
 
         public /* synthetic */ void lambda$onNextPressed$1$CancelAccountDeletionActivity$PhoneView(Bundle bundle, TL_account_sendConfirmPhoneCode tL_account_sendConfirmPhoneCode, TLObject tLObject, TL_error tL_error) {

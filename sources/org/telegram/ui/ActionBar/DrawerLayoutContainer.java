@@ -293,9 +293,9 @@ public class DrawerLayoutContainer extends FrameLayout {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:113:0x01ee  */
-    /* JADX WARNING: Missing block: B:85:0x0181, code skipped:
-            if (r8 != ((float) r7.drawerLayout.getMeasuredWidth())) goto L_0x0183;
+    /* JADX WARNING: Removed duplicated region for block: B:115:0x01f2  */
+    /* JADX WARNING: Missing block: B:87:0x0185, code skipped:
+            if (r8 != ((float) r7.drawerLayout.getMeasuredWidth())) goto L_0x0187;
      */
     public boolean onTouchEvent(android.view.MotionEvent r8) {
         /*
@@ -303,7 +303,7 @@ public class DrawerLayoutContainer extends FrameLayout {
         r0 = r7.parentActionBarLayout;
         r0 = r0.checkTransitionAnimation();
         r1 = 0;
-        if (r0 != 0) goto L_0x01f7;
+        if (r0 != 0) goto L_0x01fb;
     L_0x0009:
         r0 = r7.drawerOpened;
         r2 = 1;
@@ -327,12 +327,12 @@ public class DrawerLayoutContainer extends FrameLayout {
         return r2;
     L_0x0028:
         r0 = r7.allowOpenDrawer;
-        if (r0 == 0) goto L_0x01f4;
+        if (r0 == 0) goto L_0x01f8;
     L_0x002c:
         r0 = r7.parentActionBarLayout;
         r0 = r0.fragmentsStack;
         r0 = r0.size();
-        if (r0 != r2) goto L_0x01f4;
+        if (r0 != r2) goto L_0x01f8;
     L_0x0036:
         r0 = 2;
         if (r8 == 0) goto L_0x0082;
@@ -362,27 +362,27 @@ public class DrawerLayoutContainer extends FrameLayout {
         r3 = r7.startedTrackingX;
         r4 = r7.startedTrackingY;
         r0 = r0.contains(r3, r4);
-        if (r0 == 0) goto L_0x01f4;
+        if (r0 == 0) goto L_0x01f8;
     L_0x006e:
         r8 = r8.getPointerId(r1);
         r7.startedTrackingPointerId = r8;
         r7.maybeStartTracking = r2;
         r7.cancelCurrentAnimation();
         r8 = r7.velocityTracker;
-        if (r8 == 0) goto L_0x01f4;
+        if (r8 == 0) goto L_0x01f8;
     L_0x007d:
         r8.clear();
-        goto L_0x01f4;
+        goto L_0x01f8;
     L_0x0082:
         r3 = 0;
-        if (r8 == 0) goto L_0x013d;
+        if (r8 == 0) goto L_0x0141;
     L_0x0085:
         r4 = r8.getAction();
-        if (r4 != r0) goto L_0x013d;
+        if (r4 != r0) goto L_0x0141;
     L_0x008b:
         r0 = r8.getPointerId(r1);
         r4 = r7.startedTrackingPointerId;
-        if (r0 != r4) goto L_0x013d;
+        if (r0 != r4) goto L_0x0141;
     L_0x0093:
         r0 = r7.velocityTracker;
         if (r0 != 0) goto L_0x009d;
@@ -405,10 +405,10 @@ public class DrawerLayoutContainer extends FrameLayout {
         r4 = r7.velocityTracker;
         r4.addMovement(r8);
         r4 = r7.maybeStartTracking;
-        if (r4 == 0) goto L_0x010e;
+        if (r4 == 0) goto L_0x0112;
     L_0x00bd:
         r4 = r7.startedTracking;
-        if (r4 != 0) goto L_0x010e;
+        if (r4 != 0) goto L_0x0112;
     L_0x00c1:
         r4 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1));
         if (r4 <= 0) goto L_0x00e0;
@@ -423,94 +423,97 @@ public class DrawerLayoutContainer extends FrameLayout {
         r5 = NUM; // 0x3e4ccccd float:0.2 double:5.164075695E-315;
         r5 = org.telegram.messenger.AndroidUtilities.getPixelsInCM(r5, r2);
         r4 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1));
-        if (r4 >= 0) goto L_0x00ff;
+        if (r4 >= 0) goto L_0x0103;
     L_0x00e0:
-        r3 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1));
-        if (r3 >= 0) goto L_0x010e;
+        r4 = r7.drawerOpened;
+        if (r4 == 0) goto L_0x0112;
     L_0x00e4:
+        r3 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1));
+        if (r3 >= 0) goto L_0x0112;
+    L_0x00e8:
         r3 = java.lang.Math.abs(r0);
         r1 = java.lang.Math.abs(r1);
         r1 = (r3 > r1 ? 1 : (r3 == r1 ? 0 : -1));
-        if (r1 < 0) goto L_0x010e;
-    L_0x00f0:
+        if (r1 < 0) goto L_0x0112;
+    L_0x00f4:
         r1 = java.lang.Math.abs(r0);
         r3 = NUM; // 0x3ecccccd float:0.4 double:5.205520926E-315;
         r3 = org.telegram.messenger.AndroidUtilities.getPixelsInCM(r3, r2);
         r1 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1));
-        if (r1 < 0) goto L_0x010e;
-    L_0x00ff:
+        if (r1 < 0) goto L_0x0112;
+    L_0x0103:
         r7.prepareForDrawerOpen(r8);
         r8 = r8.getX();
         r8 = (int) r8;
         r7.startedTrackingX = r8;
         r7.requestDisallowInterceptTouchEvent(r2);
-        goto L_0x01f4;
-    L_0x010e:
-        r1 = r7.startedTracking;
-        if (r1 == 0) goto L_0x01f4;
+        goto L_0x01f8;
     L_0x0112:
-        r1 = r7.beginTrackingSent;
-        if (r1 != 0) goto L_0x0131;
+        r1 = r7.startedTracking;
+        if (r1 == 0) goto L_0x01f8;
     L_0x0116:
+        r1 = r7.beginTrackingSent;
+        if (r1 != 0) goto L_0x0135;
+    L_0x011a:
         r1 = r7.getContext();
         r1 = (android.app.Activity) r1;
         r1 = r1.getCurrentFocus();
-        if (r1 == 0) goto L_0x012f;
-    L_0x0122:
+        if (r1 == 0) goto L_0x0133;
+    L_0x0126:
         r1 = r7.getContext();
         r1 = (android.app.Activity) r1;
         r1 = r1.getCurrentFocus();
         org.telegram.messenger.AndroidUtilities.hideKeyboard(r1);
-    L_0x012f:
+    L_0x0133:
         r7.beginTrackingSent = r2;
-    L_0x0131:
+    L_0x0135:
         r7.moveDrawerByX(r0);
         r8 = r8.getX();
         r8 = (int) r8;
         r7.startedTrackingX = r8;
-        goto L_0x01f4;
-    L_0x013d:
-        if (r8 == 0) goto L_0x015d;
-    L_0x013f:
-        if (r8 == 0) goto L_0x01f4;
+        goto L_0x01f8;
     L_0x0141:
+        if (r8 == 0) goto L_0x0161;
+    L_0x0143:
+        if (r8 == 0) goto L_0x01f8;
+    L_0x0145:
         r0 = r8.getPointerId(r1);
         r4 = r7.startedTrackingPointerId;
-        if (r0 != r4) goto L_0x01f4;
-    L_0x0149:
+        if (r0 != r4) goto L_0x01f8;
+    L_0x014d:
         r0 = r8.getAction();
         r4 = 3;
-        if (r0 == r4) goto L_0x015d;
-    L_0x0150:
+        if (r0 == r4) goto L_0x0161;
+    L_0x0154:
         r0 = r8.getAction();
-        if (r0 == r2) goto L_0x015d;
-    L_0x0156:
+        if (r0 == r2) goto L_0x0161;
+    L_0x015a:
         r8 = r8.getAction();
         r0 = 6;
-        if (r8 != r0) goto L_0x01f4;
-    L_0x015d:
-        r8 = r7.velocityTracker;
-        if (r8 != 0) goto L_0x0167;
+        if (r8 != r0) goto L_0x01f8;
     L_0x0161:
+        r8 = r7.velocityTracker;
+        if (r8 != 0) goto L_0x016b;
+    L_0x0165:
         r8 = android.view.VelocityTracker.obtain();
         r7.velocityTracker = r8;
-    L_0x0167:
+    L_0x016b:
         r8 = r7.velocityTracker;
         r0 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
         r8.computeCurrentVelocity(r0);
         r8 = r7.startedTracking;
-        if (r8 != 0) goto L_0x0183;
-    L_0x0172:
+        if (r8 != 0) goto L_0x0187;
+    L_0x0176:
         r8 = r7.drawerPosition;
         r0 = (r8 > r3 ? 1 : (r8 == r3 ? 0 : -1));
-        if (r0 == 0) goto L_0x01e6;
-    L_0x0178:
+        if (r0 == 0) goto L_0x01ea;
+    L_0x017c:
         r0 = r7.drawerLayout;
         r0 = r0.getMeasuredWidth();
         r0 = (float) r0;
         r8 = (r8 > r0 ? 1 : (r8 == r0 ? 0 : -1));
-        if (r8 == 0) goto L_0x01e6;
-    L_0x0183:
+        if (r8 == 0) goto L_0x01ea;
+    L_0x0187:
         r8 = r7.velocityTracker;
         r8 = r8.getXVelocity();
         r0 = r7.velocityTracker;
@@ -523,69 +526,69 @@ public class DrawerLayoutContainer extends FrameLayout {
         r5 = r5 / r6;
         r6 = NUM; // 0x455aCLASSNAME float:3500.0 double:5.7488258E-315;
         r4 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1));
-        if (r4 >= 0) goto L_0x01b2;
-    L_0x01a2:
-        r4 = (r8 > r6 ? 1 : (r8 == r6 ? 0 : -1));
-        if (r4 < 0) goto L_0x01be;
+        if (r4 >= 0) goto L_0x01b6;
     L_0x01a6:
+        r4 = (r8 > r6 ? 1 : (r8 == r6 ? 0 : -1));
+        if (r4 < 0) goto L_0x01c2;
+    L_0x01aa:
         r4 = java.lang.Math.abs(r8);
         r0 = java.lang.Math.abs(r0);
         r0 = (r4 > r0 ? 1 : (r4 == r0 ? 0 : -1));
-        if (r0 < 0) goto L_0x01be;
-    L_0x01b2:
-        r0 = (r8 > r3 ? 1 : (r8 == r3 ? 0 : -1));
-        if (r0 >= 0) goto L_0x01c0;
+        if (r0 < 0) goto L_0x01c2;
     L_0x01b6:
+        r0 = (r8 > r3 ? 1 : (r8 == r3 ? 0 : -1));
+        if (r0 >= 0) goto L_0x01c4;
+    L_0x01ba:
         r0 = java.lang.Math.abs(r8);
         r0 = (r0 > r6 ? 1 : (r0 == r6 ? 0 : -1));
-        if (r0 < 0) goto L_0x01c0;
-    L_0x01be:
+        if (r0 < 0) goto L_0x01c4;
+    L_0x01c2:
         r0 = 1;
-        goto L_0x01c1;
-    L_0x01c0:
+        goto L_0x01c5;
+    L_0x01c4:
         r0 = 0;
-    L_0x01c1:
-        if (r0 != 0) goto L_0x01d5;
-    L_0x01c3:
-        r0 = r7.drawerOpened;
-        if (r0 != 0) goto L_0x01d0;
+    L_0x01c5:
+        if (r0 != 0) goto L_0x01d9;
     L_0x01c7:
-        r8 = java.lang.Math.abs(r8);
-        r8 = (r8 > r6 ? 1 : (r8 == r6 ? 0 : -1));
-        if (r8 < 0) goto L_0x01d0;
-    L_0x01cf:
-        goto L_0x01d1;
-    L_0x01d0:
-        r2 = 0;
-    L_0x01d1:
-        r7.openDrawer(r2);
-        goto L_0x01e6;
-    L_0x01d5:
         r0 = r7.drawerOpened;
-        if (r0 == 0) goto L_0x01e2;
-    L_0x01d9:
+        if (r0 != 0) goto L_0x01d4;
+    L_0x01cb:
         r8 = java.lang.Math.abs(r8);
         r8 = (r8 > r6 ? 1 : (r8 == r6 ? 0 : -1));
-        if (r8 < 0) goto L_0x01e2;
-    L_0x01e1:
-        goto L_0x01e3;
-    L_0x01e2:
+        if (r8 < 0) goto L_0x01d4;
+    L_0x01d3:
+        goto L_0x01d5;
+    L_0x01d4:
         r2 = 0;
-    L_0x01e3:
-        r7.closeDrawer(r2);
+    L_0x01d5:
+        r7.openDrawer(r2);
+        goto L_0x01ea;
+    L_0x01d9:
+        r0 = r7.drawerOpened;
+        if (r0 == 0) goto L_0x01e6;
+    L_0x01dd:
+        r8 = java.lang.Math.abs(r8);
+        r8 = (r8 > r6 ? 1 : (r8 == r6 ? 0 : -1));
+        if (r8 < 0) goto L_0x01e6;
+    L_0x01e5:
+        goto L_0x01e7;
     L_0x01e6:
+        r2 = 0;
+    L_0x01e7:
+        r7.closeDrawer(r2);
+    L_0x01ea:
         r7.startedTracking = r1;
         r7.maybeStartTracking = r1;
         r8 = r7.velocityTracker;
-        if (r8 == 0) goto L_0x01f4;
-    L_0x01ee:
+        if (r8 == 0) goto L_0x01f8;
+    L_0x01f2:
         r8.recycle();
         r8 = 0;
         r7.velocityTracker = r8;
-    L_0x01f4:
+    L_0x01f8:
         r8 = r7.startedTracking;
         return r8;
-    L_0x01f7:
+    L_0x01fb:
         return r1;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.DrawerLayoutContainer.onTouchEvent(android.view.MotionEvent):boolean");

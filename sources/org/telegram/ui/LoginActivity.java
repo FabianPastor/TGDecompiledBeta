@@ -6,6 +6,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,6 +24,8 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.telephony.PhoneNumberUtils;
+import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -65,6 +68,7 @@ import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AndroidUtilities.LinkMovementMethodMy;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLocation;
@@ -75,6 +79,7 @@ import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.SRPHelper;
+import org.telegram.messenger.SmsReceiver;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
@@ -105,6 +110,7 @@ import org.telegram.tgnet.TLRPC.TL_auth_sentCodeTypeFlashCall;
 import org.telegram.tgnet.TLRPC.TL_auth_sentCodeTypeSms;
 import org.telegram.tgnet.TLRPC.TL_auth_signIn;
 import org.telegram.tgnet.TLRPC.TL_auth_signUp;
+import org.telegram.tgnet.TLRPC.TL_codeSettings;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_help_termsOfService;
 import org.telegram.tgnet.TLRPC.TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow;
@@ -3078,467 +3084,169 @@ public class LoginActivity extends BaseFragment {
             this.ignoreOnTextChange = false;
         }
 
-        /* JADX WARNING: Removed duplicated region for block: B:111:0x02eb A:{Catch:{ Exception -> 0x0300 }} */
         public void onNextPressed() {
-            /*
-            r17 = this;
-            r1 = r17;
-            r0 = r1.this$0;
-            r0 = r0.getParentActivity();
-            if (r0 == 0) goto L_0x03a6;
-        L_0x000a:
-            r0 = r1.nextPressed;
-            if (r0 == 0) goto L_0x0010;
-        L_0x000e:
-            goto L_0x03a6;
-        L_0x0010:
-            r0 = org.telegram.messenger.ApplicationLoader.applicationContext;
-            r2 = "phone";
-            r0 = r0.getSystemService(r2);
-            r3 = r0;
-            r3 = (android.telephony.TelephonyManager) r3;
-            r0 = org.telegram.messenger.BuildVars.DEBUG_VERSION;
-            if (r0 == 0) goto L_0x0037;
-        L_0x001f:
-            r0 = new java.lang.StringBuilder;
-            r0.<init>();
-            r4 = "sim status = ";
-            r0.append(r4);
-            r4 = r3.getSimState();
-            r0.append(r4);
-            r0 = r0.toString();
-            org.telegram.messenger.FileLog.d(r0);
-        L_0x0037:
-            r0 = r3.getSimState();
-            r4 = 1;
-            r5 = 0;
-            if (r0 == r4) goto L_0x004f;
-        L_0x003f:
-            if (r0 == 0) goto L_0x004f;
-        L_0x0041:
-            r0 = r3.getPhoneType();
-            if (r0 == 0) goto L_0x004f;
-        L_0x0047:
-            r0 = org.telegram.messenger.AndroidUtilities.isAirplaneModeOn();
-            if (r0 != 0) goto L_0x004f;
-        L_0x004d:
-            r0 = 1;
-            goto L_0x0050;
-        L_0x004f:
-            r0 = 0;
-        L_0x0050:
-            r6 = android.os.Build.VERSION.SDK_INT;
-            r7 = 23;
-            r8 = 0;
-            r9 = NUM; // 0x7f0d0673 float:1.8745463E38 double:1.053130593E-314;
-            r10 = "OK";
-            r11 = NUM; // 0x7f0d00e7 float:1.8742583E38 double:1.0531298917E-314;
-            r12 = "AppName";
-            if (r6 < r7) goto L_0x0149;
-        L_0x0061:
-            if (r0 == 0) goto L_0x0149;
-        L_0x0063:
-            r6 = r1.this$0;
-            r6 = r6.getParentActivity();
-            r7 = "android.permission.READ_PHONE_STATE";
-            r6 = r6.checkSelfPermission(r7);
-            if (r6 != 0) goto L_0x0073;
-        L_0x0071:
-            r6 = 1;
-            goto L_0x0074;
-        L_0x0073:
-            r6 = 0;
-        L_0x0074:
-            r13 = r1.this$0;
-            r13 = r13.getParentActivity();
-            r14 = "android.permission.CALL_PHONE";
-            r13 = r13.checkSelfPermission(r14);
-            if (r13 != 0) goto L_0x0084;
-        L_0x0082:
-            r13 = 1;
-            goto L_0x0085;
-        L_0x0084:
-            r13 = 0;
-        L_0x0085:
-            r15 = r1.this$0;
-            r15 = r15.checkPermissions;
-            if (r15 == 0) goto L_0x014a;
-        L_0x008d:
-            r15 = r1.this$0;
-            r15 = r15.permissionsItems;
-            r15.clear();
-            if (r6 != 0) goto L_0x00a1;
-        L_0x0098:
-            r15 = r1.this$0;
-            r15 = r15.permissionsItems;
-            r15.add(r7);
-        L_0x00a1:
-            if (r13 != 0) goto L_0x00ac;
-        L_0x00a3:
-            r15 = r1.this$0;
-            r15 = r15.permissionsItems;
-            r15.add(r14);
-        L_0x00ac:
-            r14 = r1.this$0;
-            r14 = r14.permissionsItems;
-            r14 = r14.isEmpty();
-            if (r14 != 0) goto L_0x014a;
-        L_0x00b8:
-            r14 = org.telegram.messenger.MessagesController.getGlobalMainSettings();
-            r15 = 6;
-            if (r13 != 0) goto L_0x00d9;
-        L_0x00bf:
-            if (r6 == 0) goto L_0x00d9;
-        L_0x00c1:
-            r7 = r1.this$0;
-            r7 = r7.getParentActivity();
-            r13 = r1.this$0;
-            r13 = r13.permissionsItems;
-            r14 = new java.lang.String[r5];
-            r13 = r13.toArray(r14);
-            r13 = (java.lang.String[]) r13;
-            r7.requestPermissions(r13, r15);
-            goto L_0x0145;
-        L_0x00d9:
-            r13 = "firstlogin";
-            r16 = r14.getBoolean(r13, r4);
-            if (r16 != 0) goto L_0x0108;
-        L_0x00e1:
-            r4 = r1.this$0;
-            r4 = r4.getParentActivity();
-            r4 = r4.shouldShowRequestPermissionRationale(r7);
-            if (r4 == 0) goto L_0x00ee;
-        L_0x00ed:
-            goto L_0x0108;
-        L_0x00ee:
-            r4 = r1.this$0;	 Catch:{ Exception -> 0x0106 }
-            r4 = r4.getParentActivity();	 Catch:{ Exception -> 0x0106 }
-            r7 = r1.this$0;	 Catch:{ Exception -> 0x0106 }
-            r7 = r7.permissionsItems;	 Catch:{ Exception -> 0x0106 }
-            r13 = new java.lang.String[r5];	 Catch:{ Exception -> 0x0106 }
-            r7 = r7.toArray(r13);	 Catch:{ Exception -> 0x0106 }
-            r7 = (java.lang.String[]) r7;	 Catch:{ Exception -> 0x0106 }
-            r4.requestPermissions(r7, r15);	 Catch:{ Exception -> 0x0106 }
-            goto L_0x0145;
-        L_0x0106:
-            r4 = 0;
-            goto L_0x0146;
-        L_0x0108:
-            r4 = r14.edit();
-            r4 = r4.putBoolean(r13, r5);
-            r4.commit();
-            r4 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
-            r7 = r1.this$0;
-            r7 = r7.getParentActivity();
-            r4.<init>(r7);
-            r7 = org.telegram.messenger.LocaleController.getString(r12, r11);
-            r4.setTitle(r7);
-            r7 = org.telegram.messenger.LocaleController.getString(r10, r9);
-            r4.setPositiveButton(r7, r8);
-            r7 = NUM; // 0x7f0d00c9 float:1.8742522E38 double:1.053129877E-314;
-            r13 = "AllowReadCall";
-            r7 = org.telegram.messenger.LocaleController.getString(r13, r7);
-            r4.setMessage(r7);
-            r7 = r1.this$0;
-            r4 = r4.create();
-            r4 = r7.showDialog(r4);
-            r7.permissionsDialog = r4;
-        L_0x0145:
-            r4 = 1;
-        L_0x0146:
-            if (r4 == 0) goto L_0x014a;
-        L_0x0148:
-            return;
-        L_0x0149:
-            r6 = 1;
-        L_0x014a:
-            r4 = r1.countryState;
-            r7 = 1;
-            if (r4 != r7) goto L_0x0162;
-        L_0x014f:
-            r0 = r1.this$0;
-            r2 = org.telegram.messenger.LocaleController.getString(r12, r11);
-            r3 = NUM; // 0x7f0d029d float:1.8743472E38 double:1.053130108E-314;
-            r4 = "ChooseCountry";
-            r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
-            r0.needShowAlert(r2, r3);
-            return;
-        L_0x0162:
-            r7 = 2;
-            if (r4 != r7) goto L_0x017c;
-        L_0x0165:
-            r4 = org.telegram.messenger.BuildVars.DEBUG_VERSION;
-            if (r4 != 0) goto L_0x017c;
-        L_0x0169:
-            r0 = r1.this$0;
-            r2 = org.telegram.messenger.LocaleController.getString(r12, r11);
-            r3 = NUM; // 0x7f0d0a5d float:1.8747496E38 double:1.0531310883E-314;
-            r4 = "WrongCountry";
-            r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
-            r0.needShowAlert(r2, r3);
-            return;
-        L_0x017c:
-            r4 = r1.codeField;
-            r4 = r4.length();
-            if (r4 != 0) goto L_0x0197;
-        L_0x0184:
-            r0 = r1.this$0;
-            r2 = org.telegram.messenger.LocaleController.getString(r12, r11);
-            r3 = NUM; // 0x7f0d04cb float:1.8744603E38 double:1.053130384E-314;
-            r4 = "InvalidPhoneNumber";
-            r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
-            r0.needShowAlert(r2, r3);
-            return;
-        L_0x0197:
-            r4 = new java.lang.StringBuilder;
-            r4.<init>();
-            r7 = "";
-            r4.append(r7);
-            r7 = r1.codeField;
-            r7 = r7.getText();
-            r4.append(r7);
-            r7 = r1.phoneField;
-            r7 = r7.getText();
-            r4.append(r7);
-            r4 = r4.toString();
-            r4 = org.telegram.PhoneFormat.PhoneFormat.stripExceptNumbers(r4);
-            r7 = r1.this$0;
-            r7 = r7.getParentActivity();
-            r7 = r7 instanceof org.telegram.ui.LaunchActivity;
-            if (r7 == 0) goto L_0x022a;
-        L_0x01c5:
-            r7 = 0;
-        L_0x01c6:
-            r13 = 3;
-            if (r7 >= r13) goto L_0x022a;
-        L_0x01c9:
-            r13 = org.telegram.messenger.UserConfig.getInstance(r7);
-            r14 = r13.isClientActivated();
-            if (r14 != 0) goto L_0x01d4;
-        L_0x01d3:
-            goto L_0x01e7;
-        L_0x01d4:
-            r13 = r13.getCurrentUser();
-            r13 = r13.phone;
-            r14 = r13.contains(r4);
-            if (r14 != 0) goto L_0x01ea;
-        L_0x01e0:
-            r13 = r4.contains(r13);
-            if (r13 == 0) goto L_0x01e7;
-        L_0x01e6:
-            goto L_0x01ea;
-        L_0x01e7:
-            r7 = r7 + 1;
-            goto L_0x01c6;
-        L_0x01ea:
-            r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
-            r2 = r1.this$0;
-            r2 = r2.getParentActivity();
-            r0.<init>(r2);
-            r2 = org.telegram.messenger.LocaleController.getString(r12, r11);
-            r0.setTitle(r2);
-            r2 = NUM; // 0x7f0d0057 float:1.8742291E38 double:1.0531298205E-314;
-            r3 = "AccountAlreadyLoggedIn";
-            r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
-            r0.setMessage(r2);
-            r2 = NUM; // 0x7f0d0059 float:1.8742295E38 double:1.0531298215E-314;
-            r3 = "AccountSwitch";
-            r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
-            r3 = new org.telegram.ui.-$$Lambda$LoginActivity$PhoneView$cUnbbQpCdT7SsTR9k7MHJwteqf4;
-            r3.<init>(r1, r7);
-            r0.setPositiveButton(r2, r3);
-            r2 = org.telegram.messenger.LocaleController.getString(r10, r9);
-            r0.setNegativeButton(r2, r8);
-            r2 = r1.this$0;
-            r0 = r0.create();
-            r2.showDialog(r0);
-            return;
-        L_0x022a:
-            r7 = r1.this$0;
-            r7 = r7.currentAccount;
-            r7 = org.telegram.tgnet.ConnectionsManager.getInstance(r7);
-            r7.cleanup(r5);
-            r7 = new org.telegram.tgnet.TLRPC$TL_auth_sendCode;
-            r7.<init>();
-            r8 = org.telegram.messenger.BuildVars.APP_HASH;
-            r7.api_hash = r8;
-            r8 = org.telegram.messenger.BuildVars.APP_ID;
-            r7.api_id = r8;
-            r7.phone_number = r4;
-            r8 = new org.telegram.tgnet.TLRPC$TL_codeSettings;
-            r8.<init>();
-            r7.settings = r8;
-            r8 = r7.settings;
-            if (r0 == 0) goto L_0x0255;
-        L_0x0251:
-            if (r6 == 0) goto L_0x0255;
-        L_0x0253:
-            r0 = 1;
-            goto L_0x0256;
-        L_0x0255:
-            r0 = 0;
-        L_0x0256:
-            r8.allow_flashcall = r0;
-            r0 = android.os.Build.VERSION.SDK_INT;
-            r6 = 26;
-            if (r0 < r6) goto L_0x0281;
-        L_0x025e:
-            r0 = r7.settings;	 Catch:{ Throwable -> 0x027c }
-            r6 = android.telephony.SmsManager.getDefault();	 Catch:{ Throwable -> 0x027c }
-            r8 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x027c }
-            r9 = new android.content.Intent;	 Catch:{ Throwable -> 0x027c }
-            r10 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x027c }
-            r11 = org.telegram.messenger.SmsReceiver.class;
-            r9.<init>(r10, r11);	 Catch:{ Throwable -> 0x027c }
-            r10 = NUM; // 0x8000000 float:3.85186E-34 double:6.63123685E-316;
-            r8 = android.app.PendingIntent.getBroadcast(r8, r5, r9, r10);	 Catch:{ Throwable -> 0x027c }
-            r6 = r6.createAppSpecificSmsToken(r8);	 Catch:{ Throwable -> 0x027c }
-            r0.app_hash = r6;	 Catch:{ Throwable -> 0x027c }
-            goto L_0x028a;
-        L_0x027c:
-            r0 = move-exception;
-            org.telegram.messenger.FileLog.e(r0);
-            goto L_0x028a;
-        L_0x0281:
-            r0 = r7.settings;
-            r6 = org.telegram.messenger.BuildVars.SMS_HASH;
-            r0.app_hash = r6;
-            r6 = 1;
-            r0.app_hash_persistent = r6;
-        L_0x028a:
-            r0 = org.telegram.messenger.ApplicationLoader.applicationContext;
-            r6 = "mainconfig";
-            r0 = r0.getSharedPreferences(r6, r5);
-            r6 = r7.settings;
-            r6 = r6.app_hash;
-            r6 = android.text.TextUtils.isEmpty(r6);
-            r8 = "sms_hash";
-            if (r6 != 0) goto L_0x02b6;
-        L_0x029e:
-            r6 = r7.settings;
-            r9 = r6.flags;
-            r9 = r9 | 8;
-            r6.flags = r9;
-            r0 = r0.edit();
-            r6 = r7.settings;
-            r6 = r6.app_hash;
-            r0 = r0.putString(r8, r6);
-            r0.commit();
-            goto L_0x02c1;
-        L_0x02b6:
-            r0 = r0.edit();
-            r0 = r0.remove(r8);
-            r0.commit();
-        L_0x02c1:
-            r0 = r7.settings;
-            r0 = r0.allow_flashcall;
-            if (r0 == 0) goto L_0x0308;
-        L_0x02c7:
-            r0 = r3.getLine1Number();	 Catch:{ Exception -> 0x0300 }
-            r3 = android.text.TextUtils.isEmpty(r0);	 Catch:{ Exception -> 0x0300 }
-            if (r3 != 0) goto L_0x02f0;
-        L_0x02d1:
-            r3 = r7.settings;	 Catch:{ Exception -> 0x0300 }
-            r6 = r4.contains(r0);	 Catch:{ Exception -> 0x0300 }
-            if (r6 != 0) goto L_0x02e2;
-        L_0x02d9:
-            r0 = r0.contains(r4);	 Catch:{ Exception -> 0x0300 }
-            if (r0 == 0) goto L_0x02e0;
-        L_0x02df:
-            goto L_0x02e2;
-        L_0x02e0:
-            r0 = 0;
-            goto L_0x02e3;
-        L_0x02e2:
-            r0 = 1;
-        L_0x02e3:
-            r3.current_number = r0;	 Catch:{ Exception -> 0x0300 }
-            r0 = r7.settings;	 Catch:{ Exception -> 0x0300 }
-            r0 = r0.current_number;	 Catch:{ Exception -> 0x0300 }
-            if (r0 != 0) goto L_0x0308;
-        L_0x02eb:
-            r0 = r7.settings;	 Catch:{ Exception -> 0x0300 }
-            r0.allow_flashcall = r5;	 Catch:{ Exception -> 0x0300 }
-            goto L_0x0308;
-        L_0x02f0:
-            r0 = org.telegram.messenger.UserConfig.getActivatedAccountsCount();	 Catch:{ Exception -> 0x0300 }
-            if (r0 <= 0) goto L_0x02fb;
-        L_0x02f6:
-            r0 = r7.settings;	 Catch:{ Exception -> 0x0300 }
-            r0.allow_flashcall = r5;	 Catch:{ Exception -> 0x0300 }
-            goto L_0x0308;
-        L_0x02fb:
-            r0 = r7.settings;	 Catch:{ Exception -> 0x0300 }
-            r0.current_number = r5;	 Catch:{ Exception -> 0x0300 }
-            goto L_0x0308;
-        L_0x0300:
-            r0 = move-exception;
-            r3 = r7.settings;
-            r3.allow_flashcall = r5;
-            org.telegram.messenger.FileLog.e(r0);
-        L_0x0308:
-            r3 = new android.os.Bundle;
-            r3.<init>();
-            r0 = new java.lang.StringBuilder;
-            r0.<init>();
-            r5 = "+";
-            r0.append(r5);
-            r6 = r1.codeField;
-            r6 = r6.getText();
-            r0.append(r6);
-            r6 = " ";
-            r0.append(r6);
-            r8 = r1.phoneField;
-            r8 = r8.getText();
-            r0.append(r8);
-            r0 = r0.toString();
-            r3.putString(r2, r0);
-            r0 = "ephone";
-            r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x036c }
-            r2.<init>();	 Catch:{ Exception -> 0x036c }
-            r2.append(r5);	 Catch:{ Exception -> 0x036c }
-            r8 = r1.codeField;	 Catch:{ Exception -> 0x036c }
-            r8 = r8.getText();	 Catch:{ Exception -> 0x036c }
-            r8 = r8.toString();	 Catch:{ Exception -> 0x036c }
-            r8 = org.telegram.PhoneFormat.PhoneFormat.stripExceptNumbers(r8);	 Catch:{ Exception -> 0x036c }
-            r2.append(r8);	 Catch:{ Exception -> 0x036c }
-            r2.append(r6);	 Catch:{ Exception -> 0x036c }
-            r6 = r1.phoneField;	 Catch:{ Exception -> 0x036c }
-            r6 = r6.getText();	 Catch:{ Exception -> 0x036c }
-            r6 = r6.toString();	 Catch:{ Exception -> 0x036c }
-            r6 = org.telegram.PhoneFormat.PhoneFormat.stripExceptNumbers(r6);	 Catch:{ Exception -> 0x036c }
-            r2.append(r6);	 Catch:{ Exception -> 0x036c }
-            r2 = r2.toString();	 Catch:{ Exception -> 0x036c }
-            r3.putString(r0, r2);	 Catch:{ Exception -> 0x036c }
-            goto L_0x0384;
-        L_0x036c:
-            r0 = move-exception;
-            org.telegram.messenger.FileLog.e(r0);
-            r0 = new java.lang.StringBuilder;
-            r0.<init>();
-            r0.append(r5);
-            r0.append(r4);
-            r0 = r0.toString();
-            r2 = "ephone";
-            r3.putString(r2, r0);
-        L_0x0384:
-            r0 = "phoneFormated";
-            r3.putString(r0, r4);
-            r2 = 1;
-            r1.nextPressed = r2;
-            r0 = r1.this$0;
-            r0 = r0.currentAccount;
-            r0 = org.telegram.tgnet.ConnectionsManager.getInstance(r0);
-            r2 = new org.telegram.ui.-$$Lambda$LoginActivity$PhoneView$S6zazpVdhFP3KhISZlgIZLho1x0;
-            r2.<init>(r1, r3, r7);
-            r3 = 27;
-            r0 = r0.sendRequest(r7, r2, r3);
-            r2 = r1.this$0;
-            r2.needShowProgress(r0);
-        L_0x03a6:
-            return;
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LoginActivity$PhoneView.onNextPressed():void");
+            if (!(this.this$0.getParentActivity() == null || this.nextPressed)) {
+                StringBuilder stringBuilder;
+                Object obj;
+                String str = "phone";
+                TelephonyManager telephonyManager = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService(str);
+                if (BuildVars.DEBUG_VERSION) {
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append("sim status = ");
+                    stringBuilder.append(telephonyManager.getSimState());
+                    FileLog.d(stringBuilder.toString());
+                }
+                int simState = telephonyManager.getSimState();
+                Object obj2 = (simState == 1 || simState == 0 || telephonyManager.getPhoneType() == 0 || AndroidUtilities.isAirplaneModeOn()) ? null : 1;
+                String str2 = "OK";
+                String str3 = "AppName";
+                if (VERSION.SDK_INT < 23 || obj2 == null) {
+                    obj = 1;
+                } else {
+                    String str4 = "android.permission.READ_PHONE_STATE";
+                    obj = this.this$0.getParentActivity().checkSelfPermission(str4) == 0 ? 1 : null;
+                    String str5 = "android.permission.CALL_PHONE";
+                    Object obj3 = this.this$0.getParentActivity().checkSelfPermission(str5) == 0 ? 1 : null;
+                    if (this.this$0.checkPermissions) {
+                        this.this$0.permissionsItems.clear();
+                        if (obj == null) {
+                            this.this$0.permissionsItems.add(str4);
+                        }
+                        if (obj3 == null) {
+                            this.this$0.permissionsItems.add(str5);
+                        }
+                        if (!this.this$0.permissionsItems.isEmpty()) {
+                            Object obj4;
+                            SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
+                            if (obj3 != null || obj == null) {
+                                String str6 = "firstlogin";
+                                if (globalMainSettings.getBoolean(str6, true) || this.this$0.getParentActivity().shouldShowRequestPermissionRationale(str4)) {
+                                    globalMainSettings.edit().putBoolean(str6, false).commit();
+                                    Builder builder = new Builder(this.this$0.getParentActivity());
+                                    builder.setTitle(LocaleController.getString(str3, NUM));
+                                    builder.setPositiveButton(LocaleController.getString(str2, NUM), null);
+                                    builder.setMessage(LocaleController.getString("AllowReadCall", NUM));
+                                    LoginActivity loginActivity = this.this$0;
+                                    loginActivity.permissionsDialog = loginActivity.showDialog(builder.create());
+                                } else {
+                                    try {
+                                        this.this$0.getParentActivity().requestPermissions((String[]) this.this$0.permissionsItems.toArray(new String[0]), 6);
+                                    } catch (Exception unused) {
+                                        obj4 = null;
+                                    }
+                                }
+                            } else {
+                                this.this$0.getParentActivity().requestPermissions((String[]) this.this$0.permissionsItems.toArray(new String[0]), 6);
+                            }
+                            obj4 = 1;
+                            if (obj4 != null) {
+                                return;
+                            }
+                        }
+                    }
+                }
+                int i = this.countryState;
+                if (i == 1) {
+                    this.this$0.needShowAlert(LocaleController.getString(str3, NUM), LocaleController.getString("ChooseCountry", NUM));
+                } else if (i == 2 && !BuildVars.DEBUG_VERSION) {
+                    this.this$0.needShowAlert(LocaleController.getString(str3, NUM), LocaleController.getString("WrongCountry", NUM));
+                } else if (this.codeField.length() == 0) {
+                    this.this$0.needShowAlert(LocaleController.getString(str3, NUM), LocaleController.getString("InvalidPhoneNumber", NUM));
+                } else {
+                    StringBuilder stringBuilder2 = new StringBuilder();
+                    stringBuilder2.append("");
+                    stringBuilder2.append(this.codeField.getText());
+                    stringBuilder2.append(this.phoneField.getText());
+                    String stripExceptNumbers = PhoneFormat.stripExceptNumbers(stringBuilder2.toString());
+                    if (this.this$0.getParentActivity() instanceof LaunchActivity) {
+                        for (int i2 = 0; i2 < 3; i2++) {
+                            UserConfig instance = UserConfig.getInstance(i2);
+                            if (instance.isClientActivated() && PhoneNumberUtils.compare(stripExceptNumbers, instance.getCurrentUser().phone)) {
+                                Builder builder2 = new Builder(this.this$0.getParentActivity());
+                                builder2.setTitle(LocaleController.getString(str3, NUM));
+                                builder2.setMessage(LocaleController.getString("AccountAlreadyLoggedIn", NUM));
+                                builder2.setPositiveButton(LocaleController.getString("AccountSwitch", NUM), new -$$Lambda$LoginActivity$PhoneView$cUnbbQpCdT7SsTR9k7MHJwteqf4(this, i2));
+                                builder2.setNegativeButton(LocaleController.getString(str2, NUM), null);
+                                this.this$0.showDialog(builder2.create());
+                                return;
+                            }
+                        }
+                    }
+                    ConnectionsManager.getInstance(this.this$0.currentAccount).cleanup(false);
+                    TL_auth_sendCode tL_auth_sendCode = new TL_auth_sendCode();
+                    tL_auth_sendCode.api_hash = BuildVars.APP_HASH;
+                    tL_auth_sendCode.api_id = BuildVars.APP_ID;
+                    tL_auth_sendCode.phone_number = stripExceptNumbers;
+                    tL_auth_sendCode.settings = new TL_codeSettings();
+                    TL_codeSettings tL_codeSettings = tL_auth_sendCode.settings;
+                    boolean z = (obj2 == null || obj == null) ? false : true;
+                    tL_codeSettings.allow_flashcall = z;
+                    if (VERSION.SDK_INT >= 26) {
+                        try {
+                            tL_auth_sendCode.settings.app_hash = SmsManager.getDefault().createAppSpecificSmsToken(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, new Intent(ApplicationLoader.applicationContext, SmsReceiver.class), NUM));
+                        } catch (Throwable th) {
+                            FileLog.e(th);
+                        }
+                    } else {
+                        TL_codeSettings tL_codeSettings2 = tL_auth_sendCode.settings;
+                        tL_codeSettings2.app_hash = BuildVars.SMS_HASH;
+                        tL_codeSettings2.app_hash_persistent = true;
+                    }
+                    SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+                    String str7 = "sms_hash";
+                    if (TextUtils.isEmpty(tL_auth_sendCode.settings.app_hash)) {
+                        sharedPreferences.edit().remove(str7).commit();
+                    } else {
+                        TL_codeSettings tL_codeSettings3 = tL_auth_sendCode.settings;
+                        tL_codeSettings3.flags |= 8;
+                        sharedPreferences.edit().putString(str7, tL_auth_sendCode.settings.app_hash).commit();
+                    }
+                    if (tL_auth_sendCode.settings.allow_flashcall) {
+                        try {
+                            String line1Number = telephonyManager.getLine1Number();
+                            if (!TextUtils.isEmpty(line1Number)) {
+                                tL_auth_sendCode.settings.current_number = PhoneNumberUtils.compare(stripExceptNumbers, line1Number);
+                                if (!tL_auth_sendCode.settings.current_number) {
+                                    tL_auth_sendCode.settings.allow_flashcall = false;
+                                }
+                            } else if (UserConfig.getActivatedAccountsCount() > 0) {
+                                tL_auth_sendCode.settings.allow_flashcall = false;
+                            } else {
+                                tL_auth_sendCode.settings.current_number = false;
+                            }
+                        } catch (Exception th2) {
+                            tL_auth_sendCode.settings.allow_flashcall = false;
+                            FileLog.e(th2);
+                        }
+                    }
+                    Bundle bundle = new Bundle();
+                    stringBuilder = new StringBuilder();
+                    String str8 = "+";
+                    stringBuilder.append(str8);
+                    stringBuilder.append(this.codeField.getText());
+                    String str9 = " ";
+                    stringBuilder.append(str9);
+                    stringBuilder.append(this.phoneField.getText());
+                    bundle.putString(str, stringBuilder.toString());
+                    try {
+                        StringBuilder stringBuilder3 = new StringBuilder();
+                        stringBuilder3.append(str8);
+                        stringBuilder3.append(PhoneFormat.stripExceptNumbers(this.codeField.getText().toString()));
+                        stringBuilder3.append(str9);
+                        stringBuilder3.append(PhoneFormat.stripExceptNumbers(this.phoneField.getText().toString()));
+                        bundle.putString("ephone", stringBuilder3.toString());
+                    } catch (Exception th22) {
+                        FileLog.e(th22);
+                        stringBuilder = new StringBuilder();
+                        stringBuilder.append(str8);
+                        stringBuilder.append(stripExceptNumbers);
+                        bundle.putString("ephone", stringBuilder.toString());
+                    }
+                    bundle.putString("phoneFormated", stripExceptNumbers);
+                    this.nextPressed = true;
+                    this.this$0.needShowProgress(ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tL_auth_sendCode, new -$$Lambda$LoginActivity$PhoneView$S6zazpVdhFP3KhISZlgIZLho1x0(this, bundle, tL_auth_sendCode), 27));
+                }
+            }
         }
 
         public /* synthetic */ void lambda$onNextPressed$6$LoginActivity$PhoneView(int i, DialogInterface dialogInterface, int i2) {

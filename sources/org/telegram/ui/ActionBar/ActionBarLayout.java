@@ -775,6 +775,10 @@ public class ActionBarLayout extends FrameLayout {
         }
     }
 
+    public boolean isInPreviewMode() {
+        return this.inPreviewMode || this.transitionAnimationPreviewMode;
+    }
+
     public boolean presentFragment(BaseFragment baseFragment, boolean z, boolean z2, boolean z3, boolean z4) {
         BaseFragment baseFragment2 = baseFragment;
         boolean z5 = z;

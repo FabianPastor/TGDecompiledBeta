@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: 1.0 (Android)
-SHA1-Digest-Manifest: icTEygH0yveGnKPBw/Pc+x5gFBs=
+SHA1-Digest-Manifest: reKCNnBrW8n4tXg+A23tBocySVw=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: rxhHciAaYFUBXdpoeVYVYdEWNUo=
+SHA1-Digest: h9SFJ3Yh/fNKM/TPPsETQNH+m4A=
 
 Name: META-INF/androidx.appcompat_appcompat.version
 SHA1-Digest: Q82O8vXFHwteVUsLsa5xZBp0MsI=
@@ -232,7 +232,7 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: n8ovyt6LVVpJ5E7KRbT/qlysp60=
+SHA1-Digest: +owOZZxczV69u711OAeXBHh7tWM=
 
 Name: fabric/com.stripe.stripe-android.properties
 SHA1-Digest: meJMBKLUSTmOentmkKD9WbS/j5I=
@@ -732,7 +732,7 @@ Name: res/drawable-hdpi-v4/authorize.png
 SHA1-Digest: 6aB2mR9CwPbDRNHuelQzDa+wyd8=
 
 Name: res/drawable-hdpi-v4/background_hd.jpg
-SHA1-Digest: 8s4/8JD5MdDt8oh6NemzFiaJOXc=
+SHA1-Digest: ju+gmyxeP7Z1HcDpRv5rRNp9bNk=
 
 Name: res/drawable-hdpi-v4/background_selected.png
 SHA1-Digest: oziYQlMvR1Ce3JHk+ly1/EAhRgk=
@@ -2677,7 +2677,7 @@ Name: res/drawable-mdpi-v4/authorize.png
 SHA1-Digest: v5BE+dSuk9Go+kXi9mvggpFzE2I=
 
 Name: res/drawable-mdpi-v4/background_hd.jpg
-SHA1-Digest: uY6o2g6daBxLW6SfD7dYdTtbapY=
+SHA1-Digest: W/kZkPcDiJlUujGFY/Cv0mHJQis=
 
 Name: res/drawable-mdpi-v4/background_selected.png
 SHA1-Digest: nu/2n9g6Do/aSLdleVdVnAcumx8=
@@ -4642,7 +4642,7 @@ Name: res/drawable-xhdpi-v4/authorize.png
 SHA1-Digest: bt5eFxg1mxD4z6jO9vPxUkWuXMU=
 
 Name: res/drawable-xhdpi-v4/background_hd.jpg
-SHA1-Digest: /mAFCdI5dWUPWNaBjaUfYdCWhkE=
+SHA1-Digest: LQmhJ8fhOBR7nZsywjdmfjqNg+w=
 
 Name: res/drawable-xhdpi-v4/background_selected.png
 SHA1-Digest: CnHUbkfGOmiaq2MFjg/zsrRT3Oo=
@@ -6547,7 +6547,7 @@ Name: res/drawable-xxhdpi-v4/authorize.png
 SHA1-Digest: YoMWoeXpCOKce1QA2gm+hy5ia7s=
 
 Name: res/drawable-xxhdpi-v4/background_hd.jpg
-SHA1-Digest: VlS68+KbZGy2Z1tSk65LUir9cgw=
+SHA1-Digest: fb28IVaWHhl9CV5dKu6D7BXi8BE=
 
 Name: res/drawable-xxhdpi-v4/background_selected.png
 SHA1-Digest: os0/SONVW0HFMaiZDPkPsR5DUu8=
@@ -8926,7 +8926,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: eTsXoSZyDh88OuOS8VQI6OdVkfQ=
 
 Name: resources.arsc
-SHA1-Digest: xnJkanoJqQQa12w4+aJNEg5GZjQ=
+SHA1-Digest: 5L1WTpCEMmJ8qPcl+GpLbZS5Yj4=
 
 Name: version.txt
 SHA1-Digest: N6saYwG9YKFIhHj+jH0ssSY5RCQ=

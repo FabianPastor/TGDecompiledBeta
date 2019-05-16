@@ -3,7 +3,7 @@ Built-By: Generated-by-ADT
 Created-By: Android Gradle 3.4.0
 
 Name: AndroidManifest.xml
-SHA1-Digest: woaCJryzqR05dov41hxZrqPMdIk=
+SHA1-Digest: 1UQv/WqQ16cgyTmLh3+PYZQxRzw=
 
 Name: META-INF/androidx.appcompat_appcompat.version
 SHA1-Digest: xTi2bHEQyjoCjM/kItDx+iAKmTU=
@@ -231,7 +231,7 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: +iwpeg/N641PeAzfLtpcRrFmQ3M=
+SHA1-Digest: JMAJfvkA7+LXRKPj+Fbe5z2JFGc=
 
 Name: fabric/com.stripe.stripe-android.properties
 SHA1-Digest: FHlRDdxccFhBf1l94YXJ1DBcfcA=
@@ -731,7 +731,7 @@ Name: res/drawable-hdpi-v4/authorize.png
 SHA1-Digest: 8xl263c3pKMTMMW0PY0KK5eVVUo=
 
 Name: res/drawable-hdpi-v4/background_hd.jpg
-SHA1-Digest: xwENRcsmNGgaNHFHDa5T+XXjGmA=
+SHA1-Digest: F7rCbtTmT3oQBLn/oSLhEE/gH54=
 
 Name: res/drawable-hdpi-v4/background_selected.png
 SHA1-Digest: cTUE0QsOEwsl7sDoVLtWxD3rg3Q=
@@ -2676,7 +2676,7 @@ Name: res/drawable-mdpi-v4/authorize.png
 SHA1-Digest: LVAgszuVn3HM+AoGeH/GjbrImWA=
 
 Name: res/drawable-mdpi-v4/background_hd.jpg
-SHA1-Digest: pcEPaZrqPkcjH2UuTrQrN9C+QdE=
+SHA1-Digest: J5O4Ve4leN+GcCdPqLfZcZrgBdQ=
 
 Name: res/drawable-mdpi-v4/background_selected.png
 SHA1-Digest: B0b8X4f8pWu8IYaFlnxYYTKbAls=
@@ -4641,7 +4641,7 @@ Name: res/drawable-xhdpi-v4/authorize.png
 SHA1-Digest: 2CgT+kn4NtCpB/C60D19rJ3vgjc=
 
 Name: res/drawable-xhdpi-v4/background_hd.jpg
-SHA1-Digest: Iftxr5wtgCOQzQhaYmHa4Si74Lw=
+SHA1-Digest: eMIcnqkOFEs5g580MVVs/hoe7d4=
 
 Name: res/drawable-xhdpi-v4/background_selected.png
 SHA1-Digest: UP+cfiOc4IO/8wqtgI9fqIbi1Wg=
@@ -6546,7 +6546,7 @@ Name: res/drawable-xxhdpi-v4/authorize.png
 SHA1-Digest: 0A3YIr2RnR7FbFMTDDvD5cQx4mg=
 
 Name: res/drawable-xxhdpi-v4/background_hd.jpg
-SHA1-Digest: dhdOeP7ML9+iq2Q4FUCi5inURdY=
+SHA1-Digest: fEEaPIStmKQn1KV5vfUAdHjU9rs=
 
 Name: res/drawable-xxhdpi-v4/background_selected.png
 SHA1-Digest: fPsZA4sEomDzxEzTgCIEZFlJTKc=
@@ -8925,7 +8925,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: +MNf64vCtPnRiuZgbqYoIaqfJC4=
 
 Name: resources.arsc
-SHA1-Digest: 6y7HRSkHFfLtdn09ex7RSyrnHPQ=
+SHA1-Digest: sgbS95tDrCZLd4ZTW1WUlwf2Oxo=
 
 Name: version.txt
 SHA1-Digest: J/nihzJRxlZEj3lPEgpfeoTyk98=

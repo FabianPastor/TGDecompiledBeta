@@ -4037,118 +4037,118 @@ public class DialogCell extends BaseCell {
     }
 
     /* Access modifiers changed, original: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:410:0x0ae1  */
-    /* JADX WARNING: Removed duplicated region for block: B:410:0x0ae1  */
-    /* JADX WARNING: Removed duplicated region for block: B:384:0x0a7c  */
-    /* JADX WARNING: Removed duplicated region for block: B:400:0x0abe  */
-    /* JADX WARNING: Removed duplicated region for block: B:390:0x0a92  */
-    /* JADX WARNING: Removed duplicated region for block: B:410:0x0ae1  */
-    /* JADX WARNING: Removed duplicated region for block: B:384:0x0a7c  */
-    /* JADX WARNING: Removed duplicated region for block: B:390:0x0a92  */
-    /* JADX WARNING: Removed duplicated region for block: B:400:0x0abe  */
-    /* JADX WARNING: Removed duplicated region for block: B:410:0x0ae1  */
-    /* JADX WARNING: Removed duplicated region for block: B:342:0x09a9  */
-    /* JADX WARNING: Removed duplicated region for block: B:357:0x0a16  */
-    /* JADX WARNING: Removed duplicated region for block: B:352:0x0a00  */
-    /* JADX WARNING: Removed duplicated region for block: B:373:0x0a52  */
-    /* JADX WARNING: Removed duplicated region for block: B:365:0x0a2e  */
-    /* JADX WARNING: Removed duplicated region for block: B:384:0x0a7c  */
-    /* JADX WARNING: Removed duplicated region for block: B:400:0x0abe  */
-    /* JADX WARNING: Removed duplicated region for block: B:390:0x0a92  */
-    /* JADX WARNING: Removed duplicated region for block: B:410:0x0ae1  */
-    /* JADX WARNING: Removed duplicated region for block: B:289:0x089f  */
-    /* JADX WARNING: Removed duplicated region for block: B:288:0x089a  */
-    /* JADX WARNING: Removed duplicated region for block: B:297:0x08bf  */
-    /* JADX WARNING: Removed duplicated region for block: B:292:0x08aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:309:0x0923  */
-    /* JADX WARNING: Removed duplicated region for block: B:304:0x090d  */
-    /* JADX WARNING: Removed duplicated region for block: B:318:0x093f  */
-    /* JADX WARNING: Removed duplicated region for block: B:321:0x0946  */
-    /* JADX WARNING: Removed duplicated region for block: B:342:0x09a9  */
-    /* JADX WARNING: Removed duplicated region for block: B:352:0x0a00  */
-    /* JADX WARNING: Removed duplicated region for block: B:357:0x0a16  */
-    /* JADX WARNING: Removed duplicated region for block: B:365:0x0a2e  */
-    /* JADX WARNING: Removed duplicated region for block: B:373:0x0a52  */
-    /* JADX WARNING: Removed duplicated region for block: B:384:0x0a7c  */
-    /* JADX WARNING: Removed duplicated region for block: B:390:0x0a92  */
-    /* JADX WARNING: Removed duplicated region for block: B:400:0x0abe  */
-    /* JADX WARNING: Removed duplicated region for block: B:410:0x0ae1  */
-    /* JADX WARNING: Removed duplicated region for block: B:318:0x093f  */
-    /* JADX WARNING: Removed duplicated region for block: B:321:0x0946  */
-    /* JADX WARNING: Removed duplicated region for block: B:342:0x09a9  */
-    /* JADX WARNING: Removed duplicated region for block: B:357:0x0a16  */
-    /* JADX WARNING: Removed duplicated region for block: B:352:0x0a00  */
-    /* JADX WARNING: Removed duplicated region for block: B:373:0x0a52  */
-    /* JADX WARNING: Removed duplicated region for block: B:365:0x0a2e  */
-    /* JADX WARNING: Removed duplicated region for block: B:384:0x0a7c  */
-    /* JADX WARNING: Removed duplicated region for block: B:400:0x0abe  */
-    /* JADX WARNING: Removed duplicated region for block: B:390:0x0a92  */
-    /* JADX WARNING: Removed duplicated region for block: B:410:0x0ae1  */
-    /* JADX WARNING: Removed duplicated region for block: B:127:0x043e  */
-    /* JADX WARNING: Removed duplicated region for block: B:126:0x042f  */
-    /* JADX WARNING: Removed duplicated region for block: B:138:0x047a  */
-    /* JADX WARNING: Removed duplicated region for block: B:152:0x04ce  */
-    /* JADX WARNING: Removed duplicated region for block: B:155:0x04e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:170:0x0534  */
-    /* JADX WARNING: Removed duplicated region for block: B:186:0x0591  */
-    /* JADX WARNING: Removed duplicated region for block: B:185:0x0582  */
-    /* JADX WARNING: Removed duplicated region for block: B:214:0x0621  */
-    /* JADX WARNING: Removed duplicated region for block: B:205:0x05ee  */
-    /* JADX WARNING: Removed duplicated region for block: B:229:0x06bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:228:0x066a  */
-    /* JADX WARNING: Removed duplicated region for block: B:261:0x081b  */
-    /* JADX WARNING: Removed duplicated region for block: B:264:0x0842  */
-    /* JADX WARNING: Removed duplicated region for block: B:275:0x085d  */
-    /* JADX WARNING: Removed duplicated region for block: B:288:0x089a  */
-    /* JADX WARNING: Removed duplicated region for block: B:289:0x089f  */
-    /* JADX WARNING: Removed duplicated region for block: B:292:0x08aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:297:0x08bf  */
-    /* JADX WARNING: Removed duplicated region for block: B:304:0x090d  */
-    /* JADX WARNING: Removed duplicated region for block: B:309:0x0923  */
-    /* JADX WARNING: Removed duplicated region for block: B:318:0x093f  */
-    /* JADX WARNING: Removed duplicated region for block: B:321:0x0946  */
-    /* JADX WARNING: Removed duplicated region for block: B:342:0x09a9  */
-    /* JADX WARNING: Removed duplicated region for block: B:352:0x0a00  */
-    /* JADX WARNING: Removed duplicated region for block: B:357:0x0a16  */
-    /* JADX WARNING: Removed duplicated region for block: B:365:0x0a2e  */
-    /* JADX WARNING: Removed duplicated region for block: B:373:0x0a52  */
-    /* JADX WARNING: Removed duplicated region for block: B:384:0x0a7c  */
-    /* JADX WARNING: Removed duplicated region for block: B:390:0x0a92  */
-    /* JADX WARNING: Removed duplicated region for block: B:400:0x0abe  */
-    /* JADX WARNING: Removed duplicated region for block: B:410:0x0ae1  */
-    /* JADX WARNING: Removed duplicated region for block: B:126:0x042f  */
-    /* JADX WARNING: Removed duplicated region for block: B:127:0x043e  */
-    /* JADX WARNING: Removed duplicated region for block: B:138:0x047a  */
-    /* JADX WARNING: Removed duplicated region for block: B:152:0x04ce  */
-    /* JADX WARNING: Removed duplicated region for block: B:155:0x04e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:170:0x0534  */
-    /* JADX WARNING: Removed duplicated region for block: B:185:0x0582  */
-    /* JADX WARNING: Removed duplicated region for block: B:186:0x0591  */
-    /* JADX WARNING: Removed duplicated region for block: B:194:0x05c8  */
-    /* JADX WARNING: Removed duplicated region for block: B:205:0x05ee  */
-    /* JADX WARNING: Removed duplicated region for block: B:214:0x0621  */
-    /* JADX WARNING: Removed duplicated region for block: B:228:0x066a  */
-    /* JADX WARNING: Removed duplicated region for block: B:229:0x06bc  */
-    /* JADX WARNING: Removed duplicated region for block: B:261:0x081b  */
-    /* JADX WARNING: Removed duplicated region for block: B:264:0x0842  */
-    /* JADX WARNING: Removed duplicated region for block: B:275:0x085d  */
-    /* JADX WARNING: Removed duplicated region for block: B:289:0x089f  */
-    /* JADX WARNING: Removed duplicated region for block: B:288:0x089a  */
-    /* JADX WARNING: Removed duplicated region for block: B:297:0x08bf  */
-    /* JADX WARNING: Removed duplicated region for block: B:292:0x08aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:309:0x0923  */
-    /* JADX WARNING: Removed duplicated region for block: B:304:0x090d  */
-    /* JADX WARNING: Removed duplicated region for block: B:318:0x093f  */
-    /* JADX WARNING: Removed duplicated region for block: B:321:0x0946  */
-    /* JADX WARNING: Removed duplicated region for block: B:342:0x09a9  */
-    /* JADX WARNING: Removed duplicated region for block: B:357:0x0a16  */
-    /* JADX WARNING: Removed duplicated region for block: B:352:0x0a00  */
-    /* JADX WARNING: Removed duplicated region for block: B:373:0x0a52  */
-    /* JADX WARNING: Removed duplicated region for block: B:365:0x0a2e  */
-    /* JADX WARNING: Removed duplicated region for block: B:384:0x0a7c  */
-    /* JADX WARNING: Removed duplicated region for block: B:400:0x0abe  */
-    /* JADX WARNING: Removed duplicated region for block: B:390:0x0a92  */
-    /* JADX WARNING: Removed duplicated region for block: B:410:0x0ae1  */
+    /* JADX WARNING: Removed duplicated region for block: B:413:0x0aee  */
+    /* JADX WARNING: Removed duplicated region for block: B:413:0x0aee  */
+    /* JADX WARNING: Removed duplicated region for block: B:387:0x0a89  */
+    /* JADX WARNING: Removed duplicated region for block: B:403:0x0acb  */
+    /* JADX WARNING: Removed duplicated region for block: B:393:0x0a9f  */
+    /* JADX WARNING: Removed duplicated region for block: B:413:0x0aee  */
+    /* JADX WARNING: Removed duplicated region for block: B:387:0x0a89  */
+    /* JADX WARNING: Removed duplicated region for block: B:393:0x0a9f  */
+    /* JADX WARNING: Removed duplicated region for block: B:403:0x0acb  */
+    /* JADX WARNING: Removed duplicated region for block: B:413:0x0aee  */
+    /* JADX WARNING: Removed duplicated region for block: B:345:0x09b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:360:0x0a23  */
+    /* JADX WARNING: Removed duplicated region for block: B:355:0x0a0d  */
+    /* JADX WARNING: Removed duplicated region for block: B:376:0x0a5f  */
+    /* JADX WARNING: Removed duplicated region for block: B:368:0x0a3b  */
+    /* JADX WARNING: Removed duplicated region for block: B:387:0x0a89  */
+    /* JADX WARNING: Removed duplicated region for block: B:403:0x0acb  */
+    /* JADX WARNING: Removed duplicated region for block: B:393:0x0a9f  */
+    /* JADX WARNING: Removed duplicated region for block: B:413:0x0aee  */
+    /* JADX WARNING: Removed duplicated region for block: B:292:0x08ac  */
+    /* JADX WARNING: Removed duplicated region for block: B:291:0x08a7  */
+    /* JADX WARNING: Removed duplicated region for block: B:300:0x08cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:295:0x08b7  */
+    /* JADX WARNING: Removed duplicated region for block: B:312:0x0930  */
+    /* JADX WARNING: Removed duplicated region for block: B:307:0x091a  */
+    /* JADX WARNING: Removed duplicated region for block: B:321:0x094c  */
+    /* JADX WARNING: Removed duplicated region for block: B:324:0x0953  */
+    /* JADX WARNING: Removed duplicated region for block: B:345:0x09b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:355:0x0a0d  */
+    /* JADX WARNING: Removed duplicated region for block: B:360:0x0a23  */
+    /* JADX WARNING: Removed duplicated region for block: B:368:0x0a3b  */
+    /* JADX WARNING: Removed duplicated region for block: B:376:0x0a5f  */
+    /* JADX WARNING: Removed duplicated region for block: B:387:0x0a89  */
+    /* JADX WARNING: Removed duplicated region for block: B:393:0x0a9f  */
+    /* JADX WARNING: Removed duplicated region for block: B:403:0x0acb  */
+    /* JADX WARNING: Removed duplicated region for block: B:413:0x0aee  */
+    /* JADX WARNING: Removed duplicated region for block: B:321:0x094c  */
+    /* JADX WARNING: Removed duplicated region for block: B:324:0x0953  */
+    /* JADX WARNING: Removed duplicated region for block: B:345:0x09b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:360:0x0a23  */
+    /* JADX WARNING: Removed duplicated region for block: B:355:0x0a0d  */
+    /* JADX WARNING: Removed duplicated region for block: B:376:0x0a5f  */
+    /* JADX WARNING: Removed duplicated region for block: B:368:0x0a3b  */
+    /* JADX WARNING: Removed duplicated region for block: B:387:0x0a89  */
+    /* JADX WARNING: Removed duplicated region for block: B:403:0x0acb  */
+    /* JADX WARNING: Removed duplicated region for block: B:393:0x0a9f  */
+    /* JADX WARNING: Removed duplicated region for block: B:413:0x0aee  */
+    /* JADX WARNING: Removed duplicated region for block: B:130:0x044b  */
+    /* JADX WARNING: Removed duplicated region for block: B:129:0x043c  */
+    /* JADX WARNING: Removed duplicated region for block: B:141:0x0487  */
+    /* JADX WARNING: Removed duplicated region for block: B:155:0x04db  */
+    /* JADX WARNING: Removed duplicated region for block: B:158:0x04f3  */
+    /* JADX WARNING: Removed duplicated region for block: B:173:0x0541  */
+    /* JADX WARNING: Removed duplicated region for block: B:189:0x059e  */
+    /* JADX WARNING: Removed duplicated region for block: B:188:0x058f  */
+    /* JADX WARNING: Removed duplicated region for block: B:217:0x062e  */
+    /* JADX WARNING: Removed duplicated region for block: B:208:0x05fb  */
+    /* JADX WARNING: Removed duplicated region for block: B:232:0x06c9  */
+    /* JADX WARNING: Removed duplicated region for block: B:231:0x0677  */
+    /* JADX WARNING: Removed duplicated region for block: B:264:0x0828  */
+    /* JADX WARNING: Removed duplicated region for block: B:267:0x084f  */
+    /* JADX WARNING: Removed duplicated region for block: B:278:0x086a  */
+    /* JADX WARNING: Removed duplicated region for block: B:291:0x08a7  */
+    /* JADX WARNING: Removed duplicated region for block: B:292:0x08ac  */
+    /* JADX WARNING: Removed duplicated region for block: B:295:0x08b7  */
+    /* JADX WARNING: Removed duplicated region for block: B:300:0x08cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:307:0x091a  */
+    /* JADX WARNING: Removed duplicated region for block: B:312:0x0930  */
+    /* JADX WARNING: Removed duplicated region for block: B:321:0x094c  */
+    /* JADX WARNING: Removed duplicated region for block: B:324:0x0953  */
+    /* JADX WARNING: Removed duplicated region for block: B:345:0x09b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:355:0x0a0d  */
+    /* JADX WARNING: Removed duplicated region for block: B:360:0x0a23  */
+    /* JADX WARNING: Removed duplicated region for block: B:368:0x0a3b  */
+    /* JADX WARNING: Removed duplicated region for block: B:376:0x0a5f  */
+    /* JADX WARNING: Removed duplicated region for block: B:387:0x0a89  */
+    /* JADX WARNING: Removed duplicated region for block: B:393:0x0a9f  */
+    /* JADX WARNING: Removed duplicated region for block: B:403:0x0acb  */
+    /* JADX WARNING: Removed duplicated region for block: B:413:0x0aee  */
+    /* JADX WARNING: Removed duplicated region for block: B:129:0x043c  */
+    /* JADX WARNING: Removed duplicated region for block: B:130:0x044b  */
+    /* JADX WARNING: Removed duplicated region for block: B:141:0x0487  */
+    /* JADX WARNING: Removed duplicated region for block: B:155:0x04db  */
+    /* JADX WARNING: Removed duplicated region for block: B:158:0x04f3  */
+    /* JADX WARNING: Removed duplicated region for block: B:173:0x0541  */
+    /* JADX WARNING: Removed duplicated region for block: B:188:0x058f  */
+    /* JADX WARNING: Removed duplicated region for block: B:189:0x059e  */
+    /* JADX WARNING: Removed duplicated region for block: B:197:0x05d5  */
+    /* JADX WARNING: Removed duplicated region for block: B:208:0x05fb  */
+    /* JADX WARNING: Removed duplicated region for block: B:217:0x062e  */
+    /* JADX WARNING: Removed duplicated region for block: B:231:0x0677  */
+    /* JADX WARNING: Removed duplicated region for block: B:232:0x06c9  */
+    /* JADX WARNING: Removed duplicated region for block: B:264:0x0828  */
+    /* JADX WARNING: Removed duplicated region for block: B:267:0x084f  */
+    /* JADX WARNING: Removed duplicated region for block: B:278:0x086a  */
+    /* JADX WARNING: Removed duplicated region for block: B:292:0x08ac  */
+    /* JADX WARNING: Removed duplicated region for block: B:291:0x08a7  */
+    /* JADX WARNING: Removed duplicated region for block: B:300:0x08cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:295:0x08b7  */
+    /* JADX WARNING: Removed duplicated region for block: B:312:0x0930  */
+    /* JADX WARNING: Removed duplicated region for block: B:307:0x091a  */
+    /* JADX WARNING: Removed duplicated region for block: B:321:0x094c  */
+    /* JADX WARNING: Removed duplicated region for block: B:324:0x0953  */
+    /* JADX WARNING: Removed duplicated region for block: B:345:0x09b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:360:0x0a23  */
+    /* JADX WARNING: Removed duplicated region for block: B:355:0x0a0d  */
+    /* JADX WARNING: Removed duplicated region for block: B:376:0x0a5f  */
+    /* JADX WARNING: Removed duplicated region for block: B:368:0x0a3b  */
+    /* JADX WARNING: Removed duplicated region for block: B:387:0x0a89  */
+    /* JADX WARNING: Removed duplicated region for block: B:403:0x0acb  */
+    /* JADX WARNING: Removed duplicated region for block: B:393:0x0a9f  */
+    /* JADX WARNING: Removed duplicated region for block: B:413:0x0aee  */
     @android.annotation.SuppressLint({"DrawAllocation"})
     public void onDraw(android.graphics.Canvas r25) {
         /*
@@ -4217,7 +4217,7 @@ public class DialogCell extends BaseCell {
         goto L_0x007f;
     L_0x0064:
         r0 = r1.translationDrawable;
-        if (r0 == 0) goto L_0x02b4;
+        if (r0 == 0) goto L_0x02c1;
     L_0x0068:
         r2 = r0 instanceof com.airbnb.lottie.LottieDrawable;
         if (r2 == 0) goto L_0x0078;
@@ -4231,7 +4231,7 @@ public class DialogCell extends BaseCell {
         r0 = 0;
         r1.translationDrawable = r0;
         r1.translationAnimationStarted = r13;
-        goto L_0x02b4;
+        goto L_0x02c1;
     L_0x007f:
         r25.save();
         r0 = r1.currentDialogFolderId;
@@ -4386,6 +4386,14 @@ public class DialogCell extends BaseCell {
     L_0x01a8:
         r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
         r4 = r1.translationDrawable;
+        r4 = r4 instanceof com.airbnb.lottie.LottieDrawable;
+        if (r4 != 0) goto L_0x01b9;
+    L_0x01b2:
+        r4 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r3 = r3 + r4;
+    L_0x01b9:
+        r4 = r1.translationDrawable;
         r4 = r4.getIntrinsicWidth();
         r4 = r4 / r15;
         r4 = r4 + r2;
@@ -4395,8 +4403,8 @@ public class DialogCell extends BaseCell {
         r5 = r5 + r3;
         r6 = r1.currentRevealProgress;
         r6 = (r6 > r11 ? 1 : (r6 == r11 ? 0 : -1));
-        if (r6 <= 0) goto L_0x023b;
-    L_0x01c2:
+        if (r6 <= 0) goto L_0x0248;
+    L_0x01cf:
         r25.save();
         r6 = org.telegram.messenger.AndroidUtilities.dp(r12);
         r6 = (float) r6;
@@ -4429,12 +4437,12 @@ public class DialogCell extends BaseCell {
         r8.drawCircle(r4, r5, r6, r7);
         r25.restore();
         r4 = org.telegram.ui.ActionBar.Theme.dialogs_archiveDrawableRecolored;
-        if (r4 != 0) goto L_0x023b;
-    L_0x020f:
+        if (r4 != 0) goto L_0x0248;
+    L_0x021c:
         r4 = org.telegram.ui.ActionBar.Theme.dialogs_archiveDrawable;
         r5 = r4 instanceof com.airbnb.lottie.LottieDrawable;
-        if (r5 == 0) goto L_0x0239;
-    L_0x0215:
+        if (r5 == 0) goto L_0x0246;
+    L_0x0222:
         r4 = (com.airbnb.lottie.LottieDrawable) r4;
         r5 = new com.airbnb.lottie.model.KeyPath;
         r6 = new java.lang.String[r15];
@@ -4450,21 +4458,21 @@ public class DialogCell extends BaseCell {
         r12.<init>(r13);
         r7.<init>(r12);
         r4.addValueCallback(r5, r6, r7);
-    L_0x0239:
+    L_0x0246:
         org.telegram.ui.ActionBar.Theme.dialogs_archiveDrawableRecolored = r14;
-    L_0x023b:
+    L_0x0248:
         r25.save();
         r2 = (float) r2;
         r3 = (float) r3;
         r8.translate(r2, r3);
         r2 = r1.currentRevealBounceProgress;
         r3 = (r2 > r11 ? 1 : (r2 == r11 ? 0 : -1));
-        if (r3 == 0) goto L_0x0269;
-    L_0x0249:
+        if (r3 == 0) goto L_0x0276;
+    L_0x0256:
         r3 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r4 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1));
-        if (r4 == 0) goto L_0x0269;
-    L_0x024f:
+        if (r4 == 0) goto L_0x0276;
+    L_0x025c:
         r4 = r1.interpolator;
         r2 = r4.getInterpolation(r2);
         r2 = r2 + r3;
@@ -4477,7 +4485,7 @@ public class DialogCell extends BaseCell {
         r4 = r4 / r15;
         r4 = (float) r4;
         r8.scale(r2, r2, r3, r4);
-    L_0x0269:
+    L_0x0276:
         r2 = r1.translationDrawable;
         r3 = 0;
         org.telegram.ui.Cells.BaseCell.setDrawableBounds(r2, r3, r3);
@@ -4502,30 +4510,30 @@ public class DialogCell extends BaseCell {
         r2 = r2 - r0;
         r0 = (float) r2;
         r2 = org.telegram.messenger.SharedConfig.useThreeLinesLayout;
-        if (r2 == 0) goto L_0x02a5;
-    L_0x02a2:
+        if (r2 == 0) goto L_0x02b2;
+    L_0x02af:
         r2 = NUM; // 0x42780000 float:62.0 double:5.5096253E-315;
-        goto L_0x02a7;
-    L_0x02a5:
+        goto L_0x02b4;
+    L_0x02b2:
         r2 = NUM; // 0x426CLASSNAME float:59.0 double:5.50573981E-315;
-    L_0x02a7:
+    L_0x02b4:
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r2 = (float) r2;
         r4 = org.telegram.ui.ActionBar.Theme.dialogs_archiveTextPaint;
         r8.drawText(r3, r0, r2, r4);
         r25.restore();
-    L_0x02b4:
+    L_0x02c1:
         r0 = r1.translationX;
         r0 = (r0 > r11 ? 1 : (r0 == r11 ? 0 : -1));
-        if (r0 == 0) goto L_0x02c2;
-    L_0x02ba:
+        if (r0 == 0) goto L_0x02cf;
+    L_0x02c7:
         r25.save();
         r0 = r1.translationX;
         r8.translate(r0, r11);
-    L_0x02c2:
+    L_0x02cf:
         r0 = r1.isSelected;
-        if (r0 == 0) goto L_0x02d9;
-    L_0x02c6:
+        if (r0 == 0) goto L_0x02e6;
+    L_0x02d3:
         r3 = 0;
         r4 = 0;
         r0 = r24.getMeasuredWidth();
@@ -4535,18 +4543,18 @@ public class DialogCell extends BaseCell {
         r7 = org.telegram.ui.ActionBar.Theme.dialogs_tabletSeletedPaint;
         r2 = r25;
         r2.drawRect(r3, r4, r5, r6, r7);
-    L_0x02d9:
+    L_0x02e6:
         r0 = r1.currentDialogFolderId;
         r12 = "chats_pinnedOverlay";
-        if (r0 == 0) goto L_0x030f;
-    L_0x02df:
+        if (r0 == 0) goto L_0x031c;
+    L_0x02ec:
         r0 = org.telegram.messenger.SharedConfig.archiveHidden;
-        if (r0 == 0) goto L_0x02e9;
-    L_0x02e3:
+        if (r0 == 0) goto L_0x02f6;
+    L_0x02f0:
         r0 = r1.archiveBackgroundProgress;
         r0 = (r0 > r11 ? 1 : (r0 == r11 ? 0 : -1));
-        if (r0 == 0) goto L_0x030f;
-    L_0x02e9:
+        if (r0 == 0) goto L_0x031c;
+    L_0x02f6:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_pinnedPaint;
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r12);
         r3 = r1.archiveBackgroundProgress;
@@ -4563,14 +4571,14 @@ public class DialogCell extends BaseCell {
         r7 = org.telegram.ui.ActionBar.Theme.dialogs_pinnedPaint;
         r2 = r25;
         r2.drawRect(r3, r4, r5, r6, r7);
-        goto L_0x0333;
-    L_0x030f:
+        goto L_0x0340;
+    L_0x031c:
         r0 = r1.drawPin;
-        if (r0 != 0) goto L_0x0317;
-    L_0x0313:
+        if (r0 != 0) goto L_0x0324;
+    L_0x0320:
         r0 = r1.drawPinBackground;
-        if (r0 == 0) goto L_0x0333;
-    L_0x0317:
+        if (r0 == 0) goto L_0x0340;
+    L_0x0324:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_pinnedPaint;
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r12);
         r0.setColor(r2);
@@ -4583,20 +4591,20 @@ public class DialogCell extends BaseCell {
         r7 = org.telegram.ui.ActionBar.Theme.dialogs_pinnedPaint;
         r2 = r25;
         r2.drawRect(r3, r4, r5, r6, r7);
-    L_0x0333:
+    L_0x0340:
         r0 = r1.translationX;
         r0 = (r0 > r11 ? 1 : (r0 == r11 ? 0 : -1));
-        if (r0 != 0) goto L_0x0344;
-    L_0x0339:
+        if (r0 != 0) goto L_0x0351;
+    L_0x0346:
         r0 = r1.cornerProgress;
         r0 = (r0 > r11 ? 1 : (r0 == r11 ? 0 : -1));
-        if (r0 == 0) goto L_0x0340;
-    L_0x033f:
-        goto L_0x0344;
-    L_0x0340:
+        if (r0 == 0) goto L_0x034d;
+    L_0x034c:
+        goto L_0x0351;
+    L_0x034d:
         r2 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
-        goto L_0x03f7;
-    L_0x0344:
+        goto L_0x0404;
+    L_0x0351:
         r25.save();
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_pinnedPaint;
         r2 = "windowBackgroundWhite";
@@ -4626,15 +4634,15 @@ public class DialogCell extends BaseCell {
         r4 = org.telegram.ui.ActionBar.Theme.dialogs_pinnedPaint;
         r8.drawRoundRect(r0, r3, r2, r4);
         r0 = r1.currentDialogFolderId;
-        if (r0 == 0) goto L_0x03c4;
-    L_0x038c:
+        if (r0 == 0) goto L_0x03d1;
+    L_0x0399:
         r0 = org.telegram.messenger.SharedConfig.archiveHidden;
-        if (r0 == 0) goto L_0x0396;
-    L_0x0390:
+        if (r0 == 0) goto L_0x03a3;
+    L_0x039d:
         r0 = r1.archiveBackgroundProgress;
         r0 = (r0 > r11 ? 1 : (r0 == r11 ? 0 : -1));
-        if (r0 == 0) goto L_0x03c4;
-    L_0x0396:
+        if (r0 == 0) goto L_0x03d1;
+    L_0x03a3:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_pinnedPaint;
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r12);
         r3 = r1.archiveBackgroundProgress;
@@ -4654,19 +4662,19 @@ public class DialogCell extends BaseCell {
         r2 = r2 * r4;
         r4 = org.telegram.ui.ActionBar.Theme.dialogs_pinnedPaint;
         r8.drawRoundRect(r0, r3, r2, r4);
-        goto L_0x03cd;
-    L_0x03c4:
+        goto L_0x03da;
+    L_0x03d1:
         r0 = r1.drawPin;
-        if (r0 != 0) goto L_0x03d0;
-    L_0x03c8:
+        if (r0 != 0) goto L_0x03dd;
+    L_0x03d5:
         r0 = r1.drawPinBackground;
-        if (r0 == 0) goto L_0x03cd;
-    L_0x03cc:
-        goto L_0x03d0;
-    L_0x03cd:
+        if (r0 == 0) goto L_0x03da;
+    L_0x03d9:
+        goto L_0x03dd;
+    L_0x03da:
         r2 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
-        goto L_0x03f4;
-    L_0x03d0:
+        goto L_0x0401;
+    L_0x03dd:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_pinnedPaint;
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r12);
         r0.setColor(r2);
@@ -4682,142 +4690,142 @@ public class DialogCell extends BaseCell {
         r4 = r4 * r5;
         r5 = org.telegram.ui.ActionBar.Theme.dialogs_pinnedPaint;
         r8.drawRoundRect(r0, r3, r4, r5);
-    L_0x03f4:
+    L_0x0401:
         r25.restore();
-    L_0x03f7:
+    L_0x0404:
         r0 = r1.translationX;
         r3 = NUM; // 0x43160000 float:150.0 double:5.56078426E-315;
         r0 = (r0 > r11 ? 1 : (r0 == r11 ? 0 : -1));
-        if (r0 == 0) goto L_0x0415;
-    L_0x03ff:
+        if (r0 == 0) goto L_0x0422;
+    L_0x040c:
         r0 = r1.cornerProgress;
         r4 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r5 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1));
-        if (r5 >= 0) goto L_0x042a;
-    L_0x0407:
+        if (r5 >= 0) goto L_0x0437;
+    L_0x0414:
         r5 = (float) r9;
         r5 = r5 / r3;
         r0 = r0 + r5;
         r1.cornerProgress = r0;
         r0 = r1.cornerProgress;
         r0 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1));
-        if (r0 <= 0) goto L_0x0428;
-    L_0x0412:
+        if (r0 <= 0) goto L_0x0435;
+    L_0x041f:
         r1.cornerProgress = r4;
-        goto L_0x0428;
-    L_0x0415:
+        goto L_0x0435;
+    L_0x0422:
         r0 = r1.cornerProgress;
         r4 = (r0 > r11 ? 1 : (r0 == r11 ? 0 : -1));
-        if (r4 <= 0) goto L_0x042a;
-    L_0x041b:
+        if (r4 <= 0) goto L_0x0437;
+    L_0x0428:
         r4 = (float) r9;
         r4 = r4 / r3;
         r0 = r0 - r4;
         r1.cornerProgress = r0;
         r0 = r1.cornerProgress;
         r0 = (r0 > r11 ? 1 : (r0 == r11 ? 0 : -1));
-        if (r0 >= 0) goto L_0x0428;
-    L_0x0426:
+        if (r0 >= 0) goto L_0x0435;
+    L_0x0433:
         r1.cornerProgress = r11;
-    L_0x0428:
+    L_0x0435:
         r4 = 1;
-        goto L_0x042b;
-    L_0x042a:
+        goto L_0x0438;
+    L_0x0437:
         r4 = 0;
-    L_0x042b:
+    L_0x0438:
         r0 = r1.drawNameLock;
-        if (r0 == 0) goto L_0x043e;
-    L_0x042f:
+        if (r0 == 0) goto L_0x044b;
+    L_0x043c:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_lockDrawable;
         r5 = r1.nameLockLeft;
         r6 = r1.nameLockTop;
         org.telegram.ui.Cells.BaseCell.setDrawableBounds(r0, r5, r6);
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_lockDrawable;
         r0.draw(r8);
-        goto L_0x0476;
-    L_0x043e:
+        goto L_0x0483;
+    L_0x044b:
         r0 = r1.drawNameGroup;
-        if (r0 == 0) goto L_0x0451;
-    L_0x0442:
+        if (r0 == 0) goto L_0x045e;
+    L_0x044f:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_groupDrawable;
         r5 = r1.nameLockLeft;
         r6 = r1.nameLockTop;
         org.telegram.ui.Cells.BaseCell.setDrawableBounds(r0, r5, r6);
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_groupDrawable;
         r0.draw(r8);
-        goto L_0x0476;
-    L_0x0451:
+        goto L_0x0483;
+    L_0x045e:
         r0 = r1.drawNameBroadcast;
-        if (r0 == 0) goto L_0x0464;
-    L_0x0455:
+        if (r0 == 0) goto L_0x0471;
+    L_0x0462:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_broadcastDrawable;
         r5 = r1.nameLockLeft;
         r6 = r1.nameLockTop;
         org.telegram.ui.Cells.BaseCell.setDrawableBounds(r0, r5, r6);
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_broadcastDrawable;
         r0.draw(r8);
-        goto L_0x0476;
-    L_0x0464:
+        goto L_0x0483;
+    L_0x0471:
         r0 = r1.drawNameBot;
-        if (r0 == 0) goto L_0x0476;
-    L_0x0468:
+        if (r0 == 0) goto L_0x0483;
+    L_0x0475:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_botDrawable;
         r5 = r1.nameLockLeft;
         r6 = r1.nameLockTop;
         org.telegram.ui.Cells.BaseCell.setDrawableBounds(r0, r5, r6);
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_botDrawable;
         r0.draw(r8);
-    L_0x0476:
+    L_0x0483:
         r0 = r1.nameLayout;
-        if (r0 == 0) goto L_0x04ca;
-    L_0x047a:
+        if (r0 == 0) goto L_0x04d7;
+    L_0x0487:
         r0 = r1.currentDialogFolderId;
-        if (r0 == 0) goto L_0x048c;
-    L_0x047e:
+        if (r0 == 0) goto L_0x0499;
+    L_0x048b:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_namePaint;
         r5 = "chats_nameArchived";
         r5 = org.telegram.ui.ActionBar.Theme.getColor(r5);
         r0.linkColor = r5;
         r0.setColor(r5);
-        goto L_0x04ab;
-    L_0x048c:
+        goto L_0x04b8;
+    L_0x0499:
         r0 = r1.encryptedChat;
-        if (r0 == 0) goto L_0x049e;
-    L_0x0490:
+        if (r0 == 0) goto L_0x04ab;
+    L_0x049d:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_namePaint;
         r5 = "chats_secretName";
         r5 = org.telegram.ui.ActionBar.Theme.getColor(r5);
         r0.linkColor = r5;
         r0.setColor(r5);
-        goto L_0x04ab;
-    L_0x049e:
+        goto L_0x04b8;
+    L_0x04ab:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_namePaint;
         r5 = "chats_name";
         r5 = org.telegram.ui.ActionBar.Theme.getColor(r5);
         r0.linkColor = r5;
         r0.setColor(r5);
-    L_0x04ab:
+    L_0x04b8:
         r25.save();
         r0 = r1.nameLeft;
         r0 = (float) r0;
         r5 = org.telegram.messenger.SharedConfig.useThreeLinesLayout;
-        if (r5 == 0) goto L_0x04b8;
-    L_0x04b5:
+        if (r5 == 0) goto L_0x04c5;
+    L_0x04c2:
         r5 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
-        goto L_0x04ba;
-    L_0x04b8:
+        goto L_0x04c7;
+    L_0x04c5:
         r5 = NUM; // 0x41500000 float:13.0 double:5.413783207E-315;
-    L_0x04ba:
+    L_0x04c7:
         r5 = org.telegram.messenger.AndroidUtilities.dp(r5);
         r5 = (float) r5;
         r8.translate(r0, r5);
         r0 = r1.nameLayout;
         r0.draw(r8);
         r25.restore();
-    L_0x04ca:
+    L_0x04d7:
         r0 = r1.timeLayout;
-        if (r0 == 0) goto L_0x04e2;
-    L_0x04ce:
+        if (r0 == 0) goto L_0x04ef;
+    L_0x04db:
         r25.save();
         r0 = r1.timeLeft;
         r0 = (float) r0;
@@ -4827,112 +4835,112 @@ public class DialogCell extends BaseCell {
         r0 = r1.timeLayout;
         r0.draw(r8);
         r25.restore();
-    L_0x04e2:
+    L_0x04ef:
         r0 = r1.messageNameLayout;
-        if (r0 == 0) goto L_0x0530;
-    L_0x04e6:
+        if (r0 == 0) goto L_0x053d;
+    L_0x04f3:
         r0 = r1.currentDialogFolderId;
-        if (r0 == 0) goto L_0x04f8;
-    L_0x04ea:
+        if (r0 == 0) goto L_0x0505;
+    L_0x04f7:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_messageNamePaint;
         r5 = "chats_nameMessageArchived_threeLines";
         r5 = org.telegram.ui.ActionBar.Theme.getColor(r5);
         r0.linkColor = r5;
         r0.setColor(r5);
-        goto L_0x0517;
-    L_0x04f8:
+        goto L_0x0524;
+    L_0x0505:
         r0 = r1.draftMessage;
-        if (r0 == 0) goto L_0x050a;
-    L_0x04fc:
+        if (r0 == 0) goto L_0x0517;
+    L_0x0509:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_messageNamePaint;
         r5 = "chats_draft";
         r5 = org.telegram.ui.ActionBar.Theme.getColor(r5);
         r0.linkColor = r5;
         r0.setColor(r5);
-        goto L_0x0517;
-    L_0x050a:
+        goto L_0x0524;
+    L_0x0517:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_messageNamePaint;
         r5 = "chats_nameMessage_threeLines";
         r5 = org.telegram.ui.ActionBar.Theme.getColor(r5);
         r0.linkColor = r5;
         r0.setColor(r5);
-    L_0x0517:
+    L_0x0524:
         r25.save();
         r0 = r1.messageNameLeft;
         r0 = (float) r0;
         r5 = r1.messageNameTop;
         r5 = (float) r5;
         r8.translate(r0, r5);
-        r0 = r1.messageNameLayout;	 Catch:{ Exception -> 0x0529 }
-        r0.draw(r8);	 Catch:{ Exception -> 0x0529 }
-        goto L_0x052d;
-    L_0x0529:
+        r0 = r1.messageNameLayout;	 Catch:{ Exception -> 0x0536 }
+        r0.draw(r8);	 Catch:{ Exception -> 0x0536 }
+        goto L_0x053a;
+    L_0x0536:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x052d:
+    L_0x053a:
         r25.restore();
-    L_0x0530:
+    L_0x053d:
         r0 = r1.messageLayout;
-        if (r0 == 0) goto L_0x057e;
-    L_0x0534:
+        if (r0 == 0) goto L_0x058b;
+    L_0x0541:
         r0 = r1.currentDialogFolderId;
-        if (r0 == 0) goto L_0x0558;
-    L_0x0538:
+        if (r0 == 0) goto L_0x0565;
+    L_0x0545:
         r0 = r1.chat;
-        if (r0 == 0) goto L_0x054a;
-    L_0x053c:
+        if (r0 == 0) goto L_0x0557;
+    L_0x0549:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_messagePaint;
         r5 = "chats_nameMessageArchived";
         r5 = org.telegram.ui.ActionBar.Theme.getColor(r5);
         r0.linkColor = r5;
         r0.setColor(r5);
-        goto L_0x0565;
-    L_0x054a:
+        goto L_0x0572;
+    L_0x0557:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_messagePaint;
         r5 = "chats_messageArchived";
         r5 = org.telegram.ui.ActionBar.Theme.getColor(r5);
         r0.linkColor = r5;
         r0.setColor(r5);
-        goto L_0x0565;
-    L_0x0558:
+        goto L_0x0572;
+    L_0x0565:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_messagePaint;
         r5 = "chats_message";
         r5 = org.telegram.ui.ActionBar.Theme.getColor(r5);
         r0.linkColor = r5;
         r0.setColor(r5);
-    L_0x0565:
+    L_0x0572:
         r25.save();
         r0 = r1.messageLeft;
         r0 = (float) r0;
         r5 = r1.messageTop;
         r5 = (float) r5;
         r8.translate(r0, r5);
-        r0 = r1.messageLayout;	 Catch:{ Exception -> 0x0577 }
-        r0.draw(r8);	 Catch:{ Exception -> 0x0577 }
-        goto L_0x057b;
-    L_0x0577:
+        r0 = r1.messageLayout;	 Catch:{ Exception -> 0x0584 }
+        r0.draw(r8);	 Catch:{ Exception -> 0x0584 }
+        goto L_0x0588;
+    L_0x0584:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x057b:
+    L_0x0588:
         r25.restore();
-    L_0x057e:
+    L_0x058b:
         r0 = r1.drawClock;
-        if (r0 == 0) goto L_0x0591;
-    L_0x0582:
+        if (r0 == 0) goto L_0x059e;
+    L_0x058f:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_clockDrawable;
         r5 = r1.checkDrawLeft;
         r6 = r1.checkDrawTop;
         org.telegram.ui.Cells.BaseCell.setDrawableBounds(r0, r5, r6);
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_clockDrawable;
         r0.draw(r8);
-        goto L_0x05c4;
-    L_0x0591:
+        goto L_0x05d1;
+    L_0x059e:
         r0 = r1.drawCheck2;
-        if (r0 == 0) goto L_0x05c4;
-    L_0x0595:
+        if (r0 == 0) goto L_0x05d1;
+    L_0x05a2:
         r0 = r1.drawCheck1;
-        if (r0 == 0) goto L_0x05b6;
-    L_0x0599:
+        if (r0 == 0) goto L_0x05c3;
+    L_0x05a6:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_halfCheckDrawable;
         r5 = r1.halfCheckDrawLeft;
         r6 = r1.checkDrawTop;
@@ -4945,99 +4953,99 @@ public class DialogCell extends BaseCell {
         org.telegram.ui.Cells.BaseCell.setDrawableBounds(r0, r5, r6);
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_checkDrawable;
         r0.draw(r8);
-        goto L_0x05c4;
-    L_0x05b6:
+        goto L_0x05d1;
+    L_0x05c3:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_checkDrawable;
         r5 = r1.checkDrawLeft;
         r6 = r1.checkDrawTop;
         org.telegram.ui.Cells.BaseCell.setDrawableBounds(r0, r5, r6);
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_checkDrawable;
         r0.draw(r8);
-    L_0x05c4:
+    L_0x05d1:
         r0 = r1.dialogMuted;
-        if (r0 == 0) goto L_0x05ea;
-    L_0x05c8:
+        if (r0 == 0) goto L_0x05f7;
+    L_0x05d5:
         r0 = r1.drawVerified;
-        if (r0 != 0) goto L_0x05ea;
-    L_0x05cc:
+        if (r0 != 0) goto L_0x05f7;
+    L_0x05d9:
         r0 = r1.drawScam;
-        if (r0 != 0) goto L_0x05ea;
-    L_0x05d0:
-        r0 = org.telegram.ui.ActionBar.Theme.dialogs_muteDrawable;
-        r5 = r1.nameMuteLeft;
-        r6 = org.telegram.messenger.SharedConfig.useThreeLinesLayout;
-        if (r6 == 0) goto L_0x05db;
-    L_0x05d8:
-        r6 = NUM; // 0x41580000 float:13.5 double:5.416373534E-315;
-        goto L_0x05dd;
-    L_0x05db:
-        r6 = NUM; // 0x41940000 float:18.5 double:5.435800986E-315;
+        if (r0 != 0) goto L_0x05f7;
     L_0x05dd:
+        r0 = org.telegram.ui.ActionBar.Theme.dialogs_muteDrawable;
+        r5 = r1.nameMuteLeft;
+        r6 = org.telegram.messenger.SharedConfig.useThreeLinesLayout;
+        if (r6 == 0) goto L_0x05e8;
+    L_0x05e5:
+        r6 = NUM; // 0x41580000 float:13.5 double:5.416373534E-315;
+        goto L_0x05ea;
+    L_0x05e8:
+        r6 = NUM; // 0x41940000 float:18.5 double:5.435800986E-315;
+    L_0x05ea:
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
         org.telegram.ui.Cells.BaseCell.setDrawableBounds(r0, r5, r6);
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_muteDrawable;
         r0.draw(r8);
-        goto L_0x063e;
-    L_0x05ea:
+        goto L_0x064b;
+    L_0x05f7:
         r0 = r1.drawVerified;
-        if (r0 == 0) goto L_0x0621;
-    L_0x05ee:
-        r0 = org.telegram.ui.ActionBar.Theme.dialogs_verifiedDrawable;
-        r5 = r1.nameMuteLeft;
-        r6 = org.telegram.messenger.SharedConfig.useThreeLinesLayout;
-        if (r6 == 0) goto L_0x05f9;
-    L_0x05f6:
-        r6 = NUM; // 0x41480000 float:12.5 double:5.41119288E-315;
-        goto L_0x05fb;
-    L_0x05f9:
-        r6 = NUM; // 0x41840000 float:16.5 double:5.43062033E-315;
+        if (r0 == 0) goto L_0x062e;
     L_0x05fb:
+        r0 = org.telegram.ui.ActionBar.Theme.dialogs_verifiedDrawable;
+        r5 = r1.nameMuteLeft;
+        r6 = org.telegram.messenger.SharedConfig.useThreeLinesLayout;
+        if (r6 == 0) goto L_0x0606;
+    L_0x0603:
+        r6 = NUM; // 0x41480000 float:12.5 double:5.41119288E-315;
+        goto L_0x0608;
+    L_0x0606:
+        r6 = NUM; // 0x41840000 float:16.5 double:5.43062033E-315;
+    L_0x0608:
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
         org.telegram.ui.Cells.BaseCell.setDrawableBounds(r0, r5, r6);
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_verifiedCheckDrawable;
         r5 = r1.nameMuteLeft;
         r6 = org.telegram.messenger.SharedConfig.useThreeLinesLayout;
-        if (r6 == 0) goto L_0x060d;
-    L_0x060a:
+        if (r6 == 0) goto L_0x061a;
+    L_0x0617:
         r6 = NUM; // 0x41480000 float:12.5 double:5.41119288E-315;
-        goto L_0x060f;
-    L_0x060d:
+        goto L_0x061c;
+    L_0x061a:
         r6 = NUM; // 0x41840000 float:16.5 double:5.43062033E-315;
-    L_0x060f:
+    L_0x061c:
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
         org.telegram.ui.Cells.BaseCell.setDrawableBounds(r0, r5, r6);
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_verifiedDrawable;
         r0.draw(r8);
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_verifiedCheckDrawable;
         r0.draw(r8);
-        goto L_0x063e;
-    L_0x0621:
+        goto L_0x064b;
+    L_0x062e:
         r0 = r1.drawScam;
-        if (r0 == 0) goto L_0x063e;
-    L_0x0625:
+        if (r0 == 0) goto L_0x064b;
+    L_0x0632:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_scamDrawable;
         r5 = r1.nameMuteLeft;
         r6 = org.telegram.messenger.SharedConfig.useThreeLinesLayout;
-        if (r6 == 0) goto L_0x0630;
-    L_0x062d:
+        if (r6 == 0) goto L_0x063d;
+    L_0x063a:
         r6 = NUM; // 0x41400000 float:12.0 double:5.408602553E-315;
-        goto L_0x0632;
-    L_0x0630:
+        goto L_0x063f;
+    L_0x063d:
         r6 = NUM; // 0x41700000 float:15.0 double:5.424144515E-315;
-    L_0x0632:
+    L_0x063f:
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
         org.telegram.ui.Cells.BaseCell.setDrawableBounds(r0, r5, r6);
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_scamDrawable;
         r0.draw(r8);
-    L_0x063e:
+    L_0x064b:
         r0 = r1.drawReorder;
         r5 = NUM; // 0x437var_ float:255.0 double:5.5947823E-315;
-        if (r0 != 0) goto L_0x064a;
-    L_0x0644:
+        if (r0 != 0) goto L_0x0657;
+    L_0x0651:
         r0 = r1.reorderIconProgress;
         r0 = (r0 > r11 ? 1 : (r0 == r11 ? 0 : -1));
-        if (r0 == 0) goto L_0x0662;
-    L_0x064a:
+        if (r0 == 0) goto L_0x066f;
+    L_0x0657:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_reorderDrawable;
         r6 = r1.reorderIconProgress;
         r6 = r6 * r5;
@@ -5049,12 +5057,12 @@ public class DialogCell extends BaseCell {
         org.telegram.ui.Cells.BaseCell.setDrawableBounds(r0, r6, r7);
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_reorderDrawable;
         r0.draw(r8);
-    L_0x0662:
+    L_0x066f:
         r0 = r1.drawError;
         r6 = NUM; // 0x41b80000 float:23.0 double:5.447457457E-315;
         r7 = NUM; // 0x41380000 float:11.5 double:5.406012226E-315;
-        if (r0 == 0) goto L_0x06bc;
-    L_0x066a:
+        if (r0 == 0) goto L_0x06c9;
+    L_0x0677:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_errorDrawable;
         r12 = r1.reorderIconProgress;
         r13 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
@@ -5093,19 +5101,19 @@ public class DialogCell extends BaseCell {
         org.telegram.ui.Cells.BaseCell.setDrawableBounds(r0, r5, r6);
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_errorDrawable;
         r0.draw(r8);
-        goto L_0x0815;
-    L_0x06bc:
-        r0 = r1.drawCount;
-        if (r0 != 0) goto L_0x06e7;
-    L_0x06c0:
-        r0 = r1.drawMention;
-        if (r0 == 0) goto L_0x06c5;
-    L_0x06c4:
-        goto L_0x06e7;
-    L_0x06c5:
-        r0 = r1.drawPin;
-        if (r0 == 0) goto L_0x0815;
+        goto L_0x0822;
     L_0x06c9:
+        r0 = r1.drawCount;
+        if (r0 != 0) goto L_0x06f4;
+    L_0x06cd:
+        r0 = r1.drawMention;
+        if (r0 == 0) goto L_0x06d2;
+    L_0x06d1:
+        goto L_0x06f4;
+    L_0x06d2:
+        r0 = r1.drawPin;
+        if (r0 == 0) goto L_0x0822;
+    L_0x06d6:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_pinnedDrawable;
         r6 = r1.reorderIconProgress;
         r7 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
@@ -5119,24 +5127,24 @@ public class DialogCell extends BaseCell {
         org.telegram.ui.Cells.BaseCell.setDrawableBounds(r0, r5, r6);
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_pinnedDrawable;
         r0.draw(r8);
-        goto L_0x0815;
-    L_0x06e7:
-        r0 = r1.drawCount;
-        if (r0 == 0) goto L_0x0761;
-    L_0x06eb:
-        r0 = r1.dialogMuted;
-        if (r0 != 0) goto L_0x06f7;
-    L_0x06ef:
-        r0 = r1.currentDialogFolderId;
-        if (r0 == 0) goto L_0x06f4;
-    L_0x06f3:
-        goto L_0x06f7;
+        goto L_0x0822;
     L_0x06f4:
+        r0 = r1.drawCount;
+        if (r0 == 0) goto L_0x076e;
+    L_0x06f8:
+        r0 = r1.dialogMuted;
+        if (r0 != 0) goto L_0x0704;
+    L_0x06fc:
+        r0 = r1.currentDialogFolderId;
+        if (r0 == 0) goto L_0x0701;
+    L_0x0700:
+        goto L_0x0704;
+    L_0x0701:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_countPaint;
-        goto L_0x06f9;
-    L_0x06f7:
+        goto L_0x0706;
+    L_0x0704:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_countGrayPaint;
-    L_0x06f9:
+    L_0x0706:
         r12 = r1.reorderIconProgress;
         r13 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r15 = r13 - r12;
@@ -5174,8 +5182,8 @@ public class DialogCell extends BaseCell {
         r12 = r12 * r7;
         r8.drawRoundRect(r2, r13, r12, r0);
         r0 = r1.countLayout;
-        if (r0 == 0) goto L_0x0761;
-    L_0x0746:
+        if (r0 == 0) goto L_0x076e;
+    L_0x0753:
         r25.save();
         r0 = r1.countLeft;
         r0 = (float) r0;
@@ -5188,10 +5196,10 @@ public class DialogCell extends BaseCell {
         r0 = r1.countLayout;
         r0.draw(r8);
         r25.restore();
-    L_0x0761:
+    L_0x076e:
         r0 = r1.drawMention;
-        if (r0 == 0) goto L_0x0815;
-    L_0x0765:
+        if (r0 == 0) goto L_0x0822;
+    L_0x0772:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_countPaint;
         r2 = r1.reorderIconProgress;
         r12 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
@@ -5219,24 +5227,24 @@ public class DialogCell extends BaseCell {
         r6 = (float) r14;
         r2.set(r12, r13, r0, r6);
         r0 = r1.dialogMuted;
-        if (r0 == 0) goto L_0x07a3;
-    L_0x079c:
+        if (r0 == 0) goto L_0x07b0;
+    L_0x07a9:
         r0 = r1.folderId;
-        if (r0 == 0) goto L_0x07a3;
-    L_0x07a0:
+        if (r0 == 0) goto L_0x07b0;
+    L_0x07ad:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_countGrayPaint;
-        goto L_0x07a5;
-    L_0x07a3:
+        goto L_0x07b2;
+    L_0x07b0:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_countPaint;
-    L_0x07a5:
+    L_0x07b2:
         r2 = r1.rect;
         r6 = org.telegram.messenger.AndroidUtilities.density;
         r12 = r6 * r7;
         r6 = r6 * r7;
         r8.drawRoundRect(r2, r12, r6, r0);
         r0 = r1.mentionLayout;
-        if (r0 == 0) goto L_0x07de;
-    L_0x07b4:
+        if (r0 == 0) goto L_0x07eb;
+    L_0x07c1:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_countTextPaint;
         r2 = r1.reorderIconProgress;
         r6 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
@@ -5256,8 +5264,8 @@ public class DialogCell extends BaseCell {
         r0 = r1.mentionLayout;
         r0.draw(r8);
         r25.restore();
-        goto L_0x0815;
-    L_0x07de:
+        goto L_0x0822;
+    L_0x07eb:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_mentionDrawable;
         r2 = r1.reorderIconProgress;
         r6 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
@@ -5281,11 +5289,11 @@ public class DialogCell extends BaseCell {
         org.telegram.ui.Cells.BaseCell.setDrawableBounds(r0, r2, r5, r6, r7);
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_mentionDrawable;
         r0.draw(r8);
-    L_0x0815:
+    L_0x0822:
         r0 = r1.animatingArchiveAvatar;
         r12 = NUM; // 0x432a0000 float:170.0 double:5.567260075E-315;
-        if (r0 == 0) goto L_0x0839;
-    L_0x081b:
+        if (r0 == 0) goto L_0x0846;
+    L_0x0828:
         r25.save();
         r0 = r1.interpolator;
         r2 = r1.animatingArchiveAvatarProgress;
@@ -5298,39 +5306,39 @@ public class DialogCell extends BaseCell {
         r5 = r1.avatarImage;
         r5 = r5.getCenterY();
         r8.scale(r0, r0, r2, r5);
-    L_0x0839:
+    L_0x0846:
         r0 = r1.avatarImage;
         r0.draw(r8);
         r0 = r1.animatingArchiveAvatar;
-        if (r0 == 0) goto L_0x0845;
-    L_0x0842:
+        if (r0 == 0) goto L_0x0852;
+    L_0x084f:
         r25.restore();
-    L_0x0845:
+    L_0x0852:
         r0 = r1.user;
-        if (r0 == 0) goto L_0x0938;
-    L_0x0849:
+        if (r0 == 0) goto L_0x0945;
+    L_0x0856:
         r2 = r1.isDialogCell;
-        if (r2 == 0) goto L_0x0938;
-    L_0x084d:
+        if (r2 == 0) goto L_0x0945;
+    L_0x085a:
         r2 = r1.currentDialogFolderId;
-        if (r2 != 0) goto L_0x0938;
-    L_0x0851:
+        if (r2 != 0) goto L_0x0945;
+    L_0x085e:
         r0 = org.telegram.messenger.MessagesController.isSupportUser(r0);
-        if (r0 != 0) goto L_0x0938;
-    L_0x0857:
+        if (r0 != 0) goto L_0x0945;
+    L_0x0864:
         r0 = r1.user;
         r2 = r0.self;
-        if (r2 != 0) goto L_0x0887;
-    L_0x085d:
+        if (r2 != 0) goto L_0x0894;
+    L_0x086a:
         r0 = r0.status;
-        if (r0 == 0) goto L_0x086f;
-    L_0x0861:
+        if (r0 == 0) goto L_0x087c;
+    L_0x086e:
         r0 = r0.expires;
         r2 = r1.currentAccount;
         r2 = org.telegram.tgnet.ConnectionsManager.getInstance(r2);
         r2 = r2.getCurrentTime();
-        if (r0 > r2) goto L_0x0885;
-    L_0x086f:
+        if (r0 > r2) goto L_0x0892;
+    L_0x087c:
         r0 = r1.currentAccount;
         r0 = org.telegram.messenger.MessagesController.getInstance(r0);
         r0 = r0.onlinePrivacy;
@@ -5338,62 +5346,62 @@ public class DialogCell extends BaseCell {
         r2 = r2.id;
         r2 = java.lang.Integer.valueOf(r2);
         r0 = r0.containsKey(r2);
-        if (r0 == 0) goto L_0x0887;
-    L_0x0885:
+        if (r0 == 0) goto L_0x0894;
+    L_0x0892:
         r0 = 1;
-        goto L_0x0888;
-    L_0x0887:
+        goto L_0x0895;
+    L_0x0894:
         r0 = 0;
-    L_0x0888:
-        if (r0 != 0) goto L_0x0890;
-    L_0x088a:
+    L_0x0895:
+        if (r0 != 0) goto L_0x089d;
+    L_0x0897:
         r2 = r1.onlineProgress;
         r2 = (r2 > r11 ? 1 : (r2 == r11 ? 0 : -1));
-        if (r2 == 0) goto L_0x0938;
-    L_0x0890:
+        if (r2 == 0) goto L_0x0945;
+    L_0x089d:
         r2 = r1.avatarImage;
         r2 = r2.getImageY2();
         r5 = org.telegram.messenger.SharedConfig.useThreeLinesLayout;
-        if (r5 == 0) goto L_0x089f;
-    L_0x089a:
+        if (r5 == 0) goto L_0x08ac;
+    L_0x08a7:
         r5 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
         r16 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
-        goto L_0x08a1;
-    L_0x089f:
+        goto L_0x08ae;
+    L_0x08ac:
         r16 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
-    L_0x08a1:
+    L_0x08ae:
         r5 = org.telegram.messenger.AndroidUtilities.dp(r16);
         r2 = r2 - r5;
         r5 = org.telegram.messenger.LocaleController.isRTL;
-        if (r5 == 0) goto L_0x08bf;
-    L_0x08aa:
+        if (r5 == 0) goto L_0x08cc;
+    L_0x08b7:
         r5 = r1.avatarImage;
         r5 = r5.getImageX();
         r6 = org.telegram.messenger.SharedConfig.useThreeLinesLayout;
-        if (r6 == 0) goto L_0x08b7;
-    L_0x08b4:
+        if (r6 == 0) goto L_0x08c4;
+    L_0x08c1:
         r6 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
-        goto L_0x08b9;
-    L_0x08b7:
+        goto L_0x08c6;
+    L_0x08c4:
         r6 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
-    L_0x08b9:
+    L_0x08c6:
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r5 = r5 + r6;
-        goto L_0x08d3;
-    L_0x08bf:
+        goto L_0x08e0;
+    L_0x08cc:
         r5 = r1.avatarImage;
         r5 = r5.getImageX2();
         r6 = org.telegram.messenger.SharedConfig.useThreeLinesLayout;
-        if (r6 == 0) goto L_0x08cc;
-    L_0x08c9:
+        if (r6 == 0) goto L_0x08d9;
+    L_0x08d6:
         r6 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
-        goto L_0x08ce;
-    L_0x08cc:
+        goto L_0x08db;
+    L_0x08d9:
         r6 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
-    L_0x08ce:
+    L_0x08db:
         r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
         r5 = r5 - r6;
-    L_0x08d3:
+    L_0x08e0:
         r6 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint;
         r7 = "windowBackgroundWhite";
         r7 = org.telegram.ui.ActionBar.Theme.getColor(r7);
@@ -5418,81 +5426,81 @@ public class DialogCell extends BaseCell {
         r6 = r6 * r7;
         r7 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint;
         r8.drawCircle(r5, r2, r6, r7);
-        if (r0 == 0) goto L_0x0923;
-    L_0x090d:
+        if (r0 == 0) goto L_0x0930;
+    L_0x091a:
         r0 = r1.onlineProgress;
         r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r5 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r5 >= 0) goto L_0x0938;
-    L_0x0915:
+        if (r5 >= 0) goto L_0x0945;
+    L_0x0922:
         r4 = (float) r9;
         r4 = r4 / r3;
         r0 = r0 + r4;
         r1.onlineProgress = r0;
         r0 = r1.onlineProgress;
         r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r0 <= 0) goto L_0x0936;
-    L_0x0920:
+        if (r0 <= 0) goto L_0x0943;
+    L_0x092d:
         r1.onlineProgress = r2;
-        goto L_0x0936;
-    L_0x0923:
+        goto L_0x0943;
+    L_0x0930:
         r0 = r1.onlineProgress;
         r2 = (r0 > r11 ? 1 : (r0 == r11 ? 0 : -1));
-        if (r2 <= 0) goto L_0x0938;
-    L_0x0929:
+        if (r2 <= 0) goto L_0x0945;
+    L_0x0936:
         r2 = (float) r9;
         r2 = r2 / r3;
         r0 = r0 - r2;
         r1.onlineProgress = r0;
         r0 = r1.onlineProgress;
         r0 = (r0 > r11 ? 1 : (r0 == r11 ? 0 : -1));
-        if (r0 >= 0) goto L_0x0936;
-    L_0x0934:
+        if (r0 >= 0) goto L_0x0943;
+    L_0x0941:
         r1.onlineProgress = r11;
-    L_0x0936:
+    L_0x0943:
         r14 = 1;
-        goto L_0x0939;
-    L_0x0938:
+        goto L_0x0946;
+    L_0x0945:
         r14 = r4;
-    L_0x0939:
+    L_0x0946:
         r0 = r1.translationX;
         r0 = (r0 > r11 ? 1 : (r0 == r11 ? 0 : -1));
-        if (r0 == 0) goto L_0x0942;
-    L_0x093f:
+        if (r0 == 0) goto L_0x094f;
+    L_0x094c:
         r25.restore();
-    L_0x0942:
+    L_0x094f:
         r0 = r1.useSeparator;
-        if (r0 == 0) goto L_0x09a2;
-    L_0x0946:
+        if (r0 == 0) goto L_0x09af;
+    L_0x0953:
         r0 = r1.fullSeparator;
-        if (r0 != 0) goto L_0x0966;
-    L_0x094a:
+        if (r0 != 0) goto L_0x0973;
+    L_0x0957:
         r0 = r1.currentDialogFolderId;
-        if (r0 == 0) goto L_0x0956;
-    L_0x094e:
+        if (r0 == 0) goto L_0x0963;
+    L_0x095b:
         r0 = r1.archiveHidden;
-        if (r0 == 0) goto L_0x0956;
-    L_0x0952:
-        r0 = r1.fullSeparator2;
-        if (r0 == 0) goto L_0x0966;
-    L_0x0956:
-        r0 = r1.fullSeparator2;
-        if (r0 == 0) goto L_0x095f;
-    L_0x095a:
-        r0 = r1.archiveHidden;
-        if (r0 != 0) goto L_0x095f;
-    L_0x095e:
-        goto L_0x0966;
+        if (r0 == 0) goto L_0x0963;
     L_0x095f:
+        r0 = r1.fullSeparator2;
+        if (r0 == 0) goto L_0x0973;
+    L_0x0963:
+        r0 = r1.fullSeparator2;
+        if (r0 == 0) goto L_0x096c;
+    L_0x0967:
+        r0 = r1.archiveHidden;
+        if (r0 != 0) goto L_0x096c;
+    L_0x096b:
+        goto L_0x0973;
+    L_0x096c:
         r0 = NUM; // 0x42900000 float:72.0 double:5.517396283E-315;
         r13 = org.telegram.messenger.AndroidUtilities.dp(r0);
-        goto L_0x0967;
-    L_0x0966:
+        goto L_0x0974;
+    L_0x0973:
         r13 = 0;
-    L_0x0967:
+    L_0x0974:
         r0 = org.telegram.messenger.LocaleController.isRTL;
-        if (r0 == 0) goto L_0x0987;
-    L_0x096b:
+        if (r0 == 0) goto L_0x0994;
+    L_0x0978:
         r3 = 0;
         r0 = r24.getMeasuredHeight();
         r2 = 1;
@@ -5507,8 +5515,8 @@ public class DialogCell extends BaseCell {
         r7 = org.telegram.ui.ActionBar.Theme.dividerPaint;
         r2 = r25;
         r2.drawLine(r3, r4, r5, r6, r7);
-        goto L_0x09a2;
-    L_0x0987:
+        goto L_0x09af;
+    L_0x0994:
         r3 = (float) r13;
         r0 = r24.getMeasuredHeight();
         r13 = 1;
@@ -5522,21 +5530,21 @@ public class DialogCell extends BaseCell {
         r7 = org.telegram.ui.ActionBar.Theme.dividerPaint;
         r2 = r25;
         r2.drawLine(r3, r4, r5, r6, r7);
-        goto L_0x09a3;
-    L_0x09a2:
+        goto L_0x09b0;
+    L_0x09af:
         r13 = 1;
-    L_0x09a3:
+    L_0x09b0:
         r0 = r1.clipProgress;
         r0 = (r0 > r11 ? 1 : (r0 == r11 ? 0 : -1));
-        if (r0 == 0) goto L_0x09f2;
-    L_0x09a9:
+        if (r0 == 0) goto L_0x09ff;
+    L_0x09b6:
         r0 = android.os.Build.VERSION.SDK_INT;
         r2 = 24;
-        if (r0 == r2) goto L_0x09b3;
-    L_0x09af:
+        if (r0 == r2) goto L_0x09c0;
+    L_0x09bc:
         r25.restore();
-        goto L_0x09f2;
-    L_0x09b3:
+        goto L_0x09ff;
+    L_0x09c0:
         r0 = org.telegram.ui.ActionBar.Theme.dialogs_pinnedPaint;
         r2 = "windowBackgroundWhite";
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
@@ -5567,142 +5575,142 @@ public class DialogCell extends BaseCell {
         r7 = org.telegram.ui.ActionBar.Theme.dialogs_pinnedPaint;
         r2 = r25;
         r2.drawRect(r3, r4, r5, r6, r7);
-    L_0x09f2:
+    L_0x09ff:
         r0 = r1.drawReorder;
-        if (r0 != 0) goto L_0x09fc;
-    L_0x09f6:
+        if (r0 != 0) goto L_0x0a09;
+    L_0x0a03:
         r0 = r1.reorderIconProgress;
         r0 = (r0 > r11 ? 1 : (r0 == r11 ? 0 : -1));
-        if (r0 == 0) goto L_0x0a2a;
-    L_0x09fc:
+        if (r0 == 0) goto L_0x0a37;
+    L_0x0a09:
         r0 = r1.drawReorder;
-        if (r0 == 0) goto L_0x0a16;
-    L_0x0a00:
+        if (r0 == 0) goto L_0x0a23;
+    L_0x0a0d:
         r0 = r1.reorderIconProgress;
         r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r3 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r3 >= 0) goto L_0x0a2a;
-    L_0x0a08:
+        if (r3 >= 0) goto L_0x0a37;
+    L_0x0a15:
         r3 = (float) r9;
         r3 = r3 / r12;
         r0 = r0 + r3;
         r1.reorderIconProgress = r0;
         r0 = r1.reorderIconProgress;
         r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r0 <= 0) goto L_0x0a29;
-    L_0x0a13:
+        if (r0 <= 0) goto L_0x0a36;
+    L_0x0a20:
         r1.reorderIconProgress = r2;
-        goto L_0x0a29;
-    L_0x0a16:
+        goto L_0x0a36;
+    L_0x0a23:
         r0 = r1.reorderIconProgress;
         r2 = (r0 > r11 ? 1 : (r0 == r11 ? 0 : -1));
-        if (r2 <= 0) goto L_0x0a2a;
-    L_0x0a1c:
+        if (r2 <= 0) goto L_0x0a37;
+    L_0x0a29:
         r2 = (float) r9;
         r2 = r2 / r12;
         r0 = r0 - r2;
         r1.reorderIconProgress = r0;
         r0 = r1.reorderIconProgress;
         r0 = (r0 > r11 ? 1 : (r0 == r11 ? 0 : -1));
-        if (r0 >= 0) goto L_0x0a29;
-    L_0x0a27:
+        if (r0 >= 0) goto L_0x0a36;
+    L_0x0a34:
         r1.reorderIconProgress = r11;
-    L_0x0a29:
+    L_0x0a36:
         r14 = 1;
-    L_0x0a2a:
+    L_0x0a37:
         r0 = r1.archiveHidden;
-        if (r0 == 0) goto L_0x0a52;
-    L_0x0a2e:
+        if (r0 == 0) goto L_0x0a5f;
+    L_0x0a3b:
         r0 = r1.archiveBackgroundProgress;
         r2 = (r0 > r11 ? 1 : (r0 == r11 ? 0 : -1));
-        if (r2 <= 0) goto L_0x0a78;
-    L_0x0a34:
+        if (r2 <= 0) goto L_0x0a85;
+    L_0x0a41:
         r2 = (float) r9;
         r2 = r2 / r12;
         r0 = r0 - r2;
         r1.archiveBackgroundProgress = r0;
         r0 = r1.currentRevealBounceProgress;
         r0 = (r0 > r11 ? 1 : (r0 == r11 ? 0 : -1));
-        if (r0 >= 0) goto L_0x0a41;
-    L_0x0a3f:
+        if (r0 >= 0) goto L_0x0a4e;
+    L_0x0a4c:
         r1.currentRevealBounceProgress = r11;
-    L_0x0a41:
+    L_0x0a4e:
         r0 = r1.avatarDrawable;
         r0 = r0.getAvatarType();
         r2 = 3;
-        if (r0 != r2) goto L_0x0a77;
-    L_0x0a4a:
+        if (r0 != r2) goto L_0x0a84;
+    L_0x0a57:
         r0 = r1.avatarDrawable;
         r2 = r1.archiveBackgroundProgress;
         r0.setArchivedAvatarHiddenProgress(r2);
-        goto L_0x0a77;
-    L_0x0a52:
+        goto L_0x0a84;
+    L_0x0a5f:
         r0 = r1.archiveBackgroundProgress;
         r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r3 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r3 >= 0) goto L_0x0a78;
-    L_0x0a5a:
+        if (r3 >= 0) goto L_0x0a85;
+    L_0x0a67:
         r3 = (float) r9;
         r3 = r3 / r12;
         r0 = r0 + r3;
         r1.archiveBackgroundProgress = r0;
         r0 = r1.currentRevealBounceProgress;
         r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r0 <= 0) goto L_0x0a67;
-    L_0x0a65:
+        if (r0 <= 0) goto L_0x0a74;
+    L_0x0a72:
         r1.currentRevealBounceProgress = r2;
-    L_0x0a67:
+    L_0x0a74:
         r0 = r1.avatarDrawable;
         r0 = r0.getAvatarType();
         r2 = 3;
-        if (r0 != r2) goto L_0x0a77;
-    L_0x0a70:
+        if (r0 != r2) goto L_0x0a84;
+    L_0x0a7d:
         r0 = r1.avatarDrawable;
         r2 = r1.archiveBackgroundProgress;
         r0.setArchivedAvatarHiddenProgress(r2);
-    L_0x0a77:
+    L_0x0a84:
         r14 = 1;
-    L_0x0a78:
+    L_0x0a85:
         r0 = r1.animatingArchiveAvatar;
-        if (r0 == 0) goto L_0x0a8e;
-    L_0x0a7c:
+        if (r0 == 0) goto L_0x0a9b;
+    L_0x0a89:
         r0 = r1.animatingArchiveAvatarProgress;
         r2 = (float) r9;
         r0 = r0 + r2;
         r1.animatingArchiveAvatarProgress = r0;
         r0 = r1.animatingArchiveAvatarProgress;
         r0 = (r0 > r12 ? 1 : (r0 == r12 ? 0 : -1));
-        if (r0 < 0) goto L_0x0a8d;
-    L_0x0a88:
+        if (r0 < 0) goto L_0x0a9a;
+    L_0x0a95:
         r1.animatingArchiveAvatarProgress = r12;
         r2 = 0;
         r1.animatingArchiveAvatar = r2;
-    L_0x0a8d:
+    L_0x0a9a:
         r14 = 1;
-    L_0x0a8e:
+    L_0x0a9b:
         r0 = r1.drawRevealBackground;
-        if (r0 == 0) goto L_0x0abe;
-    L_0x0a92:
+        if (r0 == 0) goto L_0x0acb;
+    L_0x0a9f:
         r0 = r1.currentRevealBounceProgress;
         r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r3 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r3 >= 0) goto L_0x0aa8;
-    L_0x0a9a:
+        if (r3 >= 0) goto L_0x0ab5;
+    L_0x0aa7:
         r3 = (float) r9;
         r3 = r3 / r12;
         r0 = r0 + r3;
         r1.currentRevealBounceProgress = r0;
         r0 = r1.currentRevealBounceProgress;
         r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r0 <= 0) goto L_0x0aa8;
-    L_0x0aa5:
+        if (r0 <= 0) goto L_0x0ab5;
+    L_0x0ab2:
         r1.currentRevealBounceProgress = r2;
         r14 = 1;
-    L_0x0aa8:
+    L_0x0ab5:
         r0 = r1.currentRevealProgress;
         r3 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r3 >= 0) goto L_0x0adf;
-    L_0x0aae:
+        if (r3 >= 0) goto L_0x0aec;
+    L_0x0abb:
         r3 = (float) r9;
         r4 = NUM; // 0x43960000 float:300.0 double:5.60222949E-315;
         r3 = r3 / r4;
@@ -5710,23 +5718,23 @@ public class DialogCell extends BaseCell {
         r1.currentRevealProgress = r0;
         r0 = r1.currentRevealProgress;
         r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r0 <= 0) goto L_0x0ade;
-    L_0x0abb:
+        if (r0 <= 0) goto L_0x0aeb;
+    L_0x0ac8:
         r1.currentRevealProgress = r2;
-        goto L_0x0ade;
-    L_0x0abe:
+        goto L_0x0aeb;
+    L_0x0acb:
         r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r0 = r1.currentRevealBounceProgress;
         r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r0 != 0) goto L_0x0ac9;
-    L_0x0ac6:
+        if (r0 != 0) goto L_0x0ad6;
+    L_0x0ad3:
         r1.currentRevealBounceProgress = r11;
         r14 = 1;
-    L_0x0ac9:
+    L_0x0ad6:
         r0 = r1.currentRevealProgress;
         r2 = (r0 > r11 ? 1 : (r0 == r11 ? 0 : -1));
-        if (r2 <= 0) goto L_0x0adf;
-    L_0x0acf:
+        if (r2 <= 0) goto L_0x0aec;
+    L_0x0adc:
         r2 = (float) r9;
         r3 = NUM; // 0x43960000 float:300.0 double:5.60222949E-315;
         r2 = r2 / r3;
@@ -5734,16 +5742,16 @@ public class DialogCell extends BaseCell {
         r1.currentRevealProgress = r0;
         r0 = r1.currentRevealProgress;
         r0 = (r0 > r11 ? 1 : (r0 == r11 ? 0 : -1));
-        if (r0 >= 0) goto L_0x0ade;
-    L_0x0adc:
+        if (r0 >= 0) goto L_0x0aeb;
+    L_0x0ae9:
         r1.currentRevealProgress = r11;
-    L_0x0ade:
+    L_0x0aeb:
         r14 = 1;
-    L_0x0adf:
-        if (r14 == 0) goto L_0x0ae4;
-    L_0x0ae1:
+    L_0x0aec:
+        if (r14 == 0) goto L_0x0af1;
+    L_0x0aee:
         r24.invalidate();
-    L_0x0ae4:
+    L_0x0af1:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.DialogCell.onDraw(android.graphics.Canvas):void");

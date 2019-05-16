@@ -24,6 +24,7 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.telephony.PhoneNumberUtils;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
@@ -10625,9 +10626,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
 
     private void startPhoneVerification(boolean z, String str, Runnable runnable, ErrorRunnable errorRunnable, PassportActivityDelegate passportActivityDelegate) {
         Object obj;
-        TL_codeSettings tL_codeSettings;
         TelephonyManager telephonyManager = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
-        boolean z2 = true;
         Object obj2 = (telephonyManager.getSimState() == 1 || telephonyManager.getPhoneType() == 0) ? null : 1;
         if (getParentActivity() == null || VERSION.SDK_INT < 23 || obj2 == null) {
             obj = 1;
@@ -10660,9 +10659,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         TL_account_sendVerifyPhoneCode tL_account_sendVerifyPhoneCode = new TL_account_sendVerifyPhoneCode();
         tL_account_sendVerifyPhoneCode.phone_number = str;
         tL_account_sendVerifyPhoneCode.settings = new TL_codeSettings();
-        TL_codeSettings tL_codeSettings2 = tL_account_sendVerifyPhoneCode.settings;
-        boolean z3 = (obj2 == null || obj == null) ? false : true;
-        tL_codeSettings2.allow_flashcall = z3;
+        TL_codeSettings tL_codeSettings = tL_account_sendVerifyPhoneCode.settings;
+        boolean z2 = (obj2 == null || obj == null) ? false : true;
+        tL_codeSettings.allow_flashcall = z2;
         if (VERSION.SDK_INT >= 26) {
             try {
                 tL_account_sendVerifyPhoneCode.settings.app_hash = SmsManager.getDefault().createAppSpecificSmsToken(PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, new Intent(ApplicationLoader.applicationContext, SmsReceiver.class), NUM));
@@ -10670,17 +10669,17 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 FileLog.e(th);
             }
         } else {
-            tL_codeSettings2 = tL_account_sendVerifyPhoneCode.settings;
-            tL_codeSettings2.app_hash = BuildVars.SMS_HASH;
-            tL_codeSettings2.app_hash_persistent = true;
+            tL_codeSettings = tL_account_sendVerifyPhoneCode.settings;
+            tL_codeSettings.app_hash = BuildVars.SMS_HASH;
+            tL_codeSettings.app_hash_persistent = true;
         }
         SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
         String str3 = "sms_hash";
         if (TextUtils.isEmpty(tL_account_sendVerifyPhoneCode.settings.app_hash)) {
             sharedPreferences.edit().remove(str3).commit();
         } else {
-            tL_codeSettings = tL_account_sendVerifyPhoneCode.settings;
-            tL_codeSettings.flags |= 8;
+            TL_codeSettings tL_codeSettings2 = tL_account_sendVerifyPhoneCode.settings;
+            tL_codeSettings2.flags |= 8;
             sharedPreferences.edit().putString(str3, tL_account_sendVerifyPhoneCode.settings.app_hash).commit();
         }
         if (tL_account_sendVerifyPhoneCode.settings.allow_flashcall) {
@@ -10689,13 +10688,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 if (TextUtils.isEmpty(line1Number)) {
                     tL_account_sendVerifyPhoneCode.settings.current_number = false;
                 } else {
-                    tL_codeSettings = tL_account_sendVerifyPhoneCode.settings;
-                    if (!str.contains(line1Number)) {
-                        if (!line1Number.contains(str)) {
-                            z2 = false;
-                        }
-                    }
-                    tL_codeSettings.current_number = z2;
+                    tL_account_sendVerifyPhoneCode.settings.current_number = PhoneNumberUtils.compare(str, line1Number);
                     if (!tL_account_sendVerifyPhoneCode.settings.current_number) {
                         tL_account_sendVerifyPhoneCode.settings.allow_flashcall = false;
                     }
