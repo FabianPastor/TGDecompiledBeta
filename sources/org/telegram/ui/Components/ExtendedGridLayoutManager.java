@@ -2,8 +2,8 @@ package org.telegram.ui.Components;
 
 import android.content.Context;
 import android.util.SparseIntArray;
+import androidx.recyclerview.widget.GridLayoutManager;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.support.widget.GridLayoutManager;
 
 public class ExtendedGridLayoutManager extends GridLayoutManager {
     private int calculatedWidth;
@@ -12,84 +12,91 @@ public class ExtendedGridLayoutManager extends GridLayoutManager {
     private SparseIntArray itemsToRow = new SparseIntArray();
     private int rowsCount;
 
-    public ExtendedGridLayoutManager(Context context, int spanCount) {
-        super(context, spanCount);
-    }
-
     public boolean supportsPredictiveItemAnimations() {
         return false;
     }
 
-    private void prepareLayout(float viewPortAvailableSize) {
-        if (viewPortAvailableSize == 0.0f) {
-            viewPortAvailableSize = 100.0f;
+    public ExtendedGridLayoutManager(Context context, int i) {
+        super(context, i);
+    }
+
+    private void prepareLayout(float f) {
+        if (f == 0.0f) {
+            f = 100.0f;
         }
         this.itemSpans.clear();
         this.itemsToRow.clear();
         this.rowsCount = 0;
         this.firstRowMax = 0;
-        int preferredRowSize = AndroidUtilities.dp(100.0f);
-        int itemsCount = getFlowItemCount();
+        int dp = AndroidUtilities.dp(100.0f);
+        int flowItemCount = getFlowItemCount();
         int spanCount = getSpanCount();
-        int spanLeft = spanCount;
-        int currentItemsInRow = 0;
-        int currentItemsSpanAmount = 0;
-        for (int a = 0; a < itemsCount; a++) {
-            Size size = sizeForItem(a);
-            int requiredSpan = Math.min(spanCount, (int) Math.floor((double) (((float) spanCount) * (((size.width / size.height) * ((float) preferredRowSize)) / viewPortAvailableSize))));
-            boolean moveToNewRow = spanLeft < requiredSpan || (requiredSpan > 33 && spanLeft < requiredSpan - 15);
-            if (moveToNewRow) {
-                if (spanLeft != 0) {
-                    int spanPerItem = spanLeft / currentItemsInRow;
-                    int start = a - currentItemsInRow;
-                    for (int b = start; b < start + currentItemsInRow; b++) {
-                        if (b == (start + currentItemsInRow) - 1) {
-                            this.itemSpans.put(b, this.itemSpans.get(b) + spanLeft);
-                        } else {
-                            this.itemSpans.put(b, this.itemSpans.get(b) + spanPerItem);
+        int i = spanCount;
+        int i2 = 0;
+        for (int i3 = 0; i3 < flowItemCount; i3++) {
+            Size sizeForItem = sizeForItem(i3);
+            int min = Math.min(spanCount, (int) Math.floor((double) (((float) spanCount) * (((sizeForItem.width / sizeForItem.height) * ((float) dp)) / f))));
+            Object obj = (i < min || (min > 33 && i < min - 15)) ? 1 : null;
+            if (obj != null) {
+                if (i != 0) {
+                    int i4 = i / i2;
+                    int i5 = i3 - i2;
+                    int i6 = i;
+                    i = i5;
+                    while (true) {
+                        int i7 = i5 + i2;
+                        if (i >= i7) {
+                            break;
                         }
-                        spanLeft -= spanPerItem;
+                        SparseIntArray sparseIntArray;
+                        if (i == i7 - 1) {
+                            sparseIntArray = this.itemSpans;
+                            sparseIntArray.put(i, sparseIntArray.get(i) + i6);
+                        } else {
+                            sparseIntArray = this.itemSpans;
+                            sparseIntArray.put(i, sparseIntArray.get(i) + i4);
+                        }
+                        i6 -= i4;
+                        i++;
                     }
-                    this.itemsToRow.put(a - 1, this.rowsCount);
+                    this.itemsToRow.put(i3 - 1, this.rowsCount);
                 }
                 this.rowsCount++;
-                currentItemsSpanAmount = 0;
-                currentItemsInRow = 0;
-                spanLeft = spanCount;
-            } else if (spanLeft < requiredSpan) {
-                requiredSpan = spanLeft;
+                i = spanCount;
+                i2 = 0;
+            } else if (i < min) {
+                min = i;
             }
             if (this.rowsCount == 0) {
-                this.firstRowMax = Math.max(this.firstRowMax, a);
+                this.firstRowMax = Math.max(this.firstRowMax, i3);
             }
-            if (a == itemsCount - 1) {
-                this.itemsToRow.put(a, this.rowsCount);
+            if (i3 == flowItemCount - 1) {
+                this.itemsToRow.put(i3, this.rowsCount);
             }
-            currentItemsSpanAmount += requiredSpan;
-            currentItemsInRow++;
-            spanLeft -= requiredSpan;
-            this.itemSpans.put(a, requiredSpan);
+            i2++;
+            i -= min;
+            this.itemSpans.put(i3, min);
         }
-        if (itemsCount != 0) {
+        if (flowItemCount != 0) {
             this.rowsCount++;
         }
     }
 
     private Size sizeForItem(int i) {
-        Size size = getSizeForItem(i);
-        if (size.width == 0.0f) {
-            size.width = 100.0f;
+        Size sizeForItem = getSizeForItem(i);
+        if (sizeForItem.width == 0.0f) {
+            sizeForItem.width = 100.0f;
         }
-        if (size.height == 0.0f) {
-            size.height = 100.0f;
+        if (sizeForItem.height == 0.0f) {
+            sizeForItem.height = 100.0f;
         }
-        float aspect = size.width / size.height;
-        if (aspect > 4.0f || aspect < 0.2f) {
-            float max = Math.max(size.width, size.height);
-            size.width = max;
-            size.height = max;
+        float f = sizeForItem.width / sizeForItem.height;
+        if (f > 4.0f || f < 0.2f) {
+            f = Math.max(sizeForItem.width, sizeForItem.height);
+            sizeForItem.width = f;
+            sizeForItem.height = f;
         }
-        return size;
+        return sizeForItem;
     }
 
     /* Access modifiers changed, original: protected */
@@ -109,9 +116,9 @@ public class ExtendedGridLayoutManager extends GridLayoutManager {
         return this.itemSpans.get(i);
     }
 
-    public int getRowsCount(int width) {
+    public int getRowsCount(int i) {
         if (this.rowsCount == 0) {
-            prepareLayout((float) width);
+            prepareLayout((float) i);
         }
         return this.rowsCount;
     }

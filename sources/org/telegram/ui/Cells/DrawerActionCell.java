@@ -30,8 +30,8 @@ public class DrawerActionCell extends FrameLayout {
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
     }
 
     /* Access modifiers changed, original: protected */
@@ -40,16 +40,16 @@ public class DrawerActionCell extends FrameLayout {
         this.textView.setTextColor(Theme.getColor("chats_menuItemText"));
     }
 
-    public void setTextAndIcon(String text, int resId) {
+    public void setTextAndIcon(String str, int i) {
         try {
-            this.textView.setText(text);
-            Drawable drawable = getResources().getDrawable(resId).mutate();
-            if (drawable != null) {
-                drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_menuItemIcon"), Mode.MULTIPLY));
+            this.textView.setText(str);
+            Drawable mutate = getResources().getDrawable(i).mutate();
+            if (mutate != null) {
+                mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_menuItemIcon"), Mode.MULTIPLY));
             }
-            this.textView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
-        } catch (Throwable e) {
-            FileLog.e(e);
+            this.textView.setCompoundDrawablesWithIntrinsicBounds(mutate, null, null, null);
+        } catch (Throwable th) {
+            FileLog.e(th);
         }
     }
 }

@@ -28,119 +28,94 @@ public class PollEditTextCell extends FrameLayout {
     private EditTextBoldCursor textView;
     private SimpleTextView textView2;
 
-    public PollEditTextCell(Context context, OnClickListener onDelete) {
-        int i;
-        float f;
-        float f2;
-        int i2 = 3;
+    /* Access modifiers changed, original: protected */
+    public boolean drawDivider() {
+        return true;
+    }
+
+    public PollEditTextCell(Context context, OnClickListener onClickListener) {
         super(context);
         this.textView = new EditTextBoldCursor(context) {
-            public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
-                InputConnection conn = super.onCreateInputConnection(outAttrs);
+            public InputConnection onCreateInputConnection(EditorInfo editorInfo) {
+                InputConnection onCreateInputConnection = super.onCreateInputConnection(editorInfo);
                 if (PollEditTextCell.this.showNextButton) {
-                    outAttrs.imeOptions &= -NUM;
+                    editorInfo.imeOptions &= -NUM;
                 }
-                return conn;
+                return onCreateInputConnection;
             }
         };
         this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.textView.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
         this.textView.setTextSize(1, 16.0f);
+        int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.textView.setBackgroundDrawable(null);
         this.textView.setPadding(0, AndroidUtilities.dp(14.0f), 0, AndroidUtilities.dp(14.0f));
-        this.textView.setImeOptions(this.textView.getImeOptions() | NUM);
-        this.textView.setInputType(this.textView.getInputType() | 16384);
         EditTextBoldCursor editTextBoldCursor = this.textView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
-            i = 3;
-        }
-        i |= 16;
-        if (!LocaleController.isRTL || onDelete == null) {
-            f = 21.0f;
-        } else {
-            f = 58.0f;
-        }
-        if (LocaleController.isRTL || onDelete == null) {
-            f2 = 21.0f;
-        } else {
-            f2 = 58.0f;
-        }
-        addView(editTextBoldCursor, LayoutHelper.createFrame(-1, -2.0f, i, f, 0.0f, f2, 0.0f));
-        if (onDelete != null) {
-            int i3;
+        editTextBoldCursor.setImeOptions(editTextBoldCursor.getImeOptions() | NUM);
+        editTextBoldCursor = this.textView;
+        editTextBoldCursor.setInputType(editTextBoldCursor.getInputType() | 16384);
+        editTextBoldCursor = this.textView;
+        int i2 = (LocaleController.isRTL ? 5 : 3) | 16;
+        float f = (!LocaleController.isRTL || onClickListener == null) ? 21.0f : 58.0f;
+        float f2 = (LocaleController.isRTL || onClickListener == null) ? 21.0f : 58.0f;
+        addView(editTextBoldCursor, LayoutHelper.createFrame(-1, -2.0f, i2, f, 0.0f, f2, 0.0f));
+        if (onClickListener != null) {
             this.deleteImageView = new ImageView(context);
             this.deleteImageView.setFocusable(false);
             this.deleteImageView.setScaleType(ScaleType.CENTER);
             this.deleteImageView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("stickers_menuSelector")));
             this.deleteImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("stickers_menu"), Mode.MULTIPLY));
             this.deleteImageView.setImageResource(NUM);
-            this.deleteImageView.setOnClickListener(onDelete);
+            this.deleteImageView.setOnClickListener(onClickListener);
             this.deleteImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayText"), Mode.MULTIPLY));
             this.deleteImageView.setContentDescription(LocaleController.getString("Delete", NUM));
             addView(this.deleteImageView, LayoutHelper.createFrame(48, 50.0f, (LocaleController.isRTL ? 3 : 5) | 48, LocaleController.isRTL ? 3.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 3.0f, 0.0f));
             this.textView2 = new SimpleTextView(getContext());
             this.textView2.setTextSize(13);
+            this.textView2.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
             SimpleTextView simpleTextView = this.textView2;
             if (LocaleController.isRTL) {
-                i3 = 3;
-            } else {
-                i3 = 5;
+                i = 3;
             }
-            simpleTextView.setGravity(i3 | 48);
-            SimpleTextView simpleTextView2 = this.textView2;
-            if (!LocaleController.isRTL) {
-                i2 = 5;
-            }
-            addView(simpleTextView2, LayoutHelper.createFrame(48, 24.0f, i2 | 48, LocaleController.isRTL ? 20.0f : 0.0f, 43.0f, LocaleController.isRTL ? 0.0f : 20.0f, 0.0f));
+            addView(simpleTextView, LayoutHelper.createFrame(48, 24.0f, i | 48, LocaleController.isRTL ? 20.0f : 0.0f, 43.0f, LocaleController.isRTL ? 0.0f : 20.0f, 0.0f));
         }
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int i;
-        int width = MeasureSpec.getSize(widthMeasureSpec);
-        if (this.deleteImageView != null) {
-            this.deleteImageView.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
+    public void onMeasure(int i, int i2) {
+        i = MeasureSpec.getSize(i);
+        ImageView imageView = this.deleteImageView;
+        if (imageView != null) {
+            imageView.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
             this.textView2.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(24.0f), NUM));
         }
-        this.textView.measure(MeasureSpec.makeMeasureSpec(((width - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(this.deleteImageView != null ? 79.0f : 42.0f), NUM), MeasureSpec.makeMeasureSpec(0, 0));
-        int h = this.textView.getMeasuredHeight();
-        int max = Math.max(AndroidUtilities.dp(50.0f), this.textView.getMeasuredHeight());
-        if (this.needDivider) {
-            i = 1;
-        } else {
-            i = 0;
-        }
-        setMeasuredDimension(width, i + max);
-        if (this.textView2 != null) {
-            this.textView2.setAlpha(h >= AndroidUtilities.dp(52.0f) ? 1.0f : 0.0f);
+        this.textView.measure(MeasureSpec.makeMeasureSpec(((i - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(this.deleteImageView != null ? 79.0f : 42.0f), NUM), MeasureSpec.makeMeasureSpec(0, 0));
+        i2 = this.textView.getMeasuredHeight();
+        setMeasuredDimension(i, Math.max(AndroidUtilities.dp(50.0f), this.textView.getMeasuredHeight()) + this.needDivider);
+        SimpleTextView simpleTextView = this.textView2;
+        if (simpleTextView != null) {
+            simpleTextView.setAlpha(i2 >= AndroidUtilities.dp(52.0f) ? 1.0f : 0.0f);
         }
     }
 
     public void callOnDelete() {
-        if (this.deleteImageView != null) {
-            this.deleteImageView.callOnClick();
+        ImageView imageView = this.deleteImageView;
+        if (imageView != null) {
+            imageView.callOnClick();
         }
     }
 
-    public void setShowNextButton(boolean value) {
-        this.showNextButton = value;
+    public void setShowNextButton(boolean z) {
+        this.showNextButton = z;
     }
 
     public EditTextBoldCursor getTextView() {
         return this.textView;
     }
 
-    public void addTextWatcher(TextWatcher watcher) {
-        this.textView.addTextChangedListener(watcher);
-    }
-
-    /* Access modifiers changed, original: protected */
-    public boolean drawDivider() {
-        return true;
+    public void addTextWatcher(TextWatcher textWatcher) {
+        this.textView.addTextChangedListener(textWatcher);
     }
 
     public String getText() {
@@ -151,32 +126,33 @@ public class PollEditTextCell extends FrameLayout {
         return this.textView.length();
     }
 
-    public void setTextColor(int color) {
-        this.textView.setTextColor(color);
+    public void setTextColor(int i) {
+        this.textView.setTextColor(i);
     }
 
-    public void setText(String text, boolean divider) {
-        this.textView.setText(text);
-        this.needDivider = divider;
-        setWillNotDraw(!divider);
+    public void setText(String str, boolean z) {
+        this.textView.setText(str);
+        this.needDivider = z;
+        setWillNotDraw(z ^ 1);
     }
 
-    public void setTextAndHint(String text, String hint, boolean divider) {
-        if (this.deleteImageView != null) {
-            this.deleteImageView.setTag(null);
+    public void setTextAndHint(String str, String str2, boolean z) {
+        ImageView imageView = this.deleteImageView;
+        if (imageView != null) {
+            imageView.setTag(null);
         }
-        this.textView.setText(text);
-        this.textView.setHint(hint);
-        this.needDivider = divider;
-        setWillNotDraw(!divider);
+        this.textView.setText(str);
+        this.textView.setHint(str2);
+        this.needDivider = z;
+        setWillNotDraw(z ^ 1);
     }
 
-    public void setEnabled(boolean value, ArrayList<Animator> arrayList) {
-        setEnabled(value);
+    public void setEnabled(boolean z, ArrayList<Animator> arrayList) {
+        setEnabled(z);
     }
 
-    public void setText2(String text) {
-        this.textView2.setText(text);
+    public void setText2(String str) {
+        this.textView2.setText(str);
     }
 
     public SimpleTextView getTextView2() {

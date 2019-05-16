@@ -34,49 +34,45 @@ public class ReportOtherActivity extends BaseFragment {
     private View headerLabelView;
     private int message_id = getArguments().getInt("message_id", 0);
 
-    public ReportOtherActivity(Bundle args) {
-        super(args);
+    public ReportOtherActivity(Bundle bundle) {
+        super(bundle);
     }
 
     public View createView(Context context) {
-        int i = 3;
         this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("ReportChat", NUM));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
-            public void onItemClick(int id) {
-                if (id == -1) {
+            static /* synthetic */ void lambda$onItemClick$0(TLObject tLObject, TL_error tL_error) {
+            }
+
+            public void onItemClick(int i) {
+                if (i == -1) {
                     ReportOtherActivity.this.finishFragment();
-                } else if (id == 1 && ReportOtherActivity.this.firstNameField.getText().length() != 0) {
-                    TLObject req;
-                    InputPeer peer = MessagesController.getInstance(UserConfig.selectedAccount).getInputPeer((int) ReportOtherActivity.this.dialog_id);
-                    TLObject request;
-                    TL_inputReportReasonOther reportReasonOther;
+                } else if (i == 1 && ReportOtherActivity.this.firstNameField.getText().length() != 0) {
+                    TLObject tL_messages_report;
+                    InputPeer inputPeer = MessagesController.getInstance(UserConfig.selectedAccount).getInputPeer((int) ReportOtherActivity.this.dialog_id);
+                    TL_inputReportReasonOther tL_inputReportReasonOther;
                     if (ReportOtherActivity.this.message_id != 0) {
-                        request = new TL_messages_report();
-                        request.peer = peer;
-                        request.id.add(Integer.valueOf(ReportOtherActivity.this.message_id));
-                        reportReasonOther = new TL_inputReportReasonOther();
-                        reportReasonOther.text = ReportOtherActivity.this.firstNameField.getText().toString();
-                        request.reason = reportReasonOther;
-                        req = request;
+                        tL_messages_report = new TL_messages_report();
+                        tL_messages_report.peer = inputPeer;
+                        tL_messages_report.id.add(Integer.valueOf(ReportOtherActivity.this.message_id));
+                        tL_inputReportReasonOther = new TL_inputReportReasonOther();
+                        tL_inputReportReasonOther.text = ReportOtherActivity.this.firstNameField.getText().toString();
+                        tL_messages_report.reason = tL_inputReportReasonOther;
                     } else {
-                        request = new TL_account_reportPeer();
-                        request.peer = MessagesController.getInstance(ReportOtherActivity.this.currentAccount).getInputPeer((int) ReportOtherActivity.this.dialog_id);
-                        reportReasonOther = new TL_inputReportReasonOther();
-                        reportReasonOther.text = ReportOtherActivity.this.firstNameField.getText().toString();
-                        request.reason = reportReasonOther;
-                        req = request;
+                        tL_messages_report = new TL_account_reportPeer();
+                        tL_messages_report.peer = MessagesController.getInstance(ReportOtherActivity.this.currentAccount).getInputPeer((int) ReportOtherActivity.this.dialog_id);
+                        tL_inputReportReasonOther = new TL_inputReportReasonOther();
+                        tL_inputReportReasonOther.text = ReportOtherActivity.this.firstNameField.getText().toString();
+                        tL_messages_report.reason = tL_inputReportReasonOther;
                     }
-                    ConnectionsManager.getInstance(ReportOtherActivity.this.currentAccount).sendRequest(req, ReportOtherActivity$1$$Lambda$0.$instance);
+                    ConnectionsManager.getInstance(ReportOtherActivity.this.currentAccount).sendRequest(tL_messages_report, -$$Lambda$ReportOtherActivity$1$PbLFyQbNnsMkC-qS1TkzMcffkwA.INSTANCE);
                     if (ReportOtherActivity.this.getParentActivity() != null) {
                         Toast.makeText(ReportOtherActivity.this.getParentActivity(), LocaleController.getString("ReportChatSent", NUM), 0).show();
                     }
                     ReportOtherActivity.this.finishFragment();
                 }
-            }
-
-            static final /* synthetic */ void lambda$onItemClick$0$ReportOtherActivity$1(TLObject response, TL_error error) {
             }
         });
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f));
@@ -84,12 +80,14 @@ public class ReportOtherActivity extends BaseFragment {
         this.fragmentView = linearLayout;
         this.fragmentView.setLayoutParams(new LayoutParams(-1, -1));
         ((LinearLayout) this.fragmentView).setOrientation(1);
-        this.fragmentView.setOnTouchListener(ReportOtherActivity$$Lambda$0.$instance);
+        this.fragmentView.setOnTouchListener(-$$Lambda$ReportOtherActivity$VcwTn-4nik4XOSC4IbcsIN4IckE.INSTANCE);
         this.firstNameField = new EditTextBoldCursor(context);
         this.firstNameField.setTextSize(1, 18.0f);
         this.firstNameField.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
-        this.firstNameField.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        String str = "windowBackgroundWhiteBlackText";
+        this.firstNameField.setTextColor(Theme.getColor(str));
         this.firstNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
+        int i = 3;
         this.firstNameField.setMaxLines(3);
         this.firstNameField.setPadding(0, 0, 0, 0);
         this.firstNameField.setGravity(LocaleController.isRTL ? 5 : 3);
@@ -100,23 +98,26 @@ public class ReportOtherActivity extends BaseFragment {
             i = 5;
         }
         editTextBoldCursor.setGravity(i);
-        this.firstNameField.setCursorColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        this.firstNameField.setCursorColor(Theme.getColor(str));
         this.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         this.firstNameField.setCursorWidth(1.5f);
-        this.firstNameField.setOnEditorActionListener(new ReportOtherActivity$$Lambda$1(this));
+        this.firstNameField.setOnEditorActionListener(new -$$Lambda$ReportOtherActivity$JRCa_EXPGvX6N9BVVFwqPlLZM80(this));
         linearLayout.addView(this.firstNameField, LayoutHelper.createLinear(-1, 36, 24.0f, 24.0f, 24.0f, 0.0f));
         this.firstNameField.setHint(LocaleController.getString("ReportChatDescription", NUM));
-        this.firstNameField.setSelection(this.firstNameField.length());
+        editTextBoldCursor = this.firstNameField;
+        editTextBoldCursor.setSelection(editTextBoldCursor.length());
         return this.fragmentView;
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ boolean lambda$createView$1$ReportOtherActivity(TextView textView, int i, KeyEvent keyEvent) {
-        if (i != 6 || this.doneButton == null) {
-            return false;
+    public /* synthetic */ boolean lambda$createView$1$ReportOtherActivity(TextView textView, int i, KeyEvent keyEvent) {
+        if (i == 6) {
+            View view = this.doneButton;
+            if (view != null) {
+                view.performClick();
+                return true;
+            }
         }
-        this.doneButton.performClick();
-        return true;
+        return false;
     }
 
     public void onResume() {
@@ -127,31 +128,21 @@ public class ReportOtherActivity extends BaseFragment {
         }
     }
 
-    public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
-        if (isOpen) {
-            AndroidUtilities.runOnUIThread(new ReportOtherActivity$$Lambda$2(this), 100);
+    public void onTransitionAnimationEnd(boolean z, boolean z2) {
+        if (z) {
+            AndroidUtilities.runOnUIThread(new -$$Lambda$ReportOtherActivity$djrT4sV5rD_-jM1owBrq9EJKfOk(this), 100);
         }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$onTransitionAnimationEnd$2$ReportOtherActivity() {
-        if (this.firstNameField != null) {
-            this.firstNameField.requestFocus();
+    public /* synthetic */ void lambda$onTransitionAnimationEnd$2$ReportOtherActivity() {
+        EditTextBoldCursor editTextBoldCursor = this.firstNameField;
+        if (editTextBoldCursor != null) {
+            editTextBoldCursor.requestFocus();
             AndroidUtilities.showKeyboard(this.firstNameField);
         }
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[9];
-        themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite");
-        themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault");
-        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon");
-        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle");
-        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector");
-        themeDescriptionArr[5] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[6] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, "windowBackgroundWhiteHintText");
-        themeDescriptionArr[7] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "windowBackgroundWhiteInputField");
-        themeDescriptionArr[8] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, "windowBackgroundWhiteInputFieldActivated");
-        return themeDescriptionArr;
+        return new ThemeDescription[]{new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector"), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, "windowBackgroundWhiteHintText"), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "windowBackgroundWhiteInputField"), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, "windowBackgroundWhiteInputFieldActivated")};
     }
 }

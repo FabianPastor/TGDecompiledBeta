@@ -17,109 +17,105 @@ public interface IPostMessageService extends IInterface {
         private static class Proxy implements IPostMessageService {
             private IBinder mRemote;
 
-            Proxy(IBinder remote) {
-                this.mRemote = remote;
+            public String getInterfaceDescriptor() {
+                return "android.support.customtabs.IPostMessageService";
+            }
+
+            Proxy(IBinder iBinder) {
+                this.mRemote = iBinder;
             }
 
             public IBinder asBinder() {
                 return this.mRemote;
             }
 
-            public String getInterfaceDescriptor() {
-                return "android.support.customtabs.IPostMessageService";
-            }
-
-            public void onMessageChannelReady(ICustomTabsCallback callback, Bundle extras) throws RemoteException {
-                Parcel _data = Parcel.obtain();
-                Parcel _reply = Parcel.obtain();
+            public void onMessageChannelReady(ICustomTabsCallback iCustomTabsCallback, Bundle bundle) throws RemoteException {
+                Parcel obtain = Parcel.obtain();
+                Parcel obtain2 = Parcel.obtain();
                 try {
-                    _data.writeInterfaceToken("android.support.customtabs.IPostMessageService");
-                    _data.writeStrongBinder(callback != null ? callback.asBinder() : null);
-                    if (extras != null) {
-                        _data.writeInt(1);
-                        extras.writeToParcel(_data, 0);
+                    obtain.writeInterfaceToken("android.support.customtabs.IPostMessageService");
+                    obtain.writeStrongBinder(iCustomTabsCallback != null ? iCustomTabsCallback.asBinder() : null);
+                    if (bundle != null) {
+                        obtain.writeInt(1);
+                        bundle.writeToParcel(obtain, 0);
                     } else {
-                        _data.writeInt(0);
+                        obtain.writeInt(0);
                     }
-                    this.mRemote.transact(2, _data, _reply, 0);
-                    _reply.readException();
+                    this.mRemote.transact(2, obtain, obtain2, 0);
+                    obtain2.readException();
                 } finally {
-                    _reply.recycle();
-                    _data.recycle();
+                    obtain2.recycle();
+                    obtain.recycle();
                 }
             }
 
-            public void onPostMessage(ICustomTabsCallback callback, String message, Bundle extras) throws RemoteException {
-                Parcel _data = Parcel.obtain();
-                Parcel _reply = Parcel.obtain();
+            public void onPostMessage(ICustomTabsCallback iCustomTabsCallback, String str, Bundle bundle) throws RemoteException {
+                Parcel obtain = Parcel.obtain();
+                Parcel obtain2 = Parcel.obtain();
                 try {
-                    _data.writeInterfaceToken("android.support.customtabs.IPostMessageService");
-                    _data.writeStrongBinder(callback != null ? callback.asBinder() : null);
-                    _data.writeString(message);
-                    if (extras != null) {
-                        _data.writeInt(1);
-                        extras.writeToParcel(_data, 0);
+                    obtain.writeInterfaceToken("android.support.customtabs.IPostMessageService");
+                    obtain.writeStrongBinder(iCustomTabsCallback != null ? iCustomTabsCallback.asBinder() : null);
+                    obtain.writeString(str);
+                    if (bundle != null) {
+                        obtain.writeInt(1);
+                        bundle.writeToParcel(obtain, 0);
                     } else {
-                        _data.writeInt(0);
+                        obtain.writeInt(0);
                     }
-                    this.mRemote.transact(3, _data, _reply, 0);
-                    _reply.readException();
+                    this.mRemote.transact(3, obtain, obtain2, 0);
+                    obtain2.readException();
                 } finally {
-                    _reply.recycle();
-                    _data.recycle();
+                    obtain2.recycle();
+                    obtain.recycle();
                 }
             }
-        }
-
-        public Stub() {
-            attachInterface(this, "android.support.customtabs.IPostMessageService");
-        }
-
-        public static IPostMessageService asInterface(IBinder obj) {
-            if (obj == null) {
-                return null;
-            }
-            IInterface iin = obj.queryLocalInterface("android.support.customtabs.IPostMessageService");
-            return (iin == null || !(iin instanceof IPostMessageService)) ? new Proxy(obj) : (IPostMessageService) iin;
         }
 
         public IBinder asBinder() {
             return this;
         }
 
-        public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
-            ICustomTabsCallback _arg0;
-            switch (code) {
-                case 2:
-                    Bundle _arg11;
-                    data.enforceInterface("android.support.customtabs.IPostMessageService");
-                    _arg0 = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder());
-                    if (data.readInt() != 0) {
-                        _arg11 = (Bundle) Bundle.CREATOR.createFromParcel(data);
-                    } else {
-                        _arg11 = null;
-                    }
-                    onMessageChannelReady(_arg0, _arg11);
-                    reply.writeNoException();
-                    return true;
-                case 3:
-                    Bundle _arg2;
-                    data.enforceInterface("android.support.customtabs.IPostMessageService");
-                    _arg0 = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(data.readStrongBinder());
-                    String _arg1 = data.readString();
-                    if (data.readInt() != 0) {
-                        _arg2 = (Bundle) Bundle.CREATOR.createFromParcel(data);
-                    } else {
-                        _arg2 = null;
-                    }
-                    onPostMessage(_arg0, _arg1, _arg2);
-                    reply.writeNoException();
-                    return true;
-                case 1598968902:
-                    reply.writeString("android.support.customtabs.IPostMessageService");
-                    return true;
-                default:
-                    return super.onTransact(code, data, reply, flags);
+        public Stub() {
+            attachInterface(this, "android.support.customtabs.IPostMessageService");
+        }
+
+        public static IPostMessageService asInterface(IBinder iBinder) {
+            if (iBinder == null) {
+                return null;
+            }
+            IInterface queryLocalInterface = iBinder.queryLocalInterface("android.support.customtabs.IPostMessageService");
+            IPostMessageService proxy = (queryLocalInterface == null || !(queryLocalInterface instanceof IPostMessageService)) ? new Proxy(iBinder) : (IPostMessageService) queryLocalInterface;
+            return proxy;
+        }
+
+        public boolean onTransact(int i, Parcel parcel, Parcel parcel2, int i2) throws RemoteException {
+            Bundle bundle = null;
+            String str = "android.support.customtabs.IPostMessageService";
+            ICustomTabsCallback asInterface;
+            if (i == 2) {
+                parcel.enforceInterface(str);
+                asInterface = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(parcel.readStrongBinder());
+                if (parcel.readInt() != 0) {
+                    bundle = (Bundle) Bundle.CREATOR.createFromParcel(parcel);
+                }
+                onMessageChannelReady(asInterface, bundle);
+                parcel2.writeNoException();
+                return true;
+            } else if (i == 3) {
+                parcel.enforceInterface(str);
+                asInterface = org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub.asInterface(parcel.readStrongBinder());
+                String readString = parcel.readString();
+                if (parcel.readInt() != 0) {
+                    bundle = (Bundle) Bundle.CREATOR.createFromParcel(parcel);
+                }
+                onPostMessage(asInterface, readString, bundle);
+                parcel2.writeNoException();
+                return true;
+            } else if (i != NUM) {
+                return super.onTransact(i, parcel, parcel2, i2);
+            } else {
+                parcel2.writeString(str);
+                return true;
             }
         }
     }

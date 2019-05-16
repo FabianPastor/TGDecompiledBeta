@@ -4,41 +4,41 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.support.v4.app.BundleCompat;
 import android.util.Log;
+import androidx.core.app.BundleCompat;
 import org.telegram.messenger.support.customtabs.ICustomTabsCallback.Stub;
 
 public class CustomTabsSessionToken {
     private static final String TAG = "CustomTabsSessionToken";
     private final CustomTabsCallback mCallback = new CustomTabsCallback() {
-        public void onNavigationEvent(int navigationEvent, Bundle extras) {
+        public void onNavigationEvent(int i, Bundle bundle) {
             try {
-                CustomTabsSessionToken.this.mCallbackBinder.onNavigationEvent(navigationEvent, extras);
-            } catch (RemoteException e) {
+                CustomTabsSessionToken.this.mCallbackBinder.onNavigationEvent(i, bundle);
+            } catch (RemoteException unused) {
                 Log.e("CustomTabsSessionToken", "RemoteException during ICustomTabsCallback transaction");
             }
         }
 
-        public void extraCallback(String callbackName, Bundle args) {
+        public void extraCallback(String str, Bundle bundle) {
             try {
-                CustomTabsSessionToken.this.mCallbackBinder.extraCallback(callbackName, args);
-            } catch (RemoteException e) {
+                CustomTabsSessionToken.this.mCallbackBinder.extraCallback(str, bundle);
+            } catch (RemoteException unused) {
                 Log.e("CustomTabsSessionToken", "RemoteException during ICustomTabsCallback transaction");
             }
         }
 
-        public void onMessageChannelReady(Bundle extras) {
+        public void onMessageChannelReady(Bundle bundle) {
             try {
-                CustomTabsSessionToken.this.mCallbackBinder.onMessageChannelReady(extras);
-            } catch (RemoteException e) {
+                CustomTabsSessionToken.this.mCallbackBinder.onMessageChannelReady(bundle);
+            } catch (RemoteException unused) {
                 Log.e("CustomTabsSessionToken", "RemoteException during ICustomTabsCallback transaction");
             }
         }
 
-        public void onPostMessage(String message, Bundle extras) {
+        public void onPostMessage(String str, Bundle bundle) {
             try {
-                CustomTabsSessionToken.this.mCallbackBinder.onPostMessage(message, extras);
-            } catch (RemoteException e) {
+                CustomTabsSessionToken.this.mCallbackBinder.onPostMessage(str, bundle);
+            } catch (RemoteException unused) {
                 Log.e("CustomTabsSessionToken", "RemoteException during ICustomTabsCallback transaction");
             }
         }
@@ -46,23 +46,23 @@ public class CustomTabsSessionToken {
     private final ICustomTabsCallback mCallbackBinder;
 
     static class DummyCallback extends Stub {
-        DummyCallback() {
-        }
-
-        public void onNavigationEvent(int navigationEvent, Bundle extras) {
-        }
-
-        public void extraCallback(String callbackName, Bundle args) {
-        }
-
-        public void onMessageChannelReady(Bundle extras) {
-        }
-
-        public void onPostMessage(String message, Bundle extras) {
-        }
-
         public IBinder asBinder() {
             return this;
+        }
+
+        public void extraCallback(String str, Bundle bundle) {
+        }
+
+        public void onMessageChannelReady(Bundle bundle) {
+        }
+
+        public void onNavigationEvent(int i, Bundle bundle) {
+        }
+
+        public void onPostMessage(String str, Bundle bundle) {
+        }
+
+        DummyCallback() {
         }
     }
 
@@ -78,8 +78,8 @@ public class CustomTabsSessionToken {
         return new CustomTabsSessionToken(new DummyCallback());
     }
 
-    CustomTabsSessionToken(ICustomTabsCallback callbackBinder) {
-        this.mCallbackBinder = callbackBinder;
+    CustomTabsSessionToken(ICustomTabsCallback iCustomTabsCallback) {
+        this.mCallbackBinder = iCustomTabsCallback;
     }
 
     /* Access modifiers changed, original: 0000 */
@@ -91,9 +91,9 @@ public class CustomTabsSessionToken {
         return getCallbackBinder().hashCode();
     }
 
-    public boolean equals(Object o) {
-        if (o instanceof CustomTabsSessionToken) {
-            return ((CustomTabsSessionToken) o).getCallbackBinder().equals(this.mCallbackBinder.asBinder());
+    public boolean equals(Object obj) {
+        if (obj instanceof CustomTabsSessionToken) {
+            return ((CustomTabsSessionToken) obj).getCallbackBinder().equals(this.mCallbackBinder.asBinder());
         }
         return false;
     }
@@ -102,7 +102,7 @@ public class CustomTabsSessionToken {
         return this.mCallback;
     }
 
-    public boolean isAssociatedWith(CustomTabsSession session) {
-        return session.getBinder().equals(this.mCallbackBinder);
+    public boolean isAssociatedWith(CustomTabsSession customTabsSession) {
+        return customTabsSession.getBinder().equals(this.mCallbackBinder);
     }
 }

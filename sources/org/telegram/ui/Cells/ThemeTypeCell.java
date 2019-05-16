@@ -20,8 +20,6 @@ public class ThemeTypeCell extends FrameLayout {
     private TextView textView;
 
     public ThemeTypeCell(Context context) {
-        int i;
-        int i2 = 3;
         super(context);
         setWillNotDraw(false);
         this.textView = new TextView(context);
@@ -31,37 +29,32 @@ public class ThemeTypeCell extends FrameLayout {
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TruncateAt.END);
+        int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        TextView textView = this.textView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
-            i = 3;
-        }
-        addView(textView, LayoutHelper.createFrame(-1, -1.0f, i | 48, LocaleController.isRTL ? 71.0f : 21.0f, 0.0f, LocaleController.isRTL ? 21.0f : 23.0f, 0.0f));
+        addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 71.0f : 21.0f, 0.0f, LocaleController.isRTL ? 21.0f : 23.0f, 0.0f));
         this.checkImage = new ImageView(context);
         this.checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor("featuredStickers_addedIcon"), Mode.MULTIPLY));
         this.checkImage.setImageResource(NUM);
         ImageView imageView = this.checkImage;
-        if (!LocaleController.isRTL) {
-            i2 = 5;
+        if (LocaleController.isRTL) {
+            i = 3;
         }
-        addView(imageView, LayoutHelper.createFrame(19, 14.0f, i2 | 16, 23.0f, 0.0f, 23.0f, 0.0f));
+        addView(imageView, LayoutHelper.createFrame(19, 14.0f, i | 16, 23.0f, 0.0f, 23.0f, 0.0f));
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(50.0f), NUM));
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50.0f) + this.needDivider, NUM));
     }
 
-    public void setValue(String name, boolean checked, boolean divider) {
-        this.textView.setText(name);
-        this.checkImage.setVisibility(checked ? 0 : 4);
-        this.needDivider = divider;
+    public void setValue(String str, boolean z, boolean z2) {
+        this.textView.setText(str);
+        this.checkImage.setVisibility(z ? 0 : 4);
+        this.needDivider = z2;
     }
 
-    public void setTypeChecked(boolean value) {
-        this.checkImage.setVisibility(value ? 0 : 4);
+    public void setTypeChecked(boolean z) {
+        this.checkImage.setVisibility(z ? 0 : 4);
     }
 
     /* Access modifiers changed, original: protected */

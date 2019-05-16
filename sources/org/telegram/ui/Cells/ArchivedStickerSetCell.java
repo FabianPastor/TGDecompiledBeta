@@ -11,9 +11,10 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
+import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
-import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Document;
+import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.StickerSetCovered;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
@@ -31,10 +32,7 @@ public class ArchivedStickerSetCell extends FrameLayout {
     private TextView textView;
     private TextView valueTextView;
 
-    public ArchivedStickerSetCell(Context context, boolean needCheckBox) {
-        int i;
-        int i2;
-        int i3 = 3;
+    public ArchivedStickerSetCell(Context context, boolean z) {
         super(context);
         this.textView = new TextView(context);
         this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
@@ -43,51 +41,29 @@ public class ArchivedStickerSetCell extends FrameLayout {
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TruncateAt.END);
+        int i = 5;
         this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
-        TextView textView = this.textView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
-            i = 3;
-        }
-        addView(textView, LayoutHelper.createFrame(-2, -2.0f, i, 71.0f, 10.0f, needCheckBox ? 71.0f : 21.0f, 0.0f));
+        addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, 71.0f, 10.0f, z ? 71.0f : 21.0f, 0.0f));
         this.valueTextView = new TextView(context);
         this.valueTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
         this.valueTextView.setTextSize(1, 13.0f);
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);
         this.valueTextView.setSingleLine(true);
-        TextView textView2 = this.valueTextView;
-        if (LocaleController.isRTL) {
-            i2 = 5;
-        } else {
-            i2 = 3;
-        }
-        textView2.setGravity(i2);
-        textView = this.valueTextView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
-            i = 3;
-        }
-        addView(textView, LayoutHelper.createFrame(-2, -2.0f, i, 71.0f, 35.0f, needCheckBox ? 71.0f : 21.0f, 0.0f));
+        this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
+        addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, 71.0f, 35.0f, z ? 71.0f : 21.0f, 0.0f));
         this.imageView = new BackupImageView(context);
         this.imageView.setAspectFit(true);
-        BackupImageView backupImageView = this.imageView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
-            i = 3;
-        }
-        addView(backupImageView, LayoutHelper.createFrame(48, 48.0f, i | 48, LocaleController.isRTL ? 0.0f : 12.0f, 8.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
-        if (needCheckBox) {
+        addView(this.imageView, LayoutHelper.createFrame(48, 48.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 12.0f, 8.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
+        if (z) {
             this.checkBox = new Switch(context);
-            this.checkBox.setColors("switchTrack", "switchTrackChecked", "windowBackgroundWhite", "windowBackgroundWhite");
+            String str = "windowBackgroundWhite";
+            this.checkBox.setColors("switchTrack", "switchTrackChecked", str, str);
             Switch switchR = this.checkBox;
-            if (!LocaleController.isRTL) {
-                i3 = 5;
+            if (LocaleController.isRTL) {
+                i = 3;
             }
-            addView(switchR, LayoutHelper.createFrame(37, 40.0f, i3 | 16, 16.0f, 0.0f, 16.0f, 0.0f));
+            addView(switchR, LayoutHelper.createFrame(37, 40.0f, i | 16, 16.0f, 0.0f, 16.0f, 0.0f));
         }
     }
 
@@ -104,78 +80,65 @@ public class ArchivedStickerSetCell extends FrameLayout {
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(64.0f), NUM));
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f) + this.needDivider, NUM));
     }
 
-    public void setStickersSet(StickerSetCovered set, boolean divider) {
-        boolean z;
-        TLObject thumb;
-        this.needDivider = divider;
-        this.stickersSet = set;
-        if (this.needDivider) {
-            z = false;
-        } else {
-            z = true;
-        }
-        setWillNotDraw(z);
+    public void setStickersSet(StickerSetCovered stickerSetCovered, boolean z) {
+        this.needDivider = z;
+        this.stickersSet = stickerSetCovered;
+        setWillNotDraw(this.needDivider ^ 1);
         this.textView.setText(this.stickersSet.set.title);
-        this.valueTextView.setText(LocaleController.formatPluralString("Stickers", set.set.count));
-        if (set.cover != null) {
-            thumb = FileLoader.getClosestPhotoSizeWithSize(set.cover.thumbs, 90);
+        this.valueTextView.setText(LocaleController.formatPluralString("Stickers", stickerSetCovered.set.count));
+        Document document = stickerSetCovered.cover;
+        PhotoSize closestPhotoSizeWithSize = document != null ? FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90) : null;
+        if (closestPhotoSizeWithSize != null && closestPhotoSizeWithSize.location != null) {
+            this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, stickerSetCovered.cover), null, "webp", null, (Object) stickerSetCovered);
+        } else if (stickerSetCovered.covers.isEmpty()) {
+            this.imageView.setImage(null, null, "webp", null, (Object) stickerSetCovered);
         } else {
-            thumb = null;
+            document = (Document) stickerSetCovered.covers.get(0);
+            this.imageView.setImage(ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90), document), null, "webp", null, (Object) stickerSetCovered);
         }
-        if (thumb == null || thumb.location == null) {
-            if (set.covers.isEmpty()) {
-                thumb = null;
-            } else {
-                thumb = FileLoader.getClosestPhotoSizeWithSize(((Document) set.covers.get(0)).thumbs, 90);
-            }
-            if (thumb != null) {
-                this.imageView.setImage(thumb, null, "webp", null, (Object) set);
-                return;
-            }
-            return;
-        }
-        this.imageView.setImage(thumb, null, "webp", null, (Object) set);
     }
 
-    public void setOnCheckClick(OnCheckedChangeListener listener) {
+    public void setOnCheckClick(OnCheckedChangeListener onCheckedChangeListener) {
         Switch switchR = this.checkBox;
-        this.onCheckedChangeListener = listener;
-        switchR.setOnCheckedChangeListener(listener);
-        this.checkBox.setOnClickListener(new ArchivedStickerSetCell$$Lambda$0(this));
+        this.onCheckedChangeListener = onCheckedChangeListener;
+        switchR.setOnCheckedChangeListener(onCheckedChangeListener);
+        this.checkBox.setOnClickListener(new -$$Lambda$ArchivedStickerSetCell$9Rmaru-mwDl6BO3ARD8hu93oKu8(this));
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$setOnCheckClick$0$ArchivedStickerSetCell(View v) {
-        this.checkBox.setChecked(!this.checkBox.isChecked(), true);
+    public /* synthetic */ void lambda$setOnCheckClick$0$ArchivedStickerSetCell(View view) {
+        Switch switchR = this.checkBox;
+        switchR.setChecked(switchR.isChecked() ^ 1, true);
     }
 
-    public void setChecked(boolean checked) {
+    public void setChecked(boolean z) {
         this.checkBox.setOnCheckedChangeListener(null);
-        this.checkBox.setChecked(checked, true);
+        this.checkBox.setChecked(z, true);
         this.checkBox.setOnCheckedChangeListener(this.onCheckedChangeListener);
     }
 
     public boolean isChecked() {
-        return this.checkBox != null && this.checkBox.isChecked();
+        Switch switchR = this.checkBox;
+        return switchR != null && switchR.isChecked();
     }
 
     public StickerSetCovered getStickersSet() {
         return this.stickersSet;
     }
 
-    public boolean onTouchEvent(MotionEvent event) {
-        if (this.checkBox != null) {
-            this.checkBox.getHitRect(this.rect);
-            if (this.rect.contains((int) event.getX(), (int) event.getY())) {
-                event.offsetLocation(-this.checkBox.getX(), -this.checkBox.getY());
-                return this.checkBox.onTouchEvent(event);
+    public boolean onTouchEvent(MotionEvent motionEvent) {
+        Switch switchR = this.checkBox;
+        if (switchR != null) {
+            switchR.getHitRect(this.rect);
+            if (this.rect.contains((int) motionEvent.getX(), (int) motionEvent.getY())) {
+                motionEvent.offsetLocation(-this.checkBox.getX(), -this.checkBox.getY());
+                return this.checkBox.onTouchEvent(motionEvent);
             }
         }
-        return super.onTouchEvent(event);
+        return super.onTouchEvent(motionEvent);
     }
 
     /* Access modifiers changed, original: protected */

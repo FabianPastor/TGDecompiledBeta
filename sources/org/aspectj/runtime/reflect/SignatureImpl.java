@@ -29,20 +29,20 @@ abstract class SignatureImpl implements Signature {
             makeCache();
         }
 
-        public String get(int cacheOffset) {
-            String[] cachedArray = array();
-            if (cachedArray == null) {
+        public String get(int i) {
+            String[] array = array();
+            if (array == null) {
                 return null;
             }
-            return cachedArray[cacheOffset];
+            return array[i];
         }
 
-        public void set(int cacheOffset, String result) {
-            String[] cachedArray = array();
-            if (cachedArray == null) {
-                cachedArray = makeCache();
+        public void set(int i, String str) {
+            String[] array = array();
+            if (array == null) {
+                array = makeCache();
             }
-            cachedArray[cacheOffset] = result;
+            array[i] = str;
         }
 
         private String[] array() {
@@ -50,41 +50,61 @@ abstract class SignatureImpl implements Signature {
         }
 
         private String[] makeCache() {
-            String[] array = new String[3];
-            this.toStringCacheRef = new SoftReference(array);
-            return array;
+            String[] strArr = new String[3];
+            this.toStringCacheRef = new SoftReference(strArr);
+            return strArr;
         }
     }
 
     public abstract String createToString(StringMaker stringMaker);
 
-    SignatureImpl(int modifiers, String name, Class declaringType) {
-        this.modifiers = modifiers;
-        this.name = name;
-        this.declaringType = declaringType;
+    SignatureImpl(int i, String str, Class cls) {
+        this.modifiers = i;
+        this.name = str;
+        this.declaringType = cls;
     }
 
     /* Access modifiers changed, original: 0000 */
-    public String toString(StringMaker sm) {
-        String result = null;
-        if (useCache) {
-            if (this.stringCache == null) {
-                try {
-                    this.stringCache = new CacheImpl();
-                } catch (Throwable th) {
-                    useCache = false;
-                }
-            } else {
-                result = this.stringCache.get(sm.cacheOffset);
-            }
-        }
-        if (result == null) {
-            result = createToString(sm);
-        }
-        if (useCache) {
-            this.stringCache.set(sm.cacheOffset, result);
-        }
-        return result;
+    /* JADX WARNING: Removed duplicated region for block: B:11:0x001e  */
+    /* JADX WARNING: Removed duplicated region for block: B:14:0x0026  */
+    public java.lang.String toString(org.aspectj.runtime.reflect.StringMaker r3) {
+        /*
+        r2 = this;
+        r0 = useCache;
+        if (r0 == 0) goto L_0x001b;
+    L_0x0004:
+        r0 = r2.stringCache;
+        if (r0 != 0) goto L_0x0014;
+    L_0x0008:
+        r0 = new org.aspectj.runtime.reflect.SignatureImpl$CacheImpl;	 Catch:{ Throwable -> 0x0010 }
+        r0.<init>();	 Catch:{ Throwable -> 0x0010 }
+        r2.stringCache = r0;	 Catch:{ Throwable -> 0x0010 }
+        goto L_0x001b;
+    L_0x0010:
+        r0 = 0;
+        useCache = r0;
+        goto L_0x001b;
+    L_0x0014:
+        r1 = r3.cacheOffset;
+        r0 = r0.get(r1);
+        goto L_0x001c;
+    L_0x001b:
+        r0 = 0;
+    L_0x001c:
+        if (r0 != 0) goto L_0x0022;
+    L_0x001e:
+        r0 = r2.createToString(r3);
+    L_0x0022:
+        r1 = useCache;
+        if (r1 == 0) goto L_0x002d;
+    L_0x0026:
+        r1 = r2.stringCache;
+        r3 = r3.cacheOffset;
+        r1.set(r3, r0);
+    L_0x002d:
+        return r0;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.aspectj.runtime.reflect.SignatureImpl.toString(org.aspectj.runtime.reflect.StringMaker):java.lang.String");
     }
 
     public final String toString() {
@@ -127,42 +147,42 @@ abstract class SignatureImpl implements Signature {
     }
 
     /* Access modifiers changed, original: 0000 */
-    public String extractString(int n) {
-        int startIndex = 0;
-        int endIndex = this.stringRep.indexOf(45);
+    public String extractString(int i) {
+        int indexOf = this.stringRep.indexOf(45);
+        int i2 = 0;
         while (true) {
-            int n2 = n;
-            n = n2 - 1;
-            if (n2 <= 0) {
+            int i3 = i - 1;
+            if (i <= 0) {
                 break;
             }
-            startIndex = endIndex + 1;
-            endIndex = this.stringRep.indexOf(45, startIndex);
+            i2 = indexOf + 1;
+            indexOf = this.stringRep.indexOf(45, i2);
+            i = i3;
         }
-        if (endIndex == -1) {
-            endIndex = this.stringRep.length();
+        if (indexOf == -1) {
+            indexOf = this.stringRep.length();
         }
-        return this.stringRep.substring(startIndex, endIndex);
+        return this.stringRep.substring(i2, indexOf);
     }
 
     /* Access modifiers changed, original: 0000 */
-    public int extractInt(int n) {
-        return Integer.parseInt(extractString(n), 16);
+    public int extractInt(int i) {
+        return Integer.parseInt(extractString(i), 16);
     }
 
     /* Access modifiers changed, original: 0000 */
-    public Class extractType(int n) {
-        return Factory.makeClass(extractString(n), getLookupClassLoader());
+    public Class extractType(int i) {
+        return Factory.makeClass(extractString(i), getLookupClassLoader());
     }
 
     /* Access modifiers changed, original: 0000 */
-    public Class[] extractTypes(int n) {
-        StringTokenizer st = new StringTokenizer(extractString(n), ":");
-        int N = st.countTokens();
-        Class[] ret = new Class[N];
-        for (int i = 0; i < N; i++) {
-            ret[i] = Factory.makeClass(st.nextToken(), getLookupClassLoader());
+    public Class[] extractTypes(int i) {
+        StringTokenizer stringTokenizer = new StringTokenizer(extractString(i), ":");
+        i = stringTokenizer.countTokens();
+        Class[] clsArr = new Class[i];
+        for (int i2 = 0; i2 < i; i2++) {
+            clsArr[i2] = Factory.makeClass(stringTokenizer.nextToken(), getLookupClassLoader());
         }
-        return ret;
+        return clsArr;
     }
 }

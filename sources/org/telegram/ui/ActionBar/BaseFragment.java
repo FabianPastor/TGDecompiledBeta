@@ -15,8 +15,15 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityManager;
+import java.util.ArrayList;
+import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 
@@ -31,8 +38,82 @@ public class BaseFragment {
     protected boolean inPreviewMode;
     private boolean isFinished;
     protected ActionBarLayout parentLayout;
-    protected boolean swipeBackEnabled;
+    protected boolean swipeBackEnabled = false;
     protected Dialog visibleDialog;
+
+    public boolean canBeginSlide() {
+        return true;
+    }
+
+    public View createView(Context context) {
+        return null;
+    }
+
+    public boolean dismissDialogOnPause(Dialog dialog) {
+        return true;
+    }
+
+    public boolean extendActionMode(Menu menu) {
+        return false;
+    }
+
+    public boolean needDelayOpenAnimation() {
+        return false;
+    }
+
+    public void onActivityResultFragment(int i, int i2, Intent intent) {
+    }
+
+    public boolean onBackPressed() {
+        return true;
+    }
+
+    /* Access modifiers changed, original: protected */
+    public void onBecomeFullyHidden() {
+    }
+
+    public void onConfigurationChanged(Configuration configuration) {
+    }
+
+    /* Access modifiers changed, original: protected */
+    public AnimatorSet onCustomTransitionAnimation(boolean z, Runnable runnable) {
+        return null;
+    }
+
+    /* Access modifiers changed, original: protected */
+    public void onDialogDismiss(Dialog dialog) {
+    }
+
+    public boolean onFragmentCreate() {
+        return true;
+    }
+
+    public void onLowMemory() {
+    }
+
+    /* Access modifiers changed, original: protected */
+    public void onRemoveFromParent() {
+    }
+
+    public void onRequestPermissionsResultFragment(int i, String[] strArr, int[] iArr) {
+    }
+
+    public void onResume() {
+    }
+
+    /* Access modifiers changed, original: protected */
+    public void onTransitionAnimationEnd(boolean z, boolean z2) {
+    }
+
+    /* Access modifiers changed, original: protected */
+    public void onTransitionAnimationStart(boolean z, boolean z2) {
+    }
+
+    public void restoreSelfArgs(Bundle bundle) {
+    }
+
+    public void saveSelfArgs(Bundle bundle) {
+    }
 
     public BaseFragment() {
         this.currentAccount = UserConfig.selectedAccount;
@@ -41,19 +122,20 @@ public class BaseFragment {
         this.classGuid = ConnectionsManager.generateClassGuid();
     }
 
-    public BaseFragment(Bundle args) {
+    public BaseFragment(Bundle bundle) {
         this.currentAccount = UserConfig.selectedAccount;
         this.swipeBackEnabled = true;
         this.hasOwnBackground = false;
-        this.arguments = args;
+        this.arguments = bundle;
         this.classGuid = ConnectionsManager.generateClassGuid();
     }
 
-    public void setCurrentAccount(int account) {
-        if (this.fragmentView != null) {
-            throw new IllegalStateException("trying to set current account when fragment UI already created");
+    public void setCurrentAccount(int i) {
+        if (this.fragmentView == null) {
+            this.currentAccount = i;
+            return;
         }
-        this.currentAccount = account;
+        throw new IllegalStateException("trying to set current account when fragment UI already created");
     }
 
     public ActionBar getActionBar() {
@@ -62,10 +144,6 @@ public class BaseFragment {
 
     public View getFragmentView() {
         return this.fragmentView;
-    }
-
-    public View createView(Context context) {
-        return null;
     }
 
     public Bundle getArguments() {
@@ -77,43 +155,44 @@ public class BaseFragment {
     }
 
     /* Access modifiers changed, original: protected */
-    public void setInPreviewMode(boolean value) {
-        boolean z = false;
-        this.inPreviewMode = value;
-        if (this.actionBar == null) {
-            return;
-        }
-        if (this.inPreviewMode) {
-            this.actionBar.setOccupyStatusBar(false);
-            return;
-        }
+    public void setInPreviewMode(boolean z) {
+        this.inPreviewMode = z;
         ActionBar actionBar = this.actionBar;
-        if (VERSION.SDK_INT >= 21) {
-            z = true;
+        if (actionBar != null) {
+            boolean z2 = false;
+            if (this.inPreviewMode) {
+                actionBar.setOccupyStatusBar(false);
+                return;
+            }
+            if (VERSION.SDK_INT >= 21) {
+                z2 = true;
+            }
+            actionBar.setOccupyStatusBar(z2);
         }
-        actionBar.setOccupyStatusBar(z);
     }
 
     /* Access modifiers changed, original: protected */
     public void clearViews() {
-        ViewGroup parent;
-        if (this.fragmentView != null) {
-            parent = (ViewGroup) this.fragmentView.getParent();
-            if (parent != null) {
+        ViewGroup viewGroup;
+        View view = this.fragmentView;
+        if (view != null) {
+            viewGroup = (ViewGroup) view.getParent();
+            if (viewGroup != null) {
                 try {
                     onRemoveFromParent();
-                    parent.removeView(this.fragmentView);
+                    viewGroup.removeView(this.fragmentView);
                 } catch (Exception e) {
                     FileLog.e(e);
                 }
             }
             this.fragmentView = null;
         }
-        if (this.actionBar != null) {
-            parent = (ViewGroup) this.actionBar.getParent();
-            if (parent != null) {
+        ActionBar actionBar = this.actionBar;
+        if (actionBar != null) {
+            viewGroup = (ViewGroup) actionBar.getParent();
+            if (viewGroup != null) {
                 try {
-                    parent.removeView(this.actionBar);
+                    viewGroup.removeView(this.actionBar);
                 } catch (Exception e2) {
                     FileLog.e(e2);
                 }
@@ -124,46 +203,45 @@ public class BaseFragment {
     }
 
     /* Access modifiers changed, original: protected */
-    public void onRemoveFromParent() {
-    }
-
-    /* Access modifiers changed, original: protected */
-    public void setParentLayout(ActionBarLayout layout) {
-        if (this.parentLayout != layout) {
-            ViewGroup parent;
-            this.parentLayout = layout;
-            if (this.fragmentView != null) {
-                parent = (ViewGroup) this.fragmentView.getParent();
-                if (parent != null) {
+    public void setParentLayout(ActionBarLayout actionBarLayout) {
+        if (this.parentLayout != actionBarLayout) {
+            this.parentLayout = actionBarLayout;
+            View view = this.fragmentView;
+            if (view != null) {
+                ViewGroup viewGroup = (ViewGroup) view.getParent();
+                if (viewGroup != null) {
                     try {
                         onRemoveFromParent();
-                        parent.removeView(this.fragmentView);
+                        viewGroup.removeView(this.fragmentView);
                     } catch (Exception e) {
                         FileLog.e(e);
                     }
                 }
-                if (!(this.parentLayout == null || this.parentLayout.getContext() == this.fragmentView.getContext())) {
+                actionBarLayout = this.parentLayout;
+                if (!(actionBarLayout == null || actionBarLayout.getContext() == this.fragmentView.getContext())) {
                     this.fragmentView = null;
                 }
             }
             if (this.actionBar != null) {
-                boolean differentParent = (this.parentLayout == null || this.parentLayout.getContext() == this.actionBar.getContext()) ? false : true;
-                if (this.actionBar.getAddToContainer() || differentParent) {
-                    parent = (ViewGroup) this.actionBar.getParent();
-                    if (parent != null) {
+                actionBarLayout = this.parentLayout;
+                Object obj = (actionBarLayout == null || actionBarLayout.getContext() == this.actionBar.getContext()) ? null : 1;
+                if (this.actionBar.getAddToContainer() || obj != null) {
+                    ViewGroup viewGroup2 = (ViewGroup) this.actionBar.getParent();
+                    if (viewGroup2 != null) {
                         try {
-                            parent.removeView(this.actionBar);
+                            viewGroup2.removeView(this.actionBar);
                         } catch (Exception e2) {
                             FileLog.e(e2);
                         }
                     }
                 }
-                if (differentParent) {
+                if (obj != null) {
                     this.actionBar = null;
                 }
             }
-            if (this.parentLayout != null && this.actionBar == null) {
-                this.actionBar = createActionBar(this.parentLayout.getContext());
+            actionBarLayout = this.parentLayout;
+            if (actionBarLayout != null && this.actionBar == null) {
+                this.actionBar = createActionBar(actionBarLayout.getContext());
                 this.actionBar.parentFragment = this;
             }
         }
@@ -183,8 +261,8 @@ public class BaseFragment {
         return actionBar;
     }
 
-    public void movePreviewFragment(float dy) {
-        this.parentLayout.movePreviewFragment(dy);
+    public void movePreviewFragment(float f) {
+        this.parentLayout.movePreviewFragment(f);
     }
 
     public void finishPreviewFragment() {
@@ -195,16 +273,22 @@ public class BaseFragment {
         finishFragment(true);
     }
 
-    public void finishFragment(boolean animated) {
-        if (!this.isFinished && this.parentLayout != null) {
-            this.finishing = true;
-            this.parentLayout.closeLastFragment(animated);
+    public void finishFragment(boolean z) {
+        if (!this.isFinished) {
+            ActionBarLayout actionBarLayout = this.parentLayout;
+            if (actionBarLayout != null) {
+                this.finishing = true;
+                actionBarLayout.closeLastFragment(z);
+            }
         }
     }
 
     public void removeSelfFromStack() {
-        if (!this.isFinished && this.parentLayout != null) {
-            this.parentLayout.removeFragmentFromStack(this);
+        if (!this.isFinished) {
+            ActionBarLayout actionBarLayout = this.parentLayout;
+            if (actionBarLayout != null) {
+                actionBarLayout.removeFragmentFromStack(this);
+            }
         }
     }
 
@@ -213,28 +297,19 @@ public class BaseFragment {
         return this.finishing;
     }
 
-    public boolean onFragmentCreate() {
-        return true;
-    }
-
     public void onFragmentDestroy() {
         ConnectionsManager.getInstance(this.currentAccount).cancelRequestsForGuid(this.classGuid);
         this.isFinished = true;
-        if (this.actionBar != null) {
-            this.actionBar.setEnabled(false);
+        ActionBar actionBar = this.actionBar;
+        if (actionBar != null) {
+            actionBar.setEnabled(false);
         }
     }
 
-    public boolean needDelayOpenAnimation() {
-        return false;
-    }
-
-    public void onResume() {
-    }
-
     public void onPause() {
-        if (this.actionBar != null) {
-            this.actionBar.onPause();
+        ActionBar actionBar = this.actionBar;
+        if (actionBar != null) {
+            actionBar.onPause();
         }
         try {
             if (this.visibleDialog != null && this.visibleDialog.isShowing() && dismissDialogOnPause(this.visibleDialog)) {
@@ -246,86 +321,65 @@ public class BaseFragment {
         }
     }
 
-    public BaseFragment getFragmentForAlert(int offset) {
-        if (this.parentLayout == null || this.parentLayout.fragmentsStack.size() <= offset + 1) {
+    public BaseFragment getFragmentForAlert(int i) {
+        ActionBarLayout actionBarLayout = this.parentLayout;
+        if (actionBarLayout == null || actionBarLayout.fragmentsStack.size() <= i + 1) {
             return this;
         }
-        return (BaseFragment) this.parentLayout.fragmentsStack.get((this.parentLayout.fragmentsStack.size() - 2) - offset);
+        ArrayList arrayList = this.parentLayout.fragmentsStack;
+        return (BaseFragment) arrayList.get((arrayList.size() - 2) - i);
     }
 
-    public void onConfigurationChanged(Configuration newConfig) {
+    public boolean presentFragmentAsPreview(BaseFragment baseFragment) {
+        ActionBarLayout actionBarLayout = this.parentLayout;
+        return actionBarLayout != null && actionBarLayout.presentFragmentAsPreview(baseFragment);
     }
 
-    public boolean onBackPressed() {
-        return true;
+    public boolean presentFragment(BaseFragment baseFragment) {
+        ActionBarLayout actionBarLayout = this.parentLayout;
+        return actionBarLayout != null && actionBarLayout.presentFragment(baseFragment);
     }
 
-    public void onActivityResultFragment(int requestCode, int resultCode, Intent data) {
+    public boolean presentFragment(BaseFragment baseFragment, boolean z) {
+        ActionBarLayout actionBarLayout = this.parentLayout;
+        return actionBarLayout != null && actionBarLayout.presentFragment(baseFragment, z);
     }
 
-    public void onRequestPermissionsResultFragment(int requestCode, String[] permissions, int[] grantResults) {
-    }
-
-    public void saveSelfArgs(Bundle args) {
-    }
-
-    public void restoreSelfArgs(Bundle args) {
-    }
-
-    public boolean presentFragmentAsPreview(BaseFragment fragment) {
-        return this.parentLayout != null && this.parentLayout.presentFragmentAsPreview(fragment);
-    }
-
-    public boolean presentFragment(BaseFragment fragment) {
-        return this.parentLayout != null && this.parentLayout.presentFragment(fragment);
-    }
-
-    public boolean presentFragment(BaseFragment fragment, boolean removeLast) {
-        return this.parentLayout != null && this.parentLayout.presentFragment(fragment, removeLast);
-    }
-
-    public boolean presentFragment(BaseFragment fragment, boolean removeLast, boolean forceWithoutAnimation) {
-        return this.parentLayout != null && this.parentLayout.presentFragment(fragment, removeLast, forceWithoutAnimation, true, false);
+    public boolean presentFragment(BaseFragment baseFragment, boolean z, boolean z2) {
+        ActionBarLayout actionBarLayout = this.parentLayout;
+        return actionBarLayout != null && actionBarLayout.presentFragment(baseFragment, z, z2, true, false);
     }
 
     public Activity getParentActivity() {
-        if (this.parentLayout != null) {
-            return this.parentLayout.parentActivity;
-        }
-        return null;
+        ActionBarLayout actionBarLayout = this.parentLayout;
+        return actionBarLayout != null ? actionBarLayout.parentActivity : null;
     }
 
     /* Access modifiers changed, original: protected */
-    public void setParentActivityTitle(CharSequence title) {
-        Activity activity = getParentActivity();
-        if (activity != null) {
-            activity.setTitle(title);
+    public void setParentActivityTitle(CharSequence charSequence) {
+        Activity parentActivity = getParentActivity();
+        if (parentActivity != null) {
+            parentActivity.setTitle(charSequence);
         }
     }
 
-    public void startActivityForResult(Intent intent, int requestCode) {
-        if (this.parentLayout != null) {
-            this.parentLayout.startActivityForResult(intent, requestCode);
+    public void startActivityForResult(Intent intent, int i) {
+        ActionBarLayout actionBarLayout = this.parentLayout;
+        if (actionBarLayout != null) {
+            actionBarLayout.startActivityForResult(intent, i);
         }
     }
 
     public void dismissCurrentDialig() {
-        if (this.visibleDialog != null) {
+        Dialog dialog = this.visibleDialog;
+        if (dialog != null) {
             try {
-                this.visibleDialog.dismiss();
+                dialog.dismiss();
                 this.visibleDialog = null;
             } catch (Exception e) {
                 FileLog.e(e);
             }
         }
-    }
-
-    public boolean dismissDialogOnPause(Dialog dialog) {
-        return true;
-    }
-
-    public boolean canBeginSlide() {
-        return true;
     }
 
     public void onBeginSlide() {
@@ -337,17 +391,10 @@ public class BaseFragment {
         } catch (Exception e) {
             FileLog.e(e);
         }
-        if (this.actionBar != null) {
-            this.actionBar.onPause();
+        ActionBar actionBar = this.actionBar;
+        if (actionBar != null) {
+            actionBar.onPause();
         }
-    }
-
-    /* Access modifiers changed, original: protected */
-    public void onTransitionAnimationStart(boolean isOpen, boolean backward) {
-    }
-
-    /* Access modifiers changed, original: protected */
-    public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
     }
 
     /* Access modifiers changed, original: protected */
@@ -363,18 +410,6 @@ public class BaseFragment {
         }
     }
 
-    /* Access modifiers changed, original: protected */
-    public void onBecomeFullyHidden() {
-    }
-
-    /* Access modifiers changed, original: protected */
-    public AnimatorSet onCustomTransitionAnimation(boolean isOpen, Runnable callback) {
-        return null;
-    }
-
-    public void onLowMemory() {
-    }
-
     public Dialog showDialog(Dialog dialog) {
         return showDialog(dialog, false, null);
     }
@@ -383,45 +418,38 @@ public class BaseFragment {
         return showDialog(dialog, false, onDismissListener);
     }
 
-    public Dialog showDialog(Dialog dialog, boolean allowInTransition, OnDismissListener onDismissListener) {
-        Dialog dialog2 = null;
-        if (dialog == null || this.parentLayout == null || this.parentLayout.animationInProgress || this.parentLayout.startedTracking) {
-            return dialog2;
-        }
-        if (!allowInTransition && this.parentLayout.checkTransitionAnimation()) {
-            return dialog2;
-        }
-        try {
-            if (this.visibleDialog != null) {
-                this.visibleDialog.dismiss();
-                this.visibleDialog = null;
+    public Dialog showDialog(Dialog dialog, boolean z, OnDismissListener onDismissListener) {
+        if (dialog != null) {
+            ActionBarLayout actionBarLayout = this.parentLayout;
+            if (!(actionBarLayout == null || actionBarLayout.animationInProgress || actionBarLayout.startedTracking || (!z && actionBarLayout.checkTransitionAnimation()))) {
+                try {
+                    if (this.visibleDialog != null) {
+                        this.visibleDialog.dismiss();
+                        this.visibleDialog = null;
+                    }
+                } catch (Exception e) {
+                    FileLog.e(e);
+                }
+                try {
+                    this.visibleDialog = dialog;
+                    this.visibleDialog.setCanceledOnTouchOutside(true);
+                    this.visibleDialog.setOnDismissListener(new -$$Lambda$BaseFragment$vXTvtAK8XZpLjv4Env96FSJndOM(this, onDismissListener));
+                    this.visibleDialog.show();
+                    return this.visibleDialog;
+                } catch (Exception e2) {
+                    FileLog.e(e2);
+                }
             }
-        } catch (Exception e) {
-            FileLog.e(e);
         }
-        try {
-            this.visibleDialog = dialog;
-            this.visibleDialog.setCanceledOnTouchOutside(true);
-            this.visibleDialog.setOnDismissListener(new BaseFragment$$Lambda$0(this, onDismissListener));
-            this.visibleDialog.show();
-            return this.visibleDialog;
-        } catch (Exception e2) {
-            FileLog.e(e2);
-            return dialog2;
-        }
+        return null;
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$showDialog$0$BaseFragment(OnDismissListener onDismissListener, DialogInterface dialog1) {
+    public /* synthetic */ void lambda$showDialog$0$BaseFragment(OnDismissListener onDismissListener, DialogInterface dialogInterface) {
         if (onDismissListener != null) {
-            onDismissListener.onDismiss(dialog1);
+            onDismissListener.onDismiss(dialogInterface);
         }
         onDialogDismiss(this.visibleDialog);
         this.visibleDialog = null;
-    }
-
-    /* Access modifiers changed, original: protected */
-    public void onDialogDismiss(Dialog dialog) {
     }
 
     public Dialog getVisibleDialog() {
@@ -432,11 +460,45 @@ public class BaseFragment {
         this.visibleDialog = dialog;
     }
 
-    public boolean extendActionMode(Menu menu) {
-        return false;
-    }
-
     public ThemeDescription[] getThemeDescriptions() {
         return new ThemeDescription[0];
+    }
+
+    /* Access modifiers changed, original: protected */
+    public AccountInstance getAccountInstance() {
+        return AccountInstance.getInstance(this.currentAccount);
+    }
+
+    /* Access modifiers changed, original: protected */
+    public MessagesController getMessagesController() {
+        return getAccountInstance().getMessagesController();
+    }
+
+    /* Access modifiers changed, original: protected */
+    public ContactsController getContactsController() {
+        return getAccountInstance().getContactsController();
+    }
+
+    /* Access modifiers changed, original: protected */
+    public DataQuery getDataQuery() {
+        return getAccountInstance().getDataQuery();
+    }
+
+    /* Access modifiers changed, original: protected */
+    public ConnectionsManager getConnectionsManager() {
+        return getAccountInstance().getConnectionsManager();
+    }
+
+    /* Access modifiers changed, original: protected */
+    public NotificationsController getNotificationsController() {
+        return getAccountInstance().getNotificationsController();
+    }
+
+    public NotificationCenter getNotificationCenter() {
+        return getAccountInstance().getNotificationCenter();
+    }
+
+    public UserConfig getUserConfig() {
+        return getAccountInstance().getUserConfig();
     }
 }

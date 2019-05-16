@@ -25,14 +25,10 @@ public class RadioCell extends FrameLayout {
         this(context, false, 21);
     }
 
-    public RadioCell(Context context, boolean dialog, int padding) {
-        int i;
-        int i2;
-        int i3 = 0;
-        int i4 = 3;
+    public RadioCell(Context context, boolean z, int i) {
         super(context);
         this.textView = new TextView(context);
-        if (dialog) {
+        if (z) {
             this.textView.setTextColor(Theme.getColor("dialogTextBlack"));
         } else {
             this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
@@ -42,103 +38,80 @@ public class RadioCell extends FrameLayout {
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TruncateAt.END);
-        TextView textView = this.textView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
-            i = 3;
-        }
-        textView.setGravity(i | 16);
-        TextView textView2 = this.textView;
-        if (LocaleController.isRTL) {
-            i2 = 5;
-        } else {
-            i2 = 3;
-        }
-        addView(textView2, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, (float) padding, 0.0f, (float) padding, 0.0f));
+        int i2 = 5;
+        this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
+        float f = (float) i;
+        addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, f, 0.0f, f, 0.0f));
         this.radioButton = new RadioButton(context);
         this.radioButton.setSize(AndroidUtilities.dp(20.0f));
-        if (dialog) {
+        if (z) {
             this.radioButton.setColor(Theme.getColor("dialogRadioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
         } else {
             this.radioButton.setColor(Theme.getColor("radioBackground"), Theme.getColor("radioBackgroundChecked"));
         }
         RadioButton radioButton = this.radioButton;
-        if (!LocaleController.isRTL) {
-            i4 = 5;
+        if (LocaleController.isRTL) {
+            i2 = 3;
         }
-        int i5 = i4 | 48;
-        float f = (float) (LocaleController.isRTL ? padding + 1 : 0);
+        int i3 = i2 | 48;
+        int i4 = 0;
+        float f2 = (float) (LocaleController.isRTL ? i + 1 : 0);
         if (!LocaleController.isRTL) {
-            i3 = padding + 1;
+            i4 = i + 1;
         }
-        addView(radioButton, LayoutHelper.createFrame(22, 22.0f, i5, f, 14.0f, (float) i3, 0.0f));
+        addView(radioButton, LayoutHelper.createFrame(22, 22.0f, i3, f2, 14.0f, (float) i4, 0.0f));
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (this.needDivider ? 1 : 0) + AndroidUtilities.dp(50.0f));
-        int availableWidth = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(34.0f);
+    public void onMeasure(int i, int i2) {
+        setMeasuredDimension(MeasureSpec.getSize(i), AndroidUtilities.dp(50.0f) + this.needDivider);
+        i = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(34.0f);
         this.radioButton.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(22.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(22.0f), NUM));
-        this.textView.measure(MeasureSpec.makeMeasureSpec(availableWidth, NUM), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
+        this.textView.measure(MeasureSpec.makeMeasureSpec(i, NUM), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
     }
 
-    public void setTextColor(int color) {
-        this.textView.setTextColor(color);
+    public void setTextColor(int i) {
+        this.textView.setTextColor(i);
     }
 
-    public void setText(String text, boolean checked, boolean divider) {
-        boolean z = false;
-        this.textView.setText(text);
-        this.radioButton.setChecked(checked, false);
-        this.needDivider = divider;
-        if (!divider) {
-            z = true;
-        }
-        setWillNotDraw(z);
+    public void setText(String str, boolean z, boolean z2) {
+        this.textView.setText(str);
+        this.radioButton.setChecked(z, false);
+        this.needDivider = z2;
+        setWillNotDraw(z2 ^ 1);
     }
 
     public boolean isChecked() {
         return this.radioButton.isChecked();
     }
 
-    public void setChecked(boolean checked, boolean animated) {
-        this.radioButton.setChecked(checked, animated);
+    public void setChecked(boolean z, boolean z2) {
+        this.radioButton.setChecked(z, z2);
     }
 
-    public void setEnabled(boolean value, ArrayList<Animator> animators) {
+    public void setEnabled(boolean z, ArrayList<Animator> arrayList) {
         float f = 1.0f;
-        TextView textView;
-        RadioButton radioButton;
-        if (animators != null) {
-            textView = this.textView;
-            String str = "alpha";
+        if (arrayList != null) {
+            TextView textView = this.textView;
             float[] fArr = new float[1];
-            fArr[0] = value ? 1.0f : 0.5f;
-            animators.add(ObjectAnimator.ofFloat(textView, str, fArr));
-            radioButton = this.radioButton;
-            String str2 = "alpha";
+            fArr[0] = z ? 1.0f : 0.5f;
+            String str = "alpha";
+            arrayList.add(ObjectAnimator.ofFloat(textView, str, fArr));
+            RadioButton radioButton = this.radioButton;
             float[] fArr2 = new float[1];
-            if (!value) {
+            if (!z) {
                 f = 0.5f;
             }
             fArr2[0] = f;
-            animators.add(ObjectAnimator.ofFloat(radioButton, str2, fArr2));
+            arrayList.add(ObjectAnimator.ofFloat(radioButton, str, fArr2));
             return;
         }
-        float f2;
-        textView = this.textView;
-        if (value) {
-            f2 = 1.0f;
-        } else {
-            f2 = 0.5f;
-        }
-        textView.setAlpha(f2);
-        radioButton = this.radioButton;
-        if (!value) {
+        this.textView.setAlpha(z ? 1.0f : 0.5f);
+        RadioButton radioButton2 = this.radioButton;
+        if (!z) {
             f = 0.5f;
         }
-        radioButton.setAlpha(f);
+        radioButton2.setAlpha(f);
     }
 
     /* Access modifiers changed, original: protected */
@@ -148,10 +121,10 @@ public class RadioCell extends FrameLayout {
         }
     }
 
-    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
-        super.onInitializeAccessibilityNodeInfo(info);
-        info.setClassName("android.widget.RadioButton");
-        info.setCheckable(true);
-        info.setChecked(isChecked());
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        accessibilityNodeInfo.setClassName("android.widget.RadioButton");
+        accessibilityNodeInfo.setCheckable(true);
+        accessibilityNodeInfo.setChecked(isChecked());
     }
 }

@@ -18,8 +18,6 @@ public class TextColorThemeCell extends FrameLayout {
     private TextView textView;
 
     public TextColorThemeCell(Context context) {
-        int i;
-        int i2 = 5;
         super(context);
         if (colorPaint == null) {
             colorPaint = new Paint(1);
@@ -30,23 +28,24 @@ public class TextColorThemeCell extends FrameLayout {
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
+        int i = 5;
+        this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
+        this.textView.setPadding(0, 0, 0, AndroidUtilities.dp(3.0f));
         TextView textView = this.textView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
+        if (!LocaleController.isRTL) {
             i = 3;
         }
-        textView.setGravity(i | 16);
-        this.textView.setPadding(0, 0, 0, AndroidUtilities.dp(3.0f));
-        TextView textView2 = this.textView;
-        if (!LocaleController.isRTL) {
-            i2 = 3;
+        int i2 = i | 48;
+        i = 21;
+        float f = (float) (LocaleController.isRTL ? 21 : 57);
+        if (LocaleController.isRTL) {
+            i = 57;
         }
-        addView(textView2, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, (float) (LocaleController.isRTL ? 21 : 57), 0.0f, (float) (LocaleController.isRTL ? 57 : 21), 0.0f));
+        addView(textView, LayoutHelper.createFrame(-1, -1.0f, i2, f, 0.0f, (float) i, 0.0f));
     }
 
-    public void setAlpha(float value) {
-        this.alpha = value;
+    public void setAlpha(float f) {
+        this.alpha = f;
         invalidate();
     }
 
@@ -55,13 +54,13 @@ public class TextColorThemeCell extends FrameLayout {
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(50.0f), NUM));
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50.0f) + this.needDivider, NUM));
     }
 
-    public void setTextAndColor(String text, int color) {
-        this.textView.setText(text);
-        this.currentColor = color;
+    public void setTextAndColor(String str, int i) {
+        this.textView.setText(str);
+        this.currentColor = i;
         boolean z = !this.needDivider && this.currentColor == 0;
         setWillNotDraw(z);
         invalidate();
@@ -69,10 +68,11 @@ public class TextColorThemeCell extends FrameLayout {
 
     /* Access modifiers changed, original: protected */
     public void onDraw(Canvas canvas) {
-        if (this.currentColor != 0) {
-            colorPaint.setColor(this.currentColor);
-            colorPaint.setAlpha((int) (255.0f * this.alpha));
-            canvas.drawCircle(!LocaleController.isRTL ? (float) AndroidUtilities.dp(28.0f) : (float) (getMeasuredWidth() - AndroidUtilities.dp(28.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.dp(10.0f), colorPaint);
+        int i = this.currentColor;
+        if (i != 0) {
+            colorPaint.setColor(i);
+            colorPaint.setAlpha((int) (this.alpha * 255.0f));
+            canvas.drawCircle((float) (!LocaleController.isRTL ? AndroidUtilities.dp(28.0f) : getMeasuredWidth() - AndroidUtilities.dp(28.0f)), (float) (getMeasuredHeight() / 2), (float) AndroidUtilities.dp(10.0f), colorPaint);
         }
     }
 }

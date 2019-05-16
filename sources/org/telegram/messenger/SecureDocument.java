@@ -13,11 +13,11 @@ public class SecureDocument extends TLObject {
     public TL_secureFile secureFile;
     public int type;
 
-    public SecureDocument(SecureDocumentKey key, TL_secureFile file, String p, byte[] fh, byte[] secret) {
-        this.secureDocumentKey = key;
-        this.secureFile = file;
-        this.path = p;
-        this.fileHash = fh;
-        this.fileSecret = secret;
+    public SecureDocument(SecureDocumentKey secureDocumentKey, TL_secureFile tL_secureFile, String str, byte[] bArr, byte[] bArr2) {
+        this.secureDocumentKey = secureDocumentKey;
+        this.secureFile = tL_secureFile;
+        this.path = str;
+        this.fileHash = bArr;
+        this.fileSecret = bArr2;
     }
 }

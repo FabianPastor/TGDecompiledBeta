@@ -7,11 +7,9 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Build.VERSION;
-import android.support.annotation.Keep;
 import android.view.MotionEvent;
 import android.view.TextureView;
 import android.view.View;
@@ -24,8 +22,8 @@ import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
+import androidx.annotation.Keep;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
-import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
@@ -48,7 +46,7 @@ public class PipVideoView {
     private class MiniControlsView extends FrameLayout {
         private float bufferedPosition;
         private AnimatorSet currentAnimation;
-        private Runnable hideRunnable = new PipVideoView$MiniControlsView$$Lambda$0(this);
+        private Runnable hideRunnable = new -$$Lambda$PipVideoView$MiniControlsView$1lMZ0uhQOCqoH6v0Akw4gfbgK2g(this);
         private ImageView inlineButton;
         private boolean isCompleted;
         private boolean isVisible = true;
@@ -71,19 +69,18 @@ public class PipVideoView {
             }
         };
 
-        /* Access modifiers changed, original: final|synthetic */
-        public final /* synthetic */ void lambda$new$0$PipVideoView$MiniControlsView() {
+        public /* synthetic */ void lambda$new$0$PipVideoView$MiniControlsView() {
             show(false, true);
         }
 
-        public MiniControlsView(Context context, boolean fullControls) {
+        public MiniControlsView(Context context, boolean z) {
             super(context);
             this.inlineButton = new ImageView(context);
             this.inlineButton.setScaleType(ScaleType.CENTER);
             this.inlineButton.setImageResource(NUM);
             addView(this.inlineButton, LayoutHelper.createFrame(56, 48, 53));
-            this.inlineButton.setOnClickListener(new PipVideoView$MiniControlsView$$Lambda$1(this));
-            if (fullControls) {
+            this.inlineButton.setOnClickListener(new -$$Lambda$PipVideoView$MiniControlsView$wbm8DJnUhe315ylEORpdCN9TCPU(this));
+            if (z) {
                 this.progressPaint = new Paint();
                 this.progressPaint.setColor(-15095832);
                 this.progressInnerPaint = new Paint();
@@ -92,15 +89,14 @@ public class PipVideoView {
                 this.playButton = new ImageView(context);
                 this.playButton.setScaleType(ScaleType.CENTER);
                 addView(this.playButton, LayoutHelper.createFrame(48, 48, 17));
-                this.playButton.setOnClickListener(new PipVideoView$MiniControlsView$$Lambda$2(this));
+                this.playButton.setOnClickListener(new -$$Lambda$PipVideoView$MiniControlsView$1JTbmkeJbI8PQhj0gt64f8TrJNY(this));
             }
-            setOnTouchListener(PipVideoView$MiniControlsView$$Lambda$3.$instance);
+            setOnTouchListener(-$$Lambda$PipVideoView$MiniControlsView$jKPELGvyg4VHgdM0XCb-ZaGLO4U.INSTANCE);
             updatePlayButton();
             show(false, false);
         }
 
-        /* Access modifiers changed, original: final|synthetic */
-        public final /* synthetic */ void lambda$new$1$PipVideoView$MiniControlsView(View v) {
+        public /* synthetic */ void lambda$new$1$PipVideoView$MiniControlsView(View view) {
             if (PipVideoView.this.parentSheet != null) {
                 PipVideoView.this.parentSheet.exitFromPip();
             } else if (PipVideoView.this.photoViewer != null) {
@@ -108,8 +104,7 @@ public class PipVideoView {
             }
         }
 
-        /* Access modifiers changed, original: final|synthetic */
-        public final /* synthetic */ void lambda$new$2$PipVideoView$MiniControlsView(View v) {
+        public /* synthetic */ void lambda$new$2$PipVideoView$MiniControlsView(View view) {
             if (PipVideoView.this.photoViewer != null) {
                 VideoPlayer videoPlayer = PipVideoView.this.photoViewer.getVideoPlayer();
                 if (videoPlayer != null) {
@@ -140,31 +135,33 @@ public class PipVideoView {
             }
         }
 
-        public void setBufferedProgress(float position) {
-            this.bufferedPosition = position;
+        public void setBufferedProgress(float f) {
+            this.bufferedPosition = f;
             invalidate();
         }
 
-        public void setProgress(float value) {
-            this.progress = value;
+        public void setProgress(float f) {
+            this.progress = f;
             invalidate();
         }
 
-        public void show(boolean value, boolean animated) {
-            if (this.isVisible != value) {
-                this.isVisible = value;
-                if (this.currentAnimation != null) {
-                    this.currentAnimation.cancel();
+        public void show(boolean z, boolean z2) {
+            if (this.isVisible != z) {
+                this.isVisible = z;
+                AnimatorSet animatorSet = this.currentAnimation;
+                if (animatorSet != null) {
+                    animatorSet.cancel();
                 }
-                AnimatorSet animatorSet;
+                String str = "alpha";
+                AnimatorSet animatorSet2;
                 Animator[] animatorArr;
                 if (this.isVisible) {
-                    if (animated) {
+                    if (z2) {
                         this.currentAnimation = new AnimatorSet();
-                        animatorSet = this.currentAnimation;
+                        animatorSet2 = this.currentAnimation;
                         animatorArr = new Animator[1];
-                        animatorArr[0] = ObjectAnimator.ofFloat(this, "alpha", new float[]{1.0f});
-                        animatorSet.playTogether(animatorArr);
+                        animatorArr[0] = ObjectAnimator.ofFloat(this, str, new float[]{1.0f});
+                        animatorSet2.playTogether(animatorArr);
                         this.currentAnimation.setDuration(150);
                         this.currentAnimation.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animator) {
@@ -175,12 +172,12 @@ public class PipVideoView {
                     } else {
                         setAlpha(1.0f);
                     }
-                } else if (animated) {
+                } else if (z2) {
                     this.currentAnimation = new AnimatorSet();
-                    animatorSet = this.currentAnimation;
+                    animatorSet2 = this.currentAnimation;
                     animatorArr = new Animator[1];
-                    animatorArr[0] = ObjectAnimator.ofFloat(this, "alpha", new float[]{0.0f});
-                    animatorSet.playTogether(animatorArr);
+                    animatorArr[0] = ObjectAnimator.ofFloat(this, str, new float[]{0.0f});
+                    animatorSet2.playTogether(animatorArr);
                     this.currentAnimation.setDuration(150);
                     this.currentAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {
@@ -202,8 +199,8 @@ public class PipVideoView {
             }
         }
 
-        public boolean onInterceptTouchEvent(MotionEvent ev) {
-            if (ev.getAction() == 0) {
+        public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+            if (motionEvent.getAction() == 0) {
                 if (this.isVisible) {
                     checkNeedHide();
                 } else {
@@ -211,11 +208,11 @@ public class PipVideoView {
                     return true;
                 }
             }
-            return super.onInterceptTouchEvent(ev);
+            return super.onInterceptTouchEvent(motionEvent);
         }
 
-        public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-            super.requestDisallowInterceptTouchEvent(disallowIntercept);
+        public void requestDisallowInterceptTouchEvent(boolean z) {
+            super.requestDisallowInterceptTouchEvent(z);
             checkNeedHide();
         }
 
@@ -227,141 +224,143 @@ public class PipVideoView {
 
         /* Access modifiers changed, original: protected */
         public void onDraw(Canvas canvas) {
-            int width = getMeasuredWidth();
-            int height = getMeasuredHeight();
-            int progressLineY = height - AndroidUtilities.dp(3.0f);
-            int cy = height - AndroidUtilities.dp(7.0f);
-            int progressX = 0 + ((int) (((float) (width - 0)) * this.progress));
-            if (this.bufferedPosition != 0.0f) {
-                Canvas canvas2 = canvas;
-                canvas2.drawRect((float) null, (float) progressLineY, (((float) (width - 0)) * this.bufferedPosition) + ((float) null), (float) (AndroidUtilities.dp(3.0f) + progressLineY), this.progressInnerPaint);
+            int measuredWidth = getMeasuredWidth();
+            int measuredHeight = getMeasuredHeight() - AndroidUtilities.dp(3.0f);
+            AndroidUtilities.dp(7.0f);
+            float f = (float) (measuredWidth - 0);
+            int i = ((int) (this.progress * f)) + 0;
+            float f2 = this.bufferedPosition;
+            if (f2 != 0.0f) {
+                float f3 = (float) null;
+                canvas.drawRect(f3, (float) measuredHeight, f3 + (f * f2), (float) (AndroidUtilities.dp(3.0f) + measuredHeight), this.progressInnerPaint);
             }
-            canvas.drawRect((float) null, (float) progressLineY, (float) progressX, (float) (AndroidUtilities.dp(3.0f) + progressLineY), this.progressPaint);
+            canvas.drawRect((float) null, (float) measuredHeight, (float) i, (float) (measuredHeight + AndroidUtilities.dp(3.0f)), this.progressPaint);
         }
     }
 
-    public TextureView show(Activity activity, EmbedBottomSheet sheet, View controls, float aspectRatio, int rotation, WebView webview) {
-        return show(activity, null, sheet, controls, aspectRatio, rotation, webview);
+    public TextureView show(Activity activity, EmbedBottomSheet embedBottomSheet, View view, float f, int i, WebView webView) {
+        return show(activity, null, embedBottomSheet, view, f, i, webView);
     }
 
-    public TextureView show(Activity activity, PhotoViewer viewer, float aspectRatio, int rotation) {
-        return show(activity, viewer, null, null, aspectRatio, rotation, null);
+    public TextureView show(Activity activity, PhotoViewer photoViewer, float f, int i) {
+        return show(activity, photoViewer, null, null, f, i, null);
     }
 
-    public TextureView show(Activity activity, PhotoViewer viewer, EmbedBottomSheet sheet, View controls, float aspectRatio, int rotation, WebView webview) {
+    public TextureView show(Activity activity, PhotoViewer photoViewer, EmbedBottomSheet embedBottomSheet, View view, float f, int i, WebView webView) {
         TextureView textureView;
-        this.parentSheet = sheet;
+        this.parentSheet = embedBottomSheet;
         this.parentActivity = activity;
-        this.photoViewer = viewer;
+        this.photoViewer = photoViewer;
         this.windowView = new FrameLayout(activity) {
             private boolean dragging;
             private float startX;
             private float startY;
 
-            public boolean onInterceptTouchEvent(MotionEvent event) {
-                float x = event.getRawX();
-                float y = event.getRawY();
-                if (event.getAction() == 0) {
-                    this.startX = x;
-                    this.startY = y;
-                } else if (event.getAction() == 2 && !this.dragging && (Math.abs(this.startX - x) >= AndroidUtilities.getPixelsInCM(0.3f, true) || Math.abs(this.startY - y) >= AndroidUtilities.getPixelsInCM(0.3f, false))) {
+            public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+                float rawX = motionEvent.getRawX();
+                float rawY = motionEvent.getRawY();
+                if (motionEvent.getAction() == 0) {
+                    this.startX = rawX;
+                    this.startY = rawY;
+                } else if (motionEvent.getAction() == 2 && !this.dragging && (Math.abs(this.startX - rawX) >= AndroidUtilities.getPixelsInCM(0.3f, true) || Math.abs(this.startY - rawY) >= AndroidUtilities.getPixelsInCM(0.3f, false))) {
                     this.dragging = true;
-                    this.startX = x;
-                    this.startY = y;
+                    this.startX = rawX;
+                    this.startY = rawY;
                     if (PipVideoView.this.controlsView != null) {
                         ((ViewParent) PipVideoView.this.controlsView).requestDisallowInterceptTouchEvent(true);
                     }
                     return true;
                 }
-                return super.onInterceptTouchEvent(event);
+                return super.onInterceptTouchEvent(motionEvent);
             }
 
-            public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-                super.requestDisallowInterceptTouchEvent(disallowIntercept);
+            public void requestDisallowInterceptTouchEvent(boolean z) {
+                super.requestDisallowInterceptTouchEvent(z);
             }
 
-            public boolean onTouchEvent(MotionEvent event) {
+            public boolean onTouchEvent(MotionEvent motionEvent) {
                 if (!this.dragging) {
                     return false;
                 }
-                float x = event.getRawX();
-                float y = event.getRawY();
-                if (event.getAction() == 2) {
-                    float dx = x - this.startX;
-                    float dy = y - this.startY;
+                float rawX = motionEvent.getRawX();
+                float rawY = motionEvent.getRawY();
+                if (motionEvent.getAction() == 2) {
+                    float f = rawX - this.startX;
+                    float f2 = rawY - this.startY;
                     LayoutParams access$500 = PipVideoView.this.windowLayoutParams;
-                    access$500.x = (int) (((float) access$500.x) + dx);
-                    access$500 = PipVideoView.this.windowLayoutParams;
-                    access$500.y = (int) (((float) access$500.y) + dy);
-                    int maxDiff = PipVideoView.this.videoWidth / 2;
-                    if (PipVideoView.this.windowLayoutParams.x < (-maxDiff)) {
-                        PipVideoView.this.windowLayoutParams.x = -maxDiff;
-                    } else if (PipVideoView.this.windowLayoutParams.x > (AndroidUtilities.displaySize.x - PipVideoView.this.windowLayoutParams.width) + maxDiff) {
-                        PipVideoView.this.windowLayoutParams.x = (AndroidUtilities.displaySize.x - PipVideoView.this.windowLayoutParams.width) + maxDiff;
+                    access$500.x = (int) (((float) access$500.x) + f);
+                    LayoutParams access$5002 = PipVideoView.this.windowLayoutParams;
+                    access$5002.y = (int) (((float) access$5002.y) + f2);
+                    int access$600 = PipVideoView.this.videoWidth / 2;
+                    int i = -access$600;
+                    if (PipVideoView.this.windowLayoutParams.x < i) {
+                        PipVideoView.this.windowLayoutParams.x = i;
+                    } else if (PipVideoView.this.windowLayoutParams.x > (AndroidUtilities.displaySize.x - PipVideoView.this.windowLayoutParams.width) + access$600) {
+                        PipVideoView.this.windowLayoutParams.x = (AndroidUtilities.displaySize.x - PipVideoView.this.windowLayoutParams.width) + access$600;
                     }
-                    float alpha = 1.0f;
+                    float f3 = 1.0f;
                     if (PipVideoView.this.windowLayoutParams.x < 0) {
-                        alpha = 1.0f + ((((float) PipVideoView.this.windowLayoutParams.x) / ((float) maxDiff)) * 0.5f);
+                        f3 = 1.0f + ((((float) PipVideoView.this.windowLayoutParams.x) / ((float) access$600)) * 0.5f);
                     } else if (PipVideoView.this.windowLayoutParams.x > AndroidUtilities.displaySize.x - PipVideoView.this.windowLayoutParams.width) {
-                        alpha = 1.0f - ((((float) ((PipVideoView.this.windowLayoutParams.x - AndroidUtilities.displaySize.x) + PipVideoView.this.windowLayoutParams.width)) / ((float) maxDiff)) * 0.5f);
+                        f3 = 1.0f - ((((float) ((PipVideoView.this.windowLayoutParams.x - AndroidUtilities.displaySize.x) + PipVideoView.this.windowLayoutParams.width)) / ((float) access$600)) * 0.5f);
                     }
-                    if (PipVideoView.this.windowView.getAlpha() != alpha) {
-                        PipVideoView.this.windowView.setAlpha(alpha);
+                    if (PipVideoView.this.windowView.getAlpha() != f3) {
+                        PipVideoView.this.windowView.setAlpha(f3);
                     }
-                    if (PipVideoView.this.windowLayoutParams.y < (-null)) {
-                        PipVideoView.this.windowLayoutParams.y = -null;
+                    if (PipVideoView.this.windowLayoutParams.y < 0) {
+                        PipVideoView.this.windowLayoutParams.y = 0;
                     } else if (PipVideoView.this.windowLayoutParams.y > (AndroidUtilities.displaySize.y - PipVideoView.this.windowLayoutParams.height) + 0) {
                         PipVideoView.this.windowLayoutParams.y = (AndroidUtilities.displaySize.y - PipVideoView.this.windowLayoutParams.height) + 0;
                     }
                     PipVideoView.this.windowManager.updateViewLayout(PipVideoView.this.windowView, PipVideoView.this.windowLayoutParams);
-                    this.startX = x;
-                    this.startY = y;
-                } else if (event.getAction() == 1) {
+                    this.startX = rawX;
+                    this.startY = rawY;
+                } else if (motionEvent.getAction() == 1) {
                     this.dragging = false;
                     PipVideoView.this.animateToBoundsMaybe();
                 }
                 return true;
             }
         };
-        if (aspectRatio > 1.0f) {
+        if (f > 1.0f) {
             this.videoWidth = AndroidUtilities.dp(192.0f);
-            this.videoHeight = (int) (((float) this.videoWidth) / aspectRatio);
+            this.videoHeight = (int) (((float) this.videoWidth) / f);
         } else {
             this.videoHeight = AndroidUtilities.dp(192.0f);
-            this.videoWidth = (int) (((float) this.videoHeight) * aspectRatio);
+            this.videoWidth = (int) (((float) this.videoHeight) * f);
         }
         AspectRatioFrameLayout aspectRatioFrameLayout = new AspectRatioFrameLayout(activity);
-        aspectRatioFrameLayout.setAspectRatio(aspectRatio, rotation);
+        aspectRatioFrameLayout.setAspectRatio(f, i);
         this.windowView.addView(aspectRatioFrameLayout, LayoutHelper.createFrame(-1, -1, 17));
-        if (webview != null) {
-            ViewGroup parent = (ViewGroup) webview.getParent();
-            if (parent != null) {
-                parent.removeView(webview);
+        if (webView != null) {
+            ViewGroup viewGroup = (ViewGroup) webView.getParent();
+            if (viewGroup != null) {
+                viewGroup.removeView(webView);
             }
-            aspectRatioFrameLayout.addView(webview, LayoutHelper.createFrame(-1, -1.0f));
+            aspectRatioFrameLayout.addView(webView, LayoutHelper.createFrame(-1, -1.0f));
             textureView = null;
         } else {
             textureView = new TextureView(activity);
             aspectRatioFrameLayout.addView(textureView, LayoutHelper.createFrame(-1, -1.0f));
         }
-        if (controls == null) {
-            this.controlsView = new MiniControlsView(activity, viewer != null);
+        if (view == null) {
+            this.controlsView = new MiniControlsView(activity, photoViewer != null);
         } else {
-            this.controlsView = controls;
+            this.controlsView = view;
         }
         this.windowView.addView(this.controlsView, LayoutHelper.createFrame(-1, -1.0f));
         this.windowManager = (WindowManager) ApplicationLoader.applicationContext.getSystemService("window");
         this.preferences = ApplicationLoader.applicationContext.getSharedPreferences("pipconfig", 0);
-        int sidex = this.preferences.getInt("sidex", 1);
-        int sidey = this.preferences.getInt("sidey", 0);
-        float px = this.preferences.getFloat("px", 0.0f);
-        float py = this.preferences.getFloat("py", 0.0f);
+        int i2 = this.preferences.getInt("sidex", 1);
+        int i3 = this.preferences.getInt("sidey", 0);
+        float f2 = this.preferences.getFloat("px", 0.0f);
+        float f3 = this.preferences.getFloat("py", 0.0f);
         try {
             this.windowLayoutParams = new LayoutParams();
             this.windowLayoutParams.width = this.videoWidth;
             this.windowLayoutParams.height = this.videoHeight;
-            this.windowLayoutParams.x = getSideCoord(true, sidex, px, this.videoWidth);
-            this.windowLayoutParams.y = getSideCoord(false, sidey, py, this.videoHeight);
+            this.windowLayoutParams.x = getSideCoord(true, i2, f2, this.videoWidth);
+            this.windowLayoutParams.y = getSideCoord(false, i3, f3, this.videoHeight);
             this.windowLayoutParams.format = -3;
             this.windowLayoutParams.gravity = 51;
             if (VERSION.SDK_INT >= 26) {
@@ -379,8 +378,9 @@ public class PipVideoView {
     }
 
     public void onVideoCompleted() {
-        if (this.controlsView instanceof MiniControlsView) {
-            MiniControlsView miniControlsView = this.controlsView;
+        View view = this.controlsView;
+        if (view instanceof MiniControlsView) {
+            MiniControlsView miniControlsView = (MiniControlsView) view;
             miniControlsView.isCompleted = true;
             miniControlsView.progress = 0.0f;
             miniControlsView.bufferedPosition = 0.0f;
@@ -390,45 +390,45 @@ public class PipVideoView {
         }
     }
 
-    public void setBufferedProgress(float progress) {
-        if (this.controlsView instanceof MiniControlsView) {
-            ((MiniControlsView) this.controlsView).setBufferedProgress(progress);
+    public void setBufferedProgress(float f) {
+        View view = this.controlsView;
+        if (view instanceof MiniControlsView) {
+            ((MiniControlsView) view).setBufferedProgress(f);
         }
     }
 
     public void updatePlayButton() {
-        if (this.controlsView instanceof MiniControlsView) {
-            MiniControlsView miniControlsView = this.controlsView;
+        View view = this.controlsView;
+        if (view instanceof MiniControlsView) {
+            MiniControlsView miniControlsView = (MiniControlsView) view;
             miniControlsView.updatePlayButton();
             miniControlsView.invalidate();
         }
     }
 
-    private static int getSideCoord(boolean isX, int side, float p, int sideSize) {
-        int total;
-        int result;
-        if (isX) {
-            total = AndroidUtilities.displaySize.x - sideSize;
+    private static int getSideCoord(boolean z, int i, float f, int i2) {
+        int i3;
+        if (z) {
+            i3 = AndroidUtilities.displaySize.x;
         } else {
-            total = (AndroidUtilities.displaySize.y - sideSize) - ActionBar.getCurrentActionBarHeight();
+            i3 = AndroidUtilities.displaySize.y - i2;
+            i2 = ActionBar.getCurrentActionBarHeight();
         }
-        if (side == 0) {
-            result = AndroidUtilities.dp(10.0f);
-        } else if (side == 1) {
-            result = total - AndroidUtilities.dp(10.0f);
+        i3 -= i2;
+        if (i == 0) {
+            i = AndroidUtilities.dp(10.0f);
+        } else if (i == 1) {
+            i = i3 - AndroidUtilities.dp(10.0f);
         } else {
-            result = Math.round(((float) (total - AndroidUtilities.dp(20.0f))) * p) + AndroidUtilities.dp(10.0f);
+            i = Math.round(((float) (i3 - AndroidUtilities.dp(20.0f))) * f) + AndroidUtilities.dp(10.0f);
         }
-        if (isX) {
-            return result;
-        }
-        return result + ActionBar.getCurrentActionBarHeight();
+        return !z ? i + ActionBar.getCurrentActionBarHeight() : i;
     }
 
     public void close() {
         try {
             this.windowManager.removeView(this.windowView);
-        } catch (Exception e) {
+        } catch (Exception unused) {
         }
         this.parentSheet = null;
         this.photoViewer = null;
@@ -436,115 +436,294 @@ public class PipVideoView {
     }
 
     public void onConfigurationChanged() {
-        int sidex = this.preferences.getInt("sidex", 1);
-        int sidey = this.preferences.getInt("sidey", 0);
-        float px = this.preferences.getFloat("px", 0.0f);
-        float py = this.preferences.getFloat("py", 0.0f);
-        this.windowLayoutParams.x = getSideCoord(true, sidex, px, this.videoWidth);
-        this.windowLayoutParams.y = getSideCoord(false, sidey, py, this.videoHeight);
+        int i = this.preferences.getInt("sidex", 1);
+        int i2 = this.preferences.getInt("sidey", 0);
+        float f = this.preferences.getFloat("px", 0.0f);
+        float f2 = this.preferences.getFloat("py", 0.0f);
+        this.windowLayoutParams.x = getSideCoord(true, i, f, this.videoWidth);
+        this.windowLayoutParams.y = getSideCoord(false, i2, f2, this.videoHeight);
         this.windowManager.updateViewLayout(this.windowView, this.windowLayoutParams);
     }
 
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x0117  */
+    /* JADX WARNING: Removed duplicated region for block: B:54:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x0184  */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x0117  */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x0184  */
+    /* JADX WARNING: Removed duplicated region for block: B:54:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x0117  */
+    /* JADX WARNING: Removed duplicated region for block: B:54:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x0184  */
     private void animateToBoundsMaybe() {
-        int startX = getSideCoord(true, 0, 0.0f, this.videoWidth);
-        int endX = getSideCoord(true, 1, 0.0f, this.videoWidth);
-        int startY = getSideCoord(false, 0, 0.0f, this.videoHeight);
-        int endY = getSideCoord(false, 1, 0.0f, this.videoHeight);
-        ArrayList<Animator> animators = null;
-        Editor editor = this.preferences.edit();
-        int maxDiff = AndroidUtilities.dp(20.0f);
-        boolean slideOut = false;
-        if (Math.abs(startX - this.windowLayoutParams.x) <= maxDiff || (this.windowLayoutParams.x < 0 && this.windowLayoutParams.x > (-this.videoWidth) / 4)) {
-            if (null == null) {
-                animators = new ArrayList();
-            }
-            editor.putInt("sidex", 0);
-            if (this.windowView.getAlpha() != 1.0f) {
-                animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{1.0f}));
-            }
-            animators.add(ObjectAnimator.ofInt(this, "x", new int[]{startX}));
-        } else if (Math.abs(endX - this.windowLayoutParams.x) <= maxDiff || (this.windowLayoutParams.x > AndroidUtilities.displaySize.x - this.videoWidth && this.windowLayoutParams.x < AndroidUtilities.displaySize.x - ((this.videoWidth / 4) * 3))) {
-            if (null == null) {
-                animators = new ArrayList();
-            }
-            editor.putInt("sidex", 1);
-            if (this.windowView.getAlpha() != 1.0f) {
-                animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{1.0f}));
-            }
-            animators.add(ObjectAnimator.ofInt(this, "x", new int[]{endX}));
-        } else if (this.windowView.getAlpha() != 1.0f) {
-            if (null == null) {
-                animators = new ArrayList();
-            }
-            if (this.windowLayoutParams.x < 0) {
-                animators.add(ObjectAnimator.ofInt(this, "x", new int[]{-this.videoWidth}));
-            } else {
-                animators.add(ObjectAnimator.ofInt(this, "x", new int[]{AndroidUtilities.displaySize.x}));
-            }
-            slideOut = true;
-        } else {
-            editor.putFloat("px", ((float) (this.windowLayoutParams.x - startX)) / ((float) (endX - startX)));
-            editor.putInt("sidex", 2);
-        }
-        if (!slideOut) {
-            if (Math.abs(startY - this.windowLayoutParams.y) <= maxDiff || this.windowLayoutParams.y <= ActionBar.getCurrentActionBarHeight()) {
-                if (animators == null) {
-                    animators = new ArrayList();
-                }
-                editor.putInt("sidey", 0);
-                animators.add(ObjectAnimator.ofInt(this, "y", new int[]{startY}));
-            } else if (Math.abs(endY - this.windowLayoutParams.y) <= maxDiff) {
-                if (animators == null) {
-                    animators = new ArrayList();
-                }
-                editor.putInt("sidey", 1);
-                animators.add(ObjectAnimator.ofInt(this, "y", new int[]{endY}));
-            } else {
-                editor.putFloat("py", ((float) (this.windowLayoutParams.y - startY)) / ((float) (endY - startY)));
-                editor.putInt("sidey", 2);
-            }
-            editor.commit();
-        }
-        if (animators != null) {
-            if (this.decelerateInterpolator == null) {
-                this.decelerateInterpolator = new DecelerateInterpolator();
-            }
-            AnimatorSet animatorSet = new AnimatorSet();
-            animatorSet.setInterpolator(this.decelerateInterpolator);
-            animatorSet.setDuration(150);
-            if (slideOut) {
-                animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f}));
-                animatorSet.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animation) {
-                        if (PipVideoView.this.parentSheet != null) {
-                            PipVideoView.this.parentSheet.destroy();
-                        } else if (PipVideoView.this.photoViewer != null) {
-                            PipVideoView.this.photoViewer.destroyPhotoViewer();
-                        }
-                    }
-                });
-            }
-            animatorSet.playTogether(animators);
-            animatorSet.start();
-        }
+        /*
+        r16 = this;
+        r0 = r16;
+        r1 = r0.videoWidth;
+        r2 = 0;
+        r3 = 0;
+        r4 = 1;
+        r1 = getSideCoord(r4, r3, r2, r1);
+        r5 = r0.videoWidth;
+        r5 = getSideCoord(r4, r4, r2, r5);
+        r6 = r0.videoHeight;
+        r6 = getSideCoord(r3, r3, r2, r6);
+        r7 = r0.videoHeight;
+        r7 = getSideCoord(r3, r4, r2, r7);
+        r8 = r0.preferences;
+        r8 = r8.edit();
+        r9 = NUM; // 0x41a00000 float:20.0 double:5.439686476E-315;
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r9);
+        r10 = r0.windowLayoutParams;
+        r10 = r10.x;
+        r10 = r1 - r10;
+        r10 = java.lang.Math.abs(r10);
+        r12 = "alpha";
+        r13 = "sidex";
+        r14 = "x";
+        r15 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        if (r10 <= r9) goto L_0x00e8;
+    L_0x003e:
+        r10 = r0.windowLayoutParams;
+        r10 = r10.x;
+        if (r10 >= 0) goto L_0x004d;
+    L_0x0044:
+        r2 = r0.videoWidth;
+        r2 = -r2;
+        r2 = r2 / 4;
+        if (r10 <= r2) goto L_0x004d;
+    L_0x004b:
+        goto L_0x00e8;
+    L_0x004d:
+        r2 = r0.windowLayoutParams;
+        r2 = r2.x;
+        r2 = r5 - r2;
+        r2 = java.lang.Math.abs(r2);
+        if (r2 <= r9) goto L_0x00ba;
+    L_0x0059:
+        r2 = r0.windowLayoutParams;
+        r2 = r2.x;
+        r10 = org.telegram.messenger.AndroidUtilities.displaySize;
+        r10 = r10.x;
+        r11 = r0.videoWidth;
+        r3 = r10 - r11;
+        if (r2 <= r3) goto L_0x006f;
+    L_0x0067:
+        r11 = r11 / 4;
+        r11 = r11 * 3;
+        r10 = r10 - r11;
+        if (r2 >= r10) goto L_0x006f;
+    L_0x006e:
+        goto L_0x00ba;
+    L_0x006f:
+        r2 = r0.windowView;
+        r2 = r2.getAlpha();
+        r2 = (r2 > r15 ? 1 : (r2 == r15 ? 0 : -1));
+        if (r2 == 0) goto L_0x00a6;
+    L_0x0079:
+        r1 = new java.util.ArrayList;
+        r1.<init>();
+        r2 = r0.windowLayoutParams;
+        r2 = r2.x;
+        if (r2 >= 0) goto L_0x0094;
+    L_0x0084:
+        r2 = new int[r4];
+        r3 = r0.videoWidth;
+        r3 = -r3;
+        r5 = 0;
+        r2[r5] = r3;
+        r2 = android.animation.ObjectAnimator.ofInt(r0, r14, r2);
+        r1.add(r2);
+        goto L_0x00a4;
+    L_0x0094:
+        r5 = 0;
+        r2 = new int[r4];
+        r3 = org.telegram.messenger.AndroidUtilities.displaySize;
+        r3 = r3.x;
+        r2[r5] = r3;
+        r2 = android.animation.ObjectAnimator.ofInt(r0, r14, r2);
+        r1.add(r2);
+    L_0x00a4:
+        r10 = 1;
+        goto L_0x0115;
+    L_0x00a6:
+        r2 = r0.windowLayoutParams;
+        r2 = r2.x;
+        r2 = r2 - r1;
+        r2 = (float) r2;
+        r5 = r5 - r1;
+        r1 = (float) r5;
+        r2 = r2 / r1;
+        r1 = "px";
+        r8.putFloat(r1, r2);
+        r1 = 2;
+        r8.putInt(r13, r1);
+        r1 = 0;
+        goto L_0x0114;
+    L_0x00ba:
+        r1 = new java.util.ArrayList;
+        r1.<init>();
+        r8.putInt(r13, r4);
+        r2 = r0.windowView;
+        r2 = r2.getAlpha();
+        r2 = (r2 > r15 ? 1 : (r2 == r15 ? 0 : -1));
+        if (r2 == 0) goto L_0x00db;
+    L_0x00cc:
+        r2 = r0.windowView;
+        r3 = new float[r4];
+        r10 = 0;
+        r3[r10] = r15;
+        r2 = android.animation.ObjectAnimator.ofFloat(r2, r12, r3);
+        r1.add(r2);
+        goto L_0x00dc;
+    L_0x00db:
+        r10 = 0;
+    L_0x00dc:
+        r2 = new int[r4];
+        r2[r10] = r5;
+        r2 = android.animation.ObjectAnimator.ofInt(r0, r14, r2);
+        r1.add(r2);
+        goto L_0x0115;
+    L_0x00e8:
+        r10 = 0;
+        r2 = new java.util.ArrayList;
+        r2.<init>();
+        r8.putInt(r13, r10);
+        r3 = r0.windowView;
+        r3 = r3.getAlpha();
+        r3 = (r3 > r15 ? 1 : (r3 == r15 ? 0 : -1));
+        if (r3 == 0) goto L_0x0108;
+    L_0x00fb:
+        r3 = r0.windowView;
+        r5 = new float[r4];
+        r5[r10] = r15;
+        r3 = android.animation.ObjectAnimator.ofFloat(r3, r12, r5);
+        r2.add(r3);
+    L_0x0108:
+        r3 = new int[r4];
+        r3[r10] = r1;
+        r1 = android.animation.ObjectAnimator.ofInt(r0, r14, r3);
+        r2.add(r1);
+        r1 = r2;
+    L_0x0114:
+        r10 = 0;
+    L_0x0115:
+        if (r10 != 0) goto L_0x0182;
+    L_0x0117:
+        r2 = r0.windowLayoutParams;
+        r2 = r2.y;
+        r2 = r6 - r2;
+        r2 = java.lang.Math.abs(r2);
+        r3 = "y";
+        r5 = "sidey";
+        if (r2 <= r9) goto L_0x0169;
+    L_0x0128:
+        r2 = r0.windowLayoutParams;
+        r2 = r2.y;
+        r11 = org.telegram.ui.ActionBar.ActionBar.getCurrentActionBarHeight();
+        if (r2 > r11) goto L_0x0133;
+    L_0x0132:
+        goto L_0x0169;
+    L_0x0133:
+        r2 = r0.windowLayoutParams;
+        r2 = r2.y;
+        r2 = r7 - r2;
+        r2 = java.lang.Math.abs(r2);
+        if (r2 > r9) goto L_0x0156;
+    L_0x013f:
+        if (r1 != 0) goto L_0x0146;
+    L_0x0141:
+        r1 = new java.util.ArrayList;
+        r1.<init>();
+    L_0x0146:
+        r8.putInt(r5, r4);
+        r2 = new int[r4];
+        r5 = 0;
+        r2[r5] = r7;
+        r2 = android.animation.ObjectAnimator.ofInt(r0, r3, r2);
+        r1.add(r2);
+        goto L_0x017f;
+    L_0x0156:
+        r2 = r0.windowLayoutParams;
+        r2 = r2.y;
+        r2 = r2 - r6;
+        r2 = (float) r2;
+        r7 = r7 - r6;
+        r3 = (float) r7;
+        r2 = r2 / r3;
+        r3 = "py";
+        r8.putFloat(r3, r2);
+        r2 = 2;
+        r8.putInt(r5, r2);
+        goto L_0x017f;
+    L_0x0169:
+        if (r1 != 0) goto L_0x0170;
+    L_0x016b:
+        r1 = new java.util.ArrayList;
+        r1.<init>();
+    L_0x0170:
+        r2 = 0;
+        r8.putInt(r5, r2);
+        r5 = new int[r4];
+        r5[r2] = r6;
+        r2 = android.animation.ObjectAnimator.ofInt(r0, r3, r5);
+        r1.add(r2);
+    L_0x017f:
+        r8.commit();
+    L_0x0182:
+        if (r1 == 0) goto L_0x01bd;
+    L_0x0184:
+        r2 = r0.decelerateInterpolator;
+        if (r2 != 0) goto L_0x018f;
+    L_0x0188:
+        r2 = new android.view.animation.DecelerateInterpolator;
+        r2.<init>();
+        r0.decelerateInterpolator = r2;
+    L_0x018f:
+        r2 = new android.animation.AnimatorSet;
+        r2.<init>();
+        r3 = r0.decelerateInterpolator;
+        r2.setInterpolator(r3);
+        r5 = 150; // 0x96 float:2.1E-43 double:7.4E-322;
+        r2.setDuration(r5);
+        if (r10 == 0) goto L_0x01b7;
+    L_0x01a0:
+        r3 = r0.windowView;
+        r4 = new float[r4];
+        r5 = 0;
+        r6 = 0;
+        r4[r6] = r5;
+        r3 = android.animation.ObjectAnimator.ofFloat(r3, r12, r4);
+        r1.add(r3);
+        r3 = new org.telegram.ui.Components.PipVideoView$2;
+        r3.<init>();
+        r2.addListener(r3);
+    L_0x01b7:
+        r2.playTogether(r1);
+        r2.start();
+    L_0x01bd:
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PipVideoView.animateToBoundsMaybe():void");
     }
 
-    public static Rect getPipRect(float aspectRatio) {
-        int videoWidth;
-        int videoHeight;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("pipconfig", 0);
-        int sidex = preferences.getInt("sidex", 1);
-        int sidey = preferences.getInt("sidey", 0);
-        float px = preferences.getFloat("px", 0.0f);
-        float py = preferences.getFloat("py", 0.0f);
-        if (aspectRatio > 1.0f) {
-            videoWidth = AndroidUtilities.dp(192.0f);
-            videoHeight = (int) (((float) videoWidth) / aspectRatio);
+    public static Rect getPipRect(float f) {
+        int dp;
+        int i;
+        SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("pipconfig", 0);
+        int i2 = sharedPreferences.getInt("sidex", 1);
+        int i3 = sharedPreferences.getInt("sidey", 0);
+        float f2 = sharedPreferences.getFloat("px", 0.0f);
+        float f3 = sharedPreferences.getFloat("py", 0.0f);
+        if (f > 1.0f) {
+            dp = AndroidUtilities.dp(192.0f);
+            int i4 = dp;
+            dp = (int) (((float) dp) / f);
+            i = i4;
         } else {
-            videoHeight = AndroidUtilities.dp(192.0f);
-            videoWidth = (int) (((float) videoHeight) * aspectRatio);
+            dp = AndroidUtilities.dp(192.0f);
+            i = (int) (((float) dp) * f);
         }
-        return new Rect((float) getSideCoord(true, sidex, px, videoWidth), (float) getSideCoord(false, sidey, py, videoHeight), (float) videoWidth, (float) videoHeight);
+        return new Rect((float) getSideCoord(true, i2, f2, i), (float) getSideCoord(false, i3, f3, dp), (float) i, (float) dp);
     }
 
     @Keep
@@ -558,14 +737,16 @@ public class PipVideoView {
     }
 
     @Keep
-    public void setX(int value) {
-        this.windowLayoutParams.x = value;
-        this.windowManager.updateViewLayout(this.windowView, this.windowLayoutParams);
+    public void setX(int i) {
+        LayoutParams layoutParams = this.windowLayoutParams;
+        layoutParams.x = i;
+        this.windowManager.updateViewLayout(this.windowView, layoutParams);
     }
 
     @Keep
-    public void setY(int value) {
-        this.windowLayoutParams.y = value;
-        this.windowManager.updateViewLayout(this.windowView, this.windowLayoutParams);
+    public void setY(int i) {
+        LayoutParams layoutParams = this.windowLayoutParams;
+        layoutParams.y = i;
+        this.windowManager.updateViewLayout(this.windowView, layoutParams);
     }
 }

@@ -2,13 +2,12 @@ package org.telegram.ui;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.FrameLayout;
@@ -31,10 +30,6 @@ public class PhotoCropActivity extends BaseFragment {
     private Bitmap imageToCrop;
     private boolean sameBitmap = false;
     private PhotoCropView view;
-
-    public interface PhotoEditActivityDelegate {
-        void didFinishEdit(Bitmap bitmap);
-    }
 
     private class PhotoCropView extends FrameLayout {
         int bitmapHeight;
@@ -71,326 +66,1017 @@ public class PhotoCropActivity extends BaseFragment {
             this.halfPaint.setColor(-NUM);
             setBackgroundColor(-13421773);
             setOnTouchListener(new OnTouchListener() {
-                public boolean onTouch(View view, MotionEvent motionEvent) {
-                    float x = motionEvent.getX();
-                    float y = motionEvent.getY();
-                    int cornerSide = AndroidUtilities.dp(14.0f);
-                    if (motionEvent.getAction() == 0) {
-                        if (PhotoCropView.this.rectX - ((float) cornerSide) < x && PhotoCropView.this.rectX + ((float) cornerSide) > x && PhotoCropView.this.rectY - ((float) cornerSide) < y && PhotoCropView.this.rectY + ((float) cornerSide) > y) {
-                            PhotoCropView.this.draggingState = 1;
-                        } else if ((PhotoCropView.this.rectX - ((float) cornerSide)) + PhotoCropView.this.rectSizeX < x && (PhotoCropView.this.rectX + ((float) cornerSide)) + PhotoCropView.this.rectSizeX > x && PhotoCropView.this.rectY - ((float) cornerSide) < y && PhotoCropView.this.rectY + ((float) cornerSide) > y) {
-                            PhotoCropView.this.draggingState = 2;
-                        } else if (PhotoCropView.this.rectX - ((float) cornerSide) < x && PhotoCropView.this.rectX + ((float) cornerSide) > x && (PhotoCropView.this.rectY - ((float) cornerSide)) + PhotoCropView.this.rectSizeY < y && (PhotoCropView.this.rectY + ((float) cornerSide)) + PhotoCropView.this.rectSizeY > y) {
-                            PhotoCropView.this.draggingState = 3;
-                        } else if ((PhotoCropView.this.rectX - ((float) cornerSide)) + PhotoCropView.this.rectSizeX < x && (PhotoCropView.this.rectX + ((float) cornerSide)) + PhotoCropView.this.rectSizeX > x && (PhotoCropView.this.rectY - ((float) cornerSide)) + PhotoCropView.this.rectSizeY < y && (PhotoCropView.this.rectY + ((float) cornerSide)) + PhotoCropView.this.rectSizeY > y) {
-                            PhotoCropView.this.draggingState = 4;
-                        } else if (PhotoCropView.this.rectX >= x || PhotoCropView.this.rectX + PhotoCropView.this.rectSizeX <= x || PhotoCropView.this.rectY >= y || PhotoCropView.this.rectY + PhotoCropView.this.rectSizeY <= y) {
-                            PhotoCropView.this.draggingState = 0;
-                        } else {
-                            PhotoCropView.this.draggingState = 5;
-                        }
-                        if (PhotoCropView.this.draggingState != 0) {
-                            PhotoCropView.this.requestDisallowInterceptTouchEvent(true);
-                        }
-                        PhotoCropView.this.oldX = x;
-                        PhotoCropView.this.oldY = y;
-                    } else if (motionEvent.getAction() == 1) {
-                        PhotoCropView.this.draggingState = 0;
-                    } else if (motionEvent.getAction() == 2 && PhotoCropView.this.draggingState != 0) {
-                        float diffX = x - PhotoCropView.this.oldX;
-                        float diffY = y - PhotoCropView.this.oldY;
-                        PhotoCropView photoCropView;
-                        if (PhotoCropView.this.draggingState == 5) {
-                            photoCropView = PhotoCropView.this;
-                            photoCropView.rectX += diffX;
-                            photoCropView = PhotoCropView.this;
-                            photoCropView.rectY += diffY;
-                            if (PhotoCropView.this.rectX < ((float) PhotoCropView.this.bitmapX)) {
-                                PhotoCropView.this.rectX = (float) PhotoCropView.this.bitmapX;
-                            } else if (PhotoCropView.this.rectX + PhotoCropView.this.rectSizeX > ((float) (PhotoCropView.this.bitmapX + PhotoCropView.this.bitmapWidth))) {
-                                PhotoCropView.this.rectX = ((float) (PhotoCropView.this.bitmapX + PhotoCropView.this.bitmapWidth)) - PhotoCropView.this.rectSizeX;
-                            }
-                            if (PhotoCropView.this.rectY < ((float) PhotoCropView.this.bitmapY)) {
-                                PhotoCropView.this.rectY = (float) PhotoCropView.this.bitmapY;
-                            } else if (PhotoCropView.this.rectY + PhotoCropView.this.rectSizeY > ((float) (PhotoCropView.this.bitmapY + PhotoCropView.this.bitmapHeight))) {
-                                PhotoCropView.this.rectY = ((float) (PhotoCropView.this.bitmapY + PhotoCropView.this.bitmapHeight)) - PhotoCropView.this.rectSizeY;
-                            }
-                        } else if (PhotoCropView.this.draggingState == 1) {
-                            if (PhotoCropView.this.rectSizeX - diffX < 160.0f) {
-                                diffX = PhotoCropView.this.rectSizeX - 160.0f;
-                            }
-                            if (PhotoCropView.this.rectX + diffX < ((float) PhotoCropView.this.bitmapX)) {
-                                diffX = ((float) PhotoCropView.this.bitmapX) - PhotoCropView.this.rectX;
-                            }
-                            if (PhotoCropView.this.freeform) {
-                                if (PhotoCropView.this.rectSizeY - diffY < 160.0f) {
-                                    diffY = PhotoCropView.this.rectSizeY - 160.0f;
-                                }
-                                if (PhotoCropView.this.rectY + diffY < ((float) PhotoCropView.this.bitmapY)) {
-                                    diffY = ((float) PhotoCropView.this.bitmapY) - PhotoCropView.this.rectY;
-                                }
-                                photoCropView = PhotoCropView.this;
-                                photoCropView.rectX += diffX;
-                                photoCropView = PhotoCropView.this;
-                                photoCropView.rectY += diffY;
-                                photoCropView = PhotoCropView.this;
-                                photoCropView.rectSizeX -= diffX;
-                                photoCropView = PhotoCropView.this;
-                                photoCropView.rectSizeY -= diffY;
-                            } else {
-                                if (PhotoCropView.this.rectY + diffX < ((float) PhotoCropView.this.bitmapY)) {
-                                    diffX = ((float) PhotoCropView.this.bitmapY) - PhotoCropView.this.rectY;
-                                }
-                                photoCropView = PhotoCropView.this;
-                                photoCropView.rectX += diffX;
-                                photoCropView = PhotoCropView.this;
-                                photoCropView.rectY += diffX;
-                                photoCropView = PhotoCropView.this;
-                                photoCropView.rectSizeX -= diffX;
-                                photoCropView = PhotoCropView.this;
-                                photoCropView.rectSizeY -= diffX;
-                            }
-                        } else if (PhotoCropView.this.draggingState == 2) {
-                            if (PhotoCropView.this.rectSizeX + diffX < 160.0f) {
-                                diffX = -(PhotoCropView.this.rectSizeX - 160.0f);
-                            }
-                            if ((PhotoCropView.this.rectX + PhotoCropView.this.rectSizeX) + diffX > ((float) (PhotoCropView.this.bitmapX + PhotoCropView.this.bitmapWidth))) {
-                                diffX = (((float) (PhotoCropView.this.bitmapX + PhotoCropView.this.bitmapWidth)) - PhotoCropView.this.rectX) - PhotoCropView.this.rectSizeX;
-                            }
-                            if (PhotoCropView.this.freeform) {
-                                if (PhotoCropView.this.rectSizeY - diffY < 160.0f) {
-                                    diffY = PhotoCropView.this.rectSizeY - 160.0f;
-                                }
-                                if (PhotoCropView.this.rectY + diffY < ((float) PhotoCropView.this.bitmapY)) {
-                                    diffY = ((float) PhotoCropView.this.bitmapY) - PhotoCropView.this.rectY;
-                                }
-                                photoCropView = PhotoCropView.this;
-                                photoCropView.rectY += diffY;
-                                photoCropView = PhotoCropView.this;
-                                photoCropView.rectSizeX += diffX;
-                                photoCropView = PhotoCropView.this;
-                                photoCropView.rectSizeY -= diffY;
-                            } else {
-                                if (PhotoCropView.this.rectY - diffX < ((float) PhotoCropView.this.bitmapY)) {
-                                    diffX = PhotoCropView.this.rectY - ((float) PhotoCropView.this.bitmapY);
-                                }
-                                photoCropView = PhotoCropView.this;
-                                photoCropView.rectY -= diffX;
-                                photoCropView = PhotoCropView.this;
-                                photoCropView.rectSizeX += diffX;
-                                photoCropView = PhotoCropView.this;
-                                photoCropView.rectSizeY += diffX;
-                            }
-                        } else if (PhotoCropView.this.draggingState == 3) {
-                            if (PhotoCropView.this.rectSizeX - diffX < 160.0f) {
-                                diffX = PhotoCropView.this.rectSizeX - 160.0f;
-                            }
-                            if (PhotoCropView.this.rectX + diffX < ((float) PhotoCropView.this.bitmapX)) {
-                                diffX = ((float) PhotoCropView.this.bitmapX) - PhotoCropView.this.rectX;
-                            }
-                            if (PhotoCropView.this.freeform) {
-                                if ((PhotoCropView.this.rectY + PhotoCropView.this.rectSizeY) + diffY > ((float) (PhotoCropView.this.bitmapY + PhotoCropView.this.bitmapHeight))) {
-                                    diffY = (((float) (PhotoCropView.this.bitmapY + PhotoCropView.this.bitmapHeight)) - PhotoCropView.this.rectY) - PhotoCropView.this.rectSizeY;
-                                }
-                                photoCropView = PhotoCropView.this;
-                                photoCropView.rectX += diffX;
-                                photoCropView = PhotoCropView.this;
-                                photoCropView.rectSizeX -= diffX;
-                                photoCropView = PhotoCropView.this;
-                                photoCropView.rectSizeY += diffY;
-                                if (PhotoCropView.this.rectSizeY < 160.0f) {
-                                    PhotoCropView.this.rectSizeY = 160.0f;
-                                }
-                            } else {
-                                if ((PhotoCropView.this.rectY + PhotoCropView.this.rectSizeX) - diffX > ((float) (PhotoCropView.this.bitmapY + PhotoCropView.this.bitmapHeight))) {
-                                    diffX = ((PhotoCropView.this.rectY + PhotoCropView.this.rectSizeX) - ((float) PhotoCropView.this.bitmapY)) - ((float) PhotoCropView.this.bitmapHeight);
-                                }
-                                photoCropView = PhotoCropView.this;
-                                photoCropView.rectX += diffX;
-                                photoCropView = PhotoCropView.this;
-                                photoCropView.rectSizeX -= diffX;
-                                photoCropView = PhotoCropView.this;
-                                photoCropView.rectSizeY -= diffX;
-                            }
-                        } else if (PhotoCropView.this.draggingState == 4) {
-                            if ((PhotoCropView.this.rectX + PhotoCropView.this.rectSizeX) + diffX > ((float) (PhotoCropView.this.bitmapX + PhotoCropView.this.bitmapWidth))) {
-                                diffX = (((float) (PhotoCropView.this.bitmapX + PhotoCropView.this.bitmapWidth)) - PhotoCropView.this.rectX) - PhotoCropView.this.rectSizeX;
-                            }
-                            if (PhotoCropView.this.freeform) {
-                                if ((PhotoCropView.this.rectY + PhotoCropView.this.rectSizeY) + diffY > ((float) (PhotoCropView.this.bitmapY + PhotoCropView.this.bitmapHeight))) {
-                                    diffY = (((float) (PhotoCropView.this.bitmapY + PhotoCropView.this.bitmapHeight)) - PhotoCropView.this.rectY) - PhotoCropView.this.rectSizeY;
-                                }
-                                photoCropView = PhotoCropView.this;
-                                photoCropView.rectSizeX += diffX;
-                                photoCropView = PhotoCropView.this;
-                                photoCropView.rectSizeY += diffY;
-                            } else {
-                                if ((PhotoCropView.this.rectY + PhotoCropView.this.rectSizeX) + diffX > ((float) (PhotoCropView.this.bitmapY + PhotoCropView.this.bitmapHeight))) {
-                                    diffX = (((float) (PhotoCropView.this.bitmapY + PhotoCropView.this.bitmapHeight)) - PhotoCropView.this.rectY) - PhotoCropView.this.rectSizeX;
-                                }
-                                photoCropView = PhotoCropView.this;
-                                photoCropView.rectSizeX += diffX;
-                                photoCropView = PhotoCropView.this;
-                                photoCropView.rectSizeY += diffX;
-                            }
-                            if (PhotoCropView.this.rectSizeX < 160.0f) {
-                                PhotoCropView.this.rectSizeX = 160.0f;
-                            }
-                            if (PhotoCropView.this.rectSizeY < 160.0f) {
-                                PhotoCropView.this.rectSizeY = 160.0f;
-                            }
-                        }
-                        PhotoCropView.this.oldX = x;
-                        PhotoCropView.this.oldY = y;
-                        PhotoCropView.this.invalidate();
-                    }
-                    return true;
+                /* JADX WARNING: Removed duplicated region for block: B:50:0x00d2  */
+                /* JADX WARNING: Removed duplicated region for block: B:50:0x00d2  */
+                /* JADX WARNING: Removed duplicated region for block: B:50:0x00d2  */
+                /* JADX WARNING: Removed duplicated region for block: B:50:0x00d2  */
+                /* JADX WARNING: Removed duplicated region for block: B:50:0x00d2  */
+                public boolean onTouch(android.view.View r12, android.view.MotionEvent r13) {
+                    /*
+                    r11 = this;
+                    r12 = r13.getX();
+                    r0 = r13.getY();
+                    r1 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
+                    r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
+                    r2 = r13.getAction();
+                    r3 = 4;
+                    r4 = 3;
+                    r5 = 5;
+                    r6 = 0;
+                    r7 = 2;
+                    r8 = 1;
+                    if (r2 != 0) goto L_0x00dd;
+                L_0x001a:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r2 = r13.rectX;
+                    r1 = (float) r1;
+                    r9 = r2 - r1;
+                    r9 = (r9 > r12 ? 1 : (r9 == r12 ? 0 : -1));
+                    if (r9 >= 0) goto L_0x003b;
+                L_0x0025:
+                    r2 = r2 + r1;
+                    r2 = (r2 > r12 ? 1 : (r2 == r12 ? 0 : -1));
+                    if (r2 <= 0) goto L_0x003b;
+                L_0x002a:
+                    r2 = r13.rectY;
+                    r9 = r2 - r1;
+                    r9 = (r9 > r0 ? 1 : (r9 == r0 ? 0 : -1));
+                    if (r9 >= 0) goto L_0x003b;
+                L_0x0032:
+                    r2 = r2 + r1;
+                    r2 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1));
+                    if (r2 <= 0) goto L_0x003b;
+                L_0x0037:
+                    r13.draggingState = r8;
+                    goto L_0x00cc;
+                L_0x003b:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r2 = r13.rectX;
+                    r9 = r2 - r1;
+                    r10 = r13.rectSizeX;
+                    r9 = r9 + r10;
+                    r9 = (r9 > r12 ? 1 : (r9 == r12 ? 0 : -1));
+                    if (r9 >= 0) goto L_0x005f;
+                L_0x0048:
+                    r2 = r2 + r1;
+                    r2 = r2 + r10;
+                    r2 = (r2 > r12 ? 1 : (r2 == r12 ? 0 : -1));
+                    if (r2 <= 0) goto L_0x005f;
+                L_0x004e:
+                    r2 = r13.rectY;
+                    r9 = r2 - r1;
+                    r9 = (r9 > r0 ? 1 : (r9 == r0 ? 0 : -1));
+                    if (r9 >= 0) goto L_0x005f;
+                L_0x0056:
+                    r2 = r2 + r1;
+                    r2 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1));
+                    if (r2 <= 0) goto L_0x005f;
+                L_0x005b:
+                    r13.draggingState = r7;
+                    goto L_0x00cc;
+                L_0x005f:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r2 = r13.rectX;
+                    r7 = r2 - r1;
+                    r7 = (r7 > r12 ? 1 : (r7 == r12 ? 0 : -1));
+                    if (r7 >= 0) goto L_0x0082;
+                L_0x0069:
+                    r2 = r2 + r1;
+                    r2 = (r2 > r12 ? 1 : (r2 == r12 ? 0 : -1));
+                    if (r2 <= 0) goto L_0x0082;
+                L_0x006e:
+                    r2 = r13.rectY;
+                    r7 = r2 - r1;
+                    r9 = r13.rectSizeY;
+                    r7 = r7 + r9;
+                    r7 = (r7 > r0 ? 1 : (r7 == r0 ? 0 : -1));
+                    if (r7 >= 0) goto L_0x0082;
+                L_0x0079:
+                    r2 = r2 + r1;
+                    r2 = r2 + r9;
+                    r2 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1));
+                    if (r2 <= 0) goto L_0x0082;
+                L_0x007f:
+                    r13.draggingState = r4;
+                    goto L_0x00cc;
+                L_0x0082:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r2 = r13.rectX;
+                    r4 = r2 - r1;
+                    r7 = r13.rectSizeX;
+                    r4 = r4 + r7;
+                    r4 = (r4 > r12 ? 1 : (r4 == r12 ? 0 : -1));
+                    if (r4 >= 0) goto L_0x00a9;
+                L_0x008f:
+                    r2 = r2 + r1;
+                    r2 = r2 + r7;
+                    r2 = (r2 > r12 ? 1 : (r2 == r12 ? 0 : -1));
+                    if (r2 <= 0) goto L_0x00a9;
+                L_0x0095:
+                    r2 = r13.rectY;
+                    r4 = r2 - r1;
+                    r7 = r13.rectSizeY;
+                    r4 = r4 + r7;
+                    r4 = (r4 > r0 ? 1 : (r4 == r0 ? 0 : -1));
+                    if (r4 >= 0) goto L_0x00a9;
+                L_0x00a0:
+                    r2 = r2 + r1;
+                    r2 = r2 + r7;
+                    r1 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1));
+                    if (r1 <= 0) goto L_0x00a9;
+                L_0x00a6:
+                    r13.draggingState = r3;
+                    goto L_0x00cc;
+                L_0x00a9:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r1 = r13.rectX;
+                    r2 = (r1 > r12 ? 1 : (r1 == r12 ? 0 : -1));
+                    if (r2 >= 0) goto L_0x00c8;
+                L_0x00b1:
+                    r2 = r13.rectSizeX;
+                    r1 = r1 + r2;
+                    r1 = (r1 > r12 ? 1 : (r1 == r12 ? 0 : -1));
+                    if (r1 <= 0) goto L_0x00c8;
+                L_0x00b8:
+                    r1 = r13.rectY;
+                    r2 = (r1 > r0 ? 1 : (r1 == r0 ? 0 : -1));
+                    if (r2 >= 0) goto L_0x00c8;
+                L_0x00be:
+                    r2 = r13.rectSizeY;
+                    r1 = r1 + r2;
+                    r1 = (r1 > r0 ? 1 : (r1 == r0 ? 0 : -1));
+                    if (r1 <= 0) goto L_0x00c8;
+                L_0x00c5:
+                    r13.draggingState = r5;
+                    goto L_0x00cc;
+                L_0x00c8:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r13.draggingState = r6;
+                L_0x00cc:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r1 = r13.draggingState;
+                    if (r1 == 0) goto L_0x00d5;
+                L_0x00d2:
+                    r13.requestDisallowInterceptTouchEvent(r8);
+                L_0x00d5:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r13.oldX = r12;
+                    r13.oldY = r0;
+                    goto L_0x0341;
+                L_0x00dd:
+                    r1 = r13.getAction();
+                    if (r1 != r8) goto L_0x00e9;
+                L_0x00e3:
+                    r12 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r12.draggingState = r6;
+                    goto L_0x0341;
+                L_0x00e9:
+                    r13 = r13.getAction();
+                    if (r13 != r7) goto L_0x0341;
+                L_0x00ef:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r1 = r13.draggingState;
+                    if (r1 == 0) goto L_0x0341;
+                L_0x00f5:
+                    r2 = r13.oldX;
+                    r2 = r12 - r2;
+                    r6 = r13.oldY;
+                    r6 = r0 - r6;
+                    if (r1 != r5) goto L_0x014a;
+                L_0x00ff:
+                    r1 = r13.rectX;
+                    r1 = r1 + r2;
+                    r13.rectX = r1;
+                    r1 = r13.rectY;
+                    r1 = r1 + r6;
+                    r13.rectY = r1;
+                    r1 = r13.rectX;
+                    r2 = r13.bitmapX;
+                    r3 = (float) r2;
+                    r3 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1));
+                    if (r3 >= 0) goto L_0x0116;
+                L_0x0112:
+                    r1 = (float) r2;
+                    r13.rectX = r1;
+                    goto L_0x0127;
+                L_0x0116:
+                    r3 = r13.rectSizeX;
+                    r1 = r1 + r3;
+                    r4 = r13.bitmapWidth;
+                    r5 = r2 + r4;
+                    r5 = (float) r5;
+                    r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1));
+                    if (r1 <= 0) goto L_0x0127;
+                L_0x0122:
+                    r2 = r2 + r4;
+                    r1 = (float) r2;
+                    r1 = r1 - r3;
+                    r13.rectX = r1;
+                L_0x0127:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r1 = r13.rectY;
+                    r2 = r13.bitmapY;
+                    r3 = (float) r2;
+                    r3 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1));
+                    if (r3 >= 0) goto L_0x0137;
+                L_0x0132:
+                    r1 = (float) r2;
+                    r13.rectY = r1;
+                    goto L_0x0338;
+                L_0x0137:
+                    r3 = r13.rectSizeY;
+                    r1 = r1 + r3;
+                    r4 = r13.bitmapHeight;
+                    r5 = r2 + r4;
+                    r5 = (float) r5;
+                    r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1));
+                    if (r1 <= 0) goto L_0x0338;
+                L_0x0143:
+                    r2 = r2 + r4;
+                    r1 = (float) r2;
+                    r1 = r1 - r3;
+                    r13.rectY = r1;
+                    goto L_0x0338;
+                L_0x014a:
+                    r5 = NUM; // 0x43200000 float:160.0 double:5.564022167E-315;
+                    if (r1 != r8) goto L_0x01c6;
+                L_0x014e:
+                    r13 = r13.rectSizeX;
+                    r1 = r13 - r2;
+                    r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1));
+                    if (r1 >= 0) goto L_0x0158;
+                L_0x0156:
+                    r2 = r13 - r5;
+                L_0x0158:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r1 = r13.rectX;
+                    r3 = r1 + r2;
+                    r13 = r13.bitmapX;
+                    r4 = (float) r13;
+                    r3 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1));
+                    if (r3 >= 0) goto L_0x0168;
+                L_0x0165:
+                    r13 = (float) r13;
+                    r2 = r13 - r1;
+                L_0x0168:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r1 = r13.freeform;
+                    if (r1 != 0) goto L_0x0194;
+                L_0x016e:
+                    r1 = r13.rectY;
+                    r3 = r1 + r2;
+                    r13 = r13.bitmapY;
+                    r4 = (float) r13;
+                    r3 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1));
+                    if (r3 >= 0) goto L_0x017c;
+                L_0x0179:
+                    r13 = (float) r13;
+                    r2 = r13 - r1;
+                L_0x017c:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r1 = r13.rectX;
+                    r1 = r1 + r2;
+                    r13.rectX = r1;
+                    r1 = r13.rectY;
+                    r1 = r1 + r2;
+                    r13.rectY = r1;
+                    r1 = r13.rectSizeX;
+                    r1 = r1 - r2;
+                    r13.rectSizeX = r1;
+                    r1 = r13.rectSizeY;
+                    r1 = r1 - r2;
+                    r13.rectSizeY = r1;
+                    goto L_0x0338;
+                L_0x0194:
+                    r13 = r13.rectSizeY;
+                    r1 = r13 - r6;
+                    r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1));
+                    if (r1 >= 0) goto L_0x019e;
+                L_0x019c:
+                    r6 = r13 - r5;
+                L_0x019e:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r1 = r13.rectY;
+                    r3 = r1 + r6;
+                    r13 = r13.bitmapY;
+                    r4 = (float) r13;
+                    r3 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1));
+                    if (r3 >= 0) goto L_0x01ae;
+                L_0x01ab:
+                    r13 = (float) r13;
+                    r6 = r13 - r1;
+                L_0x01ae:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r1 = r13.rectX;
+                    r1 = r1 + r2;
+                    r13.rectX = r1;
+                    r1 = r13.rectY;
+                    r1 = r1 + r6;
+                    r13.rectY = r1;
+                    r1 = r13.rectSizeX;
+                    r1 = r1 - r2;
+                    r13.rectSizeX = r1;
+                    r1 = r13.rectSizeY;
+                    r1 = r1 - r6;
+                    r13.rectSizeY = r1;
+                    goto L_0x0338;
+                L_0x01c6:
+                    if (r1 != r7) goto L_0x023f;
+                L_0x01c8:
+                    r13 = r13.rectSizeX;
+                    r1 = r13 + r2;
+                    r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1));
+                    if (r1 >= 0) goto L_0x01d2;
+                L_0x01d0:
+                    r13 = r13 - r5;
+                    r2 = -r13;
+                L_0x01d2:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r1 = r13.rectX;
+                    r3 = r13.rectSizeX;
+                    r4 = r1 + r3;
+                    r4 = r4 + r2;
+                    r7 = r13.bitmapX;
+                    r13 = r13.bitmapWidth;
+                    r9 = r7 + r13;
+                    r9 = (float) r9;
+                    r4 = (r4 > r9 ? 1 : (r4 == r9 ? 0 : -1));
+                    if (r4 <= 0) goto L_0x01eb;
+                L_0x01e6:
+                    r7 = r7 + r13;
+                    r13 = (float) r7;
+                    r13 = r13 - r1;
+                    r2 = r13 - r3;
+                L_0x01eb:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r1 = r13.freeform;
+                    if (r1 != 0) goto L_0x0212;
+                L_0x01f1:
+                    r1 = r13.rectY;
+                    r3 = r1 - r2;
+                    r13 = r13.bitmapY;
+                    r4 = (float) r13;
+                    r3 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1));
+                    if (r3 >= 0) goto L_0x01ff;
+                L_0x01fc:
+                    r13 = (float) r13;
+                    r2 = r1 - r13;
+                L_0x01ff:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r1 = r13.rectY;
+                    r1 = r1 - r2;
+                    r13.rectY = r1;
+                    r1 = r13.rectSizeX;
+                    r1 = r1 + r2;
+                    r13.rectSizeX = r1;
+                    r1 = r13.rectSizeY;
+                    r1 = r1 + r2;
+                    r13.rectSizeY = r1;
+                    goto L_0x0338;
+                L_0x0212:
+                    r13 = r13.rectSizeY;
+                    r1 = r13 - r6;
+                    r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1));
+                    if (r1 >= 0) goto L_0x021c;
+                L_0x021a:
+                    r6 = r13 - r5;
+                L_0x021c:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r1 = r13.rectY;
+                    r3 = r1 + r6;
+                    r13 = r13.bitmapY;
+                    r4 = (float) r13;
+                    r3 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1));
+                    if (r3 >= 0) goto L_0x022c;
+                L_0x0229:
+                    r13 = (float) r13;
+                    r6 = r13 - r1;
+                L_0x022c:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r1 = r13.rectY;
+                    r1 = r1 + r6;
+                    r13.rectY = r1;
+                    r1 = r13.rectSizeX;
+                    r1 = r1 + r2;
+                    r13.rectSizeX = r1;
+                    r1 = r13.rectSizeY;
+                    r1 = r1 - r6;
+                    r13.rectSizeY = r1;
+                    goto L_0x0338;
+                L_0x023f:
+                    if (r1 != r4) goto L_0x02be;
+                L_0x0241:
+                    r13 = r13.rectSizeX;
+                    r1 = r13 - r2;
+                    r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1));
+                    if (r1 >= 0) goto L_0x024b;
+                L_0x0249:
+                    r2 = r13 - r5;
+                L_0x024b:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r1 = r13.rectX;
+                    r3 = r1 + r2;
+                    r13 = r13.bitmapX;
+                    r4 = (float) r13;
+                    r3 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1));
+                    if (r3 >= 0) goto L_0x025b;
+                L_0x0258:
+                    r13 = (float) r13;
+                    r2 = r13 - r1;
+                L_0x025b:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r1 = r13.freeform;
+                    if (r1 != 0) goto L_0x028c;
+                L_0x0261:
+                    r1 = r13.rectY;
+                    r3 = r13.rectSizeX;
+                    r4 = r1 + r3;
+                    r4 = r4 - r2;
+                    r5 = r13.bitmapY;
+                    r13 = r13.bitmapHeight;
+                    r6 = r5 + r13;
+                    r6 = (float) r6;
+                    r4 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1));
+                    if (r4 <= 0) goto L_0x0279;
+                L_0x0273:
+                    r1 = r1 + r3;
+                    r2 = (float) r5;
+                    r1 = r1 - r2;
+                    r13 = (float) r13;
+                    r2 = r1 - r13;
+                L_0x0279:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r1 = r13.rectX;
+                    r1 = r1 + r2;
+                    r13.rectX = r1;
+                    r1 = r13.rectSizeX;
+                    r1 = r1 - r2;
+                    r13.rectSizeX = r1;
+                    r1 = r13.rectSizeY;
+                    r1 = r1 - r2;
+                    r13.rectSizeY = r1;
+                    goto L_0x0338;
+                L_0x028c:
+                    r1 = r13.rectY;
+                    r3 = r13.rectSizeY;
+                    r4 = r1 + r3;
+                    r4 = r4 + r6;
+                    r7 = r13.bitmapY;
+                    r13 = r13.bitmapHeight;
+                    r9 = r7 + r13;
+                    r9 = (float) r9;
+                    r4 = (r4 > r9 ? 1 : (r4 == r9 ? 0 : -1));
+                    if (r4 <= 0) goto L_0x02a3;
+                L_0x029e:
+                    r7 = r7 + r13;
+                    r13 = (float) r7;
+                    r13 = r13 - r1;
+                    r6 = r13 - r3;
+                L_0x02a3:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r1 = r13.rectX;
+                    r1 = r1 + r2;
+                    r13.rectX = r1;
+                    r1 = r13.rectSizeX;
+                    r1 = r1 - r2;
+                    r13.rectSizeX = r1;
+                    r1 = r13.rectSizeY;
+                    r1 = r1 + r6;
+                    r13.rectSizeY = r1;
+                    r1 = r13.rectSizeY;
+                    r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1));
+                    if (r1 >= 0) goto L_0x0338;
+                L_0x02ba:
+                    r13.rectSizeY = r5;
+                    goto L_0x0338;
+                L_0x02be:
+                    if (r1 != r3) goto L_0x0338;
+                L_0x02c0:
+                    r1 = r13.rectX;
+                    r3 = r13.rectSizeX;
+                    r4 = r1 + r3;
+                    r4 = r4 + r2;
+                    r7 = r13.bitmapX;
+                    r13 = r13.bitmapWidth;
+                    r9 = r7 + r13;
+                    r9 = (float) r9;
+                    r4 = (r4 > r9 ? 1 : (r4 == r9 ? 0 : -1));
+                    if (r4 <= 0) goto L_0x02d7;
+                L_0x02d2:
+                    r7 = r7 + r13;
+                    r13 = (float) r7;
+                    r13 = r13 - r1;
+                    r2 = r13 - r3;
+                L_0x02d7:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r1 = r13.freeform;
+                    if (r1 != 0) goto L_0x0301;
+                L_0x02dd:
+                    r1 = r13.rectY;
+                    r3 = r13.rectSizeX;
+                    r4 = r1 + r3;
+                    r4 = r4 + r2;
+                    r6 = r13.bitmapY;
+                    r13 = r13.bitmapHeight;
+                    r7 = r6 + r13;
+                    r7 = (float) r7;
+                    r4 = (r4 > r7 ? 1 : (r4 == r7 ? 0 : -1));
+                    if (r4 <= 0) goto L_0x02f4;
+                L_0x02ef:
+                    r6 = r6 + r13;
+                    r13 = (float) r6;
+                    r13 = r13 - r1;
+                    r2 = r13 - r3;
+                L_0x02f4:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r1 = r13.rectSizeX;
+                    r1 = r1 + r2;
+                    r13.rectSizeX = r1;
+                    r1 = r13.rectSizeY;
+                    r1 = r1 + r2;
+                    r13.rectSizeY = r1;
+                    goto L_0x0324;
+                L_0x0301:
+                    r1 = r13.rectY;
+                    r3 = r13.rectSizeY;
+                    r4 = r1 + r3;
+                    r4 = r4 + r6;
+                    r7 = r13.bitmapY;
+                    r13 = r13.bitmapHeight;
+                    r9 = r7 + r13;
+                    r9 = (float) r9;
+                    r4 = (r4 > r9 ? 1 : (r4 == r9 ? 0 : -1));
+                    if (r4 <= 0) goto L_0x0318;
+                L_0x0313:
+                    r7 = r7 + r13;
+                    r13 = (float) r7;
+                    r13 = r13 - r1;
+                    r6 = r13 - r3;
+                L_0x0318:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r1 = r13.rectSizeX;
+                    r1 = r1 + r2;
+                    r13.rectSizeX = r1;
+                    r1 = r13.rectSizeY;
+                    r1 = r1 + r6;
+                    r13.rectSizeY = r1;
+                L_0x0324:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r1 = r13.rectSizeX;
+                    r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1));
+                    if (r1 >= 0) goto L_0x032e;
+                L_0x032c:
+                    r13.rectSizeX = r5;
+                L_0x032e:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r1 = r13.rectSizeY;
+                    r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1));
+                    if (r1 >= 0) goto L_0x0338;
+                L_0x0336:
+                    r13.rectSizeY = r5;
+                L_0x0338:
+                    r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this;
+                    r13.oldX = r12;
+                    r13.oldY = r0;
+                    r13.invalidate();
+                L_0x0341:
+                    return r8;
+                    */
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoCropActivity$PhotoCropView$AnonymousClass1.onTouch(android.view.View, android.view.MotionEvent):boolean");
                 }
             });
         }
 
         private void updateBitmapSize() {
             if (this.viewWidth != 0 && this.viewHeight != 0 && PhotoCropActivity.this.imageToCrop != null) {
-                float percX = (this.rectX - ((float) this.bitmapX)) / ((float) this.bitmapWidth);
-                float percY = (this.rectY - ((float) this.bitmapY)) / ((float) this.bitmapHeight);
-                float percSizeX = this.rectSizeX / ((float) this.bitmapWidth);
-                float percSizeY = this.rectSizeY / ((float) this.bitmapHeight);
-                float w = (float) PhotoCropActivity.this.imageToCrop.getWidth();
-                float h = (float) PhotoCropActivity.this.imageToCrop.getHeight();
-                float scaleX = ((float) this.viewWidth) / w;
-                float scaleY = ((float) this.viewHeight) / h;
-                if (scaleX > scaleY) {
-                    this.bitmapHeight = this.viewHeight;
-                    this.bitmapWidth = (int) Math.ceil((double) (w * scaleY));
+                float f = this.rectX - ((float) this.bitmapX);
+                int i = this.bitmapWidth;
+                f /= (float) i;
+                float f2 = this.rectY - ((float) this.bitmapY);
+                int i2 = this.bitmapHeight;
+                f2 /= (float) i2;
+                float f3 = this.rectSizeX / ((float) i);
+                float f4 = this.rectSizeY / ((float) i2);
+                float width = (float) PhotoCropActivity.this.imageToCrop.getWidth();
+                float height = (float) PhotoCropActivity.this.imageToCrop.getHeight();
+                int i3 = this.viewWidth;
+                float f5 = ((float) i3) / width;
+                int i4 = this.viewHeight;
+                float f6 = ((float) i4) / height;
+                if (f5 > f6) {
+                    this.bitmapHeight = i4;
+                    this.bitmapWidth = (int) Math.ceil((double) (width * f6));
                 } else {
-                    this.bitmapWidth = this.viewWidth;
-                    this.bitmapHeight = (int) Math.ceil((double) (h * scaleX));
+                    this.bitmapWidth = i3;
+                    this.bitmapHeight = (int) Math.ceil((double) (height * f5));
                 }
                 this.bitmapX = ((this.viewWidth - this.bitmapWidth) / 2) + AndroidUtilities.dp(14.0f);
                 this.bitmapY = ((this.viewHeight - this.bitmapHeight) / 2) + AndroidUtilities.dp(14.0f);
+                int i5;
                 if (this.rectX != -1.0f || this.rectY != -1.0f) {
-                    this.rectX = (((float) this.bitmapWidth) * percX) + ((float) this.bitmapX);
-                    this.rectY = (((float) this.bitmapHeight) * percY) + ((float) this.bitmapY);
-                    this.rectSizeX = ((float) this.bitmapWidth) * percSizeX;
-                    this.rectSizeY = ((float) this.bitmapHeight) * percSizeY;
+                    i2 = this.bitmapWidth;
+                    this.rectX = (f * ((float) i2)) + ((float) this.bitmapX);
+                    i5 = this.bitmapHeight;
+                    this.rectY = (f2 * ((float) i5)) + ((float) this.bitmapY);
+                    this.rectSizeX = f3 * ((float) i2);
+                    this.rectSizeY = f4 * ((float) i5);
                 } else if (this.freeform) {
                     this.rectY = (float) this.bitmapY;
                     this.rectX = (float) this.bitmapX;
                     this.rectSizeX = (float) this.bitmapWidth;
                     this.rectSizeY = (float) this.bitmapHeight;
-                } else if (this.bitmapWidth > this.bitmapHeight) {
-                    this.rectY = (float) this.bitmapY;
-                    this.rectX = (float) (((this.viewWidth - this.bitmapHeight) / 2) + AndroidUtilities.dp(14.0f));
-                    this.rectSizeX = (float) this.bitmapHeight;
-                    this.rectSizeY = (float) this.bitmapHeight;
                 } else {
-                    this.rectX = (float) this.bitmapX;
-                    this.rectY = (float) (((this.viewHeight - this.bitmapWidth) / 2) + AndroidUtilities.dp(14.0f));
-                    this.rectSizeX = (float) this.bitmapWidth;
-                    this.rectSizeY = (float) this.bitmapWidth;
+                    i5 = this.bitmapWidth;
+                    i = this.bitmapHeight;
+                    if (i5 > i) {
+                        this.rectY = (float) this.bitmapY;
+                        this.rectX = (float) (((this.viewWidth - i) / 2) + AndroidUtilities.dp(14.0f));
+                        i5 = this.bitmapHeight;
+                        this.rectSizeX = (float) i5;
+                        this.rectSizeY = (float) i5;
+                    } else {
+                        this.rectX = (float) this.bitmapX;
+                        this.rectY = (float) (((this.viewHeight - i5) / 2) + AndroidUtilities.dp(14.0f));
+                        i5 = this.bitmapWidth;
+                        this.rectSizeX = (float) i5;
+                        this.rectSizeY = (float) i5;
+                    }
                 }
                 invalidate();
             }
         }
 
         /* Access modifiers changed, original: protected */
-        public void onLayout(boolean changed, int left, int top, int right, int bottom) {
-            super.onLayout(changed, left, top, right, bottom);
-            this.viewWidth = (right - left) - AndroidUtilities.dp(28.0f);
-            this.viewHeight = (bottom - top) - AndroidUtilities.dp(28.0f);
+        public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+            super.onLayout(z, i, i2, i3, i4);
+            this.viewWidth = (i3 - i) - AndroidUtilities.dp(28.0f);
+            this.viewHeight = (i4 - i2) - AndroidUtilities.dp(28.0f);
             updateBitmapSize();
         }
 
         public Bitmap getBitmap() {
-            int x = (int) (((float) PhotoCropActivity.this.imageToCrop.getWidth()) * ((this.rectX - ((float) this.bitmapX)) / ((float) this.bitmapWidth)));
-            int y = (int) (((float) PhotoCropActivity.this.imageToCrop.getHeight()) * ((this.rectY - ((float) this.bitmapY)) / ((float) this.bitmapHeight)));
-            int sizeX = (int) (((float) PhotoCropActivity.this.imageToCrop.getWidth()) * (this.rectSizeX / ((float) this.bitmapWidth)));
-            int sizeY = (int) (((float) PhotoCropActivity.this.imageToCrop.getWidth()) * (this.rectSizeY / ((float) this.bitmapWidth)));
-            if (x < 0) {
-                x = 0;
+            float f = this.rectX - ((float) this.bitmapX);
+            int i = this.bitmapWidth;
+            float f2 = this.rectSizeX / ((float) i);
+            float f3 = this.rectSizeY / ((float) i);
+            int width = (int) ((f / ((float) i)) * ((float) PhotoCropActivity.this.imageToCrop.getWidth()));
+            i = (int) (((this.rectY - ((float) this.bitmapY)) / ((float) this.bitmapHeight)) * ((float) PhotoCropActivity.this.imageToCrop.getHeight()));
+            int width2 = (int) (f2 * ((float) PhotoCropActivity.this.imageToCrop.getWidth()));
+            int width3 = (int) (f3 * ((float) PhotoCropActivity.this.imageToCrop.getWidth()));
+            if (width < 0) {
+                width = 0;
             }
-            if (y < 0) {
-                y = 0;
+            if (i < 0) {
+                i = 0;
             }
-            if (x + sizeX > PhotoCropActivity.this.imageToCrop.getWidth()) {
-                sizeX = PhotoCropActivity.this.imageToCrop.getWidth() - x;
+            if (width + width2 > PhotoCropActivity.this.imageToCrop.getWidth()) {
+                width2 = PhotoCropActivity.this.imageToCrop.getWidth() - width;
             }
-            if (y + sizeY > PhotoCropActivity.this.imageToCrop.getHeight()) {
-                sizeY = PhotoCropActivity.this.imageToCrop.getHeight() - y;
+            if (i + width3 > PhotoCropActivity.this.imageToCrop.getHeight()) {
+                width3 = PhotoCropActivity.this.imageToCrop.getHeight() - i;
             }
             try {
-                return Bitmaps.createBitmap(PhotoCropActivity.this.imageToCrop, x, y, sizeX, sizeY);
-            } catch (Throwable e2) {
-                FileLog.e(e2);
+                width = Bitmaps.createBitmap(PhotoCropActivity.this.imageToCrop, width, i, width2, width3);
+                return width;
+            } catch (Throwable th) {
+                FileLog.e(th);
                 return null;
             }
         }
 
         /* Access modifiers changed, original: protected */
-        public void onDraw(Canvas canvas) {
-            if (PhotoCropActivity.this.drawable != null) {
-                try {
-                    PhotoCropActivity.this.drawable.setBounds(this.bitmapX, this.bitmapY, this.bitmapX + this.bitmapWidth, this.bitmapY + this.bitmapHeight);
-                    PhotoCropActivity.this.drawable.draw(canvas);
-                } catch (Throwable e) {
-                    FileLog.e(e);
-                }
-            }
-            canvas.drawRect((float) this.bitmapX, (float) this.bitmapY, (float) (this.bitmapX + this.bitmapWidth), this.rectY, this.halfPaint);
-            Canvas canvas2 = canvas;
-            canvas2.drawRect((float) this.bitmapX, this.rectY, this.rectX, this.rectSizeY + this.rectY, this.halfPaint);
-            canvas2 = canvas;
-            canvas2.drawRect(this.rectSizeX + this.rectX, this.rectY, (float) (this.bitmapX + this.bitmapWidth), this.rectSizeY + this.rectY, this.halfPaint);
-            canvas2 = canvas;
-            canvas2.drawRect((float) this.bitmapX, this.rectSizeY + this.rectY, (float) (this.bitmapX + this.bitmapWidth), (float) (this.bitmapY + this.bitmapHeight), this.halfPaint);
-            canvas2 = canvas;
-            canvas2.drawRect(this.rectX, this.rectY, this.rectSizeX + this.rectX, this.rectSizeY + this.rectY, this.rectPaint);
-            int side = AndroidUtilities.dp(1.0f);
-            canvas2 = canvas;
-            canvas2.drawRect(((float) side) + this.rectX, ((float) side) + this.rectY, ((float) AndroidUtilities.dp(20.0f)) + (this.rectX + ((float) side)), ((float) (side * 3)) + this.rectY, this.circlePaint);
-            canvas2 = canvas;
-            canvas2.drawRect(((float) side) + this.rectX, ((float) side) + this.rectY, ((float) (side * 3)) + this.rectX, ((float) AndroidUtilities.dp(20.0f)) + (this.rectY + ((float) side)), this.circlePaint);
-            canvas2 = canvas;
-            canvas2.drawRect(((this.rectX + this.rectSizeX) - ((float) side)) - ((float) AndroidUtilities.dp(20.0f)), ((float) side) + this.rectY, (this.rectX + this.rectSizeX) - ((float) side), ((float) (side * 3)) + this.rectY, this.circlePaint);
-            canvas2 = canvas;
-            canvas2.drawRect((this.rectX + this.rectSizeX) - ((float) (side * 3)), ((float) side) + this.rectY, (this.rectX + this.rectSizeX) - ((float) side), ((float) AndroidUtilities.dp(20.0f)) + (this.rectY + ((float) side)), this.circlePaint);
-            canvas2 = canvas;
-            canvas2.drawRect(((float) side) + this.rectX, ((this.rectY + this.rectSizeY) - ((float) side)) - ((float) AndroidUtilities.dp(20.0f)), ((float) (side * 3)) + this.rectX, (this.rectY + this.rectSizeY) - ((float) side), this.circlePaint);
-            canvas2 = canvas;
-            canvas2.drawRect(((float) side) + this.rectX, (this.rectY + this.rectSizeY) - ((float) (side * 3)), ((float) AndroidUtilities.dp(20.0f)) + (this.rectX + ((float) side)), (this.rectY + this.rectSizeY) - ((float) side), this.circlePaint);
-            canvas.drawRect(((this.rectX + this.rectSizeX) - ((float) side)) - ((float) AndroidUtilities.dp(20.0f)), (this.rectY + this.rectSizeY) - ((float) (side * 3)), (this.rectX + this.rectSizeX) - ((float) side), (this.rectY + this.rectSizeY) - ((float) side), this.circlePaint);
-            canvas.drawRect((this.rectX + this.rectSizeX) - ((float) (side * 3)), ((this.rectY + this.rectSizeY) - ((float) side)) - ((float) AndroidUtilities.dp(20.0f)), (this.rectX + this.rectSizeX) - ((float) side), (this.rectY + this.rectSizeY) - ((float) side), this.circlePaint);
-            for (int a = 1; a < 3; a++) {
-                canvas2 = canvas;
-                canvas2.drawRect(((this.rectSizeX / 3.0f) * ((float) a)) + this.rectX, ((float) side) + this.rectY, ((this.rectSizeX / 3.0f) * ((float) a)) + (this.rectX + ((float) side)), (this.rectY + this.rectSizeY) - ((float) side), this.circlePaint);
-                canvas2 = canvas;
-                canvas2.drawRect(((float) side) + this.rectX, ((this.rectSizeY / 3.0f) * ((float) a)) + this.rectY, this.rectSizeX + (this.rectX - ((float) side)), ((float) side) + (this.rectY + ((this.rectSizeY / 3.0f) * ((float) a))), this.circlePaint);
-            }
+        /* JADX WARNING: Removed duplicated region for block: B:14:0x01b8 A:{LOOP_END, LOOP:0: B:13:0x01b6->B:14:0x01b8} */
+        public void onDraw(android.graphics.Canvas r16) {
+            /*
+            r15 = this;
+            r1 = r15;
+            r0 = org.telegram.ui.PhotoCropActivity.this;
+            r0 = r0.drawable;
+            if (r0 == 0) goto L_0x0035;
+        L_0x0009:
+            r0 = org.telegram.ui.PhotoCropActivity.this;	 Catch:{ Throwable -> 0x002e }
+            r0 = r0.drawable;	 Catch:{ Throwable -> 0x002e }
+            r2 = r1.bitmapX;	 Catch:{ Throwable -> 0x002e }
+            r3 = r1.bitmapY;	 Catch:{ Throwable -> 0x002e }
+            r4 = r1.bitmapX;	 Catch:{ Throwable -> 0x002e }
+            r5 = r1.bitmapWidth;	 Catch:{ Throwable -> 0x002e }
+            r4 = r4 + r5;
+            r5 = r1.bitmapY;	 Catch:{ Throwable -> 0x002e }
+            r6 = r1.bitmapHeight;	 Catch:{ Throwable -> 0x002e }
+            r5 = r5 + r6;
+            r0.setBounds(r2, r3, r4, r5);	 Catch:{ Throwable -> 0x002e }
+            r0 = org.telegram.ui.PhotoCropActivity.this;	 Catch:{ Throwable -> 0x002e }
+            r0 = r0.drawable;	 Catch:{ Throwable -> 0x002e }
+            r8 = r16;
+            r0.draw(r8);	 Catch:{ Throwable -> 0x002c }
+            goto L_0x0037;
+        L_0x002c:
+            r0 = move-exception;
+            goto L_0x0031;
+        L_0x002e:
+            r0 = move-exception;
+            r8 = r16;
+        L_0x0031:
+            org.telegram.messenger.FileLog.e(r0);
+            goto L_0x0037;
+        L_0x0035:
+            r8 = r16;
+        L_0x0037:
+            r0 = r1.bitmapX;
+            r3 = (float) r0;
+            r2 = r1.bitmapY;
+            r4 = (float) r2;
+            r2 = r1.bitmapWidth;
+            r0 = r0 + r2;
+            r5 = (float) r0;
+            r6 = r1.rectY;
+            r7 = r1.halfPaint;
+            r2 = r16;
+            r2.drawRect(r3, r4, r5, r6, r7);
+            r0 = r1.bitmapX;
+            r3 = (float) r0;
+            r4 = r1.rectY;
+            r5 = r1.rectX;
+            r0 = r1.rectSizeY;
+            r6 = r4 + r0;
+            r7 = r1.halfPaint;
+            r2.drawRect(r3, r4, r5, r6, r7);
+            r0 = r1.rectX;
+            r2 = r1.rectSizeX;
+            r3 = r0 + r2;
+            r4 = r1.rectY;
+            r0 = r1.bitmapX;
+            r2 = r1.bitmapWidth;
+            r0 = r0 + r2;
+            r5 = (float) r0;
+            r0 = r1.rectSizeY;
+            r6 = r4 + r0;
+            r7 = r1.halfPaint;
+            r2 = r16;
+            r2.drawRect(r3, r4, r5, r6, r7);
+            r0 = r1.bitmapX;
+            r3 = (float) r0;
+            r2 = r1.rectY;
+            r4 = r1.rectSizeY;
+            r4 = r4 + r2;
+            r2 = r1.bitmapWidth;
+            r0 = r0 + r2;
+            r5 = (float) r0;
+            r0 = r1.bitmapY;
+            r2 = r1.bitmapHeight;
+            r0 = r0 + r2;
+            r6 = (float) r0;
+            r7 = r1.halfPaint;
+            r2 = r16;
+            r2.drawRect(r3, r4, r5, r6, r7);
+            r3 = r1.rectX;
+            r4 = r1.rectY;
+            r0 = r1.rectSizeX;
+            r5 = r3 + r0;
+            r0 = r1.rectSizeY;
+            r6 = r4 + r0;
+            r7 = r1.rectPaint;
+            r2.drawRect(r3, r4, r5, r6, r7);
+            r0 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+            r0 = org.telegram.messenger.AndroidUtilities.dp(r0);
+            r2 = r1.rectX;
+            r9 = (float) r0;
+            r3 = r2 + r9;
+            r4 = r1.rectY;
+            r4 = r4 + r9;
+            r2 = r2 + r9;
+            r10 = NUM; // 0x41a00000 float:20.0 double:5.439686476E-315;
+            r5 = org.telegram.messenger.AndroidUtilities.dp(r10);
+            r5 = (float) r5;
+            r5 = r5 + r2;
+            r2 = r1.rectY;
+            r11 = 3;
+            r0 = r0 * 3;
+            r0 = (float) r0;
+            r6 = r2 + r0;
+            r7 = r1.circlePaint;
+            r2 = r16;
+            r2.drawRect(r3, r4, r5, r6, r7);
+            r2 = r1.rectX;
+            r3 = r2 + r9;
+            r4 = r1.rectY;
+            r5 = r4 + r9;
+            r6 = r2 + r0;
+            r4 = r4 + r9;
+            r2 = org.telegram.messenger.AndroidUtilities.dp(r10);
+            r2 = (float) r2;
+            r7 = r4 + r2;
+            r12 = r1.circlePaint;
+            r2 = r16;
+            r4 = r5;
+            r5 = r6;
+            r6 = r7;
+            r7 = r12;
+            r2.drawRect(r3, r4, r5, r6, r7);
+            r2 = r1.rectX;
+            r3 = r1.rectSizeX;
+            r2 = r2 + r3;
+            r2 = r2 - r9;
+            r3 = org.telegram.messenger.AndroidUtilities.dp(r10);
+            r3 = (float) r3;
+            r3 = r2 - r3;
+            r2 = r1.rectY;
+            r4 = r2 + r9;
+            r5 = r1.rectX;
+            r6 = r1.rectSizeX;
+            r5 = r5 + r6;
+            r5 = r5 - r9;
+            r6 = r2 + r0;
+            r7 = r1.circlePaint;
+            r2 = r16;
+            r2.drawRect(r3, r4, r5, r6, r7);
+            r2 = r1.rectX;
+            r3 = r1.rectSizeX;
+            r4 = r2 + r3;
+            r4 = r4 - r0;
+            r5 = r1.rectY;
+            r6 = r5 + r9;
+            r2 = r2 + r3;
+            r7 = r2 - r9;
+            r5 = r5 + r9;
+            r2 = org.telegram.messenger.AndroidUtilities.dp(r10);
+            r2 = (float) r2;
+            r12 = r5 + r2;
+            r13 = r1.circlePaint;
+            r2 = r16;
+            r3 = r4;
+            r4 = r6;
+            r5 = r7;
+            r6 = r12;
+            r7 = r13;
+            r2.drawRect(r3, r4, r5, r6, r7);
+            r2 = r1.rectX;
+            r3 = r2 + r9;
+            r2 = r1.rectY;
+            r4 = r1.rectSizeY;
+            r2 = r2 + r4;
+            r2 = r2 - r9;
+            r4 = org.telegram.messenger.AndroidUtilities.dp(r10);
+            r4 = (float) r4;
+            r4 = r2 - r4;
+            r2 = r1.rectX;
+            r5 = r2 + r0;
+            r2 = r1.rectY;
+            r6 = r1.rectSizeY;
+            r2 = r2 + r6;
+            r6 = r2 - r9;
+            r7 = r1.circlePaint;
+            r2 = r16;
+            r2.drawRect(r3, r4, r5, r6, r7);
+            r2 = r1.rectX;
+            r3 = r2 + r9;
+            r4 = r1.rectY;
+            r5 = r1.rectSizeY;
+            r4 = r4 + r5;
+            r4 = r4 - r0;
+            r2 = r2 + r9;
+            r5 = org.telegram.messenger.AndroidUtilities.dp(r10);
+            r5 = (float) r5;
+            r5 = r5 + r2;
+            r2 = r1.rectY;
+            r6 = r1.rectSizeY;
+            r2 = r2 + r6;
+            r6 = r2 - r9;
+            r7 = r1.circlePaint;
+            r2 = r16;
+            r2.drawRect(r3, r4, r5, r6, r7);
+            r2 = r1.rectX;
+            r3 = r1.rectSizeX;
+            r2 = r2 + r3;
+            r2 = r2 - r9;
+            r3 = org.telegram.messenger.AndroidUtilities.dp(r10);
+            r3 = (float) r3;
+            r3 = r2 - r3;
+            r2 = r1.rectY;
+            r4 = r1.rectSizeY;
+            r5 = r2 + r4;
+            r5 = r5 - r0;
+            r6 = r1.rectX;
+            r7 = r1.rectSizeX;
+            r6 = r6 + r7;
+            r6 = r6 - r9;
+            r2 = r2 + r4;
+            r7 = r2 - r9;
+            r12 = r1.circlePaint;
+            r2 = r16;
+            r4 = r5;
+            r5 = r6;
+            r6 = r7;
+            r7 = r12;
+            r2.drawRect(r3, r4, r5, r6, r7);
+            r2 = r1.rectX;
+            r3 = r1.rectSizeX;
+            r2 = r2 + r3;
+            r3 = r2 - r0;
+            r0 = r1.rectY;
+            r2 = r1.rectSizeY;
+            r0 = r0 + r2;
+            r0 = r0 - r9;
+            r2 = org.telegram.messenger.AndroidUtilities.dp(r10);
+            r2 = (float) r2;
+            r4 = r0 - r2;
+            r0 = r1.rectX;
+            r2 = r1.rectSizeX;
+            r0 = r0 + r2;
+            r5 = r0 - r9;
+            r0 = r1.rectY;
+            r2 = r1.rectSizeY;
+            r0 = r0 + r2;
+            r6 = r0 - r9;
+            r7 = r1.circlePaint;
+            r2 = r16;
+            r2.drawRect(r3, r4, r5, r6, r7);
+            r0 = 1;
+        L_0x01b6:
+            if (r0 >= r11) goto L_0x0204;
+        L_0x01b8:
+            r2 = r1.rectX;
+            r3 = r1.rectSizeX;
+            r10 = NUM; // 0x40400000 float:3.0 double:5.325712093E-315;
+            r4 = r3 / r10;
+            r12 = (float) r0;
+            r4 = r4 * r12;
+            r4 = r4 + r2;
+            r5 = r1.rectY;
+            r6 = r5 + r9;
+            r2 = r2 + r9;
+            r3 = r3 / r10;
+            r3 = r3 * r12;
+            r7 = r2 + r3;
+            r2 = r1.rectSizeY;
+            r5 = r5 + r2;
+            r13 = r5 - r9;
+            r14 = r1.circlePaint;
+            r2 = r16;
+            r3 = r4;
+            r4 = r6;
+            r5 = r7;
+            r6 = r13;
+            r7 = r14;
+            r2.drawRect(r3, r4, r5, r6, r7);
+            r2 = r1.rectX;
+            r3 = r2 + r9;
+            r4 = r1.rectY;
+            r5 = r1.rectSizeY;
+            r6 = r5 / r10;
+            r6 = r6 * r12;
+            r6 = r6 + r4;
+            r2 = r2 - r9;
+            r7 = r1.rectSizeX;
+            r7 = r7 + r2;
+            r5 = r5 / r10;
+            r5 = r5 * r12;
+            r4 = r4 + r5;
+            r10 = r4 + r9;
+            r12 = r1.circlePaint;
+            r2 = r16;
+            r4 = r6;
+            r5 = r7;
+            r6 = r10;
+            r7 = r12;
+            r2.drawRect(r3, r4, r5, r6, r7);
+            r0 = r0 + 1;
+            goto L_0x01b6;
+        L_0x0204:
+            return;
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoCropActivity$PhotoCropView.onDraw(android.graphics.Canvas):void");
         }
     }
 
-    public PhotoCropActivity(Bundle args) {
-        super(args);
+    public interface PhotoEditActivityDelegate {
+        void didFinishEdit(Bitmap bitmap);
+    }
+
+    public PhotoCropActivity(Bundle bundle) {
+        super(bundle);
     }
 
     public boolean onFragmentCreate() {
         this.swipeBackEnabled = false;
         if (this.imageToCrop == null) {
-            String photoPath = getArguments().getString("photoPath");
-            Uri photoUri = (Uri) getArguments().getParcelable("photoUri");
-            if (photoPath == null && photoUri == null) {
+            String string = getArguments().getString("photoPath");
+            Uri uri = (Uri) getArguments().getParcelable("photoUri");
+            if (string == null && uri == null) {
                 return false;
             }
-            if (photoPath != null && !new File(photoPath).exists()) {
+            if (string != null && !new File(string).exists()) {
                 return false;
             }
-            int size;
+            int dp;
             if (AndroidUtilities.isTablet()) {
-                size = AndroidUtilities.dp(520.0f);
+                dp = AndroidUtilities.dp(520.0f);
             } else {
-                size = Math.max(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y);
+                Point point = AndroidUtilities.displaySize;
+                dp = Math.max(point.x, point.y);
             }
-            this.imageToCrop = ImageLoader.loadBitmap(photoPath, photoUri, (float) size, (float) size, true);
+            float f = (float) dp;
+            this.imageToCrop = ImageLoader.loadBitmap(string, uri, f, f, true);
             if (this.imageToCrop == null) {
                 return false;
             }
@@ -405,9 +1091,12 @@ public class PhotoCropActivity extends BaseFragment {
         if (!(this.bitmapKey == null || !ImageLoader.getInstance().decrementUseCount(this.bitmapKey) || ImageLoader.getInstance().isInCache(this.bitmapKey))) {
             this.bitmapKey = null;
         }
-        if (!(this.bitmapKey != null || this.imageToCrop == null || this.sameBitmap)) {
-            this.imageToCrop.recycle();
-            this.imageToCrop = null;
+        if (this.bitmapKey == null) {
+            Bitmap bitmap = this.imageToCrop;
+            if (!(bitmap == null || this.sameBitmap)) {
+                bitmap.recycle();
+                this.imageToCrop = null;
+            }
         }
         this.drawable = null;
     }
@@ -420,10 +1109,10 @@ public class PhotoCropActivity extends BaseFragment {
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("CropImage", NUM));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
-            public void onItemClick(int id) {
-                if (id == -1) {
+            public void onItemClick(int i) {
+                if (i == -1) {
                     PhotoCropActivity.this.finishFragment();
-                } else if (id == 1) {
+                } else if (i == 1) {
                     if (!(PhotoCropActivity.this.delegate == null || PhotoCropActivity.this.doneButtonPressed)) {
                         Bitmap bitmap = PhotoCropActivity.this.view.getBitmap();
                         if (bitmap == PhotoCropActivity.this.imageToCrop) {
@@ -445,7 +1134,7 @@ public class PhotoCropActivity extends BaseFragment {
         return this.fragmentView;
     }
 
-    public void setDelegate(PhotoEditActivityDelegate delegate) {
-        this.delegate = delegate;
+    public void setDelegate(PhotoEditActivityDelegate photoEditActivityDelegate) {
+        this.delegate = photoEditActivityDelegate;
     }
 }

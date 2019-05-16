@@ -27,88 +27,76 @@ public class HeaderCell extends FrameLayout {
         this(context, false, 21, 15, false);
     }
 
-    public HeaderCell(Context context, int padding) {
-        this(context, false, padding, 15, false);
+    public HeaderCell(Context context, int i) {
+        this(context, false, i, 15, false);
     }
 
-    public HeaderCell(Context context, boolean dialog, int padding, int topMargin, boolean text2) {
-        int i;
-        int i2 = 3;
+    public HeaderCell(Context context, boolean z, int i, int i2, boolean z2) {
+        int i3 = i2;
         super(context);
         this.height = 40;
         this.textView = new TextView(getContext());
         this.textView.setTextSize(1, 15.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView.setEllipsize(TruncateAt.END);
+        int i4 = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        this.textView.setMinHeight(AndroidUtilities.dp((float) (this.height - topMargin)));
-        if (dialog) {
+        this.textView.setMinHeight(AndroidUtilities.dp((float) (this.height - i3)));
+        if (z) {
             this.textView.setTextColor(Theme.getColor("dialogTextBlue2"));
         } else {
             this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlueHeader"));
         }
-        TextView textView = this.textView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
-            i = 3;
-        }
-        addView(textView, LayoutHelper.createFrame(-1, -1.0f, i | 48, (float) padding, (float) topMargin, (float) padding, 0.0f));
-        if (text2) {
+        float f = (float) i;
+        addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, f, (float) i3, f, 0.0f));
+        if (z2) {
             this.textView2 = new SimpleTextView(getContext());
             this.textView2.setTextSize(13);
+            this.textView2.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
             SimpleTextView simpleTextView = this.textView2;
             if (LocaleController.isRTL) {
-                i = 3;
-            } else {
-                i = 5;
+                i4 = 3;
             }
-            simpleTextView.setGravity(i | 48);
-            SimpleTextView simpleTextView2 = this.textView2;
-            if (!LocaleController.isRTL) {
-                i2 = 5;
-            }
-            addView(simpleTextView2, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, (float) padding, 21.0f, (float) padding, 0.0f));
+            addView(simpleTextView, LayoutHelper.createFrame(-1, -1.0f, i4 | 48, f, 21.0f, f, 0.0f));
         }
     }
 
-    public void setHeight(int value) {
+    public void setHeight(int i) {
         this.textView.setMinHeight(AndroidUtilities.dp((float) this.height) - ((LayoutParams) this.textView.getLayoutParams()).topMargin);
     }
 
-    public void setEnabled(boolean value, ArrayList<Animator> animators) {
+    public void setEnabled(boolean z, ArrayList<Animator> arrayList) {
         float f = 1.0f;
-        TextView textView;
-        if (animators != null) {
-            textView = this.textView;
-            String str = "alpha";
+        if (arrayList != null) {
+            TextView textView = this.textView;
             float[] fArr = new float[1];
-            if (!value) {
+            if (!z) {
                 f = 0.5f;
             }
             fArr[0] = f;
-            animators.add(ObjectAnimator.ofFloat(textView, str, fArr));
+            arrayList.add(ObjectAnimator.ofFloat(textView, "alpha", fArr));
             return;
         }
-        textView = this.textView;
-        if (!value) {
+        TextView textView2 = this.textView;
+        if (!z) {
             f = 0.5f;
         }
-        textView.setAlpha(f);
+        textView2.setAlpha(f);
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(0, 0));
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(0, 0));
     }
 
-    public void setText(String text) {
-        this.textView.setText(text);
+    public void setText(String str) {
+        this.textView.setText(str);
     }
 
-    public void setText2(String text) {
-        if (this.textView2 != null) {
-            this.textView2.setText(text);
+    public void setText2(String str) {
+        SimpleTextView simpleTextView = this.textView2;
+        if (simpleTextView != null) {
+            simpleTextView.setText(str);
         }
     }
 
@@ -116,12 +104,12 @@ public class HeaderCell extends FrameLayout {
         return this.textView2;
     }
 
-    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
-        super.onInitializeAccessibilityNodeInfo(info);
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         if (VERSION.SDK_INT >= 19) {
-            CollectionItemInfo collection = info.getCollectionItemInfo();
-            if (collection != null) {
-                info.setCollectionItemInfo(CollectionItemInfo.obtain(collection.getRowIndex(), collection.getRowSpan(), collection.getColumnIndex(), collection.getColumnSpan(), true));
+            CollectionItemInfo collectionItemInfo = accessibilityNodeInfo.getCollectionItemInfo();
+            if (collectionItemInfo != null) {
+                accessibilityNodeInfo.setCollectionItemInfo(CollectionItemInfo.obtain(collectionItemInfo.getRowIndex(), collectionItemInfo.getRowSpan(), collectionItemInfo.getColumnIndex(), collectionItemInfo.getColumnSpan(), true));
             }
         }
     }

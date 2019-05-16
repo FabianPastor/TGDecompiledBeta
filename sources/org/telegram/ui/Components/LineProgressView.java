@@ -31,51 +31,61 @@ public class LineProgressView extends View {
     }
 
     private void updateAnimation() {
-        long newTime = System.currentTimeMillis();
-        long dt = newTime - this.lastUpdateTime;
-        this.lastUpdateTime = newTime;
-        if (!(this.animatedProgressValue == 1.0f || this.animatedProgressValue == this.currentProgress)) {
-            float progressDiff = this.currentProgress - this.animationProgressStart;
-            if (progressDiff > 0.0f) {
-                this.currentProgressTime += dt;
-                if (this.currentProgressTime >= 300) {
-                    this.animatedProgressValue = this.currentProgress;
-                    this.animationProgressStart = this.currentProgress;
-                    this.currentProgressTime = 0;
-                } else {
-                    this.animatedProgressValue = this.animationProgressStart + (decelerateInterpolator.getInterpolation(((float) this.currentProgressTime) / 300.0f) * progressDiff);
+        long currentTimeMillis = System.currentTimeMillis();
+        long j = currentTimeMillis - this.lastUpdateTime;
+        this.lastUpdateTime = currentTimeMillis;
+        float f = this.animatedProgressValue;
+        if (f != 1.0f) {
+            float f2 = this.currentProgress;
+            if (f != f2) {
+                f = this.animationProgressStart;
+                float f3 = f2 - f;
+                if (f3 > 0.0f) {
+                    this.currentProgressTime += j;
+                    long j2 = this.currentProgressTime;
+                    if (j2 >= 300) {
+                        this.animatedProgressValue = f2;
+                        this.animationProgressStart = f2;
+                        this.currentProgressTime = 0;
+                    } else {
+                        this.animatedProgressValue = f + (f3 * decelerateInterpolator.getInterpolation(((float) j2) / 300.0f));
+                    }
                 }
+                invalidate();
             }
-            invalidate();
         }
-        if (this.animatedProgressValue >= 1.0f && this.animatedProgressValue == 1.0f && this.animatedAlphaValue != 0.0f) {
-            this.animatedAlphaValue -= ((float) dt) / 200.0f;
-            if (this.animatedAlphaValue <= 0.0f) {
-                this.animatedAlphaValue = 0.0f;
+        f = this.animatedProgressValue;
+        if (f >= 1.0f && f == 1.0f) {
+            f = this.animatedAlphaValue;
+            if (f != 0.0f) {
+                this.animatedAlphaValue = f - (((float) j) / 200.0f);
+                if (this.animatedAlphaValue <= 0.0f) {
+                    this.animatedAlphaValue = 0.0f;
+                }
+                invalidate();
             }
-            invalidate();
         }
     }
 
-    public void setProgressColor(int color) {
-        this.progressColor = color;
+    public void setProgressColor(int i) {
+        this.progressColor = i;
     }
 
-    public void setBackColor(int color) {
-        this.backColor = color;
+    public void setBackColor(int i) {
+        this.backColor = i;
     }
 
-    public void setProgress(float value, boolean animated) {
-        if (animated) {
+    public void setProgress(float f, boolean z) {
+        if (z) {
             this.animationProgressStart = this.animatedProgressValue;
         } else {
-            this.animatedProgressValue = value;
-            this.animationProgressStart = value;
+            this.animatedProgressValue = f;
+            this.animationProgressStart = f;
         }
-        if (value != 1.0f) {
+        if (f != 1.0f) {
             this.animatedAlphaValue = 1.0f;
         }
-        this.currentProgress = value;
+        this.currentProgress = f;
         this.currentProgressTime = 0;
         this.lastUpdateTime = System.currentTimeMillis();
         invalidate();
@@ -86,8 +96,9 @@ public class LineProgressView extends View {
     }
 
     public void onDraw(Canvas canvas) {
-        if (!(this.backColor == 0 || this.animatedProgressValue == 1.0f)) {
-            progressPaint.setColor(this.backColor);
+        int i = this.backColor;
+        if (!(i == 0 || this.animatedProgressValue == 1.0f)) {
+            progressPaint.setColor(i);
             progressPaint.setAlpha((int) (this.animatedAlphaValue * 255.0f));
             canvas.drawRect((float) ((int) (((float) getWidth()) * this.animatedProgressValue)), 0.0f, (float) getWidth(), (float) getHeight(), progressPaint);
         }

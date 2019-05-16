@@ -51,10 +51,14 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         void onCameraInit();
     }
 
-    public CameraView(Context context, boolean frontface) {
+    private int clamp(int i, int i2, int i3) {
+        return i > i3 ? i3 : i < i2 ? i2 : i;
+    }
+
+    public CameraView(Context context, boolean z) {
         super(context, null);
-        this.isFrontface = frontface;
-        this.initialFrontface = frontface;
+        this.isFrontface = z;
+        this.initialFrontface = z;
         this.textureView = new TextureView(context);
         this.textureView.setSurfaceTextureListener(this);
         addView(this.textureView);
@@ -66,13 +70,13 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     }
 
     /* Access modifiers changed, original: protected */
-    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
+    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+        super.onLayout(z, i, i2, i3, i4);
         checkPreviewMatrix();
     }
 
-    public void setMirror(boolean value) {
-        this.mirror = value;
+    public void setMirror(boolean z) {
+        this.mirror = z;
     }
 
     public boolean isFrontface() {
@@ -80,9 +84,9 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     }
 
     public boolean hasFrontFaceCamera() {
-        ArrayList<CameraInfo> cameraInfos = CameraController.getInstance().getCameras();
-        for (int a = 0; a < cameraInfos.size(); a++) {
-            if (((CameraInfo) cameraInfos.get(a)).frontCamera != 0) {
+        ArrayList cameras = CameraController.getInstance().getCameras();
+        for (int i = 0; i < cameras.size(); i++) {
+            if (((CameraInfo) cameras.get(i)).frontCamera != 0) {
                 return true;
             }
         }
@@ -90,96 +94,190 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
     }
 
     public void switchCamera() {
-        boolean z = false;
         if (this.cameraSession != null) {
             CameraController.getInstance().close(this.cameraSession, null, null);
             this.cameraSession = null;
         }
         this.initied = false;
-        if (!this.isFrontface) {
-            z = true;
-        }
-        this.isFrontface = z;
+        this.isFrontface ^= 1;
         initCamera();
     }
 
+    /* JADX WARNING: Missing block: B:42:0x00e7, code skipped:
+            if (r0.getHeight() >= 1280) goto L_0x00ea;
+     */
     private void initCamera() {
-        CameraInfo info = null;
-        ArrayList<CameraInfo> cameraInfos = CameraController.getInstance().getCameras();
-        if (cameraInfos != null) {
-            for (int a = 0; a < cameraInfos.size(); a++) {
-                CameraInfo cameraInfo = (CameraInfo) cameraInfos.get(a);
-                if ((this.isFrontface && cameraInfo.frontCamera != 0) || (!this.isFrontface && cameraInfo.frontCamera == 0)) {
-                    info = cameraInfo;
-                    break;
-                }
-            }
-            if (info != null) {
-                Size aspectRatio;
-                int wantedWidth;
-                int wantedHeight;
-                float screenSize = ((float) Math.max(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)) / ((float) Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y));
-                if (this.initialFrontface) {
-                    aspectRatio = new Size(16, 9);
-                    wantedWidth = 480;
-                    wantedHeight = 270;
-                } else if (Math.abs(screenSize - 1.3333334f) < 0.1f) {
-                    aspectRatio = new Size(4, 3);
-                    wantedWidth = 1280;
-                    wantedHeight = 960;
-                } else {
-                    aspectRatio = new Size(16, 9);
-                    wantedWidth = 1280;
-                    wantedHeight = 720;
-                }
-                if (this.textureView.getWidth() > 0 && this.textureView.getHeight() > 0) {
-                    int width = Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y);
-                    this.previewSize = CameraController.chooseOptimalSize(info.getPreviewSizes(), width, (aspectRatio.getHeight() * width) / aspectRatio.getWidth(), aspectRatio);
-                }
-                Size pictureSize = CameraController.chooseOptimalSize(info.getPictureSizes(), wantedWidth, wantedHeight, aspectRatio);
-                if (pictureSize.getWidth() >= 1280 && pictureSize.getHeight() >= 1280) {
-                    if (Math.abs(screenSize - 1.3333334f) < 0.1f) {
-                        aspectRatio = new Size(3, 4);
-                    } else {
-                        aspectRatio = new Size(9, 16);
-                    }
-                    Size pictureSize2 = CameraController.chooseOptimalSize(info.getPictureSizes(), wantedHeight, wantedWidth, aspectRatio);
-                    if (pictureSize2.getWidth() < 1280 || pictureSize2.getHeight() < 1280) {
-                        pictureSize = pictureSize2;
-                    }
-                }
-                SurfaceTexture surfaceTexture = this.textureView.getSurfaceTexture();
-                if (this.previewSize != null && surfaceTexture != null) {
-                    surfaceTexture.setDefaultBufferSize(this.previewSize.getWidth(), this.previewSize.getHeight());
-                    this.cameraSession = new CameraSession(info, this.previewSize, pictureSize, 256);
-                    CameraController.getInstance().open(this.cameraSession, surfaceTexture, new Runnable() {
-                        public void run() {
-                            if (CameraView.this.cameraSession != null) {
-                                CameraView.this.cameraSession.setInitied();
-                            }
-                            CameraView.this.checkPreviewMatrix();
-                        }
-                    }, new Runnable() {
-                        public void run() {
-                            if (CameraView.this.delegate != null) {
-                                CameraView.this.delegate.onCameraCreated(CameraView.this.cameraSession.cameraInfo.camera);
-                            }
-                        }
-                    });
-                }
-            }
-        }
+        /*
+        r15 = this;
+        r0 = org.telegram.messenger.camera.CameraController.getInstance();
+        r0 = r0.getCameras();
+        if (r0 != 0) goto L_0x000b;
+    L_0x000a:
+        return;
+    L_0x000b:
+        r1 = 0;
+    L_0x000c:
+        r2 = r0.size();
+        if (r1 >= r2) goto L_0x002c;
+    L_0x0012:
+        r2 = r0.get(r1);
+        r2 = (org.telegram.messenger.camera.CameraInfo) r2;
+        r3 = r15.isFrontface;
+        if (r3 == 0) goto L_0x0020;
+    L_0x001c:
+        r3 = r2.frontCamera;
+        if (r3 != 0) goto L_0x002d;
+    L_0x0020:
+        r3 = r15.isFrontface;
+        if (r3 != 0) goto L_0x0029;
+    L_0x0024:
+        r3 = r2.frontCamera;
+        if (r3 != 0) goto L_0x0029;
+    L_0x0028:
+        goto L_0x002d;
+    L_0x0029:
+        r1 = r1 + 1;
+        goto L_0x000c;
+    L_0x002c:
+        r2 = 0;
+    L_0x002d:
+        if (r2 != 0) goto L_0x0030;
+    L_0x002f:
+        return;
+    L_0x0030:
+        r0 = NUM; // 0x3faaaaab float:1.3333334 double:5.277359326E-315;
+        r1 = org.telegram.messenger.AndroidUtilities.displaySize;
+        r3 = r1.x;
+        r1 = r1.y;
+        r1 = java.lang.Math.max(r3, r1);
+        r1 = (float) r1;
+        r3 = org.telegram.messenger.AndroidUtilities.displaySize;
+        r4 = r3.x;
+        r3 = r3.y;
+        r3 = java.lang.Math.min(r4, r3);
+        r3 = (float) r3;
+        r1 = r1 / r3;
+        r3 = r15.initialFrontface;
+        r4 = 3;
+        r5 = 4;
+        r6 = NUM; // 0x3dcccccd float:0.1 double:5.122630465E-315;
+        r7 = 9;
+        r8 = 16;
+        r9 = 1280; // 0x500 float:1.794E-42 double:6.324E-321;
+        if (r3 == 0) goto L_0x0063;
+    L_0x0059:
+        r3 = new org.telegram.messenger.camera.Size;
+        r3.<init>(r8, r7);
+        r10 = 480; // 0x1e0 float:6.73E-43 double:2.37E-321;
+        r11 = 270; // 0x10e float:3.78E-43 double:1.334E-321;
+        goto L_0x007e;
+    L_0x0063:
+        r3 = r1 - r0;
+        r3 = java.lang.Math.abs(r3);
+        r3 = (r3 > r6 ? 1 : (r3 == r6 ? 0 : -1));
+        if (r3 >= 0) goto L_0x0075;
+    L_0x006d:
+        r3 = new org.telegram.messenger.camera.Size;
+        r3.<init>(r5, r4);
+        r11 = 960; // 0x3c0 float:1.345E-42 double:4.743E-321;
+        goto L_0x007c;
+    L_0x0075:
+        r3 = new org.telegram.messenger.camera.Size;
+        r3.<init>(r8, r7);
+        r11 = 720; // 0x2d0 float:1.009E-42 double:3.557E-321;
+    L_0x007c:
+        r10 = 1280; // 0x500 float:1.794E-42 double:6.324E-321;
+    L_0x007e:
+        r12 = r15.textureView;
+        r12 = r12.getWidth();
+        if (r12 <= 0) goto L_0x00ad;
+    L_0x0086:
+        r12 = r15.textureView;
+        r12 = r12.getHeight();
+        if (r12 <= 0) goto L_0x00ad;
+    L_0x008e:
+        r12 = org.telegram.messenger.AndroidUtilities.displaySize;
+        r13 = r12.x;
+        r12 = r12.y;
+        r12 = java.lang.Math.min(r13, r12);
+        r13 = r3.getHeight();
+        r13 = r13 * r12;
+        r14 = r3.getWidth();
+        r13 = r13 / r14;
+        r14 = r2.getPreviewSizes();
+        r12 = org.telegram.messenger.camera.CameraController.chooseOptimalSize(r14, r12, r13, r3);
+        r15.previewSize = r12;
+    L_0x00ad:
+        r12 = r2.getPictureSizes();
+        r3 = org.telegram.messenger.camera.CameraController.chooseOptimalSize(r12, r10, r11, r3);
+        r12 = r3.getWidth();
+        if (r12 < r9) goto L_0x00ea;
+    L_0x00bb:
+        r12 = r3.getHeight();
+        if (r12 < r9) goto L_0x00ea;
+    L_0x00c1:
+        r1 = r1 - r0;
+        r0 = java.lang.Math.abs(r1);
+        r0 = (r0 > r6 ? 1 : (r0 == r6 ? 0 : -1));
+        if (r0 >= 0) goto L_0x00d0;
+    L_0x00ca:
+        r0 = new org.telegram.messenger.camera.Size;
+        r0.<init>(r4, r5);
+        goto L_0x00d5;
+    L_0x00d0:
+        r0 = new org.telegram.messenger.camera.Size;
+        r0.<init>(r7, r8);
+    L_0x00d5:
+        r1 = r2.getPictureSizes();
+        r0 = org.telegram.messenger.camera.CameraController.chooseOptimalSize(r1, r11, r10, r0);
+        r1 = r0.getWidth();
+        if (r1 < r9) goto L_0x00eb;
+    L_0x00e3:
+        r1 = r0.getHeight();
+        if (r1 >= r9) goto L_0x00ea;
+    L_0x00e9:
+        goto L_0x00eb;
+    L_0x00ea:
+        r0 = r3;
+    L_0x00eb:
+        r1 = r15.textureView;
+        r1 = r1.getSurfaceTexture();
+        r3 = r15.previewSize;
+        if (r3 == 0) goto L_0x0122;
+    L_0x00f5:
+        if (r1 == 0) goto L_0x0122;
+    L_0x00f7:
+        r3 = r3.getWidth();
+        r4 = r15.previewSize;
+        r4 = r4.getHeight();
+        r1.setDefaultBufferSize(r3, r4);
+        r3 = new org.telegram.messenger.camera.CameraSession;
+        r4 = r15.previewSize;
+        r5 = 256; // 0x100 float:3.59E-43 double:1.265E-321;
+        r3.<init>(r2, r4, r0, r5);
+        r15.cameraSession = r3;
+        r0 = org.telegram.messenger.camera.CameraController.getInstance();
+        r2 = r15.cameraSession;
+        r3 = new org.telegram.messenger.camera.CameraView$1;
+        r3.<init>();
+        r4 = new org.telegram.messenger.camera.CameraView$2;
+        r4.<init>();
+        r0.open(r2, r1, r3, r4);
+    L_0x0122:
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.camera.CameraView.initCamera():void");
     }
 
     public Size getPreviewSize() {
         return this.previewSize;
     }
 
-    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+    public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i2) {
         initCamera();
     }
 
-    public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int width, int height) {
+    public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int i, int i2) {
         checkPreviewMatrix();
     }
 
@@ -190,49 +288,56 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         return false;
     }
 
-    public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-        if (!this.initied && this.cameraSession != null && this.cameraSession.isInitied()) {
-            if (this.delegate != null) {
-                this.delegate.onCameraInit();
+    public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
+        if (!this.initied) {
+            CameraSession cameraSession = this.cameraSession;
+            if (cameraSession != null && cameraSession.isInitied()) {
+                CameraViewDelegate cameraViewDelegate = this.delegate;
+                if (cameraViewDelegate != null) {
+                    cameraViewDelegate.onCameraInit();
+                }
+                this.initied = true;
             }
-            this.initied = true;
         }
     }
 
-    public void setClipTop(int value) {
-        this.clipTop = value;
+    public void setClipTop(int i) {
+        this.clipTop = i;
     }
 
-    public void setClipLeft(int value) {
-        this.clipLeft = value;
+    public void setClipLeft(int i) {
+        this.clipLeft = i;
     }
 
     private void checkPreviewMatrix() {
-        if (this.previewSize != null) {
-            adjustAspectRatio(this.previewSize.getWidth(), this.previewSize.getHeight(), ((Activity) getContext()).getWindowManager().getDefaultDisplay().getRotation());
+        Size size = this.previewSize;
+        if (size != null) {
+            adjustAspectRatio(size.getWidth(), this.previewSize.getHeight(), ((Activity) getContext()).getWindowManager().getDefaultDisplay().getRotation());
         }
     }
 
-    private void adjustAspectRatio(int previewWidth, int previewHeight, int rotation) {
-        float scale;
+    private void adjustAspectRatio(int i, int i2, int i3) {
+        float max;
         this.txform.reset();
-        int viewWidth = getWidth();
-        int viewHeight = getHeight();
-        float viewCenterX = (float) (viewWidth / 2);
-        float viewCenterY = (float) (viewHeight / 2);
-        if (rotation == 0 || rotation == 2) {
-            scale = Math.max(((float) (this.clipTop + viewHeight)) / ((float) previewWidth), ((float) (this.clipLeft + viewWidth)) / ((float) previewHeight));
+        int width = getWidth();
+        int height = getHeight();
+        float f = (float) (width / 2);
+        float f2 = (float) (height / 2);
+        if (i3 == 0 || i3 == 2) {
+            max = Math.max(((float) (this.clipTop + height)) / ((float) i), ((float) (this.clipLeft + width)) / ((float) i2));
         } else {
-            scale = Math.max(((float) (this.clipTop + viewHeight)) / ((float) previewHeight), ((float) (this.clipLeft + viewWidth)) / ((float) previewWidth));
+            max = Math.max(((float) (this.clipTop + height)) / ((float) i2), ((float) (this.clipLeft + width)) / ((float) i));
         }
-        this.txform.postScale((((float) previewHeight) * scale) / ((float) viewWidth), (((float) previewWidth) * scale) / ((float) viewHeight), viewCenterX, viewCenterY);
-        if (1 == rotation || 3 == rotation) {
-            this.txform.postRotate((float) ((rotation - 2) * 90), viewCenterX, viewCenterY);
-        } else if (2 == rotation) {
-            this.txform.postRotate(180.0f, viewCenterX, viewCenterY);
+        float f3 = (float) width;
+        float f4 = (float) height;
+        this.txform.postScale((((float) i2) * max) / f3, (((float) i) * max) / f4, f, f2);
+        if (1 == i3 || 3 == i3) {
+            this.txform.postRotate((float) ((i3 - 2) * 90), f, f2);
+        } else if (2 == i3) {
+            this.txform.postRotate(180.0f, f, f2);
         }
         if (this.mirror) {
-            this.txform.postScale(-1.0f, 1.0f, viewCenterX, viewCenterY);
+            this.txform.postScale(-1.0f, 1.0f, f, f2);
         }
         if (!(this.clipTop == 0 && this.clipLeft == 0)) {
             this.txform.postTranslate((float) ((-this.clipLeft) / 2), (float) ((-this.clipTop) / 2));
@@ -240,41 +345,35 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         this.textureView.setTransform(this.txform);
         Matrix matrix = new Matrix();
         matrix.postRotate((float) this.cameraSession.getDisplayOrientation());
-        matrix.postScale(((float) viewWidth) / 2000.0f, ((float) viewHeight) / 2000.0f);
-        matrix.postTranslate(((float) viewWidth) / 2.0f, ((float) viewHeight) / 2.0f);
+        matrix.postScale(f3 / 2000.0f, f4 / 2000.0f);
+        matrix.postTranslate(f3 / 2.0f, f4 / 2.0f);
         matrix.invert(this.matrix);
     }
 
-    private Rect calculateTapArea(float x, float y, float coefficient) {
-        int areaSize = Float.valueOf(((float) this.focusAreaSize) * coefficient).intValue();
-        int left = clamp(((int) x) - (areaSize / 2), 0, getWidth() - areaSize);
-        int top = clamp(((int) y) - (areaSize / 2), 0, getHeight() - areaSize);
-        RectF rectF = new RectF((float) left, (float) top, (float) (left + areaSize), (float) (top + areaSize));
+    private Rect calculateTapArea(float f, float f2, float f3) {
+        int intValue = Float.valueOf(((float) this.focusAreaSize) * f3).intValue();
+        int i = intValue / 2;
+        int clamp = clamp(((int) f) - i, 0, getWidth() - intValue);
+        int clamp2 = clamp(((int) f2) - i, 0, getHeight() - intValue);
+        RectF rectF = new RectF((float) clamp, (float) clamp2, (float) (clamp + intValue), (float) (clamp2 + intValue));
         this.matrix.mapRect(rectF);
         return new Rect(Math.round(rectF.left), Math.round(rectF.top), Math.round(rectF.right), Math.round(rectF.bottom));
     }
 
-    private int clamp(int x, int min, int max) {
-        if (x > max) {
-            return max;
-        }
-        if (x < min) {
-            return min;
-        }
-        return x;
-    }
-
-    public void focusToPoint(int x, int y) {
-        Rect focusRect = calculateTapArea((float) x, (float) y, 1.0f);
-        Rect meteringRect = calculateTapArea((float) x, (float) y, 1.5f);
-        if (this.cameraSession != null) {
-            this.cameraSession.focusToRect(focusRect, meteringRect);
+    public void focusToPoint(int i, int i2) {
+        float f = (float) i;
+        float f2 = (float) i2;
+        Rect calculateTapArea = calculateTapArea(f, f2, 1.0f);
+        Rect calculateTapArea2 = calculateTapArea(f, f2, 1.5f);
+        CameraSession cameraSession = this.cameraSession;
+        if (cameraSession != null) {
+            cameraSession.focusToRect(calculateTapArea, calculateTapArea2);
         }
         this.focusProgress = 0.0f;
         this.innerAlpha = 1.0f;
         this.outerAlpha = 1.0f;
-        this.cx = x;
-        this.cy = y;
+        this.cx = i;
+        this.cy = i2;
         this.lastDrawTime = System.currentTimeMillis();
         invalidate();
     }
@@ -291,49 +390,58 @@ public class CameraView extends FrameLayout implements SurfaceTextureListener {
         return this.cameraSession;
     }
 
-    public void destroy(boolean async, Runnable beforeDestroyRunnable) {
-        if (this.cameraSession != null) {
-            this.cameraSession.destroy();
-            CameraController.getInstance().close(this.cameraSession, !async ? new CountDownLatch(1) : null, beforeDestroyRunnable);
+    public void destroy(boolean z, Runnable runnable) {
+        CameraSession cameraSession = this.cameraSession;
+        if (cameraSession != null) {
+            cameraSession.destroy();
+            CameraController.getInstance().close(this.cameraSession, !z ? new CountDownLatch(1) : null, runnable);
         }
     }
 
     /* Access modifiers changed, original: protected */
-    public boolean drawChild(Canvas canvas, View child, long drawingTime) {
-        boolean result = super.drawChild(canvas, child, drawingTime);
+    public boolean drawChild(Canvas canvas, View view, long j) {
+        boolean drawChild = super.drawChild(canvas, view, j);
         if (!(this.focusProgress == 1.0f && this.innerAlpha == 0.0f && this.outerAlpha == 0.0f)) {
-            int baseRad = AndroidUtilities.dp(30.0f);
-            long newTime = System.currentTimeMillis();
-            long dt = newTime - this.lastDrawTime;
-            if (dt < 0 || dt > 17) {
-                dt = 17;
+            int dp = AndroidUtilities.dp(30.0f);
+            long currentTimeMillis = System.currentTimeMillis();
+            long j2 = currentTimeMillis - this.lastDrawTime;
+            if (j2 < 0 || j2 > 17) {
+                j2 = 17;
             }
-            this.lastDrawTime = newTime;
+            this.lastDrawTime = currentTimeMillis;
             this.outerPaint.setAlpha((int) (this.interpolator.getInterpolation(this.outerAlpha) * 255.0f));
             this.innerPaint.setAlpha((int) (this.interpolator.getInterpolation(this.innerAlpha) * 127.0f));
-            float interpolated = this.interpolator.getInterpolation(this.focusProgress);
-            canvas.drawCircle((float) this.cx, (float) this.cy, ((float) baseRad) + (((float) baseRad) * (1.0f - interpolated)), this.outerPaint);
-            canvas.drawCircle((float) this.cx, (float) this.cy, ((float) baseRad) * interpolated, this.innerPaint);
-            if (this.focusProgress < 1.0f) {
-                this.focusProgress += ((float) dt) / 200.0f;
+            float interpolation = this.interpolator.getInterpolation(this.focusProgress);
+            float f = (float) dp;
+            canvas.drawCircle((float) this.cx, (float) this.cy, ((1.0f - interpolation) * f) + f, this.outerPaint);
+            canvas.drawCircle((float) this.cx, (float) this.cy, f * interpolation, this.innerPaint);
+            float f2 = this.focusProgress;
+            if (f2 < 1.0f) {
+                this.focusProgress = f2 + (((float) j2) / 200.0f);
                 if (this.focusProgress > 1.0f) {
                     this.focusProgress = 1.0f;
                 }
                 invalidate();
-            } else if (this.innerAlpha != 0.0f) {
-                this.innerAlpha -= ((float) dt) / 150.0f;
-                if (this.innerAlpha < 0.0f) {
-                    this.innerAlpha = 0.0f;
+            } else {
+                f2 = this.innerAlpha;
+                if (f2 != 0.0f) {
+                    this.innerAlpha = f2 - (((float) j2) / 150.0f);
+                    if (this.innerAlpha < 0.0f) {
+                        this.innerAlpha = 0.0f;
+                    }
+                    invalidate();
+                } else {
+                    f2 = this.outerAlpha;
+                    if (f2 != 0.0f) {
+                        this.outerAlpha = f2 - (((float) j2) / 150.0f);
+                        if (this.outerAlpha < 0.0f) {
+                            this.outerAlpha = 0.0f;
+                        }
+                        invalidate();
+                    }
                 }
-                invalidate();
-            } else if (this.outerAlpha != 0.0f) {
-                this.outerAlpha -= ((float) dt) / 150.0f;
-                if (this.outerAlpha < 0.0f) {
-                    this.outerAlpha = 0.0f;
-                }
-                invalidate();
             }
         }
-        return result;
+        return drawChild;
     }
 }

@@ -22,42 +22,28 @@ public class TextCheckBoxCell extends FrameLayout {
         this(context, false);
     }
 
-    public TextCheckBoxCell(Context context, boolean dialog) {
-        int i;
-        int i2;
-        int i3 = 3;
+    public TextCheckBoxCell(Context context, boolean z) {
         super(context);
         this.textView = new TextView(context);
-        this.textView.setTextColor(Theme.getColor(dialog ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
+        this.textView.setTextColor(Theme.getColor(z ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
-        TextView textView = this.textView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
-            i = 3;
-        }
-        textView.setGravity(i | 16);
+        int i = 5;
+        this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.textView.setEllipsize(TruncateAt.END);
-        TextView textView2 = this.textView;
-        if (LocaleController.isRTL) {
-            i2 = 5;
-        } else {
-            i2 = 3;
-        }
-        addView(textView2, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, LocaleController.isRTL ? 66.0f : 21.0f, 0.0f, LocaleController.isRTL ? 21.0f : 66.0f, 0.0f));
-        this.checkBox = new CheckBoxSquare(context, dialog);
+        addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 66.0f : 21.0f, 0.0f, LocaleController.isRTL ? 21.0f : 66.0f, 0.0f));
+        this.checkBox = new CheckBoxSquare(context, z);
         this.checkBox.setDuplicateParentStateEnabled(false);
         this.checkBox.setFocusable(false);
         this.checkBox.setFocusableInTouchMode(false);
         this.checkBox.setClickable(false);
         CheckBoxSquare checkBoxSquare = this.checkBox;
-        if (!LocaleController.isRTL) {
-            i3 = 5;
+        if (LocaleController.isRTL) {
+            i = 3;
         }
-        addView(checkBoxSquare, LayoutHelper.createFrame(18, 18.0f, i3 | 16, 21.0f, 0.0f, 21.0f, 0.0f));
+        addView(checkBoxSquare, LayoutHelper.createFrame(18, 18.0f, i | 16, 21.0f, 0.0f, 21.0f, 0.0f));
     }
 
     public void invalidate() {
@@ -66,23 +52,19 @@ public class TextCheckBoxCell extends FrameLayout {
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(50.0f), NUM));
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50.0f) + this.needDivider, NUM));
     }
 
-    public void setTextAndCheck(String text, boolean checked, boolean divider) {
-        boolean z = false;
-        this.textView.setText(text);
-        this.checkBox.setChecked(checked, false);
-        this.needDivider = divider;
-        if (!divider) {
-            z = true;
-        }
-        setWillNotDraw(z);
+    public void setTextAndCheck(String str, boolean z, boolean z2) {
+        this.textView.setText(str);
+        this.checkBox.setChecked(z, false);
+        this.needDivider = z2;
+        setWillNotDraw(z2 ^ 1);
     }
 
-    public void setChecked(boolean checked) {
-        this.checkBox.setChecked(checked, true);
+    public void setChecked(boolean z) {
+        this.checkBox.setChecked(z, true);
     }
 
     public boolean isChecked() {
@@ -96,10 +78,10 @@ public class TextCheckBoxCell extends FrameLayout {
         }
     }
 
-    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
-        super.onInitializeAccessibilityNodeInfo(info);
-        info.setClassName("android.widget.CheckBox");
-        info.setCheckable(true);
-        info.setChecked(isChecked());
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        accessibilityNodeInfo.setClassName("android.widget.CheckBox");
+        accessibilityNodeInfo.setCheckable(true);
+        accessibilityNodeInfo.setChecked(isChecked());
     }
 }

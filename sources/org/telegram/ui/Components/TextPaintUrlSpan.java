@@ -9,9 +9,9 @@ public class TextPaintUrlSpan extends MetricAffectingSpan {
     private TextPaint textPaint;
     private int textSize;
 
-    public TextPaintUrlSpan(TextPaint paint, String url) {
-        this.textPaint = paint;
-        this.currentUrl = url;
+    public TextPaintUrlSpan(TextPaint textPaint, String str) {
+        this.textPaint = textPaint;
+        this.currentUrl = str;
     }
 
     public String getUrl() {
@@ -22,25 +22,29 @@ public class TextPaintUrlSpan extends MetricAffectingSpan {
         return this.textPaint;
     }
 
-    public void updateMeasureState(TextPaint p) {
-        if (this.textPaint != null) {
-            p.setColor(this.textPaint.getColor());
-            p.setTypeface(this.textPaint.getTypeface());
-            p.setFlags(this.textPaint.getFlags());
-            p.setTextSize(this.textPaint.getTextSize());
-            p.baselineShift = this.textPaint.baselineShift;
-            p.bgColor = this.textPaint.bgColor;
+    public void updateMeasureState(TextPaint textPaint) {
+        TextPaint textPaint2 = this.textPaint;
+        if (textPaint2 != null) {
+            textPaint.setColor(textPaint2.getColor());
+            textPaint.setTypeface(this.textPaint.getTypeface());
+            textPaint.setFlags(this.textPaint.getFlags());
+            textPaint.setTextSize(this.textPaint.getTextSize());
+            textPaint2 = this.textPaint;
+            textPaint.baselineShift = textPaint2.baselineShift;
+            textPaint.bgColor = textPaint2.bgColor;
         }
     }
 
-    public void updateDrawState(TextPaint p) {
-        if (this.textPaint != null) {
-            p.setColor(this.textPaint.getColor());
-            p.setTypeface(this.textPaint.getTypeface());
-            p.setFlags(this.textPaint.getFlags());
-            p.setTextSize(this.textPaint.getTextSize());
-            p.baselineShift = this.textPaint.baselineShift;
-            p.bgColor = this.textPaint.bgColor;
+    public void updateDrawState(TextPaint textPaint) {
+        TextPaint textPaint2 = this.textPaint;
+        if (textPaint2 != null) {
+            textPaint.setColor(textPaint2.getColor());
+            textPaint.setTypeface(this.textPaint.getTypeface());
+            textPaint.setFlags(this.textPaint.getFlags());
+            textPaint.setTextSize(this.textPaint.getTextSize());
+            textPaint2 = this.textPaint;
+            textPaint.baselineShift = textPaint2.baselineShift;
+            textPaint.bgColor = textPaint2.bgColor;
         }
     }
 }

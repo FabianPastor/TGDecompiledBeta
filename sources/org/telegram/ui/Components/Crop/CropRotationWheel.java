@@ -58,16 +58,16 @@ public class CropRotationWheel extends FrameLayout {
         this.aspectRatioButton.setImageResource(NUM);
         this.aspectRatioButton.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
         this.aspectRatioButton.setScaleType(ScaleType.CENTER);
-        this.aspectRatioButton.setOnClickListener(new CropRotationWheel$$Lambda$0(this));
+        this.aspectRatioButton.setOnClickListener(new -$$Lambda$CropRotationWheel$o9DV-6J5Q1lFFifNNTKEl8cNF9w(this));
         this.aspectRatioButton.setContentDescription(LocaleController.getString("AccDescrAspectRatio", NUM));
         addView(this.aspectRatioButton, LayoutHelper.createFrame(70, 64, 19));
-        ImageView rotation90Button = new ImageView(context);
-        rotation90Button.setImageResource(NUM);
-        rotation90Button.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
-        rotation90Button.setScaleType(ScaleType.CENTER);
-        rotation90Button.setOnClickListener(new CropRotationWheel$$Lambda$1(this));
-        rotation90Button.setContentDescription(LocaleController.getString("AccDescrRotate", NUM));
-        addView(rotation90Button, LayoutHelper.createFrame(70, 64, 21));
+        ImageView imageView = new ImageView(context);
+        imageView.setImageResource(NUM);
+        imageView.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
+        imageView.setScaleType(ScaleType.CENTER);
+        imageView.setOnClickListener(new -$$Lambda$CropRotationWheel$Is9w1zkokBjEYWq9bkepljuCiac(this));
+        imageView.setContentDescription(LocaleController.getString("AccDescrRotate", NUM));
+        addView(imageView, LayoutHelper.createFrame(70, 64, 21));
         this.degreesLabel = new TextView(context);
         this.degreesLabel.setTextColor(-1);
         addView(this.degreesLabel, LayoutHelper.createFrame(-2, -2, 49));
@@ -75,73 +75,81 @@ public class CropRotationWheel extends FrameLayout {
         setRotation(0.0f, false);
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$new$0$CropRotationWheel(View v) {
-        if (this.rotationListener != null) {
-            this.rotationListener.aspectRatioPressed();
+    public /* synthetic */ void lambda$new$0$CropRotationWheel(View view) {
+        RotationWheelListener rotationWheelListener = this.rotationListener;
+        if (rotationWheelListener != null) {
+            rotationWheelListener.aspectRatioPressed();
         }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$new$1$CropRotationWheel(View v) {
-        if (this.rotationListener != null) {
-            this.rotationListener.rotate90Pressed();
+    public /* synthetic */ void lambda$new$1$CropRotationWheel(View view) {
+        RotationWheelListener rotationWheelListener = this.rotationListener;
+        if (rotationWheelListener != null) {
+            rotationWheelListener.rotate90Pressed();
         }
     }
 
-    public void setFreeform(boolean freeform) {
-        this.aspectRatioButton.setVisibility(freeform ? 0 : 8);
+    public void setFreeform(boolean z) {
+        this.aspectRatioButton.setVisibility(z ? 0 : 8);
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(Math.min(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(400.0f)), NUM), heightMeasureSpec);
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(Math.min(MeasureSpec.getSize(i), AndroidUtilities.dp(400.0f)), NUM), i2);
     }
 
     public void reset() {
         setRotation(0.0f, false);
     }
 
-    public void setListener(RotationWheelListener listener) {
-        this.rotationListener = listener;
+    public void setListener(RotationWheelListener rotationWheelListener) {
+        this.rotationListener = rotationWheelListener;
     }
 
-    public void setRotation(float rotation, boolean animated) {
-        this.rotation = rotation;
-        float value = this.rotation;
-        if (((double) Math.abs(value)) < 0.099d) {
-            value = Math.abs(value);
+    public void setRotation(float f, boolean z) {
+        this.rotation = f;
+        f = this.rotation;
+        if (((double) Math.abs(f)) < 0.099d) {
+            f = Math.abs(f);
         }
-        this.degreesLabel.setText(String.format("%.1fº", new Object[]{Float.valueOf(value)}));
+        this.degreesLabel.setText(String.format("%.1fº", new Object[]{Float.valueOf(f)}));
         invalidate();
     }
 
-    public void setAspectLock(boolean enabled) {
-        this.aspectRatioButton.setColorFilter(enabled ? new PorterDuffColorFilter(-11420173, Mode.MULTIPLY) : null);
+    public void setAspectLock(boolean z) {
+        this.aspectRatioButton.setColorFilter(z ? new PorterDuffColorFilter(-11420173, Mode.MULTIPLY) : null);
     }
 
-    public boolean onTouchEvent(MotionEvent ev) {
-        int action = ev.getActionMasked();
-        float x = ev.getX();
-        if (action == 0) {
+    public boolean onTouchEvent(MotionEvent motionEvent) {
+        int actionMasked = motionEvent.getActionMasked();
+        float x = motionEvent.getX();
+        RotationWheelListener rotationWheelListener;
+        if (actionMasked == 0) {
             this.prevX = x;
-            if (this.rotationListener != null) {
-                this.rotationListener.onStart();
+            rotationWheelListener = this.rotationListener;
+            if (rotationWheelListener != null) {
+                rotationWheelListener.onStart();
             }
-        } else if (action == 1 || action == 3) {
-            if (this.rotationListener != null) {
-                this.rotationListener.onEnd(this.rotation);
+        } else if (actionMasked == 1 || actionMasked == 3) {
+            rotationWheelListener = this.rotationListener;
+            if (rotationWheelListener != null) {
+                rotationWheelListener.onEnd(this.rotation);
             }
             AndroidUtilities.makeAccessibilityAnnouncement(String.format("%.1f°", new Object[]{Float.valueOf(this.rotation)}));
-        } else if (action == 2) {
-            float newAngle = Math.max(-45.0f, Math.min(45.0f, this.rotation + ((float) ((((double) ((this.prevX - x) / AndroidUtilities.density)) / 3.141592653589793d) / 1.649999976158142d))));
-            if (((double) Math.abs(newAngle - this.rotation)) > 0.001d) {
-                if (((double) Math.abs(newAngle)) < 0.05d) {
-                    newAngle = 0.0f;
+        } else if (actionMasked == 2) {
+            float f = this.prevX - x;
+            float f2 = this.rotation;
+            double d = (double) (f / AndroidUtilities.density);
+            Double.isNaN(d);
+            f = Math.max(-45.0f, Math.min(45.0f, f2 + ((float) ((d / 3.141592653589793d) / 1.649999976158142d))));
+            if (((double) Math.abs(f - this.rotation)) > 0.001d) {
+                if (((double) Math.abs(f)) < 0.05d) {
+                    f = 0.0f;
                 }
-                setRotation(newAngle, false);
-                if (this.rotationListener != null) {
-                    this.rotationListener.onChange(this.rotation);
+                setRotation(f, false);
+                RotationWheelListener rotationWheelListener2 = this.rotationListener;
+                if (rotationWheelListener2 != null) {
+                    rotationWheelListener2.onChange(this.rotation);
                 }
                 this.prevX = x;
             }
@@ -154,49 +162,50 @@ public class CropRotationWheel extends FrameLayout {
         super.onDraw(canvas);
         int width = getWidth();
         int height = getHeight();
-        float angle = (-this.rotation) * 2.0f;
-        float delta = angle % 5.0f;
-        int segments = (int) Math.floor((double) (angle / 5.0f));
-        for (int i = 0; i < 16; i++) {
+        float f = (-this.rotation) * 2.0f;
+        float f2 = f % 5.0f;
+        int floor = (int) Math.floor((double) (f / 5.0f));
+        int i = 0;
+        while (i < 16) {
             Paint paint = this.whitePaint;
-            int a = i;
-            if (a < segments || (a == 0 && delta < 0.0f)) {
+            if (i < floor || (i == 0 && f2 < 0.0f)) {
                 paint = this.bluePaint;
             }
-            boolean z = a == segments || (a == 0 && segments == -1);
-            drawLine(canvas, a, delta, width, height, z, paint);
+            Paint paint2 = paint;
+            boolean z = i == floor || (i == 0 && floor == -1);
+            drawLine(canvas, i, f2, width, height, z, paint2);
             if (i != 0) {
-                a = -i;
-                paint = a > segments ? this.bluePaint : this.whitePaint;
-                if (a == segments + 1) {
-                    z = true;
-                } else {
-                    z = false;
-                }
-                drawLine(canvas, a, delta, width, height, z, paint);
+                int i2 = -i;
+                drawLine(canvas, i2, f2, width, height, i2 == floor + 1, i2 > floor ? this.bluePaint : this.whitePaint);
             }
+            i++;
         }
         this.bluePaint.setAlpha(255);
         this.tempRect.left = (float) ((width - AndroidUtilities.dp(2.5f)) / 2);
         this.tempRect.top = (float) ((height - AndroidUtilities.dp(22.0f)) / 2);
-        this.tempRect.right = (float) ((AndroidUtilities.dp(2.5f) + width) / 2);
-        this.tempRect.bottom = (float) ((AndroidUtilities.dp(22.0f) + height) / 2);
+        this.tempRect.right = (float) ((width + AndroidUtilities.dp(2.5f)) / 2);
+        this.tempRect.bottom = (float) ((height + AndroidUtilities.dp(22.0f)) / 2);
         canvas.drawRoundRect(this.tempRect, (float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(2.0f), this.bluePaint);
     }
 
     /* Access modifiers changed, original: protected */
-    public void drawLine(Canvas canvas, int i, float delta, int width, int height, boolean center, Paint paint) {
-        int radius = (int) ((((float) width) / 2.0f) - ((float) AndroidUtilities.dp(70.0f)));
-        int val = (int) (((double) radius) * Math.cos(Math.toRadians((double) (90.0f - (((float) (i * 5)) + delta)))));
-        int x = (width / 2) + val;
-        float f = ((float) Math.abs(val)) / ((float) radius);
-        int alpha = Math.min(255, Math.max(0, (int) ((1.0f - (f * f)) * 255.0f)));
-        if (center) {
+    public void drawLine(Canvas canvas, int i, float f, int i2, int i3, boolean z, Paint paint) {
+        int dp = (int) ((((float) i2) / 2.0f) - ((float) AndroidUtilities.dp(70.0f)));
+        double d = (double) dp;
+        double cos = Math.cos(Math.toRadians((double) (90.0f - (((float) (i * 5)) + f))));
+        Double.isNaN(d);
+        i = (int) (d * cos);
+        i2 = (i2 / 2) + i;
+        float abs = ((float) Math.abs(i)) / ((float) dp);
+        i = Math.min(255, Math.max(0, (int) ((1.0f - (abs * abs)) * 255.0f)));
+        if (z) {
             paint = this.bluePaint;
         }
-        paint.setAlpha(alpha);
-        int w = center ? 4 : 2;
-        int h = center ? AndroidUtilities.dp(16.0f) : AndroidUtilities.dp(12.0f);
-        canvas.drawRect((float) (x - (w / 2)), (float) ((height - h) / 2), (float) ((w / 2) + x), (float) ((height + h) / 2), paint);
+        Paint paint2 = paint;
+        paint2.setAlpha(i);
+        i = z ? 4 : 2;
+        int dp2 = AndroidUtilities.dp(z ? 16.0f : 12.0f);
+        i /= 2;
+        canvas.drawRect((float) (i2 - i), (float) ((i3 - dp2) / 2), (float) (i2 + i), (float) ((i3 + dp2) / 2), paint2);
     }
 }

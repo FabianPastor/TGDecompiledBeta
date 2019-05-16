@@ -55,123 +55,122 @@ public class StickerEmojiCell extends FrameLayout {
         return this.recent;
     }
 
-    public void setRecent(boolean value) {
-        this.recent = value;
+    public void setRecent(boolean z) {
+        this.recent = z;
     }
 
-    public void setSticker(Document document, Object parent, boolean showEmoji) {
-        setSticker(document, parent, null, showEmoji);
+    public void setSticker(Document document, Object obj, boolean z) {
+        setSticker(document, obj, null, z);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:19:0x0090  */
-    public void setSticker(org.telegram.tgnet.TLRPC.Document r12, java.lang.Object r13, java.lang.String r14, boolean r15) {
+    /* JADX WARNING: Removed duplicated region for block: B:23:0x0098  */
+    /* JADX WARNING: Removed duplicated region for block: B:23:0x0098  */
+    public void setSticker(org.telegram.tgnet.TLRPC.Document r17, java.lang.Object r18, java.lang.String r19, boolean r20) {
         /*
-        r11 = this;
-        if (r12 == 0) goto L_0x003e;
-    L_0x0002:
-        r11.sticker = r12;
-        r11.parentObject = r13;
-        r0 = r12.thumbs;
-        r2 = 90;
-        r1 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r0, r2);
-        if (r1 == 0) goto L_0x003f;
-    L_0x0010:
-        r0 = r11.imageView;
-        r2 = 0;
-        r3 = "webp";
-        r4 = 0;
-        r5 = r11.parentObject;
-        r0.setImage(r1, r2, r3, r4, r5);
-    L_0x001c:
-        if (r14 == 0) goto L_0x004d;
-    L_0x001e:
-        r0 = r11.emojiTextView;
-        r2 = r11.emojiTextView;
-        r2 = r2.getPaint();
-        r2 = r2.getFontMetricsInt();
-        r3 = NUM; // 0x41800000 float:16.0 double:5.42932517E-315;
-        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
-        r4 = 0;
-        r2 = org.telegram.messenger.Emoji.replaceEmoji(r14, r2, r3, r4);
-        r0.setText(r2);
-        r0 = r11.emojiTextView;
-        r2 = 0;
-        r0.setVisibility(r2);
-    L_0x003e:
-        return;
-    L_0x003f:
-        r2 = r11.imageView;
-        r4 = 0;
-        r5 = "webp";
+        r16 = this;
+        r0 = r16;
+        r1 = r17;
+        r2 = r19;
+        if (r1 == 0) goto L_0x00c9;
+    L_0x0008:
+        r0.sticker = r1;
+        r3 = r18;
+        r0.parentObject = r3;
+        r3 = r1.thumbs;
+        r4 = 90;
+        r3 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r3, r4);
+        if (r3 == 0) goto L_0x0028;
+    L_0x0018:
+        r4 = r0.imageView;
+        r5 = org.telegram.messenger.ImageLocation.getForDocument(r3, r1);
         r6 = 0;
-        r7 = r11.parentObject;
-        r3 = r12;
-        r2.setImage(r3, r4, r5, r6, r7);
-        goto L_0x001c;
-    L_0x004d:
-        if (r15 == 0) goto L_0x00c2;
-    L_0x004f:
-        r10 = 0;
         r8 = 0;
-    L_0x0051:
-        r0 = r12.attributes;
-        r0 = r0.size();
-        if (r8 >= r0) goto L_0x008e;
-    L_0x0059:
-        r0 = r12.attributes;
-        r9 = r0.get(r8);
-        r9 = (org.telegram.tgnet.TLRPC.DocumentAttribute) r9;
-        r0 = r9 instanceof org.telegram.tgnet.TLRPC.TL_documentAttributeSticker;
-        if (r0 == 0) goto L_0x00bf;
-    L_0x0065:
-        r0 = r9.alt;
-        if (r0 == 0) goto L_0x008e;
-    L_0x0069:
-        r0 = r9.alt;
-        r0 = r0.length();
-        if (r0 <= 0) goto L_0x008e;
-    L_0x0071:
-        r0 = r11.emojiTextView;
-        r2 = r9.alt;
-        r3 = r11.emojiTextView;
-        r3 = r3.getPaint();
-        r3 = r3.getFontMetricsInt();
-        r4 = NUM; // 0x41800000 float:16.0 double:5.42932517E-315;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r5 = 0;
-        r2 = org.telegram.messenger.Emoji.replaceEmoji(r2, r3, r4, r5);
-        r0.setText(r2);
-        r10 = 1;
-    L_0x008e:
-        if (r10 != 0) goto L_0x00b8;
-    L_0x0090:
-        r0 = r11.emojiTextView;
-        r2 = r11.currentAccount;
-        r2 = org.telegram.messenger.DataQuery.getInstance(r2);
-        r3 = r11.sticker;
-        r4 = r3.id;
-        r2 = r2.getEmojiForSticker(r4);
-        r3 = r11.emojiTextView;
-        r3 = r3.getPaint();
-        r3 = r3.getFontMetricsInt();
-        r4 = NUM; // 0x41800000 float:16.0 double:5.42932517E-315;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r5 = 0;
-        r2 = org.telegram.messenger.Emoji.replaceEmoji(r2, r3, r4, r5);
-        r0.setText(r2);
-    L_0x00b8:
-        r0 = r11.emojiTextView;
+        r9 = r0.parentObject;
+        r7 = "webp";
+        r4.setImage(r5, r6, r7, r8, r9);
+        goto L_0x0037;
+    L_0x0028:
+        r10 = r0.imageView;
+        r11 = org.telegram.messenger.ImageLocation.getForDocument(r17);
+        r12 = 0;
+        r14 = 0;
+        r15 = r0.parentObject;
+        r13 = "webp";
+        r10.setImage(r11, r12, r13, r14, r15);
+    L_0x0037:
+        r3 = NUM; // 0x41800000 float:16.0 double:5.42932517E-315;
+        r4 = 0;
+        if (r2 == 0) goto L_0x0058;
+    L_0x003c:
+        r1 = r0.emojiTextView;
+        r5 = r1.getPaint();
+        r5 = r5.getFontMetricsInt();
+        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
+        r2 = org.telegram.messenger.Emoji.replaceEmoji(r2, r5, r3, r4);
+        r1.setText(r2);
+        r1 = r0.emojiTextView;
+        r1.setVisibility(r4);
+        goto L_0x00c9;
+    L_0x0058:
+        if (r20 == 0) goto L_0x00c3;
+    L_0x005a:
         r2 = 0;
-        r0.setVisibility(r2);
-        goto L_0x003e;
-    L_0x00bf:
-        r8 = r8 + 1;
-        goto L_0x0051;
-    L_0x00c2:
-        r0 = r11.emojiTextView;
+    L_0x005b:
+        r5 = r1.attributes;
+        r5 = r5.size();
+        if (r2 >= r5) goto L_0x0095;
+    L_0x0063:
+        r5 = r1.attributes;
+        r5 = r5.get(r2);
+        r5 = (org.telegram.tgnet.TLRPC.DocumentAttribute) r5;
+        r6 = r5 instanceof org.telegram.tgnet.TLRPC.TL_documentAttributeSticker;
+        if (r6 == 0) goto L_0x0092;
+    L_0x006f:
+        r1 = r5.alt;
+        if (r1 == 0) goto L_0x0095;
+    L_0x0073:
+        r1 = r1.length();
+        if (r1 <= 0) goto L_0x0095;
+    L_0x0079:
+        r1 = r0.emojiTextView;
+        r2 = r5.alt;
+        r5 = r1.getPaint();
+        r5 = r5.getFontMetricsInt();
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r3);
+        r2 = org.telegram.messenger.Emoji.replaceEmoji(r2, r5, r6, r4);
+        r1.setText(r2);
+        r1 = 1;
+        goto L_0x0096;
+    L_0x0092:
+        r2 = r2 + 1;
+        goto L_0x005b;
+    L_0x0095:
+        r1 = 0;
+    L_0x0096:
+        if (r1 != 0) goto L_0x00bd;
+    L_0x0098:
+        r1 = r0.emojiTextView;
+        r2 = r0.currentAccount;
+        r2 = org.telegram.messenger.DataQuery.getInstance(r2);
+        r5 = r0.sticker;
+        r5 = r5.id;
+        r2 = r2.getEmojiForSticker(r5);
+        r5 = r0.emojiTextView;
+        r5 = r5.getPaint();
+        r5 = r5.getFontMetricsInt();
+        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
+        r2 = org.telegram.messenger.Emoji.replaceEmoji(r2, r5, r3, r4);
+        r1.setText(r2);
+    L_0x00bd:
+        r1 = r0.emojiTextView;
+        r1.setVisibility(r4);
+        goto L_0x00c9;
+    L_0x00c3:
+        r1 = r0.emojiTextView;
         r2 = 4;
-        r0.setVisibility(r2);
-        goto L_0x003e;
+        r1.setVisibility(r2);
+    L_0x00c9:
+        return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.StickerEmojiCell.setSticker(org.telegram.tgnet.TLRPC$Document, java.lang.Object, java.lang.String, boolean):void");
     }
@@ -186,8 +185,8 @@ public class StickerEmojiCell extends FrameLayout {
         invalidate();
     }
 
-    public void setScaled(boolean value) {
-        this.scaled = value;
+    public void setScaled(boolean z) {
+        this.scaled = z;
         this.lastUpdateTime = System.currentTimeMillis();
         invalidate();
     }
@@ -206,32 +205,36 @@ public class StickerEmojiCell extends FrameLayout {
     }
 
     /* Access modifiers changed, original: protected */
-    public boolean drawChild(Canvas canvas, View child, long drawingTime) {
-        boolean result = super.drawChild(canvas, child, drawingTime);
-        if (child == this.imageView && (this.changingAlpha || ((this.scaled && this.scale != 0.8f) || !(this.scaled || this.scale == 1.0f)))) {
-            long newTime = System.currentTimeMillis();
-            long dt = newTime - this.lastUpdateTime;
-            this.lastUpdateTime = newTime;
+    public boolean drawChild(Canvas canvas, View view, long j) {
+        boolean drawChild = super.drawChild(canvas, view, j);
+        if (view == this.imageView && (this.changingAlpha || ((this.scaled && this.scale != 0.8f) || !(this.scaled || this.scale == 1.0f)))) {
+            long currentTimeMillis = System.currentTimeMillis();
+            long j2 = currentTimeMillis - this.lastUpdateTime;
+            this.lastUpdateTime = currentTimeMillis;
             if (this.changingAlpha) {
-                this.time += dt;
+                this.time += j2;
                 if (this.time > 1050) {
                     this.time = 1050;
                 }
-                this.alpha = 0.5f + (interpolator.getInterpolation(((float) this.time) / 1050.0f) * 0.5f);
+                this.alpha = (interpolator.getInterpolation(((float) this.time) / 1050.0f) * 0.5f) + 0.5f;
                 if (this.alpha >= 1.0f) {
                     this.changingAlpha = false;
                     this.alpha = 1.0f;
                 }
                 this.imageView.getImageReceiver().setAlpha(this.alpha);
-            } else if (!this.scaled || this.scale == 0.8f) {
-                this.scale += ((float) dt) / 400.0f;
+            } else {
+                if (this.scaled) {
+                    float f = this.scale;
+                    if (f != 0.8f) {
+                        this.scale = f - (((float) j2) / 400.0f);
+                        if (this.scale < 0.8f) {
+                            this.scale = 0.8f;
+                        }
+                    }
+                }
+                this.scale += ((float) j2) / 400.0f;
                 if (this.scale > 1.0f) {
                     this.scale = 1.0f;
-                }
-            } else {
-                this.scale -= ((float) dt) / 400.0f;
-                if (this.scale < 0.8f) {
-                    this.scale = 0.8f;
                 }
             }
             this.imageView.setScaleX(this.scale);
@@ -239,24 +242,30 @@ public class StickerEmojiCell extends FrameLayout {
             this.imageView.invalidate();
             invalidate();
         }
-        return result;
+        return drawChild;
     }
 
-    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
-        super.onInitializeAccessibilityNodeInfo(info);
-        String descr = LocaleController.getString("AttachSticker", NUM);
-        for (int a = 0; a < this.sticker.attributes.size(); a++) {
-            DocumentAttribute attribute = (DocumentAttribute) this.sticker.attributes.get(a);
-            if (attribute instanceof TL_documentAttributeSticker) {
-                if (attribute.alt != null && attribute.alt.length() > 0) {
-                    this.emojiTextView.setText(Emoji.replaceEmoji(attribute.alt, this.emojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16.0f), false));
-                    descr = attribute.alt + " " + descr;
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        CharSequence string = LocaleController.getString("AttachSticker", NUM);
+        for (int i = 0; i < this.sticker.attributes.size(); i++) {
+            DocumentAttribute documentAttribute = (DocumentAttribute) this.sticker.attributes.get(i);
+            if (documentAttribute instanceof TL_documentAttributeSticker) {
+                String str = documentAttribute.alt;
+                if (str != null && str.length() > 0) {
+                    TextView textView = this.emojiTextView;
+                    textView.setText(Emoji.replaceEmoji(documentAttribute.alt, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16.0f), false));
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append(documentAttribute.alt);
+                    stringBuilder.append(" ");
+                    stringBuilder.append(string);
+                    string = stringBuilder.toString();
                 }
-                info.setContentDescription(descr);
-                info.setEnabled(true);
+                accessibilityNodeInfo.setContentDescription(string);
+                accessibilityNodeInfo.setEnabled(true);
             }
         }
-        info.setContentDescription(descr);
-        info.setEnabled(true);
+        accessibilityNodeInfo.setContentDescription(string);
+        accessibilityNodeInfo.setEnabled(true);
     }
 }

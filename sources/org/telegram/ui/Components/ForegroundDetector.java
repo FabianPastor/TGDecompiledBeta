@@ -13,7 +13,7 @@ import org.telegram.messenger.FileLog;
 
 @SuppressLint({"NewApi"})
 public class ForegroundDetector implements ActivityLifecycleCallbacks {
-    private static ForegroundDetector Instance = null;
+    private static ForegroundDetector Instance;
     private long enterBackgroundTime = 0;
     private CopyOnWriteArrayList<Listener> listeners = new CopyOnWriteArrayList();
     private int refs;
@@ -23,6 +23,21 @@ public class ForegroundDetector implements ActivityLifecycleCallbacks {
         void onBecameBackground();
 
         void onBecameForeground();
+    }
+
+    public void onActivityCreated(Activity activity, Bundle bundle) {
+    }
+
+    public void onActivityDestroyed(Activity activity) {
+    }
+
+    public void onActivityPaused(Activity activity) {
+    }
+
+    public void onActivityResumed(Activity activity) {
+    }
+
+    public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
     }
 
     public static ForegroundDetector getInstance() {
@@ -71,8 +86,8 @@ public class ForegroundDetector implements ActivityLifecycleCallbacks {
         }
     }
 
-    public boolean isWasInBackground(boolean reset) {
-        if (reset && VERSION.SDK_INT >= 21 && System.currentTimeMillis() - this.enterBackgroundTime < 200) {
+    public boolean isWasInBackground(boolean z) {
+        if (z && VERSION.SDK_INT >= 21 && System.currentTimeMillis() - this.enterBackgroundTime < 200) {
             this.wasInBackground = false;
         }
         return this.wasInBackground;
@@ -100,20 +115,5 @@ public class ForegroundDetector implements ActivityLifecycleCallbacks {
                 }
             }
         }
-    }
-
-    public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-    }
-
-    public void onActivityResumed(Activity activity) {
-    }
-
-    public void onActivityPaused(Activity activity) {
-    }
-
-    public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-    }
-
-    public void onActivityDestroyed(Activity activity) {
     }
 }

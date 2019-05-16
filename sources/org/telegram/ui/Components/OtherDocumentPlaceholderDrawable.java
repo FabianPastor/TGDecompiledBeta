@@ -21,6 +21,7 @@ import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.tgnet.TLRPC.Document;
+import org.telegram.tgnet.TLRPC.Message;
 
 public class OtherDocumentPlaceholderDrawable extends RecyclableDrawable implements FileDownloadProgressListener {
     private static TextPaint buttonPaint = new TextPaint(1);
@@ -50,6 +51,16 @@ public class OtherDocumentPlaceholderDrawable extends RecyclableDrawable impleme
     private boolean progressVisible;
     private Drawable thumbDrawable;
 
+    public int getOpacity() {
+        return -1;
+    }
+
+    public void onProgressUpload(String str, float f, boolean z) {
+    }
+
+    public void setColorFilter(ColorFilter colorFilter) {
+    }
+
     static {
         progressPaint.setStrokeCap(Cap.ROUND);
         paint.setColor(-14209998);
@@ -59,11 +70,12 @@ public class OtherDocumentPlaceholderDrawable extends RecyclableDrawable impleme
         buttonPaint.setColor(-10327179);
         percentPaint.setColor(-1);
         openPaint.setColor(-1);
-        docPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        namePaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        buttonPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        percentPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        openPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        String str = "fonts/rmedium.ttf";
+        docPaint.setTypeface(AndroidUtilities.getTypeface(str));
+        namePaint.setTypeface(AndroidUtilities.getTypeface(str));
+        buttonPaint.setTypeface(AndroidUtilities.getTypeface(str));
+        percentPaint.setTypeface(AndroidUtilities.getTypeface(str));
+        openPaint.setTypeface(AndroidUtilities.getTypeface(str));
     }
 
     public OtherDocumentPlaceholderDrawable(Context context, View view, MessageObject messageObject) {
@@ -83,8 +95,8 @@ public class OtherDocumentPlaceholderDrawable extends RecyclableDrawable impleme
             if (TextUtils.isEmpty(this.fileName)) {
                 this.fileName = "name";
             }
-            int idx = this.fileName.lastIndexOf(46);
-            this.ext = idx == -1 ? "" : this.fileName.substring(idx + 1).toUpperCase();
+            int lastIndexOf = this.fileName.lastIndexOf(46);
+            this.ext = lastIndexOf == -1 ? "" : this.fileName.substring(lastIndexOf + 1).toUpperCase();
             if (((int) Math.ceil((double) docPaint.measureText(this.ext))) > AndroidUtilities.dp(40.0f)) {
                 this.ext = TextUtils.ellipsize(this.ext, docPaint, (float) AndroidUtilities.dp(40.0f), TruncateAt.END).toString();
             }
@@ -97,70 +109,67 @@ public class OtherDocumentPlaceholderDrawable extends RecyclableDrawable impleme
         checkFileExist();
     }
 
-    public void setColorFilter(ColorFilter colorFilter) {
-    }
-
-    public void setAlpha(int alpha) {
-        if (this.thumbDrawable != null) {
-            this.thumbDrawable.setAlpha(alpha);
+    public void setAlpha(int i) {
+        Drawable drawable = this.thumbDrawable;
+        if (drawable != null) {
+            drawable.setAlpha(i);
         }
-        paint.setAlpha(alpha);
-        docPaint.setAlpha(alpha);
-        namePaint.setAlpha(alpha);
-        sizePaint.setAlpha(alpha);
-        buttonPaint.setAlpha(alpha);
-        percentPaint.setAlpha(alpha);
-        openPaint.setAlpha(alpha);
+        paint.setAlpha(i);
+        docPaint.setAlpha(i);
+        namePaint.setAlpha(i);
+        sizePaint.setAlpha(i);
+        buttonPaint.setAlpha(i);
+        percentPaint.setAlpha(i);
+        openPaint.setAlpha(i);
     }
 
     public void draw(Canvas canvas) {
-        String button;
-        TextPaint paint;
-        int offsetY;
+        String string;
+        TextPaint textPaint;
+        int i;
         Rect bounds = getBounds();
         int width = bounds.width();
         int height = bounds.height();
         canvas.save();
         canvas.translate((float) bounds.left, (float) bounds.top);
         canvas.drawRect(0.0f, 0.0f, (float) width, (float) height, paint);
-        int y = (height - AndroidUtilities.dp(240.0f)) / 2;
-        int x = (width - AndroidUtilities.dp(48.0f)) / 2;
-        this.thumbDrawable.setBounds(x, y, AndroidUtilities.dp(48.0f) + x, AndroidUtilities.dp(48.0f) + y);
+        height = (height - AndroidUtilities.dp(240.0f)) / 2;
+        int dp = (width - AndroidUtilities.dp(48.0f)) / 2;
+        this.thumbDrawable.setBounds(dp, height, AndroidUtilities.dp(48.0f) + dp, AndroidUtilities.dp(48.0f) + height);
         this.thumbDrawable.draw(canvas);
-        Canvas canvas2 = canvas;
-        canvas2.drawText(this.ext, (float) ((width - ((int) Math.ceil((double) docPaint.measureText(this.ext)))) / 2), (float) (AndroidUtilities.dp(31.0f) + y), docPaint);
-        canvas2 = canvas;
-        canvas2.drawText(this.fileName, (float) ((width - ((int) Math.ceil((double) namePaint.measureText(this.fileName)))) / 2), (float) (AndroidUtilities.dp(96.0f) + y), namePaint);
-        canvas2 = canvas;
-        canvas2.drawText(this.fileSize, (float) ((width - ((int) Math.ceil((double) sizePaint.measureText(this.fileSize)))) / 2), (float) (AndroidUtilities.dp(125.0f) + y), sizePaint);
+        canvas.drawText(this.ext, (float) ((width - ((int) Math.ceil((double) docPaint.measureText(this.ext)))) / 2), (float) (AndroidUtilities.dp(31.0f) + height), docPaint);
+        canvas.drawText(this.fileName, (float) ((width - ((int) Math.ceil((double) namePaint.measureText(this.fileName)))) / 2), (float) (AndroidUtilities.dp(96.0f) + height), namePaint);
+        canvas.drawText(this.fileSize, (float) ((width - ((int) Math.ceil((double) sizePaint.measureText(this.fileSize)))) / 2), (float) (AndroidUtilities.dp(125.0f) + height), sizePaint);
         if (this.loaded) {
-            button = LocaleController.getString("OpenFile", NUM);
-            paint = openPaint;
-            offsetY = 0;
+            string = LocaleController.getString("OpenFile", NUM);
+            textPaint = openPaint;
+            i = 0;
         } else {
             if (this.loading) {
-                button = LocaleController.getString("Cancel", NUM).toUpperCase();
+                string = LocaleController.getString("Cancel", NUM).toUpperCase();
             } else {
-                button = LocaleController.getString("TapToDownload", NUM);
+                string = LocaleController.getString("TapToDownload", NUM);
             }
-            offsetY = AndroidUtilities.dp(28.0f);
-            paint = buttonPaint;
+            i = AndroidUtilities.dp(28.0f);
+            textPaint = buttonPaint;
         }
-        canvas.drawText(button, (float) ((width - ((int) Math.ceil((double) paint.measureText(button)))) / 2), (float) ((AndroidUtilities.dp(235.0f) + y) + offsetY), paint);
+        canvas.drawText(string, (float) ((width - ((int) Math.ceil((double) textPaint.measureText(string)))) / 2), (float) ((AndroidUtilities.dp(235.0f) + height) + i), textPaint);
         if (this.progressVisible) {
-            if (this.progress != null) {
-                canvas2 = canvas;
-                canvas2.drawText(this.progress, (float) ((width - ((int) Math.ceil((double) percentPaint.measureText(this.progress)))) / 2), (float) (AndroidUtilities.dp(210.0f) + y), percentPaint);
+            string = this.progress;
+            if (string != null) {
+                canvas.drawText(this.progress, (float) ((width - ((int) Math.ceil((double) percentPaint.measureText(string)))) / 2), (float) (AndroidUtilities.dp(210.0f) + height), percentPaint);
             }
-            x = (width - AndroidUtilities.dp(240.0f)) / 2;
-            y += AndroidUtilities.dp(232.0f);
+            width = (width - AndroidUtilities.dp(240.0f)) / 2;
+            height += AndroidUtilities.dp(232.0f);
             progressPaint.setColor(-10327179);
-            progressPaint.setAlpha((int) (255.0f * this.animatedAlphaValue));
-            canvas.drawRect((float) (x + ((int) (((float) AndroidUtilities.dp(240.0f)) * this.animatedProgressValue))), (float) y, (float) (AndroidUtilities.dp(240.0f) + x), (float) (AndroidUtilities.dp(2.0f) + y), progressPaint);
+            progressPaint.setAlpha((int) (this.animatedAlphaValue * 255.0f));
+            float f = (float) height;
+            Canvas canvas2 = canvas;
+            canvas2.drawRect((float) (((int) (((float) AndroidUtilities.dp(240.0f)) * this.animatedProgressValue)) + width), f, (float) (AndroidUtilities.dp(240.0f) + width), (float) (AndroidUtilities.dp(2.0f) + height), progressPaint);
             progressPaint.setColor(-1);
-            progressPaint.setAlpha((int) (255.0f * this.animatedAlphaValue));
-            Canvas canvas3 = canvas;
-            canvas3.drawRect((float) x, (float) y, (((float) AndroidUtilities.dp(240.0f)) * this.animatedProgressValue) + ((float) x), (float) (AndroidUtilities.dp(2.0f) + y), progressPaint);
+            progressPaint.setAlpha((int) (this.animatedAlphaValue * 255.0f));
+            float f2 = (float) width;
+            canvas.drawRect(f2, f, f2 + (((float) AndroidUtilities.dp(240.0f)) * this.animatedProgressValue), (float) (height + AndroidUtilities.dp(2.0f)), progressPaint);
             updateAnimation();
         }
         canvas.restore();
@@ -182,27 +191,20 @@ public class OtherDocumentPlaceholderDrawable extends RecyclableDrawable impleme
         return this.parentView.getMeasuredHeight();
     }
 
-    public int getOpacity() {
-        return -1;
-    }
-
-    public void onFailedDownload(String name, boolean canceled) {
+    public void onFailedDownload(String str, boolean z) {
         checkFileExist();
     }
 
-    public void onSuccessDownload(String name) {
+    public void onSuccessDownload(String str) {
         setProgress(1.0f, true);
         checkFileExist();
     }
 
-    public void onProgressDownload(String fileName, float progress) {
+    public void onProgressDownload(String str, float f) {
         if (!this.progressVisible) {
             checkFileExist();
         }
-        setProgress(progress, true);
-    }
-
-    public void onProgressUpload(String fileName, float progress, boolean isEncrypted) {
+        setProgress(f, true);
     }
 
     public int getObserverTag() {
@@ -216,80 +218,94 @@ public class OtherDocumentPlaceholderDrawable extends RecyclableDrawable impleme
     }
 
     public void checkFileExist() {
-        if (this.parentMessageObject == null || this.parentMessageObject.messageOwner.media == null) {
-            this.loading = false;
-            this.loaded = true;
-            this.progressVisible = false;
-            setProgress(0.0f, false);
-            DownloadController.getInstance(this.parentMessageObject.currentAccount).removeLoadingFileObserver(this);
-        } else {
-            String fileName = null;
-            if ((TextUtils.isEmpty(this.parentMessageObject.messageOwner.attachPath) || !new File(this.parentMessageObject.messageOwner.attachPath).exists()) && !FileLoader.getPathToMessage(this.parentMessageObject.messageOwner).exists()) {
-                fileName = FileLoader.getAttachFileName(this.parentMessageObject.getDocument());
-            }
-            this.loaded = false;
-            if (fileName == null) {
-                this.progressVisible = false;
-                this.loading = false;
-                this.loaded = true;
-                DownloadController.getInstance(this.parentMessageObject.currentAccount).removeLoadingFileObserver(this);
-            } else {
-                DownloadController.getInstance(this.parentMessageObject.currentAccount).addLoadingFileObserver(fileName, this);
-                this.loading = FileLoader.getInstance(this.parentMessageObject.currentAccount).isLoadingFile(fileName);
-                if (this.loading) {
-                    this.progressVisible = true;
-                    Float progress = ImageLoader.getInstance().getFileProgress(fileName);
-                    if (progress == null) {
-                        progress = Float.valueOf(0.0f);
-                    }
-                    setProgress(progress.floatValue(), false);
-                } else {
-                    this.progressVisible = false;
+        MessageObject messageObject = this.parentMessageObject;
+        if (messageObject != null) {
+            Message message = messageObject.messageOwner;
+            if (message.media != null) {
+                String str = null;
+                if ((TextUtils.isEmpty(message.attachPath) || !new File(this.parentMessageObject.messageOwner.attachPath).exists()) && !FileLoader.getPathToMessage(this.parentMessageObject.messageOwner).exists()) {
+                    str = FileLoader.getAttachFileName(this.parentMessageObject.getDocument());
                 }
+                this.loaded = false;
+                if (str == null) {
+                    this.progressVisible = false;
+                    this.loading = false;
+                    this.loaded = true;
+                    DownloadController.getInstance(this.parentMessageObject.currentAccount).removeLoadingFileObserver(this);
+                } else {
+                    DownloadController.getInstance(this.parentMessageObject.currentAccount).addLoadingFileObserver(str, this);
+                    this.loading = FileLoader.getInstance(this.parentMessageObject.currentAccount).isLoadingFile(str);
+                    if (this.loading) {
+                        this.progressVisible = true;
+                        Float fileProgress = ImageLoader.getInstance().getFileProgress(str);
+                        if (fileProgress == null) {
+                            fileProgress = Float.valueOf(0.0f);
+                        }
+                        setProgress(fileProgress.floatValue(), false);
+                    } else {
+                        this.progressVisible = false;
+                    }
+                }
+                this.parentView.invalidate();
             }
         }
+        this.loading = false;
+        this.loaded = true;
+        this.progressVisible = false;
+        setProgress(0.0f, false);
+        DownloadController.getInstance(this.parentMessageObject.currentAccount).removeLoadingFileObserver(this);
         this.parentView.invalidate();
     }
 
     private void updateAnimation() {
-        long newTime = System.currentTimeMillis();
-        long dt = newTime - this.lastUpdateTime;
-        this.lastUpdateTime = newTime;
-        if (!(this.animatedProgressValue == 1.0f || this.animatedProgressValue == this.currentProgress)) {
-            float progressDiff = this.currentProgress - this.animationProgressStart;
-            if (progressDiff > 0.0f) {
-                this.currentProgressTime += dt;
-                if (this.currentProgressTime >= 300) {
-                    this.animatedProgressValue = this.currentProgress;
-                    this.animationProgressStart = this.currentProgress;
-                    this.currentProgressTime = 0;
-                } else {
-                    this.animatedProgressValue = this.animationProgressStart + (decelerateInterpolator.getInterpolation(((float) this.currentProgressTime) / 300.0f) * progressDiff);
+        long currentTimeMillis = System.currentTimeMillis();
+        long j = currentTimeMillis - this.lastUpdateTime;
+        this.lastUpdateTime = currentTimeMillis;
+        float f = this.animatedProgressValue;
+        if (f != 1.0f) {
+            float f2 = this.currentProgress;
+            if (f != f2) {
+                f = this.animationProgressStart;
+                float f3 = f2 - f;
+                if (f3 > 0.0f) {
+                    this.currentProgressTime += j;
+                    long j2 = this.currentProgressTime;
+                    if (j2 >= 300) {
+                        this.animatedProgressValue = f2;
+                        this.animationProgressStart = f2;
+                        this.currentProgressTime = 0;
+                    } else {
+                        this.animatedProgressValue = f + (f3 * decelerateInterpolator.getInterpolation(((float) j2) / 300.0f));
+                    }
                 }
+                this.parentView.invalidate();
             }
-            this.parentView.invalidate();
         }
-        if (this.animatedProgressValue >= 1.0f && this.animatedProgressValue == 1.0f && this.animatedAlphaValue != 0.0f) {
-            this.animatedAlphaValue -= ((float) dt) / 200.0f;
-            if (this.animatedAlphaValue <= 0.0f) {
-                this.animatedAlphaValue = 0.0f;
+        f = this.animatedProgressValue;
+        if (f >= 1.0f && f == 1.0f) {
+            f = this.animatedAlphaValue;
+            if (f != 0.0f) {
+                this.animatedAlphaValue = f - (((float) j) / 200.0f);
+                if (this.animatedAlphaValue <= 0.0f) {
+                    this.animatedAlphaValue = 0.0f;
+                }
+                this.parentView.invalidate();
             }
-            this.parentView.invalidate();
         }
     }
 
-    public void setProgress(float value, boolean animated) {
-        if (animated) {
+    public void setProgress(float f, boolean z) {
+        if (z) {
             this.animationProgressStart = this.animatedProgressValue;
         } else {
-            this.animatedProgressValue = value;
-            this.animationProgressStart = value;
+            this.animatedProgressValue = f;
+            this.animationProgressStart = f;
         }
-        this.progress = String.format("%d%%", new Object[]{Integer.valueOf((int) (100.0f * value))});
-        if (value != 1.0f) {
+        this.progress = String.format("%d%%", new Object[]{Integer.valueOf((int) (100.0f * f))});
+        if (f != 1.0f) {
             this.animatedAlphaValue = 1.0f;
         }
-        this.currentProgress = value;
+        this.currentProgress = f;
         this.currentProgressTime = 0;
         this.lastUpdateTime = System.currentTimeMillis();
         this.parentView.invalidate();

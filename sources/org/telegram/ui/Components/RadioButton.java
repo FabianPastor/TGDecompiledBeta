@@ -10,8 +10,8 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
-import android.support.annotation.Keep;
 import android.view.View;
+import androidx.annotation.Keep;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 
@@ -43,15 +43,15 @@ public class RadioButton extends View {
         try {
             this.bitmap = Bitmap.createBitmap(AndroidUtilities.dp((float) this.size), AndroidUtilities.dp((float) this.size), Config.ARGB_4444);
             this.bitmapCanvas = new Canvas(this.bitmap);
-        } catch (Throwable e) {
-            FileLog.e(e);
+        } catch (Throwable th) {
+            FileLog.e(th);
         }
     }
 
     @Keep
-    public void setProgress(float value) {
-        if (this.progress != value) {
-            this.progress = value;
+    public void setProgress(float f) {
+        if (this.progress != f) {
+            this.progress = f;
             invalidate();
         }
     }
@@ -60,39 +60,39 @@ public class RadioButton extends View {
         return this.progress;
     }
 
-    public void setSize(int value) {
-        if (this.size != value) {
-            this.size = value;
+    public void setSize(int i) {
+        if (this.size != i) {
+            this.size = i;
         }
     }
 
-    public void setColor(int color1, int color2) {
-        this.color = color1;
-        this.checkedColor = color2;
+    public void setColor(int i, int i2) {
+        this.color = i;
+        this.checkedColor = i2;
         invalidate();
     }
 
-    public void setBackgroundColor(int color1) {
-        this.color = color1;
+    public void setBackgroundColor(int i) {
+        this.color = i;
         invalidate();
     }
 
-    public void setCheckedColor(int color2) {
-        this.checkedColor = color2;
+    public void setCheckedColor(int i) {
+        this.checkedColor = i;
         invalidate();
     }
 
     private void cancelCheckAnimator() {
-        if (this.checkAnimator != null) {
-            this.checkAnimator.cancel();
+        ObjectAnimator objectAnimator = this.checkAnimator;
+        if (objectAnimator != null) {
+            objectAnimator.cancel();
         }
     }
 
-    private void animateToCheckedState(boolean newCheckedState) {
-        String str = "progress";
+    private void animateToCheckedState(boolean z) {
         float[] fArr = new float[1];
-        fArr[0] = newCheckedState ? 1.0f : 0.0f;
-        this.checkAnimator = ObjectAnimator.ofFloat(this, str, fArr);
+        fArr[0] = z ? 1.0f : 0.0f;
+        this.checkAnimator = ObjectAnimator.ofFloat(this, "progress", fArr);
         this.checkAnimator.setDuration(200);
         this.checkAnimator.start();
     }
@@ -109,15 +109,15 @@ public class RadioButton extends View {
         this.attachedToWindow = false;
     }
 
-    public void setChecked(boolean checked, boolean animated) {
-        if (checked != this.isChecked) {
-            this.isChecked = checked;
-            if (this.attachedToWindow && animated) {
-                animateToCheckedState(checked);
-                return;
+    public void setChecked(boolean z, boolean z2) {
+        if (z != this.isChecked) {
+            this.isChecked = z;
+            if (this.attachedToWindow && z2) {
+                animateToCheckedState(z);
+            } else {
+                cancelCheckAnimator();
+                setProgress(z ? 1.0f : 0.0f);
             }
-            cancelCheckAnimator();
-            setProgress(checked ? 1.0f : 0.0f);
         }
     }
 
@@ -127,43 +127,47 @@ public class RadioButton extends View {
 
     /* Access modifiers changed, original: protected */
     public void onDraw(Canvas canvas) {
-        float circleProgress;
-        if (this.bitmap == null || this.bitmap.getWidth() != getMeasuredWidth()) {
-            if (this.bitmap != null) {
-                this.bitmap.recycle();
+        Bitmap bitmap = this.bitmap;
+        if (bitmap == null || bitmap.getWidth() != getMeasuredWidth()) {
+            bitmap = this.bitmap;
+            if (bitmap != null) {
+                bitmap.recycle();
                 this.bitmap = null;
             }
             try {
                 this.bitmap = Bitmap.createBitmap(getMeasuredWidth(), getMeasuredHeight(), Config.ARGB_8888);
                 this.bitmapCanvas = new Canvas(this.bitmap);
-            } catch (Throwable e) {
-                FileLog.e(e);
+            } catch (Throwable th) {
+                FileLog.e(th);
             }
         }
-        if (this.progress <= 0.5f) {
+        float f = this.progress;
+        if (f <= 0.5f) {
             paint.setColor(this.color);
             checkedPaint.setColor(this.color);
-            circleProgress = this.progress / 0.5f;
+            f = this.progress / 0.5f;
         } else {
-            circleProgress = 2.0f - (this.progress / 0.5f);
-            int r1 = Color.red(this.color);
-            int rD = (int) (((float) (Color.red(this.checkedColor) - r1)) * (1.0f - circleProgress));
-            int g1 = Color.green(this.color);
-            int gD = (int) (((float) (Color.green(this.checkedColor) - g1)) * (1.0f - circleProgress));
-            int b1 = Color.blue(this.color);
-            int c = Color.rgb(r1 + rD, g1 + gD, b1 + ((int) (((float) (Color.blue(this.checkedColor) - b1)) * (1.0f - circleProgress))));
-            paint.setColor(c);
-            checkedPaint.setColor(c);
+            f = 2.0f - (f / 0.5f);
+            int red = Color.red(this.color);
+            float f2 = 1.0f - f;
+            int red2 = (int) (((float) (Color.red(this.checkedColor) - red)) * f2);
+            int green = Color.green(this.color);
+            int green2 = (int) (((float) (Color.green(this.checkedColor) - green)) * f2);
+            int blue = Color.blue(this.color);
+            red = Color.rgb(red + red2, green + green2, blue + ((int) (((float) (Color.blue(this.checkedColor) - blue)) * f2)));
+            paint.setColor(red);
+            checkedPaint.setColor(red);
         }
-        if (this.bitmap != null) {
-            this.bitmap.eraseColor(0);
-            float rad = ((float) (this.size / 2)) - ((1.0f + circleProgress) * AndroidUtilities.density);
-            this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), rad, paint);
+        Bitmap bitmap2 = this.bitmap;
+        if (bitmap2 != null) {
+            bitmap2.eraseColor(0);
+            float f3 = ((float) (this.size / 2)) - ((f + 1.0f) * AndroidUtilities.density);
+            this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), f3, paint);
             if (this.progress <= 0.5f) {
-                this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), rad - ((float) AndroidUtilities.dp(1.0f)), checkedPaint);
-                this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), (rad - ((float) AndroidUtilities.dp(1.0f))) * (1.0f - circleProgress), eraser);
+                this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), f3 - ((float) AndroidUtilities.dp(1.0f)), checkedPaint);
+                this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), (f3 - ((float) AndroidUtilities.dp(1.0f))) * (1.0f - f), eraser);
             } else {
-                this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), ((float) (this.size / 4)) + (((rad - ((float) AndroidUtilities.dp(1.0f))) - ((float) (this.size / 4))) * circleProgress), checkedPaint);
+                this.bitmapCanvas.drawCircle((float) (getMeasuredWidth() / 2), (float) (getMeasuredHeight() / 2), ((float) (this.size / 4)) + (((f3 - ((float) AndroidUtilities.dp(1.0f))) - ((float) (this.size / 4))) * f), checkedPaint);
             }
             canvas.drawBitmap(this.bitmap, 0.0f, 0.0f, null);
         }

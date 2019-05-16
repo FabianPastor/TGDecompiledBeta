@@ -14,9 +14,16 @@ public class ShareLocationDrawable extends Drawable {
     private long lastUpdateTime = 0;
     private float[] progress = new float[]{0.0f, -0.5f};
 
-    public ShareLocationDrawable(Context context, boolean small) {
-        this.isSmall = small;
-        if (small) {
+    public int getOpacity() {
+        return 0;
+    }
+
+    public void setAlpha(int i) {
+    }
+
+    public ShareLocationDrawable(Context context, boolean z) {
+        this.isSmall = z;
+        if (z) {
             this.drawable = context.getResources().getDrawable(NUM);
             this.drawableLeft = context.getResources().getDrawable(NUM);
             this.drawableRight = context.getResources().getDrawable(NUM);
@@ -28,68 +35,79 @@ public class ShareLocationDrawable extends Drawable {
     }
 
     private void update() {
-        long newTime = System.currentTimeMillis();
-        long dt = newTime - this.lastUpdateTime;
-        this.lastUpdateTime = newTime;
-        if (dt > 16) {
-            dt = 16;
+        long currentTimeMillis = System.currentTimeMillis();
+        long j = currentTimeMillis - this.lastUpdateTime;
+        this.lastUpdateTime = currentTimeMillis;
+        currentTimeMillis = 16;
+        if (j <= 16) {
+            currentTimeMillis = j;
         }
-        for (int a = 0; a < 2; a++) {
-            if (this.progress[a] >= 1.0f) {
-                this.progress[a] = 0.0f;
-            }
+        for (int i = 0; i < 2; i++) {
             float[] fArr = this.progress;
-            fArr[a] = fArr[a] + (((float) dt) / 1300.0f);
-            if (this.progress[a] > 1.0f) {
-                this.progress[a] = 1.0f;
+            if (fArr[i] >= 1.0f) {
+                fArr[i] = 0.0f;
+            }
+            fArr = this.progress;
+            fArr[i] = fArr[i] + (((float) currentTimeMillis) / 1300.0f);
+            if (fArr[i] > 1.0f) {
+                fArr[i] = 1.0f;
             }
         }
         invalidateSelf();
     }
 
     public void draw(Canvas canvas) {
-        int size = AndroidUtilities.dp(this.isSmall ? 30.0f : 120.0f);
-        int y = getBounds().top + ((getIntrinsicHeight() - size) / 2);
-        int x = getBounds().left + ((getIntrinsicWidth() - size) / 2);
-        this.drawable.setBounds(x, y, this.drawable.getIntrinsicWidth() + x, this.drawable.getIntrinsicHeight() + y);
-        this.drawable.draw(canvas);
-        for (int a = 0; a < 2; a++) {
-            if (this.progress[a] >= 0.0f) {
-                float alpha;
-                float scale = 0.5f + (0.5f * this.progress[a]);
-                int w = AndroidUtilities.dp((this.isSmall ? 2.5f : 5.0f) * scale);
-                int h = AndroidUtilities.dp((this.isSmall ? 6.5f : 18.0f) * scale);
-                int tx = AndroidUtilities.dp((this.isSmall ? 6.0f : 15.0f) * this.progress[a]);
-                if (this.progress[a] < 0.5f) {
-                    alpha = this.progress[a] / 0.5f;
+        Canvas canvas2 = canvas;
+        int dp = AndroidUtilities.dp(this.isSmall ? 30.0f : 120.0f);
+        int i = 2;
+        int intrinsicHeight = getBounds().top + ((getIntrinsicHeight() - dp) / 2);
+        int intrinsicWidth = getBounds().left + ((getIntrinsicWidth() - dp) / 2);
+        Drawable drawable = this.drawable;
+        drawable.setBounds(intrinsicWidth, intrinsicHeight, drawable.getIntrinsicWidth() + intrinsicWidth, this.drawable.getIntrinsicHeight() + intrinsicHeight);
+        this.drawable.draw(canvas2);
+        int i2 = 0;
+        while (i2 < i) {
+            float[] fArr = this.progress;
+            if (fArr[i2] >= 0.0f) {
+                float f;
+                float f2 = (fArr[i2] * 0.5f) + 0.5f;
+                int dp2 = AndroidUtilities.dp((this.isSmall ? 2.5f : 5.0f) * f2);
+                int dp3 = AndroidUtilities.dp((this.isSmall ? 6.5f : 18.0f) * f2);
+                int dp4 = AndroidUtilities.dp((this.isSmall ? 6.0f : 15.0f) * this.progress[i2]);
+                float[] fArr2 = this.progress;
+                if (fArr2[i2] < 0.5f) {
+                    f = fArr2[i2] / 0.5f;
                 } else {
-                    alpha = 1.0f - ((this.progress[a] - 0.5f) / 0.5f);
+                    f = 1.0f - ((fArr2[i2] - 0.5f) / 0.5f);
                 }
-                int cx = (AndroidUtilities.dp(this.isSmall ? 7.0f : 42.0f) + x) - tx;
-                int cy = (y + (this.drawable.getIntrinsicHeight() / 2)) - (this.isSmall ? 0 : AndroidUtilities.dp(7.0f));
-                this.drawableLeft.setAlpha((int) (255.0f * alpha));
-                this.drawableLeft.setBounds(cx - w, cy - h, cx + w, cy + h);
-                this.drawableLeft.draw(canvas);
-                cx = ((x + this.drawable.getIntrinsicWidth()) - AndroidUtilities.dp(this.isSmall ? 7.0f : 42.0f)) + tx;
-                this.drawableRight.setAlpha((int) (255.0f * alpha));
-                this.drawableRight.setBounds(cx - w, cy - h, cx + w, cy + h);
-                this.drawableRight.draw(canvas);
+                float f3 = 42.0f;
+                int dp5 = (AndroidUtilities.dp(this.isSmall ? 7.0f : 42.0f) + intrinsicWidth) - dp4;
+                int intrinsicHeight2 = ((this.drawable.getIntrinsicHeight() / i) + intrinsicHeight) - (this.isSmall ? 0 : AndroidUtilities.dp(7.0f));
+                int i3 = (int) (f * 255.0f);
+                this.drawableLeft.setAlpha(i3);
+                i = intrinsicHeight2 - dp3;
+                intrinsicHeight2 += dp3;
+                this.drawableLeft.setBounds(dp5 - dp2, i, dp5 + dp2, intrinsicHeight2);
+                this.drawableLeft.draw(canvas2);
+                dp = this.drawable.getIntrinsicWidth() + intrinsicWidth;
+                if (this.isSmall) {
+                    f3 = 7.0f;
+                }
+                dp = (dp - AndroidUtilities.dp(f3)) + dp4;
+                this.drawableRight.setAlpha(i3);
+                this.drawableRight.setBounds(dp - dp2, i, dp + dp2, intrinsicHeight2);
+                this.drawableRight.draw(canvas2);
             }
+            i2++;
+            i = 2;
         }
         update();
     }
 
-    public void setAlpha(int alpha) {
-    }
-
-    public void setColorFilter(ColorFilter cf) {
-        this.drawable.setColorFilter(cf);
-        this.drawableLeft.setColorFilter(cf);
-        this.drawableRight.setColorFilter(cf);
-    }
-
-    public int getOpacity() {
-        return 0;
+    public void setColorFilter(ColorFilter colorFilter) {
+        this.drawable.setColorFilter(colorFilter);
+        this.drawableLeft.setColorFilter(colorFilter);
+        this.drawableRight.setColorFilter(colorFilter);
     }
 
     public int getIntrinsicWidth() {

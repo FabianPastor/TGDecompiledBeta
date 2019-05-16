@@ -15,24 +15,24 @@ import org.telegram.messenger.FileLog;
 public final class FingerprintManagerCompatApi23 {
 
     public static abstract class AuthenticationCallback {
-        public void onAuthenticationError(int errMsgId, CharSequence errString) {
-        }
-
-        public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
-        }
-
-        public void onAuthenticationSucceeded(AuthenticationResultInternal result) {
+        public void onAuthenticationError(int i, CharSequence charSequence) {
         }
 
         public void onAuthenticationFailed() {
+        }
+
+        public void onAuthenticationHelp(int i, CharSequence charSequence) {
+        }
+
+        public void onAuthenticationSucceeded(AuthenticationResultInternal authenticationResultInternal) {
         }
     }
 
     public static final class AuthenticationResultInternal {
         private CryptoObject mCryptoObject;
 
-        public AuthenticationResultInternal(CryptoObject crypto) {
-            this.mCryptoObject = crypto;
+        public AuthenticationResultInternal(CryptoObject cryptoObject) {
+            this.mCryptoObject = cryptoObject;
         }
 
         public CryptoObject getCryptoObject() {
@@ -76,8 +76,8 @@ public final class FingerprintManagerCompatApi23 {
         }
     }
 
-    private static FingerprintManager getFingerprintManager(Context ctx) {
-        return (FingerprintManager) ctx.getSystemService(FingerprintManager.class);
+    private static FingerprintManager getFingerprintManager(Context context) {
+        return (FingerprintManager) context.getSystemService(FingerprintManager.class);
     }
 
     public static boolean hasEnrolledFingerprints(Context context) {
@@ -98,15 +98,16 @@ public final class FingerprintManagerCompatApi23 {
         }
     }
 
-    public static void authenticate(Context context, CryptoObject crypto, int flags, Object cancel, AuthenticationCallback callback, Handler handler) {
+    public static void authenticate(Context context, CryptoObject cryptoObject, int i, Object obj, AuthenticationCallback authenticationCallback, Handler handler) {
         try {
-            getFingerprintManager(context).authenticate(wrapCryptoObject(crypto), (CancellationSignal) cancel, flags, wrapCallback(callback), handler);
+            getFingerprintManager(context).authenticate(wrapCryptoObject(cryptoObject), (CancellationSignal) obj, i, wrapCallback(authenticationCallback), handler);
         } catch (Exception e) {
             FileLog.e(e);
         }
     }
 
     private static android.hardware.fingerprint.FingerprintManager.CryptoObject wrapCryptoObject(CryptoObject cryptoObject) {
+        android.hardware.fingerprint.FingerprintManager.CryptoObject cryptoObject2 = null;
         if (cryptoObject == null) {
             return null;
         }
@@ -117,12 +118,13 @@ public final class FingerprintManagerCompatApi23 {
             return new android.hardware.fingerprint.FingerprintManager.CryptoObject(cryptoObject.getSignature());
         }
         if (cryptoObject.getMac() != null) {
-            return new android.hardware.fingerprint.FingerprintManager.CryptoObject(cryptoObject.getMac());
+            cryptoObject2 = new android.hardware.fingerprint.FingerprintManager.CryptoObject(cryptoObject.getMac());
         }
-        return null;
+        return cryptoObject2;
     }
 
     private static CryptoObject unwrapCryptoObject(android.hardware.fingerprint.FingerprintManager.CryptoObject cryptoObject) {
+        CryptoObject cryptoObject2 = null;
         if (cryptoObject == null) {
             return null;
         }
@@ -133,27 +135,27 @@ public final class FingerprintManagerCompatApi23 {
             return new CryptoObject(cryptoObject.getSignature());
         }
         if (cryptoObject.getMac() != null) {
-            return new CryptoObject(cryptoObject.getMac());
+            cryptoObject2 = new CryptoObject(cryptoObject.getMac());
         }
-        return null;
+        return cryptoObject2;
     }
 
-    private static android.hardware.fingerprint.FingerprintManager.AuthenticationCallback wrapCallback(final AuthenticationCallback callback) {
+    private static android.hardware.fingerprint.FingerprintManager.AuthenticationCallback wrapCallback(final AuthenticationCallback authenticationCallback) {
         return new android.hardware.fingerprint.FingerprintManager.AuthenticationCallback() {
-            public void onAuthenticationError(int errMsgId, CharSequence errString) {
-                callback.onAuthenticationError(errMsgId, errString);
+            public void onAuthenticationError(int i, CharSequence charSequence) {
+                authenticationCallback.onAuthenticationError(i, charSequence);
             }
 
-            public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
-                callback.onAuthenticationHelp(helpMsgId, helpString);
+            public void onAuthenticationHelp(int i, CharSequence charSequence) {
+                authenticationCallback.onAuthenticationHelp(i, charSequence);
             }
 
-            public void onAuthenticationSucceeded(AuthenticationResult result) {
-                callback.onAuthenticationSucceeded(new AuthenticationResultInternal(FingerprintManagerCompatApi23.unwrapCryptoObject(result.getCryptoObject())));
+            public void onAuthenticationSucceeded(AuthenticationResult authenticationResult) {
+                authenticationCallback.onAuthenticationSucceeded(new AuthenticationResultInternal(FingerprintManagerCompatApi23.unwrapCryptoObject(authenticationResult.getCryptoObject())));
             }
 
             public void onAuthenticationFailed() {
-                callback.onAuthenticationFailed();
+                authenticationCallback.onAuthenticationFailed();
             }
         };
     }

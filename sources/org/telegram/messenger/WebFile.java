@@ -28,46 +28,47 @@ public class WebFile extends TLObject {
     public int w;
     public int zoom;
 
-    public static WebFile createWithGeoPoint(GeoPoint point, int w, int h, int zoom, int scale) {
-        return createWithGeoPoint(point.lat, point._long, point.access_hash, w, h, zoom, scale);
+    public static WebFile createWithGeoPoint(GeoPoint geoPoint, int i, int i2, int i3, int i4) {
+        return createWithGeoPoint(geoPoint.lat, geoPoint._long, geoPoint.access_hash, i, i2, i3, i4);
     }
 
-    public static WebFile createWithGeoPoint(double lat, double _long, long access_hash, int w, int h, int zoom, int scale) {
+    public static WebFile createWithGeoPoint(double d, double d2, long j, int i, int i2, int i3, int i4) {
         WebFile webFile = new WebFile();
-        TL_inputWebFileGeoPointLocation location = new TL_inputWebFileGeoPointLocation();
-        webFile.location = location;
+        TL_inputWebFileGeoPointLocation tL_inputWebFileGeoPointLocation = new TL_inputWebFileGeoPointLocation();
+        webFile.location = tL_inputWebFileGeoPointLocation;
         TL_inputGeoPoint tL_inputGeoPoint = new TL_inputGeoPoint();
         webFile.geo_point = tL_inputGeoPoint;
-        location.geo_point = tL_inputGeoPoint;
-        location.access_hash = access_hash;
-        webFile.geo_point.lat = lat;
-        webFile.geo_point._long = _long;
-        webFile.w = w;
-        location.w = w;
-        webFile.h = h;
-        location.h = h;
-        webFile.zoom = zoom;
-        location.zoom = zoom;
-        webFile.scale = scale;
-        location.scale = scale;
+        tL_inputWebFileGeoPointLocation.geo_point = tL_inputGeoPoint;
+        tL_inputWebFileGeoPointLocation.access_hash = j;
+        InputGeoPoint inputGeoPoint = webFile.geo_point;
+        inputGeoPoint.lat = d;
+        inputGeoPoint._long = d2;
+        webFile.w = i;
+        tL_inputWebFileGeoPointLocation.w = i;
+        webFile.h = i2;
+        tL_inputWebFileGeoPointLocation.h = i2;
+        webFile.zoom = i3;
+        tL_inputWebFileGeoPointLocation.zoom = i3;
+        webFile.scale = i4;
+        tL_inputWebFileGeoPointLocation.scale = i4;
         webFile.mime_type = "image/png";
-        webFile.url = String.format(Locale.US, "maps_%.6f_%.6f_%d_%d_%d_%d.png", new Object[]{Double.valueOf(lat), Double.valueOf(_long), Integer.valueOf(w), Integer.valueOf(h), Integer.valueOf(zoom), Integer.valueOf(scale)});
+        webFile.url = String.format(Locale.US, "maps_%.6f_%.6f_%d_%d_%d_%d.png", new Object[]{Double.valueOf(d), Double.valueOf(d2), Integer.valueOf(i), Integer.valueOf(i2), Integer.valueOf(i3), Integer.valueOf(i4)});
         webFile.attributes = new ArrayList();
         return webFile;
     }
 
     public static WebFile createWithWebDocument(WebDocument webDocument) {
         WebFile webFile = new WebFile();
-        TL_webDocument document = (TL_webDocument) webDocument;
-        TL_inputWebFileLocation location = new TL_inputWebFileLocation();
-        webFile.location = location;
+        TL_webDocument tL_webDocument = (TL_webDocument) webDocument;
+        TL_inputWebFileLocation tL_inputWebFileLocation = new TL_inputWebFileLocation();
+        webFile.location = tL_inputWebFileLocation;
         String str = webDocument.url;
         webFile.url = str;
-        location.url = str;
-        location.access_hash = document.access_hash;
-        webFile.size = document.size;
-        webFile.mime_type = document.mime_type;
-        webFile.attributes = document.attributes;
+        tL_inputWebFileLocation.url = str;
+        tL_inputWebFileLocation.access_hash = tL_webDocument.access_hash;
+        webFile.size = tL_webDocument.size;
+        webFile.mime_type = tL_webDocument.mime_type;
+        webFile.attributes = tL_webDocument.attributes;
         return webFile;
     }
 }

@@ -2,17 +2,15 @@ package org.telegram.ui.Components;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView.LayoutParams;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
-import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.TLRPC.StickerSetCovered;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -33,6 +31,10 @@ public class StickersArchiveAlert extends Builder {
     private class ListAdapter extends SelectionAdapter {
         Context context;
 
+        public boolean isEnabled(ViewHolder viewHolder) {
+            return false;
+        }
+
         public ListAdapter(Context context) {
             this.context = context;
         }
@@ -41,65 +43,63 @@ public class StickersArchiveAlert extends Builder {
             return StickersArchiveAlert.this.stickerSets.size();
         }
 
-        public boolean isEnabled(ViewHolder holder) {
-            return false;
+        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            ArchivedStickerSetCell archivedStickerSetCell = new ArchivedStickerSetCell(this.context, false);
+            archivedStickerSetCell.setLayoutParams(new LayoutParams(-1, AndroidUtilities.dp(82.0f)));
+            return new Holder(archivedStickerSetCell);
         }
 
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = new ArchivedStickerSetCell(this.context, false);
-            view.setLayoutParams(new LayoutParams(-1, AndroidUtilities.dp(82.0f)));
-            return new Holder(view);
-        }
-
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            ((ArchivedStickerSetCell) holder.itemView).setStickersSet((StickerSetCovered) StickersArchiveAlert.this.stickerSets.get(position), position != StickersArchiveAlert.this.stickerSets.size() + -1);
+        public void onBindViewHolder(ViewHolder viewHolder, int i) {
+            ArchivedStickerSetCell archivedStickerSetCell = (ArchivedStickerSetCell) viewHolder.itemView;
+            StickerSetCovered stickerSetCovered = (StickerSetCovered) StickersArchiveAlert.this.stickerSets.get(i);
+            boolean z = true;
+            if (i == StickersArchiveAlert.this.stickerSets.size() - 1) {
+                z = false;
+            }
+            archivedStickerSetCell.setStickersSet(stickerSetCovered, z);
         }
     }
 
-    public StickersArchiveAlert(Context context, BaseFragment baseFragment, ArrayList<StickerSetCovered> sets) {
+    public StickersArchiveAlert(Context context, BaseFragment baseFragment, ArrayList<StickerSetCovered> arrayList) {
         super(context);
-        StickerSetCovered set = (StickerSetCovered) sets.get(0);
-        if (set.set.masks) {
+        StickerSetCovered stickerSetCovered = (StickerSetCovered) arrayList.get(0);
+        if (stickerSetCovered.set.masks) {
             this.currentType = 1;
             setTitle(LocaleController.getString("ArchivedMasksAlertTitle", NUM));
         } else {
             this.currentType = 0;
             setTitle(LocaleController.getString("ArchivedStickersAlertTitle", NUM));
         }
-        this.stickerSets = new ArrayList(sets);
+        this.stickerSets = new ArrayList(arrayList);
         this.parentFragment = baseFragment;
-        LinearLayout container = new LinearLayout(context);
-        container.setOrientation(1);
-        setView(container);
+        LinearLayout linearLayout = new LinearLayout(context);
+        linearLayout.setOrientation(1);
+        setView(linearLayout);
         TextView textView = new TextView(context);
         textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         textView.setTextSize(1, 16.0f);
         textView.setPadding(AndroidUtilities.dp(23.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(23.0f), 0);
-        if (set.set.masks) {
+        if (stickerSetCovered.set.masks) {
             textView.setText(LocaleController.getString("ArchivedMasksAlertInfo", NUM));
         } else {
             textView.setText(LocaleController.getString("ArchivedStickersAlertInfo", NUM));
         }
-        container.addView(textView, LayoutHelper.createLinear(-2, -2));
-        RecyclerListView listView = new RecyclerListView(context);
-        listView.setLayoutManager(new LinearLayoutManager(getContext(), 1, false));
-        listView.setAdapter(new ListAdapter(context));
-        listView.setVerticalScrollBarEnabled(false);
-        listView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
-        listView.setGlowColor(-657673);
-        container.addView(listView, LayoutHelper.createLinear(-1, -2, 0.0f, 10.0f, 0.0f, 0.0f));
-        setNegativeButton(LocaleController.getString("Close", NUM), new OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
+        linearLayout.addView(textView, LayoutHelper.createLinear(-2, -2));
+        RecyclerListView recyclerListView = new RecyclerListView(context);
+        recyclerListView.setLayoutManager(new LinearLayoutManager(getContext(), 1, false));
+        recyclerListView.setAdapter(new ListAdapter(context));
+        recyclerListView.setVerticalScrollBarEnabled(false);
+        recyclerListView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
+        recyclerListView.setGlowColor(-657673);
+        linearLayout.addView(recyclerListView, LayoutHelper.createLinear(-1, -2, 0.0f, 10.0f, 0.0f, 0.0f));
+        setNegativeButton(LocaleController.getString("Close", NUM), -$$Lambda$StickersArchiveAlert$aZBoZIIFPTD8rz1ZNGesyGf1Q4c.INSTANCE);
         if (this.parentFragment != null) {
-            setPositiveButton(LocaleController.getString("Settings", NUM), new OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    StickersArchiveAlert.this.parentFragment.presentFragment(new StickersActivity(StickersArchiveAlert.this.currentType));
-                    dialog.dismiss();
-                }
-            });
+            setPositiveButton(LocaleController.getString("Settings", NUM), new -$$Lambda$StickersArchiveAlert$SQKaDZmcHPoQxPPXCgwZ7yu892U(this));
         }
+    }
+
+    public /* synthetic */ void lambda$new$1$StickersArchiveAlert(DialogInterface dialogInterface, int i) {
+        this.parentFragment.presentFragment(new StickersActivity(this.currentType));
+        dialogInterface.dismiss();
     }
 }

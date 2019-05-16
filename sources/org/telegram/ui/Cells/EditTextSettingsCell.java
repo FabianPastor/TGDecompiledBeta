@@ -19,7 +19,6 @@ public class EditTextSettingsCell extends FrameLayout {
     private EditTextBoldCursor textView;
 
     public EditTextSettingsCell(Context context) {
-        int i = 3;
         super(context);
         this.textView = new EditTextBoldCursor(context);
         this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
@@ -29,20 +28,22 @@ public class EditTextSettingsCell extends FrameLayout {
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TruncateAt.END);
+        int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.textView.setBackgroundDrawable(null);
         this.textView.setPadding(0, 0, 0, 0);
-        this.textView.setInputType(this.textView.getInputType() | 16384);
         EditTextBoldCursor editTextBoldCursor = this.textView;
-        if (LocaleController.isRTL) {
-            i = 5;
+        editTextBoldCursor.setInputType(editTextBoldCursor.getInputType() | 16384);
+        editTextBoldCursor = this.textView;
+        if (!LocaleController.isRTL) {
+            i = 3;
         }
         addView(editTextBoldCursor, LayoutHelper.createFrame(-1, -1.0f, i | 48, 21.0f, 0.0f, 21.0f, 0.0f));
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (this.needDivider ? 1 : 0) + AndroidUtilities.dp(50.0f));
+    public void onMeasure(int i, int i2) {
+        setMeasuredDimension(MeasureSpec.getSize(i), AndroidUtilities.dp(50.0f) + this.needDivider);
         this.textView.measure(MeasureSpec.makeMeasureSpec(((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(42.0f), NUM), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
     }
 
@@ -50,8 +51,8 @@ public class EditTextSettingsCell extends FrameLayout {
         return this.textView;
     }
 
-    public void addTextWatcher(TextWatcher watcher) {
-        this.textView.addTextChangedListener(watcher);
+    public void addTextWatcher(TextWatcher textWatcher) {
+        this.textView.addTextChangedListener(textWatcher);
     }
 
     public String getText() {
@@ -62,25 +63,25 @@ public class EditTextSettingsCell extends FrameLayout {
         return this.textView.length();
     }
 
-    public void setTextColor(int color) {
-        this.textView.setTextColor(color);
+    public void setTextColor(int i) {
+        this.textView.setTextColor(i);
     }
 
-    public void setText(String text, boolean divider) {
-        this.textView.setText(text);
-        this.needDivider = divider;
-        setWillNotDraw(!divider);
+    public void setText(String str, boolean z) {
+        this.textView.setText(str);
+        this.needDivider = z;
+        setWillNotDraw(z ^ 1);
     }
 
-    public void setTextAndHint(String text, String hint, boolean divider) {
-        this.textView.setText(text);
-        this.textView.setHint(hint);
-        this.needDivider = divider;
-        setWillNotDraw(!divider);
+    public void setTextAndHint(String str, String str2, boolean z) {
+        this.textView.setText(str);
+        this.textView.setHint(str2);
+        this.needDivider = z;
+        setWillNotDraw(z ^ 1);
     }
 
-    public void setEnabled(boolean value, ArrayList<Animator> arrayList) {
-        setEnabled(value);
+    public void setEnabled(boolean z, ArrayList<Animator> arrayList) {
+        setEnabled(z);
     }
 
     /* Access modifiers changed, original: protected */

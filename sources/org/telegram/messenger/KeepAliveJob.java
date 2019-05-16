@@ -26,7 +26,7 @@ public class KeepAliveJob extends JobIntentService {
                             KeepAliveJob.startingJob = true;
                         }
                         JobIntentService.enqueueWork(ApplicationLoader.applicationContext, KeepAliveJob.class, 1000, new Intent());
-                    } catch (Exception e) {
+                    } catch (Exception unused) {
                     }
                 }
             }
@@ -59,73 +59,70 @@ public class KeepAliveJob extends JobIntentService {
     }
 
     /* Access modifiers changed, original: protected */
-    /* JADX WARNING: Missing block: B:9:0x0014, code skipped:
-            if (org.telegram.messenger.BuildVars.LOGS_ENABLED == false) goto L_0x001c;
+    /* JADX WARNING: Missing block: B:10:0x0014, code skipped:
+            if (org.telegram.messenger.BuildVars.LOGS_ENABLED == false) goto L_0x001b;
      */
-    /* JADX WARNING: Missing block: B:10:0x0016, code skipped:
+    /* JADX WARNING: Missing block: B:11:0x0016, code skipped:
             org.telegram.messenger.FileLog.d("started keep-alive job");
      */
-    /* JADX WARNING: Missing block: B:11:0x001c, code skipped:
+    /* JADX WARNING: Missing block: B:12:0x001b, code skipped:
             org.telegram.messenger.Utilities.globalQueue.postRunnable(finishJobByTimeoutRunnable, 60000);
      */
-    /* JADX WARNING: Missing block: B:13:?, code skipped:
+    /* JADX WARNING: Missing block: B:14:?, code skipped:
             countDownLatch.await();
      */
-    public void onHandleWork(android.content.Intent r5) {
+    public void onHandleWork(android.content.Intent r4) {
         /*
-        r4 = this;
-        r1 = sync;
-        monitor-enter(r1);
-        r0 = startingJob;	 Catch:{ all -> 0x0044 }
+        r3 = this;
+        r4 = sync;
+        monitor-enter(r4);
+        r0 = startingJob;	 Catch:{ all -> 0x0045 }
         if (r0 != 0) goto L_0x0009;
     L_0x0007:
-        monitor-exit(r1);	 Catch:{ all -> 0x0044 }
-    L_0x0008:
+        monitor-exit(r4);	 Catch:{ all -> 0x0045 }
         return;
     L_0x0009:
-        r0 = new java.util.concurrent.CountDownLatch;	 Catch:{ all -> 0x0044 }
-        r2 = 1;
-        r0.<init>(r2);	 Catch:{ all -> 0x0044 }
-        countDownLatch = r0;	 Catch:{ all -> 0x0044 }
-        monitor-exit(r1);	 Catch:{ all -> 0x0044 }
-        r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r0 == 0) goto L_0x001c;
+        r0 = new java.util.concurrent.CountDownLatch;	 Catch:{ all -> 0x0045 }
+        r1 = 1;
+        r0.<init>(r1);	 Catch:{ all -> 0x0045 }
+        countDownLatch = r0;	 Catch:{ all -> 0x0045 }
+        monitor-exit(r4);	 Catch:{ all -> 0x0045 }
+        r4 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
+        if (r4 == 0) goto L_0x001b;
     L_0x0016:
-        r0 = "started keep-alive job";
-        org.telegram.messenger.FileLog.d(r0);
-    L_0x001c:
-        r0 = org.telegram.messenger.Utilities.globalQueue;
-        r1 = finishJobByTimeoutRunnable;
-        r2 = 60000; // 0xea60 float:8.4078E-41 double:2.9644E-319;
-        r0.postRunnable(r1, r2);
-        r0 = countDownLatch;	 Catch:{ Throwable -> 0x004a }
-        r0.await();	 Catch:{ Throwable -> 0x004a }
-    L_0x002b:
-        r0 = org.telegram.messenger.Utilities.globalQueue;
-        r1 = finishJobByTimeoutRunnable;
-        r0.cancelRunnable(r1);
-        r1 = sync;
-        monitor-enter(r1);
-        r0 = 0;
-        countDownLatch = r0;	 Catch:{ all -> 0x0047 }
-        monitor-exit(r1);	 Catch:{ all -> 0x0047 }
-        r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r0 == 0) goto L_0x0008;
-    L_0x003d:
-        r0 = "ended keep-alive job";
-        org.telegram.messenger.FileLog.d(r0);
-        goto L_0x0008;
-    L_0x0044:
+        r4 = "started keep-alive job";
+        org.telegram.messenger.FileLog.d(r4);
+    L_0x001b:
+        r4 = org.telegram.messenger.Utilities.globalQueue;
+        r0 = finishJobByTimeoutRunnable;
+        r1 = 60000; // 0xea60 float:8.4078E-41 double:2.9644E-319;
+        r4.postRunnable(r0, r1);
+        r4 = countDownLatch;	 Catch:{ Throwable -> 0x002a }
+        r4.await();	 Catch:{ Throwable -> 0x002a }
+    L_0x002a:
+        r4 = org.telegram.messenger.Utilities.globalQueue;
+        r0 = finishJobByTimeoutRunnable;
+        r4.cancelRunnable(r0);
+        r0 = sync;
+        monitor-enter(r0);
+        r4 = 0;
+        countDownLatch = r4;	 Catch:{ all -> 0x0042 }
+        monitor-exit(r0);	 Catch:{ all -> 0x0042 }
+        r4 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
+        if (r4 == 0) goto L_0x0041;
+    L_0x003c:
+        r4 = "ended keep-alive job";
+        org.telegram.messenger.FileLog.d(r4);
+    L_0x0041:
+        return;
+    L_0x0042:
+        r4 = move-exception;
+        monitor-exit(r0);	 Catch:{ all -> 0x0042 }
+        throw r4;
+    L_0x0045:
         r0 = move-exception;
-        monitor-exit(r1);	 Catch:{ all -> 0x0044 }
+        monitor-exit(r4);	 Catch:{ all -> 0x0045 }
         throw r0;
-    L_0x0047:
-        r0 = move-exception;
-        monitor-exit(r1);	 Catch:{ all -> 0x0047 }
-        throw r0;
-    L_0x004a:
-        r0 = move-exception;
-        goto L_0x002b;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.KeepAliveJob.onHandleWork(android.content.Intent):void");
     }

@@ -17,6 +17,10 @@ public class EmptyTextProgressView extends FrameLayout {
     private boolean showAtCenter;
     private TextView textView;
 
+    public boolean hasOverlappingRendering() {
+        return false;
+    }
+
     public EmptyTextProgressView(Context context) {
         super(context);
         this.progressBar = new RadialProgressView(context);
@@ -30,7 +34,7 @@ public class EmptyTextProgressView extends FrameLayout {
         this.textView.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
         this.textView.setText(LocaleController.getString("NoResult", NUM));
         addView(this.textView, LayoutHelper.createFrame(-2, -2.0f));
-        setOnTouchListener(EmptyTextProgressView$$Lambda$0.$instance);
+        setOnTouchListener(-$$Lambda$EmptyTextProgressView$AeVTSCBshpCl6wf4siSABV33AKw.INSTANCE);
     }
 
     public void showProgress() {
@@ -43,56 +47,56 @@ public class EmptyTextProgressView extends FrameLayout {
         this.progressBar.setVisibility(4);
     }
 
-    public void setText(String text) {
-        this.textView.setText(text);
+    public void setText(String str) {
+        this.textView.setText(str);
     }
 
-    public void setTextColor(int color) {
-        this.textView.setTextColor(color);
+    public void setTextColor(int i) {
+        this.textView.setTextColor(i);
     }
 
-    public void setProgressBarColor(int color) {
-        this.progressBar.setProgressColor(color);
+    public void setProgressBarColor(int i) {
+        this.progressBar.setProgressColor(i);
     }
 
-    public void setTopImage(int resId) {
-        if (resId == 0) {
+    public void setTopImage(int i) {
+        if (i == 0) {
             this.textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
             return;
         }
-        Drawable drawable = getContext().getResources().getDrawable(resId).mutate();
-        if (drawable != null) {
-            drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("emptyListPlaceholder"), Mode.MULTIPLY));
+        Drawable mutate = getContext().getResources().getDrawable(i).mutate();
+        if (mutate != null) {
+            mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("emptyListPlaceholder"), Mode.MULTIPLY));
         }
-        this.textView.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
+        this.textView.setCompoundDrawablesWithIntrinsicBounds(null, mutate, null, null);
         this.textView.setCompoundDrawablePadding(AndroidUtilities.dp(1.0f));
     }
 
-    public void setTextSize(int size) {
-        this.textView.setTextSize(1, (float) size);
+    public void setTextSize(int i) {
+        this.textView.setTextSize(1, (float) i);
     }
 
-    public void setShowAtCenter(boolean value) {
-        this.showAtCenter = value;
+    public void setShowAtCenter(boolean z) {
+        this.showAtCenter = z;
     }
 
     /* Access modifiers changed, original: protected */
-    public void onLayout(boolean changed, int l, int t, int r, int b) {
+    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
         this.inLayout = true;
-        int width = r - l;
-        int height = b - t;
+        i3 -= i;
+        i4 -= i2;
         int childCount = getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View child = getChildAt(i);
-            if (child.getVisibility() != 8) {
-                int y;
-                int x = (width - child.getMeasuredWidth()) / 2;
+        for (i2 = 0; i2 < childCount; i2++) {
+            View childAt = getChildAt(i2);
+            if (childAt.getVisibility() != 8) {
+                int measuredHeight;
+                int measuredWidth = (i3 - childAt.getMeasuredWidth()) / 2;
                 if (this.showAtCenter) {
-                    y = ((height / 2) - child.getMeasuredHeight()) / 2;
+                    measuredHeight = ((i4 / 2) - childAt.getMeasuredHeight()) / 2;
                 } else {
-                    y = (height - child.getMeasuredHeight()) / 2;
+                    measuredHeight = (i4 - childAt.getMeasuredHeight()) / 2;
                 }
-                child.layout(x, y, child.getMeasuredWidth() + x, child.getMeasuredHeight() + y);
+                childAt.layout(measuredWidth, measuredHeight, childAt.getMeasuredWidth() + measuredWidth, childAt.getMeasuredHeight() + measuredHeight);
             }
         }
         this.inLayout = false;
@@ -102,9 +106,5 @@ public class EmptyTextProgressView extends FrameLayout {
         if (!this.inLayout) {
             super.requestLayout();
         }
-    }
-
-    public boolean hasOverlappingRendering() {
-        return false;
     }
 }

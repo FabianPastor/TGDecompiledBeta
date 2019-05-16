@@ -8,7 +8,6 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -19,8 +18,9 @@ import android.graphics.Path.Direction;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
-import android.support.annotation.Keep;
+import android.util.Property;
 import android.view.MotionEvent;
 import android.view.TextureView;
 import android.view.View;
@@ -30,8 +30,8 @@ import android.view.WindowManager.LayoutParams;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import androidx.annotation.Keep;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
-import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.Bitmaps;
@@ -64,80 +64,81 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
     private WindowManager windowManager;
     private FrameLayout windowView;
 
-    public void show(Activity activity, Runnable closeRunnable) {
+    public void show(Activity activity, Runnable runnable) {
         if (activity != null) {
             instance = this;
-            this.onCloseRunnable = closeRunnable;
+            this.onCloseRunnable = runnable;
             this.windowView = new FrameLayout(activity) {
                 private boolean dragging;
                 private boolean startDragging;
                 private float startX;
                 private float startY;
 
-                public boolean onInterceptTouchEvent(MotionEvent event) {
-                    if (event.getAction() == 0) {
-                        this.startX = event.getRawX();
-                        this.startY = event.getRawY();
+                public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+                    if (motionEvent.getAction() == 0) {
+                        this.startX = motionEvent.getRawX();
+                        this.startY = motionEvent.getRawY();
                         this.startDragging = true;
                     }
                     return true;
                 }
 
-                public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-                    super.requestDisallowInterceptTouchEvent(disallowIntercept);
+                public void requestDisallowInterceptTouchEvent(boolean z) {
+                    super.requestDisallowInterceptTouchEvent(z);
                 }
 
-                public boolean onTouchEvent(MotionEvent event) {
+                public boolean onTouchEvent(MotionEvent motionEvent) {
                     if (!this.startDragging && !this.dragging) {
                         return false;
                     }
-                    float x = event.getRawX();
-                    float y = event.getRawY();
-                    if (event.getAction() == 2) {
-                        float dx = x - this.startX;
-                        float dy = y - this.startY;
+                    float rawX = motionEvent.getRawX();
+                    float rawY = motionEvent.getRawY();
+                    if (motionEvent.getAction() == 2) {
+                        float f = rawX - this.startX;
+                        float f2 = rawY - this.startY;
                         if (this.startDragging) {
-                            if (Math.abs(dx) >= AndroidUtilities.getPixelsInCM(0.3f, true) || Math.abs(dy) >= AndroidUtilities.getPixelsInCM(0.3f, false)) {
+                            if (Math.abs(f) >= AndroidUtilities.getPixelsInCM(0.3f, true) || Math.abs(f2) >= AndroidUtilities.getPixelsInCM(0.3f, false)) {
                                 this.dragging = true;
                                 this.startDragging = false;
                             }
                         } else if (this.dragging) {
                             LayoutParams access$000 = PipRoundVideoView.this.windowLayoutParams;
-                            access$000.x = (int) (((float) access$000.x) + dx);
-                            access$000 = PipRoundVideoView.this.windowLayoutParams;
-                            access$000.y = (int) (((float) access$000.y) + dy);
-                            int maxDiff = PipRoundVideoView.this.videoWidth / 2;
-                            if (PipRoundVideoView.this.windowLayoutParams.x < (-maxDiff)) {
-                                PipRoundVideoView.this.windowLayoutParams.x = -maxDiff;
-                            } else if (PipRoundVideoView.this.windowLayoutParams.x > (AndroidUtilities.displaySize.x - PipRoundVideoView.this.windowLayoutParams.width) + maxDiff) {
-                                PipRoundVideoView.this.windowLayoutParams.x = (AndroidUtilities.displaySize.x - PipRoundVideoView.this.windowLayoutParams.width) + maxDiff;
+                            access$000.x = (int) (((float) access$000.x) + f);
+                            LayoutParams access$0002 = PipRoundVideoView.this.windowLayoutParams;
+                            access$0002.y = (int) (((float) access$0002.y) + f2);
+                            int access$100 = PipRoundVideoView.this.videoWidth / 2;
+                            int i = -access$100;
+                            if (PipRoundVideoView.this.windowLayoutParams.x < i) {
+                                PipRoundVideoView.this.windowLayoutParams.x = i;
+                            } else if (PipRoundVideoView.this.windowLayoutParams.x > (AndroidUtilities.displaySize.x - PipRoundVideoView.this.windowLayoutParams.width) + access$100) {
+                                PipRoundVideoView.this.windowLayoutParams.x = (AndroidUtilities.displaySize.x - PipRoundVideoView.this.windowLayoutParams.width) + access$100;
                             }
-                            float alpha = 1.0f;
+                            float f3 = 1.0f;
                             if (PipRoundVideoView.this.windowLayoutParams.x < 0) {
-                                alpha = 1.0f + ((((float) PipRoundVideoView.this.windowLayoutParams.x) / ((float) maxDiff)) * 0.5f);
+                                f3 = 1.0f + ((((float) PipRoundVideoView.this.windowLayoutParams.x) / ((float) access$100)) * 0.5f);
                             } else if (PipRoundVideoView.this.windowLayoutParams.x > AndroidUtilities.displaySize.x - PipRoundVideoView.this.windowLayoutParams.width) {
-                                alpha = 1.0f - ((((float) ((PipRoundVideoView.this.windowLayoutParams.x - AndroidUtilities.displaySize.x) + PipRoundVideoView.this.windowLayoutParams.width)) / ((float) maxDiff)) * 0.5f);
+                                f3 = 1.0f - ((((float) ((PipRoundVideoView.this.windowLayoutParams.x - AndroidUtilities.displaySize.x) + PipRoundVideoView.this.windowLayoutParams.width)) / ((float) access$100)) * 0.5f);
                             }
-                            if (PipRoundVideoView.this.windowView.getAlpha() != alpha) {
-                                PipRoundVideoView.this.windowView.setAlpha(alpha);
+                            if (PipRoundVideoView.this.windowView.getAlpha() != f3) {
+                                PipRoundVideoView.this.windowView.setAlpha(f3);
                             }
-                            if (PipRoundVideoView.this.windowLayoutParams.y < (-null)) {
-                                PipRoundVideoView.this.windowLayoutParams.y = -null;
+                            if (PipRoundVideoView.this.windowLayoutParams.y < 0) {
+                                PipRoundVideoView.this.windowLayoutParams.y = 0;
                             } else if (PipRoundVideoView.this.windowLayoutParams.y > (AndroidUtilities.displaySize.y - PipRoundVideoView.this.windowLayoutParams.height) + 0) {
                                 PipRoundVideoView.this.windowLayoutParams.y = (AndroidUtilities.displaySize.y - PipRoundVideoView.this.windowLayoutParams.height) + 0;
                             }
                             PipRoundVideoView.this.windowManager.updateViewLayout(PipRoundVideoView.this.windowView, PipRoundVideoView.this.windowLayoutParams);
-                            this.startX = x;
-                            this.startY = y;
+                            this.startX = rawX;
+                            this.startY = rawY;
                         }
-                    } else if (event.getAction() == 1) {
+                    } else if (motionEvent.getAction() == 1) {
                         if (this.startDragging && !this.dragging) {
-                            MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
-                            if (messageObject != null) {
+                            MessageObject playingMessageObject = MediaController.getInstance().getPlayingMessageObject();
+                            if (playingMessageObject != null) {
                                 if (MediaController.getInstance().isMessagePaused()) {
-                                    MediaController.getInstance().playMessage(messageObject);
+                                    MediaController.getInstance().playMessage(playingMessageObject);
                                 } else {
-                                    MediaController.getInstance().lambda$startAudioAgain$5$MediaController(messageObject);
+                                    MediaController.getInstance().lambda$startAudioAgain$5$MediaController(playingMessageObject);
                                 }
                             }
                         }
@@ -150,11 +151,13 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
 
                 /* Access modifiers changed, original: protected */
                 public void onDraw(Canvas canvas) {
-                    if (Theme.chat_roundVideoShadow != null) {
-                        Theme.chat_roundVideoShadow.setAlpha((int) (getAlpha() * 255.0f));
+                    Drawable drawable = Theme.chat_roundVideoShadow;
+                    if (drawable != null) {
+                        drawable.setAlpha((int) (getAlpha() * 255.0f));
                         Theme.chat_roundVideoShadow.setBounds(AndroidUtilities.dp(1.0f), AndroidUtilities.dp(2.0f), AndroidUtilities.dp(125.0f), AndroidUtilities.dp(125.0f));
                         Theme.chat_roundVideoShadow.draw(canvas);
                         Theme.chat_docBackPaint.setColor(Theme.getColor("chat_inBubble"));
+                        Theme.chat_docBackPaint.setAlpha((int) (getAlpha() * 255.0f));
                         canvas.drawCircle((float) AndroidUtilities.dp(63.0f), (float) AndroidUtilities.dp(63.0f), (float) AndroidUtilities.dp(59.5f), Theme.chat_docBackPaint);
                     }
                 }
@@ -165,16 +168,16 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
             if (VERSION.SDK_INT >= 21) {
                 this.aspectRatioFrameLayout = new AspectRatioFrameLayout(activity) {
                     /* Access modifiers changed, original: protected */
-                    public boolean drawChild(Canvas canvas, View child, long drawingTime) {
-                        boolean result = super.drawChild(canvas, child, drawingTime);
-                        if (child == PipRoundVideoView.this.textureView) {
-                            MessageObject currentMessageObject = MediaController.getInstance().getPlayingMessageObject();
-                            if (currentMessageObject != null) {
+                    public boolean drawChild(Canvas canvas, View view, long j) {
+                        boolean drawChild = super.drawChild(canvas, view, j);
+                        if (view == PipRoundVideoView.this.textureView) {
+                            MessageObject playingMessageObject = MediaController.getInstance().getPlayingMessageObject();
+                            if (playingMessageObject != null) {
                                 PipRoundVideoView.this.rect.set(AndroidUtilities.dpf2(1.5f), AndroidUtilities.dpf2(1.5f), ((float) getMeasuredWidth()) - AndroidUtilities.dpf2(1.5f), ((float) getMeasuredHeight()) - AndroidUtilities.dpf2(1.5f));
-                                canvas.drawArc(PipRoundVideoView.this.rect, -90.0f, currentMessageObject.audioProgress * 360.0f, false, Theme.chat_radialProgressPaint);
+                                canvas.drawArc(PipRoundVideoView.this.rect, -90.0f, playingMessageObject.audioProgress * 360.0f, false, Theme.chat_radialProgressPaint);
                             }
                         }
-                        return result;
+                        return drawChild;
                     }
                 };
                 this.aspectRatioFrameLayout.setOutlineProvider(new ViewOutlineProvider() {
@@ -185,42 +188,43 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
                 });
                 this.aspectRatioFrameLayout.setClipToOutline(true);
             } else {
-                final Paint aspectPaint = new Paint(1);
-                aspectPaint.setColor(-16777216);
-                aspectPaint.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
+                final Paint paint = new Paint(1);
+                paint.setColor(-16777216);
+                paint.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
                 this.aspectRatioFrameLayout = new AspectRatioFrameLayout(activity) {
                     private Path aspectPath = new Path();
 
                     /* Access modifiers changed, original: protected */
-                    public void onSizeChanged(int w, int h, int oldw, int oldh) {
-                        super.onSizeChanged(w, h, oldw, oldh);
+                    public void onSizeChanged(int i, int i2, int i3, int i4) {
+                        super.onSizeChanged(i, i2, i3, i4);
                         this.aspectPath.reset();
-                        this.aspectPath.addCircle((float) (w / 2), (float) (h / 2), (float) (w / 2), Direction.CW);
+                        float f = (float) (i / 2);
+                        this.aspectPath.addCircle(f, (float) (i2 / 2), f, Direction.CW);
                         this.aspectPath.toggleInverseFillType();
                     }
 
                     /* Access modifiers changed, original: protected */
                     public void dispatchDraw(Canvas canvas) {
                         super.dispatchDraw(canvas);
-                        canvas.drawPath(this.aspectPath, aspectPaint);
+                        canvas.drawPath(this.aspectPath, paint);
                     }
 
                     /* Access modifiers changed, original: protected */
-                    public boolean drawChild(Canvas canvas, View child, long drawingTime) {
-                        boolean result;
+                    public boolean drawChild(Canvas canvas, View view, long j) {
+                        boolean drawChild;
                         try {
-                            result = super.drawChild(canvas, child, drawingTime);
-                        } catch (Throwable th) {
-                            result = false;
+                            drawChild = super.drawChild(canvas, view, j);
+                        } catch (Throwable unused) {
+                            drawChild = false;
                         }
-                        if (child == PipRoundVideoView.this.textureView) {
-                            MessageObject currentMessageObject = MediaController.getInstance().getPlayingMessageObject();
-                            if (currentMessageObject != null) {
+                        if (view == PipRoundVideoView.this.textureView) {
+                            MessageObject playingMessageObject = MediaController.getInstance().getPlayingMessageObject();
+                            if (playingMessageObject != null) {
                                 PipRoundVideoView.this.rect.set(AndroidUtilities.dpf2(1.5f), AndroidUtilities.dpf2(1.5f), ((float) getMeasuredWidth()) - AndroidUtilities.dpf2(1.5f), ((float) getMeasuredHeight()) - AndroidUtilities.dpf2(1.5f));
-                                canvas.drawArc(PipRoundVideoView.this.rect, -90.0f, currentMessageObject.audioProgress * 360.0f, false, Theme.chat_radialProgressPaint);
+                                canvas.drawArc(PipRoundVideoView.this.rect, -90.0f, playingMessageObject.audioProgress * 360.0f, false, Theme.chat_radialProgressPaint);
                             }
                         }
-                        return result;
+                        return drawChild;
                     }
                 };
                 this.aspectRatioFrameLayout.setLayerType(2, null);
@@ -237,16 +241,16 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
             this.imageView.setVisibility(4);
             this.windowManager = (WindowManager) activity.getSystemService("window");
             this.preferences = ApplicationLoader.applicationContext.getSharedPreferences("pipconfig", 0);
-            int sidex = this.preferences.getInt("sidex", 1);
-            int sidey = this.preferences.getInt("sidey", 0);
-            float px = this.preferences.getFloat("px", 0.0f);
-            float py = this.preferences.getFloat("py", 0.0f);
+            int i = this.preferences.getInt("sidex", 1);
+            int i2 = this.preferences.getInt("sidey", 0);
+            float f = this.preferences.getFloat("px", 0.0f);
+            float f2 = this.preferences.getFloat("py", 0.0f);
             try {
                 this.windowLayoutParams = new LayoutParams();
                 this.windowLayoutParams.width = this.videoWidth;
                 this.windowLayoutParams.height = this.videoHeight;
-                this.windowLayoutParams.x = getSideCoord(true, sidex, px, this.videoWidth);
-                this.windowLayoutParams.y = getSideCoord(false, sidey, py, this.videoHeight);
+                this.windowLayoutParams.x = getSideCoord(true, i, f, this.videoWidth);
+                this.windowLayoutParams.y = getSideCoord(false, i2, f2, this.videoHeight);
                 this.windowLayoutParams.format = -3;
                 this.windowLayoutParams.gravity = 51;
                 this.windowLayoutParams.type = 99;
@@ -262,30 +266,31 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
         }
     }
 
-    private static int getSideCoord(boolean isX, int side, float p, int sideSize) {
-        int total;
-        int result;
-        if (isX) {
-            total = AndroidUtilities.displaySize.x - sideSize;
+    private static int getSideCoord(boolean z, int i, float f, int i2) {
+        int i3;
+        if (z) {
+            i3 = AndroidUtilities.displaySize.x;
         } else {
-            total = (AndroidUtilities.displaySize.y - sideSize) - ActionBar.getCurrentActionBarHeight();
+            i3 = AndroidUtilities.displaySize.y - i2;
+            i2 = ActionBar.getCurrentActionBarHeight();
         }
-        if (side == 0) {
-            result = AndroidUtilities.dp(10.0f);
-        } else if (side == 1) {
-            result = total - AndroidUtilities.dp(10.0f);
+        i3 -= i2;
+        if (i == 0) {
+            i = AndroidUtilities.dp(10.0f);
+        } else if (i == 1) {
+            i = i3 - AndroidUtilities.dp(10.0f);
         } else {
-            result = Math.round(((float) (total - AndroidUtilities.dp(20.0f))) * p) + AndroidUtilities.dp(10.0f);
+            i = Math.round(((float) (i3 - AndroidUtilities.dp(20.0f))) * f) + AndroidUtilities.dp(10.0f);
         }
-        if (isX) {
-            return result;
-        }
-        return result + ActionBar.getCurrentActionBarHeight();
+        return !z ? i + ActionBar.getCurrentActionBarHeight() : i;
     }
 
-    public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.messagePlayingProgressDidChanged && this.aspectRatioFrameLayout != null) {
-            this.aspectRatioFrameLayout.invalidate();
+    public void didReceivedNotification(int i, int i2, Object... objArr) {
+        if (i == NotificationCenter.messagePlayingProgressDidChanged) {
+            AspectRatioFrameLayout aspectRatioFrameLayout = this.aspectRatioFrameLayout;
+            if (aspectRatioFrameLayout != null) {
+                aspectRatioFrameLayout.invalidate();
+            }
         }
     }
 
@@ -293,91 +298,90 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
         return this.textureView;
     }
 
-    public void close(boolean animated) {
-        if (!animated) {
-            if (this.bitmap != null) {
-                this.imageView.setImageDrawable(null);
-                this.bitmap.recycle();
-                this.bitmap = null;
+    public void close(boolean z) {
+        if (z) {
+            TextureView textureView = this.textureView;
+            if (textureView != null && textureView.getParent() != null) {
+                if (this.textureView.getWidth() > 0 && this.textureView.getHeight() > 0) {
+                    this.bitmap = Bitmaps.createBitmap(this.textureView.getWidth(), this.textureView.getHeight(), Config.ARGB_8888);
+                }
+                try {
+                    this.textureView.getBitmap(this.bitmap);
+                } catch (Throwable unused) {
+                    this.bitmap = null;
+                }
+                this.imageView.setImageBitmap(this.bitmap);
+                try {
+                    this.aspectRatioFrameLayout.removeView(this.textureView);
+                } catch (Exception unused2) {
+                }
+                this.imageView.setVisibility(0);
+                runShowHideAnimation(false);
+                return;
             }
-            try {
-                this.windowManager.removeView(this.windowView);
-            } catch (Exception e) {
-            }
-            if (instance == this) {
-                instance = null;
-            }
-            this.parentActivity = null;
-            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
-        } else if (this.textureView != null && this.textureView.getParent() != null) {
-            if (this.textureView.getWidth() > 0 && this.textureView.getHeight() > 0) {
-                this.bitmap = Bitmaps.createBitmap(this.textureView.getWidth(), this.textureView.getHeight(), Config.ARGB_8888);
-            }
-            try {
-                this.textureView.getBitmap(this.bitmap);
-            } catch (Throwable th) {
-                this.bitmap = null;
-            }
-            this.imageView.setImageBitmap(this.bitmap);
-            try {
-                this.aspectRatioFrameLayout.removeView(this.textureView);
-            } catch (Exception e2) {
-            }
-            this.imageView.setVisibility(0);
-            runShowHideAnimation(false);
+            return;
         }
+        if (this.bitmap != null) {
+            this.imageView.setImageDrawable(null);
+            this.bitmap.recycle();
+            this.bitmap = null;
+        }
+        try {
+            this.windowManager.removeView(this.windowView);
+        } catch (Exception unused3) {
+        }
+        if (instance == this) {
+            instance = null;
+        }
+        this.parentActivity = null;
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
     }
 
     public void onConfigurationChanged() {
-        int sidex = this.preferences.getInt("sidex", 1);
-        int sidey = this.preferences.getInt("sidey", 0);
-        float px = this.preferences.getFloat("px", 0.0f);
-        float py = this.preferences.getFloat("py", 0.0f);
-        this.windowLayoutParams.x = getSideCoord(true, sidex, px, this.videoWidth);
-        this.windowLayoutParams.y = getSideCoord(false, sidey, py, this.videoHeight);
+        int i = this.preferences.getInt("sidex", 1);
+        int i2 = this.preferences.getInt("sidey", 0);
+        float f = this.preferences.getFloat("px", 0.0f);
+        float f2 = this.preferences.getFloat("py", 0.0f);
+        this.windowLayoutParams.x = getSideCoord(true, i, f, this.videoWidth);
+        this.windowLayoutParams.y = getSideCoord(false, i2, f2, this.videoHeight);
         this.windowManager.updateViewLayout(this.windowView, this.windowLayoutParams);
     }
 
-    public void showTemporary(boolean show) {
-        float f;
-        float f2 = 1.0f;
-        if (this.hideShowAnimation != null) {
-            this.hideShowAnimation.cancel();
+    public void showTemporary(boolean z) {
+        AnimatorSet animatorSet = this.hideShowAnimation;
+        if (animatorSet != null) {
+            animatorSet.cancel();
         }
         this.hideShowAnimation = new AnimatorSet();
-        AnimatorSet animatorSet = this.hideShowAnimation;
+        animatorSet = this.hideShowAnimation;
         Animator[] animatorArr = new Animator[3];
         FrameLayout frameLayout = this.windowView;
-        String str = "alpha";
+        Property property = View.ALPHA;
         float[] fArr = new float[1];
-        fArr[0] = show ? 1.0f : 0.0f;
-        animatorArr[0] = ObjectAnimator.ofFloat(frameLayout, str, fArr);
+        float f = 1.0f;
+        fArr[0] = z ? 1.0f : 0.0f;
+        animatorArr[0] = ObjectAnimator.ofFloat(frameLayout, property, fArr);
         frameLayout = this.windowView;
-        str = "scaleX";
+        property = View.SCALE_X;
         fArr = new float[1];
-        if (show) {
-            f = 1.0f;
-        } else {
+        fArr[0] = z ? 1.0f : 0.8f;
+        animatorArr[1] = ObjectAnimator.ofFloat(frameLayout, property, fArr);
+        FrameLayout frameLayout2 = this.windowView;
+        Property property2 = View.SCALE_Y;
+        float[] fArr2 = new float[1];
+        if (!z) {
             f = 0.8f;
         }
-        fArr[0] = f;
-        animatorArr[1] = ObjectAnimator.ofFloat(frameLayout, str, fArr);
-        frameLayout = this.windowView;
-        str = "scaleY";
-        fArr = new float[1];
-        if (!show) {
-            f2 = 0.8f;
-        }
-        fArr[0] = f2;
-        animatorArr[2] = ObjectAnimator.ofFloat(frameLayout, str, fArr);
+        fArr2[0] = f;
+        animatorArr[2] = ObjectAnimator.ofFloat(frameLayout2, property2, fArr2);
         animatorSet.playTogether(animatorArr);
         this.hideShowAnimation.setDuration(150);
         if (this.decelerateInterpolator == null) {
             this.decelerateInterpolator = new DecelerateInterpolator();
         }
         this.hideShowAnimation.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animation) {
-                if (animation.equals(PipRoundVideoView.this.hideShowAnimation)) {
+            public void onAnimationEnd(Animator animator) {
+                if (animator.equals(PipRoundVideoView.this.hideShowAnimation)) {
                     PipRoundVideoView.this.hideShowAnimation = null;
                 }
             }
@@ -386,55 +390,50 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
         this.hideShowAnimation.start();
     }
 
-    private void runShowHideAnimation(final boolean show) {
-        float f;
-        float f2 = 1.0f;
-        if (this.hideShowAnimation != null) {
-            this.hideShowAnimation.cancel();
+    private void runShowHideAnimation(final boolean z) {
+        AnimatorSet animatorSet = this.hideShowAnimation;
+        if (animatorSet != null) {
+            animatorSet.cancel();
         }
         this.hideShowAnimation = new AnimatorSet();
-        AnimatorSet animatorSet = this.hideShowAnimation;
+        animatorSet = this.hideShowAnimation;
         Animator[] animatorArr = new Animator[3];
         FrameLayout frameLayout = this.windowView;
-        String str = "alpha";
+        Property property = View.ALPHA;
         float[] fArr = new float[1];
-        fArr[0] = show ? 1.0f : 0.0f;
-        animatorArr[0] = ObjectAnimator.ofFloat(frameLayout, str, fArr);
+        float f = 1.0f;
+        fArr[0] = z ? 1.0f : 0.0f;
+        animatorArr[0] = ObjectAnimator.ofFloat(frameLayout, property, fArr);
         frameLayout = this.windowView;
-        str = "scaleX";
+        property = View.SCALE_X;
         fArr = new float[1];
-        if (show) {
-            f = 1.0f;
-        } else {
+        fArr[0] = z ? 1.0f : 0.8f;
+        animatorArr[1] = ObjectAnimator.ofFloat(frameLayout, property, fArr);
+        FrameLayout frameLayout2 = this.windowView;
+        Property property2 = View.SCALE_Y;
+        float[] fArr2 = new float[1];
+        if (!z) {
             f = 0.8f;
         }
-        fArr[0] = f;
-        animatorArr[1] = ObjectAnimator.ofFloat(frameLayout, str, fArr);
-        frameLayout = this.windowView;
-        str = "scaleY";
-        fArr = new float[1];
-        if (!show) {
-            f2 = 0.8f;
-        }
-        fArr[0] = f2;
-        animatorArr[2] = ObjectAnimator.ofFloat(frameLayout, str, fArr);
+        fArr2[0] = f;
+        animatorArr[2] = ObjectAnimator.ofFloat(frameLayout2, property2, fArr2);
         animatorSet.playTogether(animatorArr);
         this.hideShowAnimation.setDuration(150);
         if (this.decelerateInterpolator == null) {
             this.decelerateInterpolator = new DecelerateInterpolator();
         }
         this.hideShowAnimation.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animation) {
-                if (animation.equals(PipRoundVideoView.this.hideShowAnimation)) {
-                    if (!show) {
+            public void onAnimationEnd(Animator animator) {
+                if (animator.equals(PipRoundVideoView.this.hideShowAnimation)) {
+                    if (!z) {
                         PipRoundVideoView.this.close(false);
                     }
                     PipRoundVideoView.this.hideShowAnimation = null;
                 }
             }
 
-            public void onAnimationCancel(Animator animation) {
-                if (animation.equals(PipRoundVideoView.this.hideShowAnimation)) {
+            public void onAnimationCancel(Animator animator) {
+                if (animator.equals(PipRoundVideoView.this.hideShowAnimation)) {
                     PipRoundVideoView.this.hideShowAnimation = null;
                 }
             }
@@ -443,87 +442,259 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
         this.hideShowAnimation.start();
     }
 
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x0114  */
+    /* JADX WARNING: Removed duplicated region for block: B:54:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x017f  */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x0114  */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x017f  */
+    /* JADX WARNING: Removed duplicated region for block: B:54:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x0114  */
+    /* JADX WARNING: Removed duplicated region for block: B:54:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x017f  */
     private void animateToBoundsMaybe() {
-        int startX = getSideCoord(true, 0, 0.0f, this.videoWidth);
-        int endX = getSideCoord(true, 1, 0.0f, this.videoWidth);
-        int startY = getSideCoord(false, 0, 0.0f, this.videoHeight);
-        int endY = getSideCoord(false, 1, 0.0f, this.videoHeight);
-        ArrayList<Animator> animators = null;
-        Editor editor = this.preferences.edit();
-        int maxDiff = AndroidUtilities.dp(20.0f);
-        boolean slideOut = false;
-        if (Math.abs(startX - this.windowLayoutParams.x) <= maxDiff || (this.windowLayoutParams.x < 0 && this.windowLayoutParams.x > (-this.videoWidth) / 4)) {
-            if (null == null) {
-                animators = new ArrayList();
-            }
-            editor.putInt("sidex", 0);
-            if (this.windowView.getAlpha() != 1.0f) {
-                animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{1.0f}));
-            }
-            animators.add(ObjectAnimator.ofInt(this, "x", new int[]{startX}));
-        } else if (Math.abs(endX - this.windowLayoutParams.x) <= maxDiff || (this.windowLayoutParams.x > AndroidUtilities.displaySize.x - this.videoWidth && this.windowLayoutParams.x < AndroidUtilities.displaySize.x - ((this.videoWidth / 4) * 3))) {
-            if (null == null) {
-                animators = new ArrayList();
-            }
-            editor.putInt("sidex", 1);
-            if (this.windowView.getAlpha() != 1.0f) {
-                animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{1.0f}));
-            }
-            animators.add(ObjectAnimator.ofInt(this, "x", new int[]{endX}));
-        } else if (this.windowView.getAlpha() != 1.0f) {
-            if (null == null) {
-                animators = new ArrayList();
-            }
-            if (this.windowLayoutParams.x < 0) {
-                animators.add(ObjectAnimator.ofInt(this, "x", new int[]{-this.videoWidth}));
-            } else {
-                animators.add(ObjectAnimator.ofInt(this, "x", new int[]{AndroidUtilities.displaySize.x}));
-            }
-            slideOut = true;
-        } else {
-            editor.putFloat("px", ((float) (this.windowLayoutParams.x - startX)) / ((float) (endX - startX)));
-            editor.putInt("sidex", 2);
-        }
-        if (!slideOut) {
-            if (Math.abs(startY - this.windowLayoutParams.y) <= maxDiff || this.windowLayoutParams.y <= ActionBar.getCurrentActionBarHeight()) {
-                if (animators == null) {
-                    animators = new ArrayList();
-                }
-                editor.putInt("sidey", 0);
-                animators.add(ObjectAnimator.ofInt(this, "y", new int[]{startY}));
-            } else if (Math.abs(endY - this.windowLayoutParams.y) <= maxDiff) {
-                if (animators == null) {
-                    animators = new ArrayList();
-                }
-                editor.putInt("sidey", 1);
-                animators.add(ObjectAnimator.ofInt(this, "y", new int[]{endY}));
-            } else {
-                editor.putFloat("py", ((float) (this.windowLayoutParams.y - startY)) / ((float) (endY - startY)));
-                editor.putInt("sidey", 2);
-            }
-            editor.commit();
-        }
-        if (animators != null) {
-            if (this.decelerateInterpolator == null) {
-                this.decelerateInterpolator = new DecelerateInterpolator();
-            }
-            AnimatorSet animatorSet = new AnimatorSet();
-            animatorSet.setInterpolator(this.decelerateInterpolator);
-            animatorSet.setDuration(150);
-            if (slideOut) {
-                animators.add(ObjectAnimator.ofFloat(this.windowView, "alpha", new float[]{0.0f}));
-                animatorSet.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animation) {
-                        PipRoundVideoView.this.close(false);
-                        if (PipRoundVideoView.this.onCloseRunnable != null) {
-                            PipRoundVideoView.this.onCloseRunnable.run();
-                        }
-                    }
-                });
-            }
-            animatorSet.playTogether(animators);
-            animatorSet.start();
-        }
+        /*
+        r16 = this;
+        r0 = r16;
+        r1 = r0.videoWidth;
+        r2 = 0;
+        r3 = 0;
+        r4 = 1;
+        r1 = getSideCoord(r4, r3, r2, r1);
+        r5 = r0.videoWidth;
+        r5 = getSideCoord(r4, r4, r2, r5);
+        r6 = r0.videoHeight;
+        r6 = getSideCoord(r3, r3, r2, r6);
+        r7 = r0.videoHeight;
+        r7 = getSideCoord(r3, r4, r2, r7);
+        r8 = r0.preferences;
+        r8 = r8.edit();
+        r9 = NUM; // 0x41a00000 float:20.0 double:5.439686476E-315;
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r9);
+        r10 = r0.windowLayoutParams;
+        r10 = r10.x;
+        r10 = r1 - r10;
+        r10 = java.lang.Math.abs(r10);
+        r12 = "sidex";
+        r13 = "x";
+        r14 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        if (r10 <= r9) goto L_0x00e5;
+    L_0x003c:
+        r10 = r0.windowLayoutParams;
+        r10 = r10.x;
+        if (r10 >= 0) goto L_0x004b;
+    L_0x0042:
+        r15 = r0.videoWidth;
+        r15 = -r15;
+        r15 = r15 / 4;
+        if (r10 <= r15) goto L_0x004b;
+    L_0x0049:
+        goto L_0x00e5;
+    L_0x004b:
+        r10 = r0.windowLayoutParams;
+        r10 = r10.x;
+        r10 = r5 - r10;
+        r10 = java.lang.Math.abs(r10);
+        if (r10 <= r9) goto L_0x00b7;
+    L_0x0057:
+        r10 = r0.windowLayoutParams;
+        r10 = r10.x;
+        r15 = org.telegram.messenger.AndroidUtilities.displaySize;
+        r15 = r15.x;
+        r2 = r0.videoWidth;
+        r11 = r15 - r2;
+        if (r10 <= r11) goto L_0x006d;
+    L_0x0065:
+        r2 = r2 / 4;
+        r2 = r2 * 3;
+        r15 = r15 - r2;
+        if (r10 >= r15) goto L_0x006d;
+    L_0x006c:
+        goto L_0x00b7;
+    L_0x006d:
+        r2 = r0.windowView;
+        r2 = r2.getAlpha();
+        r2 = (r2 > r14 ? 1 : (r2 == r14 ? 0 : -1));
+        if (r2 == 0) goto L_0x00a3;
+    L_0x0077:
+        r1 = new java.util.ArrayList;
+        r1.<init>();
+        r2 = r0.windowLayoutParams;
+        r2 = r2.x;
+        if (r2 >= 0) goto L_0x0091;
+    L_0x0082:
+        r2 = new int[r4];
+        r5 = r0.videoWidth;
+        r5 = -r5;
+        r2[r3] = r5;
+        r2 = android.animation.ObjectAnimator.ofInt(r0, r13, r2);
+        r1.add(r2);
+        goto L_0x00a0;
+    L_0x0091:
+        r2 = new int[r4];
+        r5 = org.telegram.messenger.AndroidUtilities.displaySize;
+        r5 = r5.x;
+        r2[r3] = r5;
+        r2 = android.animation.ObjectAnimator.ofInt(r0, r13, r2);
+        r1.add(r2);
+    L_0x00a0:
+        r2 = r1;
+        r1 = 1;
+        goto L_0x0112;
+    L_0x00a3:
+        r2 = r0.windowLayoutParams;
+        r2 = r2.x;
+        r2 = r2 - r1;
+        r2 = (float) r2;
+        r5 = r5 - r1;
+        r1 = (float) r5;
+        r2 = r2 / r1;
+        r1 = "px";
+        r8.putFloat(r1, r2);
+        r1 = 2;
+        r8.putInt(r12, r1);
+        r1 = 0;
+        goto L_0x00e3;
+    L_0x00b7:
+        r1 = new java.util.ArrayList;
+        r1.<init>();
+        r8.putInt(r12, r4);
+        r2 = r0.windowView;
+        r2 = r2.getAlpha();
+        r2 = (r2 > r14 ? 1 : (r2 == r14 ? 0 : -1));
+        if (r2 == 0) goto L_0x00d8;
+    L_0x00c9:
+        r2 = r0.windowView;
+        r10 = android.view.View.ALPHA;
+        r11 = new float[r4];
+        r11[r3] = r14;
+        r2 = android.animation.ObjectAnimator.ofFloat(r2, r10, r11);
+        r1.add(r2);
+    L_0x00d8:
+        r2 = new int[r4];
+        r2[r3] = r5;
+        r2 = android.animation.ObjectAnimator.ofInt(r0, r13, r2);
+        r1.add(r2);
+    L_0x00e3:
+        r2 = r1;
+        goto L_0x0111;
+    L_0x00e5:
+        r2 = new java.util.ArrayList;
+        r2.<init>();
+        r8.putInt(r12, r3);
+        r5 = r0.windowView;
+        r5 = r5.getAlpha();
+        r5 = (r5 > r14 ? 1 : (r5 == r14 ? 0 : -1));
+        if (r5 == 0) goto L_0x0106;
+    L_0x00f7:
+        r5 = r0.windowView;
+        r10 = android.view.View.ALPHA;
+        r11 = new float[r4];
+        r11[r3] = r14;
+        r5 = android.animation.ObjectAnimator.ofFloat(r5, r10, r11);
+        r2.add(r5);
+    L_0x0106:
+        r5 = new int[r4];
+        r5[r3] = r1;
+        r1 = android.animation.ObjectAnimator.ofInt(r0, r13, r5);
+        r2.add(r1);
+    L_0x0111:
+        r1 = 0;
+    L_0x0112:
+        if (r1 != 0) goto L_0x017d;
+    L_0x0114:
+        r5 = r0.windowLayoutParams;
+        r5 = r5.y;
+        r5 = r6 - r5;
+        r5 = java.lang.Math.abs(r5);
+        r10 = "y";
+        r11 = "sidey";
+        if (r5 <= r9) goto L_0x0165;
+    L_0x0125:
+        r5 = r0.windowLayoutParams;
+        r5 = r5.y;
+        r12 = org.telegram.ui.ActionBar.ActionBar.getCurrentActionBarHeight();
+        if (r5 > r12) goto L_0x0130;
+    L_0x012f:
+        goto L_0x0165;
+    L_0x0130:
+        r5 = r0.windowLayoutParams;
+        r5 = r5.y;
+        r5 = r7 - r5;
+        r5 = java.lang.Math.abs(r5);
+        if (r5 > r9) goto L_0x0152;
+    L_0x013c:
+        if (r2 != 0) goto L_0x0143;
+    L_0x013e:
+        r2 = new java.util.ArrayList;
+        r2.<init>();
+    L_0x0143:
+        r8.putInt(r11, r4);
+        r5 = new int[r4];
+        r5[r3] = r7;
+        r5 = android.animation.ObjectAnimator.ofInt(r0, r10, r5);
+        r2.add(r5);
+        goto L_0x017a;
+    L_0x0152:
+        r5 = r0.windowLayoutParams;
+        r5 = r5.y;
+        r5 = r5 - r6;
+        r5 = (float) r5;
+        r7 = r7 - r6;
+        r6 = (float) r7;
+        r5 = r5 / r6;
+        r6 = "py";
+        r8.putFloat(r6, r5);
+        r5 = 2;
+        r8.putInt(r11, r5);
+        goto L_0x017a;
+    L_0x0165:
+        if (r2 != 0) goto L_0x016c;
+    L_0x0167:
+        r2 = new java.util.ArrayList;
+        r2.<init>();
+    L_0x016c:
+        r8.putInt(r11, r3);
+        r5 = new int[r4];
+        r5[r3] = r6;
+        r5 = android.animation.ObjectAnimator.ofInt(r0, r10, r5);
+        r2.add(r5);
+    L_0x017a:
+        r8.commit();
+    L_0x017d:
+        if (r2 == 0) goto L_0x01b9;
+    L_0x017f:
+        r5 = r0.decelerateInterpolator;
+        if (r5 != 0) goto L_0x018a;
+    L_0x0183:
+        r5 = new android.view.animation.DecelerateInterpolator;
+        r5.<init>();
+        r0.decelerateInterpolator = r5;
+    L_0x018a:
+        r5 = new android.animation.AnimatorSet;
+        r5.<init>();
+        r6 = r0.decelerateInterpolator;
+        r5.setInterpolator(r6);
+        r6 = 150; // 0x96 float:2.1E-43 double:7.4E-322;
+        r5.setDuration(r6);
+        if (r1 == 0) goto L_0x01b3;
+    L_0x019b:
+        r1 = r0.windowView;
+        r6 = android.view.View.ALPHA;
+        r4 = new float[r4];
+        r7 = 0;
+        r4[r3] = r7;
+        r1 = android.animation.ObjectAnimator.ofFloat(r1, r6, r4);
+        r2.add(r1);
+        r1 = new org.telegram.ui.Components.PipRoundVideoView$7;
+        r1.<init>();
+        r5.addListener(r1);
+    L_0x01b3:
+        r5.playTogether(r2);
+        r5.start();
+    L_0x01b9:
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PipRoundVideoView.animateToBoundsMaybe():void");
     }
 
     public int getX() {
@@ -535,20 +706,22 @@ public class PipRoundVideoView implements NotificationCenterDelegate {
     }
 
     @Keep
-    public void setX(int value) {
-        this.windowLayoutParams.x = value;
+    public void setX(int i) {
+        LayoutParams layoutParams = this.windowLayoutParams;
+        layoutParams.x = i;
         try {
-            this.windowManager.updateViewLayout(this.windowView, this.windowLayoutParams);
-        } catch (Exception e) {
+            this.windowManager.updateViewLayout(this.windowView, layoutParams);
+        } catch (Exception unused) {
         }
     }
 
     @Keep
-    public void setY(int value) {
-        this.windowLayoutParams.y = value;
+    public void setY(int i) {
+        LayoutParams layoutParams = this.windowLayoutParams;
+        layoutParams.y = i;
         try {
-            this.windowManager.updateViewLayout(this.windowView, this.windowLayoutParams);
-        } catch (Exception e) {
+            this.windowManager.updateViewLayout(this.windowView, layoutParams);
+        } catch (Exception unused) {
         }
     }
 

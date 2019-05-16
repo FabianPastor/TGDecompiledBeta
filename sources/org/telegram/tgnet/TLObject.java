@@ -10,23 +10,23 @@ public class TLObject {
     public boolean disableFree = false;
     public int networkType;
 
-    public void readParams(AbstractSerializedData stream, boolean exception) {
-    }
-
-    public void serializeToStream(AbstractSerializedData stream) {
-    }
-
-    public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
+    public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         return null;
     }
 
     public void freeResources() {
     }
 
+    public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
+    }
+
+    public void serializeToStream(AbstractSerializedData abstractSerializedData) {
+    }
+
     public int getObjectSize() {
-        NativeByteBuffer byteBuffer = (NativeByteBuffer) sizeCalculator.get();
-        byteBuffer.rewind();
+        NativeByteBuffer nativeByteBuffer = (NativeByteBuffer) sizeCalculator.get();
+        nativeByteBuffer.rewind();
         serializeToStream((AbstractSerializedData) sizeCalculator.get());
-        return byteBuffer.length();
+        return nativeByteBuffer.length();
     }
 }

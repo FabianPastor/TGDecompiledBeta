@@ -63,7 +63,7 @@ public class NotificationCenter {
     public static final int fileNewChunkAvailable;
     public static final int filePreparingFailed;
     public static final int filePreparingStarted;
-    private static volatile NotificationCenter globalInstance;
+    private static volatile NotificationCenter globalInstance = null;
     public static final int groupStickersDidLoad;
     public static final int hasNewContactsToImport;
     public static final int historyCleared;
@@ -127,7 +127,7 @@ public class NotificationCenter {
     public static final int stickersDidLoad;
     public static final int stopEncodingService;
     public static final int suggestedLangpack;
-    private static int totalEvents;
+    private static int totalEvents = 1;
     public static final int updateInterfaces;
     public static final int updateMentionsCount;
     public static final int updateMessageMedia;
@@ -145,22 +145,21 @@ public class NotificationCenter {
     private SparseArray<ArrayList<Object>> observers = new SparseArray();
     private SparseArray<ArrayList<Object>> removeAfterBroadcast = new SparseArray();
 
-    public interface NotificationCenterDelegate {
-        void didReceivedNotification(int i, int i2, Object... objArr);
-    }
-
     private class DelayedPost {
         private Object[] args;
         private int id;
 
-        private DelayedPost(int id, Object[] args) {
-            this.id = id;
-            this.args = args;
+        private DelayedPost(int i, Object[] objArr) {
+            this.id = i;
+            this.args = objArr;
         }
     }
 
+    public interface NotificationCenterDelegate {
+        void didReceivedNotification(int i, int i2, Object... objArr);
+    }
+
     static {
-        totalEvents = 1;
         int i = totalEvents;
         totalEvents = i + 1;
         didReceiveNewMessages = i;
@@ -550,74 +549,49 @@ public class NotificationCenter {
         closeSearchByActiveAction = i;
     }
 
-    public static NotificationCenter getInstance(int num) {
-        Throwable th;
-        NotificationCenter localInstance = Instance[num];
-        if (localInstance == null) {
+    public static NotificationCenter getInstance(int i) {
+        NotificationCenter notificationCenter = Instance[i];
+        if (notificationCenter == null) {
             synchronized (NotificationCenter.class) {
-                try {
-                    localInstance = Instance[num];
-                    if (localInstance == null) {
-                        NotificationCenter[] notificationCenterArr = Instance;
-                        NotificationCenter localInstance2 = new NotificationCenter(num);
-                        try {
-                            notificationCenterArr[num] = localInstance2;
-                            localInstance = localInstance2;
-                        } catch (Throwable th2) {
-                            th = th2;
-                            localInstance = localInstance2;
-                            throw th;
-                        }
-                    }
-                } catch (Throwable th3) {
-                    th = th3;
-                    throw th;
+                notificationCenter = Instance[i];
+                if (notificationCenter == null) {
+                    NotificationCenter[] notificationCenterArr = Instance;
+                    NotificationCenter notificationCenter2 = new NotificationCenter(i);
+                    notificationCenterArr[i] = notificationCenter2;
+                    notificationCenter = notificationCenter2;
                 }
             }
         }
-        return localInstance;
+        return notificationCenter;
     }
 
     public static NotificationCenter getGlobalInstance() {
-        Throwable th;
-        NotificationCenter localInstance = globalInstance;
-        if (localInstance == null) {
+        NotificationCenter notificationCenter = globalInstance;
+        if (notificationCenter == null) {
             synchronized (NotificationCenter.class) {
-                try {
-                    localInstance = globalInstance;
-                    if (localInstance == null) {
-                        NotificationCenter localInstance2 = new NotificationCenter(-1);
-                        try {
-                            globalInstance = localInstance2;
-                            localInstance = localInstance2;
-                        } catch (Throwable th2) {
-                            th = th2;
-                            localInstance = localInstance2;
-                            throw th;
-                        }
-                    }
-                } catch (Throwable th3) {
-                    th = th3;
-                    throw th;
+                notificationCenter = globalInstance;
+                if (notificationCenter == null) {
+                    notificationCenter = new NotificationCenter(-1);
+                    globalInstance = notificationCenter;
                 }
             }
         }
-        return localInstance;
+        return notificationCenter;
     }
 
-    public NotificationCenter(int account) {
-        this.currentAccount = account;
+    public NotificationCenter(int i) {
+        this.currentAccount = i;
     }
 
-    public void setAllowedNotificationsDutingAnimation(int[] notifications) {
-        this.allowedNotifications = notifications;
+    public void setAllowedNotificationsDutingAnimation(int[] iArr) {
+        this.allowedNotifications = iArr;
     }
 
-    public void setAnimationInProgress(boolean value) {
-        this.animationInProgress = value;
+    public void setAnimationInProgress(boolean z) {
+        this.animationInProgress = z;
         if (!this.animationInProgress && !this.delayedPosts.isEmpty()) {
-            for (int a = 0; a < this.delayedPosts.size(); a++) {
-                DelayedPost delayedPost = (DelayedPost) this.delayedPosts.get(a);
+            for (int i = 0; i < this.delayedPosts.size(); i++) {
+                DelayedPost delayedPost = (DelayedPost) this.delayedPosts.get(i);
                 postNotificationNameInternal(delayedPost.id, true, delayedPost.args);
             }
             this.delayedPosts.clear();
@@ -628,107 +602,119 @@ public class NotificationCenter {
         return this.animationInProgress;
     }
 
-    public void postNotificationName(int id, Object... args) {
-        boolean allowDuringAnimation = false;
+    public void postNotificationName(int i, Object... objArr) {
+        boolean z = false;
         if (this.allowedNotifications != null) {
-            for (int i : this.allowedNotifications) {
-                if (i == id) {
-                    allowDuringAnimation = true;
+            int i2 = 0;
+            while (true) {
+                int[] iArr = this.allowedNotifications;
+                if (i2 >= iArr.length) {
                     break;
+                } else if (iArr[i2] == i) {
+                    z = true;
+                    break;
+                } else {
+                    i2++;
                 }
             }
         }
-        postNotificationNameInternal(id, allowDuringAnimation, args);
+        postNotificationNameInternal(i, z, objArr);
     }
 
-    public void postNotificationNameInternal(int id, boolean allowDuringAnimation, Object... args) {
+    public void postNotificationNameInternal(int i, boolean z, Object... objArr) {
         if (BuildVars.DEBUG_VERSION && Thread.currentThread() != ApplicationLoader.applicationHandler.getLooper().getThread()) {
             throw new RuntimeException("postNotificationName allowed only from MAIN thread");
-        } else if (allowDuringAnimation || !this.animationInProgress) {
-            int a;
+        } else if (z || !this.animationInProgress) {
+            int i2;
             this.broadcasting++;
-            ArrayList<Object> objects = (ArrayList) this.observers.get(id);
-            if (!(objects == null || objects.isEmpty())) {
-                for (a = 0; a < objects.size(); a++) {
-                    ((NotificationCenterDelegate) objects.get(a)).didReceivedNotification(id, this.currentAccount, args);
+            ArrayList arrayList = (ArrayList) this.observers.get(i);
+            if (!(arrayList == null || arrayList.isEmpty())) {
+                for (i2 = 0; i2 < arrayList.size(); i2++) {
+                    ((NotificationCenterDelegate) arrayList.get(i2)).didReceivedNotification(i, this.currentAccount, objArr);
                 }
             }
             this.broadcasting--;
             if (this.broadcasting == 0) {
-                int key;
-                ArrayList<Object> arrayList;
-                int b;
+                int keyAt;
+                ArrayList arrayList2;
                 if (this.removeAfterBroadcast.size() != 0) {
-                    for (a = 0; a < this.removeAfterBroadcast.size(); a++) {
-                        key = this.removeAfterBroadcast.keyAt(a);
-                        arrayList = (ArrayList) this.removeAfterBroadcast.get(key);
-                        for (b = 0; b < arrayList.size(); b++) {
-                            removeObserver(arrayList.get(b), key);
+                    for (i = 0; i < this.removeAfterBroadcast.size(); i++) {
+                        keyAt = this.removeAfterBroadcast.keyAt(i);
+                        arrayList2 = (ArrayList) this.removeAfterBroadcast.get(keyAt);
+                        for (i2 = 0; i2 < arrayList2.size(); i2++) {
+                            removeObserver(arrayList2.get(i2), keyAt);
                         }
                     }
                     this.removeAfterBroadcast.clear();
                 }
                 if (this.addAfterBroadcast.size() != 0) {
-                    for (a = 0; a < this.addAfterBroadcast.size(); a++) {
-                        key = this.addAfterBroadcast.keyAt(a);
-                        arrayList = (ArrayList) this.addAfterBroadcast.get(key);
-                        for (b = 0; b < arrayList.size(); b++) {
-                            addObserver(arrayList.get(b), key);
+                    for (i = 0; i < this.addAfterBroadcast.size(); i++) {
+                        keyAt = this.addAfterBroadcast.keyAt(i);
+                        arrayList2 = (ArrayList) this.addAfterBroadcast.get(keyAt);
+                        for (i2 = 0; i2 < arrayList2.size(); i2++) {
+                            addObserver(arrayList2.get(i2), keyAt);
                         }
                     }
                     this.addAfterBroadcast.clear();
                 }
             }
         } else {
-            this.delayedPosts.add(new DelayedPost(id, args));
+            this.delayedPosts.add(new DelayedPost(i, objArr));
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.e("delay post notification " + id + " with args count = " + args.length);
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("delay post notification ");
+                stringBuilder.append(i);
+                stringBuilder.append(" with args count = ");
+                stringBuilder.append(objArr.length);
+                FileLog.e(stringBuilder.toString());
             }
         }
     }
 
-    public void addObserver(Object observer, int id) {
+    public void addObserver(Object obj, int i) {
+        ArrayList arrayList;
         if (BuildVars.DEBUG_VERSION && Thread.currentThread() != ApplicationLoader.applicationHandler.getLooper().getThread()) {
             throw new RuntimeException("addObserver allowed only from MAIN thread");
         } else if (this.broadcasting != 0) {
-            ArrayList<Object> arrayList = (ArrayList) this.addAfterBroadcast.get(id);
+            arrayList = (ArrayList) this.addAfterBroadcast.get(i);
             if (arrayList == null) {
                 arrayList = new ArrayList();
-                this.addAfterBroadcast.put(id, arrayList);
+                this.addAfterBroadcast.put(i, arrayList);
             }
-            arrayList.add(observer);
+            arrayList.add(obj);
         } else {
-            ArrayList<Object> objects = (ArrayList) this.observers.get(id);
-            if (objects == null) {
+            arrayList = (ArrayList) this.observers.get(i);
+            if (arrayList == null) {
                 SparseArray sparseArray = this.observers;
-                objects = new ArrayList();
-                sparseArray.put(id, objects);
+                ArrayList arrayList2 = new ArrayList();
+                sparseArray.put(i, arrayList2);
+                arrayList = arrayList2;
             }
-            if (!objects.contains(observer)) {
-                objects.add(observer);
+            if (!arrayList.contains(obj)) {
+                arrayList.add(obj);
             }
         }
     }
 
-    public void removeObserver(Object observer, int id) {
+    public void removeObserver(Object obj, int i) {
         if (BuildVars.DEBUG_VERSION && Thread.currentThread() != ApplicationLoader.applicationHandler.getLooper().getThread()) {
             throw new RuntimeException("removeObserver allowed only from MAIN thread");
         } else if (this.broadcasting != 0) {
-            ArrayList<Object> arrayList = (ArrayList) this.removeAfterBroadcast.get(id);
+            ArrayList arrayList = (ArrayList) this.removeAfterBroadcast.get(i);
             if (arrayList == null) {
                 arrayList = new ArrayList();
-                this.removeAfterBroadcast.put(id, arrayList);
+                this.removeAfterBroadcast.put(i, arrayList);
             }
-            arrayList.add(observer);
+            arrayList.add(obj);
         } else {
-            ArrayList<Object> objects = (ArrayList) this.observers.get(id);
-            if (objects != null) {
-                objects.remove(observer);
+            ArrayList arrayList2 = (ArrayList) this.observers.get(i);
+            if (arrayList2 != null) {
+                arrayList2.remove(obj);
             }
         }
     }
 
-    public boolean hasObservers(int id) {
-        return this.observers.indexOfKey(id) >= 0;
+    public boolean hasObservers(int i) {
+        return this.observers.indexOfKey(i) >= 0;
     }
 }

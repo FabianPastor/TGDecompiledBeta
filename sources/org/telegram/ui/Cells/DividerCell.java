@@ -14,8 +14,8 @@ public class DividerCell extends View {
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (getPaddingTop() + getPaddingBottom()) + 1);
+    public void onMeasure(int i, int i2) {
+        setMeasuredDimension(MeasureSpec.getSize(i), (getPaddingTop() + getPaddingBottom()) + 1);
     }
 
     /* Access modifiers changed, original: protected */

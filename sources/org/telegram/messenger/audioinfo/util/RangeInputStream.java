@@ -6,9 +6,9 @@ import java.io.InputStream;
 public class RangeInputStream extends PositionInputStream {
     private final long endPosition;
 
-    public RangeInputStream(InputStream delegate, long position, long length) throws IOException {
-        super(delegate, position);
-        this.endPosition = position + length;
+    public RangeInputStream(InputStream inputStream, long j, long j2) throws IOException {
+        super(inputStream, j);
+        this.endPosition = j + j2;
     }
 
     public long getRemainingLength() {
@@ -22,20 +22,24 @@ public class RangeInputStream extends PositionInputStream {
         return super.read();
     }
 
-    public int read(byte[] b, int off, int len) throws IOException {
-        if (getPosition() + ((long) len) > this.endPosition) {
-            len = (int) (this.endPosition - getPosition());
-            if (len == 0) {
+    public int read(byte[] bArr, int i, int i2) throws IOException {
+        long position = getPosition() + ((long) i2);
+        long j = this.endPosition;
+        if (position > j) {
+            i2 = (int) (j - getPosition());
+            if (i2 == 0) {
                 return -1;
             }
         }
-        return super.read(b, off, len);
+        return super.read(bArr, i, i2);
     }
 
-    public long skip(long n) throws IOException {
-        if (getPosition() + n > this.endPosition) {
-            n = (long) ((int) (this.endPosition - getPosition()));
+    public long skip(long j) throws IOException {
+        long position = getPosition() + j;
+        long j2 = this.endPosition;
+        if (position > j2) {
+            j = (long) ((int) (j2 - getPosition()));
         }
-        return super.skip(n);
+        return super.skip(j);
     }
 }

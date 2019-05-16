@@ -2,22 +2,20 @@ package org.telegram.ui.Adapters;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.location.Location;
 import android.os.Build.VERSION;
-import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
-import org.telegram.messenger.ContactsController;
-import org.telegram.messenger.DataQuery;
-import org.telegram.messenger.Emoji;
-import org.telegram.messenger.EmojiSuggestion;
+import org.telegram.messenger.DataQuery.KeywordResult;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
@@ -25,39 +23,26 @@ import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.SendMessagesHelper.LocationProvider;
 import org.telegram.messenger.SendMessagesHelper.LocationProvider.LocationProviderDelegate;
 import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.UserObject;
-import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.BotInfo;
 import org.telegram.tgnet.TLRPC.BotInlineResult;
-import org.telegram.tgnet.TLRPC.ChannelParticipant;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.ChatFull;
-import org.telegram.tgnet.TLRPC.ChatParticipant;
-import org.telegram.tgnet.TLRPC.TL_botCommand;
 import org.telegram.tgnet.TLRPC.TL_botInlineMessageMediaAuto;
 import org.telegram.tgnet.TLRPC.TL_channelFull;
-import org.telegram.tgnet.TLRPC.TL_channelParticipantsSearch;
-import org.telegram.tgnet.TLRPC.TL_channels_channelParticipants;
-import org.telegram.tgnet.TLRPC.TL_channels_getParticipants;
-import org.telegram.tgnet.TLRPC.TL_contacts_resolveUsername;
-import org.telegram.tgnet.TLRPC.TL_contacts_resolvedPeer;
+import org.telegram.tgnet.TLRPC.TL_chatBannedRights;
 import org.telegram.tgnet.TLRPC.TL_document;
 import org.telegram.tgnet.TLRPC.TL_error;
 import org.telegram.tgnet.TLRPC.TL_inlineBotSwitchPM;
-import org.telegram.tgnet.TLRPC.TL_inputGeoPoint;
-import org.telegram.tgnet.TLRPC.TL_inputPeerEmpty;
 import org.telegram.tgnet.TLRPC.TL_messages_botResults;
-import org.telegram.tgnet.TLRPC.TL_messages_getInlineBotResults;
 import org.telegram.tgnet.TLRPC.TL_photo;
-import org.telegram.tgnet.TLRPC.TL_topPeer;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.SearchAdapterHelper.HashtagObject;
 import org.telegram.ui.Adapters.SearchAdapterHelper.SearchAdapterHelperDelegate;
+import org.telegram.ui.Adapters.SearchAdapterHelper.SearchAdapterHelperDelegate.-CC;
 import org.telegram.ui.Cells.BotSwitchCell;
 import org.telegram.ui.Cells.ContextLinkCell;
 import org.telegram.ui.Cells.MentionCell;
@@ -68,6 +53,7 @@ import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 public class MentionsAdapter extends SelectionAdapter {
     private SparseArray<BotInfo> botInfo;
     private int botsCount;
+    private Runnable cancelDelayRunnable;
     private int channelLastReqId;
     private int channelReqId;
     private boolean contextMedia;
@@ -84,13 +70,15 @@ public class MentionsAdapter extends SelectionAdapter {
     private boolean isSearchingMentions;
     private Location lastKnownLocation;
     private int lastPosition;
+    private String[] lastSearchKeyboardLanguage;
     private String lastText;
     private boolean lastUsernameOnly;
     private LocationProvider locationProvider = new LocationProvider(new LocationProviderDelegate() {
         public void onLocationAcquired(Location location) {
             if (MentionsAdapter.this.foundContextBot != null && MentionsAdapter.this.foundContextBot.bot_inline_geo) {
                 MentionsAdapter.this.lastKnownLocation = location;
-                MentionsAdapter.this.searchForContextBotResults(true, MentionsAdapter.this.foundContextBot, MentionsAdapter.this.searchingContextQuery, "");
+                MentionsAdapter mentionsAdapter = MentionsAdapter.this;
+                mentionsAdapter.searchForContextBotResults(true, mentionsAdapter.foundContextBot, MentionsAdapter.this.searchingContextQuery, "");
             }
         }
 
@@ -120,7 +108,7 @@ public class MentionsAdapter extends SelectionAdapter {
     private ArrayList<String> searchResultCommandsHelp;
     private ArrayList<User> searchResultCommandsUsers;
     private ArrayList<String> searchResultHashtags;
-    private ArrayList<EmojiSuggestion> searchResultSuggestions;
+    private ArrayList<KeywordResult> searchResultSuggestions;
     private ArrayList<User> searchResultUsernames;
     private SparseArray<User> searchResultUsernamesMap;
     private String searchingContextQuery;
@@ -134,21 +122,21 @@ public class MentionsAdapter extends SelectionAdapter {
         void onContextSearch(boolean z);
     }
 
-    static /* synthetic */ int access$1604(MentionsAdapter x0) {
-        int i = x0.channelLastReqId + 1;
-        x0.channelLastReqId = i;
+    static /* synthetic */ int access$1604(MentionsAdapter mentionsAdapter) {
+        int i = mentionsAdapter.channelLastReqId + 1;
+        mentionsAdapter.channelLastReqId = i;
         return i;
     }
 
-    public MentionsAdapter(Context context, boolean darkTheme, long did, MentionsAdapterDelegate mentionsAdapterDelegate) {
+    public MentionsAdapter(Context context, boolean z, long j, MentionsAdapterDelegate mentionsAdapterDelegate) {
         this.mContext = context;
         this.delegate = mentionsAdapterDelegate;
-        this.isDarkTheme = darkTheme;
-        this.dialog_id = did;
+        this.isDarkTheme = z;
+        this.dialog_id = j;
         this.searchAdapterHelper = new SearchAdapterHelper(true);
         this.searchAdapterHelper.setDelegate(new SearchAdapterHelperDelegate() {
-            public SparseArray getExcludeUsers() {
-                return SearchAdapterHelper$SearchAdapterHelperDelegate$$CC.getExcludeUsers(this);
+            public /* synthetic */ SparseArray<User> getExcludeUsers() {
+                return -CC.$default$getExcludeUsers(this);
             }
 
             public void onDataSetChanged() {
@@ -157,18 +145,21 @@ public class MentionsAdapter extends SelectionAdapter {
 
             public void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap) {
                 if (MentionsAdapter.this.lastText != null) {
-                    MentionsAdapter.this.searchUsernameOrHashtag(MentionsAdapter.this.lastText, MentionsAdapter.this.lastPosition, MentionsAdapter.this.messages, MentionsAdapter.this.lastUsernameOnly);
+                    MentionsAdapter mentionsAdapter = MentionsAdapter.this;
+                    mentionsAdapter.searchUsernameOrHashtag(mentionsAdapter.lastText, MentionsAdapter.this.lastPosition, MentionsAdapter.this.messages, MentionsAdapter.this.lastUsernameOnly);
                 }
             }
         });
     }
 
     public void onDestroy() {
-        if (this.locationProvider != null) {
-            this.locationProvider.stop();
+        LocationProvider locationProvider = this.locationProvider;
+        if (locationProvider != null) {
+            locationProvider.stop();
         }
-        if (this.contextQueryRunnable != null) {
-            AndroidUtilities.cancelRunOnUIThread(this.contextQueryRunnable);
+        Runnable runnable = this.contextQueryRunnable;
+        if (runnable != null) {
+            AndroidUtilities.cancelRunOnUIThread(runnable);
             this.contextQueryRunnable = null;
         }
         if (this.contextUsernameReqid != 0) {
@@ -186,52 +177,57 @@ public class MentionsAdapter extends SelectionAdapter {
         this.noUserName = false;
     }
 
-    public void setParentFragment(ChatActivity fragment) {
-        this.parentFragment = fragment;
+    public void setParentFragment(ChatActivity chatActivity) {
+        this.parentFragment = chatActivity;
     }
 
-    public void setChatInfo(ChatFull chatInfo) {
+    public void setChatInfo(ChatFull chatFull) {
         this.currentAccount = UserConfig.selectedAccount;
-        this.info = chatInfo;
-        if (!(this.inlineMediaEnabled || this.foundContextBot == null || this.parentFragment == null)) {
-            Chat chat = this.parentFragment.getCurrentChat();
-            if (chat != null) {
-                this.inlineMediaEnabled = ChatObject.canSendStickers(chat);
-                if (this.inlineMediaEnabled) {
-                    this.searchResultUsernames = null;
-                    notifyDataSetChanged();
-                    this.delegate.needChangePanelVisibility(false);
-                    processFoundUser(this.foundContextBot);
+        this.info = chatFull;
+        if (!(this.inlineMediaEnabled || this.foundContextBot == null)) {
+            ChatActivity chatActivity = this.parentFragment;
+            if (chatActivity != null) {
+                Chat currentChat = chatActivity.getCurrentChat();
+                if (currentChat != null) {
+                    this.inlineMediaEnabled = ChatObject.canSendStickers(currentChat);
+                    if (this.inlineMediaEnabled) {
+                        this.searchResultUsernames = null;
+                        notifyDataSetChanged();
+                        this.delegate.needChangePanelVisibility(false);
+                        processFoundUser(this.foundContextBot);
+                    }
                 }
             }
         }
-        if (this.lastText != null) {
-            searchUsernameOrHashtag(this.lastText, this.lastPosition, this.messages, this.lastUsernameOnly);
+        String str = this.lastText;
+        if (str != null) {
+            searchUsernameOrHashtag(str, this.lastPosition, this.messages, this.lastUsernameOnly);
         }
     }
 
-    public void setNeedUsernames(boolean value) {
-        this.needUsernames = value;
+    public void setNeedUsernames(boolean z) {
+        this.needUsernames = z;
     }
 
-    public void setNeedBotContext(boolean value) {
-        this.needBotContext = value;
+    public void setNeedBotContext(boolean z) {
+        this.needBotContext = z;
     }
 
-    public void setBotInfo(SparseArray<BotInfo> info) {
-        this.botInfo = info;
+    public void setBotInfo(SparseArray<BotInfo> sparseArray) {
+        this.botInfo = sparseArray;
     }
 
-    public void setBotsCount(int count) {
-        this.botsCount = count;
+    public void setBotsCount(int i) {
+        this.botsCount = i;
     }
 
     public void clearRecentHashtags() {
         this.searchAdapterHelper.clearRecentHashtags();
         this.searchResultHashtags.clear();
         notifyDataSetChanged();
-        if (this.delegate != null) {
-            this.delegate.needChangePanelVisibility(false);
+        MentionsAdapterDelegate mentionsAdapterDelegate = this.delegate;
+        if (mentionsAdapterDelegate != null) {
+            mentionsAdapterDelegate.needChangePanelVisibility(false);
         }
     }
 
@@ -240,7 +236,8 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     public int getContextBotId() {
-        return this.foundContextBot != null ? this.foundContextBot.id : 0;
+        User user = this.foundContextBot;
+        return user != null ? user.id : 0;
     }
 
     public User getContextBotUser() {
@@ -248,7 +245,8 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     public String getContextBotName() {
-        return this.foundContextBot != null ? this.foundContextBot.username : "";
+        User user = this.foundContextBot;
+        return user != null ? user.username : "";
     }
 
     private void processFoundUser(User user) {
@@ -259,10 +257,11 @@ public class MentionsAdapter extends SelectionAdapter {
             this.inlineMediaEnabled = true;
         } else {
             this.foundContextBot = user;
-            if (this.parentFragment != null) {
-                Chat chat = this.parentFragment.getCurrentChat();
-                if (chat != null) {
-                    this.inlineMediaEnabled = ChatObject.canSendStickers(chat);
+            ChatActivity chatActivity = this.parentFragment;
+            if (chatActivity != null) {
+                Chat currentChat = chatActivity.getCurrentChat();
+                if (currentChat != null) {
+                    this.inlineMediaEnabled = ChatObject.canSendStickers(currentChat);
                     if (!this.inlineMediaEnabled) {
                         notifyDataSetChanged();
                         this.delegate.needChangePanelVisibility(true);
@@ -271,162 +270,219 @@ public class MentionsAdapter extends SelectionAdapter {
                 }
             }
             if (this.foundContextBot.bot_inline_geo) {
-                if (MessagesController.getNotificationsSettings(this.currentAccount).getBoolean("inlinegeo_" + this.foundContextBot.id, false) || this.parentFragment == null || this.parentFragment.getParentActivity() == null) {
-                    checkLocationPermissionsOrStart();
-                } else {
-                    User foundContextBotFinal = this.foundContextBot;
-                    Builder builder = new Builder(this.parentFragment.getParentActivity());
-                    builder.setTitle(LocaleController.getString("ShareYouLocationTitle", NUM));
-                    builder.setMessage(LocaleController.getString("ShareYouLocationInline", NUM));
-                    boolean[] buttonClicked = new boolean[1];
-                    builder.setPositiveButton(LocaleController.getString("OK", NUM), new MentionsAdapter$$Lambda$0(this, buttonClicked, foundContextBotFinal));
-                    builder.setNegativeButton(LocaleController.getString("Cancel", NUM), new MentionsAdapter$$Lambda$1(this, buttonClicked));
-                    this.parentFragment.showDialog(builder.create(), new MentionsAdapter$$Lambda$2(this, buttonClicked));
+                SharedPreferences notificationsSettings = MessagesController.getNotificationsSettings(this.currentAccount);
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("inlinegeo_");
+                stringBuilder.append(this.foundContextBot.id);
+                if (!notificationsSettings.getBoolean(stringBuilder.toString(), false)) {
+                    chatActivity = this.parentFragment;
+                    if (!(chatActivity == null || chatActivity.getParentActivity() == null)) {
+                        user = this.foundContextBot;
+                        Builder builder = new Builder(this.parentFragment.getParentActivity());
+                        builder.setTitle(LocaleController.getString("ShareYouLocationTitle", NUM));
+                        builder.setMessage(LocaleController.getString("ShareYouLocationInline", NUM));
+                        boolean[] zArr = new boolean[1];
+                        builder.setPositiveButton(LocaleController.getString("OK", NUM), new -$$Lambda$MentionsAdapter$3hBy3ePtH3hOR9uoZtzoQOcheTs(this, zArr, user));
+                        builder.setNegativeButton(LocaleController.getString("Cancel", NUM), new -$$Lambda$MentionsAdapter$CT1DE5mOMJY5cACE3GAb-uXrprc(this, zArr));
+                        this.parentFragment.showDialog(builder.create(), new -$$Lambda$MentionsAdapter$MgskdrDXUdlxFwtdPn3PQRymvWA(this, zArr));
+                    }
                 }
+                checkLocationPermissionsOrStart();
             }
         }
         if (this.foundContextBot == null) {
             this.noUserName = true;
-            return;
+        } else {
+            MentionsAdapterDelegate mentionsAdapterDelegate = this.delegate;
+            if (mentionsAdapterDelegate != null) {
+                mentionsAdapterDelegate.onContextSearch(true);
+            }
+            searchForContextBotResults(true, this.foundContextBot, this.searchingContextQuery, "");
         }
-        if (this.delegate != null) {
-            this.delegate.onContextSearch(true);
-        }
-        searchForContextBotResults(true, this.foundContextBot, this.searchingContextQuery, "");
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$processFoundUser$0$MentionsAdapter(boolean[] buttonClicked, User foundContextBotFinal, DialogInterface dialogInterface, int i) {
-        buttonClicked[0] = true;
-        if (foundContextBotFinal != null) {
-            MessagesController.getNotificationsSettings(this.currentAccount).edit().putBoolean("inlinegeo_" + foundContextBotFinal.id, true).commit();
+    public /* synthetic */ void lambda$processFoundUser$0$MentionsAdapter(boolean[] zArr, User user, DialogInterface dialogInterface, int i) {
+        zArr[0] = true;
+        if (user != null) {
+            Editor edit = MessagesController.getNotificationsSettings(this.currentAccount).edit();
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("inlinegeo_");
+            stringBuilder.append(user.id);
+            edit.putBoolean(stringBuilder.toString(), true).commit();
             checkLocationPermissionsOrStart();
         }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$processFoundUser$1$MentionsAdapter(boolean[] buttonClicked, DialogInterface dialog, int which) {
-        buttonClicked[0] = true;
+    public /* synthetic */ void lambda$processFoundUser$1$MentionsAdapter(boolean[] zArr, DialogInterface dialogInterface, int i) {
+        zArr[0] = true;
         onLocationUnavailable();
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$processFoundUser$2$MentionsAdapter(boolean[] buttonClicked, DialogInterface dialog) {
-        if (!buttonClicked[0]) {
+    public /* synthetic */ void lambda$processFoundUser$2$MentionsAdapter(boolean[] zArr, DialogInterface dialogInterface) {
+        if (!zArr[0]) {
             onLocationUnavailable();
         }
     }
 
-    private void searchForContextBot(String username, String query) {
-        if (this.foundContextBot == null || this.foundContextBot.username == null || !this.foundContextBot.username.equals(username) || this.searchingContextQuery == null || !this.searchingContextQuery.equals(query)) {
-            this.searchResultBotContext = null;
-            this.searchResultBotContextSwitch = null;
-            notifyDataSetChanged();
-            if (this.foundContextBot != null) {
-                if (this.inlineMediaEnabled || username == null || query == null) {
-                    this.delegate.needChangePanelVisibility(false);
-                } else {
-                    return;
-                }
-            }
-            if (this.contextQueryRunnable != null) {
-                AndroidUtilities.cancelRunOnUIThread(this.contextQueryRunnable);
-                this.contextQueryRunnable = null;
-            }
-            if (TextUtils.isEmpty(username) || !(this.searchingContextUsername == null || this.searchingContextUsername.equals(username))) {
-                if (this.contextUsernameReqid != 0) {
-                    ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.contextUsernameReqid, true);
-                    this.contextUsernameReqid = 0;
-                }
-                if (this.contextQueryReqid != 0) {
-                    ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.contextQueryReqid, true);
-                    this.contextQueryReqid = 0;
-                }
-                this.foundContextBot = null;
-                this.inlineMediaEnabled = true;
-                this.searchingContextUsername = null;
-                this.searchingContextQuery = null;
-                this.locationProvider.stop();
-                this.noUserName = false;
-                if (this.delegate != null) {
-                    this.delegate.onContextSearch(false);
-                }
-                if (username == null || username.length() == 0) {
-                    return;
-                }
-            }
-            if (query == null) {
-                if (this.contextQueryReqid != 0) {
-                    ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.contextQueryReqid, true);
-                    this.contextQueryReqid = 0;
-                }
-                this.searchingContextQuery = null;
-                if (this.delegate != null) {
-                    this.delegate.onContextSearch(false);
-                    return;
-                }
-                return;
-            }
-            if (this.delegate != null) {
-                if (this.foundContextBot != null) {
-                    this.delegate.onContextSearch(true);
-                } else if (username.equals("gif")) {
-                    this.searchingContextUsername = "gif";
-                    this.delegate.onContextSearch(false);
-                }
-            }
-            final MessagesController messagesController = MessagesController.getInstance(this.currentAccount);
-            final MessagesStorage messagesStorage = MessagesStorage.getInstance(this.currentAccount);
-            this.searchingContextQuery = query;
-            final String str = query;
-            final String str2 = username;
-            this.contextQueryRunnable = new Runnable() {
-                public void run() {
-                    if (MentionsAdapter.this.contextQueryRunnable == this) {
-                        MentionsAdapter.this.contextQueryRunnable = null;
-                        if (MentionsAdapter.this.foundContextBot == null && !MentionsAdapter.this.noUserName) {
-                            MentionsAdapter.this.searchingContextUsername = str2;
-                            TLObject object = messagesController.getUserOrChat(MentionsAdapter.this.searchingContextUsername);
-                            if (object instanceof User) {
-                                MentionsAdapter.this.processFoundUser((User) object);
-                                return;
-                            }
-                            TL_contacts_resolveUsername req = new TL_contacts_resolveUsername();
-                            req.username = MentionsAdapter.this.searchingContextUsername;
-                            MentionsAdapter.this.contextUsernameReqid = ConnectionsManager.getInstance(MentionsAdapter.this.currentAccount).sendRequest(req, new MentionsAdapter$4$$Lambda$0(this, str2, messagesController, messagesStorage));
-                        } else if (!MentionsAdapter.this.noUserName) {
-                            MentionsAdapter.this.searchForContextBotResults(true, MentionsAdapter.this.foundContextBot, str, "");
-                        }
-                    }
-                }
-
-                /* Access modifiers changed, original: final|synthetic */
-                public final /* synthetic */ void lambda$run$1$MentionsAdapter$4(String username, MessagesController messagesController, MessagesStorage messagesStorage, TLObject response, TL_error error) {
-                    AndroidUtilities.runOnUIThread(new MentionsAdapter$4$$Lambda$1(this, username, error, response, messagesController, messagesStorage));
-                }
-
-                /* Access modifiers changed, original: final|synthetic */
-                public final /* synthetic */ void lambda$null$0$MentionsAdapter$4(String username, TL_error error, TLObject response, MessagesController messagesController, MessagesStorage messagesStorage) {
-                    if (MentionsAdapter.this.searchingContextUsername != null && MentionsAdapter.this.searchingContextUsername.equals(username)) {
-                        User user = null;
-                        if (error == null) {
-                            TL_contacts_resolvedPeer res = (TL_contacts_resolvedPeer) response;
-                            if (!res.users.isEmpty()) {
-                                user = (User) res.users.get(0);
-                                messagesController.putUser(user, false);
-                                messagesStorage.putUsersAndChats(res.users, null, true, true);
-                            }
-                        }
-                        MentionsAdapter.this.processFoundUser(user);
-                    }
-                }
-            };
-            AndroidUtilities.runOnUIThread(this.contextQueryRunnable, 400);
-        }
+    /* JADX WARNING: Missing block: B:27:0x004c, code skipped:
+            if (r1.equals(r8) == false) goto L_0x004e;
+     */
+    /* JADX WARNING: Missing block: B:39:0x008c, code skipped:
+            if (r8.length() != 0) goto L_0x008f;
+     */
+    private void searchForContextBot(java.lang.String r8, java.lang.String r9) {
+        /*
+        r7 = this;
+        r0 = r7.foundContextBot;
+        if (r0 == 0) goto L_0x0019;
+    L_0x0004:
+        r0 = r0.username;
+        if (r0 == 0) goto L_0x0019;
+    L_0x0008:
+        r0 = r0.equals(r8);
+        if (r0 == 0) goto L_0x0019;
+    L_0x000e:
+        r0 = r7.searchingContextQuery;
+        if (r0 == 0) goto L_0x0019;
+    L_0x0012:
+        r0 = r0.equals(r9);
+        if (r0 == 0) goto L_0x0019;
+    L_0x0018:
+        return;
+    L_0x0019:
+        r0 = 0;
+        r7.searchResultBotContext = r0;
+        r7.searchResultBotContextSwitch = r0;
+        r7.notifyDataSetChanged();
+        r1 = r7.foundContextBot;
+        r2 = 0;
+        if (r1 == 0) goto L_0x0034;
+    L_0x0026:
+        r1 = r7.inlineMediaEnabled;
+        if (r1 != 0) goto L_0x002f;
+    L_0x002a:
+        if (r8 == 0) goto L_0x002f;
+    L_0x002c:
+        if (r9 == 0) goto L_0x002f;
+    L_0x002e:
+        return;
+    L_0x002f:
+        r1 = r7.delegate;
+        r1.needChangePanelVisibility(r2);
+    L_0x0034:
+        r1 = r7.contextQueryRunnable;
+        if (r1 == 0) goto L_0x003d;
+    L_0x0038:
+        org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r1);
+        r7.contextQueryRunnable = r0;
+    L_0x003d:
+        r1 = android.text.TextUtils.isEmpty(r8);
+        r3 = 1;
+        if (r1 != 0) goto L_0x004e;
+    L_0x0044:
+        r1 = r7.searchingContextUsername;
+        if (r1 == 0) goto L_0x008f;
+    L_0x0048:
+        r1 = r1.equals(r8);
+        if (r1 != 0) goto L_0x008f;
+    L_0x004e:
+        r1 = r7.contextUsernameReqid;
+        if (r1 == 0) goto L_0x005f;
+    L_0x0052:
+        r1 = r7.currentAccount;
+        r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1);
+        r4 = r7.contextUsernameReqid;
+        r1.cancelRequest(r4, r3);
+        r7.contextUsernameReqid = r2;
+    L_0x005f:
+        r1 = r7.contextQueryReqid;
+        if (r1 == 0) goto L_0x0070;
+    L_0x0063:
+        r1 = r7.currentAccount;
+        r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1);
+        r4 = r7.contextQueryReqid;
+        r1.cancelRequest(r4, r3);
+        r7.contextQueryReqid = r2;
+    L_0x0070:
+        r7.foundContextBot = r0;
+        r7.inlineMediaEnabled = r3;
+        r7.searchingContextUsername = r0;
+        r7.searchingContextQuery = r0;
+        r1 = r7.locationProvider;
+        r1.stop();
+        r7.noUserName = r2;
+        r1 = r7.delegate;
+        if (r1 == 0) goto L_0x0086;
+    L_0x0083:
+        r1.onContextSearch(r2);
+    L_0x0086:
+        if (r8 == 0) goto L_0x00e7;
+    L_0x0088:
+        r1 = r8.length();
+        if (r1 != 0) goto L_0x008f;
+    L_0x008e:
+        goto L_0x00e7;
+    L_0x008f:
+        if (r9 != 0) goto L_0x00ac;
+    L_0x0091:
+        r8 = r7.contextQueryReqid;
+        if (r8 == 0) goto L_0x00a2;
+    L_0x0095:
+        r8 = r7.currentAccount;
+        r8 = org.telegram.tgnet.ConnectionsManager.getInstance(r8);
+        r9 = r7.contextQueryReqid;
+        r8.cancelRequest(r9, r3);
+        r7.contextQueryReqid = r2;
+    L_0x00a2:
+        r7.searchingContextQuery = r0;
+        r8 = r7.delegate;
+        if (r8 == 0) goto L_0x00ab;
+    L_0x00a8:
+        r8.onContextSearch(r2);
+    L_0x00ab:
+        return;
+    L_0x00ac:
+        r0 = r7.delegate;
+        if (r0 == 0) goto L_0x00c7;
+    L_0x00b0:
+        r1 = r7.foundContextBot;
+        if (r1 == 0) goto L_0x00b8;
+    L_0x00b4:
+        r0.onContextSearch(r3);
+        goto L_0x00c7;
+    L_0x00b8:
+        r0 = "gif";
+        r1 = r8.equals(r0);
+        if (r1 == 0) goto L_0x00c7;
+    L_0x00c0:
+        r7.searchingContextUsername = r0;
+        r0 = r7.delegate;
+        r0.onContextSearch(r2);
+    L_0x00c7:
+        r0 = r7.currentAccount;
+        r5 = org.telegram.messenger.MessagesController.getInstance(r0);
+        r0 = r7.currentAccount;
+        r6 = org.telegram.messenger.MessagesStorage.getInstance(r0);
+        r7.searchingContextQuery = r9;
+        r0 = new org.telegram.ui.Adapters.MentionsAdapter$4;
+        r1 = r0;
+        r2 = r7;
+        r3 = r9;
+        r4 = r8;
+        r1.<init>(r3, r4, r5, r6);
+        r7.contextQueryRunnable = r0;
+        r8 = r7.contextQueryRunnable;
+        r0 = 400; // 0x190 float:5.6E-43 double:1.976E-321;
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r8, r0);
+    L_0x00e7:
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.MentionsAdapter.searchForContextBot(java.lang.String, java.lang.String):void");
     }
 
     private void onLocationUnavailable() {
-        if (this.foundContextBot != null && this.foundContextBot.bot_inline_geo) {
+        User user = this.foundContextBot;
+        if (user != null && user.bot_inline_geo) {
             this.lastKnownLocation = new Location("network");
             this.lastKnownLocation.setLatitude(-1000.0d);
             this.lastKnownLocation.setLongitude(-1000.0d);
@@ -435,121 +491,270 @@ public class MentionsAdapter extends SelectionAdapter {
     }
 
     private void checkLocationPermissionsOrStart() {
-        if (this.parentFragment != null && this.parentFragment.getParentActivity() != null) {
-            if (VERSION.SDK_INT >= 23 && this.parentFragment.getParentActivity().checkSelfPermission("android.permission.ACCESS_COARSE_LOCATION") != 0) {
-                this.parentFragment.getParentActivity().requestPermissions(new String[]{"android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"}, 2);
-            } else if (this.foundContextBot != null && this.foundContextBot.bot_inline_geo) {
+        ChatActivity chatActivity = this.parentFragment;
+        if (!(chatActivity == null || chatActivity.getParentActivity() == null)) {
+            if (VERSION.SDK_INT >= 23) {
+                if (this.parentFragment.getParentActivity().checkSelfPermission("android.permission.ACCESS_COARSE_LOCATION") != 0) {
+                    this.parentFragment.getParentActivity().requestPermissions(new String[]{r1, "android.permission.ACCESS_FINE_LOCATION"}, 2);
+                    return;
+                }
+            }
+            User user = this.foundContextBot;
+            if (user != null && user.bot_inline_geo) {
                 this.locationProvider.start();
             }
         }
     }
 
-    public void setSearchingMentions(boolean value) {
-        this.isSearchingMentions = value;
+    public void setSearchingMentions(boolean z) {
+        this.isSearchingMentions = z;
     }
 
     public String getBotCaption() {
-        if (this.foundContextBot != null) {
-            return this.foundContextBot.bot_inline_placeholder;
+        User user = this.foundContextBot;
+        if (user != null) {
+            return user.bot_inline_placeholder;
         }
-        if (this.searchingContextUsername == null || !this.searchingContextUsername.equals("gif")) {
-            return null;
-        }
-        return "Search GIFs";
+        String str = this.searchingContextUsername;
+        return (str == null || !str.equals("gif")) ? null : "Search GIFs";
     }
 
     public void searchForContextBotForNextOffset() {
-        if (this.contextQueryReqid == 0 && this.nextQueryOffset != null && this.nextQueryOffset.length() != 0 && this.foundContextBot != null && this.searchingContextQuery != null) {
-            searchForContextBotResults(true, this.foundContextBot, this.searchingContextQuery, this.nextQueryOffset);
-        }
-    }
-
-    private void searchForContextBotResults(boolean cache, User user, String query, String offset) {
-        if (this.contextQueryReqid != 0) {
-            ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.contextQueryReqid, true);
-            this.contextQueryReqid = 0;
-        }
-        if (this.inlineMediaEnabled) {
-            if (query == null || user == null) {
-                this.searchingContextQuery = null;
-            } else if (!user.bot_inline_geo || this.lastKnownLocation != null) {
-                StringBuilder append = new StringBuilder().append(this.dialog_id).append("_").append(query).append("_").append(offset).append("_").append(this.dialog_id).append("_").append(user.id).append("_");
-                Object valueOf = (!user.bot_inline_geo || this.lastKnownLocation == null || this.lastKnownLocation.getLatitude() == -1000.0d) ? "" : Double.valueOf(this.lastKnownLocation.getLatitude() + this.lastKnownLocation.getLongitude());
-                String key = append.append(valueOf).toString();
-                MessagesStorage messagesStorage = MessagesStorage.getInstance(this.currentAccount);
-                RequestDelegate requestDelegate = new MentionsAdapter$$Lambda$3(this, query, cache, user, offset, messagesStorage, key);
-                if (cache) {
-                    messagesStorage.getBotCache(key, requestDelegate);
-                    return;
-                }
-                TL_messages_getInlineBotResults req = new TL_messages_getInlineBotResults();
-                req.bot = MessagesController.getInstance(this.currentAccount).getInputUser(user);
-                req.query = query;
-                req.offset = offset;
-                if (!(!user.bot_inline_geo || this.lastKnownLocation == null || this.lastKnownLocation.getLatitude() == -1000.0d)) {
-                    req.flags |= 1;
-                    req.geo_point = new TL_inputGeoPoint();
-                    req.geo_point.lat = AndroidUtilities.fixLocationCoord(this.lastKnownLocation.getLatitude());
-                    req.geo_point._long = AndroidUtilities.fixLocationCoord(this.lastKnownLocation.getLongitude());
-                }
-                int lower_id = (int) this.dialog_id;
-                int high_id = (int) (this.dialog_id >> 32);
-                if (lower_id != 0) {
-                    req.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(lower_id);
-                } else {
-                    req.peer = new TL_inputPeerEmpty();
-                }
-                this.contextQueryReqid = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, requestDelegate, 2);
-            }
-        } else if (this.delegate != null) {
-            this.delegate.onContextSearch(false);
-        }
-    }
-
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$searchForContextBotResults$4$MentionsAdapter(String query, boolean cache, User user, String offset, MessagesStorage messagesStorage, String key, TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new MentionsAdapter$$Lambda$7(this, query, cache, response, user, offset, messagesStorage, key));
-    }
-
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$null$3$MentionsAdapter(String query, boolean cache, TLObject response, User user, String offset, MessagesStorage messagesStorage, String key) {
-        if (this.searchingContextQuery != null && query.equals(this.searchingContextQuery)) {
-            this.contextQueryReqid = 0;
-            if (cache && response == null) {
-                searchForContextBotResults(false, user, query, offset);
-            } else if (this.delegate != null) {
-                this.delegate.onContextSearch(false);
-            }
-            if (response instanceof TL_messages_botResults) {
-                boolean z;
-                TL_messages_botResults res = (TL_messages_botResults) response;
-                if (!(cache || res.cache_time == 0)) {
-                    messagesStorage.saveBotCache(key, res);
-                }
-                this.nextQueryOffset = res.next_offset;
-                if (this.searchResultBotContextSwitch == null) {
-                    this.searchResultBotContextSwitch = res.switch_pm;
-                }
-                int a = 0;
-                while (a < res.results.size()) {
-                    BotInlineResult result = (BotInlineResult) res.results.get(a);
-                    if (!((result.document instanceof TL_document) || (result.photo instanceof TL_photo) || "game".equals(result.type) || result.content != null || !(result.send_message instanceof TL_botInlineMessageMediaAuto))) {
-                        res.results.remove(a);
-                        a--;
+        if (this.contextQueryReqid == 0) {
+            String str = this.nextQueryOffset;
+            if (str != null && str.length() != 0) {
+                User user = this.foundContextBot;
+                if (user != null) {
+                    String str2 = this.searchingContextQuery;
+                    if (str2 != null) {
+                        searchForContextBotResults(true, user, str2, this.nextQueryOffset);
                     }
-                    result.query_id = res.query_id;
-                    a++;
                 }
-                boolean added = false;
-                if (this.searchResultBotContext == null || offset.length() == 0) {
-                    this.searchResultBotContext = res.results;
-                    this.contextMedia = res.gallery;
+            }
+        }
+    }
+
+    /* JADX WARNING: Removed duplicated region for block: B:27:0x00b2  */
+    /* JADX WARNING: Removed duplicated region for block: B:26:0x00ad  */
+    private void searchForContextBotResults(boolean r17, org.telegram.tgnet.TLRPC.User r18, java.lang.String r19, java.lang.String r20) {
+        /*
+        r16 = this;
+        r8 = r16;
+        r9 = r18;
+        r10 = r19;
+        r11 = r20;
+        r0 = r8.contextQueryReqid;
+        r1 = 0;
+        r12 = 1;
+        if (r0 == 0) goto L_0x001b;
+    L_0x000e:
+        r0 = r8.currentAccount;
+        r0 = org.telegram.tgnet.ConnectionsManager.getInstance(r0);
+        r2 = r8.contextQueryReqid;
+        r0.cancelRequest(r2, r12);
+        r8.contextQueryReqid = r1;
+    L_0x001b:
+        r0 = r8.inlineMediaEnabled;
+        if (r0 != 0) goto L_0x0027;
+    L_0x001f:
+        r0 = r8.delegate;
+        if (r0 == 0) goto L_0x0026;
+    L_0x0023:
+        r0.onContextSearch(r1);
+    L_0x0026:
+        return;
+    L_0x0027:
+        if (r10 == 0) goto L_0x012c;
+    L_0x0029:
+        if (r9 != 0) goto L_0x002d;
+    L_0x002b:
+        goto L_0x012c;
+    L_0x002d:
+        r0 = r9.bot_inline_geo;
+        if (r0 == 0) goto L_0x0036;
+    L_0x0031:
+        r0 = r8.lastKnownLocation;
+        if (r0 != 0) goto L_0x0036;
+    L_0x0035:
+        return;
+    L_0x0036:
+        r0 = new java.lang.StringBuilder;
+        r0.<init>();
+        r1 = r8.dialog_id;
+        r0.append(r1);
+        r1 = "_";
+        r0.append(r1);
+        r0.append(r10);
+        r0.append(r1);
+        r0.append(r11);
+        r0.append(r1);
+        r2 = r8.dialog_id;
+        r0.append(r2);
+        r0.append(r1);
+        r2 = r9.id;
+        r0.append(r2);
+        r0.append(r1);
+        r1 = r9.bot_inline_geo;
+        r13 = -NUM; // 0xCLASSNAMEfNUM float:0.0 double:-1000.0;
+        if (r1 == 0) goto L_0x0088;
+    L_0x006a:
+        r1 = r8.lastKnownLocation;
+        if (r1 == 0) goto L_0x0088;
+    L_0x006e:
+        r1 = r1.getLatitude();
+        r3 = (r1 > r13 ? 1 : (r1 == r13 ? 0 : -1));
+        if (r3 == 0) goto L_0x0088;
+    L_0x0076:
+        r1 = r8.lastKnownLocation;
+        r1 = r1.getLatitude();
+        r3 = r8.lastKnownLocation;
+        r3 = r3.getLongitude();
+        r1 = r1 + r3;
+        r1 = java.lang.Double.valueOf(r1);
+        goto L_0x008a;
+    L_0x0088:
+        r1 = "";
+    L_0x008a:
+        r0.append(r1);
+        r15 = r0.toString();
+        r0 = r8.currentAccount;
+        r7 = org.telegram.messenger.MessagesStorage.getInstance(r0);
+        r6 = new org.telegram.ui.Adapters.-$$Lambda$MentionsAdapter$5habXq1r64920QdCkG9j6xMgM4U;
+        r0 = r6;
+        r1 = r16;
+        r2 = r19;
+        r3 = r17;
+        r4 = r18;
+        r5 = r20;
+        r12 = r6;
+        r6 = r7;
+        r13 = r7;
+        r7 = r15;
+        r0.<init>(r1, r2, r3, r4, r5, r6, r7);
+        if (r17 == 0) goto L_0x00b2;
+    L_0x00ad:
+        r13.getBotCache(r15, r12);
+        goto L_0x012b;
+    L_0x00b2:
+        r0 = new org.telegram.tgnet.TLRPC$TL_messages_getInlineBotResults;
+        r0.<init>();
+        r1 = r8.currentAccount;
+        r1 = org.telegram.messenger.MessagesController.getInstance(r1);
+        r1 = r1.getInputUser(r9);
+        r0.bot = r1;
+        r0.query = r10;
+        r0.offset = r11;
+        r1 = r9.bot_inline_geo;
+        if (r1 == 0) goto L_0x0105;
+    L_0x00cb:
+        r1 = r8.lastKnownLocation;
+        if (r1 == 0) goto L_0x0105;
+    L_0x00cf:
+        r1 = r1.getLatitude();
+        r3 = -NUM; // 0xCLASSNAMEfNUM float:0.0 double:-1000.0;
+        r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1));
+        if (r5 == 0) goto L_0x0105;
+    L_0x00dc:
+        r1 = r0.flags;
+        r2 = 1;
+        r1 = r1 | r2;
+        r0.flags = r1;
+        r1 = new org.telegram.tgnet.TLRPC$TL_inputGeoPoint;
+        r1.<init>();
+        r0.geo_point = r1;
+        r1 = r0.geo_point;
+        r2 = r8.lastKnownLocation;
+        r2 = r2.getLatitude();
+        r2 = org.telegram.messenger.AndroidUtilities.fixLocationCoord(r2);
+        r1.lat = r2;
+        r1 = r0.geo_point;
+        r2 = r8.lastKnownLocation;
+        r2 = r2.getLongitude();
+        r2 = org.telegram.messenger.AndroidUtilities.fixLocationCoord(r2);
+        r1._long = r2;
+    L_0x0105:
+        r1 = r8.dialog_id;
+        r2 = (int) r1;
+        if (r2 == 0) goto L_0x0117;
+    L_0x010a:
+        r1 = r8.currentAccount;
+        r1 = org.telegram.messenger.MessagesController.getInstance(r1);
+        r1 = r1.getInputPeer(r2);
+        r0.peer = r1;
+        goto L_0x011e;
+    L_0x0117:
+        r1 = new org.telegram.tgnet.TLRPC$TL_inputPeerEmpty;
+        r1.<init>();
+        r0.peer = r1;
+    L_0x011e:
+        r1 = r8.currentAccount;
+        r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1);
+        r2 = 2;
+        r0 = r1.sendRequest(r0, r12, r2);
+        r8.contextQueryReqid = r0;
+    L_0x012b:
+        return;
+    L_0x012c:
+        r0 = 0;
+        r8.searchingContextQuery = r0;
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.MentionsAdapter.searchForContextBotResults(boolean, org.telegram.tgnet.TLRPC$User, java.lang.String, java.lang.String):void");
+    }
+
+    public /* synthetic */ void lambda$searchForContextBotResults$4$MentionsAdapter(String str, boolean z, User user, String str2, MessagesStorage messagesStorage, String str3, TLObject tLObject, TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MentionsAdapter$HVDPv79fAM1RehGsWWysAxv-W1Q(this, str, z, tLObject, user, str2, messagesStorage, str3));
+    }
+
+    public /* synthetic */ void lambda$null$3$MentionsAdapter(String str, boolean z, TLObject tLObject, User user, String str2, MessagesStorage messagesStorage, String str3) {
+        if (str.equals(this.searchingContextQuery)) {
+            MentionsAdapterDelegate mentionsAdapterDelegate;
+            this.contextQueryReqid = 0;
+            if (z && tLObject == null) {
+                searchForContextBotResults(false, user, str, str2);
+            } else {
+                mentionsAdapterDelegate = this.delegate;
+                if (mentionsAdapterDelegate != null) {
+                    mentionsAdapterDelegate.onContextSearch(false);
+                }
+            }
+            if (tLObject instanceof TL_messages_botResults) {
+                boolean z2;
+                Object obj;
+                TL_messages_botResults tL_messages_botResults = (TL_messages_botResults) tLObject;
+                if (!(z || tL_messages_botResults.cache_time == 0)) {
+                    messagesStorage.saveBotCache(str3, tL_messages_botResults);
+                }
+                this.nextQueryOffset = tL_messages_botResults.next_offset;
+                if (this.searchResultBotContextSwitch == null) {
+                    this.searchResultBotContextSwitch = tL_messages_botResults.switch_pm;
+                }
+                int i = 0;
+                while (true) {
+                    z2 = true;
+                    if (i >= tL_messages_botResults.results.size()) {
+                        break;
+                    }
+                    BotInlineResult botInlineResult = (BotInlineResult) tL_messages_botResults.results.get(i);
+                    if (!((botInlineResult.document instanceof TL_document) || (botInlineResult.photo instanceof TL_photo))) {
+                        if (!"game".equals(botInlineResult.type) && botInlineResult.content == null && (botInlineResult.send_message instanceof TL_botInlineMessageMediaAuto)) {
+                            tL_messages_botResults.results.remove(i);
+                            i--;
+                        }
+                    }
+                    botInlineResult.query_id = tL_messages_botResults.query_id;
+                    i++;
+                }
+                if (this.searchResultBotContext == null || str2.length() == 0) {
+                    this.searchResultBotContext = tL_messages_botResults.results;
+                    this.contextMedia = tL_messages_botResults.gallery;
+                    obj = null;
                 } else {
-                    added = true;
-                    this.searchResultBotContext.addAll(res.results);
-                    if (res.results.isEmpty()) {
+                    this.searchResultBotContext.addAll(tL_messages_botResults.results);
+                    if (tL_messages_botResults.results.isEmpty()) {
                         this.nextQueryOffset = "";
                     }
+                    obj = 1;
                 }
                 this.searchResultHashtags = null;
                 this.searchResultUsernames = null;
@@ -558,378 +763,791 @@ public class MentionsAdapter extends SelectionAdapter {
                 this.searchResultSuggestions = null;
                 this.searchResultCommandsHelp = null;
                 this.searchResultCommandsUsers = null;
-                if (added) {
-                    boolean hasTop = this.searchResultBotContextSwitch != null;
-                    notifyItemChanged(((hasTop ? 1 : 0) + (this.searchResultBotContext.size() - res.results.size())) - 1);
-                    notifyItemRangeInserted((hasTop ? 1 : 0) + (this.searchResultBotContext.size() - res.results.size()), res.results.size());
+                if (obj != null) {
+                    i = this.searchResultBotContextSwitch != null ? 1 : 0;
+                    notifyItemChanged(((this.searchResultBotContext.size() - tL_messages_botResults.results.size()) + i) - 1);
+                    notifyItemRangeInserted((this.searchResultBotContext.size() - tL_messages_botResults.results.size()) + i, tL_messages_botResults.results.size());
                 } else {
                     notifyDataSetChanged();
                 }
-                MentionsAdapterDelegate mentionsAdapterDelegate = this.delegate;
+                mentionsAdapterDelegate = this.delegate;
                 if (this.searchResultBotContext.isEmpty() && this.searchResultBotContextSwitch == null) {
-                    z = false;
-                } else {
-                    z = true;
+                    z2 = false;
                 }
-                mentionsAdapterDelegate.needChangePanelVisibility(z);
+                mentionsAdapterDelegate.needChangePanelVisibility(z2);
             }
         }
     }
 
-    public void searchUsernameOrHashtag(String text, int position, ArrayList<MessageObject> messageObjects, boolean usernameOnly) {
-        if (this.channelReqId != 0) {
-            ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.channelReqId, true);
-            this.channelReqId = 0;
-        }
-        if (this.searchGlobalRunnable != null) {
-            AndroidUtilities.cancelRunOnUIThread(this.searchGlobalRunnable);
-            this.searchGlobalRunnable = null;
-        }
-        if (TextUtils.isEmpty(text)) {
-            searchForContextBot(null, null);
-            this.delegate.needChangePanelVisibility(false);
-            this.lastText = null;
-            return;
-        }
-        int a;
-        char ch;
-        int searchPostion = position;
-        if (text.length() > 0) {
-            searchPostion--;
-        }
-        this.lastText = null;
-        this.lastUsernameOnly = usernameOnly;
-        StringBuilder result = new StringBuilder();
-        int foundType = -1;
-        boolean hasIllegalUsernameCharacters = false;
-        if (!usernameOnly && this.needBotContext && text.charAt(0) == '@') {
-            int index = text.indexOf(32);
-            int len = text.length();
-            String username = null;
-            String query = null;
-            if (index > 0) {
-                username = text.substring(1, index);
-                query = text.substring(index + 1);
-            } else if (text.charAt(len - 1) == 't' && text.charAt(len - 2) == 'o' && text.charAt(len - 3) == 'b') {
-                username = text.substring(1);
-                query = "";
-            } else {
-                searchForContextBot(null, null);
-            }
-            if (username == null || username.length() < 1) {
-                username = "";
-            } else {
-                for (a = 1; a < username.length(); a++) {
-                    ch = username.charAt(a);
-                    if ((ch < '0' || ch > '9') && ((ch < 'a' || ch > 'z') && ((ch < 'A' || ch > 'Z') && ch != '_'))) {
-                        username = "";
-                        break;
-                    }
-                }
-            }
-            searchForContextBot(username, query);
-        } else {
-            searchForContextBot(null, null);
-        }
-        if (this.foundContextBot == null) {
-            MessagesController messagesController = MessagesController.getInstance(this.currentAccount);
-            int dogPostion = -1;
-            if (usernameOnly) {
-                result.append(text.substring(1));
-                this.resultStartPosition = 0;
-                this.resultLength = result.length();
-                foundType = 0;
-            } else {
-                a = searchPostion;
-                while (a >= 0) {
-                    if (a < text.length()) {
-                        ch = text.charAt(a);
-                        if (a == 0 || text.charAt(a - 1) == ' ' || text.charAt(a - 1) == 10) {
-                            if (ch != '@') {
-                                if (ch != '#') {
-                                    if (a != 0 || this.botInfo == null || ch != '/') {
-                                        if (ch == ':' && result.length() > 0) {
-                                            foundType = 3;
-                                            this.resultStartPosition = a;
-                                            this.resultLength = result.length() + 1;
-                                            break;
-                                        }
-                                    }
-                                    foundType = 2;
-                                    this.resultStartPosition = a;
-                                    this.resultLength = result.length() + 1;
-                                    break;
-                                } else if (this.searchAdapterHelper.loadRecentHashtags()) {
-                                    foundType = 1;
-                                    this.resultStartPosition = a;
-                                    this.resultLength = result.length() + 1;
-                                    result.insert(0, ch);
-                                } else {
-                                    this.lastText = text;
-                                    this.lastPosition = position;
-                                    this.messages = messageObjects;
-                                    this.delegate.needChangePanelVisibility(false);
-                                    return;
-                                }
-                            } else if (this.needUsernames || (this.needBotContext && a == 0)) {
-                                if (this.info != null || a == 0) {
-                                    dogPostion = a;
-                                    foundType = 0;
-                                    this.resultStartPosition = a;
-                                    this.resultLength = result.length() + 1;
-                                } else {
-                                    this.lastText = text;
-                                    this.lastPosition = position;
-                                    this.messages = messageObjects;
-                                    this.delegate.needChangePanelVisibility(false);
-                                    return;
-                                }
-                            }
-                        }
-                        if ((ch < '0' || ch > '9') && ((ch < 'a' || ch > 'z') && ((ch < 'A' || ch > 'Z') && ch != '_'))) {
-                            hasIllegalUsernameCharacters = true;
-                        }
-                        result.insert(0, ch);
-                    }
-                    a--;
-                }
-            }
-            ArrayList<String> newResult;
-            if (foundType == -1) {
-                this.delegate.needChangePanelVisibility(false);
-            } else if (foundType == 0) {
-                User user;
-                Chat chat;
-                ArrayList<Integer> users = new ArrayList();
-                for (a = 0; a < Math.min(100, messageObjects.size()); a++) {
-                    int from_id = ((MessageObject) messageObjects.get(a)).messageOwner.from_id;
-                    if (!users.contains(Integer.valueOf(from_id))) {
-                        users.add(Integer.valueOf(from_id));
-                    }
-                }
-                String usernameString = result.toString().toLowerCase();
-                boolean hasSpace = usernameString.indexOf(32) >= 0;
-                ArrayList<User> newResult2 = new ArrayList();
-                SparseArray<User> newResultsHashMap = new SparseArray();
-                SparseArray<User> newMap = new SparseArray();
-                ArrayList<TL_topPeer> inlineBots = DataQuery.getInstance(this.currentAccount).inlineBots;
-                if (!usernameOnly && this.needBotContext && dogPostion == 0 && !inlineBots.isEmpty()) {
-                    int count = 0;
-                    for (a = 0; a < inlineBots.size(); a++) {
-                        user = messagesController.getUser(Integer.valueOf(((TL_topPeer) inlineBots.get(a)).peer.user_id));
-                        if (user != null) {
-                            if (user.username != null && user.username.length() > 0 && ((usernameString.length() > 0 && user.username.toLowerCase().startsWith(usernameString)) || usernameString.length() == 0)) {
-                                newResult2.add(user);
-                                newResultsHashMap.put(user.id, user);
-                                count++;
-                            }
-                            if (count == 5) {
-                                break;
-                            }
-                        }
-                    }
-                }
-                if (this.parentFragment != null) {
-                    chat = this.parentFragment.getCurrentChat();
-                } else if (this.info != null) {
-                    chat = messagesController.getChat(Integer.valueOf(this.info.id));
-                } else {
-                    chat = null;
-                }
-                if (!(chat == null || this.info == null || this.info.participants == null || (ChatObject.isChannel(chat) && !chat.megagroup))) {
-                    for (a = 0; a < this.info.participants.participants.size(); a++) {
-                        user = messagesController.getUser(Integer.valueOf(((ChatParticipant) this.info.participants.participants.get(a)).user_id));
-                        if (user != null && (usernameOnly || !UserObject.isUserSelf(user))) {
-                            if (newResultsHashMap.indexOfKey(user.id) < 0) {
-                                if (usernameString.length() == 0) {
-                                    if (!user.deleted) {
-                                        newResult2.add(user);
-                                    }
-                                } else if (user.username != null && user.username.length() > 0 && user.username.toLowerCase().startsWith(usernameString)) {
-                                    newResult2.add(user);
-                                    newMap.put(user.id, user);
-                                } else if (user.first_name != null && user.first_name.length() > 0 && user.first_name.toLowerCase().startsWith(usernameString)) {
-                                    newResult2.add(user);
-                                    newMap.put(user.id, user);
-                                } else if (user.last_name != null && user.last_name.length() > 0 && user.last_name.toLowerCase().startsWith(usernameString)) {
-                                    newResult2.add(user);
-                                    newMap.put(user.id, user);
-                                } else if (hasSpace && ContactsController.formatName(user.first_name, user.last_name).toLowerCase().startsWith(usernameString)) {
-                                    newResult2.add(user);
-                                    newMap.put(user.id, user);
-                                }
-                            }
-                        }
-                    }
-                }
-                this.searchResultHashtags = null;
-                this.searchResultCommands = null;
-                this.searchResultCommandsHelp = null;
-                this.searchResultCommandsUsers = null;
-                this.searchResultSuggestions = null;
-                this.searchResultUsernames = newResult2;
-                this.searchResultUsernamesMap = newMap;
-                if (chat != null && chat.megagroup && usernameString.length() > 0) {
-                    final String str = usernameString;
-                    final MessagesController messagesController2 = messagesController;
-                    AnonymousClass5 anonymousClass5 = new Runnable() {
-                        public void run() {
-                            if (MentionsAdapter.this.searchGlobalRunnable == this) {
-                                TL_channels_getParticipants req = new TL_channels_getParticipants();
-                                req.channel = MessagesController.getInputChannel(chat);
-                                req.limit = 20;
-                                req.offset = 0;
-                                TL_channelParticipantsSearch channelParticipantsSearch = new TL_channelParticipantsSearch();
-                                channelParticipantsSearch.q = str;
-                                req.filter = channelParticipantsSearch;
-                                MentionsAdapter.this.channelReqId = ConnectionsManager.getInstance(MentionsAdapter.this.currentAccount).sendRequest(req, new MentionsAdapter$5$$Lambda$0(this, MentionsAdapter.access$1604(MentionsAdapter.this), messagesController2));
-                            }
-                        }
-
-                        /* Access modifiers changed, original: final|synthetic */
-                        public final /* synthetic */ void lambda$run$1$MentionsAdapter$5(int currentReqId, MessagesController messagesController, TLObject response, TL_error error) {
-                            AndroidUtilities.runOnUIThread(new MentionsAdapter$5$$Lambda$1(this, currentReqId, error, response, messagesController));
-                        }
-
-                        /* Access modifiers changed, original: final|synthetic */
-                        public final /* synthetic */ void lambda$null$0$MentionsAdapter$5(int currentReqId, TL_error error, TLObject response, MessagesController messagesController) {
-                            if (!(MentionsAdapter.this.channelReqId == 0 || currentReqId != MentionsAdapter.this.channelLastReqId || MentionsAdapter.this.searchResultUsernamesMap == null || MentionsAdapter.this.searchResultUsernames == null || error != null)) {
-                                TL_channels_channelParticipants res = (TL_channels_channelParticipants) response;
-                                messagesController.putUsers(res.users, false);
-                                if (!res.participants.isEmpty()) {
-                                    int currentUserId = UserConfig.getInstance(MentionsAdapter.this.currentAccount).getClientUserId();
-                                    for (int a = 0; a < res.participants.size(); a++) {
-                                        ChannelParticipant participant = (ChannelParticipant) res.participants.get(a);
-                                        if (MentionsAdapter.this.searchResultUsernamesMap.indexOfKey(participant.user_id) < 0 && (MentionsAdapter.this.isSearchingMentions || participant.user_id != currentUserId)) {
-                                            User user = messagesController.getUser(Integer.valueOf(participant.user_id));
-                                            if (user != null) {
-                                                MentionsAdapter.this.searchResultUsernames.add(user);
-                                            } else {
-                                                return;
-                                            }
-                                        }
-                                    }
-                                    MentionsAdapter.this.notifyDataSetChanged();
-                                }
-                            }
-                            MentionsAdapter.this.channelReqId = 0;
-                        }
-                    };
-                    this.searchGlobalRunnable = anonymousClass5;
-                    AndroidUtilities.runOnUIThread(anonymousClass5, 200);
-                }
-                Collections.sort(this.searchResultUsernames, new MentionsAdapter$$Lambda$4(newResultsHashMap, users));
-                notifyDataSetChanged();
-                this.delegate.needChangePanelVisibility(!newResult2.isEmpty());
-            } else if (foundType == 1) {
-                newResult = new ArrayList();
-                String hashtagString = result.toString().toLowerCase();
-                ArrayList<HashtagObject> hashtags = this.searchAdapterHelper.getHashtags();
-                for (a = 0; a < hashtags.size(); a++) {
-                    HashtagObject hashtagObject = (HashtagObject) hashtags.get(a);
-                    if (!(hashtagObject == null || hashtagObject.hashtag == null || !hashtagObject.hashtag.startsWith(hashtagString))) {
-                        newResult.add(hashtagObject.hashtag);
-                    }
-                }
-                this.searchResultHashtags = newResult;
-                this.searchResultUsernames = null;
-                this.searchResultUsernamesMap = null;
-                this.searchResultCommands = null;
-                this.searchResultCommandsHelp = null;
-                this.searchResultCommandsUsers = null;
-                this.searchResultSuggestions = null;
-                notifyDataSetChanged();
-                this.delegate.needChangePanelVisibility(!newResult.isEmpty());
-            } else if (foundType == 2) {
-                newResult = new ArrayList();
-                ArrayList<String> newResultHelp = new ArrayList();
-                ArrayList<User> newResultUsers = new ArrayList();
-                String command = result.toString().toLowerCase();
-                for (int b = 0; b < this.botInfo.size(); b++) {
-                    BotInfo info = (BotInfo) this.botInfo.valueAt(b);
-                    for (a = 0; a < info.commands.size(); a++) {
-                        TL_botCommand botCommand = (TL_botCommand) info.commands.get(a);
-                        if (!(botCommand == null || botCommand.command == null || !botCommand.command.startsWith(command))) {
-                            newResult.add("/" + botCommand.command);
-                            newResultHelp.add(botCommand.description);
-                            newResultUsers.add(messagesController.getUser(Integer.valueOf(info.user_id)));
-                        }
-                    }
-                }
-                this.searchResultHashtags = null;
-                this.searchResultUsernames = null;
-                this.searchResultUsernamesMap = null;
-                this.searchResultSuggestions = null;
-                this.searchResultCommands = newResult;
-                this.searchResultCommandsHelp = newResultHelp;
-                this.searchResultCommandsUsers = newResultUsers;
-                notifyDataSetChanged();
-                this.delegate.needChangePanelVisibility(!newResult.isEmpty());
-            } else if (foundType != 3) {
-            } else {
-                if (hasIllegalUsernameCharacters) {
-                    this.delegate.needChangePanelVisibility(false);
-                    return;
-                }
-                Object[] suggestions = Emoji.getSuggestion(result.toString());
-                if (suggestions != null) {
-                    this.searchResultSuggestions = new ArrayList();
-                    for (EmojiSuggestion suggestion : suggestions) {
-                        suggestion.emoji = suggestion.emoji.replace("️", "");
-                        this.searchResultSuggestions.add(suggestion);
-                    }
-                    Emoji.loadRecentEmoji();
-                    Collections.sort(this.searchResultSuggestions, MentionsAdapter$$Lambda$5.$instance);
-                }
-                this.searchResultHashtags = null;
-                this.searchResultUsernames = null;
-                this.searchResultUsernamesMap = null;
-                this.searchResultCommands = null;
-                this.searchResultCommandsHelp = null;
-                this.searchResultCommandsUsers = null;
-                notifyDataSetChanged();
-                this.delegate.needChangePanelVisibility(this.searchResultSuggestions != null);
-            }
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:113:0x01ba  */
+    /* JADX WARNING: Removed duplicated region for block: B:111:0x01b4  */
+    public void searchUsernameOrHashtag(java.lang.String r17, int r18, java.util.ArrayList<org.telegram.messenger.MessageObject> r19, boolean r20) {
+        /*
+        r16 = this;
+        r7 = r16;
+        r0 = r17;
+        r1 = r18;
+        r2 = r19;
+        r3 = r20;
+        r4 = r7.cancelDelayRunnable;
+        r5 = 0;
+        if (r4 == 0) goto L_0x0014;
+    L_0x000f:
+        org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r4);
+        r7.cancelDelayRunnable = r5;
+    L_0x0014:
+        r4 = r7.channelReqId;
+        r6 = 0;
+        r8 = 1;
+        if (r4 == 0) goto L_0x0027;
+    L_0x001a:
+        r4 = r7.currentAccount;
+        r4 = org.telegram.tgnet.ConnectionsManager.getInstance(r4);
+        r9 = r7.channelReqId;
+        r4.cancelRequest(r9, r8);
+        r7.channelReqId = r6;
+    L_0x0027:
+        r4 = r7.searchGlobalRunnable;
+        if (r4 == 0) goto L_0x0030;
+    L_0x002b:
+        org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r4);
+        r7.searchGlobalRunnable = r5;
+    L_0x0030:
+        r4 = android.text.TextUtils.isEmpty(r17);
+        if (r4 == 0) goto L_0x0041;
+    L_0x0036:
+        r7.searchForContextBot(r5, r5);
+        r0 = r7.delegate;
+        r0.needChangePanelVisibility(r6);
+        r7.lastText = r5;
+        return;
+    L_0x0041:
+        r4 = r17.length();
+        if (r4 <= 0) goto L_0x004a;
+    L_0x0047:
+        r4 = r1 + -1;
+        goto L_0x004b;
+    L_0x004a:
+        r4 = r1;
+    L_0x004b:
+        r7.lastText = r5;
+        r7.lastUsernameOnly = r3;
+        r9 = new java.lang.StringBuilder;
+        r9.<init>();
+        r10 = 64;
+        r11 = 3;
+        r12 = 32;
+        if (r3 != 0) goto L_0x00de;
+    L_0x005b:
+        r13 = r7.needBotContext;
+        if (r13 == 0) goto L_0x00de;
+    L_0x005f:
+        r13 = r0.charAt(r6);
+        if (r13 != r10) goto L_0x00de;
+    L_0x0065:
+        r13 = r0.indexOf(r12);
+        r14 = r17.length();
+        r15 = "";
+        if (r13 <= 0) goto L_0x007b;
+    L_0x0071:
+        r14 = r0.substring(r8, r13);
+        r13 = r13 + r8;
+        r13 = r0.substring(r13);
+        goto L_0x00a4;
+    L_0x007b:
+        r13 = r14 + -1;
+        r13 = r0.charAt(r13);
+        r10 = 116; // 0x74 float:1.63E-43 double:5.73E-322;
+        if (r13 != r10) goto L_0x009f;
+    L_0x0085:
+        r10 = r14 + -2;
+        r10 = r0.charAt(r10);
+        r13 = 111; // 0x6f float:1.56E-43 double:5.5E-322;
+        if (r10 != r13) goto L_0x009f;
+    L_0x008f:
+        r14 = r14 - r11;
+        r10 = r0.charAt(r14);
+        r13 = 98;
+        if (r10 != r13) goto L_0x009f;
+    L_0x0098:
+        r10 = r0.substring(r8);
+        r14 = r10;
+        r13 = r15;
+        goto L_0x00a4;
+    L_0x009f:
+        r7.searchForContextBot(r5, r5);
+        r13 = r5;
+        r14 = r13;
+    L_0x00a4:
+        if (r14 == 0) goto L_0x00da;
+    L_0x00a6:
+        r10 = r14.length();
+        if (r10 < r8) goto L_0x00da;
+    L_0x00ac:
+        r10 = 1;
+    L_0x00ad:
+        r11 = r14.length();
+        if (r10 >= r11) goto L_0x00d9;
+    L_0x00b3:
+        r11 = r14.charAt(r10);
+        r12 = 48;
+        if (r11 < r12) goto L_0x00bf;
+    L_0x00bb:
+        r12 = 57;
+        if (r11 <= r12) goto L_0x00d4;
+    L_0x00bf:
+        r12 = 97;
+        if (r11 < r12) goto L_0x00c7;
+    L_0x00c3:
+        r12 = 122; // 0x7a float:1.71E-43 double:6.03E-322;
+        if (r11 <= r12) goto L_0x00d4;
+    L_0x00c7:
+        r12 = 65;
+        if (r11 < r12) goto L_0x00cf;
+    L_0x00cb:
+        r12 = 90;
+        if (r11 <= r12) goto L_0x00d4;
+    L_0x00cf:
+        r12 = 95;
+        if (r11 == r12) goto L_0x00d4;
+    L_0x00d3:
+        goto L_0x00da;
+    L_0x00d4:
+        r10 = r10 + 1;
+        r12 = 32;
+        goto L_0x00ad;
+    L_0x00d9:
+        r15 = r14;
+    L_0x00da:
+        r7.searchForContextBot(r15, r13);
+        goto L_0x00e1;
+    L_0x00de:
+        r7.searchForContextBot(r5, r5);
+    L_0x00e1:
+        r10 = r7.foundContextBot;
+        if (r10 == 0) goto L_0x00e6;
+    L_0x00e5:
+        return;
+    L_0x00e6:
+        r10 = r7.currentAccount;
+        r10 = org.telegram.messenger.MessagesController.getInstance(r10);
+        r12 = -1;
+        if (r3 == 0) goto L_0x0102;
+    L_0x00ef:
+        r0 = r0.substring(r8);
+        r9.append(r0);
+        r7.resultStartPosition = r6;
+        r0 = r9.length();
+        r7.resultLength = r0;
+        r0 = 0;
+    L_0x00ff:
+        r4 = -1;
+        goto L_0x01b2;
+    L_0x0102:
+        if (r4 < 0) goto L_0x01af;
+    L_0x0104:
+        r13 = r17.length();
+        if (r4 < r13) goto L_0x010e;
+    L_0x010a:
+        r11 = 64;
+        goto L_0x01ab;
+    L_0x010e:
+        r13 = r0.charAt(r4);
+        if (r4 == 0) goto L_0x012b;
+    L_0x0114:
+        r14 = r4 + -1;
+        r15 = r0.charAt(r14);
+        r11 = 32;
+        if (r15 == r11) goto L_0x012b;
+    L_0x011e:
+        r11 = r0.charAt(r14);
+        r14 = 10;
+        if (r11 != r14) goto L_0x0127;
+    L_0x0126:
+        goto L_0x012b;
+    L_0x0127:
+        r11 = 64;
+        goto L_0x01a8;
+    L_0x012b:
+        r11 = 64;
+        if (r13 != r11) goto L_0x0156;
+    L_0x012f:
+        r14 = r7.needUsernames;
+        if (r14 != 0) goto L_0x0139;
+    L_0x0133:
+        r14 = r7.needBotContext;
+        if (r14 == 0) goto L_0x01a8;
+    L_0x0137:
+        if (r4 != 0) goto L_0x01a8;
+    L_0x0139:
+        r11 = r7.info;
+        if (r11 != 0) goto L_0x014b;
+    L_0x013d:
+        if (r4 == 0) goto L_0x014b;
+    L_0x013f:
+        r7.lastText = r0;
+        r7.lastPosition = r1;
+        r7.messages = r2;
+        r0 = r7.delegate;
+        r0.needChangePanelVisibility(r6);
+        return;
+    L_0x014b:
+        r7.resultStartPosition = r4;
+        r0 = r9.length();
+        r0 = r0 + r8;
+        r7.resultLength = r0;
+        r0 = 0;
+        goto L_0x01b2;
+    L_0x0156:
+        r14 = 35;
+        if (r13 != r14) goto L_0x017c;
+    L_0x015a:
+        r11 = r7.searchAdapterHelper;
+        r11 = r11.loadRecentHashtags();
+        if (r11 == 0) goto L_0x0170;
+    L_0x0162:
+        r7.resultStartPosition = r4;
+        r0 = r9.length();
+        r0 = r0 + r8;
+        r7.resultLength = r0;
+        r9.insert(r6, r13);
+        r0 = 1;
+        goto L_0x00ff;
+    L_0x0170:
+        r7.lastText = r0;
+        r7.lastPosition = r1;
+        r7.messages = r2;
+        r0 = r7.delegate;
+        r0.needChangePanelVisibility(r6);
+        return;
+    L_0x017c:
+        if (r4 != 0) goto L_0x0192;
+    L_0x017e:
+        r14 = r7.botInfo;
+        if (r14 == 0) goto L_0x0192;
+    L_0x0182:
+        r14 = 47;
+        if (r13 != r14) goto L_0x0192;
+    L_0x0186:
+        r7.resultStartPosition = r4;
+        r0 = r9.length();
+        r0 = r0 + r8;
+        r7.resultLength = r0;
+        r0 = 2;
+        goto L_0x00ff;
+    L_0x0192:
+        r14 = 58;
+        if (r13 != r14) goto L_0x01a8;
+    L_0x0196:
+        r14 = r9.length();
+        if (r14 <= 0) goto L_0x01a8;
+    L_0x019c:
+        r7.resultStartPosition = r4;
+        r0 = r9.length();
+        r0 = r0 + r8;
+        r7.resultLength = r0;
+        r0 = 3;
+        goto L_0x00ff;
+    L_0x01a8:
+        r9.insert(r6, r13);
+    L_0x01ab:
+        r4 = r4 + -1;
+        goto L_0x0102;
+    L_0x01af:
+        r0 = -1;
+        goto L_0x00ff;
+    L_0x01b2:
+        if (r0 != r12) goto L_0x01ba;
+    L_0x01b4:
+        r0 = r7.delegate;
+        r0.needChangePanelVisibility(r6);
+        return;
+    L_0x01ba:
+        if (r0 != 0) goto L_0x03b6;
+    L_0x01bc:
+        r0 = new java.util.ArrayList;
+        r0.<init>();
+        r1 = 0;
+    L_0x01c2:
+        r11 = 100;
+        r12 = r19.size();
+        r11 = java.lang.Math.min(r11, r12);
+        if (r1 >= r11) goto L_0x01ec;
+    L_0x01ce:
+        r11 = r2.get(r1);
+        r11 = (org.telegram.messenger.MessageObject) r11;
+        r11 = r11.messageOwner;
+        r11 = r11.from_id;
+        r12 = java.lang.Integer.valueOf(r11);
+        r12 = r0.contains(r12);
+        if (r12 != 0) goto L_0x01e9;
+    L_0x01e2:
+        r11 = java.lang.Integer.valueOf(r11);
+        r0.add(r11);
+    L_0x01e9:
+        r1 = r1 + 1;
+        goto L_0x01c2;
+    L_0x01ec:
+        r1 = r9.toString();
+        r9 = r1.toLowerCase();
+        r1 = 32;
+        r1 = r9.indexOf(r1);
+        if (r1 < 0) goto L_0x01fe;
+    L_0x01fc:
+        r1 = 1;
+        goto L_0x01ff;
+    L_0x01fe:
+        r1 = 0;
+    L_0x01ff:
+        r11 = new java.util.ArrayList;
+        r11.<init>();
+        r2 = new android.util.SparseArray;
+        r2.<init>();
+        r12 = new android.util.SparseArray;
+        r12.<init>();
+        r13 = r7.currentAccount;
+        r13 = org.telegram.messenger.DataQuery.getInstance(r13);
+        r13 = r13.inlineBots;
+        r14 = 5;
+        if (r3 != 0) goto L_0x0275;
+    L_0x0219:
+        r15 = r7.needBotContext;
+        if (r15 == 0) goto L_0x0275;
+    L_0x021d:
+        if (r4 != 0) goto L_0x0275;
+    L_0x021f:
+        r4 = r13.isEmpty();
+        if (r4 != 0) goto L_0x0275;
+    L_0x0225:
+        r4 = 0;
+        r15 = 0;
+    L_0x0227:
+        r6 = r13.size();
+        if (r4 >= r6) goto L_0x0275;
+    L_0x022d:
+        r6 = r13.get(r4);
+        r6 = (org.telegram.tgnet.TLRPC.TL_topPeer) r6;
+        r6 = r6.peer;
+        r6 = r6.user_id;
+        r6 = java.lang.Integer.valueOf(r6);
+        r6 = r10.getUser(r6);
+        if (r6 != 0) goto L_0x0242;
+    L_0x0241:
+        goto L_0x0271;
+    L_0x0242:
+        r8 = r6.username;
+        if (r8 == 0) goto L_0x026e;
+    L_0x0246:
+        r8 = r8.length();
+        if (r8 <= 0) goto L_0x026e;
+    L_0x024c:
+        r8 = r9.length();
+        if (r8 <= 0) goto L_0x025e;
+    L_0x0252:
+        r8 = r6.username;
+        r8 = r8.toLowerCase();
+        r8 = r8.startsWith(r9);
+        if (r8 != 0) goto L_0x0264;
+    L_0x025e:
+        r8 = r9.length();
+        if (r8 != 0) goto L_0x026e;
+    L_0x0264:
+        r11.add(r6);
+        r8 = r6.id;
+        r2.put(r8, r6);
+        r15 = r15 + 1;
+    L_0x026e:
+        if (r15 != r14) goto L_0x0271;
+    L_0x0270:
+        goto L_0x0275;
+    L_0x0271:
+        r4 = r4 + 1;
+        r8 = 1;
+        goto L_0x0227;
+    L_0x0275:
+        r4 = r7.parentFragment;
+        if (r4 == 0) goto L_0x027e;
+    L_0x0279:
+        r4 = r4.getCurrentChat();
+        goto L_0x028e;
+    L_0x027e:
+        r4 = r7.info;
+        if (r4 == 0) goto L_0x028d;
+    L_0x0282:
+        r4 = r4.id;
+        r4 = java.lang.Integer.valueOf(r4);
+        r4 = r10.getChat(r4);
+        goto L_0x028e;
+    L_0x028d:
+        r4 = r5;
+    L_0x028e:
+        if (r4 == 0) goto L_0x0365;
+    L_0x0290:
+        r6 = r7.info;
+        if (r6 == 0) goto L_0x0365;
+    L_0x0294:
+        r6 = r6.participants;
+        if (r6 == 0) goto L_0x0365;
+    L_0x0298:
+        r6 = org.telegram.messenger.ChatObject.isChannel(r4);
+        if (r6 == 0) goto L_0x02a2;
+    L_0x029e:
+        r6 = r4.megagroup;
+        if (r6 == 0) goto L_0x0365;
+    L_0x02a2:
+        r6 = 0;
+    L_0x02a3:
+        r8 = r7.info;
+        r8 = r8.participants;
+        r8 = r8.participants;
+        r8 = r8.size();
+        if (r6 >= r8) goto L_0x0365;
+    L_0x02af:
+        r8 = r7.info;
+        r8 = r8.participants;
+        r8 = r8.participants;
+        r8 = r8.get(r6);
+        r8 = (org.telegram.tgnet.TLRPC.ChatParticipant) r8;
+        r8 = r8.user_id;
+        r8 = java.lang.Integer.valueOf(r8);
+        r8 = r10.getUser(r8);
+        if (r8 == 0) goto L_0x0361;
+    L_0x02c7:
+        if (r3 != 0) goto L_0x02cf;
+    L_0x02c9:
+        r13 = org.telegram.messenger.UserObject.isUserSelf(r8);
+        if (r13 != 0) goto L_0x0361;
+    L_0x02cf:
+        r13 = r8.id;
+        r13 = r2.indexOfKey(r13);
+        if (r13 < 0) goto L_0x02d9;
+    L_0x02d7:
+        goto L_0x0361;
+    L_0x02d9:
+        r13 = r9.length();
+        if (r13 != 0) goto L_0x02e8;
+    L_0x02df:
+        r13 = r8.deleted;
+        if (r13 != 0) goto L_0x0361;
+    L_0x02e3:
+        r11.add(r8);
+        goto L_0x0361;
+    L_0x02e8:
+        r13 = r8.username;
+        if (r13 == 0) goto L_0x0307;
+    L_0x02ec:
+        r13 = r13.length();
+        if (r13 <= 0) goto L_0x0307;
+    L_0x02f2:
+        r13 = r8.username;
+        r13 = r13.toLowerCase();
+        r13 = r13.startsWith(r9);
+        if (r13 == 0) goto L_0x0307;
+    L_0x02fe:
+        r11.add(r8);
+        r13 = r8.id;
+        r12.put(r13, r8);
+        goto L_0x0361;
+    L_0x0307:
+        r13 = r8.first_name;
+        if (r13 == 0) goto L_0x0326;
+    L_0x030b:
+        r13 = r13.length();
+        if (r13 <= 0) goto L_0x0326;
+    L_0x0311:
+        r13 = r8.first_name;
+        r13 = r13.toLowerCase();
+        r13 = r13.startsWith(r9);
+        if (r13 == 0) goto L_0x0326;
+    L_0x031d:
+        r11.add(r8);
+        r13 = r8.id;
+        r12.put(r13, r8);
+        goto L_0x0361;
+    L_0x0326:
+        r13 = r8.last_name;
+        if (r13 == 0) goto L_0x0345;
+    L_0x032a:
+        r13 = r13.length();
+        if (r13 <= 0) goto L_0x0345;
+    L_0x0330:
+        r13 = r8.last_name;
+        r13 = r13.toLowerCase();
+        r13 = r13.startsWith(r9);
+        if (r13 == 0) goto L_0x0345;
+    L_0x033c:
+        r11.add(r8);
+        r13 = r8.id;
+        r12.put(r13, r8);
+        goto L_0x0361;
+    L_0x0345:
+        if (r1 == 0) goto L_0x0361;
+    L_0x0347:
+        r13 = r8.first_name;
+        r15 = r8.last_name;
+        r13 = org.telegram.messenger.ContactsController.formatName(r13, r15);
+        r13 = r13.toLowerCase();
+        r13 = r13.startsWith(r9);
+        if (r13 == 0) goto L_0x0361;
+    L_0x0359:
+        r11.add(r8);
+        r13 = r8.id;
+        r12.put(r13, r8);
+    L_0x0361:
+        r6 = r6 + 1;
+        goto L_0x02a3;
+    L_0x0365:
+        r1 = new org.telegram.ui.Adapters.-$$Lambda$MentionsAdapter$RtUwcbbmysCllxWaHytbPO9oFzY;
+        r1.<init>(r12, r0);
+        java.util.Collections.sort(r11, r1);
+        r7.searchResultHashtags = r5;
+        r7.searchResultCommands = r5;
+        r7.searchResultCommandsHelp = r5;
+        r7.searchResultCommandsUsers = r5;
+        r7.searchResultSuggestions = r5;
+        if (r4 == 0) goto L_0x03b0;
+    L_0x0379:
+        r0 = r4.megagroup;
+        if (r0 == 0) goto L_0x03b0;
+    L_0x037d:
+        r0 = r9.length();
+        if (r0 <= 0) goto L_0x03b0;
+    L_0x0383:
+        r0 = r11.size();
+        if (r0 >= r14) goto L_0x0396;
+    L_0x0389:
+        r0 = new org.telegram.ui.Adapters.-$$Lambda$MentionsAdapter$_MTgLbVZU0vjX841sg9FU0IKm0g;
+        r0.<init>(r7, r11, r12);
+        r7.cancelDelayRunnable = r0;
+        r1 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r0, r1);
+        goto L_0x039a;
+    L_0x0396:
+        r0 = 1;
+        r7.showUsersResult(r11, r12, r0);
+    L_0x039a:
+        r8 = new org.telegram.ui.Adapters.MentionsAdapter$5;
+        r0 = r8;
+        r1 = r16;
+        r2 = r4;
+        r3 = r9;
+        r4 = r11;
+        r5 = r12;
+        r6 = r10;
+        r0.<init>(r2, r3, r4, r5, r6);
+        r7.searchGlobalRunnable = r8;
+        r0 = 200; // 0xc8 float:2.8E-43 double:9.9E-322;
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r8, r0);
+        goto L_0x04cd;
+    L_0x03b0:
+        r1 = 1;
+        r7.showUsersResult(r11, r12, r1);
+        goto L_0x04cd;
+    L_0x03b6:
+        r1 = 1;
+        if (r0 != r1) goto L_0x040b;
+    L_0x03b9:
+        r0 = new java.util.ArrayList;
+        r0.<init>();
+        r1 = r9.toString();
+        r1 = r1.toLowerCase();
+        r2 = r7.searchAdapterHelper;
+        r2 = r2.getHashtags();
+        r3 = 0;
+    L_0x03cd:
+        r4 = r2.size();
+        if (r3 >= r4) goto L_0x03ed;
+    L_0x03d3:
+        r4 = r2.get(r3);
+        r4 = (org.telegram.ui.Adapters.SearchAdapterHelper.HashtagObject) r4;
+        if (r4 == 0) goto L_0x03ea;
+    L_0x03db:
+        r6 = r4.hashtag;
+        if (r6 == 0) goto L_0x03ea;
+    L_0x03df:
+        r6 = r6.startsWith(r1);
+        if (r6 == 0) goto L_0x03ea;
+    L_0x03e5:
+        r4 = r4.hashtag;
+        r0.add(r4);
+    L_0x03ea:
+        r3 = r3 + 1;
+        goto L_0x03cd;
+    L_0x03ed:
+        r7.searchResultHashtags = r0;
+        r7.searchResultUsernames = r5;
+        r7.searchResultUsernamesMap = r5;
+        r7.searchResultCommands = r5;
+        r7.searchResultCommandsHelp = r5;
+        r7.searchResultCommandsUsers = r5;
+        r7.searchResultSuggestions = r5;
+        r16.notifyDataSetChanged();
+        r1 = r7.delegate;
+        r0 = r0.isEmpty();
+        r2 = 1;
+        r0 = r0 ^ r2;
+        r1.needChangePanelVisibility(r0);
+        goto L_0x04cd;
+    L_0x040b:
+        r1 = 2;
+        if (r0 != r1) goto L_0x049e;
+    L_0x040e:
+        r0 = new java.util.ArrayList;
+        r0.<init>();
+        r1 = new java.util.ArrayList;
+        r1.<init>();
+        r2 = new java.util.ArrayList;
+        r2.<init>();
+        r3 = r9.toString();
+        r3 = r3.toLowerCase();
+        r4 = 0;
+    L_0x0426:
+        r6 = r7.botInfo;
+        r6 = r6.size();
+        if (r4 >= r6) goto L_0x0481;
+    L_0x042e:
+        r6 = r7.botInfo;
+        r6 = r6.valueAt(r4);
+        r6 = (org.telegram.tgnet.TLRPC.BotInfo) r6;
+        r8 = 0;
+    L_0x0437:
+        r9 = r6.commands;
+        r9 = r9.size();
+        if (r8 >= r9) goto L_0x047e;
+    L_0x043f:
+        r9 = r6.commands;
+        r9 = r9.get(r8);
+        r9 = (org.telegram.tgnet.TLRPC.TL_botCommand) r9;
+        if (r9 == 0) goto L_0x047b;
+    L_0x0449:
+        r11 = r9.command;
+        if (r11 == 0) goto L_0x047b;
+    L_0x044d:
+        r11 = r11.startsWith(r3);
+        if (r11 == 0) goto L_0x047b;
+    L_0x0453:
+        r11 = new java.lang.StringBuilder;
+        r11.<init>();
+        r12 = "/";
+        r11.append(r12);
+        r12 = r9.command;
+        r11.append(r12);
+        r11 = r11.toString();
+        r0.add(r11);
+        r9 = r9.description;
+        r1.add(r9);
+        r9 = r6.user_id;
+        r9 = java.lang.Integer.valueOf(r9);
+        r9 = r10.getUser(r9);
+        r2.add(r9);
+    L_0x047b:
+        r8 = r8 + 1;
+        goto L_0x0437;
+    L_0x047e:
+        r4 = r4 + 1;
+        goto L_0x0426;
+    L_0x0481:
+        r7.searchResultHashtags = r5;
+        r7.searchResultUsernames = r5;
+        r7.searchResultUsernamesMap = r5;
+        r7.searchResultSuggestions = r5;
+        r7.searchResultCommands = r0;
+        r7.searchResultCommandsHelp = r1;
+        r7.searchResultCommandsUsers = r2;
+        r16.notifyDataSetChanged();
+        r1 = r7.delegate;
+        r0 = r0.isEmpty();
+        r2 = 1;
+        r0 = r0 ^ r2;
+        r1.needChangePanelVisibility(r0);
+        goto L_0x04cd;
+    L_0x049e:
+        r1 = 3;
+        if (r0 != r1) goto L_0x04cd;
+    L_0x04a1:
+        r0 = org.telegram.messenger.AndroidUtilities.getCurrentKeyboardLanguage();
+        r1 = r7.lastSearchKeyboardLanguage;
+        r1 = java.util.Arrays.equals(r0, r1);
+        if (r1 != 0) goto L_0x04b6;
+    L_0x04ad:
+        r1 = r7.currentAccount;
+        r1 = org.telegram.messenger.DataQuery.getInstance(r1);
+        r1.fetchNewEmojiKeywords(r0);
+    L_0x04b6:
+        r7.lastSearchKeyboardLanguage = r0;
+        r0 = r7.currentAccount;
+        r0 = org.telegram.messenger.DataQuery.getInstance(r0);
+        r1 = r7.lastSearchKeyboardLanguage;
+        r2 = r9.toString();
+        r3 = new org.telegram.ui.Adapters.-$$Lambda$MentionsAdapter$rScwFUSTmUPNK4byYGdy0eHPN2M;
+        r3.<init>(r7);
+        r4 = 0;
+        r0.getEmojiSuggestions(r1, r2, r4, r3);
+    L_0x04cd:
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.MentionsAdapter.searchUsernameOrHashtag(java.lang.String, int, java.util.ArrayList, boolean):void");
     }
 
-    static final /* synthetic */ int lambda$searchUsernameOrHashtag$5$MentionsAdapter(SparseArray newResultsHashMap, ArrayList users, User lhs, User rhs) {
-        if (newResultsHashMap.indexOfKey(lhs.id) >= 0 && newResultsHashMap.indexOfKey(rhs.id) >= 0) {
+    static /* synthetic */ int lambda$searchUsernameOrHashtag$5(SparseArray sparseArray, ArrayList arrayList, User user, User user2) {
+        if (sparseArray.indexOfKey(user.id) >= 0 && sparseArray.indexOfKey(user2.id) >= 0) {
             return 0;
         }
-        if (newResultsHashMap.indexOfKey(lhs.id) >= 0) {
+        if (sparseArray.indexOfKey(user.id) >= 0) {
             return -1;
         }
-        if (newResultsHashMap.indexOfKey(rhs.id) >= 0) {
+        int i = 1;
+        if (sparseArray.indexOfKey(user2.id) >= 0) {
             return 1;
         }
-        int lhsNum = users.indexOf(Integer.valueOf(lhs.id));
-        int rhsNum = users.indexOf(Integer.valueOf(rhs.id));
-        if (lhsNum == -1 || rhsNum == -1) {
-            if (lhsNum != -1 && rhsNum == -1) {
-                return -1;
+        int indexOf = arrayList.indexOf(Integer.valueOf(user.id));
+        int indexOf2 = arrayList.indexOf(Integer.valueOf(user2.id));
+        if (indexOf != -1 && indexOf2 != -1) {
+            if (indexOf < indexOf2) {
+                i = -1;
+            } else if (indexOf == indexOf2) {
+                i = 0;
             }
-            if (lhsNum != -1 || rhsNum == -1) {
+            return i;
+        } else if (indexOf != -1 && indexOf2 == -1) {
+            return -1;
+        } else {
+            if (indexOf != -1 || indexOf2 == -1) {
                 return 0;
             }
             return 1;
-        } else if (lhsNum >= rhsNum) {
-            return lhsNum == rhsNum ? 0 : 1;
-        } else {
-            return -1;
         }
     }
 
-    static final /* synthetic */ int lambda$searchUsernameOrHashtag$6$MentionsAdapter(EmojiSuggestion o1, EmojiSuggestion o2) {
-        Integer n1 = (Integer) Emoji.emojiUseHistory.get(o1.emoji);
-        if (n1 == null) {
-            n1 = Integer.valueOf(0);
+    public /* synthetic */ void lambda$searchUsernameOrHashtag$6$MentionsAdapter(ArrayList arrayList, SparseArray sparseArray) {
+        this.cancelDelayRunnable = null;
+        showUsersResult(arrayList, sparseArray, true);
+    }
+
+    public /* synthetic */ void lambda$searchUsernameOrHashtag$7$MentionsAdapter(ArrayList arrayList, String str) {
+        this.searchResultSuggestions = arrayList;
+        this.searchResultHashtags = null;
+        this.searchResultUsernames = null;
+        this.searchResultUsernamesMap = null;
+        this.searchResultCommands = null;
+        this.searchResultCommandsHelp = null;
+        this.searchResultCommandsUsers = null;
+        notifyDataSetChanged();
+        this.delegate.needChangePanelVisibility(this.searchResultSuggestions != null);
+    }
+
+    private void showUsersResult(ArrayList<User> arrayList, SparseArray<User> sparseArray, boolean z) {
+        this.searchResultUsernames = arrayList;
+        this.searchResultUsernamesMap = sparseArray;
+        Runnable runnable = this.cancelDelayRunnable;
+        if (runnable != null) {
+            AndroidUtilities.cancelRunOnUIThread(runnable);
+            this.cancelDelayRunnable = null;
         }
-        Integer n2 = (Integer) Emoji.emojiUseHistory.get(o2.emoji);
-        if (n2 == null) {
-            n2 = Integer.valueOf(0);
+        if (z) {
+            notifyDataSetChanged();
+            this.delegate.needChangePanelVisibility(this.searchResultUsernames.isEmpty() ^ 1);
         }
-        return n2.compareTo(n1);
     }
 
     public int getResultStartPosition() {
@@ -949,54 +1567,58 @@ public class MentionsAdapter extends SelectionAdapter {
         if (this.foundContextBot != null && !this.inlineMediaEnabled) {
             return 1;
         }
-        if (this.searchResultBotContext != null) {
-            int size = this.searchResultBotContext.size();
+        ArrayList arrayList = this.searchResultBotContext;
+        if (arrayList != null) {
+            int size = arrayList.size();
             if (this.searchResultBotContextSwitch == null) {
                 i = 0;
             }
-            return i + size;
-        } else if (this.searchResultUsernames != null) {
-            return this.searchResultUsernames.size();
-        } else {
-            if (this.searchResultHashtags != null) {
-                return this.searchResultHashtags.size();
-            }
-            if (this.searchResultCommands != null) {
-                return this.searchResultCommands.size();
-            }
-            return this.searchResultSuggestions != null ? this.searchResultSuggestions.size() : 0;
+            return size + i;
         }
+        arrayList = this.searchResultUsernames;
+        if (arrayList != null) {
+            return arrayList.size();
+        }
+        arrayList = this.searchResultHashtags;
+        if (arrayList != null) {
+            return arrayList.size();
+        }
+        arrayList = this.searchResultCommands;
+        if (arrayList != null) {
+            return arrayList.size();
+        }
+        arrayList = this.searchResultSuggestions;
+        if (arrayList != null) {
+            return arrayList.size();
+        }
+        return 0;
     }
 
-    public int getItemViewType(int position) {
+    public int getItemViewType(int i) {
         if (this.foundContextBot != null && !this.inlineMediaEnabled) {
             return 3;
         }
-        if (this.searchResultBotContext == null) {
+        if (this.searchResultBotContext != null) {
+            return (i != 0 || this.searchResultBotContextSwitch == null) ? 1 : 2;
+        } else {
             return 0;
         }
-        if (position != 0 || this.searchResultBotContextSwitch == null) {
-            return 1;
-        }
-        return 2;
     }
 
-    public void addHashtagsFromMessage(CharSequence message) {
-        this.searchAdapterHelper.addHashtagsFromMessage(message);
+    public void addHashtagsFromMessage(CharSequence charSequence) {
+        this.searchAdapterHelper.addHashtagsFromMessage(charSequence);
     }
 
     public int getItemPosition(int i) {
-        if (this.searchResultBotContext == null || this.searchResultBotContextSwitch == null) {
-            return i;
-        }
-        return i - 1;
+        return (this.searchResultBotContext == null || this.searchResultBotContextSwitch == null) ? i : i - 1;
     }
 
     public Object getItem(int i) {
         if (this.searchResultBotContext != null) {
-            if (this.searchResultBotContextSwitch != null) {
+            TL_inlineBotSwitchPM tL_inlineBotSwitchPM = this.searchResultBotContextSwitch;
+            if (tL_inlineBotSwitchPM != null) {
                 if (i == 0) {
-                    return this.searchResultBotContextSwitch;
+                    return tL_inlineBotSwitchPM;
                 }
                 i--;
             }
@@ -1004,35 +1626,41 @@ public class MentionsAdapter extends SelectionAdapter {
                 return null;
             }
             return this.searchResultBotContext.get(i);
-        } else if (this.searchResultUsernames != null) {
-            if (i < 0 || i >= this.searchResultUsernames.size()) {
+        }
+        ArrayList arrayList = this.searchResultUsernames;
+        if (arrayList == null) {
+            arrayList = this.searchResultHashtags;
+            if (arrayList == null) {
+                arrayList = this.searchResultSuggestions;
+                if (arrayList == null) {
+                    arrayList = this.searchResultCommands;
+                    if (arrayList == null || i < 0 || i >= arrayList.size()) {
+                        return null;
+                    }
+                    if (this.searchResultCommandsUsers == null || (this.botsCount == 1 && !(this.info instanceof TL_channelFull))) {
+                        return this.searchResultCommands.get(i);
+                    }
+                    if (this.searchResultCommandsUsers.get(i) != null) {
+                        Object[] objArr = new Object[2];
+                        objArr[0] = this.searchResultCommands.get(i);
+                        objArr[1] = this.searchResultCommandsUsers.get(i) != null ? ((User) this.searchResultCommandsUsers.get(i)).username : "";
+                        return String.format("%s@%s", objArr);
+                    }
+                    return String.format("%s", new Object[]{this.searchResultCommands.get(i)});
+                } else if (i < 0 || i >= arrayList.size()) {
+                    return null;
+                } else {
+                    return this.searchResultSuggestions.get(i);
+                }
+            } else if (i < 0 || i >= arrayList.size()) {
                 return null;
+            } else {
+                return this.searchResultHashtags.get(i);
             }
-            return this.searchResultUsernames.get(i);
-        } else if (this.searchResultHashtags != null) {
-            if (i < 0 || i >= this.searchResultHashtags.size()) {
-                return null;
-            }
-            return this.searchResultHashtags.get(i);
-        } else if (this.searchResultSuggestions != null) {
-            if (i < 0 || i >= this.searchResultSuggestions.size()) {
-                return null;
-            }
-            return this.searchResultSuggestions.get(i);
-        } else if (this.searchResultCommands == null || i < 0 || i >= this.searchResultCommands.size()) {
+        } else if (i < 0 || i >= arrayList.size()) {
             return null;
         } else {
-            if (this.searchResultCommandsUsers == null || (this.botsCount == 1 && !(this.info instanceof TL_channelFull))) {
-                return this.searchResultCommands.get(i);
-            }
-            if (this.searchResultCommandsUsers.get(i) != null) {
-                String str = "%s@%s";
-                Object[] objArr = new Object[2];
-                objArr[0] = this.searchResultCommands.get(i);
-                objArr[1] = this.searchResultCommandsUsers.get(i) != null ? ((User) this.searchResultCommandsUsers.get(i)).username : "";
-                return String.format(str, objArr);
-            }
-            return String.format("%s", new Object[]{this.searchResultCommands.get(i)});
+            return this.searchResultUsernames.get(i);
         }
     }
 
@@ -1056,96 +1684,106 @@ public class MentionsAdapter extends SelectionAdapter {
         return this.contextMedia;
     }
 
-    public boolean isEnabled(ViewHolder holder) {
+    public boolean isEnabled(ViewHolder viewHolder) {
         return this.foundContextBot == null || this.inlineMediaEnabled;
     }
 
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view;
-        switch (viewType) {
-            case 0:
-                view = new MentionCell(this.mContext);
-                ((MentionCell) view).setIsDarkTheme(this.isDarkTheme);
-                break;
-            case 1:
-                view = new ContextLinkCell(this.mContext);
-                ((ContextLinkCell) view).setDelegate(new MentionsAdapter$$Lambda$6(this));
-                break;
-            case 2:
-                view = new BotSwitchCell(this.mContext);
-                break;
-            default:
-                View textView = new TextView(this.mContext);
-                textView.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
-                textView.setTextSize(1, 14.0f);
-                textView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
-                view = textView;
-                break;
+    public /* synthetic */ void lambda$onCreateViewHolder$8$MentionsAdapter(ContextLinkCell contextLinkCell) {
+        this.delegate.onContextClick(contextLinkCell.getResult());
+    }
+
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        View mentionCell;
+        if (i == 0) {
+            mentionCell = new MentionCell(this.mContext);
+            mentionCell.setIsDarkTheme(this.isDarkTheme);
+        } else if (i == 1) {
+            mentionCell = new ContextLinkCell(this.mContext);
+            mentionCell.setDelegate(new -$$Lambda$MentionsAdapter$VoCNDYNNW-mhCQ-lScxh9-TCNkI(this));
+        } else if (i != 2) {
+            mentionCell = new TextView(this.mContext);
+            mentionCell.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
+            mentionCell.setTextSize(1, 14.0f);
+            mentionCell.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
+        } else {
+            mentionCell = new BotSwitchCell(this.mContext);
         }
-        return new Holder(view);
+        return new Holder(mentionCell);
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$onCreateViewHolder$7$MentionsAdapter(ContextLinkCell cell) {
-        this.delegate.onContextClick(cell.getResult());
-    }
-
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        boolean z = true;
-        if (holder.getItemViewType() == 3) {
-            TextView textView = holder.itemView;
-            Chat chat = this.parentFragment.getCurrentChat();
-            if (chat == null) {
-                return;
-            }
-            if (!ChatObject.hasAdminRights(chat) && chat.default_banned_rights != null && chat.default_banned_rights.send_inline) {
-                textView.setText(LocaleController.getString("GlobalAttachInlineRestricted", NUM));
-            } else if (AndroidUtilities.isBannedForever(chat.banned_rights)) {
-                textView.setText(LocaleController.getString("AttachInlineRestrictedForever", NUM));
-            } else {
-                textView.setText(LocaleController.formatString("AttachInlineRestricted", NUM, LocaleController.formatDateForBan((long) chat.banned_rights.until_date)));
+    public void onBindViewHolder(ViewHolder viewHolder, int i) {
+        boolean z = false;
+        if (viewHolder.getItemViewType() == 3) {
+            TextView textView = (TextView) viewHolder.itemView;
+            Chat currentChat = this.parentFragment.getCurrentChat();
+            if (currentChat != null) {
+                if (!ChatObject.hasAdminRights(currentChat)) {
+                    TL_chatBannedRights tL_chatBannedRights = currentChat.default_banned_rights;
+                    if (tL_chatBannedRights != null && tL_chatBannedRights.send_inline) {
+                        textView.setText(LocaleController.getString("GlobalAttachInlineRestricted", NUM));
+                        return;
+                    }
+                }
+                if (AndroidUtilities.isBannedForever(currentChat.banned_rights)) {
+                    textView.setText(LocaleController.getString("AttachInlineRestrictedForever", NUM));
+                } else {
+                    textView.setText(LocaleController.formatString("AttachInlineRestricted", NUM, LocaleController.formatDateForBan((long) currentChat.banned_rights.until_date)));
+                }
             }
         } else if (this.searchResultBotContext != null) {
-            boolean hasTop;
-            if (this.searchResultBotContextSwitch != null) {
-                hasTop = true;
-            } else {
-                hasTop = false;
-            }
-            if (holder.getItemViewType() != 2) {
-                if (hasTop) {
-                    position--;
+            Object obj = this.searchResultBotContextSwitch != null ? 1 : null;
+            if (viewHolder.getItemViewType() != 2) {
+                if (obj != null) {
+                    i--;
                 }
-                ContextLinkCell contextLinkCell = (ContextLinkCell) holder.itemView;
-                BotInlineResult botInlineResult = (BotInlineResult) this.searchResultBotContext.get(position);
+                ContextLinkCell contextLinkCell = (ContextLinkCell) viewHolder.itemView;
+                BotInlineResult botInlineResult = (BotInlineResult) this.searchResultBotContext.get(i);
                 boolean z2 = this.contextMedia;
-                boolean z3 = position != this.searchResultBotContext.size() + -1;
-                if (!(hasTop && position == 0)) {
-                    z = false;
+                boolean z3 = i != this.searchResultBotContext.size() - 1;
+                if (obj != null && i == 0) {
+                    z = true;
                 }
                 contextLinkCell.setLink(botInlineResult, z2, z3, z);
-            } else if (hasTop) {
-                ((BotSwitchCell) holder.itemView).setText(this.searchResultBotContextSwitch.text);
+            } else if (obj != null) {
+                ((BotSwitchCell) viewHolder.itemView).setText(this.searchResultBotContextSwitch.text);
             }
-        } else if (this.searchResultUsernames != null) {
-            ((MentionCell) holder.itemView).setUser((User) this.searchResultUsernames.get(position));
-        } else if (this.searchResultHashtags != null) {
-            ((MentionCell) holder.itemView).setText((String) this.searchResultHashtags.get(position));
-        } else if (this.searchResultSuggestions != null) {
-            ((MentionCell) holder.itemView).setEmojiSuggestion((EmojiSuggestion) this.searchResultSuggestions.get(position));
-        } else if (this.searchResultCommands != null) {
-            ((MentionCell) holder.itemView).setBotCommand((String) this.searchResultCommands.get(position), (String) this.searchResultCommandsHelp.get(position), this.searchResultCommandsUsers != null ? (User) this.searchResultCommandsUsers.get(position) : null);
+        } else {
+            ArrayList arrayList = this.searchResultUsernames;
+            if (arrayList != null) {
+                ((MentionCell) viewHolder.itemView).setUser((User) arrayList.get(i));
+                return;
+            }
+            arrayList = this.searchResultHashtags;
+            if (arrayList != null) {
+                ((MentionCell) viewHolder.itemView).setText((String) arrayList.get(i));
+                return;
+            }
+            arrayList = this.searchResultSuggestions;
+            if (arrayList != null) {
+                ((MentionCell) viewHolder.itemView).setEmojiSuggestion((KeywordResult) arrayList.get(i));
+                return;
+            }
+            arrayList = this.searchResultCommands;
+            if (arrayList != null) {
+                MentionCell mentionCell = (MentionCell) viewHolder.itemView;
+                String str = (String) arrayList.get(i);
+                String str2 = (String) this.searchResultCommandsHelp.get(i);
+                ArrayList arrayList2 = this.searchResultCommandsUsers;
+                mentionCell.setBotCommand(str, str2, arrayList2 != null ? (User) arrayList2.get(i) : null);
+            }
         }
     }
 
-    public void onRequestPermissionsResultFragment(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode != 2 || this.foundContextBot == null || !this.foundContextBot.bot_inline_geo) {
-            return;
-        }
-        if (grantResults.length <= 0 || grantResults[0] != 0) {
-            onLocationUnavailable();
-        } else {
-            this.locationProvider.start();
+    public void onRequestPermissionsResultFragment(int i, String[] strArr, int[] iArr) {
+        if (i == 2) {
+            User user = this.foundContextBot;
+            if (user != null && user.bot_inline_geo) {
+                if (iArr.length <= 0 || iArr[0] != 0) {
+                    onLocationUnavailable();
+                } else {
+                    this.locationProvider.start();
+                }
+            }
         }
     }
 }

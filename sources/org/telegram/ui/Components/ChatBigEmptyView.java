@@ -19,39 +19,41 @@ public class ChatBigEmptyView extends LinearLayout {
     private TextView statusTextView;
     private ArrayList<TextView> textViews = new ArrayList();
 
-    public ChatBigEmptyView(Context context, int type) {
-        ImageView imageView;
+    public ChatBigEmptyView(Context context, int i) {
+        Context context2 = context;
+        int i2 = i;
         super(context);
         setBackgroundResource(NUM);
         getBackground().setColorFilter(Theme.colorFilter);
         setPadding(AndroidUtilities.dp(16.0f), AndroidUtilities.dp(12.0f), AndroidUtilities.dp(16.0f), AndroidUtilities.dp(12.0f));
         setOrientation(1);
-        if (type == 0) {
-            this.statusTextView = new TextView(context);
+        String str = "chat_serviceText";
+        if (i2 == 0) {
+            this.statusTextView = new TextView(context2);
             this.statusTextView.setTextSize(1, 15.0f);
-            this.statusTextView.setTextColor(Theme.getColor("chat_serviceText"));
+            this.statusTextView.setTextColor(Theme.getColor(str));
             this.statusTextView.setGravity(1);
             this.statusTextView.setMaxWidth(AndroidUtilities.dp(210.0f));
             this.textViews.add(this.statusTextView);
             addView(this.statusTextView, LayoutHelper.createLinear(-2, -2, 49));
-        } else if (type == 1) {
-            this.statusTextView = new TextView(context);
+        } else if (i2 == 1) {
+            this.statusTextView = new TextView(context2);
             this.statusTextView.setTextSize(1, 15.0f);
-            this.statusTextView.setTextColor(Theme.getColor("chat_serviceText"));
+            this.statusTextView.setTextColor(Theme.getColor(str));
             this.statusTextView.setGravity(1);
             this.statusTextView.setMaxWidth(AndroidUtilities.dp(210.0f));
             this.textViews.add(this.statusTextView);
             addView(this.statusTextView, LayoutHelper.createLinear(-2, -2, 49));
         } else {
-            imageView = new ImageView(context);
+            ImageView imageView = new ImageView(context2);
             imageView.setImageResource(NUM);
             addView(imageView, LayoutHelper.createLinear(-2, -2, 49, 0, 2, 0, 0));
         }
-        TextView textView = new TextView(context);
-        if (type == 0) {
+        TextView textView = new TextView(context2);
+        if (i2 == 0) {
             textView.setText(LocaleController.getString("EncryptedDescriptionTitle", NUM));
             textView.setTextSize(1, 15.0f);
-        } else if (type == 1) {
+        } else if (i2 == 1) {
             textView.setText(LocaleController.getString("GroupEmptyTitle2", NUM));
             textView.setTextSize(1, 15.0f);
         } else {
@@ -60,114 +62,96 @@ public class ChatBigEmptyView extends LinearLayout {
             textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             textView.setGravity(1);
         }
-        textView.setTextColor(Theme.getColor("chat_serviceText"));
+        textView.setTextColor(Theme.getColor(str));
         this.textViews.add(textView);
         textView.setMaxWidth(AndroidUtilities.dp(260.0f));
-        int i = type != 2 ? LocaleController.isRTL ? 5 : 3 : 1;
-        addView(textView, LayoutHelper.createLinear(-2, -2, i | 48, 0, 8, 0, type != 2 ? 0 : 8));
-        for (int a = 0; a < 4; a++) {
-            LinearLayout linearLayout = new LinearLayout(context);
+        int i3 = i2 != 2 ? LocaleController.isRTL ? 5 : 3 : 1;
+        addView(textView, LayoutHelper.createLinear(-2, -2, i3 | 48, 0, 8, 0, i2 != 2 ? 0 : 8));
+        for (int i4 = 0; i4 < 4; i4++) {
+            LinearLayout linearLayout = new LinearLayout(context2);
             linearLayout.setOrientation(0);
             addView(linearLayout, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 0, 8, 0, 0));
-            imageView = new ImageView(context);
-            imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_serviceText"), Mode.MULTIPLY));
-            if (type == 0) {
-                imageView.setImageResource(NUM);
-            } else if (type == 2) {
-                imageView.setImageResource(NUM);
+            ImageView imageView2 = new ImageView(context2);
+            imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
+            if (i2 == 0) {
+                imageView2.setImageResource(NUM);
+            } else if (i2 == 2) {
+                imageView2.setImageResource(NUM);
             } else {
-                imageView.setImageResource(NUM);
+                imageView2.setImageResource(NUM);
             }
-            this.imageViews.add(imageView);
-            textView = new TextView(context);
-            textView.setTextSize(1, 15.0f);
-            textView.setTextColor(Theme.getColor("chat_serviceText"));
-            this.textViews.add(textView);
-            textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-            textView.setMaxWidth(AndroidUtilities.dp(260.0f));
-            switch (a) {
-                case 0:
-                    if (type != 0) {
-                        if (type != 2) {
-                            textView.setText(LocaleController.getString("GroupDescription1", NUM));
-                            break;
-                        } else {
-                            textView.setText(LocaleController.getString("ChatYourSelfDescription1", NUM));
-                            break;
+            this.imageViews.add(imageView2);
+            TextView textView2 = new TextView(context2);
+            textView2.setTextSize(1, 15.0f);
+            textView2.setTextColor(Theme.getColor(str));
+            this.textViews.add(textView2);
+            textView2.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
+            textView2.setMaxWidth(AndroidUtilities.dp(260.0f));
+            if (i4 != 0) {
+                if (i4 != 1) {
+                    if (i4 != 2) {
+                        if (i4 == 3) {
+                            if (i2 == 0) {
+                                textView2.setText(LocaleController.getString("EncryptedDescription4", NUM));
+                            } else if (i2 == 2) {
+                                textView2.setText(LocaleController.getString("ChatYourSelfDescription4", NUM));
+                            } else {
+                                textView2.setText(LocaleController.getString("GroupDescription4", NUM));
+                            }
                         }
+                    } else if (i2 == 0) {
+                        textView2.setText(LocaleController.getString("EncryptedDescription3", NUM));
+                    } else if (i2 == 2) {
+                        textView2.setText(LocaleController.getString("ChatYourSelfDescription3", NUM));
+                    } else {
+                        textView2.setText(LocaleController.getString("GroupDescription3", NUM));
                     }
-                    textView.setText(LocaleController.getString("EncryptedDescription1", NUM));
-                    break;
-                case 1:
-                    if (type != 0) {
-                        if (type != 2) {
-                            textView.setText(LocaleController.getString("GroupDescription2", NUM));
-                            break;
-                        } else {
-                            textView.setText(LocaleController.getString("ChatYourSelfDescription2", NUM));
-                            break;
-                        }
-                    }
-                    textView.setText(LocaleController.getString("EncryptedDescription2", NUM));
-                    break;
-                case 2:
-                    if (type != 0) {
-                        if (type != 2) {
-                            textView.setText(LocaleController.getString("GroupDescription3", NUM));
-                            break;
-                        } else {
-                            textView.setText(LocaleController.getString("ChatYourSelfDescription3", NUM));
-                            break;
-                        }
-                    }
-                    textView.setText(LocaleController.getString("EncryptedDescription3", NUM));
-                    break;
-                case 3:
-                    if (type != 0) {
-                        if (type != 2) {
-                            textView.setText(LocaleController.getString("GroupDescription4", NUM));
-                            break;
-                        } else {
-                            textView.setText(LocaleController.getString("ChatYourSelfDescription4", NUM));
-                            break;
-                        }
-                    }
-                    textView.setText(LocaleController.getString("EncryptedDescription4", NUM));
-                    break;
+                } else if (i2 == 0) {
+                    textView2.setText(LocaleController.getString("EncryptedDescription2", NUM));
+                } else if (i2 == 2) {
+                    textView2.setText(LocaleController.getString("ChatYourSelfDescription2", NUM));
+                } else {
+                    textView2.setText(LocaleController.getString("GroupDescription2", NUM));
+                }
+            } else if (i2 == 0) {
+                textView2.setText(LocaleController.getString("EncryptedDescription1", NUM));
+            } else if (i2 == 2) {
+                textView2.setText(LocaleController.getString("ChatYourSelfDescription1", NUM));
+            } else {
+                textView2.setText(LocaleController.getString("GroupDescription1", NUM));
             }
             if (LocaleController.isRTL) {
-                linearLayout.addView(textView, LayoutHelper.createLinear(-2, -2));
-                if (type == 0) {
-                    linearLayout.addView(imageView, LayoutHelper.createLinear(-2, -2, 8.0f, 3.0f, 0.0f, 0.0f));
-                } else if (type == 2) {
-                    linearLayout.addView(imageView, LayoutHelper.createLinear(-2, -2, 8.0f, 7.0f, 0.0f, 0.0f));
+                linearLayout.addView(textView2, LayoutHelper.createLinear(-2, -2));
+                if (i2 == 0) {
+                    linearLayout.addView(imageView2, LayoutHelper.createLinear(-2, -2, 8.0f, 3.0f, 0.0f, 0.0f));
+                } else if (i2 == 2) {
+                    linearLayout.addView(imageView2, LayoutHelper.createLinear(-2, -2, 8.0f, 7.0f, 0.0f, 0.0f));
                 } else {
-                    linearLayout.addView(imageView, LayoutHelper.createLinear(-2, -2, 8.0f, 3.0f, 0.0f, 0.0f));
+                    linearLayout.addView(imageView2, LayoutHelper.createLinear(-2, -2, 8.0f, 3.0f, 0.0f, 0.0f));
                 }
             } else {
-                if (type == 0) {
-                    linearLayout.addView(imageView, LayoutHelper.createLinear(-2, -2, 0.0f, 4.0f, 8.0f, 0.0f));
-                } else if (type == 2) {
-                    linearLayout.addView(imageView, LayoutHelper.createLinear(-2, -2, 0.0f, 8.0f, 8.0f, 0.0f));
+                if (i2 == 0) {
+                    linearLayout.addView(imageView2, LayoutHelper.createLinear(-2, -2, 0.0f, 4.0f, 8.0f, 0.0f));
+                } else if (i2 == 2) {
+                    linearLayout.addView(imageView2, LayoutHelper.createLinear(-2, -2, 0.0f, 8.0f, 8.0f, 0.0f));
                 } else {
-                    linearLayout.addView(imageView, LayoutHelper.createLinear(-2, -2, 0.0f, 4.0f, 8.0f, 0.0f));
+                    linearLayout.addView(imageView2, LayoutHelper.createLinear(-2, -2, 0.0f, 4.0f, 8.0f, 0.0f));
                 }
-                linearLayout.addView(textView, LayoutHelper.createLinear(-2, -2));
+                linearLayout.addView(textView2, LayoutHelper.createLinear(-2, -2));
             }
         }
     }
 
-    public void setTextColor(int color) {
-        int a;
-        for (a = 0; a < this.textViews.size(); a++) {
-            ((TextView) this.textViews.get(a)).setTextColor(color);
+    public void setTextColor(int i) {
+        for (int i2 = 0; i2 < this.textViews.size(); i2++) {
+            ((TextView) this.textViews.get(i2)).setTextColor(i);
         }
-        for (a = 0; a < this.imageViews.size(); a++) {
-            ((ImageView) this.imageViews.get(a)).setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_serviceText"), Mode.MULTIPLY));
+        for (int i3 = 0; i3 < this.imageViews.size(); i3++) {
+            ((ImageView) this.imageViews.get(i3)).setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_serviceText"), Mode.MULTIPLY));
         }
     }
 
-    public void setStatusText(CharSequence text) {
-        this.statusTextView.setText(text);
+    public void setStatusText(CharSequence charSequence) {
+        this.statusTextView.setText(charSequence);
     }
 }

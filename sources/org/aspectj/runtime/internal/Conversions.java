@@ -5,19 +5,19 @@ public final class Conversions {
         return new Integer(i);
     }
 
-    public static Object longObject(long i) {
-        return new Long(i);
+    public static Object longObject(long j) {
+        return new Long(j);
     }
 
-    public static Object floatObject(float i) {
-        return new Float(i);
+    public static Object floatObject(float f) {
+        return new Float(f);
     }
 
-    public static Object doubleObject(double i) {
-        return new Double(i);
+    public static Object doubleObject(double d) {
+        return new Double(d);
     }
 
-    public static Object booleanObject(boolean i) {
-        return new Boolean(i);
+    public static Object booleanObject(boolean z) {
+        return new Boolean(z);
     }
 }

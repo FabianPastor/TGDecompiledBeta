@@ -17,21 +17,25 @@ public class BrightnessControlCell extends FrameLayout {
     private ImageView rightImageView;
     private SeekBarView seekBarView;
 
+    /* Access modifiers changed, original: protected */
+    public void didChangedValue(float f) {
+    }
+
     public BrightnessControlCell(Context context) {
         super(context);
         this.leftImageView = new ImageView(context);
         this.leftImageView.setImageResource(NUM);
         addView(this.leftImageView, LayoutHelper.createFrame(24, 24.0f, 51, 17.0f, 12.0f, 0.0f, 0.0f));
         this.seekBarView = new SeekBarView(context) {
-            public boolean onTouchEvent(MotionEvent event) {
-                if (event.getAction() == 0) {
+            public boolean onTouchEvent(MotionEvent motionEvent) {
+                if (motionEvent.getAction() == 0) {
                     getParent().requestDisallowInterceptTouchEvent(true);
                 }
-                return super.onTouchEvent(event);
+                return super.onTouchEvent(motionEvent);
             }
         };
         this.seekBarView.setReportChanges(true);
-        this.seekBarView.setDelegate(new BrightnessControlCell$$Lambda$0(this));
+        this.seekBarView.setDelegate(new -$$Lambda$GN4ZDAm3ZJLTBxjR6_2pFIyDFuo(this));
         addView(this.seekBarView, LayoutHelper.createFrame(-1, 30.0f, 51, 58.0f, 9.0f, 58.0f, 0.0f));
         this.rightImageView = new ImageView(context);
         this.rightImageView.setImageResource(NUM);
@@ -41,20 +45,17 @@ public class BrightnessControlCell extends FrameLayout {
     /* Access modifiers changed, original: protected */
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        this.leftImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("profile_actionIcon"), Mode.MULTIPLY));
-        this.rightImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("profile_actionIcon"), Mode.MULTIPLY));
+        String str = "profile_actionIcon";
+        this.leftImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
+        this.rightImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
     }
 
     /* Access modifiers changed, original: protected */
-    public void didChangedValue(float value) {
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
     }
 
-    /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
-    }
-
-    public void setProgress(float value) {
-        this.seekBarView.setProgress(value);
+    public void setProgress(float f) {
+        this.seekBarView.setProgress(f);
     }
 }

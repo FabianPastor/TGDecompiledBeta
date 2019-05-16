@@ -7,11 +7,11 @@ import android.content.Intent;
 public class AutoMessageHeardReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         ApplicationLoader.postInitApplication();
-        long dialog_id = intent.getLongExtra("dialog_id", 0);
-        int max_id = intent.getIntExtra("max_id", 0);
-        int currentAccount = intent.getIntExtra("currentAccount", 0);
-        if (dialog_id != 0 && max_id != 0) {
-            MessagesController.getInstance(currentAccount).markDialogAsRead(dialog_id, max_id, max_id, 0, false, 0, true);
+        long longExtra = intent.getLongExtra("dialog_id", 0);
+        int intExtra = intent.getIntExtra("max_id", 0);
+        int intExtra2 = intent.getIntExtra("currentAccount", 0);
+        if (longExtra != 0 && intExtra != 0) {
+            MessagesController.getInstance(intExtra2).markDialogAsRead(longExtra, intExtra, intExtra, 0, false, 0, true);
         }
     }
 }

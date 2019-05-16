@@ -17,15 +17,15 @@ public class UndoStore {
     }
 
     public boolean canUndo() {
-        return !this.operations.isEmpty();
+        return this.operations.isEmpty() ^ 1;
     }
 
     public void setDelegate(UndoStoreDelegate undoStoreDelegate) {
         this.delegate = undoStoreDelegate;
     }
 
-    public void registerUndo(UUID uuid, Runnable undoRunnable) {
-        this.uuidToOperationMap.put(uuid, undoRunnable);
+    public void registerUndo(UUID uuid, Runnable runnable) {
+        this.uuidToOperationMap.put(uuid, runnable);
         this.operations.add(uuid);
         notifyOfHistoryChanges();
     }
@@ -38,12 +38,12 @@ public class UndoStore {
 
     public void undo() {
         if (this.operations.size() != 0) {
-            int lastIndex = this.operations.size() - 1;
-            UUID uuid = (UUID) this.operations.get(lastIndex);
-            Runnable undoRunnable = (Runnable) this.uuidToOperationMap.get(uuid);
+            int size = this.operations.size() - 1;
+            UUID uuid = (UUID) this.operations.get(size);
+            Runnable runnable = (Runnable) this.uuidToOperationMap.get(uuid);
             this.uuidToOperationMap.remove(uuid);
-            this.operations.remove(lastIndex);
-            undoRunnable.run();
+            this.operations.remove(size);
+            runnable.run();
             notifyOfHistoryChanges();
         }
     }

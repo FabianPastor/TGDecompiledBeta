@@ -22,9 +22,9 @@ import android.widget.TextView;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.UserObject;
-import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
@@ -46,6 +46,8 @@ public class DrawerProfileCell extends FrameLayout {
     private Rect srcRect = new Rect();
 
     public DrawerProfileCell(Context context) {
+        int i;
+        String str;
         super(context);
         this.shadowView = new ImageView(context);
         this.shadowView.setVisibility(4);
@@ -73,7 +75,15 @@ public class DrawerProfileCell extends FrameLayout {
         addView(this.phoneTextView, LayoutHelper.createFrame(-1, -2.0f, 83, 16.0f, 0.0f, 76.0f, 9.0f));
         this.arrowView = new ImageView(context);
         this.arrowView.setScaleType(ScaleType.CENTER);
-        this.arrowView.setContentDescription(this.accountsShowed ? LocaleController.getString("AccDescrHideAccounts", NUM) : LocaleController.getString("AccDescrShowAccounts", NUM));
+        ImageView imageView = this.arrowView;
+        if (this.accountsShowed) {
+            i = NUM;
+            str = "AccDescrHideAccounts";
+        } else {
+            i = NUM;
+            str = "AccDescrShowAccounts";
+        }
+        imageView.setContentDescription(LocaleController.getString(str, i));
         addView(this.arrowView, LayoutHelper.createFrame(59, 59, 85));
         if (Theme.getEventType() == 0) {
             this.snowflakesEffect = new SnowflakesEffect();
@@ -81,15 +91,15 @@ public class DrawerProfileCell extends FrameLayout {
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    public void onMeasure(int i, int i2) {
         if (VERSION.SDK_INT >= 21) {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(148.0f) + AndroidUtilities.statusBarHeight, NUM));
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(148.0f) + AndroidUtilities.statusBarHeight, NUM));
             return;
         }
         try {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(148.0f), NUM));
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(148.0f), NUM));
         } catch (Exception e) {
-            setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(148.0f));
+            setMeasuredDimension(MeasureSpec.getSize(i), AndroidUtilities.dp(148.0f));
             FileLog.e(e);
         }
     }
@@ -97,52 +107,52 @@ public class DrawerProfileCell extends FrameLayout {
     /* Access modifiers changed, original: protected */
     public void onDraw(Canvas canvas) {
         int color;
-        Drawable backgroundDrawable = Theme.getCachedWallpaper();
-        if (Theme.hasThemeKey("chats_menuTopShadow")) {
-            color = Theme.getColor("chats_menuTopShadow");
+        Drawable cachedWallpaper = Theme.getCachedWallpaper();
+        String str = "chats_menuTopShadow";
+        if (Theme.hasThemeKey(str)) {
+            color = Theme.getColor(str);
         } else {
             color = Theme.getServiceMessageColor() | -16777216;
         }
-        if (this.currentColor == null || this.currentColor.intValue() != color) {
+        Integer num = this.currentColor;
+        if (num == null || num.intValue() != color) {
             this.currentColor = Integer.valueOf(color);
             this.shadowView.getDrawable().setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
         }
         this.nameTextView.setTextColor(Theme.getColor("chats_menuName"));
-        if (!Theme.isCustomTheme() || Theme.isPatternWallpaper() || backgroundDrawable == null) {
+        if (!Theme.isCustomTheme() || Theme.isPatternWallpaper() || cachedWallpaper == null) {
             this.shadowView.setVisibility(4);
             this.phoneTextView.setTextColor(Theme.getColor("chats_menuPhoneCats"));
             super.onDraw(canvas);
         } else {
             this.phoneTextView.setTextColor(Theme.getColor("chats_menuPhone"));
             this.shadowView.setVisibility(0);
-            if (backgroundDrawable instanceof ColorDrawable) {
-                backgroundDrawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
-                backgroundDrawable.draw(canvas);
-            } else if (backgroundDrawable instanceof BitmapDrawable) {
-                float scale;
-                Bitmap bitmap = ((BitmapDrawable) backgroundDrawable).getBitmap();
-                float scaleX = ((float) getMeasuredWidth()) / ((float) bitmap.getWidth());
-                float scaleY = ((float) getMeasuredHeight()) / ((float) bitmap.getHeight());
-                if (scaleX < scaleY) {
-                    scale = scaleY;
-                } else {
-                    scale = scaleX;
+            if (cachedWallpaper instanceof ColorDrawable) {
+                cachedWallpaper.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
+                cachedWallpaper.draw(canvas);
+            } else if (cachedWallpaper instanceof BitmapDrawable) {
+                Bitmap bitmap = ((BitmapDrawable) cachedWallpaper).getBitmap();
+                float measuredWidth = ((float) getMeasuredWidth()) / ((float) bitmap.getWidth());
+                float measuredHeight = ((float) getMeasuredHeight()) / ((float) bitmap.getHeight());
+                if (measuredWidth < measuredHeight) {
+                    measuredWidth = measuredHeight;
                 }
-                int width = (int) (((float) getMeasuredWidth()) / scale);
-                int height = (int) (((float) getMeasuredHeight()) / scale);
-                int x = (bitmap.getWidth() - width) / 2;
-                int y = (bitmap.getHeight() - height) / 2;
-                this.srcRect.set(x, y, x + width, y + height);
+                int measuredWidth2 = (int) (((float) getMeasuredWidth()) / measuredWidth);
+                color = (int) (((float) getMeasuredHeight()) / measuredWidth);
+                int width = (bitmap.getWidth() - measuredWidth2) / 2;
+                int height = (bitmap.getHeight() - color) / 2;
+                this.srcRect.set(width, height, measuredWidth2 + width, color + height);
                 this.destRect.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
                 try {
                     canvas.drawBitmap(bitmap, this.srcRect, this.destRect, this.paint);
-                } catch (Throwable e) {
-                    FileLog.e(e);
+                } catch (Throwable th) {
+                    FileLog.e(th);
                 }
             }
         }
-        if (this.snowflakesEffect != null) {
-            this.snowflakesEffect.onDraw(this, canvas);
+        SnowflakesEffect snowflakesEffect = this.snowflakesEffect;
+        if (snowflakesEffect != null) {
+            snowflakesEffect.onDraw(this, canvas);
         }
     }
 
@@ -150,38 +160,48 @@ public class DrawerProfileCell extends FrameLayout {
         return this.accountsShowed;
     }
 
-    public void setAccountsShowed(boolean value) {
-        if (this.accountsShowed != value) {
-            this.accountsShowed = value;
+    public void setAccountsShowed(boolean z) {
+        if (this.accountsShowed != z) {
+            this.accountsShowed = z;
             this.arrowView.setImageResource(this.accountsShowed ? NUM : NUM);
         }
     }
 
     public void setOnArrowClickListener(OnClickListener onClickListener) {
-        this.arrowView.setOnClickListener(new DrawerProfileCell$$Lambda$0(this, onClickListener));
+        this.arrowView.setOnClickListener(new -$$Lambda$DrawerProfileCell$E00gMmT74biKthBWyKI7QNe-uk4(this, onClickListener));
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$setOnArrowClickListener$0$DrawerProfileCell(OnClickListener onClickListener, View v) {
-        this.accountsShowed = !this.accountsShowed;
+    public /* synthetic */ void lambda$setOnArrowClickListener$0$DrawerProfileCell(OnClickListener onClickListener, View view) {
+        int i;
+        String str;
+        this.accountsShowed ^= 1;
         this.arrowView.setImageResource(this.accountsShowed ? NUM : NUM);
         onClickListener.onClick(this);
-        this.arrowView.setContentDescription(this.accountsShowed ? LocaleController.getString("AccDescrHideAccounts", NUM) : LocaleController.getString("AccDescrShowAccounts", NUM));
+        ImageView imageView = this.arrowView;
+        if (this.accountsShowed) {
+            i = NUM;
+            str = "AccDescrHideAccounts";
+        } else {
+            i = NUM;
+            str = "AccDescrShowAccounts";
+        }
+        imageView.setContentDescription(LocaleController.getString(str, i));
     }
 
-    public void setUser(User user, boolean accounts) {
+    public void setUser(User user, boolean z) {
         if (user != null) {
-            TLObject photo = null;
-            if (user.photo != null) {
-                photo = user.photo.photo_small;
-            }
-            this.accountsShowed = accounts;
+            this.accountsShowed = z;
             this.arrowView.setImageResource(this.accountsShowed ? NUM : NUM);
             this.nameTextView.setText(UserObject.getUserName(user));
-            this.phoneTextView.setText(PhoneFormat.getInstance().format("+" + user.phone));
+            TextView textView = this.phoneTextView;
+            PhoneFormat instance = PhoneFormat.getInstance();
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("+");
+            stringBuilder.append(user.phone);
+            textView.setText(instance.format(stringBuilder.toString()));
             Drawable avatarDrawable = new AvatarDrawable(user);
             avatarDrawable.setColor(Theme.getColor("avatar_backgroundInProfileBlue"));
-            this.avatarImageView.setImage(photo, "50_50", avatarDrawable, (Object) user);
+            this.avatarImageView.setImage(ImageLocation.getForUser(user, false), "50_50", avatarDrawable, (Object) user);
         }
     }
 }

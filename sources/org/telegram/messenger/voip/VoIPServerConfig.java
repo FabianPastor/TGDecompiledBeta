@@ -10,30 +10,30 @@ public class VoIPServerConfig {
 
     private static native void nativeSetConfig(String str);
 
-    public static void setConfig(String json) {
+    public static void setConfig(String str) {
         try {
-            config = new JSONObject(json);
-            nativeSetConfig(json);
-        } catch (JSONException x) {
+            config = new JSONObject(str);
+            nativeSetConfig(str);
+        } catch (JSONException e) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.e("Error parsing VoIP config", x);
+                FileLog.e("Error parsing VoIP config", e);
             }
         }
     }
 
-    public static int getInt(String key, int fallback) {
-        return config.optInt(key, fallback);
+    public static int getInt(String str, int i) {
+        return config.optInt(str, i);
     }
 
-    public static double getDouble(String key, double fallback) {
-        return config.optDouble(key, fallback);
+    public static double getDouble(String str, double d) {
+        return config.optDouble(str, d);
     }
 
-    public static String getString(String key, String fallback) {
-        return config.optString(key, fallback);
+    public static String getString(String str, String str2) {
+        return config.optString(str, str2);
     }
 
-    public static boolean getBoolean(String key, boolean fallback) {
-        return config.optBoolean(key, fallback);
+    public static boolean getBoolean(String str, boolean z) {
+        return config.optBoolean(str, z);
     }
 }

@@ -20,7 +20,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController.PhotoEntry;
 import org.telegram.ui.Components.BackupImageView;
@@ -57,9 +56,9 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         this.videoInfoContainer.setBackgroundResource(NUM);
         this.videoInfoContainer.setPadding(AndroidUtilities.dp(3.0f), 0, AndroidUtilities.dp(3.0f), 0);
         addView(this.videoInfoContainer, LayoutHelper.createFrame(80, 16, 83));
-        ImageView imageView1 = new ImageView(context);
-        imageView1.setImageResource(NUM);
-        this.videoInfoContainer.addView(imageView1, LayoutHelper.createFrame(-2, -2, 19));
+        ImageView imageView = new ImageView(context);
+        imageView.setImageResource(NUM);
+        this.videoInfoContainer.addView(imageView, LayoutHelper.createFrame(-2, -2, 19));
         this.videoTextView = new TextView(context);
         this.videoTextView.setTextColor(-1);
         this.videoTextView.setTextSize(1, 12.0f);
@@ -75,25 +74,25 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         setFocusable(true);
     }
 
-    public void setIsVertical(boolean value) {
-        this.isVertical = value;
+    public void setIsVertical(boolean z) {
+        this.isVertical = z;
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int i = 0;
+    public void onMeasure(int i, int i2) {
+        i2 = 0;
         if (this.isVertical) {
-            int makeMeasureSpec = MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(80.0f), NUM);
+            i = MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(80.0f), NUM);
             if (!this.isLast) {
-                i = 6;
+                i2 = 6;
             }
-            super.onMeasure(makeMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) (i + 80)), NUM));
+            super.onMeasure(i, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) (i2 + 80)), NUM));
             return;
         }
         if (!this.isLast) {
-            i = 6;
+            i2 = 6;
         }
-        super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) (i + 80)), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(80.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) (i2 + 80)), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(80.0f), NUM));
     }
 
     public PhotoEntry getPhotoEntry() {
@@ -116,64 +115,77 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         return this.videoInfoContainer;
     }
 
-    public void setPhotoEntry(PhotoEntry entry, boolean needCheckShow, boolean last) {
-        boolean showing;
-        float f = 0.0f;
-        boolean z = false;
+    public void setPhotoEntry(PhotoEntry photoEntry, boolean z, boolean z2) {
+        int i = 0;
         this.pressed = false;
-        this.photoEntry = entry;
-        this.isLast = last;
+        this.photoEntry = photoEntry;
+        this.isLast = z2;
         if (this.photoEntry.isVideo) {
             this.imageView.setOrientation(0, true);
             this.videoInfoContainer.setVisibility(0);
-            int seconds = this.photoEntry.duration - ((this.photoEntry.duration / 60) * 60);
-            this.videoTextView.setText(String.format("%d:%02d", new Object[]{Integer.valueOf(minutes), Integer.valueOf(seconds)}));
+            int i2 = this.photoEntry.duration;
+            i2 -= (i2 / 60) * 60;
+            this.videoTextView.setText(String.format("%d:%02d", new Object[]{Integer.valueOf(r1), Integer.valueOf(i2)}));
         } else {
             this.videoInfoContainer.setVisibility(4);
         }
-        if (this.photoEntry.thumbPath != null) {
-            this.imageView.setImage(this.photoEntry.thumbPath, null, getResources().getDrawable(NUM));
-        } else if (this.photoEntry.path == null) {
+        photoEntry = this.photoEntry;
+        String str = photoEntry.thumbPath;
+        if (str != null) {
+            this.imageView.setImage(str, null, getResources().getDrawable(NUM));
+        } else if (photoEntry.path != null) {
+            String str2 = ":";
+            BackupImageView backupImageView;
+            StringBuilder stringBuilder;
+            if (photoEntry.isVideo) {
+                backupImageView = this.imageView;
+                stringBuilder = new StringBuilder();
+                stringBuilder.append("vthumb://");
+                stringBuilder.append(this.photoEntry.imageId);
+                stringBuilder.append(str2);
+                stringBuilder.append(this.photoEntry.path);
+                backupImageView.setImage(stringBuilder.toString(), null, getResources().getDrawable(NUM));
+            } else {
+                this.imageView.setOrientation(photoEntry.orientation, true);
+                backupImageView = this.imageView;
+                stringBuilder = new StringBuilder();
+                stringBuilder.append("thumb://");
+                stringBuilder.append(this.photoEntry.imageId);
+                stringBuilder.append(str2);
+                stringBuilder.append(this.photoEntry.path);
+                backupImageView.setImage(stringBuilder.toString(), null, getResources().getDrawable(NUM));
+            }
+        } else {
             this.imageView.setImageResource(NUM);
-        } else if (this.photoEntry.isVideo) {
-            this.imageView.setImage("vthumb://" + this.photoEntry.imageId + ":" + this.photoEntry.path, null, getResources().getDrawable(NUM));
-        } else {
-            this.imageView.setOrientation(this.photoEntry.orientation, true);
-            this.imageView.setImage("thumb://" + this.photoEntry.imageId + ":" + this.photoEntry.path, null, getResources().getDrawable(NUM));
         }
-        if (needCheckShow && PhotoViewer.isShowingImage(this.photoEntry.path)) {
-            showing = true;
-        } else {
-            showing = false;
+        if (z && PhotoViewer.isShowingImage(this.photoEntry.path)) {
+            i = 1;
         }
-        ImageReceiver imageReceiver = this.imageView.getImageReceiver();
-        if (!showing) {
-            z = true;
-        }
-        imageReceiver.setVisible(z, true);
-        this.checkBox.setAlpha(showing ? 0.0f : 1.0f);
+        this.imageView.getImageReceiver().setVisible(i ^ 1, true);
+        float f = 0.0f;
+        this.checkBox.setAlpha(i != 0 ? 0.0f : 1.0f);
         FrameLayout frameLayout = this.videoInfoContainer;
-        if (!showing) {
+        if (i == 0) {
             f = 1.0f;
         }
         frameLayout.setAlpha(f);
         requestLayout();
     }
 
-    public void setChecked(int num, boolean value, boolean animated) {
-        this.checkBox.setChecked(num, value, animated);
+    public void setChecked(int i, boolean z, boolean z2) {
+        this.checkBox.setChecked(i, z, z2);
     }
 
-    public void setNum(int num) {
-        this.checkBox.setNum(num);
+    public void setNum(int i) {
+        this.checkBox.setNum(i);
     }
 
-    public void setOnCheckClickLisnener(OnClickListener onCheckClickLisnener) {
-        this.checkFrame.setOnClickListener(onCheckClickLisnener);
+    public void setOnCheckClickLisnener(OnClickListener onClickListener) {
+        this.checkFrame.setOnClickListener(onClickListener);
     }
 
-    public void setDelegate(PhotoAttachPhotoCellDelegate delegate) {
-        this.delegate = delegate;
+    public void setDelegate(PhotoAttachPhotoCellDelegate photoAttachPhotoCellDelegate) {
+        this.delegate = photoAttachPhotoCellDelegate;
     }
 
     public void callDelegate() {
@@ -184,98 +196,144 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         this.imageView.getImageReceiver().setVisible(true, true);
     }
 
-    public void showCheck(boolean show) {
+    public void showCheck(boolean z) {
         float f = 1.0f;
-        if (!show || this.checkBox.getAlpha() != 1.0f) {
-            if (show || this.checkBox.getAlpha() != 0.0f) {
-                if (this.animatorSet != null) {
-                    this.animatorSet.cancel();
-                    this.animatorSet = null;
-                }
-                this.animatorSet = new AnimatorSet();
-                this.animatorSet.setInterpolator(new DecelerateInterpolator());
-                this.animatorSet.setDuration(180);
-                AnimatorSet animatorSet = this.animatorSet;
-                Animator[] animatorArr = new Animator[2];
-                FrameLayout frameLayout = this.videoInfoContainer;
-                String str = "alpha";
-                float[] fArr = new float[1];
-                fArr[0] = show ? 1.0f : 0.0f;
-                animatorArr[0] = ObjectAnimator.ofFloat(frameLayout, str, fArr);
-                CheckBox checkBox = this.checkBox;
-                String str2 = "alpha";
-                float[] fArr2 = new float[1];
-                if (!show) {
-                    f = 0.0f;
-                }
-                fArr2[0] = f;
-                animatorArr[1] = ObjectAnimator.ofFloat(checkBox, str2, fArr2);
-                animatorSet.playTogether(animatorArr);
-                this.animatorSet.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animation) {
-                        if (animation.equals(PhotoAttachPhotoCell.this.animatorSet)) {
-                            PhotoAttachPhotoCell.this.animatorSet = null;
-                        }
+        if (!(z && this.checkBox.getAlpha() == 1.0f) && (z || this.checkBox.getAlpha() != 0.0f)) {
+            AnimatorSet animatorSet = this.animatorSet;
+            if (animatorSet != null) {
+                animatorSet.cancel();
+                this.animatorSet = null;
+            }
+            this.animatorSet = new AnimatorSet();
+            this.animatorSet.setInterpolator(new DecelerateInterpolator());
+            this.animatorSet.setDuration(180);
+            animatorSet = this.animatorSet;
+            Animator[] animatorArr = new Animator[2];
+            FrameLayout frameLayout = this.videoInfoContainer;
+            float[] fArr = new float[1];
+            fArr[0] = z ? 1.0f : 0.0f;
+            String str = "alpha";
+            animatorArr[0] = ObjectAnimator.ofFloat(frameLayout, str, fArr);
+            CheckBox checkBox = this.checkBox;
+            fArr = new float[1];
+            if (!z) {
+                f = 0.0f;
+            }
+            fArr[0] = f;
+            animatorArr[1] = ObjectAnimator.ofFloat(checkBox, str, fArr);
+            animatorSet.playTogether(animatorArr);
+            this.animatorSet.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animator) {
+                    if (animator.equals(PhotoAttachPhotoCell.this.animatorSet)) {
+                        PhotoAttachPhotoCell.this.animatorSet = null;
                     }
-                });
-                this.animatorSet.start();
-            }
+                }
+            });
+            this.animatorSet.start();
         }
     }
 
-    public boolean onTouchEvent(MotionEvent event) {
-        boolean result = false;
-        this.checkFrame.getHitRect(rect);
-        if (event.getAction() == 0) {
-            if (rect.contains((int) event.getX(), (int) event.getY())) {
-                this.pressed = true;
-                invalidate();
-                result = true;
-            }
-        } else if (this.pressed) {
-            if (event.getAction() == 1) {
-                getParent().requestDisallowInterceptTouchEvent(true);
-                this.pressed = false;
-                playSoundEffect(0);
-                sendAccessibilityEvent(1);
-                this.delegate.onCheckClick(this);
-                invalidate();
-            } else if (event.getAction() == 3) {
-                this.pressed = false;
-                invalidate();
-            } else if (event.getAction() == 2 && !rect.contains((int) event.getX(), (int) event.getY())) {
-                this.pressed = false;
-                invalidate();
-            }
-        }
-        if (result) {
-            return result;
-        }
-        return super.onTouchEvent(event);
+    /* JADX WARNING: Removed duplicated region for block: B:22:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:20:0x0077  */
+    public boolean onTouchEvent(android.view.MotionEvent r6) {
+        /*
+        r5 = this;
+        r0 = r5.checkFrame;
+        r1 = rect;
+        r0.getHitRect(r1);
+        r0 = r6.getAction();
+        r1 = 1;
+        r2 = 0;
+        if (r0 != 0) goto L_0x0027;
+    L_0x000f:
+        r0 = rect;
+        r3 = r6.getX();
+        r3 = (int) r3;
+        r4 = r6.getY();
+        r4 = (int) r4;
+        r0 = r0.contains(r3, r4);
+        if (r0 == 0) goto L_0x0074;
+    L_0x0021:
+        r5.pressed = r1;
+        r5.invalidate();
+        goto L_0x0075;
+    L_0x0027:
+        r0 = r5.pressed;
+        if (r0 == 0) goto L_0x0074;
+    L_0x002b:
+        r0 = r6.getAction();
+        if (r0 != r1) goto L_0x0049;
+    L_0x0031:
+        r0 = r5.getParent();
+        r0.requestDisallowInterceptTouchEvent(r1);
+        r5.pressed = r2;
+        r5.playSoundEffect(r2);
+        r5.sendAccessibilityEvent(r1);
+        r0 = r5.delegate;
+        r0.onCheckClick(r5);
+        r5.invalidate();
+        goto L_0x0074;
+    L_0x0049:
+        r0 = r6.getAction();
+        r1 = 3;
+        if (r0 != r1) goto L_0x0056;
+    L_0x0050:
+        r5.pressed = r2;
+        r5.invalidate();
+        goto L_0x0074;
+    L_0x0056:
+        r0 = r6.getAction();
+        r1 = 2;
+        if (r0 != r1) goto L_0x0074;
+    L_0x005d:
+        r0 = rect;
+        r1 = r6.getX();
+        r1 = (int) r1;
+        r3 = r6.getY();
+        r3 = (int) r3;
+        r0 = r0.contains(r1, r3);
+        if (r0 != 0) goto L_0x0074;
+    L_0x006f:
+        r5.pressed = r2;
+        r5.invalidate();
+    L_0x0074:
+        r1 = 0;
+    L_0x0075:
+        if (r1 != 0) goto L_0x007b;
+    L_0x0077:
+        r1 = super.onTouchEvent(r6);
+    L_0x007b:
+        return r1;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.PhotoAttachPhotoCell.onTouchEvent(android.view.MotionEvent):boolean");
     }
 
-    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
-        super.onInitializeAccessibilityNodeInfo(info);
-        info.setEnabled(true);
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        accessibilityNodeInfo.setEnabled(true);
         if (this.photoEntry.isVideo) {
-            info.setText(LocaleController.getString("AttachVideo", NUM) + ", " + LocaleController.formatCallDuration(this.photoEntry.duration));
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(LocaleController.getString("AttachVideo", NUM));
+            stringBuilder.append(", ");
+            stringBuilder.append(LocaleController.formatCallDuration(this.photoEntry.duration));
+            accessibilityNodeInfo.setText(stringBuilder.toString());
         } else {
-            info.setText(LocaleController.getString("AttachPhoto", NUM));
+            accessibilityNodeInfo.setText(LocaleController.getString("AttachPhoto", NUM));
         }
         if (this.checkBox.isChecked()) {
-            info.setSelected(true);
+            accessibilityNodeInfo.setSelected(true);
         }
         if (VERSION.SDK_INT >= 21) {
-            info.addAction(new AccessibilityAction(NUM, LocaleController.getString("Open", NUM)));
+            accessibilityNodeInfo.addAction(new AccessibilityAction(NUM, LocaleController.getString("Open", NUM)));
         }
     }
 
-    public boolean performAccessibilityAction(int action, Bundle arguments) {
-        if (action == NUM) {
-            View parent = (View) getParent();
-            parent.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), 0, (float) getLeft(), (float) ((getTop() + getHeight()) - 1), 0));
-            parent.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), 1, (float) getLeft(), (float) ((getTop() + getHeight()) - 1), 0));
+    public boolean performAccessibilityAction(int i, Bundle bundle) {
+        if (i == NUM) {
+            View view = (View) getParent();
+            view.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), 0, (float) getLeft(), (float) ((getTop() + getHeight()) - 1), 0));
+            view.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), 1, (float) getLeft(), (float) ((getTop() + getHeight()) - 1), 0));
         }
-        return super.performAccessibilityAction(action, arguments);
+        return super.performAccessibilityAction(i, bundle);
     }
 }

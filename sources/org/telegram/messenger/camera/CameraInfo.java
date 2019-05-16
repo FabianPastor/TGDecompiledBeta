@@ -10,9 +10,9 @@ public class CameraInfo {
     protected ArrayList<Size> pictureSizes = new ArrayList();
     protected ArrayList<Size> previewSizes = new ArrayList();
 
-    public CameraInfo(int id, int frontFace) {
-        this.cameraId = id;
-        this.frontCamera = frontFace;
+    public CameraInfo(int i, int i2) {
+        this.cameraId = i;
+        this.frontCamera = i2;
     }
 
     public int getCameraId() {

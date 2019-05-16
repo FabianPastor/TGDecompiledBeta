@@ -13,14 +13,14 @@ public class ShadowSectionCell extends View {
         this(context, 12);
     }
 
-    public ShadowSectionCell(Context context, int s) {
+    public ShadowSectionCell(Context context, int i) {
         super(context);
         setBackgroundDrawable(Theme.getThemedDrawable(context, NUM, "windowBackgroundGrayShadow"));
-        this.size = s;
+        this.size = i;
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) this.size), NUM));
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) this.size), NUM));
     }
 }

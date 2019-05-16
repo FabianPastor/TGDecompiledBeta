@@ -9,7 +9,7 @@ import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
-import android.support.annotation.Keep;
+import androidx.annotation.Keep;
 import org.telegram.messenger.AndroidUtilities;
 
 public class AnimatedArrowDrawable extends Drawable {
@@ -20,46 +20,53 @@ public class AnimatedArrowDrawable extends Drawable {
     private Paint paint = new Paint(1);
     private Path path = new Path();
 
-    public AnimatedArrowDrawable(int color, boolean small) {
+    public int getOpacity() {
+        return -2;
+    }
+
+    public void setAlpha(int i) {
+    }
+
+    public AnimatedArrowDrawable(int i, boolean z) {
         this.paint.setStyle(Style.STROKE);
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
-        this.paint.setColor(color);
+        this.paint.setColor(i);
         this.paint.setStrokeCap(Cap.ROUND);
         this.paint.setStrokeJoin(Join.ROUND);
-        this.isSmall = small;
+        this.isSmall = z;
         updatePath();
     }
 
-    public void draw(Canvas c) {
-        c.drawPath(this.path, this.paint);
+    public void draw(Canvas canvas) {
+        canvas.drawPath(this.path, this.paint);
         checkAnimation();
     }
 
     private void updatePath() {
         this.path.reset();
-        float p = (this.animProgress * 2.0f) - 1.0f;
+        float f = (this.animProgress * 2.0f) - 1.0f;
         if (this.isSmall) {
-            this.path.moveTo((float) AndroidUtilities.dp(3.0f), ((float) AndroidUtilities.dp(6.0f)) - (((float) AndroidUtilities.dp(2.0f)) * p));
-            this.path.lineTo((float) AndroidUtilities.dp(8.0f), ((float) AndroidUtilities.dp(6.0f)) + (((float) AndroidUtilities.dp(2.0f)) * p));
-            this.path.lineTo((float) AndroidUtilities.dp(13.0f), ((float) AndroidUtilities.dp(6.0f)) - (((float) AndroidUtilities.dp(2.0f)) * p));
+            this.path.moveTo((float) AndroidUtilities.dp(3.0f), ((float) AndroidUtilities.dp(6.0f)) - (((float) AndroidUtilities.dp(2.0f)) * f));
+            this.path.lineTo((float) AndroidUtilities.dp(8.0f), ((float) AndroidUtilities.dp(6.0f)) + (((float) AndroidUtilities.dp(2.0f)) * f));
+            this.path.lineTo((float) AndroidUtilities.dp(13.0f), ((float) AndroidUtilities.dp(6.0f)) - (((float) AndroidUtilities.dp(2.0f)) * f));
             return;
         }
-        this.path.moveTo((float) AndroidUtilities.dp(4.5f), ((float) AndroidUtilities.dp(12.0f)) - (((float) AndroidUtilities.dp(4.0f)) * p));
-        this.path.lineTo((float) AndroidUtilities.dp(13.0f), ((float) AndroidUtilities.dp(12.0f)) + (((float) AndroidUtilities.dp(4.0f)) * p));
-        this.path.lineTo((float) AndroidUtilities.dp(21.5f), ((float) AndroidUtilities.dp(12.0f)) - (((float) AndroidUtilities.dp(4.0f)) * p));
+        this.path.moveTo((float) AndroidUtilities.dp(4.5f), ((float) AndroidUtilities.dp(12.0f)) - (((float) AndroidUtilities.dp(4.0f)) * f));
+        this.path.lineTo((float) AndroidUtilities.dp(13.0f), ((float) AndroidUtilities.dp(12.0f)) + (((float) AndroidUtilities.dp(4.0f)) * f));
+        this.path.lineTo((float) AndroidUtilities.dp(21.5f), ((float) AndroidUtilities.dp(12.0f)) - (((float) AndroidUtilities.dp(4.0f)) * f));
     }
 
     @Keep
-    public void setAnimationProgress(float progress) {
-        this.animProgress = progress;
-        this.animateToProgress = progress;
+    public void setAnimationProgress(float f) {
+        this.animProgress = f;
+        this.animateToProgress = f;
         updatePath();
         invalidateSelf();
     }
 
-    public void setAnimationProgressAnimated(float progress) {
-        if (this.animateToProgress != progress) {
-            this.animateToProgress = progress;
+    public void setAnimationProgressAnimated(float f) {
+        if (this.animateToProgress != f) {
+            this.animateToProgress = f;
             this.lastUpdateTime = SystemClock.elapsedRealtime();
             invalidateSelf();
         }
@@ -67,18 +74,20 @@ public class AnimatedArrowDrawable extends Drawable {
 
     private void checkAnimation() {
         if (this.animateToProgress != this.animProgress) {
-            long newTime = SystemClock.elapsedRealtime();
-            long dt = newTime - this.lastUpdateTime;
-            this.lastUpdateTime = newTime;
-            if (this.animProgress < this.animateToProgress) {
-                this.animProgress += ((float) dt) / 180.0f;
-                if (this.animProgress > this.animateToProgress) {
-                    this.animProgress = this.animateToProgress;
+            long elapsedRealtime = SystemClock.elapsedRealtime();
+            long j = elapsedRealtime - this.lastUpdateTime;
+            this.lastUpdateTime = elapsedRealtime;
+            float f = this.animProgress;
+            float f2 = this.animateToProgress;
+            if (f < f2) {
+                this.animProgress = f + (((float) j) / 180.0f);
+                if (this.animProgress > f2) {
+                    this.animProgress = f2;
                 }
             } else {
-                this.animProgress -= ((float) dt) / 180.0f;
-                if (this.animProgress < this.animateToProgress) {
-                    this.animProgress = this.animateToProgress;
+                this.animProgress = f - (((float) j) / 180.0f);
+                if (this.animProgress < f2) {
+                    this.animProgress = f2;
                 }
             }
             updatePath();
@@ -86,23 +95,16 @@ public class AnimatedArrowDrawable extends Drawable {
         }
     }
 
-    public void setColor(int color) {
-        this.paint.setColor(color);
+    public void setColor(int i) {
+        this.paint.setColor(i);
     }
 
     public float getAnimationProgress() {
         return this.animProgress;
     }
 
-    public void setAlpha(int alpha) {
-    }
-
     public void setColorFilter(ColorFilter colorFilter) {
         this.paint.setColorFilter(colorFilter);
-    }
-
-    public int getOpacity() {
-        return -2;
     }
 
     public int getIntrinsicWidth() {

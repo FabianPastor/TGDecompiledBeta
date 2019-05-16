@@ -6,67 +6,67 @@ import java.io.InputStream;
 import org.telegram.messenger.audioinfo.AudioInfo;
 
 public class ID3v1Info extends AudioInfo {
-    public static boolean isID3v1StartPosition(InputStream input) throws IOException {
-        input.mark(3);
+    public static boolean isID3v1StartPosition(InputStream inputStream) throws IOException {
+        inputStream.mark(3);
         try {
-            boolean z = input.read() == 84 && input.read() == 65 && input.read() == 71;
-            input.reset();
+            boolean z = inputStream.read() == 84 && inputStream.read() == 65 && inputStream.read() == 71;
+            inputStream.reset();
             return z;
         } catch (Throwable th) {
-            input.reset();
+            inputStream.reset();
         }
     }
 
-    public ID3v1Info(InputStream input) throws IOException {
-        if (isID3v1StartPosition(input)) {
+    public ID3v1Info(InputStream inputStream) throws IOException {
+        if (isID3v1StartPosition(inputStream)) {
             this.brand = "ID3";
             this.version = "1.0";
-            byte[] bytes = readBytes(input, 128);
-            this.title = extractString(bytes, 3, 30);
-            this.artist = extractString(bytes, 33, 30);
-            this.album = extractString(bytes, 63, 30);
+            byte[] readBytes = readBytes(inputStream, 128);
+            this.title = extractString(readBytes, 3, 30);
+            this.artist = extractString(readBytes, 33, 30);
+            this.album = extractString(readBytes, 63, 30);
             try {
-                this.year = Short.parseShort(extractString(bytes, 93, 4));
-            } catch (NumberFormatException e) {
+                this.year = Short.parseShort(extractString(readBytes, 93, 4));
+            } catch (NumberFormatException unused) {
                 this.year = (short) 0;
             }
-            this.comment = extractString(bytes, 97, 30);
-            ID3v1Genre id3v1Genre = ID3v1Genre.getGenre(bytes[127]);
-            if (id3v1Genre != null) {
-                this.genre = id3v1Genre.getDescription();
+            this.comment = extractString(readBytes, 97, 30);
+            ID3v1Genre genre = ID3v1Genre.getGenre(readBytes[127]);
+            if (genre != null) {
+                this.genre = genre.getDescription();
             }
-            if (bytes[125] == (byte) 0 && bytes[126] != (byte) 0) {
+            if (readBytes[125] == (byte) 0 && readBytes[126] != (byte) 0) {
                 this.version = "1.1";
-                this.track = (short) (bytes[126] & 255);
+                this.track = (short) (readBytes[126] & 255);
             }
         }
     }
 
     /* Access modifiers changed, original: 0000 */
-    public byte[] readBytes(InputStream input, int len) throws IOException {
-        int total = 0;
-        byte[] bytes = new byte[len];
-        while (total < len) {
-            int current = input.read(bytes, total, len - total);
-            if (current > 0) {
-                total += current;
+    public byte[] readBytes(InputStream inputStream, int i) throws IOException {
+        byte[] bArr = new byte[i];
+        int i2 = 0;
+        while (i2 < i) {
+            int read = inputStream.read(bArr, i2, i - i2);
+            if (read > 0) {
+                i2 += read;
             } else {
                 throw new EOFException();
             }
         }
-        return bytes;
+        return bArr;
     }
 
     /* Access modifiers changed, original: 0000 */
-    public String extractString(byte[] bytes, int offset, int length) {
+    public String extractString(byte[] bArr, int i, int i2) {
         try {
-            String text = new String(bytes, offset, length, "ISO-8859-1");
-            int zeroIndex = text.indexOf(0);
-            if (zeroIndex < 0) {
-                return text;
+            String str = new String(bArr, i, i2, "ISO-8859-1");
+            i = str.indexOf(0);
+            if (i >= 0) {
+                str = str.substring(0, i);
             }
-            return text.substring(0, zeroIndex);
-        } catch (Exception e) {
+            return str;
+        } catch (Exception unused) {
             return "";
         }
     }

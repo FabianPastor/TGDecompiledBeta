@@ -40,56 +40,69 @@ public class SeekBar {
         this.delegate = seekBarDelegate;
     }
 
-    public boolean onTouch(int action, float x, float y) {
-        if (action == 0) {
-            int additionWidth = (this.height - thumbWidth) / 2;
-            if (((float) (this.thumbX - additionWidth)) <= x && x <= ((float) ((this.thumbX + thumbWidth) + additionWidth)) && y >= 0.0f && y <= ((float) this.height)) {
+    public boolean onTouch(int i, float f, float f2) {
+        if (i == 0) {
+            i = this.height;
+            int i2 = thumbWidth;
+            int i3 = (i - i2) / 2;
+            int i4 = this.thumbX;
+            if (((float) (i4 - i3)) <= f && f <= ((float) ((i2 + i4) + i3)) && f2 >= 0.0f && f2 <= ((float) i)) {
                 this.pressed = true;
-                this.thumbDX = (int) (x - ((float) this.thumbX));
+                this.thumbDX = (int) (f - ((float) i4));
                 return true;
             }
-        } else if (action == 1 || action == 3) {
+        } else if (i == 1 || i == 3) {
             if (this.pressed) {
-                if (action == 1 && this.delegate != null) {
-                    this.delegate.onSeekBarDrag(((float) this.thumbX) / ((float) (this.width - thumbWidth)));
+                if (i == 1) {
+                    SeekBarDelegate seekBarDelegate = this.delegate;
+                    if (seekBarDelegate != null) {
+                        seekBarDelegate.onSeekBarDrag(((float) this.thumbX) / ((float) (this.width - thumbWidth)));
+                    }
                 }
                 this.pressed = false;
                 return true;
             }
-        } else if (action == 2 && this.pressed) {
-            this.thumbX = (int) (x - ((float) this.thumbDX));
-            if (this.thumbX < 0) {
+        } else if (i == 2 && this.pressed) {
+            this.thumbX = (int) (f - ((float) this.thumbDX));
+            i = this.thumbX;
+            if (i < 0) {
                 this.thumbX = 0;
-                return true;
-            } else if (this.thumbX <= this.width - thumbWidth) {
-                return true;
             } else {
-                this.thumbX = this.width - thumbWidth;
-                return true;
+                int i5 = this.width;
+                int i6 = thumbWidth;
+                if (i > i5 - i6) {
+                    this.thumbX = i5 - i6;
+                }
             }
+            return true;
         }
         return false;
     }
 
-    public void setColors(int background, int cache, int progress, int circle, int selected) {
-        this.backgroundColor = background;
-        this.cacheColor = cache;
-        this.circleColor = circle;
-        this.progressColor = progress;
-        this.backgroundSelectedColor = selected;
+    public void setColors(int i, int i2, int i3, int i4, int i5) {
+        this.backgroundColor = i;
+        this.cacheColor = i2;
+        this.circleColor = i4;
+        this.progressColor = i3;
+        this.backgroundSelectedColor = i5;
     }
 
-    public void setProgress(float progress) {
-        this.thumbX = (int) Math.ceil((double) (((float) (this.width - thumbWidth)) * progress));
-        if (this.thumbX < 0) {
+    public void setProgress(float f) {
+        this.thumbX = (int) Math.ceil((double) (((float) (this.width - thumbWidth)) * f));
+        int i = this.thumbX;
+        if (i < 0) {
             this.thumbX = 0;
-        } else if (this.thumbX > this.width - thumbWidth) {
-            this.thumbX = this.width - thumbWidth;
+            return;
+        }
+        int i2 = this.width;
+        int i3 = thumbWidth;
+        if (i > i2 - i3) {
+            this.thumbX = i2 - i3;
         }
     }
 
-    public void setBufferedProgress(float value) {
-        this.bufferedProgress = value;
+    public void setBufferedProgress(float f) {
+        this.bufferedProgress = f;
     }
 
     public float getProgress() {
@@ -100,31 +113,55 @@ public class SeekBar {
         return this.pressed;
     }
 
-    public void setSelected(boolean value) {
-        this.selected = value;
+    public void setSelected(boolean z) {
+        this.selected = z;
     }
 
-    public void setSize(int w, int h) {
-        this.width = w;
-        this.height = h;
+    public void setSize(int i, int i2) {
+        this.width = i;
+        this.height = i2;
     }
 
-    public void setLineHeight(int value) {
-        this.lineHeight = value;
+    public void setLineHeight(int i) {
+        this.lineHeight = i;
     }
 
     public void draw(Canvas canvas) {
-        this.rect.set((float) (thumbWidth / 2), (float) ((this.height / 2) - (this.lineHeight / 2)), (float) (this.width - (thumbWidth / 2)), (float) ((this.height / 2) + (this.lineHeight / 2)));
+        RectF rectF = this.rect;
+        int i = thumbWidth;
+        float f = (float) (i / 2);
+        int i2 = this.height;
+        int i3 = i2 / 2;
+        int i4 = this.lineHeight;
+        rectF.set(f, (float) (i3 - (i4 / 2)), (float) (this.width - (i / 2)), (float) ((i2 / 2) + (i4 / 2)));
         paint.setColor(this.selected ? this.backgroundSelectedColor : this.backgroundColor);
-        canvas.drawRoundRect(this.rect, (float) (thumbWidth / 2), (float) (thumbWidth / 2), paint);
+        rectF = this.rect;
+        i = thumbWidth;
+        canvas.drawRoundRect(rectF, (float) (i / 2), (float) (i / 2), paint);
         if (this.bufferedProgress > 0.0f) {
             paint.setColor(this.selected ? this.backgroundSelectedColor : this.cacheColor);
-            this.rect.set((float) (thumbWidth / 2), (float) ((this.height / 2) - (this.lineHeight / 2)), ((float) (thumbWidth / 2)) + (this.bufferedProgress * ((float) (this.width - thumbWidth))), (float) ((this.height / 2) + (this.lineHeight / 2)));
-            canvas.drawRoundRect(this.rect, (float) (thumbWidth / 2), (float) (thumbWidth / 2), paint);
+            rectF = this.rect;
+            i = thumbWidth;
+            f = (float) (i / 2);
+            i2 = this.height;
+            i3 = i2 / 2;
+            i4 = this.lineHeight;
+            rectF.set(f, (float) (i3 - (i4 / 2)), ((float) (i / 2)) + (this.bufferedProgress * ((float) (this.width - i))), (float) ((i2 / 2) + (i4 / 2)));
+            rectF = this.rect;
+            i = thumbWidth;
+            canvas.drawRoundRect(rectF, (float) (i / 2), (float) (i / 2), paint);
         }
-        this.rect.set((float) (thumbWidth / 2), (float) ((this.height / 2) - (this.lineHeight / 2)), (float) ((thumbWidth / 2) + this.thumbX), (float) ((this.height / 2) + (this.lineHeight / 2)));
+        rectF = this.rect;
+        i = thumbWidth;
+        f = (float) (i / 2);
+        i2 = this.height;
+        i3 = i2 / 2;
+        i4 = this.lineHeight;
+        rectF.set(f, (float) (i3 - (i4 / 2)), (float) ((i / 2) + this.thumbX), (float) ((i2 / 2) + (i4 / 2)));
         paint.setColor(this.progressColor);
-        canvas.drawRoundRect(this.rect, (float) (thumbWidth / 2), (float) (thumbWidth / 2), paint);
+        rectF = this.rect;
+        i = thumbWidth;
+        canvas.drawRoundRect(rectF, (float) (i / 2), (float) (i / 2), paint);
         paint.setColor(this.circleColor);
         canvas.drawCircle((float) (this.thumbX + (thumbWidth / 2)), (float) (this.height / 2), (float) AndroidUtilities.dp(this.pressed ? 8.0f : 6.0f), paint);
     }

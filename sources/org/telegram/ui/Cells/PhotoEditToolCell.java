@@ -21,15 +21,16 @@ public class PhotoEditToolCell extends FrameLayout {
             PhotoEditToolCell.this.valueTextView.setTag(null);
             PhotoEditToolCell.this.valueAnimation = new AnimatorSet();
             AnimatorSet access$100 = PhotoEditToolCell.this.valueAnimation;
-            r1 = new Animator[2];
-            r1[0] = ObjectAnimator.ofFloat(PhotoEditToolCell.this.valueTextView, "alpha", new float[]{0.0f});
-            r1[1] = ObjectAnimator.ofFloat(PhotoEditToolCell.this.nameTextView, "alpha", new float[]{1.0f});
-            access$100.playTogether(r1);
+            Animator[] animatorArr = new Animator[2];
+            String str = "alpha";
+            animatorArr[0] = ObjectAnimator.ofFloat(PhotoEditToolCell.this.valueTextView, str, new float[]{0.0f});
+            animatorArr[1] = ObjectAnimator.ofFloat(PhotoEditToolCell.this.nameTextView, str, new float[]{1.0f});
+            access$100.playTogether(animatorArr);
             PhotoEditToolCell.this.valueAnimation.setDuration(180);
             PhotoEditToolCell.this.valueAnimation.setInterpolator(new DecelerateInterpolator());
             PhotoEditToolCell.this.valueAnimation.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animation) {
-                    if (animation.equals(PhotoEditToolCell.this.valueAnimation)) {
+                public void onAnimationEnd(Animator animator) {
+                    if (animator.equals(PhotoEditToolCell.this.valueAnimation)) {
                         PhotoEditToolCell.this.valueAnimation = null;
                     }
                 }
@@ -64,12 +65,22 @@ public class PhotoEditToolCell extends FrameLayout {
 
     public void setSeekBarDelegate(final PhotoEditorSeekBarDelegate photoEditorSeekBarDelegate) {
         this.seekBar.setDelegate(new PhotoEditorSeekBarDelegate() {
-            public void onProgressChanged(int i, int progress) {
-                photoEditorSeekBarDelegate.onProgressChanged(i, progress);
-                if (progress > 0) {
-                    PhotoEditToolCell.this.valueTextView.setText("+" + progress);
+            public void onProgressChanged(int i, int i2) {
+                photoEditorSeekBarDelegate.onProgressChanged(i, i2);
+                TextView access$000;
+                StringBuilder stringBuilder;
+                if (i2 > 0) {
+                    access$000 = PhotoEditToolCell.this.valueTextView;
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append("+");
+                    stringBuilder.append(i2);
+                    access$000.setText(stringBuilder.toString());
                 } else {
-                    PhotoEditToolCell.this.valueTextView.setText("" + progress);
+                    access$000 = PhotoEditToolCell.this.valueTextView;
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append("");
+                    stringBuilder.append(i2);
+                    access$000.setText(stringBuilder.toString());
                 }
                 if (PhotoEditToolCell.this.valueTextView.getTag() == null) {
                     if (PhotoEditToolCell.this.valueAnimation != null) {
@@ -78,14 +89,15 @@ public class PhotoEditToolCell extends FrameLayout {
                     PhotoEditToolCell.this.valueTextView.setTag(Integer.valueOf(1));
                     PhotoEditToolCell.this.valueAnimation = new AnimatorSet();
                     AnimatorSet access$100 = PhotoEditToolCell.this.valueAnimation;
-                    r1 = new Animator[2];
-                    r1[0] = ObjectAnimator.ofFloat(PhotoEditToolCell.this.valueTextView, "alpha", new float[]{1.0f});
-                    r1[1] = ObjectAnimator.ofFloat(PhotoEditToolCell.this.nameTextView, "alpha", new float[]{0.0f});
-                    access$100.playTogether(r1);
+                    Animator[] animatorArr = new Animator[2];
+                    String str = "alpha";
+                    animatorArr[0] = ObjectAnimator.ofFloat(PhotoEditToolCell.this.valueTextView, str, new float[]{1.0f});
+                    animatorArr[1] = ObjectAnimator.ofFloat(PhotoEditToolCell.this.nameTextView, str, new float[]{0.0f});
+                    access$100.playTogether(animatorArr);
                     PhotoEditToolCell.this.valueAnimation.setDuration(180);
                     PhotoEditToolCell.this.valueAnimation.setInterpolator(new DecelerateInterpolator());
                     PhotoEditToolCell.this.valueAnimation.addListener(new AnimatorListenerAdapter() {
-                        public void onAnimationEnd(Animator animation) {
+                        public void onAnimationEnd(Animator animator) {
                             AndroidUtilities.runOnUIThread(PhotoEditToolCell.this.hideValueRunnable, 1000);
                         }
                     });
@@ -98,32 +110,45 @@ public class PhotoEditToolCell extends FrameLayout {
         });
     }
 
-    public void setTag(Object tag) {
-        super.setTag(tag);
-        this.seekBar.setTag(tag);
+    public void setTag(Object obj) {
+        super.setTag(obj);
+        this.seekBar.setTag(obj);
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(40.0f), NUM));
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(40.0f), NUM));
     }
 
-    public void setIconAndTextAndValue(String text, float value, int min, int max) {
-        if (this.valueAnimation != null) {
-            this.valueAnimation.cancel();
+    public void setIconAndTextAndValue(String str, float f, int i, int i2) {
+        AnimatorSet animatorSet = this.valueAnimation;
+        if (animatorSet != null) {
+            animatorSet.cancel();
             this.valueAnimation = null;
         }
         AndroidUtilities.cancelRunOnUIThread(this.hideValueRunnable);
         this.valueTextView.setTag(null);
-        this.nameTextView.setText(text.substring(0, 1).toUpperCase() + text.substring(1).toLowerCase());
-        if (value > 0.0f) {
-            this.valueTextView.setText("+" + ((int) value));
+        TextView textView = this.nameTextView;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(str.substring(0, 1).toUpperCase());
+        stringBuilder.append(str.substring(1).toLowerCase());
+        textView.setText(stringBuilder.toString());
+        if (f > 0.0f) {
+            textView = this.valueTextView;
+            stringBuilder = new StringBuilder();
+            stringBuilder.append("+");
+            stringBuilder.append((int) f);
+            textView.setText(stringBuilder.toString());
         } else {
-            this.valueTextView.setText("" + ((int) value));
+            textView = this.valueTextView;
+            stringBuilder = new StringBuilder();
+            stringBuilder.append("");
+            stringBuilder.append((int) f);
+            textView.setText(stringBuilder.toString());
         }
         this.valueTextView.setAlpha(0.0f);
         this.nameTextView.setAlpha(1.0f);
-        this.seekBar.setMinMax(min, max);
-        this.seekBar.setProgress((int) value, false);
+        this.seekBar.setMinMax(i, i2);
+        this.seekBar.setProgress((int) f, false);
     }
 }

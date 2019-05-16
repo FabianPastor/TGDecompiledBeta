@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Base.Theme.AppCompat">
+    </style>
+    <style name="Base.Theme.AppCompat.Light">
+    </style>
+    <style name="Base.V28.Theme.AppCompat">
+        <item name="dialogCornerRadius">?unknown_attr_ref: 1010571</item>
+    </style>
+    <style name="Base.V28.Theme.AppCompat.Light">
+        <item name="dialogCornerRadius">?unknown_attr_ref: 1010571</item>
+    </style>
+    <style name="Theme.TMessages">
+        <item name="android:colorBackground">@android:color/white</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:listViewStyle">@style/Theme.TMessages.ListView</item>
+        <item name="android:textViewStyle">@style/MyTextViewStyle</item>
+        <item name="android:itemTextAppearance">@style/ActionBar.Transparent.TMessages.Item</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowActionBarOverlay">false</item>
+        <item name="android:listChoiceBackgroundIndicator">@drawable/list_selector_ex</item>
+        <item name="android:alertDialogTheme">@style/Theme.TMessages.Dialog.Alert</item>
+        <item name="android:datePickerStyle">@style/Theme.TMessages.DatePicker</item>
+        <item name="android:calendarViewStyle">@style/Theme.TMessages.CalendarView</item>
+        <item name="android:actionBarItemBackground">@drawable/bar_selector_style</item>
+        <item name="android:colorControlActivated">#4991cc</item>
+        <item name="android:colorPrimary">#527da3</item>
+        <item name="android:colorPrimaryDark">#33000000</item>
+        <item name="android:navigationBarColor">#000000</item>
+        <item name="android:timePickerStyle">@style/Theme.TMessages.TimePicker</item>
+        <item name="android:timePickerDialogTheme">@style/Theme.TMessages.Dialog.Alert</item>
+        <item name="android:datePickerDialogTheme">@style/Theme.TMessages.Dialog.Alert</item>
+        <item name="?0x1010586">1</item>
+    </style>
+</resources>

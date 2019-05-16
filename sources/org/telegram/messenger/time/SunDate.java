@@ -8,119 +8,115 @@ public class SunDate {
     private static final double INV360 = 0.002777777777777778d;
     private static final double RADEG = 57.29577951308232d;
 
-    private static long days_since_2000_Jan_0(int y, int m, int d) {
-        return ((((367 * ((long) y)) - ((long) (((((m + 9) / 12) + y) * 7) / 4))) + ((long) ((m * 275) / 9))) + ((long) d)) - 730530;
+    private static long days_since_2000_Jan_0(int i, int i2, int i3) {
+        return ((((((long) i) * 367) - ((long) (((i + ((i2 + 9) / 12)) * 7) / 4))) + ((long) ((i2 * 275) / 9))) + ((long) i3)) - 730530;
     }
 
-    private static double revolution(double x) {
-        return x - (360.0d * Math.floor(0.002777777777777778d * x));
+    private static double revolution(double d) {
+        return d - (Math.floor(0.002777777777777778d * d) * 360.0d);
     }
 
-    private static double rev180(double x) {
-        return x - (360.0d * Math.floor((0.002777777777777778d * x) + 0.5d));
+    private static double rev180(double d) {
+        return d - (Math.floor((0.002777777777777778d * d) + 0.5d) * 360.0d);
     }
 
     private static double GMST0(double d) {
-        return revolution(818.9874d + (0.985647352d * d));
+        return revolution((d * 0.985647352d) + 818.9874d);
     }
 
-    private static double sind(double x) {
-        return Math.sin(0.017453292519943295d * x);
+    private static double sind(double d) {
+        return Math.sin(d * 0.017453292519943295d);
     }
 
-    private static double cosd(double x) {
-        return Math.cos(0.017453292519943295d * x);
+    private static double cosd(double d) {
+        return Math.cos(d * 0.017453292519943295d);
     }
 
-    private static double tand(double x) {
-        return Math.tan(0.017453292519943295d * x);
+    private static double tand(double d) {
+        return Math.tan(d * 0.017453292519943295d);
     }
 
-    private static double acosd(double x) {
-        return 57.29577951308232d * Math.acos(x);
+    private static double acosd(double d) {
+        return Math.acos(d) * 57.29577951308232d;
     }
 
-    private static double atan2d(double y, double x) {
-        return 57.29577951308232d * Math.atan2(y, x);
+    private static double atan2d(double d, double d2) {
+        return Math.atan2(d, d2) * 57.29577951308232d;
     }
 
-    private static void sunposAtDay(double p, double[] ot, double[] d) {
-        double S = revolution(356.047d + (0.9856002585d * p));
-        double l = 282.9404d + (4.70935E-5d * p);
-        double a = 0.016709d - (1.151E-9d * p);
-        double V = (((57.29577951308232d * a) * sind(S)) * (1.0d + (cosd(S) * a))) + S;
-        double k = cosd(V) - a;
-        double i = Math.sqrt(1.0d - (a * a)) * sind(V);
-        d[0] = Math.sqrt((k * k) + (i * i));
-        ot[0] = atan2d(i, k) + l;
-        if (ot[0] >= 360.0d) {
-            ot[0] = ot[0] - 360.0d;
+    private static void sunposAtDay(double d, double[] dArr, double[] dArr2) {
+        double revolution = revolution((0.9856002585d * d) + 356.047d);
+        double d2 = (4.70935E-5d * d) + 282.9404d;
+        double d3 = 0.016709d - (d * 1.151E-9d);
+        d = (((57.29577951308232d * d3) * sind(revolution)) * ((cosd(revolution) * d3) + 1.0d)) + revolution;
+        revolution = cosd(d) - d3;
+        d3 = Math.sqrt(1.0d - (d3 * d3)) * sind(d);
+        dArr2[0] = Math.sqrt((revolution * revolution) + (d3 * d3));
+        dArr[0] = atan2d(d3, revolution) + d2;
+        if (dArr[0] >= 360.0d) {
+            dArr[0] = dArr[0] - 360.0d;
         }
     }
 
-    private static void sun_RA_decAtDay(double d, double[] RA, double[] dec, double[] r) {
-        double[] lon = new double[1];
-        sunposAtDay(d, lon, r);
-        double ys = r[0] * sind(lon[0]);
-        double obl_ecl = 23.4393d - (3.563E-7d * d);
-        double xe = r[0] * cosd(lon[0]);
-        double ye = ys * cosd(obl_ecl);
-        double ze = ys * sind(obl_ecl);
-        RA[0] = atan2d(ye, xe);
-        dec[0] = atan2d(ze, Math.sqrt((xe * xe) + (ye * ye)));
+    private static void sun_RA_decAtDay(double d, double[] dArr, double[] dArr2, double[] dArr3) {
+        double[] dArr4 = new double[1];
+        sunposAtDay(d, dArr4, dArr3);
+        double cosd = dArr3[0] * cosd(dArr4[0]);
+        double sind = dArr3[0] * sind(dArr4[0]);
+        double d2 = 23.4393d - (d * 3.563E-7d);
+        d = cosd(d2) * sind;
+        sind *= sind(d2);
+        dArr[0] = atan2d(d, cosd);
+        dArr2[0] = atan2d(sind, Math.sqrt((cosd * cosd) + (d * d)));
     }
 
-    private static int sunRiseSetHelperForYear(int year, int month, int day, double lon, double lat, double altit, int upper_limb, double[] sun) {
-        double t;
-        double[] sRA = new double[1];
-        double[] sdec = new double[1];
-        double[] sr = new double[1];
-        int rc = 0;
-        double d = (((double) days_since_2000_Jan_0(year, month, day)) + 0.5d) - (lon / 360.0d);
-        double sidtime = revolution((GMST0(d) + 180.0d) + lon);
-        sun_RA_decAtDay(d, sRA, sdec, sr);
-        double tsouth = 12.0d - (rev180(sidtime - sRA[0]) / 15.0d);
-        double sradius = 0.2666d / sr[0];
-        if (upper_limb != 0) {
-            altit -= sradius;
-        }
-        double cost = (sind(altit) - (sind(lat) * sind(sdec[0]))) / (cosd(lat) * cosd(sdec[0]));
-        if (cost >= 1.0d) {
-            rc = -1;
-            t = 0.0d;
-        } else if (cost <= -1.0d) {
-            rc = 1;
-            t = 12.0d;
+    private static int sunRiseSetHelperForYear(int i, int i2, int i3, double d, double d2, double d3, int i4, double[] dArr) {
+        int i5;
+        double[] dArr2 = new double[1];
+        double[] dArr3 = new double[1];
+        double[] dArr4 = new double[1];
+        double days_since_2000_Jan_0 = (double) days_since_2000_Jan_0(i, i2, i3);
+        Double.isNaN(days_since_2000_Jan_0);
+        days_since_2000_Jan_0 = (days_since_2000_Jan_0 + 0.5d) - (d / 360.0d);
+        double revolution = revolution((GMST0(days_since_2000_Jan_0) + 180.0d) + d);
+        sun_RA_decAtDay(days_since_2000_Jan_0, dArr2, dArr3, dArr4);
+        double d4 = 12.0d;
+        double rev180 = 12.0d - (rev180(revolution - dArr2[0]) / 15.0d);
+        double sind = (sind(i4 != 0 ? d3 - (0.2666d / dArr4[0]) : d3) - (sind(d2) * sind(dArr3[0]))) / (cosd(d2) * cosd(dArr3[0]));
+        if (sind >= 1.0d) {
+            i5 = -1;
+            d4 = 0.0d;
+        } else if (sind <= -1.0d) {
+            i5 = 1;
         } else {
-            t = acosd(cost) / 15.0d;
+            d4 = acosd(sind) / 15.0d;
+            i5 = 0;
         }
-        sun[0] = tsouth - t;
-        sun[1] = tsouth + t;
-        return rc;
+        dArr[0] = rev180 - d4;
+        dArr[1] = rev180 + d4;
+        return i5;
     }
 
-    private static int sunRiseSetForYear(int year, int month, int day, double lon, double lat, double[] sun) {
-        return sunRiseSetHelperForYear(year, month, day, lon, lat, -0.5833333333333334d, 1, sun);
+    private static int sunRiseSetForYear(int i, int i2, int i3, double d, double d2, double[] dArr) {
+        return sunRiseSetHelperForYear(i, i2, i3, d, d2, -0.5833333333333334d, 1, dArr);
     }
 
-    public static int[] calculateSunriseSunset(double lat, double lon) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        double[] sun = new double[2];
-        sunRiseSetForYear(calendar.get(1), calendar.get(2) + 1, calendar.get(5), lon, lat, sun);
-        int timeZoneOffset = (TimeZone.getDefault().getOffset(System.currentTimeMillis()) / 1000) / 60;
-        int sunrise = ((int) (sun[0] * 60.0d)) + timeZoneOffset;
-        int sunset = ((int) (sun[1] * 60.0d)) + timeZoneOffset;
-        if (sunrise < 0) {
-            sunrise += 1440;
-        } else if (sunrise > 1440) {
-            sunrise -= 1440;
+    public static int[] calculateSunriseSunset(double d, double d2) {
+        Calendar instance = Calendar.getInstance();
+        instance.setTimeInMillis(System.currentTimeMillis());
+        double[] dArr = new double[2];
+        sunRiseSetForYear(instance.get(1), instance.get(2) + 1, instance.get(5), d2, d, dArr);
+        int offset = (TimeZone.getDefault().getOffset(System.currentTimeMillis()) / 1000) / 60;
+        int i = ((int) (dArr[0] * 60.0d)) + offset;
+        int i2 = ((int) (dArr[1] * 60.0d)) + offset;
+        if (i < 0) {
+            i += 1440;
+        } else if (i > 1440) {
+            i -= 1440;
         }
-        if (sunset < 0) {
-            sunset += 1440;
-        } else if (sunset > 1440) {
-            sunset += 1440;
+        if (i2 < 0 || i2 > 1440) {
+            i2 += 1440;
         }
-        return new int[]{sunrise, sunset};
+        return new int[]{i, i2};
     }
 }

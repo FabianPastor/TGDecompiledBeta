@@ -6,7 +6,6 @@ import android.graphics.drawable.Drawable;
 import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-import android.view.MotionEvent;
 import android.view.View.MeasureSpec;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DownloadController;
@@ -22,7 +21,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.BaseCell;
 import org.telegram.ui.Components.SeekBar.SeekBarDelegate;
 
-public class PopupAudioView extends BaseCell implements FileDownloadProgressListener, SeekBarDelegate {
+public class PopupAudioView extends BaseCell implements SeekBarDelegate, FileDownloadProgressListener {
     private int TAG;
     private int buttonPressed = 0;
     private int buttonState = 0;
@@ -41,6 +40,9 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
     private int timeX;
     private boolean wasLayout = false;
 
+    public void onProgressUpload(String str, float f, boolean z) {
+    }
+
     public PopupAudioView(Context context) {
         super(context);
         this.timePaint.setTextSize((float) AndroidUtilities.dp(16.0f));
@@ -53,7 +55,12 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
     public void setMessageObject(MessageObject messageObject) {
         if (this.currentMessageObject != messageObject) {
             this.currentAccount = messageObject.currentAccount;
-            this.seekBar.setColors(Theme.getColor("chat_inAudioSeekbar"), Theme.getColor("chat_inAudioSeekbar"), Theme.getColor("chat_inAudioSeekbarFill"), Theme.getColor("chat_inAudioSeekbarFill"), Theme.getColor("chat_inAudioSeekbarSelected"));
+            SeekBar seekBar = this.seekBar;
+            String str = "chat_inAudioSeekbar";
+            int color = Theme.getColor(str);
+            int color2 = Theme.getColor(str);
+            str = "chat_inAudioSeekbarFill";
+            seekBar.setColors(color, color2, Theme.getColor(str), Theme.getColor(str), Theme.getColor("chat_inAudioSeekbarSelected"));
             this.progressView.setProgressColors(-2497813, -7944712);
             this.currentMessageObject = messageObject;
             this.wasLayout = false;
@@ -67,12 +74,12 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(56.0f));
+    public void onMeasure(int i, int i2) {
+        setMeasuredDimension(MeasureSpec.getSize(i), AndroidUtilities.dp(56.0f));
     }
 
     /* Access modifiers changed, original: protected */
-    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
+    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
         if (this.currentMessageObject != null) {
             this.seekBarX = AndroidUtilities.dp(54.0f);
             this.buttonX = AndroidUtilities.dp(10.0f);
@@ -83,7 +90,7 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
             this.seekBarY = AndroidUtilities.dp(13.0f);
             this.buttonY = AndroidUtilities.dp(10.0f);
             updateProgress();
-            if (changed || !this.wasLayout) {
+            if (z || !this.wasLayout) {
                 this.wasLayout = true;
             }
         }
@@ -97,7 +104,8 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
                 Theme.chat_msgInMediaDrawable.draw(canvas);
                 if (this.currentMessageObject != null) {
                     canvas.save();
-                    if (this.buttonState == 0 || this.buttonState == 1) {
+                    int i = this.buttonState;
+                    if (i == 0 || i == 1) {
                         canvas.translate((float) this.seekBarX, (float) this.seekBarY);
                         this.seekBar.draw(canvas);
                     } else {
@@ -105,12 +113,12 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
                         this.progressView.draw(canvas);
                     }
                     canvas.restore();
-                    int state = this.buttonState + 5;
+                    i = this.buttonState + 5;
                     this.timePaint.setColor(-6182221);
-                    Drawable buttonDrawable = Theme.chat_fileStatesDrawable[state][this.buttonPressed];
-                    int side = AndroidUtilities.dp(36.0f);
-                    BaseCell.setDrawableBounds(buttonDrawable, this.buttonX + ((side - buttonDrawable.getIntrinsicWidth()) / 2), this.buttonY + ((side - buttonDrawable.getIntrinsicHeight()) / 2));
-                    buttonDrawable.draw(canvas);
+                    Drawable drawable = Theme.chat_fileStatesDrawable[i][this.buttonPressed];
+                    int dp = AndroidUtilities.dp(36.0f);
+                    BaseCell.setDrawableBounds(drawable, ((dp - drawable.getIntrinsicWidth()) / 2) + this.buttonX, ((dp - drawable.getIntrinsicHeight()) / 2) + this.buttonY);
+                    drawable.draw(canvas);
                     canvas.save();
                     canvas.translate((float) this.timeX, (float) AndroidUtilities.dp(18.0f));
                     this.timeLayout.draw(canvas);
@@ -129,65 +137,146 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
         DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
     }
 
-    public boolean onTouchEvent(MotionEvent event) {
-        float x = event.getX();
-        float y = event.getY();
-        boolean result = this.seekBar.onTouch(event.getAction(), event.getX() - ((float) this.seekBarX), event.getY() - ((float) this.seekBarY));
-        if (result) {
-            if (event.getAction() == 0) {
-                getParent().requestDisallowInterceptTouchEvent(true);
-            }
-            invalidate();
-            return result;
-        }
-        int side = AndroidUtilities.dp(36.0f);
-        if (event.getAction() == 0) {
-            if (x >= ((float) this.buttonX) && x <= ((float) (this.buttonX + side)) && y >= ((float) this.buttonY) && y <= ((float) (this.buttonY + side))) {
-                this.buttonPressed = 1;
-                invalidate();
-                result = true;
-            }
-        } else if (this.buttonPressed == 1) {
-            if (event.getAction() == 1) {
-                this.buttonPressed = 0;
-                playSoundEffect(0);
-                didPressedButton();
-                invalidate();
-            } else if (event.getAction() == 3) {
-                this.buttonPressed = 0;
-                invalidate();
-            } else if (event.getAction() == 2 && (x < ((float) this.buttonX) || x > ((float) (this.buttonX + side)) || y < ((float) this.buttonY) || y > ((float) (this.buttonY + side)))) {
-                this.buttonPressed = 0;
-                invalidate();
-            }
-        }
-        if (result) {
-            return result;
-        }
-        return super.onTouchEvent(event);
+    /* JADX WARNING: Missing block: B:34:0x00a7, code skipped:
+            if (r1 <= ((float) (r0 + r4))) goto L_0x00ae;
+     */
+    public boolean onTouchEvent(android.view.MotionEvent r8) {
+        /*
+        r7 = this;
+        r0 = r8.getX();
+        r1 = r8.getY();
+        r2 = r7.seekBar;
+        r3 = r8.getAction();
+        r4 = r8.getX();
+        r5 = r7.seekBarX;
+        r5 = (float) r5;
+        r4 = r4 - r5;
+        r5 = r8.getY();
+        r6 = r7.seekBarY;
+        r6 = (float) r6;
+        r5 = r5 - r6;
+        r2 = r2.onTouch(r3, r4, r5);
+        r3 = 1;
+        if (r2 == 0) goto L_0x0037;
+    L_0x0025:
+        r8 = r8.getAction();
+        if (r8 != 0) goto L_0x0032;
+    L_0x002b:
+        r8 = r7.getParent();
+        r8.requestDisallowInterceptTouchEvent(r3);
+    L_0x0032:
+        r7.invalidate();
+        goto L_0x00b4;
+    L_0x0037:
+        r4 = NUM; // 0x42100000 float:36.0 double:5.47595105E-315;
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r5 = r8.getAction();
+        if (r5 != 0) goto L_0x0064;
+    L_0x0043:
+        r5 = r7.buttonX;
+        r6 = (float) r5;
+        r6 = (r0 > r6 ? 1 : (r0 == r6 ? 0 : -1));
+        if (r6 < 0) goto L_0x00ae;
+    L_0x004a:
+        r5 = r5 + r4;
+        r5 = (float) r5;
+        r0 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1));
+        if (r0 > 0) goto L_0x00ae;
+    L_0x0050:
+        r0 = r7.buttonY;
+        r5 = (float) r0;
+        r5 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1));
+        if (r5 < 0) goto L_0x00ae;
+    L_0x0057:
+        r0 = r0 + r4;
+        r0 = (float) r0;
+        r0 = (r1 > r0 ? 1 : (r1 == r0 ? 0 : -1));
+        if (r0 > 0) goto L_0x00ae;
+    L_0x005d:
+        r7.buttonPressed = r3;
+        r7.invalidate();
+        r2 = 1;
+        goto L_0x00ae;
+    L_0x0064:
+        r5 = r7.buttonPressed;
+        if (r5 != r3) goto L_0x00ae;
+    L_0x0068:
+        r5 = r8.getAction();
+        r6 = 0;
+        if (r5 != r3) goto L_0x007b;
+    L_0x006f:
+        r7.buttonPressed = r6;
+        r7.playSoundEffect(r6);
+        r7.didPressedButton();
+        r7.invalidate();
+        goto L_0x00ae;
+    L_0x007b:
+        r3 = r8.getAction();
+        r5 = 3;
+        if (r3 != r5) goto L_0x0088;
+    L_0x0082:
+        r7.buttonPressed = r6;
+        r7.invalidate();
+        goto L_0x00ae;
+    L_0x0088:
+        r3 = r8.getAction();
+        r5 = 2;
+        if (r3 != r5) goto L_0x00ae;
+    L_0x008f:
+        r3 = r7.buttonX;
+        r5 = (float) r3;
+        r5 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1));
+        if (r5 < 0) goto L_0x00a9;
+    L_0x0096:
+        r3 = r3 + r4;
+        r3 = (float) r3;
+        r0 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1));
+        if (r0 > 0) goto L_0x00a9;
+    L_0x009c:
+        r0 = r7.buttonY;
+        r3 = (float) r0;
+        r3 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1));
+        if (r3 < 0) goto L_0x00a9;
+    L_0x00a3:
+        r0 = r0 + r4;
+        r0 = (float) r0;
+        r0 = (r1 > r0 ? 1 : (r1 == r0 ? 0 : -1));
+        if (r0 <= 0) goto L_0x00ae;
+    L_0x00a9:
+        r7.buttonPressed = r6;
+        r7.invalidate();
+    L_0x00ae:
+        if (r2 != 0) goto L_0x00b4;
+    L_0x00b0:
+        r2 = super.onTouchEvent(r8);
+    L_0x00b4:
+        return r2;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PopupAudioView.onTouchEvent(android.view.MotionEvent):boolean");
     }
 
     private void didPressedButton() {
-        if (this.buttonState == 0) {
-            boolean result = MediaController.getInstance().playMessage(this.currentMessageObject);
+        int i = this.buttonState;
+        if (i == 0) {
+            boolean playMessage = MediaController.getInstance().playMessage(this.currentMessageObject);
             if (!this.currentMessageObject.isOut() && this.currentMessageObject.isContentUnread() && this.currentMessageObject.messageOwner.to_id.channel_id == 0) {
                 MessagesController.getInstance(this.currentAccount).markMessageContentAsRead(this.currentMessageObject);
                 this.currentMessageObject.setContentIsRead();
             }
-            if (result) {
+            if (playMessage) {
                 this.buttonState = 1;
                 invalidate();
             }
-        } else if (this.buttonState == 1) {
+        } else if (i == 1) {
             if (MediaController.getInstance().lambda$startAudioAgain$5$MediaController(this.currentMessageObject)) {
                 this.buttonState = 0;
                 invalidate();
             }
-        } else if (this.buttonState == 2) {
+        } else if (i == 2) {
             FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, 1, 0);
             this.buttonState = 4;
             invalidate();
-        } else if (this.buttonState == 3) {
+        } else if (i == 3) {
             FileLoader.getInstance(this.currentAccount).cancelLoadFile(this.currentMessageObject.getDocument());
             this.buttonState = 2;
             invalidate();
@@ -196,25 +285,27 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
 
     public void updateProgress() {
         if (this.currentMessageObject != null) {
+            int i;
             if (!this.seekBar.isDragging()) {
                 this.seekBar.setProgress(this.currentMessageObject.audioProgress);
             }
-            int duration = 0;
             if (MediaController.getInstance().isPlayingMessage(this.currentMessageObject)) {
-                duration = this.currentMessageObject.audioProgressSec;
+                i = this.currentMessageObject.audioProgressSec;
             } else {
-                for (int a = 0; a < this.currentMessageObject.getDocument().attributes.size(); a++) {
-                    DocumentAttribute attribute = (DocumentAttribute) this.currentMessageObject.getDocument().attributes.get(a);
-                    if (attribute instanceof TL_documentAttributeAudio) {
-                        duration = attribute.duration;
+                for (i = 0; i < this.currentMessageObject.getDocument().attributes.size(); i++) {
+                    DocumentAttribute documentAttribute = (DocumentAttribute) this.currentMessageObject.getDocument().attributes.get(i);
+                    if (documentAttribute instanceof TL_documentAttributeAudio) {
+                        i = documentAttribute.duration;
                         break;
                     }
                 }
+                i = 0;
             }
-            String timeString = String.format("%02d:%02d", new Object[]{Integer.valueOf(duration / 60), Integer.valueOf(duration % 60)});
-            if (this.lastTimeString == null || !(this.lastTimeString == null || this.lastTimeString.equals(timeString))) {
-                this.timeWidth = (int) Math.ceil((double) this.timePaint.measureText(timeString));
-                this.timeLayout = new StaticLayout(timeString, this.timePaint, this.timeWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+            String format = String.format("%02d:%02d", new Object[]{Integer.valueOf(i / 60), Integer.valueOf(i % 60)});
+            String str = this.lastTimeString;
+            if (str == null || !(str == null || str.equals(format))) {
+                this.timeWidth = (int) Math.ceil((double) this.timePaint.measureText(format));
+                this.timeLayout = new StaticLayout(format, this.timePaint, this.timeWidth, Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             }
             invalidate();
         }
@@ -232,8 +323,8 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
         String fileName = this.currentMessageObject.getFileName();
         if (FileLoader.getPathToMessage(this.currentMessageObject.messageOwner).exists()) {
             DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
-            boolean playing = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
-            if (!playing || (playing && MediaController.getInstance().isMessagePaused())) {
+            boolean isPlayingMessage = MediaController.getInstance().isPlayingMessage(this.currentMessageObject);
+            if (!isPlayingMessage || (isPlayingMessage && MediaController.getInstance().isMessagePaused())) {
                 this.buttonState = 0;
             } else {
                 this.buttonState = 1;
@@ -243,9 +334,9 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
             DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(fileName, this);
             if (FileLoader.getInstance(this.currentAccount).isLoadingFile(fileName)) {
                 this.buttonState = 3;
-                Float progress = ImageLoader.getInstance().getFileProgress(fileName);
-                if (progress != null) {
-                    this.progressView.setProgress(progress.floatValue());
+                Float fileProgress = ImageLoader.getInstance().getFileProgress(fileName);
+                if (fileProgress != null) {
+                    this.progressView.setProgress(fileProgress.floatValue());
                 } else {
                     this.progressView.setProgress(0.0f);
                 }
@@ -257,33 +348,31 @@ public class PopupAudioView extends BaseCell implements FileDownloadProgressList
         updateProgress();
     }
 
-    public void onFailedDownload(String fileName, boolean canceled) {
+    public void onFailedDownload(String str, boolean z) {
         updateButtonState();
     }
 
-    public void onSuccessDownload(String fileName) {
+    public void onSuccessDownload(String str) {
         updateButtonState();
     }
 
-    public void onProgressDownload(String fileName, float progress) {
-        this.progressView.setProgress(progress);
+    public void onProgressDownload(String str, float f) {
+        this.progressView.setProgress(f);
         if (this.buttonState != 3) {
             updateButtonState();
         }
         invalidate();
     }
 
-    public void onProgressUpload(String fileName, float progress, boolean isEncrypted) {
-    }
-
     public int getObserverTag() {
         return this.TAG;
     }
 
-    public void onSeekBarDrag(float progress) {
-        if (this.currentMessageObject != null) {
-            this.currentMessageObject.audioProgress = progress;
-            MediaController.getInstance().seekToProgress(this.currentMessageObject, progress);
+    public void onSeekBarDrag(float f) {
+        MessageObject messageObject = this.currentMessageObject;
+        if (messageObject != null) {
+            messageObject.audioProgress = f;
+            MediaController.getInstance().seekToProgress(this.currentMessageObject, f);
         }
     }
 }

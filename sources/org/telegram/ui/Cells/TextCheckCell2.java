@@ -29,6 +29,7 @@ public class TextCheckCell2 extends FrameLayout {
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
+        int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.textView.setEllipsize(TruncateAt.END);
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 64.0f : 21.0f, 0.0f, LocaleController.isRTL ? 21.0f : 64.0f, 0.0f));
@@ -44,44 +45,43 @@ public class TextCheckCell2 extends FrameLayout {
         addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 64.0f : 21.0f, 35.0f, LocaleController.isRTL ? 21.0f : 64.0f, 0.0f));
         this.checkBox = new Switch(context);
         this.checkBox.setDrawIconType(1);
-        addView(this.checkBox, LayoutHelper.createFrame(37, 40.0f, (LocaleController.isRTL ? 3 : 5) | 16, 22.0f, 0.0f, 22.0f, 0.0f));
+        Switch switchR = this.checkBox;
+        if (LocaleController.isRTL) {
+            i = 3;
+        }
+        addView(switchR, LayoutHelper.createFrame(37, 40.0f, i | 16, 22.0f, 0.0f, 22.0f, 0.0f));
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    public void onMeasure(int i, int i2) {
         if (this.isMultiline) {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(0, 0));
-            return;
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(0, 0));
+        } else {
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(this.valueTextView.getVisibility() == 0 ? 64.0f : 50.0f) + this.needDivider, NUM));
         }
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(this.valueTextView.getVisibility() == 0 ? 64.0f : 50.0f), NUM));
     }
 
-    public void setTextAndCheck(String text, boolean checked, boolean divider) {
-        boolean z = false;
-        this.textView.setText(text);
+    public void setTextAndCheck(String str, boolean z, boolean z2) {
+        this.textView.setText(str);
         this.isMultiline = false;
-        this.checkBox.setChecked(checked, false);
-        this.needDivider = divider;
+        this.checkBox.setChecked(z, false);
+        this.needDivider = z2;
         this.valueTextView.setVisibility(8);
         LayoutParams layoutParams = (LayoutParams) this.textView.getLayoutParams();
         layoutParams.height = -1;
         layoutParams.topMargin = 0;
         this.textView.setLayoutParams(layoutParams);
-        if (!divider) {
-            z = true;
-        }
-        setWillNotDraw(z);
+        setWillNotDraw(z2 ^ 1);
     }
 
-    public void setTextAndValueAndCheck(String text, String value, boolean checked, boolean multiline, boolean divider) {
-        boolean z = true;
-        this.textView.setText(text);
-        this.valueTextView.setText(value);
-        this.checkBox.setChecked(checked, false);
-        this.needDivider = divider;
+    public void setTextAndValueAndCheck(String str, String str2, boolean z, boolean z2, boolean z3) {
+        this.textView.setText(str);
+        this.valueTextView.setText(str2);
+        this.checkBox.setChecked(z, false);
+        this.needDivider = z3;
         this.valueTextView.setVisibility(0);
-        this.isMultiline = multiline;
-        if (multiline) {
+        this.isMultiline = z2;
+        if (z2) {
             this.valueTextView.setLines(0);
             this.valueTextView.setMaxLines(0);
             this.valueTextView.setSingleLine(false);
@@ -98,15 +98,12 @@ public class TextCheckCell2 extends FrameLayout {
         layoutParams.height = -2;
         layoutParams.topMargin = AndroidUtilities.dp(10.0f);
         this.textView.setLayoutParams(layoutParams);
-        if (divider) {
-            z = false;
-        }
-        setWillNotDraw(z);
+        setWillNotDraw(1 ^ z3);
     }
 
-    public void setEnabled(boolean value) {
-        super.setEnabled(value);
-        if (value) {
+    public void setEnabled(boolean z) {
+        super.setEnabled(z);
+        if (z) {
             this.textView.setAlpha(1.0f);
             this.valueTextView.setAlpha(1.0f);
             this.checkBox.setAlpha(1.0f);
@@ -117,12 +114,12 @@ public class TextCheckCell2 extends FrameLayout {
         this.valueTextView.setAlpha(0.5f);
     }
 
-    public void setChecked(boolean checked) {
-        this.checkBox.setChecked(checked, true);
+    public void setChecked(boolean z) {
+        this.checkBox.setChecked(z, true);
     }
 
-    public void setIcon(int icon) {
-        this.checkBox.setIcon(icon);
+    public void setIcon(int i) {
+        this.checkBox.setIcon(i);
     }
 
     public boolean hasIcon() {
@@ -140,11 +137,20 @@ public class TextCheckCell2 extends FrameLayout {
         }
     }
 
-    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
-        super.onInitializeAccessibilityNodeInfo(info);
-        info.setClassName("android.widget.Switch");
-        info.setCheckable(true);
-        info.setChecked(this.checkBox.isChecked());
-        info.setContentDescription(this.checkBox.isChecked() ? LocaleController.getString("NotificationsOn", NUM) : LocaleController.getString("NotificationsOff", NUM));
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        int i;
+        String str;
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        accessibilityNodeInfo.setClassName("android.widget.Switch");
+        accessibilityNodeInfo.setCheckable(true);
+        accessibilityNodeInfo.setChecked(this.checkBox.isChecked());
+        if (this.checkBox.isChecked()) {
+            i = NUM;
+            str = "NotificationsOn";
+        } else {
+            i = NUM;
+            str = "NotificationsOff";
+        }
+        accessibilityNodeInfo.setContentDescription(LocaleController.getString(str, i));
     }
 }

@@ -14,13 +14,19 @@ public abstract class PostMessageServiceConnection implements ServiceConnection 
     private IPostMessageService mService;
     private final ICustomTabsCallback mSessionBinder;
 
-    public PostMessageServiceConnection(CustomTabsSessionToken session) {
-        this.mSessionBinder = Stub.asInterface(session.getCallbackBinder());
+    public void onPostMessageServiceConnected() {
     }
 
-    public boolean bindSessionToPostMessageService(Context context, String packageName) {
+    public void onPostMessageServiceDisconnected() {
+    }
+
+    public PostMessageServiceConnection(CustomTabsSessionToken customTabsSessionToken) {
+        this.mSessionBinder = Stub.asInterface(customTabsSessionToken.getCallbackBinder());
+    }
+
+    public boolean bindSessionToPostMessageService(Context context, String str) {
         Intent intent = new Intent();
-        intent.setClassName(packageName, PostMessageService.class.getName());
+        intent.setClassName(str, PostMessageService.class.getName());
         return context.bindService(intent, this, 1);
     }
 
@@ -28,47 +34,43 @@ public abstract class PostMessageServiceConnection implements ServiceConnection 
         context.unbindService(this);
     }
 
-    public final void onServiceConnected(ComponentName name, IBinder service) {
-        this.mService = IPostMessageService.Stub.asInterface(service);
+    public final void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+        this.mService = IPostMessageService.Stub.asInterface(iBinder);
         onPostMessageServiceConnected();
     }
 
-    public final void onServiceDisconnected(ComponentName name) {
+    public final void onServiceDisconnected(ComponentName componentName) {
         this.mService = null;
         onPostMessageServiceDisconnected();
     }
 
-    public final boolean notifyMessageChannelReady(Bundle extras) {
+    public final boolean notifyMessageChannelReady(Bundle bundle) {
         if (this.mService == null) {
             return false;
         }
         synchronized (this.mLock) {
             try {
-                this.mService.onMessageChannelReady(this.mSessionBinder, extras);
-            } catch (RemoteException e) {
+                this.mService.onMessageChannelReady(this.mSessionBinder, bundle);
+            } catch (RemoteException unused) {
                 return false;
+            } catch (Throwable th) {
             }
         }
         return true;
     }
 
-    public final boolean postMessage(String message, Bundle extras) {
+    public final boolean postMessage(String str, Bundle bundle) {
         if (this.mService == null) {
             return false;
         }
         synchronized (this.mLock) {
             try {
-                this.mService.onPostMessage(this.mSessionBinder, message, extras);
-            } catch (RemoteException e) {
+                this.mService.onPostMessage(this.mSessionBinder, str, bundle);
+            } catch (RemoteException unused) {
                 return false;
+            } catch (Throwable th) {
             }
         }
         return true;
-    }
-
-    public void onPostMessageServiceConnected() {
-    }
-
-    public void onPostMessageServiceDisconnected() {
     }
 }

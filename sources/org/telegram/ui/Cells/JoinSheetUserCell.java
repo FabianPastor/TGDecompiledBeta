@@ -7,8 +7,8 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
-import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
@@ -38,23 +38,23 @@ public class JoinSheetUserCell extends FrameLayout {
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    public void onMeasure(int i, int i2) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(90.0f), NUM));
     }
 
     public void setUser(User user) {
         this.nameTextView.setText(ContactsController.formatName(user.first_name, user.last_name));
         this.avatarDrawable.setInfo(user);
-        TLObject photo = null;
-        if (!(user == null || user.photo == null)) {
-            photo = user.photo.photo_small;
-        }
-        this.imageView.setImage(photo, "50_50", this.avatarDrawable, (Object) user);
+        this.imageView.setImage(ImageLocation.getForUser(user, false), "50_50", this.avatarDrawable, (Object) user);
     }
 
-    public void setCount(int count) {
+    public void setCount(int i) {
         this.nameTextView.setText("");
-        this.avatarDrawable.setInfo(0, null, null, false, "+" + LocaleController.formatShortNumber(count, this.result));
+        AvatarDrawable avatarDrawable = this.avatarDrawable;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("+");
+        stringBuilder.append(LocaleController.formatShortNumber(i, this.result));
+        avatarDrawable.setInfo(0, null, null, false, stringBuilder.toString());
         this.imageView.setImage(null, "50_50", this.avatarDrawable, null);
     }
 }

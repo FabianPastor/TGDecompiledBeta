@@ -17,11 +17,11 @@ class JoinPointImpl implements ProceedingJoinPoint {
         Signature signature;
         SourceLocation sourceLocation;
 
-        public StaticPartImpl(int id, String kind, Signature signature, SourceLocation sourceLocation) {
-            this.kind = kind;
+        public StaticPartImpl(int i, String str, Signature signature, SourceLocation sourceLocation) {
+            this.kind = str;
             this.signature = signature;
             this.sourceLocation = sourceLocation;
-            this.id = id;
+            this.id = i;
         }
 
         public String getKind() {
@@ -33,13 +33,13 @@ class JoinPointImpl implements ProceedingJoinPoint {
         }
 
         /* Access modifiers changed, original: 0000 */
-        public String toString(StringMaker sm) {
-            StringBuffer buf = new StringBuffer();
-            buf.append(sm.makeKindName(getKind()));
-            buf.append("(");
-            buf.append(((SignatureImpl) getSignature()).toString(sm));
-            buf.append(")");
-            return buf.toString();
+        public String toString(StringMaker stringMaker) {
+            StringBuffer stringBuffer = new StringBuffer();
+            stringBuffer.append(stringMaker.makeKindName(getKind()));
+            stringBuffer.append("(");
+            stringBuffer.append(((SignatureImpl) getSignature()).toString(stringMaker));
+            stringBuffer.append(")");
+            return stringBuffer.toString();
         }
 
         public final String toString() {
@@ -47,11 +47,11 @@ class JoinPointImpl implements ProceedingJoinPoint {
         }
     }
 
-    public JoinPointImpl(StaticPart staticPart, Object _this, Object target, Object[] args) {
+    public JoinPointImpl(StaticPart staticPart, Object obj, Object obj2, Object[] objArr) {
         this.staticPart = staticPart;
-        this._this = _this;
-        this.target = target;
-        this.args = args;
+        this._this = obj;
+        this.target = obj2;
+        this.args = objArr;
     }
 
     public Object getTarget() {

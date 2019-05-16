@@ -23,6 +23,12 @@ public class EntitiesContainerView extends FrameLayout implements OnScaleGesture
         boolean shouldReceiveTouches();
     }
 
+    public void onRotationEnd(RotationGestureDetector rotationGestureDetector) {
+    }
+
+    public void onScaleEnd(ScaleGestureDetector scaleGestureDetector) {
+    }
+
     public EntitiesContainerView(Context context, EntitiesContainerViewDelegate entitiesContainerViewDelegate) {
         super(context);
         this.gestureDetector = new ScaleGestureDetector(context, this);
@@ -31,75 +37,71 @@ public class EntitiesContainerView extends FrameLayout implements OnScaleGesture
     }
 
     public int entitiesCount() {
-        int count = 0;
-        for (int index = 0; index < getChildCount(); index++) {
-            if (getChildAt(index) instanceof EntityView) {
-                count++;
+        int i = 0;
+        for (int i2 = 0; i2 < getChildCount(); i2++) {
+            if (getChildAt(i2) instanceof EntityView) {
+                i++;
             }
         }
-        return count;
+        return i;
     }
 
-    public void bringViewToFront(EntityView view) {
-        if (indexOfChild(view) != getChildCount() - 1) {
-            removeView(view);
-            addView(view, getChildCount());
+    public void bringViewToFront(EntityView entityView) {
+        if (indexOfChild(entityView) != getChildCount() - 1) {
+            removeView(entityView);
+            addView(entityView, getChildCount());
         }
     }
 
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return ev.getPointerCount() == 2 && this.delegate.shouldReceiveTouches();
+    public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+        return motionEvent.getPointerCount() == 2 && this.delegate.shouldReceiveTouches();
     }
 
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(MotionEvent motionEvent) {
         if (this.delegate.onSelectedEntityRequest() == null) {
             return false;
         }
-        if (event.getPointerCount() == 1) {
-            int action = event.getActionMasked();
-            if (action == 0) {
+        if (motionEvent.getPointerCount() == 1) {
+            int actionMasked = motionEvent.getActionMasked();
+            if (actionMasked == 0) {
                 this.hasTransformed = false;
-            } else if (action == 1 || action == 2) {
-                if (this.hasTransformed || this.delegate == null) {
-                    return false;
+            } else if (actionMasked == 1 || actionMasked == 2) {
+                if (!this.hasTransformed) {
+                    EntitiesContainerViewDelegate entitiesContainerViewDelegate = this.delegate;
+                    if (entitiesContainerViewDelegate != null) {
+                        entitiesContainerViewDelegate.onEntityDeselect();
+                    }
                 }
-                this.delegate.onEntityDeselect();
                 return false;
             }
         }
-        this.gestureDetector.onTouchEvent(event);
-        this.rotationGestureDetector.onTouchEvent(event);
+        this.gestureDetector.onTouchEvent(motionEvent);
+        this.rotationGestureDetector.onTouchEvent(motionEvent);
         return true;
     }
 
-    public boolean onScale(ScaleGestureDetector detector) {
-        float sf = detector.getScaleFactor();
-        this.delegate.onSelectedEntityRequest().scale(sf / this.previousScale);
-        this.previousScale = sf;
+    public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
+        float scaleFactor = scaleGestureDetector.getScaleFactor();
+        this.delegate.onSelectedEntityRequest().scale(scaleFactor / this.previousScale);
+        this.previousScale = scaleFactor;
         return false;
     }
 
-    public boolean onScaleBegin(ScaleGestureDetector detector) {
+    public boolean onScaleBegin(ScaleGestureDetector scaleGestureDetector) {
         this.previousScale = 1.0f;
         this.hasTransformed = true;
         return true;
     }
 
-    public void onScaleEnd(ScaleGestureDetector detector) {
-    }
-
-    public void onRotationBegin(RotationGestureDetector rotationDetector) {
-        this.previousAngle = rotationDetector.getStartAngle();
+    public void onRotationBegin(RotationGestureDetector rotationGestureDetector) {
+        this.previousAngle = rotationGestureDetector.getStartAngle();
         this.hasTransformed = true;
     }
 
-    public void onRotation(RotationGestureDetector rotationDetector) {
-        EntityView view = this.delegate.onSelectedEntityRequest();
-        float angle = rotationDetector.getAngle();
-        view.rotate(view.getRotation() + (this.previousAngle - angle));
+    public void onRotation(RotationGestureDetector rotationGestureDetector) {
+        EntityView onSelectedEntityRequest = this.delegate.onSelectedEntityRequest();
+        float angle = rotationGestureDetector.getAngle();
+        onSelectedEntityRequest.rotate(onSelectedEntityRequest.getRotation() + (this.previousAngle - angle));
         this.previousAngle = angle;
-    }
-
-    public void onRotationEnd(RotationGestureDetector rotationDetector) {
     }
 }
