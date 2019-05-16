@@ -180,6 +180,7 @@ public class MessageObject {
     static final String[] excludeWords = new String[]{" vs. ", " vs ", " versus ", " ft. ", " ft ", " featuring ", " feat. ", " feat ", " presents ", " pres. ", " pres ", " and ", " & ", " . "};
     public static Pattern instagramUrlPattern;
     public static Pattern urlPattern;
+    private boolean animatedHackedSticker;
     public boolean attachPathExists;
     public int audioPlayerDuration;
     public float audioProgress;
@@ -4691,7 +4692,10 @@ public class MessageObject {
                                 this.type = 9;
                             } else if (isGifDocument(document)) {
                                 this.type = 8;
-                            } else if (isSticker() || isAnimatedSticker()) {
+                            } else if (isSticker()) {
+                                this.type = 13;
+                            } else if (isAnimatedSticker()) {
+                                this.animatedHackedSticker = true;
                                 this.type = 13;
                             } else {
                                 this.type = 9;
@@ -7735,7 +7739,8 @@ public class MessageObject {
         if (i == 1000) {
             return isStickerMessage(this.messageOwner);
         }
-        return i == 13;
+        boolean z = i == 13 && !this.animatedHackedSticker;
+        return z;
     }
 
     public boolean isAnimatedSticker() {
