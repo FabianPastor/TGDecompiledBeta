@@ -1108,45 +1108,48 @@ public class ActionBarLayout extends FrameLayout {
             }
             View view;
             if (baseFragment != null) {
-                ViewGroup viewGroup;
                 LinearLayoutContainer linearLayoutContainer = this.containerView;
                 this.containerView = this.containerViewBack;
                 this.containerViewBack = linearLayoutContainer;
-                this.containerView.setVisibility(0);
                 baseFragment.setParentLayout(this);
                 View view2 = baseFragment.fragmentView;
                 if (view2 == null) {
                     view2 = baseFragment.createView(this.parentActivity);
                 }
-                ActionBar actionBar = baseFragment.actionBar;
-                if (actionBar != null && actionBar.getAddToContainer()) {
-                    if (this.removeActionBarExtraHeight) {
-                        baseFragment.actionBar.setOccupyStatusBar(false);
+                if (!this.inPreviewMode) {
+                    ViewGroup viewGroup;
+                    this.containerView.setVisibility(0);
+                    ActionBar actionBar = baseFragment.actionBar;
+                    if (actionBar != null && actionBar.getAddToContainer()) {
+                        if (this.removeActionBarExtraHeight) {
+                            baseFragment.actionBar.setOccupyStatusBar(false);
+                        }
+                        viewGroup = (ViewGroup) baseFragment.actionBar.getParent();
+                        if (viewGroup != null) {
+                            viewGroup.removeView(baseFragment.actionBar);
+                        }
+                        this.containerView.addView(baseFragment.actionBar);
+                        baseFragment.actionBar.setTitleOverlayText(this.titleOverlayText, this.titleOverlayTextId, this.overlayAction);
                     }
-                    viewGroup = (ViewGroup) baseFragment.actionBar.getParent();
+                    viewGroup = (ViewGroup) view2.getParent();
                     if (viewGroup != null) {
-                        viewGroup.removeView(baseFragment.actionBar);
+                        baseFragment.onRemoveFromParent();
+                        try {
+                            viewGroup.removeView(view2);
+                        } catch (Exception e) {
+                            FileLog.e(e);
+                        }
                     }
-                    this.containerView.addView(baseFragment.actionBar);
-                    baseFragment.actionBar.setTitleOverlayText(this.titleOverlayText, this.titleOverlayTextId, this.overlayAction);
+                    this.containerView.addView(view2);
+                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) view2.getLayoutParams();
+                    layoutParams.width = -1;
+                    layoutParams.height = -1;
+                    layoutParams.leftMargin = 0;
+                    layoutParams.rightMargin = 0;
+                    layoutParams.bottomMargin = 0;
+                    layoutParams.topMargin = 0;
+                    view2.setLayoutParams(layoutParams);
                 }
-                viewGroup = (ViewGroup) view2.getParent();
-                if (viewGroup != null) {
-                    baseFragment.onRemoveFromParent();
-                    try {
-                        viewGroup.removeView(view2);
-                    } catch (Exception unused) {
-                    }
-                }
-                this.containerView.addView(view2);
-                LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) view2.getLayoutParams();
-                layoutParams.width = -1;
-                layoutParams.height = -1;
-                layoutParams.leftMargin = 0;
-                layoutParams.rightMargin = 0;
-                layoutParams.bottomMargin = 0;
-                layoutParams.topMargin = 0;
-                view2.setLayoutParams(layoutParams);
                 baseFragment.onTransitionAnimationStart(true, true);
                 baseFragment2.onTransitionAnimationStart(false, false);
                 baseFragment.onResume();

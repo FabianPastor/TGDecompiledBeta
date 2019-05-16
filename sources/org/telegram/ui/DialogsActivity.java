@@ -221,8 +221,16 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         private boolean swipeFolderBack;
         private boolean swipingFolder;
 
+        public float getSwipeEscapeVelocity(float f) {
+            return 3500.0f;
+        }
+
         public float getSwipeThreshold(ViewHolder viewHolder) {
             return 0.3f;
+        }
+
+        public float getSwipeVelocityThreshold(float f) {
+            return Float.MAX_VALUE;
         }
 
         SwipeController() {
@@ -1139,7 +1147,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         this.listView.setItemAnimator(this.dialogsItemAnimator);
         this.listView.setVerticalScrollBarEnabled(true);
         this.listView.setInstantClick(true);
-        this.listView.setHasFixedSize(true);
         this.listView.setTag(Integer.valueOf(4));
         this.layoutManager = new LinearLayoutManager(context2) {
             public void smoothScrollToPosition(RecyclerView recyclerView, State state, int i) {
