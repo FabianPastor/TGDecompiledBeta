@@ -5615,14 +5615,17 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
         if (!(this.currentPage == 0 || this.currentChatId == 0)) {
             this.currentPage = 0;
         }
-        int i = this.currentPage;
-        if (i == 0 || z) {
+        if (this.currentPage == 0 || z || this.views.size() == 1) {
             showBackspaceButton(true, false);
             showStickerSettingsButton(false, false);
             if (this.pager.getCurrentItem() != 0) {
                 this.pager.setCurrentItem(0, z ^ 1);
+                return;
             }
-        } else if (i == 1) {
+            return;
+        }
+        int i = this.currentPage;
+        if (i == 1) {
             showBackspaceButton(false, false);
             showStickerSettingsButton(true, false);
             if (this.pager.getCurrentItem() != 2) {
@@ -5635,14 +5638,14 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
                 showTrendingTab(true);
                 return;
             }
-            int i2 = this.recentTabBum;
-            if (i2 >= 0) {
-                this.stickersTab.selectTab(i2);
+            i = this.recentTabBum;
+            if (i >= 0) {
+                this.stickersTab.selectTab(i);
                 return;
             }
-            i2 = this.favTabBum;
-            if (i2 >= 0) {
-                this.stickersTab.selectTab(i2);
+            i = this.favTabBum;
+            if (i >= 0) {
+                this.stickersTab.selectTab(i);
             } else {
                 this.stickersTab.selectTab(this.stickersTabOffset);
             }

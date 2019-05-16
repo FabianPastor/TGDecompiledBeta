@@ -7741,7 +7741,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:21:0x005d A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:1:0x0001} */
+    /* JADX WARNING: Removed duplicated region for block: B:21:0x005d A:{Splitter:B:1:0x0001, ExcHandler: all (th java.lang.Throwable)} */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Missing block: B:21:0x005d, code skipped:
             r5 = th;
@@ -14987,34 +14987,36 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void setDialogsFolderId(ArrayList<TL_folderPeer> arrayList, ArrayList<TL_inputFolderPeer> arrayList2, long j, int i) {
         if (arrayList != null || arrayList2 != null || j != 0) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$5JfuuldSJrRDoSCtCfY34JpGfZc(this, arrayList, arrayList2, i, j));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$q9LBUYbGHICqUAhZYow6OBqXprY(this, arrayList, arrayList2, i, j));
         }
     }
 
-    public /* synthetic */ void lambda$setDialogsFolderId$141$MessagesStorage(ArrayList arrayList, ArrayList arrayList2, int i, long j) {
+    public /* synthetic */ void lambda$setDialogsFolderId$140$MessagesStorage(ArrayList arrayList, ArrayList arrayList2, int i, long j) {
         try {
             this.database.beginTransaction();
             SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE dialogs SET folder_id = ? WHERE did = ?");
-            long peerDialogId;
+            int i2 = 0;
             if (arrayList != null) {
                 int size = arrayList.size();
-                for (i = 0; i < size; i++) {
-                    TL_folderPeer tL_folderPeer = (TL_folderPeer) arrayList.get(i);
-                    peerDialogId = DialogObject.getPeerDialogId(tL_folderPeer.peer);
+                while (i2 < size) {
+                    TL_folderPeer tL_folderPeer = (TL_folderPeer) arrayList.get(i2);
+                    j = DialogObject.getPeerDialogId(tL_folderPeer.peer);
                     executeFast.requery();
                     executeFast.bindInteger(1, tL_folderPeer.folder_id);
-                    executeFast.bindLong(2, peerDialogId);
+                    executeFast.bindLong(2, j);
                     executeFast.step();
+                    i2++;
                 }
             } else if (arrayList2 != null) {
                 int size2 = arrayList2.size();
-                for (i = 0; i < size2; i++) {
-                    TL_inputFolderPeer tL_inputFolderPeer = (TL_inputFolderPeer) arrayList2.get(i);
-                    peerDialogId = DialogObject.getPeerDialogId(tL_inputFolderPeer.peer);
+                while (i2 < size2) {
+                    TL_inputFolderPeer tL_inputFolderPeer = (TL_inputFolderPeer) arrayList2.get(i2);
+                    j = DialogObject.getPeerDialogId(tL_inputFolderPeer.peer);
                     executeFast.requery();
                     executeFast.bindInteger(1, tL_inputFolderPeer.folder_id);
-                    executeFast.bindLong(2, peerDialogId);
+                    executeFast.bindLong(2, j);
                     executeFast.step();
+                    i2++;
                 }
             } else {
                 executeFast.requery();
@@ -15024,13 +15026,21 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             }
             executeFast.dispose();
             this.database.commitTransaction();
-            SQLiteCursor queryFinalized = this.database.queryFinalized("SELECT did FROM dialogs WHERE folder_id = ?", Integer.valueOf(1));
+            checkIfFolderEmptyInternal(1);
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+    }
+
+    private void checkIfFolderEmptyInternal(int i) {
+        try {
+            SQLiteCursor queryFinalized = this.database.queryFinalized("SELECT did FROM dialogs WHERE folder_id = ?", Integer.valueOf(i));
             if (!queryFinalized.next()) {
-                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$nM7IEYa6DHNT-x5PLLvqxXEA6o0(this));
+                AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$BszFQZ3JvU5br_KB3GfZlRcHTDM(this, i));
                 SQLiteDatabase sQLiteDatabase = this.database;
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append("DELETE FROM dialogs WHERE did = ");
-                stringBuilder.append(DialogObject.makeFolderDialogId(1));
+                stringBuilder.append(DialogObject.makeFolderDialogId(i));
                 sQLiteDatabase.executeFast(stringBuilder.toString()).stepThis().dispose();
             }
             queryFinalized.dispose();
@@ -15039,15 +15049,23 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    public /* synthetic */ void lambda$null$140$MessagesStorage() {
-        MessagesController.getInstance(this.currentAccount).onFolderEmpty(1);
+    public /* synthetic */ void lambda$checkIfFolderEmptyInternal$141$MessagesStorage(int i) {
+        MessagesController.getInstance(this.currentAccount).onFolderEmpty(i);
+    }
+
+    public void checkIfFolderEmpty(int i) {
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$ihCSLdB7fxrTGR7O-kp-xEh1a_0(this, i));
+    }
+
+    public /* synthetic */ void lambda$checkIfFolderEmpty$142$MessagesStorage(int i) {
+        checkIfFolderEmptyInternal(i);
     }
 
     public void unpinAllDialogsExceptNew(ArrayList<Long> arrayList, int i) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$Ddew0CEJ_p2AJHgB5NoeH3eCdQw(this, arrayList, i));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$56oQ4aHz7XTwkr1eroOd47iXRqM(this, arrayList, i));
     }
 
-    public /* synthetic */ void lambda$unpinAllDialogsExceptNew$142$MessagesStorage(ArrayList arrayList, int i) {
+    public /* synthetic */ void lambda$unpinAllDialogsExceptNew$143$MessagesStorage(ArrayList arrayList, int i) {
         try {
             long longValue;
             ArrayList arrayList2 = new ArrayList();
@@ -15076,7 +15094,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     public void setDialogUnread(long j, boolean z) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$CKiP2jQhP3bMHRkic2tVwmgJfig(this, j, z));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$h3ocL3-60szEFo6cBaY1gADrHU0(this, j, z));
     }
 
     /* JADX WARNING: Missing block: B:5:0x0025, code skipped:
@@ -15107,7 +15125,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Missing block: B:25:?, code skipped:
             return;
      */
-    public /* synthetic */ void lambda$setDialogUnread$143$MessagesStorage(long r6, boolean r8) {
+    public /* synthetic */ void lambda$setDialogUnread$144$MessagesStorage(long r6, boolean r8) {
         /*
         r5 = this;
         r0 = 0;
@@ -15169,14 +15187,14 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x005c:
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$setDialogUnread$143$MessagesStorage(long, boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$setDialogUnread$144$MessagesStorage(long, boolean):void");
     }
 
     public void setDialogPinned(long j, int i) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$AiDYTHRLDJEhuW3_82Vb-TsqO_c(this, i, j));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$XPN19rMIJMh6qL-AF5WtGqNwsCo(this, i, j));
     }
 
-    public /* synthetic */ void lambda$setDialogPinned$144$MessagesStorage(int i, long j) {
+    public /* synthetic */ void lambda$setDialogPinned$145$MessagesStorage(int i, long j) {
         try {
             SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE dialogs SET pinned = ? WHERE did = ?");
             executeFast.bindInteger(1, i);
@@ -15190,11 +15208,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void putDialogs(messages_Dialogs messages_dialogs, int i) {
         if (!messages_dialogs.dialogs.isEmpty()) {
-            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$SP4NWDIhBs89x83JhEQbPgHfl_0(this, messages_dialogs, i));
+            this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$q0butAO3c_YY5Id9qxsxMNb7kFY(this, messages_dialogs, i));
         }
     }
 
-    public /* synthetic */ void lambda$putDialogs$145$MessagesStorage(messages_Dialogs messages_dialogs, int i) {
+    public /* synthetic */ void lambda$putDialogs$146$MessagesStorage(messages_Dialogs messages_dialogs, int i) {
         putDialogsInternal(messages_dialogs, i);
         try {
             loadUnreadMessages();
@@ -15206,7 +15224,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     public int getDialogReadMax(boolean z, long j) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Integer[] numArr = new Integer[]{Integer.valueOf(0)};
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$oo0v__1RdN_rO0e5kqW6A04D4Ao(this, z, j, numArr, countDownLatch));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$6C1BWzG0p2S-1FVn0V8AZdEAdSM(this, z, j, numArr, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -15248,7 +15266,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         	at jadx.api.JavaClass.decompile(JavaClass.java:62)
         	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
         */
-    public /* synthetic */ void lambda$getDialogReadMax$146$MessagesStorage(boolean r5, long r6, java.lang.Integer[] r8, java.util.concurrent.CountDownLatch r9) {
+    public /* synthetic */ void lambda$getDialogReadMax$147$MessagesStorage(boolean r5, long r6, java.lang.Integer[] r8, java.util.concurrent.CountDownLatch r9) {
         /*
         r4 = this;
         r0 = 0;
@@ -15306,13 +15324,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x005f:
         throw r5;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getDialogReadMax$146$MessagesStorage(boolean, long, java.lang.Integer[], java.util.concurrent.CountDownLatch):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getDialogReadMax$147$MessagesStorage(boolean, long, java.lang.Integer[], java.util.concurrent.CountDownLatch):void");
     }
 
     public int getChannelPtsSync(int i) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Integer[] numArr = new Integer[]{Integer.valueOf(0)};
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$dKOeLXgsGhw-RvlccPAsrIwQZqA(this, i, numArr, countDownLatch));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$lwIGp85MVtvOJZk317frmfRH9cw(this, i, numArr, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -15379,7 +15397,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Missing block: B:19:?, code skipped:
             return;
      */
-    public /* synthetic */ void lambda$getChannelPtsSync$147$MessagesStorage(int r5, java.lang.Integer[] r6, java.util.concurrent.CountDownLatch r7) {
+    public /* synthetic */ void lambda$getChannelPtsSync$148$MessagesStorage(int r5, java.lang.Integer[] r6, java.util.concurrent.CountDownLatch r7) {
         /*
         r4 = this;
         r0 = 0;
@@ -15430,13 +15448,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x004a:
         throw r5;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getChannelPtsSync$147$MessagesStorage(int, java.lang.Integer[], java.util.concurrent.CountDownLatch):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getChannelPtsSync$148$MessagesStorage(int, java.lang.Integer[], java.util.concurrent.CountDownLatch):void");
     }
 
     public User getUserSync(int i) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         User[] userArr = new User[1];
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$LtS-FKOcgVH3YBCZPLDRfDpE-FQ(this, userArr, i, countDownLatch));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$xNkvoFyT5h2vdEcNbLElyFPE9xc(this, userArr, i, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -15445,7 +15463,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         return userArr[0];
     }
 
-    public /* synthetic */ void lambda$getUserSync$148$MessagesStorage(User[] userArr, int i, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$getUserSync$149$MessagesStorage(User[] userArr, int i, CountDownLatch countDownLatch) {
         userArr[0] = getUser(i);
         countDownLatch.countDown();
     }
@@ -15453,7 +15471,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     public Chat getChatSync(int i) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Chat[] chatArr = new Chat[1];
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$CdZ7E32u1n6P7Cpm7mlm0LMfBhM(this, chatArr, i, countDownLatch));
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$FPm2wKLMGEaTwBiPw8dp3fwp1t0(this, chatArr, i, countDownLatch));
         try {
             countDownLatch.await();
         } catch (Exception e) {
@@ -15462,7 +15480,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         return chatArr[0];
     }
 
-    public /* synthetic */ void lambda$getChatSync$149$MessagesStorage(Chat[] chatArr, int i, CountDownLatch countDownLatch) {
+    public /* synthetic */ void lambda$getChatSync$150$MessagesStorage(Chat[] chatArr, int i, CountDownLatch countDownLatch) {
         chatArr[0] = getChat(i);
         countDownLatch.countDown();
     }

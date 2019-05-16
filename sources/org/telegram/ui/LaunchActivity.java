@@ -364,7 +364,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         goto L_0x0112;
     L_0x0112:
         r0 = r11.getWindow();
-        r3 = NUM; // 0x7var_c1 float:1.7946008E38 double:1.0529358513E-314;
+        r3 = NUM; // 0x7var_bf float:1.7946004E38 double:1.0529358504E-314;
         r0.setBackgroundDrawableResource(r3);
         r0 = org.telegram.messenger.SharedConfig.passcodeHash;
         r0 = r0.length();

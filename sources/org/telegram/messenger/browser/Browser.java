@@ -518,6 +518,9 @@ public class Browser {
     }
 
     public static boolean isPassportUrl(String str) {
+        if (str == null) {
+            return false;
+        }
         try {
             str = str.toLowerCase();
             if (str.startsWith("tg:passport") || str.startsWith("tg://passport") || str.startsWith("tg:secureid") || (str.contains("resolve") && str.contains("domain=telegrampassport"))) {

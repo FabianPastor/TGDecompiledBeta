@@ -3762,7 +3762,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r0.setTitle(r1);
         r0 = r6.actionBar;
         r0 = r0.createMenu();
-        r1 = NUM; // 0x7var_d float:1.7945805E38 double:1.052935802E-314;
+        r1 = NUM; // 0x7var_b float:1.79458E38 double:1.052935801E-314;
         r12 = 1;
         r0.addItem(r12, r1);
         r13 = "windowBackgroundGrayShadow";
@@ -4196,7 +4196,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r3 = r16;
         goto L_0x01fd;
     L_0x0314:
-        if (r10 == 0) goto L_0x03d6;
+        if (r10 == 0) goto L_0x03d7;
     L_0x0316:
         r0 = new org.telegram.ui.Cells.TextInfoPrivacyCell;
         r0.<init>(r7);
@@ -4212,8 +4212,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r0 = r0.privacy_policy_url;
         r0 = android.text.TextUtils.isEmpty(r0);
         r2 = 2;
-        if (r0 != 0) goto L_0x0392;
-    L_0x033b:
+        if (r0 != 0) goto L_0x0393;
+    L_0x033c:
         r0 = NUM; // 0x7f0d0747 float:1.8745893E38 double:1.053130698E-314;
         r2 = new java.lang.Object[r2];
         r3 = org.telegram.messenger.UserObject.getFirstName(r10);
@@ -4230,10 +4230,10 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r4 = r0.indexOf(r3);
         r0 = r0.lastIndexOf(r3);
         r3 = -1;
-        if (r4 == r3) goto L_0x038c;
-    L_0x0364:
-        if (r0 == r3) goto L_0x038c;
-    L_0x0366:
+        if (r4 == r3) goto L_0x038d;
+    L_0x0365:
+        if (r0 == r3) goto L_0x038d;
+    L_0x0367:
         r3 = r6.bottomCell;
         r3 = r3.getTextView();
         r5 = new org.telegram.messenger.AndroidUtilities$LinkMovementMethodMy;
@@ -4250,11 +4250,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r0 = r0 - r5;
         r5 = 33;
         r2.setSpan(r3, r4, r0, r5);
-    L_0x038c:
+    L_0x038d:
         r0 = r6.bottomCell;
         r0.setText(r2);
-        goto L_0x03b2;
-    L_0x0392:
+        goto L_0x03b3;
+    L_0x0393:
         r0 = r6.bottomCell;
         r3 = NUM; // 0x7f0d073b float:1.874587E38 double:1.053130692E-314;
         r2 = new java.lang.Object[r2];
@@ -4268,7 +4268,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r2 = org.telegram.messenger.LocaleController.formatString(r4, r3, r2);
         r2 = org.telegram.messenger.AndroidUtilities.replaceTags(r2);
         r0.setText(r2);
-    L_0x03b2:
+    L_0x03b3:
         r0 = r6.bottomCell;
         r0 = r0.getTextView();
         r1 = org.telegram.ui.ActionBar.Theme.getColor(r1);
@@ -4283,7 +4283,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r3 = -1;
         r4 = org.telegram.ui.Components.LayoutHelper.createLinear(r3, r2);
         r0.addView(r1, r4);
-    L_0x03d6:
+    L_0x03d7:
         r0 = new android.widget.FrameLayout;
         r0.<init>(r7);
         r6.bottomLayout = r0;
@@ -4613,8 +4613,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:17:0x02e2  */
-    /* JADX WARNING: Removed duplicated region for block: B:16:0x02e0  */
+    /* JADX WARNING: Removed duplicated region for block: B:17:0x02e3  */
+    /* JADX WARNING: Removed duplicated region for block: B:16:0x02e1  */
     private void createManageInterface(android.content.Context r20) {
         /*
         r19 = this;
@@ -4630,7 +4630,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r0 = r6.actionBar;
         r0 = r0.createMenu();
         r8 = 1;
-        r1 = NUM; // 0x7var_d float:1.7945805E38 double:1.052935802E-314;
+        r1 = NUM; // 0x7var_b float:1.79458E38 double:1.052935801E-314;
         r0.addItem(r8, r1);
         r0 = new org.telegram.ui.Cells.HeaderCell;
         r0.<init>(r7);
@@ -4728,8 +4728,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r1 = org.telegram.ui.ActionBar.Theme.getThemedDrawable(r7, r9, r1);
         r0.setBackgroundDrawable(r1);
         r0 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r0 == 0) goto L_0x013a;
-    L_0x0122:
+        if (r0 == 0) goto L_0x013b;
+    L_0x0123:
         r0 = r6.linearLayout2;
         r1 = r6.emptyLayout;
         r9 = new android.widget.LinearLayout$LayoutParams;
@@ -4739,8 +4739,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r12 = r12 - r13;
         r9.<init>(r3, r12);
         r0.addView(r1, r9);
-        goto L_0x014f;
-    L_0x013a:
+        goto L_0x0150;
+    L_0x013b:
         r0 = r6.linearLayout2;
         r1 = r6.emptyLayout;
         r9 = new android.widget.LinearLayout$LayoutParams;
@@ -4750,12 +4750,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r12 = r12 - r13;
         r9.<init>(r3, r12);
         r0.addView(r1, r9);
-    L_0x014f:
+    L_0x0150:
         r0 = new android.widget.ImageView;
         r0.<init>(r7);
         r6.emptyImageView = r0;
         r0 = r6.emptyImageView;
-        r1 = NUM; // 0x7var_ float:1.7945627E38 double:1.0529357585E-314;
+        r1 = NUM; // 0x7var_ float:1.7945622E38 double:1.0529357575E-314;
         r0.setImageResource(r1);
         r0 = r6.emptyImageView;
         r1 = new android.graphics.PorterDuffColorFilter;
@@ -4865,17 +4865,17 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r0 = r0.values;
         r9 = r0.size();
         r11 = 0;
-    L_0x026e:
-        if (r11 >= r9) goto L_0x02ed;
-    L_0x0270:
+    L_0x026f:
+        if (r11 >= r9) goto L_0x02ee;
+    L_0x0271:
         r0 = r6.currentForm;
         r0 = r0.values;
         r0 = r0.get(r11);
         r0 = (org.telegram.tgnet.TLRPC.TL_secureValue) r0;
         r1 = r0.type;
         r1 = r6.isPersonalDocument(r1);
-        if (r1 == 0) goto L_0x02a7;
-    L_0x0282:
+        if (r1 == 0) goto L_0x02a8;
+    L_0x0283:
         r1 = new java.util.ArrayList;
         r1.<init>();
         r2 = new org.telegram.tgnet.TLRPC$TL_secureRequiredType;
@@ -4890,16 +4890,16 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r2 = new org.telegram.tgnet.TLRPC$TL_secureValueTypePersonalDetails;
         r2.<init>();
         r0.type = r2;
-    L_0x02a3:
+    L_0x02a4:
         r2 = r0;
         r3 = r1;
         r4 = 1;
-        goto L_0x02dc;
-    L_0x02a7:
+        goto L_0x02dd;
+    L_0x02a8:
         r1 = r0.type;
         r1 = r6.isAddressDocument(r1);
-        if (r1 == 0) goto L_0x02cf;
-    L_0x02af:
+        if (r1 == 0) goto L_0x02d0;
+    L_0x02b0:
         r1 = new java.util.ArrayList;
         r1.<init>();
         r2 = new org.telegram.tgnet.TLRPC$TL_secureRequiredType;
@@ -4913,8 +4913,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r2 = new org.telegram.tgnet.TLRPC$TL_secureValueTypeAddress;
         r2.<init>();
         r0.type = r2;
-        goto L_0x02a3;
-    L_0x02cf:
+        goto L_0x02a4;
+    L_0x02d0:
         r1 = new org.telegram.tgnet.TLRPC$TL_secureRequiredType;
         r1.<init>();
         r0 = r0.type;
@@ -4923,21 +4923,21 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         r3 = r0;
         r2 = r1;
         r4 = 0;
-    L_0x02dc:
+    L_0x02dd:
         r0 = r9 + -1;
-        if (r11 != r0) goto L_0x02e2;
-    L_0x02e0:
+        if (r11 != r0) goto L_0x02e3;
+    L_0x02e1:
         r5 = 1;
-        goto L_0x02e3;
-    L_0x02e2:
-        r5 = 0;
+        goto L_0x02e4;
     L_0x02e3:
+        r5 = 0;
+    L_0x02e4:
         r0 = r19;
         r1 = r20;
         r0.addField(r1, r2, r3, r4, r5);
         r11 = r11 + 1;
-        goto L_0x026e;
-    L_0x02ed:
+        goto L_0x026f;
+    L_0x02ee:
         r19.updateManageVisibility();
         return;
         */
@@ -8292,7 +8292,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     /* JADX WARNING: Removed duplicated region for block: B:208:0x03d2  */
     /* JADX WARNING: Removed duplicated region for block: B:249:0x049a  */
     /* JADX WARNING: Removed duplicated region for block: B:225:0x0428  */
-    /* JADX WARNING: Removed duplicated region for block: B:291:0x0551  */
+    /* JADX WARNING: Removed duplicated region for block: B:291:0x0552  */
     /* JADX WARNING: Removed duplicated region for block: B:290:0x054e  */
     /* JADX WARNING: Removed duplicated region for block: B:202:0x03b7  */
     /* JADX WARNING: Removed duplicated region for block: B:205:0x03bf  */
@@ -8303,7 +8303,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     /* JADX WARNING: Removed duplicated region for block: B:225:0x0428  */
     /* JADX WARNING: Removed duplicated region for block: B:249:0x049a  */
     /* JADX WARNING: Removed duplicated region for block: B:290:0x054e  */
-    /* JADX WARNING: Removed duplicated region for block: B:291:0x0551  */
+    /* JADX WARNING: Removed duplicated region for block: B:291:0x0552  */
     /* JADX WARNING: Removed duplicated region for block: B:47:0x010f  */
     /* JADX WARNING: Removed duplicated region for block: B:39:0x00d2  */
     /* JADX WARNING: Removed duplicated region for block: B:206:0x03cf  */
@@ -8313,7 +8313,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     /* JADX WARNING: Removed duplicated region for block: B:211:0x03e4  */
     /* JADX WARNING: Removed duplicated region for block: B:249:0x049a  */
     /* JADX WARNING: Removed duplicated region for block: B:225:0x0428  */
-    /* JADX WARNING: Removed duplicated region for block: B:291:0x0551  */
+    /* JADX WARNING: Removed duplicated region for block: B:291:0x0552  */
     /* JADX WARNING: Removed duplicated region for block: B:290:0x054e  */
     /* JADX WARNING: Removed duplicated region for block: B:39:0x00d2  */
     /* JADX WARNING: Removed duplicated region for block: B:47:0x010f  */
@@ -8325,7 +8325,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     /* JADX WARNING: Removed duplicated region for block: B:225:0x0428  */
     /* JADX WARNING: Removed duplicated region for block: B:249:0x049a  */
     /* JADX WARNING: Removed duplicated region for block: B:290:0x054e  */
-    /* JADX WARNING: Removed duplicated region for block: B:291:0x0551  */
+    /* JADX WARNING: Removed duplicated region for block: B:291:0x0552  */
     private void setTypeValue(org.telegram.tgnet.TLRPC.TL_secureRequiredType r31, java.lang.String r32, java.lang.String r33, org.telegram.tgnet.TLRPC.TL_secureRequiredType r34, java.lang.String r35, boolean r36, int r37) {
         /*
         r30 = this;
@@ -9174,37 +9174,37 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     L_0x0545:
         r1.setValue(r0);
         r0 = r1.valueTextView;
-        if (r19 == 0) goto L_0x0551;
+        if (r19 == 0) goto L_0x0552;
     L_0x054e:
         r2 = "windowBackgroundWhiteRedText3";
-        goto L_0x0553;
-    L_0x0551:
+        goto L_0x0554;
+    L_0x0552:
         r2 = "windowBackgroundWhiteGrayText2";
-    L_0x0553:
+    L_0x0554:
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
         r0.setTextColor(r2);
-        if (r19 != 0) goto L_0x056f;
-    L_0x055c:
+        if (r19 != 0) goto L_0x0570;
+    L_0x055d:
         r0 = r7.currentActivityType;
         r2 = 8;
-        if (r0 == r2) goto L_0x056f;
-    L_0x0562:
-        if (r36 == 0) goto L_0x0566;
-    L_0x0564:
-        if (r11 != 0) goto L_0x056a;
-    L_0x0566:
-        if (r36 != 0) goto L_0x056f;
-    L_0x0568:
-        if (r20 == 0) goto L_0x056f;
-    L_0x056a:
-        if (r11 == 0) goto L_0x0570;
-    L_0x056c:
-        if (r23 == 0) goto L_0x056f;
-    L_0x056e:
-        goto L_0x0570;
+        if (r0 == r2) goto L_0x0570;
+    L_0x0563:
+        if (r36 == 0) goto L_0x0567;
+    L_0x0565:
+        if (r11 != 0) goto L_0x056b;
+    L_0x0567:
+        if (r36 != 0) goto L_0x0570;
+    L_0x0569:
+        if (r20 == 0) goto L_0x0570;
+    L_0x056b:
+        if (r11 == 0) goto L_0x0571;
+    L_0x056d:
+        if (r23 == 0) goto L_0x0570;
     L_0x056f:
-        r15 = 0;
+        goto L_0x0571;
     L_0x0570:
+        r15 = 0;
+    L_0x0571:
         r1.setChecked(r15);
         return;
         */

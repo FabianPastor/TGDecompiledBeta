@@ -1370,7 +1370,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         r8 = org.telegram.messenger.LocaleController.getString(r7, r6);
         r5 = r5.setContentTitle(r8);
         r5 = r5.setContentText(r1);
-        r8 = NUM; // 0x7var_b float:1.7945639E38 double:1.0529357614E-314;
+        r8 = NUM; // 0x7var_ float:1.7945635E38 double:1.0529357604E-314;
         r5 = r5.setSmallIcon(r8);
         r5 = r5.setSubText(r2);
         r8 = 0;

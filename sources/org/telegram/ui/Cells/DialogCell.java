@@ -5784,37 +5784,43 @@ public class DialogCell extends BaseCell {
     }
 
     public void onPopulateAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
+        User user;
         super.onPopulateAccessibilityEvent(accessibilityEvent);
         StringBuilder stringBuilder = new StringBuilder();
         String str = ". ";
-        if (this.encryptedChat != null) {
-            stringBuilder.append(LocaleController.getString("AccDescrSecretChat", NUM));
+        if (this.currentDialogFolderId == 1) {
+            stringBuilder.append(LocaleController.getString("ArchivedChats", NUM));
             stringBuilder.append(str);
-        }
-        User user = this.user;
-        if (user != null) {
-            if (user.bot) {
-                stringBuilder.append(LocaleController.getString("Bot", NUM));
+        } else {
+            if (this.encryptedChat != null) {
+                stringBuilder.append(LocaleController.getString("AccDescrSecretChat", NUM));
                 stringBuilder.append(str);
             }
             user = this.user;
-            if (user.self) {
-                stringBuilder.append(LocaleController.getString("SavedMessages", NUM));
-            } else {
-                stringBuilder.append(ContactsController.formatName(user.first_name, user.last_name));
-            }
-            stringBuilder.append(str);
-        } else {
-            Chat chat = this.chat;
-            if (chat != null) {
-                if (chat.broadcast) {
-                    stringBuilder.append(LocaleController.getString("AccDescrChannel", NUM));
+            if (user != null) {
+                if (user.bot) {
+                    stringBuilder.append(LocaleController.getString("Bot", NUM));
+                    stringBuilder.append(str);
+                }
+                user = this.user;
+                if (user.self) {
+                    stringBuilder.append(LocaleController.getString("SavedMessages", NUM));
                 } else {
-                    stringBuilder.append(LocaleController.getString("AccDescrGroup", NUM));
+                    stringBuilder.append(ContactsController.formatName(user.first_name, user.last_name));
                 }
                 stringBuilder.append(str);
-                stringBuilder.append(this.chat.title);
-                stringBuilder.append(str);
+            } else {
+                Chat chat = this.chat;
+                if (chat != null) {
+                    if (chat.broadcast) {
+                        stringBuilder.append(LocaleController.getString("AccDescrChannel", NUM));
+                    } else {
+                        stringBuilder.append(LocaleController.getString("AccDescrGroup", NUM));
+                    }
+                    stringBuilder.append(str);
+                    stringBuilder.append(this.chat.title);
+                    stringBuilder.append(str);
+                }
             }
         }
         int i = this.unreadCount;
@@ -5823,7 +5829,7 @@ public class DialogCell extends BaseCell {
             stringBuilder.append(str);
         }
         MessageObject messageObject = this.message;
-        if (messageObject == null) {
+        if (messageObject == null || this.currentDialogFolderId != 0) {
             accessibilityEvent.setContentDescription(stringBuilder.toString());
             return;
         }

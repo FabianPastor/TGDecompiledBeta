@@ -355,9 +355,9 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
             MessagesStorage.getInstance(ShareAlert.this.currentAccount).getStorageQueue().postRunnable(new -$$Lambda$ShareAlert$ShareSearchAdapter$-0pnpfSXHTiImTPZ850FgfY7mkY(this, str, i));
         }
 
-        /* JADX WARNING: Removed duplicated region for block: B:76:0x01d3 A:{LOOP_END, Catch:{ Exception -> 0x0414 }, LOOP:2: B:46:0x0114->B:76:0x01d3} */
+        /* JADX WARNING: Removed duplicated region for block: B:76:0x01d3 A:{LOOP_END, LOOP:2: B:46:0x0114->B:76:0x01d3, Catch:{ Exception -> 0x0414 }} */
         /* JADX WARNING: Removed duplicated region for block: B:190:0x0165 A:{SYNTHETIC} */
-        /* JADX WARNING: Removed duplicated region for block: B:172:0x03f8 A:{LOOP_END, Catch:{ Exception -> 0x0414 }, LOOP:7: B:144:0x0342->B:172:0x03f8} */
+        /* JADX WARNING: Removed duplicated region for block: B:172:0x03f8 A:{LOOP_END, LOOP:7: B:144:0x0342->B:172:0x03f8, Catch:{ Exception -> 0x0414 }} */
         /* JADX WARNING: Removed duplicated region for block: B:215:0x038c A:{SYNTHETIC} */
         public /* synthetic */ void lambda$searchDialogsInternal$1$ShareAlert$ShareSearchAdapter(java.lang.String r21, int r22) {
             /*
@@ -1127,60 +1127,57 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
 
             private void onMeasureInternal(int i, int i2) {
                 int i3;
-                int i4;
-                View view;
                 int size = MeasureSpec.getSize(i);
                 int size2 = MeasureSpec.getSize(i2);
                 setMeasuredDimension(size, size2);
+                int access$1300 = size - (ShareAlert.this.backgroundPaddingLeft * 2);
                 float f = 1.0f;
                 if (getKeyboardHeight() <= AndroidUtilities.dp(20.0f)) {
-                    int i5;
                     if (AndroidUtilities.isInMultiwindow) {
-                        i5 = i2;
+                        size = i2;
                     } else {
                         size2 -= ShareAlert.this.commentTextView.getEmojiPadding();
-                        i5 = MeasureSpec.makeMeasureSpec(size2, NUM);
+                        size = MeasureSpec.makeMeasureSpec(size2, NUM);
                     }
                     this.ignoreLayout = true;
-                    int i6 = ShareAlert.this.commentTextView.isPopupShowing() ? 8 : 0;
+                    int i4 = ShareAlert.this.commentTextView.isPopupShowing() ? 8 : 0;
                     if (ShareAlert.this.pickerBottomLayout != null) {
-                        ShareAlert.this.pickerBottomLayout.setVisibility(i6);
-                        View view2 = ShareAlert.this.shadow[1];
-                        if (!(ShareAlert.this.frameLayout2.getVisibility() == 0 || i6 == 0)) {
-                            f = 0.0f;
-                        }
-                        view2.setAlpha(f);
-                    }
-                    this.ignoreLayout = false;
-                    i3 = size2;
-                    i4 = i5;
-                } else {
-                    this.ignoreLayout = true;
-                    ShareAlert.this.commentTextView.hideEmojiView();
-                    if (ShareAlert.this.pickerBottomLayout != null) {
-                        ShareAlert.this.pickerBottomLayout.setVisibility(8);
-                        view = ShareAlert.this.shadow[1];
-                        if (ShareAlert.this.frameLayout2.getVisibility() != 0) {
+                        ShareAlert.this.pickerBottomLayout.setVisibility(i4);
+                        View view = ShareAlert.this.shadow[1];
+                        if (!(ShareAlert.this.frameLayout2.getVisibility() == 0 || i4 == 0)) {
                             f = 0.0f;
                         }
                         view.setAlpha(f);
                     }
                     this.ignoreLayout = false;
-                    i4 = i2;
-                    i3 = size2;
+                    i3 = size;
+                } else {
+                    this.ignoreLayout = true;
+                    ShareAlert.this.commentTextView.hideEmojiView();
+                    if (ShareAlert.this.pickerBottomLayout != null) {
+                        ShareAlert.this.pickerBottomLayout.setVisibility(8);
+                        View view2 = ShareAlert.this.shadow[1];
+                        if (ShareAlert.this.frameLayout2.getVisibility() != 0) {
+                            f = 0.0f;
+                        }
+                        view2.setAlpha(f);
+                    }
+                    this.ignoreLayout = false;
+                    i3 = i2;
                 }
+                int i5 = size2;
                 int childCount = getChildCount();
-                for (int i7 = 0; i7 < childCount; i7++) {
-                    view = getChildAt(i7);
-                    if (!(view == null || view.getVisibility() == 8)) {
-                        if (ShareAlert.this.commentTextView == null || !ShareAlert.this.commentTextView.isPopupView(view)) {
-                            measureChildWithMargins(view, i, 0, i4, 0);
+                for (int i6 = 0; i6 < childCount; i6++) {
+                    View childAt = getChildAt(i6);
+                    if (!(childAt == null || childAt.getVisibility() == 8)) {
+                        if (ShareAlert.this.commentTextView == null || !ShareAlert.this.commentTextView.isPopupView(childAt)) {
+                            measureChildWithMargins(childAt, i, 0, i3, 0);
                         } else if (!AndroidUtilities.isInMultiwindow && !AndroidUtilities.isTablet()) {
-                            view.measure(MeasureSpec.makeMeasureSpec(size, NUM), MeasureSpec.makeMeasureSpec(view.getLayoutParams().height, NUM));
+                            childAt.measure(MeasureSpec.makeMeasureSpec(access$1300, NUM), MeasureSpec.makeMeasureSpec(childAt.getLayoutParams().height, NUM));
                         } else if (AndroidUtilities.isTablet()) {
-                            view.measure(MeasureSpec.makeMeasureSpec(size, NUM), MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(AndroidUtilities.isTablet() ? 200.0f : 320.0f), (i3 - AndroidUtilities.statusBarHeight) + getPaddingTop()), NUM));
+                            childAt.measure(MeasureSpec.makeMeasureSpec(access$1300, NUM), MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(AndroidUtilities.isTablet() ? 200.0f : 320.0f), (i5 - AndroidUtilities.statusBarHeight) + getPaddingTop()), NUM));
                         } else {
-                            view.measure(MeasureSpec.makeMeasureSpec(size, NUM), MeasureSpec.makeMeasureSpec((i3 - AndroidUtilities.statusBarHeight) + getPaddingTop(), NUM));
+                            childAt.measure(MeasureSpec.makeMeasureSpec(access$1300, NUM), MeasureSpec.makeMeasureSpec((i5 - AndroidUtilities.statusBarHeight) + getPaddingTop(), NUM));
                         }
                     }
                 }

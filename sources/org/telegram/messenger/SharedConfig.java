@@ -61,6 +61,7 @@ public class SharedConfig {
     public static boolean saveIncomingPhotos;
     public static boolean saveStreamMedia = true;
     public static boolean saveToGallery;
+    public static boolean showAnimatedStickers = BuildVars.DEBUG_VERSION;
     public static boolean showNotificationsForAllAccounts = true;
     public static boolean shuffleMusic;
     public static boolean sortContactsByName;

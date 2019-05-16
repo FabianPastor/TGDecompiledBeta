@@ -2546,10 +2546,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         r4 = r2.silent;
         if (r4 == 0) goto L_0x0150;
     L_0x014c:
-        r4 = NUM; // 0x7var_ float:1.7945231E38 double:1.052935662E-314;
+        r4 = NUM; // 0x7var_ float:1.7945227E38 double:1.052935661E-314;
         goto L_0x0153;
     L_0x0150:
-        r4 = NUM; // 0x7var_ float:1.7945233E38 double:1.0529356626E-314;
+        r4 = NUM; // 0x7var_ float:1.794523E38 double:1.0529356616E-314;
     L_0x0153:
         r3.setImageResource(r4);
         r3 = r2.attachLayout;

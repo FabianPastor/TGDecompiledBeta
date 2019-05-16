@@ -1533,7 +1533,10 @@ public class MentionsAdapter extends SelectionAdapter {
         this.searchResultCommandsHelp = null;
         this.searchResultCommandsUsers = null;
         notifyDataSetChanged();
-        this.delegate.needChangePanelVisibility(this.searchResultSuggestions != null);
+        MentionsAdapterDelegate mentionsAdapterDelegate = this.delegate;
+        ArrayList arrayList2 = this.searchResultSuggestions;
+        boolean z = (arrayList2 == null || arrayList2.isEmpty()) ? false : true;
+        mentionsAdapterDelegate.needChangePanelVisibility(z);
     }
 
     private void showUsersResult(ArrayList<User> arrayList, SparseArray<User> sparseArray, boolean z) {

@@ -74,7 +74,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         applyTextStyleToSelection(new TypefaceSpan(Typeface.MONOSPACE));
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:8:0x00be  */
+    /* JADX WARNING: Removed duplicated region for block: B:8:0x00c1  */
     public void makeSelectedUrl() {
         /*
         r9 = this;
@@ -122,19 +122,19 @@ public class EditTextCaption extends EditTextBoldCursor {
         r1.setPadding(r4, r4, r4, r4);
         r0.setView(r1);
         r5 = r9.selectionStart;
-        if (r5 < 0) goto L_0x0085;
-    L_0x007b:
+        if (r5 < 0) goto L_0x0088;
+    L_0x007e:
         r6 = r9.selectionEnd;
-        if (r6 < 0) goto L_0x0085;
-    L_0x007f:
+        if (r6 < 0) goto L_0x0088;
+    L_0x0082:
         r7 = -1;
         r9.selectionEnd = r7;
         r9.selectionStart = r7;
-        goto L_0x008d;
-    L_0x0085:
+        goto L_0x0090;
+    L_0x0088:
         r5 = r9.getSelectionStart();
         r6 = r9.getSelectionEnd();
-    L_0x008d:
+    L_0x0090:
         r7 = NUM; // 0x7f0d0674 float:1.8745465E38 double:1.0531305937E-314;
         r8 = "OK";
         r7 = org.telegram.messenger.LocaleController.getString(r8, r7);
@@ -151,15 +151,15 @@ public class EditTextCaption extends EditTextBoldCursor {
         r0.setOnShowListener(r3);
         r0 = r1.getLayoutParams();
         r0 = (android.view.ViewGroup.MarginLayoutParams) r0;
-        if (r0 == 0) goto L_0x00dc;
-    L_0x00be:
+        if (r0 == 0) goto L_0x00df;
+    L_0x00c1:
         r3 = r0 instanceof android.widget.FrameLayout.LayoutParams;
-        if (r3 == 0) goto L_0x00c7;
-    L_0x00c2:
+        if (r3 == 0) goto L_0x00ca;
+    L_0x00c5:
         r3 = r0;
         r3 = (android.widget.FrameLayout.LayoutParams) r3;
         r3.gravity = r2;
-    L_0x00c7:
+    L_0x00ca:
         r2 = NUM; // 0x41CLASSNAME float:24.0 double:5.450047783E-315;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r0.leftMargin = r2;
@@ -168,7 +168,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r0.height = r2;
         r1.setLayoutParams(r0);
-    L_0x00dc:
+    L_0x00df:
         r0 = r1.getText();
         r0 = r0.length();
         r1.setSelection(r4, r0);

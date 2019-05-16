@@ -5552,6 +5552,7 @@ public class MessagesController implements NotificationCenterDelegate {
             this.allDialogs.remove(dialog);
             sortDialogs(null);
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.folderBecomeEmpty, Integer.valueOf(i));
         }
     }
 
@@ -5566,6 +5567,12 @@ public class MessagesController implements NotificationCenterDelegate {
 
     public /* synthetic */ void lambda$onFolderEmpty$111$MessagesController(int i) {
         removeFolder(i);
+    }
+
+    public void checkIfFolderEmpty(int i) {
+        if (i != 0) {
+            MessagesStorage.getInstance(this.currentAccount).checkIfFolderEmpty(i);
+        }
     }
 
     public int addDialogToFolder(long j, int i, int i2, long j2) {
@@ -11363,11 +11370,14 @@ public class MessagesController implements NotificationCenterDelegate {
                         if (!dialog.pinned) {
                             break;
                         }
-                        InputPeer inputPeer = getInputPeer((int) ((Dialog) dialogs.get(i3)).id);
-                        TL_inputDialogPeer tL_inputDialogPeer = new TL_inputDialogPeer();
-                        tL_inputDialogPeer.peer = inputPeer;
-                        tL_messages_reorderPinnedDialogs.order.add(tL_inputDialogPeer);
-                        i2 += tL_inputDialogPeer.getObjectSize();
+                        MessagesStorage.getInstance(this.currentAccount).setDialogPinned(dialog.id, dialog.pinnedNum);
+                        if (((int) dialog.id) != 0) {
+                            InputPeer inputPeer = getInputPeer((int) ((Dialog) dialogs.get(i3)).id);
+                            TL_inputDialogPeer tL_inputDialogPeer = new TL_inputDialogPeer();
+                            tL_inputDialogPeer.peer = inputPeer;
+                            tL_messages_reorderPinnedDialogs.order.add(tL_inputDialogPeer);
+                            i2 += tL_inputDialogPeer.getObjectSize();
+                        }
                     }
                 }
                 try {
@@ -11497,15 +11507,17 @@ public class MessagesController implements NotificationCenterDelegate {
             this.loadingPinnedDialogs.put(i, 1);
             TL_messages_getPinnedDialogs tL_messages_getPinnedDialogs = new TL_messages_getPinnedDialogs();
             tL_messages_getPinnedDialogs.folder_id = i;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_messages_getPinnedDialogs, new -$$Lambda$MessagesController$gs6r1Zvge1wE6LL3LKxA2bJJ-Ls(this, i, j));
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_messages_getPinnedDialogs, new -$$Lambda$MessagesController$5ms5SUOMLniJAFeiQgpTUwbDtSY(this, i));
         }
     }
 
-    public /* synthetic */ void lambda$loadPinnedDialogs$222$MessagesController(int i, long j, TLObject tLObject, TL_error tL_error) {
+    public /* synthetic */ void lambda$loadPinnedDialogs$222$MessagesController(int i, TLObject tLObject, TL_error tL_error) {
         if (tLObject != null) {
             int i2;
             Chat chat;
+            int i3;
             TL_messages_peerDialogs tL_messages_peerDialogs = (TL_messages_peerDialogs) tLObject;
+            ArrayList arrayList = new ArrayList(tL_messages_peerDialogs.dialogs);
             fetchFolderInLoadedPinnedDialogs(tL_messages_peerDialogs);
             TL_messages_dialogs tL_messages_dialogs = new TL_messages_dialogs();
             tL_messages_dialogs.users.addAll(tL_messages_peerDialogs.users);
@@ -11526,7 +11538,7 @@ public class MessagesController implements NotificationCenterDelegate {
             for (i2 = 0; i2 < tL_messages_peerDialogs.messages.size(); i2++) {
                 Message message = (Message) tL_messages_peerDialogs.messages.get(i2);
                 Peer peer = message.to_id;
-                int i3 = peer.channel_id;
+                i3 = peer.channel_id;
                 if (i3 != 0) {
                     chat = (Chat) sparseArray2.get(i3);
                     if (chat != null && chat.left) {
@@ -11542,19 +11554,22 @@ public class MessagesController implements NotificationCenterDelegate {
                 MessageObject messageObject = new MessageObject(this.currentAccount, message, sparseArray, sparseArray2, false);
                 longSparseArray.put(messageObject.getDialogId(), messageObject);
             }
-            for (int i5 = 0; i5 < tL_messages_peerDialogs.dialogs.size(); i5++) {
-                Dialog dialog = (Dialog) tL_messages_peerDialogs.dialogs.get(i5);
+            boolean z = !arrayList.isEmpty() && (arrayList.get(0) instanceof TL_dialogFolder);
+            int size = arrayList.size();
+            for (i3 = 0; i3 < size; i3++) {
+                Dialog dialog = (Dialog) arrayList.get(i3);
                 dialog.pinned = true;
                 DialogObject.initDialog(dialog);
+                Chat chat2;
                 if (DialogObject.isChannel(dialog)) {
-                    chat = (Chat) sparseArray2.get(-((int) dialog.id));
-                    if (chat != null && chat.left) {
+                    chat2 = (Chat) sparseArray2.get(-((int) dialog.id));
+                    if (chat2 != null && chat2.left) {
                     }
                 } else {
-                    long j2 = dialog.id;
-                    if (((int) j2) < 0) {
-                        chat = (Chat) sparseArray2.get(-((int) j2));
-                        if (!(chat == null || chat.migrated_to == null)) {
+                    long j = dialog.id;
+                    if (((int) j) < 0) {
+                        chat2 = (Chat) sparseArray2.get(-((int) j));
+                        if (!(chat2 == null || chat2.migrated_to == null)) {
                         }
                     }
                 }
@@ -11575,113 +11590,99 @@ public class MessagesController implements NotificationCenterDelegate {
                 }
                 this.dialogs_read_outbox_max.put(Long.valueOf(dialog.id), Integer.valueOf(Math.max(num.intValue(), dialog.read_outbox_max_id)));
             }
-            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new -$$Lambda$MessagesController$mqdVJOP9FdAueFUSmndMvNOCTS0(this, i, tL_messages_peerDialogs, j, longSparseArray, tL_messages_dialogs));
+            MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new -$$Lambda$MessagesController$2xwawfxy77A7uYEfX2S3k-suXFE(this, i, arrayList, z, tL_messages_peerDialogs, longSparseArray, tL_messages_dialogs));
         }
     }
 
-    public /* synthetic */ void lambda$null$221$MessagesController(int i, TL_messages_peerDialogs tL_messages_peerDialogs, long j, LongSparseArray longSparseArray, TL_messages_dialogs tL_messages_dialogs) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$QlHrs56wmBUu5g5tmjkxDJmSIu0(this, i, tL_messages_peerDialogs, j, longSparseArray, tL_messages_dialogs));
+    public /* synthetic */ void lambda$null$221$MessagesController(int i, ArrayList arrayList, boolean z, TL_messages_peerDialogs tL_messages_peerDialogs, LongSparseArray longSparseArray, TL_messages_dialogs tL_messages_dialogs) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$LYiV_HiXwANpNMOPEqVG43Un0Dg(this, i, arrayList, z, tL_messages_peerDialogs, longSparseArray, tL_messages_dialogs));
     }
 
-    public /* synthetic */ void lambda$null$220$MessagesController(int i, TL_messages_peerDialogs tL_messages_peerDialogs, long j, LongSparseArray longSparseArray, TL_messages_dialogs tL_messages_dialogs) {
-        boolean z;
+    public /* synthetic */ void lambda$null$220$MessagesController(int i, ArrayList arrayList, boolean z, TL_messages_peerDialogs tL_messages_peerDialogs, LongSparseArray longSparseArray, TL_messages_dialogs tL_messages_dialogs) {
+        int i2;
         Dialog dialog;
         Object obj;
-        Object obj2;
-        int i2 = i;
+        int size;
+        int i3 = i;
+        ArrayList arrayList2 = arrayList;
         TL_messages_peerDialogs tL_messages_peerDialogs2 = tL_messages_peerDialogs;
-        this.loadingPinnedDialogs.delete(i2);
-        applyDialogsNotificationsSettings(tL_messages_peerDialogs2.dialogs);
-        LongSparseArray longSparseArray2 = new LongSparseArray();
+        this.loadingPinnedDialogs.delete(i3);
+        applyDialogsNotificationsSettings(arrayList2);
         ArrayList dialogs = getDialogs(i);
-        int i3 = 0;
-        int i4 = 0;
-        Object obj3 = null;
-        while (true) {
-            z = true;
-            if (i3 >= dialogs.size()) {
-                break;
-            }
-            dialog = (Dialog) dialogs.get(i3);
-            if (!(((int) dialog.id) == 0 || (dialog instanceof TL_dialogFolder))) {
-                if (!dialog.pinned) {
+        int i4 = z;
+        int i5 = 0;
+        Object obj2 = null;
+        for (i2 = 0; i2 < dialogs.size(); i2++) {
+            dialog = (Dialog) dialogs.get(i2);
+            if (!(dialog instanceof TL_dialogFolder)) {
+                if (((int) dialog.id) == 0) {
+                    if (i4 < arrayList.size()) {
+                        arrayList2.add(i4, dialog);
+                    } else {
+                        arrayList2.add(dialog);
+                    }
+                    i4++;
+                } else if (!dialog.pinned) {
                     break;
+                } else {
+                    i5 = Math.max(dialog.pinnedNum, i5);
+                    dialog.pinned = false;
+                    dialog.pinnedNum = 0;
+                    i4++;
+                    obj2 = 1;
                 }
-                i4 = Math.max(dialog.pinnedNum, i4);
-                longSparseArray2.put(dialog.id, Integer.valueOf(dialog.pinnedNum));
-                dialog.pinned = false;
-                dialog.pinnedNum = 0;
-                obj3 = 1;
             }
-            i3++;
         }
         dialogs = new ArrayList();
-        if (tL_messages_peerDialogs2.dialogs.isEmpty()) {
-            obj = obj3;
-            obj2 = null;
+        if (arrayList.isEmpty()) {
+            obj = null;
         } else {
             putUsers(tL_messages_peerDialogs2.users, false);
             putChats(tL_messages_peerDialogs2.chats, false);
-            i3 = tL_messages_peerDialogs2.dialogs.size();
-            obj = obj3;
-            int i5 = 0;
-            obj2 = null;
-            while (i5 < i3) {
-                int i6;
-                dialog = (Dialog) tL_messages_peerDialogs2.dialogs.get(i5);
-                if (j != 0) {
-                    Integer num = (Integer) longSparseArray2.get(dialog.id);
-                    if (num != null) {
-                        dialog.pinnedNum = num.intValue();
-                    }
-                }
-                if (dialog.pinnedNum == 0) {
-                    dialog.pinnedNum = (i3 - i5) + i4;
-                }
-                dialogs.add(Long.valueOf(dialog.id));
-                int i7 = i3;
-                Dialog dialog2 = (Dialog) this.dialogs_dict.get(dialog.id);
-                if (dialog2 != null) {
-                    dialog2.pinned = z;
-                    dialog2.pinnedNum = dialog.pinnedNum;
-                    MessagesStorage.getInstance(this.currentAccount).setDialogPinned(dialog.id, dialog.pinnedNum);
-                    LongSparseArray longSparseArray3 = longSparseArray;
-                    i6 = i4;
+            size = arrayList.size();
+            i2 = 0;
+            obj = null;
+            while (i2 < size) {
+                Dialog dialog2 = (Dialog) arrayList2.get(i2);
+                dialog2.pinnedNum = (size - i2) + i5;
+                dialogs.add(Long.valueOf(dialog2.id));
+                dialog = (Dialog) this.dialogs_dict.get(dialog2.id);
+                if (dialog != null) {
+                    dialog.pinned = true;
+                    dialog.pinnedNum = dialog2.pinnedNum;
+                    MessagesStorage.getInstance(this.currentAccount).setDialogPinned(dialog2.id, dialog2.pinnedNum);
+                    LongSparseArray longSparseArray2 = longSparseArray;
                 } else {
-                    this.dialogs_dict.put(dialog.id, dialog);
-                    MessageObject messageObject = (MessageObject) longSparseArray.get(dialog.id);
-                    i6 = i4;
-                    this.dialogMessage.put(dialog.id, messageObject);
+                    this.dialogs_dict.put(dialog2.id, dialog2);
+                    MessageObject messageObject = (MessageObject) longSparseArray.get(dialog2.id);
+                    this.dialogMessage.put(dialog2.id, messageObject);
                     if (messageObject != null && messageObject.messageOwner.to_id.channel_id == 0) {
                         this.dialogMessagesByIds.put(messageObject.getId(), messageObject);
-                        long j2 = messageObject.messageOwner.random_id;
-                        if (j2 != 0) {
-                            this.dialogMessagesByRandomIds.put(j2, messageObject);
+                        long j = messageObject.messageOwner.random_id;
+                        if (j != 0) {
+                            this.dialogMessagesByRandomIds.put(j, messageObject);
                         }
                     }
-                    obj2 = 1;
+                    obj = 1;
                 }
-                i5++;
-                i4 = i6;
-                i3 = i7;
-                obj = 1;
-                z = true;
+                i2++;
+                obj2 = 1;
             }
         }
-        if (obj != null) {
-            if (obj2 != null) {
+        if (obj2 != null) {
+            if (obj != null) {
                 this.allDialogs.clear();
-                int size = this.dialogs_dict.size();
-                for (int i8 = 0; i8 < size; i8++) {
-                    this.allDialogs.add(this.dialogs_dict.valueAt(i8));
+                int size2 = this.dialogs_dict.size();
+                for (size = 0; size < size2; size++) {
+                    this.allDialogs.add(this.dialogs_dict.valueAt(size));
                 }
             }
             sortDialogs(null);
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
         }
-        MessagesStorage.getInstance(this.currentAccount).unpinAllDialogsExceptNew(dialogs, i2);
+        MessagesStorage.getInstance(this.currentAccount).unpinAllDialogsExceptNew(dialogs, i3);
         MessagesStorage.getInstance(this.currentAccount).putDialogs(tL_messages_dialogs, 1);
-        UserConfig.getInstance(this.currentAccount).setPinnedDialogsLoaded(i2, true);
+        UserConfig.getInstance(this.currentAccount).setPinnedDialogsLoaded(i3, true);
         UserConfig.getInstance(this.currentAccount).saveConfig(false);
     }
 

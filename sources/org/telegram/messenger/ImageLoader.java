@@ -3443,11 +3443,14 @@ public class ImageLoader {
     /* JADX WARNING: Removed duplicated region for block: B:64:0x0159  */
     /* JADX WARNING: Removed duplicated region for block: B:77:0x01a1  */
     /* JADX WARNING: Removed duplicated region for block: B:66:0x015d  */
+    /* JADX WARNING: Removed duplicated region for block: B:127:0x0278  */
+    /* JADX WARNING: Removed duplicated region for block: B:126:0x0274  */
+    /* JADX WARNING: Removed duplicated region for block: B:134:0x02a0  */
     /* JADX WARNING: Missing block: B:61:0x0154, code skipped:
             if (r2.exists() == false) goto L_0x0156;
      */
-    /* JADX WARNING: Missing block: B:122:0x025c, code skipped:
-            if (r3 == false) goto L_0x0295;
+    /* JADX WARNING: Missing block: B:121:0x025e, code skipped:
+            if (r3 == false) goto L_0x02be;
      */
     public /* synthetic */ void lambda$createLoadOperationForImageReceiver$5$ImageLoader(int r21, java.lang.String r22, java.lang.String r23, int r24, org.telegram.messenger.ImageReceiver r25, java.lang.String r26, int r27, org.telegram.messenger.ImageLocation r28, boolean r29, java.lang.Object r30, org.telegram.tgnet.TLRPC.Document r31, boolean r32, boolean r33, int r34, int r35, java.lang.String r36, int r37) {
         /*
@@ -3512,7 +3515,7 @@ public class ImageLoader {
     L_0x0058:
         r15 = 0;
     L_0x0059:
-        if (r15 != 0) goto L_0x049d;
+        if (r15 != 0) goto L_0x04b1;
     L_0x005b:
         r13 = r8.path;
         r14 = "_";
@@ -3726,7 +3729,7 @@ public class ImageLoader {
         r9 = 0;
         r15 = 0;
     L_0x01b6:
-        if (r1 == r3) goto L_0x049d;
+        if (r1 == r3) goto L_0x04b1;
     L_0x01b8:
         r3 = r28.isEncrypted();
         r4 = new org.telegram.messenger.ImageLoader$CacheImage;
@@ -3776,252 +3779,264 @@ public class ImageLoader {
         r7 = 1;
         r4.animatedFile = r7;
     L_0x020e:
-        if (r9 != 0) goto L_0x0354;
+        if (r9 != 0) goto L_0x036b;
     L_0x0210:
         r7 = r8.photoSize;
         r7 = r7 instanceof org.telegram.tgnet.TLRPC.TL_photoStrippedSize;
         r10 = "g";
-        if (r7 == 0) goto L_0x0222;
+        if (r7 == 0) goto L_0x0220;
     L_0x0218:
         r11 = r22;
         r7 = r34;
-        r12 = r35;
         r14 = 0;
         r15 = 1;
-        goto L_0x0340;
-    L_0x0222:
+        goto L_0x035a;
+    L_0x0220:
         r7 = r8.secureDocument;
-        if (r7 == 0) goto L_0x0248;
-    L_0x0226:
+        if (r7 == 0) goto L_0x0244;
+    L_0x0224:
         r4.secureDocument = r7;
         r3 = r4.secureDocument;
         r3 = r3.secureFile;
         r3 = r3.dc_id;
         r7 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
-        if (r3 != r7) goto L_0x0234;
-    L_0x0232:
+        if (r3 != r7) goto L_0x0232;
+    L_0x0230:
         r15 = 1;
-        goto L_0x0235;
-    L_0x0234:
+        goto L_0x0233;
+    L_0x0232:
         r15 = 0;
-    L_0x0235:
+    L_0x0233:
         r3 = new java.io.File;
         r7 = org.telegram.messenger.FileLoader.getDirectory(r18);
         r11 = r22;
         r3.<init>(r7, r11);
         r7 = r34;
-        r12 = r35;
-    L_0x0244:
         r9 = r3;
-    L_0x0245:
+    L_0x0241:
         r14 = 0;
-        goto L_0x0340;
-    L_0x0248:
+        goto L_0x035a;
+    L_0x0244:
         r11 = r22;
         r7 = r10.equals(r6);
-        if (r7 != 0) goto L_0x0291;
+        r9 = "json";
+        r12 = "tg_secret_sticker";
+        if (r7 != 0) goto L_0x02b8;
     L_0x0250:
         r7 = r34;
-        if (r7 != 0) goto L_0x025f;
+        if (r7 != 0) goto L_0x0261;
     L_0x0254:
-        r12 = r35;
-        if (r12 <= 0) goto L_0x0261;
+        r13 = r35;
+        if (r13 <= 0) goto L_0x0263;
     L_0x0258:
-        r9 = r8.path;
-        if (r9 != 0) goto L_0x0261;
-    L_0x025c:
-        if (r3 == 0) goto L_0x0295;
+        r24 = r2;
+        r2 = r8.path;
+        if (r2 != 0) goto L_0x0265;
     L_0x025e:
-        goto L_0x0261;
-    L_0x025f:
-        r12 = r35;
+        if (r3 == 0) goto L_0x02be;
+    L_0x0260:
+        goto L_0x0265;
     L_0x0261:
+        r13 = r35;
+    L_0x0263:
+        r24 = r2;
+    L_0x0265:
+        r2 = new java.io.File;
+        r3 = org.telegram.messenger.FileLoader.getDirectory(r18);
+        r2.<init>(r3, r11);
+        r3 = r2.exists();
+        if (r3 == 0) goto L_0x0278;
+    L_0x0274:
+        r31 = r15;
+        r3 = 1;
+        goto L_0x029c;
+    L_0x0278:
+        r3 = 2;
+        if (r7 != r3) goto L_0x0298;
+    L_0x027b:
+        r2 = new java.io.File;
+        r3 = org.telegram.messenger.FileLoader.getDirectory(r18);
+        r14 = new java.lang.StringBuilder;
+        r14.<init>();
+        r14.append(r11);
+        r31 = r15;
+        r15 = ".enc";
+        r14.append(r15);
+        r14 = r14.toString();
+        r2.<init>(r3, r14);
+        goto L_0x029a;
+    L_0x0298:
+        r31 = r15;
+    L_0x029a:
+        r3 = r24;
+    L_0x029c:
+        r14 = r8.document;
+        if (r14 == 0) goto L_0x02b3;
+    L_0x02a0:
+        r14 = org.telegram.messenger.FileLoader.getDocumentFileName(r14);
+        r12 = r14.startsWith(r12);
+        if (r12 == 0) goto L_0x02b3;
+    L_0x02aa:
+        r9 = r14.endsWith(r9);
+        if (r9 == 0) goto L_0x02b3;
+    L_0x02b0:
+        r9 = 1;
+        r4.lottieFile = r9;
+    L_0x02b3:
+        r15 = r31;
+        r9 = r2;
+        r2 = r3;
+        goto L_0x0241;
+    L_0x02b8:
+        r7 = r34;
+        r13 = r35;
+        r24 = r2;
+    L_0x02be:
+        r31 = r15;
+        r2 = r8.document;
+        if (r2 == 0) goto L_0x033b;
+    L_0x02c4:
+        r3 = r2 instanceof org.telegram.tgnet.TLRPC.TL_documentEncrypted;
+        if (r3 == 0) goto L_0x02d2;
+    L_0x02c8:
         r3 = new java.io.File;
-        r9 = org.telegram.messenger.FileLoader.getDirectory(r18);
-        r3.<init>(r9, r11);
-        r9 = r3.exists();
-        if (r9 == 0) goto L_0x0273;
-    L_0x0270:
+        r15 = org.telegram.messenger.FileLoader.getDirectory(r18);
+        r3.<init>(r15, r11);
+        goto L_0x02ec;
+    L_0x02d2:
+        r3 = org.telegram.messenger.MessageObject.isVideoDocument(r2);
+        if (r3 == 0) goto L_0x02e3;
+    L_0x02d8:
+        r3 = new java.io.File;
+        r15 = 2;
+        r1 = org.telegram.messenger.FileLoader.getDirectory(r15);
+        r3.<init>(r1, r11);
+        goto L_0x02ec;
+    L_0x02e3:
+        r3 = new java.io.File;
+        r1 = org.telegram.messenger.FileLoader.getDirectory(r17);
+        r3.<init>(r1, r11);
+    L_0x02ec:
+        r1 = r10.equals(r6);
+        if (r1 == 0) goto L_0x031c;
+    L_0x02f2:
+        r1 = r3.exists();
+        if (r1 != 0) goto L_0x031c;
+    L_0x02f8:
+        r3 = new java.io.File;
+        r1 = org.telegram.messenger.FileLoader.getDirectory(r18);
+        r15 = new java.lang.StringBuilder;
+        r15.<init>();
+        r13 = r2.dc_id;
+        r15.append(r13);
+        r15.append(r14);
+        r13 = r2.id;
+        r15.append(r13);
+        r13 = ".temp";
+        r15.append(r13);
+        r13 = r15.toString();
+        r3.<init>(r1, r13);
+    L_0x031c:
+        r1 = org.telegram.messenger.BuildVars.DEBUG_PRIVATE_VERSION;
+        if (r1 == 0) goto L_0x0333;
+    L_0x0320:
+        r1 = org.telegram.messenger.FileLoader.getDocumentFileName(r2);
+        r12 = r1.startsWith(r12);
+        if (r12 == 0) goto L_0x0333;
+    L_0x032a:
+        r1 = r1.endsWith(r9);
+        if (r1 == 0) goto L_0x0333;
+    L_0x0330:
+        r1 = 1;
+        r4.lottieFile = r1;
+    L_0x0333:
+        r14 = r2.size;
+        r2 = r24;
+        r15 = r31;
         r9 = r3;
-        r2 = 1;
-        goto L_0x0245;
-    L_0x0273:
-        r9 = 2;
-        if (r7 != r9) goto L_0x0244;
-    L_0x0276:
-        r3 = new java.io.File;
-        r9 = org.telegram.messenger.FileLoader.getDirectory(r18);
+        goto L_0x035a;
+    L_0x033b:
+        r1 = r8.webFile;
+        if (r1 == 0) goto L_0x0349;
+    L_0x033f:
+        r1 = new java.io.File;
+        r2 = org.telegram.messenger.FileLoader.getDirectory(r17);
+        r1.<init>(r2, r11);
+        goto L_0x0353;
+    L_0x0349:
+        r1 = new java.io.File;
+        r2 = 0;
+        r3 = org.telegram.messenger.FileLoader.getDirectory(r2);
+        r1.<init>(r3, r11);
+    L_0x0353:
+        r2 = r24;
+        r15 = r31;
+        r9 = r1;
+        goto L_0x0241;
+    L_0x035a:
+        r1 = r10.equals(r6);
+        if (r1 == 0) goto L_0x0368;
+    L_0x0360:
+        r1 = 1;
+        r4.animatedFile = r1;
+        r4.size = r14;
+        r3 = r2;
+        r15 = 1;
+        goto L_0x0376;
+    L_0x0368:
+        r1 = 1;
+        r3 = r2;
+        goto L_0x0376;
+    L_0x036b:
+        r11 = r22;
+        r7 = r34;
+        r24 = r2;
+        r31 = r15;
+        r1 = 1;
+        r3 = r24;
+    L_0x0376:
+        r2 = r27;
+        r4.imageType = r2;
+        r10 = r23;
+        r4.key = r10;
+        r4.filter = r6;
+        r4.imageLocation = r8;
+        r12 = r36;
+        r4.ext = r12;
+        r13 = r37;
+        r4.currentAccount = r13;
+        r14 = r30;
+        r4.parentObject = r14;
+        r1 = 2;
+        if (r7 != r1) goto L_0x03ad;
+    L_0x0391:
+        r1 = new java.io.File;
+        r12 = org.telegram.messenger.FileLoader.getInternalCacheDir();
         r13 = new java.lang.StringBuilder;
         r13.<init>();
         r13.append(r11);
-        r14 = ".enc";
+        r14 = ".enc.key";
         r13.append(r14);
         r13 = r13.toString();
-        r3.<init>(r9, r13);
-        goto L_0x0244;
-    L_0x0291:
-        r7 = r34;
-        r12 = r35;
-    L_0x0295:
-        r3 = r8.document;
-        if (r3 == 0) goto L_0x031e;
-    L_0x0299:
-        r9 = r3 instanceof org.telegram.tgnet.TLRPC.TL_documentEncrypted;
-        if (r9 == 0) goto L_0x02a9;
-    L_0x029d:
-        r9 = new java.io.File;
-        r13 = org.telegram.messenger.FileLoader.getDirectory(r18);
-        r9.<init>(r13, r11);
-        r24 = r2;
-        goto L_0x02c7;
-    L_0x02a9:
-        r9 = org.telegram.messenger.MessageObject.isVideoDocument(r3);
-        if (r9 == 0) goto L_0x02bc;
-    L_0x02af:
-        r9 = new java.io.File;
-        r24 = r2;
-        r13 = 2;
-        r2 = org.telegram.messenger.FileLoader.getDirectory(r13);
-        r9.<init>(r2, r11);
-        goto L_0x02c7;
-    L_0x02bc:
-        r24 = r2;
-        r9 = new java.io.File;
-        r2 = org.telegram.messenger.FileLoader.getDirectory(r17);
-        r9.<init>(r2, r11);
-    L_0x02c7:
-        r2 = r10.equals(r6);
-        if (r2 == 0) goto L_0x02fa;
-    L_0x02cd:
-        r2 = r9.exists();
-        if (r2 != 0) goto L_0x02fa;
-    L_0x02d3:
-        r9 = new java.io.File;
-        r2 = org.telegram.messenger.FileLoader.getDirectory(r18);
-        r13 = new java.lang.StringBuilder;
-        r13.<init>();
-        r31 = r15;
-        r15 = r3.dc_id;
-        r13.append(r15);
-        r13.append(r14);
-        r14 = r3.id;
-        r13.append(r14);
-        r14 = ".temp";
-        r13.append(r14);
-        r13 = r13.toString();
-        r9.<init>(r2, r13);
-        goto L_0x02fc;
-    L_0x02fa:
-        r31 = r15;
-    L_0x02fc:
-        r2 = org.telegram.messenger.BuildVars.DEBUG_PRIVATE_VERSION;
-        if (r2 == 0) goto L_0x0317;
-    L_0x0300:
-        r2 = org.telegram.messenger.FileLoader.getDocumentFileName(r3);
-        r13 = "tg";
-        r13 = r2.startsWith(r13);
-        if (r13 == 0) goto L_0x0317;
-    L_0x030c:
-        r13 = "json";
-        r2 = r2.endsWith(r13);
-        if (r2 == 0) goto L_0x0317;
-    L_0x0314:
-        r2 = 1;
-        r4.lottieFile = r2;
-    L_0x0317:
-        r14 = r3.size;
-        r2 = r24;
-        r15 = r31;
-        goto L_0x0340;
-    L_0x031e:
-        r24 = r2;
-        r31 = r15;
-        r2 = r8.webFile;
-        if (r2 == 0) goto L_0x0330;
-    L_0x0326:
-        r2 = new java.io.File;
-        r3 = org.telegram.messenger.FileLoader.getDirectory(r17);
-        r2.<init>(r3, r11);
-        goto L_0x033a;
-    L_0x0330:
-        r2 = new java.io.File;
-        r3 = 0;
-        r9 = org.telegram.messenger.FileLoader.getDirectory(r3);
-        r2.<init>(r9, r11);
-    L_0x033a:
-        r15 = r31;
-        r9 = r2;
-        r14 = 0;
-        r2 = r24;
-    L_0x0340:
-        r3 = r10.equals(r6);
-        if (r3 == 0) goto L_0x034e;
-    L_0x0346:
-        r3 = 1;
-        r4.animatedFile = r3;
-        r4.size = r14;
-        r10 = r9;
-        r15 = 1;
-        goto L_0x0350;
-    L_0x034e:
-        r3 = 1;
-        r10 = r9;
-    L_0x0350:
-        r9 = r2;
-        r2 = r27;
-        goto L_0x0364;
-    L_0x0354:
-        r11 = r22;
-        r7 = r34;
-        r12 = r35;
-        r24 = r2;
-        r31 = r15;
-        r3 = 1;
-        r2 = r27;
-        r10 = r9;
-        r9 = r24;
-    L_0x0364:
-        r4.imageType = r2;
-        r13 = r23;
-        r4.key = r13;
-        r4.filter = r6;
-        r4.imageLocation = r8;
-        r14 = r36;
-        r4.ext = r14;
-        r3 = r37;
-        r4.currentAccount = r3;
-        r3 = r30;
-        r4.parentObject = r3;
-        r14 = 2;
-        if (r7 != r14) goto L_0x0399;
-    L_0x037d:
-        r14 = new java.io.File;
-        r3 = org.telegram.messenger.FileLoader.getInternalCacheDir();
-        r1 = new java.lang.StringBuilder;
-        r1.<init>();
-        r1.append(r11);
-        r7 = ".enc.key";
-        r1.append(r7);
-        r1 = r1.toString();
-        r14.<init>(r3, r1);
-        r4.encryptionKeyPath = r14;
-    L_0x0399:
-        r4.addImageReceiver(r5, r13, r6, r2);
-        if (r15 != 0) goto L_0x047c;
-    L_0x039e:
-        if (r9 != 0) goto L_0x047c;
-    L_0x03a0:
-        r1 = r10.exists();
-        if (r1 == 0) goto L_0x03a8;
-    L_0x03a6:
-        goto L_0x047c;
-    L_0x03a8:
+        r1.<init>(r12, r13);
+        r4.encryptionKeyPath = r1;
+    L_0x03ad:
+        r4.addImageReceiver(r5, r10, r6, r2);
+        if (r15 != 0) goto L_0x0490;
+    L_0x03b2:
+        if (r3 != 0) goto L_0x0490;
+    L_0x03b4:
+        r1 = r9.exists();
+        if (r1 == 0) goto L_0x03bc;
+    L_0x03ba:
+        goto L_0x0490;
+    L_0x03bc:
         r4.url = r11;
         r1 = r0.imageLoadingByUrl;
         r1.put(r11, r4);
         r1 = r8.path;
-        if (r1 == 0) goto L_0x0407;
-    L_0x03b3:
+        if (r1 == 0) goto L_0x041d;
+    L_0x03c7:
         r1 = org.telegram.messenger.Utilities.MD5(r1);
         r2 = org.telegram.messenger.FileLoader.getDirectory(r18);
         r3 = new java.io.File;
@@ -4033,12 +4048,12 @@ public class ImageLoader {
         r1 = r5.toString();
         r3.<init>(r2, r1);
         r4.tempFilePath = r3;
-        r4.finalFilePath = r10;
+        r4.finalFilePath = r9;
         r1 = r8.path;
         r2 = r19;
         r1 = r1.startsWith(r2);
-        if (r1 == 0) goto L_0x03f3;
-    L_0x03df:
+        if (r1 == 0) goto L_0x0407;
+    L_0x03f3:
         r1 = new org.telegram.messenger.ImageLoader$ArtworkLoadTask;
         r1.<init>(r4);
         r4.artworkTask = r1;
@@ -4047,123 +4062,123 @@ public class ImageLoader {
         r1.add(r2);
         r1 = 0;
         r0.runArtworkTasks(r1);
-        goto L_0x049d;
-    L_0x03f3:
+        goto L_0x04b1;
+    L_0x0407:
         r1 = 0;
         r2 = new org.telegram.messenger.ImageLoader$HttpImageTask;
-        r2.<init>(r4, r12);
+        r3 = r35;
+        r2.<init>(r4, r3);
         r4.httpTask = r2;
         r2 = r0.httpTasks;
         r3 = r4.httpTask;
         r2.add(r3);
         r0.runHttpTasks(r1);
-        goto L_0x049d;
-    L_0x0407:
+        goto L_0x04b1;
+    L_0x041d:
+        r3 = r35;
         r1 = r8.location;
-        if (r1 == 0) goto L_0x042b;
-    L_0x040b:
-        r1 = r34;
-        if (r1 != 0) goto L_0x0417;
-    L_0x040f:
-        if (r12 <= 0) goto L_0x0415;
-    L_0x0411:
-        r2 = r8.key;
-        if (r2 == 0) goto L_0x0417;
-    L_0x0415:
+        if (r1 == 0) goto L_0x0441;
+    L_0x0423:
+        if (r7 != 0) goto L_0x042d;
+    L_0x0425:
+        if (r3 <= 0) goto L_0x042b;
+    L_0x0427:
+        r1 = r8.key;
+        if (r1 == 0) goto L_0x042d;
+    L_0x042b:
         r11 = 1;
-        goto L_0x0418;
-    L_0x0417:
-        r11 = r1;
-    L_0x0418:
+        goto L_0x042e;
+    L_0x042d:
+        r11 = r7;
+    L_0x042e:
         r6 = org.telegram.messenger.FileLoader.getInstance(r37);
-        if (r21 == 0) goto L_0x0420;
-    L_0x041e:
+        if (r21 == 0) goto L_0x0436;
+    L_0x0434:
         r10 = 2;
-        goto L_0x0421;
-    L_0x0420:
+        goto L_0x0437;
+    L_0x0436:
         r10 = 1;
-    L_0x0421:
+    L_0x0437:
         r7 = r28;
         r8 = r30;
         r9 = r36;
         r6.loadFile(r7, r8, r9, r10, r11);
-        goto L_0x0469;
-    L_0x042b:
-        r1 = r34;
+        goto L_0x047d;
+    L_0x0441:
+        r1 = r8.document;
+        if (r1 == 0) goto L_0x0458;
+    L_0x0445:
+        r1 = org.telegram.messenger.FileLoader.getInstance(r37);
         r2 = r8.document;
-        if (r2 == 0) goto L_0x0444;
-    L_0x0431:
-        r2 = org.telegram.messenger.FileLoader.getInstance(r37);
-        r3 = r8.document;
-        if (r21 == 0) goto L_0x043d;
-    L_0x0439:
-        r6 = r30;
-        r7 = 2;
-        goto L_0x0440;
-    L_0x043d:
-        r6 = r30;
-        r7 = 1;
-    L_0x0440:
-        r2.loadFile(r3, r6, r7, r1);
-        goto L_0x0469;
-    L_0x0444:
-        r2 = r8.secureDocument;
-        if (r2 == 0) goto L_0x0457;
-    L_0x0448:
+        if (r21 == 0) goto L_0x0451;
+    L_0x044d:
+        r3 = r30;
+        r6 = 2;
+        goto L_0x0454;
+    L_0x0451:
+        r3 = r30;
+        r6 = 1;
+    L_0x0454:
+        r1.loadFile(r2, r3, r6, r7);
+        goto L_0x047d;
+    L_0x0458:
+        r1 = r8.secureDocument;
+        if (r1 == 0) goto L_0x046b;
+    L_0x045c:
         r1 = org.telegram.messenger.FileLoader.getInstance(r37);
         r2 = r8.secureDocument;
-        if (r21 == 0) goto L_0x0452;
-    L_0x0450:
+        if (r21 == 0) goto L_0x0466;
+    L_0x0464:
         r3 = 2;
-        goto L_0x0453;
-    L_0x0452:
-        r3 = 1;
-    L_0x0453:
-        r1.loadFile(r2, r3);
-        goto L_0x0469;
-    L_0x0457:
-        r2 = r8.webFile;
-        if (r2 == 0) goto L_0x0469;
-    L_0x045b:
-        r2 = org.telegram.messenger.FileLoader.getInstance(r37);
-        r3 = r8.webFile;
-        if (r21 == 0) goto L_0x0465;
-    L_0x0463:
-        r6 = 2;
-        goto L_0x0466;
-    L_0x0465:
-        r6 = 1;
+        goto L_0x0467;
     L_0x0466:
-        r2.loadFile(r3, r6, r1);
-    L_0x0469:
-        r1 = r25.isForceLoding();
-        if (r1 == 0) goto L_0x049d;
+        r3 = 1;
+    L_0x0467:
+        r1.loadFile(r2, r3);
+        goto L_0x047d;
+    L_0x046b:
+        r1 = r8.webFile;
+        if (r1 == 0) goto L_0x047d;
     L_0x046f:
+        r1 = org.telegram.messenger.FileLoader.getInstance(r37);
+        r2 = r8.webFile;
+        if (r21 == 0) goto L_0x0479;
+    L_0x0477:
+        r3 = 2;
+        goto L_0x047a;
+    L_0x0479:
+        r3 = 1;
+    L_0x047a:
+        r1.loadFile(r2, r3, r7);
+    L_0x047d:
+        r1 = r25.isForceLoding();
+        if (r1 == 0) goto L_0x04b1;
+    L_0x0483:
         r1 = r0.forceLoadingImages;
         r2 = r4.key;
         r3 = 0;
         r3 = java.lang.Integer.valueOf(r3);
         r1.put(r2, r3);
-        goto L_0x049d;
-    L_0x047c:
-        r4.finalFilePath = r10;
+        goto L_0x04b1;
+    L_0x0490:
+        r4.finalFilePath = r9;
         r4.imageLocation = r8;
         r1 = new org.telegram.messenger.ImageLoader$CacheOutTask;
         r1.<init>(r4);
         r4.cacheTask = r1;
         r1 = r0.imageLoadingByKeys;
-        r1.put(r13, r4);
-        if (r21 == 0) goto L_0x0496;
-    L_0x048e:
+        r1.put(r10, r4);
+        if (r21 == 0) goto L_0x04aa;
+    L_0x04a2:
         r1 = r0.cacheThumbOutQueue;
         r2 = r4.cacheTask;
         r1.postRunnable(r2);
-        goto L_0x049d;
-    L_0x0496:
+        goto L_0x04b1;
+    L_0x04aa:
         r1 = r0.cacheOutQueue;
         r2 = r4.cacheTask;
         r1.postRunnable(r2);
-    L_0x049d:
+    L_0x04b1:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageLoader.lambda$createLoadOperationForImageReceiver$5$ImageLoader(int, java.lang.String, java.lang.String, int, org.telegram.messenger.ImageReceiver, java.lang.String, int, org.telegram.messenger.ImageLocation, boolean, java.lang.Object, org.telegram.tgnet.TLRPC$Document, boolean, boolean, int, int, java.lang.String, int):void");

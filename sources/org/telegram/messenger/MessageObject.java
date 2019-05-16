@@ -180,6 +180,7 @@ public class MessageObject {
     static final String[] excludeWords = new String[]{" vs. ", " vs ", " versus ", " ft. ", " ft ", " featuring ", " feat. ", " feat ", " presents ", " pres. ", " pres ", " and ", " & ", " . "};
     public static Pattern instagramUrlPattern;
     public static Pattern urlPattern;
+    private boolean animatedHackedSticker;
     public boolean attachPathExists;
     public int audioPlayerDuration;
     public float audioProgress;
@@ -4299,7 +4300,7 @@ public class MessageObject {
                     }
                     this.messageText = replaceWithLink(string, str2, user2);
                     return;
-                } else if (this.replyMessageObject.isSticker()) {
+                } else if (this.replyMessageObject.isSticker() || this.replyMessageObject.isAnimatedSticker()) {
                     string = LocaleController.getString("ActionPinnedSticker", NUM);
                     if (user2 == null) {
                         user2 = chat2;
@@ -4691,7 +4692,10 @@ public class MessageObject {
                                 this.type = 9;
                             } else if (isGifDocument(document)) {
                                 this.type = 8;
-                            } else if (this.messageOwner.media.document.mime_type.equals("image/webp") && isSticker()) {
+                            } else if (isSticker()) {
+                                this.type = 13;
+                            } else if (isAnimatedSticker()) {
+                                this.animatedHackedSticker = true;
                                 this.type = 13;
                             } else {
                                 this.type = 9;
@@ -4851,7 +4855,7 @@ public class MessageObject {
                     }
                 } else if (BuildVars.DEBUG_PRIVATE_VERSION) {
                     String documentFileName = FileLoader.getDocumentFileName(document);
-                    if (documentFileName.startsWith("tg") && documentFileName.endsWith("json")) {
+                    if (documentFileName.startsWith("tg_secret_sticker") && documentFileName.endsWith("json")) {
                         return true;
                     }
                     return false;
@@ -7320,8 +7324,18 @@ public class MessageObject {
         if (document != null) {
             for (int i = 0; i < document.attributes.size(); i++) {
                 if (((DocumentAttribute) document.attributes.get(i)) instanceof TL_documentAttributeSticker) {
-                    return true;
+                    return "image/webp".equals(document.mime_type);
                 }
+            }
+        }
+        return false;
+    }
+
+    public static boolean isAnimatedStickerDocument(Document document) {
+        if (SharedConfig.showAnimatedStickers && document != null) {
+            String documentFileName = FileLoader.getDocumentFileName(document);
+            if (documentFileName.startsWith("tg_secret_sticker") && documentFileName.endsWith("json")) {
+                return true;
             }
         }
         return false;
@@ -7442,6 +7456,11 @@ public class MessageObject {
     public static boolean isStickerMessage(Message message) {
         MessageMedia messageMedia = message.media;
         return messageMedia != null && isStickerDocument(messageMedia.document);
+    }
+
+    public static boolean isAnimatedStickerMessage(Message message) {
+        MessageMedia messageMedia = message.media;
+        return messageMedia != null && isAnimatedStickerDocument(messageMedia.document);
     }
 
     public static boolean isLocationMessage(Message message) {
@@ -7719,6 +7738,15 @@ public class MessageObject {
         int i = this.type;
         if (i == 1000) {
             return isStickerMessage(this.messageOwner);
+        }
+        boolean z = i == 13 && !this.animatedHackedSticker;
+        return z;
+    }
+
+    public boolean isAnimatedSticker() {
+        int i = this.type;
+        if (i == 1000) {
+            return isAnimatedStickerMessage(this.messageOwner);
         }
         return i == 13;
     }
@@ -8178,7 +8206,7 @@ public class MessageObject {
         if (messageMedia instanceof TL_messageMediaPhoto) {
             return true;
         }
-        if (!(!(messageMedia instanceof TL_messageMediaDocument) || isVoice() || isSticker() || isRoundVideo())) {
+        if (!(!(messageMedia instanceof TL_messageMediaDocument) || isVoice() || isSticker() || isAnimatedSticker() || isRoundVideo())) {
             z = true;
         }
         return z;

@@ -3790,7 +3790,7 @@ public class DataQuery {
         r0 = org.telegram.messenger.LocaleController.getString(r0, r12);	 Catch:{ Throwable -> 0x02b7 }
         r0 = r11.setLongLabel(r0);	 Catch:{ Throwable -> 0x02b7 }
         r11 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x02b7 }
-        r12 = NUM; // 0x7var_ float:1.7945878E38 double:1.0529358197E-314;
+        r12 = NUM; // 0x7var_f float:1.7945874E38 double:1.0529358187E-314;
         r11 = android.graphics.drawable.Icon.createWithResource(r11, r12);	 Catch:{ Throwable -> 0x02b7 }
         r0 = r0.setIcon(r11);	 Catch:{ Throwable -> 0x02b7 }
         r0 = r0.setIntent(r4);	 Catch:{ Throwable -> 0x02b7 }
@@ -4020,7 +4020,7 @@ public class DataQuery {
         goto L_0x0298;
     L_0x028c:
         r2 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x02b7 }
-        r4 = NUM; // 0x7var_ float:1.794588E38 double:1.05293582E-314;
+        r4 = NUM; // 0x7var_ float:1.7945876E38 double:1.052935819E-314;
         r2 = android.graphics.drawable.Icon.createWithResource(r2, r4);	 Catch:{ Throwable -> 0x02b7 }
         r1.setIcon(r2);	 Catch:{ Throwable -> 0x02b7 }
     L_0x0298:

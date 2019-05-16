@@ -36,7 +36,7 @@ public class CameraController implements OnInfoListener {
     private static final int KEEP_ALIVE_SECONDS = 60;
     private static final int MAX_POOL_SIZE = 1;
     protected ArrayList<String> availableFlashModes = new ArrayList();
-    protected ArrayList<CameraInfo> cameraInfos;
+    protected volatile ArrayList<CameraInfo> cameraInfos;
     private boolean cameraInitied;
     private boolean loadingCameras;
     private ArrayList<Runnable> onFinishCameraInitRunnables = new ArrayList();
@@ -448,13 +448,7 @@ public class CameraController implements OnInfoListener {
     }
 
     public boolean isCameraInitied() {
-        if (this.cameraInitied) {
-            ArrayList arrayList = this.cameraInfos;
-            if (!(arrayList == null || arrayList.isEmpty())) {
-                return true;
-            }
-        }
-        return false;
+        return (!this.cameraInitied || this.cameraInfos == null || this.cameraInfos.isEmpty()) ? false : true;
     }
 
     public void close(CameraSession cameraSession, CountDownLatch countDownLatch, Runnable runnable) {

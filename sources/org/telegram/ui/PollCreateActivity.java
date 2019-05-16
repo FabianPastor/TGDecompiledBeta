@@ -407,6 +407,15 @@ public class PollCreateActivity extends BaseFragment {
                 rect.bottom += AndroidUtilities.dp(60.0f);
                 return super.requestChildRectangleOnScreen(view, rect, z);
             }
+
+            /* Access modifiers changed, original: protected */
+            public void onMeasure(int i, int i2) {
+                super.onMeasure(i, i2);
+            }
+
+            public void requestLayout() {
+                super.requestLayout();
+            }
         };
         this.listView.setVerticalScrollBarEnabled(false);
         ((DefaultItemAnimator) this.listView.getItemAnimator()).setDelayAnimations(false);

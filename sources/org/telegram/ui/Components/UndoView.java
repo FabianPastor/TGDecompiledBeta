@@ -221,6 +221,7 @@ public class UndoView extends FrameLayout {
     }
 
     public void showWithAction(long j, int i, Runnable runnable, Runnable runnable2) {
+        String stringBuilder;
         long j2 = j;
         int i2 = i;
         Runnable runnable3 = this.currentActionRunnable;
@@ -311,6 +312,18 @@ public class UndoView extends FrameLayout {
                 MessagesController.getInstance(this.currentAccount).addDialogAction(j2, this.currentAction == 0);
             }
         }
+        StringBuilder stringBuilder2 = new StringBuilder();
+        stringBuilder2.append(this.infoTextView.getText());
+        if (this.subinfoTextView.getVisibility() == 0) {
+            StringBuilder stringBuilder3 = new StringBuilder();
+            stringBuilder3.append(". ");
+            stringBuilder3.append(this.subinfoTextView.getText());
+            stringBuilder = stringBuilder3.toString();
+        } else {
+            stringBuilder = "";
+        }
+        stringBuilder2.append(stringBuilder);
+        AndroidUtilities.makeAccessibilityAnnouncement(stringBuilder2.toString());
         if (getVisibility() != 0) {
             setVisibility(0);
             int i4 = 52;
