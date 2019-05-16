@@ -34,8 +34,17 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
-import androidx.core.view.NestedScrollingParent2;
+import androidx.core.view.NestedScrollingParent3;
 import androidx.core.view.NestedScrollingParentHelper;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.ItemTouchHelper.Callback;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScrollerMiddle;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener;
+import androidx.recyclerview.widget.RecyclerView.State;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import com.airbnb.lottie.LottieDrawable;
 import java.util.ArrayList;
 import org.telegram.messenger.AccountInstance;
@@ -57,15 +66,6 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.XiaomiUtilities;
-import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.support.widget.LinearSmoothScrollerMiddle;
-import org.telegram.messenger.support.widget.RecyclerView;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
-import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
-import org.telegram.messenger.support.widget.RecyclerView.State;
-import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
-import org.telegram.messenger.support.widget.helper.ItemTouchHelper;
-import org.telegram.messenger.support.widget.helper.ItemTouchHelper.Callback;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.Dialog;
@@ -408,7 +408,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         }
     }
 
-    private class ContentView extends SizeNotifierFrameLayout implements NestedScrollingParent2 {
+    private class ContentView extends SizeNotifierFrameLayout implements NestedScrollingParent3 {
         private int inputFieldHeight;
         private NestedScrollingParentHelper nestedScrollingParentHelper = new NestedScrollingParentHelper(this);
         private boolean startedScrollAtTop;
@@ -422,7 +422,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             return false;
         }
 
+        public void onNestedScroll(View view, int i, int i2, int i3, int i4) {
+        }
+
         public void onNestedScroll(View view, int i, int i2, int i3, int i4, int i5) {
+        }
+
+        public void onNestedScroll(View view, int i, int i2, int i3, int i4, int i5, int[] iArr) {
         }
 
         public ContentView(Context context) {
@@ -1089,6 +1095,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 }
             }
         };
+        this.listView.setOverScrollMode(2);
         this.listView.setItemAnimator(this.dialogsItemAnimator);
         this.listView.setVerticalScrollBarEnabled(true);
         this.listView.setInstantClick(true);
@@ -1266,7 +1273,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             /* JADX WARNING: Missing block: B:32:0x00ee, code skipped:
             if (java.lang.Math.abs(r1) > 1) goto L_0x00fc;
      */
-            public void onScrolled(org.telegram.messenger.support.widget.RecyclerView r6, int r7, int r8) {
+            public void onScrolled(androidx.recyclerview.widget.RecyclerView r6, int r7, int r8) {
                 /*
                 r5 = this;
                 r7 = org.telegram.ui.DialogsActivity.this;
@@ -1417,7 +1424,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             L_0x0123:
                 return;
                 */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity$AnonymousClass8.onScrolled(org.telegram.messenger.support.widget.RecyclerView, int, int):void");
+                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity$AnonymousClass8.onScrolled(androidx.recyclerview.widget.RecyclerView, int, int):void");
             }
 
             public /* synthetic */ void lambda$onScrolled$0$DialogsActivity$8(boolean z) {
@@ -3656,6 +3663,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     public ThemeDescription[] getThemeDescriptions() {
+        LottieDrawable lottieDrawable;
         -$$Lambda$DialogsActivity$kk8TCoSt0Vvk5iX4TZpsEfeGO6c -__lambda_dialogsactivity_kk8tcost0vvk5ix4tzpsefego6c = new -$$Lambda$DialogsActivity$kk8TCoSt0Vvk5iX4TZpsEfeGO6c(this);
         ArrayList arrayList = new ArrayList();
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite"));
@@ -3748,17 +3756,41 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         }
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{Theme.dialogs_archiveAvatarDrawable}, "Box2", "avatar_text"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{Theme.dialogs_archiveAvatarDrawable}, "Box1", "avatar_text"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{Theme.dialogs_pinArchiveDrawable}, "Arrow", "avatar_text"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{Theme.dialogs_pinArchiveDrawable}, "Line", "avatar_text"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{Theme.dialogs_unpinArchiveDrawable}, "Arrow", "avatar_text"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{Theme.dialogs_unpinArchiveDrawable}, "Line", "avatar_text"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{Theme.dialogs_archiveDrawable}, "Arrow", "chats_archiveBackground"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{Theme.dialogs_archiveDrawable}, "Box2", "avatar_text"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{Theme.dialogs_archiveDrawable}, "Box1", "avatar_text"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{Theme.dialogs_unarchiveDrawable}, "Arrow1", "avatar_text"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{Theme.dialogs_unarchiveDrawable}, "Arrow2", "chats_archivePinBackground"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{Theme.dialogs_unarchiveDrawable}, "Box2", "avatar_text"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{Theme.dialogs_unarchiveDrawable}, "Box1", "avatar_text"));
+        Drawable drawable = Theme.dialogs_pinArchiveDrawable;
+        if (drawable instanceof LottieDrawable) {
+            lottieDrawable = (LottieDrawable) drawable;
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{lottieDrawable}, "Arrow", "avatar_text"));
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{lottieDrawable}, "Line", "avatar_text"));
+        } else {
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, null, new Drawable[]{drawable}, null, "avatar_text"));
+        }
+        drawable = Theme.dialogs_unpinArchiveDrawable;
+        if (drawable instanceof LottieDrawable) {
+            lottieDrawable = (LottieDrawable) drawable;
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{lottieDrawable}, "Arrow", "avatar_text"));
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{lottieDrawable}, "Line", "avatar_text"));
+        } else {
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, null, new Drawable[]{drawable}, null, "avatar_text"));
+        }
+        drawable = Theme.dialogs_archiveDrawable;
+        if (drawable instanceof LottieDrawable) {
+            lottieDrawable = (LottieDrawable) drawable;
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{lottieDrawable}, "Arrow", "chats_archiveBackground"));
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{lottieDrawable}, "Box2", "avatar_text"));
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{lottieDrawable}, "Box1", "avatar_text"));
+        } else {
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, null, new Drawable[]{drawable}, null, "avatar_text"));
+        }
+        drawable = Theme.dialogs_unarchiveDrawable;
+        if (drawable instanceof LottieDrawable) {
+            lottieDrawable = (LottieDrawable) drawable;
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{lottieDrawable}, "Arrow1", "avatar_text"));
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{lottieDrawable}, "Arrow2", "chats_archivePinBackground"));
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{lottieDrawable}, "Box2", "avatar_text"));
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, new LottieDrawable[]{lottieDrawable}, "Box1", "avatar_text"));
+        } else {
+            arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, null, new Drawable[]{drawable}, null, "avatar_text"));
+        }
         arrayList.add(new ThemeDescription(this.sideMenu, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "chats_menuBackground"));
         arrayList.add(new ThemeDescription(this.sideMenu, 0, new Class[]{DrawerProfileCell.class}, null, null, null, "chats_menuName"));
         arrayList.add(new ThemeDescription(this.sideMenu, 0, new Class[]{DrawerProfileCell.class}, null, null, null, "chats_menuPhone"));

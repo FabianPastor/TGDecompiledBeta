@@ -36,6 +36,15 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
+import androidx.recyclerview.widget.RecyclerView.ItemDecoration;
+import androidx.recyclerview.widget.RecyclerView.LayoutParams;
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener;
+import androidx.recyclerview.widget.RecyclerView.State;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -51,15 +60,6 @@ import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.support.widget.GridLayoutManager;
-import org.telegram.messenger.support.widget.GridLayoutManager.SpanSizeLookup;
-import org.telegram.messenger.support.widget.RecyclerView;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
-import org.telegram.messenger.support.widget.RecyclerView.ItemDecoration;
-import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
-import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
-import org.telegram.messenger.support.widget.RecyclerView.State;
-import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
@@ -355,9 +355,9 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
             MessagesStorage.getInstance(ShareAlert.this.currentAccount).getStorageQueue().postRunnable(new -$$Lambda$ShareAlert$ShareSearchAdapter$-0pnpfSXHTiImTPZ850FgfY7mkY(this, str, i));
         }
 
-        /* JADX WARNING: Removed duplicated region for block: B:76:0x01d3 A:{LOOP_END, Catch:{ Exception -> 0x0414 }, LOOP:2: B:46:0x0114->B:76:0x01d3} */
+        /* JADX WARNING: Removed duplicated region for block: B:76:0x01d3 A:{LOOP_END, LOOP:2: B:46:0x0114->B:76:0x01d3, Catch:{ Exception -> 0x0414 }} */
         /* JADX WARNING: Removed duplicated region for block: B:190:0x0165 A:{SYNTHETIC} */
-        /* JADX WARNING: Removed duplicated region for block: B:172:0x03f8 A:{LOOP_END, Catch:{ Exception -> 0x0414 }, LOOP:7: B:144:0x0342->B:172:0x03f8} */
+        /* JADX WARNING: Removed duplicated region for block: B:172:0x03f8 A:{LOOP_END, LOOP:7: B:144:0x0342->B:172:0x03f8, Catch:{ Exception -> 0x0414 }} */
         /* JADX WARNING: Removed duplicated region for block: B:215:0x038c A:{SYNTHETIC} */
         public /* synthetic */ void lambda$searchDialogsInternal$1$ShareAlert$ShareSearchAdapter(java.lang.String r21, int r22) {
             /*

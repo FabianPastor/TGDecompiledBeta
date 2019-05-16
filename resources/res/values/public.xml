@@ -1333,6 +1333,39 @@
     <public type="id" name="acc_action_msg_options" id="NUM" />
     <public type="id" name="acc_action_open_photo" id="NUM" />
     <public type="id" name="acc_action_small_button" id="NUM" />
+    <public type="id" name="accessibility_action_clickable_span" id="NUM" />
+    <public type="id" name="accessibility_custom_action_0" id="NUM" />
+    <public type="id" name="accessibility_custom_action_1" id="NUM" />
+    <public type="id" name="accessibility_custom_action_10" id="NUM" />
+    <public type="id" name="accessibility_custom_action_11" id="NUM" />
+    <public type="id" name="accessibility_custom_action_12" id="NUM" />
+    <public type="id" name="accessibility_custom_action_13" id="NUM" />
+    <public type="id" name="accessibility_custom_action_14" id="NUM" />
+    <public type="id" name="accessibility_custom_action_15" id="NUM" />
+    <public type="id" name="accessibility_custom_action_16" id="NUM" />
+    <public type="id" name="accessibility_custom_action_17" id="NUM" />
+    <public type="id" name="accessibility_custom_action_18" id="NUM" />
+    <public type="id" name="accessibility_custom_action_19" id="NUM" />
+    <public type="id" name="accessibility_custom_action_2" id="NUM" />
+    <public type="id" name="accessibility_custom_action_20" id="NUM" />
+    <public type="id" name="accessibility_custom_action_21" id="NUM" />
+    <public type="id" name="accessibility_custom_action_22" id="NUM" />
+    <public type="id" name="accessibility_custom_action_23" id="NUM" />
+    <public type="id" name="accessibility_custom_action_24" id="NUM" />
+    <public type="id" name="accessibility_custom_action_25" id="NUM" />
+    <public type="id" name="accessibility_custom_action_26" id="NUM" />
+    <public type="id" name="accessibility_custom_action_27" id="NUM" />
+    <public type="id" name="accessibility_custom_action_28" id="NUM" />
+    <public type="id" name="accessibility_custom_action_29" id="NUM" />
+    <public type="id" name="accessibility_custom_action_3" id="NUM" />
+    <public type="id" name="accessibility_custom_action_30" id="NUM" />
+    <public type="id" name="accessibility_custom_action_31" id="NUM" />
+    <public type="id" name="accessibility_custom_action_4" id="NUM" />
+    <public type="id" name="accessibility_custom_action_5" id="NUM" />
+    <public type="id" name="accessibility_custom_action_6" id="NUM" />
+    <public type="id" name="accessibility_custom_action_7" id="NUM" />
+    <public type="id" name="accessibility_custom_action_8" id="NUM" />
+    <public type="id" name="accessibility_custom_action_9" id="NUM" />
     <public type="id" name="action0" id="NUM" />
     <public type="id" name="action_bar" id="NUM" />
     <public type="id" name="action_bar_activity_content" id="NUM" />
@@ -1404,6 +1437,7 @@
     <public type="id" name="decline_text" id="NUM" />
     <public type="id" name="decor_content_parent" id="NUM" />
     <public type="id" name="default_activity_button" id="NUM" />
+    <public type="id" name="dialog_button" id="NUM" />
     <public type="id" name="disableHome" id="NUM" />
     <public type="id" name="donate_with" id="NUM" />
     <public type="id" name="donate_with_google" id="NUM" />
@@ -1548,6 +1582,11 @@
     <public type="id" name="submit_area" id="NUM" />
     <public type="id" name="subtitle" id="NUM" />
     <public type="id" name="tabMode" id="NUM" />
+    <public type="id" name="tag_accessibility_actions" id="NUM" />
+    <public type="id" name="tag_accessibility_clickable_spans" id="NUM" />
+    <public type="id" name="tag_accessibility_heading" id="NUM" />
+    <public type="id" name="tag_accessibility_pane_title" id="NUM" />
+    <public type="id" name="tag_screen_reader_focusable" id="NUM" />
     <public type="id" name="tag_transition_group" id="NUM" />
     <public type="id" name="tag_unhandled_key_event_manager" id="NUM" />
     <public type="id" name="tag_unhandled_key_listeners" id="NUM" />
@@ -1614,6 +1653,7 @@
     <public type="layout" name="abc_tooltip" id="NUM" />
     <public type="layout" name="call_notification" id="NUM" />
     <public type="layout" name="call_notification_rtl" id="NUM" />
+    <public type="layout" name="custom_dialog" id="NUM" />
     <public type="layout" name="hockeyapp_activity_expiry_info" id="NUM" />
     <public type="layout" name="hockeyapp_activity_feedback" id="NUM" />
     <public type="layout" name="hockeyapp_activity_login" id="NUM" />

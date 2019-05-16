@@ -2,7 +2,7 @@ package org.telegram.ui.Adapters;
 
 import android.content.Context;
 import android.view.ViewGroup;
-import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.TLRPC.TL_messageMediaVenue;
 import org.telegram.ui.Cells.LocationCell;
 import org.telegram.ui.Components.RecyclerListView.Holder;

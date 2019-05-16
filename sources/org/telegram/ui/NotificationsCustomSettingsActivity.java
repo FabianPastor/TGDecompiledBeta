@@ -18,6 +18,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -28,10 +32,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.support.widget.RecyclerView;
-import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
-import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.ActionBarMenuItem.ActionBarMenuItemSearchListener;
@@ -931,7 +931,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         r6 = r10.currentType;
         r7 = r10.exceptions;
         r8 = r10.currentAccount;
-        r9 = new org.telegram.ui.-$$Lambda$NotificationsCustomSettingsActivity$otjpDTRYk6zu32Dyx_FDur5Q7Gs;
+        r9 = new org.telegram.ui.-$$Lambda$NotificationsCustomSettingsActivity$ZmFDQGaW1AFFelUamuZaIwn-BvM;
         r9.<init>(r10, r14, r2, r12);
         r3 = r10;
         org.telegram.ui.Components.AlertsCreator.showCustomNotificationsDialog(r3, r4, r6, r7, r8, r9);
@@ -1228,6 +1228,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
     public /* synthetic */ void lambda$null$1$NotificationsCustomSettingsActivity(NotificationException notificationException) {
         this.exceptions.add(0, notificationException);
         updateRows();
+        this.adapter.notifyDataSetChanged();
     }
 
     public /* synthetic */ void lambda$null$3$NotificationsCustomSettingsActivity(NotificationsCheckCell notificationsCheckCell, ViewHolder viewHolder, int i, int i2) {

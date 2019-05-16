@@ -3,11 +3,11 @@ package org.telegram.ui.Components;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.view.View;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.ItemDecoration;
+import androidx.recyclerview.widget.RecyclerView.State;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.support.widget.RecyclerView;
-import org.telegram.messenger.support.widget.RecyclerView.ItemDecoration;
-import org.telegram.messenger.support.widget.RecyclerView.State;
 import org.telegram.ui.ActionBar.Theme;
 
 public class GroupCreateDividerItemDecoration extends ItemDecoration {

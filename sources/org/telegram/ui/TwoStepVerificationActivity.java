@@ -25,6 +25,8 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.math.BigInteger;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
@@ -35,8 +37,6 @@ import org.telegram.messenger.SRPHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.PasswordKdfAlgo;
@@ -1099,7 +1099,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         }
         int lastIndexOf = str.lastIndexOf(46);
         int lastIndexOf2 = str.lastIndexOf(64);
-        if (lastIndexOf < 0 || lastIndexOf2 < 0 || lastIndexOf < lastIndexOf2) {
+        if (lastIndexOf2 < 0 || lastIndexOf < lastIndexOf2) {
             return false;
         }
         return true;

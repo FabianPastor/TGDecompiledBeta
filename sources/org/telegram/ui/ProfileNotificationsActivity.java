@@ -22,6 +22,10 @@ import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
+import androidx.recyclerview.widget.RecyclerView.LayoutParams;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -32,10 +36,6 @@ import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.NotificationsController;
-import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
-import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
-import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Dialog;
 import org.telegram.tgnet.TLRPC.TL_peerNotifySettings;
@@ -511,10 +511,10 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         this.addingException = bundle.getBoolean("exception", false);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:32:0x00f5  */
-    /* JADX WARNING: Removed duplicated region for block: B:31:0x00d4  */
-    /* JADX WARNING: Removed duplicated region for block: B:44:0x0180  */
-    /* JADX WARNING: Removed duplicated region for block: B:41:0x016c  */
+    /* JADX WARNING: Removed duplicated region for block: B:30:0x00f3  */
+    /* JADX WARNING: Removed duplicated region for block: B:29:0x00d2  */
+    /* JADX WARNING: Removed duplicated region for block: B:42:0x017e  */
+    /* JADX WARNING: Removed duplicated region for block: B:39:0x016a  */
     public boolean onFragmentCreate() {
         /*
         r8 = this;
@@ -601,30 +601,28 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         r3 = r8.dialog_id;
         r1 = (int) r3;
         r3 = 1;
-        if (r1 >= 0) goto L_0x00a4;
+        if (r1 >= 0) goto L_0x00a2;
     L_0x0087:
         r4 = r8.currentAccount;
         r4 = org.telegram.messenger.MessagesController.getInstance(r4);
         r5 = -r1;
         r5 = java.lang.Integer.valueOf(r5);
         r4 = r4.getChat(r5);
-        if (r4 == 0) goto L_0x00a4;
-    L_0x0098:
         r5 = org.telegram.messenger.ChatObject.isChannel(r4);
-        if (r5 == 0) goto L_0x00a4;
-    L_0x009e:
+        if (r5 == 0) goto L_0x00a2;
+    L_0x009c:
         r4 = r4.megagroup;
-        if (r4 != 0) goto L_0x00a4;
-    L_0x00a2:
+        if (r4 != 0) goto L_0x00a2;
+    L_0x00a0:
         r4 = 1;
-        goto L_0x00a5;
-    L_0x00a4:
+        goto L_0x00a3;
+    L_0x00a2:
         r4 = 0;
+    L_0x00a3:
+        if (r1 == 0) goto L_0x00c8;
     L_0x00a5:
-        if (r1 == 0) goto L_0x00ca;
+        if (r4 != 0) goto L_0x00c8;
     L_0x00a7:
-        if (r4 != 0) goto L_0x00ca;
-    L_0x00a9:
         r4 = r8.rowCount;
         r5 = r4 + 1;
         r8.rowCount = r5;
@@ -641,15 +639,15 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         r5 = r4 + 1;
         r8.rowCount = r5;
         r8.popupInfoRow = r4;
-        goto L_0x00d2;
-    L_0x00ca:
+        goto L_0x00d0;
+    L_0x00c8:
         r8.popupRow = r2;
         r8.popupEnabledRow = r2;
         r8.popupDisabledRow = r2;
         r8.popupInfoRow = r2;
+    L_0x00d0:
+        if (r1 <= 0) goto L_0x00f3;
     L_0x00d2:
-        if (r1 <= 0) goto L_0x00f5;
-    L_0x00d4:
         r1 = r8.rowCount;
         r2 = r1 + 1;
         r8.rowCount = r2;
@@ -666,13 +664,13 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         r2 = r1 + 1;
         r8.rowCount = r2;
         r8.ringtoneInfoRow = r1;
-        goto L_0x00fd;
-    L_0x00f5:
+        goto L_0x00fb;
+    L_0x00f3:
         r8.callsRow = r2;
         r8.callsVibrateRow = r2;
         r8.ringtoneRow = r2;
         r8.ringtoneInfoRow = r2;
-    L_0x00fd:
+    L_0x00fb:
         r1 = r8.rowCount;
         r2 = r1 + 1;
         r8.rowCount = r2;
@@ -695,18 +693,18 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         r2.append(r4);
         r2 = r2.toString();
         r2 = r1.getBoolean(r2, r0);
-        if (r2 != 0) goto L_0x013b;
-    L_0x0134:
+        if (r2 != 0) goto L_0x0139;
+    L_0x0132:
         r2 = r8.addingException;
-        if (r2 == 0) goto L_0x0139;
-    L_0x0138:
-        goto L_0x013b;
-    L_0x0139:
+        if (r2 == 0) goto L_0x0137;
+    L_0x0136:
+        goto L_0x0139;
+    L_0x0137:
         r2 = 0;
-        goto L_0x013c;
-    L_0x013b:
+        goto L_0x013a;
+    L_0x0139:
         r2 = 1;
-    L_0x013c:
+    L_0x013a:
         r8.customEnabled = r2;
         r2 = new java.lang.StringBuilder;
         r2.<init>();
@@ -723,33 +721,33 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         r5.append(r6);
         r4 = r5.toString();
         r1 = r1.getInt(r4, r0);
-        if (r1 != 0) goto L_0x0180;
+        if (r1 != 0) goto L_0x017e;
+    L_0x016a:
+        if (r2 == 0) goto L_0x016f;
     L_0x016c:
-        if (r2 == 0) goto L_0x0171;
-    L_0x016e:
         r8.notificationsEnabled = r3;
-        goto L_0x018d;
-    L_0x0171:
+        goto L_0x018b;
+    L_0x016f:
         r0 = r8.currentAccount;
         r0 = org.telegram.messenger.NotificationsController.getInstance(r0);
         r1 = r8.dialog_id;
         r0 = r0.isGlobalNotificationsEnabled(r1);
         r8.notificationsEnabled = r0;
-        goto L_0x018d;
+        goto L_0x018b;
+    L_0x017e:
+        if (r1 != r3) goto L_0x0183;
     L_0x0180:
-        if (r1 != r3) goto L_0x0185;
-    L_0x0182:
         r8.notificationsEnabled = r3;
-        goto L_0x018d;
-    L_0x0185:
+        goto L_0x018b;
+    L_0x0183:
         r2 = 2;
-        if (r1 != r2) goto L_0x018b;
-    L_0x0188:
+        if (r1 != r2) goto L_0x0189;
+    L_0x0186:
         r8.notificationsEnabled = r0;
-        goto L_0x018d;
+        goto L_0x018b;
+    L_0x0189:
+        r8.notificationsEnabled = r0;
     L_0x018b:
-        r8.notificationsEnabled = r0;
-    L_0x018d:
         r0 = r8.currentAccount;
         r0 = org.telegram.messenger.NotificationCenter.getInstance(r0);
         r1 = org.telegram.messenger.NotificationCenter.notificationsSettingsUpdated;

@@ -22,6 +22,9 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -32,9 +35,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
-import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Message;
@@ -232,8 +232,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
             while (it.hasNext()) {
                 MessageObject messageObject = (MessageObject) it.next();
                 Message message = messageObject.messageOwner;
-                MessageAction messageAction = message.action;
-                if (messageAction != null && (messageAction instanceof TL_messageActionPhoneCall)) {
+                if (message.action instanceof TL_messageActionPhoneCall) {
                     CallLogRow callLogRow;
                     int i4 = message.from_id == UserConfig.getInstance(this.currentAccount).getClientUserId() ? messageObject.messageOwner.to_id.user_id : messageObject.messageOwner.from_id;
                     int i5 = messageObject.messageOwner.from_id == UserConfig.getInstance(this.currentAccount).getClientUserId() ? 0 : 1;
@@ -347,7 +346,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
             /* JADX WARNING: Missing block: B:27:0x00a5, code skipped:
             if (java.lang.Math.abs(r1) > 1) goto L_0x00b3;
      */
-            public void onScrolled(org.telegram.messenger.support.widget.RecyclerView r5, int r6, int r7) {
+            public void onScrolled(androidx.recyclerview.widget.RecyclerView r5, int r6, int r7) {
                 /*
                 r4 = this;
                 r6 = org.telegram.ui.CallLogActivity.this;
@@ -466,7 +465,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
             L_0x00d2:
                 return;
                 */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.CallLogActivity$AnonymousClass3.onScrolled(org.telegram.messenger.support.widget.RecyclerView, int, int):void");
+                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.CallLogActivity$AnonymousClass3.onScrolled(androidx.recyclerview.widget.RecyclerView, int, int):void");
             }
 
             public /* synthetic */ void lambda$onScrolled$0$CallLogActivity$3(CallLogRow callLogRow) {
@@ -534,7 +533,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
         if (VoIPHelper.canRateCall((TL_messageActionPhoneCall) ((Message) callLogRow.calls.get(0)).action)) {
             arrayList.add(LocaleController.getString("CallMessageReportProblem", NUM));
         }
-        new Builder(getParentActivity()).setTitle(LocaleController.getString("Calls", NUM)).setItems((CharSequence[]) arrayList.toArray(new String[arrayList.size()]), new -$$Lambda$CallLogActivity$attFsRotfjaCaQu5P_RAm6Vh5uM(this, callLogRow)).show();
+        new Builder(getParentActivity()).setTitle(LocaleController.getString("Calls", NUM)).setItems((CharSequence[]) arrayList.toArray(new String[0]), new -$$Lambda$CallLogActivity$attFsRotfjaCaQu5P_RAm6Vh5uM(this, callLogRow)).show();
         return true;
     }
 

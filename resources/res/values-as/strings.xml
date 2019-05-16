@@ -47,5 +47,4 @@
     <string name="common_signin_button_text_long">Googleৰ জৰিয়তে ছাইন ইন কৰক</string>
     <string name="fcm_fallback_notification_channel_label">বিবিধ</string>
     <string name="search_menu_title">অনুসন্ধান কৰক</string>
-    <string name="status_bar_notification_info_overflow">৯৯৯+</string>
 </resources>

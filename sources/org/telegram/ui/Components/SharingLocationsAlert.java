@@ -10,10 +10,13 @@ import android.os.Build.VERSION;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 import org.telegram.messenger.AndroidUtilities;
@@ -22,15 +25,10 @@ import org.telegram.messenger.LocationController;
 import org.telegram.messenger.LocationController.SharingLocationInfo;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.support.widget.RecyclerView;
-import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
-import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.SharingLiveLocationCell;
 import org.telegram.ui.Components.RecyclerListView.Holder;
-import org.telegram.ui.Components.RecyclerListView.OnItemClickListener;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 import org.telegram.ui.ContentPreviewViewer;
 
@@ -100,10 +98,10 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
             if (itemViewType == 0) {
                 ((SharingLiveLocationCell) viewHolder.itemView).setDialog(SharingLocationsAlert.this.getLocation(i - 1));
             } else if (itemViewType == 1 && SharingLocationsAlert.this.textView != null) {
-                TextView access$800 = SharingLocationsAlert.this.textView;
+                TextView access$600 = SharingLocationsAlert.this.textView;
                 Object[] objArr = new Object[1];
                 objArr[0] = LocaleController.formatPluralString("Chats", LocationController.getLocationsCount());
-                access$800.setText(LocaleController.formatString("SharingLiveLocationTitle", NUM, objArr));
+                access$600.setText(LocaleController.formatString("SharingLiveLocationTitle", NUM, objArr));
             }
         }
     }
@@ -209,15 +207,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
                 SharingLocationsAlert.this.updateLayout();
             }
         });
-        this.listView.setOnItemClickListener(new OnItemClickListener() {
-            public void onItemClick(View view, int i) {
-                i--;
-                if (i >= 0 && i < LocationController.getLocationsCount()) {
-                    SharingLocationsAlert.this.delegate.didSelectLocation(SharingLocationsAlert.this.getLocation(i));
-                    SharingLocationsAlert.this.dismiss();
-                }
-            }
-        });
+        this.listView.setOnItemClickListener(new -$$Lambda$SharingLocationsAlert$DpSNSHcc4un3mf9rnSsA-SYRUYE(this));
         this.containerView.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
         View view = new View(context);
         view.setBackgroundResource(NUM);
@@ -228,24 +218,32 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         pickerBottomLayout.cancelButton.setTextColor(Theme.getColor("dialogTextRed"));
         pickerBottomLayout.cancelButton.setText(LocaleController.getString("StopAllLocationSharings", NUM));
-        pickerBottomLayout.cancelButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View view) {
-                for (int i = 0; i < 3; i++) {
-                    LocationController.getInstance(i).removeAllLocationSharings();
-                }
-                SharingLocationsAlert.this.dismiss();
-            }
-        });
+        pickerBottomLayout.cancelButton.setOnClickListener(new -$$Lambda$SharingLocationsAlert$_EuBrHBpuV07T7IQJTP904l7r08(this));
         pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor("dialogTextBlue2"));
         pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("Close", NUM).toUpperCase());
         pickerBottomLayout.doneButton.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
-        pickerBottomLayout.doneButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View view) {
-                SharingLocationsAlert.this.dismiss();
-            }
-        });
+        pickerBottomLayout.doneButton.setOnClickListener(new -$$Lambda$SharingLocationsAlert$0An2GQnWbLXoCb_gmzP5F2Gw9Lc(this));
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(8);
         this.adapter.notifyDataSetChanged();
+    }
+
+    public /* synthetic */ void lambda$new$0$SharingLocationsAlert(View view, int i) {
+        i--;
+        if (i >= 0 && i < LocationController.getLocationsCount()) {
+            this.delegate.didSelectLocation(getLocation(i));
+            dismiss();
+        }
+    }
+
+    public /* synthetic */ void lambda$new$1$SharingLocationsAlert(View view) {
+        for (int i = 0; i < 3; i++) {
+            LocationController.getInstance(i).removeAllLocationSharings();
+        }
+        dismiss();
+    }
+
+    public /* synthetic */ void lambda$new$2$SharingLocationsAlert(View view) {
+        dismiss();
     }
 
     @SuppressLint({"NewApi"})

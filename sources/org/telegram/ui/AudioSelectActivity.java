@@ -1,20 +1,37 @@
 package org.telegram.ui;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.provider.MediaStore.Audio.Media;
 import android.util.LongSparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
+import java.io.File;
 import java.util.ArrayList;
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.FileLoader;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaController.AudioEntry;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
+import org.telegram.tgnet.TLRPC.Document;
+import org.telegram.tgnet.TLRPC.MessageMedia;
+import org.telegram.tgnet.TLRPC.Peer;
+import org.telegram.tgnet.TLRPC.TL_document;
+import org.telegram.tgnet.TLRPC.TL_documentAttributeAudio;
+import org.telegram.tgnet.TLRPC.TL_documentAttributeFilename;
+import org.telegram.tgnet.TLRPC.TL_message;
+import org.telegram.tgnet.TLRPC.TL_messageMediaDocument;
+import org.telegram.tgnet.TLRPC.TL_peerUser;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -91,207 +108,6 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             }
             audioCell.setAudio(audioEntry2, z2, z);
         }
-    }
-
-    /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:25:0x017c in {7, 8, 10, 12, 18, 19, 21, 23, 24} preds:[]
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-        	at java.lang.Iterable.forEach(Iterable.java:75)
-        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-        */
-    public /* synthetic */ void lambda$loadAudio$4$AudioSelectActivity() {
-        /*
-        r18 = this;
-        r1 = r18;
-        r0 = 6;
-        r4 = new java.lang.String[r0];
-        r0 = 0;
-        r2 = "_id";
-        r4[r0] = r2;
-        r8 = 1;
-        r2 = "artist";
-        r4[r8] = r2;
-        r9 = 2;
-        r2 = "title";
-        r4[r9] = r2;
-        r10 = 3;
-        r2 = "_data";
-        r4[r10] = r2;
-        r11 = 4;
-        r2 = "duration";
-        r4[r11] = r2;
-        r12 = 5;
-        r2 = "album";
-        r4[r12] = r2;
-        r13 = new java.util.ArrayList;
-        r13.<init>();
-        r14 = 0;
-        r2 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0164 }
-        r2 = r2.getContentResolver();	 Catch:{ Exception -> 0x0164 }
-        r3 = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;	 Catch:{ Exception -> 0x0164 }
-        r5 = "is_music != 0";	 Catch:{ Exception -> 0x0164 }
-        r6 = 0;	 Catch:{ Exception -> 0x0164 }
-        r7 = "title";	 Catch:{ Exception -> 0x0164 }
-        r14 = r2.query(r3, r4, r5, r6, r7);	 Catch:{ Exception -> 0x0164 }
-        r2 = -NUM; // 0xfffffffvar_ca6CLASSNAME float:-1.2182823E-33 double:NaN;	 Catch:{ Exception -> 0x0164 }
-        r3 = r14.moveToNext();	 Catch:{ Exception -> 0x0164 }
-        if (r3 == 0) goto L_0x015f;	 Catch:{ Exception -> 0x0164 }
-        r3 = new org.telegram.messenger.MediaController$AudioEntry;	 Catch:{ Exception -> 0x0164 }
-        r3.<init>();	 Catch:{ Exception -> 0x0164 }
-        r4 = r14.getInt(r0);	 Catch:{ Exception -> 0x0164 }
-        r4 = (long) r4;	 Catch:{ Exception -> 0x0164 }
-        r3.id = r4;	 Catch:{ Exception -> 0x0164 }
-        r4 = r14.getString(r8);	 Catch:{ Exception -> 0x0164 }
-        r3.author = r4;	 Catch:{ Exception -> 0x0164 }
-        r4 = r14.getString(r9);	 Catch:{ Exception -> 0x0164 }
-        r3.title = r4;	 Catch:{ Exception -> 0x0164 }
-        r4 = r14.getString(r10);	 Catch:{ Exception -> 0x0164 }
-        r3.path = r4;	 Catch:{ Exception -> 0x0164 }
-        r4 = r14.getLong(r11);	 Catch:{ Exception -> 0x0164 }
-        r6 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;	 Catch:{ Exception -> 0x0164 }
-        r4 = r4 / r6;	 Catch:{ Exception -> 0x0164 }
-        r5 = (int) r4;	 Catch:{ Exception -> 0x0164 }
-        r3.duration = r5;	 Catch:{ Exception -> 0x0164 }
-        r4 = r14.getString(r12);	 Catch:{ Exception -> 0x0164 }
-        r3.genre = r4;	 Catch:{ Exception -> 0x0164 }
-        r4 = new java.io.File;	 Catch:{ Exception -> 0x0164 }
-        r5 = r3.path;	 Catch:{ Exception -> 0x0164 }
-        r4.<init>(r5);	 Catch:{ Exception -> 0x0164 }
-        r5 = new org.telegram.tgnet.TLRPC$TL_message;	 Catch:{ Exception -> 0x0164 }
-        r5.<init>();	 Catch:{ Exception -> 0x0164 }
-        r5.out = r8;	 Catch:{ Exception -> 0x0164 }
-        r5.id = r2;	 Catch:{ Exception -> 0x0164 }
-        r15 = new org.telegram.tgnet.TLRPC$TL_peerUser;	 Catch:{ Exception -> 0x0164 }
-        r15.<init>();	 Catch:{ Exception -> 0x0164 }
-        r5.to_id = r15;	 Catch:{ Exception -> 0x0164 }
-        r15 = r5.to_id;	 Catch:{ Exception -> 0x0164 }
-        r8 = r1.currentAccount;	 Catch:{ Exception -> 0x0164 }
-        r8 = org.telegram.messenger.UserConfig.getInstance(r8);	 Catch:{ Exception -> 0x0164 }
-        r8 = r8.getClientUserId();	 Catch:{ Exception -> 0x0164 }
-        r5.from_id = r8;	 Catch:{ Exception -> 0x0164 }
-        r15.user_id = r8;	 Catch:{ Exception -> 0x0164 }
-        r16 = java.lang.System.currentTimeMillis();	 Catch:{ Exception -> 0x0164 }
-        r6 = r16 / r6;	 Catch:{ Exception -> 0x0164 }
-        r7 = (int) r6;	 Catch:{ Exception -> 0x0164 }
-        r5.date = r7;	 Catch:{ Exception -> 0x0164 }
-        r6 = "";	 Catch:{ Exception -> 0x0164 }
-        r5.message = r6;	 Catch:{ Exception -> 0x0164 }
-        r6 = r3.path;	 Catch:{ Exception -> 0x0164 }
-        r5.attachPath = r6;	 Catch:{ Exception -> 0x0164 }
-        r6 = new org.telegram.tgnet.TLRPC$TL_messageMediaDocument;	 Catch:{ Exception -> 0x0164 }
-        r6.<init>();	 Catch:{ Exception -> 0x0164 }
-        r5.media = r6;	 Catch:{ Exception -> 0x0164 }
-        r6 = r5.media;	 Catch:{ Exception -> 0x0164 }
-        r7 = r6.flags;	 Catch:{ Exception -> 0x0164 }
-        r7 = r7 | r10;	 Catch:{ Exception -> 0x0164 }
-        r6.flags = r7;	 Catch:{ Exception -> 0x0164 }
-        r6 = r5.media;	 Catch:{ Exception -> 0x0164 }
-        r7 = new org.telegram.tgnet.TLRPC$TL_document;	 Catch:{ Exception -> 0x0164 }
-        r7.<init>();	 Catch:{ Exception -> 0x0164 }
-        r6.document = r7;	 Catch:{ Exception -> 0x0164 }
-        r6 = r5.flags;	 Catch:{ Exception -> 0x0164 }
-        r6 = r6 | 768;	 Catch:{ Exception -> 0x0164 }
-        r5.flags = r6;	 Catch:{ Exception -> 0x0164 }
-        r6 = org.telegram.messenger.FileLoader.getFileExtension(r4);	 Catch:{ Exception -> 0x0164 }
-        r7 = r5.media;	 Catch:{ Exception -> 0x0164 }
-        r7 = r7.document;	 Catch:{ Exception -> 0x0164 }
-        r11 = 0;	 Catch:{ Exception -> 0x0164 }
-        r7.id = r11;	 Catch:{ Exception -> 0x0164 }
-        r7 = r5.media;	 Catch:{ Exception -> 0x0164 }
-        r7 = r7.document;	 Catch:{ Exception -> 0x0164 }
-        r7.access_hash = r11;	 Catch:{ Exception -> 0x0164 }
-        r7 = r5.media;	 Catch:{ Exception -> 0x0164 }
-        r7 = r7.document;	 Catch:{ Exception -> 0x0164 }
-        r11 = new byte[r0];	 Catch:{ Exception -> 0x0164 }
-        r7.file_reference = r11;	 Catch:{ Exception -> 0x0164 }
-        r7 = r5.media;	 Catch:{ Exception -> 0x0164 }
-        r7 = r7.document;	 Catch:{ Exception -> 0x0164 }
-        r11 = r5.date;	 Catch:{ Exception -> 0x0164 }
-        r7.date = r11;	 Catch:{ Exception -> 0x0164 }
-        r7 = r5.media;	 Catch:{ Exception -> 0x0164 }
-        r7 = r7.document;	 Catch:{ Exception -> 0x0164 }
-        r11 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0164 }
-        r11.<init>();	 Catch:{ Exception -> 0x0164 }
-        r12 = "audio/";	 Catch:{ Exception -> 0x0164 }
-        r11.append(r12);	 Catch:{ Exception -> 0x0164 }
-        r12 = r6.length();	 Catch:{ Exception -> 0x0164 }
-        if (r12 <= 0) goto L_0x00fd;	 Catch:{ Exception -> 0x0164 }
-        goto L_0x00ff;	 Catch:{ Exception -> 0x0164 }
-        r6 = "mp3";	 Catch:{ Exception -> 0x0164 }
-        r11.append(r6);	 Catch:{ Exception -> 0x0164 }
-        r6 = r11.toString();	 Catch:{ Exception -> 0x0164 }
-        r7.mime_type = r6;	 Catch:{ Exception -> 0x0164 }
-        r6 = r5.media;	 Catch:{ Exception -> 0x0164 }
-        r6 = r6.document;	 Catch:{ Exception -> 0x0164 }
-        r11 = r4.length();	 Catch:{ Exception -> 0x0164 }
-        r7 = (int) r11;	 Catch:{ Exception -> 0x0164 }
-        r6.size = r7;	 Catch:{ Exception -> 0x0164 }
-        r6 = r5.media;	 Catch:{ Exception -> 0x0164 }
-        r6 = r6.document;	 Catch:{ Exception -> 0x0164 }
-        r6.dc_id = r0;	 Catch:{ Exception -> 0x0164 }
-        r6 = new org.telegram.tgnet.TLRPC$TL_documentAttributeAudio;	 Catch:{ Exception -> 0x0164 }
-        r6.<init>();	 Catch:{ Exception -> 0x0164 }
-        r7 = r3.duration;	 Catch:{ Exception -> 0x0164 }
-        r6.duration = r7;	 Catch:{ Exception -> 0x0164 }
-        r7 = r3.title;	 Catch:{ Exception -> 0x0164 }
-        r6.title = r7;	 Catch:{ Exception -> 0x0164 }
-        r7 = r3.author;	 Catch:{ Exception -> 0x0164 }
-        r6.performer = r7;	 Catch:{ Exception -> 0x0164 }
-        r7 = r6.flags;	 Catch:{ Exception -> 0x0164 }
-        r7 = r7 | r10;	 Catch:{ Exception -> 0x0164 }
-        r6.flags = r7;	 Catch:{ Exception -> 0x0164 }
-        r7 = r5.media;	 Catch:{ Exception -> 0x0164 }
-        r7 = r7.document;	 Catch:{ Exception -> 0x0164 }
-        r7 = r7.attributes;	 Catch:{ Exception -> 0x0164 }
-        r7.add(r6);	 Catch:{ Exception -> 0x0164 }
-        r6 = new org.telegram.tgnet.TLRPC$TL_documentAttributeFilename;	 Catch:{ Exception -> 0x0164 }
-        r6.<init>();	 Catch:{ Exception -> 0x0164 }
-        r4 = r4.getName();	 Catch:{ Exception -> 0x0164 }
-        r6.file_name = r4;	 Catch:{ Exception -> 0x0164 }
-        r4 = r5.media;	 Catch:{ Exception -> 0x0164 }
-        r4 = r4.document;	 Catch:{ Exception -> 0x0164 }
-        r4 = r4.attributes;	 Catch:{ Exception -> 0x0164 }
-        r4.add(r6);	 Catch:{ Exception -> 0x0164 }
-        r4 = new org.telegram.messenger.MessageObject;	 Catch:{ Exception -> 0x0164 }
-        r6 = r1.currentAccount;	 Catch:{ Exception -> 0x0164 }
-        r4.<init>(r6, r5, r0);	 Catch:{ Exception -> 0x0164 }
-        r3.messageObject = r4;	 Catch:{ Exception -> 0x0164 }
-        r13.add(r3);	 Catch:{ Exception -> 0x0164 }
-        r2 = r2 + -1;
-        r8 = 1;
-        r11 = 4;
-        r12 = 5;
-        goto L_0x003d;
-        if (r14 == 0) goto L_0x016d;
-        goto L_0x016a;
-        r0 = move-exception;
-        goto L_0x0176;
-        r0 = move-exception;
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x0162 }
-        if (r14 == 0) goto L_0x016d;
-        r14.close();
-        r0 = new org.telegram.ui.-$$Lambda$AudioSelectActivity$QzekR4OrJV2j13f_JDzwyvvM314;
-        r0.<init>(r1, r13);
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r0);
-        return;
-        if (r14 == 0) goto L_0x017b;
-        r14.close();
-        throw r0;
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.AudioSelectActivity.lambda$loadAudio$4$AudioSelectActivity():void");
     }
 
     public boolean onFragmentCreate() {
@@ -417,6 +233,103 @@ public class AudioSelectActivity extends BaseFragment implements NotificationCen
             emptyTextProgressView.showProgress();
         }
         Utilities.globalQueue.postRunnable(new -$$Lambda$AudioSelectActivity$GEv7u1xk_gK3KYDecS-JYS1z0Do(this));
+    }
+
+    public /* synthetic */ void lambda$loadAudio$4$AudioSelectActivity() {
+        Cursor query;
+        Throwable th;
+        Throwable th2;
+        Throwable th3;
+        r4 = new String[6];
+        int i = 1;
+        r4[1] = "artist";
+        r4[2] = "title";
+        r4[3] = "_data";
+        r4[4] = "duration";
+        r4[5] = "album";
+        ArrayList arrayList = new ArrayList();
+        try {
+            query = ApplicationLoader.applicationContext.getContentResolver().query(Media.EXTERNAL_CONTENT_URI, r4, "is_music != 0", null, "title");
+            int i2 = -NUM;
+            while (query.moveToNext()) {
+                try {
+                    AudioEntry audioEntry = new AudioEntry();
+                    audioEntry.id = (long) query.getInt(0);
+                    audioEntry.author = query.getString(i);
+                    audioEntry.title = query.getString(2);
+                    audioEntry.path = query.getString(3);
+                    audioEntry.duration = (int) (query.getLong(4) / 1000);
+                    audioEntry.genre = query.getString(5);
+                    File file = new File(audioEntry.path);
+                    TL_message tL_message = new TL_message();
+                    tL_message.out = i;
+                    tL_message.id = i2;
+                    tL_message.to_id = new TL_peerUser();
+                    Peer peer = tL_message.to_id;
+                    i = UserConfig.getInstance(this.currentAccount).getClientUserId();
+                    tL_message.from_id = i;
+                    peer.user_id = i;
+                    tL_message.date = (int) (System.currentTimeMillis() / 1000);
+                    tL_message.message = "";
+                    tL_message.attachPath = audioEntry.path;
+                    tL_message.media = new TL_messageMediaDocument();
+                    MessageMedia messageMedia = tL_message.media;
+                    messageMedia.flags |= 3;
+                    tL_message.media.document = new TL_document();
+                    tL_message.flags |= 768;
+                    String fileExtension = FileLoader.getFileExtension(file);
+                    tL_message.media.document.id = 0;
+                    tL_message.media.document.access_hash = 0;
+                    tL_message.media.document.file_reference = new byte[0];
+                    tL_message.media.document.date = tL_message.date;
+                    Document document = tL_message.media.document;
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("audio/");
+                    if (fileExtension.length() <= 0) {
+                        fileExtension = "mp3";
+                    }
+                    stringBuilder.append(fileExtension);
+                    document.mime_type = stringBuilder.toString();
+                    tL_message.media.document.size = (int) file.length();
+                    tL_message.media.document.dc_id = 0;
+                    TL_documentAttributeAudio tL_documentAttributeAudio = new TL_documentAttributeAudio();
+                    tL_documentAttributeAudio.duration = audioEntry.duration;
+                    tL_documentAttributeAudio.title = audioEntry.title;
+                    tL_documentAttributeAudio.performer = audioEntry.author;
+                    tL_documentAttributeAudio.flags |= 3;
+                    tL_message.media.document.attributes.add(tL_documentAttributeAudio);
+                    TL_documentAttributeFilename tL_documentAttributeFilename = new TL_documentAttributeFilename();
+                    tL_documentAttributeFilename.file_name = file.getName();
+                    tL_message.media.document.attributes.add(tL_documentAttributeFilename);
+                    audioEntry.messageObject = new MessageObject(this.currentAccount, tL_message, false);
+                    arrayList.add(audioEntry);
+                    i2--;
+                    i = 1;
+                } catch (Throwable th4) {
+                    th2 = th4;
+                    th3 = th;
+                }
+            }
+            if (query != null) {
+                query.close();
+            }
+        } catch (Exception th22) {
+            FileLog.e(th22);
+        }
+        AndroidUtilities.runOnUIThread(new -$$Lambda$AudioSelectActivity$QzekR4OrJV2j13f_JDzwyvvM314(this, arrayList));
+        return;
+        throw th22;
+        if (query != null) {
+            if (th3 != null) {
+                try {
+                    query.close();
+                } catch (Throwable unused) {
+                }
+            } else {
+                query.close();
+            }
+        }
+        throw th22;
     }
 
     public /* synthetic */ void lambda$null$3$AudioSelectActivity(ArrayList arrayList) {

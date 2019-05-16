@@ -310,7 +310,7 @@ public class VoIPController {
         nativeSetMicMute(this.nativeInst, z);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:24:0x005e  */
+    /* JADX WARNING: Removed duplicated region for block: B:24:0x005d  */
     /* JADX WARNING: Removed duplicated region for block: B:23:0x0047  */
     public void setConfig(double r17, double r19, int r21, long r22) {
         /*
@@ -364,7 +364,7 @@ public class VoIPController {
     L_0x0042:
         r11 = 1;
         r2 = org.telegram.messenger.BuildVars.DEBUG_VERSION;
-        if (r2 == 0) goto L_0x005e;
+        if (r2 == 0) goto L_0x005d;
     L_0x0047:
         r2 = new java.lang.StringBuilder;
         r2.<init>();
@@ -373,22 +373,22 @@ public class VoIPController {
         r2.append(r0);
         r0 = r2.toString();
         r0 = r14.getLogFilePath(r0);
-        goto L_0x0062;
-    L_0x005e:
+        goto L_0x0061;
+    L_0x005d:
         r0 = r14.getLogFilePath(r0);
-    L_0x0062:
+    L_0x0061:
         r12 = r0;
         r0 = org.telegram.messenger.BuildVars.DEBUG_VERSION;
-        if (r0 == 0) goto L_0x0071;
-    L_0x0067:
-        if (r5 == 0) goto L_0x0071;
-    L_0x0069:
+        if (r0 == 0) goto L_0x006f;
+    L_0x0066:
+        if (r5 == 0) goto L_0x006f;
+    L_0x0068:
         r0 = "voipStats";
         r0 = r14.getLogFilePath(r0);
-        goto L_0x0072;
-    L_0x0071:
+        goto L_0x0070;
+    L_0x006f:
         r0 = 0;
-    L_0x0072:
+    L_0x0070:
         r13 = r0;
         r15 = org.telegram.messenger.BuildVars.DEBUG_VERSION;
         r0 = r16;

@@ -1020,12 +1020,12 @@ public class ContentPreviewViewer {
         /*
         r9 = this;
         r0 = r9.containerView;
-        if (r0 == 0) goto L_0x01d5;
+        if (r0 == 0) goto L_0x01d4;
     L_0x0004:
         r0 = r9.backgroundDrawable;
         if (r0 != 0) goto L_0x000a;
     L_0x0008:
-        goto L_0x01d5;
+        goto L_0x01d4;
     L_0x000a:
         r1 = NUM; // 0x43340000 float:180.0 double:5.570497984E-315;
         r2 = r9.showProgress;
@@ -1197,7 +1197,7 @@ public class ContentPreviewViewer {
     L_0x0155:
         r10 = r9.showProgress;
         r10 = (r10 > r1 ? 1 : (r10 == r1 ? 0 : -1));
-        if (r10 == 0) goto L_0x01d5;
+        if (r10 == 0) goto L_0x01d4;
     L_0x015b:
         r2 = java.lang.System.currentTimeMillis();
         r4 = r9.lastUpdateTime;
@@ -1212,15 +1212,15 @@ public class ContentPreviewViewer {
         r10.invalidate();
         r10 = r9.showProgress;
         r10 = (r10 > r1 ? 1 : (r10 == r1 ? 0 : -1));
-        if (r10 <= 0) goto L_0x01d5;
+        if (r10 <= 0) goto L_0x01d4;
     L_0x0177:
         r9.showProgress = r1;
-        goto L_0x01d5;
+        goto L_0x01d4;
     L_0x017a:
         r10 = r9.showProgress;
         r1 = 0;
         r10 = (r10 > r1 ? 1 : (r10 == r1 ? 0 : -1));
-        if (r10 == 0) goto L_0x01d5;
+        if (r10 == 0) goto L_0x01d4;
     L_0x0181:
         r2 = java.lang.System.currentTimeMillis();
         r4 = r9.lastUpdateTime;
@@ -1241,7 +1241,7 @@ public class ContentPreviewViewer {
     L_0x019f:
         r10 = r9.showProgress;
         r10 = (r10 > r1 ? 1 : (r10 == r1 ? 0 : -1));
-        if (r10 != 0) goto L_0x01d5;
+        if (r10 != 0) goto L_0x01d4;
     L_0x01a5:
         r10 = r9.centerImage;
         r0 = 0;
@@ -1251,21 +1251,21 @@ public class ContentPreviewViewer {
         r10 = new org.telegram.ui.-$$Lambda$ContentPreviewViewer$3zyytvnhTcdtAb2UIfBrX-cZ_go;
         r10.<init>(r9);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r10);
-        r10 = r9.windowView;	 Catch:{ Exception -> 0x01d1 }
-        r10 = r10.getParent();	 Catch:{ Exception -> 0x01d1 }
-        if (r10 == 0) goto L_0x01d5;
+        r10 = r9.windowView;	 Catch:{ Exception -> 0x01d0 }
+        r10 = r10.getParent();	 Catch:{ Exception -> 0x01d0 }
+        if (r10 == 0) goto L_0x01d4;
     L_0x01c0:
-        r10 = r9.parentActivity;	 Catch:{ Exception -> 0x01d1 }
+        r10 = r9.parentActivity;	 Catch:{ Exception -> 0x01d0 }
         r0 = "window";
-        r10 = r10.getSystemService(r0);	 Catch:{ Exception -> 0x01d1 }
-        r10 = (android.view.WindowManager) r10;	 Catch:{ Exception -> 0x01d1 }
-        r0 = r9.windowView;	 Catch:{ Exception -> 0x01d1 }
-        r10.removeView(r0);	 Catch:{ Exception -> 0x01d1 }
-        goto L_0x01d5;
-    L_0x01d1:
+        r10 = r10.getSystemService(r0);	 Catch:{ Exception -> 0x01d0 }
+        r10 = (android.view.WindowManager) r10;	 Catch:{ Exception -> 0x01d0 }
+        r0 = r9.windowView;	 Catch:{ Exception -> 0x01d0 }
+        r10.removeView(r0);	 Catch:{ Exception -> 0x01d0 }
+        goto L_0x01d4;
+    L_0x01d0:
         r10 = move-exception;
         org.telegram.messenger.FileLog.e(r10);
-    L_0x01d5:
+    L_0x01d4:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ContentPreviewViewer.onDraw(android.graphics.Canvas):void");

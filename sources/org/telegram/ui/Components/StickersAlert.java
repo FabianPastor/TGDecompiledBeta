@@ -29,6 +29,13 @@ import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.ItemDecoration;
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener;
+import androidx.recyclerview.widget.RecyclerView.State;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 import org.telegram.messenger.AndroidUtilities;
@@ -40,13 +47,6 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.messenger.support.widget.GridLayoutManager;
-import org.telegram.messenger.support.widget.GridLayoutManager.SpanSizeLookup;
-import org.telegram.messenger.support.widget.RecyclerView;
-import org.telegram.messenger.support.widget.RecyclerView.ItemDecoration;
-import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
-import org.telegram.messenger.support.widget.RecyclerView.State;
-import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -883,7 +883,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r12 = r12.positionsToSets;
         r12 = r12.get(r13);
         r12 = (org.telegram.tgnet.TLRPC.StickerSetCovered) r12;
-        if (r12 == 0) goto L_0x011b;
+        if (r12 == 0) goto L_0x011a;
     L_0x0012:
         r11.dismiss();
         r3 = new org.telegram.tgnet.TLRPC$TL_inputStickerSetID;
@@ -901,18 +901,18 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r0 = r12;
         r0.<init>(r1, r2, r3, r4, r5);
         r12.show();
-        goto L_0x011b;
+        goto L_0x011a;
     L_0x0035:
         r12 = r11.stickerSet;
-        if (r12 == 0) goto L_0x011b;
+        if (r12 == 0) goto L_0x011a;
     L_0x0039:
-        if (r13 < 0) goto L_0x011b;
+        if (r13 < 0) goto L_0x011a;
     L_0x003b:
         r12 = r12.documents;
         r12 = r12.size();
         if (r13 < r12) goto L_0x0045;
     L_0x0043:
-        goto L_0x011b;
+        goto L_0x011a;
     L_0x0045:
         r12 = r11.stickerSet;
         r12 = r12.documents;
@@ -1011,7 +1011,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r0 = 200; // 0xc8 float:2.8E-43 double:9.9E-322;
         r13.setDuration(r0);
         r13.start();
-    L_0x011b:
+    L_0x011a:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.StickersAlert.lambda$init$6$StickersAlert(android.view.View, int):void");

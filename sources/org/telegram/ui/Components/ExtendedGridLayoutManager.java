@@ -2,8 +2,8 @@ package org.telegram.ui.Components;
 
 import android.content.Context;
 import android.util.SparseIntArray;
+import androidx.recyclerview.widget.GridLayoutManager;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.support.widget.GridLayoutManager;
 
 public class ExtendedGridLayoutManager extends GridLayoutManager {
     private int calculatedWidth;

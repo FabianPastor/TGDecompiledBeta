@@ -635,7 +635,7 @@ public class AndroidUtilities {
         return iArr;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:21:0x005a A:{SYNTHETIC, Splitter:B:21:0x005a} */
+    /* JADX WARNING: Removed duplicated region for block: B:21:0x0059 A:{SYNTHETIC, Splitter:B:21:0x0059} */
     public static boolean isInternalUri(android.net.Uri r5) {
         /*
         r5 = r5.getPath();
@@ -658,54 +658,54 @@ public class AndroidUtilities {
         r1.append(r2);
         r1 = r1.toString();
         r1 = r5.matches(r1);
-        if (r1 == 0) goto L_0x0036;
-    L_0x0035:
+        if (r1 == 0) goto L_0x0035;
+    L_0x0034:
         return r0;
-    L_0x0036:
+    L_0x0035:
         r1 = 0;
-    L_0x0037:
+    L_0x0036:
         r2 = 1;
-        if (r5 == 0) goto L_0x0043;
-    L_0x003a:
+        if (r5 == 0) goto L_0x0042;
+    L_0x0039:
         r3 = r5.length();
         r4 = 4096; // 0x1000 float:5.74E-42 double:2.0237E-320;
-        if (r3 <= r4) goto L_0x0043;
-    L_0x0042:
+        if (r3 <= r4) goto L_0x0042;
+    L_0x0041:
         return r2;
-    L_0x0043:
+    L_0x0042:
         r3 = org.telegram.messenger.Utilities.readlink(r5);
-        if (r3 == 0) goto L_0x0058;
-    L_0x0049:
+        if (r3 == 0) goto L_0x0057;
+    L_0x0048:
         r4 = r3.equals(r5);
-        if (r4 == 0) goto L_0x0050;
+        if (r4 == 0) goto L_0x004f;
+    L_0x004e:
+        goto L_0x0057;
     L_0x004f:
-        goto L_0x0058;
-    L_0x0050:
         r1 = r1 + r2;
         r5 = 10;
-        if (r1 < r5) goto L_0x0056;
-    L_0x0055:
+        if (r1 < r5) goto L_0x0055;
+    L_0x0054:
         return r2;
-    L_0x0056:
+    L_0x0055:
         r5 = r3;
-        goto L_0x0037;
-    L_0x0058:
-        if (r5 == 0) goto L_0x006e;
-    L_0x005a:
-        r1 = new java.io.File;	 Catch:{ Exception -> 0x0067 }
-        r1.<init>(r5);	 Catch:{ Exception -> 0x0067 }
-        r1 = r1.getCanonicalPath();	 Catch:{ Exception -> 0x0067 }
-        if (r1 == 0) goto L_0x006e;
-    L_0x0065:
+        goto L_0x0036;
+    L_0x0057:
+        if (r5 == 0) goto L_0x006d;
+    L_0x0059:
+        r1 = new java.io.File;	 Catch:{ Exception -> 0x0066 }
+        r1.<init>(r5);	 Catch:{ Exception -> 0x0066 }
+        r1 = r1.getCanonicalPath();	 Catch:{ Exception -> 0x0066 }
+        if (r1 == 0) goto L_0x006d;
+    L_0x0064:
         r5 = r1;
-        goto L_0x006e;
-    L_0x0067:
+        goto L_0x006d;
+    L_0x0066:
         r1 = "/./";
         r3 = "/";
         r5.replace(r1, r3);
-    L_0x006e:
-        if (r5 == 0) goto L_0x0092;
-    L_0x0070:
+    L_0x006d:
+        if (r5 == 0) goto L_0x0091;
+    L_0x006f:
         r5 = r5.toLowerCase();
         r1 = new java.lang.StringBuilder;
         r1.<init>();
@@ -716,10 +716,10 @@ public class AndroidUtilities {
         r1.append(r3);
         r1 = r1.toString();
         r5 = r5.contains(r1);
-        if (r5 == 0) goto L_0x0092;
-    L_0x0091:
+        if (r5 == 0) goto L_0x0091;
+    L_0x0090:
         r0 = 1;
-    L_0x0092:
+    L_0x0091:
         return r0;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.isInternalUri(android.net.Uri):boolean");

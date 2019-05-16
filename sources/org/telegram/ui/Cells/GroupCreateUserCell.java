@@ -236,8 +236,8 @@ public class GroupCreateUserCell extends FrameLayout {
     L_0x00a4:
         r11 = r10.currentStatus;
         r0 = "windowBackgroundWhiteGrayText";
-        if (r11 == 0) goto L_0x00c0;
-    L_0x00ab:
+        if (r11 == 0) goto L_0x00bf;
+    L_0x00aa:
         r1 = r10.statusTextView;
         r1.setText(r11, r3);
         r11 = r10.statusTextView;
@@ -245,12 +245,12 @@ public class GroupCreateUserCell extends FrameLayout {
         r11 = r10.statusTextView;
         r0 = org.telegram.ui.ActionBar.Theme.getColor(r0);
         r11.setTextColor(r0);
-        goto L_0x0157;
-    L_0x00c0:
+        goto L_0x0155;
+    L_0x00bf:
         r11 = r10.currentUser;
         r1 = r11.bot;
-        if (r1 == 0) goto L_0x00e3;
-    L_0x00c6:
+        if (r1 == 0) goto L_0x00e2;
+    L_0x00c5:
         r11 = r10.statusTextView;
         r11.setTag(r0);
         r11 = r10.statusTextView;
@@ -261,24 +261,24 @@ public class GroupCreateUserCell extends FrameLayout {
         r1 = "Bot";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r11.setText(r0);
-        goto L_0x0157;
-    L_0x00e3:
+        goto L_0x0155;
+    L_0x00e2:
         r11 = r11.id;
         r1 = r10.currentAccount;
         r1 = org.telegram.messenger.UserConfig.getInstance(r1);
         r1 = r1.getClientUserId();
-        if (r11 == r1) goto L_0x0138;
-    L_0x00f1:
+        if (r11 == r1) goto L_0x0137;
+    L_0x00f0:
         r11 = r10.currentUser;
         r11 = r11.status;
-        if (r11 == 0) goto L_0x0105;
-    L_0x00f7:
+        if (r11 == 0) goto L_0x0104;
+    L_0x00f6:
         r11 = r11.expires;
         r1 = r10.currentAccount;
         r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1);
         r1 = r1.getCurrentTime();
-        if (r11 > r1) goto L_0x0138;
-    L_0x0105:
+        if (r11 > r1) goto L_0x0137;
+    L_0x0104:
         r11 = r10.currentAccount;
         r11 = org.telegram.messenger.MessagesController.getInstance(r11);
         r11 = r11.onlinePrivacy;
@@ -286,10 +286,10 @@ public class GroupCreateUserCell extends FrameLayout {
         r1 = r1.id;
         r1 = java.lang.Integer.valueOf(r1);
         r11 = r11.containsKey(r1);
-        if (r11 == 0) goto L_0x011c;
+        if (r11 == 0) goto L_0x011b;
+    L_0x011a:
+        goto L_0x0137;
     L_0x011b:
-        goto L_0x0138;
-    L_0x011c:
         r11 = r10.statusTextView;
         r11.setTag(r0);
         r11 = r10.statusTextView;
@@ -300,8 +300,8 @@ public class GroupCreateUserCell extends FrameLayout {
         r1 = r10.currentUser;
         r0 = org.telegram.messenger.LocaleController.formatUserStatus(r0, r1);
         r11.setText(r0);
-        goto L_0x0157;
-    L_0x0138:
+        goto L_0x0155;
+    L_0x0137:
         r11 = r10.statusTextView;
         r0 = "windowBackgroundWhiteBlueText";
         r11.setTag(r0);
@@ -313,7 +313,7 @@ public class GroupCreateUserCell extends FrameLayout {
         r1 = "Online";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r11.setText(r0);
-    L_0x0157:
+    L_0x0155:
         r11 = r10.avatarImageView;
         r0 = r10.currentUser;
         r0 = org.telegram.messenger.ImageLocation.getForUser(r0, r2);

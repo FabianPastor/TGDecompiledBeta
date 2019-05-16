@@ -25,6 +25,11 @@ import android.view.ViewTreeObserver.OnPreDrawListener;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.LayoutParams;
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,11 +45,6 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.support.widget.RecyclerView;
-import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
-import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
-import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.BotInlineResult;
@@ -954,8 +954,8 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 r4 = r15;
                 r8 = r10;
                 r4.drawRect(r5, r6, r7, r8, r9);
-                if (r2 == r1) goto L_0x006c;
-            L_0x0053:
+                if (r2 == r1) goto L_0x006a;
+            L_0x0052:
                 r0 = r14.paint;
                 r2 = "windowBackgroundGray";
                 r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
@@ -967,7 +967,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 r13 = r14.paint;
                 r8 = r15;
                 r8.drawRect(r9, r10, r11, r12, r13);
-            L_0x006c:
+            L_0x006a:
                 return;
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.WallpapersListActivity$AnonymousClass4.onDraw(android.graphics.Canvas):void");

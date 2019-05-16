@@ -22,6 +22,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView.LayoutParams;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener;
@@ -37,9 +40,6 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
-import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.KeyboardButton;
@@ -552,7 +552,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         }
 
         /* JADX WARNING: Removed duplicated region for block: B:14:0x0059  */
-        public void onBindViewHolder(org.telegram.messenger.support.widget.RecyclerView.ViewHolder r10, int r11) {
+        public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r10, int r11) {
             /*
             r9 = this;
             r0 = r9.messages;
@@ -641,7 +641,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         L_0x009d:
             return;
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ThemePreviewActivity$MessagesAdapter.onBindViewHolder(org.telegram.messenger.support.widget.RecyclerView$ViewHolder, int):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ThemePreviewActivity$MessagesAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");
         }
 
         public int getItemViewType(int i) {

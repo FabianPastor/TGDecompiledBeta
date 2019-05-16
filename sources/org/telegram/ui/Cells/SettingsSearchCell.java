@@ -56,6 +56,9 @@ public class SettingsSearchCell extends FrameLayout {
             FontMetricsInt fontMetricsInt = paint.getFontMetricsInt();
             i2 = fontMetricsInt.descent;
             canvas.translate(f, (float) (((i4 + i2) - ((i2 - fontMetricsInt.ascent) / 2)) - ((drawable.getBounds().bottom - drawable.getBounds().top) / 2)));
+            if (LocaleController.isRTL) {
+                canvas.scale(-1.0f, 1.0f, (float) (drawable.getIntrinsicWidth() / 2), (float) (drawable.getIntrinsicHeight() / 2));
+            }
             drawable.draw(canvas);
             canvas.restore();
         }

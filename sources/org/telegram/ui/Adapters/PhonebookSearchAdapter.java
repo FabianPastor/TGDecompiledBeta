@@ -2,6 +2,7 @@ package org.telegram.ui.Adapters;
 
 import android.content.Context;
 import android.view.ViewGroup;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -12,7 +13,6 @@ import org.telegram.messenger.ContactsController.Contact;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.Cells.UserCell;
 import org.telegram.ui.Components.RecyclerListView.Holder;

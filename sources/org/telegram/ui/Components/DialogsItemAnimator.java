@@ -9,11 +9,11 @@ import android.os.Build.VERSION;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.view.animation.DecelerateInterpolator;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
-import org.telegram.messenger.support.widget.SimpleItemAnimator;
 import org.telegram.ui.Cells.DialogCell;
 
 public class DialogsItemAnimator extends SimpleItemAnimator {

@@ -51,6 +51,15 @@ import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
+import androidx.recyclerview.widget.RecyclerView.ItemDecoration;
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener;
+import androidx.recyclerview.widget.RecyclerView.State;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener;
@@ -75,15 +84,6 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.messenger.support.widget.GridLayoutManager;
-import org.telegram.messenger.support.widget.GridLayoutManager.SpanSizeLookup;
-import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.support.widget.RecyclerView;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
-import org.telegram.messenger.support.widget.RecyclerView.ItemDecoration;
-import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
-import org.telegram.messenger.support.widget.RecyclerView.State;
-import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.BotInlineResult;
@@ -5609,44 +5609,45 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     }
 
     public void onOpen(boolean z) {
-        if (this.stickersTab != null) {
-            if (!(this.currentPage == 0 || this.currentChatId == 0)) {
-                this.currentPage = 0;
+        if (!(this.currentPage == 0 || this.currentChatId == 0)) {
+            this.currentPage = 0;
+        }
+        int i = this.currentPage;
+        if (i == 0 || z) {
+            showBackspaceButton(true, false);
+            showStickerSettingsButton(false, false);
+            if (this.pager.getCurrentItem() != 0) {
+                this.pager.setCurrentItem(0, z ^ 1);
             }
-            int i = this.currentPage;
-            if (i == 0 || z) {
-                showBackspaceButton(true, false);
-                showStickerSettingsButton(false, false);
-                if (this.pager.getCurrentItem() != 0) {
-                    this.pager.setCurrentItem(0, z ^ 1);
-                }
-            } else if (i == 1) {
-                showBackspaceButton(false, false);
-                showStickerSettingsButton(true, false);
-                if (this.pager.getCurrentItem() != 2) {
-                    this.pager.setCurrentItem(2, false);
-                }
-                if (this.trendingTabNum == 0 && DataQuery.getInstance(this.currentAccount).areAllTrendingStickerSetsUnread()) {
-                    showTrendingTab(true);
-                    return;
-                }
-                int i2 = this.recentTabBum;
-                if (i2 >= 0) {
-                    this.stickersTab.selectTab(i2);
-                    return;
-                }
-                i2 = this.favTabBum;
-                if (i2 >= 0) {
-                    this.stickersTab.selectTab(i2);
-                } else {
-                    this.stickersTab.selectTab(this.stickersTabOffset);
-                }
-            } else if (i == 2) {
-                showBackspaceButton(false, false);
-                showStickerSettingsButton(false, false);
-                if (this.pager.getCurrentItem() != 1) {
-                    this.pager.setCurrentItem(1, false);
-                }
+        } else if (i == 1) {
+            showBackspaceButton(false, false);
+            showStickerSettingsButton(true, false);
+            if (this.pager.getCurrentItem() != 2) {
+                this.pager.setCurrentItem(2, false);
+            }
+            if (this.stickersTab == null) {
+                return;
+            }
+            if (this.trendingTabNum == 0 && DataQuery.getInstance(this.currentAccount).areAllTrendingStickerSetsUnread()) {
+                showTrendingTab(true);
+                return;
+            }
+            int i2 = this.recentTabBum;
+            if (i2 >= 0) {
+                this.stickersTab.selectTab(i2);
+                return;
+            }
+            i2 = this.favTabBum;
+            if (i2 >= 0) {
+                this.stickersTab.selectTab(i2);
+            } else {
+                this.stickersTab.selectTab(this.stickersTabOffset);
+            }
+        } else if (i == 2) {
+            showBackspaceButton(false, false);
+            showStickerSettingsButton(false, false);
+            if (this.pager.getCurrentItem() != 1) {
+                this.pager.setCurrentItem(1, false);
             }
         }
     }

@@ -56,6 +56,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.recyclerview.widget.GridLayoutManagerFixed;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
+import androidx.recyclerview.widget.RecyclerView.LayoutParams;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -102,11 +107,6 @@ import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.messenger.support.widget.GridLayoutManagerFixed;
-import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
-import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
-import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
@@ -1784,7 +1784,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         /* JADX WARNING: Missing block: B:80:0x017d, code skipped:
             if (r13.getFromId() == r0.getFromId()) goto L_0x0169;
      */
-        public void onBindViewHolder(org.telegram.messenger.support.widget.RecyclerView.ViewHolder r13, int r14) {
+        public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r13, int r14) {
             /*
             r12 = this;
             r0 = r12.botInfoRow;
@@ -2100,7 +2100,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         L_0x020d:
             return;
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity$ChatActivityAdapter.onBindViewHolder(org.telegram.messenger.support.widget.RecyclerView$ViewHolder, int):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity$ChatActivityAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");
         }
 
         public int getItemViewType(int i) {
@@ -2113,7 +2113,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         }
 
         /* JADX WARNING: Removed duplicated region for block: B:50:0x0119  */
-        public void onViewAttachedToWindow(org.telegram.messenger.support.widget.RecyclerView.ViewHolder r12) {
+        public void onViewAttachedToWindow(androidx.recyclerview.widget.RecyclerView.ViewHolder r12) {
             /*
             r11 = this;
             r0 = r12.itemView;
@@ -2361,7 +2361,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         L_0x01d2:
             return;
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity$ChatActivityAdapter.onViewAttachedToWindow(org.telegram.messenger.support.widget.RecyclerView$ViewHolder):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity$ChatActivityAdapter.onViewAttachedToWindow(androidx.recyclerview.widget.RecyclerView$ViewHolder):void");
         }
 
         /* JADX WARNING: Removed duplicated region for block: B:13:0x0032  */
@@ -5033,7 +5033,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r2.setOnTouchListener(r3);
         r1 = r7.stickersListView;
         r1.setDisallowInterceptTouchEvents(r10);
-        r1 = new org.telegram.messenger.support.widget.LinearLayoutManager;
+        r1 = new androidx.recyclerview.widget.LinearLayoutManager;
         r1.<init>(r0);
         r1.setOrientation(r9);
         r2 = r7.stickersListView;
@@ -17650,9 +17650,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4 = 33;
         r5 = 0;
         r0.setSpan(r1, r5, r3, r4);
-        r1 = NUM; // 0x7var_ float:1.8077777E38 double:1.0529679493E-314;
+        r1 = NUM; // 0x7var_aa float:1.8077846E38 double:1.052967966E-314;
         r3 = 6;
-        r6 = NUM; // 0x7var_ float:1.8077779E38 double:1.05296795E-314;
+        r6 = NUM; // 0x7var_ab float:1.8077848E38 double:1.0529679666E-314;
         r8.add(r6, r1, r3, r0);
         r0 = new android.text.SpannableStringBuilder;
         r1 = NUM; // 0x7f0d04e8 float:1.8744662E38 double:1.053130398E-314;
@@ -17665,7 +17665,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1.<init>(r3);
         r3 = r0.length();
         r0.setSpan(r1, r5, r3, r4);
-        r1 = NUM; // 0x7var_a float:1.807778E38 double:1.0529679503E-314;
+        r1 = NUM; // 0x7var_ac float:1.807785E38 double:1.052967967E-314;
         r3 = 7;
         r8.add(r6, r1, r3, r0);
         r0 = new android.text.SpannableStringBuilder;
@@ -17678,16 +17678,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1.<init>(r3);
         r3 = r0.length();
         r0.setSpan(r1, r5, r3, r4);
-        r1 = NUM; // 0x7var_c float:1.8077785E38 double:1.0529679513E-314;
+        r1 = NUM; // 0x7var_ae float:1.8077854E38 double:1.052967968E-314;
         r3 = 8;
         r8.add(r6, r1, r3, r0);
-        r0 = NUM; // 0x7var_b float:1.8077783E38 double:1.052967951E-314;
+        r0 = NUM; // 0x7var_ad float:1.8077852E38 double:1.0529679676E-314;
         r1 = 9;
         r3 = NUM; // 0x7f0d02ef float:1.8743638E38 double:1.0531301486E-314;
         r4 = "CreateLink";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r8.add(r6, r0, r1, r3);
-        r0 = NUM; // 0x7var_d float:1.8077787E38 double:1.052967952E-314;
+        r0 = NUM; // 0x7var_af float:1.8077856E38 double:1.0529679686E-314;
         r1 = 10;
         r3 = NUM; // 0x7f0d0838 float:1.8746382E38 double:1.053130817E-314;
         r4 = "Regular";
@@ -18048,10 +18048,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                             ChatActivity.this.alertViewAnimator = null;
                         }
                         ChatActivity.this.alertViewAnimator = new AnimatorSet();
-                        AnimatorSet access$21800 = ChatActivity.this.alertViewAnimator;
+                        AnimatorSet access$21900 = ChatActivity.this.alertViewAnimator;
                         Animator[] animatorArr = new Animator[1];
                         animatorArr[0] = ObjectAnimator.ofFloat(ChatActivity.this.alertView, View.TRANSLATION_Y, new float[]{(float) (-AndroidUtilities.dp(50.0f))});
-                        access$21800.playTogether(animatorArr);
+                        access$21900.playTogether(animatorArr);
                         ChatActivity.this.alertViewAnimator.setDuration(200);
                         ChatActivity.this.alertViewAnimator.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animator) {

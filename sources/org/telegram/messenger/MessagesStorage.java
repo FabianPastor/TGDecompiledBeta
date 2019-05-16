@@ -5656,7 +5656,7 @@ public class MessagesStorage {
                         }
                         String str4 = str3;
                         int intValue = queryFinalized.intValue(8);
-                        arrayList11.add(new MessageObject(this.currentAccount, TLdeserialize2, stringValue, stringValue2, str4, (intValue & 1) != 0, (intValue & 2) != 0));
+                        arrayList11.add(new MessageObject(this.currentAccount, TLdeserialize2, stringValue, stringValue2, str4, (intValue & 1) != 0, (intValue & 2) != 0, false));
                         addUsersAndChatsFromMessage(TLdeserialize2, arrayList6, arrayList7);
                     }
                     max = 0;
@@ -7662,7 +7662,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:21:0x005d A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:1:0x0001} */
+    /* JADX WARNING: Removed duplicated region for block: B:21:0x005d A:{Splitter:B:1:0x0001, ExcHandler: all (th java.lang.Throwable)} */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Missing block: B:21:0x005d, code skipped:
             r5 = th;

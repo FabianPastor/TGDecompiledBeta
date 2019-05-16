@@ -36,6 +36,9 @@ import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.Toast;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
@@ -53,9 +56,6 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.support.widget.RecyclerView;
-import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.EncryptedChat;
 import org.telegram.tgnet.TLRPC.User;
@@ -350,7 +350,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             /* JADX WARNING: Missing block: B:15:0x004f, code skipped:
             if (java.lang.Math.abs(r0) > 1) goto L_0x005d;
      */
-            public void onScrolled(org.telegram.messenger.support.widget.RecyclerView r4, int r5, int r6) {
+            public void onScrolled(androidx.recyclerview.widget.RecyclerView r4, int r5, int r6) {
                 /*
                 r3 = this;
                 super.onScrolled(r4, r5, r6);
@@ -434,7 +434,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             L_0x0084:
                 return;
                 */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ContactsActivity$AnonymousClass5.onScrolled(org.telegram.messenger.support.widget.RecyclerView, int, int):void");
+                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ContactsActivity$AnonymousClass5.onScrolled(androidx.recyclerview.widget.RecyclerView, int, int):void");
             }
         });
         if (!(this.createSecretChat || this.returnAsResult)) {

@@ -77,6 +77,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.Keep;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup;
+import androidx.recyclerview.widget.GridLayoutManagerFixed;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
+import androidx.recyclerview.widget.RecyclerView.ItemDecoration;
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener;
+import androidx.recyclerview.widget.RecyclerView.State;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener;
@@ -111,17 +122,6 @@ import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.messenger.support.widget.DefaultItemAnimator;
-import org.telegram.messenger.support.widget.GridLayoutManager;
-import org.telegram.messenger.support.widget.GridLayoutManager.SpanSizeLookup;
-import org.telegram.messenger.support.widget.GridLayoutManagerFixed;
-import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.support.widget.RecyclerView;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
-import org.telegram.messenger.support.widget.RecyclerView.ItemDecoration;
-import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
-import org.telegram.messenger.support.widget.RecyclerView.State;
-import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
@@ -1340,7 +1340,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     for (i3 = 
 /*
 Method generation error in method: org.telegram.ui.ArticleViewer.BlockCollageCell.GroupedMessages.calculate():void, dex: classes.dex
-jadx.core.utils.exceptions.CodegenException: Error generate insn: PHI: (r14_15 'i3' int) = (r14_2 'i3' int), (r14_0 'i3' int), (r14_14 'i3' int) binds: {(r14_2 'i3' int)=B:71:0x04f4, (r14_0 'i3' int)=B:72:0x04f9, (r14_14 'i3' int)=B:218:0x0740} in method: org.telegram.ui.ArticleViewer.BlockCollageCell.GroupedMessages.calculate():void, dex: classes.dex
+jadx.core.utils.exceptions.CodegenException: Error generate insn: PHI: (r14_15 'i3' int) = (r14_2 'i3' int), (r14_0 'i3' int), (r14_14 'i3' int) binds: {(r14_2 'i3' int)=B:71:0x04f3, (r14_0 'i3' int)=B:72:0x04f8, (r14_14 'i3' int)=B:218:0x073f} in method: org.telegram.ui.ArticleViewer.BlockCollageCell.GroupedMessages.calculate():void, dex: classes.dex
 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:228)
 	at jadx.core.codegen.RegionGen.makeLoop(RegionGen.java:185)
 	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:63)
@@ -14048,20 +14048,20 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:42:0x0103  */
     /* JADX WARNING: Removed duplicated region for block: B:41:0x00fb  */
     /* JADX WARNING: Removed duplicated region for block: B:45:0x010c  */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x018f  */
-    /* JADX WARNING: Removed duplicated region for block: B:58:0x0148  */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x0220  */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x015f A:{Catch:{ Exception -> 0x018a }} */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:62:0x0159 */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x018e  */
+    /* JADX WARNING: Removed duplicated region for block: B:58:0x0147  */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x021f  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x015e A:{Catch:{ Exception -> 0x0189 }} */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:62:0x0158 */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Can't wrap try/catch for region: R(6:58|(2:60|61)|62|63|(2:65|(1:67))|68) */
-    /* JADX WARNING: Missing block: B:69:0x018a, code skipped:
+    /* JADX WARNING: Missing block: B:69:0x0189, code skipped:
             r12 = move-exception;
      */
-    /* JADX WARNING: Missing block: B:70:0x018b, code skipped:
+    /* JADX WARNING: Missing block: B:70:0x018a, code skipped:
             org.telegram.messenger.FileLog.e(r12);
      */
-    /* JADX WARNING: Missing block: B:71:0x018e, code skipped:
+    /* JADX WARNING: Missing block: B:71:0x018d, code skipped:
             return false;
      */
     private boolean open(org.telegram.messenger.MessageObject r12, org.telegram.tgnet.TLRPC.WebPage r13, java.lang.String r14, boolean r15) {
@@ -14069,19 +14069,19 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r11 = this;
         r0 = r11.parentActivity;
         r1 = 0;
-        if (r0 == 0) goto L_0x0226;
+        if (r0 == 0) goto L_0x0225;
     L_0x0005:
         r0 = r11.isVisible;
         if (r0 == 0) goto L_0x000d;
     L_0x0009:
         r0 = r11.collapsed;
-        if (r0 == 0) goto L_0x0226;
+        if (r0 == 0) goto L_0x0225;
     L_0x000d:
         if (r12 != 0) goto L_0x0013;
     L_0x000f:
         if (r13 != 0) goto L_0x0013;
     L_0x0011:
-        goto L_0x0226;
+        goto L_0x0225;
     L_0x0013:
         if (r12 == 0) goto L_0x001b;
     L_0x0015:
@@ -14258,48 +14258,48 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r11.lastInsets = r3;
         r12 = r11.isVisible;
         r14 = "window";
-        if (r12 != 0) goto L_0x018f;
-    L_0x0148:
+        if (r12 != 0) goto L_0x018e;
+    L_0x0147:
         r12 = r11.parentActivity;
         r12 = r12.getSystemService(r14);
         r12 = (android.view.WindowManager) r12;
         r14 = r11.attachedToWindow;
-        if (r14 == 0) goto L_0x0159;
-    L_0x0154:
-        r14 = r11.windowView;	 Catch:{ Exception -> 0x0159 }
-        r12.removeView(r14);	 Catch:{ Exception -> 0x0159 }
-    L_0x0159:
-        r14 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x018a }
+        if (r14 == 0) goto L_0x0158;
+    L_0x0153:
+        r14 = r11.windowView;	 Catch:{ Exception -> 0x0158 }
+        r12.removeView(r14);	 Catch:{ Exception -> 0x0158 }
+    L_0x0158:
+        r14 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0189 }
         r15 = 21;
-        if (r14 < r15) goto L_0x0170;
-    L_0x015f:
-        r14 = r11.windowLayoutParams;	 Catch:{ Exception -> 0x018a }
+        if (r14 < r15) goto L_0x016f;
+    L_0x015e:
+        r14 = r11.windowLayoutParams;	 Catch:{ Exception -> 0x0189 }
         r15 = -NUM; // 0xfffffffvar_ float:-9.2194E-41 double:NaN;
-        r14.flags = r15;	 Catch:{ Exception -> 0x018a }
-        r14 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x018a }
+        r14.flags = r15;	 Catch:{ Exception -> 0x0189 }
+        r14 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0189 }
         r15 = 28;
-        if (r14 < r15) goto L_0x0170;
-    L_0x016c:
-        r14 = r11.windowLayoutParams;	 Catch:{ Exception -> 0x018a }
-        r14.layoutInDisplayCutoutMode = r4;	 Catch:{ Exception -> 0x018a }
-    L_0x0170:
-        r14 = r11.windowLayoutParams;	 Catch:{ Exception -> 0x018a }
-        r15 = r14.flags;	 Catch:{ Exception -> 0x018a }
+        if (r14 < r15) goto L_0x016f;
+    L_0x016b:
+        r14 = r11.windowLayoutParams;	 Catch:{ Exception -> 0x0189 }
+        r14.layoutInDisplayCutoutMode = r4;	 Catch:{ Exception -> 0x0189 }
+    L_0x016f:
+        r14 = r11.windowLayoutParams;	 Catch:{ Exception -> 0x0189 }
+        r15 = r14.flags;	 Catch:{ Exception -> 0x0189 }
         r15 = r15 | 1032;
-        r14.flags = r15;	 Catch:{ Exception -> 0x018a }
-        r14 = r11.windowView;	 Catch:{ Exception -> 0x018a }
-        r14.setFocusable(r1);	 Catch:{ Exception -> 0x018a }
-        r14 = r11.containerView;	 Catch:{ Exception -> 0x018a }
-        r14.setFocusable(r1);	 Catch:{ Exception -> 0x018a }
-        r14 = r11.windowView;	 Catch:{ Exception -> 0x018a }
-        r15 = r11.windowLayoutParams;	 Catch:{ Exception -> 0x018a }
-        r12.addView(r14, r15);	 Catch:{ Exception -> 0x018a }
-        goto L_0x01a6;
-    L_0x018a:
+        r14.flags = r15;	 Catch:{ Exception -> 0x0189 }
+        r14 = r11.windowView;	 Catch:{ Exception -> 0x0189 }
+        r14.setFocusable(r1);	 Catch:{ Exception -> 0x0189 }
+        r14 = r11.containerView;	 Catch:{ Exception -> 0x0189 }
+        r14.setFocusable(r1);	 Catch:{ Exception -> 0x0189 }
+        r14 = r11.windowView;	 Catch:{ Exception -> 0x0189 }
+        r15 = r11.windowLayoutParams;	 Catch:{ Exception -> 0x0189 }
+        r12.addView(r14, r15);	 Catch:{ Exception -> 0x0189 }
+        goto L_0x01a5;
+    L_0x0189:
         r12 = move-exception;
         org.telegram.messenger.FileLog.e(r12);
         return r1;
-    L_0x018f:
+    L_0x018e:
         r12 = r11.windowLayoutParams;
         r15 = r12.flags;
         r15 = r15 & -17;
@@ -14310,7 +14310,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r14 = r11.windowView;
         r15 = r11.windowLayoutParams;
         r12.updateViewLayout(r14, r15);
-    L_0x01a6:
+    L_0x01a5:
         r11.isVisible = r4;
         r11.animationInProgress = r4;
         r12 = r11.windowView;
@@ -14361,13 +14361,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r13);
         r12 = android.os.Build.VERSION.SDK_INT;
         r13 = 18;
-        if (r12 < r13) goto L_0x0225;
-    L_0x0220:
+        if (r12 < r13) goto L_0x0224;
+    L_0x021f:
         r12 = r11.containerView;
         r12.setLayerType(r5, r3);
-    L_0x0225:
+    L_0x0224:
         return r4;
-    L_0x0226:
+    L_0x0225:
         return r1;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.open(org.telegram.messenger.MessageObject, org.telegram.tgnet.TLRPC$WebPage, java.lang.String, boolean):boolean");

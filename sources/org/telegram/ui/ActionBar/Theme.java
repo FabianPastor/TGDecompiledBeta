@@ -284,7 +284,7 @@ public class Theme {
     private static ThemeInfo defaultTheme = null;
     public static LottieDrawable dialogs_archiveAvatarDrawable = null;
     public static boolean dialogs_archiveAvatarDrawableRecolored = false;
-    public static LottieDrawable dialogs_archiveDrawable = null;
+    public static Drawable dialogs_archiveDrawable = null;
     public static boolean dialogs_archiveDrawableRecolored = false;
     public static Drawable dialogs_botDrawable = null;
     public static Drawable dialogs_broadcastDrawable = null;
@@ -311,15 +311,15 @@ public class Theme {
     public static TextPaint dialogs_offlinePaint = null;
     public static Paint dialogs_onlineCirclePaint = null;
     public static TextPaint dialogs_onlinePaint = null;
-    public static LottieDrawable dialogs_pinArchiveDrawable = null;
+    public static Drawable dialogs_pinArchiveDrawable = null;
     public static Drawable dialogs_pinnedDrawable = null;
     public static Paint dialogs_pinnedPaint = null;
     public static Drawable dialogs_reorderDrawable = null;
     public static ScamDrawable dialogs_scamDrawable = null;
     public static Paint dialogs_tabletSeletedPaint = null;
     public static TextPaint dialogs_timePaint = null;
-    public static LottieDrawable dialogs_unarchiveDrawable = null;
-    public static LottieDrawable dialogs_unpinArchiveDrawable = null;
+    public static Drawable dialogs_unarchiveDrawable = null;
+    public static Drawable dialogs_unpinArchiveDrawable = null;
     public static Drawable dialogs_verifiedCheckDrawable = null;
     public static Drawable dialogs_verifiedDrawable = null;
     public static Paint dividerPaint = null;
@@ -2443,7 +2443,7 @@ public class Theme {
     }
 
     /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:96:0x0152 in {5, 6, 11, 17, 22, 23, 28, 31, 32, 35, 37, 39, 41, 42, 48, 50, 54, 57, 58, 66, 72, 76, 79, 81, 82, 88, 89, 92, 95} preds:[]
+        jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:96:0x0151 in {5, 6, 11, 17, 22, 23, 28, 31, 32, 35, 37, 39, 41, 42, 48, 50, 54, 57, 58, 66, 72, 76, 79, 81, 82, 88, 89, 92, 95} preds:[]
         	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
         	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
         	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
@@ -2464,42 +2464,42 @@ public class Theme {
         /*
         r0 = wallpaperSync;
         monitor-enter(r0);
-        r1 = org.telegram.messenger.MessagesController.getGlobalMainSettings();	 Catch:{ all -> 0x014f }
-        r2 = "overrideThemeWallpaper";	 Catch:{ all -> 0x014f }
-        r3 = 0;	 Catch:{ all -> 0x014f }
-        r2 = r1.getBoolean(r2, r3);	 Catch:{ all -> 0x014f }
-        r4 = "selectedBackgroundMotion";	 Catch:{ all -> 0x014f }
-        r4 = r1.getBoolean(r4, r3);	 Catch:{ all -> 0x014f }
-        isWallpaperMotion = r4;	 Catch:{ all -> 0x014f }
-        r4 = "selectedPattern";	 Catch:{ all -> 0x014f }
-        r5 = 0;	 Catch:{ all -> 0x014f }
-        r7 = r1.getLong(r4, r5);	 Catch:{ all -> 0x014f }
-        r4 = 1;	 Catch:{ all -> 0x014f }
-        r9 = (r7 > r5 ? 1 : (r7 == r5 ? 0 : -1));	 Catch:{ all -> 0x014f }
-        if (r9 == 0) goto L_0x0025;	 Catch:{ all -> 0x014f }
-        r7 = 1;	 Catch:{ all -> 0x014f }
-        goto L_0x0026;	 Catch:{ all -> 0x014f }
-        r7 = 0;	 Catch:{ all -> 0x014f }
-        isPatternWallpaper = r7;	 Catch:{ all -> 0x014f }
-        if (r2 != 0) goto L_0x00b6;	 Catch:{ all -> 0x014f }
-        r2 = currentColors;	 Catch:{ all -> 0x014f }
-        r7 = "chat_wallpaper";	 Catch:{ all -> 0x014f }
-        r2 = r2.get(r7);	 Catch:{ all -> 0x014f }
-        r2 = (java.lang.Integer) r2;	 Catch:{ all -> 0x014f }
-        if (r2 == 0) goto L_0x0045;	 Catch:{ all -> 0x014f }
-        r7 = new android.graphics.drawable.ColorDrawable;	 Catch:{ all -> 0x014f }
-        r2 = r2.intValue();	 Catch:{ all -> 0x014f }
-        r7.<init>(r2);	 Catch:{ all -> 0x014f }
-        wallpaper = r7;	 Catch:{ all -> 0x014f }
-        isCustomTheme = r4;	 Catch:{ all -> 0x014f }
-        goto L_0x00b6;	 Catch:{ all -> 0x014f }
-        r2 = themedWallpaperFileOffset;	 Catch:{ all -> 0x014f }
-        if (r2 <= 0) goto L_0x00b6;	 Catch:{ all -> 0x014f }
-        r2 = currentTheme;	 Catch:{ all -> 0x014f }
-        r2 = r2.pathToFile;	 Catch:{ all -> 0x014f }
-        if (r2 != 0) goto L_0x0055;	 Catch:{ all -> 0x014f }
-        r2 = currentTheme;	 Catch:{ all -> 0x014f }
-        r2 = r2.assetName;	 Catch:{ all -> 0x014f }
+        r1 = org.telegram.messenger.MessagesController.getGlobalMainSettings();	 Catch:{ all -> 0x014e }
+        r2 = "overrideThemeWallpaper";	 Catch:{ all -> 0x014e }
+        r3 = 0;	 Catch:{ all -> 0x014e }
+        r2 = r1.getBoolean(r2, r3);	 Catch:{ all -> 0x014e }
+        r4 = "selectedBackgroundMotion";	 Catch:{ all -> 0x014e }
+        r4 = r1.getBoolean(r4, r3);	 Catch:{ all -> 0x014e }
+        isWallpaperMotion = r4;	 Catch:{ all -> 0x014e }
+        r4 = "selectedPattern";	 Catch:{ all -> 0x014e }
+        r5 = 0;	 Catch:{ all -> 0x014e }
+        r7 = r1.getLong(r4, r5);	 Catch:{ all -> 0x014e }
+        r4 = 1;	 Catch:{ all -> 0x014e }
+        r9 = (r7 > r5 ? 1 : (r7 == r5 ? 0 : -1));	 Catch:{ all -> 0x014e }
+        if (r9 == 0) goto L_0x0025;	 Catch:{ all -> 0x014e }
+        r7 = 1;	 Catch:{ all -> 0x014e }
+        goto L_0x0026;	 Catch:{ all -> 0x014e }
+        r7 = 0;	 Catch:{ all -> 0x014e }
+        isPatternWallpaper = r7;	 Catch:{ all -> 0x014e }
+        if (r2 != 0) goto L_0x00b6;	 Catch:{ all -> 0x014e }
+        r2 = currentColors;	 Catch:{ all -> 0x014e }
+        r7 = "chat_wallpaper";	 Catch:{ all -> 0x014e }
+        r2 = r2.get(r7);	 Catch:{ all -> 0x014e }
+        r2 = (java.lang.Integer) r2;	 Catch:{ all -> 0x014e }
+        if (r2 == 0) goto L_0x0045;	 Catch:{ all -> 0x014e }
+        r7 = new android.graphics.drawable.ColorDrawable;	 Catch:{ all -> 0x014e }
+        r2 = r2.intValue();	 Catch:{ all -> 0x014e }
+        r7.<init>(r2);	 Catch:{ all -> 0x014e }
+        wallpaper = r7;	 Catch:{ all -> 0x014e }
+        isCustomTheme = r4;	 Catch:{ all -> 0x014e }
+        goto L_0x00b6;	 Catch:{ all -> 0x014e }
+        r2 = themedWallpaperFileOffset;	 Catch:{ all -> 0x014e }
+        if (r2 <= 0) goto L_0x00b6;	 Catch:{ all -> 0x014e }
+        r2 = currentTheme;	 Catch:{ all -> 0x014e }
+        r2 = r2.pathToFile;	 Catch:{ all -> 0x014e }
+        if (r2 != 0) goto L_0x0055;	 Catch:{ all -> 0x014e }
+        r2 = currentTheme;	 Catch:{ all -> 0x014e }
+        r2 = r2.assetName;	 Catch:{ all -> 0x014e }
         if (r2 == 0) goto L_0x00b6;
         r2 = 0;
         r7 = currentTheme;	 Catch:{ Throwable -> 0x009f }
@@ -2529,7 +2529,7 @@ public class Theme {
         r8.close();	 Catch:{ Exception -> 0x0092 }
         goto L_0x00b6;
         r2 = move-exception;
-        org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x014f }
+        org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x014e }
         goto L_0x00b6;
         r1 = move-exception;
         r2 = r8;
@@ -2550,75 +2550,75 @@ public class Theme {
         r2.close();	 Catch:{ Exception -> 0x00b1 }
         goto L_0x00b5;
         r2 = move-exception;
-        org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x014f }
-        throw r1;	 Catch:{ all -> 0x014f }
-        r2 = wallpaper;	 Catch:{ all -> 0x014f }
-        if (r2 != 0) goto L_0x0143;
-        r7 = getSelectedBackgroundId();	 Catch:{ Throwable -> 0x0132 }
-        r2 = "selectedPattern";	 Catch:{ Throwable -> 0x0132 }
-        r9 = r1.getLong(r2, r5);	 Catch:{ Throwable -> 0x0132 }
-        r2 = "selectedColor";	 Catch:{ Throwable -> 0x0132 }
-        r1 = r1.getInt(r2, r3);	 Catch:{ Throwable -> 0x0132 }
+        org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x014e }
+        throw r1;	 Catch:{ all -> 0x014e }
+        r2 = wallpaper;	 Catch:{ all -> 0x014e }
+        if (r2 != 0) goto L_0x0142;
+        r7 = getSelectedBackgroundId();	 Catch:{ Throwable -> 0x0131 }
+        r2 = "selectedPattern";	 Catch:{ Throwable -> 0x0131 }
+        r9 = r1.getLong(r2, r5);	 Catch:{ Throwable -> 0x0131 }
+        r2 = "selectedColor";	 Catch:{ Throwable -> 0x0131 }
+        r1 = r1.getInt(r2, r3);	 Catch:{ Throwable -> 0x0131 }
         r11 = 1000001; // 0xvar_ float:1.4013E-39 double:4.94066E-318;
         r2 = NUM; // 0x7var_ float:1.7944811E38 double:1.05293556E-314;
         r13 = (r7 > r11 ? 1 : (r7 == r11 ? 0 : -1));
         if (r13 != 0) goto L_0x00e3;
-        r5 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x0133 }
-        r5 = r5.getResources();	 Catch:{ Throwable -> 0x0133 }
-        r2 = r5.getDrawable(r2);	 Catch:{ Throwable -> 0x0133 }
-        wallpaper = r2;	 Catch:{ Throwable -> 0x0133 }
-        isCustomTheme = r3;	 Catch:{ Throwable -> 0x0133 }
-        goto L_0x0133;	 Catch:{ Throwable -> 0x0133 }
-        r11 = -1;	 Catch:{ Throwable -> 0x0133 }
-        r13 = (r7 > r11 ? 1 : (r7 == r11 ? 0 : -1));	 Catch:{ Throwable -> 0x0133 }
-        if (r13 == 0) goto L_0x00f3;	 Catch:{ Throwable -> 0x0133 }
-        r11 = -100;	 Catch:{ Throwable -> 0x0133 }
-        r13 = (r7 > r11 ? 1 : (r7 == r11 ? 0 : -1));	 Catch:{ Throwable -> 0x0133 }
-        if (r13 < 0) goto L_0x00f3;	 Catch:{ Throwable -> 0x0133 }
-        r11 = (r7 > r5 ? 1 : (r7 == r5 ? 0 : -1));	 Catch:{ Throwable -> 0x0133 }
-        if (r11 <= 0) goto L_0x0133;	 Catch:{ Throwable -> 0x0133 }
-        if (r1 == 0) goto L_0x0101;	 Catch:{ Throwable -> 0x0133 }
-        r7 = (r9 > r5 ? 1 : (r9 == r5 ? 0 : -1));	 Catch:{ Throwable -> 0x0133 }
-        if (r7 != 0) goto L_0x0101;	 Catch:{ Throwable -> 0x0133 }
-        r2 = new android.graphics.drawable.ColorDrawable;	 Catch:{ Throwable -> 0x0133 }
-        r2.<init>(r1);	 Catch:{ Throwable -> 0x0133 }
-        wallpaper = r2;	 Catch:{ Throwable -> 0x0133 }
-        goto L_0x0133;	 Catch:{ Throwable -> 0x0133 }
-        r5 = new java.io.File;	 Catch:{ Throwable -> 0x0133 }
-        r6 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();	 Catch:{ Throwable -> 0x0133 }
-        r7 = "wallpaper.jpg";	 Catch:{ Throwable -> 0x0133 }
-        r5.<init>(r6, r7);	 Catch:{ Throwable -> 0x0133 }
-        r5.length();	 Catch:{ Throwable -> 0x0133 }
-        r6 = r5.exists();	 Catch:{ Throwable -> 0x0133 }
-        if (r6 == 0) goto L_0x0123;	 Catch:{ Throwable -> 0x0133 }
-        r2 = r5.getAbsolutePath();	 Catch:{ Throwable -> 0x0133 }
-        r2 = android.graphics.drawable.Drawable.createFromPath(r2);	 Catch:{ Throwable -> 0x0133 }
-        wallpaper = r2;	 Catch:{ Throwable -> 0x0133 }
-        isCustomTheme = r4;	 Catch:{ Throwable -> 0x0133 }
-        goto L_0x0133;	 Catch:{ Throwable -> 0x0133 }
-        r5 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x0133 }
-        r5 = r5.getResources();	 Catch:{ Throwable -> 0x0133 }
-        r2 = r5.getDrawable(r2);	 Catch:{ Throwable -> 0x0133 }
-        wallpaper = r2;	 Catch:{ Throwable -> 0x0133 }
-        isCustomTheme = r3;	 Catch:{ Throwable -> 0x0133 }
-        goto L_0x0133;
+        r5 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x0132 }
+        r5 = r5.getResources();	 Catch:{ Throwable -> 0x0132 }
+        r2 = r5.getDrawable(r2);	 Catch:{ Throwable -> 0x0132 }
+        wallpaper = r2;	 Catch:{ Throwable -> 0x0132 }
+        isCustomTheme = r3;	 Catch:{ Throwable -> 0x0132 }
+        goto L_0x0132;	 Catch:{ Throwable -> 0x0132 }
+        r11 = -1;	 Catch:{ Throwable -> 0x0132 }
+        r13 = (r7 > r11 ? 1 : (r7 == r11 ? 0 : -1));	 Catch:{ Throwable -> 0x0132 }
+        if (r13 == 0) goto L_0x00f3;	 Catch:{ Throwable -> 0x0132 }
+        r11 = -100;	 Catch:{ Throwable -> 0x0132 }
+        r13 = (r7 > r11 ? 1 : (r7 == r11 ? 0 : -1));	 Catch:{ Throwable -> 0x0132 }
+        if (r13 < 0) goto L_0x00f3;	 Catch:{ Throwable -> 0x0132 }
+        r11 = (r7 > r5 ? 1 : (r7 == r5 ? 0 : -1));	 Catch:{ Throwable -> 0x0132 }
+        if (r11 <= 0) goto L_0x0132;	 Catch:{ Throwable -> 0x0132 }
+        if (r1 == 0) goto L_0x0101;	 Catch:{ Throwable -> 0x0132 }
+        r7 = (r9 > r5 ? 1 : (r9 == r5 ? 0 : -1));	 Catch:{ Throwable -> 0x0132 }
+        if (r7 != 0) goto L_0x0101;	 Catch:{ Throwable -> 0x0132 }
+        r2 = new android.graphics.drawable.ColorDrawable;	 Catch:{ Throwable -> 0x0132 }
+        r2.<init>(r1);	 Catch:{ Throwable -> 0x0132 }
+        wallpaper = r2;	 Catch:{ Throwable -> 0x0132 }
+        goto L_0x0132;	 Catch:{ Throwable -> 0x0132 }
+        r5 = new java.io.File;	 Catch:{ Throwable -> 0x0132 }
+        r6 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();	 Catch:{ Throwable -> 0x0132 }
+        r7 = "wallpaper.jpg";	 Catch:{ Throwable -> 0x0132 }
+        r5.<init>(r6, r7);	 Catch:{ Throwable -> 0x0132 }
+        r5.length();	 Catch:{ Throwable -> 0x0132 }
+        r6 = r5.exists();	 Catch:{ Throwable -> 0x0132 }
+        if (r6 == 0) goto L_0x0122;	 Catch:{ Throwable -> 0x0132 }
+        r2 = r5.getAbsolutePath();	 Catch:{ Throwable -> 0x0132 }
+        r2 = android.graphics.drawable.Drawable.createFromPath(r2);	 Catch:{ Throwable -> 0x0132 }
+        wallpaper = r2;	 Catch:{ Throwable -> 0x0132 }
+        isCustomTheme = r4;	 Catch:{ Throwable -> 0x0132 }
+        goto L_0x0132;	 Catch:{ Throwable -> 0x0132 }
+        r5 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x0132 }
+        r5 = r5.getResources();	 Catch:{ Throwable -> 0x0132 }
+        r2 = r5.getDrawable(r2);	 Catch:{ Throwable -> 0x0132 }
+        wallpaper = r2;	 Catch:{ Throwable -> 0x0132 }
+        isCustomTheme = r3;	 Catch:{ Throwable -> 0x0132 }
+        goto L_0x0132;
         r1 = 0;
-    L_0x0133:
-        r2 = wallpaper;	 Catch:{ all -> 0x014f }
-        if (r2 != 0) goto L_0x0143;	 Catch:{ all -> 0x014f }
-        if (r1 != 0) goto L_0x013c;	 Catch:{ all -> 0x014f }
-        r1 = -2693905; // 0xffffffffffd6e4ef float:NaN double:NaN;	 Catch:{ all -> 0x014f }
-        r2 = new android.graphics.drawable.ColorDrawable;	 Catch:{ all -> 0x014f }
-        r2.<init>(r1);	 Catch:{ all -> 0x014f }
-        wallpaper = r2;	 Catch:{ all -> 0x014f }
-        r1 = wallpaper;	 Catch:{ all -> 0x014f }
-        calcBackgroundColor(r1, r4);	 Catch:{ all -> 0x014f }
-        r1 = org.telegram.ui.ActionBar.-$$Lambda$Theme$TMhHMPfcji-vj3thFJwRUoKkxRA.INSTANCE;	 Catch:{ all -> 0x014f }
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r1);	 Catch:{ all -> 0x014f }
-        monitor-exit(r0);	 Catch:{ all -> 0x014f }
-        return;	 Catch:{ all -> 0x014f }
-        r1 = move-exception;	 Catch:{ all -> 0x014f }
-        monitor-exit(r0);	 Catch:{ all -> 0x014f }
+    L_0x0132:
+        r2 = wallpaper;	 Catch:{ all -> 0x014e }
+        if (r2 != 0) goto L_0x0142;	 Catch:{ all -> 0x014e }
+        if (r1 != 0) goto L_0x013b;	 Catch:{ all -> 0x014e }
+        r1 = -2693905; // 0xffffffffffd6e4ef float:NaN double:NaN;	 Catch:{ all -> 0x014e }
+        r2 = new android.graphics.drawable.ColorDrawable;	 Catch:{ all -> 0x014e }
+        r2.<init>(r1);	 Catch:{ all -> 0x014e }
+        wallpaper = r2;	 Catch:{ all -> 0x014e }
+        r1 = wallpaper;	 Catch:{ all -> 0x014e }
+        calcBackgroundColor(r1, r4);	 Catch:{ all -> 0x014e }
+        r1 = org.telegram.ui.ActionBar.-$$Lambda$Theme$TMhHMPfcji-vj3thFJwRUoKkxRA.INSTANCE;	 Catch:{ all -> 0x014e }
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r1);	 Catch:{ all -> 0x014e }
+        monitor-exit(r0);	 Catch:{ all -> 0x014e }
+        return;	 Catch:{ all -> 0x014e }
+        r1 = move-exception;	 Catch:{ all -> 0x014e }
+        monitor-exit(r0);	 Catch:{ all -> 0x014e }
         throw r1;
         return;
         */
@@ -4557,14 +4557,25 @@ public class Theme {
             avatar_savedDrawable = resources.getDrawable(NUM);
             dialogs_archiveAvatarDrawable = new LottieDrawable();
             dialogs_archiveAvatarDrawable.setComposition((LottieComposition) LottieCompositionFactory.fromRawResSync(context, NUM).getValue());
-            dialogs_archiveDrawable = new LottieDrawable();
-            dialogs_archiveDrawable.setComposition((LottieComposition) LottieCompositionFactory.fromRawResSync(context, NUM).getValue());
-            dialogs_unarchiveDrawable = new LottieDrawable();
-            dialogs_unarchiveDrawable.setComposition((LottieComposition) LottieCompositionFactory.fromRawResSync(context, NUM).getValue());
-            dialogs_pinArchiveDrawable = new LottieDrawable();
-            dialogs_pinArchiveDrawable.setComposition((LottieComposition) LottieCompositionFactory.fromRawResSync(context, NUM).getValue());
-            dialogs_unpinArchiveDrawable = new LottieDrawable();
-            dialogs_unpinArchiveDrawable.setComposition((LottieComposition) LottieCompositionFactory.fromRawResSync(context, NUM).getValue());
+            if (VERSION.SDK_INT == 24) {
+                dialogs_archiveDrawable = resources.getDrawable(NUM);
+                dialogs_unarchiveDrawable = resources.getDrawable(NUM);
+                dialogs_pinArchiveDrawable = resources.getDrawable(NUM);
+                dialogs_unpinArchiveDrawable = resources.getDrawable(NUM);
+            } else {
+                LottieDrawable lottieDrawable = new LottieDrawable();
+                lottieDrawable.setComposition((LottieComposition) LottieCompositionFactory.fromRawResSync(context, NUM).getValue());
+                dialogs_archiveDrawable = lottieDrawable;
+                lottieDrawable = new LottieDrawable();
+                lottieDrawable.setComposition((LottieComposition) LottieCompositionFactory.fromRawResSync(context, NUM).getValue());
+                dialogs_unarchiveDrawable = lottieDrawable;
+                lottieDrawable = new LottieDrawable();
+                lottieDrawable.setComposition((LottieComposition) LottieCompositionFactory.fromRawResSync(context, NUM).getValue());
+                dialogs_pinArchiveDrawable = lottieDrawable;
+                lottieDrawable = new LottieDrawable();
+                lottieDrawable.setComposition((LottieComposition) LottieCompositionFactory.fromRawResSync(context, NUM).getValue());
+                dialogs_unpinArchiveDrawable = lottieDrawable;
+            }
             applyCommonTheme();
         }
     }
@@ -4604,30 +4615,48 @@ public class Theme {
             r8[1] = str2;
             lottieDrawable.addValueCallback(new KeyPath(r8), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str))));
             dialogs_archiveAvatarDrawableRecolored = false;
-            dialogs_pinArchiveDrawable.addValueCallback(new KeyPath(str2), LottieProperty.COLOR_FILTER, null);
-            lottieDrawable = dialogs_pinArchiveDrawable;
-            r8 = new String[2];
-            r8[0] = "Arrow";
-            r8[1] = str2;
-            lottieDrawable.addValueCallback(new KeyPath(r8), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str))));
-            lottieDrawable = dialogs_pinArchiveDrawable;
-            r7 = new String[2];
-            r7[0] = "Line";
-            r7[1] = str2;
-            lottieDrawable.addValueCallback(new KeyPath(r7), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str))));
-            dialogs_unpinArchiveDrawable.addValueCallback(new KeyPath(str2), LottieProperty.COLOR_FILTER, null);
-            dialogs_unpinArchiveDrawable.addValueCallback(new KeyPath("Arrow", str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str))));
-            dialogs_unpinArchiveDrawable.addValueCallback(new KeyPath("Line", str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str))));
-            dialogs_archiveDrawable.addValueCallback(new KeyPath(str2), LottieProperty.COLOR_FILTER, null);
-            dialogs_archiveDrawable.addValueCallback(new KeyPath("Arrow", str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor("chats_archiveBackground"))));
-            dialogs_archiveDrawable.addValueCallback(new KeyPath("Box2", str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str))));
-            dialogs_archiveDrawable.addValueCallback(new KeyPath("Box1", str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str))));
-            dialogs_archiveDrawableRecolored = false;
-            dialogs_unarchiveDrawable.addValueCallback(new KeyPath(str2), LottieProperty.COLOR_FILTER, null);
-            dialogs_unarchiveDrawable.addValueCallback(new KeyPath("Arrow1", str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str))));
-            dialogs_unarchiveDrawable.addValueCallback(new KeyPath("Arrow2", str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor("chats_archivePinBackground"))));
-            dialogs_unarchiveDrawable.addValueCallback(new KeyPath("Box2", str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str))));
-            dialogs_unarchiveDrawable.addValueCallback(new KeyPath("Box1", str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str))));
+            Drawable drawable = dialogs_pinArchiveDrawable;
+            String str4 = "Line";
+            String str5 = "Arrow";
+            if (drawable instanceof LottieDrawable) {
+                lottieDrawable = (LottieDrawable) drawable;
+                lottieDrawable.addValueCallback(new KeyPath(str2), LottieProperty.COLOR_FILTER, null);
+                lottieDrawable.addValueCallback(new KeyPath(str5, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str))));
+                lottieDrawable.addValueCallback(new KeyPath(str4, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str))));
+            } else {
+                setDrawableColorByKey(drawable, str);
+            }
+            drawable = dialogs_unpinArchiveDrawable;
+            if (drawable instanceof LottieDrawable) {
+                lottieDrawable = (LottieDrawable) drawable;
+                lottieDrawable.addValueCallback(new KeyPath(str2), LottieProperty.COLOR_FILTER, null);
+                lottieDrawable.addValueCallback(new KeyPath(str5, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str))));
+                lottieDrawable.addValueCallback(new KeyPath(str4, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str))));
+            } else {
+                setDrawableColorByKey(drawable, str);
+            }
+            drawable = dialogs_archiveDrawable;
+            if (drawable instanceof LottieDrawable) {
+                lottieDrawable = (LottieDrawable) drawable;
+                lottieDrawable.addValueCallback(new KeyPath(str2), LottieProperty.COLOR_FILTER, null);
+                lottieDrawable.addValueCallback(new KeyPath(str5, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor("chats_archiveBackground"))));
+                lottieDrawable.addValueCallback(new KeyPath(r11, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str))));
+                lottieDrawable.addValueCallback(new KeyPath(str3, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str))));
+                dialogs_archiveDrawableRecolored = false;
+            } else {
+                setDrawableColorByKey(drawable, str);
+            }
+            drawable = dialogs_unarchiveDrawable;
+            if (drawable instanceof LottieDrawable) {
+                lottieDrawable = (LottieDrawable) drawable;
+                lottieDrawable.addValueCallback(new KeyPath(str2), LottieProperty.COLOR_FILTER, null);
+                lottieDrawable.addValueCallback(new KeyPath(r9, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str))));
+                lottieDrawable.addValueCallback(new KeyPath(r10, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor("chats_archivePinBackground"))));
+                lottieDrawable.addValueCallback(new KeyPath(r11, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str))));
+                lottieDrawable.addValueCallback(new KeyPath(str3, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str))));
+            } else {
+                setDrawableColorByKey(drawable, str);
+            }
         }
     }
 

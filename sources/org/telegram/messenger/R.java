@@ -323,6 +323,7 @@ public final class R {
         public static final int titleMarginEnd = NUM;
         public static final int titleMarginStart = NUM;
         public static final int titleMarginTop = NUM;
+        @Deprecated
         public static final int titleMargins = NUM;
         public static final int titleTextAppearance = NUM;
         public static final int titleTextColor = NUM;
@@ -1357,6 +1358,39 @@ public final class R {
         public static final int acc_action_msg_options = NUM;
         public static final int acc_action_open_photo = NUM;
         public static final int acc_action_small_button = NUM;
+        public static final int accessibility_action_clickable_span = NUM;
+        public static final int accessibility_custom_action_0 = NUM;
+        public static final int accessibility_custom_action_1 = NUM;
+        public static final int accessibility_custom_action_10 = NUM;
+        public static final int accessibility_custom_action_11 = NUM;
+        public static final int accessibility_custom_action_12 = NUM;
+        public static final int accessibility_custom_action_13 = NUM;
+        public static final int accessibility_custom_action_14 = NUM;
+        public static final int accessibility_custom_action_15 = NUM;
+        public static final int accessibility_custom_action_16 = NUM;
+        public static final int accessibility_custom_action_17 = NUM;
+        public static final int accessibility_custom_action_18 = NUM;
+        public static final int accessibility_custom_action_19 = NUM;
+        public static final int accessibility_custom_action_2 = NUM;
+        public static final int accessibility_custom_action_20 = NUM;
+        public static final int accessibility_custom_action_21 = NUM;
+        public static final int accessibility_custom_action_22 = NUM;
+        public static final int accessibility_custom_action_23 = NUM;
+        public static final int accessibility_custom_action_24 = NUM;
+        public static final int accessibility_custom_action_25 = NUM;
+        public static final int accessibility_custom_action_26 = NUM;
+        public static final int accessibility_custom_action_27 = NUM;
+        public static final int accessibility_custom_action_28 = NUM;
+        public static final int accessibility_custom_action_29 = NUM;
+        public static final int accessibility_custom_action_3 = NUM;
+        public static final int accessibility_custom_action_30 = NUM;
+        public static final int accessibility_custom_action_31 = NUM;
+        public static final int accessibility_custom_action_4 = NUM;
+        public static final int accessibility_custom_action_5 = NUM;
+        public static final int accessibility_custom_action_6 = NUM;
+        public static final int accessibility_custom_action_7 = NUM;
+        public static final int accessibility_custom_action_8 = NUM;
+        public static final int accessibility_custom_action_9 = NUM;
         public static final int action0 = NUM;
         public static final int action_bar = NUM;
         public static final int action_bar_activity_content = NUM;
@@ -1428,6 +1462,7 @@ public final class R {
         public static final int decline_text = NUM;
         public static final int decor_content_parent = NUM;
         public static final int default_activity_button = NUM;
+        public static final int dialog_button = NUM;
         public static final int disableHome = NUM;
         public static final int donate_with = NUM;
         public static final int donate_with_google = NUM;
@@ -1572,6 +1607,11 @@ public final class R {
         public static final int submit_area = NUM;
         public static final int subtitle = NUM;
         public static final int tabMode = NUM;
+        public static final int tag_accessibility_actions = NUM;
+        public static final int tag_accessibility_clickable_spans = NUM;
+        public static final int tag_accessibility_heading = NUM;
+        public static final int tag_accessibility_pane_title = NUM;
+        public static final int tag_screen_reader_focusable = NUM;
         public static final int tag_transition_group = NUM;
         public static final int tag_unhandled_key_event_manager = NUM;
         public static final int tag_unhandled_key_listeners = NUM;
@@ -1644,6 +1684,7 @@ public final class R {
         public static final int abc_tooltip = NUM;
         public static final int call_notification = NUM;
         public static final int call_notification_rtl = NUM;
+        public static final int custom_dialog = NUM;
         public static final int hockeyapp_activity_expiry_info = NUM;
         public static final int hockeyapp_activity_feedback = NUM;
         public static final int hockeyapp_activity_login = NUM;
@@ -6523,6 +6564,7 @@ public final class R {
         public static final int TextAppearance_android_typeface = 1;
         public static final int TextAppearance_fontFamily = 11;
         public static final int TextAppearance_textAllCaps = 12;
+        @Deprecated
         public static final int[] Toolbar = new int[]{16842927, 16843072, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM};
         public static final int Toolbar_android_gravity = 0;
         public static final int Toolbar_android_minHeight = 1;
@@ -6550,6 +6592,7 @@ public final class R {
         public static final int Toolbar_titleMarginEnd = 23;
         public static final int Toolbar_titleMarginStart = 24;
         public static final int Toolbar_titleMarginTop = 25;
+        @Deprecated
         public static final int Toolbar_titleMargins = 26;
         public static final int Toolbar_titleTextAppearance = 27;
         public static final int Toolbar_titleTextColor = 28;

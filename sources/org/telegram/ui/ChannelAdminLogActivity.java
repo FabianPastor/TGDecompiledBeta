@@ -40,6 +40,14 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScrollerMiddle;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
+import androidx.recyclerview.widget.RecyclerView.LayoutParams;
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener;
+import androidx.recyclerview.widget.RecyclerView.State;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -64,14 +72,6 @@ import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.messenger.support.widget.LinearLayoutManager;
-import org.telegram.messenger.support.widget.LinearSmoothScrollerMiddle;
-import org.telegram.messenger.support.widget.RecyclerView;
-import org.telegram.messenger.support.widget.RecyclerView.Adapter;
-import org.telegram.messenger.support.widget.RecyclerView.LayoutParams;
-import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
-import org.telegram.messenger.support.widget.RecyclerView.State;
-import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.ChannelAdminLogEventAction;
@@ -804,7 +804,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         /* JADX WARNING: Missing block: B:33:0x00cc, code skipped:
             if (java.lang.Math.abs(r11.date - r5.date) <= 300) goto L_0x00d0;
      */
-        public void onBindViewHolder(org.telegram.messenger.support.widget.RecyclerView.ViewHolder r11, int r12) {
+        public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r11, int r12) {
             /*
             r10 = this;
             r0 = r10.loadingUpRow;
@@ -939,7 +939,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         L_0x00e9:
             return;
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter.onBindViewHolder(org.telegram.messenger.support.widget.RecyclerView$ViewHolder, int):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");
         }
 
         public int getItemViewType(int i) {
