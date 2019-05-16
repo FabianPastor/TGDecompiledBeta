@@ -34,33 +34,34 @@ public class SettingsSearchCell extends FrameLayout {
             super(drawable);
         }
 
-        public int getSize(Paint paint, CharSequence text, int start, int end, FontMetricsInt fontMetricsInt) {
-            Rect rect = getDrawable().getBounds();
+        public int getSize(Paint paint, CharSequence charSequence, int i, int i2, FontMetricsInt fontMetricsInt) {
+            Rect bounds = getDrawable().getBounds();
             if (fontMetricsInt != null) {
-                FontMetricsInt fmPaint = paint.getFontMetricsInt();
-                int drHeight = rect.bottom - rect.top;
-                int centerY = fmPaint.ascent + ((fmPaint.descent - fmPaint.ascent) / 2);
-                fontMetricsInt.ascent = centerY - (drHeight / 2);
+                FontMetricsInt fontMetricsInt2 = paint.getFontMetricsInt();
+                i = fontMetricsInt2.descent;
+                int i3 = fontMetricsInt2.ascent;
+                i3 += (i - i3) / 2;
+                i2 = (bounds.bottom - bounds.top) / 2;
+                fontMetricsInt.ascent = i3 - i2;
                 fontMetricsInt.top = fontMetricsInt.ascent;
-                fontMetricsInt.bottom = (drHeight / 2) + centerY;
+                fontMetricsInt.bottom = i3 + i2;
                 fontMetricsInt.descent = fontMetricsInt.bottom;
             }
-            return rect.right;
+            return bounds.right;
         }
 
-        public void draw(Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, Paint paint) {
+        public void draw(Canvas canvas, CharSequence charSequence, int i, int i2, float f, int i3, int i4, int i5, Paint paint) {
             Drawable drawable = getDrawable();
             canvas.save();
-            FontMetricsInt fmPaint = paint.getFontMetricsInt();
-            canvas.translate(x, (float) (((fmPaint.descent + y) - ((fmPaint.descent - fmPaint.ascent) / 2)) - ((drawable.getBounds().bottom - drawable.getBounds().top) / 2)));
+            FontMetricsInt fontMetricsInt = paint.getFontMetricsInt();
+            i2 = fontMetricsInt.descent;
+            canvas.translate(f, (float) (((i4 + i2) - ((i2 - fontMetricsInt.ascent) / 2)) - ((drawable.getBounds().bottom - drawable.getBounds().top) / 2)));
             drawable.draw(canvas);
             canvas.restore();
         }
     }
 
     public SettingsSearchCell(Context context) {
-        int i;
-        int i2;
         super(context);
         this.textView = new TextView(context);
         this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
@@ -70,124 +71,105 @@ public class SettingsSearchCell extends FrameLayout {
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TruncateAt.END);
-        TextView textView = this.textView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
-            i = 3;
-        }
-        addView(textView, LayoutHelper.createFrame(-2, -2.0f, i, LocaleController.isRTL ? 16.0f : 71.0f, 10.0f, LocaleController.isRTL ? 71.0f : 16.0f, 0.0f));
+        addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, LocaleController.isRTL ? 16.0f : 71.0f, 10.0f, LocaleController.isRTL ? 71.0f : 16.0f, 0.0f));
         this.valueTextView = new TextView(context);
         this.valueTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
         this.valueTextView.setTextSize(1, 13.0f);
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);
         this.valueTextView.setSingleLine(true);
-        TextView textView2 = this.valueTextView;
-        if (LocaleController.isRTL) {
-            i2 = 5;
-        } else {
-            i2 = 3;
-        }
-        textView2.setGravity(i2);
-        textView = this.valueTextView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
-            i = 3;
-        }
-        addView(textView, LayoutHelper.createFrame(-2, -2.0f, i, LocaleController.isRTL ? 16.0f : 71.0f, 33.0f, LocaleController.isRTL ? 71.0f : 16.0f, 0.0f));
+        this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
+        addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, LocaleController.isRTL ? 16.0f : 71.0f, 33.0f, LocaleController.isRTL ? 71.0f : 16.0f, 0.0f));
         this.imageView = new ImageView(context);
         this.imageView.setScaleType(ScaleType.CENTER);
         this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), Mode.MULTIPLY));
-        ImageView imageView = this.imageView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
-            i = 3;
-        }
-        addView(imageView, LayoutHelper.createFrame(48, 48.0f, i, 10.0f, 8.0f, 10.0f, 0.0f));
+        addView(this.imageView, LayoutHelper.createFrame(48, 48.0f, LocaleController.isRTL ? 5 : 3, 10.0f, 8.0f, 10.0f, 0.0f));
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(64.0f), NUM));
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f) + this.needDivider, NUM));
     }
 
-    public void setTextAndValueAndIcon(CharSequence text, String[] value, int icon, boolean divider) {
-        this.textView.setText(text);
+    public void setTextAndValueAndIcon(CharSequence charSequence, String[] strArr, int i, boolean z) {
+        this.textView.setText(charSequence);
         LayoutParams layoutParams = (LayoutParams) this.textView.getLayoutParams();
+        float f = 16.0f;
         layoutParams.leftMargin = AndroidUtilities.dp(LocaleController.isRTL ? 16.0f : 71.0f);
         layoutParams.rightMargin = AndroidUtilities.dp(LocaleController.isRTL ? 71.0f : 16.0f);
-        if (value != null) {
-            SpannableStringBuilder builder = new SpannableStringBuilder();
-            for (int a = 0; a < value.length; a++) {
-                if (a != 0) {
-                    builder.append(" > ");
-                    Drawable drawable = getContext().getResources().getDrawable(NUM).mutate();
-                    drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-                    drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayText2"), Mode.MULTIPLY));
-                    builder.setSpan(new VerticalImageSpan(drawable), builder.length() - 2, builder.length() - 1, 33);
+        if (strArr != null) {
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
+            for (int i2 = 0; i2 < strArr.length; i2++) {
+                if (i2 != 0) {
+                    spannableStringBuilder.append(" > ");
+                    Drawable mutate = getContext().getResources().getDrawable(NUM).mutate();
+                    mutate.setBounds(0, 0, mutate.getIntrinsicWidth(), mutate.getIntrinsicHeight());
+                    mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayText2"), Mode.MULTIPLY));
+                    spannableStringBuilder.setSpan(new VerticalImageSpan(mutate), spannableStringBuilder.length() - 2, spannableStringBuilder.length() - 1, 33);
                 }
-                builder.append(value[a]);
+                spannableStringBuilder.append(strArr[i2]);
             }
-            this.valueTextView.setText(builder);
+            this.valueTextView.setText(spannableStringBuilder);
             this.valueTextView.setVisibility(0);
             layoutParams.topMargin = AndroidUtilities.dp(10.0f);
             layoutParams = (LayoutParams) this.valueTextView.getLayoutParams();
             layoutParams.leftMargin = AndroidUtilities.dp(LocaleController.isRTL ? 16.0f : 71.0f);
-            layoutParams.rightMargin = AndroidUtilities.dp(LocaleController.isRTL ? 71.0f : 16.0f);
+            if (LocaleController.isRTL) {
+                f = 71.0f;
+            }
+            layoutParams.rightMargin = AndroidUtilities.dp(f);
         } else {
             layoutParams.topMargin = AndroidUtilities.dp(21.0f);
             this.valueTextView.setVisibility(8);
         }
-        if (icon != 0) {
-            this.imageView.setImageResource(icon);
+        if (i != 0) {
+            this.imageView.setImageResource(i);
             this.imageView.setVisibility(0);
         } else {
             this.imageView.setVisibility(8);
         }
         this.left = 69;
-        this.needDivider = divider;
-        setWillNotDraw(!this.needDivider);
+        this.needDivider = z;
+        setWillNotDraw(this.needDivider ^ 1);
     }
 
-    public void setTextAndValue(CharSequence text, String[] value, boolean faq, boolean divider) {
+    public void setTextAndValue(CharSequence charSequence, String[] strArr, boolean z, boolean z2) {
         LayoutParams layoutParams = (LayoutParams) this.textView.getLayoutParams();
-        SpannableStringBuilder builder;
-        int a;
-        Drawable drawable;
-        if (faq) {
-            this.valueTextView.setText(text);
-            builder = new SpannableStringBuilder();
-            for (a = 0; a < value.length; a++) {
-                if (a != 0) {
-                    builder.append(" > ");
-                    drawable = getContext().getResources().getDrawable(NUM).mutate();
-                    drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-                    drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteBlackText"), Mode.MULTIPLY));
-                    builder.setSpan(new VerticalImageSpan(drawable), builder.length() - 2, builder.length() - 1, 33);
+        String str = " > ";
+        SpannableStringBuilder spannableStringBuilder;
+        int i;
+        Drawable mutate;
+        if (z) {
+            this.valueTextView.setText(charSequence);
+            spannableStringBuilder = new SpannableStringBuilder();
+            for (i = 0; i < strArr.length; i++) {
+                if (i != 0) {
+                    spannableStringBuilder.append(str);
+                    mutate = getContext().getResources().getDrawable(NUM).mutate();
+                    mutate.setBounds(0, 0, mutate.getIntrinsicWidth(), mutate.getIntrinsicHeight());
+                    mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteBlackText"), Mode.MULTIPLY));
+                    spannableStringBuilder.setSpan(new VerticalImageSpan(mutate), spannableStringBuilder.length() - 2, spannableStringBuilder.length() - 1, 33);
                 }
-                builder.append(value[a]);
+                spannableStringBuilder.append(strArr[i]);
             }
-            this.textView.setText(builder);
+            this.textView.setText(spannableStringBuilder);
             this.valueTextView.setVisibility(0);
             layoutParams.topMargin = AndroidUtilities.dp(10.0f);
         } else {
-            this.textView.setText(text);
-            if (value != null) {
-                builder = new SpannableStringBuilder();
-                for (a = 0; a < value.length; a++) {
-                    if (a != 0) {
-                        builder.append(" > ");
-                        drawable = getContext().getResources().getDrawable(NUM).mutate();
-                        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-                        drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayText2"), Mode.MULTIPLY));
-                        builder.setSpan(new VerticalImageSpan(drawable), builder.length() - 2, builder.length() - 1, 33);
+            this.textView.setText(charSequence);
+            if (strArr != null) {
+                spannableStringBuilder = new SpannableStringBuilder();
+                for (i = 0; i < strArr.length; i++) {
+                    if (i != 0) {
+                        spannableStringBuilder.append(str);
+                        mutate = getContext().getResources().getDrawable(NUM).mutate();
+                        mutate.setBounds(0, 0, mutate.getIntrinsicWidth(), mutate.getIntrinsicHeight());
+                        mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayText2"), Mode.MULTIPLY));
+                        spannableStringBuilder.setSpan(new VerticalImageSpan(mutate), spannableStringBuilder.length() - 2, spannableStringBuilder.length() - 1, 33);
                     }
-                    builder.append(value[a]);
+                    spannableStringBuilder.append(strArr[i]);
                 }
-                this.valueTextView.setText(builder);
+                this.valueTextView.setText(spannableStringBuilder);
                 this.valueTextView.setVisibility(0);
                 layoutParams.topMargin = AndroidUtilities.dp(10.0f);
             } else {
@@ -198,13 +180,13 @@ public class SettingsSearchCell extends FrameLayout {
         int dp = AndroidUtilities.dp(16.0f);
         layoutParams.rightMargin = dp;
         layoutParams.leftMargin = dp;
-        layoutParams = (LayoutParams) this.valueTextView.getLayoutParams();
-        dp = AndroidUtilities.dp(16.0f);
-        layoutParams.rightMargin = dp;
-        layoutParams.leftMargin = dp;
+        LayoutParams layoutParams2 = (LayoutParams) this.valueTextView.getLayoutParams();
+        int dp2 = AndroidUtilities.dp(16.0f);
+        layoutParams2.rightMargin = dp2;
+        layoutParams2.leftMargin = dp2;
         this.imageView.setVisibility(8);
-        this.needDivider = divider;
-        setWillNotDraw(!this.needDivider);
+        this.needDivider = z2;
+        setWillNotDraw(this.needDivider ^ 1);
         this.left = 16;
     }
 

@@ -15,43 +15,45 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.SerializedData;
 
 public class SharedConfig {
-    public static boolean allowBigEmoji;
-    public static boolean allowScreenCapture;
-    public static boolean appLocked;
+    public static boolean allowBigEmoji = false;
+    public static boolean allowScreenCapture = false;
+    public static boolean appLocked = false;
+    public static boolean archiveHidden = false;
     public static int autoLockIn = 3600;
     public static boolean autoplayGifs = true;
     public static boolean autoplayVideo = true;
-    public static int badPasscodeTries;
-    private static boolean configLoaded;
-    public static ProxyInfo currentProxy;
+    public static int badPasscodeTries = 0;
+    private static boolean configLoaded = false;
+    public static ProxyInfo currentProxy = null;
     public static boolean customTabs = true;
     public static boolean directShare = true;
-    public static long directShareHash;
+    public static long directShareHash = 0;
+    public static boolean drawDialogIcons = false;
     public static int fontSize = AndroidUtilities.dp(16.0f);
     public static boolean groupPhotosEnabled = true;
-    public static boolean hasCameraCache;
+    public static boolean hasCameraCache = false;
     public static boolean inappCamera = true;
-    public static boolean isWaitingForPasscodeEnter;
-    public static long lastAppPauseTime;
+    public static boolean isWaitingForPasscodeEnter = false;
+    public static long lastAppPauseTime = 0;
     private static int lastLocalId = -210000;
-    public static int lastPauseTime;
-    public static String lastUpdateVersion;
-    public static long lastUptimeMillis;
+    public static int lastPauseTime = 0;
+    public static String lastUpdateVersion = null;
+    public static long lastUptimeMillis = 0;
     private static final Object localIdSync = new Object();
     public static int mapPreviewType = 2;
     public static boolean noSoundHintShowed = false;
     public static String passcodeHash = "";
-    public static long passcodeRetryInMs;
+    public static long passcodeRetryInMs = 0;
     public static byte[] passcodeSalt = new byte[0];
-    public static int passcodeType;
-    public static int passportConfigHash;
+    public static int passcodeType = 0;
+    public static int passportConfigHash = 0;
     private static String passportConfigJson = "";
-    private static HashMap<String, String> passportConfigMap;
-    public static boolean playOrderReversed;
+    private static HashMap<String, String> passportConfigMap = null;
+    public static boolean playOrderReversed = false;
     public static ArrayList<ProxyInfo> proxyList = new ArrayList();
-    private static boolean proxyListLoaded;
-    public static byte[] pushAuthKey;
-    public static byte[] pushAuthKeyId;
+    private static boolean proxyListLoaded = false;
+    public static byte[] pushAuthKey = null;
+    public static byte[] pushAuthKeyId = null;
     public static String pushString = "";
     public static boolean raiseToSpeak = true;
     public static int repeatMode;
@@ -69,6 +71,7 @@ public class SharedConfig {
     private static final Object sync = new Object();
     public static boolean useFingerprint = true;
     public static boolean useSystemEmoji;
+    public static boolean useThreeLinesLayout;
 
     public static class ProxyInfo {
         public String address;
@@ -82,23 +85,24 @@ public class SharedConfig {
         public String secret;
         public String username;
 
-        public ProxyInfo(String a, int p, String u, String pw, String s) {
-            this.address = a;
-            this.port = p;
-            this.username = u;
-            this.password = pw;
-            this.secret = s;
+        public ProxyInfo(String str, int i, String str2, String str3, String str4) {
+            this.address = str;
+            this.port = i;
+            this.username = str2;
+            this.password = str3;
+            this.secret = str4;
+            String str5 = "";
             if (this.address == null) {
-                this.address = "";
+                this.address = str5;
             }
             if (this.password == null) {
-                this.password = "";
+                this.password = str5;
             }
             if (this.username == null) {
-                this.username = "";
+                this.username = str5;
             }
             if (this.secret == null) {
-                this.secret = "";
+                this.secret = str5;
             }
         }
     }
@@ -110,28 +114,28 @@ public class SharedConfig {
     public static void saveConfig() {
         synchronized (sync) {
             try {
-                Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", 0).edit();
-                editor.putBoolean("saveIncomingPhotos", saveIncomingPhotos);
-                editor.putString("passcodeHash1", passcodeHash);
-                editor.putString("passcodeSalt", passcodeSalt.length > 0 ? Base64.encodeToString(passcodeSalt, 0) : "");
-                editor.putBoolean("appLocked", appLocked);
-                editor.putInt("passcodeType", passcodeType);
-                editor.putLong("passcodeRetryInMs", passcodeRetryInMs);
-                editor.putLong("lastUptimeMillis", lastUptimeMillis);
-                editor.putInt("badPasscodeTries", badPasscodeTries);
-                editor.putInt("autoLockIn", autoLockIn);
-                editor.putInt("lastPauseTime", lastPauseTime);
-                editor.putLong("lastAppPauseTime", lastAppPauseTime);
-                editor.putString("lastUpdateVersion2", lastUpdateVersion);
-                editor.putBoolean("useFingerprint", useFingerprint);
-                editor.putBoolean("allowScreenCapture", allowScreenCapture);
-                editor.putString("pushString2", pushString);
-                editor.putString("pushAuthKey", pushAuthKey != null ? Base64.encodeToString(pushAuthKey, 0) : "");
-                editor.putInt("lastLocalId", lastLocalId);
-                editor.putString("passportConfigJson", passportConfigJson);
-                editor.putInt("passportConfigHash", passportConfigHash);
-                editor.putBoolean("sortContactsByName", sortContactsByName);
-                editor.commit();
+                Editor edit = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", 0).edit();
+                edit.putBoolean("saveIncomingPhotos", saveIncomingPhotos);
+                edit.putString("passcodeHash1", passcodeHash);
+                edit.putString("passcodeSalt", passcodeSalt.length > 0 ? Base64.encodeToString(passcodeSalt, 0) : "");
+                edit.putBoolean("appLocked", appLocked);
+                edit.putInt("passcodeType", passcodeType);
+                edit.putLong("passcodeRetryInMs", passcodeRetryInMs);
+                edit.putLong("lastUptimeMillis", lastUptimeMillis);
+                edit.putInt("badPasscodeTries", badPasscodeTries);
+                edit.putInt("autoLockIn", autoLockIn);
+                edit.putInt("lastPauseTime", lastPauseTime);
+                edit.putLong("lastAppPauseTime", lastAppPauseTime);
+                edit.putString("lastUpdateVersion2", lastUpdateVersion);
+                edit.putBoolean("useFingerprint", useFingerprint);
+                edit.putBoolean("allowScreenCapture", allowScreenCapture);
+                edit.putString("pushString2", pushString);
+                edit.putString("pushAuthKey", pushAuthKey != null ? Base64.encodeToString(pushAuthKey, 0) : "");
+                edit.putInt("lastLocalId", lastLocalId);
+                edit.putString("passportConfigJson", passportConfigJson);
+                edit.putInt("passportConfigHash", passportConfigHash);
+                edit.putBoolean("sortContactsByName", sortContactsByName);
+                edit.commit();
             } catch (Exception e) {
                 FileLog.e(e);
             }
@@ -139,12 +143,12 @@ public class SharedConfig {
     }
 
     public static int getLastLocalId() {
-        int value;
+        int i;
         synchronized (localIdSync) {
-            value = lastLocalId;
-            lastLocalId = value - 1;
+            i = lastLocalId;
+            lastLocalId = i - 1;
         }
-        return value;
+        return i;
     }
 
     public static void loadConfig() {
@@ -152,63 +156,65 @@ public class SharedConfig {
             if (configLoaded) {
                 return;
             }
-            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", 0);
-            saveIncomingPhotos = preferences.getBoolean("saveIncomingPhotos", false);
-            passcodeHash = preferences.getString("passcodeHash1", "");
-            appLocked = preferences.getBoolean("appLocked", false);
-            passcodeType = preferences.getInt("passcodeType", 0);
-            passcodeRetryInMs = preferences.getLong("passcodeRetryInMs", 0);
-            lastUptimeMillis = preferences.getLong("lastUptimeMillis", 0);
-            badPasscodeTries = preferences.getInt("badPasscodeTries", 0);
-            autoLockIn = preferences.getInt("autoLockIn", 3600);
-            lastPauseTime = preferences.getInt("lastPauseTime", 0);
-            lastAppPauseTime = preferences.getLong("lastAppPauseTime", 0);
-            useFingerprint = preferences.getBoolean("useFingerprint", true);
-            lastUpdateVersion = preferences.getString("lastUpdateVersion2", "3.5");
-            allowScreenCapture = preferences.getBoolean("allowScreenCapture", false);
-            lastLocalId = preferences.getInt("lastLocalId", -210000);
-            pushString = preferences.getString("pushString2", "");
-            passportConfigJson = preferences.getString("passportConfigJson", "");
-            passportConfigHash = preferences.getInt("passportConfigHash", 0);
-            String authKeyString = preferences.getString("pushAuthKey", null);
-            if (!TextUtils.isEmpty(authKeyString)) {
-                pushAuthKey = Base64.decode(authKeyString, 0);
+            SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", 0);
+            saveIncomingPhotos = sharedPreferences.getBoolean("saveIncomingPhotos", false);
+            passcodeHash = sharedPreferences.getString("passcodeHash1", "");
+            appLocked = sharedPreferences.getBoolean("appLocked", false);
+            passcodeType = sharedPreferences.getInt("passcodeType", 0);
+            passcodeRetryInMs = sharedPreferences.getLong("passcodeRetryInMs", 0);
+            lastUptimeMillis = sharedPreferences.getLong("lastUptimeMillis", 0);
+            badPasscodeTries = sharedPreferences.getInt("badPasscodeTries", 0);
+            autoLockIn = sharedPreferences.getInt("autoLockIn", 3600);
+            lastPauseTime = sharedPreferences.getInt("lastPauseTime", 0);
+            lastAppPauseTime = sharedPreferences.getLong("lastAppPauseTime", 0);
+            useFingerprint = sharedPreferences.getBoolean("useFingerprint", true);
+            lastUpdateVersion = sharedPreferences.getString("lastUpdateVersion2", "3.5");
+            allowScreenCapture = sharedPreferences.getBoolean("allowScreenCapture", false);
+            lastLocalId = sharedPreferences.getInt("lastLocalId", -210000);
+            pushString = sharedPreferences.getString("pushString2", "");
+            passportConfigJson = sharedPreferences.getString("passportConfigJson", "");
+            passportConfigHash = sharedPreferences.getInt("passportConfigHash", 0);
+            String string = sharedPreferences.getString("pushAuthKey", null);
+            if (!TextUtils.isEmpty(string)) {
+                pushAuthKey = Base64.decode(string, 0);
             }
             if (passcodeHash.length() > 0 && lastPauseTime == 0) {
                 lastPauseTime = (int) ((System.currentTimeMillis() / 1000) - 600);
             }
-            String passcodeSaltString = preferences.getString("passcodeSalt", "");
-            if (passcodeSaltString.length() > 0) {
-                passcodeSalt = Base64.decode(passcodeSaltString, 0);
+            String string2 = sharedPreferences.getString("passcodeSalt", "");
+            if (string2.length() > 0) {
+                passcodeSalt = Base64.decode(string2, 0);
             } else {
                 passcodeSalt = new byte[0];
             }
-            preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
-            saveToGallery = preferences.getBoolean("save_gallery", false);
-            autoplayGifs = preferences.getBoolean("autoplay_gif", true);
-            autoplayVideo = preferences.getBoolean("autoplay_video", true);
-            mapPreviewType = preferences.getInt("mapPreviewType", 2);
-            raiseToSpeak = preferences.getBoolean("raise_to_speak", true);
-            customTabs = preferences.getBoolean("custom_tabs", true);
-            directShare = preferences.getBoolean("direct_share", true);
-            shuffleMusic = preferences.getBoolean("shuffleMusic", false);
-            playOrderReversed = preferences.getBoolean("playOrderReversed", false);
-            inappCamera = preferences.getBoolean("inappCamera", true);
-            hasCameraCache = preferences.contains("cameraCache");
+            sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+            saveToGallery = sharedPreferences.getBoolean("save_gallery", false);
+            autoplayGifs = sharedPreferences.getBoolean("autoplay_gif", true);
+            autoplayVideo = sharedPreferences.getBoolean("autoplay_video", true);
+            mapPreviewType = sharedPreferences.getInt("mapPreviewType", 2);
+            raiseToSpeak = sharedPreferences.getBoolean("raise_to_speak", true);
+            customTabs = sharedPreferences.getBoolean("custom_tabs", true);
+            directShare = sharedPreferences.getBoolean("direct_share", true);
+            shuffleMusic = sharedPreferences.getBoolean("shuffleMusic", false);
+            playOrderReversed = sharedPreferences.getBoolean("playOrderReversed", false);
+            inappCamera = sharedPreferences.getBoolean("inappCamera", true);
+            hasCameraCache = sharedPreferences.contains("cameraCache");
             roundCamera16to9 = true;
-            groupPhotosEnabled = preferences.getBoolean("groupPhotosEnabled", true);
-            repeatMode = preferences.getInt("repeatMode", 0);
-            fontSize = preferences.getInt("fons_size", AndroidUtilities.isTablet() ? 18 : 16);
-            allowBigEmoji = preferences.getBoolean("allowBigEmoji", true);
-            useSystemEmoji = preferences.getBoolean("useSystemEmoji", false);
-            streamMedia = preferences.getBoolean("streamMedia", true);
-            saveStreamMedia = preferences.getBoolean("saveStreamMedia", true);
-            streamAllVideo = preferences.getBoolean("streamAllVideo", BuildVars.DEBUG_VERSION);
-            streamMkv = preferences.getBoolean("streamMkv", false);
-            suggestStickers = preferences.getInt("suggestStickers", 0);
-            sortContactsByName = preferences.getBoolean("sortContactsByName", false);
-            noSoundHintShowed = preferences.getBoolean("noSoundHintShowed", false);
-            directShareHash = preferences.getLong("directShareHash", 0);
+            groupPhotosEnabled = sharedPreferences.getBoolean("groupPhotosEnabled", true);
+            repeatMode = sharedPreferences.getInt("repeatMode", 0);
+            fontSize = sharedPreferences.getInt("fons_size", AndroidUtilities.isTablet() ? 18 : 16);
+            allowBigEmoji = sharedPreferences.getBoolean("allowBigEmoji", true);
+            useSystemEmoji = sharedPreferences.getBoolean("useSystemEmoji", false);
+            streamMedia = sharedPreferences.getBoolean("streamMedia", true);
+            saveStreamMedia = sharedPreferences.getBoolean("saveStreamMedia", true);
+            streamAllVideo = sharedPreferences.getBoolean("streamAllVideo", BuildVars.DEBUG_VERSION);
+            streamMkv = sharedPreferences.getBoolean("streamMkv", false);
+            suggestStickers = sharedPreferences.getInt("suggestStickers", 0);
+            sortContactsByName = sharedPreferences.getBoolean("sortContactsByName", false);
+            noSoundHintShowed = sharedPreferences.getBoolean("noSoundHintShowed", false);
+            directShareHash = sharedPreferences.getLong("directShareHash", 0);
+            useThreeLinesLayout = sharedPreferences.getBoolean("useThreeLinesLayout", false);
+            archiveHidden = sharedPreferences.getBoolean("archiveHidden", false);
             showNotificationsForAllAccounts = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", 0).getBoolean("AllAccounts", true);
             configLoaded = true;
         }
@@ -216,26 +222,20 @@ public class SharedConfig {
 
     public static void increaseBadPasscodeTries() {
         badPasscodeTries++;
-        if (badPasscodeTries >= 3) {
-            switch (badPasscodeTries) {
-                case 3:
-                    passcodeRetryInMs = 5000;
-                    break;
-                case 4:
-                    passcodeRetryInMs = 10000;
-                    break;
-                case 5:
-                    passcodeRetryInMs = 15000;
-                    break;
-                case 6:
-                    passcodeRetryInMs = 20000;
-                    break;
-                case 7:
-                    passcodeRetryInMs = 25000;
-                    break;
-                default:
-                    passcodeRetryInMs = 30000;
-                    break;
+        int i = badPasscodeTries;
+        if (i >= 3) {
+            if (i == 3) {
+                passcodeRetryInMs = 5000;
+            } else if (i == 4) {
+                passcodeRetryInMs = 10000;
+            } else if (i == 5) {
+                passcodeRetryInMs = 15000;
+            } else if (i == 6) {
+                passcodeRetryInMs = 20000;
+            } else if (i != 7) {
+                passcodeRetryInMs = 30000;
+            } else {
+                passcodeRetryInMs = 25000;
             }
             lastUptimeMillis = SystemClock.elapsedRealtime();
         }
@@ -246,10 +246,10 @@ public class SharedConfig {
         return passportConfigMap != null;
     }
 
-    public static void setPassportConfig(String json, int hash) {
+    public static void setPassportConfig(String str, int i) {
         passportConfigMap = null;
-        passportConfigJson = json;
-        passportConfigHash = hash;
+        passportConfigJson = str;
+        passportConfigHash = i;
         saveConfig();
         getCountryLangs();
     }
@@ -258,54 +258,51 @@ public class SharedConfig {
         if (passportConfigMap == null) {
             passportConfigMap = new HashMap();
             try {
-                JSONObject object = new JSONObject(passportConfigJson);
-                Iterator<String> iter = object.keys();
-                while (iter.hasNext()) {
-                    String key = (String) iter.next();
-                    passportConfigMap.put(key.toUpperCase(), object.getString(key).toUpperCase());
+                JSONObject jSONObject = new JSONObject(passportConfigJson);
+                Iterator keys = jSONObject.keys();
+                while (keys.hasNext()) {
+                    String str = (String) keys.next();
+                    passportConfigMap.put(str.toUpperCase(), jSONObject.getString(str).toUpperCase());
                 }
-            } catch (Throwable e) {
-                FileLog.e(e);
+            } catch (Throwable th) {
+                FileLog.e(th);
             }
         }
         return passportConfigMap;
     }
 
-    public static boolean checkPasscode(String passcode) {
-        boolean result = false;
-        byte[] passcodeBytes;
+    public static boolean checkPasscode(String str) {
+        String str2 = "UTF-8";
         byte[] bytes;
         if (passcodeSalt.length == 0) {
-            result = Utilities.MD5(passcode).equals(passcodeHash);
-            if (!result) {
-                return result;
+            boolean equals = Utilities.MD5(str).equals(passcodeHash);
+            if (equals) {
+                try {
+                    passcodeSalt = new byte[16];
+                    Utilities.random.nextBytes(passcodeSalt);
+                    bytes = str.getBytes(str2);
+                    byte[] bArr = new byte[(bytes.length + 32)];
+                    System.arraycopy(passcodeSalt, 0, bArr, 0, 16);
+                    System.arraycopy(bytes, 0, bArr, 16, bytes.length);
+                    System.arraycopy(passcodeSalt, 0, bArr, bytes.length + 16, 16);
+                    passcodeHash = Utilities.bytesToHex(Utilities.computeSHA256(bArr, 0, bArr.length));
+                    saveConfig();
+                } catch (Exception e) {
+                    FileLog.e(e);
+                }
             }
-            try {
-                passcodeSalt = new byte[16];
-                Utilities.random.nextBytes(passcodeSalt);
-                passcodeBytes = passcode.getBytes("UTF-8");
-                bytes = new byte[(passcodeBytes.length + 32)];
-                System.arraycopy(passcodeSalt, 0, bytes, 0, 16);
-                System.arraycopy(passcodeBytes, 0, bytes, 16, passcodeBytes.length);
-                System.arraycopy(passcodeSalt, 0, bytes, passcodeBytes.length + 16, 16);
-                passcodeHash = Utilities.bytesToHex(Utilities.computeSHA256(bytes, 0, bytes.length));
-                saveConfig();
-                return result;
-            } catch (Exception e) {
-                FileLog.e(e);
-                return result;
-            }
+            return equals;
         }
         try {
-            passcodeBytes = passcode.getBytes("UTF-8");
-            bytes = new byte[(passcodeBytes.length + 32)];
-            System.arraycopy(passcodeSalt, 0, bytes, 0, 16);
-            System.arraycopy(passcodeBytes, 0, bytes, 16, passcodeBytes.length);
-            System.arraycopy(passcodeSalt, 0, bytes, passcodeBytes.length + 16, 16);
-            return passcodeHash.equals(Utilities.bytesToHex(Utilities.computeSHA256(bytes, 0, bytes.length)));
+            bytes = str.getBytes(str2);
+            byte[] bArr2 = new byte[(bytes.length + 32)];
+            System.arraycopy(passcodeSalt, 0, bArr2, 0, 16);
+            System.arraycopy(bytes, 0, bArr2, 16, bytes.length);
+            System.arraycopy(passcodeSalt, 0, bArr2, bytes.length + 16, 16);
+            return passcodeHash.equals(Utilities.bytesToHex(Utilities.computeSHA256(bArr2, 0, bArr2.length)));
         } catch (Exception e2) {
             FileLog.e(e2);
-            return result;
+            return false;
         }
     }
 
@@ -327,31 +324,24 @@ public class SharedConfig {
         saveConfig();
     }
 
-    public static void setSuggestStickers(int type) {
-        suggestStickers = type;
-        Editor editor = MessagesController.getGlobalMainSettings().edit();
-        editor.putInt("suggestStickers", suggestStickers);
-        editor.commit();
+    public static void setSuggestStickers(int i) {
+        suggestStickers = i;
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putInt("suggestStickers", suggestStickers);
+        edit.commit();
     }
 
-    public static void toggleShuffleMusic(int type) {
-        boolean z = true;
-        if (type == 2) {
-            if (shuffleMusic) {
-                z = false;
-            }
-            shuffleMusic = z;
+    public static void toggleShuffleMusic(int i) {
+        if (i == 2) {
+            shuffleMusic ^= 1;
         } else {
-            if (playOrderReversed) {
-                z = false;
-            }
-            playOrderReversed = z;
+            playOrderReversed ^= 1;
         }
         MediaController.getInstance().checkIsNextMediaFileDownloaded();
-        Editor editor = MessagesController.getGlobalMainSettings().edit();
-        editor.putBoolean("shuffleMusic", shuffleMusic);
-        editor.putBoolean("playOrderReversed", playOrderReversed);
-        editor.commit();
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putBoolean("shuffleMusic", shuffleMusic);
+        edit.putBoolean("playOrderReversed", playOrderReversed);
+        edit.commit();
     }
 
     public static void toggleRepeatMode() {
@@ -359,182 +349,206 @@ public class SharedConfig {
         if (repeatMode > 2) {
             repeatMode = 0;
         }
-        Editor editor = MessagesController.getGlobalMainSettings().edit();
-        editor.putInt("repeatMode", repeatMode);
-        editor.commit();
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putInt("repeatMode", repeatMode);
+        edit.commit();
     }
 
     public static void toggleSaveToGallery() {
-        saveToGallery = !saveToGallery;
-        Editor editor = MessagesController.getGlobalMainSettings().edit();
-        editor.putBoolean("save_gallery", saveToGallery);
-        editor.commit();
+        saveToGallery ^= 1;
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putBoolean("save_gallery", saveToGallery);
+        edit.commit();
         checkSaveToGalleryFiles();
     }
 
     public static void toggleAutoplayGifs() {
-        autoplayGifs = !autoplayGifs;
-        Editor editor = MessagesController.getGlobalMainSettings().edit();
-        editor.putBoolean("autoplay_gif", autoplayGifs);
-        editor.commit();
+        autoplayGifs ^= 1;
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putBoolean("autoplay_gif", autoplayGifs);
+        edit.commit();
+    }
+
+    public static void setUseThreeLinesLayout(boolean z) {
+        useThreeLinesLayout = z;
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putBoolean("useThreeLinesLayout", useThreeLinesLayout);
+        edit.commit();
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.dialogsNeedReload, Boolean.valueOf(true));
+    }
+
+    public static void toggleArchiveHidden() {
+        archiveHidden ^= 1;
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putBoolean("archiveHidden", archiveHidden);
+        edit.commit();
     }
 
     public static void toggleAutoplayVideo() {
-        autoplayVideo = !autoplayVideo;
-        Editor editor = MessagesController.getGlobalMainSettings().edit();
-        editor.putBoolean("autoplay_video", autoplayVideo);
-        editor.commit();
+        autoplayVideo ^= 1;
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putBoolean("autoplay_video", autoplayVideo);
+        edit.commit();
     }
 
     public static boolean isSecretMapPreviewSet() {
         return MessagesController.getGlobalMainSettings().contains("mapPreviewType");
     }
 
-    public static void setSecretMapPreviewType(int value) {
-        mapPreviewType = value;
-        Editor editor = MessagesController.getGlobalMainSettings().edit();
-        editor.putInt("mapPreviewType", mapPreviewType);
-        editor.commit();
+    public static void setSecretMapPreviewType(int i) {
+        mapPreviewType = i;
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putInt("mapPreviewType", mapPreviewType);
+        edit.commit();
     }
 
-    public static void setNoSoundHintShowed(boolean value) {
-        if (noSoundHintShowed != value) {
-            noSoundHintShowed = value;
-            Editor editor = MessagesController.getGlobalMainSettings().edit();
-            editor.putBoolean("noSoundHintShowed", noSoundHintShowed);
-            editor.commit();
+    public static void setNoSoundHintShowed(boolean z) {
+        if (noSoundHintShowed != z) {
+            noSoundHintShowed = z;
+            Editor edit = MessagesController.getGlobalMainSettings().edit();
+            edit.putBoolean("noSoundHintShowed", noSoundHintShowed);
+            edit.commit();
         }
     }
 
     public static void toogleRaiseToSpeak() {
-        raiseToSpeak = !raiseToSpeak;
-        Editor editor = MessagesController.getGlobalMainSettings().edit();
-        editor.putBoolean("raise_to_speak", raiseToSpeak);
-        editor.commit();
+        raiseToSpeak ^= 1;
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putBoolean("raise_to_speak", raiseToSpeak);
+        edit.commit();
     }
 
     public static void toggleCustomTabs() {
-        customTabs = !customTabs;
-        Editor editor = MessagesController.getGlobalMainSettings().edit();
-        editor.putBoolean("custom_tabs", customTabs);
-        editor.commit();
+        customTabs ^= 1;
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putBoolean("custom_tabs", customTabs);
+        edit.commit();
     }
 
     public static void toggleDirectShare() {
-        directShare = !directShare;
-        Editor editor = MessagesController.getGlobalMainSettings().edit();
-        editor.putBoolean("direct_share", directShare);
-        editor.commit();
+        directShare ^= 1;
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putBoolean("direct_share", directShare);
+        edit.commit();
     }
 
     public static void toggleStreamMedia() {
-        streamMedia = !streamMedia;
-        Editor editor = MessagesController.getGlobalMainSettings().edit();
-        editor.putBoolean("streamMedia", streamMedia);
-        editor.commit();
+        streamMedia ^= 1;
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putBoolean("streamMedia", streamMedia);
+        edit.commit();
     }
 
     public static void toggleSortContactsByName() {
-        sortContactsByName = !sortContactsByName;
-        Editor editor = MessagesController.getGlobalMainSettings().edit();
-        editor.putBoolean("sortContactsByName", sortContactsByName);
-        editor.commit();
+        sortContactsByName ^= 1;
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putBoolean("sortContactsByName", sortContactsByName);
+        edit.commit();
     }
 
     public static void toggleStreamAllVideo() {
-        streamAllVideo = !streamAllVideo;
-        Editor editor = MessagesController.getGlobalMainSettings().edit();
-        editor.putBoolean("streamAllVideo", streamAllVideo);
-        editor.commit();
+        streamAllVideo ^= 1;
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putBoolean("streamAllVideo", streamAllVideo);
+        edit.commit();
     }
 
     public static void toggleStreamMkv() {
-        streamMkv = !streamMkv;
-        Editor editor = MessagesController.getGlobalMainSettings().edit();
-        editor.putBoolean("streamMkv", streamMkv);
-        editor.commit();
+        streamMkv ^= 1;
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putBoolean("streamMkv", streamMkv);
+        edit.commit();
     }
 
     public static void toggleSaveStreamMedia() {
-        saveStreamMedia = !saveStreamMedia;
-        Editor editor = MessagesController.getGlobalMainSettings().edit();
-        editor.putBoolean("saveStreamMedia", saveStreamMedia);
-        editor.commit();
+        saveStreamMedia ^= 1;
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putBoolean("saveStreamMedia", saveStreamMedia);
+        edit.commit();
     }
 
     public static void toggleInappCamera() {
-        inappCamera = !inappCamera;
-        Editor editor = MessagesController.getGlobalMainSettings().edit();
-        editor.putBoolean("inappCamera", inappCamera);
-        editor.commit();
+        inappCamera ^= 1;
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putBoolean("inappCamera", inappCamera);
+        edit.commit();
     }
 
     public static void toggleRoundCamera16to9() {
-        roundCamera16to9 = !roundCamera16to9;
-        Editor editor = MessagesController.getGlobalMainSettings().edit();
-        editor.putBoolean("roundCamera16to9", roundCamera16to9);
-        editor.commit();
+        roundCamera16to9 ^= 1;
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putBoolean("roundCamera16to9", roundCamera16to9);
+        edit.commit();
     }
 
     public static void toggleGroupPhotosEnabled() {
-        groupPhotosEnabled = !groupPhotosEnabled;
-        Editor editor = MessagesController.getGlobalMainSettings().edit();
-        editor.putBoolean("groupPhotosEnabled", groupPhotosEnabled);
-        editor.commit();
+        groupPhotosEnabled ^= 1;
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putBoolean("groupPhotosEnabled", groupPhotosEnabled);
+        edit.commit();
     }
 
     public static void loadProxyList() {
         if (!proxyListLoaded) {
-            ProxyInfo info;
-            SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
-            String proxyAddress = preferences.getString("proxy_ip", "");
-            String proxyUsername = preferences.getString("proxy_user", "");
-            String proxyPassword = preferences.getString("proxy_pass", "");
-            String proxySecret = preferences.getString("proxy_secret", "");
-            int proxyPort = preferences.getInt("proxy_port", 1080);
+            SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
+            String str = "";
+            String string = sharedPreferences.getString("proxy_ip", str);
+            String string2 = sharedPreferences.getString("proxy_user", str);
+            String string3 = sharedPreferences.getString("proxy_pass", str);
+            String string4 = sharedPreferences.getString("proxy_secret", str);
+            int i = sharedPreferences.getInt("proxy_port", 1080);
             proxyListLoaded = true;
             proxyList.clear();
             currentProxy = null;
-            String list = preferences.getString("proxy_list", null);
-            if (!TextUtils.isEmpty(list)) {
-                SerializedData data = new SerializedData(Base64.decode(list, 0));
-                int count = data.readInt32(false);
-                for (int a = 0; a < count; a++) {
-                    info = new ProxyInfo(data.readString(false), data.readInt32(false), data.readString(false), data.readString(false), data.readString(false));
-                    proxyList.add(info);
-                    if (currentProxy == null && !TextUtils.isEmpty(proxyAddress) && proxyAddress.equals(info.address) && proxyPort == info.port) {
-                        if (proxyUsername.equals(info.username) && proxyPassword.equals(info.password)) {
-                            currentProxy = info;
-                        }
+            String string5 = sharedPreferences.getString("proxy_list", null);
+            if (!TextUtils.isEmpty(string5)) {
+                SerializedData serializedData = new SerializedData(Base64.decode(string5, 0));
+                int readInt32 = serializedData.readInt32(false);
+                for (int i2 = 0; i2 < readInt32; i2++) {
+                    ProxyInfo proxyInfo = new ProxyInfo(serializedData.readString(false), serializedData.readInt32(false), serializedData.readString(false), serializedData.readString(false), serializedData.readString(false));
+                    proxyList.add(proxyInfo);
+                    if (currentProxy == null && !TextUtils.isEmpty(string) && string.equals(proxyInfo.address) && i == proxyInfo.port && string2.equals(proxyInfo.username) && string3.equals(proxyInfo.password)) {
+                        currentProxy = proxyInfo;
                     }
                 }
-                data.cleanup();
+                serializedData.cleanup();
             }
-            if (currentProxy == null && !TextUtils.isEmpty(proxyAddress)) {
-                info = new ProxyInfo(proxyAddress, proxyPort, proxyUsername, proxyPassword, proxySecret);
-                currentProxy = info;
-                proxyList.add(0, info);
+            if (currentProxy == null && !TextUtils.isEmpty(string)) {
+                ProxyInfo proxyInfo2 = new ProxyInfo(string, i, string2, string3, string4);
+                currentProxy = proxyInfo2;
+                proxyList.add(0, proxyInfo2);
             }
         }
     }
 
     public static void saveProxyList() {
         SerializedData serializedData = new SerializedData();
-        int count = proxyList.size();
-        serializedData.writeInt32(count);
-        for (int a = 0; a < count; a++) {
-            String str;
-            ProxyInfo info = (ProxyInfo) proxyList.get(a);
-            serializedData.writeString(info.address != null ? info.address : "");
-            serializedData.writeInt32(info.port);
-            serializedData.writeString(info.username != null ? info.username : "");
-            serializedData.writeString(info.password != null ? info.password : "");
-            if (info.secret != null) {
-                str = info.secret;
-            } else {
-                str = "";
+        int size = proxyList.size();
+        serializedData.writeInt32(size);
+        for (int i = 0; i < size; i++) {
+            ProxyInfo proxyInfo = (ProxyInfo) proxyList.get(i);
+            String str = proxyInfo.address;
+            String str2 = "";
+            if (str == null) {
+                str = str2;
             }
             serializedData.writeString(str);
+            serializedData.writeInt32(proxyInfo.port);
+            str = proxyInfo.username;
+            if (str == null) {
+                str = str2;
+            }
+            serializedData.writeString(str);
+            str = proxyInfo.password;
+            if (str == null) {
+                str = str2;
+            }
+            serializedData.writeString(str);
+            String str3 = proxyInfo.secret;
+            if (str3 == null) {
+                str3 = str2;
+            }
+            serializedData.writeString(str3);
         }
         ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0).edit().putString("proxy_list", Base64.encodeToString(serializedData.toByteArray(), 2)).commit();
         serializedData.cleanup();
@@ -542,11 +556,11 @@ public class SharedConfig {
 
     public static ProxyInfo addProxy(ProxyInfo proxyInfo) {
         loadProxyList();
-        int count = proxyList.size();
-        for (int a = 0; a < count; a++) {
-            ProxyInfo info = (ProxyInfo) proxyList.get(a);
-            if (proxyInfo.address.equals(info.address) && proxyInfo.port == info.port && proxyInfo.username.equals(info.username) && proxyInfo.password.equals(info.password) && proxyInfo.secret.equals(info.secret)) {
-                return info;
+        int size = proxyList.size();
+        for (int i = 0; i < size; i++) {
+            ProxyInfo proxyInfo2 = (ProxyInfo) proxyList.get(i);
+            if (proxyInfo.address.equals(proxyInfo2.address) && proxyInfo.port == proxyInfo2.port && proxyInfo.username.equals(proxyInfo2.username) && proxyInfo.password.equals(proxyInfo2.password) && proxyInfo.secret.equals(proxyInfo2.secret)) {
+                return proxyInfo2;
             }
         }
         proxyList.add(proxyInfo);
@@ -557,18 +571,20 @@ public class SharedConfig {
     public static void deleteProxy(ProxyInfo proxyInfo) {
         if (currentProxy == proxyInfo) {
             currentProxy = null;
-            SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-            boolean enabled = preferences.getBoolean("proxy_enabled", false);
-            Editor editor = preferences.edit();
-            editor.putString("proxy_ip", "");
-            editor.putString("proxy_pass", "");
-            editor.putString("proxy_user", "");
-            editor.putString("proxy_secret", "");
-            editor.putInt("proxy_port", 1080);
-            editor.putBoolean("proxy_enabled", false);
-            editor.putBoolean("proxy_enabled_calls", false);
-            editor.commit();
-            if (enabled) {
+            SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
+            String str = "proxy_enabled";
+            boolean z = globalMainSettings.getBoolean(str, false);
+            Editor edit = globalMainSettings.edit();
+            String str2 = "";
+            edit.putString("proxy_ip", str2);
+            edit.putString("proxy_pass", str2);
+            edit.putString("proxy_user", str2);
+            edit.putString("proxy_secret", str2);
+            edit.putInt("proxy_port", 1080);
+            edit.putBoolean(str, false);
+            edit.putBoolean("proxy_enabled_calls", false);
+            edit.commit();
+            if (z) {
                 ConnectionsManager.setProxySettings(false, "", 0, "", "", "");
             }
         }
@@ -578,26 +594,27 @@ public class SharedConfig {
 
     public static void checkSaveToGalleryFiles() {
         try {
-            File telegramPath = new File(Environment.getExternalStorageDirectory(), "Telegram");
-            File imagePath = new File(telegramPath, "Telegram Images");
-            imagePath.mkdir();
-            File videoPath = new File(telegramPath, "Telegram Video");
-            videoPath.mkdir();
+            File file = new File(Environment.getExternalStorageDirectory(), "Telegram");
+            File file2 = new File(file, "Telegram Images");
+            file2.mkdir();
+            File file3 = new File(file, "Telegram Video");
+            file3.mkdir();
+            String str = ".nomedia";
             if (saveToGallery) {
-                if (imagePath.isDirectory()) {
-                    new File(imagePath, ".nomedia").delete();
+                if (file2.isDirectory()) {
+                    new File(file2, str).delete();
                 }
-                if (videoPath.isDirectory()) {
-                    new File(videoPath, ".nomedia").delete();
+                if (file3.isDirectory()) {
+                    new File(file3, str).delete();
                     return;
                 }
                 return;
             }
-            if (imagePath.isDirectory()) {
-                new File(imagePath, ".nomedia").createNewFile();
+            if (file2.isDirectory()) {
+                new File(file2, str).createNewFile();
             }
-            if (videoPath.isDirectory()) {
-                new File(videoPath, ".nomedia").createNewFile();
+            if (file3.isDirectory()) {
+                new File(file3, str).createNewFile();
             }
         } catch (Exception e) {
             FileLog.e(e);

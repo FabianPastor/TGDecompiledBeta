@@ -43,7 +43,8 @@ public class PhotoPickerSearchCell extends LinearLayout {
             this.textView1 = new TextView(context);
             this.textView1.setGravity(16);
             this.textView1.setTextSize(1, 14.0f);
-            this.textView1.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            String str = "fonts/rmedium.ttf";
+            this.textView1.setTypeface(AndroidUtilities.getTypeface(str));
             this.textView1.setTextColor(-1);
             this.textView1.setSingleLine(true);
             this.textView1.setEllipsize(TruncateAt.END);
@@ -51,22 +52,22 @@ public class PhotoPickerSearchCell extends LinearLayout {
             this.textView2 = new TextView(context);
             this.textView2.setGravity(16);
             this.textView2.setTextSize(1, 10.0f);
-            this.textView2.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            this.textView2.setTypeface(AndroidUtilities.getTypeface(str));
             this.textView2.setTextColor(-10066330);
             this.textView2.setSingleLine(true);
             this.textView2.setEllipsize(TruncateAt.END);
             addView(this.textView2, LayoutHelper.createFrame(-1, -2.0f, 51, 51.0f, 26.0f, 4.0f, 0.0f));
         }
 
-        public boolean onTouchEvent(MotionEvent event) {
+        public boolean onTouchEvent(MotionEvent motionEvent) {
             if (VERSION.SDK_INT >= 21) {
-                this.selector.drawableHotspotChanged(event.getX(), event.getY());
+                this.selector.drawableHotspotChanged(motionEvent.getX(), motionEvent.getY());
             }
-            return super.onTouchEvent(event);
+            return super.onTouchEvent(motionEvent);
         }
     }
 
-    public PhotoPickerSearchCell(Context context, boolean allowGifs) {
+    public PhotoPickerSearchCell(Context context, boolean z) {
         super(context);
         setOrientation(0);
         SearchButton searchButton = new SearchButton(context);
@@ -81,7 +82,7 @@ public class PhotoPickerSearchCell extends LinearLayout {
         layoutParams.width = 0;
         searchButton.setLayoutParams(layoutParams);
         searchButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
+            public void onClick(View view) {
                 if (PhotoPickerSearchCell.this.delegate != null) {
                     PhotoPickerSearchCell.this.delegate.didPressedSearchButton(0);
                 }
@@ -100,15 +101,15 @@ public class PhotoPickerSearchCell extends LinearLayout {
         searchButton.textView2.setText("GIPHY");
         searchButton.imageView.setImageResource(NUM);
         addView(searchButton);
-        layoutParams = (LayoutParams) searchButton.getLayoutParams();
-        layoutParams.weight = 0.5f;
-        layoutParams.topMargin = AndroidUtilities.dp(4.0f);
-        layoutParams.height = AndroidUtilities.dp(48.0f);
-        layoutParams.width = 0;
-        searchButton.setLayoutParams(layoutParams);
-        if (allowGifs) {
+        LayoutParams layoutParams2 = (LayoutParams) searchButton.getLayoutParams();
+        layoutParams2.weight = 0.5f;
+        layoutParams2.topMargin = AndroidUtilities.dp(4.0f);
+        layoutParams2.height = AndroidUtilities.dp(48.0f);
+        layoutParams2.width = 0;
+        searchButton.setLayoutParams(layoutParams2);
+        if (z) {
             searchButton.setOnClickListener(new OnClickListener() {
-                public void onClick(View v) {
+                public void onClick(View view) {
                     if (PhotoPickerSearchCell.this.delegate != null) {
                         PhotoPickerSearchCell.this.delegate.didPressedSearchButton(1);
                     }
@@ -119,12 +120,12 @@ public class PhotoPickerSearchCell extends LinearLayout {
         }
     }
 
-    public void setDelegate(PhotoPickerSearchCellDelegate delegate) {
-        this.delegate = delegate;
+    public void setDelegate(PhotoPickerSearchCellDelegate photoPickerSearchCellDelegate) {
+        this.delegate = photoPickerSearchCellDelegate;
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(52.0f), NUM));
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(52.0f), NUM));
     }
 }

@@ -29,14 +29,14 @@ public class SortedList<T> {
 
         public abstract int compare(T2 t2, T2 t22);
 
-        public abstract void onChanged(int i, int i2);
-
-        public void onChanged(int position, int count, Object payload) {
-            onChanged(position, count);
-        }
-
         public Object getChangePayload(T2 t2, T2 t22) {
             return null;
+        }
+
+        public abstract void onChanged(int i, int i2);
+
+        public void onChanged(int i, int i2, Object obj) {
+            onChanged(i, i2);
         }
     }
 
@@ -44,44 +44,44 @@ public class SortedList<T> {
         private final BatchingListUpdateCallback mBatchingListUpdateCallback = new BatchingListUpdateCallback(this.mWrappedCallback);
         final Callback<T2> mWrappedCallback;
 
-        public BatchedCallback(Callback<T2> wrappedCallback) {
-            this.mWrappedCallback = wrappedCallback;
+        public BatchedCallback(Callback<T2> callback) {
+            this.mWrappedCallback = callback;
         }
 
-        public int compare(T2 o1, T2 o2) {
-            return this.mWrappedCallback.compare(o1, o2);
+        public int compare(T2 t2, T2 t22) {
+            return this.mWrappedCallback.compare(t2, t22);
         }
 
-        public void onInserted(int position, int count) {
-            this.mBatchingListUpdateCallback.onInserted(position, count);
+        public void onInserted(int i, int i2) {
+            this.mBatchingListUpdateCallback.onInserted(i, i2);
         }
 
-        public void onRemoved(int position, int count) {
-            this.mBatchingListUpdateCallback.onRemoved(position, count);
+        public void onRemoved(int i, int i2) {
+            this.mBatchingListUpdateCallback.onRemoved(i, i2);
         }
 
-        public void onMoved(int fromPosition, int toPosition) {
-            this.mBatchingListUpdateCallback.onMoved(fromPosition, toPosition);
+        public void onMoved(int i, int i2) {
+            this.mBatchingListUpdateCallback.onMoved(i, i2);
         }
 
-        public void onChanged(int position, int count) {
-            this.mBatchingListUpdateCallback.onChanged(position, count, null);
+        public void onChanged(int i, int i2) {
+            this.mBatchingListUpdateCallback.onChanged(i, i2, null);
         }
 
-        public void onChanged(int position, int count, Object payload) {
-            this.mBatchingListUpdateCallback.onChanged(position, count, payload);
+        public void onChanged(int i, int i2, Object obj) {
+            this.mBatchingListUpdateCallback.onChanged(i, i2, obj);
         }
 
-        public boolean areContentsTheSame(T2 oldItem, T2 newItem) {
-            return this.mWrappedCallback.areContentsTheSame(oldItem, newItem);
+        public boolean areContentsTheSame(T2 t2, T2 t22) {
+            return this.mWrappedCallback.areContentsTheSame(t2, t22);
         }
 
-        public boolean areItemsTheSame(T2 item1, T2 item2) {
-            return this.mWrappedCallback.areItemsTheSame(item1, item2);
+        public boolean areItemsTheSame(T2 t2, T2 t22) {
+            return this.mWrappedCallback.areItemsTheSame(t2, t22);
         }
 
-        public Object getChangePayload(T2 item1, T2 item2) {
-            return this.mWrappedCallback.getChangePayload(item1, item2);
+        public Object getChangePayload(T2 t2, T2 t22) {
+            return this.mWrappedCallback.getChangePayload(t2, t22);
         }
 
         public void dispatchLastEvent() {
@@ -89,13 +89,13 @@ public class SortedList<T> {
         }
     }
 
-    public SortedList(Class<T> klass, Callback<T> callback) {
-        this(klass, callback, 10);
+    public SortedList(Class<T> cls, Callback<T> callback) {
+        this(cls, callback, 10);
     }
 
-    public SortedList(Class<T> klass, Callback<T> callback, int initialCapacity) {
-        this.mTClass = klass;
-        this.mData = (Object[]) Array.newInstance(klass, initialCapacity);
+    public SortedList(Class<T> cls, Callback<T> callback, int i) {
+        this.mTClass = cls;
+        this.mData = (Object[]) Array.newInstance(cls, i);
         this.mCallback = callback;
         this.mSize = 0;
     }
@@ -104,123 +104,126 @@ public class SortedList<T> {
         return this.mSize;
     }
 
-    public int add(T item) {
+    public int add(T t) {
         throwIfInMutationOperation();
-        return add(item, true);
+        return add(t, true);
     }
 
-    public void addAll(T[] items, boolean mayModifyInput) {
+    public void addAll(T[] tArr, boolean z) {
         throwIfInMutationOperation();
-        if (items.length != 0) {
-            if (mayModifyInput) {
-                addAllInternal(items);
+        if (tArr.length != 0) {
+            if (z) {
+                addAllInternal(tArr);
             } else {
-                addAllInternal(copyArray(items));
+                addAllInternal(copyArray(tArr));
             }
         }
     }
 
-    public void addAll(T... items) {
-        addAll(items, false);
+    public void addAll(T... tArr) {
+        addAll(tArr, false);
     }
 
-    public void addAll(Collection<T> items) {
-        addAll(items.toArray((Object[]) ((Object[]) Array.newInstance(this.mTClass, items.size()))), true);
+    public void addAll(Collection<T> collection) {
+        addAll(collection.toArray((Object[]) Array.newInstance(this.mTClass, collection.size())), true);
     }
 
-    public void replaceAll(T[] items, boolean mayModifyInput) {
+    public void replaceAll(T[] tArr, boolean z) {
         throwIfInMutationOperation();
-        if (mayModifyInput) {
-            replaceAllInternal(items);
+        if (z) {
+            replaceAllInternal(tArr);
         } else {
-            replaceAllInternal(copyArray(items));
+            replaceAllInternal(copyArray(tArr));
         }
     }
 
-    public void replaceAll(T... items) {
-        replaceAll(items, false);
+    public void replaceAll(T... tArr) {
+        replaceAll(tArr, false);
     }
 
-    public void replaceAll(Collection<T> items) {
-        replaceAll(items.toArray((Object[]) ((Object[]) Array.newInstance(this.mTClass, items.size()))), true);
+    public void replaceAll(Collection<T> collection) {
+        replaceAll(collection.toArray((Object[]) Array.newInstance(this.mTClass, collection.size())), true);
     }
 
-    private void addAllInternal(T[] newItems) {
-        if (newItems.length >= 1) {
-            int newSize = sortAndDedup(newItems);
+    private void addAllInternal(T[] tArr) {
+        if (tArr.length >= 1) {
+            int sortAndDedup = sortAndDedup(tArr);
             if (this.mSize == 0) {
-                this.mData = newItems;
-                this.mSize = newSize;
-                this.mCallback.onInserted(0, newSize);
-                return;
+                this.mData = tArr;
+                this.mSize = sortAndDedup;
+                this.mCallback.onInserted(0, sortAndDedup);
+            } else {
+                merge(tArr, sortAndDedup);
             }
-            merge(newItems, newSize);
         }
     }
 
-    private void replaceAllInternal(T[] newData) {
-        boolean forceBatchedUpdates;
-        if (this.mCallback instanceof BatchedCallback) {
-            forceBatchedUpdates = false;
-        } else {
-            forceBatchedUpdates = true;
-        }
-        if (forceBatchedUpdates) {
+    private void replaceAllInternal(T[] tArr) {
+        Object obj = !(this.mCallback instanceof BatchedCallback) ? 1 : null;
+        if (obj != null) {
             beginBatchedUpdates();
         }
         this.mOldDataStart = 0;
         this.mOldDataSize = this.mSize;
         this.mOldData = this.mData;
         this.mNewDataStart = 0;
-        int newSize = sortAndDedup(newData);
-        this.mData = (Object[]) Array.newInstance(this.mTClass, newSize);
+        int sortAndDedup = sortAndDedup(tArr);
+        this.mData = (Object[]) Array.newInstance(this.mTClass, sortAndDedup);
         while (true) {
-            int itemCount;
-            if (this.mNewDataStart >= newSize && this.mOldDataStart >= this.mOldDataSize) {
+            if (this.mNewDataStart >= sortAndDedup && this.mOldDataStart >= this.mOldDataSize) {
                 break;
-            } else if (this.mOldDataStart >= this.mOldDataSize) {
-                int insertIndex = this.mNewDataStart;
-                itemCount = newSize - this.mNewDataStart;
-                System.arraycopy(newData, insertIndex, this.mData, insertIndex, itemCount);
-                this.mNewDataStart += itemCount;
-                this.mSize += itemCount;
-                this.mCallback.onInserted(insertIndex, itemCount);
+            }
+            int i = this.mOldDataStart;
+            int i2 = this.mOldDataSize;
+            if (i >= i2) {
+                int i3 = this.mNewDataStart;
+                sortAndDedup -= i3;
+                System.arraycopy(tArr, i3, this.mData, i3, sortAndDedup);
+                this.mNewDataStart += sortAndDedup;
+                this.mSize += sortAndDedup;
+                this.mCallback.onInserted(i3, sortAndDedup);
                 break;
-            } else if (this.mNewDataStart >= newSize) {
-                itemCount = this.mOldDataSize - this.mOldDataStart;
-                this.mSize -= itemCount;
-                this.mCallback.onRemoved(this.mNewDataStart, itemCount);
+            }
+            int i4 = this.mNewDataStart;
+            if (i4 >= sortAndDedup) {
+                i2 -= i;
+                this.mSize -= i2;
+                this.mCallback.onRemoved(i4, i2);
                 break;
-            } else {
-                T oldItem = this.mOldData[this.mOldDataStart];
-                T newItem = newData[this.mNewDataStart];
-                int result = this.mCallback.compare(oldItem, newItem);
-                if (result < 0) {
-                    replaceAllRemove();
-                } else if (result > 0) {
-                    replaceAllInsert(newItem);
-                } else if (this.mCallback.areItemsTheSame(oldItem, newItem)) {
-                    this.mData[this.mNewDataStart] = newItem;
-                    this.mOldDataStart++;
-                    this.mNewDataStart++;
-                    if (!this.mCallback.areContentsTheSame(oldItem, newItem)) {
-                        this.mCallback.onChanged(this.mNewDataStart - 1, 1, this.mCallback.getChangePayload(oldItem, newItem));
-                    }
-                } else {
-                    replaceAllRemove();
-                    replaceAllInsert(newItem);
+            }
+            Object obj2 = this.mOldData[i];
+            Object obj3 = tArr[i4];
+            i4 = this.mCallback.compare(obj2, obj3);
+            if (i4 < 0) {
+                replaceAllRemove();
+            } else if (i4 > 0) {
+                replaceAllInsert(obj3);
+            } else if (this.mCallback.areItemsTheSame(obj2, obj3)) {
+                Object[] objArr = this.mData;
+                int i5 = this.mNewDataStart;
+                objArr[i5] = obj3;
+                this.mOldDataStart++;
+                this.mNewDataStart = i5 + 1;
+                if (!this.mCallback.areContentsTheSame(obj2, obj3)) {
+                    Callback callback = this.mCallback;
+                    callback.onChanged(this.mNewDataStart - 1, 1, callback.getChangePayload(obj2, obj3));
                 }
+            } else {
+                replaceAllRemove();
+                replaceAllInsert(obj3);
             }
         }
         this.mOldData = null;
-        if (forceBatchedUpdates) {
+        if (obj != null) {
             endBatchedUpdates();
         }
     }
 
-    private void replaceAllInsert(T newItem) {
-        this.mData[this.mNewDataStart] = newItem;
-        this.mNewDataStart++;
+    private void replaceAllInsert(T t) {
+        Object[] objArr = this.mData;
+        int i = this.mNewDataStart;
+        objArr[i] = t;
+        this.mNewDataStart = i + 1;
         this.mSize++;
         this.mCallback.onInserted(this.mNewDataStart - 1, 1);
     }
@@ -231,112 +234,110 @@ public class SortedList<T> {
         this.mCallback.onRemoved(this.mNewDataStart, 1);
     }
 
-    private int sortAndDedup(T[] items) {
-        if (items.length == 0) {
+    private int sortAndDedup(T[] tArr) {
+        if (tArr.length == 0) {
             return 0;
         }
-        Arrays.sort(items, this.mCallback);
-        int rangeStart = 0;
-        int rangeEnd = 1;
-        for (int i = 1; i < items.length; i++) {
-            T currentItem = items[i];
-            if (this.mCallback.compare(items[rangeStart], currentItem) == 0) {
-                int sameItemPos = findSameItem(currentItem, items, rangeStart, rangeEnd);
-                if (sameItemPos != -1) {
-                    items[sameItemPos] = currentItem;
+        Arrays.sort(tArr, this.mCallback);
+        int i = 1;
+        int i2 = 0;
+        for (int i3 = 1; i3 < tArr.length; i3++) {
+            Object obj = tArr[i3];
+            if (this.mCallback.compare(tArr[i2], obj) == 0) {
+                int findSameItem = findSameItem(obj, tArr, i2, i);
+                if (findSameItem != -1) {
+                    tArr[findSameItem] = obj;
                 } else {
-                    if (rangeEnd != i) {
-                        items[rangeEnd] = currentItem;
+                    if (i != i3) {
+                        tArr[i] = obj;
                     }
-                    rangeEnd++;
+                    i++;
                 }
             } else {
-                if (rangeEnd != i) {
-                    items[rangeEnd] = currentItem;
+                if (i != i3) {
+                    tArr[i] = obj;
                 }
-                rangeStart = rangeEnd;
-                rangeEnd++;
+                i2 = i;
+                i++;
             }
         }
-        return rangeEnd;
+        return i;
     }
 
-    private int findSameItem(T item, T[] items, int from, int to) {
-        for (int pos = from; pos < to; pos++) {
-            if (this.mCallback.areItemsTheSame(items[pos], item)) {
-                return pos;
+    private int findSameItem(T t, T[] tArr, int i, int i2) {
+        while (i < i2) {
+            if (this.mCallback.areItemsTheSame(tArr[i], t)) {
+                return i;
             }
+            i++;
         }
         return -1;
     }
 
-    private void merge(T[] newData, int newDataSize) {
-        boolean forceBatchedUpdates;
-        if (this.mCallback instanceof BatchedCallback) {
-            forceBatchedUpdates = false;
-        } else {
-            forceBatchedUpdates = true;
-        }
-        if (forceBatchedUpdates) {
+    private void merge(T[] tArr, int i) {
+        int i2 = 0;
+        Object obj = !(this.mCallback instanceof BatchedCallback) ? 1 : null;
+        if (obj != null) {
             beginBatchedUpdates();
         }
         this.mOldData = this.mData;
         this.mOldDataStart = 0;
-        this.mOldDataSize = this.mSize;
-        this.mData = (Object[]) Array.newInstance(this.mTClass, (this.mSize + newDataSize) + 10);
+        int i3 = this.mSize;
+        this.mOldDataSize = i3;
+        this.mData = (Object[]) Array.newInstance(this.mTClass, (i3 + i) + 10);
         this.mNewDataStart = 0;
-        int newDataStart = 0;
         while (true) {
-            int itemCount;
-            if (this.mOldDataStart >= this.mOldDataSize && newDataStart >= newDataSize) {
+            if (this.mOldDataStart >= this.mOldDataSize && i2 >= i) {
                 break;
-            } else if (this.mOldDataStart == this.mOldDataSize) {
-                itemCount = newDataSize - newDataStart;
-                System.arraycopy(newData, newDataStart, this.mData, this.mNewDataStart, itemCount);
-                this.mNewDataStart += itemCount;
-                this.mSize += itemCount;
-                this.mCallback.onInserted(this.mNewDataStart - itemCount, itemCount);
+            }
+            i3 = this.mOldDataStart;
+            int i4 = this.mOldDataSize;
+            if (i3 == i4) {
+                i -= i2;
+                System.arraycopy(tArr, i2, this.mData, this.mNewDataStart, i);
+                this.mNewDataStart += i;
+                this.mSize += i;
+                this.mCallback.onInserted(this.mNewDataStart - i, i);
                 break;
-            } else if (newDataStart == newDataSize) {
-                itemCount = this.mOldDataSize - this.mOldDataStart;
-                System.arraycopy(this.mOldData, this.mOldDataStart, this.mData, this.mNewDataStart, itemCount);
-                this.mNewDataStart += itemCount;
+            } else if (i2 == i) {
+                i4 -= i3;
+                System.arraycopy(this.mOldData, i3, this.mData, this.mNewDataStart, i4);
+                this.mNewDataStart += i4;
                 break;
             } else {
-                T oldItem = this.mOldData[this.mOldDataStart];
-                T newItem = newData[newDataStart];
-                int compare = this.mCallback.compare(oldItem, newItem);
-                Object[] objArr;
-                int i;
+                Object obj2 = this.mOldData[i3];
+                Object obj3 = tArr[i2];
+                int compare = this.mCallback.compare(obj2, obj3);
                 if (compare > 0) {
-                    objArr = this.mData;
-                    i = this.mNewDataStart;
-                    this.mNewDataStart = i + 1;
-                    objArr[i] = newItem;
+                    Object[] objArr = this.mData;
+                    compare = this.mNewDataStart;
+                    this.mNewDataStart = compare + 1;
+                    objArr[compare] = obj3;
                     this.mSize++;
-                    newDataStart++;
+                    i2++;
                     this.mCallback.onInserted(this.mNewDataStart - 1, 1);
-                } else if (compare == 0 && this.mCallback.areItemsTheSame(oldItem, newItem)) {
-                    objArr = this.mData;
-                    i = this.mNewDataStart;
-                    this.mNewDataStart = i + 1;
-                    objArr[i] = newItem;
-                    newDataStart++;
+                } else if (compare == 0 && this.mCallback.areItemsTheSame(obj2, obj3)) {
+                    Object[] objArr2 = this.mData;
+                    int i5 = this.mNewDataStart;
+                    this.mNewDataStart = i5 + 1;
+                    objArr2[i5] = obj3;
+                    i2++;
                     this.mOldDataStart++;
-                    if (!this.mCallback.areContentsTheSame(oldItem, newItem)) {
-                        this.mCallback.onChanged(this.mNewDataStart - 1, 1, this.mCallback.getChangePayload(oldItem, newItem));
+                    if (!this.mCallback.areContentsTheSame(obj2, obj3)) {
+                        Callback callback = this.mCallback;
+                        callback.onChanged(this.mNewDataStart - 1, 1, callback.getChangePayload(obj2, obj3));
                     }
                 } else {
-                    objArr = this.mData;
-                    i = this.mNewDataStart;
-                    this.mNewDataStart = i + 1;
-                    objArr[i] = oldItem;
+                    Object[] objArr3 = this.mData;
+                    compare = this.mNewDataStart;
+                    this.mNewDataStart = compare + 1;
+                    objArr3[compare] = obj2;
                     this.mOldDataStart++;
                 }
             }
         }
         this.mOldData = null;
-        if (forceBatchedUpdates) {
+        if (obj != null) {
             endBatchedUpdates();
         }
     }
@@ -349,9 +350,10 @@ public class SortedList<T> {
 
     public void beginBatchedUpdates() {
         throwIfInMutationOperation();
-        if (!(this.mCallback instanceof BatchedCallback)) {
+        Callback callback = this.mCallback;
+        if (!(callback instanceof BatchedCallback)) {
             if (this.mBatchedCallback == null) {
-                this.mBatchedCallback = new BatchedCallback(this.mCallback);
+                this.mBatchedCallback = new BatchedCallback(callback);
             }
             this.mCallback = this.mBatchedCallback;
         }
@@ -359,219 +361,227 @@ public class SortedList<T> {
 
     public void endBatchedUpdates() {
         throwIfInMutationOperation();
-        if (this.mCallback instanceof BatchedCallback) {
-            ((BatchedCallback) this.mCallback).dispatchLastEvent();
+        Callback callback = this.mCallback;
+        if (callback instanceof BatchedCallback) {
+            ((BatchedCallback) callback).dispatchLastEvent();
         }
-        if (this.mCallback == this.mBatchedCallback) {
-            this.mCallback = this.mBatchedCallback.mWrappedCallback;
+        callback = this.mCallback;
+        Callback callback2 = this.mBatchedCallback;
+        if (callback == callback2) {
+            this.mCallback = callback2.mWrappedCallback;
         }
     }
 
-    private int add(T item, boolean notify) {
-        int index = findIndexOf(item, this.mData, 0, this.mSize, 1);
-        if (index == -1) {
-            index = 0;
-        } else if (index < this.mSize) {
-            T existing = this.mData[index];
-            if (this.mCallback.areItemsTheSame(existing, item)) {
-                int i;
-                if (this.mCallback.areContentsTheSame(existing, item)) {
-                    this.mData[index] = item;
-                    i = index;
-                    return index;
+    private int add(T t, boolean z) {
+        int findIndexOf = findIndexOf(t, this.mData, 0, this.mSize, 1);
+        if (findIndexOf == -1) {
+            findIndexOf = 0;
+        } else if (findIndexOf < this.mSize) {
+            Object obj = this.mData[findIndexOf];
+            if (this.mCallback.areItemsTheSame(obj, t)) {
+                if (this.mCallback.areContentsTheSame(obj, t)) {
+                    this.mData[findIndexOf] = t;
+                    return findIndexOf;
                 }
-                this.mData[index] = item;
-                this.mCallback.onChanged(index, 1, this.mCallback.getChangePayload(existing, item));
-                i = index;
-                return index;
+                this.mData[findIndexOf] = t;
+                Callback callback = this.mCallback;
+                callback.onChanged(findIndexOf, 1, callback.getChangePayload(obj, t));
+                return findIndexOf;
             }
         }
-        addToData(index, item);
-        if (notify) {
-            this.mCallback.onInserted(index, 1);
+        addToData(findIndexOf, t);
+        if (z) {
+            this.mCallback.onInserted(findIndexOf, 1);
         }
-        return index;
+        return findIndexOf;
     }
 
-    public boolean remove(T item) {
+    public boolean remove(T t) {
         throwIfInMutationOperation();
-        return remove(item, true);
+        return remove(t, true);
     }
 
-    public T removeItemAt(int index) {
+    public T removeItemAt(int i) {
         throwIfInMutationOperation();
-        T item = get(index);
-        removeItemAtIndex(index, true);
-        return item;
+        Object obj = get(i);
+        removeItemAtIndex(i, true);
+        return obj;
     }
 
-    private boolean remove(T item, boolean notify) {
-        int index = findIndexOf(item, this.mData, 0, this.mSize, 2);
-        if (index == -1) {
+    private boolean remove(T t, boolean z) {
+        int findIndexOf = findIndexOf(t, this.mData, 0, this.mSize, 2);
+        if (findIndexOf == -1) {
             return false;
         }
-        removeItemAtIndex(index, notify);
+        removeItemAtIndex(findIndexOf, z);
         return true;
     }
 
-    private void removeItemAtIndex(int index, boolean notify) {
-        System.arraycopy(this.mData, index + 1, this.mData, index, (this.mSize - index) - 1);
+    private void removeItemAtIndex(int i, boolean z) {
+        Object[] objArr = this.mData;
+        System.arraycopy(objArr, i + 1, objArr, i, (this.mSize - i) - 1);
         this.mSize--;
         this.mData[this.mSize] = null;
-        if (notify) {
-            this.mCallback.onRemoved(index, 1);
+        if (z) {
+            this.mCallback.onRemoved(i, 1);
         }
     }
 
-    public void updateItemAt(int index, T item) {
-        boolean contentsChanged;
+    public void updateItemAt(int i, T t) {
         throwIfInMutationOperation();
-        T existing = get(index);
-        if (existing == item || !this.mCallback.areContentsTheSame(existing, item)) {
-            contentsChanged = true;
-        } else {
-            contentsChanged = false;
-        }
-        if (existing == item || this.mCallback.compare(existing, item) != 0) {
-            if (contentsChanged) {
-                this.mCallback.onChanged(index, 1, this.mCallback.getChangePayload(existing, item));
+        T t2 = get(i);
+        Object obj = (t2 == t || !this.mCallback.areContentsTheSame(t2, t)) ? 1 : null;
+        if (t2 == t || this.mCallback.compare(t2, t) != 0) {
+            if (obj != null) {
+                Callback callback = this.mCallback;
+                callback.onChanged(i, 1, callback.getChangePayload(t2, t));
             }
-            removeItemAtIndex(index, false);
-            int newIndex = add(item, false);
-            if (index != newIndex) {
-                this.mCallback.onMoved(index, newIndex);
-                return;
+            removeItemAtIndex(i, false);
+            int add = add(t, false);
+            if (i != add) {
+                this.mCallback.onMoved(i, add);
             }
             return;
         }
-        this.mData[index] = item;
-        if (contentsChanged) {
-            this.mCallback.onChanged(index, 1, this.mCallback.getChangePayload(existing, item));
+        this.mData[i] = t;
+        if (obj != null) {
+            Callback callback2 = this.mCallback;
+            callback2.onChanged(i, 1, callback2.getChangePayload(t2, t));
         }
     }
 
-    public void recalculatePositionOfItemAt(int index) {
+    public void recalculatePositionOfItemAt(int i) {
         throwIfInMutationOperation();
-        T item = get(index);
-        removeItemAtIndex(index, false);
-        int newIndex = add(item, false);
-        if (index != newIndex) {
-            this.mCallback.onMoved(index, newIndex);
+        Object obj = get(i);
+        removeItemAtIndex(i, false);
+        int add = add(obj, false);
+        if (i != add) {
+            this.mCallback.onMoved(i, add);
         }
     }
 
-    public T get(int index) throws IndexOutOfBoundsException {
-        if (index >= this.mSize || index < 0) {
-            throw new IndexOutOfBoundsException("Asked to get item at " + index + " but size is " + this.mSize);
-        } else if (this.mOldData == null || index < this.mNewDataStart) {
-            return this.mData[index];
-        } else {
-            return this.mOldData[(index - this.mNewDataStart) + this.mOldDataStart];
+    public T get(int i) throws IndexOutOfBoundsException {
+        if (i >= this.mSize || i < 0) {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("Asked to get item at ");
+            stringBuilder.append(i);
+            stringBuilder.append(" but size is ");
+            stringBuilder.append(this.mSize);
+            throw new IndexOutOfBoundsException(stringBuilder.toString());
         }
+        Object[] objArr = this.mOldData;
+        if (objArr != null) {
+            int i2 = this.mNewDataStart;
+            if (i >= i2) {
+                return objArr[(i - i2) + this.mOldDataStart];
+            }
+        }
+        return this.mData[i];
     }
 
-    public int indexOf(T item) {
+    public int indexOf(T t) {
         if (this.mOldData != null) {
-            int index = findIndexOf(item, this.mData, 0, this.mNewDataStart, 4);
-            if (index != -1) {
-                return index;
+            int findIndexOf = findIndexOf(t, this.mData, 0, this.mNewDataStart, 4);
+            if (findIndexOf != -1) {
+                return findIndexOf;
             }
-            index = findIndexOf(item, this.mOldData, this.mOldDataStart, this.mOldDataSize, 4);
-            return index != -1 ? (index - this.mOldDataStart) + this.mNewDataStart : -1;
-        } else {
-            return findIndexOf(item, this.mData, 0, this.mSize, 4);
+            int findIndexOf2 = findIndexOf(t, this.mOldData, this.mOldDataStart, this.mOldDataSize, 4);
+            if (findIndexOf2 != -1) {
+                return (findIndexOf2 - this.mOldDataStart) + this.mNewDataStart;
+            }
+            return -1;
         }
+        return findIndexOf(t, this.mData, 0, this.mSize, 4);
     }
 
-    private int findIndexOf(T item, T[] mData, int left, int right, int reason) {
-        while (left < right) {
-            int middle = (left + right) / 2;
-            T myItem = mData[middle];
-            int cmp = this.mCallback.compare(myItem, item);
-            if (cmp < 0) {
-                left = middle + 1;
-            } else if (cmp != 0) {
-                right = middle;
-            } else if (this.mCallback.areItemsTheSame(myItem, item)) {
-                return middle;
+    private int findIndexOf(T t, T[] tArr, int i, int i2, int i3) {
+        while (i < i2) {
+            int i4 = (i + i2) / 2;
+            Object obj = tArr[i4];
+            int compare = this.mCallback.compare(obj, t);
+            if (compare < 0) {
+                i = i4 + 1;
+            } else if (compare != 0) {
+                i2 = i4;
+            } else if (this.mCallback.areItemsTheSame(obj, t)) {
+                return i4;
             } else {
-                int exact = linearEqualitySearch(item, middle, left, right);
-                if (reason != 1) {
-                    return exact;
+                int linearEqualitySearch = linearEqualitySearch(t, i4, i, i2);
+                if (i3 == 1 && linearEqualitySearch == -1) {
+                    linearEqualitySearch = i4;
                 }
-                if (exact != -1) {
-                    return exact;
+                return linearEqualitySearch;
+            }
+        }
+        if (i3 != 1) {
+            i = -1;
+        }
+        return i;
+    }
+
+    private int linearEqualitySearch(T t, int i, int i2, int i3) {
+        int i4 = i - 1;
+        while (i4 >= i2) {
+            Object obj = this.mData[i4];
+            if (this.mCallback.compare(obj, t) != 0) {
+                break;
+            } else if (this.mCallback.areItemsTheSame(obj, t)) {
+                return i4;
+            } else {
+                i4--;
+            }
+        }
+        Object obj2;
+        do {
+            i++;
+            if (i < i3) {
+                obj2 = this.mData[i];
+                if (this.mCallback.compare(obj2, t) != 0) {
                 }
-                return middle;
             }
-        }
-        if (reason != 1) {
-            left = -1;
-        }
-        return left;
+            return -1;
+        } while (!this.mCallback.areItemsTheSame(obj2, t));
+        return i;
     }
 
-    private int linearEqualitySearch(T item, int middle, int left, int right) {
-        T nextItem;
-        int i;
-        int next = middle - 1;
-        while (next >= left) {
-            nextItem = this.mData[next];
-            if (this.mCallback.compare(nextItem, item) != 0) {
-                break;
-            } else if (this.mCallback.areItemsTheSame(nextItem, item)) {
-                i = next;
-                return next;
+    private void addToData(int i, T t) {
+        int i2 = this.mSize;
+        if (i <= i2) {
+            Object[] objArr = this.mData;
+            if (i2 == objArr.length) {
+                Object[] objArr2 = (Object[]) Array.newInstance(this.mTClass, objArr.length + 10);
+                System.arraycopy(this.mData, 0, objArr2, 0, i);
+                objArr2[i] = t;
+                System.arraycopy(this.mData, i, objArr2, i + 1, this.mSize - i);
+                this.mData = objArr2;
             } else {
-                next--;
+                System.arraycopy(objArr, i, objArr, i + 1, i2 - i);
+                this.mData[i] = t;
             }
+            this.mSize++;
+            return;
         }
-        next = middle + 1;
-        while (next < right) {
-            nextItem = this.mData[next];
-            if (this.mCallback.compare(nextItem, item) != 0) {
-                break;
-            } else if (this.mCallback.areItemsTheSame(nextItem, item)) {
-                i = next;
-                return next;
-            } else {
-                next++;
-            }
-        }
-        i = next;
-        return -1;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("cannot add item to ");
+        stringBuilder.append(i);
+        stringBuilder.append(" because size is ");
+        stringBuilder.append(this.mSize);
+        throw new IndexOutOfBoundsException(stringBuilder.toString());
     }
 
-    private void addToData(int index, T item) {
-        if (index > this.mSize) {
-            throw new IndexOutOfBoundsException("cannot add item to " + index + " because size is " + this.mSize);
-        }
-        if (this.mSize == this.mData.length) {
-            Object[] newData = (Object[]) ((Object[]) Array.newInstance(this.mTClass, this.mData.length + 10));
-            System.arraycopy(this.mData, 0, newData, 0, index);
-            newData[index] = item;
-            System.arraycopy(this.mData, index, newData, index + 1, this.mSize - index);
-            this.mData = newData;
-        } else {
-            System.arraycopy(this.mData, index, this.mData, index + 1, this.mSize - index);
-            this.mData[index] = item;
-        }
-        this.mSize++;
-    }
-
-    private T[] copyArray(T[] items) {
-        Object[] copy = (Object[]) ((Object[]) Array.newInstance(this.mTClass, items.length));
-        System.arraycopy(items, 0, copy, 0, items.length);
-        return copy;
+    private T[] copyArray(T[] tArr) {
+        Object[] objArr = (Object[]) Array.newInstance(this.mTClass, tArr.length);
+        System.arraycopy(tArr, 0, objArr, 0, tArr.length);
+        return objArr;
     }
 
     public void clear() {
         throwIfInMutationOperation();
-        if (this.mSize != 0) {
-            int prevSize = this.mSize;
-            Arrays.fill(this.mData, 0, prevSize, null);
+        int i = this.mSize;
+        if (i != 0) {
+            Arrays.fill(this.mData, 0, i, null);
             this.mSize = 0;
-            this.mCallback.onRemoved(0, prevSize);
+            this.mCallback.onRemoved(0, i);
         }
     }
 }

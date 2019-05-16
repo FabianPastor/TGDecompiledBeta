@@ -13,114 +13,97 @@ public class RuleSet {
     public ArrayList<PhoneRule> rules = new ArrayList();
 
     /* Access modifiers changed, original: 0000 */
-    public String format(String str, String intlPrefix, String trunkPrefix, boolean prefixRequired) {
-        if (str.length() < this.matchLen) {
-            return null;
-        }
-        PhoneRule rule;
-        int val = 0;
-        Matcher matcher = pattern.matcher(str.substring(0, this.matchLen));
-        if (matcher.find()) {
-            val = Integer.parseInt(matcher.group(0));
-        }
-        Iterator it = this.rules.iterator();
-        while (it.hasNext()) {
-            rule = (PhoneRule) it.next();
-            if (val >= rule.minVal && val <= rule.maxVal && str.length() <= rule.maxLen) {
-                if (prefixRequired) {
-                    if (((rule.flag12 & 3) == 0 && trunkPrefix == null && intlPrefix == null) || !((trunkPrefix == null || (rule.flag12 & 1) == 0) && (intlPrefix == null || (rule.flag12 & 2) == 0))) {
-                        return rule.format(str, intlPrefix, trunkPrefix);
-                    }
-                } else if ((trunkPrefix == null && intlPrefix == null) || !((trunkPrefix == null || (rule.flag12 & 1) == 0) && (intlPrefix == null || (rule.flag12 & 2) == 0))) {
-                    return rule.format(str, intlPrefix, trunkPrefix);
-                }
+    public String format(String str, String str2, String str3, boolean z) {
+        int length = str.length();
+        int i = this.matchLen;
+        if (length >= i) {
+            length = 0;
+            Matcher matcher = pattern.matcher(str.substring(0, i));
+            if (matcher.find()) {
+                length = Integer.parseInt(matcher.group(0));
             }
-        }
-        if (prefixRequired) {
-            return null;
-        }
-        if (intlPrefix != null) {
-            it = this.rules.iterator();
+            Iterator it = this.rules.iterator();
             while (it.hasNext()) {
-                rule = (PhoneRule) it.next();
-                if (val >= rule.minVal && val <= rule.maxVal && str.length() <= rule.maxLen) {
-                    if (trunkPrefix == null || (rule.flag12 & 1) != 0) {
-                        return rule.format(str, intlPrefix, trunkPrefix);
+                PhoneRule phoneRule = (PhoneRule) it.next();
+                if (length >= phoneRule.minVal && length <= phoneRule.maxVal && str.length() <= phoneRule.maxLen) {
+                    if (z) {
+                        if (((phoneRule.flag12 & 3) == 0 && str3 == null && str2 == null) || !((str3 == null || (phoneRule.flag12 & 1) == 0) && (str2 == null || (phoneRule.flag12 & 2) == 0))) {
+                            return phoneRule.format(str, str2, str3);
+                        }
+                    } else if ((str3 == null && str2 == null) || !((str3 == null || (phoneRule.flag12 & 1) == 0) && (str2 == null || (phoneRule.flag12 & 2) == 0))) {
+                        return phoneRule.format(str, str2, str3);
                     }
                 }
             }
-            return null;
-        } else if (trunkPrefix == null) {
-            return null;
-        } else {
-            it = this.rules.iterator();
-            while (it.hasNext()) {
-                rule = (PhoneRule) it.next();
-                if (val >= rule.minVal && val <= rule.maxVal && str.length() <= rule.maxLen) {
-                    if (intlPrefix == null || (rule.flag12 & 2) != 0) {
-                        return rule.format(str, intlPrefix, trunkPrefix);
+            if (!z) {
+                Iterator it2;
+                PhoneRule phoneRule2;
+                if (str2 != null) {
+                    it2 = this.rules.iterator();
+                    while (it2.hasNext()) {
+                        phoneRule2 = (PhoneRule) it2.next();
+                        if (length >= phoneRule2.minVal && length <= phoneRule2.maxVal && str.length() <= phoneRule2.maxLen) {
+                            if (str3 == null || (phoneRule2.flag12 & 1) != 0) {
+                                return phoneRule2.format(str, str2, str3);
+                            }
+                        }
                     }
-                }
-            }
-            return null;
-        }
-    }
-
-    /* Access modifiers changed, original: 0000 */
-    public boolean isValid(String str, String intlPrefix, String trunkPrefix, boolean prefixRequired) {
-        if (str.length() < this.matchLen) {
-            return false;
-        }
-        PhoneRule rule;
-        int val = 0;
-        Matcher matcher = pattern.matcher(str.substring(0, this.matchLen));
-        if (matcher.find()) {
-            val = Integer.parseInt(matcher.group(0));
-        }
-        Iterator it = this.rules.iterator();
-        while (it.hasNext()) {
-            rule = (PhoneRule) it.next();
-            if (val >= rule.minVal && val <= rule.maxVal && str.length() == rule.maxLen) {
-                if (prefixRequired) {
-                    if ((rule.flag12 & 3) == 0 && trunkPrefix == null && intlPrefix == null) {
-                        return true;
-                    }
-                    if (trunkPrefix != null && (rule.flag12 & 1) != 0) {
-                        return true;
-                    }
-                    if (!(intlPrefix == null || (rule.flag12 & 2) == 0)) {
-                        return true;
-                    }
-                } else if (trunkPrefix == null && intlPrefix == null) {
-                    return true;
-                } else {
-                    if (trunkPrefix != null && (rule.flag12 & 1) != 0) {
-                        return true;
-                    }
-                    if (!(intlPrefix == null || (rule.flag12 & 2) == 0)) {
-                        return true;
-                    }
-                }
-            }
-        }
-        if (!prefixRequired) {
-            if (intlPrefix != null && !this.hasRuleWithIntlPrefix) {
-                it = this.rules.iterator();
-                while (it.hasNext()) {
-                    rule = (PhoneRule) it.next();
-                    if (val >= rule.minVal && val <= rule.maxVal && str.length() == rule.maxLen) {
-                        if (trunkPrefix == null || (rule.flag12 & 1) != 0) {
-                            return true;
+                } else if (str3 != null) {
+                    it2 = this.rules.iterator();
+                    while (it2.hasNext()) {
+                        phoneRule2 = (PhoneRule) it2.next();
+                        if (length >= phoneRule2.minVal && length <= phoneRule2.maxVal && str.length() <= phoneRule2.maxLen) {
+                            if (str2 == null || (phoneRule2.flag12 & 2) != 0) {
+                                return phoneRule2.format(str, str2, str3);
+                            }
                         }
                     }
                 }
-            } else if (!(trunkPrefix == null || this.hasRuleWithTrunkPrefix)) {
-                it = this.rules.iterator();
-                while (it.hasNext()) {
-                    rule = (PhoneRule) it.next();
-                    if (val >= rule.minVal && val <= rule.maxVal && str.length() == rule.maxLen) {
-                        if (intlPrefix == null || (rule.flag12 & 2) != 0) {
+            }
+        }
+        return null;
+    }
+
+    /* Access modifiers changed, original: 0000 */
+    public boolean isValid(String str, String str2, String str3, boolean z) {
+        int length = str.length();
+        int i = this.matchLen;
+        if (length >= i) {
+            Matcher matcher = pattern.matcher(str.substring(0, i));
+            length = matcher.find() ? Integer.parseInt(matcher.group(0)) : 0;
+            Iterator it = this.rules.iterator();
+            while (it.hasNext()) {
+                PhoneRule phoneRule = (PhoneRule) it.next();
+                if (length >= phoneRule.minVal && length <= phoneRule.maxVal && str.length() == phoneRule.maxLen) {
+                    if (z) {
+                        if (((phoneRule.flag12 & 3) == 0 && str3 == null && str2 == null) || !((str3 == null || (phoneRule.flag12 & 1) == 0) && (str2 == null || (phoneRule.flag12 & 2) == 0))) {
                             return true;
+                        }
+                    } else if ((str3 == null && str2 == null) || !((str3 == null || (phoneRule.flag12 & 1) == 0) && (str2 == null || (phoneRule.flag12 & 2) == 0))) {
+                        return true;
+                    }
+                }
+            }
+            if (!z) {
+                PhoneRule phoneRule2;
+                if (str2 != null && !this.hasRuleWithIntlPrefix) {
+                    Iterator it2 = this.rules.iterator();
+                    while (it2.hasNext()) {
+                        phoneRule2 = (PhoneRule) it2.next();
+                        if (length >= phoneRule2.minVal && length <= phoneRule2.maxVal && str.length() == phoneRule2.maxLen) {
+                            if (str3 == null || (phoneRule2.flag12 & 1) != 0) {
+                                return true;
+                            }
+                        }
+                    }
+                } else if (!(str3 == null || this.hasRuleWithTrunkPrefix)) {
+                    Iterator it3 = this.rules.iterator();
+                    while (it3.hasNext()) {
+                        phoneRule2 = (PhoneRule) it3.next();
+                        if (length >= phoneRule2.minVal && length <= phoneRule2.maxVal && str.length() == phoneRule2.maxLen) {
+                            if (str2 == null || (phoneRule2.flag12 & 2) != 0) {
+                                return true;
+                            }
                         }
                     }
                 }

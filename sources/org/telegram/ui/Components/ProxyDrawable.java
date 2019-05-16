@@ -24,6 +24,13 @@ public class ProxyDrawable extends Drawable {
     private Paint outerPaint = new Paint(1);
     private int radOffset = 0;
 
+    public int getOpacity() {
+        return -2;
+    }
+
+    public void setAlpha(int i) {
+    }
+
     public ProxyDrawable(Context context) {
         this.emptyDrawable = context.getResources().getDrawable(NUM);
         this.fullDrawable = context.getResources().getDrawable(NUM);
@@ -33,20 +40,21 @@ public class ProxyDrawable extends Drawable {
         this.lastUpdateTime = SystemClock.elapsedRealtime();
     }
 
-    public void setConnected(boolean enabled, boolean value, boolean animated) {
-        this.isEnabled = enabled;
-        this.connected = value;
+    public void setConnected(boolean z, boolean z2, boolean z3) {
+        this.isEnabled = z;
+        this.connected = z2;
         this.lastUpdateTime = SystemClock.elapsedRealtime();
-        if (!animated) {
+        if (!z3) {
             this.connectedAnimationProgress = this.connected ? 1.0f : 0.0f;
         }
         invalidateSelf();
     }
 
     public void draw(Canvas canvas) {
-        long newTime = SystemClock.elapsedRealtime();
-        long dt = newTime - this.lastUpdateTime;
-        this.lastUpdateTime = newTime;
+        float f;
+        long elapsedRealtime = SystemClock.elapsedRealtime();
+        long j = elapsedRealtime - this.lastUpdateTime;
+        this.lastUpdateTime = elapsedRealtime;
         if (!this.isEnabled) {
             this.emptyDrawable.setBounds(getBounds());
             this.emptyDrawable.draw(canvas);
@@ -54,45 +62,46 @@ public class ProxyDrawable extends Drawable {
             this.emptyDrawable.setBounds(getBounds());
             this.emptyDrawable.draw(canvas);
             this.outerPaint.setColor(Theme.getColor("contextProgressOuter2"));
-            this.outerPaint.setAlpha((int) (255.0f * (1.0f - this.connectedAnimationProgress)));
-            this.radOffset = (int) (((float) this.radOffset) + (((float) (360 * dt)) / 1000.0f));
+            this.outerPaint.setAlpha((int) ((1.0f - this.connectedAnimationProgress) * 255.0f));
+            this.radOffset = (int) (((float) this.radOffset) + (((float) (360 * j)) / 1000.0f));
             int width = getBounds().width();
-            int x = (width / 2) - AndroidUtilities.dp(3.0f);
-            int y = (getBounds().height() / 2) - AndroidUtilities.dp(3.0f);
-            this.cicleRect.set((float) x, (float) y, (float) (AndroidUtilities.dp(6.0f) + x), (float) (AndroidUtilities.dp(6.0f) + y));
+            width = (width / 2) - AndroidUtilities.dp(3.0f);
+            int height = (getBounds().height() / 2) - AndroidUtilities.dp(3.0f);
+            this.cicleRect.set((float) width, (float) height, (float) (width + AndroidUtilities.dp(6.0f)), (float) (height + AndroidUtilities.dp(6.0f)));
             canvas.drawArc(this.cicleRect, (float) (this.radOffset - 90), 90.0f, false, this.outerPaint);
             invalidateSelf();
         }
         if (this.isEnabled && (this.connected || this.connectedAnimationProgress != 0.0f)) {
-            this.fullDrawable.setAlpha((int) (255.0f * this.connectedAnimationProgress));
+            this.fullDrawable.setAlpha((int) (this.connectedAnimationProgress * 255.0f));
             this.fullDrawable.setBounds(getBounds());
             this.fullDrawable.draw(canvas);
         }
-        if (this.connected && this.connectedAnimationProgress != 1.0f) {
-            this.connectedAnimationProgress += ((float) dt) / 300.0f;
-            if (this.connectedAnimationProgress > 1.0f) {
-                this.connectedAnimationProgress = 1.0f;
+        if (this.connected) {
+            f = this.connectedAnimationProgress;
+            if (f != 1.0f) {
+                this.connectedAnimationProgress = f + (((float) j) / 300.0f);
+                if (this.connectedAnimationProgress > 1.0f) {
+                    this.connectedAnimationProgress = 1.0f;
+                }
+                invalidateSelf();
+                return;
             }
-            invalidateSelf();
-        } else if (!this.connected && this.connectedAnimationProgress != 0.0f) {
-            this.connectedAnimationProgress -= ((float) dt) / 300.0f;
-            if (this.connectedAnimationProgress < 0.0f) {
-                this.connectedAnimationProgress = 0.0f;
+        }
+        if (!this.connected) {
+            f = this.connectedAnimationProgress;
+            if (f != 0.0f) {
+                this.connectedAnimationProgress = f - (((float) j) / 300.0f);
+                if (this.connectedAnimationProgress < 0.0f) {
+                    this.connectedAnimationProgress = 0.0f;
+                }
+                invalidateSelf();
             }
-            invalidateSelf();
         }
     }
 
-    public void setAlpha(int alpha) {
-    }
-
-    public void setColorFilter(ColorFilter cf) {
-        this.emptyDrawable.setColorFilter(cf);
-        this.fullDrawable.setColorFilter(cf);
-    }
-
-    public int getOpacity() {
-        return -2;
+    public void setColorFilter(ColorFilter colorFilter) {
+        this.emptyDrawable.setColorFilter(colorFilter);
+        this.fullDrawable.setColorFilter(colorFilter);
     }
 
     public int getIntrinsicWidth() {

@@ -18,8 +18,8 @@ public class TestActivity extends BaseFragment {
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle("Test");
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
-            public void onItemClick(int id) {
-                if (id == -1) {
+            public void onItemClick(int i) {
+                if (i == -1) {
                     TestActivity.this.finishFragment();
                 }
             }
@@ -27,28 +27,28 @@ public class TestActivity extends BaseFragment {
         FrameLayout frameLayout = new FrameLayout(context);
         frameLayout.setBackgroundColor(-16777216);
         this.fragmentView = frameLayout;
-        MediaActionDrawable actionDrawable2 = new MediaActionDrawable();
-        actionDrawable2.setIcon(2, false);
+        MediaActionDrawable mediaActionDrawable = new MediaActionDrawable();
+        mediaActionDrawable.setIcon(2, false);
         ImageView imageView = new ImageView(context);
-        imageView.setImageDrawable(actionDrawable2);
+        imageView.setImageDrawable(mediaActionDrawable);
         imageView.getClass();
-        actionDrawable2.setDelegate(TestActivity$$Lambda$0.get$Lambda(imageView));
+        mediaActionDrawable.setDelegate(new -$$Lambda$pmzqDjiJ3K2EPQb0Rq1MYHdTzL0(imageView));
         frameLayout.addView(imageView, LayoutHelper.createFrame(48, 48, 17));
-        frameLayout.setOnClickListener(new TestActivity$$Lambda$1(actionDrawable2));
+        frameLayout.setOnClickListener(new -$$Lambda$TestActivity$8SA6jL3MHG2fMuwJNTKXrp0KhUw(mediaActionDrawable));
         return this.fragmentView;
     }
 
-    static final /* synthetic */ void lambda$createView$0$TestActivity(MediaActionDrawable actionDrawable2, View v) {
-        int icon = actionDrawable2.getCurrentIcon();
-        boolean animated = true;
-        if (icon == 2) {
-            icon = 3;
-        } else if (icon == 3) {
-            icon = 0;
-        } else if (icon == 0) {
-            icon = 2;
-            animated = false;
+    static /* synthetic */ void lambda$createView$0(MediaActionDrawable mediaActionDrawable, View view) {
+        int currentIcon = mediaActionDrawable.getCurrentIcon();
+        boolean z = true;
+        if (currentIcon == 2) {
+            currentIcon = 3;
+        } else if (currentIcon == 3) {
+            currentIcon = 0;
+        } else if (currentIcon == 0) {
+            currentIcon = 2;
+            z = false;
         }
-        actionDrawable2.setIcon(icon, animated);
+        mediaActionDrawable.setIcon(currentIcon, z);
     }
 }

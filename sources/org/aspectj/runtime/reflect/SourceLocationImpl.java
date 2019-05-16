@@ -7,10 +7,10 @@ class SourceLocationImpl implements SourceLocation {
     int line;
     Class withinType;
 
-    SourceLocationImpl(Class withinType, String fileName, int line) {
-        this.withinType = withinType;
-        this.fileName = fileName;
-        this.line = line;
+    SourceLocationImpl(Class cls, String str, int i) {
+        this.withinType = cls;
+        this.fileName = str;
+        this.line = i;
     }
 
     public String getFileName() {
@@ -22,6 +22,10 @@ class SourceLocationImpl implements SourceLocation {
     }
 
     public String toString() {
-        return new StringBuffer().append(getFileName()).append(":").append(getLine()).toString();
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append(getFileName());
+        stringBuffer.append(":");
+        stringBuffer.append(getLine());
+        return stringBuffer.toString();
     }
 }

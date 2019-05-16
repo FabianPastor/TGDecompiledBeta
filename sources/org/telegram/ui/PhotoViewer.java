@@ -13,7 +13,6 @@ import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
@@ -34,8 +33,6 @@ import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.Settings;
-import android.support.annotation.Keep;
-import android.support.v4.content.FileProvider;
 import android.text.Layout.Alignment;
 import android.text.Selection;
 import android.text.Spannable;
@@ -66,7 +63,6 @@ import android.view.ViewTreeObserver.OnPreDrawListener;
 import android.view.WindowInsets;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
-import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -78,15 +74,13 @@ import android.widget.LinearLayout;
 import android.widget.Scroller;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.annotation.Keep;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.lang.reflect.Array;
-import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -94,25 +88,22 @@ import org.telegram.messenger.Bitmaps;
 import org.telegram.messenger.BringAppForegroundService;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
-import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DataQuery;
+import org.telegram.messenger.DataQuery.KeywordResult;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.Emoji;
-import org.telegram.messenger.EmojiSuggestion;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
+import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.ImageReceiver.BitmapHolder;
-import org.telegram.messenger.ImageReceiver.ImageReceiverDelegate;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaController.PhotoEntry;
-import org.telegram.messenger.MediaController.SavedFilterState;
 import org.telegram.messenger.MediaController.SearchImage;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.SecureDocument;
@@ -135,14 +126,14 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.BotInlineResult;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.Document;
-import org.telegram.tgnet.TLRPC.EncryptedChat;
 import org.telegram.tgnet.TLRPC.FileLocation;
-import org.telegram.tgnet.TLRPC.InputDocument;
-import org.telegram.tgnet.TLRPC.MessageEntity;
+import org.telegram.tgnet.TLRPC.Message;
+import org.telegram.tgnet.TLRPC.MessageAction;
+import org.telegram.tgnet.TLRPC.MessageMedia;
 import org.telegram.tgnet.TLRPC.PageBlock;
 import org.telegram.tgnet.TLRPC.Photo;
 import org.telegram.tgnet.TLRPC.PhotoSize;
-import org.telegram.tgnet.TLRPC.TL_inputPhoto;
+import org.telegram.tgnet.TLRPC.TL_fileLocationToBeDeprecated;
 import org.telegram.tgnet.TLRPC.TL_message;
 import org.telegram.tgnet.TLRPC.TL_messageActionEmpty;
 import org.telegram.tgnet.TLRPC.TL_messageActionUserUpdatedPhoto;
@@ -151,16 +142,16 @@ import org.telegram.tgnet.TLRPC.TL_messageMediaInvoice;
 import org.telegram.tgnet.TLRPC.TL_messageMediaPhoto;
 import org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
 import org.telegram.tgnet.TLRPC.TL_messageService;
-import org.telegram.tgnet.TLRPC.TL_photoEmpty;
 import org.telegram.tgnet.TLRPC.TL_webDocument;
 import org.telegram.tgnet.TLRPC.User;
+import org.telegram.tgnet.TLRPC.WebDocument;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
+import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
-import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
@@ -201,7 +192,7 @@ import org.telegram.ui.Components.VideoPlayer.VideoPlayerDelegate;
 import org.telegram.ui.Components.VideoTimelinePlayView;
 import org.telegram.ui.Components.VideoTimelinePlayView.VideoTimelineViewDelegate;
 
-public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, NotificationCenterDelegate {
+public class PhotoViewer implements NotificationCenterDelegate, OnGestureListener, OnDoubleTapListener {
     @SuppressLint({"StaticFieldLeak"})
     private static volatile PhotoViewer Instance = null;
     private static volatile PhotoViewer PipInstance = null;
@@ -223,7 +214,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
     private ActionBar actionBar;
     private AnimatorSet actionBarAnimator;
     private Context actvityContext;
-    private TextView allMediaItem;
+    private ActionBarMenuSubItem allMediaItem;
     private boolean allowMentions;
     private boolean allowShare;
     private float animateToScale;
@@ -234,7 +225,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
     private int animationInProgress;
     private long animationStartTime;
     private float animationValue;
-    private float[][] animationValues = ((float[][]) Array.newInstance(Float.TYPE, new int[]{2, 10}));
+    private float[][] animationValues = ((float[][]) Array.newInstance(float.class, new int[]{2, 10}));
     private boolean applying;
     private AspectRatioFrameLayout aspectRatioFrameLayout;
     private boolean attachedToWindow;
@@ -270,7 +261,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
     private AnimatorSet currentCaptionAnimation;
     private long currentDialogId;
     private int currentEditMode;
-    private FileLocation currentFileLocation;
+    private ImageLocation currentFileLocation;
     private String[] currentFileNames = new String[3];
     private int currentIndex;
     private AnimatorSet currentListViewAnimation;
@@ -282,7 +273,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
     private SecureDocument currentSecureDocument;
     private String currentSubtitle;
     private BitmapHolder currentThumb;
-    private FileLocation currentUserAvatarLocation = null;
+    private ImageLocation currentUserAvatarLocation = null;
     private boolean currentVideoFinishedLoading;
     private int dateOverride;
     private TextView dateTextView;
@@ -311,7 +302,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
     private AnimatorSet imageMoveAnimation;
     private ArrayList<MessageObject> imagesArr = new ArrayList();
     private ArrayList<Object> imagesArrLocals = new ArrayList();
-    private ArrayList<FileLocation> imagesArrLocations = new ArrayList();
+    private ArrayList<ImageLocation> imagesArrLocations = new ArrayList();
     private ArrayList<Integer> imagesArrLocationsSizes = new ArrayList();
     private ArrayList<MessageObject> imagesArrTemp = new ArrayList();
     private SparseArray<MessageObject>[] imagesByIds = new SparseArray[]{new SparseArray(), new SparseArray()};
@@ -350,7 +341,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
     private float minX;
     private float minY;
     private AnimatorSet miniProgressAnimator;
-    private Runnable miniProgressShowRunnable = new PhotoViewer$$Lambda$0(this);
+    private Runnable miniProgressShowRunnable = new -$$Lambda$PhotoViewer$kxaoiG79AFKAwlWEJtsCNV1PPvc(this);
     private RadialProgressView miniProgressView;
     private float moveStartX;
     private float moveStartY;
@@ -433,27 +424,27 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
     private long startedPlayTime;
     private boolean streamingAlertShown;
     private SurfaceTextureListener surfaceTextureListener = new SurfaceTextureListener() {
-        public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+        public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i2) {
         }
 
-        public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+        public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int i, int i2) {
         }
 
-        public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+        public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
             if (PhotoViewer.this.videoTextureView == null || !PhotoViewer.this.changingTextureView) {
                 return true;
             }
             if (PhotoViewer.this.switchingInlineMode) {
                 PhotoViewer.this.waitingForFirstTextureUpload = 2;
             }
-            PhotoViewer.this.videoTextureView.setSurfaceTexture(surface);
+            PhotoViewer.this.videoTextureView.setSurfaceTexture(surfaceTexture);
             PhotoViewer.this.videoTextureView.setVisibility(0);
             PhotoViewer.this.changingTextureView = false;
             PhotoViewer.this.containerView.invalidate();
             return false;
         }
 
-        public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+        public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
             if (PhotoViewer.this.waitingForFirstTextureUpload == 1) {
                 PhotoViewer.this.changedTextureView.getViewTreeObserver().addOnPreDrawListener(new OnPreDrawListener() {
                     public boolean onPreDraw() {
@@ -466,13 +457,12 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                                 PhotoViewer.this.currentBitmap = null;
                             }
                         }
-                        AndroidUtilities.runOnUIThread(new PhotoViewer$4$1$$Lambda$0(this));
+                        AndroidUtilities.runOnUIThread(new -$$Lambda$PhotoViewer$4$1$chreZZnt0YkItDSej6M4QHP4VU4(this));
                         PhotoViewer.this.waitingForFirstTextureUpload = 0;
                         return true;
                     }
 
-                    /* Access modifiers changed, original: final|synthetic */
-                    public final /* synthetic */ void lambda$onPreDraw$0$PhotoViewer$4$1() {
+                    public /* synthetic */ void lambda$onPreDraw$0$PhotoViewer$4$1() {
                         if (PhotoViewer.this.isInline) {
                             PhotoViewer.this.dismissInternal();
                         }
@@ -496,12 +486,12 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 try {
                     PhotoViewer.this.currentBitmap = Bitmaps.createBitmap(PhotoViewer.this.videoTextureView.getWidth(), PhotoViewer.this.videoTextureView.getHeight(), Config.ARGB_8888);
                     PhotoViewer.this.videoTextureView.getBitmap(PhotoViewer.this.currentBitmap);
-                } catch (Throwable e) {
+                } catch (Throwable th) {
                     if (PhotoViewer.this.currentBitmap != null) {
                         PhotoViewer.this.currentBitmap.recycle();
                         PhotoViewer.this.currentBitmap = null;
                     }
-                    FileLog.e(e);
+                    FileLog.e(th);
                 }
                 if (PhotoViewer.this.currentBitmap != null) {
                     PhotoViewer.this.textureImageView.setVisibility(0);
@@ -512,7 +502,11 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             }
             PhotoViewer.this.isInline = true;
             PhotoViewer.this.pipVideoView = new PipVideoView();
-            PhotoViewer.this.changedTextureView = PhotoViewer.this.pipVideoView.show(PhotoViewer.this.parentActivity, PhotoViewer.this, PhotoViewer.this.aspectRatioFrameLayout.getAspectRatio(), PhotoViewer.this.aspectRatioFrameLayout.getVideoRotation());
+            PhotoViewer photoViewer = PhotoViewer.this;
+            PipVideoView access$1500 = photoViewer.pipVideoView;
+            Activity access$2600 = PhotoViewer.this.parentActivity;
+            PhotoViewer photoViewer2 = PhotoViewer.this;
+            photoViewer.changedTextureView = access$1500.show(access$2600, photoViewer2, photoViewer2.aspectRatioFrameLayout.getAspectRatio(), PhotoViewer.this.aspectRatioFrameLayout.getVideoRotation());
             PhotoViewer.this.changedTextureView.setVisibility(4);
             PhotoViewer.this.aspectRatioFrameLayout.removeView(PhotoViewer.this.videoTextureView);
         }
@@ -532,13 +526,13 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
     private Runnable updateProgressRunnable = new Runnable() {
         public void run() {
             if (PhotoViewer.this.videoPlayer != null) {
-                float progress;
+                float currentPosition;
                 if (PhotoViewer.this.isCurrentVideo) {
                     if (!PhotoViewer.this.videoTimelineView.isDragging()) {
-                        progress = ((float) PhotoViewer.this.videoPlayer.getCurrentPosition()) / ((float) PhotoViewer.this.videoPlayer.getDuration());
+                        currentPosition = ((float) PhotoViewer.this.videoPlayer.getCurrentPosition()) / ((float) PhotoViewer.this.videoPlayer.getDuration());
                         if (PhotoViewer.this.inPreview || PhotoViewer.this.videoTimelineView.getVisibility() != 0) {
-                            PhotoViewer.this.videoTimelineView.setProgress(progress);
-                        } else if (progress >= PhotoViewer.this.videoTimelineView.getRightProgress()) {
+                            PhotoViewer.this.videoTimelineView.setProgress(currentPosition);
+                        } else if (currentPosition >= PhotoViewer.this.videoTimelineView.getRightProgress()) {
                             PhotoViewer.this.videoTimelineView.setProgress(0.0f);
                             PhotoViewer.this.videoPlayer.seekTo((long) ((int) (PhotoViewer.this.videoTimelineView.getLeftProgress() * ((float) PhotoViewer.this.videoPlayer.getDuration()))));
                             if (PhotoViewer.this.muteVideo) {
@@ -548,68 +542,61 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                             }
                             PhotoViewer.this.containerView.invalidate();
                         } else {
-                            progress -= PhotoViewer.this.videoTimelineView.getLeftProgress();
-                            if (progress < 0.0f) {
-                                progress = 0.0f;
+                            currentPosition -= PhotoViewer.this.videoTimelineView.getLeftProgress();
+                            if (currentPosition < 0.0f) {
+                                currentPosition = 0.0f;
                             }
-                            progress /= PhotoViewer.this.videoTimelineView.getRightProgress() - PhotoViewer.this.videoTimelineView.getLeftProgress();
-                            if (progress > 1.0f) {
-                                progress = 1.0f;
+                            currentPosition /= PhotoViewer.this.videoTimelineView.getRightProgress() - PhotoViewer.this.videoTimelineView.getLeftProgress();
+                            if (currentPosition > 1.0f) {
+                                currentPosition = 1.0f;
                             }
-                            PhotoViewer.this.videoTimelineView.setProgress(progress);
+                            PhotoViewer.this.videoTimelineView.setProgress(currentPosition);
                         }
                         PhotoViewer.this.updateVideoPlayerTime();
                     }
                 } else if (!PhotoViewer.this.videoPlayerSeekbar.isDragging()) {
-                    float bufferedProgress;
-                    progress = ((float) PhotoViewer.this.videoPlayer.getCurrentPosition()) / ((float) PhotoViewer.this.videoPlayer.getDuration());
+                    float f;
+                    currentPosition = ((float) PhotoViewer.this.videoPlayer.getCurrentPosition()) / ((float) PhotoViewer.this.videoPlayer.getDuration());
                     if (PhotoViewer.this.currentVideoFinishedLoading) {
-                        bufferedProgress = 1.0f;
+                        f = 1.0f;
                     } else {
-                        long newTime = SystemClock.elapsedRealtime();
-                        if (Math.abs(newTime - PhotoViewer.this.lastBufferedPositionCheck) >= 500) {
+                        long elapsedRealtime = SystemClock.elapsedRealtime();
+                        if (Math.abs(elapsedRealtime - PhotoViewer.this.lastBufferedPositionCheck) >= 500) {
                             if (PhotoViewer.this.isStreaming) {
-                                float access$1200;
-                                FileLoader instance = FileLoader.getInstance(PhotoViewer.this.currentAccount);
-                                if (PhotoViewer.this.seekToProgressPending != 0.0f) {
-                                    access$1200 = PhotoViewer.this.seekToProgressPending;
-                                } else {
-                                    access$1200 = progress;
-                                }
-                                bufferedProgress = instance.getBufferedProgressFromPosition(access$1200, PhotoViewer.this.currentFileNames[0]);
+                                f = FileLoader.getInstance(PhotoViewer.this.currentAccount).getBufferedProgressFromPosition(PhotoViewer.this.seekToProgressPending != 0.0f ? PhotoViewer.this.seekToProgressPending : currentPosition, PhotoViewer.this.currentFileNames[0]);
                             } else {
-                                bufferedProgress = 1.0f;
+                                f = 1.0f;
                             }
-                            PhotoViewer.this.lastBufferedPositionCheck = newTime;
+                            PhotoViewer.this.lastBufferedPositionCheck = elapsedRealtime;
                         } else {
-                            bufferedProgress = -1.0f;
+                            f = -1.0f;
                         }
                     }
                     if (PhotoViewer.this.inPreview || PhotoViewer.this.videoTimelineView.getVisibility() != 0) {
                         if (PhotoViewer.this.seekToProgressPending == 0.0f) {
-                            PhotoViewer.this.videoPlayerSeekbar.setProgress(progress);
+                            PhotoViewer.this.videoPlayerSeekbar.setProgress(currentPosition);
                         }
-                        if (bufferedProgress != -1.0f) {
-                            PhotoViewer.this.videoPlayerSeekbar.setBufferedProgress(bufferedProgress);
+                        if (f != -1.0f) {
+                            PhotoViewer.this.videoPlayerSeekbar.setBufferedProgress(f);
                             if (PhotoViewer.this.pipVideoView != null) {
-                                PhotoViewer.this.pipVideoView.setBufferedProgress(bufferedProgress);
+                                PhotoViewer.this.pipVideoView.setBufferedProgress(f);
                             }
                         }
-                    } else if (progress >= PhotoViewer.this.videoTimelineView.getRightProgress()) {
+                    } else if (currentPosition >= PhotoViewer.this.videoTimelineView.getRightProgress()) {
                         PhotoViewer.this.videoPlayer.pause();
                         PhotoViewer.this.videoPlayerSeekbar.setProgress(0.0f);
                         PhotoViewer.this.videoPlayer.seekTo((long) ((int) (PhotoViewer.this.videoTimelineView.getLeftProgress() * ((float) PhotoViewer.this.videoPlayer.getDuration()))));
                         PhotoViewer.this.containerView.invalidate();
                     } else {
-                        progress -= PhotoViewer.this.videoTimelineView.getLeftProgress();
-                        if (progress < 0.0f) {
-                            progress = 0.0f;
+                        currentPosition -= PhotoViewer.this.videoTimelineView.getLeftProgress();
+                        if (currentPosition < 0.0f) {
+                            currentPosition = 0.0f;
                         }
-                        progress /= PhotoViewer.this.videoTimelineView.getRightProgress() - PhotoViewer.this.videoTimelineView.getLeftProgress();
-                        if (progress > 1.0f) {
-                            progress = 1.0f;
+                        currentPosition /= PhotoViewer.this.videoTimelineView.getRightProgress() - PhotoViewer.this.videoTimelineView.getLeftProgress();
+                        if (currentPosition > 1.0f) {
+                            currentPosition = 1.0f;
                         }
-                        PhotoViewer.this.videoPlayerSeekbar.setProgress(progress);
+                        PhotoViewer.this.videoPlayerSeekbar.setProgress(currentPosition);
                     }
                     PhotoViewer.this.videoPlayerControlFrameLayout.invalidate();
                     PhotoViewer.this.updateVideoPlayerTime();
@@ -647,6 +634,310 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
     private FrameLayout windowView;
     private boolean zoomAnimation;
     private boolean zooming;
+
+    private class BackgroundDrawable extends ColorDrawable {
+        private boolean allowDrawContent;
+        private Runnable drawRunnable;
+
+        public BackgroundDrawable(int i) {
+            super(i);
+        }
+
+        @Keep
+        public void setAlpha(int i) {
+            if (PhotoViewer.this.parentActivity instanceof LaunchActivity) {
+                boolean z = (PhotoViewer.this.isVisible && i == 255) ? false : true;
+                this.allowDrawContent = z;
+                ((LaunchActivity) PhotoViewer.this.parentActivity).drawerLayoutContainer.setAllowDrawContent(this.allowDrawContent);
+                if (PhotoViewer.this.parentAlert != null) {
+                    if (!this.allowDrawContent) {
+                        AndroidUtilities.runOnUIThread(new -$$Lambda$PhotoViewer$BackgroundDrawable$pDidiNsUGVGYtvuU76vLRyxH30U(this), 50);
+                    } else if (PhotoViewer.this.parentAlert != null) {
+                        PhotoViewer.this.parentAlert.setAllowDrawContent(this.allowDrawContent);
+                    }
+                }
+            }
+            super.setAlpha(i);
+        }
+
+        public /* synthetic */ void lambda$setAlpha$0$PhotoViewer$BackgroundDrawable() {
+            if (PhotoViewer.this.parentAlert != null) {
+                PhotoViewer.this.parentAlert.setAllowDrawContent(this.allowDrawContent);
+            }
+        }
+
+        public void draw(Canvas canvas) {
+            super.draw(canvas);
+            if (getAlpha() != 0) {
+                Runnable runnable = this.drawRunnable;
+                if (runnable != null) {
+                    AndroidUtilities.runOnUIThread(runnable);
+                    this.drawRunnable = null;
+                }
+            }
+        }
+    }
+
+    private class CounterView extends View {
+        private int currentCount = 0;
+        private int height;
+        private Paint paint;
+        private RectF rect;
+        private float rotation;
+        private StaticLayout staticLayout;
+        private TextPaint textPaint = new TextPaint(1);
+        private int width;
+
+        public CounterView(Context context) {
+            super(context);
+            this.textPaint.setTextSize((float) AndroidUtilities.dp(18.0f));
+            this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            this.textPaint.setColor(-1);
+            this.paint = new Paint(1);
+            this.paint.setColor(-1);
+            this.paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
+            this.paint.setStyle(Style.STROKE);
+            this.paint.setStrokeJoin(Join.ROUND);
+            this.rect = new RectF();
+            setCount(0);
+        }
+
+        @Keep
+        public void setScaleX(float f) {
+            super.setScaleX(f);
+            invalidate();
+        }
+
+        @Keep
+        public void setRotationX(float f) {
+            this.rotation = f;
+            invalidate();
+        }
+
+        public float getRotationX() {
+            return this.rotation;
+        }
+
+        public void setCount(int i) {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("");
+            stringBuilder.append(Math.max(1, i));
+            this.staticLayout = new StaticLayout(stringBuilder.toString(), this.textPaint, AndroidUtilities.dp(100.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+            this.width = (int) Math.ceil((double) this.staticLayout.getLineWidth(0));
+            this.height = this.staticLayout.getLineBottom(0);
+            AnimatorSet animatorSet = new AnimatorSet();
+            if (i == 0) {
+                r3 = new Animator[4];
+                r3[0] = ObjectAnimator.ofFloat(this, View.SCALE_X, new float[]{0.0f});
+                r3[1] = ObjectAnimator.ofFloat(this, View.SCALE_Y, new float[]{0.0f});
+                r3[2] = ObjectAnimator.ofInt(this.paint, AnimationProperties.PAINT_ALPHA, new int[]{0});
+                r3[3] = ObjectAnimator.ofInt(this.textPaint, AnimationProperties.PAINT_ALPHA, new int[]{0});
+                animatorSet.playTogether(r3);
+                animatorSet.setInterpolator(new DecelerateInterpolator());
+            } else {
+                int i2 = this.currentCount;
+                if (i2 == 0) {
+                    animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, View.SCALE_X, new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this, View.SCALE_Y, new float[]{0.0f, 1.0f}), ObjectAnimator.ofInt(this.paint, AnimationProperties.PAINT_ALPHA, new int[]{0, 255}), ObjectAnimator.ofInt(this.textPaint, AnimationProperties.PAINT_ALPHA, new int[]{0, 255})});
+                    animatorSet.setInterpolator(new DecelerateInterpolator());
+                } else if (i < i2) {
+                    animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, View.SCALE_X, new float[]{1.1f, 1.0f}), ObjectAnimator.ofFloat(this, View.SCALE_Y, new float[]{1.1f, 1.0f})});
+                    animatorSet.setInterpolator(new OvershootInterpolator());
+                } else {
+                    animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, View.SCALE_X, new float[]{0.9f, 1.0f}), ObjectAnimator.ofFloat(this, View.SCALE_Y, new float[]{0.9f, 1.0f})});
+                    animatorSet.setInterpolator(new OvershootInterpolator());
+                }
+            }
+            animatorSet.setDuration(180);
+            animatorSet.start();
+            requestLayout();
+            this.currentCount = i;
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onMeasure(int i, int i2) {
+            super.onMeasure(MeasureSpec.makeMeasureSpec(Math.max(this.width + AndroidUtilities.dp(20.0f), AndroidUtilities.dp(30.0f)), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(40.0f), NUM));
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
+            int measuredHeight = getMeasuredHeight() / 2;
+            this.paint.setAlpha(255);
+            this.rect.set((float) AndroidUtilities.dp(1.0f), (float) (measuredHeight - AndroidUtilities.dp(14.0f)), (float) (getMeasuredWidth() - AndroidUtilities.dp(1.0f)), (float) (measuredHeight + AndroidUtilities.dp(14.0f)));
+            canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(15.0f), (float) AndroidUtilities.dp(15.0f), this.paint);
+            if (this.staticLayout != null) {
+                this.textPaint.setAlpha((int) ((1.0f - this.rotation) * 255.0f));
+                canvas.save();
+                canvas.translate((float) ((getMeasuredWidth() - this.width) / 2), (((float) ((getMeasuredHeight() - this.height) / 2)) + AndroidUtilities.dpf2(0.2f)) + (this.rotation * ((float) AndroidUtilities.dp(5.0f))));
+                this.staticLayout.draw(canvas);
+                canvas.restore();
+                this.paint.setAlpha((int) (this.rotation * 255.0f));
+                measuredHeight = (int) this.rect.centerX();
+                int centerY = (int) (((float) ((int) this.rect.centerY())) - ((((float) AndroidUtilities.dp(5.0f)) * (1.0f - this.rotation)) + ((float) AndroidUtilities.dp(3.0f))));
+                canvas.drawLine((float) (AndroidUtilities.dp(0.5f) + measuredHeight), (float) (centerY - AndroidUtilities.dp(0.5f)), (float) (measuredHeight - AndroidUtilities.dp(6.0f)), (float) (AndroidUtilities.dp(6.0f) + centerY), this.paint);
+                canvas.drawLine((float) (measuredHeight - AndroidUtilities.dp(0.5f)), (float) (centerY - AndroidUtilities.dp(0.5f)), (float) (measuredHeight + AndroidUtilities.dp(6.0f)), (float) (centerY + AndroidUtilities.dp(6.0f)), this.paint);
+            }
+        }
+    }
+
+    public static class LinkMovementMethodMy extends LinkMovementMethod {
+        public boolean onTouchEvent(TextView textView, Spannable spannable, MotionEvent motionEvent) {
+            try {
+                boolean onTouchEvent = super.onTouchEvent(textView, spannable, motionEvent);
+                if (motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {
+                    Selection.removeSelection(spannable);
+                }
+                return onTouchEvent;
+            } catch (Exception e) {
+                FileLog.e(e);
+                return false;
+            }
+        }
+    }
+
+    private class PhotoProgressView {
+        private float alpha = 1.0f;
+        private float animatedAlphaValue = 1.0f;
+        private float animatedProgressValue = 0.0f;
+        private float animationProgressStart = 0.0f;
+        private int backgroundState = -1;
+        private float currentProgress = 0.0f;
+        private long currentProgressTime = 0;
+        private long lastUpdateTime = 0;
+        private View parent;
+        private int previousBackgroundState = -2;
+        private RectF progressRect = new RectF();
+        private float radOffset = 0.0f;
+        private float scale = 1.0f;
+        private int size = AndroidUtilities.dp(64.0f);
+
+        public PhotoProgressView(Context context, View view) {
+            if (PhotoViewer.decelerateInterpolator == null) {
+                PhotoViewer.decelerateInterpolator = new DecelerateInterpolator(1.5f);
+                PhotoViewer.progressPaint = new Paint(1);
+                PhotoViewer.progressPaint.setStyle(Style.STROKE);
+                PhotoViewer.progressPaint.setStrokeCap(Cap.ROUND);
+                PhotoViewer.progressPaint.setStrokeWidth((float) AndroidUtilities.dp(3.0f));
+                PhotoViewer.progressPaint.setColor(-1);
+            }
+            this.parent = view;
+        }
+
+        private void updateAnimation() {
+            long currentTimeMillis = System.currentTimeMillis();
+            long j = currentTimeMillis - this.lastUpdateTime;
+            if (j > 18) {
+                j = 18;
+            }
+            this.lastUpdateTime = currentTimeMillis;
+            if (this.animatedProgressValue != 1.0f) {
+                this.radOffset += ((float) (360 * j)) / 3000.0f;
+                float f = this.currentProgress;
+                float f2 = this.animationProgressStart;
+                float f3 = f - f2;
+                if (f3 > 0.0f) {
+                    this.currentProgressTime += j;
+                    if (this.currentProgressTime >= 300) {
+                        this.animatedProgressValue = f;
+                        this.animationProgressStart = f;
+                        this.currentProgressTime = 0;
+                    } else {
+                        this.animatedProgressValue = f2 + (f3 * PhotoViewer.decelerateInterpolator.getInterpolation(((float) this.currentProgressTime) / 300.0f));
+                    }
+                }
+                this.parent.invalidate();
+            }
+            if (this.animatedProgressValue >= 1.0f && this.previousBackgroundState != -2) {
+                this.animatedAlphaValue -= ((float) j) / 200.0f;
+                if (this.animatedAlphaValue <= 0.0f) {
+                    this.animatedAlphaValue = 0.0f;
+                    this.previousBackgroundState = -2;
+                }
+                this.parent.invalidate();
+            }
+        }
+
+        public void setProgress(float f, boolean z) {
+            if (z) {
+                this.animationProgressStart = this.animatedProgressValue;
+            } else {
+                this.animatedProgressValue = f;
+                this.animationProgressStart = f;
+            }
+            this.currentProgress = f;
+            this.currentProgressTime = 0;
+        }
+
+        public void setBackgroundState(int i, boolean z) {
+            if (this.backgroundState != i || !z) {
+                this.lastUpdateTime = System.currentTimeMillis();
+                if (z) {
+                    int i2 = this.backgroundState;
+                    if (i2 != i) {
+                        this.previousBackgroundState = i2;
+                        this.animatedAlphaValue = 1.0f;
+                        this.backgroundState = i;
+                        this.parent.invalidate();
+                    }
+                }
+                this.previousBackgroundState = -2;
+                this.backgroundState = i;
+                this.parent.invalidate();
+            }
+        }
+
+        public void setAlpha(float f) {
+            this.alpha = f;
+        }
+
+        public void setScale(float f) {
+            this.scale = f;
+        }
+
+        public void onDraw(Canvas canvas) {
+            Drawable drawable;
+            int i = (int) (((float) this.size) * this.scale);
+            int access$3400 = (PhotoViewer.this.getContainerViewWidth() - i) / 2;
+            int access$3500 = (PhotoViewer.this.getContainerViewHeight() - i) / 2;
+            int i2 = this.previousBackgroundState;
+            if (i2 >= 0 && i2 < 4) {
+                drawable = PhotoViewer.progressDrawables[this.previousBackgroundState];
+                if (drawable != null) {
+                    drawable.setAlpha((int) ((this.animatedAlphaValue * 255.0f) * this.alpha));
+                    drawable.setBounds(access$3400, access$3500, access$3400 + i, access$3500 + i);
+                    drawable.draw(canvas);
+                }
+            }
+            i2 = this.backgroundState;
+            if (i2 >= 0 && i2 < 4) {
+                drawable = PhotoViewer.progressDrawables[this.backgroundState];
+                if (drawable != null) {
+                    if (this.previousBackgroundState != -2) {
+                        drawable.setAlpha((int) (((1.0f - this.animatedAlphaValue) * 255.0f) * this.alpha));
+                    } else {
+                        drawable.setAlpha((int) (this.alpha * 255.0f));
+                    }
+                    drawable.setBounds(access$3400, access$3500, access$3400 + i, access$3500 + i);
+                    drawable.draw(canvas);
+                }
+            }
+            i2 = this.backgroundState;
+            if (!(i2 == 0 || i2 == 1)) {
+                i2 = this.previousBackgroundState;
+                if (!(i2 == 0 || i2 == 1)) {
+                    return;
+                }
+            }
+            int dp = AndroidUtilities.dp(4.0f);
+            if (this.previousBackgroundState != -2) {
+                PhotoViewer.progressPaint.setAlpha((int) ((this.animatedAlphaValue * 255.0f) * this.alpha));
+            } else {
+                PhotoViewer.progressPaint.setAlpha((int) (this.alpha * 255.0f));
+            }
+            this.progressRect.set((float) (access$3400 + dp), (float) (access$3500 + dp), (float) ((access$3400 + i) - dp), (float) ((access$3500 + i) - dp));
+            canvas.drawArc(this.progressRect, this.radOffset - 0.049804688f, Math.max(4.0f, this.animatedProgressValue * 360.0f), false, PhotoViewer.progressPaint);
+            updateAnimation();
+        }
+    }
 
     public interface PhotoViewerProvider {
         boolean allowCaption();
@@ -696,700 +987,6 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         void willSwitchFromPhoto(MessageObject messageObject, FileLocation fileLocation, int i);
     }
 
-    public static class EmptyPhotoViewerProvider implements PhotoViewerProvider {
-        public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int index, boolean needPreview) {
-            return null;
-        }
-
-        public BitmapHolder getThumbForPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
-            return null;
-        }
-
-        public void willSwitchFromPhoto(MessageObject messageObject, FileLocation fileLocation, int index) {
-        }
-
-        public void willHidePhotoViewer() {
-        }
-
-        public int setPhotoUnchecked(Object photoEntry) {
-            return -1;
-        }
-
-        public boolean isPhotoChecked(int index) {
-            return false;
-        }
-
-        public int setPhotoChecked(int index, VideoEditedInfo videoEditedInfo) {
-            return -1;
-        }
-
-        public boolean cancelButtonPressed() {
-            return true;
-        }
-
-        public void sendButtonPressed(int index, VideoEditedInfo videoEditedInfo) {
-        }
-
-        public int getSelectedCount() {
-            return 0;
-        }
-
-        public void updatePhotoAtIndex(int index) {
-        }
-
-        public boolean allowCaption() {
-            return true;
-        }
-
-        public boolean scaleToFill() {
-            return false;
-        }
-
-        public void toggleGroupPhotosEnabled() {
-        }
-
-        public ArrayList<Object> getSelectedPhotosOrder() {
-            return null;
-        }
-
-        public HashMap<Object, Object> getSelectedPhotos() {
-            return null;
-        }
-
-        public boolean canScrollAway() {
-            return true;
-        }
-
-        public boolean allowGroupPhotos() {
-            return true;
-        }
-
-        public void needAddMorePhotos() {
-        }
-
-        public int getPhotoIndex(int index) {
-            return -1;
-        }
-
-        public void deleteImageAtIndex(int index) {
-        }
-
-        public String getDeleteMessageString() {
-            return null;
-        }
-
-        public boolean canCaptureMorePhotos() {
-            return true;
-        }
-    }
-
-    private class BackgroundDrawable extends ColorDrawable {
-        private boolean allowDrawContent;
-        private Runnable drawRunnable;
-
-        public BackgroundDrawable(int color) {
-            super(color);
-        }
-
-        @Keep
-        public void setAlpha(int alpha) {
-            if (PhotoViewer.this.parentActivity instanceof LaunchActivity) {
-                boolean z = (PhotoViewer.this.isVisible && alpha == 255) ? false : true;
-                this.allowDrawContent = z;
-                ((LaunchActivity) PhotoViewer.this.parentActivity).drawerLayoutContainer.setAllowDrawContent(this.allowDrawContent);
-                if (PhotoViewer.this.parentAlert != null) {
-                    if (!this.allowDrawContent) {
-                        AndroidUtilities.runOnUIThread(new PhotoViewer$BackgroundDrawable$$Lambda$0(this), 50);
-                    } else if (PhotoViewer.this.parentAlert != null) {
-                        PhotoViewer.this.parentAlert.setAllowDrawContent(this.allowDrawContent);
-                    }
-                }
-            }
-            super.setAlpha(alpha);
-        }
-
-        /* Access modifiers changed, original: final|synthetic */
-        public final /* synthetic */ void lambda$setAlpha$0$PhotoViewer$BackgroundDrawable() {
-            if (PhotoViewer.this.parentAlert != null) {
-                PhotoViewer.this.parentAlert.setAllowDrawContent(this.allowDrawContent);
-            }
-        }
-
-        public void draw(Canvas canvas) {
-            super.draw(canvas);
-            if (getAlpha() != 0 && this.drawRunnable != null) {
-                AndroidUtilities.runOnUIThread(this.drawRunnable);
-                this.drawRunnable = null;
-            }
-        }
-    }
-
-    private class CounterView extends View {
-        private int currentCount = 0;
-        private int height;
-        private Paint paint;
-        private RectF rect;
-        private float rotation;
-        private StaticLayout staticLayout;
-        private TextPaint textPaint = new TextPaint(1);
-        private int width;
-
-        public CounterView(Context context) {
-            super(context);
-            this.textPaint.setTextSize((float) AndroidUtilities.dp(18.0f));
-            this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            this.textPaint.setColor(-1);
-            this.paint = new Paint(1);
-            this.paint.setColor(-1);
-            this.paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
-            this.paint.setStyle(Style.STROKE);
-            this.paint.setStrokeJoin(Join.ROUND);
-            this.rect = new RectF();
-            setCount(0);
-        }
-
-        @Keep
-        public void setScaleX(float scaleX) {
-            super.setScaleX(scaleX);
-            invalidate();
-        }
-
-        @Keep
-        public void setRotationX(float rotationX) {
-            this.rotation = rotationX;
-            invalidate();
-        }
-
-        public float getRotationX() {
-            return this.rotation;
-        }
-
-        public void setCount(int value) {
-            this.staticLayout = new StaticLayout("" + Math.max(1, value), this.textPaint, AndroidUtilities.dp(100.0f), Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-            this.width = (int) Math.ceil((double) this.staticLayout.getLineWidth(0));
-            this.height = this.staticLayout.getLineBottom(0);
-            AnimatorSet animatorSet = new AnimatorSet();
-            if (value == 0) {
-                r0 = new Animator[4];
-                r0[0] = ObjectAnimator.ofFloat(this, View.SCALE_X, new float[]{0.0f});
-                r0[1] = ObjectAnimator.ofFloat(this, View.SCALE_Y, new float[]{0.0f});
-                r0[2] = ObjectAnimator.ofInt(this.paint, AnimationProperties.PAINT_ALPHA, new int[]{0});
-                r0[3] = ObjectAnimator.ofInt(this.textPaint, AnimationProperties.PAINT_ALPHA, new int[]{0});
-                animatorSet.playTogether(r0);
-                animatorSet.setInterpolator(new DecelerateInterpolator());
-            } else if (this.currentCount == 0) {
-                animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, View.SCALE_X, new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this, View.SCALE_Y, new float[]{0.0f, 1.0f}), ObjectAnimator.ofInt(this.paint, AnimationProperties.PAINT_ALPHA, new int[]{0, 255}), ObjectAnimator.ofInt(this.textPaint, AnimationProperties.PAINT_ALPHA, new int[]{0, 255})});
-                animatorSet.setInterpolator(new DecelerateInterpolator());
-            } else if (value < this.currentCount) {
-                animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, View.SCALE_X, new float[]{1.1f, 1.0f}), ObjectAnimator.ofFloat(this, View.SCALE_Y, new float[]{1.1f, 1.0f})});
-                animatorSet.setInterpolator(new OvershootInterpolator());
-            } else {
-                animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, View.SCALE_X, new float[]{0.9f, 1.0f}), ObjectAnimator.ofFloat(this, View.SCALE_Y, new float[]{0.9f, 1.0f})});
-                animatorSet.setInterpolator(new OvershootInterpolator());
-            }
-            animatorSet.setDuration(180);
-            animatorSet.start();
-            requestLayout();
-            this.currentCount = value;
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(Math.max(this.width + AndroidUtilities.dp(20.0f), AndroidUtilities.dp(30.0f)), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(40.0f), NUM));
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onDraw(Canvas canvas) {
-            int cy = getMeasuredHeight() / 2;
-            this.paint.setAlpha(255);
-            this.rect.set((float) AndroidUtilities.dp(1.0f), (float) (cy - AndroidUtilities.dp(14.0f)), (float) (getMeasuredWidth() - AndroidUtilities.dp(1.0f)), (float) (AndroidUtilities.dp(14.0f) + cy));
-            canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(15.0f), (float) AndroidUtilities.dp(15.0f), this.paint);
-            if (this.staticLayout != null) {
-                this.textPaint.setAlpha((int) ((1.0f - this.rotation) * 255.0f));
-                canvas.save();
-                canvas.translate((float) ((getMeasuredWidth() - this.width) / 2), (((float) ((getMeasuredHeight() - this.height) / 2)) + AndroidUtilities.dpf2(0.2f)) + (this.rotation * ((float) AndroidUtilities.dp(5.0f))));
-                this.staticLayout.draw(canvas);
-                canvas.restore();
-                this.paint.setAlpha((int) (this.rotation * 255.0f));
-                int cx = (int) this.rect.centerX();
-                cy = (int) (((float) ((int) this.rect.centerY())) - ((((float) AndroidUtilities.dp(5.0f)) * (1.0f - this.rotation)) + ((float) AndroidUtilities.dp(3.0f))));
-                canvas.drawLine((float) (AndroidUtilities.dp(0.5f) + cx), (float) (cy - AndroidUtilities.dp(0.5f)), (float) (cx - AndroidUtilities.dp(6.0f)), (float) (AndroidUtilities.dp(6.0f) + cy), this.paint);
-                canvas.drawLine((float) (cx - AndroidUtilities.dp(0.5f)), (float) (cy - AndroidUtilities.dp(0.5f)), (float) (AndroidUtilities.dp(6.0f) + cx), (float) (AndroidUtilities.dp(6.0f) + cy), this.paint);
-            }
-        }
-    }
-
-    private class FrameLayoutDrawer extends SizeNotifierFrameLayoutPhoto {
-        private Paint paint = new Paint();
-
-        public FrameLayoutDrawer(Context context) {
-            super(context);
-            setWillNotDraw(false);
-            this.paint.setColor(NUM);
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-            int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-            setMeasuredDimension(widthSize, heightSize);
-            measureChildWithMargins(PhotoViewer.this.captionEditText, widthMeasureSpec, 0, heightMeasureSpec, 0);
-            int inputFieldHeight = PhotoViewer.this.captionEditText.getMeasuredHeight();
-            widthSize -= getPaddingRight() + getPaddingLeft();
-            heightSize -= getPaddingBottom();
-            int childCount = getChildCount();
-            for (int i = 0; i < childCount; i++) {
-                View child = getChildAt(i);
-                if (!(child.getVisibility() == 8 || child == PhotoViewer.this.captionEditText)) {
-                    if (child == PhotoViewer.this.aspectRatioFrameLayout) {
-                        int i2;
-                        int i3 = AndroidUtilities.displaySize.y;
-                        if (VERSION.SDK_INT >= 21) {
-                            i2 = AndroidUtilities.statusBarHeight;
-                        } else {
-                            i2 = 0;
-                        }
-                        child.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(i2 + i3, NUM));
-                    } else if (!PhotoViewer.this.captionEditText.isPopupView(child)) {
-                        measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0);
-                    } else if (!AndroidUtilities.isInMultiwindow) {
-                        child.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(child.getLayoutParams().height, NUM));
-                    } else if (AndroidUtilities.isTablet()) {
-                        child.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(320.0f), (heightSize - inputFieldHeight) - AndroidUtilities.statusBarHeight), NUM));
-                    } else {
-                        child.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec((heightSize - inputFieldHeight) - AndroidUtilities.statusBarHeight, NUM));
-                    }
-                }
-            }
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onLayout(boolean changed, int _l, int t, int _r, int _b) {
-            int count = getChildCount();
-            int paddingBottom = (getKeyboardHeight() > AndroidUtilities.dp(20.0f) || AndroidUtilities.isInMultiwindow) ? 0 : PhotoViewer.this.captionEditText.getEmojiPadding();
-            for (int i = 0; i < count; i++) {
-                View child = getChildAt(i);
-                if (child.getVisibility() != 8) {
-                    int l;
-                    int r;
-                    int b;
-                    int childLeft;
-                    int childTop;
-                    if (child == PhotoViewer.this.aspectRatioFrameLayout) {
-                        l = _l;
-                        r = _r;
-                        b = _b;
-                    } else {
-                        l = _l + getPaddingLeft();
-                        r = _r - getPaddingRight();
-                        b = _b - getPaddingBottom();
-                    }
-                    FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) child.getLayoutParams();
-                    int width = child.getMeasuredWidth();
-                    int height = child.getMeasuredHeight();
-                    int gravity = lp.gravity;
-                    if (gravity == -1) {
-                        gravity = 51;
-                    }
-                    int verticalGravity = gravity & 112;
-                    switch ((gravity & 7) & 7) {
-                        case 1:
-                            childLeft = ((((r - l) - width) / 2) + lp.leftMargin) - lp.rightMargin;
-                            break;
-                        case 5:
-                            childLeft = ((r - l) - width) - lp.rightMargin;
-                            break;
-                        default:
-                            childLeft = lp.leftMargin;
-                            break;
-                    }
-                    switch (verticalGravity) {
-                        case 16:
-                            childTop = (((((b - paddingBottom) - t) - height) / 2) + lp.topMargin) - lp.bottomMargin;
-                            break;
-                        case 48:
-                            childTop = lp.topMargin;
-                            break;
-                        case 80:
-                            childTop = (((b - paddingBottom) - t) - height) - lp.bottomMargin;
-                            break;
-                        default:
-                            childTop = lp.topMargin;
-                            break;
-                    }
-                    if (child == PhotoViewer.this.mentionListView) {
-                        childTop -= PhotoViewer.this.captionEditText.getMeasuredHeight();
-                    } else if (PhotoViewer.this.captionEditText.isPopupView(child)) {
-                        if (AndroidUtilities.isInMultiwindow) {
-                            childTop = (PhotoViewer.this.captionEditText.getTop() - child.getMeasuredHeight()) + AndroidUtilities.dp(1.0f);
-                        } else {
-                            childTop = PhotoViewer.this.captionEditText.getBottom();
-                        }
-                    } else if (child == PhotoViewer.this.selectedPhotosListView) {
-                        childTop = PhotoViewer.this.actionBar.getMeasuredHeight();
-                    } else if (child == PhotoViewer.this.captionTextView || child == PhotoViewer.this.switchCaptionTextView) {
-                        if (!PhotoViewer.this.groupedPhotosListView.currentPhotos.isEmpty()) {
-                            childTop -= PhotoViewer.this.groupedPhotosListView.getMeasuredHeight();
-                        }
-                    } else if (PhotoViewer.this.hintTextView != null && child == PhotoViewer.this.hintTextView) {
-                        childTop = PhotoViewer.this.selectedPhotosListView.getBottom() + AndroidUtilities.dp(3.0f);
-                    } else if (child == PhotoViewer.this.cameraItem) {
-                        int top = PhotoViewer.this.pickerView.getTop();
-                        float f = (PhotoViewer.this.sendPhotoType == 4 || PhotoViewer.this.sendPhotoType == 5) ? 40.0f : 15.0f;
-                        childTop = (top - AndroidUtilities.dp(f)) - PhotoViewer.this.cameraItem.getMeasuredHeight();
-                    }
-                    child.layout(childLeft + l, childTop, (childLeft + width) + l, childTop + height);
-                }
-            }
-            notifyHeightChanged();
-        }
-
-        /* Access modifiers changed, original: protected */
-        public void onDraw(Canvas canvas) {
-            PhotoViewer.this.onDraw(canvas);
-            if (VERSION.SDK_INT >= 21 && AndroidUtilities.statusBarHeight != 0 && PhotoViewer.this.actionBar != null) {
-                this.paint.setAlpha((int) ((PhotoViewer.this.actionBar.getAlpha() * 255.0f) * 0.2f));
-                canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) AndroidUtilities.statusBarHeight, this.paint);
-                this.paint.setAlpha((int) ((PhotoViewer.this.actionBar.getAlpha() * 255.0f) * 0.498f));
-                if (getPaddingRight() > 0) {
-                    canvas.drawRect((float) (getMeasuredWidth() - getPaddingRight()), 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.paint);
-                }
-                if (getPaddingLeft() > 0) {
-                    canvas.drawRect(0.0f, 0.0f, (float) getPaddingLeft(), (float) getMeasuredHeight(), this.paint);
-                }
-            }
-        }
-
-        /* Access modifiers changed, original: protected */
-        public boolean drawChild(Canvas canvas, View child, long drawingTime) {
-            if (child == PhotoViewer.this.mentionListView || child == PhotoViewer.this.captionEditText) {
-                if (!PhotoViewer.this.captionEditText.isPopupShowing() && PhotoViewer.this.captionEditText.getEmojiPadding() == 0 && ((AndroidUtilities.usingHardwareInput && PhotoViewer.this.captionEditText.getTag() == null) || getKeyboardHeight() == 0)) {
-                    return false;
-                }
-            } else if (child == PhotoViewer.this.cameraItem || child == PhotoViewer.this.pickerView || child == PhotoViewer.this.pickerViewSendButton || child == PhotoViewer.this.captionTextView || (PhotoViewer.this.muteItem.getVisibility() == 0 && child == PhotoViewer.this.bottomLayout)) {
-                int paddingBottom;
-                if (getKeyboardHeight() > AndroidUtilities.dp(20.0f) || AndroidUtilities.isInMultiwindow) {
-                    paddingBottom = 0;
-                } else {
-                    paddingBottom = PhotoViewer.this.captionEditText.getEmojiPadding();
-                }
-                if (PhotoViewer.this.captionEditText.isPopupShowing() || ((AndroidUtilities.usingHardwareInput && PhotoViewer.this.captionEditText.getTag() != null) || getKeyboardHeight() > 0 || paddingBottom != 0)) {
-                    PhotoViewer.this.bottomTouchEnabled = false;
-                    return false;
-                }
-                PhotoViewer.this.bottomTouchEnabled = true;
-            } else if (child == PhotoViewer.this.checkImageView || child == PhotoViewer.this.photosCounterView) {
-                if (PhotoViewer.this.captionEditText.getTag() != null) {
-                    PhotoViewer.this.bottomTouchEnabled = false;
-                    return false;
-                }
-                PhotoViewer.this.bottomTouchEnabled = true;
-            } else if (child == PhotoViewer.this.miniProgressView) {
-                return false;
-            }
-            try {
-                if (child == PhotoViewer.this.aspectRatioFrameLayout || !super.drawChild(canvas, child, drawingTime)) {
-                    return false;
-                }
-                return true;
-            } catch (Throwable th) {
-                return true;
-            }
-        }
-    }
-
-    public static class LinkMovementMethodMy extends LinkMovementMethod {
-        public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
-            try {
-                boolean result = super.onTouchEvent(widget, buffer, event);
-                if (event.getAction() != 1 && event.getAction() != 3) {
-                    return result;
-                }
-                Selection.removeSelection(buffer);
-                return result;
-            } catch (Exception e) {
-                FileLog.e(e);
-                return false;
-            }
-        }
-    }
-
-    private class ListAdapter extends SelectionAdapter {
-        private Context mContext;
-
-        public ListAdapter(Context context) {
-            this.mContext = context;
-        }
-
-        public boolean isEnabled(ViewHolder holder) {
-            return true;
-        }
-
-        public int getItemCount() {
-            if (PhotoViewer.this.placeProvider == null || PhotoViewer.this.placeProvider.getSelectedPhotosOrder() == null) {
-                return 0;
-            }
-            if (PhotoViewer.this.placeProvider.allowGroupPhotos()) {
-                return PhotoViewer.this.placeProvider.getSelectedPhotosOrder().size() + 1;
-            }
-            return PhotoViewer.this.placeProvider.getSelectedPhotosOrder().size();
-        }
-
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view;
-            switch (viewType) {
-                case 0:
-                    View cell = new PhotoPickerPhotoCell(this.mContext, false);
-                    cell.checkFrame.setOnClickListener(new PhotoViewer$ListAdapter$$Lambda$0(this));
-                    view = cell;
-                    break;
-                default:
-                    View imageView = new ImageView(this.mContext) {
-                        /* Access modifiers changed, original: protected */
-                        public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                            super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(66.0f), NUM), MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(heightMeasureSpec), NUM));
-                        }
-                    };
-                    imageView.setScaleType(ScaleType.CENTER);
-                    imageView.setImageResource(NUM);
-                    imageView.setFocusable(true);
-                    view = imageView;
-                    break;
-            }
-            return new Holder(view);
-        }
-
-        /* Access modifiers changed, original: final|synthetic */
-        public final /* synthetic */ void lambda$onCreateViewHolder$0$PhotoViewer$ListAdapter(View v) {
-            Object photoEntry = ((View) v.getParent()).getTag();
-            int idx = PhotoViewer.this.imagesArrLocals.indexOf(photoEntry);
-            int num;
-            if (idx >= 0) {
-                num = PhotoViewer.this.placeProvider.setPhotoChecked(idx, PhotoViewer.this.getCurrentVideoEditedInfo());
-                boolean checked = PhotoViewer.this.placeProvider.isPhotoChecked(idx);
-                if (idx == PhotoViewer.this.currentIndex) {
-                    PhotoViewer.this.checkImageView.setChecked(-1, false, true);
-                }
-                if (num >= 0) {
-                    if (PhotoViewer.this.placeProvider.allowGroupPhotos()) {
-                        num++;
-                    }
-                    PhotoViewer.this.selectedPhotosAdapter.notifyItemRemoved(num);
-                }
-                PhotoViewer.this.updateSelectedCount();
-                return;
-            }
-            num = PhotoViewer.this.placeProvider.setPhotoUnchecked(photoEntry);
-            if (num >= 0) {
-                if (PhotoViewer.this.placeProvider.allowGroupPhotos()) {
-                    num++;
-                }
-                PhotoViewer.this.selectedPhotosAdapter.notifyItemRemoved(num);
-                PhotoViewer.this.updateSelectedCount();
-            }
-        }
-
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            switch (holder.getItemViewType()) {
-                case 0:
-                    PhotoPickerPhotoCell cell = holder.itemView;
-                    cell.itemWidth = AndroidUtilities.dp(82.0f);
-                    BackupImageView imageView = cell.photoImage;
-                    imageView.setOrientation(0, true);
-                    ArrayList<Object> order = PhotoViewer.this.placeProvider.getSelectedPhotosOrder();
-                    if (PhotoViewer.this.placeProvider.allowGroupPhotos()) {
-                        position--;
-                    }
-                    PhotoEntry object = PhotoViewer.this.placeProvider.getSelectedPhotos().get(order.get(position));
-                    if (object instanceof PhotoEntry) {
-                        PhotoEntry photoEntry = object;
-                        cell.setTag(photoEntry);
-                        cell.videoInfoContainer.setVisibility(4);
-                        if (photoEntry.thumbPath != null) {
-                            imageView.setImage(photoEntry.thumbPath, null, this.mContext.getResources().getDrawable(NUM));
-                        } else if (photoEntry.path != null) {
-                            imageView.setOrientation(photoEntry.orientation, true);
-                            if (photoEntry.isVideo) {
-                                cell.videoInfoContainer.setVisibility(0);
-                                int seconds = photoEntry.duration - ((photoEntry.duration / 60) * 60);
-                                cell.videoTextView.setText(String.format("%d:%02d", new Object[]{Integer.valueOf(minutes), Integer.valueOf(seconds)}));
-                                imageView.setImage("vthumb://" + photoEntry.imageId + ":" + photoEntry.path, null, this.mContext.getResources().getDrawable(NUM));
-                            } else {
-                                imageView.setImage("thumb://" + photoEntry.imageId + ":" + photoEntry.path, null, this.mContext.getResources().getDrawable(NUM));
-                            }
-                        } else {
-                            imageView.setImageResource(NUM);
-                        }
-                        cell.setChecked(-1, true, false);
-                        cell.checkBox.setVisibility(0);
-                        return;
-                    } else if (object instanceof SearchImage) {
-                        SearchImage photoEntry2 = (SearchImage) object;
-                        cell.setTag(photoEntry2);
-                        cell.setImage(photoEntry2);
-                        cell.videoInfoContainer.setVisibility(4);
-                        cell.setChecked(-1, true, false);
-                        cell.checkBox.setVisibility(0);
-                        return;
-                    } else {
-                        return;
-                    }
-                case 1:
-                    CharSequence string;
-                    ImageView imageView2 = holder.itemView;
-                    imageView2.setColorFilter(SharedConfig.groupPhotosEnabled ? new PorterDuffColorFilter(-10043398, Mode.MULTIPLY) : null);
-                    if (SharedConfig.groupPhotosEnabled) {
-                        string = LocaleController.getString("GroupPhotosHelp", NUM);
-                    } else {
-                        string = LocaleController.getString("SinglePhotosHelp", NUM);
-                    }
-                    imageView2.setContentDescription(string);
-                    return;
-                default:
-                    return;
-            }
-        }
-
-        public int getItemViewType(int i) {
-            if (i == 0 && PhotoViewer.this.placeProvider.allowGroupPhotos()) {
-                return 1;
-            }
-            return 0;
-        }
-    }
-
-    private class PhotoProgressView {
-        private float alpha = 1.0f;
-        private float animatedAlphaValue = 1.0f;
-        private float animatedProgressValue = 0.0f;
-        private float animationProgressStart = 0.0f;
-        private int backgroundState = -1;
-        private float currentProgress = 0.0f;
-        private long currentProgressTime = 0;
-        private long lastUpdateTime = 0;
-        private View parent;
-        private int previousBackgroundState = -2;
-        private RectF progressRect = new RectF();
-        private float radOffset = 0.0f;
-        private float scale = 1.0f;
-        private int size = AndroidUtilities.dp(64.0f);
-
-        public PhotoProgressView(Context context, View parentView) {
-            if (PhotoViewer.decelerateInterpolator == null) {
-                PhotoViewer.decelerateInterpolator = new DecelerateInterpolator(1.5f);
-                PhotoViewer.progressPaint = new Paint(1);
-                PhotoViewer.progressPaint.setStyle(Style.STROKE);
-                PhotoViewer.progressPaint.setStrokeCap(Cap.ROUND);
-                PhotoViewer.progressPaint.setStrokeWidth((float) AndroidUtilities.dp(3.0f));
-                PhotoViewer.progressPaint.setColor(-1);
-            }
-            this.parent = parentView;
-        }
-
-        private void updateAnimation() {
-            long newTime = System.currentTimeMillis();
-            long dt = newTime - this.lastUpdateTime;
-            if (dt > 18) {
-                dt = 18;
-            }
-            this.lastUpdateTime = newTime;
-            if (this.animatedProgressValue != 1.0f) {
-                this.radOffset += ((float) (360 * dt)) / 3000.0f;
-                float progressDiff = this.currentProgress - this.animationProgressStart;
-                if (progressDiff > 0.0f) {
-                    this.currentProgressTime += dt;
-                    if (this.currentProgressTime >= 300) {
-                        this.animatedProgressValue = this.currentProgress;
-                        this.animationProgressStart = this.currentProgress;
-                        this.currentProgressTime = 0;
-                    } else {
-                        this.animatedProgressValue = this.animationProgressStart + (PhotoViewer.decelerateInterpolator.getInterpolation(((float) this.currentProgressTime) / 300.0f) * progressDiff);
-                    }
-                }
-                this.parent.invalidate();
-            }
-            if (this.animatedProgressValue >= 1.0f && this.previousBackgroundState != -2) {
-                this.animatedAlphaValue -= ((float) dt) / 200.0f;
-                if (this.animatedAlphaValue <= 0.0f) {
-                    this.animatedAlphaValue = 0.0f;
-                    this.previousBackgroundState = -2;
-                }
-                this.parent.invalidate();
-            }
-        }
-
-        public void setProgress(float value, boolean animated) {
-            if (animated) {
-                this.animationProgressStart = this.animatedProgressValue;
-            } else {
-                this.animatedProgressValue = value;
-                this.animationProgressStart = value;
-            }
-            this.currentProgress = value;
-            this.currentProgressTime = 0;
-        }
-
-        public void setBackgroundState(int state, boolean animated) {
-            if (this.backgroundState != state || !animated) {
-                this.lastUpdateTime = System.currentTimeMillis();
-                if (!animated || this.backgroundState == state) {
-                    this.previousBackgroundState = -2;
-                } else {
-                    this.previousBackgroundState = this.backgroundState;
-                    this.animatedAlphaValue = 1.0f;
-                }
-                this.backgroundState = state;
-                this.parent.invalidate();
-            }
-        }
-
-        public void setAlpha(float value) {
-            this.alpha = value;
-        }
-
-        public void setScale(float value) {
-            this.scale = value;
-        }
-
-        public void onDraw(Canvas canvas) {
-            Drawable drawable;
-            int sizeScaled = (int) (((float) this.size) * this.scale);
-            int x = (PhotoViewer.this.getContainerViewWidth() - sizeScaled) / 2;
-            int y = (PhotoViewer.this.getContainerViewHeight() - sizeScaled) / 2;
-            if (this.previousBackgroundState >= 0 && this.previousBackgroundState < 4) {
-                drawable = PhotoViewer.progressDrawables[this.previousBackgroundState];
-                if (drawable != null) {
-                    drawable.setAlpha((int) ((this.animatedAlphaValue * 255.0f) * this.alpha));
-                    drawable.setBounds(x, y, x + sizeScaled, y + sizeScaled);
-                    drawable.draw(canvas);
-                }
-            }
-            if (this.backgroundState >= 0 && this.backgroundState < 4) {
-                drawable = PhotoViewer.progressDrawables[this.backgroundState];
-                if (drawable != null) {
-                    if (this.previousBackgroundState != -2) {
-                        drawable.setAlpha((int) (((1.0f - this.animatedAlphaValue) * 255.0f) * this.alpha));
-                    } else {
-                        drawable.setAlpha((int) (this.alpha * 255.0f));
-                    }
-                    drawable.setBounds(x, y, x + sizeScaled, y + sizeScaled);
-                    drawable.draw(canvas);
-                }
-            }
-            if (this.backgroundState == 0 || this.backgroundState == 1 || this.previousBackgroundState == 0 || this.previousBackgroundState == 1) {
-                int diff = AndroidUtilities.dp(4.0f);
-                if (this.previousBackgroundState != -2) {
-                    PhotoViewer.progressPaint.setAlpha((int) ((this.animatedAlphaValue * 255.0f) * this.alpha));
-                } else {
-                    PhotoViewer.progressPaint.setAlpha((int) (this.alpha * 255.0f));
-                }
-                this.progressRect.set((float) (x + diff), (float) (y + diff), (float) ((x + sizeScaled) - diff), (float) ((y + sizeScaled) - diff));
-                canvas.drawArc(this.progressRect, this.radOffset - 0.049804688f, Math.max(4.0f, 360.0f * this.animatedProgressValue), false, PhotoViewer.progressPaint);
-                updateAnimation();
-            }
-        }
-    }
-
     public static class PlaceProviderObject {
         public int clipBottomAddition;
         public int clipTopAddition;
@@ -1424,20 +1021,25 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             this.textPaint.setColor(-3289651);
         }
 
-        public boolean onTouchEvent(MotionEvent event) {
+        public boolean onTouchEvent(MotionEvent motionEvent) {
+            float x = motionEvent.getX();
             boolean z = false;
-            float x = event.getX();
-            int a;
-            int cx;
-            if (event.getAction() == 0) {
+            int i;
+            int i2;
+            int i3;
+            int i4;
+            if (motionEvent.getAction() == 0) {
                 getParent().requestDisallowInterceptTouchEvent(true);
-                a = 0;
-                while (a < PhotoViewer.this.compressionsCount) {
-                    cx = (this.sideSide + (((this.lineSize + (this.gapSize * 2)) + this.circleSize) * a)) + (this.circleSize / 2);
-                    if (x <= ((float) (cx - AndroidUtilities.dp(15.0f))) || x >= ((float) (AndroidUtilities.dp(15.0f) + cx))) {
-                        a++;
+                i = 0;
+                while (i < PhotoViewer.this.compressionsCount) {
+                    i2 = this.sideSide;
+                    i3 = this.lineSize + (this.gapSize * 2);
+                    i4 = this.circleSize;
+                    i2 = (i2 + ((i3 + i4) * i)) + (i4 / 2);
+                    if (x <= ((float) (i2 - AndroidUtilities.dp(15.0f))) || x >= ((float) (i2 + AndroidUtilities.dp(15.0f)))) {
+                        i++;
                     } else {
-                        if (a == PhotoViewer.this.selectedCompression) {
+                        if (i == PhotoViewer.this.selectedCompression) {
                             z = true;
                         }
                         this.startMoving = z;
@@ -1445,35 +1047,43 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         this.startMovingQuality = PhotoViewer.this.selectedCompression;
                     }
                 }
-            } else if (event.getAction() == 2) {
+            } else if (motionEvent.getAction() == 2) {
                 if (this.startMoving) {
                     if (Math.abs(this.startX - x) >= AndroidUtilities.getPixelsInCM(0.5f, true)) {
                         this.moving = true;
                         this.startMoving = false;
                     }
                 } else if (this.moving) {
-                    a = 0;
-                    while (a < PhotoViewer.this.compressionsCount) {
-                        cx = (this.sideSide + (((this.lineSize + (this.gapSize * 2)) + this.circleSize) * a)) + (this.circleSize / 2);
-                        int diff = ((this.lineSize / 2) + (this.circleSize / 2)) + this.gapSize;
-                        if (x <= ((float) (cx - diff)) || x >= ((float) (cx + diff))) {
-                            a++;
-                        } else if (PhotoViewer.this.selectedCompression != a) {
-                            PhotoViewer.this.selectedCompression = a;
+                    i = 0;
+                    while (i < PhotoViewer.this.compressionsCount) {
+                        i2 = this.sideSide;
+                        int i5 = this.lineSize;
+                        i3 = this.gapSize;
+                        i4 = (i3 * 2) + i5;
+                        int i6 = this.circleSize;
+                        i2 = (i2 + ((i4 + i6) * i)) + (i6 / 2);
+                        i5 = ((i5 / 2) + (i6 / 2)) + i3;
+                        if (x <= ((float) (i2 - i5)) || x >= ((float) (i2 + i5))) {
+                            i++;
+                        } else if (PhotoViewer.this.selectedCompression != i) {
+                            PhotoViewer.this.selectedCompression = i;
                             PhotoViewer.this.didChangedCompressionLevel(false);
                             invalidate();
                         }
                     }
                 }
-            } else if (event.getAction() == 1 || event.getAction() == 3) {
+            } else if (motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {
                 if (!this.moving) {
-                    a = 0;
-                    while (a < PhotoViewer.this.compressionsCount) {
-                        cx = (this.sideSide + (((this.lineSize + (this.gapSize * 2)) + this.circleSize) * a)) + (this.circleSize / 2);
-                        if (x <= ((float) (cx - AndroidUtilities.dp(15.0f))) || x >= ((float) (AndroidUtilities.dp(15.0f) + cx))) {
-                            a++;
-                        } else if (PhotoViewer.this.selectedCompression != a) {
-                            PhotoViewer.this.selectedCompression = a;
+                    i = 0;
+                    while (i < PhotoViewer.this.compressionsCount) {
+                        i2 = this.sideSide;
+                        i3 = this.lineSize + (this.gapSize * 2);
+                        i4 = this.circleSize;
+                        i2 = (i2 + ((i3 + i4) * i)) + (i4 / 2);
+                        if (x <= ((float) (i2 - AndroidUtilities.dp(15.0f))) || x >= ((float) (i2 + AndroidUtilities.dp(15.0f)))) {
+                            i++;
+                        } else if (PhotoViewer.this.selectedCompression != i) {
+                            PhotoViewer.this.selectedCompression = i;
                             PhotoViewer.this.didChangedCompressionLevel(true);
                             invalidate();
                         }
@@ -1488,8 +1098,8 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         }
 
         /* Access modifiers changed, original: protected */
-        public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        public void onMeasure(int i, int i2) {
+            super.onMeasure(i, i2);
             this.circleSize = AndroidUtilities.dp(12.0f);
             this.gapSize = AndroidUtilities.dp(2.0f);
             this.sideSide = AndroidUtilities.dp(18.0f);
@@ -1502,46 +1112,625 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             } else {
                 this.lineSize = ((getMeasuredWidth() - (this.circleSize * PhotoViewer.this.compressionsCount)) - (this.gapSize * 8)) - (this.sideSide * 2);
             }
-            int cy = (getMeasuredHeight() / 2) + AndroidUtilities.dp(6.0f);
-            int a = 0;
-            while (a < PhotoViewer.this.compressionsCount) {
-                String text;
-                int cx = (this.sideSide + (((this.lineSize + (this.gapSize * 2)) + this.circleSize) * a)) + (this.circleSize / 2);
-                if (a <= PhotoViewer.this.selectedCompression) {
+            int measuredHeight = (getMeasuredHeight() / 2) + AndroidUtilities.dp(6.0f);
+            int i = 0;
+            while (i < PhotoViewer.this.compressionsCount) {
+                String stringBuilder;
+                int i2 = this.sideSide;
+                int i3 = this.lineSize + (this.gapSize * 2);
+                int i4 = this.circleSize;
+                i2 = (i2 + ((i3 + i4) * i)) + (i4 / 2);
+                if (i <= PhotoViewer.this.selectedCompression) {
                     this.paint.setColor(-11292945);
                 } else {
                     this.paint.setColor(NUM);
                 }
-                if (a == PhotoViewer.this.compressionsCount - 1) {
-                    text = Math.min(PhotoViewer.this.originalWidth, PhotoViewer.this.originalHeight) + "p";
-                } else if (a == 0) {
-                    text = "240p";
-                } else if (a == 1) {
-                    text = "360p";
-                } else if (a == 2) {
-                    text = "480p";
+                if (i == PhotoViewer.this.compressionsCount - 1) {
+                    StringBuilder stringBuilder2 = new StringBuilder();
+                    stringBuilder2.append(Math.min(PhotoViewer.this.originalWidth, PhotoViewer.this.originalHeight));
+                    stringBuilder2.append("p");
+                    stringBuilder = stringBuilder2.toString();
                 } else {
-                    text = "720p";
+                    stringBuilder = i == 0 ? "240p" : i == 1 ? "360p" : i == 2 ? "480p" : "720p";
                 }
-                float width = this.textPaint.measureText(text);
-                canvas.drawCircle((float) cx, (float) cy, a == PhotoViewer.this.selectedCompression ? (float) AndroidUtilities.dp(8.0f) : (float) (this.circleSize / 2), this.paint);
-                canvas.drawText(text, ((float) cx) - (width / 2.0f), (float) (cy - AndroidUtilities.dp(16.0f)), this.textPaint);
-                if (a != 0) {
-                    int x = ((cx - (this.circleSize / 2)) - this.gapSize) - this.lineSize;
-                    canvas.drawRect((float) x, (float) (cy - AndroidUtilities.dp(1.0f)), (float) (this.lineSize + x), (float) (AndroidUtilities.dp(2.0f) + cy), this.paint);
+                float measureText = this.textPaint.measureText(stringBuilder);
+                float f = (float) i2;
+                canvas.drawCircle(f, (float) measuredHeight, (float) (i == PhotoViewer.this.selectedCompression ? AndroidUtilities.dp(8.0f) : this.circleSize / 2), this.paint);
+                canvas.drawText(stringBuilder, f - (measureText / 2.0f), (float) (measuredHeight - AndroidUtilities.dp(16.0f)), this.textPaint);
+                if (i != 0) {
+                    i2 = ((i2 - (this.circleSize / 2)) - this.gapSize) - this.lineSize;
+                    canvas.drawRect((float) i2, (float) (measuredHeight - AndroidUtilities.dp(1.0f)), (float) (i2 + this.lineSize), (float) (AndroidUtilities.dp(2.0f) + measuredHeight), this.paint);
                 }
-                a++;
+                i++;
             }
         }
     }
 
-    /* Access modifiers changed, original: final|bridge|synthetic */
-    public final /* bridge */ /* synthetic */ void bridge$lambda$0$PhotoViewer() {
-        hideHint();
+    public static class EmptyPhotoViewerProvider implements PhotoViewerProvider {
+        public boolean allowCaption() {
+            return true;
+        }
+
+        public boolean allowGroupPhotos() {
+            return true;
+        }
+
+        public boolean canCaptureMorePhotos() {
+            return true;
+        }
+
+        public boolean canScrollAway() {
+            return true;
+        }
+
+        public boolean cancelButtonPressed() {
+            return true;
+        }
+
+        public void deleteImageAtIndex(int i) {
+        }
+
+        public String getDeleteMessageString() {
+            return null;
+        }
+
+        public int getPhotoIndex(int i) {
+            return -1;
+        }
+
+        public PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, FileLocation fileLocation, int i, boolean z) {
+            return null;
+        }
+
+        public int getSelectedCount() {
+            return 0;
+        }
+
+        public HashMap<Object, Object> getSelectedPhotos() {
+            return null;
+        }
+
+        public ArrayList<Object> getSelectedPhotosOrder() {
+            return null;
+        }
+
+        public BitmapHolder getThumbForPhoto(MessageObject messageObject, FileLocation fileLocation, int i) {
+            return null;
+        }
+
+        public boolean isPhotoChecked(int i) {
+            return false;
+        }
+
+        public void needAddMorePhotos() {
+        }
+
+        public boolean scaleToFill() {
+            return false;
+        }
+
+        public void sendButtonPressed(int i, VideoEditedInfo videoEditedInfo) {
+        }
+
+        public int setPhotoChecked(int i, VideoEditedInfo videoEditedInfo) {
+            return -1;
+        }
+
+        public int setPhotoUnchecked(Object obj) {
+            return -1;
+        }
+
+        public void toggleGroupPhotosEnabled() {
+        }
+
+        public void updatePhotoAtIndex(int i) {
+        }
+
+        public void willHidePhotoViewer() {
+        }
+
+        public void willSwitchFromPhoto(MessageObject messageObject, FileLocation fileLocation, int i) {
+        }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$new$0$PhotoViewer() {
+    private class FrameLayoutDrawer extends SizeNotifierFrameLayoutPhoto {
+        private Paint paint = new Paint();
+
+        public FrameLayoutDrawer(Context context) {
+            super(context);
+            setWillNotDraw(false);
+            this.paint.setColor(NUM);
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onMeasure(int i, int i2) {
+            int size = MeasureSpec.getSize(i);
+            int size2 = MeasureSpec.getSize(i2);
+            setMeasuredDimension(size, size2);
+            measureChildWithMargins(PhotoViewer.this.captionEditText, i, 0, i2, 0);
+            int measuredHeight = PhotoViewer.this.captionEditText.getMeasuredHeight();
+            size -= getPaddingRight() + getPaddingLeft();
+            size2 -= getPaddingBottom();
+            int childCount = getChildCount();
+            for (int i3 = 0; i3 < childCount; i3++) {
+                View childAt = getChildAt(i3);
+                if (!(childAt.getVisibility() == 8 || childAt == PhotoViewer.this.captionEditText)) {
+                    if (childAt == PhotoViewer.this.aspectRatioFrameLayout) {
+                        childAt.measure(i, MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.y + (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0), NUM));
+                    } else if (!PhotoViewer.this.captionEditText.isPopupView(childAt)) {
+                        measureChildWithMargins(childAt, i, 0, i2, 0);
+                    } else if (!AndroidUtilities.isInMultiwindow) {
+                        childAt.measure(MeasureSpec.makeMeasureSpec(size, NUM), MeasureSpec.makeMeasureSpec(childAt.getLayoutParams().height, NUM));
+                    } else if (AndroidUtilities.isTablet()) {
+                        childAt.measure(MeasureSpec.makeMeasureSpec(size, NUM), MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(320.0f), (size2 - measuredHeight) - AndroidUtilities.statusBarHeight), NUM));
+                    } else {
+                        childAt.measure(MeasureSpec.makeMeasureSpec(size, NUM), MeasureSpec.makeMeasureSpec((size2 - measuredHeight) - AndroidUtilities.statusBarHeight, NUM));
+                    }
+                }
+            }
+        }
+
+        /* Access modifiers changed, original: protected */
+        /* JADX WARNING: Removed duplicated region for block: B:38:0x00c0  */
+        /* JADX WARNING: Removed duplicated region for block: B:36:0x00b3  */
+        /* JADX WARNING: Removed duplicated region for block: B:32:0x009f  */
+        /* JADX WARNING: Removed duplicated region for block: B:25:0x008a  */
+        /* JADX WARNING: Removed duplicated region for block: B:36:0x00b3  */
+        /* JADX WARNING: Removed duplicated region for block: B:38:0x00c0  */
+        public void onLayout(boolean r16, int r17, int r18, int r19, int r20) {
+            /*
+            r15 = this;
+            r0 = r15;
+            r1 = r15.getChildCount();
+            r2 = r15.getKeyboardHeight();
+            r3 = NUM; // 0x41a00000 float:20.0 double:5.439686476E-315;
+            r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
+            r4 = 0;
+            if (r2 > r3) goto L_0x0021;
+        L_0x0012:
+            r2 = org.telegram.messenger.AndroidUtilities.isInMultiwindow;
+            if (r2 != 0) goto L_0x0021;
+        L_0x0016:
+            r2 = org.telegram.ui.PhotoViewer.this;
+            r2 = r2.captionEditText;
+            r2 = r2.getEmojiPadding();
+            goto L_0x0022;
+        L_0x0021:
+            r2 = 0;
+        L_0x0022:
+            if (r4 >= r1) goto L_0x019a;
+        L_0x0024:
+            r3 = r15.getChildAt(r4);
+            r5 = r3.getVisibility();
+            r6 = 8;
+            if (r5 != r6) goto L_0x0032;
+        L_0x0030:
+            goto L_0x0196;
+        L_0x0032:
+            r5 = org.telegram.ui.PhotoViewer.this;
+            r5 = r5.aspectRatioFrameLayout;
+            if (r3 != r5) goto L_0x0041;
+        L_0x003a:
+            r5 = r17;
+            r6 = r19;
+            r7 = r20;
+            goto L_0x0053;
+        L_0x0041:
+            r5 = r15.getPaddingLeft();
+            r5 = r17 + r5;
+            r6 = r15.getPaddingRight();
+            r6 = r19 - r6;
+            r7 = r15.getPaddingBottom();
+            r7 = r20 - r7;
+        L_0x0053:
+            r8 = r3.getLayoutParams();
+            r8 = (android.widget.FrameLayout.LayoutParams) r8;
+            r9 = r3.getMeasuredWidth();
+            r10 = r3.getMeasuredHeight();
+            r11 = r8.gravity;
+            r12 = -1;
+            if (r11 != r12) goto L_0x0068;
+        L_0x0066:
+            r11 = 51;
+        L_0x0068:
+            r12 = r11 & 7;
+            r11 = r11 & 112;
+            r12 = r12 & 7;
+            r13 = 5;
+            r14 = 1;
+            if (r12 == r14) goto L_0x007c;
+        L_0x0072:
+            if (r12 == r13) goto L_0x0077;
+        L_0x0074:
+            r6 = r8.leftMargin;
+            goto L_0x0086;
+        L_0x0077:
+            r6 = r6 - r5;
+            r6 = r6 - r9;
+            r12 = r8.rightMargin;
+            goto L_0x0085;
+        L_0x007c:
+            r6 = r6 - r5;
+            r6 = r6 - r9;
+            r6 = r6 / 2;
+            r12 = r8.leftMargin;
+            r6 = r6 + r12;
+            r12 = r8.rightMargin;
+        L_0x0085:
+            r6 = r6 - r12;
+        L_0x0086:
+            r12 = 16;
+            if (r11 == r12) goto L_0x009f;
+        L_0x008a:
+            r12 = 48;
+            if (r11 == r12) goto L_0x009c;
+        L_0x008e:
+            r12 = 80;
+            if (r11 == r12) goto L_0x0095;
+        L_0x0092:
+            r7 = r8.topMargin;
+            goto L_0x00ab;
+        L_0x0095:
+            r7 = r7 - r2;
+            r7 = r7 - r18;
+            r7 = r7 - r10;
+            r8 = r8.bottomMargin;
+            goto L_0x00aa;
+        L_0x009c:
+            r7 = r8.topMargin;
+            goto L_0x00ab;
+        L_0x009f:
+            r7 = r7 - r2;
+            r7 = r7 - r18;
+            r7 = r7 - r10;
+            r7 = r7 / 2;
+            r11 = r8.topMargin;
+            r7 = r7 + r11;
+            r8 = r8.bottomMargin;
+        L_0x00aa:
+            r7 = r7 - r8;
+        L_0x00ab:
+            r8 = org.telegram.ui.PhotoViewer.this;
+            r8 = r8.mentionListView;
+            if (r3 != r8) goto L_0x00c0;
+        L_0x00b3:
+            r8 = org.telegram.ui.PhotoViewer.this;
+            r8 = r8.captionEditText;
+            r8 = r8.getMeasuredHeight();
+        L_0x00bd:
+            r7 = r7 - r8;
+            goto L_0x018e;
+        L_0x00c0:
+            r8 = org.telegram.ui.PhotoViewer.this;
+            r8 = r8.captionEditText;
+            r8 = r8.isPopupView(r3);
+            if (r8 == 0) goto L_0x00f4;
+        L_0x00cc:
+            r7 = org.telegram.messenger.AndroidUtilities.isInMultiwindow;
+            if (r7 == 0) goto L_0x00e8;
+        L_0x00d0:
+            r7 = org.telegram.ui.PhotoViewer.this;
+            r7 = r7.captionEditText;
+            r7 = r7.getTop();
+            r8 = r3.getMeasuredHeight();
+            r7 = r7 - r8;
+            r8 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+            r8 = org.telegram.messenger.AndroidUtilities.dp(r8);
+        L_0x00e5:
+            r7 = r7 + r8;
+            goto L_0x018e;
+        L_0x00e8:
+            r7 = org.telegram.ui.PhotoViewer.this;
+            r7 = r7.captionEditText;
+            r7 = r7.getBottom();
+            goto L_0x018e;
+        L_0x00f4:
+            r8 = org.telegram.ui.PhotoViewer.this;
+            r8 = r8.selectedPhotosListView;
+            if (r3 != r8) goto L_0x0108;
+        L_0x00fc:
+            r7 = org.telegram.ui.PhotoViewer.this;
+            r7 = r7.actionBar;
+            r7 = r7.getMeasuredHeight();
+            goto L_0x018e;
+        L_0x0108:
+            r8 = org.telegram.ui.PhotoViewer.this;
+            r8 = r8.captionTextView;
+            if (r3 == r8) goto L_0x0174;
+        L_0x0110:
+            r8 = org.telegram.ui.PhotoViewer.this;
+            r8 = r8.switchCaptionTextView;
+            if (r3 != r8) goto L_0x0119;
+        L_0x0118:
+            goto L_0x0174;
+        L_0x0119:
+            r8 = org.telegram.ui.PhotoViewer.this;
+            r8 = r8.hintTextView;
+            if (r8 == 0) goto L_0x013a;
+        L_0x0121:
+            r8 = org.telegram.ui.PhotoViewer.this;
+            r8 = r8.hintTextView;
+            if (r3 != r8) goto L_0x013a;
+        L_0x0129:
+            r7 = org.telegram.ui.PhotoViewer.this;
+            r7 = r7.selectedPhotosListView;
+            r7 = r7.getBottom();
+            r8 = NUM; // 0x40400000 float:3.0 double:5.325712093E-315;
+            r8 = org.telegram.messenger.AndroidUtilities.dp(r8);
+            goto L_0x00e5;
+        L_0x013a:
+            r8 = org.telegram.ui.PhotoViewer.this;
+            r8 = r8.cameraItem;
+            if (r3 != r8) goto L_0x018e;
+        L_0x0142:
+            r7 = org.telegram.ui.PhotoViewer.this;
+            r7 = r7.pickerView;
+            r7 = r7.getTop();
+            r8 = org.telegram.ui.PhotoViewer.this;
+            r8 = r8.sendPhotoType;
+            r11 = 4;
+            if (r8 == r11) goto L_0x0161;
+        L_0x0155:
+            r8 = org.telegram.ui.PhotoViewer.this;
+            r8 = r8.sendPhotoType;
+            if (r8 != r13) goto L_0x015e;
+        L_0x015d:
+            goto L_0x0161;
+        L_0x015e:
+            r8 = NUM; // 0x41700000 float:15.0 double:5.424144515E-315;
+            goto L_0x0163;
+        L_0x0161:
+            r8 = NUM; // 0x42200000 float:40.0 double:5.481131706E-315;
+        L_0x0163:
+            r8 = org.telegram.messenger.AndroidUtilities.dp(r8);
+            r7 = r7 - r8;
+            r8 = org.telegram.ui.PhotoViewer.this;
+            r8 = r8.cameraItem;
+            r8 = r8.getMeasuredHeight();
+            goto L_0x00bd;
+        L_0x0174:
+            r8 = org.telegram.ui.PhotoViewer.this;
+            r8 = r8.groupedPhotosListView;
+            r8 = r8.currentPhotos;
+            r8 = r8.isEmpty();
+            if (r8 != 0) goto L_0x018e;
+        L_0x0182:
+            r8 = org.telegram.ui.PhotoViewer.this;
+            r8 = r8.groupedPhotosListView;
+            r8 = r8.getMeasuredHeight();
+            goto L_0x00bd;
+        L_0x018e:
+            r8 = r6 + r5;
+            r6 = r6 + r9;
+            r6 = r6 + r5;
+            r10 = r10 + r7;
+            r3.layout(r8, r7, r6, r10);
+        L_0x0196:
+            r4 = r4 + 1;
+            goto L_0x0022;
+        L_0x019a:
+            r15.notifyHeightChanged();
+            return;
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer$FrameLayoutDrawer.onLayout(boolean, int, int, int, int):void");
+        }
+
+        /* Access modifiers changed, original: protected */
+        public void onDraw(Canvas canvas) {
+            PhotoViewer.this.onDraw(canvas);
+            if (VERSION.SDK_INT >= 21 && AndroidUtilities.statusBarHeight != 0 && PhotoViewer.this.actionBar != null) {
+                this.paint.setAlpha((int) ((PhotoViewer.this.actionBar.getAlpha() * 255.0f) * 0.2f));
+                canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) AndroidUtilities.statusBarHeight, this.paint);
+                this.paint.setAlpha((int) ((PhotoViewer.this.actionBar.getAlpha() * 255.0f) * 0.498f));
+                if (getPaddingRight() > 0) {
+                    canvas.drawRect((float) (getMeasuredWidth() - getPaddingRight()), 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.paint);
+                }
+                if (getPaddingLeft() > 0) {
+                    canvas.drawRect(0.0f, 0.0f, (float) getPaddingLeft(), (float) getMeasuredHeight(), this.paint);
+                }
+            }
+        }
+
+        /* Access modifiers changed, original: protected */
+        public boolean drawChild(Canvas canvas, View view, long j) {
+            boolean z = true;
+            if (view == PhotoViewer.this.mentionListView || view == PhotoViewer.this.captionEditText) {
+                if (!PhotoViewer.this.captionEditText.isPopupShowing() && PhotoViewer.this.captionEditText.getEmojiPadding() == 0 && ((AndroidUtilities.usingHardwareInput && PhotoViewer.this.captionEditText.getTag() == null) || getKeyboardHeight() == 0)) {
+                    return false;
+                }
+            } else if (view == PhotoViewer.this.cameraItem || view == PhotoViewer.this.pickerView || view == PhotoViewer.this.pickerViewSendButton || view == PhotoViewer.this.captionTextView || (PhotoViewer.this.muteItem.getVisibility() == 0 && view == PhotoViewer.this.bottomLayout)) {
+                int emojiPadding = (getKeyboardHeight() > AndroidUtilities.dp(20.0f) || AndroidUtilities.isInMultiwindow) ? 0 : PhotoViewer.this.captionEditText.getEmojiPadding();
+                if (PhotoViewer.this.captionEditText.isPopupShowing() || ((AndroidUtilities.usingHardwareInput && PhotoViewer.this.captionEditText.getTag() != null) || getKeyboardHeight() > 0 || emojiPadding != 0)) {
+                    PhotoViewer.this.bottomTouchEnabled = false;
+                    return false;
+                }
+                PhotoViewer.this.bottomTouchEnabled = true;
+            } else if (view == PhotoViewer.this.checkImageView || view == PhotoViewer.this.photosCounterView) {
+                if (PhotoViewer.this.captionEditText.getTag() != null) {
+                    PhotoViewer.this.bottomTouchEnabled = false;
+                    return false;
+                }
+                PhotoViewer.this.bottomTouchEnabled = true;
+            } else if (view == PhotoViewer.this.miniProgressView) {
+                return false;
+            }
+            try {
+                if (view == PhotoViewer.this.aspectRatioFrameLayout || !super.drawChild(canvas, view, j)) {
+                    z = false;
+                }
+            } catch (Throwable unused) {
+            }
+            return z;
+        }
+    }
+
+    private class ListAdapter extends SelectionAdapter {
+        private Context mContext;
+
+        public boolean isEnabled(ViewHolder viewHolder) {
+            return true;
+        }
+
+        public ListAdapter(Context context) {
+            this.mContext = context;
+        }
+
+        public int getItemCount() {
+            if (PhotoViewer.this.placeProvider == null || PhotoViewer.this.placeProvider.getSelectedPhotosOrder() == null) {
+                return 0;
+            }
+            if (PhotoViewer.this.placeProvider.allowGroupPhotos()) {
+                return PhotoViewer.this.placeProvider.getSelectedPhotosOrder().size() + 1;
+            }
+            return PhotoViewer.this.placeProvider.getSelectedPhotosOrder().size();
+        }
+
+        public /* synthetic */ void lambda$onCreateViewHolder$0$PhotoViewer$ListAdapter(View view) {
+            Object tag = ((View) view.getParent()).getTag();
+            int indexOf = PhotoViewer.this.imagesArrLocals.indexOf(tag);
+            int photoChecked;
+            if (indexOf >= 0) {
+                photoChecked = PhotoViewer.this.placeProvider.setPhotoChecked(indexOf, PhotoViewer.this.getCurrentVideoEditedInfo());
+                PhotoViewer.this.placeProvider.isPhotoChecked(indexOf);
+                if (indexOf == PhotoViewer.this.currentIndex) {
+                    PhotoViewer.this.checkImageView.setChecked(-1, false, true);
+                }
+                if (photoChecked >= 0) {
+                    if (PhotoViewer.this.placeProvider.allowGroupPhotos()) {
+                        photoChecked++;
+                    }
+                    PhotoViewer.this.selectedPhotosAdapter.notifyItemRemoved(photoChecked);
+                }
+                PhotoViewer.this.updateSelectedCount();
+                return;
+            }
+            photoChecked = PhotoViewer.this.placeProvider.setPhotoUnchecked(tag);
+            if (photoChecked >= 0) {
+                if (PhotoViewer.this.placeProvider.allowGroupPhotos()) {
+                    photoChecked++;
+                }
+                PhotoViewer.this.selectedPhotosAdapter.notifyItemRemoved(photoChecked);
+                PhotoViewer.this.updateSelectedCount();
+            }
+        }
+
+        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            View anonymousClass1;
+            if (i != 0) {
+                anonymousClass1 = new ImageView(this.mContext) {
+                    /* Access modifiers changed, original: protected */
+                    public void onMeasure(int i, int i2) {
+                        super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(66.0f), NUM), MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i2), NUM));
+                    }
+                };
+                anonymousClass1.setScaleType(ScaleType.CENTER);
+                anonymousClass1.setImageResource(NUM);
+                anonymousClass1.setFocusable(true);
+            } else {
+                anonymousClass1 = new PhotoPickerPhotoCell(this.mContext, false);
+                anonymousClass1.checkFrame.setOnClickListener(new -$$Lambda$PhotoViewer$ListAdapter$9zkDzdvMmAtv_zjywq_3chr7CXo(this));
+            }
+            return new Holder(anonymousClass1);
+        }
+
+        public void onBindViewHolder(ViewHolder viewHolder, int i) {
+            int itemViewType = viewHolder.getItemViewType();
+            ColorFilter colorFilter = null;
+            if (itemViewType == 0) {
+                PhotoPickerPhotoCell photoPickerPhotoCell = (PhotoPickerPhotoCell) viewHolder.itemView;
+                photoPickerPhotoCell.itemWidth = AndroidUtilities.dp(82.0f);
+                BackupImageView backupImageView = photoPickerPhotoCell.photoImage;
+                backupImageView.setOrientation(0, true);
+                ArrayList selectedPhotosOrder = PhotoViewer.this.placeProvider.getSelectedPhotosOrder();
+                if (PhotoViewer.this.placeProvider.allowGroupPhotos()) {
+                    i--;
+                }
+                Object obj = PhotoViewer.this.placeProvider.getSelectedPhotos().get(selectedPhotosOrder.get(i));
+                if (obj instanceof PhotoEntry) {
+                    PhotoEntry photoEntry = (PhotoEntry) obj;
+                    photoPickerPhotoCell.setTag(photoEntry);
+                    photoPickerPhotoCell.videoInfoContainer.setVisibility(4);
+                    String str = photoEntry.thumbPath;
+                    if (str != null) {
+                        backupImageView.setImage(str, null, this.mContext.getResources().getDrawable(NUM));
+                    } else if (photoEntry.path != null) {
+                        backupImageView.setOrientation(photoEntry.orientation, true);
+                        String str2 = ":";
+                        StringBuilder stringBuilder;
+                        if (photoEntry.isVideo) {
+                            photoPickerPhotoCell.videoInfoContainer.setVisibility(0);
+                            int i2 = photoEntry.duration;
+                            i2 -= (i2 / 60) * 60;
+                            photoPickerPhotoCell.videoTextView.setText(String.format("%d:%02d", new Object[]{Integer.valueOf(r8), Integer.valueOf(i2)}));
+                            stringBuilder = new StringBuilder();
+                            stringBuilder.append("vthumb://");
+                            stringBuilder.append(photoEntry.imageId);
+                            stringBuilder.append(str2);
+                            stringBuilder.append(photoEntry.path);
+                            backupImageView.setImage(stringBuilder.toString(), null, this.mContext.getResources().getDrawable(NUM));
+                        } else {
+                            stringBuilder = new StringBuilder();
+                            stringBuilder.append("thumb://");
+                            stringBuilder.append(photoEntry.imageId);
+                            stringBuilder.append(str2);
+                            stringBuilder.append(photoEntry.path);
+                            backupImageView.setImage(stringBuilder.toString(), null, this.mContext.getResources().getDrawable(NUM));
+                        }
+                    } else {
+                        backupImageView.setImageResource(NUM);
+                    }
+                    photoPickerPhotoCell.setChecked(-1, true, false);
+                    photoPickerPhotoCell.checkBox.setVisibility(0);
+                } else if (obj instanceof SearchImage) {
+                    SearchImage searchImage = (SearchImage) obj;
+                    photoPickerPhotoCell.setTag(searchImage);
+                    photoPickerPhotoCell.setImage(searchImage);
+                    photoPickerPhotoCell.videoInfoContainer.setVisibility(4);
+                    photoPickerPhotoCell.setChecked(-1, true, false);
+                    photoPickerPhotoCell.checkBox.setVisibility(0);
+                }
+            } else if (itemViewType == 1) {
+                String str3;
+                ImageView imageView = (ImageView) viewHolder.itemView;
+                if (SharedConfig.groupPhotosEnabled) {
+                    colorFilter = new PorterDuffColorFilter(-10043398, Mode.MULTIPLY);
+                }
+                imageView.setColorFilter(colorFilter);
+                if (SharedConfig.groupPhotosEnabled) {
+                    i = NUM;
+                    str3 = "GroupPhotosHelp";
+                } else {
+                    i = NUM;
+                    str3 = "SinglePhotosHelp";
+                }
+                imageView.setContentDescription(LocaleController.getString(str3, i));
+            }
+        }
+
+        public int getItemViewType(int i) {
+            return (i == 0 && PhotoViewer.this.placeProvider.allowGroupPhotos()) ? 1 : 0;
+        }
+    }
+
+    public boolean onDoubleTapEvent(MotionEvent motionEvent) {
+        return false;
+    }
+
+    public boolean onDown(MotionEvent motionEvent) {
+        return false;
+    }
+
+    public void onLongPress(MotionEvent motionEvent) {
+    }
+
+    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent2, float f, float f2) {
+        return false;
+    }
+
+    public void onShowPress(MotionEvent motionEvent) {
+    }
+
+    public /* synthetic */ void lambda$new$0$PhotoViewer() {
         toggleMiniProgressInternal(true);
     }
 
@@ -1550,30 +1739,17 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
     }
 
     public static PhotoViewer getInstance() {
-        Throwable th;
-        PhotoViewer localInstance = Instance;
-        if (localInstance == null) {
+        PhotoViewer photoViewer = Instance;
+        if (photoViewer == null) {
             synchronized (PhotoViewer.class) {
-                try {
-                    localInstance = Instance;
-                    if (localInstance == null) {
-                        PhotoViewer localInstance2 = new PhotoViewer();
-                        try {
-                            Instance = localInstance2;
-                            localInstance = localInstance2;
-                        } catch (Throwable th2) {
-                            th = th2;
-                            localInstance = localInstance2;
-                            throw th;
-                        }
-                    }
-                } catch (Throwable th3) {
-                    th = th3;
-                    throw th;
+                photoViewer = Instance;
+                if (photoViewer == null) {
+                    photoViewer = new PhotoViewer();
+                    Instance = photoViewer;
                 }
             }
         }
-        return localInstance;
+        return photoViewer;
     }
 
     public boolean isOpenedFullScreenVideo() {
@@ -1588,314 +1764,929 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         this.blackPaint.setColor(-16777216);
     }
 
-    public void didReceivedNotification(int id, int account, Object... args) {
-        String location;
-        int a;
-        int guid;
-        long uid;
-        if (id == NotificationCenter.fileDidFailedLoad) {
-            location = args[0];
-            a = 0;
-            while (a < 3) {
-                if (this.currentFileNames[a] == null || !this.currentFileNames[a].equals(location)) {
-                    a++;
-                } else {
-                    this.photoProgressViews[a].setProgress(1.0f, true);
-                    checkProgress(a, true);
-                    return;
-                }
-            }
-        } else if (id == NotificationCenter.fileDidLoad) {
-            location = (String) args[0];
-            a = 0;
-            while (a < 3) {
-                if (this.currentFileNames[a] == null || !this.currentFileNames[a].equals(location)) {
-                    a++;
-                } else {
-                    this.photoProgressViews[a].setProgress(1.0f, true);
-                    checkProgress(a, true);
-                    if (this.videoPlayer == null && a == 0 && ((this.currentMessageObject != null && this.currentMessageObject.isVideo()) || (this.currentBotInlineResult != null && (this.currentBotInlineResult.type.equals("video") || MessageObject.isVideoDocument(this.currentBotInlineResult.document))))) {
-                        onActionClick(false);
-                    }
-                    if (a == 0 && this.videoPlayer != null) {
-                        this.currentVideoFinishedLoading = true;
-                        return;
-                    }
-                    return;
-                }
-            }
-        } else if (id == NotificationCenter.FileLoadProgressChanged) {
-            location = (String) args[0];
-            a = 0;
-            while (a < 3) {
-                if (this.currentFileNames[a] != null && this.currentFileNames[a].equals(location)) {
-                    Float loadProgress = args[1];
-                    this.photoProgressViews[a].setProgress(loadProgress.floatValue(), true);
-                    if (!(a != 0 || this.videoPlayer == null || this.videoPlayerSeekbar == null)) {
-                        float bufferedProgress;
-                        if (this.currentVideoFinishedLoading) {
-                            bufferedProgress = 1.0f;
-                        } else {
-                            long newTime = SystemClock.elapsedRealtime();
-                            if (Math.abs(newTime - this.lastBufferedPositionCheck) >= 500) {
-                                float progress;
-                                if (this.seekToProgressPending == 0.0f) {
-                                    long duration = this.videoPlayer.getDuration();
-                                    long position = this.videoPlayer.getCurrentPosition();
-                                    if (duration < 0 || duration == -9223372036854775807L || position < 0) {
-                                        progress = 0.0f;
-                                    } else {
-                                        progress = ((float) position) / ((float) duration);
-                                    }
-                                } else {
-                                    progress = this.seekToProgressPending;
-                                }
-                                bufferedProgress = this.isStreaming ? FileLoader.getInstance(this.currentAccount).getBufferedProgressFromPosition(progress, this.currentFileNames[0]) : 1.0f;
-                                this.lastBufferedPositionCheck = newTime;
-                            } else {
-                                bufferedProgress = -1.0f;
-                            }
-                        }
-                        if (bufferedProgress != -1.0f) {
-                            this.videoPlayerSeekbar.setBufferedProgress(bufferedProgress);
-                            if (this.pipVideoView != null) {
-                                this.pipVideoView.setBufferedProgress(bufferedProgress);
-                            }
-                            this.videoPlayerControlFrameLayout.invalidate();
-                        }
-                        checkBufferedProgress(loadProgress.floatValue());
-                    }
-                }
-                a++;
-            }
-        } else if (id == NotificationCenter.dialogPhotosLoaded) {
-            guid = ((Integer) args[3]).intValue();
-            if (this.avatarsDialogId == ((Integer) args[0]).intValue() && this.classGuid == guid) {
-                boolean fromCache = ((Boolean) args[2]).booleanValue();
-                int setToImage = -1;
-                ArrayList<Photo> photos = args[4];
-                if (!photos.isEmpty()) {
-                    this.imagesArrLocations.clear();
-                    this.imagesArrLocationsSizes.clear();
-                    this.avatarsArr.clear();
-                    for (a = 0; a < photos.size(); a++) {
-                        Photo photo = (Photo) photos.get(a);
-                        if (!(photo == null || (photo instanceof TL_photoEmpty) || photo.sizes == null)) {
-                            PhotoSize sizeFull = FileLoader.getClosestPhotoSizeWithSize(photo.sizes, 640);
-                            if (sizeFull != null) {
-                                if (setToImage == -1 && this.currentFileLocation != null) {
-                                    for (int b = 0; b < photo.sizes.size(); b++) {
-                                        PhotoSize size = (PhotoSize) photo.sizes.get(b);
-                                        if (size.location.local_id == this.currentFileLocation.local_id && size.location.volume_id == this.currentFileLocation.volume_id) {
-                                            setToImage = this.imagesArrLocations.size();
-                                            break;
-                                        }
-                                    }
-                                }
-                                this.imagesArrLocations.add(sizeFull.location);
-                                this.imagesArrLocationsSizes.add(Integer.valueOf(sizeFull.size));
-                                this.avatarsArr.add(photo);
-                            }
-                        }
-                    }
-                    if (this.avatarsArr.isEmpty()) {
-                        this.menuItem.hideSubItem(6);
-                    } else {
-                        this.menuItem.showSubItem(6);
-                    }
-                    this.needSearchImageInArr = false;
-                    this.currentIndex = -1;
-                    if (setToImage != -1) {
-                        setImageIndex(setToImage, true);
-                    } else {
-                        this.avatarsArr.add(0, new TL_photoEmpty());
-                        this.imagesArrLocations.add(0, this.currentFileLocation);
-                        this.imagesArrLocationsSizes.add(0, Integer.valueOf(0));
-                        setImageIndex(0, true);
-                    }
-                    if (fromCache) {
-                        MessagesController.getInstance(this.currentAccount).loadDialogPhotos(this.avatarsDialogId, 80, 0, false, this.classGuid);
-                    }
-                }
-            }
-        } else if (id == NotificationCenter.mediaCountDidLoad) {
-            uid = ((Long) args[0]).longValue();
-            if (uid == this.currentDialogId || uid == this.mergeDialogId) {
-                if (uid == this.currentDialogId) {
-                    this.totalImagesCount = ((Integer) args[1]).intValue();
-                } else if (uid == this.mergeDialogId) {
-                    this.totalImagesCountMerge = ((Integer) args[1]).intValue();
-                }
-                if (this.needSearchImageInArr && this.isFirstLoading) {
-                    this.isFirstLoading = false;
-                    this.loadingMoreImages = true;
-                    DataQuery.getInstance(this.currentAccount).loadMedia(this.currentDialogId, 80, 0, this.sharedMediaType, 1, this.classGuid);
-                } else if (!this.imagesArr.isEmpty()) {
-                    if (this.opennedFromMedia) {
-                        this.actionBar.setTitle(LocaleController.formatString("Of", NUM, Integer.valueOf(this.currentIndex + 1), Integer.valueOf(this.totalImagesCount + this.totalImagesCountMerge)));
-                    } else {
-                        this.actionBar.setTitle(LocaleController.formatString("Of", NUM, Integer.valueOf((((this.totalImagesCount + this.totalImagesCountMerge) - this.imagesArr.size()) + this.currentIndex) + 1), Integer.valueOf(this.totalImagesCount + this.totalImagesCountMerge)));
-                    }
-                }
-            }
-        } else if (id == NotificationCenter.mediaDidLoad) {
-            uid = ((Long) args[0]).longValue();
-            guid = ((Integer) args[3]).intValue();
-            if ((uid == this.currentDialogId || uid == this.mergeDialogId) && guid == this.classGuid) {
-                this.loadingMoreImages = false;
-                int loadIndex = uid == this.currentDialogId ? 0 : 1;
-                ArrayList<MessageObject> arr = args[2];
-                this.endReached[loadIndex] = ((Boolean) args[5]).booleanValue();
-                int added;
-                MessageObject message;
-                if (!this.needSearchImageInArr) {
-                    added = 0;
-                    Iterator it = arr.iterator();
-                    while (it.hasNext()) {
-                        message = (MessageObject) it.next();
-                        if (this.imagesByIds[loadIndex].indexOfKey(message.getId()) < 0) {
-                            added++;
-                            if (this.opennedFromMedia) {
-                                this.imagesArr.add(message);
-                            } else {
-                                this.imagesArr.add(0, message);
-                            }
-                            this.imagesByIds[loadIndex].put(message.getId(), message);
-                        }
-                    }
-                    if (this.opennedFromMedia) {
-                        if (added == 0) {
-                            this.totalImagesCount = this.imagesArr.size();
-                            this.totalImagesCountMerge = 0;
-                        }
-                    } else if (added != 0) {
-                        int index = this.currentIndex;
-                        this.currentIndex = -1;
-                        setImageIndex(index + added, true);
-                    } else {
-                        this.totalImagesCount = this.imagesArr.size();
-                        this.totalImagesCountMerge = 0;
-                    }
-                } else if (!arr.isEmpty() || (loadIndex == 0 && this.mergeDialogId != 0)) {
-                    int foundIndex = -1;
-                    MessageObject currentMessage = (MessageObject) this.imagesArr.get(this.currentIndex);
-                    added = 0;
-                    for (a = 0; a < arr.size(); a++) {
-                        message = (MessageObject) arr.get(a);
-                        if (this.imagesByIdsTemp[loadIndex].indexOfKey(message.getId()) < 0) {
-                            this.imagesByIdsTemp[loadIndex].put(message.getId(), message);
-                            if (this.opennedFromMedia) {
-                                this.imagesArrTemp.add(message);
-                                if (message.getId() == currentMessage.getId()) {
-                                    foundIndex = added;
-                                }
-                                added++;
-                            } else {
-                                added++;
-                                this.imagesArrTemp.add(0, message);
-                                if (message.getId() == currentMessage.getId()) {
-                                    foundIndex = arr.size() - added;
-                                }
-                            }
-                        }
-                    }
-                    if (added == 0 && (loadIndex != 0 || this.mergeDialogId == 0)) {
-                        this.totalImagesCount = this.imagesArr.size();
-                        this.totalImagesCountMerge = 0;
-                    }
-                    if (foundIndex != -1) {
-                        this.imagesArr.clear();
-                        this.imagesArr.addAll(this.imagesArrTemp);
-                        for (a = 0; a < 2; a++) {
-                            this.imagesByIds[a] = this.imagesByIdsTemp[a].clone();
-                            this.imagesByIdsTemp[a].clear();
-                        }
-                        this.imagesArrTemp.clear();
-                        this.needSearchImageInArr = false;
-                        this.currentIndex = -1;
-                        if (foundIndex >= this.imagesArr.size()) {
-                            foundIndex = this.imagesArr.size() - 1;
-                        }
-                        setImageIndex(foundIndex, true);
-                        return;
-                    }
-                    int loadFromMaxId;
-                    if (this.opennedFromMedia) {
-                        loadFromMaxId = this.imagesArrTemp.isEmpty() ? 0 : ((MessageObject) this.imagesArrTemp.get(this.imagesArrTemp.size() - 1)).getId();
-                        if (loadIndex == 0 && this.endReached[loadIndex] && this.mergeDialogId != 0) {
-                            loadIndex = 1;
-                            if (!(this.imagesArrTemp.isEmpty() || ((MessageObject) this.imagesArrTemp.get(this.imagesArrTemp.size() - 1)).getDialogId() == this.mergeDialogId)) {
-                                loadFromMaxId = 0;
-                            }
-                        }
-                    } else {
-                        if (this.imagesArrTemp.isEmpty()) {
-                            loadFromMaxId = 0;
-                        } else {
-                            loadFromMaxId = ((MessageObject) this.imagesArrTemp.get(0)).getId();
-                        }
-                        if (loadIndex == 0 && this.endReached[loadIndex] && this.mergeDialogId != 0) {
-                            loadIndex = 1;
-                            if (!(this.imagesArrTemp.isEmpty() || ((MessageObject) this.imagesArrTemp.get(0)).getDialogId() == this.mergeDialogId)) {
-                                loadFromMaxId = 0;
-                            }
-                        }
-                    }
-                    if (!this.endReached[loadIndex]) {
-                        this.loadingMoreImages = true;
-                        if (this.opennedFromMedia) {
-                            long j;
-                            DataQuery instance = DataQuery.getInstance(this.currentAccount);
-                            if (loadIndex == 0) {
-                                j = this.currentDialogId;
-                            } else {
-                                j = this.mergeDialogId;
-                            }
-                            instance.loadMedia(j, 80, loadFromMaxId, this.sharedMediaType, 1, this.classGuid);
-                            return;
-                        }
-                        DataQuery.getInstance(this.currentAccount).loadMedia(loadIndex == 0 ? this.currentDialogId : this.mergeDialogId, 80, loadFromMaxId, this.sharedMediaType, 1, this.classGuid);
-                    }
-                } else {
-                    this.needSearchImageInArr = false;
-                }
-            }
-        } else if (id == NotificationCenter.emojiDidLoad) {
-            if (this.captionTextView != null) {
-                this.captionTextView.invalidate();
-            }
-        } else if (id == NotificationCenter.filePreparingFailed) {
-            MessageObject messageObject = args[0];
-            if (this.loadInitialVideo) {
-                this.loadInitialVideo = false;
-                this.progressView.setVisibility(4);
-                preparePlayer(this.currentPlayingVideoFile, false, false);
-            } else if (this.tryStartRequestPreviewOnFinish) {
-                releasePlayer(false);
-                this.tryStartRequestPreviewOnFinish = !MediaController.getInstance().scheduleVideoConvert(this.videoPreviewMessageObject, true);
-            } else if (messageObject == this.videoPreviewMessageObject) {
-                this.requestingPreview = false;
-                this.progressView.setVisibility(4);
-            }
-        } else if (id == NotificationCenter.fileNewChunkAvailable && ((MessageObject) args[0]) == this.videoPreviewMessageObject) {
-            String finalPath = args[1];
-            if (((Long) args[3]).longValue() != 0) {
-                this.requestingPreview = false;
-                this.progressView.setVisibility(4);
-                preparePlayer(Uri.fromFile(new File(finalPath)), false, true);
-            }
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:240:0x04f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:240:0x04f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:240:0x04f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:240:0x04f1  */
+    /* JADX WARNING: Missing block: B:30:0x0079, code skipped:
+            if (org.telegram.messenger.MessageObject.isVideoDocument(r0.currentBotInlineResult.document) != false) goto L_0x007b;
+     */
+    /* JADX WARNING: Missing block: B:221:0x04a3, code skipped:
+            if (((org.telegram.messenger.MessageObject) r1.get(r1.size() - 1)).getDialogId() != r0.mergeDialogId) goto L_0x04e4;
+     */
+    /* JADX WARNING: Missing block: B:234:0x04e2, code skipped:
+            if (((org.telegram.messenger.MessageObject) r0.imagesArrTemp.get(0)).getDialogId() != r0.mergeDialogId) goto L_0x04e4;
+     */
+    public void didReceivedNotification(int r21, int r22, java.lang.Object... r23) {
+        /*
+        r20 = this;
+        r0 = r20;
+        r1 = r21;
+        r2 = org.telegram.messenger.NotificationCenter.fileDidFailedLoad;
+        r3 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r4 = 3;
+        r5 = 1;
+        r6 = 0;
+        if (r1 != r2) goto L_0x0030;
+    L_0x000d:
+        r1 = r23[r6];
+        r1 = (java.lang.String) r1;
+    L_0x0011:
+        if (r6 >= r4) goto L_0x0607;
+    L_0x0013:
+        r2 = r0.currentFileNames;
+        r7 = r2[r6];
+        if (r7 == 0) goto L_0x002d;
+    L_0x0019:
+        r2 = r2[r6];
+        r2 = r2.equals(r1);
+        if (r2 == 0) goto L_0x002d;
+    L_0x0021:
+        r1 = r0.photoProgressViews;
+        r1 = r1[r6];
+        r1.setProgress(r3, r5);
+        r0.checkProgress(r6, r5);
+        goto L_0x0607;
+    L_0x002d:
+        r6 = r6 + 1;
+        goto L_0x0011;
+    L_0x0030:
+        r2 = org.telegram.messenger.NotificationCenter.fileDidLoad;
+        if (r1 != r2) goto L_0x008b;
+    L_0x0034:
+        r1 = r23[r6];
+        r1 = (java.lang.String) r1;
+        r2 = 0;
+    L_0x0039:
+        if (r2 >= r4) goto L_0x0607;
+    L_0x003b:
+        r7 = r0.currentFileNames;
+        r8 = r7[r2];
+        if (r8 == 0) goto L_0x0088;
+    L_0x0041:
+        r7 = r7[r2];
+        r7 = r7.equals(r1);
+        if (r7 == 0) goto L_0x0088;
+    L_0x0049:
+        r1 = r0.photoProgressViews;
+        r1 = r1[r2];
+        r1.setProgress(r3, r5);
+        r0.checkProgress(r2, r5);
+        r1 = r0.videoPlayer;
+        if (r1 != 0) goto L_0x007e;
+    L_0x0057:
+        if (r2 != 0) goto L_0x007e;
+    L_0x0059:
+        r1 = r0.currentMessageObject;
+        if (r1 == 0) goto L_0x0063;
+    L_0x005d:
+        r1 = r1.isVideo();
+        if (r1 != 0) goto L_0x007b;
+    L_0x0063:
+        r1 = r0.currentBotInlineResult;
+        if (r1 == 0) goto L_0x007e;
+    L_0x0067:
+        r1 = r1.type;
+        r3 = "video";
+        r1 = r1.equals(r3);
+        if (r1 != 0) goto L_0x007b;
+    L_0x0071:
+        r1 = r0.currentBotInlineResult;
+        r1 = r1.document;
+        r1 = org.telegram.messenger.MessageObject.isVideoDocument(r1);
+        if (r1 == 0) goto L_0x007e;
+    L_0x007b:
+        r0.onActionClick(r6);
+    L_0x007e:
+        if (r2 != 0) goto L_0x0607;
+    L_0x0080:
+        r1 = r0.videoPlayer;
+        if (r1 == 0) goto L_0x0607;
+    L_0x0084:
+        r0.currentVideoFinishedLoading = r5;
+        goto L_0x0607;
+    L_0x0088:
+        r2 = r2 + 1;
+        goto L_0x0039;
+    L_0x008b:
+        r2 = org.telegram.messenger.NotificationCenter.FileLoadProgressChanged;
+        r7 = 0;
+        if (r1 != r2) goto L_0x013f;
+    L_0x0091:
+        r1 = r23[r6];
+        r1 = (java.lang.String) r1;
+        r2 = 0;
+    L_0x0096:
+        if (r2 >= r4) goto L_0x0607;
+    L_0x0098:
+        r9 = r0.currentFileNames;
+        r10 = r9[r2];
+        if (r10 == 0) goto L_0x0138;
+    L_0x009e:
+        r9 = r9[r2];
+        r9 = r9.equals(r1);
+        if (r9 == 0) goto L_0x0138;
+    L_0x00a6:
+        r9 = r23[r5];
+        r9 = (java.lang.Float) r9;
+        r10 = r0.photoProgressViews;
+        r10 = r10[r2];
+        r11 = r9.floatValue();
+        r10.setProgress(r11, r5);
+        if (r2 != 0) goto L_0x0138;
+    L_0x00b7:
+        r10 = r0.videoPlayer;
+        if (r10 == 0) goto L_0x0138;
+    L_0x00bb:
+        r10 = r0.videoPlayerSeekbar;
+        if (r10 == 0) goto L_0x0138;
+    L_0x00bf:
+        r10 = r0.currentVideoFinishedLoading;
+        r11 = -NUM; // 0xffffffffbvar_ float:-1.0 double:NaN;
+        if (r10 == 0) goto L_0x00c6;
+    L_0x00c5:
+        goto L_0x011c;
+    L_0x00c6:
+        r12 = android.os.SystemClock.elapsedRealtime();
+        r14 = r0.lastBufferedPositionCheck;
+        r14 = r12 - r14;
+        r14 = java.lang.Math.abs(r14);
+        r16 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
+        r10 = (r14 > r16 ? 1 : (r14 == r16 ? 0 : -1));
+        if (r10 < 0) goto L_0x011a;
+    L_0x00d8:
+        r10 = r0.seekToProgressPending;
+        r14 = 0;
+        r15 = (r10 > r14 ? 1 : (r10 == r14 ? 0 : -1));
+        if (r15 != 0) goto L_0x0102;
+    L_0x00df:
+        r10 = r0.videoPlayer;
+        r14 = r10.getDuration();
+        r10 = r0.videoPlayer;
+        r3 = r10.getCurrentPosition();
+        r10 = (r14 > r7 ? 1 : (r14 == r7 ? 0 : -1));
+        if (r10 < 0) goto L_0x0101;
+    L_0x00ef:
+        r17 = -NUM; // 0xNUM float:1.4E-45 double:-4.9E-324;
+        r10 = (r14 > r17 ? 1 : (r14 == r17 ? 0 : -1));
+        if (r10 == 0) goto L_0x0101;
+    L_0x00f8:
+        r10 = (r3 > r7 ? 1 : (r3 == r7 ? 0 : -1));
+        if (r10 < 0) goto L_0x0101;
+    L_0x00fc:
+        r3 = (float) r3;
+        r4 = (float) r14;
+        r3 = r3 / r4;
+        r10 = r3;
+        goto L_0x0102;
+    L_0x0101:
+        r10 = 0;
+    L_0x0102:
+        r3 = r0.isStreaming;
+        if (r3 == 0) goto L_0x0115;
+    L_0x0106:
+        r3 = r0.currentAccount;
+        r3 = org.telegram.messenger.FileLoader.getInstance(r3);
+        r4 = r0.currentFileNames;
+        r4 = r4[r6];
+        r3 = r3.getBufferedProgressFromPosition(r10, r4);
+        goto L_0x0117;
+    L_0x0115:
+        r3 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+    L_0x0117:
+        r0.lastBufferedPositionCheck = r12;
+        goto L_0x011c;
+    L_0x011a:
+        r3 = -NUM; // 0xffffffffbvar_ float:-1.0 double:NaN;
+    L_0x011c:
+        r4 = (r3 > r11 ? 1 : (r3 == r11 ? 0 : -1));
+        if (r4 == 0) goto L_0x0131;
+    L_0x0120:
+        r4 = r0.videoPlayerSeekbar;
+        r4.setBufferedProgress(r3);
+        r4 = r0.pipVideoView;
+        if (r4 == 0) goto L_0x012c;
+    L_0x0129:
+        r4.setBufferedProgress(r3);
+    L_0x012c:
+        r3 = r0.videoPlayerControlFrameLayout;
+        r3.invalidate();
+    L_0x0131:
+        r3 = r9.floatValue();
+        r0.checkBufferedProgress(r3);
+    L_0x0138:
+        r2 = r2 + 1;
+        r3 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r4 = 3;
+        goto L_0x0096;
+    L_0x013f:
+        r2 = org.telegram.messenger.NotificationCenter.dialogPhotosLoaded;
+        r3 = 4;
+        r4 = 2;
+        r9 = -1;
+        if (r1 != r2) goto L_0x028e;
+    L_0x0146:
+        r2 = 3;
+        r1 = r23[r2];
+        r1 = (java.lang.Integer) r1;
+        r1 = r1.intValue();
+        r2 = r23[r6];
+        r2 = (java.lang.Integer) r2;
+        r2 = r2.intValue();
+        r7 = r0.avatarsDialogId;
+        if (r7 != r2) goto L_0x0607;
+    L_0x015b:
+        r2 = r0.classGuid;
+        if (r2 != r1) goto L_0x0607;
+    L_0x015f:
+        r1 = r23[r4];
+        r1 = (java.lang.Boolean) r1;
+        r1 = r1.booleanValue();
+        r2 = r23[r3];
+        r2 = (java.util.ArrayList) r2;
+        r3 = r2.isEmpty();
+        if (r3 == 0) goto L_0x0172;
+    L_0x0171:
+        return;
+    L_0x0172:
+        r3 = r0.imagesArrLocations;
+        r3.clear();
+        r3 = r0.imagesArrLocationsSizes;
+        r3.clear();
+        r3 = r0.avatarsArr;
+        r3.clear();
+        r3 = 0;
+        r4 = -1;
+    L_0x0183:
+        r7 = r2.size();
+        if (r3 >= r7) goto L_0x01ff;
+    L_0x0189:
+        r7 = r2.get(r3);
+        r7 = (org.telegram.tgnet.TLRPC.Photo) r7;
+        if (r7 == 0) goto L_0x01fc;
+    L_0x0191:
+        r8 = r7 instanceof org.telegram.tgnet.TLRPC.TL_photoEmpty;
+        if (r8 != 0) goto L_0x01fc;
+    L_0x0195:
+        r8 = r7.sizes;
+        if (r8 != 0) goto L_0x019a;
+    L_0x0199:
+        goto L_0x01fc;
+    L_0x019a:
+        r10 = 640; // 0x280 float:8.97E-43 double:3.16E-321;
+        r8 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r8, r10);
+        if (r8 == 0) goto L_0x01fc;
+    L_0x01a2:
+        if (r4 != r9) goto L_0x01d7;
+    L_0x01a4:
+        r10 = r0.currentFileLocation;
+        if (r10 == 0) goto L_0x01d7;
+    L_0x01a8:
+        r10 = 0;
+    L_0x01a9:
+        r11 = r7.sizes;
+        r11 = r11.size();
+        if (r10 >= r11) goto L_0x01d7;
+    L_0x01b1:
+        r11 = r7.sizes;
+        r11 = r11.get(r10);
+        r11 = (org.telegram.tgnet.TLRPC.PhotoSize) r11;
+        r11 = r11.location;
+        r12 = r11.local_id;
+        r13 = r0.currentFileLocation;
+        r13 = r13.location;
+        r14 = r13.local_id;
+        if (r12 != r14) goto L_0x01d4;
+    L_0x01c5:
+        r11 = r11.volume_id;
+        r13 = r13.volume_id;
+        r15 = (r11 > r13 ? 1 : (r11 == r13 ? 0 : -1));
+        if (r15 != 0) goto L_0x01d4;
+    L_0x01cd:
+        r4 = r0.imagesArrLocations;
+        r4 = r4.size();
+        goto L_0x01d7;
+    L_0x01d4:
+        r10 = r10 + 1;
+        goto L_0x01a9;
+    L_0x01d7:
+        r10 = r7.dc_id;
+        if (r10 == 0) goto L_0x01e3;
+    L_0x01db:
+        r11 = r8.location;
+        r11.dc_id = r10;
+        r10 = r7.file_reference;
+        r11.file_reference = r10;
+    L_0x01e3:
+        r10 = r0.imagesArrLocations;
+        r11 = org.telegram.messenger.ImageLocation.getForPhoto(r8, r7);
+        r10.add(r11);
+        r10 = r0.imagesArrLocationsSizes;
+        r8 = r8.size;
+        r8 = java.lang.Integer.valueOf(r8);
+        r10.add(r8);
+        r8 = r0.avatarsArr;
+        r8.add(r7);
+    L_0x01fc:
+        r3 = r3 + 1;
+        goto L_0x0183;
+    L_0x01ff:
+        r2 = r0.avatarsArr;
+        r2 = r2.isEmpty();
+        r3 = 6;
+        if (r2 != 0) goto L_0x020e;
+    L_0x0208:
+        r2 = r0.menuItem;
+        r2.showSubItem(r3);
+        goto L_0x0213;
+    L_0x020e:
+        r2 = r0.menuItem;
+        r2.hideSubItem(r3);
+    L_0x0213:
+        r0.needSearchImageInArr = r6;
+        r0.currentIndex = r9;
+        if (r4 == r9) goto L_0x021d;
+    L_0x0219:
+        r0.setImageIndex(r4, r5);
+        goto L_0x0278;
+    L_0x021d:
+        r2 = r0.avatarsDialogId;
+        r3 = 0;
+        if (r2 <= 0) goto L_0x0233;
+    L_0x0222:
+        r2 = r0.currentAccount;
+        r2 = org.telegram.messenger.MessagesController.getInstance(r2);
+        r4 = r0.avatarsDialogId;
+        r4 = java.lang.Integer.valueOf(r4);
+        r2 = r2.getUser(r4);
+        goto L_0x0249;
+    L_0x0233:
+        r2 = r0.currentAccount;
+        r2 = org.telegram.messenger.MessagesController.getInstance(r2);
+        r4 = r0.avatarsDialogId;
+        r4 = -r4;
+        r4 = java.lang.Integer.valueOf(r4);
+        r2 = r2.getChat(r4);
+        r19 = r3;
+        r3 = r2;
+        r2 = r19;
+    L_0x0249:
+        if (r2 != 0) goto L_0x024d;
+    L_0x024b:
+        if (r3 == 0) goto L_0x0278;
+    L_0x024d:
+        if (r2 == 0) goto L_0x0259;
+    L_0x024f:
+        r3 = r0.imagesArrLocations;
+        r2 = org.telegram.messenger.ImageLocation.getForUser(r2, r5);
+        r3.add(r6, r2);
+        goto L_0x0262;
+    L_0x0259:
+        r2 = r0.imagesArrLocations;
+        r3 = org.telegram.messenger.ImageLocation.getForChat(r3, r5);
+        r2.add(r6, r3);
+    L_0x0262:
+        r2 = r0.avatarsArr;
+        r3 = new org.telegram.tgnet.TLRPC$TL_photoEmpty;
+        r3.<init>();
+        r2.add(r6, r3);
+        r2 = r0.imagesArrLocationsSizes;
+        r3 = java.lang.Integer.valueOf(r6);
+        r2.add(r6, r3);
+        r0.setImageIndex(r6, r5);
+    L_0x0278:
+        if (r1 == 0) goto L_0x0607;
+    L_0x027a:
+        r1 = r0.currentAccount;
+        r2 = org.telegram.messenger.MessagesController.getInstance(r1);
+        r3 = r0.avatarsDialogId;
+        r4 = 80;
+        r5 = 0;
+        r7 = 0;
+        r8 = r0.classGuid;
+        r2.loadDialogPhotos(r3, r4, r5, r7, r8);
+        goto L_0x0607;
+    L_0x028e:
+        r2 = org.telegram.messenger.NotificationCenter.mediaCountDidLoad;
+        if (r1 != r2) goto L_0x0348;
+    L_0x0292:
+        r1 = r23[r6];
+        r1 = (java.lang.Long) r1;
+        r1 = r1.longValue();
+        r7 = r0.currentDialogId;
+        r3 = (r1 > r7 ? 1 : (r1 == r7 ? 0 : -1));
+        if (r3 == 0) goto L_0x02a6;
+    L_0x02a0:
+        r7 = r0.mergeDialogId;
+        r3 = (r1 > r7 ? 1 : (r1 == r7 ? 0 : -1));
+        if (r3 != 0) goto L_0x0607;
+    L_0x02a6:
+        r7 = r0.currentDialogId;
+        r3 = (r1 > r7 ? 1 : (r1 == r7 ? 0 : -1));
+        if (r3 != 0) goto L_0x02b7;
+    L_0x02ac:
+        r1 = r23[r5];
+        r1 = (java.lang.Integer) r1;
+        r1 = r1.intValue();
+        r0.totalImagesCount = r1;
+        goto L_0x02c7;
+    L_0x02b7:
+        r7 = r0.mergeDialogId;
+        r3 = (r1 > r7 ? 1 : (r1 == r7 ? 0 : -1));
+        if (r3 != 0) goto L_0x02c7;
+    L_0x02bd:
+        r1 = r23[r5];
+        r1 = (java.lang.Integer) r1;
+        r1 = r1.intValue();
+        r0.totalImagesCountMerge = r1;
+    L_0x02c7:
+        r1 = r0.needSearchImageInArr;
+        if (r1 == 0) goto L_0x02e8;
+    L_0x02cb:
+        r1 = r0.isFirstLoading;
+        if (r1 == 0) goto L_0x02e8;
+    L_0x02cf:
+        r0.isFirstLoading = r6;
+        r0.loadingMoreImages = r5;
+        r1 = r0.currentAccount;
+        r2 = org.telegram.messenger.DataQuery.getInstance(r1);
+        r3 = r0.currentDialogId;
+        r5 = 80;
+        r6 = 0;
+        r7 = r0.sharedMediaType;
+        r8 = 1;
+        r9 = r0.classGuid;
+        r2.loadMedia(r3, r5, r6, r7, r8, r9);
+        goto L_0x0607;
+    L_0x02e8:
+        r1 = r0.imagesArr;
+        r1 = r1.isEmpty();
+        if (r1 != 0) goto L_0x0607;
+    L_0x02f0:
+        r1 = r0.opennedFromMedia;
+        r2 = NUM; // 0x7f0d067f float:1.8745488E38 double:1.053130599E-314;
+        r3 = "Of";
+        if (r1 == 0) goto L_0x031a;
+    L_0x02f9:
+        r1 = r0.actionBar;
+        r4 = new java.lang.Object[r4];
+        r7 = r0.currentIndex;
+        r7 = r7 + r5;
+        r7 = java.lang.Integer.valueOf(r7);
+        r4[r6] = r7;
+        r6 = r0.totalImagesCount;
+        r7 = r0.totalImagesCountMerge;
+        r6 = r6 + r7;
+        r6 = java.lang.Integer.valueOf(r6);
+        r4[r5] = r6;
+        r2 = org.telegram.messenger.LocaleController.formatString(r3, r2, r4);
+        r1.setTitle(r2);
+        goto L_0x0607;
+    L_0x031a:
+        r1 = r0.actionBar;
+        r4 = new java.lang.Object[r4];
+        r7 = r0.totalImagesCount;
+        r8 = r0.totalImagesCountMerge;
+        r7 = r7 + r8;
+        r8 = r0.imagesArr;
+        r8 = r8.size();
+        r7 = r7 - r8;
+        r8 = r0.currentIndex;
+        r7 = r7 + r8;
+        r7 = r7 + r5;
+        r7 = java.lang.Integer.valueOf(r7);
+        r4[r6] = r7;
+        r6 = r0.totalImagesCount;
+        r7 = r0.totalImagesCountMerge;
+        r6 = r6 + r7;
+        r6 = java.lang.Integer.valueOf(r6);
+        r4[r5] = r6;
+        r2 = org.telegram.messenger.LocaleController.formatString(r3, r2, r4);
+        r1.setTitle(r2);
+        goto L_0x0607;
+    L_0x0348:
+        r2 = org.telegram.messenger.NotificationCenter.mediaDidLoad;
+        if (r1 != r2) goto L_0x0591;
+    L_0x034c:
+        r1 = r23[r6];
+        r1 = (java.lang.Long) r1;
+        r1 = r1.longValue();
+        r3 = 3;
+        r3 = r23[r3];
+        r3 = (java.lang.Integer) r3;
+        r3 = r3.intValue();
+        r10 = r0.currentDialogId;
+        r12 = (r1 > r10 ? 1 : (r1 == r10 ? 0 : -1));
+        if (r12 == 0) goto L_0x0369;
+    L_0x0363:
+        r10 = r0.mergeDialogId;
+        r12 = (r1 > r10 ? 1 : (r1 == r10 ? 0 : -1));
+        if (r12 != 0) goto L_0x0607;
+    L_0x0369:
+        r10 = r0.classGuid;
+        if (r3 != r10) goto L_0x0607;
+    L_0x036d:
+        r0.loadingMoreImages = r6;
+        r10 = r0.currentDialogId;
+        r3 = (r1 > r10 ? 1 : (r1 == r10 ? 0 : -1));
+        if (r3 != 0) goto L_0x0377;
+    L_0x0375:
+        r1 = 0;
+        goto L_0x0378;
+    L_0x0377:
+        r1 = 1;
+    L_0x0378:
+        r2 = r23[r4];
+        r2 = (java.util.ArrayList) r2;
+        r3 = r0.endReached;
+        r10 = 5;
+        r10 = r23[r10];
+        r10 = (java.lang.Boolean) r10;
+        r10 = r10.booleanValue();
+        r3[r1] = r10;
+        r3 = r0.needSearchImageInArr;
+        if (r3 == 0) goto L_0x052b;
+    L_0x038d:
+        r3 = r2.isEmpty();
+        if (r3 == 0) goto L_0x039e;
+    L_0x0393:
+        if (r1 != 0) goto L_0x039b;
+    L_0x0395:
+        r10 = r0.mergeDialogId;
+        r3 = (r10 > r7 ? 1 : (r10 == r7 ? 0 : -1));
+        if (r3 != 0) goto L_0x039e;
+    L_0x039b:
+        r0.needSearchImageInArr = r6;
+        return;
+    L_0x039e:
+        r3 = r0.imagesArr;
+        r10 = r0.currentIndex;
+        r3 = r3.get(r10);
+        r3 = (org.telegram.messenger.MessageObject) r3;
+        r10 = 0;
+        r11 = 0;
+        r12 = -1;
+    L_0x03ab:
+        r13 = r2.size();
+        if (r10 >= r13) goto L_0x0400;
+    L_0x03b1:
+        r13 = r2.get(r10);
+        r13 = (org.telegram.messenger.MessageObject) r13;
+        r14 = r0.imagesByIdsTemp;
+        r14 = r14[r1];
+        r15 = r13.getId();
+        r14 = r14.indexOfKey(r15);
+        if (r14 >= 0) goto L_0x03fd;
+    L_0x03c5:
+        r14 = r0.imagesByIdsTemp;
+        r14 = r14[r1];
+        r15 = r13.getId();
+        r14.put(r15, r13);
+        r14 = r0.opennedFromMedia;
+        if (r14 == 0) goto L_0x03e7;
+    L_0x03d4:
+        r14 = r0.imagesArrTemp;
+        r14.add(r13);
+        r13 = r13.getId();
+        r14 = r3.getId();
+        if (r13 != r14) goto L_0x03e4;
+    L_0x03e3:
+        r12 = r11;
+    L_0x03e4:
+        r11 = r11 + 1;
+        goto L_0x03fd;
+    L_0x03e7:
+        r11 = r11 + 1;
+        r14 = r0.imagesArrTemp;
+        r14.add(r6, r13);
+        r13 = r13.getId();
+        r14 = r3.getId();
+        if (r13 != r14) goto L_0x03fd;
+    L_0x03f8:
+        r12 = r2.size();
+        r12 = r12 - r11;
+    L_0x03fd:
+        r10 = r10 + 1;
+        goto L_0x03ab;
+    L_0x0400:
+        if (r11 != 0) goto L_0x0414;
+    L_0x0402:
+        if (r1 != 0) goto L_0x040a;
+    L_0x0404:
+        r2 = r0.mergeDialogId;
+        r10 = (r2 > r7 ? 1 : (r2 == r7 ? 0 : -1));
+        if (r10 != 0) goto L_0x0414;
+    L_0x040a:
+        r2 = r0.imagesArr;
+        r2 = r2.size();
+        r0.totalImagesCount = r2;
+        r0.totalImagesCountMerge = r6;
+    L_0x0414:
+        if (r12 == r9) goto L_0x0459;
+    L_0x0416:
+        r1 = r0.imagesArr;
+        r1.clear();
+        r1 = r0.imagesArr;
+        r2 = r0.imagesArrTemp;
+        r1.addAll(r2);
+        r1 = 0;
+    L_0x0423:
+        if (r1 >= r4) goto L_0x043b;
+    L_0x0425:
+        r2 = r0.imagesByIds;
+        r3 = r0.imagesByIdsTemp;
+        r3 = r3[r1];
+        r3 = r3.clone();
+        r2[r1] = r3;
+        r2 = r0.imagesByIdsTemp;
+        r2 = r2[r1];
+        r2.clear();
+        r1 = r1 + 1;
+        goto L_0x0423;
+    L_0x043b:
+        r1 = r0.imagesArrTemp;
+        r1.clear();
+        r0.needSearchImageInArr = r6;
+        r0.currentIndex = r9;
+        r1 = r0.imagesArr;
+        r1 = r1.size();
+        if (r12 < r1) goto L_0x0454;
+    L_0x044c:
+        r1 = r0.imagesArr;
+        r1 = r1.size();
+        r12 = r1 + -1;
+    L_0x0454:
+        r0.setImageIndex(r12, r5);
+        goto L_0x0607;
+    L_0x0459:
+        r2 = r0.opennedFromMedia;
+        if (r2 == 0) goto L_0x04a6;
+    L_0x045d:
+        r2 = r0.imagesArrTemp;
+        r2 = r2.isEmpty();
+        if (r2 == 0) goto L_0x0467;
+    L_0x0465:
+        r2 = 0;
+        goto L_0x0478;
+    L_0x0467:
+        r2 = r0.imagesArrTemp;
+        r3 = r2.size();
+        r3 = r3 - r5;
+        r2 = r2.get(r3);
+        r2 = (org.telegram.messenger.MessageObject) r2;
+        r2 = r2.getId();
+    L_0x0478:
+        if (r1 != 0) goto L_0x04ea;
+    L_0x047a:
+        r3 = r0.endReached;
+        r3 = r3[r1];
+        if (r3 == 0) goto L_0x04ea;
+    L_0x0480:
+        r3 = r0.mergeDialogId;
+        r9 = (r3 > r7 ? 1 : (r3 == r7 ? 0 : -1));
+        if (r9 == 0) goto L_0x04ea;
+    L_0x0486:
+        r1 = r0.imagesArrTemp;
+        r1 = r1.isEmpty();
+        if (r1 != 0) goto L_0x04e7;
+    L_0x048e:
+        r1 = r0.imagesArrTemp;
+        r3 = r1.size();
+        r3 = r3 - r5;
+        r1 = r1.get(r3);
+        r1 = (org.telegram.messenger.MessageObject) r1;
+        r3 = r1.getDialogId();
+        r7 = r0.mergeDialogId;
+        r1 = (r3 > r7 ? 1 : (r3 == r7 ? 0 : -1));
+        if (r1 == 0) goto L_0x04e7;
+    L_0x04a5:
+        goto L_0x04e4;
+    L_0x04a6:
+        r2 = r0.imagesArrTemp;
+        r2 = r2.isEmpty();
+        if (r2 == 0) goto L_0x04b0;
+    L_0x04ae:
+        r2 = 0;
+        goto L_0x04bc;
+    L_0x04b0:
+        r2 = r0.imagesArrTemp;
+        r2 = r2.get(r6);
+        r2 = (org.telegram.messenger.MessageObject) r2;
+        r2 = r2.getId();
+    L_0x04bc:
+        if (r1 != 0) goto L_0x04ea;
+    L_0x04be:
+        r3 = r0.endReached;
+        r3 = r3[r1];
+        if (r3 == 0) goto L_0x04ea;
+    L_0x04c4:
+        r3 = r0.mergeDialogId;
+        r9 = (r3 > r7 ? 1 : (r3 == r7 ? 0 : -1));
+        if (r9 == 0) goto L_0x04ea;
+    L_0x04ca:
+        r1 = r0.imagesArrTemp;
+        r1 = r1.isEmpty();
+        if (r1 != 0) goto L_0x04e7;
+    L_0x04d2:
+        r1 = r0.imagesArrTemp;
+        r1 = r1.get(r6);
+        r1 = (org.telegram.messenger.MessageObject) r1;
+        r3 = r1.getDialogId();
+        r7 = r0.mergeDialogId;
+        r1 = (r3 > r7 ? 1 : (r3 == r7 ? 0 : -1));
+        if (r1 == 0) goto L_0x04e7;
+    L_0x04e4:
+        r1 = 1;
+        r10 = 0;
+        goto L_0x04eb;
+    L_0x04e7:
+        r10 = r2;
+        r1 = 1;
+        goto L_0x04eb;
+    L_0x04ea:
+        r10 = r2;
+    L_0x04eb:
+        r2 = r0.endReached;
+        r2 = r2[r1];
+        if (r2 != 0) goto L_0x0607;
+    L_0x04f1:
+        r0.loadingMoreImages = r5;
+        r2 = r0.opennedFromMedia;
+        if (r2 == 0) goto L_0x0511;
+    L_0x04f7:
+        r2 = r0.currentAccount;
+        r6 = org.telegram.messenger.DataQuery.getInstance(r2);
+        if (r1 != 0) goto L_0x0502;
+    L_0x04ff:
+        r1 = r0.currentDialogId;
+        goto L_0x0504;
+    L_0x0502:
+        r1 = r0.mergeDialogId;
+    L_0x0504:
+        r7 = r1;
+        r9 = 80;
+        r11 = r0.sharedMediaType;
+        r12 = 1;
+        r13 = r0.classGuid;
+        r6.loadMedia(r7, r9, r10, r11, r12, r13);
+        goto L_0x0607;
+    L_0x0511:
+        r2 = r0.currentAccount;
+        r6 = org.telegram.messenger.DataQuery.getInstance(r2);
+        if (r1 != 0) goto L_0x051c;
+    L_0x0519:
+        r1 = r0.currentDialogId;
+        goto L_0x051e;
+    L_0x051c:
+        r1 = r0.mergeDialogId;
+    L_0x051e:
+        r7 = r1;
+        r9 = 80;
+        r11 = r0.sharedMediaType;
+        r12 = 1;
+        r13 = r0.classGuid;
+        r6.loadMedia(r7, r9, r10, r11, r12, r13);
+        goto L_0x0607;
+    L_0x052b:
+        r2 = r2.iterator();
+        r3 = 0;
+    L_0x0530:
+        r4 = r2.hasNext();
+        if (r4 == 0) goto L_0x0567;
+    L_0x0536:
+        r4 = r2.next();
+        r4 = (org.telegram.messenger.MessageObject) r4;
+        r7 = r0.imagesByIds;
+        r7 = r7[r1];
+        r8 = r4.getId();
+        r7 = r7.indexOfKey(r8);
+        if (r7 >= 0) goto L_0x0530;
+    L_0x054a:
+        r3 = r3 + 1;
+        r7 = r0.opennedFromMedia;
+        if (r7 == 0) goto L_0x0556;
+    L_0x0550:
+        r7 = r0.imagesArr;
+        r7.add(r4);
+        goto L_0x055b;
+    L_0x0556:
+        r7 = r0.imagesArr;
+        r7.add(r6, r4);
+    L_0x055b:
+        r7 = r0.imagesByIds;
+        r7 = r7[r1];
+        r8 = r4.getId();
+        r7.put(r8, r4);
+        goto L_0x0530;
+    L_0x0567:
+        r1 = r0.opennedFromMedia;
+        if (r1 == 0) goto L_0x0579;
+    L_0x056b:
+        if (r3 != 0) goto L_0x0607;
+    L_0x056d:
+        r1 = r0.imagesArr;
+        r1 = r1.size();
+        r0.totalImagesCount = r1;
+        r0.totalImagesCountMerge = r6;
+        goto L_0x0607;
+    L_0x0579:
+        if (r3 == 0) goto L_0x0585;
+    L_0x057b:
+        r1 = r0.currentIndex;
+        r0.currentIndex = r9;
+        r1 = r1 + r3;
+        r0.setImageIndex(r1, r5);
+        goto L_0x0607;
+    L_0x0585:
+        r1 = r0.imagesArr;
+        r1 = r1.size();
+        r0.totalImagesCount = r1;
+        r0.totalImagesCountMerge = r6;
+        goto L_0x0607;
+    L_0x0591:
+        r2 = org.telegram.messenger.NotificationCenter.emojiDidLoad;
+        if (r1 != r2) goto L_0x059d;
+    L_0x0595:
+        r1 = r0.captionTextView;
+        if (r1 == 0) goto L_0x0607;
+    L_0x0599:
+        r1.invalidate();
+        goto L_0x0607;
+    L_0x059d:
+        r2 = org.telegram.messenger.NotificationCenter.filePreparingFailed;
+        if (r1 != r2) goto L_0x05d7;
+    L_0x05a1:
+        r1 = r23[r6];
+        r1 = (org.telegram.messenger.MessageObject) r1;
+        r2 = r0.loadInitialVideo;
+        if (r2 == 0) goto L_0x05b6;
+    L_0x05a9:
+        r0.loadInitialVideo = r6;
+        r1 = r0.progressView;
+        r1.setVisibility(r3);
+        r1 = r0.currentPlayingVideoFile;
+        r0.preparePlayer(r1, r6, r6);
+        goto L_0x0607;
+    L_0x05b6:
+        r2 = r0.tryStartRequestPreviewOnFinish;
+        if (r2 == 0) goto L_0x05cb;
+    L_0x05ba:
+        r0.releasePlayer(r6);
+        r1 = org.telegram.messenger.MediaController.getInstance();
+        r2 = r0.videoPreviewMessageObject;
+        r1 = r1.scheduleVideoConvert(r2, r5);
+        r1 = r1 ^ r5;
+        r0.tryStartRequestPreviewOnFinish = r1;
+        goto L_0x0607;
+    L_0x05cb:
+        r2 = r0.videoPreviewMessageObject;
+        if (r1 != r2) goto L_0x0607;
+    L_0x05cf:
+        r0.requestingPreview = r6;
+        r1 = r0.progressView;
+        r1.setVisibility(r3);
+        goto L_0x0607;
+    L_0x05d7:
+        r2 = org.telegram.messenger.NotificationCenter.fileNewChunkAvailable;
+        if (r1 != r2) goto L_0x0607;
+    L_0x05db:
+        r1 = r23[r6];
+        r1 = (org.telegram.messenger.MessageObject) r1;
+        r2 = r0.videoPreviewMessageObject;
+        if (r1 != r2) goto L_0x0607;
+    L_0x05e3:
+        r1 = r23[r5];
+        r1 = (java.lang.String) r1;
+        r2 = 3;
+        r2 = r23[r2];
+        r2 = (java.lang.Long) r2;
+        r9 = r2.longValue();
+        r2 = (r9 > r7 ? 1 : (r9 == r7 ? 0 : -1));
+        if (r2 == 0) goto L_0x0607;
+    L_0x05f4:
+        r0.requestingPreview = r6;
+        r2 = r0.progressView;
+        r2.setVisibility(r3);
+        r2 = new java.io.File;
+        r2.<init>(r1);
+        r1 = android.net.Uri.fromFile(r2);
+        r0.preparePlayer(r1, r6, r5);
+    L_0x0607:
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.didReceivedNotification(int, int, java.lang.Object[]):void");
     }
 
     private void showDownloadAlert() {
-        boolean alreadyDownloading = false;
         Builder builder = new Builder(this.parentActivity);
         builder.setTitle(LocaleController.getString("AppName", NUM));
         builder.setPositiveButton(LocaleController.getString("OK", NUM), null);
-        if (this.currentMessageObject != null && this.currentMessageObject.isVideo() && FileLoader.getInstance(this.currentMessageObject.currentAccount).isLoadingFile(this.currentFileNames[0])) {
-            alreadyDownloading = true;
+        MessageObject messageObject = this.currentMessageObject;
+        int i = 0;
+        if (messageObject != null && messageObject.isVideo() && FileLoader.getInstance(this.currentMessageObject.currentAccount).isLoadingFile(this.currentFileNames[0])) {
+            i = 1;
         }
-        if (alreadyDownloading) {
+        if (i != 0) {
             builder.setMessage(LocaleController.getString("PleaseStreamDownload", NUM));
         } else {
             builder.setMessage(LocaleController.getString("PleaseDownload", NUM));
@@ -1903,93 +2694,157 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         showAlertDialog(builder);
     }
 
+    /* JADX WARNING: Missing exception handler attribute for start block: B:39:0x0098 */
+    /* JADX WARNING: Can't wrap try/catch for region: R(4:37|38|39|40) */
     private void onSharePressed() {
-        Throwable e;
-        boolean z = true;
-        if (this.parentActivity != null && this.allowShare) {
-            File f = null;
-            boolean isVideo = false;
-            try {
-                if (this.currentMessageObject != null) {
-                    isVideo = this.currentMessageObject.isVideo();
-                    if (!TextUtils.isEmpty(this.currentMessageObject.messageOwner.attachPath)) {
-                        File f2 = new File(this.currentMessageObject.messageOwner.attachPath);
-                        try {
-                            if (f2.exists()) {
-                                f = f2;
-                            } else {
-                                f = null;
-                            }
-                        } catch (Exception e2) {
-                            e = e2;
-                            f = f2;
-                        }
-                    }
-                    if (f == null) {
-                        f = FileLoader.getPathToMessage(this.currentMessageObject.messageOwner);
-                    }
-                } else if (this.currentFileLocation != null) {
-                    FileLocation fileLocation = this.currentFileLocation;
-                    if (this.avatarsDialogId == 0 && !this.isEvent) {
-                        z = false;
-                    }
-                    f = FileLoader.getPathToAttach(fileLocation, z);
-                }
-                if (f.exists()) {
-                    Intent intent = new Intent("android.intent.action.SEND");
-                    if (isVideo) {
-                        intent.setType("video/mp4");
-                    } else if (this.currentMessageObject != null) {
-                        intent.setType(this.currentMessageObject.getMimeType());
-                    } else {
-                        intent.setType("image/jpeg");
-                    }
-                    if (VERSION.SDK_INT >= 24) {
-                        try {
-                            intent.putExtra("android.intent.extra.STREAM", FileProvider.getUriForFile(this.parentActivity, "org.telegram.messenger.beta.provider", f));
-                            intent.setFlags(1);
-                        } catch (Exception e3) {
-                            intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(f));
-                        }
-                    } else {
-                        intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(f));
-                    }
-                    this.parentActivity.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", NUM)), 500);
-                    return;
-                }
-                showDownloadAlert();
-                return;
-            } catch (Exception e4) {
-                e = e4;
-            }
-        } else {
-            return;
-        }
-        FileLog.e(e);
+        /*
+        r6 = this;
+        r0 = r6.parentActivity;
+        if (r0 == 0) goto L_0x00c4;
+    L_0x0004:
+        r0 = r6.allowShare;
+        if (r0 != 0) goto L_0x000a;
+    L_0x0008:
+        goto L_0x00c4;
+    L_0x000a:
+        r0 = r6.currentMessageObject;	 Catch:{ Exception -> 0x00c0 }
+        r1 = 1;
+        r2 = 0;
+        r3 = 0;
+        if (r0 == 0) goto L_0x0041;
+    L_0x0011:
+        r0 = r6.currentMessageObject;	 Catch:{ Exception -> 0x00c0 }
+        r2 = r0.isVideo();	 Catch:{ Exception -> 0x00c0 }
+        r0 = r6.currentMessageObject;	 Catch:{ Exception -> 0x00c0 }
+        r0 = r0.messageOwner;	 Catch:{ Exception -> 0x00c0 }
+        r0 = r0.attachPath;	 Catch:{ Exception -> 0x00c0 }
+        r0 = android.text.TextUtils.isEmpty(r0);	 Catch:{ Exception -> 0x00c0 }
+        if (r0 != 0) goto L_0x0036;
+    L_0x0023:
+        r0 = new java.io.File;	 Catch:{ Exception -> 0x00c0 }
+        r4 = r6.currentMessageObject;	 Catch:{ Exception -> 0x00c0 }
+        r4 = r4.messageOwner;	 Catch:{ Exception -> 0x00c0 }
+        r4 = r4.attachPath;	 Catch:{ Exception -> 0x00c0 }
+        r0.<init>(r4);	 Catch:{ Exception -> 0x00c0 }
+        r4 = r0.exists();	 Catch:{ Exception -> 0x00c0 }
+        if (r4 != 0) goto L_0x0035;
+    L_0x0034:
+        goto L_0x0036;
+    L_0x0035:
+        r3 = r0;
+    L_0x0036:
+        if (r3 != 0) goto L_0x0059;
+    L_0x0038:
+        r0 = r6.currentMessageObject;	 Catch:{ Exception -> 0x00c0 }
+        r0 = r0.messageOwner;	 Catch:{ Exception -> 0x00c0 }
+        r3 = org.telegram.messenger.FileLoader.getPathToMessage(r0);	 Catch:{ Exception -> 0x00c0 }
+        goto L_0x0059;
+    L_0x0041:
+        r0 = r6.currentFileLocation;	 Catch:{ Exception -> 0x00c0 }
+        if (r0 == 0) goto L_0x0059;
+    L_0x0045:
+        r0 = r6.currentFileLocation;	 Catch:{ Exception -> 0x00c0 }
+        r0 = r0.location;	 Catch:{ Exception -> 0x00c0 }
+        r3 = r6.avatarsDialogId;	 Catch:{ Exception -> 0x00c0 }
+        if (r3 != 0) goto L_0x0054;
+    L_0x004d:
+        r3 = r6.isEvent;	 Catch:{ Exception -> 0x00c0 }
+        if (r3 == 0) goto L_0x0052;
+    L_0x0051:
+        goto L_0x0054;
+    L_0x0052:
+        r3 = 0;
+        goto L_0x0055;
+    L_0x0054:
+        r3 = 1;
+    L_0x0055:
+        r3 = org.telegram.messenger.FileLoader.getPathToAttach(r0, r3);	 Catch:{ Exception -> 0x00c0 }
+    L_0x0059:
+        r0 = r3.exists();	 Catch:{ Exception -> 0x00c0 }
+        if (r0 == 0) goto L_0x00bc;
+    L_0x005f:
+        r0 = new android.content.Intent;	 Catch:{ Exception -> 0x00c0 }
+        r4 = "android.intent.action.SEND";
+        r0.<init>(r4);	 Catch:{ Exception -> 0x00c0 }
+        if (r2 == 0) goto L_0x006e;
+    L_0x0068:
+        r2 = "video/mp4";
+        r0.setType(r2);	 Catch:{ Exception -> 0x00c0 }
+        goto L_0x0081;
+    L_0x006e:
+        r2 = r6.currentMessageObject;	 Catch:{ Exception -> 0x00c0 }
+        if (r2 == 0) goto L_0x007c;
+    L_0x0072:
+        r2 = r6.currentMessageObject;	 Catch:{ Exception -> 0x00c0 }
+        r2 = r2.getMimeType();	 Catch:{ Exception -> 0x00c0 }
+        r0.setType(r2);	 Catch:{ Exception -> 0x00c0 }
+        goto L_0x0081;
+    L_0x007c:
+        r2 = "image/jpeg";
+        r0.setType(r2);	 Catch:{ Exception -> 0x00c0 }
+    L_0x0081:
+        r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x00c0 }
+        r4 = 24;
+        r5 = "android.intent.extra.STREAM";
+        if (r2 < r4) goto L_0x00a0;
+    L_0x0089:
+        r2 = r6.parentActivity;	 Catch:{ Exception -> 0x0098 }
+        r4 = "org.telegram.messenger.beta.provider";
+        r2 = androidx.core.content.FileProvider.getUriForFile(r2, r4, r3);	 Catch:{ Exception -> 0x0098 }
+        r0.putExtra(r5, r2);	 Catch:{ Exception -> 0x0098 }
+        r0.setFlags(r1);	 Catch:{ Exception -> 0x0098 }
+        goto L_0x00a7;
+    L_0x0098:
+        r1 = android.net.Uri.fromFile(r3);	 Catch:{ Exception -> 0x00c0 }
+        r0.putExtra(r5, r1);	 Catch:{ Exception -> 0x00c0 }
+        goto L_0x00a7;
+    L_0x00a0:
+        r1 = android.net.Uri.fromFile(r3);	 Catch:{ Exception -> 0x00c0 }
+        r0.putExtra(r5, r1);	 Catch:{ Exception -> 0x00c0 }
+    L_0x00a7:
+        r1 = r6.parentActivity;	 Catch:{ Exception -> 0x00c0 }
+        r2 = "ShareFile";
+        r3 = NUM; // 0x7f0d08f6 float:1.8746768E38 double:1.053130911E-314;
+        r2 = org.telegram.messenger.LocaleController.getString(r2, r3);	 Catch:{ Exception -> 0x00c0 }
+        r0 = android.content.Intent.createChooser(r0, r2);	 Catch:{ Exception -> 0x00c0 }
+        r2 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
+        r1.startActivityForResult(r0, r2);	 Catch:{ Exception -> 0x00c0 }
+        goto L_0x00c4;
+    L_0x00bc:
+        r6.showDownloadAlert();	 Catch:{ Exception -> 0x00c0 }
+        goto L_0x00c4;
+    L_0x00c0:
+        r0 = move-exception;
+        org.telegram.messenger.FileLog.e(r0);
+    L_0x00c4:
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.onSharePressed():void");
     }
 
     private void setScaleToFill() {
         float bitmapWidth = (float) this.centerImage.getBitmapWidth();
-        float containerWidth = (float) getContainerViewWidth();
+        float containerViewWidth = (float) getContainerViewWidth();
         float bitmapHeight = (float) this.centerImage.getBitmapHeight();
-        float containerHeight = (float) getContainerViewHeight();
-        float scaleFit = Math.min(containerHeight / bitmapHeight, containerWidth / bitmapWidth);
-        this.scale = Math.max(containerWidth / ((float) ((int) (bitmapWidth * scaleFit))), containerHeight / ((float) ((int) (bitmapHeight * scaleFit))));
+        float containerViewHeight = (float) getContainerViewHeight();
+        float min = Math.min(containerViewHeight / bitmapHeight, containerViewWidth / bitmapWidth);
+        this.scale = Math.max(containerViewWidth / ((float) ((int) (bitmapWidth * min))), containerViewHeight / ((float) ((int) (bitmapHeight * min))));
         updateMinMax(this.scale);
     }
 
-    public void setParentAlert(ChatAttachAlert alert) {
-        this.parentAlert = alert;
+    public void setParentAlert(ChatAttachAlert chatAttachAlert) {
+        this.parentAlert = chatAttachAlert;
     }
 
     public void setParentActivity(Activity activity) {
+        Activity activity2 = activity;
         this.currentAccount = UserConfig.selectedAccount;
         this.centerImage.setCurrentAccount(this.currentAccount);
         this.leftImage.setCurrentAccount(this.currentAccount);
         this.rightImage.setCurrentAccount(this.currentAccount);
-        if (this.parentActivity != activity) {
-            FrameLayout.LayoutParams layoutParams;
-            this.parentActivity = activity;
+        if (this.parentActivity != activity2) {
+            int i;
+            this.parentActivity = activity2;
             this.actvityContext = new ContextThemeWrapper(this.parentActivity, NUM);
             if (progressDrawables == null) {
                 progressDrawables = new Drawable[4];
@@ -1998,70 +2853,77 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 progressDrawables[2] = this.parentActivity.getResources().getDrawable(NUM);
                 progressDrawables[3] = this.parentActivity.getResources().getDrawable(NUM);
             }
-            this.scroller = new Scroller(activity);
-            this.windowView = new FrameLayout(activity) {
+            this.scroller = new Scroller(activity2);
+            this.windowView = new FrameLayout(activity2) {
                 private Runnable attachRunnable;
 
-                public boolean onInterceptTouchEvent(MotionEvent ev) {
-                    return PhotoViewer.this.isVisible && super.onInterceptTouchEvent(ev);
+                public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+                    return PhotoViewer.this.isVisible && super.onInterceptTouchEvent(motionEvent);
                 }
 
-                public boolean onTouchEvent(MotionEvent event) {
-                    return PhotoViewer.this.isVisible && PhotoViewer.this.onTouchEvent(event);
+                public boolean onTouchEvent(MotionEvent motionEvent) {
+                    return PhotoViewer.this.isVisible && PhotoViewer.this.onTouchEvent(motionEvent);
                 }
 
                 /* Access modifiers changed, original: protected */
-                public boolean drawChild(Canvas canvas, View child, long drawingTime) {
-                    boolean result;
+                public boolean drawChild(Canvas canvas, View view, long j) {
+                    boolean drawChild;
                     try {
-                        result = super.drawChild(canvas, child, drawingTime);
-                    } catch (Throwable th) {
-                        result = false;
+                        drawChild = super.drawChild(canvas, view, j);
+                    } catch (Throwable unused) {
+                        drawChild = false;
                     }
-                    if (VERSION.SDK_INT >= 21 && child == PhotoViewer.this.animatingImageView && PhotoViewer.this.lastInsets != null) {
-                        canvas.drawRect(0.0f, (float) getMeasuredHeight(), (float) getMeasuredWidth(), (float) (getMeasuredHeight() + ((WindowInsets) PhotoViewer.this.lastInsets).getSystemWindowInsetBottom()), PhotoViewer.this.blackPaint);
+                    if (VERSION.SDK_INT >= 21 && view == PhotoViewer.this.animatingImageView && PhotoViewer.this.lastInsets != null) {
+                        Canvas canvas2 = canvas;
+                        canvas2.drawRect(0.0f, (float) getMeasuredHeight(), (float) getMeasuredWidth(), (float) (getMeasuredHeight() + ((WindowInsets) PhotoViewer.this.lastInsets).getSystemWindowInsetBottom()), PhotoViewer.this.blackPaint);
                     }
-                    return result;
+                    return drawChild;
                 }
 
                 /* Access modifiers changed, original: protected */
-                public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                    int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-                    int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-                    if (VERSION.SDK_INT >= 21 && PhotoViewer.this.lastInsets != null) {
-                        WindowInsets insets = (WindowInsets) PhotoViewer.this.lastInsets;
-                        if (AndroidUtilities.incorrectDisplaySizeFix) {
-                            if (heightSize > AndroidUtilities.displaySize.y) {
-                                heightSize = AndroidUtilities.displaySize.y;
-                            }
-                            heightSize += AndroidUtilities.statusBarHeight;
+                public void onMeasure(int i, int i2) {
+                    i = MeasureSpec.getSize(i);
+                    i2 = MeasureSpec.getSize(i2);
+                    if (VERSION.SDK_INT < 21 || PhotoViewer.this.lastInsets == null) {
+                        int i3 = AndroidUtilities.displaySize.y;
+                        if (i2 > i3) {
+                            i2 = i3;
                         }
-                        heightSize -= insets.getSystemWindowInsetBottom();
-                    } else if (heightSize > AndroidUtilities.displaySize.y) {
-                        heightSize = AndroidUtilities.displaySize.y;
+                    } else {
+                        WindowInsets windowInsets = (WindowInsets) PhotoViewer.this.lastInsets;
+                        if (AndroidUtilities.incorrectDisplaySizeFix) {
+                            int i4 = AndroidUtilities.displaySize.y;
+                            if (i2 > i4) {
+                                i2 = i4;
+                            }
+                            i2 += AndroidUtilities.statusBarHeight;
+                        }
+                        i2 -= windowInsets.getSystemWindowInsetBottom();
                     }
-                    setMeasuredDimension(widthSize, heightSize);
+                    setMeasuredDimension(i, i2);
                     ViewGroup.LayoutParams layoutParams = PhotoViewer.this.animatingImageView.getLayoutParams();
                     PhotoViewer.this.animatingImageView.measure(MeasureSpec.makeMeasureSpec(layoutParams.width, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(layoutParams.height, Integer.MIN_VALUE));
-                    PhotoViewer.this.containerView.measure(MeasureSpec.makeMeasureSpec(widthSize, NUM), MeasureSpec.makeMeasureSpec(heightSize, NUM));
+                    PhotoViewer.this.containerView.measure(MeasureSpec.makeMeasureSpec(i, NUM), MeasureSpec.makeMeasureSpec(i2, NUM));
                 }
 
                 /* Access modifiers changed, original: protected */
-                public void onLayout(boolean changed, int left, int top, int right, int bottom) {
-                    if (VERSION.SDK_INT < 21 || PhotoViewer.this.lastInsets != null) {
+                public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+                    if (VERSION.SDK_INT >= 21) {
+                        PhotoViewer.this.lastInsets;
                     }
                     PhotoViewer.this.animatingImageView.layout(0, 0, PhotoViewer.this.animatingImageView.getMeasuredWidth() + 0, PhotoViewer.this.animatingImageView.getMeasuredHeight());
                     PhotoViewer.this.containerView.layout(0, 0, PhotoViewer.this.containerView.getMeasuredWidth() + 0, PhotoViewer.this.containerView.getMeasuredHeight());
                     PhotoViewer.this.wasLayout = true;
-                    if (changed) {
+                    if (z) {
                         if (!PhotoViewer.this.dontResetZoomOnFirstLayout) {
                             PhotoViewer.this.scale = 1.0f;
                             PhotoViewer.this.translationX = 0.0f;
                             PhotoViewer.this.translationY = 0.0f;
-                            PhotoViewer.this.updateMinMax(PhotoViewer.this.scale);
+                            PhotoViewer photoViewer = PhotoViewer.this;
+                            photoViewer.updateMinMax(photoViewer.scale);
                         }
                         if (PhotoViewer.this.checkImageView != null) {
-                            PhotoViewer.this.checkImageView.post(new PhotoViewer$5$$Lambda$0(this));
+                            PhotoViewer.this.checkImageView.post(new -$$Lambda$PhotoViewer$5$gQgnGW1vt8iiuLxByIijlXWDJsU(this));
                         }
                     }
                     if (PhotoViewer.this.dontResetZoomOnFirstLayout) {
@@ -2070,12 +2932,11 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     }
                 }
 
-                /* Access modifiers changed, original: final|synthetic */
-                public final /* synthetic */ void lambda$onLayout$0$PhotoViewer$5() {
-                    int i = 0;
+                public /* synthetic */ void lambda$onLayout$0$PhotoViewer$5() {
                     FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) PhotoViewer.this.checkImageView.getLayoutParams();
-                    int rotation = ((WindowManager) ApplicationLoader.applicationContext.getSystemService("window")).getDefaultDisplay().getRotation();
-                    layoutParams.topMargin = (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0) + ((ActionBar.getCurrentActionBarHeight() - AndroidUtilities.dp(40.0f)) / 2);
+                    ((WindowManager) ApplicationLoader.applicationContext.getSystemService("window")).getDefaultDisplay().getRotation();
+                    int i = 0;
+                    layoutParams.topMargin = ((ActionBar.getCurrentActionBarHeight() - AndroidUtilities.dp(40.0f)) / 2) + (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
                     PhotoViewer.this.checkImageView.setLayoutParams(layoutParams);
                     layoutParams = (FrameLayout.LayoutParams) PhotoViewer.this.photosCounterView.getLayoutParams();
                     int currentActionBarHeight = (ActionBar.getCurrentActionBarHeight() - AndroidUtilities.dp(40.0f)) / 2;
@@ -2099,9 +2960,9 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     PhotoViewer.this.wasLayout = false;
                 }
 
-                public boolean dispatchKeyEventPreIme(KeyEvent event) {
-                    if (event == null || event.getKeyCode() != 4 || event.getAction() != 1) {
-                        return super.dispatchKeyEventPreIme(event);
+                public boolean dispatchKeyEventPreIme(KeyEvent keyEvent) {
+                    if (keyEvent == null || keyEvent.getKeyCode() != 4 || keyEvent.getAction() != 1) {
+                        return super.dispatchKeyEventPreIme(keyEvent);
                     }
                     if (PhotoViewer.this.captionEditText.isPopupShowing() || PhotoViewer.this.captionEditText.isKeyboardVisible()) {
                         PhotoViewer.this.closeCaptionEnter(false);
@@ -2111,51 +2972,53 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     return true;
                 }
 
-                public ActionMode startActionModeForChild(View originalView, Callback callback, int type) {
+                public ActionMode startActionModeForChild(View view, Callback callback, int i) {
                     if (VERSION.SDK_INT >= 23) {
-                        View view = PhotoViewer.this.parentActivity.findViewById(16908290);
-                        if (view instanceof ViewGroup) {
+                        View findViewById = PhotoViewer.this.parentActivity.findViewById(16908290);
+                        if (findViewById instanceof ViewGroup) {
                             try {
-                                return ((ViewGroup) view).startActionModeForChild(originalView, callback, type);
-                            } catch (Throwable e) {
-                                FileLog.e(e);
+                                view = ((ViewGroup) findViewById).startActionModeForChild(view, callback, i);
+                                return view;
+                            } catch (Throwable th) {
+                                FileLog.e(th);
                             }
                         }
                     }
-                    return super.startActionModeForChild(originalView, callback, type);
+                    return super.startActionModeForChild(view, callback, i);
                 }
             };
             this.windowView.setBackgroundDrawable(this.backgroundDrawable);
             this.windowView.setClipChildren(true);
             this.windowView.setFocusable(false);
-            this.animatingImageView = new ClippingImageView(activity);
+            this.animatingImageView = new ClippingImageView(activity2);
             this.animatingImageView.setAnimationValues(this.animationValues);
             this.windowView.addView(this.animatingImageView, LayoutHelper.createFrame(40, 40.0f));
-            this.containerView = new FrameLayoutDrawer(activity);
+            this.containerView = new FrameLayoutDrawer(activity2);
             this.containerView.setFocusable(false);
             this.windowView.addView(this.containerView, LayoutHelper.createFrame(-1, -1, 51));
             if (VERSION.SDK_INT >= 21) {
                 this.containerView.setFitsSystemWindows(true);
-                this.containerView.setOnApplyWindowInsetsListener(new PhotoViewer$$Lambda$1(this));
+                this.containerView.setOnApplyWindowInsetsListener(new -$$Lambda$PhotoViewer$dljDNjeNI7WCE_iobU6HEh1zPNQ(this));
                 this.containerView.setSystemUiVisibility(1792);
             }
             this.windowLayoutParams = new LayoutParams();
-            this.windowLayoutParams.height = -1;
-            this.windowLayoutParams.format = -3;
-            this.windowLayoutParams.width = -1;
-            this.windowLayoutParams.gravity = 51;
-            this.windowLayoutParams.type = 99;
+            LayoutParams layoutParams = this.windowLayoutParams;
+            layoutParams.height = -1;
+            layoutParams.format = -3;
+            layoutParams.width = -1;
+            layoutParams.gravity = 51;
+            layoutParams.type = 99;
             if (VERSION.SDK_INT >= 28) {
-                this.windowLayoutParams.layoutInDisplayCutoutMode = 1;
+                layoutParams.layoutInDisplayCutoutMode = 1;
             }
             if (VERSION.SDK_INT >= 21) {
                 this.windowLayoutParams.flags = -NUM;
             } else {
                 this.windowLayoutParams.flags = 131072;
             }
-            this.actionBar = new ActionBar(activity) {
-                public void setAlpha(float alpha) {
-                    super.setAlpha(alpha);
+            this.actionBar = new ActionBar(activity2) {
+                public void setAlpha(float f) {
+                    super.setAlpha(f);
                     PhotoViewer.this.containerView.invalidate();
                 }
             };
@@ -2168,103 +3031,111 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             this.actionBar.setTitle(LocaleController.formatString("Of", NUM, Integer.valueOf(1), Integer.valueOf(1)));
             this.containerView.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f));
             this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
-                public void onItemClick(int id) {
-                    int i;
-                    BaseFragment mediaActivity;
-                    Bundle args;
-                    if (id == -1) {
+                public void onItemClick(int i) {
+                    int i2 = i;
+                    int i3 = 1;
+                    Bundle bundle;
+                    int access$7600;
+                    Chat chat;
+                    if (i2 == -1) {
                         if (PhotoViewer.this.needCaptionLayout && (PhotoViewer.this.captionEditText.isPopupShowing() || PhotoViewer.this.captionEditText.isKeyboardVisible())) {
                             PhotoViewer.this.closeCaptionEnter(false);
-                        } else {
-                            PhotoViewer.this.closePhoto(true, false);
-                        }
-                    } else if (id == 1) {
-                        if (VERSION.SDK_INT < 23 || PhotoViewer.this.parentActivity.checkSelfPermission("android.permission.WRITE_EXTERNAL_STORAGE") == 0) {
-                            File f = null;
-                            if (PhotoViewer.this.currentMessageObject != null) {
-                                if ((PhotoViewer.this.currentMessageObject.messageOwner.media instanceof TL_messageMediaWebPage) && PhotoViewer.this.currentMessageObject.messageOwner.media.webpage != null && PhotoViewer.this.currentMessageObject.messageOwner.media.webpage.document == null) {
-                                    f = FileLoader.getPathToAttach(PhotoViewer.this.getFileLocation(PhotoViewer.this.currentIndex, null), true);
-                                } else {
-                                    f = FileLoader.getPathToMessage(PhotoViewer.this.currentMessageObject.messageOwner);
-                                }
-                            } else if (PhotoViewer.this.currentFileLocation != null) {
-                                FileLocation access$7200 = PhotoViewer.this.currentFileLocation;
-                                boolean z = PhotoViewer.this.avatarsDialogId != 0 || PhotoViewer.this.isEvent;
-                                f = FileLoader.getPathToAttach(access$7200, z);
-                            }
-                            if (f == null || !f.exists()) {
-                                PhotoViewer.this.showDownloadAlert();
-                                return;
-                            }
-                            String file = f.toString();
-                            Activity access$2600 = PhotoViewer.this.parentActivity;
-                            if (PhotoViewer.this.currentMessageObject == null || !PhotoViewer.this.currentMessageObject.isVideo()) {
-                                i = 0;
-                            } else {
-                                i = 1;
-                            }
-                            MediaController.saveFile(file, access$2600, i, null, null);
                             return;
                         }
-                        PhotoViewer.this.parentActivity.requestPermissions(new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, 4);
-                    } else if (id == 2) {
+                        PhotoViewer.this.closePhoto(true, false);
+                    } else if (i2 == 1) {
+                        File pathToAttach;
+                        if (VERSION.SDK_INT >= 23) {
+                            if (PhotoViewer.this.parentActivity.checkSelfPermission("android.permission.WRITE_EXTERNAL_STORAGE") != 0) {
+                                PhotoViewer.this.parentActivity.requestPermissions(new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, 4);
+                                return;
+                            }
+                        }
+                        if (PhotoViewer.this.currentMessageObject != null) {
+                            if ((PhotoViewer.this.currentMessageObject.messageOwner.media instanceof TL_messageMediaWebPage) && PhotoViewer.this.currentMessageObject.messageOwner.media.webpage != null && PhotoViewer.this.currentMessageObject.messageOwner.media.webpage.document == null) {
+                                PhotoViewer photoViewer = PhotoViewer.this;
+                                pathToAttach = FileLoader.getPathToAttach(photoViewer.getFileLocation(photoViewer.currentIndex, null), true);
+                            } else {
+                                pathToAttach = FileLoader.getPathToMessage(PhotoViewer.this.currentMessageObject.messageOwner);
+                            }
+                        } else if (PhotoViewer.this.currentFileLocation != null) {
+                            TL_fileLocationToBeDeprecated tL_fileLocationToBeDeprecated = PhotoViewer.this.currentFileLocation.location;
+                            boolean z = PhotoViewer.this.avatarsDialogId != 0 || PhotoViewer.this.isEvent;
+                            pathToAttach = FileLoader.getPathToAttach(tL_fileLocationToBeDeprecated, z);
+                        } else {
+                            pathToAttach = null;
+                        }
+                        if (pathToAttach == null || !pathToAttach.exists()) {
+                            PhotoViewer.this.showDownloadAlert();
+                        } else {
+                            String file = pathToAttach.toString();
+                            Activity access$2600 = PhotoViewer.this.parentActivity;
+                            if (PhotoViewer.this.currentMessageObject == null || !PhotoViewer.this.currentMessageObject.isVideo()) {
+                                i3 = 0;
+                            }
+                            MediaController.saveFile(file, access$2600, i3, null, null);
+                        }
+                    } else if (i2 == 2) {
                         if (PhotoViewer.this.currentDialogId != 0) {
                             PhotoViewer.this.disableShowCheck = true;
-                            Bundle args2 = new Bundle();
-                            args2.putLong("dialog_id", PhotoViewer.this.currentDialogId);
-                            mediaActivity = new MediaActivity(args2, new int[]{-1, -1, -1, -1, -1}, null, PhotoViewer.this.sharedMediaType);
+                            bundle = new Bundle();
+                            bundle.putLong("dialog_id", PhotoViewer.this.currentDialogId);
+                            MediaActivity mediaActivity = new MediaActivity(bundle, new int[]{-1, -1, -1, -1, -1}, null, PhotoViewer.this.sharedMediaType);
                             if (PhotoViewer.this.parentChatActivity != null) {
                                 mediaActivity.setChatInfo(PhotoViewer.this.parentChatActivity.getCurrentChatInfo());
                             }
                             PhotoViewer.this.closePhoto(false, false);
                             ((LaunchActivity) PhotoViewer.this.parentActivity).presentFragment(mediaActivity, false, true);
                         }
-                    } else if (id == 4) {
+                    } else if (i2 == 4) {
                         if (PhotoViewer.this.currentMessageObject != null) {
-                            args = new Bundle();
-                            int lower_part = (int) PhotoViewer.this.currentDialogId;
-                            int high_id = (int) (PhotoViewer.this.currentDialogId >> 32);
-                            if (lower_part == 0) {
-                                args.putInt("enc_id", high_id);
-                            } else if (high_id == 1) {
-                                args.putInt("chat_id", lower_part);
-                            } else if (lower_part > 0) {
-                                args.putInt("user_id", lower_part);
-                            } else if (lower_part < 0) {
-                                Chat chat = MessagesController.getInstance(PhotoViewer.this.currentAccount).getChat(Integer.valueOf(-lower_part));
-                                if (!(chat == null || chat.migrated_to == null)) {
-                                    args.putInt("migrated_to", lower_part);
-                                    lower_part = -chat.migrated_to.channel_id;
+                            bundle = new Bundle();
+                            int access$76002 = (int) PhotoViewer.this.currentDialogId;
+                            access$7600 = (int) (PhotoViewer.this.currentDialogId >> 32);
+                            if (access$76002 != 0) {
+                                String str = "chat_id";
+                                if (access$7600 == 1) {
+                                    bundle.putInt(str, access$76002);
+                                } else if (access$76002 > 0) {
+                                    bundle.putInt("user_id", access$76002);
+                                } else if (access$76002 < 0) {
+                                    chat = MessagesController.getInstance(PhotoViewer.this.currentAccount).getChat(Integer.valueOf(-access$76002));
+                                    if (!(chat == null || chat.migrated_to == null)) {
+                                        bundle.putInt("migrated_to", access$76002);
+                                        access$76002 = -chat.migrated_to.channel_id;
+                                    }
+                                    bundle.putInt(str, -access$76002);
                                 }
-                                args.putInt("chat_id", -lower_part);
+                            } else {
+                                bundle.putInt("enc_id", access$7600);
                             }
-                            args.putInt("message_id", PhotoViewer.this.currentMessageObject.getId());
+                            bundle.putInt("message_id", PhotoViewer.this.currentMessageObject.getId());
                             NotificationCenter.getInstance(PhotoViewer.this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
                             LaunchActivity launchActivity = (LaunchActivity) PhotoViewer.this.parentActivity;
-                            boolean remove = launchActivity.getMainFragmentsCount() > 1 || AndroidUtilities.isTablet();
-                            launchActivity.presentFragment(new ChatActivity(args), remove, true);
+                            boolean z2 = launchActivity.getMainFragmentsCount() > 1 || AndroidUtilities.isTablet();
+                            launchActivity.presentFragment(new ChatActivity(bundle), z2, true);
                             PhotoViewer.this.currentMessageObject = null;
                             PhotoViewer.this.closePhoto(false, false);
                         }
-                    } else if (id == 3) {
+                    } else if (i2 == 3) {
                         if (PhotoViewer.this.currentMessageObject != null && PhotoViewer.this.parentActivity != null) {
                             ((LaunchActivity) PhotoViewer.this.parentActivity).switchToAccount(PhotoViewer.this.currentMessageObject.currentAccount, true);
-                            args = new Bundle();
-                            args.putBoolean("onlySelect", true);
-                            args.putInt("dialogsType", 3);
-                            mediaActivity = new DialogsActivity(args);
-                            ArrayList<MessageObject> fmessages = new ArrayList();
-                            fmessages.add(PhotoViewer.this.currentMessageObject);
-                            mediaActivity.setDelegate(new PhotoViewer$7$$Lambda$0(this, fmessages));
-                            ((LaunchActivity) PhotoViewer.this.parentActivity).presentFragment(mediaActivity, false, true);
+                            bundle = new Bundle();
+                            bundle.putBoolean("onlySelect", true);
+                            bundle.putInt("dialogsType", 3);
+                            DialogsActivity dialogsActivity = new DialogsActivity(bundle);
+                            ArrayList arrayList = new ArrayList();
+                            arrayList.add(PhotoViewer.this.currentMessageObject);
+                            dialogsActivity.setDelegate(new -$$Lambda$PhotoViewer$7$MBP2lcO9C4pgMJ4ntN8Td94R7bI(this, arrayList));
+                            ((LaunchActivity) PhotoViewer.this.parentActivity).presentFragment(dialogsActivity, false, true);
                             PhotoViewer.this.closePhoto(false, false);
                         }
-                    } else if (id == 6) {
+                    } else if (i2 == 6) {
                         if (PhotoViewer.this.parentActivity != null && PhotoViewer.this.placeProvider != null) {
                             Builder builder = new Builder(PhotoViewer.this.parentActivity);
-                            String text = PhotoViewer.this.placeProvider.getDeleteMessageString();
-                            if (text != null) {
-                                builder.setMessage(text);
+                            String deleteMessageString = PhotoViewer.this.placeProvider.getDeleteMessageString();
+                            if (deleteMessageString != null) {
+                                builder.setMessage(deleteMessageString);
                             } else if (PhotoViewer.this.currentMessageObject != null && PhotoViewer.this.currentMessageObject.isVideo()) {
                                 builder.setMessage(LocaleController.formatString("AreYouSureDeleteVideo", NUM, new Object[0]));
                             } else if (PhotoViewer.this.currentMessageObject == null || !PhotoViewer.this.currentMessageObject.isGif()) {
@@ -2273,77 +3144,66 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                                 builder.setMessage(LocaleController.formatString("AreYouSureDeleteGIF", NUM, new Object[0]));
                             }
                             builder.setTitle(LocaleController.getString("AppName", NUM));
-                            boolean[] deleteForAll = new boolean[1];
+                            boolean[] zArr = new boolean[1];
                             if (PhotoViewer.this.currentMessageObject != null) {
-                                int lower_id = (int) PhotoViewer.this.currentMessageObject.getDialogId();
-                                if (lower_id != 0) {
-                                    User currentUser;
-                                    Chat currentChat;
-                                    if (lower_id > 0) {
-                                        currentUser = MessagesController.getInstance(PhotoViewer.this.currentAccount).getUser(Integer.valueOf(lower_id));
-                                        currentChat = null;
+                                access$7600 = (int) PhotoViewer.this.currentMessageObject.getDialogId();
+                                if (access$7600 != 0) {
+                                    User user;
+                                    if (access$7600 > 0) {
+                                        user = MessagesController.getInstance(PhotoViewer.this.currentAccount).getUser(Integer.valueOf(access$7600));
+                                        chat = null;
                                     } else {
-                                        currentUser = null;
-                                        currentChat = MessagesController.getInstance(PhotoViewer.this.currentAccount).getChat(Integer.valueOf(-lower_id));
+                                        chat = MessagesController.getInstance(PhotoViewer.this.currentAccount).getChat(Integer.valueOf(-access$7600));
+                                        user = null;
                                     }
-                                    if (!(currentUser == null && ChatObject.isChannel(currentChat))) {
-                                        int currentDate = ConnectionsManager.getInstance(PhotoViewer.this.currentAccount).getCurrentTime();
-                                        int revokeTimeLimit;
-                                        if (currentUser != null) {
-                                            revokeTimeLimit = MessagesController.getInstance(PhotoViewer.this.currentAccount).revokeTimePmLimit;
+                                    if (!(user == null && ChatObject.isChannel(chat))) {
+                                        int currentTime = ConnectionsManager.getInstance(PhotoViewer.this.currentAccount).getCurrentTime();
+                                        int i4;
+                                        if (user != null) {
+                                            i4 = MessagesController.getInstance(PhotoViewer.this.currentAccount).revokeTimePmLimit;
                                         } else {
-                                            revokeTimeLimit = MessagesController.getInstance(PhotoViewer.this.currentAccount).revokeTimeLimit;
+                                            i4 = MessagesController.getInstance(PhotoViewer.this.currentAccount).revokeTimeLimit;
                                         }
-                                        if (!((currentUser == null || currentUser.id == UserConfig.getInstance(PhotoViewer.this.currentAccount).getClientUserId()) && currentChat == null) && ((PhotoViewer.this.currentMessageObject.messageOwner.action == null || (PhotoViewer.this.currentMessageObject.messageOwner.action instanceof TL_messageActionEmpty)) && PhotoViewer.this.currentMessageObject.isOut() && currentDate - PhotoViewer.this.currentMessageObject.messageOwner.date <= revokeTimeLimit)) {
-                                            int dp;
-                                            View frameLayout = new FrameLayout(PhotoViewer.this.parentActivity);
-                                            CheckBoxCell cell = new CheckBoxCell(PhotoViewer.this.parentActivity, 1);
-                                            cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                                            if (currentChat != null) {
-                                                cell.setText(LocaleController.getString("DeleteForAll", NUM), "", false, false);
+                                        if (!((user == null || user.id == UserConfig.getInstance(PhotoViewer.this.currentAccount).getClientUserId()) && chat == null) && ((PhotoViewer.this.currentMessageObject.messageOwner.action == null || (PhotoViewer.this.currentMessageObject.messageOwner.action instanceof TL_messageActionEmpty)) && PhotoViewer.this.currentMessageObject.isOut() && currentTime - PhotoViewer.this.currentMessageObject.messageOwner.date <= i4)) {
+                                            FrameLayout frameLayout = new FrameLayout(PhotoViewer.this.parentActivity);
+                                            CheckBoxCell checkBoxCell = new CheckBoxCell(PhotoViewer.this.parentActivity, 1);
+                                            checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                                            String str2 = "";
+                                            if (chat != null) {
+                                                checkBoxCell.setText(LocaleController.getString("DeleteForAll", NUM), str2, false, false);
                                             } else {
-                                                cell.setText(LocaleController.formatString("DeleteForUser", NUM, UserObject.getFirstName(currentUser)), "", false, false);
+                                                checkBoxCell.setText(LocaleController.formatString("DeleteForUser", NUM, UserObject.getFirstName(user)), str2, false, false);
                                             }
-                                            if (LocaleController.isRTL) {
-                                                i = AndroidUtilities.dp(16.0f);
-                                            } else {
-                                                i = AndroidUtilities.dp(8.0f);
-                                            }
-                                            if (LocaleController.isRTL) {
-                                                dp = AndroidUtilities.dp(8.0f);
-                                            } else {
-                                                dp = AndroidUtilities.dp(16.0f);
-                                            }
-                                            cell.setPadding(i, 0, dp, 0);
-                                            frameLayout.addView(cell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
-                                            cell.setOnClickListener(new PhotoViewer$7$$Lambda$1(deleteForAll));
+                                            checkBoxCell.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : AndroidUtilities.dp(8.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(8.0f) : AndroidUtilities.dp(16.0f), 0);
+                                            frameLayout.addView(checkBoxCell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
+                                            checkBoxCell.setOnClickListener(new -$$Lambda$PhotoViewer$7$PnoO3dhBjKU061H6V2Ybr5NYtAo(zArr));
                                             builder.setView(frameLayout);
                                         }
                                     }
                                 }
                             }
-                            builder.setPositiveButton(LocaleController.getString("OK", NUM), new PhotoViewer$7$$Lambda$2(this, deleteForAll));
+                            builder.setPositiveButton(LocaleController.getString("OK", NUM), new -$$Lambda$PhotoViewer$7$It5atnO7wprrf4dhdkFyC0mozx4(this, zArr));
                             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
                             PhotoViewer.this.showAlertDialog(builder);
                         }
-                    } else if (id == 10) {
+                    } else if (i2 == 10) {
                         PhotoViewer.this.onSharePressed();
-                    } else if (id == 11) {
+                    } else if (i2 == 11) {
                         try {
                             AndroidUtilities.openForView(PhotoViewer.this.currentMessageObject, PhotoViewer.this.parentActivity);
                             PhotoViewer.this.closePhoto(false, false);
                         } catch (Exception e) {
                             FileLog.e(e);
                         }
-                    } else if (id == 13) {
+                    } else if (i2 == 13) {
                         if (PhotoViewer.this.parentActivity != null && PhotoViewer.this.currentMessageObject != null && PhotoViewer.this.currentMessageObject.messageOwner.media != null && PhotoViewer.this.currentMessageObject.messageOwner.media.photo != null) {
                             new StickersAlert(PhotoViewer.this.parentActivity, PhotoViewer.this.currentMessageObject, PhotoViewer.this.currentMessageObject.messageOwner.media.photo).show();
                         }
-                    } else if (id == 5) {
+                    } else if (i2 == 5) {
                         if (PhotoViewer.this.pipItem.getAlpha() == 1.0f) {
                             PhotoViewer.this.switchToPip();
                         }
-                    } else if (id == 7 && PhotoViewer.this.currentMessageObject != null) {
+                    } else if (i2 == 7 && PhotoViewer.this.currentMessageObject != null) {
                         FileLoader.getInstance(PhotoViewer.this.currentAccount).cancelLoadFile(PhotoViewer.this.currentMessageObject.getDocument());
                         PhotoViewer.this.releasePlayer(false);
                         PhotoViewer.this.bottomLayout.setTag(Integer.valueOf(1));
@@ -2351,172 +3211,408 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     }
                 }
 
-                /* Access modifiers changed, original: final|synthetic */
-                public final /* synthetic */ void lambda$onItemClick$0$PhotoViewer$7(ArrayList fmessages, DialogsActivity fragment1, ArrayList dids, CharSequence message, boolean param) {
-                    long did;
-                    if (dids.size() > 1 || ((Long) dids.get(0)).longValue() == ((long) UserConfig.getInstance(PhotoViewer.this.currentAccount).getClientUserId()) || message != null) {
-                        for (int a = 0; a < dids.size(); a++) {
-                            did = ((Long) dids.get(a)).longValue();
-                            if (message != null) {
-                                SendMessagesHelper.getInstance(PhotoViewer.this.currentAccount).sendMessage(message.toString(), did, null, null, true, null, null, null);
+                public /* synthetic */ void lambda$onItemClick$0$PhotoViewer$7(ArrayList arrayList, DialogsActivity dialogsActivity, ArrayList arrayList2, CharSequence charSequence, boolean z) {
+                    ArrayList arrayList3 = arrayList;
+                    ArrayList arrayList4 = arrayList2;
+                    int i = 0;
+                    if (arrayList2.size() > 1 || ((Long) arrayList4.get(0)).longValue() == ((long) UserConfig.getInstance(PhotoViewer.this.currentAccount).getClientUserId()) || charSequence != null) {
+                        while (i < arrayList2.size()) {
+                            long j;
+                            long longValue = ((Long) arrayList4.get(i)).longValue();
+                            if (charSequence != null) {
+                                j = longValue;
+                                SendMessagesHelper.getInstance(PhotoViewer.this.currentAccount).sendMessage(charSequence.toString(), longValue, null, null, true, null, null, null);
+                            } else {
+                                j = longValue;
                             }
-                            SendMessagesHelper.getInstance(PhotoViewer.this.currentAccount).sendMessage(fmessages, did);
+                            SendMessagesHelper.getInstance(PhotoViewer.this.currentAccount).sendMessage(arrayList, j);
+                            i++;
+                            arrayList4 = arrayList2;
                         }
-                        fragment1.finishFragment();
+                        dialogsActivity.finishFragment();
                         return;
                     }
-                    did = ((Long) dids.get(0)).longValue();
-                    int lower_part = (int) did;
-                    int high_part = (int) (did >> 32);
-                    Bundle args1 = new Bundle();
-                    args1.putBoolean("scrollToTopOnResume", true);
-                    if (lower_part == 0) {
-                        args1.putInt("enc_id", high_part);
-                    } else if (lower_part > 0) {
-                        args1.putInt("user_id", lower_part);
-                    } else if (lower_part < 0) {
-                        args1.putInt("chat_id", -lower_part);
+                    long longValue2 = ((Long) arrayList4.get(0)).longValue();
+                    int i2 = (int) longValue2;
+                    int i3 = (int) (longValue2 >> 32);
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("scrollToTopOnResume", true);
+                    if (i2 == 0) {
+                        bundle.putInt("enc_id", i3);
+                    } else if (i2 > 0) {
+                        bundle.putInt("user_id", i2);
+                    } else if (i2 < 0) {
+                        bundle.putInt("chat_id", -i2);
                     }
                     NotificationCenter.getInstance(PhotoViewer.this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
-                    ChatActivity chatActivity = new ChatActivity(args1);
+                    ChatActivity chatActivity = new ChatActivity(bundle);
                     if (((LaunchActivity) PhotoViewer.this.parentActivity).presentFragment(chatActivity, true, false)) {
-                        chatActivity.showFieldPanelForForward(true, fmessages);
+                        chatActivity.showFieldPanelForForward(true, arrayList3);
                     } else {
-                        fragment1.finishFragment();
+                        dialogsActivity.finishFragment();
                     }
                 }
 
-                static final /* synthetic */ void lambda$onItemClick$1$PhotoViewer$7(boolean[] deleteForAll, View v) {
-                    boolean z;
-                    CheckBoxCell cell1 = (CheckBoxCell) v;
-                    if (deleteForAll[0]) {
-                        z = false;
-                    } else {
-                        z = true;
-                    }
-                    deleteForAll[0] = z;
-                    cell1.setChecked(deleteForAll[0], true);
+                static /* synthetic */ void lambda$onItemClick$1(boolean[] zArr, View view) {
+                    CheckBoxCell checkBoxCell = (CheckBoxCell) view;
+                    zArr[0] = zArr[0] ^ 1;
+                    checkBoxCell.setChecked(zArr[0], true);
                 }
 
-                /* Access modifiers changed, original: final|synthetic */
-                public final /* synthetic */ void lambda$onItemClick$2$PhotoViewer$7(boolean[] deleteForAll, DialogInterface dialogInterface, int i) {
-                    if (PhotoViewer.this.imagesArr.isEmpty()) {
-                        int index;
-                        if (PhotoViewer.this.avatarsArr.isEmpty()) {
-                            if (!PhotoViewer.this.secureDocuments.isEmpty() && PhotoViewer.this.placeProvider != null) {
-                                PhotoViewer.this.secureDocuments.remove(PhotoViewer.this.currentIndex);
-                                PhotoViewer.this.placeProvider.deleteImageAtIndex(PhotoViewer.this.currentIndex);
-                                if (PhotoViewer.this.secureDocuments.isEmpty()) {
-                                    PhotoViewer.this.closePhoto(false, false);
-                                    return;
-                                }
-                                index = PhotoViewer.this.currentIndex;
-                                if (index >= PhotoViewer.this.secureDocuments.size()) {
-                                    index = PhotoViewer.this.secureDocuments.size() - 1;
-                                }
-                                PhotoViewer.this.currentIndex = -1;
-                                PhotoViewer.this.setImageIndex(index, true);
-                            }
-                        } else if (PhotoViewer.this.currentIndex >= 0 && PhotoViewer.this.currentIndex < PhotoViewer.this.avatarsArr.size()) {
-                            Photo photo = (Photo) PhotoViewer.this.avatarsArr.get(PhotoViewer.this.currentIndex);
-                            FileLocation currentLocation = (FileLocation) PhotoViewer.this.imagesArrLocations.get(PhotoViewer.this.currentIndex);
-                            if (photo instanceof TL_photoEmpty) {
-                                photo = null;
-                            }
-                            boolean current = false;
-                            if (PhotoViewer.this.currentUserAvatarLocation != null) {
-                                if (photo != null) {
-                                    Iterator it = photo.sizes.iterator();
-                                    while (it.hasNext()) {
-                                        PhotoSize size = (PhotoSize) it.next();
-                                        if (size.location.local_id == PhotoViewer.this.currentUserAvatarLocation.local_id && size.location.volume_id == PhotoViewer.this.currentUserAvatarLocation.volume_id) {
-                                            current = true;
-                                            break;
-                                        }
-                                    }
-                                } else if (currentLocation.local_id == PhotoViewer.this.currentUserAvatarLocation.local_id && currentLocation.volume_id == PhotoViewer.this.currentUserAvatarLocation.volume_id) {
-                                    current = true;
-                                }
-                            }
-                            if (current) {
-                                MessagesController.getInstance(PhotoViewer.this.currentAccount).deleteUserPhoto(null);
-                                PhotoViewer.this.closePhoto(false, false);
-                            } else if (photo != null) {
-                                TL_inputPhoto inputPhoto = new TL_inputPhoto();
-                                inputPhoto.id = photo.id;
-                                inputPhoto.access_hash = photo.access_hash;
-                                inputPhoto.file_reference = photo.file_reference;
-                                if (inputPhoto.file_reference == null) {
-                                    inputPhoto.file_reference = new byte[0];
-                                }
-                                MessagesController.getInstance(PhotoViewer.this.currentAccount).deleteUserPhoto(inputPhoto);
-                                MessagesStorage.getInstance(PhotoViewer.this.currentAccount).clearUserPhoto(PhotoViewer.this.avatarsDialogId, photo.id);
-                                PhotoViewer.this.imagesArrLocations.remove(PhotoViewer.this.currentIndex);
-                                PhotoViewer.this.imagesArrLocationsSizes.remove(PhotoViewer.this.currentIndex);
-                                PhotoViewer.this.avatarsArr.remove(PhotoViewer.this.currentIndex);
-                                if (PhotoViewer.this.imagesArrLocations.isEmpty()) {
-                                    PhotoViewer.this.closePhoto(false, false);
-                                    return;
-                                }
-                                index = PhotoViewer.this.currentIndex;
-                                if (index >= PhotoViewer.this.avatarsArr.size()) {
-                                    index = PhotoViewer.this.avatarsArr.size() - 1;
-                                }
-                                PhotoViewer.this.currentIndex = -1;
-                                PhotoViewer.this.setImageIndex(index, true);
-                            }
-                        }
-                    } else if (PhotoViewer.this.currentIndex >= 0 && PhotoViewer.this.currentIndex < PhotoViewer.this.imagesArr.size()) {
-                        MessageObject obj = (MessageObject) PhotoViewer.this.imagesArr.get(PhotoViewer.this.currentIndex);
-                        if (obj.isSent()) {
-                            PhotoViewer.this.closePhoto(false, false);
-                            ArrayList<Integer> arr = new ArrayList();
-                            if (PhotoViewer.this.slideshowMessageId != 0) {
-                                arr.add(Integer.valueOf(PhotoViewer.this.slideshowMessageId));
-                            } else {
-                                arr.add(Integer.valueOf(obj.getId()));
-                            }
-                            ArrayList<Long> random_ids = null;
-                            EncryptedChat encryptedChat = null;
-                            if (((int) obj.getDialogId()) == 0 && obj.messageOwner.random_id != 0) {
-                                random_ids = new ArrayList();
-                                random_ids.add(Long.valueOf(obj.messageOwner.random_id));
-                                encryptedChat = MessagesController.getInstance(PhotoViewer.this.currentAccount).getEncryptedChat(Integer.valueOf((int) (obj.getDialogId() >> 32)));
-                            }
-                            MessagesController.getInstance(PhotoViewer.this.currentAccount).deleteMessages(arr, random_ids, encryptedChat, obj.messageOwner.to_id.channel_id, deleteForAll[0]);
-                        }
-                    }
+                /* JADX WARNING: Removed duplicated region for block: B:47:0x0192  */
+                /* JADX WARNING: Removed duplicated region for block: B:46:0x017e  */
+                /* JADX WARNING: Missing block: B:42:0x0177, code skipped:
+            if (r2.location.volume_id == org.telegram.ui.PhotoViewer.access$9000(r8.this$0).location.volume_id) goto L_0x0179;
+     */
+                public /* synthetic */ void lambda$onItemClick$2$PhotoViewer$7(boolean[] r9, android.content.DialogInterface r10, int r11) {
+                    /*
+                    r8 = this;
+                    r10 = org.telegram.ui.PhotoViewer.this;
+                    r10 = r10.imagesArr;
+                    r10 = r10.isEmpty();
+                    r11 = 0;
+                    r0 = 0;
+                    if (r10 != 0) goto L_0x00c5;
+                L_0x000e:
+                    r10 = org.telegram.ui.PhotoViewer.this;
+                    r10 = r10.currentIndex;
+                    if (r10 < 0) goto L_0x00c4;
+                L_0x0016:
+                    r10 = org.telegram.ui.PhotoViewer.this;
+                    r10 = r10.currentIndex;
+                    r1 = org.telegram.ui.PhotoViewer.this;
+                    r1 = r1.imagesArr;
+                    r1 = r1.size();
+                    if (r10 < r1) goto L_0x002a;
+                L_0x0028:
+                    goto L_0x00c4;
+                L_0x002a:
+                    r10 = org.telegram.ui.PhotoViewer.this;
+                    r10 = r10.imagesArr;
+                    r1 = org.telegram.ui.PhotoViewer.this;
+                    r1 = r1.currentIndex;
+                    r10 = r10.get(r1);
+                    r10 = (org.telegram.messenger.MessageObject) r10;
+                    r1 = r10.isSent();
+                    if (r1 == 0) goto L_0x02a4;
+                L_0x0042:
+                    r1 = org.telegram.ui.PhotoViewer.this;
+                    r1.closePhoto(r0, r0);
+                    r3 = new java.util.ArrayList;
+                    r3.<init>();
+                    r1 = org.telegram.ui.PhotoViewer.this;
+                    r1 = r1.slideshowMessageId;
+                    if (r1 == 0) goto L_0x0062;
+                L_0x0054:
+                    r1 = org.telegram.ui.PhotoViewer.this;
+                    r1 = r1.slideshowMessageId;
+                    r1 = java.lang.Integer.valueOf(r1);
+                    r3.add(r1);
+                    goto L_0x006d;
+                L_0x0062:
+                    r1 = r10.getId();
+                    r1 = java.lang.Integer.valueOf(r1);
+                    r3.add(r1);
+                L_0x006d:
+                    r1 = r10.getDialogId();
+                    r2 = (int) r1;
+                    if (r2 != 0) goto L_0x00ab;
+                L_0x0074:
+                    r1 = r10.messageOwner;
+                    r1 = r1.random_id;
+                    r4 = 0;
+                    r6 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1));
+                    if (r6 == 0) goto L_0x00ab;
+                L_0x007e:
+                    r11 = new java.util.ArrayList;
+                    r11.<init>();
+                    r1 = r10.messageOwner;
+                    r1 = r1.random_id;
+                    r1 = java.lang.Long.valueOf(r1);
+                    r11.add(r1);
+                    r1 = org.telegram.ui.PhotoViewer.this;
+                    r1 = r1.currentAccount;
+                    r1 = org.telegram.messenger.MessagesController.getInstance(r1);
+                    r4 = r10.getDialogId();
+                    r2 = 32;
+                    r4 = r4 >> r2;
+                    r2 = (int) r4;
+                    r2 = java.lang.Integer.valueOf(r2);
+                    r1 = r1.getEncryptedChat(r2);
+                    r4 = r11;
+                    r5 = r1;
+                    goto L_0x00ad;
+                L_0x00ab:
+                    r4 = r11;
+                    r5 = r4;
+                L_0x00ad:
+                    r11 = org.telegram.ui.PhotoViewer.this;
+                    r11 = r11.currentAccount;
+                    r2 = org.telegram.messenger.MessagesController.getInstance(r11);
+                    r10 = r10.messageOwner;
+                    r10 = r10.to_id;
+                    r6 = r10.channel_id;
+                    r7 = r9[r0];
+                    r2.deleteMessages(r3, r4, r5, r6, r7);
+                    goto L_0x02a4;
+                L_0x00c4:
+                    return;
+                L_0x00c5:
+                    r9 = org.telegram.ui.PhotoViewer.this;
+                    r9 = r9.avatarsArr;
+                    r9 = r9.isEmpty();
+                    r10 = -1;
+                    r1 = 1;
+                    if (r9 != 0) goto L_0x0238;
+                L_0x00d3:
+                    r9 = org.telegram.ui.PhotoViewer.this;
+                    r9 = r9.currentIndex;
+                    if (r9 < 0) goto L_0x0237;
+                L_0x00db:
+                    r9 = org.telegram.ui.PhotoViewer.this;
+                    r9 = r9.currentIndex;
+                    r2 = org.telegram.ui.PhotoViewer.this;
+                    r2 = r2.avatarsArr;
+                    r2 = r2.size();
+                    if (r9 < r2) goto L_0x00ef;
+                L_0x00ed:
+                    goto L_0x0237;
+                L_0x00ef:
+                    r9 = org.telegram.ui.PhotoViewer.this;
+                    r9 = r9.avatarsArr;
+                    r2 = org.telegram.ui.PhotoViewer.this;
+                    r2 = r2.currentIndex;
+                    r9 = r9.get(r2);
+                    r9 = (org.telegram.tgnet.TLRPC.Photo) r9;
+                    r2 = org.telegram.ui.PhotoViewer.this;
+                    r2 = r2.imagesArrLocations;
+                    r3 = org.telegram.ui.PhotoViewer.this;
+                    r3 = r3.currentIndex;
+                    r2 = r2.get(r3);
+                    r2 = (org.telegram.messenger.ImageLocation) r2;
+                    r3 = r9 instanceof org.telegram.tgnet.TLRPC.TL_photoEmpty;
+                    if (r3 == 0) goto L_0x0118;
+                L_0x0117:
+                    r9 = r11;
+                L_0x0118:
+                    r3 = org.telegram.ui.PhotoViewer.this;
+                    r3 = r3.currentUserAvatarLocation;
+                    if (r3 == 0) goto L_0x017b;
+                L_0x0120:
+                    if (r9 == 0) goto L_0x0157;
+                L_0x0122:
+                    r2 = r9.sizes;
+                    r2 = r2.iterator();
+                L_0x0128:
+                    r3 = r2.hasNext();
+                    if (r3 == 0) goto L_0x017b;
+                L_0x012e:
+                    r3 = r2.next();
+                    r3 = (org.telegram.tgnet.TLRPC.PhotoSize) r3;
+                    r4 = r3.location;
+                    r4 = r4.local_id;
+                    r5 = org.telegram.ui.PhotoViewer.this;
+                    r5 = r5.currentUserAvatarLocation;
+                    r5 = r5.location;
+                    r5 = r5.local_id;
+                    if (r4 != r5) goto L_0x0128;
+                L_0x0144:
+                    r3 = r3.location;
+                    r3 = r3.volume_id;
+                    r5 = org.telegram.ui.PhotoViewer.this;
+                    r5 = r5.currentUserAvatarLocation;
+                    r5 = r5.location;
+                    r5 = r5.volume_id;
+                    r7 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1));
+                    if (r7 != 0) goto L_0x0128;
+                L_0x0156:
+                    goto L_0x0179;
+                L_0x0157:
+                    r3 = r2.location;
+                    r3 = r3.local_id;
+                    r4 = org.telegram.ui.PhotoViewer.this;
+                    r4 = r4.currentUserAvatarLocation;
+                    r4 = r4.location;
+                    r4 = r4.local_id;
+                    if (r3 != r4) goto L_0x017b;
+                L_0x0167:
+                    r2 = r2.location;
+                    r2 = r2.volume_id;
+                    r4 = org.telegram.ui.PhotoViewer.this;
+                    r4 = r4.currentUserAvatarLocation;
+                    r4 = r4.location;
+                    r4 = r4.volume_id;
+                    r6 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1));
+                    if (r6 != 0) goto L_0x017b;
+                L_0x0179:
+                    r2 = 1;
+                    goto L_0x017c;
+                L_0x017b:
+                    r2 = 0;
+                L_0x017c:
+                    if (r2 == 0) goto L_0x0192;
+                L_0x017e:
+                    r9 = org.telegram.ui.PhotoViewer.this;
+                    r9 = r9.currentAccount;
+                    r9 = org.telegram.messenger.MessagesController.getInstance(r9);
+                    r9.deleteUserPhoto(r11);
+                    r9 = org.telegram.ui.PhotoViewer.this;
+                    r9.closePhoto(r0, r0);
+                    goto L_0x02a4;
+                L_0x0192:
+                    if (r9 == 0) goto L_0x02a4;
+                L_0x0194:
+                    r11 = new org.telegram.tgnet.TLRPC$TL_inputPhoto;
+                    r11.<init>();
+                    r2 = r9.id;
+                    r11.id = r2;
+                    r2 = r9.access_hash;
+                    r11.access_hash = r2;
+                    r2 = r9.file_reference;
+                    r11.file_reference = r2;
+                    r2 = r11.file_reference;
+                    if (r2 != 0) goto L_0x01ad;
+                L_0x01a9:
+                    r2 = new byte[r0];
+                    r11.file_reference = r2;
+                L_0x01ad:
+                    r2 = org.telegram.ui.PhotoViewer.this;
+                    r2 = r2.currentAccount;
+                    r2 = org.telegram.messenger.MessagesController.getInstance(r2);
+                    r2.deleteUserPhoto(r11);
+                    r11 = org.telegram.ui.PhotoViewer.this;
+                    r11 = r11.currentAccount;
+                    r11 = org.telegram.messenger.MessagesStorage.getInstance(r11);
+                    r2 = org.telegram.ui.PhotoViewer.this;
+                    r2 = r2.avatarsDialogId;
+                    r3 = r9.id;
+                    r11.clearUserPhoto(r2, r3);
+                    r9 = org.telegram.ui.PhotoViewer.this;
+                    r9 = r9.imagesArrLocations;
+                    r11 = org.telegram.ui.PhotoViewer.this;
+                    r11 = r11.currentIndex;
+                    r9.remove(r11);
+                    r9 = org.telegram.ui.PhotoViewer.this;
+                    r9 = r9.imagesArrLocationsSizes;
+                    r11 = org.telegram.ui.PhotoViewer.this;
+                    r11 = r11.currentIndex;
+                    r9.remove(r11);
+                    r9 = org.telegram.ui.PhotoViewer.this;
+                    r9 = r9.avatarsArr;
+                    r11 = org.telegram.ui.PhotoViewer.this;
+                    r11 = r11.currentIndex;
+                    r9.remove(r11);
+                    r9 = org.telegram.ui.PhotoViewer.this;
+                    r9 = r9.imagesArrLocations;
+                    r9 = r9.isEmpty();
+                    if (r9 == 0) goto L_0x020f;
+                L_0x0208:
+                    r9 = org.telegram.ui.PhotoViewer.this;
+                    r9.closePhoto(r0, r0);
+                    goto L_0x02a4;
+                L_0x020f:
+                    r9 = org.telegram.ui.PhotoViewer.this;
+                    r9 = r9.currentIndex;
+                    r11 = org.telegram.ui.PhotoViewer.this;
+                    r11 = r11.avatarsArr;
+                    r11 = r11.size();
+                    if (r9 < r11) goto L_0x022c;
+                L_0x0221:
+                    r9 = org.telegram.ui.PhotoViewer.this;
+                    r9 = r9.avatarsArr;
+                    r9 = r9.size();
+                    r9 = r9 - r1;
+                L_0x022c:
+                    r11 = org.telegram.ui.PhotoViewer.this;
+                    r11.currentIndex = r10;
+                    r10 = org.telegram.ui.PhotoViewer.this;
+                    r10.setImageIndex(r9, r1);
+                    goto L_0x02a4;
+                L_0x0237:
+                    return;
+                L_0x0238:
+                    r9 = org.telegram.ui.PhotoViewer.this;
+                    r9 = r9.secureDocuments;
+                    r9 = r9.isEmpty();
+                    if (r9 != 0) goto L_0x02a4;
+                L_0x0244:
+                    r9 = org.telegram.ui.PhotoViewer.this;
+                    r9 = r9.placeProvider;
+                    if (r9 != 0) goto L_0x024d;
+                L_0x024c:
+                    return;
+                L_0x024d:
+                    r9 = org.telegram.ui.PhotoViewer.this;
+                    r9 = r9.secureDocuments;
+                    r11 = org.telegram.ui.PhotoViewer.this;
+                    r11 = r11.currentIndex;
+                    r9.remove(r11);
+                    r9 = org.telegram.ui.PhotoViewer.this;
+                    r9 = r9.placeProvider;
+                    r11 = org.telegram.ui.PhotoViewer.this;
+                    r11 = r11.currentIndex;
+                    r9.deleteImageAtIndex(r11);
+                    r9 = org.telegram.ui.PhotoViewer.this;
+                    r9 = r9.secureDocuments;
+                    r9 = r9.isEmpty();
+                    if (r9 == 0) goto L_0x027d;
+                L_0x0277:
+                    r9 = org.telegram.ui.PhotoViewer.this;
+                    r9.closePhoto(r0, r0);
+                    goto L_0x02a4;
+                L_0x027d:
+                    r9 = org.telegram.ui.PhotoViewer.this;
+                    r9 = r9.currentIndex;
+                    r11 = org.telegram.ui.PhotoViewer.this;
+                    r11 = r11.secureDocuments;
+                    r11 = r11.size();
+                    if (r9 < r11) goto L_0x029a;
+                L_0x028f:
+                    r9 = org.telegram.ui.PhotoViewer.this;
+                    r9 = r9.secureDocuments;
+                    r9 = r9.size();
+                    r9 = r9 - r1;
+                L_0x029a:
+                    r11 = org.telegram.ui.PhotoViewer.this;
+                    r11.currentIndex = r10;
+                    r10 = org.telegram.ui.PhotoViewer.this;
+                    r10.setImageIndex(r9, r1);
+                L_0x02a4:
+                    return;
+                    */
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer$AnonymousClass7.lambda$onItemClick$2$PhotoViewer$7(boolean[], android.content.DialogInterface, int):void");
                 }
 
                 public boolean canOpenMenu() {
-                    boolean z = false;
                     if (PhotoViewer.this.currentMessageObject != null) {
                         return FileLoader.getPathToMessage(PhotoViewer.this.currentMessageObject.messageOwner).exists();
                     }
+                    boolean z = false;
                     if (PhotoViewer.this.currentFileLocation == null) {
                         return false;
                     }
-                    FileLocation access$7200 = PhotoViewer.this.currentFileLocation;
+                    PhotoViewer photoViewer = PhotoViewer.this;
+                    FileLocation access$8500 = photoViewer.getFileLocation(photoViewer.currentFileLocation);
                     if (PhotoViewer.this.avatarsDialogId != 0 || PhotoViewer.this.isEvent) {
                         z = true;
                     }
-                    return FileLoader.getPathToAttach(access$7200, z).exists();
+                    return FileLoader.getPathToAttach(access$8500, z).exists();
                 }
             });
-            ActionBarMenu menu = this.actionBar.createMenu();
-            this.masksItem = menu.addItem(13, NUM);
-            this.pipItem = menu.addItem(5, NUM);
-            this.sendItem = menu.addItem(3, NUM);
-            this.menuItem = menu.addItem(0, NUM);
-            this.menuItem.addSubItem(11, LocaleController.getString("OpenInExternalApp", NUM)).setTextColor(-328966);
+            ActionBarMenu createMenu = this.actionBar.createMenu();
+            this.masksItem = createMenu.addItem(13, NUM);
+            this.pipItem = createMenu.addItem(5, NUM);
+            this.sendItem = createMenu.addItem(3, NUM);
+            this.menuItem = createMenu.addItem(0, NUM);
+            this.menuItem.addSubItem(11, NUM, LocaleController.getString("OpenInExternalApp", NUM)).setTextColor(-328966);
             this.menuItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
-            this.allMediaItem = this.menuItem.addSubItem(2, LocaleController.getString("ShowAllMedia", NUM));
+            this.allMediaItem = this.menuItem.addSubItem(2, NUM, LocaleController.getString("ShowAllMedia", NUM));
             this.allMediaItem.setTextColor(-328966);
-            this.menuItem.addSubItem(4, LocaleController.getString("ShowInChat", NUM)).setTextColor(-328966);
-            this.menuItem.addSubItem(10, LocaleController.getString("ShareFile", NUM)).setTextColor(-328966);
-            this.menuItem.addSubItem(1, LocaleController.getString("SaveToGallery", NUM)).setTextColor(-328966);
-            this.menuItem.addSubItem(6, LocaleController.getString("Delete", NUM)).setTextColor(-328966);
-            this.menuItem.addSubItem(7, LocaleController.getString("StopDownload", NUM)).setTextColor(-328966);
+            this.menuItem.addSubItem(4, NUM, LocaleController.getString("ShowInChat", NUM)).setTextColor(-328966);
+            this.menuItem.addSubItem(10, NUM, LocaleController.getString("ShareFile", NUM)).setTextColor(-328966);
+            this.menuItem.addSubItem(1, NUM, LocaleController.getString("SaveToGallery", NUM)).setTextColor(-328966);
+            this.menuItem.addSubItem(6, NUM, LocaleController.getString("Delete", NUM)).setTextColor(-328966);
+            this.menuItem.addSubItem(7, NUM, LocaleController.getString("StopDownload", NUM)).setTextColor(-328966);
             this.menuItem.redrawPopup(-NUM);
             this.sendItem.setContentDescription(LocaleController.getString("Forward", NUM));
             this.bottomLayout = new FrameLayout(this.actvityContext);
@@ -2525,6 +3621,14 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             this.groupedPhotosListView = new GroupedPhotosListView(this.actvityContext);
             this.containerView.addView(this.groupedPhotosListView, LayoutHelper.createFrame(-1, 62.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
             this.groupedPhotosListView.setDelegate(new GroupedPhotosListViewDelegate() {
+                public ArrayList<PageBlock> getPageBlockArr() {
+                    return null;
+                }
+
+                public Object getParentObject() {
+                    return null;
+                }
+
                 public int getCurrentIndex() {
                     return PhotoViewer.this.currentIndex;
                 }
@@ -2541,7 +3645,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     return PhotoViewer.this.slideshowMessageId;
                 }
 
-                public ArrayList<FileLocation> getImagesArrLocations() {
+                public ArrayList<ImageLocation> getImagesArrLocations() {
                     return PhotoViewer.this.imagesArrLocations;
                 }
 
@@ -2549,32 +3653,24 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     return PhotoViewer.this.imagesArr;
                 }
 
-                public ArrayList<PageBlock> getPageBlockArr() {
-                    return null;
-                }
-
-                public Object getParentObject() {
-                    return null;
-                }
-
-                public void setCurrentIndex(int index) {
+                public void setCurrentIndex(int i) {
                     PhotoViewer.this.currentIndex = -1;
                     if (PhotoViewer.this.currentThumb != null) {
                         PhotoViewer.this.currentThumb.release();
                         PhotoViewer.this.currentThumb = null;
                     }
-                    PhotoViewer.this.setImageIndex(index, true);
+                    PhotoViewer.this.setImageIndex(i, true);
                 }
             });
             this.captionTextView = createCaptionTextView();
             this.switchCaptionTextView = createCaptionTextView();
-            for (int a = 0; a < 3; a++) {
-                this.photoProgressViews[a] = new PhotoProgressView(this.containerView.getContext(), this.containerView);
-                this.photoProgressViews[a].setBackgroundState(0, false);
+            for (i = 0; i < 3; i++) {
+                this.photoProgressViews[i] = new PhotoProgressView(this.containerView.getContext(), this.containerView);
+                this.photoProgressViews[i].setBackgroundState(0, false);
             }
             this.miniProgressView = new RadialProgressView(this.actvityContext) {
-                public void setAlpha(float alpha) {
-                    super.setAlpha(alpha);
+                public void setAlpha(float f) {
+                    super.setAlpha(f);
                     if (PhotoViewer.this.containerView != null) {
                         PhotoViewer.this.containerView.invalidate();
                     }
@@ -2599,7 +3695,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             this.shareButton.setScaleType(ScaleType.CENTER);
             this.shareButton.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
             this.bottomLayout.addView(this.shareButton, LayoutHelper.createFrame(50, -1, 53));
-            this.shareButton.setOnClickListener(new PhotoViewer$$Lambda$2(this));
+            this.shareButton.setOnClickListener(new -$$Lambda$PhotoViewer$jnWuEkM1mcOIlgJQ2IKC_gla8zE(this));
             this.shareButton.setContentDescription(LocaleController.getString("ShareFile", NUM));
             this.nameTextView = new TextView(this.containerView.getContext());
             this.nameTextView.setTextSize(1, 14.0f);
@@ -2631,8 +3727,8 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             this.qualityPicker.setTranslationY((float) AndroidUtilities.dp(120.0f));
             this.qualityPicker.doneButton.setText(LocaleController.getString("Done", NUM).toUpperCase());
             this.containerView.addView(this.qualityPicker, LayoutHelper.createFrame(-1, 48, 83));
-            this.qualityPicker.cancelButton.setOnClickListener(new PhotoViewer$$Lambda$3(this));
-            this.qualityPicker.doneButton.setOnClickListener(new PhotoViewer$$Lambda$4(this));
+            this.qualityPicker.cancelButton.setOnClickListener(new -$$Lambda$PhotoViewer$Ix7Bv26ggFYqzRhGVPWK6_2sNXM(this));
+            this.qualityPicker.doneButton.setOnClickListener(new -$$Lambda$PhotoViewer$39sOKx3t1IYK0_BSSSDOFzpR-Xk(this));
             this.videoForwardDrawable = new VideoForwardDrawable();
             this.videoForwardDrawable.setDelegate(new VideoForwardDrawableDelegate() {
                 public void onAnimationEnd() {
@@ -2648,58 +3744,58 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             this.qualityChooseView.setBackgroundColor(NUM);
             this.containerView.addView(this.qualityChooseView, LayoutHelper.createFrame(-1, 70.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
             this.pickerView = new FrameLayout(this.actvityContext) {
-                public boolean dispatchTouchEvent(MotionEvent ev) {
-                    return PhotoViewer.this.bottomTouchEnabled && super.dispatchTouchEvent(ev);
+                public boolean dispatchTouchEvent(MotionEvent motionEvent) {
+                    return PhotoViewer.this.bottomTouchEnabled && super.dispatchTouchEvent(motionEvent);
                 }
 
-                public boolean onInterceptTouchEvent(MotionEvent ev) {
-                    return PhotoViewer.this.bottomTouchEnabled && super.onInterceptTouchEvent(ev);
+                public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+                    return PhotoViewer.this.bottomTouchEnabled && super.onInterceptTouchEvent(motionEvent);
                 }
 
-                public boolean onTouchEvent(MotionEvent event) {
-                    return PhotoViewer.this.bottomTouchEnabled && super.onTouchEvent(event);
+                public boolean onTouchEvent(MotionEvent motionEvent) {
+                    return PhotoViewer.this.bottomTouchEnabled && super.onTouchEvent(motionEvent);
                 }
             };
             this.pickerView.setBackgroundColor(NUM);
             this.containerView.addView(this.pickerView, LayoutHelper.createFrame(-1, -2, 83));
             this.videoTimelineView = new VideoTimelinePlayView(this.parentActivity);
             this.videoTimelineView.setDelegate(new VideoTimelineViewDelegate() {
-                public void onLeftProgressChanged(float progress) {
-                    if (PhotoViewer.this.videoPlayer != null) {
-                        if (PhotoViewer.this.videoPlayer.isPlaying()) {
-                            PhotoViewer.this.videoPlayer.pause();
-                            PhotoViewer.this.containerView.invalidate();
-                        }
-                        PhotoViewer.this.videoPlayer.seekTo((long) ((int) (PhotoViewer.this.videoDuration * progress)));
-                        PhotoViewer.this.videoPlayerSeekbar.setProgress(0.0f);
-                        PhotoViewer.this.videoTimelineView.setProgress(0.0f);
-                        PhotoViewer.this.updateVideoInfo();
-                    }
-                }
-
-                public void onRightProgressChanged(float progress) {
-                    if (PhotoViewer.this.videoPlayer != null) {
-                        if (PhotoViewer.this.videoPlayer.isPlaying()) {
-                            PhotoViewer.this.videoPlayer.pause();
-                            PhotoViewer.this.containerView.invalidate();
-                        }
-                        PhotoViewer.this.videoPlayer.seekTo((long) ((int) (PhotoViewer.this.videoDuration * progress)));
-                        PhotoViewer.this.videoPlayerSeekbar.setProgress(0.0f);
-                        PhotoViewer.this.videoTimelineView.setProgress(0.0f);
-                        PhotoViewer.this.updateVideoInfo();
-                    }
-                }
-
-                public void onPlayProgressChanged(float progress) {
-                    if (PhotoViewer.this.videoPlayer != null) {
-                        PhotoViewer.this.videoPlayer.seekTo((long) ((int) (PhotoViewer.this.videoDuration * progress)));
-                    }
-                }
-
                 public void didStartDragging() {
                 }
 
                 public void didStopDragging() {
+                }
+
+                public void onLeftProgressChanged(float f) {
+                    if (PhotoViewer.this.videoPlayer != null) {
+                        if (PhotoViewer.this.videoPlayer.isPlaying()) {
+                            PhotoViewer.this.videoPlayer.pause();
+                            PhotoViewer.this.containerView.invalidate();
+                        }
+                        PhotoViewer.this.videoPlayer.seekTo((long) ((int) (PhotoViewer.this.videoDuration * f)));
+                        PhotoViewer.this.videoPlayerSeekbar.setProgress(0.0f);
+                        PhotoViewer.this.videoTimelineView.setProgress(0.0f);
+                        PhotoViewer.this.updateVideoInfo();
+                    }
+                }
+
+                public void onRightProgressChanged(float f) {
+                    if (PhotoViewer.this.videoPlayer != null) {
+                        if (PhotoViewer.this.videoPlayer.isPlaying()) {
+                            PhotoViewer.this.videoPlayer.pause();
+                            PhotoViewer.this.containerView.invalidate();
+                        }
+                        PhotoViewer.this.videoPlayer.seekTo((long) ((int) (PhotoViewer.this.videoDuration * f)));
+                        PhotoViewer.this.videoPlayerSeekbar.setProgress(0.0f);
+                        PhotoViewer.this.videoTimelineView.setProgress(0.0f);
+                        PhotoViewer.this.updateVideoInfo();
+                    }
+                }
+
+                public void onPlayProgressChanged(float f) {
+                    if (PhotoViewer.this.videoPlayer != null) {
+                        PhotoViewer.this.videoPlayer.seekTo((long) ((int) (PhotoViewer.this.videoDuration * f)));
+                    }
                 }
             });
             this.pickerView.addView(this.videoTimelineView, LayoutHelper.createFrame(-1, 58.0f, 51, 0.0f, 8.0f, 0.0f, 88.0f));
@@ -2711,83 +3807,90 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             this.pickerViewSendButton.setImageResource(NUM);
             this.containerView.addView(this.pickerViewSendButton, LayoutHelper.createFrame(56, 56.0f, 85, 0.0f, 0.0f, 14.0f, 14.0f));
             this.pickerViewSendButton.setContentDescription(LocaleController.getString("Send", NUM));
-            this.pickerViewSendButton.setOnClickListener(new PhotoViewer$$Lambda$5(this));
-            LinearLayout itemsLayout = new LinearLayout(this.parentActivity);
-            itemsLayout.setOrientation(0);
-            this.pickerView.addView(itemsLayout, LayoutHelper.createFrame(-2, 48.0f, 81, 0.0f, 0.0f, 34.0f, 0.0f));
+            this.pickerViewSendButton.setOnClickListener(new -$$Lambda$PhotoViewer$Ygm2nkEIz52xt8vsvpsgSvg6BwY(this));
+            LinearLayout linearLayout = new LinearLayout(this.parentActivity);
+            linearLayout.setOrientation(0);
+            this.pickerView.addView(linearLayout, LayoutHelper.createFrame(-2, 48.0f, 81, 0.0f, 0.0f, 34.0f, 0.0f));
             this.cropItem = new ImageView(this.parentActivity);
             this.cropItem.setScaleType(ScaleType.CENTER);
             this.cropItem.setImageResource(NUM);
             this.cropItem.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
-            itemsLayout.addView(this.cropItem, LayoutHelper.createLinear(70, 48));
-            this.cropItem.setOnClickListener(new PhotoViewer$$Lambda$6(this));
+            linearLayout.addView(this.cropItem, LayoutHelper.createLinear(70, 48));
+            this.cropItem.setOnClickListener(new -$$Lambda$PhotoViewer$eMxgxyAI6SdVhY11OBq7nV_Jqtc(this));
             this.cropItem.setContentDescription(LocaleController.getString("CropImage", NUM));
             this.rotateItem = new ImageView(this.parentActivity);
             this.rotateItem.setScaleType(ScaleType.CENTER);
             this.rotateItem.setImageResource(NUM);
             this.rotateItem.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
-            itemsLayout.addView(this.rotateItem, LayoutHelper.createLinear(70, 48));
-            this.rotateItem.setOnClickListener(new PhotoViewer$$Lambda$7(this));
+            linearLayout.addView(this.rotateItem, LayoutHelper.createLinear(70, 48));
+            this.rotateItem.setOnClickListener(new -$$Lambda$PhotoViewer$S84XUzehocAn-E9EWBFOsOwSJTw(this));
             this.rotateItem.setContentDescription(LocaleController.getString("AccDescrRotate", NUM));
             this.paintItem = new ImageView(this.parentActivity);
             this.paintItem.setScaleType(ScaleType.CENTER);
             this.paintItem.setImageResource(NUM);
             this.paintItem.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
-            itemsLayout.addView(this.paintItem, LayoutHelper.createLinear(70, 48));
-            this.paintItem.setOnClickListener(new PhotoViewer$$Lambda$8(this));
+            linearLayout.addView(this.paintItem, LayoutHelper.createLinear(70, 48));
+            this.paintItem.setOnClickListener(new -$$Lambda$PhotoViewer$Nm0i__eT2GlY_xQALMRCLASSNAMEgc1G0(this));
             this.paintItem.setContentDescription(LocaleController.getString("AccDescrPhotoEditor", NUM));
             this.compressItem = new ImageView(this.parentActivity);
             this.compressItem.setTag(Integer.valueOf(1));
             this.compressItem.setScaleType(ScaleType.CENTER);
             this.compressItem.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
             this.selectedCompression = MessagesController.getGlobalMainSettings().getInt("compress_video2", 1);
-            if (this.selectedCompression <= 0) {
+            int i2 = this.selectedCompression;
+            if (i2 <= 0) {
                 this.compressItem.setImageResource(NUM);
-            } else if (this.selectedCompression == 1) {
+            } else if (i2 == 1) {
                 this.compressItem.setImageResource(NUM);
-            } else if (this.selectedCompression == 2) {
+            } else if (i2 == 2) {
                 this.compressItem.setImageResource(NUM);
-            } else if (this.selectedCompression == 3) {
+            } else if (i2 == 3) {
                 this.compressItem.setImageResource(NUM);
-            } else if (this.selectedCompression == 4) {
+            } else if (i2 == 4) {
                 this.compressItem.setImageResource(NUM);
             }
-            itemsLayout.addView(this.compressItem, LayoutHelper.createLinear(70, 48));
-            this.compressItem.setOnClickListener(new PhotoViewer$$Lambda$9(this));
-            this.compressItem.setContentDescription(LocaleController.getString("AccDescrVideoQuality", NUM) + ", " + new String[]{"240", "360", "480", "720", "1080"}[Math.max(0, this.selectedCompression)]);
+            linearLayout.addView(this.compressItem, LayoutHelper.createLinear(70, 48));
+            this.compressItem.setOnClickListener(new -$$Lambda$PhotoViewer$ZNbglMdvMBz7fic2b_SNO94Evbk(this));
+            String[] strArr = new String[]{"240", "360", "480", "720", "1080"};
+            ImageView imageView = this.compressItem;
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(LocaleController.getString("AccDescrVideoQuality", NUM));
+            stringBuilder.append(", ");
+            stringBuilder.append(strArr[Math.max(0, this.selectedCompression)]);
+            imageView.setContentDescription(stringBuilder.toString());
             this.muteItem = new ImageView(this.parentActivity);
             this.muteItem.setScaleType(ScaleType.CENTER);
             this.muteItem.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
-            itemsLayout.addView(this.muteItem, LayoutHelper.createLinear(70, 48));
-            this.muteItem.setOnClickListener(new PhotoViewer$$Lambda$10(this));
+            linearLayout.addView(this.muteItem, LayoutHelper.createLinear(70, 48));
+            this.muteItem.setOnClickListener(new -$$Lambda$PhotoViewer$MIXMx0jfsMSq1oOpVJ4spUPP5Ss(this));
             this.cameraItem = new ImageView(this.parentActivity);
             this.cameraItem.setScaleType(ScaleType.CENTER);
             this.cameraItem.setImageResource(NUM);
             this.cameraItem.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
             this.cameraItem.setContentDescription(LocaleController.getString("AccDescrTakeMorePics", NUM));
             this.containerView.addView(this.cameraItem, LayoutHelper.createFrame(48, 48.0f, 85, 0.0f, 0.0f, 16.0f, 0.0f));
-            this.cameraItem.setOnClickListener(new PhotoViewer$$Lambda$11(this));
+            this.cameraItem.setOnClickListener(new -$$Lambda$PhotoViewer$FkVTKWzor1OYhcy-PdaAovVJgkQ(this));
             this.tuneItem = new ImageView(this.parentActivity);
             this.tuneItem.setScaleType(ScaleType.CENTER);
             this.tuneItem.setImageResource(NUM);
             this.tuneItem.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
-            itemsLayout.addView(this.tuneItem, LayoutHelper.createLinear(70, 48));
-            this.tuneItem.setOnClickListener(new PhotoViewer$$Lambda$12(this));
+            linearLayout.addView(this.tuneItem, LayoutHelper.createLinear(70, 48));
+            this.tuneItem.setOnClickListener(new -$$Lambda$PhotoViewer$BtjFUBdRHmVM1bQF4oFTkkfFVOY(this));
             this.tuneItem.setContentDescription(LocaleController.getString("AccDescrPhotoAdjust", NUM));
             this.timeItem = new ImageView(this.parentActivity);
             this.timeItem.setScaleType(ScaleType.CENTER);
             this.timeItem.setImageResource(NUM);
             this.timeItem.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
             this.timeItem.setContentDescription(LocaleController.getString("SetTimer", NUM));
-            itemsLayout.addView(this.timeItem, LayoutHelper.createLinear(70, 48));
-            this.timeItem.setOnClickListener(new PhotoViewer$$Lambda$13(this));
+            linearLayout.addView(this.timeItem, LayoutHelper.createLinear(70, 48));
+            this.timeItem.setOnClickListener(new -$$Lambda$PhotoViewer$5tqvSuoNJkycbaIOeX7zem0z4z4(this));
             this.editorDoneLayout = new PickerBottomLayoutViewer(this.actvityContext);
             this.editorDoneLayout.setBackgroundColor(NUM);
             this.editorDoneLayout.updateSelectedCount(0, false);
             this.editorDoneLayout.setVisibility(8);
             this.containerView.addView(this.editorDoneLayout, LayoutHelper.createFrame(-1, 48, 83));
-            this.editorDoneLayout.cancelButton.setOnClickListener(new PhotoViewer$$Lambda$14(this));
-            this.editorDoneLayout.doneButton.setOnClickListener(new PhotoViewer$$Lambda$15(this));
+            this.editorDoneLayout.cancelButton.setOnClickListener(new -$$Lambda$PhotoViewer$jVRNS_vT_efmfMNpUJWPuD_BH_s(this));
+            this.editorDoneLayout.doneButton.setOnClickListener(new -$$Lambda$PhotoViewer$lzLoax3UVNdU6xIvKXGhOoY4Vc8(this));
             this.resetButton = new TextView(this.actvityContext);
             this.resetButton.setVisibility(8);
             this.resetButton.setTextSize(1, 14.0f);
@@ -2798,26 +3901,26 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             this.resetButton.setText(LocaleController.getString("Reset", NUM).toUpperCase());
             this.resetButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.editorDoneLayout.addView(this.resetButton, LayoutHelper.createFrame(-2, -1, 49));
-            this.resetButton.setOnClickListener(new PhotoViewer$$Lambda$16(this));
+            this.resetButton.setOnClickListener(new -$$Lambda$PhotoViewer$jYKD2cxo5_0tGvpCTvsWOo0KirI(this));
             this.gestureDetector = new GestureDetector(this.containerView.getContext(), this);
             setDoubleTapEnabled(true);
-            ImageReceiverDelegate imageReceiverDelegate = new PhotoViewer$$Lambda$17(this);
+            -$$Lambda$PhotoViewer$8d9Z5wt8PBRYWSSOdeX0wadZFXk -__lambda_photoviewer_8d9z5wt8pbrywssodex0wadzfxk = new -$$Lambda$PhotoViewer$8d9Z5wt8PBRYWSSOdeX0wadZFXk(this);
             this.centerImage.setParentView(this.containerView);
             this.centerImage.setCrossfadeAlpha((byte) 2);
             this.centerImage.setInvalidateAll(true);
-            this.centerImage.setDelegate(imageReceiverDelegate);
+            this.centerImage.setDelegate(-__lambda_photoviewer_8d9z5wt8pbrywssodex0wadzfxk);
             this.leftImage.setParentView(this.containerView);
             this.leftImage.setCrossfadeAlpha((byte) 2);
             this.leftImage.setInvalidateAll(true);
-            this.leftImage.setDelegate(imageReceiverDelegate);
+            this.leftImage.setDelegate(-__lambda_photoviewer_8d9z5wt8pbrywssodex0wadzfxk);
             this.rightImage.setParentView(this.containerView);
             this.rightImage.setCrossfadeAlpha((byte) 2);
             this.rightImage.setInvalidateAll(true);
-            this.rightImage.setDelegate(imageReceiverDelegate);
-            int rotation = ((WindowManager) ApplicationLoader.applicationContext.getSystemService("window")).getDefaultDisplay().getRotation();
+            this.rightImage.setDelegate(-__lambda_photoviewer_8d9z5wt8pbrywssodex0wadzfxk);
+            i = ((WindowManager) ApplicationLoader.applicationContext.getSystemService("window")).getDefaultDisplay().getRotation();
             this.checkImageView = new CheckBox(this.containerView.getContext(), NUM) {
-                public boolean onTouchEvent(MotionEvent event) {
-                    return PhotoViewer.this.bottomTouchEnabled && super.onTouchEvent(event);
+                public boolean onTouchEvent(MotionEvent motionEvent) {
+                    return PhotoViewer.this.bottomTouchEnabled && super.onTouchEvent(motionEvent);
                 }
             };
             this.checkImageView.setDrawBackground(true);
@@ -2827,47 +3930,47 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             this.checkImageView.setColor(-10043398, -1);
             this.checkImageView.setVisibility(8);
             FrameLayoutDrawer frameLayoutDrawer = this.containerView;
-            View view = this.checkImageView;
-            float f = (rotation == 3 || rotation == 1) ? 58.0f : 68.0f;
-            frameLayoutDrawer.addView(view, LayoutHelper.createFrame(40, 40.0f, 53, 0.0f, f, 10.0f, 0.0f));
+            CheckBox checkBox = this.checkImageView;
+            float f = (i == 3 || i == 1) ? 58.0f : 68.0f;
+            frameLayoutDrawer.addView(checkBox, LayoutHelper.createFrame(40, 40.0f, 53, 0.0f, f, 10.0f, 0.0f));
             if (VERSION.SDK_INT >= 21) {
-                layoutParams = (FrameLayout.LayoutParams) this.checkImageView.getLayoutParams();
-                layoutParams.topMargin += AndroidUtilities.statusBarHeight;
+                FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) this.checkImageView.getLayoutParams();
+                layoutParams2.topMargin += AndroidUtilities.statusBarHeight;
             }
-            this.checkImageView.setOnClickListener(new PhotoViewer$$Lambda$18(this));
+            this.checkImageView.setOnClickListener(new -$$Lambda$PhotoViewer$MNTsOUmDycPlm-15mLZjYpUg6Ec(this));
             this.photosCounterView = new CounterView(this.parentActivity);
             frameLayoutDrawer = this.containerView;
-            view = this.photosCounterView;
-            f = (rotation == 3 || rotation == 1) ? 58.0f : 68.0f;
-            frameLayoutDrawer.addView(view, LayoutHelper.createFrame(40, 40.0f, 53, 0.0f, f, 66.0f, 0.0f));
+            CounterView counterView = this.photosCounterView;
+            f = (i == 3 || i == 1) ? 58.0f : 68.0f;
+            frameLayoutDrawer.addView(counterView, LayoutHelper.createFrame(40, 40.0f, 53, 0.0f, f, 66.0f, 0.0f));
             if (VERSION.SDK_INT >= 21) {
-                layoutParams = (FrameLayout.LayoutParams) this.photosCounterView.getLayoutParams();
-                layoutParams.topMargin += AndroidUtilities.statusBarHeight;
+                FrameLayout.LayoutParams layoutParams3 = (FrameLayout.LayoutParams) this.photosCounterView.getLayoutParams();
+                layoutParams3.topMargin += AndroidUtilities.statusBarHeight;
             }
-            this.photosCounterView.setOnClickListener(new PhotoViewer$$Lambda$19(this));
+            this.photosCounterView.setOnClickListener(new -$$Lambda$PhotoViewer$v61rlDfXP7XMVPYKHGswQHaXc-E(this));
             this.selectedPhotosListView = new RecyclerListView(this.parentActivity);
             this.selectedPhotosListView.setVisibility(8);
             this.selectedPhotosListView.setAlpha(0.0f);
             this.selectedPhotosListView.setTranslationY((float) (-AndroidUtilities.dp(10.0f)));
             this.selectedPhotosListView.addItemDecoration(new ItemDecoration() {
-                public void getItemOffsets(Rect outRect, View view, RecyclerView parent, State state) {
-                    int position = parent.getChildAdapterPosition(view);
-                    if ((view instanceof PhotoPickerPhotoCell) && position == 0) {
-                        outRect.left = AndroidUtilities.dp(3.0f);
+                public void getItemOffsets(Rect rect, View view, RecyclerView recyclerView, State state) {
+                    int childAdapterPosition = recyclerView.getChildAdapterPosition(view);
+                    if ((view instanceof PhotoPickerPhotoCell) && childAdapterPosition == 0) {
+                        rect.left = AndroidUtilities.dp(3.0f);
                     } else {
-                        outRect.left = 0;
+                        rect.left = 0;
                     }
-                    outRect.right = AndroidUtilities.dp(3.0f);
+                    rect.right = AndroidUtilities.dp(3.0f);
                 }
             });
             ((DefaultItemAnimator) this.selectedPhotosListView.getItemAnimator()).setDelayAnimations(false);
             this.selectedPhotosListView.setBackgroundColor(NUM);
             this.selectedPhotosListView.setPadding(0, AndroidUtilities.dp(3.0f), 0, AndroidUtilities.dp(3.0f));
             this.selectedPhotosListView.setLayoutManager(new LinearLayoutManager(this.parentActivity, 0, false) {
-                public void smoothScrollToPosition(RecyclerView recyclerView, State state, int position) {
-                    LinearSmoothScrollerEnd linearSmoothScroller = new LinearSmoothScrollerEnd(recyclerView.getContext());
-                    linearSmoothScroller.setTargetPosition(position);
-                    startSmoothScroll(linearSmoothScroller);
+                public void smoothScrollToPosition(RecyclerView recyclerView, State state, int i) {
+                    LinearSmoothScrollerEnd linearSmoothScrollerEnd = new LinearSmoothScrollerEnd(recyclerView.getContext());
+                    linearSmoothScrollerEnd.setTargetPosition(i);
+                    startSmoothScroll(linearSmoothScrollerEnd);
                 }
             });
             RecyclerListView recyclerListView = this.selectedPhotosListView;
@@ -2875,28 +3978,36 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             this.selectedPhotosAdapter = listAdapter;
             recyclerListView.setAdapter(listAdapter);
             this.containerView.addView(this.selectedPhotosListView, LayoutHelper.createFrame(-1, 88, 51));
-            this.selectedPhotosListView.setOnItemClickListener(new PhotoViewer$$Lambda$20(this));
+            this.selectedPhotosListView.setOnItemClickListener(new -$$Lambda$PhotoViewer$-FS1GaFBb1N0jAMDctH7XmfNRmw(this));
             this.captionEditText = new PhotoViewerCaptionEnterView(this.actvityContext, this.containerView, this.windowView) {
-                public boolean dispatchTouchEvent(MotionEvent ev) {
+                public boolean dispatchTouchEvent(MotionEvent motionEvent) {
+                    boolean z = false;
                     try {
-                        return !PhotoViewer.this.bottomTouchEnabled && super.dispatchTouchEvent(ev);
+                        if (!PhotoViewer.this.bottomTouchEnabled && super.dispatchTouchEvent(motionEvent)) {
+                            z = true;
+                        }
+                        return z;
                     } catch (Exception e) {
                         FileLog.e(e);
                         return false;
                     }
                 }
 
-                public boolean onInterceptTouchEvent(MotionEvent ev) {
+                public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+                    boolean z = false;
                     try {
-                        return !PhotoViewer.this.bottomTouchEnabled && super.onInterceptTouchEvent(ev);
+                        if (!PhotoViewer.this.bottomTouchEnabled && super.onInterceptTouchEvent(motionEvent)) {
+                            z = true;
+                        }
+                        return z;
                     } catch (Exception e) {
                         FileLog.e(e);
                         return false;
                     }
                 }
 
-                public boolean onTouchEvent(MotionEvent event) {
-                    return !PhotoViewer.this.bottomTouchEnabled && super.onTouchEvent(event);
+                public boolean onTouchEvent(MotionEvent motionEvent) {
+                    return !PhotoViewer.this.bottomTouchEnabled && super.onTouchEvent(motionEvent);
                 }
             };
             this.captionEditText.setDelegate(new PhotoViewerCaptionEnterViewDelegate() {
@@ -2904,21 +4015,14 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     PhotoViewer.this.closeCaptionEnter(true);
                 }
 
-                public void onTextChanged(CharSequence text) {
-                    if (PhotoViewer.this.mentionsAdapter != null && PhotoViewer.this.captionEditText != null && PhotoViewer.this.parentChatActivity != null && text != null) {
-                        PhotoViewer.this.mentionsAdapter.searchUsernameOrHashtag(text.toString(), PhotoViewer.this.captionEditText.getCursorPosition(), PhotoViewer.this.parentChatActivity.messages, false);
+                public void onTextChanged(CharSequence charSequence) {
+                    if (PhotoViewer.this.mentionsAdapter != null && PhotoViewer.this.captionEditText != null && PhotoViewer.this.parentChatActivity != null && charSequence != null) {
+                        PhotoViewer.this.mentionsAdapter.searchUsernameOrHashtag(charSequence.toString(), PhotoViewer.this.captionEditText.getCursorPosition(), PhotoViewer.this.parentChatActivity.messages, false);
                     }
                 }
 
-                public void onWindowSizeChanged(int size) {
-                    int i;
-                    int min = Math.min(3, PhotoViewer.this.mentionsAdapter.getItemCount()) * 36;
-                    if (PhotoViewer.this.mentionsAdapter.getItemCount() > 3) {
-                        i = 18;
-                    } else {
-                        i = 0;
-                    }
-                    if (size - (ActionBar.getCurrentActionBarHeight() * 2) < AndroidUtilities.dp((float) (i + min))) {
+                public void onWindowSizeChanged(int i) {
+                    if (i - (ActionBar.getCurrentActionBarHeight() * 2) < AndroidUtilities.dp((float) ((Math.min(3, PhotoViewer.this.mentionsAdapter.getItemCount()) * 36) + (PhotoViewer.this.mentionsAdapter.getItemCount() > 3 ? 18 : 0)))) {
                         PhotoViewer.this.allowMentions = false;
                         if (PhotoViewer.this.mentionListView != null && PhotoViewer.this.mentionListView.getVisibility() == 0) {
                             PhotoViewer.this.mentionListView.setVisibility(4);
@@ -2937,16 +4041,16 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             }
             this.containerView.addView(this.captionEditText, LayoutHelper.createFrame(-1, -2, 83));
             this.mentionListView = new RecyclerListView(this.actvityContext) {
-                public boolean dispatchTouchEvent(MotionEvent ev) {
-                    return !PhotoViewer.this.bottomTouchEnabled && super.dispatchTouchEvent(ev);
+                public boolean dispatchTouchEvent(MotionEvent motionEvent) {
+                    return !PhotoViewer.this.bottomTouchEnabled && super.dispatchTouchEvent(motionEvent);
                 }
 
-                public boolean onInterceptTouchEvent(MotionEvent ev) {
-                    return !PhotoViewer.this.bottomTouchEnabled && super.onInterceptTouchEvent(ev);
+                public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+                    return !PhotoViewer.this.bottomTouchEnabled && super.onInterceptTouchEvent(motionEvent);
                 }
 
-                public boolean onTouchEvent(MotionEvent event) {
-                    return !PhotoViewer.this.bottomTouchEnabled && super.onTouchEvent(event);
+                public boolean onTouchEvent(MotionEvent motionEvent) {
+                    return !PhotoViewer.this.bottomTouchEnabled && super.onTouchEvent(motionEvent);
                 }
             };
             this.mentionListView.setTag(Integer.valueOf(5));
@@ -2964,20 +4068,19 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             this.containerView.addView(this.mentionListView, LayoutHelper.createFrame(-1, 110, 83));
             recyclerListView = this.mentionListView;
             MentionsAdapter mentionsAdapter = new MentionsAdapter(this.actvityContext, true, 0, new MentionsAdapterDelegate() {
-                public void needChangePanelVisibility(boolean show) {
-                    if (show) {
-                        int i;
-                        FrameLayout.LayoutParams layoutParams3 = (FrameLayout.LayoutParams) PhotoViewer.this.mentionListView.getLayoutParams();
-                        int min = Math.min(3, PhotoViewer.this.mentionsAdapter.getItemCount()) * 36;
-                        if (PhotoViewer.this.mentionsAdapter.getItemCount() > 3) {
-                            i = 18;
-                        } else {
-                            i = 0;
-                        }
-                        int height = min + i;
-                        layoutParams3.height = AndroidUtilities.dp((float) height);
-                        layoutParams3.topMargin = -AndroidUtilities.dp((float) height);
-                        PhotoViewer.this.mentionListView.setLayoutParams(layoutParams3);
+                public void onContextClick(BotInlineResult botInlineResult) {
+                }
+
+                public void onContextSearch(boolean z) {
+                }
+
+                public void needChangePanelVisibility(boolean z) {
+                    if (z) {
+                        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) PhotoViewer.this.mentionListView.getLayoutParams();
+                        float min = (float) ((Math.min(3, PhotoViewer.this.mentionsAdapter.getItemCount()) * 36) + (PhotoViewer.this.mentionsAdapter.getItemCount() > 3 ? 18 : 0));
+                        layoutParams.height = AndroidUtilities.dp(min);
+                        layoutParams.topMargin = -AndroidUtilities.dp(min);
+                        PhotoViewer.this.mentionListView.setLayoutParams(layoutParams);
                         if (PhotoViewer.this.mentionListAnimation != null) {
                             PhotoViewer.this.mentionListAnimation.cancel();
                             PhotoViewer.this.mentionListAnimation = null;
@@ -2992,58 +4095,51 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                             PhotoViewer.this.mentionListAnimation = new AnimatorSet();
                             PhotoViewer.this.mentionListAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(PhotoViewer.this.mentionListView, View.ALPHA, new float[]{0.0f, 1.0f})});
                             PhotoViewer.this.mentionListAnimation.addListener(new AnimatorListenerAdapter() {
-                                public void onAnimationEnd(Animator animation) {
-                                    if (PhotoViewer.this.mentionListAnimation != null && PhotoViewer.this.mentionListAnimation.equals(animation)) {
+                                public void onAnimationEnd(Animator animator) {
+                                    if (PhotoViewer.this.mentionListAnimation != null && PhotoViewer.this.mentionListAnimation.equals(animator)) {
                                         PhotoViewer.this.mentionListAnimation = null;
                                     }
                                 }
                             });
                             PhotoViewer.this.mentionListAnimation.setDuration(200);
                             PhotoViewer.this.mentionListAnimation.start();
-                            return;
+                        } else {
+                            PhotoViewer.this.mentionListView.setAlpha(1.0f);
+                            PhotoViewer.this.mentionListView.setVisibility(4);
                         }
-                        PhotoViewer.this.mentionListView.setAlpha(1.0f);
-                        PhotoViewer.this.mentionListView.setVisibility(4);
-                        return;
-                    }
-                    if (PhotoViewer.this.mentionListAnimation != null) {
-                        PhotoViewer.this.mentionListAnimation.cancel();
-                        PhotoViewer.this.mentionListAnimation = null;
-                    }
-                    if (PhotoViewer.this.mentionListView.getVisibility() == 8) {
-                        return;
-                    }
-                    if (PhotoViewer.this.allowMentions) {
-                        PhotoViewer.this.mentionListAnimation = new AnimatorSet();
-                        AnimatorSet access$9800 = PhotoViewer.this.mentionListAnimation;
-                        Animator[] animatorArr = new Animator[1];
-                        animatorArr[0] = ObjectAnimator.ofFloat(PhotoViewer.this.mentionListView, View.ALPHA, new float[]{0.0f});
-                        access$9800.playTogether(animatorArr);
-                        PhotoViewer.this.mentionListAnimation.addListener(new AnimatorListenerAdapter() {
-                            public void onAnimationEnd(Animator animation) {
-                                if (PhotoViewer.this.mentionListAnimation != null && PhotoViewer.this.mentionListAnimation.equals(animation)) {
-                                    PhotoViewer.this.mentionListView.setVisibility(8);
-                                    PhotoViewer.this.mentionListAnimation = null;
-                                }
+                    } else {
+                        if (PhotoViewer.this.mentionListAnimation != null) {
+                            PhotoViewer.this.mentionListAnimation.cancel();
+                            PhotoViewer.this.mentionListAnimation = null;
+                        }
+                        if (PhotoViewer.this.mentionListView.getVisibility() != 8) {
+                            if (PhotoViewer.this.allowMentions) {
+                                PhotoViewer.this.mentionListAnimation = new AnimatorSet();
+                                AnimatorSet access$9900 = PhotoViewer.this.mentionListAnimation;
+                                Animator[] animatorArr = new Animator[1];
+                                animatorArr[0] = ObjectAnimator.ofFloat(PhotoViewer.this.mentionListView, View.ALPHA, new float[]{0.0f});
+                                access$9900.playTogether(animatorArr);
+                                PhotoViewer.this.mentionListAnimation.addListener(new AnimatorListenerAdapter() {
+                                    public void onAnimationEnd(Animator animator) {
+                                        if (PhotoViewer.this.mentionListAnimation != null && PhotoViewer.this.mentionListAnimation.equals(animator)) {
+                                            PhotoViewer.this.mentionListView.setVisibility(8);
+                                            PhotoViewer.this.mentionListAnimation = null;
+                                        }
+                                    }
+                                });
+                                PhotoViewer.this.mentionListAnimation.setDuration(200);
+                                PhotoViewer.this.mentionListAnimation.start();
+                            } else {
+                                PhotoViewer.this.mentionListView.setVisibility(8);
                             }
-                        });
-                        PhotoViewer.this.mentionListAnimation.setDuration(200);
-                        PhotoViewer.this.mentionListAnimation.start();
-                        return;
+                        }
                     }
-                    PhotoViewer.this.mentionListView.setVisibility(8);
-                }
-
-                public void onContextSearch(boolean searching) {
-                }
-
-                public void onContextClick(BotInlineResult result) {
                 }
             });
             this.mentionsAdapter = mentionsAdapter;
             recyclerListView.setAdapter(mentionsAdapter);
-            this.mentionListView.setOnItemClickListener(new PhotoViewer$$Lambda$21(this));
-            this.mentionListView.setOnItemLongClickListener(new PhotoViewer$$Lambda$22(this));
+            this.mentionListView.setOnItemClickListener(new -$$Lambda$PhotoViewer$JG3xW1rvxoBoP1ShppmfpfTlhQo(this));
+            this.mentionListView.setOnItemLongClickListener(new -$$Lambda$PhotoViewer$vduFoUyvar_i_ViN04AaYIiTGtk(this));
             if (((AccessibilityManager) this.actvityContext.getSystemService("accessibility")).isEnabled()) {
                 this.playButtonAccessibilityOverlay = new View(this.actvityContext);
                 this.playButtonAccessibilityOverlay.setContentDescription(LocaleController.getString("AccActionPlay", NUM));
@@ -3053,47 +4149,43 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ WindowInsets lambda$setParentActivity$1$PhotoViewer(View v, WindowInsets insets) {
-        WindowInsets oldInsets = this.lastInsets;
-        this.lastInsets = insets;
-        if (oldInsets == null || !oldInsets.toString().equals(insets.toString())) {
+    public /* synthetic */ WindowInsets lambda$setParentActivity$1$PhotoViewer(View view, WindowInsets windowInsets) {
+        WindowInsets windowInsets2 = (WindowInsets) this.lastInsets;
+        this.lastInsets = windowInsets;
+        if (windowInsets2 == null || !windowInsets2.toString().equals(windowInsets.toString())) {
             if (this.animationInProgress == 1) {
-                this.animatingImageView.setTranslationX(this.animatingImageView.getTranslationX() - ((float) getLeftInset()));
+                ClippingImageView clippingImageView = this.animatingImageView;
+                clippingImageView.setTranslationX(clippingImageView.getTranslationX() - ((float) getLeftInset()));
                 this.animationValues[0][2] = this.animatingImageView.getTranslationX();
             }
             this.windowView.requestLayout();
         }
-        this.containerView.setPadding(insets.getSystemWindowInsetLeft(), 0, insets.getSystemWindowInsetRight(), 0);
-        return insets.consumeSystemWindowInsets();
+        this.containerView.setPadding(windowInsets.getSystemWindowInsetLeft(), 0, windowInsets.getSystemWindowInsetRight(), 0);
+        return windowInsets.consumeSystemWindowInsets();
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$setParentActivity$2$PhotoViewer(View v) {
+    public /* synthetic */ void lambda$setParentActivity$2$PhotoViewer(View view) {
         onSharePressed();
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$setParentActivity$3$PhotoViewer(View view) {
+    public /* synthetic */ void lambda$setParentActivity$3$PhotoViewer(View view) {
         this.selectedCompression = this.previousCompression;
         didChangedCompressionLevel(false);
         showQualityView(false);
         requestVideoPreview(2);
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$setParentActivity$4$PhotoViewer(View view) {
+    public /* synthetic */ void lambda$setParentActivity$4$PhotoViewer(View view) {
         showQualityView(false);
         requestVideoPreview(2);
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$setParentActivity$5$PhotoViewer(View v) {
+    public /* synthetic */ void lambda$setParentActivity$5$PhotoViewer(View view) {
         if (this.captionEditText.getTag() == null) {
             if (this.sendPhotoType == 1) {
                 applyCurrentEditMode();
             }
-            if (this.placeProvider != null && !this.doneButtonPressed) {
+            if (!(this.placeProvider == null || this.doneButtonPressed)) {
                 this.placeProvider.sendButtonPressed(this.currentIndex, getCurrentVideoEditedInfo());
                 this.doneButtonPressed = true;
                 closePhoto(false, false);
@@ -3101,350 +4193,355 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$setParentActivity$6$PhotoViewer(View v) {
+    public /* synthetic */ void lambda$setParentActivity$6$PhotoViewer(View view) {
         if (this.captionEditText.getTag() == null) {
             switchToEditMode(1);
         }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$setParentActivity$7$PhotoViewer(View v) {
-        if (this.photoCropView != null) {
-            this.photoCropView.rotate();
+    public /* synthetic */ void lambda$setParentActivity$7$PhotoViewer(View view) {
+        PhotoCropView photoCropView = this.photoCropView;
+        if (photoCropView != null) {
+            photoCropView.rotate();
         }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$setParentActivity$8$PhotoViewer(View v) {
+    public /* synthetic */ void lambda$setParentActivity$8$PhotoViewer(View view) {
         if (this.captionEditText.getTag() == null) {
             switchToEditMode(3);
         }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$setParentActivity$9$PhotoViewer(View v) {
+    public /* synthetic */ void lambda$setParentActivity$9$PhotoViewer(View view) {
         if (this.captionEditText.getTag() == null) {
             showQualityView(true);
             requestVideoPreview(1);
         }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$setParentActivity$10$PhotoViewer(View v) {
+    public /* synthetic */ void lambda$setParentActivity$10$PhotoViewer(View view) {
         if (this.captionEditText.getTag() == null) {
-            this.muteVideo = !this.muteVideo;
+            this.muteVideo ^= 1;
             updateMuteButton();
             updateVideoInfo();
             if (!this.muteVideo || this.checkImageView.isChecked()) {
-                Object object = this.imagesArrLocals.get(this.currentIndex);
-                if (object instanceof PhotoEntry) {
-                    ((PhotoEntry) object).editedInfo = getCurrentVideoEditedInfo();
-                    return;
+                Object obj = this.imagesArrLocals.get(this.currentIndex);
+                if (obj instanceof PhotoEntry) {
+                    ((PhotoEntry) obj).editedInfo = getCurrentVideoEditedInfo();
                 }
-                return;
+            } else {
+                this.checkImageView.callOnClick();
             }
-            this.checkImageView.callOnClick();
         }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$setParentActivity$11$PhotoViewer(View v) {
+    public /* synthetic */ void lambda$setParentActivity$11$PhotoViewer(View view) {
         if (this.placeProvider != null && this.captionEditText.getTag() == null) {
             this.placeProvider.needAddMorePhotos();
             closePhoto(true, false);
         }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$setParentActivity$12$PhotoViewer(View v) {
+    public /* synthetic */ void lambda$setParentActivity$12$PhotoViewer(View view) {
         if (this.captionEditText.getTag() == null) {
             switchToEditMode(2);
         }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$setParentActivity$18$PhotoViewer(View v) {
+    public /* synthetic */ void lambda$setParentActivity$18$PhotoViewer(View view) {
         if (this.parentActivity != null && this.captionEditText.getTag() == null) {
-            CharSequence string;
-            int currentTTL;
+            int i;
+            String str;
             BottomSheet.Builder builder = new BottomSheet.Builder(this.parentActivity);
             builder.setUseHardwareLayer(false);
             LinearLayout linearLayout = new LinearLayout(this.parentActivity);
             linearLayout.setOrientation(1);
             builder.setCustomView(linearLayout);
-            TextView titleView = new TextView(this.parentActivity);
-            titleView.setLines(1);
-            titleView.setSingleLine(true);
-            titleView.setText(LocaleController.getString("MessageLifetime", NUM));
-            titleView.setTextColor(-1);
-            titleView.setTextSize(1, 16.0f);
-            titleView.setEllipsize(TruncateAt.MIDDLE);
-            titleView.setPadding(AndroidUtilities.dp(21.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(21.0f), AndroidUtilities.dp(4.0f));
-            titleView.setGravity(16);
-            linearLayout.addView(titleView, LayoutHelper.createFrame(-1, -2.0f));
-            titleView.setOnTouchListener(PhotoViewer$$Lambda$44.$instance);
-            titleView = new TextView(this.parentActivity);
+            TextView textView = new TextView(this.parentActivity);
+            textView.setLines(1);
+            textView.setSingleLine(true);
+            textView.setText(LocaleController.getString("MessageLifetime", NUM));
+            textView.setTextColor(-1);
+            textView.setTextSize(1, 16.0f);
+            textView.setEllipsize(TruncateAt.MIDDLE);
+            textView.setPadding(AndroidUtilities.dp(21.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(21.0f), AndroidUtilities.dp(4.0f));
+            textView.setGravity(16);
+            linearLayout.addView(textView, LayoutHelper.createFrame(-1, -2.0f));
+            textView.setOnTouchListener(-$$Lambda$PhotoViewer$Fa9LvP0G4vIQvImlUbz8lm7_OVc.INSTANCE);
+            textView = new TextView(this.parentActivity);
             if (this.isCurrentVideo) {
-                string = LocaleController.getString("MessageLifetimeVideo", NUM);
+                i = NUM;
+                str = "MessageLifetimeVideo";
             } else {
-                string = LocaleController.getString("MessageLifetimePhoto", NUM);
+                i = NUM;
+                str = "MessageLifetimePhoto";
             }
-            titleView.setText(string);
-            titleView.setTextColor(-8355712);
-            titleView.setTextSize(1, 14.0f);
-            titleView.setEllipsize(TruncateAt.MIDDLE);
-            titleView.setPadding(AndroidUtilities.dp(21.0f), 0, AndroidUtilities.dp(21.0f), AndroidUtilities.dp(8.0f));
-            titleView.setGravity(16);
-            linearLayout.addView(titleView, LayoutHelper.createFrame(-1, -2.0f));
-            titleView.setOnTouchListener(PhotoViewer$$Lambda$45.$instance);
-            BottomSheet bottomSheet = builder.create();
+            textView.setText(LocaleController.getString(str, i));
+            textView.setTextColor(-8355712);
+            textView.setTextSize(1, 14.0f);
+            textView.setEllipsize(TruncateAt.MIDDLE);
+            textView.setPadding(AndroidUtilities.dp(21.0f), 0, AndroidUtilities.dp(21.0f), AndroidUtilities.dp(8.0f));
+            textView.setGravity(16);
+            linearLayout.addView(textView, LayoutHelper.createFrame(-1, -2.0f));
+            textView.setOnTouchListener(-$$Lambda$PhotoViewer$yXvdI0LzaOnMgp9nlpi13Yy9i9g.INSTANCE);
+            BottomSheet create = builder.create();
             NumberPicker numberPicker = new NumberPicker(this.parentActivity);
             numberPicker.setMinValue(0);
             numberPicker.setMaxValue(28);
-            Object object = this.imagesArrLocals.get(this.currentIndex);
-            if (object instanceof PhotoEntry) {
-                currentTTL = ((PhotoEntry) object).ttl;
-            } else if (object instanceof SearchImage) {
-                currentTTL = ((SearchImage) object).ttl;
-            } else {
-                currentTTL = 0;
-            }
-            if (currentTTL == 0) {
+            Object obj = this.imagesArrLocals.get(this.currentIndex);
+            int i2 = obj instanceof PhotoEntry ? ((PhotoEntry) obj).ttl : obj instanceof SearchImage ? ((SearchImage) obj).ttl : 0;
+            if (i2 == 0) {
                 numberPicker.setValue(MessagesController.getGlobalMainSettings().getInt("self_destruct", 7));
-            } else if (currentTTL < 0 || currentTTL >= 21) {
-                numberPicker.setValue(((currentTTL / 5) + 21) - 5);
+            } else if (i2 < 0 || i2 >= 21) {
+                numberPicker.setValue(((i2 / 5) + 21) - 5);
             } else {
-                numberPicker.setValue(currentTTL);
+                numberPicker.setValue(i2);
             }
             numberPicker.setTextColor(-1);
             numberPicker.setSelectorColor(-11711155);
-            numberPicker.setFormatter(PhotoViewer$$Lambda$46.$instance);
+            numberPicker.setFormatter(-$$Lambda$PhotoViewer$7xRrdNHIBWSRxpUDkiQj1xCx9mM.INSTANCE);
             linearLayout.addView(numberPicker, LayoutHelper.createLinear(-1, -2));
-            FrameLayout buttonsLayout = new FrameLayout(this.parentActivity) {
+            AnonymousClass13 anonymousClass13 = new FrameLayout(this.parentActivity) {
                 /* Access modifiers changed, original: protected */
-                public void onLayout(boolean changed, int left, int top, int right, int bottom) {
-                    int count = getChildCount();
-                    View positiveButton = null;
-                    int width = right - left;
-                    for (int a = 0; a < count; a++) {
-                        View child = getChildAt(a);
-                        if (((Integer) child.getTag()).intValue() == -1) {
-                            positiveButton = child;
-                            child.layout((width - getPaddingRight()) - child.getMeasuredWidth(), getPaddingTop(), (width - getPaddingRight()) + child.getMeasuredWidth(), getPaddingTop() + child.getMeasuredHeight());
-                        } else if (((Integer) child.getTag()).intValue() == -2) {
-                            int x = (width - getPaddingRight()) - child.getMeasuredWidth();
-                            if (positiveButton != null) {
-                                x -= positiveButton.getMeasuredWidth() + AndroidUtilities.dp(8.0f);
+                public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+                    int childCount = getChildCount();
+                    i3 -= i;
+                    View view = null;
+                    for (i2 = 0; i2 < childCount; i2++) {
+                        View childAt = getChildAt(i2);
+                        if (((Integer) childAt.getTag()).intValue() == -1) {
+                            childAt.layout((i3 - getPaddingRight()) - childAt.getMeasuredWidth(), getPaddingTop(), (i3 - getPaddingRight()) + childAt.getMeasuredWidth(), getPaddingTop() + childAt.getMeasuredHeight());
+                            view = childAt;
+                        } else if (((Integer) childAt.getTag()).intValue() == -2) {
+                            int paddingRight = (i3 - getPaddingRight()) - childAt.getMeasuredWidth();
+                            if (view != null) {
+                                paddingRight -= view.getMeasuredWidth() + AndroidUtilities.dp(8.0f);
                             }
-                            child.layout(x, getPaddingTop(), child.getMeasuredWidth() + x, getPaddingTop() + child.getMeasuredHeight());
+                            childAt.layout(paddingRight, getPaddingTop(), childAt.getMeasuredWidth() + paddingRight, getPaddingTop() + childAt.getMeasuredHeight());
                         } else {
-                            child.layout(getPaddingLeft(), getPaddingTop(), getPaddingLeft() + child.getMeasuredWidth(), getPaddingTop() + child.getMeasuredHeight());
+                            childAt.layout(getPaddingLeft(), getPaddingTop(), getPaddingLeft() + childAt.getMeasuredWidth(), getPaddingTop() + childAt.getMeasuredHeight());
                         }
                     }
                 }
             };
-            buttonsLayout.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
-            linearLayout.addView(buttonsLayout, LayoutHelper.createLinear(-1, 52));
-            TextView textView = new TextView(this.parentActivity);
-            textView.setMinWidth(AndroidUtilities.dp(64.0f));
-            textView.setTag(Integer.valueOf(-1));
-            textView.setTextSize(1, 14.0f);
-            textView.setTextColor(-11944718);
-            textView.setGravity(17);
-            textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            textView.setText(LocaleController.getString("Done", NUM).toUpperCase());
-            textView.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable());
-            textView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
-            buttonsLayout.addView(textView, LayoutHelper.createFrame(-2, 36, 53));
-            textView.setOnClickListener(new PhotoViewer$$Lambda$47(this, numberPicker, bottomSheet));
-            textView = new TextView(this.parentActivity);
-            textView.setMinWidth(AndroidUtilities.dp(64.0f));
-            textView.setTag(Integer.valueOf(-2));
-            textView.setTextSize(1, 14.0f);
-            textView.setTextColor(-11944718);
-            textView.setGravity(17);
-            textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            textView.setText(LocaleController.getString("Cancel", NUM).toUpperCase());
-            textView.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable());
-            textView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
-            buttonsLayout.addView(textView, LayoutHelper.createFrame(-2, 36, 53));
-            textView.setOnClickListener(new PhotoViewer$$Lambda$48(bottomSheet));
-            bottomSheet.show();
-            bottomSheet.setBackgroundColor(-16777216);
+            anonymousClass13.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
+            linearLayout.addView(anonymousClass13, LayoutHelper.createLinear(-1, 52));
+            TextView textView2 = new TextView(this.parentActivity);
+            textView2.setMinWidth(AndroidUtilities.dp(64.0f));
+            textView2.setTag(Integer.valueOf(-1));
+            textView2.setTextSize(1, 14.0f);
+            textView2.setTextColor(-11944718);
+            textView2.setGravity(17);
+            textView2.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            textView2.setText(LocaleController.getString("Done", NUM).toUpperCase());
+            textView2.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(-11944718));
+            textView2.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
+            anonymousClass13.addView(textView2, LayoutHelper.createFrame(-2, 36, 53));
+            textView2.setOnClickListener(new -$$Lambda$PhotoViewer$26GEXmzp746KJTav-ZQPy3lxX3s(this, numberPicker, create));
+            textView2 = new TextView(this.parentActivity);
+            textView2.setMinWidth(AndroidUtilities.dp(64.0f));
+            textView2.setTag(Integer.valueOf(-2));
+            textView2.setTextSize(1, 14.0f);
+            textView2.setTextColor(-11944718);
+            textView2.setGravity(17);
+            textView2.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            textView2.setText(LocaleController.getString("Cancel", NUM).toUpperCase());
+            textView2.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(-11944718));
+            textView2.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
+            anonymousClass13.addView(textView2, LayoutHelper.createFrame(-2, 36, 53));
+            textView2.setOnClickListener(new -$$Lambda$PhotoViewer$b3BwHxjBmMPlPrpxL3EOAigJ9HU(create));
+            create.show();
+            create.setBackgroundColor(-16777216);
         }
     }
 
-    static final /* synthetic */ String lambda$null$15$PhotoViewer(int value) {
-        if (value == 0) {
+    static /* synthetic */ String lambda$null$15(int i) {
+        if (i == 0) {
             return LocaleController.getString("ShortMessageLifetimeForever", NUM);
         }
-        if (value < 1 || value >= 21) {
-            return LocaleController.formatTTLString((value - 16) * 5);
+        if (i < 1 || i >= 21) {
+            return LocaleController.formatTTLString((i - 16) * 5);
         }
-        return LocaleController.formatTTLString(value);
+        return LocaleController.formatTTLString(i);
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$null$16$PhotoViewer(NumberPicker numberPicker, BottomSheet bottomSheet, View v1) {
-        int seconds;
+    public /* synthetic */ void lambda$null$16$PhotoViewer(NumberPicker numberPicker, BottomSheet bottomSheet, View view) {
         int value = numberPicker.getValue();
-        Editor editor = MessagesController.getGlobalMainSettings().edit();
-        editor.putInt("self_destruct", value);
-        editor.commit();
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putInt("self_destruct", value);
+        edit.commit();
         bottomSheet.dismiss();
         if (value < 0 || value >= 21) {
-            seconds = (value - 16) * 5;
-        } else {
-            seconds = value;
+            value = (value - 16) * 5;
         }
-        Object object1 = this.imagesArrLocals.get(this.currentIndex);
-        if (object1 instanceof PhotoEntry) {
-            ((PhotoEntry) object1).ttl = seconds;
-        } else if (object1 instanceof SearchImage) {
-            ((SearchImage) object1).ttl = seconds;
+        Object obj = this.imagesArrLocals.get(this.currentIndex);
+        if (obj instanceof PhotoEntry) {
+            ((PhotoEntry) obj).ttl = value;
+        } else if (obj instanceof SearchImage) {
+            ((SearchImage) obj).ttl = value;
         }
-        this.timeItem.setColorFilter(seconds != 0 ? new PorterDuffColorFilter(-12734994, Mode.MULTIPLY) : null);
+        this.timeItem.setColorFilter(value != 0 ? new PorterDuffColorFilter(-12734994, Mode.MULTIPLY) : null);
         if (!this.checkImageView.isChecked()) {
             this.checkImageView.callOnClick();
         }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$setParentActivity$19$PhotoViewer(View view) {
+    public /* synthetic */ void lambda$setParentActivity$19$PhotoViewer(View view) {
         switchToEditMode(0);
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$setParentActivity$20$PhotoViewer(View view) {
+    public /* synthetic */ void lambda$setParentActivity$20$PhotoViewer(View view) {
         if (this.currentEditMode != 1 || this.photoCropView.isReady()) {
             applyCurrentEditMode();
             switchToEditMode(0);
         }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$setParentActivity$21$PhotoViewer(View v) {
+    public /* synthetic */ void lambda$setParentActivity$21$PhotoViewer(View view) {
         this.photoCropView.reset();
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$setParentActivity$22$PhotoViewer(ImageReceiver imageReceiver, boolean set, boolean thumb) {
-        if (imageReceiver == this.centerImage && set && !thumb && ((this.currentEditMode == 1 || this.sendPhotoType == 1) && this.photoCropView != null)) {
+    public /* synthetic */ void lambda$setParentActivity$22$PhotoViewer(ImageReceiver imageReceiver, boolean z, boolean z2) {
+        if (imageReceiver == this.centerImage && z && !z2 && ((this.currentEditMode == 1 || this.sendPhotoType == 1) && this.photoCropView != null)) {
             Bitmap bitmap = imageReceiver.getBitmap();
             if (bitmap != null) {
                 this.photoCropView.setBitmap(bitmap, imageReceiver.getOrientation(), this.sendPhotoType != 1, true);
             }
         }
-        if (imageReceiver != this.centerImage || !set || this.placeProvider == null || !this.placeProvider.scaleToFill() || this.ignoreDidSetImage) {
-            return;
-        }
-        if (this.wasLayout) {
-            setScaleToFill();
-        } else {
-            this.dontResetZoomOnFirstLayout = true;
+        if (imageReceiver == this.centerImage && z) {
+            PhotoViewerProvider photoViewerProvider = this.placeProvider;
+            if (photoViewerProvider != null && photoViewerProvider.scaleToFill() && !this.ignoreDidSetImage) {
+                if (this.wasLayout) {
+                    setScaleToFill();
+                } else {
+                    this.dontResetZoomOnFirstLayout = true;
+                }
+            }
         }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$setParentActivity$23$PhotoViewer(View v) {
+    public /* synthetic */ void lambda$setParentActivity$23$PhotoViewer(View view) {
         if (this.captionEditText.getTag() == null) {
             setPhotoChecked();
         }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$setParentActivity$24$PhotoViewer(View v) {
-        if (this.captionEditText.getTag() == null && this.placeProvider != null && this.placeProvider.getSelectedPhotosOrder() != null && !this.placeProvider.getSelectedPhotosOrder().isEmpty()) {
-            togglePhotosListView(!this.isPhotosListViewVisible, true);
+    public /* synthetic */ void lambda$setParentActivity$24$PhotoViewer(View view) {
+        if (this.captionEditText.getTag() == null) {
+            PhotoViewerProvider photoViewerProvider = this.placeProvider;
+            if (photoViewerProvider != null && photoViewerProvider.getSelectedPhotosOrder() != null && !this.placeProvider.getSelectedPhotosOrder().isEmpty()) {
+                togglePhotosListView(this.isPhotosListViewVisible ^ 1, true);
+            }
         }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$setParentActivity$25$PhotoViewer(View view, int position) {
-        if (position == 0 && this.placeProvider.allowGroupPhotos()) {
-            boolean z;
-            boolean enabled = SharedConfig.groupPhotosEnabled;
+    public /* synthetic */ void lambda$setParentActivity$25$PhotoViewer(View view, int i) {
+        if (i == 0 && this.placeProvider.allowGroupPhotos()) {
+            int i2;
+            String str;
+            boolean z = SharedConfig.groupPhotosEnabled;
             SharedConfig.toggleGroupPhotosEnabled();
             this.placeProvider.toggleGroupPhotosEnabled();
             ImageView imageView = (ImageView) view;
-            imageView.setColorFilter(!enabled ? new PorterDuffColorFilter(-10043398, Mode.MULTIPLY) : null);
-            imageView.setContentDescription(SharedConfig.groupPhotosEnabled ? LocaleController.getString("GroupPhotosHelp", NUM) : LocaleController.getString("SinglePhotosHelp", NUM));
-            if (enabled) {
-                z = false;
+            imageView.setColorFilter(!z ? new PorterDuffColorFilter(-10043398, Mode.MULTIPLY) : null);
+            if (SharedConfig.groupPhotosEnabled) {
+                i2 = NUM;
+                str = "GroupPhotosHelp";
             } else {
-                z = true;
+                i2 = NUM;
+                str = "SinglePhotosHelp";
             }
-            showHint(false, z);
+            imageView.setContentDescription(LocaleController.getString(str, i2));
+            showHint(false, z ^ 1);
             return;
         }
         this.ignoreDidSetImage = true;
-        int idx = this.imagesArrLocals.indexOf(view.getTag());
-        if (idx >= 0) {
+        int indexOf = this.imagesArrLocals.indexOf(view.getTag());
+        if (indexOf >= 0) {
             this.currentIndex = -1;
-            setImageIndex(idx, true);
+            setImageIndex(indexOf, true);
         }
         this.ignoreDidSetImage = false;
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$setParentActivity$26$PhotoViewer(View view, int position) {
-        User object = this.mentionsAdapter.getItem(position);
-        int start = this.mentionsAdapter.getResultStartPosition();
-        int len = this.mentionsAdapter.getResultLength();
-        if (object instanceof User) {
-            User user = object;
+    public /* synthetic */ void lambda$setParentActivity$26$PhotoViewer(View view, int i) {
+        Object item = this.mentionsAdapter.getItem(i);
+        i = this.mentionsAdapter.getResultStartPosition();
+        int resultLength = this.mentionsAdapter.getResultLength();
+        String str = " ";
+        PhotoViewerCaptionEnterView photoViewerCaptionEnterView;
+        StringBuilder stringBuilder;
+        if (item instanceof User) {
+            User user = (User) item;
             if (user.username != null) {
-                this.captionEditText.replaceWithText(start, len, "@" + user.username + " ", false);
+                photoViewerCaptionEnterView = this.captionEditText;
+                stringBuilder = new StringBuilder();
+                stringBuilder.append("@");
+                stringBuilder.append(user.username);
+                stringBuilder.append(str);
+                photoViewerCaptionEnterView.replaceWithText(i, resultLength, stringBuilder.toString(), false);
                 return;
             }
-            Spannable spannable = new SpannableString(UserObject.getFirstName(user) + " ");
-            spannable.setSpan(new URLSpanUserMentionPhotoViewer("" + user.id, true), 0, spannable.length(), 33);
-            this.captionEditText.replaceWithText(start, len, spannable, false);
-        } else if (object instanceof String) {
-            this.captionEditText.replaceWithText(start, len, object + " ", false);
-        } else if (object instanceof EmojiSuggestion) {
-            String code = ((EmojiSuggestion) object).emoji;
-            this.captionEditText.addEmojiToRecent(code);
-            this.captionEditText.replaceWithText(start, len, code, true);
+            String firstName = UserObject.getFirstName(user);
+            StringBuilder stringBuilder2 = new StringBuilder();
+            stringBuilder2.append(firstName);
+            stringBuilder2.append(str);
+            SpannableString spannableString = new SpannableString(stringBuilder2.toString());
+            StringBuilder stringBuilder3 = new StringBuilder();
+            stringBuilder3.append("");
+            stringBuilder3.append(user.id);
+            spannableString.setSpan(new URLSpanUserMentionPhotoViewer(stringBuilder3.toString(), true), 0, spannableString.length(), 33);
+            this.captionEditText.replaceWithText(i, resultLength, spannableString, false);
+        } else if (item instanceof String) {
+            photoViewerCaptionEnterView = this.captionEditText;
+            stringBuilder = new StringBuilder();
+            stringBuilder.append(item);
+            stringBuilder.append(str);
+            photoViewerCaptionEnterView.replaceWithText(i, resultLength, stringBuilder.toString(), false);
+        } else if (item instanceof KeywordResult) {
+            String str2 = ((KeywordResult) item).emoji;
+            this.captionEditText.addEmojiToRecent(str2);
+            this.captionEditText.replaceWithText(i, resultLength, str2, true);
         }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ boolean lambda$setParentActivity$28$PhotoViewer(View view, int position) {
-        if (!(this.mentionsAdapter.getItem(position) instanceof String)) {
+    public /* synthetic */ boolean lambda$setParentActivity$28$PhotoViewer(View view, int i) {
+        if (!(this.mentionsAdapter.getItem(i) instanceof String)) {
             return false;
         }
         Builder builder = new Builder(this.parentActivity);
         builder.setTitle(LocaleController.getString("AppName", NUM));
         builder.setMessage(LocaleController.getString("ClearSearch", NUM));
-        builder.setPositiveButton(LocaleController.getString("ClearButton", NUM).toUpperCase(), new PhotoViewer$$Lambda$43(this));
+        builder.setPositiveButton(LocaleController.getString("ClearButton", NUM).toUpperCase(), new -$$Lambda$PhotoViewer$gsWZpdB3_4pFKnDWFxWdNysXyg0(this));
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
         showAlertDialog(builder);
         return true;
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$null$27$PhotoViewer(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$null$27$PhotoViewer(DialogInterface dialogInterface, int i) {
         this.mentionsAdapter.clearRecentHashtags();
     }
 
     private boolean checkInlinePermissions() {
-        if (this.parentActivity == null) {
+        Activity activity = this.parentActivity;
+        if (activity == null) {
             return false;
         }
-        if (VERSION.SDK_INT < 23 || Settings.canDrawOverlays(this.parentActivity)) {
+        if (VERSION.SDK_INT < 23 || Settings.canDrawOverlays(activity)) {
             return true;
         }
-        new Builder(this.parentActivity).setTitle(LocaleController.getString("AppName", NUM)).setMessage(LocaleController.getString("PermissionDrawAboveOtherApps", NUM)).setPositiveButton(LocaleController.getString("PermissionOpenSettings", NUM), new PhotoViewer$$Lambda$23(this)).show();
+        new Builder(this.parentActivity).setTitle(LocaleController.getString("AppName", NUM)).setMessage(LocaleController.getString("PermissionDrawAboveOtherApps", NUM)).setPositiveButton(LocaleController.getString("PermissionOpenSettings", NUM), new -$$Lambda$PhotoViewer$3qscthC5fEqwYQ6AGYUupTSlBhs(this)).show();
         return false;
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$checkInlinePermissions$29$PhotoViewer(DialogInterface dialog, int which) {
-        if (this.parentActivity != null) {
+    public /* synthetic */ void lambda$checkInlinePermissions$29$PhotoViewer(DialogInterface dialogInterface, int i) {
+        Activity activity = this.parentActivity;
+        if (activity != null) {
             try {
-                this.parentActivity.startActivity(new Intent("android.settings.action.MANAGE_OVERLAY_PERMISSION", Uri.parse("package:" + this.parentActivity.getPackageName())));
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("package:");
+                stringBuilder.append(this.parentActivity.getPackageName());
+                activity.startActivity(new Intent("android.settings.action.MANAGE_OVERLAY_PERMISSION", Uri.parse(stringBuilder.toString())));
             } catch (Exception e) {
                 FileLog.e(e);
             }
@@ -3452,43 +4549,38 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
     }
 
     private TextView createCaptionTextView() {
-        TextView textView = new TextView(this.actvityContext) {
-            public boolean onTouchEvent(MotionEvent event) {
-                return PhotoViewer.this.bottomTouchEnabled && super.onTouchEvent(event);
+        AnonymousClass22 anonymousClass22 = new TextView(this.actvityContext) {
+            public boolean onTouchEvent(MotionEvent motionEvent) {
+                return PhotoViewer.this.bottomTouchEnabled && super.onTouchEvent(motionEvent);
             }
         };
-        textView.setMovementMethod(new LinkMovementMethodMy());
-        textView.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f));
-        textView.setLinkTextColor(-1);
-        textView.setTextColor(-1);
-        textView.setHighlightColor(NUM);
-        textView.setEllipsize(TruncateAt.END);
-        textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        textView.setTextSize(1, 16.0f);
-        textView.setVisibility(4);
-        textView.setOnClickListener(new PhotoViewer$$Lambda$24(this));
-        return textView;
+        anonymousClass22.setMovementMethod(new LinkMovementMethodMy());
+        anonymousClass22.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f));
+        anonymousClass22.setLinkTextColor(-1);
+        anonymousClass22.setTextColor(-1);
+        anonymousClass22.setHighlightColor(NUM);
+        anonymousClass22.setEllipsize(TruncateAt.END);
+        anonymousClass22.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
+        anonymousClass22.setTextSize(1, 16.0f);
+        anonymousClass22.setVisibility(4);
+        anonymousClass22.setOnClickListener(new -$$Lambda$PhotoViewer$zH4Om9_yDl8bq0dJjg4CnIpYu4A(this));
+        return anonymousClass22;
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$createCaptionTextView$30$PhotoViewer(View v) {
+    public /* synthetic */ void lambda$createCaptionTextView$30$PhotoViewer(View view) {
         if (this.needCaptionLayout) {
             openCaptionEnter();
         }
     }
 
     private int getLeftInset() {
-        if (this.lastInsets == null || VERSION.SDK_INT < 21) {
-            return 0;
-        }
-        return ((WindowInsets) this.lastInsets).getSystemWindowInsetLeft();
+        Object obj = this.lastInsets;
+        return (obj == null || VERSION.SDK_INT < 21) ? 0 : ((WindowInsets) obj).getSystemWindowInsetLeft();
     }
 
     private int getRightInset() {
-        if (this.lastInsets == null || VERSION.SDK_INT < 21) {
-            return 0;
-        }
-        return ((WindowInsets) this.lastInsets).getSystemWindowInsetRight();
+        Object obj = this.lastInsets;
+        return (obj == null || VERSION.SDK_INT < 21) ? 0 : ((WindowInsets) obj).getSystemWindowInsetRight();
     }
 
     private void dismissInternal() {
@@ -3512,18 +4604,19 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             Instance = null;
             this.switchingInlineMode = true;
             this.isVisible = false;
-            if (this.currentPlaceObject != null) {
-                this.currentPlaceObject.imageReceiver.setVisible(true, true);
+            PlaceProviderObject placeProviderObject = this.currentPlaceObject;
+            if (placeProviderObject != null) {
+                placeProviderObject.imageReceiver.setVisible(true, true);
                 AnimatedFileDrawable animation = this.currentPlaceObject.imageReceiver.getAnimation();
                 if (animation != null) {
-                    Bitmap bitmap = animation.getAnimatedBitmap();
-                    if (bitmap != null) {
+                    Bitmap animatedBitmap = animation.getAnimatedBitmap();
+                    if (animatedBitmap != null) {
                         try {
-                            Bitmap src = this.videoTextureView.getBitmap(bitmap.getWidth(), bitmap.getHeight());
-                            new Canvas(bitmap).drawBitmap(src, 0.0f, 0.0f, null);
-                            src.recycle();
-                        } catch (Throwable e) {
-                            FileLog.e(e);
+                            Bitmap bitmap = this.videoTextureView.getBitmap(animatedBitmap.getWidth(), animatedBitmap.getHeight());
+                            new Canvas(animatedBitmap).drawBitmap(bitmap, 0.0f, 0.0f, null);
+                            bitmap.recycle();
+                        } catch (Throwable th) {
+                            FileLog.e(th);
                         }
                     }
                     animation.seekTo(this.videoPlayer.getCurrentPosition(), true);
@@ -3533,19 +4626,19 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             }
             if (VERSION.SDK_INT >= 21) {
                 this.pipAnimationInProgress = true;
-                org.telegram.ui.Components.Rect rect = PipVideoView.getPipRect(this.aspectRatioFrameLayout.getAspectRatio());
-                float scale = rect.width / ((float) this.videoTextureView.getWidth());
-                rect.y += (float) AndroidUtilities.statusBarHeight;
+                org.telegram.ui.Components.Rect pipRect = PipVideoView.getPipRect(this.aspectRatioFrameLayout.getAspectRatio());
+                float width = pipRect.width / ((float) this.videoTextureView.getWidth());
+                pipRect.y += (float) AndroidUtilities.statusBarHeight;
                 AnimatorSet animatorSet = new AnimatorSet();
                 Animator[] animatorArr = new Animator[13];
-                animatorArr[0] = ObjectAnimator.ofFloat(this.textureImageView, View.SCALE_X, new float[]{scale});
-                animatorArr[1] = ObjectAnimator.ofFloat(this.textureImageView, View.SCALE_Y, new float[]{scale});
-                animatorArr[2] = ObjectAnimator.ofFloat(this.textureImageView, View.TRANSLATION_X, new float[]{rect.x});
-                animatorArr[3] = ObjectAnimator.ofFloat(this.textureImageView, View.TRANSLATION_Y, new float[]{rect.y});
-                animatorArr[4] = ObjectAnimator.ofFloat(this.videoTextureView, View.SCALE_X, new float[]{scale});
-                animatorArr[5] = ObjectAnimator.ofFloat(this.videoTextureView, View.SCALE_Y, new float[]{scale});
-                animatorArr[6] = ObjectAnimator.ofFloat(this.videoTextureView, View.TRANSLATION_X, new float[]{(rect.x - this.aspectRatioFrameLayout.getX()) + ((float) getLeftInset())});
-                animatorArr[7] = ObjectAnimator.ofFloat(this.videoTextureView, View.TRANSLATION_Y, new float[]{rect.y - this.aspectRatioFrameLayout.getY()});
+                animatorArr[0] = ObjectAnimator.ofFloat(this.textureImageView, View.SCALE_X, new float[]{width});
+                animatorArr[1] = ObjectAnimator.ofFloat(this.textureImageView, View.SCALE_Y, new float[]{width});
+                animatorArr[2] = ObjectAnimator.ofFloat(this.textureImageView, View.TRANSLATION_X, new float[]{pipRect.x});
+                animatorArr[3] = ObjectAnimator.ofFloat(this.textureImageView, View.TRANSLATION_Y, new float[]{pipRect.y});
+                animatorArr[4] = ObjectAnimator.ofFloat(this.videoTextureView, View.SCALE_X, new float[]{width});
+                animatorArr[5] = ObjectAnimator.ofFloat(this.videoTextureView, View.SCALE_Y, new float[]{width});
+                animatorArr[6] = ObjectAnimator.ofFloat(this.videoTextureView, View.TRANSLATION_X, new float[]{(pipRect.x - this.aspectRatioFrameLayout.getX()) + ((float) getLeftInset())});
+                animatorArr[7] = ObjectAnimator.ofFloat(this.videoTextureView, View.TRANSLATION_Y, new float[]{pipRect.y - this.aspectRatioFrameLayout.getY()});
                 animatorArr[8] = ObjectAnimator.ofInt(this.backgroundDrawable, AnimationProperties.COLOR_DRAWABLE_ALPHA, new int[]{0});
                 animatorArr[9] = ObjectAnimator.ofFloat(this.actionBar, View.ALPHA, new float[]{0.0f});
                 animatorArr[10] = ObjectAnimator.ofFloat(this.bottomLayout, View.ALPHA, new float[]{0.0f});
@@ -3555,7 +4648,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 animatorSet.setInterpolator(new DecelerateInterpolator());
                 animatorSet.setDuration(250);
                 animatorSet.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animation) {
+                    public void onAnimationEnd(Animator animator) {
                         PhotoViewer.this.pipAnimationInProgress = false;
                         PhotoViewer.this.switchToInlineRunnable.run();
                     }
@@ -3580,8 +4673,9 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             Instance = PipInstance;
             PipInstance = null;
             this.switchingInlineMode = true;
-            if (this.currentBitmap != null) {
-                this.currentBitmap.recycle();
+            Bitmap bitmap = this.currentBitmap;
+            if (bitmap != null) {
+                bitmap.recycle();
                 this.currentBitmap = null;
             }
             this.changingTextureView = true;
@@ -3591,23 +4685,23 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             if (ApplicationLoader.mainInterfacePaused) {
                 try {
                     this.parentActivity.startService(new Intent(ApplicationLoader.applicationContext, BringAppForegroundService.class));
-                } catch (Throwable e) {
-                    FileLog.e(e);
+                } catch (Throwable th) {
+                    FileLog.e(th);
                 }
             }
             if (VERSION.SDK_INT >= 21) {
                 this.pipAnimationInProgress = true;
-                org.telegram.ui.Components.Rect rect = PipVideoView.getPipRect(this.aspectRatioFrameLayout.getAspectRatio());
-                float scale = rect.width / ((float) this.textureImageView.getLayoutParams().width);
-                rect.y += (float) AndroidUtilities.statusBarHeight;
-                this.textureImageView.setScaleX(scale);
-                this.textureImageView.setScaleY(scale);
-                this.textureImageView.setTranslationX(rect.x);
-                this.textureImageView.setTranslationY(rect.y);
-                this.videoTextureView.setScaleX(scale);
-                this.videoTextureView.setScaleY(scale);
-                this.videoTextureView.setTranslationX(rect.x - this.aspectRatioFrameLayout.getX());
-                this.videoTextureView.setTranslationY(rect.y - this.aspectRatioFrameLayout.getY());
+                org.telegram.ui.Components.Rect pipRect = PipVideoView.getPipRect(this.aspectRatioFrameLayout.getAspectRatio());
+                float f = pipRect.width / ((float) this.textureImageView.getLayoutParams().width);
+                pipRect.y += (float) AndroidUtilities.statusBarHeight;
+                this.textureImageView.setScaleX(f);
+                this.textureImageView.setScaleY(f);
+                this.textureImageView.setTranslationX(pipRect.x);
+                this.textureImageView.setTranslationY(pipRect.y);
+                this.videoTextureView.setScaleX(f);
+                this.videoTextureView.setScaleY(f);
+                this.videoTextureView.setTranslationX(pipRect.x - this.aspectRatioFrameLayout.getX());
+                this.videoTextureView.setTranslationY(pipRect.y - this.aspectRatioFrameLayout.getY());
             } else {
                 this.pipVideoView.close();
                 this.pipVideoView = null;
@@ -3618,8 +4712,8 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 if (this.currentPlaceObject != null) {
                     this.currentPlaceObject.imageReceiver.setVisible(false, false);
                 }
-            } catch (Exception e2) {
-                FileLog.e(e2);
+            } catch (Exception e) {
+                FileLog.e(e);
             }
             if (VERSION.SDK_INT >= 21) {
                 this.waitingForDraw = 4;
@@ -3631,12 +4725,12 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         this.videoPlayerSeekbar = new SeekBar(this.containerView.getContext());
         this.videoPlayerSeekbar.setLineHeight(AndroidUtilities.dp(4.0f));
         this.videoPlayerSeekbar.setColors(NUM, NUM, -2764585, -1, -1);
-        this.videoPlayerSeekbar.setDelegate(new PhotoViewer$$Lambda$25(this));
+        this.videoPlayerSeekbar.setDelegate(new -$$Lambda$PhotoViewer$Wr55IT5IGNjEYLW2UzsHblapEMs(this));
         this.videoPlayerControlFrameLayout = new FrameLayout(this.containerView.getContext()) {
-            public boolean onTouchEvent(MotionEvent event) {
-                int x = (int) event.getX();
-                int y = (int) event.getY();
-                if (PhotoViewer.this.videoPlayerSeekbar.onTouch(event.getAction(), event.getX() - ((float) AndroidUtilities.dp(48.0f)), event.getY())) {
+            public boolean onTouchEvent(MotionEvent motionEvent) {
+                motionEvent.getX();
+                motionEvent.getY();
+                if (PhotoViewer.this.videoPlayerSeekbar.onTouch(motionEvent.getAction(), motionEvent.getX() - ((float) AndroidUtilities.dp(48.0f)), motionEvent.getY())) {
                     getParent().requestDisallowInterceptTouchEvent(true);
                     invalidate();
                 }
@@ -3644,40 +4738,48 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             }
 
             /* Access modifiers changed, original: protected */
-            public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                long duration;
-                super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            public void onMeasure(int i, int i2) {
+                super.onMeasure(i, i2);
+                long j = 0;
                 if (PhotoViewer.this.videoPlayer != null) {
-                    duration = PhotoViewer.this.videoPlayer.getDuration();
-                    if (duration == -9223372036854775807L) {
-                        duration = 0;
+                    long duration = PhotoViewer.this.videoPlayer.getDuration();
+                    if (duration != -9223372036854775807L) {
+                        j = duration;
                     }
-                } else {
-                    duration = 0;
                 }
-                duration /= 1000;
-                PhotoViewer.this.videoPlayerSeekbar.setSize((getMeasuredWidth() - AndroidUtilities.dp(64.0f)) - ((int) Math.ceil((double) PhotoViewer.this.videoPlayerTime.getPaint().measureText(String.format("%02d:%02d / %02d:%02d", new Object[]{Long.valueOf(duration / 60), Long.valueOf(duration % 60), Long.valueOf(duration / 60), Long.valueOf(duration % 60)})))), getMeasuredHeight());
+                j /= 1000;
+                Paint paint = PhotoViewer.this.videoPlayerTime.getPaint();
+                r10 = new Object[4];
+                long j2 = j / 60;
+                r10[0] = Long.valueOf(j2);
+                j %= 60;
+                r10[1] = Long.valueOf(j);
+                r10[2] = Long.valueOf(j2);
+                r10[3] = Long.valueOf(j);
+                PhotoViewer.this.videoPlayerSeekbar.setSize((getMeasuredWidth() - AndroidUtilities.dp(64.0f)) - ((int) Math.ceil((double) paint.measureText(String.format("%02d:%02d / %02d:%02d", r10)))), getMeasuredHeight());
             }
 
             /* Access modifiers changed, original: protected */
-            public void onLayout(boolean changed, int left, int top, int right, int bottom) {
-                super.onLayout(changed, left, top, right, bottom);
-                float progress = 0.0f;
+            public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+                float currentPosition;
+                super.onLayout(z, i, i2, i3, i4);
                 if (PhotoViewer.this.videoPlayer != null) {
-                    progress = ((float) PhotoViewer.this.videoPlayer.getCurrentPosition()) / ((float) PhotoViewer.this.videoPlayer.getDuration());
+                    currentPosition = ((float) PhotoViewer.this.videoPlayer.getCurrentPosition()) / ((float) PhotoViewer.this.videoPlayer.getDuration());
                     if (!PhotoViewer.this.inPreview && PhotoViewer.this.videoTimelineView.getVisibility() == 0) {
-                        progress -= PhotoViewer.this.videoTimelineView.getLeftProgress();
-                        if (progress < 0.0f) {
-                            progress = 0.0f;
+                        currentPosition -= PhotoViewer.this.videoTimelineView.getLeftProgress();
+                        if (currentPosition < 0.0f) {
+                            currentPosition = 0.0f;
                         }
-                        progress /= PhotoViewer.this.videoTimelineView.getRightProgress() - PhotoViewer.this.videoTimelineView.getLeftProgress();
-                        if (progress > 1.0f) {
-                            progress = 1.0f;
+                        currentPosition /= PhotoViewer.this.videoTimelineView.getRightProgress() - PhotoViewer.this.videoTimelineView.getLeftProgress();
+                        if (currentPosition > 1.0f) {
+                            currentPosition = 1.0f;
                         }
                     }
+                } else {
+                    currentPosition = 0.0f;
                 }
-                PhotoViewer.this.videoPlayerSeekbar.setProgress(progress);
-                PhotoViewer.this.videoTimelineView.setProgress(progress);
+                PhotoViewer.this.videoPlayerSeekbar.setProgress(currentPosition);
+                PhotoViewer.this.videoTimelineView.setProgress(currentPosition);
             }
 
             /* Access modifiers changed, original: protected */
@@ -3695,7 +4797,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         this.videoPlayerControlFrameLayout.addView(this.videoPlayButton, LayoutHelper.createFrame(48, 48.0f, 51, 4.0f, 0.0f, 0.0f, 0.0f));
         this.videoPlayButton.setFocusable(true);
         this.videoPlayButton.setContentDescription(LocaleController.getString("AccActionPlay", NUM));
-        this.videoPlayButton.setOnClickListener(new PhotoViewer$$Lambda$26(this));
+        this.videoPlayButton.setOnClickListener(new -$$Lambda$PhotoViewer$b2YYbmShobZSde9PkRRj-gylAtM(this));
         this.videoPlayerTime = new SimpleTextView(this.containerView.getContext());
         this.videoPlayerTime.setTextColor(-1);
         this.videoPlayerTime.setGravity(53);
@@ -3703,26 +4805,25 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         this.videoPlayerControlFrameLayout.addView(this.videoPlayerTime, LayoutHelper.createFrame(-2, -1.0f, 53, 0.0f, 17.0f, 7.0f, 0.0f));
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$createVideoControlsInterface$31$PhotoViewer(float progress) {
+    public /* synthetic */ void lambda$createVideoControlsInterface$31$PhotoViewer(float f) {
         if (this.videoPlayer != null) {
             if (!this.inPreview && this.videoTimelineView.getVisibility() == 0) {
-                progress = this.videoTimelineView.getLeftProgress() + ((this.videoTimelineView.getRightProgress() - this.videoTimelineView.getLeftProgress()) * progress);
+                f = this.videoTimelineView.getLeftProgress() + ((this.videoTimelineView.getRightProgress() - this.videoTimelineView.getLeftProgress()) * f);
             }
             long duration = this.videoPlayer.getDuration();
             if (duration == -9223372036854775807L) {
-                this.seekToProgressPending = progress;
+                this.seekToProgressPending = f;
             } else {
-                this.videoPlayer.seekTo((long) ((int) (((float) duration) * progress)));
+                this.videoPlayer.seekTo((long) ((int) (f * ((float) duration))));
             }
         }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$createVideoControlsInterface$32$PhotoViewer(View v) {
-        if (this.videoPlayer != null) {
+    public /* synthetic */ void lambda$createVideoControlsInterface$32$PhotoViewer(View view) {
+        VideoPlayer videoPlayer = this.videoPlayer;
+        if (videoPlayer != null) {
             if (this.isPlaying) {
-                this.videoPlayer.pause();
+                videoPlayer.pause();
             } else {
                 if (this.isCurrentVideo) {
                     if (Math.abs(this.videoTimelineView.getProgress() - 1.0f) < 0.01f || this.videoPlayer.getCurrentPosition() == this.videoPlayer.getDuration()) {
@@ -3738,28 +4839,40 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
     }
 
     private void openCaptionEnter() {
-        if (this.imageMoveAnimation == null && this.changeModeAnimation == null && this.currentEditMode == 0 && this.sendPhotoType != 1 && this.sendPhotoType != 3) {
-            this.selectedPhotosListView.setVisibility(8);
-            this.selectedPhotosListView.setEnabled(false);
-            this.selectedPhotosListView.setAlpha(0.0f);
-            this.selectedPhotosListView.setTranslationY((float) (-AndroidUtilities.dp(10.0f)));
-            this.photosCounterView.setRotationX(0.0f);
-            this.isPhotosListViewVisible = false;
-            this.captionEditText.setTag(Integer.valueOf(1));
-            this.captionEditText.openKeyboard();
-            this.captionEditText.setImportantForAccessibility(0);
-            this.lastTitle = this.actionBar.getTitle();
-            if (this.isCurrentVideo) {
-                this.actionBar.setTitle(this.muteVideo ? LocaleController.getString("GifCaption", NUM) : LocaleController.getString("VideoCaption", NUM));
-                this.actionBar.setSubtitle(null);
-                return;
+        if (this.imageMoveAnimation == null && this.changeModeAnimation == null && this.currentEditMode == 0) {
+            int i = this.sendPhotoType;
+            if (i != 1 && i != 3) {
+                this.selectedPhotosListView.setVisibility(8);
+                this.selectedPhotosListView.setEnabled(false);
+                this.selectedPhotosListView.setAlpha(0.0f);
+                this.selectedPhotosListView.setTranslationY((float) (-AndroidUtilities.dp(10.0f)));
+                this.photosCounterView.setRotationX(0.0f);
+                this.isPhotosListViewVisible = false;
+                this.captionEditText.setTag(Integer.valueOf(1));
+                this.captionEditText.openKeyboard();
+                this.captionEditText.setImportantForAccessibility(0);
+                this.lastTitle = this.actionBar.getTitle();
+                if (this.isCurrentVideo) {
+                    int i2;
+                    String str;
+                    ActionBar actionBar = this.actionBar;
+                    if (this.muteVideo) {
+                        i2 = NUM;
+                        str = "GifCaption";
+                    } else {
+                        i2 = NUM;
+                        str = "VideoCaption";
+                    }
+                    actionBar.setTitle(LocaleController.getString(str, i2));
+                    this.actionBar.setSubtitle(null);
+                    return;
+                }
+                this.actionBar.setTitle(LocaleController.getString("PhotoCaption", NUM));
             }
-            this.actionBar.setTitle(LocaleController.getString("PhotoCaption", NUM));
         }
     }
 
     private VideoEditedInfo getCurrentVideoEditedInfo() {
-        int i = -1;
         if (!this.isCurrentVideo || this.currentPlayingVideoFile == null || this.compressionsCount == 0) {
             return null;
         }
@@ -3771,9 +4884,11 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         videoEditedInfo.originalHeight = this.originalHeight;
         videoEditedInfo.bitrate = this.bitrate;
         videoEditedInfo.originalPath = this.currentPlayingVideoFile.getPath();
-        videoEditedInfo.estimatedSize = this.estimatedSize != 0 ? (long) this.estimatedSize : 1;
+        int i = this.estimatedSize;
+        videoEditedInfo.estimatedSize = i != 0 ? (long) i : 1;
         videoEditedInfo.estimatedDuration = this.estimatedDuration;
         videoEditedInfo.framerate = this.videoFramerate;
+        int i2 = -1;
         if (this.muteVideo || !(this.compressItem.getTag() == null || this.selectedCompression == this.compressionsCount - 1)) {
             if (this.muteVideo) {
                 this.selectedCompression = 1;
@@ -3782,46 +4897,48 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             videoEditedInfo.resultWidth = this.resultWidth;
             videoEditedInfo.resultHeight = this.resultHeight;
             if (!this.muteVideo) {
-                i = this.bitrate;
+                i2 = this.bitrate;
             }
-            videoEditedInfo.bitrate = i;
+            videoEditedInfo.bitrate = i2;
             videoEditedInfo.muted = this.muteVideo;
-            return videoEditedInfo;
+        } else {
+            videoEditedInfo.resultWidth = this.originalWidth;
+            videoEditedInfo.resultHeight = this.originalHeight;
+            if (!this.muteVideo) {
+                i2 = this.originalBitrate;
+            }
+            videoEditedInfo.bitrate = i2;
+            videoEditedInfo.muted = this.muteVideo;
         }
-        videoEditedInfo.resultWidth = this.originalWidth;
-        videoEditedInfo.resultHeight = this.originalHeight;
-        if (!this.muteVideo) {
-            i = this.originalBitrate;
-        }
-        videoEditedInfo.bitrate = i;
-        videoEditedInfo.muted = this.muteVideo;
         return videoEditedInfo;
     }
 
-    private void closeCaptionEnter(boolean apply) {
-        CharSequence charSequence = null;
-        if (this.currentIndex >= 0 && this.currentIndex < this.imagesArrLocals.size()) {
-            PhotoEntry object = this.imagesArrLocals.get(this.currentIndex);
-            if (apply) {
-                CharSequence[] result = new CharSequence[]{this.captionEditText.getFieldCharSequence()};
-                ArrayList<MessageEntity> entities = DataQuery.getInstance(this.currentAccount).getEntities(result);
-                if (object instanceof PhotoEntry) {
-                    PhotoEntry photoEntry = object;
-                    photoEntry.caption = result[0];
+    private void closeCaptionEnter(boolean z) {
+        int i = this.currentIndex;
+        if (i >= 0 && i < this.imagesArrLocals.size()) {
+            Object obj = this.imagesArrLocals.get(this.currentIndex);
+            CharSequence charSequence = null;
+            if (z) {
+                CharSequence[] charSequenceArr = new CharSequence[]{this.captionEditText.getFieldCharSequence()};
+                ArrayList entities = DataQuery.getInstance(this.currentAccount).getEntities(charSequenceArr);
+                if (obj instanceof PhotoEntry) {
+                    PhotoEntry photoEntry = (PhotoEntry) obj;
+                    photoEntry.caption = charSequenceArr[0];
                     photoEntry.entities = entities;
-                } else if (object instanceof SearchImage) {
-                    SearchImage photoEntry2 = (SearchImage) object;
-                    photoEntry2.caption = result[0];
-                    photoEntry2.entities = entities;
+                } else if (obj instanceof SearchImage) {
+                    SearchImage searchImage = (SearchImage) obj;
+                    searchImage.caption = charSequenceArr[0];
+                    searchImage.entities = entities;
                 }
                 if (!(this.captionEditText.getFieldCharSequence().length() == 0 || this.placeProvider.isPhotoChecked(this.currentIndex))) {
                     setPhotoChecked();
                 }
-                setCurrentCaption(null, result[0], false);
+                setCurrentCaption(null, charSequenceArr[0], false);
             }
             this.captionEditText.setTag(null);
-            if (this.lastTitle != null) {
-                this.actionBar.setTitle(this.lastTitle);
+            String str = this.lastTitle;
+            if (str != null) {
+                this.actionBar.setTitle(str);
                 this.lastTitle = null;
             }
             if (this.isCurrentVideo) {
@@ -3831,7 +4948,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 }
                 actionBar.setSubtitle(charSequence);
             }
-            updateCaptionTextForCurrentPhoto(object);
+            updateCaptionTextForCurrentPhoto(obj);
             if (this.captionEditText.isPopupShowing()) {
                 this.captionEditText.hidePopup();
             }
@@ -3843,73 +4960,82 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
     }
 
     private void updateVideoPlayerTime() {
-        String newText;
-        if (this.videoPlayer == null) {
-            newText = String.format("%02d:%02d / %02d:%02d", new Object[]{Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0)});
+        CharSequence format;
+        VideoPlayer videoPlayer = this.videoPlayer;
+        String str = "%02d:%02d / %02d:%02d";
+        Integer valueOf = Integer.valueOf(0);
+        if (videoPlayer == null) {
+            format = String.format(str, new Object[]{valueOf, valueOf, valueOf, valueOf});
         } else {
-            long current = this.videoPlayer.getCurrentPosition();
-            if (current < 0) {
-                current = 0;
+            long currentPosition = videoPlayer.getCurrentPosition();
+            long j = 0;
+            if (currentPosition < 0) {
+                currentPosition = 0;
             }
-            long total = this.videoPlayer.getDuration();
-            if (total < 0) {
-                total = 0;
+            long duration = this.videoPlayer.getDuration();
+            if (duration >= 0) {
+                j = duration;
             }
-            if (total == -9223372036854775807L || current == -9223372036854775807L) {
-                newText = String.format("%02d:%02d / %02d:%02d", new Object[]{Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0)});
+            if (j == -9223372036854775807L || currentPosition == -9223372036854775807L) {
+                format = String.format(str, new Object[]{valueOf, valueOf, valueOf, valueOf});
             } else {
                 if (!this.inPreview && this.videoTimelineView.getVisibility() == 0) {
-                    total = (long) (((float) total) * (this.videoTimelineView.getRightProgress() - this.videoTimelineView.getLeftProgress()));
-                    current = (long) (((float) current) - (this.videoTimelineView.getLeftProgress() * ((float) total)));
-                    if (current > total) {
-                        current = total;
+                    j = (long) (((float) j) * (this.videoTimelineView.getRightProgress() - this.videoTimelineView.getLeftProgress()));
+                    currentPosition = (long) (((float) currentPosition) - (this.videoTimelineView.getLeftProgress() * ((float) j)));
+                    if (currentPosition > j) {
+                        currentPosition = j;
                     }
                 }
-                current /= 1000;
-                total /= 1000;
-                newText = String.format("%02d:%02d / %02d:%02d", new Object[]{Long.valueOf(current / 60), Long.valueOf(current % 60), Long.valueOf(total / 60), Long.valueOf(total % 60)});
+                currentPosition /= 1000;
+                j /= 1000;
+                format = String.format(str, new Object[]{Long.valueOf(currentPosition / 60), Long.valueOf(currentPosition % 60), Long.valueOf(j / 60), Long.valueOf(j % 60)});
             }
         }
-        this.videoPlayerTime.setText(newText);
+        this.videoPlayerTime.setText(format);
     }
 
-    private void checkBufferedProgress(float progress) {
-        if (this.isStreaming && this.parentActivity != null && !this.streamingAlertShown && this.videoPlayer != null && this.currentMessageObject != null) {
-            Document document = this.currentMessageObject.getDocument();
-            if (document != null && this.currentMessageObject.getDuration() >= 20 && progress < 0.9f) {
-                if ((((float) document.size) * progress >= 5242880.0f || (progress >= 0.5f && document.size >= 2097152)) && Math.abs(SystemClock.elapsedRealtime() - this.startedPlayTime) >= 2000) {
-                    if (this.videoPlayer.getDuration() == -9223372036854775807L) {
-                        Toast.makeText(this.parentActivity, LocaleController.getString("VideoDoesNotSupportStreaming", NUM), 1).show();
+    private void checkBufferedProgress(float f) {
+        if (!(!this.isStreaming || this.parentActivity == null || this.streamingAlertShown || this.videoPlayer == null)) {
+            MessageObject messageObject = this.currentMessageObject;
+            if (messageObject != null) {
+                Document document = messageObject.getDocument();
+                if (document != null && this.currentMessageObject.getDuration() >= 20 && f < 0.9f) {
+                    int i = document.size;
+                    if ((((float) i) * f >= 5242880.0f || (f >= 0.5f && i >= 2097152)) && Math.abs(SystemClock.elapsedRealtime() - this.startedPlayTime) >= 2000) {
+                        if (this.videoPlayer.getDuration() == -9223372036854775807L) {
+                            Toast.makeText(this.parentActivity, LocaleController.getString("VideoDoesNotSupportStreaming", NUM), 1).show();
+                        }
+                        this.streamingAlertShown = true;
                     }
-                    this.streamingAlertShown = true;
                 }
             }
         }
     }
 
-    public void injectVideoPlayer(VideoPlayer player) {
-        this.injectingVideoPlayer = player;
+    public void injectVideoPlayer(VideoPlayer videoPlayer) {
+        this.injectingVideoPlayer = videoPlayer;
     }
 
-    public void injectVideoPlayerSurface(SurfaceTexture surface) {
-        this.injectingVideoPlayerSurface = surface;
+    public void injectVideoPlayerSurface(SurfaceTexture surfaceTexture) {
+        this.injectingVideoPlayerSurface = surfaceTexture;
     }
 
     public boolean isInjectingVideoPlayer() {
         return this.injectingVideoPlayer != null;
     }
 
-    private void updatePlayerState(boolean playWhenReady, int playbackState) {
+    private void updatePlayerState(boolean z, int i) {
         if (this.videoPlayer != null) {
+            PipVideoView pipVideoView;
             if (this.isStreaming) {
-                if (playbackState != 2 || !this.skipFirstBufferingProgress) {
-                    boolean z = this.seekToProgressPending != 0.0f || playbackState == 2;
-                    toggleMiniProgress(z, true);
-                } else if (playWhenReady) {
+                if (i != 2 || !this.skipFirstBufferingProgress) {
+                    boolean z2 = this.seekToProgressPending != 0.0f || i == 2;
+                    toggleMiniProgress(z2, true);
+                } else if (z) {
                     this.skipFirstBufferingProgress = false;
                 }
             }
-            if (!playWhenReady || playbackState == 4 || playbackState == 1) {
+            if (!z || i == 4 || i == 1) {
                 try {
                     this.parentActivity.getWindow().clearFlags(128);
                     this.keepScreenOnFlagSet = false;
@@ -3924,14 +5050,16 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     FileLog.e(e2);
                 }
             }
-            if (this.seekToProgressPending != 0.0f && (playbackState == 3 || playbackState == 1)) {
+            if (this.seekToProgressPending != 0.0f && (i == 3 || i == 1)) {
                 this.videoPlayer.seekTo((long) ((int) (((float) this.videoPlayer.getDuration()) * this.seekToProgressPending)));
                 this.seekToProgressPending = 0.0f;
-                if (!(this.currentMessageObject == null || FileLoader.getInstance(this.currentMessageObject.currentAccount).isLoadingVideoAny(this.currentMessageObject.getDocument()))) {
+                MessageObject messageObject = this.currentMessageObject;
+                if (!(messageObject == null || FileLoader.getInstance(messageObject.currentAccount).isLoadingVideoAny(this.currentMessageObject.getDocument()))) {
                     this.skipFirstBufferingProgress = true;
                 }
             }
-            if (playbackState == 3) {
+            MessageObject messageObject2;
+            if (i == 3) {
                 if (this.aspectRatioFrameLayout.getVisibility() != 0) {
                     this.aspectRatioFrameLayout.setVisibility(0);
                 }
@@ -3941,23 +5069,27 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     this.pipItem.setAlpha(1.0f);
                 }
                 this.playerWasReady = true;
-                if (this.currentMessageObject != null && this.currentMessageObject.isVideo()) {
+                messageObject2 = this.currentMessageObject;
+                if (messageObject2 != null && messageObject2.isVideo()) {
                     AndroidUtilities.cancelRunOnUIThread(this.setLoadingRunnable);
                     FileLoader.getInstance(this.currentMessageObject.currentAccount).removeLoadingVideo(this.currentMessageObject.getDocument(), true, false);
                 }
-            } else if (playbackState == 2 && playWhenReady && this.currentMessageObject != null && this.currentMessageObject.isVideo()) {
-                if (this.playerWasReady) {
-                    this.setLoadingRunnable.run();
-                } else {
-                    AndroidUtilities.runOnUIThread(this.setLoadingRunnable, 1000);
+            } else if (i == 2 && z) {
+                messageObject2 = this.currentMessageObject;
+                if (messageObject2 != null && messageObject2.isVideo()) {
+                    if (this.playerWasReady) {
+                        this.setLoadingRunnable.run();
+                    } else {
+                        AndroidUtilities.runOnUIThread(this.setLoadingRunnable, 1000);
+                    }
                 }
             }
-            if (!this.videoPlayer.isPlaying() || playbackState == 4) {
+            if (!this.videoPlayer.isPlaying() || i == 4) {
                 if (this.isPlaying) {
                     this.isPlaying = false;
                     this.videoPlayButton.setImageResource(NUM);
                     AndroidUtilities.cancelRunOnUIThread(this.updateProgressRunnable);
-                    if (playbackState == 4) {
+                    if (i == 4) {
                         if (!this.isCurrentVideo) {
                             if (!this.isActionBarVisible) {
                                 toggleActionBar(true, true);
@@ -3982,8 +5114,9 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                             this.videoPlayer.pause();
                             this.containerView.invalidate();
                         }
-                        if (this.pipVideoView != null) {
-                            this.pipVideoView.onVideoCompleted();
+                        pipVideoView = this.pipVideoView;
+                        if (pipVideoView != null) {
+                            pipVideoView.onVideoCompleted();
                         }
                     }
                 }
@@ -3992,31 +5125,33 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 this.videoPlayButton.setImageResource(NUM);
                 AndroidUtilities.runOnUIThread(this.updateProgressRunnable);
             }
-            if (this.pipVideoView != null) {
-                this.pipVideoView.updatePlayButton();
+            pipVideoView = this.pipVideoView;
+            if (pipVideoView != null) {
+                pipVideoView.updatePlayButton();
             }
             updateVideoPlayerTime();
         }
     }
 
-    private void preparePlayer(Uri uri, boolean playWhenReady, boolean preview) {
-        int i = 0;
-        if (!preview) {
+    private void preparePlayer(Uri uri, boolean z, boolean z2) {
+        if (!z2) {
             this.currentPlayingVideoFile = uri;
         }
         if (this.parentActivity != null) {
+            int i = 0;
             this.streamingAlertShown = false;
             this.startedPlayTime = SystemClock.elapsedRealtime();
             this.currentVideoFinishedLoading = false;
             this.lastBufferedPositionCheck = 0;
+            boolean z3 = true;
             this.firstAnimationDelay = true;
-            this.inPreview = preview;
+            this.inPreview = z2;
             releasePlayer(false);
             if (this.videoTextureView == null) {
                 this.aspectRatioFrameLayout = new AspectRatioFrameLayout(this.parentActivity) {
                     /* Access modifiers changed, original: protected */
-                    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+                    public void onMeasure(int i, int i2) {
+                        super.onMeasure(i, i2);
                         if (PhotoViewer.this.textureImageView != null) {
                             ViewGroup.LayoutParams layoutParams = PhotoViewer.this.textureImageView.getLayoutParams();
                             layoutParams.width = getMeasuredWidth();
@@ -4027,8 +5162,9 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 this.aspectRatioFrameLayout.setVisibility(4);
                 this.containerView.addView(this.aspectRatioFrameLayout, 0, LayoutHelper.createFrame(-1, -1, 17));
                 this.videoTextureView = new TextureView(this.parentActivity);
-                if (this.injectingVideoPlayerSurface != null) {
-                    this.videoTextureView.setSurfaceTexture(this.injectingVideoPlayerSurface);
+                SurfaceTexture surfaceTexture = this.injectingVideoPlayerSurface;
+                if (surfaceTexture != null) {
+                    this.videoTextureView.setSurfaceTexture(surfaceTexture);
                     this.textureUploaded = true;
                     this.injectingVideoPlayerSurface = null;
                 }
@@ -4051,54 +5187,53 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             this.videoCrossfadeAlpha = 0.0f;
             textureView.setAlpha(0.0f);
             this.videoPlayButton.setImageResource(NUM);
-            boolean newPlayerCreated = false;
             this.playerWasReady = false;
             if (this.videoPlayer == null) {
-                if (this.injectingVideoPlayer != null) {
-                    this.videoPlayer = this.injectingVideoPlayer;
+                VideoPlayer videoPlayer = this.injectingVideoPlayer;
+                if (videoPlayer != null) {
+                    this.videoPlayer = videoPlayer;
                     this.injectingVideoPlayer = null;
                     this.playerInjected = true;
                     updatePlayerState(this.videoPlayer.getPlayWhenReady(), this.videoPlayer.getPlaybackState());
+                    z3 = false;
                 } else {
                     this.videoPlayer = new VideoPlayer();
-                    newPlayerCreated = true;
                 }
                 this.videoPlayer.setTextureView(this.videoTextureView);
                 this.videoPlayer.setDelegate(new VideoPlayerDelegate() {
-                    public void onStateChanged(boolean playWhenReady, int playbackState) {
-                        PhotoViewer.this.updatePlayerState(playWhenReady, playbackState);
+                    public void onStateChanged(boolean z, int i) {
+                        PhotoViewer.this.updatePlayerState(z, i);
                     }
 
-                    public void onError(Exception e) {
-                        FileLog.e((Throwable) e);
+                    public void onError(Exception exception) {
+                        FileLog.e((Throwable) exception);
                         if (PhotoViewer.this.menuItem.isSubItemVisible(11)) {
                             Builder builder = new Builder(PhotoViewer.this.parentActivity);
                             builder.setTitle(LocaleController.getString("AppName", NUM));
                             builder.setMessage(LocaleController.getString("CantPlayVideo", NUM));
-                            builder.setPositiveButton(LocaleController.getString("Open", NUM), new PhotoViewer$26$$Lambda$0(this));
+                            builder.setPositiveButton(LocaleController.getString("Open", NUM), new -$$Lambda$PhotoViewer$26$aI6m9nXQqJHr0j_z6Zhi3CLASSNAME-Vo(this));
                             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
                             PhotoViewer.this.showAlertDialog(builder);
                         }
                     }
 
-                    /* Access modifiers changed, original: final|synthetic */
-                    public final /* synthetic */ void lambda$onError$0$PhotoViewer$26(DialogInterface dialog, int which) {
+                    public /* synthetic */ void lambda$onError$0$PhotoViewer$26(DialogInterface dialogInterface, int i) {
                         try {
                             AndroidUtilities.openForView(PhotoViewer.this.currentMessageObject, PhotoViewer.this.parentActivity);
                             PhotoViewer.this.closePhoto(false, false);
-                        } catch (Exception e1) {
-                            FileLog.e(e1);
+                        } catch (Exception e) {
+                            FileLog.e(e);
                         }
                     }
 
-                    public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
+                    public void onVideoSizeChanged(int i, int i2, int i3, float f) {
                         if (PhotoViewer.this.aspectRatioFrameLayout != null) {
-                            if (unappliedRotationDegrees == 90 || unappliedRotationDegrees == 270) {
-                                int temp = width;
-                                width = height;
-                                height = temp;
+                            if (!(i3 == 90 || i3 == 270)) {
+                                int i4 = i2;
+                                i2 = i;
+                                i = i4;
                             }
-                            PhotoViewer.this.aspectRatioFrameLayout.setAspectRatio(height == 0 ? 1.0f : (((float) width) * pixelWidthHeightRatio) / ((float) height), unappliedRotationDegrees);
+                            PhotoViewer.this.aspectRatioFrameLayout.setAspectRatio(i == 0 ? 1.0f : (((float) i2) * f) / ((float) i), i3);
                         }
                     }
 
@@ -4138,8 +5273,8 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                             PhotoViewer.this.switchingInlineMode = false;
                             if (VERSION.SDK_INT >= 21) {
                                 PhotoViewer.this.aspectRatioFrameLayout.getLocationInWindow(PhotoViewer.this.pipPosition);
-                                int[] access$10700 = PhotoViewer.this.pipPosition;
-                                access$10700[1] = (int) (((float) access$10700[1]) - PhotoViewer.this.containerView.getTranslationY());
+                                int[] access$10800 = PhotoViewer.this.pipPosition;
+                                access$10800[1] = (int) (((float) access$10800[1]) - PhotoViewer.this.containerView.getTranslationY());
                                 PhotoViewer.this.textureImageView.setTranslationX(PhotoViewer.this.textureImageView.getTranslationX() + ((float) PhotoViewer.this.getLeftInset()));
                                 PhotoViewer.this.videoTextureView.setTranslationX((PhotoViewer.this.videoTextureView.getTranslationX() + ((float) PhotoViewer.this.getLeftInset())) - PhotoViewer.this.aspectRatioFrameLayout.getX());
                                 AnimatorSet animatorSet = new AnimatorSet();
@@ -4161,7 +5296,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                                 animatorSet.setInterpolator(new DecelerateInterpolator());
                                 animatorSet.setDuration(250);
                                 animatorSet.addListener(new AnimatorListenerAdapter() {
-                                    public void onAnimationEnd(Animator animation) {
+                                    public void onAnimationEnd(Animator animator) {
                                         PhotoViewer.this.pipAnimationInProgress = false;
                                     }
                                 });
@@ -4171,16 +5306,19 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                         }
                     }
                 });
+            } else {
+                z3 = false;
             }
-            if (newPlayerCreated) {
+            if (z3) {
                 this.seekToProgressPending = this.seekToProgressPending2;
                 this.videoPlayer.preparePlayer(uri, "other");
                 this.videoPlayerSeekbar.setProgress(0.0f);
                 this.videoTimelineView.setProgress(0.0f);
                 this.videoPlayerSeekbar.setBufferedProgress(0.0f);
-                this.videoPlayer.setPlayWhenReady(playWhenReady);
+                this.videoPlayer.setPlayWhenReady(z);
             }
-            if (this.currentBotInlineResult == null || !(this.currentBotInlineResult.type.equals("video") || MessageObject.isVideoDocument(this.currentBotInlineResult.document))) {
+            BotInlineResult botInlineResult = this.currentBotInlineResult;
+            if (botInlineResult == null || !(botInlineResult.type.equals("video") || MessageObject.isVideoDocument(this.currentBotInlineResult.document))) {
                 this.bottomLayout.setPadding(0, 0, 0, 0);
             } else {
                 this.bottomLayout.setVisibility(0);
@@ -4198,12 +5336,12 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 this.shareButton.setVisibility(8);
                 this.menuItem.showSubItem(10);
             }
-            this.inPreview = preview;
+            this.inPreview = z2;
             updateAccessibilityOverlayVisibility();
         }
     }
 
-    private void releasePlayer(boolean onClose) {
+    private void releasePlayer(boolean z) {
         if (this.videoPlayer != null) {
             AndroidUtilities.cancelRunOnUIThread(this.setLoadingRunnable);
             this.videoPlayer.releasePlayer(true);
@@ -4225,10 +5363,11 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 FileLog.e(e);
             }
         }
-        if (this.aspectRatioFrameLayout != null) {
+        AspectRatioFrameLayout aspectRatioFrameLayout = this.aspectRatioFrameLayout;
+        if (aspectRatioFrameLayout != null) {
             try {
-                this.containerView.removeView(this.aspectRatioFrameLayout);
-            } catch (Throwable th) {
+                this.containerView.removeView(aspectRatioFrameLayout);
+            } catch (Throwable unused) {
             }
             this.aspectRatioFrameLayout = null;
         }
@@ -4237,12 +5376,12 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         }
         if (this.isPlaying) {
             this.isPlaying = false;
-            if (!onClose) {
+            if (!z) {
                 this.videoPlayButton.setImageResource(NUM);
             }
             AndroidUtilities.cancelRunOnUIThread(this.updateProgressRunnable);
         }
-        if (!onClose && !this.inPreview && !this.requestingPreview) {
+        if (!z && !this.inPreview && !this.requestingPreview) {
             this.videoPlayerControlFrameLayout.setVisibility(8);
             this.dateTextView.setVisibility(0);
             this.nameTextView.setVisibility(0);
@@ -4253,17 +5392,12 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         }
     }
 
-    private void updateCaptionTextForCurrentPhoto(Object object) {
-        CharSequence caption = null;
-        if (object instanceof PhotoEntry) {
-            caption = ((PhotoEntry) object).caption;
-        } else if (!(object instanceof BotInlineResult) && (object instanceof SearchImage)) {
-            caption = ((SearchImage) object).caption;
-        }
-        if (TextUtils.isEmpty(caption)) {
+    private void updateCaptionTextForCurrentPhoto(Object obj) {
+        CharSequence charSequence = obj instanceof PhotoEntry ? ((PhotoEntry) obj).caption : (!(obj instanceof BotInlineResult) && (obj instanceof SearchImage)) ? ((SearchImage) obj).caption : null;
+        if (TextUtils.isEmpty(charSequence)) {
             this.captionEditText.setFieldText("");
         } else {
-            this.captionEditText.setFieldText(caption);
+            this.captionEditText.setFieldText(charSequence);
         }
     }
 
@@ -4280,138 +5414,338 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             try {
                 this.visibleDialog = builder.show();
                 this.visibleDialog.setCanceledOnTouchOutside(true);
-                this.visibleDialog.setOnDismissListener(new PhotoViewer$$Lambda$27(this));
+                this.visibleDialog.setOnDismissListener(new -$$Lambda$PhotoViewer$6qHPQWdf_DnEW0pxgH-u4b0yivA(this));
             } catch (Exception e2) {
                 FileLog.e(e2);
             }
         }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$showAlertDialog$33$PhotoViewer(DialogInterface dialog) {
+    public /* synthetic */ void lambda$showAlertDialog$33$PhotoViewer(DialogInterface dialogInterface) {
         this.visibleDialog = null;
     }
 
+    /* JADX WARNING: Removed duplicated region for block: B:72:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:15:0x0045  */
     private void applyCurrentEditMode() {
-        Bitmap bitmap = null;
-        ArrayList<InputDocument> stickers = null;
-        SavedFilterState savedFilterState = null;
-        boolean removeSavedState = false;
-        if (this.currentEditMode == 1 || (this.currentEditMode == 0 && this.sendPhotoType == 1)) {
-            bitmap = this.photoCropView.getBitmap();
-            removeSavedState = true;
-        } else if (this.currentEditMode == 2) {
-            bitmap = this.photoFilterView.getBitmap();
-            savedFilterState = this.photoFilterView.getSavedFilterState();
-        } else if (this.currentEditMode == 3) {
-            bitmap = this.photoPaintView.getBitmap();
-            stickers = this.photoPaintView.getMasks();
-            removeSavedState = true;
-        }
-        if (bitmap != null) {
-            PhotoSize size = ImageLoader.scaleAndSaveImage(bitmap, (float) AndroidUtilities.getPhotoSize(), (float) AndroidUtilities.getPhotoSize(), 80, false, 101, 101);
-            if (size != null) {
-                PhotoEntry object = this.imagesArrLocals.get(this.currentIndex);
-                if (object instanceof PhotoEntry) {
-                    PhotoEntry entry = object;
-                    entry.imagePath = FileLoader.getPathToAttach(size, true).toString();
-                    size = ImageLoader.scaleAndSaveImage(bitmap, (float) AndroidUtilities.dp(120.0f), (float) AndroidUtilities.dp(120.0f), 70, false, 101, 101);
-                    if (size != null) {
-                        entry.thumbPath = FileLoader.getPathToAttach(size, true).toString();
-                    }
-                    if (stickers != null) {
-                        entry.stickers.addAll(stickers);
-                    }
-                    if (this.currentEditMode == 1) {
-                        this.cropItem.setColorFilter(new PorterDuffColorFilter(-12734994, Mode.MULTIPLY));
-                        entry.isCropped = true;
-                    } else if (this.currentEditMode == 2) {
-                        this.tuneItem.setColorFilter(new PorterDuffColorFilter(-12734994, Mode.MULTIPLY));
-                        entry.isFiltered = true;
-                    } else if (this.currentEditMode == 3) {
-                        this.paintItem.setColorFilter(new PorterDuffColorFilter(-12734994, Mode.MULTIPLY));
-                        entry.isPainted = true;
-                    }
-                    if (savedFilterState != null) {
-                        entry.savedFilterState = savedFilterState;
-                    } else if (removeSavedState) {
-                        entry.savedFilterState = null;
-                    }
-                } else if (object instanceof SearchImage) {
-                    SearchImage entry2 = (SearchImage) object;
-                    entry2.imagePath = FileLoader.getPathToAttach(size, true).toString();
-                    size = ImageLoader.scaleAndSaveImage(bitmap, (float) AndroidUtilities.dp(120.0f), (float) AndroidUtilities.dp(120.0f), 70, false, 101, 101);
-                    if (size != null) {
-                        entry2.thumbPath = FileLoader.getPathToAttach(size, true).toString();
-                    }
-                    if (stickers != null) {
-                        entry2.stickers.addAll(stickers);
-                    }
-                    if (this.currentEditMode == 1) {
-                        this.cropItem.setColorFilter(new PorterDuffColorFilter(-12734994, Mode.MULTIPLY));
-                        entry2.isCropped = true;
-                    } else if (this.currentEditMode == 2) {
-                        this.tuneItem.setColorFilter(new PorterDuffColorFilter(-12734994, Mode.MULTIPLY));
-                        entry2.isFiltered = true;
-                    } else if (this.currentEditMode == 3) {
-                        this.paintItem.setColorFilter(new PorterDuffColorFilter(-12734994, Mode.MULTIPLY));
-                        entry2.isPainted = true;
-                    }
-                    if (savedFilterState != null) {
-                        entry2.savedFilterState = savedFilterState;
-                    } else if (removeSavedState) {
-                        entry2.savedFilterState = null;
-                    }
-                }
-                if ((this.sendPhotoType == 0 || this.sendPhotoType == 4) && this.placeProvider != null) {
-                    this.placeProvider.updatePhotoAtIndex(this.currentIndex);
-                    if (!this.placeProvider.isPhotoChecked(this.currentIndex)) {
-                        setPhotoChecked();
-                    }
-                }
-                if (this.currentEditMode == 1) {
-                    float scaleX = this.photoCropView.getRectSizeX() / ((float) getContainerViewWidth());
-                    float scaleY = this.photoCropView.getRectSizeY() / ((float) getContainerViewHeight());
-                    if (scaleX <= scaleY) {
-                        scaleX = scaleY;
-                    }
-                    this.scale = scaleX;
-                    this.translationX = (this.photoCropView.getRectX() + (this.photoCropView.getRectSizeX() / 2.0f)) - ((float) (getContainerViewWidth() / 2));
-                    this.translationY = (this.photoCropView.getRectY() + (this.photoCropView.getRectSizeY() / 2.0f)) - ((float) (getContainerViewHeight() / 2));
-                    this.zoomAnimation = true;
-                    this.applying = true;
-                    this.photoCropView.onDisappear();
-                }
-                this.centerImage.setParentView(null);
-                this.centerImage.setOrientation(0, true);
-                this.ignoreDidSetImage = true;
-                this.centerImage.setImageBitmap(bitmap);
-                this.ignoreDidSetImage = false;
-                this.centerImage.setParentView(this.containerView);
-                if (this.sendPhotoType == 1) {
-                    setCropBitmap();
-                }
-            }
-        }
+        /*
+        r19 = this;
+        r0 = r19;
+        r1 = r0.currentEditMode;
+        r2 = 3;
+        r4 = 2;
+        r6 = 1;
+        if (r1 == r6) goto L_0x0039;
+    L_0x0009:
+        if (r1 != 0) goto L_0x0010;
+    L_0x000b:
+        r1 = r0.sendPhotoType;
+        if (r1 != r6) goto L_0x0010;
+    L_0x000f:
+        goto L_0x0039;
+    L_0x0010:
+        r1 = r0.currentEditMode;
+        if (r1 != r4) goto L_0x0023;
+    L_0x0014:
+        r1 = r0.photoFilterView;
+        r1 = r1.getBitmap();
+        r7 = r0.photoFilterView;
+        r7 = r7.getSavedFilterState();
+        r15 = r7;
+        r14 = 0;
+        goto L_0x0036;
+    L_0x0023:
+        if (r1 != r2) goto L_0x0033;
+    L_0x0025:
+        r1 = r0.photoPaintView;
+        r1 = r1.getBitmap();
+        r7 = r0.photoPaintView;
+        r7 = r7.getMasks();
+        r14 = r7;
+        goto L_0x0040;
+    L_0x0033:
+        r1 = 0;
+        r14 = 0;
+        r15 = 0;
+    L_0x0036:
+        r16 = 0;
+        goto L_0x0043;
+    L_0x0039:
+        r1 = r0.photoCropView;
+        r1 = r1.getBitmap();
+        r14 = 0;
+    L_0x0040:
+        r15 = 0;
+        r16 = 1;
+    L_0x0043:
+        if (r1 == 0) goto L_0x0205;
+    L_0x0045:
+        r7 = org.telegram.messenger.AndroidUtilities.getPhotoSize();
+        r8 = (float) r7;
+        r7 = org.telegram.messenger.AndroidUtilities.getPhotoSize();
+        r9 = (float) r7;
+        r10 = 80;
+        r11 = 0;
+        r12 = 101; // 0x65 float:1.42E-43 double:5.0E-322;
+        r13 = 101; // 0x65 float:1.42E-43 double:5.0E-322;
+        r7 = r1;
+        r7 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r7, r8, r9, r10, r11, r12, r13);
+        if (r7 == 0) goto L_0x0205;
+    L_0x005d:
+        r8 = r0.imagesArrLocals;
+        r9 = r0.currentIndex;
+        r8 = r8.get(r9);
+        r9 = r8 instanceof org.telegram.messenger.MediaController.PhotoEntry;
+        r10 = NUM; // 0x42var_ float:120.0 double:5.548480205E-315;
+        r13 = -12734994; // 0xffffffffff3dadee float:-2.5212719E38 double:NaN;
+        if (r9 == 0) goto L_0x00ed;
+    L_0x006e:
+        r12 = r8;
+        r12 = (org.telegram.messenger.MediaController.PhotoEntry) r12;
+        r7 = org.telegram.messenger.FileLoader.getPathToAttach(r7, r6);
+        r7 = r7.toString();
+        r12.imagePath = r7;
+        r7 = org.telegram.messenger.AndroidUtilities.dp(r10);
+        r8 = (float) r7;
+        r7 = org.telegram.messenger.AndroidUtilities.dp(r10);
+        r9 = (float) r7;
+        r10 = 70;
+        r11 = 0;
+        r17 = 101; // 0x65 float:1.42E-43 double:5.0E-322;
+        r18 = 101; // 0x65 float:1.42E-43 double:5.0E-322;
+        r7 = r1;
+        r3 = r12;
+        r12 = r17;
+        r5 = -12734994; // 0xffffffffff3dadee float:-2.5212719E38 double:NaN;
+        r13 = r18;
+        r7 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r7, r8, r9, r10, r11, r12, r13);
+        if (r7 == 0) goto L_0x00a5;
+    L_0x009b:
+        r7 = org.telegram.messenger.FileLoader.getPathToAttach(r7, r6);
+        r7 = r7.toString();
+        r3.thumbPath = r7;
+    L_0x00a5:
+        if (r14 == 0) goto L_0x00ac;
+    L_0x00a7:
+        r7 = r3.stickers;
+        r7.addAll(r14);
+    L_0x00ac:
+        r7 = r0.currentEditMode;
+        if (r7 != r6) goto L_0x00bf;
+    L_0x00b0:
+        r2 = r0.cropItem;
+        r7 = new android.graphics.PorterDuffColorFilter;
+        r8 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r7.<init>(r5, r8);
+        r2.setColorFilter(r7);
+        r3.isCropped = r6;
+        goto L_0x00e0;
+    L_0x00bf:
+        if (r7 != r4) goto L_0x00d0;
+    L_0x00c1:
+        r2 = r0.tuneItem;
+        r7 = new android.graphics.PorterDuffColorFilter;
+        r8 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r7.<init>(r5, r8);
+        r2.setColorFilter(r7);
+        r3.isFiltered = r6;
+        goto L_0x00e0;
+    L_0x00d0:
+        if (r7 != r2) goto L_0x00e0;
+    L_0x00d2:
+        r2 = r0.paintItem;
+        r7 = new android.graphics.PorterDuffColorFilter;
+        r8 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r7.<init>(r5, r8);
+        r2.setColorFilter(r7);
+        r3.isPainted = r6;
+    L_0x00e0:
+        if (r15 == 0) goto L_0x00e6;
+    L_0x00e2:
+        r3.savedFilterState = r15;
+        goto L_0x0168;
+    L_0x00e6:
+        if (r16 == 0) goto L_0x0168;
+    L_0x00e8:
+        r2 = 0;
+        r3.savedFilterState = r2;
+        goto L_0x0168;
+    L_0x00ed:
+        r5 = -12734994; // 0xffffffffff3dadee float:-2.5212719E38 double:NaN;
+        r3 = r8 instanceof org.telegram.messenger.MediaController.SearchImage;
+        if (r3 == 0) goto L_0x0168;
+    L_0x00f4:
+        r3 = r8;
+        r3 = (org.telegram.messenger.MediaController.SearchImage) r3;
+        r7 = org.telegram.messenger.FileLoader.getPathToAttach(r7, r6);
+        r7 = r7.toString();
+        r3.imagePath = r7;
+        r7 = org.telegram.messenger.AndroidUtilities.dp(r10);
+        r8 = (float) r7;
+        r7 = org.telegram.messenger.AndroidUtilities.dp(r10);
+        r9 = (float) r7;
+        r10 = 70;
+        r11 = 0;
+        r12 = 101; // 0x65 float:1.42E-43 double:5.0E-322;
+        r13 = 101; // 0x65 float:1.42E-43 double:5.0E-322;
+        r7 = r1;
+        r7 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r7, r8, r9, r10, r11, r12, r13);
+        if (r7 == 0) goto L_0x0123;
+    L_0x0119:
+        r7 = org.telegram.messenger.FileLoader.getPathToAttach(r7, r6);
+        r7 = r7.toString();
+        r3.thumbPath = r7;
+    L_0x0123:
+        if (r14 == 0) goto L_0x012a;
+    L_0x0125:
+        r7 = r3.stickers;
+        r7.addAll(r14);
+    L_0x012a:
+        r7 = r0.currentEditMode;
+        if (r7 != r6) goto L_0x013d;
+    L_0x012e:
+        r2 = r0.cropItem;
+        r7 = new android.graphics.PorterDuffColorFilter;
+        r8 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r7.<init>(r5, r8);
+        r2.setColorFilter(r7);
+        r3.isCropped = r6;
+        goto L_0x015e;
+    L_0x013d:
+        if (r7 != r4) goto L_0x014e;
+    L_0x013f:
+        r2 = r0.tuneItem;
+        r7 = new android.graphics.PorterDuffColorFilter;
+        r8 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r7.<init>(r5, r8);
+        r2.setColorFilter(r7);
+        r3.isFiltered = r6;
+        goto L_0x015e;
+    L_0x014e:
+        if (r7 != r2) goto L_0x015e;
+    L_0x0150:
+        r2 = r0.paintItem;
+        r7 = new android.graphics.PorterDuffColorFilter;
+        r8 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r7.<init>(r5, r8);
+        r2.setColorFilter(r7);
+        r3.isPainted = r6;
+    L_0x015e:
+        if (r15 == 0) goto L_0x0163;
+    L_0x0160:
+        r3.savedFilterState = r15;
+        goto L_0x0168;
+    L_0x0163:
+        if (r16 == 0) goto L_0x0168;
+    L_0x0165:
+        r2 = 0;
+        r3.savedFilterState = r2;
+    L_0x0168:
+        r2 = r0.sendPhotoType;
+        if (r2 == 0) goto L_0x016f;
+    L_0x016c:
+        r3 = 4;
+        if (r2 != r3) goto L_0x0185;
+    L_0x016f:
+        r2 = r0.placeProvider;
+        if (r2 == 0) goto L_0x0185;
+    L_0x0173:
+        r3 = r0.currentIndex;
+        r2.updatePhotoAtIndex(r3);
+        r2 = r0.placeProvider;
+        r3 = r0.currentIndex;
+        r2 = r2.isPhotoChecked(r3);
+        if (r2 != 0) goto L_0x0185;
+    L_0x0182:
+        r19.setPhotoChecked();
+    L_0x0185:
+        r2 = r0.currentEditMode;
+        if (r2 != r6) goto L_0x01e2;
+    L_0x0189:
+        r2 = r0.photoCropView;
+        r2 = r2.getRectSizeX();
+        r3 = r19.getContainerViewWidth();
+        r3 = (float) r3;
+        r2 = r2 / r3;
+        r3 = r0.photoCropView;
+        r3 = r3.getRectSizeY();
+        r5 = r19.getContainerViewHeight();
+        r5 = (float) r5;
+        r3 = r3 / r5;
+        r5 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1));
+        if (r5 <= 0) goto L_0x01a6;
+    L_0x01a5:
+        goto L_0x01a7;
+    L_0x01a6:
+        r2 = r3;
+    L_0x01a7:
+        r0.scale = r2;
+        r2 = r0.photoCropView;
+        r2 = r2.getRectX();
+        r3 = r0.photoCropView;
+        r3 = r3.getRectSizeX();
+        r5 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+        r3 = r3 / r5;
+        r2 = r2 + r3;
+        r3 = r19.getContainerViewWidth();
+        r3 = r3 / r4;
+        r3 = (float) r3;
+        r2 = r2 - r3;
+        r0.translationX = r2;
+        r2 = r0.photoCropView;
+        r2 = r2.getRectY();
+        r3 = r0.photoCropView;
+        r3 = r3.getRectSizeY();
+        r3 = r3 / r5;
+        r2 = r2 + r3;
+        r3 = r19.getContainerViewHeight();
+        r3 = r3 / r4;
+        r3 = (float) r3;
+        r2 = r2 - r3;
+        r0.translationY = r2;
+        r0.zoomAnimation = r6;
+        r0.applying = r6;
+        r2 = r0.photoCropView;
+        r2.onDisappear();
+    L_0x01e2:
+        r2 = r0.centerImage;
+        r3 = 0;
+        r2.setParentView(r3);
+        r2 = r0.centerImage;
+        r3 = 0;
+        r2.setOrientation(r3, r6);
+        r0.ignoreDidSetImage = r6;
+        r2 = r0.centerImage;
+        r2.setImageBitmap(r1);
+        r0.ignoreDidSetImage = r3;
+        r1 = r0.centerImage;
+        r2 = r0.containerView;
+        r1.setParentView(r2);
+        r1 = r0.sendPhotoType;
+        if (r1 != r6) goto L_0x0205;
+    L_0x0202:
+        r19.setCropBitmap();
+    L_0x0205:
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.applyCurrentEditMode():void");
     }
 
     private void setPhotoChecked() {
-        if (this.placeProvider == null) {
-            return;
-        }
-        if (this.placeProvider.getSelectedPhotos() == null || this.maxSelectedPhotos <= 0 || this.placeProvider.getSelectedPhotos().size() <= this.maxSelectedPhotos || this.placeProvider.isPhotoChecked(this.currentIndex)) {
-            int num = this.placeProvider.setPhotoChecked(this.currentIndex, getCurrentVideoEditedInfo());
-            boolean checked = this.placeProvider.isPhotoChecked(this.currentIndex);
-            this.checkImageView.setChecked(checked, true);
-            if (num >= 0) {
+        PhotoViewerProvider photoViewerProvider = this.placeProvider;
+        if (photoViewerProvider != null && (photoViewerProvider.getSelectedPhotos() == null || this.maxSelectedPhotos <= 0 || this.placeProvider.getSelectedPhotos().size() <= this.maxSelectedPhotos || this.placeProvider.isPhotoChecked(this.currentIndex))) {
+            int photoChecked = this.placeProvider.setPhotoChecked(this.currentIndex, getCurrentVideoEditedInfo());
+            boolean isPhotoChecked = this.placeProvider.isPhotoChecked(this.currentIndex);
+            this.checkImageView.setChecked(isPhotoChecked, true);
+            if (photoChecked >= 0) {
                 if (this.placeProvider.allowGroupPhotos()) {
-                    num++;
+                    photoChecked++;
                 }
-                if (checked) {
-                    this.selectedPhotosAdapter.notifyItemInserted(num);
-                    this.selectedPhotosListView.smoothScrollToPosition(num);
+                if (isPhotoChecked) {
+                    this.selectedPhotosAdapter.notifyItemInserted(photoChecked);
+                    this.selectedPhotosListView.smoothScrollToPosition(photoChecked);
                 } else {
-                    this.selectedPhotosAdapter.notifyItemRemoved(num);
+                    this.selectedPhotosAdapter.notifyItemRemoved(photoChecked);
                 }
             }
             updateSelectedCount();
@@ -4423,623 +5757,770 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             this.photoCropView = new PhotoCropView(this.actvityContext);
             this.photoCropView.setVisibility(8);
             this.containerView.addView(this.photoCropView, this.containerView.indexOfChild(this.pickerViewSendButton) - 1, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 48.0f));
-            this.photoCropView.setDelegate(new PhotoViewer$$Lambda$28(this));
+            this.photoCropView.setDelegate(new -$$Lambda$PhotoViewer$4LlSn7fGI8FnhnGA3tv2t0xhh6E(this));
         }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$createCropView$34$PhotoViewer(boolean reset) {
-        this.resetButton.setVisibility(reset ? 8 : 0);
+    public /* synthetic */ void lambda$createCropView$34$PhotoViewer(boolean z) {
+        this.resetButton.setVisibility(z ? 8 : 0);
     }
 
-    private void switchToEditMode(int mode) {
-        if (this.currentEditMode == mode || this.centerImage.getBitmap() == null || this.changeModeAnimation != null || this.imageMoveAnimation != null || this.photoProgressViews[0].backgroundState != -1 || this.captionEditText.getTag() != null) {
-            return;
-        }
-        final int i;
-        ArrayList<Animator> arrayList;
-        float[] fArr;
-        if (mode == 0) {
-            if (this.centerImage.getBitmap() != null) {
-                float scale;
-                float newScale;
-                int bitmapWidth = this.centerImage.getBitmapWidth();
-                int bitmapHeight = this.centerImage.getBitmapHeight();
-                float scaleX = ((float) getContainerViewWidth()) / ((float) bitmapWidth);
-                float scaleY = ((float) getContainerViewHeight()) / ((float) bitmapHeight);
-                float newScaleX = ((float) getContainerViewWidth(0)) / ((float) bitmapWidth);
-                float newScaleY = ((float) getContainerViewHeight(0)) / ((float) bitmapHeight);
-                if (scaleX > scaleY) {
-                    scale = scaleY;
-                } else {
-                    scale = scaleX;
-                }
-                if (newScaleX > newScaleY) {
-                    newScale = newScaleY;
-                } else {
-                    newScale = newScaleX;
-                }
-                if (this.sendPhotoType == 1) {
-                    setCropTranslations(true);
-                } else {
-                    this.animateToScale = newScale / scale;
-                    this.animateToX = 0.0f;
-                    this.translationX = (float) ((getLeftInset() / 2) - (getRightInset() / 2));
-                    if (this.currentEditMode == 1) {
-                        this.animateToY = (float) AndroidUtilities.dp(58.0f);
-                    } else if (this.currentEditMode == 2) {
-                        this.animateToY = (float) AndroidUtilities.dp(92.0f);
-                    } else if (this.currentEditMode == 3) {
-                        this.animateToY = (float) AndroidUtilities.dp(44.0f);
-                    }
-                    if (VERSION.SDK_INT >= 21) {
-                        this.animateToY -= (float) (AndroidUtilities.statusBarHeight / 2);
-                    }
-                    this.animationStartTime = System.currentTimeMillis();
-                    this.zoomAnimation = true;
-                }
-            }
-            this.padImageForHorizontalInsets = false;
-            this.imageMoveAnimation = new AnimatorSet();
-            ArrayList<Animator> animators = new ArrayList(4);
-            float[] fArr2;
-            if (this.currentEditMode == 1) {
-                animators.add(ObjectAnimator.ofFloat(this.editorDoneLayout, View.TRANSLATION_Y, new float[]{(float) AndroidUtilities.dp(48.0f)}));
-                fArr2 = new float[2];
-                animators.add(ObjectAnimator.ofFloat(this, AnimationProperties.PHOTO_VIEWER_ANIMATION_VALUE, new float[]{0.0f, 1.0f}));
-                animators.add(ObjectAnimator.ofFloat(this.photoCropView, View.ALPHA, new float[]{0.0f}));
-            } else if (this.currentEditMode == 2) {
-                this.photoFilterView.shutdown();
-                animators.add(ObjectAnimator.ofFloat(this.photoFilterView.getToolsView(), View.TRANSLATION_Y, new float[]{(float) AndroidUtilities.dp(186.0f)}));
-                fArr2 = new float[2];
-                animators.add(ObjectAnimator.ofFloat(this, AnimationProperties.PHOTO_VIEWER_ANIMATION_VALUE, new float[]{0.0f, 1.0f}));
-            } else if (this.currentEditMode == 3) {
-                this.photoPaintView.shutdown();
-                animators.add(ObjectAnimator.ofFloat(this.photoPaintView.getToolsView(), View.TRANSLATION_Y, new float[]{(float) AndroidUtilities.dp(126.0f)}));
-                animators.add(ObjectAnimator.ofFloat(this.photoPaintView.getColorPicker(), View.TRANSLATION_Y, new float[]{(float) AndroidUtilities.dp(126.0f)}));
-                fArr2 = new float[2];
-                animators.add(ObjectAnimator.ofFloat(this, AnimationProperties.PHOTO_VIEWER_ANIMATION_VALUE, new float[]{0.0f, 1.0f}));
-            }
-            this.imageMoveAnimation.playTogether(animators);
-            this.imageMoveAnimation.setDuration(200);
-            i = mode;
-            this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animation) {
-                    if (PhotoViewer.this.currentEditMode == 1) {
-                        PhotoViewer.this.editorDoneLayout.setVisibility(8);
-                        PhotoViewer.this.photoCropView.setVisibility(8);
-                    } else if (PhotoViewer.this.currentEditMode == 2) {
-                        PhotoViewer.this.containerView.removeView(PhotoViewer.this.photoFilterView);
-                        PhotoViewer.this.photoFilterView = null;
-                    } else if (PhotoViewer.this.currentEditMode == 3) {
-                        PhotoViewer.this.containerView.removeView(PhotoViewer.this.photoPaintView);
-                        PhotoViewer.this.photoPaintView = null;
-                    }
-                    PhotoViewer.this.imageMoveAnimation = null;
-                    PhotoViewer.this.currentEditMode = i;
-                    PhotoViewer.this.applying = false;
-                    if (PhotoViewer.this.sendPhotoType != 1) {
-                        PhotoViewer.this.animateToScale = 1.0f;
-                        PhotoViewer.this.animateToX = 0.0f;
-                        PhotoViewer.this.animateToY = 0.0f;
-                        PhotoViewer.this.scale = 1.0f;
-                    }
-                    PhotoViewer.this.updateMinMax(PhotoViewer.this.scale);
-                    PhotoViewer.this.containerView.invalidate();
-                    AnimatorSet animatorSet = new AnimatorSet();
-                    ArrayList<Animator> arrayList = new ArrayList();
-                    arrayList.add(ObjectAnimator.ofFloat(PhotoViewer.this.pickerView, View.TRANSLATION_Y, new float[]{0.0f}));
-                    arrayList.add(ObjectAnimator.ofFloat(PhotoViewer.this.pickerViewSendButton, View.TRANSLATION_Y, new float[]{0.0f}));
-                    if (PhotoViewer.this.sendPhotoType != 1) {
-                        arrayList.add(ObjectAnimator.ofFloat(PhotoViewer.this.actionBar, View.TRANSLATION_Y, new float[]{0.0f}));
-                    }
-                    if (PhotoViewer.this.needCaptionLayout) {
-                        arrayList.add(ObjectAnimator.ofFloat(PhotoViewer.this.captionTextView, View.TRANSLATION_Y, new float[]{0.0f}));
-                    }
-                    if (PhotoViewer.this.sendPhotoType == 0 || PhotoViewer.this.sendPhotoType == 4) {
-                        arrayList.add(ObjectAnimator.ofFloat(PhotoViewer.this.checkImageView, View.ALPHA, new float[]{1.0f}));
-                        arrayList.add(ObjectAnimator.ofFloat(PhotoViewer.this.photosCounterView, View.ALPHA, new float[]{1.0f}));
-                    } else if (PhotoViewer.this.sendPhotoType == 1) {
-                        arrayList.add(ObjectAnimator.ofFloat(PhotoViewer.this.photoCropView, View.ALPHA, new float[]{1.0f}));
-                    }
-                    if (PhotoViewer.this.cameraItem.getTag() != null) {
-                        PhotoViewer.this.cameraItem.setVisibility(0);
-                        arrayList.add(ObjectAnimator.ofFloat(PhotoViewer.this.cameraItem, View.ALPHA, new float[]{1.0f}));
-                    }
-                    animatorSet.playTogether(arrayList);
-                    animatorSet.setDuration(200);
-                    animatorSet.addListener(new AnimatorListenerAdapter() {
-                        public void onAnimationStart(Animator animation) {
-                            PhotoViewer.this.pickerView.setVisibility(0);
-                            PhotoViewer.this.pickerViewSendButton.setVisibility(0);
-                            PhotoViewer.this.actionBar.setVisibility(0);
-                            if (PhotoViewer.this.needCaptionLayout) {
-                                PhotoViewer.this.captionTextView.setVisibility(PhotoViewer.this.captionTextView.getTag() != null ? 0 : 4);
-                            }
-                            if (PhotoViewer.this.sendPhotoType == 0 || PhotoViewer.this.sendPhotoType == 4 || ((PhotoViewer.this.sendPhotoType == 2 || PhotoViewer.this.sendPhotoType == 5) && PhotoViewer.this.imagesArrLocals.size() > 1)) {
-                                PhotoViewer.this.checkImageView.setVisibility(0);
-                                PhotoViewer.this.photosCounterView.setVisibility(0);
-                            } else if (PhotoViewer.this.sendPhotoType == 1) {
-                                PhotoViewer.this.setCropTranslations(false);
-                            }
-                        }
-                    });
-                    animatorSet.start();
-                }
-            });
-            this.imageMoveAnimation.start();
-        } else if (mode == 1) {
-            createCropView();
-            this.photoCropView.onAppear();
-            this.editorDoneLayout.doneButton.setText(LocaleController.getString("Crop", NUM));
-            this.editorDoneLayout.doneButton.setTextColor(-11420173);
-            this.changeModeAnimation = new AnimatorSet();
-            arrayList = new ArrayList();
-            arrayList.add(ObjectAnimator.ofFloat(this.pickerView, View.TRANSLATION_Y, new float[]{0.0f, (float) AndroidUtilities.dp(96.0f)}));
-            arrayList.add(ObjectAnimator.ofFloat(this.pickerViewSendButton, View.TRANSLATION_Y, new float[]{0.0f, (float) AndroidUtilities.dp(96.0f)}));
-            arrayList.add(ObjectAnimator.ofFloat(this.actionBar, View.TRANSLATION_Y, new float[]{0.0f, (float) (-this.actionBar.getHeight())}));
-            if (this.needCaptionLayout) {
-                arrayList.add(ObjectAnimator.ofFloat(this.captionTextView, View.TRANSLATION_Y, new float[]{0.0f, (float) AndroidUtilities.dp(96.0f)}));
-            }
-            if (this.sendPhotoType == 0 || this.sendPhotoType == 4) {
-                fArr = new float[2];
-                arrayList.add(ObjectAnimator.ofFloat(this.checkImageView, View.ALPHA, new float[]{1.0f, 0.0f}));
-                fArr = new float[2];
-                arrayList.add(ObjectAnimator.ofFloat(this.photosCounterView, View.ALPHA, new float[]{1.0f, 0.0f}));
-            }
-            if (this.selectedPhotosListView.getVisibility() == 0) {
-                fArr = new float[2];
-                arrayList.add(ObjectAnimator.ofFloat(this.selectedPhotosListView, View.ALPHA, new float[]{1.0f, 0.0f}));
-            }
-            if (this.cameraItem.getTag() != null) {
-                fArr = new float[2];
-                arrayList.add(ObjectAnimator.ofFloat(this.cameraItem, View.ALPHA, new float[]{1.0f, 0.0f}));
-            }
-            this.changeModeAnimation.playTogether(arrayList);
-            this.changeModeAnimation.setDuration(200);
-            i = mode;
-            this.changeModeAnimation.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animation) {
-                    PhotoViewer.this.changeModeAnimation = null;
-                    PhotoViewer.this.pickerView.setVisibility(8);
-                    PhotoViewer.this.pickerViewSendButton.setVisibility(8);
-                    PhotoViewer.this.cameraItem.setVisibility(8);
-                    PhotoViewer.this.selectedPhotosListView.setVisibility(8);
-                    PhotoViewer.this.selectedPhotosListView.setAlpha(0.0f);
-                    PhotoViewer.this.selectedPhotosListView.setTranslationY((float) (-AndroidUtilities.dp(10.0f)));
-                    PhotoViewer.this.photosCounterView.setRotationX(0.0f);
-                    PhotoViewer.this.selectedPhotosListView.setEnabled(false);
-                    PhotoViewer.this.isPhotosListViewVisible = false;
-                    if (PhotoViewer.this.needCaptionLayout) {
-                        PhotoViewer.this.captionTextView.setVisibility(4);
-                    }
-                    if (PhotoViewer.this.sendPhotoType == 0 || PhotoViewer.this.sendPhotoType == 4 || ((PhotoViewer.this.sendPhotoType == 2 || PhotoViewer.this.sendPhotoType == 5) && PhotoViewer.this.imagesArrLocals.size() > 1)) {
-                        PhotoViewer.this.checkImageView.setVisibility(8);
-                        PhotoViewer.this.photosCounterView.setVisibility(8);
-                    }
-                    Bitmap bitmap = PhotoViewer.this.centerImage.getBitmap();
-                    if (bitmap != null) {
-                        float scale;
-                        float newScale;
-                        PhotoViewer.this.photoCropView.setBitmap(bitmap, PhotoViewer.this.centerImage.getOrientation(), PhotoViewer.this.sendPhotoType != 1, false);
-                        PhotoViewer.this.photoCropView.onDisappear();
-                        int bitmapWidth = PhotoViewer.this.centerImage.getBitmapWidth();
-                        int bitmapHeight = PhotoViewer.this.centerImage.getBitmapHeight();
-                        float scaleX = ((float) PhotoViewer.this.getContainerViewWidth()) / ((float) bitmapWidth);
-                        float scaleY = ((float) PhotoViewer.this.getContainerViewHeight()) / ((float) bitmapHeight);
-                        float newScaleX = ((float) PhotoViewer.this.getContainerViewWidth(1)) / ((float) bitmapWidth);
-                        float newScaleY = ((float) PhotoViewer.this.getContainerViewHeight(1)) / ((float) bitmapHeight);
-                        if (scaleX > scaleY) {
-                            scale = scaleY;
-                        } else {
-                            scale = scaleX;
-                        }
-                        if (newScaleX > newScaleY) {
-                            newScale = newScaleY;
-                        } else {
-                            newScale = newScaleX;
-                        }
-                        if (PhotoViewer.this.sendPhotoType == 1) {
-                            float minSide = (float) Math.min(PhotoViewer.this.getContainerViewWidth(1), PhotoViewer.this.getContainerViewHeight(1));
-                            newScaleX = minSide / ((float) bitmapWidth);
-                            newScaleY = minSide / ((float) bitmapHeight);
-                            if (newScaleX > newScaleY) {
-                                newScale = newScaleX;
-                            } else {
-                                newScale = newScaleY;
-                            }
-                        }
-                        PhotoViewer.this.animateToScale = newScale / scale;
-                        PhotoViewer.this.animateToX = (float) ((PhotoViewer.this.getLeftInset() / 2) - (PhotoViewer.this.getRightInset() / 2));
-                        PhotoViewer.this.animateToY = (float) ((VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight / 2 : 0) + (-AndroidUtilities.dp(56.0f)));
-                        PhotoViewer.this.animationStartTime = System.currentTimeMillis();
-                        PhotoViewer.this.zoomAnimation = true;
-                    }
-                    PhotoViewer.this.imageMoveAnimation = new AnimatorSet();
-                    AnimatorSet access$11600 = PhotoViewer.this.imageMoveAnimation;
-                    Animator[] animatorArr = new Animator[3];
-                    animatorArr[0] = ObjectAnimator.ofFloat(PhotoViewer.this.editorDoneLayout, View.TRANSLATION_Y, new float[]{(float) AndroidUtilities.dp(48.0f), 0.0f});
-                    float[] fArr = new float[2];
-                    animatorArr[1] = ObjectAnimator.ofFloat(PhotoViewer.this, AnimationProperties.PHOTO_VIEWER_ANIMATION_VALUE, new float[]{0.0f, 1.0f});
-                    fArr = new float[2];
-                    animatorArr[2] = ObjectAnimator.ofFloat(PhotoViewer.this.photoCropView, View.ALPHA, new float[]{0.0f, 1.0f});
-                    access$11600.playTogether(animatorArr);
-                    PhotoViewer.this.imageMoveAnimation.setDuration(200);
-                    PhotoViewer.this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
-                        public void onAnimationStart(Animator animation) {
-                            PhotoViewer.this.editorDoneLayout.setVisibility(0);
-                            PhotoViewer.this.photoCropView.setVisibility(0);
-                        }
-
-                        public void onAnimationEnd(Animator animation) {
-                            PhotoViewer.this.photoCropView.onAppeared();
-                            PhotoViewer.this.imageMoveAnimation = null;
-                            PhotoViewer.this.currentEditMode = i;
-                            PhotoViewer.this.animateToScale = 1.0f;
-                            PhotoViewer.this.animateToX = 0.0f;
-                            PhotoViewer.this.animateToY = 0.0f;
-                            PhotoViewer.this.scale = 1.0f;
-                            PhotoViewer.this.updateMinMax(PhotoViewer.this.scale);
-                            PhotoViewer.this.padImageForHorizontalInsets = true;
-                            PhotoViewer.this.containerView.invalidate();
-                        }
-                    });
-                    PhotoViewer.this.imageMoveAnimation.start();
-                }
-            });
-            this.changeModeAnimation.start();
-        } else if (mode == 2) {
-            if (this.photoFilterView == null) {
-                Bitmap bitmap;
-                SavedFilterState state = null;
-                String originalPath = null;
-                int orientation = 0;
-                if (!this.imagesArrLocals.isEmpty()) {
-                    PhotoEntry object = this.imagesArrLocals.get(this.currentIndex);
-                    if (object instanceof PhotoEntry) {
-                        PhotoEntry entry = object;
-                        if (entry.imagePath == null) {
-                            originalPath = entry.path;
-                            state = entry.savedFilterState;
-                        }
-                        orientation = entry.orientation;
-                    } else if (object instanceof SearchImage) {
-                        SearchImage entry2 = (SearchImage) object;
-                        state = entry2.savedFilterState;
-                        originalPath = entry2.imageUrl;
-                    }
-                }
-                if (state == null) {
-                    bitmap = this.centerImage.getBitmap();
-                    orientation = this.centerImage.getOrientation();
-                } else {
-                    bitmap = BitmapFactory.decodeFile(originalPath);
-                }
-                this.photoFilterView = new PhotoFilterView(this.parentActivity, bitmap, orientation, state);
-                this.containerView.addView(this.photoFilterView, LayoutHelper.createFrame(-1, -1.0f));
-                this.photoFilterView.getDoneTextView().setOnClickListener(new PhotoViewer$$Lambda$29(this));
-                this.photoFilterView.getCancelTextView().setOnClickListener(new PhotoViewer$$Lambda$30(this));
-                this.photoFilterView.getToolsView().setTranslationY((float) AndroidUtilities.dp(186.0f));
-            }
-            this.changeModeAnimation = new AnimatorSet();
-            arrayList = new ArrayList();
-            arrayList.add(ObjectAnimator.ofFloat(this.pickerView, View.TRANSLATION_Y, new float[]{0.0f, (float) AndroidUtilities.dp(96.0f)}));
-            arrayList.add(ObjectAnimator.ofFloat(this.pickerViewSendButton, View.TRANSLATION_Y, new float[]{0.0f, (float) AndroidUtilities.dp(96.0f)}));
-            arrayList.add(ObjectAnimator.ofFloat(this.actionBar, View.TRANSLATION_Y, new float[]{0.0f, (float) (-this.actionBar.getHeight())}));
-            if (this.sendPhotoType == 0 || this.sendPhotoType == 4) {
-                fArr = new float[2];
-                arrayList.add(ObjectAnimator.ofFloat(this.checkImageView, View.ALPHA, new float[]{1.0f, 0.0f}));
-                fArr = new float[2];
-                arrayList.add(ObjectAnimator.ofFloat(this.photosCounterView, View.ALPHA, new float[]{1.0f, 0.0f}));
-            } else if (this.sendPhotoType == 1) {
-                fArr = new float[2];
-                arrayList.add(ObjectAnimator.ofFloat(this.photoCropView, View.ALPHA, new float[]{1.0f, 0.0f}));
-            }
-            if (this.selectedPhotosListView.getVisibility() == 0) {
-                fArr = new float[2];
-                arrayList.add(ObjectAnimator.ofFloat(this.selectedPhotosListView, View.ALPHA, new float[]{1.0f, 0.0f}));
-            }
-            if (this.cameraItem.getTag() != null) {
-                fArr = new float[2];
-                arrayList.add(ObjectAnimator.ofFloat(this.cameraItem, View.ALPHA, new float[]{1.0f, 0.0f}));
-            }
-            this.changeModeAnimation.playTogether(arrayList);
-            this.changeModeAnimation.setDuration(200);
-            i = mode;
-            this.changeModeAnimation.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animation) {
-                    PhotoViewer.this.changeModeAnimation = null;
-                    PhotoViewer.this.pickerView.setVisibility(8);
-                    PhotoViewer.this.pickerViewSendButton.setVisibility(8);
-                    PhotoViewer.this.actionBar.setVisibility(8);
-                    PhotoViewer.this.cameraItem.setVisibility(8);
-                    PhotoViewer.this.selectedPhotosListView.setVisibility(8);
-                    PhotoViewer.this.selectedPhotosListView.setAlpha(0.0f);
-                    PhotoViewer.this.selectedPhotosListView.setTranslationY((float) (-AndroidUtilities.dp(10.0f)));
-                    PhotoViewer.this.photosCounterView.setRotationX(0.0f);
-                    PhotoViewer.this.selectedPhotosListView.setEnabled(false);
-                    PhotoViewer.this.isPhotosListViewVisible = false;
-                    if (PhotoViewer.this.needCaptionLayout) {
-                        PhotoViewer.this.captionTextView.setVisibility(4);
-                    }
-                    if (PhotoViewer.this.sendPhotoType == 0 || PhotoViewer.this.sendPhotoType == 4 || ((PhotoViewer.this.sendPhotoType == 2 || PhotoViewer.this.sendPhotoType == 5) && PhotoViewer.this.imagesArrLocals.size() > 1)) {
-                        PhotoViewer.this.checkImageView.setVisibility(8);
-                        PhotoViewer.this.photosCounterView.setVisibility(8);
-                    }
-                    if (PhotoViewer.this.centerImage.getBitmap() != null) {
-                        float scale;
-                        float newScale;
-                        int bitmapWidth = PhotoViewer.this.centerImage.getBitmapWidth();
-                        int bitmapHeight = PhotoViewer.this.centerImage.getBitmapHeight();
-                        float scaleX = ((float) PhotoViewer.this.getContainerViewWidth()) / ((float) bitmapWidth);
-                        float scaleY = ((float) PhotoViewer.this.getContainerViewHeight()) / ((float) bitmapHeight);
-                        float newScaleX = ((float) PhotoViewer.this.getContainerViewWidth(2)) / ((float) bitmapWidth);
-                        float newScaleY = ((float) PhotoViewer.this.getContainerViewHeight(2)) / ((float) bitmapHeight);
-                        if (scaleX > scaleY) {
-                            scale = scaleY;
-                        } else {
-                            scale = scaleX;
-                        }
-                        if (newScaleX > newScaleY) {
-                            newScale = newScaleY;
-                        } else {
-                            newScale = newScaleX;
-                        }
-                        PhotoViewer.this.animateToScale = newScale / scale;
-                        PhotoViewer.this.animateToX = (float) ((PhotoViewer.this.getLeftInset() / 2) - (PhotoViewer.this.getRightInset() / 2));
-                        PhotoViewer.this.animateToY = (float) ((VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight / 2 : 0) + (-AndroidUtilities.dp(92.0f)));
-                        PhotoViewer.this.animationStartTime = System.currentTimeMillis();
-                        PhotoViewer.this.zoomAnimation = true;
-                    }
-                    PhotoViewer.this.imageMoveAnimation = new AnimatorSet();
-                    AnimatorSet access$11600 = PhotoViewer.this.imageMoveAnimation;
-                    r12 = new Animator[2];
-                    float[] fArr = new float[2];
-                    r12[0] = ObjectAnimator.ofFloat(PhotoViewer.this, AnimationProperties.PHOTO_VIEWER_ANIMATION_VALUE, new float[]{0.0f, 1.0f});
-                    r12[1] = ObjectAnimator.ofFloat(PhotoViewer.this.photoFilterView.getToolsView(), View.TRANSLATION_Y, new float[]{(float) AndroidUtilities.dp(186.0f), 0.0f});
-                    access$11600.playTogether(r12);
-                    PhotoViewer.this.imageMoveAnimation.setDuration(200);
-                    PhotoViewer.this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
-                        public void onAnimationStart(Animator animation) {
-                        }
-
-                        public void onAnimationEnd(Animator animation) {
-                            PhotoViewer.this.photoFilterView.init();
-                            PhotoViewer.this.imageMoveAnimation = null;
-                            PhotoViewer.this.currentEditMode = i;
-                            PhotoViewer.this.animateToScale = 1.0f;
-                            PhotoViewer.this.animateToX = 0.0f;
-                            PhotoViewer.this.animateToY = 0.0f;
-                            PhotoViewer.this.scale = 1.0f;
-                            PhotoViewer.this.updateMinMax(PhotoViewer.this.scale);
-                            PhotoViewer.this.padImageForHorizontalInsets = true;
-                            PhotoViewer.this.containerView.invalidate();
-                            if (PhotoViewer.this.sendPhotoType == 1) {
-                                PhotoViewer.this.photoCropView.reset();
-                            }
-                        }
-                    });
-                    PhotoViewer.this.imageMoveAnimation.start();
-                }
-            });
-            this.changeModeAnimation.start();
-        } else if (mode == 3) {
-            if (this.photoPaintView == null) {
-                this.photoPaintView = new PhotoPaintView(this.parentActivity, this.centerImage.getBitmap(), this.centerImage.getOrientation());
-                this.containerView.addView(this.photoPaintView, LayoutHelper.createFrame(-1, -1.0f));
-                this.photoPaintView.getDoneTextView().setOnClickListener(new PhotoViewer$$Lambda$31(this));
-                this.photoPaintView.getCancelTextView().setOnClickListener(new PhotoViewer$$Lambda$32(this));
-                this.photoPaintView.getColorPicker().setTranslationY((float) AndroidUtilities.dp(126.0f));
-                this.photoPaintView.getToolsView().setTranslationY((float) AndroidUtilities.dp(126.0f));
-            }
-            this.changeModeAnimation = new AnimatorSet();
-            arrayList = new ArrayList();
-            arrayList.add(ObjectAnimator.ofFloat(this.pickerView, View.TRANSLATION_Y, new float[]{0.0f, (float) AndroidUtilities.dp(96.0f)}));
-            arrayList.add(ObjectAnimator.ofFloat(this.pickerViewSendButton, View.TRANSLATION_Y, new float[]{0.0f, (float) AndroidUtilities.dp(96.0f)}));
-            arrayList.add(ObjectAnimator.ofFloat(this.actionBar, View.TRANSLATION_Y, new float[]{0.0f, (float) (-this.actionBar.getHeight())}));
-            if (this.needCaptionLayout) {
-                arrayList.add(ObjectAnimator.ofFloat(this.captionTextView, View.TRANSLATION_Y, new float[]{0.0f, (float) AndroidUtilities.dp(96.0f)}));
-            }
-            if (this.sendPhotoType == 0 || this.sendPhotoType == 4) {
-                fArr = new float[2];
-                arrayList.add(ObjectAnimator.ofFloat(this.checkImageView, View.ALPHA, new float[]{1.0f, 0.0f}));
-                fArr = new float[2];
-                arrayList.add(ObjectAnimator.ofFloat(this.photosCounterView, View.ALPHA, new float[]{1.0f, 0.0f}));
-            } else if (this.sendPhotoType == 1) {
-                fArr = new float[2];
-                arrayList.add(ObjectAnimator.ofFloat(this.photoCropView, View.ALPHA, new float[]{1.0f, 0.0f}));
-            }
-            if (this.selectedPhotosListView.getVisibility() == 0) {
-                fArr = new float[2];
-                arrayList.add(ObjectAnimator.ofFloat(this.selectedPhotosListView, View.ALPHA, new float[]{1.0f, 0.0f}));
-            }
-            if (this.cameraItem.getTag() != null) {
-                fArr = new float[2];
-                arrayList.add(ObjectAnimator.ofFloat(this.cameraItem, View.ALPHA, new float[]{1.0f, 0.0f}));
-            }
-            this.changeModeAnimation.playTogether(arrayList);
-            this.changeModeAnimation.setDuration(200);
-            i = mode;
-            this.changeModeAnimation.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animation) {
-                    PhotoViewer.this.changeModeAnimation = null;
-                    PhotoViewer.this.pickerView.setVisibility(8);
-                    PhotoViewer.this.pickerViewSendButton.setVisibility(8);
-                    PhotoViewer.this.cameraItem.setVisibility(8);
-                    PhotoViewer.this.selectedPhotosListView.setVisibility(8);
-                    PhotoViewer.this.selectedPhotosListView.setAlpha(0.0f);
-                    PhotoViewer.this.selectedPhotosListView.setTranslationY((float) (-AndroidUtilities.dp(10.0f)));
-                    PhotoViewer.this.photosCounterView.setRotationX(0.0f);
-                    PhotoViewer.this.selectedPhotosListView.setEnabled(false);
-                    PhotoViewer.this.isPhotosListViewVisible = false;
-                    if (PhotoViewer.this.needCaptionLayout) {
-                        PhotoViewer.this.captionTextView.setVisibility(4);
-                    }
-                    if (PhotoViewer.this.sendPhotoType == 0 || PhotoViewer.this.sendPhotoType == 4 || ((PhotoViewer.this.sendPhotoType == 2 || PhotoViewer.this.sendPhotoType == 5) && PhotoViewer.this.imagesArrLocals.size() > 1)) {
-                        PhotoViewer.this.checkImageView.setVisibility(8);
-                        PhotoViewer.this.photosCounterView.setVisibility(8);
-                    }
-                    if (PhotoViewer.this.centerImage.getBitmap() != null) {
-                        float scale;
-                        float newScale;
-                        int bitmapWidth = PhotoViewer.this.centerImage.getBitmapWidth();
-                        int bitmapHeight = PhotoViewer.this.centerImage.getBitmapHeight();
-                        float scaleX = ((float) PhotoViewer.this.getContainerViewWidth()) / ((float) bitmapWidth);
-                        float scaleY = ((float) PhotoViewer.this.getContainerViewHeight()) / ((float) bitmapHeight);
-                        float newScaleX = ((float) PhotoViewer.this.getContainerViewWidth(3)) / ((float) bitmapWidth);
-                        float newScaleY = ((float) PhotoViewer.this.getContainerViewHeight(3)) / ((float) bitmapHeight);
-                        if (scaleX > scaleY) {
-                            scale = scaleY;
-                        } else {
-                            scale = scaleX;
-                        }
-                        if (newScaleX > newScaleY) {
-                            newScale = newScaleY;
-                        } else {
-                            newScale = newScaleX;
-                        }
-                        PhotoViewer.this.animateToScale = newScale / scale;
-                        PhotoViewer.this.animateToX = (float) ((PhotoViewer.this.getLeftInset() / 2) - (PhotoViewer.this.getRightInset() / 2));
-                        PhotoViewer.this.animateToY = (float) ((VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight / 2 : 0) + (-AndroidUtilities.dp(44.0f)));
-                        PhotoViewer.this.animationStartTime = System.currentTimeMillis();
-                        PhotoViewer.this.zoomAnimation = true;
-                    }
-                    PhotoViewer.this.imageMoveAnimation = new AnimatorSet();
-                    AnimatorSet access$11600 = PhotoViewer.this.imageMoveAnimation;
-                    Animator[] animatorArr = new Animator[3];
-                    float[] fArr = new float[2];
-                    animatorArr[0] = ObjectAnimator.ofFloat(PhotoViewer.this, AnimationProperties.PHOTO_VIEWER_ANIMATION_VALUE, new float[]{0.0f, 1.0f});
-                    animatorArr[1] = ObjectAnimator.ofFloat(PhotoViewer.this.photoPaintView.getColorPicker(), View.TRANSLATION_Y, new float[]{(float) AndroidUtilities.dp(126.0f), 0.0f});
-                    animatorArr[2] = ObjectAnimator.ofFloat(PhotoViewer.this.photoPaintView.getToolsView(), View.TRANSLATION_Y, new float[]{(float) AndroidUtilities.dp(126.0f), 0.0f});
-                    access$11600.playTogether(animatorArr);
-                    PhotoViewer.this.imageMoveAnimation.setDuration(200);
-                    PhotoViewer.this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
-                        public void onAnimationStart(Animator animation) {
-                        }
-
-                        public void onAnimationEnd(Animator animation) {
-                            PhotoViewer.this.photoPaintView.init();
-                            PhotoViewer.this.imageMoveAnimation = null;
-                            PhotoViewer.this.currentEditMode = i;
-                            PhotoViewer.this.animateToScale = 1.0f;
-                            PhotoViewer.this.animateToX = 0.0f;
-                            PhotoViewer.this.animateToY = 0.0f;
-                            PhotoViewer.this.scale = 1.0f;
-                            PhotoViewer.this.updateMinMax(PhotoViewer.this.scale);
-                            PhotoViewer.this.padImageForHorizontalInsets = true;
-                            PhotoViewer.this.containerView.invalidate();
-                            if (PhotoViewer.this.sendPhotoType == 1) {
-                                PhotoViewer.this.photoCropView.reset();
-                            }
-                        }
-                    });
-                    PhotoViewer.this.imageMoveAnimation.start();
-                }
-            });
-            this.changeModeAnimation.start();
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:80:0x02f3  */
+    /* JADX WARNING: Removed duplicated region for block: B:79:0x02e6  */
+    /* JADX WARNING: Removed duplicated region for block: B:79:0x02e6  */
+    /* JADX WARNING: Removed duplicated region for block: B:80:0x02f3  */
+    private void switchToEditMode(int r18) {
+        /*
+        r17 = this;
+        r0 = r17;
+        r1 = r18;
+        r2 = r0.currentEditMode;
+        if (r2 == r1) goto L_0x0557;
+    L_0x0008:
+        r2 = r0.centerImage;
+        r2 = r2.getBitmap();
+        if (r2 == 0) goto L_0x0557;
+    L_0x0010:
+        r2 = r0.changeModeAnimation;
+        if (r2 != 0) goto L_0x0557;
+    L_0x0014:
+        r2 = r0.imageMoveAnimation;
+        if (r2 != 0) goto L_0x0557;
+    L_0x0018:
+        r2 = r0.photoProgressViews;
+        r3 = 0;
+        r2 = r2[r3];
+        r2 = r2.backgroundState;
+        r4 = -1;
+        if (r2 != r4) goto L_0x0557;
+    L_0x0024:
+        r2 = r0.captionEditText;
+        r2 = r2.getTag();
+        if (r2 == 0) goto L_0x002e;
+    L_0x002c:
+        goto L_0x0557;
+    L_0x002e:
+        r2 = NUM; // 0x433a0000 float:186.0 double:5.57244073E-315;
+        r5 = 3;
+        r6 = NUM; // 0x42fCLASSNAME float:126.0 double:5.552365696E-315;
+        r9 = 4;
+        r10 = 0;
+        r11 = 1;
+        r12 = 2;
+        if (r1 != 0) goto L_0x019f;
+    L_0x0039:
+        r4 = r0.centerImage;
+        r4 = r4.getBitmap();
+        if (r4 == 0) goto L_0x00c9;
+    L_0x0041:
+        r4 = r0.centerImage;
+        r4 = r4.getBitmapWidth();
+        r13 = r0.centerImage;
+        r13 = r13.getBitmapHeight();
+        r14 = r17.getContainerViewWidth();
+        r14 = (float) r14;
+        r4 = (float) r4;
+        r14 = r14 / r4;
+        r15 = r17.getContainerViewHeight();
+        r15 = (float) r15;
+        r13 = (float) r13;
+        r15 = r15 / r13;
+        r7 = r0.getContainerViewWidth(r3);
+        r7 = (float) r7;
+        r7 = r7 / r4;
+        r4 = r0.getContainerViewHeight(r3);
+        r4 = (float) r4;
+        r4 = r4 / r13;
+        r8 = (r14 > r15 ? 1 : (r14 == r15 ? 0 : -1));
+        if (r8 <= 0) goto L_0x006c;
+    L_0x006b:
+        r14 = r15;
+    L_0x006c:
+        r8 = (r7 > r4 ? 1 : (r7 == r4 ? 0 : -1));
+        if (r8 <= 0) goto L_0x0071;
+    L_0x0070:
+        goto L_0x0072;
+    L_0x0071:
+        r4 = r7;
+    L_0x0072:
+        r7 = r0.sendPhotoType;
+        if (r7 != r11) goto L_0x007a;
+    L_0x0076:
+        r0.setCropTranslations(r11);
+        goto L_0x00c9;
+    L_0x007a:
+        r4 = r4 / r14;
+        r0.animateToScale = r4;
+        r0.animateToX = r10;
+        r4 = r17.getLeftInset();
+        r4 = r4 / r12;
+        r7 = r17.getRightInset();
+        r7 = r7 / r12;
+        r4 = r4 - r7;
+        r4 = (float) r4;
+        r0.translationX = r4;
+        r4 = r0.currentEditMode;
+        if (r4 != r11) goto L_0x009b;
+    L_0x0091:
+        r4 = NUM; // 0x42680000 float:58.0 double:5.50444465E-315;
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r4 = (float) r4;
+        r0.animateToY = r4;
+        goto L_0x00b2;
+    L_0x009b:
+        if (r4 != r12) goto L_0x00a7;
+    L_0x009d:
+        r4 = NUM; // 0x42b80000 float:92.0 double:5.530347917E-315;
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r4 = (float) r4;
+        r0.animateToY = r4;
+        goto L_0x00b2;
+    L_0x00a7:
+        if (r4 != r5) goto L_0x00b2;
+    L_0x00a9:
+        r4 = NUM; // 0x42300000 float:44.0 double:5.48631236E-315;
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
+        r4 = (float) r4;
+        r0.animateToY = r4;
+    L_0x00b2:
+        r4 = android.os.Build.VERSION.SDK_INT;
+        r7 = 21;
+        if (r4 < r7) goto L_0x00c1;
+    L_0x00b8:
+        r4 = r0.animateToY;
+        r7 = org.telegram.messenger.AndroidUtilities.statusBarHeight;
+        r7 = r7 / r12;
+        r7 = (float) r7;
+        r4 = r4 - r7;
+        r0.animateToY = r4;
+    L_0x00c1:
+        r7 = java.lang.System.currentTimeMillis();
+        r0.animationStartTime = r7;
+        r0.zoomAnimation = r11;
+    L_0x00c9:
+        r0.padImageForHorizontalInsets = r3;
+        r4 = new android.animation.AnimatorSet;
+        r4.<init>();
+        r0.imageMoveAnimation = r4;
+        r4 = new java.util.ArrayList;
+        r4.<init>(r9);
+        r7 = r0.currentEditMode;
+        if (r7 != r11) goto L_0x010f;
+    L_0x00db:
+        r2 = r0.editorDoneLayout;
+        r5 = android.view.View.TRANSLATION_Y;
+        r6 = new float[r11];
+        r7 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
+        r7 = org.telegram.messenger.AndroidUtilities.dp(r7);
+        r7 = (float) r7;
+        r6[r3] = r7;
+        r2 = android.animation.ObjectAnimator.ofFloat(r2, r5, r6);
+        r4.add(r2);
+        r2 = org.telegram.ui.Components.AnimationProperties.PHOTO_VIEWER_ANIMATION_VALUE;
+        r5 = new float[r12];
+        r5 = {0, NUM};
+        r2 = android.animation.ObjectAnimator.ofFloat(r0, r2, r5);
+        r4.add(r2);
+        r2 = r0.photoCropView;
+        r5 = android.view.View.ALPHA;
+        r6 = new float[r11];
+        r6[r3] = r10;
+        r2 = android.animation.ObjectAnimator.ofFloat(r2, r5, r6);
+        r4.add(r2);
+        goto L_0x0182;
+    L_0x010f:
+        if (r7 != r12) goto L_0x013d;
+    L_0x0111:
+        r5 = r0.photoFilterView;
+        r5.shutdown();
+        r5 = r0.photoFilterView;
+        r5 = r5.getToolsView();
+        r6 = android.view.View.TRANSLATION_Y;
+        r7 = new float[r11];
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
+        r2 = (float) r2;
+        r7[r3] = r2;
+        r2 = android.animation.ObjectAnimator.ofFloat(r5, r6, r7);
+        r4.add(r2);
+        r2 = org.telegram.ui.Components.AnimationProperties.PHOTO_VIEWER_ANIMATION_VALUE;
+        r3 = new float[r12];
+        r3 = {0, NUM};
+        r2 = android.animation.ObjectAnimator.ofFloat(r0, r2, r3);
+        r4.add(r2);
+        goto L_0x0182;
+    L_0x013d:
+        if (r7 != r5) goto L_0x0182;
+    L_0x013f:
+        r2 = r0.photoPaintView;
+        r2.shutdown();
+        r2 = r0.photoPaintView;
+        r2 = r2.getToolsView();
+        r5 = android.view.View.TRANSLATION_Y;
+        r7 = new float[r11];
+        r8 = org.telegram.messenger.AndroidUtilities.dp(r6);
+        r8 = (float) r8;
+        r7[r3] = r8;
+        r2 = android.animation.ObjectAnimator.ofFloat(r2, r5, r7);
+        r4.add(r2);
+        r2 = r0.photoPaintView;
+        r2 = r2.getColorPicker();
+        r5 = android.view.View.TRANSLATION_Y;
+        r7 = new float[r11];
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
+        r6 = (float) r6;
+        r7[r3] = r6;
+        r2 = android.animation.ObjectAnimator.ofFloat(r2, r5, r7);
+        r4.add(r2);
+        r2 = org.telegram.ui.Components.AnimationProperties.PHOTO_VIEWER_ANIMATION_VALUE;
+        r3 = new float[r12];
+        r3 = {0, NUM};
+        r2 = android.animation.ObjectAnimator.ofFloat(r0, r2, r3);
+        r4.add(r2);
+    L_0x0182:
+        r2 = r0.imageMoveAnimation;
+        r2.playTogether(r4);
+        r2 = r0.imageMoveAnimation;
+        r3 = 200; // 0xc8 float:2.8E-43 double:9.9E-322;
+        r2.setDuration(r3);
+        r2 = r0.imageMoveAnimation;
+        r3 = new org.telegram.ui.PhotoViewer$27;
+        r3.<init>(r1);
+        r2.addListener(r3);
+        r1 = r0.imageMoveAnimation;
+        r1.start();
+        goto L_0x0557;
+    L_0x019f:
+        r7 = NUM; // 0x42CLASSNAME float:96.0 double:5.532938244E-315;
+        if (r1 != r11) goto L_0x02a1;
+    L_0x01a3:
+        r17.createCropView();
+        r2 = r0.photoCropView;
+        r2.onAppear();
+        r2 = r0.editorDoneLayout;
+        r2 = r2.doneButton;
+        r4 = NUM; // 0x7f0d02f5 float:1.874365E38 double:1.0531301516E-314;
+        r5 = "Crop";
+        r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
+        r2.setText(r4);
+        r2 = r0.editorDoneLayout;
+        r2 = r2.doneButton;
+        r4 = -11420173; // 0xfffffffffvar_bdf3 float:-2.7879492E38 double:NaN;
+        r2.setTextColor(r4);
+        r2 = new android.animation.AnimatorSet;
+        r2.<init>();
+        r0.changeModeAnimation = r2;
+        r2 = new java.util.ArrayList;
+        r2.<init>();
+        r4 = r0.pickerView;
+        r5 = android.view.View.TRANSLATION_Y;
+        r6 = new float[r12];
+        r6[r3] = r10;
+        r8 = org.telegram.messenger.AndroidUtilities.dp(r7);
+        r8 = (float) r8;
+        r6[r11] = r8;
+        r4 = android.animation.ObjectAnimator.ofFloat(r4, r5, r6);
+        r2.add(r4);
+        r4 = r0.pickerViewSendButton;
+        r5 = android.view.View.TRANSLATION_Y;
+        r6 = new float[r12];
+        r6[r3] = r10;
+        r8 = org.telegram.messenger.AndroidUtilities.dp(r7);
+        r8 = (float) r8;
+        r6[r11] = r8;
+        r4 = android.animation.ObjectAnimator.ofFloat(r4, r5, r6);
+        r2.add(r4);
+        r4 = r0.actionBar;
+        r5 = android.view.View.TRANSLATION_Y;
+        r6 = new float[r12];
+        r6[r3] = r10;
+        r8 = r4.getHeight();
+        r8 = -r8;
+        r8 = (float) r8;
+        r6[r11] = r8;
+        r4 = android.animation.ObjectAnimator.ofFloat(r4, r5, r6);
+        r2.add(r4);
+        r4 = r0.needCaptionLayout;
+        if (r4 == 0) goto L_0x022e;
+    L_0x0218:
+        r4 = r0.captionTextView;
+        r5 = android.view.View.TRANSLATION_Y;
+        r6 = new float[r12];
+        r6[r3] = r10;
+        r3 = org.telegram.messenger.AndroidUtilities.dp(r7);
+        r3 = (float) r3;
+        r6[r11] = r3;
+        r3 = android.animation.ObjectAnimator.ofFloat(r4, r5, r6);
+        r2.add(r3);
+    L_0x022e:
+        r3 = r0.sendPhotoType;
+        if (r3 == 0) goto L_0x0234;
+    L_0x0232:
+        if (r3 != r9) goto L_0x0254;
+    L_0x0234:
+        r3 = r0.checkImageView;
+        r4 = android.view.View.ALPHA;
+        r5 = new float[r12];
+        r5 = {NUM, 0};
+        r3 = android.animation.ObjectAnimator.ofFloat(r3, r4, r5);
+        r2.add(r3);
+        r3 = r0.photosCounterView;
+        r4 = android.view.View.ALPHA;
+        r5 = new float[r12];
+        r5 = {NUM, 0};
+        r3 = android.animation.ObjectAnimator.ofFloat(r3, r4, r5);
+        r2.add(r3);
+    L_0x0254:
+        r3 = r0.selectedPhotosListView;
+        r3 = r3.getVisibility();
+        if (r3 != 0) goto L_0x026c;
+    L_0x025c:
+        r3 = r0.selectedPhotosListView;
+        r4 = android.view.View.ALPHA;
+        r5 = new float[r12];
+        r5 = {NUM, 0};
+        r3 = android.animation.ObjectAnimator.ofFloat(r3, r4, r5);
+        r2.add(r3);
+    L_0x026c:
+        r3 = r0.cameraItem;
+        r3 = r3.getTag();
+        if (r3 == 0) goto L_0x0284;
+    L_0x0274:
+        r3 = r0.cameraItem;
+        r4 = android.view.View.ALPHA;
+        r5 = new float[r12];
+        r5 = {NUM, 0};
+        r3 = android.animation.ObjectAnimator.ofFloat(r3, r4, r5);
+        r2.add(r3);
+    L_0x0284:
+        r3 = r0.changeModeAnimation;
+        r3.playTogether(r2);
+        r2 = r0.changeModeAnimation;
+        r3 = 200; // 0xc8 float:2.8E-43 double:9.9E-322;
+        r2.setDuration(r3);
+        r2 = r0.changeModeAnimation;
+        r3 = new org.telegram.ui.PhotoViewer$28;
+        r3.<init>(r1);
+        r2.addListener(r3);
+        r1 = r0.changeModeAnimation;
+        r1.start();
+        goto L_0x0557;
+    L_0x02a1:
+        r8 = -NUM; // 0xffffffffbvar_ float:-1.0 double:NaN;
+        if (r1 != r12) goto L_0x040b;
+    L_0x02a5:
+        r5 = r0.photoFilterView;
+        if (r5 != 0) goto L_0x0335;
+    L_0x02a9:
+        r5 = r0.imagesArrLocals;
+        r5 = r5.isEmpty();
+        r6 = 0;
+        if (r5 != 0) goto L_0x02e2;
+    L_0x02b2:
+        r5 = r0.imagesArrLocals;
+        r13 = r0.currentIndex;
+        r5 = r5.get(r13);
+        r13 = r5 instanceof org.telegram.messenger.MediaController.PhotoEntry;
+        if (r13 == 0) goto L_0x02d7;
+    L_0x02be:
+        r5 = (org.telegram.messenger.MediaController.PhotoEntry) r5;
+        r13 = r5.imagePath;
+        if (r13 != 0) goto L_0x02ce;
+    L_0x02c4:
+        r6 = r5.path;
+        r13 = r5.savedFilterState;
+        r16 = r13;
+        r13 = r6;
+        r6 = r16;
+        goto L_0x02cf;
+    L_0x02ce:
+        r13 = r6;
+    L_0x02cf:
+        r5 = r5.orientation;
+        r16 = r13;
+        r13 = r5;
+        r5 = r16;
+        goto L_0x02e4;
+    L_0x02d7:
+        r13 = r5 instanceof org.telegram.messenger.MediaController.SearchImage;
+        if (r13 == 0) goto L_0x02e2;
+    L_0x02db:
+        r5 = (org.telegram.messenger.MediaController.SearchImage) r5;
+        r6 = r5.savedFilterState;
+        r5 = r5.imageUrl;
+        goto L_0x02e3;
+    L_0x02e2:
+        r5 = r6;
+    L_0x02e3:
+        r13 = 0;
+    L_0x02e4:
+        if (r6 != 0) goto L_0x02f3;
+    L_0x02e6:
+        r5 = r0.centerImage;
+        r5 = r5.getBitmap();
+        r13 = r0.centerImage;
+        r13 = r13.getOrientation();
+        goto L_0x02f7;
+    L_0x02f3:
+        r5 = android.graphics.BitmapFactory.decodeFile(r5);
+    L_0x02f7:
+        r14 = new org.telegram.ui.Components.PhotoFilterView;
+        r15 = r0.parentActivity;
+        r14.<init>(r15, r5, r13, r6);
+        r0.photoFilterView = r14;
+        r5 = r0.containerView;
+        r6 = r0.photoFilterView;
+        r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r8);
+        r5.addView(r6, r4);
+        r4 = r0.photoFilterView;
+        r4 = r4.getDoneTextView();
+        r5 = new org.telegram.ui.-$$Lambda$PhotoViewer$_kiq87m6DEbP6Rtuq9Z0xaIwbfE;
+        r5.<init>(r0);
+        r4.setOnClickListener(r5);
+        r4 = r0.photoFilterView;
+        r4 = r4.getCancelTextView();
+        r5 = new org.telegram.ui.-$$Lambda$PhotoViewer$2VWEpko1xopXpDQMDqF1erZanWU;
+        r5.<init>(r0);
+        r4.setOnClickListener(r5);
+        r4 = r0.photoFilterView;
+        r4 = r4.getToolsView();
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
+        r2 = (float) r2;
+        r4.setTranslationY(r2);
+    L_0x0335:
+        r2 = new android.animation.AnimatorSet;
+        r2.<init>();
+        r0.changeModeAnimation = r2;
+        r2 = new java.util.ArrayList;
+        r2.<init>();
+        r4 = r0.pickerView;
+        r5 = android.view.View.TRANSLATION_Y;
+        r6 = new float[r12];
+        r6[r3] = r10;
+        r8 = org.telegram.messenger.AndroidUtilities.dp(r7);
+        r8 = (float) r8;
+        r6[r11] = r8;
+        r4 = android.animation.ObjectAnimator.ofFloat(r4, r5, r6);
+        r2.add(r4);
+        r4 = r0.pickerViewSendButton;
+        r5 = android.view.View.TRANSLATION_Y;
+        r6 = new float[r12];
+        r6[r3] = r10;
+        r7 = org.telegram.messenger.AndroidUtilities.dp(r7);
+        r7 = (float) r7;
+        r6[r11] = r7;
+        r4 = android.animation.ObjectAnimator.ofFloat(r4, r5, r6);
+        r2.add(r4);
+        r4 = r0.actionBar;
+        r5 = android.view.View.TRANSLATION_Y;
+        r6 = new float[r12];
+        r6[r3] = r10;
+        r3 = r4.getHeight();
+        r3 = -r3;
+        r3 = (float) r3;
+        r6[r11] = r3;
+        r3 = android.animation.ObjectAnimator.ofFloat(r4, r5, r6);
+        r2.add(r3);
+        r3 = r0.sendPhotoType;
+        if (r3 == 0) goto L_0x039e;
+    L_0x0388:
+        if (r3 != r9) goto L_0x038b;
+    L_0x038a:
+        goto L_0x039e;
+    L_0x038b:
+        if (r3 != r11) goto L_0x03be;
+    L_0x038d:
+        r3 = r0.photoCropView;
+        r4 = android.view.View.ALPHA;
+        r5 = new float[r12];
+        r5 = {NUM, 0};
+        r3 = android.animation.ObjectAnimator.ofFloat(r3, r4, r5);
+        r2.add(r3);
+        goto L_0x03be;
+    L_0x039e:
+        r3 = r0.checkImageView;
+        r4 = android.view.View.ALPHA;
+        r5 = new float[r12];
+        r5 = {NUM, 0};
+        r3 = android.animation.ObjectAnimator.ofFloat(r3, r4, r5);
+        r2.add(r3);
+        r3 = r0.photosCounterView;
+        r4 = android.view.View.ALPHA;
+        r5 = new float[r12];
+        r5 = {NUM, 0};
+        r3 = android.animation.ObjectAnimator.ofFloat(r3, r4, r5);
+        r2.add(r3);
+    L_0x03be:
+        r3 = r0.selectedPhotosListView;
+        r3 = r3.getVisibility();
+        if (r3 != 0) goto L_0x03d6;
+    L_0x03c6:
+        r3 = r0.selectedPhotosListView;
+        r4 = android.view.View.ALPHA;
+        r5 = new float[r12];
+        r5 = {NUM, 0};
+        r3 = android.animation.ObjectAnimator.ofFloat(r3, r4, r5);
+        r2.add(r3);
+    L_0x03d6:
+        r3 = r0.cameraItem;
+        r3 = r3.getTag();
+        if (r3 == 0) goto L_0x03ee;
+    L_0x03de:
+        r3 = r0.cameraItem;
+        r4 = android.view.View.ALPHA;
+        r5 = new float[r12];
+        r5 = {NUM, 0};
+        r3 = android.animation.ObjectAnimator.ofFloat(r3, r4, r5);
+        r2.add(r3);
+    L_0x03ee:
+        r3 = r0.changeModeAnimation;
+        r3.playTogether(r2);
+        r2 = r0.changeModeAnimation;
+        r3 = 200; // 0xc8 float:2.8E-43 double:9.9E-322;
+        r2.setDuration(r3);
+        r2 = r0.changeModeAnimation;
+        r3 = new org.telegram.ui.PhotoViewer$29;
+        r3.<init>(r1);
+        r2.addListener(r3);
+        r1 = r0.changeModeAnimation;
+        r1.start();
+        goto L_0x0557;
+    L_0x040b:
+        if (r1 != r5) goto L_0x0557;
+    L_0x040d:
+        r2 = r0.photoPaintView;
+        if (r2 != 0) goto L_0x0469;
+    L_0x0411:
+        r2 = new org.telegram.ui.Components.PhotoPaintView;
+        r5 = r0.parentActivity;
+        r13 = r0.centerImage;
+        r13 = r13.getBitmap();
+        r14 = r0.centerImage;
+        r14 = r14.getOrientation();
+        r2.<init>(r5, r13, r14);
+        r0.photoPaintView = r2;
+        r2 = r0.containerView;
+        r5 = r0.photoPaintView;
+        r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r8);
+        r2.addView(r5, r4);
+        r2 = r0.photoPaintView;
+        r2 = r2.getDoneTextView();
+        r4 = new org.telegram.ui.-$$Lambda$PhotoViewer$iPzcqyK9klw8fE_zuZB7xfys4J8;
+        r4.<init>(r0);
+        r2.setOnClickListener(r4);
+        r2 = r0.photoPaintView;
+        r2 = r2.getCancelTextView();
+        r4 = new org.telegram.ui.-$$Lambda$PhotoViewer$Ws0W6J-E4CCAikNDkwUaS7ufRkg;
+        r4.<init>(r0);
+        r2.setOnClickListener(r4);
+        r2 = r0.photoPaintView;
+        r2 = r2.getColorPicker();
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r6);
+        r4 = (float) r4;
+        r2.setTranslationY(r4);
+        r2 = r0.photoPaintView;
+        r2 = r2.getToolsView();
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r6);
+        r4 = (float) r4;
+        r2.setTranslationY(r4);
+    L_0x0469:
+        r2 = new android.animation.AnimatorSet;
+        r2.<init>();
+        r0.changeModeAnimation = r2;
+        r2 = new java.util.ArrayList;
+        r2.<init>();
+        r4 = r0.pickerView;
+        r5 = android.view.View.TRANSLATION_Y;
+        r6 = new float[r12];
+        r6[r3] = r10;
+        r8 = org.telegram.messenger.AndroidUtilities.dp(r7);
+        r8 = (float) r8;
+        r6[r11] = r8;
+        r4 = android.animation.ObjectAnimator.ofFloat(r4, r5, r6);
+        r2.add(r4);
+        r4 = r0.pickerViewSendButton;
+        r5 = android.view.View.TRANSLATION_Y;
+        r6 = new float[r12];
+        r6[r3] = r10;
+        r8 = org.telegram.messenger.AndroidUtilities.dp(r7);
+        r8 = (float) r8;
+        r6[r11] = r8;
+        r4 = android.animation.ObjectAnimator.ofFloat(r4, r5, r6);
+        r2.add(r4);
+        r4 = r0.actionBar;
+        r5 = android.view.View.TRANSLATION_Y;
+        r6 = new float[r12];
+        r6[r3] = r10;
+        r8 = r4.getHeight();
+        r8 = -r8;
+        r8 = (float) r8;
+        r6[r11] = r8;
+        r4 = android.animation.ObjectAnimator.ofFloat(r4, r5, r6);
+        r2.add(r4);
+        r4 = r0.needCaptionLayout;
+        if (r4 == 0) goto L_0x04d2;
+    L_0x04bc:
+        r4 = r0.captionTextView;
+        r5 = android.view.View.TRANSLATION_Y;
+        r6 = new float[r12];
+        r6[r3] = r10;
+        r3 = org.telegram.messenger.AndroidUtilities.dp(r7);
+        r3 = (float) r3;
+        r6[r11] = r3;
+        r3 = android.animation.ObjectAnimator.ofFloat(r4, r5, r6);
+        r2.add(r3);
+    L_0x04d2:
+        r3 = r0.sendPhotoType;
+        if (r3 == 0) goto L_0x04ec;
+    L_0x04d6:
+        if (r3 != r9) goto L_0x04d9;
+    L_0x04d8:
+        goto L_0x04ec;
+    L_0x04d9:
+        if (r3 != r11) goto L_0x050c;
+    L_0x04db:
+        r3 = r0.photoCropView;
+        r4 = android.view.View.ALPHA;
+        r5 = new float[r12];
+        r5 = {NUM, 0};
+        r3 = android.animation.ObjectAnimator.ofFloat(r3, r4, r5);
+        r2.add(r3);
+        goto L_0x050c;
+    L_0x04ec:
+        r3 = r0.checkImageView;
+        r4 = android.view.View.ALPHA;
+        r5 = new float[r12];
+        r5 = {NUM, 0};
+        r3 = android.animation.ObjectAnimator.ofFloat(r3, r4, r5);
+        r2.add(r3);
+        r3 = r0.photosCounterView;
+        r4 = android.view.View.ALPHA;
+        r5 = new float[r12];
+        r5 = {NUM, 0};
+        r3 = android.animation.ObjectAnimator.ofFloat(r3, r4, r5);
+        r2.add(r3);
+    L_0x050c:
+        r3 = r0.selectedPhotosListView;
+        r3 = r3.getVisibility();
+        if (r3 != 0) goto L_0x0524;
+    L_0x0514:
+        r3 = r0.selectedPhotosListView;
+        r4 = android.view.View.ALPHA;
+        r5 = new float[r12];
+        r5 = {NUM, 0};
+        r3 = android.animation.ObjectAnimator.ofFloat(r3, r4, r5);
+        r2.add(r3);
+    L_0x0524:
+        r3 = r0.cameraItem;
+        r3 = r3.getTag();
+        if (r3 == 0) goto L_0x053c;
+    L_0x052c:
+        r3 = r0.cameraItem;
+        r4 = android.view.View.ALPHA;
+        r5 = new float[r12];
+        r5 = {NUM, 0};
+        r3 = android.animation.ObjectAnimator.ofFloat(r3, r4, r5);
+        r2.add(r3);
+    L_0x053c:
+        r3 = r0.changeModeAnimation;
+        r3.playTogether(r2);
+        r2 = r0.changeModeAnimation;
+        r3 = 200; // 0xc8 float:2.8E-43 double:9.9E-322;
+        r2.setDuration(r3);
+        r2 = r0.changeModeAnimation;
+        r3 = new org.telegram.ui.PhotoViewer$30;
+        r3.<init>(r1);
+        r2.addListener(r3);
+        r1 = r0.changeModeAnimation;
+        r1.start();
+    L_0x0557:
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.switchToEditMode(int):void");
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$switchToEditMode$35$PhotoViewer(View v) {
+    public /* synthetic */ void lambda$switchToEditMode$35$PhotoViewer(View view) {
         applyCurrentEditMode();
         switchToEditMode(0);
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$switchToEditMode$37$PhotoViewer(View v) {
-        if (!this.photoFilterView.hasChanges()) {
-            switchToEditMode(0);
-        } else if (this.parentActivity != null) {
-            Builder builder = new Builder(this.parentActivity);
-            builder.setMessage(LocaleController.getString("DiscardChanges", NUM));
-            builder.setTitle(LocaleController.getString("AppName", NUM));
-            builder.setPositiveButton(LocaleController.getString("OK", NUM), new PhotoViewer$$Lambda$42(this));
-            builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
-            showAlertDialog(builder);
+    public /* synthetic */ void lambda$switchToEditMode$37$PhotoViewer(View view) {
+        if (this.photoFilterView.hasChanges()) {
+            Context context = this.parentActivity;
+            if (context != null) {
+                Builder builder = new Builder(context);
+                builder.setMessage(LocaleController.getString("DiscardChanges", NUM));
+                builder.setTitle(LocaleController.getString("AppName", NUM));
+                builder.setPositiveButton(LocaleController.getString("OK", NUM), new -$$Lambda$PhotoViewer$FGSVMb30vu6rC6W9VRlBHbytWQc(this));
+                builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
+                showAlertDialog(builder);
+            } else {
+                return;
+            }
         }
-    }
-
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$null$36$PhotoViewer(DialogInterface dialogInterface, int i) {
         switchToEditMode(0);
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$switchToEditMode$38$PhotoViewer(View v) {
+    public /* synthetic */ void lambda$null$36$PhotoViewer(DialogInterface dialogInterface, int i) {
+        switchToEditMode(0);
+    }
+
+    public /* synthetic */ void lambda$switchToEditMode$38$PhotoViewer(View view) {
         applyCurrentEditMode();
         switchToEditMode(0);
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$null$39$PhotoViewer() {
+    public /* synthetic */ void lambda$null$39$PhotoViewer() {
         switchToEditMode(0);
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$switchToEditMode$40$PhotoViewer(View v) {
-        this.photoPaintView.maybeShowDismissalAlert(this, this.parentActivity, new PhotoViewer$$Lambda$41(this));
+    public /* synthetic */ void lambda$switchToEditMode$40$PhotoViewer(View view) {
+        this.photoPaintView.maybeShowDismissalAlert(this, this.parentActivity, new -$$Lambda$PhotoViewer$NZvIqbihVu7AhVHkylD9XeLLrzY(this));
     }
 
-    private void toggleCheckImageView(boolean show) {
-        float f;
-        float f2 = 1.0f;
+    private void toggleCheckImageView(boolean z) {
         AnimatorSet animatorSet = new AnimatorSet();
-        ArrayList<Animator> arrayList = new ArrayList();
+        ArrayList arrayList = new ArrayList();
         FrameLayout frameLayout = this.pickerView;
         Property property = View.ALPHA;
         float[] fArr = new float[1];
-        fArr[0] = show ? 1.0f : 0.0f;
+        float f = 1.0f;
+        fArr[0] = z ? 1.0f : 0.0f;
         arrayList.add(ObjectAnimator.ofFloat(frameLayout, property, fArr));
         ImageView imageView = this.pickerViewSendButton;
         property = View.ALPHA;
         fArr = new float[1];
-        if (show) {
-            f = 1.0f;
-        } else {
-            f = 0.0f;
-        }
-        fArr[0] = f;
+        fArr[0] = z ? 1.0f : 0.0f;
         arrayList.add(ObjectAnimator.ofFloat(imageView, property, fArr));
         if (this.needCaptionLayout) {
             TextView textView = this.captionTextView;
             property = View.ALPHA;
             fArr = new float[1];
-            if (show) {
-                f = 1.0f;
-            } else {
-                f = 0.0f;
-            }
-            fArr[0] = f;
+            fArr[0] = z ? 1.0f : 0.0f;
             arrayList.add(ObjectAnimator.ofFloat(textView, property, fArr));
         }
-        if (this.sendPhotoType == 0 || this.sendPhotoType == 4) {
+        int i = this.sendPhotoType;
+        if (i == 0 || i == 4) {
             CheckBox checkBox = this.checkImageView;
             property = View.ALPHA;
             fArr = new float[1];
-            if (show) {
-                f = 1.0f;
-            } else {
-                f = 0.0f;
-            }
-            fArr[0] = f;
+            fArr[0] = z ? 1.0f : 0.0f;
             arrayList.add(ObjectAnimator.ofFloat(checkBox, property, fArr));
             CounterView counterView = this.photosCounterView;
-            Property property2 = View.ALPHA;
+            property = View.ALPHA;
             float[] fArr2 = new float[1];
-            if (!show) {
-                f2 = 0.0f;
+            if (!z) {
+                f = 0.0f;
             }
-            fArr2[0] = f2;
-            arrayList.add(ObjectAnimator.ofFloat(counterView, property2, fArr2));
+            fArr2[0] = f;
+            arrayList.add(ObjectAnimator.ofFloat(counterView, property, fArr2));
         }
         animatorSet.playTogether(arrayList);
         animatorSet.setDuration(200);
         animatorSet.start();
     }
 
-    private void toggleMiniProgressInternal(final boolean show) {
-        if (show) {
+    private void toggleMiniProgressInternal(final boolean z) {
+        if (z) {
             this.miniProgressView.setVisibility(0);
         }
         this.miniProgressAnimator = new AnimatorSet();
@@ -5048,22 +6529,22 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         RadialProgressView radialProgressView = this.miniProgressView;
         Property property = View.ALPHA;
         float[] fArr = new float[1];
-        fArr[0] = show ? 1.0f : 0.0f;
+        fArr[0] = z ? 1.0f : 0.0f;
         animatorArr[0] = ObjectAnimator.ofFloat(radialProgressView, property, fArr);
         animatorSet.playTogether(animatorArr);
         this.miniProgressAnimator.setDuration(200);
         this.miniProgressAnimator.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animation) {
-                if (animation.equals(PhotoViewer.this.miniProgressAnimator)) {
-                    if (!show) {
+            public void onAnimationEnd(Animator animator) {
+                if (animator.equals(PhotoViewer.this.miniProgressAnimator)) {
+                    if (!z) {
                         PhotoViewer.this.miniProgressView.setVisibility(4);
                     }
                     PhotoViewer.this.miniProgressAnimator = null;
                 }
             }
 
-            public void onAnimationCancel(Animator animation) {
-                if (animation.equals(PhotoViewer.this.miniProgressAnimator)) {
+            public void onAnimationCancel(Animator animator) {
+                if (animator.equals(PhotoViewer.this.miniProgressAnimator)) {
                     PhotoViewer.this.miniProgressAnimator = null;
                 }
             }
@@ -5071,12 +6552,15 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         this.miniProgressAnimator.start();
     }
 
-    private void toggleMiniProgress(boolean show, boolean animated) {
-        if (animated) {
-            toggleMiniProgressInternal(show);
-            if (show) {
-                if (this.miniProgressAnimator != null) {
-                    this.miniProgressAnimator.cancel();
+    private void toggleMiniProgress(boolean z, boolean z2) {
+        int i = 0;
+        if (z2) {
+            toggleMiniProgressInternal(z);
+            AnimatorSet animatorSet;
+            if (z) {
+                animatorSet = this.miniProgressAnimator;
+                if (animatorSet != null) {
+                    animatorSet.cancel();
                     this.miniProgressAnimator = null;
                 }
                 AndroidUtilities.cancelRunOnUIThread(this.miniProgressShowRunnable);
@@ -5089,27 +6573,33 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 return;
             }
             AndroidUtilities.cancelRunOnUIThread(this.miniProgressShowRunnable);
-            if (this.miniProgressAnimator != null) {
-                this.miniProgressAnimator.cancel();
+            animatorSet = this.miniProgressAnimator;
+            if (animatorSet != null) {
+                animatorSet.cancel();
                 toggleMiniProgressInternal(false);
                 return;
             }
             return;
         }
-        if (this.miniProgressAnimator != null) {
-            this.miniProgressAnimator.cancel();
+        AnimatorSet animatorSet2 = this.miniProgressAnimator;
+        if (animatorSet2 != null) {
+            animatorSet2.cancel();
             this.miniProgressAnimator = null;
         }
-        this.miniProgressView.setAlpha(show ? 1.0f : 0.0f);
-        this.miniProgressView.setVisibility(show ? 0 : 4);
+        this.miniProgressView.setAlpha(z ? 1.0f : 0.0f);
+        RadialProgressView radialProgressView = this.miniProgressView;
+        if (!z) {
+            i = 4;
+        }
+        radialProgressView.setVisibility(i);
     }
 
-    private void toggleActionBar(final boolean show, boolean animated) {
-        float f = 1.0f;
-        if (this.actionBarAnimator != null) {
-            this.actionBarAnimator.cancel();
+    private void toggleActionBar(final boolean z, boolean z2) {
+        AnimatorSet animatorSet = this.actionBarAnimator;
+        if (animatorSet != null) {
+            animatorSet.cancel();
         }
-        if (show) {
+        if (z) {
             this.actionBar.setVisibility(0);
             if (this.bottomLayout.getTag() != null) {
                 this.bottomLayout.setVisibility(0);
@@ -5118,69 +6608,56 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 this.captionTextView.setVisibility(0);
             }
         }
-        this.isActionBarVisible = show;
+        this.isActionBarVisible = z;
         if (VERSION.SDK_INT >= 21 && this.sendPhotoType != 1) {
             int i = (this.containerView.getPaddingLeft() > 0 || this.containerView.getPaddingRight() > 0) ? 4098 : 0;
-            int flags = i | 4;
-            if (show) {
-                this.containerView.setSystemUiVisibility(this.containerView.getSystemUiVisibility() & (flags ^ -1));
+            int i2 = 4 | i;
+            FrameLayoutDrawer frameLayoutDrawer;
+            if (z) {
+                frameLayoutDrawer = this.containerView;
+                frameLayoutDrawer.setSystemUiVisibility((i2 ^ -1) & frameLayoutDrawer.getSystemUiVisibility());
             } else {
-                this.containerView.setSystemUiVisibility(this.containerView.getSystemUiVisibility() | flags);
+                frameLayoutDrawer = this.containerView;
+                frameLayoutDrawer.setSystemUiVisibility(i2 | frameLayoutDrawer.getSystemUiVisibility());
             }
         }
-        float f2;
-        TextView textView;
-        if (animated) {
-            ArrayList<Animator> arrayList = new ArrayList();
+        float f = 1.0f;
+        if (z2) {
+            ArrayList arrayList = new ArrayList();
             ActionBar actionBar = this.actionBar;
             Property property = View.ALPHA;
             float[] fArr = new float[1];
-            if (show) {
-                f2 = 1.0f;
-            } else {
-                f2 = 0.0f;
-            }
-            fArr[0] = f2;
+            fArr[0] = z ? 1.0f : 0.0f;
             arrayList.add(ObjectAnimator.ofFloat(actionBar, property, fArr));
-            if (this.bottomLayout != null) {
-                FrameLayout frameLayout = this.bottomLayout;
+            FrameLayout frameLayout = this.bottomLayout;
+            if (frameLayout != null) {
                 property = View.ALPHA;
                 fArr = new float[1];
-                if (show) {
-                    f2 = 1.0f;
-                } else {
-                    f2 = 0.0f;
-                }
-                fArr[0] = f2;
+                fArr[0] = z ? 1.0f : 0.0f;
                 arrayList.add(ObjectAnimator.ofFloat(frameLayout, property, fArr));
             }
             GroupedPhotosListView groupedPhotosListView = this.groupedPhotosListView;
             property = View.ALPHA;
             fArr = new float[1];
-            if (show) {
-                f2 = 1.0f;
-            } else {
-                f2 = 0.0f;
-            }
-            fArr[0] = f2;
+            fArr[0] = z ? 1.0f : 0.0f;
             arrayList.add(ObjectAnimator.ofFloat(groupedPhotosListView, property, fArr));
             if (this.captionTextView.getTag() != null) {
-                textView = this.captionTextView;
-                Property property2 = View.ALPHA;
+                TextView textView = this.captionTextView;
+                property = View.ALPHA;
                 float[] fArr2 = new float[1];
-                if (!show) {
+                if (!z) {
                     f = 0.0f;
                 }
                 fArr2[0] = f;
-                arrayList.add(ObjectAnimator.ofFloat(textView, property2, fArr2));
+                arrayList.add(ObjectAnimator.ofFloat(textView, property, fArr2));
             }
             this.actionBarAnimator = new AnimatorSet();
             this.actionBarAnimator.playTogether(arrayList);
             this.actionBarAnimator.setDuration(200);
             this.actionBarAnimator.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animation) {
-                    if (animation.equals(PhotoViewer.this.actionBarAnimator)) {
-                        if (!show) {
+                public void onAnimationEnd(Animator animator) {
+                    if (animator.equals(PhotoViewer.this.actionBarAnimator)) {
+                        if (!z) {
                             PhotoViewer.this.actionBar.setVisibility(4);
                             if (PhotoViewer.this.bottomLayout.getTag() != null) {
                                 PhotoViewer.this.bottomLayout.setVisibility(4);
@@ -5193,8 +6670,8 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                     }
                 }
 
-                public void onAnimationCancel(Animator animation) {
-                    if (animation.equals(PhotoViewer.this.actionBarAnimator)) {
+                public void onAnimationCancel(Animator animator) {
+                    if (animator.equals(PhotoViewer.this.actionBarAnimator)) {
                         PhotoViewer.this.actionBarAnimator = null;
                     }
                 }
@@ -5202,70 +6679,50 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             this.actionBarAnimator.start();
             return;
         }
-        ActionBar actionBar2 = this.actionBar;
-        if (show) {
-            f2 = 1.0f;
-        } else {
-            f2 = 0.0f;
-        }
-        actionBar2.setAlpha(f2);
-        FrameLayout frameLayout2 = this.bottomLayout;
-        if (show) {
-            f2 = 1.0f;
-        } else {
-            f2 = 0.0f;
-        }
-        frameLayout2.setAlpha(f2);
-        GroupedPhotosListView groupedPhotosListView2 = this.groupedPhotosListView;
-        if (show) {
-            f2 = 1.0f;
-        } else {
-            f2 = 0.0f;
-        }
-        groupedPhotosListView2.setAlpha(f2);
-        textView = this.captionTextView;
-        if (!show) {
+        this.actionBar.setAlpha(z ? 1.0f : 0.0f);
+        this.bottomLayout.setAlpha(z ? 1.0f : 0.0f);
+        this.groupedPhotosListView.setAlpha(z ? 1.0f : 0.0f);
+        TextView textView2 = this.captionTextView;
+        if (!z) {
             f = 0.0f;
         }
-        textView.setAlpha(f);
+        textView2.setAlpha(f);
     }
 
-    private void togglePhotosListView(boolean show, boolean animated) {
-        float f = 1.0f;
-        if (show != this.isPhotosListViewVisible) {
-            if (show) {
+    private void togglePhotosListView(boolean z, boolean z2) {
+        if (z != this.isPhotosListViewVisible) {
+            if (z) {
                 this.selectedPhotosListView.setVisibility(0);
             }
-            this.isPhotosListViewVisible = show;
-            this.selectedPhotosListView.setEnabled(show);
-            RecyclerListView recyclerListView;
-            CounterView counterView;
-            if (animated) {
-                ArrayList<Animator> arrayList = new ArrayList();
-                recyclerListView = this.selectedPhotosListView;
+            this.isPhotosListViewVisible = z;
+            this.selectedPhotosListView.setEnabled(z);
+            float f = 1.0f;
+            if (z2) {
+                ArrayList arrayList = new ArrayList();
+                RecyclerListView recyclerListView = this.selectedPhotosListView;
                 Property property = View.ALPHA;
                 float[] fArr = new float[1];
-                fArr[0] = show ? 1.0f : 0.0f;
+                fArr[0] = z ? 1.0f : 0.0f;
                 arrayList.add(ObjectAnimator.ofFloat(recyclerListView, property, fArr));
                 recyclerListView = this.selectedPhotosListView;
                 property = View.TRANSLATION_Y;
                 fArr = new float[1];
-                fArr[0] = show ? 0.0f : (float) (-AndroidUtilities.dp(10.0f));
+                fArr[0] = z ? 0.0f : (float) (-AndroidUtilities.dp(10.0f));
                 arrayList.add(ObjectAnimator.ofFloat(recyclerListView, property, fArr));
-                counterView = this.photosCounterView;
+                CounterView counterView = this.photosCounterView;
                 Property property2 = View.ROTATION_X;
                 float[] fArr2 = new float[1];
-                if (!show) {
+                if (!z) {
                     f = 0.0f;
                 }
                 fArr2[0] = f;
                 arrayList.add(ObjectAnimator.ofFloat(counterView, property2, fArr2));
                 this.currentListViewAnimation = new AnimatorSet();
                 this.currentListViewAnimation.playTogether(arrayList);
-                if (!show) {
+                if (!z) {
                     this.currentListViewAnimation.addListener(new AnimatorListenerAdapter() {
-                        public void onAnimationEnd(Animator animation) {
-                            if (PhotoViewer.this.currentListViewAnimation != null && PhotoViewer.this.currentListViewAnimation.equals(animation)) {
+                        public void onAnimationEnd(Animator animator) {
+                            if (PhotoViewer.this.currentListViewAnimation != null && PhotoViewer.this.currentListViewAnimation.equals(animator)) {
                                 PhotoViewer.this.selectedPhotosListView.setVisibility(8);
                                 PhotoViewer.this.currentListViewAnimation = null;
                             }
@@ -5274,1501 +6731,1199 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 }
                 this.currentListViewAnimation.setDuration(200);
                 this.currentListViewAnimation.start();
-                return;
-            }
-            float f2;
-            recyclerListView = this.selectedPhotosListView;
-            if (show) {
-                f2 = 1.0f;
             } else {
-                f2 = 0.0f;
-            }
-            recyclerListView.setAlpha(f2);
-            this.selectedPhotosListView.setTranslationY(show ? 0.0f : (float) (-AndroidUtilities.dp(10.0f)));
-            counterView = this.photosCounterView;
-            if (!show) {
-                f = 0.0f;
-            }
-            counterView.setRotationX(f);
-            if (!show) {
-                this.selectedPhotosListView.setVisibility(8);
+                this.selectedPhotosListView.setAlpha(z ? 1.0f : 0.0f);
+                this.selectedPhotosListView.setTranslationY(z ? 0.0f : (float) (-AndroidUtilities.dp(10.0f)));
+                CounterView counterView2 = this.photosCounterView;
+                if (!z) {
+                    f = 0.0f;
+                }
+                counterView2.setRotationX(f);
+                if (!z) {
+                    this.selectedPhotosListView.setVisibility(8);
+                }
             }
         }
     }
 
-    private String getFileName(int index) {
-        if (index < 0) {
+    private String getFileName(int i) {
+        if (i < 0) {
             return null;
         }
+        String str = ".jpg";
+        String str2 = "_";
+        StringBuilder stringBuilder;
         if (this.secureDocuments.isEmpty()) {
             if (this.imagesArrLocations.isEmpty() && this.imagesArr.isEmpty()) {
-                if (this.imagesArrLocals.isEmpty() || index >= this.imagesArrLocals.size()) {
+                if (this.imagesArrLocals.isEmpty() || i >= this.imagesArrLocals.size()) {
                     return null;
                 }
-                SearchImage object = this.imagesArrLocals.get(index);
-                if (object instanceof SearchImage) {
-                    return object.getAttachName();
+                Object obj = this.imagesArrLocals.get(i);
+                if (obj instanceof SearchImage) {
+                    return ((SearchImage) obj).getAttachName();
                 }
-                if (!(object instanceof BotInlineResult)) {
-                    return null;
+                if (obj instanceof BotInlineResult) {
+                    BotInlineResult botInlineResult = (BotInlineResult) obj;
+                    Document document = botInlineResult.document;
+                    if (document != null) {
+                        return FileLoader.getAttachFileName(document);
+                    }
+                    Photo photo = botInlineResult.photo;
+                    if (photo != null) {
+                        return FileLoader.getAttachFileName(FileLoader.getClosestPhotoSizeWithSize(photo.sizes, AndroidUtilities.getPhotoSize()));
+                    }
+                    if (botInlineResult.content instanceof TL_webDocument) {
+                        stringBuilder = new StringBuilder();
+                        stringBuilder.append(Utilities.MD5(botInlineResult.content.url));
+                        stringBuilder.append(".");
+                        WebDocument webDocument = botInlineResult.content;
+                        stringBuilder.append(ImageLoader.getHttpUrlExtension(webDocument.url, FileLoader.getMimeTypePart(webDocument.mime_type)));
+                        return stringBuilder.toString();
+                    }
                 }
-                BotInlineResult botInlineResult = (BotInlineResult) object;
-                if (botInlineResult.document != null) {
-                    return FileLoader.getAttachFileName(botInlineResult.document);
-                }
-                if (botInlineResult.photo != null) {
-                    return FileLoader.getAttachFileName(FileLoader.getClosestPhotoSizeWithSize(botInlineResult.photo.sizes, AndroidUtilities.getPhotoSize()));
-                }
-                if (botInlineResult.content instanceof TL_webDocument) {
-                    return Utilities.MD5(botInlineResult.content.url) + "." + ImageLoader.getHttpUrlExtension(botInlineResult.content.url, FileLoader.getMimeTypePart(botInlineResult.content.mime_type));
-                }
-                return null;
             } else if (this.imagesArrLocations.isEmpty()) {
-                if (this.imagesArr.isEmpty() || index >= this.imagesArr.size()) {
+                if (this.imagesArr.isEmpty() || i >= this.imagesArr.size()) {
                     return null;
                 }
-                return FileLoader.getMessageFileName(((MessageObject) this.imagesArr.get(index)).messageOwner);
-            } else if (index >= this.imagesArrLocations.size()) {
+                return FileLoader.getMessageFileName(((MessageObject) this.imagesArr.get(i)).messageOwner);
+            } else if (i >= this.imagesArrLocations.size()) {
                 return null;
             } else {
-                FileLocation location = (FileLocation) this.imagesArrLocations.get(index);
-                return location.volume_id + "_" + location.local_id + ".jpg";
+                ImageLocation imageLocation = (ImageLocation) this.imagesArrLocations.get(i);
+                stringBuilder = new StringBuilder();
+                stringBuilder.append(imageLocation.location.volume_id);
+                stringBuilder.append(str2);
+                stringBuilder.append(imageLocation.location.local_id);
+                stringBuilder.append(str);
+                return stringBuilder.toString();
             }
-        } else if (index >= this.secureDocuments.size()) {
+            return null;
+        } else if (i >= this.secureDocuments.size()) {
             return null;
         } else {
-            SecureDocument location2 = (SecureDocument) this.secureDocuments.get(index);
-            return location2.secureFile.dc_id + "_" + location2.secureFile.id + ".jpg";
+            SecureDocument secureDocument = (SecureDocument) this.secureDocuments.get(i);
+            stringBuilder = new StringBuilder();
+            stringBuilder.append(secureDocument.secureFile.dc_id);
+            stringBuilder.append(str2);
+            stringBuilder.append(secureDocument.secureFile.id);
+            stringBuilder.append(str);
+            return stringBuilder.toString();
         }
     }
 
-    private TLObject getFileLocation(int index, int[] size) {
-        if (index < 0) {
+    private ImageLocation getImageLocation(int i, int[] iArr) {
+        if (i < 0) {
             return null;
         }
         if (this.secureDocuments.isEmpty()) {
             if (this.imagesArrLocations.isEmpty()) {
-                if (this.imagesArr.isEmpty() || index >= this.imagesArr.size()) {
+                if (this.imagesArr.isEmpty() || i >= this.imagesArr.size()) {
                     return null;
                 }
-                MessageObject message = (MessageObject) this.imagesArr.get(index);
-                TLObject sizeFull;
-                if (message.messageOwner instanceof TL_messageService) {
-                    if (message.messageOwner.action instanceof TL_messageActionUserUpdatedPhoto) {
-                        return message.messageOwner.action.newUserPhoto.photo_big;
-                    }
-                    sizeFull = FileLoader.getClosestPhotoSizeWithSize(message.photoThumbs, AndroidUtilities.getPhotoSize());
-                    if (sizeFull != null) {
-                        if (size != null) {
-                            size[0] = sizeFull.size;
-                            if (size[0] == 0) {
-                                size[0] = -1;
+                MessageObject messageObject = (MessageObject) this.imagesArr.get(i);
+                Message message = messageObject.messageOwner;
+                PhotoSize closestPhotoSizeWithSize;
+                if (!(message instanceof TL_messageService)) {
+                    MessageMedia messageMedia = message.media;
+                    if (!(messageMedia instanceof TL_messageMediaPhoto) || messageMedia.photo == null) {
+                        messageMedia = messageObject.messageOwner.media;
+                        if (!(messageMedia instanceof TL_messageMediaWebPage) || messageMedia.webpage == null) {
+                            messageMedia = messageObject.messageOwner.media;
+                            if (messageMedia instanceof TL_messageMediaInvoice) {
+                                return ImageLocation.getForWebFile(WebFile.createWithWebDocument(((TL_messageMediaInvoice) messageMedia).photo));
+                            }
+                            if (messageObject.getDocument() != null && MessageObject.isDocumentHasThumb(messageObject.getDocument())) {
+                                Document document = messageObject.getDocument();
+                                PhotoSize closestPhotoSizeWithSize2 = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90);
+                                if (iArr != null) {
+                                    iArr[0] = closestPhotoSizeWithSize2.size;
+                                    if (iArr[0] == 0) {
+                                        iArr[0] = -1;
+                                    }
+                                }
+                                return ImageLocation.getForDocument(closestPhotoSizeWithSize2, document);
                             }
                         }
-                        return sizeFull;
-                    } else if (size == null) {
-                        return null;
-                    } else {
-                        size[0] = -1;
-                        return null;
                     }
-                } else if (((message.messageOwner.media instanceof TL_messageMediaPhoto) && message.messageOwner.media.photo != null) || ((message.messageOwner.media instanceof TL_messageMediaWebPage) && message.messageOwner.media.webpage != null)) {
-                    sizeFull = FileLoader.getClosestPhotoSizeWithSize(message.photoThumbs, AndroidUtilities.getPhotoSize());
-                    if (sizeFull != null) {
-                        if (size != null) {
-                            size[0] = sizeFull.size;
-                            if (size[0] == 0) {
-                                size[0] = -1;
+                    if (messageObject.isGif()) {
+                        return ImageLocation.getForDocument(messageObject.getDocument());
+                    }
+                    closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, AndroidUtilities.getPhotoSize());
+                    if (closestPhotoSizeWithSize != null) {
+                        if (iArr != null) {
+                            iArr[0] = closestPhotoSizeWithSize.size;
+                            if (iArr[0] == 0) {
+                                iArr[0] = -1;
                             }
                         }
-                        return sizeFull;
-                    } else if (size == null) {
-                        return null;
-                    } else {
-                        size[0] = -1;
-                        return null;
+                        return ImageLocation.getForObject(closestPhotoSizeWithSize, messageObject.photoThumbsObject);
+                    } else if (iArr != null) {
+                        iArr[0] = -1;
                     }
-                } else if (message.messageOwner.media instanceof TL_messageMediaInvoice) {
-                    return ((TL_messageMediaInvoice) message.messageOwner.media).photo;
+                } else if (message.action instanceof TL_messageActionUserUpdatedPhoto) {
+                    return null;
                 } else {
-                    if (message.getDocument() == null || !MessageObject.isDocumentHasThumb(message.getDocument())) {
-                        return null;
-                    }
-                    TLObject thumb = FileLoader.getClosestPhotoSizeWithSize(message.getDocument().thumbs, 90);
-                    if (size != null) {
-                        size[0] = thumb.size;
-                        if (size[0] == 0) {
-                            size[0] = -1;
+                    closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, AndroidUtilities.getPhotoSize());
+                    if (closestPhotoSizeWithSize != null) {
+                        if (iArr != null) {
+                            iArr[0] = closestPhotoSizeWithSize.size;
+                            if (iArr[0] == 0) {
+                                iArr[0] = -1;
+                            }
                         }
+                        return ImageLocation.getForObject(closestPhotoSizeWithSize, messageObject.photoThumbsObject);
+                    } else if (iArr != null) {
+                        iArr[0] = -1;
                     }
-                    return thumb;
                 }
-            } else if (index >= this.imagesArrLocations.size()) {
+                return null;
+            } else if (i >= this.imagesArrLocations.size()) {
                 return null;
             } else {
-                if (size != null) {
-                    size[0] = ((Integer) this.imagesArrLocationsSizes.get(index)).intValue();
+                if (iArr != null) {
+                    iArr[0] = ((Integer) this.imagesArrLocationsSizes.get(i)).intValue();
                 }
-                return (TLObject) this.imagesArrLocations.get(index);
+                return (ImageLocation) this.imagesArrLocations.get(i);
             }
-        } else if (index >= this.secureDocuments.size()) {
+        } else if (i >= this.secureDocuments.size()) {
             return null;
         } else {
-            if (size != null) {
-                size[0] = ((SecureDocument) this.secureDocuments.get(index)).secureFile.size;
+            if (iArr != null) {
+                iArr[0] = ((SecureDocument) this.secureDocuments.get(i)).secureFile.size;
             }
-            return (TLObject) this.secureDocuments.get(index);
+            return ImageLocation.getForSecureDocument((SecureDocument) this.secureDocuments.get(i));
+        }
+    }
+
+    private TLObject getFileLocation(int i, int[] iArr) {
+        if (i < 0) {
+            return null;
+        }
+        if (this.secureDocuments.isEmpty()) {
+            if (this.imagesArrLocations.isEmpty()) {
+                if (this.imagesArr.isEmpty() || i >= this.imagesArr.size()) {
+                    return null;
+                }
+                MessageObject messageObject = (MessageObject) this.imagesArr.get(i);
+                Message message = messageObject.messageOwner;
+                PhotoSize closestPhotoSizeWithSize;
+                if (message instanceof TL_messageService) {
+                    MessageAction messageAction = message.action;
+                    if (messageAction instanceof TL_messageActionUserUpdatedPhoto) {
+                        return messageAction.newUserPhoto.photo_big;
+                    }
+                    closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, AndroidUtilities.getPhotoSize());
+                    if (closestPhotoSizeWithSize != null) {
+                        if (iArr != null) {
+                            iArr[0] = closestPhotoSizeWithSize.size;
+                            if (iArr[0] == 0) {
+                                iArr[0] = -1;
+                            }
+                        }
+                        return closestPhotoSizeWithSize;
+                    } else if (iArr != null) {
+                        iArr[0] = -1;
+                    }
+                } else {
+                    MessageMedia messageMedia = message.media;
+                    if (!(messageMedia instanceof TL_messageMediaPhoto) || messageMedia.photo == null) {
+                        messageMedia = messageObject.messageOwner.media;
+                        if (!(messageMedia instanceof TL_messageMediaWebPage) || messageMedia.webpage == null) {
+                            messageMedia = messageObject.messageOwner.media;
+                            if (messageMedia instanceof TL_messageMediaInvoice) {
+                                return ((TL_messageMediaInvoice) messageMedia).photo;
+                            }
+                            if (messageObject.getDocument() != null && MessageObject.isDocumentHasThumb(messageObject.getDocument())) {
+                                closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(messageObject.getDocument().thumbs, 90);
+                                if (iArr != null) {
+                                    iArr[0] = closestPhotoSizeWithSize.size;
+                                    if (iArr[0] == 0) {
+                                        iArr[0] = -1;
+                                    }
+                                }
+                                return closestPhotoSizeWithSize;
+                            }
+                        }
+                    }
+                    closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, AndroidUtilities.getPhotoSize());
+                    if (closestPhotoSizeWithSize != null) {
+                        if (iArr != null) {
+                            iArr[0] = closestPhotoSizeWithSize.size;
+                            if (iArr[0] == 0) {
+                                iArr[0] = -1;
+                            }
+                        }
+                        return closestPhotoSizeWithSize;
+                    } else if (iArr != null) {
+                        iArr[0] = -1;
+                    }
+                }
+                return null;
+            } else if (i >= this.imagesArrLocations.size()) {
+                return null;
+            } else {
+                if (iArr != null) {
+                    iArr[0] = ((Integer) this.imagesArrLocationsSizes.get(i)).intValue();
+                }
+                return ((ImageLocation) this.imagesArrLocations.get(i)).location;
+            }
+        } else if (i >= this.secureDocuments.size()) {
+            return null;
+        } else {
+            if (iArr != null) {
+                iArr[0] = ((SecureDocument) this.secureDocuments.get(i)).secureFile.size;
+            }
+            return (TLObject) this.secureDocuments.get(i);
         }
     }
 
     private void updateSelectedCount() {
-        if (this.placeProvider != null) {
-            int count = this.placeProvider.getSelectedCount();
-            this.photosCounterView.setCount(count);
-            if (count == 0) {
+        PhotoViewerProvider photoViewerProvider = this.placeProvider;
+        if (photoViewerProvider != null) {
+            int selectedCount = photoViewerProvider.getSelectedCount();
+            this.photosCounterView.setCount(selectedCount);
+            if (selectedCount == 0) {
                 togglePhotosListView(false, true);
             }
         }
     }
 
-    /* JADX WARNING: Missing block: B:52:0x037d, code skipped:
-            if ("telegram_album".equals(r23.type) == false) goto L_0x0402;
+    /* JADX WARNING: Removed duplicated region for block: B:186:0x04e4  */
+    /* JADX WARNING: Removed duplicated region for block: B:185:0x04e2  */
+    /* JADX WARNING: Removed duplicated region for block: B:189:0x04ed  */
+    /* JADX WARNING: Removed duplicated region for block: B:166:0x049e  */
+    /* JADX WARNING: Removed duplicated region for block: B:193:0x052d  */
+    /* JADX WARNING: Removed duplicated region for block: B:192:0x0521  */
+    /* JADX WARNING: Removed duplicated region for block: B:212:0x059e  */
+    /* JADX WARNING: Removed duplicated region for block: B:266:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:227:0x05e7  */
+    /* JADX WARNING: Removed duplicated region for block: B:205:0x0565  */
+    /* JADX WARNING: Removed duplicated region for block: B:212:0x059e  */
+    /* JADX WARNING: Removed duplicated region for block: B:227:0x05e7  */
+    /* JADX WARNING: Removed duplicated region for block: B:266:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:205:0x0565  */
+    /* JADX WARNING: Removed duplicated region for block: B:212:0x059e  */
+    /* JADX WARNING: Removed duplicated region for block: B:266:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:227:0x05e7  */
+    /* JADX WARNING: Missing block: B:53:0x0224, code skipped:
+            if ("telegram_album".equals(r2.type) != false) goto L_0x0226;
      */
-    private void onPhotoShow(org.telegram.messenger.MessageObject r25, org.telegram.tgnet.TLRPC.FileLocation r26, java.util.ArrayList<org.telegram.messenger.MessageObject> r27, java.util.ArrayList<org.telegram.messenger.SecureDocument> r28, java.util.ArrayList<java.lang.Object> r29, int r30, org.telegram.ui.PhotoViewer.PlaceProviderObject r31) {
+    /* JADX WARNING: Missing block: B:163:0x0497, code skipped:
+            if (r0.cropItem.getVisibility() == 0) goto L_0x0467;
+     */
+    private void onPhotoShow(org.telegram.messenger.MessageObject r27, org.telegram.tgnet.TLRPC.FileLocation r28, java.util.ArrayList<org.telegram.messenger.MessageObject> r29, java.util.ArrayList<org.telegram.messenger.SecureDocument> r30, java.util.ArrayList<java.lang.Object> r31, int r32, org.telegram.ui.PhotoViewer.PlaceProviderObject r33) {
         /*
-        r24 = this;
-        r3 = org.telegram.tgnet.ConnectionsManager.generateClassGuid();
-        r0 = r24;
-        r0.classGuid = r3;
-        r3 = 0;
-        r0 = r24;
-        r0.currentMessageObject = r3;
-        r3 = 0;
-        r0 = r24;
-        r0.currentFileLocation = r3;
-        r3 = 0;
-        r0 = r24;
-        r0.currentSecureDocument = r3;
-        r3 = 0;
-        r0 = r24;
-        r0.currentPathObject = r3;
-        r3 = 0;
-        r0 = r24;
-        r0.fromCamera = r3;
-        r3 = 0;
-        r0 = r24;
-        r0.currentBotInlineResult = r3;
-        r3 = -1;
-        r0 = r24;
-        r0.currentIndex = r3;
-        r0 = r24;
-        r3 = r0.currentFileNames;
-        r4 = 0;
-        r5 = 0;
-        r3[r4] = r5;
-        r0 = r24;
-        r3 = r0.currentFileNames;
-        r4 = 1;
-        r5 = 0;
-        r3[r4] = r5;
-        r0 = r24;
-        r3 = r0.currentFileNames;
-        r4 = 2;
-        r5 = 0;
-        r3[r4] = r5;
-        r3 = 0;
-        r0 = r24;
-        r0.avatarsDialogId = r3;
-        r3 = 0;
-        r0 = r24;
-        r0.totalImagesCount = r3;
-        r3 = 0;
-        r0 = r24;
-        r0.totalImagesCountMerge = r3;
-        r3 = 0;
-        r0 = r24;
-        r0.currentEditMode = r3;
-        r3 = 1;
-        r0 = r24;
-        r0.isFirstLoading = r3;
-        r3 = 0;
-        r0 = r24;
-        r0.needSearchImageInArr = r3;
-        r3 = 0;
-        r0 = r24;
-        r0.loadingMoreImages = r3;
-        r0 = r24;
-        r3 = r0.endReached;
-        r4 = 0;
-        r5 = 0;
-        r3[r4] = r5;
-        r0 = r24;
-        r4 = r0.endReached;
-        r5 = 1;
-        r0 = r24;
-        r6 = r0.mergeDialogId;
-        r8 = 0;
-        r3 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
-        if (r3 != 0) goto L_0x00de;
-    L_0x007d:
-        r3 = 1;
-    L_0x007e:
-        r4[r5] = r3;
-        r3 = 0;
-        r0 = r24;
-        r0.opennedFromMedia = r3;
-        r3 = 0;
-        r0 = r24;
-        r0.needCaptionLayout = r3;
-        r0 = r24;
-        r3 = r0.containerView;
-        r4 = 1;
-        r4 = java.lang.Integer.valueOf(r4);
-        r3.setTag(r4);
-        r3 = 0;
-        r0 = r24;
-        r0.isCurrentVideo = r3;
-        r0 = r24;
-        r3 = r0.imagesArr;
-        r3.clear();
-        r0 = r24;
-        r3 = r0.imagesArrLocations;
-        r3.clear();
-        r0 = r24;
-        r3 = r0.imagesArrLocationsSizes;
-        r3.clear();
-        r0 = r24;
-        r3 = r0.avatarsArr;
-        r3.clear();
-        r0 = r24;
-        r3 = r0.secureDocuments;
-        r3.clear();
-        r0 = r24;
-        r3 = r0.imagesArrLocals;
-        r3.clear();
-        r2 = 0;
-    L_0x00c6:
-        r3 = 2;
-        if (r2 >= r3) goto L_0x00e0;
-    L_0x00c9:
-        r0 = r24;
-        r3 = r0.imagesByIds;
-        r3 = r3[r2];
-        r3.clear();
-        r0 = r24;
-        r3 = r0.imagesByIdsTemp;
-        r3 = r3[r2];
-        r3.clear();
-        r2 = r2 + 1;
-        goto L_0x00c6;
-    L_0x00de:
-        r3 = 0;
-        goto L_0x007e;
-    L_0x00e0:
-        r0 = r24;
-        r3 = r0.imagesArrTemp;
-        r3.clear();
-        r3 = 0;
-        r0 = r24;
-        r0.currentUserAvatarLocation = r3;
-        r0 = r24;
-        r3 = r0.containerView;
-        r4 = 0;
-        r5 = 0;
-        r6 = 0;
+        r26 = this;
+        r0 = r26;
+        r1 = r27;
+        r2 = r29;
+        r3 = r30;
+        r4 = r31;
+        r5 = r32;
+        r6 = r33;
+        r7 = org.telegram.tgnet.ConnectionsManager.generateClassGuid();
+        r0.classGuid = r7;
         r7 = 0;
-        r3.setPadding(r4, r5, r6, r7);
-        r0 = r24;
-        r3 = r0.currentThumb;
-        if (r3 == 0) goto L_0x0104;
-    L_0x00fd:
-        r0 = r24;
-        r3 = r0.currentThumb;
-        r3.release();
-    L_0x0104:
-        if (r31 == 0) goto L_0x0328;
-    L_0x0106:
-        r0 = r31;
-        r3 = r0.thumb;
-    L_0x010a:
-        r0 = r24;
-        r0.currentThumb = r3;
-        if (r31 == 0) goto L_0x032b;
-    L_0x0110:
-        r0 = r31;
-        r3 = r0.isEvent;
-        if (r3 == 0) goto L_0x032b;
-    L_0x0116:
-        r3 = 1;
-    L_0x0117:
-        r0 = r24;
-        r0.isEvent = r3;
-        r3 = 0;
-        r0 = r24;
-        r0.sharedMediaType = r3;
-        r0 = r24;
-        r3 = r0.allMediaItem;
-        r4 = "ShowAllMedia";
-        r5 = NUM; // 0x7f0CLASSNAMEbd float:1.861373E38 double:1.0530985037E-314;
-        r4 = org.telegram.messenger.LocaleController.getString(r4, r5);
-        r3.setText(r4);
-        r0 = r24;
-        r3 = r0.menuItem;
-        r4 = 0;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.sendItem;
-        r4 = 8;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.pipItem;
-        r4 = 8;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.cameraItem;
-        r4 = 8;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.cameraItem;
-        r4 = 0;
-        r3.setTag(r4);
-        r0 = r24;
-        r3 = r0.bottomLayout;
-        r4 = 0;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.bottomLayout;
-        r4 = 1;
-        r4 = java.lang.Integer.valueOf(r4);
-        r3.setTag(r4);
-        r0 = r24;
-        r3 = r0.bottomLayout;
-        r4 = 0;
-        r3.setTranslationY(r4);
-        r0 = r24;
-        r3 = r0.captionTextView;
-        r4 = 0;
-        r3.setTranslationY(r4);
-        r0 = r24;
-        r3 = r0.shareButton;
-        r4 = 8;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.qualityChooseView;
-        if (r3 == 0) goto L_0x01a7;
-    L_0x018f:
-        r0 = r24;
-        r3 = r0.qualityChooseView;
-        r4 = 4;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.qualityPicker;
-        r4 = 4;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.qualityChooseView;
-        r4 = 0;
-        r3.setTag(r4);
-    L_0x01a7:
-        r0 = r24;
-        r3 = r0.qualityChooseViewAnimation;
-        if (r3 == 0) goto L_0x01b9;
-    L_0x01ad:
-        r0 = r24;
-        r3 = r0.qualityChooseViewAnimation;
-        r3.cancel();
-        r3 = 0;
-        r0 = r24;
-        r0.qualityChooseViewAnimation = r3;
-    L_0x01b9:
-        r3 = 1;
-        r0 = r24;
-        r0.setDoubleTapEnabled(r3);
-        r3 = 0;
-        r0 = r24;
-        r0.allowShare = r3;
-        r3 = 0;
-        r0 = r24;
-        r0.slideshowMessageId = r3;
-        r3 = 0;
-        r0 = r24;
-        r0.nameOverride = r3;
-        r3 = 0;
-        r0 = r24;
-        r0.dateOverride = r3;
-        r0 = r24;
-        r3 = r0.menuItem;
-        r4 = 2;
-        r3.hideSubItem(r4);
-        r0 = r24;
-        r3 = r0.menuItem;
-        r4 = 4;
-        r3.hideSubItem(r4);
-        r0 = r24;
-        r3 = r0.menuItem;
-        r4 = 10;
-        r3.hideSubItem(r4);
-        r0 = r24;
-        r3 = r0.menuItem;
-        r4 = 11;
-        r3.hideSubItem(r4);
-        r0 = r24;
-        r3 = r0.actionBar;
-        r4 = 0;
-        r3.setTranslationY(r4);
-        r0 = r24;
-        r3 = r0.checkImageView;
-        r4 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r3.setAlpha(r4);
-        r0 = r24;
-        r3 = r0.checkImageView;
-        r4 = 8;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.actionBar;
-        r4 = 0;
-        r3.setTitleRightMargin(r4);
-        r0 = r24;
-        r3 = r0.photosCounterView;
-        r4 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r3.setAlpha(r4);
-        r0 = r24;
-        r3 = r0.photosCounterView;
-        r4 = 8;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.pickerView;
-        r4 = 8;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.pickerViewSendButton;
-        r4 = 8;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.pickerViewSendButton;
-        r4 = 0;
-        r3.setTranslationY(r4);
-        r0 = r24;
-        r3 = r0.pickerView;
-        r4 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r3.setAlpha(r4);
-        r0 = r24;
-        r3 = r0.pickerViewSendButton;
-        r4 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r3.setAlpha(r4);
-        r0 = r24;
-        r3 = r0.pickerView;
-        r4 = 0;
-        r3.setTranslationY(r4);
-        r0 = r24;
-        r3 = r0.paintItem;
-        r4 = 8;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.cropItem;
-        r4 = 8;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.tuneItem;
-        r4 = 8;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.timeItem;
-        r4 = 8;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.rotateItem;
-        r4 = 8;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.videoTimelineView;
-        r4 = 8;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.compressItem;
-        r4 = 8;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.captionEditText;
-        r4 = 8;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.mentionListView;
-        r4 = 8;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.muteItem;
-        r4 = 8;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.actionBar;
-        r4 = 0;
-        r3.setSubtitle(r4);
-        r0 = r24;
-        r3 = r0.masksItem;
-        r4 = 8;
-        r3.setVisibility(r4);
-        r3 = 0;
-        r0 = r24;
-        r0.muteVideo = r3;
-        r0 = r24;
-        r3 = r0.muteItem;
-        r4 = NUM; // 0x7var_ float:1.794576E38 double:1.052935791E-314;
-        r3.setImageResource(r4);
-        r0 = r24;
-        r3 = r0.editorDoneLayout;
-        r4 = 8;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.captionTextView;
-        r4 = 0;
-        r3.setTag(r4);
-        r0 = r24;
-        r3 = r0.captionTextView;
-        r4 = 4;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.photoCropView;
-        if (r3 == 0) goto L_0x02ff;
-    L_0x02f6:
-        r0 = r24;
-        r3 = r0.photoCropView;
-        r4 = 8;
-        r3.setVisibility(r4);
-    L_0x02ff:
-        r0 = r24;
-        r3 = r0.photoFilterView;
-        if (r3 == 0) goto L_0x030e;
-    L_0x0305:
-        r0 = r24;
-        r3 = r0.photoFilterView;
-        r4 = 8;
-        r3.setVisibility(r4);
-    L_0x030e:
-        r2 = 0;
-    L_0x030f:
-        r3 = 3;
-        if (r2 >= r3) goto L_0x032e;
-    L_0x0312:
-        r0 = r24;
-        r3 = r0.photoProgressViews;
-        r3 = r3[r2];
-        if (r3 == 0) goto L_0x0325;
-    L_0x031a:
-        r0 = r24;
-        r3 = r0.photoProgressViews;
-        r3 = r3[r2];
-        r4 = -1;
-        r5 = 0;
-        r3.setBackgroundState(r4, r5);
-    L_0x0325:
-        r2 = r2 + 1;
-        goto L_0x030f;
-    L_0x0328:
-        r3 = 0;
-        goto L_0x010a;
-    L_0x032b:
-        r3 = 0;
-        goto L_0x0117;
-    L_0x032e:
-        if (r25 == 0) goto L_0x0528;
-    L_0x0330:
-        if (r27 != 0) goto L_0x0528;
-    L_0x0332:
-        r0 = r25;
-        r3 = r0.messageOwner;
-        r3 = r3.media;
-        r3 = r3 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
-        if (r3 == 0) goto L_0x0402;
-    L_0x033c:
-        r0 = r25;
-        r3 = r0.messageOwner;
-        r3 = r3.media;
-        r3 = r3.webpage;
-        if (r3 == 0) goto L_0x0402;
-    L_0x0346:
-        r0 = r25;
-        r3 = r0.messageOwner;
-        r3 = r3.media;
-        r0 = r3.webpage;
-        r23 = r0;
-        r0 = r23;
-        r0 = r0.site_name;
-        r21 = r0;
-        if (r21 == 0) goto L_0x0402;
-    L_0x0358:
-        r21 = r21.toLowerCase();
-        r3 = "instagram";
-        r0 = r21;
-        r3 = r0.equals(r3);
-        if (r3 != 0) goto L_0x037f;
-    L_0x0367:
-        r3 = "twitter";
-        r0 = r21;
-        r3 = r0.equals(r3);
-        if (r3 != 0) goto L_0x037f;
-    L_0x0372:
-        r3 = "telegram_album";
-        r0 = r23;
-        r4 = r0.type;
-        r3 = r3.equals(r4);
-        if (r3 == 0) goto L_0x0402;
-    L_0x037f:
-        r0 = r23;
-        r3 = r0.author;
-        r3 = android.text.TextUtils.isEmpty(r3);
-        if (r3 != 0) goto L_0x0391;
-    L_0x0389:
-        r0 = r23;
-        r3 = r0.author;
-        r0 = r24;
-        r0.nameOverride = r3;
-    L_0x0391:
-        r0 = r23;
-        r3 = r0.cached_page;
-        r3 = r3 instanceof org.telegram.tgnet.TLRPC.TL_page;
-        if (r3 == 0) goto L_0x03be;
-    L_0x0399:
-        r2 = 0;
-    L_0x039a:
-        r0 = r23;
-        r3 = r0.cached_page;
-        r3 = r3.blocks;
-        r3 = r3.size();
-        if (r2 >= r3) goto L_0x03be;
-    L_0x03a6:
-        r0 = r23;
-        r3 = r0.cached_page;
-        r3 = r3.blocks;
-        r13 = r3.get(r2);
-        r13 = (org.telegram.tgnet.TLRPC.PageBlock) r13;
-        r3 = r13 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockAuthorDate;
-        if (r3 == 0) goto L_0x04d7;
-    L_0x03b6:
-        r13 = (org.telegram.tgnet.TLRPC.TL_pageBlockAuthorDate) r13;
-        r3 = r13.published_date;
-        r0 = r24;
-        r0.dateOverride = r3;
-    L_0x03be:
-        r3 = 0;
-        r4 = 0;
-        r0 = r25;
-        r12 = r0.getWebPagePhotos(r3, r4);
-        r3 = r12.isEmpty();
-        if (r3 != 0) goto L_0x0402;
-    L_0x03cc:
-        r3 = r25.getId();
-        r0 = r24;
-        r0.slideshowMessageId = r3;
-        r3 = 0;
-        r0 = r24;
-        r0.needSearchImageInArr = r3;
-        r0 = r24;
-        r3 = r0.imagesArr;
-        r3.addAll(r12);
-        r0 = r24;
-        r3 = r0.imagesArr;
-        r3 = r3.size();
-        r0 = r24;
-        r0.totalImagesCount = r3;
-        r0 = r24;
-        r3 = r0.imagesArr;
-        r0 = r25;
-        r16 = r3.indexOf(r0);
-        if (r16 >= 0) goto L_0x03fa;
-    L_0x03f8:
+        r0.currentMessageObject = r7;
+        r0.currentFileLocation = r7;
+        r0.currentSecureDocument = r7;
+        r0.currentPathObject = r7;
+        r8 = 0;
+        r0.fromCamera = r8;
+        r0.currentBotInlineResult = r7;
+        r9 = -1;
+        r0.currentIndex = r9;
+        r10 = r0.currentFileNames;
+        r10[r8] = r7;
+        r11 = 1;
+        r12 = java.lang.Integer.valueOf(r11);
+        r10[r11] = r7;
+        r13 = 2;
+        r10[r13] = r7;
+        r0.avatarsDialogId = r8;
+        r0.totalImagesCount = r8;
+        r0.totalImagesCountMerge = r8;
+        r0.currentEditMode = r8;
+        r0.isFirstLoading = r11;
+        r0.needSearchImageInArr = r8;
+        r0.loadingMoreImages = r8;
+        r10 = r0.endReached;
+        r10[r8] = r8;
+        r14 = r0.mergeDialogId;
         r16 = 0;
-    L_0x03fa:
-        r3 = 1;
-        r0 = r24;
-        r1 = r16;
-        r0.setImageIndex(r1, r3);
-    L_0x0402:
-        r3 = r25.canPreviewDocument();
-        if (r3 == 0) goto L_0x041e;
-    L_0x0408:
-        r3 = 1;
-        r0 = r24;
-        r0.sharedMediaType = r3;
-        r0 = r24;
-        r3 = r0.allMediaItem;
-        r4 = "ShowAllFiles";
-        r5 = NUM; // 0x7f0CLASSNAMEbc float:1.8613727E38 double:1.053098503E-314;
-        r4 = org.telegram.messenger.LocaleController.getString(r4, r5);
-        r3.setText(r4);
-    L_0x041e:
-        r0 = r24;
-        r3 = r0.slideshowMessageId;
-        if (r3 != 0) goto L_0x0449;
-    L_0x0424:
-        r0 = r24;
-        r3 = r0.imagesArr;
-        r0 = r25;
-        r3.add(r0);
-        r0 = r24;
-        r3 = r0.currentAnimation;
-        if (r3 != 0) goto L_0x043d;
-    L_0x0433:
-        r0 = r25;
-        r4 = r0.eventId;
-        r6 = 0;
-        r3 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1));
-        if (r3 == 0) goto L_0x04db;
-    L_0x043d:
-        r3 = 0;
-        r0 = r24;
-        r0.needSearchImageInArr = r3;
-    L_0x0442:
-        r3 = 0;
-        r4 = 1;
-        r0 = r24;
-        r0.setImageIndex(r3, r4);
-    L_0x0449:
-        r0 = r24;
-        r3 = r0.currentAnimation;
-        if (r3 != 0) goto L_0x049f;
-    L_0x044f:
-        r0 = r24;
-        r3 = r0.isEvent;
-        if (r3 != 0) goto L_0x049f;
-    L_0x0455:
-        r0 = r24;
-        r4 = r0.currentDialogId;
-        r6 = 0;
-        r3 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1));
-        if (r3 == 0) goto L_0x08a5;
-    L_0x045f:
-        r0 = r24;
-        r3 = r0.totalImagesCount;
-        if (r3 != 0) goto L_0x08a5;
-    L_0x0465:
-        r0 = r24;
-        r3 = r0.currentAccount;
-        r3 = org.telegram.messenger.DataQuery.getInstance(r3);
-        r0 = r24;
-        r4 = r0.currentDialogId;
-        r0 = r24;
-        r6 = r0.sharedMediaType;
-        r0 = r24;
-        r7 = r0.classGuid;
-        r8 = 1;
-        r3.getMediaCount(r4, r6, r7, r8);
-        r0 = r24;
-        r4 = r0.mergeDialogId;
-        r6 = 0;
-        r3 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1));
-        if (r3 == 0) goto L_0x049f;
-    L_0x0487:
-        r0 = r24;
-        r3 = r0.currentAccount;
-        r3 = org.telegram.messenger.DataQuery.getInstance(r3);
-        r0 = r24;
-        r4 = r0.mergeDialogId;
-        r0 = r24;
-        r6 = r0.sharedMediaType;
-        r0 = r24;
-        r7 = r0.classGuid;
-        r8 = 1;
-        r3.getMediaCount(r4, r6, r7, r8);
-    L_0x049f:
-        r0 = r24;
-        r3 = r0.currentMessageObject;
-        if (r3 == 0) goto L_0x04af;
-    L_0x04a5:
-        r0 = r24;
-        r3 = r0.currentMessageObject;
-        r3 = r3.isVideo();
-        if (r3 != 0) goto L_0x04d0;
-    L_0x04af:
-        r0 = r24;
-        r3 = r0.currentBotInlineResult;
-        if (r3 == 0) goto L_0x08c5;
-    L_0x04b5:
-        r0 = r24;
-        r3 = r0.currentBotInlineResult;
-        r3 = r3.type;
-        r4 = "video";
-        r3 = r3.equals(r4);
-        if (r3 != 0) goto L_0x04d0;
-    L_0x04c4:
-        r0 = r24;
-        r3 = r0.currentBotInlineResult;
-        r3 = r3.document;
-        r3 = org.telegram.messenger.MessageObject.isVideoDocument(r3);
-        if (r3 == 0) goto L_0x08c5;
-    L_0x04d0:
-        r3 = 0;
-        r0 = r24;
-        r0.onActionClick(r3);
-    L_0x04d6:
-        return;
-    L_0x04d7:
-        r2 = r2 + 1;
-        goto L_0x039a;
-    L_0x04db:
-        r0 = r25;
-        r3 = r0.messageOwner;
-        r3 = r3.media;
-        r3 = r3 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaInvoice;
-        if (r3 != 0) goto L_0x0442;
-    L_0x04e5:
-        r0 = r25;
-        r3 = r0.messageOwner;
-        r3 = r3.media;
-        r3 = r3 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
-        if (r3 != 0) goto L_0x0442;
-    L_0x04ef:
-        r0 = r25;
-        r3 = r0.messageOwner;
-        r3 = r3.action;
-        if (r3 == 0) goto L_0x0501;
-    L_0x04f7:
-        r0 = r25;
-        r3 = r0.messageOwner;
-        r3 = r3.action;
-        r3 = r3 instanceof org.telegram.tgnet.TLRPC.TL_messageActionEmpty;
-        if (r3 == 0) goto L_0x0442;
-    L_0x0501:
-        r3 = 1;
-        r0 = r24;
-        r0.needSearchImageInArr = r3;
-        r0 = r24;
-        r3 = r0.imagesByIds;
-        r4 = 0;
-        r3 = r3[r4];
-        r4 = r25.getId();
-        r0 = r25;
-        r3.put(r4, r0);
-        r0 = r24;
-        r3 = r0.menuItem;
-        r4 = 2;
-        r3.showSubItem(r4);
-        r0 = r24;
-        r3 = r0.sendItem;
-        r4 = 0;
-        r3.setVisibility(r4);
-        goto L_0x0442;
-    L_0x0528:
-        if (r28 == 0) goto L_0x053d;
-    L_0x052a:
-        r0 = r24;
-        r3 = r0.secureDocuments;
-        r0 = r28;
-        r3.addAll(r0);
-        r3 = 1;
-        r0 = r24;
-        r1 = r30;
-        r0.setImageIndex(r1, r3);
-        goto L_0x0449;
-    L_0x053d:
-        if (r26 == 0) goto L_0x05b9;
-    L_0x053f:
-        r0 = r31;
-        r3 = r0.dialogId;
-        r0 = r24;
-        r0.avatarsDialogId = r3;
-        r0 = r24;
-        r3 = r0.imagesArrLocations;
-        r0 = r26;
-        r3.add(r0);
-        r0 = r24;
-        r3 = r0.imagesArrLocationsSizes;
-        r0 = r31;
-        r4 = r0.size;
-        r4 = java.lang.Integer.valueOf(r4);
-        r3.add(r4);
-        r0 = r24;
-        r3 = r0.avatarsArr;
-        r4 = new org.telegram.tgnet.TLRPC$TL_photoEmpty;
-        r4.<init>();
-        r3.add(r4);
-        r0 = r24;
-        r4 = r0.shareButton;
-        r0 = r24;
-        r3 = r0.videoPlayerControlFrameLayout;
-        r3 = r3.getVisibility();
-        if (r3 == 0) goto L_0x05ac;
-    L_0x0579:
-        r3 = 0;
-    L_0x057a:
-        r4.setVisibility(r3);
-        r3 = 1;
-        r0 = r24;
-        r0.allowShare = r3;
-        r0 = r24;
-        r3 = r0.menuItem;
-        r4 = 2;
-        r3.hideSubItem(r4);
-        r0 = r24;
-        r3 = r0.shareButton;
-        r3 = r3.getVisibility();
-        if (r3 != 0) goto L_0x05af;
-    L_0x0594:
-        r0 = r24;
-        r3 = r0.menuItem;
-        r4 = 10;
-        r3.hideSubItem(r4);
-    L_0x059d:
-        r3 = 0;
-        r4 = 1;
-        r0 = r24;
-        r0.setImageIndex(r3, r4);
-        r0 = r26;
-        r1 = r24;
-        r1.currentUserAvatarLocation = r0;
-        goto L_0x0449;
-    L_0x05ac:
-        r3 = 8;
-        goto L_0x057a;
-    L_0x05af:
-        r0 = r24;
-        r3 = r0.menuItem;
-        r4 = 10;
-        r3.showSubItem(r4);
-        goto L_0x059d;
-    L_0x05b9:
-        if (r27 == 0) goto L_0x0641;
-    L_0x05bb:
-        r3 = 1;
-        r0 = r24;
-        r0.opennedFromMedia = r3;
-        r0 = r24;
-        r3 = r0.menuItem;
-        r4 = 4;
-        r3.showSubItem(r4);
-        r0 = r24;
-        r3 = r0.sendItem;
-        r4 = 0;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.imagesArr;
-        r0 = r27;
-        r3.addAll(r0);
-        r2 = 0;
-    L_0x05da:
-        r0 = r24;
-        r3 = r0.imagesArr;
-        r3 = r3.size();
-        if (r2 >= r3) goto L_0x060f;
-    L_0x05e4:
-        r0 = r24;
-        r3 = r0.imagesArr;
-        r17 = r3.get(r2);
-        r17 = (org.telegram.messenger.MessageObject) r17;
-        r0 = r24;
-        r4 = r0.imagesByIds;
-        r6 = r17.getDialogId();
-        r0 = r24;
-        r8 = r0.currentDialogId;
-        r3 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
-        if (r3 != 0) goto L_0x060d;
-    L_0x05fe:
-        r3 = 0;
-    L_0x05ff:
-        r3 = r4[r3];
-        r4 = r17.getId();
-        r0 = r17;
-        r3.put(r4, r0);
-        r2 = r2 + 1;
-        goto L_0x05da;
-    L_0x060d:
-        r3 = 1;
-        goto L_0x05ff;
-    L_0x060f:
-        r0 = r24;
-        r3 = r0.imagesArr;
-        r0 = r30;
-        r19 = r3.get(r0);
-        r19 = (org.telegram.messenger.MessageObject) r19;
-        r3 = r19.canPreviewDocument();
-        if (r3 == 0) goto L_0x0637;
-    L_0x0621:
-        r3 = 1;
-        r0 = r24;
-        r0.sharedMediaType = r3;
-        r0 = r24;
-        r3 = r0.allMediaItem;
-        r4 = "ShowAllFiles";
-        r5 = NUM; // 0x7f0CLASSNAMEbc float:1.8613727E38 double:1.053098503E-314;
-        r4 = org.telegram.messenger.LocaleController.getString(r4, r5);
-        r3.setText(r4);
-    L_0x0637:
-        r3 = 1;
-        r0 = r24;
-        r1 = r30;
-        r0.setImageIndex(r1, r3);
-        goto L_0x0449;
-    L_0x0641:
-        if (r29 == 0) goto L_0x0449;
-    L_0x0643:
-        r0 = r24;
-        r3 = r0.sendPhotoType;
-        if (r3 == 0) goto L_0x0665;
-    L_0x0649:
-        r0 = r24;
-        r3 = r0.sendPhotoType;
-        r4 = 4;
-        if (r3 == r4) goto L_0x0665;
-    L_0x0650:
-        r0 = r24;
-        r3 = r0.sendPhotoType;
-        r4 = 2;
-        if (r3 == r4) goto L_0x065e;
-    L_0x0657:
-        r0 = r24;
-        r3 = r0.sendPhotoType;
-        r4 = 5;
-        if (r3 != r4) goto L_0x0682;
-    L_0x065e:
-        r3 = r29.size();
-        r4 = 1;
-        if (r3 <= r4) goto L_0x0682;
-    L_0x0665:
-        r0 = r24;
-        r3 = r0.checkImageView;
-        r4 = 0;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.photosCounterView;
-        r4 = 0;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.actionBar;
-        r4 = NUM; // 0x42CLASSNAME float:100.0 double:5.53552857E-315;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r3.setTitleRightMargin(r4);
-    L_0x0682:
-        r0 = r24;
-        r3 = r0.sendPhotoType;
-        r4 = 2;
-        if (r3 == r4) goto L_0x0690;
-    L_0x0689:
-        r0 = r24;
-        r3 = r0.sendPhotoType;
-        r4 = 5;
-        if (r3 != r4) goto L_0x06ae;
-    L_0x0690:
-        r0 = r24;
-        r3 = r0.placeProvider;
-        r3 = r3.canCaptureMorePhotos();
-        if (r3 == 0) goto L_0x06ae;
-    L_0x069a:
-        r0 = r24;
-        r3 = r0.cameraItem;
-        r4 = 0;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.cameraItem;
-        r4 = 1;
-        r4 = java.lang.Integer.valueOf(r4);
-        r3.setTag(r4);
-    L_0x06ae:
-        r0 = r24;
-        r3 = r0.menuItem;
-        r4 = 8;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.imagesArrLocals;
-        r0 = r29;
-        r3.addAll(r0);
-        r0 = r24;
-        r3 = r0.imagesArrLocals;
-        r0 = r30;
-        r18 = r3.get(r0);
-        r0 = r18;
-        r3 = r0 instanceof org.telegram.messenger.MediaController.PhotoEntry;
-        if (r3 == 0) goto L_0x080d;
-    L_0x06d0:
-        r18 = (org.telegram.messenger.MediaController.PhotoEntry) r18;
-        r0 = r18;
-        r3 = r0.isVideo;
-        if (r3 == 0) goto L_0x07e7;
-    L_0x06d8:
-        r0 = r24;
-        r3 = r0.cropItem;
-        r4 = 8;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.rotateItem;
-        r4 = 8;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.bottomLayout;
-        r4 = 0;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.bottomLayout;
-        r4 = 1;
-        r4 = java.lang.Integer.valueOf(r4);
-        r3.setTag(r4);
-        r0 = r24;
-        r3 = r0.bottomLayout;
-        r4 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r4 = -r4;
-        r4 = (float) r4;
-        r3.setTranslationY(r4);
-    L_0x070d:
+        r18 = (r14 > r16 ? 1 : (r14 == r16 ? 0 : -1));
+        if (r18 != 0) goto L_0x004f;
+    L_0x004d:
+        r14 = 1;
+        goto L_0x0050;
+    L_0x004f:
+        r14 = 0;
+    L_0x0050:
+        r10[r11] = r14;
+        r0.opennedFromMedia = r8;
+        r0.needCaptionLayout = r8;
+        r10 = r0.containerView;
+        r10.setTag(r12);
+        r0.isCurrentVideo = r8;
+        r10 = r0.imagesArr;
+        r10.clear();
+        r10 = r0.imagesArrLocations;
+        r10.clear();
+        r10 = r0.imagesArrLocationsSizes;
+        r10.clear();
+        r10 = r0.avatarsArr;
+        r10.clear();
+        r10 = r0.secureDocuments;
+        r10.clear();
+        r10 = r0.imagesArrLocals;
+        r10.clear();
+        r10 = 0;
+    L_0x007c:
+        if (r10 >= r13) goto L_0x008f;
+    L_0x007e:
+        r14 = r0.imagesByIds;
+        r14 = r14[r10];
+        r14.clear();
+        r14 = r0.imagesByIdsTemp;
+        r14 = r14[r10];
+        r14.clear();
+        r10 = r10 + 1;
+        goto L_0x007c;
+    L_0x008f:
+        r10 = r0.imagesArrTemp;
+        r10.clear();
+        r0.currentUserAvatarLocation = r7;
+        r10 = r0.containerView;
+        r10.setPadding(r8, r8, r8, r8);
+        r10 = r0.currentThumb;
+        if (r10 == 0) goto L_0x00a2;
+    L_0x009f:
+        r10.release();
+    L_0x00a2:
+        if (r6 == 0) goto L_0x00a7;
+    L_0x00a4:
+        r10 = r6.thumb;
+        goto L_0x00a8;
+    L_0x00a7:
+        r10 = r7;
+    L_0x00a8:
+        r0.currentThumb = r10;
+        if (r6 == 0) goto L_0x00b2;
+    L_0x00ac:
+        r10 = r6.isEvent;
+        if (r10 == 0) goto L_0x00b2;
+    L_0x00b0:
         r10 = 1;
-    L_0x070e:
-        r0 = r24;
+        goto L_0x00b3;
+    L_0x00b2:
+        r10 = 0;
+    L_0x00b3:
+        r0.isEvent = r10;
+        r0.sharedMediaType = r8;
+        r10 = r0.allMediaItem;
+        r14 = NUM; // 0x7f0d0914 float:1.8746828E38 double:1.0531309258E-314;
+        r15 = "ShowAllMedia";
+        r14 = org.telegram.messenger.LocaleController.getString(r15, r14);
+        r10.setText(r14);
+        r10 = r0.menuItem;
+        r10.setVisibility(r8);
+        r10 = r0.sendItem;
+        r14 = 8;
+        r10.setVisibility(r14);
+        r10 = r0.pipItem;
+        r10.setVisibility(r14);
+        r10 = r0.cameraItem;
+        r10.setVisibility(r14);
+        r10 = r0.cameraItem;
+        r10.setTag(r7);
+        r10 = r0.bottomLayout;
+        r10.setVisibility(r8);
+        r10 = r0.bottomLayout;
+        r10.setTag(r12);
+        r10 = r0.bottomLayout;
+        r15 = 0;
+        r10.setTranslationY(r15);
+        r10 = r0.captionTextView;
+        r10.setTranslationY(r15);
+        r10 = r0.shareButton;
+        r10.setVisibility(r14);
+        r10 = r0.qualityChooseView;
+        r9 = 4;
+        if (r10 == 0) goto L_0x010c;
+    L_0x00ff:
+        r10.setVisibility(r9);
+        r10 = r0.qualityPicker;
+        r10.setVisibility(r9);
+        r10 = r0.qualityChooseView;
+        r10.setTag(r7);
+    L_0x010c:
+        r10 = r0.qualityChooseViewAnimation;
+        if (r10 == 0) goto L_0x0115;
+    L_0x0110:
+        r10.cancel();
+        r0.qualityChooseViewAnimation = r7;
+    L_0x0115:
+        r0.setDoubleTapEnabled(r11);
+        r0.allowShare = r8;
+        r0.slideshowMessageId = r8;
+        r0.nameOverride = r7;
+        r0.dateOverride = r8;
+        r10 = r0.menuItem;
+        r10.hideSubItem(r13);
+        r10 = r0.menuItem;
+        r10.hideSubItem(r9);
+        r10 = r0.menuItem;
+        r13 = 10;
+        r10.hideSubItem(r13);
+        r10 = r0.menuItem;
+        r13 = 11;
+        r10.hideSubItem(r13);
+        r10 = r0.actionBar;
+        r10.setTranslationY(r15);
+        r10 = r0.checkImageView;
+        r13 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r10.setAlpha(r13);
+        r10 = r0.checkImageView;
+        r10.setVisibility(r14);
+        r10 = r0.actionBar;
+        r10.setTitleRightMargin(r8);
+        r10 = r0.photosCounterView;
+        r10.setAlpha(r13);
+        r10 = r0.photosCounterView;
+        r10.setVisibility(r14);
+        r10 = r0.pickerView;
+        r10.setVisibility(r14);
+        r10 = r0.pickerViewSendButton;
+        r10.setVisibility(r14);
+        r10 = r0.pickerViewSendButton;
+        r10.setTranslationY(r15);
+        r10 = r0.pickerView;
+        r10.setAlpha(r13);
+        r10 = r0.pickerViewSendButton;
+        r10.setAlpha(r13);
+        r10 = r0.pickerView;
+        r10.setTranslationY(r15);
+        r10 = r0.paintItem;
+        r10.setVisibility(r14);
+        r10 = r0.cropItem;
+        r10.setVisibility(r14);
+        r10 = r0.tuneItem;
+        r10.setVisibility(r14);
+        r10 = r0.timeItem;
+        r10.setVisibility(r14);
+        r10 = r0.rotateItem;
+        r10.setVisibility(r14);
+        r10 = r0.videoTimelineView;
+        r10.setVisibility(r14);
+        r10 = r0.compressItem;
+        r10.setVisibility(r14);
+        r10 = r0.captionEditText;
+        r10.setVisibility(r14);
+        r10 = r0.mentionListView;
+        r10.setVisibility(r14);
+        r10 = r0.muteItem;
+        r10.setVisibility(r14);
+        r10 = r0.actionBar;
+        r10.setSubtitle(r7);
+        r10 = r0.masksItem;
+        r10.setVisibility(r14);
+        r0.muteVideo = r8;
+        r10 = r0.muteItem;
+        r13 = NUM; // 0x7var_d6 float:1.794605E38 double:1.0529358617E-314;
+        r10.setImageResource(r13);
+        r10 = r0.editorDoneLayout;
+        r10.setVisibility(r14);
+        r10 = r0.captionTextView;
+        r10.setTag(r7);
+        r10 = r0.captionTextView;
+        r10.setVisibility(r9);
+        r10 = r0.photoCropView;
+        if (r10 == 0) goto L_0x01d2;
+    L_0x01cf:
+        r10.setVisibility(r14);
+    L_0x01d2:
+        r10 = r0.photoFilterView;
+        if (r10 == 0) goto L_0x01d9;
+    L_0x01d6:
+        r10.setVisibility(r14);
+    L_0x01d9:
+        r10 = 0;
+    L_0x01da:
+        r13 = 3;
+        if (r10 >= r13) goto L_0x01ef;
+    L_0x01dd:
+        r13 = r0.photoProgressViews;
+        r22 = r13[r10];
+        if (r22 == 0) goto L_0x01ea;
+    L_0x01e3:
+        r13 = r13[r10];
+        r15 = -1;
+        r13.setBackgroundState(r15, r8);
+        goto L_0x01eb;
+    L_0x01ea:
+        r15 = -1;
+    L_0x01eb:
+        r10 = r10 + 1;
+        r15 = 0;
+        goto L_0x01da;
+    L_0x01ef:
+        r10 = NUM; // 0x7f0d0913 float:1.8746826E38 double:1.0531309253E-314;
+        r13 = "ShowAllFiles";
+        if (r1 == 0) goto L_0x02de;
+    L_0x01f6:
+        if (r2 != 0) goto L_0x02de;
+    L_0x01f8:
+        r2 = r1.messageOwner;
+        r2 = r2.media;
+        r3 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
+        if (r3 == 0) goto L_0x0286;
+    L_0x0200:
+        r2 = r2.webpage;
+        if (r2 == 0) goto L_0x0286;
+    L_0x0204:
+        r3 = r2.site_name;
+        if (r3 == 0) goto L_0x0286;
+    L_0x0208:
+        r3 = r3.toLowerCase();
+        r4 = "instagram";
+        r4 = r3.equals(r4);
+        if (r4 != 0) goto L_0x0226;
+    L_0x0214:
+        r4 = "twitter";
+        r3 = r3.equals(r4);
+        if (r3 != 0) goto L_0x0226;
+    L_0x021c:
+        r3 = r2.type;
+        r4 = "telegram_album";
+        r3 = r4.equals(r3);
+        if (r3 == 0) goto L_0x0286;
+    L_0x0226:
+        r3 = r2.author;
+        r3 = android.text.TextUtils.isEmpty(r3);
+        if (r3 != 0) goto L_0x0232;
+    L_0x022e:
+        r3 = r2.author;
+        r0.nameOverride = r3;
+    L_0x0232:
+        r3 = r2.cached_page;
+        r3 = r3 instanceof org.telegram.tgnet.TLRPC.TL_page;
+        if (r3 == 0) goto L_0x025b;
+    L_0x0238:
+        r3 = 0;
+    L_0x0239:
+        r4 = r2.cached_page;
+        r4 = r4.blocks;
+        r4 = r4.size();
+        if (r3 >= r4) goto L_0x025b;
+    L_0x0243:
+        r4 = r2.cached_page;
+        r4 = r4.blocks;
+        r4 = r4.get(r3);
+        r4 = (org.telegram.tgnet.TLRPC.PageBlock) r4;
+        r6 = r4 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockAuthorDate;
+        if (r6 == 0) goto L_0x0258;
+    L_0x0251:
+        r4 = (org.telegram.tgnet.TLRPC.TL_pageBlockAuthorDate) r4;
+        r2 = r4.published_date;
+        r0.dateOverride = r2;
+        goto L_0x025b;
+    L_0x0258:
+        r3 = r3 + 1;
+        goto L_0x0239;
+    L_0x025b:
+        r2 = r1.getWebPagePhotos(r7, r7);
+        r3 = r2.isEmpty();
+        if (r3 != 0) goto L_0x0286;
+    L_0x0265:
+        r3 = r27.getId();
+        r0.slideshowMessageId = r3;
+        r0.needSearchImageInArr = r8;
+        r3 = r0.imagesArr;
+        r3.addAll(r2);
+        r2 = r0.imagesArr;
+        r2 = r2.size();
+        r0.totalImagesCount = r2;
+        r2 = r0.imagesArr;
+        r2 = r2.indexOf(r1);
+        if (r2 >= 0) goto L_0x0283;
+    L_0x0282:
+        r2 = 0;
+    L_0x0283:
+        r0.setImageIndex(r2, r11);
+    L_0x0286:
+        r2 = r27.canPreviewDocument();
+        if (r2 == 0) goto L_0x0297;
+    L_0x028c:
+        r0.sharedMediaType = r11;
+        r2 = r0.allMediaItem;
+        r3 = org.telegram.messenger.LocaleController.getString(r13, r10);
+        r2.setText(r3);
+    L_0x0297:
+        r2 = r0.slideshowMessageId;
+        if (r2 != 0) goto L_0x02e8;
+    L_0x029b:
+        r2 = r0.imagesArr;
+        r2.add(r1);
+        r2 = r0.currentAnimation;
+        if (r2 != 0) goto L_0x02d8;
+    L_0x02a4:
+        r2 = r1.eventId;
+        r4 = (r2 > r16 ? 1 : (r2 == r16 ? 0 : -1));
+        if (r4 == 0) goto L_0x02ab;
+    L_0x02aa:
+        goto L_0x02d8;
+    L_0x02ab:
+        r2 = r1.messageOwner;
+        r3 = r2.media;
+        r4 = r3 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaInvoice;
+        if (r4 != 0) goto L_0x02da;
+    L_0x02b3:
+        r3 = r3 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
+        if (r3 != 0) goto L_0x02da;
+    L_0x02b7:
+        r2 = r2.action;
+        if (r2 == 0) goto L_0x02bf;
+    L_0x02bb:
+        r2 = r2 instanceof org.telegram.tgnet.TLRPC.TL_messageActionEmpty;
+        if (r2 == 0) goto L_0x02da;
+    L_0x02bf:
+        r0.needSearchImageInArr = r11;
+        r2 = r0.imagesByIds;
+        r2 = r2[r8];
+        r3 = r27.getId();
+        r2.put(r3, r1);
+        r1 = r0.menuItem;
+        r2 = 2;
+        r1.showSubItem(r2);
+        r1 = r0.sendItem;
+        r1.setVisibility(r8);
+        goto L_0x02da;
+    L_0x02d8:
+        r0.needSearchImageInArr = r8;
+    L_0x02da:
+        r0.setImageIndex(r8, r11);
+        goto L_0x02e8;
+    L_0x02de:
+        if (r3 == 0) goto L_0x02eb;
+    L_0x02e0:
+        r1 = r0.secureDocuments;
+        r1.addAll(r3);
+        r0.setImageIndex(r5, r11);
+    L_0x02e8:
+        r3 = r7;
+        goto L_0x0557;
+    L_0x02eb:
+        if (r28 == 0) goto L_0x036d;
+    L_0x02ed:
+        r1 = r6.dialogId;
+        r0.avatarsDialogId = r1;
+        r1 = r0.avatarsDialogId;
+        if (r1 <= 0) goto L_0x030a;
+    L_0x02f5:
+        r1 = r0.currentAccount;
+        r1 = org.telegram.messenger.MessagesController.getInstance(r1);
+        r2 = r0.avatarsDialogId;
+        r2 = java.lang.Integer.valueOf(r2);
+        r1 = r1.getUser(r2);
+        r1 = org.telegram.messenger.ImageLocation.getForUser(r1, r11);
+        goto L_0x031f;
+    L_0x030a:
+        r1 = r0.currentAccount;
+        r1 = org.telegram.messenger.MessagesController.getInstance(r1);
+        r2 = r0.avatarsDialogId;
+        r2 = -r2;
+        r2 = java.lang.Integer.valueOf(r2);
+        r1 = r1.getChat(r2);
+        r1 = org.telegram.messenger.ImageLocation.getForChat(r1, r11);
+    L_0x031f:
+        r2 = r0.imagesArrLocations;
+        r2.add(r1);
+        r0.currentUserAvatarLocation = r1;
+        r1 = r0.imagesArrLocationsSizes;
+        r2 = r6.size;
+        r2 = java.lang.Integer.valueOf(r2);
+        r1.add(r2);
+        r1 = r0.avatarsArr;
+        r2 = new org.telegram.tgnet.TLRPC$TL_photoEmpty;
+        r2.<init>();
+        r1.add(r2);
+        r1 = r0.shareButton;
+        r2 = r0.videoPlayerControlFrameLayout;
+        r2 = r2.getVisibility();
+        if (r2 == 0) goto L_0x0346;
+    L_0x0345:
+        r14 = 0;
+    L_0x0346:
+        r1.setVisibility(r14);
+        r0.allowShare = r11;
+        r1 = r0.menuItem;
+        r2 = 2;
+        r1.hideSubItem(r2);
+        r1 = r0.shareButton;
+        r1 = r1.getVisibility();
+        if (r1 != 0) goto L_0x0361;
+    L_0x0359:
+        r1 = r0.menuItem;
+        r2 = 10;
+        r1.hideSubItem(r2);
+        goto L_0x0368;
+    L_0x0361:
+        r2 = 10;
+        r1 = r0.menuItem;
+        r1.showSubItem(r2);
+    L_0x0368:
+        r0.setImageIndex(r8, r11);
+        goto L_0x02e8;
+    L_0x036d:
+        if (r2 == 0) goto L_0x03cc;
+    L_0x036f:
+        r0.opennedFromMedia = r11;
+        r1 = r0.menuItem;
+        r1.showSubItem(r9);
+        r1 = r0.sendItem;
+        r1.setVisibility(r8);
+        r1 = r0.imagesArr;
+        r1.addAll(r2);
+        r1 = 0;
+    L_0x0381:
+        r2 = r0.imagesArr;
+        r2 = r2.size();
+        if (r1 >= r2) goto L_0x03ae;
+    L_0x0389:
+        r2 = r0.imagesArr;
+        r2 = r2.get(r1);
+        r2 = (org.telegram.messenger.MessageObject) r2;
+        r3 = r0.imagesByIds;
+        r14 = r2.getDialogId();
+        r7 = r0.currentDialogId;
+        r4 = (r14 > r7 ? 1 : (r14 == r7 ? 0 : -1));
+        if (r4 != 0) goto L_0x039f;
+    L_0x039d:
+        r4 = 0;
+        goto L_0x03a0;
+    L_0x039f:
+        r4 = 1;
+    L_0x03a0:
+        r3 = r3[r4];
+        r4 = r2.getId();
+        r3.put(r4, r2);
+        r1 = r1 + 1;
+        r7 = 0;
+        r8 = 0;
+        goto L_0x0381;
+    L_0x03ae:
+        r1 = r0.imagesArr;
+        r1 = r1.get(r5);
+        r1 = (org.telegram.messenger.MessageObject) r1;
+        r1 = r1.canPreviewDocument();
+        if (r1 == 0) goto L_0x03c7;
+    L_0x03bc:
+        r0.sharedMediaType = r11;
+        r1 = r0.allMediaItem;
+        r2 = org.telegram.messenger.LocaleController.getString(r13, r10);
+        r1.setText(r2);
+    L_0x03c7:
+        r0.setImageIndex(r5, r11);
+        goto L_0x0556;
+    L_0x03cc:
+        if (r4 == 0) goto L_0x0556;
+    L_0x03ce:
+        r1 = r0.sendPhotoType;
+        r2 = 5;
+        if (r1 == 0) goto L_0x03e0;
+    L_0x03d3:
+        if (r1 == r9) goto L_0x03e0;
+    L_0x03d5:
+        r3 = 2;
+        if (r1 == r3) goto L_0x03da;
+    L_0x03d8:
+        if (r1 != r2) goto L_0x03f6;
+    L_0x03da:
+        r1 = r31.size();
+        if (r1 <= r11) goto L_0x03f6;
+    L_0x03e0:
+        r1 = r0.checkImageView;
+        r3 = 0;
+        r1.setVisibility(r3);
+        r1 = r0.photosCounterView;
+        r1.setVisibility(r3);
+        r1 = r0.actionBar;
+        r3 = NUM; // 0x42CLASSNAME float:100.0 double:5.53552857E-315;
+        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
+        r1.setTitleRightMargin(r3);
+    L_0x03f6:
+        r1 = r0.sendPhotoType;
+        r3 = 2;
+        if (r1 == r3) goto L_0x03fd;
+    L_0x03fb:
+        if (r1 != r2) goto L_0x0410;
+    L_0x03fd:
+        r1 = r0.placeProvider;
+        r1 = r1.canCaptureMorePhotos();
+        if (r1 == 0) goto L_0x0410;
+    L_0x0405:
+        r1 = r0.cameraItem;
+        r3 = 0;
+        r1.setVisibility(r3);
+        r1 = r0.cameraItem;
+        r1.setTag(r12);
+    L_0x0410:
+        r1 = r0.menuItem;
+        r1.setVisibility(r14);
+        r1 = r0.imagesArrLocals;
+        r1.addAll(r4);
+        r1 = r0.imagesArrLocals;
+        r1 = r1.get(r5);
+        r3 = r1 instanceof org.telegram.messenger.MediaController.PhotoEntry;
+        if (r3 == 0) goto L_0x0469;
+    L_0x0424:
+        r1 = (org.telegram.messenger.MediaController.PhotoEntry) r1;
+        r1 = r1.isVideo;
+        if (r1 == 0) goto L_0x044d;
+    L_0x042a:
+        r1 = r0.cropItem;
+        r1.setVisibility(r14);
+        r1 = r0.rotateItem;
+        r1.setVisibility(r14);
+        r1 = r0.bottomLayout;
+        r3 = 0;
+        r1.setVisibility(r3);
+        r1 = r0.bottomLayout;
+        r1.setTag(r12);
+        r1 = r0.bottomLayout;
+        r3 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
+        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
+        r3 = -r3;
+        r3 = (float) r3;
+        r1.setTranslationY(r3);
+        goto L_0x0467;
+    L_0x044d:
+        r1 = r0.cropItem;
+        r3 = r0.sendPhotoType;
+        if (r3 == r11) goto L_0x0455;
+    L_0x0453:
+        r3 = 0;
+        goto L_0x0457;
+    L_0x0455:
+        r3 = 8;
+    L_0x0457:
+        r1.setVisibility(r3);
+        r1 = r0.rotateItem;
+        r3 = r0.sendPhotoType;
+        if (r3 == r11) goto L_0x0463;
+    L_0x0460:
+        r3 = 8;
+        goto L_0x0464;
+    L_0x0463:
+        r3 = 0;
+    L_0x0464:
+        r1.setVisibility(r3);
+    L_0x0467:
+        r8 = 1;
+        goto L_0x049a;
+    L_0x0469:
+        r3 = r1 instanceof org.telegram.tgnet.TLRPC.BotInlineResult;
+        if (r3 == 0) goto L_0x0479;
+    L_0x046d:
+        r1 = r0.cropItem;
+        r1.setVisibility(r14);
+        r1 = r0.rotateItem;
+        r1.setVisibility(r14);
+    L_0x0477:
+        r8 = 0;
+        goto L_0x049a;
+    L_0x0479:
+        r3 = r0.cropItem;
+        r4 = r1 instanceof org.telegram.messenger.MediaController.SearchImage;
+        if (r4 == 0) goto L_0x0487;
+    L_0x047f:
+        r1 = (org.telegram.messenger.MediaController.SearchImage) r1;
+        r1 = r1.type;
+        if (r1 != 0) goto L_0x0487;
+    L_0x0485:
+        r1 = 0;
+        goto L_0x0489;
+    L_0x0487:
+        r1 = 8;
+    L_0x0489:
+        r3.setVisibility(r1);
+        r1 = r0.rotateItem;
+        r1.setVisibility(r14);
+        r1 = r0.cropItem;
+        r1 = r1.getVisibility();
+        if (r1 != 0) goto L_0x0477;
+    L_0x0499:
+        goto L_0x0467;
+    L_0x049a:
+        r1 = r0.parentChatActivity;
+        if (r1 == 0) goto L_0x04f2;
+    L_0x049e:
+        r1 = r1.currentEncryptedChat;
+        if (r1 == 0) goto L_0x04ac;
+    L_0x04a2:
+        r1 = r1.layer;
+        r1 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r1);
+        r3 = 46;
+        if (r1 < r3) goto L_0x04f2;
+    L_0x04ac:
+        r1 = r0.mentionsAdapter;
         r3 = r0.parentChatActivity;
-        if (r3 == 0) goto L_0x0789;
-    L_0x0714:
-        r0 = r24;
-        r3 = r0.parentChatActivity;
-        r3 = r3.currentEncryptedChat;
-        if (r3 == 0) goto L_0x072c;
-    L_0x071c:
-        r0 = r24;
-        r3 = r0.parentChatActivity;
-        r3 = r3.currentEncryptedChat;
-        r3 = r3.layer;
-        r3 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r3);
-        r4 = 46;
-        if (r3 < r4) goto L_0x0789;
-    L_0x072c:
-        r0 = r24;
-        r3 = r0.mentionsAdapter;
-        r0 = r24;
-        r4 = r0.parentChatActivity;
-        r4 = r4.chatInfo;
-        r3.setChatInfo(r4);
-        r0 = r24;
-        r4 = r0.mentionsAdapter;
-        r0 = r24;
+        r3 = r3.chatInfo;
+        r1.setChatInfo(r3);
+        r1 = r0.mentionsAdapter;
         r3 = r0.parentChatActivity;
         r3 = r3.currentChat;
-        if (r3 == 0) goto L_0x0859;
-    L_0x0745:
+        if (r3 == 0) goto L_0x04bf;
+    L_0x04bd:
         r3 = 1;
-    L_0x0746:
-        r4.setNeedUsernames(r3);
-        r0 = r24;
-        r3 = r0.mentionsAdapter;
-        r4 = 0;
-        r3.setNeedBotContext(r4);
-        if (r10 == 0) goto L_0x085c;
-    L_0x0753:
-        r0 = r24;
-        r3 = r0.placeProvider;
-        if (r3 == 0) goto L_0x0769;
-    L_0x0759:
-        r0 = r24;
-        r3 = r0.placeProvider;
-        if (r3 == 0) goto L_0x085c;
-    L_0x075f:
-        r0 = r24;
-        r3 = r0.placeProvider;
-        r3 = r3.allowCaption();
-        if (r3 == 0) goto L_0x085c;
-    L_0x0769:
-        r3 = 1;
-    L_0x076a:
-        r0 = r24;
-        r0.needCaptionLayout = r3;
-        r0 = r24;
-        r4 = r0.captionEditText;
-        r0 = r24;
+        goto L_0x04c0;
+    L_0x04bf:
+        r3 = 0;
+    L_0x04c0:
+        r1.setNeedUsernames(r3);
+        r1 = r0.mentionsAdapter;
+        r3 = 0;
+        r1.setNeedBotContext(r3);
+        if (r8 == 0) goto L_0x04d9;
+    L_0x04cb:
+        r1 = r0.placeProvider;
+        if (r1 == 0) goto L_0x04d7;
+    L_0x04cf:
+        if (r1 == 0) goto L_0x04d9;
+    L_0x04d1:
+        r1 = r1.allowCaption();
+        if (r1 == 0) goto L_0x04d9;
+    L_0x04d7:
+        r1 = 1;
+        goto L_0x04da;
+    L_0x04d9:
+        r1 = 0;
+    L_0x04da:
+        r0.needCaptionLayout = r1;
+        r1 = r0.captionEditText;
         r3 = r0.needCaptionLayout;
-        if (r3 == 0) goto L_0x085f;
-    L_0x0778:
+        if (r3 == 0) goto L_0x04e4;
+    L_0x04e2:
         r3 = 0;
-    L_0x0779:
-        r4.setVisibility(r3);
-        r0 = r24;
-        r3 = r0.needCaptionLayout;
-        if (r3 == 0) goto L_0x0789;
-    L_0x0782:
-        r0 = r24;
-        r3 = r0.captionEditText;
-        r3.onCreate();
-    L_0x0789:
-        r0 = r24;
-        r3 = r0.pickerView;
-        r4 = 0;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.pickerViewSendButton;
-        r4 = 0;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.pickerViewSendButton;
-        r4 = 0;
-        r3.setTranslationY(r4);
-        r0 = r24;
-        r3 = r0.pickerViewSendButton;
-        r4 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r3.setAlpha(r4);
-        r0 = r24;
-        r3 = r0.bottomLayout;
-        r4 = 8;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.bottomLayout;
-        r4 = 0;
-        r3.setTag(r4);
-        r0 = r24;
-        r3 = r0.containerView;
-        r4 = 0;
-        r3.setTag(r4);
-        r3 = 1;
-        r0 = r24;
-        r1 = r30;
-        r0.setImageIndex(r1, r3);
-        r0 = r24;
-        r3 = r0.sendPhotoType;
-        r4 = 1;
-        if (r3 != r4) goto L_0x0863;
-    L_0x07d2:
-        r0 = r24;
-        r3 = r0.paintItem;
-        r4 = 0;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.tuneItem;
-        r4 = 0;
-        r3.setVisibility(r4);
-    L_0x07e2:
-        r24.updateSelectedCount();
-        goto L_0x0449;
-    L_0x07e7:
-        r0 = r24;
-        r4 = r0.cropItem;
-        r0 = r24;
-        r3 = r0.sendPhotoType;
-        r5 = 1;
-        if (r3 == r5) goto L_0x0808;
-    L_0x07f2:
-        r3 = 0;
-    L_0x07f3:
-        r4.setVisibility(r3);
-        r0 = r24;
-        r4 = r0.rotateItem;
-        r0 = r24;
-        r3 = r0.sendPhotoType;
-        r5 = 1;
-        if (r3 == r5) goto L_0x080b;
-    L_0x0801:
+        goto L_0x04e6;
+    L_0x04e4:
         r3 = 8;
-    L_0x0803:
-        r4.setVisibility(r3);
-        goto L_0x070d;
-    L_0x0808:
-        r3 = 8;
-        goto L_0x07f3;
-    L_0x080b:
+    L_0x04e6:
+        r1.setVisibility(r3);
+        r1 = r0.needCaptionLayout;
+        if (r1 == 0) goto L_0x04f2;
+    L_0x04ed:
+        r1 = r0.captionEditText;
+        r1.onCreate();
+    L_0x04f2:
+        r1 = r0.pickerView;
         r3 = 0;
-        goto L_0x0803;
-    L_0x080d:
-        r0 = r18;
-        r3 = r0 instanceof org.telegram.tgnet.TLRPC.BotInlineResult;
-        if (r3 == 0) goto L_0x0828;
-    L_0x0813:
-        r0 = r24;
-        r3 = r0.cropItem;
-        r4 = 8;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.rotateItem;
-        r4 = 8;
-        r3.setVisibility(r4);
-        r10 = 0;
-        goto L_0x070e;
-    L_0x0828:
-        r0 = r24;
-        r4 = r0.cropItem;
-        r0 = r18;
-        r3 = r0 instanceof org.telegram.messenger.MediaController.SearchImage;
-        if (r3 == 0) goto L_0x0854;
-    L_0x0832:
-        r18 = (org.telegram.messenger.MediaController.SearchImage) r18;
-        r0 = r18;
-        r3 = r0.type;
-        if (r3 != 0) goto L_0x0854;
-    L_0x083a:
+        r1.setVisibility(r3);
+        r1 = r0.pickerViewSendButton;
+        r1.setVisibility(r3);
+        r1 = r0.pickerViewSendButton;
         r3 = 0;
-    L_0x083b:
-        r4.setVisibility(r3);
-        r0 = r24;
-        r3 = r0.rotateItem;
-        r4 = 8;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.cropItem;
-        r3 = r3.getVisibility();
-        if (r3 != 0) goto L_0x0857;
-    L_0x0851:
-        r10 = 1;
-    L_0x0852:
-        goto L_0x070e;
-    L_0x0854:
-        r3 = 8;
-        goto L_0x083b;
-    L_0x0857:
-        r10 = 0;
-        goto L_0x0852;
-    L_0x0859:
+        r1.setTranslationY(r3);
+        r1 = r0.pickerViewSendButton;
+        r3 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r1.setAlpha(r3);
+        r1 = r0.bottomLayout;
+        r1.setVisibility(r14);
+        r1 = r0.bottomLayout;
         r3 = 0;
-        goto L_0x0746;
-    L_0x085c:
+        r1.setTag(r3);
+        r1 = r0.containerView;
+        r1.setTag(r3);
+        r0.setImageIndex(r5, r11);
+        r1 = r0.sendPhotoType;
+        if (r1 != r11) goto L_0x052d;
+    L_0x0521:
+        r1 = r0.paintItem;
+        r2 = 0;
+        r1.setVisibility(r2);
+        r1 = r0.tuneItem;
+        r1.setVisibility(r2);
+        goto L_0x0552;
+    L_0x052d:
+        if (r1 == r9) goto L_0x0548;
+    L_0x052f:
+        if (r1 == r2) goto L_0x0548;
+    L_0x0531:
+        r1 = r0.paintItem;
+        r2 = r0.cropItem;
+        r2 = r2.getVisibility();
+        r1.setVisibility(r2);
+        r1 = r0.tuneItem;
+        r2 = r0.cropItem;
+        r2 = r2.getVisibility();
+        r1.setVisibility(r2);
+        goto L_0x0552;
+    L_0x0548:
+        r1 = r0.paintItem;
+        r1.setVisibility(r14);
+        r1 = r0.tuneItem;
+        r1.setVisibility(r14);
+    L_0x0552:
+        r26.updateSelectedCount();
+        goto L_0x0557;
+    L_0x0556:
         r3 = 0;
-        goto L_0x076a;
-    L_0x085f:
-        r3 = 8;
-        goto L_0x0779;
-    L_0x0863:
-        r0 = r24;
-        r3 = r0.sendPhotoType;
-        r4 = 4;
-        if (r3 == r4) goto L_0x0891;
-    L_0x086a:
-        r0 = r24;
-        r3 = r0.sendPhotoType;
-        r4 = 5;
-        if (r3 == r4) goto L_0x0891;
-    L_0x0871:
-        r0 = r24;
-        r3 = r0.paintItem;
-        r0 = r24;
-        r4 = r0.cropItem;
-        r4 = r4.getVisibility();
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.tuneItem;
-        r0 = r24;
-        r4 = r0.cropItem;
-        r4 = r4.getVisibility();
-        r3.setVisibility(r4);
-        goto L_0x07e2;
-    L_0x0891:
-        r0 = r24;
-        r3 = r0.paintItem;
-        r4 = 8;
-        r3.setVisibility(r4);
-        r0 = r24;
-        r3 = r0.tuneItem;
-        r4 = 8;
-        r3.setVisibility(r4);
-        goto L_0x07e2;
-    L_0x08a5:
-        r0 = r24;
-        r3 = r0.avatarsDialogId;
-        if (r3 == 0) goto L_0x049f;
-    L_0x08ab:
-        r0 = r24;
-        r3 = r0.currentAccount;
-        r3 = org.telegram.messenger.MessagesController.getInstance(r3);
-        r0 = r24;
-        r4 = r0.avatarsDialogId;
-        r5 = 80;
-        r6 = 0;
-        r8 = 1;
-        r0 = r24;
-        r9 = r0.classGuid;
-        r3.loadDialogPhotos(r4, r5, r6, r8, r9);
-        goto L_0x049f;
-    L_0x08c5:
-        r0 = r24;
-        r3 = r0.imagesArrLocals;
-        r3 = r3.isEmpty();
-        if (r3 != 0) goto L_0x04d6;
-    L_0x08cf:
-        r0 = r24;
-        r3 = r0.imagesArrLocals;
-        r0 = r30;
-        r15 = r3.get(r0);
-        r14 = 0;
-        r0 = r24;
-        r3 = r0.parentChatActivity;
-        if (r3 == 0) goto L_0x0939;
-    L_0x08e0:
-        r0 = r24;
-        r3 = r0.parentChatActivity;
-        r22 = r3.getCurrentUser();
-    L_0x08e8:
-        r0 = r24;
-        r3 = r0.parentChatActivity;
-        if (r3 == 0) goto L_0x093c;
-    L_0x08ee:
-        r0 = r24;
-        r3 = r0.parentChatActivity;
-        r3 = r3.isSecretChat();
-        if (r3 != 0) goto L_0x093c;
-    L_0x08f8:
-        if (r22 == 0) goto L_0x093c;
-    L_0x08fa:
-        r0 = r22;
-        r3 = r0.bot;
-        if (r3 != 0) goto L_0x093c;
-    L_0x0900:
-        r0 = r24;
-        r3 = r0.parentChatActivity;
-        r3 = r3.isEditingMessageMedia();
-        if (r3 != 0) goto L_0x093c;
-    L_0x090a:
-        r11 = 1;
-    L_0x090b:
-        r3 = r15 instanceof org.telegram.messenger.MediaController.PhotoEntry;
-        if (r3 == 0) goto L_0x093e;
-    L_0x090f:
-        r20 = r15;
-        r20 = (org.telegram.messenger.MediaController.PhotoEntry) r20;
-        r0 = r20;
-        r3 = r0.isVideo;
-        if (r3 == 0) goto L_0x092d;
-    L_0x0919:
-        r3 = new java.io.File;
-        r0 = r20;
-        r4 = r0.path;
-        r3.<init>(r4);
-        r3 = android.net.Uri.fromFile(r3);
-        r4 = 0;
-        r5 = 0;
-        r0 = r24;
-        r0.preparePlayer(r3, r4, r5);
-    L_0x092d:
-        if (r11 == 0) goto L_0x04d6;
-    L_0x092f:
-        r0 = r24;
-        r3 = r0.timeItem;
-        r4 = 0;
-        r3.setVisibility(r4);
-        goto L_0x04d6;
-    L_0x0939:
+    L_0x0557:
+        r1 = r0.currentAnimation;
+        if (r1 != 0) goto L_0x05b5;
+    L_0x055b:
+        r1 = r0.isEvent;
+        if (r1 != 0) goto L_0x05b5;
+    L_0x055f:
+        r1 = r0.currentDialogId;
+        r4 = (r1 > r16 ? 1 : (r1 == r16 ? 0 : -1));
+        if (r4 == 0) goto L_0x059a;
+    L_0x0565:
+        r1 = r0.totalImagesCount;
+        if (r1 != 0) goto L_0x059a;
+    L_0x0569:
+        r1 = r0.currentAccount;
+        r19 = org.telegram.messenger.DataQuery.getInstance(r1);
+        r1 = r0.currentDialogId;
+        r4 = r0.sharedMediaType;
+        r6 = r0.classGuid;
+        r24 = 1;
+        r20 = r1;
+        r22 = r4;
+        r23 = r6;
+        r19.getMediaCount(r20, r22, r23, r24);
+        r1 = r0.mergeDialogId;
+        r4 = (r1 > r16 ? 1 : (r1 == r16 ? 0 : -1));
+        if (r4 == 0) goto L_0x05b5;
+    L_0x0586:
+        r1 = r0.currentAccount;
+        r12 = org.telegram.messenger.DataQuery.getInstance(r1);
+        r13 = r0.mergeDialogId;
+        r15 = r0.sharedMediaType;
+        r1 = r0.classGuid;
+        r17 = 1;
+        r16 = r1;
+        r12.getMediaCount(r13, r15, r16, r17);
+        goto L_0x05b5;
+    L_0x059a:
+        r1 = r0.avatarsDialogId;
+        if (r1 == 0) goto L_0x05b5;
+    L_0x059e:
+        r1 = r0.currentAccount;
+        r19 = org.telegram.messenger.MessagesController.getInstance(r1);
+        r1 = r0.avatarsDialogId;
+        r21 = 80;
         r22 = 0;
-        goto L_0x08e8;
-    L_0x093c:
-        r11 = 0;
-        goto L_0x090b;
-    L_0x093e:
-        if (r11 == 0) goto L_0x092d;
-    L_0x0940:
-        r3 = r15 instanceof org.telegram.messenger.MediaController.SearchImage;
-        if (r3 == 0) goto L_0x092d;
-    L_0x0944:
-        r15 = (org.telegram.messenger.MediaController.SearchImage) r15;
-        r3 = r15.type;
-        if (r3 != 0) goto L_0x094c;
-    L_0x094a:
-        r11 = 1;
-    L_0x094b:
-        goto L_0x092d;
-    L_0x094c:
-        r11 = 0;
-        goto L_0x094b;
+        r24 = 1;
+        r2 = r0.classGuid;
+        r20 = r1;
+        r25 = r2;
+        r19.loadDialogPhotos(r20, r21, r22, r24, r25);
+    L_0x05b5:
+        r1 = r0.currentMessageObject;
+        if (r1 == 0) goto L_0x05c2;
+    L_0x05b9:
+        r1 = r1.isVideo();
+        if (r1 != 0) goto L_0x05c0;
+    L_0x05bf:
+        goto L_0x05c2;
+    L_0x05c0:
+        r1 = 0;
+        goto L_0x05db;
+    L_0x05c2:
+        r1 = r0.currentBotInlineResult;
+        if (r1 == 0) goto L_0x05df;
+    L_0x05c6:
+        r1 = r1.type;
+        r2 = "video";
+        r1 = r1.equals(r2);
+        if (r1 != 0) goto L_0x05c0;
+    L_0x05d0:
+        r1 = r0.currentBotInlineResult;
+        r1 = r1.document;
+        r1 = org.telegram.messenger.MessageObject.isVideoDocument(r1);
+        if (r1 == 0) goto L_0x05df;
+    L_0x05da:
+        goto L_0x05c0;
+    L_0x05db:
+        r0.onActionClick(r1);
+        goto L_0x0642;
+    L_0x05df:
+        r1 = r0.imagesArrLocals;
+        r1 = r1.isEmpty();
+        if (r1 != 0) goto L_0x0642;
+    L_0x05e7:
+        r1 = r0.imagesArrLocals;
+        r1 = r1.get(r5);
+        r2 = r0.parentChatActivity;
+        if (r2 == 0) goto L_0x05f6;
+    L_0x05f1:
+        r7 = r2.getCurrentUser();
+        r3 = r7;
+    L_0x05f6:
+        r2 = r0.parentChatActivity;
+        if (r2 == 0) goto L_0x0610;
+    L_0x05fa:
+        r2 = r2.isSecretChat();
+        if (r2 != 0) goto L_0x0610;
+    L_0x0600:
+        if (r3 == 0) goto L_0x0610;
+    L_0x0602:
+        r2 = r3.bot;
+        if (r2 != 0) goto L_0x0610;
+    L_0x0606:
+        r2 = r0.parentChatActivity;
+        r2 = r2.isEditingMessageMedia();
+        if (r2 != 0) goto L_0x0610;
+    L_0x060e:
+        r2 = 1;
+        goto L_0x0611;
+    L_0x0610:
+        r2 = 0;
+    L_0x0611:
+        r3 = r1 instanceof org.telegram.messenger.MediaController.PhotoEntry;
+        if (r3 == 0) goto L_0x062b;
+    L_0x0615:
+        r1 = (org.telegram.messenger.MediaController.PhotoEntry) r1;
+        r3 = r1.isVideo;
+        if (r3 == 0) goto L_0x063a;
+    L_0x061b:
+        r3 = new java.io.File;
+        r1 = r1.path;
+        r3.<init>(r1);
+        r1 = android.net.Uri.fromFile(r3);
+        r3 = 0;
+        r0.preparePlayer(r1, r3, r3);
+        goto L_0x063a;
+    L_0x062b:
+        if (r2 == 0) goto L_0x063a;
+    L_0x062d:
+        r3 = r1 instanceof org.telegram.messenger.MediaController.SearchImage;
+        if (r3 == 0) goto L_0x063a;
+    L_0x0631:
+        r1 = (org.telegram.messenger.MediaController.SearchImage) r1;
+        r1 = r1.type;
+        if (r1 != 0) goto L_0x0639;
+    L_0x0637:
+        r2 = 1;
+        goto L_0x063a;
+    L_0x0639:
+        r2 = 0;
+    L_0x063a:
+        if (r2 == 0) goto L_0x0642;
+    L_0x063c:
+        r1 = r0.timeItem;
+        r2 = 0;
+        r1.setVisibility(r2);
+    L_0x0642:
+        return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.onPhotoShow(org.telegram.messenger.MessageObject, org.telegram.tgnet.TLRPC$FileLocation, java.util.ArrayList, java.util.ArrayList, java.util.ArrayList, int, org.telegram.ui.PhotoViewer$PlaceProviderObject):void");
     }
 
-    private void setDoubleTapEnabled(boolean value) {
-        OnDoubleTapListener thisR;
-        this.doubleTapEnabled = value;
-        GestureDetector gestureDetector = this.gestureDetector;
-        if (!value) {
-            thisR = null;
-        }
-        gestureDetector.setOnDoubleTapListener(thisR);
+    private void setDoubleTapEnabled(boolean z) {
+        this.doubleTapEnabled = z;
+        this.gestureDetector.setOnDoubleTapListener(z ? this : null);
     }
 
     public boolean isMuteVideo() {
@@ -6783,510 +7938,1512 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         }
     }
 
-    private void setIsAboutToSwitchToIndex(int index, boolean init) {
-        if (init || this.switchingToIndex != index) {
-            boolean z;
-            this.switchingToIndex = index;
-            boolean isVideo = false;
-            CharSequence caption = null;
-            String newFileName = getFileName(index);
-            MessageObject newMessageObject = null;
-            Chat chat;
-            User user;
-            if (this.imagesArr.isEmpty()) {
-                if (!this.secureDocuments.isEmpty()) {
-                    this.allowShare = false;
-                    this.menuItem.hideSubItem(1);
-                    this.nameTextView.setText("");
-                    this.dateTextView.setText("");
-                    this.actionBar.setTitle(LocaleController.formatString("Of", NUM, Integer.valueOf(this.switchingToIndex + 1), Integer.valueOf(this.secureDocuments.size())));
-                } else if (this.imagesArrLocations.isEmpty()) {
-                    if (!this.imagesArrLocals.isEmpty()) {
-                        if (index >= 0 && index < this.imagesArrLocals.size()) {
-                            ColorFilter filter;
-                            BotInlineResult object = this.imagesArrLocals.get(index);
-                            int ttl = 0;
-                            boolean isFiltered = false;
-                            boolean isPainted = false;
-                            boolean isCropped = false;
-                            if (object instanceof BotInlineResult) {
-                                BotInlineResult botInlineResult = object;
-                                this.currentBotInlineResult = botInlineResult;
-                                if (botInlineResult.document != null) {
-                                    isVideo = MessageObject.isVideoDocument(botInlineResult.document);
-                                } else if (botInlineResult.content instanceof TL_webDocument) {
-                                    isVideo = botInlineResult.type.equals("video");
-                                }
-                            } else {
-                                PhotoEntry photoEntry;
-                                SearchImage searchImage;
-                                String pathObject = null;
-                                boolean isAnimation = false;
-                                if (object instanceof PhotoEntry) {
-                                    photoEntry = (PhotoEntry) object;
-                                    pathObject = photoEntry.path;
-                                    isVideo = photoEntry.isVideo;
-                                } else if (object instanceof SearchImage) {
-                                    searchImage = (SearchImage) object;
-                                    pathObject = searchImage.getPathToAttach();
-                                    if (searchImage.type == 1) {
-                                        isAnimation = true;
-                                    }
-                                }
-                                if (isVideo) {
-                                    this.muteItem.setVisibility(0);
-                                    this.compressItem.setVisibility(0);
-                                    this.isCurrentVideo = true;
-                                    updateAccessibilityOverlayVisibility();
-                                    boolean isMuted = false;
-                                    if (object instanceof PhotoEntry) {
-                                        photoEntry = (PhotoEntry) object;
-                                        isMuted = photoEntry.editedInfo != null && photoEntry.editedInfo.muted;
-                                    }
-                                    processOpenVideo(pathObject, isMuted);
-                                    this.videoTimelineView.setVisibility(0);
-                                    this.paintItem.setVisibility(8);
-                                    this.cropItem.setVisibility(8);
-                                    this.tuneItem.setVisibility(8);
-                                    this.rotateItem.setVisibility(8);
-                                } else {
-                                    this.videoTimelineView.setVisibility(8);
-                                    this.muteItem.setVisibility(8);
-                                    this.isCurrentVideo = false;
-                                    updateAccessibilityOverlayVisibility();
-                                    this.compressItem.setVisibility(8);
-                                    if (isAnimation) {
-                                        this.paintItem.setVisibility(8);
-                                        this.cropItem.setVisibility(8);
-                                        this.rotateItem.setVisibility(8);
-                                        this.tuneItem.setVisibility(8);
-                                    } else {
-                                        if (this.sendPhotoType == 4 || this.sendPhotoType == 5) {
-                                            this.paintItem.setVisibility(8);
-                                            this.tuneItem.setVisibility(8);
-                                        } else {
-                                            this.paintItem.setVisibility(0);
-                                            this.tuneItem.setVisibility(0);
-                                        }
-                                        this.cropItem.setVisibility(this.sendPhotoType != 1 ? 0 : 8);
-                                        this.rotateItem.setVisibility(this.sendPhotoType != 1 ? 8 : 0);
-                                    }
-                                    this.actionBar.setSubtitle(null);
-                                }
-                                if (object instanceof PhotoEntry) {
-                                    photoEntry = (PhotoEntry) object;
-                                    z = photoEntry.bucketId == 0 && photoEntry.dateTaken == 0 && this.imagesArrLocals.size() == 1;
-                                    this.fromCamera = z;
-                                    caption = photoEntry.caption;
-                                    ttl = photoEntry.ttl;
-                                    isFiltered = photoEntry.isFiltered;
-                                    isPainted = photoEntry.isPainted;
-                                    isCropped = photoEntry.isCropped;
-                                } else if (object instanceof SearchImage) {
-                                    searchImage = (SearchImage) object;
-                                    caption = searchImage.caption;
-                                    ttl = searchImage.ttl;
-                                    isFiltered = searchImage.isFiltered;
-                                    isPainted = searchImage.isPainted;
-                                    isCropped = searchImage.isCropped;
-                                }
-                            }
-                            if (this.bottomLayout.getVisibility() != 8) {
-                                this.bottomLayout.setVisibility(8);
-                            }
-                            this.bottomLayout.setTag(null);
-                            if (!this.fromCamera) {
-                                this.actionBar.setTitle(LocaleController.formatString("Of", NUM, Integer.valueOf(this.switchingToIndex + 1), Integer.valueOf(this.imagesArrLocals.size())));
-                            } else if (isVideo) {
-                                this.actionBar.setTitle(LocaleController.getString("AttachVideo", NUM));
-                            } else {
-                                this.actionBar.setTitle(LocaleController.getString("AttachPhoto", NUM));
-                            }
-                            if (this.parentChatActivity != null) {
-                                chat = this.parentChatActivity.getCurrentChat();
-                                if (chat != null) {
-                                    this.actionBar.setTitle(chat.title);
-                                } else {
-                                    user = this.parentChatActivity.getCurrentUser();
-                                    if (user != null) {
-                                        this.actionBar.setTitle(ContactsController.formatName(user.first_name, user.last_name));
-                                    }
-                                }
-                            }
-                            if (this.sendPhotoType == 0 || this.sendPhotoType == 4 || ((this.sendPhotoType == 2 || this.sendPhotoType == 5) && this.imagesArrLocals.size() > 1)) {
-                                this.checkImageView.setChecked(this.placeProvider.isPhotoChecked(this.switchingToIndex), false);
-                            }
-                            updateCaptionTextForCurrentPhoto(object);
-                            ColorFilter porterDuffColorFilter = new PorterDuffColorFilter(-12734994, Mode.MULTIPLY);
-                            this.timeItem.setColorFilter(ttl != 0 ? porterDuffColorFilter : null);
-                            this.paintItem.setColorFilter(isPainted ? porterDuffColorFilter : null);
-                            this.cropItem.setColorFilter(isCropped ? porterDuffColorFilter : null);
-                            ImageView imageView = this.tuneItem;
-                            if (!isFiltered) {
-                                filter = null;
-                            }
-                            imageView.setColorFilter(filter);
-                        } else {
-                            return;
-                        }
-                    }
-                } else if (index >= 0 && index < this.imagesArrLocations.size()) {
-                    this.nameTextView.setText("");
-                    this.dateTextView.setText("");
-                    if (this.avatarsDialogId != UserConfig.getInstance(this.currentAccount).getClientUserId() || this.avatarsArr.isEmpty()) {
-                        this.menuItem.hideSubItem(6);
-                    } else {
-                        this.menuItem.showSubItem(6);
-                    }
-                    if (this.isEvent) {
-                        this.actionBar.setTitle(LocaleController.getString("AttachPhoto", NUM));
-                    } else {
-                        this.actionBar.setTitle(LocaleController.formatString("Of", NUM, Integer.valueOf(this.switchingToIndex + 1), Integer.valueOf(this.imagesArrLocations.size())));
-                    }
-                    this.menuItem.showSubItem(1);
-                    this.allowShare = true;
-                    this.shareButton.setVisibility(this.videoPlayerControlFrameLayout.getVisibility() != 0 ? 0 : 8);
-                    if (this.shareButton.getVisibility() == 0) {
-                        this.menuItem.hideSubItem(10);
-                    } else {
-                        this.menuItem.showSubItem(10);
-                    }
-                    this.groupedPhotosListView.fillList();
-                } else {
-                    return;
-                }
-            } else if (this.switchingToIndex >= 0 && this.switchingToIndex < this.imagesArr.size()) {
-                newMessageObject = (MessageObject) this.imagesArr.get(this.switchingToIndex);
-                isVideo = newMessageObject.isVideo();
-                boolean isInvoice = newMessageObject.isInvoice();
-                if (isInvoice) {
-                    this.masksItem.setVisibility(8);
-                    this.menuItem.hideSubItem(6);
-                    this.menuItem.hideSubItem(11);
-                    caption = newMessageObject.messageOwner.media.description;
-                    this.allowShare = false;
-                    this.bottomLayout.setTranslationY((float) AndroidUtilities.dp(48.0f));
-                    this.captionTextView.setTranslationY((float) AndroidUtilities.dp(48.0f));
-                } else {
-                    long date;
-                    ActionBarMenuItem actionBarMenuItem = this.masksItem;
-                    int i = (!newMessageObject.hasPhotoStickers() || ((int) newMessageObject.getDialogId()) == 0) ? 8 : 0;
-                    actionBarMenuItem.setVisibility(i);
-                    if (newMessageObject.canDeleteMessage(null) && this.slideshowMessageId == 0) {
-                        this.menuItem.showSubItem(6);
-                    } else {
-                        this.menuItem.hideSubItem(6);
-                    }
-                    if (isVideo) {
-                        this.menuItem.showSubItem(11);
-                        if (this.pipItem.getVisibility() != 0) {
-                            this.pipItem.setVisibility(0);
-                        }
-                        if (!this.pipAvailable) {
-                            this.pipItem.setEnabled(false);
-                            this.pipItem.setAlpha(0.5f);
-                        }
-                    } else {
-                        this.menuItem.hideSubItem(11);
-                        if (this.pipItem.getVisibility() != 8) {
-                            this.pipItem.setVisibility(8);
-                        }
-                    }
-                    if (this.nameOverride != null) {
-                        this.nameTextView.setText(this.nameOverride);
-                    } else if (newMessageObject.isFromUser()) {
-                        user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(newMessageObject.messageOwner.from_id));
-                        if (user != null) {
-                            this.nameTextView.setText(UserObject.getUserName(user));
-                        } else {
-                            this.nameTextView.setText("");
-                        }
-                    } else {
-                        chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(newMessageObject.messageOwner.to_id.channel_id));
-                        if (chat != null) {
-                            this.nameTextView.setText(chat.title);
-                        } else {
-                            this.nameTextView.setText("");
-                        }
-                    }
-                    if (this.dateOverride != 0) {
-                        date = ((long) this.dateOverride) * 1000;
-                    } else {
-                        date = ((long) newMessageObject.messageOwner.date) * 1000;
-                    }
-                    String dateString = LocaleController.formatString("formatDateAtTime", NUM, LocaleController.getInstance().formatterYear.format(new Date(date)), LocaleController.getInstance().formatterDay.format(new Date(date)));
-                    if (newFileName == null || !isVideo) {
-                        this.dateTextView.setText(dateString);
-                    } else {
-                        this.dateTextView.setText(String.format("%s (%s)", new Object[]{dateString, AndroidUtilities.formatFileSize((long) newMessageObject.getDocument().size)}));
-                    }
-                    caption = newMessageObject.caption;
-                }
-                if (this.currentAnimation != null) {
-                    this.menuItem.hideSubItem(1);
-                    this.menuItem.hideSubItem(10);
-                    if (!newMessageObject.canDeleteMessage(null)) {
-                        this.menuItem.setVisibility(8);
-                    }
-                    this.allowShare = true;
-                    this.shareButton.setVisibility(0);
-                    this.actionBar.setTitle(LocaleController.getString("AttachGif", NUM));
-                } else {
-                    int loadFromMaxId;
-                    int loadIndex;
-                    if (this.totalImagesCount + this.totalImagesCountMerge == 0 || this.needSearchImageInArr) {
-                        if (this.slideshowMessageId == 0 && (newMessageObject.messageOwner.media instanceof TL_messageMediaWebPage)) {
-                            if (newMessageObject.canPreviewDocument()) {
-                                this.actionBar.setTitle(LocaleController.getString("AttachDocument", NUM));
-                            } else if (newMessageObject.isVideo()) {
-                                this.actionBar.setTitle(LocaleController.getString("AttachVideo", NUM));
-                            } else {
-                                this.actionBar.setTitle(LocaleController.getString("AttachPhoto", NUM));
-                            }
-                        } else if (isInvoice) {
-                            this.actionBar.setTitle(newMessageObject.messageOwner.media.title);
-                        } else if (newMessageObject.isVideo()) {
-                            this.actionBar.setTitle(LocaleController.getString("AttachVideo", NUM));
-                        } else if (newMessageObject.getDocument() != null) {
-                            this.actionBar.setTitle(LocaleController.getString("AttachDocument", NUM));
-                        }
-                    } else if (this.opennedFromMedia) {
-                        if (this.imagesArr.size() < this.totalImagesCount + this.totalImagesCountMerge && !this.loadingMoreImages && this.switchingToIndex > this.imagesArr.size() - 5) {
-                            loadFromMaxId = this.imagesArr.isEmpty() ? 0 : ((MessageObject) this.imagesArr.get(this.imagesArr.size() - 1)).getId();
-                            loadIndex = 0;
-                            if (this.endReached[0] && this.mergeDialogId != 0) {
-                                loadIndex = 1;
-                                if (!(this.imagesArr.isEmpty() || ((MessageObject) this.imagesArr.get(this.imagesArr.size() - 1)).getDialogId() == this.mergeDialogId)) {
-                                    loadFromMaxId = 0;
-                                }
-                            }
-                            DataQuery.getInstance(this.currentAccount).loadMedia(loadIndex == 0 ? this.currentDialogId : this.mergeDialogId, 80, loadFromMaxId, this.sharedMediaType, 1, this.classGuid);
-                            this.loadingMoreImages = true;
-                        }
-                        this.actionBar.setTitle(LocaleController.formatString("Of", NUM, Integer.valueOf(this.switchingToIndex + 1), Integer.valueOf(this.totalImagesCount + this.totalImagesCountMerge)));
-                    } else {
-                        if (this.imagesArr.size() < this.totalImagesCount + this.totalImagesCountMerge && !this.loadingMoreImages && this.switchingToIndex < 5) {
-                            loadFromMaxId = this.imagesArr.isEmpty() ? 0 : ((MessageObject) this.imagesArr.get(0)).getId();
-                            loadIndex = 0;
-                            if (this.endReached[0] && this.mergeDialogId != 0) {
-                                loadIndex = 1;
-                                if (!(this.imagesArr.isEmpty() || ((MessageObject) this.imagesArr.get(0)).getDialogId() == this.mergeDialogId)) {
-                                    loadFromMaxId = 0;
-                                }
-                            }
-                            DataQuery.getInstance(this.currentAccount).loadMedia(loadIndex == 0 ? this.currentDialogId : this.mergeDialogId, 80, loadFromMaxId, this.sharedMediaType, 1, this.classGuid);
-                            this.loadingMoreImages = true;
-                        }
-                        this.actionBar.setTitle(LocaleController.formatString("Of", NUM, Integer.valueOf((((this.totalImagesCount + this.totalImagesCountMerge) - this.imagesArr.size()) + this.switchingToIndex) + 1), Integer.valueOf(this.totalImagesCount + this.totalImagesCountMerge)));
-                    }
-                    if (((int) this.currentDialogId) == 0) {
-                        this.sendItem.setVisibility(8);
-                    }
-                    if (newMessageObject.messageOwner.ttl == 0 || newMessageObject.messageOwner.ttl >= 3600) {
-                        this.allowShare = true;
-                        this.menuItem.showSubItem(1);
-                        this.shareButton.setVisibility(this.videoPlayerControlFrameLayout.getVisibility() != 0 ? 0 : 8);
-                        if (this.shareButton.getVisibility() == 0) {
-                            this.menuItem.hideSubItem(10);
-                        } else {
-                            this.menuItem.showSubItem(10);
-                        }
-                    } else {
-                        this.allowShare = false;
-                        this.menuItem.hideSubItem(1);
-                        this.shareButton.setVisibility(8);
-                        this.menuItem.hideSubItem(10);
-                    }
-                }
-                this.groupedPhotosListView.fillList();
-            } else {
-                return;
-            }
-            if (init) {
-                z = false;
-            } else {
-                z = true;
-            }
-            setCurrentCaption(newMessageObject, caption, z);
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:34:0x00d2  */
+    /* JADX WARNING: Removed duplicated region for block: B:28:0x00af  */
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x00ee  */
+    /* JADX WARNING: Removed duplicated region for block: B:39:0x00e8  */
+    /* JADX WARNING: Removed duplicated region for block: B:52:0x0140  */
+    /* JADX WARNING: Removed duplicated region for block: B:260:0x0664  */
+    /* JADX WARNING: Removed duplicated region for block: B:266:0x068e  */
+    /* JADX WARNING: Removed duplicated region for block: B:263:0x0672  */
+    /* JADX WARNING: Removed duplicated region for block: B:269:0x06b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:288:0x070e  */
+    /* JADX WARNING: Removed duplicated region for block: B:287:0x070c  */
+    /* JADX WARNING: Removed duplicated region for block: B:292:0x0718  */
+    /* JADX WARNING: Removed duplicated region for block: B:291:0x0716  */
+    /* JADX WARNING: Removed duplicated region for block: B:296:0x0722  */
+    /* JADX WARNING: Removed duplicated region for block: B:295:0x0720  */
+    /* JADX WARNING: Removed duplicated region for block: B:299:0x072b  */
+    private void setIsAboutToSwitchToIndex(int r27, boolean r28) {
+        /*
+        r26 = this;
+        r0 = r26;
+        r1 = r27;
+        if (r28 != 0) goto L_0x000b;
+    L_0x0006:
+        r2 = r0.switchingToIndex;
+        if (r2 != r1) goto L_0x000b;
+    L_0x000a:
+        return;
+    L_0x000b:
+        r0.switchingToIndex = r1;
+        r2 = r26.getFileName(r27);
+        r3 = r0.imagesArr;
+        r3 = r3.isEmpty();
+        r4 = "AttachVideo";
+        r6 = "AttachPhoto";
+        r8 = 6;
+        r10 = "Of";
+        r12 = "";
+        r13 = 2;
+        r14 = 0;
+        r15 = 8;
+        r9 = 0;
+        if (r3 != 0) goto L_0x0424;
+    L_0x0027:
+        r1 = r0.switchingToIndex;
+        if (r1 < 0) goto L_0x0423;
+    L_0x002b:
+        r3 = r0.imagesArr;
+        r3 = r3.size();
+        if (r1 < r3) goto L_0x0035;
+    L_0x0033:
+        goto L_0x0423;
+    L_0x0035:
+        r1 = r0.imagesArr;
+        r3 = r0.switchingToIndex;
+        r1 = r1.get(r3);
+        r1 = (org.telegram.messenger.MessageObject) r1;
+        r3 = r1.isVideo();
+        r16 = r1.isInvoice();
+        r7 = 11;
+        if (r16 == 0) goto L_0x007e;
+    L_0x004b:
+        r2 = r0.masksItem;
+        r2.setVisibility(r15);
+        r2 = r0.menuItem;
+        r2.hideSubItem(r8);
+        r2 = r0.menuItem;
+        r2.hideSubItem(r7);
+        r2 = r1.messageOwner;
+        r2 = r2.media;
+        r2 = r2.description;
+        r0.allowShare = r9;
+        r3 = r0.bottomLayout;
+        r7 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
+        r7 = org.telegram.messenger.AndroidUtilities.dp(r7);
+        r7 = (float) r7;
+        r3.setTranslationY(r7);
+        r3 = r0.captionTextView;
+        r7 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
+        r7 = org.telegram.messenger.AndroidUtilities.dp(r7);
+        r7 = (float) r7;
+        r3.setTranslationY(r7);
+        r17 = r6;
+        goto L_0x01a0;
+    L_0x007e:
+        r11 = r0.masksItem;
+        r17 = r1.hasPhotoStickers();
+        if (r17 == 0) goto L_0x0091;
+    L_0x0086:
+        r17 = r6;
+        r5 = r1.getDialogId();
+        r6 = (int) r5;
+        if (r6 == 0) goto L_0x0093;
+    L_0x008f:
+        r5 = 0;
+        goto L_0x0095;
+    L_0x0091:
+        r17 = r6;
+    L_0x0093:
+        r5 = 8;
+    L_0x0095:
+        r11.setVisibility(r5);
+        r5 = r1.canDeleteMessage(r14);
+        if (r5 == 0) goto L_0x00a8;
+    L_0x009e:
+        r5 = r0.slideshowMessageId;
+        if (r5 != 0) goto L_0x00a8;
+    L_0x00a2:
+        r5 = r0.menuItem;
+        r5.showSubItem(r8);
+        goto L_0x00ad;
+    L_0x00a8:
+        r5 = r0.menuItem;
+        r5.hideSubItem(r8);
+    L_0x00ad:
+        if (r3 == 0) goto L_0x00d2;
+    L_0x00af:
+        r5 = r0.menuItem;
+        r5.showSubItem(r7);
+        r5 = r0.pipItem;
+        r5 = r5.getVisibility();
+        if (r5 == 0) goto L_0x00c1;
+    L_0x00bc:
+        r5 = r0.pipItem;
+        r5.setVisibility(r9);
+    L_0x00c1:
+        r5 = r0.pipAvailable;
+        if (r5 != 0) goto L_0x00e4;
+    L_0x00c5:
+        r5 = r0.pipItem;
+        r5.setEnabled(r9);
+        r5 = r0.pipItem;
+        r6 = NUM; // 0x3var_ float:0.5 double:5.222099017E-315;
+        r5.setAlpha(r6);
+        goto L_0x00e4;
+    L_0x00d2:
+        r5 = r0.menuItem;
+        r5.hideSubItem(r7);
+        r5 = r0.pipItem;
+        r5 = r5.getVisibility();
+        if (r5 == r15) goto L_0x00e4;
+    L_0x00df:
+        r5 = r0.pipItem;
+        r5.setVisibility(r15);
+    L_0x00e4:
+        r5 = r0.nameOverride;
+        if (r5 == 0) goto L_0x00ee;
+    L_0x00e8:
+        r6 = r0.nameTextView;
+        r6.setText(r5);
+        goto L_0x013b;
+    L_0x00ee:
+        r5 = r1.isFromUser();
+        if (r5 == 0) goto L_0x0118;
+    L_0x00f4:
+        r5 = r0.currentAccount;
+        r5 = org.telegram.messenger.MessagesController.getInstance(r5);
+        r6 = r1.messageOwner;
+        r6 = r6.from_id;
+        r6 = java.lang.Integer.valueOf(r6);
+        r5 = r5.getUser(r6);
+        if (r5 == 0) goto L_0x0112;
+    L_0x0108:
+        r6 = r0.nameTextView;
+        r5 = org.telegram.messenger.UserObject.getUserName(r5);
+        r6.setText(r5);
+        goto L_0x013b;
+    L_0x0112:
+        r5 = r0.nameTextView;
+        r5.setText(r12);
+        goto L_0x013b;
+    L_0x0118:
+        r5 = r0.currentAccount;
+        r5 = org.telegram.messenger.MessagesController.getInstance(r5);
+        r6 = r1.messageOwner;
+        r6 = r6.to_id;
+        r6 = r6.channel_id;
+        r6 = java.lang.Integer.valueOf(r6);
+        r5 = r5.getChat(r6);
+        if (r5 == 0) goto L_0x0136;
+    L_0x012e:
+        r6 = r0.nameTextView;
+        r5 = r5.title;
+        r6.setText(r5);
+        goto L_0x013b;
+    L_0x0136:
+        r5 = r0.nameTextView;
+        r5.setText(r12);
+    L_0x013b:
+        r5 = r0.dateOverride;
+        if (r5 == 0) goto L_0x0140;
+    L_0x013f:
+        goto L_0x0144;
+    L_0x0140:
+        r5 = r1.messageOwner;
+        r5 = r5.date;
+    L_0x0144:
+        r5 = (long) r5;
+        r7 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
+        r5 = r5 * r7;
+        r7 = NUM; // 0x7f0d0ac7 float:1.874771E38 double:1.0531311407E-314;
+        r8 = new java.lang.Object[r13];
+        r11 = org.telegram.messenger.LocaleController.getInstance();
+        r11 = r11.formatterYear;
+        r12 = new java.util.Date;
+        r12.<init>(r5);
+        r11 = r11.format(r12);
+        r8[r9] = r11;
+        r11 = org.telegram.messenger.LocaleController.getInstance();
+        r11 = r11.formatterDay;
+        r12 = new java.util.Date;
+        r12.<init>(r5);
+        r5 = r11.format(r12);
+        r6 = 1;
+        r8[r6] = r5;
+        r5 = "formatDateAtTime";
+        r5 = org.telegram.messenger.LocaleController.formatString(r5, r7, r8);
+        if (r2 == 0) goto L_0x0199;
+    L_0x0179:
+        if (r3 == 0) goto L_0x0199;
+    L_0x017b:
+        r2 = r0.dateTextView;
+        r3 = new java.lang.Object[r13];
+        r3[r9] = r5;
+        r5 = r1.getDocument();
+        r5 = r5.size;
+        r5 = (long) r5;
+        r5 = org.telegram.messenger.AndroidUtilities.formatFileSize(r5);
+        r6 = 1;
+        r3[r6] = r5;
+        r5 = "%s (%s)";
+        r3 = java.lang.String.format(r5, r3);
+        r2.setText(r3);
+        goto L_0x019e;
+    L_0x0199:
+        r2 = r0.dateTextView;
+        r2.setText(r5);
+    L_0x019e:
+        r2 = r1.caption;
+    L_0x01a0:
+        r3 = r0.currentAnimation;
+        if (r3 == 0) goto L_0x01d3;
+    L_0x01a4:
+        r3 = r0.menuItem;
+        r4 = 1;
+        r3.hideSubItem(r4);
+        r3 = r0.menuItem;
+        r5 = 10;
+        r3.hideSubItem(r5);
+        r3 = r1.canDeleteMessage(r14);
+        if (r3 != 0) goto L_0x01bc;
+    L_0x01b7:
+        r3 = r0.menuItem;
+        r3.setVisibility(r15);
+    L_0x01bc:
+        r0.allowShare = r4;
+        r3 = r0.shareButton;
+        r3.setVisibility(r9);
+        r3 = r0.actionBar;
+        r4 = NUM; // 0x7f0d0137 float:1.8742746E38 double:1.053129931E-314;
+        r5 = "AttachGif";
+        r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
+        r3.setTitle(r4);
+        goto L_0x041b;
+    L_0x01d3:
+        r3 = r0.totalImagesCount;
+        r5 = r0.totalImagesCountMerge;
+        r3 = r3 + r5;
+        if (r3 == 0) goto L_0x034d;
+    L_0x01da:
+        r3 = r0.needSearchImageInArr;
+        if (r3 != 0) goto L_0x034d;
+    L_0x01de:
+        r3 = r0.opennedFromMedia;
+        if (r3 == 0) goto L_0x029b;
+    L_0x01e2:
+        r3 = r0.imagesArr;
+        r3 = r3.size();
+        r4 = r0.totalImagesCount;
+        r5 = r0.totalImagesCountMerge;
+        r4 = r4 + r5;
+        if (r3 >= r4) goto L_0x0276;
+    L_0x01ef:
+        r3 = r0.loadingMoreImages;
+        if (r3 != 0) goto L_0x0276;
+    L_0x01f3:
+        r3 = r0.switchingToIndex;
+        r4 = r0.imagesArr;
+        r4 = r4.size();
+        r5 = 5;
+        r4 = r4 - r5;
+        if (r3 <= r4) goto L_0x0276;
+    L_0x01ff:
+        r3 = r0.imagesArr;
+        r3 = r3.isEmpty();
+        if (r3 == 0) goto L_0x0209;
+    L_0x0207:
+        r3 = 0;
+        goto L_0x021b;
+    L_0x0209:
+        r3 = r0.imagesArr;
+        r4 = r3.size();
+        r5 = 1;
+        r4 = r4 - r5;
+        r3 = r3.get(r4);
+        r3 = (org.telegram.messenger.MessageObject) r3;
+        r3 = r3.getId();
+    L_0x021b:
+        r4 = r0.endReached;
+        r4 = r4[r9];
+        if (r4 == 0) goto L_0x0251;
+    L_0x0221:
+        r4 = r0.mergeDialogId;
+        r6 = 0;
+        r8 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1));
+        if (r8 == 0) goto L_0x0251;
+    L_0x0229:
+        r4 = r0.imagesArr;
+        r4 = r4.isEmpty();
+        if (r4 != 0) goto L_0x024d;
+    L_0x0231:
+        r4 = r0.imagesArr;
+        r5 = r4.size();
+        r6 = 1;
+        r5 = r5 - r6;
+        r4 = r4.get(r5);
+        r4 = (org.telegram.messenger.MessageObject) r4;
+        r4 = r4.getDialogId();
+        r6 = r0.mergeDialogId;
+        r8 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1));
+        if (r8 == 0) goto L_0x024d;
+    L_0x0249:
+        r3 = 1;
+        r22 = 0;
+        goto L_0x0254;
+    L_0x024d:
+        r22 = r3;
+        r3 = 1;
+        goto L_0x0254;
+    L_0x0251:
+        r22 = r3;
+        r3 = 0;
+    L_0x0254:
+        r4 = r0.currentAccount;
+        r18 = org.telegram.messenger.DataQuery.getInstance(r4);
+        if (r3 != 0) goto L_0x025f;
+    L_0x025c:
+        r3 = r0.currentDialogId;
+        goto L_0x0261;
+    L_0x025f:
+        r3 = r0.mergeDialogId;
+    L_0x0261:
+        r19 = r3;
+        r21 = 80;
+        r3 = r0.sharedMediaType;
+        r24 = 1;
+        r4 = r0.classGuid;
+        r23 = r3;
+        r25 = r4;
+        r18.loadMedia(r19, r21, r22, r23, r24, r25);
+        r3 = 1;
+        r0.loadingMoreImages = r3;
+        goto L_0x0277;
+    L_0x0276:
+        r3 = 1;
+    L_0x0277:
+        r4 = r0.actionBar;
+        r5 = new java.lang.Object[r13];
+        r6 = r0.switchingToIndex;
+        r6 = r6 + r3;
+        r6 = java.lang.Integer.valueOf(r6);
+        r5[r9] = r6;
+        r6 = r0.totalImagesCount;
+        r7 = r0.totalImagesCountMerge;
+        r6 = r6 + r7;
+        r6 = java.lang.Integer.valueOf(r6);
+        r5[r3] = r6;
+        r3 = NUM; // 0x7f0d067f float:1.8745488E38 double:1.053130599E-314;
+        r3 = org.telegram.messenger.LocaleController.formatString(r10, r3, r5);
+        r4.setTitle(r3);
+        goto L_0x03c5;
+    L_0x029b:
+        r3 = r0.imagesArr;
+        r3 = r3.size();
+        r4 = r0.totalImagesCount;
+        r5 = r0.totalImagesCountMerge;
+        r4 = r4 + r5;
+        if (r3 >= r4) goto L_0x031b;
+    L_0x02a8:
+        r3 = r0.loadingMoreImages;
+        if (r3 != 0) goto L_0x031b;
+    L_0x02ac:
+        r3 = r0.switchingToIndex;
+        r4 = 5;
+        if (r3 >= r4) goto L_0x031b;
+    L_0x02b1:
+        r3 = r0.imagesArr;
+        r3 = r3.isEmpty();
+        if (r3 == 0) goto L_0x02bb;
+    L_0x02b9:
+        r3 = 0;
+        goto L_0x02c7;
+    L_0x02bb:
+        r3 = r0.imagesArr;
+        r3 = r3.get(r9);
+        r3 = (org.telegram.messenger.MessageObject) r3;
+        r3 = r3.getId();
+    L_0x02c7:
+        r4 = r0.endReached;
+        r4 = r4[r9];
+        if (r4 == 0) goto L_0x02f7;
+    L_0x02cd:
+        r4 = r0.mergeDialogId;
+        r6 = 0;
+        r8 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1));
+        if (r8 == 0) goto L_0x02f7;
+    L_0x02d5:
+        r4 = r0.imagesArr;
+        r4 = r4.isEmpty();
+        if (r4 != 0) goto L_0x02f3;
+    L_0x02dd:
+        r4 = r0.imagesArr;
+        r4 = r4.get(r9);
+        r4 = (org.telegram.messenger.MessageObject) r4;
+        r4 = r4.getDialogId();
+        r6 = r0.mergeDialogId;
+        r8 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1));
+        if (r8 == 0) goto L_0x02f3;
+    L_0x02ef:
+        r3 = 1;
+        r22 = 0;
+        goto L_0x02fa;
+    L_0x02f3:
+        r22 = r3;
+        r3 = 1;
+        goto L_0x02fa;
+    L_0x02f7:
+        r22 = r3;
+        r3 = 0;
+    L_0x02fa:
+        r4 = r0.currentAccount;
+        r18 = org.telegram.messenger.DataQuery.getInstance(r4);
+        if (r3 != 0) goto L_0x0305;
+    L_0x0302:
+        r3 = r0.currentDialogId;
+        goto L_0x0307;
+    L_0x0305:
+        r3 = r0.mergeDialogId;
+    L_0x0307:
+        r19 = r3;
+        r21 = 80;
+        r3 = r0.sharedMediaType;
+        r24 = 1;
+        r4 = r0.classGuid;
+        r23 = r3;
+        r25 = r4;
+        r18.loadMedia(r19, r21, r22, r23, r24, r25);
+        r3 = 1;
+        r0.loadingMoreImages = r3;
+    L_0x031b:
+        r3 = r0.actionBar;
+        r4 = new java.lang.Object[r13];
+        r5 = r0.totalImagesCount;
+        r6 = r0.totalImagesCountMerge;
+        r5 = r5 + r6;
+        r6 = r0.imagesArr;
+        r6 = r6.size();
+        r5 = r5 - r6;
+        r6 = r0.switchingToIndex;
+        r5 = r5 + r6;
+        r6 = 1;
+        r5 = r5 + r6;
+        r5 = java.lang.Integer.valueOf(r5);
+        r4[r9] = r5;
+        r5 = r0.totalImagesCount;
+        r7 = r0.totalImagesCountMerge;
+        r5 = r5 + r7;
+        r5 = java.lang.Integer.valueOf(r5);
+        r4[r6] = r5;
+        r5 = NUM; // 0x7f0d067f float:1.8745488E38 double:1.053130599E-314;
+        r4 = org.telegram.messenger.LocaleController.formatString(r10, r5, r4);
+        r3.setTitle(r4);
+        goto L_0x03c5;
+    L_0x034d:
+        r3 = r0.slideshowMessageId;
+        if (r3 != 0) goto L_0x0390;
+    L_0x0351:
+        r3 = r1.messageOwner;
+        r3 = r3.media;
+        r3 = r3 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
+        if (r3 == 0) goto L_0x0390;
+    L_0x0359:
+        r3 = r1.canPreviewDocument();
+        if (r3 == 0) goto L_0x036e;
+    L_0x035f:
+        r3 = r0.actionBar;
+        r4 = NUM; // 0x7f0d0135 float:1.8742741E38 double:1.05312993E-314;
+        r5 = "AttachDocument";
+        r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
+        r3.setTitle(r4);
+        goto L_0x03c5;
+    L_0x036e:
+        r3 = r1.isVideo();
+        if (r3 == 0) goto L_0x0381;
+    L_0x0374:
+        r3 = r0.actionBar;
+        r5 = NUM; // 0x7f0d0148 float:1.874278E38 double:1.0531299396E-314;
+        r4 = org.telegram.messenger.LocaleController.getString(r4, r5);
+        r3.setTitle(r4);
+        goto L_0x03c5;
+    L_0x0381:
+        r3 = r0.actionBar;
+        r5 = r17;
+        r4 = NUM; // 0x7f0d0142 float:1.8742768E38 double:1.0531299366E-314;
+        r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
+        r3.setTitle(r4);
+        goto L_0x03c5;
+    L_0x0390:
+        if (r16 == 0) goto L_0x039e;
+    L_0x0392:
+        r3 = r0.actionBar;
+        r4 = r1.messageOwner;
+        r4 = r4.media;
+        r4 = r4.title;
+        r3.setTitle(r4);
+        goto L_0x03c5;
+    L_0x039e:
+        r3 = r1.isVideo();
+        if (r3 == 0) goto L_0x03b1;
+    L_0x03a4:
+        r3 = r0.actionBar;
+        r5 = NUM; // 0x7f0d0148 float:1.874278E38 double:1.0531299396E-314;
+        r4 = org.telegram.messenger.LocaleController.getString(r4, r5);
+        r3.setTitle(r4);
+        goto L_0x03c5;
+    L_0x03b1:
+        r3 = r1.getDocument();
+        if (r3 == 0) goto L_0x03c5;
+    L_0x03b7:
+        r3 = r0.actionBar;
+        r4 = NUM; // 0x7f0d0135 float:1.8742741E38 double:1.05312993E-314;
+        r5 = "AttachDocument";
+        r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
+        r3.setTitle(r4);
+    L_0x03c5:
+        r3 = r0.currentDialogId;
+        r4 = (int) r3;
+        if (r4 != 0) goto L_0x03cf;
+    L_0x03ca:
+        r3 = r0.sendItem;
+        r3.setVisibility(r15);
+    L_0x03cf:
+        r3 = r1.messageOwner;
+        r3 = r3.ttl;
+        if (r3 == 0) goto L_0x03ee;
+    L_0x03d5:
+        r4 = 3600; // 0xe10 float:5.045E-42 double:1.7786E-320;
+        if (r3 >= r4) goto L_0x03ee;
+    L_0x03d9:
+        r0.allowShare = r9;
+        r3 = r0.menuItem;
+        r4 = 1;
+        r3.hideSubItem(r4);
+        r3 = r0.shareButton;
+        r3.setVisibility(r15);
+        r3 = r0.menuItem;
+        r5 = 10;
+        r3.hideSubItem(r5);
+        goto L_0x041b;
+    L_0x03ee:
+        r4 = 1;
+        r0.allowShare = r4;
+        r3 = r0.menuItem;
+        r3.showSubItem(r4);
+        r3 = r0.shareButton;
+        r4 = r0.videoPlayerControlFrameLayout;
+        r4 = r4.getVisibility();
+        if (r4 == 0) goto L_0x0401;
+    L_0x0400:
+        r15 = 0;
+    L_0x0401:
+        r3.setVisibility(r15);
+        r3 = r0.shareButton;
+        r3 = r3.getVisibility();
+        if (r3 != 0) goto L_0x0414;
+    L_0x040c:
+        r3 = r0.menuItem;
+        r4 = 10;
+        r3.hideSubItem(r4);
+        goto L_0x041b;
+    L_0x0414:
+        r4 = 10;
+        r3 = r0.menuItem;
+        r3.showSubItem(r4);
+    L_0x041b:
+        r3 = r0.groupedPhotosListView;
+        r3.fillList();
+        r14 = r1;
+        goto L_0x0733;
+    L_0x0423:
+        return;
+    L_0x0424:
+        r5 = r6;
+        r2 = r0.secureDocuments;
+        r2 = r2.isEmpty();
+        if (r2 != 0) goto L_0x0464;
+    L_0x042d:
+        r0.allowShare = r9;
+        r1 = r0.menuItem;
+        r2 = 1;
+        r1.hideSubItem(r2);
+        r1 = r0.nameTextView;
+        r1.setText(r12);
+        r1 = r0.dateTextView;
+        r1.setText(r12);
+        r1 = r0.actionBar;
+        r3 = new java.lang.Object[r13];
+        r4 = r0.switchingToIndex;
+        r4 = r4 + r2;
+        r4 = java.lang.Integer.valueOf(r4);
+        r3[r9] = r4;
+        r4 = r0.secureDocuments;
+        r4 = r4.size();
+        r4 = java.lang.Integer.valueOf(r4);
+        r3[r2] = r4;
+        r2 = NUM; // 0x7f0d067f float:1.8745488E38 double:1.053130599E-314;
+        r2 = org.telegram.messenger.LocaleController.formatString(r10, r2, r3);
+        r1.setTitle(r2);
+        goto L_0x0732;
+    L_0x0464:
+        r2 = r0.imagesArrLocations;
+        r2 = r2.isEmpty();
+        if (r2 != 0) goto L_0x050d;
+    L_0x046c:
+        if (r1 < 0) goto L_0x050c;
+    L_0x046e:
+        r2 = r0.imagesArrLocations;
+        r2 = r2.size();
+        if (r1 < r2) goto L_0x0478;
+    L_0x0476:
+        goto L_0x050c;
+    L_0x0478:
+        r1 = r0.nameTextView;
+        r1.setText(r12);
+        r1 = r0.dateTextView;
+        r1.setText(r12);
+        r1 = r0.avatarsDialogId;
+        r2 = r0.currentAccount;
+        r2 = org.telegram.messenger.UserConfig.getInstance(r2);
+        r2 = r2.getClientUserId();
+        if (r1 != r2) goto L_0x049e;
+    L_0x0490:
+        r1 = r0.avatarsArr;
+        r1 = r1.isEmpty();
+        if (r1 != 0) goto L_0x049e;
+    L_0x0498:
+        r1 = r0.menuItem;
+        r1.showSubItem(r8);
+        goto L_0x04a3;
+    L_0x049e:
+        r1 = r0.menuItem;
+        r1.hideSubItem(r8);
+    L_0x04a3:
+        r1 = r0.isEvent;
+        if (r1 == 0) goto L_0x04b5;
+    L_0x04a7:
+        r1 = r0.actionBar;
+        r2 = NUM; // 0x7f0d0142 float:1.8742768E38 double:1.0531299366E-314;
+        r2 = org.telegram.messenger.LocaleController.getString(r5, r2);
+        r1.setTitle(r2);
+        r4 = 1;
+        goto L_0x04d9;
+    L_0x04b5:
+        r1 = r0.actionBar;
+        r2 = new java.lang.Object[r13];
+        r3 = r0.switchingToIndex;
+        r4 = 1;
+        r3 = r3 + r4;
+        r3 = java.lang.Integer.valueOf(r3);
+        r2[r9] = r3;
+        r3 = r0.imagesArrLocations;
+        r3 = r3.size();
+        r3 = java.lang.Integer.valueOf(r3);
+        r2[r4] = r3;
+        r3 = NUM; // 0x7f0d067f float:1.8745488E38 double:1.053130599E-314;
+        r2 = org.telegram.messenger.LocaleController.formatString(r10, r3, r2);
+        r1.setTitle(r2);
+    L_0x04d9:
+        r1 = r0.menuItem;
+        r1.showSubItem(r4);
+        r0.allowShare = r4;
+        r1 = r0.shareButton;
+        r2 = r0.videoPlayerControlFrameLayout;
+        r2 = r2.getVisibility();
+        if (r2 == 0) goto L_0x04eb;
+    L_0x04ea:
+        r15 = 0;
+    L_0x04eb:
+        r1.setVisibility(r15);
+        r1 = r0.shareButton;
+        r1 = r1.getVisibility();
+        if (r1 != 0) goto L_0x04fe;
+    L_0x04f6:
+        r1 = r0.menuItem;
+        r2 = 10;
+        r1.hideSubItem(r2);
+        goto L_0x0505;
+    L_0x04fe:
+        r2 = 10;
+        r1 = r0.menuItem;
+        r1.showSubItem(r2);
+    L_0x0505:
+        r1 = r0.groupedPhotosListView;
+        r1.fillList();
+        goto L_0x0732;
+    L_0x050c:
+        return;
+    L_0x050d:
+        r2 = r0.imagesArrLocals;
+        r2 = r2.isEmpty();
+        if (r2 != 0) goto L_0x0732;
+    L_0x0515:
+        if (r1 < 0) goto L_0x0731;
+    L_0x0517:
+        r2 = r0.imagesArrLocals;
+        r2 = r2.size();
+        if (r1 < r2) goto L_0x0521;
+    L_0x051f:
+        goto L_0x0731;
+    L_0x0521:
+        r2 = r0.imagesArrLocals;
+        r1 = r2.get(r1);
+        r2 = r1 instanceof org.telegram.tgnet.TLRPC.BotInlineResult;
+        if (r2 == 0) goto L_0x0551;
+    L_0x052b:
+        r2 = r1;
+        r2 = (org.telegram.tgnet.TLRPC.BotInlineResult) r2;
+        r0.currentBotInlineResult = r2;
+        r3 = r2.document;
+        if (r3 == 0) goto L_0x0539;
+    L_0x0534:
+        r2 = org.telegram.messenger.MessageObject.isVideoDocument(r3);
+        goto L_0x0549;
+    L_0x0539:
+        r3 = r2.content;
+        r3 = r3 instanceof org.telegram.tgnet.TLRPC.TL_webDocument;
+        if (r3 == 0) goto L_0x0548;
+    L_0x053f:
+        r2 = r2.type;
+        r3 = "video";
+        r2 = r2.equals(r3);
+        goto L_0x0549;
+    L_0x0548:
+        r2 = 0;
+    L_0x0549:
+        r3 = r2;
+    L_0x054a:
+        r6 = r14;
+        r2 = 0;
+        r7 = 0;
+        r8 = 0;
+        r11 = 0;
+        goto L_0x065c;
+    L_0x0551:
+        r2 = r1 instanceof org.telegram.messenger.MediaController.PhotoEntry;
+        if (r2 == 0) goto L_0x0560;
+    L_0x0555:
+        r3 = r1;
+        r3 = (org.telegram.messenger.MediaController.PhotoEntry) r3;
+        r6 = r3.path;
+        r3 = r3.isVideo;
+        r8 = r6;
+        r6 = 0;
+        r7 = 1;
+        goto L_0x057a;
+    L_0x0560:
+        r3 = r1 instanceof org.telegram.messenger.MediaController.SearchImage;
+        if (r3 == 0) goto L_0x0576;
+    L_0x0564:
+        r3 = r1;
+        r3 = (org.telegram.messenger.MediaController.SearchImage) r3;
+        r6 = r3.getPathToAttach();
+        r3 = r3.type;
+        r7 = 1;
+        if (r3 != r7) goto L_0x0574;
+    L_0x0570:
+        r8 = r6;
+        r3 = 0;
+        r6 = 1;
+        goto L_0x057a;
+    L_0x0574:
+        r8 = r6;
+        goto L_0x0578;
+    L_0x0576:
+        r7 = 1;
+        r8 = r14;
+    L_0x0578:
+        r3 = 0;
+        r6 = 0;
+    L_0x057a:
+        if (r3 == 0) goto L_0x05b8;
+    L_0x057c:
+        r6 = r0.muteItem;
+        r6.setVisibility(r9);
+        r6 = r0.compressItem;
+        r6.setVisibility(r9);
+        r0.isCurrentVideo = r7;
+        r26.updateAccessibilityOverlayVisibility();
+        if (r2 == 0) goto L_0x059a;
+    L_0x058d:
+        r6 = r1;
+        r6 = (org.telegram.messenger.MediaController.PhotoEntry) r6;
+        r6 = r6.editedInfo;
+        if (r6 == 0) goto L_0x059a;
+    L_0x0594:
+        r6 = r6.muted;
+        if (r6 == 0) goto L_0x059a;
+    L_0x0598:
+        r6 = 1;
+        goto L_0x059b;
+    L_0x059a:
+        r6 = 0;
+    L_0x059b:
+        r0.processOpenVideo(r8, r6);
+        r6 = r0.videoTimelineView;
+        r6.setVisibility(r9);
+        r6 = r0.paintItem;
+        r6.setVisibility(r15);
+        r6 = r0.cropItem;
+        r6.setVisibility(r15);
+        r6 = r0.tuneItem;
+        r6.setVisibility(r15);
+        r6 = r0.rotateItem;
+        r6.setVisibility(r15);
+        goto L_0x0621;
+    L_0x05b8:
+        r7 = r0.videoTimelineView;
+        r7.setVisibility(r15);
+        r7 = r0.muteItem;
+        r7.setVisibility(r15);
+        r0.isCurrentVideo = r9;
+        r26.updateAccessibilityOverlayVisibility();
+        r7 = r0.compressItem;
+        r7.setVisibility(r15);
+        if (r6 == 0) goto L_0x05e3;
+    L_0x05ce:
+        r6 = r0.paintItem;
+        r6.setVisibility(r15);
+        r6 = r0.cropItem;
+        r6.setVisibility(r15);
+        r6 = r0.rotateItem;
+        r6.setVisibility(r15);
+        r6 = r0.tuneItem;
+        r6.setVisibility(r15);
+        goto L_0x061c;
+    L_0x05e3:
+        r6 = r0.sendPhotoType;
+        r7 = 4;
+        if (r6 == r7) goto L_0x05f7;
+    L_0x05e8:
+        r7 = 5;
+        if (r6 != r7) goto L_0x05ec;
+    L_0x05eb:
+        goto L_0x05f7;
+    L_0x05ec:
+        r6 = r0.paintItem;
+        r6.setVisibility(r9);
+        r6 = r0.tuneItem;
+        r6.setVisibility(r9);
+        goto L_0x0601;
+    L_0x05f7:
+        r6 = r0.paintItem;
+        r6.setVisibility(r15);
+        r6 = r0.tuneItem;
+        r6.setVisibility(r15);
+    L_0x0601:
+        r6 = r0.cropItem;
+        r7 = r0.sendPhotoType;
+        r8 = 1;
+        if (r7 == r8) goto L_0x060a;
+    L_0x0608:
+        r7 = 0;
+        goto L_0x060c;
+    L_0x060a:
+        r7 = 8;
+    L_0x060c:
+        r6.setVisibility(r7);
+        r6 = r0.rotateItem;
+        r7 = r0.sendPhotoType;
+        if (r7 == r8) goto L_0x0618;
+    L_0x0615:
+        r7 = 8;
+        goto L_0x0619;
+    L_0x0618:
+        r7 = 0;
+    L_0x0619:
+        r6.setVisibility(r7);
+    L_0x061c:
+        r6 = r0.actionBar;
+        r6.setSubtitle(r14);
+    L_0x0621:
+        if (r2 == 0) goto L_0x064b;
+    L_0x0623:
+        r2 = r1;
+        r2 = (org.telegram.messenger.MediaController.PhotoEntry) r2;
+        r6 = r2.bucketId;
+        if (r6 != 0) goto L_0x063d;
+    L_0x062a:
+        r6 = r2.dateTaken;
+        r11 = 0;
+        r8 = (r6 > r11 ? 1 : (r6 == r11 ? 0 : -1));
+        if (r8 != 0) goto L_0x063d;
+    L_0x0632:
+        r6 = r0.imagesArrLocals;
+        r6 = r6.size();
+        r7 = 1;
+        if (r6 != r7) goto L_0x063d;
+    L_0x063b:
+        r6 = 1;
+        goto L_0x063e;
+    L_0x063d:
+        r6 = 0;
+    L_0x063e:
+        r0.fromCamera = r6;
+        r6 = r2.caption;
+        r7 = r2.ttl;
+        r8 = r2.isFiltered;
+        r11 = r2.isPainted;
+        r2 = r2.isCropped;
+        goto L_0x065c;
+    L_0x064b:
+        r2 = r1 instanceof org.telegram.messenger.MediaController.SearchImage;
+        if (r2 == 0) goto L_0x054a;
+    L_0x064f:
+        r2 = r1;
+        r2 = (org.telegram.messenger.MediaController.SearchImage) r2;
+        r6 = r2.caption;
+        r7 = r2.ttl;
+        r8 = r2.isFiltered;
+        r11 = r2.isPainted;
+        r2 = r2.isCropped;
+    L_0x065c:
+        r12 = r0.bottomLayout;
+        r12 = r12.getVisibility();
+        if (r12 == r15) goto L_0x0669;
+    L_0x0664:
+        r12 = r0.bottomLayout;
+        r12.setVisibility(r15);
+    L_0x0669:
+        r12 = r0.bottomLayout;
+        r12.setTag(r14);
+        r12 = r0.fromCamera;
+        if (r12 == 0) goto L_0x068e;
+    L_0x0672:
+        if (r3 == 0) goto L_0x0681;
+    L_0x0674:
+        r3 = r0.actionBar;
+        r5 = NUM; // 0x7f0d0148 float:1.874278E38 double:1.0531299396E-314;
+        r4 = org.telegram.messenger.LocaleController.getString(r4, r5);
+        r3.setTitle(r4);
+        goto L_0x06b2;
+    L_0x0681:
+        r3 = r0.actionBar;
+        r4 = NUM; // 0x7f0d0142 float:1.8742768E38 double:1.0531299366E-314;
+        r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
+        r3.setTitle(r4);
+        goto L_0x06b2;
+    L_0x068e:
+        r3 = r0.actionBar;
+        r4 = new java.lang.Object[r13];
+        r5 = r0.switchingToIndex;
+        r12 = 1;
+        r5 = r5 + r12;
+        r5 = java.lang.Integer.valueOf(r5);
+        r4[r9] = r5;
+        r5 = r0.imagesArrLocals;
+        r5 = r5.size();
+        r5 = java.lang.Integer.valueOf(r5);
+        r4[r12] = r5;
+        r5 = NUM; // 0x7f0d067f float:1.8745488E38 double:1.053130599E-314;
+        r4 = org.telegram.messenger.LocaleController.formatString(r10, r5, r4);
+        r3.setTitle(r4);
+    L_0x06b2:
+        r3 = r0.parentChatActivity;
+        if (r3 == 0) goto L_0x06d9;
+    L_0x06b6:
+        r3 = r3.getCurrentChat();
+        if (r3 == 0) goto L_0x06c4;
+    L_0x06bc:
+        r4 = r0.actionBar;
+        r3 = r3.title;
+        r4.setTitle(r3);
+        goto L_0x06d9;
+    L_0x06c4:
+        r3 = r0.parentChatActivity;
+        r3 = r3.getCurrentUser();
+        if (r3 == 0) goto L_0x06d9;
+    L_0x06cc:
+        r4 = r0.actionBar;
+        r5 = r3.first_name;
+        r3 = r3.last_name;
+        r3 = org.telegram.messenger.ContactsController.formatName(r5, r3);
+        r4.setTitle(r3);
+    L_0x06d9:
+        r3 = r0.sendPhotoType;
+        if (r3 == 0) goto L_0x06ee;
+    L_0x06dd:
+        r4 = 4;
+        if (r3 == r4) goto L_0x06ee;
+    L_0x06e0:
+        if (r3 == r13) goto L_0x06e5;
+    L_0x06e2:
+        r4 = 5;
+        if (r3 != r4) goto L_0x06fb;
+    L_0x06e5:
+        r3 = r0.imagesArrLocals;
+        r3 = r3.size();
+        r4 = 1;
+        if (r3 <= r4) goto L_0x06fb;
+    L_0x06ee:
+        r3 = r0.checkImageView;
+        r4 = r0.placeProvider;
+        r5 = r0.switchingToIndex;
+        r4 = r4.isPhotoChecked(r5);
+        r3.setChecked(r4, r9);
+    L_0x06fb:
+        r0.updateCaptionTextForCurrentPhoto(r1);
+        r1 = new android.graphics.PorterDuffColorFilter;
+        r3 = -12734994; // 0xffffffffff3dadee float:-2.5212719E38 double:NaN;
+        r4 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r1.<init>(r3, r4);
+        r3 = r0.timeItem;
+        if (r7 == 0) goto L_0x070e;
+    L_0x070c:
+        r4 = r1;
+        goto L_0x070f;
+    L_0x070e:
+        r4 = r14;
+    L_0x070f:
+        r3.setColorFilter(r4);
+        r3 = r0.paintItem;
+        if (r11 == 0) goto L_0x0718;
+    L_0x0716:
+        r4 = r1;
+        goto L_0x0719;
+    L_0x0718:
+        r4 = r14;
+    L_0x0719:
+        r3.setColorFilter(r4);
+        r3 = r0.cropItem;
+        if (r2 == 0) goto L_0x0722;
+    L_0x0720:
+        r2 = r1;
+        goto L_0x0723;
+    L_0x0722:
+        r2 = r14;
+    L_0x0723:
+        r3.setColorFilter(r2);
+        r2 = r0.tuneItem;
+        if (r8 == 0) goto L_0x072b;
+    L_0x072a:
+        goto L_0x072c;
+    L_0x072b:
+        r1 = r14;
+    L_0x072c:
+        r2.setColorFilter(r1);
+        r2 = r6;
+        goto L_0x0733;
+    L_0x0731:
+        return;
+    L_0x0732:
+        r2 = r14;
+    L_0x0733:
+        r1 = 1;
+        r1 = r28 ^ 1;
+        r0.setCurrentCaption(r14, r2, r1);
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.setIsAboutToSwitchToIndex(int, boolean):void");
     }
 
-    private void setImageIndex(int index, boolean init) {
-        if (this.currentIndex != index && this.placeProvider != null) {
-            boolean canPreviewDocument;
-            if (!(init || this.currentThumb == null)) {
-                this.currentThumb.release();
-                this.currentThumb = null;
-            }
-            this.currentFileNames[0] = getFileName(index);
-            this.currentFileNames[1] = getFileName(index + 1);
-            this.currentFileNames[2] = getFileName(index - 1);
-            this.placeProvider.willSwitchFromPhoto(this.currentMessageObject, this.currentFileLocation, this.currentIndex);
-            int prevIndex = this.currentIndex;
-            this.currentIndex = index;
-            setIsAboutToSwitchToIndex(this.currentIndex, init);
-            boolean isVideo = false;
-            boolean sameImage = false;
-            Uri videoPath = null;
-            if (this.imagesArr.isEmpty()) {
-                if (this.secureDocuments.isEmpty()) {
-                    if (this.imagesArrLocations.isEmpty()) {
-                        if (!this.imagesArrLocals.isEmpty()) {
-                            if (index < 0 || index >= this.imagesArrLocals.size()) {
-                                closePhoto(false, false);
-                                return;
-                            }
-                            BotInlineResult object = this.imagesArrLocals.get(index);
-                            if (object instanceof BotInlineResult) {
-                                BotInlineResult botInlineResult = object;
-                                this.currentBotInlineResult = botInlineResult;
-                                if (botInlineResult.document != null) {
-                                    this.currentPathObject = FileLoader.getPathToAttach(botInlineResult.document).getAbsolutePath();
-                                    isVideo = MessageObject.isVideoDocument(botInlineResult.document);
-                                } else if (botInlineResult.photo != null) {
-                                    this.currentPathObject = FileLoader.getPathToAttach(FileLoader.getClosestPhotoSizeWithSize(botInlineResult.photo.sizes, AndroidUtilities.getPhotoSize())).getAbsolutePath();
-                                } else if (botInlineResult.content instanceof TL_webDocument) {
-                                    this.currentPathObject = botInlineResult.content.url;
-                                    isVideo = botInlineResult.type.equals("video");
-                                }
-                            } else if (object instanceof PhotoEntry) {
-                                PhotoEntry photoEntry = (PhotoEntry) object;
-                                this.currentPathObject = photoEntry.path;
-                                isVideo = photoEntry.isVideo;
-                                videoPath = Uri.fromFile(new File(photoEntry.path));
-                            } else if (object instanceof SearchImage) {
-                                this.currentPathObject = ((SearchImage) object).getPathToAttach();
-                            }
-                        }
-                    } else if (index < 0 || index >= this.imagesArrLocations.size()) {
-                        closePhoto(false, false);
-                        return;
-                    } else {
-                        FileLocation old = this.currentFileLocation;
-                        FileLocation newLocation = (FileLocation) this.imagesArrLocations.get(index);
-                        if (init && old != null && newLocation != null && old.local_id == newLocation.local_id && old.volume_id == newLocation.volume_id) {
-                            sameImage = true;
-                        }
-                        this.currentFileLocation = (FileLocation) this.imagesArrLocations.get(index);
-                    }
-                } else if (index < 0 || index >= this.secureDocuments.size()) {
-                    closePhoto(false, false);
-                    return;
-                } else {
-                    this.currentSecureDocument = (SecureDocument) this.secureDocuments.get(index);
-                }
-            } else if (this.currentIndex < 0 || this.currentIndex >= this.imagesArr.size()) {
-                closePhoto(false, false);
-                return;
-            } else {
-                MessageObject newMessageObject = (MessageObject) this.imagesArr.get(this.currentIndex);
-                sameImage = init && this.currentMessageObject != null && this.currentMessageObject.getId() == newMessageObject.getId();
-                this.currentMessageObject = newMessageObject;
-                isVideo = newMessageObject.isVideo();
-                if (this.sharedMediaType == 1) {
-                    canPreviewDocument = newMessageObject.canPreviewDocument();
-                    this.canZoom = canPreviewDocument;
-                    if (canPreviewDocument) {
-                        this.menuItem.showSubItem(1);
-                        setDoubleTapEnabled(true);
-                    } else {
-                        this.menuItem.hideSubItem(1);
-                        setDoubleTapEnabled(false);
-                    }
-                }
-            }
-            if (this.currentPlaceObject != null) {
-                if (this.animationInProgress == 0) {
-                    this.currentPlaceObject.imageReceiver.setVisible(true, true);
-                } else {
-                    this.showAfterAnimation = this.currentPlaceObject;
-                }
-            }
-            this.currentPlaceObject = this.placeProvider.getPlaceForPhoto(this.currentMessageObject, this.currentFileLocation, this.currentIndex, false);
-            if (this.currentPlaceObject != null) {
-                if (this.animationInProgress == 0) {
-                    this.currentPlaceObject.imageReceiver.setVisible(false, true);
-                } else {
-                    this.hideAfterAnimation = this.currentPlaceObject;
-                }
-            }
-            if (!sameImage) {
-                this.draggingDown = false;
-                this.translationX = 0.0f;
-                this.translationY = 0.0f;
-                this.scale = 1.0f;
-                this.animateToX = 0.0f;
-                this.animateToY = 0.0f;
-                this.animateToScale = 1.0f;
-                this.animationStartTime = 0;
-                this.imageMoveAnimation = null;
-                this.changeModeAnimation = null;
-                if (this.aspectRatioFrameLayout != null) {
-                    this.aspectRatioFrameLayout.setVisibility(4);
-                }
-                this.pinchStartDistance = 0.0f;
-                this.pinchStartScale = 1.0f;
-                this.pinchCenterX = 0.0f;
-                this.pinchCenterY = 0.0f;
-                this.pinchStartX = 0.0f;
-                this.pinchStartY = 0.0f;
-                this.moveStartX = 0.0f;
-                this.moveStartY = 0.0f;
-                this.zooming = false;
-                this.moving = false;
-                this.doubleTap = false;
-                this.invalidCoords = false;
-                this.canDragDown = true;
-                this.changingPage = false;
-                this.switchImageAfterAnimation = 0;
-                if (this.sharedMediaType != 1) {
-                    canPreviewDocument = (this.imagesArrLocals.isEmpty() && (this.currentFileNames[0] == null || this.photoProgressViews[0].backgroundState == 0)) ? false : true;
-                    this.canZoom = canPreviewDocument;
-                }
-                updateMinMax(this.scale);
-                releasePlayer(false);
-            }
-            if (isVideo && videoPath != null) {
-                this.isStreaming = false;
-                preparePlayer(videoPath, false, false);
-            }
-            if (prevIndex == -1) {
-                setImages();
-                for (int a = 0; a < 3; a++) {
-                    checkProgress(a, false);
-                }
-                return;
-            }
-            checkProgress(0, false);
-            ImageReceiver temp;
-            PhotoProgressView tempProgress;
-            if (prevIndex > this.currentIndex) {
-                temp = this.rightImage;
-                this.rightImage = this.centerImage;
-                this.centerImage = this.leftImage;
-                this.leftImage = temp;
-                tempProgress = this.photoProgressViews[0];
-                this.photoProgressViews[0] = this.photoProgressViews[2];
-                this.photoProgressViews[2] = tempProgress;
-                setIndexToImage(this.leftImage, this.currentIndex - 1);
-                checkProgress(1, false);
-                checkProgress(2, false);
-            } else if (prevIndex < this.currentIndex) {
-                temp = this.leftImage;
-                this.leftImage = this.centerImage;
-                this.centerImage = this.rightImage;
-                this.rightImage = temp;
-                tempProgress = this.photoProgressViews[0];
-                this.photoProgressViews[0] = this.photoProgressViews[1];
-                this.photoProgressViews[1] = tempProgress;
-                setIndexToImage(this.rightImage, this.currentIndex + 1);
-                checkProgress(1, false);
-                checkProgress(2, false);
-            }
-        }
+    private FileLocation getFileLocation(ImageLocation imageLocation) {
+        return imageLocation == null ? null : imageLocation.location;
     }
 
-    private void setCurrentCaption(MessageObject messageObject, CharSequence caption, boolean animated) {
+    /* JADX WARNING: Removed duplicated region for block: B:25:0x0089  */
+    private void setImageIndex(int r12, boolean r13) {
+        /*
+        r11 = this;
+        r0 = r11.currentIndex;
+        if (r0 == r12) goto L_0x02ad;
+    L_0x0004:
+        r0 = r11.placeProvider;
+        if (r0 != 0) goto L_0x000a;
+    L_0x0008:
+        goto L_0x02ad;
+    L_0x000a:
+        r0 = 0;
+        if (r13 != 0) goto L_0x0016;
+    L_0x000d:
+        r1 = r11.currentThumb;
+        if (r1 == 0) goto L_0x0016;
+    L_0x0011:
+        r1.release();
+        r11.currentThumb = r0;
+    L_0x0016:
+        r1 = r11.currentFileNames;
+        r2 = r11.getFileName(r12);
+        r3 = 0;
+        r1[r3] = r2;
+        r1 = r11.currentFileNames;
+        r2 = r12 + 1;
+        r2 = r11.getFileName(r2);
+        r4 = 1;
+        r1[r4] = r2;
+        r1 = r11.currentFileNames;
+        r2 = r12 + -1;
+        r2 = r11.getFileName(r2);
+        r5 = 2;
+        r1[r5] = r2;
+        r1 = r11.placeProvider;
+        r2 = r11.currentMessageObject;
+        r6 = r11.currentFileLocation;
+        r6 = r11.getFileLocation(r6);
+        r7 = r11.currentIndex;
+        r1.willSwitchFromPhoto(r2, r6, r7);
+        r1 = r11.currentIndex;
+        r11.currentIndex = r12;
+        r2 = r11.currentIndex;
+        r11.setIsAboutToSwitchToIndex(r2, r13);
+        r2 = r11.imagesArr;
+        r2 = r2.isEmpty();
+        if (r2 != 0) goto L_0x00a9;
+    L_0x0055:
+        r12 = r11.currentIndex;
+        if (r12 < 0) goto L_0x00a5;
+    L_0x0059:
+        r2 = r11.imagesArr;
+        r2 = r2.size();
+        if (r12 < r2) goto L_0x0062;
+    L_0x0061:
+        goto L_0x00a5;
+    L_0x0062:
+        r12 = r11.imagesArr;
+        r2 = r11.currentIndex;
+        r12 = r12.get(r2);
+        r12 = (org.telegram.messenger.MessageObject) r12;
+        if (r13 == 0) goto L_0x007e;
+    L_0x006e:
+        r13 = r11.currentMessageObject;
+        if (r13 == 0) goto L_0x007e;
+    L_0x0072:
+        r13 = r13.getId();
+        r2 = r12.getId();
+        if (r13 != r2) goto L_0x007e;
+    L_0x007c:
+        r13 = 1;
+        goto L_0x007f;
+    L_0x007e:
+        r13 = 0;
+    L_0x007f:
+        r11.currentMessageObject = r12;
+        r2 = r12.isVideo();
+        r6 = r11.sharedMediaType;
+        if (r6 != r4) goto L_0x00a2;
+    L_0x0089:
+        r12 = r12.canPreviewDocument();
+        r11.canZoom = r12;
+        if (r12 == 0) goto L_0x009a;
+    L_0x0091:
+        r12 = r11.menuItem;
+        r12.showSubItem(r4);
+        r11.setDoubleTapEnabled(r4);
+        goto L_0x00a2;
+    L_0x009a:
+        r12 = r11.menuItem;
+        r12.hideSubItem(r4);
+        r11.setDoubleTapEnabled(r3);
+    L_0x00a2:
+        r12 = r0;
+        goto L_0x01a9;
+    L_0x00a5:
+        r11.closePhoto(r3, r3);
+        return;
+    L_0x00a9:
+        r2 = r11.secureDocuments;
+        r2 = r2.isEmpty();
+        if (r2 != 0) goto L_0x00cc;
+    L_0x00b1:
+        if (r12 < 0) goto L_0x00c8;
+    L_0x00b3:
+        r13 = r11.secureDocuments;
+        r13 = r13.size();
+        if (r12 < r13) goto L_0x00bc;
+    L_0x00bb:
+        goto L_0x00c8;
+    L_0x00bc:
+        r13 = r11.secureDocuments;
+        r12 = r13.get(r12);
+        r12 = (org.telegram.messenger.SecureDocument) r12;
+        r11.currentSecureDocument = r12;
+        goto L_0x01a6;
+    L_0x00c8:
+        r11.closePhoto(r3, r3);
+        return;
+    L_0x00cc:
+        r2 = r11.imagesArrLocations;
+        r2 = r2.isEmpty();
+        if (r2 != 0) goto L_0x0115;
+    L_0x00d4:
+        if (r12 < 0) goto L_0x0111;
+    L_0x00d6:
+        r2 = r11.imagesArrLocations;
+        r2 = r2.size();
+        if (r12 < r2) goto L_0x00df;
+    L_0x00de:
+        goto L_0x0111;
+    L_0x00df:
+        r2 = r11.currentFileLocation;
+        r6 = r11.imagesArrLocations;
+        r6 = r6.get(r12);
+        r6 = (org.telegram.messenger.ImageLocation) r6;
+        if (r13 == 0) goto L_0x0103;
+    L_0x00eb:
+        if (r2 == 0) goto L_0x0103;
+    L_0x00ed:
+        if (r6 == 0) goto L_0x0103;
+    L_0x00ef:
+        r13 = r2.location;
+        r2 = r13.local_id;
+        r6 = r6.location;
+        r7 = r6.local_id;
+        if (r2 != r7) goto L_0x0103;
+    L_0x00f9:
+        r7 = r13.volume_id;
+        r9 = r6.volume_id;
+        r13 = (r7 > r9 ? 1 : (r7 == r9 ? 0 : -1));
+        if (r13 != 0) goto L_0x0103;
+    L_0x0101:
+        r13 = 1;
+        goto L_0x0104;
+    L_0x0103:
+        r13 = 0;
+    L_0x0104:
+        r2 = r11.imagesArrLocations;
+        r12 = r2.get(r12);
+        r12 = (org.telegram.messenger.ImageLocation) r12;
+        r11.currentFileLocation = r12;
+        r12 = r0;
+        goto L_0x01a8;
+    L_0x0111:
+        r11.closePhoto(r3, r3);
+        return;
+    L_0x0115:
+        r13 = r11.imagesArrLocals;
+        r13 = r13.isEmpty();
+        if (r13 != 0) goto L_0x01a6;
+    L_0x011d:
+        if (r12 < 0) goto L_0x01a2;
+    L_0x011f:
+        r13 = r11.imagesArrLocals;
+        r13 = r13.size();
+        if (r12 < r13) goto L_0x0129;
+    L_0x0127:
+        goto L_0x01a2;
+    L_0x0129:
+        r13 = r11.imagesArrLocals;
+        r12 = r13.get(r12);
+        r13 = r12 instanceof org.telegram.tgnet.TLRPC.BotInlineResult;
+        if (r13 == 0) goto L_0x017c;
+    L_0x0133:
+        r12 = (org.telegram.tgnet.TLRPC.BotInlineResult) r12;
+        r11.currentBotInlineResult = r12;
+        r13 = r12.document;
+        if (r13 == 0) goto L_0x014c;
+    L_0x013b:
+        r13 = org.telegram.messenger.FileLoader.getPathToAttach(r13);
+        r13 = r13.getAbsolutePath();
+        r11.currentPathObject = r13;
+        r12 = r12.document;
+        r12 = org.telegram.messenger.MessageObject.isVideoDocument(r12);
+        goto L_0x0179;
+    L_0x014c:
+        r13 = r12.photo;
+        if (r13 == 0) goto L_0x0165;
+    L_0x0150:
+        r12 = r13.sizes;
+        r13 = org.telegram.messenger.AndroidUtilities.getPhotoSize();
+        r12 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r12, r13);
+        r12 = org.telegram.messenger.FileLoader.getPathToAttach(r12);
+        r12 = r12.getAbsolutePath();
+        r11.currentPathObject = r12;
+        goto L_0x0178;
+    L_0x0165:
+        r13 = r12.content;
+        r2 = r13 instanceof org.telegram.tgnet.TLRPC.TL_webDocument;
+        if (r2 == 0) goto L_0x0178;
+    L_0x016b:
+        r13 = r13.url;
+        r11.currentPathObject = r13;
+        r12 = r12.type;
+        r13 = "video";
+        r12 = r12.equals(r13);
+        goto L_0x0179;
+    L_0x0178:
+        r12 = 0;
+    L_0x0179:
+        r2 = r12;
+        r12 = r0;
+        goto L_0x0193;
+    L_0x017c:
+        r13 = r12 instanceof org.telegram.messenger.MediaController.PhotoEntry;
+        if (r13 == 0) goto L_0x0195;
+    L_0x0180:
+        r12 = (org.telegram.messenger.MediaController.PhotoEntry) r12;
+        r13 = r12.path;
+        r11.currentPathObject = r13;
+        r12 = r12.isVideo;
+        r2 = new java.io.File;
+        r2.<init>(r13);
+        r13 = android.net.Uri.fromFile(r2);
+        r2 = r12;
+        r12 = r13;
+    L_0x0193:
+        r13 = 0;
+        goto L_0x01a9;
+    L_0x0195:
+        r13 = r12 instanceof org.telegram.messenger.MediaController.SearchImage;
+        if (r13 == 0) goto L_0x01a6;
+    L_0x0199:
+        r12 = (org.telegram.messenger.MediaController.SearchImage) r12;
+        r12 = r12.getPathToAttach();
+        r11.currentPathObject = r12;
+        goto L_0x01a6;
+    L_0x01a2:
+        r11.closePhoto(r3, r3);
+        return;
+    L_0x01a6:
+        r12 = r0;
+        r13 = 0;
+    L_0x01a8:
+        r2 = 0;
+    L_0x01a9:
+        r6 = r11.currentPlaceObject;
+        if (r6 == 0) goto L_0x01b9;
+    L_0x01ad:
+        r7 = r11.animationInProgress;
+        if (r7 != 0) goto L_0x01b7;
+    L_0x01b1:
+        r6 = r6.imageReceiver;
+        r6.setVisible(r4, r4);
+        goto L_0x01b9;
+    L_0x01b7:
+        r11.showAfterAnimation = r6;
+    L_0x01b9:
+        r6 = r11.placeProvider;
+        r7 = r11.currentMessageObject;
+        r8 = r11.currentFileLocation;
+        r8 = r11.getFileLocation(r8);
+        r9 = r11.currentIndex;
+        r6 = r6.getPlaceForPhoto(r7, r8, r9, r3);
+        r11.currentPlaceObject = r6;
+        r6 = r11.currentPlaceObject;
+        if (r6 == 0) goto L_0x01db;
+    L_0x01cf:
+        r7 = r11.animationInProgress;
+        if (r7 != 0) goto L_0x01d9;
+    L_0x01d3:
+        r6 = r6.imageReceiver;
+        r6.setVisible(r3, r4);
+        goto L_0x01db;
+    L_0x01d9:
+        r11.hideAfterAnimation = r6;
+    L_0x01db:
+        if (r13 != 0) goto L_0x0246;
+    L_0x01dd:
+        r11.draggingDown = r3;
+        r13 = 0;
+        r11.translationX = r13;
+        r11.translationY = r13;
+        r6 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r11.scale = r6;
+        r11.animateToX = r13;
+        r11.animateToY = r13;
+        r11.animateToScale = r6;
+        r7 = 0;
+        r11.animationStartTime = r7;
+        r11.imageMoveAnimation = r0;
+        r11.changeModeAnimation = r0;
+        r0 = r11.aspectRatioFrameLayout;
+        if (r0 == 0) goto L_0x01fe;
+    L_0x01fa:
+        r7 = 4;
+        r0.setVisibility(r7);
+    L_0x01fe:
+        r11.pinchStartDistance = r13;
+        r11.pinchStartScale = r6;
+        r11.pinchCenterX = r13;
+        r11.pinchCenterY = r13;
+        r11.pinchStartX = r13;
+        r11.pinchStartY = r13;
+        r11.moveStartX = r13;
+        r11.moveStartY = r13;
+        r11.zooming = r3;
+        r11.moving = r3;
+        r11.doubleTap = r3;
+        r11.invalidCoords = r3;
+        r11.canDragDown = r4;
+        r11.changingPage = r3;
+        r11.switchImageAfterAnimation = r3;
+        r13 = r11.sharedMediaType;
+        if (r13 == r4) goto L_0x023e;
+    L_0x0220:
+        r13 = r11.imagesArrLocals;
+        r13 = r13.isEmpty();
+        if (r13 == 0) goto L_0x023b;
+    L_0x0228:
+        r13 = r11.currentFileNames;
+        r13 = r13[r3];
+        if (r13 == 0) goto L_0x0239;
+    L_0x022e:
+        r13 = r11.photoProgressViews;
+        r13 = r13[r3];
+        r13 = r13.backgroundState;
+        if (r13 == 0) goto L_0x0239;
+    L_0x0238:
+        goto L_0x023b;
+    L_0x0239:
+        r13 = 0;
+        goto L_0x023c;
+    L_0x023b:
+        r13 = 1;
+    L_0x023c:
+        r11.canZoom = r13;
+    L_0x023e:
+        r13 = r11.scale;
+        r11.updateMinMax(r13);
+        r11.releasePlayer(r3);
+    L_0x0246:
+        if (r2 == 0) goto L_0x024f;
+    L_0x0248:
+        if (r12 == 0) goto L_0x024f;
+    L_0x024a:
+        r11.isStreaming = r3;
+        r11.preparePlayer(r12, r3, r3);
+    L_0x024f:
+        r12 = -1;
+        if (r1 != r12) goto L_0x025f;
+    L_0x0252:
+        r11.setImages();
+        r12 = 0;
+    L_0x0256:
+        r13 = 3;
+        if (r12 >= r13) goto L_0x02ad;
+    L_0x0259:
+        r11.checkProgress(r12, r3);
+        r12 = r12 + 1;
+        goto L_0x0256;
+    L_0x025f:
+        r11.checkProgress(r3, r3);
+        r12 = r11.currentIndex;
+        if (r1 <= r12) goto L_0x0289;
+    L_0x0266:
+        r13 = r11.rightImage;
+        r0 = r11.centerImage;
+        r11.rightImage = r0;
+        r0 = r11.leftImage;
+        r11.centerImage = r0;
+        r11.leftImage = r13;
+        r13 = r11.photoProgressViews;
+        r0 = r13[r3];
+        r1 = r13[r5];
+        r13[r3] = r1;
+        r13[r5] = r0;
+        r13 = r11.leftImage;
+        r12 = r12 - r4;
+        r11.setIndexToImage(r13, r12);
+        r11.checkProgress(r4, r3);
+        r11.checkProgress(r5, r3);
+        goto L_0x02ad;
+    L_0x0289:
+        if (r1 >= r12) goto L_0x02ad;
+    L_0x028b:
+        r13 = r11.leftImage;
+        r0 = r11.centerImage;
+        r11.leftImage = r0;
+        r0 = r11.rightImage;
+        r11.centerImage = r0;
+        r11.rightImage = r13;
+        r13 = r11.photoProgressViews;
+        r0 = r13[r3];
+        r1 = r13[r4];
+        r13[r3] = r1;
+        r13[r4] = r0;
+        r13 = r11.rightImage;
+        r12 = r12 + r4;
+        r11.setIndexToImage(r13, r12);
+        r11.checkProgress(r4, r3);
+        r11.checkProgress(r5, r3);
+    L_0x02ad:
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.setImageIndex(int, boolean):void");
+    }
+
+    private void setCurrentCaption(MessageObject messageObject, CharSequence charSequence, boolean z) {
+        MessageObject messageObject2 = messageObject;
         if (this.needCaptionLayout) {
             if (this.captionTextView.getParent() != this.pickerView) {
                 this.captionTextView.setBackgroundDrawable(null);
@@ -7305,54 +9462,55 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             this.captionTextView.setSingleLine(false);
             this.captionTextView.setMaxLines(10);
         }
-        boolean wasVisisble = this.captionTextView.getTag() != null;
+        Object obj = this.captionTextView.getTag() != null ? 1 : null;
         AnimatorSet animatorSet;
         Animator[] animatorArr;
-        if (!TextUtils.isEmpty(caption)) {
-            CharSequence str;
+        if (!TextUtils.isEmpty(charSequence)) {
+            Object replaceEmoji;
             Theme.createChatResources(null, true);
-            if (messageObject == null || messageObject.messageOwner.entities.isEmpty()) {
-                str = Emoji.replaceEmoji(new SpannableStringBuilder(caption), this.captionTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+            if (messageObject2 == null || messageObject2.messageOwner.entities.isEmpty()) {
+                replaceEmoji = Emoji.replaceEmoji(new SpannableStringBuilder(charSequence), this.captionTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
             } else {
-                Spannable spannableString = SpannableString.valueOf(caption.toString());
-                messageObject.addEntitiesToText(spannableString, true, false);
-                str = Emoji.replaceEmoji(spannableString, this.captionTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+                SpannableString valueOf = SpannableString.valueOf(charSequence.toString());
+                messageObject2.addEntitiesToText(valueOf, true, false);
+                replaceEmoji = Emoji.replaceEmoji(valueOf, this.captionTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
             }
-            this.captionTextView.setTag(str);
-            if (this.currentCaptionAnimation != null) {
-                this.currentCaptionAnimation.cancel();
+            this.captionTextView.setTag(replaceEmoji);
+            AnimatorSet animatorSet2 = this.currentCaptionAnimation;
+            if (animatorSet2 != null) {
+                animatorSet2.cancel();
                 this.currentCaptionAnimation = null;
             }
             try {
-                this.captionTextView.setText(str);
+                this.captionTextView.setText(replaceEmoji);
             } catch (Exception e) {
                 FileLog.e(e);
             }
             this.captionTextView.setScrollY(0);
             this.captionTextView.setTextColor(-1);
-            boolean visible = this.isActionBarVisible && (this.bottomLayout.getVisibility() == 0 || this.pickerView.getVisibility() == 0);
-            if (visible) {
+            replaceEmoji = (this.isActionBarVisible && (this.bottomLayout.getVisibility() == 0 || this.pickerView.getVisibility() == 0)) ? 1 : null;
+            if (replaceEmoji != null) {
                 this.captionTextView.setVisibility(0);
-                if (!animated || wasVisisble) {
-                    this.captionTextView.setAlpha(1.0f);
+                if (z && obj == null) {
+                    this.currentCaptionAnimation = new AnimatorSet();
+                    this.currentCaptionAnimation.setDuration(200);
+                    this.currentCaptionAnimation.setInterpolator(decelerateInterpolator);
+                    this.currentCaptionAnimation.addListener(new AnimatorListenerAdapter() {
+                        public void onAnimationEnd(Animator animator) {
+                            if (animator.equals(PhotoViewer.this.currentCaptionAnimation)) {
+                                PhotoViewer.this.currentCaptionAnimation = null;
+                            }
+                        }
+                    });
+                    animatorSet = this.currentCaptionAnimation;
+                    animatorArr = new Animator[2];
+                    animatorArr[0] = ObjectAnimator.ofFloat(this.captionTextView, View.ALPHA, new float[]{0.0f, 1.0f});
+                    animatorArr[1] = ObjectAnimator.ofFloat(this.captionTextView, View.TRANSLATION_Y, new float[]{(float) AndroidUtilities.dp(5.0f), 0.0f});
+                    animatorSet.playTogether(animatorArr);
+                    this.currentCaptionAnimation.start();
                     return;
                 }
-                this.currentCaptionAnimation = new AnimatorSet();
-                this.currentCaptionAnimation.setDuration(200);
-                this.currentCaptionAnimation.setInterpolator(decelerateInterpolator);
-                this.currentCaptionAnimation.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animation) {
-                        if (animation.equals(PhotoViewer.this.currentCaptionAnimation)) {
-                            PhotoViewer.this.currentCaptionAnimation = null;
-                        }
-                    }
-                });
-                animatorSet = this.currentCaptionAnimation;
-                animatorArr = new Animator[2];
-                animatorArr[0] = ObjectAnimator.ofFloat(this.captionTextView, View.ALPHA, new float[]{0.0f, 1.0f});
-                animatorArr[1] = ObjectAnimator.ofFloat(this.captionTextView, View.TRANSLATION_Y, new float[]{(float) AndroidUtilities.dp(5.0f), 0.0f});
-                animatorSet.playTogether(animatorArr);
-                this.currentCaptionAnimation.start();
+                this.captionTextView.setAlpha(1.0f);
             } else if (this.captionTextView.getVisibility() == 0) {
                 this.captionTextView.setVisibility(4);
                 this.captionTextView.setAlpha(0.0f);
@@ -7365,527 +9523,946 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         } else {
             this.captionTextView.setTextColor(-1);
             this.captionTextView.setTag(null);
-            if (animated && wasVisisble) {
-                this.currentCaptionAnimation = new AnimatorSet();
-                this.currentCaptionAnimation.setDuration(200);
-                this.currentCaptionAnimation.setInterpolator(decelerateInterpolator);
-                this.currentCaptionAnimation.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animation) {
-                        if (animation.equals(PhotoViewer.this.currentCaptionAnimation)) {
-                            PhotoViewer.this.captionTextView.setVisibility(4);
-                            PhotoViewer.this.currentCaptionAnimation = null;
-                        }
-                    }
-
-                    public void onAnimationCancel(Animator animation) {
-                        if (animation.equals(PhotoViewer.this.currentCaptionAnimation)) {
-                            PhotoViewer.this.currentCaptionAnimation = null;
-                        }
-                    }
-                });
-                animatorSet = this.currentCaptionAnimation;
-                animatorArr = new Animator[2];
-                animatorArr[0] = ObjectAnimator.ofFloat(this.captionTextView, View.ALPHA, new float[]{0.0f});
-                animatorArr[1] = ObjectAnimator.ofFloat(this.captionTextView, View.TRANSLATION_Y, new float[]{(float) AndroidUtilities.dp(5.0f)});
-                animatorSet.playTogether(animatorArr);
-                this.currentCaptionAnimation.start();
+            if (!z || obj == null) {
+                this.captionTextView.setVisibility(4);
                 return;
             }
-            this.captionTextView.setVisibility(4);
+            this.currentCaptionAnimation = new AnimatorSet();
+            this.currentCaptionAnimation.setDuration(200);
+            this.currentCaptionAnimation.setInterpolator(decelerateInterpolator);
+            this.currentCaptionAnimation.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animator) {
+                    if (animator.equals(PhotoViewer.this.currentCaptionAnimation)) {
+                        PhotoViewer.this.captionTextView.setVisibility(4);
+                        PhotoViewer.this.currentCaptionAnimation = null;
+                    }
+                }
+
+                public void onAnimationCancel(Animator animator) {
+                    if (animator.equals(PhotoViewer.this.currentCaptionAnimation)) {
+                        PhotoViewer.this.currentCaptionAnimation = null;
+                    }
+                }
+            });
+            animatorSet = this.currentCaptionAnimation;
+            animatorArr = new Animator[2];
+            animatorArr[0] = ObjectAnimator.ofFloat(this.captionTextView, View.ALPHA, new float[]{0.0f});
+            animatorArr[1] = ObjectAnimator.ofFloat(this.captionTextView, View.TRANSLATION_Y, new float[]{(float) AndroidUtilities.dp(5.0f)});
+            animatorSet.playTogether(animatorArr);
+            this.currentCaptionAnimation.start();
         }
     }
 
-    private void checkProgress(int a, boolean animated) {
-        int index = this.currentIndex;
-        if (a == 1) {
-            index++;
-        } else if (a == 2) {
-            index--;
-        }
-        if (this.currentFileNames[a] != null) {
-            boolean z;
-            File f = null;
-            boolean isVideo = false;
-            boolean canStream = false;
-            if (this.currentMessageObject != null) {
-                if (index < 0 || index >= this.imagesArr.size()) {
-                    this.photoProgressViews[a].setBackgroundState(-1, animated);
-                    return;
-                }
-                MessageObject messageObject = (MessageObject) this.imagesArr.get(index);
-                if (this.sharedMediaType != 1 || messageObject.canPreviewDocument()) {
-                    if (!TextUtils.isEmpty(messageObject.messageOwner.attachPath)) {
-                        f = new File(messageObject.messageOwner.attachPath);
-                        if (!f.exists()) {
-                            f = null;
-                        }
-                    }
-                    if (f == null) {
-                        if ((messageObject.messageOwner.media instanceof TL_messageMediaWebPage) && messageObject.messageOwner.media.webpage != null && messageObject.messageOwner.media.webpage.document == null) {
-                            f = FileLoader.getPathToAttach(getFileLocation(index, null), true);
-                        } else {
-                            f = FileLoader.getPathToMessage(messageObject.messageOwner);
-                        }
-                    }
-                    canStream = SharedConfig.streamMedia && messageObject.isVideo() && messageObject.canStreamVideo() && ((int) messageObject.getDialogId()) != 0;
-                    isVideo = messageObject.isVideo();
-                } else {
-                    this.photoProgressViews[a].setBackgroundState(-1, animated);
-                    return;
-                }
-            } else if (this.currentBotInlineResult != null) {
-                if (index < 0 || index >= this.imagesArrLocals.size()) {
-                    this.photoProgressViews[a].setBackgroundState(-1, animated);
-                    return;
-                }
-                BotInlineResult botInlineResult = (BotInlineResult) this.imagesArrLocals.get(index);
-                if (botInlineResult.type.equals("video") || MessageObject.isVideoDocument(botInlineResult.document)) {
-                    if (botInlineResult.document != null) {
-                        f = FileLoader.getPathToAttach(botInlineResult.document);
-                    } else if (botInlineResult.content instanceof TL_webDocument) {
-                        f = new File(FileLoader.getDirectory(4), Utilities.MD5(botInlineResult.content.url) + "." + ImageLoader.getHttpUrlExtension(botInlineResult.content.url, "mp4"));
-                    }
-                    isVideo = true;
-                } else if (botInlineResult.document != null) {
-                    f = new File(FileLoader.getDirectory(3), this.currentFileNames[a]);
-                } else if (botInlineResult.photo != null) {
-                    f = new File(FileLoader.getDirectory(0), this.currentFileNames[a]);
-                }
-                if (f == null || !f.exists()) {
-                    f = new File(FileLoader.getDirectory(4), this.currentFileNames[a]);
-                }
-            } else if (this.currentFileLocation != null) {
-                if (index < 0 || index >= this.imagesArrLocations.size()) {
-                    this.photoProgressViews[a].setBackgroundState(-1, animated);
-                    return;
-                }
-                FileLocation location = (FileLocation) this.imagesArrLocations.get(index);
-                z = this.avatarsDialogId != 0 || this.isEvent;
-                f = FileLoader.getPathToAttach(location, z);
-            } else if (this.currentSecureDocument != null) {
-                if (index < 0 || index >= this.secureDocuments.size()) {
-                    this.photoProgressViews[a].setBackgroundState(-1, animated);
-                    return;
-                }
-                f = FileLoader.getPathToAttach((SecureDocument) this.secureDocuments.get(index), true);
-            } else if (this.currentPathObject != null) {
-                f = new File(FileLoader.getDirectory(3), this.currentFileNames[a]);
-                if (!f.exists()) {
-                    f = new File(FileLoader.getDirectory(4), this.currentFileNames[a]);
-                }
-            }
-            boolean exists = f.exists();
-            if (f == null || !(exists || canStream)) {
-                if (!isVideo) {
-                    this.photoProgressViews[a].setBackgroundState(0, animated);
-                } else if (FileLoader.getInstance(this.currentAccount).isLoadingFile(this.currentFileNames[a])) {
-                    this.photoProgressViews[a].setBackgroundState(1, false);
-                } else {
-                    this.photoProgressViews[a].setBackgroundState(2, false);
-                }
-                Float progress = ImageLoader.getInstance().getFileProgress(this.currentFileNames[a]);
-                if (progress == null) {
-                    progress = Float.valueOf(0.0f);
-                }
-                this.photoProgressViews[a].setProgress(progress.floatValue(), false);
-            } else {
-                if (isVideo) {
-                    this.photoProgressViews[a].setBackgroundState(3, animated);
-                } else {
-                    this.photoProgressViews[a].setBackgroundState(-1, animated);
-                }
-                if (a == 0) {
-                    if (exists) {
-                        this.menuItem.hideSubItem(7);
-                    } else if (FileLoader.getInstance(this.currentAccount).isLoadingFile(this.currentFileNames[a])) {
-                        this.menuItem.showSubItem(7);
-                    } else {
-                        this.menuItem.hideSubItem(7);
-                    }
-                }
-            }
-            if (a == 0) {
-                if (this.imagesArrLocals.isEmpty() && (this.currentFileNames[0] == null || this.photoProgressViews[0].backgroundState == 0)) {
-                    z = false;
-                } else {
-                    z = true;
-                }
-                this.canZoom = z;
-                return;
-            }
-            return;
-        }
-        boolean isLocalVideo = false;
-        if (!this.imagesArrLocals.isEmpty() && index >= 0 && index < this.imagesArrLocals.size()) {
-            PhotoEntry object = this.imagesArrLocals.get(index);
-            if (object instanceof PhotoEntry) {
-                isLocalVideo = object.isVideo;
-            }
-        }
-        if (isLocalVideo) {
-            this.photoProgressViews[a].setBackgroundState(3, animated);
-        } else {
-            this.photoProgressViews[a].setBackgroundState(-1, animated);
-        }
+    /* JADX WARNING: Missing block: B:21:0x0058, code skipped:
+            if (r8.exists() == false) goto L_0x005a;
+     */
+    private void checkProgress(int r12, boolean r13) {
+        /*
+        r11 = this;
+        r0 = r11.currentIndex;
+        r1 = 2;
+        r2 = 1;
+        if (r12 != r2) goto L_0x0009;
+    L_0x0006:
+        r0 = r0 + 1;
+        goto L_0x000d;
+    L_0x0009:
+        if (r12 != r1) goto L_0x000d;
+    L_0x000b:
+        r0 = r0 + -1;
+    L_0x000d:
+        r3 = r11.currentFileNames;
+        r3 = r3[r12];
+        r4 = 3;
+        r5 = -1;
+        r6 = 0;
+        if (r3 == 0) goto L_0x027d;
+    L_0x0016:
+        r3 = r11.currentMessageObject;
+        r7 = 0;
+        if (r3 == 0) goto L_0x00a7;
+    L_0x001b:
+        if (r0 < 0) goto L_0x009f;
+    L_0x001d:
+        r3 = r11.imagesArr;
+        r3 = r3.size();
+        if (r0 < r3) goto L_0x0027;
+    L_0x0025:
+        goto L_0x009f;
+    L_0x0027:
+        r3 = r11.imagesArr;
+        r3 = r3.get(r0);
+        r3 = (org.telegram.messenger.MessageObject) r3;
+        r8 = r11.sharedMediaType;
+        if (r8 != r2) goto L_0x0041;
+    L_0x0033:
+        r8 = r3.canPreviewDocument();
+        if (r8 != 0) goto L_0x0041;
+    L_0x0039:
+        r0 = r11.photoProgressViews;
+        r12 = r0[r12];
+        r12.setBackgroundState(r5, r13);
+        return;
+    L_0x0041:
+        r8 = r3.messageOwner;
+        r8 = r8.attachPath;
+        r8 = android.text.TextUtils.isEmpty(r8);
+        if (r8 != 0) goto L_0x005a;
+    L_0x004b:
+        r8 = new java.io.File;
+        r9 = r3.messageOwner;
+        r9 = r9.attachPath;
+        r8.<init>(r9);
+        r9 = r8.exists();
+        if (r9 != 0) goto L_0x005b;
+    L_0x005a:
+        r8 = r7;
+    L_0x005b:
+        if (r8 != 0) goto L_0x007e;
+    L_0x005d:
+        r8 = r3.messageOwner;
+        r8 = r8.media;
+        r9 = r8 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
+        if (r9 == 0) goto L_0x0076;
+    L_0x0065:
+        r8 = r8.webpage;
+        if (r8 == 0) goto L_0x0076;
+    L_0x0069:
+        r8 = r8.document;
+        if (r8 != 0) goto L_0x0076;
+    L_0x006d:
+        r0 = r11.getFileLocation(r0, r7);
+        r0 = org.telegram.messenger.FileLoader.getPathToAttach(r0, r2);
+        goto L_0x007c;
+    L_0x0076:
+        r0 = r3.messageOwner;
+        r0 = org.telegram.messenger.FileLoader.getPathToMessage(r0);
+    L_0x007c:
+        r7 = r0;
+        goto L_0x007f;
+    L_0x007e:
+        r7 = r8;
+    L_0x007f:
+        r0 = org.telegram.messenger.SharedConfig.streamMedia;
+        if (r0 == 0) goto L_0x0098;
+    L_0x0083:
+        r0 = r3.isVideo();
+        if (r0 == 0) goto L_0x0098;
+    L_0x0089:
+        r0 = r3.canStreamVideo();
+        if (r0 == 0) goto L_0x0098;
+    L_0x008f:
+        r8 = r3.getDialogId();
+        r0 = (int) r8;
+        if (r0 == 0) goto L_0x0098;
+    L_0x0096:
+        r0 = 1;
+        goto L_0x0099;
+    L_0x0098:
+        r0 = 0;
+    L_0x0099:
+        r3 = r3.isVideo();
+        goto L_0x01d5;
+    L_0x009f:
+        r0 = r11.photoProgressViews;
+        r12 = r0[r12];
+        r12.setBackgroundState(r5, r13);
+        return;
+    L_0x00a7:
+        r3 = r11.currentBotInlineResult;
+        r8 = 4;
+        if (r3 == 0) goto L_0x0159;
+    L_0x00ac:
+        if (r0 < 0) goto L_0x0151;
+    L_0x00ae:
+        r3 = r11.imagesArrLocals;
+        r3 = r3.size();
+        if (r0 < r3) goto L_0x00b8;
+    L_0x00b6:
+        goto L_0x0151;
+    L_0x00b8:
+        r3 = r11.imagesArrLocals;
+        r0 = r3.get(r0);
+        r0 = (org.telegram.tgnet.TLRPC.BotInlineResult) r0;
+        r3 = r0.type;
+        r9 = "video";
+        r3 = r3.equals(r9);
+        if (r3 != 0) goto L_0x00f8;
+    L_0x00ca:
+        r3 = r0.document;
+        r3 = org.telegram.messenger.MessageObject.isVideoDocument(r3);
+        if (r3 == 0) goto L_0x00d3;
+    L_0x00d2:
+        goto L_0x00f8;
+    L_0x00d3:
+        r3 = r0.document;
+        if (r3 == 0) goto L_0x00e5;
+    L_0x00d7:
+        r7 = new java.io.File;
+        r0 = org.telegram.messenger.FileLoader.getDirectory(r4);
+        r3 = r11.currentFileNames;
+        r3 = r3[r12];
+        r7.<init>(r0, r3);
+        goto L_0x00f6;
+    L_0x00e5:
+        r0 = r0.photo;
+        if (r0 == 0) goto L_0x00f6;
+    L_0x00e9:
+        r7 = new java.io.File;
+        r0 = org.telegram.messenger.FileLoader.getDirectory(r6);
+        r3 = r11.currentFileNames;
+        r3 = r3[r12];
+        r7.<init>(r0, r3);
+    L_0x00f6:
+        r0 = 0;
+        goto L_0x0137;
+    L_0x00f8:
+        r3 = r0.document;
+        if (r3 == 0) goto L_0x0101;
+    L_0x00fc:
+        r7 = org.telegram.messenger.FileLoader.getPathToAttach(r3);
+        goto L_0x0136;
+    L_0x0101:
+        r3 = r0.content;
+        r3 = r3 instanceof org.telegram.tgnet.TLRPC.TL_webDocument;
+        if (r3 == 0) goto L_0x0136;
+    L_0x0107:
+        r7 = new java.io.File;
+        r3 = org.telegram.messenger.FileLoader.getDirectory(r8);
+        r9 = new java.lang.StringBuilder;
+        r9.<init>();
+        r10 = r0.content;
+        r10 = r10.url;
+        r10 = org.telegram.messenger.Utilities.MD5(r10);
+        r9.append(r10);
+        r10 = ".";
+        r9.append(r10);
+        r0 = r0.content;
+        r0 = r0.url;
+        r10 = "mp4";
+        r0 = org.telegram.messenger.ImageLoader.getHttpUrlExtension(r0, r10);
+        r9.append(r0);
+        r0 = r9.toString();
+        r7.<init>(r3, r0);
+    L_0x0136:
+        r0 = 1;
+    L_0x0137:
+        if (r7 == 0) goto L_0x013f;
+    L_0x0139:
+        r3 = r7.exists();
+        if (r3 != 0) goto L_0x014d;
+    L_0x013f:
+        r3 = new java.io.File;
+        r7 = org.telegram.messenger.FileLoader.getDirectory(r8);
+        r8 = r11.currentFileNames;
+        r8 = r8[r12];
+        r3.<init>(r7, r8);
+        r7 = r3;
+    L_0x014d:
+        r3 = r0;
+        r0 = 0;
+        goto L_0x01d5;
+    L_0x0151:
+        r0 = r11.photoProgressViews;
+        r12 = r0[r12];
+        r12.setBackgroundState(r5, r13);
+        return;
+    L_0x0159:
+        r3 = r11.currentFileLocation;
+        if (r3 == 0) goto L_0x018b;
+    L_0x015d:
+        if (r0 < 0) goto L_0x0183;
+    L_0x015f:
+        r3 = r11.imagesArrLocations;
+        r3 = r3.size();
+        if (r0 < r3) goto L_0x0168;
+    L_0x0167:
+        goto L_0x0183;
+    L_0x0168:
+        r3 = r11.imagesArrLocations;
+        r0 = r3.get(r0);
+        r0 = (org.telegram.messenger.ImageLocation) r0;
+        r0 = r0.location;
+        r3 = r11.avatarsDialogId;
+        if (r3 != 0) goto L_0x017d;
+    L_0x0176:
+        r3 = r11.isEvent;
+        if (r3 == 0) goto L_0x017b;
+    L_0x017a:
+        goto L_0x017d;
+    L_0x017b:
+        r3 = 0;
+        goto L_0x017e;
+    L_0x017d:
+        r3 = 1;
+    L_0x017e:
+        r7 = org.telegram.messenger.FileLoader.getPathToAttach(r0, r3);
+        goto L_0x01d3;
+    L_0x0183:
+        r0 = r11.photoProgressViews;
+        r12 = r0[r12];
+        r12.setBackgroundState(r5, r13);
+        return;
+    L_0x018b:
+        r3 = r11.currentSecureDocument;
+        if (r3 == 0) goto L_0x01af;
+    L_0x018f:
+        if (r0 < 0) goto L_0x01a7;
+    L_0x0191:
+        r3 = r11.secureDocuments;
+        r3 = r3.size();
+        if (r0 < r3) goto L_0x019a;
+    L_0x0199:
+        goto L_0x01a7;
+    L_0x019a:
+        r3 = r11.secureDocuments;
+        r0 = r3.get(r0);
+        r0 = (org.telegram.messenger.SecureDocument) r0;
+        r7 = org.telegram.messenger.FileLoader.getPathToAttach(r0, r2);
+        goto L_0x01d3;
+    L_0x01a7:
+        r0 = r11.photoProgressViews;
+        r12 = r0[r12];
+        r12.setBackgroundState(r5, r13);
+        return;
+    L_0x01af:
+        r0 = r11.currentPathObject;
+        if (r0 == 0) goto L_0x01d3;
+    L_0x01b3:
+        r7 = new java.io.File;
+        r0 = org.telegram.messenger.FileLoader.getDirectory(r4);
+        r3 = r11.currentFileNames;
+        r3 = r3[r12];
+        r7.<init>(r0, r3);
+        r0 = r7.exists();
+        if (r0 != 0) goto L_0x01d3;
+    L_0x01c6:
+        r7 = new java.io.File;
+        r0 = org.telegram.messenger.FileLoader.getDirectory(r8);
+        r3 = r11.currentFileNames;
+        r3 = r3[r12];
+        r7.<init>(r0, r3);
+    L_0x01d3:
+        r0 = 0;
+        r3 = 0;
+    L_0x01d5:
+        r8 = r7.exists();
+        if (r7 == 0) goto L_0x0217;
+    L_0x01db:
+        if (r8 != 0) goto L_0x01df;
+    L_0x01dd:
+        if (r0 == 0) goto L_0x0217;
+    L_0x01df:
+        if (r3 == 0) goto L_0x01e9;
+    L_0x01e1:
+        r0 = r11.photoProgressViews;
+        r0 = r0[r12];
+        r0.setBackgroundState(r4, r13);
+        goto L_0x01f0;
+    L_0x01e9:
+        r0 = r11.photoProgressViews;
+        r0 = r0[r12];
+        r0.setBackgroundState(r5, r13);
+    L_0x01f0:
+        if (r12 != 0) goto L_0x025e;
+    L_0x01f2:
+        r13 = 7;
+        if (r8 != 0) goto L_0x0211;
+    L_0x01f5:
+        r0 = r11.currentAccount;
+        r0 = org.telegram.messenger.FileLoader.getInstance(r0);
+        r1 = r11.currentFileNames;
+        r1 = r1[r12];
+        r0 = r0.isLoadingFile(r1);
+        if (r0 != 0) goto L_0x020b;
+    L_0x0205:
+        r0 = r11.menuItem;
+        r0.hideSubItem(r13);
+        goto L_0x025e;
+    L_0x020b:
+        r0 = r11.menuItem;
+        r0.showSubItem(r13);
+        goto L_0x025e;
+    L_0x0211:
+        r0 = r11.menuItem;
+        r0.hideSubItem(r13);
+        goto L_0x025e;
+    L_0x0217:
+        if (r3 == 0) goto L_0x0239;
+    L_0x0219:
+        r13 = r11.currentAccount;
+        r13 = org.telegram.messenger.FileLoader.getInstance(r13);
+        r0 = r11.currentFileNames;
+        r0 = r0[r12];
+        r13 = r13.isLoadingFile(r0);
+        if (r13 != 0) goto L_0x0231;
+    L_0x0229:
+        r13 = r11.photoProgressViews;
+        r13 = r13[r12];
+        r13.setBackgroundState(r1, r6);
+        goto L_0x0240;
+    L_0x0231:
+        r13 = r11.photoProgressViews;
+        r13 = r13[r12];
+        r13.setBackgroundState(r2, r6);
+        goto L_0x0240;
+    L_0x0239:
+        r0 = r11.photoProgressViews;
+        r0 = r0[r12];
+        r0.setBackgroundState(r6, r13);
+    L_0x0240:
+        r13 = org.telegram.messenger.ImageLoader.getInstance();
+        r0 = r11.currentFileNames;
+        r0 = r0[r12];
+        r13 = r13.getFileProgress(r0);
+        if (r13 != 0) goto L_0x0253;
+    L_0x024e:
+        r13 = 0;
+        r13 = java.lang.Float.valueOf(r13);
+    L_0x0253:
+        r0 = r11.photoProgressViews;
+        r0 = r0[r12];
+        r13 = r13.floatValue();
+        r0.setProgress(r13, r6);
+    L_0x025e:
+        if (r12 != 0) goto L_0x02ae;
+    L_0x0260:
+        r12 = r11.imagesArrLocals;
+        r12 = r12.isEmpty();
+        if (r12 == 0) goto L_0x027a;
+    L_0x0268:
+        r12 = r11.currentFileNames;
+        r12 = r12[r6];
+        if (r12 == 0) goto L_0x0279;
+    L_0x026e:
+        r12 = r11.photoProgressViews;
+        r12 = r12[r6];
+        r12 = r12.backgroundState;
+        if (r12 == 0) goto L_0x0279;
+    L_0x0278:
+        goto L_0x027a;
+    L_0x0279:
+        r2 = 0;
+    L_0x027a:
+        r11.canZoom = r2;
+        goto L_0x02ae;
+    L_0x027d:
+        r1 = r11.imagesArrLocals;
+        r1 = r1.isEmpty();
+        if (r1 != 0) goto L_0x029d;
+    L_0x0285:
+        if (r0 < 0) goto L_0x029d;
+    L_0x0287:
+        r1 = r11.imagesArrLocals;
+        r1 = r1.size();
+        if (r0 >= r1) goto L_0x029d;
+    L_0x028f:
+        r1 = r11.imagesArrLocals;
+        r0 = r1.get(r0);
+        r1 = r0 instanceof org.telegram.messenger.MediaController.PhotoEntry;
+        if (r1 == 0) goto L_0x029d;
+    L_0x0299:
+        r0 = (org.telegram.messenger.MediaController.PhotoEntry) r0;
+        r6 = r0.isVideo;
+    L_0x029d:
+        if (r6 == 0) goto L_0x02a7;
+    L_0x029f:
+        r0 = r11.photoProgressViews;
+        r12 = r0[r12];
+        r12.setBackgroundState(r4, r13);
+        goto L_0x02ae;
+    L_0x02a7:
+        r0 = r11.photoProgressViews;
+        r12 = r0[r12];
+        r12.setBackgroundState(r5, r13);
+    L_0x02ae:
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.checkProgress(int, boolean):void");
     }
 
     public int getSelectiongLength() {
-        return this.captionEditText != null ? this.captionEditText.getSelectionLength() : 0;
+        PhotoViewerCaptionEnterView photoViewerCaptionEnterView = this.captionEditText;
+        return photoViewerCaptionEnterView != null ? photoViewerCaptionEnterView.getSelectionLength() : 0;
     }
 
-    private void setIndexToImage(ImageReceiver imageReceiver, int index) {
-        imageReceiver.setOrientation(0, false);
-        BitmapHolder placeHolder;
-        int size;
-        int imageSize;
-        String str;
-        Drawable bitmapDrawable;
+    private void setIndexToImage(ImageReceiver imageReceiver, int i) {
+        ImageReceiver imageReceiver2 = imageReceiver;
+        int i2 = i;
+        imageReceiver2.setOrientation(0, false);
+        MessageObject messageObject = null;
         if (this.secureDocuments.isEmpty()) {
-            Drawable bitmapDrawable2;
-            Document document;
+            String str = "%d_%d";
+            Object obj;
+            TLObject fileLocation;
             if (this.imagesArrLocals.isEmpty()) {
-                MessageObject messageObject;
-                PhotoSize thumbLocation;
-                Drawable drawable;
-                Object obj;
-                if (this.imagesArr.isEmpty() || index < 0 || index >= this.imagesArr.size()) {
-                    messageObject = null;
+                BitmapHolder bitmapHolder;
+                PhotoSize closestPhotoSizeWithSize;
+                if (this.imagesArr.isEmpty() || i2 < 0 || i2 >= this.imagesArr.size()) {
+                    obj = null;
                 } else {
-                    messageObject = (MessageObject) this.imagesArr.get(index);
-                    imageReceiver.setShouldGenerateQualityThumb(true);
+                    MessageObject messageObject2 = (MessageObject) this.imagesArr.get(i2);
+                    imageReceiver2.setShouldGenerateQualityThumb(true);
+                    obj = messageObject2;
                 }
-                if (messageObject != null) {
-                    if (messageObject.isVideo()) {
-                        imageReceiver.setNeedsQualityThumb(true);
-                        if (messageObject.photoThumbs == null || messageObject.photoThumbs.isEmpty()) {
-                            imageReceiver.setImageBitmap(this.parentActivity.getResources().getDrawable(NUM));
-                            return;
-                        }
-                        placeHolder = null;
-                        if (this.currentThumb != null && imageReceiver == this.centerImage) {
-                            placeHolder = this.currentThumb;
-                        }
-                        thumbLocation = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 100);
-                        if (placeHolder != null) {
-                            bitmapDrawable2 = new BitmapDrawable(placeHolder.bitmap);
+                if (obj != null) {
+                    if (obj.isVideo()) {
+                        imageReceiver2.setNeedsQualityThumb(true);
+                        ArrayList arrayList = obj.photoThumbs;
+                        if (arrayList == null || arrayList.isEmpty()) {
+                            imageReceiver2.setImageBitmap(this.parentActivity.getResources().getDrawable(NUM));
                         } else {
-                            drawable = null;
+                            BitmapHolder bitmapHolder2 = this.currentThumb;
+                            if (bitmapHolder2 == null || imageReceiver2 != this.centerImage) {
+                                bitmapHolder2 = null;
+                            }
+                            imageReceiver.setImage(null, null, bitmapHolder2 == null ? ImageLocation.getForObject(FileLoader.getClosestPhotoSizeWithSize(obj.photoThumbs, 100), obj.photoThumbsObject) : null, "b", bitmapHolder2 != null ? new BitmapDrawable(bitmapHolder2.bitmap) : null, 0, null, obj, 1);
                         }
-                        if (placeHolder == null) {
-                            obj = thumbLocation;
-                        } else {
-                            obj = null;
-                        }
-                        imageReceiver.setImage(null, null, drawable, obj, "b", 0, null, messageObject, 1);
                         return;
-                    } else if (this.currentAnimation != null) {
-                        imageReceiver.setImageBitmap(this.currentAnimation);
+                    }
+                    Drawable drawable = this.currentAnimation;
+                    if (drawable != null) {
+                        imageReceiver2.setImageBitmap(drawable);
                         this.currentAnimation.setSecondParentView(this.containerView);
                         return;
                     } else if (this.sharedMediaType == 1) {
-                        if (messageObject.canPreviewDocument()) {
-                            document = messageObject.getDocument();
-                            imageReceiver.setNeedsQualityThumb(true);
-                            placeHolder = null;
-                            if (this.currentThumb != null && imageReceiver == this.centerImage) {
-                                placeHolder = this.currentThumb;
+                        if (obj.canPreviewDocument()) {
+                            Document document = obj.getDocument();
+                            imageReceiver2.setNeedsQualityThumb(true);
+                            bitmapHolder = this.currentThumb;
+                            if (bitmapHolder == null || imageReceiver2 != this.centerImage) {
+                                bitmapHolder = null;
                             }
-                            thumbLocation = messageObject != null ? FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 100) : null;
-                            if (placeHolder != null) {
-                                bitmapDrawable2 = new BitmapDrawable(placeHolder.bitmap);
-                            } else {
-                                drawable = null;
+                            closestPhotoSizeWithSize = obj != null ? FileLoader.getClosestPhotoSizeWithSize(obj.photoThumbs, 100) : null;
+                            int i3 = (int) (4096.0f / AndroidUtilities.density);
+                            ImageLocation forDocument = ImageLocation.getForDocument(document);
+                            String format = String.format(Locale.US, str, new Object[]{Integer.valueOf(i3), Integer.valueOf(i3)});
+                            ImageLocation forDocument2 = bitmapHolder == null ? ImageLocation.getForDocument(closestPhotoSizeWithSize, document) : null;
+                            if (bitmapHolder != null) {
+                                messageObject = new BitmapDrawable(bitmapHolder.bitmap);
                             }
-                            imageReceiver.setImage(document, null, drawable, placeHolder == null ? thumbLocation : null, "b", document.size, null, messageObject, 0);
-                            return;
+                            imageReceiver.setImage(forDocument, format, forDocument2, "b", messageObject, document.size, null, obj, 0);
+                        } else {
+                            imageReceiver2.setImageBitmap(new OtherDocumentPlaceholderDrawable(this.parentActivity, this.containerView, obj));
                         }
-                        imageReceiver.setImageBitmap(new OtherDocumentPlaceholderDrawable(this.parentActivity, this.containerView, messageObject));
                         return;
                     }
                 }
-                int[] size2 = new int[1];
-                TLObject fileLocation = getFileLocation(index, size2);
-                if (fileLocation != null) {
-                    int i;
-                    imageReceiver.setNeedsQualityThumb(true);
-                    placeHolder = null;
-                    if (this.currentThumb != null && imageReceiver == this.centerImage) {
-                        placeHolder = this.currentThumb;
+                int[] iArr = new int[1];
+                ImageLocation imageLocation = getImageLocation(i2, iArr);
+                fileLocation = getFileLocation(i2, iArr);
+                if (imageLocation != null) {
+                    TLObject tLObject;
+                    imageReceiver2.setNeedsQualityThumb(true);
+                    bitmapHolder = this.currentThumb;
+                    if (bitmapHolder == null || imageReceiver2 != this.centerImage) {
+                        bitmapHolder = null;
                     }
-                    if (size2[0] == 0) {
-                        size2[0] = -1;
+                    if (iArr[0] == 0) {
+                        iArr[0] = -1;
                     }
-                    thumbLocation = messageObject != null ? FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 100) : null;
-                    if (thumbLocation != null && thumbLocation == fileLocation) {
-                        thumbLocation = null;
-                    }
-                    boolean cacheOnly = (messageObject != null && messageObject.isWebpage()) || this.avatarsDialogId != 0 || this.isEvent;
-                    if (placeHolder != null) {
-                        bitmapDrawable2 = new BitmapDrawable(placeHolder.bitmap);
+                    if (obj != null) {
+                        closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(obj.photoThumbs, 100);
+                        tLObject = obj.photoThumbsObject;
                     } else {
-                        drawable = null;
+                        closestPhotoSizeWithSize = null;
+                        tLObject = closestPhotoSizeWithSize;
                     }
-                    if (placeHolder == null) {
-                        obj = thumbLocation;
-                    } else {
-                        obj = null;
+                    if (closestPhotoSizeWithSize != null && closestPhotoSizeWithSize == fileLocation) {
+                        closestPhotoSizeWithSize = null;
                     }
-                    String str2 = "b";
-                    int i2 = size2[0];
-                    if (cacheOnly) {
-                        i = 1;
-                    } else {
-                        i = 0;
-                    }
-                    imageReceiver.setImage(fileLocation, null, drawable, obj, str2, i2, null, messageObject, i);
-                    return;
-                }
-                imageReceiver.setNeedsQualityThumb(true);
-                if (size2[0] == 0) {
-                    imageReceiver.setImageBitmap((Bitmap) null);
-                } else {
-                    imageReceiver.setImageBitmap(this.parentActivity.getResources().getDrawable(NUM));
-                }
-            } else if (index < 0 || index >= this.imagesArrLocals.size()) {
-                imageReceiver.setImageBitmap((Bitmap) null);
-            } else {
-                PhotoEntry object = this.imagesArrLocals.get(index);
-                size = (int) (((float) AndroidUtilities.getPhotoSize()) / AndroidUtilities.density);
-                placeHolder = null;
-                if (this.currentThumb != null && imageReceiver == this.centerImage) {
-                    placeHolder = this.currentThumb;
-                }
-                if (placeHolder == null) {
-                    placeHolder = this.placeProvider.getThumbForPhoto(null, null, index);
-                }
-                String path = null;
-                document = null;
-                WebFile webDocument = null;
-                PhotoSize photo = null;
-                imageSize = 0;
-                String filter = null;
-                boolean isVideo = false;
-                int cacheType = 0;
-                if (object instanceof PhotoEntry) {
-                    PhotoEntry photoEntry = object;
-                    isVideo = photoEntry.isVideo;
-                    if (photoEntry.isVideo) {
-                        path = photoEntry.thumbPath != null ? photoEntry.thumbPath : "vthumb://" + photoEntry.imageId + ":" + photoEntry.path;
-                    } else {
-                        if (photoEntry.imagePath != null) {
-                            path = photoEntry.imagePath;
+                    int i4 = ((obj == null || !obj.isWebpage()) && this.avatarsDialogId == 0 && !this.isEvent) ? 0 : 1;
+                    if (obj == null) {
+                        i2 = this.avatarsDialogId;
+                        if (i2 != 0) {
+                            User user;
+                            if (i2 > 0) {
+                                user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.avatarsDialogId));
+                            } else {
+                                user = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-this.avatarsDialogId));
+                            }
+                            obj = user;
                         } else {
-                            imageReceiver.setOrientation(photoEntry.orientation, false);
-                            path = photoEntry.path;
+                            obj = null;
                         }
-                        filter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(size), Integer.valueOf(size)});
                     }
-                } else if (object instanceof BotInlineResult) {
-                    cacheType = 1;
-                    BotInlineResult botInlineResult = (BotInlineResult) object;
+                    imageReceiver.setImage(imageLocation, null, bitmapHolder == null ? ImageLocation.getForObject(closestPhotoSizeWithSize, tLObject) : null, "b", bitmapHolder != null ? new BitmapDrawable(bitmapHolder.bitmap) : null, iArr[0], null, obj, i4);
+                } else {
+                    imageReceiver2.setNeedsQualityThumb(true);
+                    if (iArr[0] == 0) {
+                        imageReceiver2.setImageBitmap(null);
+                    } else {
+                        imageReceiver2.setImageBitmap(this.parentActivity.getResources().getDrawable(NUM));
+                    }
+                }
+            } else if (i2 < 0 || i2 >= this.imagesArrLocals.size()) {
+                imageReceiver2.setImageBitmap(null);
+            } else {
+                String str2;
+                PhotoSize photoSize;
+                TLObject tLObject2;
+                boolean z;
+                String str3;
+                int i5;
+                int i6;
+                WebFile webFile;
+                Document document2;
+                obj = this.imagesArrLocals.get(i2);
+                int photoSize2 = (int) (((float) AndroidUtilities.getPhotoSize()) / AndroidUtilities.density);
+                BitmapHolder bitmapHolder3 = this.currentThumb;
+                if (bitmapHolder3 == null || imageReceiver2 != this.centerImage) {
+                    bitmapHolder3 = null;
+                }
+                if (bitmapHolder3 == null) {
+                    bitmapHolder3 = this.placeProvider.getThumbForPhoto(null, null, i2);
+                }
+                String str4 = "d";
+                String str5;
+                int i7;
+                if (obj instanceof PhotoEntry) {
+                    String str6;
+                    PhotoEntry photoEntry = (PhotoEntry) obj;
+                    boolean z2 = photoEntry.isVideo;
+                    if (z2) {
+                        str5 = photoEntry.thumbPath;
+                        if (str5 == null) {
+                            StringBuilder stringBuilder = new StringBuilder();
+                            stringBuilder.append("vthumb://");
+                            stringBuilder.append(photoEntry.imageId);
+                            stringBuilder.append(":");
+                            stringBuilder.append(photoEntry.path);
+                            str5 = stringBuilder.toString();
+                        }
+                        str6 = null;
+                    } else {
+                        str5 = photoEntry.imagePath;
+                        if (str5 == null) {
+                            imageReceiver2.setOrientation(photoEntry.orientation, false);
+                            str5 = photoEntry.path;
+                        }
+                        str6 = String.format(Locale.US, str, new Object[]{Integer.valueOf(photoSize2), Integer.valueOf(photoSize2)});
+                    }
+                    str2 = str6;
+                    photoSize = null;
+                    tLObject2 = photoSize;
+                    z = z2;
+                    str3 = str5;
+                    i5 = 0;
+                    i6 = 0;
+                    webFile = tLObject2;
+                    document2 = webFile;
+                } else if (obj instanceof BotInlineResult) {
+                    PhotoSize closestPhotoSizeWithSize2;
+                    WebFile webFile2;
+                    PhotoSize photoSize3;
+                    BotInlineResult botInlineResult = (BotInlineResult) obj;
                     if (botInlineResult.type.equals("video") || MessageObject.isVideoDocument(botInlineResult.document)) {
-                        if (botInlineResult.document != null) {
-                            photo = FileLoader.getClosestPhotoSizeWithSize(botInlineResult.document.thumbs, 90);
-                        } else if (botInlineResult.thumb instanceof TL_webDocument) {
-                            webDocument = WebFile.createWithWebDocument(botInlineResult.thumb);
-                        }
-                    } else if (botInlineResult.type.equals("gif") && botInlineResult.document != null) {
-                        document = botInlineResult.document;
-                        imageSize = botInlineResult.document.size;
-                        filter = "d";
-                    } else if (botInlineResult.photo != null) {
-                        PhotoSize sizeFull = FileLoader.getClosestPhotoSizeWithSize(botInlineResult.photo.sizes, AndroidUtilities.getPhotoSize());
-                        photo = sizeFull;
-                        imageSize = sizeFull.size;
-                        filter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(size), Integer.valueOf(size)});
-                    } else if (botInlineResult.content instanceof TL_webDocument) {
-                        if (botInlineResult.type.equals("gif")) {
-                            filter = "d";
+                        Document document3 = botInlineResult.document;
+                        if (document3 != null) {
+                            closestPhotoSizeWithSize2 = FileLoader.getClosestPhotoSizeWithSize(document3.thumbs, 90);
+                            tLObject2 = botInlineResult.document;
+                            webFile2 = null;
+                            document2 = webFile2;
+                            str2 = document2;
+                            i7 = 0;
+                            i5 = i7;
+                            z = false;
+                            i6 = 1;
+                            str3 = null;
+                            photoSize3 = closestPhotoSizeWithSize2;
+                            webFile = webFile2;
+                            photoSize = photoSize3;
                         } else {
-                            filter = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(size), Integer.valueOf(size)});
+                            WebDocument webDocument = botInlineResult.thumb;
+                            if (webDocument instanceof TL_webDocument) {
+                                webFile2 = WebFile.createWithWebDocument(webDocument);
+                                closestPhotoSizeWithSize2 = null;
+                                document2 = closestPhotoSizeWithSize2;
+                                tLObject2 = document2;
+                                str2 = tLObject2;
+                                i7 = 0;
+                                i5 = i7;
+                                z = false;
+                                i6 = 1;
+                                str3 = null;
+                                photoSize3 = closestPhotoSizeWithSize2;
+                                webFile = webFile2;
+                                photoSize = photoSize3;
+                            }
                         }
-                        webDocument = WebFile.createWithWebDocument(botInlineResult.content);
-                    }
-                } else if (object instanceof SearchImage) {
-                    cacheType = 1;
-                    SearchImage photoEntry2 = (SearchImage) object;
-                    if (photoEntry2.photoSize != null) {
-                        photo = photoEntry2.photoSize;
-                        imageSize = photoEntry2.photoSize.size;
-                    } else if (photoEntry2.imagePath != null) {
-                        path = photoEntry2.imagePath;
-                    } else if (photoEntry2.document != null) {
-                        document = photoEntry2.document;
-                        imageSize = photoEntry2.document.size;
                     } else {
-                        path = photoEntry2.imageUrl;
-                        imageSize = photoEntry2.size;
+                        String str7 = "gif";
+                        if (botInlineResult.type.equals(str7)) {
+                            document2 = botInlineResult.document;
+                            if (document2 != null) {
+                                i7 = document2.size;
+                                webFile2 = null;
+                                tLObject2 = webFile2;
+                                str2 = str4;
+                                closestPhotoSizeWithSize2 = tLObject2;
+                                i5 = i7;
+                                z = false;
+                                i6 = 1;
+                                str3 = null;
+                                photoSize3 = closestPhotoSizeWithSize2;
+                                webFile = webFile2;
+                                photoSize = photoSize3;
+                            }
+                        }
+                        Photo photo = botInlineResult.photo;
+                        if (photo != null) {
+                            closestPhotoSizeWithSize2 = FileLoader.getClosestPhotoSizeWithSize(photo.sizes, AndroidUtilities.getPhotoSize());
+                            fileLocation = botInlineResult.photo;
+                            i7 = closestPhotoSizeWithSize2.size;
+                            str2 = String.format(Locale.US, str, new Object[]{Integer.valueOf(photoSize2), Integer.valueOf(photoSize2)});
+                            tLObject2 = fileLocation;
+                            webFile2 = null;
+                            document2 = webFile2;
+                            i5 = i7;
+                            z = false;
+                            i6 = 1;
+                            str3 = null;
+                            photoSize3 = closestPhotoSizeWithSize2;
+                            webFile = webFile2;
+                            photoSize = photoSize3;
+                        } else if (botInlineResult.content instanceof TL_webDocument) {
+                            if (!botInlineResult.type.equals(str7)) {
+                                str4 = String.format(Locale.US, str, new Object[]{Integer.valueOf(photoSize2), Integer.valueOf(photoSize2)});
+                            }
+                            webFile2 = WebFile.createWithWebDocument(botInlineResult.content);
+                            TLObject tLObject3 = null;
+                            tLObject2 = tLObject3;
+                            str2 = str4;
+                            i7 = 0;
+                            closestPhotoSizeWithSize2 = tLObject2;
+                            i5 = i7;
+                            z = false;
+                            i6 = 1;
+                            str3 = null;
+                            photoSize3 = closestPhotoSizeWithSize2;
+                            webFile = webFile2;
+                            photoSize = photoSize3;
+                        }
                     }
-                    filter = "d";
-                }
-                if (document != null) {
-                    Object obj2;
-                    PhotoSize thumb = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90);
-                    str = "d";
-                    if (placeHolder != null) {
-                        bitmapDrawable = new BitmapDrawable(placeHolder.bitmap);
+                    webFile2 = null;
+                    closestPhotoSizeWithSize2 = webFile2;
+                    document2 = closestPhotoSizeWithSize2;
+                    tLObject2 = document2;
+                    str2 = tLObject2;
+                    i7 = 0;
+                    i5 = i7;
+                    z = false;
+                    i6 = 1;
+                    str3 = null;
+                    photoSize3 = closestPhotoSizeWithSize2;
+                    webFile = webFile2;
+                    photoSize = photoSize3;
+                } else if (obj instanceof SearchImage) {
+                    MessageObject messageObject3;
+                    SearchImage searchImage = (SearchImage) obj;
+                    PhotoSize photoSize4 = searchImage.photoSize;
+                    if (photoSize4 != null) {
+                        fileLocation = searchImage.photo;
+                        messageObject3 = null;
+                        i7 = photoSize4.size;
+                        tLObject2 = fileLocation;
+                        photoSize = photoSize4;
+                        document2 = messageObject3;
                     } else {
-                        bitmapDrawable = null;
+                        str5 = searchImage.imagePath;
+                        if (str5 != null) {
+                            photoSize = null;
+                            tLObject2 = photoSize;
+                            messageObject3 = str5;
+                            i7 = 0;
+                        } else {
+                            document2 = searchImage.document;
+                            if (document2 != null) {
+                                i7 = document2.size;
+                                photoSize = null;
+                                tLObject2 = photoSize;
+                                messageObject3 = tLObject2;
+                            } else {
+                                str5 = searchImage.imageUrl;
+                                i7 = searchImage.size;
+                                fileLocation = null;
+                                tLObject2 = fileLocation;
+                                Object obj2 = str5;
+                            }
+                        }
+                        document2 = tLObject2;
                     }
-                    if (placeHolder == null) {
-                        obj2 = thumb;
-                    } else {
-                        obj2 = null;
-                    }
-                    imageReceiver.setImage(document, str, bitmapDrawable, obj2, String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(size), Integer.valueOf(size)}), imageSize, null, object, cacheType);
-                } else if (photo != null) {
-                    Drawable drawable2;
-                    if (placeHolder != null) {
-                        bitmapDrawable2 = new BitmapDrawable(placeHolder.bitmap);
-                    } else {
-                        drawable2 = null;
-                    }
-                    imageReceiver.setImage(photo, filter, drawable2, null, String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(size), Integer.valueOf(size)}), imageSize, null, object, cacheType);
-                } else if (webDocument != null) {
-                    Drawable path2;
-                    if (placeHolder != null) {
-                        bitmapDrawable2 = new BitmapDrawable(placeHolder.bitmap);
-                    } else {
-                        path2 = (!isVideo || this.parentActivity == null) ? null : this.parentActivity.getResources().getDrawable(NUM);
-                    }
-                    imageReceiver.setImage(webDocument, filter, path2, null, object, cacheType);
+                    i5 = i7;
+                    z = false;
+                    i6 = 1;
+                    str3 = messageObject3;
+                    str2 = str4;
+                    webFile = null;
                 } else {
-                    Drawable drawable3;
-                    if (placeHolder != null) {
-                        bitmapDrawable2 = new BitmapDrawable(placeHolder.bitmap);
+                    photoSize = null;
+                    webFile = photoSize;
+                    document2 = webFile;
+                    tLObject2 = document2;
+                    str2 = tLObject2;
+                    str3 = str2;
+                    z = false;
+                    i5 = 0;
+                    i6 = 0;
+                }
+                Drawable bitmapDrawable;
+                Drawable drawable2;
+                if (document2 != null) {
+                    imageReceiver.setImage(ImageLocation.getForDocument(document2), "d", bitmapHolder3 == null ? ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(document2.thumbs, 90), document2) : null, String.format(Locale.US, str, new Object[]{Integer.valueOf(photoSize2), Integer.valueOf(photoSize2)}), bitmapHolder3 != null ? new BitmapDrawable(bitmapHolder3.bitmap) : null, i5, null, obj, i6);
+                } else if (photoSize != null) {
+                    imageReceiver.setImage(ImageLocation.getForObject(photoSize, tLObject2), str2, bitmapHolder3 != null ? new BitmapDrawable(bitmapHolder3.bitmap) : null, i5, null, obj, i6);
+                } else if (webFile != null) {
+                    ImageLocation forWebFile = ImageLocation.getForWebFile(webFile);
+                    if (bitmapHolder3 != null) {
+                        bitmapDrawable = new BitmapDrawable(bitmapHolder3.bitmap);
                     } else {
-                        drawable3 = (!isVideo || this.parentActivity == null) ? null : this.parentActivity.getResources().getDrawable(NUM);
+                        if (z) {
+                            Activity activity = this.parentActivity;
+                            if (activity != null) {
+                                bitmapDrawable = activity.getResources().getDrawable(NUM);
+                            }
+                        }
+                        drawable2 = null;
+                        imageReceiver.setImage(forWebFile, str2, drawable2, null, obj, i6);
                     }
-                    imageReceiver.setImage(path, filter, drawable3, null, imageSize);
+                    drawable2 = bitmapDrawable;
+                    imageReceiver.setImage(forWebFile, str2, drawable2, null, obj, i6);
+                } else {
+                    if (bitmapHolder3 != null) {
+                        bitmapDrawable = new BitmapDrawable(bitmapHolder3.bitmap);
+                    } else {
+                        if (z) {
+                            Activity activity2 = this.parentActivity;
+                            if (activity2 != null) {
+                                bitmapDrawable = activity2.getResources().getDrawable(NUM);
+                            }
+                        }
+                        drawable2 = null;
+                        imageReceiver.setImage(str3, str2, drawable2, null, i5);
+                    }
+                    drawable2 = bitmapDrawable;
+                    imageReceiver.setImage(str3, str2, drawable2, null, i5);
                 }
             }
-        } else if (index >= 0 && index < this.secureDocuments.size()) {
-            Object object2 = this.secureDocuments.get(index);
-            size = (int) (((float) AndroidUtilities.getPhotoSize()) / AndroidUtilities.density);
-            placeHolder = null;
-            if (this.currentThumb != null && imageReceiver == this.centerImage) {
-                placeHolder = this.currentThumb;
+        } else if (i2 >= 0 && i2 < this.secureDocuments.size()) {
+            this.secureDocuments.get(i2);
+            AndroidUtilities.getPhotoSize();
+            float f = AndroidUtilities.density;
+            BitmapHolder bitmapHolder4 = this.currentThumb;
+            if (bitmapHolder4 == null || imageReceiver2 != this.centerImage) {
+                bitmapHolder4 = null;
             }
-            if (placeHolder == null) {
-                placeHolder = this.placeProvider.getThumbForPhoto(null, null, index);
+            if (bitmapHolder4 == null) {
+                bitmapHolder4 = this.placeProvider.getThumbForPhoto(null, null, i2);
             }
-            SecureDocument document2 = (SecureDocument) this.secureDocuments.get(index);
-            imageSize = document2.secureFile.size;
-            str = "d";
-            if (placeHolder != null) {
-                bitmapDrawable = new BitmapDrawable(placeHolder.bitmap);
-            } else {
-                bitmapDrawable = null;
+            SecureDocument secureDocument = (SecureDocument) this.secureDocuments.get(i2);
+            int i8 = secureDocument.secureFile.size;
+            ImageLocation forSecureDocument = ImageLocation.getForSecureDocument(secureDocument);
+            if (bitmapHolder4 != null) {
+                messageObject = new BitmapDrawable(bitmapHolder4.bitmap);
             }
-            imageReceiver.setImage(document2, str, bitmapDrawable, null, null, imageSize, null, null, 0);
+            imageReceiver.setImage(forSecureDocument, "d", null, null, messageObject, i8, null, null, 0);
         }
     }
 
-    public static boolean isShowingImage(MessageObject object) {
-        boolean result = false;
-        if (Instance != null) {
-            result = (Instance.pipAnimationInProgress || !Instance.isVisible || Instance.disableShowCheck || object == null || Instance.currentMessageObject == null || Instance.currentMessageObject.getId() != object.getId() || Instance.currentMessageObject.getDialogId() != object.getDialogId()) ? false : true;
+    public static boolean isShowingImage(MessageObject messageObject) {
+        boolean z = (Instance == null || Instance.pipAnimationInProgress || !Instance.isVisible || Instance.disableShowCheck || messageObject == null || Instance.currentMessageObject == null || Instance.currentMessageObject.getId() != messageObject.getId() || Instance.currentMessageObject.getDialogId() != messageObject.getDialogId()) ? false : true;
+        if (z || PipInstance == null) {
+            return z;
         }
-        if (result || PipInstance == null) {
-            return result;
-        }
-        if (!PipInstance.isVisible || PipInstance.disableShowCheck || object == null || PipInstance.currentMessageObject == null || PipInstance.currentMessageObject.getId() != object.getId() || PipInstance.currentMessageObject.getDialogId() != object.getDialogId()) {
+        return PipInstance.isVisible && !PipInstance.disableShowCheck && messageObject != null && PipInstance.currentMessageObject != null && PipInstance.currentMessageObject.getId() == messageObject.getId() && PipInstance.currentMessageObject.getDialogId() == messageObject.getDialogId();
+    }
+
+    public static boolean isPlayingMessageInPip(MessageObject messageObject) {
+        return (PipInstance == null || messageObject == null || PipInstance.currentMessageObject == null || PipInstance.currentMessageObject.getId() != messageObject.getId() || PipInstance.currentMessageObject.getDialogId() != messageObject.getDialogId()) ? false : true;
+    }
+
+    public static boolean isPlayingMessage(MessageObject messageObject) {
+        return (Instance == null || Instance.pipAnimationInProgress || !Instance.isVisible || messageObject == null || Instance.currentMessageObject == null || Instance.currentMessageObject.getId() != messageObject.getId() || Instance.currentMessageObject.getDialogId() != messageObject.getDialogId()) ? false : true;
+    }
+
+    public static boolean isShowingImage(FileLocation fileLocation) {
+        if (Instance == null || !Instance.isVisible || Instance.disableShowCheck || fileLocation == null || Instance.currentFileLocation == null || fileLocation.local_id != Instance.currentFileLocation.location.local_id || fileLocation.volume_id != Instance.currentFileLocation.location.volume_id || fileLocation.dc_id != Instance.currentFileLocation.dc_id) {
             return false;
         }
         return true;
     }
 
-    public static boolean isPlayingMessageInPip(MessageObject object) {
-        return (PipInstance == null || object == null || PipInstance.currentMessageObject == null || PipInstance.currentMessageObject.getId() != object.getId() || PipInstance.currentMessageObject.getDialogId() != object.getDialogId()) ? false : true;
-    }
-
-    public static boolean isPlayingMessage(MessageObject object) {
-        return (Instance == null || Instance.pipAnimationInProgress || !Instance.isVisible || object == null || Instance.currentMessageObject == null || Instance.currentMessageObject.getId() != object.getId() || Instance.currentMessageObject.getDialogId() != object.getDialogId()) ? false : true;
-    }
-
-    public static boolean isShowingImage(FileLocation object) {
-        if (Instance != null) {
-            return Instance.isVisible && !Instance.disableShowCheck && object != null && Instance.currentFileLocation != null && object.local_id == Instance.currentFileLocation.local_id && object.volume_id == Instance.currentFileLocation.volume_id && object.dc_id == Instance.currentFileLocation.dc_id;
-        } else {
+    public static boolean isShowingImage(BotInlineResult botInlineResult) {
+        if (Instance == null || !Instance.isVisible || Instance.disableShowCheck || botInlineResult == null || Instance.currentBotInlineResult == null || botInlineResult.id != Instance.currentBotInlineResult.id) {
             return false;
         }
+        return true;
     }
 
-    public static boolean isShowingImage(BotInlineResult object) {
-        if (Instance != null) {
-            return (!Instance.isVisible || Instance.disableShowCheck || object == null || Instance.currentBotInlineResult == null || object.id != Instance.currentBotInlineResult.id) ? false : true;
-        } else {
+    public static boolean isShowingImage(String str) {
+        if (Instance == null || !Instance.isVisible || Instance.disableShowCheck || str == null || !str.equals(Instance.currentPathObject)) {
             return false;
         }
-    }
-
-    public static boolean isShowingImage(String object) {
-        if (Instance != null) {
-            return Instance.isVisible && !Instance.disableShowCheck && object != null && object.equals(Instance.currentPathObject);
-        } else {
-            return false;
-        }
+        return true;
     }
 
     public void setParentChatActivity(ChatActivity chatActivity) {
         this.parentChatActivity = chatActivity;
     }
 
-    public void setMaxSelectedPhotos(int value) {
-        this.maxSelectedPhotos = value;
+    public void setMaxSelectedPhotos(int i) {
+        this.maxSelectedPhotos = i;
     }
 
-    public boolean openPhoto(MessageObject messageObject, long dialogId, long mergeDialogId, PhotoViewerProvider provider) {
-        return openPhoto(messageObject, null, null, null, null, 0, provider, null, dialogId, mergeDialogId, true);
+    public boolean openPhoto(MessageObject messageObject, long j, long j2, PhotoViewerProvider photoViewerProvider) {
+        return openPhoto(messageObject, null, null, null, null, 0, photoViewerProvider, null, j, j2, true);
     }
 
-    public boolean openPhoto(MessageObject messageObject, long dialogId, long mergeDialogId, PhotoViewerProvider provider, boolean fullScreenVideo) {
-        return openPhoto(messageObject, null, null, null, null, 0, provider, null, dialogId, mergeDialogId, fullScreenVideo);
+    public boolean openPhoto(MessageObject messageObject, long j, long j2, PhotoViewerProvider photoViewerProvider, boolean z) {
+        return openPhoto(messageObject, null, null, null, null, 0, photoViewerProvider, null, j, j2, z);
     }
 
-    public boolean openPhoto(FileLocation fileLocation, PhotoViewerProvider provider) {
-        return openPhoto(null, fileLocation, null, null, null, 0, provider, null, 0, 0, true);
+    public boolean openPhoto(FileLocation fileLocation, PhotoViewerProvider photoViewerProvider) {
+        return openPhoto(null, fileLocation, null, null, null, 0, photoViewerProvider, null, 0, 0, true);
     }
 
-    public boolean openPhoto(ArrayList<MessageObject> messages, int index, long dialogId, long mergeDialogId, PhotoViewerProvider provider) {
-        return openPhoto((MessageObject) messages.get(index), null, messages, null, null, index, provider, null, dialogId, mergeDialogId, true);
+    public boolean openPhoto(ArrayList<MessageObject> arrayList, int i, long j, long j2, PhotoViewerProvider photoViewerProvider) {
+        return openPhoto((MessageObject) arrayList.get(i), null, arrayList, null, null, i, photoViewerProvider, null, j, j2, true);
     }
 
-    public boolean openPhoto(ArrayList<SecureDocument> documents, int index, PhotoViewerProvider provider) {
-        return openPhoto(null, null, null, documents, null, index, provider, null, 0, 0, true);
+    public boolean openPhoto(ArrayList<SecureDocument> arrayList, int i, PhotoViewerProvider photoViewerProvider) {
+        return openPhoto(null, null, null, arrayList, null, i, photoViewerProvider, null, 0, 0, true);
     }
 
-    public boolean openPhotoForSelect(ArrayList<Object> photos, int index, int type, PhotoViewerProvider provider, ChatActivity chatActivity) {
-        this.sendPhotoType = type;
-        if (this.pickerViewSendButton != null) {
-            FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) this.pickerViewSendButton.getLayoutParams();
-            if (this.sendPhotoType == 4 || this.sendPhotoType == 5) {
+    public boolean openPhotoForSelect(ArrayList<Object> arrayList, int i, int i2, PhotoViewerProvider photoViewerProvider, ChatActivity chatActivity) {
+        this.sendPhotoType = i2;
+        ImageView imageView = this.pickerViewSendButton;
+        if (imageView != null) {
+            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) imageView.getLayoutParams();
+            int i3 = this.sendPhotoType;
+            if (i3 == 4 || i3 == 5) {
                 this.pickerViewSendButton.setImageResource(NUM);
                 this.pickerViewSendButton.setPadding(AndroidUtilities.dp(4.0f), 0, 0, 0);
-                layoutParams2.bottomMargin = AndroidUtilities.dp(19.0f);
-            } else if (this.sendPhotoType == 1 || this.sendPhotoType == 3) {
+                layoutParams.bottomMargin = AndroidUtilities.dp(19.0f);
+            } else if (i3 == 1 || i3 == 3) {
                 this.pickerViewSendButton.setImageResource(NUM);
                 this.pickerViewSendButton.setPadding(0, AndroidUtilities.dp(1.0f), 0, 0);
-                layoutParams2.bottomMargin = AndroidUtilities.dp(19.0f);
+                layoutParams.bottomMargin = AndroidUtilities.dp(19.0f);
             } else {
                 this.pickerViewSendButton.setImageResource(NUM);
                 this.pickerViewSendButton.setPadding(AndroidUtilities.dp(4.0f), 0, 0, 0);
-                layoutParams2.bottomMargin = AndroidUtilities.dp(14.0f);
+                layoutParams.bottomMargin = AndroidUtilities.dp(14.0f);
             }
-            this.pickerViewSendButton.setLayoutParams(layoutParams2);
+            this.pickerViewSendButton.setLayoutParams(layoutParams);
         }
-        return openPhoto(null, null, null, null, photos, index, provider, chatActivity, 0, 0, true);
+        return openPhoto(null, null, null, null, arrayList, i, photoViewerProvider, chatActivity, 0, 0, true);
     }
 
     private boolean checkAnimation() {
         if (this.animationInProgress != 0 && Math.abs(this.transitionAnimationStartTime - System.currentTimeMillis()) >= 500) {
-            if (this.animationEndRunnable != null) {
-                this.animationEndRunnable.run();
+            Runnable runnable = this.animationEndRunnable;
+            if (runnable != null) {
+                runnable.run();
                 this.animationEndRunnable = null;
             }
             this.animationInProgress = 0;
@@ -7896,45 +10473,42 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         return false;
     }
 
-    private void setCropTranslations(boolean animated) {
+    private void setCropTranslations(boolean z) {
         if (this.sendPhotoType == 1) {
             int bitmapWidth = this.centerImage.getBitmapWidth();
             int bitmapHeight = this.centerImage.getBitmapHeight();
-            if (bitmapWidth != 0 && bitmapHeight != 0) {
-                float scaleFinal;
-                float newScale;
-                float scaleX = ((float) getContainerViewWidth()) / ((float) bitmapWidth);
-                float scaleY = ((float) getContainerViewHeight()) / ((float) bitmapHeight);
-                if (scaleX > scaleY) {
-                    scaleFinal = scaleY;
-                } else {
-                    scaleFinal = scaleX;
+            if (!(bitmapWidth == 0 || bitmapHeight == 0)) {
+                float f = (float) bitmapWidth;
+                float containerViewWidth = ((float) getContainerViewWidth()) / f;
+                float f2 = (float) bitmapHeight;
+                float containerViewHeight = ((float) getContainerViewHeight()) / f2;
+                if (containerViewWidth > containerViewHeight) {
+                    containerViewWidth = containerViewHeight;
                 }
-                float minSide = (float) Math.min(getContainerViewWidth(1), getContainerViewHeight(1));
-                float newScaleX = minSide / ((float) bitmapWidth);
-                float newScaleY = minSide / ((float) bitmapHeight);
-                if (newScaleX > newScaleY) {
-                    newScale = newScaleX;
-                } else {
-                    newScale = newScaleY;
+                containerViewHeight = (float) Math.min(getContainerViewWidth(1), getContainerViewHeight(1));
+                f = containerViewHeight / f;
+                f2 = containerViewHeight / f2;
+                if (f <= f2) {
+                    f = f2;
                 }
-                if (animated) {
+                if (z) {
                     this.animationStartTime = System.currentTimeMillis();
                     this.animateToX = (float) ((getLeftInset() / 2) - (getRightInset() / 2));
-                    if (this.currentEditMode == 2) {
+                    int i = this.currentEditMode;
+                    if (i == 2) {
                         this.animateToY = (float) (AndroidUtilities.dp(92.0f) - AndroidUtilities.dp(56.0f));
-                    } else if (this.currentEditMode == 3) {
+                    } else if (i == 3) {
                         this.animateToY = (float) (AndroidUtilities.dp(44.0f) - AndroidUtilities.dp(56.0f));
                     }
-                    this.animateToScale = newScale / scaleFinal;
+                    this.animateToScale = f / containerViewWidth;
                     this.zoomAnimation = true;
-                    return;
+                } else {
+                    this.animationStartTime = 0;
+                    this.translationX = (float) ((getLeftInset() / 2) - (getRightInset() / 2));
+                    this.translationY = (float) ((-AndroidUtilities.dp(56.0f)) + (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight / 2 : 0));
+                    this.scale = f / containerViewWidth;
+                    updateMinMax(this.scale);
                 }
-                this.animationStartTime = 0;
-                this.translationX = (float) ((getLeftInset() / 2) - (getRightInset() / 2));
-                this.translationY = (float) ((VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight / 2 : 0) + (-AndroidUtilities.dp(56.0f)));
-                this.scale = newScale / scaleFinal;
-                updateMinMax(this.scale);
             }
         }
     }
@@ -7967,310 +10541,336 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         }
     }
 
-    public boolean openPhoto(MessageObject messageObject, FileLocation fileLocation, ArrayList<MessageObject> messages, ArrayList<SecureDocument> documents, ArrayList<Object> photos, int index, PhotoViewerProvider provider, ChatActivity chatActivity, long dialogId, long mDialogId, boolean fullScreenVideo) {
-        if (this.parentActivity == null || this.isVisible || ((provider == null && checkAnimation()) || (messageObject == null && fileLocation == null && messages == null && photos == null && documents == null))) {
-            return false;
-        }
-        final PlaceProviderObject object = provider.getPlaceForPhoto(messageObject, fileLocation, index, true);
-        if (object == null && photos == null) {
-            return false;
-        }
-        this.lastInsets = null;
-        WindowManager wm = (WindowManager) this.parentActivity.getSystemService("window");
-        if (this.attachedToWindow) {
-            try {
-                wm.removeView(this.windowView);
-            } catch (Exception e) {
-            }
-        }
-        try {
-            this.windowLayoutParams.type = 99;
-            if (VERSION.SDK_INT >= 21) {
-                this.windowLayoutParams.flags = -NUM;
-            } else {
-                this.windowLayoutParams.flags = 131072;
-            }
-            this.windowLayoutParams.softInputMode = 272;
-            this.windowView.setFocusable(false);
-            this.containerView.setFocusable(false);
-            wm.addView(this.windowView, this.windowLayoutParams);
-            this.doneButtonPressed = false;
-            this.parentChatActivity = chatActivity;
-            this.actionBar.setTitle(LocaleController.formatString("Of", NUM, Integer.valueOf(1), Integer.valueOf(1)));
-            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidFailedLoad);
-            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidLoad);
-            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileLoadProgressChanged);
-            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.mediaCountDidLoad);
-            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.mediaDidLoad);
-            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.dialogPhotosLoaded);
-            NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
-            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.filePreparingFailed);
-            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileNewChunkAvailable);
-            this.placeProvider = provider;
-            this.mergeDialogId = mDialogId;
-            this.currentDialogId = dialogId;
-            this.selectedPhotosAdapter.notifyDataSetChanged();
-            if (this.velocityTracker == null) {
-                this.velocityTracker = VelocityTracker.obtain();
-            }
-            this.isVisible = true;
-            togglePhotosListView(false, false);
-            this.openedFullScreenVideo = !fullScreenVideo;
-            if (this.openedFullScreenVideo) {
-                toggleActionBar(false, false);
-            } else if (this.sendPhotoType == 1) {
-                createCropView();
-                toggleActionBar(false, false);
-            } else {
-                toggleActionBar(true, false);
-            }
-            this.seekToProgressPending2 = 0.0f;
-            this.skipFirstBufferingProgress = false;
-            this.playerInjected = false;
-            if (object != null) {
-                this.disableShowCheck = true;
-                this.animationInProgress = 1;
-                if (messageObject != null) {
-                    this.currentAnimation = object.imageReceiver.getAnimation();
-                    if (this.currentAnimation != null && messageObject.isVideo()) {
-                        object.imageReceiver.setAllowStartAnimation(false);
-                        object.imageReceiver.stopAnimation();
-                        if (MediaController.getInstance().isPlayingMessage(messageObject)) {
-                            this.seekToProgressPending2 = messageObject.audioProgress;
-                        }
-                        boolean z = this.injectingVideoPlayer == null && !FileLoader.getInstance(messageObject.currentAccount).isLoadingVideo(messageObject.getDocument(), true) && (this.currentAnimation.hasBitmap() || !FileLoader.getInstance(messageObject.currentAccount).isLoadingVideo(messageObject.getDocument(), false));
-                        this.skipFirstBufferingProgress = z;
-                        this.currentAnimation = null;
-                    }
-                }
-                onPhotoShow(messageObject, fileLocation, messages, documents, photos, index, object);
-                if (this.sendPhotoType == 1) {
-                    this.photoCropView.setVisibility(0);
-                    this.photoCropView.setAlpha(0.0f);
-                    this.photoCropView.setFreeform(false);
-                }
-                final ArrayList<Object> arrayList = photos;
-                this.windowView.getViewTreeObserver().addOnPreDrawListener(new OnPreDrawListener() {
-                    public boolean onPreDraw() {
-                        float scale;
-                        float yPos;
-                        float xPos;
-                        PhotoViewer.this.windowView.getViewTreeObserver().removeOnPreDrawListener(this);
-                        Rect drawRegion = object.imageReceiver.getDrawRegion();
-                        int orientation = object.imageReceiver.getOrientation();
-                        int animatedOrientation = object.imageReceiver.getAnimatedOrientation();
-                        if (animatedOrientation != 0) {
-                            orientation = animatedOrientation;
-                        }
-                        PhotoViewer.this.animatingImageView.setVisibility(0);
-                        PhotoViewer.this.animatingImageView.setRadius(object.radius);
-                        PhotoViewer.this.animatingImageView.setOrientation(orientation);
-                        PhotoViewer.this.animatingImageView.setNeedRadius(object.radius != 0);
-                        PhotoViewer.this.animatingImageView.setImageBitmap(object.thumb);
-                        PhotoViewer.this.initCropView();
-                        if (PhotoViewer.this.sendPhotoType == 1) {
-                            PhotoViewer.this.photoCropView.hideBackView();
-                            PhotoViewer.this.photoCropView.setAspectRatio(1.0f);
-                        }
-                        PhotoViewer.this.animatingImageView.setAlpha(1.0f);
-                        PhotoViewer.this.animatingImageView.setPivotX(0.0f);
-                        PhotoViewer.this.animatingImageView.setPivotY(0.0f);
-                        PhotoViewer.this.animatingImageView.setScaleX(object.scale);
-                        PhotoViewer.this.animatingImageView.setScaleY(object.scale);
-                        PhotoViewer.this.animatingImageView.setTranslationX(((float) object.viewX) + (((float) drawRegion.left) * object.scale));
-                        PhotoViewer.this.animatingImageView.setTranslationY(((float) object.viewY) + (((float) drawRegion.top) * object.scale));
-                        ViewGroup.LayoutParams layoutParams = PhotoViewer.this.animatingImageView.getLayoutParams();
-                        layoutParams.width = drawRegion.width();
-                        layoutParams.height = drawRegion.height();
-                        PhotoViewer.this.animatingImageView.setLayoutParams(layoutParams);
-                        if (PhotoViewer.this.sendPhotoType == 1) {
-                            float statusBarHeight = (float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
-                            float measuredHeight = (((float) PhotoViewer.this.photoCropView.getMeasuredHeight()) - ((float) AndroidUtilities.dp(64.0f))) - statusBarHeight;
-                            float minSide = Math.min((float) PhotoViewer.this.photoCropView.getMeasuredWidth(), measuredHeight) - ((float) (AndroidUtilities.dp(16.0f) * 2));
-                            float centerX = ((float) PhotoViewer.this.photoCropView.getMeasuredWidth()) / 2.0f;
-                            float centerY = statusBarHeight + (measuredHeight / 2.0f);
-                            float top = centerY - (minSide / 2.0f);
-                            float bottom = centerY + (minSide / 2.0f);
-                            scale = Math.max(((centerX + (minSide / 2.0f)) - (centerX - (minSide / 2.0f))) / ((float) layoutParams.width), (bottom - top) / ((float) layoutParams.height));
-                            yPos = top + (((bottom - top) - (((float) layoutParams.height) * scale)) / 2.0f);
-                            xPos = ((((float) ((PhotoViewer.this.windowView.getMeasuredWidth() - PhotoViewer.this.getLeftInset()) - PhotoViewer.this.getRightInset())) - (((float) layoutParams.width) * scale)) / 2.0f) + ((float) PhotoViewer.this.getLeftInset());
-                        } else {
-                            float scaleX = ((float) PhotoViewer.this.windowView.getMeasuredWidth()) / ((float) layoutParams.width);
-                            float scaleY = ((float) ((VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0) + AndroidUtilities.displaySize.y)) / ((float) layoutParams.height);
-                            if (scaleX > scaleY) {
-                                scale = scaleY;
-                            } else {
-                                scale = scaleX;
-                            }
-                            yPos = (((float) ((VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0) + AndroidUtilities.displaySize.y)) - (((float) layoutParams.height) * scale)) / 2.0f;
-                            xPos = (((float) PhotoViewer.this.windowView.getMeasuredWidth()) - (((float) layoutParams.width) * scale)) / 2.0f;
-                        }
-                        int clipHorizontal = Math.abs(drawRegion.left - object.imageReceiver.getImageX());
-                        int clipVertical = Math.abs(drawRegion.top - object.imageReceiver.getImageY());
-                        int[] coords2 = new int[2];
-                        object.parentView.getLocationInWindow(coords2);
-                        int clipTop = ((coords2[1] - (VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight)) - (object.viewY + drawRegion.top)) + object.clipTopAddition;
-                        if (clipTop < 0) {
-                            clipTop = 0;
-                        }
-                        int clipBottom = ((layoutParams.height + (object.viewY + drawRegion.top)) - ((object.parentView.getHeight() + coords2[1]) - (VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight))) + object.clipBottomAddition;
-                        if (clipBottom < 0) {
-                            clipBottom = 0;
-                        }
-                        clipTop = Math.max(clipTop, clipVertical);
-                        clipBottom = Math.max(clipBottom, clipVertical);
-                        PhotoViewer.this.animationValues[0][0] = PhotoViewer.this.animatingImageView.getScaleX();
-                        PhotoViewer.this.animationValues[0][1] = PhotoViewer.this.animatingImageView.getScaleY();
-                        PhotoViewer.this.animationValues[0][2] = PhotoViewer.this.animatingImageView.getTranslationX();
-                        PhotoViewer.this.animationValues[0][3] = PhotoViewer.this.animatingImageView.getTranslationY();
-                        PhotoViewer.this.animationValues[0][4] = ((float) clipHorizontal) * object.scale;
-                        PhotoViewer.this.animationValues[0][5] = ((float) clipTop) * object.scale;
-                        PhotoViewer.this.animationValues[0][6] = ((float) clipBottom) * object.scale;
-                        PhotoViewer.this.animationValues[0][7] = (float) PhotoViewer.this.animatingImageView.getRadius();
-                        PhotoViewer.this.animationValues[0][8] = ((float) clipVertical) * object.scale;
-                        PhotoViewer.this.animationValues[0][9] = ((float) clipHorizontal) * object.scale;
-                        PhotoViewer.this.animationValues[1][0] = scale;
-                        PhotoViewer.this.animationValues[1][1] = scale;
-                        PhotoViewer.this.animationValues[1][2] = xPos;
-                        PhotoViewer.this.animationValues[1][3] = yPos;
-                        PhotoViewer.this.animationValues[1][4] = 0.0f;
-                        PhotoViewer.this.animationValues[1][5] = 0.0f;
-                        PhotoViewer.this.animationValues[1][6] = 0.0f;
-                        PhotoViewer.this.animationValues[1][7] = 0.0f;
-                        PhotoViewer.this.animationValues[1][8] = 0.0f;
-                        PhotoViewer.this.animationValues[1][9] = 0.0f;
-                        PhotoViewer.this.animatingImageView.setAnimationProgress(0.0f);
-                        PhotoViewer.this.backgroundDrawable.setAlpha(0);
-                        PhotoViewer.this.containerView.setAlpha(0.0f);
-                        PhotoViewer.this.animationEndRunnable = new PhotoViewer$36$$Lambda$0(this, arrayList);
-                        if (PhotoViewer.this.openedFullScreenVideo) {
-                            if (PhotoViewer.this.animationEndRunnable != null) {
-                                PhotoViewer.this.animationEndRunnable.run();
-                                PhotoViewer.this.animationEndRunnable = null;
-                            }
-                            PhotoViewer.this.containerView.setAlpha(1.0f);
-                            PhotoViewer.this.backgroundDrawable.setAlpha(255);
-                            PhotoViewer.this.animatingImageView.setAnimationProgress(1.0f);
-                            if (PhotoViewer.this.sendPhotoType == 1) {
-                                PhotoViewer.this.photoCropView.setAlpha(1.0f);
-                            }
-                        } else {
-                            AnimatorSet animatorSet = new AnimatorSet();
-                            ArrayList<Animator> animators = new ArrayList(PhotoViewer.this.sendPhotoType == 1 ? 4 : 3);
-                            float[] fArr = new float[2];
-                            animators.add(ObjectAnimator.ofFloat(PhotoViewer.this.animatingImageView, AnimationProperties.CLIPPING_IMAGE_VIEW_PROGRESS, new float[]{0.0f, 1.0f}));
-                            int[] iArr = new int[2];
-                            animators.add(ObjectAnimator.ofInt(PhotoViewer.this.backgroundDrawable, AnimationProperties.COLOR_DRAWABLE_ALPHA, new int[]{0, 255}));
-                            fArr = new float[2];
-                            animators.add(ObjectAnimator.ofFloat(PhotoViewer.this.containerView, View.ALPHA, new float[]{0.0f, 1.0f}));
-                            if (PhotoViewer.this.sendPhotoType == 1) {
-                                fArr = new float[2];
-                                animators.add(ObjectAnimator.ofFloat(PhotoViewer.this.photoCropView, View.ALPHA, new float[]{0.0f, 1.0f}));
-                            }
-                            animatorSet.playTogether(animators);
-                            animatorSet.setDuration(200);
-                            animatorSet.addListener(new AnimatorListenerAdapter() {
-                                public void onAnimationEnd(Animator animation) {
-                                    AndroidUtilities.runOnUIThread(new PhotoViewer$36$1$$Lambda$0(this));
-                                }
-
-                                /* Access modifiers changed, original: final|synthetic */
-                                public final /* synthetic */ void lambda$onAnimationEnd$0$PhotoViewer$36$1() {
-                                    NotificationCenter.getInstance(PhotoViewer.this.currentAccount).setAnimationInProgress(false);
-                                    if (PhotoViewer.this.animationEndRunnable != null) {
-                                        PhotoViewer.this.animationEndRunnable.run();
-                                        PhotoViewer.this.animationEndRunnable = null;
-                                    }
-                                }
-                            });
-                            if (VERSION.SDK_INT >= 18) {
-                                PhotoViewer.this.containerView.setLayerType(2, null);
-                            }
-                            PhotoViewer.this.transitionAnimationStartTime = System.currentTimeMillis();
-                            AndroidUtilities.runOnUIThread(new PhotoViewer$36$$Lambda$1(this, animatorSet));
-                        }
-                        PhotoViewer.this.backgroundDrawable.drawRunnable = new PhotoViewer$36$$Lambda$2(this, object);
-                        return true;
-                    }
-
-                    /* Access modifiers changed, original: final|synthetic */
-                    public final /* synthetic */ void lambda$onPreDraw$0$PhotoViewer$36(ArrayList photos) {
-                        if (PhotoViewer.this.containerView != null && PhotoViewer.this.windowView != null) {
-                            if (VERSION.SDK_INT >= 18) {
-                                PhotoViewer.this.containerView.setLayerType(0, null);
-                            }
-                            PhotoViewer.this.animationInProgress = 0;
-                            PhotoViewer.this.transitionAnimationStartTime = 0;
-                            PhotoViewer.this.setImages();
-                            PhotoViewer.this.setCropBitmap();
-                            if (PhotoViewer.this.sendPhotoType == 1) {
-                                PhotoViewer.this.photoCropView.showBackView();
-                            }
-                            PhotoViewer.this.containerView.invalidate();
-                            PhotoViewer.this.animatingImageView.setVisibility(8);
-                            if (PhotoViewer.this.showAfterAnimation != null) {
-                                PhotoViewer.this.showAfterAnimation.imageReceiver.setVisible(true, true);
-                            }
-                            if (PhotoViewer.this.hideAfterAnimation != null) {
-                                PhotoViewer.this.hideAfterAnimation.imageReceiver.setVisible(false, true);
-                            }
-                            if (photos != null && PhotoViewer.this.sendPhotoType != 3) {
-                                if (VERSION.SDK_INT >= 21) {
-                                    PhotoViewer.this.windowLayoutParams.flags = -NUM;
-                                } else {
-                                    PhotoViewer.this.windowLayoutParams.flags = 0;
-                                }
-                                PhotoViewer.this.windowLayoutParams.softInputMode = 272;
-                                ((WindowManager) PhotoViewer.this.parentActivity.getSystemService("window")).updateViewLayout(PhotoViewer.this.windowView, PhotoViewer.this.windowLayoutParams);
-                                PhotoViewer.this.windowView.setFocusable(true);
-                                PhotoViewer.this.containerView.setFocusable(true);
-                            }
-                        }
-                    }
-
-                    /* Access modifiers changed, original: final|synthetic */
-                    public final /* synthetic */ void lambda$onPreDraw$1$PhotoViewer$36(AnimatorSet animatorSet) {
-                        NotificationCenter.getInstance(PhotoViewer.this.currentAccount).setAllowedNotificationsDutingAnimation(new int[]{NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats, NotificationCenter.mediaCountDidLoad, NotificationCenter.mediaDidLoad, NotificationCenter.dialogPhotosLoaded});
-                        NotificationCenter.getInstance(PhotoViewer.this.currentAccount).setAnimationInProgress(true);
-                        animatorSet.start();
-                    }
-
-                    /* Access modifiers changed, original: final|synthetic */
-                    public final /* synthetic */ void lambda$onPreDraw$2$PhotoViewer$36(PlaceProviderObject object) {
-                        PhotoViewer.this.disableShowCheck = false;
-                        object.imageReceiver.setVisible(false, true);
-                    }
-                });
-            } else {
-                if (!(photos == null || this.sendPhotoType == 3)) {
-                    if (VERSION.SDK_INT >= 21) {
-                        this.windowLayoutParams.flags = -NUM;
-                    } else {
-                        this.windowLayoutParams.flags = 0;
-                    }
-                    this.windowLayoutParams.softInputMode = 272;
-                    wm.updateViewLayout(this.windowView, this.windowLayoutParams);
-                    this.windowView.setFocusable(true);
-                    this.containerView.setFocusable(true);
-                }
-                this.backgroundDrawable.setAlpha(255);
-                this.containerView.setAlpha(1.0f);
-                onPhotoShow(messageObject, fileLocation, messages, documents, photos, index, object);
-                initCropView();
-                setCropBitmap();
-            }
-            AccessibilityManager am = (AccessibilityManager) this.parentActivity.getSystemService("accessibility");
-            if (am.isTouchExplorationEnabled()) {
-                AccessibilityEvent event = AccessibilityEvent.obtain();
-                event.setEventType(16384);
-                event.getText().add(LocaleController.getString("AccDescrPhotoViewer", NUM));
-                am.sendAccessibilityEvent(event);
-            }
-            return true;
-        } catch (Exception e2) {
-            FileLog.e(e2);
-            return false;
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:24:0x005e A:{Catch:{ Exception -> 0x0263 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:23:0x0056 A:{Catch:{ Exception -> 0x0263 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:28:0x0112  */
+    /* JADX WARNING: Removed duplicated region for block: B:32:0x0129  */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x0125  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x01e4 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:38:0x0140  */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x0246  */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:20:0x004a */
+    /* JADX WARNING: Failed to process nested try/catch */
+    public boolean openPhoto(org.telegram.messenger.MessageObject r18, org.telegram.tgnet.TLRPC.FileLocation r19, java.util.ArrayList<org.telegram.messenger.MessageObject> r20, java.util.ArrayList<org.telegram.messenger.SecureDocument> r21, java.util.ArrayList<java.lang.Object> r22, int r23, org.telegram.ui.PhotoViewer.PhotoViewerProvider r24, org.telegram.ui.ChatActivity r25, long r26, long r28, boolean r30) {
+        /*
+        r17 = this;
+        r9 = r17;
+        r0 = r18;
+        r3 = r19;
+        r10 = r22;
+        r1 = r24;
+        r2 = r9.parentActivity;
+        r11 = 0;
+        if (r2 == 0) goto L_0x0267;
+    L_0x000f:
+        r2 = r9.isVisible;
+        if (r2 != 0) goto L_0x0267;
+    L_0x0013:
+        if (r1 != 0) goto L_0x001b;
+    L_0x0015:
+        r2 = r17.checkAnimation();
+        if (r2 != 0) goto L_0x0267;
+    L_0x001b:
+        if (r0 != 0) goto L_0x0027;
+    L_0x001d:
+        if (r3 != 0) goto L_0x0027;
+    L_0x001f:
+        if (r20 != 0) goto L_0x0027;
+    L_0x0021:
+        if (r10 != 0) goto L_0x0027;
+    L_0x0023:
+        if (r21 != 0) goto L_0x0027;
+    L_0x0025:
+        goto L_0x0267;
+    L_0x0027:
+        r12 = 1;
+        r7 = r23;
+        r13 = r1.getPlaceForPhoto(r0, r3, r7, r12);
+        if (r13 != 0) goto L_0x0033;
+    L_0x0030:
+        if (r10 != 0) goto L_0x0033;
+    L_0x0032:
+        return r11;
+    L_0x0033:
+        r2 = 0;
+        r9.lastInsets = r2;
+        r4 = r9.parentActivity;
+        r5 = "window";
+        r4 = r4.getSystemService(r5);
+        r4 = (android.view.WindowManager) r4;
+        r5 = r9.attachedToWindow;
+        if (r5 == 0) goto L_0x004a;
+    L_0x0045:
+        r5 = r9.windowView;	 Catch:{ Exception -> 0x004a }
+        r4.removeView(r5);	 Catch:{ Exception -> 0x004a }
+    L_0x004a:
+        r5 = r9.windowLayoutParams;	 Catch:{ Exception -> 0x0263 }
+        r6 = 99;
+        r5.type = r6;	 Catch:{ Exception -> 0x0263 }
+        r5 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0263 }
+        r6 = 21;
+        if (r5 < r6) goto L_0x005e;
+    L_0x0056:
+        r5 = r9.windowLayoutParams;	 Catch:{ Exception -> 0x0263 }
+        r8 = -NUM; // 0xfffffffvar_ float:-2.75865E-40 double:NaN;
+        r5.flags = r8;	 Catch:{ Exception -> 0x0263 }
+        goto L_0x0064;
+    L_0x005e:
+        r5 = r9.windowLayoutParams;	 Catch:{ Exception -> 0x0263 }
+        r8 = 131072; // 0x20000 float:1.83671E-40 double:6.47582E-319;
+        r5.flags = r8;	 Catch:{ Exception -> 0x0263 }
+    L_0x0064:
+        r5 = r9.windowLayoutParams;	 Catch:{ Exception -> 0x0263 }
+        r8 = 272; // 0x110 float:3.81E-43 double:1.344E-321;
+        r5.softInputMode = r8;	 Catch:{ Exception -> 0x0263 }
+        r5 = r9.windowView;	 Catch:{ Exception -> 0x0263 }
+        r5.setFocusable(r11);	 Catch:{ Exception -> 0x0263 }
+        r5 = r9.containerView;	 Catch:{ Exception -> 0x0263 }
+        r5.setFocusable(r11);	 Catch:{ Exception -> 0x0263 }
+        r5 = r9.windowView;	 Catch:{ Exception -> 0x0263 }
+        r14 = r9.windowLayoutParams;	 Catch:{ Exception -> 0x0263 }
+        r4.addView(r5, r14);	 Catch:{ Exception -> 0x0263 }
+        r9.doneButtonPressed = r11;
+        r5 = r25;
+        r9.parentChatActivity = r5;
+        r5 = r9.actionBar;
+        r14 = NUM; // 0x7f0d067f float:1.8745488E38 double:1.053130599E-314;
+        r15 = 2;
+        r15 = new java.lang.Object[r15];
+        r16 = java.lang.Integer.valueOf(r12);
+        r15[r11] = r16;
+        r16 = java.lang.Integer.valueOf(r12);
+        r15[r12] = r16;
+        r8 = "Of";
+        r8 = org.telegram.messenger.LocaleController.formatString(r8, r14, r15);
+        r5.setTitle(r8);
+        r5 = r9.currentAccount;
+        r5 = org.telegram.messenger.NotificationCenter.getInstance(r5);
+        r8 = org.telegram.messenger.NotificationCenter.fileDidFailedLoad;
+        r5.addObserver(r9, r8);
+        r5 = r9.currentAccount;
+        r5 = org.telegram.messenger.NotificationCenter.getInstance(r5);
+        r8 = org.telegram.messenger.NotificationCenter.fileDidLoad;
+        r5.addObserver(r9, r8);
+        r5 = r9.currentAccount;
+        r5 = org.telegram.messenger.NotificationCenter.getInstance(r5);
+        r8 = org.telegram.messenger.NotificationCenter.FileLoadProgressChanged;
+        r5.addObserver(r9, r8);
+        r5 = r9.currentAccount;
+        r5 = org.telegram.messenger.NotificationCenter.getInstance(r5);
+        r8 = org.telegram.messenger.NotificationCenter.mediaCountDidLoad;
+        r5.addObserver(r9, r8);
+        r5 = r9.currentAccount;
+        r5 = org.telegram.messenger.NotificationCenter.getInstance(r5);
+        r8 = org.telegram.messenger.NotificationCenter.mediaDidLoad;
+        r5.addObserver(r9, r8);
+        r5 = r9.currentAccount;
+        r5 = org.telegram.messenger.NotificationCenter.getInstance(r5);
+        r8 = org.telegram.messenger.NotificationCenter.dialogPhotosLoaded;
+        r5.addObserver(r9, r8);
+        r5 = org.telegram.messenger.NotificationCenter.getGlobalInstance();
+        r8 = org.telegram.messenger.NotificationCenter.emojiDidLoad;
+        r5.addObserver(r9, r8);
+        r5 = r9.currentAccount;
+        r5 = org.telegram.messenger.NotificationCenter.getInstance(r5);
+        r8 = org.telegram.messenger.NotificationCenter.filePreparingFailed;
+        r5.addObserver(r9, r8);
+        r5 = r9.currentAccount;
+        r5 = org.telegram.messenger.NotificationCenter.getInstance(r5);
+        r8 = org.telegram.messenger.NotificationCenter.fileNewChunkAvailable;
+        r5.addObserver(r9, r8);
+        r9.placeProvider = r1;
+        r14 = r28;
+        r9.mergeDialogId = r14;
+        r14 = r26;
+        r9.currentDialogId = r14;
+        r1 = r9.selectedPhotosAdapter;
+        r1.notifyDataSetChanged();
+        r1 = r9.velocityTracker;
+        if (r1 != 0) goto L_0x0118;
+    L_0x0112:
+        r1 = android.view.VelocityTracker.obtain();
+        r9.velocityTracker = r1;
+    L_0x0118:
+        r9.isVisible = r12;
+        r9.togglePhotosListView(r11, r11);
+        r1 = r30 ^ 1;
+        r9.openedFullScreenVideo = r1;
+        r1 = r9.openedFullScreenVideo;
+        if (r1 == 0) goto L_0x0129;
+    L_0x0125:
+        r9.toggleActionBar(r11, r11);
+        goto L_0x0137;
+    L_0x0129:
+        r1 = r9.sendPhotoType;
+        if (r1 != r12) goto L_0x0134;
+    L_0x012d:
+        r17.createCropView();
+        r9.toggleActionBar(r11, r11);
+        goto L_0x0137;
+    L_0x0134:
+        r9.toggleActionBar(r12, r11);
+    L_0x0137:
+        r14 = 0;
+        r9.seekToProgressPending2 = r14;
+        r9.skipFirstBufferingProgress = r11;
+        r9.playerInjected = r11;
+        if (r13 == 0) goto L_0x01e4;
+    L_0x0140:
+        r9.disableShowCheck = r12;
+        r9.animationInProgress = r12;
+        if (r0 == 0) goto L_0x01b0;
+    L_0x0146:
+        r1 = r13.imageReceiver;
+        r1 = r1.getAnimation();
+        r9.currentAnimation = r1;
+        r1 = r9.currentAnimation;
+        if (r1 == 0) goto L_0x01b0;
+    L_0x0152:
+        r1 = r18.isVideo();
+        if (r1 == 0) goto L_0x01a4;
+    L_0x0158:
+        r1 = r13.imageReceiver;
+        r1.setAllowStartAnimation(r11);
+        r1 = r13.imageReceiver;
+        r1.stopAnimation();
+        r1 = org.telegram.messenger.MediaController.getInstance();
+        r1 = r1.isPlayingMessage(r0);
+        if (r1 == 0) goto L_0x0170;
+    L_0x016c:
+        r1 = r0.audioProgress;
+        r9.seekToProgressPending2 = r1;
+    L_0x0170:
+        r1 = r9.injectingVideoPlayer;
+        if (r1 != 0) goto L_0x019e;
+    L_0x0174:
+        r1 = r0.currentAccount;
+        r1 = org.telegram.messenger.FileLoader.getInstance(r1);
+        r4 = r18.getDocument();
+        r1 = r1.isLoadingVideo(r4, r12);
+        if (r1 != 0) goto L_0x019e;
+    L_0x0184:
+        r1 = r9.currentAnimation;
+        r1 = r1.hasBitmap();
+        if (r1 != 0) goto L_0x019c;
+    L_0x018c:
+        r1 = r0.currentAccount;
+        r1 = org.telegram.messenger.FileLoader.getInstance(r1);
+        r4 = r18.getDocument();
+        r1 = r1.isLoadingVideo(r4, r11);
+        if (r1 != 0) goto L_0x019e;
+    L_0x019c:
+        r1 = 1;
+        goto L_0x019f;
+    L_0x019e:
+        r1 = 0;
+    L_0x019f:
+        r9.skipFirstBufferingProgress = r1;
+        r9.currentAnimation = r2;
+        goto L_0x01b0;
+    L_0x01a4:
+        r1 = r0.getWebPagePhotos(r2, r2);
+        r1 = r1.size();
+        if (r1 <= r12) goto L_0x01b0;
+    L_0x01ae:
+        r9.currentAnimation = r2;
+    L_0x01b0:
+        r1 = r17;
+        r2 = r18;
+        r3 = r19;
+        r4 = r20;
+        r5 = r21;
+        r6 = r22;
+        r7 = r23;
+        r8 = r13;
+        r1.onPhotoShow(r2, r3, r4, r5, r6, r7, r8);
+        r0 = r9.sendPhotoType;
+        if (r0 != r12) goto L_0x01d5;
+    L_0x01c6:
+        r0 = r9.photoCropView;
+        r0.setVisibility(r11);
+        r0 = r9.photoCropView;
+        r0.setAlpha(r14);
+        r0 = r9.photoCropView;
+        r0.setFreeform(r11);
+    L_0x01d5:
+        r0 = r9.windowView;
+        r0 = r0.getViewTreeObserver();
+        r1 = new org.telegram.ui.PhotoViewer$36;
+        r1.<init>(r13, r10);
+        r0.addOnPreDrawListener(r1);
+        goto L_0x0236;
+    L_0x01e4:
+        if (r10 == 0) goto L_0x0210;
+    L_0x01e6:
+        r1 = r9.sendPhotoType;
+        r2 = 3;
+        if (r1 == r2) goto L_0x0210;
+    L_0x01eb:
+        r1 = android.os.Build.VERSION.SDK_INT;
+        if (r1 < r6) goto L_0x01f7;
+    L_0x01ef:
+        r1 = r9.windowLayoutParams;
+        r2 = -NUM; // 0xfffffffvar_ float:-9.2194E-41 double:NaN;
+        r1.flags = r2;
+        goto L_0x01fb;
+    L_0x01f7:
+        r1 = r9.windowLayoutParams;
+        r1.flags = r11;
+    L_0x01fb:
+        r1 = r9.windowLayoutParams;
+        r2 = 272; // 0x110 float:3.81E-43 double:1.344E-321;
+        r1.softInputMode = r2;
+        r2 = r9.windowView;
+        r4.updateViewLayout(r2, r1);
+        r1 = r9.windowView;
+        r1.setFocusable(r12);
+        r1 = r9.containerView;
+        r1.setFocusable(r12);
+    L_0x0210:
+        r1 = r9.backgroundDrawable;
+        r2 = 255; // 0xff float:3.57E-43 double:1.26E-321;
+        r1.setAlpha(r2);
+        r1 = r9.containerView;
+        r2 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r1.setAlpha(r2);
+        r1 = r17;
+        r2 = r18;
+        r3 = r19;
+        r4 = r20;
+        r5 = r21;
+        r6 = r22;
+        r7 = r23;
+        r8 = r13;
+        r1.onPhotoShow(r2, r3, r4, r5, r6, r7, r8);
+        r17.initCropView();
+        r17.setCropBitmap();
+    L_0x0236:
+        r0 = r9.parentActivity;
+        r1 = "accessibility";
+        r0 = r0.getSystemService(r1);
+        r0 = (android.view.accessibility.AccessibilityManager) r0;
+        r1 = r0.isTouchExplorationEnabled();
+        if (r1 == 0) goto L_0x0262;
+    L_0x0246:
+        r1 = android.view.accessibility.AccessibilityEvent.obtain();
+        r2 = 16384; // 0x4000 float:2.2959E-41 double:8.0948E-320;
+        r1.setEventType(r2);
+        r2 = r1.getText();
+        r3 = NUM; // 0x7f0d0039 float:1.874223E38 double:1.0531298057E-314;
+        r4 = "AccDescrPhotoViewer";
+        r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
+        r2.add(r3);
+        r0.sendAccessibilityEvent(r1);
+    L_0x0262:
+        return r12;
+    L_0x0263:
+        r0 = move-exception;
+        org.telegram.messenger.FileLog.e(r0);
+    L_0x0267:
+        return r11;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.openPhoto(org.telegram.messenger.MessageObject, org.telegram.tgnet.TLRPC$FileLocation, java.util.ArrayList, java.util.ArrayList, java.util.ArrayList, int, org.telegram.ui.PhotoViewer$PhotoViewerProvider, org.telegram.ui.ChatActivity, long, long, boolean):boolean");
     }
 
     public void injectVideoPlayerToMediaController() {
@@ -8281,279 +10881,296 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         }
     }
 
-    public void closePhoto(boolean animated, boolean fromEditMode) {
-        if (fromEditMode || this.currentEditMode == 0) {
-            if (this.qualityChooseView == null || this.qualityChooseView.getTag() == null) {
-                this.openedFullScreenVideo = false;
-                try {
-                    if (this.visibleDialog != null) {
-                        this.visibleDialog.dismiss();
-                        this.visibleDialog = null;
-                    }
-                } catch (Exception e) {
-                    FileLog.e(e);
-                }
-                if (VERSION.SDK_INT >= 21 && this.actionBar != null) {
-                    int flagsToClear = this.containerView.getSystemUiVisibility() & 4102;
-                    if (flagsToClear != 0) {
-                        this.containerView.setSystemUiVisibility(this.containerView.getSystemUiVisibility() & (flagsToClear ^ -1));
-                    }
-                }
-                if (this.currentEditMode != 0) {
-                    if (this.currentEditMode == 2) {
-                        this.photoFilterView.shutdown();
-                        this.containerView.removeView(this.photoFilterView);
-                        this.photoFilterView = null;
-                    } else if (this.currentEditMode == 1) {
-                        this.editorDoneLayout.setVisibility(8);
-                        this.photoCropView.setVisibility(8);
-                    } else if (this.currentEditMode == 3) {
-                        this.photoPaintView.shutdown();
-                        this.containerView.removeView(this.photoPaintView);
-                        this.photoPaintView = null;
-                    }
-                    this.currentEditMode = 0;
-                } else if (this.sendPhotoType == 1) {
-                    this.photoCropView.setVisibility(8);
-                }
-                if (this.parentActivity == null) {
-                    return;
-                }
-                if ((this.isInline || this.isVisible) && !checkAnimation() && this.placeProvider != null) {
-                    if (!this.captionEditText.hideActionMode() || fromEditMode) {
-                        PlaceProviderObject object = this.placeProvider.getPlaceForPhoto(this.currentMessageObject, this.currentFileLocation, this.currentIndex, true);
-                        if (!(this.videoPlayer == null || object == null)) {
-                            AnimatedFileDrawable animation = object.imageReceiver.getAnimation();
-                            if (animation != null) {
-                                if (this.textureUploaded) {
-                                    Bitmap bitmap = animation.getAnimatedBitmap();
-                                    if (bitmap != null) {
-                                        try {
-                                            Bitmap src = this.videoTextureView.getBitmap(bitmap.getWidth(), bitmap.getHeight());
-                                            new Canvas(bitmap).drawBitmap(src, 0.0f, 0.0f, null);
-                                            src.recycle();
-                                        } catch (Throwable e2) {
-                                            FileLog.e(e2);
-                                        }
-                                    }
-                                }
-                                animation.seekTo(this.videoPlayer.getCurrentPosition(), !FileLoader.getInstance(this.currentMessageObject.currentAccount).isLoadingVideo(this.currentMessageObject.getDocument(), true));
-                                object.imageReceiver.setAllowStartAnimation(true);
-                                object.imageReceiver.startAnimation();
-                            }
-                        }
-                        releasePlayer(true);
-                        this.captionEditText.onDestroy();
-                        this.parentChatActivity = null;
-                        removeObservers();
-                        this.isActionBarVisible = false;
-                        if (this.velocityTracker != null) {
-                            this.velocityTracker.recycle();
-                            this.velocityTracker = null;
-                        }
-                        if (this.isInline) {
-                            this.isInline = false;
-                            this.animationInProgress = 0;
-                            onPhotoClosed(object);
-                            this.containerView.setScaleX(1.0f);
-                            this.containerView.setScaleY(1.0f);
-                            return;
-                        }
-                        AnimatorSet animatorSet;
-                        if (animated) {
-                            float scale2;
-                            this.animationInProgress = 1;
-                            this.animatingImageView.setVisibility(0);
-                            this.containerView.invalidate();
-                            animatorSet = new AnimatorSet();
-                            ViewGroup.LayoutParams layoutParams = this.animatingImageView.getLayoutParams();
-                            Rect drawRegion = null;
-                            if (object != null) {
-                                this.animatingImageView.setNeedRadius(object.radius != 0);
-                                drawRegion = object.imageReceiver.getDrawRegion();
-                                layoutParams.width = drawRegion.right - drawRegion.left;
-                                layoutParams.height = drawRegion.bottom - drawRegion.top;
-                                int orientation = object.imageReceiver.getOrientation();
-                                int animatedOrientation = object.imageReceiver.getAnimatedOrientation();
-                                if (animatedOrientation != 0) {
-                                    orientation = animatedOrientation;
-                                }
-                                this.animatingImageView.setOrientation(orientation);
-                                this.animatingImageView.setImageBitmap(object.thumb);
-                            } else {
-                                this.animatingImageView.setNeedRadius(false);
-                                layoutParams.width = this.centerImage.getImageWidth();
-                                layoutParams.height = this.centerImage.getImageHeight();
-                                this.animatingImageView.setOrientation(this.centerImage.getOrientation());
-                                this.animatingImageView.setImageBitmap(this.centerImage.getBitmapSafe());
-                            }
-                            this.animatingImageView.setLayoutParams(layoutParams);
-                            float scaleX = ((float) this.windowView.getMeasuredWidth()) / ((float) layoutParams.width);
-                            float scaleY = ((float) ((VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0) + AndroidUtilities.displaySize.y)) / ((float) layoutParams.height);
-                            if (scaleX > scaleY) {
-                                scale2 = scaleY;
-                            } else {
-                                scale2 = scaleX;
-                            }
-                            float yPos = (((float) ((VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0) + AndroidUtilities.displaySize.y)) - ((((float) layoutParams.height) * this.scale) * scale2)) / 2.0f;
-                            this.animatingImageView.setTranslationX(this.translationX + ((((float) this.windowView.getMeasuredWidth()) - ((((float) layoutParams.width) * this.scale) * scale2)) / 2.0f));
-                            this.animatingImageView.setTranslationY(this.translationY + yPos);
-                            this.animatingImageView.setScaleX(this.scale * scale2);
-                            this.animatingImageView.setScaleY(this.scale * scale2);
-                            if (object != null) {
-                                object.imageReceiver.setVisible(false, true);
-                                int clipHorizontal = Math.abs(drawRegion.left - object.imageReceiver.getImageX());
-                                int clipVertical = Math.abs(drawRegion.top - object.imageReceiver.getImageY());
-                                int[] coords2 = new int[2];
-                                object.parentView.getLocationInWindow(coords2);
-                                int clipTop = ((coords2[1] - (VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight)) - (object.viewY + drawRegion.top)) + object.clipTopAddition;
-                                if (clipTop < 0) {
-                                    clipTop = 0;
-                                }
-                                int clipBottom = (((drawRegion.bottom - drawRegion.top) + (object.viewY + drawRegion.top)) - ((object.parentView.getHeight() + coords2[1]) - (VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight))) + object.clipBottomAddition;
-                                if (clipBottom < 0) {
-                                    clipBottom = 0;
-                                }
-                                clipTop = Math.max(clipTop, clipVertical);
-                                clipBottom = Math.max(clipBottom, clipVertical);
-                                this.animationValues[0][0] = this.animatingImageView.getScaleX();
-                                this.animationValues[0][1] = this.animatingImageView.getScaleY();
-                                this.animationValues[0][2] = this.animatingImageView.getTranslationX();
-                                this.animationValues[0][3] = this.animatingImageView.getTranslationY();
-                                this.animationValues[0][4] = 0.0f;
-                                this.animationValues[0][5] = 0.0f;
-                                this.animationValues[0][6] = 0.0f;
-                                this.animationValues[0][7] = 0.0f;
-                                this.animationValues[0][8] = 0.0f;
-                                this.animationValues[0][9] = 0.0f;
-                                this.animationValues[1][0] = object.scale;
-                                this.animationValues[1][1] = object.scale;
-                                this.animationValues[1][2] = ((float) object.viewX) + (((float) drawRegion.left) * object.scale);
-                                this.animationValues[1][3] = ((float) object.viewY) + (((float) drawRegion.top) * object.scale);
-                                this.animationValues[1][4] = ((float) clipHorizontal) * object.scale;
-                                this.animationValues[1][5] = ((float) clipTop) * object.scale;
-                                this.animationValues[1][6] = ((float) clipBottom) * object.scale;
-                                this.animationValues[1][7] = (float) object.radius;
-                                this.animationValues[1][8] = ((float) clipVertical) * object.scale;
-                                this.animationValues[1][9] = ((float) clipHorizontal) * object.scale;
-                                ArrayList<Animator> animators = new ArrayList(this.sendPhotoType == 1 ? 4 : 3);
-                                float[] fArr = new float[2];
-                                animators.add(ObjectAnimator.ofFloat(this.animatingImageView, AnimationProperties.CLIPPING_IMAGE_VIEW_PROGRESS, new float[]{0.0f, 1.0f}));
-                                animators.add(ObjectAnimator.ofInt(this.backgroundDrawable, AnimationProperties.COLOR_DRAWABLE_ALPHA, new int[]{0}));
-                                animators.add(ObjectAnimator.ofFloat(this.containerView, View.ALPHA, new float[]{0.0f}));
-                                if (this.sendPhotoType == 1) {
-                                    animators.add(ObjectAnimator.ofFloat(this.photoCropView, View.ALPHA, new float[]{0.0f}));
-                                }
-                                animatorSet.playTogether(animators);
-                            } else {
-                                float f;
-                                int h = AndroidUtilities.displaySize.y + (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
-                                r31 = new Animator[4];
-                                r31[0] = ObjectAnimator.ofInt(this.backgroundDrawable, AnimationProperties.COLOR_DRAWABLE_ALPHA, new int[]{0});
-                                r31[1] = ObjectAnimator.ofFloat(this.animatingImageView, View.ALPHA, new float[]{0.0f});
-                                ClippingImageView clippingImageView = this.animatingImageView;
-                                Property property = View.TRANSLATION_Y;
-                                float[] fArr2 = new float[1];
-                                if (this.translationY >= 0.0f) {
-                                    f = (float) h;
-                                } else {
-                                    f = (float) (-h);
-                                }
-                                fArr2[0] = f;
-                                r31[2] = ObjectAnimator.ofFloat(clippingImageView, property, fArr2);
-                                r31[3] = ObjectAnimator.ofFloat(this.containerView, View.ALPHA, new float[]{0.0f});
-                                animatorSet.playTogether(r31);
-                            }
-                            this.animationEndRunnable = new PhotoViewer$$Lambda$34(this, object);
-                            animatorSet.setDuration(200);
-                            animatorSet.addListener(new AnimatorListenerAdapter() {
-                                public void onAnimationEnd(Animator animation) {
-                                    AndroidUtilities.runOnUIThread(new PhotoViewer$37$$Lambda$0(this));
-                                }
-
-                                /* Access modifiers changed, original: final|synthetic */
-                                public final /* synthetic */ void lambda$onAnimationEnd$0$PhotoViewer$37() {
-                                    if (PhotoViewer.this.animationEndRunnable != null) {
-                                        PhotoViewer.this.animationEndRunnable.run();
-                                        PhotoViewer.this.animationEndRunnable = null;
-                                    }
-                                }
-                            });
-                            this.transitionAnimationStartTime = System.currentTimeMillis();
-                            if (VERSION.SDK_INT >= 18) {
-                                this.containerView.setLayerType(2, null);
-                            }
-                            animatorSet.start();
-                        } else {
-                            animatorSet = new AnimatorSet();
-                            r30 = new Animator[4];
-                            r30[0] = ObjectAnimator.ofFloat(this.containerView, View.SCALE_X, new float[]{0.9f});
-                            r30[1] = ObjectAnimator.ofFloat(this.containerView, View.SCALE_Y, new float[]{0.9f});
-                            r30[2] = ObjectAnimator.ofInt(this.backgroundDrawable, AnimationProperties.COLOR_DRAWABLE_ALPHA, new int[]{0});
-                            r30[3] = ObjectAnimator.ofFloat(this.containerView, View.ALPHA, new float[]{0.0f});
-                            animatorSet.playTogether(r30);
-                            this.animationInProgress = 2;
-                            this.animationEndRunnable = new PhotoViewer$$Lambda$35(this, object);
-                            animatorSet.setDuration(200);
-                            animatorSet.addListener(new AnimatorListenerAdapter() {
-                                public void onAnimationEnd(Animator animation) {
-                                    if (PhotoViewer.this.animationEndRunnable != null) {
-                                        PhotoViewer.this.animationEndRunnable.run();
-                                        PhotoViewer.this.animationEndRunnable = null;
-                                    }
-                                }
-                            });
-                            this.transitionAnimationStartTime = System.currentTimeMillis();
-                            if (VERSION.SDK_INT >= 18) {
-                                this.containerView.setLayerType(2, null);
-                            }
-                            animatorSet.start();
-                        }
-                        if (this.currentAnimation != null) {
-                            this.currentAnimation.setSecondParentView(null);
-                            this.currentAnimation = null;
-                            this.centerImage.setImageBitmap((Drawable) null);
-                        }
-                        if (this.placeProvider != null && !this.placeProvider.canScrollAway()) {
-                            this.placeProvider.cancelButtonPressed();
-                            return;
-                        }
+    public void closePhoto(boolean z, boolean z2) {
+        int i;
+        int i2 = 3;
+        if (!z2) {
+            i = this.currentEditMode;
+            if (i != 0) {
+                if (i == 3) {
+                    PhotoPaintView photoPaintView = this.photoPaintView;
+                    if (photoPaintView != null) {
+                        photoPaintView.maybeShowDismissalAlert(this, this.parentActivity, new -$$Lambda$PhotoViewer$KYtFxmNpM70wviBQal0FRLyYs-s(this));
                         return;
                     }
-                    return;
+                }
+                switchToEditMode(0);
+                return;
+            }
+        }
+        QualityChooseView qualityChooseView = this.qualityChooseView;
+        if (qualityChooseView == null || qualityChooseView.getTag() == null) {
+            this.openedFullScreenVideo = false;
+            try {
+                if (this.visibleDialog != null) {
+                    this.visibleDialog.dismiss();
+                    this.visibleDialog = null;
+                }
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+            if (VERSION.SDK_INT >= 21 && this.actionBar != null) {
+                i = this.containerView.getSystemUiVisibility() & 4102;
+                if (i != 0) {
+                    FrameLayoutDrawer frameLayoutDrawer = this.containerView;
+                    frameLayoutDrawer.setSystemUiVisibility((i ^ -1) & frameLayoutDrawer.getSystemUiVisibility());
+                }
+            }
+            i = this.currentEditMode;
+            if (i != 0) {
+                if (i == 2) {
+                    this.photoFilterView.shutdown();
+                    this.containerView.removeView(this.photoFilterView);
+                    this.photoFilterView = null;
+                } else if (i == 1) {
+                    this.editorDoneLayout.setVisibility(8);
+                    this.photoCropView.setVisibility(8);
+                } else if (i == 3) {
+                    this.photoPaintView.shutdown();
+                    this.containerView.removeView(this.photoPaintView);
+                    this.photoPaintView = null;
+                }
+                this.currentEditMode = 0;
+            } else if (this.sendPhotoType == 1) {
+                this.photoCropView.setVisibility(8);
+            }
+            if (this.parentActivity != null && ((this.isInline || this.isVisible) && !checkAnimation() && this.placeProvider != null && (!this.captionEditText.hideActionMode() || z2))) {
+                PlaceProviderObject placeForPhoto = this.placeProvider.getPlaceForPhoto(this.currentMessageObject, getFileLocation(this.currentFileLocation), this.currentIndex, true);
+                if (!(this.videoPlayer == null || placeForPhoto == null)) {
+                    AnimatedFileDrawable animation = placeForPhoto.imageReceiver.getAnimation();
+                    if (animation != null) {
+                        if (this.textureUploaded) {
+                            Bitmap animatedBitmap = animation.getAnimatedBitmap();
+                            if (animatedBitmap != null) {
+                                try {
+                                    Bitmap bitmap = this.videoTextureView.getBitmap(animatedBitmap.getWidth(), animatedBitmap.getHeight());
+                                    new Canvas(animatedBitmap).drawBitmap(bitmap, 0.0f, 0.0f, null);
+                                    bitmap.recycle();
+                                } catch (Throwable e2) {
+                                    FileLog.e(e2);
+                                }
+                            }
+                        }
+                        animation.seekTo(this.videoPlayer.getCurrentPosition(), FileLoader.getInstance(this.currentMessageObject.currentAccount).isLoadingVideo(this.currentMessageObject.getDocument(), true) ^ 1);
+                        placeForPhoto.imageReceiver.setAllowStartAnimation(true);
+                        placeForPhoto.imageReceiver.startAnimation();
+                    }
+                }
+                releasePlayer(true);
+                this.captionEditText.onDestroy();
+                this.parentChatActivity = null;
+                removeObservers();
+                this.isActionBarVisible = false;
+                VelocityTracker velocityTracker = this.velocityTracker;
+                if (velocityTracker != null) {
+                    velocityTracker.recycle();
+                    this.velocityTracker = null;
+                }
+                if (this.isInline) {
+                    this.isInline = false;
+                    this.animationInProgress = 0;
+                    onPhotoClosed(placeForPhoto);
+                    this.containerView.setScaleX(1.0f);
+                    this.containerView.setScaleY(1.0f);
+                } else {
+                    Drawable drawable;
+                    Animator[] animatorArr;
+                    if (z) {
+                        RectF drawRegion;
+                        int animatedOrientation;
+                        this.animationInProgress = 1;
+                        this.animatingImageView.setVisibility(0);
+                        this.containerView.invalidate();
+                        AnimatorSet animatorSet = new AnimatorSet();
+                        ViewGroup.LayoutParams layoutParams = this.animatingImageView.getLayoutParams();
+                        if (placeForPhoto != null) {
+                            this.animatingImageView.setNeedRadius(placeForPhoto.radius != 0);
+                            drawRegion = placeForPhoto.imageReceiver.getDrawRegion();
+                            layoutParams.width = (int) drawRegion.width();
+                            layoutParams.height = (int) drawRegion.height();
+                            i = placeForPhoto.imageReceiver.getOrientation();
+                            animatedOrientation = placeForPhoto.imageReceiver.getAnimatedOrientation();
+                            if (animatedOrientation != 0) {
+                                i = animatedOrientation;
+                            }
+                            this.animatingImageView.setOrientation(i);
+                            this.animatingImageView.setImageBitmap(placeForPhoto.thumb);
+                        } else {
+                            this.animatingImageView.setNeedRadius(false);
+                            layoutParams.width = this.centerImage.getImageWidth();
+                            layoutParams.height = this.centerImage.getImageHeight();
+                            this.animatingImageView.setOrientation(this.centerImage.getOrientation());
+                            this.animatingImageView.setImageBitmap(this.centerImage.getBitmapSafe());
+                            drawRegion = null;
+                        }
+                        this.animatingImageView.setLayoutParams(layoutParams);
+                        float measuredWidth = ((float) this.windowView.getMeasuredWidth()) / ((float) layoutParams.width);
+                        float f = ((float) (AndroidUtilities.displaySize.y + (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0))) / ((float) layoutParams.height);
+                        if (measuredWidth > f) {
+                            measuredWidth = f;
+                        }
+                        f = (float) layoutParams.width;
+                        float f2 = this.scale;
+                        float f3 = (((float) (AndroidUtilities.displaySize.y + (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0))) - ((((float) layoutParams.height) * f2) * measuredWidth)) / 2.0f;
+                        this.animatingImageView.setTranslationX(((((float) this.windowView.getMeasuredWidth()) - ((f * f2) * measuredWidth)) / 2.0f) + this.translationX);
+                        this.animatingImageView.setTranslationY(f3 + this.translationY);
+                        this.animatingImageView.setScaleX(this.scale * measuredWidth);
+                        this.animatingImageView.setScaleY(this.scale * measuredWidth);
+                        if (placeForPhoto != null) {
+                            placeForPhoto.imageReceiver.setVisible(false, true);
+                            i = (int) Math.abs(drawRegion.left - ((float) placeForPhoto.imageReceiver.getImageX()));
+                            int abs = (int) Math.abs(drawRegion.top - ((float) placeForPhoto.imageReceiver.getImageY()));
+                            int[] iArr = new int[2];
+                            placeForPhoto.parentView.getLocationInWindow(iArr);
+                            animatedOrientation = (int) ((((float) (iArr[1] - (VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight))) - (((float) placeForPhoto.viewY) + drawRegion.top)) + ((float) placeForPhoto.clipTopAddition));
+                            if (animatedOrientation < 0) {
+                                animatedOrientation = 0;
+                            }
+                            f2 = (float) placeForPhoto.viewY;
+                            float f4 = drawRegion.top;
+                            int height = (int) ((((f2 + f4) + (drawRegion.bottom - f4)) - ((float) ((iArr[1] + placeForPhoto.parentView.getHeight()) - (VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight)))) + ((float) placeForPhoto.clipBottomAddition));
+                            if (height < 0) {
+                                height = 0;
+                            }
+                            int max = Math.max(animatedOrientation, abs);
+                            height = Math.max(height, abs);
+                            this.animationValues[0][0] = this.animatingImageView.getScaleX();
+                            this.animationValues[0][1] = this.animatingImageView.getScaleY();
+                            this.animationValues[0][2] = this.animatingImageView.getTranslationX();
+                            this.animationValues[0][3] = this.animatingImageView.getTranslationY();
+                            float[][] fArr = this.animationValues;
+                            fArr[0][4] = 0.0f;
+                            fArr[0][5] = 0.0f;
+                            fArr[0][6] = 0.0f;
+                            fArr[0][7] = 0.0f;
+                            fArr[0][8] = 0.0f;
+                            fArr[0][9] = 0.0f;
+                            float[] fArr2 = fArr[1];
+                            f4 = placeForPhoto.scale;
+                            fArr2[0] = f4;
+                            fArr[1][1] = f4;
+                            fArr[1][2] = ((float) placeForPhoto.viewX) + (drawRegion.left * f4);
+                            fArr[1][3] = ((float) placeForPhoto.viewY) + (drawRegion.top * f4);
+                            measuredWidth = (float) i;
+                            fArr[1][4] = measuredWidth * f4;
+                            fArr[1][5] = ((float) max) * f4;
+                            fArr[1][6] = ((float) height) * f4;
+                            fArr[1][7] = (float) placeForPhoto.radius;
+                            fArr[1][8] = ((float) abs) * f4;
+                            fArr[1][9] = measuredWidth * f4;
+                            if (this.sendPhotoType == 1) {
+                                i2 = 4;
+                            }
+                            ArrayList arrayList = new ArrayList(i2);
+                            arrayList.add(ObjectAnimator.ofFloat(this.animatingImageView, AnimationProperties.CLIPPING_IMAGE_VIEW_PROGRESS, new float[]{0.0f, 1.0f}));
+                            arrayList.add(ObjectAnimator.ofInt(this.backgroundDrawable, AnimationProperties.COLOR_DRAWABLE_ALPHA, new int[]{0}));
+                            arrayList.add(ObjectAnimator.ofFloat(this.containerView, View.ALPHA, new float[]{0.0f}));
+                            if (this.sendPhotoType == 1) {
+                                arrayList.add(ObjectAnimator.ofFloat(this.photoCropView, View.ALPHA, new float[]{0.0f}));
+                            }
+                            animatorSet.playTogether(arrayList);
+                        } else {
+                            i = AndroidUtilities.displaySize.y + (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+                            animatorArr = new Animator[4];
+                            animatorArr[0] = ObjectAnimator.ofInt(this.backgroundDrawable, AnimationProperties.COLOR_DRAWABLE_ALPHA, new int[]{0});
+                            animatorArr[1] = ObjectAnimator.ofFloat(this.animatingImageView, View.ALPHA, new float[]{0.0f});
+                            ClippingImageView clippingImageView = this.animatingImageView;
+                            Property property = View.TRANSLATION_Y;
+                            float[] fArr3 = new float[1];
+                            if (this.translationY < 0.0f) {
+                                i = -i;
+                            }
+                            fArr3[0] = (float) i;
+                            animatorArr[2] = ObjectAnimator.ofFloat(clippingImageView, property, fArr3);
+                            animatorArr[3] = ObjectAnimator.ofFloat(this.containerView, View.ALPHA, new float[]{0.0f});
+                            animatorSet.playTogether(animatorArr);
+                        }
+                        this.animationEndRunnable = new -$$Lambda$PhotoViewer$SQuc4TyZ0dWDiWuazMyrUv4byaU(this, placeForPhoto);
+                        animatorSet.setDuration(200);
+                        animatorSet.addListener(new AnimatorListenerAdapter() {
+                            public void onAnimationEnd(Animator animator) {
+                                AndroidUtilities.runOnUIThread(new -$$Lambda$PhotoViewer$37$riPaWbwqB97e1xvF_frnJnVZJ9M(this));
+                            }
+
+                            public /* synthetic */ void lambda$onAnimationEnd$0$PhotoViewer$37() {
+                                if (PhotoViewer.this.animationEndRunnable != null) {
+                                    PhotoViewer.this.animationEndRunnable.run();
+                                    PhotoViewer.this.animationEndRunnable = null;
+                                }
+                            }
+                        });
+                        this.transitionAnimationStartTime = System.currentTimeMillis();
+                        if (VERSION.SDK_INT >= 18) {
+                            this.containerView.setLayerType(2, null);
+                        }
+                        animatorSet.start();
+                        drawable = null;
+                    } else {
+                        AnimatorSet animatorSet2 = new AnimatorSet();
+                        animatorArr = new Animator[4];
+                        animatorArr[0] = ObjectAnimator.ofFloat(this.containerView, View.SCALE_X, new float[]{0.9f});
+                        animatorArr[1] = ObjectAnimator.ofFloat(this.containerView, View.SCALE_Y, new float[]{0.9f});
+                        animatorArr[2] = ObjectAnimator.ofInt(this.backgroundDrawable, AnimationProperties.COLOR_DRAWABLE_ALPHA, new int[]{0});
+                        animatorArr[3] = ObjectAnimator.ofFloat(this.containerView, View.ALPHA, new float[]{0.0f});
+                        animatorSet2.playTogether(animatorArr);
+                        this.animationInProgress = 2;
+                        this.animationEndRunnable = new -$$Lambda$PhotoViewer$mbE9dgLgiv_6p2JdgFOuRdnxess(this, placeForPhoto);
+                        animatorSet2.setDuration(200);
+                        animatorSet2.addListener(new AnimatorListenerAdapter() {
+                            public void onAnimationEnd(Animator animator) {
+                                if (PhotoViewer.this.animationEndRunnable != null) {
+                                    PhotoViewer.this.animationEndRunnable.run();
+                                    PhotoViewer.this.animationEndRunnable = null;
+                                }
+                            }
+                        });
+                        this.transitionAnimationStartTime = System.currentTimeMillis();
+                        if (VERSION.SDK_INT >= 18) {
+                            drawable = null;
+                            this.containerView.setLayerType(2, null);
+                        } else {
+                            drawable = null;
+                        }
+                        animatorSet2.start();
+                    }
+                    AnimatedFileDrawable animatedFileDrawable = this.currentAnimation;
+                    if (animatedFileDrawable != null) {
+                        animatedFileDrawable.setSecondParentView(drawable);
+                        this.currentAnimation = drawable;
+                        this.centerImage.setImageBitmap(drawable);
+                    }
+                    PhotoViewerProvider photoViewerProvider = this.placeProvider;
+                    if (!(photoViewerProvider == null || photoViewerProvider.canScrollAway())) {
+                        this.placeProvider.cancelButtonPressed();
+                    }
                 }
                 return;
             }
-            this.qualityPicker.cancelButton.callOnClick();
-        } else if (this.currentEditMode != 3 || this.photoPaintView == null) {
-            switchToEditMode(0);
-        } else {
-            this.photoPaintView.maybeShowDismissalAlert(this, this.parentActivity, new PhotoViewer$$Lambda$33(this));
+            return;
         }
+        this.qualityPicker.cancelButton.callOnClick();
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$closePhoto$41$PhotoViewer() {
+    public /* synthetic */ void lambda$closePhoto$41$PhotoViewer() {
         switchToEditMode(0);
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$closePhoto$42$PhotoViewer(PlaceProviderObject object) {
+    public /* synthetic */ void lambda$closePhoto$42$PhotoViewer(PlaceProviderObject placeProviderObject) {
         if (VERSION.SDK_INT >= 18) {
             this.containerView.setLayerType(0, null);
         }
         this.animationInProgress = 0;
-        onPhotoClosed(object);
+        onPhotoClosed(placeProviderObject);
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$closePhoto$43$PhotoViewer(PlaceProviderObject object) {
-        if (this.containerView != null) {
+    public /* synthetic */ void lambda$closePhoto$43$PhotoViewer(PlaceProviderObject placeProviderObject) {
+        FrameLayoutDrawer frameLayoutDrawer = this.containerView;
+        if (frameLayoutDrawer != null) {
             if (VERSION.SDK_INT >= 18) {
-                this.containerView.setLayerType(0, null);
+                frameLayoutDrawer.setLayerType(0, null);
             }
             this.animationInProgress = 0;
-            onPhotoClosed(object);
+            onPhotoClosed(placeProviderObject);
             this.containerView.setScaleX(1.0f);
             this.containerView.setScaleY(1.0f);
         }
@@ -8574,8 +11191,9 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
 
     public void destroyPhotoViewer() {
         if (this.parentActivity != null && this.windowView != null) {
-            if (this.pipVideoView != null) {
-                this.pipVideoView.close();
+            PipVideoView pipVideoView = this.pipVideoView;
+            if (pipVideoView != null) {
+                pipVideoView.close();
                 this.pipVideoView = null;
             }
             removeObservers();
@@ -8588,13 +11206,15 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             } catch (Exception e) {
                 FileLog.e(e);
             }
-            if (this.currentThumb != null) {
-                this.currentThumb.release();
+            BitmapHolder bitmapHolder = this.currentThumb;
+            if (bitmapHolder != null) {
+                bitmapHolder.release();
                 this.currentThumb = null;
             }
             this.animatingImageView.setImageBitmap(null);
-            if (this.captionEditText != null) {
-                this.captionEditText.onDestroy();
+            PhotoViewerCaptionEnterView photoViewerCaptionEnterView = this.captionEditText;
+            if (photoViewerCaptionEnterView != null) {
+                photoViewerCaptionEnterView.onDestroy();
             }
             if (this == PipInstance) {
                 PipInstance = null;
@@ -8604,7 +11224,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         }
     }
 
-    private void onPhotoClosed(PlaceProviderObject object) {
+    private void onPhotoClosed(PlaceProviderObject placeProviderObject) {
         this.isVisible = false;
         this.disableShowCheck = true;
         this.currentMessageObject = null;
@@ -8612,48 +11232,53 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         this.currentFileLocation = null;
         this.currentSecureDocument = null;
         this.currentPathObject = null;
-        if (this.videoPlayerControlFrameLayout != null) {
-            this.videoPlayerControlFrameLayout.setVisibility(8);
+        FrameLayout frameLayout = this.videoPlayerControlFrameLayout;
+        if (frameLayout != null) {
+            frameLayout.setVisibility(8);
             this.dateTextView.setVisibility(0);
             this.nameTextView.setVisibility(0);
         }
         this.sendPhotoType = 0;
-        if (this.currentThumb != null) {
-            this.currentThumb.release();
+        BitmapHolder bitmapHolder = this.currentThumb;
+        if (bitmapHolder != null) {
+            bitmapHolder.release();
             this.currentThumb = null;
         }
         this.parentAlert = null;
-        if (this.currentAnimation != null) {
-            this.currentAnimation.setSecondParentView(null);
+        AnimatedFileDrawable animatedFileDrawable = this.currentAnimation;
+        if (animatedFileDrawable != null) {
+            animatedFileDrawable.setSecondParentView(null);
             this.currentAnimation = null;
         }
-        for (int a = 0; a < 3; a++) {
-            if (this.photoProgressViews[a] != null) {
-                this.photoProgressViews[a].setBackgroundState(-1, false);
+        for (int i = 0; i < 3; i++) {
+            PhotoProgressView[] photoProgressViewArr = this.photoProgressViews;
+            if (photoProgressViewArr[i] != null) {
+                photoProgressViewArr[i].setBackgroundState(-1, false);
             }
         }
         requestVideoPreview(0);
-        if (this.videoTimelineView != null) {
-            this.videoTimelineView.destroy();
+        VideoTimelinePlayView videoTimelinePlayView = this.videoTimelineView;
+        if (videoTimelinePlayView != null) {
+            videoTimelinePlayView.destroy();
         }
-        this.centerImage.setImageBitmap((Bitmap) null);
-        this.leftImage.setImageBitmap((Bitmap) null);
-        this.rightImage.setImageBitmap((Bitmap) null);
-        this.containerView.post(new PhotoViewer$$Lambda$36(this));
-        if (this.placeProvider != null) {
-            this.placeProvider.willHidePhotoViewer();
+        this.centerImage.setImageBitmap(null);
+        this.leftImage.setImageBitmap(null);
+        this.rightImage.setImageBitmap(null);
+        this.containerView.post(new -$$Lambda$PhotoViewer$ckQHNq394VAfTJ1gr02N4PrzmKY(this));
+        PhotoViewerProvider photoViewerProvider = this.placeProvider;
+        if (photoViewerProvider != null) {
+            photoViewerProvider.willHidePhotoViewer();
         }
         this.groupedPhotosListView.clear();
         this.placeProvider = null;
         this.selectedPhotosAdapter.notifyDataSetChanged();
         this.disableShowCheck = false;
-        if (object != null) {
-            object.imageReceiver.setVisible(true, true);
+        if (placeProviderObject != null) {
+            placeProviderObject.imageReceiver.setVisible(true, true);
         }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$onPhotoClosed$44$PhotoViewer() {
+    public /* synthetic */ void lambda$onPhotoClosed$44$PhotoViewer() {
         this.animatingImageView.setImageBitmap(null);
         try {
             if (this.windowView.getParent() != null) {
@@ -8664,35 +11289,41 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         }
     }
 
-    private void redraw(int count) {
-        if (count < 6 && this.containerView != null) {
-            this.containerView.invalidate();
-            AndroidUtilities.runOnUIThread(new PhotoViewer$$Lambda$37(this, count), 100);
+    private void redraw(int i) {
+        if (i < 6) {
+            FrameLayoutDrawer frameLayoutDrawer = this.containerView;
+            if (frameLayoutDrawer != null) {
+                frameLayoutDrawer.invalidate();
+                AndroidUtilities.runOnUIThread(new -$$Lambda$PhotoViewer$PaqzhTFF8kO_z23DxN4SVmAhhn4(this, i), 100);
+            }
         }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$redraw$45$PhotoViewer(int count) {
-        redraw(count + 1);
+    public /* synthetic */ void lambda$redraw$45$PhotoViewer(int i) {
+        redraw(i + 1);
     }
 
     public void onResume() {
         redraw(0);
-        if (this.videoPlayer != null) {
-            this.videoPlayer.seekTo(this.videoPlayer.getCurrentPosition() + 1);
+        VideoPlayer videoPlayer = this.videoPlayer;
+        if (videoPlayer != null) {
+            videoPlayer.seekTo(videoPlayer.getCurrentPosition() + 1);
         }
     }
 
-    public void onConfigurationChanged(Configuration newConfig) {
-        if (this.pipVideoView != null) {
-            this.pipVideoView.onConfigurationChanged();
+    public void onConfigurationChanged(Configuration configuration) {
+        PipVideoView pipVideoView = this.pipVideoView;
+        if (pipVideoView != null) {
+            pipVideoView.onConfigurationChanged();
         }
     }
 
     public void onPause() {
         if (this.currentAnimation != null) {
             closePhoto(false, false);
-        } else if (this.lastTitle != null) {
+            return;
+        }
+        if (this.lastTitle != null) {
             closeCaptionEnter(true);
         }
     }
@@ -8701,19 +11332,19 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         return this.isVisible && this.placeProvider != null;
     }
 
-    private void updateMinMax(float scale) {
-        int maxW = ((int) ((((float) this.centerImage.getImageWidth()) * scale) - ((float) getContainerViewWidth()))) / 2;
-        int maxH = ((int) ((((float) this.centerImage.getImageHeight()) * scale) - ((float) getContainerViewHeight()))) / 2;
-        if (maxW > 0) {
-            this.minX = (float) (-maxW);
-            this.maxX = (float) maxW;
+    private void updateMinMax(float f) {
+        int imageWidth = ((int) ((((float) this.centerImage.getImageWidth()) * f) - ((float) getContainerViewWidth()))) / 2;
+        int imageHeight = ((int) ((((float) this.centerImage.getImageHeight()) * f) - ((float) getContainerViewHeight()))) / 2;
+        if (imageWidth > 0) {
+            this.minX = (float) (-imageWidth);
+            this.maxX = (float) imageWidth;
         } else {
             this.maxX = 0.0f;
             this.minX = 0.0f;
         }
-        if (maxH > 0) {
-            this.minY = (float) (-maxH);
-            this.maxY = (float) maxH;
+        if (imageHeight > 0) {
+            this.minY = (float) (-imageHeight);
+            this.maxY = (float) imageHeight;
             return;
         }
         this.maxY = 0.0f;
@@ -8721,29 +11352,27 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
     }
 
     private int getAdditionX() {
-        if (this.currentEditMode == 0 || this.currentEditMode == 3) {
-            return 0;
-        }
-        return AndroidUtilities.dp(14.0f);
+        int i = this.currentEditMode;
+        return (i == 0 || i == 3) ? 0 : AndroidUtilities.dp(14.0f);
     }
 
     private int getAdditionY() {
-        int i = 0;
-        int dp;
-        if (this.currentEditMode == 3) {
-            dp = AndroidUtilities.dp(8.0f);
+        int i = this.currentEditMode;
+        int i2 = 0;
+        if (i == 3) {
+            i = AndroidUtilities.dp(8.0f);
             if (VERSION.SDK_INT >= 21) {
-                i = AndroidUtilities.statusBarHeight;
+                i2 = AndroidUtilities.statusBarHeight;
             }
-            return i + dp;
-        } else if (this.currentEditMode == 0) {
+            return i + i2;
+        } else if (i == 0) {
             return 0;
         } else {
-            dp = AndroidUtilities.dp(14.0f);
+            i = AndroidUtilities.dp(14.0f);
             if (VERSION.SDK_INT >= 21) {
-                i = AndroidUtilities.statusBarHeight;
+                i2 = AndroidUtilities.statusBarHeight;
             }
-            return i + dp;
+            return i + i2;
         }
     }
 
@@ -8751,287 +11380,325 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         return getContainerViewWidth(this.currentEditMode);
     }
 
-    private int getContainerViewWidth(int mode) {
+    private int getContainerViewWidth(int i) {
         int width = this.containerView.getWidth();
-        if (mode == 0 || mode == 3) {
-            return width;
-        }
-        return width - AndroidUtilities.dp(28.0f);
+        return (i == 0 || i == 3) ? width : width - AndroidUtilities.dp(28.0f);
     }
 
     private int getContainerViewHeight() {
         return getContainerViewHeight(this.currentEditMode);
     }
 
-    private int getContainerViewHeight(int mode) {
-        int height = AndroidUtilities.displaySize.y;
-        if (mode == 0 && VERSION.SDK_INT >= 21) {
-            height += AndroidUtilities.statusBarHeight;
+    private int getContainerViewHeight(int i) {
+        int i2 = AndroidUtilities.displaySize.y;
+        if (i == 0 && VERSION.SDK_INT >= 21) {
+            i2 += AndroidUtilities.statusBarHeight;
         }
-        if (mode == 1) {
-            return height - AndroidUtilities.dp(144.0f);
+        if (i == 1) {
+            i = AndroidUtilities.dp(144.0f);
+        } else if (i == 2) {
+            i = AndroidUtilities.dp(214.0f);
+        } else if (i != 3) {
+            return i2;
+        } else {
+            i = AndroidUtilities.dp(48.0f) + ActionBar.getCurrentActionBarHeight();
         }
-        if (mode == 2) {
-            return height - AndroidUtilities.dp(214.0f);
-        }
-        if (mode == 3) {
-            return height - (AndroidUtilities.dp(48.0f) + ActionBar.getCurrentActionBarHeight());
-        }
-        return height;
+        return i2 - i;
     }
 
-    private boolean onTouchEvent(MotionEvent ev) {
+    private boolean onTouchEvent(MotionEvent motionEvent) {
         if (this.animationInProgress != 0 || this.animationStartTime != 0) {
             return false;
         }
-        if (this.currentEditMode == 2) {
-            this.photoFilterView.onTouch(ev);
+        int i = this.currentEditMode;
+        if (i == 2) {
+            this.photoFilterView.onTouch(motionEvent);
             return true;
-        } else if (this.currentEditMode == 1 || this.sendPhotoType == 1) {
-            return true;
-        } else {
+        }
+        if (!(i == 1 || this.sendPhotoType == 1)) {
             if (this.captionEditText.isPopupShowing() || this.captionEditText.isKeyboardVisible()) {
-                if (ev.getAction() == 1) {
+                if (motionEvent.getAction() == 1) {
                     closeCaptionEnter(true);
                 }
-                return true;
-            } else if (this.currentEditMode == 0 && this.sendPhotoType != 1 && ev.getPointerCount() == 1 && this.gestureDetector.onTouchEvent(ev) && this.doubleTap) {
+            } else if (this.currentEditMode == 0 && this.sendPhotoType != 1 && motionEvent.getPointerCount() == 1 && this.gestureDetector.onTouchEvent(motionEvent) && this.doubleTap) {
                 this.doubleTap = false;
                 this.moving = false;
                 this.zooming = false;
                 checkMinMax(false);
                 return true;
             } else {
-                if (ev.getActionMasked() == 0 || ev.getActionMasked() == 5) {
+                float y;
+                if (motionEvent.getActionMasked() == 0 || motionEvent.getActionMasked() == 5) {
                     this.discardTap = false;
                     if (!this.scroller.isFinished()) {
                         this.scroller.abortAnimation();
                     }
                     if (!(this.draggingDown || this.changingPage)) {
-                        if (this.canZoom && ev.getPointerCount() == 2) {
-                            this.pinchStartDistance = (float) Math.hypot((double) (ev.getX(1) - ev.getX(0)), (double) (ev.getY(1) - ev.getY(0)));
+                        VelocityTracker velocityTracker;
+                        if (this.canZoom && motionEvent.getPointerCount() == 2) {
+                            this.pinchStartDistance = (float) Math.hypot((double) (motionEvent.getX(1) - motionEvent.getX(0)), (double) (motionEvent.getY(1) - motionEvent.getY(0)));
                             this.pinchStartScale = this.scale;
-                            this.pinchCenterX = (ev.getX(0) + ev.getX(1)) / 2.0f;
-                            this.pinchCenterY = (ev.getY(0) + ev.getY(1)) / 2.0f;
+                            this.pinchCenterX = (motionEvent.getX(0) + motionEvent.getX(1)) / 2.0f;
+                            this.pinchCenterY = (motionEvent.getY(0) + motionEvent.getY(1)) / 2.0f;
                             this.pinchStartX = this.translationX;
                             this.pinchStartY = this.translationY;
                             this.zooming = true;
                             this.moving = false;
-                            if (this.velocityTracker != null) {
-                                this.velocityTracker.clear();
+                            velocityTracker = this.velocityTracker;
+                            if (velocityTracker != null) {
+                                velocityTracker.clear();
                             }
-                        } else if (ev.getPointerCount() == 1) {
-                            this.moveStartX = ev.getX();
-                            float y = ev.getY();
+                        } else if (motionEvent.getPointerCount() == 1) {
+                            this.moveStartX = motionEvent.getX();
+                            y = motionEvent.getY();
                             this.moveStartY = y;
                             this.dragY = y;
                             this.draggingDown = false;
                             this.canDragDown = true;
-                            if (this.velocityTracker != null) {
-                                this.velocityTracker.clear();
+                            velocityTracker = this.velocityTracker;
+                            if (velocityTracker != null) {
+                                velocityTracker.clear();
                             }
                         }
                     }
-                } else if (ev.getActionMasked() == 2) {
-                    if (this.canZoom && ev.getPointerCount() == 2 && !this.draggingDown && this.zooming && !this.changingPage) {
-                        this.discardTap = true;
-                        this.scale = (((float) Math.hypot((double) (ev.getX(1) - ev.getX(0)), (double) (ev.getY(1) - ev.getY(0)))) / this.pinchStartDistance) * this.pinchStartScale;
-                        this.translationX = (this.pinchCenterX - ((float) (getContainerViewWidth() / 2))) - (((this.pinchCenterX - ((float) (getContainerViewWidth() / 2))) - this.pinchStartX) * (this.scale / this.pinchStartScale));
-                        this.translationY = (this.pinchCenterY - ((float) (getContainerViewHeight() / 2))) - (((this.pinchCenterY - ((float) (getContainerViewHeight() / 2))) - this.pinchStartY) * (this.scale / this.pinchStartScale));
-                        updateMinMax(this.scale);
-                        this.containerView.invalidate();
-                    } else if (ev.getPointerCount() == 1) {
-                        if (this.velocityTracker != null) {
-                            this.velocityTracker.addMovement(ev);
-                        }
-                        float dx = Math.abs(ev.getX() - this.moveStartX);
-                        float dy = Math.abs(ev.getY() - this.dragY);
-                        if (dx > ((float) AndroidUtilities.dp(3.0f)) || dy > ((float) AndroidUtilities.dp(3.0f))) {
+                } else {
+                    float f = 0.0f;
+                    float containerViewHeight;
+                    float f2;
+                    float f3;
+                    if (motionEvent.getActionMasked() == 2) {
+                        if (this.canZoom && motionEvent.getPointerCount() == 2 && !this.draggingDown && this.zooming && !this.changingPage) {
                             this.discardTap = true;
-                            if (this.qualityChooseView != null && this.qualityChooseView.getVisibility() == 0) {
-                                return true;
-                            }
-                        }
-                        if (this.placeProvider.canScrollAway() && this.currentEditMode == 0 && this.sendPhotoType != 1 && this.canDragDown && !this.draggingDown && this.scale == 1.0f && dy >= ((float) AndroidUtilities.dp(30.0f)) && dy / 2.0f > dx) {
-                            this.draggingDown = true;
-                            this.moving = false;
-                            this.dragY = ev.getY();
-                            if (this.isActionBarVisible && this.containerView.getTag() != null) {
-                                toggleActionBar(false, true);
-                            } else if (this.pickerView.getVisibility() == 0) {
-                                toggleActionBar(false, true);
-                                togglePhotosListView(false, true);
-                                toggleCheckImageView(false);
-                            }
-                            return true;
-                        } else if (this.draggingDown) {
-                            this.translationY = ev.getY() - this.dragY;
+                            this.scale = (((float) Math.hypot((double) (motionEvent.getX(1) - motionEvent.getX(0)), (double) (motionEvent.getY(1) - motionEvent.getY(0)))) / this.pinchStartDistance) * this.pinchStartScale;
+                            this.translationX = (this.pinchCenterX - ((float) (getContainerViewWidth() / 2))) - (((this.pinchCenterX - ((float) (getContainerViewWidth() / 2))) - this.pinchStartX) * (this.scale / this.pinchStartScale));
+                            y = this.pinchCenterY - ((float) (getContainerViewHeight() / 2));
+                            containerViewHeight = (this.pinchCenterY - ((float) (getContainerViewHeight() / 2))) - this.pinchStartY;
+                            f2 = this.scale;
+                            this.translationY = y - (containerViewHeight * (f2 / this.pinchStartScale));
+                            updateMinMax(f2);
                             this.containerView.invalidate();
-                        } else if (this.invalidCoords || this.animationStartTime != 0) {
-                            this.invalidCoords = false;
-                            this.moveStartX = ev.getX();
-                            this.moveStartY = ev.getY();
-                        } else {
-                            float moveDx = this.moveStartX - ev.getX();
-                            float moveDy = this.moveStartY - ev.getY();
-                            if (this.moving || this.currentEditMode != 0 || ((this.scale == 1.0f && Math.abs(moveDy) + ((float) AndroidUtilities.dp(12.0f)) < Math.abs(moveDx)) || this.scale != 1.0f)) {
-                                if (!this.moving) {
-                                    moveDx = 0.0f;
-                                    moveDy = 0.0f;
-                                    this.moving = true;
-                                    this.canDragDown = false;
+                        } else if (motionEvent.getPointerCount() == 1) {
+                            VelocityTracker velocityTracker2 = this.velocityTracker;
+                            if (velocityTracker2 != null) {
+                                velocityTracker2.addMovement(motionEvent);
+                            }
+                            containerViewHeight = Math.abs(motionEvent.getX() - this.moveStartX);
+                            f2 = Math.abs(motionEvent.getY() - this.dragY);
+                            if (containerViewHeight > ((float) AndroidUtilities.dp(3.0f)) || f2 > ((float) AndroidUtilities.dp(3.0f))) {
+                                this.discardTap = true;
+                                QualityChooseView qualityChooseView = this.qualityChooseView;
+                                if (qualityChooseView != null && qualityChooseView.getVisibility() == 0) {
+                                    return true;
                                 }
-                                this.moveStartX = ev.getX();
-                                this.moveStartY = ev.getY();
-                                updateMinMax(this.scale);
-                                if ((this.translationX < this.minX && !(this.currentEditMode == 0 && this.rightImage.hasImageSet())) || (this.translationX > this.maxX && !(this.currentEditMode == 0 && this.leftImage.hasImageSet()))) {
-                                    moveDx /= 3.0f;
+                            }
+                            if (this.placeProvider.canScrollAway() && this.currentEditMode == 0 && this.sendPhotoType != 1 && this.canDragDown && !this.draggingDown && this.scale == 1.0f && f2 >= ((float) AndroidUtilities.dp(30.0f)) && f2 / 2.0f > containerViewHeight) {
+                                this.draggingDown = true;
+                                this.moving = false;
+                                this.dragY = motionEvent.getY();
+                                if (this.isActionBarVisible && this.containerView.getTag() != null) {
+                                    toggleActionBar(false, true);
+                                } else if (this.pickerView.getVisibility() == 0) {
+                                    toggleActionBar(false, true);
+                                    togglePhotosListView(false, true);
+                                    toggleCheckImageView(false);
                                 }
-                                if (this.maxY == 0.0f && this.minY == 0.0f && this.currentEditMode == 0 && this.sendPhotoType != 1) {
-                                    if (this.translationY - moveDy < this.minY) {
-                                        this.translationY = this.minY;
-                                        moveDy = 0.0f;
-                                    } else if (this.translationY - moveDy > this.maxY) {
-                                        this.translationY = this.maxY;
-                                        moveDy = 0.0f;
-                                    }
-                                } else if (this.translationY < this.minY || this.translationY > this.maxY) {
-                                    moveDy /= 3.0f;
-                                }
-                                this.translationX -= moveDx;
-                                if (!(this.scale == 1.0f && this.currentEditMode == 0)) {
-                                    this.translationY -= moveDy;
-                                }
+                                return true;
+                            } else if (this.draggingDown) {
+                                this.translationY = motionEvent.getY() - this.dragY;
                                 this.containerView.invalidate();
+                            } else if (this.invalidCoords || this.animationStartTime != 0) {
+                                this.invalidCoords = false;
+                                this.moveStartX = motionEvent.getX();
+                                this.moveStartY = motionEvent.getY();
+                            } else {
+                                containerViewHeight = this.moveStartX - motionEvent.getX();
+                                f2 = this.moveStartY - motionEvent.getY();
+                                if (this.moving || this.currentEditMode != 0 || ((this.scale == 1.0f && Math.abs(f2) + ((float) AndroidUtilities.dp(12.0f)) < Math.abs(containerViewHeight)) || this.scale != 1.0f)) {
+                                    if (!this.moving) {
+                                        this.moving = true;
+                                        this.canDragDown = false;
+                                        containerViewHeight = 0.0f;
+                                        f2 = 0.0f;
+                                    }
+                                    this.moveStartX = motionEvent.getX();
+                                    this.moveStartY = motionEvent.getY();
+                                    updateMinMax(this.scale);
+                                    if ((this.translationX < this.minX && !(this.currentEditMode == 0 && this.rightImage.hasImageSet())) || (this.translationX > this.maxX && !(this.currentEditMode == 0 && this.leftImage.hasImageSet()))) {
+                                        containerViewHeight /= 3.0f;
+                                    }
+                                    y = this.maxY;
+                                    if (y == 0.0f) {
+                                        float f4 = this.minY;
+                                        if (f4 == 0.0f && this.currentEditMode == 0 && this.sendPhotoType != 1) {
+                                            f3 = this.translationY;
+                                            if (f3 - f2 < f4) {
+                                                this.translationY = f4;
+                                            } else {
+                                                if (f3 - f2 > y) {
+                                                    this.translationY = y;
+                                                }
+                                                f = f2;
+                                            }
+                                            this.translationX -= containerViewHeight;
+                                            if (!(this.scale == 1.0f && this.currentEditMode == 0)) {
+                                                this.translationY -= f;
+                                            }
+                                            this.containerView.invalidate();
+                                        }
+                                    }
+                                    y = this.translationY;
+                                    if (y < this.minY || y > this.maxY) {
+                                        f = f2 / 3.0f;
+                                        this.translationX -= containerViewHeight;
+                                        this.translationY -= f;
+                                        this.containerView.invalidate();
+                                    }
+                                    f = f2;
+                                    this.translationX -= containerViewHeight;
+                                    this.translationY -= f;
+                                    this.containerView.invalidate();
+                                }
                             }
                         }
-                    }
-                } else if (ev.getActionMasked() == 3 || ev.getActionMasked() == 1 || ev.getActionMasked() == 6) {
-                    if (this.zooming) {
-                        this.invalidCoords = true;
-                        if (this.scale < 1.0f) {
-                            updateMinMax(1.0f);
-                            animateTo(1.0f, 0.0f, 0.0f, true);
-                        } else if (this.scale > 3.0f) {
-                            float atx = (this.pinchCenterX - ((float) (getContainerViewWidth() / 2))) - (((this.pinchCenterX - ((float) (getContainerViewWidth() / 2))) - this.pinchStartX) * (3.0f / this.pinchStartScale));
-                            float aty = (this.pinchCenterY - ((float) (getContainerViewHeight() / 2))) - (((this.pinchCenterY - ((float) (getContainerViewHeight() / 2))) - this.pinchStartY) * (3.0f / this.pinchStartScale));
-                            updateMinMax(3.0f);
-                            if (atx < this.minX) {
-                                atx = this.minX;
-                            } else if (atx > this.maxX) {
-                                atx = this.maxX;
+                    } else if (motionEvent.getActionMasked() == 3 || motionEvent.getActionMasked() == 1 || motionEvent.getActionMasked() == 6) {
+                        if (this.zooming) {
+                            this.invalidCoords = true;
+                            y = this.scale;
+                            if (y < 1.0f) {
+                                updateMinMax(1.0f);
+                                animateTo(1.0f, 0.0f, 0.0f, true);
+                            } else if (y > 3.0f) {
+                                y = (this.pinchCenterX - ((float) (getContainerViewWidth() / 2))) - (((this.pinchCenterX - ((float) (getContainerViewWidth() / 2))) - this.pinchStartX) * (3.0f / this.pinchStartScale));
+                                containerViewHeight = (this.pinchCenterY - ((float) (getContainerViewHeight() / 2))) - (((this.pinchCenterY - ((float) (getContainerViewHeight() / 2))) - this.pinchStartY) * (3.0f / this.pinchStartScale));
+                                updateMinMax(3.0f);
+                                f2 = this.minX;
+                                if (y >= f2) {
+                                    f2 = this.maxX;
+                                    if (y <= f2) {
+                                        f2 = y;
+                                    }
+                                }
+                                y = this.minY;
+                                if (containerViewHeight >= y) {
+                                    y = this.maxY;
+                                    if (containerViewHeight <= y) {
+                                        y = containerViewHeight;
+                                    }
+                                }
+                                animateTo(3.0f, f2, y, true);
+                            } else {
+                                checkMinMax(true);
                             }
-                            if (aty < this.minY) {
-                                aty = this.minY;
-                            } else if (aty > this.maxY) {
-                                aty = this.maxY;
+                            this.zooming = false;
+                        } else if (this.draggingDown) {
+                            if (Math.abs(this.dragY - motionEvent.getY()) > ((float) getContainerViewHeight()) / 6.0f) {
+                                closePhoto(true, false);
+                            } else {
+                                if (this.pickerView.getVisibility() == 0) {
+                                    toggleActionBar(true, true);
+                                    toggleCheckImageView(true);
+                                }
+                                animateTo(1.0f, 0.0f, 0.0f, false);
                             }
-                            animateTo(3.0f, atx, aty, true);
-                        } else {
-                            checkMinMax(true);
-                        }
-                        this.zooming = false;
-                    } else if (this.draggingDown) {
-                        if (Math.abs(this.dragY - ev.getY()) > ((float) getContainerViewHeight()) / 6.0f) {
-                            closePhoto(true, false);
-                        } else {
-                            if (this.pickerView.getVisibility() == 0) {
-                                toggleActionBar(true, true);
-                                toggleCheckImageView(true);
+                            this.draggingDown = false;
+                        } else if (this.moving) {
+                            y = this.translationX;
+                            containerViewHeight = this.translationY;
+                            updateMinMax(this.scale);
+                            this.moving = false;
+                            this.canDragDown = true;
+                            VelocityTracker velocityTracker3 = this.velocityTracker;
+                            if (velocityTracker3 != null && this.scale == 1.0f) {
+                                velocityTracker3.computeCurrentVelocity(1000);
+                                f = this.velocityTracker.getXVelocity();
                             }
-                            animateTo(1.0f, 0.0f, 0.0f, false);
-                        }
-                        this.draggingDown = false;
-                    } else if (this.moving) {
-                        float moveToX = this.translationX;
-                        float moveToY = this.translationY;
-                        updateMinMax(this.scale);
-                        this.moving = false;
-                        this.canDragDown = true;
-                        float velocity = 0.0f;
-                        if (this.velocityTracker != null && this.scale == 1.0f) {
-                            this.velocityTracker.computeCurrentVelocity(1000);
-                            velocity = this.velocityTracker.getXVelocity();
-                        }
-                        if (this.currentEditMode == 0 && this.sendPhotoType != 1) {
-                            if ((this.translationX < this.minX - ((float) (getContainerViewWidth() / 3)) || velocity < ((float) (-AndroidUtilities.dp(650.0f)))) && this.rightImage.hasImageSet()) {
-                                goToNext();
-                                return true;
-                            } else if ((this.translationX > this.maxX + ((float) (getContainerViewWidth() / 3)) || velocity > ((float) AndroidUtilities.dp(650.0f))) && this.leftImage.hasImageSet()) {
-                                goToPrev();
-                                return true;
+                            if (this.currentEditMode == 0 && this.sendPhotoType != 1) {
+                                if ((this.translationX < this.minX - ((float) (getContainerViewWidth() / 3)) || f < ((float) (-AndroidUtilities.dp(650.0f)))) && this.rightImage.hasImageSet()) {
+                                    goToNext();
+                                    return true;
+                                } else if ((this.translationX > this.maxX + ((float) (getContainerViewWidth() / 3)) || f > ((float) AndroidUtilities.dp(650.0f))) && this.leftImage.hasImageSet()) {
+                                    goToPrev();
+                                    return true;
+                                }
                             }
+                            f2 = this.translationX;
+                            f3 = this.minX;
+                            if (f2 >= f3) {
+                                f3 = this.maxX;
+                                if (f2 <= f3) {
+                                    f3 = y;
+                                }
+                            }
+                            y = this.translationY;
+                            f2 = this.minY;
+                            if (y >= f2) {
+                                f2 = this.maxY;
+                                if (y <= f2) {
+                                    f2 = containerViewHeight;
+                                }
+                            }
+                            animateTo(this.scale, f3, f2, false);
                         }
-                        if (this.translationX < this.minX) {
-                            moveToX = this.minX;
-                        } else if (this.translationX > this.maxX) {
-                            moveToX = this.maxX;
-                        }
-                        if (this.translationY < this.minY) {
-                            moveToY = this.minY;
-                        } else if (this.translationY > this.maxY) {
-                            moveToY = this.maxY;
-                        }
-                        animateTo(this.scale, moveToX, moveToY, false);
                     }
                 }
                 return false;
             }
         }
+        return true;
     }
 
-    private void checkMinMax(boolean zoom) {
-        float moveToX = this.translationX;
-        float moveToY = this.translationY;
+    private void checkMinMax(boolean z) {
+        float f = this.translationX;
+        float f2 = this.translationY;
         updateMinMax(this.scale);
-        if (this.translationX < this.minX) {
-            moveToX = this.minX;
-        } else if (this.translationX > this.maxX) {
-            moveToX = this.maxX;
+        float f3 = this.translationX;
+        float f4 = this.minX;
+        if (f3 >= f4) {
+            f4 = this.maxX;
+            if (f3 <= f4) {
+                f4 = f;
+            }
         }
-        if (this.translationY < this.minY) {
-            moveToY = this.minY;
-        } else if (this.translationY > this.maxY) {
-            moveToY = this.maxY;
+        f = this.translationY;
+        f3 = this.minY;
+        if (f >= f3) {
+            f3 = this.maxY;
+            if (f <= f3) {
+                f3 = f2;
+            }
         }
-        animateTo(this.scale, moveToX, moveToY, zoom);
+        animateTo(this.scale, f4, f3, z);
     }
 
     private void goToNext() {
-        float extra = 0.0f;
-        if (this.scale != 1.0f) {
-            extra = ((float) ((getContainerViewWidth() - this.centerImage.getImageWidth()) / 2)) * this.scale;
-        }
+        float containerViewWidth = this.scale != 1.0f ? ((float) ((getContainerViewWidth() - this.centerImage.getImageWidth()) / 2)) * this.scale : 0.0f;
         this.switchImageAfterAnimation = 1;
-        animateTo(this.scale, ((this.minX - ((float) getContainerViewWidth())) - extra) - ((float) (AndroidUtilities.dp(30.0f) / 2)), this.translationY, false);
+        animateTo(this.scale, ((this.minX - ((float) getContainerViewWidth())) - containerViewWidth) - ((float) (AndroidUtilities.dp(30.0f) / 2)), this.translationY, false);
     }
 
     private void goToPrev() {
-        float extra = 0.0f;
-        if (this.scale != 1.0f) {
-            extra = ((float) ((getContainerViewWidth() - this.centerImage.getImageWidth()) / 2)) * this.scale;
-        }
+        float containerViewWidth = this.scale != 1.0f ? ((float) ((getContainerViewWidth() - this.centerImage.getImageWidth()) / 2)) * this.scale : 0.0f;
         this.switchImageAfterAnimation = 2;
-        animateTo(this.scale, ((this.maxX + ((float) getContainerViewWidth())) + extra) + ((float) (AndroidUtilities.dp(30.0f) / 2)), this.translationY, false);
+        animateTo(this.scale, ((this.maxX + ((float) getContainerViewWidth())) + containerViewWidth) + ((float) (AndroidUtilities.dp(30.0f) / 2)), this.translationY, false);
     }
 
-    private void animateTo(float newScale, float newTx, float newTy, boolean isZoom) {
-        animateTo(newScale, newTx, newTy, isZoom, 250);
+    private void animateTo(float f, float f2, float f3, boolean z) {
+        animateTo(f, f2, f3, z, 250);
     }
 
-    private void animateTo(float newScale, float newTx, float newTy, boolean isZoom, int duration) {
-        if (this.scale != newScale || this.translationX != newTx || this.translationY != newTy) {
-            this.zoomAnimation = isZoom;
-            this.animateToScale = newScale;
-            this.animateToX = newTx;
-            this.animateToY = newTy;
+    private void animateTo(float f, float f2, float f3, boolean z, int i) {
+        if (this.scale != f || this.translationX != f2 || this.translationY != f3) {
+            this.zoomAnimation = z;
+            this.animateToScale = f;
+            this.animateToX = f2;
+            this.animateToY = f3;
             this.animationStartTime = System.currentTimeMillis();
             this.imageMoveAnimation = new AnimatorSet();
             this.imageMoveAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, AnimationProperties.PHOTO_VIEWER_ANIMATION_VALUE, new float[]{0.0f, 1.0f})});
             this.imageMoveAnimation.setInterpolator(this.interpolator);
-            this.imageMoveAnimation.setDuration((long) duration);
+            this.imageMoveAnimation.setDuration((long) i);
             this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animation) {
+                public void onAnimationEnd(Animator animator) {
                     PhotoViewer.this.imageMoveAnimation = null;
                     PhotoViewer.this.containerView.invalidate();
                 }
@@ -9041,8 +11708,8 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
     }
 
     @Keep
-    public void setAnimationValue(float value) {
-        this.animationValue = value;
+    public void setAnimationValue(float f) {
+        this.animationValue = f;
         this.containerView.invalidate();
     }
 
@@ -9058,8 +11725,8 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         animatorArr[0] = ObjectAnimator.ofFloat(this.hintTextView, View.ALPHA, new float[]{0.0f});
         animatorSet.playTogether(animatorArr);
         this.hintAnimation.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animation) {
-                if (animation.equals(PhotoViewer.this.hintAnimation)) {
+            public void onAnimationEnd(Animator animator) {
+                if (animator.equals(PhotoViewer.this.hintAnimation)) {
                     PhotoViewer.this.hintAnimation = null;
                     PhotoViewer.this.hintHideRunnable = null;
                     if (PhotoViewer.this.hintTextView != null) {
@@ -9068,8 +11735,8 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 }
             }
 
-            public void onAnimationCancel(Animator animation) {
-                if (animation.equals(PhotoViewer.this.hintAnimation)) {
+            public void onAnimationCancel(Animator animator) {
+                if (animator.equals(PhotoViewer.this.hintAnimation)) {
                     PhotoViewer.this.hintHideRunnable = null;
                     PhotoViewer.this.hintHideRunnable = null;
                 }
@@ -9079,11 +11746,8 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         this.hintAnimation.start();
     }
 
-    private void showHint(boolean hide, boolean enabled) {
-        if (this.containerView == null) {
-            return;
-        }
-        if (!hide || this.hintTextView != null) {
+    private void showHint(boolean z, boolean z2) {
+        if (!(this.containerView == null || (z && this.hintTextView == null))) {
             if (this.hintTextView == null) {
                 this.hintTextView = new TextView(this.containerView.getContext());
                 this.hintTextView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(3.0f), -NUM));
@@ -9094,9 +11758,11 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 this.hintTextView.setAlpha(0.0f);
                 this.containerView.addView(this.hintTextView, LayoutHelper.createFrame(-2, -2.0f, 51, 5.0f, 0.0f, 5.0f, 3.0f));
             }
-            if (hide) {
-                if (this.hintAnimation != null) {
-                    this.hintAnimation.cancel();
+            AnimatorSet animatorSet;
+            if (z) {
+                animatorSet = this.hintAnimation;
+                if (animatorSet != null) {
+                    animatorSet.cancel();
                     this.hintAnimation = null;
                 }
                 AndroidUtilities.cancelRunOnUIThread(this.hintHideRunnable);
@@ -9104,16 +11770,28 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 hideHint();
                 return;
             }
-            this.hintTextView.setText(enabled ? LocaleController.getString("GroupPhotosHelp", NUM) : LocaleController.getString("SinglePhotosHelp", NUM));
-            if (this.hintHideRunnable != null) {
-                if (this.hintAnimation != null) {
-                    this.hintAnimation.cancel();
+            int i;
+            String str;
+            TextView textView = this.hintTextView;
+            if (z2) {
+                i = NUM;
+                str = "GroupPhotosHelp";
+            } else {
+                i = NUM;
+                str = "SinglePhotosHelp";
+            }
+            textView.setText(LocaleController.getString(str, i));
+            Runnable runnable = this.hintHideRunnable;
+            if (runnable != null) {
+                AnimatorSet animatorSet2 = this.hintAnimation;
+                if (animatorSet2 != null) {
+                    animatorSet2.cancel();
                     this.hintAnimation = null;
                 } else {
-                    AndroidUtilities.cancelRunOnUIThread(this.hintHideRunnable);
-                    PhotoViewer$$Lambda$38 photoViewer$$Lambda$38 = new PhotoViewer$$Lambda$38(this);
-                    this.hintHideRunnable = photoViewer$$Lambda$38;
-                    AndroidUtilities.runOnUIThread(photoViewer$$Lambda$38, 2000);
+                    AndroidUtilities.cancelRunOnUIThread(runnable);
+                    -$$Lambda$PhotoViewer$YkU8h9CLASSNAMEcYhYx6kik_kbQ5mA8s -__lambda_photoviewer_yku8h9CLASSNAMEcyhyx6kik_kbq5ma8s = new -$$Lambda$PhotoViewer$YkU8h9CLASSNAMEcYhYx6kik_kbQ5mA8s(this);
+                    this.hintHideRunnable = -__lambda_photoviewer_yku8h9CLASSNAMEcyhyx6kik_kbq5ma8s;
+                    AndroidUtilities.runOnUIThread(-__lambda_photoviewer_yku8h9CLASSNAMEcyhyx6kik_kbq5ma8s, 2000);
                     return;
                 }
             } else if (this.hintAnimation != null) {
@@ -9121,25 +11799,27 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             }
             this.hintTextView.setVisibility(0);
             this.hintAnimation = new AnimatorSet();
-            AnimatorSet animatorSet = this.hintAnimation;
+            animatorSet = this.hintAnimation;
             Animator[] animatorArr = new Animator[1];
             animatorArr[0] = ObjectAnimator.ofFloat(this.hintTextView, View.ALPHA, new float[]{1.0f});
             animatorSet.playTogether(animatorArr);
             this.hintAnimation.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animation) {
-                    if (animation.equals(PhotoViewer.this.hintAnimation)) {
+                public void onAnimationEnd(Animator animator) {
+                    if (animator.equals(PhotoViewer.this.hintAnimation)) {
                         PhotoViewer.this.hintAnimation = null;
-                        AndroidUtilities.runOnUIThread(PhotoViewer.this.hintHideRunnable = new PhotoViewer$41$$Lambda$0(this), 2000);
+                        PhotoViewer photoViewer = PhotoViewer.this;
+                        -$$Lambda$PhotoViewer$41$zVPp9kWNm7HNZtSbgwtWUuDr3b8 -__lambda_photoviewer_41_zvpp9kwnm7hnztsbgwtwuudr3b8 = new -$$Lambda$PhotoViewer$41$zVPp9kWNm7HNZtSbgwtWUuDr3b8(this);
+                        photoViewer.hintHideRunnable = -__lambda_photoviewer_41_zvpp9kwnm7hnztsbgwtwuudr3b8;
+                        AndroidUtilities.runOnUIThread(-__lambda_photoviewer_41_zvpp9kwnm7hnztsbgwtwuudr3b8, 2000);
                     }
                 }
 
-                /* Access modifiers changed, original: final|synthetic */
-                public final /* synthetic */ void lambda$onAnimationEnd$0$PhotoViewer$41() {
+                public /* synthetic */ void lambda$onAnimationEnd$0$PhotoViewer$41() {
                     PhotoViewer.this.hideHint();
                 }
 
-                public void onAnimationCancel(Animator animation) {
-                    if (animation.equals(PhotoViewer.this.hintAnimation)) {
+                public void onAnimationCancel(Animator animator) {
+                    if (animator.equals(PhotoViewer.this.hintAnimation)) {
                         PhotoViewer.this.hintAnimation = null;
                     }
                 }
@@ -9149,538 +11829,1377 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         }
     }
 
-    @SuppressLint({"NewApi", "DrawAllocation"})
-    private void onDraw(Canvas canvas) {
-        if (this.animationInProgress == 1) {
-            return;
-        }
-        if (this.isVisible || this.animationInProgress == 2 || this.pipAnimationInProgress) {
-            float currentScale;
-            float currentTranslationY;
-            float currentTranslationX;
-            float translateX;
-            float scaleDiff;
-            float alpha;
-            int bitmapWidth;
-            int bitmapHeight;
-            float scaleX;
-            float scaleY;
-            float scale;
-            int width;
-            int height;
-            boolean drawProgress;
-            if (this.padImageForHorizontalInsets) {
-                canvas.save();
-                canvas.translate((float) ((getLeftInset() / 2) - (getRightInset() / 2)), 0.0f);
-            }
-            float aty = -1.0f;
-            if (this.imageMoveAnimation != null) {
-                if (!this.scroller.isFinished()) {
-                    this.scroller.abortAnimation();
-                }
-                float ts = this.scale + ((this.animateToScale - this.scale) * this.animationValue);
-                float tx = this.translationX + ((this.animateToX - this.translationX) * this.animationValue);
-                float ty = this.translationY + ((this.animateToY - this.translationY) * this.animationValue);
-                if (this.animateToScale == 1.0f && this.scale == 1.0f && this.translationX == 0.0f) {
-                    aty = ty;
-                }
-                currentScale = ts;
-                currentTranslationY = ty;
-                currentTranslationX = tx;
-                this.containerView.invalidate();
-            } else {
-                if (this.animationStartTime != 0) {
-                    this.translationX = this.animateToX;
-                    this.translationY = this.animateToY;
-                    this.scale = this.animateToScale;
-                    this.animationStartTime = 0;
-                    updateMinMax(this.scale);
-                    this.zoomAnimation = false;
-                }
-                if (!this.scroller.isFinished() && this.scroller.computeScrollOffset()) {
-                    if (((float) this.scroller.getStartX()) < this.maxX && ((float) this.scroller.getStartX()) > this.minX) {
-                        this.translationX = (float) this.scroller.getCurrX();
-                    }
-                    if (((float) this.scroller.getStartY()) < this.maxY && ((float) this.scroller.getStartY()) > this.minY) {
-                        this.translationY = (float) this.scroller.getCurrY();
-                    }
-                    this.containerView.invalidate();
-                }
-                if (this.switchImageAfterAnimation != 0) {
-                    this.openedFullScreenVideo = false;
-                    if (this.switchImageAfterAnimation == 1) {
-                        AndroidUtilities.runOnUIThread(new PhotoViewer$$Lambda$39(this));
-                    } else if (this.switchImageAfterAnimation == 2) {
-                        AndroidUtilities.runOnUIThread(new PhotoViewer$$Lambda$40(this));
-                    }
-                    this.switchImageAfterAnimation = 0;
-                }
-                currentScale = this.scale;
-                currentTranslationY = this.translationY;
-                currentTranslationX = this.translationX;
-                if (!this.moving) {
-                    aty = this.translationY;
-                }
-            }
-            if (!(this.animationInProgress == 2 || this.pipAnimationInProgress || this.isInline)) {
-                if (this.currentEditMode != 0 || this.sendPhotoType == 1 || this.scale != 1.0f || aty == -1.0f || this.zoomAnimation) {
-                    this.backgroundDrawable.setAlpha(255);
-                } else {
-                    float maxValue = ((float) getContainerViewHeight()) / 4.0f;
-                    this.backgroundDrawable.setAlpha((int) Math.max(127.0f, 255.0f * (1.0f - (Math.min(Math.abs(aty), maxValue) / maxValue))));
-                }
-            }
-            ImageReceiver sideImage = null;
-            if (this.currentEditMode == 0 && this.sendPhotoType != 1) {
-                if (!(this.scale < 1.0f || this.zoomAnimation || this.zooming)) {
-                    if (currentTranslationX > this.maxX + ((float) AndroidUtilities.dp(5.0f))) {
-                        sideImage = this.leftImage;
-                    } else if (currentTranslationX < this.minX - ((float) AndroidUtilities.dp(5.0f))) {
-                        sideImage = this.rightImage;
-                    } else {
-                        this.groupedPhotosListView.setMoveProgress(0.0f);
-                    }
-                }
-                this.changingPage = sideImage != null;
-            }
-            if (sideImage == this.rightImage) {
-                translateX = currentTranslationX;
-                scaleDiff = 0.0f;
-                alpha = 1.0f;
-                if (!this.zoomAnimation && translateX < this.minX) {
-                    alpha = Math.min(1.0f, (this.minX - translateX) / ((float) getContainerViewWidth()));
-                    scaleDiff = (1.0f - alpha) * 0.3f;
-                    translateX = (float) ((-getContainerViewWidth()) - (AndroidUtilities.dp(30.0f) / 2));
-                }
-                if (sideImage.hasBitmapImage()) {
-                    canvas.save();
-                    canvas.translate((float) (getContainerViewWidth() / 2), (float) (getContainerViewHeight() / 2));
-                    canvas.translate(((float) (getContainerViewWidth() + (AndroidUtilities.dp(30.0f) / 2))) + translateX, 0.0f);
-                    canvas.scale(1.0f - scaleDiff, 1.0f - scaleDiff);
-                    bitmapWidth = sideImage.getBitmapWidth();
-                    bitmapHeight = sideImage.getBitmapHeight();
-                    scaleX = ((float) getContainerViewWidth()) / ((float) bitmapWidth);
-                    scaleY = ((float) getContainerViewHeight()) / ((float) bitmapHeight);
-                    if (scaleX > scaleY) {
-                        scale = scaleY;
-                    } else {
-                        scale = scaleX;
-                    }
-                    width = (int) (((float) bitmapWidth) * scale);
-                    height = (int) (((float) bitmapHeight) * scale);
-                    sideImage.setAlpha(alpha);
-                    sideImage.setImageCoords((-width) / 2, (-height) / 2, width, height);
-                    sideImage.draw(canvas);
-                    canvas.restore();
-                }
-                this.groupedPhotosListView.setMoveProgress(-alpha);
-                canvas.save();
-                canvas.translate(translateX, currentTranslationY / currentScale);
-                canvas.translate(((((float) getContainerViewWidth()) * (this.scale + 1.0f)) + ((float) AndroidUtilities.dp(30.0f))) / 2.0f, (-currentTranslationY) / currentScale);
-                this.photoProgressViews[1].setScale(1.0f - scaleDiff);
-                this.photoProgressViews[1].setAlpha(alpha);
-                this.photoProgressViews[1].onDraw(canvas);
-                canvas.restore();
-            }
-            translateX = currentTranslationX;
-            scaleDiff = 0.0f;
-            alpha = 1.0f;
-            if (!this.zoomAnimation && translateX > this.maxX && this.currentEditMode == 0 && this.sendPhotoType != 1) {
-                alpha = Math.min(1.0f, (translateX - this.maxX) / ((float) getContainerViewWidth()));
-                scaleDiff = alpha * 0.3f;
-                alpha = 1.0f - alpha;
-                translateX = this.maxX;
-            }
-            boolean drawTextureView = this.aspectRatioFrameLayout != null && this.aspectRatioFrameLayout.getVisibility() == 0;
-            if (this.centerImage.hasBitmapImage() || (drawTextureView && this.textureUploaded)) {
-                canvas.save();
-                canvas.translate((float) ((getContainerViewWidth() / 2) + getAdditionX()), (float) ((getContainerViewHeight() / 2) + getAdditionY()));
-                canvas.translate(translateX, currentTranslationY);
-                canvas.scale(currentScale - scaleDiff, currentScale - scaleDiff);
-                if (drawTextureView && this.textureUploaded) {
-                    bitmapWidth = this.videoTextureView.getMeasuredWidth();
-                    bitmapHeight = this.videoTextureView.getMeasuredHeight();
-                } else {
-                    bitmapWidth = this.centerImage.getBitmapWidth();
-                    bitmapHeight = this.centerImage.getBitmapHeight();
-                }
-                scaleX = ((float) getContainerViewWidth()) / ((float) bitmapWidth);
-                scaleY = ((float) getContainerViewHeight()) / ((float) bitmapHeight);
-                if (scaleX > scaleY) {
-                    scale = scaleY;
-                } else {
-                    scale = scaleX;
-                }
-                width = (int) (((float) bitmapWidth) * scale);
-                height = (int) (((float) bitmapHeight) * scale);
-                if (!(drawTextureView && this.textureUploaded && this.videoCrossfadeStarted && this.videoCrossfadeAlpha == 1.0f)) {
-                    this.centerImage.setAlpha(alpha);
-                    this.centerImage.setImageCoords((-width) / 2, (-height) / 2, width, height);
-                    this.centerImage.draw(canvas);
-                }
-                if (drawTextureView) {
-                    scaleX = ((float) canvas.getWidth()) / ((float) bitmapWidth);
-                    scaleY = ((float) canvas.getHeight()) / ((float) bitmapHeight);
-                    if (scaleX > scaleY) {
-                        scale = scaleY;
-                    } else {
-                        scale = scaleX;
-                    }
-                    height = (int) (((float) bitmapHeight) * scale);
-                    if (!this.videoCrossfadeStarted && this.textureUploaded) {
-                        this.videoCrossfadeStarted = true;
-                        this.videoCrossfadeAlpha = 0.0f;
-                        this.videoCrossfadeAlphaLastTime = System.currentTimeMillis();
-                    }
-                    canvas.translate((float) ((-width) / 2), (float) ((-height) / 2));
-                    this.videoTextureView.setAlpha(this.videoCrossfadeAlpha * alpha);
-                    this.aspectRatioFrameLayout.draw(canvas);
-                    if (this.videoCrossfadeStarted && this.videoCrossfadeAlpha < 1.0f) {
-                        long newUpdateTime = System.currentTimeMillis();
-                        long dt = newUpdateTime - this.videoCrossfadeAlphaLastTime;
-                        this.videoCrossfadeAlphaLastTime = newUpdateTime;
-                        this.videoCrossfadeAlpha = (((float) dt) / (this.playerInjected ? 100.0f : 200.0f)) + this.videoCrossfadeAlpha;
-                        this.containerView.invalidate();
-                        if (this.videoCrossfadeAlpha > 1.0f) {
-                            this.videoCrossfadeAlpha = 1.0f;
-                        }
-                    }
-                }
-                canvas.restore();
-            }
-            if (this.isCurrentVideo) {
-                drawProgress = this.progressView.getVisibility() != 0 && (this.videoPlayer == null || !this.videoPlayer.isPlaying());
-            } else {
-                drawProgress = (drawTextureView || this.videoPlayerControlFrameLayout.getVisibility() == 0) ? false : true;
-                if (!(!drawProgress || this.currentAnimation == null || this.currentAnimation.isLoadingStream())) {
-                    drawProgress = false;
-                }
-            }
-            if (drawProgress) {
-                canvas.save();
-                canvas.translate(translateX, currentTranslationY / currentScale);
-                this.photoProgressViews[0].setScale(1.0f - scaleDiff);
-                this.photoProgressViews[0].setAlpha(alpha);
-                this.photoProgressViews[0].onDraw(canvas);
-                canvas.restore();
-            }
-            if (!this.pipAnimationInProgress && (this.miniProgressView.getVisibility() == 0 || this.miniProgressAnimator != null)) {
-                canvas.save();
-                canvas.translate(((float) this.miniProgressView.getLeft()) + translateX, ((float) this.miniProgressView.getTop()) + (currentTranslationY / currentScale));
-                this.miniProgressView.draw(canvas);
-                canvas.restore();
-            }
-            if (sideImage == this.leftImage) {
-                if (sideImage.hasBitmapImage()) {
-                    canvas.save();
-                    canvas.translate((float) (getContainerViewWidth() / 2), (float) (getContainerViewHeight() / 2));
-                    canvas.translate(((-((((float) getContainerViewWidth()) * (this.scale + 1.0f)) + ((float) AndroidUtilities.dp(30.0f)))) / 2.0f) + currentTranslationX, 0.0f);
-                    bitmapWidth = sideImage.getBitmapWidth();
-                    bitmapHeight = sideImage.getBitmapHeight();
-                    scaleX = ((float) getContainerViewWidth()) / ((float) bitmapWidth);
-                    scaleY = ((float) getContainerViewHeight()) / ((float) bitmapHeight);
-                    if (scaleX > scaleY) {
-                        scale = scaleY;
-                    } else {
-                        scale = scaleX;
-                    }
-                    width = (int) (((float) bitmapWidth) * scale);
-                    height = (int) (((float) bitmapHeight) * scale);
-                    sideImage.setAlpha(1.0f);
-                    sideImage.setImageCoords((-width) / 2, (-height) / 2, width, height);
-                    sideImage.draw(canvas);
-                    canvas.restore();
-                }
-                this.groupedPhotosListView.setMoveProgress(1.0f - alpha);
-                canvas.save();
-                canvas.translate(currentTranslationX, currentTranslationY / currentScale);
-                canvas.translate((-((((float) getContainerViewWidth()) * (this.scale + 1.0f)) + ((float) AndroidUtilities.dp(30.0f)))) / 2.0f, (-currentTranslationY) / currentScale);
-                this.photoProgressViews[2].setScale(1.0f);
-                this.photoProgressViews[2].setAlpha(1.0f);
-                this.photoProgressViews[2].onDraw(canvas);
-                canvas.restore();
-            }
-            if (this.waitingForDraw != 0) {
-                this.waitingForDraw--;
-                if (this.waitingForDraw == 0) {
-                    if (this.textureImageView != null) {
-                        try {
-                            this.currentBitmap = Bitmaps.createBitmap(this.videoTextureView.getWidth(), this.videoTextureView.getHeight(), Config.ARGB_8888);
-                            this.changedTextureView.getBitmap(this.currentBitmap);
-                        } catch (Throwable e) {
-                            if (this.currentBitmap != null) {
-                                this.currentBitmap.recycle();
-                                this.currentBitmap = null;
-                            }
-                            FileLog.e(e);
-                        }
-                        if (this.currentBitmap != null) {
-                            this.textureImageView.setVisibility(0);
-                            this.textureImageView.setImageBitmap(this.currentBitmap);
-                        } else {
-                            this.textureImageView.setImageDrawable(null);
-                        }
-                    }
-                    this.pipVideoView.close();
-                    this.pipVideoView = null;
-                } else {
-                    this.containerView.invalidate();
-                }
-            }
-            if (this.padImageForHorizontalInsets) {
-                canvas.restore();
-            }
-            if (this.aspectRatioFrameLayout != null && this.videoForwardDrawable.isAnimating()) {
-                int h = ((int) (((float) this.aspectRatioFrameLayout.getMeasuredHeight()) * (this.scale - 1.0f))) / 2;
-                this.videoForwardDrawable.setBounds(this.aspectRatioFrameLayout.getLeft(), (this.aspectRatioFrameLayout.getTop() - h) + ((int) (currentTranslationY / currentScale)), this.aspectRatioFrameLayout.getRight(), (this.aspectRatioFrameLayout.getBottom() + h) + ((int) (currentTranslationY / currentScale)));
-                this.videoForwardDrawable.draw(canvas);
-            }
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:92:0x01a7  */
+    /* JADX WARNING: Removed duplicated region for block: B:91:0x01a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:105:0x01e7  */
+    /* JADX WARNING: Removed duplicated region for block: B:193:0x0406  */
+    /* JADX WARNING: Removed duplicated region for block: B:203:0x045f  */
+    /* JADX WARNING: Removed duplicated region for block: B:213:0x0518  */
+    /* JADX WARNING: Removed duplicated region for block: B:233:0x0579  */
+    /* JADX WARNING: Removed duplicated region for block: B:193:0x0406  */
+    /* JADX WARNING: Removed duplicated region for block: B:203:0x045f  */
+    /* JADX WARNING: Removed duplicated region for block: B:213:0x0518  */
+    /* JADX WARNING: Removed duplicated region for block: B:233:0x0579  */
+    /* JADX WARNING: Removed duplicated region for block: B:241:? A:{SYNTHETIC, RETURN, SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:236:0x0580  */
+    /* JADX WARNING: Removed duplicated region for block: B:140:0x0324  */
+    /* JADX WARNING: Removed duplicated region for block: B:152:0x035a  */
+    /* JADX WARNING: Removed duplicated region for block: B:181:0x03ea  */
+    /* JADX WARNING: Removed duplicated region for block: B:174:0x03d6  */
+    /* JADX WARNING: Removed duplicated region for block: B:193:0x0406  */
+    /* JADX WARNING: Removed duplicated region for block: B:203:0x045f  */
+    /* JADX WARNING: Removed duplicated region for block: B:213:0x0518  */
+    /* JADX WARNING: Removed duplicated region for block: B:233:0x0579  */
+    /* JADX WARNING: Removed duplicated region for block: B:236:0x0580  */
+    /* JADX WARNING: Removed duplicated region for block: B:241:? A:{SYNTHETIC, RETURN, SKIP} */
+    /* JADX WARNING: Missing block: B:190:0x0401, code skipped:
+            if (r5.isLoadingStream() == false) goto L_0x0403;
+     */
+    @android.annotation.SuppressLint({"NewApi", "DrawAllocation"})
+    private void onDraw(android.graphics.Canvas r21) {
+        /*
+        r20 = this;
+        r1 = r20;
+        r2 = r21;
+        r0 = r1.animationInProgress;
+        r3 = 1;
+        if (r0 == r3) goto L_0x05c1;
+    L_0x0009:
+        r4 = r1.isVisible;
+        r5 = 2;
+        if (r4 != 0) goto L_0x0016;
+    L_0x000e:
+        if (r0 == r5) goto L_0x0016;
+    L_0x0010:
+        r0 = r1.pipAnimationInProgress;
+        if (r0 != 0) goto L_0x0016;
+    L_0x0014:
+        goto L_0x05c1;
+    L_0x0016:
+        r0 = r1.padImageForHorizontalInsets;
+        r4 = 0;
+        if (r0 == 0) goto L_0x002d;
+    L_0x001b:
+        r21.save();
+        r0 = r20.getLeftInset();
+        r0 = r0 / r5;
+        r6 = r20.getRightInset();
+        r6 = r6 / r5;
+        r0 = r0 - r6;
+        r0 = (float) r0;
+        r2.translate(r0, r4);
+    L_0x002d:
+        r0 = r1.imageMoveAnimation;
+        r6 = -NUM; // 0xffffffffbvar_ float:-1.0 double:NaN;
+        r7 = 0;
+        r8 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        if (r0 == 0) goto L_0x0076;
+    L_0x0036:
+        r0 = r1.scroller;
+        r0 = r0.isFinished();
+        if (r0 != 0) goto L_0x0043;
+    L_0x003e:
+        r0 = r1.scroller;
+        r0.abortAnimation();
+    L_0x0043:
+        r0 = r1.scale;
+        r9 = r1.animateToScale;
+        r10 = r9 - r0;
+        r11 = r1.animationValue;
+        r10 = r10 * r11;
+        r10 = r10 + r0;
+        r12 = r1.translationX;
+        r13 = r1.animateToX;
+        r13 = r13 - r12;
+        r13 = r13 * r11;
+        r13 = r13 + r12;
+        r14 = r1.translationY;
+        r15 = r1.animateToY;
+        r15 = r15 - r14;
+        r15 = r15 * r11;
+        r11 = r14 + r15;
+        r9 = (r9 > r8 ? 1 : (r9 == r8 ? 0 : -1));
+        if (r9 != 0) goto L_0x006d;
+    L_0x0063:
+        r0 = (r0 > r8 ? 1 : (r0 == r8 ? 0 : -1));
+        if (r0 != 0) goto L_0x006d;
+    L_0x0067:
+        r0 = (r12 > r4 ? 1 : (r12 == r4 ? 0 : -1));
+        if (r0 != 0) goto L_0x006d;
+    L_0x006b:
+        r0 = r11;
+        goto L_0x006f;
+    L_0x006d:
+        r0 = -NUM; // 0xffffffffbvar_ float:-1.0 double:NaN;
+    L_0x006f:
+        r9 = r1.containerView;
+        r9.invalidate();
+        goto L_0x011a;
+    L_0x0076:
+        r9 = r1.animationStartTime;
+        r11 = 0;
+        r0 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1));
+        if (r0 == 0) goto L_0x0093;
+    L_0x007e:
+        r0 = r1.animateToX;
+        r1.translationX = r0;
+        r0 = r1.animateToY;
+        r1.translationY = r0;
+        r0 = r1.animateToScale;
+        r1.scale = r0;
+        r1.animationStartTime = r11;
+        r0 = r1.scale;
+        r1.updateMinMax(r0);
+        r1.zoomAnimation = r7;
+    L_0x0093:
+        r0 = r1.scroller;
+        r0 = r0.isFinished();
+        if (r0 != 0) goto L_0x00ee;
+    L_0x009b:
+        r0 = r1.scroller;
+        r0 = r0.computeScrollOffset();
+        if (r0 == 0) goto L_0x00ee;
+    L_0x00a3:
+        r0 = r1.scroller;
+        r0 = r0.getStartX();
+        r0 = (float) r0;
+        r9 = r1.maxX;
+        r0 = (r0 > r9 ? 1 : (r0 == r9 ? 0 : -1));
+        if (r0 >= 0) goto L_0x00c6;
+    L_0x00b0:
+        r0 = r1.scroller;
+        r0 = r0.getStartX();
+        r0 = (float) r0;
+        r9 = r1.minX;
+        r0 = (r0 > r9 ? 1 : (r0 == r9 ? 0 : -1));
+        if (r0 <= 0) goto L_0x00c6;
+    L_0x00bd:
+        r0 = r1.scroller;
+        r0 = r0.getCurrX();
+        r0 = (float) r0;
+        r1.translationX = r0;
+    L_0x00c6:
+        r0 = r1.scroller;
+        r0 = r0.getStartY();
+        r0 = (float) r0;
+        r9 = r1.maxY;
+        r0 = (r0 > r9 ? 1 : (r0 == r9 ? 0 : -1));
+        if (r0 >= 0) goto L_0x00e9;
+    L_0x00d3:
+        r0 = r1.scroller;
+        r0 = r0.getStartY();
+        r0 = (float) r0;
+        r9 = r1.minY;
+        r0 = (r0 > r9 ? 1 : (r0 == r9 ? 0 : -1));
+        if (r0 <= 0) goto L_0x00e9;
+    L_0x00e0:
+        r0 = r1.scroller;
+        r0 = r0.getCurrY();
+        r0 = (float) r0;
+        r1.translationY = r0;
+    L_0x00e9:
+        r0 = r1.containerView;
+        r0.invalidate();
+    L_0x00ee:
+        r0 = r1.switchImageAfterAnimation;
+        if (r0 == 0) goto L_0x010b;
+    L_0x00f2:
+        r1.openedFullScreenVideo = r7;
+        if (r0 != r3) goto L_0x00ff;
+    L_0x00f6:
+        r0 = new org.telegram.ui.-$$Lambda$PhotoViewer$gYyANufSpmThxLWs9CMz0i1DuDE;
+        r0.<init>(r1);
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r0);
+        goto L_0x0109;
+    L_0x00ff:
+        if (r0 != r5) goto L_0x0109;
+    L_0x0101:
+        r0 = new org.telegram.ui.-$$Lambda$PhotoViewer$C7KcRvYbXzUEDYfyS8Y8Do1EYMA;
+        r0.<init>(r1);
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r0);
+    L_0x0109:
+        r1.switchImageAfterAnimation = r7;
+    L_0x010b:
+        r10 = r1.scale;
+        r0 = r1.translationY;
+        r13 = r1.translationX;
+        r9 = r1.moving;
+        if (r9 != 0) goto L_0x0117;
+    L_0x0115:
+        r11 = r0;
+        goto L_0x011a;
+    L_0x0117:
+        r11 = r0;
+        r0 = -NUM; // 0xffffffffbvar_ float:-1.0 double:NaN;
+    L_0x011a:
+        r9 = r1.animationInProgress;
+        if (r9 == r5) goto L_0x0167;
+    L_0x011e:
+        r9 = r1.pipAnimationInProgress;
+        if (r9 != 0) goto L_0x0167;
+    L_0x0122:
+        r9 = r1.isInline;
+        if (r9 != 0) goto L_0x0167;
+    L_0x0126:
+        r9 = r1.currentEditMode;
+        if (r9 != 0) goto L_0x0160;
+    L_0x012a:
+        r9 = r1.sendPhotoType;
+        if (r9 == r3) goto L_0x0160;
+    L_0x012e:
+        r9 = r1.scale;
+        r9 = (r9 > r8 ? 1 : (r9 == r8 ? 0 : -1));
+        if (r9 != 0) goto L_0x0160;
+    L_0x0134:
+        r6 = (r0 > r6 ? 1 : (r0 == r6 ? 0 : -1));
+        if (r6 == 0) goto L_0x0160;
+    L_0x0138:
+        r6 = r1.zoomAnimation;
+        if (r6 != 0) goto L_0x0160;
+    L_0x013c:
+        r6 = r20.getContainerViewHeight();
+        r6 = (float) r6;
+        r9 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
+        r6 = r6 / r9;
+        r9 = r1.backgroundDrawable;
+        r12 = NUM; // 0x42fe0000 float:127.0 double:5.553013277E-315;
+        r14 = NUM; // 0x437var_ float:255.0 double:5.5947823E-315;
+        r0 = java.lang.Math.abs(r0);
+        r0 = java.lang.Math.min(r0, r6);
+        r0 = r0 / r6;
+        r0 = r8 - r0;
+        r0 = r0 * r14;
+        r0 = java.lang.Math.max(r12, r0);
+        r0 = (int) r0;
+        r9.setAlpha(r0);
+        goto L_0x0167;
+    L_0x0160:
+        r0 = r1.backgroundDrawable;
+        r6 = 255; // 0xff float:3.57E-43 double:1.26E-321;
+        r0.setAlpha(r6);
+    L_0x0167:
+        r0 = r1.currentEditMode;
+        if (r0 != 0) goto L_0x01ab;
+    L_0x016b:
+        r0 = r1.sendPhotoType;
+        if (r0 == r3) goto L_0x01ab;
+    L_0x016f:
+        r0 = r1.scale;
+        r0 = (r0 > r8 ? 1 : (r0 == r8 ? 0 : -1));
+        if (r0 < 0) goto L_0x01a2;
+    L_0x0175:
+        r0 = r1.zoomAnimation;
+        if (r0 != 0) goto L_0x01a2;
+    L_0x0179:
+        r0 = r1.zooming;
+        if (r0 != 0) goto L_0x01a2;
+    L_0x017d:
+        r0 = r1.maxX;
+        r9 = NUM; // 0x40a00000 float:5.0 double:5.356796015E-315;
+        r12 = org.telegram.messenger.AndroidUtilities.dp(r9);
+        r12 = (float) r12;
+        r0 = r0 + r12;
+        r0 = (r13 > r0 ? 1 : (r13 == r0 ? 0 : -1));
+        if (r0 <= 0) goto L_0x018e;
+    L_0x018b:
+        r0 = r1.leftImage;
+        goto L_0x01a3;
+    L_0x018e:
+        r0 = r1.minX;
+        r9 = org.telegram.messenger.AndroidUtilities.dp(r9);
+        r9 = (float) r9;
+        r0 = r0 - r9;
+        r0 = (r13 > r0 ? 1 : (r13 == r0 ? 0 : -1));
+        if (r0 >= 0) goto L_0x019d;
+    L_0x019a:
+        r0 = r1.rightImage;
+        goto L_0x01a3;
+    L_0x019d:
+        r0 = r1.groupedPhotosListView;
+        r0.setMoveProgress(r4);
+    L_0x01a2:
+        r0 = 0;
+    L_0x01a3:
+        if (r0 == 0) goto L_0x01a7;
+    L_0x01a5:
+        r9 = 1;
+        goto L_0x01a8;
+    L_0x01a7:
+        r9 = 0;
+    L_0x01a8:
+        r1.changingPage = r9;
+        goto L_0x01ac;
+    L_0x01ab:
+        r0 = 0;
+    L_0x01ac:
+        r9 = r1.rightImage;
+        r12 = NUM; // 0x3e99999a float:0.3 double:5.188942835E-315;
+        r15 = NUM; // 0x41var_ float:30.0 double:5.465589745E-315;
+        if (r0 != r9) goto L_0x0282;
+    L_0x01b5:
+        r9 = r1.zoomAnimation;
+        if (r9 != 0) goto L_0x01dd;
+    L_0x01b9:
+        r9 = r1.minX;
+        r16 = (r13 > r9 ? 1 : (r13 == r9 ? 0 : -1));
+        if (r16 >= 0) goto L_0x01dd;
+    L_0x01bf:
+        r9 = r9 - r13;
+        r6 = r20.getContainerViewWidth();
+        r6 = (float) r6;
+        r9 = r9 / r6;
+        r6 = java.lang.Math.min(r8, r9);
+        r9 = r8 - r6;
+        r9 = r9 * r12;
+        r7 = r20.getContainerViewWidth();
+        r7 = -r7;
+        r17 = org.telegram.messenger.AndroidUtilities.dp(r15);
+        r17 = r17 / 2;
+        r7 = r7 - r17;
+        r7 = (float) r7;
+        goto L_0x01e1;
+    L_0x01dd:
+        r7 = r13;
+        r6 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r9 = 0;
+    L_0x01e1:
+        r17 = r0.hasBitmapImage();
+        if (r17 == 0) goto L_0x0241;
+    L_0x01e7:
+        r21.save();
+        r17 = r20.getContainerViewWidth();
+        r12 = r17 / 2;
+        r12 = (float) r12;
+        r17 = r20.getContainerViewHeight();
+        r3 = r17 / 2;
+        r3 = (float) r3;
+        r2.translate(r12, r3);
+        r3 = r20.getContainerViewWidth();
+        r12 = org.telegram.messenger.AndroidUtilities.dp(r15);
+        r12 = r12 / r5;
+        r3 = r3 + r12;
+        r3 = (float) r3;
+        r3 = r3 + r7;
+        r2.translate(r3, r4);
+        r3 = r8 - r9;
+        r2.scale(r3, r3);
+        r3 = r0.getBitmapWidth();
+        r12 = r0.getBitmapHeight();
+        r4 = r20.getContainerViewWidth();
+        r4 = (float) r4;
+        r3 = (float) r3;
+        r4 = r4 / r3;
+        r14 = r20.getContainerViewHeight();
+        r14 = (float) r14;
+        r12 = (float) r12;
+        r14 = r14 / r12;
+        r18 = (r4 > r14 ? 1 : (r4 == r14 ? 0 : -1));
+        if (r18 <= 0) goto L_0x022a;
+    L_0x0229:
+        goto L_0x022b;
+    L_0x022a:
+        r14 = r4;
+    L_0x022b:
+        r3 = r3 * r14;
+        r3 = (int) r3;
+        r12 = r12 * r14;
+        r4 = (int) r12;
+        r0.setAlpha(r6);
+        r12 = -r3;
+        r12 = r12 / r5;
+        r14 = -r4;
+        r14 = r14 / r5;
+        r0.setImageCoords(r12, r14, r3, r4);
+        r0.draw(r2);
+        r21.restore();
+    L_0x0241:
+        r3 = r1.groupedPhotosListView;
+        r4 = -r6;
+        r3.setMoveProgress(r4);
+        r21.save();
+        r3 = r11 / r10;
+        r2.translate(r7, r3);
+        r3 = r20.getContainerViewWidth();
+        r3 = (float) r3;
+        r4 = r1.scale;
+        r4 = r4 + r8;
+        r3 = r3 * r4;
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r15);
+        r4 = (float) r4;
+        r3 = r3 + r4;
+        r4 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+        r3 = r3 / r4;
+        r4 = -r11;
+        r4 = r4 / r10;
+        r2.translate(r3, r4);
+        r3 = r1.photoProgressViews;
+        r4 = 1;
+        r3 = r3[r4];
+        r7 = r8 - r9;
+        r3.setScale(r7);
+        r3 = r1.photoProgressViews;
+        r3 = r3[r4];
+        r3.setAlpha(r6);
+        r3 = r1.photoProgressViews;
+        r3 = r3[r4];
+        r3.onDraw(r2);
+        r21.restore();
+    L_0x0282:
+        r3 = r1.zoomAnimation;
+        if (r3 != 0) goto L_0x02ab;
+    L_0x0286:
+        r3 = r1.maxX;
+        r4 = (r13 > r3 ? 1 : (r13 == r3 ? 0 : -1));
+        if (r4 <= 0) goto L_0x02ab;
+    L_0x028c:
+        r4 = r1.currentEditMode;
+        if (r4 != 0) goto L_0x02ab;
+    L_0x0290:
+        r4 = r1.sendPhotoType;
+        r6 = 1;
+        if (r4 == r6) goto L_0x02ab;
+    L_0x0295:
+        r3 = r13 - r3;
+        r4 = r20.getContainerViewWidth();
+        r4 = (float) r4;
+        r3 = r3 / r4;
+        r3 = java.lang.Math.min(r8, r3);
+        r4 = NUM; // 0x3e99999a float:0.3 double:5.188942835E-315;
+        r4 = r4 * r3;
+        r3 = r8 - r3;
+        r6 = r1.maxX;
+        goto L_0x02af;
+    L_0x02ab:
+        r6 = r13;
+        r3 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r4 = 0;
+    L_0x02af:
+        r7 = r1.aspectRatioFrameLayout;
+        if (r7 == 0) goto L_0x02bb;
+    L_0x02b3:
+        r7 = r7.getVisibility();
+        if (r7 != 0) goto L_0x02bb;
+    L_0x02b9:
+        r7 = 1;
+        goto L_0x02bc;
+    L_0x02bb:
+        r7 = 0;
+    L_0x02bc:
+        r9 = r1.centerImage;
+        r9 = r9.hasBitmapImage();
+        if (r9 != 0) goto L_0x02cf;
+    L_0x02c4:
+        if (r7 == 0) goto L_0x02cb;
+    L_0x02c6:
+        r9 = r1.textureUploaded;
+        if (r9 == 0) goto L_0x02cb;
+    L_0x02ca:
+        goto L_0x02cf;
+    L_0x02cb:
+        r19 = r13;
+        goto L_0x03d2;
+    L_0x02cf:
+        r21.save();
+        r9 = r20.getContainerViewWidth();
+        r9 = r9 / r5;
+        r12 = r20.getAdditionX();
+        r9 = r9 + r12;
+        r9 = (float) r9;
+        r12 = r20.getContainerViewHeight();
+        r12 = r12 / r5;
+        r14 = r20.getAdditionY();
+        r12 = r12 + r14;
+        r12 = (float) r12;
+        r2.translate(r9, r12);
+        r2.translate(r6, r11);
+        r9 = r10 - r4;
+        r2.scale(r9, r9);
+        if (r7 == 0) goto L_0x0306;
+    L_0x02f5:
+        r9 = r1.textureUploaded;
+        if (r9 == 0) goto L_0x0306;
+    L_0x02f9:
+        r9 = r1.videoTextureView;
+        r9 = r9.getMeasuredWidth();
+        r12 = r1.videoTextureView;
+        r12 = r12.getMeasuredHeight();
+        goto L_0x0312;
+    L_0x0306:
+        r9 = r1.centerImage;
+        r9 = r9.getBitmapWidth();
+        r12 = r1.centerImage;
+        r12 = r12.getBitmapHeight();
+    L_0x0312:
+        r14 = r20.getContainerViewWidth();
+        r14 = (float) r14;
+        r9 = (float) r9;
+        r14 = r14 / r9;
+        r15 = r20.getContainerViewHeight();
+        r15 = (float) r15;
+        r12 = (float) r12;
+        r15 = r15 / r12;
+        r18 = (r14 > r15 ? 1 : (r14 == r15 ? 0 : -1));
+        if (r18 <= 0) goto L_0x0325;
+    L_0x0324:
+        r14 = r15;
+    L_0x0325:
+        r15 = r9 * r14;
+        r15 = (int) r15;
+        r14 = r14 * r12;
+        r14 = (int) r14;
+        if (r7 == 0) goto L_0x033f;
+    L_0x032d:
+        r5 = r1.textureUploaded;
+        if (r5 == 0) goto L_0x033f;
+    L_0x0331:
+        r5 = r1.videoCrossfadeStarted;
+        if (r5 == 0) goto L_0x033f;
+    L_0x0335:
+        r5 = r1.videoCrossfadeAlpha;
+        r5 = (r5 > r8 ? 1 : (r5 == r8 ? 0 : -1));
+        if (r5 == 0) goto L_0x033c;
+    L_0x033b:
+        goto L_0x033f;
+    L_0x033c:
+        r19 = r13;
+        goto L_0x0358;
+    L_0x033f:
+        r5 = r1.centerImage;
+        r5.setAlpha(r3);
+        r5 = r1.centerImage;
+        r8 = -r15;
+        r18 = 2;
+        r8 = r8 / 2;
+        r19 = r13;
+        r13 = -r14;
+        r13 = r13 / 2;
+        r5.setImageCoords(r8, r13, r15, r14);
+        r5 = r1.centerImage;
+        r5.draw(r2);
+    L_0x0358:
+        if (r7 == 0) goto L_0x03cf;
+    L_0x035a:
+        r5 = r21.getWidth();
+        r5 = (float) r5;
+        r5 = r5 / r9;
+        r8 = r21.getHeight();
+        r8 = (float) r8;
+        r8 = r8 / r12;
+        r9 = (r5 > r8 ? 1 : (r5 == r8 ? 0 : -1));
+        if (r9 <= 0) goto L_0x036b;
+    L_0x036a:
+        r5 = r8;
+    L_0x036b:
+        r12 = r12 * r5;
+        r5 = (int) r12;
+        r8 = r1.videoCrossfadeStarted;
+        if (r8 != 0) goto L_0x0382;
+    L_0x0372:
+        r8 = r1.textureUploaded;
+        if (r8 == 0) goto L_0x0382;
+    L_0x0376:
+        r8 = 1;
+        r1.videoCrossfadeStarted = r8;
+        r8 = 0;
+        r1.videoCrossfadeAlpha = r8;
+        r8 = java.lang.System.currentTimeMillis();
+        r1.videoCrossfadeAlphaLastTime = r8;
+    L_0x0382:
+        r8 = -r15;
+        r9 = 2;
+        r8 = r8 / r9;
+        r8 = (float) r8;
+        r5 = -r5;
+        r5 = r5 / r9;
+        r5 = (float) r5;
+        r2.translate(r8, r5);
+        r5 = r1.videoTextureView;
+        r8 = r1.videoCrossfadeAlpha;
+        r8 = r8 * r3;
+        r5.setAlpha(r8);
+        r5 = r1.aspectRatioFrameLayout;
+        r5.draw(r2);
+        r5 = r1.videoCrossfadeStarted;
+        if (r5 == 0) goto L_0x03cf;
+    L_0x039e:
+        r5 = r1.videoCrossfadeAlpha;
+        r8 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r5 = (r5 > r8 ? 1 : (r5 == r8 ? 0 : -1));
+        if (r5 >= 0) goto L_0x03cf;
+    L_0x03a6:
+        r8 = java.lang.System.currentTimeMillis();
+        r12 = r1.videoCrossfadeAlphaLastTime;
+        r12 = r8 - r12;
+        r1.videoCrossfadeAlphaLastTime = r8;
+        r5 = r1.videoCrossfadeAlpha;
+        r8 = (float) r12;
+        r9 = r1.playerInjected;
+        if (r9 == 0) goto L_0x03ba;
+    L_0x03b7:
+        r9 = NUM; // 0x42CLASSNAME float:100.0 double:5.53552857E-315;
+        goto L_0x03bc;
+    L_0x03ba:
+        r9 = NUM; // 0x43480000 float:200.0 double:5.5769738E-315;
+    L_0x03bc:
+        r8 = r8 / r9;
+        r5 = r5 + r8;
+        r1.videoCrossfadeAlpha = r5;
+        r5 = r1.containerView;
+        r5.invalidate();
+        r5 = r1.videoCrossfadeAlpha;
+        r8 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r5 = (r5 > r8 ? 1 : (r5 == r8 ? 0 : -1));
+        if (r5 <= 0) goto L_0x03cf;
+    L_0x03cd:
+        r1.videoCrossfadeAlpha = r8;
+    L_0x03cf:
+        r21.restore();
+    L_0x03d2:
+        r5 = r1.isCurrentVideo;
+        if (r5 == 0) goto L_0x03ea;
+    L_0x03d6:
+        r5 = r1.progressView;
+        r5 = r5.getVisibility();
+        if (r5 == 0) goto L_0x0403;
+    L_0x03de:
+        r5 = r1.videoPlayer;
+        if (r5 == 0) goto L_0x03e8;
+    L_0x03e2:
+        r5 = r5.isPlaying();
+        if (r5 != 0) goto L_0x0403;
+    L_0x03e8:
+        r7 = 1;
+        goto L_0x0404;
+    L_0x03ea:
+        if (r7 != 0) goto L_0x03f6;
+    L_0x03ec:
+        r5 = r1.videoPlayerControlFrameLayout;
+        r5 = r5.getVisibility();
+        if (r5 == 0) goto L_0x03f6;
+    L_0x03f4:
+        r7 = 1;
+        goto L_0x03f7;
+    L_0x03f6:
+        r7 = 0;
+    L_0x03f7:
+        if (r7 == 0) goto L_0x0404;
+    L_0x03f9:
+        r5 = r1.currentAnimation;
+        if (r5 == 0) goto L_0x0404;
+    L_0x03fd:
+        r5 = r5.isLoadingStream();
+        if (r5 != 0) goto L_0x0404;
+    L_0x0403:
+        r7 = 0;
+    L_0x0404:
+        if (r7 == 0) goto L_0x042b;
+    L_0x0406:
+        r21.save();
+        r5 = r11 / r10;
+        r2.translate(r6, r5);
+        r5 = r1.photoProgressViews;
+        r7 = 0;
+        r5 = r5[r7];
+        r8 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r4 = r8 - r4;
+        r5.setScale(r4);
+        r4 = r1.photoProgressViews;
+        r4 = r4[r7];
+        r4.setAlpha(r3);
+        r4 = r1.photoProgressViews;
+        r4 = r4[r7];
+        r4.onDraw(r2);
+        r21.restore();
+    L_0x042b:
+        r4 = r1.pipAnimationInProgress;
+        if (r4 != 0) goto L_0x045b;
+    L_0x042f:
+        r4 = r1.miniProgressView;
+        r4 = r4.getVisibility();
+        if (r4 == 0) goto L_0x043b;
+    L_0x0437:
+        r4 = r1.miniProgressAnimator;
+        if (r4 == 0) goto L_0x045b;
+    L_0x043b:
+        r21.save();
+        r4 = r1.miniProgressView;
+        r4 = r4.getLeft();
+        r4 = (float) r4;
+        r4 = r4 + r6;
+        r5 = r1.miniProgressView;
+        r5 = r5.getTop();
+        r5 = (float) r5;
+        r6 = r11 / r10;
+        r5 = r5 + r6;
+        r2.translate(r4, r5);
+        r4 = r1.miniProgressView;
+        r4.draw(r2);
+        r21.restore();
+    L_0x045b:
+        r4 = r1.leftImage;
+        if (r0 != r4) goto L_0x0514;
+    L_0x045f:
+        r4 = r0.hasBitmapImage();
+        if (r4 == 0) goto L_0x04cb;
+    L_0x0465:
+        r21.save();
+        r4 = r20.getContainerViewWidth();
+        r5 = 2;
+        r4 = r4 / r5;
+        r4 = (float) r4;
+        r6 = r20.getContainerViewHeight();
+        r6 = r6 / r5;
+        r5 = (float) r6;
+        r2.translate(r4, r5);
+        r4 = r20.getContainerViewWidth();
+        r4 = (float) r4;
+        r5 = r1.scale;
+        r6 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r5 = r5 + r6;
+        r4 = r4 * r5;
+        r5 = NUM; // 0x41var_ float:30.0 double:5.465589745E-315;
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r5);
+        r5 = (float) r6;
+        r4 = r4 + r5;
+        r4 = -r4;
+        r5 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+        r4 = r4 / r5;
+        r4 = r4 + r19;
+        r5 = 0;
+        r2.translate(r4, r5);
+        r4 = r0.getBitmapWidth();
+        r5 = r0.getBitmapHeight();
+        r6 = r20.getContainerViewWidth();
+        r6 = (float) r6;
+        r4 = (float) r4;
+        r6 = r6 / r4;
+        r7 = r20.getContainerViewHeight();
+        r7 = (float) r7;
+        r5 = (float) r5;
+        r7 = r7 / r5;
+        r8 = (r6 > r7 ? 1 : (r6 == r7 ? 0 : -1));
+        if (r8 <= 0) goto L_0x04b1;
+    L_0x04b0:
+        r6 = r7;
+    L_0x04b1:
+        r4 = r4 * r6;
+        r4 = (int) r4;
+        r5 = r5 * r6;
+        r5 = (int) r5;
+        r6 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r0.setAlpha(r6);
+        r7 = -r4;
+        r8 = 2;
+        r7 = r7 / r8;
+        r9 = -r5;
+        r9 = r9 / r8;
+        r0.setImageCoords(r7, r9, r4, r5);
+        r0.draw(r2);
+        r21.restore();
+        goto L_0x04cd;
+    L_0x04cb:
+        r6 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+    L_0x04cd:
+        r0 = r1.groupedPhotosListView;
+        r8 = r6 - r3;
+        r0.setMoveProgress(r8);
+        r21.save();
+        r0 = r11 / r10;
+        r13 = r19;
+        r2.translate(r13, r0);
+        r0 = r20.getContainerViewWidth();
+        r0 = (float) r0;
+        r3 = r1.scale;
+        r3 = r3 + r6;
+        r0 = r0 * r3;
+        r3 = NUM; // 0x41var_ float:30.0 double:5.465589745E-315;
+        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
+        r3 = (float) r3;
+        r0 = r0 + r3;
+        r0 = -r0;
+        r3 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+        r0 = r0 / r3;
+        r3 = -r11;
+        r3 = r3 / r10;
+        r2.translate(r0, r3);
+        r0 = r1.photoProgressViews;
+        r3 = 2;
+        r0 = r0[r3];
+        r4 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r0.setScale(r4);
+        r0 = r1.photoProgressViews;
+        r0 = r0[r3];
+        r0.setAlpha(r4);
+        r0 = r1.photoProgressViews;
+        r0 = r0[r3];
+        r0.onDraw(r2);
+        r21.restore();
+    L_0x0514:
+        r0 = r1.waitingForDraw;
+        if (r0 == 0) goto L_0x0575;
+    L_0x0518:
+        r3 = 1;
+        r0 = r0 - r3;
+        r1.waitingForDraw = r0;
+        r0 = r1.waitingForDraw;
+        if (r0 != 0) goto L_0x0570;
+    L_0x0520:
+        r0 = r1.textureImageView;
+        if (r0 == 0) goto L_0x0567;
+    L_0x0524:
+        r0 = r1.videoTextureView;	 Catch:{ Throwable -> 0x0540 }
+        r0 = r0.getWidth();	 Catch:{ Throwable -> 0x0540 }
+        r3 = r1.videoTextureView;	 Catch:{ Throwable -> 0x0540 }
+        r3 = r3.getHeight();	 Catch:{ Throwable -> 0x0540 }
+        r4 = android.graphics.Bitmap.Config.ARGB_8888;	 Catch:{ Throwable -> 0x0540 }
+        r0 = org.telegram.messenger.Bitmaps.createBitmap(r0, r3, r4);	 Catch:{ Throwable -> 0x0540 }
+        r1.currentBitmap = r0;	 Catch:{ Throwable -> 0x0540 }
+        r0 = r1.changedTextureView;	 Catch:{ Throwable -> 0x0540 }
+        r3 = r1.currentBitmap;	 Catch:{ Throwable -> 0x0540 }
+        r0.getBitmap(r3);	 Catch:{ Throwable -> 0x0540 }
+        goto L_0x054e;
+    L_0x0540:
+        r0 = move-exception;
+        r3 = r1.currentBitmap;
+        if (r3 == 0) goto L_0x054b;
+    L_0x0545:
+        r3.recycle();
+        r3 = 0;
+        r1.currentBitmap = r3;
+    L_0x054b:
+        org.telegram.messenger.FileLog.e(r0);
+    L_0x054e:
+        r0 = r1.currentBitmap;
+        if (r0 == 0) goto L_0x0560;
+    L_0x0552:
+        r0 = r1.textureImageView;
+        r3 = 0;
+        r0.setVisibility(r3);
+        r0 = r1.textureImageView;
+        r3 = r1.currentBitmap;
+        r0.setImageBitmap(r3);
+        goto L_0x0567;
+    L_0x0560:
+        r0 = r1.textureImageView;
+        r3 = 0;
+        r0.setImageDrawable(r3);
+        goto L_0x0568;
+    L_0x0567:
+        r3 = 0;
+    L_0x0568:
+        r0 = r1.pipVideoView;
+        r0.close();
+        r1.pipVideoView = r3;
+        goto L_0x0575;
+    L_0x0570:
+        r0 = r1.containerView;
+        r0.invalidate();
+    L_0x0575:
+        r0 = r1.padImageForHorizontalInsets;
+        if (r0 == 0) goto L_0x057c;
+    L_0x0579:
+        r21.restore();
+    L_0x057c:
+        r0 = r1.aspectRatioFrameLayout;
+        if (r0 == 0) goto L_0x05c1;
+    L_0x0580:
+        r0 = r1.videoForwardDrawable;
+        r0 = r0.isAnimating();
+        if (r0 == 0) goto L_0x05c1;
+    L_0x0588:
+        r0 = r1.aspectRatioFrameLayout;
+        r0 = r0.getMeasuredHeight();
+        r0 = (float) r0;
+        r3 = r1.scale;
+        r4 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r3 = r3 - r4;
+        r0 = r0 * r3;
+        r0 = (int) r0;
+        r3 = 2;
+        r0 = r0 / r3;
+        r3 = r1.videoForwardDrawable;
+        r4 = r1.aspectRatioFrameLayout;
+        r4 = r4.getLeft();
+        r5 = r1.aspectRatioFrameLayout;
+        r5 = r5.getTop();
+        r5 = r5 - r0;
+        r11 = r11 / r10;
+        r6 = (int) r11;
+        r5 = r5 + r6;
+        r7 = r1.aspectRatioFrameLayout;
+        r7 = r7.getRight();
+        r8 = r1.aspectRatioFrameLayout;
+        r8 = r8.getBottom();
+        r8 = r8 + r0;
+        r8 = r8 + r6;
+        r3.setBounds(r4, r5, r7, r8);
+        r0 = r1.videoForwardDrawable;
+        r0.draw(r2);
+    L_0x05c1:
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.onDraw(android.graphics.Canvas):void");
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$onDraw$46$PhotoViewer() {
+    public /* synthetic */ void lambda$onDraw$46$PhotoViewer() {
         setImageIndex(this.currentIndex + 1, false);
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$onDraw$47$PhotoViewer() {
+    public /* synthetic */ void lambda$onDraw$47$PhotoViewer() {
         setImageIndex(this.currentIndex - 1, false);
     }
 
-    private void onActionClick(boolean download) {
-        if ((this.currentMessageObject != null || this.currentBotInlineResult != null) && this.currentFileNames[0] != null) {
-            Uri uri = null;
-            File file = null;
-            this.isStreaming = false;
-            if (this.currentMessageObject != null) {
-                if (!(this.currentMessageObject.messageOwner.attachPath == null || this.currentMessageObject.messageOwner.attachPath.length() == 0)) {
-                    file = new File(this.currentMessageObject.messageOwner.attachPath);
-                    if (!file.exists()) {
-                        file = null;
-                    }
-                }
-                if (file == null) {
-                    file = FileLoader.getPathToMessage(this.currentMessageObject.messageOwner);
-                    if (!file.exists()) {
-                        file = null;
-                        if (SharedConfig.streamMedia && ((int) this.currentMessageObject.getDialogId()) != 0 && this.currentMessageObject.isVideo() && this.currentMessageObject.canStreamVideo()) {
-                            try {
-                                byte[] bArr;
-                                int reference = FileLoader.getInstance(this.currentMessageObject.currentAccount).getFileReference(this.currentMessageObject);
-                                FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, 1, 0);
-                                Document document = this.currentMessageObject.getDocument();
-                                StringBuilder append = new StringBuilder().append("?account=").append(this.currentMessageObject.currentAccount).append("&id=").append(document.id).append("&hash=").append(document.access_hash).append("&dc=").append(document.dc_id).append("&size=").append(document.size).append("&mime=").append(URLEncoder.encode(document.mime_type, "UTF-8")).append("&rid=").append(reference).append("&name=").append(URLEncoder.encode(FileLoader.getDocumentFileName(document), "UTF-8")).append("&reference=");
-                                if (document.file_reference != null) {
-                                    bArr = document.file_reference;
-                                } else {
-                                    bArr = new byte[0];
-                                }
-                                uri = Uri.parse("tg://" + this.currentMessageObject.getFileName() + append.append(Utilities.bytesToHex(bArr)).toString());
-                                this.isStreaming = true;
-                                checkProgress(0, false);
-                            } catch (Exception e) {
-                            }
-                        }
-                    }
-                }
-            } else if (this.currentBotInlineResult != null) {
-                if (this.currentBotInlineResult.document != null) {
-                    file = FileLoader.getPathToAttach(this.currentBotInlineResult.document);
-                    if (!file.exists()) {
-                        file = null;
-                    }
-                } else if (this.currentBotInlineResult.content instanceof TL_webDocument) {
-                    file = new File(FileLoader.getDirectory(4), Utilities.MD5(this.currentBotInlineResult.content.url) + "." + ImageLoader.getHttpUrlExtension(this.currentBotInlineResult.content.url, "mp4"));
-                    if (!file.exists()) {
-                        file = null;
-                    }
-                }
-            }
-            if (file != null && uri == null) {
-                uri = Uri.fromFile(file);
-            }
-            if (uri == null) {
-                if (download) {
-                    if (this.currentMessageObject != null) {
-                        if (FileLoader.getInstance(this.currentAccount).isLoadingFile(this.currentFileNames[0])) {
-                            FileLoader.getInstance(this.currentAccount).cancelLoadFile(this.currentMessageObject.getDocument());
-                        } else {
-                            FileLoader.getInstance(this.currentAccount).loadFile(this.currentMessageObject.getDocument(), this.currentMessageObject, 1, 0);
-                        }
-                    } else if (this.currentBotInlineResult != null) {
-                        if (this.currentBotInlineResult.document != null) {
-                            if (FileLoader.getInstance(this.currentAccount).isLoadingFile(this.currentFileNames[0])) {
-                                FileLoader.getInstance(this.currentAccount).cancelLoadFile(this.currentBotInlineResult.document);
-                            } else {
-                                FileLoader.getInstance(this.currentAccount).loadFile(this.currentBotInlineResult.document, this.currentMessageObject, 1, 0);
-                            }
-                        } else if (this.currentBotInlineResult.content instanceof TL_webDocument) {
-                            if (ImageLoader.getInstance().isLoadingHttpFile(this.currentBotInlineResult.content.url)) {
-                                ImageLoader.getInstance().cancelLoadHttpFile(this.currentBotInlineResult.content.url);
-                            } else {
-                                ImageLoader.getInstance().loadHttpFile(this.currentBotInlineResult.content.url, "mp4", this.currentAccount);
-                            }
-                        }
-                    }
-                    Drawable drawable = this.centerImage.getStaticThumb();
-                    if (drawable instanceof OtherDocumentPlaceholderDrawable) {
-                        ((OtherDocumentPlaceholderDrawable) drawable).checkFileExist();
-                    }
-                }
-            } else if (this.sharedMediaType != 1 || this.currentMessageObject.canPreviewDocument()) {
-                preparePlayer(uri, true, false);
-            } else {
-                AndroidUtilities.openDocument(this.currentMessageObject, this.parentActivity, null);
-            }
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:80:0x023e  */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x018c  */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x018c  */
+    /* JADX WARNING: Removed duplicated region for block: B:80:0x023e  */
+    /* JADX WARNING: Removed duplicated region for block: B:80:0x023e  */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x018c  */
+    /* JADX WARNING: Missing block: B:14:0x0037, code skipped:
+            if (r1.exists() == false) goto L_0x0039;
+     */
+    /* JADX WARNING: Missing block: B:46:0x013f, code skipped:
+            if (r0.exists() == false) goto L_0x0180;
+     */
+    /* JADX WARNING: Missing block: B:50:0x017e, code skipped:
+            if (r0.exists() == false) goto L_0x0180;
+     */
+    private void onActionClick(boolean r11) {
+        /*
+        r10 = this;
+        r0 = "UTF-8";
+        r1 = r10.currentMessageObject;
+        if (r1 != 0) goto L_0x000a;
+    L_0x0006:
+        r1 = r10.currentBotInlineResult;
+        if (r1 == 0) goto L_0x0011;
+    L_0x000a:
+        r1 = r10.currentFileNames;
+        r2 = 0;
+        r1 = r1[r2];
+        if (r1 != 0) goto L_0x0012;
+    L_0x0011:
+        return;
+    L_0x0012:
+        r10.isStreaming = r2;
+        r1 = r10.currentMessageObject;
+        r3 = "mp4";
+        r4 = 1;
+        r5 = 0;
+        if (r1 == 0) goto L_0x012f;
+    L_0x001c:
+        r1 = r1.messageOwner;
+        r1 = r1.attachPath;
+        if (r1 == 0) goto L_0x0039;
+    L_0x0022:
+        r1 = r1.length();
+        if (r1 == 0) goto L_0x0039;
+    L_0x0028:
+        r1 = new java.io.File;
+        r6 = r10.currentMessageObject;
+        r6 = r6.messageOwner;
+        r6 = r6.attachPath;
+        r1.<init>(r6);
+        r6 = r1.exists();
+        if (r6 != 0) goto L_0x003a;
+    L_0x0039:
+        r1 = r5;
+    L_0x003a:
+        if (r1 != 0) goto L_0x012c;
+    L_0x003c:
+        r1 = r10.currentMessageObject;
+        r1 = r1.messageOwner;
+        r1 = org.telegram.messenger.FileLoader.getPathToMessage(r1);
+        r6 = r1.exists();
+        if (r6 != 0) goto L_0x012c;
+    L_0x004a:
+        r1 = org.telegram.messenger.SharedConfig.streamMedia;
+        if (r1 == 0) goto L_0x0180;
+    L_0x004e:
+        r1 = r10.currentMessageObject;
+        r6 = r1.getDialogId();
+        r1 = (int) r6;
+        if (r1 == 0) goto L_0x0180;
+    L_0x0057:
+        r1 = r10.currentMessageObject;
+        r1 = r1.isVideo();
+        if (r1 == 0) goto L_0x0180;
+    L_0x005f:
+        r1 = r10.currentMessageObject;
+        r1 = r1.canStreamVideo();
+        if (r1 == 0) goto L_0x0180;
+    L_0x0067:
+        r1 = r10.currentMessageObject;	 Catch:{ Exception -> 0x0128 }
+        r1 = r1.currentAccount;	 Catch:{ Exception -> 0x0128 }
+        r1 = org.telegram.messenger.FileLoader.getInstance(r1);	 Catch:{ Exception -> 0x0128 }
+        r6 = r10.currentMessageObject;	 Catch:{ Exception -> 0x0128 }
+        r1 = r1.getFileReference(r6);	 Catch:{ Exception -> 0x0128 }
+        r6 = r10.currentAccount;	 Catch:{ Exception -> 0x0128 }
+        r6 = org.telegram.messenger.FileLoader.getInstance(r6);	 Catch:{ Exception -> 0x0128 }
+        r7 = r10.currentMessageObject;	 Catch:{ Exception -> 0x0128 }
+        r7 = r7.getDocument();	 Catch:{ Exception -> 0x0128 }
+        r8 = r10.currentMessageObject;	 Catch:{ Exception -> 0x0128 }
+        r6.loadFile(r7, r8, r4, r2);	 Catch:{ Exception -> 0x0128 }
+        r6 = r10.currentMessageObject;	 Catch:{ Exception -> 0x0128 }
+        r6 = r6.getDocument();	 Catch:{ Exception -> 0x0128 }
+        r7 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0128 }
+        r7.<init>();	 Catch:{ Exception -> 0x0128 }
+        r8 = "?account=";
+        r7.append(r8);	 Catch:{ Exception -> 0x0128 }
+        r8 = r10.currentMessageObject;	 Catch:{ Exception -> 0x0128 }
+        r8 = r8.currentAccount;	 Catch:{ Exception -> 0x0128 }
+        r7.append(r8);	 Catch:{ Exception -> 0x0128 }
+        r8 = "&id=";
+        r7.append(r8);	 Catch:{ Exception -> 0x0128 }
+        r8 = r6.id;	 Catch:{ Exception -> 0x0128 }
+        r7.append(r8);	 Catch:{ Exception -> 0x0128 }
+        r8 = "&hash=";
+        r7.append(r8);	 Catch:{ Exception -> 0x0128 }
+        r8 = r6.access_hash;	 Catch:{ Exception -> 0x0128 }
+        r7.append(r8);	 Catch:{ Exception -> 0x0128 }
+        r8 = "&dc=";
+        r7.append(r8);	 Catch:{ Exception -> 0x0128 }
+        r8 = r6.dc_id;	 Catch:{ Exception -> 0x0128 }
+        r7.append(r8);	 Catch:{ Exception -> 0x0128 }
+        r8 = "&size=";
+        r7.append(r8);	 Catch:{ Exception -> 0x0128 }
+        r8 = r6.size;	 Catch:{ Exception -> 0x0128 }
+        r7.append(r8);	 Catch:{ Exception -> 0x0128 }
+        r8 = "&mime=";
+        r7.append(r8);	 Catch:{ Exception -> 0x0128 }
+        r8 = r6.mime_type;	 Catch:{ Exception -> 0x0128 }
+        r8 = java.net.URLEncoder.encode(r8, r0);	 Catch:{ Exception -> 0x0128 }
+        r7.append(r8);	 Catch:{ Exception -> 0x0128 }
+        r8 = "&rid=";
+        r7.append(r8);	 Catch:{ Exception -> 0x0128 }
+        r7.append(r1);	 Catch:{ Exception -> 0x0128 }
+        r1 = "&name=";
+        r7.append(r1);	 Catch:{ Exception -> 0x0128 }
+        r1 = org.telegram.messenger.FileLoader.getDocumentFileName(r6);	 Catch:{ Exception -> 0x0128 }
+        r0 = java.net.URLEncoder.encode(r1, r0);	 Catch:{ Exception -> 0x0128 }
+        r7.append(r0);	 Catch:{ Exception -> 0x0128 }
+        r0 = "&reference=";
+        r7.append(r0);	 Catch:{ Exception -> 0x0128 }
+        r0 = r6.file_reference;	 Catch:{ Exception -> 0x0128 }
+        if (r0 == 0) goto L_0x00f7;
+    L_0x00f4:
+        r0 = r6.file_reference;	 Catch:{ Exception -> 0x0128 }
+        goto L_0x00f9;
+    L_0x00f7:
+        r0 = new byte[r2];	 Catch:{ Exception -> 0x0128 }
+    L_0x00f9:
+        r0 = org.telegram.messenger.Utilities.bytesToHex(r0);	 Catch:{ Exception -> 0x0128 }
+        r7.append(r0);	 Catch:{ Exception -> 0x0128 }
+        r0 = r7.toString();	 Catch:{ Exception -> 0x0128 }
+        r1 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0128 }
+        r1.<init>();	 Catch:{ Exception -> 0x0128 }
+        r6 = "tg://";
+        r1.append(r6);	 Catch:{ Exception -> 0x0128 }
+        r6 = r10.currentMessageObject;	 Catch:{ Exception -> 0x0128 }
+        r6 = r6.getFileName();	 Catch:{ Exception -> 0x0128 }
+        r1.append(r6);	 Catch:{ Exception -> 0x0128 }
+        r1.append(r0);	 Catch:{ Exception -> 0x0128 }
+        r0 = r1.toString();	 Catch:{ Exception -> 0x0128 }
+        r0 = android.net.Uri.parse(r0);	 Catch:{ Exception -> 0x0128 }
+        r10.isStreaming = r4;	 Catch:{ Exception -> 0x0129 }
+        r10.checkProgress(r2, r2);	 Catch:{ Exception -> 0x0129 }
+        goto L_0x0129;
+    L_0x0128:
+        r0 = r5;
+    L_0x0129:
+        r1 = r0;
+        r0 = r5;
+        goto L_0x0182;
+    L_0x012c:
+        r0 = r1;
+    L_0x012d:
+        r1 = r5;
+        goto L_0x0182;
+    L_0x012f:
+        r0 = r10.currentBotInlineResult;
+        if (r0 == 0) goto L_0x0180;
+    L_0x0133:
+        r1 = r0.document;
+        if (r1 == 0) goto L_0x0142;
+    L_0x0137:
+        r0 = org.telegram.messenger.FileLoader.getPathToAttach(r1);
+        r1 = r0.exists();
+        if (r1 != 0) goto L_0x012d;
+    L_0x0141:
+        goto L_0x0180;
+    L_0x0142:
+        r0 = r0.content;
+        r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_webDocument;
+        if (r0 == 0) goto L_0x0180;
+    L_0x0148:
+        r0 = new java.io.File;
+        r1 = 4;
+        r1 = org.telegram.messenger.FileLoader.getDirectory(r1);
+        r6 = new java.lang.StringBuilder;
+        r6.<init>();
+        r7 = r10.currentBotInlineResult;
+        r7 = r7.content;
+        r7 = r7.url;
+        r7 = org.telegram.messenger.Utilities.MD5(r7);
+        r6.append(r7);
+        r7 = ".";
+        r6.append(r7);
+        r7 = r10.currentBotInlineResult;
+        r7 = r7.content;
+        r7 = r7.url;
+        r7 = org.telegram.messenger.ImageLoader.getHttpUrlExtension(r7, r3);
+        r6.append(r7);
+        r6 = r6.toString();
+        r0.<init>(r1, r6);
+        r1 = r0.exists();
+        if (r1 != 0) goto L_0x012d;
+    L_0x0180:
+        r0 = r5;
+        r1 = r0;
+    L_0x0182:
+        if (r0 == 0) goto L_0x018a;
+    L_0x0184:
+        if (r1 != 0) goto L_0x018a;
+    L_0x0186:
+        r1 = android.net.Uri.fromFile(r0);
+    L_0x018a:
+        if (r1 != 0) goto L_0x023e;
+    L_0x018c:
+        if (r11 == 0) goto L_0x0255;
+    L_0x018e:
+        r11 = r10.currentMessageObject;
+        if (r11 == 0) goto L_0x01c5;
+    L_0x0192:
+        r11 = r10.currentAccount;
+        r11 = org.telegram.messenger.FileLoader.getInstance(r11);
+        r0 = r10.currentFileNames;
+        r0 = r0[r2];
+        r11 = r11.isLoadingFile(r0);
+        if (r11 != 0) goto L_0x01b5;
+    L_0x01a2:
+        r11 = r10.currentAccount;
+        r11 = org.telegram.messenger.FileLoader.getInstance(r11);
+        r0 = r10.currentMessageObject;
+        r0 = r0.getDocument();
+        r1 = r10.currentMessageObject;
+        r11.loadFile(r0, r1, r4, r2);
+        goto L_0x022e;
+    L_0x01b5:
+        r11 = r10.currentAccount;
+        r11 = org.telegram.messenger.FileLoader.getInstance(r11);
+        r0 = r10.currentMessageObject;
+        r0 = r0.getDocument();
+        r11.cancelLoadFile(r0);
+        goto L_0x022e;
+    L_0x01c5:
+        r11 = r10.currentBotInlineResult;
+        if (r11 == 0) goto L_0x022e;
+    L_0x01c9:
+        r0 = r11.document;
+        if (r0 == 0) goto L_0x01fb;
+    L_0x01cd:
+        r11 = r10.currentAccount;
+        r11 = org.telegram.messenger.FileLoader.getInstance(r11);
+        r0 = r10.currentFileNames;
+        r0 = r0[r2];
+        r11 = r11.isLoadingFile(r0);
+        if (r11 != 0) goto L_0x01ed;
+    L_0x01dd:
+        r11 = r10.currentAccount;
+        r11 = org.telegram.messenger.FileLoader.getInstance(r11);
+        r0 = r10.currentBotInlineResult;
+        r0 = r0.document;
+        r1 = r10.currentMessageObject;
+        r11.loadFile(r0, r1, r4, r2);
+        goto L_0x022e;
+    L_0x01ed:
+        r11 = r10.currentAccount;
+        r11 = org.telegram.messenger.FileLoader.getInstance(r11);
+        r0 = r10.currentBotInlineResult;
+        r0 = r0.document;
+        r11.cancelLoadFile(r0);
+        goto L_0x022e;
+    L_0x01fb:
+        r11 = r11.content;
+        r11 = r11 instanceof org.telegram.tgnet.TLRPC.TL_webDocument;
+        if (r11 == 0) goto L_0x022e;
+    L_0x0201:
+        r11 = org.telegram.messenger.ImageLoader.getInstance();
+        r0 = r10.currentBotInlineResult;
+        r0 = r0.content;
+        r0 = r0.url;
+        r11 = r11.isLoadingHttpFile(r0);
+        if (r11 != 0) goto L_0x0221;
+    L_0x0211:
+        r11 = org.telegram.messenger.ImageLoader.getInstance();
+        r0 = r10.currentBotInlineResult;
+        r0 = r0.content;
+        r0 = r0.url;
+        r1 = r10.currentAccount;
+        r11.loadHttpFile(r0, r3, r1);
+        goto L_0x022e;
+    L_0x0221:
+        r11 = org.telegram.messenger.ImageLoader.getInstance();
+        r0 = r10.currentBotInlineResult;
+        r0 = r0.content;
+        r0 = r0.url;
+        r11.cancelLoadHttpFile(r0);
+    L_0x022e:
+        r11 = r10.centerImage;
+        r11 = r11.getStaticThumb();
+        r0 = r11 instanceof org.telegram.ui.Components.OtherDocumentPlaceholderDrawable;
+        if (r0 == 0) goto L_0x0255;
+    L_0x0238:
+        r11 = (org.telegram.ui.Components.OtherDocumentPlaceholderDrawable) r11;
+        r11.checkFileExist();
+        goto L_0x0255;
+    L_0x023e:
+        r11 = r10.sharedMediaType;
+        if (r11 != r4) goto L_0x0252;
+    L_0x0242:
+        r11 = r10.currentMessageObject;
+        r11 = r11.canPreviewDocument();
+        if (r11 != 0) goto L_0x0252;
+    L_0x024a:
+        r11 = r10.currentMessageObject;
+        r0 = r10.parentActivity;
+        org.telegram.messenger.AndroidUtilities.openDocument(r11, r0, r5);
+        return;
+    L_0x0252:
+        r10.preparePlayer(r1, r4, r2);
+    L_0x0255:
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.onActionClick(boolean):void");
     }
 
-    public boolean onDown(MotionEvent e) {
-        return false;
+    public boolean onSingleTapUp(MotionEvent motionEvent) {
+        return (this.canZoom || this.doubleTapEnabled) ? false : onSingleTapConfirmed(motionEvent);
     }
 
-    public void onShowPress(MotionEvent e) {
-    }
-
-    public boolean onSingleTapUp(MotionEvent e) {
-        if (this.canZoom || this.doubleTapEnabled) {
-            return false;
-        }
-        return onSingleTapConfirmed(e);
-    }
-
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        return false;
-    }
-
-    public void onLongPress(MotionEvent e) {
-    }
-
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent2, float f, float f2) {
         if (this.scale != 1.0f) {
             this.scroller.abortAnimation();
-            this.scroller.fling(Math.round(this.translationX), Math.round(this.translationY), Math.round(velocityX), Math.round(velocityY), (int) this.minX, (int) this.maxX, (int) this.minY, (int) this.maxY);
+            this.scroller.fling(Math.round(this.translationX), Math.round(this.translationY), Math.round(f), Math.round(f2), (int) this.minX, (int) this.maxX, (int) this.minY, (int) this.maxY);
             this.containerView.postInvalidate();
         }
         return false;
     }
 
-    public boolean onSingleTapConfirmed(MotionEvent e) {
-        boolean z = false;
+    public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
         if (this.discardTap) {
             return false;
         }
-        float x;
         float y;
-        int state;
+        float containerViewHeight;
+        int access$11100;
         if (this.containerView.getTag() != null) {
-            boolean drawTextureView;
-            if (this.aspectRatioFrameLayout == null || this.aspectRatioFrameLayout.getVisibility() != 0) {
-                drawTextureView = false;
-            } else {
-                drawTextureView = true;
-            }
-            x = e.getX();
-            y = e.getY();
-            if (this.sharedMediaType != 1 || this.currentMessageObject == null) {
-                if (!(this.photoProgressViews[0] == null || this.containerView == null || drawTextureView)) {
-                    state = this.photoProgressViews[0].backgroundState;
-                    if (state > 0 && state <= 3 && x >= ((float) (getContainerViewWidth() - AndroidUtilities.dp(100.0f))) / 2.0f && x <= ((float) (getContainerViewWidth() + AndroidUtilities.dp(100.0f))) / 2.0f && y >= ((float) (getContainerViewHeight() - AndroidUtilities.dp(100.0f))) / 2.0f && y <= ((float) (getContainerViewHeight() + AndroidUtilities.dp(100.0f))) / 2.0f) {
-                        onActionClick(true);
-                        checkProgress(0, true);
-                        return true;
+            AspectRatioFrameLayout aspectRatioFrameLayout = this.aspectRatioFrameLayout;
+            Object obj = (aspectRatioFrameLayout == null || aspectRatioFrameLayout.getVisibility() != 0) ? null : 1;
+            float x = motionEvent.getX();
+            y = motionEvent.getY();
+            if (this.sharedMediaType == 1) {
+                MessageObject messageObject = this.currentMessageObject;
+                if (messageObject != null) {
+                    if (!messageObject.canPreviewDocument()) {
+                        containerViewHeight = ((float) (getContainerViewHeight() - AndroidUtilities.dp(360.0f))) / 2.0f;
+                        if (y >= containerViewHeight && y <= containerViewHeight + ((float) AndroidUtilities.dp(360.0f))) {
+                            onActionClick(true);
+                            return true;
+                        }
                     }
+                    toggleActionBar(this.isActionBarVisible ^ 1, true);
                 }
-            } else if (!this.currentMessageObject.canPreviewDocument()) {
-                float vy = ((float) (getContainerViewHeight() - AndroidUtilities.dp(360.0f))) / 2.0f;
-                if (y >= vy && y <= ((float) AndroidUtilities.dp(360.0f)) + vy) {
+            }
+            PhotoProgressView[] photoProgressViewArr = this.photoProgressViews;
+            if (!(photoProgressViewArr[0] == null || this.containerView == null || obj != null)) {
+                access$11100 = photoProgressViewArr[0].backgroundState;
+                if (access$11100 > 0 && access$11100 <= 3 && x >= ((float) (getContainerViewWidth() - AndroidUtilities.dp(100.0f))) / 2.0f && x <= ((float) (getContainerViewWidth() + AndroidUtilities.dp(100.0f))) / 2.0f && y >= ((float) (getContainerViewHeight() - AndroidUtilities.dp(100.0f))) / 2.0f && y <= ((float) (getContainerViewHeight() + AndroidUtilities.dp(100.0f))) / 2.0f) {
                     onActionClick(true);
+                    checkProgress(0, true);
                     return true;
                 }
             }
-            if (!this.isActionBarVisible) {
-                z = true;
-            }
-            toggleActionBar(z, true);
-            return true;
-        } else if (this.sendPhotoType == 0 || this.sendPhotoType == 4) {
-            if (this.isCurrentVideo) {
-                this.videoPlayButton.callOnClick();
-                return true;
-            }
-            this.checkImageView.performClick();
-            return true;
-        } else if (this.currentBotInlineResult != null && (this.currentBotInlineResult.type.equals("video") || MessageObject.isVideoDocument(this.currentBotInlineResult.document))) {
-            state = this.photoProgressViews[0].backgroundState;
-            if (state <= 0 || state > 3) {
-                return true;
-            }
-            x = e.getX();
-            y = e.getY();
-            if (x < ((float) (getContainerViewWidth() - AndroidUtilities.dp(100.0f))) / 2.0f || x > ((float) (getContainerViewWidth() + AndroidUtilities.dp(100.0f))) / 2.0f || y < ((float) (getContainerViewHeight() - AndroidUtilities.dp(100.0f))) / 2.0f || y > ((float) (getContainerViewHeight() + AndroidUtilities.dp(100.0f))) / 2.0f) {
-                return true;
-            }
-            onActionClick(true);
-            checkProgress(0, true);
-            return true;
-        } else if (this.sendPhotoType != 2 || !this.isCurrentVideo) {
-            return true;
+            toggleActionBar(this.isActionBarVisible ^ 1, true);
         } else {
-            this.videoPlayButton.callOnClick();
-            return true;
+            access$11100 = this.sendPhotoType;
+            if (access$11100 != 0 && access$11100 != 4) {
+                BotInlineResult botInlineResult = this.currentBotInlineResult;
+                if (botInlineResult != null && (botInlineResult.type.equals("video") || MessageObject.isVideoDocument(this.currentBotInlineResult.document))) {
+                    access$11100 = this.photoProgressViews[0].backgroundState;
+                    if (access$11100 > 0 && access$11100 <= 3) {
+                        containerViewHeight = motionEvent.getX();
+                        y = motionEvent.getY();
+                        if (containerViewHeight >= ((float) (getContainerViewWidth() - AndroidUtilities.dp(100.0f))) / 2.0f && containerViewHeight <= ((float) (getContainerViewWidth() + AndroidUtilities.dp(100.0f))) / 2.0f && y >= ((float) (getContainerViewHeight() - AndroidUtilities.dp(100.0f))) / 2.0f && y <= ((float) (getContainerViewHeight() + AndroidUtilities.dp(100.0f))) / 2.0f) {
+                            onActionClick(true);
+                            checkProgress(0, true);
+                            return true;
+                        }
+                    }
+                } else if (this.sendPhotoType == 2 && this.isCurrentVideo) {
+                    this.videoPlayButton.callOnClick();
+                }
+            } else if (this.isCurrentVideo) {
+                this.videoPlayButton.callOnClick();
+            } else {
+                this.checkImageView.performClick();
+            }
         }
+        return true;
     }
 
-    public boolean onDoubleTap(MotionEvent e) {
+    public boolean onDoubleTap(MotionEvent motionEvent) {
+        boolean z = false;
+        long j = 0;
         if (this.videoPlayer != null && this.videoPlayerControlFrameLayout.getVisibility() == 0) {
-            long current = this.videoPlayer.getCurrentPosition();
-            long total = this.videoPlayer.getDuration();
-            if (total >= 0 && current >= 0 && total != -9223372036854775807L && current != -9223372036854775807L) {
-                int width = getContainerViewWidth();
-                float x = e.getX();
-                long old = current;
-                if (x >= ((float) ((width / 3) * 2))) {
-                    current += 10000;
-                } else if (x < ((float) (width / 3))) {
-                    current -= 10000;
-                }
-                if (old != current) {
-                    if (current > total) {
-                        current = total;
-                    } else if (current < 0) {
-                        current = 0;
+            long currentPosition = this.videoPlayer.getCurrentPosition();
+            long duration = this.videoPlayer.getDuration();
+            if (duration >= 0 && currentPosition >= 0 && duration != -9223372036854775807L && currentPosition != -9223372036854775807L) {
+                int containerViewWidth = getContainerViewWidth();
+                float x = motionEvent.getX();
+                containerViewWidth /= 3;
+                long j2 = x >= ((float) (containerViewWidth * 2)) ? 10000 + currentPosition : x < ((float) containerViewWidth) ? currentPosition - 10000 : currentPosition;
+                if (currentPosition != j2) {
+                    if (j2 > duration) {
+                        j = duration;
+                    } else if (j2 >= 0) {
+                        j = j2;
                     }
-                    this.videoForwardDrawable.setLeftSide(x < ((float) (width / 3)));
-                    this.videoPlayer.seekTo(current);
+                    VideoForwardDrawable videoForwardDrawable = this.videoForwardDrawable;
+                    if (x < ((float) containerViewWidth)) {
+                        z = true;
+                    }
+                    videoForwardDrawable.setLeftSide(z);
+                    this.videoPlayer.seekTo(j);
                     this.containerView.invalidate();
-                    this.videoPlayerSeekbar.setProgress(((float) current) / ((float) total));
+                    this.videoPlayerSeekbar.setProgress(((float) j) / ((float) duration));
                     this.videoPlayerControlFrameLayout.invalidate();
                     return true;
                 }
             }
         }
-        if (!this.canZoom || (this.scale == 1.0f && (this.translationY != 0.0f || this.translationX != 0.0f))) {
-            return false;
-        }
-        if (this.animationStartTime != 0 || this.animationInProgress != 0) {
+        if (!this.canZoom || ((this.scale == 1.0f && (this.translationY != 0.0f || this.translationX != 0.0f)) || this.animationStartTime != 0 || this.animationInProgress != 0)) {
             return false;
         }
         if (this.scale == 1.0f) {
-            float atx = (e.getX() - ((float) (getContainerViewWidth() / 2))) - (((e.getX() - ((float) (getContainerViewWidth() / 2))) - this.translationX) * (3.0f / this.scale));
-            float aty = (e.getY() - ((float) (getContainerViewHeight() / 2))) - (((e.getY() - ((float) (getContainerViewHeight() / 2))) - this.translationY) * (3.0f / this.scale));
+            float x2 = (motionEvent.getX() - ((float) (getContainerViewWidth() / 2))) - (((motionEvent.getX() - ((float) (getContainerViewWidth() / 2))) - this.translationX) * (3.0f / this.scale));
+            float y = (motionEvent.getY() - ((float) (getContainerViewHeight() / 2))) - (((motionEvent.getY() - ((float) (getContainerViewHeight() / 2))) - this.translationY) * (3.0f / this.scale));
             updateMinMax(3.0f);
-            if (atx < this.minX) {
-                atx = this.minX;
-            } else if (atx > this.maxX) {
-                atx = this.maxX;
+            float f = this.minX;
+            if (x2 >= f) {
+                f = this.maxX;
+                if (x2 <= f) {
+                    f = x2;
+                }
             }
-            if (aty < this.minY) {
-                aty = this.minY;
-            } else if (aty > this.maxY) {
-                aty = this.maxY;
+            x2 = this.minY;
+            if (y >= x2) {
+                x2 = this.maxY;
+                if (y <= x2) {
+                    x2 = y;
+                }
             }
-            animateTo(3.0f, atx, aty, true);
+            animateTo(3.0f, f, x2, true);
         } else {
             animateTo(1.0f, 0.0f, 0.0f, true);
         }
@@ -9688,13 +13207,10 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         return true;
     }
 
-    public boolean onDoubleTapEvent(MotionEvent e) {
-        return false;
-    }
-
     public void updateMuteButton() {
-        if (this.videoPlayer != null) {
-            this.videoPlayer.setMute(this.muteVideo);
+        VideoPlayer videoPlayer = this.videoPlayer;
+        if (videoPlayer != null) {
+            videoPlayer.setMute(this.muteVideo);
         }
         if (this.videoHasAudio) {
             this.muteItem.setEnabled(true);
@@ -9730,48 +13246,62 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         this.muteItem.setAlpha(0.5f);
     }
 
-    private void didChangedCompressionLevel(boolean request) {
-        Editor editor = MessagesController.getGlobalMainSettings().edit();
-        editor.putInt("compress_video2", this.selectedCompression);
-        editor.commit();
+    private void didChangedCompressionLevel(boolean z) {
+        Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putInt("compress_video2", this.selectedCompression);
+        edit.commit();
         updateWidthHeightBitrateForCompression();
         updateVideoInfo();
-        if (request) {
+        if (z) {
             requestVideoPreview(1);
         }
     }
 
     private void updateVideoInfo() {
-        if (this.actionBar != null) {
+        ActionBar actionBar = this.actionBar;
+        if (actionBar != null) {
+            CharSequence charSequence = null;
             if (this.compressionsCount == 0) {
-                this.actionBar.setSubtitle(null);
+                actionBar.setSubtitle(null);
                 return;
             }
-            int width;
-            int height;
-            CharSequence charSequence;
-            if (this.selectedCompression == 0) {
+            int i;
+            int i2;
+            int i3 = this.selectedCompression;
+            if (i3 == 0) {
                 this.compressItem.setImageResource(NUM);
-            } else if (this.selectedCompression == 1) {
+            } else if (i3 == 1) {
                 this.compressItem.setImageResource(NUM);
-            } else if (this.selectedCompression == 2) {
+            } else if (i3 == 2) {
                 this.compressItem.setImageResource(NUM);
-            } else if (this.selectedCompression == 3) {
+            } else if (i3 == 3) {
                 this.compressItem.setImageResource(NUM);
-            } else if (this.selectedCompression == 4) {
+            } else if (i3 == 4) {
                 this.compressItem.setImageResource(NUM);
             }
-            this.compressItem.setContentDescription(LocaleController.getString("AccDescrVideoQuality", NUM) + ", " + new String[]{"240", "360", "480", "720", "1080"}[Math.max(0, this.selectedCompression)]);
+            String[] strArr = new String[]{"240", "360", "480", "720", "1080"};
+            ImageView imageView = this.compressItem;
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(LocaleController.getString("AccDescrVideoQuality", NUM));
+            stringBuilder.append(", ");
+            stringBuilder.append(strArr[Math.max(0, this.selectedCompression)]);
+            imageView.setContentDescription(stringBuilder.toString());
             this.estimatedDuration = (long) Math.ceil((double) ((this.videoTimelineView.getRightProgress() - this.videoTimelineView.getLeftProgress()) * this.videoDuration));
+            int i4;
             if (this.compressItem.getTag() == null || this.selectedCompression == this.compressionsCount - 1) {
-                width = (this.rotationValue == 90 || this.rotationValue == 270) ? this.originalHeight : this.originalWidth;
-                height = (this.rotationValue == 90 || this.rotationValue == 270) ? this.originalWidth : this.originalHeight;
+                i3 = this.rotationValue;
+                i3 = (i3 == 90 || i3 == 270) ? this.originalHeight : this.originalWidth;
+                i4 = this.rotationValue;
+                i = (i4 == 90 || i4 == 270) ? this.originalWidth : this.originalHeight;
                 this.estimatedSize = (int) (((float) this.originalSize) * (((float) this.estimatedDuration) / this.videoDuration));
             } else {
-                width = (this.rotationValue == 90 || this.rotationValue == 270) ? this.resultHeight : this.resultWidth;
-                height = (this.rotationValue == 90 || this.rotationValue == 270) ? this.resultWidth : this.resultHeight;
+                i3 = this.rotationValue;
+                i3 = (i3 == 90 || i3 == 270) ? this.resultHeight : this.resultWidth;
+                i4 = this.rotationValue;
+                i = (i4 == 90 || i4 == 270) ? this.resultWidth : this.resultHeight;
                 this.estimatedSize = (int) (((float) (this.audioFramesSize + this.videoFramesSize)) * (((float) this.estimatedDuration) / this.videoDuration));
-                this.estimatedSize += (this.estimatedSize / 32768) * 16;
+                i2 = this.estimatedSize;
+                this.estimatedSize = i2 + ((i2 / 32768) * 16);
             }
             if (this.videoTimelineView.getLeftProgress() == 0.0f) {
                 this.startTime = -1;
@@ -9783,77 +13313,78 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
             } else {
                 this.endTime = ((long) (this.videoTimelineView.getRightProgress() * this.videoDuration)) * 1000;
             }
-            String videoDimension = String.format("%dx%d", new Object[]{Integer.valueOf(width), Integer.valueOf(height)});
-            int seconds = ((int) Math.ceil((double) (this.estimatedDuration / 1000))) - (((int) ((this.estimatedDuration / 1000) / 60)) * 60);
-            String videoTimeSize = String.format("%d:%02d, ~%s", new Object[]{Integer.valueOf((int) ((this.estimatedDuration / 1000) / 60)), Integer.valueOf(seconds), AndroidUtilities.formatFileSize((long) this.estimatedSize)});
-            this.currentSubtitle = String.format("%s, %s", new Object[]{videoDimension, videoTimeSize});
-            ActionBar actionBar = this.actionBar;
-            if (this.muteVideo) {
-                charSequence = null;
-            } else {
+            String format = String.format("%dx%d", new Object[]{Integer.valueOf(i3), Integer.valueOf(i)});
+            long j = this.estimatedDuration;
+            i2 = ((int) Math.ceil((double) (j / 1000))) - (((int) ((j / 1000) / 60)) * 60);
+            String format2 = String.format("%d:%02d, ~%s", new Object[]{Integer.valueOf(i), Integer.valueOf(i2), AndroidUtilities.formatFileSize((long) this.estimatedSize)});
+            this.currentSubtitle = String.format("%s, %s", new Object[]{format, format2});
+            actionBar = this.actionBar;
+            if (!this.muteVideo) {
                 charSequence = this.currentSubtitle;
             }
             actionBar.setSubtitle(charSequence);
         }
     }
 
-    private void requestVideoPreview(int request) {
+    private void requestVideoPreview(int i) {
         if (this.videoPreviewMessageObject != null) {
             MediaController.getInstance().cancelVideoConvert(this.videoPreviewMessageObject);
         }
-        boolean wasRequestingPreview = this.requestingPreview && !this.tryStartRequestPreviewOnFinish;
+        Object obj = (!this.requestingPreview || this.tryStartRequestPreviewOnFinish) ? null : 1;
         this.requestingPreview = false;
         this.loadInitialVideo = false;
         this.progressView.setVisibility(4);
-        if (request != 1) {
+        if (i != 1) {
             this.tryStartRequestPreviewOnFinish = false;
-            if (request == 2) {
+            if (i == 2) {
                 preparePlayer(this.currentPlayingVideoFile, false, false);
             }
         } else if (this.selectedCompression == this.compressionsCount - 1) {
             this.tryStartRequestPreviewOnFinish = false;
-            if (wasRequestingPreview) {
+            if (obj == null) {
+                preparePlayer(this.currentPlayingVideoFile, false, false);
+            } else {
                 this.progressView.setVisibility(0);
                 this.loadInitialVideo = true;
-            } else {
-                preparePlayer(this.currentPlayingVideoFile, false, false);
             }
         } else {
+            VideoEditedInfo videoEditedInfo;
             this.requestingPreview = true;
             releasePlayer(false);
             if (this.videoPreviewMessageObject == null) {
-                TL_message message = new TL_message();
-                message.id = 0;
-                message.message = "";
-                message.media = new TL_messageMediaEmpty();
-                message.action = new TL_messageActionEmpty();
-                this.videoPreviewMessageObject = new MessageObject(UserConfig.selectedAccount, message, false);
+                TL_message tL_message = new TL_message();
+                tL_message.id = 0;
+                tL_message.message = "";
+                tL_message.media = new TL_messageMediaEmpty();
+                tL_message.action = new TL_messageActionEmpty();
+                this.videoPreviewMessageObject = new MessageObject(UserConfig.selectedAccount, tL_message, false);
                 this.videoPreviewMessageObject.messageOwner.attachPath = new File(FileLoader.getDirectory(4), "video_preview.mp4").getAbsolutePath();
                 this.videoPreviewMessageObject.videoEditedInfo = new VideoEditedInfo();
-                this.videoPreviewMessageObject.videoEditedInfo.rotationValue = this.rotationValue;
-                this.videoPreviewMessageObject.videoEditedInfo.originalWidth = this.originalWidth;
-                this.videoPreviewMessageObject.videoEditedInfo.originalHeight = this.originalHeight;
-                this.videoPreviewMessageObject.videoEditedInfo.framerate = this.videoFramerate;
-                this.videoPreviewMessageObject.videoEditedInfo.originalPath = this.currentPlayingVideoFile.getPath();
+                videoEditedInfo = this.videoPreviewMessageObject.videoEditedInfo;
+                videoEditedInfo.rotationValue = this.rotationValue;
+                videoEditedInfo.originalWidth = this.originalWidth;
+                videoEditedInfo.originalHeight = this.originalHeight;
+                videoEditedInfo.framerate = this.videoFramerate;
+                videoEditedInfo.originalPath = this.currentPlayingVideoFile.getPath();
             }
-            VideoEditedInfo videoEditedInfo = this.videoPreviewMessageObject.videoEditedInfo;
-            long start = this.startTime;
-            videoEditedInfo.startTime = start;
             videoEditedInfo = this.videoPreviewMessageObject.videoEditedInfo;
-            long end = this.endTime;
-            videoEditedInfo.endTime = end;
-            if (start == -1) {
-                start = 0;
+            long j = this.startTime;
+            videoEditedInfo.startTime = j;
+            long j2 = this.endTime;
+            videoEditedInfo.endTime = j2;
+            if (j == -1) {
+                j = 0;
             }
-            if (end == -1) {
-                end = (long) (this.videoDuration * 1000.0f);
+            if (j2 == -1) {
+                j2 = (long) (this.videoDuration * 1000.0f);
             }
-            if (end - start > 5000000) {
-                this.videoPreviewMessageObject.videoEditedInfo.endTime = 5000000 + start;
+            if (j2 - j > 5000000) {
+                this.videoPreviewMessageObject.videoEditedInfo.endTime = j + 5000000;
             }
-            this.videoPreviewMessageObject.videoEditedInfo.bitrate = this.bitrate;
-            this.videoPreviewMessageObject.videoEditedInfo.resultWidth = this.resultWidth;
-            this.videoPreviewMessageObject.videoEditedInfo.resultHeight = this.resultHeight;
+            videoEditedInfo = this.videoPreviewMessageObject.videoEditedInfo;
+            videoEditedInfo.bitrate = this.bitrate;
+            videoEditedInfo.resultWidth = this.resultWidth;
+            videoEditedInfo.resultHeight = this.resultHeight;
             if (!MediaController.getInstance().scheduleVideoConvert(this.videoPreviewMessageObject, true)) {
                 this.tryStartRequestPreviewOnFinish = true;
             }
@@ -9864,102 +13395,96 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
     }
 
     private void updateWidthHeightBitrateForCompression() {
-        if (this.compressionsCount > 0) {
-            if (this.selectedCompression >= this.compressionsCount) {
-                this.selectedCompression = this.compressionsCount - 1;
+        int i = this.compressionsCount;
+        if (i > 0) {
+            if (this.selectedCompression >= i) {
+                this.selectedCompression = i - 1;
             }
-            if (this.selectedCompression != this.compressionsCount - 1) {
-                float maxSize;
-                int targetBitrate;
-                float scale;
-                switch (this.selectedCompression) {
-                    case 0:
-                        maxSize = 426.0f;
-                        targetBitrate = 400000;
-                        break;
-                    case 1:
-                        maxSize = 640.0f;
-                        targetBitrate = 900000;
-                        break;
-                    case 2:
-                        maxSize = 854.0f;
-                        targetBitrate = 1100000;
-                        break;
-                    default:
-                        targetBitrate = 2500000;
-                        maxSize = 1280.0f;
-                        break;
-                }
-                if (this.originalWidth > this.originalHeight) {
-                    scale = maxSize / ((float) this.originalWidth);
+            i = this.selectedCompression;
+            if (i != this.compressionsCount - 1) {
+                float f;
+                if (i == 0) {
+                    f = 426.0f;
+                    i = 400000;
+                } else if (i == 1) {
+                    f = 640.0f;
+                    i = 900000;
+                } else if (i != 2) {
+                    i = 2500000;
+                    f = 1280.0f;
                 } else {
-                    scale = maxSize / ((float) this.originalHeight);
+                    f = 854.0f;
+                    i = 1100000;
                 }
-                this.resultWidth = Math.round((((float) this.originalWidth) * scale) / 2.0f) * 2;
-                this.resultHeight = Math.round((((float) this.originalHeight) * scale) / 2.0f) * 2;
+                int i2 = this.originalWidth;
+                int i3 = this.originalHeight;
+                f /= i2 > i3 ? (float) i2 : (float) i3;
+                this.resultWidth = Math.round((((float) this.originalWidth) * f) / 2.0f) * 2;
+                this.resultHeight = Math.round((((float) this.originalHeight) * f) / 2.0f) * 2;
                 if (this.bitrate != 0) {
-                    this.bitrate = Math.min(targetBitrate, (int) (((float) this.originalBitrate) / scale));
+                    this.bitrate = Math.min(i, (int) (((float) this.originalBitrate) / f));
                     this.videoFramesSize = (long) ((((float) (this.bitrate / 8)) * this.videoDuration) / 1000.0f);
                 }
             }
         }
     }
 
-    private void showQualityView(final boolean show) {
-        if (show) {
+    private void showQualityView(final boolean z) {
+        if (z) {
             this.previousCompression = this.selectedCompression;
         }
-        if (this.qualityChooseViewAnimation != null) {
-            this.qualityChooseViewAnimation.cancel();
+        AnimatorSet animatorSet = this.qualityChooseViewAnimation;
+        if (animatorSet != null) {
+            animatorSet.cancel();
         }
         this.qualityChooseViewAnimation = new AnimatorSet();
-        AnimatorSet animatorSet;
+        AnimatorSet animatorSet2;
         Animator[] animatorArr;
-        if (show) {
+        if (z) {
             this.qualityChooseView.setTag(Integer.valueOf(1));
-            animatorSet = this.qualityChooseViewAnimation;
+            animatorSet2 = this.qualityChooseViewAnimation;
             animatorArr = new Animator[3];
             animatorArr[0] = ObjectAnimator.ofFloat(this.pickerView, View.TRANSLATION_Y, new float[]{0.0f, (float) AndroidUtilities.dp(152.0f)});
             animatorArr[1] = ObjectAnimator.ofFloat(this.pickerViewSendButton, View.TRANSLATION_Y, new float[]{0.0f, (float) AndroidUtilities.dp(152.0f)});
             animatorArr[2] = ObjectAnimator.ofFloat(this.bottomLayout, View.TRANSLATION_Y, new float[]{(float) (-AndroidUtilities.dp(48.0f)), (float) AndroidUtilities.dp(104.0f)});
-            animatorSet.playTogether(animatorArr);
+            animatorSet2.playTogether(animatorArr);
         } else {
             this.qualityChooseView.setTag(null);
-            animatorSet = this.qualityChooseViewAnimation;
+            animatorSet2 = this.qualityChooseViewAnimation;
             animatorArr = new Animator[3];
             animatorArr[0] = ObjectAnimator.ofFloat(this.qualityChooseView, View.TRANSLATION_Y, new float[]{0.0f, (float) AndroidUtilities.dp(166.0f)});
             animatorArr[1] = ObjectAnimator.ofFloat(this.qualityPicker, View.TRANSLATION_Y, new float[]{0.0f, (float) AndroidUtilities.dp(166.0f)});
             animatorArr[2] = ObjectAnimator.ofFloat(this.bottomLayout, View.TRANSLATION_Y, new float[]{(float) (-AndroidUtilities.dp(48.0f)), (float) AndroidUtilities.dp(118.0f)});
-            animatorSet.playTogether(animatorArr);
+            animatorSet2.playTogether(animatorArr);
         }
         this.qualityChooseViewAnimation.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animation) {
-                if (animation.equals(PhotoViewer.this.qualityChooseViewAnimation)) {
+            public void onAnimationEnd(Animator animator) {
+                if (animator.equals(PhotoViewer.this.qualityChooseViewAnimation)) {
                     PhotoViewer.this.qualityChooseViewAnimation = new AnimatorSet();
-                    AnimatorSet access$15800;
+                    AnimatorSet access$15900;
                     Animator[] animatorArr;
-                    if (show) {
+                    if (z) {
                         PhotoViewer.this.qualityChooseView.setVisibility(0);
                         PhotoViewer.this.qualityPicker.setVisibility(0);
-                        access$15800 = PhotoViewer.this.qualityChooseViewAnimation;
+                        access$15900 = PhotoViewer.this.qualityChooseViewAnimation;
                         animatorArr = new Animator[3];
                         animatorArr[0] = ObjectAnimator.ofFloat(PhotoViewer.this.qualityChooseView, View.TRANSLATION_Y, new float[]{0.0f});
                         animatorArr[1] = ObjectAnimator.ofFloat(PhotoViewer.this.qualityPicker, View.TRANSLATION_Y, new float[]{0.0f});
                         animatorArr[2] = ObjectAnimator.ofFloat(PhotoViewer.this.bottomLayout, View.TRANSLATION_Y, new float[]{(float) (-AndroidUtilities.dp(48.0f))});
-                        access$15800.playTogether(animatorArr);
+                        access$15900.playTogether(animatorArr);
                     } else {
                         PhotoViewer.this.qualityChooseView.setVisibility(4);
                         PhotoViewer.this.qualityPicker.setVisibility(4);
-                        access$15800 = PhotoViewer.this.qualityChooseViewAnimation;
+                        access$15900 = PhotoViewer.this.qualityChooseViewAnimation;
                         animatorArr = new Animator[3];
                         animatorArr[0] = ObjectAnimator.ofFloat(PhotoViewer.this.pickerView, View.TRANSLATION_Y, new float[]{0.0f});
                         animatorArr[1] = ObjectAnimator.ofFloat(PhotoViewer.this.pickerViewSendButton, View.TRANSLATION_Y, new float[]{0.0f});
                         animatorArr[2] = ObjectAnimator.ofFloat(PhotoViewer.this.bottomLayout, View.TRANSLATION_Y, new float[]{(float) (-AndroidUtilities.dp(48.0f))});
-                        access$15800.playTogether(animatorArr);
+                        access$15900.playTogether(animatorArr);
                     }
                     PhotoViewer.this.qualityChooseViewAnimation.addListener(new AnimatorListenerAdapter() {
-                        public void onAnimationEnd(Animator animation) {
-                            if (animation.equals(PhotoViewer.this.qualityChooseViewAnimation)) {
+                        public void onAnimationEnd(Animator animator) {
+                            if (animator.equals(PhotoViewer.this.qualityChooseViewAnimation)) {
                                 PhotoViewer.this.qualityChooseViewAnimation = null;
                             }
                         }
@@ -9970,7 +13495,7 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                 }
             }
 
-            public void onAnimationCancel(Animator animation) {
+            public void onAnimationCancel(Animator animator) {
                 PhotoViewer.this.qualityChooseViewAnimation = null;
             }
         });
@@ -9979,68 +13504,77 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         this.qualityChooseViewAnimation.start();
     }
 
-    private ByteArrayInputStream cleanBuffer(byte[] data) {
-        byte[] output = new byte[data.length];
-        int inPos = 0;
-        int outPos = 0;
-        while (inPos < data.length) {
-            if (data[inPos] == (byte) 0 && data[inPos + 1] == (byte) 0 && data[inPos + 2] == (byte) 3) {
-                output[outPos] = (byte) 0;
-                output[outPos + 1] = (byte) 0;
-                inPos += 3;
-                outPos += 2;
+    private ByteArrayInputStream cleanBuffer(byte[] bArr) {
+        byte[] bArr2 = new byte[bArr.length];
+        int i = 0;
+        int i2 = 0;
+        while (i < bArr.length) {
+            if (bArr[i] == (byte) 0 && bArr[i + 1] == (byte) 0 && bArr[i + 2] == (byte) 3) {
+                bArr2[i2] = (byte) 0;
+                bArr2[i2 + 1] = (byte) 0;
+                i += 3;
+                i2 += 2;
             } else {
-                output[outPos] = data[inPos];
-                inPos++;
-                outPos++;
+                bArr2[i2] = bArr[i];
+                i++;
+                i2++;
             }
         }
-        return new ByteArrayInputStream(output, 0, outPos);
+        return new ByteArrayInputStream(bArr2, 0, i2);
     }
 
-    private void processOpenVideo(final String videoPath, boolean muted) {
+    private void processOpenVideo(final String str, boolean z) {
         if (this.currentLoadingVideoRunnable != null) {
             Utilities.globalQueue.cancelRunnable(this.currentLoadingVideoRunnable);
             this.currentLoadingVideoRunnable = null;
         }
         this.videoPreviewMessageObject = null;
         setCompressItemEnabled(false, true);
-        this.muteVideo = muted;
-        this.videoTimelineView.setVideoPath(videoPath);
+        this.muteVideo = z;
+        this.videoTimelineView.setVideoPath(str);
         this.compressionsCount = -1;
         this.rotationValue = 0;
         this.videoFramerate = 25;
-        this.originalSize = new File(videoPath).length();
+        this.originalSize = new File(str).length();
         DispatchQueue dispatchQueue = Utilities.globalQueue;
         AnonymousClass43 anonymousClass43 = new Runnable() {
             public void run() {
                 if (PhotoViewer.this.currentLoadingVideoRunnable == this) {
-                    int[] params = new int[9];
-                    AnimatedFileDrawable.getVideoInfo(videoPath, params);
+                    int[] iArr = new int[9];
+                    AnimatedFileDrawable.getVideoInfo(str, iArr);
                     if (PhotoViewer.this.currentLoadingVideoRunnable == this) {
                         PhotoViewer.this.currentLoadingVideoRunnable = null;
-                        AndroidUtilities.runOnUIThread(new PhotoViewer$43$$Lambda$0(this, params));
+                        AndroidUtilities.runOnUIThread(new -$$Lambda$PhotoViewer$43$-nOxRPCy18s7poWP44IsgujSQ7Q(this, iArr));
                     }
                 }
             }
 
-            /* Access modifiers changed, original: final|synthetic */
-            public final /* synthetic */ void lambda$run$0$PhotoViewer$43(int[] params) {
+            public /* synthetic */ void lambda$run$0$PhotoViewer$43(int[] iArr) {
+                String str = "video/avc";
                 if (PhotoViewer.this.parentActivity != null) {
-                    PhotoViewer.this.videoHasAudio = params[0] != 0;
-                    PhotoViewer.this.audioFramesSize = (long) params[5];
-                    PhotoViewer.this.videoFramesSize = (long) params[6];
-                    PhotoViewer.this.videoDuration = (float) params[4];
-                    PhotoViewer.this.originalBitrate = PhotoViewer.this.bitrate = params[3];
-                    PhotoViewer.this.videoFramerate = params[7];
+                    PhotoViewer.this.videoHasAudio = iArr[0] != 0;
+                    PhotoViewer.this.audioFramesSize = (long) iArr[5];
+                    PhotoViewer.this.videoFramesSize = (long) iArr[6];
+                    PhotoViewer.this.videoDuration = (float) iArr[4];
+                    PhotoViewer photoViewer = PhotoViewer.this;
+                    int i = iArr[3];
+                    photoViewer.bitrate = i;
+                    photoViewer.originalBitrate = i;
+                    PhotoViewer.this.videoFramerate = iArr[7];
                     if (PhotoViewer.this.bitrate > 900000) {
                         PhotoViewer.this.bitrate = 900000;
                     }
                     if (PhotoViewer.this.videoHasAudio) {
-                        boolean z;
-                        PhotoViewer.this.rotationValue = params[8];
-                        PhotoViewer.this.resultWidth = PhotoViewer.this.originalWidth = params[1];
-                        PhotoViewer.this.resultHeight = PhotoViewer.this.originalHeight = params[2];
+                        StringBuilder stringBuilder;
+                        PhotoViewer.this.rotationValue = iArr[8];
+                        photoViewer = PhotoViewer.this;
+                        i = iArr[1];
+                        photoViewer.originalWidth = i;
+                        photoViewer.resultWidth = i;
+                        photoViewer = PhotoViewer.this;
+                        int i2 = iArr[2];
+                        photoViewer.originalHeight = i2;
+                        photoViewer.resultHeight = i2;
                         PhotoViewer.this.selectedCompression = MessagesController.getGlobalMainSettings().getInt("compress_video2", 1);
                         if (PhotoViewer.this.originalWidth > 1280 || PhotoViewer.this.originalHeight > 1280) {
                             PhotoViewer.this.compressionsCount = 5;
@@ -10054,37 +13588,45 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
                             PhotoViewer.this.compressionsCount = 1;
                         }
                         PhotoViewer.this.updateWidthHeightBitrateForCompression();
-                        PhotoViewer photoViewer = PhotoViewer.this;
-                        if (PhotoViewer.this.compressionsCount > 1) {
-                            z = true;
-                        } else {
-                            z = false;
-                        }
-                        photoViewer.setCompressItemEnabled(z, true);
+                        PhotoViewer photoViewer2 = PhotoViewer.this;
+                        photoViewer2.setCompressItemEnabled(photoViewer2.compressionsCount > 1, true);
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.d("compressionsCount = " + PhotoViewer.this.compressionsCount + " w = " + PhotoViewer.this.originalWidth + " h = " + PhotoViewer.this.originalHeight);
+                            stringBuilder = new StringBuilder();
+                            stringBuilder.append("compressionsCount = ");
+                            stringBuilder.append(PhotoViewer.this.compressionsCount);
+                            stringBuilder.append(" w = ");
+                            stringBuilder.append(PhotoViewer.this.originalWidth);
+                            stringBuilder.append(" h = ");
+                            stringBuilder.append(PhotoViewer.this.originalHeight);
+                            FileLog.d(stringBuilder.toString());
                         }
                         if (VERSION.SDK_INT < 18 && PhotoViewer.this.compressItem.getTag() != null) {
                             try {
-                                MediaCodecInfo codecInfo = MediaController.selectCodec("video/avc");
-                                if (codecInfo == null) {
+                                MediaCodecInfo selectCodec = MediaController.selectCodec(str);
+                                if (selectCodec == null) {
                                     if (BuildVars.LOGS_ENABLED) {
                                         FileLog.d("no codec info for video/avc");
                                     }
                                     PhotoViewer.this.setCompressItemEnabled(false, true);
                                 } else {
-                                    String name = codecInfo.getName();
-                                    if (name.equals("OMX.google.h264.encoder") || name.equals("OMX.ST.VFM.H264Enc") || name.equals("OMX.Exynos.avc.enc") || name.equals("OMX.MARVELL.VIDEO.HW.CODA7542ENCODER") || name.equals("OMX.MARVELL.VIDEO.H264ENCODER") || name.equals("OMX.k3.video.encoder.avc") || name.equals("OMX.TI.DUCATI1.VIDEO.H264E")) {
-                                        if (BuildVars.LOGS_ENABLED) {
-                                            FileLog.d("unsupported encoder = " + name);
+                                    String name = selectCodec.getName();
+                                    if (!(name.equals("OMX.google.h264.encoder") || name.equals("OMX.ST.VFM.H264Enc") || name.equals("OMX.Exynos.avc.enc") || name.equals("OMX.MARVELL.VIDEO.HW.CODA7542ENCODER") || name.equals("OMX.MARVELL.VIDEO.H264ENCODER") || name.equals("OMX.k3.video.encoder.avc"))) {
+                                        if (!name.equals("OMX.TI.DUCATI1.VIDEO.H264E")) {
+                                            if (MediaController.selectColorFormat(selectCodec, str) == 0) {
+                                                if (BuildVars.LOGS_ENABLED) {
+                                                    FileLog.d("no color format for video/avc");
+                                                }
+                                                PhotoViewer.this.setCompressItemEnabled(false, true);
+                                            }
                                         }
-                                        PhotoViewer.this.setCompressItemEnabled(false, true);
-                                    } else if (MediaController.selectColorFormat(codecInfo, "video/avc") == 0) {
-                                        if (BuildVars.LOGS_ENABLED) {
-                                            FileLog.d("no color format for video/avc");
-                                        }
-                                        PhotoViewer.this.setCompressItemEnabled(false, true);
                                     }
+                                    if (BuildVars.LOGS_ENABLED) {
+                                        stringBuilder = new StringBuilder();
+                                        stringBuilder.append("unsupported encoder = ");
+                                        stringBuilder.append(name);
+                                        FileLog.d(stringBuilder.toString());
+                                    }
+                                    PhotoViewer.this.setCompressItemEnabled(false, true);
                                 }
                             } catch (Exception e) {
                                 PhotoViewer.this.setCompressItemEnabled(false, true);
@@ -10104,57 +13646,55 @@ public class PhotoViewer implements OnDoubleTapListener, OnGestureListener, Noti
         dispatchQueue.postRunnable(anonymousClass43);
     }
 
-    private void setCompressItemEnabled(boolean enabled, boolean animated) {
-        float f = 1.0f;
-        if (this.compressItem != null) {
-            if (enabled && this.compressItem.getTag() != null) {
-                return;
-            }
-            if (enabled || this.compressItem.getTag() != null) {
-                this.compressItem.setTag(enabled ? Integer.valueOf(1) : null);
-                this.compressItem.setEnabled(enabled);
-                this.compressItem.setClickable(enabled);
-                if (this.compressItemAnimation != null) {
-                    this.compressItemAnimation.cancel();
+    private void setCompressItemEnabled(boolean z, boolean z2) {
+        ImageView imageView = this.compressItem;
+        if (imageView != null) {
+            if ((!z || imageView.getTag() == null) && (z || this.compressItem.getTag() != null)) {
+                this.compressItem.setTag(z ? Integer.valueOf(1) : null);
+                this.compressItem.setEnabled(z);
+                this.compressItem.setClickable(z);
+                AnimatorSet animatorSet = this.compressItemAnimation;
+                if (animatorSet != null) {
+                    animatorSet.cancel();
                     this.compressItemAnimation = null;
                 }
-                if (animated) {
-                    float f2;
+                float f = 1.0f;
+                if (z2) {
                     this.compressItemAnimation = new AnimatorSet();
-                    AnimatorSet animatorSet = this.compressItemAnimation;
+                    AnimatorSet animatorSet2 = this.compressItemAnimation;
                     Animator[] animatorArr = new Animator[1];
-                    ImageView imageView = this.compressItem;
+                    ImageView imageView2 = this.compressItem;
                     Property property = View.ALPHA;
                     float[] fArr = new float[1];
-                    if (enabled) {
-                        f2 = 1.0f;
-                    } else {
-                        f2 = 0.5f;
+                    if (!z) {
+                        f = 0.5f;
                     }
-                    fArr[0] = f2;
-                    animatorArr[0] = ObjectAnimator.ofFloat(imageView, property, fArr);
-                    animatorSet.playTogether(animatorArr);
+                    fArr[0] = f;
+                    animatorArr[0] = ObjectAnimator.ofFloat(imageView2, property, fArr);
+                    animatorSet2.playTogether(animatorArr);
                     this.compressItemAnimation.setDuration(180);
                     this.compressItemAnimation.setInterpolator(decelerateInterpolator);
                     this.compressItemAnimation.start();
-                    return;
+                } else {
+                    ImageView imageView3 = this.compressItem;
+                    if (!z) {
+                        f = 0.5f;
+                    }
+                    imageView3.setAlpha(f);
                 }
-                ImageView imageView2 = this.compressItem;
-                if (!enabled) {
-                    f = 0.5f;
-                }
-                imageView2.setAlpha(f);
             }
         }
     }
 
     private void updateAccessibilityOverlayVisibility() {
         if (this.playButtonAccessibilityOverlay != null) {
-            if (!this.isCurrentVideo || (this.videoPlayer != null && this.videoPlayer.isPlaying())) {
-                this.playButtonAccessibilityOverlay.setVisibility(4);
-            } else {
-                this.playButtonAccessibilityOverlay.setVisibility(0);
+            if (this.isCurrentVideo) {
+                VideoPlayer videoPlayer = this.videoPlayer;
+                if (videoPlayer == null || !videoPlayer.isPlaying()) {
+                    this.playButtonAccessibilityOverlay.setVisibility(0);
+                }
             }
+            this.playButtonAccessibilityOverlay.setVisibility(4);
         }
     }
 }

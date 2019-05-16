@@ -11,30 +11,29 @@ public class MusicPlayerReceiver extends BroadcastReceiver {
             if (intent.getExtras() != null) {
                 KeyEvent keyEvent = (KeyEvent) intent.getExtras().get("android.intent.extra.KEY_EVENT");
                 if (keyEvent != null && keyEvent.getAction() == 0) {
-                    switch (keyEvent.getKeyCode()) {
-                        case 79:
-                        case 85:
-                            if (MediaController.getInstance().isMessagePaused()) {
-                                MediaController.getInstance().playMessage(MediaController.getInstance().getPlayingMessageObject());
-                                return;
-                            } else {
-                                MediaController.getInstance().lambda$startAudioAgain$5$MediaController(MediaController.getInstance().getPlayingMessageObject());
-                                return;
-                            }
-                        case 87:
-                            MediaController.getInstance().playNextMessage();
-                            return;
-                        case 88:
-                            MediaController.getInstance().playPreviousMessage();
-                            return;
-                        case 126:
+                    int keyCode = keyEvent.getKeyCode();
+                    if (keyCode != 79) {
+                        if (keyCode == 126) {
                             MediaController.getInstance().playMessage(MediaController.getInstance().getPlayingMessageObject());
-                            return;
-                        case 127:
+                        } else if (keyCode != 127) {
+                            switch (keyCode) {
+                                case 85:
+                                    break;
+                                case 87:
+                                    MediaController.getInstance().playNextMessage();
+                                    break;
+                                case 88:
+                                    MediaController.getInstance().playPreviousMessage();
+                                    break;
+                            }
+                        } else {
                             MediaController.getInstance().lambda$startAudioAgain$5$MediaController(MediaController.getInstance().getPlayingMessageObject());
-                            return;
-                        default:
-                            return;
+                        }
+                    }
+                    if (MediaController.getInstance().isMessagePaused()) {
+                        MediaController.getInstance().playMessage(MediaController.getInstance().getPlayingMessageObject());
+                    } else {
+                        MediaController.getInstance().lambda$startAudioAgain$5$MediaController(MediaController.getInstance().getPlayingMessageObject());
                     }
                 }
             }

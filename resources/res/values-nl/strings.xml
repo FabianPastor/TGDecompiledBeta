@@ -521,7 +521,6 @@
     <string name="ChannelMembers">Leden</string>
     <string name="ChannelMembersInfo">Alleen kanaal-beheerders zien deze lijst.</string>
     <string name="ChannelMessageAudio">%1$s plaatste een spraakbericht</string>
-    <string name="ChannelMessageContact">%1$s plaatste een contact</string>
     <string name="ChannelMessageDocument">%1$s plaatste een bestand</string>
     <string name="ChannelMessageFew">%1$s plaatste %2$s</string>
     <string name="ChannelMessageGIF">%1$s plaatste een GIF</string>
@@ -530,7 +529,6 @@
     <string name="ChannelMessageMusic">%1$s plaatste een muziekbestand</string>
     <string name="ChannelMessageNoText">%1$s plaatste een bericht</string>
     <string name="ChannelMessagePhoto">%1$s plaatste een foto</string>
-    <string name="ChannelMessagePoll">%1$s heeft een poll geplaatst</string>
     <string name="ChannelMessageRound">%1$s plaatste een videobericht</string>
     <string name="ChannelMessageSticker">%1$s plaatste een sticker</string>
     <string name="ChannelMessageStickerEmoji">%1$s plaatste een %2$s sticker</string>
@@ -1444,8 +1442,6 @@
     <string name="NobodyLikesSpam2">Je kunt momenteel alleen onderlinge contacten aan groepen toevoegen</string>
     <string name="NobodyLikesSpam3">Sorry, je bent momenteel beperkt in het plaatsen van berichten in publieke groepen.</string>
     <string name="NotMounted">Geen opslagmedium gevonden</string>
-    <string name="NotificationActionPinnedContact">%1$s heeft contact vastgezet in de groep %2$s</string>
-    <string name="NotificationActionPinnedContactChannel">%1$s heeft contact vastgezet</string>
     <string name="NotificationActionPinnedFile">%1$s heeft bestand vastgezet in de groep %2$s</string>
     <string name="NotificationActionPinnedFileChannel">%1$s heeft bestand vastgezet</string>
     <string name="NotificationActionPinnedGame">%1$s heeft een spel in de groep %2$s vastgezet</string>
@@ -1464,8 +1460,6 @@
     <string name="NotificationActionPinnedNoTextChannel">%1$s heeft bericht vastgezet</string>
     <string name="NotificationActionPinnedPhoto">%1$s heeft foto vastgezet in de groep %2$s</string>
     <string name="NotificationActionPinnedPhotoChannel">%1$s heeft foto vastgezet</string>
-    <string name="NotificationActionPinnedPoll">%1$s heeft poll vastgezet in de groep %2$s</string>
-    <string name="NotificationActionPinnedPollChannel">%1$s heeft een poll vastgezet</string>
     <string name="NotificationActionPinnedRound">%1$s heeft videobericht vastgezet in de groep %2$s</string>
     <string name="NotificationActionPinnedRoundChannel">%1$s heeft videobericht vastgezet</string>
     <string name="NotificationActionPinnedSticker">%1$s heeft sticker vastgezet in de groep %2$s</string>
@@ -1493,14 +1487,12 @@
     <string name="NotificationInvitedToGroup">%1$s heeft je uitgenodigd voor de groep %2$s</string>
     <string name="NotificationInvitedToGroupByLink">%1$s is nu lid van de groep %2$s via uitnodigingslink</string>
     <string name="NotificationMessageAudio">%1$s heeft je een spraakbericht gestuurd</string>
-    <string name="NotificationMessageContact">%1$s heeft een contact met je gedeeld</string>
     <string name="NotificationMessageDocument">%1$s heeft je een bestand gestuurd</string>
     <string name="NotificationMessageFew">%1$s heeft je %2$s gestuurd</string>
     <string name="NotificationMessageForwardFew">%1$s heeft %2$s naar je doorgestuurd</string>
     <string name="NotificationMessageGame">%1$s wil %2$s met je spelen</string>
     <string name="NotificationMessageGif">%1$s heeft je een GIF gestuurd</string>
     <string name="NotificationMessageGroupAudio">%1$s heeft een spraakbericht gestuurd naar de groep %2$s</string>
-    <string name="NotificationMessageGroupContact">%1$s heeft een contact gedeeld met de groep %2$s</string>
     <string name="NotificationMessageGroupDocument">%1$s heeft een bestand gestuurd naar de groep %2$s</string>
     <string name="NotificationMessageGroupGame">%1$s wil %3$s met de groep %2$s spelen</string>
     <string name="NotificationMessageGroupGif">%1$s heeft een GIF gestuurd naar de groep %2$s</string>
@@ -1510,7 +1502,6 @@
     <string name="NotificationMessageGroupMusic">%1$s heeft een muziekbestand gestuurd naar de groep %2$s</string>
     <string name="NotificationMessageGroupNoText">%1$s heeft een bericht gestuurd naar de groep %2$s</string>
     <string name="NotificationMessageGroupPhoto">%1$s heeft een foto gestuurd naar de groep %2$s</string>
-    <string name="NotificationMessageGroupPoll">%1$s heeft een poll gestuurd naar de groep %2$s</string>
     <string name="NotificationMessageGroupRound">%1$s heeft een videobericht gestuurd naar de groep %2$s</string>
     <string name="NotificationMessageGroupSticker">%1$s heeft een sticker gestuurd naar de groep %2$s</string>
     <string name="NotificationMessageGroupStickerEmoji">%1$s heeft een %3$s sticker gestuurd naar de groep %2$s</string>
@@ -1522,7 +1513,6 @@
     <string name="NotificationMessageMusic">%1$s heeft je een muziekbestand gestuurd</string>
     <string name="NotificationMessageNoText">%1$s heeft je een bericht gestuurd</string>
     <string name="NotificationMessagePhoto">%1$s heeft je een foto gestuurd</string>
-    <string name="NotificationMessagePoll">%1$s heeft je een poll gestuurd</string>
     <string name="NotificationMessageRound">%1$s heeft je een videobericht gestuurd</string>
     <string name="NotificationMessageSDPhoto">%1$s heeft je een zelfvernietigende foto gestuurd</string>
     <string name="NotificationMessageSDVideo">%1$s heeft je een zelfvernietigende video gestuurd</string>
@@ -2600,6 +2590,33 @@
     <string name="YourPasswordSuccess">Gelukt!</string>
     <string name="YourPasswordSuccessText">Je wachtwoord voor twee-staps-verificatie is nu actief.</string>
     <string name="YourPhone">Je telefoon</string>
+    <string name="abc_action_bar_home_description">Navigeren naar startpositie</string>
+    <string name="abc_action_bar_up_description">Omhoog navigeren</string>
+    <string name="abc_action_menu_overflow_description">Meer opties</string>
+    <string name="abc_action_mode_done">Gereed</string>
+    <string name="abc_activity_chooser_view_see_all">Alles weergeven</string>
+    <string name="abc_activitychooserview_choose_application">Een app selecteren</string>
+    <string name="abc_capital_off">UIT</string>
+    <string name="abc_capital_on">AAN</string>
+    <string name="abc_menu_alt_shortcut_label">Alt +</string>
+    <string name="abc_menu_ctrl_shortcut_label">Ctrl +</string>
+    <string name="abc_menu_delete_shortcut_label">verwijderen</string>
+    <string name="abc_menu_enter_shortcut_label">enter</string>
+    <string name="abc_menu_function_shortcut_label">Functie +</string>
+    <string name="abc_menu_meta_shortcut_label">Meta +</string>
+    <string name="abc_menu_shift_shortcut_label">Shift +</string>
+    <string name="abc_menu_space_shortcut_label">spatie</string>
+    <string name="abc_menu_sym_shortcut_label">Sym +</string>
+    <string name="abc_prepend_shortcut_label">Menu +</string>
+    <string name="abc_search_hint">Zoeken…</string>
+    <string name="abc_searchview_description_clear">Zoekopdracht wissen</string>
+    <string name="abc_searchview_description_query">Zoekopdracht</string>
+    <string name="abc_searchview_description_search">Zoeken</string>
+    <string name="abc_searchview_description_submit">Zoekopdracht verzenden</string>
+    <string name="abc_searchview_description_voice">Gesproken zoekopdracht</string>
+    <string name="abc_shareactionprovider_share_with">Delen met</string>
+    <string name="abc_shareactionprovider_share_with_application">Delen met %s</string>
+    <string name="abc_toolbar_collapse_description">Samenvouwen</string>
     <string name="chatDate">d MMMM</string>
     <string name="chatFullDate">d MMMM yyyy</string>
     <string name="common_google_play_services_enable_button">Inschakelen</string>
@@ -2649,6 +2666,7 @@
     <string name="messages_other">%1$d berichten</string>
     <string name="messages_two">%1$d berichten</string>
     <string name="messages_zero">%1$d berichten</string>
+    <string name="search_menu_title">Zoeken</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Kopen met Google</string>
 </resources>

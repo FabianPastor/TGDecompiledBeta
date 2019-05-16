@@ -12,8 +12,18 @@ public class IdenticonDrawable extends Drawable {
     private byte[] data;
     private Paint paint = new Paint();
 
-    private int getBits(int bitOffset) {
-        return (this.data[bitOffset / 8] >> (bitOffset % 8)) & 3;
+    public int getOpacity() {
+        return 0;
+    }
+
+    public void setAlpha(int i) {
+    }
+
+    public void setColorFilter(ColorFilter colorFilter) {
+    }
+
+    private int getBits(int i) {
+        return (this.data[i / 8] >> (i % 8)) & 3;
     }
 
     public void setEncryptedChat(EncryptedChat encryptedChat) {
@@ -26,59 +36,67 @@ public class IdenticonDrawable extends Drawable {
         invalidateSelf();
     }
 
-    public void setColors(int[] value) {
-        if (this.colors.length != 4) {
-            throw new IllegalArgumentException("colors must have length of 4");
+    public void setColors(int[] iArr) {
+        if (this.colors.length == 4) {
+            this.colors = iArr;
+            invalidateSelf();
+            return;
         }
-        this.colors = value;
-        invalidateSelf();
+        throw new IllegalArgumentException("colors must have length of 4");
     }
 
     public void draw(Canvas canvas) {
-        if (this.data != null) {
-            int bitPointer;
-            float rectSize;
-            float xOffset;
-            float yOffset;
-            int iy;
-            int ix;
-            if (this.data.length == 16) {
-                bitPointer = 0;
-                rectSize = (float) Math.floor((double) (((float) Math.min(getBounds().width(), getBounds().height())) / 8.0f));
-                xOffset = Math.max(0.0f, (((float) getBounds().width()) - (8.0f * rectSize)) / 2.0f);
-                yOffset = Math.max(0.0f, (((float) getBounds().height()) - (8.0f * rectSize)) / 2.0f);
-                for (iy = 0; iy < 8; iy++) {
-                    for (ix = 0; ix < 8; ix++) {
-                        int byteValue = getBits(bitPointer);
-                        bitPointer += 2;
-                        this.paint.setColor(this.colors[Math.abs(byteValue) % 4]);
-                        canvas.drawRect(xOffset + (((float) ix) * rectSize), (((float) iy) * rectSize) + yOffset, ((((float) ix) * rectSize) + xOffset) + rectSize, ((((float) iy) * rectSize) + rectSize) + yOffset, this.paint);
+        byte[] bArr = this.data;
+        if (bArr != null) {
+            float floor;
+            float f;
+            float max;
+            int i;
+            int i2;
+            int i3;
+            float f2;
+            float f3;
+            if (bArr.length == 16) {
+                floor = (float) Math.floor((double) (((float) Math.min(getBounds().width(), getBounds().height())) / 8.0f));
+                f = 8.0f * floor;
+                max = Math.max(0.0f, (((float) getBounds().width()) - f) / 2.0f);
+                f = Math.max(0.0f, (((float) getBounds().height()) - f) / 2.0f);
+                i = 0;
+                i2 = 0;
+                while (i < 8) {
+                    i3 = i2;
+                    for (i2 = 0; i2 < 8; i2++) {
+                        int bits = getBits(i3);
+                        i3 += 2;
+                        this.paint.setColor(this.colors[Math.abs(bits) % 4]);
+                        f2 = max + (((float) i2) * floor);
+                        f3 = ((float) i) * floor;
+                        canvas.drawRect(f2, f3 + f, f2 + floor, (f3 + floor) + f, this.paint);
                     }
+                    i++;
+                    i2 = i3;
                 }
-                return;
-            }
-            bitPointer = 0;
-            rectSize = (float) Math.floor((double) (((float) Math.min(getBounds().width(), getBounds().height())) / 12.0f));
-            xOffset = Math.max(0.0f, (((float) getBounds().width()) - (12.0f * rectSize)) / 2.0f);
-            yOffset = Math.max(0.0f, (((float) getBounds().height()) - (12.0f * rectSize)) / 2.0f);
-            for (iy = 0; iy < 12; iy++) {
-                for (ix = 0; ix < 12; ix++) {
-                    this.paint.setColor(this.colors[Math.abs(getBits(bitPointer)) % 4]);
-                    canvas.drawRect(xOffset + (((float) ix) * rectSize), (((float) iy) * rectSize) + yOffset, ((((float) ix) * rectSize) + xOffset) + rectSize, ((((float) iy) * rectSize) + rectSize) + yOffset, this.paint);
-                    bitPointer += 2;
+            } else {
+                floor = (float) Math.floor((double) (((float) Math.min(getBounds().width(), getBounds().height())) / 12.0f));
+                f = 12.0f * floor;
+                max = Math.max(0.0f, (((float) getBounds().width()) - f) / 2.0f);
+                f = Math.max(0.0f, (((float) getBounds().height()) - f) / 2.0f);
+                i = 0;
+                i2 = 0;
+                while (i < 12) {
+                    i3 = i2;
+                    for (i2 = 0; i2 < 12; i2++) {
+                        this.paint.setColor(this.colors[Math.abs(getBits(i3)) % 4]);
+                        f2 = max + (((float) i2) * floor);
+                        f3 = ((float) i) * floor;
+                        canvas.drawRect(f2, f3 + f, f2 + floor, (f3 + floor) + f, this.paint);
+                        i3 += 2;
+                    }
+                    i++;
+                    i2 = i3;
                 }
             }
         }
-    }
-
-    public void setAlpha(int alpha) {
-    }
-
-    public void setColorFilter(ColorFilter cf) {
-    }
-
-    public int getOpacity() {
-        return 0;
     }
 
     public int getIntrinsicWidth() {

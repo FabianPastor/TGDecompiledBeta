@@ -9,18 +9,18 @@ public class CorrectlyMeasuringTextView extends TextView {
         super(context);
     }
 
-    public void onMeasure(int wms, int hms) {
-        super.onMeasure(wms, hms);
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(i, i2);
         try {
-            Layout l = getLayout();
-            if (l.getLineCount() > 1) {
-                int maxw = 0;
-                for (int i = l.getLineCount() - 1; i >= 0; i--) {
-                    maxw = Math.max(maxw, Math.round(l.getPaint().measureText(getText(), l.getLineStart(i), l.getLineEnd(i))));
+            Layout layout = getLayout();
+            if (layout.getLineCount() > 1) {
+                i2 = 0;
+                for (int lineCount = layout.getLineCount() - 1; lineCount >= 0; lineCount--) {
+                    i2 = Math.max(i2, Math.round(layout.getPaint().measureText(getText(), layout.getLineStart(lineCount), layout.getLineEnd(lineCount))));
                 }
-                super.onMeasure(Math.min((getPaddingLeft() + maxw) + getPaddingRight(), getMeasuredWidth()) | NUM, getMeasuredHeight() | NUM);
+                super.onMeasure(Math.min((i2 + getPaddingLeft()) + getPaddingRight(), getMeasuredWidth()) | NUM, NUM | getMeasuredHeight());
             }
-        } catch (Exception e) {
+        } catch (Exception unused) {
         }
     }
 }

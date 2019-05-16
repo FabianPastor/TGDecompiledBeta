@@ -43,8 +43,8 @@ public abstract class OrientationHelper {
 
     public abstract void offsetChildren(int i);
 
-    /* synthetic */ OrientationHelper(LayoutManager x0, AnonymousClass1 x1) {
-        this(x0);
+    /* synthetic */ OrientationHelper(LayoutManager layoutManager, AnonymousClass1 anonymousClass1) {
+        this(layoutManager);
     }
 
     private OrientationHelper(LayoutManager layoutManager) {
@@ -65,15 +65,14 @@ public abstract class OrientationHelper {
         return Integer.MIN_VALUE == this.mLastTotalSpace ? 0 : getTotalSpace() - this.mLastTotalSpace;
     }
 
-    public static OrientationHelper createOrientationHelper(LayoutManager layoutManager, int orientation) {
-        switch (orientation) {
-            case 0:
-                return createHorizontalHelper(layoutManager);
-            case 1:
-                return createVerticalHelper(layoutManager);
-            default:
-                throw new IllegalArgumentException("invalid orientation");
+    public static OrientationHelper createOrientationHelper(LayoutManager layoutManager, int i) {
+        if (i == 0) {
+            return createHorizontalHelper(layoutManager);
         }
+        if (i == 1) {
+            return createVerticalHelper(layoutManager);
+        }
+        throw new IllegalArgumentException("invalid orientation");
     }
 
     public static OrientationHelper createHorizontalHelper(LayoutManager layoutManager) {
@@ -86,8 +85,8 @@ public abstract class OrientationHelper {
                 return this.mLayoutManager.getWidth();
             }
 
-            public void offsetChildren(int amount) {
-                this.mLayoutManager.offsetChildrenHorizontal(amount);
+            public void offsetChildren(int i) {
+                this.mLayoutManager.offsetChildrenHorizontal(i);
             }
 
             public int getStartAfterPadding() {
@@ -95,13 +94,13 @@ public abstract class OrientationHelper {
             }
 
             public int getDecoratedMeasurement(View view) {
-                LayoutParams params = (LayoutParams) view.getLayoutParams();
-                return (this.mLayoutManager.getDecoratedMeasuredWidth(view) + params.leftMargin) + params.rightMargin;
+                LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
+                return (this.mLayoutManager.getDecoratedMeasuredWidth(view) + layoutParams.leftMargin) + layoutParams.rightMargin;
             }
 
             public int getDecoratedMeasurementInOther(View view) {
-                LayoutParams params = (LayoutParams) view.getLayoutParams();
-                return (this.mLayoutManager.getDecoratedMeasuredHeight(view) + params.topMargin) + params.bottomMargin;
+                LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
+                return (this.mLayoutManager.getDecoratedMeasuredHeight(view) + layoutParams.topMargin) + layoutParams.bottomMargin;
             }
 
             public int getDecoratedEnd(View view) {
@@ -126,8 +125,8 @@ public abstract class OrientationHelper {
                 return (this.mLayoutManager.getWidth() - this.mLayoutManager.getPaddingLeft()) - this.mLayoutManager.getPaddingRight();
             }
 
-            public void offsetChild(View view, int offset) {
-                view.offsetLeftAndRight(offset);
+            public void offsetChild(View view, int i) {
+                view.offsetLeftAndRight(i);
             }
 
             public int getEndPadding() {
@@ -154,8 +153,8 @@ public abstract class OrientationHelper {
                 return this.mLayoutManager.getHeight();
             }
 
-            public void offsetChildren(int amount) {
-                this.mLayoutManager.offsetChildrenVertical(amount);
+            public void offsetChildren(int i) {
+                this.mLayoutManager.offsetChildrenVertical(i);
             }
 
             public int getStartAfterPadding() {
@@ -163,13 +162,13 @@ public abstract class OrientationHelper {
             }
 
             public int getDecoratedMeasurement(View view) {
-                LayoutParams params = (LayoutParams) view.getLayoutParams();
-                return (this.mLayoutManager.getDecoratedMeasuredHeight(view) + params.topMargin) + params.bottomMargin;
+                LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
+                return (this.mLayoutManager.getDecoratedMeasuredHeight(view) + layoutParams.topMargin) + layoutParams.bottomMargin;
             }
 
             public int getDecoratedMeasurementInOther(View view) {
-                LayoutParams params = (LayoutParams) view.getLayoutParams();
-                return (this.mLayoutManager.getDecoratedMeasuredWidth(view) + params.leftMargin) + params.rightMargin;
+                LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
+                return (this.mLayoutManager.getDecoratedMeasuredWidth(view) + layoutParams.leftMargin) + layoutParams.rightMargin;
             }
 
             public int getDecoratedEnd(View view) {
@@ -194,8 +193,8 @@ public abstract class OrientationHelper {
                 return (this.mLayoutManager.getHeight() - this.mLayoutManager.getPaddingTop()) - this.mLayoutManager.getPaddingBottom();
             }
 
-            public void offsetChild(View view, int offset) {
-                view.offsetTopAndBottom(offset);
+            public void offsetChild(View view, int i) {
+                view.offsetTopAndBottom(i);
             }
 
             public int getEndPadding() {

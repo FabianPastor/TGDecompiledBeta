@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Build.VERSION;
-import android.support.v4.content.FileProvider;
 import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -21,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import androidx.core.content.FileProvider;
 import java.io.File;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
@@ -53,65 +53,69 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
     private TextView textView;
 
     public BlockingUpdateView(Context context) {
+        Context context2 = context;
         super(context);
         setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-        int top = VERSION.SDK_INT >= 21 ? (int) (((float) AndroidUtilities.statusBarHeight) / AndroidUtilities.density) : 0;
-        FrameLayout view = new FrameLayout(context);
-        view.setBackgroundColor(-11556378);
-        addView(view, new LayoutParams(-1, (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0) + AndroidUtilities.dp(176.0f)));
-        ImageView imageView = new ImageView(context);
+        int i = VERSION.SDK_INT >= 21 ? (int) (((float) AndroidUtilities.statusBarHeight) / AndroidUtilities.density) : 0;
+        FrameLayout frameLayout = new FrameLayout(context2);
+        frameLayout.setBackgroundColor(-11556378);
+        addView(frameLayout, new LayoutParams(-1, AndroidUtilities.dp(176.0f) + (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)));
+        ImageView imageView = new ImageView(context2);
         imageView.setImageResource(NUM);
         imageView.setScaleType(ScaleType.CENTER);
         imageView.setPadding(0, 0, 0, AndroidUtilities.dp(14.0f));
-        view.addView(imageView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, (float) top, 0.0f, 0.0f));
-        imageView.setOnClickListener(new BlockingUpdateView$$Lambda$0(this));
-        ScrollView scrollView = new ScrollView(context);
+        frameLayout.addView(imageView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, (float) i, 0.0f, 0.0f));
+        imageView.setOnClickListener(new -$$Lambda$BlockingUpdateView$ninaHPZEm5ZV8HP69-4gylboxn4(this));
+        ScrollView scrollView = new ScrollView(context2);
         AndroidUtilities.setScrollViewEdgeEffectColor(scrollView, Theme.getColor("actionBarDefault"));
-        addView(scrollView, LayoutHelper.createFrame(-1, -1.0f, 51, 27.0f, (float) (top + 206), 27.0f, 130.0f));
-        FrameLayout container = new FrameLayout(context);
-        scrollView.addView(container, LayoutHelper.createScroll(-1, -2, 17));
-        TextView titleTextView = new TextView(context);
-        titleTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-        titleTextView.setTextSize(1, 20.0f);
-        titleTextView.setGravity(49);
-        titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        titleTextView.setText(LocaleController.getString("UpdateTelegram", NUM));
-        container.addView(titleTextView, LayoutHelper.createFrame(-2, -2, 49));
-        this.textView = new TextView(context);
-        this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        addView(scrollView, LayoutHelper.createFrame(-1, -1.0f, 51, 27.0f, (float) (i + 206), 27.0f, 130.0f));
+        FrameLayout frameLayout2 = new FrameLayout(context2);
+        scrollView.addView(frameLayout2, LayoutHelper.createScroll(-1, -2, 17));
+        TextView textView = new TextView(context2);
+        String str = "windowBackgroundWhiteBlackText";
+        textView.setTextColor(Theme.getColor(str));
+        textView.setTextSize(1, 20.0f);
+        textView.setGravity(49);
+        String str2 = "fonts/rmedium.ttf";
+        textView.setTypeface(AndroidUtilities.getTypeface(str2));
+        textView.setText(LocaleController.getString("UpdateTelegram", NUM));
+        frameLayout2.addView(textView, LayoutHelper.createFrame(-2, -2, 49));
+        this.textView = new TextView(context2);
+        this.textView.setTextColor(Theme.getColor(str));
         this.textView.setLinkTextColor(Theme.getColor("windowBackgroundWhiteLinkText"));
         this.textView.setTextSize(1, 15.0f);
         this.textView.setMovementMethod(new LinkMovementMethodMy());
         this.textView.setGravity(49);
         this.textView.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
-        container.addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, 51, 0.0f, 44.0f, 0.0f, 0.0f));
-        this.acceptButton = new FrameLayout(context);
+        frameLayout2.addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, 51, 0.0f, 44.0f, 0.0f, 0.0f));
+        this.acceptButton = new FrameLayout(context2);
         this.acceptButton.setBackgroundResource(NUM);
         if (VERSION.SDK_INT >= 21) {
-            StateListAnimator animator = new StateListAnimator();
-            animator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.acceptButton, "translationZ", new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
-            animator.addState(new int[0], ObjectAnimator.ofFloat(this.acceptButton, "translationZ", new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
-            this.acceptButton.setStateListAnimator(animator);
+            StateListAnimator stateListAnimator = new StateListAnimator();
+            String str3 = "translationZ";
+            stateListAnimator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.acceptButton, str3, new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
+            stateListAnimator.addState(new int[0], ObjectAnimator.ofFloat(this.acceptButton, str3, new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
+            this.acceptButton.setStateListAnimator(stateListAnimator);
         }
         this.acceptButton.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
         addView(this.acceptButton, LayoutHelper.createFrame(-2, 56.0f, 81, 0.0f, 0.0f, 0.0f, 45.0f));
-        this.acceptButton.setOnClickListener(new BlockingUpdateView$$Lambda$1(this));
-        this.acceptTextView = new TextView(context);
+        this.acceptButton.setOnClickListener(new -$$Lambda$BlockingUpdateView$58XjGl4nF8-_CcazfB65zVJEC_c(this));
+        this.acceptTextView = new TextView(context2);
         this.acceptTextView.setGravity(17);
-        this.acceptTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        this.acceptTextView.setTypeface(AndroidUtilities.getTypeface(str2));
         this.acceptTextView.setTextColor(-1);
         this.acceptTextView.setTextSize(1, 16.0f);
         this.acceptButton.addView(this.acceptTextView, LayoutHelper.createFrame(-2, -2, 17));
-        this.radialProgressView = new FrameLayout(context) {
+        this.radialProgressView = new FrameLayout(context2) {
             /* Access modifiers changed, original: protected */
-            public void onLayout(boolean changed, int left, int top, int right, int bottom) {
-                super.onLayout(changed, left, top, right, bottom);
-                int width = right - left;
-                int height = bottom - top;
-                int w = AndroidUtilities.dp(36.0f);
-                int l = (width - w) / 2;
-                int t = (height - w) / 2;
-                BlockingUpdateView.this.radialProgress.setProgressRect(l, t, l + w, t + w);
+            public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+                super.onLayout(z, i, i2, i3, i4);
+                i3 -= i;
+                i4 -= i2;
+                int dp = AndroidUtilities.dp(36.0f);
+                i3 = (i3 - dp) / 2;
+                i4 = (i4 - dp) / 2;
+                BlockingUpdateView.this.radialProgress.setProgressRect(i3, i4, i3 + dp, dp + i4);
             }
 
             /* Access modifiers changed, original: protected */
@@ -130,8 +134,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         this.acceptButton.addView(this.radialProgressView, LayoutHelper.createFrame(36, 36, 17));
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$new$0$BlockingUpdateView(View v) {
+    public /* synthetic */ void lambda$new$0$BlockingUpdateView(View view) {
         this.pressCount++;
         if (this.pressCount >= 10) {
             setVisibility(8);
@@ -140,47 +143,50 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$new$1$BlockingUpdateView(View view1) {
-        if (!checkApkInstallPermissions(getContext())) {
-            return;
-        }
-        if (this.appUpdate.document instanceof TL_document) {
-            if (!openApkInstall((Activity) getContext(), this.appUpdate.document)) {
-                FileLoader.getInstance(this.accountNum).loadFile(this.appUpdate.document, (Object) "update", 2, 1);
-                showProgress(true);
+    public /* synthetic */ void lambda$new$1$BlockingUpdateView(View view) {
+        if (checkApkInstallPermissions(getContext())) {
+            TL_help_appUpdate tL_help_appUpdate = this.appUpdate;
+            if (tL_help_appUpdate.document instanceof TL_document) {
+                if (!openApkInstall((Activity) getContext(), this.appUpdate.document)) {
+                    FileLoader.getInstance(this.accountNum).loadFile(this.appUpdate.document, "update", 2, 1);
+                    showProgress(true);
+                }
+            } else if (tL_help_appUpdate.url != null) {
+                Browser.openUrl(getContext(), this.appUpdate.url);
             }
-        } else if (this.appUpdate.url != null) {
-            Browser.openUrl(getContext(), this.appUpdate.url);
         }
     }
 
-    public void setVisibility(int visibility) {
-        super.setVisibility(visibility);
-        if (visibility == 8) {
+    public void setVisibility(int i) {
+        super.setVisibility(i);
+        if (i == 8) {
             NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.fileDidLoad);
             NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.fileDidFailedLoad);
             NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.FileLoadProgressChanged);
         }
     }
 
-    public void didReceivedNotification(int id, int account, Object... args) {
-        String location;
-        if (id == NotificationCenter.fileDidLoad) {
-            location = args[0];
-            if (this.fileName != null && this.fileName.equals(location)) {
+    public void didReceivedNotification(int i, int i2, Object... objArr) {
+        String str;
+        String str2;
+        if (i == NotificationCenter.fileDidLoad) {
+            str = (String) objArr[0];
+            str2 = this.fileName;
+            if (str2 != null && str2.equals(str)) {
                 showProgress(false);
                 openApkInstall((Activity) getContext(), this.appUpdate.document);
             }
-        } else if (id == NotificationCenter.fileDidFailedLoad) {
-            location = (String) args[0];
-            if (this.fileName != null && this.fileName.equals(location)) {
+        } else if (i == NotificationCenter.fileDidFailedLoad) {
+            str = (String) objArr[0];
+            str2 = this.fileName;
+            if (str2 != null && str2.equals(str)) {
                 showProgress(false);
             }
-        } else if (id == NotificationCenter.FileLoadProgressChanged) {
-            location = (String) args[0];
-            if (this.fileName != null && this.fileName.equals(location)) {
-                this.radialProgress.setProgress(args[1].floatValue(), true);
+        } else if (i == NotificationCenter.FileLoadProgressChanged) {
+            str = (String) objArr[0];
+            str2 = this.fileName;
+            if (str2 != null && str2.equals(str)) {
+                this.radialProgress.setProgress(((Float) objArr[1]).floatValue(), true);
             }
         }
     }
@@ -192,33 +198,37 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         Builder builder = new Builder(context);
         builder.setTitle(LocaleController.getString("AppName", NUM));
         builder.setMessage(LocaleController.getString("ApkRestricted", NUM));
-        builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", NUM), new BlockingUpdateView$$Lambda$2(context));
+        builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", NUM), new -$$Lambda$BlockingUpdateView$ftz1vauUG0mCLASSNAMEY32crTPmAh74(context));
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
         builder.show();
         return false;
     }
 
-    static final /* synthetic */ void lambda$checkApkInstallPermissions$2$BlockingUpdateView(Context context, DialogInterface dialogInterface, int i) {
+    static /* synthetic */ void lambda$checkApkInstallPermissions$2(Context context, DialogInterface dialogInterface, int i) {
         try {
-            context.startActivity(new Intent("android.settings.MANAGE_UNKNOWN_APP_SOURCES", Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName())));
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("package:");
+            stringBuilder.append(ApplicationLoader.applicationContext.getPackageName());
+            context.startActivity(new Intent("android.settings.MANAGE_UNKNOWN_APP_SOURCES", Uri.parse(stringBuilder.toString())));
         } catch (Exception e) {
             FileLog.e(e);
         }
     }
 
     public static boolean openApkInstall(Activity activity, Document document) {
-        boolean exists = false;
+        boolean z = false;
         try {
-            String fileName = FileLoader.getAttachFileName(document);
-            File f = FileLoader.getPathToAttach(document, true);
-            exists = f.exists();
-            if (exists) {
+            FileLoader.getAttachFileName(document);
+            File pathToAttach = FileLoader.getPathToAttach(document, true);
+            z = pathToAttach.exists();
+            if (z) {
                 Intent intent = new Intent("android.intent.action.VIEW");
                 intent.setFlags(1);
+                String str = "application/vnd.android.package-archive";
                 if (VERSION.SDK_INT >= 24) {
-                    intent.setDataAndType(FileProvider.getUriForFile(activity, "org.telegram.messenger.beta.provider", f), "application/vnd.android.package-archive");
+                    intent.setDataAndType(FileProvider.getUriForFile(activity, "org.telegram.messenger.beta.provider", pathToAttach), str);
                 } else {
-                    intent.setDataAndType(Uri.fromFile(f), "application/vnd.android.package-archive");
+                    intent.setDataAndType(Uri.fromFile(pathToAttach), str);
                 }
                 try {
                     activity.startActivityForResult(intent, 500);
@@ -229,45 +239,48 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         } catch (Exception e2) {
             FileLog.e(e2);
         }
-        return exists;
+        return z;
     }
 
-    private void showProgress(final boolean show) {
-        if (this.progressAnimation != null) {
-            this.progressAnimation.cancel();
+    private void showProgress(boolean z) {
+        final boolean z2 = z;
+        AnimatorSet animatorSet = this.progressAnimation;
+        if (animatorSet != null) {
+            animatorSet.cancel();
         }
         this.progressAnimation = new AnimatorSet();
-        AnimatorSet animatorSet;
-        Animator[] animatorArr;
-        if (show) {
+        String str = "alpha";
+        String str2 = "scaleY";
+        String str3 = "scaleX";
+        if (z2) {
             this.radialProgressView.setVisibility(0);
             this.acceptButton.setEnabled(false);
-            animatorSet = this.progressAnimation;
-            animatorArr = new Animator[6];
-            animatorArr[0] = ObjectAnimator.ofFloat(this.acceptTextView, "scaleX", new float[]{0.1f});
-            animatorArr[1] = ObjectAnimator.ofFloat(this.acceptTextView, "scaleY", new float[]{0.1f});
-            animatorArr[2] = ObjectAnimator.ofFloat(this.acceptTextView, "alpha", new float[]{0.0f});
-            animatorArr[3] = ObjectAnimator.ofFloat(this.radialProgressView, "scaleX", new float[]{1.0f});
-            animatorArr[4] = ObjectAnimator.ofFloat(this.radialProgressView, "scaleY", new float[]{1.0f});
-            animatorArr[5] = ObjectAnimator.ofFloat(this.radialProgressView, "alpha", new float[]{1.0f});
-            animatorSet.playTogether(animatorArr);
+            AnimatorSet animatorSet2 = this.progressAnimation;
+            Animator[] animatorArr = new Animator[6];
+            animatorArr[0] = ObjectAnimator.ofFloat(this.acceptTextView, str3, new float[]{0.1f});
+            animatorArr[1] = ObjectAnimator.ofFloat(this.acceptTextView, str2, new float[]{0.1f});
+            animatorArr[2] = ObjectAnimator.ofFloat(this.acceptTextView, str, new float[]{0.0f});
+            animatorArr[3] = ObjectAnimator.ofFloat(this.radialProgressView, str3, new float[]{1.0f});
+            animatorArr[4] = ObjectAnimator.ofFloat(this.radialProgressView, str2, new float[]{1.0f});
+            animatorArr[5] = ObjectAnimator.ofFloat(this.radialProgressView, str, new float[]{1.0f});
+            animatorSet2.playTogether(animatorArr);
         } else {
             this.acceptTextView.setVisibility(0);
             this.acceptButton.setEnabled(true);
             animatorSet = this.progressAnimation;
-            animatorArr = new Animator[6];
-            animatorArr[0] = ObjectAnimator.ofFloat(this.radialProgressView, "scaleX", new float[]{0.1f});
-            animatorArr[1] = ObjectAnimator.ofFloat(this.radialProgressView, "scaleY", new float[]{0.1f});
-            animatorArr[2] = ObjectAnimator.ofFloat(this.radialProgressView, "alpha", new float[]{0.0f});
-            animatorArr[3] = ObjectAnimator.ofFloat(this.acceptTextView, "scaleX", new float[]{1.0f});
-            animatorArr[4] = ObjectAnimator.ofFloat(this.acceptTextView, "scaleY", new float[]{1.0f});
-            animatorArr[5] = ObjectAnimator.ofFloat(this.acceptTextView, "alpha", new float[]{1.0f});
-            animatorSet.playTogether(animatorArr);
+            Animator[] animatorArr2 = new Animator[6];
+            animatorArr2[0] = ObjectAnimator.ofFloat(this.radialProgressView, str3, new float[]{0.1f});
+            animatorArr2[1] = ObjectAnimator.ofFloat(this.radialProgressView, str2, new float[]{0.1f});
+            animatorArr2[2] = ObjectAnimator.ofFloat(this.radialProgressView, str, new float[]{0.0f});
+            animatorArr2[3] = ObjectAnimator.ofFloat(this.acceptTextView, str3, new float[]{1.0f});
+            animatorArr2[4] = ObjectAnimator.ofFloat(this.acceptTextView, str2, new float[]{1.0f});
+            animatorArr2[5] = ObjectAnimator.ofFloat(this.acceptTextView, str, new float[]{1.0f});
+            animatorSet.playTogether(animatorArr2);
         }
         this.progressAnimation.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animation) {
-                if (BlockingUpdateView.this.progressAnimation != null && BlockingUpdateView.this.progressAnimation.equals(animation)) {
-                    if (show) {
+            public void onAnimationEnd(Animator animator) {
+                if (BlockingUpdateView.this.progressAnimation != null && BlockingUpdateView.this.progressAnimation.equals(animator)) {
+                    if (z2) {
                         BlockingUpdateView.this.acceptTextView.setVisibility(4);
                     } else {
                         BlockingUpdateView.this.radialProgressView.setVisibility(4);
@@ -275,8 +288,8 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
                 }
             }
 
-            public void onAnimationCancel(Animator animation) {
-                if (BlockingUpdateView.this.progressAnimation != null && BlockingUpdateView.this.progressAnimation.equals(animation)) {
+            public void onAnimationCancel(Animator animator) {
+                if (BlockingUpdateView.this.progressAnimation != null && BlockingUpdateView.this.progressAnimation.equals(animator)) {
                     BlockingUpdateView.this.progressAnimation = null;
                 }
             }
@@ -285,23 +298,29 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         this.progressAnimation.start();
     }
 
-    public void show(int account, TL_help_appUpdate update) {
+    public void show(int i, TL_help_appUpdate tL_help_appUpdate) {
         this.pressCount = 0;
-        this.appUpdate = update;
-        this.accountNum = account;
-        if (update.document instanceof TL_document) {
-            this.fileName = FileLoader.getAttachFileName(update.document);
+        this.appUpdate = tL_help_appUpdate;
+        this.accountNum = i;
+        Document document = tL_help_appUpdate.document;
+        if (document instanceof TL_document) {
+            this.fileName = FileLoader.getAttachFileName(document);
         }
         if (getVisibility() != 0) {
             setVisibility(0);
         }
-        SpannableStringBuilder builder = new SpannableStringBuilder(update.text);
-        MessageObject.addEntitiesToText(builder, update.entities, false, 0, false, false, false);
-        this.textView.setText(builder);
-        if (update.document instanceof TL_document) {
-            this.acceptTextView.setText(LocaleController.getString("Update", NUM).toUpperCase() + String.format(Locale.US, " (%1$s)", new Object[]{AndroidUtilities.formatFileSize((long) update.document.size)}));
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(tL_help_appUpdate.text);
+        MessageObject.addEntitiesToText(spannableStringBuilder, tL_help_appUpdate.entities, false, 0, false, false, false);
+        this.textView.setText(spannableStringBuilder);
+        String str = "Update";
+        if (tL_help_appUpdate.document instanceof TL_document) {
+            TextView textView = this.acceptTextView;
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(LocaleController.getString(str, NUM).toUpperCase());
+            stringBuilder.append(String.format(Locale.US, " (%1$s)", new Object[]{AndroidUtilities.formatFileSize((long) tL_help_appUpdate.document.size)}));
+            textView.setText(stringBuilder.toString());
         } else {
-            this.acceptTextView.setText(LocaleController.getString("Update", NUM).toUpperCase());
+            this.acceptTextView.setText(LocaleController.getString(str, NUM).toUpperCase());
         }
         NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileDidLoad);
         NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileDidFailedLoad);

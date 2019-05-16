@@ -53,8 +53,8 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             this.mContext = context;
         }
 
-        public boolean isEnabled(ViewHolder holder) {
-            return holder.getAdapterPosition() != PrivacyUsersActivity.this.uidArray.size();
+        public boolean isEnabled(ViewHolder viewHolder) {
+            return viewHolder.getAdapterPosition() != PrivacyUsersActivity.this.uidArray.size();
         }
 
         public int getItemCount() {
@@ -64,41 +64,45 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             return PrivacyUsersActivity.this.uidArray.size() + 1;
         }
 
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view;
-            switch (viewType) {
-                case 0:
-                    view = new UserCell(this.mContext, 1, 0, false);
-                    break;
-                default:
-                    view = new TextInfoCell(this.mContext);
-                    ((TextInfoCell) view).setText(LocaleController.getString("RemoveFromListText", NUM));
-                    break;
+        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            View textInfoCell;
+            if (i != 0) {
+                textInfoCell = new TextInfoCell(this.mContext);
+                textInfoCell.setText(LocaleController.getString("RemoveFromListText", NUM));
+            } else {
+                textInfoCell = new UserCell(this.mContext, 1, 0, false);
             }
-            return new Holder(view);
+            return new Holder(textInfoCell);
         }
 
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            if (holder.getItemViewType() == 0) {
-                User user = MessagesController.getInstance(PrivacyUsersActivity.this.currentAccount).getUser((Integer) PrivacyUsersActivity.this.uidArray.get(position));
-                UserCell userCell = (UserCell) holder.itemView;
-                CharSequence string = (user.phone == null || user.phone.length() == 0) ? LocaleController.getString("NumberUnknown", NUM) : PhoneFormat.getInstance().format("+" + user.phone);
+        public void onBindViewHolder(ViewHolder viewHolder, int i) {
+            if (viewHolder.getItemViewType() == 0) {
+                CharSequence string;
+                User user = MessagesController.getInstance(PrivacyUsersActivity.this.currentAccount).getUser((Integer) PrivacyUsersActivity.this.uidArray.get(i));
+                UserCell userCell = (UserCell) viewHolder.itemView;
+                String str = user.phone;
+                if (str == null || str.length() == 0) {
+                    string = LocaleController.getString("NumberUnknown", NUM);
+                } else {
+                    PhoneFormat instance = PhoneFormat.getInstance();
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("+");
+                    stringBuilder.append(user.phone);
+                    string = instance.format(stringBuilder.toString());
+                }
                 userCell.setData(user, null, string, 0);
             }
         }
 
         public int getItemViewType(int i) {
-            if (i == PrivacyUsersActivity.this.uidArray.size()) {
-                return 1;
-            }
-            return 0;
+            return i == PrivacyUsersActivity.this.uidArray.size() ? 1 : 0;
         }
     }
 
-    public PrivacyUsersActivity(ArrayList<Integer> users, boolean group, boolean always) {
-        this.uidArray = users;
-        this.isAlwaysShare = always;
-        this.isGroup = group;
+    public PrivacyUsersActivity(ArrayList<Integer> arrayList, boolean z, boolean z2) {
+        this.uidArray = arrayList;
+        this.isAlwaysShare = z2;
+        this.isGroup = z;
     }
 
     public boolean onFragmentCreate() {
@@ -113,8 +117,8 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     }
 
     public View createView(Context context) {
-        int i = 1;
         this.actionBar.setBackButtonImage(NUM);
+        int i = 1;
         this.actionBar.setAllowOverlayTitle(true);
         if (this.isGroup) {
             if (this.isAlwaysShare) {
@@ -128,26 +132,25 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             this.actionBar.setTitle(LocaleController.getString("NeverShareWithTitle", NUM));
         }
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
-            public void onItemClick(int id) {
-                if (id == -1) {
+            public void onItemClick(int i) {
+                if (i == -1) {
                     PrivacyUsersActivity.this.finishFragment();
-                } else if (id == 1) {
-                    Bundle args = new Bundle();
-                    args.putBoolean(PrivacyUsersActivity.this.isAlwaysShare ? "isAlwaysShare" : "isNeverShare", true);
-                    args.putBoolean("isGroup", PrivacyUsersActivity.this.isGroup);
-                    GroupCreateActivity fragment = new GroupCreateActivity(args);
-                    fragment.setDelegate(new PrivacyUsersActivity$1$$Lambda$0(this));
-                    PrivacyUsersActivity.this.presentFragment(fragment);
+                } else if (i == 1) {
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(PrivacyUsersActivity.this.isAlwaysShare ? "isAlwaysShare" : "isNeverShare", true);
+                    bundle.putBoolean("isGroup", PrivacyUsersActivity.this.isGroup);
+                    GroupCreateActivity groupCreateActivity = new GroupCreateActivity(bundle);
+                    groupCreateActivity.setDelegate(new -$$Lambda$PrivacyUsersActivity$1$szUnG8jdJxzpgLH-a2za5o_9XU8(this));
+                    PrivacyUsersActivity.this.presentFragment(groupCreateActivity);
                 }
             }
 
-            /* Access modifiers changed, original: final|synthetic */
-            public final /* synthetic */ void lambda$onItemClick$0$PrivacyUsersActivity$1(ArrayList ids) {
-                Iterator it = ids.iterator();
+            public /* synthetic */ void lambda$onItemClick$0$PrivacyUsersActivity$1(ArrayList arrayList) {
+                Iterator it = arrayList.iterator();
                 while (it.hasNext()) {
-                    Integer id1 = (Integer) it.next();
-                    if (!PrivacyUsersActivity.this.uidArray.contains(id1)) {
-                        PrivacyUsersActivity.this.uidArray.add(id1);
+                    Integer num = (Integer) it.next();
+                    if (!PrivacyUsersActivity.this.uidArray.contains(num)) {
+                        PrivacyUsersActivity.this.uidArray.add(num);
                     }
                 }
                 PrivacyUsersActivity.this.listViewAdapter.notifyDataSetChanged();
@@ -158,7 +161,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         });
         this.actionBar.createMenu().addItem(1, NUM);
         this.fragmentView = new FrameLayout(context);
-        FrameLayout frameLayout = this.fragmentView;
+        FrameLayout frameLayout = (FrameLayout) this.fragmentView;
         this.emptyView = new EmptyTextProgressView(context);
         this.emptyView.showTextView();
         this.emptyView.setText(LocaleController.getString("NoContacts", NUM));
@@ -171,65 +174,64 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         ListAdapter listAdapter = new ListAdapter(context);
         this.listViewAdapter = listAdapter;
         recyclerListView.setAdapter(listAdapter);
-        recyclerListView = this.listView;
+        RecyclerListView recyclerListView2 = this.listView;
         if (!LocaleController.isRTL) {
             i = 2;
         }
-        recyclerListView.setVerticalScrollbarPosition(i);
+        recyclerListView2.setVerticalScrollbarPosition(i);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new PrivacyUsersActivity$$Lambda$0(this));
-        this.listView.setOnItemLongClickListener(new PrivacyUsersActivity$$Lambda$1(this));
+        this.listView.setOnItemClickListener(new -$$Lambda$PrivacyUsersActivity$TfBeJKw94IYjQGIi82R1rn26EIk(this));
+        this.listView.setOnItemLongClickListener(new -$$Lambda$PrivacyUsersActivity$r_SA004H7_gb5NSQvdo4AkX5yCs(this));
         return this.fragmentView;
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$createView$0$PrivacyUsersActivity(View view, int position) {
-        if (position < this.uidArray.size()) {
-            Bundle args = new Bundle();
-            args.putInt("user_id", ((Integer) this.uidArray.get(position)).intValue());
-            presentFragment(new ProfileActivity(args));
+    public /* synthetic */ void lambda$createView$0$PrivacyUsersActivity(View view, int i) {
+        if (i < this.uidArray.size()) {
+            Bundle bundle = new Bundle();
+            bundle.putInt("user_id", ((Integer) this.uidArray.get(i)).intValue());
+            presentFragment(new ProfileActivity(bundle));
         }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ boolean lambda$createView$2$PrivacyUsersActivity(View view, int position) {
-        if (position < 0 || position >= this.uidArray.size() || getParentActivity() == null) {
+    public /* synthetic */ boolean lambda$createView$2$PrivacyUsersActivity(View view, int i) {
+        if (i < 0 || i >= this.uidArray.size() || getParentActivity() == null) {
             return false;
         }
-        this.selectedUserId = ((Integer) this.uidArray.get(position)).intValue();
+        this.selectedUserId = ((Integer) this.uidArray.get(i)).intValue();
         Builder builder = new Builder(getParentActivity());
-        builder.setItems(new CharSequence[]{LocaleController.getString("Delete", NUM)}, new PrivacyUsersActivity$$Lambda$3(this));
+        builder.setItems(new CharSequence[]{LocaleController.getString("Delete", NUM)}, new -$$Lambda$PrivacyUsersActivity$npaFGCU0vEPaOg9Ky5tzGbF2McY(this));
         showDialog(builder.create());
         return true;
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$null$1$PrivacyUsersActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$null$1$PrivacyUsersActivity(DialogInterface dialogInterface, int i) {
         if (i == 0) {
             this.uidArray.remove(Integer.valueOf(this.selectedUserId));
             this.listViewAdapter.notifyDataSetChanged();
-            if (this.delegate != null) {
-                this.delegate.didUpdatedUserList(this.uidArray, false);
+            PrivacyActivityDelegate privacyActivityDelegate = this.delegate;
+            if (privacyActivityDelegate != null) {
+                privacyActivityDelegate.didUpdatedUserList(this.uidArray, false);
             }
         }
     }
 
-    public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.updateInterfaces) {
-            int mask = ((Integer) args[0]).intValue();
-            if ((mask & 2) != 0 || (mask & 1) != 0) {
-                updateVisibleRows(mask);
+    public void didReceivedNotification(int i, int i2, Object... objArr) {
+        if (i == NotificationCenter.updateInterfaces) {
+            i = ((Integer) objArr[0]).intValue();
+            if ((i & 2) != 0 || (i & 1) != 0) {
+                updateVisibleRows(i);
             }
         }
     }
 
-    private void updateVisibleRows(int mask) {
-        if (this.listView != null) {
-            int count = this.listView.getChildCount();
-            for (int a = 0; a < count; a++) {
-                View child = this.listView.getChildAt(a);
-                if (child instanceof UserCell) {
-                    ((UserCell) child).update(mask);
+    private void updateVisibleRows(int i) {
+        RecyclerListView recyclerListView = this.listView;
+        if (recyclerListView != null) {
+            int childCount = recyclerListView.getChildCount();
+            for (int i2 = 0; i2 < childCount; i2++) {
+                View childAt = this.listView.getChildAt(i2);
+                if (childAt instanceof UserCell) {
+                    ((UserCell) childAt).update(i);
                 }
             }
         }
@@ -241,36 +243,42 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
 
     public void onResume() {
         super.onResume();
-        if (this.listViewAdapter != null) {
-            this.listViewAdapter.notifyDataSetChanged();
+        ListAdapter listAdapter = this.listViewAdapter;
+        if (listAdapter != null) {
+            listAdapter.notifyDataSetChanged();
         }
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate cellDelegate = new PrivacyUsersActivity$$Lambda$2(this);
-        r10 = new ThemeDescription[19];
-        r10[8] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGrayText5");
-        r10[9] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, null, null, null, "windowBackgroundWhiteBlackText");
-        r10[10] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, null, null, cellDelegate, "windowBackgroundWhiteGrayText");
-        r10[11] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, "avatar_text");
-        r10[12] = new ThemeDescription(null, 0, null, null, null, cellDelegate, "avatar_backgroundRed");
-        r10[13] = new ThemeDescription(null, 0, null, null, null, cellDelegate, "avatar_backgroundOrange");
-        r10[14] = new ThemeDescription(null, 0, null, null, null, cellDelegate, "avatar_backgroundViolet");
-        r10[15] = new ThemeDescription(null, 0, null, null, null, cellDelegate, "avatar_backgroundGreen");
-        r10[16] = new ThemeDescription(null, 0, null, null, null, cellDelegate, "avatar_backgroundCyan");
-        r10[17] = new ThemeDescription(null, 0, null, null, null, cellDelegate, "avatar_backgroundBlue");
-        r10[18] = new ThemeDescription(null, 0, null, null, null, cellDelegate, "avatar_backgroundPink");
-        return r10;
+        -$$Lambda$PrivacyUsersActivity$uYajhemS_7G_pwutrZXos-oxznE -__lambda_privacyusersactivity_uyajhems_7g_pwutrzxos-oxzne = new -$$Lambda$PrivacyUsersActivity$uYajhemS_7G_pwutrZXos-oxznE(this);
+        r11 = new ThemeDescription[19];
+        r11[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle");
+        r11[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector");
+        r11[6] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21");
+        r11[7] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "emptyListPlaceholder");
+        r11[8] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGrayText5");
+        r11[9] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, null, null, null, "windowBackgroundWhiteBlackText");
+        r11[10] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, null, null, (ThemeDescriptionDelegate) -__lambda_privacyusersactivity_uyajhems_7g_pwutrzxos-oxzne, "windowBackgroundWhiteGrayText");
+        r11[11] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, "avatar_text");
+        -$$Lambda$PrivacyUsersActivity$uYajhemS_7G_pwutrZXos-oxznE -__lambda_privacyusersactivity_uyajhems_7g_pwutrzxos-oxzne2 = -__lambda_privacyusersactivity_uyajhems_7g_pwutrzxos-oxzne;
+        r11[12] = new ThemeDescription(null, 0, null, null, null, -__lambda_privacyusersactivity_uyajhems_7g_pwutrzxos-oxzne2, "avatar_backgroundRed");
+        r11[13] = new ThemeDescription(null, 0, null, null, null, -__lambda_privacyusersactivity_uyajhems_7g_pwutrzxos-oxzne2, "avatar_backgroundOrange");
+        r11[14] = new ThemeDescription(null, 0, null, null, null, -__lambda_privacyusersactivity_uyajhems_7g_pwutrzxos-oxzne2, "avatar_backgroundViolet");
+        r11[15] = new ThemeDescription(null, 0, null, null, null, -__lambda_privacyusersactivity_uyajhems_7g_pwutrzxos-oxzne2, "avatar_backgroundGreen");
+        r11[16] = new ThemeDescription(null, 0, null, null, null, -__lambda_privacyusersactivity_uyajhems_7g_pwutrzxos-oxzne2, "avatar_backgroundCyan");
+        r11[17] = new ThemeDescription(null, 0, null, null, null, -__lambda_privacyusersactivity_uyajhems_7g_pwutrzxos-oxzne2, "avatar_backgroundBlue");
+        r11[18] = new ThemeDescription(null, 0, null, null, null, -__lambda_privacyusersactivity_uyajhems_7g_pwutrzxos-oxzne2, "avatar_backgroundPink");
+        return r11;
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$getThemeDescriptions$3$PrivacyUsersActivity() {
-        if (this.listView != null) {
-            int count = this.listView.getChildCount();
-            for (int a = 0; a < count; a++) {
-                View child = this.listView.getChildAt(a);
-                if (child instanceof UserCell) {
-                    ((UserCell) child).update(0);
+    public /* synthetic */ void lambda$getThemeDescriptions$3$PrivacyUsersActivity() {
+        RecyclerListView recyclerListView = this.listView;
+        if (recyclerListView != null) {
+            int childCount = recyclerListView.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                View childAt = this.listView.getChildAt(i);
+                if (childAt instanceof UserCell) {
+                    ((UserCell) childAt).update(0);
                 }
             }
         }

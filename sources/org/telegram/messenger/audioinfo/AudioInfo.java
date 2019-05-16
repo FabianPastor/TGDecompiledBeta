@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.RandomAccessFile;
 import org.telegram.messenger.audioinfo.m4a.M4AInfo;
 import org.telegram.messenger.audioinfo.mp3.MP3Info;
@@ -118,20 +117,19 @@ public abstract class AudioInfo {
 
     public static AudioInfo getAudioInfo(File file) {
         try {
-            byte[] header = new byte[12];
+            byte[] bArr = new byte[12];
             RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
-            randomAccessFile.readFully(header, 0, 8);
+            randomAccessFile.readFully(bArr, 0, 8);
             randomAccessFile.close();
-            InputStream input = new BufferedInputStream(new FileInputStream(file));
-            if (header[4] == (byte) 102 && header[5] == (byte) 116 && header[6] == (byte) 121 && header[7] == (byte) 112) {
-                return new M4AInfo(input);
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
+            if (bArr[4] == (byte) 102 && bArr[5] == (byte) 116 && bArr[6] == (byte) 121 && bArr[7] == (byte) 112) {
+                return new M4AInfo(bufferedInputStream);
             }
             if (file.getAbsolutePath().endsWith("mp3")) {
-                return new MP3Info(input, file.length());
+                return new MP3Info(bufferedInputStream, file.length());
             }
             return null;
-        } catch (Exception e) {
-            return null;
+        } catch (Exception unused) {
         }
     }
 }

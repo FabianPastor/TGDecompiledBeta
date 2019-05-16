@@ -21,75 +21,76 @@ public final class CustomTabsSession {
         return new CustomTabsSession(null, new DummyCallback(), componentName);
     }
 
-    CustomTabsSession(ICustomTabsService service, ICustomTabsCallback callback, ComponentName componentName) {
-        this.mService = service;
-        this.mCallback = callback;
+    CustomTabsSession(ICustomTabsService iCustomTabsService, ICustomTabsCallback iCustomTabsCallback, ComponentName componentName) {
+        this.mService = iCustomTabsService;
+        this.mCallback = iCustomTabsCallback;
         this.mComponentName = componentName;
     }
 
-    public boolean mayLaunchUrl(Uri url, Bundle extras, List<Bundle> otherLikelyBundles) {
+    public boolean mayLaunchUrl(Uri uri, Bundle bundle, List<Bundle> list) {
         try {
-            return this.mService.mayLaunchUrl(this.mCallback, url, extras, otherLikelyBundles);
-        } catch (RemoteException e) {
+            return this.mService.mayLaunchUrl(this.mCallback, uri, bundle, list);
+        } catch (RemoteException unused) {
             return false;
         }
     }
 
-    public boolean setActionButton(Bitmap icon, String description) {
+    public boolean setActionButton(Bitmap bitmap, String str) {
         Bundle bundle = new Bundle();
-        bundle.putParcelable("android.support.customtabs.customaction.ICON", icon);
-        bundle.putString("android.support.customtabs.customaction.DESCRIPTION", description);
-        Bundle metaBundle = new Bundle();
-        metaBundle.putBundle("android.support.customtabs.extra.ACTION_BUTTON_BUNDLE", bundle);
+        bundle.putParcelable("android.support.customtabs.customaction.ICON", bitmap);
+        bundle.putString("android.support.customtabs.customaction.DESCRIPTION", str);
+        Bundle bundle2 = new Bundle();
+        bundle2.putBundle("android.support.customtabs.extra.ACTION_BUTTON_BUNDLE", bundle);
         try {
-            return this.mService.updateVisuals(this.mCallback, metaBundle);
-        } catch (RemoteException e) {
+            return this.mService.updateVisuals(this.mCallback, bundle2);
+        } catch (RemoteException unused) {
             return false;
         }
     }
 
-    public boolean setSecondaryToolbarViews(RemoteViews remoteViews, int[] clickableIDs, PendingIntent pendingIntent) {
+    public boolean setSecondaryToolbarViews(RemoteViews remoteViews, int[] iArr, PendingIntent pendingIntent) {
         Bundle bundle = new Bundle();
         bundle.putParcelable("android.support.customtabs.extra.EXTRA_REMOTEVIEWS", remoteViews);
-        bundle.putIntArray("android.support.customtabs.extra.EXTRA_REMOTEVIEWS_VIEW_IDS", clickableIDs);
+        bundle.putIntArray("android.support.customtabs.extra.EXTRA_REMOTEVIEWS_VIEW_IDS", iArr);
         bundle.putParcelable("android.support.customtabs.extra.EXTRA_REMOTEVIEWS_PENDINGINTENT", pendingIntent);
         try {
             return this.mService.updateVisuals(this.mCallback, bundle);
-        } catch (RemoteException e) {
+        } catch (RemoteException unused) {
             return false;
         }
     }
 
     @Deprecated
-    public boolean setToolbarItem(int id, Bitmap icon, String description) {
+    public boolean setToolbarItem(int i, Bitmap bitmap, String str) {
         Bundle bundle = new Bundle();
-        bundle.putInt("android.support.customtabs.customaction.ID", id);
-        bundle.putParcelable("android.support.customtabs.customaction.ICON", icon);
-        bundle.putString("android.support.customtabs.customaction.DESCRIPTION", description);
-        Bundle metaBundle = new Bundle();
-        metaBundle.putBundle("android.support.customtabs.extra.ACTION_BUTTON_BUNDLE", bundle);
+        bundle.putInt("android.support.customtabs.customaction.ID", i);
+        bundle.putParcelable("android.support.customtabs.customaction.ICON", bitmap);
+        bundle.putString("android.support.customtabs.customaction.DESCRIPTION", str);
+        Bundle bundle2 = new Bundle();
+        bundle2.putBundle("android.support.customtabs.extra.ACTION_BUTTON_BUNDLE", bundle);
         try {
-            return this.mService.updateVisuals(this.mCallback, metaBundle);
-        } catch (RemoteException e) {
+            return this.mService.updateVisuals(this.mCallback, bundle2);
+        } catch (RemoteException unused) {
             return false;
         }
     }
 
-    public boolean requestPostMessageChannel(Uri postMessageOrigin) {
+    public boolean requestPostMessageChannel(Uri uri) {
         try {
-            return this.mService.requestPostMessageChannel(this.mCallback, postMessageOrigin);
-        } catch (RemoteException e) {
+            return this.mService.requestPostMessageChannel(this.mCallback, uri);
+        } catch (RemoteException unused) {
             return false;
         }
     }
 
-    public int postMessage(String message, Bundle extras) {
+    public int postMessage(String str, Bundle bundle) {
         int postMessage;
         synchronized (this.mLock) {
             try {
-                postMessage = this.mService.postMessage(this.mCallback, message, extras);
-            } catch (RemoteException e) {
-                postMessage = -2;
+                postMessage = this.mService.postMessage(this.mCallback, str, bundle);
+            } catch (RemoteException unused) {
+                return -2;
+            } catch (Throwable th) {
             }
         }
         return postMessage;

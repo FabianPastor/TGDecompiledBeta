@@ -33,44 +33,46 @@ public class CropGestureDetector {
     public CropGestureDetector(Context context) {
         this.mMinimumVelocity = (float) ViewConfiguration.get(context).getScaledMinimumFlingVelocity();
         this.mDetector = new ScaleGestureDetector(context, new OnScaleGestureListener() {
-            public boolean onScale(ScaleGestureDetector detector) {
-                float scaleFactor = detector.getScaleFactor();
+            public boolean onScaleBegin(ScaleGestureDetector scaleGestureDetector) {
+                return true;
+            }
+
+            public void onScaleEnd(ScaleGestureDetector scaleGestureDetector) {
+            }
+
+            public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
+                float scaleFactor = scaleGestureDetector.getScaleFactor();
                 if (Float.isNaN(scaleFactor) || Float.isInfinite(scaleFactor)) {
                     return false;
                 }
-                CropGestureDetector.this.mListener.onScale(scaleFactor, detector.getFocusX(), detector.getFocusY());
+                CropGestureDetector.this.mListener.onScale(scaleFactor, scaleGestureDetector.getFocusX(), scaleGestureDetector.getFocusY());
                 return true;
-            }
-
-            public boolean onScaleBegin(ScaleGestureDetector detector) {
-                return true;
-            }
-
-            public void onScaleEnd(ScaleGestureDetector detector) {
             }
         });
     }
 
     /* Access modifiers changed, original: 0000 */
-    public float getActiveX(MotionEvent ev) {
+    public float getActiveX(MotionEvent motionEvent) {
         try {
-            return ev.getX(this.mActivePointerIndex);
-        } catch (Exception e) {
-            return ev.getX();
+            motionEvent = motionEvent.getX(this.mActivePointerIndex);
+            return motionEvent;
+        } catch (Exception unused) {
+            return motionEvent.getX();
         }
     }
 
     /* Access modifiers changed, original: 0000 */
-    public float getActiveY(MotionEvent ev) {
+    public float getActiveY(MotionEvent motionEvent) {
         try {
-            return ev.getY(this.mActivePointerIndex);
-        } catch (Exception e) {
-            return ev.getY();
+            motionEvent = motionEvent.getY(this.mActivePointerIndex);
+            return motionEvent;
+        } catch (Exception unused) {
+            return motionEvent.getY();
         }
     }
 
-    public void setOnGestureListener(CropGestureListener listener) {
-        this.mListener = listener;
+    public void setOnGestureListener(CropGestureListener cropGestureListener) {
+        this.mListener = cropGestureListener;
     }
 
     public boolean isScaling() {
@@ -81,98 +83,98 @@ public class CropGestureDetector {
         return this.mIsDragging;
     }
 
-    public boolean onTouchEvent(MotionEvent ev) {
-        this.mDetector.onTouchEvent(ev);
-        int i = 0;
-        switch (ev.getAction() & 255) {
-            case 0:
-                this.mActivePointerId = ev.getPointerId(0);
-                break;
-            case 1:
-            case 3:
-                this.mActivePointerId = -1;
-                break;
-            case 6:
-                int pointerIndex = (65280 & ev.getAction()) >> 8;
-                if (ev.getPointerId(pointerIndex) == this.mActivePointerId) {
-                    int newPointerIndex;
-                    if (pointerIndex == 0) {
-                        newPointerIndex = 1;
-                    } else {
-                        newPointerIndex = 0;
-                    }
-                    this.mActivePointerId = ev.getPointerId(newPointerIndex);
-                    this.mLastTouchX = ev.getX(newPointerIndex);
-                    this.mLastTouchY = ev.getY(newPointerIndex);
-                    break;
-                }
-                break;
+    public boolean onTouchEvent(MotionEvent motionEvent) {
+        float yVelocity;
+        this.mDetector.onTouchEvent(motionEvent);
+        int action = motionEvent.getAction() & 255;
+        boolean z = false;
+        if (action == 0) {
+            this.mActivePointerId = motionEvent.getPointerId(0);
+        } else if (action == 1 || action == 3) {
+            this.mActivePointerId = -1;
+        } else if (action == 6) {
+            action = (65280 & motionEvent.getAction()) >> 8;
+            if (motionEvent.getPointerId(action) == this.mActivePointerId) {
+                action = action == 0 ? 1 : 0;
+                this.mActivePointerId = motionEvent.getPointerId(action);
+                this.mLastTouchX = motionEvent.getX(action);
+                this.mLastTouchY = motionEvent.getY(action);
+            }
         }
-        if (this.mActivePointerId != -1) {
-            i = this.mActivePointerId;
+        action = this.mActivePointerId;
+        if (action == -1) {
+            action = 0;
         }
-        this.mActivePointerIndex = ev.findPointerIndex(i);
-        switch (ev.getAction()) {
-            case 0:
-            case 2:
-                if (this.started) {
-                    float x = getActiveX(ev);
-                    float y = getActiveY(ev);
-                    float dx = x - this.mLastTouchX;
-                    float dy = y - this.mLastTouchY;
-                    if (!this.mIsDragging) {
-                        this.mIsDragging = ((float) Math.sqrt((double) ((dx * dx) + (dy * dy)))) >= this.mTouchSlop;
-                    }
-                    if (this.mIsDragging) {
-                        this.mListener.onDrag(dx, dy);
-                        this.mLastTouchX = x;
-                        this.mLastTouchY = y;
-                        if (this.mVelocityTracker != null) {
-                            this.mVelocityTracker.addMovement(ev);
-                            break;
-                        }
-                    }
-                }
-                this.mVelocityTracker = VelocityTracker.obtain();
-                if (this.mVelocityTracker != null) {
-                    this.mVelocityTracker.addMovement(ev);
-                }
-                this.mLastTouchX = getActiveX(ev);
-                this.mLastTouchY = getActiveY(ev);
-                this.mIsDragging = false;
-                this.started = true;
-                return true;
-                break;
-            case 1:
+        this.mActivePointerIndex = motionEvent.findPointerIndex(action);
+        action = motionEvent.getAction();
+        if (action != 0) {
+            VelocityTracker velocityTracker;
+            if (action == 1) {
                 if (this.mIsDragging) {
                     if (this.mVelocityTracker != null) {
-                        this.mLastTouchX = getActiveX(ev);
-                        this.mLastTouchY = getActiveY(ev);
-                        this.mVelocityTracker.addMovement(ev);
+                        this.mLastTouchX = getActiveX(motionEvent);
+                        this.mLastTouchY = getActiveY(motionEvent);
+                        this.mVelocityTracker.addMovement(motionEvent);
                         this.mVelocityTracker.computeCurrentVelocity(1000);
-                        float vX = this.mVelocityTracker.getXVelocity();
-                        float vY = this.mVelocityTracker.getYVelocity();
-                        if (Math.max(Math.abs(vX), Math.abs(vY)) >= this.mMinimumVelocity) {
-                            this.mListener.onFling(this.mLastTouchX, this.mLastTouchY, -vX, -vY);
+                        float xVelocity = this.mVelocityTracker.getXVelocity();
+                        yVelocity = this.mVelocityTracker.getYVelocity();
+                        if (Math.max(Math.abs(xVelocity), Math.abs(yVelocity)) >= this.mMinimumVelocity) {
+                            this.mListener.onFling(this.mLastTouchX, this.mLastTouchY, -xVelocity, -yVelocity);
                         }
                     }
                     this.mIsDragging = false;
                 }
-                if (this.mVelocityTracker != null) {
-                    this.mVelocityTracker.recycle();
+                velocityTracker = this.mVelocityTracker;
+                if (velocityTracker != null) {
+                    velocityTracker.recycle();
                     this.mVelocityTracker = null;
                 }
                 this.started = false;
-                break;
-            case 3:
-                if (this.mVelocityTracker != null) {
-                    this.mVelocityTracker.recycle();
-                    this.mVelocityTracker = null;
+            } else if (action != 2) {
+                if (action == 3) {
+                    velocityTracker = this.mVelocityTracker;
+                    if (velocityTracker != null) {
+                        velocityTracker.recycle();
+                        this.mVelocityTracker = null;
+                    }
+                    this.started = false;
+                    this.mIsDragging = false;
                 }
-                this.started = false;
-                this.mIsDragging = false;
-                break;
+            }
+            return true;
         }
+        VelocityTracker velocityTracker2;
+        if (this.started) {
+            yVelocity = getActiveX(motionEvent);
+            float activeY = getActiveY(motionEvent);
+            float f = yVelocity - this.mLastTouchX;
+            float f2 = activeY - this.mLastTouchY;
+            if (!this.mIsDragging) {
+                if (((float) Math.sqrt((double) ((f * f) + (f2 * f2)))) >= this.mTouchSlop) {
+                    z = true;
+                }
+                this.mIsDragging = z;
+            }
+            if (this.mIsDragging) {
+                this.mListener.onDrag(f, f2);
+                this.mLastTouchX = yVelocity;
+                this.mLastTouchY = activeY;
+                velocityTracker2 = this.mVelocityTracker;
+                if (velocityTracker2 != null) {
+                    velocityTracker2.addMovement(motionEvent);
+                }
+            }
+            return true;
+        }
+        this.mVelocityTracker = VelocityTracker.obtain();
+        velocityTracker2 = this.mVelocityTracker;
+        if (velocityTracker2 != null) {
+            velocityTracker2.addMovement(motionEvent);
+        }
+        this.mLastTouchX = getActiveX(motionEvent);
+        this.mLastTouchY = getActiveY(motionEvent);
+        this.mIsDragging = false;
+        this.started = true;
         return true;
     }
 }

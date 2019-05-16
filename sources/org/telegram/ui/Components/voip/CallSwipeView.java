@@ -37,16 +37,16 @@ public class CallSwipeView extends View {
     private class ArrowAnimWrapper {
         private int index;
 
-        public ArrowAnimWrapper(int value) {
-            this.index = value;
+        public ArrowAnimWrapper(int i) {
+            this.index = i;
         }
 
         public int getArrowAlpha() {
             return CallSwipeView.this.arrowAlphas[this.index];
         }
 
-        public void setArrowAlpha(int value) {
-            CallSwipeView.this.arrowAlphas[this.index] = value;
+        public void setArrowAlpha(int i) {
+            CallSwipeView.this.arrowAlphas[this.index] = i;
         }
     }
 
@@ -69,15 +69,15 @@ public class CallSwipeView extends View {
         this.arrowsPaint.setStyle(Style.STROKE);
         this.arrowsPaint.setStrokeWidth((float) AndroidUtilities.dp(2.5f));
         this.pullBgPaint = new Paint(1);
-        ArrayList<Animator> anims = new ArrayList();
+        ArrayList arrayList = new ArrayList();
         for (int i = 0; i < this.arrowAlphas.length; i++) {
-            ObjectAnimator anim = ObjectAnimator.ofInt(new ArrowAnimWrapper(i), "arrowAlpha", new int[]{64, 255, 64});
-            anim.setDuration(700);
-            anim.setStartDelay((long) (i * 200));
-            anims.add(anim);
+            ObjectAnimator ofInt = ObjectAnimator.ofInt(new ArrowAnimWrapper(i), "arrowAlpha", new int[]{64, 255, 64});
+            ofInt.setDuration(700);
+            ofInt.setStartDelay((long) (i * 200));
+            arrayList.add(ofInt);
         }
         this.arrowAnim = new AnimatorSet();
-        this.arrowAnim.playTogether(anims);
+        this.arrowAnim.playTogether(arrayList);
         this.arrowAnim.addListener(new AnimatorListenerAdapter() {
             private Runnable restarter = new Runnable() {
                 public void run() {
@@ -88,21 +88,23 @@ public class CallSwipeView extends View {
             };
             private long startTime;
 
-            public void onAnimationEnd(Animator animation) {
-                if (System.currentTimeMillis() - this.startTime < animation.getDuration() / 4) {
+            public void onAnimationEnd(Animator animator) {
+                if (System.currentTimeMillis() - this.startTime < animator.getDuration() / 4) {
                     if (BuildVars.LOGS_ENABLED) {
                         FileLog.w("Not repeating animation because previous loop was too fast");
                     }
-                } else if (!CallSwipeView.this.canceled && CallSwipeView.this.animatingArrows) {
+                    return;
+                }
+                if (!CallSwipeView.this.canceled && CallSwipeView.this.animatingArrows) {
                     CallSwipeView.this.post(this.restarter);
                 }
             }
 
-            public void onAnimationCancel(Animator animation) {
+            public void onAnimationCancel(Animator animator) {
                 CallSwipeView.this.canceled = true;
             }
 
-            public void onAnimationStart(Animator animation) {
+            public void onAnimationStart(Animator animator) {
                 this.startTime = System.currentTimeMillis();
             }
         });
@@ -111,21 +113,22 @@ public class CallSwipeView extends View {
     /* Access modifiers changed, original: protected */
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if (this.arrowAnim != null) {
+        AnimatorSet animatorSet = this.arrowAnim;
+        if (animatorSet != null) {
             this.canceled = true;
-            this.arrowAnim.cancel();
+            animatorSet.cancel();
             this.arrowAnim = null;
         }
     }
 
-    public void setColor(int color) {
-        this.pullBgPaint.setColor(color);
+    public void setColor(int i) {
+        this.pullBgPaint.setColor(i);
         this.pullBgPaint.setAlpha(178);
     }
 
-    public void setViewToDrag(View viewToDrag, boolean dragFromRight) {
-        this.viewToDrag = viewToDrag;
-        this.dragFromRight = dragFromRight;
+    public void setViewToDrag(View view, boolean z) {
+        this.viewToDrag = view;
+        this.dragFromRight = z;
         updateArrowPath();
     }
 
@@ -137,43 +140,38 @@ public class CallSwipeView extends View {
         return getHeight();
     }
 
-    public boolean onTouchEvent(MotionEvent ev) {
-        float f = 0.0f;
+    public boolean onTouchEvent(MotionEvent motionEvent) {
         if (!isEnabled()) {
             return false;
         }
-        if (ev.getAction() == 0) {
-            if ((!this.dragFromRight && ev.getX() < ((float) getDraggedViewWidth())) || (this.dragFromRight && ev.getX() > ((float) (getWidth() - getDraggedViewWidth())))) {
-                this.dragging = true;
-                this.dragStartX = ev.getX();
-                getParent().requestDisallowInterceptTouchEvent(true);
-                this.listener.onDragStart();
-                stopAnimatingArrows();
-            }
-        } else if (ev.getAction() == 2) {
-            float f2;
-            View view = this.viewToDrag;
-            if (this.dragFromRight) {
-                f2 = (float) (-(getWidth() - getDraggedViewWidth()));
-            } else {
-                f2 = 0.0f;
-            }
-            float x = ev.getX() - this.dragStartX;
-            if (!this.dragFromRight) {
-                f = (float) (getWidth() - getDraggedViewWidth());
-            }
-            view.setTranslationX(Math.max(f2, Math.min(x, f)));
-            invalidate();
-        } else if (ev.getAction() == 1 || ev.getAction() == 3) {
-            if (Math.abs(this.viewToDrag.getTranslationX()) < ((float) (getWidth() - getDraggedViewWidth())) || ev.getAction() != 1) {
-                this.listener.onDragCancel();
-                this.viewToDrag.animate().translationX(0.0f).setDuration(200).start();
+        if (motionEvent.getAction() != 0) {
+            float f = 0.0f;
+            if (motionEvent.getAction() == 2) {
+                View view = this.viewToDrag;
+                float f2 = this.dragFromRight ? (float) (-(getWidth() - getDraggedViewWidth())) : 0.0f;
+                float x = motionEvent.getX() - this.dragStartX;
+                if (!this.dragFromRight) {
+                    f = (float) (getWidth() - getDraggedViewWidth());
+                }
+                view.setTranslationX(Math.max(f2, Math.min(x, f)));
                 invalidate();
-                startAnimatingArrows();
-                this.dragging = false;
-            } else {
-                this.listener.onDragComplete();
+            } else if (motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {
+                if (Math.abs(this.viewToDrag.getTranslationX()) < ((float) (getWidth() - getDraggedViewWidth())) || motionEvent.getAction() != 1) {
+                    this.listener.onDragCancel();
+                    this.viewToDrag.animate().translationX(0.0f).setDuration(200).start();
+                    invalidate();
+                    startAnimatingArrows();
+                    this.dragging = false;
+                } else {
+                    this.listener.onDragComplete();
+                }
             }
+        } else if ((!this.dragFromRight && motionEvent.getX() < ((float) getDraggedViewWidth())) || (this.dragFromRight && motionEvent.getX() > ((float) (getWidth() - getDraggedViewWidth())))) {
+            this.dragging = true;
+            this.dragStartX = motionEvent.getX();
+            getParent().requestDisallowInterceptTouchEvent(true);
+            this.listener.onDragStart();
+            stopAnimatingArrows();
         }
         return this.dragging;
     }
@@ -183,10 +181,13 @@ public class CallSwipeView extends View {
     }
 
     public void startAnimatingArrows() {
-        if (!this.animatingArrows && this.arrowAnim != null) {
-            this.animatingArrows = true;
-            if (this.arrowAnim != null) {
-                this.arrowAnim.start();
+        if (!this.animatingArrows) {
+            AnimatorSet animatorSet = this.arrowAnim;
+            if (animatorSet != null) {
+                this.animatingArrows = true;
+                if (animatorSet != null) {
+                    animatorSet.start();
+                }
             }
         }
     }
@@ -217,19 +218,17 @@ public class CallSwipeView extends View {
         } else {
             canvas.translate((float) (getHeight() + AndroidUtilities.dp(12.0f)), (float) (getHeight() / 2));
         }
-        float offsetX = Math.abs(this.viewToDrag.getTranslationX());
+        float abs = Math.abs(this.viewToDrag.getTranslationX());
         for (int i = 0; i < 3; i++) {
-            float f;
-            float masterAlpha = 1.0f;
-            if (offsetX > ((float) AndroidUtilities.dp((float) (i * 16)))) {
-                masterAlpha = 1.0f - Math.min(1.0f, Math.max(0.0f, (offsetX - ((float) (AndroidUtilities.dp(16.0f) * i))) / ((float) AndroidUtilities.dp(16.0f))));
+            float f = 16.0f;
+            float f2 = 1.0f;
+            if (abs > ((float) AndroidUtilities.dp((float) (i * 16)))) {
+                f2 = 1.0f - Math.min(1.0f, Math.max(0.0f, (abs - ((float) (AndroidUtilities.dp(16.0f) * i))) / ((float) AndroidUtilities.dp(16.0f))));
             }
-            this.arrowsPaint.setAlpha(Math.round(((float) this.arrowAlphas[i]) * masterAlpha));
+            this.arrowsPaint.setAlpha(Math.round(((float) this.arrowAlphas[i]) * f2));
             canvas.drawPath(this.arrow, this.arrowsPaint);
             if (this.dragFromRight) {
                 f = -16.0f;
-            } else {
-                f = 16.0f;
             }
             canvas.translate((float) AndroidUtilities.dp(f), 0.0f);
         }
@@ -239,27 +238,29 @@ public class CallSwipeView extends View {
 
     private void updateArrowPath() {
         this.arrow.reset();
-        int size = AndroidUtilities.dp(6.0f);
+        int dp = AndroidUtilities.dp(6.0f);
         if (this.dragFromRight) {
-            this.arrow.moveTo((float) size, (float) (-size));
+            float f = (float) dp;
+            this.arrow.moveTo(f, (float) (-dp));
             this.arrow.lineTo(0.0f, 0.0f);
-            this.arrow.lineTo((float) size, (float) size);
+            this.arrow.lineTo(f, f);
             return;
         }
-        this.arrow.moveTo(0.0f, (float) (-size));
-        this.arrow.lineTo((float) size, 0.0f);
-        this.arrow.lineTo(0.0f, (float) size);
+        this.arrow.moveTo(0.0f, (float) (-dp));
+        float f2 = (float) dp;
+        this.arrow.lineTo(f2, 0.0f);
+        this.arrow.lineTo(0.0f, f2);
     }
 
-    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
-        super.onInitializeAccessibilityNodeInfo(info);
-        info.addAction(16);
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        accessibilityNodeInfo.addAction(16);
     }
 
-    public boolean performAccessibilityAction(int action, Bundle arguments) {
-        if (action == 16 && isEnabled()) {
+    public boolean performAccessibilityAction(int i, Bundle bundle) {
+        if (i == 16 && isEnabled()) {
             this.listener.onDragComplete();
         }
-        return super.performAccessibilityAction(action, arguments);
+        return super.performAccessibilityAction(i, bundle);
     }
 }

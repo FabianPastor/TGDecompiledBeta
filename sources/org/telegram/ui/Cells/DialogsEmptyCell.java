@@ -10,7 +10,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC.RecentMeUrl;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
@@ -25,58 +24,58 @@ public class DialogsEmptyCell extends LinearLayout {
         super(context);
         setGravity(17);
         setOrientation(1);
-        setOnTouchListener(DialogsEmptyCell$$Lambda$0.$instance);
+        setOnTouchListener(-$$Lambda$DialogsEmptyCell$7lLGhZthID2bSlrXEXwZZGk1ZsM.INSTANCE);
         this.emptyTextView1 = new TextView(context);
+        this.emptyTextView1.setTextColor(Theme.getColor("chats_nameMessage_threeLines"));
         this.emptyTextView1.setText(LocaleController.getString("NoChats", NUM));
-        this.emptyTextView1.setTextColor(Theme.getColor("emptyListPlaceholder"));
-        this.emptyTextView1.setGravity(17);
         this.emptyTextView1.setTextSize(1, 20.0f);
-        addView(this.emptyTextView1, LayoutHelper.createLinear(-2, -2, 0.0f, 20.0f, 0.0f, 0.0f));
+        this.emptyTextView1.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        this.emptyTextView1.setGravity(17);
+        addView(this.emptyTextView1, LayoutHelper.createFrame(-1, -2.0f, 51, 52.0f, 4.0f, 52.0f, 0.0f));
         this.emptyTextView2 = new TextView(context);
-        String help = LocaleController.getString("NoChatsHelp", NUM);
+        CharSequence string = LocaleController.getString("NoChatsHelp", NUM);
         if (AndroidUtilities.isTablet() && !AndroidUtilities.isSmallTablet()) {
-            help = help.replace(10, ' ');
+            string = string.replace(10, ' ');
         }
-        this.emptyTextView2.setText(help);
-        this.emptyTextView2.setTextColor(Theme.getColor("emptyListPlaceholder"));
-        this.emptyTextView2.setTextSize(1, 15.0f);
+        this.emptyTextView2.setText(string);
+        this.emptyTextView2.setTextColor(Theme.getColor("chats_message"));
+        this.emptyTextView2.setTextSize(1, 14.0f);
         this.emptyTextView2.setGravity(17);
-        this.emptyTextView2.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(6.0f), AndroidUtilities.dp(8.0f), 0);
         this.emptyTextView2.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
-        addView(this.emptyTextView2, LayoutHelper.createLinear(-2, -2, 0.0f, 0.0f, 0.0f, 20.0f));
+        addView(this.emptyTextView2, LayoutHelper.createFrame(-1, -2.0f, 51, 52.0f, 7.0f, 52.0f, 0.0f));
     }
 
-    public void setType(int value) {
-        String help;
-        this.currentType = value;
+    public void setType(int i) {
+        CharSequence string;
+        this.currentType = i;
         if (this.currentType == 0) {
-            help = LocaleController.getString("NoChatsHelp", NUM);
+            string = LocaleController.getString("NoChatsHelp", NUM);
             if (AndroidUtilities.isTablet() && !AndroidUtilities.isSmallTablet()) {
-                help = help.replace(10, ' ');
+                string = string.replace(10, ' ');
             }
         } else {
-            help = LocaleController.getString("NoChatsContactsHelp", NUM);
+            string = LocaleController.getString("NoChatsContactsHelp", NUM);
             if (AndroidUtilities.isTablet() && !AndroidUtilities.isSmallTablet()) {
-                help = help.replace(10, ' ');
+                string = string.replace(10, ' ');
             }
         }
-        this.emptyTextView2.setText(help);
+        this.emptyTextView2.setText(string);
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int totalHeight = MeasureSpec.getSize(heightMeasureSpec);
-        if (totalHeight == 0) {
-            totalHeight = (AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight()) - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+    public void onMeasure(int i, int i2) {
+        i2 = MeasureSpec.getSize(i2);
+        if (i2 == 0) {
+            i2 = (AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight()) - (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
         }
         if (this.currentType == 0) {
-            ArrayList<RecentMeUrl> arrayList = MessagesController.getInstance(this.currentAccount).hintDialogs;
+            ArrayList arrayList = MessagesController.getInstance(this.currentAccount).hintDialogs;
             if (!arrayList.isEmpty()) {
-                totalHeight -= (((AndroidUtilities.dp(72.0f) * arrayList.size()) + arrayList.size()) - 1) + AndroidUtilities.dp(50.0f);
+                i2 -= (((AndroidUtilities.dp(72.0f) * arrayList.size()) + arrayList.size()) - 1) + AndroidUtilities.dp(50.0f);
             }
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(totalHeight, NUM));
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(i2, NUM));
             return;
         }
-        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(totalHeight, Integer.MIN_VALUE));
+        super.onMeasure(i, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(166.0f), NUM));
     }
 }

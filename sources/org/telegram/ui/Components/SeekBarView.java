@@ -35,29 +35,29 @@ public class SeekBarView extends FrameLayout {
         this.thumbHeight = AndroidUtilities.dp(24.0f);
     }
 
-    public void setColors(int inner, int outer) {
-        this.innerPaint1.setColor(inner);
-        this.outerPaint1.setColor(outer);
+    public void setColors(int i, int i2) {
+        this.innerPaint1.setColor(i);
+        this.outerPaint1.setColor(i2);
     }
 
-    public void setInnerColor(int inner) {
-        this.innerPaint1.setColor(inner);
+    public void setInnerColor(int i) {
+        this.innerPaint1.setColor(i);
     }
 
-    public void setOuterColor(int outer) {
-        this.outerPaint1.setColor(outer);
+    public void setOuterColor(int i) {
+        this.outerPaint1.setColor(i);
     }
 
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return onTouch(ev);
+    public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+        return onTouch(motionEvent);
     }
 
-    public boolean onTouchEvent(MotionEvent event) {
-        return onTouch(event);
+    public boolean onTouchEvent(MotionEvent motionEvent) {
+        return onTouch(motionEvent);
     }
 
-    public void setReportChanges(boolean value) {
-        this.reportChanges = value;
+    public void setReportChanges(boolean z) {
+        this.reportChanges = z;
     }
 
     public void setDelegate(SeekBarViewDelegate seekBarViewDelegate) {
@@ -65,38 +65,40 @@ public class SeekBarView extends FrameLayout {
     }
 
     /* Access modifiers changed, original: 0000 */
-    public boolean onTouch(MotionEvent ev) {
-        if (ev.getAction() == 0) {
+    public boolean onTouch(MotionEvent motionEvent) {
+        if (motionEvent.getAction() == 0) {
             getParent().requestDisallowInterceptTouchEvent(true);
-            int additionWidth = (getMeasuredHeight() - this.thumbWidth) / 2;
-            if (ev.getY() >= 0.0f && ev.getY() <= ((float) getMeasuredHeight())) {
-                if (((float) (this.thumbX - additionWidth)) > ev.getX() || ev.getX() > ((float) ((this.thumbX + this.thumbWidth) + additionWidth))) {
-                    this.thumbX = ((int) ev.getX()) - (this.thumbWidth / 2);
-                    if (this.thumbX < 0) {
+            int measuredHeight = (getMeasuredHeight() - this.thumbWidth) / 2;
+            if (motionEvent.getY() >= 0.0f && motionEvent.getY() <= ((float) getMeasuredHeight())) {
+                if (((float) (this.thumbX - measuredHeight)) > motionEvent.getX() || motionEvent.getX() > ((float) ((this.thumbX + this.thumbWidth) + measuredHeight))) {
+                    this.thumbX = ((int) motionEvent.getX()) - (this.thumbWidth / 2);
+                    measuredHeight = this.thumbX;
+                    if (measuredHeight < 0) {
                         this.thumbX = 0;
-                    } else if (this.thumbX > getMeasuredWidth() - this.thumbWidth) {
+                    } else if (measuredHeight > getMeasuredWidth() - this.thumbWidth) {
                         this.thumbX = getMeasuredWidth() - this.thumbWidth;
                     }
                 }
-                this.thumbDX = (int) (ev.getX() - ((float) this.thumbX));
+                this.thumbDX = (int) (motionEvent.getX() - ((float) this.thumbX));
                 this.pressed = true;
                 invalidate();
                 return true;
             }
-        } else if (ev.getAction() == 1 || ev.getAction() == 3) {
+        } else if (motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {
             if (this.pressed) {
-                if (ev.getAction() == 1) {
+                if (motionEvent.getAction() == 1) {
                     this.delegate.onSeekBarDrag(((float) this.thumbX) / ((float) (getMeasuredWidth() - this.thumbWidth)));
                 }
                 this.pressed = false;
                 invalidate();
                 return true;
             }
-        } else if (ev.getAction() == 2 && this.pressed) {
-            this.thumbX = (int) (ev.getX() - ((float) this.thumbDX));
-            if (this.thumbX < 0) {
+        } else if (motionEvent.getAction() == 2 && this.pressed) {
+            this.thumbX = (int) (motionEvent.getX() - ((float) this.thumbDX));
+            int i = this.thumbX;
+            if (i < 0) {
                 this.thumbX = 0;
-            } else if (this.thumbX > getMeasuredWidth() - this.thumbWidth) {
+            } else if (i > getMeasuredWidth() - this.thumbWidth) {
                 this.thumbX = getMeasuredWidth() - this.thumbWidth;
             }
             if (this.reportChanges) {
@@ -108,31 +110,32 @@ public class SeekBarView extends FrameLayout {
         return false;
     }
 
-    public void setProgress(float progress) {
+    public void setProgress(float f) {
         if (getMeasuredWidth() == 0) {
-            this.progressToSet = progress;
+            this.progressToSet = f;
             return;
         }
         this.progressToSet = -1.0f;
-        int newThumbX = (int) Math.ceil((double) (((float) (getMeasuredWidth() - this.thumbWidth)) * progress));
-        if (this.thumbX != newThumbX) {
-            this.thumbX = newThumbX;
-            if (this.thumbX < 0) {
+        int ceil = (int) Math.ceil((double) (((float) (getMeasuredWidth() - this.thumbWidth)) * f));
+        if (this.thumbX != ceil) {
+            this.thumbX = ceil;
+            ceil = this.thumbX;
+            if (ceil < 0) {
                 this.thumbX = 0;
-            } else if (this.thumbX > getMeasuredWidth() - this.thumbWidth) {
+            } else if (ceil > getMeasuredWidth() - this.thumbWidth) {
                 this.thumbX = getMeasuredWidth() - this.thumbWidth;
             }
             invalidate();
         }
     }
 
-    public void setBufferedProgress(float progress) {
-        this.bufferedProgress = progress;
+    public void setBufferedProgress(float f) {
+        this.bufferedProgress = f;
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(i, i2);
         if (this.progressToSet >= 0.0f && getMeasuredWidth() > 0) {
             setProgress(this.progressToSet);
             this.progressToSet = -1.0f;
@@ -145,12 +148,12 @@ public class SeekBarView extends FrameLayout {
 
     /* Access modifiers changed, original: protected */
     public void onDraw(Canvas canvas) {
-        int y = (getMeasuredHeight() - this.thumbHeight) / 2;
+        int measuredHeight = (getMeasuredHeight() - this.thumbHeight) / 2;
         canvas.drawRect((float) (this.thumbWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.dp(1.0f)), (float) (getMeasuredWidth() - (this.thumbWidth / 2)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(1.0f)), this.innerPaint1);
         if (this.bufferedProgress > 0.0f) {
-            canvas.drawRect((float) (this.thumbWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.dp(1.0f)), (this.bufferedProgress * ((float) (getMeasuredWidth() - this.thumbWidth))) + ((float) (this.thumbWidth / 2)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(1.0f)), this.innerPaint1);
+            canvas.drawRect((float) (this.thumbWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.dp(1.0f)), ((float) (this.thumbWidth / 2)) + (this.bufferedProgress * ((float) (getMeasuredWidth() - this.thumbWidth))), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(1.0f)), this.innerPaint1);
         }
         canvas.drawRect((float) (this.thumbWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.dp(1.0f)), (float) ((this.thumbWidth / 2) + this.thumbX), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(1.0f)), this.outerPaint1);
-        canvas.drawCircle((float) (this.thumbX + (this.thumbWidth / 2)), (float) ((this.thumbHeight / 2) + y), (float) AndroidUtilities.dp(this.pressed ? 8.0f : 6.0f), this.outerPaint1);
+        canvas.drawCircle((float) (this.thumbX + (this.thumbWidth / 2)), (float) (measuredHeight + (this.thumbHeight / 2)), (float) AndroidUtilities.dp(this.pressed ? 8.0f : 6.0f), this.outerPaint1);
     }
 }

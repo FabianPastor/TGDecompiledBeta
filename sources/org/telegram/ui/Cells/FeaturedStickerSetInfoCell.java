@@ -42,7 +42,7 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
     private RectF rect = new RectF();
     private StickerSetCovered set;
 
-    public FeaturedStickerSetInfoCell(Context context, int left) {
+    public FeaturedStickerSetInfoCell(Context context, int i) {
         super(context);
         this.botProgressPaint.setColor(Theme.getColor("featuredStickers_buttonProgress"));
         this.botProgressPaint.setStrokeCap(Cap.ROUND);
@@ -51,46 +51,53 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         this.nameTextView = new TextView(context);
         this.nameTextView.setTextColor(Theme.getColor("chat_emojiPanelTrendingTitle"));
         this.nameTextView.setTextSize(1, 17.0f);
-        this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        String str = "fonts/rmedium.ttf";
+        this.nameTextView.setTypeface(AndroidUtilities.getTypeface(str));
         this.nameTextView.setEllipsize(TruncateAt.END);
         this.nameTextView.setSingleLine(true);
-        addView(this.nameTextView, LayoutHelper.createFrame(-2, -2.0f, 51, (float) left, 8.0f, 40.0f, 0.0f));
+        float f = (float) i;
+        addView(this.nameTextView, LayoutHelper.createFrame(-2, -2.0f, 51, f, 8.0f, 40.0f, 0.0f));
         this.infoTextView = new TextView(context);
         this.infoTextView.setTextColor(Theme.getColor("chat_emojiPanelTrendingDescription"));
         this.infoTextView.setTextSize(1, 13.0f);
         this.infoTextView.setEllipsize(TruncateAt.END);
         this.infoTextView.setSingleLine(true);
-        addView(this.infoTextView, LayoutHelper.createFrame(-2, -2.0f, 51, (float) left, 30.0f, 100.0f, 0.0f));
+        addView(this.infoTextView, LayoutHelper.createFrame(-2, -2.0f, 51, f, 30.0f, 100.0f, 0.0f));
         this.addButton = new TextView(context) {
             /* Access modifiers changed, original: protected */
             public void onDraw(Canvas canvas) {
                 super.onDraw(canvas);
                 if (FeaturedStickerSetInfoCell.this.drawProgress || !(FeaturedStickerSetInfoCell.this.drawProgress || FeaturedStickerSetInfoCell.this.progressAlpha == 0.0f)) {
                     FeaturedStickerSetInfoCell.this.botProgressPaint.setAlpha(Math.min(255, (int) (FeaturedStickerSetInfoCell.this.progressAlpha * 255.0f)));
-                    int x = getMeasuredWidth() - AndroidUtilities.dp(11.0f);
-                    FeaturedStickerSetInfoCell.this.rect.set((float) x, (float) AndroidUtilities.dp(3.0f), (float) (AndroidUtilities.dp(8.0f) + x), (float) AndroidUtilities.dp(11.0f));
+                    int measuredWidth = getMeasuredWidth() - AndroidUtilities.dp(11.0f);
+                    FeaturedStickerSetInfoCell.this.rect.set((float) measuredWidth, (float) AndroidUtilities.dp(3.0f), (float) (measuredWidth + AndroidUtilities.dp(8.0f)), (float) AndroidUtilities.dp(11.0f));
                     canvas.drawArc(FeaturedStickerSetInfoCell.this.rect, (float) FeaturedStickerSetInfoCell.this.angle, 220.0f, false, FeaturedStickerSetInfoCell.this.botProgressPaint);
                     invalidate(((int) FeaturedStickerSetInfoCell.this.rect.left) - AndroidUtilities.dp(2.0f), ((int) FeaturedStickerSetInfoCell.this.rect.top) - AndroidUtilities.dp(2.0f), ((int) FeaturedStickerSetInfoCell.this.rect.right) + AndroidUtilities.dp(2.0f), ((int) FeaturedStickerSetInfoCell.this.rect.bottom) + AndroidUtilities.dp(2.0f));
-                    long newTime = System.currentTimeMillis();
+                    long currentTimeMillis = System.currentTimeMillis();
                     if (Math.abs(FeaturedStickerSetInfoCell.this.lastUpdateTime - System.currentTimeMillis()) < 1000) {
-                        long delta = newTime - FeaturedStickerSetInfoCell.this.lastUpdateTime;
-                        FeaturedStickerSetInfoCell.this.angle = (int) (((float) FeaturedStickerSetInfoCell.this.angle) + (((float) (360 * delta)) / 2000.0f));
-                        FeaturedStickerSetInfoCell.this.angle = FeaturedStickerSetInfoCell.this.angle - ((FeaturedStickerSetInfoCell.this.angle / 360) * 360);
+                        long access$500 = currentTimeMillis - FeaturedStickerSetInfoCell.this.lastUpdateTime;
+                        float f = ((float) (360 * access$500)) / 2000.0f;
+                        FeaturedStickerSetInfoCell featuredStickerSetInfoCell = FeaturedStickerSetInfoCell.this;
+                        featuredStickerSetInfoCell.angle = (int) (((float) featuredStickerSetInfoCell.angle) + f);
+                        FeaturedStickerSetInfoCell featuredStickerSetInfoCell2 = FeaturedStickerSetInfoCell.this;
+                        featuredStickerSetInfoCell2.angle = featuredStickerSetInfoCell2.angle - ((FeaturedStickerSetInfoCell.this.angle / 360) * 360);
                         if (FeaturedStickerSetInfoCell.this.drawProgress) {
                             if (FeaturedStickerSetInfoCell.this.progressAlpha < 1.0f) {
-                                FeaturedStickerSetInfoCell.this.progressAlpha = FeaturedStickerSetInfoCell.this.progressAlpha + (((float) delta) / 200.0f);
+                                featuredStickerSetInfoCell2 = FeaturedStickerSetInfoCell.this;
+                                featuredStickerSetInfoCell2.progressAlpha = featuredStickerSetInfoCell2.progressAlpha + (((float) access$500) / 200.0f);
                                 if (FeaturedStickerSetInfoCell.this.progressAlpha > 1.0f) {
                                     FeaturedStickerSetInfoCell.this.progressAlpha = 1.0f;
                                 }
                             }
                         } else if (FeaturedStickerSetInfoCell.this.progressAlpha > 0.0f) {
-                            FeaturedStickerSetInfoCell.this.progressAlpha = FeaturedStickerSetInfoCell.this.progressAlpha - (((float) delta) / 200.0f);
+                            featuredStickerSetInfoCell2 = FeaturedStickerSetInfoCell.this;
+                            featuredStickerSetInfoCell2.progressAlpha = featuredStickerSetInfoCell2.progressAlpha - (((float) access$500) / 200.0f);
                             if (FeaturedStickerSetInfoCell.this.progressAlpha < 0.0f) {
                                 FeaturedStickerSetInfoCell.this.progressAlpha = 0.0f;
                             }
                         }
                     }
-                    FeaturedStickerSetInfoCell.this.lastUpdateTime = newTime;
+                    FeaturedStickerSetInfoCell.this.lastUpdateTime = currentTimeMillis;
                     invalidate();
                 }
             }
@@ -98,15 +105,15 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         this.addButton.setGravity(17);
         this.addButton.setTextColor(Theme.getColor("featuredStickers_buttonText"));
         this.addButton.setTextSize(1, 14.0f);
-        this.addButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        this.addButton.setTypeface(AndroidUtilities.getTypeface(str));
         addView(this.addButton, LayoutHelper.createFrame(-2, 28.0f, 53, 0.0f, 16.0f, 14.0f, 0.0f));
         setWillNotDraw(false);
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(60.0f), NUM));
-        measureChildWithMargins(this.nameTextView, widthMeasureSpec, this.addButton.getMeasuredWidth(), heightMeasureSpec, 0);
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(60.0f), NUM));
+        measureChildWithMargins(this.nameTextView, i, this.addButton.getMeasuredWidth(), i2, 0);
     }
 
     public void setAddOnClickListener(OnClickListener onClickListener) {
@@ -114,29 +121,29 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         this.addButton.setOnClickListener(onClickListener);
     }
 
-    public void setStickerSet(StickerSetCovered stickerSet, boolean unread) {
-        setStickerSet(stickerSet, unread, 0, 0);
+    public void setStickerSet(StickerSetCovered stickerSetCovered, boolean z) {
+        setStickerSet(stickerSetCovered, z, 0, 0);
     }
 
-    public void setStickerSet(StickerSetCovered stickerSet, boolean unread, int index, int searchLength) {
+    public void setStickerSet(StickerSetCovered stickerSetCovered, boolean z, int i, int i2) {
         this.lastUpdateTime = System.currentTimeMillis();
-        if (searchLength != 0) {
-            SpannableStringBuilder builder = new SpannableStringBuilder(stickerSet.set.title);
+        if (i2 != 0) {
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(stickerSetCovered.set.title);
             try {
-                builder.setSpan(new ForegroundColorSpan(Theme.getColor("windowBackgroundWhiteBlueText4")), index, index + searchLength, 33);
-            } catch (Exception e) {
+                spannableStringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor("windowBackgroundWhiteBlueText4")), i, i2 + i, 33);
+            } catch (Exception unused) {
             }
-            this.nameTextView.setText(builder);
+            this.nameTextView.setText(spannableStringBuilder);
         } else {
-            this.nameTextView.setText(stickerSet.set.title);
+            this.nameTextView.setText(stickerSetCovered.set.title);
         }
-        this.infoTextView.setText(LocaleController.formatPluralString("Stickers", stickerSet.set.count));
-        this.isUnread = unread;
+        this.infoTextView.setText(LocaleController.formatPluralString("Stickers", stickerSetCovered.set.count));
+        this.isUnread = z;
         if (this.hasOnClick) {
             this.addButton.setVisibility(0);
-            boolean isStickerPackInstalled = DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(stickerSet.set.id);
-            this.isInstalled = isStickerPackInstalled;
-            if (isStickerPackInstalled) {
+            z = DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(stickerSetCovered.set.id);
+            this.isInstalled = z;
+            if (z) {
                 this.addButton.setBackgroundDrawable(this.delDrawable);
                 this.addButton.setText(LocaleController.getString("StickersRemove", NUM).toUpperCase());
             } else {
@@ -147,18 +154,18 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         } else {
             this.addButton.setVisibility(8);
         }
-        this.set = stickerSet;
+        this.set = stickerSetCovered;
     }
 
-    public void setUrl(CharSequence text, int searchLength) {
-        if (text != null) {
-            SpannableStringBuilder builder = new SpannableStringBuilder(text);
+    public void setUrl(CharSequence charSequence, int i) {
+        if (charSequence != null) {
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(charSequence);
             try {
-                builder.setSpan(new ColorSpanUnderline(Theme.getColor("windowBackgroundWhiteBlueText4")), 0, searchLength, 33);
-                builder.setSpan(new ColorSpanUnderline(Theme.getColor("chat_emojiPanelTrendingDescription")), searchLength, text.length(), 33);
-            } catch (Exception e) {
+                spannableStringBuilder.setSpan(new ColorSpanUnderline(Theme.getColor("windowBackgroundWhiteBlueText4")), 0, i, 33);
+                spannableStringBuilder.setSpan(new ColorSpanUnderline(Theme.getColor("chat_emojiPanelTrendingDescription")), i, charSequence.length(), 33);
+            } catch (Exception unused) {
             }
-            this.infoTextView.setText(builder);
+            this.infoTextView.setText(spannableStringBuilder);
         }
     }
 
@@ -166,8 +173,8 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         return this.isInstalled;
     }
 
-    public void setDrawProgress(boolean value) {
-        this.drawProgress = value;
+    public void setDrawProgress(boolean z) {
+        this.drawProgress = z;
         this.lastUpdateTime = System.currentTimeMillis();
         this.addButton.invalidate();
     }

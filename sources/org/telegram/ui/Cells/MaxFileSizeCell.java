@@ -22,10 +22,11 @@ public class MaxFileSizeCell extends FrameLayout {
     private TextView sizeTextView;
     private TextView textView;
 
+    /* Access modifiers changed, original: protected */
+    public void didChangedSizeValue(int i) {
+    }
+
     public MaxFileSizeCell(Context context) {
-        int i;
-        int i2;
-        int i3 = 3;
         super(context);
         setWillNotDraw(false);
         this.textView = new TextView(context);
@@ -34,77 +35,70 @@ public class MaxFileSizeCell extends FrameLayout {
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
+        int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
         this.textView.setEllipsize(TruncateAt.END);
-        TextView textView = this.textView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
-            i = 3;
-        }
-        addView(textView, LayoutHelper.createFrame(-1, -1.0f, i | 48, 21.0f, 13.0f, 21.0f, 0.0f));
+        addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, 21.0f, 13.0f, 21.0f, 0.0f));
         this.sizeTextView = new TextView(context);
         this.sizeTextView.setTextColor(Theme.getColor("dialogTextBlue2"));
         this.sizeTextView.setTextSize(1, 16.0f);
         this.sizeTextView.setLines(1);
         this.sizeTextView.setMaxLines(1);
         this.sizeTextView.setSingleLine(true);
-        TextView textView2 = this.sizeTextView;
+        this.sizeTextView.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
+        TextView textView = this.sizeTextView;
         if (LocaleController.isRTL) {
-            i2 = 3;
-        } else {
-            i2 = 5;
+            i = 3;
         }
-        textView2.setGravity(i2 | 48);
-        textView = this.sizeTextView;
-        if (!LocaleController.isRTL) {
-            i3 = 5;
-        }
-        addView(textView, LayoutHelper.createFrame(-2, -1.0f, i3 | 48, 21.0f, 13.0f, 21.0f, 0.0f));
+        addView(textView, LayoutHelper.createFrame(-2, -1.0f, i | 48, 21.0f, 13.0f, 21.0f, 0.0f));
         this.seekBarView = new SeekBarView(context) {
-            public boolean onTouchEvent(MotionEvent event) {
-                if (event.getAction() == 0) {
+            public boolean onTouchEvent(MotionEvent motionEvent) {
+                if (motionEvent.getAction() == 0) {
                     getParent().requestDisallowInterceptTouchEvent(true);
                 }
-                return super.onTouchEvent(event);
+                return super.onTouchEvent(motionEvent);
             }
         };
         this.seekBarView.setReportChanges(true);
-        this.seekBarView.setDelegate(new MaxFileSizeCell$$Lambda$0(this));
+        this.seekBarView.setDelegate(new -$$Lambda$MaxFileSizeCell$cPUnEl5DY5tp-A3IQaD5cETcr3k(this));
         addView(this.seekBarView, LayoutHelper.createFrame(-1, 30.0f, 51, 10.0f, 40.0f, 10.0f, 0.0f));
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$new$0$MaxFileSizeCell(float progress) {
-        int size;
-        if (progress <= 0.25f) {
-            size = (int) (((float) 512000) + (536576.0f * (progress / 0.25f)));
+    public /* synthetic */ void lambda$new$0$MaxFileSizeCell(float f) {
+        float f2;
+        float f3;
+        if (f <= 0.25f) {
+            f2 = (float) 512000;
+            f3 = 536576.0f;
         } else {
-            progress -= 0.25f;
-            size = 512000 + 536576;
-            if (progress < 0.25f) {
-                size = (int) (((float) size) + (9437184.0f * (progress / 0.25f)));
+            f -= 0.25f;
+            if (f < 0.25f) {
+                f2 = (float) 1048576;
+                f3 = 9437184.0f;
             } else {
-                progress -= 0.25f;
-                size += 9437184;
-                if (progress <= 0.25f) {
-                    size = (int) (((float) size) + (9.437184E7f * (progress / 0.25f)));
+                f -= 0.25f;
+                if (f <= 0.25f) {
+                    f2 = (float) 10485760;
+                    f3 = 9.437184E7f;
                 } else {
-                    size = (int) (((float) (size + 94371840)) + (1.50575514E9f * ((progress - 0.25f) / 0.25f)));
+                    f -= 0.25f;
+                    f2 = (float) NUM;
+                    f3 = 1.50575514E9f;
                 }
             }
         }
-        this.sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", NUM, AndroidUtilities.formatFileSize((long) size)));
-        this.currentSize = (long) size;
-        didChangedSizeValue(size);
+        int i = (int) (f2 + ((f / 0.25f) * f3));
+        TextView textView = this.sizeTextView;
+        Object[] objArr = new Object[1];
+        long j = (long) i;
+        objArr[0] = AndroidUtilities.formatFileSize(j);
+        textView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", NUM, objArr));
+        this.currentSize = j;
+        didChangedSizeValue(i);
     }
 
-    /* Access modifiers changed, original: protected */
-    public void didChangedSizeValue(int value) {
-    }
-
-    public void setText(String text) {
-        this.textView.setText(text);
+    public void setText(String str) {
+        this.textView.setText(str);
     }
 
     public long getSize() {
@@ -112,110 +106,88 @@ public class MaxFileSizeCell extends FrameLayout {
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(80.0f), NUM));
-        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(80.0f));
-        int availableWidth = getMeasuredWidth() - AndroidUtilities.dp(42.0f);
-        this.sizeTextView.measure(MeasureSpec.makeMeasureSpec(availableWidth, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(30.0f), NUM));
-        this.textView.measure(MeasureSpec.makeMeasureSpec(Math.max(AndroidUtilities.dp(10.0f), (availableWidth - this.sizeTextView.getMeasuredWidth()) - AndroidUtilities.dp(8.0f)), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(30.0f), NUM));
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(80.0f), NUM));
+        setMeasuredDimension(MeasureSpec.getSize(i), AndroidUtilities.dp(80.0f));
+        i = getMeasuredWidth() - AndroidUtilities.dp(42.0f);
+        this.sizeTextView.measure(MeasureSpec.makeMeasureSpec(i, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(30.0f), NUM));
+        this.textView.measure(MeasureSpec.makeMeasureSpec(Math.max(AndroidUtilities.dp(10.0f), (i - this.sizeTextView.getMeasuredWidth()) - AndroidUtilities.dp(8.0f)), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(30.0f), NUM));
         this.seekBarView.measure(MeasureSpec.makeMeasureSpec(getMeasuredWidth() - AndroidUtilities.dp(20.0f), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(30.0f), NUM));
     }
 
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
+    public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
         if (isEnabled()) {
-            return super.onInterceptTouchEvent(ev);
+            return super.onInterceptTouchEvent(motionEvent);
         }
         return true;
     }
 
-    public boolean dispatchTouchEvent(MotionEvent ev) {
+    public boolean dispatchTouchEvent(MotionEvent motionEvent) {
         if (isEnabled()) {
-            return super.dispatchTouchEvent(ev);
+            return super.dispatchTouchEvent(motionEvent);
         }
         return true;
     }
 
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(MotionEvent motionEvent) {
         if (isEnabled()) {
-            return super.onTouchEvent(event);
+            return super.onTouchEvent(motionEvent);
         }
         return true;
     }
 
-    public void setSize(long size) {
-        float progress;
-        this.currentSize = size;
-        this.sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", NUM, AndroidUtilities.formatFileSize(size)));
-        size -= 512000;
-        if (size < 536576) {
-            progress = Math.max(0.0f, ((float) size) / 536576.0f) * 0.25f;
+    public void setSize(long j) {
+        float max;
+        this.currentSize = j;
+        this.sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", NUM, AndroidUtilities.formatFileSize(j)));
+        j -= 512000;
+        if (j < 536576) {
+            max = Math.max(0.0f, ((float) j) / 536576.0f) * 0.25f;
         } else {
-            progress = 0.0f + 0.25f;
-            size -= 536576;
-            if (size < 9437184) {
-                progress += Math.max(0.0f, ((float) size) / 9437184.0f) * 0.25f;
+            j -= 536576;
+            if (j < 9437184) {
+                max = (Math.max(0.0f, ((float) j) / 9437184.0f) * 0.25f) + 0.25f;
             } else {
-                progress += 0.25f;
-                size -= 9437184;
-                if (size < 94371840) {
-                    progress += Math.max(0.0f, ((float) size) / 9.437184E7f) * 0.25f;
+                float f = 0.5f;
+                j -= 9437184;
+                if (j < 94371840) {
+                    max = Math.max(0.0f, ((float) j) / 9.437184E7f);
                 } else {
-                    progress = (progress + 0.25f) + (Math.max(0.0f, ((float) (size - 94371840)) / 1.50575514E9f) * 0.25f);
+                    f = 0.75f;
+                    max = Math.max(0.0f, ((float) (j - 94371840)) / 1.50575514E9f);
                 }
+                max = (max * 0.25f) + f;
             }
         }
-        this.seekBarView.setProgress(progress);
+        this.seekBarView.setProgress(max);
     }
 
-    public void setEnabled(boolean value, ArrayList<Animator> animators) {
+    public void setEnabled(boolean z, ArrayList<Animator> arrayList) {
+        super.setEnabled(z);
         float f = 1.0f;
-        super.setEnabled(value);
-        TextView textView;
-        SeekBarView seekBarView;
-        float f2;
-        TextView textView2;
-        if (animators != null) {
-            textView = this.textView;
-            String str = "alpha";
+        if (arrayList != null) {
+            TextView textView = this.textView;
             float[] fArr = new float[1];
-            fArr[0] = value ? 1.0f : 0.5f;
-            animators.add(ObjectAnimator.ofFloat(textView, str, fArr));
-            seekBarView = this.seekBarView;
-            str = "alpha";
+            fArr[0] = z ? 1.0f : 0.5f;
+            String str = "alpha";
+            arrayList.add(ObjectAnimator.ofFloat(textView, str, fArr));
+            SeekBarView seekBarView = this.seekBarView;
             fArr = new float[1];
-            if (value) {
-                f2 = 1.0f;
-            } else {
-                f2 = 0.5f;
-            }
-            fArr[0] = f2;
-            animators.add(ObjectAnimator.ofFloat(seekBarView, str, fArr));
-            textView2 = this.sizeTextView;
-            String str2 = "alpha";
+            fArr[0] = z ? 1.0f : 0.5f;
+            arrayList.add(ObjectAnimator.ofFloat(seekBarView, str, fArr));
+            textView = this.sizeTextView;
             float[] fArr2 = new float[1];
-            if (!value) {
+            if (!z) {
                 f = 0.5f;
             }
             fArr2[0] = f;
-            animators.add(ObjectAnimator.ofFloat(textView2, str2, fArr2));
+            arrayList.add(ObjectAnimator.ofFloat(textView, str, fArr2));
             return;
         }
-        textView = this.textView;
-        if (value) {
-            f2 = 1.0f;
-        } else {
-            f2 = 0.5f;
-        }
-        textView.setAlpha(f2);
-        seekBarView = this.seekBarView;
-        if (value) {
-            f2 = 1.0f;
-        } else {
-            f2 = 0.5f;
-        }
-        seekBarView.setAlpha(f2);
-        textView2 = this.sizeTextView;
-        if (!value) {
+        this.textView.setAlpha(z ? 1.0f : 0.5f);
+        this.seekBarView.setAlpha(z ? 1.0f : 0.5f);
+        TextView textView2 = this.sizeTextView;
+        if (!z) {
             f = 0.5f;
         }
         textView2.setAlpha(f);

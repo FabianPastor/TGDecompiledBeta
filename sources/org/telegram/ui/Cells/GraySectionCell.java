@@ -13,33 +13,26 @@ public class GraySectionCell extends FrameLayout {
     private TextView textView = new TextView(getContext());
 
     public GraySectionCell(Context context) {
-        int i;
-        int i2 = 5;
         super(context);
         setBackgroundColor(Theme.getColor("graySection"));
         this.textView.setTextSize(1, 14.0f);
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView.setTextColor(Theme.getColor("key_graySectionText"));
+        int i = 5;
+        this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         TextView textView = this.textView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
+        if (!LocaleController.isRTL) {
             i = 3;
         }
-        textView.setGravity(i | 16);
-        TextView textView2 = this.textView;
-        if (!LocaleController.isRTL) {
-            i2 = 3;
-        }
-        addView(textView2, LayoutHelper.createFrame(-1, -1.0f, i2 | 48, 16.0f, 0.0f, 16.0f, 0.0f));
+        addView(textView, LayoutHelper.createFrame(-1, -1.0f, i | 48, 16.0f, 0.0f, 16.0f, 0.0f));
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(32.0f), NUM));
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(32.0f), NUM));
     }
 
-    public void setText(String text) {
-        this.textView.setText(text);
+    public void setText(String str) {
+        this.textView.setText(str);
     }
 }

@@ -53,7 +53,8 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
 
     public View createView(Context context) {
         getParentActivity().setRequestedOrientation(1);
-        this.actionBar.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+        String str = "windowBackgroundWhite";
+        this.actionBar.setBackgroundColor(Theme.getColor(str));
         this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setItemsColor(Theme.getColor("windowBackgroundWhiteGrayText2"), false);
         this.actionBar.setItemsBackgroundColor(Theme.getColor("actionBarWhiteSelector"), false);
@@ -62,51 +63,53 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
             this.actionBar.showActionModeTop();
         }
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
-            public void onItemClick(int id) {
-                if (id == -1) {
+            public void onItemClick(int i) {
+                if (i == -1) {
                     MrzCameraActivity.this.finishFragment();
                 }
             }
         });
         this.fragmentView = new ViewGroup(context) {
             /* Access modifiers changed, original: protected */
-            public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                int width = MeasureSpec.getSize(widthMeasureSpec);
-                int height = MeasureSpec.getSize(heightMeasureSpec);
-                MrzCameraActivity.this.cameraView.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.704f), NUM));
-                MrzCameraActivity.this.titleTextView.measure(MeasureSpec.makeMeasureSpec(width, NUM), MeasureSpec.makeMeasureSpec(height, 0));
-                MrzCameraActivity.this.descriptionText.measure(MeasureSpec.makeMeasureSpec((int) (((float) width) * 0.9f), NUM), MeasureSpec.makeMeasureSpec(height, 0));
-                setMeasuredDimension(width, height);
+            public void onMeasure(int i, int i2) {
+                i = MeasureSpec.getSize(i);
+                i2 = MeasureSpec.getSize(i2);
+                float f = (float) i;
+                MrzCameraActivity.this.cameraView.measure(MeasureSpec.makeMeasureSpec(i, NUM), MeasureSpec.makeMeasureSpec((int) (0.704f * f), NUM));
+                MrzCameraActivity.this.titleTextView.measure(MeasureSpec.makeMeasureSpec(i, NUM), MeasureSpec.makeMeasureSpec(i2, 0));
+                MrzCameraActivity.this.descriptionText.measure(MeasureSpec.makeMeasureSpec((int) (f * 0.9f), NUM), MeasureSpec.makeMeasureSpec(i2, 0));
+                setMeasuredDimension(i, i2);
             }
 
             /* Access modifiers changed, original: protected */
-            public void onLayout(boolean changed, int l, int t, int r, int b) {
-                int width = r - l;
-                int height = b - t;
+            public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+                i3 -= i;
+                i4 -= i2;
                 MrzCameraActivity.this.cameraView.layout(0, 0, MrzCameraActivity.this.cameraView.getMeasuredWidth(), MrzCameraActivity.this.cameraView.getMeasuredHeight() + 0);
                 MrzCameraActivity.this.recognizedMrzView.setTextSize(0, (float) (MrzCameraActivity.this.cameraView.getMeasuredHeight() / 22));
                 MrzCameraActivity.this.recognizedMrzView.setPadding(0, 0, 0, MrzCameraActivity.this.cameraView.getMeasuredHeight() / 15);
-                int y = (int) (((float) height) * 0.65f);
-                MrzCameraActivity.this.titleTextView.layout(0, y, MrzCameraActivity.this.titleTextView.getMeasuredWidth(), MrzCameraActivity.this.titleTextView.getMeasuredHeight() + y);
-                y = (int) (((float) height) * 0.74f);
-                int x = (int) (((float) width) * 0.05f);
-                MrzCameraActivity.this.descriptionText.layout(x, y, MrzCameraActivity.this.descriptionText.getMeasuredWidth() + x, MrzCameraActivity.this.descriptionText.getMeasuredHeight() + y);
+                float f = (float) i4;
+                i = (int) (0.65f * f);
+                MrzCameraActivity.this.titleTextView.layout(0, i, MrzCameraActivity.this.titleTextView.getMeasuredWidth(), MrzCameraActivity.this.titleTextView.getMeasuredHeight() + i);
+                int i5 = (int) (f * 0.74f);
+                i = (int) (((float) i3) * 0.05f);
+                MrzCameraActivity.this.descriptionText.layout(i, i5, MrzCameraActivity.this.descriptionText.getMeasuredWidth() + i, MrzCameraActivity.this.descriptionText.getMeasuredHeight() + i5);
             }
         };
-        this.fragmentView.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-        ViewGroup viewGroup = this.fragmentView;
+        this.fragmentView.setBackgroundColor(Theme.getColor(str));
+        ViewGroup viewGroup = (ViewGroup) this.fragmentView;
         viewGroup.setOnTouchListener(new OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
+            public boolean onTouch(View view, MotionEvent motionEvent) {
                 return true;
             }
         });
         this.cameraView = new CameraView(context, false);
         this.cameraView.setDelegate(new CameraViewDelegate() {
             public void onCameraCreated(Camera camera) {
-                Parameters params = camera.getParameters();
-                float evStep = params.getExposureCompensationStep();
-                params.setExposureCompensation(((float) params.getMaxExposureCompensation()) * evStep <= 2.0f ? params.getMaxExposureCompensation() : Math.round(2.0f / evStep));
-                camera.setParameters(params);
+                Parameters parameters = camera.getParameters();
+                float exposureCompensationStep = parameters.getExposureCompensationStep();
+                parameters.setExposureCompensation(((float) parameters.getMaxExposureCompensation()) * exposureCompensationStep <= 2.0f ? parameters.getMaxExposureCompensation() : Math.round(2.0f / exposureCompensationStep));
+                camera.setParameters(parameters);
             }
 
             public void onCameraInit() {
@@ -141,8 +144,8 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
         this.delegate = mrzCameraActivityDelegate;
     }
 
-    public void destroy(boolean async, Runnable beforeDestroyRunnable) {
-        this.cameraView.destroy(async, beforeDestroyRunnable);
+    public void destroy(boolean z, Runnable runnable) {
+        this.cameraView.destroy(z, runnable);
         this.cameraView = null;
         this.backgroundHandlerThread.quitSafely();
     }
@@ -151,8 +154,8 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.recordStopped, Integer.valueOf(0));
     }
 
-    public void hideCamera(boolean async) {
-        destroy(async, null);
+    public void hideCamera(boolean z) {
+        destroy(z, null);
     }
 
     private void startRecognizing() {
@@ -168,22 +171,22 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
         });
     }
 
-    public void onPreviewFrame(final byte[] data, final Camera camera) {
+    public void onPreviewFrame(final byte[] bArr, final Camera camera) {
         this.handler.post(new Runnable() {
             public void run() {
                 try {
-                    Size size = MrzCameraActivity.this.cameraView.getPreviewSize();
-                    final Result res = MrzRecognizer.recognize(data, size.getWidth(), size.getHeight(), MrzCameraActivity.this.cameraView.getCameraSession().getDisplayOrientation());
-                    if (res != null && !TextUtils.isEmpty(res.firstName) && !TextUtils.isEmpty(res.lastName) && !TextUtils.isEmpty(res.number) && res.birthDay != 0) {
-                        if ((res.expiryDay != 0 || res.doesNotExpire) && res.gender != 0) {
+                    Size previewSize = MrzCameraActivity.this.cameraView.getPreviewSize();
+                    final Result recognize = MrzRecognizer.recognize(bArr, previewSize.getWidth(), previewSize.getHeight(), MrzCameraActivity.this.cameraView.getCameraSession().getDisplayOrientation());
+                    if (recognize != null && !TextUtils.isEmpty(recognize.firstName) && !TextUtils.isEmpty(recognize.lastName) && !TextUtils.isEmpty(recognize.number) && recognize.birthDay != 0) {
+                        if ((recognize.expiryDay != 0 || recognize.doesNotExpire) && recognize.gender != 0) {
                             MrzCameraActivity.this.recognized = true;
                             camera.stopPreview();
                             AndroidUtilities.runOnUIThread(new Runnable() {
                                 public void run() {
-                                    MrzCameraActivity.this.recognizedMrzView.setText(res.rawMRZ);
+                                    MrzCameraActivity.this.recognizedMrzView.setText(recognize.rawMRZ);
                                     MrzCameraActivity.this.recognizedMrzView.animate().setDuration(200).alpha(1.0f).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
                                     if (MrzCameraActivity.this.delegate != null) {
-                                        MrzCameraActivity.this.delegate.didFindMrzInfo(res);
+                                        MrzCameraActivity.this.delegate.didFindMrzInfo(recognize);
                                     }
                                     AndroidUtilities.runOnUIThread(new Runnable() {
                                         public void run() {
@@ -194,20 +197,13 @@ public class MrzCameraActivity extends BaseFragment implements PreviewCallback {
                             });
                         }
                     }
-                } catch (Exception e) {
+                } catch (Exception unused) {
                 }
             }
         });
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[6];
-        themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite");
-        themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite");
-        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText2");
-        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarWhiteSelector");
-        themeDescriptionArr[4] = new ThemeDescription(this.titleTextView, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[5] = new ThemeDescription(this.descriptionText, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText6");
-        return themeDescriptionArr;
+        return new ThemeDescription[]{new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText2"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarWhiteSelector"), new ThemeDescription(this.titleTextView, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"), new ThemeDescription(this.descriptionText, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText6")};
     }
 }

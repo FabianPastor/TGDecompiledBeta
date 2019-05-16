@@ -18,11 +18,11 @@ public class StickerSetGroupInfoCell extends LinearLayout {
     public StickerSetGroupInfoCell(Context context) {
         super(context);
         setOrientation(1);
-        TextView infoTextView = new TextView(context);
-        infoTextView.setTextColor(Theme.getColor("chat_emojiPanelTrendingDescription"));
-        infoTextView.setTextSize(1, 14.0f);
-        infoTextView.setText(LocaleController.getString("GroupStickersInfo", NUM));
-        addView(infoTextView, LayoutHelper.createLinear(-1, -2, 51, 17, 4, 17, 0));
+        TextView textView = new TextView(context);
+        textView.setTextColor(Theme.getColor("chat_emojiPanelTrendingDescription"));
+        textView.setTextSize(1, 14.0f);
+        textView.setText(LocaleController.getString("GroupStickersInfo", NUM));
+        addView(textView, LayoutHelper.createLinear(-1, -2, 51, 17, 4, 17, 0));
         this.addButton = new TextView(context);
         this.addButton.setPadding(AndroidUtilities.dp(17.0f), 0, AndroidUtilities.dp(17.0f), 0);
         this.addButton.setGravity(17);
@@ -35,14 +35,14 @@ public class StickerSetGroupInfoCell extends LinearLayout {
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), heightMeasureSpec);
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), i2);
         if (this.isLast) {
-            View parent = (View) getParent();
-            if (parent != null) {
-                int height = ((parent.getMeasuredHeight() - parent.getPaddingBottom()) - parent.getPaddingTop()) - AndroidUtilities.dp(24.0f);
-                if (getMeasuredHeight() < height) {
-                    setMeasuredDimension(getMeasuredWidth(), height);
+            View view = (View) getParent();
+            if (view != null) {
+                i2 = ((view.getMeasuredHeight() - view.getPaddingBottom()) - view.getPaddingTop()) - AndroidUtilities.dp(24.0f);
+                if (getMeasuredHeight() < i2) {
+                    setMeasuredDimension(getMeasuredWidth(), i2);
                 }
             }
         }
@@ -52,8 +52,8 @@ public class StickerSetGroupInfoCell extends LinearLayout {
         this.addButton.setOnClickListener(onClickListener);
     }
 
-    public void setIsLast(boolean last) {
-        this.isLast = last;
+    public void setIsLast(boolean z) {
+        this.isLast = z;
         requestLayout();
     }
 }

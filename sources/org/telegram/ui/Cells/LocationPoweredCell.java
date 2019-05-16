@@ -23,23 +23,24 @@ public class LocationPoweredCell extends FrameLayout {
         addView(linearLayout, LayoutHelper.createFrame(-2, -2, 17));
         this.textView = new TextView(context);
         this.textView.setTextSize(1, 16.0f);
-        this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText3"));
+        String str = "windowBackgroundWhiteGrayText3";
+        this.textView.setTextColor(Theme.getColor(str));
         this.textView.setText("Powered by");
         linearLayout.addView(this.textView, LayoutHelper.createLinear(-2, -2));
         this.imageView = new ImageView(context);
         this.imageView.setImageResource(NUM);
-        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayText3"), Mode.MULTIPLY));
+        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), Mode.MULTIPLY));
         this.imageView.setPadding(0, AndroidUtilities.dp(2.0f), 0, 0);
         linearLayout.addView(this.imageView, LayoutHelper.createLinear(35, -2));
         this.textView2 = new TextView(context);
         this.textView2.setTextSize(1, 16.0f);
-        this.textView2.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText3"));
+        this.textView2.setTextColor(Theme.getColor(str));
         this.textView2.setText("Foursquare");
         linearLayout.addView(this.textView2, LayoutHelper.createLinear(-2, -2));
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(56.0f), NUM));
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(56.0f), NUM));
     }
 }

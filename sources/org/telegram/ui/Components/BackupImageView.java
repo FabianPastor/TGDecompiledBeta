@@ -9,9 +9,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
+import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.SecureDocument;
-import org.telegram.tgnet.TLObject;
 
 public class BackupImageView extends View {
     private int height = -1;
@@ -23,13 +23,13 @@ public class BackupImageView extends View {
         init();
     }
 
-    public BackupImageView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public BackupImageView(Context context, AttributeSet attributeSet) {
+        super(context, attributeSet);
         init();
     }
 
-    public BackupImageView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    public BackupImageView(Context context, AttributeSet attributeSet, int i) {
+        super(context, attributeSet, i);
         init();
     }
 
@@ -37,70 +37,78 @@ public class BackupImageView extends View {
         this.imageReceiver = new ImageReceiver(this);
     }
 
-    public void setImage(SecureDocument path, String filter) {
-        setImage(path, filter, null, null, null, null, null, 0, null);
+    public void setOrientation(int i, boolean z) {
+        this.imageReceiver.setOrientation(i, z);
     }
 
-    public void setImage(TLObject path, String filter, String ext, Drawable thumb, Object parentObject) {
-        setImage(path, filter, thumb, null, null, null, ext, 0, parentObject);
+    public void setImage(SecureDocument secureDocument, String str) {
+        setImage(ImageLocation.getForSecureDocument(secureDocument), str, null, null, null, null, null, 0, null);
     }
 
-    public void setImage(TLObject path, String filter, Drawable thumb, Object parentObject) {
-        setImage(path, filter, thumb, null, null, null, null, 0, parentObject);
+    public void setImage(ImageLocation imageLocation, String str, String str2, Drawable drawable, Object obj) {
+        setImage(imageLocation, str, null, null, drawable, null, str2, 0, obj);
     }
 
-    public void setImage(TLObject path, String filter, Bitmap thumb, Object parentObject) {
-        setImage(path, filter, null, thumb, null, null, null, 0, parentObject);
+    public void setImage(ImageLocation imageLocation, String str, Drawable drawable, Object obj) {
+        setImage(imageLocation, str, null, null, drawable, null, null, 0, obj);
     }
 
-    public void setImage(TLObject path, String filter, Drawable thumb, int size, Object parentObject) {
-        setImage(path, filter, thumb, null, null, null, null, size, parentObject);
+    public void setImage(ImageLocation imageLocation, String str, Bitmap bitmap, Object obj) {
+        setImage(imageLocation, str, null, null, null, bitmap, null, 0, obj);
     }
 
-    public void setImage(TLObject path, String filter, Bitmap thumb, int size, Object parentObject) {
-        setImage(path, filter, null, thumb, null, null, null, size, parentObject);
+    public void setImage(ImageLocation imageLocation, String str, Drawable drawable, int i, Object obj) {
+        setImage(imageLocation, str, null, null, drawable, null, null, i, obj);
     }
 
-    public void setImage(TLObject path, String filter, TLObject thumb, int size, Object parentObject) {
-        setImage(path, filter, null, null, thumb, null, null, size, parentObject);
+    public void setImage(ImageLocation imageLocation, String str, Bitmap bitmap, int i, Object obj) {
+        setImage(imageLocation, str, null, null, null, bitmap, null, i, obj);
     }
 
-    public void setImage(String path, String filter, Drawable thumb) {
-        setImage(path, filter, thumb, null, null, null, null, 0, null);
+    public void setImage(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, int i, Object obj) {
+        setImage(imageLocation, str, imageLocation2, str2, null, null, null, i, obj);
     }
 
-    public void setImage(String path, String filter, String thumbPath, String thumbFilter) {
-        setImage(path, filter, null, null, thumbPath, thumbFilter, null, 0, null);
+    public void setImage(String str, String str2, Drawable drawable) {
+        setImage(ImageLocation.getForPath(str), str2, null, null, drawable, null, null, 0, null);
     }
 
-    public void setOrientation(int angle, boolean center) {
-        this.imageReceiver.setOrientation(angle, center);
+    public void setImage(String str, String str2, String str3, String str4) {
+        setImage(ImageLocation.getForPath(str), str2, ImageLocation.getForPath(str3), str4, null, null, null, 0, null);
     }
 
-    public void setImage(Object path, String filter, Drawable thumb, Bitmap thumbBitmap, Object thumbLocation, String thumbFilter, String ext, int size, Object parentObject) {
-        if (thumbBitmap != null) {
-            thumb = new BitmapDrawable(null, thumbBitmap);
+    public void setImage(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, Drawable drawable, Bitmap bitmap, String str3, int i, Object obj) {
+        BackupImageView backupImageView;
+        Drawable drawable2;
+        Bitmap bitmap2 = bitmap;
+        if (bitmap2 != null) {
+            Drawable bitmapDrawable = new BitmapDrawable(null, bitmap2);
+            backupImageView = this;
+            drawable2 = bitmapDrawable;
+        } else {
+            backupImageView = this;
+            drawable2 = drawable;
         }
-        this.imageReceiver.setImage(path, filter, thumb, thumbLocation, thumbFilter, size, ext, parentObject, 0);
+        backupImageView.imageReceiver.setImage(imageLocation, str, imageLocation2, str2, drawable2, i, str3, obj, 0);
     }
 
-    public void setImage(TLObject path, String filter, TLObject thumbLocation, String thumbFilter, String ext, int size, int cacheType, Object parentObject) {
-        this.imageReceiver.setImage(path, filter, null, thumbLocation, thumbFilter, size, ext, parentObject, cacheType);
+    public void setImage(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, String str3, int i, int i2, Object obj) {
+        this.imageReceiver.setImage(imageLocation, str, imageLocation2, str2, null, i, str3, obj, i2);
     }
 
     public void setImageBitmap(Bitmap bitmap) {
         this.imageReceiver.setImageBitmap(bitmap);
     }
 
-    public void setImageResource(int resId) {
-        this.imageReceiver.setImageBitmap(getResources().getDrawable(resId));
+    public void setImageResource(int i) {
+        this.imageReceiver.setImageBitmap(getResources().getDrawable(i));
         invalidate();
     }
 
-    public void setImageResource(int resId, int color) {
-        Drawable drawable = getResources().getDrawable(resId);
+    public void setImageResource(int i, int i2) {
+        Drawable drawable = getResources().getDrawable(i);
         if (drawable != null) {
-            drawable.setColorFilter(new PorterDuffColorFilter(color, Mode.MULTIPLY));
+            drawable.setColorFilter(new PorterDuffColorFilter(i2, Mode.MULTIPLY));
         }
         this.imageReceiver.setImageBitmap(drawable);
         invalidate();
@@ -110,8 +118,8 @@ public class BackupImageView extends View {
         this.imageReceiver.setImageBitmap(drawable);
     }
 
-    public void setRoundRadius(int value) {
-        this.imageReceiver.setRoundRadius(value);
+    public void setRoundRadius(int i) {
+        this.imageReceiver.setRoundRadius(i);
         invalidate();
     }
 
@@ -119,17 +127,17 @@ public class BackupImageView extends View {
         return this.imageReceiver.getRoundRadius();
     }
 
-    public void setAspectFit(boolean value) {
-        this.imageReceiver.setAspectFit(value);
+    public void setAspectFit(boolean z) {
+        this.imageReceiver.setAspectFit(z);
     }
 
     public ImageReceiver getImageReceiver() {
         return this.imageReceiver;
     }
 
-    public void setSize(int w, int h) {
-        this.width = w;
-        this.height = h;
+    public void setSize(int i, int i2) {
+        this.width = i;
+        this.height = i2;
     }
 
     /* Access modifiers changed, original: protected */
@@ -149,7 +157,11 @@ public class BackupImageView extends View {
         if (this.width == -1 || this.height == -1) {
             this.imageReceiver.setImageCoords(0, 0, getWidth(), getHeight());
         } else {
-            this.imageReceiver.setImageCoords((getWidth() - this.width) / 2, (getHeight() - this.height) / 2, this.width, this.height);
+            ImageReceiver imageReceiver = this.imageReceiver;
+            int width = (getWidth() - this.width) / 2;
+            int height = getHeight();
+            int i = this.height;
+            imageReceiver.setImageCoords(width, (height - i) / 2, this.width, i);
         }
         this.imageReceiver.draw(canvas);
     }

@@ -13,58 +13,62 @@ public class PagerSnapHelper extends SnapHelper {
     private OrientationHelper mHorizontalHelper;
     private OrientationHelper mVerticalHelper;
 
-    public int[] calculateDistanceToFinalSnap(LayoutManager layoutManager, View targetView) {
-        int[] out = new int[2];
+    public int[] calculateDistanceToFinalSnap(LayoutManager layoutManager, View view) {
+        int[] iArr = new int[2];
         if (layoutManager.canScrollHorizontally()) {
-            out[0] = distanceToCenter(layoutManager, targetView, getHorizontalHelper(layoutManager));
+            iArr[0] = distanceToCenter(layoutManager, view, getHorizontalHelper(layoutManager));
         } else {
-            out[0] = 0;
+            iArr[0] = 0;
         }
         if (layoutManager.canScrollVertically()) {
-            out[1] = distanceToCenter(layoutManager, targetView, getVerticalHelper(layoutManager));
+            iArr[1] = distanceToCenter(layoutManager, view, getVerticalHelper(layoutManager));
         } else {
-            out[1] = 0;
+            iArr[1] = 0;
         }
-        return out;
+        return iArr;
     }
 
     public View findSnapView(LayoutManager layoutManager) {
         if (layoutManager.canScrollVertically()) {
             return findCenterView(layoutManager, getVerticalHelper(layoutManager));
         }
-        if (layoutManager.canScrollHorizontally()) {
-            return findCenterView(layoutManager, getHorizontalHelper(layoutManager));
-        }
-        return null;
+        return layoutManager.canScrollHorizontally() ? findCenterView(layoutManager, getHorizontalHelper(layoutManager)) : null;
     }
 
-    public int findTargetSnapPosition(LayoutManager layoutManager, int velocityX, int velocityY) {
+    public int findTargetSnapPosition(LayoutManager layoutManager, int i, int i2) {
         int itemCount = layoutManager.getItemCount();
         if (itemCount == 0) {
             return -1;
         }
-        View mStartMostChildView = null;
+        View view = null;
         if (layoutManager.canScrollVertically()) {
-            mStartMostChildView = findStartView(layoutManager, getVerticalHelper(layoutManager));
+            view = findStartView(layoutManager, getVerticalHelper(layoutManager));
         } else if (layoutManager.canScrollHorizontally()) {
-            mStartMostChildView = findStartView(layoutManager, getHorizontalHelper(layoutManager));
+            view = findStartView(layoutManager, getHorizontalHelper(layoutManager));
         }
-        if (mStartMostChildView == null) {
+        if (view == null) {
             return -1;
         }
-        int centerPosition = layoutManager.getPosition(mStartMostChildView);
-        if (centerPosition == -1) {
+        int position = layoutManager.getPosition(view);
+        if (position == -1) {
             return -1;
         }
-        boolean forwardDirection = layoutManager.canScrollHorizontally() ? velocityX > 0 : velocityY > 0;
-        boolean reverseLayout = false;
+        Object obj = null;
+        Object obj2 = (layoutManager.canScrollHorizontally() ? i <= 0 : i2 <= 0) ? null : 1;
         if (layoutManager instanceof ScrollVectorProvider) {
-            PointF vectorForEnd = ((ScrollVectorProvider) layoutManager).computeScrollVectorForPosition(itemCount - 1);
-            if (vectorForEnd != null) {
-                reverseLayout = vectorForEnd.x < 0.0f || vectorForEnd.y < 0.0f;
+            PointF computeScrollVectorForPosition = ((ScrollVectorProvider) layoutManager).computeScrollVectorForPosition(itemCount - 1);
+            if (computeScrollVectorForPosition != null && (computeScrollVectorForPosition.x < 0.0f || computeScrollVectorForPosition.y < 0.0f)) {
+                obj = 1;
             }
         }
-        return reverseLayout ? forwardDirection ? centerPosition - 1 : centerPosition : forwardDirection ? centerPosition + 1 : centerPosition;
+        if (obj != null) {
+            if (obj2 != null) {
+                position--;
+            }
+        } else if (obj2 != null) {
+            position++;
+        }
+        return position;
     }
 
     /* Access modifiers changed, original: protected */
@@ -72,13 +76,14 @@ public class PagerSnapHelper extends SnapHelper {
         if (layoutManager instanceof ScrollVectorProvider) {
             return new LinearSmoothScroller(this.mRecyclerView.getContext()) {
                 /* Access modifiers changed, original: protected */
-                public void onTargetFound(View targetView, State state, Action action) {
-                    int[] snapDistances = PagerSnapHelper.this.calculateDistanceToFinalSnap(PagerSnapHelper.this.mRecyclerView.getLayoutManager(), targetView);
-                    int dx = snapDistances[0];
-                    int dy = snapDistances[1];
-                    int time = calculateTimeForDeceleration(Math.max(Math.abs(dx), Math.abs(dy)));
-                    if (time > 0) {
-                        action.update(dx, dy, time, this.mDecelerateInterpolator);
+                public void onTargetFound(View view, State state, Action action) {
+                    PagerSnapHelper pagerSnapHelper = PagerSnapHelper.this;
+                    int[] calculateDistanceToFinalSnap = pagerSnapHelper.calculateDistanceToFinalSnap(pagerSnapHelper.mRecyclerView.getLayoutManager(), view);
+                    int i = calculateDistanceToFinalSnap[0];
+                    int i2 = calculateDistanceToFinalSnap[1];
+                    int calculateTimeForDeceleration = calculateTimeForDeceleration(Math.max(Math.abs(i), Math.abs(i2)));
+                    if (calculateTimeForDeceleration > 0) {
+                        action.update(i, i2, calculateTimeForDeceleration, this.mDecelerateInterpolator);
                     }
                 }
 
@@ -88,76 +93,78 @@ public class PagerSnapHelper extends SnapHelper {
                 }
 
                 /* Access modifiers changed, original: protected */
-                public int calculateTimeForScrolling(int dx) {
-                    return Math.min(100, super.calculateTimeForScrolling(dx));
+                public int calculateTimeForScrolling(int i) {
+                    return Math.min(100, super.calculateTimeForScrolling(i));
                 }
             };
         }
         return null;
     }
 
-    private int distanceToCenter(LayoutManager layoutManager, View targetView, OrientationHelper helper) {
-        int containerCenter;
-        int childCenter = helper.getDecoratedStart(targetView) + (helper.getDecoratedMeasurement(targetView) / 2);
+    private int distanceToCenter(LayoutManager layoutManager, View view, OrientationHelper orientationHelper) {
+        int startAfterPadding;
+        int decoratedStart = orientationHelper.getDecoratedStart(view) + (orientationHelper.getDecoratedMeasurement(view) / 2);
         if (layoutManager.getClipToPadding()) {
-            containerCenter = helper.getStartAfterPadding() + (helper.getTotalSpace() / 2);
+            startAfterPadding = orientationHelper.getStartAfterPadding() + (orientationHelper.getTotalSpace() / 2);
         } else {
-            containerCenter = helper.getEnd() / 2;
+            startAfterPadding = orientationHelper.getEnd() / 2;
         }
-        return childCenter - containerCenter;
+        return decoratedStart - startAfterPadding;
     }
 
-    private View findCenterView(LayoutManager layoutManager, OrientationHelper helper) {
+    private View findCenterView(LayoutManager layoutManager, OrientationHelper orientationHelper) {
         int childCount = layoutManager.getChildCount();
+        View view = null;
         if (childCount == 0) {
             return null;
         }
-        int center;
-        View closestChild = null;
+        int startAfterPadding;
         if (layoutManager.getClipToPadding()) {
-            center = helper.getStartAfterPadding() + (helper.getTotalSpace() / 2);
+            startAfterPadding = orientationHelper.getStartAfterPadding() + (orientationHelper.getTotalSpace() / 2);
         } else {
-            center = helper.getEnd() / 2;
+            startAfterPadding = orientationHelper.getEnd() / 2;
         }
-        int absClosest = Integer.MAX_VALUE;
-        for (int i = 0; i < childCount; i++) {
-            View child = layoutManager.getChildAt(i);
-            int absDistance = Math.abs((helper.getDecoratedStart(child) + (helper.getDecoratedMeasurement(child) / 2)) - center);
-            if (absDistance < absClosest) {
-                absClosest = absDistance;
-                closestChild = child;
+        int i = Integer.MAX_VALUE;
+        for (int i2 = 0; i2 < childCount; i2++) {
+            View childAt = layoutManager.getChildAt(i2);
+            int abs = Math.abs((orientationHelper.getDecoratedStart(childAt) + (orientationHelper.getDecoratedMeasurement(childAt) / 2)) - startAfterPadding);
+            if (abs < i) {
+                view = childAt;
+                i = abs;
             }
         }
-        return closestChild;
+        return view;
     }
 
-    private View findStartView(LayoutManager layoutManager, OrientationHelper helper) {
+    private View findStartView(LayoutManager layoutManager, OrientationHelper orientationHelper) {
         int childCount = layoutManager.getChildCount();
+        View view = null;
         if (childCount == 0) {
             return null;
         }
-        View closestChild = null;
-        int startest = Integer.MAX_VALUE;
-        for (int i = 0; i < childCount; i++) {
-            View child = layoutManager.getChildAt(i);
-            int childStart = helper.getDecoratedStart(child);
-            if (childStart < startest) {
-                startest = childStart;
-                closestChild = child;
+        int i = Integer.MAX_VALUE;
+        for (int i2 = 0; i2 < childCount; i2++) {
+            View childAt = layoutManager.getChildAt(i2);
+            int decoratedStart = orientationHelper.getDecoratedStart(childAt);
+            if (decoratedStart < i) {
+                view = childAt;
+                i = decoratedStart;
             }
         }
-        return closestChild;
+        return view;
     }
 
     private OrientationHelper getVerticalHelper(LayoutManager layoutManager) {
-        if (this.mVerticalHelper == null || this.mVerticalHelper.mLayoutManager != layoutManager) {
+        OrientationHelper orientationHelper = this.mVerticalHelper;
+        if (orientationHelper == null || orientationHelper.mLayoutManager != layoutManager) {
             this.mVerticalHelper = OrientationHelper.createVerticalHelper(layoutManager);
         }
         return this.mVerticalHelper;
     }
 
     private OrientationHelper getHorizontalHelper(LayoutManager layoutManager) {
-        if (this.mHorizontalHelper == null || this.mHorizontalHelper.mLayoutManager != layoutManager) {
+        OrientationHelper orientationHelper = this.mHorizontalHelper;
+        if (orientationHelper == null || orientationHelper.mLayoutManager != layoutManager) {
             this.mHorizontalHelper = OrientationHelper.createHorizontalHelper(layoutManager);
         }
         return this.mHorizontalHelper;

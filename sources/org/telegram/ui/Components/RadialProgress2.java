@@ -9,8 +9,10 @@ import android.graphics.RectF;
 import android.view.View;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
-import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.Document;
+import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.ui.ActionBar.Theme;
 
 public class RadialProgress2 {
@@ -42,18 +44,18 @@ public class RadialProgress2 {
     private int progressColor = -1;
     private RectF progressRect = new RectF();
 
-    public RadialProgress2(View parentView) {
-        this.parent = parentView;
-        this.overlayImageView = new ImageReceiver(parentView);
+    public RadialProgress2(View view) {
+        this.parent = view;
+        this.overlayImageView = new ImageReceiver(view);
         this.overlayImageView.setInvalidateAll(true);
         this.mediaActionDrawable = new MediaActionDrawable();
         MediaActionDrawable mediaActionDrawable = this.mediaActionDrawable;
-        parentView.getClass();
-        mediaActionDrawable.setDelegate(RadialProgress2$$Lambda$0.get$Lambda(parentView));
+        view.getClass();
+        mediaActionDrawable.setDelegate(new -$$Lambda$F8rg4UBMmP_S27QL-K3VXBnPS_E(view));
         this.miniMediaActionDrawable = new MediaActionDrawable();
         mediaActionDrawable = this.miniMediaActionDrawable;
-        parentView.getClass();
-        mediaActionDrawable.setDelegate(RadialProgress2$$Lambda$1.get$Lambda(parentView));
+        view.getClass();
+        mediaActionDrawable.setDelegate(new -$$Lambda$F8rg4UBMmP_S27QL-K3VXBnPS_E(view));
         this.miniMediaActionDrawable.setMini(true);
         this.miniMediaActionDrawable.setIcon(4, false);
         this.circleRadius = AndroidUtilities.dp(22.0f);
@@ -61,31 +63,24 @@ public class RadialProgress2 {
         this.overlayPaint.setColor(NUM);
     }
 
-    public void setCircleRadius(int value) {
-        this.circleRadius = value;
+    public void setCircleRadius(int i) {
+        this.circleRadius = i;
         this.overlayImageView.setRoundRadius(this.circleRadius);
     }
 
-    public void setImageOverlay(TLObject image, Object parentObject) {
-        String format;
-        ImageReceiver imageReceiver = this.overlayImageView;
-        if (image != null) {
-            format = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(this.circleRadius * 2), Integer.valueOf(this.circleRadius * 2)});
-        } else {
-            format = null;
-        }
-        imageReceiver.setImage(image, format, null, null, parentObject, 1);
+    public void setImageOverlay(PhotoSize photoSize, Document document, Object obj) {
+        this.overlayImageView.setImage(ImageLocation.getForDocument(photoSize, document), String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(this.circleRadius * 2), Integer.valueOf(this.circleRadius * 2)}), null, null, obj, 1);
     }
 
-    public void setImageOverlay(String url) {
+    public void setImageOverlay(String str) {
         String format;
         ImageReceiver imageReceiver = this.overlayImageView;
-        if (url != null) {
+        if (str != null) {
             format = String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(this.circleRadius * 2), Integer.valueOf(this.circleRadius * 2)});
         } else {
             format = null;
         }
-        imageReceiver.setImage(url, format, null, null, -1);
+        imageReceiver.setImage(str, format, null, null, -1);
     }
 
     public void onAttachedToWindow() {
@@ -96,55 +91,60 @@ public class RadialProgress2 {
         this.overlayImageView.onDetachedFromWindow();
     }
 
-    public void setColors(int circle, int circlePressed, int icon, int iconPressed) {
-        this.circleColor = circle;
-        this.circlePressedColor = circlePressed;
-        this.iconColor = icon;
-        this.iconPressedColor = iconPressed;
+    public void setColors(int i, int i2, int i3, int i4) {
+        this.circleColor = i;
+        this.circlePressedColor = i2;
+        this.iconColor = i3;
+        this.iconPressedColor = i4;
         this.circleColorKey = null;
         this.circlePressedColorKey = null;
         this.iconColorKey = null;
         this.iconPressedColorKey = null;
     }
 
-    public void setColors(String circle, String circlePressed, String icon, String iconPressed) {
-        this.circleColorKey = circle;
-        this.circlePressedColorKey = circlePressed;
-        this.iconColorKey = icon;
-        this.iconPressedColorKey = iconPressed;
+    public void setColors(String str, String str2, String str3, String str4) {
+        this.circleColorKey = str;
+        this.circlePressedColorKey = str2;
+        this.iconColorKey = str3;
+        this.iconPressedColorKey = str4;
     }
 
-    public void setDrawBackground(boolean value) {
-        this.drawBackground = value;
+    public void setDrawBackground(boolean z) {
+        this.drawBackground = z;
     }
 
-    public void setProgressRect(int left, int top, int right, int bottom) {
-        this.progressRect.set((float) left, (float) top, (float) right, (float) bottom);
+    public void setProgressRect(int i, int i2, int i3, int i4) {
+        this.progressRect.set((float) i, (float) i2, (float) i3, (float) i4);
     }
 
     public RectF getProgressRect() {
         return this.progressRect;
     }
 
-    public void setProgressColor(int color) {
-        this.progressColor = color;
+    public void setProgressColor(int i) {
+        this.progressColor = i;
     }
 
-    public void setMiniProgressBackgroundColor(int color) {
-        this.miniProgressBackgroundPaint.setColor(color);
+    public void setMiniProgressBackgroundColor(int i) {
+        this.miniProgressBackgroundPaint.setColor(i);
     }
 
-    public void setProgress(float value, boolean animated) {
+    public void setProgress(float f, boolean z) {
         if (this.drawMiniIcon) {
-            this.miniMediaActionDrawable.setProgress(value, animated);
+            this.miniMediaActionDrawable.setProgress(f, z);
         } else {
-            this.mediaActionDrawable.setProgress(value, animated);
+            this.mediaActionDrawable.setProgress(f, z);
         }
     }
 
     private void invalidateParent() {
-        int offset = AndroidUtilities.dp(2.0f);
-        this.parent.invalidate(((int) this.progressRect.left) - offset, ((int) this.progressRect.top) - offset, ((int) this.progressRect.right) + (offset * 2), ((int) this.progressRect.bottom) + (offset * 2));
+        int dp = AndroidUtilities.dp(2.0f);
+        View view = this.parent;
+        RectF rectF = this.progressRect;
+        int i = ((int) rectF.left) - dp;
+        int i2 = ((int) rectF.top) - dp;
+        dp *= 2;
+        view.invalidate(i, i2, ((int) rectF.right) + dp, ((int) rectF.bottom) + dp);
     }
 
     public int getIcon() {
@@ -155,10 +155,10 @@ public class RadialProgress2 {
         return this.miniMediaActionDrawable.getCurrentIcon();
     }
 
-    public void setIcon(int icon, boolean ifSame, boolean animated) {
-        if (!ifSame || icon != this.mediaActionDrawable.getCurrentIcon()) {
-            this.mediaActionDrawable.setIcon(icon, animated);
-            if (animated) {
+    public void setIcon(int i, boolean z, boolean z2) {
+        if (!z || i != this.mediaActionDrawable.getCurrentIcon()) {
+            this.mediaActionDrawable.setIcon(i, z2);
+            if (z2) {
                 invalidateParent();
             } else {
                 this.parent.invalidate();
@@ -166,18 +166,18 @@ public class RadialProgress2 {
         }
     }
 
-    public void setMiniIcon(int icon, boolean ifSame, boolean animated) {
-        if (icon != 2 && icon != 3 && icon != 4) {
+    public void setMiniIcon(int i, boolean z, boolean z2) {
+        if (i != 2 && i != 3 && i != 4) {
             return;
         }
-        if (!ifSame || icon != this.miniMediaActionDrawable.getCurrentIcon()) {
-            this.miniMediaActionDrawable.setIcon(icon, animated);
-            boolean z = icon != 4 || this.miniMediaActionDrawable.getTransitionProgress() < 1.0f;
-            this.drawMiniIcon = z;
+        if (!z || i != this.miniMediaActionDrawable.getCurrentIcon()) {
+            this.miniMediaActionDrawable.setIcon(i, z2);
+            boolean z3 = i != 4 || this.miniMediaActionDrawable.getTransitionProgress() < 1.0f;
+            this.drawMiniIcon = z3;
             if (this.drawMiniIcon) {
                 initMiniIcons();
             }
-            if (animated) {
+            if (z2) {
                 invalidateParent();
             } else {
                 this.parent.invalidate();
@@ -190,90 +190,103 @@ public class RadialProgress2 {
             try {
                 this.miniDrawBitmap = Bitmap.createBitmap(AndroidUtilities.dp(48.0f), AndroidUtilities.dp(48.0f), Config.ARGB_8888);
                 this.miniDrawCanvas = new Canvas(this.miniDrawBitmap);
-            } catch (Throwable th) {
+            } catch (Throwable unused) {
             }
         }
     }
 
-    public boolean swapIcon(int icon) {
-        if (this.mediaActionDrawable.setIcon(icon, false)) {
-            return true;
-        }
-        return false;
+    public boolean swapIcon(int i) {
+        return this.mediaActionDrawable.setIcon(i, false);
     }
 
-    public void setPressed(boolean value, boolean mini) {
-        if (mini) {
-            this.isPressedMini = value;
+    public void setPressed(boolean z, boolean z2) {
+        if (z2) {
+            this.isPressedMini = z;
         } else {
-            this.isPressed = value;
+            this.isPressed = z;
         }
         invalidateParent();
     }
 
-    public void setOverrideAlpha(float alpha) {
-        this.overrideAlpha = alpha;
+    public void setOverrideAlpha(float f) {
+        this.overrideAlpha = f;
     }
 
     public void draw(Canvas canvas) {
+        Canvas canvas2 = canvas;
         if (this.mediaActionDrawable.getCurrentIcon() != 4 || this.mediaActionDrawable.getTransitionProgress() < 1.0f) {
+            String str;
             int color;
-            int centerX;
+            int i;
             int centerY;
-            float alpha;
+            int i2;
+            Object obj;
+            Canvas canvas3;
             int currentIcon = this.mediaActionDrawable.getCurrentIcon();
-            float wholeAlpha = ((currentIcon == 3 || currentIcon == 6 || currentIcon == 10 || currentIcon == 8 || currentIcon == 0) && this.mediaActionDrawable.getPreviousIcon() == 4) ? this.mediaActionDrawable.getTransitionProgress() : currentIcon != 4 ? 1.0f : 1.0f - this.mediaActionDrawable.getTransitionProgress();
+            float transitionProgress = ((currentIcon == 3 || currentIcon == 6 || currentIcon == 10 || currentIcon == 8 || currentIcon == 0) && this.mediaActionDrawable.getPreviousIcon() == 4) ? this.mediaActionDrawable.getTransitionProgress() : currentIcon != 4 ? 1.0f : 1.0f - this.mediaActionDrawable.getTransitionProgress();
             if (this.isPressedMini) {
-                if (this.iconPressedColorKey != null) {
-                    this.miniMediaActionDrawable.setColor(Theme.getColor(this.iconPressedColorKey));
+                str = this.iconPressedColorKey;
+                if (str != null) {
+                    this.miniMediaActionDrawable.setColor(Theme.getColor(str));
                 } else {
                     this.miniMediaActionDrawable.setColor(this.iconPressedColor);
                 }
-                if (this.circlePressedColorKey != null) {
-                    this.circleMiniPaint.setColor(Theme.getColor(this.circlePressedColorKey));
+                str = this.circlePressedColorKey;
+                if (str != null) {
+                    this.circleMiniPaint.setColor(Theme.getColor(str));
                 } else {
                     this.circleMiniPaint.setColor(this.circlePressedColor);
                 }
             } else {
-                if (this.iconColorKey != null) {
-                    this.miniMediaActionDrawable.setColor(Theme.getColor(this.iconColorKey));
+                str = this.iconColorKey;
+                if (str != null) {
+                    this.miniMediaActionDrawable.setColor(Theme.getColor(str));
                 } else {
                     this.miniMediaActionDrawable.setColor(this.iconColor);
                 }
-                if (this.circleColorKey != null) {
-                    this.circleMiniPaint.setColor(Theme.getColor(this.circleColorKey));
+                str = this.circleColorKey;
+                if (str != null) {
+                    this.circleMiniPaint.setColor(Theme.getColor(str));
                 } else {
                     this.circleMiniPaint.setColor(this.circleColor);
                 }
             }
             MediaActionDrawable mediaActionDrawable;
+            MediaActionDrawable mediaActionDrawable2;
+            String str2;
             if (this.isPressed) {
-                if (this.iconPressedColorKey != null) {
+                str = this.iconPressedColorKey;
+                if (str != null) {
                     mediaActionDrawable = this.mediaActionDrawable;
-                    color = Theme.getColor(this.iconPressedColorKey);
+                    color = Theme.getColor(str);
                     mediaActionDrawable.setColor(color);
                 } else {
-                    mediaActionDrawable = this.mediaActionDrawable;
-                    color = this.iconPressedColor;
-                    mediaActionDrawable.setColor(color);
+                    mediaActionDrawable2 = this.mediaActionDrawable;
+                    i = this.iconPressedColor;
+                    mediaActionDrawable2.setColor(i);
+                    color = i;
                 }
-                if (this.circlePressedColorKey != null) {
-                    this.circlePaint.setColor(Theme.getColor(this.circlePressedColorKey));
+                str2 = this.circlePressedColorKey;
+                if (str2 != null) {
+                    this.circlePaint.setColor(Theme.getColor(str2));
                 } else {
                     this.circlePaint.setColor(this.circlePressedColor);
                 }
             } else {
-                if (this.iconColorKey != null) {
+                str = this.iconColorKey;
+                if (str != null) {
                     mediaActionDrawable = this.mediaActionDrawable;
-                    color = Theme.getColor(this.iconColorKey);
+                    color = Theme.getColor(str);
                     mediaActionDrawable.setColor(color);
                 } else {
-                    mediaActionDrawable = this.mediaActionDrawable;
-                    color = this.iconColor;
-                    mediaActionDrawable.setColor(color);
+                    mediaActionDrawable2 = this.mediaActionDrawable;
+                    i = this.iconColor;
+                    mediaActionDrawable2.setColor(i);
+                    color = i;
                 }
-                if (this.circleColorKey != null) {
-                    this.circlePaint.setColor(Theme.getColor(this.circleColorKey));
+                str2 = this.circleColorKey;
+                if (str2 != null) {
+                    this.circlePaint.setColor(Theme.getColor(str2));
                 } else {
                     this.circlePaint.setColor(this.circleColor);
                 }
@@ -281,92 +294,113 @@ public class RadialProgress2 {
             if (this.drawMiniIcon && this.miniDrawCanvas != null) {
                 this.miniDrawBitmap.eraseColor(0);
             }
-            this.circlePaint.setAlpha((int) ((((float) this.circlePaint.getAlpha()) * wholeAlpha) * this.overrideAlpha));
-            this.circleMiniPaint.setAlpha((int) ((((float) this.circleMiniPaint.getAlpha()) * wholeAlpha) * this.overrideAlpha));
-            boolean drawCircle = true;
+            this.circlePaint.setAlpha((int) ((((float) this.circlePaint.getAlpha()) * transitionProgress) * this.overrideAlpha));
+            this.circleMiniPaint.setAlpha((int) ((((float) this.circleMiniPaint.getAlpha()) * transitionProgress) * this.overrideAlpha));
             if (!this.drawMiniIcon || this.miniDrawCanvas == null) {
-                centerX = (int) this.progressRect.centerX();
+                i = (int) this.progressRect.centerX();
                 centerY = (int) this.progressRect.centerY();
             } else {
-                centerX = (int) (this.progressRect.width() / 2.0f);
+                i = (int) (this.progressRect.width() / 2.0f);
                 centerY = (int) (this.progressRect.height() / 2.0f);
             }
+            int i3 = 2;
             if (this.overlayImageView.hasBitmapImage()) {
-                int c;
-                alpha = this.overlayImageView.getCurrentAlpha();
-                this.overlayPaint.setAlpha((int) (((100.0f * alpha) * wholeAlpha) * this.overrideAlpha));
-                if (alpha >= 1.0f) {
-                    drawCircle = false;
-                    c = -1;
+                Object obj2;
+                float currentAlpha = this.overlayImageView.getCurrentAlpha();
+                this.overlayPaint.setAlpha((int) (((100.0f * currentAlpha) * transitionProgress) * this.overrideAlpha));
+                if (currentAlpha >= 1.0f) {
+                    color = -1;
+                    obj2 = null;
                 } else {
-                    int r = Color.red(color);
-                    int g = Color.green(color);
-                    int b = Color.blue(color);
-                    int a = Color.alpha(color);
-                    c = Color.argb(a + ((int) (((float) (255 - a)) * alpha)), r + ((int) (((float) (255 - r)) * alpha)), g + ((int) (((float) (255 - g)) * alpha)), b + ((int) (((float) (255 - b)) * alpha)));
+                    int red = Color.red(color);
+                    int green = Color.green(color);
+                    int blue = Color.blue(color);
+                    color = Color.alpha(color);
+                    color = Color.argb(color + ((int) (((float) (255 - color)) * currentAlpha)), red + ((int) (((float) (255 - red)) * currentAlpha)), green + ((int) (((float) (255 - green)) * currentAlpha)), blue + ((int) (((float) (255 - blue)) * currentAlpha)));
+                    obj2 = 1;
                 }
-                this.mediaActionDrawable.setColor(c);
-                this.overlayImageView.setImageCoords(centerX - this.circleRadius, centerY - this.circleRadius, this.circleRadius * 2, this.circleRadius * 2);
-            }
-            if (drawCircle && this.drawBackground) {
-                if (this.drawMiniIcon && this.miniDrawCanvas != null) {
-                    this.miniDrawCanvas.drawCircle((float) centerX, (float) centerY, (float) this.circleRadius, this.circlePaint);
-                } else if (!(currentIcon == 4 && wholeAlpha == 0.0f)) {
-                    canvas.drawCircle((float) centerX, (float) centerY, ((float) this.circleRadius) * wholeAlpha, this.circlePaint);
-                }
-            }
-            if (this.overlayImageView.hasBitmapImage()) {
-                this.overlayImageView.setAlpha(this.overrideAlpha * wholeAlpha);
-                if (!this.drawMiniIcon || this.miniDrawCanvas == null) {
-                    this.overlayImageView.draw(canvas);
-                    canvas.drawCircle((float) centerX, (float) centerY, (float) this.circleRadius, this.overlayPaint);
-                } else {
-                    this.overlayImageView.draw(this.miniDrawCanvas);
-                    this.miniDrawCanvas.drawCircle((float) centerX, (float) centerY, (float) this.circleRadius, this.overlayPaint);
-                }
-            }
-            this.mediaActionDrawable.setBounds(centerX - this.circleRadius, centerY - this.circleRadius, this.circleRadius + centerX, this.circleRadius + centerY);
-            if (!this.drawMiniIcon) {
-                this.mediaActionDrawable.setOverrideAlpha(this.overrideAlpha);
-                this.mediaActionDrawable.draw(canvas);
-            } else if (this.miniDrawCanvas != null) {
-                this.mediaActionDrawable.draw(this.miniDrawCanvas);
+                this.mediaActionDrawable.setColor(color);
+                ImageReceiver imageReceiver = this.overlayImageView;
+                i2 = this.circleRadius;
+                imageReceiver.setImageCoords(i - i2, centerY - i2, i2 * 2, i2 * 2);
+                obj = obj2;
             } else {
-                this.mediaActionDrawable.draw(canvas);
+                obj = 1;
+            }
+            if (obj != null && this.drawBackground) {
+                if (this.drawMiniIcon) {
+                    Canvas canvas4 = this.miniDrawCanvas;
+                    if (canvas4 != null) {
+                        canvas4.drawCircle((float) i, (float) centerY, (float) this.circleRadius, this.circlePaint);
+                    }
+                }
+                if (!(currentIcon == 4 && transitionProgress == 0.0f)) {
+                    canvas2.drawCircle((float) i, (float) centerY, ((float) this.circleRadius) * transitionProgress, this.circlePaint);
+                }
+            }
+            if (this.overlayImageView.hasBitmapImage()) {
+                this.overlayImageView.setAlpha(transitionProgress * this.overrideAlpha);
+                if (this.drawMiniIcon) {
+                    canvas3 = this.miniDrawCanvas;
+                    if (canvas3 != null) {
+                        this.overlayImageView.draw(canvas3);
+                        this.miniDrawCanvas.drawCircle((float) i, (float) centerY, (float) this.circleRadius, this.overlayPaint);
+                    }
+                }
+                this.overlayImageView.draw(canvas2);
+                canvas2.drawCircle((float) i, (float) centerY, (float) this.circleRadius, this.overlayPaint);
+            }
+            MediaActionDrawable mediaActionDrawable3 = this.mediaActionDrawable;
+            i2 = this.circleRadius;
+            mediaActionDrawable3.setBounds(i - i2, centerY - i2, i + i2, centerY + i2);
+            if (this.drawMiniIcon) {
+                canvas3 = this.miniDrawCanvas;
+                if (canvas3 != null) {
+                    this.mediaActionDrawable.draw(canvas3);
+                } else {
+                    this.mediaActionDrawable.draw(canvas2);
+                }
+            } else {
+                this.mediaActionDrawable.setOverrideAlpha(this.overrideAlpha);
+                this.mediaActionDrawable.draw(canvas2);
             }
             if (this.drawMiniIcon) {
-                int offset;
-                int size;
-                float cx;
-                float cy;
+                float centerX;
+                float centerY2;
+                float f;
                 if (Math.abs(this.progressRect.width() - ((float) AndroidUtilities.dp(44.0f))) < AndroidUtilities.density) {
-                    offset = 0;
-                    size = 20;
-                    cx = this.progressRect.centerX() + ((float) AndroidUtilities.dp((float) 16));
-                    cy = this.progressRect.centerY() + ((float) AndroidUtilities.dp((float) 16));
+                    currentIcon = 20;
+                    transitionProgress = (float) 16;
+                    centerX = this.progressRect.centerX() + ((float) AndroidUtilities.dp(transitionProgress));
+                    centerY2 = this.progressRect.centerY() + ((float) AndroidUtilities.dp(transitionProgress));
+                    i3 = 0;
                 } else {
-                    offset = 2;
-                    size = 22;
-                    cx = this.progressRect.centerX() + ((float) AndroidUtilities.dp(18.0f));
-                    cy = this.progressRect.centerY() + ((float) AndroidUtilities.dp(18.0f));
+                    currentIcon = 22;
+                    centerX = this.progressRect.centerX() + ((float) AndroidUtilities.dp(18.0f));
+                    centerY2 = this.progressRect.centerY() + ((float) AndroidUtilities.dp(18.0f));
                 }
-                int halfSize = size / 2;
-                alpha = this.miniMediaActionDrawable.getCurrentIcon() != 4 ? 1.0f : 1.0f - this.miniMediaActionDrawable.getTransitionProgress();
-                if (alpha == 0.0f) {
+                int i4 = currentIcon / 2;
+                float transitionProgress2 = this.miniMediaActionDrawable.getCurrentIcon() != 4 ? 1.0f : 1.0f - this.miniMediaActionDrawable.getTransitionProgress();
+                if (transitionProgress2 == 0.0f) {
                     this.drawMiniIcon = false;
                 }
-                if (this.miniDrawCanvas != null) {
-                    this.miniDrawCanvas.drawCircle((float) AndroidUtilities.dp((float) ((size + 18) + offset)), (float) AndroidUtilities.dp((float) ((size + 18) + offset)), ((float) AndroidUtilities.dp((float) (halfSize + 1))) * alpha, Theme.checkboxSquare_eraserPaint);
+                Canvas canvas5 = this.miniDrawCanvas;
+                if (canvas5 != null) {
+                    f = (float) ((currentIcon + 18) + i3);
+                    canvas5.drawCircle((float) AndroidUtilities.dp(f), (float) AndroidUtilities.dp(f), ((float) AndroidUtilities.dp((float) (i4 + 1))) * transitionProgress2, Theme.checkboxSquare_eraserPaint);
                 } else {
                     this.miniProgressBackgroundPaint.setColor(this.progressColor);
-                    canvas.drawCircle(cx, cy, (float) AndroidUtilities.dp(12.0f), this.miniProgressBackgroundPaint);
+                    canvas2.drawCircle(centerX, centerY2, (float) AndroidUtilities.dp(12.0f), this.miniProgressBackgroundPaint);
                 }
                 if (this.miniDrawCanvas != null) {
-                    canvas.drawBitmap(this.miniDrawBitmap, (float) ((int) this.progressRect.left), (float) ((int) this.progressRect.top), null);
+                    Bitmap bitmap = this.miniDrawBitmap;
+                    RectF rectF = this.progressRect;
+                    canvas2.drawBitmap(bitmap, (float) ((int) rectF.left), (float) ((int) rectF.top), null);
                 }
-                canvas.drawCircle(cx, cy, ((float) AndroidUtilities.dp((float) halfSize)) * alpha, this.circleMiniPaint);
-                this.miniMediaActionDrawable.setBounds((int) (cx - (((float) AndroidUtilities.dp((float) halfSize)) * alpha)), (int) (cy - (((float) AndroidUtilities.dp((float) halfSize)) * alpha)), (int) ((((float) AndroidUtilities.dp((float) halfSize)) * alpha) + cx), (int) ((((float) AndroidUtilities.dp((float) halfSize)) * alpha) + cy));
-                this.miniMediaActionDrawable.draw(canvas);
+                f = (float) i4;
+                canvas2.drawCircle(centerX, centerY2, ((float) AndroidUtilities.dp(f)) * transitionProgress2, this.circleMiniPaint);
+                this.miniMediaActionDrawable.setBounds((int) (centerX - (((float) AndroidUtilities.dp(f)) * transitionProgress2)), (int) (centerY2 - (((float) AndroidUtilities.dp(f)) * transitionProgress2)), (int) (centerX + (((float) AndroidUtilities.dp(f)) * transitionProgress2)), (int) (centerY2 + (((float) AndroidUtilities.dp(f)) * transitionProgress2)));
+                this.miniMediaActionDrawable.draw(canvas2);
             }
         }
     }

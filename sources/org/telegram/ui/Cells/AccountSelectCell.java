@@ -11,8 +11,8 @@ import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
@@ -50,8 +50,8 @@ public class AccountSelectCell extends FrameLayout {
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(56.0f), NUM));
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(56.0f), NUM));
     }
 
     /* Access modifiers changed, original: protected */
@@ -60,22 +60,19 @@ public class AccountSelectCell extends FrameLayout {
         this.textView.setTextColor(Theme.getColor("chats_menuItemText"));
     }
 
-    public void setAccount(int account, boolean check) {
-        TLObject avatar;
-        this.accountNumber = account;
-        Object user = UserConfig.getInstance(this.accountNumber).getCurrentUser();
-        this.avatarDrawable.setInfo((User) user);
-        this.textView.setText(ContactsController.formatName(user.first_name, user.last_name));
-        if (user.photo == null || user.photo.photo_small == null || user.photo.photo_small.volume_id == 0 || user.photo.photo_small.local_id == 0) {
-            avatar = null;
-        } else {
-            avatar = user.photo.photo_small;
-        }
-        this.imageView.getImageReceiver().setCurrentAccount(account);
-        this.imageView.setImage(avatar, "50_50", this.avatarDrawable, user);
+    public void setAccount(int i, boolean z) {
+        this.accountNumber = i;
+        Object currentUser = UserConfig.getInstance(this.accountNumber).getCurrentUser();
+        this.avatarDrawable.setInfo((User) currentUser);
+        this.textView.setText(ContactsController.formatName(currentUser.first_name, currentUser.last_name));
+        this.imageView.getImageReceiver().setCurrentAccount(i);
+        int i2 = 0;
+        this.imageView.setImage(ImageLocation.getForUser(currentUser, false), "50_50", this.avatarDrawable, currentUser);
         ImageView imageView = this.checkImageView;
-        int i = (check && account == UserConfig.selectedAccount) ? 0 : 4;
-        imageView.setVisibility(i);
+        if (!(z && i == UserConfig.selectedAccount)) {
+            i2 = 4;
+        }
+        imageView.setVisibility(i2);
     }
 
     public int getAccountNumber() {

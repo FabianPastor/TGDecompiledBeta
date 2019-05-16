@@ -521,7 +521,6 @@
     <string name="ChannelMembers">Membri</string>
     <string name="ChannelMembersInfo">Solo gli amministratori del canale possono vedere questa lista.</string>
     <string name="ChannelMessageAudio">%1$s ha pubblicato un messaggio vocale</string>
-    <string name="ChannelMessageContact">%1$s ha pubblicato un contatto</string>
     <string name="ChannelMessageDocument">%1$s ha pubblicato un file</string>
     <string name="ChannelMessageFew">%1$s ha pubblicato %2$s</string>
     <string name="ChannelMessageGIF">%1$s ha pubblicato una GIF</string>
@@ -530,7 +529,6 @@
     <string name="ChannelMessageMusic">%1$s ha pubblicato una file audio</string>
     <string name="ChannelMessageNoText">%1$s ha pubblicato un messaggio</string>
     <string name="ChannelMessagePhoto">%1$s ha pubblicato una foto</string>
-    <string name="ChannelMessagePoll">%1$s ha pubblicato un sondaggio</string>
     <string name="ChannelMessageRound">%1$s ha pubblicato un videomessaggio</string>
     <string name="ChannelMessageSticker">%1$s ha pubblicato uno sticker</string>
     <string name="ChannelMessageStickerEmoji">%1$s ha pubblicato uno %2$s sticker</string>
@@ -994,7 +992,7 @@
     <string name="FontSizePreviewLine1">Ah, i ragazzi di oggi con la musica techno! Godetevi i classici, come Hasselhoff!</string>
     <string name="FontSizePreviewLine2">Non posso prenderti sul serio adesso.</string>
     <string name="FontSizePreviewName">Lucio</string>
-    <string name="FontSizePreviewReply">Reinhardt, dobbiamo trovarti qualche nuova canzone 🎶.</string>
+    <string name="FontSizePreviewReply">Reinhardt, dobbiamo trovarti qualche nuova canzone ��.</string>
     <string name="ForgotPassword">Password dimenticata?</string>
     <string name="Forward">Inoltra</string>
     <string name="ForwardTo">Inoltra a...</string>
@@ -1444,8 +1442,6 @@
     <string name="NobodyLikesSpam2">Spiacenti, al momento puoi aggiungere ai gruppi solo i contatti reciproci.</string>
     <string name="NobodyLikesSpam3">Spiacenti, al momento ti è vietato pubblicare nei gruppi pubblici.</string>
     <string name="NotMounted">Archivio non montato</string>
-    <string name="NotificationActionPinnedContact">%1$s ha fissato un contatto nel gruppo %2$s</string>
-    <string name="NotificationActionPinnedContactChannel">%1$s ha fissato un contatto</string>
     <string name="NotificationActionPinnedFile">%1$s ha fissato un file nel gruppo %2$s</string>
     <string name="NotificationActionPinnedFileChannel">%1$s ha fissato un file</string>
     <string name="NotificationActionPinnedGame">%1$s ha fissato un gioco nel gruppo %2$s</string>
@@ -1464,8 +1460,6 @@
     <string name="NotificationActionPinnedNoTextChannel">%1$s ha fissato un messaggio</string>
     <string name="NotificationActionPinnedPhoto">%1$s ha fissato una foto nel gruppo %2$s</string>
     <string name="NotificationActionPinnedPhotoChannel">%1$s ha fissato una foto</string>
-    <string name="NotificationActionPinnedPoll">%1$s ha fissato un sondaggio nel gruppo %2$s</string>
-    <string name="NotificationActionPinnedPollChannel">%1$s ha fissato un sondaggio</string>
     <string name="NotificationActionPinnedRound">%1$s ha fissato un videomessaggio nel gruppo %2$s</string>
     <string name="NotificationActionPinnedRoundChannel">%1$s ha fissato un videomessaggio</string>
     <string name="NotificationActionPinnedSticker">%1$s ha fissato uno sticker nel gruppo %2$s</string>
@@ -1493,14 +1487,12 @@
     <string name="NotificationInvitedToGroup">%1$s ti ha invitato nel gruppo %2$s</string>
     <string name="NotificationInvitedToGroupByLink">%1$s si è unito al gruppo %2$s tramite link d\'invito</string>
     <string name="NotificationMessageAudio">%1$s ti ha inviato un messaggio vocale</string>
-    <string name="NotificationMessageContact">%1$s ha condiviso un contatto con te</string>
     <string name="NotificationMessageDocument">%1$s ti ha inviato un file</string>
     <string name="NotificationMessageFew">%1$s ti ha inviato %2$s</string>
     <string name="NotificationMessageForwardFew">%1$s ti ha inoltrato %2$s</string>
     <string name="NotificationMessageGame">%1$s ti ha invitato a giocare %2$s</string>
     <string name="NotificationMessageGif">%1$s ti ha inviato una GIF</string>
     <string name="NotificationMessageGroupAudio">%1$s ha inviato un messaggio vocale nel gruppo %2$s</string>
-    <string name="NotificationMessageGroupContact">%1$s ha condiviso un contatto con il gruppo %2$s</string>
     <string name="NotificationMessageGroupDocument">%1$s ha inviato un file nel gruppo %2$s</string>
     <string name="NotificationMessageGroupGame">%1$s ha invitato il gruppo %2$s a giocare %3$s</string>
     <string name="NotificationMessageGroupGif">%1$s ha inviato una GIF nel gruppo %2$s</string>
@@ -1510,7 +1502,6 @@
     <string name="NotificationMessageGroupMusic">%1$s ha inviato un file audio nel gruppo %2$s</string>
     <string name="NotificationMessageGroupNoText">%1$s ha inviato un messaggio nel gruppo %2$s</string>
     <string name="NotificationMessageGroupPhoto">%1$s ha inviato una foto nel gruppo %2$s</string>
-    <string name="NotificationMessageGroupPoll">%1$s ha inviato un sondaggio nel gruppo %2$s</string>
     <string name="NotificationMessageGroupRound">%1$s ha inviato un videomessaggio nel gruppo %2$s</string>
     <string name="NotificationMessageGroupSticker">%1$s ha inviato uno sticker nel gruppo %2$s</string>
     <string name="NotificationMessageGroupStickerEmoji">%1$s ha inviato uno %3$s sticker nel gruppo %2$s</string>
@@ -1522,7 +1513,6 @@
     <string name="NotificationMessageMusic">%1$s ti ha inviato un file audio</string>
     <string name="NotificationMessageNoText">%1$s ti ha inviato un messaggio</string>
     <string name="NotificationMessagePhoto">%1$s ti ha inviato una foto</string>
-    <string name="NotificationMessagePoll">%1$s ti ha inviato un sondaggio</string>
     <string name="NotificationMessageRound">%1$s ti ha inviato un videomessaggio</string>
     <string name="NotificationMessageSDPhoto">%1$s ti ha inviato una foto con autodistruzione</string>
     <string name="NotificationMessageSDVideo">%1$s ti ha inviato un video con autodistruzione</string>
@@ -1960,7 +1950,7 @@
     <string name="PrivacyForwardsEverybody">Collegato al tuo account</string>
     <string name="PrivacyForwardsInfo">Quando inoltrati in altre chat, i tuoi messaggi non saranno collegati al tuo account.</string>
     <string name="PrivacyForwardsInfo2">Queste impostazioni annulleranno i valori precedenti.</string>
-    <string name="PrivacyForwardsMessageLine">Reinhardt, dobbiamo trovarti qualche nuova canzone 🎶.</string>
+    <string name="PrivacyForwardsMessageLine">Reinhardt, dobbiamo trovarti qualche nuova canzone ��.</string>
     <string name="PrivacyForwardsNobody">Non collegato al tuo account</string>
     <string name="PrivacyForwardsTitle">Chi aggiunge un collegamento al mio account quando inoltra i miei messaggi?</string>
     <string name="PrivacyLastSeen">Ultimo accesso</string>
@@ -2600,6 +2590,33 @@
     <string name="YourPasswordSuccess">Fatto!</string>
     <string name="YourPasswordSuccessText">La password per la verifica in due passaggi è ora attiva.</string>
     <string name="YourPhone">Il tuo numero</string>
+    <string name="abc_action_bar_home_description">Vai alla home page</string>
+    <string name="abc_action_bar_up_description">Vai in alto</string>
+    <string name="abc_action_menu_overflow_description">Altre opzioni</string>
+    <string name="abc_action_mode_done">Fine</string>
+    <string name="abc_activity_chooser_view_see_all">Visualizza tutte</string>
+    <string name="abc_activitychooserview_choose_application">Scegli un\'applicazione</string>
+    <string name="abc_capital_off">OFF</string>
+    <string name="abc_capital_on">ON</string>
+    <string name="abc_menu_alt_shortcut_label">ALT +</string>
+    <string name="abc_menu_ctrl_shortcut_label">CTRL +</string>
+    <string name="abc_menu_delete_shortcut_label">CANC</string>
+    <string name="abc_menu_enter_shortcut_label">INVIO</string>
+    <string name="abc_menu_function_shortcut_label">FUNZIONE +</string>
+    <string name="abc_menu_meta_shortcut_label">META +</string>
+    <string name="abc_menu_shift_shortcut_label">MAIUSC +</string>
+    <string name="abc_menu_space_shortcut_label">barra spaziatrice</string>
+    <string name="abc_menu_sym_shortcut_label">SYM +</string>
+    <string name="abc_prepend_shortcut_label">MENU +</string>
+    <string name="abc_search_hint">Cerca…</string>
+    <string name="abc_searchview_description_clear">Cancella query</string>
+    <string name="abc_searchview_description_query">Query di ricerca</string>
+    <string name="abc_searchview_description_search">Cerca</string>
+    <string name="abc_searchview_description_submit">Invia query</string>
+    <string name="abc_searchview_description_voice">Ricerca vocale</string>
+    <string name="abc_shareactionprovider_share_with">Condividi con</string>
+    <string name="abc_shareactionprovider_share_with_application">Condividi tramite %s</string>
+    <string name="abc_toolbar_collapse_description">Comprimi</string>
     <string name="chatDate">d MMMM</string>
     <string name="chatFullDate">d MMMM, yyyy</string>
     <string name="common_google_play_services_enable_button">Attiva</string>
@@ -2733,6 +2750,7 @@
     <string name="messages_other">%1$d messaggi</string>
     <string name="messages_two">%1$d messaggi</string>
     <string name="messages_zero">%1$d messaggi</string>
+    <string name="search_menu_title">Ricerca</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Acquista con Google</string>
 </resources>

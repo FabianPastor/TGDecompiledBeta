@@ -14,40 +14,40 @@ public class CheckableImageView extends ImageView implements Checkable {
         this(context, null);
     }
 
-    public CheckableImageView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+    public CheckableImageView(Context context, AttributeSet attributeSet) {
+        this(context, attributeSet, 0);
     }
 
-    public CheckableImageView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    public CheckableImageView(Context context, AttributeSet attributeSet, int i) {
+        super(context, attributeSet, i);
     }
 
-    public int[] onCreateDrawableState(int extraSpace) {
-        int[] drawableState = super.onCreateDrawableState(extraSpace + 1);
+    public int[] onCreateDrawableState(int i) {
+        int[] onCreateDrawableState = super.onCreateDrawableState(i + 1);
         if (isChecked()) {
-            mergeDrawableStates(drawableState, CHECKED_STATE_SET);
+            ImageView.mergeDrawableStates(onCreateDrawableState, CHECKED_STATE_SET);
         }
-        return drawableState;
+        return onCreateDrawableState;
     }
 
     public void toggle() {
-        setChecked(!this.mChecked);
+        setChecked(this.mChecked ^ 1);
     }
 
     public boolean isChecked() {
         return this.mChecked;
     }
 
-    public void setChecked(boolean checked) {
-        if (this.mChecked != checked) {
-            this.mChecked = checked;
+    public void setChecked(boolean z) {
+        if (this.mChecked != z) {
+            this.mChecked = z;
             refreshDrawableState();
         }
     }
 
-    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
-        super.onInitializeAccessibilityNodeInfo(info);
-        info.setCheckable(true);
-        info.setChecked(isChecked());
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        accessibilityNodeInfo.setCheckable(true);
+        accessibilityNodeInfo.setChecked(isChecked());
     }
 }

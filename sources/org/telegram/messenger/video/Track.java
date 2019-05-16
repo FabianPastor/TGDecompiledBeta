@@ -47,9 +47,9 @@ public class Track {
         private int index;
         private long presentationTime;
 
-        public SamplePresentationTime(int idx, long time) {
-            this.index = idx;
-            this.presentationTime = time;
+        public SamplePresentationTime(int i, long j) {
+            this.index = i;
+            this.presentationTime = j;
         }
     }
 
@@ -68,32 +68,35 @@ public class Track {
         samplingFrequencyIndexMap.put(Integer.valueOf(8000), Integer.valueOf(11));
     }
 
-    public Track(int id, MediaFormat format, boolean audio) {
-        this.trackId = (long) id;
-        this.isAudio = audio;
+    public Track(int i, MediaFormat mediaFormat, boolean z) {
+        this.trackId = (long) i;
+        this.isAudio = z;
+        String str;
         if (this.isAudio) {
             this.volume = 1.0f;
-            this.timeScale = format.getInteger("sample-rate");
+            str = "sample-rate";
+            this.timeScale = mediaFormat.getInteger(str);
             this.handler = "soun";
             this.headerBox = new SoundMediaHeaderBox();
             this.sampleDescriptionBox = new SampleDescriptionBox();
             AudioSampleEntry audioSampleEntry = new AudioSampleEntry("mp4a");
-            audioSampleEntry.setChannelCount(format.getInteger("channel-count"));
-            audioSampleEntry.setSampleRate((long) format.getInteger("sample-rate"));
+            audioSampleEntry.setChannelCount(mediaFormat.getInteger("channel-count"));
+            audioSampleEntry.setSampleRate((long) mediaFormat.getInteger(str));
             audioSampleEntry.setDataReferenceIndex(1);
             audioSampleEntry.setSampleSize(16);
-            ESDescriptorBox esds = new ESDescriptorBox();
-            ESDescriptor descriptor = new ESDescriptor();
-            descriptor.setEsId(0);
-            SLConfigDescriptor slConfigDescriptor = new SLConfigDescriptor();
-            slConfigDescriptor.setPredefined(2);
-            descriptor.setSlConfigDescriptor(slConfigDescriptor);
+            ESDescriptorBox eSDescriptorBox = new ESDescriptorBox();
+            ESDescriptor eSDescriptor = new ESDescriptor();
+            eSDescriptor.setEsId(0);
+            SLConfigDescriptor sLConfigDescriptor = new SLConfigDescriptor();
+            sLConfigDescriptor.setPredefined(2);
+            eSDescriptor.setSlConfigDescriptor(sLConfigDescriptor);
             DecoderConfigDescriptor decoderConfigDescriptor = new DecoderConfigDescriptor();
             decoderConfigDescriptor.setObjectTypeIndication(64);
             decoderConfigDescriptor.setStreamType(5);
             decoderConfigDescriptor.setBufferSizeDB(1536);
-            if (format.containsKey("max-bitrate")) {
-                decoderConfigDescriptor.setMaxBitRate((long) format.getInteger("max-bitrate"));
+            String str2 = "max-bitrate";
+            if (mediaFormat.containsKey(str2)) {
+                decoderConfigDescriptor.setMaxBitRate((long) mediaFormat.getInteger(str2));
             } else {
                 decoderConfigDescriptor.setMaxBitRate(96000);
             }
@@ -103,24 +106,24 @@ public class Track {
             audioSpecificConfig.setSamplingFrequencyIndex(((Integer) samplingFrequencyIndexMap.get(Integer.valueOf((int) audioSampleEntry.getSampleRate()))).intValue());
             audioSpecificConfig.setChannelConfiguration(audioSampleEntry.getChannelCount());
             decoderConfigDescriptor.setAudioSpecificInfo(audioSpecificConfig);
-            descriptor.setDecoderConfigDescriptor(decoderConfigDescriptor);
-            ByteBuffer data = descriptor.serialize();
-            esds.setEsDescriptor(descriptor);
-            esds.setData(data);
-            audioSampleEntry.addBox(esds);
+            eSDescriptor.setDecoderConfigDescriptor(decoderConfigDescriptor);
+            ByteBuffer serialize = eSDescriptor.serialize();
+            eSDescriptorBox.setEsDescriptor(eSDescriptor);
+            eSDescriptorBox.setData(serialize);
+            audioSampleEntry.addBox(eSDescriptorBox);
             this.sampleDescriptionBox.addBox(audioSampleEntry);
             return;
         }
-        this.width = format.getInteger("width");
-        this.height = format.getInteger("height");
+        this.width = mediaFormat.getInteger("width");
+        this.height = mediaFormat.getInteger("height");
         this.timeScale = 90000;
         this.syncSamples = new LinkedList();
         this.handler = "vide";
         this.headerBox = new VideoMediaHeaderBox();
         this.sampleDescriptionBox = new SampleDescriptionBox();
-        String mime = format.getString("mime");
+        str = mediaFormat.getString("mime");
         VisualSampleEntry visualSampleEntry;
-        if (mime.equals("video/avc")) {
+        if (str.equals("video/avc")) {
             visualSampleEntry = new VisualSampleEntry("avc1");
             visualSampleEntry.setDataReferenceIndex(1);
             visualSampleEntry.setDepth(24);
@@ -130,77 +133,79 @@ public class Track {
             visualSampleEntry.setWidth(this.width);
             visualSampleEntry.setHeight(this.height);
             AvcConfigurationBox avcConfigurationBox = new AvcConfigurationBox();
-            if (format.getByteBuffer("csd-0") != null) {
-                ArrayList<byte[]> spsArray = new ArrayList();
-                ByteBuffer spsBuff = format.getByteBuffer("csd-0");
-                spsBuff.position(4);
-                Object spsBytes = new byte[spsBuff.remaining()];
-                spsBuff.get(spsBytes);
-                spsArray.add(spsBytes);
-                ArrayList<byte[]> ppsArray = new ArrayList();
-                ByteBuffer ppsBuff = format.getByteBuffer("csd-1");
-                ppsBuff.position(4);
-                byte[] ppsBytes = new byte[ppsBuff.remaining()];
-                ppsBuff.get(ppsBytes);
-                ppsArray.add(ppsBytes);
-                avcConfigurationBox.setSequenceParameterSets(spsArray);
-                avcConfigurationBox.setPictureParameterSets(ppsArray);
+            String str3 = "csd-0";
+            if (mediaFormat.getByteBuffer(str3) != null) {
+                ArrayList arrayList = new ArrayList();
+                ByteBuffer byteBuffer = mediaFormat.getByteBuffer(str3);
+                byteBuffer.position(4);
+                byte[] bArr = new byte[byteBuffer.remaining()];
+                byteBuffer.get(bArr);
+                arrayList.add(bArr);
+                ArrayList arrayList2 = new ArrayList();
+                ByteBuffer byteBuffer2 = mediaFormat.getByteBuffer("csd-1");
+                byteBuffer2.position(4);
+                byte[] bArr2 = new byte[byteBuffer2.remaining()];
+                byteBuffer2.get(bArr2);
+                arrayList2.add(bArr2);
+                avcConfigurationBox.setSequenceParameterSets(arrayList);
+                avcConfigurationBox.setPictureParameterSets(arrayList2);
             }
-            if (format.containsKey("level")) {
-                int level = format.getInteger("level");
-                if (level == 1) {
+            str3 = "level";
+            if (mediaFormat.containsKey(str3)) {
+                int integer = mediaFormat.getInteger(str3);
+                if (integer == 1) {
                     avcConfigurationBox.setAvcLevelIndication(1);
-                } else if (level == 32) {
+                } else if (integer == 32) {
                     avcConfigurationBox.setAvcLevelIndication(2);
-                } else if (level == 4) {
+                } else if (integer == 4) {
                     avcConfigurationBox.setAvcLevelIndication(11);
-                } else if (level == 8) {
+                } else if (integer == 8) {
                     avcConfigurationBox.setAvcLevelIndication(12);
-                } else if (level == 16) {
+                } else if (integer == 16) {
                     avcConfigurationBox.setAvcLevelIndication(13);
-                } else if (level == 64) {
+                } else if (integer == 64) {
                     avcConfigurationBox.setAvcLevelIndication(21);
-                } else if (level == 128) {
+                } else if (integer == 128) {
                     avcConfigurationBox.setAvcLevelIndication(22);
-                } else if (level == 256) {
+                } else if (integer == 256) {
                     avcConfigurationBox.setAvcLevelIndication(3);
-                } else if (level == 512) {
+                } else if (integer == 512) {
                     avcConfigurationBox.setAvcLevelIndication(31);
-                } else if (level == 1024) {
+                } else if (integer == 1024) {
                     avcConfigurationBox.setAvcLevelIndication(32);
-                } else if (level == 2048) {
+                } else if (integer == 2048) {
                     avcConfigurationBox.setAvcLevelIndication(4);
-                } else if (level == 4096) {
+                } else if (integer == 4096) {
                     avcConfigurationBox.setAvcLevelIndication(41);
-                } else if (level == 8192) {
+                } else if (integer == 8192) {
                     avcConfigurationBox.setAvcLevelIndication(42);
-                } else if (level == 16384) {
+                } else if (integer == 16384) {
                     avcConfigurationBox.setAvcLevelIndication(5);
-                } else if (level == 32768) {
+                } else if (integer == 32768) {
                     avcConfigurationBox.setAvcLevelIndication(51);
-                } else if (level == 65536) {
+                } else if (integer == 65536) {
                     avcConfigurationBox.setAvcLevelIndication(52);
-                } else if (level == 2) {
+                } else if (integer == 2) {
                     avcConfigurationBox.setAvcLevelIndication(27);
                 }
             } else {
                 avcConfigurationBox.setAvcLevelIndication(13);
             }
-            if (format.containsKey("profile")) {
-                int profile = format.getInteger("profile");
-                if (profile == 1) {
+            if (mediaFormat.containsKey("profile")) {
+                int integer2 = mediaFormat.getInteger("profile");
+                if (integer2 == 1) {
                     avcConfigurationBox.setAvcProfileIndication(66);
-                } else if (profile == 2) {
+                } else if (integer2 == 2) {
                     avcConfigurationBox.setAvcProfileIndication(77);
-                } else if (profile == 4) {
+                } else if (integer2 == 4) {
                     avcConfigurationBox.setAvcProfileIndication(88);
-                } else if (profile == 8) {
+                } else if (integer2 == 8) {
                     avcConfigurationBox.setAvcProfileIndication(100);
-                } else if (profile == 16) {
+                } else if (integer2 == 16) {
                     avcConfigurationBox.setAvcProfileIndication(110);
-                } else if (profile == 32) {
+                } else if (integer2 == 32) {
                     avcConfigurationBox.setAvcProfileIndication(122);
-                } else if (profile == 64) {
+                } else if (integer2 == 64) {
                     avcConfigurationBox.setAvcProfileIndication(244);
                 }
             } else {
@@ -214,7 +219,7 @@ public class Track {
             avcConfigurationBox.setProfileCompatibility(0);
             visualSampleEntry.addBox(avcConfigurationBox);
             this.sampleDescriptionBox.addBox(visualSampleEntry);
-        } else if (mime.equals("video/mp4v")) {
+        } else if (str.equals("video/mp4v")) {
             visualSampleEntry = new VisualSampleEntry("mp4v");
             visualSampleEntry.setDataReferenceIndex(1);
             visualSampleEntry.setDepth(24);
@@ -231,63 +236,82 @@ public class Track {
         return this.trackId;
     }
 
-    public void addSample(long offset, BufferInfo bufferInfo) {
-        boolean isSyncFrame = (this.isAudio || (bufferInfo.flags & 1) == 0) ? false : true;
-        this.samples.add(new Sample(offset, (long) bufferInfo.size));
-        if (this.syncSamples != null && isSyncFrame) {
-            this.syncSamples.add(Integer.valueOf(this.samples.size()));
+    public void addSample(long j, BufferInfo bufferInfo) {
+        int i = 1;
+        if (this.isAudio || (bufferInfo.flags & 1) == 0) {
+            i = 0;
         }
-        this.samplePresentationTimes.add(new SamplePresentationTime(this.samplePresentationTimes.size(), ((bufferInfo.presentationTimeUs * ((long) this.timeScale)) + 500000) / 1000000));
+        this.samples.add(new Sample(j, (long) bufferInfo.size));
+        LinkedList linkedList = this.syncSamples;
+        if (!(linkedList == null || i == 0)) {
+            linkedList.add(Integer.valueOf(this.samples.size()));
+        }
+        ArrayList arrayList = this.samplePresentationTimes;
+        arrayList.add(new SamplePresentationTime(arrayList.size(), ((bufferInfo.presentationTimeUs * ((long) this.timeScale)) + 500000) / 1000000));
     }
 
     public void prepare() {
-        int a;
-        SamplePresentationTime presentationTime;
-        ArrayList<SamplePresentationTime> original = new ArrayList(this.samplePresentationTimes);
-        Collections.sort(this.samplePresentationTimes, Track$$Lambda$0.$instance);
-        long lastPresentationTimeUs = 0;
+        int i;
+        int i2;
+        ArrayList arrayList = new ArrayList(this.samplePresentationTimes);
+        Collections.sort(this.samplePresentationTimes, -$$Lambda$Track$WwpAJwhUb2DZllFb8kOYdyyS8pU.INSTANCE);
         this.sampleDurations = new long[this.samplePresentationTimes.size()];
-        long minDelta = Long.MAX_VALUE;
-        boolean outOfOrder = false;
-        for (a = 0; a < this.samplePresentationTimes.size(); a++) {
-            presentationTime = (SamplePresentationTime) this.samplePresentationTimes.get(a);
-            long delta = presentationTime.presentationTime - lastPresentationTimeUs;
-            lastPresentationTimeUs = presentationTime.presentationTime;
-            this.sampleDurations[presentationTime.index] = delta;
-            if (presentationTime.index != 0) {
-                this.duration += delta;
+        long j = Long.MAX_VALUE;
+        int i3 = 0;
+        Object obj = null;
+        long j2 = 0;
+        while (true) {
+            i = 1;
+            if (i3 >= this.samplePresentationTimes.size()) {
+                break;
             }
-            if (delta != 0) {
-                minDelta = Math.min(minDelta, delta);
+            int i4;
+            SamplePresentationTime samplePresentationTime = (SamplePresentationTime) this.samplePresentationTimes.get(i3);
+            long access$000 = samplePresentationTime.presentationTime - j2;
+            j2 = samplePresentationTime.presentationTime;
+            this.sampleDurations[samplePresentationTime.index] = access$000;
+            if (samplePresentationTime.index != 0) {
+                i4 = i3;
+                this.duration += access$000;
+            } else {
+                i4 = i3;
             }
-            if (presentationTime.index != a) {
-                outOfOrder = true;
+            if (access$000 != 0) {
+                j = Math.min(j, access$000);
             }
+            i3 = i4;
+            if (samplePresentationTime.index != i3) {
+                obj = 1;
+            }
+            i3++;
         }
-        if (this.sampleDurations.length > 0) {
-            this.sampleDurations[0] = minDelta;
-            this.duration += minDelta;
+        long[] jArr = this.sampleDurations;
+        if (jArr.length > 0) {
+            i2 = 0;
+            jArr[0] = j;
+            this.duration += j;
+        } else {
+            i2 = 0;
         }
-        for (a = 1; a < original.size(); a++) {
-            ((SamplePresentationTime) original.get(a)).dt = this.sampleDurations[a] + ((SamplePresentationTime) original.get(a - 1)).dt;
+        while (i < arrayList.size()) {
+            ((SamplePresentationTime) arrayList.get(i)).dt = this.sampleDurations[i] + ((SamplePresentationTime) arrayList.get(i - 1)).dt;
+            i++;
         }
-        if (outOfOrder) {
+        if (obj != null) {
             this.sampleCompositions = new int[this.samplePresentationTimes.size()];
-            for (a = 0; a < this.samplePresentationTimes.size(); a++) {
-                presentationTime = (SamplePresentationTime) this.samplePresentationTimes.get(a);
-                this.sampleCompositions[presentationTime.index] = (int) (presentationTime.presentationTime - presentationTime.dt);
+            while (i2 < this.samplePresentationTimes.size()) {
+                SamplePresentationTime samplePresentationTime2 = (SamplePresentationTime) this.samplePresentationTimes.get(i2);
+                this.sampleCompositions[samplePresentationTime2.index] = (int) (samplePresentationTime2.presentationTime - samplePresentationTime2.dt);
+                i2++;
             }
         }
     }
 
-    static final /* synthetic */ int lambda$prepare$0$Track(SamplePresentationTime o1, SamplePresentationTime o2) {
-        if (o1.presentationTime > o2.presentationTime) {
+    static /* synthetic */ int lambda$prepare$0(SamplePresentationTime samplePresentationTime, SamplePresentationTime samplePresentationTime2) {
+        if (samplePresentationTime.presentationTime > samplePresentationTime2.presentationTime) {
             return 1;
         }
-        if (o1.presentationTime < o2.presentationTime) {
-            return -1;
-        }
-        return 0;
+        return samplePresentationTime.presentationTime < samplePresentationTime2.presentationTime ? -1 : 0;
     }
 
     public ArrayList<Sample> getSamples() {
@@ -315,14 +339,15 @@ public class Track {
     }
 
     public long[] getSyncSamples() {
-        if (this.syncSamples == null || this.syncSamples.isEmpty()) {
+        LinkedList linkedList = this.syncSamples;
+        if (linkedList == null || linkedList.isEmpty()) {
             return null;
         }
-        long[] returns = new long[this.syncSamples.size()];
+        long[] jArr = new long[this.syncSamples.size()];
         for (int i = 0; i < this.syncSamples.size(); i++) {
-            returns[i] = (long) ((Integer) this.syncSamples.get(i)).intValue();
+            jArr[i] = (long) ((Integer) this.syncSamples.get(i)).intValue();
         }
-        return returns;
+        return jArr;
     }
 
     public int getTimeScale() {

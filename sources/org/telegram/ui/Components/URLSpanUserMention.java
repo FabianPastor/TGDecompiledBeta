@@ -7,24 +7,25 @@ import org.telegram.ui.ActionBar.Theme;
 public class URLSpanUserMention extends URLSpanNoUnderline {
     private int currentType;
 
-    public URLSpanUserMention(String url, int type) {
-        super(url);
-        this.currentType = type;
+    public URLSpanUserMention(String str, int i) {
+        super(str);
+        this.currentType = i;
     }
 
-    public void onClick(View widget) {
-        super.onClick(widget);
+    public void onClick(View view) {
+        super.onClick(view);
     }
 
-    public void updateDrawState(TextPaint ds) {
-        super.updateDrawState(ds);
-        if (this.currentType == 2) {
-            ds.setColor(-1);
-        } else if (this.currentType == 1) {
-            ds.setColor(Theme.getColor("chat_messageLinkOut"));
+    public void updateDrawState(TextPaint textPaint) {
+        super.updateDrawState(textPaint);
+        int i = this.currentType;
+        if (i == 2) {
+            textPaint.setColor(-1);
+        } else if (i == 1) {
+            textPaint.setColor(Theme.getColor("chat_messageLinkOut"));
         } else {
-            ds.setColor(Theme.getColor("chat_messageLinkIn"));
+            textPaint.setColor(Theme.getColor("chat_messageLinkIn"));
         }
-        ds.setUnderlineText(false);
+        textPaint.setUnderlineText(false);
     }
 }

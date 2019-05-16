@@ -26,17 +26,32 @@ class LayoutState {
 
     /* Access modifiers changed, original: 0000 */
     public boolean hasMore(State state) {
-        return this.mCurrentPosition >= 0 && this.mCurrentPosition < state.getItemCount();
+        int i = this.mCurrentPosition;
+        return i >= 0 && i < state.getItemCount();
     }
 
     /* Access modifiers changed, original: 0000 */
     public View next(Recycler recycler) {
-        View view = recycler.getViewForPosition(this.mCurrentPosition);
+        View viewForPosition = recycler.getViewForPosition(this.mCurrentPosition);
         this.mCurrentPosition += this.mItemDirection;
-        return view;
+        return viewForPosition;
     }
 
     public String toString() {
-        return "LayoutState{mAvailable=" + this.mAvailable + ", mCurrentPosition=" + this.mCurrentPosition + ", mItemDirection=" + this.mItemDirection + ", mLayoutDirection=" + this.mLayoutDirection + ", mStartLine=" + this.mStartLine + ", mEndLine=" + this.mEndLine + '}';
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("LayoutState{mAvailable=");
+        stringBuilder.append(this.mAvailable);
+        stringBuilder.append(", mCurrentPosition=");
+        stringBuilder.append(this.mCurrentPosition);
+        stringBuilder.append(", mItemDirection=");
+        stringBuilder.append(this.mItemDirection);
+        stringBuilder.append(", mLayoutDirection=");
+        stringBuilder.append(this.mLayoutDirection);
+        stringBuilder.append(", mStartLine=");
+        stringBuilder.append(this.mStartLine);
+        stringBuilder.append(", mEndLine=");
+        stringBuilder.append(this.mEndLine);
+        stringBuilder.append('}');
+        return stringBuilder.toString();
     }
 }

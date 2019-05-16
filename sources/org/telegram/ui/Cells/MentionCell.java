@@ -6,10 +6,12 @@ import android.view.View.MeasureSpec;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DataQuery.KeywordResult;
 import org.telegram.messenger.Emoji;
-import org.telegram.messenger.EmojiSuggestion;
+import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC.User;
+import org.telegram.tgnet.TLRPC.UserProfilePhoto;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
@@ -45,37 +47,43 @@ public class MentionCell extends LinearLayout {
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(36.0f), NUM));
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(36.0f), NUM));
     }
 
     public void setUser(User user) {
+        String str = "";
         if (user == null) {
-            this.nameTextView.setText("");
-            this.usernameTextView.setText("");
+            this.nameTextView.setText(str);
+            this.usernameTextView.setText(str);
             this.imageView.setImageDrawable(null);
             return;
         }
         this.avatarDrawable.setInfo(user);
-        if (user.photo == null || user.photo.photo_small == null) {
+        UserProfilePhoto userProfilePhoto = user.photo;
+        if (userProfilePhoto == null || userProfilePhoto.photo_small == null) {
             this.imageView.setImageDrawable(this.avatarDrawable);
         } else {
-            this.imageView.setImage(user.photo.photo_small, "50_50", this.avatarDrawable, (Object) user);
+            this.imageView.setImage(ImageLocation.getForUser(user, false), "50_50", this.avatarDrawable, (Object) user);
         }
         this.nameTextView.setText(UserObject.getUserName(user));
         if (user.username != null) {
-            this.usernameTextView.setText("@" + user.username);
+            TextView textView = this.usernameTextView;
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("@");
+            stringBuilder.append(user.username);
+            textView.setText(stringBuilder.toString());
         } else {
-            this.usernameTextView.setText("");
+            this.usernameTextView.setText(str);
         }
         this.imageView.setVisibility(0);
         this.usernameTextView.setVisibility(0);
     }
 
-    public void setText(String text) {
+    public void setText(String str) {
         this.imageView.setVisibility(4);
         this.usernameTextView.setVisibility(4);
-        this.nameTextView.setText(text);
+        this.nameTextView.setText(str);
     }
 
     public void invalidate() {
@@ -83,35 +91,38 @@ public class MentionCell extends LinearLayout {
         this.nameTextView.invalidate();
     }
 
-    public void setEmojiSuggestion(EmojiSuggestion suggestion) {
+    public void setEmojiSuggestion(KeywordResult keywordResult) {
         this.imageView.setVisibility(4);
         this.usernameTextView.setVisibility(4);
-        StringBuilder stringBuilder = new StringBuilder((suggestion.emoji.length() + suggestion.label.length()) + 3);
-        stringBuilder.append(suggestion.emoji);
-        stringBuilder.append("   ");
-        stringBuilder.append(suggestion.label);
-        this.nameTextView.setText(Emoji.replaceEmoji(stringBuilder, this.nameTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false));
+        StringBuilder stringBuilder = new StringBuilder((keywordResult.emoji.length() + keywordResult.keyword.length()) + 4);
+        stringBuilder.append(keywordResult.emoji);
+        stringBuilder.append("   :");
+        stringBuilder.append(keywordResult.keyword);
+        TextView textView = this.nameTextView;
+        textView.setText(Emoji.replaceEmoji(stringBuilder, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false));
     }
 
-    public void setBotCommand(String command, String help, User user) {
+    public void setBotCommand(String str, String str2, User user) {
         if (user != null) {
             this.imageView.setVisibility(0);
             this.avatarDrawable.setInfo(user);
-            if (user.photo == null || user.photo.photo_small == null) {
+            UserProfilePhoto userProfilePhoto = user.photo;
+            if (userProfilePhoto == null || userProfilePhoto.photo_small == null) {
                 this.imageView.setImageDrawable(this.avatarDrawable);
             } else {
-                this.imageView.setImage(user.photo.photo_small, "50_50", this.avatarDrawable, (Object) user);
+                this.imageView.setImage(ImageLocation.getForUser(user, false), "50_50", this.avatarDrawable, (Object) user);
             }
         } else {
             this.imageView.setVisibility(4);
         }
         this.usernameTextView.setVisibility(0);
-        this.nameTextView.setText(command);
-        this.usernameTextView.setText(Emoji.replaceEmoji(help, this.usernameTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false));
+        this.nameTextView.setText(str);
+        TextView textView = this.usernameTextView;
+        textView.setText(Emoji.replaceEmoji(str2, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false));
     }
 
-    public void setIsDarkTheme(boolean isDarkTheme) {
-        if (isDarkTheme) {
+    public void setIsDarkTheme(boolean z) {
+        if (z) {
             this.nameTextView.setTextColor(-1);
             this.usernameTextView.setTextColor(-4473925);
             return;

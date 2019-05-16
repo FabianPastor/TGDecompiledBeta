@@ -5,8 +5,8 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.v4.app.NotificationCompat.Builder;
-import android.support.v4.app.NotificationManagerCompat;
+import androidx.core.app.NotificationCompat.Builder;
+import androidx.core.app.NotificationManagerCompat;
 import java.util.ArrayList;
 import org.telegram.messenger.LocationController.SharingLocationInfo;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
@@ -17,6 +17,10 @@ public class LocationSharingService extends Service implements NotificationCente
     private Builder builder;
     private Handler handler;
     private Runnable runnable;
+
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
 
     public LocationSharingService() {
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.liveLocationsChanged);
@@ -30,8 +34,8 @@ public class LocationSharingService extends Service implements NotificationCente
                 LocationSharingService.this.handler.postDelayed(LocationSharingService.this.runnable, 60000);
                 Utilities.stageQueue.postRunnable(new Runnable() {
                     public void run() {
-                        for (int a = 0; a < 3; a++) {
-                            LocationController.getInstance(a).update();
+                        for (int i = 0; i < 3; i++) {
+                            LocationController.getInstance(i).update();
                         }
                     }
                 });
@@ -40,86 +44,82 @@ public class LocationSharingService extends Service implements NotificationCente
         this.handler.postDelayed(this.runnable, 60000);
     }
 
-    public IBinder onBind(Intent arg2) {
-        return null;
-    }
-
     public void onDestroy() {
-        if (this.handler != null) {
-            this.handler.removeCallbacks(this.runnable);
+        Handler handler = this.handler;
+        if (handler != null) {
+            handler.removeCallbacks(this.runnable);
         }
         stopForeground(true);
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.liveLocationsChanged);
     }
 
-    public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.liveLocationsChanged && this.handler != null) {
-            this.handler.post(new Runnable() {
-                public void run() {
-                    if (LocationSharingService.this.getInfos().isEmpty()) {
-                        LocationSharingService.this.stopSelf();
-                    } else {
-                        LocationSharingService.this.updateNotification(true);
+    public void didReceivedNotification(int i, int i2, Object... objArr) {
+        if (i == NotificationCenter.liveLocationsChanged) {
+            Handler handler = this.handler;
+            if (handler != null) {
+                handler.post(new Runnable() {
+                    public void run() {
+                        if (LocationSharingService.this.getInfos().isEmpty()) {
+                            LocationSharingService.this.stopSelf();
+                        } else {
+                            LocationSharingService.this.updateNotification(true);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
     }
 
     private ArrayList<SharingLocationInfo> getInfos() {
-        ArrayList<SharingLocationInfo> infos = new ArrayList();
-        for (int a = 0; a < 3; a++) {
-            ArrayList<SharingLocationInfo> arrayList = LocationController.getInstance(a).sharingLocationsUI;
-            if (!arrayList.isEmpty()) {
-                infos.addAll(arrayList);
+        ArrayList arrayList = new ArrayList();
+        for (int i = 0; i < 3; i++) {
+            ArrayList arrayList2 = LocationController.getInstance(i).sharingLocationsUI;
+            if (!arrayList2.isEmpty()) {
+                arrayList.addAll(arrayList2);
             }
         }
-        return infos;
+        return arrayList;
     }
 
-    private void updateNotification(boolean post) {
+    private void updateNotification(boolean z) {
         if (this.builder != null) {
-            String param;
-            ArrayList<SharingLocationInfo> infos = getInfos();
+            String firstName;
+            ArrayList infos = getInfos();
             if (infos.size() == 1) {
-                SharingLocationInfo info = (SharingLocationInfo) infos.get(0);
-                int lower_id = (int) info.messageObject.getDialogId();
-                int currentAccount = info.messageObject.currentAccount;
-                if (lower_id > 0) {
-                    param = UserObject.getFirstName(MessagesController.getInstance(currentAccount).getUser(Integer.valueOf(lower_id)));
+                SharingLocationInfo sharingLocationInfo = (SharingLocationInfo) infos.get(0);
+                int dialogId = (int) sharingLocationInfo.messageObject.getDialogId();
+                int i = sharingLocationInfo.messageObject.currentAccount;
+                if (dialogId > 0) {
+                    firstName = UserObject.getFirstName(MessagesController.getInstance(i).getUser(Integer.valueOf(dialogId)));
                 } else {
-                    Chat chat = MessagesController.getInstance(currentAccount).getChat(Integer.valueOf(-lower_id));
-                    if (chat != null) {
-                        param = chat.title;
-                    } else {
-                        param = "";
-                    }
+                    Chat chat = MessagesController.getInstance(i).getChat(Integer.valueOf(-dialogId));
+                    firstName = chat != null ? chat.title : "";
                 }
             } else {
-                param = LocaleController.formatPluralString("Chats", infos.size());
+                firstName = LocaleController.formatPluralString("Chats", infos.size());
             }
-            String str = String.format(LocaleController.getString("AttachLiveLocationIsSharing", NUM), new Object[]{LocaleController.getString("AttachLiveLocation", NUM), param});
-            this.builder.setTicker(str);
-            this.builder.setContentText(str);
-            if (post) {
+            firstName = String.format(LocaleController.getString("AttachLiveLocationIsSharing", NUM), new Object[]{LocaleController.getString("AttachLiveLocation", NUM), firstName});
+            this.builder.setTicker(firstName);
+            this.builder.setContentText(firstName);
+            if (z) {
                 NotificationManagerCompat.from(ApplicationLoader.applicationContext).notify(6, this.builder.build());
             }
         }
     }
 
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public int onStartCommand(Intent intent, int i, int i2) {
         if (getInfos().isEmpty()) {
             stopSelf();
         }
         if (this.builder == null) {
-            Intent intent2 = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
-            intent2.setAction("org.tmessages.openlocations");
-            intent2.addCategory("android.intent.category.LAUNCHER");
-            PendingIntent contentIntent = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent2, 0);
+            intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
+            intent.setAction("org.tmessages.openlocations");
+            intent.addCategory("android.intent.category.LAUNCHER");
+            PendingIntent activity = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, 0);
             this.builder = new Builder(ApplicationLoader.applicationContext);
             this.builder.setWhen(System.currentTimeMillis());
             this.builder.setSmallIcon(NUM);
-            this.builder.setContentIntent(contentIntent);
+            this.builder.setContentIntent(activity);
             NotificationsController.checkOtherNotificationsChannel();
             this.builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
             this.builder.setContentTitle(LocaleController.getString("AppName", NUM));

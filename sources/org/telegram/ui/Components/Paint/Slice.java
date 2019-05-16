@@ -16,38 +16,39 @@ public class Slice {
     private RectF bounds;
     private File file;
 
-    public Slice(ByteBuffer data, RectF rect, DispatchQueue queue) {
-        this.bounds = rect;
+    public Slice(ByteBuffer byteBuffer, RectF rectF, DispatchQueue dispatchQueue) {
+        this.bounds = rectF;
         try {
             this.file = File.createTempFile("paint", ".bin", ApplicationLoader.applicationContext.getCacheDir());
         } catch (Exception e) {
             FileLog.e(e);
         }
         if (this.file != null) {
-            storeData(data);
+            storeData(byteBuffer);
         }
     }
 
     public void cleanResources() {
-        if (this.file != null) {
-            this.file.delete();
+        File file = this.file;
+        if (file != null) {
+            file.delete();
             this.file = null;
         }
     }
 
-    private void storeData(ByteBuffer data) {
+    private void storeData(ByteBuffer byteBuffer) {
         try {
-            byte[] input = data.array();
-            FileOutputStream fos = new FileOutputStream(this.file);
+            byte[] array = byteBuffer.array();
+            FileOutputStream fileOutputStream = new FileOutputStream(this.file);
             Deflater deflater = new Deflater(1, true);
-            deflater.setInput(input, data.arrayOffset(), data.remaining());
+            deflater.setInput(array, byteBuffer.arrayOffset(), byteBuffer.remaining());
             deflater.finish();
-            byte[] buf = new byte[1024];
+            byte[] bArr = new byte[1024];
             while (!deflater.finished()) {
-                fos.write(buf, 0, deflater.deflate(buf));
+                fileOutputStream.write(bArr, 0, deflater.deflate(bArr));
             }
             deflater.end();
-            fos.close();
+            fileOutputStream.close();
         } catch (Exception e) {
             FileLog.e(e);
         }
@@ -55,31 +56,31 @@ public class Slice {
 
     public ByteBuffer getData() {
         try {
-            byte[] input = new byte[1024];
-            byte[] output = new byte[1024];
-            FileInputStream fin = new FileInputStream(this.file);
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            byte[] bArr = new byte[1024];
+            byte[] bArr2 = new byte[1024];
+            FileInputStream fileInputStream = new FileInputStream(this.file);
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             Inflater inflater = new Inflater(true);
             while (true) {
-                int numRead = fin.read(input);
-                if (numRead != -1) {
-                    inflater.setInput(input, 0, numRead);
+                int read = fileInputStream.read(bArr);
+                if (read != -1) {
+                    inflater.setInput(bArr, 0, read);
                 }
                 while (true) {
-                    int numDecompressed = inflater.inflate(output, 0, output.length);
-                    if (numDecompressed == 0) {
+                    read = inflater.inflate(bArr2, 0, bArr2.length);
+                    if (read == 0) {
                         break;
                     }
-                    bos.write(output, 0, numDecompressed);
+                    byteArrayOutputStream.write(bArr2, 0, read);
                 }
                 if (inflater.finished()) {
                     inflater.end();
-                    ByteBuffer result = ByteBuffer.wrap(bos.toByteArray(), 0, bos.size());
-                    bos.close();
-                    fin.close();
-                    return result;
-                } else if (inflater.needsInput()) {
+                    ByteBuffer wrap = ByteBuffer.wrap(byteArrayOutputStream.toByteArray(), 0, byteArrayOutputStream.size());
+                    byteArrayOutputStream.close();
+                    fileInputStream.close();
+                    return wrap;
                 }
+                boolean needsInput = inflater.needsInput();
             }
         } catch (Exception e) {
             FileLog.e(e);

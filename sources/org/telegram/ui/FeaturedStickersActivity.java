@@ -52,65 +52,56 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
             return FeaturedStickersActivity.this.rowCount;
         }
 
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            if (getItemViewType(position) == 0) {
-                boolean z;
-                boolean installing;
-                ArrayList<StickerSetCovered> arrayList = DataQuery.getInstance(FeaturedStickersActivity.this.currentAccount).getFeaturedStickerSets();
-                FeaturedStickerSetCell cell = holder.itemView;
-                cell.setTag(Integer.valueOf(position));
-                StickerSetCovered stickerSet = (StickerSetCovered) arrayList.get(position);
-                if (position != arrayList.size() - 1) {
-                    z = true;
-                } else {
+        public void onBindViewHolder(ViewHolder viewHolder, int i) {
+            if (getItemViewType(i) == 0) {
+                ArrayList featuredStickerSets = DataQuery.getInstance(FeaturedStickersActivity.this.currentAccount).getFeaturedStickerSets();
+                FeaturedStickerSetCell featuredStickerSetCell = (FeaturedStickerSetCell) viewHolder.itemView;
+                featuredStickerSetCell.setTag(Integer.valueOf(i));
+                StickerSetCovered stickerSetCovered = (StickerSetCovered) featuredStickerSets.get(i);
+                boolean z = true;
+                boolean z2 = i != featuredStickerSets.size() - 1;
+                boolean z3 = FeaturedStickersActivity.this.unreadStickers != null && FeaturedStickersActivity.this.unreadStickers.contains(Long.valueOf(stickerSetCovered.set.id));
+                featuredStickerSetCell.setStickersSet(stickerSetCovered, z2, z3);
+                if (FeaturedStickersActivity.this.installingStickerSets.indexOfKey(stickerSetCovered.set.id) < 0) {
                     z = false;
                 }
-                boolean z2 = FeaturedStickersActivity.this.unreadStickers != null && FeaturedStickersActivity.this.unreadStickers.contains(Long.valueOf(stickerSet.set.id));
-                cell.setStickersSet(stickerSet, z, z2);
-                if (FeaturedStickersActivity.this.installingStickerSets.indexOfKey(stickerSet.set.id) >= 0) {
-                    installing = true;
-                } else {
-                    installing = false;
+                if (z && featuredStickerSetCell.isInstalled()) {
+                    FeaturedStickersActivity.this.installingStickerSets.remove(stickerSetCovered.set.id);
+                    featuredStickerSetCell.setDrawProgress(false);
+                    z = false;
                 }
-                if (installing && cell.isInstalled()) {
-                    FeaturedStickersActivity.this.installingStickerSets.remove(stickerSet.set.id);
-                    installing = false;
-                    cell.setDrawProgress(false);
-                }
-                cell.setDrawProgress(installing);
+                featuredStickerSetCell.setDrawProgress(z);
             }
         }
 
-        public boolean isEnabled(ViewHolder holder) {
-            return holder.getItemViewType() == 0;
+        public boolean isEnabled(ViewHolder viewHolder) {
+            return viewHolder.getItemViewType() == 0;
         }
 
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = null;
-            switch (viewType) {
-                case 0:
-                    view = new FeaturedStickerSetCell(this.mContext);
-                    view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                    ((FeaturedStickerSetCell) view).setAddOnClickListener(new FeaturedStickersActivity$ListAdapter$$Lambda$0(this));
-                    break;
-                case 1:
-                    view = new TextInfoPrivacyCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
-                    break;
+        public /* synthetic */ void lambda$onCreateViewHolder$0$FeaturedStickersActivity$ListAdapter(View view) {
+            FeaturedStickerSetCell featuredStickerSetCell = (FeaturedStickerSetCell) view.getParent();
+            StickerSetCovered stickerSet = featuredStickerSetCell.getStickerSet();
+            if (FeaturedStickersActivity.this.installingStickerSets.indexOfKey(stickerSet.set.id) < 0) {
+                FeaturedStickersActivity.this.installingStickerSets.put(stickerSet.set.id, stickerSet);
+                DataQuery.getInstance(FeaturedStickersActivity.this.currentAccount).removeStickersSet(FeaturedStickersActivity.this.getParentActivity(), stickerSet.set, 2, FeaturedStickersActivity.this, false);
+                featuredStickerSetCell.setDrawProgress(true);
             }
-            view.setLayoutParams(new LayoutParams(-1, -2));
-            return new Holder(view);
         }
 
-        /* Access modifiers changed, original: final|synthetic */
-        public final /* synthetic */ void lambda$onCreateViewHolder$0$FeaturedStickersActivity$ListAdapter(View v) {
-            FeaturedStickerSetCell parent1 = (FeaturedStickerSetCell) v.getParent();
-            StickerSetCovered pack = parent1.getStickerSet();
-            if (FeaturedStickersActivity.this.installingStickerSets.indexOfKey(pack.set.id) < 0) {
-                FeaturedStickersActivity.this.installingStickerSets.put(pack.set.id, pack);
-                DataQuery.getInstance(FeaturedStickersActivity.this.currentAccount).removeStickersSet(FeaturedStickersActivity.this.getParentActivity(), pack.set, 2, FeaturedStickersActivity.this, false);
-                parent1.setDrawProgress(true);
+        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            View featuredStickerSetCell;
+            if (i == 0) {
+                featuredStickerSetCell = new FeaturedStickerSetCell(this.mContext);
+                featuredStickerSetCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                featuredStickerSetCell.setAddOnClickListener(new -$$Lambda$FeaturedStickersActivity$ListAdapter$NM7kVZE2xCqvk5vi5R9BLMmu2pk(this));
+            } else if (i != 1) {
+                featuredStickerSetCell = null;
+            } else {
+                featuredStickerSetCell = new TextInfoPrivacyCell(this.mContext);
+                featuredStickerSetCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
             }
+            featuredStickerSetCell.setLayoutParams(new LayoutParams(-1, -2));
+            return new Holder(featuredStickerSetCell);
         }
 
         public int getItemViewType(int i) {
@@ -126,9 +117,9 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
         DataQuery.getInstance(this.currentAccount).checkFeaturedStickers();
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.featuredStickersDidLoad);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.stickersDidLoad);
-        ArrayList<Long> arrayList = DataQuery.getInstance(this.currentAccount).getUnreadStickerSets();
-        if (arrayList != null) {
-            this.unreadStickers = new ArrayList(arrayList);
+        ArrayList unreadStickerSets = DataQuery.getInstance(this.currentAccount).getUnreadStickerSets();
+        if (unreadStickerSets != null) {
+            this.unreadStickers = new ArrayList(unreadStickerSets);
         }
         updateRows();
         return true;
@@ -145,15 +136,15 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("FeaturedStickers", NUM));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
-            public void onItemClick(int id) {
-                if (id == -1) {
+            public void onItemClick(int i) {
+                if (i == -1) {
                     FeaturedStickersActivity.this.finishFragment();
                 }
             }
         });
         this.listAdapter = new ListAdapter(context);
         this.fragmentView = new FrameLayout(context);
-        FrameLayout frameLayout = this.fragmentView;
+        FrameLayout frameLayout = (FrameLayout) this.fragmentView;
         frameLayout.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
         this.listView = new RecyclerListView(context);
         this.listView.setItemAnimator(null);
@@ -169,55 +160,58 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
         this.listView.setLayoutManager(this.layoutManager);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new FeaturedStickersActivity$$Lambda$0(this));
+        this.listView.setOnItemClickListener(new -$$Lambda$FeaturedStickersActivity$HF_uvC2bkOnxNGqLkTScu_kNf5M(this));
         return this.fragmentView;
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$createView$0$FeaturedStickersActivity(final View view, int position) {
-        if (position >= this.stickersStartRow && position < this.stickersEndRow && getParentActivity() != null) {
-            InputStickerSet inputStickerSet;
-            final StickerSetCovered stickerSet = (StickerSetCovered) DataQuery.getInstance(this.currentAccount).getFeaturedStickerSets().get(position);
-            if (stickerSet.set.id != 0) {
-                inputStickerSet = new TL_inputStickerSetID();
-                inputStickerSet.id = stickerSet.set.id;
+    public /* synthetic */ void lambda$createView$0$FeaturedStickersActivity(final View view, int i) {
+        if (i >= this.stickersStartRow && i < this.stickersEndRow && getParentActivity() != null) {
+            InputStickerSet tL_inputStickerSetID;
+            final StickerSetCovered stickerSetCovered = (StickerSetCovered) DataQuery.getInstance(this.currentAccount).getFeaturedStickerSets().get(i);
+            if (stickerSetCovered.set.id != 0) {
+                tL_inputStickerSetID = new TL_inputStickerSetID();
+                tL_inputStickerSetID.id = stickerSetCovered.set.id;
             } else {
-                inputStickerSet = new TL_inputStickerSetShortName();
-                inputStickerSet.short_name = stickerSet.set.short_name;
+                tL_inputStickerSetID = new TL_inputStickerSetShortName();
+                tL_inputStickerSetID.short_name = stickerSetCovered.set.short_name;
             }
-            inputStickerSet.access_hash = stickerSet.set.access_hash;
+            InputStickerSet inputStickerSet = tL_inputStickerSetID;
+            inputStickerSet.access_hash = stickerSetCovered.set.access_hash;
             StickersAlert stickersAlert = new StickersAlert(getParentActivity(), this, inputStickerSet, null, null);
             stickersAlert.setInstallDelegate(new StickersAlertInstallDelegate() {
-                public void onStickerSetInstalled() {
-                    view.setDrawProgress(true);
-                    FeaturedStickersActivity.this.installingStickerSets.put(stickerSet.set.id, stickerSet);
+                public void onStickerSetUninstalled() {
                 }
 
-                public void onStickerSetUninstalled() {
+                public void onStickerSetInstalled() {
+                    ((FeaturedStickerSetCell) view).setDrawProgress(true);
+                    LongSparseArray access$300 = FeaturedStickersActivity.this.installingStickerSets;
+                    StickerSetCovered stickerSetCovered = stickerSetCovered;
+                    access$300.put(stickerSetCovered.set.id, stickerSetCovered);
                 }
             });
             showDialog(stickersAlert);
         }
     }
 
-    public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.featuredStickersDidLoad) {
+    public void didReceivedNotification(int i, int i2, Object... objArr) {
+        if (i == NotificationCenter.featuredStickersDidLoad) {
             if (this.unreadStickers == null) {
                 this.unreadStickers = DataQuery.getInstance(this.currentAccount).getUnreadStickerSets();
             }
             updateRows();
-        } else if (id == NotificationCenter.stickersDidLoad) {
+        } else if (i == NotificationCenter.stickersDidLoad) {
             updateVisibleTrendingSets();
         }
     }
 
     private void updateVisibleTrendingSets() {
-        if (this.layoutManager != null) {
-            int first = this.layoutManager.findFirstVisibleItemPosition();
-            if (first != -1) {
-                int last = this.layoutManager.findLastVisibleItemPosition();
-                if (last != -1) {
-                    this.listAdapter.notifyItemRangeChanged(first, (last - first) + 1);
+        LinearLayoutManager linearLayoutManager = this.layoutManager;
+        if (linearLayoutManager != null) {
+            int findFirstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
+            if (findFirstVisibleItemPosition != -1) {
+                int findLastVisibleItemPosition = this.layoutManager.findLastVisibleItemPosition();
+                if (findLastVisibleItemPosition != -1) {
+                    this.listAdapter.notifyItemRangeChanged(findFirstVisibleItemPosition, (findLastVisibleItemPosition - findFirstVisibleItemPosition) + 1);
                 }
             }
         }
@@ -225,51 +219,58 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
 
     private void updateRows() {
         this.rowCount = 0;
-        ArrayList<StickerSetCovered> stickerSets = DataQuery.getInstance(this.currentAccount).getFeaturedStickerSets();
-        if (stickerSets.isEmpty()) {
+        ArrayList featuredStickerSets = DataQuery.getInstance(this.currentAccount).getFeaturedStickerSets();
+        if (featuredStickerSets.isEmpty()) {
             this.stickersStartRow = -1;
             this.stickersEndRow = -1;
             this.stickersShadowRow = -1;
         } else {
-            this.stickersStartRow = this.rowCount;
-            this.stickersEndRow = this.rowCount + stickerSets.size();
-            this.rowCount += stickerSets.size();
             int i = this.rowCount;
-            this.rowCount = i + 1;
-            this.stickersShadowRow = i;
+            this.stickersStartRow = i;
+            this.stickersEndRow = i + featuredStickerSets.size();
+            this.rowCount += featuredStickerSets.size();
+            int i2 = this.rowCount;
+            this.rowCount = i2 + 1;
+            this.stickersShadowRow = i2;
         }
-        if (this.listAdapter != null) {
-            this.listAdapter.notifyDataSetChanged();
+        ListAdapter listAdapter = this.listAdapter;
+        if (listAdapter != null) {
+            listAdapter.notifyDataSetChanged();
         }
         DataQuery.getInstance(this.currentAccount).markFaturedStickersAsRead(true);
     }
 
     public void onResume() {
         super.onResume();
-        if (this.listAdapter != null) {
-            this.listAdapter.notifyDataSetChanged();
+        ListAdapter listAdapter = this.listAdapter;
+        if (listAdapter != null) {
+            listAdapter.notifyDataSetChanged();
         }
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[17];
-        themeDescriptionArr[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{FeaturedStickerSetCell.class}, null, null, null, "windowBackgroundWhite");
-        themeDescriptionArr[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundGray");
-        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault");
-        themeDescriptionArr[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault");
-        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon");
-        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle");
-        themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector");
-        themeDescriptionArr[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21");
-        themeDescriptionArr[8] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider");
-        themeDescriptionArr[9] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow");
-        themeDescriptionArr[10] = new ThemeDescription(this.listView, 0, new Class[]{FeaturedStickerSetCell.class}, new String[]{"progressPaint"}, null, null, null, "featuredStickers_buttonProgress");
-        themeDescriptionArr[11] = new ThemeDescription(this.listView, 0, new Class[]{FeaturedStickerSetCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[12] = new ThemeDescription(this.listView, 0, new Class[]{FeaturedStickerSetCell.class}, new String[]{"valueTextView"}, null, null, null, "windowBackgroundWhiteGrayText2");
-        themeDescriptionArr[13] = new ThemeDescription(this.listView, 0, new Class[]{FeaturedStickerSetCell.class}, new String[]{"addButton"}, null, null, null, "featuredStickers_buttonText");
-        themeDescriptionArr[14] = new ThemeDescription(this.listView, 0, new Class[]{FeaturedStickerSetCell.class}, new String[]{"checkImage"}, null, null, null, "featuredStickers_addedIcon");
-        themeDescriptionArr[15] = new ThemeDescription(this.listView, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, new Class[]{FeaturedStickerSetCell.class}, new String[]{"addButton"}, null, null, null, "featuredStickers_addButton");
-        themeDescriptionArr[16] = new ThemeDescription(this.listView, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, new Class[]{FeaturedStickerSetCell.class}, new String[]{"addButton"}, null, null, null, "featuredStickers_addButtonPressed");
-        return themeDescriptionArr;
+        r1 = new ThemeDescription[17];
+        r1[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{FeaturedStickerSetCell.class}, null, null, null, "windowBackgroundWhite");
+        r1[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundGray");
+        r1[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault");
+        r1[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault");
+        r1[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon");
+        r1[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle");
+        r1[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector");
+        r1[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21");
+        r1[8] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider");
+        r1[9] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow");
+        r1[10] = new ThemeDescription(this.listView, 0, new Class[]{FeaturedStickerSetCell.class}, new String[]{"progressPaint"}, null, null, null, "featuredStickers_buttonProgress");
+        r1[11] = new ThemeDescription(this.listView, 0, new Class[]{FeaturedStickerSetCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
+        r1[12] = new ThemeDescription(this.listView, 0, new Class[]{FeaturedStickerSetCell.class}, new String[]{"valueTextView"}, null, null, null, "windowBackgroundWhiteGrayText2");
+        View view = this.listView;
+        Class[] clsArr = new Class[]{FeaturedStickerSetCell.class};
+        String[] strArr = new String[1];
+        strArr[0] = "addButton";
+        r1[13] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "featuredStickers_buttonText");
+        r1[14] = new ThemeDescription(this.listView, 0, new Class[]{FeaturedStickerSetCell.class}, new String[]{"checkImage"}, null, null, null, "featuredStickers_addedIcon");
+        r1[15] = new ThemeDescription(this.listView, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, new Class[]{FeaturedStickerSetCell.class}, new String[]{"addButton"}, null, null, null, "featuredStickers_addButton");
+        r1[16] = new ThemeDescription(this.listView, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, new Class[]{FeaturedStickerSetCell.class}, new String[]{"addButton"}, null, null, null, "featuredStickers_addButtonPressed");
+        return r1;
     }
 }

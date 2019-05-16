@@ -10,27 +10,29 @@ public class TypefaceSpan extends MetricAffectingSpan {
     private int textSize;
     private Typeface typeface;
 
-    public TypefaceSpan(Typeface tf) {
-        this.typeface = tf;
+    public TypefaceSpan(Typeface typeface) {
+        this.typeface = typeface;
     }
 
-    public TypefaceSpan(Typeface tf, int size) {
-        this.typeface = tf;
-        this.textSize = size;
+    public TypefaceSpan(Typeface typeface, int i) {
+        this.typeface = typeface;
+        this.textSize = i;
     }
 
-    public TypefaceSpan(Typeface tf, int size, int textColor) {
-        this.typeface = tf;
-        this.textSize = size;
-        this.color = textColor;
+    public TypefaceSpan(Typeface typeface, int i, int i2) {
+        this.typeface = typeface;
+        if (i > 0) {
+            this.textSize = i;
+        }
+        this.color = i2;
     }
 
     public Typeface getTypeface() {
         return this.typeface;
     }
 
-    public void setColor(int value) {
-        this.color = value;
+    public void setColor(int i) {
+        this.color = i;
     }
 
     public boolean isMono() {
@@ -45,26 +47,31 @@ public class TypefaceSpan extends MetricAffectingSpan {
         return this.typeface == AndroidUtilities.getTypeface("fonts/ritalic.ttf");
     }
 
-    public void updateMeasureState(TextPaint p) {
-        if (this.typeface != null) {
-            p.setTypeface(this.typeface);
+    public void updateMeasureState(TextPaint textPaint) {
+        Typeface typeface = this.typeface;
+        if (typeface != null) {
+            textPaint.setTypeface(typeface);
         }
-        if (this.textSize != 0) {
-            p.setTextSize((float) this.textSize);
+        int i = this.textSize;
+        if (i != 0) {
+            textPaint.setTextSize((float) i);
         }
-        p.setFlags(p.getFlags() | 128);
+        textPaint.setFlags(textPaint.getFlags() | 128);
     }
 
-    public void updateDrawState(TextPaint tp) {
-        if (this.typeface != null) {
-            tp.setTypeface(this.typeface);
+    public void updateDrawState(TextPaint textPaint) {
+        Typeface typeface = this.typeface;
+        if (typeface != null) {
+            textPaint.setTypeface(typeface);
         }
-        if (this.textSize != 0) {
-            tp.setTextSize((float) this.textSize);
+        int i = this.textSize;
+        if (i != 0) {
+            textPaint.setTextSize((float) i);
         }
-        if (this.color != 0) {
-            tp.setColor(this.color);
+        i = this.color;
+        if (i != 0) {
+            textPaint.setColor(i);
         }
-        tp.setFlags(tp.getFlags() | 128);
+        textPaint.setFlags(textPaint.getFlags() | 128);
     }
 }

@@ -32,29 +32,30 @@ public class XiaomiUtilities {
     public static final int OP_WRITE_MMS = 10006;
 
     public static boolean isMIUI() {
-        return !TextUtils.isEmpty(AndroidUtilities.getSystemProperty("ro.miui.ui.version.name"));
+        return TextUtils.isEmpty(AndroidUtilities.getSystemProperty("ro.miui.ui.version.name")) ^ 1;
     }
 
     @TargetApi(19)
-    public static boolean isCustomPermissionGranted(int permission) {
+    public static boolean isCustomPermissionGranted(int i) {
+        boolean z = true;
         try {
-            AppOpsManager mgr = (AppOpsManager) ApplicationLoader.applicationContext.getSystemService("appops");
-            if (((Integer) AppOpsManager.class.getMethod("checkOpNoThrow", new Class[]{Integer.TYPE, Integer.TYPE, String.class}).invoke(mgr, new Object[]{Integer.valueOf(permission), Integer.valueOf(Process.myUid()), ApplicationLoader.applicationContext.getPackageName()})).intValue() == 0) {
-                return true;
+            AppOpsManager appOpsManager = (AppOpsManager) ApplicationLoader.applicationContext.getSystemService("appops");
+            if (((Integer) AppOpsManager.class.getMethod("checkOpNoThrow", new Class[]{Integer.TYPE, Integer.TYPE, String.class}).invoke(appOpsManager, new Object[]{Integer.valueOf(i), Integer.valueOf(Process.myUid()), ApplicationLoader.applicationContext.getPackageName()})).intValue() != 0) {
+                z = false;
             }
-            return false;
-        } catch (Exception x) {
-            FileLog.e(x);
+            return z;
+        } catch (Exception e) {
+            FileLog.e(e);
             return true;
         }
     }
 
     public static int getMIUIMajorVersion() {
-        String prop = AndroidUtilities.getSystemProperty("ro.miui.ui.version.name");
-        if (prop != null) {
+        String systemProperty = AndroidUtilities.getSystemProperty("ro.miui.ui.version.name");
+        if (systemProperty != null) {
             try {
-                return Integer.parseInt(prop.replace("V", ""));
-            } catch (NumberFormatException e) {
+                return Integer.parseInt(systemProperty.replace("V", ""));
+            } catch (NumberFormatException unused) {
             }
         }
         return -1;

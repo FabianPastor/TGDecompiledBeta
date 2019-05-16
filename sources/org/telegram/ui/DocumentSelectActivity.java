@@ -1,6 +1,5 @@
 package org.telegram.ui;
 
-import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.BroadcastReceiver;
@@ -58,17 +57,16 @@ public class DocumentSelectActivity extends BaseFragment {
     private RecyclerListView listView;
     private int maxSelectedFiles = -1;
     private BroadcastReceiver receiver = new BroadcastReceiver() {
-        public void onReceive(Context arg0, Intent intent) {
-            Runnable r = new DocumentSelectActivity$1$$Lambda$0(this);
+        public void onReceive(Context context, Intent intent) {
+            -$$Lambda$DocumentSelectActivity$1$QUHI_wOoyDp1Dwx1fGWii_dVi9g -__lambda_documentselectactivity_1_quhi_wooydp1dwx1fgwii_dvi9g = new -$$Lambda$DocumentSelectActivity$1$QUHI_wOoyDp1Dwx1fGWii_dVi9g(this);
             if ("android.intent.action.MEDIA_UNMOUNTED".equals(intent.getAction())) {
-                DocumentSelectActivity.this.listView.postDelayed(r, 1000);
+                DocumentSelectActivity.this.listView.postDelayed(-__lambda_documentselectactivity_1_quhi_wooydp1dwx1fgwii_dvi9g, 1000);
             } else {
-                r.run();
+                -__lambda_documentselectactivity_1_quhi_wooydp1dwx1fgwii_dvi9g.run();
             }
         }
 
-        /* Access modifiers changed, original: final|synthetic */
-        public final /* synthetic */ void lambda$onReceive$0$DocumentSelectActivity$1() {
+        public /* synthetic */ void lambda$onReceive$0$DocumentSelectActivity$1() {
             try {
                 if (DocumentSelectActivity.this.currentDir == null) {
                     DocumentSelectActivity.this.listRoots();
@@ -88,6 +86,12 @@ public class DocumentSelectActivity extends BaseFragment {
     private long sizeLimit = NUM;
 
     public interface DocumentSelectActivityDelegate {
+
+        public final /* synthetic */ class -CC {
+            public static void $default$startMusicSelectActivity(DocumentSelectActivityDelegate documentSelectActivityDelegate, BaseFragment baseFragment) {
+            }
+        }
+
         void didSelectFiles(DocumentSelectActivity documentSelectActivity, ArrayList<String> arrayList);
 
         void startDocumentSelectActivity();
@@ -104,87 +108,8 @@ public class DocumentSelectActivity extends BaseFragment {
         private HistoryEntry() {
         }
 
-        /* synthetic */ HistoryEntry(DocumentSelectActivity x0, AnonymousClass1 x1) {
+        /* synthetic */ HistoryEntry(DocumentSelectActivity documentSelectActivity, AnonymousClass1 anonymousClass1) {
             this();
-        }
-    }
-
-    private class ListAdapter extends SelectionAdapter {
-        private Context mContext;
-
-        public ListAdapter(Context context) {
-            this.mContext = context;
-        }
-
-        public boolean isEnabled(ViewHolder holder) {
-            return holder.getItemViewType() != 0;
-        }
-
-        public int getItemCount() {
-            int count = DocumentSelectActivity.this.items.size();
-            if (!DocumentSelectActivity.this.history.isEmpty() || DocumentSelectActivity.this.recentItems.isEmpty()) {
-                return count;
-            }
-            return count + (DocumentSelectActivity.this.recentItems.size() + 1);
-        }
-
-        public ListItem getItem(int position) {
-            if (position < DocumentSelectActivity.this.items.size()) {
-                return (ListItem) DocumentSelectActivity.this.items.get(position);
-            }
-            if (!(!DocumentSelectActivity.this.history.isEmpty() || DocumentSelectActivity.this.recentItems.isEmpty() || position == DocumentSelectActivity.this.items.size())) {
-                position -= DocumentSelectActivity.this.items.size() + 1;
-                if (position < DocumentSelectActivity.this.recentItems.size()) {
-                    return (ListItem) DocumentSelectActivity.this.recentItems.get(position);
-                }
-            }
-            return null;
-        }
-
-        public int getItemViewType(int position) {
-            return getItem(position) != null ? 1 : 0;
-        }
-
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view;
-            switch (viewType) {
-                case 0:
-                    view = new GraySectionCell(this.mContext);
-                    ((GraySectionCell) view).setText(LocaleController.getString("Recent", NUM));
-                    break;
-                default:
-                    view = new SharedDocumentCell(this.mContext);
-                    break;
-            }
-            return new Holder(view);
-        }
-
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            boolean z = true;
-            if (holder.getItemViewType() == 1) {
-                ListItem item = getItem(position);
-                SharedDocumentCell documentCell = holder.itemView;
-                if (item.icon != 0) {
-                    documentCell.setTextAndValueAndTypeAndThumb(item.title, item.subtitle, null, null, item.icon);
-                } else {
-                    documentCell.setTextAndValueAndTypeAndThumb(item.title, item.subtitle, item.ext.toUpperCase().substring(0, Math.min(item.ext.length(), 4)), item.thumb, 0);
-                }
-                if (item.file == null || !DocumentSelectActivity.this.actionBar.isActionModeShowed()) {
-                    if (DocumentSelectActivity.this.scrolling) {
-                        z = false;
-                    }
-                    documentCell.setChecked(false, z);
-                    return;
-                }
-                boolean z2;
-                boolean containsKey = DocumentSelectActivity.this.selectedFiles.containsKey(item.file.toString());
-                if (DocumentSelectActivity.this.scrolling) {
-                    z2 = false;
-                } else {
-                    z2 = true;
-                }
-                documentCell.setChecked(containsKey, z2);
-            }
         }
     }
 
@@ -198,17 +123,333 @@ public class DocumentSelectActivity extends BaseFragment {
         String title;
 
         private ListItem() {
-            this.subtitle = "";
-            this.ext = "";
+            String str = "";
+            this.subtitle = str;
+            this.ext = str;
         }
 
-        /* synthetic */ ListItem(DocumentSelectActivity x0, AnonymousClass1 x1) {
+        /* synthetic */ ListItem(DocumentSelectActivity documentSelectActivity, AnonymousClass1 anonymousClass1) {
             this();
         }
     }
 
-    public DocumentSelectActivity(boolean music) {
-        this.allowMusic = music;
+    private class ListAdapter extends SelectionAdapter {
+        private Context mContext;
+
+        public ListAdapter(Context context) {
+            this.mContext = context;
+        }
+
+        public boolean isEnabled(ViewHolder viewHolder) {
+            return viewHolder.getItemViewType() != 0;
+        }
+
+        public int getItemCount() {
+            int size = DocumentSelectActivity.this.items.size();
+            return (!DocumentSelectActivity.this.history.isEmpty() || DocumentSelectActivity.this.recentItems.isEmpty()) ? size : size + (DocumentSelectActivity.this.recentItems.size() + 1);
+        }
+
+        public ListItem getItem(int i) {
+            if (i < DocumentSelectActivity.this.items.size()) {
+                return (ListItem) DocumentSelectActivity.this.items.get(i);
+            }
+            if (!(!DocumentSelectActivity.this.history.isEmpty() || DocumentSelectActivity.this.recentItems.isEmpty() || i == DocumentSelectActivity.this.items.size())) {
+                i -= DocumentSelectActivity.this.items.size() + 1;
+                if (i < DocumentSelectActivity.this.recentItems.size()) {
+                    return (ListItem) DocumentSelectActivity.this.recentItems.get(i);
+                }
+            }
+            return null;
+        }
+
+        public int getItemViewType(int i) {
+            return getItem(i) != null ? 1 : 0;
+        }
+
+        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            View sharedDocumentCell;
+            if (i != 0) {
+                sharedDocumentCell = new SharedDocumentCell(this.mContext);
+            } else {
+                sharedDocumentCell = new GraySectionCell(this.mContext);
+                sharedDocumentCell.setText(LocaleController.getString("Recent", NUM));
+            }
+            return new Holder(sharedDocumentCell);
+        }
+
+        public void onBindViewHolder(ViewHolder viewHolder, int i) {
+            if (viewHolder.getItemViewType() == 1) {
+                ListItem item = getItem(i);
+                SharedDocumentCell sharedDocumentCell = (SharedDocumentCell) viewHolder.itemView;
+                int i2 = item.icon;
+                if (i2 != 0) {
+                    sharedDocumentCell.setTextAndValueAndTypeAndThumb(item.title, item.subtitle, null, null, i2);
+                } else {
+                    SharedDocumentCell sharedDocumentCell2 = sharedDocumentCell;
+                    sharedDocumentCell2.setTextAndValueAndTypeAndThumb(item.title, item.subtitle, item.ext.toUpperCase().substring(0, Math.min(item.ext.length(), 4)), item.thumb, 0);
+                }
+                if (item.file == null || !DocumentSelectActivity.this.actionBar.isActionModeShowed()) {
+                    sharedDocumentCell.setChecked(false, DocumentSelectActivity.this.scrolling ^ 1);
+                } else {
+                    sharedDocumentCell.setChecked(DocumentSelectActivity.this.selectedFiles.containsKey(item.file.toString()), DocumentSelectActivity.this.scrolling ^ 1);
+                }
+            }
+        }
+    }
+
+    /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
+        jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:94:0x022a in {3, 6, 7, 8, 17, 20, 23, 42, 43, 48, 49, 51, 55, 58, 60, 62, 64, 70, 72, 78, 80, 83, 85, 86, 90, 92, 93} preds:[]
+        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
+        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
+        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
+        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
+        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
+        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
+        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
+        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
+        	at java.lang.Iterable.forEach(Iterable.java:75)
+        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
+        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
+        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
+        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
+        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
+        */
+    @android.annotation.SuppressLint({"NewApi"})
+    private void listRoots() {
+        /*
+        r11 = this;
+        r0 = "Telegram";
+        r1 = 0;
+        r11.currentDir = r1;
+        r2 = r11.items;
+        r2.clear();
+        r2 = new java.util.HashSet;
+        r2.<init>();
+        r3 = android.os.Environment.getExternalStorageDirectory();
+        r3 = r3.getPath();
+        android.os.Environment.isExternalStorageRemovable();
+        r4 = android.os.Environment.getExternalStorageState();
+        r5 = "mounted";
+        r5 = r4.equals(r5);
+        r6 = NUM; // 0x7var_ float:1.7945136E38 double:1.052935639E-314;
+        r7 = NUM; // 0x7f0d088c float:1.8746553E38 double:1.0531308586E-314;
+        r8 = "SdCard";
+        if (r5 != 0) goto L_0x0036;
+        r5 = "mounted_ro";
+        r4 = r4.equals(r5);
+        if (r4 == 0) goto L_0x006e;
+        r4 = new org.telegram.ui.DocumentSelectActivity$ListItem;
+        r4.<init>(r11, r1);
+        r5 = android.os.Environment.isExternalStorageRemovable();
+        if (r5 == 0) goto L_0x004a;
+        r5 = org.telegram.messenger.LocaleController.getString(r8, r7);
+        r4.title = r5;
+        r4.icon = r6;
+        goto L_0x005a;
+        r5 = NUM; // 0x7f0d04c9 float:1.87446E38 double:1.053130383E-314;
+        r9 = "InternalStorage";
+        r5 = org.telegram.messenger.LocaleController.getString(r9, r5);
+        r4.title = r5;
+        r5 = NUM; // 0x7var_f float:1.7945193E38 double:1.0529356527E-314;
+        r4.icon = r5;
+        r5 = r11.getRootSubtitle(r3);
+        r4.subtitle = r5;
+        r5 = android.os.Environment.getExternalStorageDirectory();
+        r4.file = r5;
+        r5 = r11.items;
+        r5.add(r4);
+        r2.add(r3);
+        r3 = new java.io.BufferedReader;	 Catch:{ Exception -> 0x0160, all -> 0x015c }
+        r4 = new java.io.FileReader;	 Catch:{ Exception -> 0x0160, all -> 0x015c }
+        r5 = "/proc/mounts";	 Catch:{ Exception -> 0x0160, all -> 0x015c }
+        r4.<init>(r5);	 Catch:{ Exception -> 0x0160, all -> 0x015c }
+        r3.<init>(r4);	 Catch:{ Exception -> 0x0160, all -> 0x015c }
+        r4 = r3.readLine();	 Catch:{ Exception -> 0x015a }
+        if (r4 == 0) goto L_0x0156;	 Catch:{ Exception -> 0x015a }
+        r5 = "vfat";	 Catch:{ Exception -> 0x015a }
+        r5 = r4.contains(r5);	 Catch:{ Exception -> 0x015a }
+        if (r5 != 0) goto L_0x0090;	 Catch:{ Exception -> 0x015a }
+        r5 = "/mnt";	 Catch:{ Exception -> 0x015a }
+        r5 = r4.contains(r5);	 Catch:{ Exception -> 0x015a }
+        if (r5 == 0) goto L_0x007a;	 Catch:{ Exception -> 0x015a }
+        r5 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x015a }
+        if (r5 == 0) goto L_0x0097;	 Catch:{ Exception -> 0x015a }
+        org.telegram.messenger.FileLog.d(r4);	 Catch:{ Exception -> 0x015a }
+        r5 = new java.util.StringTokenizer;	 Catch:{ Exception -> 0x015a }
+        r9 = " ";	 Catch:{ Exception -> 0x015a }
+        r5.<init>(r4, r9);	 Catch:{ Exception -> 0x015a }
+        r5.nextToken();	 Catch:{ Exception -> 0x015a }
+        r5 = r5.nextToken();	 Catch:{ Exception -> 0x015a }
+        r9 = r2.contains(r5);	 Catch:{ Exception -> 0x015a }
+        if (r9 == 0) goto L_0x00ac;	 Catch:{ Exception -> 0x015a }
+        goto L_0x007a;	 Catch:{ Exception -> 0x015a }
+        r9 = "/dev/block/vold";	 Catch:{ Exception -> 0x015a }
+        r9 = r4.contains(r9);	 Catch:{ Exception -> 0x015a }
+        if (r9 == 0) goto L_0x007a;	 Catch:{ Exception -> 0x015a }
+        r9 = "/mnt/secure";	 Catch:{ Exception -> 0x015a }
+        r9 = r4.contains(r9);	 Catch:{ Exception -> 0x015a }
+        if (r9 != 0) goto L_0x007a;	 Catch:{ Exception -> 0x015a }
+        r9 = "/mnt/asec";	 Catch:{ Exception -> 0x015a }
+        r9 = r4.contains(r9);	 Catch:{ Exception -> 0x015a }
+        if (r9 != 0) goto L_0x007a;	 Catch:{ Exception -> 0x015a }
+        r9 = "/mnt/obb";	 Catch:{ Exception -> 0x015a }
+        r9 = r4.contains(r9);	 Catch:{ Exception -> 0x015a }
+        if (r9 != 0) goto L_0x007a;	 Catch:{ Exception -> 0x015a }
+        r9 = "/dev/mapper";	 Catch:{ Exception -> 0x015a }
+        r9 = r4.contains(r9);	 Catch:{ Exception -> 0x015a }
+        if (r9 != 0) goto L_0x007a;	 Catch:{ Exception -> 0x015a }
+        r9 = "tmpfs";	 Catch:{ Exception -> 0x015a }
+        r4 = r4.contains(r9);	 Catch:{ Exception -> 0x015a }
+        if (r4 != 0) goto L_0x007a;	 Catch:{ Exception -> 0x015a }
+        r4 = new java.io.File;	 Catch:{ Exception -> 0x015a }
+        r4.<init>(r5);	 Catch:{ Exception -> 0x015a }
+        r4 = r4.isDirectory();	 Catch:{ Exception -> 0x015a }
+        if (r4 != 0) goto L_0x0113;	 Catch:{ Exception -> 0x015a }
+        r4 = 47;	 Catch:{ Exception -> 0x015a }
+        r4 = r5.lastIndexOf(r4);	 Catch:{ Exception -> 0x015a }
+        r9 = -1;	 Catch:{ Exception -> 0x015a }
+        if (r4 == r9) goto L_0x0113;	 Catch:{ Exception -> 0x015a }
+        r9 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x015a }
+        r9.<init>();	 Catch:{ Exception -> 0x015a }
+        r10 = "/storage/";	 Catch:{ Exception -> 0x015a }
+        r9.append(r10);	 Catch:{ Exception -> 0x015a }
+        r4 = r4 + 1;	 Catch:{ Exception -> 0x015a }
+        r4 = r5.substring(r4);	 Catch:{ Exception -> 0x015a }
+        r9.append(r4);	 Catch:{ Exception -> 0x015a }
+        r4 = r9.toString();	 Catch:{ Exception -> 0x015a }
+        r9 = new java.io.File;	 Catch:{ Exception -> 0x015a }
+        r9.<init>(r4);	 Catch:{ Exception -> 0x015a }
+        r9 = r9.isDirectory();	 Catch:{ Exception -> 0x015a }
+        if (r9 == 0) goto L_0x0113;	 Catch:{ Exception -> 0x015a }
+        goto L_0x0114;	 Catch:{ Exception -> 0x015a }
+        r4 = r5;	 Catch:{ Exception -> 0x015a }
+        r2.add(r4);	 Catch:{ Exception -> 0x015a }
+        r5 = new org.telegram.ui.DocumentSelectActivity$ListItem;	 Catch:{ Exception -> 0x0150 }
+        r5.<init>(r11, r1);	 Catch:{ Exception -> 0x0150 }
+        r9 = r4.toLowerCase();	 Catch:{ Exception -> 0x0150 }
+        r10 = "sd";	 Catch:{ Exception -> 0x0150 }
+        r9 = r9.contains(r10);	 Catch:{ Exception -> 0x0150 }
+        if (r9 == 0) goto L_0x012f;	 Catch:{ Exception -> 0x0150 }
+        r9 = org.telegram.messenger.LocaleController.getString(r8, r7);	 Catch:{ Exception -> 0x0150 }
+        r5.title = r9;	 Catch:{ Exception -> 0x0150 }
+        goto L_0x013a;	 Catch:{ Exception -> 0x0150 }
+        r9 = "ExternalStorage";	 Catch:{ Exception -> 0x0150 }
+        r10 = NUM; // 0x7f0d0407 float:1.8744206E38 double:1.053130287E-314;	 Catch:{ Exception -> 0x0150 }
+        r9 = org.telegram.messenger.LocaleController.getString(r9, r10);	 Catch:{ Exception -> 0x0150 }
+        r5.title = r9;	 Catch:{ Exception -> 0x0150 }
+        r5.icon = r6;	 Catch:{ Exception -> 0x0150 }
+        r9 = r11.getRootSubtitle(r4);	 Catch:{ Exception -> 0x0150 }
+        r5.subtitle = r9;	 Catch:{ Exception -> 0x0150 }
+        r9 = new java.io.File;	 Catch:{ Exception -> 0x0150 }
+        r9.<init>(r4);	 Catch:{ Exception -> 0x0150 }
+        r5.file = r9;	 Catch:{ Exception -> 0x0150 }
+        r4 = r11.items;	 Catch:{ Exception -> 0x0150 }
+        r4.add(r5);	 Catch:{ Exception -> 0x0150 }
+        goto L_0x007a;
+        r4 = move-exception;
+        org.telegram.messenger.FileLog.e(r4);	 Catch:{ Exception -> 0x015a }
+        goto L_0x007a;
+        r3.close();	 Catch:{ Exception -> 0x016b }
+        goto L_0x016f;
+        r2 = move-exception;
+        goto L_0x0162;
+        r0 = move-exception;
+        r3 = r1;
+        goto L_0x021f;
+        r2 = move-exception;
+        r3 = r1;
+        org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x021e }
+        if (r3 == 0) goto L_0x016f;
+        r3.close();	 Catch:{ Exception -> 0x016b }
+        goto L_0x016f;
+        r2 = move-exception;
+        org.telegram.messenger.FileLog.e(r2);
+        r2 = new org.telegram.ui.DocumentSelectActivity$ListItem;
+        r2.<init>(r11, r1);
+        r3 = "/";
+        r2.title = r3;
+        r4 = NUM; // 0x7f0d0961 float:1.8746985E38 double:1.053130964E-314;
+        r5 = "SystemRoot";
+        r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
+        r2.subtitle = r4;
+        r4 = NUM; // 0x7var_ float:1.7945132E38 double:1.052935638E-314;
+        r2.icon = r4;
+        r5 = new java.io.File;
+        r5.<init>(r3);
+        r2.file = r5;
+        r3 = r11.items;
+        r3.add(r2);
+        r2 = new java.io.File;	 Catch:{ Exception -> 0x01ba }
+        r3 = android.os.Environment.getExternalStorageDirectory();	 Catch:{ Exception -> 0x01ba }
+        r2.<init>(r3, r0);	 Catch:{ Exception -> 0x01ba }
+        r3 = r2.exists();	 Catch:{ Exception -> 0x01ba }
+        if (r3 == 0) goto L_0x01be;	 Catch:{ Exception -> 0x01ba }
+        r3 = new org.telegram.ui.DocumentSelectActivity$ListItem;	 Catch:{ Exception -> 0x01ba }
+        r3.<init>(r11, r1);	 Catch:{ Exception -> 0x01ba }
+        r3.title = r0;	 Catch:{ Exception -> 0x01ba }
+        r0 = r2.toString();	 Catch:{ Exception -> 0x01ba }
+        r3.subtitle = r0;	 Catch:{ Exception -> 0x01ba }
+        r3.icon = r4;	 Catch:{ Exception -> 0x01ba }
+        r3.file = r2;	 Catch:{ Exception -> 0x01ba }
+        r0 = r11.items;	 Catch:{ Exception -> 0x01ba }
+        r0.add(r3);	 Catch:{ Exception -> 0x01ba }
+        goto L_0x01be;
+        r0 = move-exception;
+        org.telegram.messenger.FileLog.e(r0);
+        r0 = new org.telegram.ui.DocumentSelectActivity$ListItem;
+        r0.<init>(r11, r1);
+        r2 = NUM; // 0x7f0d0474 float:1.8744427E38 double:1.053130341E-314;
+        r3 = "Gallery";
+        r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
+        r0.title = r2;
+        r2 = NUM; // 0x7f0d0475 float:1.8744429E38 double:1.0531303413E-314;
+        r3 = "GalleryInfo";
+        r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
+        r0.subtitle = r2;
+        r2 = NUM; // 0x7var_ float:1.7945195E38 double:1.052935653E-314;
+        r0.icon = r2;
+        r0.file = r1;
+        r2 = r11.items;
+        r2.add(r0);
+        r0 = r11.allowMusic;
+        if (r0 == 0) goto L_0x0210;
+        r0 = new org.telegram.ui.DocumentSelectActivity$ListItem;
+        r0.<init>(r11, r1);
+        r2 = NUM; // 0x7f0d0141 float:1.8742766E38 double:1.053129936E-314;
+        r3 = "AttachMusic";
+        r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
+        r0.title = r2;
+        r2 = NUM; // 0x7f0d059e float:1.8745031E38 double:1.053130488E-314;
+        r3 = "MusicInfo";
+        r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
+        r0.subtitle = r2;
+        r2 = NUM; // 0x7var_ float:1.7945197E38 double:1.0529356537E-314;
+        r0.icon = r2;
+        r0.file = r1;
+        r1 = r11.items;
+        r1.add(r0);
+        r0 = r11.listView;
+        org.telegram.messenger.AndroidUtilities.clearDrawableAnimation(r0);
+        r0 = 1;
+        r11.scrolling = r0;
+        r0 = r11.listAdapter;
+        r0.notifyDataSetChanged();
+        return;
+        r0 = move-exception;
+        if (r3 == 0) goto L_0x0229;
+        r3.close();	 Catch:{ Exception -> 0x0225 }
+        goto L_0x0229;
+        r1 = move-exception;
+        org.telegram.messenger.FileLog.e(r1);
+        throw r0;
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DocumentSelectActivity.listRoots():void");
+    }
+
+    public DocumentSelectActivity(boolean z) {
+        this.allowMusic = z;
     }
 
     public boolean onFragmentCreate() {
@@ -230,58 +471,58 @@ public class DocumentSelectActivity extends BaseFragment {
     public View createView(Context context) {
         if (!this.receiverRegistered) {
             this.receiverRegistered = true;
-            IntentFilter filter = new IntentFilter();
-            filter.addAction("android.intent.action.MEDIA_BAD_REMOVAL");
-            filter.addAction("android.intent.action.MEDIA_CHECKING");
-            filter.addAction("android.intent.action.MEDIA_EJECT");
-            filter.addAction("android.intent.action.MEDIA_MOUNTED");
-            filter.addAction("android.intent.action.MEDIA_NOFS");
-            filter.addAction("android.intent.action.MEDIA_REMOVED");
-            filter.addAction("android.intent.action.MEDIA_SHARED");
-            filter.addAction("android.intent.action.MEDIA_UNMOUNTABLE");
-            filter.addAction("android.intent.action.MEDIA_UNMOUNTED");
-            filter.addDataScheme("file");
-            ApplicationLoader.applicationContext.registerReceiver(this.receiver, filter);
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction("android.intent.action.MEDIA_BAD_REMOVAL");
+            intentFilter.addAction("android.intent.action.MEDIA_CHECKING");
+            intentFilter.addAction("android.intent.action.MEDIA_EJECT");
+            intentFilter.addAction("android.intent.action.MEDIA_MOUNTED");
+            intentFilter.addAction("android.intent.action.MEDIA_NOFS");
+            intentFilter.addAction("android.intent.action.MEDIA_REMOVED");
+            intentFilter.addAction("android.intent.action.MEDIA_SHARED");
+            intentFilter.addAction("android.intent.action.MEDIA_UNMOUNTABLE");
+            intentFilter.addAction("android.intent.action.MEDIA_UNMOUNTED");
+            intentFilter.addDataScheme("file");
+            ApplicationLoader.applicationContext.registerReceiver(this.receiver, intentFilter);
         }
         this.actionBar.setBackButtonDrawable(new BackDrawable(false));
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("SelectFile", NUM));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
-            public void onItemClick(int id) {
-                if (id == -1) {
+            public void onItemClick(int i) {
+                if (i == -1) {
                     if (DocumentSelectActivity.this.actionBar.isActionModeShowed()) {
                         DocumentSelectActivity.this.selectedFiles.clear();
                         DocumentSelectActivity.this.actionBar.hideActionMode();
-                        int count = DocumentSelectActivity.this.listView.getChildCount();
-                        for (int a = 0; a < count; a++) {
-                            View child = DocumentSelectActivity.this.listView.getChildAt(a);
-                            if (child instanceof SharedDocumentCell) {
-                                ((SharedDocumentCell) child).setChecked(false, true);
+                        i = DocumentSelectActivity.this.listView.getChildCount();
+                        for (int i2 = 0; i2 < i; i2++) {
+                            View childAt = DocumentSelectActivity.this.listView.getChildAt(i2);
+                            if (childAt instanceof SharedDocumentCell) {
+                                ((SharedDocumentCell) childAt).setChecked(false, true);
                             }
                         }
                         return;
                     }
                     DocumentSelectActivity.this.finishFragment();
-                } else if (id == 3 && DocumentSelectActivity.this.delegate != null) {
+                } else if (i == 3 && DocumentSelectActivity.this.delegate != null) {
                     DocumentSelectActivity.this.delegate.didSelectFiles(DocumentSelectActivity.this, new ArrayList(DocumentSelectActivity.this.selectedFiles.keySet()));
-                    for (ListItem item : DocumentSelectActivity.this.selectedFiles.values()) {
-                        item.date = System.currentTimeMillis();
+                    for (ListItem listItem : DocumentSelectActivity.this.selectedFiles.values()) {
+                        listItem.date = System.currentTimeMillis();
                     }
                 }
             }
         });
         this.selectedFiles.clear();
         this.actionModeViews.clear();
-        ActionBarMenu actionMode = this.actionBar.createActionMode();
-        this.selectedMessagesCountTextView = new NumberTextView(actionMode.getContext());
+        ActionBarMenu createActionMode = this.actionBar.createActionMode();
+        this.selectedMessagesCountTextView = new NumberTextView(createActionMode.getContext());
         this.selectedMessagesCountTextView.setTextSize(18);
         this.selectedMessagesCountTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.selectedMessagesCountTextView.setTextColor(Theme.getColor("actionBarActionModeDefaultIcon"));
-        this.selectedMessagesCountTextView.setOnTouchListener(DocumentSelectActivity$$Lambda$0.$instance);
-        actionMode.addView(this.selectedMessagesCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 65, 0, 0, 0));
-        this.actionModeViews.add(actionMode.addItemWithWidth(3, NUM, AndroidUtilities.dp(54.0f)));
+        this.selectedMessagesCountTextView.setOnTouchListener(-$$Lambda$DocumentSelectActivity$wOAW0__TUXtkjQ-Z0vg8d4FmxpE.INSTANCE);
+        createActionMode.addView(this.selectedMessagesCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 65, 0, 0, 0));
+        this.actionModeViews.add(createActionMode.addItemWithWidth(3, NUM, AndroidUtilities.dp(54.0f)));
         this.fragmentView = new FrameLayout(context);
-        FrameLayout frameLayout = this.fragmentView;
+        FrameLayout frameLayout = (FrameLayout) this.fragmentView;
         this.emptyView = new EmptyTextProgressView(context);
         this.emptyView.showTextView();
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
@@ -298,22 +539,21 @@ public class DocumentSelectActivity extends BaseFragment {
         recyclerListView2.setAdapter(listAdapter);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setOnScrollListener(new OnScrollListener() {
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                DocumentSelectActivity.this.scrolling = newState != 0;
+            public void onScrollStateChanged(RecyclerView recyclerView, int i) {
+                DocumentSelectActivity.this.scrolling = i != 0;
             }
         });
-        this.listView.setOnItemLongClickListener(new DocumentSelectActivity$$Lambda$1(this));
-        this.listView.setOnItemClickListener(new DocumentSelectActivity$$Lambda$2(this));
+        this.listView.setOnItemLongClickListener(new -$$Lambda$DocumentSelectActivity$CyKwYdaVewVAaKBAnA3V_bH1l5E(this));
+        this.listView.setOnItemClickListener(new -$$Lambda$DocumentSelectActivity$lBQknjeUipxjA7znufbDrCLASSNAMELRU(this));
         listRoots();
         return this.fragmentView;
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ boolean lambda$createView$1$DocumentSelectActivity(View view, int position) {
+    public /* synthetic */ boolean lambda$createView$1$DocumentSelectActivity(View view, int i) {
         if (this.actionBar.isActionModeShowed()) {
             return false;
         }
-        ListItem item = this.listAdapter.getItem(position);
+        ListItem item = this.listAdapter.getItem(i);
         if (item == null) {
             return false;
         }
@@ -325,75 +565,88 @@ public class DocumentSelectActivity extends BaseFragment {
             } else if (this.canSelectOnlyImageFiles && item.thumb == null) {
                 showErrorBox(LocaleController.formatString("PassportUploadNotImage", NUM, new Object[0]));
                 return false;
-            } else if (this.sizeLimit != 0 && file.length() > this.sizeLimit) {
-                showErrorBox(LocaleController.formatString("FileUploadLimit", NUM, AndroidUtilities.formatFileSize(this.sizeLimit)));
-                return false;
-            } else if (this.maxSelectedFiles >= 0 && this.selectedFiles.size() >= this.maxSelectedFiles) {
-                showErrorBox(LocaleController.formatString("PassportUploadMaxReached", NUM, LocaleController.formatPluralString("Files", this.maxSelectedFiles)));
-                return false;
-            } else if (file.length() == 0) {
-                return false;
             } else {
-                this.selectedFiles.put(file.toString(), item);
-                this.selectedMessagesCountTextView.setNumber(1, false);
-                AnimatorSet animatorSet = new AnimatorSet();
-                ArrayList<Animator> animators = new ArrayList();
-                for (int a = 0; a < this.actionModeViews.size(); a++) {
-                    View view2 = (View) this.actionModeViews.get(a);
-                    AndroidUtilities.clearDrawableAnimation(view2);
-                    animators.add(ObjectAnimator.ofFloat(view2, "scaleY", new float[]{0.1f, 1.0f}));
+                if (this.sizeLimit != 0) {
+                    if (file.length() > this.sizeLimit) {
+                        showErrorBox(LocaleController.formatString("FileUploadLimit", NUM, AndroidUtilities.formatFileSize(this.sizeLimit)));
+                        return false;
+                    }
                 }
-                animatorSet.playTogether(animators);
-                animatorSet.setDuration(250);
-                animatorSet.start();
-                this.scrolling = false;
-                if (view instanceof SharedDocumentCell) {
-                    ((SharedDocumentCell) view).setChecked(true, true);
+                if (this.maxSelectedFiles >= 0 && this.selectedFiles.size() >= this.maxSelectedFiles) {
+                    showErrorBox(LocaleController.formatString("PassportUploadMaxReached", NUM, LocaleController.formatPluralString("Files", this.maxSelectedFiles)));
+                    return false;
+                } else if (file.length() == 0) {
+                    return false;
+                } else {
+                    this.selectedFiles.put(file.toString(), item);
+                    this.selectedMessagesCountTextView.setNumber(1, false);
+                    AnimatorSet animatorSet = new AnimatorSet();
+                    ArrayList arrayList = new ArrayList();
+                    for (int i2 = 0; i2 < this.actionModeViews.size(); i2++) {
+                        View view2 = (View) this.actionModeViews.get(i2);
+                        AndroidUtilities.clearDrawableAnimation(view2);
+                        arrayList.add(ObjectAnimator.ofFloat(view2, "scaleY", new float[]{0.1f, 1.0f}));
+                    }
+                    animatorSet.playTogether(arrayList);
+                    animatorSet.setDuration(250);
+                    animatorSet.start();
+                    this.scrolling = false;
+                    if (view instanceof SharedDocumentCell) {
+                        ((SharedDocumentCell) view).setChecked(true, true);
+                    }
+                    this.actionBar.showActionMode();
                 }
-                this.actionBar.showActionMode();
             }
         }
         return true;
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$createView$2$DocumentSelectActivity(View view, int position) {
-        ListItem item = this.listAdapter.getItem(position);
+    public /* synthetic */ void lambda$createView$2$DocumentSelectActivity(View view, int i) {
+        ListItem item = this.listAdapter.getItem(i);
         if (item != null) {
             File file = item.file;
-            HistoryEntry he;
+            ArrayList arrayList;
+            HistoryEntry historyEntry;
             if (file == null) {
-                if (item.icon == NUM) {
-                    if (this.delegate != null) {
-                        this.delegate.startDocumentSelectActivity();
+                int i2 = item.icon;
+                DocumentSelectActivityDelegate documentSelectActivityDelegate;
+                if (i2 == NUM) {
+                    documentSelectActivityDelegate = this.delegate;
+                    if (documentSelectActivityDelegate != null) {
+                        documentSelectActivityDelegate.startDocumentSelectActivity();
                     }
                     finishFragment(false);
-                } else if (item.icon != NUM) {
-                    he = (HistoryEntry) this.history.remove(this.history.size() - 1);
-                    this.actionBar.setTitle(he.title);
-                    if (he.dir != null) {
-                        listFiles(he.dir);
+                } else if (i2 == NUM) {
+                    documentSelectActivityDelegate = this.delegate;
+                    if (documentSelectActivityDelegate != null) {
+                        documentSelectActivityDelegate.startMusicSelectActivity(this);
+                    }
+                } else {
+                    arrayList = this.history;
+                    historyEntry = (HistoryEntry) arrayList.remove(arrayList.size() - 1);
+                    this.actionBar.setTitle(historyEntry.title);
+                    File file2 = historyEntry.dir;
+                    if (file2 != null) {
+                        listFiles(file2);
                     } else {
                         listRoots();
                     }
-                    this.layoutManager.scrollToPositionWithOffset(he.scrollItem, he.scrollOffset);
-                } else if (this.delegate != null) {
-                    this.delegate.startMusicSelectActivity(this);
+                    this.layoutManager.scrollToPositionWithOffset(historyEntry.scrollItem, historyEntry.scrollOffset);
                 }
             } else if (file.isDirectory()) {
-                he = new HistoryEntry(this, null);
-                he.scrollItem = this.layoutManager.findLastVisibleItemPosition();
-                View topView = this.layoutManager.findViewByPosition(he.scrollItem);
-                if (topView != null) {
-                    he.scrollOffset = topView.getTop();
+                historyEntry = new HistoryEntry(this, null);
+                historyEntry.scrollItem = this.layoutManager.findLastVisibleItemPosition();
+                View findViewByPosition = this.layoutManager.findViewByPosition(historyEntry.scrollItem);
+                if (findViewByPosition != null) {
+                    historyEntry.scrollOffset = findViewByPosition.getTop();
                 }
-                he.dir = this.currentDir;
-                he.title = this.actionBar.getTitle();
-                this.history.add(he);
+                historyEntry.dir = this.currentDir;
+                historyEntry.title = this.actionBar.getTitle();
+                this.history.add(historyEntry);
                 if (listFiles(file)) {
                     this.actionBar.setTitle(item.title);
                 } else {
-                    this.history.remove(he);
+                    this.history.remove(historyEntry);
                 }
             } else {
                 if (!file.canRead()) {
@@ -402,10 +655,15 @@ public class DocumentSelectActivity extends BaseFragment {
                 }
                 if (this.canSelectOnlyImageFiles && item.thumb == null) {
                     showErrorBox(LocaleController.formatString("PassportUploadNotImage", NUM, new Object[0]));
-                } else if (this.sizeLimit != 0 && file.length() > this.sizeLimit) {
-                    showErrorBox(LocaleController.formatString("FileUploadLimit", NUM, AndroidUtilities.formatFileSize(this.sizeLimit)));
-                } else if (file.length() == 0) {
-                } else {
+                    return;
+                }
+                if (this.sizeLimit != 0) {
+                    if (file.length() > this.sizeLimit) {
+                        showErrorBox(LocaleController.formatString("FileUploadLimit", NUM, AndroidUtilities.formatFileSize(this.sizeLimit)));
+                        return;
+                    }
+                }
+                if (file.length() != 0) {
                     if (this.actionBar.isActionModeShowed()) {
                         if (this.selectedFiles.containsKey(file.toString())) {
                             this.selectedFiles.remove(file.toString());
@@ -425,72 +683,71 @@ public class DocumentSelectActivity extends BaseFragment {
                             ((SharedDocumentCell) view).setChecked(this.selectedFiles.containsKey(item.file.toString()), true);
                         }
                     } else if (this.delegate != null) {
-                        ArrayList<String> files = new ArrayList();
-                        files.add(file.getAbsolutePath());
-                        this.delegate.didSelectFiles(this, files);
+                        arrayList = new ArrayList();
+                        arrayList.add(file.getAbsolutePath());
+                        this.delegate.didSelectFiles(this, arrayList);
                     }
                 }
             }
         }
     }
 
-    public void setMaxSelectedFiles(int value) {
-        this.maxSelectedFiles = value;
+    public void setMaxSelectedFiles(int i) {
+        this.maxSelectedFiles = i;
     }
 
-    public void setCanSelectOnlyImageFiles(boolean value) {
+    public void setCanSelectOnlyImageFiles(boolean z) {
         this.canSelectOnlyImageFiles = true;
     }
 
     public void loadRecentFiles() {
         try {
-            File[] files = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).listFiles();
-            for (File file : files) {
+            File[] listFiles = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).listFiles();
+            for (File file : listFiles) {
                 if (!file.isDirectory()) {
-                    ListItem item = new ListItem(this, null);
-                    item.title = file.getName();
-                    item.file = file;
-                    String fname = file.getName();
-                    String[] sp = fname.split("\\.");
-                    item.ext = sp.length > 1 ? sp[sp.length - 1] : "?";
-                    item.subtitle = AndroidUtilities.formatFileSize(file.length());
-                    fname = fname.toLowerCase();
-                    if (fname.endsWith(".jpg") || fname.endsWith(".png") || fname.endsWith(".gif") || fname.endsWith(".jpeg")) {
-                        item.thumb = file.getAbsolutePath();
+                    ListItem listItem = new ListItem(this, null);
+                    listItem.title = file.getName();
+                    listItem.file = file;
+                    String name = file.getName();
+                    String[] split = name.split("\\.");
+                    listItem.ext = split.length > 1 ? split[split.length - 1] : "?";
+                    listItem.subtitle = AndroidUtilities.formatFileSize(file.length());
+                    name = name.toLowerCase();
+                    if (name.endsWith(".jpg") || name.endsWith(".png") || name.endsWith(".gif") || name.endsWith(".jpeg")) {
+                        listItem.thumb = file.getAbsolutePath();
                     }
-                    this.recentItems.add(item);
+                    this.recentItems.add(listItem);
                 }
             }
-            Collections.sort(this.recentItems, DocumentSelectActivity$$Lambda$3.$instance);
+            Collections.sort(this.recentItems, -$$Lambda$DocumentSelectActivity$9fKm6qZG_Rnisjsmtz1XWQccmXA.INSTANCE);
         } catch (Exception e) {
             FileLog.e(e);
         }
     }
 
-    static final /* synthetic */ int lambda$loadRecentFiles$3$DocumentSelectActivity(ListItem o1, ListItem o2) {
-        long lm = o1.file.lastModified();
-        long rm = o2.file.lastModified();
-        if (lm == rm) {
+    static /* synthetic */ int lambda$loadRecentFiles$3(ListItem listItem, ListItem listItem2) {
+        long lastModified = listItem.file.lastModified();
+        long lastModified2 = listItem2.file.lastModified();
+        if (lastModified == lastModified2) {
             return 0;
         }
-        if (lm > rm) {
-            return -1;
-        }
-        return 1;
+        return lastModified > lastModified2 ? -1 : 1;
     }
 
     public void onResume() {
         super.onResume();
-        if (this.listAdapter != null) {
-            this.listAdapter.notifyDataSetChanged();
+        ListAdapter listAdapter = this.listAdapter;
+        if (listAdapter != null) {
+            listAdapter.notifyDataSetChanged();
         }
         fixLayoutInternal();
     }
 
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        if (this.listView != null) {
-            this.listView.getViewTreeObserver().addOnPreDrawListener(new OnPreDrawListener() {
+    public void onConfigurationChanged(Configuration configuration) {
+        super.onConfigurationChanged(configuration);
+        RecyclerListView recyclerListView = this.listView;
+        if (recyclerListView != null) {
+            recyclerListView.getViewTreeObserver().addOnPreDrawListener(new OnPreDrawListener() {
                 public boolean onPreDraw() {
                     DocumentSelectActivity.this.listView.getViewTreeObserver().removeOnPreDrawListener(this);
                     DocumentSelectActivity.this.fixLayoutInternal();
@@ -514,69 +771,79 @@ public class DocumentSelectActivity extends BaseFragment {
         if (this.history.size() <= 0) {
             return super.onBackPressed();
         }
-        HistoryEntry he = (HistoryEntry) this.history.remove(this.history.size() - 1);
-        this.actionBar.setTitle(he.title);
-        if (he.dir != null) {
-            listFiles(he.dir);
+        ArrayList arrayList = this.history;
+        HistoryEntry historyEntry = (HistoryEntry) arrayList.remove(arrayList.size() - 1);
+        this.actionBar.setTitle(historyEntry.title);
+        File file = historyEntry.dir;
+        if (file != null) {
+            listFiles(file);
         } else {
             listRoots();
         }
-        this.layoutManager.scrollToPositionWithOffset(he.scrollItem, he.scrollOffset);
+        this.layoutManager.scrollToPositionWithOffset(historyEntry.scrollItem, historyEntry.scrollOffset);
         return false;
     }
 
-    public void setDelegate(DocumentSelectActivityDelegate delegate) {
-        this.delegate = delegate;
+    public void setDelegate(DocumentSelectActivityDelegate documentSelectActivityDelegate) {
+        this.delegate = documentSelectActivityDelegate;
     }
 
-    private boolean listFiles(File dir) {
-        if (dir.canRead()) {
+    private boolean listFiles(File file) {
+        if (file.canRead()) {
             try {
-                File[] files = dir.listFiles();
-                if (files == null) {
+                File[] listFiles = file.listFiles();
+                if (listFiles == null) {
                     showErrorBox(LocaleController.getString("UnknownError", NUM));
                     return false;
                 }
-                ListItem item;
-                this.currentDir = dir;
+                String str;
+                this.currentDir = file;
                 this.items.clear();
-                Arrays.sort(files, DocumentSelectActivity$$Lambda$4.$instance);
-                for (File file : files) {
-                    if (file.getName().indexOf(46) != 0) {
-                        item = new ListItem(this, null);
-                        item.title = file.getName();
-                        item.file = file;
-                        if (file.isDirectory()) {
-                            item.icon = NUM;
-                            item.subtitle = LocaleController.getString("Folder", NUM);
+                Arrays.sort(listFiles, -$$Lambda$DocumentSelectActivity$KoBsEgVmPEJw-tYKCZKJ_jB7oso.INSTANCE);
+                int i = 0;
+                while (true) {
+                    str = "Folder";
+                    if (i >= listFiles.length) {
+                        break;
+                    }
+                    File file2 = listFiles[i];
+                    if (file2.getName().indexOf(46) != 0) {
+                        ListItem listItem = new ListItem(this, null);
+                        listItem.title = file2.getName();
+                        listItem.file = file2;
+                        if (file2.isDirectory()) {
+                            listItem.icon = NUM;
+                            listItem.subtitle = LocaleController.getString(str, NUM);
                         } else {
-                            String fname = file.getName();
-                            String[] sp = fname.split("\\.");
-                            item.ext = sp.length > 1 ? sp[sp.length - 1] : "?";
-                            item.subtitle = AndroidUtilities.formatFileSize(file.length());
-                            fname = fname.toLowerCase();
-                            if (fname.endsWith(".jpg") || fname.endsWith(".png") || fname.endsWith(".gif") || fname.endsWith(".jpeg")) {
-                                item.thumb = file.getAbsolutePath();
+                            String name = file2.getName();
+                            String[] split = name.split("\\.");
+                            listItem.ext = split.length > 1 ? split[split.length - 1] : "?";
+                            listItem.subtitle = AndroidUtilities.formatFileSize(file2.length());
+                            name = name.toLowerCase();
+                            if (name.endsWith(".jpg") || name.endsWith(".png") || name.endsWith(".gif") || name.endsWith(".jpeg")) {
+                                listItem.thumb = file2.getAbsolutePath();
                             }
                         }
-                        this.items.add(item);
+                        this.items.add(listItem);
                     }
+                    i++;
                 }
-                item = new ListItem(this, null);
-                item.title = "..";
+                ListItem listItem2 = new ListItem(this, null);
+                listItem2.title = "..";
                 if (this.history.size() > 0) {
-                    HistoryEntry entry = (HistoryEntry) this.history.get(this.history.size() - 1);
-                    if (entry.dir == null) {
-                        item.subtitle = LocaleController.getString("Folder", NUM);
+                    ArrayList arrayList = this.history;
+                    File file3 = ((HistoryEntry) arrayList.get(arrayList.size() - 1)).dir;
+                    if (file3 == null) {
+                        listItem2.subtitle = LocaleController.getString(str, NUM);
                     } else {
-                        item.subtitle = entry.dir.toString();
+                        listItem2.subtitle = file3.toString();
                     }
                 } else {
-                    item.subtitle = LocaleController.getString("Folder", NUM);
+                    listItem2.subtitle = LocaleController.getString(str, NUM);
                 }
-                item.icon = NUM;
-                item.file = null;
-                this.items.add(0, item);
+                listItem2.icon = NUM;
+                listItem2.file = null;
+                this.items.add(0, listItem2);
                 AndroidUtilities.clearDrawableAnimation(this.listView);
                 this.scrolling = true;
                 this.listAdapter.notifyDataSetChanged();
@@ -585,11 +852,11 @@ public class DocumentSelectActivity extends BaseFragment {
                 showErrorBox(e.getLocalizedMessage());
                 return false;
             }
-        } else if ((!dir.getAbsolutePath().startsWith(Environment.getExternalStorageDirectory().toString()) && !dir.getAbsolutePath().startsWith("/sdcard") && !dir.getAbsolutePath().startsWith("/mnt/sdcard")) || Environment.getExternalStorageState().equals("mounted") || Environment.getExternalStorageState().equals("mounted_ro")) {
+        } else if ((!file.getAbsolutePath().startsWith(Environment.getExternalStorageDirectory().toString()) && !file.getAbsolutePath().startsWith("/sdcard") && !file.getAbsolutePath().startsWith("/mnt/sdcard")) || Environment.getExternalStorageState().equals("mounted") || Environment.getExternalStorageState().equals("mounted_ro")) {
             showErrorBox(LocaleController.getString("AccessError", NUM));
             return false;
         } else {
-            this.currentDir = dir;
+            this.currentDir = file;
             this.items.clear();
             if ("shared".equals(Environment.getExternalStorageState())) {
                 this.emptyView.setText(LocaleController.getString("UsbActive", NUM));
@@ -603,481 +870,30 @@ public class DocumentSelectActivity extends BaseFragment {
         }
     }
 
-    static final /* synthetic */ int lambda$listFiles$4$DocumentSelectActivity(File lhs, File rhs) {
-        if (lhs.isDirectory() != rhs.isDirectory()) {
-            return lhs.isDirectory() ? -1 : 1;
-        } else {
-            return lhs.getName().compareToIgnoreCase(rhs.getName());
+    static /* synthetic */ int lambda$listFiles$4(File file, File file2) {
+        if (file.isDirectory() == file2.isDirectory()) {
+            return file.getName().compareToIgnoreCase(file2.getName());
         }
+        return file.isDirectory() ? -1 : 1;
     }
 
-    private void showErrorBox(String error) {
+    private void showErrorBox(String str) {
         if (getParentActivity() != null) {
-            new Builder(getParentActivity()).setTitle(LocaleController.getString("AppName", NUM)).setMessage(error).setPositiveButton(LocaleController.getString("OK", NUM), null).show();
+            new Builder(getParentActivity()).setTitle(LocaleController.getString("AppName", NUM)).setMessage(str).setPositiveButton(LocaleController.getString("OK", NUM), null).show();
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x0223 A:{Catch:{ Exception -> 0x033e }} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x029b  */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x029b  */
-    /* JADX WARNING: Removed duplicated region for block: B:79:0x0320 A:{SYNTHETIC, Splitter:B:79:0x0320} */
-    /* JADX WARNING: Removed duplicated region for block: B:58:0x01ca A:{SYNTHETIC, Splitter:B:58:0x01ca} */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x0223 A:{Catch:{ Exception -> 0x033e }} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x029b  */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x031c A:{Splitter:B:11:0x0094, ExcHandler: all (th java.lang.Throwable)} */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x029b  */
-    /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Missing block: B:53:0x01c3, code skipped:
-            r7 = e;
-     */
-    /* JADX WARNING: Missing block: B:54:0x01c4, code skipped:
-            r3 = r4;
-     */
-    /* JADX WARNING: Missing block: B:59:?, code skipped:
-            r3.close();
-     */
-    /* JADX WARNING: Missing block: B:76:0x031c, code skipped:
-            r21 = th;
-     */
-    /* JADX WARNING: Missing block: B:77:0x031d, code skipped:
-            r3 = r4;
-     */
-    /* JADX WARNING: Missing block: B:80:?, code skipped:
-            r3.close();
-     */
-    /* JADX WARNING: Missing block: B:88:0x0333, code skipped:
-            r7 = move-exception;
-     */
-    /* JADX WARNING: Missing block: B:89:0x0334, code skipped:
-            org.telegram.messenger.FileLog.e(r7);
-     */
-    /* JADX WARNING: Missing block: B:90:0x0339, code skipped:
-            r7 = move-exception;
-     */
-    /* JADX WARNING: Missing block: B:91:0x033a, code skipped:
-            org.telegram.messenger.FileLog.e(r7);
-     */
-    @android.annotation.SuppressLint({"NewApi"})
-    private void listRoots() {
-        /*
-        r23 = this;
-        r21 = 0;
-        r0 = r21;
-        r1 = r23;
-        r1.currentDir = r0;
-        r0 = r23;
-        r0 = r0.items;
-        r21 = r0;
-        r21.clear();
-        r17 = new java.util.HashSet;
-        r17.<init>();
-        r21 = android.os.Environment.getExternalStorageDirectory();
-        r5 = r21.getPath();
-        r12 = android.os.Environment.isExternalStorageRemovable();
-        r6 = android.os.Environment.getExternalStorageState();
-        r21 = "mounted";
-        r0 = r21;
-        r21 = r6.equals(r0);
-        if (r21 != 0) goto L_0x003c;
-    L_0x0031:
-        r21 = "mounted_ro";
-        r0 = r21;
-        r21 = r6.equals(r0);
-        if (r21 == 0) goto L_0x0084;
-    L_0x003c:
-        r8 = new org.telegram.ui.DocumentSelectActivity$ListItem;
-        r21 = 0;
-        r0 = r23;
-        r1 = r21;
-        r8.<init>(r0, r1);
-        r21 = android.os.Environment.isExternalStorageRemovable();
-        if (r21 == 0) goto L_0x02f5;
-    L_0x004d:
-        r21 = "SdCard";
-        r22 = NUM; // 0x7f0CLASSNAME float:1.8613453E38 double:1.0530984365E-314;
-        r21 = org.telegram.messenger.LocaleController.getString(r21, r22);
-        r0 = r21;
-        r8.title = r0;
-        r21 = NUM; // 0x7var_ba float:1.7944955E38 double:1.052935595E-314;
-        r0 = r21;
-        r8.icon = r0;
-    L_0x0062:
-        r0 = r23;
-        r21 = r0.getRootSubtitle(r5);
-        r0 = r21;
-        r8.subtitle = r0;
-        r21 = android.os.Environment.getExternalStorageDirectory();
-        r0 = r21;
-        r8.file = r0;
-        r0 = r23;
-        r0 = r0.items;
-        r21 = r0;
-        r0 = r21;
-        r0.add(r8);
-        r0 = r17;
-        r0.add(r5);
-    L_0x0084:
-        r3 = 0;
-        r4 = new java.io.BufferedReader;	 Catch:{ Exception -> 0x0349 }
-        r21 = new java.io.FileReader;	 Catch:{ Exception -> 0x0349 }
-        r22 = "/proc/mounts";
-        r21.<init>(r22);	 Catch:{ Exception -> 0x0349 }
-        r0 = r21;
-        r4.<init>(r0);	 Catch:{ Exception -> 0x0349 }
-    L_0x0094:
-        r14 = r4.readLine();	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        if (r14 == 0) goto L_0x0324;
-    L_0x009a:
-        r21 = "vfat";
-        r0 = r21;
-        r21 = r14.contains(r0);	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        if (r21 != 0) goto L_0x00b0;
-    L_0x00a5:
-        r21 = "/mnt";
-        r0 = r21;
-        r21 = r14.contains(r0);	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        if (r21 == 0) goto L_0x0094;
-    L_0x00b0:
-        r21 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        if (r21 == 0) goto L_0x00b7;
-    L_0x00b4:
-        org.telegram.messenger.FileLog.d(r14);	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-    L_0x00b7:
-        r19 = new java.util.StringTokenizer;	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        r21 = " ";
-        r0 = r19;
-        r1 = r21;
-        r0.<init>(r14, r1);	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        r20 = r19.nextToken();	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        r16 = r19.nextToken();	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        r0 = r17;
-        r1 = r16;
-        r21 = r0.contains(r1);	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        if (r21 != 0) goto L_0x0094;
-    L_0x00d5:
-        r21 = "/dev/block/vold";
-        r0 = r21;
-        r21 = r14.contains(r0);	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        if (r21 == 0) goto L_0x0094;
-    L_0x00e0:
-        r21 = "/mnt/secure";
-        r0 = r21;
-        r21 = r14.contains(r0);	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        if (r21 != 0) goto L_0x0094;
-    L_0x00eb:
-        r21 = "/mnt/asec";
-        r0 = r21;
-        r21 = r14.contains(r0);	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        if (r21 != 0) goto L_0x0094;
-    L_0x00f6:
-        r21 = "/mnt/obb";
-        r0 = r21;
-        r21 = r14.contains(r0);	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        if (r21 != 0) goto L_0x0094;
-    L_0x0101:
-        r21 = "/dev/mapper";
-        r0 = r21;
-        r21 = r14.contains(r0);	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        if (r21 != 0) goto L_0x0094;
-    L_0x010c:
-        r21 = "tmpfs";
-        r0 = r21;
-        r21 = r14.contains(r0);	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        if (r21 != 0) goto L_0x0094;
-    L_0x0117:
-        r21 = new java.io.File;	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        r0 = r21;
-        r1 = r16;
-        r0.<init>(r1);	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        r21 = r21.isDirectory();	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        if (r21 != 0) goto L_0x0163;
-    L_0x0126:
-        r21 = 47;
-        r0 = r16;
-        r1 = r21;
-        r11 = r0.lastIndexOf(r1);	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        r21 = -1;
-        r0 = r21;
-        if (r11 == r0) goto L_0x0163;
-    L_0x0136:
-        r21 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        r21.<init>();	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        r22 = "/storage/";
-        r21 = r21.append(r22);	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        r22 = r11 + 1;
-        r0 = r16;
-        r1 = r22;
-        r22 = r0.substring(r1);	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        r21 = r21.append(r22);	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        r15 = r21.toString();	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        r21 = new java.io.File;	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        r0 = r21;
-        r0.<init>(r15);	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        r21 = r21.isDirectory();	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        if (r21 == 0) goto L_0x0163;
-    L_0x0161:
-        r16 = r15;
-    L_0x0163:
-        r0 = r17;
-        r1 = r16;
-        r0.add(r1);	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        r13 = new org.telegram.ui.DocumentSelectActivity$ListItem;	 Catch:{ Exception -> 0x01bd, all -> 0x031c }
-        r21 = 0;
-        r0 = r23;
-        r1 = r21;
-        r13.<init>(r0, r1);	 Catch:{ Exception -> 0x01bd, all -> 0x031c }
-        r21 = r16.toLowerCase();	 Catch:{ Exception -> 0x01bd, all -> 0x031c }
-        r22 = "sd";
-        r21 = r21.contains(r22);	 Catch:{ Exception -> 0x01bd, all -> 0x031c }
-        if (r21 == 0) goto L_0x030c;
-    L_0x0182:
-        r21 = "SdCard";
-        r22 = NUM; // 0x7f0CLASSNAME float:1.8613453E38 double:1.0530984365E-314;
-        r21 = org.telegram.messenger.LocaleController.getString(r21, r22);	 Catch:{ Exception -> 0x01bd, all -> 0x031c }
-        r0 = r21;
-        r13.title = r0;	 Catch:{ Exception -> 0x01bd, all -> 0x031c }
-    L_0x0190:
-        r21 = NUM; // 0x7var_ba float:1.7944955E38 double:1.052935595E-314;
-        r0 = r21;
-        r13.icon = r0;	 Catch:{ Exception -> 0x01bd, all -> 0x031c }
-        r0 = r23;
-        r1 = r16;
-        r21 = r0.getRootSubtitle(r1);	 Catch:{ Exception -> 0x01bd, all -> 0x031c }
-        r0 = r21;
-        r13.subtitle = r0;	 Catch:{ Exception -> 0x01bd, all -> 0x031c }
-        r21 = new java.io.File;	 Catch:{ Exception -> 0x01bd, all -> 0x031c }
-        r0 = r21;
-        r1 = r16;
-        r0.<init>(r1);	 Catch:{ Exception -> 0x01bd, all -> 0x031c }
-        r0 = r21;
-        r13.file = r0;	 Catch:{ Exception -> 0x01bd, all -> 0x031c }
-        r0 = r23;
-        r0 = r0.items;	 Catch:{ Exception -> 0x01bd, all -> 0x031c }
-        r21 = r0;
-        r0 = r21;
-        r0.add(r13);	 Catch:{ Exception -> 0x01bd, all -> 0x031c }
-        goto L_0x0094;
-    L_0x01bd:
-        r7 = move-exception;
-        org.telegram.messenger.FileLog.e(r7);	 Catch:{ Exception -> 0x01c3, all -> 0x031c }
-        goto L_0x0094;
-    L_0x01c3:
-        r7 = move-exception;
-        r3 = r4;
-    L_0x01c5:
-        org.telegram.messenger.FileLog.e(r7);	 Catch:{ all -> 0x0347 }
-        if (r3 == 0) goto L_0x01cd;
-    L_0x01ca:
-        r3.close();	 Catch:{ Exception -> 0x0333 }
-    L_0x01cd:
-        r9 = new org.telegram.ui.DocumentSelectActivity$ListItem;
-        r21 = 0;
-        r0 = r23;
-        r1 = r21;
-        r9.<init>(r0, r1);
-        r21 = "/";
-        r0 = r21;
-        r9.title = r0;
-        r21 = "SystemRoot";
-        r22 = NUM; // 0x7f0CLASSNAMEa float:1.8613885E38 double:1.0530985417E-314;
-        r21 = org.telegram.messenger.LocaleController.getString(r21, r22);
-        r0 = r21;
-        r9.subtitle = r0;
-        r21 = NUM; // 0x7var_b8 float:1.7944951E38 double:1.052935594E-314;
-        r0 = r21;
-        r9.icon = r0;
-        r21 = new java.io.File;
-        r22 = "/";
-        r21.<init>(r22);
-        r0 = r21;
-        r9.file = r0;
-        r0 = r23;
-        r0 = r0.items;
-        r21 = r0;
-        r0 = r21;
-        r0.add(r9);
-        r18 = new java.io.File;	 Catch:{ Exception -> 0x033e }
-        r21 = android.os.Environment.getExternalStorageDirectory();	 Catch:{ Exception -> 0x033e }
-        r22 = "Telegram";
-        r0 = r18;
-        r1 = r21;
-        r2 = r22;
-        r0.<init>(r1, r2);	 Catch:{ Exception -> 0x033e }
-        r21 = r18.exists();	 Catch:{ Exception -> 0x033e }
-        if (r21 == 0) goto L_0x0254;
-    L_0x0223:
-        r10 = new org.telegram.ui.DocumentSelectActivity$ListItem;	 Catch:{ Exception -> 0x033e }
-        r21 = 0;
-        r0 = r23;
-        r1 = r21;
-        r10.<init>(r0, r1);	 Catch:{ Exception -> 0x033e }
-        r21 = "Telegram";
-        r0 = r21;
-        r10.title = r0;	 Catch:{ Exception -> 0x0344 }
-        r21 = r18.toString();	 Catch:{ Exception -> 0x0344 }
-        r0 = r21;
-        r10.subtitle = r0;	 Catch:{ Exception -> 0x0344 }
-        r21 = NUM; // 0x7var_b8 float:1.7944951E38 double:1.052935594E-314;
-        r0 = r21;
-        r10.icon = r0;	 Catch:{ Exception -> 0x0344 }
-        r0 = r18;
-        r10.file = r0;	 Catch:{ Exception -> 0x0344 }
-        r0 = r23;
-        r0 = r0.items;	 Catch:{ Exception -> 0x0344 }
-        r21 = r0;
-        r0 = r21;
-        r0.add(r10);	 Catch:{ Exception -> 0x0344 }
-        r9 = r10;
-    L_0x0254:
-        r9 = new org.telegram.ui.DocumentSelectActivity$ListItem;
-        r21 = 0;
-        r0 = r23;
-        r1 = r21;
-        r9.<init>(r0, r1);
-        r21 = "Gallery";
-        r22 = NUM; // 0x7f0CLASSNAME float:1.861138E38 double:1.0530979316E-314;
-        r21 = org.telegram.messenger.LocaleController.getString(r21, r22);
-        r0 = r21;
-        r9.title = r0;
-        r21 = "GalleryInfo";
-        r22 = NUM; // 0x7f0CLASSNAME float:1.8611382E38 double:1.053097932E-314;
-        r21 = org.telegram.messenger.LocaleController.getString(r21, r22);
-        r0 = r21;
-        r9.subtitle = r0;
-        r21 = NUM; // 0x7var_d7 float:1.7945014E38 double:1.0529356093E-314;
-        r0 = r21;
-        r9.icon = r0;
-        r21 = 0;
-        r0 = r21;
-        r9.file = r0;
-        r0 = r23;
-        r0 = r0.items;
-        r21 = r0;
-        r0 = r21;
-        r0.add(r9);
-        r0 = r23;
-        r0 = r0.allowMusic;
-        r21 = r0;
-        if (r21 == 0) goto L_0x02da;
-    L_0x029b:
-        r9 = new org.telegram.ui.DocumentSelectActivity$ListItem;
-        r21 = 0;
-        r0 = r23;
-        r1 = r21;
-        r9.<init>(r0, r1);
-        r21 = "AttachMusic";
-        r22 = NUM; // 0x7f0CLASSNAMEb float:1.8609798E38 double:1.053097546E-314;
-        r21 = org.telegram.messenger.LocaleController.getString(r21, r22);
-        r0 = r21;
-        r9.title = r0;
-        r21 = "MusicInfo";
-        r22 = NUM; // 0x7f0CLASSNAME float:1.8611965E38 double:1.053098074E-314;
-        r21 = org.telegram.messenger.LocaleController.getString(r21, r22);
-        r0 = r21;
-        r9.subtitle = r0;
-        r21 = NUM; // 0x7var_d8 float:1.7945016E38 double:1.0529356097E-314;
-        r0 = r21;
-        r9.icon = r0;
-        r21 = 0;
-        r0 = r21;
-        r9.file = r0;
-        r0 = r23;
-        r0 = r0.items;
-        r21 = r0;
-        r0 = r21;
-        r0.add(r9);
-    L_0x02da:
-        r0 = r23;
-        r0 = r0.listView;
-        r21 = r0;
-        org.telegram.messenger.AndroidUtilities.clearDrawableAnimation(r21);
-        r21 = 1;
-        r0 = r21;
-        r1 = r23;
-        r1.scrolling = r0;
-        r0 = r23;
-        r0 = r0.listAdapter;
-        r21 = r0;
-        r21.notifyDataSetChanged();
-        return;
-    L_0x02f5:
-        r21 = "InternalStorage";
-        r22 = NUM; // 0x7f0CLASSNAMEa float:1.8611549E38 double:1.0530979726E-314;
-        r21 = org.telegram.messenger.LocaleController.getString(r21, r22);
-        r0 = r21;
-        r8.title = r0;
-        r21 = NUM; // 0x7var_d6 float:1.7945012E38 double:1.052935609E-314;
-        r0 = r21;
-        r8.icon = r0;
-        goto L_0x0062;
-    L_0x030c:
-        r21 = "ExternalStorage";
-        r22 = NUM; // 0x7f0CLASSNAMEca float:1.861116E38 double:1.0530978777E-314;
-        r21 = org.telegram.messenger.LocaleController.getString(r21, r22);	 Catch:{ Exception -> 0x01bd, all -> 0x031c }
-        r0 = r21;
-        r13.title = r0;	 Catch:{ Exception -> 0x01bd, all -> 0x031c }
-        goto L_0x0190;
-    L_0x031c:
-        r21 = move-exception;
-        r3 = r4;
-    L_0x031e:
-        if (r3 == 0) goto L_0x0323;
-    L_0x0320:
-        r3.close();	 Catch:{ Exception -> 0x0339 }
-    L_0x0323:
-        throw r21;
-    L_0x0324:
-        if (r4 == 0) goto L_0x034c;
-    L_0x0326:
-        r4.close();	 Catch:{ Exception -> 0x032c }
-        r3 = r4;
-        goto L_0x01cd;
-    L_0x032c:
-        r7 = move-exception;
-        org.telegram.messenger.FileLog.e(r7);
-        r3 = r4;
-        goto L_0x01cd;
-    L_0x0333:
-        r7 = move-exception;
-        org.telegram.messenger.FileLog.e(r7);
-        goto L_0x01cd;
-    L_0x0339:
-        r7 = move-exception;
-        org.telegram.messenger.FileLog.e(r7);
-        goto L_0x0323;
-    L_0x033e:
-        r7 = move-exception;
-    L_0x033f:
-        org.telegram.messenger.FileLog.e(r7);
-        goto L_0x0254;
-    L_0x0344:
-        r7 = move-exception;
-        r9 = r10;
-        goto L_0x033f;
-    L_0x0347:
-        r21 = move-exception;
-        goto L_0x031e;
-    L_0x0349:
-        r7 = move-exception;
-        goto L_0x01c5;
-    L_0x034c:
-        r3 = r4;
-        goto L_0x01cd;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DocumentSelectActivity.listRoots():void");
-    }
-
-    private String getRootSubtitle(String path) {
+    private String getRootSubtitle(String str) {
         try {
-            StatFs stat = new StatFs(path);
-            long free = ((long) stat.getAvailableBlocks()) * ((long) stat.getBlockSize());
-            if (((long) stat.getBlockCount()) * ((long) stat.getBlockSize()) == 0) {
+            StatFs statFs = new StatFs(str);
+            long availableBlocks = ((long) statFs.getAvailableBlocks()) * ((long) statFs.getBlockSize());
+            if (((long) statFs.getBlockCount()) * ((long) statFs.getBlockSize()) == 0) {
                 return "";
             }
-            return LocaleController.formatString("FreeOfTotal", NUM, AndroidUtilities.formatFileSize(free), AndroidUtilities.formatFileSize(((long) stat.getBlockCount()) * ((long) stat.getBlockSize())));
+            return LocaleController.formatString("FreeOfTotal", NUM, AndroidUtilities.formatFileSize(availableBlocks), AndroidUtilities.formatFileSize(((long) statFs.getBlockCount()) * ((long) statFs.getBlockSize())));
         } catch (Exception e) {
             FileLog.e(e);
-            return path;
+            return str;
         }
     }
 
@@ -1100,9 +916,19 @@ public class DocumentSelectActivity extends BaseFragment {
         themeDescriptionArr[14] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{GraySectionCell.class}, null, null, null, "graySection");
         themeDescriptionArr[15] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"nameTextView"}, null, null, null, "windowBackgroundWhiteBlackText");
         themeDescriptionArr[16] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"dateTextView"}, null, null, null, "windowBackgroundWhiteGrayText3");
-        themeDescriptionArr[17] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKBOX, new Class[]{SharedDocumentCell.class}, new String[]{"checkBox"}, null, null, null, "checkbox");
+        View view = this.listView;
+        int i = ThemeDescription.FLAG_CHECKBOX;
+        Class[] clsArr = new Class[]{SharedDocumentCell.class};
+        String[] strArr = new String[1];
+        strArr[0] = "checkBox";
+        themeDescriptionArr[17] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "checkbox");
         themeDescriptionArr[18] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{SharedDocumentCell.class}, new String[]{"checkBox"}, null, null, null, "checkboxCheck");
-        themeDescriptionArr[19] = new ThemeDescription(this.listView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"thumbImageView"}, null, null, null, "files_folderIcon");
+        view = this.listView;
+        i = ThemeDescription.FLAG_IMAGECOLOR;
+        clsArr = new Class[]{SharedDocumentCell.class};
+        strArr = new String[1];
+        strArr[0] = "thumbImageView";
+        themeDescriptionArr[19] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "files_folderIcon");
         themeDescriptionArr[20] = new ThemeDescription(this.listView, ThemeDescription.FLAG_IMAGECOLOR | ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{SharedDocumentCell.class}, new String[]{"thumbImageView"}, null, null, null, "files_folderIconBackground");
         themeDescriptionArr[21] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"extTextView"}, null, null, null, "files_iconText");
         return themeDescriptionArr;

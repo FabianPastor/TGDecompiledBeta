@@ -9,18 +9,21 @@ public class DispatchQueue extends Thread {
     private volatile Handler handler = null;
     private CountDownLatch syncLatch = new CountDownLatch(1);
 
-    public DispatchQueue(String threadName) {
-        setName(threadName);
+    public void handleMessage(Message message) {
+    }
+
+    public DispatchQueue(String str) {
+        setName(str);
         start();
     }
 
-    public void sendMessage(Message msg, int delay) {
+    public void sendMessage(Message message, int i) {
         try {
             this.syncLatch.await();
-            if (delay <= 0) {
-                this.handler.sendMessage(msg);
+            if (i <= 0) {
+                this.handler.sendMessage(message);
             } else {
-                this.handler.sendMessageDelayed(msg, (long) delay);
+                this.handler.sendMessageDelayed(message, (long) i);
             }
         } catch (Exception e) {
             FileLog.e(e);
@@ -40,16 +43,16 @@ public class DispatchQueue extends Thread {
         postRunnable(runnable, 0);
     }
 
-    public void postRunnable(Runnable runnable, long delay) {
+    public void postRunnable(Runnable runnable, long j) {
         try {
             this.syncLatch.await();
         } catch (Exception e) {
             FileLog.e(e);
         }
-        if (delay <= 0) {
+        if (j <= 0) {
             this.handler.post(runnable);
         } else {
-            this.handler.postDelayed(runnable, delay);
+            this.handler.postDelayed(runnable, j);
         }
     }
 
@@ -62,9 +65,6 @@ public class DispatchQueue extends Thread {
         }
     }
 
-    public void handleMessage(Message inputMessage) {
-    }
-
     public void recycle() {
         this.handler.getLooper().quit();
     }
@@ -72,8 +72,8 @@ public class DispatchQueue extends Thread {
     public void run() {
         Looper.prepare();
         this.handler = new Handler() {
-            public void handleMessage(Message msg) {
-                DispatchQueue.this.handleMessage(msg);
+            public void handleMessage(Message message) {
+                DispatchQueue.this.handleMessage(message);
             }
         };
         this.syncLatch.countDown();

@@ -23,31 +23,36 @@ public class LinearSmoothScrollerMiddle extends SmoothScroller {
     protected final LinearInterpolator mLinearInterpolator = new LinearInterpolator();
     protected PointF mTargetVector;
 
-    public LinearSmoothScrollerMiddle(Context context) {
-        this.MILLISECONDS_PER_PX = 25.0f / ((float) context.getResources().getDisplayMetrics().densityDpi);
+    private int clampApplyScroll(int i, int i2) {
+        i2 = i - i2;
+        return i * i2 <= 0 ? 0 : i2;
     }
 
     /* Access modifiers changed, original: protected */
     public void onStart() {
     }
 
+    public LinearSmoothScrollerMiddle(Context context) {
+        this.MILLISECONDS_PER_PX = 25.0f / ((float) context.getResources().getDisplayMetrics().densityDpi);
+    }
+
     /* Access modifiers changed, original: protected */
-    public void onTargetFound(View targetView, State state, Action action) {
-        int dy = calculateDyToMakeVisible(targetView);
-        int time = calculateTimeForDeceleration(dy);
-        if (time > 0) {
-            action.update(0, -dy, Math.max(400, time), this.mDecelerateInterpolator);
+    public void onTargetFound(View view, State state, Action action) {
+        int calculateDyToMakeVisible = calculateDyToMakeVisible(view);
+        int calculateTimeForDeceleration = calculateTimeForDeceleration(calculateDyToMakeVisible);
+        if (calculateTimeForDeceleration > 0) {
+            action.update(0, -calculateDyToMakeVisible, Math.max(400, calculateTimeForDeceleration), this.mDecelerateInterpolator);
         }
     }
 
     /* Access modifiers changed, original: protected */
-    public void onSeekTargetStep(int dx, int dy, State state, Action action) {
+    public void onSeekTargetStep(int i, int i2, State state, Action action) {
         if (getChildCount() == 0) {
             stop();
             return;
         }
-        this.mInterimTargetDx = clampApplyScroll(this.mInterimTargetDx, dx);
-        this.mInterimTargetDy = clampApplyScroll(this.mInterimTargetDy, dy);
+        this.mInterimTargetDx = clampApplyScroll(this.mInterimTargetDx, i);
+        this.mInterimTargetDy = clampApplyScroll(this.mInterimTargetDy, i2);
         if (this.mInterimTargetDx == 0 && this.mInterimTargetDy == 0) {
             updateActionForInterimTarget(action);
         }
@@ -61,72 +66,61 @@ public class LinearSmoothScrollerMiddle extends SmoothScroller {
     }
 
     /* Access modifiers changed, original: protected */
-    public int calculateTimeForDeceleration(int dx) {
-        return (int) Math.ceil(((double) calculateTimeForScrolling(dx)) / 0.3356d);
+    public int calculateTimeForDeceleration(int i) {
+        double calculateTimeForScrolling = (double) calculateTimeForScrolling(i);
+        Double.isNaN(calculateTimeForScrolling);
+        return (int) Math.ceil(calculateTimeForScrolling / 0.3356d);
     }
 
     /* Access modifiers changed, original: protected */
-    public int calculateTimeForScrolling(int dx) {
-        return (int) Math.ceil((double) (((float) Math.abs(dx)) * this.MILLISECONDS_PER_PX));
+    public int calculateTimeForScrolling(int i) {
+        return (int) Math.ceil((double) (((float) Math.abs(i)) * this.MILLISECONDS_PER_PX));
     }
 
     /* Access modifiers changed, original: protected */
     public void updateActionForInterimTarget(Action action) {
-        PointF scrollVector = computeScrollVectorForPosition(getTargetPosition());
-        if (scrollVector == null || (scrollVector.x == 0.0f && scrollVector.y == 0.0f)) {
+        PointF computeScrollVectorForPosition = computeScrollVectorForPosition(getTargetPosition());
+        if (computeScrollVectorForPosition == null || (computeScrollVectorForPosition.x == 0.0f && computeScrollVectorForPosition.y == 0.0f)) {
             action.jumpTo(getTargetPosition());
             stop();
             return;
         }
-        normalize(scrollVector);
-        this.mTargetVector = scrollVector;
-        this.mInterimTargetDx = (int) (scrollVector.x * 10000.0f);
-        this.mInterimTargetDy = (int) (scrollVector.y * 10000.0f);
+        normalize(computeScrollVectorForPosition);
+        this.mTargetVector = computeScrollVectorForPosition;
+        this.mInterimTargetDx = (int) (computeScrollVectorForPosition.x * 10000.0f);
+        this.mInterimTargetDy = (int) (computeScrollVectorForPosition.y * 10000.0f);
         action.update((int) (((float) this.mInterimTargetDx) * 1.2f), (int) (((float) this.mInterimTargetDy) * 1.2f), (int) (((float) calculateTimeForScrolling(10000)) * 1.2f), this.mLinearInterpolator);
-    }
-
-    private int clampApplyScroll(int tmpDt, int dt) {
-        int before = tmpDt;
-        tmpDt -= dt;
-        if (before * tmpDt <= 0) {
-            return 0;
-        }
-        return tmpDt;
     }
 
     public int calculateDyToMakeVisible(View view) {
         LayoutManager layoutManager = getLayoutManager();
-        if (layoutManager == null || !layoutManager.canScrollVertically()) {
-            return 0;
-        }
-        int start;
-        LayoutParams params = (LayoutParams) view.getLayoutParams();
-        int top = layoutManager.getDecoratedTop(view) - params.topMargin;
-        int bottom = layoutManager.getDecoratedBottom(view) + params.bottomMargin;
-        int boxSize = (layoutManager.getHeight() - layoutManager.getPaddingBottom()) - layoutManager.getPaddingTop();
-        int viewSize = bottom - top;
-        if (viewSize > boxSize) {
-            start = 0;
-        } else {
-            start = (boxSize - viewSize) / 2;
-        }
-        int end = start + viewSize;
-        int dtStart = start - top;
-        if (dtStart > 0) {
-            return dtStart;
-        }
-        int dtEnd = end - bottom;
-        if (dtEnd < 0) {
-            return dtEnd;
+        if (layoutManager != null && layoutManager.canScrollVertically()) {
+            int i;
+            LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
+            int decoratedTop = layoutManager.getDecoratedTop(view) - layoutParams.topMargin;
+            int decoratedBottom = layoutManager.getDecoratedBottom(view) + layoutParams.bottomMargin;
+            int height = (layoutManager.getHeight() - layoutManager.getPaddingBottom()) - layoutManager.getPaddingTop();
+            int i2 = decoratedBottom - decoratedTop;
+            if (i2 > height) {
+                i = 0;
+            } else {
+                i = (height - i2) / 2;
+            }
+            i2 += i;
+            i -= decoratedTop;
+            if (i > 0) {
+                return i;
+            }
+            i2 -= decoratedBottom;
+            if (i2 < 0) {
+                return i2;
+            }
         }
         return 0;
     }
 
-    public PointF computeScrollVectorForPosition(int targetPosition) {
+    public PointF computeScrollVectorForPosition(int i) {
         LayoutManager layoutManager = getLayoutManager();
-        if (layoutManager instanceof ScrollVectorProvider) {
-            return ((ScrollVectorProvider) layoutManager).computeScrollVectorForPosition(targetPosition);
-        }
-        return null;
+        return layoutManager instanceof ScrollVectorProvider ? ((ScrollVectorProvider) layoutManager).computeScrollVectorForPosition(i) : null;
     }
 }

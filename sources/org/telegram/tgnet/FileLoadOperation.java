@@ -14,13 +14,13 @@ public class FileLoadOperation {
 
     public static native void native_startLoadOperation(long j);
 
-    public FileLoadOperation(int dc_id, long id, long volume_id, long access_hash, int local_id, byte[] encKey, byte[] encIv, String extension, int version, int size, File dest, File temp, FileLoadOperationDelegate fileLoadOperationDelegate) {
-        this.address = native_createLoadOpetation(dc_id, id, volume_id, access_hash, local_id, encKey, encIv, extension, version, size, dest.getAbsolutePath(), temp.getAbsolutePath(), fileLoadOperationDelegate);
+    public FileLoadOperation(int i, long j, long j2, long j3, int i2, byte[] bArr, byte[] bArr2, String str, int i3, int i4, File file, File file2, FileLoadOperationDelegate fileLoadOperationDelegate) {
+        this.address = native_createLoadOpetation(i, j, j2, j3, i2, bArr, bArr2, str, i3, i4, file.getAbsolutePath(), file2.getAbsolutePath(), fileLoadOperationDelegate);
         this.delegate = fileLoadOperationDelegate;
     }
 
-    public void setForceRequest(boolean forceRequest) {
-        this.isForceRequest = forceRequest;
+    public void setForceRequest(boolean z) {
+        this.isForceRequest = z;
     }
 
     public boolean isForceRequest() {
@@ -29,18 +29,22 @@ public class FileLoadOperation {
 
     public void start() {
         if (!this.started) {
-            if (this.address == 0) {
+            long j = this.address;
+            if (j == 0) {
                 this.delegate.onFailed(0);
                 return;
             }
             this.started = true;
-            native_startLoadOperation(this.address);
+            native_startLoadOperation(j);
         }
     }
 
     public void cancel() {
-        if (this.started && this.address != 0) {
-            native_cancelLoadOperation(this.address);
+        if (this.started) {
+            long j = this.address;
+            if (j != 0) {
+                native_cancelLoadOperation(j);
+            }
         }
     }
 

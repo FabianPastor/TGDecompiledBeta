@@ -25,7 +25,7 @@ import org.telegram.tgnet.TLRPC.TL_updatesCombined;
 import org.telegram.tgnet.TLRPC.TL_updatesTooLong;
 
 public class TLClassStore {
-    static TLClassStore store = null;
+    static TLClassStore store;
     private SparseArray<Class> classStore = new SparseArray();
 
     public TLClassStore() {
@@ -59,18 +59,17 @@ public class TLClassStore {
         return store;
     }
 
-    public TLObject TLdeserialize(NativeByteBuffer stream, int constructor, boolean exception) {
-        Class objClass = (Class) this.classStore.get(constructor);
-        if (objClass == null) {
-            return null;
+    public TLObject TLdeserialize(NativeByteBuffer nativeByteBuffer, int i, boolean z) {
+        Class cls = (Class) this.classStore.get(i);
+        if (cls != null) {
+            try {
+                TLObject tLObject = (TLObject) cls.newInstance();
+                tLObject.readParams(nativeByteBuffer, z);
+                return tLObject;
+            } catch (Throwable th) {
+                FileLog.e(th);
+            }
         }
-        try {
-            TLObject response = (TLObject) objClass.newInstance();
-            response.readParams(stream, exception);
-            return response;
-        } catch (Throwable e) {
-            FileLog.e(e);
-            return null;
-        }
+        return null;
     }
 }

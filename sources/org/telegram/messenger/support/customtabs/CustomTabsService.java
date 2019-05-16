@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.IBinder.DeathRecipient;
 import android.os.RemoteException;
-import android.support.v4.util.ArrayMap;
+import androidx.collection.ArrayMap;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.List;
@@ -23,47 +23,46 @@ public abstract class CustomTabsService extends Service {
     public static final int RESULT_FAILURE_REMOTE_ERROR = -2;
     public static final int RESULT_SUCCESS = 0;
     private Stub mBinder = new Stub() {
-        public boolean warmup(long flags) {
-            return CustomTabsService.this.warmup(flags);
+        public boolean warmup(long j) {
+            return CustomTabsService.this.warmup(j);
         }
 
-        public boolean newSession(ICustomTabsCallback callback) {
-            boolean z = false;
-            final CustomTabsSessionToken sessionToken = new CustomTabsSessionToken(callback);
+        public boolean newSession(ICustomTabsCallback iCustomTabsCallback) {
+            final CustomTabsSessionToken customTabsSessionToken = new CustomTabsSessionToken(iCustomTabsCallback);
             try {
-                DeathRecipient deathRecipient = new DeathRecipient() {
+                AnonymousClass1 anonymousClass1 = new DeathRecipient() {
                     public void binderDied() {
-                        CustomTabsService.this.cleanUpSession(sessionToken);
+                        CustomTabsService.this.cleanUpSession(customTabsSessionToken);
                     }
                 };
                 synchronized (CustomTabsService.this.mDeathRecipientMap) {
-                    callback.asBinder().linkToDeath(deathRecipient, 0);
-                    CustomTabsService.this.mDeathRecipientMap.put(callback.asBinder(), deathRecipient);
+                    iCustomTabsCallback.asBinder().linkToDeath(anonymousClass1, 0);
+                    CustomTabsService.this.mDeathRecipientMap.put(iCustomTabsCallback.asBinder(), anonymousClass1);
                 }
-                return CustomTabsService.this.newSession(sessionToken);
-            } catch (RemoteException e) {
-                return z;
+                return CustomTabsService.this.newSession(customTabsSessionToken);
+            } catch (RemoteException unused) {
+                return false;
             }
         }
 
-        public boolean mayLaunchUrl(ICustomTabsCallback callback, Uri url, Bundle extras, List<Bundle> otherLikelyBundles) {
-            return CustomTabsService.this.mayLaunchUrl(new CustomTabsSessionToken(callback), url, extras, otherLikelyBundles);
+        public boolean mayLaunchUrl(ICustomTabsCallback iCustomTabsCallback, Uri uri, Bundle bundle, List<Bundle> list) {
+            return CustomTabsService.this.mayLaunchUrl(new CustomTabsSessionToken(iCustomTabsCallback), uri, bundle, list);
         }
 
-        public Bundle extraCommand(String commandName, Bundle args) {
-            return CustomTabsService.this.extraCommand(commandName, args);
+        public Bundle extraCommand(String str, Bundle bundle) {
+            return CustomTabsService.this.extraCommand(str, bundle);
         }
 
-        public boolean updateVisuals(ICustomTabsCallback callback, Bundle bundle) {
-            return CustomTabsService.this.updateVisuals(new CustomTabsSessionToken(callback), bundle);
+        public boolean updateVisuals(ICustomTabsCallback iCustomTabsCallback, Bundle bundle) {
+            return CustomTabsService.this.updateVisuals(new CustomTabsSessionToken(iCustomTabsCallback), bundle);
         }
 
-        public boolean requestPostMessageChannel(ICustomTabsCallback callback, Uri postMessageOrigin) {
-            return CustomTabsService.this.requestPostMessageChannel(new CustomTabsSessionToken(callback), postMessageOrigin);
+        public boolean requestPostMessageChannel(ICustomTabsCallback iCustomTabsCallback, Uri uri) {
+            return CustomTabsService.this.requestPostMessageChannel(new CustomTabsSessionToken(iCustomTabsCallback), uri);
         }
 
-        public int postMessage(ICustomTabsCallback callback, String message, Bundle extras) {
-            return CustomTabsService.this.postMessage(new CustomTabsSessionToken(callback), message, extras);
+        public int postMessage(ICustomTabsCallback iCustomTabsCallback, String str, Bundle bundle) {
+            return CustomTabsService.this.postMessage(new CustomTabsSessionToken(iCustomTabsCallback), str, bundle);
         }
     };
     private final Map<IBinder, DeathRecipient> mDeathRecipientMap = new ArrayMap();
@@ -91,15 +90,15 @@ public abstract class CustomTabsService extends Service {
     }
 
     /* Access modifiers changed, original: protected */
-    public boolean cleanUpSession(CustomTabsSessionToken sessionToken) {
+    public boolean cleanUpSession(CustomTabsSessionToken customTabsSessionToken) {
         try {
             synchronized (this.mDeathRecipientMap) {
-                IBinder binder = sessionToken.getCallbackBinder();
-                binder.unlinkToDeath((DeathRecipient) this.mDeathRecipientMap.get(binder), 0);
-                this.mDeathRecipientMap.remove(binder);
+                IBinder callbackBinder = customTabsSessionToken.getCallbackBinder();
+                callbackBinder.unlinkToDeath((DeathRecipient) this.mDeathRecipientMap.get(callbackBinder), 0);
+                this.mDeathRecipientMap.remove(callbackBinder);
             }
             return true;
-        } catch (NoSuchElementException e) {
+        } catch (NoSuchElementException unused) {
             return false;
         }
     }

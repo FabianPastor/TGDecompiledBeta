@@ -12,19 +12,32 @@ public class RoundStatusDrawable extends StatusDrawable {
     private int progressDirection = 1;
     private boolean started = false;
 
-    public void setIsChat(boolean value) {
-        this.isChat = value;
+    public int getOpacity() {
+        return 0;
+    }
+
+    public void setAlpha(int i) {
+    }
+
+    public void setColorFilter(ColorFilter colorFilter) {
+    }
+
+    public void setIsChat(boolean z) {
+        this.isChat = z;
     }
 
     private void update() {
-        long newTime = System.currentTimeMillis();
-        long dt = newTime - this.lastUpdateTime;
-        this.lastUpdateTime = newTime;
-        if (dt > 50) {
-            dt = 50;
+        long currentTimeMillis = System.currentTimeMillis();
+        long j = currentTimeMillis - this.lastUpdateTime;
+        this.lastUpdateTime = currentTimeMillis;
+        currentTimeMillis = 50;
+        if (j <= 50) {
+            currentTimeMillis = j;
         }
-        this.progress += ((float) (((long) this.progressDirection) * dt)) / 400.0f;
-        if (this.progressDirection > 0 && this.progress >= 1.0f) {
+        float f = this.progress;
+        int i = this.progressDirection;
+        this.progress = f + (((float) (((long) i) * currentTimeMillis)) / 400.0f);
+        if (i > 0 && this.progress >= 1.0f) {
             this.progressDirection = -1;
             this.progress = 1.0f;
         } else if (this.progressDirection < 0 && this.progress <= 0.0f) {
@@ -45,21 +58,11 @@ public class RoundStatusDrawable extends StatusDrawable {
     }
 
     public void draw(Canvas canvas) {
-        Theme.chat_statusPaint.setAlpha(((int) (200.0f * this.progress)) + 55);
+        Theme.chat_statusPaint.setAlpha(((int) (this.progress * 200.0f)) + 55);
         canvas.drawCircle((float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp(this.isChat ? 8.0f : 9.0f), (float) AndroidUtilities.dp(4.0f), Theme.chat_statusPaint);
         if (this.started) {
             update();
         }
-    }
-
-    public void setAlpha(int alpha) {
-    }
-
-    public void setColorFilter(ColorFilter cf) {
-    }
-
-    public int getOpacity() {
-        return 0;
     }
 
     public int getIntrinsicWidth() {

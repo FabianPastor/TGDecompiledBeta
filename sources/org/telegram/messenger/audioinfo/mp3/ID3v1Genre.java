@@ -1,15 +1,15 @@
 package org.telegram.messenger.audioinfo.mp3;
 
 public enum ID3v1Genre {
-    Blues("Blues"),
+    Blues(r2),
     ClassicRock("Classic Rock"),
-    Country("Country"),
-    Dance("Dance"),
-    Disco("Disco"),
-    Funk("Funk"),
-    Grunge("Grunge"),
+    Country(r4),
+    Dance(r5),
+    Disco(r6),
+    Funk(r7),
+    Grunge(r8),
     HipHop("Hip-Hop"),
-    Jazz("Jazz"),
+    Jazz(r9),
     Metal("Metal"),
     NewAge("New Age"),
     Oldies("Oldies"),
@@ -130,13 +130,13 @@ public enum ID3v1Genre {
     
     private final String description;
 
-    public static ID3v1Genre getGenre(int id) {
+    public static ID3v1Genre getGenre(int i) {
         ID3v1Genre[] values = values();
-        return (id < 0 || id >= values.length) ? null : values[id];
+        return (i < 0 || i >= values.length) ? null : values[i];
     }
 
-    private ID3v1Genre(String description) {
-        this.description = description;
+    private ID3v1Genre(String str) {
+        this.description = str;
     }
 
     public String getDescription() {

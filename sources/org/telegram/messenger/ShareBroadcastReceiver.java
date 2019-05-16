@@ -6,14 +6,14 @@ import android.content.Intent;
 
 public class ShareBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
-        String url = intent.getDataString();
-        if (url != null) {
-            Intent shareIntent = new Intent("android.intent.action.SEND");
-            shareIntent.setType("text/plain");
-            shareIntent.putExtra("android.intent.extra.TEXT", url);
-            Intent chooserIntent = Intent.createChooser(shareIntent, LocaleController.getString("ShareLink", NUM));
-            chooserIntent.setFlags(NUM);
-            context.startActivity(chooserIntent);
+        String dataString = intent.getDataString();
+        if (dataString != null) {
+            Intent intent2 = new Intent("android.intent.action.SEND");
+            intent2.setType("text/plain");
+            intent2.putExtra("android.intent.extra.TEXT", dataString);
+            intent = Intent.createChooser(intent2, LocaleController.getString("ShareLink", NUM));
+            intent.setFlags(NUM);
+            context.startActivity(intent);
         }
     }
 }

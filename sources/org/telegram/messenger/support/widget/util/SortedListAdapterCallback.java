@@ -10,23 +10,23 @@ public abstract class SortedListAdapterCallback<T2> extends Callback<T2> {
         this.mAdapter = adapter;
     }
 
-    public void onInserted(int position, int count) {
-        this.mAdapter.notifyItemRangeInserted(position, count);
+    public void onInserted(int i, int i2) {
+        this.mAdapter.notifyItemRangeInserted(i, i2);
     }
 
-    public void onRemoved(int position, int count) {
-        this.mAdapter.notifyItemRangeRemoved(position, count);
+    public void onRemoved(int i, int i2) {
+        this.mAdapter.notifyItemRangeRemoved(i, i2);
     }
 
-    public void onMoved(int fromPosition, int toPosition) {
-        this.mAdapter.notifyItemMoved(fromPosition, toPosition);
+    public void onMoved(int i, int i2) {
+        this.mAdapter.notifyItemMoved(i, i2);
     }
 
-    public void onChanged(int position, int count) {
-        this.mAdapter.notifyItemRangeChanged(position, count);
+    public void onChanged(int i, int i2) {
+        this.mAdapter.notifyItemRangeChanged(i, i2);
     }
 
-    public void onChanged(int position, int count, Object payload) {
-        this.mAdapter.notifyItemRangeChanged(position, count, payload);
+    public void onChanged(int i, int i2, Object obj) {
+        this.mAdapter.notifyItemRangeChanged(i, i2, obj);
     }
 }

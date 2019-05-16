@@ -16,7 +16,6 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.text.TextUtils;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.devtools.build.android.desugar.runtime.ThrowableExtension;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import java.io.File;
@@ -26,11 +25,11 @@ import org.telegram.ui.Components.ForegroundDetector;
 
 public class ApplicationLoader extends Application {
     @SuppressLint({"StaticFieldLeak"})
-    public static volatile Context applicationContext;
-    public static volatile Handler applicationHandler;
+    public static volatile Context applicationContext = null;
+    public static volatile Handler applicationHandler = null;
     private static volatile boolean applicationInited = false;
-    private static ConnectivityManager connectivityManager;
-    public static volatile NetworkInfo currentNetworkInfo;
+    private static ConnectivityManager connectivityManager = null;
+    public static volatile NetworkInfo currentNetworkInfo = null;
     public static volatile boolean externalInterfacePaused = true;
     public static volatile boolean isScreenOn = false;
     public static volatile boolean mainInterfacePaused = true;
@@ -39,17 +38,17 @@ public class ApplicationLoader extends Application {
     public static volatile boolean unableGetCurrentNetwork;
 
     public static File getFilesDirFixed() {
-        File path;
-        for (int a = 0; a < 10; a++) {
-            path = applicationContext.getFilesDir();
-            if (path != null) {
-                return path;
+        File filesDir;
+        for (int i = 0; i < 10; i++) {
+            filesDir = applicationContext.getFilesDir();
+            if (filesDir != null) {
+                return filesDir;
             }
         }
         try {
-            path = new File(applicationContext.getApplicationInfo().dataDir, "files");
-            path.mkdirs();
-            return path;
+            filesDir = new File(applicationContext.getApplicationInfo().dataDir, "files");
+            filesDir.mkdirs();
+            return filesDir;
         } catch (Exception e) {
             FileLog.e(e);
             return new File("/data/data/org.telegram.messenger/files");
@@ -58,12 +57,11 @@ public class ApplicationLoader extends Application {
 
     public static void postInitApplication() {
         if (!applicationInited) {
-            int a;
             applicationInited = true;
             try {
                 LocaleController.getInstance();
             } catch (Exception e) {
-                ThrowableExtension.printStackTrace(e);
+                e.printStackTrace();
             }
             try {
                 connectivityManager = (ConnectivityManager) applicationContext.getSystemService("connectivity");
@@ -71,43 +69,46 @@ public class ApplicationLoader extends Application {
                     public void onReceive(Context context, Intent intent) {
                         try {
                             ApplicationLoader.currentNetworkInfo = ApplicationLoader.connectivityManager.getActiveNetworkInfo();
-                        } catch (Throwable th) {
+                        } catch (Throwable unused) {
                         }
-                        boolean isSlow = ApplicationLoader.isConnectionSlow();
-                        for (int a = 0; a < 3; a++) {
-                            ConnectionsManager.getInstance(a).checkConnection();
-                            FileLoader.getInstance(a).onNetworkChanged(isSlow);
+                        boolean isConnectionSlow = ApplicationLoader.isConnectionSlow();
+                        for (int i = 0; i < 3; i++) {
+                            ConnectionsManager.getInstance(i).checkConnection();
+                            FileLoader.getInstance(i).onNetworkChanged(isConnectionSlow);
                         }
                     }
                 }, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
             } catch (Exception e2) {
-                ThrowableExtension.printStackTrace(e2);
+                e2.printStackTrace();
             }
             try {
-                IntentFilter filter = new IntentFilter("android.intent.action.SCREEN_ON");
-                filter.addAction("android.intent.action.SCREEN_OFF");
-                applicationContext.registerReceiver(new ScreenReceiver(), filter);
+                IntentFilter intentFilter = new IntentFilter("android.intent.action.SCREEN_ON");
+                intentFilter.addAction("android.intent.action.SCREEN_OFF");
+                applicationContext.registerReceiver(new ScreenReceiver(), intentFilter);
             } catch (Exception e22) {
-                ThrowableExtension.printStackTrace(e22);
+                e22.printStackTrace();
             }
             try {
                 isScreenOn = ((PowerManager) applicationContext.getSystemService("power")).isScreenOn();
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d("screen state = " + isScreenOn);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("screen state = ");
+                    stringBuilder.append(isScreenOn);
+                    FileLog.d(stringBuilder.toString());
                 }
             } catch (Exception e3) {
                 FileLog.e(e3);
             }
             SharedConfig.loadConfig();
-            for (a = 0; a < 3; a++) {
-                UserConfig.getInstance(a).loadConfig();
-                MessagesController.getInstance(a);
-                ConnectionsManager.getInstance(a);
-                User user = UserConfig.getInstance(a).getCurrentUser();
-                if (user != null) {
-                    MessagesController.getInstance(a).putUser(user, true);
-                    MessagesController.getInstance(a).getBlockedUsers(true);
-                    SendMessagesHelper.getInstance(a).checkUnsentMessages();
+            for (int i = 0; i < 3; i++) {
+                UserConfig.getInstance(i).loadConfig();
+                MessagesController.getInstance(i);
+                ConnectionsManager.getInstance(i);
+                User currentUser = UserConfig.getInstance(i).getCurrentUser();
+                if (currentUser != null) {
+                    MessagesController.getInstance(i).putUser(currentUser, true);
+                    MessagesController.getInstance(i).getBlockedUsers(true);
+                    SendMessagesHelper.getInstance(i).checkUnsentMessages();
                 }
             }
             ((ApplicationLoader) applicationContext).initPlayServices();
@@ -115,9 +116,9 @@ public class ApplicationLoader extends Application {
                 FileLog.d("app initied");
             }
             MediaController.getInstance();
-            for (a = 0; a < 3; a++) {
-                ContactsController.getInstance(a).checkAppAccount();
-                DownloadController.getInstance(a);
+            for (int i2 = 0; i2 < 3; i2++) {
+                ContactsController.getInstance(i2).checkAppAccount();
+                DownloadController.getInstance(i2);
             }
             WearDataLayerListenerService.updateWatchConnectionState();
         }
@@ -126,7 +127,7 @@ public class ApplicationLoader extends Application {
     public void onCreate() {
         try {
             applicationContext = getApplicationContext();
-        } catch (Throwable th) {
+        } catch (Throwable unused) {
         }
         super.onCreate();
         if (applicationContext == null) {
@@ -136,7 +137,7 @@ public class ApplicationLoader extends Application {
         ConnectionsManager.native_setJava(false);
         ForegroundDetector foregroundDetector = new ForegroundDetector(this);
         applicationHandler = new Handler(applicationContext.getMainLooper());
-        AndroidUtilities.runOnUIThread(ApplicationLoader$$Lambda$0.$instance);
+        AndroidUtilities.runOnUIThread(-$$Lambda$r7IJ1lCIETKiJtvvar_QqYn99iv8.INSTANCE);
     }
 
     public static void startPushService() {
@@ -144,7 +145,7 @@ public class ApplicationLoader extends Application {
             try {
                 applicationContext.startService(new Intent(applicationContext, NotificationsService.class));
                 return;
-            } catch (Throwable th) {
+            } catch (Throwable unused) {
                 return;
             }
         }
@@ -156,46 +157,48 @@ public class ApplicationLoader extends Application {
         ((AlarmManager) applicationContext.getSystemService("alarm")).cancel(PendingIntent.getService(applicationContext, 0, new Intent(applicationContext, NotificationsService.class), 0));
     }
 
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
+    public void onConfigurationChanged(Configuration configuration) {
+        super.onConfigurationChanged(configuration);
         try {
-            LocaleController.getInstance().onDeviceConfigurationChange(newConfig);
-            AndroidUtilities.checkDisplaySize(applicationContext, newConfig);
+            LocaleController.getInstance().onDeviceConfigurationChange(configuration);
+            AndroidUtilities.checkDisplaySize(applicationContext, configuration);
         } catch (Exception e) {
-            ThrowableExtension.printStackTrace(e);
+            e.printStackTrace();
         }
     }
 
     private void initPlayServices() {
-        AndroidUtilities.runOnUIThread(new ApplicationLoader$$Lambda$1(this), 1000);
+        AndroidUtilities.runOnUIThread(new -$$Lambda$ApplicationLoader$3dc_HWgCQpr4N8GC4VMp2iXLXdk(this), 1000);
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$initPlayServices$2$ApplicationLoader() {
+    public /* synthetic */ void lambda$initPlayServices$2$ApplicationLoader() {
         if (checkPlayServices()) {
-            String currentPushString = SharedConfig.pushString;
-            if (TextUtils.isEmpty(currentPushString)) {
+            String str = SharedConfig.pushString;
+            if (TextUtils.isEmpty(str)) {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.d("GCM Registration not found.");
                 }
             } else if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("GCM regId = " + currentPushString);
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("GCM regId = ");
+                stringBuilder.append(str);
+                FileLog.d(stringBuilder.toString());
             }
-            Utilities.globalQueue.postRunnable(ApplicationLoader$$Lambda$2.$instance);
+            Utilities.globalQueue.postRunnable(-$$Lambda$ApplicationLoader$K0O6bl6HEmUlzvsgT8XUBevJ1qw.INSTANCE);
         } else if (BuildVars.LOGS_ENABLED) {
             FileLog.d("No valid Google Play Services APK found.");
         }
     }
 
-    static final /* synthetic */ void lambda$null$1$ApplicationLoader() {
+    static /* synthetic */ void lambda$null$1() {
         try {
-            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(ApplicationLoader$$Lambda$3.$instance);
-        } catch (Throwable e) {
-            FileLog.e(e);
+            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(-$$Lambda$ApplicationLoader$1gYYQTJQUwFTHbnWcMMeK6lerQs.INSTANCE);
+        } catch (Throwable th) {
+            FileLog.e(th);
         }
     }
 
-    static final /* synthetic */ void lambda$null$0$ApplicationLoader(InstanceIdResult instanceIdResult) {
+    static /* synthetic */ void lambda$null$0(InstanceIdResult instanceIdResult) {
         String token = instanceIdResult.getToken();
         if (!TextUtils.isEmpty(token)) {
             GcmPushListenerService.sendRegistrationToServer(token);
@@ -203,11 +206,12 @@ public class ApplicationLoader extends Application {
     }
 
     private boolean checkPlayServices() {
+        boolean z = true;
         try {
-            if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this) == 0) {
-                return true;
+            if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this) != 0) {
+                z = false;
             }
-            return false;
+            return z;
         } catch (Exception e) {
             FileLog.e(e);
             return true;
@@ -216,9 +220,9 @@ public class ApplicationLoader extends Application {
 
     public static boolean isRoaming() {
         try {
-            NetworkInfo netInfo = ((ConnectivityManager) applicationContext.getSystemService("connectivity")).getActiveNetworkInfo();
-            if (netInfo != null) {
-                return netInfo.isRoaming();
+            NetworkInfo activeNetworkInfo = ((ConnectivityManager) applicationContext.getSystemService("connectivity")).getActiveNetworkInfo();
+            if (activeNetworkInfo != null) {
+                return activeNetworkInfo.isRoaming();
             }
         } catch (Exception e) {
             FileLog.e(e);
@@ -228,9 +232,9 @@ public class ApplicationLoader extends Application {
 
     public static boolean isConnectedOrConnectingToWiFi() {
         try {
-            NetworkInfo netInfo = ((ConnectivityManager) applicationContext.getSystemService("connectivity")).getNetworkInfo(1);
-            State state = netInfo.getState();
-            if (netInfo != null && (state == State.CONNECTED || state == State.CONNECTING || state == State.SUSPENDED)) {
+            NetworkInfo networkInfo = ((ConnectivityManager) applicationContext.getSystemService("connectivity")).getNetworkInfo(1);
+            State state = networkInfo.getState();
+            if (networkInfo != null && (state == State.CONNECTED || state == State.CONNECTING || state == State.SUSPENDED)) {
                 return true;
             }
         } catch (Exception e) {
@@ -241,8 +245,8 @@ public class ApplicationLoader extends Application {
 
     public static boolean isConnectedToWiFi() {
         try {
-            NetworkInfo netInfo = ((ConnectivityManager) applicationContext.getSystemService("connectivity")).getNetworkInfo(1);
-            if (netInfo != null && netInfo.getState() == State.CONNECTED) {
+            NetworkInfo networkInfo = ((ConnectivityManager) applicationContext.getSystemService("connectivity")).getNetworkInfo(1);
+            if (networkInfo != null && networkInfo.getState() == State.CONNECTED) {
                 return true;
             }
         } catch (Exception e) {
@@ -255,26 +259,19 @@ public class ApplicationLoader extends Application {
         if (isConnectedOrConnectingToWiFi()) {
             return 1;
         }
-        if (isRoaming()) {
-            return 2;
-        }
-        return 0;
+        return isRoaming() ? 2 : 0;
     }
 
     public static boolean isConnectionSlow() {
         try {
-            NetworkInfo netInfo = ((ConnectivityManager) applicationContext.getSystemService("connectivity")).getActiveNetworkInfo();
-            if (netInfo.getType() == 0) {
-                switch (netInfo.getSubtype()) {
-                    case 1:
-                    case 2:
-                    case 4:
-                    case 7:
-                    case 11:
-                        return true;
+            NetworkInfo activeNetworkInfo = ((ConnectivityManager) applicationContext.getSystemService("connectivity")).getActiveNetworkInfo();
+            if (activeNetworkInfo.getType() == 0) {
+                int subtype = activeNetworkInfo.getSubtype();
+                if (subtype == 1 || subtype == 2 || subtype == 4 || subtype == 7 || subtype == 11) {
+                    return true;
                 }
             }
-        } catch (Throwable th) {
+        } catch (Throwable unused) {
         }
         return false;
     }
@@ -282,16 +279,16 @@ public class ApplicationLoader extends Application {
     public static boolean isNetworkOnline() {
         try {
             ConnectivityManager connectivityManager = (ConnectivityManager) applicationContext.getSystemService("connectivity");
-            NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
-            if (netInfo != null && (netInfo.isConnectedOrConnecting() || netInfo.isAvailable())) {
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            if (activeNetworkInfo != null && (activeNetworkInfo.isConnectedOrConnecting() || activeNetworkInfo.isAvailable())) {
                 return true;
             }
-            netInfo = connectivityManager.getNetworkInfo(0);
-            if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            NetworkInfo networkInfo = connectivityManager.getNetworkInfo(0);
+            if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
                 return true;
             }
-            netInfo = connectivityManager.getNetworkInfo(1);
-            if (netInfo == null || !netInfo.isConnectedOrConnecting()) {
+            NetworkInfo networkInfo2 = connectivityManager.getNetworkInfo(1);
+            if (networkInfo2 == null || !networkInfo2.isConnectedOrConnecting()) {
                 return false;
             }
             return true;

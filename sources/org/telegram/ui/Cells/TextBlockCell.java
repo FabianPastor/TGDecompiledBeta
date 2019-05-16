@@ -15,39 +15,32 @@ public class TextBlockCell extends FrameLayout {
     private TextView textView;
 
     public TextBlockCell(Context context) {
-        int i;
-        int i2 = 5;
         super(context);
         this.textView = new TextView(context);
         this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.textView.setTextSize(1, 16.0f);
+        int i = 5;
+        this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         TextView textView = this.textView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
+        if (!LocaleController.isRTL) {
             i = 3;
         }
-        textView.setGravity(i | 16);
-        TextView textView2 = this.textView;
-        if (!LocaleController.isRTL) {
-            i2 = 3;
-        }
-        addView(textView2, LayoutHelper.createFrame(-1, -2.0f, i2 | 48, 23.0f, 10.0f, 23.0f, 10.0f));
+        addView(textView, LayoutHelper.createFrame(-1, -2.0f, i | 48, 23.0f, 10.0f, 23.0f, 10.0f));
     }
 
-    public void setTextColor(int color) {
-        this.textView.setTextColor(color);
+    public void setTextColor(int i) {
+        this.textView.setTextColor(i);
     }
 
-    public void setText(String text, boolean divider) {
-        this.textView.setText(text);
-        this.needDivider = divider;
-        setWillNotDraw(!divider);
+    public void setText(String str, boolean z) {
+        this.textView.setText(str);
+        this.needDivider = z;
+        setWillNotDraw(z ^ 1);
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), heightMeasureSpec);
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), i2);
     }
 
     /* Access modifiers changed, original: protected */

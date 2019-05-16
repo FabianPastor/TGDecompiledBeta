@@ -28,6 +28,66 @@ class ViewBoundsCheck {
     BoundFlags mBoundFlags = new BoundFlags();
     final Callback mCallback;
 
+    static class BoundFlags {
+        int mBoundFlags = 0;
+        int mChildEnd;
+        int mChildStart;
+        int mRvEnd;
+        int mRvStart;
+
+        /* Access modifiers changed, original: 0000 */
+        public int compare(int i, int i2) {
+            return i > i2 ? 1 : i == i2 ? 2 : 4;
+        }
+
+        BoundFlags() {
+        }
+
+        /* Access modifiers changed, original: 0000 */
+        public void setBounds(int i, int i2, int i3, int i4) {
+            this.mRvStart = i;
+            this.mRvEnd = i2;
+            this.mChildStart = i3;
+            this.mChildEnd = i4;
+        }
+
+        /* Access modifiers changed, original: 0000 */
+        public void setFlags(int i, int i2) {
+            this.mBoundFlags = (i & i2) | (this.mBoundFlags & (i2 ^ -1));
+        }
+
+        /* Access modifiers changed, original: 0000 */
+        public void addFlags(int i) {
+            this.mBoundFlags = i | this.mBoundFlags;
+        }
+
+        /* Access modifiers changed, original: 0000 */
+        public void resetFlags() {
+            this.mBoundFlags = 0;
+        }
+
+        /* Access modifiers changed, original: 0000 */
+        public boolean boundsMatch() {
+            int i = this.mBoundFlags;
+            if ((i & 7) != 0 && (i & (compare(this.mChildStart, this.mRvStart) << 0)) == 0) {
+                return false;
+            }
+            i = this.mBoundFlags;
+            if ((i & 112) != 0 && (i & (compare(this.mChildStart, this.mRvEnd) << 4)) == 0) {
+                return false;
+            }
+            i = this.mBoundFlags;
+            if ((i & 1792) != 0 && (i & (compare(this.mChildEnd, this.mRvStart) << 8)) == 0) {
+                return false;
+            }
+            i = this.mBoundFlags;
+            if ((i & 28672) == 0 || (i & (compare(this.mChildEnd, this.mRvEnd) << 12)) != 0) {
+                return true;
+            }
+            return false;
+        }
+    }
+
     interface Callback {
         View getChildAt(int i);
 
@@ -44,68 +104,6 @@ class ViewBoundsCheck {
         int getParentStart();
     }
 
-    static class BoundFlags {
-        int mBoundFlags = 0;
-        int mChildEnd;
-        int mChildStart;
-        int mRvEnd;
-        int mRvStart;
-
-        BoundFlags() {
-        }
-
-        /* Access modifiers changed, original: 0000 */
-        public void setBounds(int rvStart, int rvEnd, int childStart, int childEnd) {
-            this.mRvStart = rvStart;
-            this.mRvEnd = rvEnd;
-            this.mChildStart = childStart;
-            this.mChildEnd = childEnd;
-        }
-
-        /* Access modifiers changed, original: 0000 */
-        public void setFlags(int flags, int mask) {
-            this.mBoundFlags = (this.mBoundFlags & (mask ^ -1)) | (flags & mask);
-        }
-
-        /* Access modifiers changed, original: 0000 */
-        public void addFlags(int flags) {
-            this.mBoundFlags |= flags;
-        }
-
-        /* Access modifiers changed, original: 0000 */
-        public void resetFlags() {
-            this.mBoundFlags = 0;
-        }
-
-        /* Access modifiers changed, original: 0000 */
-        public int compare(int x, int y) {
-            if (x > y) {
-                return 1;
-            }
-            if (x == y) {
-                return 2;
-            }
-            return 4;
-        }
-
-        /* Access modifiers changed, original: 0000 */
-        public boolean boundsMatch() {
-            if ((this.mBoundFlags & 7) != 0 && (this.mBoundFlags & (compare(this.mChildStart, this.mRvStart) << 0)) == 0) {
-                return false;
-            }
-            if ((this.mBoundFlags & 112) != 0 && (this.mBoundFlags & (compare(this.mChildStart, this.mRvEnd) << 4)) == 0) {
-                return false;
-            }
-            if ((this.mBoundFlags & 1792) != 0 && (this.mBoundFlags & (compare(this.mChildEnd, this.mRvStart) << 8)) == 0) {
-                return false;
-            }
-            if ((this.mBoundFlags & 28672) == 0 || (this.mBoundFlags & (compare(this.mChildEnd, this.mRvEnd) << 12)) != 0) {
-                return true;
-            }
-            return false;
-        }
-    }
-
     @Retention(RetentionPolicy.SOURCE)
     public @interface ViewBounds {
     }
@@ -115,40 +113,41 @@ class ViewBoundsCheck {
     }
 
     /* Access modifiers changed, original: 0000 */
-    public View findOneViewWithinBoundFlags(int fromIndex, int toIndex, int preferredBoundFlags, int acceptableBoundFlags) {
-        int start = this.mCallback.getParentStart();
-        int end = this.mCallback.getParentEnd();
-        int next = toIndex > fromIndex ? 1 : -1;
-        View acceptableMatch = null;
-        for (int i = fromIndex; i != toIndex; i += next) {
-            View child = this.mCallback.getChildAt(i);
-            this.mBoundFlags.setBounds(start, end, this.mCallback.getChildStart(child), this.mCallback.getChildEnd(child));
-            if (preferredBoundFlags != 0) {
+    public View findOneViewWithinBoundFlags(int i, int i2, int i3, int i4) {
+        int parentStart = this.mCallback.getParentStart();
+        int parentEnd = this.mCallback.getParentEnd();
+        int i5 = i2 > i ? 1 : -1;
+        View view = null;
+        while (i != i2) {
+            View childAt = this.mCallback.getChildAt(i);
+            this.mBoundFlags.setBounds(parentStart, parentEnd, this.mCallback.getChildStart(childAt), this.mCallback.getChildEnd(childAt));
+            if (i3 != 0) {
                 this.mBoundFlags.resetFlags();
-                this.mBoundFlags.addFlags(preferredBoundFlags);
+                this.mBoundFlags.addFlags(i3);
                 if (this.mBoundFlags.boundsMatch()) {
-                    return child;
+                    return childAt;
                 }
             }
-            if (acceptableBoundFlags != 0) {
+            if (i4 != 0) {
                 this.mBoundFlags.resetFlags();
-                this.mBoundFlags.addFlags(acceptableBoundFlags);
+                this.mBoundFlags.addFlags(i4);
                 if (this.mBoundFlags.boundsMatch()) {
-                    acceptableMatch = child;
+                    view = childAt;
                 }
             }
+            i += i5;
         }
-        return acceptableMatch;
+        return view;
     }
 
     /* Access modifiers changed, original: 0000 */
-    public boolean isViewWithinBoundFlags(View child, int boundsFlags) {
-        this.mBoundFlags.setBounds(this.mCallback.getParentStart(), this.mCallback.getParentEnd(), this.mCallback.getChildStart(child), this.mCallback.getChildEnd(child));
-        if (boundsFlags == 0) {
+    public boolean isViewWithinBoundFlags(View view, int i) {
+        this.mBoundFlags.setBounds(this.mCallback.getParentStart(), this.mCallback.getParentEnd(), this.mCallback.getChildStart(view), this.mCallback.getChildEnd(view));
+        if (i == 0) {
             return false;
         }
         this.mBoundFlags.resetFlags();
-        this.mBoundFlags.addFlags(boundsFlags);
+        this.mBoundFlags.addFlags(i);
         return this.mBoundFlags.boundsMatch();
     }
 }

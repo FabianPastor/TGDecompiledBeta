@@ -521,7 +521,6 @@
     <string name="ChannelMembers">أعضاء</string>
     <string name="ChannelMembersInfo">يمكن لمشرفي القناة فقط مشاهدة هذه القائمة.</string>
     <string name="ChannelMessageAudio">نشرت %1$s رسالةً صوتية</string>
-    <string name="ChannelMessageContact">نشرت %1$s جهة اتصال</string>
     <string name="ChannelMessageDocument">نشرت %1$s ملفًا</string>
     <string name="ChannelMessageFew">نشرت %1$s %2$s</string>
     <string name="ChannelMessageGIF">نشرت %1$s صورةً متحركة</string>
@@ -530,7 +529,6 @@
     <string name="ChannelMessageMusic">نشرت %1$s ملفًا صوتيًا</string>
     <string name="ChannelMessageNoText">نشرت %1$s رسالة</string>
     <string name="ChannelMessagePhoto">نشرت %1$s صورة</string>
-    <string name="ChannelMessagePoll">نشرت %1$s استفتاءًا</string>
     <string name="ChannelMessageRound">نشرت %1$s رسالةً مرئية</string>
     <string name="ChannelMessageSticker">نشرت %1$s ملصقًا</string>
     <string name="ChannelMessageStickerEmoji">نشرت %1$s ملصقًا %2$s</string>
@@ -1444,8 +1442,6 @@
     <string name="NobodyLikesSpam2">المعذرة، يمكنك فقط إضافة جهات الاتصال المشتركة للمجموعات في الوقت الحالي.</string>
     <string name="NobodyLikesSpam3">المعذرة، لقد تم حظرك من المشاركة في المجموعات العامة.</string>
     <string name="NotMounted">الذاكرة غير موجودة</string>
-    <string name="NotificationActionPinnedContact">%1$s ثبت جهة اتصال في المجموعة %2$s</string>
-    <string name="NotificationActionPinnedContactChannel">%1$s ثبت جهة اتصال</string>
     <string name="NotificationActionPinnedFile">ثبت %1$s ملفًا في المجموعة %2$s</string>
     <string name="NotificationActionPinnedFileChannel">ثبت %1$s ملفًا</string>
     <string name="NotificationActionPinnedGame">%1$s ثبت لعبة في المجموعة %2$s</string>
@@ -1464,8 +1460,6 @@
     <string name="NotificationActionPinnedNoTextChannel">ثبت %1$s رسالة</string>
     <string name="NotificationActionPinnedPhoto">%1$s ثبت صورة في المجموعة %2$s</string>
     <string name="NotificationActionPinnedPhotoChannel">%1$s ثبت صورة</string>
-    <string name="NotificationActionPinnedPoll">ثبت %1$s استفتاءًا في مجموعة %2$s</string>
-    <string name="NotificationActionPinnedPollChannel">ثبت %1$s استفتاءًا</string>
     <string name="NotificationActionPinnedRound">ثبت %1$s رسالةً مرئيةً في مجموعة %2$s</string>
     <string name="NotificationActionPinnedRoundChannel">ثبت %1$s رسالةً مرئية</string>
     <string name="NotificationActionPinnedSticker">ثبت %1$s ملصقًا في مجموعة %2$s</string>
@@ -1493,14 +1487,12 @@
     <string name="NotificationInvitedToGroup">%1$s أضافك إلى المجموعة %2$s</string>
     <string name="NotificationInvitedToGroupByLink">%1$s انضم للمجموعة %2$s عبر رابط دعوة</string>
     <string name="NotificationMessageAudio">أرسل لك %1$s رسالةً صوتية</string>
-    <string name="NotificationMessageContact">%1$s شارك جهة اتصال معك</string>
     <string name="NotificationMessageDocument"> أرسل لك %1$s ملفًا</string>
     <string name="NotificationMessageFew">أرسل لك %1$s %2$s</string>
     <string name="NotificationMessageForwardFew">حوَّل %1$s %2$s إليك</string>
     <string name="NotificationMessageGame">%1$s دعاك للعب %2$s</string>
     <string name="NotificationMessageGif">أرسل لك %1$s صورةً متحركة</string>
     <string name="NotificationMessageGroupAudio">أرسل %1$s رسالةً صوتيةً لمجموعة %2$s</string>
-    <string name="NotificationMessageGroupContact">%1$s شارك جهة اتصال مع المجموعة %2$s</string>
     <string name="NotificationMessageGroupDocument">أرسل %1$s ملفًا لمجموعة %2$s</string>
     <string name="NotificationMessageGroupGame">%1$s دعا المجموعة %2$s للعب %3$s</string>
     <string name="NotificationMessageGroupGif">أرسل %1$s صورةً متحركةً لمجموعة %2$s</string>
@@ -1510,7 +1502,6 @@
     <string name="NotificationMessageGroupMusic">أرسل %1$s ملفًا صوتيًا لمجموعة %2$s</string>
     <string name="NotificationMessageGroupNoText">أرسل %1$s رسالة للمجموعة %2$s</string>
     <string name="NotificationMessageGroupPhoto">أرسل %1$s صورة لمجموعة %2$s</string>
-    <string name="NotificationMessageGroupPoll">أرسل %1$s استفتاءًا إلى مجموعة %2$s</string>
     <string name="NotificationMessageGroupRound">أرسل %1$s رسالةً مرئيةً لمجموعة %2$s</string>
     <string name="NotificationMessageGroupSticker">أرسل %1$s ملصقًا لمجموعة %2$s</string>
     <string name="NotificationMessageGroupStickerEmoji">أرسل %1$s ملصق %3$s لمجموعة %2$s</string>
@@ -1522,7 +1513,6 @@
     <string name="NotificationMessageMusic">أرسل لك %1$s ملفًا صوتيًا</string>
     <string name="NotificationMessageNoText">أرسل لك %1$s رسالةً</string>
     <string name="NotificationMessagePhoto">أرسل لك %1$s صورةً</string>
-    <string name="NotificationMessagePoll">أرسل لك %1$s استفتاءًا</string>
     <string name="NotificationMessageRound">أرسل لك %1$s رسالةً مرئية</string>
     <string name="NotificationMessageSDPhoto">أرسل لك %1$s صورةً ذاتية التدمير</string>
     <string name="NotificationMessageSDVideo">أرسل لك %1$s مقطعًا مرئيًا ذاتي التدمير</string>
@@ -2600,6 +2590,33 @@
     <string name="YourPasswordSuccess">نجح الأمر!</string>
     <string name="YourPasswordSuccessText">تم تفعيل كلمة المرور الخاصة بالتحقق بخطوتين.</string>
     <string name="YourPhone">رقمك</string>
+    <string name="abc_action_bar_home_description">التنقل إلى الشاشة الرئيسية</string>
+    <string name="abc_action_bar_up_description">التنقل إلى أعلى</string>
+    <string name="abc_action_menu_overflow_description">خيارات إضافية</string>
+    <string name="abc_action_mode_done">تم</string>
+    <string name="abc_activity_chooser_view_see_all">عرض الكل</string>
+    <string name="abc_activitychooserview_choose_application">اختيار تطبيق</string>
+    <string name="abc_capital_off">إيقاف</string>
+    <string name="abc_capital_on">تشغيل</string>
+    <string name="abc_menu_alt_shortcut_label">Alt+</string>
+    <string name="abc_menu_ctrl_shortcut_label">Ctrl+</string>
+    <string name="abc_menu_delete_shortcut_label">delete</string>
+    <string name="abc_menu_enter_shortcut_label">enter</string>
+    <string name="abc_menu_function_shortcut_label">Function+</string>
+    <string name="abc_menu_meta_shortcut_label">Meta+</string>
+    <string name="abc_menu_shift_shortcut_label">Shift+</string>
+    <string name="abc_menu_space_shortcut_label">space</string>
+    <string name="abc_menu_sym_shortcut_label">Sym+</string>
+    <string name="abc_prepend_shortcut_label">القائمة+</string>
+    <string name="abc_search_hint">بحث…</string>
+    <string name="abc_searchview_description_clear">محو طلب البحث</string>
+    <string name="abc_searchview_description_query">طلب البحث</string>
+    <string name="abc_searchview_description_search">بحث</string>
+    <string name="abc_searchview_description_submit">إرسال طلب البحث</string>
+    <string name="abc_searchview_description_voice">البحث الصوتي</string>
+    <string name="abc_shareactionprovider_share_with">مشاركة مع</string>
+    <string name="abc_shareactionprovider_share_with_application">مشاركة مع %s</string>
+    <string name="abc_toolbar_collapse_description">تصغير</string>
     <string name="chatDate">d MMMM</string>
     <string name="chatFullDate">d MMMM yyyy</string>
     <string name="common_google_play_services_enable_button">تفعيل</string>
@@ -2649,6 +2666,7 @@
     <string name="messages_other">%1$d رسالة</string>
     <string name="messages_two">الرسالتين</string>
     <string name="messages_zero">%1$d رسالة</string>
+    <string name="search_menu_title">البحث</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">الشراء عبر Google</string>
 </resources>

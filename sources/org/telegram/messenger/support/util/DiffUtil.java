@@ -9,9 +9,9 @@ import org.telegram.messenger.support.widget.RecyclerView.Adapter;
 
 public class DiffUtil {
     private static final Comparator<Snake> SNAKE_COMPARATOR = new Comparator<Snake>() {
-        public int compare(Snake o1, Snake o2) {
-            int cmpX = o1.x - o2.x;
-            return cmpX == 0 ? o1.y - o2.y : cmpX;
+        public int compare(Snake snake, Snake snake2) {
+            int i = snake.x - snake2.x;
+            return i == 0 ? snake.y - snake2.y : i;
         }
     };
 
@@ -20,13 +20,13 @@ public class DiffUtil {
 
         public abstract boolean areItemsTheSame(int i, int i2);
 
+        public Object getChangePayload(int i, int i2) {
+            return null;
+        }
+
         public abstract int getNewListSize();
 
         public abstract int getOldListSize();
-
-        public Object getChangePayload(int oldItemPosition, int newItemPosition) {
-            return null;
-        }
     }
 
     public static class DiffResult {
@@ -45,116 +45,123 @@ public class DiffUtil {
         private final int mOldListSize;
         private final List<Snake> mSnakes;
 
-        DiffResult(Callback callback, List<Snake> snakes, int[] oldItemStatuses, int[] newItemStatuses, boolean detectMoves) {
-            this.mSnakes = snakes;
-            this.mOldItemStatuses = oldItemStatuses;
-            this.mNewItemStatuses = newItemStatuses;
+        DiffResult(Callback callback, List<Snake> list, int[] iArr, int[] iArr2, boolean z) {
+            this.mSnakes = list;
+            this.mOldItemStatuses = iArr;
+            this.mNewItemStatuses = iArr2;
             Arrays.fill(this.mOldItemStatuses, 0);
             Arrays.fill(this.mNewItemStatuses, 0);
             this.mCallback = callback;
             this.mOldListSize = callback.getOldListSize();
             this.mNewListSize = callback.getNewListSize();
-            this.mDetectMoves = detectMoves;
+            this.mDetectMoves = z;
             addRootSnake();
             findMatchingItems();
         }
 
         private void addRootSnake() {
-            Snake firstSnake = this.mSnakes.isEmpty() ? null : (Snake) this.mSnakes.get(0);
-            if (firstSnake == null || firstSnake.x != 0 || firstSnake.y != 0) {
-                Snake root = new Snake();
-                root.x = 0;
-                root.y = 0;
-                root.removal = false;
-                root.size = 0;
-                root.reverse = false;
-                this.mSnakes.add(0, root);
+            Snake snake = this.mSnakes.isEmpty() ? null : (Snake) this.mSnakes.get(0);
+            if (snake == null || snake.x != 0 || snake.y != 0) {
+                snake = new Snake();
+                snake.x = 0;
+                snake.y = 0;
+                snake.removal = false;
+                snake.size = 0;
+                snake.reverse = false;
+                this.mSnakes.add(0, snake);
             }
         }
 
         private void findMatchingItems() {
-            int posOld = this.mOldListSize;
-            int posNew = this.mNewListSize;
-            for (int i = this.mSnakes.size() - 1; i >= 0; i--) {
-                Snake snake = (Snake) this.mSnakes.get(i);
-                int endX = snake.x + snake.size;
-                int endY = snake.y + snake.size;
+            int i = this.mOldListSize;
+            int i2 = this.mNewListSize;
+            for (int size = this.mSnakes.size() - 1; size >= 0; size--) {
+                Snake snake = (Snake) this.mSnakes.get(size);
+                int i3 = snake.x;
+                int i4 = snake.size;
+                i3 += i4;
+                int i5 = snake.y + i4;
                 if (this.mDetectMoves) {
-                    while (posOld > endX) {
-                        findAddition(posOld, posNew, i);
-                        posOld--;
+                    while (i > i3) {
+                        findAddition(i, i2, size);
+                        i--;
                     }
-                    while (posNew > endY) {
-                        findRemoval(posOld, posNew, i);
-                        posNew--;
+                    while (i2 > i5) {
+                        findRemoval(i, i2, size);
+                        i2--;
                     }
                 }
-                for (int j = 0; j < snake.size; j++) {
-                    int oldItemPos = snake.x + j;
-                    int newItemPos = snake.y + j;
-                    int changeFlag = this.mCallback.areContentsTheSame(oldItemPos, newItemPos) ? 1 : 2;
-                    this.mOldItemStatuses[oldItemPos] = (newItemPos << 5) | changeFlag;
-                    this.mNewItemStatuses[newItemPos] = (oldItemPos << 5) | changeFlag;
+                for (i = 0; i < snake.size; i++) {
+                    i2 = snake.x + i;
+                    i3 = snake.y + i;
+                    i4 = this.mCallback.areContentsTheSame(i2, i3) ? 1 : 2;
+                    this.mOldItemStatuses[i2] = (i3 << 5) | i4;
+                    this.mNewItemStatuses[i3] = (i2 << 5) | i4;
                 }
-                posOld = snake.x;
-                posNew = snake.y;
+                i = snake.x;
+                i2 = snake.y;
             }
         }
 
-        private void findAddition(int x, int y, int snakeIndex) {
-            if (this.mOldItemStatuses[x - 1] == 0) {
-                findMatchingItem(x, y, snakeIndex, false);
+        private void findAddition(int i, int i2, int i3) {
+            if (this.mOldItemStatuses[i - 1] == 0) {
+                findMatchingItem(i, i2, i3, false);
             }
         }
 
-        private void findRemoval(int x, int y, int snakeIndex) {
-            if (this.mNewItemStatuses[y - 1] == 0) {
-                findMatchingItem(x, y, snakeIndex, true);
+        private void findRemoval(int i, int i2, int i3) {
+            if (this.mNewItemStatuses[i2 - 1] == 0) {
+                findMatchingItem(i, i2, i3, true);
             }
         }
 
-        private boolean findMatchingItem(int x, int y, int snakeIndex, boolean removal) {
-            int myItemPos;
-            int curX;
-            int curY;
-            if (removal) {
-                myItemPos = y - 1;
-                curX = x;
-                curY = y - 1;
+        private boolean findMatchingItem(int i, int i2, int i3, boolean z) {
+            int i4;
+            int i5;
+            if (z) {
+                i2--;
+                i4 = i;
+                i5 = i2;
             } else {
-                myItemPos = x - 1;
-                curX = x - 1;
-                curY = y;
+                i4 = i - 1;
+                i5 = i4;
             }
-            for (int i = snakeIndex; i >= 0; i--) {
-                Snake snake = (Snake) this.mSnakes.get(i);
-                int endX = snake.x + snake.size;
-                int endY = snake.y + snake.size;
-                int pos;
-                int changeFlag;
-                if (removal) {
-                    for (pos = curX - 1; pos >= endX; pos--) {
-                        if (this.mCallback.areItemsTheSame(pos, myItemPos)) {
-                            changeFlag = this.mCallback.areContentsTheSame(pos, myItemPos) ? 8 : 4;
-                            this.mNewItemStatuses[myItemPos] = (pos << 5) | 16;
-                            this.mOldItemStatuses[pos] = (myItemPos << 5) | changeFlag;
+            while (i3 >= 0) {
+                Snake snake = (Snake) this.mSnakes.get(i3);
+                int i6 = snake.x;
+                int i7 = snake.size;
+                i6 += i7;
+                int i8 = snake.y + i7;
+                i7 = 8;
+                if (z) {
+                    for (i4--; i4 >= i6; i4--) {
+                        if (this.mCallback.areItemsTheSame(i4, i5)) {
+                            if (!this.mCallback.areContentsTheSame(i4, i5)) {
+                                i7 = 4;
+                            }
+                            this.mNewItemStatuses[i5] = (i4 << 5) | 16;
+                            this.mOldItemStatuses[i4] = (i5 << 5) | i7;
                             return true;
                         }
                     }
                     continue;
                 } else {
-                    for (pos = curY - 1; pos >= endY; pos--) {
-                        if (this.mCallback.areItemsTheSame(myItemPos, pos)) {
-                            changeFlag = this.mCallback.areContentsTheSame(myItemPos, pos) ? 8 : 4;
-                            this.mOldItemStatuses[x - 1] = (pos << 5) | 16;
-                            this.mNewItemStatuses[pos] = ((x - 1) << 5) | changeFlag;
+                    for (i2--; i2 >= i8; i2--) {
+                        if (this.mCallback.areItemsTheSame(i5, i2)) {
+                            if (!this.mCallback.areContentsTheSame(i5, i2)) {
+                                i7 = 4;
+                            }
+                            i--;
+                            this.mOldItemStatuses[i] = (i2 << 5) | 16;
+                            this.mNewItemStatuses[i2] = (i << 5) | i7;
                             return true;
                         }
                     }
                     continue;
                 }
-                curX = snake.x;
-                curY = snake.y;
+                i4 = snake.x;
+                i2 = snake.y;
+                i3--;
             }
             return false;
         }
@@ -163,117 +170,121 @@ public class DiffUtil {
             dispatchUpdatesTo(new AdapterListUpdateCallback(adapter));
         }
 
-        public void dispatchUpdatesTo(ListUpdateCallback updateCallback) {
-            BatchingListUpdateCallback batchingCallback;
-            if (updateCallback instanceof BatchingListUpdateCallback) {
-                batchingCallback = (BatchingListUpdateCallback) updateCallback;
+        public void dispatchUpdatesTo(ListUpdateCallback listUpdateCallback) {
+            BatchingListUpdateCallback batchingListUpdateCallback;
+            if (listUpdateCallback instanceof BatchingListUpdateCallback) {
+                batchingListUpdateCallback = (BatchingListUpdateCallback) listUpdateCallback;
             } else {
-                batchingCallback = new BatchingListUpdateCallback(updateCallback);
-                BatchingListUpdateCallback updateCallback2 = batchingCallback;
+                batchingListUpdateCallback = new BatchingListUpdateCallback(listUpdateCallback);
             }
-            List<PostponedUpdate> postponedUpdates = new ArrayList();
-            int posOld = this.mOldListSize;
-            int posNew = this.mNewListSize;
-            for (int snakeIndex = this.mSnakes.size() - 1; snakeIndex >= 0; snakeIndex--) {
-                Snake snake = (Snake) this.mSnakes.get(snakeIndex);
-                int snakeSize = snake.size;
-                int endX = snake.x + snakeSize;
-                int endY = snake.y + snakeSize;
-                if (endX < posOld) {
-                    dispatchRemovals(postponedUpdates, batchingCallback, endX, posOld - endX, endX);
+            ArrayList arrayList = new ArrayList();
+            int i = this.mOldListSize;
+            int i2 = this.mNewListSize;
+            for (int size = this.mSnakes.size() - 1; size >= 0; size--) {
+                Snake snake = (Snake) this.mSnakes.get(size);
+                int i3 = snake.size;
+                int i4 = snake.x + i3;
+                int i5 = snake.y + i3;
+                if (i4 < i) {
+                    dispatchRemovals(arrayList, batchingListUpdateCallback, i4, i - i4, i4);
                 }
-                if (endY < posNew) {
-                    dispatchAdditions(postponedUpdates, batchingCallback, endX, posNew - endY, endY);
+                if (i5 < i2) {
+                    dispatchAdditions(arrayList, batchingListUpdateCallback, i4, i2 - i5, i5);
                 }
-                for (int i = snakeSize - 1; i >= 0; i--) {
-                    if ((this.mOldItemStatuses[snake.x + i] & 31) == 2) {
-                        batchingCallback.onChanged(snake.x + i, 1, this.mCallback.getChangePayload(snake.x + i, snake.y + i));
+                for (i3--; i3 >= 0; i3--) {
+                    int[] iArr = this.mOldItemStatuses;
+                    int i6 = snake.x;
+                    if ((iArr[i6 + i3] & 31) == 2) {
+                        batchingListUpdateCallback.onChanged(i6 + i3, 1, this.mCallback.getChangePayload(i6 + i3, snake.y + i3));
                     }
                 }
-                posOld = snake.x;
-                posNew = snake.y;
+                i = snake.x;
+                i2 = snake.y;
             }
-            batchingCallback.dispatchLastEvent();
+            batchingListUpdateCallback.dispatchLastEvent();
         }
 
-        private static PostponedUpdate removePostponedUpdate(List<PostponedUpdate> updates, int pos, boolean removal) {
-            for (int i = updates.size() - 1; i >= 0; i--) {
-                PostponedUpdate postponedUpdate = (PostponedUpdate) updates.get(i);
-                if (postponedUpdate.posInOwnerList == pos && postponedUpdate.removal == removal) {
-                    updates.remove(i);
-                    for (int j = i; j < updates.size(); j++) {
-                        PostponedUpdate postponedUpdate2 = (PostponedUpdate) updates.get(j);
-                        postponedUpdate2.currentPos = (removal ? 1 : -1) + postponedUpdate2.currentPos;
+        private static PostponedUpdate removePostponedUpdate(List<PostponedUpdate> list, int i, boolean z) {
+            int size = list.size() - 1;
+            while (size >= 0) {
+                PostponedUpdate postponedUpdate = (PostponedUpdate) list.get(size);
+                if (postponedUpdate.posInOwnerList == i && postponedUpdate.removal == z) {
+                    list.remove(size);
+                    while (size < list.size()) {
+                        PostponedUpdate postponedUpdate2 = (PostponedUpdate) list.get(size);
+                        postponedUpdate2.currentPos += z ? 1 : -1;
+                        size++;
                     }
                     return postponedUpdate;
                 }
+                size--;
             }
             return null;
         }
 
-        private void dispatchAdditions(List<PostponedUpdate> postponedUpdates, ListUpdateCallback updateCallback, int start, int count, int globalIndex) {
+        private void dispatchAdditions(List<PostponedUpdate> list, ListUpdateCallback listUpdateCallback, int i, int i2, int i3) {
             if (this.mDetectMoves) {
-                for (int i = count - 1; i >= 0; i--) {
-                    int status = this.mNewItemStatuses[globalIndex + i] & 31;
-                    switch (status) {
-                        case 0:
-                            updateCallback.onInserted(start, 1);
-                            for (PostponedUpdate update : postponedUpdates) {
-                                update.currentPos++;
-                            }
-                            break;
-                        case 4:
-                        case 8:
-                            int pos = this.mNewItemStatuses[globalIndex + i] >> 5;
-                            updateCallback.onMoved(removePostponedUpdate(postponedUpdates, pos, true).currentPos, start);
-                            if (status != 4) {
-                                break;
-                            }
-                            updateCallback.onChanged(start, 1, this.mCallback.getChangePayload(pos, globalIndex + i));
-                            break;
-                        case 16:
-                            postponedUpdates.add(new PostponedUpdate(globalIndex + i, start, false));
-                            break;
-                        default:
-                            throw new IllegalStateException("unknown flag for pos " + (globalIndex + i) + " " + Long.toBinaryString((long) status));
+                for (i2--; i2 >= 0; i2--) {
+                    int i4 = i3 + i2;
+                    int i5 = this.mNewItemStatuses[i4] & 31;
+                    if (i5 == 0) {
+                        listUpdateCallback.onInserted(i, 1);
+                        for (PostponedUpdate postponedUpdate : list) {
+                            postponedUpdate.currentPos++;
+                        }
+                    } else if (i5 == 4 || i5 == 8) {
+                        int i6 = this.mNewItemStatuses[i4] >> 5;
+                        listUpdateCallback.onMoved(removePostponedUpdate(list, i6, true).currentPos, i);
+                        if (i5 == 4) {
+                            listUpdateCallback.onChanged(i, 1, this.mCallback.getChangePayload(i6, i4));
+                        }
+                    } else if (i5 == 16) {
+                        list.add(new PostponedUpdate(i4, i, false));
+                    } else {
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append("unknown flag for pos ");
+                        stringBuilder.append(i4);
+                        stringBuilder.append(" ");
+                        stringBuilder.append(Long.toBinaryString((long) i5));
+                        throw new IllegalStateException(stringBuilder.toString());
                     }
                 }
                 return;
             }
-            updateCallback.onInserted(start, count);
+            listUpdateCallback.onInserted(i, i2);
         }
 
-        private void dispatchRemovals(List<PostponedUpdate> postponedUpdates, ListUpdateCallback updateCallback, int start, int count, int globalIndex) {
+        private void dispatchRemovals(List<PostponedUpdate> list, ListUpdateCallback listUpdateCallback, int i, int i2, int i3) {
             if (this.mDetectMoves) {
-                for (int i = count - 1; i >= 0; i--) {
-                    int status = this.mOldItemStatuses[globalIndex + i] & 31;
-                    switch (status) {
-                        case 0:
-                            updateCallback.onRemoved(start + i, 1);
-                            for (PostponedUpdate update : postponedUpdates) {
-                                update.currentPos--;
-                            }
-                            break;
-                        case 4:
-                        case 8:
-                            int pos = this.mOldItemStatuses[globalIndex + i] >> 5;
-                            PostponedUpdate update2 = removePostponedUpdate(postponedUpdates, pos, false);
-                            updateCallback.onMoved(start + i, update2.currentPos - 1);
-                            if (status != 4) {
-                                break;
-                            }
-                            updateCallback.onChanged(update2.currentPos - 1, 1, this.mCallback.getChangePayload(globalIndex + i, pos));
-                            break;
-                        case 16:
-                            postponedUpdates.add(new PostponedUpdate(globalIndex + i, start + i, true));
-                            break;
-                        default:
-                            throw new IllegalStateException("unknown flag for pos " + (globalIndex + i) + " " + Long.toBinaryString((long) status));
+                for (i2--; i2 >= 0; i2--) {
+                    int i4 = i3 + i2;
+                    int i5 = this.mOldItemStatuses[i4] & 31;
+                    if (i5 == 0) {
+                        listUpdateCallback.onRemoved(i + i2, 1);
+                        for (PostponedUpdate postponedUpdate : list) {
+                            postponedUpdate.currentPos--;
+                        }
+                    } else if (i5 == 4 || i5 == 8) {
+                        int i6 = this.mOldItemStatuses[i4] >> 5;
+                        PostponedUpdate removePostponedUpdate = removePostponedUpdate(list, i6, false);
+                        listUpdateCallback.onMoved(i + i2, removePostponedUpdate.currentPos - 1);
+                        if (i5 == 4) {
+                            listUpdateCallback.onChanged(removePostponedUpdate.currentPos - 1, 1, this.mCallback.getChangePayload(i4, i6));
+                        }
+                    } else if (i5 == 16) {
+                        list.add(new PostponedUpdate(i4, i + i2, true));
+                    } else {
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append("unknown flag for pos ");
+                        stringBuilder.append(i4);
+                        stringBuilder.append(" ");
+                        stringBuilder.append(Long.toBinaryString((long) i5));
+                        throw new IllegalStateException(stringBuilder.toString());
                     }
                 }
                 return;
             }
-            updateCallback.onRemoved(start, count);
+            listUpdateCallback.onRemoved(i, i2);
         }
 
         /* Access modifiers changed, original: 0000 */
@@ -297,10 +308,10 @@ public class DiffUtil {
         int posInOwnerList;
         boolean removal;
 
-        public PostponedUpdate(int posInOwnerList, int currentPos, boolean removal) {
-            this.posInOwnerList = posInOwnerList;
-            this.currentPos = currentPos;
-            this.removal = removal;
+        public PostponedUpdate(int i, int i2, boolean z) {
+            this.posInOwnerList = i;
+            this.currentPos = i2;
+            this.removal = z;
         }
     }
 
@@ -310,11 +321,11 @@ public class DiffUtil {
         int oldListEnd;
         int oldListStart;
 
-        public Range(int oldListStart, int oldListEnd, int newListStart, int newListEnd) {
-            this.oldListStart = oldListStart;
-            this.oldListEnd = oldListEnd;
-            this.newListStart = newListStart;
-            this.newListEnd = newListEnd;
+        public Range(int i, int i2, int i3, int i4) {
+            this.oldListStart = i;
+            this.oldListEnd = i2;
+            this.newListStart = i3;
+            this.newListEnd = i4;
         }
     }
 
@@ -332,148 +343,315 @@ public class DiffUtil {
     private DiffUtil() {
     }
 
-    public static DiffResult calculateDiff(Callback cb) {
-        return calculateDiff(cb, true);
+    public static DiffResult calculateDiff(Callback callback) {
+        return calculateDiff(callback, true);
     }
 
-    public static DiffResult calculateDiff(Callback cb, boolean detectMoves) {
-        int oldSize = cb.getOldListSize();
-        int newSize = cb.getNewListSize();
-        List<Snake> snakes = new ArrayList();
-        List<Range> stack = new ArrayList();
-        stack.add(new Range(0, oldSize, 0, newSize));
-        int max = (oldSize + newSize) + Math.abs(oldSize - newSize);
-        int[] forward = new int[(max * 2)];
-        int[] backward = new int[(max * 2)];
-        List<Range> rangePool = new ArrayList();
-        while (!stack.isEmpty()) {
-            Range range = (Range) stack.remove(stack.size() - 1);
-            Snake snake = diffPartial(cb, range.oldListStart, range.oldListEnd, range.newListStart, range.newListEnd, forward, backward, max);
-            if (snake != null) {
-                Range left;
-                if (snake.size > 0) {
-                    snakes.add(snake);
+    public static DiffResult calculateDiff(Callback callback, boolean z) {
+        int oldListSize = callback.getOldListSize();
+        int newListSize = callback.getNewListSize();
+        ArrayList arrayList = new ArrayList();
+        ArrayList arrayList2 = new ArrayList();
+        arrayList2.add(new Range(0, oldListSize, 0, newListSize));
+        oldListSize = Math.abs(oldListSize - newListSize) + (oldListSize + newListSize);
+        newListSize = oldListSize * 2;
+        int[] iArr = new int[newListSize];
+        int[] iArr2 = new int[newListSize];
+        ArrayList arrayList3 = new ArrayList();
+        while (!arrayList2.isEmpty()) {
+            Range range = (Range) arrayList2.remove(arrayList2.size() - 1);
+            Snake diffPartial = diffPartial(callback, range.oldListStart, range.oldListEnd, range.newListStart, range.newListEnd, iArr, iArr2, oldListSize);
+            if (diffPartial != null) {
+                if (diffPartial.size > 0) {
+                    arrayList.add(diffPartial);
                 }
-                snake.x += range.oldListStart;
-                snake.y += range.newListStart;
-                if (rangePool.isEmpty()) {
-                    left = new Range();
+                diffPartial.x += range.oldListStart;
+                diffPartial.y += range.newListStart;
+                Range range2 = arrayList3.isEmpty() ? new Range() : (Range) arrayList3.remove(arrayList3.size() - 1);
+                range2.oldListStart = range.oldListStart;
+                range2.newListStart = range.newListStart;
+                if (diffPartial.reverse) {
+                    range2.oldListEnd = diffPartial.x;
+                    range2.newListEnd = diffPartial.y;
+                } else if (diffPartial.removal) {
+                    range2.oldListEnd = diffPartial.x - 1;
+                    range2.newListEnd = diffPartial.y;
                 } else {
-                    left = (Range) rangePool.remove(rangePool.size() - 1);
+                    range2.oldListEnd = diffPartial.x;
+                    range2.newListEnd = diffPartial.y - 1;
                 }
-                left.oldListStart = range.oldListStart;
-                left.newListStart = range.newListStart;
-                if (snake.reverse) {
-                    left.oldListEnd = snake.x;
-                    left.newListEnd = snake.y;
-                } else if (snake.removal) {
-                    left.oldListEnd = snake.x - 1;
-                    left.newListEnd = snake.y;
+                arrayList2.add(range2);
+                int i;
+                int i2;
+                if (!diffPartial.reverse) {
+                    i = diffPartial.x;
+                    i2 = diffPartial.size;
+                    range.oldListStart = i + i2;
+                    range.newListStart = diffPartial.y + i2;
+                } else if (diffPartial.removal) {
+                    i = diffPartial.x;
+                    i2 = diffPartial.size;
+                    range.oldListStart = (i + i2) + 1;
+                    range.newListStart = diffPartial.y + i2;
                 } else {
-                    left.oldListEnd = snake.x;
-                    left.newListEnd = snake.y - 1;
+                    i = diffPartial.x;
+                    i2 = diffPartial.size;
+                    range.oldListStart = i + i2;
+                    range.newListStart = (diffPartial.y + i2) + 1;
                 }
-                stack.add(left);
-                Range right = range;
-                if (!snake.reverse) {
-                    right.oldListStart = snake.x + snake.size;
-                    right.newListStart = snake.y + snake.size;
-                } else if (snake.removal) {
-                    right.oldListStart = (snake.x + snake.size) + 1;
-                    right.newListStart = snake.y + snake.size;
-                } else {
-                    right.oldListStart = snake.x + snake.size;
-                    right.newListStart = (snake.y + snake.size) + 1;
-                }
-                stack.add(right);
+                arrayList2.add(range);
             } else {
-                rangePool.add(range);
+                arrayList3.add(range);
             }
         }
-        Collections.sort(snakes, SNAKE_COMPARATOR);
-        return new DiffResult(cb, snakes, forward, backward, detectMoves);
+        Collections.sort(arrayList, SNAKE_COMPARATOR);
+        return new DiffResult(callback, arrayList, iArr, iArr2, z);
     }
 
-    private static Snake diffPartial(Callback cb, int startOld, int endOld, int startNew, int endNew, int[] forward, int[] backward, int kOffset) {
-        int oldSize = endOld - startOld;
-        int newSize = endNew - startNew;
-        if (endOld - startOld < 1 || endNew - startNew < 1) {
-            return null;
-        }
-        int delta = oldSize - newSize;
-        int dLimit = ((oldSize + newSize) + 1) / 2;
-        Arrays.fill(forward, (kOffset - dLimit) - 1, (kOffset + dLimit) + 1, 0);
-        Arrays.fill(backward, ((kOffset - dLimit) - 1) + delta, ((kOffset + dLimit) + 1) + delta, oldSize);
-        boolean checkInFwd = delta % 2 != 0;
-        int d = 0;
-        while (d <= dLimit) {
-            int x;
-            boolean removal;
-            int y;
-            Snake outSnake;
-            int k = -d;
-            while (k <= d) {
-                if (k == (-d) || (k != d && forward[(kOffset + k) - 1] < forward[(kOffset + k) + 1])) {
-                    x = forward[(kOffset + k) + 1];
-                    removal = false;
-                } else {
-                    x = forward[(kOffset + k) - 1] + 1;
-                    removal = true;
-                }
-                y = x - k;
-                while (x < oldSize && y < newSize) {
-                    if (!cb.areItemsTheSame(startOld + x, startNew + y)) {
-                        break;
-                    }
-                    x++;
-                    y++;
-                }
-                forward[kOffset + k] = x;
-                if (!checkInFwd || k < (delta - d) + 1 || k > (delta + d) - 1 || forward[kOffset + k] < backward[kOffset + k]) {
-                    k += 2;
-                } else {
-                    outSnake = new Snake();
-                    outSnake.x = backward[kOffset + k];
-                    outSnake.y = outSnake.x - k;
-                    outSnake.size = forward[kOffset + k] - backward[kOffset + k];
-                    outSnake.removal = removal;
-                    outSnake.reverse = false;
-                    return outSnake;
-                }
-            }
-            k = -d;
-            while (k <= d) {
-                int backwardK = k + delta;
-                if (backwardK == d + delta || (backwardK != (-d) + delta && backward[(kOffset + backwardK) - 1] < backward[(kOffset + backwardK) + 1])) {
-                    x = backward[(kOffset + backwardK) - 1];
-                    removal = false;
-                } else {
-                    x = backward[(kOffset + backwardK) + 1] - 1;
-                    removal = true;
-                }
-                y = x - backwardK;
-                while (x > 0 && y > 0) {
-                    if (!cb.areItemsTheSame((startOld + x) - 1, (startNew + y) - 1)) {
-                        break;
-                    }
-                    x--;
-                    y--;
-                }
-                backward[kOffset + backwardK] = x;
-                if (checkInFwd || k + delta < (-d) || k + delta > d || forward[kOffset + backwardK] < backward[kOffset + backwardK]) {
-                    k += 2;
-                } else {
-                    outSnake = new Snake();
-                    outSnake.x = backward[kOffset + backwardK];
-                    outSnake.y = outSnake.x - backwardK;
-                    outSnake.size = forward[kOffset + backwardK] - backward[kOffset + backwardK];
-                    outSnake.removal = removal;
-                    outSnake.reverse = true;
-                    return outSnake;
-                }
-            }
-            d++;
-        }
-        throw new IllegalStateException("DiffUtil hit an unexpected case while trying to calculate the optimal path. Please make sure your data is not changing during the diff calculation.");
+    /* JADX WARNING: Removed duplicated region for block: B:83:0x00ee A:{SYNTHETIC, EDGE_INSN: B:83:0x00ee->B:53:0x00ee ?: BREAK  , EDGE_INSN: B:83:0x00ee->B:53:0x00ee ?: BREAK  } */
+    /* JADX WARNING: Removed duplicated region for block: B:51:0x00e3 A:{LOOP_END, LOOP:4: B:47:0x00cf->B:51:0x00e3} */
+    /* JADX WARNING: Missing block: B:14:0x0042, code skipped:
+            if (r1[r13 - 1] < r1[r13 + r5]) goto L_0x004d;
+     */
+    /* JADX WARNING: Missing block: B:41:0x00ba, code skipped:
+            if (r2[r13 - 1] < r2[r13 + 1]) goto L_0x00c7;
+     */
+    private static org.telegram.messenger.support.util.DiffUtil.Snake diffPartial(org.telegram.messenger.support.util.DiffUtil.Callback r19, int r20, int r21, int r22, int r23, int[] r24, int[] r25, int r26) {
+        /*
+        r0 = r19;
+        r1 = r24;
+        r2 = r25;
+        r3 = r21 - r20;
+        r4 = r23 - r22;
+        r5 = 1;
+        if (r3 < r5) goto L_0x0133;
+    L_0x000d:
+        if (r4 >= r5) goto L_0x0011;
+    L_0x000f:
+        goto L_0x0133;
+    L_0x0011:
+        r6 = r3 - r4;
+        r7 = r3 + r4;
+        r7 = r7 + r5;
+        r7 = r7 / 2;
+        r8 = r26 - r7;
+        r8 = r8 - r5;
+        r9 = r26 + r7;
+        r9 = r9 + r5;
+        r10 = 0;
+        java.util.Arrays.fill(r1, r8, r9, r10);
+        r8 = r8 + r6;
+        r9 = r9 + r6;
+        java.util.Arrays.fill(r2, r8, r9, r3);
+        r8 = r6 % 2;
+        if (r8 == 0) goto L_0x002d;
+    L_0x002b:
+        r8 = 1;
+        goto L_0x002e;
+    L_0x002d:
+        r8 = 0;
+    L_0x002e:
+        r9 = 0;
+    L_0x002f:
+        if (r9 > r7) goto L_0x012b;
+    L_0x0031:
+        r11 = -r9;
+        r12 = r11;
+    L_0x0033:
+        if (r12 > r9) goto L_0x00a2;
+    L_0x0035:
+        if (r12 == r11) goto L_0x004d;
+    L_0x0037:
+        if (r12 == r9) goto L_0x0045;
+    L_0x0039:
+        r13 = r26 + r12;
+        r14 = r13 + -1;
+        r14 = r1[r14];
+        r13 = r13 + r5;
+        r13 = r1[r13];
+        if (r14 >= r13) goto L_0x0045;
+    L_0x0044:
+        goto L_0x004d;
+    L_0x0045:
+        r13 = r26 + r12;
+        r13 = r13 - r5;
+        r13 = r1[r13];
+        r13 = r13 + r5;
+        r14 = 1;
+        goto L_0x0053;
+    L_0x004d:
+        r13 = r26 + r12;
+        r13 = r13 + r5;
+        r13 = r1[r13];
+        r14 = 0;
+    L_0x0053:
+        r15 = r13 - r12;
+    L_0x0055:
+        if (r13 >= r3) goto L_0x006a;
+    L_0x0057:
+        if (r15 >= r4) goto L_0x006a;
+    L_0x0059:
+        r10 = r20 + r13;
+        r5 = r22 + r15;
+        r5 = r0.areItemsTheSame(r10, r5);
+        if (r5 == 0) goto L_0x006a;
+    L_0x0063:
+        r13 = r13 + 1;
+        r15 = r15 + 1;
+        r5 = 1;
+        r10 = 0;
+        goto L_0x0055;
+    L_0x006a:
+        r5 = r26 + r12;
+        r1[r5] = r13;
+        if (r8 == 0) goto L_0x009c;
+    L_0x0070:
+        r10 = r6 - r9;
+        r13 = 1;
+        r10 = r10 + r13;
+        if (r12 < r10) goto L_0x009c;
+    L_0x0076:
+        r10 = r6 + r9;
+        r10 = r10 - r13;
+        if (r12 > r10) goto L_0x009c;
+    L_0x007b:
+        r10 = r1[r5];
+        r13 = r2[r5];
+        if (r10 < r13) goto L_0x009c;
+    L_0x0081:
+        r0 = new org.telegram.messenger.support.util.DiffUtil$Snake;
+        r0.<init>();
+        r3 = r2[r5];
+        r0.x = r3;
+        r3 = r0.x;
+        r3 = r3 - r12;
+        r0.y = r3;
+        r1 = r1[r5];
+        r2 = r2[r5];
+        r1 = r1 - r2;
+        r0.size = r1;
+        r0.removal = r14;
+        r5 = 0;
+        r0.reverse = r5;
+        return r0;
+    L_0x009c:
+        r5 = 0;
+        r12 = r12 + 2;
+        r5 = 1;
+        r10 = 0;
+        goto L_0x0033;
+    L_0x00a2:
+        r5 = 0;
+        r10 = r11;
+    L_0x00a4:
+        if (r10 > r9) goto L_0x0120;
+    L_0x00a6:
+        r12 = r10 + r6;
+        r13 = r9 + r6;
+        if (r12 == r13) goto L_0x00c6;
+    L_0x00ac:
+        r13 = r11 + r6;
+        if (r12 == r13) goto L_0x00bd;
+    L_0x00b0:
+        r13 = r26 + r12;
+        r14 = r13 + -1;
+        r14 = r2[r14];
+        r15 = 1;
+        r13 = r13 + r15;
+        r13 = r2[r13];
+        if (r14 >= r13) goto L_0x00be;
+    L_0x00bc:
+        goto L_0x00c7;
+    L_0x00bd:
+        r15 = 1;
+    L_0x00be:
+        r13 = r26 + r12;
+        r13 = r13 + r15;
+        r13 = r2[r13];
+        r13 = r13 - r15;
+        r14 = 1;
+        goto L_0x00cd;
+    L_0x00c6:
+        r15 = 1;
+    L_0x00c7:
+        r13 = r26 + r12;
+        r13 = r13 - r15;
+        r13 = r2[r13];
+        r14 = 0;
+    L_0x00cd:
+        r16 = r13 - r12;
+    L_0x00cf:
+        if (r13 <= 0) goto L_0x00ec;
+    L_0x00d1:
+        if (r16 <= 0) goto L_0x00ec;
+    L_0x00d3:
+        r17 = r20 + r13;
+        r5 = r17 + -1;
+        r17 = r22 + r16;
+        r18 = r3;
+        r3 = r17 + -1;
+        r3 = r0.areItemsTheSame(r5, r3);
+        if (r3 == 0) goto L_0x00ee;
+    L_0x00e3:
+        r13 = r13 + -1;
+        r16 = r16 + -1;
+        r3 = r18;
+        r5 = 0;
+        r15 = 1;
+        goto L_0x00cf;
+    L_0x00ec:
+        r18 = r3;
+    L_0x00ee:
+        r3 = r26 + r12;
+        r2[r3] = r13;
+        if (r8 != 0) goto L_0x0119;
+    L_0x00f4:
+        if (r12 < r11) goto L_0x0119;
+    L_0x00f6:
+        if (r12 > r9) goto L_0x0119;
+    L_0x00f8:
+        r5 = r1[r3];
+        r13 = r2[r3];
+        if (r5 < r13) goto L_0x0119;
+    L_0x00fe:
+        r0 = new org.telegram.messenger.support.util.DiffUtil$Snake;
+        r0.<init>();
+        r4 = r2[r3];
+        r0.x = r4;
+        r4 = r0.x;
+        r4 = r4 - r12;
+        r0.y = r4;
+        r1 = r1[r3];
+        r2 = r2[r3];
+        r1 = r1 - r2;
+        r0.size = r1;
+        r0.removal = r14;
+        r3 = 1;
+        r0.reverse = r3;
+        return r0;
+    L_0x0119:
+        r3 = 1;
+        r10 = r10 + 2;
+        r3 = r18;
+        r5 = 0;
+        goto L_0x00a4;
+    L_0x0120:
+        r18 = r3;
+        r3 = 1;
+        r9 = r9 + 1;
+        r3 = r18;
+        r5 = 1;
+        r10 = 0;
+        goto L_0x002f;
+    L_0x012b:
+        r0 = new java.lang.IllegalStateException;
+        r1 = "DiffUtil hit an unexpected case while trying to calculate the optimal path. Please make sure your data is not changing during the diff calculation.";
+        r0.<init>(r1);
+        throw r0;
+    L_0x0133:
+        r0 = 0;
+        return r0;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.support.util.DiffUtil.diffPartial(org.telegram.messenger.support.util.DiffUtil$Callback, int, int, int, int, int[], int[], int):org.telegram.messenger.support.util.DiffUtil$Snake");
     }
 }

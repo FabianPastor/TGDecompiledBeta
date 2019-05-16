@@ -11,10 +11,10 @@ public class NotificationRepeat extends IntentService {
     /* Access modifiers changed, original: protected */
     public void onHandleIntent(Intent intent) {
         if (intent != null) {
-            final int currentAccount = intent.getIntExtra("currentAccount", UserConfig.selectedAccount);
+            final int intExtra = intent.getIntExtra("currentAccount", UserConfig.selectedAccount);
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public void run() {
-                    NotificationsController.getInstance(currentAccount).repeatNotificationMaybe();
+                    NotificationsController.getInstance(intExtra).repeatNotificationMaybe();
                 }
             });
         }

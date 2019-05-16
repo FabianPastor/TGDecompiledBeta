@@ -7,7 +7,8 @@ import android.content.Intent;
 public class NotificationDismissReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (intent != null) {
-            MessagesController.getNotificationsSettings(intent.getIntExtra("currentAccount", UserConfig.selectedAccount)).edit().putInt("dismissDate", intent.getIntExtra("messageDate", 0)).commit();
+            String str = "dismissDate";
+            MessagesController.getNotificationsSettings(intent.getIntExtra("currentAccount", UserConfig.selectedAccount)).edit().putInt(str, intent.getIntExtra("messageDate", 0)).commit();
         }
     }
 }

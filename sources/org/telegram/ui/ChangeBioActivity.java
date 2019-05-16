@@ -24,8 +24,8 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.TL_account_updateProfile;
 import org.telegram.tgnet.TLRPC.TL_error;
-import org.telegram.tgnet.TLRPC.TL_userFull;
 import org.telegram.tgnet.TLRPC.User;
+import org.telegram.tgnet.TLRPC.UserFull;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -43,98 +43,112 @@ public class ChangeBioActivity extends BaseFragment {
     private TextView helpTextView;
 
     public View createView(Context context) {
+        Context context2 = context;
         this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
-        this.actionBar.setTitle(LocaleController.getString("UserBio", NUM));
+        String str = "UserBio";
+        this.actionBar.setTitle(LocaleController.getString(str, NUM));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
-            public void onItemClick(int id) {
-                if (id == -1) {
+            public void onItemClick(int i) {
+                if (i == -1) {
                     ChangeBioActivity.this.finishFragment();
-                } else if (id == 1) {
+                } else if (i == 1) {
                     ChangeBioActivity.this.saveName();
                 }
             }
         });
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f));
-        this.fragmentView = new LinearLayout(context);
-        LinearLayout linearLayout = this.fragmentView;
+        this.fragmentView = new LinearLayout(context2);
+        LinearLayout linearLayout = (LinearLayout) this.fragmentView;
         linearLayout.setOrientation(1);
-        this.fragmentView.setOnTouchListener(ChangeBioActivity$$Lambda$0.$instance);
-        FrameLayout fieldContainer = new FrameLayout(context);
-        linearLayout.addView(fieldContainer, LayoutHelper.createLinear(-1, -2, 24.0f, 24.0f, 20.0f, 0.0f));
-        this.firstNameField = new EditTextBoldCursor(context);
+        this.fragmentView.setOnTouchListener(-$$Lambda$ChangeBioActivity$QHxoa1XUfskp3fsOABXGjgD9Sl4.INSTANCE);
+        FrameLayout frameLayout = new FrameLayout(context2);
+        linearLayout.addView(frameLayout, LayoutHelper.createLinear(-1, -2, 24.0f, 24.0f, 20.0f, 0.0f));
+        this.firstNameField = new EditTextBoldCursor(context2);
         this.firstNameField.setTextSize(1, 18.0f);
         this.firstNameField.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
-        this.firstNameField.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-        this.firstNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
+        String str2 = "windowBackgroundWhiteBlackText";
+        this.firstNameField.setTextColor(Theme.getColor(str2));
+        this.firstNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context2, false));
         this.firstNameField.setMaxLines(4);
-        this.firstNameField.setPadding(AndroidUtilities.dp(LocaleController.isRTL ? 24.0f : 0.0f), 0, AndroidUtilities.dp(LocaleController.isRTL ? 0.0f : 24.0f), AndroidUtilities.dp(6.0f));
+        EditTextBoldCursor editTextBoldCursor = this.firstNameField;
+        float f = 24.0f;
+        int dp = AndroidUtilities.dp(LocaleController.isRTL ? 24.0f : 0.0f);
+        if (LocaleController.isRTL) {
+            f = 0.0f;
+        }
+        editTextBoldCursor.setPadding(dp, 0, AndroidUtilities.dp(f), AndroidUtilities.dp(6.0f));
         this.firstNameField.setGravity(LocaleController.isRTL ? 5 : 3);
         this.firstNameField.setImeOptions(NUM);
         this.firstNameField.setInputType(147457);
         this.firstNameField.setImeOptions(6);
         this.firstNameField.setFilters(new InputFilter[]{new LengthFilter(70) {
-            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-                if (source == null || TextUtils.indexOf(source, 10) == -1) {
-                    CharSequence result = super.filter(source, start, end, dest, dstart, dend);
-                    if (result == null || source == null || result.length() == source.length()) {
-                        return result;
+            public CharSequence filter(CharSequence charSequence, int i, int i2, Spanned spanned, int i3, int i4) {
+                if (charSequence == null || TextUtils.indexOf(charSequence, 10) == -1) {
+                    CharSequence filter = super.filter(charSequence, i, i2, spanned, i3, i4);
+                    if (!(filter == null || charSequence == null || filter.length() == charSequence.length())) {
+                        Vibrator vibrator = (Vibrator) ChangeBioActivity.this.getParentActivity().getSystemService("vibrator");
+                        if (vibrator != null) {
+                            vibrator.vibrate(200);
+                        }
+                        AndroidUtilities.shakeView(ChangeBioActivity.this.checkTextView, 2.0f, 0);
                     }
-                    Vibrator v = (Vibrator) ChangeBioActivity.this.getParentActivity().getSystemService("vibrator");
-                    if (v != null) {
-                        v.vibrate(200);
-                    }
-                    AndroidUtilities.shakeView(ChangeBioActivity.this.checkTextView, 2.0f, 0);
-                    return result;
+                    return filter;
                 }
                 ChangeBioActivity.this.doneButton.performClick();
                 return "";
             }
         }});
         this.firstNameField.setMinHeight(AndroidUtilities.dp(36.0f));
-        this.firstNameField.setHint(LocaleController.getString("UserBio", NUM));
-        this.firstNameField.setCursorColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        this.firstNameField.setHint(LocaleController.getString(str, NUM));
+        this.firstNameField.setCursorColor(Theme.getColor(str2));
         this.firstNameField.setCursorSize(AndroidUtilities.dp(20.0f));
         this.firstNameField.setCursorWidth(1.5f);
-        this.firstNameField.setOnEditorActionListener(new ChangeBioActivity$$Lambda$1(this));
+        this.firstNameField.setOnEditorActionListener(new -$$Lambda$ChangeBioActivity$4xLMdC_iGI1lEMvcHXGPYTNQNU8(this));
         this.firstNameField.addTextChangedListener(new TextWatcher() {
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
             }
 
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
             }
 
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(Editable editable) {
                 ChangeBioActivity.this.checkTextView.setText(String.format("%d", new Object[]{Integer.valueOf(70 - ChangeBioActivity.this.firstNameField.length())}));
             }
         });
-        fieldContainer.addView(this.firstNameField, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 0.0f, 4.0f, 0.0f));
-        this.checkTextView = new TextView(context);
+        frameLayout.addView(this.firstNameField, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 0.0f, 4.0f, 0.0f));
+        this.checkTextView = new TextView(context2);
         this.checkTextView.setTextSize(1, 15.0f);
         this.checkTextView.setText(String.format("%d", new Object[]{Integer.valueOf(70)}));
         this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
-        fieldContainer.addView(this.checkTextView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 3 : 5, 0.0f, 4.0f, 4.0f, 0.0f));
-        this.helpTextView = new TextView(context);
+        frameLayout.addView(this.checkTextView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 3 : 5, 0.0f, 4.0f, 4.0f, 0.0f));
+        this.helpTextView = new TextView(context2);
         this.helpTextView.setTextSize(1, 15.0f);
         this.helpTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText8"));
         this.helpTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.helpTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("UserBioInfo", NUM)));
         linearLayout.addView(this.helpTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 24, 10, 24, 0));
-        TL_userFull userFull = MessagesController.getInstance(this.currentAccount).getUserFull(UserConfig.getInstance(this.currentAccount).getClientUserId());
-        if (!(userFull == null || userFull.about == null)) {
-            this.firstNameField.setText(userFull.about);
-            this.firstNameField.setSelection(this.firstNameField.length());
+        UserFull userFull = MessagesController.getInstance(this.currentAccount).getUserFull(UserConfig.getInstance(this.currentAccount).getClientUserId());
+        if (userFull != null) {
+            String str3 = userFull.about;
+            if (str3 != null) {
+                this.firstNameField.setText(str3);
+                EditTextBoldCursor editTextBoldCursor2 = this.firstNameField;
+                editTextBoldCursor2.setSelection(editTextBoldCursor2.length());
+            }
         }
         return this.fragmentView;
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ boolean lambda$createView$1$ChangeBioActivity(TextView textView, int i, KeyEvent keyEvent) {
-        if (i != 6 || this.doneButton == null) {
-            return false;
+    public /* synthetic */ boolean lambda$createView$1$ChangeBioActivity(TextView textView, int i, KeyEvent keyEvent) {
+        if (i == 6) {
+            View view = this.doneButton;
+            if (view != null) {
+                view.performClick();
+                return true;
+            }
         }
-        this.doneButton.performClick();
-        return true;
+        return false;
     }
 
     public void onResume() {
@@ -146,84 +160,69 @@ public class ChangeBioActivity extends BaseFragment {
     }
 
     private void saveName() {
-        TL_userFull userFull = MessagesController.getInstance(this.currentAccount).getUserFull(UserConfig.getInstance(this.currentAccount).getClientUserId());
-        if (getParentActivity() != null && userFull != null) {
-            String currentName = userFull.about;
-            if (currentName == null) {
-                currentName = "";
+        UserFull userFull = MessagesController.getInstance(this.currentAccount).getUserFull(UserConfig.getInstance(this.currentAccount).getClientUserId());
+        if (!(getParentActivity() == null || userFull == null)) {
+            String str = userFull.about;
+            String str2 = "";
+            if (str == null) {
+                str = str2;
             }
-            String newName = this.firstNameField.getText().toString().replace("\n", "");
-            if (currentName.equals(newName)) {
+            String replace = this.firstNameField.getText().toString().replace("\n", str2);
+            if (str.equals(replace)) {
                 finishFragment();
                 return;
             }
-            AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
-            TL_account_updateProfile req = new TL_account_updateProfile();
-            req.about = newName;
-            req.flags |= 4;
-            int reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new ChangeBioActivity$$Lambda$2(this, progressDialog, userFull, newName, req), 2);
-            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(reqId, this.classGuid);
-            progressDialog.setOnCancelListener(new ChangeBioActivity$$Lambda$3(this, reqId));
-            progressDialog.show();
+            AlertDialog alertDialog = new AlertDialog(getParentActivity(), 3);
+            TL_account_updateProfile tL_account_updateProfile = new TL_account_updateProfile();
+            tL_account_updateProfile.about = replace;
+            tL_account_updateProfile.flags |= 4;
+            int sendRequest = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_account_updateProfile, new -$$Lambda$ChangeBioActivity$JZsWl0x8uGEwh0dAVWe1jdDZvHs(this, alertDialog, userFull, replace, tL_account_updateProfile), 2);
+            ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(sendRequest, this.classGuid);
+            alertDialog.setOnCancelListener(new -$$Lambda$ChangeBioActivity$Q4bba-1YALoLViuYxQRzjsdV-6c(this, sendRequest));
+            alertDialog.show();
         }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$saveName$4$ChangeBioActivity(AlertDialog progressDialog, TL_userFull userFull, String newName, TL_account_updateProfile req, TLObject response, TL_error error) {
-        if (error == null) {
-            AndroidUtilities.runOnUIThread(new ChangeBioActivity$$Lambda$4(this, progressDialog, userFull, newName, (User) response));
+    public /* synthetic */ void lambda$saveName$4$ChangeBioActivity(AlertDialog alertDialog, UserFull userFull, String str, TL_account_updateProfile tL_account_updateProfile, TLObject tLObject, TL_error tL_error) {
+        if (tL_error == null) {
+            AndroidUtilities.runOnUIThread(new -$$Lambda$ChangeBioActivity$tNpkkFgAdE6xw7aDpwDOLm8jmpc(this, alertDialog, userFull, str, (User) tLObject));
             return;
         }
-        AndroidUtilities.runOnUIThread(new ChangeBioActivity$$Lambda$5(this, progressDialog, error, req));
+        AndroidUtilities.runOnUIThread(new -$$Lambda$ChangeBioActivity$T2lBd_q-6K_Uw6G0hNAJdgSSX7I(this, alertDialog, tL_error, tL_account_updateProfile));
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$null$2$ChangeBioActivity(AlertDialog progressDialog, TL_userFull userFull, String newName, User user) {
+    public /* synthetic */ void lambda$null$2$ChangeBioActivity(AlertDialog alertDialog, UserFull userFull, String str, User user) {
         try {
-            progressDialog.dismiss();
+            alertDialog.dismiss();
         } catch (Exception e) {
             FileLog.e(e);
         }
-        userFull.about = newName;
+        userFull.about = str;
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.userInfoDidLoad, Integer.valueOf(user.id), userFull, null);
         finishFragment();
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$null$3$ChangeBioActivity(AlertDialog progressDialog, TL_error error, TL_account_updateProfile req) {
+    public /* synthetic */ void lambda$null$3$ChangeBioActivity(AlertDialog alertDialog, TL_error tL_error, TL_account_updateProfile tL_account_updateProfile) {
         try {
-            progressDialog.dismiss();
+            alertDialog.dismiss();
         } catch (Exception e) {
             FileLog.e(e);
         }
-        AlertsCreator.processError(this.currentAccount, error, this, req, new Object[0]);
+        AlertsCreator.processError(this.currentAccount, tL_error, this, tL_account_updateProfile, new Object[0]);
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$saveName$5$ChangeBioActivity(int reqId, DialogInterface dialog) {
-        ConnectionsManager.getInstance(this.currentAccount).cancelRequest(reqId, true);
+    public /* synthetic */ void lambda$saveName$5$ChangeBioActivity(int i, DialogInterface dialogInterface) {
+        ConnectionsManager.getInstance(this.currentAccount).cancelRequest(i, true);
     }
 
-    public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
-        if (isOpen) {
+    public void onTransitionAnimationEnd(boolean z, boolean z2) {
+        if (z) {
             this.firstNameField.requestFocus();
             AndroidUtilities.showKeyboard(this.firstNameField);
         }
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[11];
-        themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite");
-        themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault");
-        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon");
-        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle");
-        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector");
-        themeDescriptionArr[5] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[6] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, "windowBackgroundWhiteHintText");
-        themeDescriptionArr[7] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "windowBackgroundWhiteInputField");
-        themeDescriptionArr[8] = new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, "windowBackgroundWhiteInputFieldActivated");
-        themeDescriptionArr[9] = new ThemeDescription(this.helpTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText8");
-        themeDescriptionArr[10] = new ThemeDescription(this.checkTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText4");
-        return themeDescriptionArr;
+        return new ThemeDescription[]{new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle"), new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector"), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText"), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, "windowBackgroundWhiteHintText"), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "windowBackgroundWhiteInputField"), new ThemeDescription(this.firstNameField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, "windowBackgroundWhiteInputFieldActivated"), new ThemeDescription(this.helpTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText8"), new ThemeDescription(this.checkTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteGrayText4")};
     }
 }

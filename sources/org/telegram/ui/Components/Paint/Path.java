@@ -14,21 +14,22 @@ public class Path {
         this.points.add(point);
     }
 
-    public Path(Point[] points) {
-        this.points.addAll(Arrays.asList(points));
+    public Path(Point[] pointArr) {
+        this.points.addAll(Arrays.asList(pointArr));
     }
 
     public int getLength() {
-        if (this.points == null) {
+        Vector vector = this.points;
+        if (vector == null) {
             return 0;
         }
-        return this.points.size();
+        return vector.size();
     }
 
     public Point[] getPoints() {
-        Point[] points = new Point[this.points.size()];
-        this.points.toArray(points);
-        return points;
+        Point[] pointArr = new Point[this.points.size()];
+        this.points.toArray(pointArr);
+        return pointArr;
     }
 
     public int getColor() {
@@ -43,9 +44,9 @@ public class Path {
         return this.brush;
     }
 
-    public void setup(int color, float baseWeight, Brush brush) {
-        this.color = color;
-        this.baseWeight = baseWeight;
+    public void setup(int i, float f, Brush brush) {
+        this.color = i;
+        this.baseWeight = f;
         this.brush = brush;
     }
 }

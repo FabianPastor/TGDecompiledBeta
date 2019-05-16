@@ -18,7 +18,7 @@ import org.telegram.messenger.support.widget.RecyclerView.State;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 import org.telegram.messenger.support.widget.helper.ItemTouchHelper.ViewDropHandler;
 
-public class LinearLayoutManager extends LayoutManager implements ScrollVectorProvider, ViewDropHandler {
+public class LinearLayoutManager extends LayoutManager implements ViewDropHandler, ScrollVectorProvider {
     static final boolean DEBUG = false;
     public static final int HORIZONTAL = 0;
     public static final int INVALID_OFFSET = Integer.MIN_VALUE;
@@ -73,56 +73,64 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
         }
 
         public String toString() {
-            return "AnchorInfo{mPosition=" + this.mPosition + ", mCoordinate=" + this.mCoordinate + ", mLayoutFromEnd=" + this.mLayoutFromEnd + ", mValid=" + this.mValid + '}';
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("AnchorInfo{mPosition=");
+            stringBuilder.append(this.mPosition);
+            stringBuilder.append(", mCoordinate=");
+            stringBuilder.append(this.mCoordinate);
+            stringBuilder.append(", mLayoutFromEnd=");
+            stringBuilder.append(this.mLayoutFromEnd);
+            stringBuilder.append(", mValid=");
+            stringBuilder.append(this.mValid);
+            stringBuilder.append('}');
+            return stringBuilder.toString();
         }
 
         /* Access modifiers changed, original: 0000 */
-        public boolean isViewValidAsAnchor(View child, State state) {
-            LayoutParams lp = (LayoutParams) child.getLayoutParams();
-            return !lp.isItemRemoved() && lp.getViewLayoutPosition() >= 0 && lp.getViewLayoutPosition() < state.getItemCount();
+        public boolean isViewValidAsAnchor(View view, State state) {
+            LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
+            return !layoutParams.isItemRemoved() && layoutParams.getViewLayoutPosition() >= 0 && layoutParams.getViewLayoutPosition() < state.getItemCount();
         }
 
-        public void assignFromViewAndKeepVisibleRect(View child, int position) {
-            int spaceChange = this.mOrientationHelper.getTotalSpaceChange();
-            if (spaceChange >= 0) {
-                assignFromView(child, position);
+        public void assignFromViewAndKeepVisibleRect(View view, int i) {
+            int totalSpaceChange = this.mOrientationHelper.getTotalSpaceChange();
+            if (totalSpaceChange >= 0) {
+                assignFromView(view, i);
                 return;
             }
-            this.mPosition = position;
-            int startMargin;
+            this.mPosition = i;
+            int decoratedMeasurement;
             if (this.mLayoutFromEnd) {
-                int previousEndMargin = (this.mOrientationHelper.getEndAfterPadding() - spaceChange) - this.mOrientationHelper.getDecoratedEnd(child);
-                this.mCoordinate = this.mOrientationHelper.getEndAfterPadding() - previousEndMargin;
-                if (previousEndMargin > 0) {
-                    int estimatedChildStart = this.mCoordinate - this.mOrientationHelper.getDecoratedMeasurement(child);
-                    int layoutStart = this.mOrientationHelper.getStartAfterPadding();
-                    startMargin = estimatedChildStart - (layoutStart + Math.min(this.mOrientationHelper.getDecoratedStart(child) - layoutStart, 0));
-                    if (startMargin < 0) {
-                        this.mCoordinate += Math.min(previousEndMargin, -startMargin);
-                        return;
+                i = (this.mOrientationHelper.getEndAfterPadding() - totalSpaceChange) - this.mOrientationHelper.getDecoratedEnd(view);
+                this.mCoordinate = this.mOrientationHelper.getEndAfterPadding() - i;
+                if (i > 0) {
+                    decoratedMeasurement = this.mCoordinate - this.mOrientationHelper.getDecoratedMeasurement(view);
+                    totalSpaceChange = this.mOrientationHelper.getStartAfterPadding();
+                    decoratedMeasurement -= totalSpaceChange + Math.min(this.mOrientationHelper.getDecoratedStart(view) - totalSpaceChange, 0);
+                    if (decoratedMeasurement < 0) {
+                        this.mCoordinate += Math.min(i, -decoratedMeasurement);
                     }
-                    return;
                 }
-                return;
-            }
-            int childStart = this.mOrientationHelper.getDecoratedStart(child);
-            startMargin = childStart - this.mOrientationHelper.getStartAfterPadding();
-            this.mCoordinate = childStart;
-            if (startMargin > 0) {
-                int endMargin = (this.mOrientationHelper.getEndAfterPadding() - Math.min(0, (this.mOrientationHelper.getEndAfterPadding() - spaceChange) - this.mOrientationHelper.getDecoratedEnd(child))) - (childStart + this.mOrientationHelper.getDecoratedMeasurement(child));
-                if (endMargin < 0) {
-                    this.mCoordinate -= Math.min(startMargin, -endMargin);
+            } else {
+                i = this.mOrientationHelper.getDecoratedStart(view);
+                decoratedMeasurement = i - this.mOrientationHelper.getStartAfterPadding();
+                this.mCoordinate = i;
+                if (decoratedMeasurement > 0) {
+                    int endAfterPadding = (this.mOrientationHelper.getEndAfterPadding() - Math.min(0, (this.mOrientationHelper.getEndAfterPadding() - totalSpaceChange) - this.mOrientationHelper.getDecoratedEnd(view))) - (i + this.mOrientationHelper.getDecoratedMeasurement(view));
+                    if (endAfterPadding < 0) {
+                        this.mCoordinate -= Math.min(decoratedMeasurement, -endAfterPadding);
+                    }
                 }
             }
         }
 
-        public void assignFromView(View child, int position) {
+        public void assignFromView(View view, int i) {
             if (this.mLayoutFromEnd) {
-                this.mCoordinate = this.mOrientationHelper.getDecoratedEnd(child) + this.mOrientationHelper.getTotalSpaceChange();
+                this.mCoordinate = this.mOrientationHelper.getDecoratedEnd(view) + this.mOrientationHelper.getTotalSpaceChange();
             } else {
-                this.mCoordinate = this.mOrientationHelper.getDecoratedStart(child);
+                this.mCoordinate = this.mOrientationHelper.getDecoratedStart(view);
             }
-            this.mPosition = position;
+            this.mPosition = i;
         }
     }
 
@@ -170,7 +178,8 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
 
         /* Access modifiers changed, original: 0000 */
         public boolean hasMore(State state) {
-            return this.mCurrentPosition >= 0 && this.mCurrentPosition < state.getItemCount();
+            int i = this.mCurrentPosition;
+            return i >= 0 && i < state.getItemCount();
         }
 
         /* Access modifiers changed, original: 0000 */
@@ -178,17 +187,17 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
             if (this.mScrapList != null) {
                 return nextViewFromScrapList();
             }
-            View view = recycler.getViewForPosition(this.mCurrentPosition);
+            View viewForPosition = recycler.getViewForPosition(this.mCurrentPosition);
             this.mCurrentPosition += this.mItemDirection;
-            return view;
+            return viewForPosition;
         }
 
         private View nextViewFromScrapList() {
             int size = this.mScrapList.size();
             for (int i = 0; i < size; i++) {
                 View view = ((ViewHolder) this.mScrapList.get(i)).itemView;
-                LayoutParams lp = (LayoutParams) view.getLayoutParams();
-                if (!lp.isItemRemoved() && this.mCurrentPosition == lp.getViewLayoutPosition()) {
+                LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
+                if (!layoutParams.isItemRemoved() && this.mCurrentPosition == layoutParams.getViewLayoutPosition()) {
                     assignPositionFromScrapList(view);
                     return view;
                 }
@@ -200,70 +209,85 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
             assignPositionFromScrapList(null);
         }
 
-        public void assignPositionFromScrapList(View ignore) {
-            View closest = nextViewInLimitedList(ignore);
-            if (closest == null) {
+        public void assignPositionFromScrapList(View view) {
+            view = nextViewInLimitedList(view);
+            if (view == null) {
                 this.mCurrentPosition = -1;
             } else {
-                this.mCurrentPosition = ((LayoutParams) closest.getLayoutParams()).getViewLayoutPosition();
+                this.mCurrentPosition = ((LayoutParams) view.getLayoutParams()).getViewLayoutPosition();
             }
         }
 
-        public View nextViewInLimitedList(View ignore) {
+        public View nextViewInLimitedList(View view) {
             int size = this.mScrapList.size();
-            View closest = null;
-            int closestDistance = Integer.MAX_VALUE;
-            for (int i = 0; i < size; i++) {
-                View view = ((ViewHolder) this.mScrapList.get(i)).itemView;
-                LayoutParams lp = (LayoutParams) view.getLayoutParams();
-                if (!(view == ignore || lp.isItemRemoved())) {
-                    int distance = (lp.getViewLayoutPosition() - this.mCurrentPosition) * this.mItemDirection;
-                    if (distance >= 0 && distance < closestDistance) {
-                        closest = view;
-                        closestDistance = distance;
-                        if (distance == 0) {
-                            break;
+            View view2 = null;
+            int i = Integer.MAX_VALUE;
+            for (int i2 = 0; i2 < size; i2++) {
+                View view3 = ((ViewHolder) this.mScrapList.get(i2)).itemView;
+                LayoutParams layoutParams = (LayoutParams) view3.getLayoutParams();
+                if (!(view3 == view || layoutParams.isItemRemoved())) {
+                    int viewLayoutPosition = (layoutParams.getViewLayoutPosition() - this.mCurrentPosition) * this.mItemDirection;
+                    if (viewLayoutPosition >= 0 && viewLayoutPosition < i) {
+                        if (viewLayoutPosition == 0) {
+                            return view3;
                         }
+                        view2 = view3;
+                        i = viewLayoutPosition;
                     }
                 }
             }
-            return closest;
+            return view2;
         }
 
         /* Access modifiers changed, original: 0000 */
         public void log() {
-            Log.d("LLM#LayoutState", "avail:" + this.mAvailable + ", ind:" + this.mCurrentPosition + ", dir:" + this.mItemDirection + ", offset:" + this.mOffset + ", layoutDir:" + this.mLayoutDirection);
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("avail:");
+            stringBuilder.append(this.mAvailable);
+            stringBuilder.append(", ind:");
+            stringBuilder.append(this.mCurrentPosition);
+            stringBuilder.append(", dir:");
+            stringBuilder.append(this.mItemDirection);
+            stringBuilder.append(", offset:");
+            stringBuilder.append(this.mOffset);
+            stringBuilder.append(", layoutDir:");
+            stringBuilder.append(this.mLayoutDirection);
+            Log.d("LLM#LayoutState", stringBuilder.toString());
         }
     }
 
     public static class SavedState implements Parcelable {
         public static final Creator<SavedState> CREATOR = new Creator<SavedState>() {
-            public SavedState createFromParcel(Parcel in) {
-                return new SavedState(in);
+            public SavedState createFromParcel(Parcel parcel) {
+                return new SavedState(parcel);
             }
 
-            public SavedState[] newArray(int size) {
-                return new SavedState[size];
+            public SavedState[] newArray(int i) {
+                return new SavedState[i];
             }
         };
         boolean mAnchorLayoutFromEnd;
         int mAnchorOffset;
         int mAnchorPosition;
 
-        SavedState(Parcel in) {
+        public int describeContents() {
+            return 0;
+        }
+
+        SavedState(Parcel parcel) {
+            this.mAnchorPosition = parcel.readInt();
+            this.mAnchorOffset = parcel.readInt();
             boolean z = true;
-            this.mAnchorPosition = in.readInt();
-            this.mAnchorOffset = in.readInt();
-            if (in.readInt() != 1) {
+            if (parcel.readInt() != 1) {
                 z = false;
             }
             this.mAnchorLayoutFromEnd = z;
         }
 
-        public SavedState(SavedState other) {
-            this.mAnchorPosition = other.mAnchorPosition;
-            this.mAnchorOffset = other.mAnchorOffset;
-            this.mAnchorLayoutFromEnd = other.mAnchorLayoutFromEnd;
+        public SavedState(SavedState savedState) {
+            this.mAnchorPosition = savedState.mAnchorPosition;
+            this.mAnchorOffset = savedState.mAnchorOffset;
+            this.mAnchorLayoutFromEnd = savedState.mAnchorLayoutFromEnd;
         }
 
         /* Access modifiers changed, original: 0000 */
@@ -276,22 +300,26 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
             this.mAnchorPosition = -1;
         }
 
-        public int describeContents() {
-            return 0;
+        public void writeToParcel(Parcel parcel, int i) {
+            parcel.writeInt(this.mAnchorPosition);
+            parcel.writeInt(this.mAnchorOffset);
+            parcel.writeInt(this.mAnchorLayoutFromEnd);
         }
+    }
 
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeInt(this.mAnchorPosition);
-            dest.writeInt(this.mAnchorOffset);
-            dest.writeInt(this.mAnchorLayoutFromEnd ? 1 : 0);
-        }
+    public boolean isAutoMeasureEnabled() {
+        return true;
+    }
+
+    /* Access modifiers changed, original: 0000 */
+    public void onAnchorReady(Recycler recycler, State state, AnchorInfo anchorInfo, int i) {
     }
 
     public LinearLayoutManager(Context context) {
         this(context, 1, false);
     }
 
-    public LinearLayoutManager(Context context, int orientation, boolean reverseLayout) {
+    public LinearLayoutManager(Context context, int i, boolean z) {
         this.mOrientation = 1;
         this.mReverseLayout = false;
         this.mShouldReverseLayout = false;
@@ -304,12 +332,8 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
         this.mAnchorInfo = new AnchorInfo();
         this.mLayoutChunkResult = new LayoutChunkResult();
         this.mInitialPrefetchItemCount = 2;
-        setOrientation(orientation);
-        setReverseLayout(reverseLayout);
-    }
-
-    public boolean isAutoMeasureEnabled() {
-        return true;
+        setOrientation(i);
+        setReverseLayout(z);
     }
 
     public LayoutParams generateDefaultLayoutParams() {
@@ -320,54 +344,55 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
         return this.mRecycleChildrenOnDetach;
     }
 
-    public void setRecycleChildrenOnDetach(boolean recycleChildrenOnDetach) {
-        this.mRecycleChildrenOnDetach = recycleChildrenOnDetach;
+    public void setRecycleChildrenOnDetach(boolean z) {
+        this.mRecycleChildrenOnDetach = z;
     }
 
-    public void onDetachedFromWindow(RecyclerView view, Recycler recycler) {
-        super.onDetachedFromWindow(view, recycler);
+    public void onDetachedFromWindow(RecyclerView recyclerView, Recycler recycler) {
+        super.onDetachedFromWindow(recyclerView, recycler);
         if (this.mRecycleChildrenOnDetach) {
             removeAndRecycleAllViews(recycler);
             recycler.clear();
         }
     }
 
-    public void onInitializeAccessibilityEvent(AccessibilityEvent event) {
-        super.onInitializeAccessibilityEvent(event);
+    public void onInitializeAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
+        super.onInitializeAccessibilityEvent(accessibilityEvent);
         if (getChildCount() > 0) {
-            event.setFromIndex(findFirstVisibleItemPosition());
-            event.setToIndex(findLastVisibleItemPosition());
+            accessibilityEvent.setFromIndex(findFirstVisibleItemPosition());
+            accessibilityEvent.setToIndex(findLastVisibleItemPosition());
         }
     }
 
     public Parcelable onSaveInstanceState() {
-        if (this.mPendingSavedState != null) {
-            return new SavedState(this.mPendingSavedState);
+        SavedState savedState = this.mPendingSavedState;
+        if (savedState != null) {
+            return new SavedState(savedState);
         }
-        Parcelable state = new SavedState();
+        savedState = new SavedState();
         if (getChildCount() > 0) {
             ensureLayoutState();
-            boolean didLayoutFromEnd = this.mLastStackFromEnd ^ this.mShouldReverseLayout;
-            state.mAnchorLayoutFromEnd = didLayoutFromEnd;
-            View refChild;
-            if (didLayoutFromEnd) {
-                refChild = getChildClosestToEnd();
-                state.mAnchorOffset = this.mOrientationHelper.getEndAfterPadding() - this.mOrientationHelper.getDecoratedEnd(refChild);
-                state.mAnchorPosition = getPosition(refChild);
-                return state;
+            int i = this.mLastStackFromEnd ^ this.mShouldReverseLayout;
+            savedState.mAnchorLayoutFromEnd = i;
+            View childClosestToEnd;
+            if (i != 0) {
+                childClosestToEnd = getChildClosestToEnd();
+                savedState.mAnchorOffset = this.mOrientationHelper.getEndAfterPadding() - this.mOrientationHelper.getDecoratedEnd(childClosestToEnd);
+                savedState.mAnchorPosition = getPosition(childClosestToEnd);
+            } else {
+                childClosestToEnd = getChildClosestToStart();
+                savedState.mAnchorPosition = getPosition(childClosestToEnd);
+                savedState.mAnchorOffset = this.mOrientationHelper.getDecoratedStart(childClosestToEnd) - this.mOrientationHelper.getStartAfterPadding();
             }
-            refChild = getChildClosestToStart();
-            state.mAnchorPosition = getPosition(refChild);
-            state.mAnchorOffset = this.mOrientationHelper.getDecoratedStart(refChild) - this.mOrientationHelper.getStartAfterPadding();
-            return state;
+        } else {
+            savedState.invalidateAnchor();
         }
-        state.invalidateAnchor();
-        return state;
+        return savedState;
     }
 
-    public void onRestoreInstanceState(Parcelable state) {
-        if (state instanceof SavedState) {
-            this.mPendingSavedState = (SavedState) state;
+    public void onRestoreInstanceState(Parcelable parcelable) {
+        if (parcelable instanceof SavedState) {
+            this.mPendingSavedState = (SavedState) parcelable;
             requestLayout();
         }
     }
@@ -380,10 +405,10 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
         return this.mOrientation == 1;
     }
 
-    public void setStackFromEnd(boolean stackFromEnd) {
+    public void setStackFromEnd(boolean z) {
         assertNotInLayoutOrScroll(null);
-        if (this.mStackFromEnd != stackFromEnd) {
-            this.mStackFromEnd = stackFromEnd;
+        if (this.mStackFromEnd != z) {
+            this.mStackFromEnd = z;
             requestLayout();
         }
     }
@@ -396,214 +421,225 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
         return this.mOrientation;
     }
 
-    public void setOrientation(int orientation) {
-        if (orientation == 0 || orientation == 1) {
+    public void setOrientation(int i) {
+        if (i == 0 || i == 1) {
             assertNotInLayoutOrScroll(null);
-            if (orientation != this.mOrientation || this.mOrientationHelper == null) {
-                this.mOrientationHelper = OrientationHelper.createOrientationHelper(this, orientation);
+            if (i != this.mOrientation || this.mOrientationHelper == null) {
+                this.mOrientationHelper = OrientationHelper.createOrientationHelper(this, i);
                 this.mAnchorInfo.mOrientationHelper = this.mOrientationHelper;
-                this.mOrientation = orientation;
+                this.mOrientation = i;
                 requestLayout();
                 return;
             }
             return;
         }
-        throw new IllegalArgumentException("invalid orientation:" + orientation);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("invalid orientation:");
+        stringBuilder.append(i);
+        throw new IllegalArgumentException(stringBuilder.toString());
     }
 
     private void resolveShouldLayoutReverse() {
-        boolean z = true;
         if (this.mOrientation == 1 || !isLayoutRTL()) {
             this.mShouldReverseLayout = this.mReverseLayout;
-            return;
+        } else {
+            this.mShouldReverseLayout = this.mReverseLayout ^ 1;
         }
-        if (this.mReverseLayout) {
-            z = false;
-        }
-        this.mShouldReverseLayout = z;
     }
 
     public boolean getReverseLayout() {
         return this.mReverseLayout;
     }
 
-    public void setReverseLayout(boolean reverseLayout) {
+    public void setReverseLayout(boolean z) {
         assertNotInLayoutOrScroll(null);
-        if (reverseLayout != this.mReverseLayout) {
-            this.mReverseLayout = reverseLayout;
+        if (z != this.mReverseLayout) {
+            this.mReverseLayout = z;
             requestLayout();
         }
     }
 
-    public View findViewByPosition(int position) {
+    public View findViewByPosition(int i) {
         int childCount = getChildCount();
         if (childCount == 0) {
             return null;
         }
-        int viewPosition = position - getPosition(getChildAt(0));
-        if (viewPosition >= 0 && viewPosition < childCount) {
-            View child = getChildAt(viewPosition);
-            if (getPosition(child) == position) {
-                return child;
+        int position = i - getPosition(getChildAt(0));
+        if (position >= 0 && position < childCount) {
+            View childAt = getChildAt(position);
+            if (getPosition(childAt) == i) {
+                return childAt;
             }
         }
-        return super.findViewByPosition(position);
+        return super.findViewByPosition(i);
     }
 
     /* Access modifiers changed, original: protected */
     public int getExtraLayoutSpace(State state) {
-        if (state.hasTargetScrollPosition()) {
-            return this.mOrientationHelper.getTotalSpace();
-        }
-        return 0;
+        return state.hasTargetScrollPosition() ? this.mOrientationHelper.getTotalSpace() : 0;
     }
 
-    public void smoothScrollToPosition(RecyclerView recyclerView, State state, int position) {
+    public void smoothScrollToPosition(RecyclerView recyclerView, State state, int i) {
         LinearSmoothScroller linearSmoothScroller = new LinearSmoothScroller(recyclerView.getContext());
-        linearSmoothScroller.setTargetPosition(position);
+        linearSmoothScroller.setTargetPosition(i);
         startSmoothScroll(linearSmoothScroller);
     }
 
-    public PointF computeScrollVectorForPosition(int targetPosition) {
-        boolean z = false;
+    public PointF computeScrollVectorForPosition(int i) {
         if (getChildCount() == 0) {
             return null;
         }
-        int direction;
-        if (targetPosition < getPosition(getChildAt(0))) {
+        boolean z = false;
+        int i2 = 1;
+        if (i < getPosition(getChildAt(0))) {
             z = true;
         }
         if (z != this.mShouldReverseLayout) {
-            direction = -1;
-        } else {
-            direction = 1;
+            i2 = -1;
         }
         if (this.mOrientation == 0) {
-            return new PointF((float) direction, 0.0f);
+            return new PointF((float) i2, 0.0f);
         }
-        return new PointF(0.0f, (float) direction);
+        return new PointF(0.0f, (float) i2);
     }
 
     public void onLayoutChildren(Recycler recycler, State state) {
+        int i = -1;
         if (!(this.mPendingSavedState == null && this.mPendingScrollPosition == -1) && state.getItemCount() == 0) {
             removeAndRecycleAllViews(recycler);
             return;
         }
-        int extraForEnd;
-        int extraForStart;
-        int startOffset;
-        int endOffset;
-        if (this.mPendingSavedState != null && this.mPendingSavedState.hasValidAnchor()) {
+        int i2;
+        int i3;
+        SavedState savedState = this.mPendingSavedState;
+        if (savedState != null && savedState.hasValidAnchor()) {
             this.mPendingScrollPosition = this.mPendingSavedState.mAnchorPosition;
         }
         ensureLayoutState();
         this.mLayoutState.mRecycle = false;
         resolveShouldLayoutReverse();
-        View focused = getFocusedChild();
+        View focusedChild = getFocusedChild();
         if (!this.mAnchorInfo.mValid || this.mPendingScrollPosition != -1 || this.mPendingSavedState != null) {
             this.mAnchorInfo.reset();
-            this.mAnchorInfo.mLayoutFromEnd = this.mShouldReverseLayout ^ this.mStackFromEnd;
-            updateAnchorInfoForLayout(recycler, state, this.mAnchorInfo);
+            AnchorInfo anchorInfo = this.mAnchorInfo;
+            anchorInfo.mLayoutFromEnd = this.mShouldReverseLayout ^ this.mStackFromEnd;
+            updateAnchorInfoForLayout(recycler, state, anchorInfo);
             this.mAnchorInfo.mValid = true;
-        } else if (focused != null && (this.mOrientationHelper.getDecoratedStart(focused) >= this.mOrientationHelper.getEndAfterPadding() || this.mOrientationHelper.getDecoratedEnd(focused) <= this.mOrientationHelper.getStartAfterPadding())) {
-            this.mAnchorInfo.assignFromViewAndKeepVisibleRect(focused, getPosition(focused));
+        } else if (focusedChild != null && (this.mOrientationHelper.getDecoratedStart(focusedChild) >= this.mOrientationHelper.getEndAfterPadding() || this.mOrientationHelper.getDecoratedEnd(focusedChild) <= this.mOrientationHelper.getStartAfterPadding())) {
+            this.mAnchorInfo.assignFromViewAndKeepVisibleRect(focusedChild, getPosition(focusedChild));
         }
-        int extra = getExtraLayoutSpace(state);
+        int extraLayoutSpace = getExtraLayoutSpace(state);
         if (this.mLayoutState.mLastScrollDelta >= 0) {
-            extraForEnd = extra;
-            extraForStart = 0;
+            i2 = extraLayoutSpace;
+            extraLayoutSpace = 0;
         } else {
-            extraForStart = extra;
-            extraForEnd = 0;
+            i2 = 0;
         }
-        extraForStart += this.mOrientationHelper.getStartAfterPadding();
-        extraForEnd += this.mOrientationHelper.getEndPadding();
-        if (!(!state.isPreLayout() || this.mPendingScrollPosition == -1 || this.mPendingScrollPositionOffset == Integer.MIN_VALUE)) {
-            View existing = findViewByPosition(this.mPendingScrollPosition);
-            if (existing != null) {
-                int upcomingOffset;
-                if (this.mPendingScrollPositionBottom) {
-                    upcomingOffset = (this.mOrientationHelper.getEndAfterPadding() - this.mOrientationHelper.getDecoratedEnd(existing)) - this.mPendingScrollPositionOffset;
-                } else {
-                    upcomingOffset = this.mPendingScrollPositionOffset - (this.mOrientationHelper.getDecoratedStart(existing) - this.mOrientationHelper.getStartAfterPadding());
-                }
-                if (upcomingOffset > 0) {
-                    extraForStart += upcomingOffset;
-                } else {
-                    extraForEnd -= upcomingOffset;
+        extraLayoutSpace += this.mOrientationHelper.getStartAfterPadding();
+        i2 += this.mOrientationHelper.getEndPadding();
+        if (state.isPreLayout()) {
+            i3 = this.mPendingScrollPosition;
+            if (!(i3 == -1 || this.mPendingScrollPositionOffset == Integer.MIN_VALUE)) {
+                View findViewByPosition = findViewByPosition(i3);
+                if (findViewByPosition != null) {
+                    int endAfterPadding;
+                    if (this.mPendingScrollPositionBottom) {
+                        endAfterPadding = this.mOrientationHelper.getEndAfterPadding() - this.mOrientationHelper.getDecoratedEnd(findViewByPosition);
+                        i3 = this.mPendingScrollPositionOffset;
+                    } else {
+                        i3 = this.mOrientationHelper.getDecoratedStart(findViewByPosition) - this.mOrientationHelper.getStartAfterPadding();
+                        endAfterPadding = this.mPendingScrollPositionOffset;
+                    }
+                    endAfterPadding -= i3;
+                    if (endAfterPadding > 0) {
+                        extraLayoutSpace += endAfterPadding;
+                    } else {
+                        i2 -= endAfterPadding;
+                    }
                 }
             }
         }
-        int firstLayoutDirection = this.mAnchorInfo.mLayoutFromEnd ? this.mShouldReverseLayout ? 1 : -1 : this.mShouldReverseLayout ? -1 : 1;
-        onAnchorReady(recycler, state, this.mAnchorInfo, firstLayoutDirection);
+        if (this.mAnchorInfo.mLayoutFromEnd ? this.mShouldReverseLayout : !this.mShouldReverseLayout) {
+            i = 1;
+        }
+        onAnchorReady(recycler, state, this.mAnchorInfo, i);
         detachAndScrapAttachedViews(recycler);
         this.mLayoutState.mInfinite = resolveIsInfinite();
         this.mLayoutState.mIsPreLayout = state.isPreLayout();
+        AnchorInfo anchorInfo2 = this.mAnchorInfo;
         LayoutState layoutState;
-        if (this.mAnchorInfo.mLayoutFromEnd) {
-            updateLayoutStateToFillStart(this.mAnchorInfo);
-            this.mLayoutState.mExtra = extraForStart;
-            fill(recycler, this.mLayoutState, state, false);
-            startOffset = this.mLayoutState.mOffset;
-            int firstElement = this.mLayoutState.mCurrentPosition;
-            if (this.mLayoutState.mAvailable > 0) {
-                extraForEnd += this.mLayoutState.mAvailable;
+        LayoutState layoutState2;
+        if (anchorInfo2.mLayoutFromEnd) {
+            updateLayoutStateToFillStart(anchorInfo2);
+            layoutState = this.mLayoutState;
+            layoutState.mExtra = extraLayoutSpace;
+            fill(recycler, layoutState, state, false);
+            layoutState2 = this.mLayoutState;
+            i = layoutState2.mOffset;
+            i3 = layoutState2.mCurrentPosition;
+            extraLayoutSpace = layoutState2.mAvailable;
+            if (extraLayoutSpace > 0) {
+                i2 += extraLayoutSpace;
             }
             updateLayoutStateToFillEnd(this.mAnchorInfo);
-            this.mLayoutState.mExtra = extraForEnd;
-            layoutState = this.mLayoutState;
-            layoutState.mCurrentPosition += this.mLayoutState.mItemDirection;
-            fill(recycler, this.mLayoutState, state, false);
-            endOffset = this.mLayoutState.mOffset;
-            if (this.mLayoutState.mAvailable > 0) {
-                extraForStart = this.mLayoutState.mAvailable;
-                updateLayoutStateToFillStart(firstElement, startOffset);
-                this.mLayoutState.mExtra = extraForStart;
-                fill(recycler, this.mLayoutState, state, false);
-                startOffset = this.mLayoutState.mOffset;
+            layoutState2 = this.mLayoutState;
+            layoutState2.mExtra = i2;
+            layoutState2.mCurrentPosition += layoutState2.mItemDirection;
+            fill(recycler, layoutState2, state, false);
+            layoutState2 = this.mLayoutState;
+            i2 = layoutState2.mOffset;
+            extraLayoutSpace = layoutState2.mAvailable;
+            if (extraLayoutSpace > 0) {
+                updateLayoutStateToFillStart(i3, i);
+                layoutState = this.mLayoutState;
+                layoutState.mExtra = extraLayoutSpace;
+                fill(recycler, layoutState, state, false);
+                i = this.mLayoutState.mOffset;
             }
         } else {
-            updateLayoutStateToFillEnd(this.mAnchorInfo);
-            this.mLayoutState.mExtra = extraForEnd;
-            fill(recycler, this.mLayoutState, state, false);
-            endOffset = this.mLayoutState.mOffset;
-            int lastElement = this.mLayoutState.mCurrentPosition;
-            if (this.mLayoutState.mAvailable > 0) {
-                extraForStart += this.mLayoutState.mAvailable;
+            updateLayoutStateToFillEnd(anchorInfo2);
+            layoutState = this.mLayoutState;
+            layoutState.mExtra = i2;
+            fill(recycler, layoutState, state, false);
+            layoutState = this.mLayoutState;
+            i2 = layoutState.mOffset;
+            i3 = layoutState.mCurrentPosition;
+            i = layoutState.mAvailable;
+            if (i > 0) {
+                extraLayoutSpace += i;
             }
             updateLayoutStateToFillStart(this.mAnchorInfo);
-            this.mLayoutState.mExtra = extraForStart;
             layoutState = this.mLayoutState;
-            layoutState.mCurrentPosition += this.mLayoutState.mItemDirection;
-            fill(recycler, this.mLayoutState, state, false);
-            startOffset = this.mLayoutState.mOffset;
-            if (this.mLayoutState.mAvailable > 0) {
-                extraForEnd = this.mLayoutState.mAvailable;
-                updateLayoutStateToFillEnd(lastElement, endOffset);
-                this.mLayoutState.mExtra = extraForEnd;
-                fill(recycler, this.mLayoutState, state, false);
-                endOffset = this.mLayoutState.mOffset;
+            layoutState.mExtra = extraLayoutSpace;
+            layoutState.mCurrentPosition += layoutState.mItemDirection;
+            fill(recycler, layoutState, state, false);
+            layoutState2 = this.mLayoutState;
+            i = layoutState2.mOffset;
+            extraLayoutSpace = layoutState2.mAvailable;
+            if (extraLayoutSpace > 0) {
+                updateLayoutStateToFillEnd(i3, i2);
+                LayoutState layoutState3 = this.mLayoutState;
+                layoutState3.mExtra = extraLayoutSpace;
+                fill(recycler, layoutState3, state, false);
+                i2 = this.mLayoutState.mOffset;
             }
         }
         if (getChildCount() > 0) {
-            int fixOffset;
             if ((this.mShouldReverseLayout ^ this.mStackFromEnd) != 0) {
-                fixOffset = fixLayoutEndGap(endOffset, recycler, state, true);
-                startOffset += fixOffset;
-                endOffset += fixOffset;
-                fixOffset = fixLayoutStartGap(startOffset, recycler, state, false);
-                startOffset += fixOffset;
-                endOffset += fixOffset;
+                extraLayoutSpace = fixLayoutEndGap(i2, recycler, state, true);
+                i += extraLayoutSpace;
+                i2 += extraLayoutSpace;
+                extraLayoutSpace = fixLayoutStartGap(i, recycler, state, false);
             } else {
-                fixOffset = fixLayoutStartGap(startOffset, recycler, state, true);
-                startOffset += fixOffset;
-                endOffset += fixOffset;
-                fixOffset = fixLayoutEndGap(endOffset, recycler, state, false);
-                startOffset += fixOffset;
-                endOffset += fixOffset;
+                extraLayoutSpace = fixLayoutStartGap(i, recycler, state, true);
+                i += extraLayoutSpace;
+                i2 += extraLayoutSpace;
+                extraLayoutSpace = fixLayoutEndGap(i2, recycler, state, false);
             }
+            i += extraLayoutSpace;
+            i2 += extraLayoutSpace;
         }
-        layoutForPredictiveAnimations(recycler, state, startOffset, endOffset);
+        layoutForPredictiveAnimations(recycler, state, i, i2);
         if (state.isPreLayout()) {
             this.mAnchorInfo.reset();
         } else {
@@ -620,41 +656,46 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
         this.mAnchorInfo.reset();
     }
 
-    /* Access modifiers changed, original: 0000 */
-    public void onAnchorReady(Recycler recycler, State state, AnchorInfo anchorInfo, int firstLayoutItemDirection) {
-    }
-
-    private void layoutForPredictiveAnimations(Recycler recycler, State state, int startOffset, int endOffset) {
+    private void layoutForPredictiveAnimations(Recycler recycler, State state, int i, int i2) {
+        Recycler recycler2 = recycler;
+        State state2 = state;
         if (state.willRunPredictiveAnimations() && getChildCount() != 0 && !state.isPreLayout() && supportsPredictiveItemAnimations()) {
-            int scrapExtraStart = 0;
-            int scrapExtraEnd = 0;
-            List<ViewHolder> scrapList = recycler.getScrapList();
-            int scrapSize = scrapList.size();
-            int firstChildPos = getPosition(getChildAt(0));
-            for (int i = 0; i < scrapSize; i++) {
-                ViewHolder scrap = (ViewHolder) scrapList.get(i);
-                if (!scrap.isRemoved()) {
-                    if (((scrap.getLayoutPosition() < firstChildPos) != this.mShouldReverseLayout ? -1 : 1) == -1) {
-                        scrapExtraStart += this.mOrientationHelper.getDecoratedMeasurement(scrap.itemView);
+            LayoutState layoutState;
+            List scrapList = recycler.getScrapList();
+            int size = scrapList.size();
+            int position = getPosition(getChildAt(0));
+            int i3 = 0;
+            int i4 = 0;
+            for (int i5 = 0; i5 < size; i5++) {
+                ViewHolder viewHolder = (ViewHolder) scrapList.get(i5);
+                if (!viewHolder.isRemoved()) {
+                    int i6 = 1;
+                    if ((viewHolder.getLayoutPosition() < position) != this.mShouldReverseLayout) {
+                        i6 = -1;
+                    }
+                    if (i6 == -1) {
+                        i3 += this.mOrientationHelper.getDecoratedMeasurement(viewHolder.itemView);
                     } else {
-                        scrapExtraEnd += this.mOrientationHelper.getDecoratedMeasurement(scrap.itemView);
+                        i4 += this.mOrientationHelper.getDecoratedMeasurement(viewHolder.itemView);
                     }
                 }
             }
             this.mLayoutState.mScrapList = scrapList;
-            if (scrapExtraStart > 0) {
-                updateLayoutStateToFillStart(getPosition(getChildClosestToStart()), startOffset);
-                this.mLayoutState.mExtra = scrapExtraStart;
-                this.mLayoutState.mAvailable = 0;
-                this.mLayoutState.assignPositionFromScrapList();
-                fill(recycler, this.mLayoutState, state, false);
+            if (i3 > 0) {
+                updateLayoutStateToFillStart(getPosition(getChildClosestToStart()), i);
+                layoutState = this.mLayoutState;
+                layoutState.mExtra = i3;
+                layoutState.mAvailable = 0;
+                layoutState.assignPositionFromScrapList();
+                fill(recycler2, this.mLayoutState, state2, false);
             }
-            if (scrapExtraEnd > 0) {
-                updateLayoutStateToFillEnd(getPosition(getChildClosestToEnd()), endOffset);
-                this.mLayoutState.mExtra = scrapExtraEnd;
-                this.mLayoutState.mAvailable = 0;
-                this.mLayoutState.assignPositionFromScrapList();
-                fill(recycler, this.mLayoutState, state, false);
+            if (i4 > 0) {
+                updateLayoutStateToFillEnd(getPosition(getChildClosestToEnd()), i2);
+                layoutState = this.mLayoutState;
+                layoutState.mExtra = i4;
+                layoutState.mAvailable = 0;
+                layoutState.assignPositionFromScrapList();
+                fill(recycler2, this.mLayoutState, state2, false);
             }
             this.mLayoutState.mScrapList = null;
         }
@@ -668,34 +709,32 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
     }
 
     private boolean updateAnchorFromChildren(Recycler recycler, State state, AnchorInfo anchorInfo) {
+        boolean z = false;
         if (getChildCount() == 0) {
             return false;
         }
-        View focused = getFocusedChild();
-        if (focused != null && anchorInfo.isViewValidAsAnchor(focused, state)) {
-            anchorInfo.assignFromViewAndKeepVisibleRect(focused, getPosition(focused));
+        View focusedChild = getFocusedChild();
+        if (focusedChild != null && anchorInfo.isViewValidAsAnchor(focusedChild, state)) {
+            anchorInfo.assignFromViewAndKeepVisibleRect(focusedChild, getPosition(focusedChild));
             return true;
         } else if (this.mLastStackFromEnd != this.mStackFromEnd) {
             return false;
         } else {
-            View referenceChild;
+            View findReferenceChildClosestToEnd;
             if (anchorInfo.mLayoutFromEnd) {
-                referenceChild = findReferenceChildClosestToEnd(recycler, state);
+                findReferenceChildClosestToEnd = findReferenceChildClosestToEnd(recycler, state);
             } else {
-                referenceChild = findReferenceChildClosestToStart(recycler, state);
+                findReferenceChildClosestToEnd = findReferenceChildClosestToStart(recycler, state);
             }
-            if (referenceChild == null) {
+            if (findReferenceChildClosestToEnd == null) {
                 return false;
             }
-            anchorInfo.assignFromView(referenceChild, getPosition(referenceChild));
+            anchorInfo.assignFromView(findReferenceChildClosestToEnd, getPosition(findReferenceChildClosestToEnd));
             if (!state.isPreLayout() && supportsPredictiveItemAnimations()) {
-                boolean notVisible;
-                if (this.mOrientationHelper.getDecoratedStart(referenceChild) >= this.mOrientationHelper.getEndAfterPadding() || this.mOrientationHelper.getDecoratedEnd(referenceChild) < this.mOrientationHelper.getStartAfterPadding()) {
-                    notVisible = true;
-                } else {
-                    notVisible = false;
+                if (this.mOrientationHelper.getDecoratedStart(findReferenceChildClosestToEnd) >= this.mOrientationHelper.getEndAfterPadding() || this.mOrientationHelper.getDecoratedEnd(findReferenceChildClosestToEnd) < this.mOrientationHelper.getStartAfterPadding()) {
+                    z = true;
                 }
-                if (notVisible) {
+                if (z) {
                     int endAfterPadding;
                     if (anchorInfo.mLayoutFromEnd) {
                         endAfterPadding = this.mOrientationHelper.getEndAfterPadding();
@@ -711,132 +750,131 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
 
     private boolean updateAnchorFromPendingData(State state, AnchorInfo anchorInfo) {
         boolean z = false;
-        if (state.isPreLayout() || this.mPendingScrollPosition == -1) {
-            return false;
-        }
-        if (this.mPendingScrollPosition < 0 || this.mPendingScrollPosition >= state.getItemCount()) {
-            this.mPendingScrollPosition = -1;
-            this.mPendingScrollPositionOffset = Integer.MIN_VALUE;
-            return false;
-        }
-        anchorInfo.mPosition = this.mPendingScrollPosition;
-        if (this.mPendingSavedState != null && this.mPendingSavedState.hasValidAnchor()) {
-            anchorInfo.mLayoutFromEnd = this.mPendingSavedState.mAnchorLayoutFromEnd;
-            if (anchorInfo.mLayoutFromEnd) {
-                anchorInfo.mCoordinate = this.mOrientationHelper.getEndAfterPadding() - this.mPendingSavedState.mAnchorOffset;
-                return true;
-            }
-            anchorInfo.mCoordinate = this.mOrientationHelper.getStartAfterPadding() + this.mPendingSavedState.mAnchorOffset;
-            return true;
-        } else if (this.mPendingScrollPositionOffset == Integer.MIN_VALUE) {
-            View child = findViewByPosition(this.mPendingScrollPosition);
-            if (child == null) {
-                if (getChildCount() > 0) {
-                    boolean z2;
-                    if (this.mPendingScrollPosition < getPosition(getChildAt(0))) {
-                        z2 = true;
-                    } else {
-                        z2 = false;
-                    }
-                    if (z2 == this.mPendingScrollPositionBottom) {
-                        z = true;
-                    }
-                    anchorInfo.mLayoutFromEnd = z;
-                }
-                anchorInfo.assignCoordinateFromPadding();
-                return true;
-            } else if (this.mOrientationHelper.getDecoratedMeasurement(child) > this.mOrientationHelper.getTotalSpace()) {
-                anchorInfo.assignCoordinateFromPadding();
-                return true;
-            } else if (this.mOrientationHelper.getDecoratedStart(child) - this.mOrientationHelper.getStartAfterPadding() < 0) {
-                anchorInfo.mCoordinate = this.mOrientationHelper.getStartAfterPadding();
-                anchorInfo.mLayoutFromEnd = false;
-                return true;
-            } else if (this.mOrientationHelper.getEndAfterPadding() - this.mOrientationHelper.getDecoratedEnd(child) < 0) {
-                anchorInfo.mCoordinate = this.mOrientationHelper.getEndAfterPadding();
-                anchorInfo.mLayoutFromEnd = true;
-                return true;
-            } else {
-                int decoratedEnd;
-                if (anchorInfo.mLayoutFromEnd) {
-                    decoratedEnd = this.mOrientationHelper.getDecoratedEnd(child) + this.mOrientationHelper.getTotalSpaceChange();
+        if (!state.isPreLayout()) {
+            int i = this.mPendingScrollPosition;
+            if (i != -1) {
+                if (i < 0 || i >= state.getItemCount()) {
+                    this.mPendingScrollPosition = -1;
+                    this.mPendingScrollPositionOffset = Integer.MIN_VALUE;
                 } else {
-                    decoratedEnd = this.mOrientationHelper.getDecoratedStart(child);
+                    anchorInfo.mPosition = this.mPendingScrollPosition;
+                    SavedState savedState = this.mPendingSavedState;
+                    if (savedState != null && savedState.hasValidAnchor()) {
+                        anchorInfo.mLayoutFromEnd = this.mPendingSavedState.mAnchorLayoutFromEnd;
+                        if (anchorInfo.mLayoutFromEnd) {
+                            anchorInfo.mCoordinate = this.mOrientationHelper.getEndAfterPadding() - this.mPendingSavedState.mAnchorOffset;
+                        } else {
+                            anchorInfo.mCoordinate = this.mOrientationHelper.getStartAfterPadding() + this.mPendingSavedState.mAnchorOffset;
+                        }
+                        return true;
+                    } else if (this.mPendingScrollPositionOffset == Integer.MIN_VALUE) {
+                        View findViewByPosition = findViewByPosition(this.mPendingScrollPosition);
+                        if (findViewByPosition == null) {
+                            if (getChildCount() > 0) {
+                                if ((this.mPendingScrollPosition < getPosition(getChildAt(0))) == this.mPendingScrollPositionBottom) {
+                                    z = true;
+                                }
+                                anchorInfo.mLayoutFromEnd = z;
+                            }
+                            anchorInfo.assignCoordinateFromPadding();
+                        } else if (this.mOrientationHelper.getDecoratedMeasurement(findViewByPosition) > this.mOrientationHelper.getTotalSpace()) {
+                            anchorInfo.assignCoordinateFromPadding();
+                            return true;
+                        } else if (this.mOrientationHelper.getDecoratedStart(findViewByPosition) - this.mOrientationHelper.getStartAfterPadding() < 0) {
+                            anchorInfo.mCoordinate = this.mOrientationHelper.getStartAfterPadding();
+                            anchorInfo.mLayoutFromEnd = false;
+                            return true;
+                        } else if (this.mOrientationHelper.getEndAfterPadding() - this.mOrientationHelper.getDecoratedEnd(findViewByPosition) < 0) {
+                            anchorInfo.mCoordinate = this.mOrientationHelper.getEndAfterPadding();
+                            anchorInfo.mLayoutFromEnd = true;
+                            return true;
+                        } else {
+                            int decoratedEnd;
+                            if (anchorInfo.mLayoutFromEnd) {
+                                decoratedEnd = this.mOrientationHelper.getDecoratedEnd(findViewByPosition) + this.mOrientationHelper.getTotalSpaceChange();
+                            } else {
+                                decoratedEnd = this.mOrientationHelper.getDecoratedStart(findViewByPosition);
+                            }
+                            anchorInfo.mCoordinate = decoratedEnd;
+                        }
+                        return true;
+                    } else {
+                        boolean z2 = this.mPendingScrollPositionBottom;
+                        anchorInfo.mLayoutFromEnd = z2;
+                        if (z2) {
+                            anchorInfo.mCoordinate = this.mOrientationHelper.getEndAfterPadding() - this.mPendingScrollPositionOffset;
+                        } else {
+                            anchorInfo.mCoordinate = this.mOrientationHelper.getStartAfterPadding() + this.mPendingScrollPositionOffset;
+                        }
+                        return true;
+                    }
                 }
-                anchorInfo.mCoordinate = decoratedEnd;
-                return true;
             }
-        } else {
-            anchorInfo.mLayoutFromEnd = this.mPendingScrollPositionBottom;
-            if (this.mPendingScrollPositionBottom) {
-                anchorInfo.mCoordinate = this.mOrientationHelper.getEndAfterPadding() - this.mPendingScrollPositionOffset;
-                return true;
-            }
-            anchorInfo.mCoordinate = this.mOrientationHelper.getStartAfterPadding() + this.mPendingScrollPositionOffset;
-            return true;
         }
+        return false;
     }
 
-    private int fixLayoutEndGap(int endOffset, Recycler recycler, State state, boolean canOffsetChildren) {
-        int gap = this.mOrientationHelper.getEndAfterPadding() - endOffset;
-        if (gap > 0) {
-            int fixOffset = -scrollBy(-gap, recycler, state);
-            endOffset += fixOffset;
-            if (canOffsetChildren) {
-                gap = this.mOrientationHelper.getEndAfterPadding() - endOffset;
-                if (gap > 0) {
-                    this.mOrientationHelper.offsetChildren(gap);
-                    return gap + fixOffset;
-                }
-            }
-            return fixOffset;
+    private int fixLayoutEndGap(int i, Recycler recycler, State state, boolean z) {
+        int endAfterPadding = this.mOrientationHelper.getEndAfterPadding() - i;
+        if (endAfterPadding <= 0) {
+            return 0;
         }
-        int i = 0;
-        return 0;
+        int i2 = -scrollBy(-endAfterPadding, recycler, state);
+        i += i2;
+        if (z) {
+            int endAfterPadding2 = this.mOrientationHelper.getEndAfterPadding() - i;
+            if (endAfterPadding2 > 0) {
+                this.mOrientationHelper.offsetChildren(endAfterPadding2);
+                return endAfterPadding2 + i2;
+            }
+        }
+        return i2;
     }
 
-    private int fixLayoutStartGap(int startOffset, Recycler recycler, State state, boolean canOffsetChildren) {
-        int gap = startOffset - this.mOrientationHelper.getStartAfterPadding();
-        if (gap > 0) {
-            int fixOffset = -scrollBy(gap, recycler, state);
-            startOffset += fixOffset;
-            if (canOffsetChildren) {
-                gap = startOffset - this.mOrientationHelper.getStartAfterPadding();
-                if (gap > 0) {
-                    this.mOrientationHelper.offsetChildren(-gap);
-                    return fixOffset - gap;
-                }
-            }
-            return fixOffset;
+    private int fixLayoutStartGap(int i, Recycler recycler, State state, boolean z) {
+        int startAfterPadding = i - this.mOrientationHelper.getStartAfterPadding();
+        if (startAfterPadding <= 0) {
+            return 0;
         }
-        int i = 0;
-        return 0;
+        int i2 = -scrollBy(startAfterPadding, recycler, state);
+        i += i2;
+        if (z) {
+            i -= this.mOrientationHelper.getStartAfterPadding();
+            if (i > 0) {
+                this.mOrientationHelper.offsetChildren(-i);
+                i2 -= i;
+            }
+        }
+        return i2;
     }
 
     private void updateLayoutStateToFillEnd(AnchorInfo anchorInfo) {
         updateLayoutStateToFillEnd(anchorInfo.mPosition, anchorInfo.mCoordinate);
     }
 
-    private void updateLayoutStateToFillEnd(int itemPosition, int offset) {
-        this.mLayoutState.mAvailable = this.mOrientationHelper.getEndAfterPadding() - offset;
+    private void updateLayoutStateToFillEnd(int i, int i2) {
+        this.mLayoutState.mAvailable = this.mOrientationHelper.getEndAfterPadding() - i2;
         this.mLayoutState.mItemDirection = this.mShouldReverseLayout ? -1 : 1;
-        this.mLayoutState.mCurrentPosition = itemPosition;
-        this.mLayoutState.mLayoutDirection = 1;
-        this.mLayoutState.mOffset = offset;
-        this.mLayoutState.mScrollingOffset = Integer.MIN_VALUE;
+        LayoutState layoutState = this.mLayoutState;
+        layoutState.mCurrentPosition = i;
+        layoutState.mLayoutDirection = 1;
+        layoutState.mOffset = i2;
+        layoutState.mScrollingOffset = Integer.MIN_VALUE;
     }
 
     private void updateLayoutStateToFillStart(AnchorInfo anchorInfo) {
         updateLayoutStateToFillStart(anchorInfo.mPosition, anchorInfo.mCoordinate);
     }
 
-    private void updateLayoutStateToFillStart(int itemPosition, int offset) {
-        this.mLayoutState.mAvailable = offset - this.mOrientationHelper.getStartAfterPadding();
-        this.mLayoutState.mCurrentPosition = itemPosition;
-        this.mLayoutState.mItemDirection = this.mShouldReverseLayout ? 1 : -1;
-        this.mLayoutState.mLayoutDirection = -1;
-        this.mLayoutState.mOffset = offset;
-        this.mLayoutState.mScrollingOffset = Integer.MIN_VALUE;
+    private void updateLayoutStateToFillStart(int i, int i2) {
+        this.mLayoutState.mAvailable = i2 - this.mOrientationHelper.getStartAfterPadding();
+        LayoutState layoutState = this.mLayoutState;
+        layoutState.mCurrentPosition = i;
+        layoutState.mItemDirection = this.mShouldReverseLayout ? 1 : -1;
+        LayoutState layoutState2 = this.mLayoutState;
+        layoutState2.mLayoutDirection = -1;
+        layoutState2.mOffset = i2;
+        layoutState2.mScrollingOffset = Integer.MIN_VALUE;
     }
 
     /* Access modifiers changed, original: protected */
@@ -856,41 +894,43 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
         return new LayoutState();
     }
 
-    public void scrollToPosition(int position) {
-        this.mPendingScrollPosition = position;
+    public void scrollToPosition(int i) {
+        this.mPendingScrollPosition = i;
         this.mPendingScrollPositionOffset = Integer.MIN_VALUE;
-        if (this.mPendingSavedState != null) {
-            this.mPendingSavedState.invalidateAnchor();
+        SavedState savedState = this.mPendingSavedState;
+        if (savedState != null) {
+            savedState.invalidateAnchor();
         }
         requestLayout();
     }
 
-    public void scrollToPositionWithOffset(int position, int offset) {
-        scrollToPositionWithOffset(position, offset, this.mShouldReverseLayout);
+    public void scrollToPositionWithOffset(int i, int i2) {
+        scrollToPositionWithOffset(i, i2, this.mShouldReverseLayout);
     }
 
-    public void scrollToPositionWithOffset(int position, int offset, boolean bottom) {
-        this.mPendingScrollPosition = position;
-        this.mPendingScrollPositionOffset = offset;
-        this.mPendingScrollPositionBottom = bottom;
-        if (this.mPendingSavedState != null) {
-            this.mPendingSavedState.invalidateAnchor();
+    public void scrollToPositionWithOffset(int i, int i2, boolean z) {
+        this.mPendingScrollPosition = i;
+        this.mPendingScrollPositionOffset = i2;
+        this.mPendingScrollPositionBottom = z;
+        SavedState savedState = this.mPendingSavedState;
+        if (savedState != null) {
+            savedState.invalidateAnchor();
         }
         requestLayout();
     }
 
-    public int scrollHorizontallyBy(int dx, Recycler recycler, State state) {
+    public int scrollHorizontallyBy(int i, Recycler recycler, State state) {
         if (this.mOrientation == 1) {
             return 0;
         }
-        return scrollBy(dx, recycler, state);
+        return scrollBy(i, recycler, state);
     }
 
-    public int scrollVerticallyBy(int dy, Recycler recycler, State state) {
+    public int scrollVerticallyBy(int i, Recycler recycler, State state) {
         if (this.mOrientation == 0) {
             return 0;
         }
-        return scrollBy(dy, recycler, state);
+        return scrollBy(i, recycler, state);
     }
 
     public int computeHorizontalScrollOffset(State state) {
@@ -918,95 +958,87 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
     }
 
     private int computeScrollOffset(State state) {
-        boolean z = false;
         if (getChildCount() == 0) {
             return 0;
         }
         ensureLayoutState();
         OrientationHelper orientationHelper = this.mOrientationHelper;
-        View findFirstVisibleChildClosestToStart = findFirstVisibleChildClosestToStart(!this.mSmoothScrollbarEnabled, true);
-        if (!this.mSmoothScrollbarEnabled) {
-            z = true;
-        }
-        return ScrollbarHelper.computeScrollOffset(state, orientationHelper, findFirstVisibleChildClosestToStart, findFirstVisibleChildClosestToEnd(z, true), this, this.mSmoothScrollbarEnabled, this.mShouldReverseLayout);
+        View findFirstVisibleChildClosestToStart = findFirstVisibleChildClosestToStart(this.mSmoothScrollbarEnabled ^ 1, true);
+        return ScrollbarHelper.computeScrollOffset(state, orientationHelper, findFirstVisibleChildClosestToStart, findFirstVisibleChildClosestToEnd(this.mSmoothScrollbarEnabled ^ 1, true), this, this.mSmoothScrollbarEnabled, this.mShouldReverseLayout);
     }
 
     private int computeScrollExtent(State state) {
-        boolean z = false;
         if (getChildCount() == 0) {
             return 0;
         }
         ensureLayoutState();
         OrientationHelper orientationHelper = this.mOrientationHelper;
-        View findFirstVisibleChildClosestToStart = findFirstVisibleChildClosestToStart(!this.mSmoothScrollbarEnabled, true);
-        if (!this.mSmoothScrollbarEnabled) {
-            z = true;
-        }
-        return ScrollbarHelper.computeScrollExtent(state, orientationHelper, findFirstVisibleChildClosestToStart, findFirstVisibleChildClosestToEnd(z, true), this, this.mSmoothScrollbarEnabled);
+        View findFirstVisibleChildClosestToStart = findFirstVisibleChildClosestToStart(this.mSmoothScrollbarEnabled ^ 1, true);
+        return ScrollbarHelper.computeScrollExtent(state, orientationHelper, findFirstVisibleChildClosestToStart, findFirstVisibleChildClosestToEnd(this.mSmoothScrollbarEnabled ^ 1, true), this, this.mSmoothScrollbarEnabled);
     }
 
     private int computeScrollRange(State state) {
-        boolean z = false;
         if (getChildCount() == 0) {
             return 0;
         }
         ensureLayoutState();
         OrientationHelper orientationHelper = this.mOrientationHelper;
-        View findFirstVisibleChildClosestToStart = findFirstVisibleChildClosestToStart(!this.mSmoothScrollbarEnabled, true);
-        if (!this.mSmoothScrollbarEnabled) {
-            z = true;
-        }
-        return ScrollbarHelper.computeScrollRange(state, orientationHelper, findFirstVisibleChildClosestToStart, findFirstVisibleChildClosestToEnd(z, true), this, this.mSmoothScrollbarEnabled);
+        View findFirstVisibleChildClosestToStart = findFirstVisibleChildClosestToStart(this.mSmoothScrollbarEnabled ^ 1, true);
+        return ScrollbarHelper.computeScrollRange(state, orientationHelper, findFirstVisibleChildClosestToStart, findFirstVisibleChildClosestToEnd(this.mSmoothScrollbarEnabled ^ 1, true), this, this.mSmoothScrollbarEnabled);
     }
 
-    public void setSmoothScrollbarEnabled(boolean enabled) {
-        this.mSmoothScrollbarEnabled = enabled;
+    public void setSmoothScrollbarEnabled(boolean z) {
+        this.mSmoothScrollbarEnabled = z;
     }
 
     public boolean isSmoothScrollbarEnabled() {
         return this.mSmoothScrollbarEnabled;
     }
 
-    private void updateLayoutState(int layoutDirection, int requiredSpace, boolean canUseExistingSpace, State state) {
-        int scrollingOffset;
-        int i = -1;
-        int i2 = 1;
+    private void updateLayoutState(int i, int i2, boolean z, State state) {
         this.mLayoutState.mInfinite = resolveIsInfinite();
         this.mLayoutState.mExtra = getExtraLayoutSpace(state);
-        this.mLayoutState.mLayoutDirection = layoutDirection;
-        LayoutState layoutState;
-        View child;
-        if (layoutDirection == 1) {
-            layoutState = this.mLayoutState;
+        LayoutState layoutState = this.mLayoutState;
+        layoutState.mLayoutDirection = i;
+        int i3 = -1;
+        View childClosestToEnd;
+        LayoutState layoutState2;
+        if (i == 1) {
             layoutState.mExtra += this.mOrientationHelper.getEndPadding();
-            child = getChildClosestToEnd();
+            childClosestToEnd = getChildClosestToEnd();
             layoutState = this.mLayoutState;
             if (!this.mShouldReverseLayout) {
-                i = 1;
+                i3 = 1;
             }
-            layoutState.mItemDirection = i;
-            this.mLayoutState.mCurrentPosition = getPosition(child) + this.mLayoutState.mItemDirection;
-            this.mLayoutState.mOffset = this.mOrientationHelper.getDecoratedEnd(child);
-            scrollingOffset = this.mOrientationHelper.getDecoratedEnd(child) - this.mOrientationHelper.getEndAfterPadding();
+            layoutState.mItemDirection = i3;
+            layoutState = this.mLayoutState;
+            i3 = getPosition(childClosestToEnd);
+            layoutState2 = this.mLayoutState;
+            layoutState.mCurrentPosition = i3 + layoutState2.mItemDirection;
+            layoutState2.mOffset = this.mOrientationHelper.getDecoratedEnd(childClosestToEnd);
+            i = this.mOrientationHelper.getDecoratedEnd(childClosestToEnd) - this.mOrientationHelper.getEndAfterPadding();
         } else {
-            child = getChildClosestToStart();
+            childClosestToEnd = getChildClosestToStart();
             layoutState = this.mLayoutState;
             layoutState.mExtra += this.mOrientationHelper.getStartAfterPadding();
             layoutState = this.mLayoutState;
-            if (!this.mShouldReverseLayout) {
-                i2 = -1;
+            if (this.mShouldReverseLayout) {
+                i3 = 1;
             }
-            layoutState.mItemDirection = i2;
-            this.mLayoutState.mCurrentPosition = getPosition(child) + this.mLayoutState.mItemDirection;
-            this.mLayoutState.mOffset = this.mOrientationHelper.getDecoratedStart(child);
-            scrollingOffset = (-this.mOrientationHelper.getDecoratedStart(child)) + this.mOrientationHelper.getStartAfterPadding();
+            layoutState.mItemDirection = i3;
+            layoutState = this.mLayoutState;
+            i3 = getPosition(childClosestToEnd);
+            layoutState2 = this.mLayoutState;
+            layoutState.mCurrentPosition = i3 + layoutState2.mItemDirection;
+            layoutState2.mOffset = this.mOrientationHelper.getDecoratedStart(childClosestToEnd);
+            i = (-this.mOrientationHelper.getDecoratedStart(childClosestToEnd)) + this.mOrientationHelper.getStartAfterPadding();
         }
-        this.mLayoutState.mAvailable = requiredSpace;
-        if (canUseExistingSpace) {
-            LayoutState layoutState2 = this.mLayoutState;
-            layoutState2.mAvailable -= scrollingOffset;
+        layoutState = this.mLayoutState;
+        layoutState.mAvailable = i2;
+        if (z) {
+            layoutState.mAvailable -= i;
         }
-        this.mLayoutState.mScrollingOffset = scrollingOffset;
+        this.mLayoutState.mScrollingOffset = i;
     }
 
     /* Access modifiers changed, original: 0000 */
@@ -1016,149 +1048,148 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
 
     /* Access modifiers changed, original: 0000 */
     public void collectPrefetchPositionsForLayoutState(State state, LayoutState layoutState, LayoutPrefetchRegistry layoutPrefetchRegistry) {
-        int pos = layoutState.mCurrentPosition;
-        if (pos >= 0 && pos < state.getItemCount()) {
-            layoutPrefetchRegistry.addPosition(pos, Math.max(0, layoutState.mScrollingOffset));
+        int i = layoutState.mCurrentPosition;
+        if (i >= 0 && i < state.getItemCount()) {
+            layoutPrefetchRegistry.addPosition(i, Math.max(0, layoutState.mScrollingOffset));
         }
     }
 
-    public void collectInitialPrefetchPositions(int adapterItemCount, LayoutPrefetchRegistry layoutPrefetchRegistry) {
-        boolean fromEnd;
-        int anchorPos;
-        int direction = -1;
-        if (this.mPendingSavedState == null || !this.mPendingSavedState.hasValidAnchor()) {
+    public void collectInitialPrefetchPositions(int i, LayoutPrefetchRegistry layoutPrefetchRegistry) {
+        boolean z;
+        int i2;
+        SavedState savedState = this.mPendingSavedState;
+        int i3 = -1;
+        if (savedState == null || !savedState.hasValidAnchor()) {
             resolveShouldLayoutReverse();
-            fromEnd = this.mShouldReverseLayout;
-            anchorPos = this.mPendingScrollPosition == -1 ? fromEnd ? adapterItemCount - 1 : 0 : this.mPendingScrollPosition;
+            z = this.mShouldReverseLayout;
+            i2 = this.mPendingScrollPosition;
+            if (i2 == -1) {
+                i2 = z ? i - 1 : 0;
+            }
         } else {
-            fromEnd = this.mPendingSavedState.mAnchorLayoutFromEnd;
-            anchorPos = this.mPendingSavedState.mAnchorPosition;
+            savedState = this.mPendingSavedState;
+            z = savedState.mAnchorLayoutFromEnd;
+            i2 = savedState.mAnchorPosition;
         }
-        if (!fromEnd) {
-            direction = 1;
+        if (!z) {
+            i3 = 1;
         }
-        int targetPos = anchorPos;
-        for (int i = 0; i < this.mInitialPrefetchItemCount && targetPos >= 0 && targetPos < adapterItemCount; i++) {
-            layoutPrefetchRegistry.addPosition(targetPos, 0);
-            targetPos += direction;
+        int i4 = i2;
+        for (i2 = 0; i2 < this.mInitialPrefetchItemCount && i4 >= 0 && i4 < i; i2++) {
+            layoutPrefetchRegistry.addPosition(i4, 0);
+            i4 += i3;
         }
     }
 
-    public void setInitialPrefetchItemCount(int itemCount) {
-        this.mInitialPrefetchItemCount = itemCount;
+    public void setInitialPrefetchItemCount(int i) {
+        this.mInitialPrefetchItemCount = i;
     }
 
     public int getInitialPrefetchItemCount() {
         return this.mInitialPrefetchItemCount;
     }
 
-    public void collectAdjacentPrefetchPositions(int dx, int dy, State state, LayoutPrefetchRegistry layoutPrefetchRegistry) {
-        int delta;
-        if (this.mOrientation == 0) {
-            delta = dx;
-        } else {
-            delta = dy;
+    public void collectAdjacentPrefetchPositions(int i, int i2, State state, LayoutPrefetchRegistry layoutPrefetchRegistry) {
+        if (this.mOrientation != 0) {
+            i = i2;
         }
-        if (getChildCount() != 0 && delta != 0) {
+        if (getChildCount() != 0 && i != 0) {
             ensureLayoutState();
-            updateLayoutState(delta > 0 ? 1 : -1, Math.abs(delta), true, state);
+            updateLayoutState(i > 0 ? 1 : -1, Math.abs(i), true, state);
             collectPrefetchPositionsForLayoutState(state, this.mLayoutState, layoutPrefetchRegistry);
         }
     }
 
     /* Access modifiers changed, original: 0000 */
-    public int scrollBy(int dy, Recycler recycler, State state) {
-        int scrolled = 0;
-        if (!(getChildCount() == 0 || dy == 0)) {
-            this.mLayoutState.mRecycle = true;
-            ensureLayoutState();
-            int layoutDirection = dy > 0 ? 1 : -1;
-            int absDy = Math.abs(dy);
-            updateLayoutState(layoutDirection, absDy, true, state);
-            int consumed = this.mLayoutState.mScrollingOffset + fill(recycler, this.mLayoutState, state, false);
-            if (consumed >= 0) {
-                if (absDy > consumed) {
-                    scrolled = layoutDirection * consumed;
-                } else {
-                    scrolled = dy;
-                }
-                this.mOrientationHelper.offsetChildren(-scrolled);
-                this.mLayoutState.mLastScrollDelta = scrolled;
-            }
+    public int scrollBy(int i, Recycler recycler, State state) {
+        if (getChildCount() == 0 || i == 0) {
+            return 0;
         }
-        return scrolled;
+        this.mLayoutState.mRecycle = true;
+        ensureLayoutState();
+        int i2 = i > 0 ? 1 : -1;
+        int abs = Math.abs(i);
+        updateLayoutState(i2, abs, true, state);
+        LayoutState layoutState = this.mLayoutState;
+        int fill = layoutState.mScrollingOffset + fill(recycler, layoutState, state, false);
+        if (fill < 0) {
+            return 0;
+        }
+        if (abs > fill) {
+            i = i2 * fill;
+        }
+        this.mOrientationHelper.offsetChildren(-i);
+        this.mLayoutState.mLastScrollDelta = i;
+        return i;
     }
 
-    public void assertNotInLayoutOrScroll(String message) {
+    public void assertNotInLayoutOrScroll(String str) {
         if (this.mPendingSavedState == null) {
-            super.assertNotInLayoutOrScroll(message);
+            super.assertNotInLayoutOrScroll(str);
         }
     }
 
     /* Access modifiers changed, original: protected */
-    public void recycleChildren(Recycler recycler, int startIndex, int endIndex) {
-        if (startIndex != endIndex) {
-            int i;
-            if (endIndex > startIndex) {
-                for (i = endIndex - 1; i >= startIndex; i--) {
+    public void recycleChildren(Recycler recycler, int i, int i2) {
+        if (i != i2) {
+            if (i2 > i) {
+                for (i2--; i2 >= i; i2--) {
+                    removeAndRecycleViewAt(i2, recycler);
+                }
+            } else {
+                while (i > i2) {
                     removeAndRecycleViewAt(i, recycler);
+                    i--;
                 }
-                return;
-            }
-            for (i = startIndex; i > endIndex; i--) {
-                removeAndRecycleViewAt(i, recycler);
             }
         }
     }
 
     /* Access modifiers changed, original: protected */
-    public void recycleViewsFromStart(Recycler recycler, int dt) {
-        if (dt >= 0) {
-            int limit = dt;
+    public void recycleViewsFromStart(Recycler recycler, int i) {
+        if (i >= 0) {
             int childCount = getChildCount();
-            int i;
-            View child;
             if (this.mShouldReverseLayout) {
-                for (i = childCount - 1; i >= 0; i--) {
-                    child = getChildAt(i);
-                    if (this.mOrientationHelper.getDecoratedEnd(child) > limit || this.mOrientationHelper.getTransformedEndWithDecoration(child) > limit) {
-                        recycleChildren(recycler, childCount - 1, i);
+                childCount--;
+                for (int i2 = childCount; i2 >= 0; i2--) {
+                    View childAt = getChildAt(i2);
+                    if (this.mOrientationHelper.getDecoratedEnd(childAt) > i || this.mOrientationHelper.getTransformedEndWithDecoration(childAt) > i) {
+                        recycleChildren(recycler, childCount, i2);
                         return;
                     }
                 }
-                return;
-            }
-            for (i = 0; i < childCount; i++) {
-                child = getChildAt(i);
-                if (this.mOrientationHelper.getDecoratedEnd(child) > limit || this.mOrientationHelper.getTransformedEndWithDecoration(child) > limit) {
-                    recycleChildren(recycler, 0, i);
-                    return;
+            } else {
+                for (int i3 = 0; i3 < childCount; i3++) {
+                    View childAt2 = getChildAt(i3);
+                    if (this.mOrientationHelper.getDecoratedEnd(childAt2) > i || this.mOrientationHelper.getTransformedEndWithDecoration(childAt2) > i) {
+                        recycleChildren(recycler, 0, i3);
+                        break;
+                    }
                 }
             }
         }
     }
 
-    private void recycleViewsFromEnd(Recycler recycler, int dt) {
+    private void recycleViewsFromEnd(Recycler recycler, int i) {
         int childCount = getChildCount();
-        if (dt >= 0) {
-            int limit = this.mOrientationHelper.getEnd() - dt;
-            int i;
-            View child;
+        if (i >= 0) {
+            int end = this.mOrientationHelper.getEnd() - i;
             if (this.mShouldReverseLayout) {
-                for (i = 0; i < childCount; i++) {
-                    child = getChildAt(i);
-                    if (this.mOrientationHelper.getDecoratedStart(child) < limit || this.mOrientationHelper.getTransformedStartWithDecoration(child) < limit) {
-                        recycleChildren(recycler, 0, i);
+                for (int i2 = 0; i2 < childCount; i2++) {
+                    View childAt = getChildAt(i2);
+                    if (this.mOrientationHelper.getDecoratedStart(childAt) < end || this.mOrientationHelper.getTransformedStartWithDecoration(childAt) < end) {
+                        recycleChildren(recycler, 0, i2);
                         return;
                     }
                 }
-                return;
-            }
-            for (i = childCount - 1; i >= 0; i--) {
-                child = getChildAt(i);
-                if (this.mOrientationHelper.getDecoratedStart(child) < limit || this.mOrientationHelper.getTransformedStartWithDecoration(child) < limit) {
-                    recycleChildren(recycler, childCount - 1, i);
-                    return;
+            } else {
+                childCount--;
+                for (i = childCount; i >= 0; i--) {
+                    View childAt2 = getChildAt(i);
+                    if (this.mOrientationHelper.getDecoratedStart(childAt2) < end || this.mOrientationHelper.getTransformedStartWithDecoration(childAt2) < end) {
+                        recycleChildren(recycler, childCount, i);
+                        break;
+                    }
                 }
             }
         }
@@ -1175,117 +1206,121 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
     }
 
     /* Access modifiers changed, original: 0000 */
-    public int fill(Recycler recycler, LayoutState layoutState, State state, boolean stopOnFocusable) {
-        int start = layoutState.mAvailable;
-        if (layoutState.mScrollingOffset != Integer.MIN_VALUE) {
-            if (layoutState.mAvailable < 0) {
-                layoutState.mScrollingOffset += layoutState.mAvailable;
+    public int fill(Recycler recycler, LayoutState layoutState, State state, boolean z) {
+        int i = layoutState.mAvailable;
+        int i2 = layoutState.mScrollingOffset;
+        if (i2 != Integer.MIN_VALUE) {
+            if (i < 0) {
+                layoutState.mScrollingOffset = i2 + i;
             }
             recycleByLayoutState(recycler, layoutState);
         }
-        int remainingSpace = layoutState.mAvailable + layoutState.mExtra;
+        i2 = layoutState.mAvailable + layoutState.mExtra;
         LayoutChunkResult layoutChunkResult = this.mLayoutChunkResult;
         while (true) {
-            if ((!layoutState.mInfinite && remainingSpace <= 0) || !layoutState.hasMore(state)) {
+            if ((!layoutState.mInfinite && i2 <= 0) || !layoutState.hasMore(state)) {
                 break;
             }
             layoutChunkResult.resetInternal();
             layoutChunk(recycler, state, layoutState, layoutChunkResult);
             if (!layoutChunkResult.mFinished) {
+                int i3;
                 layoutState.mOffset += layoutChunkResult.mConsumed * layoutState.mLayoutDirection;
                 if (!(layoutChunkResult.mIgnoreConsumed && this.mLayoutState.mScrapList == null && state.isPreLayout())) {
-                    layoutState.mAvailable -= layoutChunkResult.mConsumed;
-                    remainingSpace -= layoutChunkResult.mConsumed;
+                    i3 = layoutState.mAvailable;
+                    int i4 = layoutChunkResult.mConsumed;
+                    layoutState.mAvailable = i3 - i4;
+                    i2 -= i4;
                 }
-                if (layoutState.mScrollingOffset != Integer.MIN_VALUE) {
-                    layoutState.mScrollingOffset += layoutChunkResult.mConsumed;
-                    if (layoutState.mAvailable < 0) {
-                        layoutState.mScrollingOffset += layoutState.mAvailable;
+                i3 = layoutState.mScrollingOffset;
+                if (i3 != Integer.MIN_VALUE) {
+                    layoutState.mScrollingOffset = i3 + layoutChunkResult.mConsumed;
+                    i3 = layoutState.mAvailable;
+                    if (i3 < 0) {
+                        layoutState.mScrollingOffset += i3;
                     }
                     recycleByLayoutState(recycler, layoutState);
                 }
-                if (stopOnFocusable && layoutChunkResult.mFocusable) {
+                if (z && layoutChunkResult.mFocusable) {
                     break;
                 }
             } else {
                 break;
             }
         }
-        return start - layoutState.mAvailable;
+        return i - layoutState.mAvailable;
     }
 
     /* Access modifiers changed, original: 0000 */
-    public void layoutChunk(Recycler recycler, State state, LayoutState layoutState, LayoutChunkResult result) {
-        View view = layoutState.next(recycler);
-        if (view == null) {
-            result.mFinished = true;
+    public void layoutChunk(Recycler recycler, State state, LayoutState layoutState, LayoutChunkResult layoutChunkResult) {
+        View next = layoutState.next(recycler);
+        if (next == null) {
+            layoutChunkResult.mFinished = true;
             return;
         }
-        int right;
-        int left;
-        int bottom;
-        int top;
-        LayoutParams params = (LayoutParams) view.getLayoutParams();
-        boolean z;
-        boolean z2;
+        int decoratedMeasurementInOther;
+        int i;
+        int i2;
+        int i3;
+        LayoutParams layoutParams = (LayoutParams) next.getLayoutParams();
         if (layoutState.mScrapList == null) {
-            z = this.mShouldReverseLayout;
-            if (layoutState.mLayoutDirection == -1) {
-                z2 = true;
+            if (this.mShouldReverseLayout == (layoutState.mLayoutDirection == -1)) {
+                addView(next);
             } else {
-                z2 = false;
-            }
-            if (z == z2) {
-                addView(view);
-            } else {
-                addView(view, 0);
+                addView(next, 0);
             }
         } else {
-            z = this.mShouldReverseLayout;
-            if (layoutState.mLayoutDirection == -1) {
-                z2 = true;
+            if (this.mShouldReverseLayout == (layoutState.mLayoutDirection == -1)) {
+                addDisappearingView(next);
             } else {
-                z2 = false;
-            }
-            if (z == z2) {
-                addDisappearingView(view);
-            } else {
-                addDisappearingView(view, 0);
+                addDisappearingView(next, 0);
             }
         }
-        measureChildWithMargins(view, 0, 0);
-        result.mConsumed = this.mOrientationHelper.getDecoratedMeasurement(view);
+        measureChildWithMargins(next, 0, 0);
+        layoutChunkResult.mConsumed = this.mOrientationHelper.getDecoratedMeasurement(next);
+        int width;
+        int i4;
         if (this.mOrientation == 1) {
             if (isLayoutRTL()) {
-                right = getWidth() - getPaddingRight();
-                left = right - this.mOrientationHelper.getDecoratedMeasurementInOther(view);
+                width = getWidth() - getPaddingRight();
+                decoratedMeasurementInOther = width - this.mOrientationHelper.getDecoratedMeasurementInOther(next);
             } else {
-                left = getPaddingLeft();
-                right = left + this.mOrientationHelper.getDecoratedMeasurementInOther(view);
+                decoratedMeasurementInOther = getPaddingLeft();
+                width = this.mOrientationHelper.getDecoratedMeasurementInOther(next) + decoratedMeasurementInOther;
             }
             if (layoutState.mLayoutDirection == -1) {
-                bottom = layoutState.mOffset;
-                top = layoutState.mOffset - result.mConsumed;
+                i4 = layoutState.mOffset;
+                i = i4;
+                i2 = width;
+                i3 = i4 - layoutChunkResult.mConsumed;
             } else {
-                top = layoutState.mOffset;
-                bottom = layoutState.mOffset + result.mConsumed;
+                i4 = layoutState.mOffset;
+                i3 = i4;
+                i2 = width;
+                i = layoutChunkResult.mConsumed + i4;
             }
         } else {
-            top = getPaddingTop();
-            bottom = top + this.mOrientationHelper.getDecoratedMeasurementInOther(view);
+            width = getPaddingTop();
+            decoratedMeasurementInOther = this.mOrientationHelper.getDecoratedMeasurementInOther(next) + width;
             if (layoutState.mLayoutDirection == -1) {
-                right = layoutState.mOffset;
-                left = layoutState.mOffset - result.mConsumed;
+                i4 = layoutState.mOffset;
+                i2 = i4;
+                i3 = width;
+                i = decoratedMeasurementInOther;
+                decoratedMeasurementInOther = i4 - layoutChunkResult.mConsumed;
             } else {
-                left = layoutState.mOffset;
-                right = layoutState.mOffset + result.mConsumed;
+                i4 = layoutState.mOffset;
+                i3 = width;
+                i2 = layoutChunkResult.mConsumed + i4;
+                i = decoratedMeasurementInOther;
+                decoratedMeasurementInOther = i4;
             }
         }
-        layoutDecoratedWithMargins(view, left, top, right, bottom);
-        if (params.isItemRemoved() || params.isItemChanged()) {
-            result.mIgnoreConsumed = true;
+        layoutDecoratedWithMargins(next, decoratedMeasurementInOther, i3, i2, i);
+        if (layoutParams.isItemRemoved() || layoutParams.isItemChanged()) {
+            layoutChunkResult.mIgnoreConsumed = true;
         }
-        result.mFocusable = view.hasFocusable();
+        layoutChunkResult.mFocusable = next.hasFocusable();
     }
 
     /* Access modifiers changed, original: 0000 */
@@ -1294,45 +1329,39 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
     }
 
     /* Access modifiers changed, original: 0000 */
-    public int convertFocusDirectionToLayoutDirection(int focusDirection) {
-        int i = Integer.MIN_VALUE;
-        int i2 = 1;
-        switch (focusDirection) {
-            case 1:
-                if (this.mOrientation == 1 || !isLayoutRTL()) {
-                    return -1;
-                }
-                return 1;
-            case 2:
-                if (this.mOrientation == 1) {
-                    return 1;
-                }
-                if (isLayoutRTL()) {
-                    return -1;
-                }
-                return 1;
-            case 17:
-                if (this.mOrientation != 0) {
+    public int convertFocusDirectionToLayoutDirection(int i) {
+        int i2 = -1;
+        int i3 = 1;
+        if (i == 1) {
+            return (this.mOrientation != 1 && isLayoutRTL()) ? 1 : -1;
+        } else {
+            if (i == 2) {
+                return (this.mOrientation != 1 && isLayoutRTL()) ? -1 : 1;
+            } else {
+                if (i == 17) {
+                    if (this.mOrientation != 0) {
+                        i2 = Integer.MIN_VALUE;
+                    }
+                    return i2;
+                } else if (i == 33) {
+                    if (this.mOrientation != 1) {
+                        i2 = Integer.MIN_VALUE;
+                    }
+                    return i2;
+                } else if (i == 66) {
+                    if (this.mOrientation != 0) {
+                        i3 = Integer.MIN_VALUE;
+                    }
+                    return i3;
+                } else if (i != 130) {
                     return Integer.MIN_VALUE;
+                } else {
+                    if (this.mOrientation != 1) {
+                        i3 = Integer.MIN_VALUE;
+                    }
+                    return i3;
                 }
-                return -1;
-            case 33:
-                if (this.mOrientation != 1) {
-                    return Integer.MIN_VALUE;
-                }
-                return -1;
-            case 66:
-                if (this.mOrientation != 0) {
-                    i2 = Integer.MIN_VALUE;
-                }
-                return i2;
-            case 130:
-                if (this.mOrientation == 1) {
-                    i = 1;
-                }
-                return i;
-            default:
-                return Integer.MIN_VALUE;
+            }
         }
     }
 
@@ -1344,18 +1373,18 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
         return getChildAt(this.mShouldReverseLayout ? 0 : getChildCount() - 1);
     }
 
-    private View findFirstVisibleChildClosestToStart(boolean completelyVisible, boolean acceptPartiallyVisible) {
+    private View findFirstVisibleChildClosestToStart(boolean z, boolean z2) {
         if (this.mShouldReverseLayout) {
-            return findOneVisibleChild(getChildCount() - 1, -1, completelyVisible, acceptPartiallyVisible);
+            return findOneVisibleChild(getChildCount() - 1, -1, z, z2);
         }
-        return findOneVisibleChild(0, getChildCount(), completelyVisible, acceptPartiallyVisible);
+        return findOneVisibleChild(0, getChildCount(), z, z2);
     }
 
-    private View findFirstVisibleChildClosestToEnd(boolean completelyVisible, boolean acceptPartiallyVisible) {
+    private View findFirstVisibleChildClosestToEnd(boolean z, boolean z2) {
         if (this.mShouldReverseLayout) {
-            return findOneVisibleChild(0, getChildCount(), completelyVisible, acceptPartiallyVisible);
+            return findOneVisibleChild(0, getChildCount(), z, z2);
         }
-        return findOneVisibleChild(getChildCount() - 1, -1, completelyVisible, acceptPartiallyVisible);
+        return findOneVisibleChild(getChildCount() - 1, -1, z, z2);
     }
 
     private View findReferenceChildClosestToEnd(Recycler recycler, State state) {
@@ -1381,34 +1410,35 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
     }
 
     /* Access modifiers changed, original: 0000 */
-    public View findReferenceChild(Recycler recycler, State state, int start, int end, int itemCount) {
+    public View findReferenceChild(Recycler recycler, State state, int i, int i2, int i3) {
         ensureLayoutState();
-        View invalidMatch = null;
-        View outOfBoundsMatch = null;
-        int boundsStart = this.mOrientationHelper.getStartAfterPadding();
-        int boundsEnd = this.mOrientationHelper.getEndAfterPadding();
-        int diff = end > start ? 1 : -1;
-        for (int i = start; i != end; i += diff) {
+        int startAfterPadding = this.mOrientationHelper.getStartAfterPadding();
+        int endAfterPadding = this.mOrientationHelper.getEndAfterPadding();
+        int i4 = i2 > i ? 1 : -1;
+        View view = null;
+        View view2 = null;
+        while (i != i2) {
             View childAt = getChildAt(i);
             int position = getPosition(childAt);
-            if (position >= 0 && position < itemCount) {
+            if (position >= 0 && position < i3) {
                 if (((LayoutParams) childAt.getLayoutParams()).isItemRemoved()) {
-                    if (invalidMatch == null) {
-                        invalidMatch = childAt;
+                    if (view2 == null) {
+                        view2 = childAt;
                     }
-                } else if (this.mOrientationHelper.getDecoratedStart(childAt) < boundsEnd && this.mOrientationHelper.getDecoratedEnd(childAt) >= boundsStart) {
+                } else if (this.mOrientationHelper.getDecoratedStart(childAt) < endAfterPadding && this.mOrientationHelper.getDecoratedEnd(childAt) >= startAfterPadding) {
                     return childAt;
                 } else {
-                    if (outOfBoundsMatch == null) {
-                        outOfBoundsMatch = childAt;
+                    if (view == null) {
+                        view = childAt;
                     }
                 }
             }
+            i += i4;
         }
-        if (outOfBoundsMatch == null) {
-            outOfBoundsMatch = invalidMatch;
+        if (view == null) {
+            view = view2;
         }
-        return outOfBoundsMatch;
+        return view;
     }
 
     private View findPartiallyOrCompletelyInvisibleChildClosestToEnd(Recycler recycler, State state) {
@@ -1434,168 +1464,186 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
     }
 
     public int findFirstVisibleItemPosition() {
-        View child = findOneVisibleChild(0, getChildCount(), false, true);
-        return child == null ? -1 : getPosition(child);
+        View findOneVisibleChild = findOneVisibleChild(0, getChildCount(), false, true);
+        if (findOneVisibleChild == null) {
+            return -1;
+        }
+        return getPosition(findOneVisibleChild);
     }
 
     public int findFirstCompletelyVisibleItemPosition() {
-        View child = findOneVisibleChild(0, getChildCount(), true, false);
-        return child == null ? -1 : getPosition(child);
+        View findOneVisibleChild = findOneVisibleChild(0, getChildCount(), true, false);
+        if (findOneVisibleChild == null) {
+            return -1;
+        }
+        return getPosition(findOneVisibleChild);
     }
 
     public int findLastVisibleItemPosition() {
-        View child = findOneVisibleChild(getChildCount() - 1, -1, false, true);
-        if (child == null) {
+        View findOneVisibleChild = findOneVisibleChild(getChildCount() - 1, -1, false, true);
+        if (findOneVisibleChild == null) {
             return -1;
         }
-        return getPosition(child);
+        return getPosition(findOneVisibleChild);
     }
 
     public int findLastCompletelyVisibleItemPosition() {
-        View child = findOneVisibleChild(getChildCount() - 1, -1, true, false);
-        if (child == null) {
+        View findOneVisibleChild = findOneVisibleChild(getChildCount() - 1, -1, true, false);
+        if (findOneVisibleChild == null) {
             return -1;
         }
-        return getPosition(child);
+        return getPosition(findOneVisibleChild);
     }
 
     /* Access modifiers changed, original: 0000 */
-    public View findOneVisibleChild(int fromIndex, int toIndex, boolean completelyVisible, boolean acceptPartiallyVisible) {
-        int preferredBoundsFlag;
+    public View findOneVisibleChild(int i, int i2, boolean z, boolean z2) {
         ensureLayoutState();
-        int acceptableBoundsFlag = 0;
-        if (completelyVisible) {
-            preferredBoundsFlag = 24579;
-        } else {
-            preferredBoundsFlag = 320;
-        }
-        if (acceptPartiallyVisible) {
-            acceptableBoundsFlag = 320;
+        int i3 = 320;
+        int i4 = z ? 24579 : 320;
+        if (!z2) {
+            i3 = 0;
         }
         if (this.mOrientation == 0) {
-            return this.mHorizontalBoundCheck.findOneViewWithinBoundFlags(fromIndex, toIndex, preferredBoundsFlag, acceptableBoundsFlag);
+            return this.mHorizontalBoundCheck.findOneViewWithinBoundFlags(i, i2, i4, i3);
         }
-        return this.mVerticalBoundCheck.findOneViewWithinBoundFlags(fromIndex, toIndex, preferredBoundsFlag, acceptableBoundsFlag);
+        return this.mVerticalBoundCheck.findOneViewWithinBoundFlags(i, i2, i4, i3);
     }
 
     /* Access modifiers changed, original: 0000 */
-    public View findOnePartiallyOrCompletelyInvisibleChild(int fromIndex, int toIndex) {
+    public View findOnePartiallyOrCompletelyInvisibleChild(int i, int i2) {
         ensureLayoutState();
-        int next = toIndex > fromIndex ? 1 : toIndex < fromIndex ? -1 : 0;
-        if (next == 0) {
-            return getChildAt(fromIndex);
+        Object obj = i2 > i ? 1 : i2 < i ? -1 : null;
+        if (obj == null) {
+            return getChildAt(i);
         }
-        int preferredBoundsFlag;
-        int acceptableBoundsFlag;
-        if (this.mOrientationHelper.getDecoratedStart(getChildAt(fromIndex)) < this.mOrientationHelper.getStartAfterPadding()) {
-            preferredBoundsFlag = 16644;
-            acceptableBoundsFlag = 16388;
+        int i3;
+        int i4;
+        View findOneViewWithinBoundFlags;
+        if (this.mOrientationHelper.getDecoratedStart(getChildAt(i)) < this.mOrientationHelper.getStartAfterPadding()) {
+            i3 = 16644;
+            i4 = 16388;
         } else {
-            preferredBoundsFlag = 4161;
-            acceptableBoundsFlag = 4097;
+            i3 = 4161;
+            i4 = 4097;
         }
         if (this.mOrientation == 0) {
-            return this.mHorizontalBoundCheck.findOneViewWithinBoundFlags(fromIndex, toIndex, preferredBoundsFlag, acceptableBoundsFlag);
+            findOneViewWithinBoundFlags = this.mHorizontalBoundCheck.findOneViewWithinBoundFlags(i, i2, i3, i4);
+        } else {
+            findOneViewWithinBoundFlags = this.mVerticalBoundCheck.findOneViewWithinBoundFlags(i, i2, i3, i4);
         }
-        return this.mVerticalBoundCheck.findOneViewWithinBoundFlags(fromIndex, toIndex, preferredBoundsFlag, acceptableBoundsFlag);
+        return findOneViewWithinBoundFlags;
     }
 
-    public View onFocusSearchFailed(View focused, int focusDirection, Recycler recycler, State state) {
+    public View onFocusSearchFailed(View view, int i, Recycler recycler, State state) {
         resolveShouldLayoutReverse();
         if (getChildCount() == 0) {
             return null;
         }
-        int layoutDir = convertFocusDirectionToLayoutDirection(focusDirection);
-        if (layoutDir == Integer.MIN_VALUE) {
+        int convertFocusDirectionToLayoutDirection = convertFocusDirectionToLayoutDirection(i);
+        if (convertFocusDirectionToLayoutDirection == Integer.MIN_VALUE) {
             return null;
         }
-        View nextCandidate;
-        View nextFocus;
+        View findPartiallyOrCompletelyInvisibleChildClosestToStart;
         ensureLayoutState();
         ensureLayoutState();
-        updateLayoutState(layoutDir, (int) (0.33333334f * ((float) this.mOrientationHelper.getTotalSpace())), false, state);
-        this.mLayoutState.mScrollingOffset = Integer.MIN_VALUE;
-        this.mLayoutState.mRecycle = false;
-        fill(recycler, this.mLayoutState, state, true);
-        if (layoutDir == -1) {
-            nextCandidate = findPartiallyOrCompletelyInvisibleChildClosestToStart(recycler, state);
+        updateLayoutState(convertFocusDirectionToLayoutDirection, (int) (((float) this.mOrientationHelper.getTotalSpace()) * 0.33333334f), false, state);
+        LayoutState layoutState = this.mLayoutState;
+        layoutState.mScrollingOffset = Integer.MIN_VALUE;
+        layoutState.mRecycle = false;
+        fill(recycler, layoutState, state, true);
+        if (convertFocusDirectionToLayoutDirection == -1) {
+            findPartiallyOrCompletelyInvisibleChildClosestToStart = findPartiallyOrCompletelyInvisibleChildClosestToStart(recycler, state);
         } else {
-            nextCandidate = findPartiallyOrCompletelyInvisibleChildClosestToEnd(recycler, state);
+            findPartiallyOrCompletelyInvisibleChildClosestToStart = findPartiallyOrCompletelyInvisibleChildClosestToEnd(recycler, state);
         }
-        if (layoutDir == -1) {
-            nextFocus = getChildClosestToStart();
+        if (convertFocusDirectionToLayoutDirection == -1) {
+            view = getChildClosestToStart();
         } else {
-            nextFocus = getChildClosestToEnd();
+            view = getChildClosestToEnd();
         }
-        if (!nextFocus.hasFocusable()) {
-            return nextCandidate;
+        if (!view.hasFocusable()) {
+            return findPartiallyOrCompletelyInvisibleChildClosestToStart;
         }
-        if (nextCandidate == null) {
+        if (findPartiallyOrCompletelyInvisibleChildClosestToStart == null) {
             return null;
         }
-        return nextFocus;
+        return view;
     }
 
     private void logChildren() {
-        Log.d("LinearLayoutManager", "internal representation of views on the screen");
+        String str = "LinearLayoutManager";
+        Log.d(str, "internal representation of views on the screen");
         for (int i = 0; i < getChildCount(); i++) {
-            View child = getChildAt(i);
-            Log.d("LinearLayoutManager", "item " + getPosition(child) + ", coord:" + this.mOrientationHelper.getDecoratedStart(child));
+            View childAt = getChildAt(i);
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("item ");
+            stringBuilder.append(getPosition(childAt));
+            stringBuilder.append(", coord:");
+            stringBuilder.append(this.mOrientationHelper.getDecoratedStart(childAt));
+            Log.d(str, stringBuilder.toString());
         }
-        Log.d("LinearLayoutManager", "==============");
+        Log.d(str, "==============");
     }
 
     /* Access modifiers changed, original: 0000 */
     public void validateChildOrder() {
-        boolean z = true;
-        Log.d("LinearLayoutManager", "validating child count " + getChildCount());
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("validating child count ");
+        stringBuilder.append(getChildCount());
+        Log.d("LinearLayoutManager", stringBuilder.toString());
         if (getChildCount() >= 1) {
-            int lastPos = getPosition(getChildAt(0));
-            int lastScreenLoc = this.mOrientationHelper.getDecoratedStart(getChildAt(0));
+            boolean z = false;
+            int position = getPosition(getChildAt(0));
+            int decoratedStart = this.mOrientationHelper.getDecoratedStart(getChildAt(0));
+            String str = "detected invalid location";
+            String str2 = "detected invalid position. loc invalid? ";
             int i;
-            View child;
-            int pos;
-            int screenLoc;
-            StringBuilder append;
+            View childAt;
+            int position2;
+            int decoratedStart2;
+            StringBuilder stringBuilder2;
             if (this.mShouldReverseLayout) {
                 i = 1;
                 while (i < getChildCount()) {
-                    child = getChildAt(i);
-                    pos = getPosition(child);
-                    screenLoc = this.mOrientationHelper.getDecoratedStart(child);
-                    if (pos < lastPos) {
+                    childAt = getChildAt(i);
+                    position2 = getPosition(childAt);
+                    decoratedStart2 = this.mOrientationHelper.getDecoratedStart(childAt);
+                    if (position2 < position) {
                         logChildren();
-                        append = new StringBuilder().append("detected invalid position. loc invalid? ");
-                        if (screenLoc >= lastScreenLoc) {
-                            z = false;
+                        stringBuilder2 = new StringBuilder();
+                        stringBuilder2.append(str2);
+                        if (decoratedStart2 < decoratedStart) {
+                            z = true;
                         }
-                        throw new RuntimeException(append.append(z).toString());
-                    } else if (screenLoc > lastScreenLoc) {
-                        logChildren();
-                        throw new RuntimeException("detected invalid location");
-                    } else {
+                        stringBuilder2.append(z);
+                        throw new RuntimeException(stringBuilder2.toString());
+                    } else if (decoratedStart2 <= decoratedStart) {
                         i++;
+                    } else {
+                        logChildren();
+                        throw new RuntimeException(str);
                     }
                 }
-                return;
             }
             i = 1;
             while (i < getChildCount()) {
-                child = getChildAt(i);
-                pos = getPosition(child);
-                screenLoc = this.mOrientationHelper.getDecoratedStart(child);
-                if (pos < lastPos) {
+                childAt = getChildAt(i);
+                position2 = getPosition(childAt);
+                decoratedStart2 = this.mOrientationHelper.getDecoratedStart(childAt);
+                if (position2 < position) {
                     logChildren();
-                    append = new StringBuilder().append("detected invalid position. loc invalid? ");
-                    if (screenLoc >= lastScreenLoc) {
-                        z = false;
+                    stringBuilder2 = new StringBuilder();
+                    stringBuilder2.append(str2);
+                    if (decoratedStart2 < decoratedStart) {
+                        z = true;
                     }
-                    throw new RuntimeException(append.append(z).toString());
-                } else if (screenLoc < lastScreenLoc) {
-                    logChildren();
-                    throw new RuntimeException("detected invalid location");
-                } else {
+                    stringBuilder2.append(z);
+                    throw new RuntimeException(stringBuilder2.toString());
+                } else if (decoratedStart2 >= decoratedStart) {
                     i++;
+                } else {
+                    logChildren();
+                    throw new RuntimeException(str);
                 }
             }
         }
@@ -1605,28 +1653,23 @@ public class LinearLayoutManager extends LayoutManager implements ScrollVectorPr
         return this.mPendingSavedState == null && this.mLastStackFromEnd == this.mStackFromEnd;
     }
 
-    public void prepareForDrop(View view, View target, int x, int y) {
-        int dropDirection;
+    public void prepareForDrop(View view, View view2, int i, int i2) {
         assertNotInLayoutOrScroll("Cannot drop a view during a scroll or layout calculation");
         ensureLayoutState();
         resolveShouldLayoutReverse();
-        int myPos = getPosition(view);
-        int targetPos = getPosition(target);
-        if (myPos < targetPos) {
-            dropDirection = 1;
-        } else {
-            dropDirection = -1;
-        }
+        i = getPosition(view);
+        i2 = getPosition(view2);
+        i = i < i2 ? 1 : -1;
         if (this.mShouldReverseLayout) {
-            if (dropDirection == 1) {
-                scrollToPositionWithOffset(targetPos, this.mOrientationHelper.getEndAfterPadding() - (this.mOrientationHelper.getDecoratedStart(target) + this.mOrientationHelper.getDecoratedMeasurement(view)));
+            if (i == 1) {
+                scrollToPositionWithOffset(i2, this.mOrientationHelper.getEndAfterPadding() - (this.mOrientationHelper.getDecoratedStart(view2) + this.mOrientationHelper.getDecoratedMeasurement(view)));
             } else {
-                scrollToPositionWithOffset(targetPos, this.mOrientationHelper.getEndAfterPadding() - this.mOrientationHelper.getDecoratedEnd(target));
+                scrollToPositionWithOffset(i2, this.mOrientationHelper.getEndAfterPadding() - this.mOrientationHelper.getDecoratedEnd(view2));
             }
-        } else if (dropDirection == -1) {
-            scrollToPositionWithOffset(targetPos, this.mOrientationHelper.getDecoratedStart(target));
+        } else if (i == -1) {
+            scrollToPositionWithOffset(i2, this.mOrientationHelper.getDecoratedStart(view2));
         } else {
-            scrollToPositionWithOffset(targetPos, this.mOrientationHelper.getDecoratedEnd(target) - this.mOrientationHelper.getDecoratedMeasurement(view));
+            scrollToPositionWithOffset(i2, this.mOrientationHelper.getDecoratedEnd(view2) - this.mOrientationHelper.getDecoratedMeasurement(view));
         }
     }
 }

@@ -3,7 +3,6 @@ package org.telegram.messenger.audioinfo.mp3;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
-import com.google.devtools.build.android.desugar.runtime.ThrowableExtension;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
@@ -23,11 +22,11 @@ public class ID3v2Info extends AudioInfo {
         final String imageType;
         final byte type;
 
-        public AttachedPicture(byte type, String description, String imageType, byte[] imageData) {
-            this.type = type;
-            this.description = description;
-            this.imageType = imageType;
-            this.imageData = imageData;
+        public AttachedPicture(byte b, String str, String str2, byte[] bArr) {
+            this.type = b;
+            this.description = str;
+            this.imageType = str2;
+            this.imageData = bArr;
         }
     }
 
@@ -36,78 +35,102 @@ public class ID3v2Info extends AudioInfo {
         final String language;
         final String text;
 
-        public CommentOrUnsynchronizedLyrics(String language, String description, String text) {
-            this.language = language;
-            this.description = description;
-            this.text = text;
+        public CommentOrUnsynchronizedLyrics(String str, String str2, String str3) {
+            this.language = str;
+            this.description = str2;
+            this.text = str3;
         }
     }
 
-    public static boolean isID3v2StartPosition(InputStream input) throws IOException {
-        input.mark(3);
+    public static boolean isID3v2StartPosition(InputStream inputStream) throws IOException {
+        inputStream.mark(3);
         try {
-            boolean z = input.read() == 73 && input.read() == 68 && input.read() == 51;
-            input.reset();
+            boolean z = inputStream.read() == 73 && inputStream.read() == 68 && inputStream.read() == 51;
+            inputStream.reset();
             return z;
         } catch (Throwable th) {
-            input.reset();
+            inputStream.reset();
         }
     }
 
-    public ID3v2Info(InputStream input) throws IOException, ID3v2Exception {
-        this(input, Level.FINEST);
+    public ID3v2Info(InputStream inputStream) throws IOException, ID3v2Exception {
+        this(inputStream, Level.FINEST);
     }
 
-    public ID3v2Info(InputStream input, Level debugLevel) throws IOException, ID3v2Exception {
-        this.debugLevel = debugLevel;
-        if (isID3v2StartPosition(input)) {
-            ID3v2TagHeader tagHeader = new ID3v2TagHeader(input);
+    public ID3v2Info(InputStream inputStream, Level level) throws IOException, ID3v2Exception {
+        this.debugLevel = level;
+        if (isID3v2StartPosition(inputStream)) {
+            ID3v2TagHeader iD3v2TagHeader = new ID3v2TagHeader(inputStream);
             this.brand = "ID3";
-            this.version = String.format("2.%d.%d", new Object[]{Integer.valueOf(tagHeader.getVersion()), Integer.valueOf(tagHeader.getRevision())});
-            ID3v2TagBody tagBody = tagHeader.tagBody(input);
-            loop0:
+            this.version = String.format("2.%d.%d", new Object[]{Integer.valueOf(iD3v2TagHeader.getVersion()), Integer.valueOf(iD3v2TagHeader.getRevision())});
+            ID3v2TagBody tagBody = iD3v2TagHeader.tagBody(inputStream);
             while (tagBody.getRemainingLength() > 10) {
-                ID3v2FrameHeader frameHeader = new ID3v2FrameHeader(tagBody);
-                if (frameHeader.isPadding()) {
-                    break loop0;
-                } else if (((long) frameHeader.getBodySize()) > tagBody.getRemainingLength()) {
-                    if (LOGGER.isLoggable(debugLevel)) {
-                        LOGGER.log(debugLevel, "ID3 frame claims to extend frames area");
+                ID3v2FrameHeader iD3v2FrameHeader = new ID3v2FrameHeader(tagBody);
+                if (iD3v2FrameHeader.isPadding()) {
+                    break;
+                } else if (((long) iD3v2FrameHeader.getBodySize()) > tagBody.getRemainingLength()) {
+                    if (LOGGER.isLoggable(level)) {
+                        LOGGER.log(level, "ID3 frame claims to extend frames area");
                     }
-                } else if (!frameHeader.isValid() || frameHeader.isEncryption()) {
-                    tagBody.getData().skipFully((long) frameHeader.getBodySize());
+                } else if (!iD3v2FrameHeader.isValid() || iD3v2FrameHeader.isEncryption()) {
+                    tagBody.getData().skipFully((long) iD3v2FrameHeader.getBodySize());
                 } else {
-                    ID3v2FrameBody frameBody = tagBody.frameBody(frameHeader);
+                    ID3v2DataInput data;
+                    long remainingLength;
+                    ID3v2FrameBody frameBody = tagBody.frameBody(iD3v2FrameHeader);
                     try {
                         parseFrame(frameBody);
+                        data = frameBody.getData();
+                        remainingLength = frameBody.getRemainingLength();
                     } catch (ID3v2Exception e) {
-                        if (LOGGER.isLoggable(debugLevel)) {
-                            LOGGER.log(debugLevel, String.format("ID3 exception occured in frame %s: %s", new Object[]{frameHeader.getFrameId(), e.getMessage()}));
-                        }
                         try {
-                        } catch (ID3v2Exception e2) {
-                            if (LOGGER.isLoggable(debugLevel)) {
-                                LOGGER.log(debugLevel, "ID3 exception occured: " + e2.getMessage());
+                            if (LOGGER.isLoggable(level)) {
+                                LOGGER.log(level, String.format("ID3 exception occured in frame %s: %s", new Object[]{iD3v2FrameHeader.getFrameId(), e.getMessage()}));
                             }
+                            data = frameBody.getData();
+                            remainingLength = frameBody.getRemainingLength();
+                        } catch (ID3v2Exception e2) {
+                            if (LOGGER.isLoggable(level)) {
+                                Logger logger = LOGGER;
+                                StringBuilder stringBuilder = new StringBuilder();
+                                stringBuilder.append("ID3 exception occured: ");
+                                stringBuilder.append(e2.getMessage());
+                                logger.log(level, stringBuilder.toString());
+                            }
+                        } catch (Throwable th) {
+                            frameBody.getData().skipFully(frameBody.getRemainingLength());
                         }
-                    } finally {
-                        frameBody.getData().skipFully(frameBody.getRemainingLength());
                     }
+                    data.skipFully(remainingLength);
                 }
             }
             tagBody.getData().skipFully(tagBody.getRemainingLength());
-            if (tagHeader.getFooterSize() > 0) {
-                input.skip((long) tagHeader.getFooterSize());
+            if (iD3v2TagHeader.getFooterSize() > 0) {
+                inputStream.skip((long) iD3v2TagHeader.getFooterSize());
             }
         }
     }
 
     /* Access modifiers changed, original: 0000 */
-    public void parseFrame(ID3v2FrameBody frame) throws IOException, ID3v2Exception {
+    public void parseFrame(ID3v2FrameBody iD3v2FrameBody) throws IOException, ID3v2Exception {
+        Logger logger;
+        Level level;
+        StringBuilder stringBuilder;
+        String str;
+        Level level2;
+        StringBuilder stringBuilder2;
+        Logger logger2;
+        Level level3;
+        StringBuilder stringBuilder3;
         if (LOGGER.isLoggable(this.debugLevel)) {
-            LOGGER.log(this.debugLevel, "Parsing frame: " + frame.getFrameHeader().getFrameId());
+            logger = LOGGER;
+            level = this.debugLevel;
+            stringBuilder = new StringBuilder();
+            stringBuilder.append("Parsing frame: ");
+            stringBuilder.append(iD3v2FrameBody.getFrameHeader().getFrameId());
+            logger.log(level, stringBuilder.toString());
         }
-        String frameId = frame.getFrameHeader().getFrameId();
+        String frameId = iD3v2FrameBody.getFrameHeader().getFrameId();
         Object obj = -1;
         switch (frameId.hashCode()) {
             case 66913:
@@ -309,107 +332,122 @@ public class ID3v2Info extends AudioInfo {
                 }
                 break;
         }
-        int index;
+        String parseTextFrame;
+        int indexOf;
         switch (obj) {
             case null:
             case 1:
                 if (this.cover == null || this.coverPictureType != (byte) 3) {
-                    AttachedPicture picture = parseAttachedPictureFrame(frame);
-                    if (this.cover == null || picture.type == (byte) 3 || picture.type == (byte) 0) {
-                        try {
-                            byte[] bytes = picture.imageData;
-                            Options opts = new Options();
-                            opts.inJustDecodeBounds = true;
-                            opts.inSampleSize = 1;
-                            BitmapFactory.decodeByteArray(bytes, 0, bytes.length, opts);
-                            if (opts.outWidth > 800 || opts.outHeight > 800) {
-                                for (int size = Math.max(opts.outWidth, opts.outHeight); size > 800; size /= 2) {
-                                    opts.inSampleSize *= 2;
-                                }
-                            }
-                            opts.inJustDecodeBounds = false;
-                            this.cover = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, opts);
-                            if (this.cover != null) {
-                                float scale = ((float) Math.max(this.cover.getWidth(), this.cover.getHeight())) / 120.0f;
-                                if (scale > 0.0f) {
-                                    this.smallCover = Bitmap.createScaledBitmap(this.cover, (int) (((float) this.cover.getWidth()) / scale), (int) (((float) this.cover.getHeight()) / scale), true);
-                                } else {
-                                    this.smallCover = this.cover;
-                                }
-                                if (this.smallCover == null) {
-                                    this.smallCover = this.cover;
-                                }
-                            }
-                        } catch (Throwable e) {
-                            ThrowableExtension.printStackTrace(e);
+                    AttachedPicture parseAttachedPictureFrame = parseAttachedPictureFrame(iD3v2FrameBody);
+                    if (this.cover != null) {
+                        byte b = parseAttachedPictureFrame.type;
+                        if (!(b == (byte) 3 || b == (byte) 0)) {
+                            return;
                         }
-                        this.coverPictureType = picture.type;
-                        return;
                     }
+                    try {
+                        byte[] bArr = parseAttachedPictureFrame.imageData;
+                        Options options = new Options();
+                        options.inJustDecodeBounds = true;
+                        options.inSampleSize = 1;
+                        BitmapFactory.decodeByteArray(bArr, 0, bArr.length, options);
+                        if (options.outWidth > 800 || options.outHeight > 800) {
+                            for (int max = Math.max(options.outWidth, options.outHeight); max > 800; max /= 2) {
+                                options.inSampleSize *= 2;
+                            }
+                        }
+                        options.inJustDecodeBounds = false;
+                        this.cover = BitmapFactory.decodeByteArray(bArr, 0, bArr.length, options);
+                        if (this.cover != null) {
+                            float max2 = ((float) Math.max(this.cover.getWidth(), this.cover.getHeight())) / 120.0f;
+                            if (max2 > 0.0f) {
+                                this.smallCover = Bitmap.createScaledBitmap(this.cover, (int) (((float) this.cover.getWidth()) / max2), (int) (((float) this.cover.getHeight()) / max2), true);
+                            } else {
+                                this.smallCover = this.cover;
+                            }
+                            if (this.smallCover == null) {
+                                this.smallCover = this.cover;
+                            }
+                        }
+                    } catch (Throwable th) {
+                        th.printStackTrace();
+                    }
+                    this.coverPictureType = parseAttachedPictureFrame.type;
                     return;
                 }
                 return;
             case 2:
             case 3:
-                CommentOrUnsynchronizedLyrics comm = parseCommentOrUnsynchronizedLyricsFrame(frame);
-                if (this.comment == null || comm.description == null || "".equals(comm.description)) {
-                    this.comment = comm.text;
-                    return;
+                CommentOrUnsynchronizedLyrics parseCommentOrUnsynchronizedLyricsFrame = parseCommentOrUnsynchronizedLyricsFrame(iD3v2FrameBody);
+                if (this.comment != null) {
+                    frameId = parseCommentOrUnsynchronizedLyricsFrame.description;
+                    if (!(frameId == null || "".equals(frameId))) {
+                        return;
+                    }
                 }
+                this.comment = parseCommentOrUnsynchronizedLyricsFrame.text;
                 return;
             case 4:
             case 5:
-                this.album = parseTextFrame(frame);
+                this.album = parseTextFrame(iD3v2FrameBody);
                 return;
             case 6:
             case 7:
-                this.compilation = "1".equals(parseTextFrame(frame));
+                this.compilation = "1".equals(parseTextFrame(iD3v2FrameBody));
                 return;
             case 8:
             case 9:
-                this.composer = parseTextFrame(frame);
+                this.composer = parseTextFrame(iD3v2FrameBody);
                 return;
             case 10:
             case 11:
-                String tcon = parseTextFrame(frame);
-                if (tcon.length() > 0) {
-                    this.genre = tcon;
-                    ID3v1Genre id3v1Genre = null;
+                parseTextFrame = parseTextFrame(iD3v2FrameBody);
+                if (parseTextFrame.length() > 0) {
+                    this.genre = parseTextFrame;
+                    ID3v1Genre iD3v1Genre = null;
                     try {
-                        if (tcon.charAt(0) == '(') {
-                            int pos = tcon.indexOf(41);
-                            if (pos > 1) {
-                                id3v1Genre = ID3v1Genre.getGenre(Integer.parseInt(tcon.substring(1, pos)));
-                                if (id3v1Genre == null && tcon.length() > pos + 1) {
-                                    this.genre = tcon.substring(pos + 1);
+                        if (parseTextFrame.charAt(0) == '(') {
+                            int indexOf2 = parseTextFrame.indexOf(41);
+                            if (indexOf2 > 1) {
+                                iD3v1Genre = ID3v1Genre.getGenre(Integer.parseInt(parseTextFrame.substring(1, indexOf2)));
+                                if (iD3v1Genre == null) {
+                                    indexOf2++;
+                                    if (parseTextFrame.length() > indexOf2) {
+                                        this.genre = parseTextFrame.substring(indexOf2);
+                                    }
                                 }
                             }
                         } else {
-                            id3v1Genre = ID3v1Genre.getGenre(Integer.parseInt(tcon));
+                            iD3v1Genre = ID3v1Genre.getGenre(Integer.parseInt(parseTextFrame));
                         }
-                        if (id3v1Genre != null) {
-                            this.genre = id3v1Genre.getDescription();
+                        if (iD3v1Genre != null) {
+                            this.genre = iD3v1Genre.getDescription();
                             return;
                         }
                         return;
-                    } catch (NumberFormatException e2) {
+                    } catch (NumberFormatException unused) {
                         return;
                     }
                 }
                 return;
             case 12:
             case 13:
-                this.copyright = parseTextFrame(frame);
+                this.copyright = parseTextFrame(iD3v2FrameBody);
                 return;
             case 14:
-                String tdrc = parseTextFrame(frame);
-                if (tdrc.length() >= 4) {
+                parseTextFrame = parseTextFrame(iD3v2FrameBody);
+                if (parseTextFrame.length() >= 4) {
                     try {
-                        this.year = Short.valueOf(tdrc.substring(0, 4)).shortValue();
+                        this.year = Short.valueOf(parseTextFrame.substring(0, 4)).shortValue();
                         return;
-                    } catch (NumberFormatException e3) {
+                    } catch (NumberFormatException unused2) {
                         if (LOGGER.isLoggable(this.debugLevel)) {
-                            LOGGER.log(this.debugLevel, "Could not parse year from: " + tdrc);
+                            logger = LOGGER;
+                            level = this.debugLevel;
+                            stringBuilder = new StringBuilder();
+                            stringBuilder.append("Could not parse year from: ");
+                            stringBuilder.append(parseTextFrame);
+                            logger.log(level, stringBuilder.toString());
                             return;
                         }
                         return;
@@ -418,55 +456,76 @@ public class ID3v2Info extends AudioInfo {
                 return;
             case 15:
             case 16:
-                String tlen = parseTextFrame(frame);
+                parseTextFrame = parseTextFrame(iD3v2FrameBody);
                 try {
-                    this.duration = Long.valueOf(tlen).longValue();
+                    this.duration = Long.valueOf(parseTextFrame).longValue();
                     return;
-                } catch (NumberFormatException e4) {
+                } catch (NumberFormatException unused3) {
                     if (LOGGER.isLoggable(this.debugLevel)) {
-                        LOGGER.log(this.debugLevel, "Could not parse track duration: " + tlen);
+                        logger = LOGGER;
+                        level = this.debugLevel;
+                        stringBuilder = new StringBuilder();
+                        stringBuilder.append("Could not parse track duration: ");
+                        stringBuilder.append(parseTextFrame);
+                        logger.log(level, stringBuilder.toString());
                         return;
                     }
                     return;
                 }
             case 17:
             case 18:
-                this.artist = parseTextFrame(frame);
+                this.artist = parseTextFrame(iD3v2FrameBody);
                 return;
             case 19:
             case 20:
-                this.albumArtist = parseTextFrame(frame);
+                this.albumArtist = parseTextFrame(iD3v2FrameBody);
                 return;
             case 21:
             case 22:
-                String tpos = parseTextFrame(frame);
-                if (tpos.length() > 0) {
-                    index = tpos.indexOf(47);
-                    if (index < 0) {
+                parseTextFrame = parseTextFrame(iD3v2FrameBody);
+                if (parseTextFrame.length() > 0) {
+                    indexOf = parseTextFrame.indexOf(47);
+                    str = "Could not parse disc number: ";
+                    if (indexOf < 0) {
                         try {
-                            this.disc = Short.valueOf(tpos).shortValue();
+                            this.disc = Short.valueOf(parseTextFrame).shortValue();
                             return;
-                        } catch (NumberFormatException e5) {
+                        } catch (NumberFormatException unused4) {
                             if (LOGGER.isLoggable(this.debugLevel)) {
-                                LOGGER.log(this.debugLevel, "Could not parse disc number: " + tpos);
+                                logger = LOGGER;
+                                level2 = this.debugLevel;
+                                stringBuilder2 = new StringBuilder();
+                                stringBuilder2.append(str);
+                                stringBuilder2.append(parseTextFrame);
+                                logger.log(level2, stringBuilder2.toString());
                                 return;
                             }
                             return;
                         }
                     }
                     try {
-                        this.disc = Short.valueOf(tpos.substring(0, index)).shortValue();
-                    } catch (NumberFormatException e6) {
+                        this.disc = Short.valueOf(parseTextFrame.substring(0, indexOf)).shortValue();
+                    } catch (NumberFormatException unused5) {
                         if (LOGGER.isLoggable(this.debugLevel)) {
-                            LOGGER.log(this.debugLevel, "Could not parse disc number: " + tpos);
+                            logger2 = LOGGER;
+                            level3 = this.debugLevel;
+                            stringBuilder3 = new StringBuilder();
+                            stringBuilder3.append(str);
+                            stringBuilder3.append(parseTextFrame);
+                            logger2.log(level3, stringBuilder3.toString());
                         }
                     }
                     try {
-                        this.discs = Short.valueOf(tpos.substring(index + 1)).shortValue();
+                        this.discs = Short.valueOf(parseTextFrame.substring(indexOf + 1)).shortValue();
                         return;
-                    } catch (NumberFormatException e7) {
+                    } catch (NumberFormatException unused6) {
                         if (LOGGER.isLoggable(this.debugLevel)) {
-                            LOGGER.log(this.debugLevel, "Could not parse number of discs: " + tpos);
+                            logger = LOGGER;
+                            level = this.debugLevel;
+                            stringBuilder = new StringBuilder();
+                            stringBuilder.append("Could not parse number of discs: ");
+                            stringBuilder.append(parseTextFrame);
+                            logger.log(level, stringBuilder.toString());
                             return;
                         }
                         return;
@@ -475,34 +534,50 @@ public class ID3v2Info extends AudioInfo {
                 return;
             case 23:
             case 24:
-                String trck = parseTextFrame(frame);
-                if (trck.length() > 0) {
-                    index = trck.indexOf(47);
-                    if (index < 0) {
+                parseTextFrame = parseTextFrame(iD3v2FrameBody);
+                if (parseTextFrame.length() > 0) {
+                    indexOf = parseTextFrame.indexOf(47);
+                    str = "Could not parse track number: ";
+                    if (indexOf < 0) {
                         try {
-                            this.track = Short.valueOf(trck).shortValue();
+                            this.track = Short.valueOf(parseTextFrame).shortValue();
                             return;
-                        } catch (NumberFormatException e8) {
+                        } catch (NumberFormatException unused7) {
                             if (LOGGER.isLoggable(this.debugLevel)) {
-                                LOGGER.log(this.debugLevel, "Could not parse track number: " + trck);
+                                logger = LOGGER;
+                                level2 = this.debugLevel;
+                                stringBuilder2 = new StringBuilder();
+                                stringBuilder2.append(str);
+                                stringBuilder2.append(parseTextFrame);
+                                logger.log(level2, stringBuilder2.toString());
                                 return;
                             }
                             return;
                         }
                     }
                     try {
-                        this.track = Short.valueOf(trck.substring(0, index)).shortValue();
-                    } catch (NumberFormatException e9) {
+                        this.track = Short.valueOf(parseTextFrame.substring(0, indexOf)).shortValue();
+                    } catch (NumberFormatException unused8) {
                         if (LOGGER.isLoggable(this.debugLevel)) {
-                            LOGGER.log(this.debugLevel, "Could not parse track number: " + trck);
+                            logger2 = LOGGER;
+                            level3 = this.debugLevel;
+                            stringBuilder3 = new StringBuilder();
+                            stringBuilder3.append(str);
+                            stringBuilder3.append(parseTextFrame);
+                            logger2.log(level3, stringBuilder3.toString());
                         }
                     }
                     try {
-                        this.tracks = Short.valueOf(trck.substring(index + 1)).shortValue();
+                        this.tracks = Short.valueOf(parseTextFrame.substring(indexOf + 1)).shortValue();
                         return;
-                    } catch (NumberFormatException e10) {
+                    } catch (NumberFormatException unused9) {
                         if (LOGGER.isLoggable(this.debugLevel)) {
-                            LOGGER.log(this.debugLevel, "Could not parse number of tracks: " + trck);
+                            logger = LOGGER;
+                            level = this.debugLevel;
+                            stringBuilder = new StringBuilder();
+                            stringBuilder.append("Could not parse number of tracks: ");
+                            stringBuilder.append(parseTextFrame);
+                            logger.log(level, stringBuilder.toString());
                             return;
                         }
                         return;
@@ -511,22 +586,27 @@ public class ID3v2Info extends AudioInfo {
                 return;
             case 25:
             case 26:
-                this.grouping = parseTextFrame(frame);
+                this.grouping = parseTextFrame(iD3v2FrameBody);
                 return;
             case 27:
             case 28:
-                this.title = parseTextFrame(frame);
+                this.title = parseTextFrame(iD3v2FrameBody);
                 return;
             case 29:
             case 30:
-                String tyer = parseTextFrame(frame);
-                if (tyer.length() > 0) {
+                parseTextFrame = parseTextFrame(iD3v2FrameBody);
+                if (parseTextFrame.length() > 0) {
                     try {
-                        this.year = Short.valueOf(tyer).shortValue();
+                        this.year = Short.valueOf(parseTextFrame).shortValue();
                         return;
-                    } catch (NumberFormatException e11) {
+                    } catch (NumberFormatException unused10) {
                         if (LOGGER.isLoggable(this.debugLevel)) {
-                            LOGGER.log(this.debugLevel, "Could not parse year: " + tyer);
+                            logger = LOGGER;
+                            level = this.debugLevel;
+                            stringBuilder = new StringBuilder();
+                            stringBuilder.append("Could not parse year: ");
+                            stringBuilder.append(parseTextFrame);
+                            logger.log(level, stringBuilder.toString());
                             return;
                         }
                         return;
@@ -536,7 +616,7 @@ public class ID3v2Info extends AudioInfo {
             case 31:
             case 32:
                 if (this.lyrics == null) {
-                    this.lyrics = parseCommentOrUnsynchronizedLyricsFrame(frame).text;
+                    this.lyrics = parseCommentOrUnsynchronizedLyricsFrame(iD3v2FrameBody).text;
                     return;
                 }
                 return;
@@ -546,50 +626,35 @@ public class ID3v2Info extends AudioInfo {
     }
 
     /* Access modifiers changed, original: 0000 */
-    public String parseTextFrame(ID3v2FrameBody frame) throws IOException, ID3v2Exception {
-        return frame.readFixedLengthString((int) frame.getRemainingLength(), frame.readEncoding());
+    public String parseTextFrame(ID3v2FrameBody iD3v2FrameBody) throws IOException, ID3v2Exception {
+        return iD3v2FrameBody.readFixedLengthString((int) iD3v2FrameBody.getRemainingLength(), iD3v2FrameBody.readEncoding());
     }
 
     /* Access modifiers changed, original: 0000 */
-    public CommentOrUnsynchronizedLyrics parseCommentOrUnsynchronizedLyricsFrame(ID3v2FrameBody data) throws IOException, ID3v2Exception {
-        ID3v2Encoding encoding = data.readEncoding();
-        return new CommentOrUnsynchronizedLyrics(data.readFixedLengthString(3, ID3v2Encoding.ISO_8859_1), data.readZeroTerminatedString(200, encoding), data.readFixedLengthString((int) data.getRemainingLength(), encoding));
+    public CommentOrUnsynchronizedLyrics parseCommentOrUnsynchronizedLyricsFrame(ID3v2FrameBody iD3v2FrameBody) throws IOException, ID3v2Exception {
+        ID3v2Encoding readEncoding = iD3v2FrameBody.readEncoding();
+        return new CommentOrUnsynchronizedLyrics(iD3v2FrameBody.readFixedLengthString(3, ID3v2Encoding.ISO_8859_1), iD3v2FrameBody.readZeroTerminatedString(200, readEncoding), iD3v2FrameBody.readFixedLengthString((int) iD3v2FrameBody.getRemainingLength(), readEncoding));
     }
 
     /* Access modifiers changed, original: 0000 */
-    public AttachedPicture parseAttachedPictureFrame(ID3v2FrameBody data) throws IOException, ID3v2Exception {
-        String imageType;
-        ID3v2Encoding encoding = data.readEncoding();
-        if (data.getTagHeader().getVersion() == 2) {
-            String toUpperCase = data.readFixedLengthString(3, ID3v2Encoding.ISO_8859_1).toUpperCase();
-            Object obj = -1;
-            switch (toUpperCase.hashCode()) {
-                case 73665:
-                    if (toUpperCase.equals("JPG")) {
-                        obj = 1;
-                        break;
-                    }
-                    break;
-                case 79369:
-                    if (toUpperCase.equals("PNG")) {
-                        obj = null;
-                        break;
-                    }
-                    break;
+    public AttachedPicture parseAttachedPictureFrame(ID3v2FrameBody iD3v2FrameBody) throws IOException, ID3v2Exception {
+        String toUpperCase;
+        ID3v2Encoding readEncoding = iD3v2FrameBody.readEncoding();
+        if (iD3v2FrameBody.getTagHeader().getVersion() == 2) {
+            toUpperCase = iD3v2FrameBody.readFixedLengthString(3, ID3v2Encoding.ISO_8859_1).toUpperCase();
+            int i = -1;
+            int hashCode = toUpperCase.hashCode();
+            if (hashCode != 73665) {
+                if (hashCode == 79369 && toUpperCase.equals("PNG")) {
+                    i = 0;
+                }
+            } else if (toUpperCase.equals("JPG")) {
+                i = 1;
             }
-            switch (obj) {
-                case null:
-                    imageType = "image/png";
-                    break;
-                case 1:
-                    imageType = "image/jpeg";
-                    break;
-                default:
-                    imageType = "image/unknown";
-                    break;
-            }
+            toUpperCase = i != 0 ? i != 1 ? "image/unknown" : "image/jpeg" : "image/png";
+        } else {
+            toUpperCase = iD3v2FrameBody.readZeroTerminatedString(20, ID3v2Encoding.ISO_8859_1);
         }
-        imageType = data.readZeroTerminatedString(20, ID3v2Encoding.ISO_8859_1);
-        return new AttachedPicture(data.getData().readByte(), data.readZeroTerminatedString(200, encoding), imageType, data.getData().readFully((int) data.getRemainingLength()));
+        return new AttachedPicture(iD3v2FrameBody.getData().readByte(), iD3v2FrameBody.readZeroTerminatedString(200, readEncoding), toUpperCase, iD3v2FrameBody.getData().readFully((int) iD3v2FrameBody.getRemainingLength()));
     }
 }

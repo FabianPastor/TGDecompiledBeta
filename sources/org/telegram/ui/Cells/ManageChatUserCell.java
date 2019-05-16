@@ -11,11 +11,7 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.UserObject;
-import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.FileLocation;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.SimpleTextView;
@@ -48,52 +44,29 @@ public class ManageChatUserCell extends FrameLayout {
         boolean onOptionsButtonCheck(ManageChatUserCell manageChatUserCell, boolean z);
     }
 
-    public ManageChatUserCell(Context context, int avatarPadding, int nPadding, boolean needOption) {
-        int i;
-        int i2;
-        int i3;
-        int i4 = 3;
+    public boolean hasOverlappingRendering() {
+        return false;
+    }
+
+    public ManageChatUserCell(Context context, int i, int i2, boolean z) {
         super(context);
-        this.namePadding = nPadding;
+        this.namePadding = i2;
         this.avatarDrawable = new AvatarDrawable();
         this.avatarImageView = new BackupImageView(context);
         this.avatarImageView.setRoundRadius(AndroidUtilities.dp(23.0f));
-        addView(this.avatarImageView, LayoutHelper.createFrame(46, 46.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : (float) (avatarPadding + 7), 8.0f, LocaleController.isRTL ? (float) (avatarPadding + 7) : 0.0f, 0.0f));
+        int i3 = 5;
+        addView(this.avatarImageView, LayoutHelper.createFrame(46, 46.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : (float) (i + 7), 8.0f, LocaleController.isRTL ? (float) (i + 7) : 0.0f, 0.0f));
         this.nameTextView = new SimpleTextView(context);
         this.nameTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.nameTextView.setTextSize(17);
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        SimpleTextView simpleTextView = this.nameTextView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
-            i = 3;
-        }
-        simpleTextView.setGravity(i | 48);
-        SimpleTextView simpleTextView2 = this.nameTextView;
-        if (LocaleController.isRTL) {
-            i2 = 5;
-        } else {
-            i2 = 3;
-        }
-        addView(simpleTextView2, LayoutHelper.createFrame(-1, 20.0f, i2 | 48, LocaleController.isRTL ? 46.0f : (float) (this.namePadding + 68), 11.5f, LocaleController.isRTL ? (float) (this.namePadding + 68) : 46.0f, 0.0f));
+        this.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+        addView(this.nameTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 46.0f : (float) (this.namePadding + 68), 11.5f, LocaleController.isRTL ? (float) (this.namePadding + 68) : 46.0f, 0.0f));
         this.statusTextView = new SimpleTextView(context);
         this.statusTextView.setTextSize(14);
-        SimpleTextView simpleTextView3 = this.statusTextView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
-            i = 3;
-        }
-        simpleTextView3.setGravity(i | 48);
-        simpleTextView2 = this.statusTextView;
-        if (LocaleController.isRTL) {
-            i3 = 5;
-        } else {
-            i3 = 3;
-        }
-        addView(simpleTextView2, LayoutHelper.createFrame(-1, 20.0f, i3 | 48, LocaleController.isRTL ? 28.0f : (float) (this.namePadding + 68), 34.5f, LocaleController.isRTL ? (float) (this.namePadding + 68) : 28.0f, 0.0f));
-        if (needOption) {
+        this.statusTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
+        addView(this.statusTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 28.0f : (float) (this.namePadding + 68), 34.5f, LocaleController.isRTL ? (float) (this.namePadding + 68) : 28.0f, 0.0f));
+        if (z) {
             this.optionsButton = new ImageView(context);
             this.optionsButton.setFocusable(false);
             this.optionsButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("stickers_menuSelector")));
@@ -101,153 +74,323 @@ public class ManageChatUserCell extends FrameLayout {
             this.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("stickers_menu"), Mode.MULTIPLY));
             this.optionsButton.setScaleType(ScaleType.CENTER);
             ImageView imageView = this.optionsButton;
-            if (!LocaleController.isRTL) {
-                i4 = 5;
+            if (LocaleController.isRTL) {
+                i3 = 3;
             }
-            addView(imageView, LayoutHelper.createFrame(52, 64, i4 | 48));
-            this.optionsButton.setOnClickListener(new ManageChatUserCell$$Lambda$0(this));
+            addView(imageView, LayoutHelper.createFrame(52, 64, i3 | 48));
+            this.optionsButton.setOnClickListener(new -$$Lambda$ManageChatUserCell$oJTkyKgCBYt9FR4kYNNgwqbXXuY(this));
             this.optionsButton.setContentDescription(LocaleController.getString("AccDescrUserOptions", NUM));
         }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$new$0$ManageChatUserCell(View v) {
+    public /* synthetic */ void lambda$new$0$ManageChatUserCell(View view) {
         this.delegate.onOptionsButtonCheck(this, true);
     }
 
-    public void setData(User user, CharSequence name, CharSequence status, boolean divider) {
-        if (user == null) {
+    public void setData(User user, CharSequence charSequence, CharSequence charSequence2, boolean z) {
+        User user2 = user;
+        CharSequence charSequence3 = charSequence2;
+        if (user2 == null) {
             this.currrntStatus = null;
             this.currentName = null;
             this.currentUser = null;
-            this.nameTextView.setText("");
-            this.statusTextView.setText("");
+            String str = "";
+            this.nameTextView.setText(str);
+            this.statusTextView.setText(str);
             this.avatarImageView.setImageDrawable(null);
             return;
         }
-        this.currrntStatus = status;
-        this.currentName = name;
-        this.currentUser = user;
+        this.currrntStatus = charSequence3;
+        this.currentName = charSequence;
+        this.currentUser = user2;
         if (this.optionsButton != null) {
             float f;
-            float f2;
-            boolean visible = this.delegate.onOptionsButtonCheck(this, false);
-            this.optionsButton.setVisibility(visible ? 0 : 4);
+            boolean onOptionsButtonCheck = this.delegate.onOptionsButtonCheck(this, false);
+            this.optionsButton.setVisibility(onOptionsButtonCheck ? 0 : 4);
             SimpleTextView simpleTextView = this.nameTextView;
-            int i = (LocaleController.isRTL ? 5 : 3) | 48;
+            int i = 5;
+            int i2 = (LocaleController.isRTL ? 5 : 3) | 48;
+            int i3 = 46;
+            int i4 = LocaleController.isRTL ? onOptionsButtonCheck ? 46 : 28 : this.namePadding + 68;
+            float f2 = (float) i4;
+            float f3 = (charSequence3 == null || charSequence2.length() > 0) ? 11.5f : 20.5f;
+            int i5 = LocaleController.isRTL ? this.namePadding + 68 : onOptionsButtonCheck ? 46 : 28;
+            simpleTextView.setLayoutParams(LayoutHelper.createFrame(-1, 20.0f, i2, f2, f3, (float) i5, 0.0f));
+            SimpleTextView simpleTextView2 = this.statusTextView;
+            if (!LocaleController.isRTL) {
+                i = 3;
+            }
+            int i6 = i | 48;
+            i2 = LocaleController.isRTL ? onOptionsButtonCheck ? 46 : 28 : this.namePadding + 68;
+            float f4 = (float) i2;
             if (LocaleController.isRTL) {
-                f = (float) (visible ? 46 : 28);
-            } else {
                 f = (float) (this.namePadding + 68);
-            }
-            float f3 = (status == null || status.length() > 0) ? 11.5f : 20.5f;
-            if (LocaleController.isRTL) {
-                f2 = (float) (this.namePadding + 68);
             } else {
-                f2 = (float) (visible ? 46 : 28);
+                if (!onOptionsButtonCheck) {
+                    i3 = 28;
+                }
+                f = (float) i3;
             }
-            simpleTextView.setLayoutParams(LayoutHelper.createFrame(-1, 20.0f, i, f, f3, f2, 0.0f));
-            simpleTextView = this.statusTextView;
-            i = (LocaleController.isRTL ? 5 : 3) | 48;
-            if (LocaleController.isRTL) {
-                f = (float) (visible ? 46 : 28);
-            } else {
-                f = (float) (this.namePadding + 68);
-            }
-            if (LocaleController.isRTL) {
-                f2 = (float) (this.namePadding + 68);
-            } else {
-                f2 = (float) (visible ? 46 : 28);
-            }
-            simpleTextView.setLayoutParams(LayoutHelper.createFrame(-1, 20.0f, i, f, 34.5f, f2, 0.0f));
+            simpleTextView2.setLayoutParams(LayoutHelper.createFrame(-1, 20.0f, i6, f4, 34.5f, f, 0.0f));
         }
-        this.needDivider = divider;
-        setWillNotDraw(!this.needDivider);
+        this.needDivider = z;
+        setWillNotDraw(this.needDivider ^ 1);
         update(0);
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec((this.needDivider ? 1 : 0) + AndroidUtilities.dp(64.0f), NUM));
+    public void onMeasure(int i, int i2) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f) + this.needDivider, NUM));
     }
 
-    public void setStatusColors(int color, int onlineColor) {
-        this.statusColor = color;
-        this.statusOnlineColor = onlineColor;
+    public void setStatusColors(int i, int i2) {
+        this.statusColor = i;
+        this.statusOnlineColor = i2;
     }
 
-    public void setIsAdmin(boolean value) {
-        this.isAdmin = value;
+    public void setIsAdmin(boolean z) {
+        this.isAdmin = z;
     }
 
-    public void update(int mask) {
-        if (this.currentUser != null) {
-            TLObject photo = null;
-            String newName = null;
-            if (this.currentUser.photo != null) {
-                photo = this.currentUser.photo.photo_small;
-            }
-            if (mask != 0) {
-                boolean continueUpdate = false;
-                if ((mask & 2) != 0 && ((this.lastAvatar != null && photo == null) || !(this.lastAvatar != null || photo == null || this.lastAvatar == null || photo == null || (this.lastAvatar.volume_id == photo.volume_id && this.lastAvatar.local_id == photo.local_id)))) {
-                    continueUpdate = true;
-                }
-                if (!(this.currentUser == null || continueUpdate || (mask & 4) == 0)) {
-                    int newStatus = 0;
-                    if (this.currentUser.status != null) {
-                        newStatus = this.currentUser.status.expires;
-                    }
-                    if (newStatus != this.lastStatus) {
-                        continueUpdate = true;
-                    }
-                }
-                if (!(continueUpdate || this.currentName != null || this.lastName == null || (mask & 1) == 0)) {
-                    newName = UserObject.getUserName(this.currentUser);
-                    if (!newName.equals(this.lastName)) {
-                        continueUpdate = true;
-                    }
-                }
-                if (!continueUpdate) {
-                    return;
-                }
-            }
-            this.avatarDrawable.setInfo(this.currentUser);
-            if (this.currentUser.status != null) {
-                this.lastStatus = this.currentUser.status.expires;
-            } else {
-                this.lastStatus = 0;
-            }
-            if (this.currentName != null) {
-                this.lastName = null;
-                this.nameTextView.setText(this.currentName);
-            } else {
-                if (newName == null) {
-                    newName = UserObject.getUserName(this.currentUser);
-                }
-                this.lastName = newName;
-                this.nameTextView.setText(this.lastName);
-            }
-            if (this.currrntStatus != null) {
-                this.statusTextView.setTextColor(this.statusColor);
-                this.statusTextView.setText(this.currrntStatus);
-            } else if (this.currentUser != null) {
-                if (this.currentUser.bot) {
-                    this.statusTextView.setTextColor(this.statusColor);
-                    if (this.currentUser.bot_chat_history || this.isAdmin) {
-                        this.statusTextView.setText(LocaleController.getString("BotStatusRead", NUM));
-                    } else {
-                        this.statusTextView.setText(LocaleController.getString("BotStatusCantRead", NUM));
-                    }
-                } else if (this.currentUser.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || ((this.currentUser.status != null && this.currentUser.status.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(this.currentUser.id)))) {
-                    this.statusTextView.setTextColor(this.statusOnlineColor);
-                    this.statusTextView.setText(LocaleController.getString("Online", NUM));
-                } else {
-                    this.statusTextView.setTextColor(this.statusColor);
-                    this.statusTextView.setText(LocaleController.formatUserStatus(this.currentAccount, this.currentUser));
-                }
-            }
-            this.avatarImageView.setImage(photo, "50_50", this.avatarDrawable, this.currentUser);
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x0048  */
+    /* JADX WARNING: Removed duplicated region for block: B:32:0x0045  */
+    /* JADX WARNING: Removed duplicated region for block: B:36:0x004d  */
+    /* JADX WARNING: Removed duplicated region for block: B:49:0x006e A:{RETURN} */
+    /* JADX WARNING: Missing block: B:22:0x0032, code skipped:
+            if (r3.local_id != r0.local_id) goto L_0x0034;
+     */
+    public void update(int r11) {
+        /*
+        r10 = this;
+        r0 = r10.currentUser;
+        if (r0 != 0) goto L_0x0005;
+    L_0x0004:
+        return;
+    L_0x0005:
+        r0 = r0.photo;
+        r1 = 0;
+        if (r0 == 0) goto L_0x000d;
+    L_0x000a:
+        r0 = r0.photo_small;
+        goto L_0x000e;
+    L_0x000d:
+        r0 = r1;
+    L_0x000e:
+        r2 = 0;
+        if (r11 == 0) goto L_0x006f;
+    L_0x0011:
+        r3 = r11 & 2;
+        r4 = 1;
+        if (r3 == 0) goto L_0x0036;
+    L_0x0016:
+        r3 = r10.lastAvatar;
+        if (r3 == 0) goto L_0x001c;
+    L_0x001a:
+        if (r0 == 0) goto L_0x0034;
+    L_0x001c:
+        r3 = r10.lastAvatar;
+        if (r3 != 0) goto L_0x0036;
+    L_0x0020:
+        if (r0 == 0) goto L_0x0036;
+    L_0x0022:
+        if (r3 == 0) goto L_0x0036;
+    L_0x0024:
+        if (r0 == 0) goto L_0x0036;
+    L_0x0026:
+        r5 = r3.volume_id;
+        r7 = r0.volume_id;
+        r9 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1));
+        if (r9 != 0) goto L_0x0034;
+    L_0x002e:
+        r3 = r3.local_id;
+        r5 = r0.local_id;
+        if (r3 == r5) goto L_0x0036;
+    L_0x0034:
+        r3 = 1;
+        goto L_0x0037;
+    L_0x0036:
+        r3 = 0;
+    L_0x0037:
+        r5 = r10.currentUser;
+        if (r5 == 0) goto L_0x004e;
+    L_0x003b:
+        if (r3 != 0) goto L_0x004e;
+    L_0x003d:
+        r6 = r11 & 4;
+        if (r6 == 0) goto L_0x004e;
+    L_0x0041:
+        r5 = r5.status;
+        if (r5 == 0) goto L_0x0048;
+    L_0x0045:
+        r5 = r5.expires;
+        goto L_0x0049;
+    L_0x0048:
+        r5 = 0;
+    L_0x0049:
+        r6 = r10.lastStatus;
+        if (r5 == r6) goto L_0x004e;
+    L_0x004d:
+        r3 = 1;
+    L_0x004e:
+        if (r3 != 0) goto L_0x006b;
+    L_0x0050:
+        r5 = r10.currentName;
+        if (r5 != 0) goto L_0x006b;
+    L_0x0054:
+        r5 = r10.lastName;
+        if (r5 == 0) goto L_0x006b;
+    L_0x0058:
+        r11 = r11 & r4;
+        if (r11 == 0) goto L_0x006b;
+    L_0x005b:
+        r11 = r10.currentUser;
+        r11 = org.telegram.messenger.UserObject.getUserName(r11);
+        r5 = r10.lastName;
+        r5 = r11.equals(r5);
+        if (r5 != 0) goto L_0x006c;
+    L_0x0069:
+        r3 = 1;
+        goto L_0x006c;
+    L_0x006b:
+        r11 = r1;
+    L_0x006c:
+        if (r3 != 0) goto L_0x0070;
+    L_0x006e:
+        return;
+    L_0x006f:
+        r11 = r1;
+    L_0x0070:
+        r3 = r10.avatarDrawable;
+        r4 = r10.currentUser;
+        r3.setInfo(r4);
+        r3 = r10.currentUser;
+        r3 = r3.status;
+        if (r3 == 0) goto L_0x0082;
+    L_0x007d:
+        r3 = r3.expires;
+        r10.lastStatus = r3;
+        goto L_0x0084;
+    L_0x0082:
+        r10.lastStatus = r2;
+    L_0x0084:
+        r3 = r10.currentName;
+        if (r3 == 0) goto L_0x0090;
+    L_0x0088:
+        r10.lastName = r1;
+        r11 = r10.nameTextView;
+        r11.setText(r3);
+        goto L_0x00a1;
+    L_0x0090:
+        if (r11 != 0) goto L_0x0098;
+    L_0x0092:
+        r11 = r10.currentUser;
+        r11 = org.telegram.messenger.UserObject.getUserName(r11);
+    L_0x0098:
+        r10.lastName = r11;
+        r11 = r10.nameTextView;
+        r1 = r10.lastName;
+        r11.setText(r1);
+    L_0x00a1:
+        r11 = r10.currrntStatus;
+        if (r11 == 0) goto L_0x00b5;
+    L_0x00a5:
+        r11 = r10.statusTextView;
+        r1 = r10.statusColor;
+        r11.setTextColor(r1);
+        r11 = r10.statusTextView;
+        r1 = r10.currrntStatus;
+        r11.setText(r1);
+        goto L_0x0150;
+    L_0x00b5:
+        r11 = r10.currentUser;
+        if (r11 == 0) goto L_0x0150;
+    L_0x00b9:
+        r1 = r11.bot;
+        if (r1 == 0) goto L_0x00ed;
+    L_0x00bd:
+        r11 = r10.statusTextView;
+        r1 = r10.statusColor;
+        r11.setTextColor(r1);
+        r11 = r10.currentUser;
+        r11 = r11.bot_chat_history;
+        if (r11 != 0) goto L_0x00de;
+    L_0x00ca:
+        r11 = r10.isAdmin;
+        if (r11 == 0) goto L_0x00cf;
+    L_0x00ce:
+        goto L_0x00de;
+    L_0x00cf:
+        r11 = r10.statusTextView;
+        r1 = NUM; // 0x7f0d01bd float:1.8743017E38 double:1.0531299974E-314;
+        r3 = "BotStatusCantRead";
+        r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
+        r11.setText(r1);
+        goto L_0x0150;
+    L_0x00de:
+        r11 = r10.statusTextView;
+        r1 = NUM; // 0x7f0d01be float:1.874302E38 double:1.053129998E-314;
+        r3 = "BotStatusRead";
+        r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
+        r11.setText(r1);
+        goto L_0x0150;
+    L_0x00ed:
+        r11 = r11.id;
+        r1 = r10.currentAccount;
+        r1 = org.telegram.messenger.UserConfig.getInstance(r1);
+        r1 = r1.getClientUserId();
+        if (r11 == r1) goto L_0x013b;
+    L_0x00fb:
+        r11 = r10.currentUser;
+        r11 = r11.status;
+        if (r11 == 0) goto L_0x010f;
+    L_0x0101:
+        r11 = r11.expires;
+        r1 = r10.currentAccount;
+        r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1);
+        r1 = r1.getCurrentTime();
+        if (r11 > r1) goto L_0x013b;
+    L_0x010f:
+        r11 = r10.currentAccount;
+        r11 = org.telegram.messenger.MessagesController.getInstance(r11);
+        r11 = r11.onlinePrivacy;
+        r1 = r10.currentUser;
+        r1 = r1.id;
+        r1 = java.lang.Integer.valueOf(r1);
+        r11 = r11.containsKey(r1);
+        if (r11 == 0) goto L_0x0126;
+    L_0x0125:
+        goto L_0x013b;
+    L_0x0126:
+        r11 = r10.statusTextView;
+        r1 = r10.statusColor;
+        r11.setTextColor(r1);
+        r11 = r10.statusTextView;
+        r1 = r10.currentAccount;
+        r3 = r10.currentUser;
+        r1 = org.telegram.messenger.LocaleController.formatUserStatus(r1, r3);
+        r11.setText(r1);
+        goto L_0x0150;
+    L_0x013b:
+        r11 = r10.statusTextView;
+        r1 = r10.statusOnlineColor;
+        r11.setTextColor(r1);
+        r11 = r10.statusTextView;
+        r1 = NUM; // 0x7f0d0680 float:1.874549E38 double:1.0531305997E-314;
+        r3 = "Online";
+        r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
+        r11.setText(r1);
+    L_0x0150:
+        r10.lastAvatar = r0;
+        r11 = r10.avatarImageView;
+        r0 = r10.currentUser;
+        r0 = org.telegram.messenger.ImageLocation.getForUser(r0, r2);
+        r1 = r10.avatarDrawable;
+        r2 = r10.currentUser;
+        r3 = "50_50";
+        r11.setImage(r0, r3, r1, r2);
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ManageChatUserCell.update(int):void");
     }
 
     public void recycle() {
@@ -260,10 +403,6 @@ public class ManageChatUserCell extends FrameLayout {
 
     public User getCurrentUser() {
         return this.currentUser;
-    }
-
-    public boolean hasOverlappingRendering() {
-        return false;
     }
 
     /* Access modifiers changed, original: protected */

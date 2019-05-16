@@ -12,7 +12,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
-import android.support.annotation.Keep;
 import android.view.DisplayCutout;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -26,6 +25,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ListView;
+import androidx.annotation.Keep;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
@@ -34,8 +34,9 @@ public class DrawerLayoutContainer extends FrameLayout {
     private static final int MIN_DRAWER_MARGIN = 64;
     private boolean allowDrawContent = true;
     private boolean allowOpenDrawer;
+    private Paint backgroundPaint = new Paint();
     private boolean beginTrackingSent;
-    private Paint blackPaint = new Paint();
+    private int behindKeyboardColor;
     private AnimatorSet currentAnimation;
     private ViewGroup drawerLayout;
     private boolean drawerOpened;
@@ -44,7 +45,7 @@ public class DrawerLayoutContainer extends FrameLayout {
     private boolean inLayout;
     private Object lastInsets;
     private boolean maybeStartTracking;
-    private int minDrawerMargin = ((int) ((64.0f * AndroidUtilities.density) + 0.5f));
+    private int minDrawerMargin = ((int) ((AndroidUtilities.density * 64.0f) + 0.5f));
     private int paddingTop;
     private ActionBarLayout parentActionBarLayout;
     private Rect rect = new Rect();
@@ -57,99 +58,103 @@ public class DrawerLayoutContainer extends FrameLayout {
     private int startedTrackingY;
     private VelocityTracker velocityTracker;
 
+    public boolean hasOverlappingRendering() {
+        return false;
+    }
+
     public DrawerLayoutContainer(Context context) {
         super(context);
         setDescendantFocusability(262144);
         setFocusableInTouchMode(true);
-        this.blackPaint.setColor(-16777216);
         if (VERSION.SDK_INT >= 21) {
             setFitsSystemWindows(true);
-            setOnApplyWindowInsetsListener(new DrawerLayoutContainer$$Lambda$0(this));
+            setOnApplyWindowInsetsListener(new -$$Lambda$DrawerLayoutContainer$dOsUXLZuN_il_QGSmGuPct7OsoA(this));
             setSystemUiVisibility(1280);
         }
         this.shadowLeft = getResources().getDrawable(NUM);
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ WindowInsets lambda$new$0$DrawerLayoutContainer(View v, WindowInsets insets) {
+    public /* synthetic */ WindowInsets lambda$new$0$DrawerLayoutContainer(View view, WindowInsets windowInsets) {
+        DrawerLayoutContainer drawerLayoutContainer = (DrawerLayoutContainer) view;
+        if (AndroidUtilities.statusBarHeight != windowInsets.getSystemWindowInsetTop()) {
+            drawerLayoutContainer.requestLayout();
+        }
+        AndroidUtilities.statusBarHeight = windowInsets.getSystemWindowInsetTop();
+        this.lastInsets = windowInsets;
         boolean z = true;
-        DrawerLayoutContainer drawerLayout = (DrawerLayoutContainer) v;
-        AndroidUtilities.statusBarHeight = insets.getSystemWindowInsetTop();
-        this.lastInsets = insets;
-        boolean z2 = insets.getSystemWindowInsetTop() <= 0 && getBackground() == null;
-        drawerLayout.setWillNotDraw(z2);
-        drawerLayout.requestLayout();
+        boolean z2 = windowInsets.getSystemWindowInsetTop() <= 0 && getBackground() == null;
+        drawerLayoutContainer.setWillNotDraw(z2);
         if (VERSION.SDK_INT >= 28) {
-            DisplayCutout cutout = insets.getDisplayCutout();
-            if (cutout == null || cutout.getBoundingRects().size() == 0) {
+            DisplayCutout displayCutout = windowInsets.getDisplayCutout();
+            if (displayCutout == null || displayCutout.getBoundingRects().size() == 0) {
                 z = false;
             }
             this.hasCutout = z;
-            invalidate();
         }
-        return insets.consumeSystemWindowInsets();
+        invalidate();
+        return windowInsets.consumeSystemWindowInsets();
     }
 
     @SuppressLint({"NewApi"})
-    private void dispatchChildInsets(View child, Object insets, int drawerGravity) {
-        WindowInsets wi = (WindowInsets) insets;
-        if (drawerGravity == 3) {
-            wi = wi.replaceSystemWindowInsets(wi.getSystemWindowInsetLeft(), wi.getSystemWindowInsetTop(), 0, wi.getSystemWindowInsetBottom());
-        } else if (drawerGravity == 5) {
-            wi = wi.replaceSystemWindowInsets(0, wi.getSystemWindowInsetTop(), wi.getSystemWindowInsetRight(), wi.getSystemWindowInsetBottom());
+    private void dispatchChildInsets(View view, Object obj, int i) {
+        WindowInsets windowInsets = (WindowInsets) obj;
+        if (i == 3) {
+            windowInsets = windowInsets.replaceSystemWindowInsets(windowInsets.getSystemWindowInsetLeft(), windowInsets.getSystemWindowInsetTop(), 0, windowInsets.getSystemWindowInsetBottom());
+        } else if (i == 5) {
+            windowInsets = windowInsets.replaceSystemWindowInsets(0, windowInsets.getSystemWindowInsetTop(), windowInsets.getSystemWindowInsetRight(), windowInsets.getSystemWindowInsetBottom());
         }
-        child.dispatchApplyWindowInsets(wi);
+        view.dispatchApplyWindowInsets(windowInsets);
     }
 
     @SuppressLint({"NewApi"})
-    private void applyMarginInsets(MarginLayoutParams lp, Object insets, int drawerGravity, boolean topOnly) {
-        int i = 0;
-        WindowInsets wi = (WindowInsets) insets;
-        if (drawerGravity == 3) {
-            wi = wi.replaceSystemWindowInsets(wi.getSystemWindowInsetLeft(), wi.getSystemWindowInsetTop(), 0, wi.getSystemWindowInsetBottom());
-        } else if (drawerGravity == 5) {
-            wi = wi.replaceSystemWindowInsets(0, wi.getSystemWindowInsetTop(), wi.getSystemWindowInsetRight(), wi.getSystemWindowInsetBottom());
+    private void applyMarginInsets(MarginLayoutParams marginLayoutParams, Object obj, int i, boolean z) {
+        WindowInsets windowInsets = (WindowInsets) obj;
+        int i2 = 0;
+        if (i == 3) {
+            windowInsets = windowInsets.replaceSystemWindowInsets(windowInsets.getSystemWindowInsetLeft(), windowInsets.getSystemWindowInsetTop(), 0, windowInsets.getSystemWindowInsetBottom());
+        } else if (i == 5) {
+            windowInsets = windowInsets.replaceSystemWindowInsets(0, windowInsets.getSystemWindowInsetTop(), windowInsets.getSystemWindowInsetRight(), windowInsets.getSystemWindowInsetBottom());
         }
-        lp.leftMargin = wi.getSystemWindowInsetLeft();
-        if (!topOnly) {
-            i = wi.getSystemWindowInsetTop();
+        marginLayoutParams.leftMargin = windowInsets.getSystemWindowInsetLeft();
+        if (!z) {
+            i2 = windowInsets.getSystemWindowInsetTop();
         }
-        lp.topMargin = i;
-        lp.rightMargin = wi.getSystemWindowInsetRight();
-        lp.bottomMargin = wi.getSystemWindowInsetBottom();
+        marginLayoutParams.topMargin = i2;
+        marginLayoutParams.rightMargin = windowInsets.getSystemWindowInsetRight();
+        marginLayoutParams.bottomMargin = windowInsets.getSystemWindowInsetBottom();
     }
 
-    private int getTopInset(Object insets) {
-        if (VERSION.SDK_INT < 21 || insets == null) {
+    private int getTopInset(Object obj) {
+        if (VERSION.SDK_INT < 21 || obj == null) {
             return 0;
         }
-        return ((WindowInsets) insets).getSystemWindowInsetTop();
+        return ((WindowInsets) obj).getSystemWindowInsetTop();
     }
 
-    public void setDrawerLayout(ViewGroup layout) {
-        this.drawerLayout = layout;
+    public void setDrawerLayout(ViewGroup viewGroup) {
+        this.drawerLayout = viewGroup;
         addView(this.drawerLayout);
         if (VERSION.SDK_INT >= 21) {
             this.drawerLayout.setFitsSystemWindows(true);
         }
     }
 
-    public void moveDrawerByX(float dx) {
-        setDrawerPosition(this.drawerPosition + dx);
+    public void moveDrawerByX(float f) {
+        setDrawerPosition(this.drawerPosition + f);
     }
 
     @Keep
-    public void setDrawerPosition(float value) {
-        this.drawerPosition = value;
+    public void setDrawerPosition(float f) {
+        this.drawerPosition = f;
         if (this.drawerPosition > ((float) this.drawerLayout.getMeasuredWidth())) {
             this.drawerPosition = (float) this.drawerLayout.getMeasuredWidth();
         } else if (this.drawerPosition < 0.0f) {
             this.drawerPosition = 0.0f;
         }
         this.drawerLayout.setTranslationX(this.drawerPosition);
-        int newVisibility = this.drawerPosition > 0.0f ? 0 : 8;
-        if (this.drawerLayout.getVisibility() != newVisibility) {
-            this.drawerLayout.setVisibility(newVisibility);
+        int i = this.drawerPosition > 0.0f ? 0 : 8;
+        if (this.drawerLayout.getVisibility() != i) {
+            this.drawerLayout.setVisibility(i);
         }
         setScrimOpacity(this.drawerPosition / ((float) this.drawerLayout.getMeasuredWidth()));
     }
@@ -159,16 +164,23 @@ public class DrawerLayoutContainer extends FrameLayout {
     }
 
     public void cancelCurrentAnimation() {
-        if (this.currentAnimation != null) {
-            this.currentAnimation.cancel();
+        AnimatorSet animatorSet = this.currentAnimation;
+        if (animatorSet != null) {
+            animatorSet.cancel();
             this.currentAnimation = null;
         }
     }
 
-    public void openDrawer(boolean fast) {
+    public void openDrawer(boolean z) {
         if (this.allowOpenDrawer) {
-            if (!(!AndroidUtilities.isTablet() || this.parentActionBarLayout == null || this.parentActionBarLayout.parentActivity == null)) {
-                AndroidUtilities.hideKeyboard(this.parentActionBarLayout.parentActivity.getCurrentFocus());
+            if (AndroidUtilities.isTablet()) {
+                ActionBarLayout actionBarLayout = this.parentActionBarLayout;
+                if (actionBarLayout != null) {
+                    Activity activity = actionBarLayout.parentActivity;
+                    if (activity != null) {
+                        AndroidUtilities.hideKeyboard(activity.getCurrentFocus());
+                    }
+                }
             }
             cancelCurrentAnimation();
             AnimatorSet animatorSet = new AnimatorSet();
@@ -176,7 +188,7 @@ public class DrawerLayoutContainer extends FrameLayout {
             animatorArr[0] = ObjectAnimator.ofFloat(this, "drawerPosition", new float[]{(float) this.drawerLayout.getMeasuredWidth()});
             animatorSet.playTogether(animatorArr);
             animatorSet.setInterpolator(new DecelerateInterpolator());
-            if (fast) {
+            if (z) {
                 animatorSet.setDuration((long) Math.max((int) ((200.0f / ((float) this.drawerLayout.getMeasuredWidth())) * (((float) this.drawerLayout.getMeasuredWidth()) - this.drawerPosition)), 50));
             } else {
                 animatorSet.setDuration(300);
@@ -191,14 +203,14 @@ public class DrawerLayoutContainer extends FrameLayout {
         }
     }
 
-    public void closeDrawer(boolean fast) {
+    public void closeDrawer(boolean z) {
         cancelCurrentAnimation();
         AnimatorSet animatorSet = new AnimatorSet();
         Animator[] animatorArr = new Animator[1];
         animatorArr[0] = ObjectAnimator.ofFloat(this, "drawerPosition", new float[]{0.0f});
         animatorSet.playTogether(animatorArr);
         animatorSet.setInterpolator(new DecelerateInterpolator());
-        if (fast) {
+        if (z) {
             animatorSet.setDuration((long) Math.max((int) ((200.0f / ((float) this.drawerLayout.getMeasuredWidth())) * this.drawerPosition), 50));
         } else {
             animatorSet.setDuration(300);
@@ -211,32 +223,29 @@ public class DrawerLayoutContainer extends FrameLayout {
         animatorSet.start();
     }
 
-    private void onDrawerAnimationEnd(boolean opened) {
+    private void onDrawerAnimationEnd(boolean z) {
         this.startedTracking = false;
         this.currentAnimation = null;
-        this.drawerOpened = opened;
-        if (!opened && (this.drawerLayout instanceof ListView)) {
-            ((ListView) this.drawerLayout).setSelectionFromTop(0, 0);
+        this.drawerOpened = z;
+        if (!z) {
+            ViewGroup viewGroup = this.drawerLayout;
+            if (viewGroup instanceof ListView) {
+                ((ListView) viewGroup).setSelectionFromTop(0, 0);
+            }
         }
         if (VERSION.SDK_INT >= 19) {
             for (int i = 0; i < getChildCount(); i++) {
-                View child = getChildAt(i);
-                if (child != this.drawerLayout) {
-                    int i2;
-                    if (opened) {
-                        i2 = 4;
-                    } else {
-                        i2 = 0;
-                    }
-                    child.setImportantForAccessibility(i2);
+                View childAt = getChildAt(i);
+                if (childAt != this.drawerLayout) {
+                    childAt.setImportantForAccessibility(z ? 4 : 0);
                 }
             }
         }
         sendAccessibilityEvent(32);
     }
 
-    private void setScrimOpacity(float value) {
-        this.scrimOpacity = value;
+    private void setScrimOpacity(float f) {
+        this.scrimOpacity = f;
         invalidate();
     }
 
@@ -248,14 +257,14 @@ public class DrawerLayoutContainer extends FrameLayout {
         return this.drawerLayout;
     }
 
-    public void setParentActionBarLayout(ActionBarLayout layout) {
-        this.parentActionBarLayout = layout;
+    public void setParentActionBarLayout(ActionBarLayout actionBarLayout) {
+        this.parentActionBarLayout = actionBarLayout;
     }
 
-    public void setAllowOpenDrawer(boolean value, boolean animated) {
-        this.allowOpenDrawer = value;
+    public void setAllowOpenDrawer(boolean z, boolean z2) {
+        this.allowOpenDrawer = z;
         if (!this.allowOpenDrawer && this.drawerPosition != 0.0f) {
-            if (animated) {
+            if (z2) {
                 closeDrawer(true);
                 return;
             }
@@ -264,11 +273,11 @@ public class DrawerLayoutContainer extends FrameLayout {
         }
     }
 
-    private void prepareForDrawerOpen(MotionEvent ev) {
+    private void prepareForDrawerOpen(MotionEvent motionEvent) {
         this.maybeStartTracking = false;
         this.startedTracking = true;
-        if (ev != null) {
-            this.startedTrackingX = (int) ev.getX();
+        if (motionEvent != null) {
+            this.startedTrackingX = (int) motionEvent.getX();
         }
         this.beginTrackingSent = false;
     }
@@ -277,132 +286,344 @@ public class DrawerLayoutContainer extends FrameLayout {
         return this.drawerOpened;
     }
 
-    public void setAllowDrawContent(boolean value) {
-        if (this.allowDrawContent != value) {
-            this.allowDrawContent = value;
+    public void setAllowDrawContent(boolean z) {
+        if (this.allowDrawContent != z) {
+            this.allowDrawContent = z;
             invalidate();
         }
     }
 
-    public boolean onTouchEvent(MotionEvent ev) {
-        boolean z = true;
-        if (this.parentActionBarLayout.checkTransitionAnimation()) {
-            return false;
-        }
-        if (!this.drawerOpened || ev == null || ev.getX() <= this.drawerPosition || this.startedTracking) {
-            if (this.allowOpenDrawer && this.parentActionBarLayout.fragmentsStack.size() == 1) {
-                if (ev != null && ((ev.getAction() == 0 || ev.getAction() == 2) && !this.startedTracking && !this.maybeStartTracking)) {
-                    this.parentActionBarLayout.getHitRect(this.rect);
-                    this.startedTrackingX = (int) ev.getX();
-                    this.startedTrackingY = (int) ev.getY();
-                    if (this.rect.contains(this.startedTrackingX, this.startedTrackingY)) {
-                        this.startedTrackingPointerId = ev.getPointerId(0);
-                        this.maybeStartTracking = true;
-                        cancelCurrentAnimation();
-                        if (this.velocityTracker != null) {
-                            this.velocityTracker.clear();
-                        }
-                    }
-                } else if (ev != null && ev.getAction() == 2 && ev.getPointerId(0) == this.startedTrackingPointerId) {
-                    if (this.velocityTracker == null) {
-                        this.velocityTracker = VelocityTracker.obtain();
-                    }
-                    float dx = (float) ((int) (ev.getX() - ((float) this.startedTrackingX)));
-                    float dy = (float) Math.abs(((int) ev.getY()) - this.startedTrackingY);
-                    this.velocityTracker.addMovement(ev);
-                    if (this.maybeStartTracking && !this.startedTracking && ((dx > 0.0f && dx / 3.0f > Math.abs(dy) && Math.abs(dx) >= AndroidUtilities.getPixelsInCM(0.2f, true)) || (dx < 0.0f && Math.abs(dx) >= Math.abs(dy) && Math.abs(dx) >= AndroidUtilities.getPixelsInCM(0.4f, true)))) {
-                        prepareForDrawerOpen(ev);
-                        this.startedTrackingX = (int) ev.getX();
-                        requestDisallowInterceptTouchEvent(true);
-                    } else if (this.startedTracking) {
-                        if (!this.beginTrackingSent) {
-                            if (((Activity) getContext()).getCurrentFocus() != null) {
-                                AndroidUtilities.hideKeyboard(((Activity) getContext()).getCurrentFocus());
-                            }
-                            this.beginTrackingSent = true;
-                        }
-                        moveDrawerByX(dx);
-                        this.startedTrackingX = (int) ev.getX();
-                    }
-                } else if (ev == null || (ev != null && ev.getPointerId(0) == this.startedTrackingPointerId && (ev.getAction() == 3 || ev.getAction() == 1 || ev.getAction() == 6))) {
-                    if (this.velocityTracker == null) {
-                        this.velocityTracker = VelocityTracker.obtain();
-                    }
-                    this.velocityTracker.computeCurrentVelocity(1000);
-                    if (this.startedTracking || !(this.drawerPosition == 0.0f || this.drawerPosition == ((float) this.drawerLayout.getMeasuredWidth()))) {
-                        boolean backAnimation;
-                        float velX = this.velocityTracker.getXVelocity();
-                        float velY = this.velocityTracker.getYVelocity();
-                        if ((this.drawerPosition >= ((float) this.drawerLayout.getMeasuredWidth()) / 2.0f || (velX >= 3500.0f && Math.abs(velX) >= Math.abs(velY))) && (velX >= 0.0f || Math.abs(velX) < 3500.0f)) {
-                            backAnimation = false;
-                        } else {
-                            backAnimation = true;
-                        }
-                        if (backAnimation) {
-                            if (!this.drawerOpened || Math.abs(velX) < 3500.0f) {
-                                z = false;
-                            }
-                            closeDrawer(z);
-                        } else {
-                            boolean z2;
-                            if (this.drawerOpened || Math.abs(velX) < 3500.0f) {
-                                z2 = false;
-                            } else {
-                                z2 = true;
-                            }
-                            openDrawer(z2);
-                        }
-                    }
-                    this.startedTracking = false;
-                    this.maybeStartTracking = false;
-                    if (this.velocityTracker != null) {
-                        this.velocityTracker.recycle();
-                        this.velocityTracker = null;
-                    }
-                }
-            }
-            return this.startedTracking;
-        } else if (ev.getAction() != 1) {
-            return true;
-        } else {
-            closeDrawer(false);
-            return true;
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:113:0x01ee  */
+    /* JADX WARNING: Missing block: B:85:0x0181, code skipped:
+            if (r8 != ((float) r7.drawerLayout.getMeasuredWidth())) goto L_0x0183;
+     */
+    public boolean onTouchEvent(android.view.MotionEvent r8) {
+        /*
+        r7 = this;
+        r0 = r7.parentActionBarLayout;
+        r0 = r0.checkTransitionAnimation();
+        r1 = 0;
+        if (r0 != 0) goto L_0x01f7;
+    L_0x0009:
+        r0 = r7.drawerOpened;
+        r2 = 1;
+        if (r0 == 0) goto L_0x0028;
+    L_0x000e:
+        if (r8 == 0) goto L_0x0028;
+    L_0x0010:
+        r0 = r8.getX();
+        r3 = r7.drawerPosition;
+        r0 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1));
+        if (r0 <= 0) goto L_0x0028;
+    L_0x001a:
+        r0 = r7.startedTracking;
+        if (r0 != 0) goto L_0x0028;
+    L_0x001e:
+        r8 = r8.getAction();
+        if (r8 != r2) goto L_0x0027;
+    L_0x0024:
+        r7.closeDrawer(r1);
+    L_0x0027:
+        return r2;
+    L_0x0028:
+        r0 = r7.allowOpenDrawer;
+        if (r0 == 0) goto L_0x01f4;
+    L_0x002c:
+        r0 = r7.parentActionBarLayout;
+        r0 = r0.fragmentsStack;
+        r0 = r0.size();
+        if (r0 != r2) goto L_0x01f4;
+    L_0x0036:
+        r0 = 2;
+        if (r8 == 0) goto L_0x0082;
+    L_0x0039:
+        r3 = r8.getAction();
+        if (r3 == 0) goto L_0x0045;
+    L_0x003f:
+        r3 = r8.getAction();
+        if (r3 != r0) goto L_0x0082;
+    L_0x0045:
+        r3 = r7.startedTracking;
+        if (r3 != 0) goto L_0x0082;
+    L_0x0049:
+        r3 = r7.maybeStartTracking;
+        if (r3 != 0) goto L_0x0082;
+    L_0x004d:
+        r0 = r7.parentActionBarLayout;
+        r3 = r7.rect;
+        r0.getHitRect(r3);
+        r0 = r8.getX();
+        r0 = (int) r0;
+        r7.startedTrackingX = r0;
+        r0 = r8.getY();
+        r0 = (int) r0;
+        r7.startedTrackingY = r0;
+        r0 = r7.rect;
+        r3 = r7.startedTrackingX;
+        r4 = r7.startedTrackingY;
+        r0 = r0.contains(r3, r4);
+        if (r0 == 0) goto L_0x01f4;
+    L_0x006e:
+        r8 = r8.getPointerId(r1);
+        r7.startedTrackingPointerId = r8;
+        r7.maybeStartTracking = r2;
+        r7.cancelCurrentAnimation();
+        r8 = r7.velocityTracker;
+        if (r8 == 0) goto L_0x01f4;
+    L_0x007d:
+        r8.clear();
+        goto L_0x01f4;
+    L_0x0082:
+        r3 = 0;
+        if (r8 == 0) goto L_0x013d;
+    L_0x0085:
+        r4 = r8.getAction();
+        if (r4 != r0) goto L_0x013d;
+    L_0x008b:
+        r0 = r8.getPointerId(r1);
+        r4 = r7.startedTrackingPointerId;
+        if (r0 != r4) goto L_0x013d;
+    L_0x0093:
+        r0 = r7.velocityTracker;
+        if (r0 != 0) goto L_0x009d;
+    L_0x0097:
+        r0 = android.view.VelocityTracker.obtain();
+        r7.velocityTracker = r0;
+    L_0x009d:
+        r0 = r8.getX();
+        r1 = r7.startedTrackingX;
+        r1 = (float) r1;
+        r0 = r0 - r1;
+        r0 = (int) r0;
+        r0 = (float) r0;
+        r1 = r8.getY();
+        r1 = (int) r1;
+        r4 = r7.startedTrackingY;
+        r1 = r1 - r4;
+        r1 = java.lang.Math.abs(r1);
+        r1 = (float) r1;
+        r4 = r7.velocityTracker;
+        r4.addMovement(r8);
+        r4 = r7.maybeStartTracking;
+        if (r4 == 0) goto L_0x010e;
+    L_0x00bd:
+        r4 = r7.startedTracking;
+        if (r4 != 0) goto L_0x010e;
+    L_0x00c1:
+        r4 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1));
+        if (r4 <= 0) goto L_0x00e0;
+    L_0x00c5:
+        r4 = NUM; // 0x40400000 float:3.0 double:5.325712093E-315;
+        r4 = r0 / r4;
+        r5 = java.lang.Math.abs(r1);
+        r4 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1));
+        if (r4 <= 0) goto L_0x00e0;
+    L_0x00d1:
+        r4 = java.lang.Math.abs(r0);
+        r5 = NUM; // 0x3e4ccccd float:0.2 double:5.164075695E-315;
+        r5 = org.telegram.messenger.AndroidUtilities.getPixelsInCM(r5, r2);
+        r4 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1));
+        if (r4 >= 0) goto L_0x00ff;
+    L_0x00e0:
+        r3 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1));
+        if (r3 >= 0) goto L_0x010e;
+    L_0x00e4:
+        r3 = java.lang.Math.abs(r0);
+        r1 = java.lang.Math.abs(r1);
+        r1 = (r3 > r1 ? 1 : (r3 == r1 ? 0 : -1));
+        if (r1 < 0) goto L_0x010e;
+    L_0x00f0:
+        r1 = java.lang.Math.abs(r0);
+        r3 = NUM; // 0x3ecccccd float:0.4 double:5.205520926E-315;
+        r3 = org.telegram.messenger.AndroidUtilities.getPixelsInCM(r3, r2);
+        r1 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1));
+        if (r1 < 0) goto L_0x010e;
+    L_0x00ff:
+        r7.prepareForDrawerOpen(r8);
+        r8 = r8.getX();
+        r8 = (int) r8;
+        r7.startedTrackingX = r8;
+        r7.requestDisallowInterceptTouchEvent(r2);
+        goto L_0x01f4;
+    L_0x010e:
+        r1 = r7.startedTracking;
+        if (r1 == 0) goto L_0x01f4;
+    L_0x0112:
+        r1 = r7.beginTrackingSent;
+        if (r1 != 0) goto L_0x0131;
+    L_0x0116:
+        r1 = r7.getContext();
+        r1 = (android.app.Activity) r1;
+        r1 = r1.getCurrentFocus();
+        if (r1 == 0) goto L_0x012f;
+    L_0x0122:
+        r1 = r7.getContext();
+        r1 = (android.app.Activity) r1;
+        r1 = r1.getCurrentFocus();
+        org.telegram.messenger.AndroidUtilities.hideKeyboard(r1);
+    L_0x012f:
+        r7.beginTrackingSent = r2;
+    L_0x0131:
+        r7.moveDrawerByX(r0);
+        r8 = r8.getX();
+        r8 = (int) r8;
+        r7.startedTrackingX = r8;
+        goto L_0x01f4;
+    L_0x013d:
+        if (r8 == 0) goto L_0x015d;
+    L_0x013f:
+        if (r8 == 0) goto L_0x01f4;
+    L_0x0141:
+        r0 = r8.getPointerId(r1);
+        r4 = r7.startedTrackingPointerId;
+        if (r0 != r4) goto L_0x01f4;
+    L_0x0149:
+        r0 = r8.getAction();
+        r4 = 3;
+        if (r0 == r4) goto L_0x015d;
+    L_0x0150:
+        r0 = r8.getAction();
+        if (r0 == r2) goto L_0x015d;
+    L_0x0156:
+        r8 = r8.getAction();
+        r0 = 6;
+        if (r8 != r0) goto L_0x01f4;
+    L_0x015d:
+        r8 = r7.velocityTracker;
+        if (r8 != 0) goto L_0x0167;
+    L_0x0161:
+        r8 = android.view.VelocityTracker.obtain();
+        r7.velocityTracker = r8;
+    L_0x0167:
+        r8 = r7.velocityTracker;
+        r0 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
+        r8.computeCurrentVelocity(r0);
+        r8 = r7.startedTracking;
+        if (r8 != 0) goto L_0x0183;
+    L_0x0172:
+        r8 = r7.drawerPosition;
+        r0 = (r8 > r3 ? 1 : (r8 == r3 ? 0 : -1));
+        if (r0 == 0) goto L_0x01e6;
+    L_0x0178:
+        r0 = r7.drawerLayout;
+        r0 = r0.getMeasuredWidth();
+        r0 = (float) r0;
+        r8 = (r8 > r0 ? 1 : (r8 == r0 ? 0 : -1));
+        if (r8 == 0) goto L_0x01e6;
+    L_0x0183:
+        r8 = r7.velocityTracker;
+        r8 = r8.getXVelocity();
+        r0 = r7.velocityTracker;
+        r0 = r0.getYVelocity();
+        r4 = r7.drawerPosition;
+        r5 = r7.drawerLayout;
+        r5 = r5.getMeasuredWidth();
+        r5 = (float) r5;
+        r6 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+        r5 = r5 / r6;
+        r6 = NUM; // 0x455aCLASSNAME float:3500.0 double:5.7488258E-315;
+        r4 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1));
+        if (r4 >= 0) goto L_0x01b2;
+    L_0x01a2:
+        r4 = (r8 > r6 ? 1 : (r8 == r6 ? 0 : -1));
+        if (r4 < 0) goto L_0x01be;
+    L_0x01a6:
+        r4 = java.lang.Math.abs(r8);
+        r0 = java.lang.Math.abs(r0);
+        r0 = (r4 > r0 ? 1 : (r4 == r0 ? 0 : -1));
+        if (r0 < 0) goto L_0x01be;
+    L_0x01b2:
+        r0 = (r8 > r3 ? 1 : (r8 == r3 ? 0 : -1));
+        if (r0 >= 0) goto L_0x01c0;
+    L_0x01b6:
+        r0 = java.lang.Math.abs(r8);
+        r0 = (r0 > r6 ? 1 : (r0 == r6 ? 0 : -1));
+        if (r0 < 0) goto L_0x01c0;
+    L_0x01be:
+        r0 = 1;
+        goto L_0x01c1;
+    L_0x01c0:
+        r0 = 0;
+    L_0x01c1:
+        if (r0 != 0) goto L_0x01d5;
+    L_0x01c3:
+        r0 = r7.drawerOpened;
+        if (r0 != 0) goto L_0x01d0;
+    L_0x01c7:
+        r8 = java.lang.Math.abs(r8);
+        r8 = (r8 > r6 ? 1 : (r8 == r6 ? 0 : -1));
+        if (r8 < 0) goto L_0x01d0;
+    L_0x01cf:
+        goto L_0x01d1;
+    L_0x01d0:
+        r2 = 0;
+    L_0x01d1:
+        r7.openDrawer(r2);
+        goto L_0x01e6;
+    L_0x01d5:
+        r0 = r7.drawerOpened;
+        if (r0 == 0) goto L_0x01e2;
+    L_0x01d9:
+        r8 = java.lang.Math.abs(r8);
+        r8 = (r8 > r6 ? 1 : (r8 == r6 ? 0 : -1));
+        if (r8 < 0) goto L_0x01e2;
+    L_0x01e1:
+        goto L_0x01e3;
+    L_0x01e2:
+        r2 = 0;
+    L_0x01e3:
+        r7.closeDrawer(r2);
+    L_0x01e6:
+        r7.startedTracking = r1;
+        r7.maybeStartTracking = r1;
+        r8 = r7.velocityTracker;
+        if (r8 == 0) goto L_0x01f4;
+    L_0x01ee:
+        r8.recycle();
+        r8 = 0;
+        r7.velocityTracker = r8;
+    L_0x01f4:
+        r8 = r7.startedTracking;
+        return r8;
+    L_0x01f7:
+        return r1;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.DrawerLayoutContainer.onTouchEvent(android.view.MotionEvent):boolean");
     }
 
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return this.parentActionBarLayout.checkTransitionAnimation() || onTouchEvent(ev);
+    public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+        return this.parentActionBarLayout.checkTransitionAnimation() || onTouchEvent(motionEvent);
     }
 
-    public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+    public void requestDisallowInterceptTouchEvent(boolean z) {
         if (this.maybeStartTracking && !this.startedTracking) {
             onTouchEvent(null);
         }
-        super.requestDisallowInterceptTouchEvent(disallowIntercept);
+        super.requestDisallowInterceptTouchEvent(z);
     }
 
     /* Access modifiers changed, original: protected */
-    public void onLayout(boolean changed, int l, int t, int r, int b) {
+    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
         this.inLayout = true;
         int childCount = getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View child = getChildAt(i);
-            if (child.getVisibility() != 8) {
-                LayoutParams lp = (LayoutParams) child.getLayoutParams();
+        for (i2 = 0; i2 < childCount; i2++) {
+            View childAt = getChildAt(i2);
+            if (childAt.getVisibility() != 8) {
+                LayoutParams layoutParams = (LayoutParams) childAt.getLayoutParams();
                 if (!BuildVars.DEBUG_VERSION) {
                     try {
-                        if (this.drawerLayout != child) {
-                            child.layout(lp.leftMargin, lp.topMargin + getPaddingTop(), lp.leftMargin + child.getMeasuredWidth(), (lp.topMargin + child.getMeasuredHeight()) + getPaddingTop());
+                        if (this.drawerLayout != childAt) {
+                            childAt.layout(layoutParams.leftMargin, layoutParams.topMargin + getPaddingTop(), layoutParams.leftMargin + childAt.getMeasuredWidth(), (layoutParams.topMargin + childAt.getMeasuredHeight()) + getPaddingTop());
                         } else {
-                            child.layout(-child.getMeasuredWidth(), lp.topMargin + getPaddingTop(), 0, (lp.topMargin + child.getMeasuredHeight()) + getPaddingTop());
+                            childAt.layout(-childAt.getMeasuredWidth(), layoutParams.topMargin + getPaddingTop(), 0, (layoutParams.topMargin + childAt.getMeasuredHeight()) + getPaddingTop());
                         }
                     } catch (Exception e) {
                         FileLog.e(e);
                     }
-                } else if (this.drawerLayout != child) {
-                    child.layout(lp.leftMargin, lp.topMargin + getPaddingTop(), lp.leftMargin + child.getMeasuredWidth(), (lp.topMargin + child.getMeasuredHeight()) + getPaddingTop());
+                } else if (this.drawerLayout != childAt) {
+                    childAt.layout(layoutParams.leftMargin, layoutParams.topMargin + getPaddingTop(), layoutParams.leftMargin + childAt.getMeasuredWidth(), (layoutParams.topMargin + childAt.getMeasuredHeight()) + getPaddingTop());
                 } else {
-                    child.layout(-child.getMeasuredWidth(), lp.topMargin + getPaddingTop(), 0, (lp.topMargin + child.getMeasuredHeight()) + getPaddingTop());
+                    childAt.layout(-childAt.getMeasuredWidth(), layoutParams.topMargin + getPaddingTop(), 0, (layoutParams.topMargin + childAt.getMeasuredHeight()) + getPaddingTop());
                 }
             }
         }
@@ -417,119 +638,133 @@ public class DrawerLayoutContainer extends FrameLayout {
 
     /* Access modifiers changed, original: protected */
     @SuppressLint({"NewApi"})
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-        setMeasuredDimension(widthSize, heightSize);
+    public void onMeasure(int i, int i2) {
+        int size = MeasureSpec.getSize(i);
+        int size2 = MeasureSpec.getSize(i2);
+        setMeasuredDimension(size, size2);
         if (VERSION.SDK_INT < 21) {
             this.inLayout = true;
-            if (heightSize == AndroidUtilities.displaySize.y + AndroidUtilities.statusBarHeight) {
+            if (size2 == AndroidUtilities.displaySize.y + AndroidUtilities.statusBarHeight) {
                 if (getLayoutParams() instanceof MarginLayoutParams) {
                     setPadding(0, AndroidUtilities.statusBarHeight, 0, 0);
                 }
-                heightSize = AndroidUtilities.displaySize.y;
+                size2 = AndroidUtilities.displaySize.y;
             } else if (getLayoutParams() instanceof MarginLayoutParams) {
                 setPadding(0, 0, 0, 0);
             }
             this.inLayout = false;
         }
-        boolean applyInsets = this.lastInsets != null && VERSION.SDK_INT >= 21;
+        Object obj = (this.lastInsets == null || VERSION.SDK_INT < 21) ? null : 1;
         int childCount = getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View child = getChildAt(i);
-            if (child.getVisibility() != 8) {
-                LayoutParams lp = (LayoutParams) child.getLayoutParams();
-                if (applyInsets) {
-                    if (child.getFitsSystemWindows()) {
-                        dispatchChildInsets(child, this.lastInsets, lp.gravity);
-                    } else if (child.getTag() == null) {
-                        applyMarginInsets(lp, this.lastInsets, lp.gravity, VERSION.SDK_INT >= 21);
+        for (int i3 = 0; i3 < childCount; i3++) {
+            View childAt = getChildAt(i3);
+            if (childAt.getVisibility() != 8) {
+                LayoutParams layoutParams = (LayoutParams) childAt.getLayoutParams();
+                if (obj != null) {
+                    if (childAt.getFitsSystemWindows()) {
+                        dispatchChildInsets(childAt, this.lastInsets, layoutParams.gravity);
+                    } else if (childAt.getTag() == null) {
+                        applyMarginInsets(layoutParams, this.lastInsets, layoutParams.gravity, VERSION.SDK_INT >= 21);
                     }
                 }
-                if (this.drawerLayout != child) {
-                    child.measure(MeasureSpec.makeMeasureSpec((widthSize - lp.leftMargin) - lp.rightMargin, NUM), MeasureSpec.makeMeasureSpec((heightSize - lp.topMargin) - lp.bottomMargin, NUM));
+                if (this.drawerLayout != childAt) {
+                    childAt.measure(MeasureSpec.makeMeasureSpec((size - layoutParams.leftMargin) - layoutParams.rightMargin, NUM), MeasureSpec.makeMeasureSpec((size2 - layoutParams.topMargin) - layoutParams.bottomMargin, NUM));
                 } else {
-                    child.setPadding(0, 0, 0, 0);
-                    child.measure(getChildMeasureSpec(widthMeasureSpec, (this.minDrawerMargin + lp.leftMargin) + lp.rightMargin, lp.width), getChildMeasureSpec(heightMeasureSpec, lp.topMargin + lp.bottomMargin, lp.height));
+                    childAt.setPadding(0, 0, 0, 0);
+                    childAt.measure(FrameLayout.getChildMeasureSpec(i, (this.minDrawerMargin + layoutParams.leftMargin) + layoutParams.rightMargin, layoutParams.width), FrameLayout.getChildMeasureSpec(i2, layoutParams.topMargin + layoutParams.bottomMargin, layoutParams.height));
                 }
             }
         }
     }
 
+    public void setBehindKeyboardColor(int i) {
+        this.behindKeyboardColor = i;
+        invalidate();
+    }
+
     /* Access modifiers changed, original: protected */
-    public boolean drawChild(Canvas canvas, View child, long drawingTime) {
+    public boolean drawChild(Canvas canvas, View view, long j) {
+        Canvas canvas2 = canvas;
+        View view2 = view;
+        int i = 0;
         if (!this.allowDrawContent) {
             return false;
         }
+        int i2;
         int height = getHeight();
-        boolean drawingContent = child != this.drawerLayout;
-        int lastVisibleChild = 0;
-        int clipLeft = 0;
-        int clipRight = getWidth();
-        int restoreCount = canvas.save();
-        if (drawingContent) {
+        Object obj = view2 != this.drawerLayout ? 1 : null;
+        int width = getWidth();
+        int save = canvas.save();
+        if (obj != null) {
             int childCount = getChildCount();
-            for (int i = 0; i < childCount; i++) {
-                View v = getChildAt(i);
-                if (v.getVisibility() == 0 && v != this.drawerLayout) {
-                    lastVisibleChild = i;
+            int i3 = 0;
+            i2 = 0;
+            for (int i4 = 0; i4 < childCount; i4++) {
+                View childAt = getChildAt(i4);
+                if (childAt.getVisibility() == 0 && childAt != this.drawerLayout) {
+                    i2 = i4;
                 }
-                if (v != child && v.getVisibility() == 0 && v == this.drawerLayout && v.getHeight() >= height) {
-                    int vright = v.getRight();
-                    if (vright > clipLeft) {
-                        clipLeft = vright;
+                if (childAt != view2 && childAt.getVisibility() == 0 && childAt == this.drawerLayout && childAt.getHeight() >= height) {
+                    int measuredWidth = childAt.getMeasuredWidth() + ((int) childAt.getX());
+                    if (measuredWidth > i3) {
+                        i3 = measuredWidth;
                     }
                 }
             }
-            if (clipLeft != 0) {
-                canvas.clipRect(clipLeft, 0, clipRight, getHeight());
+            if (i3 != 0) {
+                canvas.clipRect(i3, 0, width, getHeight());
             }
-        }
-        boolean result = super.drawChild(canvas, child, drawingTime);
-        canvas.restoreToCount(restoreCount);
-        if (this.scrimOpacity <= 0.0f || !drawingContent) {
-            if (this.shadowLeft == null) {
-                return result;
-            }
-            float alpha = Math.max(0.0f, Math.min(this.drawerPosition / ((float) AndroidUtilities.dp(20.0f)), 1.0f));
-            if (alpha == 0.0f) {
-                return result;
-            }
-            this.shadowLeft.setBounds((int) this.drawerPosition, child.getTop(), ((int) this.drawerPosition) + this.shadowLeft.getIntrinsicWidth(), child.getBottom());
-            this.shadowLeft.setAlpha((int) (255.0f * alpha));
-            this.shadowLeft.draw(canvas);
-            return result;
-        } else if (indexOfChild(child) != lastVisibleChild) {
-            return result;
+            i = i3;
         } else {
-            this.scrimPaint.setColor(((int) (153.0f * this.scrimOpacity)) << 24);
-            canvas.drawRect((float) clipLeft, 0.0f, (float) clipRight, (float) getHeight(), this.scrimPaint);
-            return result;
+            i2 = 0;
         }
+        boolean drawChild = super.drawChild(canvas, view, j);
+        canvas.restoreToCount(save);
+        if (this.scrimOpacity <= 0.0f || obj == null) {
+            if (this.shadowLeft != null) {
+                float max = Math.max(0.0f, Math.min(this.drawerPosition / ((float) AndroidUtilities.dp(20.0f)), 1.0f));
+                if (max != 0.0f) {
+                    this.shadowLeft.setBounds((int) this.drawerPosition, view.getTop(), ((int) this.drawerPosition) + this.shadowLeft.getIntrinsicWidth(), view.getBottom());
+                    this.shadowLeft.setAlpha((int) (max * 255.0f));
+                    this.shadowLeft.draw(canvas);
+                }
+            }
+        } else if (indexOfChild(view2) == i2) {
+            this.scrimPaint.setColor(((int) (this.scrimOpacity * 153.0f)) << 24);
+            canvas.drawRect((float) i, 0.0f, (float) width, (float) getHeight(), this.scrimPaint);
+        }
+        return drawChild;
     }
 
     /* Access modifiers changed, original: protected */
     public void onDraw(Canvas canvas) {
-        if (VERSION.SDK_INT >= 21 && this.hasCutout && this.lastInsets != null) {
-            WindowInsets insets = this.lastInsets;
-            int left = insets.getSystemWindowInsetLeft();
-            if (left != 0) {
-                canvas.drawRect(0.0f, 0.0f, (float) left, (float) getMeasuredHeight(), this.blackPaint);
-            }
-            int right = insets.getSystemWindowInsetRight();
-            if (right != 0) {
-                canvas.drawRect((float) right, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.blackPaint);
+        if (VERSION.SDK_INT >= 21) {
+            Object obj = this.lastInsets;
+            if (obj != null) {
+                WindowInsets windowInsets = (WindowInsets) obj;
+                int systemWindowInsetBottom = windowInsets.getSystemWindowInsetBottom();
+                if (systemWindowInsetBottom > 0) {
+                    this.backgroundPaint.setColor(this.behindKeyboardColor);
+                    canvas.drawRect(0.0f, (float) (getMeasuredHeight() - systemWindowInsetBottom), (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.backgroundPaint);
+                }
+                if (this.hasCutout) {
+                    this.backgroundPaint.setColor(-16777216);
+                    systemWindowInsetBottom = windowInsets.getSystemWindowInsetLeft();
+                    if (systemWindowInsetBottom != 0) {
+                        canvas.drawRect(0.0f, 0.0f, (float) systemWindowInsetBottom, (float) getMeasuredHeight(), this.backgroundPaint);
+                    }
+                    int systemWindowInsetRight = windowInsets.getSystemWindowInsetRight();
+                    if (systemWindowInsetRight != 0) {
+                        canvas.drawRect((float) systemWindowInsetRight, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.backgroundPaint);
+                    }
+                }
             }
         }
     }
 
-    public boolean hasOverlappingRendering() {
-        return false;
-    }
-
-    public boolean onRequestSendAccessibilityEvent(View child, AccessibilityEvent event) {
-        if (!this.drawerOpened || child == this.drawerLayout) {
-            return super.onRequestSendAccessibilityEvent(child, event);
+    public boolean onRequestSendAccessibilityEvent(View view, AccessibilityEvent accessibilityEvent) {
+        if (!this.drawerOpened || view == this.drawerLayout) {
+            return super.onRequestSendAccessibilityEvent(view, accessibilityEvent);
         }
         return false;
     }

@@ -8,6 +8,10 @@ import android.os.Build.VERSION;
 import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import com.airbnb.lottie.LottieProperty;
+import com.airbnb.lottie.SimpleColorFilter;
+import com.airbnb.lottie.model.KeyPath;
+import com.airbnb.lottie.value.LottieValueCallback;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.tgnet.TLRPC.Chat;
@@ -15,16 +19,39 @@ import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.Theme;
 
 public class AvatarDrawable extends Drawable {
+    public static final int AVATAR_TYPE_ARCHIVED = 3;
+    public static final int AVATAR_TYPE_NORMAL = 0;
+    public static final int AVATAR_TYPE_SAVED = 1;
+    public static final int AVATAR_TYPE_SAVED_SMALL = 2;
+    private float archivedAvatarProgress;
+    private int avatarType;
     private int color;
     private boolean drawBrodcast;
     private boolean isProfile;
     private TextPaint namePaint;
-    private int savedMessages;
     private StringBuilder stringBuilder;
     private float textHeight;
     private StaticLayout textLayout;
     private float textLeft;
     private float textWidth;
+
+    public int getIntrinsicHeight() {
+        return 0;
+    }
+
+    public int getIntrinsicWidth() {
+        return 0;
+    }
+
+    public int getOpacity() {
+        return -2;
+    }
+
+    public void setAlpha(int i) {
+    }
+
+    public void setColorFilter(ColorFilter colorFilter) {
+    }
 
     public AvatarDrawable() {
         this.stringBuilder = new StringBuilder(5);
@@ -41,56 +68,57 @@ public class AvatarDrawable extends Drawable {
         this(chat, false);
     }
 
-    public AvatarDrawable(User user, boolean profile) {
+    public AvatarDrawable(User user, boolean z) {
         this();
-        this.isProfile = profile;
+        this.isProfile = z;
         if (user != null) {
             setInfo(user.id, user.first_name, user.last_name, false, null);
         }
     }
 
-    public AvatarDrawable(Chat chat, boolean profile) {
+    public AvatarDrawable(Chat chat, boolean z) {
         this();
-        this.isProfile = profile;
+        this.isProfile = z;
         if (chat != null) {
-            setInfo(chat.id, chat.title, null, chat.id < 0, null);
+            int i = chat.id;
+            setInfo(i, chat.title, null, i < 0, null);
         }
     }
 
-    public void setProfile(boolean value) {
-        this.isProfile = value;
+    public void setProfile(boolean z) {
+        this.isProfile = z;
     }
 
-    public static int getColorIndex(int id) {
-        return (id < 0 || id >= 7) ? Math.abs(id % Theme.keys_avatar_background.length) : id;
+    public static int getColorIndex(int i) {
+        return (i < 0 || i >= 7) ? Math.abs(i % Theme.keys_avatar_background.length) : i;
     }
 
-    public static int getColorForId(int id) {
-        return Theme.getColor(Theme.keys_avatar_background[getColorIndex(id)]);
+    public static int getColorForId(int i) {
+        return Theme.getColor(Theme.keys_avatar_background[getColorIndex(i)]);
     }
 
-    public static int getButtonColorForId(int id) {
+    public static int getButtonColorForId(int i) {
         return Theme.getColor("avatar_actionBarSelectorBlue");
     }
 
-    public static int getIconColorForId(int id) {
+    public static int getIconColorForId(int i) {
         return Theme.getColor("avatar_actionBarIconBlue");
     }
 
-    public static int getProfileColorForId(int id) {
-        return Theme.getColor(Theme.keys_avatar_background[getColorIndex(id)]);
+    public static int getProfileColorForId(int i) {
+        return Theme.getColor(Theme.keys_avatar_background[getColorIndex(i)]);
     }
 
-    public static int getProfileTextColorForId(int id) {
+    public static int getProfileTextColorForId(int i) {
         return Theme.getColor("avatar_subtitleInProfileBlue");
     }
 
-    public static int getProfileBackColorForId(int id) {
+    public static int getProfileBackColorForId(int i) {
         return Theme.getColor("avatar_backgroundActionBarBlue");
     }
 
-    public static int getNameColorForId(int id) {
-        return Theme.getColor(Theme.keys_avatar_nameInMessage[getColorIndex(id)]);
+    public static int getNameColorForId(int i) {
+        return Theme.getColor(Theme.keys_avatar_nameInMessage[getColorIndex(i)]);
     }
 
     public void setInfo(User user) {
@@ -99,75 +127,90 @@ public class AvatarDrawable extends Drawable {
         }
     }
 
-    public void setSavedMessages(int value) {
-        this.savedMessages = value;
-        this.color = Theme.getColor("avatar_backgroundSaved");
+    public void setAvatarType(int i) {
+        this.avatarType = i;
+        if (this.avatarType == 3) {
+            this.color = Theme.getColor("avatar_backgroundArchivedHidden");
+        } else {
+            this.color = Theme.getColor("avatar_backgroundSaved");
+        }
+    }
+
+    public void setArchivedAvatarHiddenProgress(float f) {
+        this.archivedAvatarProgress = f;
+    }
+
+    public int getAvatarType() {
+        return this.avatarType;
     }
 
     public void setInfo(Chat chat) {
         if (chat != null) {
-            setInfo(chat.id, chat.title, null, chat.id < 0, null);
+            int i = chat.id;
+            setInfo(i, chat.title, null, i < 0, null);
         }
     }
 
-    public void setColor(int value) {
-        this.color = value;
+    public void setColor(int i) {
+        this.color = i;
     }
 
-    public void setTextSize(int size) {
-        this.namePaint.setTextSize((float) size);
+    public void setTextSize(int i) {
+        this.namePaint.setTextSize((float) i);
     }
 
-    public void setInfo(int id, String firstName, String lastName, boolean isBroadcast) {
-        setInfo(id, firstName, lastName, isBroadcast, null);
+    public void setInfo(int i, String str, String str2, boolean z) {
+        setInfo(i, str, str2, z, null);
     }
 
     public int getColor() {
         return this.color;
     }
 
-    public void setInfo(int id, String firstName, String lastName, boolean isBroadcast, String custom) {
+    public void setInfo(int i, String str, String str2, boolean z, String str3) {
         if (this.isProfile) {
-            this.color = getProfileColorForId(id);
+            this.color = getProfileColorForId(i);
         } else {
-            this.color = getColorForId(id);
+            this.color = getColorForId(i);
         }
-        this.drawBrodcast = isBroadcast;
-        this.savedMessages = 0;
-        if (firstName == null || firstName.length() == 0) {
-            firstName = lastName;
-            lastName = null;
+        this.drawBrodcast = z;
+        this.avatarType = 0;
+        if (str == null || str.length() == 0) {
+            str = str2;
+            str2 = null;
         }
         this.stringBuilder.setLength(0);
-        if (custom != null) {
-            this.stringBuilder.append(custom);
+        if (str3 != null) {
+            this.stringBuilder.append(str3);
         } else {
-            if (firstName != null && firstName.length() > 0) {
-                this.stringBuilder.appendCodePoint(firstName.codePointAt(0));
+            if (str != null && str.length() > 0) {
+                this.stringBuilder.appendCodePoint(str.codePointAt(0));
             }
-            int a;
-            if (lastName != null && lastName.length() > 0) {
-                Integer lastch = null;
-                a = lastName.length() - 1;
-                while (a >= 0 && (lastch == null || lastName.charAt(a) != ' ')) {
-                    lastch = Integer.valueOf(lastName.codePointAt(a));
-                    a--;
+            str3 = "‌";
+            if (str2 != null && str2.length() > 0) {
+                int length = str2.length() - 1;
+                Integer num = null;
+                while (length >= 0 && (num == null || str2.charAt(length) != ' ')) {
+                    num = Integer.valueOf(str2.codePointAt(length));
+                    length--;
                 }
                 if (VERSION.SDK_INT > 17) {
-                    this.stringBuilder.append("‌");
+                    this.stringBuilder.append(str3);
                 }
-                this.stringBuilder.appendCodePoint(lastch.intValue());
-            } else if (firstName != null && firstName.length() > 0) {
-                a = firstName.length() - 1;
-                while (a >= 0) {
-                    if (firstName.charAt(a) != ' ' || a == firstName.length() - 1 || firstName.charAt(a + 1) == ' ') {
-                        a--;
-                    } else {
-                        if (VERSION.SDK_INT > 17) {
-                            this.stringBuilder.append("‌");
+                this.stringBuilder.appendCodePoint(num.intValue());
+            } else if (str != null && str.length() > 0) {
+                int length2 = str.length() - 1;
+                while (length2 >= 0) {
+                    if (str.charAt(length2) == ' ' && length2 != str.length() - 1) {
+                        int i2 = length2 + 1;
+                        if (str.charAt(i2) != ' ') {
+                            if (VERSION.SDK_INT > 17) {
+                                this.stringBuilder.append(str3);
+                            }
+                            this.stringBuilder.appendCodePoint(str.codePointAt(i2));
                         }
-                        this.stringBuilder.appendCodePoint(firstName.codePointAt(a + 1));
                     }
+                    length2--;
                 }
             }
         }
@@ -192,53 +235,79 @@ public class AvatarDrawable extends Drawable {
     public void draw(Canvas canvas) {
         Rect bounds = getBounds();
         if (bounds != null) {
-            int size = bounds.width();
+            int width = bounds.width();
             this.namePaint.setColor(Theme.getColor("avatar_text"));
             Theme.avatar_backgroundPaint.setColor(this.color);
             canvas.save();
             canvas.translate((float) bounds.left, (float) bounds.top);
-            canvas.drawCircle(((float) size) / 2.0f, ((float) size) / 2.0f, ((float) size) / 2.0f, Theme.avatar_backgroundPaint);
-            int x;
-            int y;
-            if (this.savedMessages != 0 && Theme.avatar_savedDrawable != null) {
-                int w = Theme.avatar_savedDrawable.getIntrinsicWidth();
-                int h = Theme.avatar_savedDrawable.getIntrinsicHeight();
-                if (this.savedMessages == 2) {
-                    w = (int) (((float) w) * 0.8f);
-                    h = (int) (((float) h) * 0.8f);
+            float f = (float) width;
+            float f2 = f / 2.0f;
+            canvas.drawCircle(f2, f2, f2, Theme.avatar_backgroundPaint);
+            int i = this.avatarType;
+            int intrinsicWidth;
+            int intrinsicHeight;
+            int i2;
+            if (i == 3) {
+                String str = "Arrow2";
+                String str2 = "Arrow1";
+                String str3 = "**";
+                if (this.archivedAvatarProgress != 0.0f) {
+                    String str4 = "avatar_backgroundArchived";
+                    Theme.avatar_backgroundPaint.setColor(Theme.getColor(str4));
+                    canvas.drawCircle(f2, f2, this.archivedAvatarProgress * f2, Theme.avatar_backgroundPaint);
+                    if (Theme.dialogs_archiveAvatarDrawableRecolored) {
+                        Theme.dialogs_archiveAvatarDrawable.addValueCallback(new KeyPath(str2, str3), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(Theme.getColor(str4))));
+                        Theme.dialogs_archiveAvatarDrawable.addValueCallback(new KeyPath(str, str3), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(Theme.getColor(str4))));
+                        Theme.dialogs_archiveAvatarDrawableRecolored = false;
+                    }
+                } else if (!Theme.dialogs_archiveAvatarDrawableRecolored) {
+                    String str5 = "avatar_backgroundArchivedHidden";
+                    Theme.dialogs_archiveAvatarDrawable.addValueCallback(new KeyPath(str2, str3), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(Theme.getColor(str5))));
+                    Theme.dialogs_archiveAvatarDrawable.addValueCallback(new KeyPath(str, str3), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(Theme.getColor(str5))));
+                    Theme.dialogs_archiveAvatarDrawableRecolored = true;
                 }
-                x = (size - w) / 2;
-                y = (size - h) / 2;
-                Theme.avatar_savedDrawable.setBounds(x, y, x + w, y + h);
-                Theme.avatar_savedDrawable.draw(canvas);
-            } else if (this.drawBrodcast && Theme.avatar_broadcastDrawable != null) {
-                x = (size - Theme.avatar_broadcastDrawable.getIntrinsicWidth()) / 2;
-                y = (size - Theme.avatar_broadcastDrawable.getIntrinsicHeight()) / 2;
-                Theme.avatar_broadcastDrawable.setBounds(x, y, Theme.avatar_broadcastDrawable.getIntrinsicWidth() + x, Theme.avatar_broadcastDrawable.getIntrinsicHeight() + y);
-                Theme.avatar_broadcastDrawable.draw(canvas);
-            } else if (this.textLayout != null) {
-                canvas.translate(((((float) size) - this.textWidth) / 2.0f) - this.textLeft, (((float) size) - this.textHeight) / 2.0f);
-                this.textLayout.draw(canvas);
+                intrinsicWidth = Theme.dialogs_archiveAvatarDrawable.getIntrinsicWidth();
+                intrinsicHeight = Theme.dialogs_archiveAvatarDrawable.getIntrinsicHeight();
+                i2 = (width - intrinsicWidth) / 2;
+                width = (width - intrinsicHeight) / 2;
+                canvas.save();
+                canvas.translate((float) i2, (float) width);
+                Theme.dialogs_archiveAvatarDrawable.setBounds(i2, width, intrinsicWidth + i2, intrinsicHeight + width);
+                Theme.dialogs_archiveAvatarDrawable.draw(canvas);
+                canvas.restore();
+            } else {
+                Drawable drawable;
+                if (i != 0) {
+                    drawable = Theme.avatar_savedDrawable;
+                    if (drawable != null) {
+                        intrinsicWidth = drawable.getIntrinsicWidth();
+                        intrinsicHeight = Theme.avatar_savedDrawable.getIntrinsicHeight();
+                        if (this.avatarType == 2) {
+                            intrinsicWidth = (int) (((float) intrinsicWidth) * 0.8f);
+                            intrinsicHeight = (int) (((float) intrinsicHeight) * 0.8f);
+                        }
+                        i2 = (width - intrinsicWidth) / 2;
+                        width = (width - intrinsicHeight) / 2;
+                        Theme.avatar_savedDrawable.setBounds(i2, width, intrinsicWidth + i2, intrinsicHeight + width);
+                        Theme.avatar_savedDrawable.draw(canvas);
+                    }
+                }
+                if (this.drawBrodcast) {
+                    drawable = Theme.avatar_broadcastDrawable;
+                    if (drawable != null) {
+                        intrinsicWidth = (width - drawable.getIntrinsicWidth()) / 2;
+                        width = (width - Theme.avatar_broadcastDrawable.getIntrinsicHeight()) / 2;
+                        Drawable drawable2 = Theme.avatar_broadcastDrawable;
+                        drawable2.setBounds(intrinsicWidth, width, drawable2.getIntrinsicWidth() + intrinsicWidth, Theme.avatar_broadcastDrawable.getIntrinsicHeight() + width);
+                        Theme.avatar_broadcastDrawable.draw(canvas);
+                    }
+                }
+                if (this.textLayout != null) {
+                    canvas.translate(((f - this.textWidth) / 2.0f) - this.textLeft, (f - this.textHeight) / 2.0f);
+                    this.textLayout.draw(canvas);
+                }
             }
             canvas.restore();
         }
-    }
-
-    public void setAlpha(int alpha) {
-    }
-
-    public void setColorFilter(ColorFilter cf) {
-    }
-
-    public int getOpacity() {
-        return -2;
-    }
-
-    public int getIntrinsicWidth() {
-        return 0;
-    }
-
-    public int getIntrinsicHeight() {
-        return 0;
     }
 }

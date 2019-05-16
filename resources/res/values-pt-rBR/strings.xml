@@ -521,7 +521,6 @@
     <string name="ChannelMembers">Membros</string>
     <string name="ChannelMembersInfo">Somente os administradores do canal podem ver esta lista.</string>
     <string name="ChannelMessageAudio">%1$s postou uma mensagem de voz</string>
-    <string name="ChannelMessageContact">%1$s postou um contato</string>
     <string name="ChannelMessageDocument">%1$s postou um arquivo</string>
     <string name="ChannelMessageFew">%1$s postou %2$s</string>
     <string name="ChannelMessageGIF">%1$s postou um GIF</string>
@@ -530,7 +529,6 @@
     <string name="ChannelMessageMusic">%1$s postou uma música</string>
     <string name="ChannelMessageNoText">%1$s postou uma mensagem</string>
     <string name="ChannelMessagePhoto">%1$s postou uma foto</string>
-    <string name="ChannelMessagePoll">%1$s postou uma enquete</string>
     <string name="ChannelMessageRound">%1$s postou uma mensagem de vídeo</string>
     <string name="ChannelMessageSticker">%1$s postou um sticker</string>
     <string name="ChannelMessageStickerEmoji">%1$s postou um %2$s sticker</string>
@@ -994,7 +992,7 @@
     <string name="FontSizePreviewLine1">Ahh, vocês crianças de hoje em dia com essas músicas eletrônicas! Ouçam os clássicos, como Hasselhoff!</string>
     <string name="FontSizePreviewLine2">Não consigo nem te levar a sério agora.</string>
     <string name="FontSizePreviewName">Lúcio</string>
-    <string name="FontSizePreviewReply">Reinhardt, temos que achar umas músicas novas pra você. 🎶.</string>
+    <string name="FontSizePreviewReply">Reinhardt, temos que achar umas músicas novas pra você. ��.</string>
     <string name="ForgotPassword">Esqueceu a senha?</string>
     <string name="Forward">Encaminhar</string>
     <string name="ForwardTo">Encaminhar para...</string>
@@ -1444,8 +1442,6 @@
     <string name="NobodyLikesSpam2">Desculpe. No momento, você só pode adicionar contatos mútuos a grupos.</string>
     <string name="NobodyLikesSpam3">Desculpe, no momento você está restringido de postar em grupos públicos.</string>
     <string name="NotMounted">Armazenamento não está montado</string>
-    <string name="NotificationActionPinnedContact">%1$s fixou um contato no grupo %2$s</string>
-    <string name="NotificationActionPinnedContactChannel">%1$s fixou um contato</string>
     <string name="NotificationActionPinnedFile">%1$s fixou um arquivo no grupo %2$s</string>
     <string name="NotificationActionPinnedFileChannel">%1$s fixou um arquivo</string>
     <string name="NotificationActionPinnedGame">%1$s fixou um jogo no grupo %2$s</string>
@@ -1464,8 +1460,6 @@
     <string name="NotificationActionPinnedNoTextChannel">%1$s fixou uma mensagem</string>
     <string name="NotificationActionPinnedPhoto">%1$s fixou uma foto no grupo %2$s</string>
     <string name="NotificationActionPinnedPhotoChannel">%1$s fixou uma foto</string>
-    <string name="NotificationActionPinnedPoll">%1$s fixou uma enquete no grupo %2$s</string>
-    <string name="NotificationActionPinnedPollChannel">%1$s fixou uma enquete</string>
     <string name="NotificationActionPinnedRound">%1$s fixou uma mensagem de vídeo no grupo %2$s</string>
     <string name="NotificationActionPinnedRoundChannel">%1$s fixou uma mensagem de vídeo</string>
     <string name="NotificationActionPinnedSticker">%1$s fixou um sticker no grupo %2$s</string>
@@ -1493,14 +1487,12 @@
     <string name="NotificationInvitedToGroup">%1$s te convidou para o grupo %2$s</string>
     <string name="NotificationInvitedToGroupByLink">%1$s entrou para o grupo %2$s via link de convite</string>
     <string name="NotificationMessageAudio">%1$s enviou uma mensagem de voz</string>
-    <string name="NotificationMessageContact">%1$s compartilhou um contato com você</string>
     <string name="NotificationMessageDocument">%1$s te enviou um arquivo</string>
     <string name="NotificationMessageFew">%1$s te enviou %2$s</string>
     <string name="NotificationMessageForwardFew">%1$s te encaminhou %2$s</string>
     <string name="NotificationMessageGame">%1$s te convidou para jogar %2$s</string>
     <string name="NotificationMessageGif">%1$s te enviou um GIF</string>
     <string name="NotificationMessageGroupAudio">%1$s enviou uma mensagem de voz para o grupo %2$s</string>
-    <string name="NotificationMessageGroupContact">%1$s compartilhou um contato para o grupo %2$s</string>
     <string name="NotificationMessageGroupDocument">%1$s enviou um arquivo para o grupo %2$s</string>
     <string name="NotificationMessageGroupGame">%1$s convidou o grupo %2$s para jogar %3$s</string>
     <string name="NotificationMessageGroupGif">%1$s enviou um GIF para o grupo %2$s</string>
@@ -1510,7 +1502,6 @@
     <string name="NotificationMessageGroupMusic">%1$s enviou um arquivo de áudio ao grupo %2$s</string>
     <string name="NotificationMessageGroupNoText">%1$s enviou uma mensagem para o grupo %2$s</string>
     <string name="NotificationMessageGroupPhoto">%1$s enviou uma foto para o grupo %2$s</string>
-    <string name="NotificationMessageGroupPoll">%1$s enviou uma enquete ao grupo %2$s</string>
     <string name="NotificationMessageGroupRound">%1$s enviou uma mensagem de vídeo para o grupo %2$s</string>
     <string name="NotificationMessageGroupSticker">%1$s enviou um sticker ao grupo %2$s</string>
     <string name="NotificationMessageGroupStickerEmoji">%1$s enviou um %3$s sticker ao grupo %2$s</string>
@@ -1522,7 +1513,6 @@
     <string name="NotificationMessageMusic">%1$s enviou um arquivo de áudio</string>
     <string name="NotificationMessageNoText">%1$s te enviou uma mensagem</string>
     <string name="NotificationMessagePhoto">%1$s te enviou uma foto</string>
-    <string name="NotificationMessagePoll">%1$s te enviou uma enquete</string>
     <string name="NotificationMessageRound">%1$s enviou uma mensagem de vídeo</string>
     <string name="NotificationMessageSDPhoto">%1$s te enviou uma foto autodestrutiva</string>
     <string name="NotificationMessageSDVideo">%1$s te enviou um video autodestrutivo</string>
@@ -2600,6 +2590,33 @@
     <string name="YourPasswordSuccess">Tudo certo!</string>
     <string name="YourPasswordSuccessText">A sua senha para a verificação em duas etapas está ativada.</string>
     <string name="YourPhone">Seu Número</string>
+    <string name="abc_action_bar_home_description">Navegar para a página inicial</string>
+    <string name="abc_action_bar_up_description">Navegar para cima</string>
+    <string name="abc_action_menu_overflow_description">Mais opções</string>
+    <string name="abc_action_mode_done">Concluído</string>
+    <string name="abc_activity_chooser_view_see_all">Ver tudo</string>
+    <string name="abc_activitychooserview_choose_application">Selecione um app</string>
+    <string name="abc_capital_off">DESATIVAR</string>
+    <string name="abc_capital_on">ATIVAR</string>
+    <string name="abc_menu_alt_shortcut_label">Alt+</string>
+    <string name="abc_menu_ctrl_shortcut_label">Ctrl+</string>
+    <string name="abc_menu_delete_shortcut_label">delete</string>
+    <string name="abc_menu_enter_shortcut_label">enter</string>
+    <string name="abc_menu_function_shortcut_label">Function+</string>
+    <string name="abc_menu_meta_shortcut_label">Meta+</string>
+    <string name="abc_menu_shift_shortcut_label">Shift+</string>
+    <string name="abc_menu_space_shortcut_label">espaço</string>
+    <string name="abc_menu_sym_shortcut_label">Sym+</string>
+    <string name="abc_prepend_shortcut_label">Menu+</string>
+    <string name="abc_search_hint">Pesquisar...</string>
+    <string name="abc_searchview_description_clear">Limpar consulta</string>
+    <string name="abc_searchview_description_query">Consulta de pesquisa</string>
+    <string name="abc_searchview_description_search">Pesquisar</string>
+    <string name="abc_searchview_description_submit">Enviar consulta</string>
+    <string name="abc_searchview_description_voice">Pesquisa por voz</string>
+    <string name="abc_shareactionprovider_share_with">Compartilhar com</string>
+    <string name="abc_shareactionprovider_share_with_application">Compartilhar com %s</string>
+    <string name="abc_toolbar_collapse_description">Recolher</string>
     <string name="chatDate">d \'de\' MMMM</string>
     <string name="chatFullDate">d \'de\' MMMM \'de\' yyyy</string>
     <string name="common_google_play_services_enable_button">Ativar</string>
@@ -2649,6 +2666,7 @@
     <string name="messages_other">%1$d mensagens</string>
     <string name="messages_two">%1$d mensagens</string>
     <string name="messages_zero">%1$d mensagens</string>
+    <string name="search_menu_title">Pesquisar</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Comprar com o Google</string>
 </resources>

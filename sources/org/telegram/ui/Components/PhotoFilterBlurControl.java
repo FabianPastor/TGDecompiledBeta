@@ -44,6 +44,52 @@ public class PhotoFilterBlurControl extends FrameLayout {
     private float startRadius;
     private int type;
 
+    /* renamed from: org.telegram.ui.Components.PhotoFilterBlurControl$1 */
+    static /* synthetic */ class AnonymousClass1 {
+        static final /* synthetic */ int[] $SwitchMap$org$telegram$ui$Components$PhotoFilterBlurControl$BlurViewActiveControl = new int[BlurViewActiveControl.values().length];
+
+        /* JADX WARNING: Missing exception handler attribute for start block: B:5:0x001f */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:7:0x002a */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:3:0x0014 */
+        /* JADX WARNING: Failed to process nested try/catch */
+        /* JADX WARNING: Can't wrap try/catch for region: R(10:0|1|2|3|4|5|6|7|8|10) */
+        /* JADX WARNING: Can't wrap try/catch for region: R(8:0|1|2|3|4|5|6|(3:7|8|10)) */
+        static {
+            /*
+            r0 = org.telegram.ui.Components.PhotoFilterBlurControl.BlurViewActiveControl.values();
+            r0 = r0.length;
+            r0 = new int[r0];
+            $SwitchMap$org$telegram$ui$Components$PhotoFilterBlurControl$BlurViewActiveControl = r0;
+            r0 = $SwitchMap$org$telegram$ui$Components$PhotoFilterBlurControl$BlurViewActiveControl;	 Catch:{ NoSuchFieldError -> 0x0014 }
+            r1 = org.telegram.ui.Components.PhotoFilterBlurControl.BlurViewActiveControl.BlurViewActiveControlCenter;	 Catch:{ NoSuchFieldError -> 0x0014 }
+            r1 = r1.ordinal();	 Catch:{ NoSuchFieldError -> 0x0014 }
+            r2 = 1;
+            r0[r1] = r2;	 Catch:{ NoSuchFieldError -> 0x0014 }
+        L_0x0014:
+            r0 = $SwitchMap$org$telegram$ui$Components$PhotoFilterBlurControl$BlurViewActiveControl;	 Catch:{ NoSuchFieldError -> 0x001f }
+            r1 = org.telegram.ui.Components.PhotoFilterBlurControl.BlurViewActiveControl.BlurViewActiveControlInnerRadius;	 Catch:{ NoSuchFieldError -> 0x001f }
+            r1 = r1.ordinal();	 Catch:{ NoSuchFieldError -> 0x001f }
+            r2 = 2;
+            r0[r1] = r2;	 Catch:{ NoSuchFieldError -> 0x001f }
+        L_0x001f:
+            r0 = $SwitchMap$org$telegram$ui$Components$PhotoFilterBlurControl$BlurViewActiveControl;	 Catch:{ NoSuchFieldError -> 0x002a }
+            r1 = org.telegram.ui.Components.PhotoFilterBlurControl.BlurViewActiveControl.BlurViewActiveControlOuterRadius;	 Catch:{ NoSuchFieldError -> 0x002a }
+            r1 = r1.ordinal();	 Catch:{ NoSuchFieldError -> 0x002a }
+            r2 = 3;
+            r0[r1] = r2;	 Catch:{ NoSuchFieldError -> 0x002a }
+        L_0x002a:
+            r0 = $SwitchMap$org$telegram$ui$Components$PhotoFilterBlurControl$BlurViewActiveControl;	 Catch:{ NoSuchFieldError -> 0x0035 }
+            r1 = org.telegram.ui.Components.PhotoFilterBlurControl.BlurViewActiveControl.BlurViewActiveControlRotation;	 Catch:{ NoSuchFieldError -> 0x0035 }
+            r1 = r1.ordinal();	 Catch:{ NoSuchFieldError -> 0x0035 }
+            r2 = 4;
+            r0[r1] = r2;	 Catch:{ NoSuchFieldError -> 0x0035 }
+        L_0x0035:
+            return;
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoFilterBlurControl$AnonymousClass1.<clinit>():void");
+        }
+    }
+
     private enum BlurViewActiveControl {
         BlurViewActiveControlNone,
         BlurViewActiveControlCenter,
@@ -57,6 +103,13 @@ public class PhotoFilterBlurControl extends FrameLayout {
         void valueChanged(Point point, float f, float f2, float f3);
     }
 
+    private float degreesToRadians(float f) {
+        return (f * 3.1415927f) / 180.0f;
+    }
+
+    private void setSelected(boolean z, boolean z2) {
+    }
+
     public PhotoFilterBlurControl(Context context) {
         super(context);
         setWillNotDraw(false);
@@ -66,359 +119,581 @@ public class PhotoFilterBlurControl extends FrameLayout {
         this.arcPaint.setStyle(Style.STROKE);
     }
 
-    public void setType(int blurType) {
-        this.type = blurType;
+    public void setType(int i) {
+        this.type = i;
         invalidate();
     }
 
-    public void setDelegate(PhotoFilterLinearBlurControlDelegate delegate) {
-        this.delegate = delegate;
+    public void setDelegate(PhotoFilterLinearBlurControlDelegate photoFilterLinearBlurControlDelegate) {
+        this.delegate = photoFilterLinearBlurControlDelegate;
     }
 
-    private float getDistance(MotionEvent event) {
-        if (event.getPointerCount() != 2) {
+    private float getDistance(MotionEvent motionEvent) {
+        if (motionEvent.getPointerCount() != 2) {
             return 0.0f;
         }
-        float x1 = event.getX(0);
-        float y1 = event.getY(0);
-        float x2 = event.getX(1);
-        float y2 = event.getY(1);
-        return (float) Math.sqrt((double) (((x1 - x2) * (x1 - x2)) + ((y1 - y2) * (y1 - y2))));
+        float x = motionEvent.getX(0);
+        float y = motionEvent.getY(0);
+        x -= motionEvent.getX(1);
+        y -= motionEvent.getY(1);
+        return (float) Math.sqrt((double) ((x * x) + (y * y)));
     }
 
-    private float degreesToRadians(float degrees) {
-        return (3.1415927f * degrees) / 180.0f;
+    /* JADX WARNING: Missing block: B:8:0x0018, code skipped:
+            if (r2 != 6) goto L_0x016d;
+     */
+    public boolean onTouchEvent(android.view.MotionEvent r18) {
+        /*
+        r17 = this;
+        r0 = r17;
+        r1 = r18;
+        r2 = r18.getActionMasked();
+        r3 = 2;
+        r4 = 3;
+        r5 = 0;
+        r6 = 1;
+        if (r2 == 0) goto L_0x0047;
+    L_0x000e:
+        if (r2 == r6) goto L_0x002e;
+    L_0x0010:
+        if (r2 == r3) goto L_0x001c;
+    L_0x0012:
+        if (r2 == r4) goto L_0x002e;
+    L_0x0014:
+        r7 = 5;
+        if (r2 == r7) goto L_0x0047;
+    L_0x0017:
+        r3 = 6;
+        if (r2 == r3) goto L_0x002e;
+    L_0x001a:
+        goto L_0x016d;
+    L_0x001c:
+        r2 = r0.isMoving;
+        if (r2 == 0) goto L_0x0025;
+    L_0x0020:
+        r0.handlePan(r3, r1);
+        goto L_0x016d;
+    L_0x0025:
+        r2 = r0.isZooming;
+        if (r2 == 0) goto L_0x016d;
+    L_0x0029:
+        r0.handlePinch(r3, r1);
+        goto L_0x016d;
+    L_0x002e:
+        r2 = r0.isMoving;
+        if (r2 == 0) goto L_0x0038;
+    L_0x0032:
+        r0.handlePan(r4, r1);
+        r0.isMoving = r5;
+        goto L_0x0041;
+    L_0x0038:
+        r2 = r0.isZooming;
+        if (r2 == 0) goto L_0x0041;
+    L_0x003c:
+        r0.handlePinch(r4, r1);
+        r0.isZooming = r5;
+    L_0x0041:
+        r0.checkForMoving = r6;
+        r0.checkForZooming = r6;
+        goto L_0x016d;
+    L_0x0047:
+        r2 = r18.getPointerCount();
+        if (r2 != r6) goto L_0x0147;
+    L_0x004d:
+        r2 = r0.checkForMoving;
+        if (r2 == 0) goto L_0x016d;
+    L_0x0051:
+        r2 = r0.isMoving;
+        if (r2 != 0) goto L_0x016d;
+    L_0x0055:
+        r2 = r18.getX();
+        r3 = r18.getY();
+        r4 = r17.getActualCenterPoint();
+        r7 = new org.telegram.ui.Components.Point;
+        r8 = r4.x;
+        r2 = r2 - r8;
+        r4 = r4.y;
+        r3 = r3 - r4;
+        r7.<init>(r2, r3);
+        r2 = r7.x;
+        r2 = r2 * r2;
+        r3 = r7.y;
+        r3 = r3 * r3;
+        r2 = r2 + r3;
+        r2 = (double) r2;
+        r2 = java.lang.Math.sqrt(r2);
+        r2 = (float) r2;
+        r3 = r17.getActualInnerRadius();
+        r4 = r17.getActualOuterRadius();
+        r8 = r4 - r3;
+        r8 = java.lang.Math.abs(r8);
+        r9 = BlurInsetProximity;
+        r8 = (r8 > r9 ? 1 : (r8 == r9 ? 0 : -1));
+        if (r8 >= 0) goto L_0x0091;
+    L_0x008f:
+        r8 = 1;
+        goto L_0x0092;
+    L_0x0091:
+        r8 = 0;
+    L_0x0092:
+        r9 = 0;
+        if (r8 == 0) goto L_0x0097;
+    L_0x0095:
+        r10 = 0;
+        goto L_0x0099;
+    L_0x0097:
+        r10 = BlurViewRadiusInset;
+    L_0x0099:
+        if (r8 == 0) goto L_0x009c;
+    L_0x009b:
+        goto L_0x009e;
+    L_0x009c:
+        r9 = BlurViewRadiusInset;
+    L_0x009e:
+        r8 = r0.type;
+        if (r8 != 0) goto L_0x0113;
+    L_0x00a2:
+        r8 = r7.x;
+        r11 = (double) r8;
+        r8 = r0.angle;
+        r8 = r0.degreesToRadians(r8);
+        r13 = (double) r8;
+        r15 = NUM; // 0x3fvar_fb54442d18 float:3.37028055E12 double:1.NUM;
+        java.lang.Double.isNaN(r13);
+        r13 = r13 + r15;
+        r13 = java.lang.Math.cos(r13);
+        java.lang.Double.isNaN(r11);
+        r11 = r11 * r13;
+        r7 = r7.y;
+        r7 = (double) r7;
+        r13 = r0.angle;
+        r13 = r0.degreesToRadians(r13);
+        r13 = (double) r13;
+        java.lang.Double.isNaN(r13);
+        r13 = r13 + r15;
+        r13 = java.lang.Math.sin(r13);
+        java.lang.Double.isNaN(r7);
+        r7 = r7 * r13;
+        r11 = r11 + r7;
+        r7 = java.lang.Math.abs(r11);
+        r7 = (float) r7;
+        r8 = BlurViewCenterInset;
+        r2 = (r2 > r8 ? 1 : (r2 == r8 ? 0 : -1));
+        if (r2 >= 0) goto L_0x00e4;
+    L_0x00e1:
+        r0.isMoving = r6;
+        goto L_0x013d;
+    L_0x00e4:
+        r2 = BlurViewRadiusInset;
+        r2 = r3 - r2;
+        r2 = (r7 > r2 ? 1 : (r7 == r2 ? 0 : -1));
+        if (r2 <= 0) goto L_0x00f4;
+    L_0x00ec:
+        r10 = r10 + r3;
+        r2 = (r7 > r10 ? 1 : (r7 == r10 ? 0 : -1));
+        if (r2 >= 0) goto L_0x00f4;
+    L_0x00f1:
+        r0.isMoving = r6;
+        goto L_0x013d;
+    L_0x00f4:
+        r2 = r4 - r9;
+        r2 = (r7 > r2 ? 1 : (r7 == r2 ? 0 : -1));
+        if (r2 <= 0) goto L_0x0104;
+    L_0x00fa:
+        r2 = BlurViewRadiusInset;
+        r2 = r2 + r4;
+        r2 = (r7 > r2 ? 1 : (r7 == r2 ? 0 : -1));
+        if (r2 >= 0) goto L_0x0104;
+    L_0x0101:
+        r0.isMoving = r6;
+        goto L_0x013d;
+    L_0x0104:
+        r2 = BlurViewRadiusInset;
+        r3 = r3 - r2;
+        r3 = (r7 > r3 ? 1 : (r7 == r3 ? 0 : -1));
+        if (r3 <= 0) goto L_0x0110;
+    L_0x010b:
+        r4 = r4 + r2;
+        r2 = (r7 > r4 ? 1 : (r7 == r4 ? 0 : -1));
+        if (r2 < 0) goto L_0x013d;
+    L_0x0110:
+        r0.isMoving = r6;
+        goto L_0x013d;
+    L_0x0113:
+        if (r8 != r6) goto L_0x013d;
+    L_0x0115:
+        r7 = BlurViewCenterInset;
+        r7 = (r2 > r7 ? 1 : (r2 == r7 ? 0 : -1));
+        if (r7 >= 0) goto L_0x011e;
+    L_0x011b:
+        r0.isMoving = r6;
+        goto L_0x013d;
+    L_0x011e:
+        r7 = BlurViewRadiusInset;
+        r7 = r3 - r7;
+        r7 = (r2 > r7 ? 1 : (r2 == r7 ? 0 : -1));
+        if (r7 <= 0) goto L_0x012e;
+    L_0x0126:
+        r3 = r3 + r10;
+        r3 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1));
+        if (r3 >= 0) goto L_0x012e;
+    L_0x012b:
+        r0.isMoving = r6;
+        goto L_0x013d;
+    L_0x012e:
+        r3 = r4 - r9;
+        r3 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1));
+        if (r3 <= 0) goto L_0x013d;
+    L_0x0134:
+        r3 = BlurViewRadiusInset;
+        r4 = r4 + r3;
+        r2 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1));
+        if (r2 >= 0) goto L_0x013d;
+    L_0x013b:
+        r0.isMoving = r6;
+    L_0x013d:
+        r0.checkForMoving = r5;
+        r2 = r0.isMoving;
+        if (r2 == 0) goto L_0x016d;
+    L_0x0143:
+        r0.handlePan(r6, r1);
+        goto L_0x016d;
+    L_0x0147:
+        r2 = r0.isMoving;
+        if (r2 == 0) goto L_0x0152;
+    L_0x014b:
+        r0.handlePan(r4, r1);
+        r0.checkForMoving = r6;
+        r0.isMoving = r5;
+    L_0x0152:
+        r2 = r18.getPointerCount();
+        if (r2 != r3) goto L_0x0166;
+    L_0x0158:
+        r2 = r0.checkForZooming;
+        if (r2 == 0) goto L_0x016d;
+    L_0x015c:
+        r2 = r0.isZooming;
+        if (r2 != 0) goto L_0x016d;
+    L_0x0160:
+        r0.handlePinch(r6, r1);
+        r0.isZooming = r6;
+        goto L_0x016d;
+    L_0x0166:
+        r0.handlePinch(r4, r1);
+        r0.checkForZooming = r6;
+        r0.isZooming = r5;
+    L_0x016d:
+        return r6;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoFilterBlurControl.onTouchEvent(android.view.MotionEvent):boolean");
     }
 
-    public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getActionMasked()) {
-            case 0:
-            case 5:
-                if (event.getPointerCount() == 1) {
-                    if (this.checkForMoving && !this.isMoving) {
-                        float locationX = event.getX();
-                        float locationY = event.getY();
-                        Point centerPoint = getActualCenterPoint();
-                        Point delta = new Point(locationX - centerPoint.x, locationY - centerPoint.y);
-                        float radialDistance = (float) Math.sqrt((double) ((delta.x * delta.x) + (delta.y * delta.y)));
-                        float innerRadius = getActualInnerRadius();
-                        float outerRadius = getActualOuterRadius();
-                        boolean close = Math.abs(outerRadius - innerRadius) < BlurInsetProximity;
-                        float innerRadiusOuterInset = close ? 0.0f : BlurViewRadiusInset;
-                        float outerRadiusInnerInset = close ? 0.0f : BlurViewRadiusInset;
-                        if (this.type == 0) {
-                            float distance = (float) Math.abs((((double) delta.x) * Math.cos(((double) degreesToRadians(this.angle)) + 1.5707963267948966d)) + (((double) delta.y) * Math.sin(((double) degreesToRadians(this.angle)) + 1.5707963267948966d)));
-                            if (radialDistance < BlurViewCenterInset) {
-                                this.isMoving = true;
-                            } else if (distance > innerRadius - BlurViewRadiusInset && distance < innerRadius + innerRadiusOuterInset) {
-                                this.isMoving = true;
-                            } else if (distance > outerRadius - outerRadiusInnerInset && distance < BlurViewRadiusInset + outerRadius) {
-                                this.isMoving = true;
-                            } else if (distance <= innerRadius - BlurViewRadiusInset || distance >= BlurViewRadiusInset + outerRadius) {
-                                this.isMoving = true;
-                            }
-                        } else if (this.type == 1) {
-                            if (radialDistance < BlurViewCenterInset) {
-                                this.isMoving = true;
-                            } else if (radialDistance > innerRadius - BlurViewRadiusInset && radialDistance < innerRadius + innerRadiusOuterInset) {
-                                this.isMoving = true;
-                            } else if (radialDistance > outerRadius - outerRadiusInnerInset && radialDistance < BlurViewRadiusInset + outerRadius) {
-                                this.isMoving = true;
-                            }
-                        }
-                        this.checkForMoving = false;
-                        if (this.isMoving) {
-                            handlePan(1, event);
-                            break;
-                        }
-                    }
-                }
-                if (this.isMoving) {
-                    handlePan(3, event);
-                    this.checkForMoving = true;
-                    this.isMoving = false;
-                }
-                if (event.getPointerCount() == 2) {
-                    if (this.checkForZooming && !this.isZooming) {
-                        handlePinch(1, event);
-                        this.isZooming = true;
-                        break;
-                    }
-                }
-                handlePinch(3, event);
-                this.checkForZooming = true;
-                this.isZooming = false;
-                break;
-                break;
-            case 1:
-            case 3:
-            case 6:
-                if (this.isMoving) {
-                    handlePan(3, event);
-                    this.isMoving = false;
-                } else if (this.isZooming) {
-                    handlePinch(3, event);
-                    this.isZooming = false;
-                }
-                this.checkForMoving = true;
-                this.checkForZooming = true;
-                break;
-            case 2:
-                if (!this.isMoving) {
-                    if (this.isZooming) {
-                        handlePinch(2, event);
-                        break;
-                    }
-                }
-                handlePan(2, event);
-                break;
-                break;
-        }
-        return true;
-    }
-
-    private void handlePan(int state, MotionEvent event) {
-        float locationX = event.getX();
-        float locationY = event.getY();
+    private void handlePan(int i, MotionEvent motionEvent) {
+        int i2 = i;
+        float x = motionEvent.getX();
+        float y = motionEvent.getY();
         Point actualCenterPoint = getActualCenterPoint();
-        Point delta = new Point(locationX - actualCenterPoint.x, locationY - actualCenterPoint.y);
-        float radialDistance = (float) Math.sqrt((double) ((delta.x * delta.x) + (delta.y * delta.y)));
-        float shorterSide = this.actualAreaSize.width > this.actualAreaSize.height ? this.actualAreaSize.height : this.actualAreaSize.width;
-        float innerRadius = shorterSide * this.falloff;
-        float outerRadius = shorterSide * this.size;
-        float distance = (float) Math.abs((((double) delta.x) * Math.cos(((double) degreesToRadians(this.angle)) + 1.5707963267948966d)) + (((double) delta.y) * Math.sin(((double) degreesToRadians(this.angle)) + 1.5707963267948966d)));
-        switch (state) {
-            case 1:
-                this.pointerStartX = event.getX();
-                this.pointerStartY = event.getY();
-                boolean close = Math.abs(outerRadius - innerRadius) < BlurInsetProximity;
-                float innerRadiusOuterInset = close ? 0.0f : BlurViewRadiusInset;
-                float outerRadiusInnerInset = close ? 0.0f : BlurViewRadiusInset;
-                if (this.type == 0) {
-                    if (radialDistance < BlurViewCenterInset) {
+        Point point = new Point(x - actualCenterPoint.x, y - actualCenterPoint.y);
+        float f = point.x;
+        f *= f;
+        float f2 = point.y;
+        f = (float) Math.sqrt((double) (f + (f2 * f2)));
+        Size size = this.actualAreaSize;
+        float f3 = size.width;
+        f2 = size.height;
+        if (f3 <= f2) {
+            f2 = f3;
+        }
+        f3 = this.falloff * f2;
+        float f4 = this.size * f2;
+        double d = (double) point.x;
+        double degreesToRadians = (double) degreesToRadians(this.angle);
+        Double.isNaN(degreesToRadians);
+        degreesToRadians = Math.cos(degreesToRadians + 1.5707963267948966d);
+        Double.isNaN(d);
+        d *= degreesToRadians;
+        degreesToRadians = (double) point.y;
+        float f5 = f3;
+        float f6 = f4;
+        double degreesToRadians2 = (double) degreesToRadians(this.angle);
+        Double.isNaN(degreesToRadians2);
+        degreesToRadians2 = Math.sin(degreesToRadians2 + 1.5707963267948966d);
+        Double.isNaN(degreesToRadians);
+        float abs = (float) Math.abs(d + (degreesToRadians * degreesToRadians2));
+        boolean z = false;
+        f4 = 0.0f;
+        float f7;
+        if (i2 == 1) {
+            this.pointerStartX = motionEvent.getX();
+            this.pointerStartY = motionEvent.getY();
+            if (Math.abs(f6 - f5) < BlurInsetProximity) {
+                z = true;
+            }
+            if (z) {
+                f7 = 0.0f;
+            } else {
+                f7 = BlurViewRadiusInset;
+            }
+            if (!z) {
+                f4 = BlurViewRadiusInset;
+            }
+            int i3 = this.type;
+            if (i3 != 0) {
+                f2 = f5;
+                y = f6;
+                if (i3 == 1) {
+                    if (f < BlurViewCenterInset) {
                         this.activeControl = BlurViewActiveControl.BlurViewActiveControlCenter;
                         this.startCenterPoint = actualCenterPoint;
-                    } else if (distance > innerRadius - BlurViewRadiusInset && distance < innerRadius + innerRadiusOuterInset) {
+                    } else if (f > f2 - BlurViewRadiusInset && f < f2 + f7) {
                         this.activeControl = BlurViewActiveControl.BlurViewActiveControlInnerRadius;
-                        this.startDistance = distance;
-                        this.startRadius = innerRadius;
-                    } else if (distance > outerRadius - outerRadiusInnerInset && distance < BlurViewRadiusInset + outerRadius) {
+                        this.startDistance = f;
+                        this.startRadius = f2;
+                    } else if (f > y - f4 && f < y + BlurViewRadiusInset) {
                         this.activeControl = BlurViewActiveControl.BlurViewActiveControlOuterRadius;
-                        this.startDistance = distance;
-                        this.startRadius = outerRadius;
-                    } else if (distance <= innerRadius - BlurViewRadiusInset || distance >= BlurViewRadiusInset + outerRadius) {
+                        this.startDistance = f;
+                        this.startRadius = y;
+                    }
+                }
+            } else if (f < BlurViewCenterInset) {
+                this.activeControl = BlurViewActiveControl.BlurViewActiveControlCenter;
+                this.startCenterPoint = actualCenterPoint;
+            } else if (abs <= f5 - BlurViewRadiusInset || abs >= f5 + f7) {
+                f2 = f5;
+                if (abs <= f6 - f4 || abs >= f6 + BlurViewRadiusInset) {
+                    y = f6;
+                    f7 = BlurViewRadiusInset;
+                    if (abs <= f2 - f7 || abs >= y + f7) {
                         this.activeControl = BlurViewActiveControl.BlurViewActiveControlRotation;
                     }
-                } else if (this.type == 1) {
-                    if (radialDistance < BlurViewCenterInset) {
-                        this.activeControl = BlurViewActiveControl.BlurViewActiveControlCenter;
-                        this.startCenterPoint = actualCenterPoint;
-                    } else if (radialDistance > innerRadius - BlurViewRadiusInset && radialDistance < innerRadius + innerRadiusOuterInset) {
-                        this.activeControl = BlurViewActiveControl.BlurViewActiveControlInnerRadius;
-                        this.startDistance = radialDistance;
-                        this.startRadius = innerRadius;
-                    } else if (radialDistance > outerRadius - outerRadiusInnerInset && radialDistance < BlurViewRadiusInset + outerRadius) {
-                        this.activeControl = BlurViewActiveControl.BlurViewActiveControlOuterRadius;
-                        this.startDistance = radialDistance;
-                        this.startRadius = outerRadius;
+                } else {
+                    this.activeControl = BlurViewActiveControl.BlurViewActiveControlOuterRadius;
+                    this.startDistance = abs;
+                    this.startRadius = f6;
+                }
+            } else {
+                this.activeControl = BlurViewActiveControl.BlurViewActiveControlInnerRadius;
+                this.startDistance = abs;
+                this.startRadius = f5;
+            }
+            setSelected(true, true);
+        } else if (i2 == 2) {
+            i2 = this.type;
+            float width;
+            Size size2;
+            Rect rect;
+            Size size3;
+            if (i2 == 0) {
+                i2 = AnonymousClass1.$SwitchMap$org$telegram$ui$Components$PhotoFilterBlurControl$BlurViewActiveControl[this.activeControl.ordinal()];
+                if (i2 == 1) {
+                    x -= this.pointerStartX;
+                    y -= this.pointerStartY;
+                    width = (((float) getWidth()) - this.actualAreaSize.width) / 2.0f;
+                    abs = (float) getHeight();
+                    size2 = this.actualAreaSize;
+                    f2 = size2.height;
+                    rect = new Rect(width, (abs - f2) / 2.0f, size2.width, f2);
+                    abs = rect.x;
+                    x = Math.max(abs, Math.min(rect.width + abs, this.startCenterPoint.x + x));
+                    abs = rect.y;
+                    actualCenterPoint = new Point(x, Math.max(abs, Math.min(rect.height + abs, this.startCenterPoint.y + y)));
+                    y = actualCenterPoint.x - rect.x;
+                    size3 = this.actualAreaSize;
+                    f = size3.width;
+                    this.centerPoint = new Point(y / f, ((actualCenterPoint.y - rect.y) + ((f - size3.height) / 2.0f)) / f);
+                } else if (i2 == 2) {
+                    this.falloff = Math.min(Math.max(0.1f, (this.startRadius + (abs - this.startDistance)) / f2), this.size - 0.02f);
+                } else if (i2 == 3) {
+                    this.size = Math.max(this.falloff + 0.02f, (this.startRadius + (abs - this.startDistance)) / f2);
+                } else if (i2 == 4) {
+                    int i4;
+                    f7 = x - this.pointerStartX;
+                    abs = y - this.pointerStartY;
+                    Object obj = x > actualCenterPoint.x ? 1 : null;
+                    Object obj2 = y > actualCenterPoint.y ? 1 : null;
+                    if (obj == null && obj2 == null ? Math.abs(abs) <= Math.abs(f7) ? f7 <= 0.0f : abs >= 0.0f : obj == null || obj2 != null ? obj == null || obj2 == null ? Math.abs(abs) <= Math.abs(f7) ? f7 >= 0.0f : abs >= 0.0f : Math.abs(abs) <= Math.abs(f7) ? f7 >= 0.0f : abs <= 0.0f : Math.abs(abs) <= Math.abs(f7) ? f7 <= 0.0f : abs <= 0.0f) {
+                        i4 = 1;
                     }
+                    this.angle += ((((float) Math.sqrt((double) ((f7 * f7) + (abs * abs)))) * ((float) ((i4 * 2) - 1))) / 3.1415927f) / 1.15f;
+                    this.pointerStartX = x;
+                    this.pointerStartY = y;
                 }
-                setSelected(true, true);
-                return;
-            case 2:
-                float translationX;
-                float translationY;
-                Rect actualArea;
-                Point point;
-                if (this.type != 0) {
-                    if (this.type == 1) {
-                        switch (this.activeControl) {
-                            case BlurViewActiveControlCenter:
-                                translationX = locationX - this.pointerStartX;
-                                translationY = locationY - this.pointerStartY;
-                                actualArea = new Rect((((float) getWidth()) - this.actualAreaSize.width) / 2.0f, (((float) getHeight()) - this.actualAreaSize.height) / 2.0f, this.actualAreaSize.width, this.actualAreaSize.height);
-                                point = new Point(Math.max(actualArea.x, Math.min(actualArea.x + actualArea.width, this.startCenterPoint.x + translationX)), Math.max(actualArea.y, Math.min(actualArea.y + actualArea.height, this.startCenterPoint.y + translationY)));
-                                this.centerPoint = new Point((point.x - actualArea.x) / this.actualAreaSize.width, ((point.y - actualArea.y) + ((this.actualAreaSize.width - this.actualAreaSize.height) / 2.0f)) / this.actualAreaSize.width);
-                                break;
-                            case BlurViewActiveControlInnerRadius:
-                                this.falloff = Math.min(Math.max(0.1f, (this.startRadius + (radialDistance - this.startDistance)) / shorterSide), this.size - 0.02f);
-                                break;
-                            case BlurViewActiveControlOuterRadius:
-                                this.size = Math.max(this.falloff + 0.02f, (this.startRadius + (radialDistance - this.startDistance)) / shorterSide);
-                                break;
-                        }
-                    }
+            } else if (i2 == 1) {
+                i2 = AnonymousClass1.$SwitchMap$org$telegram$ui$Components$PhotoFilterBlurControl$BlurViewActiveControl[this.activeControl.ordinal()];
+                if (i2 == 1) {
+                    x -= this.pointerStartX;
+                    y -= this.pointerStartY;
+                    width = (((float) getWidth()) - this.actualAreaSize.width) / 2.0f;
+                    abs = (float) getHeight();
+                    size2 = this.actualAreaSize;
+                    f2 = size2.height;
+                    rect = new Rect(width, (abs - f2) / 2.0f, size2.width, f2);
+                    abs = rect.x;
+                    x = Math.max(abs, Math.min(rect.width + abs, this.startCenterPoint.x + x));
+                    abs = rect.y;
+                    actualCenterPoint = new Point(x, Math.max(abs, Math.min(rect.height + abs, this.startCenterPoint.y + y)));
+                    y = actualCenterPoint.x - rect.x;
+                    size3 = this.actualAreaSize;
+                    f = size3.width;
+                    this.centerPoint = new Point(y / f, ((actualCenterPoint.y - rect.y) + ((f - size3.height) / 2.0f)) / f);
+                } else if (i2 == 2) {
+                    this.falloff = Math.min(Math.max(0.1f, (this.startRadius + (f - this.startDistance)) / f2), this.size - 0.02f);
+                } else if (i2 == 3) {
+                    this.size = Math.max(this.falloff + 0.02f, (this.startRadius + (f - this.startDistance)) / f2);
                 }
-                switch (this.activeControl) {
-                    case BlurViewActiveControlCenter:
-                        translationX = locationX - this.pointerStartX;
-                        translationY = locationY - this.pointerStartY;
-                        actualArea = new Rect((((float) getWidth()) - this.actualAreaSize.width) / 2.0f, (((float) getHeight()) - this.actualAreaSize.height) / 2.0f, this.actualAreaSize.width, this.actualAreaSize.height);
-                        point = new Point(Math.max(actualArea.x, Math.min(actualArea.x + actualArea.width, this.startCenterPoint.x + translationX)), Math.max(actualArea.y, Math.min(actualArea.y + actualArea.height, this.startCenterPoint.y + translationY)));
-                        this.centerPoint = new Point((point.x - actualArea.x) / this.actualAreaSize.width, ((point.y - actualArea.y) + ((this.actualAreaSize.width - this.actualAreaSize.height) / 2.0f)) / this.actualAreaSize.width);
-                        break;
-                    case BlurViewActiveControlInnerRadius:
-                        this.falloff = Math.min(Math.max(0.1f, (this.startRadius + (distance - this.startDistance)) / shorterSide), this.size - 0.02f);
-                        break;
-                    case BlurViewActiveControlOuterRadius:
-                        this.size = Math.max(this.falloff + 0.02f, (this.startRadius + (distance - this.startDistance)) / shorterSide);
-                        break;
-                    case BlurViewActiveControlRotation:
-                        translationX = locationX - this.pointerStartX;
-                        translationY = locationY - this.pointerStartY;
-                        boolean clockwise = false;
-                        boolean right = locationX > actualCenterPoint.x;
-                        boolean bottom = locationY > actualCenterPoint.y;
-                        if (right || bottom) {
-                            if (!right || bottom) {
-                                if (right && bottom) {
-                                    if (Math.abs(translationY) > Math.abs(translationX)) {
-                                        if (translationY > 0.0f) {
-                                            clockwise = true;
-                                        }
-                                    } else if (translationX < 0.0f) {
-                                        clockwise = true;
-                                    }
-                                } else if (Math.abs(translationY) > Math.abs(translationX)) {
-                                    if (translationY < 0.0f) {
-                                        clockwise = true;
-                                    }
-                                } else if (translationX < 0.0f) {
-                                    clockwise = true;
-                                }
-                            } else if (Math.abs(translationY) > Math.abs(translationX)) {
-                                if (translationY > 0.0f) {
-                                    clockwise = true;
-                                }
-                            } else if (translationX > 0.0f) {
-                                clockwise = true;
-                            }
-                        } else if (Math.abs(translationY) > Math.abs(translationX)) {
-                            if (translationY < 0.0f) {
-                                clockwise = true;
-                            }
-                        } else if (translationX > 0.0f) {
-                            clockwise = true;
-                        }
-                        this.angle = (((((float) (((clockwise ? 1 : 0) * 2) - 1)) * ((float) Math.sqrt((double) ((translationX * translationX) + (translationY * translationY))))) / 3.1415927f) / 1.15f) + this.angle;
-                        this.pointerStartX = locationX;
-                        this.pointerStartY = locationY;
-                        break;
-                }
-                invalidate();
-                if (this.delegate != null) {
-                    this.delegate.valueChanged(this.centerPoint, this.falloff, this.size, degreesToRadians(this.angle) + 1.5707964f);
-                    return;
-                }
-                return;
-            case 3:
-            case 4:
-            case 5:
-                this.activeControl = BlurViewActiveControl.BlurViewActiveControlNone;
-                setSelected(false, true);
-                return;
-            default:
-                return;
+            }
+            invalidate();
+            PhotoFilterLinearBlurControlDelegate photoFilterLinearBlurControlDelegate = this.delegate;
+            if (photoFilterLinearBlurControlDelegate != null) {
+                photoFilterLinearBlurControlDelegate.valueChanged(this.centerPoint, this.falloff, this.size, degreesToRadians(this.angle) + 1.5707964f);
+            }
+        } else if (i2 == 3 || i2 == 4 || i2 == 5) {
+            this.activeControl = BlurViewActiveControl.BlurViewActiveControlNone;
+            setSelected(false, true);
         }
     }
 
-    private void handlePinch(int state, MotionEvent event) {
-        switch (state) {
-            case 1:
-                this.startPointerDistance = getDistance(event);
-                this.pointerScale = 1.0f;
-                this.activeControl = BlurViewActiveControl.BlurViewActiveControlWholeArea;
-                setSelected(true, true);
-                break;
-            case 2:
-                break;
-            case 3:
-            case 4:
-            case 5:
+    private void handlePinch(int i, MotionEvent motionEvent) {
+        if (i == 1) {
+            this.startPointerDistance = getDistance(motionEvent);
+            this.pointerScale = 1.0f;
+            this.activeControl = BlurViewActiveControl.BlurViewActiveControlWholeArea;
+            setSelected(true, true);
+        } else if (i != 2) {
+            if (i == 3 || i == 4 || i == 5) {
                 this.activeControl = BlurViewActiveControl.BlurViewActiveControlNone;
                 setSelected(false, true);
                 return;
-            default:
-                return;
+            }
+            return;
         }
-        float newDistance = getDistance(event);
-        this.pointerScale += ((newDistance - this.startPointerDistance) / AndroidUtilities.density) * 0.01f;
+        float distance = getDistance(motionEvent);
+        this.pointerScale += ((distance - this.startPointerDistance) / AndroidUtilities.density) * 0.01f;
         this.falloff = Math.max(0.1f, this.falloff * this.pointerScale);
         this.size = Math.max(this.falloff + 0.02f, this.size * this.pointerScale);
         this.pointerScale = 1.0f;
-        this.startPointerDistance = newDistance;
+        this.startPointerDistance = distance;
         invalidate();
-        if (this.delegate != null) {
-            this.delegate.valueChanged(this.centerPoint, this.falloff, this.size, degreesToRadians(this.angle) + 1.5707964f);
+        PhotoFilterLinearBlurControlDelegate photoFilterLinearBlurControlDelegate = this.delegate;
+        if (photoFilterLinearBlurControlDelegate != null) {
+            photoFilterLinearBlurControlDelegate.valueChanged(this.centerPoint, this.falloff, this.size, degreesToRadians(this.angle) + 1.5707964f);
         }
     }
 
-    private void setSelected(boolean selected, boolean animated) {
-    }
-
-    public void setActualAreaSize(float width, float height) {
-        this.actualAreaSize.width = width;
-        this.actualAreaSize.height = height;
+    public void setActualAreaSize(float f, float f2) {
+        Size size = this.actualAreaSize;
+        size.width = f;
+        size.height = f2;
     }
 
     /* Access modifiers changed, original: protected */
     public void onDraw(Canvas canvas) {
+        Canvas canvas2 = canvas;
         super.onDraw(canvas);
-        Point centerPoint = getActualCenterPoint();
-        float innerRadius = getActualInnerRadius();
-        float outerRadius = getActualOuterRadius();
-        canvas.translate(centerPoint.x, centerPoint.y);
-        int i;
-        Canvas canvas2;
-        if (this.type == 0) {
+        Point actualCenterPoint = getActualCenterPoint();
+        float actualInnerRadius = getActualInnerRadius();
+        float actualOuterRadius = getActualOuterRadius();
+        canvas2.translate(actualCenterPoint.x, actualCenterPoint.y);
+        int i = this.type;
+        if (i == 0) {
             float f;
-            canvas.rotate(this.angle);
-            float space = (float) AndroidUtilities.dp(6.0f);
-            float length = (float) AndroidUtilities.dp(12.0f);
-            float thickness = (float) AndroidUtilities.dp(1.5f);
-            for (i = 0; i < 30; i++) {
-                canvas2 = canvas;
-                canvas2.drawRect((length + space) * ((float) i), -innerRadius, (((float) i) * (length + space)) + length, thickness - innerRadius, this.paint);
-                canvas.drawRect(((((float) (-i)) * (length + space)) - space) - length, -innerRadius, (((float) (-i)) * (length + space)) - space, thickness - innerRadius, this.paint);
-                canvas2 = canvas;
-                f = innerRadius;
-                canvas2.drawRect((length + space) * ((float) i), f, length + (((float) i) * (length + space)), thickness + innerRadius, this.paint);
-                canvas.drawRect(((((float) (-i)) * (length + space)) - space) - length, innerRadius, (((float) (-i)) * (length + space)) - space, thickness + innerRadius, this.paint);
+            float f2;
+            float f3;
+            float f4;
+            float f5;
+            int i2;
+            Canvas canvas3;
+            float f6;
+            canvas2.rotate(this.angle);
+            float dp = (float) AndroidUtilities.dp(6.0f);
+            float dp2 = (float) AndroidUtilities.dp(12.0f);
+            float dp3 = (float) AndroidUtilities.dp(1.5f);
+            int i3 = 0;
+            while (i3 < 30) {
+                f = dp2 + dp;
+                f2 = ((float) i3) * f;
+                f3 = -actualInnerRadius;
+                f4 = f2 + dp2;
+                f5 = dp3 - actualInnerRadius;
+                float f7 = f3;
+                f3 = f5;
+                i2 = i3;
+                canvas.drawRect(f2, f3, f4, f3, this.paint);
+                f = (((float) (-i2)) * f) - dp;
+                float f8 = f - dp2;
+                canvas3 = canvas;
+                canvas3.drawRect(f8, f7, f, f3, this.paint);
+                f6 = actualInnerRadius;
+                f3 = dp3 + actualInnerRadius;
+                canvas3.drawRect(f2, f6, f4, f3, this.paint);
+                canvas3.drawRect(f8, f6, f, f3, this.paint);
+                i3 = i2 + 1;
             }
-            length = (float) AndroidUtilities.dp(6.0f);
-            for (i = 0; i < 64; i++) {
-                canvas2 = canvas;
-                canvas2.drawRect((length + space) * ((float) i), -outerRadius, length + (((float) i) * (length + space)), thickness - outerRadius, this.paint);
-                canvas.drawRect(((((float) (-i)) * (length + space)) - space) - length, -outerRadius, (((float) (-i)) * (length + space)) - space, thickness - outerRadius, this.paint);
-                canvas2 = canvas;
-                f = outerRadius;
-                canvas2.drawRect((length + space) * ((float) i), f, length + (((float) i) * (length + space)), thickness + outerRadius, this.paint);
-                canvas.drawRect(((((float) (-i)) * (length + space)) - space) - length, outerRadius, (((float) (-i)) * (length + space)) - space, thickness + outerRadius, this.paint);
+            actualInnerRadius = (float) AndroidUtilities.dp(6.0f);
+            for (i2 = 0; i2 < 64; i2++) {
+                float f9 = actualInnerRadius + dp;
+                dp2 = ((float) i2) * f9;
+                float var_ = -actualOuterRadius;
+                f = actualInnerRadius + dp2;
+                f2 = dp3 - actualOuterRadius;
+                f3 = f2;
+                f5 = var_;
+                canvas.drawRect(dp2, var_, f, f3, this.paint);
+                f9 = (((float) (-i2)) * f9) - dp;
+                f4 = f9 - actualInnerRadius;
+                canvas3 = canvas;
+                canvas3.drawRect(f4, f5, f9, f3, this.paint);
+                f6 = actualOuterRadius;
+                f3 = dp3 + actualOuterRadius;
+                canvas3.drawRect(dp2, f6, f, f3, this.paint);
+                canvas3.drawRect(f4, f6, f9, f3, this.paint);
             }
-        } else if (this.type == 1) {
-            this.arcRect.set(-innerRadius, -innerRadius, innerRadius, innerRadius);
-            for (i = 0; i < 22; i++) {
-                canvas2 = canvas;
-                canvas2.drawArc(this.arcRect, (6.15f + 10.2f) * ((float) i), 10.2f, false, this.arcPaint);
+        } else if (i == 1) {
+            int i4;
+            float var_ = -actualInnerRadius;
+            this.arcRect.set(var_, var_, actualInnerRadius, actualInnerRadius);
+            for (i4 = 0; i4 < 22; i4++) {
+                canvas.drawArc(this.arcRect, 16.35f * ((float) i4), 10.2f, false, this.arcPaint);
             }
-            this.arcRect.set(-outerRadius, -outerRadius, outerRadius, outerRadius);
-            for (i = 0; i < 64; i++) {
-                canvas2 = canvas;
-                canvas2.drawArc(this.arcRect, (2.02f + 3.6f) * ((float) i), 3.6f, false, this.arcPaint);
+            var_ = -actualOuterRadius;
+            this.arcRect.set(var_, var_, actualOuterRadius, actualOuterRadius);
+            for (i4 = 0; i4 < 64; i4++) {
+                canvas.drawArc(this.arcRect, 5.62f * ((float) i4), 3.6f, false, this.arcPaint);
             }
         }
-        canvas.drawCircle(0.0f, 0.0f, (float) AndroidUtilities.dp(8.0f), this.paint);
+        canvas2.drawCircle(0.0f, 0.0f, (float) AndroidUtilities.dp(8.0f), this.paint);
     }
 
     private Point getActualCenterPoint() {
-        return new Point((this.centerPoint.x * this.actualAreaSize.width) + ((((float) getWidth()) - this.actualAreaSize.width) / 2.0f), ((((float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)) + ((((float) getHeight()) - this.actualAreaSize.height) / 2.0f)) - ((this.actualAreaSize.width - this.actualAreaSize.height) / 2.0f)) + (this.centerPoint.y * this.actualAreaSize.width));
+        float width = (float) getWidth();
+        float f = this.actualAreaSize.width;
+        width = ((width - f) / 2.0f) + (this.centerPoint.x * f);
+        f = (float) (VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+        float height = (float) getHeight();
+        Size size = this.actualAreaSize;
+        float f2 = size.height;
+        f += (height - f2) / 2.0f;
+        height = size.width;
+        return new Point(width, (f - ((height - f2) / 2.0f)) + (this.centerPoint.y * height));
     }
 
     private float getActualInnerRadius() {
-        return (this.actualAreaSize.width > this.actualAreaSize.height ? this.actualAreaSize.height : this.actualAreaSize.width) * this.falloff;
+        Size size = this.actualAreaSize;
+        float f = size.width;
+        float f2 = size.height;
+        if (f <= f2) {
+            f2 = f;
+        }
+        return f2 * this.falloff;
     }
 
     private float getActualOuterRadius() {
-        return (this.actualAreaSize.width > this.actualAreaSize.height ? this.actualAreaSize.height : this.actualAreaSize.width) * this.size;
+        Size size = this.actualAreaSize;
+        float f = size.width;
+        float f2 = size.height;
+        if (f <= f2) {
+            f2 = f;
+        }
+        return f2 * this.size;
     }
 }

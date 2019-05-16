@@ -19,142 +19,136 @@ public class CustomTabsClient {
     private final ICustomTabsService mService;
     private final ComponentName mServiceComponentName;
 
-    CustomTabsClient(ICustomTabsService service, ComponentName componentName) {
-        this.mService = service;
+    CustomTabsClient(ICustomTabsService iCustomTabsService, ComponentName componentName) {
+        this.mService = iCustomTabsService;
         this.mServiceComponentName = componentName;
     }
 
-    public static boolean bindCustomTabsService(Context context, String packageName, CustomTabsServiceConnection connection) {
+    public static boolean bindCustomTabsService(Context context, String str, CustomTabsServiceConnection customTabsServiceConnection) {
         Intent intent = new Intent("android.support.customtabs.action.CustomTabsService");
-        if (!TextUtils.isEmpty(packageName)) {
-            intent.setPackage(packageName);
+        if (!TextUtils.isEmpty(str)) {
+            intent.setPackage(str);
         }
-        return context.bindService(intent, connection, 33);
+        return context.bindService(intent, customTabsServiceConnection, 33);
     }
 
-    public static String getPackageName(Context context, List<String> packages) {
-        return getPackageName(context, packages, false);
+    public static String getPackageName(Context context, List<String> list) {
+        return getPackageName(context, list, false);
     }
 
-    public static String getPackageName(Context context, List<String> packages, boolean ignoreDefault) {
-        List packageNames;
-        String packageName;
-        PackageManager pm = context.getPackageManager();
-        if (packages == null) {
-            packageNames = new ArrayList();
-        } else {
-            List<String> packageNames2 = packages;
-        }
-        Intent activityIntent = new Intent("android.intent.action.VIEW", Uri.parse("http://"));
-        if (!ignoreDefault) {
-            ResolveInfo defaultViewHandlerInfo = pm.resolveActivity(activityIntent, 0);
-            if (defaultViewHandlerInfo != null) {
-                packageName = defaultViewHandlerInfo.activityInfo.packageName;
-                List<String> packageNames3 = new ArrayList(packageNames2.size() + 1);
-                packageNames3.add(packageName);
-                if (packages != null) {
-                    packageNames3.addAll(packages);
+    public static String getPackageName(Context context, List<String> list, boolean z) {
+        PackageManager packageManager = context.getPackageManager();
+        List arrayList = list == null ? new ArrayList() : list;
+        Intent intent = new Intent("android.intent.action.VIEW", Uri.parse("http://"));
+        if (!z) {
+            ResolveInfo resolveActivity = packageManager.resolveActivity(intent, 0);
+            if (resolveActivity != null) {
+                String str = resolveActivity.activityInfo.packageName;
+                ArrayList arrayList2 = new ArrayList(arrayList.size() + 1);
+                arrayList2.add(str);
+                if (list != null) {
+                    arrayList2.addAll(list);
                 }
-                packageNames2 = packageNames3;
+                arrayList = arrayList2;
             }
         }
-        Intent serviceIntent = new Intent("android.support.customtabs.action.CustomTabsService");
-        for (String packageName2 : packageNames) {
-            serviceIntent.setPackage(packageName2);
-            if (pm.resolveService(serviceIntent, 0) != null) {
-                return packageName2;
+        Intent intent2 = new Intent("android.support.customtabs.action.CustomTabsService");
+        for (String str2 : arrayList) {
+            intent2.setPackage(str2);
+            if (packageManager.resolveService(intent2, 0) != null) {
+                return str2;
             }
         }
         return null;
     }
 
-    public static boolean connectAndInitialize(Context context, String packageName) {
-        boolean z = false;
-        if (packageName == null) {
-            return z;
+    public static boolean connectAndInitialize(Context context, String str) {
+        if (str == null) {
+            return false;
         }
-        final Context applicationContext = context.getApplicationContext();
+        context = context.getApplicationContext();
         try {
-            return bindCustomTabsService(applicationContext, packageName, new CustomTabsServiceConnection() {
-                public final void onCustomTabsServiceConnected(ComponentName name, CustomTabsClient client) {
-                    client.warmup(0);
-                    applicationContext.unbindService(this);
-                }
-
+            return bindCustomTabsService(context, str, new CustomTabsServiceConnection() {
                 public final void onServiceDisconnected(ComponentName componentName) {
                 }
-            });
-        } catch (SecurityException e) {
-            return z;
-        }
-    }
 
-    public boolean warmup(long flags) {
-        try {
-            return this.mService.warmup(flags);
-        } catch (RemoteException e) {
+                public final void onCustomTabsServiceConnected(ComponentName componentName, CustomTabsClient customTabsClient) {
+                    customTabsClient.warmup(0);
+                    context.unbindService(this);
+                }
+            });
+        } catch (SecurityException unused) {
             return false;
         }
     }
 
-    public CustomTabsSession newSession(final CustomTabsCallback callback) {
-        Stub wrapper = new Stub() {
+    public boolean warmup(long j) {
+        try {
+            return this.mService.warmup(j);
+        } catch (RemoteException unused) {
+            return false;
+        }
+    }
+
+    public CustomTabsSession newSession(final CustomTabsCallback customTabsCallback) {
+        AnonymousClass2 anonymousClass2 = new Stub() {
             private Handler mHandler = new Handler(Looper.getMainLooper());
 
-            public void onNavigationEvent(final int navigationEvent, final Bundle extras) {
-                if (callback != null) {
+            public void onNavigationEvent(final int i, final Bundle bundle) {
+                if (customTabsCallback != null) {
                     this.mHandler.post(new Runnable() {
                         public void run() {
-                            callback.onNavigationEvent(navigationEvent, extras);
+                            customTabsCallback.onNavigationEvent(i, bundle);
                         }
                     });
                 }
             }
 
-            public void extraCallback(final String callbackName, final Bundle args) throws RemoteException {
-                if (callback != null) {
+            public void extraCallback(final String str, final Bundle bundle) throws RemoteException {
+                if (customTabsCallback != null) {
                     this.mHandler.post(new Runnable() {
                         public void run() {
-                            callback.extraCallback(callbackName, args);
+                            customTabsCallback.extraCallback(str, bundle);
                         }
                     });
                 }
             }
 
-            public void onMessageChannelReady(final Bundle extras) throws RemoteException {
-                if (callback != null) {
+            public void onMessageChannelReady(final Bundle bundle) throws RemoteException {
+                if (customTabsCallback != null) {
                     this.mHandler.post(new Runnable() {
                         public void run() {
-                            callback.onMessageChannelReady(extras);
+                            customTabsCallback.onMessageChannelReady(bundle);
                         }
                     });
                 }
             }
 
-            public void onPostMessage(final String message, final Bundle extras) throws RemoteException {
-                if (callback != null) {
+            public void onPostMessage(final String str, final Bundle bundle) throws RemoteException {
+                if (customTabsCallback != null) {
                     this.mHandler.post(new Runnable() {
                         public void run() {
-                            callback.onPostMessage(message, extras);
+                            customTabsCallback.onPostMessage(str, bundle);
                         }
                     });
                 }
             }
         };
+        CustomTabsSession customTabsSession = null;
         try {
-            if (this.mService.newSession(wrapper)) {
-                return new CustomTabsSession(this.mService, wrapper, this.mServiceComponentName);
+            if (!this.mService.newSession(anonymousClass2)) {
+                return null;
             }
-            return null;
-        } catch (RemoteException e) {
-            return null;
+            customTabsSession = new CustomTabsSession(this.mService, anonymousClass2, this.mServiceComponentName);
+            return customTabsSession;
+        } catch (RemoteException unused) {
         }
     }
 
-    public Bundle extraCommand(String commandName, Bundle args) {
+    public Bundle extraCommand(String str, Bundle bundle) {
         try {
-            return this.mService.extraCommand(commandName, args);
-        } catch (RemoteException e) {
+            return this.mService.extraCommand(str, bundle);
+        } catch (RemoteException unused) {
             return null;
         }
     }

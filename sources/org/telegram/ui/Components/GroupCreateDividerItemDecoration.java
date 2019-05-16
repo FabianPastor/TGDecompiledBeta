@@ -15,32 +15,32 @@ public class GroupCreateDividerItemDecoration extends ItemDecoration {
     private boolean single;
     private int skipRows;
 
-    public void setSearching(boolean value) {
-        this.searching = value;
+    public void setSearching(boolean z) {
+        this.searching = z;
     }
 
-    public void setSingle(boolean value) {
-        this.single = value;
+    public void setSingle(boolean z) {
+        this.single = z;
     }
 
-    public void setSkipRows(int value) {
-        this.skipRows = value;
+    public void setSkipRows(int i) {
+        this.skipRows = i;
     }
 
-    public void onDraw(Canvas canvas, RecyclerView parent, State state) {
-        int width = parent.getWidth();
-        int childCount = parent.getChildCount() - (this.single ? 0 : 1);
+    public void onDraw(Canvas canvas, RecyclerView recyclerView, State state) {
+        int width = recyclerView.getWidth();
+        int childCount = recyclerView.getChildCount() - (this.single ^ 1);
         for (int i = 0; i < childCount; i++) {
-            View child = parent.getChildAt(i);
-            if (parent.getChildAdapterPosition(child) >= this.skipRows) {
-                int top = child.getBottom();
-                canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(72.0f), (float) top, (float) (width - (LocaleController.isRTL ? AndroidUtilities.dp(72.0f) : 0)), (float) top, Theme.dividerPaint);
+            View childAt = recyclerView.getChildAt(i);
+            if (recyclerView.getChildAdapterPosition(childAt) >= this.skipRows) {
+                float bottom = (float) childAt.getBottom();
+                canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(72.0f), bottom, (float) (width - (LocaleController.isRTL ? AndroidUtilities.dp(72.0f) : 0)), bottom, Theme.dividerPaint);
             }
         }
     }
 
-    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, State state) {
-        super.getItemOffsets(outRect, view, parent, state);
-        outRect.top = 1;
+    public void getItemOffsets(Rect rect, View view, RecyclerView recyclerView, State state) {
+        super.getItemOffsets(rect, view, recyclerView, state);
+        rect.top = 1;
     }
 }

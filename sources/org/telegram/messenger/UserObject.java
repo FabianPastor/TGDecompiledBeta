@@ -25,24 +25,37 @@ public class UserObject {
         if (user == null || isDeleted(user)) {
             return LocaleController.getString("HiddenName", NUM);
         }
-        String name = ContactsController.formatName(user.first_name, user.last_name);
-        return (name.length() != 0 || user.phone == null || user.phone.length() == 0) ? name : PhoneFormat.getInstance().format("+" + user.phone);
+        String formatName = ContactsController.formatName(user.first_name, user.last_name);
+        if (formatName.length() == 0) {
+            String str = user.phone;
+            if (!(str == null || str.length() == 0)) {
+                PhoneFormat instance = PhoneFormat.getInstance();
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("+");
+                stringBuilder.append(user.phone);
+                formatName = instance.format(stringBuilder.toString());
+            }
+        }
+        return formatName;
     }
 
     public static String getFirstName(User user) {
         return getFirstName(user, true);
     }
 
-    public static String getFirstName(User user, boolean allowShort) {
+    public static String getFirstName(User user, boolean z) {
         if (user == null || isDeleted(user)) {
             return "DELETED";
         }
-        String name = user.first_name;
-        if (TextUtils.isEmpty(name)) {
-            name = user.last_name;
-        } else if (!allowShort && name.length() <= 2) {
+        String str = user.first_name;
+        if (TextUtils.isEmpty(str)) {
+            str = user.last_name;
+        } else if (!z && str.length() <= 2) {
             return ContactsController.formatName(user.first_name, user.last_name);
         }
-        return TextUtils.isEmpty(name) ? LocaleController.getString("HiddenName", NUM) : name;
+        if (TextUtils.isEmpty(str)) {
+            str = LocaleController.getString("HiddenName", NUM);
+        }
+        return str;
     }
 }

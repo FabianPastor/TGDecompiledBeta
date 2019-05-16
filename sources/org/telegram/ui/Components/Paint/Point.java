@@ -8,10 +8,10 @@ public class Point {
     public double y;
     public double z;
 
-    public Point(double x, double y, double z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+    public Point(double d, double d2, double d3) {
+        this.x = d;
+        this.y = d2;
+        this.z = d3;
     }
 
     public Point(Point point) {
@@ -21,7 +21,7 @@ public class Point {
     }
 
     public boolean equals(Object obj) {
-        boolean z = true;
+        boolean z = false;
         if (obj == null) {
             return false;
         }
@@ -31,28 +31,28 @@ public class Point {
         if (!(obj instanceof Point)) {
             return false;
         }
-        Point other = (Point) obj;
-        if (!(this.x == other.x && this.y == other.y && this.z == other.z)) {
-            z = false;
+        Point point = (Point) obj;
+        if (this.x == point.x && this.y == point.y && this.z == point.z) {
+            z = true;
         }
         return z;
     }
 
     /* Access modifiers changed, original: 0000 */
-    public Point multiplySum(Point point, double scalar) {
-        return new Point((this.x + point.x) * scalar, (this.y + point.y) * scalar, (this.z + point.z) * scalar);
+    public Point multiplySum(Point point, double d) {
+        return new Point((this.x + point.x) * d, (this.y + point.y) * d, (this.z + point.z) * d);
     }
 
     /* Access modifiers changed, original: 0000 */
-    public Point multiplyAndAdd(double scalar, Point point) {
-        return new Point((this.x * scalar) + point.x, (this.y * scalar) + point.y, (this.z * scalar) + point.z);
+    public Point multiplyAndAdd(double d, Point point) {
+        return new Point((this.x * d) + point.x, (this.y * d) + point.y, (this.z * d) + point.z);
     }
 
     /* Access modifiers changed, original: 0000 */
-    public void alteringAddMultiplication(Point point, double scalar) {
-        this.x += point.x * scalar;
-        this.y += point.y * scalar;
-        this.z += point.z * scalar;
+    public void alteringAddMultiplication(Point point, double d) {
+        this.x += point.x * d;
+        this.y += point.y * d;
+        this.z += point.z * d;
     }
 
     /* Access modifiers changed, original: 0000 */
@@ -66,8 +66,8 @@ public class Point {
     }
 
     /* Access modifiers changed, original: 0000 */
-    public Point multiplyByScalar(double scalar) {
-        return new Point(this.x * scalar, this.y * scalar, this.z * scalar);
+    public Point multiplyByScalar(double d) {
+        return new Point(this.x * d, this.y * d, this.z * d);
     }
 
     /* Access modifiers changed, original: 0000 */
@@ -76,7 +76,12 @@ public class Point {
     }
 
     private double getMagnitude() {
-        return Math.sqrt(((this.x * this.x) + (this.y * this.y)) + (this.z * this.z));
+        double d = this.x;
+        d *= d;
+        double d2 = this.y;
+        d += d2 * d2;
+        d2 = this.z;
+        return Math.sqrt(d + (d2 * d2));
     }
 
     /* Access modifiers changed, original: 0000 */

@@ -23,13 +23,13 @@ public class TextInfoPrivacyCell extends FrameLayout {
         this(context, 21);
     }
 
-    public TextInfoPrivacyCell(Context context, int padding) {
-        int i = 5;
+    public TextInfoPrivacyCell(Context context, int i) {
         super(context);
         this.linkTextColorKey = "windowBackgroundWhiteLinkText";
         this.bottomPadding = 17;
         this.textView = new TextView(context);
         this.textView.setTextSize(1, 14.0f);
+        int i2 = 5;
         this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.textView.setPadding(0, AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(17.0f));
         this.textView.setMovementMethod(LinkMovementMethod.getInstance());
@@ -37,48 +37,49 @@ public class TextInfoPrivacyCell extends FrameLayout {
         this.textView.setLinkTextColor(Theme.getColor(this.linkTextColorKey));
         TextView textView = this.textView;
         if (!LocaleController.isRTL) {
-            i = 3;
+            i2 = 3;
         }
-        addView(textView, LayoutHelper.createFrame(-1, -2.0f, i | 48, (float) padding, 0.0f, (float) padding, 0.0f));
+        float f = (float) i;
+        addView(textView, LayoutHelper.createFrame(-1, -2.0f, i2 | 48, f, 0.0f, f, 0.0f));
     }
 
-    public void setLinkTextColorKey(String key) {
-        this.linkTextColorKey = key;
+    public void setLinkTextColorKey(String str) {
+        this.linkTextColorKey = str;
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    public void onMeasure(int i, int i2) {
         if (this.fixedSize != 0) {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) this.fixedSize), NUM));
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) this.fixedSize), NUM));
         } else {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), NUM), MeasureSpec.makeMeasureSpec(0, 0));
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(0, 0));
         }
     }
 
-    public void setBottomPadding(int value) {
-        this.bottomPadding = value;
+    public void setBottomPadding(int i) {
+        this.bottomPadding = i;
     }
 
-    public void setFixedSize(int size) {
-        this.fixedSize = size;
+    public void setFixedSize(int i) {
+        this.fixedSize = i;
     }
 
-    public void setText(CharSequence text) {
-        if (text == null) {
+    public void setText(CharSequence charSequence) {
+        if (charSequence == null) {
             this.textView.setPadding(0, AndroidUtilities.dp(2.0f), 0, 0);
         } else {
             this.textView.setPadding(0, AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp((float) this.bottomPadding));
         }
-        this.textView.setText(text);
+        this.textView.setText(charSequence);
     }
 
-    public void setTextColor(int color) {
-        this.textView.setTextColor(color);
+    public void setTextColor(int i) {
+        this.textView.setTextColor(i);
     }
 
-    public void setTextColor(String key) {
-        this.textView.setTextColor(Theme.getColor(key));
-        this.textView.setTag(key);
+    public void setTextColor(String str) {
+        this.textView.setTextColor(Theme.getColor(str));
+        this.textView.setTag(str);
     }
 
     public TextView getTextView() {
@@ -89,24 +90,22 @@ public class TextInfoPrivacyCell extends FrameLayout {
         return this.textView.length();
     }
 
-    public void setEnabled(boolean value, ArrayList<Animator> animators) {
+    public void setEnabled(boolean z, ArrayList<Animator> arrayList) {
         float f = 1.0f;
-        TextView textView;
-        if (animators != null) {
-            textView = this.textView;
-            String str = "alpha";
+        if (arrayList != null) {
+            TextView textView = this.textView;
             float[] fArr = new float[1];
-            if (!value) {
+            if (!z) {
                 f = 0.5f;
             }
             fArr[0] = f;
-            animators.add(ObjectAnimator.ofFloat(textView, str, fArr));
+            arrayList.add(ObjectAnimator.ofFloat(textView, "alpha", fArr));
             return;
         }
-        textView = this.textView;
-        if (!value) {
+        TextView textView2 = this.textView;
+        if (!z) {
             f = 0.5f;
         }
-        textView.setAlpha(f);
+        textView2.setAlpha(f);
     }
 }

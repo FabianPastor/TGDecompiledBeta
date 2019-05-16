@@ -39,50 +39,51 @@ public class SlidingTabView extends LinearLayout {
         this.interpolator = new DecelerateInterpolator();
     }
 
-    public void addTextTab(final int position, String title) {
-        TextView tab = new TextView(getContext());
-        tab.setText(title);
-        tab.setFocusable(true);
-        tab.setGravity(17);
-        tab.setSingleLine();
-        tab.setTextColor(-1);
-        tab.setTextSize(1, 14.0f);
-        tab.setTypeface(Typeface.DEFAULT_BOLD);
-        tab.setBackgroundDrawable(Theme.createSelectorDrawable(-12763843, 0));
-        tab.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                SlidingTabView.this.didSelectTab(position);
+    public void addTextTab(final int i, String str) {
+        TextView textView = new TextView(getContext());
+        textView.setText(str);
+        textView.setFocusable(true);
+        textView.setGravity(17);
+        textView.setSingleLine();
+        textView.setTextColor(-1);
+        textView.setTextSize(1, 14.0f);
+        textView.setTypeface(Typeface.DEFAULT_BOLD);
+        textView.setBackgroundDrawable(Theme.createSelectorDrawable(-12763843, 0));
+        textView.setOnClickListener(new OnClickListener() {
+            public void onClick(View view) {
+                SlidingTabView.this.didSelectTab(i);
             }
         });
-        addView(tab);
-        LayoutParams layoutParams = (LayoutParams) tab.getLayoutParams();
+        addView(textView);
+        LayoutParams layoutParams = (LayoutParams) textView.getLayoutParams();
         layoutParams.height = -1;
         layoutParams.width = 0;
         layoutParams.weight = 50.0f;
-        tab.setLayoutParams(layoutParams);
+        textView.setLayoutParams(layoutParams);
         this.tabCount++;
     }
 
-    public void setDelegate(SlidingTabViewDelegate delegate) {
-        this.delegate = delegate;
+    public void setDelegate(SlidingTabViewDelegate slidingTabViewDelegate) {
+        this.delegate = slidingTabViewDelegate;
     }
 
     public int getSeletedTab() {
         return this.selectedTab;
     }
 
-    private void didSelectTab(int tab) {
-        if (this.selectedTab != tab) {
-            this.selectedTab = tab;
-            animateToTab(tab);
-            if (this.delegate != null) {
-                this.delegate.didSelectTab(tab);
+    private void didSelectTab(int i) {
+        if (this.selectedTab != i) {
+            this.selectedTab = i;
+            animateToTab(i);
+            SlidingTabViewDelegate slidingTabViewDelegate = this.delegate;
+            if (slidingTabViewDelegate != null) {
+                slidingTabViewDelegate.didSelectTab(i);
             }
         }
     }
 
-    private void animateToTab(int tab) {
-        this.animateTabXTo = ((float) tab) * this.tabWidth;
+    private void animateToTab(int i) {
+        this.animateTabXTo = ((float) i) * this.tabWidth;
         this.startAnimationX = this.tabX;
         this.totalAnimationDiff = 0;
         this.startAnimationTime = System.currentTimeMillis();
@@ -90,9 +91,9 @@ public class SlidingTabView extends LinearLayout {
     }
 
     /* Access modifiers changed, original: protected */
-    public void onLayout(boolean changed, int l, int t, int r, int b) {
-        super.onLayout(changed, l, t, r, b);
-        this.tabWidth = ((float) (r - l)) / ((float) this.tabCount);
+    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+        super.onLayout(z, i, i2, i3, i4);
+        this.tabWidth = ((float) (i3 - i)) / ((float) this.tabCount);
         float f = this.tabWidth * ((float) this.selectedTab);
         this.tabX = f;
         this.animateTabXTo = f;
@@ -101,18 +102,18 @@ public class SlidingTabView extends LinearLayout {
     /* Access modifiers changed, original: protected */
     public void onDraw(Canvas canvas) {
         if (this.tabX != this.animateTabXTo) {
-            long dt = System.currentTimeMillis() - this.startAnimationTime;
+            long currentTimeMillis = System.currentTimeMillis() - this.startAnimationTime;
             this.startAnimationTime = System.currentTimeMillis();
-            this.totalAnimationDiff += dt;
-            if (this.totalAnimationDiff > 200) {
+            this.totalAnimationDiff += currentTimeMillis;
+            currentTimeMillis = this.totalAnimationDiff;
+            if (currentTimeMillis > 200) {
                 this.totalAnimationDiff = 200;
                 this.tabX = this.animateTabXTo;
             } else {
-                this.tabX = this.startAnimationX + (this.interpolator.getInterpolation(((float) this.totalAnimationDiff) / 200.0f) * (this.animateTabXTo - this.startAnimationX));
+                this.tabX = this.startAnimationX + (this.interpolator.getInterpolation(((float) currentTimeMillis) / 200.0f) * (this.animateTabXTo - this.startAnimationX));
                 invalidate();
             }
         }
-        Canvas canvas2 = canvas;
-        canvas2.drawRect(this.tabX, (float) (getHeight() - AndroidUtilities.dp(2.0f)), this.tabWidth + this.tabX, (float) getHeight(), this.paint);
+        canvas.drawRect(this.tabX, (float) (getHeight() - AndroidUtilities.dp(2.0f)), this.tabX + this.tabWidth, (float) getHeight(), this.paint);
     }
 }

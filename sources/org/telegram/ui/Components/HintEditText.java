@@ -24,15 +24,15 @@ public class HintEditText extends EditTextBoldCursor {
         return this.hintText;
     }
 
-    public void setHintText(String value) {
-        this.hintText = value;
+    public void setHintText(String str) {
+        this.hintText = str;
         onTextChange();
         setText(getText());
     }
 
     /* Access modifiers changed, original: protected */
-    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
+    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+        super.onLayout(z, i, i2, i3, i4);
         onTextChange();
     }
 
@@ -47,18 +47,18 @@ public class HintEditText extends EditTextBoldCursor {
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (this.hintText != null && length() < this.hintText.length()) {
-            int top = getMeasuredHeight() / 2;
-            float offsetX = this.textOffset;
-            for (int a = length(); a < this.hintText.length(); a++) {
-                float f;
-                if (this.hintText.charAt(a) == ' ') {
-                    f = this.spaceSize;
+            int measuredHeight = getMeasuredHeight() / 2;
+            float f = this.textOffset;
+            for (int length = length(); length < this.hintText.length(); length++) {
+                float f2;
+                if (this.hintText.charAt(length) == ' ') {
+                    f2 = this.spaceSize;
                 } else {
-                    this.rect.set(((int) offsetX) + AndroidUtilities.dp(1.0f), top, ((int) (this.numberSize + offsetX)) - AndroidUtilities.dp(1.0f), AndroidUtilities.dp(2.0f) + top);
+                    this.rect.set(((int) f) + AndroidUtilities.dp(1.0f), measuredHeight, ((int) (this.numberSize + f)) - AndroidUtilities.dp(1.0f), AndroidUtilities.dp(2.0f) + measuredHeight);
                     canvas.drawRect(this.rect, this.paint);
-                    f = this.numberSize;
+                    f2 = this.numberSize;
                 }
-                offsetX += f;
+                f += f2;
             }
         }
     }

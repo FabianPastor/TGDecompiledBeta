@@ -25,24 +25,24 @@ public class TelegramConnectionService extends ConnectionService {
         }
     }
 
-    public Connection onCreateIncomingConnection(PhoneAccountHandle connectionManagerPhoneAccount, ConnectionRequest request) {
+    public Connection onCreateIncomingConnection(PhoneAccountHandle phoneAccountHandle, ConnectionRequest connectionRequest) {
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("onCreateIncomingConnection ");
         }
-        Bundle extras = request.getExtras();
-        if (extras.getInt("call_type") == 1) {
-            VoIPService svc = VoIPService.getSharedInstance();
-            if (svc == null || svc.isOutgoing()) {
+        Bundle extras = connectionRequest.getExtras();
+        String str = "call_type";
+        if (extras.getInt(str) == 1) {
+            VoIPService sharedInstance = VoIPService.getSharedInstance();
+            if (sharedInstance == null || sharedInstance.isOutgoing()) {
                 return null;
             }
-            return svc.getConnectionAndStartCall();
+            return sharedInstance.getConnectionAndStartCall();
         }
-        if (extras.getInt("call_type") == 2) {
-        }
+        extras.getInt(str);
         return null;
     }
 
-    public void onCreateIncomingConnectionFailed(PhoneAccountHandle connectionManagerPhoneAccount, ConnectionRequest request) {
+    public void onCreateIncomingConnectionFailed(PhoneAccountHandle phoneAccountHandle, ConnectionRequest connectionRequest) {
         if (BuildVars.LOGS_ENABLED) {
             FileLog.e("onCreateIncomingConnectionFailed ");
         }
@@ -51,7 +51,7 @@ public class TelegramConnectionService extends ConnectionService {
         }
     }
 
-    public void onCreateOutgoingConnectionFailed(PhoneAccountHandle connectionManagerPhoneAccount, ConnectionRequest request) {
+    public void onCreateOutgoingConnectionFailed(PhoneAccountHandle phoneAccountHandle, ConnectionRequest connectionRequest) {
         if (BuildVars.LOGS_ENABLED) {
             FileLog.e("onCreateOutgoingConnectionFailed ");
         }
@@ -60,20 +60,20 @@ public class TelegramConnectionService extends ConnectionService {
         }
     }
 
-    public Connection onCreateOutgoingConnection(PhoneAccountHandle connectionManagerPhoneAccount, ConnectionRequest request) {
+    public Connection onCreateOutgoingConnection(PhoneAccountHandle phoneAccountHandle, ConnectionRequest connectionRequest) {
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("onCreateOutgoingConnection ");
         }
-        Bundle extras = request.getExtras();
-        if (extras.getInt("call_type") == 1) {
-            VoIPService svc = VoIPService.getSharedInstance();
-            if (svc == null) {
+        Bundle extras = connectionRequest.getExtras();
+        String str = "call_type";
+        if (extras.getInt(str) == 1) {
+            VoIPService sharedInstance = VoIPService.getSharedInstance();
+            if (sharedInstance == null) {
                 return null;
             }
-            return svc.getConnectionAndStartCall();
+            return sharedInstance.getConnectionAndStartCall();
         }
-        if (extras.getInt("call_type") == 2) {
-        }
+        extras.getInt(str);
         return null;
     }
 }

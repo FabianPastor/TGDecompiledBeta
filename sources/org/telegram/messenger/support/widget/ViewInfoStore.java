@@ -1,9 +1,9 @@
 package org.telegram.messenger.support.widget;
 
-import android.support.v4.util.ArrayMap;
-import android.support.v4.util.LongSparseArray;
-import android.support.v4.util.Pools.Pool;
-import android.support.v4.util.Pools.SimplePool;
+import androidx.collection.ArrayMap;
+import androidx.collection.LongSparseArray;
+import androidx.core.util.Pools$Pool;
+import androidx.core.util.Pools$SimplePool;
 import org.telegram.messenger.support.widget.RecyclerView.ItemAnimator.ItemHolderInfo;
 import org.telegram.messenger.support.widget.RecyclerView.ViewHolder;
 
@@ -11,16 +11,6 @@ class ViewInfoStore {
     private static final boolean DEBUG = false;
     final ArrayMap<ViewHolder, InfoRecord> mLayoutHolderMap = new ArrayMap();
     final LongSparseArray<ViewHolder> mOldChangedHolders = new LongSparseArray();
-
-    interface ProcessCallback {
-        void processAppeared(ViewHolder viewHolder, ItemHolderInfo itemHolderInfo, ItemHolderInfo itemHolderInfo2);
-
-        void processDisappeared(ViewHolder viewHolder, ItemHolderInfo itemHolderInfo, ItemHolderInfo itemHolderInfo2);
-
-        void processPersistent(ViewHolder viewHolder, ItemHolderInfo itemHolderInfo, ItemHolderInfo itemHolderInfo2);
-
-        void unused(ViewHolder viewHolder);
-    }
 
     static class InfoRecord {
         static final int FLAG_APPEAR = 2;
@@ -30,7 +20,7 @@ class ViewInfoStore {
         static final int FLAG_POST = 8;
         static final int FLAG_PRE = 4;
         static final int FLAG_PRE_AND_POST = 12;
-        static Pool<InfoRecord> sPool = new SimplePool(20);
+        static Pools$Pool<InfoRecord> sPool = new Pools$SimplePool(20);
         int flags;
         ItemHolderInfo postInfo;
         ItemHolderInfo preInfo;
@@ -43,17 +33,27 @@ class ViewInfoStore {
             return infoRecord == null ? new InfoRecord() : infoRecord;
         }
 
-        static void recycle(InfoRecord record) {
-            record.flags = 0;
-            record.preInfo = null;
-            record.postInfo = null;
-            sPool.release(record);
+        static void recycle(InfoRecord infoRecord) {
+            infoRecord.flags = 0;
+            infoRecord.preInfo = null;
+            infoRecord.postInfo = null;
+            sPool.release(infoRecord);
         }
 
         static void drainCache() {
-            do {
-            } while (sPool.acquire() != null);
+            while (sPool.acquire() != null) {
+            }
         }
+    }
+
+    interface ProcessCallback {
+        void processAppeared(ViewHolder viewHolder, ItemHolderInfo itemHolderInfo, ItemHolderInfo itemHolderInfo2);
+
+        void processDisappeared(ViewHolder viewHolder, ItemHolderInfo itemHolderInfo, ItemHolderInfo itemHolderInfo2);
+
+        void processPersistent(ViewHolder viewHolder, ItemHolderInfo itemHolderInfo, ItemHolderInfo itemHolderInfo2);
+
+        void unused(ViewHolder viewHolder);
     }
 
     ViewInfoStore() {
@@ -66,149 +66,158 @@ class ViewInfoStore {
     }
 
     /* Access modifiers changed, original: 0000 */
-    public void addToPreLayout(ViewHolder holder, ItemHolderInfo info) {
-        InfoRecord record = (InfoRecord) this.mLayoutHolderMap.get(holder);
-        if (record == null) {
-            record = InfoRecord.obtain();
-            this.mLayoutHolderMap.put(holder, record);
+    public void addToPreLayout(ViewHolder viewHolder, ItemHolderInfo itemHolderInfo) {
+        InfoRecord infoRecord = (InfoRecord) this.mLayoutHolderMap.get(viewHolder);
+        if (infoRecord == null) {
+            infoRecord = InfoRecord.obtain();
+            this.mLayoutHolderMap.put(viewHolder, infoRecord);
         }
-        record.preInfo = info;
-        record.flags |= 4;
+        infoRecord.preInfo = itemHolderInfo;
+        infoRecord.flags |= 4;
     }
 
     /* Access modifiers changed, original: 0000 */
-    public boolean isDisappearing(ViewHolder holder) {
-        InfoRecord record = (InfoRecord) this.mLayoutHolderMap.get(holder);
-        return (record == null || (record.flags & 1) == 0) ? false : true;
+    public boolean isDisappearing(ViewHolder viewHolder) {
+        InfoRecord infoRecord = (InfoRecord) this.mLayoutHolderMap.get(viewHolder);
+        if (infoRecord == null || (infoRecord.flags & 1) == 0) {
+            return false;
+        }
+        return true;
     }
 
     /* Access modifiers changed, original: 0000 */
-    public ItemHolderInfo popFromPreLayout(ViewHolder vh) {
-        return popFromLayoutStep(vh, 4);
+    public ItemHolderInfo popFromPreLayout(ViewHolder viewHolder) {
+        return popFromLayoutStep(viewHolder, 4);
     }
 
     /* Access modifiers changed, original: 0000 */
-    public ItemHolderInfo popFromPostLayout(ViewHolder vh) {
-        return popFromLayoutStep(vh, 8);
+    public ItemHolderInfo popFromPostLayout(ViewHolder viewHolder) {
+        return popFromLayoutStep(viewHolder, 8);
     }
 
-    private ItemHolderInfo popFromLayoutStep(ViewHolder vh, int flag) {
-        ItemHolderInfo info = null;
-        int index = this.mLayoutHolderMap.indexOfKey(vh);
-        if (index >= 0) {
-            InfoRecord record = (InfoRecord) this.mLayoutHolderMap.valueAt(index);
-            if (!(record == null || (record.flags & flag) == 0)) {
-                record.flags &= flag ^ -1;
-                if (flag == 4) {
-                    info = record.preInfo;
-                } else if (flag == 8) {
-                    info = record.postInfo;
+    private ItemHolderInfo popFromLayoutStep(ViewHolder viewHolder, int i) {
+        int indexOfKey = this.mLayoutHolderMap.indexOfKey(viewHolder);
+        if (indexOfKey < 0) {
+            return null;
+        }
+        InfoRecord infoRecord = (InfoRecord) this.mLayoutHolderMap.valueAt(indexOfKey);
+        if (infoRecord != null) {
+            int i2 = infoRecord.flags;
+            if ((i2 & i) != 0) {
+                ItemHolderInfo itemHolderInfo;
+                infoRecord.flags = (i ^ -1) & i2;
+                if (i == 4) {
+                    itemHolderInfo = infoRecord.preInfo;
+                } else if (i == 8) {
+                    itemHolderInfo = infoRecord.postInfo;
                 } else {
                     throw new IllegalArgumentException("Must provide flag PRE or POST");
                 }
-                if ((record.flags & 12) == 0) {
-                    this.mLayoutHolderMap.removeAt(index);
-                    InfoRecord.recycle(record);
+                if ((infoRecord.flags & 12) == 0) {
+                    this.mLayoutHolderMap.removeAt(indexOfKey);
+                    InfoRecord.recycle(infoRecord);
                 }
+                return itemHolderInfo;
             }
         }
-        return info;
+        return null;
     }
 
     /* Access modifiers changed, original: 0000 */
-    public void addToOldChangeHolders(long key, ViewHolder holder) {
-        this.mOldChangedHolders.put(key, holder);
+    public void addToOldChangeHolders(long j, ViewHolder viewHolder) {
+        this.mOldChangedHolders.put(j, viewHolder);
     }
 
     /* Access modifiers changed, original: 0000 */
-    public void addToAppearedInPreLayoutHolders(ViewHolder holder, ItemHolderInfo info) {
-        InfoRecord record = (InfoRecord) this.mLayoutHolderMap.get(holder);
-        if (record == null) {
-            record = InfoRecord.obtain();
-            this.mLayoutHolderMap.put(holder, record);
+    public void addToAppearedInPreLayoutHolders(ViewHolder viewHolder, ItemHolderInfo itemHolderInfo) {
+        InfoRecord infoRecord = (InfoRecord) this.mLayoutHolderMap.get(viewHolder);
+        if (infoRecord == null) {
+            infoRecord = InfoRecord.obtain();
+            this.mLayoutHolderMap.put(viewHolder, infoRecord);
         }
-        record.flags |= 2;
-        record.preInfo = info;
+        infoRecord.flags |= 2;
+        infoRecord.preInfo = itemHolderInfo;
     }
 
     /* Access modifiers changed, original: 0000 */
     public boolean isInPreLayout(ViewHolder viewHolder) {
-        InfoRecord record = (InfoRecord) this.mLayoutHolderMap.get(viewHolder);
-        return (record == null || (record.flags & 4) == 0) ? false : true;
+        InfoRecord infoRecord = (InfoRecord) this.mLayoutHolderMap.get(viewHolder);
+        return (infoRecord == null || (infoRecord.flags & 4) == 0) ? false : true;
     }
 
     /* Access modifiers changed, original: 0000 */
-    public ViewHolder getFromOldChangeHolders(long key) {
-        return (ViewHolder) this.mOldChangedHolders.get(key);
+    public ViewHolder getFromOldChangeHolders(long j) {
+        return (ViewHolder) this.mOldChangedHolders.get(j);
     }
 
     /* Access modifiers changed, original: 0000 */
-    public void addToPostLayout(ViewHolder holder, ItemHolderInfo info) {
-        InfoRecord record = (InfoRecord) this.mLayoutHolderMap.get(holder);
-        if (record == null) {
-            record = InfoRecord.obtain();
-            this.mLayoutHolderMap.put(holder, record);
+    public void addToPostLayout(ViewHolder viewHolder, ItemHolderInfo itemHolderInfo) {
+        InfoRecord infoRecord = (InfoRecord) this.mLayoutHolderMap.get(viewHolder);
+        if (infoRecord == null) {
+            infoRecord = InfoRecord.obtain();
+            this.mLayoutHolderMap.put(viewHolder, infoRecord);
         }
-        record.postInfo = info;
-        record.flags |= 8;
+        infoRecord.postInfo = itemHolderInfo;
+        infoRecord.flags |= 8;
     }
 
     /* Access modifiers changed, original: 0000 */
-    public void addToDisappearedInLayout(ViewHolder holder) {
-        InfoRecord record = (InfoRecord) this.mLayoutHolderMap.get(holder);
-        if (record == null) {
-            record = InfoRecord.obtain();
-            this.mLayoutHolderMap.put(holder, record);
+    public void addToDisappearedInLayout(ViewHolder viewHolder) {
+        InfoRecord infoRecord = (InfoRecord) this.mLayoutHolderMap.get(viewHolder);
+        if (infoRecord == null) {
+            infoRecord = InfoRecord.obtain();
+            this.mLayoutHolderMap.put(viewHolder, infoRecord);
         }
-        record.flags |= 1;
+        infoRecord.flags |= 1;
     }
 
     /* Access modifiers changed, original: 0000 */
-    public void removeFromDisappearedInLayout(ViewHolder holder) {
-        InfoRecord record = (InfoRecord) this.mLayoutHolderMap.get(holder);
-        if (record != null) {
-            record.flags &= -2;
+    public void removeFromDisappearedInLayout(ViewHolder viewHolder) {
+        InfoRecord infoRecord = (InfoRecord) this.mLayoutHolderMap.get(viewHolder);
+        if (infoRecord != null) {
+            infoRecord.flags &= -2;
         }
     }
 
     /* Access modifiers changed, original: 0000 */
-    public void process(ProcessCallback callback) {
-        for (int index = this.mLayoutHolderMap.size() - 1; index >= 0; index--) {
-            ViewHolder viewHolder = (ViewHolder) this.mLayoutHolderMap.keyAt(index);
-            InfoRecord record = (InfoRecord) this.mLayoutHolderMap.removeAt(index);
-            if ((record.flags & 3) == 3) {
-                callback.unused(viewHolder);
-            } else if ((record.flags & 1) != 0) {
-                if (record.preInfo == null) {
-                    callback.unused(viewHolder);
+    public void process(ProcessCallback processCallback) {
+        for (int size = this.mLayoutHolderMap.size() - 1; size >= 0; size--) {
+            ViewHolder viewHolder = (ViewHolder) this.mLayoutHolderMap.keyAt(size);
+            InfoRecord infoRecord = (InfoRecord) this.mLayoutHolderMap.removeAt(size);
+            int i = infoRecord.flags;
+            if ((i & 3) == 3) {
+                processCallback.unused(viewHolder);
+            } else if ((i & 1) != 0) {
+                ItemHolderInfo itemHolderInfo = infoRecord.preInfo;
+                if (itemHolderInfo == null) {
+                    processCallback.unused(viewHolder);
                 } else {
-                    callback.processDisappeared(viewHolder, record.preInfo, record.postInfo);
+                    processCallback.processDisappeared(viewHolder, itemHolderInfo, infoRecord.postInfo);
                 }
-            } else if ((record.flags & 14) == 14) {
-                callback.processAppeared(viewHolder, record.preInfo, record.postInfo);
-            } else if ((record.flags & 12) == 12) {
-                callback.processPersistent(viewHolder, record.preInfo, record.postInfo);
-            } else if ((record.flags & 4) != 0) {
-                callback.processDisappeared(viewHolder, record.preInfo, null);
-            } else if ((record.flags & 8) != 0) {
-                callback.processAppeared(viewHolder, record.preInfo, record.postInfo);
-            } else if ((record.flags & 2) != 0) {
+            } else if ((i & 14) == 14) {
+                processCallback.processAppeared(viewHolder, infoRecord.preInfo, infoRecord.postInfo);
+            } else if ((i & 12) == 12) {
+                processCallback.processPersistent(viewHolder, infoRecord.preInfo, infoRecord.postInfo);
+            } else if ((i & 4) != 0) {
+                processCallback.processDisappeared(viewHolder, infoRecord.preInfo, null);
+            } else if ((i & 8) != 0) {
+                processCallback.processAppeared(viewHolder, infoRecord.preInfo, infoRecord.postInfo);
             }
-            InfoRecord.recycle(record);
+            InfoRecord.recycle(infoRecord);
         }
     }
 
     /* Access modifiers changed, original: 0000 */
-    public void removeViewHolder(ViewHolder holder) {
-        for (int i = this.mOldChangedHolders.size() - 1; i >= 0; i--) {
-            if (holder == this.mOldChangedHolders.valueAt(i)) {
-                this.mOldChangedHolders.removeAt(i);
+    public void removeViewHolder(ViewHolder viewHolder) {
+        for (int size = this.mOldChangedHolders.size() - 1; size >= 0; size--) {
+            if (viewHolder == this.mOldChangedHolders.valueAt(size)) {
+                this.mOldChangedHolders.removeAt(size);
                 break;
             }
         }
-        InfoRecord info = (InfoRecord) this.mLayoutHolderMap.remove(holder);
-        if (info != null) {
-            InfoRecord.recycle(info);
+        InfoRecord infoRecord = (InfoRecord) this.mLayoutHolderMap.remove(viewHolder);
+        if (infoRecord != null) {
+            InfoRecord.recycle(infoRecord);
         }
     }
 

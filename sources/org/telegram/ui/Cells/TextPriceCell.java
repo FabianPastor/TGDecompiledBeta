@@ -16,9 +16,6 @@ public class TextPriceCell extends FrameLayout {
     private TextView valueTextView;
 
     public TextPriceCell(Context context) {
-        int i;
-        int i2;
-        int i3 = 3;
         super(context);
         setWillNotDraw(false);
         this.textView = new TextView(context);
@@ -27,14 +24,9 @@ public class TextPriceCell extends FrameLayout {
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TruncateAt.END);
+        int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-        TextView textView = this.textView;
-        if (LocaleController.isRTL) {
-            i = 5;
-        } else {
-            i = 3;
-        }
-        addView(textView, LayoutHelper.createFrame(-2, -1.0f, i | 48, 21.0f, 0.0f, 21.0f, 0.0f));
+        addView(this.textView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, 21.0f, 0.0f, 21.0f, 0.0f));
         this.valueTextView = new TextView(context);
         this.valueTextView.setTextSize(1, 16.0f);
         this.valueTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -42,54 +34,51 @@ public class TextPriceCell extends FrameLayout {
         this.valueTextView.setMaxLines(1);
         this.valueTextView.setSingleLine(true);
         this.valueTextView.setEllipsize(TruncateAt.END);
-        TextView textView2 = this.valueTextView;
+        this.valueTextView.setGravity((LocaleController.isRTL ? 3 : 5) | 16);
+        TextView textView = this.valueTextView;
         if (LocaleController.isRTL) {
-            i2 = 3;
-        } else {
-            i2 = 5;
+            i = 3;
         }
-        textView2.setGravity(i2 | 16);
-        textView = this.valueTextView;
-        if (!LocaleController.isRTL) {
-            i3 = 5;
-        }
-        addView(textView, LayoutHelper.createFrame(-2, -1.0f, i3 | 48, 21.0f, 0.0f, 21.0f, 0.0f));
+        addView(textView, LayoutHelper.createFrame(-2, -1.0f, i | 48, 21.0f, 0.0f, 21.0f, 0.0f));
     }
 
     /* Access modifiers changed, original: protected */
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(40.0f));
-        int availableWidth = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(34.0f);
-        this.valueTextView.measure(MeasureSpec.makeMeasureSpec(availableWidth / 2, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
-        this.textView.measure(MeasureSpec.makeMeasureSpec((availableWidth - this.valueTextView.getMeasuredWidth()) - AndroidUtilities.dp(8.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
+    public void onMeasure(int i, int i2) {
+        setMeasuredDimension(MeasureSpec.getSize(i), AndroidUtilities.dp(40.0f));
+        i = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(34.0f);
+        this.valueTextView.measure(MeasureSpec.makeMeasureSpec(i / 2, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
+        this.textView.measure(MeasureSpec.makeMeasureSpec((i - this.valueTextView.getMeasuredWidth()) - AndroidUtilities.dp(8.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
     }
 
-    public void setTextColor(int color) {
-        this.textView.setTextColor(color);
+    public void setTextColor(int i) {
+        this.textView.setTextColor(i);
     }
 
-    public void setTextValueColor(int color) {
-        this.valueTextView.setTextColor(color);
+    public void setTextValueColor(int i) {
+        this.valueTextView.setTextColor(i);
     }
 
-    public void setTextAndValue(String text, String value, boolean bold) {
-        this.textView.setText(text);
-        if (value != null) {
-            this.valueTextView.setText(value);
+    public void setTextAndValue(String str, String str2, boolean z) {
+        this.textView.setText(str);
+        if (str2 != null) {
+            this.valueTextView.setText(str2);
             this.valueTextView.setVisibility(0);
         } else {
             this.valueTextView.setVisibility(4);
         }
-        if (bold) {
-            setTag("windowBackgroundWhiteBlackText");
-            this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-            this.valueTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-            this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            this.valueTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        if (z) {
+            str = "windowBackgroundWhiteBlackText";
+            setTag(str);
+            this.textView.setTextColor(Theme.getColor(str));
+            this.valueTextView.setTextColor(Theme.getColor(str));
+            str2 = "fonts/rmedium.ttf";
+            this.textView.setTypeface(AndroidUtilities.getTypeface(str2));
+            this.valueTextView.setTypeface(AndroidUtilities.getTypeface(str2));
         } else {
-            setTag("windowBackgroundWhiteGrayText2");
-            this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
-            this.valueTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
+            str = "windowBackgroundWhiteGrayText2";
+            setTag(str);
+            this.textView.setTextColor(Theme.getColor(str));
+            this.valueTextView.setTextColor(Theme.getColor(str));
             this.textView.setTypeface(Typeface.DEFAULT);
             this.valueTextView.setTypeface(Typeface.DEFAULT);
         }

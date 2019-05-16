@@ -18,8 +18,8 @@ abstract class FormatCache<F extends Format> {
         private int hashCode;
         private final Object[] keys;
 
-        public MultipartKey(Object... keys) {
-            this.keys = keys;
+        public MultipartKey(Object... objArr) {
+            this.keys = objArr;
         }
 
         public boolean equals(Object obj) {
@@ -28,13 +28,13 @@ abstract class FormatCache<F extends Format> {
 
         public int hashCode() {
             if (this.hashCode == 0) {
-                int rc = 0;
-                for (Object key : this.keys) {
-                    if (key != null) {
-                        rc = (rc * 7) + key.hashCode();
+                int i = 0;
+                for (Object obj : this.keys) {
+                    if (obj != null) {
+                        i = (i * 7) + obj.hashCode();
                     }
                 }
-                this.hashCode = rc;
+                this.hashCode = i;
             }
             return this.hashCode;
         }
@@ -49,74 +49,72 @@ abstract class FormatCache<F extends Format> {
         return getDateTimeInstance(3, 3, TimeZone.getDefault(), Locale.getDefault());
     }
 
-    public F getInstance(String pattern, TimeZone timeZone, Locale locale) {
-        if (pattern == null) {
+    public F getInstance(String str, TimeZone timeZone, Locale locale) {
+        if (str != null) {
+            if (timeZone == null) {
+                timeZone = TimeZone.getDefault();
+            }
+            if (locale == null) {
+                locale = Locale.getDefault();
+            }
+            MultipartKey multipartKey = new MultipartKey(str, timeZone, locale);
+            Format format = (Format) this.cInstanceCache.get(multipartKey);
+            if (format != null) {
+                return format;
+            }
+            F createInstance = createInstance(str, timeZone, locale);
+            F f = (Format) this.cInstanceCache.putIfAbsent(multipartKey, createInstance);
+            return f != null ? f : createInstance;
+        } else {
             throw new NullPointerException("pattern must not be null");
         }
-        if (timeZone == null) {
-            timeZone = TimeZone.getDefault();
-        }
+    }
+
+    private F getDateTimeInstance(Integer num, Integer num2, TimeZone timeZone, Locale locale) {
         if (locale == null) {
             locale = Locale.getDefault();
         }
-        MultipartKey key = new MultipartKey(pattern, timeZone, locale);
-        Format format = (Format) this.cInstanceCache.get(key);
-        if (format != null) {
-            return format;
-        }
-        F format2 = createInstance(pattern, timeZone, locale);
-        F previousValue = (Format) this.cInstanceCache.putIfAbsent(key, format2);
-        if (previousValue != null) {
-            return previousValue;
-        }
-        return format2;
-    }
-
-    private F getDateTimeInstance(Integer dateStyle, Integer timeStyle, TimeZone timeZone, Locale locale) {
-        if (locale == null) {
-            locale = Locale.getDefault();
-        }
-        return getInstance(getPatternForStyle(dateStyle, timeStyle, locale), timeZone, locale);
+        return getInstance(getPatternForStyle(num, num2, locale), timeZone, locale);
     }
 
     /* Access modifiers changed, original: 0000 */
-    public F getDateTimeInstance(int dateStyle, int timeStyle, TimeZone timeZone, Locale locale) {
-        return getDateTimeInstance(Integer.valueOf(dateStyle), Integer.valueOf(timeStyle), timeZone, locale);
+    public F getDateTimeInstance(int i, int i2, TimeZone timeZone, Locale locale) {
+        return getDateTimeInstance(Integer.valueOf(i), Integer.valueOf(i2), timeZone, locale);
     }
 
     /* Access modifiers changed, original: 0000 */
-    public F getDateInstance(int dateStyle, TimeZone timeZone, Locale locale) {
-        return getDateTimeInstance(Integer.valueOf(dateStyle), null, timeZone, locale);
+    public F getDateInstance(int i, TimeZone timeZone, Locale locale) {
+        return getDateTimeInstance(Integer.valueOf(i), null, timeZone, locale);
     }
 
     /* Access modifiers changed, original: 0000 */
-    public F getTimeInstance(int timeStyle, TimeZone timeZone, Locale locale) {
-        return getDateTimeInstance(null, Integer.valueOf(timeStyle), timeZone, locale);
+    public F getTimeInstance(int i, TimeZone timeZone, Locale locale) {
+        return getDateTimeInstance(null, Integer.valueOf(i), timeZone, locale);
     }
 
-    static String getPatternForStyle(Integer dateStyle, Integer timeStyle, Locale locale) {
-        MultipartKey key = new MultipartKey(dateStyle, timeStyle, locale);
-        String pattern = (String) cDateTimeInstanceCache.get(key);
-        if (pattern != null) {
-            return pattern;
+    static String getPatternForStyle(Integer num, Integer num2, Locale locale) {
+        MultipartKey multipartKey = new MultipartKey(num, num2, locale);
+        String str = (String) cDateTimeInstanceCache.get(multipartKey);
+        if (str != null) {
+            return str;
         }
-        DateFormat formatter;
-        if (dateStyle == null) {
+        DateFormat timeInstance;
+        if (num == null) {
             try {
-                formatter = DateFormat.getTimeInstance(timeStyle.intValue(), locale);
-            } catch (ClassCastException e) {
-                throw new IllegalArgumentException("No date time pattern for locale: " + locale);
+                timeInstance = DateFormat.getTimeInstance(num2.intValue(), locale);
+            } catch (ClassCastException unused) {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("No date time pattern for locale: ");
+                stringBuilder.append(locale);
+                throw new IllegalArgumentException(stringBuilder.toString());
             }
-        } else if (timeStyle == null) {
-            formatter = DateFormat.getDateInstance(dateStyle.intValue(), locale);
+        } else if (num2 == null) {
+            timeInstance = DateFormat.getDateInstance(num.intValue(), locale);
         } else {
-            formatter = DateFormat.getDateTimeInstance(dateStyle.intValue(), timeStyle.intValue(), locale);
+            timeInstance = DateFormat.getDateTimeInstance(num.intValue(), num2.intValue(), locale);
         }
-        pattern = ((SimpleDateFormat) formatter).toPattern();
-        String previous = (String) cDateTimeInstanceCache.putIfAbsent(key, pattern);
-        if (previous != null) {
-            return previous;
-        }
-        return pattern;
+        String toPattern = ((SimpleDateFormat) timeInstance).toPattern();
+        String str2 = (String) cDateTimeInstanceCache.putIfAbsent(multipartKey, toPattern);
+        return str2 != null ? str2 : toPattern;
     }
 }

@@ -16,44 +16,40 @@ public class PhotoFace {
     private Point mouthPoint;
     private float width;
 
-    public PhotoFace(Face face, Bitmap sourceBitmap, Size targetSize, boolean sideward) {
-        Point leftEyePoint = null;
-        Point rightEyePoint = null;
-        Point leftMouthPoint = null;
-        Point rightMouthPoint = null;
+    public PhotoFace(Face face, Bitmap bitmap, Size size, boolean z) {
+        float f;
+        Point point = null;
+        Point point2 = null;
+        Point point3 = point2;
+        Point point4 = point3;
         for (Landmark landmark : face.getLandmarks()) {
-            PointF point = landmark.getPosition();
-            switch (landmark.getType()) {
-                case 4:
-                    leftEyePoint = transposePoint(point, sourceBitmap, targetSize, sideward);
-                    break;
-                case 5:
-                    leftMouthPoint = transposePoint(point, sourceBitmap, targetSize, sideward);
-                    break;
-                case 10:
-                    rightEyePoint = transposePoint(point, sourceBitmap, targetSize, sideward);
-                    break;
-                case 11:
-                    rightMouthPoint = transposePoint(point, sourceBitmap, targetSize, sideward);
-                    break;
-                default:
-                    break;
+            PointF position = landmark.getPosition();
+            int type = landmark.getType();
+            if (type == 4) {
+                point = transposePoint(position, bitmap, size, z);
+            } else if (type == 5) {
+                point3 = transposePoint(position, bitmap, size, z);
+            } else if (type == 10) {
+                point2 = transposePoint(position, bitmap, size, z);
+            } else if (type == 11) {
+                point4 = transposePoint(position, bitmap, size, z);
             }
         }
-        if (!(leftEyePoint == null || rightEyePoint == null)) {
-            this.eyesCenterPoint = new Point((0.5f * leftEyePoint.x) + (0.5f * rightEyePoint.x), (0.5f * leftEyePoint.y) + (0.5f * rightEyePoint.y));
-            this.eyesDistance = (float) Math.hypot((double) (rightEyePoint.x - leftEyePoint.x), (double) (rightEyePoint.y - leftEyePoint.y));
-            this.angle = (float) Math.toDegrees(3.141592653589793d + Math.atan2((double) (rightEyePoint.y - leftEyePoint.y), (double) (rightEyePoint.x - leftEyePoint.x)));
-            this.width = this.eyesDistance * 2.35f;
-            float foreheadHeight = 0.8f * this.eyesDistance;
-            float upAngle = (float) Math.toRadians((double) (this.angle - 90.0f));
-            this.foreheadPoint = new Point(this.eyesCenterPoint.x + (((float) Math.cos((double) upAngle)) * foreheadHeight), this.eyesCenterPoint.y + (((float) Math.sin((double) upAngle)) * foreheadHeight));
+        if (!(point == null || point2 == null)) {
+            this.eyesCenterPoint = new Point((point.x * 0.5f) + (point2.x * 0.5f), (point.y * 0.5f) + (point2.y * 0.5f));
+            this.eyesDistance = (float) Math.hypot((double) (point2.x - point.x), (double) (point2.y - point.y));
+            this.angle = (float) Math.toDegrees(Math.atan2((double) (point2.y - point.y), (double) (point2.x - point.x)) + 3.141592653589793d);
+            f = this.eyesDistance;
+            this.width = 2.35f * f;
+            f *= 0.8f;
+            double toRadians = (double) ((float) Math.toRadians((double) (this.angle - 90.0f)));
+            this.foreheadPoint = new Point(this.eyesCenterPoint.x + (((float) Math.cos(toRadians)) * f), this.eyesCenterPoint.y + (f * ((float) Math.sin(toRadians))));
         }
-        if (leftMouthPoint != null && rightMouthPoint != null) {
-            this.mouthPoint = new Point((0.5f * leftMouthPoint.x) + (0.5f * rightMouthPoint.x), (0.5f * leftMouthPoint.y) + (0.5f * rightMouthPoint.y));
-            float chinDepth = 0.7f * this.eyesDistance;
-            float downAngle = (float) Math.toRadians((double) (this.angle + 90.0f));
-            this.chinPoint = new Point(this.mouthPoint.x + (((float) Math.cos((double) downAngle)) * chinDepth), this.mouthPoint.y + (((float) Math.sin((double) downAngle)) * chinDepth));
+        if (point3 != null && point4 != null) {
+            this.mouthPoint = new Point((point3.x * 0.5f) + (point4.x * 0.5f), (point3.y * 0.5f) + (point4.y * 0.5f));
+            f = this.eyesDistance * 0.7f;
+            double toRadians2 = (double) ((float) Math.toRadians((double) (this.angle + 90.0f)));
+            this.chinPoint = new Point(this.mouthPoint.x + (((float) Math.cos(toRadians2)) * f), this.mouthPoint.y + (f * ((float) Math.sin(toRadians2))));
         }
     }
 
@@ -61,27 +57,26 @@ public class PhotoFace {
         return this.eyesCenterPoint != null;
     }
 
-    private Point transposePoint(PointF point, Bitmap sourceBitmap, Size targetSize, boolean sideward) {
-        return new Point((targetSize.width * point.x) / (sideward ? (float) sourceBitmap.getHeight() : (float) sourceBitmap.getWidth()), (targetSize.height * point.y) / (sideward ? (float) sourceBitmap.getWidth() : (float) sourceBitmap.getHeight()));
+    private Point transposePoint(PointF pointF, Bitmap bitmap, Size size, boolean z) {
+        return new Point((size.width * pointF.x) / ((float) (z ? bitmap.getHeight() : bitmap.getWidth())), (size.height * pointF.y) / ((float) (z ? bitmap.getWidth() : bitmap.getHeight())));
     }
 
-    public Point getPointForAnchor(int anchor) {
-        switch (anchor) {
-            case 0:
-                return this.foreheadPoint;
-            case 1:
-                return this.eyesCenterPoint;
-            case 2:
-                return this.mouthPoint;
-            case 3:
-                return this.chinPoint;
-            default:
-                return null;
+    public Point getPointForAnchor(int i) {
+        if (i == 0) {
+            return this.foreheadPoint;
+        }
+        if (i == 1) {
+            return this.eyesCenterPoint;
+        }
+        if (i != 2) {
+            return i != 3 ? null : this.chinPoint;
+        } else {
+            return this.mouthPoint;
         }
     }
 
-    public float getWidthForAnchor(int anchor) {
-        if (anchor == 1) {
+    public float getWidthForAnchor(int i) {
+        if (i == 1) {
             return this.eyesDistance;
         }
         return this.width;

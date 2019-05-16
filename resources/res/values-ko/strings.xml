@@ -521,7 +521,6 @@
     <string name="ChannelMembers">참가자</string>
     <string name="ChannelMembersInfo">채널 관리자만 이 목록을 볼 수 있습니다.</string>
     <string name="ChannelMessageAudio">%1$s 채널에 음성 메시지를 게시했습니다</string>
-    <string name="ChannelMessageContact">%1$s 채널이 연락처를 게시했습니다</string>
     <string name="ChannelMessageDocument">%1$s 채널이 파일을 게시했습니다</string>
     <string name="ChannelMessageFew">%1$s 님이 %2$s을(를) 게시했습니다</string>
     <string name="ChannelMessageGIF">%1$s 채널에서 GIF를 게시했습니다</string>
@@ -530,7 +529,6 @@
     <string name="ChannelMessageMusic">%1$s 채널이 오디오 파일을 게시했습니다</string>
     <string name="ChannelMessageNoText">%1$s 채널이 메시지를 게시했습니다</string>
     <string name="ChannelMessagePhoto">%1$s 채널이 사진을 게시했습니다</string>
-    <string name="ChannelMessagePoll">%1$s 님이 설문을 게시했습니다</string>
     <string name="ChannelMessageRound">%1$s 채널이 동영상 메시지를 게시했습니다</string>
     <string name="ChannelMessageSticker">%1$s 채널이 스티커를 게시했습니다</string>
     <string name="ChannelMessageStickerEmoji">%1$s 채널이 %2$s 스티커를 올렸습니다</string>
@@ -994,7 +992,7 @@
     <string name="FontSizePreviewLine1">요즘 젊은이들은 테크노인지 뭔지 하는 것만 좋아한다니까! 핫셀호프 같은 고전 음악을 들어 보라고!</string>
     <string name="FontSizePreviewLine2">이게 진심으로 하는 말이라니. 아으!</string>
     <string name="FontSizePreviewName">루시우</string>
-    <string name="FontSizePreviewReply">라인하르트, 새 음악도 좀 들어보시지 그래요🎶?</string>
+    <string name="FontSizePreviewReply">라인하르트, 새 음악도 좀 들어보시지 그래요��?</string>
     <string name="ForgotPassword">비밀번호를 잊어버리셨나요?</string>
     <string name="Forward">전달</string>
     <string name="ForwardTo">대화방 선택</string>
@@ -1444,8 +1442,6 @@
     <string name="NobodyLikesSpam2">죄송합니다. 서로의 연락처를 공유해야만 그룹에 초대하실 수 있습니다.</string>
     <string name="NobodyLikesSpam3">죄송합니다. 현재 회원님은 공개 그룹에 게시하실 수 없습니다.</string>
     <string name="NotMounted">스토리지가 마운트되지 않음</string>
-    <string name="NotificationActionPinnedContact">%1$s 님이 %2$s 그룹에 연락처를 고정했습니다</string>
-    <string name="NotificationActionPinnedContactChannel">%1$s 님이 연락처를 고정했습니다</string>
     <string name="NotificationActionPinnedFile">%1$s 님이 %2$s 그룹에 파일을 고정했습니다</string>
     <string name="NotificationActionPinnedFileChannel">%1$s 님이 파일을 고정했습니다</string>
     <string name="NotificationActionPinnedGame">%1$s 님이 %2$s 그룹에 게임을 고정함</string>
@@ -1464,8 +1460,6 @@
     <string name="NotificationActionPinnedNoTextChannel">%1$s 님이 메시지를 고정했습니다</string>
     <string name="NotificationActionPinnedPhoto">%1$s 님이 %2$s 그룹에 사진을 고정했습니다</string>
     <string name="NotificationActionPinnedPhotoChannel">%1$s 님이 사진을 고정했습니다</string>
-    <string name="NotificationActionPinnedPoll">%1$s 님이 %2$s 그룹에 설문을 고정했습니다</string>
-    <string name="NotificationActionPinnedPollChannel">%1$s 님이 설문을 고정했습니다</string>
     <string name="NotificationActionPinnedRound">%1$s 님이 %2$s 그룹에 동영상 메시지를 고정했습니다</string>
     <string name="NotificationActionPinnedRoundChannel">%1$s 님이 동영상 메시지를 고정했습니다</string>
     <string name="NotificationActionPinnedSticker">%1$s 님이 %2$s 그룹에 스티커를 고정했습니다</string>
@@ -1493,14 +1487,12 @@
     <string name="NotificationInvitedToGroup">%1$s님이 %2$s 그룹에 초대했습니다</string>
     <string name="NotificationInvitedToGroupByLink">초대 링크를 통해 %1$s 님이 %2$s 그룹에 들어왔습니다.</string>
     <string name="NotificationMessageAudio">%1$s님이 음성 메시지를 보냈습니다</string>
-    <string name="NotificationMessageContact">%1$s 님이 연락처를 공유했습니다</string>
     <string name="NotificationMessageDocument">%1$s님이 파일을 보냈습니다</string>
     <string name="NotificationMessageFew">%1$s 님이 회원님에게 %2$s을(를) 보냈습니다</string>
     <string name="NotificationMessageForwardFew">%1$s 님이 회원님에게 %2$s을(를) 전달했습니다</string>
     <string name="NotificationMessageGame">%1$s님이 %2$s 게임으로 초대했습니다</string>
     <string name="NotificationMessageGif">%1$s 님이 회원님에게 GIF를 보냈습니다</string>
     <string name="NotificationMessageGroupAudio">%1$s님이 %2$s 그룹에 음성 메시지를 보냈습니다</string>
-    <string name="NotificationMessageGroupContact">%1$s님이 %2$s 그룹에 연락처를 공유했습니다</string>
     <string name="NotificationMessageGroupDocument">%1$s님이 %2$s 그룹에 파일을 보냈습니다</string>
     <string name="NotificationMessageGroupGame">%1$s 님이 %2$s 그룹에 %3$s 게임으로 초대했습니다</string>
     <string name="NotificationMessageGroupGif">%1$s 님이 %2$s 그룹에 GIF를 보냈습니다</string>
@@ -1510,7 +1502,6 @@
     <string name="NotificationMessageGroupMusic">%1$s님이 %2$s 그룹에 오디오 파일을 보냈습니다</string>
     <string name="NotificationMessageGroupNoText">%1$s님이 %2$s 그룹에 메시지를 보냈습니다</string>
     <string name="NotificationMessageGroupPhoto">%1$s 님이 %2$s 그룹에 사진을 보냈습니다</string>
-    <string name="NotificationMessageGroupPoll">%1$s 님이 %2$s 그룹에 설문을 보냈습니다</string>
     <string name="NotificationMessageGroupRound">%1$s 님이 %2$s 그룹에 동영상 메시지를 보냈습니다</string>
     <string name="NotificationMessageGroupSticker">%1$s 님이 %2$s 그룹에 스티커를 보냈습니다</string>
     <string name="NotificationMessageGroupStickerEmoji">%1$s님이 %2$s 그룹에 %3$s 스티커를 보냈습니다</string>
@@ -1522,7 +1513,6 @@
     <string name="NotificationMessageMusic">%1$s 님이 오디오 파일을 보냈습니다</string>
     <string name="NotificationMessageNoText">%1$s님이 메시지를 보냈습니다</string>
     <string name="NotificationMessagePhoto">%1$s님이 사진을 보냈습니다</string>
-    <string name="NotificationMessagePoll">%1$s 님이 설문을 보냈습니다</string>
     <string name="NotificationMessageRound">%1$s 님이 동영상 메시지를 보냈습니다</string>
     <string name="NotificationMessageSDPhoto">%1$s 님이 자동 삭제되는 사진을 보냈습니다</string>
     <string name="NotificationMessageSDVideo">%1$s 님이 자동 삭제되는 동영상을 보냈습니다</string>
@@ -1960,7 +1950,7 @@
     <string name="PrivacyForwardsEverybody">계정으로 링크</string>
     <string name="PrivacyForwardsInfo">다른 대화로 전송되면, 당신의 대화들은 당신의 계정으로 다시 링크 되지 않습니다.</string>
     <string name="PrivacyForwardsInfo2">이 설정은 앞선 설정보다 우선합니다.</string>
-    <string name="PrivacyForwardsMessageLine">라인하르트, 새 음악도 좀 들어보시지 그래요 🎶?</string>
+    <string name="PrivacyForwardsMessageLine">라인하르트, 새 음악도 좀 들어보시지 그래요 ��?</string>
     <string name="PrivacyForwardsNobody">Not a link to your account</string>
     <string name="PrivacyForwardsTitle">내 메시지를 전달할 때 내 계정에 링크를 추가하는 사람</string>
     <string name="PrivacyLastSeen">마지막 접속</string>
@@ -2600,6 +2590,33 @@
     <string name="YourPasswordSuccess">성공!</string>
     <string name="YourPasswordSuccessText">2단계 인증 비밀번호가 활성화되었습니다.</string>
     <string name="YourPhone">휴대전화</string>
+    <string name="abc_action_bar_home_description">홈 탐색</string>
+    <string name="abc_action_bar_up_description">위로 탐색</string>
+    <string name="abc_action_menu_overflow_description">옵션 더보기</string>
+    <string name="abc_action_mode_done">완료</string>
+    <string name="abc_activity_chooser_view_see_all">전체 보기</string>
+    <string name="abc_activitychooserview_choose_application">앱 선택</string>
+    <string name="abc_capital_off">사용 안함</string>
+    <string name="abc_capital_on">사용</string>
+    <string name="abc_menu_alt_shortcut_label">Alt+</string>
+    <string name="abc_menu_ctrl_shortcut_label">Ctrl+</string>
+    <string name="abc_menu_delete_shortcut_label">삭제</string>
+    <string name="abc_menu_enter_shortcut_label">입력</string>
+    <string name="abc_menu_function_shortcut_label">Function+</string>
+    <string name="abc_menu_meta_shortcut_label">Meta+</string>
+    <string name="abc_menu_shift_shortcut_label">Shift+</string>
+    <string name="abc_menu_space_shortcut_label">스페이스바</string>
+    <string name="abc_menu_sym_shortcut_label">Sym+</string>
+    <string name="abc_prepend_shortcut_label">Menu+</string>
+    <string name="abc_search_hint">검색...</string>
+    <string name="abc_searchview_description_clear">검색어 삭제</string>
+    <string name="abc_searchview_description_query">검색어</string>
+    <string name="abc_searchview_description_search">검색</string>
+    <string name="abc_searchview_description_submit">검색어 보내기</string>
+    <string name="abc_searchview_description_voice">음성 검색</string>
+    <string name="abc_shareactionprovider_share_with">공유 대상</string>
+    <string name="abc_shareactionprovider_share_with_application">%s와(과) 공유</string>
+    <string name="abc_toolbar_collapse_description">접기</string>
     <string name="chatDate">M\'월\' d\'일\' EEEE</string>
     <string name="chatFullDate">yyyy년 MMMM d일</string>
     <string name="common_google_play_services_enable_button">사용 설정</string>
@@ -2649,6 +2666,7 @@
     <string name="messages_other">메시지 %1$d개</string>
     <string name="messages_two">메시지 %1$d개</string>
     <string name="messages_zero">메시지 %1$d개</string>
+    <string name="search_menu_title">검색</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="wallet_buy_button_place_holder">Google로 구매</string>
 </resources>

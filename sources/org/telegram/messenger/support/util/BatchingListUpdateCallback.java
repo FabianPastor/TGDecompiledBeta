@@ -11,68 +11,81 @@ public class BatchingListUpdateCallback implements ListUpdateCallback {
     int mLastEventType = 0;
     final ListUpdateCallback mWrapped;
 
-    public BatchingListUpdateCallback(ListUpdateCallback callback) {
-        this.mWrapped = callback;
+    public BatchingListUpdateCallback(ListUpdateCallback listUpdateCallback) {
+        this.mWrapped = listUpdateCallback;
     }
 
     public void dispatchLastEvent() {
-        if (this.mLastEventType != 0) {
-            switch (this.mLastEventType) {
-                case 1:
-                    this.mWrapped.onInserted(this.mLastEventPosition, this.mLastEventCount);
-                    break;
-                case 2:
-                    this.mWrapped.onRemoved(this.mLastEventPosition, this.mLastEventCount);
-                    break;
-                case 3:
-                    this.mWrapped.onChanged(this.mLastEventPosition, this.mLastEventCount, this.mLastEventPayload);
-                    break;
+        int i = this.mLastEventType;
+        if (i != 0) {
+            if (i == 1) {
+                this.mWrapped.onInserted(this.mLastEventPosition, this.mLastEventCount);
+            } else if (i == 2) {
+                this.mWrapped.onRemoved(this.mLastEventPosition, this.mLastEventCount);
+            } else if (i == 3) {
+                this.mWrapped.onChanged(this.mLastEventPosition, this.mLastEventCount, this.mLastEventPayload);
             }
             this.mLastEventPayload = null;
             this.mLastEventType = 0;
         }
     }
 
-    public void onInserted(int position, int count) {
-        if (this.mLastEventType != 1 || position < this.mLastEventPosition || position > this.mLastEventPosition + this.mLastEventCount) {
-            dispatchLastEvent();
-            this.mLastEventPosition = position;
-            this.mLastEventCount = count;
-            this.mLastEventType = 1;
-            return;
+    public void onInserted(int i, int i2) {
+        if (this.mLastEventType == 1) {
+            int i3 = this.mLastEventPosition;
+            if (i >= i3) {
+                int i4 = this.mLastEventCount;
+                if (i <= i3 + i4) {
+                    this.mLastEventCount = i4 + i2;
+                    this.mLastEventPosition = Math.min(i, i3);
+                    return;
+                }
+            }
         }
-        this.mLastEventCount += count;
-        this.mLastEventPosition = Math.min(position, this.mLastEventPosition);
-    }
-
-    public void onRemoved(int position, int count) {
-        if (this.mLastEventType != 2 || this.mLastEventPosition < position || this.mLastEventPosition > position + count) {
-            dispatchLastEvent();
-            this.mLastEventPosition = position;
-            this.mLastEventCount = count;
-            this.mLastEventType = 2;
-            return;
-        }
-        this.mLastEventCount += count;
-        this.mLastEventPosition = position;
-    }
-
-    public void onMoved(int fromPosition, int toPosition) {
         dispatchLastEvent();
-        this.mWrapped.onMoved(fromPosition, toPosition);
+        this.mLastEventPosition = i;
+        this.mLastEventCount = i2;
+        this.mLastEventType = 1;
     }
 
-    public void onChanged(int position, int count, Object payload) {
-        if (this.mLastEventType != 3 || position > this.mLastEventPosition + this.mLastEventCount || position + count < this.mLastEventPosition || this.mLastEventPayload != payload) {
-            dispatchLastEvent();
-            this.mLastEventPosition = position;
-            this.mLastEventCount = count;
-            this.mLastEventPayload = payload;
-            this.mLastEventType = 3;
-            return;
+    public void onRemoved(int i, int i2) {
+        if (this.mLastEventType == 2) {
+            int i3 = this.mLastEventPosition;
+            if (i3 >= i && i3 <= i + i2) {
+                this.mLastEventCount += i2;
+                this.mLastEventPosition = i;
+                return;
+            }
         }
-        int previousEnd = this.mLastEventPosition + this.mLastEventCount;
-        this.mLastEventPosition = Math.min(position, this.mLastEventPosition);
-        this.mLastEventCount = Math.max(previousEnd, position + count) - this.mLastEventPosition;
+        dispatchLastEvent();
+        this.mLastEventPosition = i;
+        this.mLastEventCount = i2;
+        this.mLastEventType = 2;
+    }
+
+    public void onMoved(int i, int i2) {
+        dispatchLastEvent();
+        this.mWrapped.onMoved(i, i2);
+    }
+
+    public void onChanged(int i, int i2, Object obj) {
+        if (this.mLastEventType == 3) {
+            int i3 = this.mLastEventPosition;
+            int i4 = this.mLastEventCount;
+            if (i <= i3 + i4) {
+                int i5 = i + i2;
+                if (i5 >= i3 && this.mLastEventPayload == obj) {
+                    i4 += i3;
+                    this.mLastEventPosition = Math.min(i, i3);
+                    this.mLastEventCount = Math.max(i4, i5) - this.mLastEventPosition;
+                    return;
+                }
+            }
+        }
+        dispatchLastEvent();
+        this.mLastEventPosition = i;
+        this.mLastEventCount = i2;
+        this.mLastEventPayload = obj;
+        this.mLastEventType = 3;
     }
 }

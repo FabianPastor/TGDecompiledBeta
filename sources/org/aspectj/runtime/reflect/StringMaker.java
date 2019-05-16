@@ -20,103 +20,119 @@ class StringMaker {
     }
 
     static {
-        shortStringMaker.shortTypeNames = true;
-        shortStringMaker.includeArgs = false;
-        shortStringMaker.includeThrows = false;
-        shortStringMaker.includeModifiers = false;
-        shortStringMaker.shortPrimaryTypeNames = true;
-        shortStringMaker.includeJoinPointTypeName = false;
-        shortStringMaker.includeEnclosingPoint = false;
-        shortStringMaker.cacheOffset = 0;
-        middleStringMaker.shortTypeNames = true;
-        middleStringMaker.includeArgs = true;
-        middleStringMaker.includeThrows = false;
-        middleStringMaker.includeModifiers = false;
-        middleStringMaker.shortPrimaryTypeNames = false;
+        StringMaker stringMaker = shortStringMaker;
+        stringMaker.shortTypeNames = true;
+        stringMaker.includeArgs = false;
+        stringMaker.includeThrows = false;
+        stringMaker.includeModifiers = false;
+        stringMaker.shortPrimaryTypeNames = true;
+        stringMaker.includeJoinPointTypeName = false;
+        stringMaker.includeEnclosingPoint = false;
+        stringMaker.cacheOffset = 0;
+        stringMaker = middleStringMaker;
+        stringMaker.shortTypeNames = true;
+        stringMaker.includeArgs = true;
+        stringMaker.includeThrows = false;
+        stringMaker.includeModifiers = false;
+        stringMaker.shortPrimaryTypeNames = false;
         shortStringMaker.cacheOffset = 1;
-        longStringMaker.shortTypeNames = false;
-        longStringMaker.includeArgs = true;
-        longStringMaker.includeThrows = false;
-        longStringMaker.includeModifiers = true;
-        longStringMaker.shortPrimaryTypeNames = false;
-        longStringMaker.shortKindName = false;
-        longStringMaker.cacheOffset = 2;
+        stringMaker = longStringMaker;
+        stringMaker.shortTypeNames = false;
+        stringMaker.includeArgs = true;
+        stringMaker.includeThrows = false;
+        stringMaker.includeModifiers = true;
+        stringMaker.shortPrimaryTypeNames = false;
+        stringMaker.shortKindName = false;
+        stringMaker.cacheOffset = 2;
     }
 
     /* Access modifiers changed, original: 0000 */
-    public String makeKindName(String name) {
-        int dash = name.lastIndexOf(45);
-        return dash == -1 ? name : name.substring(dash + 1);
+    public String makeKindName(String str) {
+        int lastIndexOf = str.lastIndexOf(45);
+        if (lastIndexOf == -1) {
+            return str;
+        }
+        return str.substring(lastIndexOf + 1);
     }
 
     /* Access modifiers changed, original: 0000 */
-    public String makeModifiersString(int modifiers) {
+    public String makeModifiersString(int i) {
+        String str = "";
         if (!this.includeModifiers) {
-            return "";
+            return str;
         }
-        String str = Modifier.toString(modifiers);
-        if (str.length() == 0) {
-            return "";
+        String modifier = Modifier.toString(i);
+        if (modifier.length() == 0) {
+            return str;
         }
-        return new StringBuffer().append(str).append(" ").toString();
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append(modifier);
+        stringBuffer.append(" ");
+        return stringBuffer.toString();
     }
 
     /* Access modifiers changed, original: 0000 */
-    public String stripPackageName(String name) {
-        int dot = name.lastIndexOf(46);
-        return dot == -1 ? name : name.substring(dot + 1);
+    public String stripPackageName(String str) {
+        int lastIndexOf = str.lastIndexOf(46);
+        if (lastIndexOf == -1) {
+            return str;
+        }
+        return str.substring(lastIndexOf + 1);
     }
 
     /* Access modifiers changed, original: 0000 */
-    public String makeTypeName(Class type, String typeName, boolean shortName) {
-        if (type == null) {
+    public String makeTypeName(Class cls, String str, boolean z) {
+        if (cls == null) {
             return "ANONYMOUS";
         }
-        if (type.isArray()) {
-            Class componentType = type.getComponentType();
-            return new StringBuffer().append(makeTypeName(componentType, componentType.getName(), shortName)).append("[]").toString();
-        } else if (shortName) {
-            return stripPackageName(typeName).replace('$', '.');
+        if (cls.isArray()) {
+            cls = cls.getComponentType();
+            StringBuffer stringBuffer = new StringBuffer();
+            stringBuffer.append(makeTypeName(cls, cls.getName(), z));
+            stringBuffer.append("[]");
+            return stringBuffer.toString();
+        } else if (z) {
+            return stripPackageName(str).replace('$', '.');
         } else {
-            return typeName.replace('$', '.');
+            return str.replace('$', '.');
         }
     }
 
-    public String makeTypeName(Class type) {
-        return makeTypeName(type, type.getName(), this.shortTypeNames);
+    public String makeTypeName(Class cls) {
+        return makeTypeName(cls, cls.getName(), this.shortTypeNames);
     }
 
-    public String makePrimaryTypeName(Class type, String typeName) {
-        return makeTypeName(type, typeName, this.shortPrimaryTypeNames);
+    public String makePrimaryTypeName(Class cls, String str) {
+        return makeTypeName(cls, str, this.shortPrimaryTypeNames);
     }
 
-    public void addTypeNames(StringBuffer buf, Class[] types) {
-        for (int i = 0; i < types.length; i++) {
+    public void addTypeNames(StringBuffer stringBuffer, Class[] clsArr) {
+        for (int i = 0; i < clsArr.length; i++) {
             if (i > 0) {
-                buf.append(", ");
+                stringBuffer.append(", ");
             }
-            buf.append(makeTypeName(types[i]));
+            stringBuffer.append(makeTypeName(clsArr[i]));
         }
     }
 
-    public void addSignature(StringBuffer buf, Class[] types) {
-        if (types != null) {
+    public void addSignature(StringBuffer stringBuffer, Class[] clsArr) {
+        if (clsArr != null) {
             if (this.includeArgs) {
-                buf.append("(");
-                addTypeNames(buf, types);
-                buf.append(")");
-            } else if (types.length == 0) {
-                buf.append("()");
+                stringBuffer.append("(");
+                addTypeNames(stringBuffer, clsArr);
+                stringBuffer.append(")");
+            } else if (clsArr.length == 0) {
+                stringBuffer.append("()");
             } else {
-                buf.append("(..)");
+                stringBuffer.append("(..)");
             }
         }
     }
 
-    public void addThrows(StringBuffer buf, Class[] types) {
-        if (this.includeThrows && types != null && types.length != 0) {
-            buf.append(" throws ");
-            addTypeNames(buf, types);
+    public void addThrows(StringBuffer stringBuffer, Class[] clsArr) {
+        if (this.includeThrows && clsArr != null && clsArr.length != 0) {
+            stringBuffer.append(" throws ");
+            addTypeNames(stringBuffer, clsArr);
         }
     }
 }

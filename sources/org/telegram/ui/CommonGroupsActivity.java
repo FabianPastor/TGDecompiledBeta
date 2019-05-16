@@ -26,7 +26,6 @@ import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
-import org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate;
 import org.telegram.ui.Cells.LoadingCell;
 import org.telegram.ui.Cells.ProfileSearchCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
@@ -54,50 +53,45 @@ public class CommonGroupsActivity extends BaseFragment {
             this.mContext = context;
         }
 
-        public boolean isEnabled(ViewHolder holder) {
-            return holder.getAdapterPosition() != CommonGroupsActivity.this.chats.size();
+        public boolean isEnabled(ViewHolder viewHolder) {
+            return viewHolder.getAdapterPosition() != CommonGroupsActivity.this.chats.size();
         }
 
         public int getItemCount() {
-            int count = CommonGroupsActivity.this.chats.size();
+            int size = CommonGroupsActivity.this.chats.size();
             if (CommonGroupsActivity.this.chats.isEmpty()) {
-                return count;
+                return size;
             }
-            count++;
-            if (CommonGroupsActivity.this.endReached) {
-                return count;
-            }
-            return count + 1;
+            size++;
+            return !CommonGroupsActivity.this.endReached ? size + 1 : size;
         }
 
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view;
-            switch (viewType) {
-                case 0:
-                    view = new ProfileSearchCell(this.mContext);
-                    view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                    break;
-                case 1:
-                    view = new LoadingCell(this.mContext);
-                    view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                    break;
-                default:
-                    view = new TextInfoPrivacyCell(this.mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
-                    break;
+        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            View profileSearchCell;
+            String str = "windowBackgroundWhite";
+            if (i == 0) {
+                profileSearchCell = new ProfileSearchCell(this.mContext);
+                profileSearchCell.setBackgroundColor(Theme.getColor(str));
+            } else if (i != 1) {
+                View textInfoPrivacyCell = new TextInfoPrivacyCell(this.mContext);
+                textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+                profileSearchCell = textInfoPrivacyCell;
+            } else {
+                profileSearchCell = new LoadingCell(this.mContext);
+                profileSearchCell.setBackgroundColor(Theme.getColor(str));
             }
-            return new Holder(view);
+            return new Holder(profileSearchCell);
         }
 
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            boolean z = false;
-            if (holder.getItemViewType() == 0) {
-                ProfileSearchCell cell = holder.itemView;
-                cell.setData((Chat) CommonGroupsActivity.this.chats.get(position), null, null, null, false, false);
-                if (!(position == CommonGroupsActivity.this.chats.size() - 1 && CommonGroupsActivity.this.endReached)) {
-                    z = true;
+        public void onBindViewHolder(ViewHolder viewHolder, int i) {
+            if (viewHolder.getItemViewType() == 0) {
+                ProfileSearchCell profileSearchCell = (ProfileSearchCell) viewHolder.itemView;
+                profileSearchCell.setData((Chat) CommonGroupsActivity.this.chats.get(i), null, null, null, false, false);
+                boolean z = true;
+                if (i == CommonGroupsActivity.this.chats.size() - 1 && CommonGroupsActivity.this.endReached) {
+                    z = false;
                 }
-                cell.useSeparator = z;
+                profileSearchCell.useSeparator = z;
             }
         }
 
@@ -105,15 +99,12 @@ public class CommonGroupsActivity extends BaseFragment {
             if (i < CommonGroupsActivity.this.chats.size()) {
                 return 0;
             }
-            if (CommonGroupsActivity.this.endReached || i != CommonGroupsActivity.this.chats.size()) {
-                return 2;
-            }
-            return 1;
+            return (CommonGroupsActivity.this.endReached || i != CommonGroupsActivity.this.chats.size()) ? 2 : 1;
         }
     }
 
-    public CommonGroupsActivity(int uid) {
-        this.userId = uid;
+    public CommonGroupsActivity(int i) {
+        this.userId = i;
     }
 
     public boolean onFragmentCreate() {
@@ -123,20 +114,20 @@ public class CommonGroupsActivity extends BaseFragment {
     }
 
     public View createView(Context context) {
-        int i = 1;
         this.actionBar.setBackButtonImage(NUM);
+        int i = 1;
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("GroupsInCommonTitle", NUM));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
-            public void onItemClick(int id) {
-                if (id == -1) {
+            public void onItemClick(int i) {
+                if (i == -1) {
                     CommonGroupsActivity.this.finishFragment();
                 }
             }
         });
         this.fragmentView = new FrameLayout(context);
         this.fragmentView.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
-        FrameLayout frameLayout = this.fragmentView;
+        FrameLayout frameLayout = (FrameLayout) this.fragmentView;
         this.emptyView = new EmptyTextProgressView(context);
         this.emptyView.setText(LocaleController.getString("NoGroupsInCommon", NUM));
         frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
@@ -150,21 +141,26 @@ public class CommonGroupsActivity extends BaseFragment {
         ListAdapter listAdapter = new ListAdapter(context);
         this.listViewAdapter = listAdapter;
         recyclerListView.setAdapter(listAdapter);
-        recyclerListView = this.listView;
+        RecyclerListView recyclerListView2 = this.listView;
         if (!LocaleController.isRTL) {
             i = 2;
         }
-        recyclerListView.setVerticalScrollbarPosition(i);
+        recyclerListView2.setVerticalScrollbarPosition(i);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new CommonGroupsActivity$$Lambda$0(this));
+        this.listView.setOnItemClickListener(new -$$Lambda$CommonGroupsActivity$J3Yy-YOVYpXyEU8UkIqEdngAT6I(this));
         this.listView.setOnScrollListener(new OnScrollListener() {
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                int firstVisibleItem = CommonGroupsActivity.this.layoutManager.findFirstVisibleItemPosition();
-                int visibleItemCount = firstVisibleItem == -1 ? 0 : Math.abs(CommonGroupsActivity.this.layoutManager.findLastVisibleItemPosition() - firstVisibleItem) + 1;
-                if (visibleItemCount > 0) {
-                    int totalItemCount = CommonGroupsActivity.this.listViewAdapter.getItemCount();
-                    if (!CommonGroupsActivity.this.endReached && !CommonGroupsActivity.this.loading && !CommonGroupsActivity.this.chats.isEmpty() && firstVisibleItem + visibleItemCount >= totalItemCount - 5) {
-                        CommonGroupsActivity.this.getChats(((Chat) CommonGroupsActivity.this.chats.get(CommonGroupsActivity.this.chats.size() - 1)).id, 100);
+            public void onScrolled(RecyclerView recyclerView, int i, int i2) {
+                int findFirstVisibleItemPosition = CommonGroupsActivity.this.layoutManager.findFirstVisibleItemPosition();
+                if (findFirstVisibleItemPosition == -1) {
+                    i = 0;
+                } else {
+                    i = Math.abs(CommonGroupsActivity.this.layoutManager.findLastVisibleItemPosition() - findFirstVisibleItemPosition) + 1;
+                }
+                if (i > 0) {
+                    i2 = CommonGroupsActivity.this.listViewAdapter.getItemCount();
+                    if (!CommonGroupsActivity.this.endReached && !CommonGroupsActivity.this.loading && !CommonGroupsActivity.this.chats.isEmpty() && findFirstVisibleItemPosition + i >= i2 - 5) {
+                        CommonGroupsActivity commonGroupsActivity = CommonGroupsActivity.this;
+                        commonGroupsActivity.getChats(((Chat) commonGroupsActivity.chats.get(CommonGroupsActivity.this.chats.size() - 1)).id, 100);
                     }
                 }
             }
@@ -177,113 +173,113 @@ public class CommonGroupsActivity extends BaseFragment {
         return this.fragmentView;
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$createView$0$CommonGroupsActivity(View view, int position) {
-        if (position >= 0 && position < this.chats.size()) {
-            Chat chat = (Chat) this.chats.get(position);
-            Bundle args = new Bundle();
-            args.putInt("chat_id", chat.id);
-            if (MessagesController.getInstance(this.currentAccount).checkCanOpenChat(args, this)) {
+    public /* synthetic */ void lambda$createView$0$CommonGroupsActivity(View view, int i) {
+        if (i >= 0 && i < this.chats.size()) {
+            Chat chat = (Chat) this.chats.get(i);
+            Bundle bundle = new Bundle();
+            bundle.putInt("chat_id", chat.id);
+            if (MessagesController.getInstance(this.currentAccount).checkCanOpenChat(bundle, this)) {
                 NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
-                presentFragment(new ChatActivity(args), true);
+                presentFragment(new ChatActivity(bundle), true);
             }
         }
     }
 
-    private void getChats(int max_id, int count) {
+    private void getChats(int i, int i2) {
         if (!this.loading) {
             this.loading = true;
-            if (!(this.emptyView == null || this.firstLoaded)) {
-                this.emptyView.showProgress();
+            EmptyTextProgressView emptyTextProgressView = this.emptyView;
+            if (!(emptyTextProgressView == null || this.firstLoaded)) {
+                emptyTextProgressView.showProgress();
             }
-            if (this.listViewAdapter != null) {
-                this.listViewAdapter.notifyDataSetChanged();
+            ListAdapter listAdapter = this.listViewAdapter;
+            if (listAdapter != null) {
+                listAdapter.notifyDataSetChanged();
             }
-            TL_messages_getCommonChats req = new TL_messages_getCommonChats();
-            req.user_id = MessagesController.getInstance(this.currentAccount).getInputUser(this.userId);
-            if (!(req.user_id instanceof TL_inputUserEmpty)) {
-                req.limit = count;
-                req.max_id = max_id;
-                ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(req, new CommonGroupsActivity$$Lambda$1(this, count)), this.classGuid);
+            TL_messages_getCommonChats tL_messages_getCommonChats = new TL_messages_getCommonChats();
+            tL_messages_getCommonChats.user_id = MessagesController.getInstance(this.currentAccount).getInputUser(this.userId);
+            if (!(tL_messages_getCommonChats.user_id instanceof TL_inputUserEmpty)) {
+                tL_messages_getCommonChats.limit = i2;
+                tL_messages_getCommonChats.max_id = i;
+                ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_messages_getCommonChats, new -$$Lambda$CommonGroupsActivity$uEpDyQSDsMXTcD9ZAD3h6fxSQJA(this, i2)), this.classGuid);
             }
         }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$getChats$2$CommonGroupsActivity(int count, TLObject response, TL_error error) {
-        AndroidUtilities.runOnUIThread(new CommonGroupsActivity$$Lambda$3(this, error, response, count));
+    public /* synthetic */ void lambda$getChats$2$CommonGroupsActivity(int i, TLObject tLObject, TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$CommonGroupsActivity$khNmAu1RhPThZuRoaDt1rnPjqQQ(this, tL_error, tLObject, i));
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$null$1$CommonGroupsActivity(TL_error error, TLObject response, int count) {
-        if (error == null) {
-            boolean z;
-            messages_Chats res = (messages_Chats) response;
-            MessagesController.getInstance(this.currentAccount).putChats(res.chats, false);
-            if (res.chats.isEmpty() || res.chats.size() != count) {
-                z = true;
-            } else {
-                z = false;
-            }
+    public /* synthetic */ void lambda$null$1$CommonGroupsActivity(TL_error tL_error, TLObject tLObject, int i) {
+        if (tL_error == null) {
+            messages_Chats messages_chats = (messages_Chats) tLObject;
+            MessagesController.getInstance(this.currentAccount).putChats(messages_chats.chats, false);
+            boolean z = messages_chats.chats.isEmpty() || messages_chats.chats.size() != i;
             this.endReached = z;
-            this.chats.addAll(res.chats);
+            this.chats.addAll(messages_chats.chats);
         } else {
             this.endReached = true;
         }
         this.loading = false;
         this.firstLoaded = true;
-        if (this.emptyView != null) {
-            this.emptyView.showTextView();
+        EmptyTextProgressView emptyTextProgressView = this.emptyView;
+        if (emptyTextProgressView != null) {
+            emptyTextProgressView.showTextView();
         }
-        if (this.listViewAdapter != null) {
-            this.listViewAdapter.notifyDataSetChanged();
+        ListAdapter listAdapter = this.listViewAdapter;
+        if (listAdapter != null) {
+            listAdapter.notifyDataSetChanged();
         }
     }
 
     public void onResume() {
         super.onResume();
-        if (this.listViewAdapter != null) {
-            this.listViewAdapter.notifyDataSetChanged();
+        ListAdapter listAdapter = this.listViewAdapter;
+        if (listAdapter != null) {
+            listAdapter.notifyDataSetChanged();
         }
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate cellDelegate = new CommonGroupsActivity$$Lambda$2(this);
-        r10 = new ThemeDescription[23];
-        r10[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{LoadingCell.class, ProfileSearchCell.class}, null, null, null, "windowBackgroundWhite");
-        r10[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundGray");
-        r10[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault");
-        r10[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault");
-        r10[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon");
-        r10[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle");
-        r10[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector");
-        r10[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21");
-        r10[8] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider");
-        r10[9] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "emptyListPlaceholder");
-        r10[10] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, "progressCircle");
-        r10[11] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow");
-        r10[12] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGrayText4");
-        r10[13] = new ThemeDescription(this.listView, 0, new Class[]{LoadingCell.class}, new String[]{"progressBar"}, null, null, null, "progressCircle");
-        r10[14] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, Theme.dialogs_namePaint, null, null, "chats_name");
-        r10[15] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, "avatar_text");
-        r10[16] = new ThemeDescription(null, 0, null, null, null, cellDelegate, "avatar_backgroundRed");
-        r10[17] = new ThemeDescription(null, 0, null, null, null, cellDelegate, "avatar_backgroundOrange");
-        r10[18] = new ThemeDescription(null, 0, null, null, null, cellDelegate, "avatar_backgroundViolet");
-        r10[19] = new ThemeDescription(null, 0, null, null, null, cellDelegate, "avatar_backgroundGreen");
-        r10[20] = new ThemeDescription(null, 0, null, null, null, cellDelegate, "avatar_backgroundCyan");
-        r10[21] = new ThemeDescription(null, 0, null, null, null, cellDelegate, "avatar_backgroundBlue");
-        r10[22] = new ThemeDescription(null, 0, null, null, null, cellDelegate, "avatar_backgroundPink");
-        return r10;
+        -$$Lambda$CommonGroupsActivity$CM0EpwYGPtlvUyQJ8b7pz0B-Dbw -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw = new -$$Lambda$CommonGroupsActivity$CM0EpwYGPtlvUyQJ8b7pz0B-Dbw(this);
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[23];
+        themeDescriptionArr[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{LoadingCell.class, ProfileSearchCell.class}, null, null, null, "windowBackgroundWhite");
+        themeDescriptionArr[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundGray");
+        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault");
+        themeDescriptionArr[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault");
+        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon");
+        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle");
+        themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector");
+        themeDescriptionArr[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21");
+        themeDescriptionArr[8] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider");
+        themeDescriptionArr[9] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "emptyListPlaceholder");
+        themeDescriptionArr[10] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, "progressCircle");
+        View view = this.listView;
+        View view2 = view;
+        themeDescriptionArr[11] = new ThemeDescription(view2, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow");
+        themeDescriptionArr[12] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGrayText4");
+        themeDescriptionArr[13] = new ThemeDescription(this.listView, 0, new Class[]{LoadingCell.class}, new String[]{"progressBar"}, null, null, null, "progressCircle");
+        themeDescriptionArr[14] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, Theme.dialogs_namePaint, null, null, "chats_name");
+        themeDescriptionArr[15] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, "avatar_text");
+        -$$Lambda$CommonGroupsActivity$CM0EpwYGPtlvUyQJ8b7pz0B-Dbw -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw2 = -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw;
+        themeDescriptionArr[16] = new ThemeDescription(null, 0, null, null, null, -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw2, "avatar_backgroundRed");
+        themeDescriptionArr[17] = new ThemeDescription(null, 0, null, null, null, -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw2, "avatar_backgroundOrange");
+        themeDescriptionArr[18] = new ThemeDescription(null, 0, null, null, null, -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw2, "avatar_backgroundViolet");
+        themeDescriptionArr[19] = new ThemeDescription(null, 0, null, null, null, -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw2, "avatar_backgroundGreen");
+        themeDescriptionArr[20] = new ThemeDescription(null, 0, null, null, null, -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw2, "avatar_backgroundCyan");
+        themeDescriptionArr[21] = new ThemeDescription(null, 0, null, null, null, -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw2, "avatar_backgroundBlue");
+        themeDescriptionArr[22] = new ThemeDescription(null, 0, null, null, null, -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw2, "avatar_backgroundPink");
+        return themeDescriptionArr;
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$getThemeDescriptions$3$CommonGroupsActivity() {
-        if (this.listView != null) {
-            int count = this.listView.getChildCount();
-            for (int a = 0; a < count; a++) {
-                View child = this.listView.getChildAt(a);
-                if (child instanceof ProfileSearchCell) {
-                    ((ProfileSearchCell) child).update(0);
+    public /* synthetic */ void lambda$getThemeDescriptions$3$CommonGroupsActivity() {
+        RecyclerListView recyclerListView = this.listView;
+        if (recyclerListView != null) {
+            int childCount = recyclerListView.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                View childAt = this.listView.getChildAt(i);
+                if (childAt instanceof ProfileSearchCell) {
+                    ((ProfileSearchCell) childAt).update(0);
                 }
             }
         }

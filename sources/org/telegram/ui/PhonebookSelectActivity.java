@@ -16,6 +16,7 @@ import org.telegram.messenger.support.widget.LinearLayoutManager;
 import org.telegram.messenger.support.widget.RecyclerView;
 import org.telegram.messenger.support.widget.RecyclerView.OnScrollListener;
 import org.telegram.tgnet.TLRPC.User;
+import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.ActionBarMenuItem.ActionBarMenuItemSearchListener;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -64,8 +65,8 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("SelectContact", NUM));
         this.actionBar.setActionBarMenuOnItemClick(new ActionBarMenuOnItemClick() {
-            public void onItemClick(int id) {
-                if (id == -1) {
+            public void onItemClick(int i) {
+                if (i == -1) {
                     PhonebookSelectActivity.this.finishFragment();
                 }
             }
@@ -89,18 +90,18 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
 
             public void onTextChanged(EditText editText) {
                 if (PhonebookSelectActivity.this.searchListViewAdapter != null) {
-                    String text = editText.getText().toString();
-                    if (text.length() != 0) {
+                    String obj = editText.getText().toString();
+                    if (obj.length() != 0) {
                         PhonebookSelectActivity.this.searchWas = true;
                     }
-                    PhonebookSelectActivity.this.searchListViewAdapter.search(text);
+                    PhonebookSelectActivity.this.searchListViewAdapter.search(obj);
                 }
             }
         }).setSearchFieldHint(LocaleController.getString("Search", NUM));
         this.searchListViewAdapter = new PhonebookSearchAdapter(context) {
             /* Access modifiers changed, original: protected */
-            public void onUpdateSearchResults(String query) {
-                if (!TextUtils.isEmpty(query) && PhonebookSelectActivity.this.listView != null && PhonebookSelectActivity.this.listView.getAdapter() != PhonebookSelectActivity.this.searchListViewAdapter) {
+            public void onUpdateSearchResults(String str) {
+                if (!TextUtils.isEmpty(str) && PhonebookSelectActivity.this.listView != null && PhonebookSelectActivity.this.listView.getAdapter() != PhonebookSelectActivity.this.searchListViewAdapter) {
                     PhonebookSelectActivity.this.listView.setAdapter(PhonebookSelectActivity.this.searchListViewAdapter);
                     PhonebookSelectActivity.this.listView.setSectionsType(0);
                     PhonebookSelectActivity.this.searchListViewAdapter.notifyDataSetChanged();
@@ -120,8 +121,8 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
         };
         this.fragmentView = new FrameLayout(context) {
             /* Access modifiers changed, original: protected */
-            public void onLayout(boolean changed, int left, int top, int right, int bottom) {
-                super.onLayout(changed, left, top, right, bottom);
+            public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+                super.onLayout(z, i, i2, i3, i4);
                 if (PhonebookSelectActivity.this.listView.getAdapter() != PhonebookSelectActivity.this.listViewAdapter) {
                     PhonebookSelectActivity.this.emptyView.setTranslationY((float) AndroidUtilities.dp(0.0f));
                 } else if (PhonebookSelectActivity.this.emptyView.getVisibility() == 0) {
@@ -129,7 +130,7 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
                 }
             }
         };
-        FrameLayout frameLayout = this.fragmentView;
+        FrameLayout frameLayout = (FrameLayout) this.fragmentView;
         this.emptyView = new EmptyTextProgressView(context);
         this.emptyView.setShowAtCenter(true);
         this.emptyView.setText(LocaleController.getString("NoContacts", NUM));
@@ -143,96 +144,96 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
         this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
         this.listView.setAdapter(this.listViewAdapter);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.listView.setOnItemClickListener(new PhonebookSelectActivity$$Lambda$0(this));
+        this.listView.setOnItemClickListener(new -$$Lambda$PhonebookSelectActivity$l53X2AdH9xoalnpyzoOuRLqxMRM(this));
         this.listView.setOnScrollListener(new OnScrollListener() {
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                if (newState == 1 && PhonebookSelectActivity.this.searching && PhonebookSelectActivity.this.searchWas) {
+            public void onScrollStateChanged(RecyclerView recyclerView, int i) {
+                if (i == 1 && PhonebookSelectActivity.this.searching && PhonebookSelectActivity.this.searchWas) {
                     AndroidUtilities.hideKeyboard(PhonebookSelectActivity.this.getParentActivity().getCurrentFocus());
                 }
             }
 
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
+            public void onScrolled(RecyclerView recyclerView, int i, int i2) {
+                super.onScrolled(recyclerView, i, i2);
             }
         });
         return this.fragmentView;
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$createView$1$PhonebookSelectActivity(View view, int position) {
-        Contact object;
+    public /* synthetic */ void lambda$createView$1$PhonebookSelectActivity(View view, int i) {
+        Object item;
         if (this.searching && this.searchWas) {
-            object = this.searchListViewAdapter.getItem(position);
+            item = this.searchListViewAdapter.getItem(i);
         } else {
-            int section = this.listViewAdapter.getSectionForPosition(position);
-            int row = this.listViewAdapter.getPositionInSectionForPosition(position);
-            if (row >= 0 && section >= 0) {
-                object = this.listViewAdapter.getItem(section, row);
+            int sectionForPosition = this.listViewAdapter.getSectionForPosition(i);
+            i = this.listViewAdapter.getPositionInSectionForPosition(i);
+            if (i >= 0 && sectionForPosition >= 0) {
+                item = this.listViewAdapter.getItem(sectionForPosition, i);
             } else {
                 return;
             }
         }
-        if (object != null) {
+        if (item != null) {
             Contact contact;
-            String name;
-            if (object instanceof Contact) {
-                contact = object;
-                if (contact.user != null) {
-                    name = ContactsController.formatName(contact.user.first_name, contact.user.last_name);
-                } else {
-                    name = "";
-                }
+            String formatName;
+            if (item instanceof Contact) {
+                contact = (Contact) item;
+                User user = contact.user;
+                formatName = user != null ? ContactsController.formatName(user.first_name, user.last_name) : "";
             } else {
-                User user = (User) object;
-                contact = new Contact();
-                contact.first_name = user.first_name;
-                contact.last_name = user.last_name;
-                contact.phones.add(user.phone);
-                contact.user = user;
-                name = ContactsController.formatName(contact.first_name, contact.last_name);
+                User user2 = (User) item;
+                Contact contact2 = new Contact();
+                contact2.first_name = user2.first_name;
+                contact2.last_name = user2.last_name;
+                contact2.phones.add(user2.phone);
+                contact2.user = user2;
+                Contact contact3 = contact2;
+                formatName = ContactsController.formatName(contact2.first_name, contact2.last_name);
+                contact = contact3;
             }
-            PhonebookShareActivity activity = new PhonebookShareActivity(contact, null, null, name);
-            activity.setDelegate(new PhonebookSelectActivity$$Lambda$2(this));
-            presentFragment(activity);
+            PhonebookShareActivity phonebookShareActivity = new PhonebookShareActivity(contact, null, null, formatName);
+            phonebookShareActivity.setDelegate(new -$$Lambda$PhonebookSelectActivity$4oi9dmdaHeu97U36787Z9FtySPo(this));
+            presentFragment(phonebookShareActivity);
         }
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$null$0$PhonebookSelectActivity(User user) {
+    public /* synthetic */ void lambda$null$0$PhonebookSelectActivity(User user) {
         removeSelfFromStack();
         this.delegate.didSelectContact(user);
     }
 
     public void onResume() {
         super.onResume();
-        if (this.listViewAdapter != null) {
-            this.listViewAdapter.notifyDataSetChanged();
+        PhonebookAdapter phonebookAdapter = this.listViewAdapter;
+        if (phonebookAdapter != null) {
+            phonebookAdapter.notifyDataSetChanged();
         }
     }
 
     public void onPause() {
         super.onPause();
-        if (this.actionBar != null) {
-            this.actionBar.closeSearchField();
+        ActionBar actionBar = this.actionBar;
+        if (actionBar != null) {
+            actionBar.closeSearchField();
         }
     }
 
-    public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.contactsDidLoad) {
-            if (this.listViewAdapter != null) {
-                this.listViewAdapter.notifyDataSetChanged();
+    public void didReceivedNotification(int i, int i2, Object... objArr) {
+        if (i == NotificationCenter.contactsDidLoad) {
+            PhonebookAdapter phonebookAdapter = this.listViewAdapter;
+            if (phonebookAdapter != null) {
+                phonebookAdapter.notifyDataSetChanged();
             }
-        } else if (id == NotificationCenter.closeChats) {
+        } else if (i == NotificationCenter.closeChats) {
             removeSelfFromStack();
         }
     }
 
-    public void setDelegate(PhonebookSelectActivityDelegate delegate) {
-        this.delegate = delegate;
+    public void setDelegate(PhonebookSelectActivityDelegate phonebookSelectActivityDelegate) {
+        this.delegate = phonebookSelectActivityDelegate;
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescriptionDelegate cellDelegate = new PhonebookSelectActivity$$Lambda$1(this);
+        -$$Lambda$PhonebookSelectActivity$6vwEKMfHE2uXMGZcFqjn-U8MjEc -__lambda_phonebookselectactivity_6vwekmfhe2uxmgzcfqjn-u8mjec = new -$$Lambda$PhonebookSelectActivity$6vwEKMfHE2uXMGZcFqjn-U8MjEc(this);
         ThemeDescription[] themeDescriptionArr = new ThemeDescription[26];
         themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite");
         themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault");
@@ -243,34 +244,38 @@ public class PhonebookSelectActivity extends BaseFragment implements Notificatio
         themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCH, null, null, null, null, "actionBarDefaultSearch");
         themeDescriptionArr[7] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCHPLACEHOLDER, null, null, null, null, "actionBarDefaultSearchPlaceholder");
         themeDescriptionArr[8] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21");
-        themeDescriptionArr[9] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SECTIONS, new Class[]{LetterSectionCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGrayText4");
+        View view = this.listView;
+        View view2 = view;
+        themeDescriptionArr[9] = new ThemeDescription(view2, ThemeDescription.FLAG_SECTIONS, new Class[]{LetterSectionCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGrayText4");
         themeDescriptionArr[10] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider");
         themeDescriptionArr[11] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "emptyListPlaceholder");
         themeDescriptionArr[12] = new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, null, null, null, null, "fastScrollActive");
         themeDescriptionArr[13] = new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, null, null, null, null, "fastScrollInactive");
         themeDescriptionArr[14] = new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, null, null, null, null, "fastScrollText");
         themeDescriptionArr[15] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[16] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, null, null, cellDelegate, "windowBackgroundWhiteGrayText");
-        themeDescriptionArr[17] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusOnlineColor"}, null, null, cellDelegate, "windowBackgroundWhiteBlueText");
+        ThemeDescriptionDelegate themeDescriptionDelegate = -__lambda_phonebookselectactivity_6vwekmfhe2uxmgzcfqjn-u8mjec;
+        themeDescriptionArr[16] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, null, null, themeDescriptionDelegate, "windowBackgroundWhiteGrayText");
+        themeDescriptionArr[17] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusOnlineColor"}, null, null, themeDescriptionDelegate, "windowBackgroundWhiteBlueText");
         themeDescriptionArr[18] = new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, "avatar_text");
-        themeDescriptionArr[19] = new ThemeDescription(null, 0, null, null, null, cellDelegate, "avatar_backgroundRed");
-        themeDescriptionArr[20] = new ThemeDescription(null, 0, null, null, null, cellDelegate, "avatar_backgroundOrange");
-        themeDescriptionArr[21] = new ThemeDescription(null, 0, null, null, null, cellDelegate, "avatar_backgroundViolet");
-        themeDescriptionArr[22] = new ThemeDescription(null, 0, null, null, null, cellDelegate, "avatar_backgroundGreen");
-        themeDescriptionArr[23] = new ThemeDescription(null, 0, null, null, null, cellDelegate, "avatar_backgroundCyan");
-        themeDescriptionArr[24] = new ThemeDescription(null, 0, null, null, null, cellDelegate, "avatar_backgroundBlue");
-        themeDescriptionArr[25] = new ThemeDescription(null, 0, null, null, null, cellDelegate, "avatar_backgroundPink");
+        -$$Lambda$PhonebookSelectActivity$6vwEKMfHE2uXMGZcFqjn-U8MjEc -__lambda_phonebookselectactivity_6vwekmfhe2uxmgzcfqjn-u8mjec2 = -__lambda_phonebookselectactivity_6vwekmfhe2uxmgzcfqjn-u8mjec;
+        themeDescriptionArr[19] = new ThemeDescription(null, 0, null, null, null, -__lambda_phonebookselectactivity_6vwekmfhe2uxmgzcfqjn-u8mjec2, "avatar_backgroundRed");
+        themeDescriptionArr[20] = new ThemeDescription(null, 0, null, null, null, -__lambda_phonebookselectactivity_6vwekmfhe2uxmgzcfqjn-u8mjec2, "avatar_backgroundOrange");
+        themeDescriptionArr[21] = new ThemeDescription(null, 0, null, null, null, -__lambda_phonebookselectactivity_6vwekmfhe2uxmgzcfqjn-u8mjec2, "avatar_backgroundViolet");
+        themeDescriptionArr[22] = new ThemeDescription(null, 0, null, null, null, -__lambda_phonebookselectactivity_6vwekmfhe2uxmgzcfqjn-u8mjec2, "avatar_backgroundGreen");
+        themeDescriptionArr[23] = new ThemeDescription(null, 0, null, null, null, -__lambda_phonebookselectactivity_6vwekmfhe2uxmgzcfqjn-u8mjec2, "avatar_backgroundCyan");
+        themeDescriptionArr[24] = new ThemeDescription(null, 0, null, null, null, -__lambda_phonebookselectactivity_6vwekmfhe2uxmgzcfqjn-u8mjec2, "avatar_backgroundBlue");
+        themeDescriptionArr[25] = new ThemeDescription(null, 0, null, null, null, -__lambda_phonebookselectactivity_6vwekmfhe2uxmgzcfqjn-u8mjec2, "avatar_backgroundPink");
         return themeDescriptionArr;
     }
 
-    /* Access modifiers changed, original: final|synthetic */
-    public final /* synthetic */ void lambda$getThemeDescriptions$2$PhonebookSelectActivity() {
-        if (this.listView != null) {
-            int count = this.listView.getChildCount();
-            for (int a = 0; a < count; a++) {
-                View child = this.listView.getChildAt(a);
-                if (child instanceof UserCell) {
-                    ((UserCell) child).update(0);
+    public /* synthetic */ void lambda$getThemeDescriptions$2$PhonebookSelectActivity() {
+        RecyclerListView recyclerListView = this.listView;
+        if (recyclerListView != null) {
+            int childCount = recyclerListView.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                View childAt = this.listView.getChildAt(i);
+                if (childAt instanceof UserCell) {
+                    ((UserCell) childAt).update(0);
                 }
             }
         }
