@@ -8187,8 +8187,7 @@ public class MessagesController implements NotificationCenterDelegate {
         if (i != 0 && this.checkingLastMessagesDialogs.indexOfKey(i) < 0) {
             TL_messages_getHistory tL_messages_getHistory = new TL_messages_getHistory();
             tL_messages_getHistory.peer = inputPeer == null ? getInputPeer(i) : inputPeer;
-            InputPeer inputPeer2 = tL_messages_getHistory.peer;
-            if (inputPeer2 != null && !(inputPeer2 instanceof TL_inputPeerChannel)) {
+            if (tL_messages_getHistory.peer != null) {
                 tL_messages_getHistory.limit = 1;
                 this.checkingLastMessagesDialogs.put(i, true);
                 if (j == 0) {

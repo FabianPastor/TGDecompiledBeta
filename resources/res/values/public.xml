@@ -3059,14 +3059,14 @@
     <public type="string" name="MarkAsRead" id="NUM" />
     <public type="string" name="MarkAsUnread" id="NUM" />
     <public type="string" name="Masks" id="NUM" />
+    <public type="string" name="MasksCount_few" id="NUM" />
+    <public type="string" name="MasksCount_many" id="NUM" />
+    <public type="string" name="MasksCount_one" id="NUM" />
+    <public type="string" name="MasksCount_other" id="NUM" />
+    <public type="string" name="MasksCount_two" id="NUM" />
+    <public type="string" name="MasksCount_zero" id="NUM" />
     <public type="string" name="MasksInfo" id="NUM" />
     <public type="string" name="MasksRemoved" id="NUM" />
-    <public type="string" name="Masks_few" id="NUM" />
-    <public type="string" name="Masks_many" id="NUM" />
-    <public type="string" name="Masks_one" id="NUM" />
-    <public type="string" name="Masks_other" id="NUM" />
-    <public type="string" name="Masks_two" id="NUM" />
-    <public type="string" name="Masks_zero" id="NUM" />
     <public type="string" name="May" id="NUM" />
     <public type="string" name="Media_few" id="NUM" />
     <public type="string" name="Media_many" id="NUM" />

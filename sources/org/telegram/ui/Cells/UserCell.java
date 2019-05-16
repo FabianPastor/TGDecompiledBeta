@@ -625,7 +625,7 @@ public class UserCell extends FrameLayout {
         r2 = r12.statusOnlineColor;
         r13.setTextColor(r2);
         r13 = r12.statusTextView;
-        r2 = NUM; // 0x7f0d0680 float:1.874549E38 double:1.0531305997E-314;
+        r2 = NUM; // 0x7f0d0676 float:1.874547E38 double:1.0531305947E-314;
         r5 = "Online";
         r2 = org.telegram.messenger.LocaleController.getString(r5, r2);
         r13.setText(r2);

@@ -375,7 +375,7 @@ public class ManageChatUserCell extends FrameLayout {
         r1 = r10.statusOnlineColor;
         r11.setTextColor(r1);
         r11 = r10.statusTextView;
-        r1 = NUM; // 0x7f0d0680 float:1.874549E38 double:1.0531305997E-314;
+        r1 = NUM; // 0x7f0d0676 float:1.874547E38 double:1.0531305947E-314;
         r3 = "Online";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r11.setText(r1);

@@ -616,7 +616,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         L_0x00e0:
             r4 = org.telegram.ui.ThemeActivity.this;	 Catch:{ Exception -> 0x00f6 }
             r6 = "ShareFile";
-            r0 = NUM; // 0x7f0d08f6 float:1.8746768E38 double:1.053130911E-314;
+            r0 = NUM; // 0x7f0d08ec float:1.8746747E38 double:1.053130906E-314;
             r6 = org.telegram.messenger.LocaleController.getString(r6, r0);	 Catch:{ Exception -> 0x00f6 }
             r5 = android.content.Intent.createChooser(r5, r6);	 Catch:{ Exception -> 0x00f6 }
             r6 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
@@ -655,7 +655,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             r0 = org.telegram.ui.ThemeActivity.this;
             r0 = r0.getParentActivity();
             r6.<init>(r0);
-            r0 = NUM; // 0x7f0d0346 float:1.8743814E38 double:1.0531301916E-314;
+            r0 = NUM; // 0x7f0d0344 float:1.874381E38 double:1.0531301906E-314;
             r1 = "DeleteThemeAlert";
             r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
             r6.setMessage(r0);
@@ -663,7 +663,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             r1 = "AppName";
             r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
             r6.setTitle(r0);
-            r0 = NUM; // 0x7f0d0327 float:1.8743752E38 double:1.0531301763E-314;
+            r0 = NUM; // 0x7f0d0325 float:1.8743747E38 double:1.0531301753E-314;
             r1 = "Delete";
             r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
             r1 = new org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$HjGrFd2877SP2gFmUCLASSNAMEvuRyOmw;

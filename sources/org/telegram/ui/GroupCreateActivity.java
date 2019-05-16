@@ -566,7 +566,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             r10 = r8.searching;
             if (r10 == 0) goto L_0x0106;
         L_0x00fa:
-            r10 = NUM; // 0x7f0d047d float:1.8744445E38 double:1.053130345E-314;
+            r10 = NUM; // 0x7f0d047b float:1.8744441E38 double:1.053130344E-314;
             r0 = "GlobalSearch";
             r10 = org.telegram.messenger.LocaleController.getString(r0, r10);
             r9.setText(r10);

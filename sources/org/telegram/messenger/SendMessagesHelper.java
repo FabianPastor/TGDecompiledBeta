@@ -3659,7 +3659,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r13 = r14.getParentActivity();
         r12.<init>(r13);
         r12.setTitle(r9);
-        r9 = NUM; // 0x7f0d067d float:1.8745484E38 double:1.053130598E-314;
+        r9 = NUM; // 0x7f0d0673 float:1.8745463E38 double:1.053130593E-314;
         r13 = "OK";
         r9 = org.telegram.messenger.LocaleController.getString(r13, r9);
         r12.setPositiveButton(r9, r10);

@@ -996,20 +996,20 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdaterDelega
         r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r1 = r3.getParentActivity();
         r0.<init>(r1);
-        r1 = NUM; // 0x7f0d09e7 float:1.8747256E38 double:1.05313103E-314;
+        r1 = NUM; // 0x7f0d09dd float:1.8747236E38 double:1.053131025E-314;
         r2 = "UserRestrictionsApplyChanges";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
         r1 = r3.isChannel;
         if (r1 == 0) goto L_0x008c;
     L_0x007f:
-        r1 = NUM; // 0x7f0d024a float:1.8743303E38 double:1.053130067E-314;
+        r1 = NUM; // 0x7f0d0248 float:1.87433E38 double:1.053130066E-314;
         r2 = "ChannelSettingsChangedAlert";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setMessage(r1);
         goto L_0x0098;
     L_0x008c:
-        r1 = NUM; // 0x7f0d0490 float:1.8744484E38 double:1.0531303546E-314;
+        r1 = NUM; // 0x7f0d048e float:1.874448E38 double:1.0531303536E-314;
         r2 = "GroupSettingsChangedAlert";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setMessage(r1);
@@ -1020,7 +1020,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdaterDelega
         r2 = new org.telegram.ui.-$$Lambda$ChatEditActivity$EBwbGLT2kSOkAGL9jcbmyJaa5JQ;
         r2.<init>(r3);
         r0.setPositiveButton(r1, r2);
-        r1 = NUM; // 0x7f0d06ed float:1.874571E38 double:1.0531306535E-314;
+        r1 = NUM; // 0x7f0d06e3 float:1.874569E38 double:1.0531306486E-314;
         r2 = "PassportDiscard";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r2 = new org.telegram.ui.-$$Lambda$ChatEditActivity$42WGB1bZqU27h5UDp3vuD-usGEg;

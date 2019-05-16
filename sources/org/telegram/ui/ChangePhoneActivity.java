@@ -1555,7 +1555,7 @@ public class ChangePhoneActivity extends BaseFragment {
             r2 = "AppName";
             r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
             r0.setTitle(r1);
-            r1 = NUM; // 0x7f0d067d float:1.8745484E38 double:1.053130598E-314;
+            r1 = NUM; // 0x7f0d0673 float:1.8745463E38 double:1.053130593E-314;
             r2 = "OK";
             r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
             r2 = 0;
@@ -1577,7 +1577,7 @@ public class ChangePhoneActivity extends BaseFragment {
             if (r7 != r5) goto L_0x0105;
         L_0x00f6:
             r0 = r13.this$0;
-            r1 = NUM; // 0x7f0d029f float:1.8743476E38 double:1.053130109E-314;
+            r1 = NUM; // 0x7f0d029d float:1.8743472E38 double:1.053130108E-314;
             r2 = "ChooseCountry";
             r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
             org.telegram.ui.Components.AlertsCreator.showSimpleAlert(r0, r1);
@@ -1588,7 +1588,7 @@ public class ChangePhoneActivity extends BaseFragment {
             if (r7 != 0) goto L_0x011c;
         L_0x010d:
             r0 = r13.this$0;
-            r1 = NUM; // 0x7f0d04cd float:1.8744607E38 double:1.0531303848E-314;
+            r1 = NUM; // 0x7f0d04cb float:1.8744603E38 double:1.053130384E-314;
             r2 = "InvalidPhoneNumber";
             r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
             org.telegram.ui.Components.AlertsCreator.showSimpleAlert(r0, r1);

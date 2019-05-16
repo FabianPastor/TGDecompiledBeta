@@ -4757,69 +4757,72 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
     }
 
     private void showStickerSettingsButton(final boolean z, boolean z2) {
-        if (!(z && this.stickerSettingsButton.getTag() == null) && (z || this.stickerSettingsButton.getTag() == null)) {
-            AnimatorSet animatorSet = this.stickersButtonAnimation;
-            Object obj = null;
-            if (animatorSet != null) {
-                animatorSet.cancel();
-                this.stickersButtonAnimation = null;
-            }
-            ImageView imageView = this.stickerSettingsButton;
-            if (!z) {
-                obj = Integer.valueOf(1);
-            }
-            imageView.setTag(obj);
-            int i = 0;
-            float f = 1.0f;
-            if (z2) {
-                if (z) {
-                    this.stickerSettingsButton.setVisibility(0);
+        ImageView imageView = this.stickerSettingsButton;
+        if (imageView != null) {
+            if (!(z && imageView.getTag() == null) && (z || this.stickerSettingsButton.getTag() == null)) {
+                AnimatorSet animatorSet = this.stickersButtonAnimation;
+                Object obj = null;
+                if (animatorSet != null) {
+                    animatorSet.cancel();
+                    this.stickersButtonAnimation = null;
                 }
-                this.stickersButtonAnimation = new AnimatorSet();
-                AnimatorSet animatorSet2 = this.stickersButtonAnimation;
-                Animator[] animatorArr = new Animator[3];
-                ImageView imageView2 = this.stickerSettingsButton;
-                Property property = View.ALPHA;
-                float[] fArr = new float[1];
-                fArr[0] = z ? 1.0f : 0.0f;
-                animatorArr[0] = ObjectAnimator.ofFloat(imageView2, property, fArr);
-                imageView2 = this.stickerSettingsButton;
-                property = View.SCALE_X;
-                fArr = new float[1];
-                fArr[0] = z ? 1.0f : 0.0f;
-                animatorArr[1] = ObjectAnimator.ofFloat(imageView2, property, fArr);
-                ImageView imageView3 = this.stickerSettingsButton;
-                Property property2 = View.SCALE_Y;
-                float[] fArr2 = new float[1];
+                imageView = this.stickerSettingsButton;
                 if (!z) {
-                    f = 0.0f;
+                    obj = Integer.valueOf(1);
                 }
-                fArr2[0] = f;
-                animatorArr[2] = ObjectAnimator.ofFloat(imageView3, property2, fArr2);
-                animatorSet2.playTogether(animatorArr);
-                this.stickersButtonAnimation.setDuration(200);
-                this.stickersButtonAnimation.setInterpolator(CubicBezierInterpolator.EASE_OUT);
-                this.stickersButtonAnimation.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animator) {
-                        if (!z) {
-                            EmojiView.this.stickerSettingsButton.setVisibility(4);
-                        }
+                imageView.setTag(obj);
+                int i = 0;
+                float f = 1.0f;
+                if (z2) {
+                    if (z) {
+                        this.stickerSettingsButton.setVisibility(0);
                     }
-                });
-                this.stickersButtonAnimation.start();
-            } else {
-                this.stickerSettingsButton.setAlpha(z ? 1.0f : 0.0f);
-                this.stickerSettingsButton.setScaleX(z ? 1.0f : 0.0f);
-                ImageView imageView4 = this.stickerSettingsButton;
-                if (!z) {
-                    f = 0.0f;
+                    this.stickersButtonAnimation = new AnimatorSet();
+                    AnimatorSet animatorSet2 = this.stickersButtonAnimation;
+                    Animator[] animatorArr = new Animator[3];
+                    ImageView imageView2 = this.stickerSettingsButton;
+                    Property property = View.ALPHA;
+                    float[] fArr = new float[1];
+                    fArr[0] = z ? 1.0f : 0.0f;
+                    animatorArr[0] = ObjectAnimator.ofFloat(imageView2, property, fArr);
+                    imageView2 = this.stickerSettingsButton;
+                    property = View.SCALE_X;
+                    fArr = new float[1];
+                    fArr[0] = z ? 1.0f : 0.0f;
+                    animatorArr[1] = ObjectAnimator.ofFloat(imageView2, property, fArr);
+                    ImageView imageView3 = this.stickerSettingsButton;
+                    Property property2 = View.SCALE_Y;
+                    float[] fArr2 = new float[1];
+                    if (!z) {
+                        f = 0.0f;
+                    }
+                    fArr2[0] = f;
+                    animatorArr[2] = ObjectAnimator.ofFloat(imageView3, property2, fArr2);
+                    animatorSet2.playTogether(animatorArr);
+                    this.stickersButtonAnimation.setDuration(200);
+                    this.stickersButtonAnimation.setInterpolator(CubicBezierInterpolator.EASE_OUT);
+                    this.stickersButtonAnimation.addListener(new AnimatorListenerAdapter() {
+                        public void onAnimationEnd(Animator animator) {
+                            if (!z) {
+                                EmojiView.this.stickerSettingsButton.setVisibility(4);
+                            }
+                        }
+                    });
+                    this.stickersButtonAnimation.start();
+                } else {
+                    this.stickerSettingsButton.setAlpha(z ? 1.0f : 0.0f);
+                    this.stickerSettingsButton.setScaleX(z ? 1.0f : 0.0f);
+                    ImageView imageView4 = this.stickerSettingsButton;
+                    if (!z) {
+                        f = 0.0f;
+                    }
+                    imageView4.setScaleY(f);
+                    imageView4 = this.stickerSettingsButton;
+                    if (!z) {
+                        i = 4;
+                    }
+                    imageView4.setVisibility(i);
                 }
-                imageView4.setScaleY(f);
-                imageView4 = this.stickerSettingsButton;
-                if (!z) {
-                    i = 4;
-                }
-                imageView4.setVisibility(i);
             }
         }
     }

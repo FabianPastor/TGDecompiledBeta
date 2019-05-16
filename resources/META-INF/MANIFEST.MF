@@ -3,7 +3,7 @@ Built-By: Generated-by-ADT
 Created-By: Android Gradle 3.4.0
 
 Name: AndroidManifest.xml
-SHA1-Digest: joYqcetTO+NV7sySb++Pxn1aaWA=
+SHA1-Digest: q7FZPzvtya6501t9vX7/XXY0ssw=
 
 Name: META-INF/androidx.appcompat_appcompat.version
 SHA1-Digest: xTi2bHEQyjoCjM/kItDx+iAKmTU=
@@ -231,7 +231,7 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: m87NqagkPvJQrJntttfo+NUYkWM=
+SHA1-Digest: i+nlyGHfkOMiaSsdrW73AdVkj64=
 
 Name: fabric/com.stripe.stripe-android.properties
 SHA1-Digest: FHlRDdxccFhBf1l94YXJ1DBcfcA=
@@ -8565,13 +8565,13 @@ Name: res/drawable/ytlogo.png
 SHA1-Digest: BB3NQSFJsjusdY5t8Uh+ro3RQNY=
 
 Name: res/layout-land/hockeyapp_fragment_update.xml
-SHA1-Digest: Lg3HE53oxVK21wGxRkGnWFY+90w=
+SHA1-Digest: SCEM1+vjVdOey7HPVINSJsyfa4I=
 
 Name: res/layout-v16/notification_template_custom_big.xml
 SHA1-Digest: 4UI6SsC8FV4ELQjU8KcaNCwWnbg=
 
 Name: res/layout-v17/abc_action_mode_close_item_material.xml
-SHA1-Digest: kR+65JpvMcXysap6E5JEsPgEZwc=
+SHA1-Digest: X5Xk6+o6GMVZ3waIbkeOn+ad7XU=
 
 Name: res/layout-v17/abc_alert_dialog_button_bar_material.xml
 SHA1-Digest: IiAZrifSt3gzV63aPZPzmAF/CRM=
@@ -8586,7 +8586,7 @@ Name: res/layout-v17/abc_popup_menu_header_item_layout.xml
 SHA1-Digest: nFlqBFrBDtcGnOL+s52rXVUIOMI=
 
 Name: res/layout-v17/abc_search_view.xml
-SHA1-Digest: vMrNJKoINuZZrpBmxnshFwsSGPM=
+SHA1-Digest: KS7dQ/iMUbP36dxJOWxP+OwuUwc=
 
 Name: res/layout-v17/abc_select_dialog_material.xml
 SHA1-Digest: mjuK8LWQYCTFF8ps1bBdMSrjlOI=
@@ -8595,7 +8595,7 @@ Name: res/layout-v17/abc_tooltip.xml
 SHA1-Digest: uU5xwoNFYe5XvGHsvurXQ5OPSjU=
 
 Name: res/layout-v17/hockeyapp_activity_feedback.xml
-SHA1-Digest: xoe5tSsUFOLudvGQSLDphm31JUk=
+SHA1-Digest: T+1rvIZn3aabrSRYGeicUiM80Fw=
 
 Name: res/layout-v17/notification_action.xml
 SHA1-Digest: +tKNhvfnF5Yd7Qwa6AYjK5VqDHc=
@@ -8634,7 +8634,7 @@ Name: res/layout-v17/select_dialog_singlechoice_material.xml
 SHA1-Digest: AI6wN8EUNJkTDVeLzA7tMVeuNO0=
 
 Name: res/layout-v21/abc_screen_toolbar.xml
-SHA1-Digest: KJtpQODHoftv4G1lCgnTZcOGybk=
+SHA1-Digest: eMb2srdxi4/zZicp28ygfXWR1ww=
 
 Name: res/layout-v21/notification_action.xml
 SHA1-Digest: O4XYHkpgdAm+C6jQ2LRY5HFQA38=
@@ -8652,7 +8652,7 @@ Name: res/layout-v22/abc_alert_dialog_button_bar_material.xml
 SHA1-Digest: 3oXDyKFFqZYTaGmBuDGaUTfD/CQ=
 
 Name: res/layout-v26/abc_screen_toolbar.xml
-SHA1-Digest: r2Na0GfBWwnuYOZjWKG48x78RHE=
+SHA1-Digest: PlNV9/r0qeG78lHN8Xiwu9UMobs=
 
 Name: res/layout-watch-v20/abc_alert_dialog_button_bar_material.xml
 SHA1-Digest: g80FEIlcuSVpKAg0Ydu5BLVzWKY=
@@ -8676,7 +8676,7 @@ Name: res/layout/abc_action_mode_bar.xml
 SHA1-Digest: mn+w2S9LlXrlnhKGSOTI5Zr1UK0=
 
 Name: res/layout/abc_action_mode_close_item_material.xml
-SHA1-Digest: O2kKf2+gjzJZZhzUPhsl1XydB5E=
+SHA1-Digest: vocvrQOqjWgdNuTlKQeeX0cNmMQ=
 
 Name: res/layout/abc_activity_chooser_view.xml
 SHA1-Digest: Rwfk5UO5jpP4BIBZci8quGTk1OM=
@@ -8730,13 +8730,13 @@ Name: res/layout/abc_screen_simple_overlay_action_mode.xml
 SHA1-Digest: P36A/Ii/5kJFY7SlneuQI/1SBcE=
 
 Name: res/layout/abc_screen_toolbar.xml
-SHA1-Digest: pSOg3WfC/B01IdGiN+W6mNVYCt0=
+SHA1-Digest: y+7cra5uF/srTOUqYChXhMl+4Jg=
 
 Name: res/layout/abc_search_dropdown_item_icons_2line.xml
 SHA1-Digest: CSyttNMiS/RE5GNw4WryAnO8KM8=
 
 Name: res/layout/abc_search_view.xml
-SHA1-Digest: nkBTImuF86Ez7qEqk+15cfLYp+Y=
+SHA1-Digest: QRXtyCiZJIPe/6RM/3BGmCqbiS0=
 
 Name: res/layout/abc_select_dialog_material.xml
 SHA1-Digest: DLRAY+WwdxqhrkG2HNwH19c/+A8=
@@ -8757,13 +8757,13 @@ Name: res/layout/hockeyapp_activity_expiry_info.xml
 SHA1-Digest: hD8CksKbwPZ0apSvH/xWgXEGm1A=
 
 Name: res/layout/hockeyapp_activity_feedback.xml
-SHA1-Digest: fKJePXRvyj81w3mjf+B59JTmaGk=
+SHA1-Digest: fiNUHrtizso5LkbcNqRTKIUhS00=
 
 Name: res/layout/hockeyapp_activity_login.xml
-SHA1-Digest: IEU6jq/3L5EQkv83/1qSZ1b5zGE=
+SHA1-Digest: ahQrofzW9M9KvzhiPN6vOIHBKSM=
 
 Name: res/layout/hockeyapp_fragment_update.xml
-SHA1-Digest: 9M1CGA83jcy6xvU2xoXz3dl1/eU=
+SHA1-Digest: C5Bpz56YHhO7og2HjP4FfIN6cSs=
 
 Name: res/layout/hockeyapp_view_feedback_message.xml
 SHA1-Digest: 2e1NJOaGzBtzTpI1j11Eu/A504U=
@@ -8831,8 +8831,35 @@ SHA1-Digest: ZYR5MRX+7EyX2ON8wf/Vyl6ekmk=
 Name: res/layout/wallet_test_layout.xml
 SHA1-Digest: lf7EAo3SaEiHM2vHX7C0oUjy/BY=
 
-Name: res/mipmap-v26/ic_launcher.xml
+Name: res/mipmap-hdpi-v26/ic_launcher.xml
 SHA1-Digest: 7hMS40ey0SfQVTQ+Xne4f/iEDKA=
+
+Name: res/mipmap-hdpi-v4/ic_launcher.png
+SHA1-Digest: m5BCNKExDDyMbiv+a2ZszOAyMx8=
+
+Name: res/mipmap-mdpi-v26/ic_launcher.xml
+SHA1-Digest: 7hMS40ey0SfQVTQ+Xne4f/iEDKA=
+
+Name: res/mipmap-mdpi-v4/ic_launcher.png
+SHA1-Digest: 4gTPDkorzot5/CjjauG022GGkdE=
+
+Name: res/mipmap-xhdpi-v26/ic_launcher.xml
+SHA1-Digest: 7hMS40ey0SfQVTQ+Xne4f/iEDKA=
+
+Name: res/mipmap-xhdpi-v4/ic_launcher.png
+SHA1-Digest: bDw5fKPQ+8e7SijpjTFluMcV87k=
+
+Name: res/mipmap-xxhdpi-v26/ic_launcher.xml
+SHA1-Digest: 7hMS40ey0SfQVTQ+Xne4f/iEDKA=
+
+Name: res/mipmap-xxhdpi-v4/ic_launcher.png
+SHA1-Digest: sp6XZAp4TYWmzt1GJ8ZjHlhwubY=
+
+Name: res/mipmap-xxxhdpi-v26/ic_launcher.xml
+SHA1-Digest: 7hMS40ey0SfQVTQ+Xne4f/iEDKA=
+
+Name: res/mipmap-xxxhdpi-v4/ic_launcher.png
+SHA1-Digest: gQPvAqJoEjktJwvXL10hbhhS12o=
 
 Name: res/raw/chats_archive.json
 SHA1-Digest: Hb2gp9rnJxInKUnQgzR11sWQm7w=
@@ -8883,7 +8910,7 @@ Name: res/xml/auth.xml
 SHA1-Digest: m//AivJf4qQ1HH9GrxcYPp0InPE=
 
 Name: res/xml/auth_menu.xml
-SHA1-Digest: +eZzptRluYT7v7XvkyZDeDy0l2c=
+SHA1-Digest: sbXDVjXcMPYJh3zp+ld5EdtH55s=
 
 Name: res/xml/automotive_app_desc.xml
 SHA1-Digest: vNxeRePtnY64Hxd7k8wXLkWhqV0=
@@ -8898,7 +8925,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: +MNf64vCtPnRiuZgbqYoIaqfJC4=
 
 Name: resources.arsc
-SHA1-Digest: iV2dkTDpACFUWmdikC6u3jiYf2k=
+SHA1-Digest: 6y7HRSkHFfLtdn09ex7RSyrnHPQ=
 
 Name: version.txt
 SHA1-Digest: J/nihzJRxlZEj3lPEgpfeoTyk98=
