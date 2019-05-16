@@ -2493,6 +2493,7 @@
     <public type="string" name="DebugMenuEnableCamera" id="NUM" />
     <public type="string" name="DebugMenuEnableLogs" id="NUM" />
     <public type="string" name="DebugMenuImportContacts" id="NUM" />
+    <public type="string" name="DebugMenuReadAllDialogs" id="NUM" />
     <public type="string" name="DebugMenuReloadContacts" id="NUM" />
     <public type="string" name="DebugMenuResetContacts" id="NUM" />
     <public type="string" name="DebugMenuResetDialogs" id="NUM" />

@@ -637,18 +637,18 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:95:0x0252 A:{LOOP_END, Catch:{ Exception -> 0x068b }, LOOP:2: B:65:0x0194->B:95:0x0252} */
+    /* JADX WARNING: Removed duplicated region for block: B:95:0x0252 A:{LOOP_END, LOOP:2: B:65:0x0194->B:95:0x0252, Catch:{ Exception -> 0x068b }} */
     /* JADX WARNING: Removed duplicated region for block: B:276:0x01e7 A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:189:0x050b A:{LOOP_END, Catch:{ Exception -> 0x068b }, LOOP:6: B:150:0x0397->B:189:0x050b} */
+    /* JADX WARNING: Removed duplicated region for block: B:189:0x050b A:{LOOP_END, LOOP:6: B:150:0x0397->B:189:0x050b, Catch:{ Exception -> 0x068b }} */
     /* JADX WARNING: Removed duplicated region for block: B:295:0x03e2 A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:252:0x0668 A:{LOOP_END, Catch:{ Exception -> 0x068b }, LOOP:10: B:223:0x05bc->B:252:0x0668} */
+    /* JADX WARNING: Removed duplicated region for block: B:252:0x0668 A:{LOOP_END, LOOP:10: B:223:0x05bc->B:252:0x0668, Catch:{ Exception -> 0x068b }} */
     /* JADX WARNING: Removed duplicated region for block: B:306:0x060d A:{SYNTHETIC} */
     public /* synthetic */ void lambda$searchDialogsInternal$8$DialogsSearchAdapter(java.lang.String r25, int r26) {
         /*
         r24 = this;
         r1 = r24;
         r0 = "SavedMessages";
-        r2 = NUM; // 0x7f0d087c float:1.874652E38 double:1.0531308507E-314;
+        r2 = NUM; // 0x7f0d087d float:1.8746522E38 double:1.053130851E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r2);	 Catch:{ Exception -> 0x068b }
         r0 = r0.toLowerCase();	 Catch:{ Exception -> 0x068b }
         r2 = r25.trim();	 Catch:{ Exception -> 0x068b }
@@ -2012,7 +2012,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         r0.setText(r2);
         goto L_0x02e2;
     L_0x0098:
-        r2 = NUM; // 0x7f0d081f float:1.8746331E38 double:1.0531308047E-314;
+        r2 = NUM; // 0x7f0d0820 float:1.8746333E38 double:1.053130805E-314;
         r3 = "Recent";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.setText(r2);
@@ -2022,7 +2022,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         r3 = r3.isEmpty();
         if (r3 != 0) goto L_0x00bc;
     L_0x00ae:
-        r2 = NUM; // 0x7f0d04a3 float:1.8744522E38 double:1.053130364E-314;
+        r2 = NUM; // 0x7f0d04a4 float:1.8744524E38 double:1.0531303645E-314;
         r3 = "Hashtags";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.setText(r2);
@@ -2041,13 +2041,13 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         r3 = r3 + r4;
         if (r2 != r3) goto L_0x00e9;
     L_0x00db:
-        r2 = NUM; // 0x7f0d047b float:1.8744441E38 double:1.053130344E-314;
+        r2 = NUM; // 0x7f0d047c float:1.8744443E38 double:1.0531303447E-314;
         r3 = "GlobalSearch";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.setText(r2);
         goto L_0x02e2;
     L_0x00e9:
-        r2 = NUM; // 0x7f0d0890 float:1.874656E38 double:1.0531308605E-314;
+        r2 = NUM; // 0x7f0d0891 float:1.8746563E38 double:1.053130861E-314;
         r3 = "SearchMessages";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.setText(r2);
@@ -2290,7 +2290,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         r11 = r1.selfUserId;
         if (r2 != r11) goto L_0x0290;
     L_0x0283:
-        r0 = NUM; // 0x7f0d087c float:1.874652E38 double:1.0531308507E-314;
+        r0 = NUM; // 0x7f0d087d float:1.8746522E38 double:1.053130851E-314;
         r2 = "SavedMessages";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r11 = r0;

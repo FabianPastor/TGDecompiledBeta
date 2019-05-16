@@ -1091,51 +1091,51 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 SettingsSearchCell settingsSearchCell = (SettingsSearchCell) viewHolder.itemView;
                 boolean z2 = false;
                 SearchResult searchResult;
-                String[] access$4400;
+                String[] access$4500;
                 if (!this.searchWas) {
                     i--;
                     Object obj = this.recentSearches.get(i);
-                    String access$4600;
+                    String access$4700;
                     if (obj instanceof SearchResult) {
                         searchResult = (SearchResult) obj;
-                        access$4600 = searchResult.searchTitle;
-                        access$4400 = searchResult.path;
+                        access$4700 = searchResult.searchTitle;
+                        access$4500 = searchResult.path;
                         if (i >= this.recentSearches.size() - 1) {
                             z = false;
                         }
-                        settingsSearchCell.setTextAndValue(access$4600, access$4400, false, z);
+                        settingsSearchCell.setTextAndValue(access$4700, access$4500, false, z);
                     } else if (obj instanceof FaqSearchResult) {
                         FaqSearchResult faqSearchResult = (FaqSearchResult) obj;
-                        access$4600 = faqSearchResult.title;
-                        access$4400 = faqSearchResult.path;
+                        access$4700 = faqSearchResult.title;
+                        access$4500 = faqSearchResult.path;
                         if (i < this.recentSearches.size() - 1) {
                             z2 = true;
                         }
-                        settingsSearchCell.setTextAndValue(access$4600, access$4400, true, z2);
+                        settingsSearchCell.setTextAndValue(access$4700, access$4500, true, z2);
                     }
                 } else if (i < this.searchResults.size()) {
-                    int access$4300;
+                    int access$4400;
                     searchResult = (SearchResult) this.searchResults.get(i);
                     SearchResult searchResult2 = i > 0 ? (SearchResult) this.searchResults.get(i - 1) : null;
                     if (searchResult2 == null || searchResult2.iconResId != searchResult.iconResId) {
-                        access$4300 = searchResult.iconResId;
+                        access$4400 = searchResult.iconResId;
                     } else {
-                        access$4300 = 0;
+                        access$4400 = 0;
                     }
                     CharSequence charSequence = (CharSequence) this.resultNames.get(i);
-                    access$4400 = searchResult.path;
+                    access$4500 = searchResult.path;
                     if (i >= this.searchResults.size() - 1) {
                         z = false;
                     }
-                    settingsSearchCell.setTextAndValueAndIcon(charSequence, access$4400, access$4300, z);
+                    settingsSearchCell.setTextAndValueAndIcon(charSequence, access$4500, access$4400, z);
                 } else {
                     i -= this.searchResults.size() + 1;
                     CharSequence charSequence2 = (CharSequence) this.resultNames.get(this.searchResults.size() + i);
-                    access$4400 = ((FaqSearchResult) this.faqSearchResults.get(i)).path;
+                    access$4500 = ((FaqSearchResult) this.faqSearchResults.get(i)).path;
                     if (i < this.searchResults.size() - 1) {
                         z2 = true;
                     }
-                    settingsSearchCell.setTextAndValue(charSequence2, access$4400, true, z2);
+                    settingsSearchCell.setTextAndValue(charSequence2, access$4500, true, z2);
                 }
             } else if (itemViewType == 1) {
                 ((GraySectionCell) viewHolder.itemView).setText(LocaleController.getString("SettingsFaqSearchTitle", NUM));
@@ -1632,7 +1632,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         String str2;
                         builder = new Builder(SettingsActivity.this.getParentActivity());
                         builder.setTitle(LocaleController.getString("DebugMenu", NUM));
-                        CharSequence[] charSequenceArr = new CharSequence[10];
+                        CharSequence[] charSequenceArr = new CharSequence[11];
                         charSequenceArr[0] = LocaleController.getString("DebugMenuImportContacts", NUM);
                         charSequenceArr[1] = LocaleController.getString("DebugMenuReloadContacts", NUM);
                         charSequenceArr[2] = LocaleController.getString("DebugMenuResetContacts", NUM);
@@ -1657,6 +1657,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         charSequenceArr[7] = LocaleController.getString("DebugMenuCallSettings", NUM);
                         charSequenceArr[8] = null;
                         charSequenceArr[9] = BuildVars.DEBUG_PRIVATE_VERSION ? "Check for app updates" : null;
+                        charSequenceArr[10] = LocaleController.getString("DebugMenuReadAllDialogs", NUM);
                         builder.setItems(charSequenceArr, new -$$Lambda$SettingsActivity$6$kxL5W9nAqj10O1Y1PL9gcNop-Uc(this));
                         builder.setNegativeButton(LocaleController.getString(str, NUM), null);
                         SettingsActivity.this.showDialog(builder.create());
@@ -1701,6 +1702,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     SharedConfig.toggleRoundCamera16to9();
                 } else if (i == 9) {
                     ((LaunchActivity) SettingsActivity.this.getParentActivity()).checkAppUpdate(true);
+                } else if (i == 10) {
+                    MessagesStorage.getInstance(SettingsActivity.this.currentAccount).readAllDialogs();
                 }
             }
         });

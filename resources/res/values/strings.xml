@@ -796,6 +796,7 @@
     <string name="DebugMenuEnableCamera">Enable in-app camera</string>
     <string name="DebugMenuEnableLogs">Enable Logs</string>
     <string name="DebugMenuImportContacts">Import Contacts</string>
+    <string name="DebugMenuReadAllDialogs">Read all Dialogs</string>
     <string name="DebugMenuReloadContacts">Reload Contacts</string>
     <string name="DebugMenuResetContacts">Reset Imported Contacts</string>
     <string name="DebugMenuResetDialogs">Reset Dialogs</string>

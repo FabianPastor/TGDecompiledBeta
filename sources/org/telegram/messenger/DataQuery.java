@@ -1072,7 +1072,7 @@ public class DataQuery {
         if (r1 == 0) goto L_0x005e;
     L_0x004b:
         r2 = org.telegram.messenger.ApplicationLoader.applicationContext;
-        r3 = NUM; // 0x7f0d0831 float:1.8746368E38 double:1.0531308136E-314;
+        r3 = NUM; // 0x7f0d0832 float:1.874637E38 double:1.053130814E-314;
         r4 = "RemovedFromFavorites";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2 = android.widget.Toast.makeText(r2, r3, r8);
@@ -3784,7 +3784,7 @@ public class DataQuery {
         r11 = new android.content.pm.ShortcutInfo$Builder;	 Catch:{ Throwable -> 0x02b7 }
         r12 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x02b7 }
         r11.<init>(r12, r10);	 Catch:{ Throwable -> 0x02b7 }
-        r12 = NUM; // 0x7f0d05ad float:1.8745062E38 double:1.0531304954E-314;
+        r12 = NUM; // 0x7f0d05ae float:1.8745064E38 double:1.053130496E-314;
         r13 = org.telegram.messenger.LocaleController.getString(r0, r12);	 Catch:{ Throwable -> 0x02b7 }
         r11 = r11.setShortLabel(r13);	 Catch:{ Throwable -> 0x02b7 }
         r0 = org.telegram.messenger.LocaleController.getString(r0, r12);	 Catch:{ Throwable -> 0x02b7 }
@@ -4535,7 +4535,7 @@ public class DataQuery {
         if (r9 == 0) goto L_0x0075;
     L_0x0068:
         r9 = "SavedMessages";
-        r10 = NUM; // 0x7f0d087c float:1.874652E38 double:1.0531308507E-314;
+        r10 = NUM; // 0x7f0d087d float:1.8746522E38 double:1.053130851E-314;
         r9 = org.telegram.messenger.LocaleController.getString(r9, r10);	 Catch:{ Exception -> 0x0249 }
         r10 = r5;
         r11 = r9;

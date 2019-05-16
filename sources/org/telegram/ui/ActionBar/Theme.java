@@ -3427,11 +3427,11 @@ public class Theme {
         fallbackKeys.put("chat_emojiPanelStickerSetNameHighlight", "windowBackgroundWhiteBlueText4");
         fallbackKeys.put("chat_emojiPanelStickerPackSelectorLine", "chat_emojiPanelIconSelected");
         fallbackKeys.put("sharedMedia_actionMode", "actionBarDefault");
-        fallbackKeys.put("key_sheet_scrollUp", "chat_emojiSearchBackground");
+        fallbackKeys.put("key_sheet_scrollUp", "chat_emojiPanelStickerPackSelector");
         fallbackKeys.put("key_sheet_other", "player_actionBarItems");
-        fallbackKeys.put("dialogSearchBackground", "chat_emojiSearchBackground");
-        fallbackKeys.put("dialogSearchHint", "chat_emojiSearchIcon");
-        fallbackKeys.put("dialogSearchIcon", "chat_emojiSearchIcon");
+        fallbackKeys.put("dialogSearchBackground", "chat_emojiPanelStickerPackSelector");
+        fallbackKeys.put("dialogSearchHint", "chat_emojiPanelIcon");
+        fallbackKeys.put("dialogSearchIcon", "chat_emojiPanelIcon");
         fallbackKeys.put("dialogSearchText", "windowBackgroundWhiteBlackText");
         fallbackKeys.put("dialogFloatingButton", "dialogRoundCheckBox");
         fallbackKeys.put("dialogFloatingButtonPressed", "dialogRoundCheckBox");

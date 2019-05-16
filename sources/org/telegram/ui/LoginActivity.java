@@ -2338,7 +2338,7 @@ public class LoginActivity extends BaseFragment {
         L_0x00d9:
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0d04cb float:1.8744603E38 double:1.053130384E-314;
+            r8 = NUM; // 0x7f0d04cc float:1.8744605E38 double:1.0531303843E-314;
             r2 = "InvalidPhoneNumber";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
@@ -2380,7 +2380,7 @@ public class LoginActivity extends BaseFragment {
         L_0x0132:
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0d0418 float:1.874424E38 double:1.0531302953E-314;
+            r8 = NUM; // 0x7f0d0419 float:1.8744242E38 double:1.053130296E-314;
             r2 = "FloodWait";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
@@ -2390,7 +2390,7 @@ public class LoginActivity extends BaseFragment {
             r8 = org.telegram.messenger.LocaleController.getString(r3, r8);
             r2 = new java.lang.StringBuilder;
             r2.<init>();
-            r3 = NUM; // 0x7f0d03a4 float:1.8744005E38 double:1.053130238E-314;
+            r3 = NUM; // 0x7f0d03a5 float:1.8744007E38 double:1.0531302385E-314;
             r4 = "ErrorOccurred";
             r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
             r2.append(r3);
@@ -2404,7 +2404,7 @@ public class LoginActivity extends BaseFragment {
         L_0x016e:
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0d04c8 float:1.8744597E38 double:1.0531303823E-314;
+            r8 = NUM; // 0x7f0d04c9 float:1.87446E38 double:1.053130383E-314;
             r2 = "InvalidCode";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);

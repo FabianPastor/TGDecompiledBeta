@@ -2390,7 +2390,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r2.putExtra(r5, r0);
     L_0x01fb:
         r0 = r10.getParentActivity();
-        r3 = NUM; // 0x7f0d08ec float:1.8746747E38 double:1.053130906E-314;
+        r3 = NUM; // 0x7f0d08ed float:1.874675E38 double:1.0531309065E-314;
         r4 = "ShareFile";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2 = android.content.Intent.createChooser(r2, r3);
@@ -2432,7 +2432,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r1 = r1.toLowerCase();
         r2 = "attheme";
         r1 = r1.endsWith(r2);
-        r2 = NUM; // 0x7f0d0673 float:1.8745463E38 double:1.053130593E-314;
+        r2 = NUM; // 0x7f0d0674 float:1.8745465E38 double:1.0531305937E-314;
         r3 = "OK";
         r4 = NUM; // 0x7f0d00e7 float:1.8742583E38 double:1.0531298917E-314;
         r5 = "AppName";
@@ -2489,7 +2489,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r0.<init>(r1);
         r1 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0d04c1 float:1.8744583E38 double:1.053130379E-314;
+        r1 = NUM; // 0x7f0d04c2 float:1.8744585E38 double:1.0531303793E-314;
         r4 = "IncorrectTheme";
         r1 = org.telegram.messenger.LocaleController.getString(r4, r1);
         r0.setMessage(r1);
@@ -2520,7 +2520,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r0.<init>(r1);
         r1 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0d04c0 float:1.8744581E38 double:1.0531303783E-314;
+        r1 = NUM; // 0x7f0d04c1 float:1.8744583E38 double:1.053130379E-314;
         r4 = "IncorrectLocalization";
         r1 = org.telegram.messenger.LocaleController.getString(r4, r1);
         r0.setMessage(r1);

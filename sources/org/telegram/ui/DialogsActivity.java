@@ -1060,7 +1060,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     return false;
                 }
                 int action = motionEvent.getAction();
-                if (DialogsActivity.this.swipeController.swipingFolder && (action == 3 || action == 1)) {
+                if (!DialogsActivity.this.itemTouchhelper.isIdle() && DialogsActivity.this.swipeController.swipingFolder && (action == 3 || action == 1)) {
                     DialogsActivity.this.swipeController.swipeFolderBack = true;
                     if (DialogsActivity.this.itemTouchhelper.checkHorizontalSwipe(null, 4) != 0) {
                         SharedConfig.toggleArchiveHidden();
@@ -2400,7 +2400,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r12 = r12 + r16;
         if (r12 <= r4) goto L_0x0228;
     L_0x011b:
-        r0 = NUM; // 0x7f0d07ce float:1.8746167E38 double:1.0531307647E-314;
+        r0 = NUM; // 0x7f0d07cf float:1.874617E38 double:1.053130765E-314;
         r1 = new java.lang.Object[r9];
         r2 = "Chats";
         r2 = org.telegram.messenger.LocaleController.formatPluralString(r2, r4);
@@ -2438,7 +2438,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r0.<init>(r4);
         if (r2 != r3) goto L_0x0197;
     L_0x0163:
-        r3 = NUM; // 0x7f0d0332 float:1.8743774E38 double:1.0531301817E-314;
+        r3 = NUM; // 0x7f0d0333 float:1.8743776E38 double:1.053130182E-314;
         r4 = new java.lang.Object[r9];
         r5 = "ChatsSelected";
         r1 = org.telegram.messenger.LocaleController.formatPluralString(r5, r1);
@@ -2450,7 +2450,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r3 = "AreYouSureDeleteFewChats";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
-        r1 = NUM; // 0x7f0d0325 float:1.8743747E38 double:1.0531301753E-314;
+        r1 = NUM; // 0x7f0d0326 float:1.874375E38 double:1.053130176E-314;
         r3 = "Delete";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r3 = new org.telegram.ui.-$$Lambda$DialogsActivity$jWd3WTqe_JWytlcg5OAtRHiocr4;
@@ -3381,10 +3381,15 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 this.currentConnectionState = i;
                 updateProxyButton(true);
             }
-        } else if (!(i == NotificationCenter.dialogsUnreadCounterChanged || i != NotificationCenter.needDeleteDialog || this.undoView == null)) {
+        } else if (i != NotificationCenter.dialogsUnreadCounterChanged && i == NotificationCenter.needDeleteDialog) {
             long longValue2 = ((Long) objArr[0]).longValue();
             User user = (User) objArr[1];
-            getUndoView().showWithAction(longValue2, 1, new -$$Lambda$DialogsActivity$SHFUF_xzVvtOneSCklijoIHeS8g(this, (Chat) objArr[2], longValue2, ((Boolean) objArr[3]).booleanValue()));
+            -$$Lambda$DialogsActivity$SHFUF_xzVvtOneSCklijoIHeS8g -__lambda_dialogsactivity_shfuf_xzvvtonescklijoihes8g = new -$$Lambda$DialogsActivity$SHFUF_xzVvtOneSCklijoIHeS8g(this, (Chat) objArr[2], longValue2, ((Boolean) objArr[3]).booleanValue());
+            if (this.undoView[0] != null) {
+                getUndoView().showWithAction(longValue2, 1, -__lambda_dialogsactivity_shfuf_xzvvtonescklijoihes8g);
+            } else {
+                -__lambda_dialogsactivity_shfuf_xzvvtonescklijoihes8g.run();
+            }
         }
     }
 

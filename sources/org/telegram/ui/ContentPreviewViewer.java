@@ -866,7 +866,7 @@ public class ContentPreviewViewer {
         Document document2 = document;
         int i2 = i;
         String str = "window";
-        if (this.parentActivity != null && document2 != null) {
+        if (this.parentActivity != null && document2 != null && this.windowView != null) {
             this.stickerEmojiLayout = null;
             if (i2 == 0) {
                 InputStickerSet inputStickerSet;

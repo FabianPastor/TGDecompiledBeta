@@ -355,9 +355,9 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
             MessagesStorage.getInstance(ShareAlert.this.currentAccount).getStorageQueue().postRunnable(new -$$Lambda$ShareAlert$ShareSearchAdapter$-0pnpfSXHTiImTPZ850FgfY7mkY(this, str, i));
         }
 
-        /* JADX WARNING: Removed duplicated region for block: B:76:0x01d3 A:{LOOP_END, Catch:{ Exception -> 0x0414 }, LOOP:2: B:46:0x0114->B:76:0x01d3} */
+        /* JADX WARNING: Removed duplicated region for block: B:76:0x01d3 A:{LOOP_END, LOOP:2: B:46:0x0114->B:76:0x01d3, Catch:{ Exception -> 0x0414 }} */
         /* JADX WARNING: Removed duplicated region for block: B:190:0x0165 A:{SYNTHETIC} */
-        /* JADX WARNING: Removed duplicated region for block: B:172:0x03f8 A:{LOOP_END, Catch:{ Exception -> 0x0414 }, LOOP:7: B:144:0x0342->B:172:0x03f8} */
+        /* JADX WARNING: Removed duplicated region for block: B:172:0x03f8 A:{LOOP_END, LOOP:7: B:144:0x0342->B:172:0x03f8, Catch:{ Exception -> 0x0414 }} */
         /* JADX WARNING: Removed duplicated region for block: B:215:0x038c A:{SYNTHETIC} */
         public /* synthetic */ void lambda$searchDialogsInternal$1$ShareAlert$ShareSearchAdapter(java.lang.String r21, int r22) {
             /*
@@ -1187,12 +1187,12 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
             }
 
             /* Access modifiers changed, original: protected */
-            /* JADX WARNING: Removed duplicated region for block: B:41:0x00c6  */
-            /* JADX WARNING: Removed duplicated region for block: B:40:0x00bd  */
-            /* JADX WARNING: Removed duplicated region for block: B:32:0x0096  */
-            /* JADX WARNING: Removed duplicated region for block: B:25:0x007c  */
-            /* JADX WARNING: Removed duplicated region for block: B:40:0x00bd  */
-            /* JADX WARNING: Removed duplicated region for block: B:41:0x00c6  */
+            /* JADX WARNING: Removed duplicated region for block: B:41:0x00ce  */
+            /* JADX WARNING: Removed duplicated region for block: B:40:0x00c5  */
+            /* JADX WARNING: Removed duplicated region for block: B:32:0x009e  */
+            /* JADX WARNING: Removed duplicated region for block: B:25:0x0084  */
+            /* JADX WARNING: Removed duplicated region for block: B:40:0x00c5  */
+            /* JADX WARNING: Removed duplicated region for block: B:41:0x00ce  */
             public void onLayout(boolean r10, int r11, int r12, int r13, int r14) {
                 /*
                 r9 = this;
@@ -1218,14 +1218,14 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
             L_0x0027:
                 r9.setBottomClip(r0);
             L_0x002a:
-                if (r2 >= r10) goto L_0x00dd;
+                if (r2 >= r10) goto L_0x00e5;
             L_0x002c:
                 r1 = r9.getChildAt(r2);
                 r3 = r1.getVisibility();
                 r4 = 8;
                 if (r3 != r4) goto L_0x003a;
             L_0x0038:
-                goto L_0x00d9;
+                goto L_0x00e1;
             L_0x003a:
                 r3 = r1.getLayoutParams();
                 r3 = (android.widget.FrameLayout.LayoutParams) r3;
@@ -1241,7 +1241,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                 r6 = r6 & 112;
                 r7 = r7 & 7;
                 r8 = 1;
-                if (r7 == r8) goto L_0x006d;
+                if (r7 == r8) goto L_0x0075;
             L_0x0058:
                 r8 = 5;
                 if (r7 == r8) goto L_0x0063;
@@ -1249,46 +1249,50 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                 r7 = r3.leftMargin;
                 r8 = r9.getPaddingLeft();
                 r7 = r7 + r8;
-                goto L_0x0078;
+                goto L_0x0080;
             L_0x0063:
-                r7 = r13 - r4;
+                r7 = r13 - r11;
+                r7 = r7 - r4;
                 r8 = r3.rightMargin;
                 r7 = r7 - r8;
                 r8 = r9.getPaddingRight();
-                goto L_0x0077;
-            L_0x006d:
+                r7 = r7 - r8;
+                r8 = org.telegram.ui.Components.ShareAlert.this;
+                r8 = r8.backgroundPaddingLeft;
+                goto L_0x007f;
+            L_0x0075:
                 r7 = r13 - r11;
                 r7 = r7 - r4;
                 r7 = r7 / 2;
                 r8 = r3.leftMargin;
                 r7 = r7 + r8;
                 r8 = r3.rightMargin;
-            L_0x0077:
+            L_0x007f:
                 r7 = r7 - r8;
-            L_0x0078:
-                r8 = 16;
-                if (r6 == r8) goto L_0x0096;
-            L_0x007c:
-                r8 = 48;
-                if (r6 == r8) goto L_0x008e;
             L_0x0080:
-                r8 = 80;
-                if (r6 == r8) goto L_0x0087;
+                r8 = 16;
+                if (r6 == r8) goto L_0x009e;
             L_0x0084:
+                r8 = 48;
+                if (r6 == r8) goto L_0x0096;
+            L_0x0088:
+                r8 = 80;
+                if (r6 == r8) goto L_0x008f;
+            L_0x008c:
                 r3 = r3.topMargin;
-                goto L_0x00a3;
-            L_0x0087:
+                goto L_0x00ab;
+            L_0x008f:
                 r6 = r14 - r0;
                 r6 = r6 - r12;
                 r6 = r6 - r5;
                 r3 = r3.bottomMargin;
-                goto L_0x00a1;
-            L_0x008e:
+                goto L_0x00a9;
+            L_0x0096:
                 r3 = r3.topMargin;
                 r6 = r9.getPaddingTop();
                 r3 = r3 + r6;
-                goto L_0x00a3;
-            L_0x0096:
+                goto L_0x00ab;
+            L_0x009e:
                 r6 = r14 - r0;
                 r6 = r6 - r12;
                 r6 = r6 - r5;
@@ -1296,39 +1300,39 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                 r8 = r3.topMargin;
                 r6 = r6 + r8;
                 r3 = r3.bottomMargin;
-            L_0x00a1:
+            L_0x00a9:
                 r3 = r6 - r3;
-            L_0x00a3:
-                r6 = org.telegram.ui.Components.ShareAlert.this;
-                r6 = r6.commentTextView;
-                if (r6 == 0) goto L_0x00d4;
             L_0x00ab:
                 r6 = org.telegram.ui.Components.ShareAlert.this;
                 r6 = r6.commentTextView;
+                if (r6 == 0) goto L_0x00dc;
+            L_0x00b3:
+                r6 = org.telegram.ui.Components.ShareAlert.this;
+                r6 = r6.commentTextView;
                 r6 = r6.isPopupView(r1);
-                if (r6 == 0) goto L_0x00d4;
-            L_0x00b7:
+                if (r6 == 0) goto L_0x00dc;
+            L_0x00bf:
                 r3 = org.telegram.messenger.AndroidUtilities.isTablet();
-                if (r3 == 0) goto L_0x00c6;
-            L_0x00bd:
+                if (r3 == 0) goto L_0x00ce;
+            L_0x00c5:
                 r3 = r9.getMeasuredHeight();
                 r6 = r1.getMeasuredHeight();
-                goto L_0x00d3;
-            L_0x00c6:
+                goto L_0x00db;
+            L_0x00ce:
                 r3 = r9.getMeasuredHeight();
                 r6 = r9.getKeyboardHeight();
                 r3 = r3 + r6;
                 r6 = r1.getMeasuredHeight();
-            L_0x00d3:
+            L_0x00db:
                 r3 = r3 - r6;
-            L_0x00d4:
+            L_0x00dc:
                 r4 = r4 + r7;
                 r5 = r5 + r3;
                 r1.layout(r7, r3, r4, r5);
-            L_0x00d9:
+            L_0x00e1:
                 r2 = r2 + 1;
                 goto L_0x002a;
-            L_0x00dd:
+            L_0x00e5:
                 r9.notifyHeightChanged();
                 r10 = org.telegram.ui.Components.ShareAlert.this;
                 r10.updateLayout();

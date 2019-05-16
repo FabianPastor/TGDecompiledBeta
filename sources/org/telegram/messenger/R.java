@@ -2532,6 +2532,7 @@ public final class R {
         public static final int DebugMenuEnableCamera = NUM;
         public static final int DebugMenuEnableLogs = NUM;
         public static final int DebugMenuImportContacts = NUM;
+        public static final int DebugMenuReadAllDialogs = NUM;
         public static final int DebugMenuReloadContacts = NUM;
         public static final int DebugMenuResetContacts = NUM;
         public static final int DebugMenuResetDialogs = NUM;

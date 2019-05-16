@@ -782,155 +782,158 @@ public class GroupedPhotosListView extends View implements OnGestureListener {
     /* Access modifiers changed, original: protected */
     public void onDraw(Canvas canvas) {
         if (!this.imagesToDraw.isEmpty()) {
-            int max;
-            float f;
             canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.backgroundPaint);
             int size = this.imagesToDraw.size();
             int i = this.drawDx;
             int i2 = (int) (((float) this.itemWidth) * 2.0f);
             int dp = AndroidUtilities.dp(8.0f);
-            PhotoSize photoSize = ((ImageLocation) this.currentPhotos.get(this.currentImage)).photoSize;
-            if (photoSize != null) {
-                max = Math.max(this.itemWidth, (int) (((float) photoSize.w) * (((float) this.itemHeight) / ((float) photoSize.h))));
-            } else {
-                max = this.itemHeight;
-            }
-            max = Math.min(i2, max);
-            float f2 = (float) (dp * 2);
-            float f3 = this.currentItemProgress;
-            int i3 = (int) (f2 * f3);
-            int i4 = this.itemWidth;
-            i4 = (i4 + ((int) (((float) (max - i4)) * f3))) + i3;
-            max = this.nextImage;
-            if (max < 0 || max >= this.currentPhotos.size()) {
-                max = this.itemWidth;
-            } else {
-                photoSize = ((ImageLocation) this.currentPhotos.get(this.nextImage)).photoSize;
+            ImageLocation imageLocation = (ImageLocation) this.currentPhotos.get(this.currentImage);
+            if (imageLocation != null) {
+                int max;
+                float f;
+                PhotoSize photoSize = imageLocation.photoSize;
                 if (photoSize != null) {
                     max = Math.max(this.itemWidth, (int) (((float) photoSize.w) * (((float) this.itemHeight) / ((float) photoSize.h))));
                 } else {
                     max = this.itemHeight;
                 }
-            }
-            i2 = Math.min(i2, max);
-            float f4 = this.nextItemProgress;
-            dp = (int) (f2 * f4);
-            i = (int) (((float) i) + ((((float) (((i2 + dp) - this.itemWidth) / 2)) * f4) * ((float) (this.nextImage > this.currentImage ? -1 : 1))));
-            max = this.itemWidth;
-            max = (max + ((int) (((float) (i2 - max)) * this.nextItemProgress))) + dp;
-            i2 = (getMeasuredWidth() - i4) / 2;
-            for (int i5 = 0; i5 < size; i5++) {
-                ImageReceiver imageReceiver = (ImageReceiver) this.imagesToDraw.get(i5);
-                int param = imageReceiver.getParam();
-                int i6 = this.currentImage;
-                if (param == i6) {
-                    imageReceiver.setImageX((i2 + i) + (i3 / 2));
-                    imageReceiver.setImageWidth(i4 - i3);
+                max = Math.min(i2, max);
+                float f2 = (float) (dp * 2);
+                float f3 = this.currentItemProgress;
+                int i3 = (int) (f2 * f3);
+                int i4 = this.itemWidth;
+                i4 = (i4 + ((int) (((float) (max - i4)) * f3))) + i3;
+                max = this.nextImage;
+                if (max < 0 || max >= this.currentPhotos.size()) {
+                    max = this.itemWidth;
                 } else {
-                    int i7 = this.nextImage;
-                    int i8;
-                    if (i7 < i6) {
-                        if (param >= i6) {
-                            imageReceiver.setImageX((((i2 + i4) + this.itemSpacing) + (((imageReceiver.getParam() - this.currentImage) - 1) * (this.itemWidth + this.itemSpacing))) + i);
-                        } else if (param <= i7) {
-                            i6 = (imageReceiver.getParam() - this.currentImage) + 1;
-                            i7 = this.itemWidth;
-                            i8 = this.itemSpacing;
-                            imageReceiver.setImageX((((i6 * (i7 + i8)) + i2) - (i8 + max)) + i);
-                        } else {
-                            imageReceiver.setImageX((((imageReceiver.getParam() - this.currentImage) * (this.itemWidth + this.itemSpacing)) + i2) + i);
-                        }
-                    } else if (param < i6) {
-                        imageReceiver.setImageX((((imageReceiver.getParam() - this.currentImage) * (this.itemWidth + this.itemSpacing)) + i2) + i);
-                    } else if (param <= i7) {
-                        imageReceiver.setImageX((((i2 + i4) + this.itemSpacing) + (((imageReceiver.getParam() - this.currentImage) - 1) * (this.itemWidth + this.itemSpacing))) + i);
+                    photoSize = ((ImageLocation) this.currentPhotos.get(this.nextImage)).photoSize;
+                    if (photoSize != null) {
+                        max = Math.max(this.itemWidth, (int) (((float) photoSize.w) * (((float) this.itemHeight) / ((float) photoSize.h))));
                     } else {
-                        int i9 = (i2 + i4) + this.itemSpacing;
-                        i8 = (imageReceiver.getParam() - this.currentImage) - 2;
-                        i6 = this.itemWidth;
-                        i7 = this.itemSpacing;
-                        imageReceiver.setImageX(((i9 + (i8 * (i6 + i7))) + (i7 + max)) + i);
-                    }
-                    if (param == this.nextImage) {
-                        imageReceiver.setImageWidth(max - dp);
-                        imageReceiver.setImageX(imageReceiver.getImageX() + (dp / 2));
-                    } else {
-                        imageReceiver.setImageWidth(this.itemWidth);
+                        max = this.itemHeight;
                     }
                 }
-                imageReceiver.draw(canvas);
-            }
-            long currentTimeMillis = System.currentTimeMillis();
-            long j = currentTimeMillis - this.lastUpdateTime;
-            if (j > 17) {
-                j = 17;
-            }
-            this.lastUpdateTime = currentTimeMillis;
-            size = this.animateToItem;
-            if (size >= 0) {
-                f3 = this.moveLineProgress;
-                if (f3 > 0.0f) {
-                    float f5 = ((float) j) / 200.0f;
-                    this.moveLineProgress = f3 - f5;
-                    if (size == this.currentImage) {
-                        f = this.currentItemProgress;
-                        if (f < 1.0f) {
-                            this.currentItemProgress = f + f5;
-                            if (this.currentItemProgress > 1.0f) {
-                                this.currentItemProgress = 1.0f;
-                            }
-                        }
-                        size = this.animateToDXStart;
-                        this.drawDx = size + ((int) Math.ceil((double) (this.currentItemProgress * ((float) (this.animateToDX - size)))));
+                i2 = Math.min(i2, max);
+                float f4 = this.nextItemProgress;
+                dp = (int) (f2 * f4);
+                i = (int) (((float) i) + ((((float) (((i2 + dp) - this.itemWidth) / 2)) * f4) * ((float) (this.nextImage > this.currentImage ? -1 : 1))));
+                max = this.itemWidth;
+                max = (max + ((int) (((float) (i2 - max)) * this.nextItemProgress))) + dp;
+                i2 = (getMeasuredWidth() - i4) / 2;
+                for (int i5 = 0; i5 < size; i5++) {
+                    ImageReceiver imageReceiver = (ImageReceiver) this.imagesToDraw.get(i5);
+                    int param = imageReceiver.getParam();
+                    int i6 = this.currentImage;
+                    if (param == i6) {
+                        imageReceiver.setImageX((i2 + i) + (i3 / 2));
+                        imageReceiver.setImageWidth(i4 - i3);
                     } else {
-                        this.nextItemProgress = CubicBezierInterpolator.EASE_OUT.getInterpolation(1.0f - this.moveLineProgress);
-                        if (this.stopedScrolling) {
+                        int i7 = this.nextImage;
+                        int i8;
+                        if (i7 < i6) {
+                            if (param >= i6) {
+                                imageReceiver.setImageX((((i2 + i4) + this.itemSpacing) + (((imageReceiver.getParam() - this.currentImage) - 1) * (this.itemWidth + this.itemSpacing))) + i);
+                            } else if (param <= i7) {
+                                i6 = (imageReceiver.getParam() - this.currentImage) + 1;
+                                i7 = this.itemWidth;
+                                i8 = this.itemSpacing;
+                                imageReceiver.setImageX((((i6 * (i7 + i8)) + i2) - (i8 + max)) + i);
+                            } else {
+                                imageReceiver.setImageX((((imageReceiver.getParam() - this.currentImage) * (this.itemWidth + this.itemSpacing)) + i2) + i);
+                            }
+                        } else if (param < i6) {
+                            imageReceiver.setImageX((((imageReceiver.getParam() - this.currentImage) * (this.itemWidth + this.itemSpacing)) + i2) + i);
+                        } else if (param <= i7) {
+                            imageReceiver.setImageX((((i2 + i4) + this.itemSpacing) + (((imageReceiver.getParam() - this.currentImage) - 1) * (this.itemWidth + this.itemSpacing))) + i);
+                        } else {
+                            int i9 = (i2 + i4) + this.itemSpacing;
+                            i8 = (imageReceiver.getParam() - this.currentImage) - 2;
+                            i6 = this.itemWidth;
+                            i7 = this.itemSpacing;
+                            imageReceiver.setImageX(((i9 + (i8 * (i6 + i7))) + (i7 + max)) + i);
+                        }
+                        if (param == this.nextImage) {
+                            imageReceiver.setImageWidth(max - dp);
+                            imageReceiver.setImageX(imageReceiver.getImageX() + (dp / 2));
+                        } else {
+                            imageReceiver.setImageWidth(this.itemWidth);
+                        }
+                    }
+                    imageReceiver.draw(canvas);
+                }
+                long currentTimeMillis = System.currentTimeMillis();
+                long j = currentTimeMillis - this.lastUpdateTime;
+                if (j > 17) {
+                    j = 17;
+                }
+                this.lastUpdateTime = currentTimeMillis;
+                size = this.animateToItem;
+                if (size >= 0) {
+                    f3 = this.moveLineProgress;
+                    if (f3 > 0.0f) {
+                        float f5 = ((float) j) / 200.0f;
+                        this.moveLineProgress = f3 - f5;
+                        if (size == this.currentImage) {
                             f = this.currentItemProgress;
-                            if (f > 0.0f) {
-                                this.currentItemProgress = f - f5;
-                                if (this.currentItemProgress < 0.0f) {
-                                    this.currentItemProgress = 0.0f;
+                            if (f < 1.0f) {
+                                this.currentItemProgress = f + f5;
+                                if (this.currentItemProgress > 1.0f) {
+                                    this.currentItemProgress = 1.0f;
                                 }
                             }
                             size = this.animateToDXStart;
-                            this.drawDx = size + ((int) Math.ceil((double) (this.nextItemProgress * ((float) (this.animateToDX - size)))));
+                            this.drawDx = size + ((int) Math.ceil((double) (this.currentItemProgress * ((float) (this.animateToDX - size)))));
                         } else {
-                            this.currentItemProgress = CubicBezierInterpolator.EASE_OUT.getInterpolation(this.moveLineProgress);
-                            this.drawDx = (int) Math.ceil((double) (this.nextItemProgress * ((float) this.animateToDX)));
+                            this.nextItemProgress = CubicBezierInterpolator.EASE_OUT.getInterpolation(1.0f - this.moveLineProgress);
+                            if (this.stopedScrolling) {
+                                f = this.currentItemProgress;
+                                if (f > 0.0f) {
+                                    this.currentItemProgress = f - f5;
+                                    if (this.currentItemProgress < 0.0f) {
+                                        this.currentItemProgress = 0.0f;
+                                    }
+                                }
+                                size = this.animateToDXStart;
+                                this.drawDx = size + ((int) Math.ceil((double) (this.nextItemProgress * ((float) (this.animateToDX - size)))));
+                            } else {
+                                this.currentItemProgress = CubicBezierInterpolator.EASE_OUT.getInterpolation(this.moveLineProgress);
+                                this.drawDx = (int) Math.ceil((double) (this.nextItemProgress * ((float) this.animateToDX)));
+                            }
+                        }
+                        if (this.moveLineProgress <= 0.0f) {
+                            this.currentImage = this.animateToItem;
+                            this.moveLineProgress = 1.0f;
+                            this.currentItemProgress = 1.0f;
+                            this.nextItemProgress = 0.0f;
+                            this.moving = false;
+                            this.stopedScrolling = false;
+                            this.drawDx = 0;
+                            this.animateToItem = -1;
                         }
                     }
-                    if (this.moveLineProgress <= 0.0f) {
-                        this.currentImage = this.animateToItem;
-                        this.moveLineProgress = 1.0f;
-                        this.currentItemProgress = 1.0f;
-                        this.nextItemProgress = 0.0f;
-                        this.moving = false;
-                        this.stopedScrolling = false;
-                        this.drawDx = 0;
-                        this.animateToItem = -1;
-                    }
-                }
-                fillImages(true, this.drawDx);
-                invalidate();
-            }
-            if (this.scrolling) {
-                f = this.currentItemProgress;
-                if (f > 0.0f) {
-                    this.currentItemProgress = f - (((float) j) / 200.0f);
-                    if (this.currentItemProgress < 0.0f) {
-                        this.currentItemProgress = 0.0f;
-                    }
+                    fillImages(true, this.drawDx);
                     invalidate();
                 }
-            }
-            if (!this.scroll.isFinished()) {
-                if (this.scroll.computeScrollOffset()) {
-                    this.drawDx = this.scroll.getCurrX();
-                    updateAfterScroll();
-                    invalidate();
+                if (this.scrolling) {
+                    f = this.currentItemProgress;
+                    if (f > 0.0f) {
+                        this.currentItemProgress = f - (((float) j) / 200.0f);
+                        if (this.currentItemProgress < 0.0f) {
+                            this.currentItemProgress = 0.0f;
+                        }
+                        invalidate();
+                    }
                 }
-                if (this.scroll.isFinished()) {
-                    stopScrolling();
+                if (!this.scroll.isFinished()) {
+                    if (this.scroll.computeScrollOffset()) {
+                        this.drawDx = this.scroll.getCurrX();
+                        updateAfterScroll();
+                        invalidate();
+                    }
+                    if (this.scroll.isFinished()) {
+                        stopScrolling();
+                    }
                 }
             }
         }
