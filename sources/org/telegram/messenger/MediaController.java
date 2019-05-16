@@ -5627,131 +5627,85 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     /* JADX WARNING: Removed duplicated region for block: B:569:0x09c0 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:576:0x09d6 A:{SYNTHETIC, Splitter:B:576:0x09d6} */
     /* JADX WARNING: Removed duplicated region for block: B:582:0x09e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
     /* JADX WARNING: Removed duplicated region for block: B:563:0x09ae A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:565:0x09b3 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:567:0x09b8 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:569:0x09c0 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:576:0x09d6 A:{SYNTHETIC, Splitter:B:576:0x09d6} */
     /* JADX WARNING: Removed duplicated region for block: B:582:0x09e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
     /* JADX WARNING: Removed duplicated region for block: B:563:0x09ae A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:565:0x09b3 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:567:0x09b8 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:569:0x09c0 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:576:0x09d6 A:{SYNTHETIC, Splitter:B:576:0x09d6} */
     /* JADX WARNING: Removed duplicated region for block: B:582:0x09e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
     /* JADX WARNING: Removed duplicated region for block: B:563:0x09ae A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:565:0x09b3 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:567:0x09b8 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:569:0x09c0 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:576:0x09d6 A:{SYNTHETIC, Splitter:B:576:0x09d6} */
     /* JADX WARNING: Removed duplicated region for block: B:582:0x09e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
     /* JADX WARNING: Removed duplicated region for block: B:563:0x09ae A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:565:0x09b3 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:567:0x09b8 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:569:0x09c0 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:576:0x09d6 A:{SYNTHETIC, Splitter:B:576:0x09d6} */
     /* JADX WARNING: Removed duplicated region for block: B:582:0x09e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
     /* JADX WARNING: Removed duplicated region for block: B:619:0x0a90  */
     /* JADX WARNING: Removed duplicated region for block: B:621:0x0a95 A:{SYNTHETIC, Splitter:B:621:0x0a95} */
     /* JADX WARNING: Removed duplicated region for block: B:627:0x0aa2  */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
     /* JADX WARNING: Removed duplicated region for block: B:563:0x09ae A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:565:0x09b3 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:567:0x09b8 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:569:0x09c0 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:576:0x09d6 A:{SYNTHETIC, Splitter:B:576:0x09d6} */
     /* JADX WARNING: Removed duplicated region for block: B:582:0x09e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
     /* JADX WARNING: Removed duplicated region for block: B:563:0x09ae A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:565:0x09b3 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:567:0x09b8 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:569:0x09c0 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:576:0x09d6 A:{SYNTHETIC, Splitter:B:576:0x09d6} */
     /* JADX WARNING: Removed duplicated region for block: B:582:0x09e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
     /* JADX WARNING: Removed duplicated region for block: B:563:0x09ae A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:565:0x09b3 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:567:0x09b8 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:569:0x09c0 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:576:0x09d6 A:{SYNTHETIC, Splitter:B:576:0x09d6} */
     /* JADX WARNING: Removed duplicated region for block: B:582:0x09e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
     /* JADX WARNING: Removed duplicated region for block: B:563:0x09ae A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:565:0x09b3 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:567:0x09b8 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:569:0x09c0 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:576:0x09d6 A:{SYNTHETIC, Splitter:B:576:0x09d6} */
     /* JADX WARNING: Removed duplicated region for block: B:582:0x09e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
     /* JADX WARNING: Removed duplicated region for block: B:563:0x09ae A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:565:0x09b3 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:567:0x09b8 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:569:0x09c0 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:576:0x09d6 A:{SYNTHETIC, Splitter:B:576:0x09d6} */
     /* JADX WARNING: Removed duplicated region for block: B:582:0x09e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
     /* JADX WARNING: Removed duplicated region for block: B:604:0x0a43  */
     /* JADX WARNING: Removed duplicated region for block: B:606:0x0a48 A:{SYNTHETIC, Splitter:B:606:0x0a48} */
     /* JADX WARNING: Removed duplicated region for block: B:612:0x0a55  */
-    /* JADX WARNING: Removed duplicated region for block: B:586:0x0a04 A:{Splitter:B:46:0x00fc, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:586:0x0a04 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:46:0x00fc} */
     /* JADX WARNING: Removed duplicated region for block: B:604:0x0a43  */
     /* JADX WARNING: Removed duplicated region for block: B:606:0x0a48 A:{SYNTHETIC, Splitter:B:606:0x0a48} */
     /* JADX WARNING: Removed duplicated region for block: B:612:0x0a55  */
-    /* JADX WARNING: Removed duplicated region for block: B:619:0x0a90  */
-    /* JADX WARNING: Removed duplicated region for block: B:621:0x0a95 A:{SYNTHETIC, Splitter:B:621:0x0a95} */
-    /* JADX WARNING: Removed duplicated region for block: B:627:0x0aa2  */
-    /* JADX WARNING: Removed duplicated region for block: B:563:0x09ae A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:565:0x09b3 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:567:0x09b8 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:569:0x09c0 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:576:0x09d6 A:{SYNTHETIC, Splitter:B:576:0x09d6} */
-    /* JADX WARNING: Removed duplicated region for block: B:582:0x09e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
-    /* JADX WARNING: Removed duplicated region for block: B:563:0x09ae A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:565:0x09b3 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:567:0x09b8 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:569:0x09c0 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:576:0x09d6 A:{SYNTHETIC, Splitter:B:576:0x09d6} */
-    /* JADX WARNING: Removed duplicated region for block: B:582:0x09e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
-    /* JADX WARNING: Removed duplicated region for block: B:563:0x09ae A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:565:0x09b3 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:567:0x09b8 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:569:0x09c0 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:576:0x09d6 A:{SYNTHETIC, Splitter:B:576:0x09d6} */
-    /* JADX WARNING: Removed duplicated region for block: B:582:0x09e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
-    /* JADX WARNING: Removed duplicated region for block: B:563:0x09ae A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:565:0x09b3 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:567:0x09b8 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:569:0x09c0 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:576:0x09d6 A:{SYNTHETIC, Splitter:B:576:0x09d6} */
-    /* JADX WARNING: Removed duplicated region for block: B:582:0x09e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
-    /* JADX WARNING: Removed duplicated region for block: B:563:0x09ae A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:565:0x09b3 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:567:0x09b8 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:569:0x09c0 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:576:0x09d6 A:{SYNTHETIC, Splitter:B:576:0x09d6} */
-    /* JADX WARNING: Removed duplicated region for block: B:582:0x09e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
-    /* JADX WARNING: Removed duplicated region for block: B:563:0x09ae A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:565:0x09b3 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:567:0x09b8 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:569:0x09c0 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:576:0x09d6 A:{SYNTHETIC, Splitter:B:576:0x09d6} */
-    /* JADX WARNING: Removed duplicated region for block: B:582:0x09e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
     /* JADX WARNING: Removed duplicated region for block: B:619:0x0a90  */
     /* JADX WARNING: Removed duplicated region for block: B:621:0x0a95 A:{SYNTHETIC, Splitter:B:621:0x0a95} */
     /* JADX WARNING: Removed duplicated region for block: B:627:0x0aa2  */
@@ -5761,29 +5715,75 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     /* JADX WARNING: Removed duplicated region for block: B:569:0x09c0 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:576:0x09d6 A:{SYNTHETIC, Splitter:B:576:0x09d6} */
     /* JADX WARNING: Removed duplicated region for block: B:582:0x09e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
     /* JADX WARNING: Removed duplicated region for block: B:563:0x09ae A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:565:0x09b3 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:567:0x09b8 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:569:0x09c0 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:576:0x09d6 A:{SYNTHETIC, Splitter:B:576:0x09d6} */
     /* JADX WARNING: Removed duplicated region for block: B:582:0x09e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
     /* JADX WARNING: Removed duplicated region for block: B:563:0x09ae A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:565:0x09b3 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:567:0x09b8 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:569:0x09c0 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:576:0x09d6 A:{SYNTHETIC, Splitter:B:576:0x09d6} */
     /* JADX WARNING: Removed duplicated region for block: B:582:0x09e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:563:0x09ae A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:565:0x09b3 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:567:0x09b8 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:569:0x09c0 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:576:0x09d6 A:{SYNTHETIC, Splitter:B:576:0x09d6} */
+    /* JADX WARNING: Removed duplicated region for block: B:582:0x09e3  */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:563:0x09ae A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:565:0x09b3 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:567:0x09b8 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:569:0x09c0 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:576:0x09d6 A:{SYNTHETIC, Splitter:B:576:0x09d6} */
+    /* JADX WARNING: Removed duplicated region for block: B:582:0x09e3  */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:563:0x09ae A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:565:0x09b3 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:567:0x09b8 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:569:0x09c0 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:576:0x09d6 A:{SYNTHETIC, Splitter:B:576:0x09d6} */
+    /* JADX WARNING: Removed duplicated region for block: B:582:0x09e3  */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:619:0x0a90  */
+    /* JADX WARNING: Removed duplicated region for block: B:621:0x0a95 A:{SYNTHETIC, Splitter:B:621:0x0a95} */
+    /* JADX WARNING: Removed duplicated region for block: B:627:0x0aa2  */
+    /* JADX WARNING: Removed duplicated region for block: B:563:0x09ae A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:565:0x09b3 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:567:0x09b8 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:569:0x09c0 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:576:0x09d6 A:{SYNTHETIC, Splitter:B:576:0x09d6} */
+    /* JADX WARNING: Removed duplicated region for block: B:582:0x09e3  */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:563:0x09ae A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:565:0x09b3 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:567:0x09b8 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:569:0x09c0 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:576:0x09d6 A:{SYNTHETIC, Splitter:B:576:0x09d6} */
+    /* JADX WARNING: Removed duplicated region for block: B:582:0x09e3  */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:563:0x09ae A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:565:0x09b3 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:567:0x09b8 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:569:0x09c0 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:576:0x09d6 A:{SYNTHETIC, Splitter:B:576:0x09d6} */
+    /* JADX WARNING: Removed duplicated region for block: B:582:0x09e3  */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
     /* JADX WARNING: Removed duplicated region for block: B:604:0x0a43  */
     /* JADX WARNING: Removed duplicated region for block: B:606:0x0a48 A:{SYNTHETIC, Splitter:B:606:0x0a48} */
     /* JADX WARNING: Removed duplicated region for block: B:612:0x0a55  */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
     /* JADX WARNING: Removed duplicated region for block: B:604:0x0a43  */
     /* JADX WARNING: Removed duplicated region for block: B:606:0x0a48 A:{SYNTHETIC, Splitter:B:606:0x0a48} */
     /* JADX WARNING: Removed duplicated region for block: B:612:0x0a55  */
@@ -5793,35 +5793,35 @@ public class MediaController implements OnAudioFocusChangeListener, Notification
     /* JADX WARNING: Removed duplicated region for block: B:604:0x0a43  */
     /* JADX WARNING: Removed duplicated region for block: B:606:0x0a48 A:{SYNTHETIC, Splitter:B:606:0x0a48} */
     /* JADX WARNING: Removed duplicated region for block: B:612:0x0a55  */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
     /* JADX WARNING: Removed duplicated region for block: B:563:0x09ae A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:565:0x09b3 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:567:0x09b8 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:569:0x09c0 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:576:0x09d6 A:{SYNTHETIC, Splitter:B:576:0x09d6} */
     /* JADX WARNING: Removed duplicated region for block: B:582:0x09e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
     /* JADX WARNING: Removed duplicated region for block: B:563:0x09ae A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:565:0x09b3 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:567:0x09b8 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:569:0x09c0 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:576:0x09d6 A:{SYNTHETIC, Splitter:B:576:0x09d6} */
     /* JADX WARNING: Removed duplicated region for block: B:582:0x09e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
     /* JADX WARNING: Removed duplicated region for block: B:563:0x09ae A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:565:0x09b3 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:567:0x09b8 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:569:0x09c0 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:576:0x09d6 A:{SYNTHETIC, Splitter:B:576:0x09d6} */
     /* JADX WARNING: Removed duplicated region for block: B:582:0x09e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
     /* JADX WARNING: Removed duplicated region for block: B:563:0x09ae A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:565:0x09b3 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:567:0x09b8 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:569:0x09c0 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:576:0x09d6 A:{SYNTHETIC, Splitter:B:576:0x09d6} */
     /* JADX WARNING: Removed duplicated region for block: B:582:0x09e3  */
-    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{Splitter:B:121:0x0221, ExcHandler: all (th java.lang.Throwable), PHI: r13 } */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0a00 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:121:0x0221, PHI: r13 } */
     /* JADX WARNING: Removed duplicated region for block: B:563:0x09ae A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:565:0x09b3 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */
     /* JADX WARNING: Removed duplicated region for block: B:567:0x09b8 A:{Catch:{ Exception -> 0x09cc, all -> 0x0a00 }} */

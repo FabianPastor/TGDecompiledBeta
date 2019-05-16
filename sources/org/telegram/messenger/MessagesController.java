@@ -5574,12 +5574,12 @@ public class MessagesController implements NotificationCenterDelegate {
         return addDialogToFolder(arrayList, i, i2, null, j2);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:51:0x012a  */
-    /* JADX WARNING: Removed duplicated region for block: B:54:0x014c  */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x014a  */
-    /* JADX WARNING: Removed duplicated region for block: B:51:0x012a  */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x014a  */
-    /* JADX WARNING: Removed duplicated region for block: B:54:0x014c  */
+    /* JADX WARNING: Removed duplicated region for block: B:51:0x0129  */
+    /* JADX WARNING: Removed duplicated region for block: B:54:0x014b  */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x0149  */
+    /* JADX WARNING: Removed duplicated region for block: B:51:0x0129  */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x0149  */
+    /* JADX WARNING: Removed duplicated region for block: B:54:0x014b  */
     public int addDialogToFolder(java.util.ArrayList<java.lang.Long> r22, int r23, int r24, java.util.ArrayList<org.telegram.tgnet.TLRPC.TL_inputFolderPeer> r25, long r26) {
         /*
         r21 = this;
@@ -5592,7 +5592,7 @@ public class MessagesController implements NotificationCenterDelegate {
         r13 = 1;
         r14 = 0;
         r2 = (r26 > r10 ? 1 : (r26 == r10 ? 0 : -1));
-        if (r2 != 0) goto L_0x0119;
+        if (r2 != 0) goto L_0x0118;
     L_0x0013:
         r2 = r1.currentAccount;
         r2 = org.telegram.messenger.UserConfig.getInstance(r2);
@@ -5603,7 +5603,7 @@ public class MessagesController implements NotificationCenterDelegate {
         r5 = 0;
         r16 = 0;
     L_0x0026:
-        if (r5 >= r7) goto L_0x00b9;
+        if (r5 >= r7) goto L_0x00b8;
     L_0x0028:
         r6 = r22;
         r4 = r6.get(r5);
@@ -5637,30 +5637,29 @@ public class MessagesController implements NotificationCenterDelegate {
         r19 = r5;
         r20 = r7;
         r12 = 1;
-        goto L_0x00b0;
+        goto L_0x00af;
     L_0x0060:
         r4.folder_id = r8;
-        r2 = -1;
-        if (r0 != r2) goto L_0x006b;
-    L_0x0065:
-        r4.pinned = r14;
-        r4.pinnedNum = r14;
-        r12 = 1;
-        goto L_0x0070;
-    L_0x006b:
+        if (r0 <= 0) goto L_0x006a;
+    L_0x0064:
         r12 = 1;
         r4.pinned = r12;
         r4.pinnedNum = r0;
-    L_0x0070:
-        if (r3 != 0) goto L_0x0077;
-    L_0x0072:
+        goto L_0x006f;
+    L_0x006a:
+        r12 = 1;
+        r4.pinned = r14;
+        r4.pinnedNum = r14;
+    L_0x006f:
+        if (r3 != 0) goto L_0x0076;
+    L_0x0071:
         r3 = new boolean[r12];
         r1.ensureFolderDialogExists(r8, r3);
-    L_0x0077:
+    L_0x0076:
         r13 = r3;
         r2 = org.telegram.messenger.DialogObject.isSecretDialogId(r10);
-        if (r2 == 0) goto L_0x0091;
-    L_0x007e:
+        if (r2 == 0) goto L_0x0090;
+    L_0x007d:
         r2 = r1.currentAccount;
         r2 = org.telegram.messenger.MessagesStorage.getInstance(r2);
         r3 = 0;
@@ -5670,8 +5669,8 @@ public class MessagesController implements NotificationCenterDelegate {
         r20 = r7;
         r7 = r23;
         r2.setDialogsFolderId(r3, r4, r5, r7);
-        goto L_0x00ae;
-    L_0x0091:
+        goto L_0x00ad;
+    L_0x0090:
         r19 = r5;
         r20 = r7;
         r2 = new org.telegram.tgnet.TLRPC$TL_inputFolderPeer;
@@ -5684,21 +5683,21 @@ public class MessagesController implements NotificationCenterDelegate {
         r3.add(r2);
         r2 = r2.getObjectSize();
         r16 = r16 + r2;
-    L_0x00ae:
+    L_0x00ad:
         r3 = r13;
         r2 = 1;
-    L_0x00b0:
+    L_0x00af:
         r5 = r19 + 1;
         r7 = r20;
         r10 = 0;
         r13 = 1;
         goto L_0x0026;
-    L_0x00b9:
+    L_0x00b8:
         r12 = 1;
-        if (r2 != 0) goto L_0x00bd;
-    L_0x00bc:
+        if (r2 != 0) goto L_0x00bc;
+    L_0x00bb:
         return r14;
-    L_0x00bd:
+    L_0x00bc:
         r2 = 0;
         r1.sortDialogs(r2);
         r0 = r1.currentAccount;
@@ -5706,61 +5705,61 @@ public class MessagesController implements NotificationCenterDelegate {
         r4 = org.telegram.messenger.NotificationCenter.dialogsNeedReload;
         r5 = new java.lang.Object[r14];
         r0.postNotificationName(r4, r5);
-        if (r16 == 0) goto L_0x0113;
-    L_0x00d0:
-        r4 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0101 }
+        if (r16 == 0) goto L_0x0112;
+    L_0x00cf:
+        r4 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0100 }
         r0 = r16 + 12;
-        r4.<init>(r0);	 Catch:{ Exception -> 0x0101 }
+        r4.<init>(r0);	 Catch:{ Exception -> 0x0100 }
         r0 = 17;
-        r4.writeInt32(r0);	 Catch:{ Exception -> 0x00ff }
-        r4.writeInt32(r8);	 Catch:{ Exception -> 0x00ff }
-        r0 = r9.folder_peers;	 Catch:{ Exception -> 0x00ff }
-        r0 = r0.size();	 Catch:{ Exception -> 0x00ff }
-        r4.writeInt32(r0);	 Catch:{ Exception -> 0x00ff }
-        r0 = r9.folder_peers;	 Catch:{ Exception -> 0x00ff }
-        r0 = r0.size();	 Catch:{ Exception -> 0x00ff }
+        r4.writeInt32(r0);	 Catch:{ Exception -> 0x00fe }
+        r4.writeInt32(r8);	 Catch:{ Exception -> 0x00fe }
+        r0 = r9.folder_peers;	 Catch:{ Exception -> 0x00fe }
+        r0 = r0.size();	 Catch:{ Exception -> 0x00fe }
+        r4.writeInt32(r0);	 Catch:{ Exception -> 0x00fe }
+        r0 = r9.folder_peers;	 Catch:{ Exception -> 0x00fe }
+        r0 = r0.size();	 Catch:{ Exception -> 0x00fe }
         r2 = 0;
-    L_0x00ef:
-        if (r2 >= r0) goto L_0x0106;
-    L_0x00f1:
-        r5 = r9.folder_peers;	 Catch:{ Exception -> 0x00ff }
-        r5 = r5.get(r2);	 Catch:{ Exception -> 0x00ff }
-        r5 = (org.telegram.tgnet.TLRPC.TL_inputFolderPeer) r5;	 Catch:{ Exception -> 0x00ff }
-        r5.serializeToStream(r4);	 Catch:{ Exception -> 0x00ff }
+    L_0x00ee:
+        if (r2 >= r0) goto L_0x0105;
+    L_0x00f0:
+        r5 = r9.folder_peers;	 Catch:{ Exception -> 0x00fe }
+        r5 = r5.get(r2);	 Catch:{ Exception -> 0x00fe }
+        r5 = (org.telegram.tgnet.TLRPC.TL_inputFolderPeer) r5;	 Catch:{ Exception -> 0x00fe }
+        r5.serializeToStream(r4);	 Catch:{ Exception -> 0x00fe }
         r2 = r2 + 1;
-        goto L_0x00ef;
-    L_0x00ff:
+        goto L_0x00ee;
+    L_0x00fe:
         r0 = move-exception;
-        goto L_0x0103;
-    L_0x0101:
+        goto L_0x0102;
+    L_0x0100:
         r0 = move-exception;
         r4 = r2;
-    L_0x0103:
+    L_0x0102:
         org.telegram.messenger.FileLog.e(r0);
-    L_0x0106:
+    L_0x0105:
         r0 = r1.currentAccount;
         r0 = org.telegram.messenger.MessagesStorage.getInstance(r0);
         r4 = r0.createPendingTask(r4);
         r17 = r4;
-        goto L_0x0115;
-    L_0x0113:
+        goto L_0x0114;
+    L_0x0112:
         r17 = 0;
-    L_0x0115:
+    L_0x0114:
         r0 = r3;
         r2 = r17;
-        goto L_0x0122;
-    L_0x0119:
+        goto L_0x0121;
+    L_0x0118:
         r0 = r25;
         r2 = 0;
         r12 = 1;
         r9.folder_peers = r0;
         r0 = r2;
         r2 = r26;
-    L_0x0122:
+    L_0x0121:
         r4 = r9.folder_peers;
         r4 = r4.isEmpty();
-        if (r4 != 0) goto L_0x0148;
-    L_0x012a:
+        if (r4 != 0) goto L_0x0147;
+    L_0x0129:
         r4 = r1.currentAccount;
         r4 = org.telegram.tgnet.ConnectionsManager.getInstance(r4);
         r5 = new org.telegram.messenger.-$$Lambda$MessagesController$6NDlWW4LaPRt1E9GG1k86kJK_WU;
@@ -5773,18 +5772,18 @@ public class MessagesController implements NotificationCenterDelegate {
         r5 = 0;
         r7 = r23;
         r2.setDialogsFolderId(r3, r4, r5, r7);
-    L_0x0148:
-        if (r0 != 0) goto L_0x014c;
-    L_0x014a:
+    L_0x0147:
+        if (r0 != 0) goto L_0x014b;
+    L_0x0149:
         r12 = 0;
-        goto L_0x0152;
-    L_0x014c:
+        goto L_0x0151;
+    L_0x014b:
         r0 = r0[r14];
-        if (r0 == 0) goto L_0x0152;
-    L_0x0150:
+        if (r0 == 0) goto L_0x0151;
+    L_0x014f:
         r13 = 2;
         r12 = 2;
-    L_0x0152:
+    L_0x0151:
         return r12;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.addDialogToFolder(java.util.ArrayList, int, int, java.util.ArrayList, long):int");
