@@ -415,9 +415,9 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             return new Holder(groupCreateUserCell);
         }
 
-        /* JADX WARNING: Removed duplicated region for block: B:44:0x00ed  */
-        /* JADX WARNING: Removed duplicated region for block: B:44:0x00ed  */
-        /* JADX WARNING: Removed duplicated region for block: B:44:0x00ed  */
+        /* JADX WARNING: Removed duplicated region for block: B:44:0x00ee  */
+        /* JADX WARNING: Removed duplicated region for block: B:44:0x00ee  */
+        /* JADX WARNING: Removed duplicated region for block: B:44:0x00ee  */
         /* JADX WARNING: Missing block: B:21:0x0074, code skipped:
             if (r0.startsWith(r5.toString()) != false) goto L_0x0076;
      */
@@ -425,14 +425,14 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             /*
             r8 = this;
             r0 = r9.getItemViewType();
-            if (r0 == 0) goto L_0x00f2;
+            if (r0 == 0) goto L_0x00f3;
         L_0x0006:
             r9 = r9.itemView;
             r9 = (org.telegram.ui.Cells.GroupCreateUserCell) r9;
             r0 = r8.searching;
             r1 = 0;
             r2 = 1;
-            if (r0 == 0) goto L_0x00d0;
+            if (r0 == 0) goto L_0x00d1;
         L_0x0010:
             r0 = r8.searchResult;
             r0 = r0.size();
@@ -463,7 +463,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         L_0x0042:
             r3 = r1;
         L_0x0043:
-            if (r3 == 0) goto L_0x00d9;
+            if (r3 == 0) goto L_0x00da;
         L_0x0045:
             r4 = "@";
             if (r10 >= r0) goto L_0x007a;
@@ -471,11 +471,11 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             r0 = r8.searchResultNames;
             r10 = r0.get(r10);
             r10 = (java.lang.CharSequence) r10;
-            if (r10 == 0) goto L_0x00da;
+            if (r10 == 0) goto L_0x00db;
         L_0x0053:
             r0 = r3.username;
             r0 = android.text.TextUtils.isEmpty(r0);
-            if (r0 != 0) goto L_0x00da;
+            if (r0 != 0) goto L_0x00db;
         L_0x005b:
             r0 = r10.toString();
             r5 = new java.lang.StringBuilder;
@@ -485,18 +485,18 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             r5.append(r4);
             r4 = r5.toString();
             r0 = r0.startsWith(r4);
-            if (r0 == 0) goto L_0x00da;
+            if (r0 == 0) goto L_0x00db;
         L_0x0076:
             r7 = r1;
             r1 = r10;
             r10 = r7;
-            goto L_0x00da;
+            goto L_0x00db;
         L_0x007a:
-            if (r10 <= r0) goto L_0x00d9;
+            if (r10 <= r0) goto L_0x00da;
         L_0x007c:
             r10 = r3.username;
             r10 = android.text.TextUtils.isEmpty(r10);
-            if (r10 != 0) goto L_0x00d9;
+            if (r10 != 0) goto L_0x00da;
         L_0x0084:
             r10 = r8.searchAdapterHelper;
             r10 = r10.getLastFoundUsername();
@@ -505,18 +505,18 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         L_0x0090:
             r10 = r10.substring(r2);
         L_0x0094:
-            r0 = new android.text.SpannableStringBuilder;	 Catch:{ Exception -> 0x00cd }
-            r0.<init>();	 Catch:{ Exception -> 0x00cd }
-            r0.append(r4);	 Catch:{ Exception -> 0x00cd }
-            r4 = r3.username;	 Catch:{ Exception -> 0x00cd }
-            r0.append(r4);	 Catch:{ Exception -> 0x00cd }
-            r4 = r3.username;	 Catch:{ Exception -> 0x00cd }
-            r4 = r4.toLowerCase();	 Catch:{ Exception -> 0x00cd }
-            r4 = r4.indexOf(r10);	 Catch:{ Exception -> 0x00cd }
+            r0 = new android.text.SpannableStringBuilder;	 Catch:{ Exception -> 0x00ce }
+            r0.<init>();	 Catch:{ Exception -> 0x00ce }
+            r0.append(r4);	 Catch:{ Exception -> 0x00ce }
+            r4 = r3.username;	 Catch:{ Exception -> 0x00ce }
+            r0.append(r4);	 Catch:{ Exception -> 0x00ce }
+            r4 = r3.username;	 Catch:{ Exception -> 0x00ce }
+            r4 = r4.toLowerCase();	 Catch:{ Exception -> 0x00ce }
+            r4 = r4.indexOf(r10);	 Catch:{ Exception -> 0x00ce }
             r5 = -1;
-            if (r4 == r5) goto L_0x00ca;
+            if (r4 == r5) goto L_0x00cb;
         L_0x00ae:
-            r10 = r10.length();	 Catch:{ Exception -> 0x00cd }
+            r10 = r10.length();	 Catch:{ Exception -> 0x00ce }
             if (r4 != 0) goto L_0x00b7;
         L_0x00b4:
             r10 = r10 + 1;
@@ -524,53 +524,53 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         L_0x00b7:
             r4 = r4 + 1;
         L_0x00b9:
-            r5 = new android.text.style.ForegroundColorSpan;	 Catch:{ Exception -> 0x00cd }
+            r5 = new android.text.style.ForegroundColorSpan;	 Catch:{ Exception -> 0x00ce }
             r6 = "windowBackgroundWhiteBlueText4";
-            r6 = org.telegram.ui.ActionBar.Theme.getColor(r6);	 Catch:{ Exception -> 0x00cd }
-            r5.<init>(r6);	 Catch:{ Exception -> 0x00cd }
+            r6 = org.telegram.ui.ActionBar.Theme.getColor(r6);	 Catch:{ Exception -> 0x00ce }
+            r5.<init>(r6);	 Catch:{ Exception -> 0x00ce }
             r10 = r10 + r4;
             r6 = 33;
-            r0.setSpan(r5, r4, r10, r6);	 Catch:{ Exception -> 0x00cd }
-        L_0x00ca:
+            r0.setSpan(r5, r4, r10, r6);	 Catch:{ Exception -> 0x00ce }
+        L_0x00cb:
             r10 = r1;
             r1 = r0;
-            goto L_0x00da;
-        L_0x00cd:
+            goto L_0x00db;
+        L_0x00ce:
             r10 = r3.username;
             goto L_0x0076;
-        L_0x00d0:
+        L_0x00d1:
             r0 = r8.contacts;
             r10 = r0.get(r10);
             r3 = r10;
             r3 = (org.telegram.tgnet.TLRPC.User) r3;
-        L_0x00d9:
-            r10 = r1;
         L_0x00da:
+            r10 = r1;
+        L_0x00db:
             r9.setUser(r3, r10, r1);
             r10 = org.telegram.ui.GroupCreateActivity.this;
             r10 = r10.selectedContacts;
             r0 = r3.id;
             r10 = r10.indexOfKey(r0);
             r0 = 0;
-            if (r10 < 0) goto L_0x00ed;
-        L_0x00ec:
-            goto L_0x00ee;
+            if (r10 < 0) goto L_0x00ee;
         L_0x00ed:
-            r2 = 0;
+            goto L_0x00ef;
         L_0x00ee:
+            r2 = 0;
+        L_0x00ef:
             r9.setChecked(r2, r0);
-            goto L_0x0106;
-        L_0x00f2:
+            goto L_0x0107;
+        L_0x00f3:
             r9 = r9.itemView;
             r9 = (org.telegram.ui.Cells.GroupCreateSectionCell) r9;
             r10 = r8.searching;
-            if (r10 == 0) goto L_0x0106;
-        L_0x00fa:
-            r10 = NUM; // 0x7f0d047c float:1.8744443E38 double:1.0531303447E-314;
+            if (r10 == 0) goto L_0x0107;
+        L_0x00fb:
+            r10 = NUM; // 0x7f0d0481 float:1.8744453E38 double:1.053130347E-314;
             r0 = "GlobalSearch";
             r10 = org.telegram.messenger.LocaleController.getString(r0, r10);
             r9.setText(r10);
-        L_0x0106:
+        L_0x0107:
             return;
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.GroupCreateActivity$GroupCreateAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");

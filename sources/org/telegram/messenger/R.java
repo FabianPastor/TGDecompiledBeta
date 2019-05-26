@@ -2032,6 +2032,7 @@ public final class R {
         public static final int AreYouSureLogout = NUM;
         public static final int AreYouSureRegistration = NUM;
         public static final int AreYouSureSecretChat = NUM;
+        public static final int AreYouSureSecretChatTitle = NUM;
         public static final int AreYouSureSessions = NUM;
         public static final int AreYouSureShareMyContactInfo = NUM;
         public static final int AreYouSureShareMyContactInfoBot = NUM;
@@ -2355,6 +2356,8 @@ public final class R {
         public static final int ChatGallery = NUM;
         public static final int ChatHints = NUM;
         public static final int ChatHintsDelete = NUM;
+        public static final int ChatHintsDeleteAlert = NUM;
+        public static final int ChatHintsDeleteAlertTitle = NUM;
         public static final int ChatHistory = NUM;
         public static final int ChatHistoryHidden = NUM;
         public static final int ChatHistoryHiddenInfo = NUM;
@@ -2437,6 +2440,8 @@ public final class R {
         public static final int ClearOtherWebSessionsHelp = NUM;
         public static final int ClearRecentEmoji = NUM;
         public static final int ClearSearch = NUM;
+        public static final int ClearSearchAlert = NUM;
+        public static final int ClearSearchAlertTitle = NUM;
         public static final int Close = NUM;
         public static final int CloseEditor = NUM;
         public static final int Code = NUM;
@@ -3736,6 +3741,7 @@ public final class R {
         public static final int PinMessageAlert = NUM;
         public static final int PinMessageAlertChannel = NUM;
         public static final int PinMessageAlertChat = NUM;
+        public static final int PinMessageAlertTitle = NUM;
         public static final int PinNotify = NUM;
         public static final int PinToTop = NUM;
         public static final int PinToTopLimitReached = NUM;
@@ -3874,8 +3880,10 @@ public final class R {
         public static final int ResetAllNotifications = NUM;
         public static final int ResetAutomaticMediaDownload = NUM;
         public static final int ResetAutomaticMediaDownloadAlert = NUM;
+        public static final int ResetAutomaticMediaDownloadAlertTitle = NUM;
         public static final int ResetChatBackgrounds = NUM;
         public static final int ResetChatBackgroundsAlert = NUM;
+        public static final int ResetChatBackgroundsAlertTitle = NUM;
         public static final int ResetChatBackgroundsInfo = NUM;
         public static final int ResetMyAccount = NUM;
         public static final int ResetMyAccountText = NUM;
@@ -3886,6 +3894,7 @@ public final class R {
         public static final int ResetNotificationsText = NUM;
         public static final int ResetStatistics = NUM;
         public static final int ResetStatisticsAlert = NUM;
+        public static final int ResetStatisticsAlertTitle = NUM;
         public static final int RestoreEmailSent = NUM;
         public static final int RestoreEmailSentInfo = NUM;
         public static final int RestoreEmailTrouble = NUM;
@@ -4077,6 +4086,7 @@ public final class R {
         public static final int SortedByName = NUM;
         public static final int Sound = NUM;
         public static final int SoundDefault = NUM;
+        public static final int Start = NUM;
         public static final int StartEncryptedChat = NUM;
         public static final int StartMessaging = NUM;
         public static final int StartText = NUM;
@@ -4216,6 +4226,7 @@ public final class R {
         public static final int UnpinFromTop = NUM;
         public static final int UnpinMessage = NUM;
         public static final int UnpinMessageAlert = NUM;
+        public static final int UnpinMessageAlertTitle = NUM;
         public static final int UnreadMessages = NUM;
         public static final int UnsupportedAttachment = NUM;
         public static final int UnsupportedMedia = NUM;

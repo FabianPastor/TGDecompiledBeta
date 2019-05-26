@@ -908,9 +908,10 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                     String str = "NoSound";
                     String str2 = "android.intent.extra.ringtone.EXISTING_URI";
                     String str3 = "android.intent.extra.ringtone.DEFAULT_URI";
-                    String str4 = "android.intent.extra.ringtone.SHOW_DEFAULT";
-                    String str5 = "android.intent.extra.ringtone.TYPE";
-                    String str6 = "android.intent.action.RINGTONE_PICKER";
+                    String str4 = "android.intent.extra.ringtone.SHOW_SILENT";
+                    String str5 = "android.intent.extra.ringtone.SHOW_DEFAULT";
+                    String str6 = "android.intent.extra.ringtone.TYPE";
+                    String str7 = "android.intent.action.RINGTONE_PICKER";
                     Parcelable parcelable = null;
                     Intent intent;
                     Uri uri;
@@ -920,8 +921,9 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                     ProfileNotificationsActivity profileNotificationsActivity2;
                     if (i == ProfileNotificationsActivity.this.soundRow) {
                         try {
-                            intent = new Intent(str6);
-                            intent.putExtra(str5, 2);
+                            intent = new Intent(str7);
+                            intent.putExtra(str6, 2);
+                            intent.putExtra(str5, true);
                             intent.putExtra(str4, true);
                             intent.putExtra(str3, RingtoneManager.getDefaultUri(2));
                             notificationsSettings = MessagesController.getNotificationsSettings(ProfileNotificationsActivity.this.currentAccount);
@@ -941,8 +943,9 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         }
                     } else if (i == ProfileNotificationsActivity.this.ringtoneRow) {
                         try {
-                            intent = new Intent(str6);
-                            intent.putExtra(str5, 1);
+                            intent = new Intent(str7);
+                            intent.putExtra(str6, 1);
+                            intent.putExtra(str5, true);
                             intent.putExtra(str4, true);
                             intent.putExtra(str3, RingtoneManager.getDefaultUri(1));
                             notificationsSettings = MessagesController.getNotificationsSettings(ProfileNotificationsActivity.this.currentAccount);

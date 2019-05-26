@@ -129,9 +129,9 @@ public class DialogsAdapter extends SelectionAdapter {
                 i += MessagesController.getInstance(this.currentAccount).hintDialogs.size() + 2;
             } else if (this.dialogsType == 0 && size == 0 && this.folderId == 0) {
                 if (ContactsController.getInstance(this.currentAccount).contacts.isEmpty() && ContactsController.getInstance(this.currentAccount).isLoadingContacts()) {
+                    this.currentCount = 0;
                     return 0;
-                }
-                if (!ContactsController.getInstance(this.currentAccount).contacts.isEmpty()) {
+                } else if (!ContactsController.getInstance(this.currentAccount).contacts.isEmpty()) {
                     i += ContactsController.getInstance(this.currentAccount).contacts.size() + 2;
                     this.showContacts = true;
                 }
@@ -145,8 +145,10 @@ public class DialogsAdapter extends SelectionAdapter {
             this.currentCount = i;
             return i;
         } else if (this.folderId == 1 && this.showArchiveHint) {
+            this.currentCount = 2;
             return 2;
         } else {
+            this.currentCount = 0;
             return 0;
         }
     }
@@ -195,7 +197,7 @@ public class DialogsAdapter extends SelectionAdapter {
         View view = viewHolder.itemView;
         if (view instanceof DialogCell) {
             DialogCell dialogCell = (DialogCell) view;
-            dialogCell.onReorderStateChanged(this.isReordering);
+            dialogCell.onReorderStateChanged(this.isReordering, false);
             dialogCell.setDialogIndex(fixPosition(viewHolder.getAdapterPosition()));
             dialogCell.checkCurrentDialogIndex(this.dialogsListFrozen);
             dialogCell.setChecked(this.selectedDialogs.contains(Long.valueOf(dialogCell.getDialogId())), false);
@@ -215,11 +217,12 @@ public class DialogsAdapter extends SelectionAdapter {
 
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View dialogCell;
+        View anonymousClass1;
         String str = "windowBackgroundGrayShadow";
         String str2 = "windowBackgroundGray";
         switch (i) {
             case 0:
-                dialogCell = new DialogCell(this.mContext, true);
+                dialogCell = new DialogCell(this.mContext, true, false);
                 break;
             case 1:
                 dialogCell = new LoadingCell(this.mContext);
@@ -241,7 +244,7 @@ public class DialogsAdapter extends SelectionAdapter {
                 textView.setOnClickListener(new -$$Lambda$DialogsAdapter$9rZHEUZrGiCwZ807CAFufwsMqa0(this));
                 break;
             case 3:
-                View anonymousClass1 = new FrameLayout(this.mContext) {
+                anonymousClass1 = new FrameLayout(this.mContext) {
                     /* Access modifiers changed, original: protected */
                     public void onMeasure(int i, int i2) {
                         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(12.0f), NUM));
@@ -251,7 +254,6 @@ public class DialogsAdapter extends SelectionAdapter {
                 View view = new View(this.mContext);
                 view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, str));
                 anonymousClass1.addView(view, LayoutHelper.createFrame(-1, -1.0f));
-                dialogCell = anonymousClass1;
                 break;
             case 4:
                 dialogCell = new DialogMeUrlCell(this.mContext);
@@ -267,11 +269,10 @@ public class DialogsAdapter extends SelectionAdapter {
                 dialogCell.setText(LocaleController.getString("YourContacts", NUM));
                 break;
             case 8:
-                View shadowSectionCell = new ShadowSectionCell(this.mContext);
+                anonymousClass1 = new ShadowSectionCell(this.mContext);
                 CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor(str2)), Theme.getThemedDrawable(this.mContext, NUM, str));
                 combinedDrawable.setFullsize(true);
-                shadowSectionCell.setBackgroundDrawable(combinedDrawable);
-                dialogCell = shadowSectionCell;
+                anonymousClass1.setBackgroundDrawable(combinedDrawable);
                 break;
             case 9:
                 dialogCell = this.archiveHintCell;
@@ -315,6 +316,7 @@ public class DialogsAdapter extends SelectionAdapter {
                 };
                 break;
         }
+        dialogCell = anonymousClass1;
         dialogCell.setLayoutParams(new LayoutParams(-1, i == 5 ? -1 : -2));
         return new Holder(dialogCell);
     }

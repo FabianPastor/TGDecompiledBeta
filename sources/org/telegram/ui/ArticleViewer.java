@@ -13560,8 +13560,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         createMenu.addItem(2, NUM);
         this.menuItem = createMenu.addItem(0, NUM);
         this.menuItem.setLayoutInScreen(true);
-        this.menuItem.addSubItem(3, NUM, LocaleController.getString("OpenInExternalApp", NUM)).setTextColor(-328966);
-        this.menuItem.addSubItem(1, NUM, LocaleController.getString("SaveToGallery", NUM)).setTextColor(-328966);
+        this.menuItem.addSubItem(3, NUM, LocaleController.getString("OpenInExternalApp", NUM)).setColors(-328966, -328966);
+        this.menuItem.addSubItem(1, NUM, LocaleController.getString("SaveToGallery", NUM)).setColors(-328966, -328966);
         this.menuItem.redrawPopup(-NUM);
         this.bottomLayout = new FrameLayout(this.parentActivity);
         this.bottomLayout.setBackgroundColor(NUM);
@@ -14048,20 +14048,20 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:42:0x0103  */
     /* JADX WARNING: Removed duplicated region for block: B:41:0x00fb  */
     /* JADX WARNING: Removed duplicated region for block: B:45:0x010c  */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x018e  */
-    /* JADX WARNING: Removed duplicated region for block: B:58:0x0147  */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x021f  */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x015e A:{Catch:{ Exception -> 0x0189 }} */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:62:0x0158 */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x018f  */
+    /* JADX WARNING: Removed duplicated region for block: B:58:0x0148  */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x0220  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x015f A:{Catch:{ Exception -> 0x018a }} */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:62:0x0159 */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Can't wrap try/catch for region: R(6:58|(2:60|61)|62|63|(2:65|(1:67))|68) */
-    /* JADX WARNING: Missing block: B:69:0x0189, code skipped:
+    /* JADX WARNING: Missing block: B:69:0x018a, code skipped:
             r12 = move-exception;
      */
-    /* JADX WARNING: Missing block: B:70:0x018a, code skipped:
+    /* JADX WARNING: Missing block: B:70:0x018b, code skipped:
             org.telegram.messenger.FileLog.e(r12);
      */
-    /* JADX WARNING: Missing block: B:71:0x018d, code skipped:
+    /* JADX WARNING: Missing block: B:71:0x018e, code skipped:
             return false;
      */
     private boolean open(org.telegram.messenger.MessageObject r12, org.telegram.tgnet.TLRPC.WebPage r13, java.lang.String r14, boolean r15) {
@@ -14069,19 +14069,19 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r11 = this;
         r0 = r11.parentActivity;
         r1 = 0;
-        if (r0 == 0) goto L_0x0225;
+        if (r0 == 0) goto L_0x0226;
     L_0x0005:
         r0 = r11.isVisible;
         if (r0 == 0) goto L_0x000d;
     L_0x0009:
         r0 = r11.collapsed;
-        if (r0 == 0) goto L_0x0225;
+        if (r0 == 0) goto L_0x0226;
     L_0x000d:
         if (r12 != 0) goto L_0x0013;
     L_0x000f:
         if (r13 != 0) goto L_0x0013;
     L_0x0011:
-        goto L_0x0225;
+        goto L_0x0226;
     L_0x0013:
         if (r12 == 0) goto L_0x001b;
     L_0x0015:
@@ -14258,48 +14258,48 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r11.lastInsets = r3;
         r12 = r11.isVisible;
         r14 = "window";
-        if (r12 != 0) goto L_0x018e;
-    L_0x0147:
+        if (r12 != 0) goto L_0x018f;
+    L_0x0148:
         r12 = r11.parentActivity;
         r12 = r12.getSystemService(r14);
         r12 = (android.view.WindowManager) r12;
         r14 = r11.attachedToWindow;
-        if (r14 == 0) goto L_0x0158;
-    L_0x0153:
-        r14 = r11.windowView;	 Catch:{ Exception -> 0x0158 }
-        r12.removeView(r14);	 Catch:{ Exception -> 0x0158 }
-    L_0x0158:
-        r14 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0189 }
+        if (r14 == 0) goto L_0x0159;
+    L_0x0154:
+        r14 = r11.windowView;	 Catch:{ Exception -> 0x0159 }
+        r12.removeView(r14);	 Catch:{ Exception -> 0x0159 }
+    L_0x0159:
+        r14 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x018a }
         r15 = 21;
-        if (r14 < r15) goto L_0x016f;
-    L_0x015e:
-        r14 = r11.windowLayoutParams;	 Catch:{ Exception -> 0x0189 }
+        if (r14 < r15) goto L_0x0170;
+    L_0x015f:
+        r14 = r11.windowLayoutParams;	 Catch:{ Exception -> 0x018a }
         r15 = -NUM; // 0xfffffffvar_ float:-9.2194E-41 double:NaN;
-        r14.flags = r15;	 Catch:{ Exception -> 0x0189 }
-        r14 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0189 }
+        r14.flags = r15;	 Catch:{ Exception -> 0x018a }
+        r14 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x018a }
         r15 = 28;
-        if (r14 < r15) goto L_0x016f;
-    L_0x016b:
-        r14 = r11.windowLayoutParams;	 Catch:{ Exception -> 0x0189 }
-        r14.layoutInDisplayCutoutMode = r4;	 Catch:{ Exception -> 0x0189 }
-    L_0x016f:
-        r14 = r11.windowLayoutParams;	 Catch:{ Exception -> 0x0189 }
-        r15 = r14.flags;	 Catch:{ Exception -> 0x0189 }
+        if (r14 < r15) goto L_0x0170;
+    L_0x016c:
+        r14 = r11.windowLayoutParams;	 Catch:{ Exception -> 0x018a }
+        r14.layoutInDisplayCutoutMode = r4;	 Catch:{ Exception -> 0x018a }
+    L_0x0170:
+        r14 = r11.windowLayoutParams;	 Catch:{ Exception -> 0x018a }
+        r15 = r14.flags;	 Catch:{ Exception -> 0x018a }
         r15 = r15 | 1032;
-        r14.flags = r15;	 Catch:{ Exception -> 0x0189 }
-        r14 = r11.windowView;	 Catch:{ Exception -> 0x0189 }
-        r14.setFocusable(r1);	 Catch:{ Exception -> 0x0189 }
-        r14 = r11.containerView;	 Catch:{ Exception -> 0x0189 }
-        r14.setFocusable(r1);	 Catch:{ Exception -> 0x0189 }
-        r14 = r11.windowView;	 Catch:{ Exception -> 0x0189 }
-        r15 = r11.windowLayoutParams;	 Catch:{ Exception -> 0x0189 }
-        r12.addView(r14, r15);	 Catch:{ Exception -> 0x0189 }
-        goto L_0x01a5;
-    L_0x0189:
+        r14.flags = r15;	 Catch:{ Exception -> 0x018a }
+        r14 = r11.windowView;	 Catch:{ Exception -> 0x018a }
+        r14.setFocusable(r1);	 Catch:{ Exception -> 0x018a }
+        r14 = r11.containerView;	 Catch:{ Exception -> 0x018a }
+        r14.setFocusable(r1);	 Catch:{ Exception -> 0x018a }
+        r14 = r11.windowView;	 Catch:{ Exception -> 0x018a }
+        r15 = r11.windowLayoutParams;	 Catch:{ Exception -> 0x018a }
+        r12.addView(r14, r15);	 Catch:{ Exception -> 0x018a }
+        goto L_0x01a6;
+    L_0x018a:
         r12 = move-exception;
         org.telegram.messenger.FileLog.e(r12);
         return r1;
-    L_0x018e:
+    L_0x018f:
         r12 = r11.windowLayoutParams;
         r15 = r12.flags;
         r15 = r15 & -17;
@@ -14310,7 +14310,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r14 = r11.windowView;
         r15 = r11.windowLayoutParams;
         r12.updateViewLayout(r14, r15);
-    L_0x01a5:
+    L_0x01a6:
         r11.isVisible = r4;
         r11.animationInProgress = r4;
         r12 = r11.windowView;
@@ -14361,13 +14361,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r13);
         r12 = android.os.Build.VERSION.SDK_INT;
         r13 = 18;
-        if (r12 < r13) goto L_0x0224;
-    L_0x021f:
+        if (r12 < r13) goto L_0x0225;
+    L_0x0220:
         r12 = r11.containerView;
         r12.setLayerType(r5, r3);
-    L_0x0224:
-        return r4;
     L_0x0225:
+        return r4;
+    L_0x0226:
         return r1;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.open(org.telegram.messenger.MessageObject, org.telegram.tgnet.TLRPC$WebPage, java.lang.String, boolean):boolean");
@@ -14961,7 +14961,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x004f:
         r0 = r5.parentActivity;	 Catch:{ Exception -> 0x0098 }
         r2 = "ShareFile";
-        r3 = NUM; // 0x7f0d08ed float:1.874675E38 double:1.0531309065E-314;
+        r3 = NUM; // 0x7f0d08f6 float:1.8746768E38 double:1.053130911E-314;
         r2 = org.telegram.messenger.LocaleController.getString(r2, r3);	 Catch:{ Exception -> 0x0098 }
         r1 = android.content.Intent.createChooser(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r2 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
@@ -14976,12 +14976,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r0.setTitle(r1);	 Catch:{ Exception -> 0x0098 }
         r1 = "OK";
-        r2 = NUM; // 0x7f0d0674 float:1.8745465E38 double:1.0531305937E-314;
+        r2 = NUM; // 0x7f0d0679 float:1.8745476E38 double:1.053130596E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r2 = 0;
         r0.setPositiveButton(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r1 = "PleaseDownload";
-        r2 = NUM; // 0x7f0d07d5 float:1.8746181E38 double:1.053130768E-314;
+        r2 = NUM; // 0x7f0d07db float:1.8746194E38 double:1.053130771E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r0.setMessage(r1);	 Catch:{ Exception -> 0x0098 }
         r0 = r0.create();	 Catch:{ Exception -> 0x0098 }
@@ -15500,7 +15500,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0 = r6.menuItem;
         r0.hideSubItem(r9);
         r0 = r6.actionBar;
-        r1 = NUM; // 0x7f0d0137 float:1.8742746E38 double:1.053129931E-314;
+        r1 = NUM; // 0x7f0d0138 float:1.8742748E38 double:1.0531299317E-314;
         r2 = "AttachGif";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
@@ -15515,21 +15515,21 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         if (r14 == 0) goto L_0x00ef;
     L_0x00e0:
         r0 = r6.actionBar;
-        r1 = NUM; // 0x7f0d0148 float:1.874278E38 double:1.0531299396E-314;
+        r1 = NUM; // 0x7f0d0149 float:1.8742782E38 double:1.05312994E-314;
         r2 = "AttachVideo";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
         goto L_0x0123;
     L_0x00ef:
         r0 = r6.actionBar;
-        r1 = NUM; // 0x7f0d0142 float:1.8742768E38 double:1.0531299366E-314;
+        r1 = NUM; // 0x7f0d0143 float:1.874277E38 double:1.053129937E-314;
         r2 = "AttachPhoto";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
         goto L_0x0123;
     L_0x00fe:
         r0 = r6.actionBar;
-        r1 = NUM; // 0x7f0d0676 float:1.874547E38 double:1.0531305947E-314;
+        r1 = NUM; // 0x7f0d067b float:1.874548E38 double:1.053130597E-314;
         r2 = new java.lang.Object[r10];
         r3 = r6.currentIndex;
         r3 = r3 + r9;

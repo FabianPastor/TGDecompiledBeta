@@ -293,6 +293,7 @@
     <string name="AreYouSureLogout">Are you sure you want to log out?\10\10Note that you can seamlessly use Telegram on all your devices at once.\10\10Remember, logging out kills all your Secret Chats.</string>
     <string name="AreYouSureRegistration">Are you sure you want to cancel registration?</string>
     <string name="AreYouSureSecretChat">Are you sure you want to start a secret chat?</string>
+    <string name="AreYouSureSecretChatTitle">Secret chat</string>
     <string name="AreYouSureSessions">Are you sure you want to terminate all other sessions?</string>
     <string name="AreYouSureShareMyContactInfo">Are you sure you want to share your phone number?</string>
     <string name="AreYouSureShareMyContactInfoBot">The bot will know your phone number. This can be useful for integration with other services.</string>
@@ -616,6 +617,8 @@
     <string name="ChatGallery">Gallery</string>
     <string name="ChatHints">People</string>
     <string name="ChatHintsDelete">Delete %1$s from suggestions?</string>
+    <string name="ChatHintsDeleteAlert">Are you sure you want to remove **%1$s** from suggestions?</string>
+    <string name="ChatHintsDeleteAlertTitle">Remove suggestion</string>
     <string name="ChatHistory">Chat history for new members</string>
     <string name="ChatHistoryHidden">Hidden</string>
     <string name="ChatHistoryHiddenInfo">New members won\'t see earlier messages.</string>
@@ -698,6 +701,8 @@
     <string name="ClearOtherWebSessionsHelp">You can log in on websites that support signing in with Telegram.</string>
     <string name="ClearRecentEmoji">Clear recent emoji?</string>
     <string name="ClearSearch">Clear search history?</string>
+    <string name="ClearSearchAlert">Are you sure you want to clear your search history?</string>
+    <string name="ClearSearchAlertTitle">Clear search history</string>
     <string name="Close">Close</string>
     <string name="CloseEditor">CLOSE EDITOR</string>
     <string name="Code">Code</string>
@@ -1997,6 +2002,7 @@
     <string name="PinMessageAlert">Do you want to pin this message in this group?</string>
     <string name="PinMessageAlertChannel">Do you want to pin this message in this channel?</string>
     <string name="PinMessageAlertChat">Do you want to pin this message at the top of the chat?</string>
+    <string name="PinMessageAlertTitle">Pin message</string>
     <string name="PinNotify">Notify all members</string>
     <string name="PinToTop">Pin to top</string>
     <string name="PinToTopLimitReached">Sorry, you can pin no more than %1$s to the top.</string>
@@ -2135,8 +2141,10 @@
     <string name="ResetAllNotifications">Reset All Notifications</string>
     <string name="ResetAutomaticMediaDownload">Reset Auto-Download Settings</string>
     <string name="ResetAutomaticMediaDownloadAlert">Are you sure you want to reset auto-download settings?</string>
+    <string name="ResetAutomaticMediaDownloadAlertTitle">Reset settings</string>
     <string name="ResetChatBackgrounds">Reset Chat Backgrounds</string>
     <string name="ResetChatBackgroundsAlert">Are you sure you want to reset all chat backgrounds?</string>
+    <string name="ResetChatBackgroundsAlertTitle">Reset chat backgrounds</string>
     <string name="ResetChatBackgroundsInfo">Remove all uploaded chat backgrounds and restore the pre-installed ones.</string>
     <string name="ResetMyAccount">RESET MY ACCOUNT</string>
     <string name="ResetMyAccountText">You will lose all your chats and messages, along with any media and files you shared, if you proceed with resetting your account.</string>
@@ -2147,6 +2155,7 @@
     <string name="ResetNotificationsText">Reset all notification settings to default</string>
     <string name="ResetStatistics">Reset Statistics</string>
     <string name="ResetStatisticsAlert">Do you want to reset your usage statistics?</string>
+    <string name="ResetStatisticsAlertTitle">Reset statistics</string>
     <string name="RestoreEmailSent">We have sent a recovery code to the email address you provided:\10\10%1$s</string>
     <string name="RestoreEmailSentInfo">Please check your email and enter the 6-digit code we sent you.</string>
     <string name="RestoreEmailTrouble">Having trouble accessing your email %1$s?</string>
@@ -2338,6 +2347,7 @@
     <string name="SortedByName">Sorted by name</string>
     <string name="Sound">Sound</string>
     <string name="SoundDefault">Default</string>
+    <string name="Start">Start</string>
     <string name="StartEncryptedChat">Start Secret Chat</string>
     <string name="StartMessaging">Start Messaging</string>
     <string name="StartText">Please confirm your country code and enter your phone number.</string>
@@ -2477,6 +2487,7 @@
     <string name="UnpinFromTop">Unpin from top</string>
     <string name="UnpinMessage">Unpin</string>
     <string name="UnpinMessageAlert">Do you want to unpin this message?</string>
+    <string name="UnpinMessageAlertTitle">Unpin message</string>
     <string name="UnreadMessages">Unread Messages</string>
     <string name="UnsupportedAttachment">Unsupported attachment</string>
     <string name="UnsupportedMedia">This message is not supported on your version of Telegram. Update the app to view: https://telegram.org/update</string>

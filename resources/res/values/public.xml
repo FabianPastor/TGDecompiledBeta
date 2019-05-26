@@ -1993,6 +1993,7 @@
     <public type="string" name="AreYouSureLogout" id="NUM" />
     <public type="string" name="AreYouSureRegistration" id="NUM" />
     <public type="string" name="AreYouSureSecretChat" id="NUM" />
+    <public type="string" name="AreYouSureSecretChatTitle" id="NUM" />
     <public type="string" name="AreYouSureSessions" id="NUM" />
     <public type="string" name="AreYouSureShareMyContactInfo" id="NUM" />
     <public type="string" name="AreYouSureShareMyContactInfoBot" id="NUM" />
@@ -2316,6 +2317,8 @@
     <public type="string" name="ChatGallery" id="NUM" />
     <public type="string" name="ChatHints" id="NUM" />
     <public type="string" name="ChatHintsDelete" id="NUM" />
+    <public type="string" name="ChatHintsDeleteAlert" id="NUM" />
+    <public type="string" name="ChatHintsDeleteAlertTitle" id="NUM" />
     <public type="string" name="ChatHistory" id="NUM" />
     <public type="string" name="ChatHistoryHidden" id="NUM" />
     <public type="string" name="ChatHistoryHiddenInfo" id="NUM" />
@@ -2398,6 +2401,8 @@
     <public type="string" name="ClearOtherWebSessionsHelp" id="NUM" />
     <public type="string" name="ClearRecentEmoji" id="NUM" />
     <public type="string" name="ClearSearch" id="NUM" />
+    <public type="string" name="ClearSearchAlert" id="NUM" />
+    <public type="string" name="ClearSearchAlertTitle" id="NUM" />
     <public type="string" name="Close" id="NUM" />
     <public type="string" name="CloseEditor" id="NUM" />
     <public type="string" name="Code" id="NUM" />
@@ -3697,6 +3702,7 @@
     <public type="string" name="PinMessageAlert" id="NUM" />
     <public type="string" name="PinMessageAlertChannel" id="NUM" />
     <public type="string" name="PinMessageAlertChat" id="NUM" />
+    <public type="string" name="PinMessageAlertTitle" id="NUM" />
     <public type="string" name="PinNotify" id="NUM" />
     <public type="string" name="PinToTop" id="NUM" />
     <public type="string" name="PinToTopLimitReached" id="NUM" />
@@ -3835,8 +3841,10 @@
     <public type="string" name="ResetAllNotifications" id="NUM" />
     <public type="string" name="ResetAutomaticMediaDownload" id="NUM" />
     <public type="string" name="ResetAutomaticMediaDownloadAlert" id="NUM" />
+    <public type="string" name="ResetAutomaticMediaDownloadAlertTitle" id="NUM" />
     <public type="string" name="ResetChatBackgrounds" id="NUM" />
     <public type="string" name="ResetChatBackgroundsAlert" id="NUM" />
+    <public type="string" name="ResetChatBackgroundsAlertTitle" id="NUM" />
     <public type="string" name="ResetChatBackgroundsInfo" id="NUM" />
     <public type="string" name="ResetMyAccount" id="NUM" />
     <public type="string" name="ResetMyAccountText" id="NUM" />
@@ -3847,6 +3855,7 @@
     <public type="string" name="ResetNotificationsText" id="NUM" />
     <public type="string" name="ResetStatistics" id="NUM" />
     <public type="string" name="ResetStatisticsAlert" id="NUM" />
+    <public type="string" name="ResetStatisticsAlertTitle" id="NUM" />
     <public type="string" name="RestoreEmailSent" id="NUM" />
     <public type="string" name="RestoreEmailSentInfo" id="NUM" />
     <public type="string" name="RestoreEmailTrouble" id="NUM" />
@@ -4038,6 +4047,7 @@
     <public type="string" name="SortedByName" id="NUM" />
     <public type="string" name="Sound" id="NUM" />
     <public type="string" name="SoundDefault" id="NUM" />
+    <public type="string" name="Start" id="NUM" />
     <public type="string" name="StartEncryptedChat" id="NUM" />
     <public type="string" name="StartMessaging" id="NUM" />
     <public type="string" name="StartText" id="NUM" />
@@ -4177,6 +4187,7 @@
     <public type="string" name="UnpinFromTop" id="NUM" />
     <public type="string" name="UnpinMessage" id="NUM" />
     <public type="string" name="UnpinMessageAlert" id="NUM" />
+    <public type="string" name="UnpinMessageAlertTitle" id="NUM" />
     <public type="string" name="UnreadMessages" id="NUM" />
     <public type="string" name="UnsupportedAttachment" id="NUM" />
     <public type="string" name="UnsupportedMedia" id="NUM" />

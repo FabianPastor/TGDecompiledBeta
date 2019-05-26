@@ -317,6 +317,8 @@ public class Theme {
     public static Paint dialogs_pinnedPaint = null;
     public static Drawable dialogs_reorderDrawable = null;
     public static ScamDrawable dialogs_scamDrawable = null;
+    public static TextPaint dialogs_searchNameEncryptedPaint = null;
+    public static TextPaint dialogs_searchNamePaint = null;
     public static Paint dialogs_tabletSeletedPaint = null;
     public static TextPaint dialogs_timePaint = null;
     public static Drawable dialogs_unarchiveDrawable = null;
@@ -345,6 +347,7 @@ public class Theme {
     public static final String key_actionBarDefaultSelector = "actionBarDefaultSelector";
     public static final String key_actionBarDefaultSubmenuBackground = "actionBarDefaultSubmenuBackground";
     public static final String key_actionBarDefaultSubmenuItem = "actionBarDefaultSubmenuItem";
+    public static final String key_actionBarDefaultSubmenuItemIcon = "actionBarDefaultSubmenuItemIcon";
     public static final String key_actionBarDefaultSubtitle = "actionBarDefaultSubtitle";
     public static final String key_actionBarDefaultTitle = "actionBarDefaultTitle";
     public static final String key_actionBarWhiteSelector = "actionBarWhiteSelector";
@@ -2954,6 +2957,7 @@ public class Theme {
         defaultColors.put("actionBarDefaultSearch", valueOf);
         defaultColors.put("actionBarDefaultSearchPlaceholder", Integer.valueOf(-NUM));
         defaultColors.put("actionBarDefaultSubmenuItem", valueOf2);
+        defaultColors.put("actionBarDefaultSubmenuItemIcon", Integer.valueOf(-9999504));
         defaultColors.put("actionBarDefaultSubmenuBackground", valueOf);
         defaultColors.put("actionBarActionModeDefaultSelector", Integer.valueOf(-986896));
         defaultColors.put("actionBarDefaultArchived", Integer.valueOf(-9471353));
@@ -3455,6 +3459,7 @@ public class Theme {
         fallbackKeys.put("chats_archivePinBackground", "chats_unreadCounterMuted");
         fallbackKeys.put("chats_archiveIcon", "chats_actionIcon");
         fallbackKeys.put("chats_archiveText", "chats_actionIcon");
+        fallbackKeys.put("actionBarDefaultSubmenuItemIcon", "dialogIcon");
         ThemeInfo themeInfo = new ThemeInfo();
         themeInfo.name = "Default";
         ArrayList arrayList = themes;
@@ -4677,6 +4682,10 @@ public class Theme {
             dialogs_namePaint.setTypeface(AndroidUtilities.getTypeface(str));
             dialogs_nameEncryptedPaint = new TextPaint(1);
             dialogs_nameEncryptedPaint.setTypeface(AndroidUtilities.getTypeface(str));
+            dialogs_searchNamePaint = new TextPaint(1);
+            dialogs_searchNamePaint.setTypeface(AndroidUtilities.getTypeface(str));
+            dialogs_searchNameEncryptedPaint = new TextPaint(1);
+            dialogs_searchNameEncryptedPaint.setTypeface(AndroidUtilities.getTypeface(str));
             dialogs_messagePaint = new TextPaint(1);
             dialogs_messageNamePaint = new TextPaint(1);
             dialogs_messageNamePaint.setTypeface(AndroidUtilities.getTypeface(str));
@@ -4716,15 +4725,21 @@ public class Theme {
         dialogs_timePaint.setTextSize((float) AndroidUtilities.dp(13.0f));
         dialogs_countTextPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
         dialogs_archiveTextPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
-        dialogs_onlinePaint.setTextSize((float) AndroidUtilities.dp(16.0f));
-        dialogs_offlinePaint.setTextSize((float) AndroidUtilities.dp(16.0f));
+        dialogs_onlinePaint.setTextSize((float) AndroidUtilities.dp(15.0f));
+        dialogs_offlinePaint.setTextSize((float) AndroidUtilities.dp(15.0f));
+        dialogs_searchNamePaint.setTextSize((float) AndroidUtilities.dp(16.0f));
+        dialogs_searchNameEncryptedPaint.setTextSize((float) AndroidUtilities.dp(16.0f));
     }
 
     public static void applyDialogsTheme() {
         TextPaint textPaint = dialogs_namePaint;
         if (textPaint != null) {
-            textPaint.setColor(getColor("chats_name"));
-            dialogs_nameEncryptedPaint.setColor(getColor("chats_secretName"));
+            String str = "chats_name";
+            textPaint.setColor(getColor(str));
+            String str2 = "chats_secretName";
+            dialogs_nameEncryptedPaint.setColor(getColor(str2));
+            dialogs_searchNamePaint.setColor(getColor(str));
+            dialogs_searchNameEncryptedPaint.setColor(getColor(str2));
             textPaint = dialogs_messagePaint;
             int color = getColor("chats_message");
             textPaint.linkColor = color;
@@ -4745,7 +4760,7 @@ public class Theme {
             dialogs_onlinePaint.setColor(getColor("windowBackgroundWhiteBlueText3"));
             dialogs_offlinePaint.setColor(getColor("windowBackgroundWhiteGrayText3"));
             setDrawableColorByKey(dialogs_lockDrawable, "chats_secretIcon");
-            String str = "chats_sentCheck";
+            str = "chats_sentCheck";
             setDrawableColorByKey(dialogs_checkDrawable, str);
             setDrawableColorByKey(dialogs_halfCheckDrawable, str);
             setDrawableColorByKey(dialogs_clockDrawable, "chats_sentClock");

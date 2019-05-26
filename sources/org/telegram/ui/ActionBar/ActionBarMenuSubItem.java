@@ -23,7 +23,7 @@ public class ActionBarMenuSubItem extends FrameLayout {
         setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         this.imageView = new ImageView(context);
         this.imageView.setScaleType(ScaleType.CENTER);
-        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogIcon"), Mode.MULTIPLY));
+        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("actionBarDefaultSubmenuItemIcon"), Mode.MULTIPLY));
         int i = 5;
         addView(this.imageView, LayoutHelper.createFrame(-2, 40, (LocaleController.isRTL ? 5 : 3) | 16));
         this.textView = new TextView(context);
@@ -31,7 +31,7 @@ public class ActionBarMenuSubItem extends FrameLayout {
         this.textView.setSingleLine(true);
         this.textView.setGravity(1);
         this.textView.setEllipsize(TruncateAt.END);
-        this.textView.setTextColor(Theme.getColor("dialogTextBlack"));
+        this.textView.setTextColor(Theme.getColor("actionBarDefaultSubmenuItem"));
         this.textView.setTextSize(1, 16.0f);
         TextView textView = this.textView;
         if (!LocaleController.isRTL) {
@@ -57,8 +57,16 @@ public class ActionBarMenuSubItem extends FrameLayout {
         this.textView.setPadding(0, 0, 0, 0);
     }
 
+    public void setColors(int i, int i2) {
+        this.textView.setTextColor(i);
+        this.imageView.setColorFilter(new PorterDuffColorFilter(i2, Mode.MULTIPLY));
+    }
+
     public void setTextColor(int i) {
         this.textView.setTextColor(i);
+    }
+
+    public void setIconColor(int i) {
         this.imageView.setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
     }
 

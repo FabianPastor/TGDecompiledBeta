@@ -1,6 +1,7 @@
 package org.telegram.ui;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
@@ -242,34 +243,35 @@ public class CommonGroupsActivity extends BaseFragment {
 
     public ThemeDescription[] getThemeDescriptions() {
         -$$Lambda$CommonGroupsActivity$CM0EpwYGPtlvUyQJ8b7pz0B-Dbw -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw = new -$$Lambda$CommonGroupsActivity$CM0EpwYGPtlvUyQJ8b7pz0B-Dbw(this);
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[23];
-        themeDescriptionArr[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{LoadingCell.class, ProfileSearchCell.class}, null, null, null, "windowBackgroundWhite");
-        themeDescriptionArr[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundGray");
-        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault");
-        themeDescriptionArr[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault");
-        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon");
-        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle");
-        themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector");
-        themeDescriptionArr[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21");
-        themeDescriptionArr[8] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider");
-        themeDescriptionArr[9] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "emptyListPlaceholder");
-        themeDescriptionArr[10] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, "progressCircle");
+        r10 = new ThemeDescription[24];
+        r10[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{LoadingCell.class, ProfileSearchCell.class}, null, null, null, "windowBackgroundWhite");
+        r10[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundGray");
+        r10[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault");
+        r10[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault");
+        r10[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon");
+        r10[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle");
+        r10[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector");
+        r10[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21");
+        r10[8] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider");
+        r10[9] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "emptyListPlaceholder");
+        r10[10] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, "progressCircle");
         View view = this.listView;
         View view2 = view;
-        themeDescriptionArr[11] = new ThemeDescription(view2, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow");
-        themeDescriptionArr[12] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGrayText4");
-        themeDescriptionArr[13] = new ThemeDescription(this.listView, 0, new Class[]{LoadingCell.class}, new String[]{"progressBar"}, null, null, null, "progressCircle");
-        themeDescriptionArr[14] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, Theme.dialogs_namePaint, null, null, "chats_name");
-        themeDescriptionArr[15] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, "avatar_text");
+        r10[11] = new ThemeDescription(view2, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow");
+        r10[12] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGrayText4");
+        r10[13] = new ThemeDescription(this.listView, 0, new Class[]{LoadingCell.class}, new String[]{"progressBar"}, null, null, null, "progressCircle");
+        r10[14] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Paint[]{Theme.dialogs_namePaint, Theme.dialogs_searchNamePaint}, null, null, "chats_name");
+        r10[15] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Paint[]{Theme.dialogs_nameEncryptedPaint, Theme.dialogs_searchNameEncryptedPaint}, null, null, "chats_secretName");
+        r10[16] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, "avatar_text");
         -$$Lambda$CommonGroupsActivity$CM0EpwYGPtlvUyQJ8b7pz0B-Dbw -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw2 = -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw;
-        themeDescriptionArr[16] = new ThemeDescription(null, 0, null, null, null, -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw2, "avatar_backgroundRed");
-        themeDescriptionArr[17] = new ThemeDescription(null, 0, null, null, null, -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw2, "avatar_backgroundOrange");
-        themeDescriptionArr[18] = new ThemeDescription(null, 0, null, null, null, -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw2, "avatar_backgroundViolet");
-        themeDescriptionArr[19] = new ThemeDescription(null, 0, null, null, null, -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw2, "avatar_backgroundGreen");
-        themeDescriptionArr[20] = new ThemeDescription(null, 0, null, null, null, -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw2, "avatar_backgroundCyan");
-        themeDescriptionArr[21] = new ThemeDescription(null, 0, null, null, null, -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw2, "avatar_backgroundBlue");
-        themeDescriptionArr[22] = new ThemeDescription(null, 0, null, null, null, -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw2, "avatar_backgroundPink");
-        return themeDescriptionArr;
+        r10[17] = new ThemeDescription(null, 0, null, null, null, -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw2, "avatar_backgroundRed");
+        r10[18] = new ThemeDescription(null, 0, null, null, null, -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw2, "avatar_backgroundOrange");
+        r10[19] = new ThemeDescription(null, 0, null, null, null, -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw2, "avatar_backgroundViolet");
+        r10[20] = new ThemeDescription(null, 0, null, null, null, -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw2, "avatar_backgroundGreen");
+        r10[21] = new ThemeDescription(null, 0, null, null, null, -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw2, "avatar_backgroundCyan");
+        r10[22] = new ThemeDescription(null, 0, null, null, null, -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw2, "avatar_backgroundBlue");
+        r10[23] = new ThemeDescription(null, 0, null, null, null, -__lambda_commongroupsactivity_cm0epwygptlvuyqj8b7pz0b-dbw2, "avatar_backgroundPink");
+        return r10;
     }
 
     public /* synthetic */ void lambda$getThemeDescriptions$3$CommonGroupsActivity() {

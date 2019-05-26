@@ -211,7 +211,7 @@ public class VoIPHelper {
                 if (str.equals(stringBuilder.toString())) {
                     try {
                         long parseLong = Long.parseLong(split2[1]);
-                        showRateAlert(context, null, tL_messageActionPhoneCall.call_id, parseLong, UserConfig.selectedAccount);
+                        showRateAlert(context, null, tL_messageActionPhoneCall.call_id, parseLong, UserConfig.selectedAccount, true);
                         return;
                     } catch (Exception unused) {
                         return;
@@ -221,7 +221,7 @@ public class VoIPHelper {
         }
     }
 
-    public static void showRateAlert(Context context, Runnable runnable, long j, long j2, int i) {
+    public static void showRateAlert(Context context, Runnable runnable, long j, long j2, int i, boolean z) {
         CheckBoxCell checkBoxCell;
         final Context context2 = context;
         final File logFile = getLogFile(j);
@@ -376,11 +376,13 @@ public class VoIPHelper {
         View view2 = button;
         final long j4 = j;
         AlertDialog alertDialog = create;
-        final int i4 = i;
+        final boolean z2 = z;
+        final TextView textView3 = textView2;
+        i3 = i;
         context2 = context;
-        TextView textView3 = textView2;
+        CheckBoxCell checkBoxCell2 = checkBoxCell;
         final AlertDialog alertDialog2 = alertDialog;
-        final TextView textView4 = textView3;
+        final CheckBoxCell checkBoxCell3 = checkBoxCell2;
         AnonymousClass11 anonymousClass112 = new View.OnClickListener() {
             public void onClick(View view) {
                 if (betterRatingView2.getRating() < 4) {
@@ -392,8 +394,8 @@ public class VoIPHelper {
                         alertDialog2.setTitle(LocaleController.getString("CallReportHint", NUM));
                         editText2.setVisibility(0);
                         if (logFile.exists()) {
-                            checkBoxCell.setVisibility(0);
-                            textView4.setVisibility(0);
+                            checkBoxCell3.setVisibility(0);
+                            textView3.setVisibility(0);
                         }
                         linearLayout.setVisibility(0);
                         ((TextView) view).setText(LocaleController.getString("Send", NUM).toUpperCase());
@@ -430,7 +432,8 @@ public class VoIPHelper {
                 TL_inputPhoneCall tL_inputPhoneCall = tL_phone_setCallRating.peer;
                 tL_inputPhoneCall.access_hash = j3;
                 tL_inputPhoneCall.id = j4;
-                ConnectionsManager.getInstance(i4).sendRequest(tL_phone_setCallRating, new RequestDelegate() {
+                tL_phone_setCallRating.user_initiative = z2;
+                ConnectionsManager.getInstance(i3).sendRequest(tL_phone_setCallRating, new RequestDelegate() {
                     public void run(TLObject tLObject, TL_error tL_error) {
                         if (tLObject instanceof TL_updates) {
                             MessagesController.getInstance(i).processUpdates((TL_updates) tLObject, false);

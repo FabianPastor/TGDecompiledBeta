@@ -83,6 +83,10 @@ public class SearchAdapterHelper {
         this.allResultsAreGlobal = z;
     }
 
+    public boolean isSearchInProgress() {
+        return (this.reqId == 0 && this.channelReqId == 0) ? false : true;
+    }
+
     public void queryServerSearch(String str, boolean z, boolean z2, boolean z3, boolean z4, int i, int i2) {
         String str2 = str;
         int i3 = i;

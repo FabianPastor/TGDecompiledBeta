@@ -58,6 +58,9 @@ public class WebFile extends TLObject {
     }
 
     public static WebFile createWithWebDocument(WebDocument webDocument) {
+        if (!(webDocument instanceof TL_webDocument)) {
+            return null;
+        }
         WebFile webFile = new WebFile();
         TL_webDocument tL_webDocument = (TL_webDocument) webDocument;
         TL_inputWebFileLocation tL_inputWebFileLocation = new TL_inputWebFileLocation();

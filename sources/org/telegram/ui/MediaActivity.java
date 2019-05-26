@@ -3123,7 +3123,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         if (r0 != 0) goto L_0x00cf;
     L_0x00c1:
         r0 = r12.scrollSlidingTextTabStrip;
-        r2 = NUM; // 0x7f0d0900 float:1.8746788E38 double:1.053130916E-314;
+        r2 = NUM; // 0x7f0d0909 float:1.8746806E38 double:1.0531309203E-314;
         r9 = "SharedMediaTab";
         r2 = org.telegram.messenger.LocaleController.getString(r9, r2);
         r0.addTextTab(r1, r2);
@@ -3137,14 +3137,14 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         if (r0 != 0) goto L_0x00eb;
     L_0x00dd:
         r0 = r12.scrollSlidingTextTabStrip;
-        r2 = NUM; // 0x7f0d08fc float:1.874678E38 double:1.053130914E-314;
+        r2 = NUM; // 0x7f0d0905 float:1.8746798E38 double:1.0531309183E-314;
         r9 = "SharedFilesTab";
         r2 = org.telegram.messenger.LocaleController.getString(r9, r2);
         r0.addTextTab(r6, r2);
     L_0x00eb:
         r9 = r12.dialog_id;
         r0 = (int) r9;
-        r2 = NUM; // 0x7f0d0901 float:1.874679E38 double:1.0531309164E-314;
+        r2 = NUM; // 0x7f0d090a float:1.8746808E38 double:1.053130921E-314;
         r9 = "SharedMusicTab";
         if (r0 == 0) goto L_0x0129;
     L_0x00f5:
@@ -3157,7 +3157,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         if (r0 != 0) goto L_0x0111;
     L_0x0103:
         r0 = r12.scrollSlidingTextTabStrip;
-        r7 = NUM; // 0x7f0d08fe float:1.8746784E38 double:1.053130915E-314;
+        r7 = NUM; // 0x7f0d0907 float:1.8746802E38 double:1.0531309193E-314;
         r8 = "SharedLinksTab";
         r7 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r0.addTextTab(r3, r7);
@@ -3209,7 +3209,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         if (r0 != 0) goto L_0x0178;
     L_0x016a:
         r0 = r12.scrollSlidingTextTabStrip;
-        r2 = NUM; // 0x7f0d0904 float:1.8746796E38 double:1.053130918E-314;
+        r2 = NUM; // 0x7f0d090d float:1.8746814E38 double:1.0531309223E-314;
         r3 = "SharedVoiceTab";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.addTextTab(r4, r2);
@@ -3654,6 +3654,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, null, null, null, null, "actionBarDefaultSubmenuBackground"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, null, null, null, null, "actionBarDefaultSubmenuItem"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM | ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "actionBarDefaultSubmenuItemIcon"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_AM_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon"));
         arrayList.add(new ThemeDescription(this.actionModeBackground, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "sharedMedia_actionMode"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_AM_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector"));
@@ -3667,11 +3668,15 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         strArr[0] = "frameLayout";
         arrayList.add(new ThemeDescription(view, i, clsArr, strArr, null, null, null, "inappPlayerBackground"));
         arrayList.add(new ThemeDescription(this.fragmentContextView, 0, new Class[]{FragmentContextView.class}, new String[]{"playButton"}, null, null, null, "inappPlayerPlayPause"));
-        arrayList.add(new ThemeDescription(this.fragmentContextView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FragmentContextView.class}, new String[]{"titleTextView"}, null, null, null, "inappPlayerTitle"));
         View view2 = this.fragmentContextView;
         View view3 = view2;
-        arrayList.add(new ThemeDescription(view3, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FragmentContextView.class}, new String[]{"frameLayout"}, null, null, null, "inappPlayerPerformer"));
-        arrayList.add(new ThemeDescription(this.fragmentContextView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{FragmentContextView.class}, new String[]{"closeButton"}, null, null, null, "inappPlayerClose"));
+        arrayList.add(new ThemeDescription(view3, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FragmentContextView.class}, new String[]{"titleTextView"}, null, null, null, "inappPlayerTitle"));
+        view2 = this.fragmentContextView;
+        View view4 = view2;
+        arrayList.add(new ThemeDescription(view4, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FragmentContextView.class}, new String[]{"frameLayout"}, null, null, null, "inappPlayerPerformer"));
+        view2 = this.fragmentContextView;
+        view3 = view2;
+        arrayList.add(new ThemeDescription(view3, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{FragmentContextView.class}, new String[]{"closeButton"}, null, null, null, "inappPlayerClose"));
         arrayList.add(new ThemeDescription(this.scrollSlidingTextTabStrip.getTabsContainer(), ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{TextView.class}, null, null, null, "actionBarDefaultTitle"));
         arrayList.add(new ThemeDescription(this.scrollSlidingTextTabStrip.getTabsContainer(), ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{TextView.class}, null, null, null, "actionBarDefaultSubtitle"));
         arrayList.add(new ThemeDescription(this.scrollSlidingTextTabStrip.getTabsContainer(), ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, new Class[]{TextView.class}, null, null, null, "actionBarDefaultSelector"));
@@ -3703,10 +3708,10 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             arrayList.add(new ThemeDescription(this.mediaPages[i2].listView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"statusImageView"}, null, null, null, "sharedMedia_startStopLoadIcon"));
             View access$2002 = this.mediaPages[i2].listView;
             int i4 = ThemeDescription.FLAG_CHECKBOX;
-            Class[] clsArr3 = new Class[]{SharedDocumentCell.class};
-            String[] strArr3 = new String[1];
-            strArr3[0] = "checkBox";
-            arrayList.add(new ThemeDescription(access$2002, i4, clsArr3, strArr3, null, null, null, "checkbox"));
+            clsArr2 = new Class[]{SharedDocumentCell.class};
+            strArr2 = new String[1];
+            strArr2[0] = "checkBox";
+            arrayList.add(new ThemeDescription(access$2002, i4, clsArr2, strArr2, null, null, null, "checkbox"));
             arrayList.add(new ThemeDescription(this.mediaPages[i2].listView, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{SharedDocumentCell.class}, new String[]{"checkBox"}, null, null, null, "checkboxCheck"));
             arrayList.add(new ThemeDescription(this.mediaPages[i2].listView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"thumbImageView"}, null, null, null, "files_folderIcon"));
             arrayList.add(new ThemeDescription(this.mediaPages[i2].listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{SharedDocumentCell.class}, new String[]{"extTextView"}, null, null, null, "files_iconText"));
@@ -3720,11 +3725,11 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             arrayList.add(new ThemeDescription(this.mediaPages[i2].listView, 0, new Class[]{SharedLinkCell.class}, new String[]{"titleTextPaint"}, null, null, null, "windowBackgroundWhiteBlackText"));
             arrayList.add(new ThemeDescription(this.mediaPages[i2].listView, 0, new Class[]{SharedLinkCell.class}, null, null, null, "windowBackgroundWhiteLinkText"));
             arrayList.add(new ThemeDescription(this.mediaPages[i2].listView, 0, new Class[]{SharedLinkCell.class}, Theme.linkSelectionPaint, null, null, "windowBackgroundWhiteLinkSelection"));
-            view3 = this.mediaPages[i2].listView;
+            access$200 = this.mediaPages[i2].listView;
             clsArr2 = new Class[]{SharedLinkCell.class};
             strArr2 = new String[1];
             strArr2[0] = "letterDrawable";
-            arrayList.add(new ThemeDescription(view3, 0, clsArr2, strArr2, null, null, null, "sharedMedia_linkPlaceholderText"));
+            arrayList.add(new ThemeDescription(access$200, 0, clsArr2, strArr2, null, null, null, "sharedMedia_linkPlaceholderText"));
             arrayList.add(new ThemeDescription(this.mediaPages[i2].listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{SharedLinkCell.class}, new String[]{"letterDrawable"}, null, null, null, "sharedMedia_linkPlaceholder"));
             arrayList.add(new ThemeDescription(this.mediaPages[i2].listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR | ThemeDescription.FLAG_SECTIONS, new Class[]{SharedMediaSectionCell.class}, null, null, null, "windowBackgroundWhite"));
             arrayList.add(new ThemeDescription(this.mediaPages[i2].listView, ThemeDescription.FLAG_SECTIONS, new Class[]{SharedMediaSectionCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText"));
