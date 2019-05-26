@@ -1320,9 +1320,16 @@ public class ProfileSearchCell extends BaseCell {
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(this.nameLayout.getText());
-        stringBuilder.append(", ");
-        stringBuilder.append(this.subLabel);
+        StaticLayout staticLayout = this.nameLayout;
+        if (staticLayout != null) {
+            stringBuilder.append(staticLayout.getText());
+        }
+        if (this.statusLayout != null) {
+            if (stringBuilder.length() > 0) {
+                stringBuilder.append(", ");
+            }
+            stringBuilder.append(this.statusLayout.getText());
+        }
         accessibilityNodeInfo.setText(stringBuilder.toString());
     }
 }
