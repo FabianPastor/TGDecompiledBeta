@@ -25,6 +25,7 @@ import android.view.ViewTreeObserver.OnPreDrawListener;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.LayoutParams;
@@ -954,8 +955,8 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 r4 = r15;
                 r8 = r10;
                 r4.drawRect(r5, r6, r7, r8, r9);
-                if (r2 == r1) goto L_0x006a;
-            L_0x0052:
+                if (r2 == r1) goto L_0x006c;
+            L_0x0053:
                 r0 = r14.paint;
                 r2 = "windowBackgroundGray";
                 r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
@@ -967,7 +968,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 r13 = r14.paint;
                 r8 = r15;
                 r8.drawRect(r9, r10, r11, r12, r13);
-            L_0x006a:
+            L_0x006c:
                 return;
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.WallpapersListActivity$AnonymousClass4.onDraw(android.graphics.Canvas):void");
@@ -1045,11 +1046,16 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 presentFragment(wallpapersListActivity);
             } else if (i == this.resetRow) {
                 Builder builder = new Builder(getParentActivity());
+                builder.setTitle(LocaleController.getString("ResetChatBackgroundsAlertTitle", NUM));
                 builder.setMessage(LocaleController.getString("ResetChatBackgroundsAlert", NUM));
-                builder.setTitle(LocaleController.getString("AppName", NUM));
                 builder.setPositiveButton(LocaleController.getString("Reset", NUM), new -$$Lambda$WallpapersListActivity$IP2pJT3LolM38wDLb7Brfxjps6Q(this));
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
-                showDialog(builder.create());
+                AlertDialog create = builder.create();
+                showDialog(create);
+                TextView textView = (TextView) create.getButton(-1);
+                if (textView != null) {
+                    textView.setTextColor(Theme.getColor("dialogTextRed2"));
+                }
             }
         }
     }

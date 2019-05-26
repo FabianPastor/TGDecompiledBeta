@@ -237,6 +237,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         private Context context;
         private int currentCount;
         private ArrayList<Dialog> dialogs = new ArrayList();
+        private LongSparseArray<Dialog> dialogsMap = new LongSparseArray();
 
         public int getItemViewType(int i) {
             return i == 0 ? 1 : 0;
@@ -249,22 +250,26 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
 
         public void fetchDialogs() {
             this.dialogs.clear();
+            this.dialogsMap.clear();
             int i = UserConfig.getInstance(ShareAlert.this.currentAccount).clientUserId;
             int i2 = 0;
             if (!MessagesController.getInstance(ShareAlert.this.currentAccount).dialogsForward.isEmpty()) {
-                this.dialogs.add(MessagesController.getInstance(ShareAlert.this.currentAccount).dialogsForward.get(0));
+                Dialog dialog = (Dialog) MessagesController.getInstance(ShareAlert.this.currentAccount).dialogsForward.get(0);
+                this.dialogs.add(dialog);
+                this.dialogsMap.put(dialog.id, dialog);
             }
             ArrayList allDialogs = MessagesController.getInstance(ShareAlert.this.currentAccount).getAllDialogs();
             while (i2 < allDialogs.size()) {
-                Dialog dialog = (Dialog) allDialogs.get(i2);
-                if (dialog instanceof TL_dialog) {
-                    long j = dialog.id;
+                Dialog dialog2 = (Dialog) allDialogs.get(i2);
+                if (dialog2 instanceof TL_dialog) {
+                    long j = dialog2.id;
                     int i3 = (int) j;
                     if (i3 != i) {
                         int i4 = (int) (j >> 32);
                         if (!(i3 == 0 || i4 == 1)) {
                             if (i3 > 0) {
-                                this.dialogs.add(dialog);
+                                this.dialogs.add(dialog2);
+                                this.dialogsMap.put(dialog2.id, dialog2);
                             } else {
                                 Chat chat = MessagesController.getInstance(ShareAlert.this.currentAccount).getChat(Integer.valueOf(-i3));
                                 if (!(chat == null || ChatObject.isNotInChat(chat))) {
@@ -273,7 +278,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                                         if ((tL_chatAdminRights == null || !tL_chatAdminRights.post_messages) && !chat.megagroup) {
                                         }
                                     }
-                                    this.dialogs.add(dialog);
+                                    this.dialogs.add(dialog2);
+                                    this.dialogsMap.put(dialog2.id, dialog2);
                                 }
                             }
                         }
@@ -1572,7 +1578,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         viewGroup.setPadding(i, 0, i, 0);
         this.frameLayout = new FrameLayout(context2);
         this.frameLayout.setBackgroundColor(Theme.getColor(str3));
-        this.frameLayout.addView(new SearchField(context2), LayoutHelper.createFrame(-1, -1, 51));
+        SearchField searchField = new SearchField(context2);
+        this.frameLayout.addView(searchField, LayoutHelper.createFrame(-1, -1, 51));
         this.gridView = new RecyclerListView(context2) {
             /* Access modifiers changed, original: protected */
             public boolean allowSelectChildAtPosition(float f, float f2) {
@@ -1616,7 +1623,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         this.listAdapter = shareDialogsAdapter;
         recyclerListView.setAdapter(shareDialogsAdapter);
         this.gridView.setGlowColor(Theme.getColor("dialogScrollGlow"));
-        this.gridView.setOnItemClickListener(new -$$Lambda$ShareAlert$YRUJBo7UGo-RZTfPIcKLovG7ghg(this));
+        this.gridView.setOnItemClickListener(new -$$Lambda$ShareAlert$W5k8hWsyZg9DfQTgiUPSh2_mvaQ(this, searchField));
         this.gridView.setOnScrollListener(new OnScrollListener() {
             public void onScrolled(RecyclerView recyclerView, int i, int i2) {
                 ShareAlert.this.updateLayout();
@@ -1754,7 +1761,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         this.loadingLink = false;
     }
 
-    public /* synthetic */ void lambda$new$2$ShareAlert(View view, int i) {
+    public /* synthetic */ void lambda$new$2$ShareAlert(SearchField searchField, View view, int i) {
         if (i >= 0) {
             Dialog item;
             Adapter adapter = this.gridView.getAdapter();
@@ -1774,6 +1781,19 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                     this.selectedDialogs.put(item.id, item);
                     shareDialogCell.setChecked(true, true);
                     updateSelectedCount(2);
+                    int i2 = UserConfig.getInstance(this.currentAccount).clientUserId;
+                    if (this.gridView.getAdapter() == this.searchAdapter) {
+                        Dialog dialog = (Dialog) this.listAdapter.dialogsMap.get(item.id);
+                        if (dialog == null) {
+                            this.listAdapter.dialogsMap.put(item.id, item);
+                            this.listAdapter.dialogs.add(1, item);
+                        } else if (dialog.id != ((long) i2)) {
+                            this.listAdapter.dialogs.remove(dialog);
+                            this.listAdapter.dialogs.add(1, dialog);
+                        }
+                        this.gridView.setAdapter(this.listAdapter);
+                        searchField.hideKeyboard();
+                    }
                 }
             }
         }

@@ -468,6 +468,7 @@ public class MessagesController implements NotificationCenterDelegate {
     public ArrayList<Dialog> dialogsForward = new ArrayList();
     public ArrayList<Dialog> dialogsGroupsOnly = new ArrayList();
     private boolean dialogsInTransaction;
+    public boolean dialogsLoaded;
     public ArrayList<Dialog> dialogsServerOnly = new ArrayList();
     public ArrayList<Dialog> dialogsUsersOnly = new ArrayList();
     public LongSparseArray<Dialog> dialogs_dict = new LongSparseArray();
@@ -1259,6 +1260,7 @@ public class MessagesController implements NotificationCenterDelegate {
         this.loadingFullParticipants.clear();
         this.loadedFullParticipants.clear();
         this.loadedFullChats.clear();
+        this.dialogsLoaded = false;
         this.nextDialogsCacheOffset.clear();
         this.loadingDialogs.clear();
         this.dialogsEndReached.clear();
@@ -6162,6 +6164,12 @@ public class MessagesController implements NotificationCenterDelegate {
             long peerDialogId = DialogObject.getPeerDialogId(inputPeer);
             if (this.gettingUnknownDialogs.indexOfKey(peerDialogId) < 0) {
                 this.gettingUnknownDialogs.put(peerDialogId, Boolean.valueOf(true));
+                if (BuildVars.LOGS_ENABLED) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("load unknown dialog ");
+                    stringBuilder.append(peerDialogId);
+                    FileLog.d(stringBuilder.toString());
+                }
                 TL_messages_getPeerDialogs tL_messages_getPeerDialogs = new TL_messages_getPeerDialogs();
                 TL_inputDialogPeer tL_inputDialogPeer = new TL_inputDialogPeer();
                 tL_inputDialogPeer.peer = inputPeer;
@@ -6212,56 +6220,60 @@ public class MessagesController implements NotificationCenterDelegate {
 
     private void fetchFolderInLoadedPinnedDialogs(TL_messages_peerDialogs tL_messages_peerDialogs) {
         int size = tL_messages_peerDialogs.dialogs.size();
-        for (int i = 0; i < size; i++) {
-            Dialog dialog = (Dialog) tL_messages_peerDialogs.dialogs.get(i);
+        int i = 0;
+        for (int i2 = 0; i2 < size; i2++) {
+            Dialog dialog = (Dialog) tL_messages_peerDialogs.dialogs.get(i2);
             if (dialog instanceof TL_dialogFolder) {
                 TL_dialogFolder tL_dialogFolder = (TL_dialogFolder) dialog;
                 long peerDialogId = DialogObject.getPeerDialogId(dialog.peer);
-                int size2 = tL_messages_peerDialogs.messages.size();
-                int i2 = 0;
-                while (i2 < size2) {
-                    Message message = (Message) tL_messages_peerDialogs.messages.get(i2);
-                    if (peerDialogId == MessageObject.getDialogId(message) && dialog.top_message == message.id) {
-                        InputPeer tL_inputPeerChannel;
-                        TL_dialog tL_dialog = new TL_dialog();
-                        tL_dialog.peer = dialog.peer;
-                        tL_dialog.top_message = dialog.top_message;
-                        tL_dialog.folder_id = tL_dialogFolder.folder.id;
-                        tL_dialog.flags |= 16;
-                        tL_messages_peerDialogs.dialogs.add(tL_dialog);
-                        Peer peer = dialog.peer;
-                        int size3;
-                        int i3;
-                        if (peer instanceof TL_peerChannel) {
-                            tL_inputPeerChannel = new TL_inputPeerChannel();
-                            tL_inputPeerChannel.channel_id = dialog.peer.channel_id;
-                            size3 = tL_messages_peerDialogs.chats.size();
-                            for (i3 = 0; i3 < size3; i3++) {
-                                Chat chat = (Chat) tL_messages_peerDialogs.chats.get(i3);
-                                if (chat.id == tL_inputPeerChannel.channel_id) {
-                                    tL_inputPeerChannel.access_hash = chat.access_hash;
-                                    break;
+                if (tL_dialogFolder.top_message == 0 || peerDialogId == 0) {
+                    tL_messages_peerDialogs.dialogs.remove(tL_dialogFolder);
+                } else {
+                    size = tL_messages_peerDialogs.messages.size();
+                    for (i2 = 0; i2 < size; i2++) {
+                        Message message = (Message) tL_messages_peerDialogs.messages.get(i2);
+                        if (peerDialogId == MessageObject.getDialogId(message) && dialog.top_message == message.id) {
+                            InputPeer tL_inputPeerChannel;
+                            TL_dialog tL_dialog = new TL_dialog();
+                            tL_dialog.peer = dialog.peer;
+                            tL_dialog.top_message = dialog.top_message;
+                            tL_dialog.folder_id = tL_dialogFolder.folder.id;
+                            tL_dialog.flags |= 16;
+                            tL_messages_peerDialogs.dialogs.add(tL_dialog);
+                            Peer peer = dialog.peer;
+                            if (peer instanceof TL_peerChannel) {
+                                tL_inputPeerChannel = new TL_inputPeerChannel();
+                                tL_inputPeerChannel.channel_id = dialog.peer.channel_id;
+                                i2 = tL_messages_peerDialogs.chats.size();
+                                while (i < i2) {
+                                    Chat chat = (Chat) tL_messages_peerDialogs.chats.get(i);
+                                    if (chat.id == tL_inputPeerChannel.channel_id) {
+                                        tL_inputPeerChannel.access_hash = chat.access_hash;
+                                        break;
+                                    }
+                                    i++;
+                                }
+                            } else if (peer instanceof TL_peerChat) {
+                                tL_inputPeerChannel = new TL_inputPeerChat();
+                                tL_inputPeerChannel.chat_id = dialog.peer.chat_id;
+                            } else {
+                                tL_inputPeerChannel = new TL_inputPeerUser();
+                                tL_inputPeerChannel.user_id = dialog.peer.user_id;
+                                i2 = tL_messages_peerDialogs.users.size();
+                                while (i < i2) {
+                                    User user = (User) tL_messages_peerDialogs.users.get(i);
+                                    if (user.id == tL_inputPeerChannel.user_id) {
+                                        tL_inputPeerChannel.access_hash = user.access_hash;
+                                        break;
+                                    }
+                                    i++;
                                 }
                             }
-                        } else if (peer instanceof TL_peerChat) {
-                            tL_inputPeerChannel = new TL_inputPeerChat();
-                            tL_inputPeerChannel.chat_id = dialog.peer.chat_id;
-                        } else {
-                            tL_inputPeerChannel = new TL_inputPeerUser();
-                            tL_inputPeerChannel.user_id = dialog.peer.user_id;
-                            size3 = tL_messages_peerDialogs.users.size();
-                            for (i3 = 0; i3 < size3; i3++) {
-                                User user = (User) tL_messages_peerDialogs.users.get(i3);
-                                if (user.id == tL_inputPeerChannel.user_id) {
-                                    tL_inputPeerChannel.access_hash = user.access_hash;
-                                    break;
-                                }
-                            }
+                            loadUnknownDialog(tL_inputPeerChannel, 0);
+                            return;
                         }
-                        loadUnknownDialog(tL_inputPeerChannel, 0);
-                    } else {
-                        i2++;
                     }
+                    return;
                 }
             }
         }
@@ -7785,6 +7797,7 @@ public class MessagesController implements NotificationCenterDelegate {
         if (!(z || i7 == this.DIALOGS_LOAD_TYPE_UNKNOWN || i7 == this.DIALOGS_LOAD_TYPE_CHANNEL)) {
             this.loadingDialogs.put(i8, false);
         }
+        this.dialogsLoaded = true;
         if (!z || this.allDialogs.isEmpty()) {
             i6 = 0;
         } else {
@@ -18328,6 +18341,16 @@ public class MessagesController implements NotificationCenterDelegate {
                 } else {
                     Chat chat = getChat(Integer.valueOf(i2));
                     if ((i2 == 0 || chat != null) && (chat == null || !chat.left)) {
+                        if (BuildVars.LOGS_ENABLED) {
+                            StringBuilder stringBuilder = new StringBuilder();
+                            stringBuilder.append("not found dialog with id ");
+                            stringBuilder.append(j2);
+                            stringBuilder.append(" dictCount = ");
+                            stringBuilder.append(this.dialogs_dict.size());
+                            stringBuilder.append(" allCount = ");
+                            stringBuilder.append(this.allDialogs.size());
+                            FileLog.d(stringBuilder.toString());
+                        }
                         TL_dialog tL_dialog2 = new TL_dialog();
                         tL_dialog2.id = j2;
                         tL_dialog2.unread_count = 0;
@@ -18408,11 +18431,12 @@ public class MessagesController implements NotificationCenterDelegate {
         return this.clearingHistoryDialogs.get(j) != null;
     }
 
-    /* JADX WARNING: Missing block: B:36:0x00c9, code skipped:
-            if (r9.add_admins != false) goto L_0x00cf;
+    /* JADX WARNING: Removed duplicated region for block: B:58:0x0112  */
+    /* JADX WARNING: Missing block: B:33:0x00bb, code skipped:
+            if (r10.add_admins != false) goto L_0x00c1;
      */
-    /* JADX WARNING: Missing block: B:38:0x00cd, code skipped:
-            if (r8.creator != false) goto L_0x00cf;
+    /* JADX WARNING: Missing block: B:35:0x00bf, code skipped:
+            if (r8.creator != false) goto L_0x00c1;
      */
     public void sortDialogs(android.util.SparseArray<org.telegram.tgnet.TLRPC.Chat> r14) {
         /*
@@ -18483,7 +18507,7 @@ public class MessagesController implements NotificationCenterDelegate {
         r4 = 0;
         r6 = 0;
     L_0x007d:
-        if (r4 >= r5) goto L_0x0145;
+        if (r4 >= r5) goto L_0x0156;
     L_0x007f:
         r7 = r13.allDialogs;
         r7 = r7.get(r4);
@@ -18494,62 +18518,61 @@ public class MessagesController implements NotificationCenterDelegate {
         r11 = (int) r10;
         r9 = (int) r8;
         r8 = r7 instanceof org.telegram.tgnet.TLRPC.TL_dialog;
-        if (r8 == 0) goto L_0x010f;
+        if (r8 == 0) goto L_0x0120;
     L_0x0093:
-        if (r9 != r1) goto L_0x009c;
-    L_0x0095:
-        r6 = r13.dialogsForward;
-        r6.add(r0, r7);
-        r6 = 1;
-        goto L_0x00a1;
-    L_0x009c:
-        r8 = r13.dialogsForward;
-        r8.add(r7);
-    L_0x00a1:
         if (r9 == 0) goto L_0x010f;
-    L_0x00a3:
+    L_0x0095:
         if (r11 == r2) goto L_0x010f;
-    L_0x00a5:
+    L_0x0097:
         r8 = r13.dialogsServerOnly;
         r8.add(r7);
         r8 = org.telegram.messenger.DialogObject.isChannel(r7);
         if (r8 == 0) goto L_0x00e6;
-    L_0x00b0:
+    L_0x00a2:
         r8 = -r9;
         r8 = java.lang.Integer.valueOf(r8);
         r8 = r13.getChat(r8);
-        if (r8 == 0) goto L_0x00d4;
-    L_0x00bb:
-        r9 = r8.megagroup;
-        if (r9 == 0) goto L_0x00cb;
-    L_0x00bf:
-        r9 = r8.admin_rights;
-        if (r9 == 0) goto L_0x00cb;
-    L_0x00c3:
-        r10 = r9.post_messages;
-        if (r10 != 0) goto L_0x00cf;
-    L_0x00c7:
-        r9 = r9.add_admins;
-        if (r9 != 0) goto L_0x00cf;
-    L_0x00cb:
-        r9 = r8.creator;
-        if (r9 == 0) goto L_0x00d4;
-    L_0x00cf:
-        r9 = r13.dialogsCanAddUsers;
-        r9.add(r7);
-    L_0x00d4:
-        if (r8 == 0) goto L_0x00e0;
-    L_0x00d6:
-        r8 = r8.megagroup;
-        if (r8 == 0) goto L_0x00e0;
-    L_0x00da:
+        if (r8 == 0) goto L_0x00c6;
+    L_0x00ad:
+        r10 = r8.megagroup;
+        if (r10 == 0) goto L_0x00bd;
+    L_0x00b1:
+        r10 = r8.admin_rights;
+        if (r10 == 0) goto L_0x00bd;
+    L_0x00b5:
+        r11 = r10.post_messages;
+        if (r11 != 0) goto L_0x00c1;
+    L_0x00b9:
+        r10 = r10.add_admins;
+        if (r10 != 0) goto L_0x00c1;
+    L_0x00bd:
+        r10 = r8.creator;
+        if (r10 == 0) goto L_0x00c6;
+    L_0x00c1:
+        r10 = r13.dialogsCanAddUsers;
+        r10.add(r7);
+    L_0x00c6:
+        if (r8 == 0) goto L_0x00d2;
+    L_0x00c8:
+        r10 = r8.megagroup;
+        if (r10 == 0) goto L_0x00d2;
+    L_0x00cc:
         r8 = r13.dialogsGroupsOnly;
         r8.add(r7);
         goto L_0x010f;
-    L_0x00e0:
-        r8 = r13.dialogsChannelsOnly;
-        r8.add(r7);
+    L_0x00d2:
+        r10 = r13.dialogsChannelsOnly;
+        r10.add(r7);
+        r10 = org.telegram.messenger.ChatObject.hasAdminRights(r8);
+        if (r10 == 0) goto L_0x00e4;
+    L_0x00dd:
+        r8 = org.telegram.messenger.ChatObject.canPost(r8);
+        if (r8 == 0) goto L_0x00e4;
+    L_0x00e3:
         goto L_0x010f;
+    L_0x00e4:
+        r8 = 0;
+        goto L_0x0110;
     L_0x00e6:
         if (r9 >= 0) goto L_0x0108;
     L_0x00e8:
@@ -18565,7 +18588,7 @@ public class MessagesController implements NotificationCenterDelegate {
     L_0x00f7:
         r7 = r13.allDialogs;
         r7.remove(r4);
-        goto L_0x0139;
+        goto L_0x014a;
     L_0x00fd:
         r8 = r13.dialogsCanAddUsers;
         r8.add(r7);
@@ -18578,63 +18601,77 @@ public class MessagesController implements NotificationCenterDelegate {
         r8 = r13.dialogsUsersOnly;
         r8.add(r7);
     L_0x010f:
+        r8 = 1;
+    L_0x0110:
+        if (r8 == 0) goto L_0x0120;
+    L_0x0112:
+        if (r9 != r1) goto L_0x011b;
+    L_0x0114:
+        r6 = r13.dialogsForward;
+        r6.add(r0, r7);
+        r6 = 1;
+        goto L_0x0120;
+    L_0x011b:
+        r8 = r13.dialogsForward;
+        r8.add(r7);
+    L_0x0120:
         r8 = r7.unread_count;
-        if (r8 != 0) goto L_0x0117;
-    L_0x0113:
+        if (r8 != 0) goto L_0x0128;
+    L_0x0124:
         r8 = r7.unread_mark;
-        if (r8 == 0) goto L_0x0124;
-    L_0x0117:
+        if (r8 == 0) goto L_0x0135;
+    L_0x0128:
         r8 = r7.id;
         r8 = r13.isDialogMuted(r8);
-        if (r8 != 0) goto L_0x0124;
-    L_0x011f:
+        if (r8 != 0) goto L_0x0135;
+    L_0x0130:
         r8 = r13.unreadUnmutedDialogs;
         r8 = r8 + r2;
         r13.unreadUnmutedDialogs = r8;
-    L_0x0124:
+    L_0x0135:
         r8 = r13.proxyDialog;
-        if (r8 == 0) goto L_0x013e;
-    L_0x0128:
+        if (r8 == 0) goto L_0x014f;
+    L_0x0139:
         r9 = r7.id;
         r11 = r8.id;
         r8 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1));
-        if (r8 != 0) goto L_0x013e;
-    L_0x0130:
+        if (r8 != 0) goto L_0x014f;
+    L_0x0141:
         r8 = r13.isLeftProxyChannel;
-        if (r8 == 0) goto L_0x013e;
-    L_0x0134:
+        if (r8 == 0) goto L_0x014f;
+    L_0x0145:
         r7 = r13.allDialogs;
         r7.remove(r4);
-    L_0x0139:
+    L_0x014a:
         r4 = r4 + -1;
         r5 = r5 + -1;
-        goto L_0x0142;
-    L_0x013e:
+        goto L_0x0153;
+    L_0x014f:
         r8 = -1;
         r13.addDialogToItsFolder(r8, r7, r3);
-    L_0x0142:
+    L_0x0153:
         r4 = r4 + r2;
         goto L_0x007d;
-    L_0x0145:
+    L_0x0156:
         r14 = r13.proxyDialog;
-        if (r14 == 0) goto L_0x0158;
-    L_0x0149:
+        if (r14 == 0) goto L_0x0169;
+    L_0x015a:
         r1 = r13.isLeftProxyChannel;
-        if (r1 == 0) goto L_0x0158;
-    L_0x014d:
+        if (r1 == 0) goto L_0x0169;
+    L_0x015e:
         r1 = r13.allDialogs;
         r1.add(r0, r14);
         r14 = -2;
         r1 = r13.proxyDialog;
         r13.addDialogToItsFolder(r14, r1, r3);
-    L_0x0158:
-        if (r6 != 0) goto L_0x0189;
-    L_0x015a:
+    L_0x0169:
+        if (r6 != 0) goto L_0x019a;
+    L_0x016b:
         r14 = r13.currentAccount;
         r14 = org.telegram.messenger.UserConfig.getInstance(r14);
         r14 = r14.getCurrentUser();
-        if (r14 == 0) goto L_0x0189;
-    L_0x0166:
+        if (r14 == 0) goto L_0x019a;
+    L_0x0177:
         r1 = new org.telegram.tgnet.TLRPC$TL_dialog;
         r1.<init>();
         r2 = r14.id;
@@ -18651,25 +18688,25 @@ public class MessagesController implements NotificationCenterDelegate {
         r2.user_id = r14;
         r14 = r13.dialogsForward;
         r14.add(r0, r1);
-    L_0x0189:
+    L_0x019a:
         r14 = r13.dialogsByFolder;
         r14 = r14.size();
-        if (r0 >= r14) goto L_0x01ad;
-    L_0x0191:
+        if (r0 >= r14) goto L_0x01be;
+    L_0x01a2:
         r14 = r13.dialogsByFolder;
         r14 = r14.keyAt(r0);
         r1 = r13.dialogsByFolder;
         r1 = r1.valueAt(r0);
         r1 = (java.util.ArrayList) r1;
         r1 = r1.isEmpty();
-        if (r1 == 0) goto L_0x01aa;
-    L_0x01a5:
+        if (r1 == 0) goto L_0x01bb;
+    L_0x01b6:
         r1 = r13.dialogsByFolder;
         r1.remove(r14);
-    L_0x01aa:
+    L_0x01bb:
         r0 = r0 + 1;
-        goto L_0x0189;
-    L_0x01ad:
+        goto L_0x019a;
+    L_0x01be:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.sortDialogs(android.util.SparseArray):void");

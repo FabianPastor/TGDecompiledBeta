@@ -158,7 +158,7 @@ public class HintDialogCell extends FrameLayout {
                 canvas.restore();
             }
             User user = this.currentUser;
-            if (user != null) {
+            if (!(user == null || user.bot)) {
                 UserStatus userStatus = user.status;
                 if ((userStatus != null && userStatus.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(this.currentUser.id))) {
                     dp = AndroidUtilities.dp(53.0f);

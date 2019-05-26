@@ -1766,15 +1766,15 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         L_0x0270:
             r0 = r1.result;
             r2 = r0[r4];
-            if (r2 == 0) goto L_0x044d;
+            if (r2 == 0) goto L_0x044e;
         L_0x0276:
             if (r6 != 0) goto L_0x0280;
         L_0x0278:
             r0 = r0[r4];
             r0 = r0.contains(r14);
-            if (r0 == 0) goto L_0x044d;
+            if (r0 == 0) goto L_0x044e;
         L_0x0280:
-            if (r3 == 0) goto L_0x044d;
+            if (r3 == 0) goto L_0x044e;
         L_0x0282:
             r0 = r1.result;
             r0 = r0[r4];
@@ -1785,7 +1785,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             r6 = r0 + 10;
             r2 = r2.indexOf(r5, r6);
             r5 = -1;
-            if (r0 == r5) goto L_0x0449;
+            if (r0 == r5) goto L_0x044a;
         L_0x0299:
             if (r2 != r5) goto L_0x02a3;
         L_0x029b:
@@ -1819,7 +1819,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
         L_0x02d5:
             r4 = 0;
         L_0x02d6:
-            if (r4 == 0) goto L_0x0449;
+            if (r4 == 0) goto L_0x044a;
         L_0x02d8:
             r0 = org.telegram.ui.Components.WebPlayerView.playerIdPattern;
             r0 = r0.matcher(r4);
@@ -1943,7 +1943,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             r10 = 1;
         L_0x03d2:
             r0 = android.text.TextUtils.isEmpty(r7);
-            if (r0 != 0) goto L_0x044b;
+            if (r0 != 0) goto L_0x044c;
         L_0x03d8:
             r0 = android.os.Build.VERSION.SDK_INT;
             r2 = 21;
@@ -1962,7 +1962,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             r2 = "');";
             r0.append(r2);
             r0 = r0.toString();
-            goto L_0x0436;
+            goto L_0x0437;
         L_0x0402:
             r0 = new java.lang.StringBuilder;
             r0.<init>();
@@ -1983,39 +1983,39 @@ public class WebPlayerView extends ViewGroup implements VideoPlayerDelegate, OnA
             r2 = "'));";
             r0.append(r2);
             r0 = r0.toString();
-        L_0x0436:
-            r2 = new org.telegram.ui.Components.-$$Lambda$WebPlayerView$YoutubeVideoTask$GMLQkdVjUFyM84BTj7n250BCLASSNAMEg;	 Catch:{ Exception -> 0x0444 }
-            r2.<init>(r1, r0);	 Catch:{ Exception -> 0x0444 }
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r2);	 Catch:{ Exception -> 0x0444 }
-            r0 = r1.countDownLatch;	 Catch:{ Exception -> 0x0444 }
-            r0.await();	 Catch:{ Exception -> 0x0444 }
-            goto L_0x044f;
-        L_0x0444:
+        L_0x0437:
+            r2 = new org.telegram.ui.Components.-$$Lambda$WebPlayerView$YoutubeVideoTask$GMLQkdVjUFyM84BTj7n250BCLASSNAMEg;	 Catch:{ Exception -> 0x0445 }
+            r2.<init>(r1, r0);	 Catch:{ Exception -> 0x0445 }
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r2);	 Catch:{ Exception -> 0x0445 }
+            r0 = r1.countDownLatch;	 Catch:{ Exception -> 0x0445 }
+            r0.await();	 Catch:{ Exception -> 0x0445 }
+            goto L_0x0450;
+        L_0x0445:
             r0 = move-exception;
             org.telegram.messenger.FileLog.e(r0);
-            goto L_0x044b;
-        L_0x0449:
+            goto L_0x044c;
+        L_0x044a:
             r9 = 0;
             r10 = 1;
-        L_0x044b:
+        L_0x044c:
             r5 = 1;
-            goto L_0x044f;
-        L_0x044d:
+            goto L_0x0450;
+        L_0x044e:
             r9 = 0;
             r5 = r6;
-        L_0x044f:
+        L_0x0450:
             r0 = r23.isCancelled();
-            if (r0 != 0) goto L_0x045b;
-        L_0x0455:
-            if (r5 == 0) goto L_0x0458;
-        L_0x0457:
-            goto L_0x045b;
+            if (r0 != 0) goto L_0x045c;
+        L_0x0456:
+            if (r5 == 0) goto L_0x0459;
         L_0x0458:
-            r4 = r1.result;
             goto L_0x045c;
-        L_0x045b:
-            r4 = r9;
+        L_0x0459:
+            r4 = r1.result;
+            goto L_0x045d;
         L_0x045c:
+            r4 = r9;
+        L_0x045d:
             return r4;
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.WebPlayerView$YoutubeVideoTask.doInBackground(java.lang.Void[]):java.lang.String[]");

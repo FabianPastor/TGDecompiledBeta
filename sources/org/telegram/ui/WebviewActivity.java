@@ -443,18 +443,20 @@ public class WebviewActivity extends BaseFragment {
     public ThemeDescription[] getThemeDescriptions() {
         ThemeDescription[] themeDescriptionArr;
         if (this.type == 0) {
-            themeDescriptionArr = new ThemeDescription[9];
+            themeDescriptionArr = new ThemeDescription[10];
+            themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite");
             themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault");
             themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon");
             themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle");
             themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector");
             themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, null, null, null, null, "actionBarDefaultSubmenuBackground");
             themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, null, null, null, null, "actionBarDefaultSubmenuItem");
-            themeDescriptionArr[7] = new ThemeDescription(this.progressView, 0, null, null, null, null, "contextProgressInner2");
-            themeDescriptionArr[8] = new ThemeDescription(this.progressView, 0, null, null, null, null, "contextProgressOuter2");
+            themeDescriptionArr[7] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM | ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "actionBarDefaultSubmenuItemIcon");
+            themeDescriptionArr[8] = new ThemeDescription(this.progressView, 0, null, null, null, null, "contextProgressInner2");
+            themeDescriptionArr[9] = new ThemeDescription(this.progressView, 0, null, null, null, null, "contextProgressOuter2");
             return themeDescriptionArr;
         }
-        themeDescriptionArr = new ThemeDescription[10];
+        themeDescriptionArr = new ThemeDescription[11];
         themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite");
         themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "player_actionBar");
         themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "player_actionBarItems");
@@ -463,8 +465,9 @@ public class WebviewActivity extends BaseFragment {
         themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "player_actionBarSelector");
         themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, null, null, null, null, "actionBarDefaultSubmenuBackground");
         themeDescriptionArr[7] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, null, null, null, null, "actionBarDefaultSubmenuItem");
-        themeDescriptionArr[8] = new ThemeDescription(this.progressView, 0, null, null, null, null, "contextProgressInner4");
-        themeDescriptionArr[9] = new ThemeDescription(this.progressView, 0, null, null, null, null, "contextProgressOuter4");
+        themeDescriptionArr[8] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM | ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "actionBarDefaultSubmenuItemIcon");
+        themeDescriptionArr[9] = new ThemeDescription(this.progressView, 0, null, null, null, null, "contextProgressInner4");
+        themeDescriptionArr[10] = new ThemeDescription(this.progressView, 0, null, null, null, null, "contextProgressOuter4");
         return themeDescriptionArr;
     }
 }

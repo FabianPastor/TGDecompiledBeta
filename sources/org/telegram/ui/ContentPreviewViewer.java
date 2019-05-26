@@ -30,11 +30,14 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.WebFile;
+import org.telegram.tgnet.TLRPC.BotInlineResult;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.DocumentAttribute;
 import org.telegram.tgnet.TLRPC.InputStickerSet;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.TL_documentAttributeSticker;
+import org.telegram.tgnet.TLRPC.WebDocument;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.BottomSheet.Builder;
 import org.telegram.ui.ActionBar.Theme;
@@ -66,6 +69,7 @@ public class ContentPreviewViewer {
     private InputStickerSet currentStickerSet;
     private ContentPreviewViewerDelegate delegate;
     private float finalMoveY;
+    private BotInlineResult inlineResult;
     private boolean isVisible = false;
     private int keyboardHeight = AndroidUtilities.dp(200.0f);
     private WindowInsets lastInsets;
@@ -127,6 +131,7 @@ public class ContentPreviewViewer {
                         }
                     }
                 } else if (ContentPreviewViewer.this.delegate != null) {
+                    boolean hasRecentGif;
                     ContentPreviewViewer.this.animateY = true;
                     ContentPreviewViewer contentPreviewViewer = ContentPreviewViewer.this;
                     contentPreviewViewer.visibleDialog = new BottomSheet(contentPreviewViewer.parentActivity, false, 0) {
@@ -157,15 +162,19 @@ public class ContentPreviewViewer {
                         arrayList.add(Integer.valueOf(NUM));
                         arrayList5.add(Integer.valueOf(0));
                     }
-                    boolean hasRecentGif = DataQuery.getInstance(ContentPreviewViewer.this.currentAccount).hasRecentGif(ContentPreviewViewer.this.currentDocument);
-                    if (hasRecentGif) {
-                        arrayList4.add(LocaleController.formatString("Delete", NUM, new Object[0]));
-                        arrayList.add(Integer.valueOf(NUM));
-                        arrayList5.add(Integer.valueOf(1));
+                    if (ContentPreviewViewer.this.currentDocument != null) {
+                        hasRecentGif = DataQuery.getInstance(ContentPreviewViewer.this.currentAccount).hasRecentGif(ContentPreviewViewer.this.currentDocument);
+                        if (hasRecentGif) {
+                            arrayList4.add(LocaleController.formatString("Delete", NUM, new Object[0]));
+                            arrayList.add(Integer.valueOf(NUM));
+                            arrayList5.add(Integer.valueOf(1));
+                        } else {
+                            arrayList4.add(LocaleController.formatString("SaveToGIFs", NUM, new Object[0]));
+                            arrayList.add(Integer.valueOf(NUM));
+                            arrayList5.add(Integer.valueOf(2));
+                        }
                     } else {
-                        arrayList4.add(LocaleController.formatString("SaveToGIFs", NUM, new Object[0]));
-                        arrayList.add(Integer.valueOf(NUM));
-                        arrayList5.add(Integer.valueOf(2));
+                        hasRecentGif = false;
                     }
                     iArr = new int[arrayList.size()];
                     for (int i2 = 0; i2 < arrayList.size(); i2++) {
@@ -208,7 +217,7 @@ public class ContentPreviewViewer {
             if (ContentPreviewViewer.this.parentActivity != null) {
                 if (((Integer) arrayList.get(i)).intValue() == 0) {
                     if (ContentPreviewViewer.this.delegate != null) {
-                        ContentPreviewViewer.this.delegate.sendGif(ContentPreviewViewer.this.currentDocument);
+                        ContentPreviewViewer.this.delegate.sendGif(ContentPreviewViewer.this.currentDocument != null ? ContentPreviewViewer.this.currentDocument : ContentPreviewViewer.this.inlineResult);
                     }
                 } else if (((Integer) arrayList.get(i)).intValue() == 1) {
                     DataQuery.getInstance(ContentPreviewViewer.this.currentAccount).removeRecentGif(ContentPreviewViewer.this.currentDocument);
@@ -245,7 +254,7 @@ public class ContentPreviewViewer {
                 return true;
             }
 
-            public static void $default$sendGif(ContentPreviewViewerDelegate contentPreviewViewerDelegate, Document document) {
+            public static void $default$sendGif(ContentPreviewViewerDelegate contentPreviewViewerDelegate, Object obj) {
             }
         }
 
@@ -257,7 +266,7 @@ public class ContentPreviewViewer {
 
         void openSet(InputStickerSet inputStickerSet, boolean z);
 
-        void sendGif(Document document);
+        void sendGif(Object obj);
 
         void sendSticker(Document document, Object obj);
     }
@@ -322,32 +331,32 @@ public class ContentPreviewViewer {
         if (r14 != 0) goto L_0x000d;
     L_0x0007:
         r14 = r9.isVisible();
-        if (r14 == 0) goto L_0x021a;
+        if (r14 == 0) goto L_0x021e;
     L_0x000d:
         r14 = r10.getAction();
         r1 = 0;
         r2 = 1;
-        if (r14 == r2) goto L_0x01da;
+        if (r14 == r2) goto L_0x01de;
     L_0x0015:
         r14 = r10.getAction();
         r3 = 3;
-        if (r14 == r3) goto L_0x01da;
+        if (r14 == r3) goto L_0x01de;
     L_0x001c:
         r14 = r10.getAction();
         r3 = 6;
         if (r14 != r3) goto L_0x0025;
     L_0x0023:
-        goto L_0x01da;
+        goto L_0x01de;
     L_0x0025:
         r13 = r10.getAction();
-        if (r13 == 0) goto L_0x021a;
+        if (r13 == 0) goto L_0x021e;
     L_0x002b:
         r13 = r9.isVisible;
         r14 = 2;
-        if (r13 == 0) goto L_0x019f;
+        if (r13 == 0) goto L_0x01a3;
     L_0x0030:
         r13 = r10.getAction();
-        if (r13 != r14) goto L_0x019e;
+        if (r13 != r14) goto L_0x01a2;
     L_0x0036:
         r13 = r9.currentContentType;
         if (r13 != r2) goto L_0x00b4;
@@ -428,7 +437,7 @@ public class ContentPreviewViewer {
         r14 = r11.getChildCount();
         r3 = 0;
     L_0x00c3:
-        if (r3 >= r14) goto L_0x019e;
+        if (r3 >= r14) goto L_0x01a2;
     L_0x00c5:
         r4 = r11 instanceof org.telegram.ui.Components.RecyclerListView;
         if (r4 == 0) goto L_0x00ce;
@@ -446,15 +455,15 @@ public class ContentPreviewViewer {
         r6 = r4.getBottom();
         r7 = r4.getLeft();
         r8 = r4.getRight();
-        if (r5 > r10) goto L_0x019a;
+        if (r5 > r10) goto L_0x019e;
     L_0x00e4:
-        if (r6 < r10) goto L_0x019a;
+        if (r6 < r10) goto L_0x019e;
     L_0x00e6:
-        if (r7 > r13) goto L_0x019a;
+        if (r7 > r13) goto L_0x019e;
     L_0x00e8:
         if (r8 >= r13) goto L_0x00ec;
     L_0x00ea:
-        goto L_0x019a;
+        goto L_0x019e;
     L_0x00ec:
         r10 = r4 instanceof org.telegram.ui.Cells.StickerEmojiCell;
         r11 = -1;
@@ -497,12 +506,12 @@ public class ContentPreviewViewer {
     L_0x0128:
         r10 = -1;
     L_0x0129:
-        if (r10 == r11) goto L_0x019e;
+        if (r10 == r11) goto L_0x01a2;
     L_0x012b:
         r11 = r9.currentPreviewCell;
         if (r4 != r11) goto L_0x0131;
     L_0x012f:
-        goto L_0x019e;
+        goto L_0x01a2;
     L_0x0131:
         r13 = r11 instanceof org.telegram.ui.Cells.StickerEmojiCell;
         if (r13 == 0) goto L_0x013b;
@@ -536,44 +545,45 @@ public class ContentPreviewViewer {
         r13 = r9.currentPreviewCell;
         r13 = (org.telegram.ui.Cells.StickerEmojiCell) r13;
         r13 = r13.isRecent();
-        r9.open(r12, r10, r13);
+        r9.open(r12, r1, r10, r13);
         r11.setScaled(r2);
-        goto L_0x0199;
+        goto L_0x019d;
     L_0x0170:
         r12 = r11 instanceof org.telegram.ui.Cells.StickerCell;
         if (r12 == 0) goto L_0x0187;
     L_0x0174:
         r11 = (org.telegram.ui.Cells.StickerCell) r11;
         r12 = r11.getSticker();
-        r9.open(r12, r10, r0);
+        r9.open(r12, r1, r10, r0);
         r11.setScaled(r2);
         r10 = r11.isClearsInputField();
         r9.clearsInputField = r10;
-        goto L_0x0199;
+        goto L_0x019d;
     L_0x0187:
         r12 = r11 instanceof org.telegram.ui.Cells.ContextLinkCell;
-        if (r12 == 0) goto L_0x0199;
+        if (r12 == 0) goto L_0x019d;
     L_0x018b:
         r11 = (org.telegram.ui.Cells.ContextLinkCell) r11;
         r12 = r11.getDocument();
-        r9.open(r12, r10, r0);
-        if (r10 == r2) goto L_0x0199;
-    L_0x0196:
-        r11.setScaled(r2);
-    L_0x0199:
-        return r2;
+        r13 = r11.getBotInlineResult();
+        r9.open(r12, r13, r10, r0);
+        if (r10 == r2) goto L_0x019d;
     L_0x019a:
+        r11.setScaled(r2);
+    L_0x019d:
+        return r2;
+    L_0x019e:
         r3 = r3 + 1;
         goto L_0x00c3;
-    L_0x019e:
+    L_0x01a2:
         return r2;
-    L_0x019f:
-        r11 = r9.openPreviewRunnable;
-        if (r11 == 0) goto L_0x021a;
     L_0x01a3:
+        r11 = r9.openPreviewRunnable;
+        if (r11 == 0) goto L_0x021e;
+    L_0x01a7:
         r11 = r10.getAction();
-        if (r11 != r14) goto L_0x01d2;
-    L_0x01a9:
+        if (r11 != r14) goto L_0x01d6;
+    L_0x01ad:
         r11 = r9.startX;
         r11 = (float) r11;
         r12 = r10.getX();
@@ -589,58 +599,58 @@ public class ContentPreviewViewer {
         r12 = org.telegram.messenger.AndroidUtilities.dp(r12);
         r12 = (double) r12;
         r14 = (r10 > r12 ? 1 : (r10 == r12 ? 0 : -1));
-        if (r14 <= 0) goto L_0x021a;
-    L_0x01ca:
+        if (r14 <= 0) goto L_0x021e;
+    L_0x01ce:
         r10 = r9.openPreviewRunnable;
         org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r10);
         r9.openPreviewRunnable = r1;
-        goto L_0x021a;
-    L_0x01d2:
+        goto L_0x021e;
+    L_0x01d6:
         r10 = r9.openPreviewRunnable;
         org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r10);
         r9.openPreviewRunnable = r1;
-        goto L_0x021a;
-    L_0x01da:
+        goto L_0x021e;
+    L_0x01de:
         r10 = new org.telegram.ui.-$$Lambda$ContentPreviewViewer$EMKDqwNyTHEkiYf1BXP5lN4E1U8;
         r10.<init>(r11, r13);
         r11 = 150; // 0x96 float:2.1E-43 double:7.4E-322;
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r10, r11);
         r10 = r9.openPreviewRunnable;
-        if (r10 == 0) goto L_0x01ee;
-    L_0x01e8:
+        if (r10 == 0) goto L_0x01f2;
+    L_0x01ec:
         org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r10);
         r9.openPreviewRunnable = r1;
-        goto L_0x021a;
-    L_0x01ee:
+        goto L_0x021e;
+    L_0x01f2:
         r10 = r9.isVisible();
-        if (r10 == 0) goto L_0x021a;
-    L_0x01f4:
+        if (r10 == 0) goto L_0x021e;
+    L_0x01f8:
         r9.close();
         r10 = r9.currentPreviewCell;
-        if (r10 == 0) goto L_0x021a;
-    L_0x01fb:
-        r11 = r10 instanceof org.telegram.ui.Cells.StickerEmojiCell;
-        if (r11 == 0) goto L_0x0205;
+        if (r10 == 0) goto L_0x021e;
     L_0x01ff:
+        r11 = r10 instanceof org.telegram.ui.Cells.StickerEmojiCell;
+        if (r11 == 0) goto L_0x0209;
+    L_0x0203:
         r10 = (org.telegram.ui.Cells.StickerEmojiCell) r10;
         r10.setScaled(r0);
-        goto L_0x0218;
-    L_0x0205:
-        r11 = r10 instanceof org.telegram.ui.Cells.StickerCell;
-        if (r11 == 0) goto L_0x020f;
+        goto L_0x021c;
     L_0x0209:
+        r11 = r10 instanceof org.telegram.ui.Cells.StickerCell;
+        if (r11 == 0) goto L_0x0213;
+    L_0x020d:
         r10 = (org.telegram.ui.Cells.StickerCell) r10;
         r10.setScaled(r0);
-        goto L_0x0218;
-    L_0x020f:
-        r11 = r10 instanceof org.telegram.ui.Cells.ContextLinkCell;
-        if (r11 == 0) goto L_0x0218;
+        goto L_0x021c;
     L_0x0213:
+        r11 = r10 instanceof org.telegram.ui.Cells.ContextLinkCell;
+        if (r11 == 0) goto L_0x021c;
+    L_0x0217:
         r10 = (org.telegram.ui.Cells.ContextLinkCell) r10;
         r10.setScaled(r0);
-    L_0x0218:
+    L_0x021c:
         r9.currentPreviewCell = r1;
-    L_0x021a:
+    L_0x021e:
         return r0;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ContentPreviewViewer.onTouch(android.view.MotionEvent, org.telegram.ui.Components.RecyclerListView, int, java.lang.Object, org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate):boolean");
@@ -790,16 +800,16 @@ public class ContentPreviewViewer {
             View view = this.currentPreviewCell;
             if (view instanceof StickerEmojiCell) {
                 StickerEmojiCell stickerEmojiCell = (StickerEmojiCell) view;
-                open(stickerEmojiCell.getSticker(), i2, ((StickerEmojiCell) this.currentPreviewCell).isRecent());
+                open(stickerEmojiCell.getSticker(), null, i2, ((StickerEmojiCell) this.currentPreviewCell).isRecent());
                 stickerEmojiCell.setScaled(true);
             } else if (view instanceof StickerCell) {
                 StickerCell stickerCell = (StickerCell) view;
-                open(stickerCell.getSticker(), i2, false);
+                open(stickerCell.getSticker(), null, i2, false);
                 stickerCell.setScaled(true);
                 this.clearsInputField = stickerCell.isClearsInputField();
             } else if (view instanceof ContextLinkCell) {
                 ContextLinkCell contextLinkCell = (ContextLinkCell) view;
-                open(contextLinkCell.getDocument(), i2, false);
+                open(contextLinkCell.getDocument(), contextLinkCell.getBotInlineResult(), i2, false);
                 if (i2 != 1) {
                     contextLinkCell.setScaled(true);
                 }
@@ -862,66 +872,92 @@ public class ContentPreviewViewer {
         this.keyboardHeight = i;
     }
 
-    public void open(Document document, int i, boolean z) {
+    public void open(Document document, BotInlineResult botInlineResult, int i, boolean z) {
         Document document2 = document;
+        BotInlineResult botInlineResult2 = botInlineResult;
         int i2 = i;
         String str = "window";
-        if (this.parentActivity != null && document2 != null && this.windowView != null) {
+        if (!(this.parentActivity == null || this.windowView == null)) {
             this.stickerEmojiLayout = null;
             if (i2 == 0) {
-                InputStickerSet inputStickerSet;
-                if (textPaint == null) {
-                    textPaint = new TextPaint(1);
-                    textPaint.setTextSize((float) AndroidUtilities.dp(24.0f));
-                }
-                for (int i3 = 0; i3 < document2.attributes.size(); i3++) {
-                    DocumentAttribute documentAttribute = (DocumentAttribute) document2.attributes.get(i3);
-                    if (documentAttribute instanceof TL_documentAttributeSticker) {
-                        inputStickerSet = documentAttribute.stickerset;
-                        if (inputStickerSet != null) {
+                if (document2 != null) {
+                    InputStickerSet inputStickerSet;
+                    if (textPaint == null) {
+                        textPaint = new TextPaint(1);
+                        textPaint.setTextSize((float) AndroidUtilities.dp(24.0f));
+                    }
+                    for (int i3 = 0; i3 < document2.attributes.size(); i3++) {
+                        DocumentAttribute documentAttribute = (DocumentAttribute) document2.attributes.get(i3);
+                        if (documentAttribute instanceof TL_documentAttributeSticker) {
+                            inputStickerSet = documentAttribute.stickerset;
+                            if (inputStickerSet != null) {
+                                break;
+                            }
+                        }
+                    }
+                    inputStickerSet = null;
+                    if (inputStickerSet != null) {
+                        try {
+                            if (this.visibleDialog != null) {
+                                this.visibleDialog.setOnDismissListener(null);
+                                this.visibleDialog.dismiss();
+                                this.visibleDialog = null;
+                            }
+                        } catch (Exception e) {
+                            FileLog.e(e);
+                        }
+                        AndroidUtilities.cancelRunOnUIThread(this.showSheetRunnable);
+                        AndroidUtilities.runOnUIThread(this.showSheetRunnable, 1300);
+                    }
+                    this.currentStickerSet = inputStickerSet;
+                    this.centerImage.setImage(ImageLocation.getForDocument(document), null, ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(document2.thumbs, 90), document2), null, "webp", (Object) this.currentStickerSet, 1);
+                    for (int i4 = 0; i4 < document2.attributes.size(); i4++) {
+                        DocumentAttribute documentAttribute2 = (DocumentAttribute) document2.attributes.get(i4);
+                        if ((documentAttribute2 instanceof TL_documentAttributeSticker) && !TextUtils.isEmpty(documentAttribute2.alt)) {
+                            this.stickerEmojiLayout = new StaticLayout(Emoji.replaceEmoji(documentAttribute2.alt, textPaint.getFontMetricsInt(), AndroidUtilities.dp(24.0f), false), textPaint, AndroidUtilities.dp(100.0f), Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
                             break;
                         }
                     }
+                } else {
+                    return;
                 }
-                inputStickerSet = null;
-                if (inputStickerSet != null) {
-                    try {
-                        if (this.visibleDialog != null) {
-                            this.visibleDialog.setOnDismissListener(null);
-                            this.visibleDialog.dismiss();
-                            this.visibleDialog = null;
-                        }
-                    } catch (Exception e) {
-                        FileLog.e(e);
-                    }
-                    AndroidUtilities.cancelRunOnUIThread(this.showSheetRunnable);
-                    AndroidUtilities.runOnUIThread(this.showSheetRunnable, 1300);
-                }
-                this.currentStickerSet = inputStickerSet;
-                String str2 = "webp";
-                this.centerImage.setImage(ImageLocation.getForDocument(document), null, ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(document2.thumbs, 90), document2), null, str2, this.currentStickerSet, 1);
-                for (int i4 = 0; i4 < document2.attributes.size(); i4++) {
-                    DocumentAttribute documentAttribute2 = (DocumentAttribute) document2.attributes.get(i4);
-                    if ((documentAttribute2 instanceof TL_documentAttributeSticker) && !TextUtils.isEmpty(documentAttribute2.alt)) {
-                        this.stickerEmojiLayout = new StaticLayout(Emoji.replaceEmoji(documentAttribute2.alt, textPaint.getFontMetricsInt(), AndroidUtilities.dp(24.0f), false), textPaint, AndroidUtilities.dp(100.0f), Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
-                        break;
-                    }
-                }
-            } else {
+            }
+            String str2 = "gif";
+            ImageReceiver imageReceiver;
+            ImageLocation forDocument;
+            ImageLocation forDocument2;
+            int i5;
+            StringBuilder stringBuilder;
+            if (document2 != null) {
                 PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(document2.thumbs, 90);
-                ImageReceiver imageReceiver = this.centerImage;
-                ImageLocation forDocument = ImageLocation.getForDocument(document);
-                ImageLocation forDocument2 = ImageLocation.getForDocument(closestPhotoSizeWithSize, document2);
-                int i5 = document2.size;
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("gif");
+                imageReceiver = this.centerImage;
+                forDocument = ImageLocation.getForDocument(document);
+                forDocument2 = ImageLocation.getForDocument(closestPhotoSizeWithSize, document2);
+                i5 = document2.size;
+                stringBuilder = new StringBuilder();
+                stringBuilder.append(str2);
                 stringBuilder.append(document2);
                 imageReceiver.setImage(forDocument, null, forDocument2, "90_90_b", i5, null, stringBuilder.toString(), 0);
-                AndroidUtilities.cancelRunOnUIThread(this.showSheetRunnable);
-                AndroidUtilities.runOnUIThread(this.showSheetRunnable, 2000);
+            } else if (botInlineResult2 != null) {
+                WebDocument webDocument = botInlineResult2.content;
+                if (webDocument != null) {
+                    imageReceiver = this.centerImage;
+                    forDocument = ImageLocation.getForWebFile(WebFile.createWithWebDocument(webDocument));
+                    forDocument2 = ImageLocation.getForWebFile(WebFile.createWithWebDocument(botInlineResult2.thumb));
+                    i5 = botInlineResult2.content.size;
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append(str2);
+                    stringBuilder.append(botInlineResult2);
+                    imageReceiver.setImage(forDocument, null, forDocument2, "90_90_b", i5, null, stringBuilder.toString(), 1);
+                } else {
+                    return;
+                }
             }
+            AndroidUtilities.cancelRunOnUIThread(this.showSheetRunnable);
+            AndroidUtilities.runOnUIThread(this.showSheetRunnable, 2000);
             this.currentContentType = i2;
             this.currentDocument = document2;
+            this.inlineResult = botInlineResult2;
             this.containerView.invalidate();
             if (!this.isVisible) {
                 AndroidUtilities.lockOrientation(this.parentActivity);
@@ -1020,12 +1056,12 @@ public class ContentPreviewViewer {
         /*
         r9 = this;
         r0 = r9.containerView;
-        if (r0 == 0) goto L_0x01d4;
+        if (r0 == 0) goto L_0x01d5;
     L_0x0004:
         r0 = r9.backgroundDrawable;
         if (r0 != 0) goto L_0x000a;
     L_0x0008:
-        goto L_0x01d4;
+        goto L_0x01d5;
     L_0x000a:
         r1 = NUM; // 0x43340000 float:180.0 double:5.570497984E-315;
         r2 = r9.showProgress;
@@ -1197,7 +1233,7 @@ public class ContentPreviewViewer {
     L_0x0155:
         r10 = r9.showProgress;
         r10 = (r10 > r1 ? 1 : (r10 == r1 ? 0 : -1));
-        if (r10 == 0) goto L_0x01d4;
+        if (r10 == 0) goto L_0x01d5;
     L_0x015b:
         r2 = java.lang.System.currentTimeMillis();
         r4 = r9.lastUpdateTime;
@@ -1212,15 +1248,15 @@ public class ContentPreviewViewer {
         r10.invalidate();
         r10 = r9.showProgress;
         r10 = (r10 > r1 ? 1 : (r10 == r1 ? 0 : -1));
-        if (r10 <= 0) goto L_0x01d4;
+        if (r10 <= 0) goto L_0x01d5;
     L_0x0177:
         r9.showProgress = r1;
-        goto L_0x01d4;
+        goto L_0x01d5;
     L_0x017a:
         r10 = r9.showProgress;
         r1 = 0;
         r10 = (r10 > r1 ? 1 : (r10 == r1 ? 0 : -1));
-        if (r10 == 0) goto L_0x01d4;
+        if (r10 == 0) goto L_0x01d5;
     L_0x0181:
         r2 = java.lang.System.currentTimeMillis();
         r4 = r9.lastUpdateTime;
@@ -1241,7 +1277,7 @@ public class ContentPreviewViewer {
     L_0x019f:
         r10 = r9.showProgress;
         r10 = (r10 > r1 ? 1 : (r10 == r1 ? 0 : -1));
-        if (r10 != 0) goto L_0x01d4;
+        if (r10 != 0) goto L_0x01d5;
     L_0x01a5:
         r10 = r9.centerImage;
         r0 = 0;
@@ -1251,21 +1287,21 @@ public class ContentPreviewViewer {
         r10 = new org.telegram.ui.-$$Lambda$ContentPreviewViewer$3zyytvnhTcdtAb2UIfBrX-cZ_go;
         r10.<init>(r9);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r10);
-        r10 = r9.windowView;	 Catch:{ Exception -> 0x01d0 }
-        r10 = r10.getParent();	 Catch:{ Exception -> 0x01d0 }
-        if (r10 == 0) goto L_0x01d4;
+        r10 = r9.windowView;	 Catch:{ Exception -> 0x01d1 }
+        r10 = r10.getParent();	 Catch:{ Exception -> 0x01d1 }
+        if (r10 == 0) goto L_0x01d5;
     L_0x01c0:
-        r10 = r9.parentActivity;	 Catch:{ Exception -> 0x01d0 }
+        r10 = r9.parentActivity;	 Catch:{ Exception -> 0x01d1 }
         r0 = "window";
-        r10 = r10.getSystemService(r0);	 Catch:{ Exception -> 0x01d0 }
-        r10 = (android.view.WindowManager) r10;	 Catch:{ Exception -> 0x01d0 }
-        r0 = r9.windowView;	 Catch:{ Exception -> 0x01d0 }
-        r10.removeView(r0);	 Catch:{ Exception -> 0x01d0 }
-        goto L_0x01d4;
-    L_0x01d0:
+        r10 = r10.getSystemService(r0);	 Catch:{ Exception -> 0x01d1 }
+        r10 = (android.view.WindowManager) r10;	 Catch:{ Exception -> 0x01d1 }
+        r0 = r9.windowView;	 Catch:{ Exception -> 0x01d1 }
+        r10.removeView(r0);	 Catch:{ Exception -> 0x01d1 }
+        goto L_0x01d5;
+    L_0x01d1:
         r10 = move-exception;
         org.telegram.messenger.FileLog.e(r10);
-    L_0x01d4:
+    L_0x01d5:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ContentPreviewViewer.onDraw(android.graphics.Canvas):void");

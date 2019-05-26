@@ -1133,6 +1133,10 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         return this.documentAttach;
     }
 
+    public BotInlineResult getBotInlineResult() {
+        return this.inlineResult;
+    }
+
     public ImageReceiver getPhotoImage() {
         return this.linkImageView;
     }

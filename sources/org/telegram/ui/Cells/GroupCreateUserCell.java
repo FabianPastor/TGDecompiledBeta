@@ -245,7 +245,7 @@ public class GroupCreateUserCell extends FrameLayout {
         r11 = r10.statusTextView;
         r0 = org.telegram.ui.ActionBar.Theme.getColor(r0);
         r11.setTextColor(r0);
-        goto L_0x0156;
+        goto L_0x0157;
     L_0x00c0:
         r11 = r10.currentUser;
         r1 = r11.bot;
@@ -257,11 +257,11 @@ public class GroupCreateUserCell extends FrameLayout {
         r0 = org.telegram.ui.ActionBar.Theme.getColor(r0);
         r11.setTextColor(r0);
         r11 = r10.statusTextView;
-        r0 = NUM; // 0x7f0d01b3 float:1.8742997E38 double:1.0531299925E-314;
+        r0 = NUM; // 0x7f0d01b4 float:1.8743E38 double:1.053129993E-314;
         r1 = "Bot";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r11.setText(r0);
-        goto L_0x0156;
+        goto L_0x0157;
     L_0x00e3:
         r11 = r11.id;
         r1 = r10.currentAccount;
@@ -300,7 +300,7 @@ public class GroupCreateUserCell extends FrameLayout {
         r1 = r10.currentUser;
         r0 = org.telegram.messenger.LocaleController.formatUserStatus(r0, r1);
         r11.setText(r0);
-        goto L_0x0156;
+        goto L_0x0157;
     L_0x0138:
         r11 = r10.statusTextView;
         r0 = "windowBackgroundWhiteBlueText";
@@ -309,11 +309,11 @@ public class GroupCreateUserCell extends FrameLayout {
         r0 = org.telegram.ui.ActionBar.Theme.getColor(r0);
         r11.setTextColor(r0);
         r11 = r10.statusTextView;
-        r0 = NUM; // 0x7f0d0677 float:1.8745471E38 double:1.053130595E-314;
+        r0 = NUM; // 0x7f0d067c float:1.8745482E38 double:1.0531305977E-314;
         r1 = "Online";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r11.setText(r0);
-    L_0x0156:
+    L_0x0157:
         r11 = r10.avatarImageView;
         r0 = r10.currentUser;
         r0 = org.telegram.messenger.ImageLocation.getForUser(r0, r2);

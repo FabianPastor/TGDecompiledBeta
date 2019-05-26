@@ -74,7 +74,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         applyTextStyleToSelection(new TypefaceSpan(Typeface.MONOSPACE));
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:8:0x00c1  */
+    /* JADX WARNING: Removed duplicated region for block: B:8:0x00c2  */
     public void makeSelectedUrl() {
         /*
         r9 = this;
@@ -82,7 +82,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         r1 = r9.getContext();
         r0.<init>(r1);
         r1 = "CreateLink";
-        r2 = NUM; // 0x7f0d02ed float:1.8743634E38 double:1.0531301476E-314;
+        r2 = NUM; // 0x7f0d02f2 float:1.8743644E38 double:1.05313015E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);
         r0.setTitle(r1);
         r1 = new org.telegram.ui.Components.EditTextCaption$1;
@@ -97,7 +97,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         r3 = org.telegram.ui.ActionBar.Theme.getColor(r3);
         r1.setTextColor(r3);
         r3 = "URL";
-        r4 = NUM; // 0x7f0d099c float:1.8747104E38 double:1.053130993E-314;
+        r4 = NUM; // 0x7f0d09a6 float:1.8747124E38 double:1.053130998E-314;
         r3 = org.telegram.messenger.LocaleController.getString(r3, r4);
         r1.setHintText(r3);
         r3 = "windowBackgroundWhiteBlueHeader";
@@ -122,26 +122,26 @@ public class EditTextCaption extends EditTextBoldCursor {
         r1.setPadding(r4, r4, r4, r4);
         r0.setView(r1);
         r5 = r9.selectionStart;
-        if (r5 < 0) goto L_0x0088;
-    L_0x007e:
+        if (r5 < 0) goto L_0x0089;
+    L_0x007f:
         r6 = r9.selectionEnd;
-        if (r6 < 0) goto L_0x0088;
-    L_0x0082:
+        if (r6 < 0) goto L_0x0089;
+    L_0x0083:
         r7 = -1;
         r9.selectionEnd = r7;
         r9.selectionStart = r7;
-        goto L_0x0090;
-    L_0x0088:
+        goto L_0x0091;
+    L_0x0089:
         r5 = r9.getSelectionStart();
         r6 = r9.getSelectionEnd();
-    L_0x0090:
-        r7 = NUM; // 0x7f0d0674 float:1.8745465E38 double:1.0531305937E-314;
+    L_0x0091:
+        r7 = NUM; // 0x7f0d0679 float:1.8745476E38 double:1.053130596E-314;
         r8 = "OK";
         r7 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r8 = new org.telegram.ui.Components.-$$Lambda$EditTextCaption$BQIhHIR0EWfMGyyXmJJ-pkFKO1Y;
         r8.<init>(r9, r5, r6, r1);
         r0.setPositiveButton(r7, r8);
-        r5 = NUM; // 0x7f0d01dd float:1.8743082E38 double:1.053130013E-314;
+        r5 = NUM; // 0x7f0d01de float:1.8743084E38 double:1.0531300137E-314;
         r6 = "Cancel";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r0.setNegativeButton(r5, r3);
@@ -151,15 +151,15 @@ public class EditTextCaption extends EditTextBoldCursor {
         r0.setOnShowListener(r3);
         r0 = r1.getLayoutParams();
         r0 = (android.view.ViewGroup.MarginLayoutParams) r0;
-        if (r0 == 0) goto L_0x00df;
-    L_0x00c1:
+        if (r0 == 0) goto L_0x00e0;
+    L_0x00c2:
         r3 = r0 instanceof android.widget.FrameLayout.LayoutParams;
-        if (r3 == 0) goto L_0x00ca;
-    L_0x00c5:
+        if (r3 == 0) goto L_0x00cb;
+    L_0x00c6:
         r3 = r0;
         r3 = (android.widget.FrameLayout.LayoutParams) r3;
         r3.gravity = r2;
-    L_0x00ca:
+    L_0x00cb:
         r2 = NUM; // 0x41CLASSNAME float:24.0 double:5.450047783E-315;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r0.leftMargin = r2;
@@ -168,7 +168,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
         r0.height = r2;
         r1.setLayoutParams(r0);
-    L_0x00df:
+    L_0x00e0:
         r0 = r1.getText();
         r0 = r0.length();
         r1.setSelection(r4, r0);

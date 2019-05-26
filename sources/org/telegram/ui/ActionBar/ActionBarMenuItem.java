@@ -389,7 +389,7 @@ public class ActionBarMenuItem extends FrameLayout {
         }
     }
 
-    public void setPopupItemsColor(int i) {
+    public void setPopupItemsColor(int i, boolean z) {
         ActionBarPopupWindowLayout actionBarPopupWindowLayout = this.popupLayout;
         if (actionBarPopupWindowLayout != null) {
             int childCount = actionBarPopupWindowLayout.linearLayout.getChildCount();
@@ -398,7 +398,11 @@ public class ActionBarMenuItem extends FrameLayout {
                 if (childAt instanceof TextView) {
                     ((TextView) childAt).setTextColor(i);
                 } else if (childAt instanceof ActionBarMenuSubItem) {
-                    ((ActionBarMenuSubItem) childAt).setTextColor(i);
+                    if (z) {
+                        ((ActionBarMenuSubItem) childAt).setIconColor(i);
+                    } else {
+                        ((ActionBarMenuSubItem) childAt).setTextColor(i);
+                    }
                 }
             }
         }

@@ -109,20 +109,20 @@ public class ShareDialogCell extends FrameLayout {
     }
 
     /* Access modifiers changed, original: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:31:0x00d1  */
-    /* JADX WARNING: Removed duplicated region for block: B:25:0x00b3  */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x00d6  */
+    /* JADX WARNING: Removed duplicated region for block: B:27:0x00b8  */
     public boolean drawChild(android.graphics.Canvas r7, android.view.View r8, long r9) {
         /*
         r6 = this;
         r9 = super.drawChild(r7, r8, r9);
         r10 = r6.imageView;
-        if (r8 != r10) goto L_0x00ec;
+        if (r8 != r10) goto L_0x00f1;
     L_0x0008:
         r8 = r6.user;
-        if (r8 == 0) goto L_0x00ec;
+        if (r8 == 0) goto L_0x00f1;
     L_0x000c:
         r8 = org.telegram.messenger.MessagesController.isSupportUser(r8);
-        if (r8 != 0) goto L_0x00ec;
+        if (r8 != 0) goto L_0x00f1;
     L_0x0012:
         r0 = android.os.SystemClock.uptimeMillis();
         r2 = r6.lastUpdateTime;
@@ -136,17 +136,20 @@ public class ShareDialogCell extends FrameLayout {
         r6.lastUpdateTime = r0;
         r8 = r6.user;
         r10 = r8.self;
-        if (r10 != 0) goto L_0x0053;
+        if (r10 != 0) goto L_0x0057;
     L_0x0029:
-        r8 = r8.status;
-        if (r8 == 0) goto L_0x003b;
+        r10 = r8.bot;
+        if (r10 != 0) goto L_0x0057;
     L_0x002d:
+        r8 = r8.status;
+        if (r8 == 0) goto L_0x003f;
+    L_0x0031:
         r8 = r8.expires;
         r10 = r6.currentAccount;
         r10 = org.telegram.tgnet.ConnectionsManager.getInstance(r10);
         r10 = r10.getCurrentTime();
-        if (r8 > r10) goto L_0x0051;
-    L_0x003b:
+        if (r8 > r10) goto L_0x0055;
+    L_0x003f:
         r8 = r6.currentAccount;
         r8 = org.telegram.messenger.MessagesController.getInstance(r8);
         r8 = r8.onlinePrivacy;
@@ -154,20 +157,20 @@ public class ShareDialogCell extends FrameLayout {
         r10 = r10.id;
         r10 = java.lang.Integer.valueOf(r10);
         r8 = r8.containsKey(r10);
-        if (r8 == 0) goto L_0x0053;
-    L_0x0051:
+        if (r8 == 0) goto L_0x0057;
+    L_0x0055:
         r8 = 1;
-        goto L_0x0054;
-    L_0x0053:
-        r8 = 0;
-    L_0x0054:
-        r10 = 0;
-        if (r8 != 0) goto L_0x005d;
+        goto L_0x0058;
     L_0x0057:
+        r8 = 0;
+    L_0x0058:
+        r10 = 0;
+        if (r8 != 0) goto L_0x0061;
+    L_0x005b:
         r0 = r6.onlineProgress;
         r0 = (r0 > r10 ? 1 : (r0 == r10 ? 0 : -1));
-        if (r0 == 0) goto L_0x00ec;
-    L_0x005d:
+        if (r0 == 0) goto L_0x00f1;
+    L_0x0061:
         r0 = r6.imageView;
         r0 = r0.getBottom();
         r1 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
@@ -203,46 +206,46 @@ public class ShareDialogCell extends FrameLayout {
         r5 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint;
         r7.drawCircle(r1, r0, r4, r5);
         r7 = NUM; // 0x43160000 float:150.0 double:5.56078426E-315;
-        if (r8 == 0) goto L_0x00d1;
-    L_0x00b3:
+        if (r8 == 0) goto L_0x00d6;
+    L_0x00b8:
         r8 = r6.onlineProgress;
         r10 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r0 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1));
-        if (r0 >= 0) goto L_0x00ec;
-    L_0x00bb:
+        if (r0 >= 0) goto L_0x00f1;
+    L_0x00c0:
         r0 = (float) r2;
         r0 = r0 / r7;
         r8 = r8 + r0;
         r6.onlineProgress = r8;
         r7 = r6.onlineProgress;
         r7 = (r7 > r10 ? 1 : (r7 == r10 ? 0 : -1));
-        if (r7 <= 0) goto L_0x00c8;
-    L_0x00c6:
+        if (r7 <= 0) goto L_0x00cd;
+    L_0x00cb:
         r6.onlineProgress = r10;
-    L_0x00c8:
+    L_0x00cd:
         r7 = r6.imageView;
         r7.invalidate();
         r6.invalidate();
-        goto L_0x00ec;
-    L_0x00d1:
+        goto L_0x00f1;
+    L_0x00d6:
         r8 = r6.onlineProgress;
         r0 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1));
-        if (r0 <= 0) goto L_0x00ec;
-    L_0x00d7:
+        if (r0 <= 0) goto L_0x00f1;
+    L_0x00dc:
         r0 = (float) r2;
         r0 = r0 / r7;
         r8 = r8 - r0;
         r6.onlineProgress = r8;
         r7 = r6.onlineProgress;
         r7 = (r7 > r10 ? 1 : (r7 == r10 ? 0 : -1));
-        if (r7 >= 0) goto L_0x00e4;
-    L_0x00e2:
+        if (r7 >= 0) goto L_0x00e9;
+    L_0x00e7:
         r6.onlineProgress = r10;
-    L_0x00e4:
+    L_0x00e9:
         r7 = r6.imageView;
         r7.invalidate();
         r6.invalidate();
-    L_0x00ec:
+    L_0x00f1:
         return r9;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ShareDialogCell.drawChild(android.graphics.Canvas, android.view.View, long):boolean");

@@ -162,11 +162,11 @@ public class EmojiView extends FrameLayout implements NotificationCenterDelegate
             }
         }
 
-        public void sendGif(Document document) {
+        public void sendGif(Object obj) {
             if (EmojiView.this.gifGridView.getAdapter() == EmojiView.this.gifAdapter) {
-                EmojiView.this.delegate.onGifSelected(document, "gif");
+                EmojiView.this.delegate.onGifSelected(obj, "gif");
             } else if (EmojiView.this.gifGridView.getAdapter() == EmojiView.this.gifSearchAdapter) {
-                EmojiView.this.delegate.onGifSelected(document, EmojiView.this.gifSearchAdapter.bot);
+                EmojiView.this.delegate.onGifSelected(obj, EmojiView.this.gifSearchAdapter.bot);
             }
         }
 

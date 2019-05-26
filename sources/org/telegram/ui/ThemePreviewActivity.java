@@ -217,7 +217,7 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         }
 
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View dialogCell = i == 0 ? new DialogCell(this.mContext, false) : i == 1 ? new LoadingCell(this.mContext) : null;
+            View dialogCell = i == 0 ? new DialogCell(this.mContext, false, false) : i == 1 ? new LoadingCell(this.mContext) : null;
             dialogCell.setLayoutParams(new LayoutParams(-1, -2));
             return new Holder(dialogCell);
         }

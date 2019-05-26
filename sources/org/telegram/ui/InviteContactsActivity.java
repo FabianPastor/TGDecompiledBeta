@@ -674,6 +674,10 @@ public class InviteContactsActivity extends BaseFragment implements Notification
                     InviteContactsActivity.this.currentDeletingSpan.cancelDeleteAnimation();
                     InviteContactsActivity.this.currentDeletingSpan = null;
                 }
+                if (motionEvent.getAction() == 0 && !AndroidUtilities.showKeyboard(this)) {
+                    clearFocus();
+                    requestFocus();
+                }
                 return super.onTouchEvent(motionEvent);
             }
         };

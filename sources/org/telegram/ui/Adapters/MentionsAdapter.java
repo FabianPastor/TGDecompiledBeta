@@ -756,6 +756,11 @@ public class MentionsAdapter extends SelectionAdapter {
                     }
                     obj = 1;
                 }
+                Runnable runnable = this.cancelDelayRunnable;
+                if (runnable != null) {
+                    AndroidUtilities.cancelRunOnUIThread(runnable);
+                    this.cancelDelayRunnable = null;
+                }
                 this.searchResultHashtags = null;
                 this.searchResultUsernames = null;
                 this.searchResultUsernamesMap = null;

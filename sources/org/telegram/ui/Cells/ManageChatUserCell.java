@@ -321,14 +321,14 @@ public class ManageChatUserCell extends FrameLayout {
         goto L_0x00de;
     L_0x00cf:
         r11 = r10.statusTextView;
-        r1 = NUM; // 0x7f0d01bd float:1.8743017E38 double:1.0531299974E-314;
+        r1 = NUM; // 0x7f0d01be float:1.874302E38 double:1.053129998E-314;
         r3 = "BotStatusCantRead";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r11.setText(r1);
         goto L_0x0150;
     L_0x00de:
         r11 = r10.statusTextView;
-        r1 = NUM; // 0x7f0d01be float:1.874302E38 double:1.053129998E-314;
+        r1 = NUM; // 0x7f0d01bf float:1.8743021E38 double:1.0531299984E-314;
         r3 = "BotStatusRead";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r11.setText(r1);
@@ -375,7 +375,7 @@ public class ManageChatUserCell extends FrameLayout {
         r1 = r10.statusOnlineColor;
         r11.setTextColor(r1);
         r11 = r10.statusTextView;
-        r1 = NUM; // 0x7f0d0677 float:1.8745471E38 double:1.053130595E-314;
+        r1 = NUM; // 0x7f0d067c float:1.8745482E38 double:1.0531305977E-314;
         r3 = "Online";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r11.setText(r1);

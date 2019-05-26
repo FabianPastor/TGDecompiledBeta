@@ -30,6 +30,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.StatsController;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -863,11 +864,16 @@ public class DataUsageActivity extends BaseFragment {
             ListAdapter listAdapter = (ListAdapter) recyclerListView.getAdapter();
             if (i == listAdapter.resetRow) {
                 Builder builder = new Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("AppName", NUM));
+                builder.setTitle(LocaleController.getString("ResetStatisticsAlertTitle", NUM));
                 builder.setMessage(LocaleController.getString("ResetStatisticsAlert", NUM));
                 builder.setPositiveButton(LocaleController.getString("Reset", NUM), new -$$Lambda$DataUsageActivity$ZhhoKKmFdkBYmiX0nsi78u9hycQ(this, listAdapter));
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
-                showDialog(builder.create());
+                AlertDialog create = builder.create();
+                showDialog(create);
+                TextView textView = (TextView) create.getButton(-1);
+                if (textView != null) {
+                    textView.setTextColor(Theme.getColor("dialogTextRed2"));
+                }
             }
         }
     }

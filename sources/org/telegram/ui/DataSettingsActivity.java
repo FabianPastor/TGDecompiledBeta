@@ -9,6 +9,7 @@ import android.content.SharedPreferences.Editor;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.LayoutParams;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
@@ -20,6 +21,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -545,11 +547,16 @@ public class DataSettingsActivity extends BaseFragment {
         } else if (i == this.resetDownloadRow) {
             if (getParentActivity() != null && view.isEnabled()) {
                 Builder builder = new Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("AppName", NUM));
+                builder.setTitle(LocaleController.getString("ResetAutomaticMediaDownloadAlertTitle", NUM));
                 builder.setMessage(LocaleController.getString("ResetAutomaticMediaDownloadAlert", NUM));
-                builder.setPositiveButton(LocaleController.getString("OK", NUM), new -$$Lambda$DataSettingsActivity$z7kMV53_j7S-p3GIoSYZ6qy2-tA(this));
+                builder.setPositiveButton(LocaleController.getString("Reset", NUM), new -$$Lambda$DataSettingsActivity$z7kMV53_j7S-p3GIoSYZ6qy2-tA(this));
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
-                builder.show();
+                AlertDialog create = builder.create();
+                showDialog(create);
+                TextView textView = (TextView) create.getButton(-1);
+                if (textView != null) {
+                    textView.setTextColor(Theme.getColor("dialogTextRed2"));
+                }
             }
         } else if (i == this.storageUsageRow) {
             presentFragment(new CacheControlActivity());

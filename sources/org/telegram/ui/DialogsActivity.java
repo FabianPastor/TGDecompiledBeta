@@ -15,6 +15,7 @@ import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Outline;
+import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
@@ -34,6 +35,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
+import android.widget.TextView;
 import androidx.core.view.NestedScrollingParent3;
 import androidx.core.view.NestedScrollingParentHelper;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -921,7 +923,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                         DialogsActivity.this.progressView.setVisibility(8);
                         DialogsActivity.this.listView.setEmptyView(DialogsActivity.this.searchEmptyView);
                     }
-                    DialogsActivity.this.searchEmptyView.showProgress();
                 }
                 if (DialogsActivity.this.dialogsSearchAdapter != null) {
                     DialogsActivity.this.dialogsSearchAdapter.searchDialogs(obj);
@@ -1065,7 +1066,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
 
             /* Access modifiers changed, original: protected */
             public void onMeasure(int i, int i2) {
-                if (this.firstLayout) {
+                if (this.firstLayout && DialogsActivity.this.getMessagesController().dialogsLoaded) {
                     if (DialogsActivity.this.hasHiddenArchive()) {
                         this.ignoreLayout = true;
                         DialogsActivity.this.layoutManager.scrollToPositionWithOffset(1, 0);
@@ -1209,47 +1210,31 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                         return true;
                     }
                 }
-                if (DialogsActivity.this.listView.getAdapter() != DialogsActivity.this.dialogsSearchAdapter) {
-                    ArrayList dialogsArray = DialogsActivity.getDialogsArray(DialogsActivity.this.currentAccount, DialogsActivity.this.dialogsType, DialogsActivity.this.folderId, DialogsActivity.this.dialogsListFrozen);
-                    i = DialogsActivity.this.dialogsAdapter.fixPosition(i);
-                    if (i < 0 || i >= dialogsArray.size()) {
+                if (DialogsActivity.this.listView.getAdapter() == DialogsActivity.this.dialogsSearchAdapter) {
+                    DialogsActivity.this.dialogsSearchAdapter.getItem(i);
+                    return false;
+                }
+                ArrayList dialogsArray = DialogsActivity.getDialogsArray(DialogsActivity.this.currentAccount, DialogsActivity.this.dialogsType, DialogsActivity.this.folderId, DialogsActivity.this.dialogsListFrozen);
+                i = DialogsActivity.this.dialogsAdapter.fixPosition(i);
+                if (i < 0 || i >= dialogsArray.size()) {
+                    return false;
+                }
+                Dialog dialog = (Dialog) dialogsArray.get(i);
+                if (DialogsActivity.this.onlySelect) {
+                    if (DialogsActivity.this.dialogsType != 3 || DialogsActivity.this.selectAlertString != null) {
                         return false;
                     }
-                    Dialog dialog = (Dialog) dialogsArray.get(i);
-                    if (DialogsActivity.this.onlySelect) {
-                        if (DialogsActivity.this.dialogsType != 3 || DialogsActivity.this.selectAlertString != null) {
-                            return false;
-                        }
-                        DialogsActivity.this.dialogsAdapter.addOrRemoveSelectedDialog(dialog.id, view);
-                        DialogsActivity.this.updateSelectedCount();
-                    } else if (dialog instanceof TL_dialogFolder) {
-                        return false;
-                    } else {
-                        if (DialogsActivity.this.actionBar.isActionModeShowed() && dialog.pinned) {
-                            return false;
-                        }
-                        DialogsActivity.this.showOrUpdateActionMode(dialog, view);
-                    }
-                    return true;
-                } else if (!(DialogsActivity.this.dialogsSearchAdapter.getItem(i) instanceof String) && !DialogsActivity.this.dialogsSearchAdapter.isRecentSearchDisplayed()) {
+                    DialogsActivity.this.dialogsAdapter.addOrRemoveSelectedDialog(dialog.id, view);
+                    DialogsActivity.this.updateSelectedCount();
+                } else if (dialog instanceof TL_dialogFolder) {
                     return false;
                 } else {
-                    Builder builder = new Builder(DialogsActivity.this.getParentActivity());
-                    builder.setTitle(LocaleController.getString("AppName", NUM));
-                    builder.setMessage(LocaleController.getString("ClearSearch", NUM));
-                    builder.setPositiveButton(LocaleController.getString("ClearButton", NUM).toUpperCase(), new -$$Lambda$DialogsActivity$6$6n8dtc2IrK91Xd23awpiEcfkWvY(this));
-                    builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
-                    DialogsActivity.this.showDialog(builder.create());
-                    return true;
+                    if (DialogsActivity.this.actionBar.isActionModeShowed() && dialog.pinned) {
+                        return false;
+                    }
+                    DialogsActivity.this.showOrUpdateActionMode(dialog, view);
                 }
-            }
-
-            public /* synthetic */ void lambda$onItemClick$0$DialogsActivity$6(DialogInterface dialogInterface, int i) {
-                if (DialogsActivity.this.dialogsSearchAdapter.isRecentSearchDisplayed()) {
-                    DialogsActivity.this.dialogsSearchAdapter.clearRecentSearch();
-                } else {
-                    DialogsActivity.this.dialogsSearchAdapter.clearRecentHashtags();
-                }
+                return true;
             }
 
             public void onLongClickRelease() {
@@ -1266,7 +1251,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         this.searchEmptyView = new EmptyTextProgressView(context2);
         this.searchEmptyView.setVisibility(8);
         this.searchEmptyView.setShowAtCenter(true);
-        this.searchEmptyView.setText(LocaleController.getString("NoResult", NUM));
+        this.searchEmptyView.setTopImage(NUM);
+        this.searchEmptyView.setText(LocaleController.getString("SettingsNoResults", NUM));
         contentView.addView(this.searchEmptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.progressView = new RadialProgressView(context2);
         this.progressView.setVisibility(8);
@@ -1550,16 +1536,43 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             public void needRemoveHint(int i) {
                 if (DialogsActivity.this.getParentActivity() != null && DialogsActivity.this.getMessagesController().getUser(Integer.valueOf(i)) != null) {
                     Builder builder = new Builder(DialogsActivity.this.getParentActivity());
-                    builder.setTitle(LocaleController.getString("AppName", NUM));
-                    builder.setMessage(LocaleController.formatString("ChatHintsDelete", NUM, ContactsController.formatName(r0.first_name, r0.last_name)));
-                    builder.setPositiveButton(LocaleController.getString("OK", NUM), new -$$Lambda$DialogsActivity$10$7JwjKBJfwtWw34NhDCOKWZDwXRQ(this, i));
+                    builder.setTitle(LocaleController.getString("ChatHintsDeleteAlertTitle", NUM));
+                    builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("ChatHintsDeleteAlert", NUM, ContactsController.formatName(r0.first_name, r0.last_name))));
+                    builder.setPositiveButton(LocaleController.getString("StickersRemove", NUM), new -$$Lambda$DialogsActivity$10$7JwjKBJfwtWw34NhDCOKWZDwXRQ(this, i));
                     builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
-                    DialogsActivity.this.showDialog(builder.create());
+                    AlertDialog create = builder.create();
+                    DialogsActivity.this.showDialog(create);
+                    TextView textView = (TextView) create.getButton(-1);
+                    if (textView != null) {
+                        textView.setTextColor(Theme.getColor("dialogTextRed2"));
+                    }
                 }
             }
 
             public /* synthetic */ void lambda$needRemoveHint$0$DialogsActivity$10(int i, DialogInterface dialogInterface, int i2) {
                 DialogsActivity.this.getDataQuery().removePeer(i);
+            }
+
+            public void needClearList() {
+                Builder builder = new Builder(DialogsActivity.this.getParentActivity());
+                builder.setTitle(LocaleController.getString("ClearSearchAlertTitle", NUM));
+                builder.setMessage(LocaleController.getString("ClearSearchAlert", NUM));
+                builder.setPositiveButton(LocaleController.getString("ClearButton", NUM).toUpperCase(), new -$$Lambda$DialogsActivity$10$Q2pbWf5Q1Cqk_6Ep5ajOPUW2nyo(this));
+                builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
+                AlertDialog create = builder.create();
+                DialogsActivity.this.showDialog(create);
+                TextView textView = (TextView) create.getButton(-1);
+                if (textView != null) {
+                    textView.setTextColor(Theme.getColor("dialogTextRed2"));
+                }
+            }
+
+            public /* synthetic */ void lambda$needClearList$1$DialogsActivity$10(DialogInterface dialogInterface, int i) {
+                if (DialogsActivity.this.dialogsSearchAdapter.isRecentSearchDisplayed()) {
+                    DialogsActivity.this.dialogsSearchAdapter.clearRecentSearch();
+                } else {
+                    DialogsActivity.this.dialogsSearchAdapter.clearRecentHashtags();
+                }
             }
         });
         this.listView.setEmptyView(this.folderId == 0 ? this.progressView : null);
@@ -2454,7 +2467,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r12 = r12 + r16;
         if (r12 <= r4) goto L_0x0228;
     L_0x011b:
-        r0 = NUM; // 0x7f0d07cf float:1.874617E38 double:1.053130765E-314;
+        r0 = NUM; // 0x7f0d07d5 float:1.8746181E38 double:1.053130768E-314;
         r1 = new java.lang.Object[r9];
         r2 = "Chats";
         r2 = org.telegram.messenger.LocaleController.formatPluralString(r2, r4);
@@ -2492,7 +2505,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r0.<init>(r4);
         if (r2 != r3) goto L_0x0197;
     L_0x0163:
-        r3 = NUM; // 0x7f0d0333 float:1.8743776E38 double:1.053130182E-314;
+        r3 = NUM; // 0x7f0d0338 float:1.8743786E38 double:1.0531301847E-314;
         r4 = new java.lang.Object[r9];
         r5 = "ChatsSelected";
         r1 = org.telegram.messenger.LocaleController.formatPluralString(r5, r1);
@@ -2504,7 +2517,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r3 = "AreYouSureDeleteFewChats";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
-        r1 = NUM; // 0x7f0d0326 float:1.874375E38 double:1.053130176E-314;
+        r1 = NUM; // 0x7f0d032b float:1.874376E38 double:1.053130178E-314;
         r3 = "Delete";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r3 = new org.telegram.ui.-$$Lambda$DialogsActivity$jWd3WTqe_JWytlcg5OAtRHiocr4;
@@ -2515,7 +2528,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r3 = r7.canClearCacheCount;
         if (r3 == 0) goto L_0x01cf;
     L_0x019b:
-        r3 = NUM; // 0x7f0d02af float:1.8743508E38 double:1.053130117E-314;
+        r3 = NUM; // 0x7f0d02b2 float:1.8743514E38 double:1.0531301184E-314;
         r4 = new java.lang.Object[r9];
         r5 = "ChatsSelectedClearCache";
         r1 = org.telegram.messenger.LocaleController.formatPluralString(r5, r1);
@@ -2527,7 +2540,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r3 = "AreYouSureClearHistoryCacheFewChats";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
-        r1 = NUM; // 0x7f0d02b3 float:1.8743516E38 double:1.053130119E-314;
+        r1 = NUM; // 0x7f0d02b6 float:1.8743522E38 double:1.0531301204E-314;
         r3 = "ClearHistoryCache";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r3 = new org.telegram.ui.-$$Lambda$DialogsActivity$iMQ7bU7WAaE9d3J2u7XQeCZi3Ow;
@@ -2535,7 +2548,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r0.setPositiveButton(r1, r3);
         goto L_0x0202;
     L_0x01cf:
-        r3 = NUM; // 0x7f0d02b1 float:1.8743512E38 double:1.053130118E-314;
+        r3 = NUM; // 0x7f0d02b4 float:1.8743518E38 double:1.0531301194E-314;
         r4 = new java.lang.Object[r9];
         r5 = "ChatsSelectedClear";
         r1 = org.telegram.messenger.LocaleController.formatPluralString(r5, r1);
@@ -2547,14 +2560,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r3 = "AreYouSureClearHistoryFewChats";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
-        r1 = NUM; // 0x7f0d02b2 float:1.8743514E38 double:1.0531301184E-314;
+        r1 = NUM; // 0x7f0d02b5 float:1.874352E38 double:1.05313012E-314;
         r3 = "ClearHistory";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r3 = new org.telegram.ui.-$$Lambda$DialogsActivity$4jeFfbPa00Dvar_qyJvj0h0oI_X4;
         r3.<init>(r7, r2);
         r0.setPositiveButton(r1, r3);
     L_0x0202:
-        r1 = NUM; // 0x7f0d01dd float:1.8743082E38 double:1.053130013E-314;
+        r1 = NUM; // 0x7f0d01de float:1.8743084E38 double:1.0531300137E-314;
         r2 = "Cancel";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setNegativeButton(r1, r8);
@@ -3463,13 +3476,15 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             }
         } else if (i != NotificationCenter.dialogsUnreadCounterChanged) {
             if (i == NotificationCenter.needDeleteDialog) {
-                long longValue2 = ((Long) objArr[0]).longValue();
-                User user = (User) objArr[1];
-                -$$Lambda$DialogsActivity$SHFUF_xzVvtOneSCklijoIHeS8g -__lambda_dialogsactivity_shfuf_xzvvtonescklijoihes8g = new -$$Lambda$DialogsActivity$SHFUF_xzVvtOneSCklijoIHeS8g(this, (Chat) objArr[2], longValue2, ((Boolean) objArr[3]).booleanValue());
-                if (this.undoView[0] != null) {
-                    getUndoView().showWithAction(longValue2, 1, -__lambda_dialogsactivity_shfuf_xzvvtonescklijoihes8g);
-                } else {
-                    -__lambda_dialogsactivity_shfuf_xzvvtonescklijoihes8g.run();
+                if (this.fragmentView != null) {
+                    long longValue2 = ((Long) objArr[0]).longValue();
+                    User user = (User) objArr[1];
+                    -$$Lambda$DialogsActivity$SHFUF_xzVvtOneSCklijoIHeS8g -__lambda_dialogsactivity_shfuf_xzvvtonescklijoihes8g = new -$$Lambda$DialogsActivity$SHFUF_xzVvtOneSCklijoIHeS8g(this, (Chat) objArr[2], longValue2, ((Boolean) objArr[3]).booleanValue());
+                    if (this.undoView[0] != null) {
+                        getUndoView().showWithAction(longValue2, 1, -__lambda_dialogsactivity_shfuf_xzvvtonescklijoihes8g);
+                    } else {
+                        -__lambda_dialogsactivity_shfuf_xzvvtonescklijoihes8g.run();
+                    }
                 }
             } else if (i == NotificationCenter.folderBecomeEmpty) {
                 i = ((Integer) objArr[0]).intValue();
@@ -3609,10 +3624,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 if (childAt instanceof DialogCell) {
                     if (this.listView.getAdapter() != this.dialogsSearchAdapter) {
                         DialogCell dialogCell = (DialogCell) childAt;
-                        if ((131072 & i) != 0) {
-                            dialogCell.onReorderStateChanged(this.actionBar.isActionModeShowed());
-                        }
                         boolean z = true;
+                        if ((131072 & i) != 0) {
+                            dialogCell.onReorderStateChanged(this.actionBar.isActionModeShowed(), true);
+                        }
                         if ((65536 & i) != 0) {
                             if ((i & 8192) == 0) {
                                 z = false;
@@ -3801,8 +3816,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, Theme.dialogs_countPaint, null, null, "chats_unreadCounter"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, Theme.dialogs_countGrayPaint, null, null, "chats_unreadCounterMuted"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class}, Theme.dialogs_countTextPaint, null, null, "chats_unreadCounterText"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, Theme.dialogs_namePaint, null, null, "chats_name"));
-        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, Theme.dialogs_nameEncryptedPaint, null, null, "chats_secretName"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, null, new Paint[]{Theme.dialogs_namePaint, Theme.dialogs_searchNamePaint}, null, null, "chats_name"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, null, new Paint[]{Theme.dialogs_nameEncryptedPaint, Theme.dialogs_searchNameEncryptedPaint}, null, null, "chats_secretName"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, null, new Drawable[]{Theme.dialogs_lockDrawable}, null, "chats_secretIcon"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, null, new Drawable[]{Theme.dialogs_groupDrawable, Theme.dialogs_broadcastDrawable, Theme.dialogs_botDrawable}, null, "chats_nameIcon"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, null, new Drawable[]{Theme.dialogs_scamDrawable}, null, "chats_draft"));

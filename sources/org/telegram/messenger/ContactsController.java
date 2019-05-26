@@ -450,7 +450,7 @@ public class ContactsController {
         r1 = 0;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
         r2 = java.lang.Integer.valueOf(r1);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
         r0.add(r2);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r0 = NUM; // 0x7f0d07bb float:1.8746129E38 double:1.0531307553E-314;
+        r0 = NUM; // 0x7f0d07c0 float:1.8746139E38 double:1.053130758E-314;
         r1 = "PhoneMobile";
         if (r14 != 0) goto L_0x018c;
         r2 = 3;
@@ -466,7 +466,7 @@ public class ContactsController {
         if (r14 != r2) goto L_0x019e;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
         r0 = r13.phoneTypes;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
         r1 = "PhoneHome";	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r3 = NUM; // 0x7f0d07b9 float:1.8746125E38 double:1.0531307543E-314;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
+        r3 = NUM; // 0x7f0d07be float:1.8746135E38 double:1.053130757E-314;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
         r1 = org.telegram.messenger.LocaleController.getString(r1, r3);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
         r0.add(r1);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
         goto L_0x01de;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
@@ -480,7 +480,7 @@ public class ContactsController {
         if (r14 != r0) goto L_0x01bd;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
         r0 = r13.phoneTypes;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
         r1 = "PhoneWork";	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r3 = NUM; // 0x7f0d07c1 float:1.874614E38 double:1.0531307583E-314;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
+        r3 = NUM; // 0x7f0d07c6 float:1.874615E38 double:1.0531307607E-314;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
         r1 = org.telegram.messenger.LocaleController.getString(r1, r3);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
         r0.add(r1);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
         goto L_0x01de;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
@@ -488,13 +488,13 @@ public class ContactsController {
         if (r14 != r0) goto L_0x01d0;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
         r0 = r13.phoneTypes;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
         r1 = "PhoneMain";	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r3 = NUM; // 0x7f0d07ba float:1.8746127E38 double:1.053130755E-314;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
+        r3 = NUM; // 0x7f0d07bf float:1.8746137E38 double:1.0531307573E-314;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
         r1 = org.telegram.messenger.LocaleController.getString(r1, r3);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
         r0.add(r1);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
         goto L_0x01de;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
         r0 = r13.phoneTypes;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
         r1 = "PhoneOther";	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r3 = NUM; // 0x7f0d07c0 float:1.8746139E38 double:1.053130758E-314;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
+        r3 = NUM; // 0x7f0d07c5 float:1.8746149E38 double:1.05313076E-314;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
         r1 = org.telegram.messenger.LocaleController.getString(r1, r3);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
         r0.add(r1);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
         r10.put(r12, r13);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }

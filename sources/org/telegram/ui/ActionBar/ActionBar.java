@@ -311,10 +311,10 @@ public class ActionBar extends FrameLayout {
         this.subtitleTextView.setTextColor(i);
     }
 
-    public void setPopupItemsColor(int i) {
+    public void setPopupItemsColor(int i, boolean z) {
         ActionBarMenu actionBarMenu = this.menu;
         if (actionBarMenu != null) {
-            actionBarMenu.setPopupItemsColor(i);
+            actionBarMenu.setPopupItemsColor(i, z);
         }
     }
 

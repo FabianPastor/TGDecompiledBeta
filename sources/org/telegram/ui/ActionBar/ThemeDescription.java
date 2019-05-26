@@ -329,8 +329,9 @@ public class ThemeDescription {
             if ((this.changeFlags & FLAG_AB_SEARCH) != 0) {
                 ((ActionBar) this.viewToInvalidate).setSearchTextColor(i, false);
             }
-            if ((this.changeFlags & FLAG_AB_SUBMENUITEM) != 0) {
-                ((ActionBar) this.viewToInvalidate).setPopupItemsColor(i);
+            i2 = this.changeFlags;
+            if ((FLAG_AB_SUBMENUITEM & i2) != 0) {
+                ((ActionBar) this.viewToInvalidate).setPopupItemsColor(i, (i2 & FLAG_IMAGECOLOR) != 0);
             }
             if ((this.changeFlags & FLAG_AB_SUBMENUBACKGROUND) != 0) {
                 ((ActionBar) this.viewToInvalidate).setPopupBackgroundColor(i);
