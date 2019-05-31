@@ -158,13 +158,11 @@ import org.telegram.tgnet.TLRPC.TL_messageActionChatDeleteUser;
 import org.telegram.tgnet.TLRPC.TL_messageActionChatEditPhoto;
 import org.telegram.tgnet.TLRPC.TL_messageActionChatMigrateTo;
 import org.telegram.tgnet.TLRPC.TL_messageActionCreatedBroadcastList;
-import org.telegram.tgnet.TLRPC.TL_messageMediaUnsupported;
 import org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
 import org.telegram.tgnet.TLRPC.TL_messageService;
 import org.telegram.tgnet.TLRPC.TL_messages_addChatUser;
 import org.telegram.tgnet.TLRPC.TL_messages_affectedHistory;
 import org.telegram.tgnet.TLRPC.TL_messages_affectedMessages;
-import org.telegram.tgnet.TLRPC.TL_messages_channelMessages;
 import org.telegram.tgnet.TLRPC.TL_messages_chatFull;
 import org.telegram.tgnet.TLRPC.TL_messages_createChat;
 import org.telegram.tgnet.TLRPC.TL_messages_deleteChatUser;
@@ -275,8 +273,6 @@ import org.telegram.tgnet.TLRPC.TL_wallPaper;
 import org.telegram.tgnet.TLRPC.TL_wallPaperSettings;
 import org.telegram.tgnet.TLRPC.TL_webPage;
 import org.telegram.tgnet.TLRPC.TL_webPageEmpty;
-import org.telegram.tgnet.TLRPC.TL_webPagePending;
-import org.telegram.tgnet.TLRPC.TL_webPageUrlPending;
 import org.telegram.tgnet.TLRPC.Update;
 import org.telegram.tgnet.TLRPC.Updates;
 import org.telegram.tgnet.TLRPC.User;
@@ -479,6 +475,7 @@ public class MessagesController implements NotificationCenterDelegate {
     private ConcurrentHashMap<Integer, EncryptedChat> encryptedChats = new ConcurrentHashMap(10, 1.0f, 2);
     private SparseArray<ExportedChatInvite> exportedChats = new SparseArray();
     public boolean firstGettingTask;
+    private SparseArray<ChatFull> fullChats = new SparseArray();
     private SparseArray<UserFull> fullUsers = new SparseArray();
     private boolean getDifferenceFirstSync = true;
     public boolean gettingDifference;
@@ -816,7 +813,6 @@ public class MessagesController implements NotificationCenterDelegate {
     public /* synthetic */ void lambda$updateConfig$2$MessagesController(TL_config tL_config) {
         String str;
         DownloadController.getInstance(this.currentAccount).loadAutoDownloadConfig(false);
-        LocaleController.getInstance().loadRemoteLanguages(this.currentAccount);
         this.maxMegagroupCount = tL_config.megagroup_size_max;
         this.maxGroupCount = tL_config.chat_size_max;
         this.maxEditTime = tL_config.edit_time_limit;
@@ -861,7 +857,11 @@ public class MessagesController implements NotificationCenterDelegate {
         this.blockedCountry = tL_config.blocked_mode;
         this.dcDomainName = tL_config.dc_txt_domain_name;
         this.webFileDatacenterId = tL_config.webfile_dc_id;
-        this.suggestedLangCode = tL_config.suggested_lang_code;
+        str = this.suggestedLangCode;
+        if (str == null || !str.equals(tL_config.suggested_lang_code)) {
+            this.suggestedLangCode = tL_config.suggested_lang_code;
+            LocaleController.getInstance().loadRemoteLanguages(this.currentAccount);
+        }
         String str2 = "google";
         if (tL_config.static_maps_provider == null) {
             tL_config.static_maps_provider = str2;
@@ -1217,6 +1217,7 @@ public class MessagesController implements NotificationCenterDelegate {
         this.dialogs_read_outbox_max.clear();
         this.exportedChats.clear();
         this.fullUsers.clear();
+        this.fullChats.clear();
         this.dialogsByFolder.clear();
         this.unreadUnmutedDialogs = 0;
         this.joiningToChannels.clear();
@@ -1805,6 +1806,10 @@ public class MessagesController implements NotificationCenterDelegate {
         return (UserFull) this.fullUsers.get(i);
     }
 
+    public ChatFull getChatFull(int i) {
+        return (ChatFull) this.fullChats.get(i);
+    }
+
     public void cancelLoadFullUser(int i) {
         this.loadingFullUsers.remove(Integer.valueOf(i));
     }
@@ -2030,6 +2035,7 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     public /* synthetic */ void lambda$null$15$MessagesController(int i, TL_messages_chatFull tL_messages_chatFull, int i2) {
+        this.fullChats.put(i, tL_messages_chatFull.full_chat);
         applyDialogNotificationsSettings((long) (-i), tL_messages_chatFull.full_chat.notify_settings);
         for (int i3 = 0; i3 < tL_messages_chatFull.full_chat.bot_info.size(); i3++) {
             DataQuery.getInstance(this.currentAccount).putBotInfo((BotInfo) tL_messages_chatFull.full_chat.bot_info.get(i3));
@@ -5218,138 +5224,409 @@ public class MessagesController implements NotificationCenterDelegate {
         Utilities.stageQueue.postRunnable(new -$$Lambda$MessagesController$B3eeeWzbYDkKoJj9YxFxBPuwloE(this, messages_messages, j, z, i, i9, z4, i5, i2, i3, i4, i6, z2, i10, i7, i8, i11, z3));
     }
 
-    public /* synthetic */ void lambda$processLoadedMessages$108$MessagesController(messages_Messages messages_messages, long j, boolean z, int i, int i2, boolean z2, int i3, int i4, int i5, int i6, int i7, boolean z3, int i8, int i9, int i10, int i11, boolean z4) {
-        MessagesController thisR;
-        Chat chat;
-        boolean z5;
-        boolean z6;
-        messages_Messages messages_messages2 = messages_messages;
-        long j2 = j;
-        if (messages_messages2 instanceof TL_messages_channelMessages) {
-            boolean z7;
-            int i12 = -((int) j2);
-            if (this.channelsPts.get(i12) == 0 && MessagesStorage.getInstance(this.currentAccount).getChannelPtsSync(i12) == 0) {
-                this.channelsPts.put(i12, messages_messages2.pts);
-                if (this.needShortPollChannels.indexOfKey(i12) < 0 || this.shortPollChannels.indexOfKey(i12) >= 0) {
-                    getChannelDifference(i12);
-                } else {
-                    getChannelDifference(i12, 2, 0, null);
-                }
-                z7 = true;
-            } else {
-                z7 = false;
-            }
-            for (int i13 = 0; i13 < messages_messages2.chats.size(); i13++) {
-                chat = (Chat) messages_messages2.chats.get(i13);
-                if (chat.id == i12) {
-                    z5 = chat.megagroup;
-                    z6 = z7;
-                    break;
-                }
-            }
-            z6 = z7;
-            z5 = false;
-        } else {
-            z5 = false;
-            z6 = false;
-        }
-        int i14 = (int) j2;
-        int i15 = (int) (j2 >> 32);
-        if (!z) {
-            ImageLoader.saveMessagesThumbs(messages_messages2.messages);
-        }
-        if (i15 == 1 || i14 == 0 || !z || messages_messages2.messages.size() != 0) {
-            SparseArray sparseArray = new SparseArray();
-            SparseArray sparseArray2 = new SparseArray();
-            for (i14 = 0; i14 < messages_messages2.users.size(); i14++) {
-                User user = (User) messages_messages2.users.get(i14);
-                sparseArray.put(user.id, user);
-            }
-            for (i14 = 0; i14 < messages_messages2.chats.size(); i14++) {
-                chat = (Chat) messages_messages2.chats.get(i14);
-                sparseArray2.put(chat.id, chat);
-            }
-            int size = messages_messages2.messages.size();
-            if (z) {
-                thisR = this;
-            } else {
-                thisR = this;
-                Integer num = (Integer) thisR.dialogs_read_inbox_max.get(Long.valueOf(j));
-                if (num == null) {
-                    num = Integer.valueOf(MessagesStorage.getInstance(thisR.currentAccount).getDialogReadMax(false, j2));
-                    thisR.dialogs_read_inbox_max.put(Long.valueOf(j), num);
-                }
-                Integer num2 = (Integer) thisR.dialogs_read_outbox_max.get(Long.valueOf(j));
-                if (num2 == null) {
-                    num2 = Integer.valueOf(MessagesStorage.getInstance(thisR.currentAccount).getDialogReadMax(true, j2));
-                    thisR.dialogs_read_outbox_max.put(Long.valueOf(j), num2);
-                }
-                for (i15 = 0; i15 < size; i15++) {
-                    Message message = (Message) messages_messages2.messages.get(i15);
-                    if (z5) {
-                        message.flags |= Integer.MIN_VALUE;
-                    }
-                    MessageAction messageAction = message.action;
-                    if (messageAction instanceof TL_messageActionChatDeleteUser) {
-                        User user2 = (User) sparseArray.get(messageAction.user_id);
-                        if (user2 != null && user2.bot) {
-                            message.reply_markup = new TL_replyKeyboardHide();
-                            message.flags |= 64;
-                        }
-                    }
-                    messageAction = message.action;
-                    if ((messageAction instanceof TL_messageActionChatMigrateTo) || (messageAction instanceof TL_messageActionChannelCreate)) {
-                        message.unread = false;
-                        message.media_unread = false;
-                    } else {
-                        message.unread = (message.out ? num2 : num).intValue() < message.id;
-                    }
-                }
-                MessagesStorage.getInstance(thisR.currentAccount).putMessages(messages_messages, j, i2, i4, z6);
-            }
-            ArrayList arrayList = new ArrayList();
-            ArrayList arrayList2 = new ArrayList();
-            HashMap hashMap = new HashMap();
-            for (i14 = 0; i14 < size; i14++) {
-                Message message2 = (Message) messages_messages2.messages.get(i14);
-                message2.dialog_id = j2;
-                MessageObject messageObject = new MessageObject(thisR.currentAccount, message2, sparseArray, sparseArray2, true);
-                arrayList.add(messageObject);
-                if (z) {
-                    MessageMedia messageMedia = message2.media;
-                    if (messageMedia instanceof TL_messageMediaUnsupported) {
-                        byte[] bArr = messageMedia.bytes;
-                        if (bArr != null) {
-                            if (bArr.length != 0) {
-                                if (bArr.length == 1) {
-                                    if (bArr[0] >= (byte) 99) {
-                                    }
-                                }
-                            }
-                            arrayList2.add(Integer.valueOf(message2.id));
-                        }
-                    } else if (messageMedia instanceof TL_messageMediaWebPage) {
-                        WebPage webPage = messageMedia.webpage;
-                        if (!(webPage instanceof TL_webPagePending) || webPage.date > ConnectionsManager.getInstance(thisR.currentAccount).getCurrentTime()) {
-                            webPage = message2.media.webpage;
-                            if (webPage instanceof TL_webPageUrlPending) {
-                                ArrayList arrayList3 = (ArrayList) hashMap.get(webPage.url);
-                                if (arrayList3 == null) {
-                                    arrayList3 = new ArrayList();
-                                    hashMap.put(message2.media.webpage.url, arrayList3);
-                                }
-                                arrayList3.add(messageObject);
-                            }
-                        } else {
-                            arrayList2.add(Integer.valueOf(message2.id));
-                        }
-                    }
-                }
-            }
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$Z4Bd5ZrkcBpI903-24hDafvqXGk(this, messages_messages, z, z2, i2, i3, j, i, arrayList, i7, i9, i10, z4, i6, i8, i4, i11, arrayList2, hashMap));
-            return;
-        }
-        AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$L2__57wpUETyhq6XVWbkuE1LFZE(this, j, i, i2, z2, i3, i4, i5, i6, i7, z3, i8, i9, i10, i11));
+    /* JADX WARNING: Removed duplicated region for block: B:126:0x0266 A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:102:0x0223  */
+    /* JADX WARNING: Removed duplicated region for block: B:102:0x0223  */
+    /* JADX WARNING: Removed duplicated region for block: B:126:0x0266 A:{SYNTHETIC} */
+    /* JADX WARNING: Missing block: B:96:0x020e, code skipped:
+            if (r3[0] < (byte) 100) goto L_0x0212;
+     */
+    public /* synthetic */ void lambda$processLoadedMessages$108$MessagesController(org.telegram.tgnet.TLRPC.messages_Messages r25, long r26, boolean r28, int r29, int r30, boolean r31, int r32, int r33, int r34, int r35, int r36, boolean r37, int r38, int r39, int r40, int r41, boolean r42) {
+        /*
+        r24 = this;
+        r15 = r24;
+        r7 = r25;
+        r8 = r26;
+        r0 = r7 instanceof org.telegram.tgnet.TLRPC.TL_messages_channelMessages;
+        r10 = 1;
+        r11 = 0;
+        if (r0 == 0) goto L_0x0069;
+    L_0x000c:
+        r0 = (int) r8;
+        r6 = -r0;
+        r0 = r15.channelsPts;
+        r0 = r0.get(r6);
+        if (r0 != 0) goto L_0x0049;
+    L_0x0016:
+        r0 = r15.currentAccount;
+        r0 = org.telegram.messenger.MessagesStorage.getInstance(r0);
+        r0 = r0.getChannelPtsSync(r6);
+        if (r0 != 0) goto L_0x0049;
+    L_0x0022:
+        r0 = r15.channelsPts;
+        r1 = r7.pts;
+        r0.put(r6, r1);
+        r0 = r15.needShortPollChannels;
+        r0 = r0.indexOfKey(r6);
+        if (r0 < 0) goto L_0x0044;
+    L_0x0031:
+        r0 = r15.shortPollChannels;
+        r0 = r0.indexOfKey(r6);
+        if (r0 >= 0) goto L_0x0044;
+    L_0x0039:
+        r2 = 2;
+        r3 = 0;
+        r5 = 0;
+        r0 = r24;
+        r1 = r6;
+        r0.getChannelDifference(r1, r2, r3, r5);
+        goto L_0x0047;
+    L_0x0044:
+        r15.getChannelDifference(r6);
+    L_0x0047:
+        r0 = 1;
+        goto L_0x004a;
+    L_0x0049:
+        r0 = 0;
+    L_0x004a:
+        r1 = 0;
+    L_0x004b:
+        r2 = r7.chats;
+        r2 = r2.size();
+        if (r1 >= r2) goto L_0x0066;
+    L_0x0053:
+        r2 = r7.chats;
+        r2 = r2.get(r1);
+        r2 = (org.telegram.tgnet.TLRPC.Chat) r2;
+        r3 = r2.id;
+        if (r3 != r6) goto L_0x0063;
+    L_0x005f:
+        r1 = r2.megagroup;
+        r6 = r0;
+        goto L_0x006b;
+    L_0x0063:
+        r1 = r1 + 1;
+        goto L_0x004b;
+    L_0x0066:
+        r6 = r0;
+        r1 = 0;
+        goto L_0x006b;
+    L_0x0069:
+        r1 = 0;
+        r6 = 0;
+    L_0x006b:
+        r0 = (int) r8;
+        r2 = 32;
+        r2 = r8 >> r2;
+        r3 = (int) r2;
+        if (r28 != 0) goto L_0x0078;
+    L_0x0073:
+        r2 = r7.messages;
+        org.telegram.messenger.ImageLoader.saveMessagesThumbs(r2);
+    L_0x0078:
+        if (r3 == r10) goto L_0x00af;
+    L_0x007a:
+        if (r0 == 0) goto L_0x00af;
+    L_0x007c:
+        if (r28 == 0) goto L_0x00af;
+    L_0x007e:
+        r0 = r7.messages;
+        r0 = r0.size();
+        if (r0 != 0) goto L_0x00af;
+    L_0x0086:
+        r17 = new org.telegram.messenger.-$$Lambda$MessagesController$L2__57wpUETyhq6XVWbkuE1LFZE;
+        r0 = r17;
+        r1 = r24;
+        r2 = r26;
+        r4 = r29;
+        r5 = r30;
+        r6 = r31;
+        r7 = r32;
+        r8 = r33;
+        r9 = r34;
+        r10 = r35;
+        r11 = r36;
+        r12 = r37;
+        r13 = r38;
+        r14 = r39;
+        r15 = r40;
+        r16 = r41;
+        r0.<init>(r1, r2, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16);
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r17);
+        return;
+    L_0x00af:
+        r12 = new android.util.SparseArray;
+        r12.<init>();
+        r13 = new android.util.SparseArray;
+        r13.<init>();
+        r0 = 0;
+    L_0x00ba:
+        r2 = r7.users;
+        r2 = r2.size();
+        if (r0 >= r2) goto L_0x00d2;
+    L_0x00c2:
+        r2 = r7.users;
+        r2 = r2.get(r0);
+        r2 = (org.telegram.tgnet.TLRPC.User) r2;
+        r3 = r2.id;
+        r12.put(r3, r2);
+        r0 = r0 + 1;
+        goto L_0x00ba;
+    L_0x00d2:
+        r0 = 0;
+    L_0x00d3:
+        r2 = r7.chats;
+        r2 = r2.size();
+        if (r0 >= r2) goto L_0x00eb;
+    L_0x00db:
+        r2 = r7.chats;
+        r2 = r2.get(r0);
+        r2 = (org.telegram.tgnet.TLRPC.Chat) r2;
+        r3 = r2.id;
+        r13.put(r3, r2);
+        r0 = r0 + 1;
+        goto L_0x00d3;
+    L_0x00eb:
+        r0 = r7.messages;
+        r14 = r0.size();
+        if (r28 != 0) goto L_0x01af;
+    L_0x00f3:
+        r15 = r24;
+        r0 = r15.dialogs_read_inbox_max;
+        r2 = java.lang.Long.valueOf(r26);
+        r0 = r0.get(r2);
+        r0 = (java.lang.Integer) r0;
+        if (r0 != 0) goto L_0x011a;
+    L_0x0103:
+        r0 = r15.currentAccount;
+        r0 = org.telegram.messenger.MessagesStorage.getInstance(r0);
+        r0 = r0.getDialogReadMax(r11, r8);
+        r0 = java.lang.Integer.valueOf(r0);
+        r2 = r15.dialogs_read_inbox_max;
+        r3 = java.lang.Long.valueOf(r26);
+        r2.put(r3, r0);
+    L_0x011a:
+        r2 = r15.dialogs_read_outbox_max;
+        r3 = java.lang.Long.valueOf(r26);
+        r2 = r2.get(r3);
+        r2 = (java.lang.Integer) r2;
+        if (r2 != 0) goto L_0x013f;
+    L_0x0128:
+        r2 = r15.currentAccount;
+        r2 = org.telegram.messenger.MessagesStorage.getInstance(r2);
+        r2 = r2.getDialogReadMax(r10, r8);
+        r2 = java.lang.Integer.valueOf(r2);
+        r3 = r15.dialogs_read_outbox_max;
+        r4 = java.lang.Long.valueOf(r26);
+        r3.put(r4, r2);
+    L_0x013f:
+        r3 = 0;
+    L_0x0140:
+        if (r3 >= r14) goto L_0x019d;
+    L_0x0142:
+        r4 = r7.messages;
+        r4 = r4.get(r3);
+        r4 = (org.telegram.tgnet.TLRPC.Message) r4;
+        if (r1 == 0) goto L_0x0154;
+    L_0x014c:
+        r5 = r4.flags;
+        r16 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
+        r5 = r5 | r16;
+        r4.flags = r5;
+    L_0x0154:
+        r5 = r4.action;
+        r10 = r5 instanceof org.telegram.tgnet.TLRPC.TL_messageActionChatDeleteUser;
+        if (r10 == 0) goto L_0x0175;
+    L_0x015a:
+        r5 = r5.user_id;
+        r5 = r12.get(r5);
+        r5 = (org.telegram.tgnet.TLRPC.User) r5;
+        if (r5 == 0) goto L_0x0175;
+    L_0x0164:
+        r5 = r5.bot;
+        if (r5 == 0) goto L_0x0175;
+    L_0x0168:
+        r5 = new org.telegram.tgnet.TLRPC$TL_replyKeyboardHide;
+        r5.<init>();
+        r4.reply_markup = r5;
+        r5 = r4.flags;
+        r5 = r5 | 64;
+        r4.flags = r5;
+    L_0x0175:
+        r5 = r4.action;
+        r10 = r5 instanceof org.telegram.tgnet.TLRPC.TL_messageActionChatMigrateTo;
+        if (r10 != 0) goto L_0x0195;
+    L_0x017b:
+        r5 = r5 instanceof org.telegram.tgnet.TLRPC.TL_messageActionChannelCreate;
+        if (r5 == 0) goto L_0x0180;
+    L_0x017f:
+        goto L_0x0195;
+    L_0x0180:
+        r5 = r4.out;
+        if (r5 == 0) goto L_0x0186;
+    L_0x0184:
+        r5 = r2;
+        goto L_0x0187;
+    L_0x0186:
+        r5 = r0;
+    L_0x0187:
+        r5 = r5.intValue();
+        r10 = r4.id;
+        if (r5 >= r10) goto L_0x0191;
+    L_0x018f:
+        r5 = 1;
+        goto L_0x0192;
+    L_0x0191:
+        r5 = 0;
+    L_0x0192:
+        r4.unread = r5;
+        goto L_0x0199;
+    L_0x0195:
+        r4.unread = r11;
+        r4.media_unread = r11;
+    L_0x0199:
+        r3 = r3 + 1;
+        r10 = 1;
+        goto L_0x0140;
+    L_0x019d:
+        r0 = r15.currentAccount;
+        r0 = org.telegram.messenger.MessagesStorage.getInstance(r0);
+        r1 = r25;
+        r2 = r26;
+        r4 = r30;
+        r5 = r33;
+        r0.putMessages(r1, r2, r4, r5, r6);
+        goto L_0x01b1;
+    L_0x01af:
+        r15 = r24;
+    L_0x01b1:
+        r10 = new java.util.ArrayList;
+        r10.<init>();
+        r6 = new java.util.ArrayList;
+        r6.<init>();
+        r5 = new java.util.HashMap;
+        r5.<init>();
+        r0 = 0;
+    L_0x01c1:
+        if (r0 >= r14) goto L_0x026c;
+    L_0x01c3:
+        r1 = r7.messages;
+        r1 = r1.get(r0);
+        r1 = (org.telegram.tgnet.TLRPC.Message) r1;
+        r1.dialog_id = r8;
+        r2 = new org.telegram.messenger.MessageObject;
+        r3 = r15.currentAccount;
+        r23 = 1;
+        r18 = r2;
+        r19 = r3;
+        r20 = r1;
+        r21 = r12;
+        r22 = r13;
+        r18.<init>(r19, r20, r21, r22, r23);
+        r10.add(r2);
+        if (r28 == 0) goto L_0x0265;
+    L_0x01e5:
+        r3 = r1.legacy;
+        r4 = 100;
+        if (r3 == 0) goto L_0x01f9;
+    L_0x01eb:
+        r3 = r1.layer;
+        if (r3 >= r4) goto L_0x01f9;
+    L_0x01ef:
+        r3 = r1.id;
+        r3 = java.lang.Integer.valueOf(r3);
+        r6.add(r3);
+        goto L_0x021c;
+    L_0x01f9:
+        r3 = r1.media;
+        r4 = r3 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaUnsupported;
+        if (r4 == 0) goto L_0x021c;
+    L_0x01ff:
+        r3 = r3.bytes;
+        if (r3 == 0) goto L_0x021c;
+    L_0x0203:
+        r4 = r3.length;
+        if (r4 == 0) goto L_0x0211;
+    L_0x0206:
+        r4 = r3.length;
+        r7 = 1;
+        if (r4 != r7) goto L_0x021d;
+    L_0x020a:
+        r3 = r3[r11];
+        r4 = 100;
+        if (r3 >= r4) goto L_0x021d;
+    L_0x0210:
+        goto L_0x0212;
+    L_0x0211:
+        r7 = 1;
+    L_0x0212:
+        r3 = r1.id;
+        r3 = java.lang.Integer.valueOf(r3);
+        r6.add(r3);
+        goto L_0x021d;
+    L_0x021c:
+        r7 = 1;
+    L_0x021d:
+        r3 = r1.media;
+        r4 = r3 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
+        if (r4 == 0) goto L_0x0266;
+    L_0x0223:
+        r3 = r3.webpage;
+        r4 = r3 instanceof org.telegram.tgnet.TLRPC.TL_webPagePending;
+        if (r4 == 0) goto L_0x0241;
+    L_0x0229:
+        r3 = r3.date;
+        r4 = r15.currentAccount;
+        r4 = org.telegram.tgnet.ConnectionsManager.getInstance(r4);
+        r4 = r4.getCurrentTime();
+        if (r3 > r4) goto L_0x0241;
+    L_0x0237:
+        r1 = r1.id;
+        r1 = java.lang.Integer.valueOf(r1);
+        r6.add(r1);
+        goto L_0x0266;
+    L_0x0241:
+        r3 = r1.media;
+        r3 = r3.webpage;
+        r4 = r3 instanceof org.telegram.tgnet.TLRPC.TL_webPageUrlPending;
+        if (r4 == 0) goto L_0x0266;
+    L_0x0249:
+        r3 = r3.url;
+        r3 = r5.get(r3);
+        r3 = (java.util.ArrayList) r3;
+        if (r3 != 0) goto L_0x0261;
+    L_0x0253:
+        r3 = new java.util.ArrayList;
+        r3.<init>();
+        r1 = r1.media;
+        r1 = r1.webpage;
+        r1 = r1.url;
+        r5.put(r1, r3);
+    L_0x0261:
+        r3.add(r2);
+        goto L_0x0266;
+    L_0x0265:
+        r7 = 1;
+    L_0x0266:
+        r0 = r0 + 1;
+        r7 = r25;
+        goto L_0x01c1;
+    L_0x026c:
+        r21 = new org.telegram.messenger.-$$Lambda$MessagesController$Z4Bd5ZrkcBpI903-24hDafvqXGk;
+        r0 = r21;
+        r1 = r24;
+        r2 = r25;
+        r3 = r28;
+        r4 = r31;
+        r20 = r5;
+        r5 = r30;
+        r19 = r6;
+        r6 = r32;
+        r7 = r26;
+        r9 = r29;
+        r11 = r36;
+        r12 = r39;
+        r13 = r40;
+        r14 = r42;
+        r15 = r35;
+        r16 = r38;
+        r17 = r33;
+        r18 = r41;
+        r0.<init>(r1, r2, r3, r4, r5, r6, r7, r9, r10, r11, r12, r13, r14, r15, r16, r17, r18, r19, r20);
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r21);
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.lambda$processLoadedMessages$108$MessagesController(org.telegram.tgnet.TLRPC$messages_Messages, long, boolean, int, int, boolean, int, int, int, int, int, boolean, int, int, int, int, boolean):void");
     }
 
     public /* synthetic */ void lambda$null$106$MessagesController(long j, int i, int i2, boolean z, int i3, int i4, int i5, int i6, int i7, boolean z2, int i8, int i9, int i10, int i11) {
@@ -9189,6 +9466,9 @@ public class MessagesController implements NotificationCenterDelegate {
         } else {
             TL_channels_createChannel tL_channels_createChannel = new TL_channels_createChannel();
             tL_channels_createChannel.title = str;
+            if (str2 == null) {
+                str2 = "";
+            }
             tL_channels_createChannel.about = str2;
             if (i == 4) {
                 tL_channels_createChannel.megagroup = true;
@@ -9513,7 +9793,7 @@ public class MessagesController implements NotificationCenterDelegate {
             AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$gHAV7k8HUui7jwavTT5ub-YwyHk(this, i));
         }
         if (tL_error != null) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$QEj10fA0SyCIQdMlFZT2Ntp8yZg(this, tL_error, baseFragment, tLObject, z, z2));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesController$FzKpDwgMKXFwcQpN6PW-r4fPJ0A(this, tL_error, baseFragment, tLObject, z, z2, inputUser));
             return;
         }
         Object obj;
@@ -9545,15 +9825,15 @@ public class MessagesController implements NotificationCenterDelegate {
         this.joiningToChannels.remove(Integer.valueOf(i));
     }
 
-    public /* synthetic */ void lambda$null$178$MessagesController(TL_error tL_error, BaseFragment baseFragment, TLObject tLObject, boolean z, boolean z2) {
+    public /* synthetic */ void lambda$null$178$MessagesController(TL_error tL_error, BaseFragment baseFragment, TLObject tLObject, boolean z, boolean z2, InputUser inputUser) {
         int i = this.currentAccount;
-        boolean z3 = true;
         Object[] objArr = new Object[1];
-        if (!z || z2) {
-            z3 = false;
-        }
-        objArr[0] = Boolean.valueOf(z3);
+        z2 = z && !z2;
+        objArr[0] = Boolean.valueOf(z2);
         AlertsCreator.processError(i, tL_error, baseFragment, tLObject, objArr);
+        if (z && (inputUser instanceof TL_inputUserSelf)) {
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(8192));
+        }
     }
 
     public /* synthetic */ void lambda$null$179$MessagesController(int i) {
@@ -18233,11 +18513,12 @@ public class MessagesController implements NotificationCenterDelegate {
         long j2 = j;
         ArrayList<MessageObject> arrayList2 = arrayList;
         if (!(arrayList2 == null || arrayList.isEmpty())) {
-            int i = 1;
+            int i = 0;
             Object obj = ((int) j2) == 0 ? 1 : null;
             MessageObject messageObject = null;
-            int i2 = 0;
             Object obj2 = null;
+            int i2 = 0;
+            Object obj3 = null;
             for (int i3 = 0; i3 < arrayList.size(); i3++) {
                 MessageObject messageObject2 = (MessageObject) arrayList2.get(i3);
                 if (messageObject == null || ((obj == null && messageObject2.getId() > messageObject.getId()) || (((obj != null || (messageObject2.getId() < 0 && messageObject.getId() < 0)) && messageObject2.getId() < messageObject.getId()) || messageObject2.messageOwner.date > messageObject.messageOwner.date))) {
@@ -18246,6 +18527,9 @@ public class MessagesController implements NotificationCenterDelegate {
                         i2 = i4;
                     }
                     messageObject = messageObject2;
+                }
+                if (obj2 == null && !messageObject2.isOut()) {
+                    obj2 = 1;
                 }
                 if (!(!messageObject2.isOut() || messageObject2.isSending() || messageObject2.isForwarded())) {
                     DataQuery instance;
@@ -18260,7 +18544,7 @@ public class MessagesController implements NotificationCenterDelegate {
                     }
                 }
                 if (messageObject2.isOut() && messageObject2.isSent()) {
-                    obj2 = 1;
+                    obj3 = 1;
                 }
             }
             DataQuery.getInstance(this.currentAccount).loadReplyMessagesForMessages(arrayList2, j2);
@@ -18302,30 +18586,34 @@ public class MessagesController implements NotificationCenterDelegate {
                     }
                     return;
                 }
-                long j3;
                 if (tL_dialog != null) {
-                    if (tL_dialog.folder_id != 1 || isDialogMuted(tL_dialog.id)) {
-                        i = 0;
+                    int i6;
+                    if (obj2 != null) {
+                        i6 = 1;
+                        if (tL_dialog.folder_id == 1 && !isDialogMuted(tL_dialog.id)) {
+                            tL_dialog.folder_id = 0;
+                            tL_dialog.pinned = false;
+                            tL_dialog.pinnedNum = 0;
+                            MessagesStorage.getInstance(this.currentAccount).setDialogsFolderId(null, null, tL_dialog.id, 0);
+                            i = 1;
+                        }
                     } else {
-                        tL_dialog.folder_id = 0;
-                        tL_dialog.pinned = false;
-                        tL_dialog.pinnedNum = 0;
-                        MessagesStorage.getInstance(this.currentAccount).setDialogsFolderId(null, null, tL_dialog.id, 0);
-                        i = 1;
+                        i6 = 1;
                     }
                     if ((tL_dialog.top_message > 0 && messageObject.getId() > 0 && messageObject.getId() > tL_dialog.top_message) || ((tL_dialog.top_message < 0 && messageObject.getId() < 0 && messageObject.getId() < tL_dialog.top_message) || this.dialogMessage.indexOfKey(j2) < 0 || tL_dialog.top_message < 0 || tL_dialog.last_message_date <= messageObject.messageOwner.date)) {
                         MessageObject messageObject4 = (MessageObject) this.dialogMessagesByIds.get(tL_dialog.top_message);
                         this.dialogMessagesByIds.remove(tL_dialog.top_message);
                         if (messageObject4 != null) {
-                            j3 = messageObject4.messageOwner.random_id;
+                            long j3 = messageObject4.messageOwner.random_id;
                             if (j3 != 0) {
                                 this.dialogMessagesByRandomIds.remove(j3);
                             }
                         }
                         tL_dialog.top_message = messageObject.getId();
-                        if (!z) {
+                        if (z) {
+                            i6 = i;
+                        } else {
                             tL_dialog.last_message_date = messageObject.messageOwner.date;
-                            i = 1;
                         }
                         this.dialogMessage.put(j2, messageObject);
                         if (messageObject.messageOwner.to_id.channel_id == 0) {
@@ -18335,10 +18623,9 @@ public class MessagesController implements NotificationCenterDelegate {
                                 this.dialogMessagesByRandomIds.put(j4, messageObject);
                             }
                         }
+                        i = i6;
                     }
-                } else if (z) {
-                    i = 0;
-                } else {
+                } else if (!z) {
                     Chat chat = getChat(Integer.valueOf(i2));
                     if ((i2 == 0 || chat != null) && (chat == null || !chat.left)) {
                         if (BuildVars.LOGS_ENABLED) {
@@ -18362,12 +18649,13 @@ public class MessagesController implements NotificationCenterDelegate {
                         this.dialogMessage.put(j2, messageObject);
                         if (messageObject.messageOwner.to_id.channel_id == 0) {
                             this.dialogMessagesByIds.put(messageObject.getId(), messageObject);
-                            j3 = messageObject.messageOwner.random_id;
-                            if (j3 != 0) {
-                                this.dialogMessagesByRandomIds.put(j3, messageObject);
+                            long j5 = messageObject.messageOwner.random_id;
+                            if (j5 != 0) {
+                                this.dialogMessagesByRandomIds.put(j5, messageObject);
                             }
                         }
                         MessagesStorage.getInstance(this.currentAccount).getDialogFolderId(j2, new -$$Lambda$MessagesController$UGzhyEr_7mVrPzKWG0QmrzUROSg(this, tL_dialog2, j2));
+                        i = 1;
                     } else {
                         return;
                     }
@@ -18375,7 +18663,7 @@ public class MessagesController implements NotificationCenterDelegate {
                 if (i != 0) {
                     sortDialogs(null);
                 }
-                if (obj2 != null) {
+                if (obj3 != null) {
                     DataQuery.getInstance(this.currentAccount).increasePeerRaiting(j2);
                 }
             }

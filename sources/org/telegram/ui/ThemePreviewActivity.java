@@ -505,6 +505,10 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
                         -CC.$default$didPressVoteButton(this, chatMessageCell, tL_pollAnswer);
                     }
 
+                    public /* synthetic */ void didStartVideoStream(MessageObject messageObject) {
+                        -CC.$default$didStartVideoStream(this, messageObject);
+                    }
+
                     public /* synthetic */ boolean isChatAdminCell(int i) {
                         return -CC.$default$isChatAdminCell(this, i);
                     }

@@ -206,9 +206,7 @@
     <string name="AllowReadSms">Por favor, permita que o Telegram receba SMS. Assim podemos inserir o código automaticamente para você.</string>
     <string name="AlternativeOptions">Opções alternativas</string>
     <string name="AlwaysAllow">Sempre Permitir</string>
-    <string name="AlwaysAllowPlaceholder">Sempre permitir...</string>
     <string name="AlwaysShareWith">Sempre Mostrar Para</string>
-    <string name="AlwaysShareWithPlaceholder">Sempre compartilhar para os usuários...</string>
     <string name="AlwaysShareWithTitle">Sempre Mostrar</string>
     <string name="AlwaysShowPopup">Sempre mostrar pop-up</string>
     <string name="AndMoreTypingGroup_few">%1$s and %2$d more are typing</string>
@@ -263,7 +261,6 @@
     <string name="AreTyping">estão escrevendo...</string>
     <string name="AreTypingGroup">%1$s estão escrevendo...</string>
     <string name="AreYouSure">Você tem certeza?</string>
-    <string name="AreYouSureBlockContact">Você tem certeza de que deseja bloquear este contato?</string>
     <string name="AreYouSureClearDrafts">Deseja mesmo apagar todos os seus rascunhos da nuvem?</string>
     <string name="AreYouSureClearHistory">Você tem certeza de que deseja limpar o histórico?</string>
     <string name="AreYouSureClearHistoryCacheFewChats">Apagar todo os textos e mídias armazenadas em cache dos chats selecionados?</string>
@@ -377,7 +374,6 @@
     <string name="AutoLockDisabled">Desativado</string>
     <string name="AutoLockInTime">em %1$s</string>
     <string name="AutoLockInfo">Solicita a senha se você ficar ausente por um tempo.</string>
-    <string name="AutoNightAutomatic">Automático</string>
     <string name="AutoNightBrightness">Porcentagem do brilho</string>
     <string name="AutoNightBrightnessInfo">Alternar para o seu tema noturno preferido quando a luz ambiente estiver abaixo de %1$d%%.</string>
     <string name="AutoNightDisabled">Desativado</string>
@@ -1447,9 +1443,7 @@
     <string name="NetworkUsageSince">Uso da rede desde %1$s</string>
     <string name="NetworkUsageWiFi">WI-FI</string>
     <string name="NeverAllow">Nunca Permitir</string>
-    <string name="NeverAllowPlaceholder">Nunca permitir...</string>
     <string name="NeverShareWith">Nunca Mostrar Para</string>
-    <string name="NeverShareWithPlaceholder">Nunca mostrar para os usuários...</string>
     <string name="NeverShareWithTitle">Nunca Mostrar</string>
     <string name="NewBroadcastList">Nova Lista de Transmissão</string>
     <string name="NewChannel">Novo Canal</string>
@@ -1672,7 +1666,6 @@
     <string name="OpenInBrowser">ABRIR EM...</string>
     <string name="OpenInExternalApp">Abrir em...</string>
     <string name="OpenMessage">VER MENSAGEM</string>
-    <string name="OpenUrlAlert">Abrir URL em %1$s?</string>
     <string name="OptionHint">Opção</string>
     <string name="Option_few">mais %1$d opções</string>
     <string name="Option_many">mais %1$d opções</string>

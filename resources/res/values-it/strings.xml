@@ -206,9 +206,7 @@
     <string name="AllowReadSms">Per favore consenti a Telegram di ricevere SMS così potremo inserire in automatico il codice per te.</string>
     <string name="AlternativeOptions">Opzioni alternative</string>
     <string name="AlwaysAllow">Consenti sempre</string>
-    <string name="AlwaysAllowPlaceholder">Consenti sempre...</string>
     <string name="AlwaysShareWith">Condividi con</string>
-    <string name="AlwaysShareWithPlaceholder">Condividi con gli utenti...</string>
     <string name="AlwaysShareWithTitle">Condividi</string>
     <string name="AlwaysShowPopup">Mostra sempre il popup</string>
     <string name="AndMoreTypingGroup_few">%1$s e altri %2$d stanno scrivendo</string>
@@ -263,7 +261,6 @@
     <string name="AreTyping">stanno scrivendo...</string>
     <string name="AreTypingGroup">%1$s stanno scrivendo...</string>
     <string name="AreYouSure">Sei sicuro?</string>
-    <string name="AreYouSureBlockContact">Sei sicuro di voler bloccare questo contatto?</string>
     <string name="AreYouSureClearDrafts">Sei sicuro di voler eliminare tutte le bozze?</string>
     <string name="AreYouSureClearHistory">Sei sicuro di voler eliminare la cronologia?</string>
     <string name="AreYouSureClearHistoryCacheFewChats">Eliminare tutti i testi e i media dalle chat selezionate?</string>
@@ -377,7 +374,6 @@
     <string name="AutoLockDisabled">Disattivato</string>
     <string name="AutoLockInTime">dopo %1$s</string>
     <string name="AutoLockInfo">Richiede il codice se assente per del tempo.</string>
-    <string name="AutoNightAutomatic">Automatica</string>
     <string name="AutoNightBrightness">Soglia luminosità</string>
     <string name="AutoNightBrightnessInfo">Passa al tema notte quando la luce ambientale è inferiore al %1$d%%.</string>
     <string name="AutoNightDisabled">Disattivata</string>
@@ -1447,9 +1443,7 @@
     <string name="NetworkUsageSince">Utilizzo rete da %1$s</string>
     <string name="NetworkUsageWiFi">WI-FI</string>
     <string name="NeverAllow">Non consentire mai</string>
-    <string name="NeverAllowPlaceholder">Non consentire mai...</string>
     <string name="NeverShareWith">Non condividere con</string>
-    <string name="NeverShareWithPlaceholder">Non condividere con gli utenti...</string>
     <string name="NeverShareWithTitle">Non condividere</string>
     <string name="NewBroadcastList">Nuova lista broadcast</string>
     <string name="NewChannel">Nuovo canale</string>
@@ -1672,7 +1666,6 @@
     <string name="OpenInBrowser">APRI IN...</string>
     <string name="OpenInExternalApp">Apri in...</string>
     <string name="OpenMessage">APRI MESSAGGIO</string>
-    <string name="OpenUrlAlert">Aprire url %1$s?</string>
     <string name="OptionHint">Opzione</string>
     <string name="Option_few">altre %1$d opzioni</string>
     <string name="Option_many">altre %1$d opzioni</string>

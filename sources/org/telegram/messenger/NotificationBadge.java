@@ -3,6 +3,7 @@ package org.telegram.messenger;
 import android.annotation.TargetApi;
 import android.content.AsyncQueryHandler;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -242,83 +243,38 @@ public class NotificationBadge {
         private static final String CONTENT_URI = "content://com.sec.badge/apps?notify=true";
         private static DefaultBadger defaultBadger;
 
-        /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-            jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:23:0x0088 in {3, 4, 6, 15, 17, 19, 22} preds:[]
-            	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-            	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-            	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-            	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-            	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-            	at java.util.ArrayList.forEach(ArrayList.java:1257)
-            	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-            	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$0(DepthTraversal.java:13)
-            	at java.util.ArrayList.forEach(ArrayList.java:1257)
-            	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:13)
-            	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-            	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-            	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-            	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-            */
-        public void executeBadge(int r12) {
-            /*
-            r11 = this;
-            r0 = defaultBadger;	 Catch:{ Exception -> 0x0010 }
-            if (r0 != 0) goto L_0x000b;	 Catch:{ Exception -> 0x0010 }
-            r0 = new org.telegram.messenger.NotificationBadge$DefaultBadger;	 Catch:{ Exception -> 0x0010 }
-            r0.<init>();	 Catch:{ Exception -> 0x0010 }
-            defaultBadger = r0;	 Catch:{ Exception -> 0x0010 }
-            r0 = defaultBadger;	 Catch:{ Exception -> 0x0010 }
-            r0.executeBadge(r12);	 Catch:{ Exception -> 0x0010 }
-            r0 = "content://com.sec.badge/apps?notify=true";
-            r0 = android.net.Uri.parse(r0);
-            r1 = org.telegram.messenger.ApplicationLoader.applicationContext;
-            r7 = r1.getContentResolver();
-            r8 = 0;
-            r3 = CONTENT_PROJECTION;	 Catch:{ all -> 0x0083 }
-            r4 = "package=?";	 Catch:{ all -> 0x0083 }
-            r9 = 1;	 Catch:{ all -> 0x0083 }
-            r5 = new java.lang.String[r9];	 Catch:{ all -> 0x0083 }
-            r1 = org.telegram.messenger.NotificationBadge.componentName;	 Catch:{ all -> 0x0083 }
-            r1 = r1.getPackageName();	 Catch:{ all -> 0x0083 }
-            r10 = 0;	 Catch:{ all -> 0x0083 }
-            r5[r10] = r1;	 Catch:{ all -> 0x0083 }
-            r6 = 0;	 Catch:{ all -> 0x0083 }
-            r1 = r7;	 Catch:{ all -> 0x0083 }
-            r2 = r0;	 Catch:{ all -> 0x0083 }
-            r8 = r1.query(r2, r3, r4, r5, r6);	 Catch:{ all -> 0x0083 }
-            if (r8 == 0) goto L_0x007f;	 Catch:{ all -> 0x0083 }
-            r1 = org.telegram.messenger.NotificationBadge.componentName;	 Catch:{ all -> 0x0083 }
-            r1 = r1.getClassName();	 Catch:{ all -> 0x0083 }
-            r2 = 0;	 Catch:{ all -> 0x0083 }
-            r3 = r8.moveToNext();	 Catch:{ all -> 0x0083 }
-            if (r3 == 0) goto L_0x0072;	 Catch:{ all -> 0x0083 }
-            r3 = r8.getInt(r10);	 Catch:{ all -> 0x0083 }
-            r4 = org.telegram.messenger.NotificationBadge.componentName;	 Catch:{ all -> 0x0083 }
-            r4 = r11.getContentValues(r4, r12, r10);	 Catch:{ all -> 0x0083 }
-            r5 = "_id=?";	 Catch:{ all -> 0x0083 }
-            r6 = new java.lang.String[r9];	 Catch:{ all -> 0x0083 }
-            r3 = java.lang.String.valueOf(r3);	 Catch:{ all -> 0x0083 }
-            r6[r10] = r3;	 Catch:{ all -> 0x0083 }
-            r7.update(r0, r4, r5, r6);	 Catch:{ all -> 0x0083 }
-            r3 = "class";	 Catch:{ all -> 0x0083 }
-            r3 = r8.getColumnIndex(r3);	 Catch:{ all -> 0x0083 }
-            r3 = r8.getString(r3);	 Catch:{ all -> 0x0083 }
-            r3 = r1.equals(r3);	 Catch:{ all -> 0x0083 }
-            if (r3 == 0) goto L_0x0041;	 Catch:{ all -> 0x0083 }
-            r2 = 1;	 Catch:{ all -> 0x0083 }
-            goto L_0x0041;	 Catch:{ all -> 0x0083 }
-            if (r2 != 0) goto L_0x007f;	 Catch:{ all -> 0x0083 }
-            r1 = org.telegram.messenger.NotificationBadge.componentName;	 Catch:{ all -> 0x0083 }
-            r12 = r11.getContentValues(r1, r12, r9);	 Catch:{ all -> 0x0083 }
-            r7.insert(r0, r12);	 Catch:{ all -> 0x0083 }
-            org.telegram.messenger.NotificationBadge.close(r8);
-            return;
-            r12 = move-exception;
-            org.telegram.messenger.NotificationBadge.close(r8);
-            throw r12;
-            return;
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.NotificationBadge$SamsungHomeBadger.executeBadge(int):void");
+        public void executeBadge(int i) {
+            try {
+                if (defaultBadger == null) {
+                    defaultBadger = new DefaultBadger();
+                }
+                defaultBadger.executeBadge(i);
+            } catch (Exception unused) {
+            }
+            Uri parse = Uri.parse("content://com.sec.badge/apps?notify=true");
+            ContentResolver contentResolver = ApplicationLoader.applicationContext.getContentResolver();
+            try {
+                ContentResolver contentResolver2 = contentResolver;
+                Uri uri = parse;
+                Cursor query = contentResolver2.query(uri, CONTENT_PROJECTION, "package=?", new String[]{NotificationBadge.componentName.getPackageName()}, null);
+                if (query != null) {
+                    String className = NotificationBadge.componentName.getClassName();
+                    Object obj = null;
+                    while (query.moveToNext()) {
+                        int i2 = query.getInt(0);
+                        contentResolver.update(parse, getContentValues(NotificationBadge.componentName, i, false), "_id=?", new String[]{String.valueOf(i2)});
+                        if (className.equals(query.getString(query.getColumnIndex("class")))) {
+                            obj = 1;
+                        }
+                    }
+                    if (obj == null) {
+                        contentResolver.insert(parse, getContentValues(NotificationBadge.componentName, i, true));
+                    }
+                }
+                NotificationBadge.close(query);
+            } catch (Throwable th) {
+                NotificationBadge.close(null);
+            }
         }
 
         private ContentValues getContentValues(ComponentName componentName, int i, boolean z) {

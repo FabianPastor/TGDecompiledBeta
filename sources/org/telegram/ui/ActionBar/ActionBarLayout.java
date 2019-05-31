@@ -476,7 +476,6 @@ public class ActionBarLayout extends FrameLayout {
         if (this.fragmentsStack.size() > 1) {
             ArrayList arrayList;
             VelocityTracker velocityTracker;
-            float f;
             if (motionEvent != null && motionEvent.getAction() == 0 && !this.startedTracking && !this.maybeStartTracking) {
                 arrayList = this.fragmentsStack;
                 if (!((BaseFragment) arrayList.get(arrayList.size() - 1)).swipeBackEnabled) {
@@ -513,37 +512,36 @@ public class ActionBarLayout extends FrameLayout {
                         ((BaseFragment) arrayList2.get(arrayList2.size() - 1)).onBeginSlide();
                         this.beginTrackingSent = true;
                     }
-                    f = (float) max;
+                    float f = (float) max;
                     this.containerView.setTranslationX(f);
                     setInnerTranslationX(f);
                 }
             } else if (motionEvent != null && motionEvent.getPointerId(0) == this.startedTrackingPointerId && (motionEvent.getAction() == 3 || motionEvent.getAction() == 1 || motionEvent.getAction() == 6)) {
-                float yVelocity;
+                float xVelocity;
                 if (this.velocityTracker == null) {
                     this.velocityTracker = VelocityTracker.obtain();
                 }
                 this.velocityTracker.computeCurrentVelocity(1000);
-                if (!(this.inPreviewMode || this.transitionAnimationPreviewMode || this.startedTracking)) {
-                    arrayList = this.fragmentsStack;
-                    if (((BaseFragment) arrayList.get(arrayList.size() - 1)).swipeBackEnabled) {
-                        f = this.velocityTracker.getXVelocity();
-                        yVelocity = this.velocityTracker.getYVelocity();
-                        if (f >= 3500.0f && f > Math.abs(yVelocity)) {
-                            prepareForMoving(motionEvent);
-                            if (!this.beginTrackingSent) {
-                                if (((Activity) getContext()).getCurrentFocus() != null) {
-                                    AndroidUtilities.hideKeyboard(((Activity) getContext()).getCurrentFocus());
-                                }
-                                this.beginTrackingSent = true;
+                arrayList = this.fragmentsStack;
+                BaseFragment baseFragment = (BaseFragment) arrayList.get(arrayList.size() - 1);
+                if (!(this.inPreviewMode || this.transitionAnimationPreviewMode || this.startedTracking || !baseFragment.swipeBackEnabled)) {
+                    xVelocity = this.velocityTracker.getXVelocity();
+                    float yVelocity = this.velocityTracker.getYVelocity();
+                    if (xVelocity >= 3500.0f && xVelocity > Math.abs(yVelocity) && baseFragment.canBeginSlide()) {
+                        prepareForMoving(motionEvent);
+                        if (!this.beginTrackingSent) {
+                            if (((Activity) getContext()).getCurrentFocus() != null) {
+                                AndroidUtilities.hideKeyboard(((Activity) getContext()).getCurrentFocus());
                             }
+                            this.beginTrackingSent = true;
                         }
                     }
                 }
                 if (this.startedTracking) {
                     float x = this.containerView.getX();
                     AnimatorSet animatorSet = new AnimatorSet();
-                    yVelocity = this.velocityTracker.getXVelocity();
-                    final boolean z = x < ((float) this.containerView.getMeasuredWidth()) / 3.0f && (yVelocity < 3500.0f || yVelocity < this.velocityTracker.getYVelocity());
+                    xVelocity = this.velocityTracker.getXVelocity();
+                    final boolean z = x < ((float) this.containerView.getMeasuredWidth()) / 3.0f && (xVelocity < 3500.0f || xVelocity < this.velocityTracker.getYVelocity());
                     String str = "innerTranslationX";
                     String str2 = "translationX";
                     Animator[] animatorArr;
@@ -1356,7 +1354,9 @@ public class ActionBarLayout extends FrameLayout {
                     int green2 = Color.green(this.animateStartColors[i][i2]);
                     int blue2 = Color.blue(this.animateStartColors[i][i2]);
                     int alpha2 = Color.alpha(this.animateStartColors[i][i2]);
-                    this.themeAnimatorDescriptions[i][i2].setColor(Color.argb(Math.min(255, (int) (((float) alpha2) + (((float) (alpha - alpha2)) * f))), Math.min(255, (int) (((float) red2) + (((float) (red - red2)) * f))), Math.min(255, (int) (((float) green2) + (((float) (green - green2)) * f))), Math.min(255, (int) (((float) blue2) + (((float) (blue - blue2)) * f)))), false, false);
+                    red = Color.argb(Math.min(255, (int) (((float) alpha2) + (((float) (alpha - alpha2)) * f))), Math.min(255, (int) (((float) red2) + (((float) (red - red2)) * f))), Math.min(255, (int) (((float) green2) + (((float) (green - green2)) * f))), Math.min(255, (int) (((float) blue2) + (((float) (blue - blue2)) * f))));
+                    Theme.setAnimatedColor(this.themeAnimatorDescriptions[i][i2].getCurrentKey(), red);
+                    this.themeAnimatorDescriptions[i][i2].setColor(red, false, false);
                 }
                 ThemeDescriptionDelegate[] themeDescriptionDelegateArr = this.themeAnimatorDelegate;
                 if (themeDescriptionDelegateArr[i] != null) {
@@ -1372,7 +1372,6 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     public void animateThemedValues(ThemeInfo themeInfo, boolean z) {
-        int i = 1;
         if (this.transitionAnimationInProgress || this.startedTracking) {
             this.animateThemeAfterAnimation = true;
             this.animateSetThemeAfterAnimation = themeInfo;
@@ -1384,51 +1383,50 @@ public class ActionBarLayout extends FrameLayout {
             animatorSet.cancel();
             this.themeAnimatorSet = null;
         }
-        int i2 = 0;
         Object obj = null;
-        for (int i3 = 0; i3 < 2; i3++) {
+        for (int i = 0; i < 2; i++) {
             BaseFragment lastFragment;
-            if (i3 == 0) {
+            if (i == 0) {
                 lastFragment = getLastFragment();
-            } else if (this.inPreviewMode || this.transitionAnimationPreviewMode || this.fragmentsStack.size() > 1) {
+            } else if ((this.inPreviewMode || this.transitionAnimationPreviewMode) && this.fragmentsStack.size() > 1) {
                 ArrayList arrayList = this.fragmentsStack;
                 lastFragment = (BaseFragment) arrayList.get(arrayList.size() - 2);
             } else {
-                this.themeAnimatorDescriptions[i3] = null;
-                this.animateStartColors[i3] = null;
-                this.animateEndColors[i3] = null;
-                this.themeAnimatorDelegate[i3] = null;
+                this.themeAnimatorDescriptions[i] = null;
+                this.animateStartColors[i] = null;
+                this.animateEndColors[i] = null;
+                this.themeAnimatorDelegate[i] = null;
             }
             if (lastFragment != null) {
                 ThemeDescription[][] themeDescriptionArr;
-                this.themeAnimatorDescriptions[i3] = lastFragment.getThemeDescriptions();
-                this.animateStartColors[i3] = new int[this.themeAnimatorDescriptions[i3].length];
-                int i4 = 0;
+                this.themeAnimatorDescriptions[i] = lastFragment.getThemeDescriptions();
+                this.animateStartColors[i] = new int[this.themeAnimatorDescriptions[i].length];
+                int i2 = 0;
                 while (true) {
                     themeDescriptionArr = this.themeAnimatorDescriptions;
-                    if (i4 >= themeDescriptionArr[i3].length) {
+                    if (i2 >= themeDescriptionArr[i].length) {
                         break;
                     }
-                    this.animateStartColors[i3][i4] = themeDescriptionArr[i3][i4].getSetColor();
-                    ThemeDescriptionDelegate delegateDisabled = this.themeAnimatorDescriptions[i3][i4].setDelegateDisabled();
+                    this.animateStartColors[i][i2] = themeDescriptionArr[i][i2].getSetColor();
+                    ThemeDescriptionDelegate delegateDisabled = this.themeAnimatorDescriptions[i][i2].setDelegateDisabled();
                     ThemeDescriptionDelegate[] themeDescriptionDelegateArr = this.themeAnimatorDelegate;
-                    if (themeDescriptionDelegateArr[i3] == null && delegateDisabled != null) {
-                        themeDescriptionDelegateArr[i3] = delegateDisabled;
+                    if (themeDescriptionDelegateArr[i] == null && delegateDisabled != null) {
+                        themeDescriptionDelegateArr[i] = delegateDisabled;
                     }
-                    i4++;
+                    i2++;
                 }
-                if (i3 == 0) {
+                if (i == 0) {
                     Theme.applyTheme(themeInfo, z);
                 }
-                this.animateEndColors[i3] = new int[this.themeAnimatorDescriptions[i3].length];
-                i4 = 0;
+                this.animateEndColors[i] = new int[this.themeAnimatorDescriptions[i].length];
+                i2 = 0;
                 while (true) {
                     themeDescriptionArr = this.themeAnimatorDescriptions;
-                    if (i4 >= themeDescriptionArr[i3].length) {
+                    if (i2 >= themeDescriptionArr[i].length) {
                         break;
                     }
-                    this.animateEndColors[i3][i4] = themeDescriptionArr[i3][i4].getSetColor();
-                    i4++;
+                    this.animateEndColors[i][i2] = themeDescriptionArr[i][i2].getSetColor();
+                    i2++;
                 }
                 obj = 1;
             }
@@ -1444,6 +1442,7 @@ public class ActionBarLayout extends FrameLayout {
                             ActionBarLayout.this.animateEndColors[i] = null;
                             ActionBarLayout.this.themeAnimatorDelegate[i] = null;
                         }
+                        Theme.setAnimatingColor(false);
                         ActionBarLayout.this.themeAnimatorSet = null;
                     }
                 }
@@ -1456,27 +1455,26 @@ public class ActionBarLayout extends FrameLayout {
                             ActionBarLayout.this.animateEndColors[i] = null;
                             ActionBarLayout.this.themeAnimatorDelegate[i] = null;
                         }
+                        Theme.setAnimatingColor(false);
                         ActionBarLayout.this.themeAnimatorSet = null;
                     }
                 }
             });
+            int size = this.fragmentsStack.size();
+            int i3 = (this.inPreviewMode || this.transitionAnimationPreviewMode) ? 2 : 1;
+            size -= i3;
+            for (i3 = 0; i3 < size; i3++) {
+                BaseFragment baseFragment = (BaseFragment) this.fragmentsStack.get(i3);
+                baseFragment.clearViews();
+                baseFragment.setParentLayout(this);
+            }
+            Theme.setAnimatingColor(true);
             AnimatorSet animatorSet2 = this.themeAnimatorSet;
             Animator[] animatorArr = new Animator[1];
             animatorArr[0] = ObjectAnimator.ofFloat(this, "themeAnimationValue", new float[]{0.0f, 1.0f});
             animatorSet2.playTogether(animatorArr);
             this.themeAnimatorSet.setDuration(200);
             this.themeAnimatorSet.start();
-            int size = this.fragmentsStack.size();
-            if (this.inPreviewMode || this.transitionAnimationPreviewMode) {
-                i = 2;
-            }
-            size -= i;
-            while (i2 < size) {
-                BaseFragment baseFragment = (BaseFragment) this.fragmentsStack.get(i2);
-                baseFragment.clearViews();
-                baseFragment.setParentLayout(this);
-                i2++;
-            }
         }
     }
 

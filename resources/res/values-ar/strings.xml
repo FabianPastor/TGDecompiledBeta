@@ -206,9 +206,7 @@
     <string name="AllowReadSms">فضلًا قم بالسماح لتيليجرام بتلقي رسائل SMS القصيرة ليتمكن من تفعيل حسابك تلقائيًا.</string>
     <string name="AlternativeOptions">خيارات بديلة</string>
     <string name="AlwaysAllow">السماح دائمًا</string>
-    <string name="AlwaysAllowPlaceholder">السماح دائمًا لـ...</string>
     <string name="AlwaysShareWith">المشاركة دائمًا مع</string>
-    <string name="AlwaysShareWithPlaceholder">المشاركة مع هؤلاء دائمًا...</string>
     <string name="AlwaysShareWithTitle">المشاركة دائمًا مع</string>
     <string name="AlwaysShowPopup">أظهرها دائمًا</string>
     <string name="AndMoreTypingGroup_few">%1$s و %2$d أشخاص آخرين يكتبون</string>
@@ -263,7 +261,6 @@
     <string name="AreTyping">يكتبون… </string>
     <string name="AreTypingGroup">%1$s يكتبون...</string>
     <string name="AreYouSure">هل أنت متأكد؟</string>
-    <string name="AreYouSureBlockContact">هل ترغب حقًا في حظر جهة الاتصال هذه؟</string>
     <string name="AreYouSureClearDrafts">هل ترغب حقًا في حذف جميع المسودات السحابية؟</string>
     <string name="AreYouSureClearHistory">هل ترغب حقًا في مسح محتوى المحادثة؟</string>
     <string name="AreYouSureClearHistoryCacheFewChats">حذف جميع الرسائل والوسائط المخزنة مؤقتًا من المحادثات المحددة؟</string>
@@ -377,7 +374,6 @@
     <string name="AutoLockDisabled">معطَّل</string>
     <string name="AutoLockInTime">خلال %1$s</string>
     <string name="AutoLockInfo">طلب رمز القفل إن غِبتُ لفترةٍ ما.</string>
-    <string name="AutoNightAutomatic">تلقائي</string>
     <string name="AutoNightBrightness">مؤشر السطوع</string>
     <string name="AutoNightBrightnessInfo">قم بالتبديل للنمط الليلي عند انخفاض الإضاءة المحيطة إلى %1$d%% أو أقل.</string>
     <string name="AutoNightDisabled">معطَّل</string>
@@ -1447,9 +1443,7 @@
     <string name="NetworkUsageSince">إحصاءات الاستهلاك منذ %1$s</string>
     <string name="NetworkUsageWiFi">WI-FI</string>
     <string name="NeverAllow">عدم السماح أبدًا</string>
-    <string name="NeverAllowPlaceholder">عدم السماح مطلقًا لـ...</string>
     <string name="NeverShareWith">عدم المشاركة مع</string>
-    <string name="NeverShareWithPlaceholder">عدم المشاركة مع هؤلاء مطلقًا...</string>
     <string name="NeverShareWithTitle">عدم المشاركة مع</string>
     <string name="NewBroadcastList">رسالة جماعية جديدة</string>
     <string name="NewChannel">قناة جديدة</string>
@@ -1672,7 +1666,6 @@
     <string name="OpenInBrowser">فتح بواسطة...</string>
     <string name="OpenInExternalApp">فتح باستخدام...</string>
     <string name="OpenMessage">عرض الرسالة</string>
-    <string name="OpenUrlAlert">هل ترغب في فتح الرابط %1$s؟</string>
     <string name="OptionHint">خيار</string>
     <string name="Option_few">%1$d خيارات إضافية</string>
     <string name="Option_many">%1$d خيارًا إضافيًا</string>

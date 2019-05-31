@@ -96,6 +96,7 @@ import org.telegram.tgnet.TLRPC.TL_inputPeerUser;
 import org.telegram.tgnet.TLRPC.TL_inputSingleMedia;
 import org.telegram.tgnet.TLRPC.TL_keyboardButtonBuy;
 import org.telegram.tgnet.TLRPC.TL_keyboardButtonGame;
+import org.telegram.tgnet.TLRPC.TL_keyboardButtonUrlAuth;
 import org.telegram.tgnet.TLRPC.TL_messageActionScreenshotTaken;
 import org.telegram.tgnet.TLRPC.TL_messageEncryptedAction;
 import org.telegram.tgnet.TLRPC.TL_messageEntityBold;
@@ -125,8 +126,6 @@ import org.telegram.tgnet.TLRPC.TL_messages_sendMultiMedia;
 import org.telegram.tgnet.TLRPC.TL_messages_sendScreenshotNotification;
 import org.telegram.tgnet.TLRPC.TL_messages_sendVote;
 import org.telegram.tgnet.TLRPC.TL_messages_uploadMedia;
-import org.telegram.tgnet.TLRPC.TL_payments_getPaymentForm;
-import org.telegram.tgnet.TLRPC.TL_payments_getPaymentReceipt;
 import org.telegram.tgnet.TLRPC.TL_peerUser;
 import org.telegram.tgnet.TLRPC.TL_photo;
 import org.telegram.tgnet.TLRPC.TL_photoCachedSize;
@@ -1366,72 +1365,72 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:150:0x03ac  */
-    /* JADX WARNING: Removed duplicated region for block: B:157:0x03f3  */
-    /* JADX WARNING: Removed duplicated region for block: B:170:0x042a  */
-    /* JADX WARNING: Removed duplicated region for block: B:174:0x0483  */
-    /* JADX WARNING: Removed duplicated region for block: B:173:0x044c  */
-    /* JADX WARNING: Removed duplicated region for block: B:78:0x01e5  */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x01b5  */
-    /* JADX WARNING: Removed duplicated region for block: B:103:0x028d  */
-    /* JADX WARNING: Removed duplicated region for block: B:113:0x02c1  */
-    /* JADX WARNING: Removed duplicated region for block: B:115:0x02c9  */
-    /* JADX WARNING: Removed duplicated region for block: B:118:0x02d6  */
-    /* JADX WARNING: Removed duplicated region for block: B:121:0x02fc  */
-    /* JADX WARNING: Removed duplicated region for block: B:124:0x0306  */
-    /* JADX WARNING: Removed duplicated region for block: B:132:0x0353  */
-    /* JADX WARNING: Removed duplicated region for block: B:127:0x0327  */
-    /* JADX WARNING: Removed duplicated region for block: B:138:0x0376  */
-    /* JADX WARNING: Removed duplicated region for block: B:135:0x035d  */
-    /* JADX WARNING: Removed duplicated region for block: B:142:0x037e A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:150:0x03ac  */
-    /* JADX WARNING: Removed duplicated region for block: B:153:0x03db A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:157:0x03f3  */
-    /* JADX WARNING: Removed duplicated region for block: B:164:0x0412  */
-    /* JADX WARNING: Removed duplicated region for block: B:170:0x042a  */
-    /* JADX WARNING: Removed duplicated region for block: B:173:0x044c  */
-    /* JADX WARNING: Removed duplicated region for block: B:174:0x0483  */
-    /* JADX WARNING: Removed duplicated region for block: B:176:0x0487  */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x01ac  */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x0198  */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x01b5  */
-    /* JADX WARNING: Removed duplicated region for block: B:78:0x01e5  */
-    /* JADX WARNING: Removed duplicated region for block: B:103:0x028d  */
-    /* JADX WARNING: Removed duplicated region for block: B:107:0x02a7  */
-    /* JADX WARNING: Removed duplicated region for block: B:113:0x02c1  */
-    /* JADX WARNING: Removed duplicated region for block: B:115:0x02c9  */
-    /* JADX WARNING: Removed duplicated region for block: B:118:0x02d6  */
-    /* JADX WARNING: Removed duplicated region for block: B:121:0x02fc  */
-    /* JADX WARNING: Removed duplicated region for block: B:124:0x0306  */
-    /* JADX WARNING: Removed duplicated region for block: B:127:0x0327  */
-    /* JADX WARNING: Removed duplicated region for block: B:132:0x0353  */
-    /* JADX WARNING: Removed duplicated region for block: B:135:0x035d  */
-    /* JADX WARNING: Removed duplicated region for block: B:138:0x0376  */
-    /* JADX WARNING: Removed duplicated region for block: B:142:0x037e A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:150:0x03ac  */
-    /* JADX WARNING: Removed duplicated region for block: B:153:0x03db A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:157:0x03f3  */
-    /* JADX WARNING: Removed duplicated region for block: B:164:0x0412  */
-    /* JADX WARNING: Removed duplicated region for block: B:170:0x042a  */
-    /* JADX WARNING: Removed duplicated region for block: B:174:0x0483  */
-    /* JADX WARNING: Removed duplicated region for block: B:173:0x044c  */
-    /* JADX WARNING: Removed duplicated region for block: B:176:0x0487  */
-    public int sendMessage(java.util.ArrayList<org.telegram.messenger.MessageObject> r46, long r47) {
+    /* JADX WARNING: Removed duplicated region for block: B:170:0x043f  */
+    /* JADX WARNING: Removed duplicated region for block: B:177:0x0487  */
+    /* JADX WARNING: Removed duplicated region for block: B:190:0x04c3  */
+    /* JADX WARNING: Removed duplicated region for block: B:194:0x051e  */
+    /* JADX WARNING: Removed duplicated region for block: B:193:0x04e7  */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x01e5  */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x01b5  */
+    /* JADX WARNING: Removed duplicated region for block: B:102:0x028d  */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x02c1  */
+    /* JADX WARNING: Removed duplicated region for block: B:114:0x02c9  */
+    /* JADX WARNING: Removed duplicated region for block: B:117:0x02d6  */
+    /* JADX WARNING: Removed duplicated region for block: B:120:0x02fa  */
+    /* JADX WARNING: Removed duplicated region for block: B:143:0x0397  */
+    /* JADX WARNING: Removed duplicated region for block: B:146:0x03a1  */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x03c0  */
+    /* JADX WARNING: Removed duplicated region for block: B:158:0x0407  */
+    /* JADX WARNING: Removed duplicated region for block: B:155:0x03ee  */
+    /* JADX WARNING: Removed duplicated region for block: B:162:0x040f A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:170:0x043f  */
+    /* JADX WARNING: Removed duplicated region for block: B:173:0x046e A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:177:0x0487  */
+    /* JADX WARNING: Removed duplicated region for block: B:184:0x04a9  */
+    /* JADX WARNING: Removed duplicated region for block: B:190:0x04c3  */
+    /* JADX WARNING: Removed duplicated region for block: B:193:0x04e7  */
+    /* JADX WARNING: Removed duplicated region for block: B:194:0x051e  */
+    /* JADX WARNING: Removed duplicated region for block: B:196:0x0522  */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x01ac  */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x0198  */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x01b5  */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x01e5  */
+    /* JADX WARNING: Removed duplicated region for block: B:102:0x028d  */
+    /* JADX WARNING: Removed duplicated region for block: B:106:0x02a7  */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x02c1  */
+    /* JADX WARNING: Removed duplicated region for block: B:114:0x02c9  */
+    /* JADX WARNING: Removed duplicated region for block: B:117:0x02d6  */
+    /* JADX WARNING: Removed duplicated region for block: B:120:0x02fa  */
+    /* JADX WARNING: Removed duplicated region for block: B:143:0x0397  */
+    /* JADX WARNING: Removed duplicated region for block: B:146:0x03a1  */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x03c0  */
+    /* JADX WARNING: Removed duplicated region for block: B:155:0x03ee  */
+    /* JADX WARNING: Removed duplicated region for block: B:158:0x0407  */
+    /* JADX WARNING: Removed duplicated region for block: B:162:0x040f A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:170:0x043f  */
+    /* JADX WARNING: Removed duplicated region for block: B:173:0x046e A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:177:0x0487  */
+    /* JADX WARNING: Removed duplicated region for block: B:184:0x04a9  */
+    /* JADX WARNING: Removed duplicated region for block: B:190:0x04c3  */
+    /* JADX WARNING: Removed duplicated region for block: B:194:0x051e  */
+    /* JADX WARNING: Removed duplicated region for block: B:193:0x04e7  */
+    /* JADX WARNING: Removed duplicated region for block: B:196:0x0522  */
+    public int sendMessage(java.util.ArrayList<org.telegram.messenger.MessageObject> r44, long r45) {
         /*
-        r45 = this;
-        r11 = r45;
-        r12 = r46;
-        r13 = r47;
+        r43 = this;
+        r11 = r43;
+        r12 = r44;
+        r13 = r45;
         r15 = 0;
-        if (r12 == 0) goto L_0x067d;
+        if (r12 == 0) goto L_0x070d;
     L_0x0009:
-        r0 = r46.isEmpty();
+        r0 = r44.isEmpty();
         if (r0 == 0) goto L_0x0011;
     L_0x000f:
-        goto L_0x067d;
+        goto L_0x070d;
     L_0x0011:
         r0 = (int) r13;
-        if (r0 == 0) goto L_0x0661;
+        if (r0 == 0) goto L_0x06f1;
     L_0x0014:
         r1 = r11.currentAccount;
         r1 = org.telegram.messenger.MessagesController.getInstance(r1);
@@ -1519,18 +1518,18 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r3 = r5;
         r5 = 0;
     L_0x00c1:
-        r15 = r46.size();
-        if (r5 >= r15) goto L_0x065e;
+        r15 = r44.size();
+        if (r5 >= r15) goto L_0x06ee;
     L_0x00c7:
         r15 = r12.get(r5);
         r15 = (org.telegram.messenger.MessageObject) r15;
         r27 = r15.getId();
-        if (r27 <= 0) goto L_0x05fa;
+        if (r27 <= 0) goto L_0x068a;
     L_0x00d3:
         r27 = r15.needDrawBluredPreview();
         if (r27 == 0) goto L_0x00db;
     L_0x00d9:
-        goto L_0x05fa;
+        goto L_0x068a;
     L_0x00db:
         r27 = r1;
         if (r17 != 0) goto L_0x012a;
@@ -1556,31 +1555,30 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r26 = 1;
     L_0x0100:
         r11 = r5;
-        r33 = r6;
-        r36 = r7;
+        r35 = r6;
+        r28 = r7;
         r32 = r8;
-        r28 = r9;
+        r29 = r9;
         r1 = r27;
     L_0x010b:
-        r37 = 1;
+        r36 = 1;
         r27 = r23;
-        goto L_0x064c;
+        goto L_0x06dc;
     L_0x0111:
         r24 = r0;
-        r31 = r3;
+        r33 = r3;
         r34 = r4;
         r11 = r5;
-        r33 = r6;
-        r36 = r7;
+        r35 = r6;
+        r28 = r7;
         r32 = r8;
-        r28 = r9;
-        r30 = r27;
-        r37 = 1;
+        r29 = r9;
+        r31 = r27;
+        r36 = 1;
     L_0x0124:
         r27 = r23;
-    L_0x0126:
         r23 = r2;
-        goto L_0x0642;
+        goto L_0x06d2;
     L_0x012a:
         r29 = 2;
         if (r18 != 0) goto L_0x016d;
@@ -1607,24 +1605,24 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r26 = 2;
     L_0x014b:
         r11 = r5;
-        r33 = r6;
-        r36 = r7;
+        r35 = r6;
+        r28 = r7;
         r32 = r8;
-        r28 = r9;
+        r29 = r9;
         r1 = r27;
         r0 = r31;
         goto L_0x010b;
     L_0x0159:
+        r33 = r3;
         r34 = r4;
         r11 = r5;
-        r33 = r6;
-        r36 = r7;
+        r35 = r6;
+        r28 = r7;
         r32 = r8;
-        r28 = r9;
-        r30 = r27;
+        r29 = r9;
         r24 = r31;
-        r37 = 1;
-        r31 = r3;
+        r36 = 1;
+        r31 = r27;
         goto L_0x0124;
     L_0x016d:
         r31 = r0;
@@ -1856,22 +1854,114 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r1 = r15.messageOwner;
         r6 = r1.attachPath;
         r0.attachPath = r6;
-        r1 = r1.entities;
-        r0.entities = r1;
+        r6 = r1.entities;
+        r0.entities = r6;
+        r1 = r1.reply_markup;
+        r1 = r1 instanceof org.telegram.tgnet.TLRPC.TL_replyInlineMarkup;
+        if (r1 == 0) goto L_0x038d;
+    L_0x02fa:
+        r1 = r0.flags;
+        r1 = r1 | 64;
+        r0.flags = r1;
+        r1 = new org.telegram.tgnet.TLRPC$TL_replyInlineMarkup;
+        r1.<init>();
+        r0.reply_markup = r1;
+        r1 = r15.messageOwner;
+        r1 = r1.reply_markup;
+        r1 = r1.rows;
+        r1 = r1.size();
+        r6 = 0;
+    L_0x0312:
+        if (r6 >= r1) goto L_0x038d;
+    L_0x0314:
+        r8 = r15.messageOwner;
+        r8 = r8.reply_markup;
+        r8 = r8.rows;
+        r8 = r8.get(r6);
+        r8 = (org.telegram.tgnet.TLRPC.TL_keyboardButtonRow) r8;
+        r28 = r1;
+        r1 = r8.buttons;
+        r1 = r1.size();
+        r29 = r9;
+        r10 = r16;
+        r9 = 0;
+    L_0x032d:
+        if (r9 >= r1) goto L_0x0384;
+    L_0x032f:
+        r34 = r1;
+        r1 = r8.buttons;
+        r1 = r1.get(r9);
+        r1 = (org.telegram.tgnet.TLRPC.KeyboardButton) r1;
+        r35 = r8;
+        r8 = r1 instanceof org.telegram.tgnet.TLRPC.TL_keyboardButtonUrlAuth;
+        if (r8 != 0) goto L_0x0347;
+    L_0x033f:
+        r13 = r1 instanceof org.telegram.tgnet.TLRPC.TL_keyboardButtonUrl;
+        if (r13 != 0) goto L_0x0347;
+    L_0x0343:
+        r13 = r1 instanceof org.telegram.tgnet.TLRPC.TL_keyboardButtonSwitchInline;
+        if (r13 == 0) goto L_0x037b;
+    L_0x0347:
+        if (r8 == 0) goto L_0x0368;
+    L_0x0349:
+        r8 = new org.telegram.tgnet.TLRPC$TL_keyboardButtonUrlAuth;
+        r8.<init>();
+        r13 = r1.flags;
+        r8.flags = r13;
+        r13 = r1.fwd_text;
+        if (r13 == 0) goto L_0x035b;
+    L_0x0356:
+        r8.fwd_text = r13;
+        r8.text = r13;
+        goto L_0x035f;
+    L_0x035b:
+        r13 = r1.text;
+        r8.text = r13;
+    L_0x035f:
+        r13 = r1.url;
+        r8.url = r13;
+        r1 = r1.button_id;
+        r8.button_id = r1;
+        r1 = r8;
+    L_0x0368:
+        if (r10 != 0) goto L_0x0376;
+    L_0x036a:
+        r10 = new org.telegram.tgnet.TLRPC$TL_keyboardButtonRow;
+        r10.<init>();
+        r8 = r0.reply_markup;
+        r8 = r8.rows;
+        r8.add(r10);
+    L_0x0376:
+        r8 = r10.buttons;
+        r8.add(r1);
+    L_0x037b:
+        r9 = r9 + 1;
+        r13 = r45;
+        r1 = r34;
+        r8 = r35;
+        goto L_0x032d;
+    L_0x0384:
+        r6 = r6 + 1;
+        r13 = r45;
+        r1 = r28;
+        r9 = r29;
+        goto L_0x0312;
+    L_0x038d:
+        r29 = r9;
         r1 = r0.entities;
         r1 = r1.isEmpty();
-        if (r1 != 0) goto L_0x0302;
-    L_0x02fc:
+        if (r1 != 0) goto L_0x039d;
+    L_0x0397:
         r1 = r0.flags;
         r1 = r1 | 128;
         r0.flags = r1;
-    L_0x0302:
+    L_0x039d:
         r1 = r0.attachPath;
-        if (r1 != 0) goto L_0x030a;
-    L_0x0306:
+        if (r1 != 0) goto L_0x03a5;
+    L_0x03a1:
         r1 = "";
         r0.attachPath = r1;
-    L_0x030a:
+    L_0x03a5:
         r1 = r11.currentAccount;
         r1 = org.telegram.messenger.UserConfig.getInstance(r1);
         r1 = r1.getNewMessageId();
@@ -1880,81 +1970,73 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r1 = 1;
         r0.out = r1;
         r1 = r15.messageOwner;
-        r28 = r9;
         r8 = r1.grouped_id;
-        r34 = 0;
-        r1 = (r8 > r34 ? 1 : (r8 == r34 ? 0 : -1));
-        if (r1 == 0) goto L_0x0353;
-    L_0x0327:
+        r13 = 0;
+        r1 = (r8 > r13 ? 1 : (r8 == r13 ? 0 : -1));
+        if (r1 == 0) goto L_0x03e6;
+    L_0x03c0:
         r1 = r7.get(r8);
         r1 = (java.lang.Long) r1;
-        if (r1 != 0) goto L_0x0343;
-    L_0x032f:
+        if (r1 != 0) goto L_0x03d9;
+    L_0x03c8:
         r1 = org.telegram.messenger.Utilities.random;
-        r36 = r1.nextLong();
-        r1 = java.lang.Long.valueOf(r36);
+        r34 = r1.nextLong();
+        r1 = java.lang.Long.valueOf(r34);
         r6 = r15.messageOwner;
-        r36 = r8;
-        r8 = r6.grouped_id;
-        r7.put(r8, r1);
-        goto L_0x0345;
-    L_0x0343:
-        r36 = r8;
-    L_0x0345:
-        r8 = r1.longValue();
-        r0.grouped_id = r8;
+        r13 = r6.grouped_id;
+        r7.put(r13, r1);
+    L_0x03d9:
+        r13 = r1.longValue();
+        r0.grouped_id = r13;
         r1 = r0.flags;
         r6 = 131072; // 0x20000 float:1.83671E-40 double:6.47582E-319;
         r1 = r1 | r6;
         r0.flags = r1;
-        goto L_0x0355;
-    L_0x0353:
-        r36 = r8;
-    L_0x0355:
-        r1 = r46.size();
+    L_0x03e6:
+        r1 = r44.size();
         r6 = 1;
         r1 = r1 - r6;
-        if (r5 == r1) goto L_0x0376;
-    L_0x035d:
+        if (r5 == r1) goto L_0x0407;
+    L_0x03ee:
         r1 = r5 + 1;
         r1 = r12.get(r1);
         r1 = (org.telegram.messenger.MessageObject) r1;
         r1 = r1.messageOwner;
-        r8 = r1.grouped_id;
+        r13 = r1.grouped_id;
         r1 = r15.messageOwner;
         r10 = r7;
         r6 = r1.grouped_id;
-        r1 = (r8 > r6 ? 1 : (r8 == r6 ? 0 : -1));
-        if (r1 == 0) goto L_0x0377;
-    L_0x0372:
-        r9 = r23;
+        r1 = (r13 > r6 ? 1 : (r13 == r6 ? 0 : -1));
+        if (r1 == 0) goto L_0x0408;
+    L_0x0403:
+        r13 = r23;
         r1 = 1;
-        goto L_0x037a;
-    L_0x0376:
+        goto L_0x040b;
+    L_0x0407:
         r10 = r7;
-    L_0x0377:
-        r9 = r23;
+    L_0x0408:
+        r13 = r23;
         r1 = 0;
-    L_0x037a:
-        r6 = r9.channel_id;
-        if (r6 == 0) goto L_0x0394;
-    L_0x037e:
-        if (r21 != 0) goto L_0x0394;
-    L_0x0380:
-        if (r22 == 0) goto L_0x038d;
-    L_0x0382:
+    L_0x040b:
+        r6 = r13.channel_id;
+        if (r6 == 0) goto L_0x0425;
+    L_0x040f:
+        if (r21 != 0) goto L_0x0425;
+    L_0x0411:
+        if (r22 == 0) goto L_0x041e;
+    L_0x0413:
         r6 = r11.currentAccount;
         r6 = org.telegram.messenger.UserConfig.getInstance(r6);
         r6 = r6.getClientUserId();
-        goto L_0x038e;
-    L_0x038d:
+        goto L_0x041f;
+    L_0x041e:
         r6 = -r6;
-    L_0x038e:
+    L_0x041f:
         r0.from_id = r6;
         r6 = 1;
         r0.post = r6;
-        goto L_0x03a6;
-    L_0x0394:
+        goto L_0x0437;
+    L_0x0425:
         r6 = r11.currentAccount;
         r6 = org.telegram.messenger.UserConfig.getInstance(r6);
         r6 = r6.getClientUserId();
@@ -1962,14 +2044,15 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r6 = r0.flags;
         r6 = r6 | 256;
         r0.flags = r6;
-    L_0x03a6:
+    L_0x0437:
         r6 = r0.random_id;
-        r8 = (r6 > r34 ? 1 : (r6 == r34 ? 0 : -1));
-        if (r8 != 0) goto L_0x03b2;
-    L_0x03ac:
-        r6 = r45.getNextRandomId();
+        r34 = 0;
+        r14 = (r6 > r34 ? 1 : (r6 == r34 ? 0 : -1));
+        if (r14 != 0) goto L_0x0445;
+    L_0x043f:
+        r6 = r43.getNextRandomId();
         r0.random_id = r6;
-    L_0x03b2:
+    L_0x0445:
         r6 = r0.random_id;
         r6 = java.lang.Long.valueOf(r6);
         r4.add(r6);
@@ -1984,194 +2067,201 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r0.date = r6;
         r6 = r33;
         r7 = r6 instanceof org.telegram.tgnet.TLRPC.TL_inputPeerChannel;
-        if (r7 == 0) goto L_0x03e9;
-    L_0x03db:
-        if (r21 != 0) goto L_0x03e9;
-    L_0x03dd:
-        r8 = 1;
-        r0.views = r8;
-        r8 = r0.flags;
-        r8 = r8 | 1024;
-        r0.flags = r8;
+        if (r7 == 0) goto L_0x047d;
+    L_0x046e:
+        if (r21 != 0) goto L_0x047d;
+    L_0x0470:
+        r14 = 1;
+        r0.views = r14;
+        r14 = r0.flags;
+        r14 = r14 | 1024;
+        r0.flags = r14;
+        r14 = r2;
         r23 = r3;
-        goto L_0x0400;
-    L_0x03e9:
-        r8 = r15.messageOwner;
+        goto L_0x0495;
+    L_0x047d:
+        r14 = r15.messageOwner;
         r23 = r3;
-        r3 = r8.flags;
+        r3 = r14.flags;
         r3 = r3 & 1024;
-        if (r3 == 0) goto L_0x03fd;
-    L_0x03f3:
-        r3 = r8.views;
+        if (r3 == 0) goto L_0x0491;
+    L_0x0487:
+        r3 = r14.views;
         r0.views = r3;
         r3 = r0.flags;
         r3 = r3 | 1024;
         r0.flags = r3;
-    L_0x03fd:
+    L_0x0491:
         r3 = 1;
         r0.unread = r3;
-    L_0x0400:
-        r0.dialog_id = r13;
-        r0.to_id = r9;
-        r3 = org.telegram.messenger.MessageObject.isVoiceMessage(r0);
-        if (r3 != 0) goto L_0x0410;
-    L_0x040a:
-        r3 = org.telegram.messenger.MessageObject.isRoundVideoMessage(r0);
-        if (r3 == 0) goto L_0x0422;
-    L_0x0410:
-        if (r7 == 0) goto L_0x041f;
-    L_0x0412:
-        r3 = r15.getChannelId();
-        if (r3 == 0) goto L_0x041f;
-    L_0x0418:
-        r3 = r15.isContentUnread();
-        r0.media_unread = r3;
-        goto L_0x0422;
-    L_0x041f:
-        r3 = 1;
-        r0.media_unread = r3;
-    L_0x0422:
-        r3 = r15.messageOwner;
-        r3 = r3.to_id;
-        r7 = r3 instanceof org.telegram.tgnet.TLRPC.TL_peerChannel;
-        if (r7 == 0) goto L_0x042f;
-    L_0x042a:
-        r3 = r3.channel_id;
-        r3 = -r3;
-        r0.ttl = r3;
-    L_0x042f:
-        r3 = new org.telegram.messenger.MessageObject;
-        r7 = r11.currentAccount;
-        r8 = 1;
-        r3.<init>(r7, r0, r8);
-        r7 = r3.messageOwner;
-        r7.send_state = r8;
-        r7 = r31;
-        r7.add(r3);
-        r3 = r27;
-        r3.add(r0);
+        r14 = r2;
+    L_0x0495:
+        r2 = r45;
+        r0.dialog_id = r2;
+        r0.to_id = r13;
+        r28 = org.telegram.messenger.MessageObject.isVoiceMessage(r0);
+        if (r28 != 0) goto L_0x04a7;
+    L_0x04a1:
+        r28 = org.telegram.messenger.MessageObject.isRoundVideoMessage(r0);
+        if (r28 == 0) goto L_0x04b9;
+    L_0x04a7:
+        if (r7 == 0) goto L_0x04b6;
+    L_0x04a9:
+        r7 = r15.getChannelId();
+        if (r7 == 0) goto L_0x04b6;
+    L_0x04af:
+        r7 = r15.isContentUnread();
+        r0.media_unread = r7;
+        goto L_0x04b9;
+    L_0x04b6:
+        r7 = 1;
+        r0.media_unread = r7;
+    L_0x04b9:
+        r7 = r15.messageOwner;
+        r7 = r7.to_id;
+        r28 = r10;
+        r10 = r7 instanceof org.telegram.tgnet.TLRPC.TL_peerChannel;
+        if (r10 == 0) goto L_0x04c8;
+    L_0x04c3:
+        r7 = r7.channel_id;
+        r7 = -r7;
+        r0.ttl = r7;
+    L_0x04c8:
+        r7 = new org.telegram.messenger.MessageObject;
+        r10 = r11.currentAccount;
+        r33 = r14;
+        r14 = 1;
+        r7.<init>(r10, r0, r14);
+        r10 = r7.messageOwner;
+        r10.send_state = r14;
+        r10 = r31;
+        r10.add(r7);
+        r7 = r27;
+        r7.add(r0);
         r11.putToSendingMessages(r0);
         r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r0 == 0) goto L_0x0483;
-    L_0x044c:
+        if (r0 == 0) goto L_0x051e;
+    L_0x04e7:
         r0 = new java.lang.StringBuilder;
         r0.<init>();
-        r8 = "forward message user_id = ";
-        r0.append(r8);
-        r8 = r6.user_id;
-        r0.append(r8);
-        r8 = " chat_id = ";
-        r0.append(r8);
-        r8 = r6.chat_id;
-        r0.append(r8);
-        r8 = " channel_id = ";
-        r0.append(r8);
-        r8 = r6.channel_id;
-        r0.append(r8);
-        r8 = " access_hash = ";
-        r0.append(r8);
-        r27 = r9;
-        r8 = r6.access_hash;
-        r0.append(r8);
+        r14 = "forward message user_id = ";
+        r0.append(r14);
+        r14 = r6.user_id;
+        r0.append(r14);
+        r14 = " chat_id = ";
+        r0.append(r14);
+        r14 = r6.chat_id;
+        r0.append(r14);
+        r14 = " channel_id = ";
+        r0.append(r14);
+        r14 = r6.channel_id;
+        r0.append(r14);
+        r14 = " access_hash = ";
+        r0.append(r14);
+        r27 = r13;
+        r13 = r6.access_hash;
+        r0.append(r13);
         r0 = r0.toString();
         org.telegram.messenger.FileLog.d(r0);
-        goto L_0x0485;
-    L_0x0483:
-        r27 = r9;
-    L_0x0485:
-        if (r1 == 0) goto L_0x048d;
-    L_0x0487:
-        r0 = r3.size();
-        if (r0 > 0) goto L_0x04ca;
-    L_0x048d:
-        r0 = r3.size();
+        goto L_0x0520;
+    L_0x051e:
+        r27 = r13;
+    L_0x0520:
+        if (r1 == 0) goto L_0x0528;
+    L_0x0522:
+        r0 = r7.size();
+        if (r0 > 0) goto L_0x0567;
+    L_0x0528:
+        r0 = r7.size();
         r1 = 100;
-        if (r0 == r1) goto L_0x04ca;
-    L_0x0495:
-        r0 = r46.size();
+        if (r0 == r1) goto L_0x0567;
+    L_0x0530:
+        r0 = r44.size();
         r1 = 1;
         r0 = r0 - r1;
-        if (r5 == r0) goto L_0x04ca;
-    L_0x049d:
-        r0 = r46.size();
+        if (r5 == r0) goto L_0x0567;
+    L_0x0538:
+        r0 = r44.size();
         r0 = r0 - r1;
-        if (r5 == r0) goto L_0x04b9;
-    L_0x04a4:
+        if (r5 == r0) goto L_0x0554;
+    L_0x053f:
         r0 = r5 + 1;
         r0 = r12.get(r0);
         r0 = (org.telegram.messenger.MessageObject) r0;
         r0 = r0.getDialogId();
-        r8 = r15.getDialogId();
-        r30 = (r0 > r8 ? 1 : (r0 == r8 ? 0 : -1));
-        if (r30 == 0) goto L_0x04b9;
-    L_0x04b8:
-        goto L_0x04ca;
-    L_0x04b9:
-        r30 = r3;
+        r13 = r15.getDialogId();
+        r31 = (r0 > r13 ? 1 : (r0 == r13 ? 0 : -1));
+        if (r31 == 0) goto L_0x0554;
+    L_0x0553:
+        goto L_0x0567;
+    L_0x0554:
         r34 = r4;
         r11 = r5;
-        r33 = r6;
-        r24 = r7;
-        r36 = r10;
-        r31 = r23;
-        r37 = 1;
-        goto L_0x0126;
-    L_0x04ca:
+        r35 = r6;
+        r31 = r7;
+        r24 = r10;
+        r36 = 1;
+        r42 = r33;
+        r33 = r23;
+        r23 = r42;
+        goto L_0x06d2;
+    L_0x0567:
         r0 = r11.currentAccount;
-        r38 = org.telegram.messenger.MessagesStorage.getInstance(r0);
+        r36 = org.telegram.messenger.MessagesStorage.getInstance(r0);
         r0 = new java.util.ArrayList;
-        r0.<init>(r3);
+        r0.<init>(r7);
+        r38 = 0;
+        r39 = 1;
         r40 = 0;
-        r41 = 1;
-        r42 = 0;
-        r43 = 0;
-        r39 = r0;
-        r38.putMessages(r39, r40, r41, r42, r43);
+        r41 = 0;
+        r37 = r0;
+        r36.putMessages(r37, r38, r39, r40, r41);
         r0 = r11.currentAccount;
         r0 = org.telegram.messenger.MessagesController.getInstance(r0);
-        r0.updateInterfaceWithMessages(r13, r7);
+        r0.updateInterfaceWithMessages(r2, r10);
         r0 = r11.currentAccount;
         r0 = org.telegram.messenger.NotificationCenter.getInstance(r0);
         r1 = org.telegram.messenger.NotificationCenter.dialogsNeedReload;
-        r8 = 0;
-        r9 = new java.lang.Object[r8];
-        r0.postNotificationName(r1, r9);
+        r13 = 0;
+        r14 = new java.lang.Object[r13];
+        r0.postNotificationName(r1, r14);
         r0 = r11.currentAccount;
         r0 = org.telegram.messenger.UserConfig.getInstance(r0);
-        r0.saveConfig(r8);
-        r9 = new org.telegram.tgnet.TLRPC$TL_messages_forwardMessages;
-        r9.<init>();
-        r9.to_peer = r6;
-        r0 = (r36 > r34 ? 1 : (r36 == r34 ? 0 : -1));
-        if (r0 == 0) goto L_0x050f;
-    L_0x050d:
-        r0 = 1;
-        goto L_0x0510;
-    L_0x050f:
+        r0.saveConfig(r13);
+        r13 = new org.telegram.tgnet.TLRPC$TL_messages_forwardMessages;
+        r13.<init>();
+        r13.to_peer = r6;
         r0 = 0;
-    L_0x0510:
-        r9.grouped = r0;
-        r0 = r9.to_peer;
+        r14 = (r8 > r0 ? 1 : (r8 == r0 ? 0 : -1));
+        if (r14 == 0) goto L_0x05ae;
+    L_0x05ac:
+        r0 = 1;
+        goto L_0x05af;
+    L_0x05ae:
+        r0 = 0;
+    L_0x05af:
+        r13.grouped = r0;
+        r0 = r13.to_peer;
         r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_inputPeerChannel;
-        if (r0 == 0) goto L_0x0536;
-    L_0x0518:
+        if (r0 == 0) goto L_0x05d5;
+    L_0x05b7:
         r0 = r11.currentAccount;
         r0 = org.telegram.messenger.MessagesController.getNotificationsSettings(r0);
         r1 = new java.lang.StringBuilder;
         r1.<init>();
         r8 = "silent_";
         r1.append(r8);
-        r1.append(r13);
+        r1.append(r2);
         r1 = r1.toString();
         r8 = 0;
         r0 = r0.getBoolean(r1, r8);
-        r9.silent = r0;
-    L_0x0536:
+        r13.silent = r0;
+    L_0x05d5:
         r0 = r15.messageOwner;
         r0 = r0.to_id;
         r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_peerChannel;
-        if (r0 == 0) goto L_0x0571;
-    L_0x053e:
+        if (r0 == 0) goto L_0x0609;
+    L_0x05dd:
         r0 = r11.currentAccount;
         r0 = org.telegram.messenger.MessagesController.getInstance(r0);
         r1 = r15.messageOwner;
@@ -2181,83 +2271,72 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r0 = r0.getChat(r1);
         r1 = new org.telegram.tgnet.TLRPC$TL_inputPeerChannel;
         r1.<init>();
-        r9.from_peer = r1;
-        r1 = r9.from_peer;
+        r13.from_peer = r1;
+        r1 = r13.from_peer;
         r8 = r15.messageOwner;
         r8 = r8.to_id;
         r8 = r8.channel_id;
         r1.channel_id = r8;
-        if (r0 == 0) goto L_0x056d;
-    L_0x0565:
-        r8 = r5;
-        r33 = r6;
-        r5 = r0.access_hash;
-        r1.access_hash = r5;
-        goto L_0x057b;
-    L_0x056d:
-        r8 = r5;
-        r33 = r6;
-        goto L_0x057b;
-    L_0x0571:
-        r8 = r5;
-        r33 = r6;
+        if (r0 == 0) goto L_0x0610;
+    L_0x0604:
+        r8 = r0.access_hash;
+        r1.access_hash = r8;
+        goto L_0x0610;
+    L_0x0609:
         r0 = new org.telegram.tgnet.TLRPC$TL_inputPeerEmpty;
         r0.<init>();
-        r9.from_peer = r0;
-    L_0x057b:
-        r9.random_id = r4;
-        r9.id = r2;
-        r0 = r46.size();
-        r15 = 1;
-        if (r0 != r15) goto L_0x0595;
-    L_0x0586:
+        r13.from_peer = r0;
+    L_0x0610:
+        r13.random_id = r4;
+        r8 = r33;
+        r13.id = r8;
+        r0 = r44.size();
+        r9 = 1;
+        if (r0 != r9) goto L_0x062c;
+    L_0x061d:
         r0 = 0;
         r1 = r12.get(r0);
         r1 = (org.telegram.messenger.MessageObject) r1;
         r0 = r1.messageOwner;
         r0 = r0.with_my_score;
-        if (r0 == 0) goto L_0x0595;
-    L_0x0593:
+        if (r0 == 0) goto L_0x062c;
+    L_0x062a:
         r0 = 1;
-        goto L_0x0596;
-    L_0x0595:
+        goto L_0x062d;
+    L_0x062c:
         r0 = 0;
-    L_0x0596:
-        r9.with_my_score = r0;
+    L_0x062d:
+        r13.with_my_score = r0;
         r0 = r11.currentAccount;
-        r6 = org.telegram.tgnet.ConnectionsManager.getInstance(r0);
-        r5 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$GtPQ6DFMMI1Gm-S7QANSsM7url8;
-        r24 = r7;
-        r0 = r5;
-        r30 = r3;
-        r1 = r45;
-        r31 = r23;
-        r23 = r2;
-        r2 = r47;
+        r14 = org.telegram.tgnet.ConnectionsManager.getInstance(r0);
+        r15 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$GtPQ6DFMMI1Gm-S7QANSsM7url8;
+        r24 = r10;
+        r0 = r15;
+        r31 = r7;
+        r1 = r43;
+        r33 = r23;
+        r23 = r8;
+        r7 = r2;
+        r2 = r45;
         r34 = r4;
         r4 = r21;
-        r7 = r5;
+        r10 = r5;
         r5 = r25;
-        r15 = r6;
-        r6 = r31;
-        r36 = r10;
-        r10 = r7;
-        r7 = r30;
-        r11 = r8;
+        r35 = r6;
+        r6 = r33;
+        r7 = r31;
         r8 = r24;
-        r35 = r9;
-        r37 = 1;
+        r36 = 1;
         r9 = r27;
-        r13 = r10;
-        r10 = r35;
+        r11 = r10;
+        r10 = r13;
         r0.<init>(r1, r2, r4, r5, r6, r7, r8, r9, r10);
         r0 = 68;
-        r1 = r35;
-        r15.sendRequest(r1, r13, r0);
-        r0 = r46.size();
+        r14.sendRequest(r13, r15, r0);
+        r0 = r44.size();
         r0 = r0 + -1;
-        if (r11 == r0) goto L_0x0642;
-    L_0x05da:
+        if (r11 == r0) goto L_0x06d2;
+    L_0x066a:
         r0 = new java.util.ArrayList;
         r0.<init>();
         r1 = new java.util.ArrayList;
@@ -2268,96 +2347,96 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r3.<init>();
         r4 = new android.util.LongSparseArray;
         r4.<init>();
-        r44 = r4;
+        r42 = r4;
         r4 = r2;
         r2 = r3;
-        r3 = r44;
-        goto L_0x064c;
-    L_0x05fa:
+        r3 = r42;
+        goto L_0x06dc;
+    L_0x068a:
         r24 = r0;
-        r30 = r1;
-        r31 = r3;
+        r31 = r1;
+        r33 = r3;
         r34 = r4;
         r11 = r5;
-        r33 = r6;
-        r36 = r7;
+        r35 = r6;
+        r28 = r7;
         r32 = r8;
-        r28 = r9;
+        r29 = r9;
         r27 = r23;
-        r37 = 1;
+        r36 = 1;
         r23 = r2;
         r0 = r15.type;
-        if (r0 != 0) goto L_0x0642;
-    L_0x0615:
+        if (r0 != 0) goto L_0x06d2;
+    L_0x06a5:
         r0 = r15.messageText;
         r0 = android.text.TextUtils.isEmpty(r0);
-        if (r0 != 0) goto L_0x0642;
-    L_0x061d:
+        if (r0 != 0) goto L_0x06d2;
+    L_0x06ad:
         r0 = r15.messageOwner;
         r0 = r0.media;
-        if (r0 == 0) goto L_0x0627;
-    L_0x0623:
+        if (r0 == 0) goto L_0x06b7;
+    L_0x06b3:
         r0 = r0.webpage;
         r5 = r0;
-        goto L_0x0629;
-    L_0x0627:
+        goto L_0x06b9;
+    L_0x06b7:
         r5 = r16;
-    L_0x0629:
+    L_0x06b9:
         r0 = r15.messageText;
         r1 = r0.toString();
         r4 = 0;
-        if (r5 == 0) goto L_0x0634;
-    L_0x0632:
+        if (r5 == 0) goto L_0x06c4;
+    L_0x06c2:
         r6 = 1;
-        goto L_0x0635;
-    L_0x0634:
+        goto L_0x06c5;
+    L_0x06c4:
         r6 = 0;
-    L_0x0635:
+    L_0x06c5:
         r0 = r15.messageOwner;
         r7 = r0.entities;
         r8 = 0;
         r9 = 0;
-        r0 = r45;
-        r2 = r47;
+        r0 = r43;
+        r2 = r45;
         r0.sendMessage(r1, r2, r4, r5, r6, r7, r8, r9);
-    L_0x0642:
+    L_0x06d2:
         r2 = r23;
         r0 = r24;
-        r1 = r30;
-        r3 = r31;
+        r1 = r31;
+        r3 = r33;
         r4 = r34;
-    L_0x064c:
+    L_0x06dc:
         r5 = r11 + 1;
-        r11 = r45;
-        r13 = r47;
+        r11 = r43;
+        r13 = r45;
         r23 = r27;
-        r9 = r28;
+        r7 = r28;
+        r9 = r29;
         r8 = r32;
-        r6 = r33;
-        r7 = r36;
+        r6 = r35;
         goto L_0x00c1;
-    L_0x065e:
-        r2 = r45;
-        goto L_0x067c;
-    L_0x0661:
+    L_0x06ee:
+        r2 = r43;
+        goto L_0x070c;
+    L_0x06f1:
         r0 = 0;
-    L_0x0662:
-        r1 = r46.size();
-        if (r0 >= r1) goto L_0x0678;
-    L_0x0668:
+    L_0x06f2:
+        r1 = r44.size();
+        if (r0 >= r1) goto L_0x0708;
+    L_0x06f8:
         r1 = r12.get(r0);
         r1 = (org.telegram.messenger.MessageObject) r1;
-        r2 = r45;
-        r3 = r47;
+        r2 = r43;
+        r3 = r45;
         r2.processForwardFromMyName(r1, r3);
         r0 = r0 + 1;
-        goto L_0x0662;
-    L_0x0678:
-        r2 = r45;
+        goto L_0x06f2;
+    L_0x0708:
+        r2 = r43;
         r26 = 0;
-    L_0x067c:
+    L_0x070c:
         return r26;
-    L_0x067d:
+    L_0x070d:
         r2 = r11;
         r0 = 0;
         return r0;
@@ -3496,265 +3575,420 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         return ((Long) this.voteSendTime.get(j, Long.valueOf(0))).longValue();
     }
 
-    public void sendCallback(boolean z, MessageObject messageObject, KeyboardButton keyboardButton, ChatActivity chatActivity) {
-        MessageObject messageObject2 = messageObject;
-        KeyboardButton keyboardButton2 = keyboardButton;
-        if (messageObject2 != null && keyboardButton2 != null && chatActivity != null) {
-            boolean z2;
-            boolean z3 = keyboardButton2 instanceof TL_keyboardButtonGame;
-            int i = 0;
-            if (z3) {
-                i = 1;
-                z2 = false;
-            } else if (keyboardButton2 instanceof TL_keyboardButtonBuy) {
-                z2 = z;
-                i = 2;
-            } else {
-                z2 = z;
-            }
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(messageObject.getDialogId());
-            String str = "_";
-            stringBuilder.append(str);
-            stringBuilder.append(messageObject.getId());
-            stringBuilder.append(str);
-            stringBuilder.append(Utilities.bytesToHex(keyboardButton2.data));
-            stringBuilder.append(str);
-            stringBuilder.append(i);
-            String stringBuilder2 = stringBuilder.toString();
-            this.waitingForCallback.put(stringBuilder2, Boolean.valueOf(true));
-            -$$Lambda$SendMessagesHelper$dI2Pjo3q3FWw7MFM1jQfwpbp8Kg -__lambda_sendmessageshelper_di2pjo3q3fww7mfm1jqfwpbp8kg = new -$$Lambda$SendMessagesHelper$dI2Pjo3q3FWw7MFM1jQfwpbp8Kg(this, stringBuilder2, z2, messageObject, keyboardButton, chatActivity);
-            if (z2) {
-                MessagesStorage.getInstance(this.currentAccount).getBotCache(stringBuilder2, -__lambda_sendmessageshelper_di2pjo3q3fww7mfm1jqfwpbp8kg);
-            } else if (!(keyboardButton2 instanceof TL_keyboardButtonBuy)) {
-                TL_messages_getBotCallbackAnswer tL_messages_getBotCallbackAnswer = new TL_messages_getBotCallbackAnswer();
-                tL_messages_getBotCallbackAnswer.peer = MessagesController.getInstance(this.currentAccount).getInputPeer((int) messageObject.getDialogId());
-                tL_messages_getBotCallbackAnswer.msg_id = messageObject.getId();
-                tL_messages_getBotCallbackAnswer.game = z3;
-                byte[] bArr = keyboardButton2.data;
-                if (bArr != null) {
-                    tL_messages_getBotCallbackAnswer.flags |= 1;
-                    tL_messages_getBotCallbackAnswer.data = bArr;
-                }
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_messages_getBotCallbackAnswer, -__lambda_sendmessageshelper_di2pjo3q3fww7mfm1jqfwpbp8kg, 2);
-            } else if ((messageObject2.messageOwner.media.flags & 4) == 0) {
-                TL_payments_getPaymentForm tL_payments_getPaymentForm = new TL_payments_getPaymentForm();
-                tL_payments_getPaymentForm.msg_id = messageObject.getId();
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_payments_getPaymentForm, -__lambda_sendmessageshelper_di2pjo3q3fww7mfm1jqfwpbp8kg, 2);
-            } else {
-                TL_payments_getPaymentReceipt tL_payments_getPaymentReceipt = new TL_payments_getPaymentReceipt();
-                tL_payments_getPaymentReceipt.msg_id = messageObject2.messageOwner.media.receipt_msg_id;
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_payments_getPaymentReceipt, -__lambda_sendmessageshelper_di2pjo3q3fww7mfm1jqfwpbp8kg, 2);
-            }
-        }
-    }
-
-    public /* synthetic */ void lambda$sendCallback$17$SendMessagesHelper(String str, boolean z, MessageObject messageObject, KeyboardButton keyboardButton, ChatActivity chatActivity, TLObject tLObject, TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$SendMessagesHelper$IZdTubNXATOuG8G9OfLvNMDwHLY(this, str, z, tLObject, messageObject, keyboardButton, chatActivity));
-    }
-
-    /* JADX WARNING: Removed duplicated region for block: B:32:0x0092  */
-    /* JADX WARNING: Removed duplicated region for block: B:39:0x00c5  */
-    /* JADX WARNING: Removed duplicated region for block: B:35:0x0098  */
-    /* JADX WARNING: Removed duplicated region for block: B:32:0x0092  */
-    /* JADX WARNING: Removed duplicated region for block: B:35:0x0098  */
-    /* JADX WARNING: Removed duplicated region for block: B:39:0x00c5  */
-    public /* synthetic */ void lambda$null$16$SendMessagesHelper(java.lang.String r9, boolean r10, org.telegram.tgnet.TLObject r11, org.telegram.messenger.MessageObject r12, org.telegram.tgnet.TLRPC.KeyboardButton r13, org.telegram.ui.ChatActivity r14) {
+    /* JADX WARNING: Removed duplicated region for block: B:18:0x0084  */
+    /* JADX WARNING: Removed duplicated region for block: B:17:0x0079  */
+    public void sendCallback(boolean r18, org.telegram.messenger.MessageObject r19, org.telegram.tgnet.TLRPC.KeyboardButton r20, org.telegram.ui.ChatActivity r21) {
         /*
-        r8 = this;
-        r0 = r8.waitingForCallback;
-        r0.remove(r9);
-        r0 = 0;
-        if (r10 == 0) goto L_0x000f;
+        r17 = this;
+        r8 = r17;
+        r9 = r19;
+        r10 = r20;
+        if (r9 == 0) goto L_0x0125;
     L_0x0008:
-        if (r11 != 0) goto L_0x000f;
+        if (r10 == 0) goto L_0x0125;
     L_0x000a:
-        r8.sendCallback(r0, r12, r13, r14);
-        goto L_0x013b;
-    L_0x000f:
-        if (r11 == 0) goto L_0x013b;
-    L_0x0011:
-        r1 = r13 instanceof org.telegram.tgnet.TLRPC.TL_keyboardButtonBuy;
-        if (r1 == 0) goto L_0x0040;
+        if (r21 != 0) goto L_0x000e;
+    L_0x000c:
+        goto L_0x0125;
+    L_0x000e:
+        r11 = r10 instanceof org.telegram.tgnet.TLRPC.TL_keyboardButtonUrlAuth;
+        r12 = 1;
+        r13 = 0;
+        if (r11 == 0) goto L_0x0017;
+    L_0x0014:
+        r0 = 3;
     L_0x0015:
-        r9 = r11 instanceof org.telegram.tgnet.TLRPC.TL_payments_paymentForm;
-        if (r9 == 0) goto L_0x0030;
-    L_0x0019:
-        r11 = (org.telegram.tgnet.TLRPC.TL_payments_paymentForm) r11;
-        r9 = r8.currentAccount;
-        r9 = org.telegram.messenger.MessagesController.getInstance(r9);
-        r10 = r11.users;
-        r9.putUsers(r10, r0);
-        r9 = new org.telegram.ui.PaymentFormActivity;
-        r9.<init>(r11, r12);
-        r14.presentFragment(r9);
-        goto L_0x013b;
-    L_0x0030:
-        r9 = r11 instanceof org.telegram.tgnet.TLRPC.TL_payments_paymentReceipt;
-        if (r9 == 0) goto L_0x013b;
-    L_0x0034:
-        r9 = new org.telegram.ui.PaymentFormActivity;
-        r11 = (org.telegram.tgnet.TLRPC.TL_payments_paymentReceipt) r11;
-        r9.<init>(r12, r11);
-        r14.presentFragment(r9);
-        goto L_0x013b;
-    L_0x0040:
-        r11 = (org.telegram.tgnet.TLRPC.TL_messages_botCallbackAnswer) r11;
-        if (r10 != 0) goto L_0x0051;
-    L_0x0044:
-        r10 = r11.cache_time;
-        if (r10 == 0) goto L_0x0051;
-    L_0x0048:
-        r10 = r8.currentAccount;
-        r10 = org.telegram.messenger.MessagesStorage.getInstance(r10);
-        r10.saveBotCache(r9, r11);
-    L_0x0051:
-        r9 = r11.message;
-        r10 = 0;
-        if (r9 == 0) goto L_0x00cc;
-    L_0x0056:
-        r9 = r12.messageOwner;
-        r12 = r9.from_id;
-        r9 = r9.via_bot_id;
-        if (r9 == 0) goto L_0x005f;
-    L_0x005e:
-        goto L_0x0060;
-    L_0x005f:
-        r9 = r12;
-    L_0x0060:
-        if (r9 <= 0) goto L_0x007b;
-    L_0x0062:
-        r12 = r8.currentAccount;
-        r12 = org.telegram.messenger.MessagesController.getInstance(r12);
-        r9 = java.lang.Integer.valueOf(r9);
-        r9 = r12.getUser(r9);
-        if (r9 == 0) goto L_0x008f;
-    L_0x0072:
-        r12 = r9.first_name;
-        r9 = r9.last_name;
-        r9 = org.telegram.messenger.ContactsController.formatName(r12, r9);
-        goto L_0x0090;
-    L_0x007b:
-        r12 = r8.currentAccount;
-        r12 = org.telegram.messenger.MessagesController.getInstance(r12);
-        r9 = -r9;
-        r9 = java.lang.Integer.valueOf(r9);
-        r9 = r12.getChat(r9);
-        if (r9 == 0) goto L_0x008f;
-    L_0x008c:
-        r9 = r9.title;
-        goto L_0x0090;
-    L_0x008f:
-        r9 = r10;
-    L_0x0090:
-        if (r9 != 0) goto L_0x0094;
-    L_0x0092:
-        r9 = "bot";
-    L_0x0094:
-        r12 = r11.alert;
-        if (r12 == 0) goto L_0x00c5;
-    L_0x0098:
-        r12 = r14.getParentActivity();
-        if (r12 != 0) goto L_0x009f;
-    L_0x009e:
-        return;
-    L_0x009f:
-        r12 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
-        r13 = r14.getParentActivity();
-        r12.<init>(r13);
-        r12.setTitle(r9);
-        r9 = NUM; // 0x7f0d0679 float:1.8745476E38 double:1.053130596E-314;
-        r13 = "OK";
-        r9 = org.telegram.messenger.LocaleController.getString(r13, r9);
-        r12.setPositiveButton(r9, r10);
-        r9 = r11.message;
-        r12.setMessage(r9);
-        r9 = r12.create();
-        r14.showDialog(r9);
-        goto L_0x013b;
-    L_0x00c5:
-        r10 = r11.message;
-        r14.showAlert(r9, r10);
-        goto L_0x013b;
-    L_0x00cc:
-        r9 = r11.url;
-        if (r9 == 0) goto L_0x013b;
-    L_0x00d0:
-        r9 = r14.getParentActivity();
-        if (r9 != 0) goto L_0x00d7;
-    L_0x00d6:
-        return;
+        r15 = 0;
+        goto L_0x0028;
+    L_0x0017:
+        r0 = r10 instanceof org.telegram.tgnet.TLRPC.TL_keyboardButtonGame;
+        if (r0 == 0) goto L_0x001d;
+    L_0x001b:
+        r0 = 1;
+        goto L_0x0015;
+    L_0x001d:
+        r0 = r10 instanceof org.telegram.tgnet.TLRPC.TL_keyboardButtonBuy;
+        if (r0 == 0) goto L_0x0025;
+    L_0x0021:
+        r15 = r18;
+        r0 = 2;
+        goto L_0x0028;
+    L_0x0025:
+        r15 = r18;
+        r0 = 0;
+    L_0x0028:
+        r1 = new java.lang.StringBuilder;
+        r1.<init>();
+        r2 = r19.getDialogId();
+        r1.append(r2);
+        r2 = "_";
+        r1.append(r2);
+        r3 = r19.getId();
+        r1.append(r3);
+        r1.append(r2);
+        r3 = r10.data;
+        r3 = org.telegram.messenger.Utilities.bytesToHex(r3);
+        r1.append(r3);
+        r1.append(r2);
+        r1.append(r0);
+        r7 = r1.toString();
+        r0 = r8.waitingForCallback;
+        r1 = java.lang.Boolean.valueOf(r12);
+        r0.put(r7, r1);
+        r6 = new org.telegram.tgnet.TLObject[r12];
+        r5 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$mrT1SKD1wBToK3yGrtE1zSzHHGY;
+        r0 = r5;
+        r1 = r17;
+        r2 = r7;
+        r3 = r15;
+        r4 = r19;
+        r12 = r5;
+        r5 = r20;
+        r16 = r6;
+        r6 = r21;
+        r14 = r7;
+        r7 = r16;
+        r0.<init>(r1, r2, r3, r4, r5, r6, r7);
+        if (r15 == 0) goto L_0x0084;
+    L_0x0079:
+        r0 = r8.currentAccount;
+        r0 = org.telegram.messenger.MessagesStorage.getInstance(r0);
+        r0.getBotCache(r14, r12);
+        goto L_0x0125;
+    L_0x0084:
+        if (r11 == 0) goto L_0x00b3;
+    L_0x0086:
+        r0 = new org.telegram.tgnet.TLRPC$TL_messages_requestUrlAuth;
+        r0.<init>();
+        r1 = r8.currentAccount;
+        r1 = org.telegram.messenger.MessagesController.getInstance(r1);
+        r2 = r19.getDialogId();
+        r3 = (int) r2;
+        r1 = r1.getInputPeer(r3);
+        r0.peer = r1;
+        r1 = r19.getId();
+        r0.msg_id = r1;
+        r1 = r10.button_id;
+        r0.button_id = r1;
+        r16[r13] = r0;
+        r1 = r8.currentAccount;
+        r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1);
+        r2 = 2;
+        r1.sendRequest(r0, r12, r2);
+        goto L_0x0125;
+    L_0x00b3:
+        r0 = r10 instanceof org.telegram.tgnet.TLRPC.TL_keyboardButtonBuy;
+        if (r0 == 0) goto L_0x00ef;
+    L_0x00b7:
+        r0 = r9.messageOwner;
+        r0 = r0.media;
+        r0 = r0.flags;
+        r0 = r0 & 4;
+        if (r0 != 0) goto L_0x00d7;
+    L_0x00c1:
+        r0 = new org.telegram.tgnet.TLRPC$TL_payments_getPaymentForm;
+        r0.<init>();
+        r1 = r19.getId();
+        r0.msg_id = r1;
+        r1 = r8.currentAccount;
+        r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1);
+        r2 = 2;
+        r1.sendRequest(r0, r12, r2);
+        goto L_0x0125;
     L_0x00d7:
-        r9 = r12.messageOwner;
-        r1 = r9.from_id;
-        r9 = r9.via_bot_id;
-        if (r9 == 0) goto L_0x00e1;
-    L_0x00df:
-        r7 = r9;
-        goto L_0x00e2;
-    L_0x00e1:
-        r7 = r1;
-    L_0x00e2:
-        r9 = r8.currentAccount;
-        r9 = org.telegram.messenger.MessagesController.getInstance(r9);
-        r1 = java.lang.Integer.valueOf(r7);
-        r9 = r9.getUser(r1);
-        r1 = 1;
-        if (r9 == 0) goto L_0x00f9;
-    L_0x00f3:
-        r9 = r9.verified;
-        if (r9 == 0) goto L_0x00f9;
-    L_0x00f7:
-        r9 = 1;
-        goto L_0x00fa;
-    L_0x00f9:
-        r9 = 0;
-    L_0x00fa:
-        r13 = r13 instanceof org.telegram.tgnet.TLRPC.TL_keyboardButtonGame;
-        if (r13 == 0) goto L_0x0136;
-    L_0x00fe:
-        r13 = r12.messageOwner;
-        r13 = r13.media;
-        r2 = r13 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaGame;
-        if (r2 == 0) goto L_0x0108;
-    L_0x0106:
-        r10 = r13.game;
-    L_0x0108:
-        r3 = r10;
-        if (r3 != 0) goto L_0x010c;
-    L_0x010b:
-        return;
-    L_0x010c:
-        r5 = r11.url;
-        if (r9 != 0) goto L_0x012f;
-    L_0x0110:
-        r9 = r8.currentAccount;
-        r9 = org.telegram.messenger.MessagesController.getNotificationsSettings(r9);
-        r10 = new java.lang.StringBuilder;
-        r10.<init>();
-        r11 = "askgame_";
-        r10.append(r11);
-        r10.append(r7);
-        r10 = r10.toString();
-        r9 = r9.getBoolean(r10, r1);
-        if (r9 == 0) goto L_0x012f;
-    L_0x012d:
-        r6 = 1;
-        goto L_0x0130;
-    L_0x012f:
-        r6 = 0;
-    L_0x0130:
-        r2 = r14;
-        r4 = r12;
-        r2.showOpenGameAlert(r3, r4, r5, r6, r7);
-        goto L_0x013b;
-    L_0x0136:
-        r9 = r11.url;
-        r14.showOpenUrlAlert(r9, r0);
-    L_0x013b:
+        r2 = 2;
+        r0 = new org.telegram.tgnet.TLRPC$TL_payments_getPaymentReceipt;
+        r0.<init>();
+        r1 = r9.messageOwner;
+        r1 = r1.media;
+        r1 = r1.receipt_msg_id;
+        r0.msg_id = r1;
+        r1 = r8.currentAccount;
+        r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1);
+        r1.sendRequest(r0, r12, r2);
+        goto L_0x0125;
+    L_0x00ef:
+        r0 = new org.telegram.tgnet.TLRPC$TL_messages_getBotCallbackAnswer;
+        r0.<init>();
+        r1 = r8.currentAccount;
+        r1 = org.telegram.messenger.MessagesController.getInstance(r1);
+        r2 = r19.getDialogId();
+        r3 = (int) r2;
+        r1 = r1.getInputPeer(r3);
+        r0.peer = r1;
+        r1 = r19.getId();
+        r0.msg_id = r1;
+        r1 = r10 instanceof org.telegram.tgnet.TLRPC.TL_keyboardButtonGame;
+        r0.game = r1;
+        r1 = r10.data;
+        if (r1 == 0) goto L_0x011b;
+    L_0x0113:
+        r2 = r0.flags;
+        r3 = 1;
+        r2 = r2 | r3;
+        r0.flags = r2;
+        r0.data = r1;
+    L_0x011b:
+        r1 = r8.currentAccount;
+        r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1);
+        r2 = 2;
+        r1.sendRequest(r0, r12, r2);
+    L_0x0125:
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.lambda$null$16$SendMessagesHelper(java.lang.String, boolean, org.telegram.tgnet.TLObject, org.telegram.messenger.MessageObject, org.telegram.tgnet.TLRPC$KeyboardButton, org.telegram.ui.ChatActivity):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.sendCallback(boolean, org.telegram.messenger.MessageObject, org.telegram.tgnet.TLRPC$KeyboardButton, org.telegram.ui.ChatActivity):void");
+    }
+
+    public /* synthetic */ void lambda$sendCallback$17$SendMessagesHelper(String str, boolean z, MessageObject messageObject, KeyboardButton keyboardButton, ChatActivity chatActivity, TLObject[] tLObjectArr, TLObject tLObject, TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$SendMessagesHelper$4H8dDsDRj446uqFYh4DKm4UlDEU(this, str, z, tLObject, messageObject, keyboardButton, chatActivity, tLObjectArr));
+    }
+
+    /* JADX WARNING: Removed duplicated region for block: B:43:0x00ce  */
+    /* JADX WARNING: Removed duplicated region for block: B:50:0x0101  */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x00d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:43:0x00ce  */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x00d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:50:0x0101  */
+    /* JADX WARNING: Missing block: B:76:0x0165, code skipped:
+            if (r1.getBoolean(r2.toString(), true) != false) goto L_0x0169;
+     */
+    public /* synthetic */ void lambda$null$16$SendMessagesHelper(java.lang.String r12, boolean r13, org.telegram.tgnet.TLObject r14, org.telegram.messenger.MessageObject r15, org.telegram.tgnet.TLRPC.KeyboardButton r16, org.telegram.ui.ChatActivity r17, org.telegram.tgnet.TLObject[] r18) {
+        /*
+        r11 = this;
+        r0 = r11;
+        r1 = r12;
+        r2 = r14;
+        r3 = r15;
+        r4 = r16;
+        r5 = r17;
+        r6 = r0.waitingForCallback;
+        r6.remove(r12);
+        r6 = 0;
+        if (r13 == 0) goto L_0x0017;
+    L_0x0010:
+        if (r2 != 0) goto L_0x0017;
+    L_0x0012:
+        r11.sendCallback(r6, r15, r4, r5);
+        goto L_0x0179;
+    L_0x0017:
+        if (r2 == 0) goto L_0x0179;
+    L_0x0019:
+        r7 = r4 instanceof org.telegram.tgnet.TLRPC.TL_keyboardButtonUrlAuth;
+        r8 = 1;
+        if (r7 == 0) goto L_0x004c;
+    L_0x001e:
+        r1 = r2 instanceof org.telegram.tgnet.TLRPC.TL_urlAuthResultRequest;
+        if (r1 == 0) goto L_0x0030;
+    L_0x0022:
+        r1 = r2;
+        r1 = (org.telegram.tgnet.TLRPC.TL_urlAuthResultRequest) r1;
+        r2 = r18[r6];
+        r2 = (org.telegram.tgnet.TLRPC.TL_messages_requestUrlAuth) r2;
+        r3 = r4.url;
+        r5.showRequestUrlAlert(r1, r2, r3);
+        goto L_0x0179;
+    L_0x0030:
+        r1 = r2 instanceof org.telegram.tgnet.TLRPC.TL_urlAuthResultAccepted;
+        if (r1 == 0) goto L_0x003e;
+    L_0x0034:
+        r1 = r2;
+        r1 = (org.telegram.tgnet.TLRPC.TL_urlAuthResultAccepted) r1;
+        r1 = r1.url;
+        r5.showOpenUrlAlert(r1, r6);
+        goto L_0x0179;
+    L_0x003e:
+        r1 = r2 instanceof org.telegram.tgnet.TLRPC.TL_urlAuthResultDefault;
+        if (r1 == 0) goto L_0x0179;
+    L_0x0042:
+        r1 = r2;
+        r1 = (org.telegram.tgnet.TLRPC.TL_urlAuthResultDefault) r1;
+        r1 = r4.url;
+        r5.showOpenUrlAlert(r1, r8);
+        goto L_0x0179;
+    L_0x004c:
+        r7 = r4 instanceof org.telegram.tgnet.TLRPC.TL_keyboardButtonBuy;
+        if (r7 == 0) goto L_0x007c;
+    L_0x0050:
+        r1 = r2 instanceof org.telegram.tgnet.TLRPC.TL_payments_paymentForm;
+        if (r1 == 0) goto L_0x006c;
+    L_0x0054:
+        r1 = r2;
+        r1 = (org.telegram.tgnet.TLRPC.TL_payments_paymentForm) r1;
+        r2 = r0.currentAccount;
+        r2 = org.telegram.messenger.MessagesController.getInstance(r2);
+        r4 = r1.users;
+        r2.putUsers(r4, r6);
+        r2 = new org.telegram.ui.PaymentFormActivity;
+        r2.<init>(r1, r15);
+        r5.presentFragment(r2);
+        goto L_0x0179;
+    L_0x006c:
+        r1 = r2 instanceof org.telegram.tgnet.TLRPC.TL_payments_paymentReceipt;
+        if (r1 == 0) goto L_0x0179;
+    L_0x0070:
+        r1 = new org.telegram.ui.PaymentFormActivity;
+        r2 = (org.telegram.tgnet.TLRPC.TL_payments_paymentReceipt) r2;
+        r1.<init>(r15, r2);
+        r5.presentFragment(r1);
+        goto L_0x0179;
+    L_0x007c:
+        r2 = (org.telegram.tgnet.TLRPC.TL_messages_botCallbackAnswer) r2;
+        if (r13 != 0) goto L_0x008d;
+    L_0x0080:
+        r7 = r2.cache_time;
+        if (r7 == 0) goto L_0x008d;
+    L_0x0084:
+        r7 = r0.currentAccount;
+        r7 = org.telegram.messenger.MessagesStorage.getInstance(r7);
+        r7.saveBotCache(r12, r2);
+    L_0x008d:
+        r1 = r2.message;
+        r7 = 0;
+        if (r1 == 0) goto L_0x0108;
+    L_0x0092:
+        r1 = r3.messageOwner;
+        r3 = r1.from_id;
+        r1 = r1.via_bot_id;
+        if (r1 == 0) goto L_0x009b;
+    L_0x009a:
+        goto L_0x009c;
+    L_0x009b:
+        r1 = r3;
+    L_0x009c:
+        if (r1 <= 0) goto L_0x00b7;
+    L_0x009e:
+        r3 = r0.currentAccount;
+        r3 = org.telegram.messenger.MessagesController.getInstance(r3);
+        r1 = java.lang.Integer.valueOf(r1);
+        r1 = r3.getUser(r1);
+        if (r1 == 0) goto L_0x00cb;
+    L_0x00ae:
+        r3 = r1.first_name;
+        r1 = r1.last_name;
+        r1 = org.telegram.messenger.ContactsController.formatName(r3, r1);
+        goto L_0x00cc;
+    L_0x00b7:
+        r3 = r0.currentAccount;
+        r3 = org.telegram.messenger.MessagesController.getInstance(r3);
+        r1 = -r1;
+        r1 = java.lang.Integer.valueOf(r1);
+        r1 = r3.getChat(r1);
+        if (r1 == 0) goto L_0x00cb;
+    L_0x00c8:
+        r1 = r1.title;
+        goto L_0x00cc;
+    L_0x00cb:
+        r1 = r7;
+    L_0x00cc:
+        if (r1 != 0) goto L_0x00d0;
+    L_0x00ce:
+        r1 = "bot";
+    L_0x00d0:
+        r3 = r2.alert;
+        if (r3 == 0) goto L_0x0101;
+    L_0x00d4:
+        r3 = r17.getParentActivity();
+        if (r3 != 0) goto L_0x00db;
+    L_0x00da:
+        return;
+    L_0x00db:
+        r3 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
+        r4 = r17.getParentActivity();
+        r3.<init>(r4);
+        r3.setTitle(r1);
+        r1 = NUM; // 0x7f0d06a7 float:1.8745569E38 double:1.053130619E-314;
+        r4 = "OK";
+        r1 = org.telegram.messenger.LocaleController.getString(r4, r1);
+        r3.setPositiveButton(r1, r7);
+        r1 = r2.message;
+        r3.setMessage(r1);
+        r1 = r3.create();
+        r5.showDialog(r1);
+        goto L_0x0179;
+    L_0x0101:
+        r2 = r2.message;
+        r5.showAlert(r1, r2);
+        goto L_0x0179;
+    L_0x0108:
+        r1 = r2.url;
+        if (r1 == 0) goto L_0x0179;
+    L_0x010c:
+        r1 = r17.getParentActivity();
+        if (r1 != 0) goto L_0x0113;
+    L_0x0112:
+        return;
+    L_0x0113:
+        r1 = r3.messageOwner;
+        r9 = r1.from_id;
+        r1 = r1.via_bot_id;
+        if (r1 == 0) goto L_0x011c;
+    L_0x011b:
+        r9 = r1;
+    L_0x011c:
+        r1 = r0.currentAccount;
+        r1 = org.telegram.messenger.MessagesController.getInstance(r1);
+        r10 = java.lang.Integer.valueOf(r9);
+        r1 = r1.getUser(r10);
+        if (r1 == 0) goto L_0x0132;
+    L_0x012c:
+        r1 = r1.verified;
+        if (r1 == 0) goto L_0x0132;
+    L_0x0130:
+        r1 = 1;
+        goto L_0x0133;
+    L_0x0132:
+        r1 = 0;
+    L_0x0133:
+        r4 = r4 instanceof org.telegram.tgnet.TLRPC.TL_keyboardButtonGame;
+        if (r4 == 0) goto L_0x0174;
+    L_0x0137:
+        r4 = r3.messageOwner;
+        r4 = r4.media;
+        r10 = r4 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaGame;
+        if (r10 == 0) goto L_0x0142;
+    L_0x013f:
+        r4 = r4.game;
+        goto L_0x0143;
+    L_0x0142:
+        r4 = r7;
+    L_0x0143:
+        if (r4 != 0) goto L_0x0146;
+    L_0x0145:
+        return;
+    L_0x0146:
+        r7 = r2.url;
+        if (r1 != 0) goto L_0x0168;
+    L_0x014a:
+        r1 = r0.currentAccount;
+        r1 = org.telegram.messenger.MessagesController.getNotificationsSettings(r1);
+        r2 = new java.lang.StringBuilder;
+        r2.<init>();
+        r10 = "askgame_";
+        r2.append(r10);
+        r2.append(r9);
+        r2 = r2.toString();
+        r1 = r1.getBoolean(r2, r8);
+        if (r1 == 0) goto L_0x0168;
+    L_0x0167:
+        goto L_0x0169;
+    L_0x0168:
+        r8 = 0;
+    L_0x0169:
+        r1 = r17;
+        r2 = r4;
+        r3 = r15;
+        r4 = r7;
+        r5 = r8;
+        r6 = r9;
+        r1.showOpenGameAlert(r2, r3, r4, r5, r6);
+        goto L_0x0179;
+    L_0x0174:
+        r1 = r2.url;
+        r5.showOpenUrlAlert(r1, r6);
+    L_0x0179:
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.lambda$null$16$SendMessagesHelper(java.lang.String, boolean, org.telegram.tgnet.TLObject, org.telegram.messenger.MessageObject, org.telegram.tgnet.TLRPC$KeyboardButton, org.telegram.ui.ChatActivity, org.telegram.tgnet.TLObject[]):void");
     }
 
     public boolean isSendingCallback(MessageObject messageObject, KeyboardButton keyboardButton) {
@@ -3762,7 +3996,9 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         if (messageObject == null || keyboardButton == null) {
             return false;
         }
-        if (keyboardButton instanceof TL_keyboardButtonGame) {
+        if (keyboardButton instanceof TL_keyboardButtonUrlAuth) {
+            i = 3;
+        } else if (keyboardButton instanceof TL_keyboardButtonGame) {
             i = 1;
         } else if (keyboardButton instanceof TL_keyboardButtonBuy) {
             i = 2;
@@ -9834,95 +10070,95 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:172:0x0285  */
-    /* JADX WARNING: Removed duplicated region for block: B:255:0x040c  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x0406  */
-    /* JADX WARNING: Removed duplicated region for block: B:258:0x0414  */
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x041d  */
+    /* JADX WARNING: Removed duplicated region for block: B:255:0x040d  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x0407  */
+    /* JADX WARNING: Removed duplicated region for block: B:258:0x0415  */
+    /* JADX WARNING: Removed duplicated region for block: B:260:0x041e  */
     /* JADX WARNING: Removed duplicated region for block: B:137:0x01b5  */
     /* JADX WARNING: Removed duplicated region for block: B:127:0x018a  */
     /* JADX WARNING: Removed duplicated region for block: B:139:0x01ba  */
     /* JADX WARNING: Removed duplicated region for block: B:147:0x01fa A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:172:0x0285  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x0406  */
-    /* JADX WARNING: Removed duplicated region for block: B:255:0x040c  */
-    /* JADX WARNING: Removed duplicated region for block: B:258:0x0414  */
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x041d  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x0407  */
+    /* JADX WARNING: Removed duplicated region for block: B:255:0x040d  */
+    /* JADX WARNING: Removed duplicated region for block: B:258:0x0415  */
+    /* JADX WARNING: Removed duplicated region for block: B:260:0x041e  */
     /* JADX WARNING: Removed duplicated region for block: B:127:0x018a  */
     /* JADX WARNING: Removed duplicated region for block: B:137:0x01b5  */
     /* JADX WARNING: Removed duplicated region for block: B:139:0x01ba  */
     /* JADX WARNING: Removed duplicated region for block: B:147:0x01fa A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:172:0x0285  */
-    /* JADX WARNING: Removed duplicated region for block: B:255:0x040c  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x0406  */
-    /* JADX WARNING: Removed duplicated region for block: B:258:0x0414  */
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x041d  */
+    /* JADX WARNING: Removed duplicated region for block: B:255:0x040d  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x0407  */
+    /* JADX WARNING: Removed duplicated region for block: B:258:0x0415  */
+    /* JADX WARNING: Removed duplicated region for block: B:260:0x041e  */
     /* JADX WARNING: Removed duplicated region for block: B:137:0x01b5  */
     /* JADX WARNING: Removed duplicated region for block: B:127:0x018a  */
     /* JADX WARNING: Removed duplicated region for block: B:139:0x01ba  */
     /* JADX WARNING: Removed duplicated region for block: B:147:0x01fa A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:172:0x0285  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x0406  */
-    /* JADX WARNING: Removed duplicated region for block: B:255:0x040c  */
-    /* JADX WARNING: Removed duplicated region for block: B:258:0x0414  */
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x041d  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x0407  */
+    /* JADX WARNING: Removed duplicated region for block: B:255:0x040d  */
+    /* JADX WARNING: Removed duplicated region for block: B:258:0x0415  */
+    /* JADX WARNING: Removed duplicated region for block: B:260:0x041e  */
     /* JADX WARNING: Removed duplicated region for block: B:127:0x018a  */
     /* JADX WARNING: Removed duplicated region for block: B:137:0x01b5  */
     /* JADX WARNING: Removed duplicated region for block: B:139:0x01ba  */
     /* JADX WARNING: Removed duplicated region for block: B:147:0x01fa A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:172:0x0285  */
-    /* JADX WARNING: Removed duplicated region for block: B:255:0x040c  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x0406  */
-    /* JADX WARNING: Removed duplicated region for block: B:258:0x0414  */
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x041d  */
+    /* JADX WARNING: Removed duplicated region for block: B:255:0x040d  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x0407  */
+    /* JADX WARNING: Removed duplicated region for block: B:258:0x0415  */
+    /* JADX WARNING: Removed duplicated region for block: B:260:0x041e  */
     /* JADX WARNING: Removed duplicated region for block: B:137:0x01b5  */
     /* JADX WARNING: Removed duplicated region for block: B:127:0x018a  */
     /* JADX WARNING: Removed duplicated region for block: B:139:0x01ba  */
     /* JADX WARNING: Removed duplicated region for block: B:147:0x01fa A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:172:0x0285  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x0406  */
-    /* JADX WARNING: Removed duplicated region for block: B:255:0x040c  */
-    /* JADX WARNING: Removed duplicated region for block: B:258:0x0414  */
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x041d  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x0407  */
+    /* JADX WARNING: Removed duplicated region for block: B:255:0x040d  */
+    /* JADX WARNING: Removed duplicated region for block: B:258:0x0415  */
+    /* JADX WARNING: Removed duplicated region for block: B:260:0x041e  */
     /* JADX WARNING: Removed duplicated region for block: B:105:0x014c A:{SYNTHETIC, Splitter:B:105:0x014c} */
     /* JADX WARNING: Removed duplicated region for block: B:127:0x018a  */
     /* JADX WARNING: Removed duplicated region for block: B:137:0x01b5  */
     /* JADX WARNING: Removed duplicated region for block: B:139:0x01ba  */
     /* JADX WARNING: Removed duplicated region for block: B:147:0x01fa A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:172:0x0285  */
-    /* JADX WARNING: Removed duplicated region for block: B:255:0x040c  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x0406  */
-    /* JADX WARNING: Removed duplicated region for block: B:258:0x0414  */
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x041d  */
+    /* JADX WARNING: Removed duplicated region for block: B:255:0x040d  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x0407  */
+    /* JADX WARNING: Removed duplicated region for block: B:258:0x0415  */
+    /* JADX WARNING: Removed duplicated region for block: B:260:0x041e  */
     /* JADX WARNING: Removed duplicated region for block: B:105:0x014c A:{SYNTHETIC, Splitter:B:105:0x014c} */
     /* JADX WARNING: Removed duplicated region for block: B:137:0x01b5  */
     /* JADX WARNING: Removed duplicated region for block: B:127:0x018a  */
     /* JADX WARNING: Removed duplicated region for block: B:139:0x01ba  */
     /* JADX WARNING: Removed duplicated region for block: B:147:0x01fa A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:172:0x0285  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x0406  */
-    /* JADX WARNING: Removed duplicated region for block: B:255:0x040c  */
-    /* JADX WARNING: Removed duplicated region for block: B:258:0x0414  */
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x041d  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x0407  */
+    /* JADX WARNING: Removed duplicated region for block: B:255:0x040d  */
+    /* JADX WARNING: Removed duplicated region for block: B:258:0x0415  */
+    /* JADX WARNING: Removed duplicated region for block: B:260:0x041e  */
     /* JADX WARNING: Removed duplicated region for block: B:105:0x014c A:{SYNTHETIC, Splitter:B:105:0x014c} */
     /* JADX WARNING: Removed duplicated region for block: B:127:0x018a  */
     /* JADX WARNING: Removed duplicated region for block: B:137:0x01b5  */
     /* JADX WARNING: Removed duplicated region for block: B:139:0x01ba  */
     /* JADX WARNING: Removed duplicated region for block: B:147:0x01fa A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:172:0x0285  */
-    /* JADX WARNING: Removed duplicated region for block: B:255:0x040c  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x0406  */
-    /* JADX WARNING: Removed duplicated region for block: B:258:0x0414  */
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x041d  */
+    /* JADX WARNING: Removed duplicated region for block: B:255:0x040d  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x0407  */
+    /* JADX WARNING: Removed duplicated region for block: B:258:0x0415  */
+    /* JADX WARNING: Removed duplicated region for block: B:260:0x041e  */
     /* JADX WARNING: Removed duplicated region for block: B:105:0x014c A:{SYNTHETIC, Splitter:B:105:0x014c} */
     /* JADX WARNING: Removed duplicated region for block: B:137:0x01b5  */
     /* JADX WARNING: Removed duplicated region for block: B:127:0x018a  */
     /* JADX WARNING: Removed duplicated region for block: B:139:0x01ba  */
     /* JADX WARNING: Removed duplicated region for block: B:147:0x01fa A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:172:0x0285  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x0406  */
-    /* JADX WARNING: Removed duplicated region for block: B:255:0x040c  */
-    /* JADX WARNING: Removed duplicated region for block: B:258:0x0414  */
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x041d  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x0407  */
+    /* JADX WARNING: Removed duplicated region for block: B:255:0x040d  */
+    /* JADX WARNING: Removed duplicated region for block: B:258:0x0415  */
+    /* JADX WARNING: Removed duplicated region for block: B:260:0x041e  */
     /* JADX WARNING: Removed duplicated region for block: B:113:0x015e A:{SYNTHETIC, Splitter:B:113:0x015e} */
     /* JADX WARNING: Removed duplicated region for block: B:105:0x014c A:{SYNTHETIC, Splitter:B:105:0x014c} */
     /* JADX WARNING: Removed duplicated region for block: B:127:0x018a  */
@@ -9930,10 +10166,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     /* JADX WARNING: Removed duplicated region for block: B:139:0x01ba  */
     /* JADX WARNING: Removed duplicated region for block: B:147:0x01fa A:{SKIP} */
     /* JADX WARNING: Removed duplicated region for block: B:172:0x0285  */
-    /* JADX WARNING: Removed duplicated region for block: B:255:0x040c  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x0406  */
-    /* JADX WARNING: Removed duplicated region for block: B:258:0x0414  */
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x041d  */
+    /* JADX WARNING: Removed duplicated region for block: B:255:0x040d  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x0407  */
+    /* JADX WARNING: Removed duplicated region for block: B:258:0x0415  */
+    /* JADX WARNING: Removed duplicated region for block: B:260:0x041e  */
     private static boolean prepareSendingDocumentInternal(int r27, java.lang.String r28, java.lang.String r29, android.net.Uri r30, java.lang.String r31, long r32, org.telegram.messenger.MessageObject r34, java.lang.CharSequence r35, java.util.ArrayList<org.telegram.tgnet.TLRPC.MessageEntity> r36, org.telegram.messenger.MessageObject r37, boolean r38) {
         /*
         r0 = r28;
@@ -10006,14 +10242,14 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r2 = new java.io.File;
         r2.<init>(r7);
         r3 = r2.exists();
-        if (r3 == 0) goto L_0x043b;
+        if (r3 == 0) goto L_0x043c;
     L_0x005f:
         r8 = r2.length();
         r10 = 0;
         r3 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1));
         if (r3 != 0) goto L_0x006b;
     L_0x0069:
-        goto L_0x043b;
+        goto L_0x043c;
     L_0x006b:
         r8 = r32;
         r3 = (int) r8;
@@ -10378,7 +10614,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r1 = 0;
         r13 = 0;
     L_0x0283:
-        if (r1 != 0) goto L_0x0403;
+        if (r1 != 0) goto L_0x0404;
     L_0x0285:
         r1 = new org.telegram.tgnet.TLRPC$TL_document;
         r1.<init>();
@@ -10408,201 +10644,201 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     L_0x02bc:
         r0 = r21.length();
         r10 = "application/octet-stream";
-        if (r0 == 0) goto L_0x033e;
+        if (r0 == 0) goto L_0x033f;
     L_0x02c4:
         r0 = r6.hashCode();
         switch(r0) {
-            case 106458: goto L_0x02fa;
-            case 108272: goto L_0x02f2;
-            case 109967: goto L_0x02ea;
-            case 3145576: goto L_0x02e0;
-            case 3418175: goto L_0x02d6;
+            case 106458: goto L_0x02fb;
+            case 108272: goto L_0x02f3;
+            case 109967: goto L_0x02eb;
+            case 3145576: goto L_0x02e1;
+            case 3418175: goto L_0x02d7;
             case 3645340: goto L_0x02cc;
             default: goto L_0x02cb;
         };
     L_0x02cb:
-        goto L_0x0302;
+        goto L_0x0303;
     L_0x02cc:
         r0 = "webp";
         r0 = r6.equals(r0);
-        if (r0 == 0) goto L_0x0302;
-    L_0x02d4:
+        if (r0 == 0) goto L_0x0303;
+    L_0x02d5:
         r4 = 0;
-        goto L_0x0303;
-    L_0x02d6:
+        goto L_0x0304;
+    L_0x02d7:
         r4 = r28;
         r0 = r6.equals(r4);
-        if (r0 == 0) goto L_0x0302;
-    L_0x02de:
+        if (r0 == 0) goto L_0x0303;
+    L_0x02df:
         r4 = 1;
-        goto L_0x0303;
-    L_0x02e0:
+        goto L_0x0304;
+    L_0x02e1:
         r4 = r22;
         r0 = r6.equals(r4);
-        if (r0 == 0) goto L_0x0302;
-    L_0x02e8:
+        if (r0 == 0) goto L_0x0303;
+    L_0x02e9:
         r4 = 5;
-        goto L_0x0303;
-    L_0x02ea:
+        goto L_0x0304;
+    L_0x02eb:
         r0 = r6.equals(r8);
-        if (r0 == 0) goto L_0x0302;
-    L_0x02f0:
+        if (r0 == 0) goto L_0x0303;
+    L_0x02f1:
         r4 = 4;
-        goto L_0x0303;
-    L_0x02f2:
+        goto L_0x0304;
+    L_0x02f3:
         r0 = r6.equals(r4);
-        if (r0 == 0) goto L_0x0302;
-    L_0x02f8:
+        if (r0 == 0) goto L_0x0303;
+    L_0x02f9:
         r4 = 2;
-        goto L_0x0303;
-    L_0x02fa:
+        goto L_0x0304;
+    L_0x02fb:
         r0 = r6.equals(r12);
-        if (r0 == 0) goto L_0x0302;
-    L_0x0300:
+        if (r0 == 0) goto L_0x0303;
+    L_0x0301:
         r4 = 3;
-        goto L_0x0303;
-    L_0x0302:
-        r4 = -1;
+        goto L_0x0304;
     L_0x0303:
-        if (r4 == 0) goto L_0x0339;
-    L_0x0305:
+        r4 = -1;
+    L_0x0304:
+        if (r4 == 0) goto L_0x033a;
+    L_0x0306:
         r8 = 1;
-        if (r4 == r8) goto L_0x0334;
-    L_0x0308:
+        if (r4 == r8) goto L_0x0335;
+    L_0x0309:
         r8 = 2;
-        if (r4 == r8) goto L_0x032f;
-    L_0x030b:
+        if (r4 == r8) goto L_0x0330;
+    L_0x030c:
         r0 = 3;
-        if (r4 == r0) goto L_0x032a;
-    L_0x030e:
+        if (r4 == r0) goto L_0x032b;
+    L_0x030f:
         r0 = 4;
-        if (r4 == r0) goto L_0x0325;
-    L_0x0311:
+        if (r4 == r0) goto L_0x0326;
+    L_0x0312:
         r0 = 5;
-        if (r4 == r0) goto L_0x0320;
-    L_0x0314:
+        if (r4 == r0) goto L_0x0321;
+    L_0x0315:
         r0 = r5.getMimeTypeFromExtension(r6);
-        if (r0 == 0) goto L_0x031d;
-    L_0x031a:
+        if (r0 == 0) goto L_0x031e;
+    L_0x031b:
         r1.mime_type = r0;
-        goto L_0x0340;
-    L_0x031d:
+        goto L_0x0341;
+    L_0x031e:
         r1.mime_type = r10;
-        goto L_0x0340;
-    L_0x0320:
+        goto L_0x0341;
+    L_0x0321:
         r0 = "audio/flac";
         r1.mime_type = r0;
-        goto L_0x0340;
-    L_0x0325:
+        goto L_0x0341;
+    L_0x0326:
         r0 = "audio/ogg";
         r1.mime_type = r0;
-        goto L_0x0340;
-    L_0x032a:
+        goto L_0x0341;
+    L_0x032b:
         r0 = "audio/m4a";
         r1.mime_type = r0;
-        goto L_0x0340;
-    L_0x032f:
+        goto L_0x0341;
+    L_0x0330:
         r0 = "audio/mpeg";
         r1.mime_type = r0;
-        goto L_0x0340;
-    L_0x0334:
+        goto L_0x0341;
+    L_0x0335:
         r0 = "audio/opus";
         r1.mime_type = r0;
-        goto L_0x0340;
-    L_0x0339:
+        goto L_0x0341;
+    L_0x033a:
         r0 = "image/webp";
         r1.mime_type = r0;
-        goto L_0x0340;
-    L_0x033e:
+        goto L_0x0341;
+    L_0x033f:
         r1.mime_type = r10;
-    L_0x0340:
+    L_0x0341:
         r0 = r1.mime_type;
         r4 = "image/gif";
         r0 = r0.equals(r4);
-        if (r0 == 0) goto L_0x038d;
-    L_0x034a:
-        if (r37 == 0) goto L_0x0356;
-    L_0x034c:
+        if (r0 == 0) goto L_0x038e;
+    L_0x034b:
+        if (r37 == 0) goto L_0x0357;
+    L_0x034d:
         r4 = r37.getGroupIdForUse();
         r10 = 0;
         r0 = (r4 > r10 ? 1 : (r4 == r10 ? 0 : -1));
-        if (r0 != 0) goto L_0x038d;
-    L_0x0356:
-        r0 = r2.getAbsolutePath();	 Catch:{ Exception -> 0x0389 }
+        if (r0 != 0) goto L_0x038e;
+    L_0x0357:
+        r0 = r2.getAbsolutePath();	 Catch:{ Exception -> 0x038a }
         r2 = NUM; // 0x42b40000 float:90.0 double:5.529052754E-315;
         r4 = 0;
         r5 = 1;
-        r0 = org.telegram.messenger.ImageLoader.loadBitmap(r0, r4, r2, r2, r5);	 Catch:{ Exception -> 0x0389 }
-        if (r0 == 0) goto L_0x038d;
-    L_0x0364:
+        r0 = org.telegram.messenger.ImageLoader.loadBitmap(r0, r4, r2, r2, r5);	 Catch:{ Exception -> 0x038a }
+        if (r0 == 0) goto L_0x038e;
+    L_0x0365:
         r4 = "animation.gif";
-        r14.file_name = r4;	 Catch:{ Exception -> 0x0389 }
-        r4 = r1.attributes;	 Catch:{ Exception -> 0x0389 }
-        r5 = new org.telegram.tgnet.TLRPC$TL_documentAttributeAnimated;	 Catch:{ Exception -> 0x0389 }
-        r5.<init>();	 Catch:{ Exception -> 0x0389 }
-        r4.add(r5);	 Catch:{ Exception -> 0x0389 }
+        r14.file_name = r4;	 Catch:{ Exception -> 0x038a }
+        r4 = r1.attributes;	 Catch:{ Exception -> 0x038a }
+        r5 = new org.telegram.tgnet.TLRPC$TL_documentAttributeAnimated;	 Catch:{ Exception -> 0x038a }
+        r5.<init>();	 Catch:{ Exception -> 0x038a }
+        r4.add(r5);	 Catch:{ Exception -> 0x038a }
         r4 = 55;
-        r2 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r0, r2, r2, r4, r3);	 Catch:{ Exception -> 0x0389 }
-        if (r2 == 0) goto L_0x0385;
-    L_0x037a:
-        r3 = r1.thumbs;	 Catch:{ Exception -> 0x0389 }
-        r3.add(r2);	 Catch:{ Exception -> 0x0389 }
-        r2 = r1.flags;	 Catch:{ Exception -> 0x0389 }
+        r2 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r0, r2, r2, r4, r3);	 Catch:{ Exception -> 0x038a }
+        if (r2 == 0) goto L_0x0386;
+    L_0x037b:
+        r3 = r1.thumbs;	 Catch:{ Exception -> 0x038a }
+        r3.add(r2);	 Catch:{ Exception -> 0x038a }
+        r2 = r1.flags;	 Catch:{ Exception -> 0x038a }
         r3 = 1;
         r2 = r2 | r3;
-        r1.flags = r2;	 Catch:{ Exception -> 0x0389 }
-    L_0x0385:
-        r0.recycle();	 Catch:{ Exception -> 0x0389 }
-        goto L_0x038d;
-    L_0x0389:
+        r1.flags = r2;	 Catch:{ Exception -> 0x038a }
+    L_0x0386:
+        r0.recycle();	 Catch:{ Exception -> 0x038a }
+        goto L_0x038e;
+    L_0x038a:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x038d:
+    L_0x038e:
         r0 = r1.mime_type;
         r2 = "image/webp";
         r0 = r0.equals(r2);
-        if (r0 == 0) goto L_0x0403;
-    L_0x0397:
-        if (r20 == 0) goto L_0x0403;
-    L_0x0399:
-        if (r37 != 0) goto L_0x0403;
-    L_0x039b:
+        if (r0 == 0) goto L_0x0404;
+    L_0x0398:
+        if (r20 == 0) goto L_0x0404;
+    L_0x039a:
+        if (r37 != 0) goto L_0x0404;
+    L_0x039c:
         r2 = new android.graphics.BitmapFactory$Options;
         r2.<init>();
         r3 = 1;
-        r2.inJustDecodeBounds = r3;	 Catch:{ Exception -> 0x03ca }
-        r0 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x03ca }
+        r2.inJustDecodeBounds = r3;	 Catch:{ Exception -> 0x03cb }
+        r0 = new java.io.RandomAccessFile;	 Catch:{ Exception -> 0x03cb }
         r3 = "r";
-        r0.<init>(r7, r3);	 Catch:{ Exception -> 0x03ca }
-        r14 = r0.getChannel();	 Catch:{ Exception -> 0x03ca }
-        r15 = java.nio.channels.FileChannel.MapMode.READ_ONLY;	 Catch:{ Exception -> 0x03ca }
+        r0.<init>(r7, r3);	 Catch:{ Exception -> 0x03cb }
+        r14 = r0.getChannel();	 Catch:{ Exception -> 0x03cb }
+        r15 = java.nio.channels.FileChannel.MapMode.READ_ONLY;	 Catch:{ Exception -> 0x03cb }
         r16 = 0;
-        r3 = r7.length();	 Catch:{ Exception -> 0x03ca }
-        r3 = (long) r3;	 Catch:{ Exception -> 0x03ca }
+        r3 = r7.length();	 Catch:{ Exception -> 0x03cb }
+        r3 = (long) r3;	 Catch:{ Exception -> 0x03cb }
         r18 = r3;
-        r3 = r14.map(r15, r16, r18);	 Catch:{ Exception -> 0x03ca }
-        r4 = r3.limit();	 Catch:{ Exception -> 0x03ca }
+        r3 = r14.map(r15, r16, r18);	 Catch:{ Exception -> 0x03cb }
+        r4 = r3.limit();	 Catch:{ Exception -> 0x03cb }
         r5 = 0;
         r6 = 1;
-        org.telegram.messenger.Utilities.loadWebpImage(r5, r3, r4, r2, r6);	 Catch:{ Exception -> 0x03ca }
-        r0.close();	 Catch:{ Exception -> 0x03ca }
-        goto L_0x03ce;
-    L_0x03ca:
+        org.telegram.messenger.Utilities.loadWebpImage(r5, r3, r4, r2, r6);	 Catch:{ Exception -> 0x03cb }
+        r0.close();	 Catch:{ Exception -> 0x03cb }
+        goto L_0x03cf;
+    L_0x03cb:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x03ce:
+    L_0x03cf:
         r0 = r2.outWidth;
-        if (r0 == 0) goto L_0x0403;
-    L_0x03d2:
+        if (r0 == 0) goto L_0x0404;
+    L_0x03d3:
         r3 = r2.outHeight;
-        if (r3 == 0) goto L_0x0403;
-    L_0x03d6:
+        if (r3 == 0) goto L_0x0404;
+    L_0x03d7:
         r4 = 800; // 0x320 float:1.121E-42 double:3.953E-321;
-        if (r0 > r4) goto L_0x0403;
-    L_0x03da:
+        if (r0 > r4) goto L_0x0404;
+    L_0x03db:
         r0 = 800; // 0x320 float:1.121E-42 double:3.953E-321;
-        if (r3 > r0) goto L_0x0403;
-    L_0x03de:
+        if (r3 > r0) goto L_0x0404;
+    L_0x03df:
         r0 = new org.telegram.tgnet.TLRPC$TL_documentAttributeSticker;
         r0.<init>();
         r0.alt = r9;
@@ -10619,30 +10855,30 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r0.h = r2;
         r2 = r1.attributes;
         r2.add(r0);
-    L_0x0403:
+    L_0x0404:
         r3 = r1;
-        if (r35 == 0) goto L_0x040c;
-    L_0x0406:
+        if (r35 == 0) goto L_0x040d;
+    L_0x0407:
         r0 = r35.toString();
         r10 = r0;
-        goto L_0x040d;
-    L_0x040c:
-        r10 = r9;
+        goto L_0x040e;
     L_0x040d:
+        r10 = r9;
+    L_0x040e:
         r5 = new java.util.HashMap;
         r5.<init>();
-        if (r26 == 0) goto L_0x041b;
-    L_0x0414:
+        if (r26 == 0) goto L_0x041c;
+    L_0x0415:
         r0 = "originalPath";
         r1 = r26;
         r5.put(r0, r1);
-    L_0x041b:
-        if (r38 == 0) goto L_0x0424;
-    L_0x041d:
+    L_0x041c:
+        if (r38 == 0) goto L_0x0425;
+    L_0x041e:
         r0 = "forceDocument";
         r1 = "1";
         r5.put(r0, r1);
-    L_0x0424:
+    L_0x0425:
         r12 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$oWtR0AbMdP04znHWUTItf-tR4Wc;
         r0 = r12;
         r1 = r37;
@@ -10656,7 +10892,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r12);
         r1 = 1;
         return r1;
-    L_0x043b:
+    L_0x043c:
         r1 = 0;
         return r1;
         */
@@ -11002,7 +11238,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r2 = r7;
         r4 = r2;
         r10 = r4;
-        goto L_0x0402;
+        goto L_0x0405;
     L_0x004e:
         r0 = r8 instanceof org.telegram.tgnet.TLRPC.TL_botInlineMediaResult;
         if (r0 == 0) goto L_0x0070;
@@ -11011,28 +11247,28 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         if (r0 == 0) goto L_0x0060;
     L_0x0056:
         r1 = r0 instanceof org.telegram.tgnet.TLRPC.TL_document;
-        if (r1 == 0) goto L_0x03fe;
+        if (r1 == 0) goto L_0x0401;
     L_0x005a:
         r0 = (org.telegram.tgnet.TLRPC.TL_document) r0;
         r2 = r0;
         r4 = r7;
-        goto L_0x0400;
+        goto L_0x0403;
     L_0x0060:
         r0 = r8.photo;
-        if (r0 == 0) goto L_0x03fe;
+        if (r0 == 0) goto L_0x0401;
     L_0x0064:
         r1 = r0 instanceof org.telegram.tgnet.TLRPC.TL_photo;
-        if (r1 == 0) goto L_0x03fe;
+        if (r1 == 0) goto L_0x0401;
     L_0x0068:
         r0 = (org.telegram.tgnet.TLRPC.TL_photo) r0;
         r10 = r0;
         r2 = r7;
         r4 = r2;
         r11 = r4;
-        goto L_0x0402;
+        goto L_0x0405;
     L_0x0070:
         r0 = r8.content;
-        if (r0 == 0) goto L_0x03fe;
+        if (r0 == 0) goto L_0x0401;
     L_0x0074:
         r0 = new java.io.File;
         r4 = 4;
@@ -11067,93 +11303,93 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r4 = "gif";
         r2 = "sticker";
         switch(r13) {
-            case -1890252483: goto L_0x00f9;
-            case 102340: goto L_0x00f1;
-            case 3143036: goto L_0x00e9;
-            case 93166550: goto L_0x00e1;
-            case 106642994: goto L_0x00d7;
-            case 112202875: goto L_0x00cd;
+            case -1890252483: goto L_0x00fa;
+            case 102340: goto L_0x00f2;
+            case 3143036: goto L_0x00ea;
+            case 93166550: goto L_0x00e2;
+            case 106642994: goto L_0x00d8;
+            case 112202875: goto L_0x00ce;
             case 112386354: goto L_0x00c3;
             default: goto L_0x00c2;
         };
     L_0x00c2:
-        goto L_0x0101;
+        goto L_0x0102;
     L_0x00c3:
         r13 = "voice";
         r11 = r11.equals(r13);
-        if (r11 == 0) goto L_0x0101;
-    L_0x00cb:
+        if (r11 == 0) goto L_0x0102;
+    L_0x00cc:
         r11 = 1;
-        goto L_0x0102;
-    L_0x00cd:
+        goto L_0x0103;
+    L_0x00ce:
         r13 = "video";
         r11 = r11.equals(r13);
-        if (r11 == 0) goto L_0x0101;
-    L_0x00d5:
+        if (r11 == 0) goto L_0x0102;
+    L_0x00d6:
         r11 = 3;
-        goto L_0x0102;
-    L_0x00d7:
+        goto L_0x0103;
+    L_0x00d8:
         r13 = "photo";
         r11 = r11.equals(r13);
-        if (r11 == 0) goto L_0x0101;
-    L_0x00df:
+        if (r11 == 0) goto L_0x0102;
+    L_0x00e0:
         r11 = 6;
-        goto L_0x0102;
-    L_0x00e1:
+        goto L_0x0103;
+    L_0x00e2:
         r11 = r11.equals(r15);
-        if (r11 == 0) goto L_0x0101;
-    L_0x00e7:
+        if (r11 == 0) goto L_0x0102;
+    L_0x00e8:
         r11 = 0;
-        goto L_0x0102;
-    L_0x00e9:
+        goto L_0x0103;
+    L_0x00ea:
         r11 = r11.equals(r14);
-        if (r11 == 0) goto L_0x0101;
-    L_0x00ef:
+        if (r11 == 0) goto L_0x0102;
+    L_0x00f0:
         r11 = 2;
-        goto L_0x0102;
-    L_0x00f1:
+        goto L_0x0103;
+    L_0x00f2:
         r11 = r11.equals(r4);
-        if (r11 == 0) goto L_0x0101;
-    L_0x00f7:
+        if (r11 == 0) goto L_0x0102;
+    L_0x00f8:
         r11 = 5;
-        goto L_0x0102;
-    L_0x00f9:
+        goto L_0x0103;
+    L_0x00fa:
         r11 = r11.equals(r2);
-        if (r11 == 0) goto L_0x0101;
-    L_0x00ff:
+        if (r11 == 0) goto L_0x0102;
+    L_0x0100:
         r11 = 4;
-        goto L_0x0102;
-    L_0x0101:
-        r11 = -1;
+        goto L_0x0103;
     L_0x0102:
+        r11 = -1;
+    L_0x0103:
         switch(r11) {
-            case 0: goto L_0x015c;
-            case 1: goto L_0x015c;
-            case 2: goto L_0x015c;
-            case 3: goto L_0x015c;
-            case 4: goto L_0x015c;
-            case 5: goto L_0x015c;
-            case 6: goto L_0x010b;
-            default: goto L_0x0105;
+            case 0: goto L_0x015d;
+            case 1: goto L_0x015d;
+            case 2: goto L_0x015d;
+            case 3: goto L_0x015d;
+            case 4: goto L_0x015d;
+            case 5: goto L_0x015d;
+            case 6: goto L_0x010c;
+            default: goto L_0x0106;
         };
-    L_0x0105:
+    L_0x0106:
         r2 = r7;
         r11 = r2;
         r4 = r10;
         r10 = r11;
-        goto L_0x0402;
-    L_0x010b:
+        goto L_0x0405;
+    L_0x010c:
         r0 = r0.exists();
-        if (r0 == 0) goto L_0x011a;
-    L_0x0111:
+        if (r0 == 0) goto L_0x011b;
+    L_0x0112:
         r0 = getInstance(r20);
         r0 = r0.generatePhotoSizes(r10, r7);
-        goto L_0x011b;
-    L_0x011a:
-        r0 = r7;
+        goto L_0x011c;
     L_0x011b:
-        if (r0 != 0) goto L_0x0156;
-    L_0x011d:
+        r0 = r7;
+    L_0x011c:
+        if (r0 != 0) goto L_0x0157;
+    L_0x011e:
         r0 = new org.telegram.tgnet.TLRPC$TL_photo;
         r0.<init>();
         r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r20);
@@ -11178,13 +11414,13 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r2.type = r1;
         r1 = r0.sizes;
         r1.add(r2);
-    L_0x0156:
+    L_0x0157:
         r2 = r7;
         r11 = r2;
         r4 = r10;
         r10 = r0;
-        goto L_0x0402;
-    L_0x015c:
+        goto L_0x0405;
+    L_0x015d:
         r11 = new org.telegram.tgnet.TLRPC$TL_document;
         r11.<init>();
         r0 = r2;
@@ -11208,78 +11444,78 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r2 = r8.type;
         r16 = r2.hashCode();
         switch(r16) {
-            case -1890252483: goto L_0x01bf;
-            case 102340: goto L_0x01b7;
-            case 3143036: goto L_0x01af;
-            case 93166550: goto L_0x01a7;
-            case 112202875: goto L_0x019d;
-            case 112386354: goto L_0x0193;
-            default: goto L_0x0192;
+            case -1890252483: goto L_0x01c1;
+            case 102340: goto L_0x01b9;
+            case 3143036: goto L_0x01b1;
+            case 93166550: goto L_0x01a9;
+            case 112202875: goto L_0x019f;
+            case 112386354: goto L_0x0194;
+            default: goto L_0x0193;
         };
-    L_0x0192:
-        goto L_0x01c7;
     L_0x0193:
+        goto L_0x01c9;
+    L_0x0194:
         r0 = "voice";
         r0 = r2.equals(r0);
-        if (r0 == 0) goto L_0x01c7;
-    L_0x019b:
-        r0 = 1;
-        goto L_0x01c8;
+        if (r0 == 0) goto L_0x01c9;
     L_0x019d:
+        r0 = 1;
+        goto L_0x01ca;
+    L_0x019f:
         r0 = "video";
         r0 = r2.equals(r0);
-        if (r0 == 0) goto L_0x01c7;
-    L_0x01a5:
-        r0 = 4;
-        goto L_0x01c8;
+        if (r0 == 0) goto L_0x01c9;
     L_0x01a7:
+        r0 = 4;
+        goto L_0x01ca;
+    L_0x01a9:
         r0 = r2.equals(r15);
-        if (r0 == 0) goto L_0x01c7;
-    L_0x01ad:
-        r0 = 2;
-        goto L_0x01c8;
+        if (r0 == 0) goto L_0x01c9;
     L_0x01af:
+        r0 = 2;
+        goto L_0x01ca;
+    L_0x01b1:
         r0 = r2.equals(r14);
-        if (r0 == 0) goto L_0x01c7;
-    L_0x01b5:
-        r0 = 3;
-        goto L_0x01c8;
+        if (r0 == 0) goto L_0x01c9;
     L_0x01b7:
+        r0 = 3;
+        goto L_0x01ca;
+    L_0x01b9:
         r0 = r2.equals(r4);
-        if (r0 == 0) goto L_0x01c7;
-    L_0x01bd:
-        r0 = 0;
-        goto L_0x01c8;
+        if (r0 == 0) goto L_0x01c9;
     L_0x01bf:
+        r0 = 0;
+        goto L_0x01ca;
+    L_0x01c1:
         r0 = r2.equals(r0);
-        if (r0 == 0) goto L_0x01c7;
-    L_0x01c5:
-        r0 = 5;
-        goto L_0x01c8;
+        if (r0 == 0) goto L_0x01c9;
     L_0x01c7:
+        r0 = 5;
+        goto L_0x01ca;
+    L_0x01c9:
         r0 = -1;
-    L_0x01c8:
+    L_0x01ca:
         r2 = 55;
-        if (r0 == 0) goto L_0x035c;
-    L_0x01cc:
+        if (r0 == 0) goto L_0x035f;
+    L_0x01ce:
         r4 = 1;
-        if (r0 == r4) goto L_0x0344;
-    L_0x01cf:
+        if (r0 == r4) goto L_0x0347;
+    L_0x01d1:
         r3 = 2;
-        if (r0 == r3) goto L_0x0318;
-    L_0x01d2:
+        if (r0 == r3) goto L_0x031b;
+    L_0x01d4:
         r3 = 3;
-        if (r0 == r3) goto L_0x02e8;
-    L_0x01d5:
+        if (r0 == r3) goto L_0x02eb;
+    L_0x01d7:
         r3 = NUM; // 0x42b40000 float:90.0 double:5.529052754E-315;
         r4 = 4;
-        if (r0 == r4) goto L_0x026a;
-    L_0x01da:
+        if (r0 == r4) goto L_0x026d;
+    L_0x01dc:
         r4 = 5;
-        if (r0 == r4) goto L_0x01df;
-    L_0x01dd:
-        goto L_0x03b9;
+        if (r0 == r4) goto L_0x01e1;
     L_0x01df:
+        goto L_0x03bc;
+    L_0x01e1:
         r0 = new org.telegram.tgnet.TLRPC$TL_documentAttributeSticker;
         r0.<init>();
         r4 = "";
@@ -11302,49 +11538,49 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r4.add(r0);
         r0 = "sticker.webp";
         r1.file_name = r0;
-        r0 = r8.thumb;	 Catch:{ Throwable -> 0x0264 }
-        if (r0 == 0) goto L_0x03b9;
-    L_0x0214:
-        r0 = new java.io.File;	 Catch:{ Throwable -> 0x0264 }
+        r0 = r8.thumb;	 Catch:{ Throwable -> 0x0267 }
+        if (r0 == 0) goto L_0x03bc;
+    L_0x0216:
+        r0 = new java.io.File;	 Catch:{ Throwable -> 0x0267 }
         r4 = 4;
-        r4 = org.telegram.messenger.FileLoader.getDirectory(r4);	 Catch:{ Throwable -> 0x0264 }
-        r13 = new java.lang.StringBuilder;	 Catch:{ Throwable -> 0x0264 }
-        r13.<init>();	 Catch:{ Throwable -> 0x0264 }
-        r15 = r8.thumb;	 Catch:{ Throwable -> 0x0264 }
-        r15 = r15.url;	 Catch:{ Throwable -> 0x0264 }
-        r15 = org.telegram.messenger.Utilities.MD5(r15);	 Catch:{ Throwable -> 0x0264 }
-        r13.append(r15);	 Catch:{ Throwable -> 0x0264 }
-        r13.append(r12);	 Catch:{ Throwable -> 0x0264 }
-        r12 = r8.thumb;	 Catch:{ Throwable -> 0x0264 }
-        r12 = r12.url;	 Catch:{ Throwable -> 0x0264 }
+        r4 = org.telegram.messenger.FileLoader.getDirectory(r4);	 Catch:{ Throwable -> 0x0267 }
+        r13 = new java.lang.StringBuilder;	 Catch:{ Throwable -> 0x0267 }
+        r13.<init>();	 Catch:{ Throwable -> 0x0267 }
+        r15 = r8.thumb;	 Catch:{ Throwable -> 0x0267 }
+        r15 = r15.url;	 Catch:{ Throwable -> 0x0267 }
+        r15 = org.telegram.messenger.Utilities.MD5(r15);	 Catch:{ Throwable -> 0x0267 }
+        r13.append(r15);	 Catch:{ Throwable -> 0x0267 }
+        r13.append(r12);	 Catch:{ Throwable -> 0x0267 }
+        r12 = r8.thumb;	 Catch:{ Throwable -> 0x0267 }
+        r12 = r12.url;	 Catch:{ Throwable -> 0x0267 }
         r15 = "webp";
-        r12 = org.telegram.messenger.ImageLoader.getHttpUrlExtension(r12, r15);	 Catch:{ Throwable -> 0x0264 }
-        r13.append(r12);	 Catch:{ Throwable -> 0x0264 }
-        r12 = r13.toString();	 Catch:{ Throwable -> 0x0264 }
-        r0.<init>(r4, r12);	 Catch:{ Throwable -> 0x0264 }
-        r0 = r0.getAbsolutePath();	 Catch:{ Throwable -> 0x0264 }
+        r12 = org.telegram.messenger.ImageLoader.getHttpUrlExtension(r12, r15);	 Catch:{ Throwable -> 0x0267 }
+        r13.append(r12);	 Catch:{ Throwable -> 0x0267 }
+        r12 = r13.toString();	 Catch:{ Throwable -> 0x0267 }
+        r0.<init>(r4, r12);	 Catch:{ Throwable -> 0x0267 }
+        r0 = r0.getAbsolutePath();	 Catch:{ Throwable -> 0x0267 }
         r4 = 1;
-        r0 = org.telegram.messenger.ImageLoader.loadBitmap(r0, r7, r3, r3, r4);	 Catch:{ Throwable -> 0x0264 }
-        if (r0 == 0) goto L_0x03b9;
-    L_0x024d:
+        r0 = org.telegram.messenger.ImageLoader.loadBitmap(r0, r7, r3, r3, r4);	 Catch:{ Throwable -> 0x0267 }
+        if (r0 == 0) goto L_0x03bc;
+    L_0x0250:
         r4 = 0;
-        r2 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r0, r3, r3, r2, r4);	 Catch:{ Throwable -> 0x0264 }
-        if (r2 == 0) goto L_0x025f;
-    L_0x0254:
-        r3 = r11.thumbs;	 Catch:{ Throwable -> 0x0264 }
-        r3.add(r2);	 Catch:{ Throwable -> 0x0264 }
-        r2 = r11.flags;	 Catch:{ Throwable -> 0x0264 }
+        r2 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r0, r3, r3, r2, r4);	 Catch:{ Throwable -> 0x0267 }
+        if (r2 == 0) goto L_0x0262;
+    L_0x0257:
+        r3 = r11.thumbs;	 Catch:{ Throwable -> 0x0267 }
+        r3.add(r2);	 Catch:{ Throwable -> 0x0267 }
+        r2 = r11.flags;	 Catch:{ Throwable -> 0x0267 }
         r3 = 1;
         r2 = r2 | r3;
-        r11.flags = r2;	 Catch:{ Throwable -> 0x0264 }
-    L_0x025f:
-        r0.recycle();	 Catch:{ Throwable -> 0x0264 }
-        goto L_0x03b9;
-    L_0x0264:
+        r11.flags = r2;	 Catch:{ Throwable -> 0x0267 }
+    L_0x0262:
+        r0.recycle();	 Catch:{ Throwable -> 0x0267 }
+        goto L_0x03bc;
+    L_0x0267:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-        goto L_0x03b9;
-    L_0x026a:
+        goto L_0x03bc;
+    L_0x026d:
         r0 = "video.mp4";
         r1.file_name = r0;
         r0 = new org.telegram.tgnet.TLRPC$TL_documentAttributeVideo;
@@ -11361,56 +11597,56 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r0.supports_streaming = r13;
         r4 = r11.attributes;
         r4.add(r0);
-        r0 = r8.thumb;	 Catch:{ Throwable -> 0x02e2 }
-        if (r0 == 0) goto L_0x03b9;
-    L_0x0292:
-        r0 = new java.io.File;	 Catch:{ Throwable -> 0x02e2 }
+        r0 = r8.thumb;	 Catch:{ Throwable -> 0x02e5 }
+        if (r0 == 0) goto L_0x03bc;
+    L_0x0295:
+        r0 = new java.io.File;	 Catch:{ Throwable -> 0x02e5 }
         r4 = 4;
-        r4 = org.telegram.messenger.FileLoader.getDirectory(r4);	 Catch:{ Throwable -> 0x02e2 }
-        r13 = new java.lang.StringBuilder;	 Catch:{ Throwable -> 0x02e2 }
-        r13.<init>();	 Catch:{ Throwable -> 0x02e2 }
-        r15 = r8.thumb;	 Catch:{ Throwable -> 0x02e2 }
-        r15 = r15.url;	 Catch:{ Throwable -> 0x02e2 }
-        r15 = org.telegram.messenger.Utilities.MD5(r15);	 Catch:{ Throwable -> 0x02e2 }
-        r13.append(r15);	 Catch:{ Throwable -> 0x02e2 }
-        r13.append(r12);	 Catch:{ Throwable -> 0x02e2 }
-        r12 = r8.thumb;	 Catch:{ Throwable -> 0x02e2 }
-        r12 = r12.url;	 Catch:{ Throwable -> 0x02e2 }
+        r4 = org.telegram.messenger.FileLoader.getDirectory(r4);	 Catch:{ Throwable -> 0x02e5 }
+        r13 = new java.lang.StringBuilder;	 Catch:{ Throwable -> 0x02e5 }
+        r13.<init>();	 Catch:{ Throwable -> 0x02e5 }
+        r15 = r8.thumb;	 Catch:{ Throwable -> 0x02e5 }
+        r15 = r15.url;	 Catch:{ Throwable -> 0x02e5 }
+        r15 = org.telegram.messenger.Utilities.MD5(r15);	 Catch:{ Throwable -> 0x02e5 }
+        r13.append(r15);	 Catch:{ Throwable -> 0x02e5 }
+        r13.append(r12);	 Catch:{ Throwable -> 0x02e5 }
+        r12 = r8.thumb;	 Catch:{ Throwable -> 0x02e5 }
+        r12 = r12.url;	 Catch:{ Throwable -> 0x02e5 }
         r15 = "jpg";
-        r12 = org.telegram.messenger.ImageLoader.getHttpUrlExtension(r12, r15);	 Catch:{ Throwable -> 0x02e2 }
-        r13.append(r12);	 Catch:{ Throwable -> 0x02e2 }
-        r12 = r13.toString();	 Catch:{ Throwable -> 0x02e2 }
-        r0.<init>(r4, r12);	 Catch:{ Throwable -> 0x02e2 }
-        r0 = r0.getAbsolutePath();	 Catch:{ Throwable -> 0x02e2 }
+        r12 = org.telegram.messenger.ImageLoader.getHttpUrlExtension(r12, r15);	 Catch:{ Throwable -> 0x02e5 }
+        r13.append(r12);	 Catch:{ Throwable -> 0x02e5 }
+        r12 = r13.toString();	 Catch:{ Throwable -> 0x02e5 }
+        r0.<init>(r4, r12);	 Catch:{ Throwable -> 0x02e5 }
+        r0 = r0.getAbsolutePath();	 Catch:{ Throwable -> 0x02e5 }
         r4 = 1;
-        r0 = org.telegram.messenger.ImageLoader.loadBitmap(r0, r7, r3, r3, r4);	 Catch:{ Throwable -> 0x02e2 }
-        if (r0 == 0) goto L_0x03b9;
-    L_0x02cb:
+        r0 = org.telegram.messenger.ImageLoader.loadBitmap(r0, r7, r3, r3, r4);	 Catch:{ Throwable -> 0x02e5 }
+        if (r0 == 0) goto L_0x03bc;
+    L_0x02ce:
         r4 = 0;
-        r2 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r0, r3, r3, r2, r4);	 Catch:{ Throwable -> 0x02e2 }
-        if (r2 == 0) goto L_0x02dd;
-    L_0x02d2:
-        r3 = r11.thumbs;	 Catch:{ Throwable -> 0x02e2 }
-        r3.add(r2);	 Catch:{ Throwable -> 0x02e2 }
-        r2 = r11.flags;	 Catch:{ Throwable -> 0x02e2 }
+        r2 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r0, r3, r3, r2, r4);	 Catch:{ Throwable -> 0x02e5 }
+        if (r2 == 0) goto L_0x02e0;
+    L_0x02d5:
+        r3 = r11.thumbs;	 Catch:{ Throwable -> 0x02e5 }
+        r3.add(r2);	 Catch:{ Throwable -> 0x02e5 }
+        r2 = r11.flags;	 Catch:{ Throwable -> 0x02e5 }
         r3 = 1;
         r2 = r2 | r3;
-        r11.flags = r2;	 Catch:{ Throwable -> 0x02e2 }
-    L_0x02dd:
-        r0.recycle();	 Catch:{ Throwable -> 0x02e2 }
-        goto L_0x03b9;
-    L_0x02e2:
+        r11.flags = r2;	 Catch:{ Throwable -> 0x02e5 }
+    L_0x02e0:
+        r0.recycle();	 Catch:{ Throwable -> 0x02e5 }
+        goto L_0x03bc;
+    L_0x02e5:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-        goto L_0x03b9;
-    L_0x02e8:
+        goto L_0x03bc;
+    L_0x02eb:
         r0 = r8.content;
         r0 = r0.mime_type;
         r2 = 47;
         r0 = r0.lastIndexOf(r2);
         r2 = -1;
-        if (r0 == r2) goto L_0x0314;
-    L_0x02f5:
+        if (r0 == r2) goto L_0x0317;
+    L_0x02f8:
         r2 = new java.lang.StringBuilder;
         r2.<init>();
         r3 = "file.";
@@ -11423,11 +11659,11 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r2.append(r0);
         r0 = r2.toString();
         r1.file_name = r0;
-        goto L_0x03b9;
-    L_0x0314:
+        goto L_0x03bc;
+    L_0x0317:
         r1.file_name = r14;
-        goto L_0x03b9;
-    L_0x0318:
+        goto L_0x03bc;
+    L_0x031b:
         r0 = new org.telegram.tgnet.TLRPC$TL_documentAttributeAudio;
         r0.<init>();
         r2 = org.telegram.messenger.MessageObject.getInlineResultDuration(r19);
@@ -11439,20 +11675,20 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r2 = r2 | r3;
         r0.flags = r2;
         r2 = r8.description;
-        if (r2 == 0) goto L_0x0339;
-    L_0x0331:
+        if (r2 == 0) goto L_0x033c;
+    L_0x0334:
         r0.performer = r2;
         r2 = r0.flags;
         r3 = 2;
         r2 = r2 | r3;
         r0.flags = r2;
-    L_0x0339:
+    L_0x033c:
         r2 = "audio.mp3";
         r1.file_name = r2;
         r2 = r11.attributes;
         r2.add(r0);
-        goto L_0x03b9;
-    L_0x0344:
+        goto L_0x03bc;
+    L_0x0347:
         r0 = new org.telegram.tgnet.TLRPC$TL_documentAttributeAudio;
         r0.<init>();
         r2 = org.telegram.messenger.MessageObject.getInlineResultDuration(r19);
@@ -11463,84 +11699,84 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r1.file_name = r2;
         r2 = r11.attributes;
         r2.add(r0);
-        goto L_0x03b9;
-    L_0x035c:
+        goto L_0x03bc;
+    L_0x035f:
         r0 = "animation.gif";
         r1.file_name = r0;
         r0 = "mp4";
         r0 = r10.endsWith(r0);
-        if (r0 == 0) goto L_0x0377;
-    L_0x0368:
+        if (r0 == 0) goto L_0x037a;
+    L_0x036b:
         r0 = "video/mp4";
         r11.mime_type = r0;
         r0 = r11.attributes;
         r4 = new org.telegram.tgnet.TLRPC$TL_documentAttributeAnimated;
         r4.<init>();
         r0.add(r4);
-        goto L_0x037b;
-    L_0x0377:
+        goto L_0x037e;
+    L_0x037a:
         r0 = "image/gif";
         r11.mime_type = r0;
-    L_0x037b:
-        if (r3 == 0) goto L_0x0380;
-    L_0x037d:
-        r0 = 90;
-        goto L_0x0382;
+    L_0x037e:
+        if (r3 == 0) goto L_0x0383;
     L_0x0380:
+        r0 = 90;
+        goto L_0x0385;
+    L_0x0383:
         r0 = 320; // 0x140 float:4.48E-43 double:1.58E-321;
-    L_0x0382:
+    L_0x0385:
         r3 = "mp4";
-        r3 = r10.endsWith(r3);	 Catch:{ Throwable -> 0x03b5 }
-        if (r3 == 0) goto L_0x0390;
-    L_0x038a:
+        r3 = r10.endsWith(r3);	 Catch:{ Throwable -> 0x03b8 }
+        if (r3 == 0) goto L_0x0393;
+    L_0x038d:
         r3 = 1;
-        r4 = android.media.ThumbnailUtils.createVideoThumbnail(r10, r3);	 Catch:{ Throwable -> 0x03b5 }
-        goto L_0x0396;
-    L_0x0390:
+        r4 = android.media.ThumbnailUtils.createVideoThumbnail(r10, r3);	 Catch:{ Throwable -> 0x03b8 }
+        goto L_0x0399;
+    L_0x0393:
         r3 = 1;
-        r4 = (float) r0;	 Catch:{ Throwable -> 0x03b5 }
-        r4 = org.telegram.messenger.ImageLoader.loadBitmap(r10, r7, r4, r4, r3);	 Catch:{ Throwable -> 0x03b5 }
-    L_0x0396:
-        if (r4 == 0) goto L_0x03b9;
-    L_0x0398:
-        r3 = (float) r0;	 Catch:{ Throwable -> 0x03b5 }
+        r4 = (float) r0;	 Catch:{ Throwable -> 0x03b8 }
+        r4 = org.telegram.messenger.ImageLoader.loadBitmap(r10, r7, r4, r4, r3);	 Catch:{ Throwable -> 0x03b8 }
+    L_0x0399:
+        if (r4 == 0) goto L_0x03bc;
+    L_0x039b:
+        r3 = (float) r0;	 Catch:{ Throwable -> 0x03b8 }
         r12 = 90;
-        if (r0 <= r12) goto L_0x039f;
-    L_0x039d:
+        if (r0 <= r12) goto L_0x03a2;
+    L_0x03a0:
         r2 = 80;
-    L_0x039f:
+    L_0x03a2:
         r12 = 0;
-        r0 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r4, r3, r3, r2, r12);	 Catch:{ Throwable -> 0x03b5 }
-        if (r0 == 0) goto L_0x03b1;
-    L_0x03a6:
-        r2 = r11.thumbs;	 Catch:{ Throwable -> 0x03b5 }
-        r2.add(r0);	 Catch:{ Throwable -> 0x03b5 }
-        r0 = r11.flags;	 Catch:{ Throwable -> 0x03b5 }
+        r0 = org.telegram.messenger.ImageLoader.scaleAndSaveImage(r4, r3, r3, r2, r12);	 Catch:{ Throwable -> 0x03b8 }
+        if (r0 == 0) goto L_0x03b4;
+    L_0x03a9:
+        r2 = r11.thumbs;	 Catch:{ Throwable -> 0x03b8 }
+        r2.add(r0);	 Catch:{ Throwable -> 0x03b8 }
+        r0 = r11.flags;	 Catch:{ Throwable -> 0x03b8 }
         r2 = 1;
         r0 = r0 | r2;
-        r11.flags = r0;	 Catch:{ Throwable -> 0x03b5 }
-    L_0x03b1:
-        r4.recycle();	 Catch:{ Throwable -> 0x03b5 }
-        goto L_0x03b9;
-    L_0x03b5:
+        r11.flags = r0;	 Catch:{ Throwable -> 0x03b8 }
+    L_0x03b4:
+        r4.recycle();	 Catch:{ Throwable -> 0x03b8 }
+        goto L_0x03bc;
+    L_0x03b8:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x03b9:
+    L_0x03bc:
         r0 = r1.file_name;
-        if (r0 != 0) goto L_0x03bf;
-    L_0x03bd:
+        if (r0 != 0) goto L_0x03c2;
+    L_0x03c0:
         r1.file_name = r14;
-    L_0x03bf:
+    L_0x03c2:
         r0 = r11.mime_type;
-        if (r0 != 0) goto L_0x03c7;
-    L_0x03c3:
+        if (r0 != 0) goto L_0x03ca;
+    L_0x03c6:
         r0 = "application/octet-stream";
         r11.mime_type = r0;
-    L_0x03c7:
+    L_0x03ca:
         r0 = r11.thumbs;
         r0 = r0.isEmpty();
-        if (r0 == 0) goto L_0x03fa;
-    L_0x03cf:
+        if (r0 == 0) goto L_0x03fd;
+    L_0x03d2:
         r0 = new org.telegram.tgnet.TLRPC$TL_photoSize;
         r0.<init>();
         r1 = org.telegram.messenger.MessageObject.getInlineResultWidthAndHeight(r19);
@@ -11561,28 +11797,28 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r0 = r11.flags;
         r0 = r0 | r3;
         r11.flags = r0;
-    L_0x03fa:
+    L_0x03fd:
         r4 = r10;
         r2 = r11;
         r10 = r7;
-        goto L_0x0401;
-    L_0x03fe:
+        goto L_0x0404;
+    L_0x0401:
         r2 = r7;
         r4 = r2;
-    L_0x0400:
+    L_0x0403:
         r10 = r4;
-    L_0x0401:
-        r11 = r10;
-    L_0x0402:
-        if (r9 == 0) goto L_0x040f;
     L_0x0404:
+        r11 = r10;
+    L_0x0405:
+        if (r9 == 0) goto L_0x0412;
+    L_0x0407:
         r0 = r8.content;
-        if (r0 == 0) goto L_0x040f;
-    L_0x0408:
+        if (r0 == 0) goto L_0x0412;
+    L_0x040b:
         r0 = r0.url;
         r1 = "originalPath";
         r9.put(r1, r0);
-    L_0x040f:
+    L_0x0412:
         r0 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$CPpK9yWRb5dnrmUMGY1znfyz2J0;
         r1 = r0;
         r3 = r20;
@@ -11918,44 +12154,44 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     /* JADX WARNING: Removed duplicated region for block: B:285:0x0707  */
     /* JADX WARNING: Removed duplicated region for block: B:291:0x0719  */
     /* JADX WARNING: Removed duplicated region for block: B:298:0x075f  */
-    /* JADX WARNING: Removed duplicated region for block: B:441:0x0a80  */
-    /* JADX WARNING: Removed duplicated region for block: B:435:0x0a51  */
-    /* JADX WARNING: Removed duplicated region for block: B:354:0x08e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:349:0x08a3  */
-    /* JADX WARNING: Removed duplicated region for block: B:349:0x08a3  */
-    /* JADX WARNING: Removed duplicated region for block: B:354:0x08e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:354:0x08e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:349:0x08a3  */
-    /* JADX WARNING: Removed duplicated region for block: B:346:0x089d  */
-    /* JADX WARNING: Removed duplicated region for block: B:345:0x0893  */
+    /* JADX WARNING: Removed duplicated region for block: B:441:0x0a83  */
+    /* JADX WARNING: Removed duplicated region for block: B:435:0x0a54  */
+    /* JADX WARNING: Removed duplicated region for block: B:354:0x08e9  */
+    /* JADX WARNING: Removed duplicated region for block: B:349:0x08a6  */
+    /* JADX WARNING: Removed duplicated region for block: B:349:0x08a6  */
+    /* JADX WARNING: Removed duplicated region for block: B:354:0x08e9  */
+    /* JADX WARNING: Removed duplicated region for block: B:354:0x08e9  */
+    /* JADX WARNING: Removed duplicated region for block: B:349:0x08a6  */
+    /* JADX WARNING: Removed duplicated region for block: B:346:0x08a0  */
+    /* JADX WARNING: Removed duplicated region for block: B:345:0x0896  */
     /* JADX WARNING: Removed duplicated region for block: B:17:0x004a  */
     /* JADX WARNING: Removed duplicated region for block: B:78:0x018d  */
-    /* JADX WARNING: Removed duplicated region for block: B:452:0x0b1d  */
-    /* JADX WARNING: Removed duplicated region for block: B:451:0x0b12  */
-    /* JADX WARNING: Removed duplicated region for block: B:454:0x0b21  */
-    /* JADX WARNING: Removed duplicated region for block: B:461:0x0b33 A:{LOOP_END, LOOP:4: B:459:0x0b2d->B:461:0x0b33} */
+    /* JADX WARNING: Removed duplicated region for block: B:452:0x0b20  */
+    /* JADX WARNING: Removed duplicated region for block: B:451:0x0b15  */
+    /* JADX WARNING: Removed duplicated region for block: B:454:0x0b24  */
+    /* JADX WARNING: Removed duplicated region for block: B:461:0x0b36 A:{LOOP_END, LOOP:4: B:459:0x0b30->B:461:0x0b36} */
     /* JADX WARNING: Removed duplicated region for block: B:479:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:464:0x0b6c  */
+    /* JADX WARNING: Removed duplicated region for block: B:464:0x0b6f  */
     /* JADX WARNING: Removed duplicated region for block: B:145:0x033b  */
     /* JADX WARNING: Removed duplicated region for block: B:144:0x030f  */
     /* JADX WARNING: Removed duplicated region for block: B:150:0x0351  */
     /* JADX WARNING: Removed duplicated region for block: B:153:0x035c  */
-    /* JADX WARNING: Removed duplicated region for block: B:435:0x0a51  */
-    /* JADX WARNING: Removed duplicated region for block: B:441:0x0a80  */
+    /* JADX WARNING: Removed duplicated region for block: B:435:0x0a54  */
+    /* JADX WARNING: Removed duplicated region for block: B:441:0x0a83  */
     /* JADX WARNING: Removed duplicated region for block: B:144:0x030f  */
     /* JADX WARNING: Removed duplicated region for block: B:145:0x033b  */
     /* JADX WARNING: Removed duplicated region for block: B:150:0x0351  */
     /* JADX WARNING: Removed duplicated region for block: B:153:0x035c  */
-    /* JADX WARNING: Removed duplicated region for block: B:441:0x0a80  */
-    /* JADX WARNING: Removed duplicated region for block: B:435:0x0a51  */
+    /* JADX WARNING: Removed duplicated region for block: B:441:0x0a83  */
+    /* JADX WARNING: Removed duplicated region for block: B:435:0x0a54  */
     /* JADX WARNING: Missing block: B:40:0x009d, code skipped:
             if (org.telegram.messenger.MediaController.isWebp(r3.uri) != false) goto L_0x0160;
      */
-    /* JADX WARNING: Missing block: B:419:0x0a2b, code skipped:
-            if (r53.size() == 1) goto L_0x0a34;
+    /* JADX WARNING: Missing block: B:419:0x0a2e, code skipped:
+            if (r53.size() == 1) goto L_0x0a37;
      */
-    /* JADX WARNING: Missing block: B:438:0x0a71, code skipped:
-            if (r11 == (r20 - 1)) goto L_0x0a76;
+    /* JADX WARNING: Missing block: B:438:0x0a74, code skipped:
+            if (r11 == (r20 - 1)) goto L_0x0a79;
      */
     static /* synthetic */ void lambda$prepareSendingMedia$60(java.util.ArrayList r53, long r54, int r56, boolean r57, boolean r58, org.telegram.messenger.MessageObject r59, org.telegram.messenger.MessageObject r60, androidx.core.view.inputmethod.InputContentInfoCompat r61) {
         /*
@@ -12218,7 +12454,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r9 = 0;
         r22 = 0;
     L_0x018b:
-        if (r9 >= r12) goto L_0x0b07;
+        if (r9 >= r12) goto L_0x0b0a;
     L_0x018d:
         r24 = r1.get(r9);
         r8 = r24;
@@ -12725,7 +12961,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r4 = 1;
         r28 = 0;
         r33 = 0;
-        goto L_0x0aed;
+        goto L_0x0af0;
     L_0x0510:
         r47 = r4;
         r40 = r5;
@@ -13184,7 +13420,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r26 = r51;
         r4 = 1;
         r28 = 0;
-        goto L_0x0aed;
+        goto L_0x0af0;
     L_0x0804:
         r11 = r3;
         r23 = r13;
@@ -13208,16 +13444,16 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     L_0x0826:
         r2 = r0;
     L_0x0827:
-        if (r57 != 0) goto L_0x088f;
+        if (r57 != 0) goto L_0x0892;
     L_0x0829:
         r3 = r13.path;
         r4 = r13.uri;
         r3 = org.telegram.messenger.ImageLoader.shouldSendImageAsDocument(r3, r4);
         if (r3 == 0) goto L_0x0834;
     L_0x0833:
-        goto L_0x088f;
+        goto L_0x0892;
     L_0x0834:
-        if (r0 == 0) goto L_0x0854;
+        if (r0 == 0) goto L_0x0855;
     L_0x0836:
         r14 = r28;
         r3 = r0.endsWith(r14);
@@ -13225,71 +13461,71 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
     L_0x083e:
         r3 = ".webp";
         r3 = r0.endsWith(r3);
-        if (r3 == 0) goto L_0x0856;
+        if (r3 == 0) goto L_0x0857;
     L_0x0846:
         r3 = r0.endsWith(r14);
         if (r3 == 0) goto L_0x084f;
     L_0x084c:
         r3 = "gif";
-        goto L_0x0851;
+        goto L_0x0852;
     L_0x084f:
         r3 = "webp";
-    L_0x0851:
+    L_0x0852:
         r19 = r3;
-        goto L_0x089f;
-    L_0x0854:
+        goto L_0x08a2;
+    L_0x0855:
         r14 = r28;
-    L_0x0856:
-        if (r0 != 0) goto L_0x088c;
-    L_0x0858:
+    L_0x0857:
+        if (r0 != 0) goto L_0x088f;
+    L_0x0859:
         r3 = r13.uri;
-        if (r3 == 0) goto L_0x088c;
-    L_0x085c:
+        if (r3 == 0) goto L_0x088f;
+    L_0x085d:
         r3 = org.telegram.messenger.MediaController.isGif(r3);
-        if (r3 == 0) goto L_0x0873;
-    L_0x0862:
+        if (r3 == 0) goto L_0x0874;
+    L_0x0863:
         r0 = r13.uri;
         r2 = r0.toString();
         r0 = r13.uri;
         r3 = "gif";
         r0 = org.telegram.messenger.MediaController.copyFileToCache(r0, r3);
         r19 = "gif";
-        goto L_0x089f;
-    L_0x0873:
+        goto L_0x08a2;
+    L_0x0874:
         r3 = r13.uri;
         r3 = org.telegram.messenger.MediaController.isWebp(r3);
-        if (r3 == 0) goto L_0x088c;
-    L_0x087b:
+        if (r3 == 0) goto L_0x088f;
+    L_0x087c:
         r0 = r13.uri;
         r2 = r0.toString();
         r0 = r13.uri;
         r3 = "webp";
         r0 = org.telegram.messenger.MediaController.copyFileToCache(r0, r3);
         r19 = "webp";
-        goto L_0x089f;
-    L_0x088c:
+        goto L_0x08a2;
+    L_0x088f:
         r10 = r0;
         r0 = 0;
-        goto L_0x08a1;
-    L_0x088f:
+        goto L_0x08a4;
+    L_0x0892:
         r14 = r28;
-        if (r0 == 0) goto L_0x089d;
-    L_0x0893:
+        if (r0 == 0) goto L_0x08a0;
+    L_0x0896:
         r3 = new java.io.File;
         r3.<init>(r0);
         r3 = org.telegram.messenger.FileLoader.getFileExtension(r3);
-        goto L_0x0851;
-    L_0x089d:
+        goto L_0x0852;
+    L_0x08a0:
         r19 = r6;
-    L_0x089f:
+    L_0x08a2:
         r10 = r0;
         r0 = 1;
-    L_0x08a1:
-        if (r0 == 0) goto L_0x08e6;
-    L_0x08a3:
+    L_0x08a4:
+        if (r0 == 0) goto L_0x08e9;
+    L_0x08a6:
         r15 = r40;
-        if (r15 != 0) goto L_0x08c1;
-    L_0x08a7:
+        if (r15 != 0) goto L_0x08c4;
+    L_0x08aa:
         r5 = new java.util.ArrayList;
         r5.<init>();
         r4 = new java.util.ArrayList;
@@ -13301,12 +13537,12 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r15 = r5;
         r0 = r29;
         r3 = r30;
-        goto L_0x08c7;
-    L_0x08c1:
+        goto L_0x08ca;
+    L_0x08c4:
         r0 = r29;
         r3 = r30;
         r4 = r47;
-    L_0x08c7:
+    L_0x08ca:
         r15.add(r10);
         r4.add(r2);
         r2 = r13.caption;
@@ -13321,10 +13557,10 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r0 = r22;
         r2 = r31;
         goto L_0x07f9;
-    L_0x08e6:
+    L_0x08e9:
         r15 = r40;
-        if (r10 == 0) goto L_0x090e;
-    L_0x08ea:
+        if (r10 == 0) goto L_0x0911;
+    L_0x08ed:
         r0 = new java.io.File;
         r0.<init>(r10);
         r3 = new java.lang.StringBuilder;
@@ -13337,52 +13573,52 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r3.append(r4);
         r5 = r3.toString();
         r7 = r5;
-        goto L_0x0910;
-    L_0x090e:
+        goto L_0x0913;
+    L_0x0911:
         r7 = r33;
-    L_0x0910:
+    L_0x0913:
         r12 = r44;
-        if (r12 == 0) goto L_0x0937;
-    L_0x0914:
+        if (r12 == 0) goto L_0x093a;
+    L_0x0917:
         r0 = r12.get(r13);
         r2 = r0;
         r2 = (org.telegram.messenger.SendMessagesHelper.MediaSendPrepareWorker) r2;
         r0 = r2.photo;
         r3 = r2.parentObject;
-        if (r0 != 0) goto L_0x092f;
-    L_0x0921:
-        r0 = r2.sync;	 Catch:{ Exception -> 0x0927 }
-        r0.await();	 Catch:{ Exception -> 0x0927 }
-        goto L_0x092b;
-    L_0x0927:
+        if (r0 != 0) goto L_0x0932;
+    L_0x0924:
+        r0 = r2.sync;	 Catch:{ Exception -> 0x092a }
+        r0.await();	 Catch:{ Exception -> 0x092a }
+        goto L_0x092e;
+    L_0x092a:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x092b:
+    L_0x092e:
         r0 = r2.photo;
         r3 = r2.parentObject;
-    L_0x092f:
+    L_0x0932:
         r35 = r1;
         r21 = r3;
         r9 = r6;
         r1 = r7;
-        goto L_0x09c2;
-    L_0x0937:
-        if (r23 != 0) goto L_0x099c;
-    L_0x0939:
+        goto L_0x09c5;
+    L_0x093a:
+        if (r23 != 0) goto L_0x099f;
+    L_0x093c:
         r0 = r13.ttl;
-        if (r0 != 0) goto L_0x099c;
-    L_0x093d:
+        if (r0 != 0) goto L_0x099f;
+    L_0x0940:
         r0 = org.telegram.messenger.MessagesStorage.getInstance(r56);
-        if (r23 != 0) goto L_0x0945;
-    L_0x0943:
-        r2 = 0;
-        goto L_0x0946;
-    L_0x0945:
-        r2 = 3;
+        if (r23 != 0) goto L_0x0948;
     L_0x0946:
+        r2 = 0;
+        goto L_0x0949;
+    L_0x0948:
+        r2 = 3;
+    L_0x0949:
         r0 = r0.getSentFile(r7, r2);
-        if (r0 == 0) goto L_0x0958;
-    L_0x094c:
+        if (r0 == 0) goto L_0x095b;
+    L_0x094f:
         r2 = 0;
         r3 = r0[r2];
         r5 = r3;
@@ -13390,29 +13626,29 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r2 = 1;
         r0 = r0[r2];
         r0 = (java.lang.String) r0;
-        goto L_0x095b;
-    L_0x0958:
+        goto L_0x095e;
+    L_0x095b:
         r0 = r33;
         r5 = r0;
-    L_0x095b:
-        if (r5 != 0) goto L_0x0983;
-    L_0x095d:
+    L_0x095e:
+        if (r5 != 0) goto L_0x0986;
+    L_0x0960:
         r2 = r13.uri;
-        if (r2 == 0) goto L_0x0983;
-    L_0x0961:
+        if (r2 == 0) goto L_0x0986;
+    L_0x0964:
         r2 = org.telegram.messenger.MessagesStorage.getInstance(r56);
         r3 = r13.uri;
         r3 = org.telegram.messenger.AndroidUtilities.getPath(r3);
-        if (r23 != 0) goto L_0x096f;
-    L_0x096d:
-        r4 = 0;
-        goto L_0x0970;
-    L_0x096f:
-        r4 = 3;
+        if (r23 != 0) goto L_0x0972;
     L_0x0970:
+        r4 = 0;
+        goto L_0x0973;
+    L_0x0972:
+        r4 = 3;
+    L_0x0973:
         r2 = r2.getSentFile(r3, r4);
-        if (r2 == 0) goto L_0x0983;
-    L_0x0976:
+        if (r2 == 0) goto L_0x0986;
+    L_0x0979:
         r3 = 0;
         r0 = r2[r3];
         r0 = (org.telegram.tgnet.TLRPC.TL_photo) r0;
@@ -13420,11 +13656,11 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r2 = r2[r3];
         r2 = (java.lang.String) r2;
         r21 = r2;
-        goto L_0x0986;
-    L_0x0983:
+        goto L_0x0989;
+    L_0x0986:
         r21 = r0;
         r0 = r5;
-    L_0x0986:
+    L_0x0989:
         r5 = r13.path;
         r8 = r13.uri;
         r27 = 0;
@@ -13437,52 +13673,52 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r1 = r7;
         r7 = r27;
         ensureMediaThumbExists(r2, r3, r4, r5, r6, r7);
-        goto L_0x09a4;
-    L_0x099c:
+        goto L_0x09a7;
+    L_0x099f:
         r35 = r1;
         r9 = r6;
         r1 = r7;
         r0 = r33;
         r21 = r0;
-    L_0x09a4:
-        if (r0 != 0) goto L_0x09c2;
-    L_0x09a6:
+    L_0x09a7:
+        if (r0 != 0) goto L_0x09c5;
+    L_0x09a9:
         r0 = getInstance(r56);
         r2 = r13.path;
         r3 = r13.uri;
         r0 = r0.generatePhotoSizes(r2, r3);
-        if (r23 == 0) goto L_0x09c2;
-    L_0x09b4:
+        if (r23 == 0) goto L_0x09c5;
+    L_0x09b7:
         r2 = r13.canDeleteAfter;
-        if (r2 == 0) goto L_0x09c2;
-    L_0x09b8:
+        if (r2 == 0) goto L_0x09c5;
+    L_0x09bb:
         r2 = new java.io.File;
         r3 = r13.path;
         r2.<init>(r3);
         r2.delete();
-    L_0x09c2:
-        r7 = r0;
-        if (r7 == 0) goto L_0x0aa7;
     L_0x09c5:
+        r7 = r0;
+        if (r7 == 0) goto L_0x0aaa;
+    L_0x09c8:
         r8 = new java.util.HashMap;
         r8.<init>();
         r2 = 1;
         r3 = new android.graphics.Bitmap[r2];
         r4 = new java.lang.String[r2];
         r0 = r13.masks;
-        if (r0 == 0) goto L_0x09db;
-    L_0x09d3:
+        if (r0 == 0) goto L_0x09de;
+    L_0x09d6:
         r0 = r0.isEmpty();
-        if (r0 != 0) goto L_0x09db;
-    L_0x09d9:
-        r0 = 1;
-        goto L_0x09dc;
-    L_0x09db:
-        r0 = 0;
+        if (r0 != 0) goto L_0x09de;
     L_0x09dc:
+        r0 = 1;
+        goto L_0x09df;
+    L_0x09de:
+        r0 = 0;
+    L_0x09df:
         r7.has_stickers = r0;
-        if (r0 == 0) goto L_0x0a1f;
-    L_0x09e0:
+        if (r0 == 0) goto L_0x0a22;
+    L_0x09e3:
         r0 = new org.telegram.tgnet.SerializedData;
         r2 = r13.masks;
         r2 = r2.size();
@@ -13493,66 +13729,66 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r2 = r2.size();
         r0.writeInt32(r2);
         r2 = 0;
-    L_0x09f9:
+    L_0x09fc:
         r5 = r13.masks;
         r5 = r5.size();
-        if (r2 >= r5) goto L_0x0a0f;
-    L_0x0a01:
+        if (r2 >= r5) goto L_0x0a12;
+    L_0x0a04:
         r5 = r13.masks;
         r5 = r5.get(r2);
         r5 = (org.telegram.tgnet.TLRPC.InputDocument) r5;
         r5.serializeToStream(r0);
         r2 = r2 + 1;
-        goto L_0x09f9;
-    L_0x0a0f:
+        goto L_0x09fc;
+    L_0x0a12:
         r2 = r0.toByteArray();
         r2 = org.telegram.messenger.Utilities.bytesToHex(r2);
         r5 = "masks";
         r8.put(r5, r2);
         r0.cleanup();
-    L_0x0a1f:
-        if (r1 == 0) goto L_0x0a24;
-    L_0x0a21:
-        r8.put(r11, r1);
+    L_0x0a22:
+        if (r1 == 0) goto L_0x0a27;
     L_0x0a24:
-        if (r58 == 0) goto L_0x0a33;
-    L_0x0a26:
-        r0 = r53.size();	 Catch:{ Exception -> 0x0a30 }
+        r8.put(r11, r1);
+    L_0x0a27:
+        if (r58 == 0) goto L_0x0a36;
+    L_0x0a29:
+        r0 = r53.size();	 Catch:{ Exception -> 0x0a33 }
         r1 = 1;
-        if (r0 != r1) goto L_0x0a2e;
-    L_0x0a2d:
-        goto L_0x0a34;
-    L_0x0a2e:
-        r10 = 0;
-        goto L_0x0a4f;
+        if (r0 != r1) goto L_0x0a31;
     L_0x0a30:
-        r0 = move-exception;
-        r1 = 1;
-        goto L_0x0a4b;
+        goto L_0x0a37;
+    L_0x0a31:
+        r10 = 0;
+        goto L_0x0a52;
     L_0x0a33:
+        r0 = move-exception;
         r1 = 1;
-    L_0x0a34:
-        r0 = r7.sizes;	 Catch:{ Exception -> 0x0a4a }
-        r2 = org.telegram.messenger.AndroidUtilities.getPhotoSize();	 Catch:{ Exception -> 0x0a4a }
-        r0 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r0, r2);	 Catch:{ Exception -> 0x0a4a }
-        if (r0 == 0) goto L_0x0a2e;
-    L_0x0a40:
+        goto L_0x0a4e;
+    L_0x0a36:
+        r1 = 1;
+    L_0x0a37:
+        r0 = r7.sizes;	 Catch:{ Exception -> 0x0a4d }
+        r2 = org.telegram.messenger.AndroidUtilities.getPhotoSize();	 Catch:{ Exception -> 0x0a4d }
+        r0 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r0, r2);	 Catch:{ Exception -> 0x0a4d }
+        if (r0 == 0) goto L_0x0a31;
+    L_0x0a43:
         r10 = 0;
-        r0 = getKeyForPhotoSize(r0, r3, r10);	 Catch:{ Exception -> 0x0a48 }
-        r4[r10] = r0;	 Catch:{ Exception -> 0x0a48 }
-        goto L_0x0a4f;
-    L_0x0a48:
-        r0 = move-exception;
-        goto L_0x0a4c;
-    L_0x0a4a:
-        r0 = move-exception;
+        r0 = getKeyForPhotoSize(r0, r3, r10);	 Catch:{ Exception -> 0x0a4b }
+        r4[r10] = r0;	 Catch:{ Exception -> 0x0a4b }
+        goto L_0x0a52;
     L_0x0a4b:
+        r0 = move-exception;
+        goto L_0x0a4f;
+    L_0x0a4d:
+        r0 = move-exception;
+    L_0x0a4e:
         r10 = 0;
-    L_0x0a4c:
-        org.telegram.messenger.FileLog.e(r0);
     L_0x0a4f:
-        if (r58 == 0) goto L_0x0a80;
-    L_0x0a51:
+        org.telegram.messenger.FileLog.e(r0);
+    L_0x0a52:
+        if (r58 == 0) goto L_0x0a83;
+    L_0x0a54:
         r0 = r22 + 1;
         r2 = new java.lang.StringBuilder;
         r2.<init>();
@@ -13563,26 +13799,26 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r9 = "groupId";
         r8.put(r9, r2);
         r2 = 10;
-        if (r0 == r2) goto L_0x0a74;
-    L_0x0a6d:
+        if (r0 == r2) goto L_0x0a77;
+    L_0x0a70:
         r2 = r20 + -1;
         r11 = r43;
-        if (r11 != r2) goto L_0x0a86;
-    L_0x0a73:
-        goto L_0x0a76;
-    L_0x0a74:
-        r11 = r43;
+        if (r11 != r2) goto L_0x0a89;
     L_0x0a76:
+        goto L_0x0a79;
+    L_0x0a77:
+        r11 = r43;
+    L_0x0a79:
         r2 = "final";
         r9 = "1";
         r8.put(r2, r9);
         r31 = r24;
-        goto L_0x0a86;
-    L_0x0a80:
+        goto L_0x0a89;
+    L_0x0a83:
         r11 = r43;
         r5 = r51;
         r0 = r22;
-    L_0x0a86:
+    L_0x0a89:
         r22 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$y8ZvqnjS4LBoWsFR5SKpceGPC-c;
         r2 = r22;
         r26 = r5;
@@ -13599,15 +13835,15 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r5 = r15;
         r2 = r31;
         r4 = 1;
-        goto L_0x0aed;
-    L_0x0aa7:
+        goto L_0x0af0;
+    L_0x0aaa:
         r36 = r12;
         r21 = r43;
         r26 = r51;
         r4 = 1;
         r28 = 0;
-        if (r15 != 0) goto L_0x0acc;
-    L_0x0ab2:
+        if (r15 != 0) goto L_0x0acf;
+    L_0x0ab5:
         r5 = new java.util.ArrayList;
         r5.<init>();
         r0 = new java.util.ArrayList;
@@ -13619,12 +13855,12 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r15 = r5;
         r2 = r29;
         r3 = r30;
-        goto L_0x0ad2;
-    L_0x0acc:
+        goto L_0x0ad5;
+    L_0x0acf:
         r2 = r29;
         r3 = r30;
         r0 = r47;
-    L_0x0ad2:
+    L_0x0ad5:
         r15.add(r10);
         r0.add(r1);
         r1 = r13.caption;
@@ -13637,7 +13873,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r5 = r15;
         r0 = r22;
         r2 = r31;
-    L_0x0aed:
+    L_0x0af0:
         r9 = r21 + 1;
         r1 = r53;
         r13 = r56;
@@ -13651,36 +13887,36 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r11 = r36;
         r4 = r47;
         goto L_0x018b;
-    L_0x0b07:
+    L_0x0b0a:
         r47 = r4;
         r15 = r5;
         r24 = 0;
         r28 = 0;
         r0 = (r2 > r24 ? 1 : (r2 == r24 ? 0 : -1));
-        if (r0 == 0) goto L_0x0b1d;
-    L_0x0b12:
+        if (r0 == 0) goto L_0x0b20;
+    L_0x0b15:
         r0 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$Pt_JmP03Oq1fmlBa3qgnN3eURQI;
         r13 = r56;
         r0.<init>(r13, r2);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r0);
-        goto L_0x0b1f;
-    L_0x0b1d:
+        goto L_0x0b22;
+    L_0x0b20:
         r13 = r56;
-    L_0x0b1f:
-        if (r61 == 0) goto L_0x0b24;
-    L_0x0b21:
-        r61.releasePermission();
+    L_0x0b22:
+        if (r61 == 0) goto L_0x0b27;
     L_0x0b24:
-        if (r15 == 0) goto L_0x0b68;
-    L_0x0b26:
+        r61.releasePermission();
+    L_0x0b27:
+        if (r15 == 0) goto L_0x0b6b;
+    L_0x0b29:
         r0 = r15.isEmpty();
-        if (r0 != 0) goto L_0x0b68;
-    L_0x0b2c:
+        if (r0 != 0) goto L_0x0b6b;
+    L_0x0b2f:
         r0 = 0;
-    L_0x0b2d:
+    L_0x0b30:
         r1 = r15.size();
-        if (r0 >= r1) goto L_0x0b68;
-    L_0x0b33:
+        if (r0 >= r1) goto L_0x0b6b;
+    L_0x0b36:
         r1 = r15.get(r0);
         r2 = r1;
         r2 = (java.lang.String) r2;
@@ -13705,11 +13941,11 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r12 = r57;
         prepareSendingDocumentInternal(r1, r2, r3, r4, r5, r6, r8, r9, r10, r11, r12);
         r0 = r0 + 1;
-        goto L_0x0b2d;
-    L_0x0b68:
+        goto L_0x0b30;
+    L_0x0b6b:
         r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r0 == 0) goto L_0x0b86;
-    L_0x0b6c:
+        if (r0 == 0) goto L_0x0b89;
+    L_0x0b6f:
         r0 = new java.lang.StringBuilder;
         r0.<init>();
         r1 = "total send time = ";
@@ -13719,7 +13955,7 @@ public class SendMessagesHelper implements NotificationCenterDelegate {
         r0.append(r1);
         r0 = r0.toString();
         org.telegram.messenger.FileLog.d(r0);
-    L_0x0b86:
+    L_0x0b89:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.lambda$prepareSendingMedia$60(java.util.ArrayList, long, int, boolean, boolean, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, androidx.core.view.inputmethod.InputContentInfoCompat):void");

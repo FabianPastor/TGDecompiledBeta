@@ -191,7 +191,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         if (r0 == 0) goto L_0x002e;
     L_0x001f:
         r0 = r7.actionBar;
-        r1 = NUM; // 0x7f0d08b3 float:1.8746632E38 double:1.053130878E-314;
+        r1 = NUM; // 0x7f0d08ed float:1.874675E38 double:1.0531309065E-314;
         r2 = "SelectContact";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
@@ -201,21 +201,21 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         if (r0 == 0) goto L_0x0041;
     L_0x0032:
         r0 = r7.actionBar;
-        r1 = NUM; // 0x7f0d05bd float:1.8745094E38 double:1.0531305033E-314;
+        r1 = NUM; // 0x7f0d05eb float:1.8745188E38 double:1.053130526E-314;
         r2 = "NewSecretChat";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
         goto L_0x005e;
     L_0x0041:
         r0 = r7.actionBar;
-        r1 = NUM; // 0x7f0d05b5 float:1.8745078E38 double:1.0531304994E-314;
+        r1 = NUM; // 0x7f0d05e3 float:1.8745171E38 double:1.053130522E-314;
         r2 = "NewMessageTitle";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
         goto L_0x005e;
     L_0x0050:
         r0 = r7.actionBar;
-        r1 = NUM; // 0x7f0d02de float:1.8743603E38 double:1.05313014E-314;
+        r1 = NUM; // 0x7f0d02f1 float:1.8743642E38 double:1.0531301496E-314;
         r2 = "Contacts";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
@@ -232,7 +232,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         r2 = new org.telegram.ui.ContactsActivity$2;
         r2.<init>();
         r1 = r1.setActionBarMenuItemSearchListener(r2);
-        r2 = NUM; // 0x7f0d088d float:1.8746555E38 double:1.053130859E-314;
+        r2 = NUM; // 0x7f0d08c5 float:1.8746668E38 double:1.0531308867E-314;
         r3 = "Search";
         r8 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setSearchFieldHint(r8);
@@ -247,10 +247,10 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         r1 = r7.sortByName;
         if (r1 == 0) goto L_0x00a5;
     L_0x00a1:
-        r1 = NUM; // 0x7var_c4 float:1.7944975E38 double:1.0529356E-314;
+        r1 = NUM; // 0x7var_c3 float:1.7944973E38 double:1.0529355994E-314;
         goto L_0x00a8;
     L_0x00a5:
-        r1 = NUM; // 0x7var_c3 float:1.7944973E38 double:1.0529355994E-314;
+        r1 = NUM; // 0x7var_c2 float:1.7944971E38 double:1.052935599E-314;
     L_0x00a8:
         r0 = r0.addItem(r4, r1);
         r7.sortItem = r0;
@@ -351,7 +351,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         r1 = r7.emptyView;
         r1.setShowAtCenter(r14);
         r1 = r7.emptyView;
-        r2 = NUM; // 0x7f0d05c9 float:1.8745119E38 double:1.0531305093E-314;
+        r2 = NUM; // 0x7f0d05f7 float:1.8745212E38 double:1.053130532E-314;
         r3 = "NoContacts";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setText(r2);
@@ -500,7 +500,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         r1 = NUM; // 0x7var_ float:1.7944773E38 double:1.0529355505E-314;
         r0.setImageResource(r1);
         r0 = r7.floatingButtonContainer;
-        r1 = NUM; // 0x7f0d02f3 float:1.8743646E38 double:1.0531301506E-314;
+        r1 = NUM; // 0x7f0d0306 float:1.8743685E38 double:1.05313016E-314;
         r2 = "CreateNewContact";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setContentDescription(r1);
@@ -664,9 +664,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                     presentFragment(new GroupInviteActivity(sectionForPosition));
                 }
             } else if (i2 == 0) {
-                bundle2 = new Bundle();
-                bundle2.putBoolean("showFabButton", true);
-                presentFragment(new GroupCreateActivity(bundle2), false);
+                presentFragment(new GroupCreateActivity(new Bundle()), false);
             } else if (i2 == 1) {
                 bundle2 = new Bundle();
                 bundle2.putBoolean("onlyUsers", true);

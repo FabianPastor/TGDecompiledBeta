@@ -82,7 +82,7 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
         super(context);
         float dpf2 = AndroidUtilities.dpf2(3.0f);
         this.selectorDrawable.setCornerRadii(new float[]{dpf2, dpf2, dpf2, dpf2, 0.0f, 0.0f, 0.0f, 0.0f});
-        this.selectorDrawable.setColor(Theme.getColor("actionBarDefaultTitle"));
+        this.selectorDrawable.setColor(Theme.getColor("actionBarTabLine"));
         setFillViewport(true);
         setWillNotDraw(false);
         setHorizontalScrollBarEnabled(false);
@@ -101,8 +101,8 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
     }
 
     private void setAnimationProgressInernal(TextView textView, TextView textView2, float f) {
-        int color = Theme.getColor("actionBarDefaultTitle");
-        int color2 = Theme.getColor("actionBarDefaultSubtitle");
+        int color = Theme.getColor("actionBarTabActiveText");
+        int color2 = Theme.getColor("actionBarTabUnactiveText");
         int red = Color.red(color);
         int green = Color.green(color);
         int blue = Color.blue(color);
@@ -185,7 +185,7 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
         TextView textView = new TextView(getContext());
         textView.setGravity(17);
         textView.setText(charSequence);
-        textView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("actionBarDefaultSelector"), 3));
+        textView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("actionBarTabSelector"), 3));
         textView.setTextSize(1, 14.0f);
         textView.setSingleLine(true);
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -233,8 +233,8 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
         int i = 0;
         while (i < childCount) {
             TextView textView = (TextView) this.tabsContainer.getChildAt(i);
-            String str = "actionBarDefaultTitle";
-            String str2 = "actionBarDefaultSubtitle";
+            String str = "actionBarTabActiveText";
+            String str2 = "actionBarTabUnactiveText";
             textView.setTag(this.currentPosition == i ? str : str2);
             if (this.currentPosition != i) {
                 str = str2;

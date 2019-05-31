@@ -129,81 +129,11 @@ public class VoIPController {
 
     private native void nativeSetRemoteEndpoints(long j, TL_phoneConnection[] tL_phoneConnectionArr, boolean z, boolean z2, int i);
 
-    private native void nativeStart(long j);
+    public static native void nativeSetVideoRenderer(long j, long j2);
 
-    /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:23:0x006c in {13, 15, 16, 18, 20, 22} preds:[]
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-        */
-    public void setRemoteEndpoints(org.telegram.tgnet.TLRPC.TL_phoneConnection[] r8, boolean r9, boolean r10, int r11) {
-        /*
-        r7 = this;
-        r0 = r8.length;
-        if (r0 == 0) goto L_0x0064;
-        r0 = 0;
-        r1 = r8.length;
-        if (r0 >= r1) goto L_0x0056;
-        r1 = r8[r0];
-        r2 = r1.ip;
-        r3 = "endpoint ";
-        if (r2 == 0) goto L_0x003c;
-        r2 = r2.length();
-        if (r2 == 0) goto L_0x003c;
-        r2 = r1.peer_tag;
-        if (r2 == 0) goto L_0x0039;
-        r2 = r2.length;
-        r4 = 16;
-        if (r2 != r4) goto L_0x001f;
-        goto L_0x0039;
-        r8 = new java.lang.IllegalArgumentException;
-        r9 = new java.lang.StringBuilder;
-        r9.<init>();
-        r9.append(r3);
-        r9.append(r1);
-        r10 = " has peer_tag of wrong length";
-        r9.append(r10);
-        r9 = r9.toString();
-        r8.<init>(r9);
-        throw r8;
-        r0 = r0 + 1;
-        goto L_0x0004;
-        r8 = new java.lang.IllegalArgumentException;
-        r9 = new java.lang.StringBuilder;
-        r9.<init>();
-        r9.append(r3);
-        r9.append(r1);
-        r10 = " has empty/null ipv4";
-        r9.append(r10);
-        r9 = r9.toString();
-        r8.<init>(r9);
-        throw r8;
-        r7.ensureNativeInstance();
-        r1 = r7.nativeInst;
-        r0 = r7;
-        r3 = r8;
-        r4 = r9;
-        r5 = r10;
-        r6 = r11;
-        r0.nativeSetRemoteEndpoints(r1, r3, r4, r5, r6);
-        return;
-        r8 = new java.lang.IllegalArgumentException;
-        r9 = "endpoints size is 0";
-        r8.<init>(r9);
-        throw r8;
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.voip.VoIPController.setRemoteEndpoints(org.telegram.tgnet.TLRPC$TL_phoneConnection[], boolean, boolean, int):void");
-    }
+    public static native void nativeSetVideoSource(long j, long j2);
+
+    private native void nativeStart(long j);
 
     public VoIPController() {
         this.nativeInst = 0;
@@ -218,6 +148,39 @@ public class VoIPController {
     public void connect() {
         ensureNativeInstance();
         nativeConnect(this.nativeInst);
+    }
+
+    public void setRemoteEndpoints(TL_phoneConnection[] tL_phoneConnectionArr, boolean z, boolean z2, int i) {
+        if (tL_phoneConnectionArr.length != 0) {
+            int i2 = 0;
+            while (i2 < tL_phoneConnectionArr.length) {
+                TL_phoneConnection tL_phoneConnection = tL_phoneConnectionArr[i2];
+                String str = tL_phoneConnection.ip;
+                String str2 = "endpoint ";
+                StringBuilder stringBuilder;
+                if (str == null || str.length() == 0) {
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append(str2);
+                    stringBuilder.append(tL_phoneConnection);
+                    stringBuilder.append(" has empty/null ipv4");
+                    throw new IllegalArgumentException(stringBuilder.toString());
+                }
+                byte[] bArr = tL_phoneConnection.peer_tag;
+                if (bArr == null || bArr.length == 16) {
+                    i2++;
+                } else {
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append(str2);
+                    stringBuilder.append(tL_phoneConnection);
+                    stringBuilder.append(" has peer_tag of wrong length");
+                    throw new IllegalArgumentException(stringBuilder.toString());
+                }
+            }
+            ensureNativeInstance();
+            nativeSetRemoteEndpoints(this.nativeInst, tL_phoneConnectionArr, z, z2, i);
+            return;
+        }
+        throw new IllegalArgumentException("endpoints size is 0");
     }
 
     public void setEncryptionKey(byte[] bArr, boolean z) {
@@ -310,7 +273,7 @@ public class VoIPController {
         nativeSetMicMute(this.nativeInst, z);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:24:0x005d  */
+    /* JADX WARNING: Removed duplicated region for block: B:24:0x005e  */
     /* JADX WARNING: Removed duplicated region for block: B:23:0x0047  */
     public void setConfig(double r17, double r19, int r21, long r22) {
         /*
@@ -364,7 +327,7 @@ public class VoIPController {
     L_0x0042:
         r11 = 1;
         r2 = org.telegram.messenger.BuildVars.DEBUG_VERSION;
-        if (r2 == 0) goto L_0x005d;
+        if (r2 == 0) goto L_0x005e;
     L_0x0047:
         r2 = new java.lang.StringBuilder;
         r2.<init>();
@@ -373,22 +336,22 @@ public class VoIPController {
         r2.append(r0);
         r0 = r2.toString();
         r0 = r14.getLogFilePath(r0);
-        goto L_0x0061;
-    L_0x005d:
+        goto L_0x0062;
+    L_0x005e:
         r0 = r14.getLogFilePath(r0);
-    L_0x0061:
+    L_0x0062:
         r12 = r0;
         r0 = org.telegram.messenger.BuildVars.DEBUG_VERSION;
-        if (r0 == 0) goto L_0x006f;
-    L_0x0066:
-        if (r5 == 0) goto L_0x006f;
-    L_0x0068:
+        if (r0 == 0) goto L_0x0071;
+    L_0x0067:
+        if (r5 == 0) goto L_0x0071;
+    L_0x0069:
         r0 = "voipStats";
         r0 = r14.getLogFilePath(r0);
-        goto L_0x0070;
-    L_0x006f:
+        goto L_0x0072;
+    L_0x0071:
         r0 = 0;
-    L_0x0070:
+    L_0x0072:
         r13 = r0;
         r15 = org.telegram.messenger.BuildVars.DEBUG_VERSION;
         r0 = r16;

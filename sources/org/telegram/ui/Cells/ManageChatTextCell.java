@@ -97,7 +97,7 @@ public class ManageChatTextCell extends FrameLayout {
         } else {
             this.valueTextView.setVisibility(4);
         }
-        this.imageView.setPadding(0, AndroidUtilities.dp(7.0f), 0, 0);
+        this.imageView.setPadding(0, AndroidUtilities.dp(5.0f), 0, 0);
         this.imageView.setImageResource(i);
         this.divider = z;
         setWillNotDraw(this.divider ^ 1);

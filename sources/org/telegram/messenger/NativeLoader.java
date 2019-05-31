@@ -10,134 +10,6 @@ public class NativeLoader {
 
     private static native void init(String str, boolean z);
 
-    /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:75:0x00de in {5, 7, 17, 21, 24, 28, 30, 33, 35, 36, 39, 41, 43, 45, 51, 53, 57, 59, 60, 61, 65, 67, 71, 73, 74} preds:[]
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-        	at java.lang.Iterable.forEach(Iterable.java:75)
-        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-        */
-    @android.annotation.SuppressLint({"UnsafeDynamicallyLoadedCode", "SetWorldReadable"})
-    private static boolean loadFromZip(android.content.Context r5, java.io.File r6, java.io.File r7, java.lang.String r8) {
-        /*
-        r0 = "/";
-        r1 = 0;
-        r6 = r6.listFiles();	 Catch:{ Exception -> 0x0013 }
-        r2 = r6.length;	 Catch:{ Exception -> 0x0013 }
-        r3 = 0;	 Catch:{ Exception -> 0x0013 }
-        if (r3 >= r2) goto L_0x0017;	 Catch:{ Exception -> 0x0013 }
-        r4 = r6[r3];	 Catch:{ Exception -> 0x0013 }
-        r4.delete();	 Catch:{ Exception -> 0x0013 }
-        r3 = r3 + 1;
-        goto L_0x0009;
-        r6 = move-exception;
-        org.telegram.messenger.FileLog.e(r6);
-        r6 = 0;
-        r2 = new java.util.zip.ZipFile;	 Catch:{ Exception -> 0x00ae, all -> 0x00ab }
-        r5 = r5.getApplicationInfo();	 Catch:{ Exception -> 0x00ae, all -> 0x00ab }
-        r5 = r5.sourceDir;	 Catch:{ Exception -> 0x00ae, all -> 0x00ab }
-        r2.<init>(r5);	 Catch:{ Exception -> 0x00ae, all -> 0x00ab }
-        r5 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x00a9 }
-        r5.<init>();	 Catch:{ Exception -> 0x00a9 }
-        r3 = "lib/";	 Catch:{ Exception -> 0x00a9 }
-        r5.append(r3);	 Catch:{ Exception -> 0x00a9 }
-        r5.append(r8);	 Catch:{ Exception -> 0x00a9 }
-        r5.append(r0);	 Catch:{ Exception -> 0x00a9 }
-        r3 = "libtmessages.30.so";	 Catch:{ Exception -> 0x00a9 }
-        r5.append(r3);	 Catch:{ Exception -> 0x00a9 }
-        r5 = r5.toString();	 Catch:{ Exception -> 0x00a9 }
-        r5 = r2.getEntry(r5);	 Catch:{ Exception -> 0x00a9 }
-        if (r5 == 0) goto L_0x008a;	 Catch:{ Exception -> 0x00a9 }
-        r6 = r2.getInputStream(r5);	 Catch:{ Exception -> 0x00a9 }
-        r5 = new java.io.FileOutputStream;	 Catch:{ Exception -> 0x00a9 }
-        r5.<init>(r7);	 Catch:{ Exception -> 0x00a9 }
-        r8 = 4096; // 0x1000 float:5.74E-42 double:2.0237E-320;	 Catch:{ Exception -> 0x00a9 }
-        r8 = new byte[r8];	 Catch:{ Exception -> 0x00a9 }
-        r0 = r6.read(r8);	 Catch:{ Exception -> 0x00a9 }
-        if (r0 <= 0) goto L_0x005c;	 Catch:{ Exception -> 0x00a9 }
-        java.lang.Thread.yield();	 Catch:{ Exception -> 0x00a9 }
-        r5.write(r8, r1, r0);	 Catch:{ Exception -> 0x00a9 }
-        goto L_0x004f;	 Catch:{ Exception -> 0x00a9 }
-        r5.close();	 Catch:{ Exception -> 0x00a9 }
-        r5 = 1;	 Catch:{ Exception -> 0x00a9 }
-        r7.setReadable(r5, r1);	 Catch:{ Exception -> 0x00a9 }
-        r7.setExecutable(r5, r1);	 Catch:{ Exception -> 0x00a9 }
-        r7.setWritable(r5);	 Catch:{ Exception -> 0x00a9 }
-        r7 = r7.getAbsolutePath();	 Catch:{ Error -> 0x0073 }
-        java.lang.System.load(r7);	 Catch:{ Error -> 0x0073 }
-        nativeLoaded = r5;	 Catch:{ Error -> 0x0073 }
-        goto L_0x0077;
-        r7 = move-exception;
-        org.telegram.messenger.FileLog.e(r7);	 Catch:{ Exception -> 0x00a9 }
-        if (r6 == 0) goto L_0x0081;
-        r6.close();	 Catch:{ Exception -> 0x007d }
-        goto L_0x0081;
-        r6 = move-exception;
-        org.telegram.messenger.FileLog.e(r6);
-        r2.close();	 Catch:{ Exception -> 0x0085 }
-        goto L_0x0089;
-        r6 = move-exception;
-        org.telegram.messenger.FileLog.e(r6);
-        return r5;
-        r5 = new java.lang.Exception;	 Catch:{ Exception -> 0x00a9 }
-        r7 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x00a9 }
-        r7.<init>();	 Catch:{ Exception -> 0x00a9 }
-        r3 = "Unable to find file in apk:lib/";	 Catch:{ Exception -> 0x00a9 }
-        r7.append(r3);	 Catch:{ Exception -> 0x00a9 }
-        r7.append(r8);	 Catch:{ Exception -> 0x00a9 }
-        r7.append(r0);	 Catch:{ Exception -> 0x00a9 }
-        r8 = "tmessages.30";	 Catch:{ Exception -> 0x00a9 }
-        r7.append(r8);	 Catch:{ Exception -> 0x00a9 }
-        r7 = r7.toString();	 Catch:{ Exception -> 0x00a9 }
-        r5.<init>(r7);	 Catch:{ Exception -> 0x00a9 }
-        throw r5;	 Catch:{ Exception -> 0x00a9 }
-        r5 = move-exception;
-        goto L_0x00b0;
-        r5 = move-exception;
-        r2 = r6;
-        goto L_0x00c9;
-        r5 = move-exception;
-        r2 = r6;
-        org.telegram.messenger.FileLog.e(r5);	 Catch:{ all -> 0x00c8 }
-        if (r6 == 0) goto L_0x00bd;
-        r6.close();	 Catch:{ Exception -> 0x00b9 }
-        goto L_0x00bd;
-        r5 = move-exception;
-        org.telegram.messenger.FileLog.e(r5);
-        if (r2 == 0) goto L_0x00c7;
-        r2.close();	 Catch:{ Exception -> 0x00c3 }
-        goto L_0x00c7;
-        r5 = move-exception;
-        org.telegram.messenger.FileLog.e(r5);
-        return r1;
-        r5 = move-exception;
-        if (r6 == 0) goto L_0x00d3;
-        r6.close();	 Catch:{ Exception -> 0x00cf }
-        goto L_0x00d3;
-        r6 = move-exception;
-        org.telegram.messenger.FileLog.e(r6);
-        if (r2 == 0) goto L_0x00dd;
-        r2.close();	 Catch:{ Exception -> 0x00d9 }
-        goto L_0x00dd;
-        r6 = move-exception;
-        org.telegram.messenger.FileLog.e(r6);
-        throw r5;
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.NativeLoader.loadFromZip(android.content.Context, java.io.File, java.io.File, java.lang.String):boolean");
-    }
-
     /* JADX WARNING: Removed duplicated region for block: B:8:0x0022  */
     /* JADX WARNING: Removed duplicated region for block: B:12:0x0036 A:{RETURN} */
     /* JADX WARNING: Removed duplicated region for block: B:11:0x0035 A:{RETURN} */
@@ -177,6 +49,157 @@ public class NativeLoader {
         return r0;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.NativeLoader.getNativeLibraryDir(android.content.Context):java.io.File");
+    }
+
+    /* JADX WARNING: Removed duplicated region for block: B:57:0x00cb A:{SYNTHETIC, Splitter:B:57:0x00cb} */
+    /* JADX WARNING: Removed duplicated region for block: B:62:0x00d5 A:{SYNTHETIC, Splitter:B:62:0x00d5} */
+    /* JADX WARNING: Removed duplicated region for block: B:45:0x00b5 A:{SYNTHETIC, Splitter:B:45:0x00b5} */
+    /* JADX WARNING: Removed duplicated region for block: B:50:0x00bf A:{SYNTHETIC, Splitter:B:50:0x00bf} */
+    @android.annotation.SuppressLint({"UnsafeDynamicallyLoadedCode", "SetWorldReadable"})
+    private static boolean loadFromZip(android.content.Context r5, java.io.File r6, java.io.File r7, java.lang.String r8) {
+        /*
+        r0 = "/";
+        r1 = 0;
+        r6 = r6.listFiles();	 Catch:{ Exception -> 0x0013 }
+        r2 = r6.length;	 Catch:{ Exception -> 0x0013 }
+        r3 = 0;
+    L_0x0009:
+        if (r3 >= r2) goto L_0x0017;
+    L_0x000b:
+        r4 = r6[r3];	 Catch:{ Exception -> 0x0013 }
+        r4.delete();	 Catch:{ Exception -> 0x0013 }
+        r3 = r3 + 1;
+        goto L_0x0009;
+    L_0x0013:
+        r6 = move-exception;
+        org.telegram.messenger.FileLog.e(r6);
+    L_0x0017:
+        r6 = 0;
+        r2 = new java.util.zip.ZipFile;	 Catch:{ Exception -> 0x00ae, all -> 0x00ab }
+        r5 = r5.getApplicationInfo();	 Catch:{ Exception -> 0x00ae, all -> 0x00ab }
+        r5 = r5.sourceDir;	 Catch:{ Exception -> 0x00ae, all -> 0x00ab }
+        r2.<init>(r5);	 Catch:{ Exception -> 0x00ae, all -> 0x00ab }
+        r5 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x00a9 }
+        r5.<init>();	 Catch:{ Exception -> 0x00a9 }
+        r3 = "lib/";
+        r5.append(r3);	 Catch:{ Exception -> 0x00a9 }
+        r5.append(r8);	 Catch:{ Exception -> 0x00a9 }
+        r5.append(r0);	 Catch:{ Exception -> 0x00a9 }
+        r3 = "libtmessages.30.so";
+        r5.append(r3);	 Catch:{ Exception -> 0x00a9 }
+        r5 = r5.toString();	 Catch:{ Exception -> 0x00a9 }
+        r5 = r2.getEntry(r5);	 Catch:{ Exception -> 0x00a9 }
+        if (r5 == 0) goto L_0x008a;
+    L_0x0042:
+        r6 = r2.getInputStream(r5);	 Catch:{ Exception -> 0x00a9 }
+        r5 = new java.io.FileOutputStream;	 Catch:{ Exception -> 0x00a9 }
+        r5.<init>(r7);	 Catch:{ Exception -> 0x00a9 }
+        r8 = 4096; // 0x1000 float:5.74E-42 double:2.0237E-320;
+        r8 = new byte[r8];	 Catch:{ Exception -> 0x00a9 }
+    L_0x004f:
+        r0 = r6.read(r8);	 Catch:{ Exception -> 0x00a9 }
+        if (r0 <= 0) goto L_0x005c;
+    L_0x0055:
+        java.lang.Thread.yield();	 Catch:{ Exception -> 0x00a9 }
+        r5.write(r8, r1, r0);	 Catch:{ Exception -> 0x00a9 }
+        goto L_0x004f;
+    L_0x005c:
+        r5.close();	 Catch:{ Exception -> 0x00a9 }
+        r5 = 1;
+        r7.setReadable(r5, r1);	 Catch:{ Exception -> 0x00a9 }
+        r7.setExecutable(r5, r1);	 Catch:{ Exception -> 0x00a9 }
+        r7.setWritable(r5);	 Catch:{ Exception -> 0x00a9 }
+        r7 = r7.getAbsolutePath();	 Catch:{ Error -> 0x0073 }
+        java.lang.System.load(r7);	 Catch:{ Error -> 0x0073 }
+        nativeLoaded = r5;	 Catch:{ Error -> 0x0073 }
+        goto L_0x0077;
+    L_0x0073:
+        r7 = move-exception;
+        org.telegram.messenger.FileLog.e(r7);	 Catch:{ Exception -> 0x00a9 }
+    L_0x0077:
+        if (r6 == 0) goto L_0x0081;
+    L_0x0079:
+        r6.close();	 Catch:{ Exception -> 0x007d }
+        goto L_0x0081;
+    L_0x007d:
+        r6 = move-exception;
+        org.telegram.messenger.FileLog.e(r6);
+    L_0x0081:
+        r2.close();	 Catch:{ Exception -> 0x0085 }
+        goto L_0x0089;
+    L_0x0085:
+        r6 = move-exception;
+        org.telegram.messenger.FileLog.e(r6);
+    L_0x0089:
+        return r5;
+    L_0x008a:
+        r5 = new java.lang.Exception;	 Catch:{ Exception -> 0x00a9 }
+        r7 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x00a9 }
+        r7.<init>();	 Catch:{ Exception -> 0x00a9 }
+        r3 = "Unable to find file in apk:lib/";
+        r7.append(r3);	 Catch:{ Exception -> 0x00a9 }
+        r7.append(r8);	 Catch:{ Exception -> 0x00a9 }
+        r7.append(r0);	 Catch:{ Exception -> 0x00a9 }
+        r8 = "tmessages.30";
+        r7.append(r8);	 Catch:{ Exception -> 0x00a9 }
+        r7 = r7.toString();	 Catch:{ Exception -> 0x00a9 }
+        r5.<init>(r7);	 Catch:{ Exception -> 0x00a9 }
+        throw r5;	 Catch:{ Exception -> 0x00a9 }
+    L_0x00a9:
+        r5 = move-exception;
+        goto L_0x00b0;
+    L_0x00ab:
+        r5 = move-exception;
+        r2 = r6;
+        goto L_0x00c9;
+    L_0x00ae:
+        r5 = move-exception;
+        r2 = r6;
+    L_0x00b0:
+        org.telegram.messenger.FileLog.e(r5);	 Catch:{ all -> 0x00c8 }
+        if (r6 == 0) goto L_0x00bd;
+    L_0x00b5:
+        r6.close();	 Catch:{ Exception -> 0x00b9 }
+        goto L_0x00bd;
+    L_0x00b9:
+        r5 = move-exception;
+        org.telegram.messenger.FileLog.e(r5);
+    L_0x00bd:
+        if (r2 == 0) goto L_0x00c7;
+    L_0x00bf:
+        r2.close();	 Catch:{ Exception -> 0x00c3 }
+        goto L_0x00c7;
+    L_0x00c3:
+        r5 = move-exception;
+        org.telegram.messenger.FileLog.e(r5);
+    L_0x00c7:
+        return r1;
+    L_0x00c8:
+        r5 = move-exception;
+    L_0x00c9:
+        if (r6 == 0) goto L_0x00d3;
+    L_0x00cb:
+        r6.close();	 Catch:{ Exception -> 0x00cf }
+        goto L_0x00d3;
+    L_0x00cf:
+        r6 = move-exception;
+        org.telegram.messenger.FileLog.e(r6);
+    L_0x00d3:
+        if (r2 == 0) goto L_0x00dd;
+    L_0x00d5:
+        r2.close();	 Catch:{ Exception -> 0x00d9 }
+        goto L_0x00dd;
+    L_0x00d9:
+        r6 = move-exception;
+        org.telegram.messenger.FileLog.e(r6);
+    L_0x00dd:
+        goto L_0x00df;
+    L_0x00de:
+        throw r5;
+    L_0x00df:
+        goto L_0x00de;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.NativeLoader.loadFromZip(android.content.Context, java.io.File, java.io.File, java.lang.String):boolean");
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:64:0x00ea A:{Catch:{ Throwable -> 0x001f }} */

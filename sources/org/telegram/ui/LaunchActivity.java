@@ -153,83 +153,83 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     /* JADX WARNING: Missing exception handler attribute for start block: B:43:0x0109 */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Can't wrap try/catch for region: R(5:40|41|42|43|44) */
-    /* JADX WARNING: Missing block: B:111:0x044b, code skipped:
+    /* JADX WARNING: Missing block: B:111:0x044c, code skipped:
             r0 = -1;
      */
-    /* JADX WARNING: Missing block: B:112:0x044c, code skipped:
-            if (r0 == 0) goto L_0x04b5;
+    /* JADX WARNING: Missing block: B:112:0x044d, code skipped:
+            if (r0 == 0) goto L_0x04b6;
      */
-    /* JADX WARNING: Missing block: B:113:0x044e, code skipped:
-            if (r0 == 1) goto L_0x04a6;
+    /* JADX WARNING: Missing block: B:113:0x044f, code skipped:
+            if (r0 == 1) goto L_0x04a7;
      */
-    /* JADX WARNING: Missing block: B:114:0x0450, code skipped:
-            if (r0 == 2) goto L_0x0492;
+    /* JADX WARNING: Missing block: B:114:0x0451, code skipped:
+            if (r0 == 2) goto L_0x0493;
      */
-    /* JADX WARNING: Missing block: B:115:0x0452, code skipped:
-            if (r0 == 3) goto L_0x047e;
+    /* JADX WARNING: Missing block: B:115:0x0453, code skipped:
+            if (r0 == 3) goto L_0x047f;
      */
-    /* JADX WARNING: Missing block: B:116:0x0454, code skipped:
-            if (r0 == 4) goto L_0x046a;
+    /* JADX WARNING: Missing block: B:116:0x0455, code skipped:
+            if (r0 == 4) goto L_0x046b;
      */
-    /* JADX WARNING: Missing block: B:118:0x0457, code skipped:
-            if (r0 == 5) goto L_0x045b;
+    /* JADX WARNING: Missing block: B:118:0x0458, code skipped:
+            if (r0 == 5) goto L_0x045c;
      */
-    /* JADX WARNING: Missing block: B:120:0x045b, code skipped:
+    /* JADX WARNING: Missing block: B:120:0x045c, code skipped:
             r0 = new org.telegram.ui.WallpapersListActivity(0);
             r11.actionBarLayout.addFragmentToStack(r0);
             r0.restoreSelfArgs(r12);
      */
-    /* JADX WARNING: Missing block: B:121:0x046a, code skipped:
-            if (r3 == null) goto L_0x0534;
+    /* JADX WARNING: Missing block: B:121:0x046b, code skipped:
+            if (r3 == null) goto L_0x0535;
      */
-    /* JADX WARNING: Missing block: B:122:0x046c, code skipped:
+    /* JADX WARNING: Missing block: B:122:0x046d, code skipped:
             r0 = new org.telegram.ui.ProfileActivity(r3);
      */
-    /* JADX WARNING: Missing block: B:123:0x0477, code skipped:
-            if (r11.actionBarLayout.addFragmentToStack(r0) == false) goto L_0x0534;
+    /* JADX WARNING: Missing block: B:123:0x0478, code skipped:
+            if (r11.actionBarLayout.addFragmentToStack(r0) == false) goto L_0x0535;
      */
-    /* JADX WARNING: Missing block: B:124:0x0479, code skipped:
+    /* JADX WARNING: Missing block: B:124:0x047a, code skipped:
             r0.restoreSelfArgs(r12);
      */
-    /* JADX WARNING: Missing block: B:125:0x047e, code skipped:
-            if (r3 == null) goto L_0x0534;
+    /* JADX WARNING: Missing block: B:125:0x047f, code skipped:
+            if (r3 == null) goto L_0x0535;
      */
-    /* JADX WARNING: Missing block: B:126:0x0480, code skipped:
+    /* JADX WARNING: Missing block: B:126:0x0481, code skipped:
             r0 = new org.telegram.ui.ChannelCreateActivity(r3);
      */
-    /* JADX WARNING: Missing block: B:127:0x048b, code skipped:
-            if (r11.actionBarLayout.addFragmentToStack(r0) == false) goto L_0x0534;
+    /* JADX WARNING: Missing block: B:127:0x048c, code skipped:
+            if (r11.actionBarLayout.addFragmentToStack(r0) == false) goto L_0x0535;
      */
-    /* JADX WARNING: Missing block: B:128:0x048d, code skipped:
+    /* JADX WARNING: Missing block: B:128:0x048e, code skipped:
             r0.restoreSelfArgs(r12);
      */
-    /* JADX WARNING: Missing block: B:129:0x0492, code skipped:
-            if (r3 == null) goto L_0x0534;
+    /* JADX WARNING: Missing block: B:129:0x0493, code skipped:
+            if (r3 == null) goto L_0x0535;
      */
-    /* JADX WARNING: Missing block: B:130:0x0494, code skipped:
+    /* JADX WARNING: Missing block: B:130:0x0495, code skipped:
             r0 = new org.telegram.ui.GroupCreateFinalActivity(r3);
      */
-    /* JADX WARNING: Missing block: B:131:0x049f, code skipped:
-            if (r11.actionBarLayout.addFragmentToStack(r0) == false) goto L_0x0534;
+    /* JADX WARNING: Missing block: B:131:0x04a0, code skipped:
+            if (r11.actionBarLayout.addFragmentToStack(r0) == false) goto L_0x0535;
      */
-    /* JADX WARNING: Missing block: B:132:0x04a1, code skipped:
+    /* JADX WARNING: Missing block: B:132:0x04a2, code skipped:
             r0.restoreSelfArgs(r12);
      */
-    /* JADX WARNING: Missing block: B:133:0x04a6, code skipped:
+    /* JADX WARNING: Missing block: B:133:0x04a7, code skipped:
             r0 = new org.telegram.ui.SettingsActivity();
             r11.actionBarLayout.addFragmentToStack(r0);
             r0.restoreSelfArgs(r12);
      */
-    /* JADX WARNING: Missing block: B:134:0x04b5, code skipped:
-            if (r3 == null) goto L_0x0534;
+    /* JADX WARNING: Missing block: B:134:0x04b6, code skipped:
+            if (r3 == null) goto L_0x0535;
      */
-    /* JADX WARNING: Missing block: B:135:0x04b7, code skipped:
+    /* JADX WARNING: Missing block: B:135:0x04b8, code skipped:
             r0 = new org.telegram.ui.ChatActivity(r3);
      */
-    /* JADX WARNING: Missing block: B:136:0x04c2, code skipped:
-            if (r11.actionBarLayout.addFragmentToStack(r0) == false) goto L_0x0534;
+    /* JADX WARNING: Missing block: B:136:0x04c3, code skipped:
+            if (r11.actionBarLayout.addFragmentToStack(r0) == false) goto L_0x0535;
      */
-    /* JADX WARNING: Missing block: B:137:0x04c4, code skipped:
+    /* JADX WARNING: Missing block: B:137:0x04c5, code skipped:
             r0.restoreSelfArgs(r12);
      */
     public void onCreate(android.os.Bundle r12) {
@@ -364,7 +364,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         goto L_0x0112;
     L_0x0112:
         r0 = r11.getWindow();
-        r3 = NUM; // 0x7var_bf float:1.7946004E38 double:1.0529358504E-314;
+        r3 = NUM; // 0x7var_c3 float:1.7946012E38 double:1.0529358523E-314;
         r0.setBackgroundDrawableResource(r3);
         r0 = org.telegram.messenger.SharedConfig.passcodeHash;
         r0 = r0.length();
@@ -444,7 +444,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r6.<init>(r11);
         r11.backgroundTablet = r6;
         r6 = r11.getResources();
-        r7 = NUM; // 0x7var_ float:1.7944888E38 double:1.0529355786E-314;
+        r7 = NUM; // 0x7var_ float:1.7944886E38 double:1.052935578E-314;
         r6 = r6.getDrawable(r7);
         r6 = (android.graphics.drawable.BitmapDrawable) r6;
         r7 = android.graphics.Shader.TileMode.REPEAT;
@@ -512,7 +512,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r6 = r11.layersActionBarLayout;
         r6.setUseAlphaAnimations(r1);
         r6 = r11.layersActionBarLayout;
-        r7 = NUM; // 0x7var_a float:1.7944858E38 double:1.052935571E-314;
+        r7 = NUM; // 0x7var_ float:1.7944856E38 double:1.0529355707E-314;
         r6.setBackgroundResource(r7);
         r6 = r11.layersActionBarLayout;
         r7 = layerFragmentsStack;
@@ -652,7 +652,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r0 = r11.actionBarLayout;
         r0 = r0.fragmentsStack;
         r0 = r0.isEmpty();
-        if (r0 == 0) goto L_0x04cd;
+        if (r0 == 0) goto L_0x04ce;
     L_0x03c4:
         r0 = r11.currentAccount;
         r0 = org.telegram.messenger.UserConfig.getInstance(r0);
@@ -676,15 +676,15 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r0 = r11.drawerLayoutContainer;
         r0.setAllowOpenDrawer(r1, r2);
     L_0x03f4:
-        if (r12 == 0) goto L_0x0534;
+        if (r12 == 0) goto L_0x0535;
     L_0x03f6:
         r0 = "fragment";
-        r0 = r12.getString(r0);	 Catch:{ Exception -> 0x04c8 }
-        if (r0 == 0) goto L_0x0534;
+        r0 = r12.getString(r0);	 Catch:{ Exception -> 0x04c9 }
+        if (r0 == 0) goto L_0x0535;
     L_0x03fe:
         r3 = "args";
-        r3 = r12.getBundle(r3);	 Catch:{ Exception -> 0x04c8 }
-        r4 = r0.hashCode();	 Catch:{ Exception -> 0x04c8 }
+        r3 = r12.getBundle(r3);	 Catch:{ Exception -> 0x04c9 }
+        r4 = r0.hashCode();	 Catch:{ Exception -> 0x04c9 }
         r6 = 4;
         r7 = 3;
         r8 = 2;
@@ -696,238 +696,238 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             case 738950403: goto L_0x0419;
             case 1434631203: goto L_0x040f;
             default: goto L_0x040e;
-        };	 Catch:{ Exception -> 0x04c8 }
+        };	 Catch:{ Exception -> 0x04c9 }
     L_0x040e:
-        goto L_0x044b;
+        goto L_0x044c;
     L_0x040f:
         r4 = "settings";
-        r0 = r0.equals(r4);	 Catch:{ Exception -> 0x04c8 }
-        if (r0 == 0) goto L_0x044b;
+        r0 = r0.equals(r4);	 Catch:{ Exception -> 0x04c9 }
+        if (r0 == 0) goto L_0x044c;
     L_0x0417:
         r0 = 1;
-        goto L_0x044c;
+        goto L_0x044d;
     L_0x0419:
         r4 = "channel";
-        r0 = r0.equals(r4);	 Catch:{ Exception -> 0x04c8 }
-        if (r0 == 0) goto L_0x044b;
+        r0 = r0.equals(r4);	 Catch:{ Exception -> 0x04c9 }
+        if (r0 == 0) goto L_0x044c;
     L_0x0421:
         r0 = 3;
-        goto L_0x044c;
+        goto L_0x044d;
     L_0x0423:
         r4 = "group";
-        r0 = r0.equals(r4);	 Catch:{ Exception -> 0x04c8 }
-        if (r0 == 0) goto L_0x044b;
+        r0 = r0.equals(r4);	 Catch:{ Exception -> 0x04c9 }
+        if (r0 == 0) goto L_0x044c;
     L_0x042b:
         r0 = 2;
-        goto L_0x044c;
+        goto L_0x044d;
     L_0x042d:
         r4 = "chat";
-        r0 = r0.equals(r4);	 Catch:{ Exception -> 0x04c8 }
-        if (r0 == 0) goto L_0x044b;
+        r0 = r0.equals(r4);	 Catch:{ Exception -> 0x04c9 }
+        if (r0 == 0) goto L_0x044c;
     L_0x0435:
         r0 = 0;
-        goto L_0x044c;
+        goto L_0x044d;
     L_0x0437:
         r4 = "chat_profile";
-        r0 = r0.equals(r4);	 Catch:{ Exception -> 0x04c8 }
-        if (r0 == 0) goto L_0x044b;
+        r0 = r0.equals(r4);	 Catch:{ Exception -> 0x04c9 }
+        if (r0 == 0) goto L_0x044c;
     L_0x043f:
         r0 = 4;
-        goto L_0x044c;
+        goto L_0x044d;
     L_0x0441:
         r4 = "wallpapers";
-        r0 = r0.equals(r4);	 Catch:{ Exception -> 0x04c8 }
-        if (r0 == 0) goto L_0x044b;
-    L_0x0449:
+        r0 = r0.equals(r4);	 Catch:{ Exception -> 0x04c9 }
+        if (r0 == 0) goto L_0x044c;
+    L_0x044a:
         r0 = 5;
-        goto L_0x044c;
-    L_0x044b:
-        r0 = -1;
+        goto L_0x044d;
     L_0x044c:
-        if (r0 == 0) goto L_0x04b5;
-    L_0x044e:
-        if (r0 == r1) goto L_0x04a6;
-    L_0x0450:
-        if (r0 == r8) goto L_0x0492;
-    L_0x0452:
-        if (r0 == r7) goto L_0x047e;
-    L_0x0454:
-        if (r0 == r6) goto L_0x046a;
-    L_0x0456:
+        r0 = -1;
+    L_0x044d:
+        if (r0 == 0) goto L_0x04b6;
+    L_0x044f:
+        if (r0 == r1) goto L_0x04a7;
+    L_0x0451:
+        if (r0 == r8) goto L_0x0493;
+    L_0x0453:
+        if (r0 == r7) goto L_0x047f;
+    L_0x0455:
+        if (r0 == r6) goto L_0x046b;
+    L_0x0457:
         r3 = 5;
-        if (r0 == r3) goto L_0x045b;
-    L_0x0459:
-        goto L_0x0534;
-    L_0x045b:
-        r0 = new org.telegram.ui.WallpapersListActivity;	 Catch:{ Exception -> 0x04c8 }
-        r0.<init>(r2);	 Catch:{ Exception -> 0x04c8 }
-        r3 = r11.actionBarLayout;	 Catch:{ Exception -> 0x04c8 }
-        r3.addFragmentToStack(r0);	 Catch:{ Exception -> 0x04c8 }
-        r0.restoreSelfArgs(r12);	 Catch:{ Exception -> 0x04c8 }
-        goto L_0x0534;
-    L_0x046a:
-        if (r3 == 0) goto L_0x0534;
-    L_0x046c:
-        r0 = new org.telegram.ui.ProfileActivity;	 Catch:{ Exception -> 0x04c8 }
-        r0.<init>(r3);	 Catch:{ Exception -> 0x04c8 }
-        r3 = r11.actionBarLayout;	 Catch:{ Exception -> 0x04c8 }
-        r3 = r3.addFragmentToStack(r0);	 Catch:{ Exception -> 0x04c8 }
-        if (r3 == 0) goto L_0x0534;
-    L_0x0479:
-        r0.restoreSelfArgs(r12);	 Catch:{ Exception -> 0x04c8 }
-        goto L_0x0534;
-    L_0x047e:
-        if (r3 == 0) goto L_0x0534;
-    L_0x0480:
-        r0 = new org.telegram.ui.ChannelCreateActivity;	 Catch:{ Exception -> 0x04c8 }
-        r0.<init>(r3);	 Catch:{ Exception -> 0x04c8 }
-        r3 = r11.actionBarLayout;	 Catch:{ Exception -> 0x04c8 }
-        r3 = r3.addFragmentToStack(r0);	 Catch:{ Exception -> 0x04c8 }
-        if (r3 == 0) goto L_0x0534;
-    L_0x048d:
-        r0.restoreSelfArgs(r12);	 Catch:{ Exception -> 0x04c8 }
-        goto L_0x0534;
-    L_0x0492:
-        if (r3 == 0) goto L_0x0534;
-    L_0x0494:
-        r0 = new org.telegram.ui.GroupCreateFinalActivity;	 Catch:{ Exception -> 0x04c8 }
-        r0.<init>(r3);	 Catch:{ Exception -> 0x04c8 }
-        r3 = r11.actionBarLayout;	 Catch:{ Exception -> 0x04c8 }
-        r3 = r3.addFragmentToStack(r0);	 Catch:{ Exception -> 0x04c8 }
-        if (r3 == 0) goto L_0x0534;
-    L_0x04a1:
-        r0.restoreSelfArgs(r12);	 Catch:{ Exception -> 0x04c8 }
-        goto L_0x0534;
-    L_0x04a6:
-        r0 = new org.telegram.ui.SettingsActivity;	 Catch:{ Exception -> 0x04c8 }
-        r0.<init>();	 Catch:{ Exception -> 0x04c8 }
-        r3 = r11.actionBarLayout;	 Catch:{ Exception -> 0x04c8 }
-        r3.addFragmentToStack(r0);	 Catch:{ Exception -> 0x04c8 }
-        r0.restoreSelfArgs(r12);	 Catch:{ Exception -> 0x04c8 }
-        goto L_0x0534;
-    L_0x04b5:
-        if (r3 == 0) goto L_0x0534;
-    L_0x04b7:
-        r0 = new org.telegram.ui.ChatActivity;	 Catch:{ Exception -> 0x04c8 }
-        r0.<init>(r3);	 Catch:{ Exception -> 0x04c8 }
-        r3 = r11.actionBarLayout;	 Catch:{ Exception -> 0x04c8 }
-        r3 = r3.addFragmentToStack(r0);	 Catch:{ Exception -> 0x04c8 }
-        if (r3 == 0) goto L_0x0534;
-    L_0x04c4:
-        r0.restoreSelfArgs(r12);	 Catch:{ Exception -> 0x04c8 }
-        goto L_0x0534;
-    L_0x04c8:
+        if (r0 == r3) goto L_0x045c;
+    L_0x045a:
+        goto L_0x0535;
+    L_0x045c:
+        r0 = new org.telegram.ui.WallpapersListActivity;	 Catch:{ Exception -> 0x04c9 }
+        r0.<init>(r2);	 Catch:{ Exception -> 0x04c9 }
+        r3 = r11.actionBarLayout;	 Catch:{ Exception -> 0x04c9 }
+        r3.addFragmentToStack(r0);	 Catch:{ Exception -> 0x04c9 }
+        r0.restoreSelfArgs(r12);	 Catch:{ Exception -> 0x04c9 }
+        goto L_0x0535;
+    L_0x046b:
+        if (r3 == 0) goto L_0x0535;
+    L_0x046d:
+        r0 = new org.telegram.ui.ProfileActivity;	 Catch:{ Exception -> 0x04c9 }
+        r0.<init>(r3);	 Catch:{ Exception -> 0x04c9 }
+        r3 = r11.actionBarLayout;	 Catch:{ Exception -> 0x04c9 }
+        r3 = r3.addFragmentToStack(r0);	 Catch:{ Exception -> 0x04c9 }
+        if (r3 == 0) goto L_0x0535;
+    L_0x047a:
+        r0.restoreSelfArgs(r12);	 Catch:{ Exception -> 0x04c9 }
+        goto L_0x0535;
+    L_0x047f:
+        if (r3 == 0) goto L_0x0535;
+    L_0x0481:
+        r0 = new org.telegram.ui.ChannelCreateActivity;	 Catch:{ Exception -> 0x04c9 }
+        r0.<init>(r3);	 Catch:{ Exception -> 0x04c9 }
+        r3 = r11.actionBarLayout;	 Catch:{ Exception -> 0x04c9 }
+        r3 = r3.addFragmentToStack(r0);	 Catch:{ Exception -> 0x04c9 }
+        if (r3 == 0) goto L_0x0535;
+    L_0x048e:
+        r0.restoreSelfArgs(r12);	 Catch:{ Exception -> 0x04c9 }
+        goto L_0x0535;
+    L_0x0493:
+        if (r3 == 0) goto L_0x0535;
+    L_0x0495:
+        r0 = new org.telegram.ui.GroupCreateFinalActivity;	 Catch:{ Exception -> 0x04c9 }
+        r0.<init>(r3);	 Catch:{ Exception -> 0x04c9 }
+        r3 = r11.actionBarLayout;	 Catch:{ Exception -> 0x04c9 }
+        r3 = r3.addFragmentToStack(r0);	 Catch:{ Exception -> 0x04c9 }
+        if (r3 == 0) goto L_0x0535;
+    L_0x04a2:
+        r0.restoreSelfArgs(r12);	 Catch:{ Exception -> 0x04c9 }
+        goto L_0x0535;
+    L_0x04a7:
+        r0 = new org.telegram.ui.SettingsActivity;	 Catch:{ Exception -> 0x04c9 }
+        r0.<init>();	 Catch:{ Exception -> 0x04c9 }
+        r3 = r11.actionBarLayout;	 Catch:{ Exception -> 0x04c9 }
+        r3.addFragmentToStack(r0);	 Catch:{ Exception -> 0x04c9 }
+        r0.restoreSelfArgs(r12);	 Catch:{ Exception -> 0x04c9 }
+        goto L_0x0535;
+    L_0x04b6:
+        if (r3 == 0) goto L_0x0535;
+    L_0x04b8:
+        r0 = new org.telegram.ui.ChatActivity;	 Catch:{ Exception -> 0x04c9 }
+        r0.<init>(r3);	 Catch:{ Exception -> 0x04c9 }
+        r3 = r11.actionBarLayout;	 Catch:{ Exception -> 0x04c9 }
+        r3 = r3.addFragmentToStack(r0);	 Catch:{ Exception -> 0x04c9 }
+        if (r3 == 0) goto L_0x0535;
+    L_0x04c5:
+        r0.restoreSelfArgs(r12);	 Catch:{ Exception -> 0x04c9 }
+        goto L_0x0535;
+    L_0x04c9:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-        goto L_0x0534;
-    L_0x04cd:
+        goto L_0x0535;
+    L_0x04ce:
         r0 = r11.actionBarLayout;
         r0 = r0.fragmentsStack;
         r0 = r0.get(r2);
         r0 = (org.telegram.ui.ActionBar.BaseFragment) r0;
         r3 = r0 instanceof org.telegram.ui.DialogsActivity;
-        if (r3 == 0) goto L_0x04e2;
-    L_0x04db:
+        if (r3 == 0) goto L_0x04e3;
+    L_0x04dc:
         r0 = (org.telegram.ui.DialogsActivity) r0;
         r3 = r11.sideMenu;
         r0.setSideMenu(r3);
-    L_0x04e2:
+    L_0x04e3:
         r0 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r0 == 0) goto L_0x0517;
-    L_0x04e8:
+        if (r0 == 0) goto L_0x0518;
+    L_0x04e9:
         r0 = r11.actionBarLayout;
         r0 = r0.fragmentsStack;
         r0 = r0.size();
-        if (r0 > r1) goto L_0x04fe;
-    L_0x04f2:
+        if (r0 > r1) goto L_0x04ff;
+    L_0x04f3:
         r0 = r11.layersActionBarLayout;
         r0 = r0.fragmentsStack;
         r0 = r0.isEmpty();
-        if (r0 == 0) goto L_0x04fe;
-    L_0x04fc:
+        if (r0 == 0) goto L_0x04ff;
+    L_0x04fd:
         r0 = 1;
-        goto L_0x04ff;
-    L_0x04fe:
-        r0 = 0;
+        goto L_0x0500;
     L_0x04ff:
+        r0 = 0;
+    L_0x0500:
         r3 = r11.layersActionBarLayout;
         r3 = r3.fragmentsStack;
         r3 = r3.size();
-        if (r3 != r1) goto L_0x0518;
-    L_0x0509:
+        if (r3 != r1) goto L_0x0519;
+    L_0x050a:
         r3 = r11.layersActionBarLayout;
         r3 = r3.fragmentsStack;
         r3 = r3.get(r2);
         r3 = r3 instanceof org.telegram.ui.LoginActivity;
-        if (r3 == 0) goto L_0x0518;
-    L_0x0515:
+        if (r3 == 0) goto L_0x0519;
+    L_0x0516:
         r0 = 0;
-        goto L_0x0518;
-    L_0x0517:
-        r0 = 1;
+        goto L_0x0519;
     L_0x0518:
+        r0 = 1;
+    L_0x0519:
         r3 = r11.actionBarLayout;
         r3 = r3.fragmentsStack;
         r3 = r3.size();
-        if (r3 != r1) goto L_0x052f;
-    L_0x0522:
+        if (r3 != r1) goto L_0x0530;
+    L_0x0523:
         r3 = r11.actionBarLayout;
         r3 = r3.fragmentsStack;
         r3 = r3.get(r2);
         r3 = r3 instanceof org.telegram.ui.LoginActivity;
-        if (r3 == 0) goto L_0x052f;
-    L_0x052e:
-        r0 = 0;
+        if (r3 == 0) goto L_0x0530;
     L_0x052f:
+        r0 = 0;
+    L_0x0530:
         r3 = r11.drawerLayoutContainer;
         r3.setAllowOpenDrawer(r0, r2);
-    L_0x0534:
+    L_0x0535:
         r11.checkLayout();
         r0 = r11.getIntent();
-        if (r12 == 0) goto L_0x053f;
-    L_0x053d:
+        if (r12 == 0) goto L_0x0540;
+    L_0x053e:
         r12 = 1;
-        goto L_0x0540;
-    L_0x053f:
-        r12 = 0;
+        goto L_0x0541;
     L_0x0540:
+        r12 = 0;
+    L_0x0541:
         r11.handleIntent(r0, r2, r12, r2);
-        r12 = android.os.Build.DISPLAY;	 Catch:{ Exception -> 0x0584 }
-        r0 = android.os.Build.USER;	 Catch:{ Exception -> 0x0584 }
+        r12 = android.os.Build.DISPLAY;	 Catch:{ Exception -> 0x0585 }
+        r0 = android.os.Build.USER;	 Catch:{ Exception -> 0x0585 }
         r2 = "";
-        if (r12 == 0) goto L_0x0550;
-    L_0x054b:
-        r12 = r12.toLowerCase();	 Catch:{ Exception -> 0x0584 }
-        goto L_0x0551;
-    L_0x0550:
-        r12 = r2;
+        if (r12 == 0) goto L_0x0551;
+    L_0x054c:
+        r12 = r12.toLowerCase();	 Catch:{ Exception -> 0x0585 }
+        goto L_0x0552;
     L_0x0551:
-        if (r0 == 0) goto L_0x0557;
-    L_0x0553:
-        r2 = r12.toLowerCase();	 Catch:{ Exception -> 0x0584 }
-    L_0x0557:
+        r12 = r2;
+    L_0x0552:
+        if (r0 == 0) goto L_0x0558;
+    L_0x0554:
+        r2 = r12.toLowerCase();	 Catch:{ Exception -> 0x0585 }
+    L_0x0558:
         r0 = "flyme";
-        r12 = r12.contains(r0);	 Catch:{ Exception -> 0x0584 }
-        if (r12 != 0) goto L_0x0567;
-    L_0x055f:
+        r12 = r12.contains(r0);	 Catch:{ Exception -> 0x0585 }
+        if (r12 != 0) goto L_0x0568;
+    L_0x0560:
         r12 = "flyme";
-        r12 = r2.contains(r12);	 Catch:{ Exception -> 0x0584 }
-        if (r12 == 0) goto L_0x0588;
-    L_0x0567:
-        org.telegram.messenger.AndroidUtilities.incorrectDisplaySizeFix = r1;	 Catch:{ Exception -> 0x0584 }
-        r12 = r11.getWindow();	 Catch:{ Exception -> 0x0584 }
-        r12 = r12.getDecorView();	 Catch:{ Exception -> 0x0584 }
-        r12 = r12.getRootView();	 Catch:{ Exception -> 0x0584 }
-        r0 = r12.getViewTreeObserver();	 Catch:{ Exception -> 0x0584 }
-        r2 = new org.telegram.ui.-$$Lambda$LaunchActivity$KOGX7F1UQC0GXDka6tTbIrU0Wk0;	 Catch:{ Exception -> 0x0584 }
-        r2.<init>(r12);	 Catch:{ Exception -> 0x0584 }
-        r11.onGlobalLayoutListener = r2;	 Catch:{ Exception -> 0x0584 }
-        r0.addOnGlobalLayoutListener(r2);	 Catch:{ Exception -> 0x0584 }
-        goto L_0x0588;
-    L_0x0584:
+        r12 = r2.contains(r12);	 Catch:{ Exception -> 0x0585 }
+        if (r12 == 0) goto L_0x0589;
+    L_0x0568:
+        org.telegram.messenger.AndroidUtilities.incorrectDisplaySizeFix = r1;	 Catch:{ Exception -> 0x0585 }
+        r12 = r11.getWindow();	 Catch:{ Exception -> 0x0585 }
+        r12 = r12.getDecorView();	 Catch:{ Exception -> 0x0585 }
+        r12 = r12.getRootView();	 Catch:{ Exception -> 0x0585 }
+        r0 = r12.getViewTreeObserver();	 Catch:{ Exception -> 0x0585 }
+        r2 = new org.telegram.ui.-$$Lambda$LaunchActivity$KOGX7F1UQC0GXDka6tTbIrU0Wk0;	 Catch:{ Exception -> 0x0585 }
+        r2.<init>(r12);	 Catch:{ Exception -> 0x0585 }
+        r11.onGlobalLayoutListener = r2;	 Catch:{ Exception -> 0x0585 }
+        r0.addOnGlobalLayoutListener(r2);	 Catch:{ Exception -> 0x0585 }
+        goto L_0x0589;
+    L_0x0585:
         r12 = move-exception;
         org.telegram.messenger.FileLog.e(r12);
-    L_0x0588:
+    L_0x0589:
         r12 = org.telegram.messenger.MediaController.getInstance();
         r12.setBaseActivity(r11, r1);
         return;
@@ -981,9 +981,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
             i2 = this.drawerLayoutAdapter.getId(i);
             Bundle bundle;
             if (i2 == 2) {
-                bundle = new Bundle();
-                bundle.putBoolean("showFabButton", true);
-                lambda$runLinkRequest$27$LaunchActivity(new GroupCreateActivity(bundle));
+                lambda$runLinkRequest$27$LaunchActivity(new GroupCreateActivity(new Bundle()));
                 this.drawerLayoutContainer.closeDrawer(false);
             } else if (i2 == 3) {
                 bundle = new Bundle();
@@ -3744,24 +3742,24 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r4 = r4.size();
         if (r4 == r11) goto L_0x0fb6;
     L_0x0f7d:
-        r4 = NUM; // 0x7f0d08ca float:1.8746678E38 double:1.053130889E-314;
+        r4 = NUM; // 0x7f0d0905 float:1.8746798E38 double:1.0531309183E-314;
         r5 = "SendContactTo";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r5 = "selectAlertString";
         r0.putString(r5, r4);
-        r4 = NUM; // 0x7f0d08bc float:1.874665E38 double:1.0531308823E-314;
+        r4 = NUM; // 0x7f0d08f7 float:1.874677E38 double:1.0531309114E-314;
         r5 = "SendContactToGroup";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r5 = "selectAlertStringGroup";
         r0.putString(r5, r4);
         goto L_0x0fb6;
     L_0x0f9a:
-        r4 = NUM; // 0x7f0d08ca float:1.8746678E38 double:1.053130889E-314;
+        r4 = NUM; // 0x7f0d0905 float:1.8746798E38 double:1.0531309183E-314;
         r5 = "SendMessagesTo";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r5 = "selectAlertString";
         r0.putString(r5, r4);
-        r4 = NUM; // 0x7f0d08cb float:1.874668E38 double:1.0531308897E-314;
+        r4 = NUM; // 0x7f0d0906 float:1.87468E38 double:1.053130919E-314;
         r5 = "SendMessagesToGroup";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r5 = "selectAlertStringGroup";
@@ -4043,18 +4041,18 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     L_0x007a:
         r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r0.<init>(r13);
-        r1 = NUM; // 0x7f0d00e7 float:1.8742583E38 double:1.0531298917E-314;
+        r1 = NUM; // 0x7f0d00ed float:1.8742595E38 double:1.0531298946E-314;
         r4 = "AppName";
         r1 = org.telegram.messenger.LocaleController.getString(r4, r1);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0d0697 float:1.8745536E38 double:1.053130611E-314;
+        r1 = NUM; // 0x7f0d06c9 float:1.8745638E38 double:1.0531306357E-314;
         r3 = new java.lang.Object[r3];
         r3[r12] = r39;
         r4 = "OtherLoginCode";
         r1 = org.telegram.messenger.LocaleController.formatString(r4, r1, r3);
         r1 = org.telegram.messenger.AndroidUtilities.replaceTags(r1);
         r0.setMessage(r1);
-        r1 = NUM; // 0x7f0d0679 float:1.8745476E38 double:1.053130596E-314;
+        r1 = NUM; // 0x7f0d06a7 float:1.8745569E38 double:1.053130619E-314;
         r3 = "OK";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setPositiveButton(r1, r2);
@@ -4463,12 +4461,12 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r5 = "cantSendToChannels";
         r4.putBoolean(r5, r10);
         r4.putInt(r7, r10);
-        r5 = NUM; // 0x7f0d08bd float:1.8746652E38 double:1.053130883E-314;
+        r5 = NUM; // 0x7f0d08f8 float:1.8746772E38 double:1.053130912E-314;
         r7 = "SendGameTo";
         r5 = org.telegram.messenger.LocaleController.getString(r7, r5);
         r7 = "selectAlertString";
         r4.putString(r7, r5);
-        r5 = NUM; // 0x7f0d08be float:1.8746654E38 double:1.0531308833E-314;
+        r5 = NUM; // 0x7f0d08f9 float:1.8746774E38 double:1.0531309124E-314;
         r7 = "SendGameToGroup";
         r5 = org.telegram.messenger.LocaleController.getString(r7, r5);
         r7 = "selectAlertStringGroup";
@@ -4600,7 +4598,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r0.putBoolean(r8, r10);
         r5 = 2;
         r0.putInt(r7, r5);
-        r7 = NUM; // 0x7f0d00be float:1.87425E38 double:1.0531298714E-314;
+        r7 = NUM; // 0x7f0d00c4 float:1.8742512E38 double:1.0531298744E-314;
         r5 = new java.lang.Object[r5];
         r8 = org.telegram.messenger.UserObject.getUserName(r2);
         r5[r6] = r8;
@@ -4619,7 +4617,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         goto L_0x026c;
     L_0x0197:
         r0 = "BotCantJoinGroups";
-        r2 = NUM; // 0x7f0d01b5 float:1.8743001E38 double:1.0531299935E-314;
+        r2 = NUM; // 0x7f0d01c5 float:1.8743034E38 double:1.0531300014E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r2);	 Catch:{ Exception -> 0x01a8 }
         r0 = android.widget.Toast.makeText(r11, r0, r6);	 Catch:{ Exception -> 0x01a8 }
         r0.show();	 Catch:{ Exception -> 0x01a8 }
@@ -4720,7 +4718,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         goto L_0x026c;
     L_0x0257:
         r0 = "NoUsernameFound";
-        r2 = NUM; // 0x7f0d05eb float:1.8745188E38 double:1.053130526E-314;
+        r2 = NUM; // 0x7f0d0619 float:1.874528E38 double:1.053130549E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r2);	 Catch:{ Exception -> 0x0268 }
         r0 = android.widget.Toast.makeText(r11, r0, r6);	 Catch:{ Exception -> 0x0268 }
         r0.show();	 Catch:{ Exception -> 0x0268 }
@@ -4815,9 +4813,9 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r2 = r0;
         org.telegram.messenger.FileLog.e(r2);
     L_0x0013:
-        r0 = NUM; // 0x7f0d0679 float:1.8745476E38 double:1.053130596E-314;
+        r0 = NUM; // 0x7f0d06a7 float:1.8745569E38 double:1.053130619E-314;
         r2 = "OK";
-        r3 = NUM; // 0x7f0d00e7 float:1.8742583E38 double:1.0531298917E-314;
+        r3 = NUM; // 0x7f0d00ed float:1.8742595E38 double:1.0531298946E-314;
         r4 = "AppName";
         r14 = 0;
         if (r1 != 0) goto L_0x0160;
@@ -4930,7 +4928,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r13.<init>(r15);
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r13.setTitle(r3);
-        r3 = NUM; // 0x7f0d021d float:1.8743212E38 double:1.053130045E-314;
+        r3 = NUM; // 0x7f0d022f float:1.8743249E38 double:1.0531300537E-314;
         r4 = new java.lang.Object[r6];
         r6 = r1.chat;
         if (r6 == 0) goto L_0x0107;
@@ -4972,7 +4970,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r1 = r20;
         r2 = r21;
         r0.setPositiveButton(r1, r2);
-        r1 = NUM; // 0x7f0d01de float:1.8743084E38 double:1.0531300137E-314;
+        r1 = NUM; // 0x7f0d01ef float:1.8743119E38 double:1.053130022E-314;
         r2 = "Cancel";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r5 = 0;
@@ -4992,13 +4990,13 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r1 = r1.startsWith(r3);
         if (r1 == 0) goto L_0x0185;
     L_0x0178:
-        r1 = NUM; // 0x7f0d041e float:1.8744253E38 double:1.0531302983E-314;
+        r1 = NUM; // 0x7f0d044b float:1.8744344E38 double:1.0531303205E-314;
         r3 = "FloodWait";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r7.setMessage(r1);
         goto L_0x0191;
     L_0x0185:
-        r1 = NUM; // 0x7f0d04f0 float:1.8744678E38 double:1.053130402E-314;
+        r1 = NUM; // 0x7f0d051d float:1.874477E38 double:1.0531304243E-314;
         r3 = "JoinToGroupErrorNotExist";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r7.setMessage(r1);
@@ -5620,13 +5618,13 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     L_0x0068:
         r12 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r12.<init>(r10);
-        r13 = NUM; // 0x7f0d00e7 float:1.8742583E38 double:1.0531298917E-314;
+        r13 = NUM; // 0x7f0d00ed float:1.8742595E38 double:1.0531298946E-314;
         r6 = "AppName";
         r13 = org.telegram.messenger.LocaleController.getString(r6, r13);
         r12.setTitle(r13);
         if (r11 != r5) goto L_0x0088;
     L_0x007b:
-        r11 = NUM; // 0x7f0d07b3 float:1.8746112E38 double:1.0531307513E-314;
+        r11 = NUM; // 0x7f0d07e5 float:1.8746214E38 double:1.053130776E-314;
         r13 = "PermissionNoAudio";
         r11 = org.telegram.messenger.LocaleController.getString(r13, r11);
         r12.setMessage(r11);
@@ -5634,7 +5632,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     L_0x0088:
         if (r11 != r4) goto L_0x0097;
     L_0x008a:
-        r11 = NUM; // 0x7f0d07b9 float:1.8746125E38 double:1.0531307543E-314;
+        r11 = NUM; // 0x7f0d07eb float:1.8746226E38 double:1.053130779E-314;
         r13 = "PermissionStorage";
         r11 = org.telegram.messenger.LocaleController.getString(r13, r11);
         r12.setMessage(r11);
@@ -5642,7 +5640,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     L_0x0097:
         if (r11 != r3) goto L_0x00a6;
     L_0x0099:
-        r11 = NUM; // 0x7f0d07b1 float:1.8746108E38 double:1.0531307504E-314;
+        r11 = NUM; // 0x7f0d07e3 float:1.874621E38 double:1.053130775E-314;
         r13 = "PermissionContacts";
         r11 = org.telegram.messenger.LocaleController.getString(r13, r11);
         r12.setMessage(r11);
@@ -5654,18 +5652,18 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     L_0x00aa:
         if (r11 != r0) goto L_0x00b8;
     L_0x00ac:
-        r11 = NUM; // 0x7f0d07b5 float:1.8746116E38 double:1.0531307523E-314;
+        r11 = NUM; // 0x7f0d07e7 float:1.8746218E38 double:1.053130777E-314;
         r13 = "PermissionNoCamera";
         r11 = org.telegram.messenger.LocaleController.getString(r13, r11);
         r12.setMessage(r11);
     L_0x00b8:
-        r11 = NUM; // 0x7f0d07b8 float:1.8746123E38 double:1.053130754E-314;
+        r11 = NUM; // 0x7f0d07ea float:1.8746224E38 double:1.0531307785E-314;
         r13 = "PermissionOpenSettings";
         r11 = org.telegram.messenger.LocaleController.getString(r13, r11);
         r13 = new org.telegram.ui.-$$Lambda$LaunchActivity$4W20lwtGVi8T2FP_31dzdYvI9yo;
         r13.<init>(r10);
         r12.setNegativeButton(r11, r13);
-        r11 = NUM; // 0x7f0d0679 float:1.8745476E38 double:1.053130596E-314;
+        r11 = NUM; // 0x7f0d06a7 float:1.8745569E38 double:1.053130619E-314;
         r13 = "OK";
         r11 = org.telegram.messenger.LocaleController.getString(r13, r11);
         r12.setPositiveButton(r11, r9);
@@ -6196,7 +6194,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r7 = new org.telegram.ui.ActionBar.AlertDialog$Builder;	 Catch:{ Exception -> 0x0115 }
         r7.<init>(r1);	 Catch:{ Exception -> 0x0115 }
         r8 = r1.systemLocaleStrings;	 Catch:{ Exception -> 0x0115 }
-        r9 = NUM; // 0x7f0d02ac float:1.8743502E38 double:1.0531301155E-314;
+        r9 = NUM; // 0x7f0d02be float:1.8743539E38 double:1.0531301244E-314;
         r8 = r1.getStringForLanguageAlert(r8, r2, r9);	 Catch:{ Exception -> 0x0115 }
         r7.setTitle(r8);	 Catch:{ Exception -> 0x0115 }
         r8 = r1.englishLocaleStrings;	 Catch:{ Exception -> 0x0115 }
@@ -6211,7 +6209,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r11 = new org.telegram.messenger.LocaleController.LocaleInfo[r8];	 Catch:{ Exception -> 0x0115 }
         r12 = r1.systemLocaleStrings;	 Catch:{ Exception -> 0x0115 }
         r13 = "English";
-        r14 = NUM; // 0x7f0d03a0 float:1.8743997E38 double:1.053130236E-314;
+        r14 = NUM; // 0x7f0d03c9 float:1.874408E38 double:1.0531302563E-314;
         r12 = r1.getStringForLanguageAlert(r12, r13, r14);	 Catch:{ Exception -> 0x0115 }
         if (r5 == 0) goto L_0x0056;
     L_0x0054:
@@ -6288,7 +6286,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r3 = new org.telegram.ui.Cells.LanguageCell;	 Catch:{ Exception -> 0x0115 }
         r3.<init>(r1, r6);	 Catch:{ Exception -> 0x0115 }
         r4 = r1.systemLocaleStrings;	 Catch:{ Exception -> 0x0115 }
-        r5 = NUM; // 0x7f0d02ad float:1.8743504E38 double:1.053130116E-314;
+        r5 = NUM; // 0x7f0d02bf float:1.874354E38 double:1.053130125E-314;
         r4 = r1.getStringForLanguageAlert(r4, r0, r5);	 Catch:{ Exception -> 0x0115 }
         r6 = r1.englishLocaleStrings;	 Catch:{ Exception -> 0x0115 }
         r0 = r1.getStringForLanguageAlert(r6, r0, r5);	 Catch:{ Exception -> 0x0115 }
@@ -6301,7 +6299,7 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
         r2.addView(r3, r0);	 Catch:{ Exception -> 0x0115 }
         r7.setView(r2);	 Catch:{ Exception -> 0x0115 }
         r0 = "OK";
-        r2 = NUM; // 0x7f0d0679 float:1.8745476E38 double:1.053130596E-314;
+        r2 = NUM; // 0x7f0d06a7 float:1.8745569E38 double:1.053130619E-314;
         r0 = org.telegram.messenger.LocaleController.getString(r0, r2);	 Catch:{ Exception -> 0x0115 }
         r2 = new org.telegram.ui.-$$Lambda$LaunchActivity$-_OYvDrFInFakn0WORCpq62kH08;	 Catch:{ Exception -> 0x0115 }
         r2.<init>(r1, r10);	 Catch:{ Exception -> 0x0115 }

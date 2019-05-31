@@ -99,112 +99,112 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
     }
 
     /* Access modifiers changed, original: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:108:0x0279  */
-    /* JADX WARNING: Removed duplicated region for block: B:108:0x0279  */
-    /* JADX WARNING: Removed duplicated region for block: B:90:0x020e  */
-    /* JADX WARNING: Removed duplicated region for block: B:104:0x025f  */
-    /* JADX WARNING: Removed duplicated region for block: B:103:0x0241  */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x034b  */
-    /* JADX WARNING: Removed duplicated region for block: B:145:0x02f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:153:0x035b  */
-    /* JADX WARNING: Removed duplicated region for block: B:152:0x0359  */
-    /* JADX WARNING: Removed duplicated region for block: B:162:0x03d0  */
-    /* JADX WARNING: Removed duplicated region for block: B:156:0x0363  */
-    /* JADX WARNING: Removed duplicated region for block: B:178:0x0497  */
-    /* JADX WARNING: Removed duplicated region for block: B:174:0x045b  */
-    /* JADX WARNING: Removed duplicated region for block: B:109:0x0280  */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x01d3  */
-    /* JADX WARNING: Removed duplicated region for block: B:112:0x0287  */
-    /* JADX WARNING: Removed duplicated region for block: B:129:0x02c3  */
-    /* JADX WARNING: Removed duplicated region for block: B:126:0x02b7  */
-    /* JADX WARNING: Removed duplicated region for block: B:145:0x02f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x034b  */
-    /* JADX WARNING: Removed duplicated region for block: B:152:0x0359  */
-    /* JADX WARNING: Removed duplicated region for block: B:153:0x035b  */
-    /* JADX WARNING: Removed duplicated region for block: B:156:0x0363  */
-    /* JADX WARNING: Removed duplicated region for block: B:162:0x03d0  */
-    /* JADX WARNING: Removed duplicated region for block: B:174:0x045b  */
-    /* JADX WARNING: Removed duplicated region for block: B:178:0x0497  */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x01b1  */
+    /* JADX WARNING: Removed duplicated region for block: B:108:0x027a  */
+    /* JADX WARNING: Removed duplicated region for block: B:108:0x027a  */
+    /* JADX WARNING: Removed duplicated region for block: B:90:0x020f  */
+    /* JADX WARNING: Removed duplicated region for block: B:104:0x0260  */
+    /* JADX WARNING: Removed duplicated region for block: B:103:0x0242  */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x034c  */
+    /* JADX WARNING: Removed duplicated region for block: B:145:0x02f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:153:0x035c  */
+    /* JADX WARNING: Removed duplicated region for block: B:152:0x035a  */
+    /* JADX WARNING: Removed duplicated region for block: B:162:0x03d1  */
+    /* JADX WARNING: Removed duplicated region for block: B:156:0x0364  */
+    /* JADX WARNING: Removed duplicated region for block: B:178:0x0498  */
+    /* JADX WARNING: Removed duplicated region for block: B:174:0x045c  */
+    /* JADX WARNING: Removed duplicated region for block: B:109:0x0281  */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x01d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x0288  */
+    /* JADX WARNING: Removed duplicated region for block: B:129:0x02c4  */
+    /* JADX WARNING: Removed duplicated region for block: B:126:0x02b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:145:0x02f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x034c  */
+    /* JADX WARNING: Removed duplicated region for block: B:152:0x035a  */
+    /* JADX WARNING: Removed duplicated region for block: B:153:0x035c  */
+    /* JADX WARNING: Removed duplicated region for block: B:156:0x0364  */
+    /* JADX WARNING: Removed duplicated region for block: B:162:0x03d1  */
+    /* JADX WARNING: Removed duplicated region for block: B:174:0x045c  */
+    /* JADX WARNING: Removed duplicated region for block: B:178:0x0498  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x01b2  */
     /* JADX WARNING: Removed duplicated region for block: B:55:0x0175  */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x01d3  */
-    /* JADX WARNING: Removed duplicated region for block: B:109:0x0280  */
-    /* JADX WARNING: Removed duplicated region for block: B:112:0x0287  */
-    /* JADX WARNING: Removed duplicated region for block: B:126:0x02b7  */
-    /* JADX WARNING: Removed duplicated region for block: B:129:0x02c3  */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x034b  */
-    /* JADX WARNING: Removed duplicated region for block: B:145:0x02f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:153:0x035b  */
-    /* JADX WARNING: Removed duplicated region for block: B:152:0x0359  */
-    /* JADX WARNING: Removed duplicated region for block: B:162:0x03d0  */
-    /* JADX WARNING: Removed duplicated region for block: B:156:0x0363  */
-    /* JADX WARNING: Removed duplicated region for block: B:178:0x0497  */
-    /* JADX WARNING: Removed duplicated region for block: B:174:0x045b  */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x01d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:109:0x0281  */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x0288  */
+    /* JADX WARNING: Removed duplicated region for block: B:126:0x02b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:129:0x02c4  */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x034c  */
+    /* JADX WARNING: Removed duplicated region for block: B:145:0x02f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:153:0x035c  */
+    /* JADX WARNING: Removed duplicated region for block: B:152:0x035a  */
+    /* JADX WARNING: Removed duplicated region for block: B:162:0x03d1  */
+    /* JADX WARNING: Removed duplicated region for block: B:156:0x0364  */
+    /* JADX WARNING: Removed duplicated region for block: B:178:0x0498  */
+    /* JADX WARNING: Removed duplicated region for block: B:174:0x045c  */
     /* JADX WARNING: Removed duplicated region for block: B:18:0x0064  */
     /* JADX WARNING: Removed duplicated region for block: B:55:0x0175  */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x01b1  */
-    /* JADX WARNING: Removed duplicated region for block: B:109:0x0280  */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x01d3  */
-    /* JADX WARNING: Removed duplicated region for block: B:112:0x0287  */
-    /* JADX WARNING: Removed duplicated region for block: B:129:0x02c3  */
-    /* JADX WARNING: Removed duplicated region for block: B:126:0x02b7  */
-    /* JADX WARNING: Removed duplicated region for block: B:145:0x02f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x034b  */
-    /* JADX WARNING: Removed duplicated region for block: B:152:0x0359  */
-    /* JADX WARNING: Removed duplicated region for block: B:153:0x035b  */
-    /* JADX WARNING: Removed duplicated region for block: B:156:0x0363  */
-    /* JADX WARNING: Removed duplicated region for block: B:162:0x03d0  */
-    /* JADX WARNING: Removed duplicated region for block: B:174:0x045b  */
-    /* JADX WARNING: Removed duplicated region for block: B:178:0x0497  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x01b2  */
+    /* JADX WARNING: Removed duplicated region for block: B:109:0x0281  */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x01d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x0288  */
+    /* JADX WARNING: Removed duplicated region for block: B:129:0x02c4  */
+    /* JADX WARNING: Removed duplicated region for block: B:126:0x02b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:145:0x02f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x034c  */
+    /* JADX WARNING: Removed duplicated region for block: B:152:0x035a  */
+    /* JADX WARNING: Removed duplicated region for block: B:153:0x035c  */
+    /* JADX WARNING: Removed duplicated region for block: B:156:0x0364  */
+    /* JADX WARNING: Removed duplicated region for block: B:162:0x03d1  */
+    /* JADX WARNING: Removed duplicated region for block: B:174:0x045c  */
+    /* JADX WARNING: Removed duplicated region for block: B:178:0x0498  */
     /* JADX WARNING: Removed duplicated region for block: B:43:0x012b A:{SYNTHETIC, Splitter:B:43:0x012b} */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x01b1  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x01b2  */
     /* JADX WARNING: Removed duplicated region for block: B:55:0x0175  */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x01d3  */
-    /* JADX WARNING: Removed duplicated region for block: B:109:0x0280  */
-    /* JADX WARNING: Removed duplicated region for block: B:112:0x0287  */
-    /* JADX WARNING: Removed duplicated region for block: B:126:0x02b7  */
-    /* JADX WARNING: Removed duplicated region for block: B:129:0x02c3  */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x034b  */
-    /* JADX WARNING: Removed duplicated region for block: B:145:0x02f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:153:0x035b  */
-    /* JADX WARNING: Removed duplicated region for block: B:152:0x0359  */
-    /* JADX WARNING: Removed duplicated region for block: B:162:0x03d0  */
-    /* JADX WARNING: Removed duplicated region for block: B:156:0x0363  */
-    /* JADX WARNING: Removed duplicated region for block: B:178:0x0497  */
-    /* JADX WARNING: Removed duplicated region for block: B:174:0x045b  */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x01d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:109:0x0281  */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x0288  */
+    /* JADX WARNING: Removed duplicated region for block: B:126:0x02b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:129:0x02c4  */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x034c  */
+    /* JADX WARNING: Removed duplicated region for block: B:145:0x02f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:153:0x035c  */
+    /* JADX WARNING: Removed duplicated region for block: B:152:0x035a  */
+    /* JADX WARNING: Removed duplicated region for block: B:162:0x03d1  */
+    /* JADX WARNING: Removed duplicated region for block: B:156:0x0364  */
+    /* JADX WARNING: Removed duplicated region for block: B:178:0x0498  */
+    /* JADX WARNING: Removed duplicated region for block: B:174:0x045c  */
     /* JADX WARNING: Removed duplicated region for block: B:43:0x012b A:{SYNTHETIC, Splitter:B:43:0x012b} */
     /* JADX WARNING: Removed duplicated region for block: B:55:0x0175  */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x01b1  */
-    /* JADX WARNING: Removed duplicated region for block: B:109:0x0280  */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x01d3  */
-    /* JADX WARNING: Removed duplicated region for block: B:112:0x0287  */
-    /* JADX WARNING: Removed duplicated region for block: B:129:0x02c3  */
-    /* JADX WARNING: Removed duplicated region for block: B:126:0x02b7  */
-    /* JADX WARNING: Removed duplicated region for block: B:145:0x02f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x034b  */
-    /* JADX WARNING: Removed duplicated region for block: B:152:0x0359  */
-    /* JADX WARNING: Removed duplicated region for block: B:153:0x035b  */
-    /* JADX WARNING: Removed duplicated region for block: B:156:0x0363  */
-    /* JADX WARNING: Removed duplicated region for block: B:162:0x03d0  */
-    /* JADX WARNING: Removed duplicated region for block: B:174:0x045b  */
-    /* JADX WARNING: Removed duplicated region for block: B:178:0x0497  */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x01b1  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x01b2  */
+    /* JADX WARNING: Removed duplicated region for block: B:109:0x0281  */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x01d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x0288  */
+    /* JADX WARNING: Removed duplicated region for block: B:129:0x02c4  */
+    /* JADX WARNING: Removed duplicated region for block: B:126:0x02b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:145:0x02f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x034c  */
+    /* JADX WARNING: Removed duplicated region for block: B:152:0x035a  */
+    /* JADX WARNING: Removed duplicated region for block: B:153:0x035c  */
+    /* JADX WARNING: Removed duplicated region for block: B:156:0x0364  */
+    /* JADX WARNING: Removed duplicated region for block: B:162:0x03d1  */
+    /* JADX WARNING: Removed duplicated region for block: B:174:0x045c  */
+    /* JADX WARNING: Removed duplicated region for block: B:178:0x0498  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x01b2  */
     /* JADX WARNING: Removed duplicated region for block: B:55:0x0175  */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x01d3  */
-    /* JADX WARNING: Removed duplicated region for block: B:109:0x0280  */
-    /* JADX WARNING: Removed duplicated region for block: B:112:0x0287  */
-    /* JADX WARNING: Removed duplicated region for block: B:126:0x02b7  */
-    /* JADX WARNING: Removed duplicated region for block: B:129:0x02c3  */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x034b  */
-    /* JADX WARNING: Removed duplicated region for block: B:145:0x02f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:153:0x035b  */
-    /* JADX WARNING: Removed duplicated region for block: B:152:0x0359  */
-    /* JADX WARNING: Removed duplicated region for block: B:162:0x03d0  */
-    /* JADX WARNING: Removed duplicated region for block: B:156:0x0363  */
-    /* JADX WARNING: Removed duplicated region for block: B:178:0x0497  */
-    /* JADX WARNING: Removed duplicated region for block: B:174:0x045b  */
-    /* JADX WARNING: Missing block: B:70:0x01c9, code skipped:
-            if (r3 == r1.currentPhotoObject) goto L_0x01cb;
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x01d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:109:0x0281  */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x0288  */
+    /* JADX WARNING: Removed duplicated region for block: B:126:0x02b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:129:0x02c4  */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x034c  */
+    /* JADX WARNING: Removed duplicated region for block: B:145:0x02f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:153:0x035c  */
+    /* JADX WARNING: Removed duplicated region for block: B:152:0x035a  */
+    /* JADX WARNING: Removed duplicated region for block: B:162:0x03d1  */
+    /* JADX WARNING: Removed duplicated region for block: B:156:0x0364  */
+    /* JADX WARNING: Removed duplicated region for block: B:178:0x0498  */
+    /* JADX WARNING: Removed duplicated region for block: B:174:0x045c  */
+    /* JADX WARNING: Missing block: B:70:0x01ca, code skipped:
+            if (r3 == r1.currentPhotoObject) goto L_0x01cc;
      */
     @android.annotation.SuppressLint({"DrawAllocation"})
     public void onMeasure(int r37, int r38) {
@@ -416,7 +416,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         r6 = 3;
         r8 = 5;
         r9 = 80;
-        if (r0 == 0) goto L_0x01b1;
+        if (r0 == 0) goto L_0x01b2;
     L_0x0175:
         r0 = org.telegram.messenger.MessageObject.isGifDocument(r0);
         r3 = 90;
@@ -426,11 +426,11 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         r0 = r0.thumbs;
         r0 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r0, r3);
         r1.currentPhotoObject = r0;
-        goto L_0x01cb;
+        goto L_0x01cc;
     L_0x0188:
         r0 = r1.documentAttach;
         r0 = org.telegram.messenger.MessageObject.isStickerDocument(r0);
-        if (r0 == 0) goto L_0x01a0;
+        if (r0 == 0) goto L_0x01a1;
     L_0x0190:
         r0 = r1.documentAttach;
         r0 = r0.thumbs;
@@ -439,103 +439,103 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         r3 = "webp";
         r25 = r3;
         r3 = 0;
-        goto L_0x01ce;
-    L_0x01a0:
+        goto L_0x01cf;
+    L_0x01a1:
         r0 = r1.documentAttachType;
-        if (r0 == r8) goto L_0x01cb;
-    L_0x01a4:
-        if (r0 == r6) goto L_0x01cb;
-    L_0x01a6:
+        if (r0 == r8) goto L_0x01cc;
+    L_0x01a5:
+        if (r0 == r6) goto L_0x01cc;
+    L_0x01a7:
         r0 = r1.documentAttach;
         r0 = r0.thumbs;
         r0 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r0, r3);
         r1.currentPhotoObject = r0;
-        goto L_0x01cb;
-    L_0x01b1:
+        goto L_0x01cc;
+    L_0x01b2:
         r0 = r1.inlineResult;
-        if (r0 == 0) goto L_0x01cb;
-    L_0x01b5:
+        if (r0 == 0) goto L_0x01cc;
+    L_0x01b6:
         r0 = r0.photo;
-        if (r0 == 0) goto L_0x01cb;
-    L_0x01b9:
+        if (r0 == 0) goto L_0x01cc;
+    L_0x01ba:
         r0 = org.telegram.messenger.AndroidUtilities.getPhotoSize();
         r0 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r3, r0, r7);
         r1.currentPhotoObject = r0;
         r3 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r3, r9);
         r0 = r1.currentPhotoObject;
-        if (r3 != r0) goto L_0x01cc;
-    L_0x01cb:
-        r3 = 0;
+        if (r3 != r0) goto L_0x01cd;
     L_0x01cc:
+        r3 = 0;
+    L_0x01cd:
         r25 = 0;
-    L_0x01ce:
+    L_0x01cf:
         r0 = r1.inlineResult;
         r10 = 2;
-        if (r0 == 0) goto L_0x0280;
-    L_0x01d3:
+        if (r0 == 0) goto L_0x0281;
+    L_0x01d4:
         r11 = r0.content;
         r11 = r11 instanceof org.telegram.tgnet.TLRPC.TL_webDocument;
-        if (r11 == 0) goto L_0x020b;
-    L_0x01d9:
+        if (r11 == 0) goto L_0x020c;
+    L_0x01da:
         r0 = r0.type;
-        if (r0 == 0) goto L_0x020b;
-    L_0x01dd:
+        if (r0 == 0) goto L_0x020c;
+    L_0x01de:
         r11 = "gif";
         r0 = r0.startsWith(r11);
-        if (r0 == 0) goto L_0x01ee;
-    L_0x01e5:
+        if (r0 == 0) goto L_0x01ef;
+    L_0x01e6:
         r0 = r1.inlineResult;
         r0 = r0.content;
         r0 = (org.telegram.tgnet.TLRPC.TL_webDocument) r0;
         r1.documentAttachType = r10;
-        goto L_0x020c;
-    L_0x01ee:
+        goto L_0x020d;
+    L_0x01ef:
         r0 = r1.inlineResult;
         r0 = r0.type;
         r11 = "photo";
         r0 = r0.equals(r11);
-        if (r0 == 0) goto L_0x020b;
-    L_0x01fa:
+        if (r0 == 0) goto L_0x020c;
+    L_0x01fb:
         r0 = r1.inlineResult;
         r11 = r0.thumb;
         r12 = r11 instanceof org.telegram.tgnet.TLRPC.TL_webDocument;
-        if (r12 == 0) goto L_0x0206;
-    L_0x0202:
+        if (r12 == 0) goto L_0x0207;
+    L_0x0203:
         r0 = r11;
         r0 = (org.telegram.tgnet.TLRPC.TL_webDocument) r0;
-        goto L_0x020c;
-    L_0x0206:
+        goto L_0x020d;
+    L_0x0207:
         r0 = r0.content;
         r0 = (org.telegram.tgnet.TLRPC.TL_webDocument) r0;
-        goto L_0x020c;
-    L_0x020b:
-        r0 = 0;
+        goto L_0x020d;
     L_0x020c:
-        if (r0 != 0) goto L_0x0219;
-    L_0x020e:
+        r0 = 0;
+    L_0x020d:
+        if (r0 != 0) goto L_0x021a;
+    L_0x020f:
         r11 = r1.inlineResult;
         r11 = r11.thumb;
         r12 = r11 instanceof org.telegram.tgnet.TLRPC.TL_webDocument;
-        if (r12 == 0) goto L_0x0219;
-    L_0x0216:
+        if (r12 == 0) goto L_0x021a;
+    L_0x0217:
         r0 = r11;
         r0 = (org.telegram.tgnet.TLRPC.TL_webDocument) r0;
-    L_0x0219:
-        if (r0 != 0) goto L_0x0274;
-    L_0x021b:
+    L_0x021a:
+        if (r0 != 0) goto L_0x0275;
+    L_0x021c:
         r11 = r1.currentPhotoObject;
-        if (r11 != 0) goto L_0x0274;
-    L_0x021f:
-        if (r3 != 0) goto L_0x0274;
-    L_0x0221:
+        if (r11 != 0) goto L_0x0275;
+    L_0x0220:
+        if (r3 != 0) goto L_0x0275;
+    L_0x0222:
         r11 = r1.inlineResult;
         r11 = r11.send_message;
         r12 = r11 instanceof org.telegram.tgnet.TLRPC.TL_botInlineMessageMediaVenue;
-        if (r12 != 0) goto L_0x022d;
-    L_0x0229:
+        if (r12 != 0) goto L_0x022e;
+    L_0x022a:
         r11 = r11 instanceof org.telegram.tgnet.TLRPC.TL_botInlineMessageMediaGeo;
-        if (r11 == 0) goto L_0x0274;
-    L_0x022d:
+        if (r11 == 0) goto L_0x0275;
+    L_0x022e:
         r11 = r1.inlineResult;
         r11 = r11.send_message;
         r11 = r11.geo;
@@ -544,8 +544,8 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         r11 = r1.currentAccount;
         r11 = org.telegram.messenger.MessagesController.getInstance(r11);
         r11 = r11.mapProvider;
-        if (r11 != r10) goto L_0x025f;
-    L_0x0241:
+        if (r11 != r10) goto L_0x0260;
+    L_0x0242:
         r11 = r1.inlineResult;
         r11 = r11.send_message;
         r11 = r11.geo;
@@ -559,8 +559,8 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         r11 = org.telegram.messenger.WebFile.createWithGeoPoint(r11, r14, r14, r12, r13);
         r17 = r11;
         r11 = 0;
-        goto L_0x0277;
-    L_0x025f:
+        goto L_0x0278;
+    L_0x0260:
         r11 = r1.currentAccount;
         r31 = 72;
         r32 = 72;
@@ -570,103 +570,103 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         r27 = r12;
         r29 = r14;
         r11 = org.telegram.messenger.AndroidUtilities.formapMapUrl(r26, r27, r29, r31, r32, r33, r34);
-        goto L_0x0275;
-    L_0x0274:
-        r11 = 0;
+        goto L_0x0276;
     L_0x0275:
+        r11 = 0;
+    L_0x0276:
         r17 = 0;
-    L_0x0277:
-        if (r0 == 0) goto L_0x0283;
-    L_0x0279:
+    L_0x0278:
+        if (r0 == 0) goto L_0x0284;
+    L_0x027a:
         r0 = org.telegram.messenger.WebFile.createWithWebDocument(r0);
         r17 = r0;
-        goto L_0x0283;
-    L_0x0280:
+        goto L_0x0284;
+    L_0x0281:
         r11 = 0;
         r17 = 0;
-    L_0x0283:
+    L_0x0284:
         r0 = r1.documentAttach;
-        if (r0 == 0) goto L_0x02ad;
-    L_0x0287:
-        r0 = 0;
+        if (r0 == 0) goto L_0x02ae;
     L_0x0288:
+        r0 = 0;
+    L_0x0289:
         r12 = r1.documentAttach;
         r12 = r12.attributes;
         r12 = r12.size();
-        if (r0 >= r12) goto L_0x02ad;
-    L_0x0292:
+        if (r0 >= r12) goto L_0x02ae;
+    L_0x0293:
         r12 = r1.documentAttach;
         r12 = r12.attributes;
         r12 = r12.get(r0);
         r12 = (org.telegram.tgnet.TLRPC.DocumentAttribute) r12;
         r13 = r12 instanceof org.telegram.tgnet.TLRPC.TL_documentAttributeImageSize;
-        if (r13 != 0) goto L_0x02a8;
-    L_0x02a0:
+        if (r13 != 0) goto L_0x02a9;
+    L_0x02a1:
         r13 = r12 instanceof org.telegram.tgnet.TLRPC.TL_documentAttributeVideo;
-        if (r13 == 0) goto L_0x02a5;
-    L_0x02a4:
-        goto L_0x02a8;
+        if (r13 == 0) goto L_0x02a6;
     L_0x02a5:
+        goto L_0x02a9;
+    L_0x02a6:
         r0 = r0 + 1;
-        goto L_0x0288;
-    L_0x02a8:
+        goto L_0x0289;
+    L_0x02a9:
         r0 = r12.w;
         r12 = r12.h;
-        goto L_0x02af;
-    L_0x02ad:
+        goto L_0x02b0;
+    L_0x02ae:
         r0 = 0;
         r12 = 0;
-    L_0x02af:
-        if (r0 == 0) goto L_0x02b3;
-    L_0x02b1:
-        if (r12 != 0) goto L_0x02d0;
-    L_0x02b3:
+    L_0x02b0:
+        if (r0 == 0) goto L_0x02b4;
+    L_0x02b2:
+        if (r12 != 0) goto L_0x02d1;
+    L_0x02b4:
         r13 = r1.currentPhotoObject;
-        if (r13 == 0) goto L_0x02c3;
-    L_0x02b7:
-        if (r3 == 0) goto L_0x02bc;
-    L_0x02b9:
+        if (r13 == 0) goto L_0x02c4;
+    L_0x02b8:
+        if (r3 == 0) goto L_0x02bd;
+    L_0x02ba:
         r0 = -1;
         r3.size = r0;
-    L_0x02bc:
+    L_0x02bd:
         r0 = r1.currentPhotoObject;
         r12 = r0.w;
         r0 = r0.h;
-        goto L_0x02d5;
-    L_0x02c3:
+        goto L_0x02d6;
+    L_0x02c4:
         r13 = r1.inlineResult;
-        if (r13 == 0) goto L_0x02d0;
-    L_0x02c7:
+        if (r13 == 0) goto L_0x02d1;
+    L_0x02c8:
         r0 = org.telegram.messenger.MessageObject.getInlineResultWidthAndHeight(r13);
         r12 = r0[r2];
         r0 = r0[r7];
-        goto L_0x02d5;
-    L_0x02d0:
+        goto L_0x02d6;
+    L_0x02d1:
         r35 = r12;
         r12 = r0;
         r0 = r35;
-    L_0x02d5:
+    L_0x02d6:
         r13 = NUM; // 0x42a00000 float:80.0 double:5.522576936E-315;
-        if (r12 == 0) goto L_0x02db;
-    L_0x02d9:
-        if (r0 != 0) goto L_0x02e0;
-    L_0x02db:
+        if (r12 == 0) goto L_0x02dc;
+    L_0x02da:
+        if (r0 != 0) goto L_0x02e1;
+    L_0x02dc:
         r12 = org.telegram.messenger.AndroidUtilities.dp(r13);
         r0 = r12;
-    L_0x02e0:
+    L_0x02e1:
         r14 = r1.documentAttach;
-        if (r14 != 0) goto L_0x02ec;
-    L_0x02e4:
+        if (r14 != 0) goto L_0x02ed;
+    L_0x02e5:
         r14 = r1.currentPhotoObject;
-        if (r14 != 0) goto L_0x02ec;
-    L_0x02e8:
-        if (r17 != 0) goto L_0x02ec;
-    L_0x02ea:
-        if (r11 == 0) goto L_0x0455;
-    L_0x02ec:
+        if (r14 != 0) goto L_0x02ed;
+    L_0x02e9:
+        if (r17 != 0) goto L_0x02ed;
+    L_0x02eb:
+        if (r11 == 0) goto L_0x0456;
+    L_0x02ed:
         r14 = r1.mediaWebpage;
-        if (r14 == 0) goto L_0x034b;
-    L_0x02f0:
+        if (r14 == 0) goto L_0x034c;
+    L_0x02f1:
         r12 = (float) r12;
         r0 = (float) r0;
         r13 = org.telegram.messenger.AndroidUtilities.dp(r13);
@@ -675,8 +675,8 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         r12 = r12 / r0;
         r0 = (int) r12;
         r12 = r1.documentAttachType;
-        if (r12 != r10) goto L_0x031c;
-    L_0x02fe:
+        if (r12 != r10) goto L_0x031d;
+    L_0x02ff:
         r12 = java.util.Locale.US;
         r13 = new java.lang.Object[r10];
         r0 = (float) r0;
@@ -690,8 +690,8 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         r0 = "%d_%d_b";
         r0 = java.lang.String.format(r12, r0, r13);
         r23 = r0;
-        goto L_0x0352;
-    L_0x031c:
+        goto L_0x0353;
+    L_0x031d:
         r12 = java.util.Locale.US;
         r13 = new java.lang.Object[r10];
         r0 = (float) r0;
@@ -711,30 +711,30 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         r9.append(r12);
         r9 = r9.toString();
         r23 = r9;
-        goto L_0x0352;
-    L_0x034b:
+        goto L_0x0353;
+    L_0x034c:
         r0 = "52_52_b";
         r9 = "52_52";
         r23 = r0;
         r0 = r9;
-    L_0x0352:
+    L_0x0353:
         r9 = r1.linkImageView;
         r12 = r1.documentAttachType;
         r13 = 6;
-        if (r12 != r13) goto L_0x035b;
-    L_0x0359:
+        if (r12 != r13) goto L_0x035c;
+    L_0x035a:
         r12 = 1;
-        goto L_0x035c;
-    L_0x035b:
-        r12 = 0;
+        goto L_0x035d;
     L_0x035c:
+        r12 = 0;
+    L_0x035d:
         r9.setAspectFit(r12);
         r9 = r1.documentAttachType;
-        if (r9 != r10) goto L_0x03d0;
-    L_0x0363:
+        if (r9 != r10) goto L_0x03d1;
+    L_0x0364:
         r3 = r1.documentAttach;
-        if (r3 == 0) goto L_0x038c;
-    L_0x0367:
+        if (r3 == 0) goto L_0x038d;
+    L_0x0368:
         r9 = r1.linkImageView;
         r20 = org.telegram.messenger.ImageLocation.getForDocument(r3);
         r21 = 0;
@@ -750,10 +750,10 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         r24 = r3;
         r26 = r11;
         r19.setImage(r20, r21, r22, r23, r24, r25, r26, r27);
-        goto L_0x0453;
-    L_0x038c:
-        if (r17 == 0) goto L_0x03af;
-    L_0x038e:
+        goto L_0x0454;
+    L_0x038d:
+        if (r17 == 0) goto L_0x03b0;
+    L_0x038f:
         r3 = r1.linkImageView;
         r20 = org.telegram.messenger.ImageLocation.getForWebFile(r17);
         r21 = 0;
@@ -767,8 +767,8 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         r23 = r0;
         r26 = r9;
         r19.setImage(r20, r21, r22, r23, r24, r25, r26, r27);
-        goto L_0x0453;
-    L_0x03af:
+        goto L_0x0454;
+    L_0x03b0:
         r3 = r1.linkImageView;
         r20 = org.telegram.messenger.ImageLocation.getForPath(r11);
         r21 = 0;
@@ -782,14 +782,14 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         r23 = r0;
         r26 = r9;
         r19.setImage(r20, r21, r22, r23, r24, r25, r26, r27);
-        goto L_0x0453;
-    L_0x03d0:
+        goto L_0x0454;
+    L_0x03d1:
         r9 = r1.currentPhotoObject;
-        if (r9 == 0) goto L_0x041a;
-    L_0x03d4:
+        if (r9 == 0) goto L_0x041b;
+    L_0x03d5:
         r11 = r1.documentAttach;
-        if (r11 == 0) goto L_0x03f8;
-    L_0x03d8:
+        if (r11 == 0) goto L_0x03f9;
+    L_0x03d9:
         r12 = r1.linkImageView;
         r20 = org.telegram.messenger.ImageLocation.getForDocument(r9, r11);
         r9 = r1.photoAttach;
@@ -803,8 +803,8 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         r24 = r3;
         r26 = r9;
         r19.setImage(r20, r21, r22, r23, r24, r25, r26, r27);
-        goto L_0x0453;
-    L_0x03f8:
+        goto L_0x0454;
+    L_0x03f9:
         r11 = r1.linkImageView;
         r12 = r1.photoAttach;
         r20 = org.telegram.messenger.ImageLocation.getForPhoto(r9, r12);
@@ -819,10 +819,10 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         r24 = r3;
         r26 = r9;
         r19.setImage(r20, r21, r22, r23, r24, r25, r26, r27);
-        goto L_0x0453;
-    L_0x041a:
-        if (r17 == 0) goto L_0x0438;
-    L_0x041c:
+        goto L_0x0454;
+    L_0x041b:
+        if (r17 == 0) goto L_0x0439;
+    L_0x041d:
         r9 = r1.linkImageView;
         r20 = org.telegram.messenger.ImageLocation.getForWebFile(r17);
         r11 = r1.photoAttach;
@@ -834,8 +834,8 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         r21 = r0;
         r26 = r3;
         r19.setImage(r20, r21, r22, r23, r24, r25, r26, r27);
-        goto L_0x0453;
-    L_0x0438:
+        goto L_0x0454;
+    L_0x0439:
         r9 = r1.linkImageView;
         r20 = org.telegram.messenger.ImageLocation.getForPath(r11);
         r11 = r1.photoAttach;
@@ -847,18 +847,18 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         r21 = r0;
         r26 = r3;
         r19.setImage(r20, r21, r22, r23, r24, r25, r26, r27);
-    L_0x0453:
+    L_0x0454:
         r1.drawLinkImageView = r7;
-    L_0x0455:
+    L_0x0456:
         r0 = r1.mediaWebpage;
         r3 = NUM; // 0x41CLASSNAME float:24.0 double:5.450047783E-315;
-        if (r0 == 0) goto L_0x0497;
-    L_0x045b:
+        if (r0 == 0) goto L_0x0498;
+    L_0x045c:
         r0 = android.view.View.MeasureSpec.getSize(r38);
-        if (r0 != 0) goto L_0x0465;
-    L_0x0461:
+        if (r0 != 0) goto L_0x0466;
+    L_0x0462:
         r0 = org.telegram.messenger.AndroidUtilities.dp(r4);
-    L_0x0465:
+    L_0x0466:
         r1.setMeasuredDimension(r5, r0);
         r4 = org.telegram.messenger.AndroidUtilities.dp(r3);
         r4 = r5 - r4;
@@ -878,44 +878,44 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         r3.setCircleRadius(r4);
         r3 = r1.linkImageView;
         r3.setImageCoords(r2, r2, r5, r0);
-        goto L_0x0563;
-    L_0x0497:
+        goto L_0x0564;
+    L_0x0498:
         r0 = r1.titleLayout;
-        if (r0 == 0) goto L_0x04ad;
-    L_0x049b:
+        if (r0 == 0) goto L_0x04ae;
+    L_0x049c:
         r0 = r0.getLineCount();
-        if (r0 == 0) goto L_0x04ad;
-    L_0x04a1:
+        if (r0 == 0) goto L_0x04ae;
+    L_0x04a2:
         r0 = r1.titleLayout;
         r4 = r0.getLineCount();
         r4 = r4 - r7;
         r0 = r0.getLineBottom(r4);
         r2 = r2 + r0;
-    L_0x04ad:
+    L_0x04ae:
         r0 = r1.descriptionLayout;
-        if (r0 == 0) goto L_0x04c3;
-    L_0x04b1:
+        if (r0 == 0) goto L_0x04c4;
+    L_0x04b2:
         r0 = r0.getLineCount();
-        if (r0 == 0) goto L_0x04c3;
-    L_0x04b7:
+        if (r0 == 0) goto L_0x04c4;
+    L_0x04b8:
         r0 = r1.descriptionLayout;
         r4 = r0.getLineCount();
         r4 = r4 - r7;
         r0 = r0.getLineBottom(r4);
         r2 = r2 + r0;
-    L_0x04c3:
+    L_0x04c4:
         r0 = r1.linkLayout;
-        if (r0 == 0) goto L_0x04d9;
-    L_0x04c7:
+        if (r0 == 0) goto L_0x04da;
+    L_0x04c8:
         r0 = r0.getLineCount();
-        if (r0 <= 0) goto L_0x04d9;
-    L_0x04cd:
+        if (r0 <= 0) goto L_0x04da;
+    L_0x04ce:
         r0 = r1.linkLayout;
         r4 = r0.getLineCount();
         r4 = r4 - r7;
         r0 = r0.getLineBottom(r4);
         r2 = r2 + r0;
-    L_0x04d9:
+    L_0x04da:
         r0 = NUM; // 0x42500000 float:52.0 double:5.496673668E-315;
         r0 = org.telegram.messenger.AndroidUtilities.dp(r0);
         r0 = java.lang.Math.max(r0, r2);
@@ -932,18 +932,18 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         r0 = NUM; // 0x42500000 float:52.0 double:5.496673668E-315;
         r0 = org.telegram.messenger.AndroidUtilities.dp(r0);
         r2 = org.telegram.messenger.LocaleController.isRTL;
-        if (r2 == 0) goto L_0x0515;
-    L_0x0508:
+        if (r2 == 0) goto L_0x0516;
+    L_0x0509:
         r2 = android.view.View.MeasureSpec.getSize(r37);
         r4 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
         r5 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r2 = r2 - r5;
         r2 = r2 - r0;
-        goto L_0x051b;
-    L_0x0515:
+        goto L_0x051c;
+    L_0x0516:
         r4 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
         r2 = org.telegram.messenger.AndroidUtilities.dp(r4);
-    L_0x051b:
+    L_0x051c:
         r5 = r1.letterDrawable;
         r7 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r9 = r2 + r0;
@@ -954,10 +954,10 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r5.setImageCoords(r2, r4, r0, r0);
         r0 = r1.documentAttachType;
-        if (r0 == r6) goto L_0x053b;
-    L_0x0539:
-        if (r0 != r8) goto L_0x0563;
-    L_0x053b:
+        if (r0 == r6) goto L_0x053c;
+    L_0x053a:
+        if (r0 != r8) goto L_0x0564;
+    L_0x053c:
         r0 = r1.radialProgress;
         r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
         r0.setCircleRadius(r3);
@@ -973,7 +973,7 @@ public class ContextLinkCell extends View implements FileDownloadProgressListene
         r5 = NUM; // 0x42600000 float:56.0 double:5.50185432E-315;
         r5 = org.telegram.messenger.AndroidUtilities.dp(r5);
         r0.setProgressRect(r3, r4, r2, r5);
-    L_0x0563:
+    L_0x0564:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ContextLinkCell.onMeasure(int, int):void");

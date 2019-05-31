@@ -111,7 +111,7 @@ public class UserCell extends FrameLayout {
             this.adminTextView = new TextView(context2);
             this.adminTextView.setTextSize(1, 14.0f);
             this.adminTextView.setTextColor(Theme.getColor("profile_creatorIcon"));
-            addView(this.adminTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 3 : 5) | 48, LocaleController.isRTL ? 23.0f : 0.0f, 15.0f, LocaleController.isRTL ? 0.0f : 23.0f, 0.0f));
+            addView(this.adminTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 3 : 5) | 48, LocaleController.isRTL ? 23.0f : 0.0f, 10.0f, LocaleController.isRTL ? 0.0f : 23.0f, 0.0f));
         }
         setFocusable(true);
     }
@@ -574,14 +574,14 @@ public class UserCell extends FrameLayout {
         goto L_0x0123;
     L_0x0114:
         r13 = r12.statusTextView;
-        r2 = NUM; // 0x7f0d01be float:1.874302E38 double:1.053129998E-314;
+        r2 = NUM; // 0x7f0d01ce float:1.8743052E38 double:1.053130006E-314;
         r5 = "BotStatusCantRead";
         r2 = org.telegram.messenger.LocaleController.getString(r5, r2);
         r13.setText(r2);
         goto L_0x018f;
     L_0x0123:
         r13 = r12.statusTextView;
-        r2 = NUM; // 0x7f0d01bf float:1.8743021E38 double:1.0531299984E-314;
+        r2 = NUM; // 0x7f0d01cf float:1.8743054E38 double:1.0531300063E-314;
         r5 = "BotStatusRead";
         r2 = org.telegram.messenger.LocaleController.getString(r5, r2);
         r13.setText(r2);
@@ -625,7 +625,7 @@ public class UserCell extends FrameLayout {
         r2 = r12.statusOnlineColor;
         r13.setTextColor(r2);
         r13 = r12.statusTextView;
-        r2 = NUM; // 0x7f0d067c float:1.8745482E38 double:1.0531305977E-314;
+        r2 = NUM; // 0x7f0d06aa float:1.8745575E38 double:1.0531306204E-314;
         r5 = "Online";
         r2 = org.telegram.messenger.LocaleController.getString(r5, r2);
         r13.setText(r2);

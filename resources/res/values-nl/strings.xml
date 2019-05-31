@@ -206,9 +206,7 @@
     <string name="AllowReadSms">Sta het ontvangen van SMS toe zodat we automatisch je inlogcode kunnen invoeren.</string>
     <string name="AlternativeOptions">Andere opties</string>
     <string name="AlwaysAllow">Altijd toestaan</string>
-    <string name="AlwaysAllowPlaceholder">Altijd toestaan...</string>
     <string name="AlwaysShareWith">Altijd delen met</string>
-    <string name="AlwaysShareWithPlaceholder">Altijd delen met gebruikers</string>
     <string name="AlwaysShareWithTitle">Altijd delen</string>
     <string name="AlwaysShowPopup">Altijd pop-up tonen</string>
     <string name="AndMoreTypingGroup_few">%1$s en %2$d anderen zijn aan het typen</string>
@@ -263,7 +261,6 @@
     <string name="AreTyping">zijn aan het typen</string>
     <string name="AreTypingGroup">%1$s zijn aan het typen...</string>
     <string name="AreYouSure">Weet je het zeker?</string>
-    <string name="AreYouSureBlockContact">Weet je zeker dat je deze persoon wilt blokkeren?</string>
     <string name="AreYouSureClearDrafts">Echt alle Cloud-conceptberichten wissen?</string>
     <string name="AreYouSureClearHistory">Geschiedenis echt wissen? </string>
     <string name="AreYouSureClearHistoryCacheFewChats">Alle gecachete tekst en media van de geselecteerde chats verwijderen?</string>
@@ -377,7 +374,6 @@
     <string name="AutoLockDisabled">Uitgeschakeld</string>
     <string name="AutoLockInTime">over %1$s</string>
     <string name="AutoLockInfo">Vraag om toegangscode indien afwezig</string>
-    <string name="AutoNightAutomatic">Automatisch</string>
     <string name="AutoNightBrightness">Drempelwaarde omgevingslicht</string>
     <string name="AutoNightBrightnessInfo">Schakel om naar je nachtthema als het omgevingslicht minder dan %1$d%% is.</string>
     <string name="AutoNightDisabled">Uitgeschakeld</string>
@@ -1447,9 +1443,7 @@
     <string name="NetworkUsageSince">Datagebruik sinds %1$s</string>
     <string name="NetworkUsageWiFi">WI-FI</string>
     <string name="NeverAllow">Nooit toestaan</string>
-    <string name="NeverAllowPlaceholder">Nooit toestaan...</string>
     <string name="NeverShareWith">Nooit delen met</string>
-    <string name="NeverShareWithPlaceholder">Nooit delen met gebruikers</string>
     <string name="NeverShareWithTitle">Nooit delen</string>
     <string name="NewBroadcastList">Nieuwe verzendlijst</string>
     <string name="NewChannel">Nieuw kanaal</string>
@@ -1672,7 +1666,6 @@
     <string name="OpenInBrowser">OPENEN IN...</string>
     <string name="OpenInExternalApp">Open met...</string>
     <string name="OpenMessage">BEKIJK BERICHT</string>
-    <string name="OpenUrlAlert">URL %1$s openen?</string>
     <string name="OptionHint">Optie</string>
     <string name="Option_few">%1$d meer opties</string>
     <string name="Option_many">%1$d meer opties</string>

@@ -1791,6 +1791,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                             this.listAdapter.dialogs.remove(dialog);
                             this.listAdapter.dialogs.add(1, dialog);
                         }
+                        searchField.searchEditText.setText("");
                         this.gridView.setAdapter(this.listAdapter);
                         searchField.hideKeyboard();
                     }

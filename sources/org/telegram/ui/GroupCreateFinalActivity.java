@@ -84,6 +84,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     private RadialProgressView avatarProgressView;
     private int chatType;
     private boolean createAfterUpload;
+    private GroupCreateFinalActivityDelegate delegate;
     private AnimatorSet doneItemAnimation;
     private boolean donePressed;
     private EditTextEmoji editText;
@@ -98,6 +99,14 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     private ArrayList<Integer> selectedContacts;
     private Drawable shadowDrawable;
     private InputFile uploadedAvatar;
+
+    public interface GroupCreateFinalActivityDelegate {
+        void didFailChatCreation();
+
+        void didFinishChatCreation(GroupCreateFinalActivity groupCreateFinalActivity, int i);
+
+        void didStartChatCreation();
+    }
 
     public class GroupCreateAdapter extends SelectionAdapter {
         private Context context;
@@ -140,7 +149,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             if (itemViewType == 1) {
                 ((HeaderCell) viewHolder.itemView).setText(LocaleController.formatPluralString("Members", GroupCreateFinalActivity.this.selectedContacts.size()));
             } else if (itemViewType == 2) {
-                ((GroupCreateUserCell) viewHolder.itemView).setUser(MessagesController.getInstance(GroupCreateFinalActivity.this.currentAccount).getUser((Integer) GroupCreateFinalActivity.this.selectedContacts.get(i - 2)), null, null);
+                ((GroupCreateUserCell) viewHolder.itemView).setObject(MessagesController.getInstance(GroupCreateFinalActivity.this.currentAccount).getUser((Integer) GroupCreateFinalActivity.this.selectedContacts.get(i - 2)), null, null);
             }
         }
 
@@ -244,7 +253,6 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     }
 
     public View createView(Context context) {
-        int i;
         String str;
         Drawable combinedDrawable;
         Context context2 = context;
@@ -486,7 +494,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         this.avatarDrawable.setInfo(5, null, null, this.chatType == 1);
         this.avatarImage.setImageDrawable(this.avatarDrawable);
         this.avatarImage.setContentDescription(LocaleController.getString("ChoosePhoto", NUM));
-        int i2 = 3;
+        int i = 3;
         this.editTextContainer.addView(this.avatarImage, LayoutHelper.createFrame(64, 64.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 16.0f, LocaleController.isRTL ? 16.0f : 0.0f, 16.0f));
         final Paint paint = new Paint(1);
         paint.setColor(NUM);
@@ -530,14 +538,15 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         showAvatarProgress(false, false);
         this.editText = new EditTextEmoji(context2, anonymousClass2, this, 0);
         EditTextEmoji editTextEmoji2 = this.editText;
-        if (this.chatType == 0) {
-            i = NUM;
+        int i2 = this.chatType;
+        if (i2 == 0 || i2 == 4) {
+            i2 = NUM;
             str = "EnterGroupNamePlaceholder";
         } else {
-            i = NUM;
+            i2 = NUM;
             str = "EnterListName";
         }
-        editTextEmoji2.setHint(LocaleController.getString(str, i));
+        editTextEmoji2.setHint(LocaleController.getString(str, i2));
         String str2 = this.nameToSet;
         if (str2 != null) {
             this.editText.setText(str2);
@@ -593,9 +602,9 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         int i3 = VERSION.SDK_INT >= 21 ? 56 : 60;
         float f2 = VERSION.SDK_INT >= 21 ? 56.0f : 60.0f;
         if (!LocaleController.isRTL) {
-            i2 = 5;
+            i = 5;
         }
-        anonymousClass2.addView(frameLayout, LayoutHelper.createFrame(i3, f2, i2 | 80, LocaleController.isRTL ? 14.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 14.0f, 14.0f));
+        anonymousClass2.addView(frameLayout, LayoutHelper.createFrame(i3, f2, i | 80, LocaleController.isRTL ? 14.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 14.0f, 14.0f));
         this.floatingButtonContainer.setOnClickListener(new -$$Lambda$GroupCreateFinalActivity$75-_1xxdeXhVklExcewj9GeLGnQ(this));
         this.floatingButtonIcon = new ImageView(context2);
         this.floatingButtonIcon.setScaleType(ScaleType.CENTER);
@@ -662,6 +671,10 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         if (inputFile != null) {
             this.uploadedAvatar = inputFile;
             if (this.createAfterUpload) {
+                GroupCreateFinalActivityDelegate groupCreateFinalActivityDelegate = this.delegate;
+                if (groupCreateFinalActivityDelegate != null) {
+                    groupCreateFinalActivityDelegate.didStartChatCreation();
+                }
                 MessagesController.getInstance(this.currentAccount).createChat(this.editText.getText().toString(), this.selectedContacts, null, this.chatType, this);
             }
             showAvatarProgress(false, true);
@@ -676,6 +689,10 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
 
     public String getInitialSearchString() {
         return this.editText.getText().toString();
+    }
+
+    public void setDelegate(GroupCreateFinalActivityDelegate groupCreateFinalActivityDelegate) {
+        this.delegate = groupCreateFinalActivityDelegate;
     }
 
     private void showAvatarProgress(final boolean z, boolean z2) {
@@ -804,13 +821,22 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             if (editTextEmoji != null) {
                 editTextEmoji.setEnabled(true);
             }
+            GroupCreateFinalActivityDelegate groupCreateFinalActivityDelegate = this.delegate;
+            if (groupCreateFinalActivityDelegate != null) {
+                groupCreateFinalActivityDelegate.didFailChatCreation();
+            }
         } else if (i == NotificationCenter.chatDidCreated) {
             this.reqId = 0;
             i = ((Integer) objArr[0]).intValue();
-            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
-            Bundle bundle = new Bundle();
-            bundle.putInt("chat_id", i);
-            presentFragment(new ChatActivity(bundle), true);
+            GroupCreateFinalActivityDelegate groupCreateFinalActivityDelegate2 = this.delegate;
+            if (groupCreateFinalActivityDelegate2 != null) {
+                groupCreateFinalActivityDelegate2.didFinishChatCreation(this, i);
+            } else {
+                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
+                Bundle bundle = new Bundle();
+                bundle.putInt("chat_id", i);
+                presentFragment(new ChatActivity(bundle), true);
+            }
             if (this.uploadedAvatar != null) {
                 MessagesController.getInstance(this.currentAccount).changeChatAvatar(i, this.uploadedAvatar, this.avatar, this.avatarBig);
             }

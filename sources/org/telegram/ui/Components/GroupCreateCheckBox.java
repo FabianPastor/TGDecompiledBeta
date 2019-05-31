@@ -36,10 +36,10 @@ public class GroupCreateCheckBox extends View {
 
     public GroupCreateCheckBox(Context context) {
         super(context);
-        String str = "groupcreate_checkboxCheck";
+        String str = "checkboxCheck";
         this.backgroundKey = str;
         this.checkKey = str;
-        this.innerKey = "groupcreate_checkbox";
+        this.innerKey = "checkbox";
         if (eraser == null) {
             eraser = new Paint(1);
             eraser.setColor(0);

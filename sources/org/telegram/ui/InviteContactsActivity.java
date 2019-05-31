@@ -1006,8 +1006,8 @@ public class InviteContactsActivity extends BaseFragment implements Notification
         clsArr = new Class[]{InviteUserCell.class};
         strArr = new String[1];
         strArr[0] = "checkBox";
-        themeDescriptionArr[21] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "groupcreate_checkbox");
-        themeDescriptionArr[22] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{InviteUserCell.class}, new String[]{"checkBox"}, null, null, null, "groupcreate_checkboxCheck");
+        themeDescriptionArr[21] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "checkbox");
+        themeDescriptionArr[22] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{InviteUserCell.class}, new String[]{"checkBox"}, null, null, null, "checkboxCheck");
         view = this.listView;
         i = ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG;
         clsArr = new Class[]{InviteUserCell.class};

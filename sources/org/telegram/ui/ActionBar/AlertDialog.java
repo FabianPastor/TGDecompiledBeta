@@ -62,6 +62,7 @@ public class AlertDialog extends Dialog implements Callback {
     private TextView lineProgressViewPercent;
     private CharSequence message;
     private TextView messageTextView;
+    private boolean messageTextViewClickable = true;
     private OnClickListener negativeButtonListener;
     private CharSequence negativeButtonText;
     private OnClickListener neutralButtonListener;
@@ -241,6 +242,11 @@ public class AlertDialog extends Dialog implements Callback {
 
         public Builder setCustomViewOffset(int i) {
             this.alertDialog.customViewOffset = i;
+            return this;
+        }
+
+        public Builder setMessageTextViewClickable(boolean z) {
+            this.alertDialog.messageTextViewClickable = z;
             return this;
         }
 
@@ -837,6 +843,10 @@ public class AlertDialog extends Dialog implements Callback {
         this.messageTextView.setTextSize(1, 16.0f);
         this.messageTextView.setMovementMethod(new LinkMovementMethodMy());
         this.messageTextView.setLinkTextColor(getThemeColor("dialogTextLink"));
+        if (!this.messageTextViewClickable) {
+            this.messageTextView.setClickable(false);
+            this.messageTextView.setEnabled(false);
+        }
         this.messageTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
         int i3 = this.progressViewStyle;
         RadialProgressView radialProgressView;
@@ -1334,6 +1344,10 @@ public class AlertDialog extends Dialog implements Callback {
         }
         this.messageTextView.setText(this.message);
         this.messageTextView.setVisibility(0);
+    }
+
+    public void setMessageTextViewClickable(boolean z) {
+        this.messageTextViewClickable = z;
     }
 
     public void setButton(int i, CharSequence charSequence, OnClickListener onClickListener) {

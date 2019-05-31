@@ -1,100 +1,22 @@
 package org.telegram.messenger;
 
-import android.graphics.drawable.BitmapDrawable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 
-public class LruCache {
-    private final LinkedHashMap<String, BitmapDrawable> map;
+public class LruCache<T> {
+    private final LinkedHashMap<String, T> map;
     private final LinkedHashMap<String, ArrayList<String>> mapFilters;
     private int maxSize;
     private int size;
 
-    /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:28:0x0078 in {9, 14, 21, 22, 24, 27} preds:[]
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-        	at java.lang.Iterable.forEach(Iterable.java:75)
-        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-        */
-    private void trimToSize(int r9, java.lang.String r10) {
-        /*
-        r8 = this;
-        monitor-enter(r8);
-        r0 = r8.map;	 Catch:{ all -> 0x0075 }
-        r0 = r0.entrySet();	 Catch:{ all -> 0x0075 }
-        r0 = r0.iterator();	 Catch:{ all -> 0x0075 }
-        r1 = r0.hasNext();	 Catch:{ all -> 0x0075 }
-        if (r1 == 0) goto L_0x0073;	 Catch:{ all -> 0x0075 }
-        r1 = r8.size;	 Catch:{ all -> 0x0075 }
-        if (r1 <= r9) goto L_0x0073;	 Catch:{ all -> 0x0075 }
-        r1 = r8.map;	 Catch:{ all -> 0x0075 }
-        r1 = r1.isEmpty();	 Catch:{ all -> 0x0075 }
-        if (r1 == 0) goto L_0x001e;	 Catch:{ all -> 0x0075 }
-        goto L_0x0073;	 Catch:{ all -> 0x0075 }
-        r1 = r0.next();	 Catch:{ all -> 0x0075 }
-        r1 = (java.util.Map.Entry) r1;	 Catch:{ all -> 0x0075 }
-        r2 = r1.getKey();	 Catch:{ all -> 0x0075 }
-        r2 = (java.lang.String) r2;	 Catch:{ all -> 0x0075 }
-        if (r10 == 0) goto L_0x0033;	 Catch:{ all -> 0x0075 }
-        r3 = r10.equals(r2);	 Catch:{ all -> 0x0075 }
-        if (r3 == 0) goto L_0x0033;	 Catch:{ all -> 0x0075 }
-        goto L_0x000b;	 Catch:{ all -> 0x0075 }
-        r1 = r1.getValue();	 Catch:{ all -> 0x0075 }
-        r1 = (android.graphics.drawable.BitmapDrawable) r1;	 Catch:{ all -> 0x0075 }
-        r3 = r8.size;	 Catch:{ all -> 0x0075 }
-        r4 = r8.safeSizeOf(r2, r1);	 Catch:{ all -> 0x0075 }
-        r3 = r3 - r4;	 Catch:{ all -> 0x0075 }
-        r8.size = r3;	 Catch:{ all -> 0x0075 }
-        r0.remove();	 Catch:{ all -> 0x0075 }
-        r3 = "@";	 Catch:{ all -> 0x0075 }
-        r3 = r2.split(r3);	 Catch:{ all -> 0x0075 }
-        r4 = r3.length;	 Catch:{ all -> 0x0075 }
-        r5 = 1;	 Catch:{ all -> 0x0075 }
-        if (r4 <= r5) goto L_0x006e;	 Catch:{ all -> 0x0075 }
-        r4 = r8.mapFilters;	 Catch:{ all -> 0x0075 }
-        r6 = 0;	 Catch:{ all -> 0x0075 }
-        r7 = r3[r6];	 Catch:{ all -> 0x0075 }
-        r4 = r4.get(r7);	 Catch:{ all -> 0x0075 }
-        r4 = (java.util.ArrayList) r4;	 Catch:{ all -> 0x0075 }
-        if (r4 == 0) goto L_0x006e;	 Catch:{ all -> 0x0075 }
-        r7 = r3[r5];	 Catch:{ all -> 0x0075 }
-        r4.remove(r7);	 Catch:{ all -> 0x0075 }
-        r4 = r4.isEmpty();	 Catch:{ all -> 0x0075 }
-        if (r4 == 0) goto L_0x006e;	 Catch:{ all -> 0x0075 }
-        r4 = r8.mapFilters;	 Catch:{ all -> 0x0075 }
-        r3 = r3[r6];	 Catch:{ all -> 0x0075 }
-        r4.remove(r3);	 Catch:{ all -> 0x0075 }
-        r3 = 0;	 Catch:{ all -> 0x0075 }
-        r8.entryRemoved(r5, r2, r1, r3);	 Catch:{ all -> 0x0075 }
-        goto L_0x000b;	 Catch:{ all -> 0x0075 }
-        monitor-exit(r8);	 Catch:{ all -> 0x0075 }
-        return;	 Catch:{ all -> 0x0075 }
-        r9 = move-exception;	 Catch:{ all -> 0x0075 }
-        monitor-exit(r8);	 Catch:{ all -> 0x0075 }
-        throw r9;
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.LruCache.trimToSize(int, java.lang.String):void");
+    /* Access modifiers changed, original: protected */
+    public void entryRemoved(boolean z, String str, T t, T t2) {
     }
 
     /* Access modifiers changed, original: protected */
-    public void entryRemoved(boolean z, String str, BitmapDrawable bitmapDrawable, BitmapDrawable bitmapDrawable2) {
-    }
-
-    /* Access modifiers changed, original: protected */
-    public int sizeOf(String str, BitmapDrawable bitmapDrawable) {
+    public int sizeOf(String str, T t) {
         return 1;
     }
 
@@ -108,12 +30,12 @@ public class LruCache {
         throw new IllegalArgumentException("maxSize <= 0");
     }
 
-    public final BitmapDrawable get(String str) {
+    public final T get(String str) {
         if (str != null) {
             synchronized (this) {
-                BitmapDrawable bitmapDrawable = (BitmapDrawable) this.map.get(str);
-                if (bitmapDrawable != null) {
-                    return bitmapDrawable;
+                Object obj = this.map.get(str);
+                if (obj != null) {
+                    return obj;
                 }
                 return null;
             }
@@ -126,16 +48,16 @@ public class LruCache {
         return arrayList != null ? new ArrayList(arrayList) : null;
     }
 
-    public BitmapDrawable put(String str, BitmapDrawable bitmapDrawable) {
-        if (str == null || bitmapDrawable == null) {
+    public T put(String str, T t) {
+        if (str == null || t == null) {
             throw new NullPointerException("key == null || value == null");
         }
-        BitmapDrawable bitmapDrawable2;
+        Object put;
         synchronized (this) {
-            this.size += safeSizeOf(str, bitmapDrawable);
-            bitmapDrawable2 = (BitmapDrawable) this.map.put(str, bitmapDrawable);
-            if (bitmapDrawable2 != null) {
-                this.size -= safeSizeOf(str, bitmapDrawable2);
+            this.size += safeSizeOf(str, t);
+            put = this.map.put(str, t);
+            if (put != null) {
+                this.size -= safeSizeOf(str, put);
             }
         }
         String[] split = str.split("@");
@@ -149,23 +71,52 @@ public class LruCache {
                 arrayList.add(split[1]);
             }
         }
-        if (bitmapDrawable2 != null) {
-            entryRemoved(false, str, bitmapDrawable2, bitmapDrawable);
+        if (put != null) {
+            entryRemoved(false, str, put, t);
         }
         trimToSize(this.maxSize, str);
-        return bitmapDrawable2;
+        return put;
     }
 
-    public final BitmapDrawable remove(String str) {
-        if (str != null) {
-            BitmapDrawable bitmapDrawable;
-            synchronized (this) {
-                bitmapDrawable = (BitmapDrawable) this.map.remove(str);
-                if (bitmapDrawable != null) {
-                    this.size -= safeSizeOf(str, bitmapDrawable);
+    private void trimToSize(int i, String str) {
+        synchronized (this) {
+            Iterator it = this.map.entrySet().iterator();
+            while (it.hasNext() && this.size > i) {
+                if (this.map.isEmpty()) {
+                    break;
+                }
+                Entry entry = (Entry) it.next();
+                String str2 = (String) entry.getKey();
+                if (str == null || !str.equals(str2)) {
+                    Object value = entry.getValue();
+                    this.size -= safeSizeOf(str2, value);
+                    it.remove();
+                    String[] split = str2.split("@");
+                    if (split.length > 1) {
+                        ArrayList arrayList = (ArrayList) this.mapFilters.get(split[0]);
+                        if (arrayList != null) {
+                            arrayList.remove(split[1]);
+                            if (arrayList.isEmpty()) {
+                                this.mapFilters.remove(split[0]);
+                            }
+                        }
+                    }
+                    entryRemoved(true, str2, value, null);
                 }
             }
-            if (bitmapDrawable != null) {
+        }
+    }
+
+    public final T remove(String str) {
+        if (str != null) {
+            Object remove;
+            synchronized (this) {
+                remove = this.map.remove(str);
+                if (remove != null) {
+                    this.size -= safeSizeOf(str, remove);
+                }
+            }
+            if (remove != null) {
                 String[] split = str.split("@");
                 if (split.length > 1) {
                     ArrayList arrayList = (ArrayList) this.mapFilters.get(split[0]);
@@ -176,9 +127,9 @@ public class LruCache {
                         }
                     }
                 }
-                entryRemoved(false, str, bitmapDrawable, null);
+                entryRemoved(false, str, remove, null);
             }
-            return bitmapDrawable;
+            return remove;
         }
         throw new NullPointerException("key == null");
     }
@@ -187,8 +138,8 @@ public class LruCache {
         return this.map.containsKey(str);
     }
 
-    private int safeSizeOf(String str, BitmapDrawable bitmapDrawable) {
-        int sizeOf = sizeOf(str, bitmapDrawable);
+    private int safeSizeOf(String str, T t) {
+        int sizeOf = sizeOf(str, t);
         if (sizeOf >= 0) {
             return sizeOf;
         }
@@ -196,7 +147,7 @@ public class LruCache {
         stringBuilder.append("Negative size: ");
         stringBuilder.append(str);
         stringBuilder.append("=");
-        stringBuilder.append(bitmapDrawable);
+        stringBuilder.append(t);
         throw new IllegalStateException(stringBuilder.toString());
     }
 

@@ -128,6 +128,7 @@ public class NotificationCenter {
     public static final int stickersDidLoad;
     public static final int stopEncodingService;
     public static final int suggestedLangpack;
+    public static final int themeListUpdated;
     private static int totalEvents = 1;
     public static final int updateInterfaces;
     public static final int updateMentionsCount;
@@ -515,6 +516,9 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         didSetNewTheme = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        themeListUpdated = i;
         i = totalEvents;
         totalEvents = i + 1;
         needSetDayNightTheme = i;

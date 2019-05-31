@@ -727,8 +727,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
         r10[28] = new ThemeDescription(null, 0, null, null, null, -__lambda_calllogactivity_jzz7fdd3hmf_ya8ahg1h2nhtpcs2, "avatar_backgroundCyan");
         r10[29] = new ThemeDescription(null, 0, null, null, null, -__lambda_calllogactivity_jzz7fdd3hmf_ya8ahg1h2nhtpcs2, "avatar_backgroundBlue");
         r10[30] = new ThemeDescription(null, 0, null, null, null, -__lambda_calllogactivity_jzz7fdd3hmf_ya8ahg1h2nhtpcs2, "avatar_backgroundPink");
-        r10[31] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, null, new Drawable[]{this.greenDrawable, this.greenDrawable2, Theme.chat_msgCallUpRedDrawable, Theme.chat_msgCallDownRedDrawable}, null, "calls_callReceivedGreenIcon");
-        r10[32] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, null, new Drawable[]{this.redDrawable, Theme.chat_msgCallUpGreenDrawable, Theme.chat_msgCallDownGreenDrawable}, null, "calls_callReceivedRedIcon");
+        r10[31] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, null, new Drawable[]{this.greenDrawable, this.greenDrawable2, Theme.calllog_msgCallUpRedDrawable, Theme.calllog_msgCallDownRedDrawable}, null, "calls_callReceivedGreenIcon");
+        r10[32] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, null, new Drawable[]{this.redDrawable, Theme.calllog_msgCallUpGreenDrawable, Theme.calllog_msgCallDownGreenDrawable}, null, "calls_callReceivedRedIcon");
         return r10;
     }
 

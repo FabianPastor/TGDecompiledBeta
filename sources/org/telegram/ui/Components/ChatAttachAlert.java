@@ -2081,7 +2081,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     L_0x003a:
         goto L_0x0073;
     L_0x003b:
-        r6 = NUM; // 0x7var_d5 float:1.794501E38 double:1.0529356083E-314;
+        r6 = NUM; // 0x7var_d4 float:1.7945008E38 double:1.052935608E-314;
         r5.setImageResource(r6);
         r6 = NUM; // 0x7f0d0011 float:1.874215E38 double:1.053129786E-314;
         r0 = "AccDescrCameraFlashAuto";
@@ -2089,7 +2089,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         r5.setContentDescription(r6);
         goto L_0x0073;
     L_0x004e:
-        r6 = NUM; // 0x7var_d7 float:1.7945014E38 double:1.0529356093E-314;
+        r6 = NUM; // 0x7var_d6 float:1.7945012E38 double:1.052935609E-314;
         r5.setImageResource(r6);
         r6 = NUM; // 0x7f0d0013 float:1.8742153E38 double:1.053129787E-314;
         r0 = "AccDescrCameraFlashOn";
@@ -2097,7 +2097,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         r5.setContentDescription(r6);
         goto L_0x0073;
     L_0x0061:
-        r6 = NUM; // 0x7var_d6 float:1.7945012E38 double:1.052935609E-314;
+        r6 = NUM; // 0x7var_d5 float:1.794501E38 double:1.0529356083E-314;
         r5.setImageResource(r6);
         r6 = NUM; // 0x7f0d0012 float:1.8742151E38 double:1.0531297864E-314;
         r0 = "AccDescrCameraFlashOff";
@@ -3542,9 +3542,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                     if (i > 2) {
                         MessageObject messageObject = this.editingMessageObject;
                         if (messageObject != null && messageObject.hasValidGroupId()) {
-                            int i2 = i + 3;
-                            ((AttachButton) this.attachButtons.get(i2)).setEnabled(false);
-                            ((AttachButton) this.attachButtons.get(i2)).setAlpha(0.2f);
+                            ((AttachButton) this.attachButtons.get(i)).setEnabled(false);
+                            ((AttachButton) this.attachButtons.get(i)).setAlpha(0.2f);
                             i++;
                         }
                     }

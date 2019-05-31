@@ -152,6 +152,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenterDele
                     z = false;
                 }
                 emojiView.onOpen(z);
+                this.editText.requestFocus();
             }
         }
     }

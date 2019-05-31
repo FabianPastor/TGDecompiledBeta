@@ -52,7 +52,9 @@ import org.telegram.tgnet.TLRPC.TL_chatParticipant;
 import org.telegram.tgnet.TLRPC.TL_chatParticipantAdmin;
 import org.telegram.tgnet.TLRPC.TL_contact;
 import org.telegram.tgnet.TLRPC.TL_dialog;
+import org.telegram.tgnet.TLRPC.TL_dialogFolder;
 import org.telegram.tgnet.TLRPC.TL_documentEmpty;
+import org.telegram.tgnet.TLRPC.TL_folder;
 import org.telegram.tgnet.TLRPC.TL_folderPeer;
 import org.telegram.tgnet.TLRPC.TL_inputFolderPeer;
 import org.telegram.tgnet.TLRPC.TL_inputMessageEntityMentionName;
@@ -68,6 +70,7 @@ import org.telegram.tgnet.TLRPC.TL_messageMediaUnsupported_old;
 import org.telegram.tgnet.TLRPC.TL_messageMediaWebPage;
 import org.telegram.tgnet.TLRPC.TL_messages_botCallbackAnswer;
 import org.telegram.tgnet.TLRPC.TL_messages_botResults;
+import org.telegram.tgnet.TLRPC.TL_messages_dialogs;
 import org.telegram.tgnet.TLRPC.TL_peerNotifySettingsEmpty_layer77;
 import org.telegram.tgnet.TLRPC.TL_photoEmpty;
 import org.telegram.tgnet.TLRPC.TL_photos_photos;
@@ -143,3952 +146,6 @@ public class MessagesStorage {
 
         private ReadDialog() {
         }
-    }
-
-    /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:99:0x02a7 in {9, 13, 14, 18, 19, 20, 27, 28, 38, 39, 40, 41, 44, 45, 48, 49, 52, 53, 58, 59, 60, 67, 71, 74, 77, 78, 81, 84, 87, 91, 93, 95, 96, 98} preds:[]
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-        	at java.lang.Iterable.forEach(Iterable.java:75)
-        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-        */
-    private void updateDialogsWithDeletedMessagesInternal(java.util.ArrayList<java.lang.Integer> r18, java.util.ArrayList<java.lang.Long> r19, int r20) {
-        /*
-        r17 = this;
-        r1 = r17;
-        r0 = r19;
-        r2 = r20;
-        r3 = java.lang.Thread.currentThread();
-        r3 = r3.getId();
-        r5 = r1.storageQueue;
-        r5 = r5.getId();
-        r7 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1));
-        if (r7 != 0) goto L_0x029e;
-        r3 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0299 }
-        r3.<init>();	 Catch:{ Exception -> 0x0299 }
-        r4 = r18.isEmpty();	 Catch:{ Exception -> 0x0299 }
-        r5 = 3;
-        r6 = 2;
-        r7 = ",";
-        r8 = 1;
-        r9 = 0;
-        if (r4 != 0) goto L_0x00a5;
-        if (r2 == 0) goto L_0x003d;
-        r4 = -r2;
-        r10 = (long) r4;
-        r4 = java.lang.Long.valueOf(r10);	 Catch:{ Exception -> 0x0299 }
-        r3.add(r4);	 Catch:{ Exception -> 0x0299 }
-        r4 = r1.database;	 Catch:{ Exception -> 0x0299 }
-        r10 = "UPDATE dialogs SET last_mid = (SELECT mid FROM messages WHERE uid = ? AND date = (SELECT MAX(date) FROM messages WHERE uid = ?)) WHERE did = ?";	 Catch:{ Exception -> 0x0299 }
-        r4 = r4.executeFast(r10);	 Catch:{ Exception -> 0x0299 }
-        goto L_0x0074;	 Catch:{ Exception -> 0x0299 }
-        r4 = r18;	 Catch:{ Exception -> 0x0299 }
-        r4 = android.text.TextUtils.join(r7, r4);	 Catch:{ Exception -> 0x0299 }
-        r10 = r1.database;	 Catch:{ Exception -> 0x0299 }
-        r11 = java.util.Locale.US;	 Catch:{ Exception -> 0x0299 }
-        r12 = "SELECT did FROM dialogs WHERE last_mid IN(%s)";	 Catch:{ Exception -> 0x0299 }
-        r13 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0299 }
-        r13[r9] = r4;	 Catch:{ Exception -> 0x0299 }
-        r4 = java.lang.String.format(r11, r12, r13);	 Catch:{ Exception -> 0x0299 }
-        r11 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x0299 }
-        r4 = r10.queryFinalized(r4, r11);	 Catch:{ Exception -> 0x0299 }
-        r10 = r4.next();	 Catch:{ Exception -> 0x0299 }
-        if (r10 == 0) goto L_0x0069;	 Catch:{ Exception -> 0x0299 }
-        r10 = r4.longValue(r9);	 Catch:{ Exception -> 0x0299 }
-        r10 = java.lang.Long.valueOf(r10);	 Catch:{ Exception -> 0x0299 }
-        r3.add(r10);	 Catch:{ Exception -> 0x0299 }
-        goto L_0x0057;	 Catch:{ Exception -> 0x0299 }
-        r4.dispose();	 Catch:{ Exception -> 0x0299 }
-        r4 = r1.database;	 Catch:{ Exception -> 0x0299 }
-        r10 = "UPDATE dialogs SET last_mid = (SELECT mid FROM messages WHERE uid = ? AND date = (SELECT MAX(date) FROM messages WHERE uid = ? AND date != 0)) WHERE did = ?";	 Catch:{ Exception -> 0x0299 }
-        r4 = r4.executeFast(r10);	 Catch:{ Exception -> 0x0299 }
-        r10 = r1.database;	 Catch:{ Exception -> 0x0299 }
-        r10.beginTransaction();	 Catch:{ Exception -> 0x0299 }
-        r10 = 0;	 Catch:{ Exception -> 0x0299 }
-        r11 = r3.size();	 Catch:{ Exception -> 0x0299 }
-        if (r10 >= r11) goto L_0x009c;	 Catch:{ Exception -> 0x0299 }
-        r11 = r3.get(r10);	 Catch:{ Exception -> 0x0299 }
-        r11 = (java.lang.Long) r11;	 Catch:{ Exception -> 0x0299 }
-        r11 = r11.longValue();	 Catch:{ Exception -> 0x0299 }
-        r4.requery();	 Catch:{ Exception -> 0x0299 }
-        r4.bindLong(r8, r11);	 Catch:{ Exception -> 0x0299 }
-        r4.bindLong(r6, r11);	 Catch:{ Exception -> 0x0299 }
-        r4.bindLong(r5, r11);	 Catch:{ Exception -> 0x0299 }
-        r4.step();	 Catch:{ Exception -> 0x0299 }
-        r10 = r10 + 1;	 Catch:{ Exception -> 0x0299 }
-        goto L_0x007a;	 Catch:{ Exception -> 0x0299 }
-        r4.dispose();	 Catch:{ Exception -> 0x0299 }
-        r4 = r1.database;	 Catch:{ Exception -> 0x0299 }
-        r4.commitTransaction();	 Catch:{ Exception -> 0x0299 }
-        goto L_0x00ae;	 Catch:{ Exception -> 0x0299 }
-        r4 = -r2;	 Catch:{ Exception -> 0x0299 }
-        r10 = (long) r4;	 Catch:{ Exception -> 0x0299 }
-        r4 = java.lang.Long.valueOf(r10);	 Catch:{ Exception -> 0x0299 }
-        r3.add(r4);	 Catch:{ Exception -> 0x0299 }
-        if (r0 == 0) goto L_0x00c9;	 Catch:{ Exception -> 0x0299 }
-        r4 = 0;	 Catch:{ Exception -> 0x0299 }
-        r10 = r19.size();	 Catch:{ Exception -> 0x0299 }
-        if (r4 >= r10) goto L_0x00c9;	 Catch:{ Exception -> 0x0299 }
-        r10 = r0.get(r4);	 Catch:{ Exception -> 0x0299 }
-        r10 = (java.lang.Long) r10;	 Catch:{ Exception -> 0x0299 }
-        r11 = r3.contains(r10);	 Catch:{ Exception -> 0x0299 }
-        if (r11 != 0) goto L_0x00c6;	 Catch:{ Exception -> 0x0299 }
-        r3.add(r10);	 Catch:{ Exception -> 0x0299 }
-        r4 = r4 + 1;	 Catch:{ Exception -> 0x0299 }
-        goto L_0x00b1;	 Catch:{ Exception -> 0x0299 }
-        r0 = android.text.TextUtils.join(r7, r3);	 Catch:{ Exception -> 0x0299 }
-        r3 = new org.telegram.tgnet.TLRPC$TL_messages_dialogs;	 Catch:{ Exception -> 0x0299 }
-        r3.<init>();	 Catch:{ Exception -> 0x0299 }
-        r4 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0299 }
-        r4.<init>();	 Catch:{ Exception -> 0x0299 }
-        r10 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0299 }
-        r10.<init>();	 Catch:{ Exception -> 0x0299 }
-        r11 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0299 }
-        r11.<init>();	 Catch:{ Exception -> 0x0299 }
-        r12 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0299 }
-        r12.<init>();	 Catch:{ Exception -> 0x0299 }
-        r13 = r1.database;	 Catch:{ Exception -> 0x0299 }
-        r14 = java.util.Locale.US;	 Catch:{ Exception -> 0x0299 }
-        r15 = "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, m.date, d.pts, d.inbox_max, d.outbox_max, d.pinned, d.unread_count_i, d.flags, d.folder_id, d.data FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid WHERE d.did IN(%s)";	 Catch:{ Exception -> 0x0299 }
-        r5 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0299 }
-        r5[r9] = r0;	 Catch:{ Exception -> 0x0299 }
-        r0 = java.lang.String.format(r14, r15, r5);	 Catch:{ Exception -> 0x0299 }
-        r5 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x0299 }
-        r0 = r13.queryFinalized(r0, r5);	 Catch:{ Exception -> 0x0299 }
-        r5 = r0.next();	 Catch:{ Exception -> 0x0299 }
-        if (r5 == 0) goto L_0x0253;	 Catch:{ Exception -> 0x0299 }
-        r13 = r0.longValue(r9);	 Catch:{ Exception -> 0x0299 }
-        r5 = org.telegram.messenger.DialogObject.isFolderDialogId(r13);	 Catch:{ Exception -> 0x0299 }
-        r15 = 15;	 Catch:{ Exception -> 0x0299 }
-        if (r5 == 0) goto L_0x013d;	 Catch:{ Exception -> 0x0299 }
-        r5 = new org.telegram.tgnet.TLRPC$TL_dialogFolder;	 Catch:{ Exception -> 0x0299 }
-        r5.<init>();	 Catch:{ Exception -> 0x0299 }
-        r6 = 16;	 Catch:{ Exception -> 0x0299 }
-        r16 = r0.isNull(r6);	 Catch:{ Exception -> 0x0299 }
-        if (r16 != 0) goto L_0x0142;	 Catch:{ Exception -> 0x0299 }
-        r6 = r0.byteBufferValue(r6);	 Catch:{ Exception -> 0x0299 }
-        if (r6 == 0) goto L_0x012a;	 Catch:{ Exception -> 0x0299 }
-        r8 = r6.readInt32(r9);	 Catch:{ Exception -> 0x0299 }
-        r8 = org.telegram.tgnet.TLRPC.TL_folder.TLdeserialize(r6, r8, r9);	 Catch:{ Exception -> 0x0299 }
-        r5.folder = r8;	 Catch:{ Exception -> 0x0299 }
-        goto L_0x0139;	 Catch:{ Exception -> 0x0299 }
-        r8 = new org.telegram.tgnet.TLRPC$TL_folder;	 Catch:{ Exception -> 0x0299 }
-        r8.<init>();	 Catch:{ Exception -> 0x0299 }
-        r5.folder = r8;	 Catch:{ Exception -> 0x0299 }
-        r8 = r5.folder;	 Catch:{ Exception -> 0x0299 }
-        r9 = r0.intValue(r15);	 Catch:{ Exception -> 0x0299 }
-        r8.id = r9;	 Catch:{ Exception -> 0x0299 }
-        r6.reuse();	 Catch:{ Exception -> 0x0299 }
-        goto L_0x0142;	 Catch:{ Exception -> 0x0299 }
-        r5 = new org.telegram.tgnet.TLRPC$TL_dialog;	 Catch:{ Exception -> 0x0299 }
-        r5.<init>();	 Catch:{ Exception -> 0x0299 }
-        r5.id = r13;	 Catch:{ Exception -> 0x0299 }
-        r6 = 1;	 Catch:{ Exception -> 0x0299 }
-        r8 = r0.intValue(r6);	 Catch:{ Exception -> 0x0299 }
-        r5.top_message = r8;	 Catch:{ Exception -> 0x0299 }
-        r6 = 10;	 Catch:{ Exception -> 0x0299 }
-        r6 = r0.intValue(r6);	 Catch:{ Exception -> 0x0299 }
-        r5.read_inbox_max_id = r6;	 Catch:{ Exception -> 0x0299 }
-        r6 = 11;	 Catch:{ Exception -> 0x0299 }
-        r6 = r0.intValue(r6);	 Catch:{ Exception -> 0x0299 }
-        r5.read_outbox_max_id = r6;	 Catch:{ Exception -> 0x0299 }
-        r6 = 2;	 Catch:{ Exception -> 0x0299 }
-        r8 = r0.intValue(r6);	 Catch:{ Exception -> 0x0299 }
-        r5.unread_count = r8;	 Catch:{ Exception -> 0x0299 }
-        r8 = 13;	 Catch:{ Exception -> 0x0299 }
-        r8 = r0.intValue(r8);	 Catch:{ Exception -> 0x0299 }
-        r5.unread_mentions_count = r8;	 Catch:{ Exception -> 0x0299 }
-        r8 = 3;	 Catch:{ Exception -> 0x0299 }
-        r9 = r0.intValue(r8);	 Catch:{ Exception -> 0x0299 }
-        r5.last_message_date = r9;	 Catch:{ Exception -> 0x0299 }
-        r9 = 9;	 Catch:{ Exception -> 0x0299 }
-        r9 = r0.intValue(r9);	 Catch:{ Exception -> 0x0299 }
-        r5.pts = r9;	 Catch:{ Exception -> 0x0299 }
-        if (r2 != 0) goto L_0x017d;	 Catch:{ Exception -> 0x0299 }
-        r9 = 0;	 Catch:{ Exception -> 0x0299 }
-        goto L_0x017e;	 Catch:{ Exception -> 0x0299 }
-        r9 = 1;	 Catch:{ Exception -> 0x0299 }
-        r5.flags = r9;	 Catch:{ Exception -> 0x0299 }
-        r9 = 12;	 Catch:{ Exception -> 0x0299 }
-        r9 = r0.intValue(r9);	 Catch:{ Exception -> 0x0299 }
-        r5.pinnedNum = r9;	 Catch:{ Exception -> 0x0299 }
-        r9 = r5.pinnedNum;	 Catch:{ Exception -> 0x0299 }
-        if (r9 == 0) goto L_0x018e;	 Catch:{ Exception -> 0x0299 }
-        r9 = 1;	 Catch:{ Exception -> 0x0299 }
-        goto L_0x018f;	 Catch:{ Exception -> 0x0299 }
-        r9 = 0;	 Catch:{ Exception -> 0x0299 }
-        r5.pinned = r9;	 Catch:{ Exception -> 0x0299 }
-        r9 = 14;	 Catch:{ Exception -> 0x0299 }
-        r9 = r0.intValue(r9);	 Catch:{ Exception -> 0x0299 }
-        r13 = 1;	 Catch:{ Exception -> 0x0299 }
-        r9 = r9 & r13;	 Catch:{ Exception -> 0x0299 }
-        if (r9 == 0) goto L_0x019d;	 Catch:{ Exception -> 0x0299 }
-        r9 = 1;	 Catch:{ Exception -> 0x0299 }
-        goto L_0x019e;	 Catch:{ Exception -> 0x0299 }
-        r9 = 0;	 Catch:{ Exception -> 0x0299 }
-        r5.unread_mark = r9;	 Catch:{ Exception -> 0x0299 }
-        r9 = r0.intValue(r15);	 Catch:{ Exception -> 0x0299 }
-        r5.folder_id = r9;	 Catch:{ Exception -> 0x0299 }
-        r9 = r3.dialogs;	 Catch:{ Exception -> 0x0299 }
-        r9.add(r5);	 Catch:{ Exception -> 0x0299 }
-        r9 = 4;	 Catch:{ Exception -> 0x0299 }
-        r9 = r0.byteBufferValue(r9);	 Catch:{ Exception -> 0x0299 }
-        if (r9 == 0) goto L_0x01f6;	 Catch:{ Exception -> 0x0299 }
-        r13 = 0;	 Catch:{ Exception -> 0x0299 }
-        r14 = r9.readInt32(r13);	 Catch:{ Exception -> 0x0299 }
-        r14 = org.telegram.tgnet.TLRPC.Message.TLdeserialize(r9, r14, r13);	 Catch:{ Exception -> 0x0299 }
-        r15 = r1.currentAccount;	 Catch:{ Exception -> 0x0299 }
-        r15 = org.telegram.messenger.UserConfig.getInstance(r15);	 Catch:{ Exception -> 0x0299 }
-        r15 = r15.clientUserId;	 Catch:{ Exception -> 0x0299 }
-        r14.readAttachPath(r9, r15);	 Catch:{ Exception -> 0x0299 }
-        r9.reuse();	 Catch:{ Exception -> 0x0299 }
-        r9 = 5;	 Catch:{ Exception -> 0x0299 }
-        r9 = r0.intValue(r9);	 Catch:{ Exception -> 0x0299 }
-        org.telegram.messenger.MessageObject.setUnreadFlags(r14, r9);	 Catch:{ Exception -> 0x0299 }
-        r9 = 6;	 Catch:{ Exception -> 0x0299 }
-        r9 = r0.intValue(r9);	 Catch:{ Exception -> 0x0299 }
-        r14.id = r9;	 Catch:{ Exception -> 0x0299 }
-        r9 = 7;	 Catch:{ Exception -> 0x0299 }
-        r9 = r0.intValue(r9);	 Catch:{ Exception -> 0x0299 }
-        r14.send_state = r9;	 Catch:{ Exception -> 0x0299 }
-        r9 = 8;	 Catch:{ Exception -> 0x0299 }
-        r9 = r0.intValue(r9);	 Catch:{ Exception -> 0x0299 }
-        if (r9 == 0) goto L_0x01e9;	 Catch:{ Exception -> 0x0299 }
-        r5.last_message_date = r9;	 Catch:{ Exception -> 0x0299 }
-        r8 = r5.id;	 Catch:{ Exception -> 0x0299 }
-        r14.dialog_id = r8;	 Catch:{ Exception -> 0x0299 }
-        r8 = r3.messages;	 Catch:{ Exception -> 0x0299 }
-        r8.add(r14);	 Catch:{ Exception -> 0x0299 }
-        addUsersAndChatsFromMessage(r14, r10, r11);	 Catch:{ Exception -> 0x0299 }
-        goto L_0x01f7;	 Catch:{ Exception -> 0x0299 }
-        r13 = 0;	 Catch:{ Exception -> 0x0299 }
-        r8 = r5.id;	 Catch:{ Exception -> 0x0299 }
-        r9 = (int) r8;	 Catch:{ Exception -> 0x0299 }
-        r14 = r5.id;	 Catch:{ Exception -> 0x0299 }
-        r5 = 32;	 Catch:{ Exception -> 0x0299 }
-        r14 = r14 >> r5;	 Catch:{ Exception -> 0x0299 }
-        r5 = (int) r14;	 Catch:{ Exception -> 0x0299 }
-        if (r9 == 0) goto L_0x023e;	 Catch:{ Exception -> 0x0299 }
-        r8 = 1;	 Catch:{ Exception -> 0x0299 }
-        if (r5 != r8) goto L_0x0217;	 Catch:{ Exception -> 0x0299 }
-        r5 = java.lang.Integer.valueOf(r9);	 Catch:{ Exception -> 0x0299 }
-        r5 = r11.contains(r5);	 Catch:{ Exception -> 0x0299 }
-        if (r5 != 0) goto L_0x0250;	 Catch:{ Exception -> 0x0299 }
-        r5 = java.lang.Integer.valueOf(r9);	 Catch:{ Exception -> 0x0299 }
-        r11.add(r5);	 Catch:{ Exception -> 0x0299 }
-        goto L_0x0250;	 Catch:{ Exception -> 0x0299 }
-        if (r9 <= 0) goto L_0x022b;	 Catch:{ Exception -> 0x0299 }
-        r5 = java.lang.Integer.valueOf(r9);	 Catch:{ Exception -> 0x0299 }
-        r5 = r10.contains(r5);	 Catch:{ Exception -> 0x0299 }
-        if (r5 != 0) goto L_0x0250;	 Catch:{ Exception -> 0x0299 }
-        r5 = java.lang.Integer.valueOf(r9);	 Catch:{ Exception -> 0x0299 }
-        r10.add(r5);	 Catch:{ Exception -> 0x0299 }
-        goto L_0x0250;	 Catch:{ Exception -> 0x0299 }
-        r5 = -r9;	 Catch:{ Exception -> 0x0299 }
-        r9 = java.lang.Integer.valueOf(r5);	 Catch:{ Exception -> 0x0299 }
-        r9 = r11.contains(r9);	 Catch:{ Exception -> 0x0299 }
-        if (r9 != 0) goto L_0x0250;	 Catch:{ Exception -> 0x0299 }
-        r5 = java.lang.Integer.valueOf(r5);	 Catch:{ Exception -> 0x0299 }
-        r11.add(r5);	 Catch:{ Exception -> 0x0299 }
-        goto L_0x0250;	 Catch:{ Exception -> 0x0299 }
-        r8 = 1;	 Catch:{ Exception -> 0x0299 }
-        r9 = java.lang.Integer.valueOf(r5);	 Catch:{ Exception -> 0x0299 }
-        r9 = r12.contains(r9);	 Catch:{ Exception -> 0x0299 }
-        if (r9 != 0) goto L_0x0250;	 Catch:{ Exception -> 0x0299 }
-        r5 = java.lang.Integer.valueOf(r5);	 Catch:{ Exception -> 0x0299 }
-        r12.add(r5);	 Catch:{ Exception -> 0x0299 }
-        r9 = 0;	 Catch:{ Exception -> 0x0299 }
-        goto L_0x00fa;	 Catch:{ Exception -> 0x0299 }
-        r0.dispose();	 Catch:{ Exception -> 0x0299 }
-        r0 = r12.isEmpty();	 Catch:{ Exception -> 0x0299 }
-        if (r0 != 0) goto L_0x0263;	 Catch:{ Exception -> 0x0299 }
-        r0 = android.text.TextUtils.join(r7, r12);	 Catch:{ Exception -> 0x0299 }
-        r1.getEncryptedChatsInternal(r0, r4, r10);	 Catch:{ Exception -> 0x0299 }
-        r0 = r11.isEmpty();	 Catch:{ Exception -> 0x0299 }
-        if (r0 != 0) goto L_0x0272;	 Catch:{ Exception -> 0x0299 }
-        r0 = android.text.TextUtils.join(r7, r11);	 Catch:{ Exception -> 0x0299 }
-        r2 = r3.chats;	 Catch:{ Exception -> 0x0299 }
-        r1.getChatsInternal(r0, r2);	 Catch:{ Exception -> 0x0299 }
-        r0 = r10.isEmpty();	 Catch:{ Exception -> 0x0299 }
-        if (r0 != 0) goto L_0x0281;	 Catch:{ Exception -> 0x0299 }
-        r0 = android.text.TextUtils.join(r7, r10);	 Catch:{ Exception -> 0x0299 }
-        r2 = r3.users;	 Catch:{ Exception -> 0x0299 }
-        r1.getUsersInternal(r0, r2);	 Catch:{ Exception -> 0x0299 }
-        r0 = r3.dialogs;	 Catch:{ Exception -> 0x0299 }
-        r0 = r0.isEmpty();	 Catch:{ Exception -> 0x0299 }
-        if (r0 == 0) goto L_0x028f;	 Catch:{ Exception -> 0x0299 }
-        r0 = r4.isEmpty();	 Catch:{ Exception -> 0x0299 }
-        if (r0 != 0) goto L_0x029d;	 Catch:{ Exception -> 0x0299 }
-        r0 = r1.currentAccount;	 Catch:{ Exception -> 0x0299 }
-        r0 = org.telegram.messenger.MessagesController.getInstance(r0);	 Catch:{ Exception -> 0x0299 }
-        r0.processDialogsUpdate(r3, r4);	 Catch:{ Exception -> 0x0299 }
-        goto L_0x029d;
-        r0 = move-exception;
-        org.telegram.messenger.FileLog.e(r0);
-        return;
-        r0 = new java.lang.RuntimeException;
-        r2 = "wrong db thread";
-        r0.<init>(r2);
-        throw r0;
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.updateDialogsWithDeletedMessagesInternal(java.util.ArrayList, java.util.ArrayList, int):void");
-    }
-
-    /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:55:0x0102 in {6, 11, 12, 13, 16, 21, 22, 33, 34, 37, 40, 41, 45, 49, 51, 52, 54} preds:[]
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-        	at java.lang.Iterable.forEach(Iterable.java:75)
-        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-        */
-    private void updateUsersInternal(java.util.ArrayList<org.telegram.tgnet.TLRPC.User> r7, boolean r8, boolean r9) {
-        /*
-        r6 = this;
-        r0 = java.lang.Thread.currentThread();
-        r0 = r0.getId();
-        r2 = r6.storageQueue;
-        r2 = r2.getId();
-        r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r4 != 0) goto L_0x00f9;
-        r0 = 0;
-        if (r8 == 0) goto L_0x005c;
-        if (r9 == 0) goto L_0x001c;
-        r8 = r6.database;	 Catch:{ Exception -> 0x00f4 }
-        r8.beginTransaction();	 Catch:{ Exception -> 0x00f4 }
-        r8 = r6.database;	 Catch:{ Exception -> 0x00f4 }
-        r1 = "UPDATE users SET status = ? WHERE uid = ?";	 Catch:{ Exception -> 0x00f4 }
-        r8 = r8.executeFast(r1);	 Catch:{ Exception -> 0x00f4 }
-        r1 = r7.size();	 Catch:{ Exception -> 0x00f4 }
-        r2 = 0;	 Catch:{ Exception -> 0x00f4 }
-        if (r2 >= r1) goto L_0x0050;	 Catch:{ Exception -> 0x00f4 }
-        r3 = r7.get(r2);	 Catch:{ Exception -> 0x00f4 }
-        r3 = (org.telegram.tgnet.TLRPC.User) r3;	 Catch:{ Exception -> 0x00f4 }
-        r8.requery();	 Catch:{ Exception -> 0x00f4 }
-        r4 = r3.status;	 Catch:{ Exception -> 0x00f4 }
-        r5 = 1;	 Catch:{ Exception -> 0x00f4 }
-        if (r4 == 0) goto L_0x0041;	 Catch:{ Exception -> 0x00f4 }
-        r4 = r3.status;	 Catch:{ Exception -> 0x00f4 }
-        r4 = r4.expires;	 Catch:{ Exception -> 0x00f4 }
-        r8.bindInteger(r5, r4);	 Catch:{ Exception -> 0x00f4 }
-        goto L_0x0044;	 Catch:{ Exception -> 0x00f4 }
-        r8.bindInteger(r5, r0);	 Catch:{ Exception -> 0x00f4 }
-        r4 = 2;	 Catch:{ Exception -> 0x00f4 }
-        r3 = r3.id;	 Catch:{ Exception -> 0x00f4 }
-        r8.bindInteger(r4, r3);	 Catch:{ Exception -> 0x00f4 }
-        r8.step();	 Catch:{ Exception -> 0x00f4 }
-        r2 = r2 + 1;	 Catch:{ Exception -> 0x00f4 }
-        goto L_0x0029;	 Catch:{ Exception -> 0x00f4 }
-        r8.dispose();	 Catch:{ Exception -> 0x00f4 }
-        if (r9 == 0) goto L_0x00f8;	 Catch:{ Exception -> 0x00f4 }
-        r7 = r6.database;	 Catch:{ Exception -> 0x00f4 }
-        r7.commitTransaction();	 Catch:{ Exception -> 0x00f4 }
-        goto L_0x00f8;	 Catch:{ Exception -> 0x00f4 }
-        r8 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x00f4 }
-        r8.<init>();	 Catch:{ Exception -> 0x00f4 }
-        r1 = new android.util.SparseArray;	 Catch:{ Exception -> 0x00f4 }
-        r1.<init>();	 Catch:{ Exception -> 0x00f4 }
-        r2 = r7.size();	 Catch:{ Exception -> 0x00f4 }
-        r3 = 0;	 Catch:{ Exception -> 0x00f4 }
-        if (r3 >= r2) goto L_0x008b;	 Catch:{ Exception -> 0x00f4 }
-        r4 = r7.get(r3);	 Catch:{ Exception -> 0x00f4 }
-        r4 = (org.telegram.tgnet.TLRPC.User) r4;	 Catch:{ Exception -> 0x00f4 }
-        r5 = r8.length();	 Catch:{ Exception -> 0x00f4 }
-        if (r5 == 0) goto L_0x007e;	 Catch:{ Exception -> 0x00f4 }
-        r5 = ",";	 Catch:{ Exception -> 0x00f4 }
-        r8.append(r5);	 Catch:{ Exception -> 0x00f4 }
-        r5 = r4.id;	 Catch:{ Exception -> 0x00f4 }
-        r8.append(r5);	 Catch:{ Exception -> 0x00f4 }
-        r5 = r4.id;	 Catch:{ Exception -> 0x00f4 }
-        r1.put(r5, r4);	 Catch:{ Exception -> 0x00f4 }
-        r3 = r3 + 1;	 Catch:{ Exception -> 0x00f4 }
-        goto L_0x006b;	 Catch:{ Exception -> 0x00f4 }
-        r7 = new java.util.ArrayList;	 Catch:{ Exception -> 0x00f4 }
-        r7.<init>();	 Catch:{ Exception -> 0x00f4 }
-        r8 = r8.toString();	 Catch:{ Exception -> 0x00f4 }
-        r6.getUsersInternal(r8, r7);	 Catch:{ Exception -> 0x00f4 }
-        r8 = r7.size();	 Catch:{ Exception -> 0x00f4 }
-        if (r0 >= r8) goto L_0x00dc;	 Catch:{ Exception -> 0x00f4 }
-        r2 = r7.get(r0);	 Catch:{ Exception -> 0x00f4 }
-        r2 = (org.telegram.tgnet.TLRPC.User) r2;	 Catch:{ Exception -> 0x00f4 }
-        r3 = r2.id;	 Catch:{ Exception -> 0x00f4 }
-        r3 = r1.get(r3);	 Catch:{ Exception -> 0x00f4 }
-        r3 = (org.telegram.tgnet.TLRPC.User) r3;	 Catch:{ Exception -> 0x00f4 }
-        if (r3 == 0) goto L_0x00d9;	 Catch:{ Exception -> 0x00f4 }
-        r4 = r3.first_name;	 Catch:{ Exception -> 0x00f4 }
-        if (r4 == 0) goto L_0x00c8;	 Catch:{ Exception -> 0x00f4 }
-        r4 = r3.last_name;	 Catch:{ Exception -> 0x00f4 }
-        if (r4 == 0) goto L_0x00c8;	 Catch:{ Exception -> 0x00f4 }
-        r4 = org.telegram.messenger.UserObject.isContact(r2);	 Catch:{ Exception -> 0x00f4 }
-        if (r4 != 0) goto L_0x00c3;	 Catch:{ Exception -> 0x00f4 }
-        r4 = r3.first_name;	 Catch:{ Exception -> 0x00f4 }
-        r2.first_name = r4;	 Catch:{ Exception -> 0x00f4 }
-        r4 = r3.last_name;	 Catch:{ Exception -> 0x00f4 }
-        r2.last_name = r4;	 Catch:{ Exception -> 0x00f4 }
-        r3 = r3.username;	 Catch:{ Exception -> 0x00f4 }
-        r2.username = r3;	 Catch:{ Exception -> 0x00f4 }
-        goto L_0x00d9;	 Catch:{ Exception -> 0x00f4 }
-        r4 = r3.photo;	 Catch:{ Exception -> 0x00f4 }
-        if (r4 == 0) goto L_0x00d1;	 Catch:{ Exception -> 0x00f4 }
-        r3 = r3.photo;	 Catch:{ Exception -> 0x00f4 }
-        r2.photo = r3;	 Catch:{ Exception -> 0x00f4 }
-        goto L_0x00d9;	 Catch:{ Exception -> 0x00f4 }
-        r4 = r3.phone;	 Catch:{ Exception -> 0x00f4 }
-        if (r4 == 0) goto L_0x00d9;	 Catch:{ Exception -> 0x00f4 }
-        r3 = r3.phone;	 Catch:{ Exception -> 0x00f4 }
-        r2.phone = r3;	 Catch:{ Exception -> 0x00f4 }
-        r0 = r0 + 1;	 Catch:{ Exception -> 0x00f4 }
-        goto L_0x009b;	 Catch:{ Exception -> 0x00f4 }
-        r8 = r7.isEmpty();	 Catch:{ Exception -> 0x00f4 }
-        if (r8 != 0) goto L_0x00f8;	 Catch:{ Exception -> 0x00f4 }
-        if (r9 == 0) goto L_0x00e9;	 Catch:{ Exception -> 0x00f4 }
-        r8 = r6.database;	 Catch:{ Exception -> 0x00f4 }
-        r8.beginTransaction();	 Catch:{ Exception -> 0x00f4 }
-        r6.putUsersInternal(r7);	 Catch:{ Exception -> 0x00f4 }
-        if (r9 == 0) goto L_0x00f8;	 Catch:{ Exception -> 0x00f4 }
-        r7 = r6.database;	 Catch:{ Exception -> 0x00f4 }
-        r7.commitTransaction();	 Catch:{ Exception -> 0x00f4 }
-        goto L_0x00f8;
-        r7 = move-exception;
-        org.telegram.messenger.FileLog.e(r7);
-        return;
-        r7 = new java.lang.RuntimeException;
-        r8 = "wrong db thread";
-        r7.<init>(r8);
-        throw r7;
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.updateUsersInternal(java.util.ArrayList, boolean, boolean):void");
-    }
-
-    /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:154:0x0257 in {11, 12, 21, 24, 25, 28, 31, 36, 39, 40, 44, 46, 47, 49, 51, 53, 55, 59, 60, 70, 71, 75, 76, 78, 80, 81, 83, 84, 86, 88, 90, 91, 92, 93, 97, 101, 102, 111, 114, 115, 118, 121, 126, 128, 130, 132, 134, 136, 137, 141, 143, 145, 146, 148, 149, 150, 152, 153} preds:[]
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-        	at java.lang.Iterable.forEach(Iterable.java:75)
-        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-        */
-    public /* synthetic */ void lambda$getCachedPhoneBook$90$MessagesStorage(boolean r27) {
-        /*
-        r26 = this;
-        r1 = r26;
-        r2 = "";
-        r3 = 6;
-        r4 = 3;
-        r5 = 2;
-        r6 = 5;
-        r7 = 4;
-        r9 = 1;
-        r11 = 8;
-        r12 = 5000; // 0x1388 float:7.006E-42 double:2.4703E-320;
-        r13 = 0;
-        r0 = r1.database;	 Catch:{ Throwable -> 0x00e9, all -> 0x00e5 }
-        r14 = "SELECT name FROM sqlite_master WHERE type='table' AND name='user_contacts_v6'";	 Catch:{ Throwable -> 0x00e9, all -> 0x00e5 }
-        r15 = new java.lang.Object[r13];	 Catch:{ Throwable -> 0x00e9, all -> 0x00e5 }
-        r14 = r0.queryFinalized(r14, r15);	 Catch:{ Throwable -> 0x00e9, all -> 0x00e5 }
-        r0 = r14.next();	 Catch:{ Throwable -> 0x00e2, all -> 0x00de }
-        r14.dispose();	 Catch:{ Throwable -> 0x00e2, all -> 0x00de }
-        if (r0 == 0) goto L_0x00db;
-        r0 = r1.database;	 Catch:{ Throwable -> 0x00e9, all -> 0x00e5 }
-        r14 = "SELECT COUNT(uid) FROM user_contacts_v6 WHERE 1";	 Catch:{ Throwable -> 0x00e9, all -> 0x00e5 }
-        r15 = new java.lang.Object[r13];	 Catch:{ Throwable -> 0x00e9, all -> 0x00e5 }
-        r14 = r0.queryFinalized(r14, r15);	 Catch:{ Throwable -> 0x00e9, all -> 0x00e5 }
-        r0 = r14.next();	 Catch:{ Throwable -> 0x00e2, all -> 0x00de }
-        if (r0 == 0) goto L_0x003b;	 Catch:{ Throwable -> 0x00e2, all -> 0x00de }
-        r0 = r14.intValue(r13);	 Catch:{ Throwable -> 0x00e2, all -> 0x00de }
-        r0 = java.lang.Math.min(r12, r0);	 Catch:{ Throwable -> 0x00e2, all -> 0x00de }
-        goto L_0x003d;	 Catch:{ Throwable -> 0x00e2, all -> 0x00de }
-        r0 = 16;	 Catch:{ Throwable -> 0x00e2, all -> 0x00de }
-        r14.dispose();	 Catch:{ Throwable -> 0x00e2, all -> 0x00de }
-        r15 = new android.util.SparseArray;	 Catch:{ Throwable -> 0x00e2, all -> 0x00de }
-        r15.<init>(r0);	 Catch:{ Throwable -> 0x00e2, all -> 0x00de }
-        r0 = r1.database;	 Catch:{ Throwable -> 0x00e2, all -> 0x00de }
-        r8 = "SELECT us.uid, us.fname, us.sname, up.phone, up.sphone, up.deleted, us.imported FROM user_contacts_v6 as us LEFT JOIN user_phones_v6 as up ON us.uid = up.uid WHERE 1";	 Catch:{ Throwable -> 0x00e2, all -> 0x00de }
-        r10 = new java.lang.Object[r13];	 Catch:{ Throwable -> 0x00e2, all -> 0x00de }
-        r10 = r0.queryFinalized(r8, r10);	 Catch:{ Throwable -> 0x00e2, all -> 0x00de }
-        r0 = r10.next();	 Catch:{ Throwable -> 0x00d9 }
-        if (r0 == 0) goto L_0x00cc;	 Catch:{ Throwable -> 0x00d9 }
-        r0 = r10.intValue(r13);	 Catch:{ Throwable -> 0x00d9 }
-        r8 = r15.get(r0);	 Catch:{ Throwable -> 0x00d9 }
-        r8 = (org.telegram.messenger.ContactsController.Contact) r8;	 Catch:{ Throwable -> 0x00d9 }
-        if (r8 != 0) goto L_0x0089;	 Catch:{ Throwable -> 0x00d9 }
-        r8 = new org.telegram.messenger.ContactsController$Contact;	 Catch:{ Throwable -> 0x00d9 }
-        r8.<init>();	 Catch:{ Throwable -> 0x00d9 }
-        r14 = r10.stringValue(r9);	 Catch:{ Throwable -> 0x00d9 }
-        r8.first_name = r14;	 Catch:{ Throwable -> 0x00d9 }
-        r14 = r10.stringValue(r5);	 Catch:{ Throwable -> 0x00d9 }
-        r8.last_name = r14;	 Catch:{ Throwable -> 0x00d9 }
-        r14 = r10.intValue(r3);	 Catch:{ Throwable -> 0x00d9 }
-        r8.imported = r14;	 Catch:{ Throwable -> 0x00d9 }
-        r14 = r8.first_name;	 Catch:{ Throwable -> 0x00d9 }
-        if (r14 != 0) goto L_0x007e;	 Catch:{ Throwable -> 0x00d9 }
-        r8.first_name = r2;	 Catch:{ Throwable -> 0x00d9 }
-        r14 = r8.last_name;	 Catch:{ Throwable -> 0x00d9 }
-        if (r14 != 0) goto L_0x0084;	 Catch:{ Throwable -> 0x00d9 }
-        r8.last_name = r2;	 Catch:{ Throwable -> 0x00d9 }
-        r8.contact_id = r0;	 Catch:{ Throwable -> 0x00d9 }
-        r15.put(r0, r8);	 Catch:{ Throwable -> 0x00d9 }
-        r0 = r10.stringValue(r4);	 Catch:{ Throwable -> 0x00d9 }
-        if (r0 != 0) goto L_0x0090;	 Catch:{ Throwable -> 0x00d9 }
-        goto L_0x004f;	 Catch:{ Throwable -> 0x00d9 }
-        r14 = r8.phones;	 Catch:{ Throwable -> 0x00d9 }
-        r14.add(r0);	 Catch:{ Throwable -> 0x00d9 }
-        r14 = r10.stringValue(r7);	 Catch:{ Throwable -> 0x00d9 }
-        if (r14 != 0) goto L_0x009c;	 Catch:{ Throwable -> 0x00d9 }
-        goto L_0x004f;	 Catch:{ Throwable -> 0x00d9 }
-        r3 = r14.length();	 Catch:{ Throwable -> 0x00d9 }
-        if (r3 != r11) goto L_0x00ac;	 Catch:{ Throwable -> 0x00d9 }
-        r3 = r0.length();	 Catch:{ Throwable -> 0x00d9 }
-        if (r3 == r11) goto L_0x00ac;	 Catch:{ Throwable -> 0x00d9 }
-        r14 = org.telegram.PhoneFormat.PhoneFormat.stripExceptNumbers(r0);	 Catch:{ Throwable -> 0x00d9 }
-        r0 = r8.shortPhones;	 Catch:{ Throwable -> 0x00d9 }
-        r0.add(r14);	 Catch:{ Throwable -> 0x00d9 }
-        r0 = r8.phoneDeleted;	 Catch:{ Throwable -> 0x00d9 }
-        r3 = r10.intValue(r6);	 Catch:{ Throwable -> 0x00d9 }
-        r3 = java.lang.Integer.valueOf(r3);	 Catch:{ Throwable -> 0x00d9 }
-        r0.add(r3);	 Catch:{ Throwable -> 0x00d9 }
-        r0 = r8.phoneTypes;	 Catch:{ Throwable -> 0x00d9 }
-        r0.add(r2);	 Catch:{ Throwable -> 0x00d9 }
-        r0 = r15.size();	 Catch:{ Throwable -> 0x00d9 }
-        if (r0 != r12) goto L_0x00ca;	 Catch:{ Throwable -> 0x00d9 }
-        goto L_0x00cc;	 Catch:{ Throwable -> 0x00d9 }
-        r3 = 6;	 Catch:{ Throwable -> 0x00d9 }
-        goto L_0x004f;	 Catch:{ Throwable -> 0x00d9 }
-        r10.dispose();	 Catch:{ Throwable -> 0x00d9 }
-        r0 = r1.currentAccount;	 Catch:{ Throwable -> 0x00e9, all -> 0x00e5 }
-        r0 = org.telegram.messenger.ContactsController.getInstance(r0);	 Catch:{ Throwable -> 0x00e9, all -> 0x00e5 }
-        r0.migratePhoneBookToV7(r15);	 Catch:{ Throwable -> 0x00e9, all -> 0x00e5 }
-        return;
-        r0 = move-exception;
-        goto L_0x00eb;
-        r17 = 0;
-        goto L_0x00f5;
-        r0 = move-exception;
-        r10 = r14;
-        goto L_0x0251;
-        r0 = move-exception;
-        r10 = r14;
-        goto L_0x00eb;
-        r0 = move-exception;
-        r10 = 0;
-        goto L_0x0251;
-        r0 = move-exception;
-        r10 = 0;
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x0250 }
-        if (r10 == 0) goto L_0x00f3;
-        r10.dispose();
-        r17 = r10;
-        r0 = r1.database;	 Catch:{ Throwable -> 0x0156 }
-        r3 = "SELECT COUNT(key) FROM user_contacts_v7 WHERE 1";	 Catch:{ Throwable -> 0x0156 }
-        r8 = new java.lang.Object[r13];	 Catch:{ Throwable -> 0x0156 }
-        r3 = r0.queryFinalized(r3, r8);	 Catch:{ Throwable -> 0x0156 }
-        r0 = r3.next();	 Catch:{ Throwable -> 0x014d, all -> 0x014a }
-        if (r0 == 0) goto L_0x013e;	 Catch:{ Throwable -> 0x014d, all -> 0x014a }
-        r8 = r3.intValue(r13);	 Catch:{ Throwable -> 0x014d, all -> 0x014a }
-        r10 = java.lang.Math.min(r12, r8);	 Catch:{ Throwable -> 0x013a, all -> 0x014a }
-        if (r8 <= r12) goto L_0x0113;
-        r0 = r8 + -5000;
-        r14 = r0;
-        goto L_0x0114;
-        r14 = 0;
-        r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Throwable -> 0x0134, all -> 0x014a }
-        if (r0 == 0) goto L_0x0131;	 Catch:{ Throwable -> 0x0134, all -> 0x014a }
-        r0 = new java.lang.StringBuilder;	 Catch:{ Throwable -> 0x0134, all -> 0x014a }
-        r0.<init>();	 Catch:{ Throwable -> 0x0134, all -> 0x014a }
-        r15 = r1.currentAccount;	 Catch:{ Throwable -> 0x0134, all -> 0x014a }
-        r0.append(r15);	 Catch:{ Throwable -> 0x0134, all -> 0x014a }
-        r15 = " current cached contacts count = ";	 Catch:{ Throwable -> 0x0134, all -> 0x014a }
-        r0.append(r15);	 Catch:{ Throwable -> 0x0134, all -> 0x014a }
-        r0.append(r8);	 Catch:{ Throwable -> 0x0134, all -> 0x014a }
-        r0 = r0.toString();	 Catch:{ Throwable -> 0x0134, all -> 0x014a }
-        org.telegram.messenger.FileLog.d(r0);	 Catch:{ Throwable -> 0x0134, all -> 0x014a }
-        r16 = r10;
-        goto L_0x0142;
-        r0 = move-exception;
-        r17 = r3;
-        r16 = r10;
-        goto L_0x015b;
-        r0 = move-exception;
-        r17 = r3;
-        goto L_0x0158;
-        r8 = 0;
-        r14 = 0;
-        r16 = 16;
-        if (r3 == 0) goto L_0x0147;
-        r3.dispose();
-        r17 = r3;
-        goto L_0x0163;
-        r0 = move-exception;
-        goto L_0x024a;
-        r0 = move-exception;
-        r17 = r3;
-        goto L_0x0157;
-        r0 = move-exception;
-        r3 = r17;
-        goto L_0x024a;
-        r0 = move-exception;
-        r8 = 0;
-        r14 = 0;
-        r16 = 16;
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x0151 }
-        if (r17 == 0) goto L_0x0163;
-        r17.dispose();
-        r0 = r16;
-        r3 = new java.util.HashMap;
-        r3.<init>(r0);
-        if (r14 == 0) goto L_0x0186;
-        r0 = r1.database;	 Catch:{ Exception -> 0x0220 }
-        r10 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0220 }
-        r10.<init>();	 Catch:{ Exception -> 0x0220 }
-        r14 = "SELECT us.key, us.uid, us.fname, us.sname, up.phone, up.sphone, up.deleted, us.imported FROM user_contacts_v7 as us LEFT JOIN user_phones_v7 as up ON us.key = up.key WHERE 1 LIMIT 0,";	 Catch:{ Exception -> 0x0220 }
-        r10.append(r14);	 Catch:{ Exception -> 0x0220 }
-        r10.append(r8);	 Catch:{ Exception -> 0x0220 }
-        r8 = r10.toString();	 Catch:{ Exception -> 0x0220 }
-        r10 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x0220 }
-        r0 = r0.queryFinalized(r8, r10);	 Catch:{ Exception -> 0x0220 }
-        goto L_0x0190;	 Catch:{ Exception -> 0x0220 }
-        r0 = r1.database;	 Catch:{ Exception -> 0x0220 }
-        r8 = "SELECT us.key, us.uid, us.fname, us.sname, up.phone, up.sphone, up.deleted, us.imported FROM user_contacts_v7 as us LEFT JOIN user_phones_v7 as up ON us.key = up.key WHERE 1";	 Catch:{ Exception -> 0x0220 }
-        r10 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x0220 }
-        r0 = r0.queryFinalized(r8, r10);	 Catch:{ Exception -> 0x0220 }
-        r8 = r0;
-        r0 = r8.next();	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        if (r0 == 0) goto L_0x0212;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r0 = r8.stringValue(r13);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r10 = r3.get(r0);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r10 = (org.telegram.messenger.ContactsController.Contact) r10;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        if (r10 != 0) goto L_0x01d0;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r10 = new org.telegram.messenger.ContactsController$Contact;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r10.<init>();	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r14 = r8.intValue(r9);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r10.contact_id = r14;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r14 = r8.stringValue(r5);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r10.first_name = r14;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r14 = r8.stringValue(r4);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r10.last_name = r14;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r14 = 7;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r14 = r8.intValue(r14);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r10.imported = r14;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r14 = r10.first_name;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        if (r14 != 0) goto L_0x01c7;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r10.first_name = r2;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r14 = r10.last_name;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        if (r14 != 0) goto L_0x01cd;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r10.last_name = r2;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r3.put(r0, r10);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r0 = r8.stringValue(r7);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        if (r0 != 0) goto L_0x01d8;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r14 = 6;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        goto L_0x0191;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r14 = r10.phones;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r14.add(r0);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r14 = r8.stringValue(r6);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        if (r14 != 0) goto L_0x01e4;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        goto L_0x01d6;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r15 = r14.length();	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        if (r15 != r11) goto L_0x01f4;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r15 = r0.length();	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        if (r15 == r11) goto L_0x01f4;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r14 = org.telegram.PhoneFormat.PhoneFormat.stripExceptNumbers(r0);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r0 = r10.shortPhones;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r0.add(r14);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r0 = r10.phoneDeleted;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r14 = 6;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r15 = r8.intValue(r14);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r15 = java.lang.Integer.valueOf(r15);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r0.add(r15);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r0 = r10.phoneTypes;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r0.add(r2);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r0 = r3.size();	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        if (r0 != r12) goto L_0x0191;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        r8.dispose();	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
-        goto L_0x022c;
-        r0 = move-exception;
-        goto L_0x0244;
-        r0 = move-exception;
-        r17 = r8;
-        goto L_0x0221;
-        r0 = move-exception;
-        r8 = r17;
-        goto L_0x0244;
-        r0 = move-exception;
-        r3.clear();	 Catch:{ all -> 0x021c }
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x021c }
-        if (r17 == 0) goto L_0x022c;
-        r17.dispose();
-        r0 = r1.currentAccount;
-        r18 = org.telegram.messenger.ContactsController.getInstance(r0);
-        r20 = 1;
-        r21 = 1;
-        r22 = 0;
-        r23 = 0;
-        r24 = r27 ^ 1;
-        r25 = 0;
-        r19 = r3;
-        r18.performSyncPhoneBook(r19, r20, r21, r22, r23, r24, r25);
-        return;
-        if (r8 == 0) goto L_0x0249;
-        r8.dispose();
-        throw r0;
-        if (r3 == 0) goto L_0x024f;
-        r3.dispose();
-        throw r0;
-        r0 = move-exception;
-        if (r10 == 0) goto L_0x0256;
-        r10.dispose();
-        throw r0;
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getCachedPhoneBook$90$MessagesStorage(boolean):void");
-    }
-
-    /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:960:0x156d in {2, 3, 7, 10, 11, 35, 37, 38, 40, 41, 43, 44, 46, 47, 49, 50, 51, 52, 54, 55, 56, 57, 58, 61, 63, 65, 67, 69, 95, 96, 97, 99, 101, 103, 105, 107, 109, 110, 127, 129, 131, 132, 141, 143, 144, 145, 147, 149, 151, 153, 155, 156, 158, 159, 167, 168, 178, 179, 180, 181, 183, 184, 185, 186, 188, 190, 193, 194, 202, 203, 205, 207, 209, 211, 212, 213, 215, 216, 217, 219, 221, 222, 225, 226, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 251, 252, 255, 257, 258, 260, 261, 263, 265, 272, 275, 282, 283, 291, 292, 295, 296, 304, 305, 308, 309, 310, 311, 315, 316, 322, 323, 326, 327, 328, 330, 332, 338, 339, 353, 355, 357, 358, 365, 366, 371, 374, 379, 386, 387, 389, 391, 393, 394, 395, 397, 398, 399, 400, 401, 403, 404, 412, 413, 415, 417, 418, 424, 425, 430, 431, 436, 437, 442, 443, 444, 446, 448, 456, 457, 464, 466, 468, 469, 470, 472, 474, 475, 476, 477, 479, 480, 481, 483, 484, 485, 487, 489, 491, 493, 495, 496, 497, 498, 499, 501, 502, 503, 504, 505, 513, 514, 519, 520, 528, 529, 531, 533, 535, 536, 538, 539, 541, 542, 544, 545, 547, 548, 550, 552, 553, 554, 558, 561, 562, 563, 565, 567, 570, 571, 577, 578, 582, 587, 588, 589, 592, 593, 596, 597, 598, 599, 601, 603, 609, 610, 618, 642, 644, 645, 647, 648, 654, 656, 658, 659, 664, 672, 676, 683, 692, 693, 695, 697, 709, 710, 719, 720, 723, 726, 727, 730, 733, 734, 735, 740, 741, 754, 756, 758, 760, 762, 765, 766, 767, 769, 771, 773, 774, 776, 777, 779, 781, 783, 785, 786, 787, 789, 791, 793, 794, 795, 796, 797, 799, 800, 801, 802, 804, 805, 806, 807, 808, 809, 821, 828, 829, 832, 835, 843, 844, 845, 859, 860, 861, 869, 870, 871, 872, 873, 874, 884, 885, 893, 894, 895, 898, 900, 902, 903, 907, 910, 911, 913, 915, 917, 918, 920, 921, 923, 925, 927, 928, 930, 931, 933, 934, 935, 936, 938, 939, 940, 941, 943, 944, 945, 947, 948, 949, 950, 953, 955, 957, 959} preds:[]
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-        	at java.lang.Iterable.forEach(Iterable.java:75)
-        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-        */
-    public /* synthetic */ void lambda$getMessages$98$MessagesStorage(int r38, int r39, boolean r40, long r41, int r43, int r44, int r45, int r46, int r47) {
-        /*
-        r37 = this;
-        r1 = r37;
-        r2 = r38;
-        r3 = r39;
-        r4 = r41;
-        r15 = r43;
-        r6 = r1.currentAccount;
-        r6 = org.telegram.messenger.UserConfig.getInstance(r6);
-        r6 = r6.clientUserId;
-        r7 = new org.telegram.tgnet.TLRPC$TL_messages_messages;
-        r7.<init>();
-        r8 = (long) r3;
-        if (r40 == 0) goto L_0x001d;
-        r11 = (int) r4;
-        r11 = -r11;
-        goto L_0x001e;
-        r11 = 0;
-        r12 = 32;
-        r13 = 0;
-        r16 = (r8 > r13 ? 1 : (r8 == r13 ? 0 : -1));
-        if (r16 == 0) goto L_0x002b;
-        if (r11 == 0) goto L_0x002b;
-        r13 = (long) r11;
-        r13 = r13 << r12;
-        r8 = r8 | r13;
-        r13 = r8;
-        r8 = 777000; // 0xbdb28 float:1.088809E-39 double:3.83889E-318;
-        r19 = (r4 > r8 ? 1 : (r4 == r8 ? 0 : -1));
-        if (r19 != 0) goto L_0x0036;
-        r8 = 10;
-        goto L_0x0037;
-        r8 = 1;
-        r9 = new java.util.ArrayList;	 Catch:{ Exception -> 0x1512, all -> 0x14fe }
-        r9.<init>();	 Catch:{ Exception -> 0x1512, all -> 0x14fe }
-        r12 = new java.util.ArrayList;	 Catch:{ Exception -> 0x1512, all -> 0x14fe }
-        r12.<init>();	 Catch:{ Exception -> 0x1512, all -> 0x14fe }
-        r10 = new java.util.ArrayList;	 Catch:{ Exception -> 0x1512, all -> 0x14fe }
-        r10.<init>();	 Catch:{ Exception -> 0x1512, all -> 0x14fe }
-        r21 = r10;	 Catch:{ Exception -> 0x1512, all -> 0x14fe }
-        r10 = new android.util.SparseArray;	 Catch:{ Exception -> 0x1512, all -> 0x14fe }
-        r10.<init>();	 Catch:{ Exception -> 0x1512, all -> 0x14fe }
-        r22 = r10;	 Catch:{ Exception -> 0x1512, all -> 0x14fe }
-        r10 = new android.util.LongSparseArray;	 Catch:{ Exception -> 0x1512, all -> 0x14fe }
-        r10.<init>();	 Catch:{ Exception -> 0x1512, all -> 0x14fe }
-        r23 = r10;
-        r10 = (int) r4;
-        r24 = r9;
-        if (r10 == 0) goto L_0x0bb7;
-        r9 = "SELECT inbox_max, unread_count, date, unread_count_i FROM dialogs WHERE did = ";
-        r26 = r12;
-        r12 = 3;
-        if (r15 != r12) goto L_0x0150;
-        if (r44 != 0) goto L_0x0150;
-        r8 = r1.database;	 Catch:{ Exception -> 0x013e, all -> 0x012b }
-        r12 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x013e, all -> 0x012b }
-        r12.<init>();	 Catch:{ Exception -> 0x013e, all -> 0x012b }
-        r12.append(r9);	 Catch:{ Exception -> 0x013e, all -> 0x012b }
-        r12.append(r4);	 Catch:{ Exception -> 0x013e, all -> 0x012b }
-        r9 = r12.toString();	 Catch:{ Exception -> 0x013e, all -> 0x012b }
-        r27 = r7;
-        r12 = 0;
-        r7 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
-        r7 = r8.queryFinalized(r9, r7);	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
-        r8 = r7.next();	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
-        if (r8 == 0) goto L_0x00e8;	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
-        r8 = r7.intValue(r12);	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
-        r9 = 1;
-        r8 = r8 + r9;
-        r12 = r7.intValue(r9);	 Catch:{ Exception -> 0x00da, all -> 0x00ca }
-        r9 = 2;
-        r28 = r7.intValue(r9);	 Catch:{ Exception -> 0x00c0, all -> 0x00b4 }
-        r9 = 3;
-        r29 = r7.intValue(r9);	 Catch:{ Exception -> 0x00a8, all -> 0x009a }
-        goto L_0x00ee;
-        r0 = move-exception;
-        r21 = r0;
-        r6 = r2;
-        r7 = r3;
-        r33 = r8;
-        r13 = r12;
-        r11 = r27;
-        r14 = r28;
-        r12 = 0;
-        goto L_0x00d6;
-        r0 = move-exception;
-        r6 = r2;
-        r7 = r3;
-        r33 = r8;
-        r13 = r12;
-        r11 = r27;
-        r14 = r28;
-        r12 = 0;
-        goto L_0x00e4;
-        r0 = move-exception;
-        r21 = r0;
-        r6 = r2;
-        r7 = r3;
-        r33 = r8;
-        r13 = r12;
-        r11 = r27;
-        r12 = 0;
-        goto L_0x00d5;
-        r0 = move-exception;
-        r6 = r2;
-        r7 = r3;
-        r33 = r8;
-        r13 = r12;
-        r11 = r27;
-        r12 = 0;
-        goto L_0x00e3;
-        r0 = move-exception;
-        r21 = r0;
-        r6 = r2;
-        r7 = r3;
-        r33 = r8;
-        r11 = r27;
-        r12 = 0;
-        r13 = 0;
-        r14 = 0;
-        r17 = 0;
-        goto L_0x0c8b;
-        r0 = move-exception;
-        r6 = r2;
-        r7 = r3;
-        r33 = r8;
-        r11 = r27;
-        r12 = 0;
-        r13 = 0;
-        r14 = 0;
-        r17 = 0;
-        goto L_0x0c9e;
-        r8 = 0;
-        r12 = 0;
-        r28 = 0;
-        r29 = 0;
-        r7.dispose();	 Catch:{ Exception -> 0x0118, all -> 0x0103 }
-        r31 = r3;
-        r36 = r6;
-        r33 = r8;
-        r30 = r29;
-        r6 = 0;
-        r32 = 0;
-        r29 = r28;
-        r28 = r10;
-        r10 = r12;
-        goto L_0x0425;
-        r0 = move-exception;
-        r21 = r0;
-        r6 = r2;
-        r7 = r3;
-        r33 = r8;
-        r13 = r12;
-        r11 = r27;
-        r14 = r28;
-        r20 = r29;
-        r12 = 0;
-        r17 = 0;
-        r19 = 0;
-        goto L_0x1553;
-        r0 = move-exception;
-        r6 = r2;
-        r7 = r3;
-        r33 = r8;
-        r13 = r12;
-        r11 = r27;
-        r14 = r28;
-        r20 = r29;
-        r12 = 0;
-        r17 = 0;
-        r19 = 0;
-        goto L_0x1523;
-        r0 = move-exception;
-        r21 = r0;
-        r6 = r2;
-        r11 = r7;
-        r12 = 0;
-        r13 = 0;
-        r14 = 0;
-        r17 = 0;
-        r19 = 0;
-        r20 = 0;
-        r33 = 0;
-        r7 = r3;
-        goto L_0x1553;
-        r0 = move-exception;
-        r6 = r2;
-        r11 = r7;
-        r12 = 0;
-        r13 = 0;
-        r14 = 0;
-        r17 = 0;
-        r19 = 0;
-        r20 = 0;
-        r33 = 0;
-        r2 = r0;
-        r7 = r3;
-        goto L_0x1524;
-        r27 = r7;
-        r7 = 1;
-        if (r15 == r7) goto L_0x0415;
-        r7 = 3;
-        if (r15 == r7) goto L_0x0415;
-        r7 = 4;
-        if (r15 == r7) goto L_0x0415;
-        if (r44 != 0) goto L_0x0415;
-        r7 = 2;
-        if (r15 != r7) goto L_0x03df;
-        r7 = r1.database;	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
-        r12 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
-        r12.<init>();	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
-        r12.append(r9);	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
-        r12.append(r4);	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
-        r9 = r12.toString();	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
-        r28 = r10;	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
-        r12 = 0;	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
-        r10 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
-        r7 = r7.queryFinalized(r9, r10);	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
-        r9 = r7.next();	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
-        if (r9 == 0) goto L_0x01fd;	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
-        r9 = r7.intValue(r12);	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
-        r13 = (long) r9;
-        r10 = 1;
-        r12 = r7.intValue(r10);	 Catch:{ Exception -> 0x01f2, all -> 0x01e5 }
-        r10 = 2;
-        r29 = r7.intValue(r10);	 Catch:{ Exception -> 0x01d9, all -> 0x01cb }
-        r10 = 3;
-        r30 = r7.intValue(r10);	 Catch:{ Exception -> 0x01bd, all -> 0x01ad }
-        r16 = 0;
-        r10 = (r13 > r16 ? 1 : (r13 == r16 ? 0 : -1));
-        if (r10 == 0) goto L_0x01a5;
-        if (r11 == 0) goto L_0x01a5;
-        r31 = r9;
-        r9 = (long) r11;
-        r18 = 32;
-        r9 = r9 << r18;
-        r13 = r13 | r9;
-        goto L_0x01a7;
-        r31 = r9;
-        r10 = r12;
-        r12 = r31;
-        r9 = 1;
-        goto L_0x0206;
-        r0 = move-exception;
-        r31 = r9;
-        r21 = r0;
-        r6 = r2;
-        r7 = r3;
-        r13 = r12;
-        r11 = r27;
-        r14 = r29;
-        r33 = r31;
-        goto L_0x00a6;
-        r0 = move-exception;
-        r31 = r9;
-        r6 = r2;
-        r7 = r3;
-        r13 = r12;
-        r11 = r27;
-        r14 = r29;
-        r33 = r31;
-        goto L_0x00b2;
-        r0 = move-exception;
-        r31 = r9;
-        r21 = r0;
-        r6 = r2;
-        r7 = r3;
-        r13 = r12;
-        r11 = r27;
-        r33 = r31;
-        goto L_0x00be;
-        r0 = move-exception;
-        r31 = r9;
-        r6 = r2;
-        r7 = r3;
-        r13 = r12;
-        r11 = r27;
-        r33 = r31;
-        goto L_0x00c8;
-        r0 = move-exception;
-        r31 = r9;
-        r21 = r0;
-        r6 = r2;
-        r7 = r3;
-        r11 = r27;
-        r33 = r31;
-        goto L_0x00d3;
-        r0 = move-exception;
-        r31 = r9;
-        r6 = r2;
-        r7 = r3;
-        r11 = r27;
-        r33 = r31;
-        goto L_0x00e1;
-        r31 = r3;
-        r9 = 0;
-        r10 = 0;
-        r12 = 0;
-        r29 = 0;
-        r30 = 0;
-        r7.dispose();	 Catch:{ Exception -> 0x03c5, all -> 0x03b9 }
-        if (r9 != 0) goto L_0x02ab;
-        r7 = r1.database;	 Catch:{ Exception -> 0x02a4, all -> 0x029d }
-        r32 = r9;
-        r9 = java.util.Locale.US;	 Catch:{ Exception -> 0x029b, all -> 0x0299 }
-        r33 = r12;
-        r12 = "SELECT min(mid), max(date) FROM messages WHERE uid = %d AND out = 0 AND read_state IN(0,2) AND mid > 0";	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
-        r34 = r13;	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
-        r13 = 1;	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
-        r14 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
-        r13 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
-        r36 = r6;	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
-        r6 = 0;	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
-        r14[r6] = r13;	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
-        r9 = java.lang.String.format(r9, r12, r14);	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
-        r12 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
-        r7 = r7.queryFinalized(r9, r12);	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
-        r9 = r7.next();	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
-        if (r9 == 0) goto L_0x024f;	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
-        r9 = r7.intValue(r6);	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
-        r6 = 1;
-        r12 = r7.intValue(r6);	 Catch:{ Exception -> 0x0248, all -> 0x023f }
-        r33 = r9;
-        goto L_0x0251;
-        r0 = move-exception;
-        r21 = r0;
-        r6 = r2;
-        r7 = r3;
-        r33 = r9;
-        goto L_0x040c;
-        r0 = move-exception;
-        r6 = r2;
-        r7 = r3;
-        r33 = r9;
-        goto L_0x0412;
-        r12 = r29;
-        r7.dispose();	 Catch:{ Exception -> 0x0294, all -> 0x028f }
-        if (r33 == 0) goto L_0x0289;	 Catch:{ Exception -> 0x0294, all -> 0x028f }
-        r6 = r1.database;	 Catch:{ Exception -> 0x0294, all -> 0x028f }
-        r7 = java.util.Locale.US;	 Catch:{ Exception -> 0x0294, all -> 0x028f }
-        r9 = "SELECT COUNT(*) FROM messages WHERE uid = %d AND mid >= %d AND out = 0 AND read_state IN(0,2)";	 Catch:{ Exception -> 0x0294, all -> 0x028f }
-        r13 = 2;	 Catch:{ Exception -> 0x0294, all -> 0x028f }
-        r14 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x0294, all -> 0x028f }
-        r13 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0294, all -> 0x028f }
-        r29 = r12;
-        r12 = 0;
-        r14[r12] = r13;	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
-        r13 = java.lang.Integer.valueOf(r33);	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
-        r19 = 1;	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
-        r14[r19] = r13;	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
-        r7 = java.lang.String.format(r7, r9, r14);	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
-        r9 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
-        r6 = r6.queryFinalized(r7, r9);	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
-        r7 = r6.next();	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
-        if (r7 == 0) goto L_0x0285;	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
-        r7 = r6.intValue(r12);	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
-        r10 = r7;	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
-        r6.dispose();	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
-        goto L_0x028b;
-        r29 = r12;
-        r13 = r34;
-        goto L_0x03ee;
-        r0 = move-exception;
-        r29 = r12;
-        goto L_0x0408;
-        r0 = move-exception;
-        r29 = r12;
-        goto L_0x0410;
-        r0 = move-exception;
-        goto L_0x02a0;
-        r0 = move-exception;
-        goto L_0x02a7;
-        r0 = move-exception;
-        r32 = r9;
-        r33 = r12;
-        goto L_0x0408;
-        r0 = move-exception;
-        r32 = r9;
-        r33 = r12;
-        goto L_0x0410;
-        r36 = r6;
-        r32 = r9;
-        r33 = r12;
-        r34 = r13;
-        if (r31 != 0) goto L_0x0336;
-        r6 = r1.database;	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
-        r7 = java.util.Locale.US;	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
-        r9 = "SELECT COUNT(*) FROM messages WHERE uid = %d AND mid > 0 AND out = 0 AND read_state IN(0,2)";	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
-        r12 = 1;	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
-        r13 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
-        r12 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
-        r14 = 0;	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
-        r13[r14] = r12;	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
-        r7 = java.lang.String.format(r7, r9, r13);	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
-        r9 = new java.lang.Object[r14];	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
-        r6 = r6.queryFinalized(r7, r9);	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
-        r7 = r6.next();	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
-        if (r7 == 0) goto L_0x02da;
-        r7 = r6.intValue(r14);	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
-        goto L_0x02db;
-        r7 = 0;
-        r6.dispose();	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
-        if (r7 != r10) goto L_0x0324;	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
-        r6 = r1.database;	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
-        r7 = java.util.Locale.US;	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
-        r9 = "SELECT min(mid) FROM messages WHERE uid = %d AND out = 0 AND read_state IN(0,2) AND mid > 0";	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
-        r12 = 1;	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
-        r13 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
-        r12 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
-        r14 = 0;	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
-        r13[r14] = r12;	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
-        r7 = java.lang.String.format(r7, r9, r13);	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
-        r9 = new java.lang.Object[r14];	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
-        r6 = r6.queryFinalized(r7, r9);	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
-        r7 = r6.next();	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
-        if (r7 == 0) goto L_0x0319;	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
-        r7 = r6.intValue(r14);	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
-        r13 = (long) r7;
-        r16 = 0;
-        r9 = (r13 > r16 ? 1 : (r13 == r16 ? 0 : -1));
-        if (r9 == 0) goto L_0x0315;
-        if (r11 == 0) goto L_0x0315;
-        r12 = r10;
-        r9 = (long) r11;
-        r18 = 32;
-        r9 = r9 << r18;
-        r13 = r13 | r9;
-        goto L_0x0316;
-        r12 = r10;
-        r33 = r7;
-        goto L_0x031e;
-        r12 = r10;
-        r7 = r31;
-        r13 = r34;
-        r6.dispose();	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r34 = r13;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        goto L_0x0327;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r12 = r10;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r7 = r31;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r10 = r33;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r31 = r7;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r33 = r10;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r10 = r12;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        goto L_0x028b;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r0 = move-exception;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        goto L_0x03be;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r0 = move-exception;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        goto L_0x03ca;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r12 = r10;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r6 = r1.database;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r7 = java.util.Locale.US;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r9 = "SELECT start, end FROM messages_holes WHERE uid = %d AND start < %d AND end > %d";	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r10 = 3;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r13 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r10 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r14 = 0;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r13[r14] = r10;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r10 = java.lang.Integer.valueOf(r31);	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r14 = 1;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r13[r14] = r10;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r10 = java.lang.Integer.valueOf(r31);	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r14 = 2;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r13[r14] = r10;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r7 = java.lang.String.format(r7, r9, r13);	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r9 = 0;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r10 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r6 = r6.queryFinalized(r7, r10);	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r7 = r6.next();	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        if (r7 != 0) goto L_0x0368;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r7 = 1;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        goto L_0x0369;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r7 = 0;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r6.dispose();	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        if (r7 == 0) goto L_0x032d;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r6 = r1.database;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r7 = java.util.Locale.US;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r9 = "SELECT min(mid) FROM messages WHERE uid = %d AND out = 0 AND read_state IN(0,2) AND mid > %d";	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r10 = 2;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r13 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r10 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r14 = 0;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r13[r14] = r10;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r10 = java.lang.Integer.valueOf(r31);	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r19 = 1;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r13[r19] = r10;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r7 = java.lang.String.format(r7, r9, r13);	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r9 = new java.lang.Object[r14];	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r6 = r6.queryFinalized(r7, r9);	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r7 = r6.next();	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        if (r7 == 0) goto L_0x03aa;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r7 = r6.intValue(r14);	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r13 = (long) r7;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r9 = 0;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r31 = (r13 > r9 ? 1 : (r13 == r9 ? 0 : -1));	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        if (r31 == 0) goto L_0x03ae;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        if (r11 == 0) goto L_0x03ae;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r9 = (long) r11;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r18 = 32;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r9 = r9 << r18;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r13 = r13 | r9;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        goto L_0x03ae;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r7 = r31;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r13 = r34;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r6.dispose();	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
-        r31 = r7;
-        r10 = r12;
-        goto L_0x03ee;
-        r0 = move-exception;
-        goto L_0x03bf;
-        r0 = move-exception;
-        goto L_0x03cb;
-        r0 = move-exception;
-        r32 = r9;
-        r33 = r12;
-        r12 = r10;
-        r21 = r0;
-        r6 = r2;
-        r7 = r3;
-        goto L_0x0b96;
-        r0 = move-exception;
-        r32 = r9;
-        r33 = r12;
-        r12 = r10;
-        r6 = r2;
-        r7 = r3;
-        goto L_0x0ba9;
-        r0 = move-exception;
-        r21 = r0;
-        r6 = r2;
-        r7 = r3;
-        r11 = r27;
-        goto L_0x1506;
-        r0 = move-exception;
-        r6 = r2;
-        r7 = r3;
-        r11 = r27;
-        goto L_0x1518;
-        r36 = r6;
-        r28 = r10;
-        r31 = r3;
-        r10 = 0;
-        r29 = 0;
-        r30 = 0;
-        r32 = 0;
-        r33 = 0;
-        if (r2 > r10) goto L_0x03f8;
-        if (r10 >= r8) goto L_0x03f3;
-        goto L_0x03f8;
-        r6 = r10 - r2;
-        r2 = r2 + 10;
-        goto L_0x0425;
-        r6 = r10 + 10;
-        r2 = java.lang.Math.max(r2, r6);	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
-        if (r10 >= r8) goto L_0x0405;
-        r6 = 0;
-        r10 = 0;
-        r13 = 0;
-        goto L_0x0421;
-        r6 = 0;
-        goto L_0x0425;
-        r0 = move-exception;
-        r21 = r0;
-        r6 = r2;
-        r7 = r3;
-        r13 = r10;
-        goto L_0x0b97;
-        r0 = move-exception;
-        r6 = r2;
-        r7 = r3;
-        r13 = r10;
-        goto L_0x0baa;
-        r36 = r6;
-        r28 = r10;
-        r31 = r3;
-        r6 = 0;
-        r10 = 0;
-        r29 = 0;
-        r30 = 0;
-        r32 = 0;
-        r33 = 0;
-        r7 = r1.database;	 Catch:{ Exception -> 0x0ba4, all -> 0x0b8f }
-        r8 = java.util.Locale.US;	 Catch:{ Exception -> 0x0ba4, all -> 0x0b8f }
-        r9 = "SELECT start FROM messages_holes WHERE uid = %d AND start IN (0, 1)";	 Catch:{ Exception -> 0x0ba4, all -> 0x0b8f }
-        r12 = 1;	 Catch:{ Exception -> 0x0ba4, all -> 0x0b8f }
-        r3 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x0ba4, all -> 0x0b8f }
-        r12 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0ba4, all -> 0x0b8f }
-        r34 = r10;
-        r10 = 0;
-        r3[r10] = r12;	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
-        r3 = java.lang.String.format(r8, r9, r3);	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
-        r8 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
-        r3 = r7.queryFinalized(r3, r8);	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
-        r7 = r3.next();	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
-        if (r7 == 0) goto L_0x04a1;
-        r7 = r3.intValue(r10);	 Catch:{ Exception -> 0x0491, all -> 0x047f }
-        r8 = 1;
-        if (r7 != r8) goto L_0x0450;
-        r10 = 1;
-        goto L_0x0451;
-        r10 = 0;
-        r3.dispose();	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r3 = 3;
-        goto L_0x04ed;
-        r0 = move-exception;
-        r7 = r39;
-        r21 = r0;
-        r6 = r2;
-        r17 = r10;
-        r11 = r27;
-        r14 = r29;
-        r20 = r30;
-        r19 = r32;
-        r13 = r34;
-        r12 = 0;
-        goto L_0x1553;
-        r0 = move-exception;
-        r7 = r39;
-        r6 = r2;
-        r17 = r10;
-        r11 = r27;
-        r14 = r29;
-        r20 = r30;
-        r19 = r32;
-        r13 = r34;
-        r12 = 0;
-        goto L_0x1523;
-        r0 = move-exception;
-        r7 = r39;
-        r21 = r0;
-        r6 = r2;
-        r11 = r27;
-        r14 = r29;
-        r20 = r30;
-        r19 = r32;
-        r13 = r34;
-        goto L_0x0b9f;
-        r0 = move-exception;
-        r7 = r39;
-        r6 = r2;
-        r11 = r27;
-        r14 = r29;
-        r20 = r30;
-        r19 = r32;
-        r13 = r34;
-        goto L_0x0bb2;
-        r3.dispose();	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
-        r3 = r1.database;	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
-        r7 = java.util.Locale.US;	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
-        r8 = "SELECT min(mid) FROM messages WHERE uid = %d AND mid > 0";	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
-        r9 = 1;	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
-        r10 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
-        r9 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
-        r12 = 0;	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
-        r10[r12] = r9;	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
-        r7 = java.lang.String.format(r7, r8, r10);	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
-        r8 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
-        r3 = r3.queryFinalized(r7, r8);	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
-        r7 = r3.next();	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
-        if (r7 == 0) goto L_0x04e8;
-        r7 = r3.intValue(r12);	 Catch:{ Exception -> 0x0491, all -> 0x047f }
-        if (r7 == 0) goto L_0x04e8;	 Catch:{ Exception -> 0x0491, all -> 0x047f }
-        r8 = r1.database;	 Catch:{ Exception -> 0x0491, all -> 0x047f }
-        r9 = "REPLACE INTO messages_holes VALUES(?, ?, ?)";	 Catch:{ Exception -> 0x0491, all -> 0x047f }
-        r8 = r8.executeFast(r9);	 Catch:{ Exception -> 0x0491, all -> 0x047f }
-        r8.requery();	 Catch:{ Exception -> 0x0491, all -> 0x047f }
-        r9 = 1;	 Catch:{ Exception -> 0x0491, all -> 0x047f }
-        r8.bindLong(r9, r4);	 Catch:{ Exception -> 0x0491, all -> 0x047f }
-        r9 = 2;	 Catch:{ Exception -> 0x0491, all -> 0x047f }
-        r10 = 0;	 Catch:{ Exception -> 0x0491, all -> 0x047f }
-        r8.bindInteger(r9, r10);	 Catch:{ Exception -> 0x0491, all -> 0x047f }
-        r9 = 3;	 Catch:{ Exception -> 0x0491, all -> 0x047f }
-        r8.bindInteger(r9, r7);	 Catch:{ Exception -> 0x0491, all -> 0x047f }
-        r8.step();	 Catch:{ Exception -> 0x0491, all -> 0x047f }
-        r8.dispose();	 Catch:{ Exception -> 0x0491, all -> 0x047f }
-        r3.dispose();	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
-        r3 = 3;
-        r10 = 0;
-        if (r15 == r3) goto L_0x0792;
-        r3 = 4;
-        if (r15 == r3) goto L_0x0792;
-        if (r32 == 0) goto L_0x04f9;
-        r3 = 2;
-        if (r15 != r3) goto L_0x04fa;
-        goto L_0x0792;
-        r3 = 2;
-        r7 = 1;
-        if (r15 != r7) goto L_0x05a9;
-        r6 = r1.database;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r7 = java.util.Locale.US;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = "SELECT start, end FROM messages_holes WHERE uid = %d AND start >= %d AND start != 1 AND end != 1 ORDER BY start ASC LIMIT 1";	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r9 = new java.lang.Object[r3];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r3 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r12 = 0;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r9[r12] = r3;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r3 = java.lang.Integer.valueOf(r39);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r19 = 1;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r9[r19] = r3;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r3 = java.lang.String.format(r7, r8, r9);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r7 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r3 = r6.queryFinalized(r3, r7);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r6 = r3.next();	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        if (r6 == 0) goto L_0x0531;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r6 = r3.intValue(r12);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r6 = (long) r6;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        if (r11 == 0) goto L_0x0533;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = (long) r11;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r11 = 32;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = r8 << r11;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r6 = r6 | r8;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        goto L_0x0533;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r6 = 0;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r3.dispose();	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = 0;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r3 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        if (r3 == 0) goto L_0x0577;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r3 = r1.database;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = java.util.Locale.US;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r9 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date >= %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d";	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r11 = 5;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r12 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r11 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r20 = 0;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r12[r20] = r11;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r11 = java.lang.Integer.valueOf(r44);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r19 = 1;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r12[r19] = r11;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r11 = java.lang.Long.valueOf(r13);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r13 = 2;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r12[r13] = r11;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r6 = java.lang.Long.valueOf(r6);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r7 = 3;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r12[r7] = r6;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r6 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r7 = 4;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r12[r7] = r6;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r6 = java.lang.String.format(r8, r9, r12);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r7 = 0;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r3 = r3.queryFinalized(r6, r8);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        goto L_0x068c;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r3 = r1.database;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r7 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date >= %d AND m.mid > %d ORDER BY m.date ASC, m.mid ASC LIMIT %d";	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = 4;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r9 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r11 = 0;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r9[r11] = r8;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = java.lang.Integer.valueOf(r44);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r11 = 1;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r9[r11] = r8;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = java.lang.Long.valueOf(r13);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r11 = 2;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r9[r11] = r8;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r11 = 3;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r9[r11] = r8;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r6 = java.lang.String.format(r6, r7, r9);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r7 = 0;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r3 = r3.queryFinalized(r6, r8);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        goto L_0x068c;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        if (r44 == 0) goto L_0x069f;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r7 = 0;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r3 = (r13 > r7 ? 1 : (r13 == r7 ? 0 : -1));	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        if (r3 == 0) goto L_0x065c;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r3 = r1.database;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r7 = "SELECT end FROM messages_holes WHERE uid = %d AND end <= %d ORDER BY end DESC LIMIT 1";	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = 2;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r9 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r12 = 0;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r9[r12] = r8;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = java.lang.Integer.valueOf(r39);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r19 = 1;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r9[r19] = r8;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r6 = java.lang.String.format(r6, r7, r9);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r7 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r3 = r3.queryFinalized(r6, r7);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r6 = r3.next();	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        if (r6 == 0) goto L_0x05e6;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r6 = r3.intValue(r12);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r6 = (long) r6;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        if (r11 == 0) goto L_0x05e8;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = (long) r11;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r11 = 32;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = r8 << r11;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r6 = r6 | r8;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        goto L_0x05e8;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r6 = 0;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r3.dispose();	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = 0;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r3 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        if (r3 == 0) goto L_0x062b;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r3 = r1.database;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = java.util.Locale.US;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r9 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date <= %d AND m.mid < %d AND (m.mid >= %d OR m.mid < 0) ORDER BY m.date DESC, m.mid DESC LIMIT %d";	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r11 = 5;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r12 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r11 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r20 = 0;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r12[r20] = r11;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r11 = java.lang.Integer.valueOf(r44);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r19 = 1;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r12[r19] = r11;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r11 = java.lang.Long.valueOf(r13);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r13 = 2;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r12[r13] = r11;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r6 = java.lang.Long.valueOf(r6);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r7 = 3;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r12[r7] = r6;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r6 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r7 = 4;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r12[r7] = r6;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r6 = java.lang.String.format(r8, r9, r12);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r7 = 0;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r3 = r3.queryFinalized(r6, r8);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        goto L_0x068c;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r3 = r1.database;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r7 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date <= %d AND m.mid < %d ORDER BY m.date DESC, m.mid DESC LIMIT %d";	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = 4;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r9 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r11 = 0;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r9[r11] = r8;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = java.lang.Integer.valueOf(r44);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r11 = 1;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r9[r11] = r8;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = java.lang.Long.valueOf(r13);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r11 = 2;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r9[r11] = r8;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r11 = 3;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r9[r11] = r8;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r6 = java.lang.String.format(r6, r7, r9);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r7 = 0;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r3 = r3.queryFinalized(r6, r8);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        goto L_0x068c;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r3 = r1.database;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r7 = java.util.Locale.US;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date <= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d,%d";	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r9 = 4;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r11 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r9 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r12 = 0;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r11[r12] = r9;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r9 = java.lang.Integer.valueOf(r44);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r12 = 1;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r11[r12] = r9;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r6 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r9 = 2;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r11[r9] = r6;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r6 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r9 = 3;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r11[r9] = r6;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r6 = java.lang.String.format(r7, r8, r11);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r7 = 0;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r3 = r3.queryFinalized(r6, r8);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r7 = r39;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r6 = r2;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r35 = r10;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r14 = r29;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r2 = r30;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = r31;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r11 = r33;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r13 = r34;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r10 = 0;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r12 = 0;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        goto L_0x0ed2;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r3 = r1.database;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r7 = java.util.Locale.US;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = "SELECT max(mid) FROM messages WHERE uid = %d AND mid > 0";	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r9 = 1;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r12 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r9 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r13 = 0;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r12[r13] = r9;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r7 = java.lang.String.format(r7, r8, r12);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r8 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r3 = r3.queryFinalized(r7, r8);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r7 = r3.next();	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        if (r7 == 0) goto L_0x06c4;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        r7 = r3.intValue(r13);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        goto L_0x06c5;
-        r7 = 0;
-        r3.dispose();	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r3 = r1.database;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r8 = java.util.Locale.US;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r9 = "SELECT max(end) FROM messages_holes WHERE uid = %d";	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r12 = 1;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r13 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r12 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r14 = 0;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r13[r14] = r12;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r8 = java.lang.String.format(r8, r9, r13);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r9 = new java.lang.Object[r14];	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r3 = r3.queryFinalized(r8, r9);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r8 = r3.next();	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        if (r8 == 0) goto L_0x06f5;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r8 = r3.intValue(r14);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r13 = (long) r8;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        if (r11 == 0) goto L_0x06f7;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r8 = (long) r11;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r11 = 32;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r8 = r8 << r11;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r13 = r13 | r8;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        goto L_0x06f7;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r13 = 0;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r3.dispose();	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r8 = 0;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r3 = (r13 > r8 ? 1 : (r13 == r8 ? 0 : -1));	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        if (r3 == 0) goto L_0x0732;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r3 = r1.database;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r8 = java.util.Locale.US;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r9 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND (m.mid >= %d OR m.mid < 0) ORDER BY m.date DESC, m.mid DESC LIMIT %d,%d";	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r11 = 4;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r12 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r11 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r20 = 0;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r12[r20] = r11;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r11 = java.lang.Long.valueOf(r13);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r13 = 1;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r12[r13] = r11;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r6 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r11 = 2;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r12[r11] = r6;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r6 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r11 = 3;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r12[r11] = r6;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r6 = java.lang.String.format(r8, r9, r12);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r8 = 0;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r9 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r3 = r3.queryFinalized(r6, r9);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        goto L_0x075b;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r3 = r1.database;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r8 = java.util.Locale.US;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r9 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d ORDER BY m.date DESC, m.mid DESC LIMIT %d,%d";	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r11 = 3;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r12 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r11 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r13 = 0;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r12[r13] = r11;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r6 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r11 = 1;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r12[r11] = r6;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r6 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r11 = 2;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r12[r11] = r6;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r6 = java.lang.String.format(r8, r9, r12);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r8 = 0;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r9 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r3 = r3.queryFinalized(r6, r9);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
-        r6 = r2;
-        r12 = r7;
-        r35 = r10;
-        r14 = r29;
-        r2 = r30;
-        r8 = r31;
-        r11 = r33;
-        r13 = r34;
-        r10 = 0;
-        r7 = r39;
-        goto L_0x0ed2;
-        r0 = move-exception;
-        r21 = r0;
-        r6 = r2;
-        r12 = r7;
-        r17 = r10;
-        r11 = r27;
-        r14 = r29;
-        r20 = r30;
-        r19 = r32;
-        r13 = r34;
-        goto L_0x14e6;
-        r0 = move-exception;
-        r6 = r2;
-        r12 = r7;
-        r17 = r10;
-        r11 = r27;
-        r14 = r29;
-        r20 = r30;
-        r19 = r32;
-        r13 = r34;
-        goto L_0x14fb;
-        r3 = r1.database;	 Catch:{ Exception -> 0x0b72, all -> 0x0b5b }
-        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x0b72, all -> 0x0b5b }
-        r7 = "SELECT max(mid) FROM messages WHERE uid = %d AND mid > 0";	 Catch:{ Exception -> 0x0b72, all -> 0x0b5b }
-        r8 = 1;	 Catch:{ Exception -> 0x0b72, all -> 0x0b5b }
-        r9 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0b72, all -> 0x0b5b }
-        r8 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0b72, all -> 0x0b5b }
-        r12 = 0;	 Catch:{ Exception -> 0x0b72, all -> 0x0b5b }
-        r9[r12] = r8;	 Catch:{ Exception -> 0x0b72, all -> 0x0b5b }
-        r6 = java.lang.String.format(r6, r7, r9);	 Catch:{ Exception -> 0x0b72, all -> 0x0b5b }
-        r7 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x0b72, all -> 0x0b5b }
-        r3 = r3.queryFinalized(r6, r7);	 Catch:{ Exception -> 0x0b72, all -> 0x0b5b }
-        r6 = r3.next();	 Catch:{ Exception -> 0x0b72, all -> 0x0b5b }
-        if (r6 == 0) goto L_0x07b7;
-        r6 = r3.intValue(r12);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
-        goto L_0x07b8;
-        r6 = 0;
-        r3.dispose();	 Catch:{ Exception -> 0x0b42, all -> 0x0b27 }
-        r3 = 4;
-        if (r15 != r3) goto L_0x090d;
-        if (r45 == 0) goto L_0x090d;
-        r3 = r1.database;	 Catch:{ Exception -> 0x08f7, all -> 0x08df }
-        r7 = java.util.Locale.US;	 Catch:{ Exception -> 0x08f7, all -> 0x08df }
-        r8 = "SELECT max(mid) FROM messages WHERE uid = %d AND date <= %d AND mid > 0";	 Catch:{ Exception -> 0x08f7, all -> 0x08df }
-        r9 = 2;	 Catch:{ Exception -> 0x08f7, all -> 0x08df }
-        r12 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x08f7, all -> 0x08df }
-        r9 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x08f7, all -> 0x08df }
-        r38 = r6;
-        r6 = 0;
-        r12[r6] = r9;	 Catch:{ Exception -> 0x08dd, all -> 0x08db }
-        r9 = java.lang.Integer.valueOf(r45);	 Catch:{ Exception -> 0x08dd, all -> 0x08db }
-        r19 = 1;	 Catch:{ Exception -> 0x08dd, all -> 0x08db }
-        r12[r19] = r9;	 Catch:{ Exception -> 0x08dd, all -> 0x08db }
-        r7 = java.lang.String.format(r7, r8, r12);	 Catch:{ Exception -> 0x08dd, all -> 0x08db }
-        r8 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x08dd, all -> 0x08db }
-        r3 = r3.queryFinalized(r7, r8);	 Catch:{ Exception -> 0x08dd, all -> 0x08db }
-        r7 = r3.next();	 Catch:{ Exception -> 0x08dd, all -> 0x08db }
-        if (r7 == 0) goto L_0x0819;
-        r7 = r3.intValue(r6);	 Catch:{ Exception -> 0x0805, all -> 0x07ef }
-        goto L_0x081a;
-        r0 = move-exception;
-        r12 = r38;
-        r7 = r39;
-        r21 = r0;
-        r6 = r2;
-        r17 = r10;
-        r11 = r27;
-        r14 = r29;
-        r20 = r30;
-        r19 = r32;
-        r13 = r34;
-        goto L_0x1553;
-        r0 = move-exception;
-        r12 = r38;
-        r7 = r39;
-        r6 = r2;
-        r17 = r10;
-        r11 = r27;
-        r14 = r29;
-        r20 = r30;
-        r19 = r32;
-        r13 = r34;
-        goto L_0x1523;
-        r7 = -1;
-        r3.dispose();	 Catch:{ Exception -> 0x08dd, all -> 0x08db }
-        r3 = r1.database;	 Catch:{ Exception -> 0x08dd, all -> 0x08db }
-        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x08dd, all -> 0x08db }
-        r9 = "SELECT min(mid) FROM messages WHERE uid = %d AND date >= %d AND mid > 0";	 Catch:{ Exception -> 0x08dd, all -> 0x08db }
-        r12 = 2;	 Catch:{ Exception -> 0x08dd, all -> 0x08db }
-        r8 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x08dd, all -> 0x08db }
-        r12 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x08dd, all -> 0x08db }
-        r35 = r10;
-        r10 = 0;
-        r8[r10] = r12;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r12 = java.lang.Integer.valueOf(r45);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r19 = 1;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r8[r19] = r12;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6 = java.lang.String.format(r6, r9, r8);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r8 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3 = r3.queryFinalized(r6, r8);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6 = r3.next();	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        if (r6 == 0) goto L_0x084c;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r8 = r3.intValue(r10);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        goto L_0x084d;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r8 = -1;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3.dispose();	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3 = -1;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        if (r7 == r3) goto L_0x0911;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        if (r8 == r3) goto L_0x0911;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        if (r7 != r8) goto L_0x085c;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3 = r39;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r8 = r7;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        goto L_0x0915;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3 = r1.database;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r9 = "SELECT start FROM messages_holes WHERE uid = %d AND start <= %d AND end > %d";	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r10 = 3;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r12 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r10 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r20 = 0;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r12[r20] = r10;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r10 = java.lang.Integer.valueOf(r7);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r19 = 1;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r12[r19] = r10;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r10 = java.lang.Integer.valueOf(r7);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r25 = 2;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r12[r25] = r10;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6 = java.lang.String.format(r6, r9, r12);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r9 = 0;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r10 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3 = r3.queryFinalized(r6, r10);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6 = r3.next();	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        if (r6 == 0) goto L_0x088f;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r7 = -1;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3.dispose();	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3 = -1;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        if (r7 == r3) goto L_0x0911;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3 = r1.database;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r7 = "SELECT start FROM messages_holes WHERE uid = %d AND start <= %d AND end > %d";	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r9 = 3;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r10 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r9 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r12 = 0;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r10[r12] = r9;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r9 = java.lang.Integer.valueOf(r8);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r12 = 1;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r10[r12] = r9;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r9 = java.lang.Integer.valueOf(r8);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r12 = 2;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r10[r12] = r9;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6 = java.lang.String.format(r6, r7, r10);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r7 = 0;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r9 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3 = r3.queryFinalized(r6, r9);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6 = r3.next();	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        if (r6 == 0) goto L_0x08c5;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r8 = -1;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3.dispose();	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3 = -1;
-        if (r8 == r3) goto L_0x0911;
-        r13 = (long) r8;
-        r6 = 0;
-        r3 = (r13 > r6 ? 1 : (r13 == r6 ? 0 : -1));
-        if (r3 == 0) goto L_0x08d9;
-        if (r11 == 0) goto L_0x08d9;
-        r6 = (long) r11;
-        r3 = 32;
-        r6 = r6 << r3;
-        r13 = r13 | r6;
-        r3 = r8;
-        goto L_0x0915;
-        r0 = move-exception;
-        goto L_0x08e2;
-        r0 = move-exception;
-        goto L_0x08fa;
-        r0 = move-exception;
-        r38 = r6;
-        r35 = r10;
-        r12 = r38;
-        r7 = r39;
-        r21 = r0;
-        r6 = r2;
-        r11 = r27;
-        r14 = r29;
-        r20 = r30;
-        r19 = r32;
-        r13 = r34;
-        goto L_0x0f1e;
-        r0 = move-exception;
-        r38 = r6;
-        r35 = r10;
-        r12 = r38;
-        r7 = r39;
-        r6 = r2;
-        r11 = r27;
-        r14 = r29;
-        r20 = r30;
-        r19 = r32;
-        r13 = r34;
-        goto L_0x0var_;
-        r38 = r6;
-        r35 = r10;
-        r3 = r39;
-        r8 = r31;
-        if (r8 == 0) goto L_0x0919;
-        r10 = 1;
-        goto L_0x091a;
-        r10 = 0;
-        if (r10 == 0) goto L_0x095d;
-        r6 = r1.database;	 Catch:{ Exception -> 0x0959, all -> 0x0955 }
-        r7 = java.util.Locale.US;	 Catch:{ Exception -> 0x0959, all -> 0x0955 }
-        r9 = "SELECT start FROM messages_holes WHERE uid = %d AND start < %d AND end > %d";	 Catch:{ Exception -> 0x0959, all -> 0x0955 }
-        r39 = r3;
-        r12 = 3;
-        r3 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r12 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r20 = 0;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3[r20] = r12;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r12 = java.lang.Integer.valueOf(r8);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r19 = 1;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3[r19] = r12;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r12 = java.lang.Integer.valueOf(r8);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r25 = 2;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3[r25] = r12;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3 = java.lang.String.format(r7, r9, r3);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r7 = 0;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r9 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3 = r6.queryFinalized(r3, r9);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6 = r3.next();	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        if (r6 == 0) goto L_0x0951;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r10 = 0;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3.dispose();	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        goto L_0x095f;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r0 = move-exception;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r39 = r3;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        goto L_0x08e4;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r0 = move-exception;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r39 = r3;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        goto L_0x08fc;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r39 = r3;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        if (r10 == 0) goto L_0x0a92;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3 = r1.database;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r9 = java.util.Locale.US;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r10 = "SELECT start FROM messages_holes WHERE uid = %d AND start >= %d ORDER BY start ASC LIMIT 1";	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r12 = 2;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r7 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r12 = 0;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6[r12] = r7;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r7 = java.lang.Integer.valueOf(r8);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r19 = 1;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6[r19] = r7;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6 = java.lang.String.format(r9, r10, r6);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r7 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3 = r3.queryFinalized(r6, r7);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6 = r3.next();	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        if (r6 == 0) goto L_0x0996;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6 = r3.intValue(r12);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6 = (long) r6;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        if (r11 == 0) goto L_0x0998;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r9 = (long) r11;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r12 = 32;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r9 = r9 << r12;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6 = r6 | r9;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        goto L_0x0998;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6 = 0;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3.dispose();	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3 = r1.database;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r9 = java.util.Locale.US;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r10 = "SELECT end FROM messages_holes WHERE uid = %d AND end <= %d ORDER BY end DESC LIMIT 1";	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r12 = 2;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r4 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r5 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r12 = 0;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r4[r12] = r5;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r5 = java.lang.Integer.valueOf(r8);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r19 = 1;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r4[r19] = r5;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r4 = java.lang.String.format(r9, r10, r4);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r5 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3 = r3.queryFinalized(r4, r5);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r4 = r3.next();	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        if (r4 == 0) goto L_0x09d0;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r4 = r3.intValue(r12);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r4 = (long) r4;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        if (r11 == 0) goto L_0x09d2;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r9 = (long) r11;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r12 = 32;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r9 = r9 << r12;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r4 = r4 | r9;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        goto L_0x09d2;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r4 = 1;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3.dispose();	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r9 = 0;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3 = (r6 > r9 ? 1 : (r6 == r9 ? 0 : -1));	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        if (r3 != 0) goto L_0x0a25;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r9 = 1;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3 = (r4 > r9 ? 1 : (r4 == r9 ? 0 : -1));	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        if (r3 == 0) goto L_0x09e2;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        goto L_0x0a25;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3 = r1.database;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r4 = java.util.Locale.US;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r5 = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6 = 6;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r9 = 0;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r7[r9] = r6;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6 = java.lang.Long.valueOf(r13);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r9 = 1;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r7[r9] = r6;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6 = r2 / 2;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r9 = 2;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r7[r9] = r6;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r9 = 3;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r7[r9] = r6;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6 = java.lang.Long.valueOf(r13);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r9 = 4;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r7[r9] = r6;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6 = r2 / 2;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r9 = 5;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r7[r9] = r6;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r4 = java.lang.String.format(r4, r5, r7);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r5 = 0;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6 = new java.lang.Object[r5];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3 = r3.queryFinalized(r4, r6);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        goto L_0x0a88;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r9 = 0;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3 = (r6 > r9 ? 1 : (r6 == r9 ? 0 : -1));	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        if (r3 != 0) goto L_0x0a35;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6 = NUM; // 0x3b9aca00 float:0.NUM double:4.94065646E-315;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        if (r11 == 0) goto L_0x0a35;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r9 = (long) r11;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3 = 32;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r9 = r9 << r3;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6 = r6 | r9;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3 = r1.database;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r9 = java.util.Locale.US;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r10 = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND (m.mid >= %d OR m.mid < 0) ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND (m.mid <= %d OR m.mid < 0) ORDER BY m.date ASC, m.mid ASC LIMIT %d)";	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r11 = 8;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r11 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r12 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r20 = 0;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r11[r20] = r12;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r12 = java.lang.Long.valueOf(r13);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r19 = 1;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r11[r19] = r12;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r4 = java.lang.Long.valueOf(r4);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r5 = 2;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r11[r5] = r4;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r4 = r2 / 2;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r4 = java.lang.Integer.valueOf(r4);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r5 = 3;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r11[r5] = r4;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r4 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r5 = 4;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r11[r5] = r4;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r4 = java.lang.Long.valueOf(r13);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r5 = 5;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r11[r5] = r4;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r4 = java.lang.Long.valueOf(r6);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r5 = 6;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r11[r5] = r4;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r4 = 7;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r5 = r2 / 2;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r5 = java.lang.Integer.valueOf(r5);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r11[r4] = r5;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r4 = java.lang.String.format(r9, r10, r11);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r5 = 0;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r6 = new java.lang.Object[r5];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r3 = r3.queryFinalized(r4, r6);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        r12 = r34;
-        goto L_0x0b18;
-        r0 = move-exception;
-        goto L_0x08e4;
-        r0 = move-exception;
-        goto L_0x08fc;
-        r3 = 2;
-        if (r15 != r3) goto L_0x0b15;
-        r3 = r1.database;	 Catch:{ Exception -> 0x0b13, all -> 0x0b11 }
-        r4 = java.util.Locale.US;	 Catch:{ Exception -> 0x0b13, all -> 0x0b11 }
-        r5 = "SELECT COUNT(*) FROM messages WHERE uid = %d AND mid != 0 AND out = 0 AND read_state IN(0,2)";	 Catch:{ Exception -> 0x0b13, all -> 0x0b11 }
-        r6 = 1;	 Catch:{ Exception -> 0x0b13, all -> 0x0b11 }
-        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x0b13, all -> 0x0b11 }
-        r6 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0b13, all -> 0x0b11 }
-        r9 = 0;	 Catch:{ Exception -> 0x0b13, all -> 0x0b11 }
-        r7[r9] = r6;	 Catch:{ Exception -> 0x0b13, all -> 0x0b11 }
-        r4 = java.lang.String.format(r4, r5, r7);	 Catch:{ Exception -> 0x0b13, all -> 0x0b11 }
-        r5 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x0b13, all -> 0x0b11 }
-        r3 = r3.queryFinalized(r4, r5);	 Catch:{ Exception -> 0x0b13, all -> 0x0b11 }
-        r4 = r3.next();	 Catch:{ Exception -> 0x0b13, all -> 0x0b11 }
-        if (r4 == 0) goto L_0x0aba;
-        r10 = r3.intValue(r9);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
-        goto L_0x0abb;
-        r10 = 0;
-        r3.dispose();	 Catch:{ Exception -> 0x0b13, all -> 0x0b11 }
-        r12 = r34;
-        if (r10 != r12) goto L_0x0b0b;
-        r3 = r1.database;	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
-        r4 = java.util.Locale.US;	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
-        r5 = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
-        r6 = 6;	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
-        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
-        r6 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
-        r9 = 0;	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
-        r7[r9] = r6;	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
-        r6 = java.lang.Long.valueOf(r13);	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
-        r9 = 1;	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
-        r7[r9] = r6;	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
-        r6 = r2 / 2;	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
-        r6 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
-        r9 = 2;	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
-        r7[r9] = r6;	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
-        r6 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
-        r9 = 3;	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
-        r7[r9] = r6;	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
-        r6 = java.lang.Long.valueOf(r13);	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
-        r9 = 4;	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
-        r7[r9] = r6;	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
-        r6 = r2 / 2;	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
-        r6 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
-        r9 = 5;	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
-        r7[r9] = r6;	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
-        r4 = java.lang.String.format(r4, r5, r7);	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
-        r5 = 0;	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
-        r6 = new java.lang.Object[r5];	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
-        r3 = r3.queryFinalized(r4, r6);	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
-        r4 = r3;
-        r3 = 1;
-        goto L_0x0b0e;
-        r0 = move-exception;
-        goto L_0x0b2e;
-        r0 = move-exception;
-        goto L_0x0b49;
-        r3 = 0;
-        r4 = r3;
-        r3 = 0;
-        r10 = r3;
-        r3 = r4;
-        goto L_0x0b19;
-        r0 = move-exception;
-        goto L_0x0b2c;
-        r0 = move-exception;
-        goto L_0x0b47;
-        r12 = r34;
-        r3 = 0;
-        r10 = 0;
-        r7 = r39;
-        r6 = r2;
-        r13 = r12;
-        r14 = r29;
-        r2 = r30;
-        r11 = r33;
-        r12 = r38;
-        goto L_0x0ed2;
-        r0 = move-exception;
-        r38 = r6;
-        r35 = r10;
-        r12 = r34;
-        r7 = r39;
-        r21 = r0;
-        r6 = r2;
-        r13 = r12;
-        r11 = r27;
-        r14 = r29;
-        r20 = r30;
-        r19 = r32;
-        r17 = r35;
-        r12 = r38;
-        goto L_0x1553;
-        r0 = move-exception;
-        r38 = r6;
-        r35 = r10;
-        r12 = r34;
-        r7 = r39;
-        r6 = r2;
-        r13 = r12;
-        r11 = r27;
-        r14 = r29;
-        r20 = r30;
-        r19 = r32;
-        r17 = r35;
-        r12 = r38;
-        goto L_0x1523;
-        r0 = move-exception;
-        r35 = r10;
-        r12 = r34;
-        r7 = r39;
-        r21 = r0;
-        r6 = r2;
-        r13 = r12;
-        r11 = r27;
-        r14 = r29;
-        r20 = r30;
-        r19 = r32;
-        r17 = r35;
-        goto L_0x0469;
-        r0 = move-exception;
-        r35 = r10;
-        r12 = r34;
-        r7 = r39;
-        r6 = r2;
-        r13 = r12;
-        r11 = r27;
-        r14 = r29;
-        r20 = r30;
-        r19 = r32;
-        r17 = r35;
-        goto L_0x047c;
-        r0 = move-exception;
-        r12 = r34;
-        goto L_0x0b91;
-        r0 = move-exception;
-        r12 = r34;
-        goto L_0x0ba6;
-        r0 = move-exception;
-        r12 = r10;
-        r7 = r39;
-        r21 = r0;
-        r6 = r2;
-        r13 = r12;
-        r11 = r27;
-        r14 = r29;
-        r20 = r30;
-        r19 = r32;
-        r12 = 0;
-        r17 = 0;
-        goto L_0x1553;
-        r0 = move-exception;
-        r12 = r10;
-        r7 = r39;
-        r6 = r2;
-        r13 = r12;
-        r11 = r27;
-        r14 = r29;
-        r20 = r30;
-        r19 = r32;
-        r12 = 0;
-        r17 = 0;
-        goto L_0x1523;
-        r36 = r6;
-        r27 = r7;
-        r28 = r10;
-        r26 = r12;
-        r3 = "SELECT min(mid) FROM messages WHERE uid = %d AND mid < 0";
-        r4 = 3;
-        if (r15 != r4) goto L_0x0cc0;
-        if (r44 != 0) goto L_0x0cc0;
-        r4 = r1.database;	 Catch:{ Exception -> 0x0cb3, all -> 0x0ca4 }
-        r5 = java.util.Locale.US;	 Catch:{ Exception -> 0x0cb3, all -> 0x0ca4 }
-        r6 = 1;	 Catch:{ Exception -> 0x0cb3, all -> 0x0ca4 }
-        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x0cb3, all -> 0x0ca4 }
-        r6 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0cb3, all -> 0x0ca4 }
-        r9 = 0;	 Catch:{ Exception -> 0x0cb3, all -> 0x0ca4 }
-        r7[r9] = r6;	 Catch:{ Exception -> 0x0cb3, all -> 0x0ca4 }
-        r5 = java.lang.String.format(r5, r3, r7);	 Catch:{ Exception -> 0x0cb3, all -> 0x0ca4 }
-        r6 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x0cb3, all -> 0x0ca4 }
-        r4 = r4.queryFinalized(r5, r6);	 Catch:{ Exception -> 0x0cb3, all -> 0x0ca4 }
-        r5 = r4.next();	 Catch:{ Exception -> 0x0cb3, all -> 0x0ca4 }
-        if (r5 == 0) goto L_0x0be9;	 Catch:{ Exception -> 0x0cb3, all -> 0x0ca4 }
-        r10 = r4.intValue(r9);	 Catch:{ Exception -> 0x0cb3, all -> 0x0ca4 }
-        goto L_0x0bea;
-        r10 = 0;
-        r4.dispose();	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c7c }
-        r4 = r1.database;	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c7c }
-        r5 = java.util.Locale.US;	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c7c }
-        r6 = "SELECT max(mid), max(date) FROM messages WHERE uid = %d AND out = 0 AND read_state IN(0,2) AND mid < 0";	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c7c }
-        r7 = 1;	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c7c }
-        r9 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c7c }
-        r7 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c7c }
-        r11 = 0;	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c7c }
-        r9[r11] = r7;	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c7c }
-        r5 = java.lang.String.format(r5, r6, r9);	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c7c }
-        r6 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c7c }
-        r4 = r4.queryFinalized(r5, r6);	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c7c }
-        r5 = r4.next();	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c7c }
-        if (r5 == 0) goto L_0x0CLASSNAME;	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c7c }
-        r5 = r4.intValue(r11);	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c7c }
-        r6 = 1;	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c7c }
-        r7 = r4.intValue(r6);	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c7c }
-        goto L_0x0CLASSNAME;
-        r5 = 0;
-        r7 = 0;
-        r4.dispose();	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0CLASSNAME }
-        if (r5 == 0) goto L_0x0CLASSNAME;
-        r4 = r1.database;	 Catch:{ Exception -> 0x0c5a, all -> 0x0CLASSNAME }
-        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x0c5a, all -> 0x0CLASSNAME }
-        r9 = "SELECT COUNT(*) FROM messages WHERE uid = %d AND mid <= %d AND out = 0 AND read_state IN(0,2)";	 Catch:{ Exception -> 0x0c5a, all -> 0x0CLASSNAME }
-        r10 = 2;	 Catch:{ Exception -> 0x0c5a, all -> 0x0CLASSNAME }
-        r11 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x0c5a, all -> 0x0CLASSNAME }
-        r10 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0c5a, all -> 0x0CLASSNAME }
-        r12 = 0;	 Catch:{ Exception -> 0x0c5a, all -> 0x0CLASSNAME }
-        r11[r12] = r10;	 Catch:{ Exception -> 0x0c5a, all -> 0x0CLASSNAME }
-        r10 = java.lang.Integer.valueOf(r5);	 Catch:{ Exception -> 0x0c5a, all -> 0x0CLASSNAME }
-        r19 = 1;	 Catch:{ Exception -> 0x0c5a, all -> 0x0CLASSNAME }
-        r11[r19] = r10;	 Catch:{ Exception -> 0x0c5a, all -> 0x0CLASSNAME }
-        r6 = java.lang.String.format(r6, r9, r11);	 Catch:{ Exception -> 0x0c5a, all -> 0x0CLASSNAME }
-        r9 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x0c5a, all -> 0x0CLASSNAME }
-        r4 = r4.queryFinalized(r6, r9);	 Catch:{ Exception -> 0x0c5a, all -> 0x0CLASSNAME }
-        r6 = r4.next();	 Catch:{ Exception -> 0x0c5a, all -> 0x0CLASSNAME }
-        if (r6 == 0) goto L_0x0c4b;	 Catch:{ Exception -> 0x0c5a, all -> 0x0CLASSNAME }
-        r10 = r4.intValue(r12);	 Catch:{ Exception -> 0x0c5a, all -> 0x0CLASSNAME }
-        goto L_0x0c4c;
-        r10 = 0;
-        r4.dispose();	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r4 = 3;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        goto L_0x0cc4;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r0 = move-exception;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r21 = r0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r6 = r2;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r33 = r5;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r14 = r7;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        goto L_0x0c6b;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r0 = move-exception;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r6 = r2;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r33 = r5;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r14 = r7;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        goto L_0x0CLASSNAME;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r5 = r10;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r4 = 3;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        goto L_0x0cc3;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r0 = move-exception;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r21 = r0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r6 = r2;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r14 = r7;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r33 = r10;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r11 = r27;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r12 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r13 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        goto L_0x14e0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r0 = move-exception;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r6 = r2;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r14 = r7;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r33 = r10;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r11 = r27;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r12 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r13 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        goto L_0x14f5;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r0 = move-exception;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r7 = r39;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r21 = r0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r6 = r2;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r33 = r10;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r11 = r27;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r12 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r13 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r14 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r17 = 1;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r19 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r20 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        goto L_0x1553;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r0 = move-exception;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r7 = r39;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r6 = r2;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r33 = r10;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r11 = r27;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r12 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r13 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r14 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r17 = 1;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r19 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r20 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        goto L_0x1523;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r0 = move-exception;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r7 = r39;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r21 = r0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r6 = r2;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r11 = r27;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r12 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r13 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r14 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r17 = 1;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        goto L_0x150b;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r0 = move-exception;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r7 = r39;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r6 = r2;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r11 = r27;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r12 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r13 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r14 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r17 = 1;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        goto L_0x151d;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r4 = 3;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r5 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r7 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r10 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        if (r15 == r4) goto L_0x0e67;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r6 = 4;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        if (r15 != r6) goto L_0x0ccb;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        goto L_0x0e67;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r6 = 1;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        if (r15 != r6) goto L_0x0d1c;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r3 = r1.database;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r8 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid < %d ORDER BY m.mid DESC LIMIT %d";	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r9 = new java.lang.Object[r4];	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r4 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r11 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r9[r11] = r4;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r4 = java.lang.Integer.valueOf(r39);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r11 = 1;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r9[r11] = r4;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r4 = java.lang.Integer.valueOf(r38);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r11 = 2;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r9[r11] = r4;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r4 = java.lang.String.format(r6, r8, r9);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r6 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r8 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r3 = r3.queryFinalized(r4, r8);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r8 = r39;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r6 = r2;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r11 = r5;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r14 = r7;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r13 = r10;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r2 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r10 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r12 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r32 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r35 = 1;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r7 = r8;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        goto L_0x0ed2;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r0 = move-exception;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r21 = r0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r6 = r2;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r33 = r5;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r14 = r7;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r13 = r10;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r11 = r27;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        goto L_0x14df;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r0 = move-exception;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r6 = r2;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r33 = r5;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r14 = r7;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r13 = r10;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r11 = r27;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        goto L_0x14f4;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        if (r44 == 0) goto L_0x0d7b;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        if (r39 == 0) goto L_0x0d4a;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r3 = r1.database;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r4 = java.util.Locale.US;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r6 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d ORDER BY m.mid ASC LIMIT %d";	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r8 = 3;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r9 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r8 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r11 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r9[r11] = r8;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r8 = java.lang.Integer.valueOf(r39);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r11 = 1;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r9[r11] = r8;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r8 = java.lang.Integer.valueOf(r38);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r11 = 2;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r9[r11] = r8;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r4 = java.lang.String.format(r4, r6, r9);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r6 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r8 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r3 = r3.queryFinalized(r4, r8);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        goto L_0x0cf6;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r3 = r1.database;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r4 = java.util.Locale.US;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r6 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date <= %d ORDER BY m.mid ASC LIMIT %d,%d";	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r8 = 4;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r9 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r8 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r11 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r9[r11] = r8;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r8 = java.lang.Integer.valueOf(r44);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r12 = 1;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r9[r12] = r8;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r8 = java.lang.Integer.valueOf(r11);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r12 = 2;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r9[r12] = r8;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r8 = java.lang.Integer.valueOf(r38);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r12 = 3;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r9[r12] = r8;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r4 = java.lang.String.format(r4, r6, r9);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r6 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r3 = r3.queryFinalized(r4, r6);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        goto L_0x0cf6;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r4 = 2;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        if (r15 != r4) goto L_0x0e02;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r4 = r1.database;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r9 = 1;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r11 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r9 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r12 = 0;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r11[r12] = r9;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r3 = java.lang.String.format(r6, r3, r11);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r6 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r3 = r4.queryFinalized(r3, r6);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r4 = r3.next();	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        if (r4 == 0) goto L_0x0da1;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        r4 = r3.intValue(r12);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        goto L_0x0da2;
-        r4 = 0;
-        r3.dispose();	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r3 = r1.database;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r9 = "SELECT max(mid), max(date) FROM messages WHERE uid = %d AND out = 0 AND read_state IN(0,2) AND mid < 0";	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r11 = 1;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r12 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r11 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r13 = 0;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r12[r13] = r11;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r6 = java.lang.String.format(r6, r9, r12);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r9 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r3 = r3.queryFinalized(r6, r9);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r6 = r3.next();	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        if (r6 == 0) goto L_0x0dce;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r5 = r3.intValue(r13);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r6 = 1;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r7 = r3.intValue(r6);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r3.dispose();	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        if (r5 == 0) goto L_0x0e03;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r3 = r1.database;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r9 = "SELECT COUNT(*) FROM messages WHERE uid = %d AND mid <= %d AND out = 0 AND read_state IN(0,2)";	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r11 = 2;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r12 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r11 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r13 = 0;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r12[r13] = r11;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r11 = java.lang.Integer.valueOf(r5);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r14 = 1;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r12[r14] = r11;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r6 = java.lang.String.format(r6, r9, r12);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r9 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r3 = r3.queryFinalized(r6, r9);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r6 = r3.next();	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        if (r6 == 0) goto L_0x0dfe;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r10 = r3.intValue(r13);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r3.dispose();	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        goto L_0x0e03;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r4 = 0;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        if (r2 > r10) goto L_0x0e0d;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        if (r10 >= r8) goto L_0x0e08;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        goto L_0x0e0d;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r3 = r10 - r2;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r2 = r2 + 10;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        goto L_0x0e1b;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r3 = r10 + 10;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r2 = java.lang.Math.max(r2, r3);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        if (r10 >= r8) goto L_0x0e1a;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r3 = 0;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r4 = 0;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r5 = 0;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r10 = 0;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        goto L_0x0e1b;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r3 = 0;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r6 = r1.database;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r8 = java.util.Locale.US;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r9 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d ORDER BY m.mid ASC LIMIT %d,%d";	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r11 = 3;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r12 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r11 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r13 = 0;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r12[r13] = r11;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r3 = java.lang.Integer.valueOf(r3);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r11 = 1;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r12[r11] = r3;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r3 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r11 = 2;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r12[r11] = r3;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r3 = java.lang.String.format(r8, r9, r12);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r8 = 0;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r9 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r3 = r6.queryFinalized(r3, r9);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
-        r8 = r39;
-        r6 = r2;
-        r12 = r4;
-        r11 = r5;
-        r14 = r7;
-        r13 = r10;
-        r2 = 0;
-        r10 = 0;
-        goto L_0x0cff;
-        r0 = move-exception;
-        r21 = r0;
-        r6 = r2;
-        r12 = r4;
-        r33 = r5;
-        r14 = r7;
-        r13 = r10;
-        r11 = r27;
-        goto L_0x14e0;
-        r0 = move-exception;
-        r6 = r2;
-        r12 = r4;
-        r33 = r5;
-        r14 = r7;
-        r13 = r10;
-        r11 = r27;
-        goto L_0x14f5;
-        r4 = r1.database;	 Catch:{ Exception -> 0x14ea, all -> 0x14d3 }
-        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x14ea, all -> 0x14d3 }
-        r8 = 1;	 Catch:{ Exception -> 0x14ea, all -> 0x14d3 }
-        r9 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x14ea, all -> 0x14d3 }
-        r8 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x14ea, all -> 0x14d3 }
-        r11 = 0;	 Catch:{ Exception -> 0x14ea, all -> 0x14d3 }
-        r9[r11] = r8;	 Catch:{ Exception -> 0x14ea, all -> 0x14d3 }
-        r3 = java.lang.String.format(r6, r3, r9);	 Catch:{ Exception -> 0x14ea, all -> 0x14d3 }
-        r6 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x14ea, all -> 0x14d3 }
-        r3 = r4.queryFinalized(r3, r6);	 Catch:{ Exception -> 0x14ea, all -> 0x14d3 }
-        r4 = r3.next();	 Catch:{ Exception -> 0x14ea, all -> 0x14d3 }
-        if (r4 == 0) goto L_0x0e8a;
-        r4 = r3.intValue(r11);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
-        goto L_0x0e8b;
-        r4 = 0;
-        r3.dispose();	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
-        r3 = r1.database;	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
-        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
-        r8 = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d ORDER BY m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d ORDER BY m.mid ASC LIMIT %d)";	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
-        r9 = 6;	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
-        r11 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
-        r9 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
-        r12 = 0;	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
-        r11[r12] = r9;	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
-        r9 = java.lang.Long.valueOf(r13);	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
-        r12 = 1;	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
-        r11[r12] = r9;	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
-        r9 = r2 / 2;	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
-        r9 = java.lang.Integer.valueOf(r9);	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
-        r12 = 2;	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
-        r11[r12] = r9;	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
-        r9 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
-        r12 = 3;	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
-        r11[r12] = r9;	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
-        r9 = java.lang.Long.valueOf(r13);	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
-        r12 = 4;	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
-        r11[r12] = r9;	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
-        r9 = r2 / 2;	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
-        r9 = java.lang.Integer.valueOf(r9);	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
-        r12 = 5;	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
-        r11[r12] = r9;	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
-        r6 = java.lang.String.format(r6, r8, r11);	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
-        r8 = 0;
-        r9 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x14b4, all -> 0x14af }
-        r3 = r3.queryFinalized(r6, r9);	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
-        goto L_0x0e44;
-        r4 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
-        if (r3 == 0) goto L_0x1259;
-        r9 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
-        r29 = r3.next();	 Catch:{ Exception -> 0x123d, all -> 0x1220 }
-        if (r29 == 0) goto L_0x11ec;
-        r39 = r14;
-        r5 = 1;
-        r14 = r3.byteBufferValue(r5);	 Catch:{ Exception -> 0x11d9, all -> 0x11c6 }
-        if (r14 == 0) goto L_0x1190;
-        r44 = r13;
-        r5 = 0;
-        r13 = r14.readInt32(r5);	 Catch:{ Exception -> 0x117d, all -> 0x116a }
-        r13 = org.telegram.tgnet.TLRPC.Message.TLdeserialize(r14, r13, r5);	 Catch:{ Exception -> 0x117d, all -> 0x116a }
-        r29 = r12;
-        r5 = 2;
-        r12 = r3.intValue(r5);	 Catch:{ Exception -> 0x1154, all -> 0x113d }
-        r13.send_state = r12;	 Catch:{ Exception -> 0x1154, all -> 0x113d }
-        r5 = r13.id;	 Catch:{ Exception -> 0x1154, all -> 0x113d }
-        if (r5 <= 0) goto L_0x0var_;
-        r5 = r13.send_state;	 Catch:{ Exception -> 0x0var_, all -> 0x0f0d }
-        if (r5 == 0) goto L_0x0var_;	 Catch:{ Exception -> 0x0var_, all -> 0x0f0d }
-        r5 = r13.send_state;	 Catch:{ Exception -> 0x0var_, all -> 0x0f0d }
-        r12 = 3;	 Catch:{ Exception -> 0x0var_, all -> 0x0f0d }
-        if (r5 == r12) goto L_0x0var_;	 Catch:{ Exception -> 0x0var_, all -> 0x0f0d }
-        r5 = 0;	 Catch:{ Exception -> 0x0var_, all -> 0x0f0d }
-        r13.send_state = r5;	 Catch:{ Exception -> 0x0var_, all -> 0x0f0d }
-        goto L_0x0var_;
-        r0 = move-exception;
-        r14 = r39;
-        r13 = r44;
-        r21 = r0;
-        r20 = r2;
-        r33 = r11;
-        r11 = r27;
-        r12 = r29;
-        r19 = r32;
-        r17 = r35;
-        goto L_0x1553;
-        r0 = move-exception;
-        r14 = r39;
-        r13 = r44;
-        r20 = r2;
-        r33 = r11;
-        r11 = r27;
-        r12 = r29;
-        r19 = r32;
-        r17 = r35;
-        goto L_0x1523;
-        r30 = r11;
-        r5 = r36;
-        r11 = (long) r5;
-        r33 = r6;
-        r31 = r7;
-        r6 = r41;
-        r34 = (r6 > r11 ? 1 : (r6 == r11 ? 0 : -1));
-        if (r34 != 0) goto L_0x0f6b;
-        r11 = 1;
-        r13.out = r11;	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
-        goto L_0x0f6b;
-        r0 = move-exception;
-        r14 = r39;
-        r13 = r44;
-        r21 = r0;
-        r20 = r2;
-        r11 = r27;
-        goto L_0x1491;
-        r0 = move-exception;
-        r14 = r39;
-        r13 = r44;
-        r20 = r2;
-        r11 = r27;
-        r12 = r29;
-        r7 = r31;
-        r19 = r32;
-        r6 = r33;
-        r17 = r35;
-        r2 = r0;
-        goto L_0x1255;
-        r13.readAttachPath(r14, r5);	 Catch:{ Exception -> 0x1136, all -> 0x112f }
-        r14.reuse();	 Catch:{ Exception -> 0x1136, all -> 0x112f }
-        r11 = 0;	 Catch:{ Exception -> 0x1136, all -> 0x112f }
-        r12 = r3.intValue(r11);	 Catch:{ Exception -> 0x1136, all -> 0x112f }
-        org.telegram.messenger.MessageObject.setUnreadFlags(r13, r12);	 Catch:{ Exception -> 0x1136, all -> 0x112f }
-        r11 = 3;	 Catch:{ Exception -> 0x1136, all -> 0x112f }
-        r12 = r3.intValue(r11);	 Catch:{ Exception -> 0x1136, all -> 0x112f }
-        r13.id = r12;	 Catch:{ Exception -> 0x1136, all -> 0x112f }
-        r11 = r13.id;	 Catch:{ Exception -> 0x1136, all -> 0x112f }
-        if (r11 <= 0) goto L_0x0var_;
-        r11 = r13.id;	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
-        r4 = java.lang.Math.min(r11, r4);	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
-        r11 = r13.id;	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
-        r9 = java.lang.Math.max(r11, r9);	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
-        r11 = 4;
-        r12 = r3.intValue(r11);	 Catch:{ Exception -> 0x1136, all -> 0x112f }
-        r13.date = r12;	 Catch:{ Exception -> 0x1136, all -> 0x112f }
-        r13.dialog_id = r6;	 Catch:{ Exception -> 0x1136, all -> 0x112f }
-        r11 = r13.flags;	 Catch:{ Exception -> 0x1136, all -> 0x112f }
-        r11 = r11 & 1024;
-        if (r11 == 0) goto L_0x0fa6;
-        r11 = 7;
-        r11 = r3.intValue(r11);	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
-        r13.views = r11;	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
-        if (r28 == 0) goto L_0x0fb4;	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
-        r11 = r13.ttl;	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
-        if (r11 != 0) goto L_0x0fb4;	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
-        r11 = 8;	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
-        r11 = r3.intValue(r11);	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
-        r13.ttl = r11;	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
-        r11 = 9;
-        r11 = r3.intValue(r11);	 Catch:{ Exception -> 0x1136, all -> 0x112f }
-        if (r11 == 0) goto L_0x0fbf;
-        r11 = 1;
-        r13.mentioned = r11;	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
-        r11 = r27;
-        r12 = r11.messages;	 Catch:{ Exception -> 0x112d, all -> 0x112b }
-        r12.add(r13);	 Catch:{ Exception -> 0x112d, all -> 0x112b }
-        r12 = r24;	 Catch:{ Exception -> 0x112d, all -> 0x112b }
-        r14 = r26;	 Catch:{ Exception -> 0x112d, all -> 0x112b }
-        addUsersAndChatsFromMessage(r13, r12, r14);	 Catch:{ Exception -> 0x112d, all -> 0x112b }
-        r24 = r4;	 Catch:{ Exception -> 0x112d, all -> 0x112b }
-        r4 = r13.reply_to_msg_id;	 Catch:{ Exception -> 0x112d, all -> 0x112b }
-        if (r4 != 0) goto L_0x0ffc;
-        r6 = r13.reply_to_random_id;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r16 = 0;
-        r4 = (r6 > r16 ? 1 : (r6 == r16 ? 0 : -1));
-        if (r4 == 0) goto L_0x0fdc;
-        goto L_0x0ffc;
-        r36 = r5;
-        r5 = r21;
-        r4 = r23;
-        r18 = 32;
-        r21 = r8;
-        goto L_0x10c2;
-        r0 = move-exception;
-        r14 = r39;
-        r13 = r44;
-        r21 = r0;
-        r20 = r2;
-        goto L_0x1491;
-        r0 = move-exception;
-        r14 = r39;
-        r13 = r44;
-        r20 = r2;
-        goto L_0x0f5e;
-        r6 = 6;
-        r4 = r3.isNull(r6);	 Catch:{ Exception -> 0x112d, all -> 0x112b }
-        if (r4 != 0) goto L_0x1034;
-        r4 = r3.byteBufferValue(r6);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        if (r4 == 0) goto L_0x1034;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r7 = 0;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r6 = r4.readInt32(r7);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r6 = org.telegram.tgnet.TLRPC.Message.TLdeserialize(r4, r6, r7);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r13.replyMessage = r6;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r6 = r13.replyMessage;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r6.readAttachPath(r4, r5);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r4.reuse();	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r4 = r13.replyMessage;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        if (r4 == 0) goto L_0x1034;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r4 = org.telegram.messenger.MessageObject.isMegagroup(r13);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        if (r4 == 0) goto L_0x102f;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r4 = r13.replyMessage;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r6 = r4.flags;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r7 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r6 = r6 | r7;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r4.flags = r6;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r4 = r13.replyMessage;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        addUsersAndChatsFromMessage(r4, r12, r14);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r4 = r13.replyMessage;	 Catch:{ Exception -> 0x112d, all -> 0x112b }
-        if (r4 != 0) goto L_0x0fdc;
-        r4 = r13.reply_to_msg_id;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        if (r4 == 0) goto L_0x1089;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r4 = r13.reply_to_msg_id;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r6 = (long) r4;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r4 = r13.to_id;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r4 = r4.channel_id;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        if (r4 == 0) goto L_0x1052;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r4 = r13.to_id;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r4 = r4.channel_id;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r36 = r5;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r4 = (long) r4;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r18 = 32;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r4 = r4 << r18;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r6 = r6 | r4;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        goto L_0x1056;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r36 = r5;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r18 = 32;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r4 = java.lang.Long.valueOf(r6);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r5 = r21;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r4 = r5.contains(r4);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        if (r4 != 0) goto L_0x1069;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r4 = java.lang.Long.valueOf(r6);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r5.add(r4);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r4 = r13.reply_to_msg_id;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r6 = r22;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r4 = r6.get(r4);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r4 = (java.util.ArrayList) r4;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        if (r4 != 0) goto L_0x107f;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r4 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r4.<init>();	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r7 = r13.reply_to_msg_id;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r6.put(r7, r4);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r4.add(r13);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r22 = r6;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r21 = r8;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r4 = r23;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        goto L_0x10c2;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r36 = r5;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r5 = r21;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r18 = 32;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r6 = r13.reply_to_random_id;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r4 = java.lang.Long.valueOf(r6);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r4 = r5.contains(r4);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        if (r4 != 0) goto L_0x10a4;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r6 = r13.reply_to_random_id;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r4 = java.lang.Long.valueOf(r6);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r5.add(r4);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r6 = r13.reply_to_random_id;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r4 = r23;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r6 = r4.get(r6);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r6 = (java.util.ArrayList) r6;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        if (r6 != 0) goto L_0x10bd;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r6 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r6.<init>();	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r21 = r8;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r7 = r13.reply_to_random_id;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r4.put(r7, r6);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        goto L_0x10bf;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r21 = r8;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r6.add(r13);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        if (r28 != 0) goto L_0x10d2;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r6 = 5;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r7 = r3.isNull(r6);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        if (r7 != 0) goto L_0x10d3;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r7 = r3.longValue(r6);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        r13.random_id = r7;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
-        goto L_0x10d3;
-        r6 = 5;
-        r7 = org.telegram.messenger.MessageObject.isSecretPhotoOrVideo(r13);	 Catch:{ Exception -> 0x112d, all -> 0x112b }
-        if (r7 == 0) goto L_0x111d;
-        r7 = r1.database;	 Catch:{ Exception -> 0x1111, all -> 0x112b }
-        r8 = java.util.Locale.US;	 Catch:{ Exception -> 0x1111, all -> 0x112b }
-        r6 = "SELECT date FROM enc_tasks_v2 WHERE mid = %d";	 Catch:{ Exception -> 0x1111, all -> 0x112b }
-        r23 = r4;
-        r26 = r9;
-        r4 = 1;
-        r9 = new java.lang.Object[r4];	 Catch:{ Exception -> 0x110d, all -> 0x112b }
-        r4 = r13.id;	 Catch:{ Exception -> 0x110d, all -> 0x112b }
-        r4 = java.lang.Integer.valueOf(r4);	 Catch:{ Exception -> 0x110d, all -> 0x112b }
-        r27 = r2;
-        r2 = 0;
-        r9[r2] = r4;	 Catch:{ Exception -> 0x110b, all -> 0x120b }
-        r4 = java.lang.String.format(r8, r6, r9);	 Catch:{ Exception -> 0x110b, all -> 0x120b }
-        r6 = new java.lang.Object[r2];	 Catch:{ Exception -> 0x110b, all -> 0x120b }
-        r4 = r7.queryFinalized(r4, r6);	 Catch:{ Exception -> 0x110b, all -> 0x120b }
-        r6 = r4.next();	 Catch:{ Exception -> 0x110b, all -> 0x120b }
-        if (r6 == 0) goto L_0x1107;	 Catch:{ Exception -> 0x110b, all -> 0x120b }
-        r6 = r4.intValue(r2);	 Catch:{ Exception -> 0x110b, all -> 0x120b }
-        r13.destroyTime = r6;	 Catch:{ Exception -> 0x110b, all -> 0x120b }
-        r4.dispose();	 Catch:{ Exception -> 0x110b, all -> 0x120b }
-        goto L_0x1123;
-        r0 = move-exception;
-        goto L_0x1118;
-        r0 = move-exception;
-        r27 = r2;
-        goto L_0x1118;
-        r0 = move-exception;
-        r27 = r2;
-        r23 = r4;
-        r26 = r9;
-        r2 = r0;
-        org.telegram.messenger.FileLog.e(r2);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        goto L_0x1123;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r27 = r2;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r23 = r4;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r26 = r9;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r2 = r23;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r4 = r24;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r9 = r26;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        goto L_0x11aa;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r0 = move-exception;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        goto L_0x1132;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r0 = move-exception;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        goto L_0x1139;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r0 = move-exception;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r11 = r27;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r27 = r2;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        goto L_0x120c;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r0 = move-exception;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r11 = r27;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r27 = r2;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        goto L_0x1217;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r0 = move-exception;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r33 = r6;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r31 = r7;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r30 = r11;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r11 = r27;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r27 = r2;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r14 = r39;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r13 = r44;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r21 = r0;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r20 = r27;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r12 = r29;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        goto L_0x1235;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r0 = move-exception;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r33 = r6;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r31 = r7;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r30 = r11;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r11 = r27;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r27 = r2;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r14 = r39;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r13 = r44;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r2 = r0;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r20 = r27;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r12 = r29;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        goto L_0x1251;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r0 = move-exception;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r33 = r6;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r31 = r7;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r30 = r11;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r29 = r12;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r11 = r27;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r27 = r2;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r14 = r39;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r13 = r44;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        goto L_0x1231;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r0 = move-exception;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r33 = r6;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r31 = r7;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r30 = r11;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r29 = r12;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r11 = r27;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r27 = r2;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r14 = r39;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r13 = r44;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        goto L_0x124e;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r33 = r6;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r31 = r7;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r30 = r11;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r29 = r12;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r44 = r13;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r5 = r21;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r12 = r24;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r14 = r26;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r11 = r27;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r18 = 32;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r27 = r2;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r21 = r8;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r2 = r23;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r13 = r44;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r23 = r2;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r24 = r12;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r26 = r14;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r8 = r21;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r2 = r27;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r12 = r29;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r7 = r31;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r6 = r33;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r14 = r39;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r21 = r5;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r27 = r11;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r11 = r30;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        goto L_0x0ed9;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r0 = move-exception;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r33 = r6;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r31 = r7;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r30 = r11;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r29 = r12;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r44 = r13;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r11 = r27;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r27 = r2;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r14 = r39;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        goto L_0x1231;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r0 = move-exception;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r33 = r6;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r31 = r7;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r30 = r11;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r29 = r12;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r44 = r13;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r11 = r27;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r27 = r2;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r14 = r39;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        goto L_0x124e;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r33 = r6;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r31 = r7;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r30 = r11;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r29 = r12;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r44 = r13;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r39 = r14;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r5 = r21;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r12 = r24;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r14 = r26;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r11 = r27;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r27 = r2;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r21 = r8;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r2 = r23;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r3.dispose();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        goto L_0x1275;
-        r0 = move-exception;
-        r14 = r39;
-        r13 = r44;
-        r21 = r0;
-        r20 = r27;
-        goto L_0x1491;
-        r0 = move-exception;
-        r14 = r39;
-        r13 = r44;
-        r2 = r0;
-        r20 = r27;
-        goto L_0x14a5;
-        r0 = move-exception;
-        r33 = r6;
-        r31 = r7;
-        r30 = r11;
-        r29 = r12;
-        r44 = r13;
-        r39 = r14;
-        r11 = r27;
-        r27 = r2;
-        r21 = r0;
-        r20 = r27;
-        r19 = r32;
-        r17 = r35;
-        r33 = r30;
-        goto L_0x1553;
-        r0 = move-exception;
-        r33 = r6;
-        r31 = r7;
-        r30 = r11;
-        r29 = r12;
-        r44 = r13;
-        r39 = r14;
-        r11 = r27;
-        r27 = r2;
-        r2 = r0;
-        r20 = r27;
-        r19 = r32;
-        r17 = r35;
-        r33 = r30;
-        goto L_0x1524;
-        r33 = r6;
-        r31 = r7;
-        r30 = r11;
-        r29 = r12;
-        r44 = r13;
-        r39 = r14;
-        r5 = r21;
-        r12 = r24;
-        r14 = r26;
-        r11 = r27;
-        r27 = r2;
-        r21 = r8;
-        r2 = r23;
-        r9 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
-        r3 = r11.messages;	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
-        r6 = org.telegram.messenger.-$$Lambda$MessagesStorage$ckxq9sSVjeMrluKAIkQqpix6aHQ.INSTANCE;	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
-        java.util.Collections.sort(r3, r6);	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
-        if (r28 == 0) goto L_0x12be;
-        r3 = 3;
-        if (r15 == r3) goto L_0x128e;
-        r3 = 4;
-        if (r15 == r3) goto L_0x128e;
-        r3 = 2;
-        if (r15 != r3) goto L_0x128c;
-        if (r32 == 0) goto L_0x128c;
-        if (r10 != 0) goto L_0x128c;
-        goto L_0x128e;
-        r3 = 4;
-        goto L_0x12ab;
-        r3 = r11.messages;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r3 = r3.isEmpty();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        if (r3 != 0) goto L_0x128c;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r8 = r21;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        if (r4 > r8) goto L_0x129c;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        if (r9 >= r8) goto L_0x128c;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r5.clear();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r12.clear();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r14.clear();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r3 = r11.messages;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r3.clear();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        goto L_0x128c;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        if (r15 == r3) goto L_0x12b0;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r3 = 3;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        if (r15 != r3) goto L_0x12be;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r3 = r11.messages;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r3 = r3.size();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r4 = 1;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        if (r3 != r4) goto L_0x12be;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r3 = r11.messages;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r3.clear();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r3 = r5.isEmpty();	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
-        r4 = ",";
-        if (r3 != 0) goto L_0x13e2;
-        r3 = r22.size();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        if (r3 <= 0) goto L_0x12e8;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r3 = r1.database;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r7 = "SELECT data, mid, date FROM messages WHERE mid IN(%s)";	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r8 = 1;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r9 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r5 = android.text.TextUtils.join(r4, r5);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r8 = 0;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r9[r8] = r5;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r5 = java.lang.String.format(r6, r7, r9);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r6 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r3 = r3.queryFinalized(r5, r6);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r8 = 0;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        goto L_0x1302;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r3 = r1.database;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r7 = "SELECT m.data, m.mid, m.date, r.random_id FROM randoms as r INNER JOIN messages as m ON r.mid = m.mid WHERE r.random_id IN(%s)";	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r8 = 1;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r9 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r5 = android.text.TextUtils.join(r4, r5);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r8 = 0;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r9[r8] = r5;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r5 = java.lang.String.format(r6, r7, r9);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r6 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r3 = r3.queryFinalized(r5, r6);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r5 = r3.next();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        if (r5 == 0) goto L_0x13b3;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r5 = r3.byteBufferValue(r8);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        if (r5 == 0) goto L_0x13aa;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r6 = r5.readInt32(r8);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r6 = org.telegram.tgnet.TLRPC.Message.TLdeserialize(r5, r6, r8);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r7 = r36;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r6.readAttachPath(r5, r7);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r5.reuse();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r5 = 1;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r8 = r3.intValue(r5);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r6.id = r8;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r5 = 2;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r8 = r3.intValue(r5);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r6.date = r8;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r8 = r41;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r6.dialog_id = r8;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        addUsersAndChatsFromMessage(r6, r12, r14);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r10 = r22.size();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        if (r10 <= 0) goto L_0x136d;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r10 = r6.id;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r13 = r22;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r10 = r13.get(r10);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r10 = (java.util.ArrayList) r10;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        if (r10 == 0) goto L_0x136a;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r36 = r7;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r5 = 0;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r7 = r10.size();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        if (r5 >= r7) goto L_0x13ac;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r7 = r10.get(r5);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r7 = (org.telegram.tgnet.TLRPC.Message) r7;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r7.replyMessage = r6;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r18 = org.telegram.messenger.MessageObject.isMegagroup(r7);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        if (r18 == 0) goto L_0x1365;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r7 = r7.replyMessage;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r8 = r7.flags;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r9 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r8 = r8 | r9;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r7.flags = r8;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r5 = r5 + 1;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r8 = r41;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        goto L_0x1348;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r36 = r7;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        goto L_0x13ac;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r36 = r7;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r13 = r22;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r5 = 3;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r7 = r3.longValue(r5);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r9 = r2.get(r7);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r9 = (java.util.ArrayList) r9;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r2.remove(r7);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        if (r9 == 0) goto L_0x13ad;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r7 = 0;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r8 = r9.size();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        if (r7 >= r8) goto L_0x13ad;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r8 = r9.get(r7);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r8 = (org.telegram.tgnet.TLRPC.Message) r8;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r8.replyMessage = r6;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r10 = r6.id;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r8.reply_to_msg_id = r10;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r10 = org.telegram.messenger.MessageObject.isMegagroup(r8);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        if (r10 == 0) goto L_0x13a5;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r8 = r8.replyMessage;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r10 = r8.flags;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r18 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r10 = r10 | r18;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r8.flags = r10;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        goto L_0x13a7;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r18 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r7 = r7 + 1;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        goto L_0x1382;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r13 = r22;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r5 = 3;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r18 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r22 = r13;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        goto L_0x12e6;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r3.dispose();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r3 = r2.size();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        if (r3 <= 0) goto L_0x13e2;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r3 = 0;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r5 = r2.size();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        if (r3 >= r5) goto L_0x13e2;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r5 = r2.valueAt(r3);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r5 = (java.util.ArrayList) r5;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r6 = 0;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r7 = r5.size();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        if (r6 >= r7) goto L_0x13dd;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r7 = r5.get(r6);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r7 = (org.telegram.tgnet.TLRPC.Message) r7;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r8 = 0;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r7.reply_to_random_id = r8;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
-        r6 = r6 + 1;
-        goto L_0x13ca;
-        r8 = 0;
-        r3 = r3 + 1;
-        goto L_0x13bd;
-        if (r27 == 0) goto L_0x142f;
-        r2 = r1.database;	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
-        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
-        r5 = "SELECT COUNT(mid) FROM messages WHERE uid = %d AND mention = 1 AND read_state IN(0, 1)";	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
-        r6 = 1;	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
-        r6 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
-        r7 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
-        r8 = 0;	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
-        r6[r8] = r7;	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
-        r3 = java.lang.String.format(r3, r5, r6);	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
-        r5 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
-        r2 = r2.queryFinalized(r3, r5);	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
-        r3 = r2.next();	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
-        if (r3 == 0) goto L_0x1411;	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
-        r3 = r2.intValue(r8);	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
-        r5 = r27;
-        if (r5 == r3) goto L_0x140f;
-        r3 = r5 * -1;
-        goto L_0x1414;
-        r3 = r5;
-        goto L_0x1414;
-        r5 = r27;
-        goto L_0x140c;
-        r2.dispose();	 Catch:{ Exception -> 0x1425, all -> 0x141a }
-        r20 = r3;
-        goto L_0x1433;
-        r0 = move-exception;
-        r14 = r39;
-        r13 = r44;
-        r21 = r0;
-        r20 = r3;
-        goto L_0x1491;
-        r0 = move-exception;
-        r14 = r39;
-        r13 = r44;
-        r2 = r0;
-        r20 = r3;
-        goto L_0x14a5;
-        r5 = r27;
-        r20 = r5;
-        r2 = r12.isEmpty();	 Catch:{ Exception -> 0x147f, all -> 0x1477 }
-        if (r2 != 0) goto L_0x1442;	 Catch:{ Exception -> 0x147f, all -> 0x1477 }
-        r2 = android.text.TextUtils.join(r4, r12);	 Catch:{ Exception -> 0x147f, all -> 0x1477 }
-        r3 = r11.users;	 Catch:{ Exception -> 0x147f, all -> 0x1477 }
-        r1.getUsersInternal(r2, r3);	 Catch:{ Exception -> 0x147f, all -> 0x1477 }
-        r2 = r14.isEmpty();	 Catch:{ Exception -> 0x147f, all -> 0x1477 }
-        if (r2 != 0) goto L_0x1451;	 Catch:{ Exception -> 0x147f, all -> 0x1477 }
-        r2 = android.text.TextUtils.join(r4, r14);	 Catch:{ Exception -> 0x147f, all -> 0x1477 }
-        r3 = r11.chats;	 Catch:{ Exception -> 0x147f, all -> 0x1477 }
-        r1.getChatsInternal(r2, r3);	 Catch:{ Exception -> 0x147f, all -> 0x1477 }
-        r2 = r1.currentAccount;
-        r2 = org.telegram.messenger.MessagesController.getInstance(r2);
-        r9 = 1;
-        r3 = r11;
-        r4 = r41;
-        r6 = r33;
-        r7 = r31;
-        r8 = r45;
-        r10 = r46;
-        r11 = r30;
-        r12 = r29;
-        r13 = r44;
-        r14 = r39;
-        r15 = r43;
-        r16 = r40;
-        r17 = r35;
-        r18 = r47;
-        r19 = r32;
-        goto L_0x154c;
-        r0 = move-exception;
-        r14 = r39;
-        r13 = r44;
-        r21 = r0;
-        goto L_0x1491;
-        r0 = move-exception;
-        r14 = r39;
-        r13 = r44;
-        r2 = r0;
-        goto L_0x14a5;
-        r0 = move-exception;
-        r5 = r27;
-        r14 = r39;
-        r13 = r44;
-        r21 = r0;
-        r20 = r5;
-        r12 = r29;
-        r7 = r31;
-        r19 = r32;
-        r6 = r33;
-        goto L_0x1237;
-        r0 = move-exception;
-        r5 = r27;
-        r14 = r39;
-        r13 = r44;
-        r2 = r0;
-        r20 = r5;
-        r12 = r29;
-        r7 = r31;
-        r19 = r32;
-        r6 = r33;
-        goto L_0x1253;
-        r0 = move-exception;
-        r11 = r27;
-        r6 = 1;
-        goto L_0x14be;
-        r0 = move-exception;
-        r11 = r27;
-        r6 = 1;
-        goto L_0x14cc;
-        r0 = move-exception;
-        r11 = r27;
-        r6 = 1;
-        r8 = 0;
-        r21 = r0;
-        r6 = r2;
-        r12 = r4;
-        r33 = r5;
-        r14 = r7;
-        r13 = r10;
-        goto L_0x14e0;
-        r0 = move-exception;
-        r11 = r27;
-        r6 = 1;
-        r8 = 0;
-        r6 = r2;
-        r12 = r4;
-        r33 = r5;
-        r14 = r7;
-        r13 = r10;
-        goto L_0x14f5;
-        r0 = move-exception;
-        r11 = r27;
-        r6 = 1;
-        r8 = 0;
-        r21 = r0;
-        r6 = r2;
-        r33 = r5;
-        r14 = r7;
-        r13 = r10;
-        r12 = 0;
-        r17 = 1;
-        r19 = 0;
-        r20 = 0;
-        r7 = r39;
-        goto L_0x1553;
-        r0 = move-exception;
-        r11 = r27;
-        r6 = 1;
-        r8 = 0;
-        r6 = r2;
-        r33 = r5;
-        r14 = r7;
-        r13 = r10;
-        r12 = 0;
-        r17 = 1;
-        r19 = 0;
-        r20 = 0;
-        r7 = r39;
-        goto L_0x1523;
-        r0 = move-exception;
-        r11 = r7;
-        r8 = 0;
-        r7 = r39;
-        r21 = r0;
-        r6 = r2;
-        r12 = 0;
-        r13 = 0;
-        r14 = 0;
-        r17 = 0;
-        r19 = 0;
-        r20 = 0;
-        r33 = 0;
-        goto L_0x1553;
-        r0 = move-exception;
-        r11 = r7;
-        r8 = 0;
-        r7 = r39;
-        r6 = r2;
-        r12 = 0;
-        r13 = 0;
-        r14 = 0;
-        r17 = 0;
-        r19 = 0;
-        r20 = 0;
-        r33 = 0;
-        r2 = r0;
-        r3 = r11.messages;	 Catch:{ all -> 0x1550 }
-        r3.clear();	 Catch:{ all -> 0x1550 }
-        r3 = r11.chats;	 Catch:{ all -> 0x1550 }
-        r3.clear();	 Catch:{ all -> 0x1550 }
-        r3 = r11.users;	 Catch:{ all -> 0x1550 }
-        r3.clear();	 Catch:{ all -> 0x1550 }
-        org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x1550 }
-        r2 = r1.currentAccount;
-        r2 = org.telegram.messenger.MessagesController.getInstance(r2);
-        r9 = 1;
-        r3 = r11;
-        r4 = r41;
-        r8 = r45;
-        r10 = r46;
-        r11 = r33;
-        r15 = r43;
-        r16 = r40;
-        r18 = r47;
-        r2.processLoadedMessages(r3, r4, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16, r17, r18, r19, r20);
-        return;
-        r0 = move-exception;
-        r21 = r0;
-        r2 = r1.currentAccount;
-        r2 = org.telegram.messenger.MessagesController.getInstance(r2);
-        r9 = 1;
-        r3 = r11;
-        r4 = r41;
-        r8 = r45;
-        r10 = r46;
-        r11 = r33;
-        r15 = r43;
-        r16 = r40;
-        r18 = r47;
-        r2.processLoadedMessages(r3, r4, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16, r17, r18, r19, r20);
-        throw r21;
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getMessages$98$MessagesStorage(int, int, boolean, long, int, int, int, int, int):void");
-    }
-
-    /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:27:0x006c in {9, 12, 15, 16, 23, 24, 26} preds:[]
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-        	at java.lang.Iterable.forEach(Iterable.java:75)
-        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-        */
-    public /* synthetic */ void lambda$getSentFile$100$MessagesStorage(java.lang.String r6, int r7, java.lang.Object[] r8, java.util.concurrent.CountDownLatch r9) {
-        /*
-        r5 = this;
-        r6 = org.telegram.messenger.Utilities.MD5(r6);	 Catch:{ Exception -> 0x0062 }
-        if (r6 == 0) goto L_0x005c;	 Catch:{ Exception -> 0x0062 }
-        r0 = r5.database;	 Catch:{ Exception -> 0x0062 }
-        r1 = java.util.Locale.US;	 Catch:{ Exception -> 0x0062 }
-        r2 = "SELECT data, parent FROM sent_files_v2 WHERE uid = '%s' AND type = %d";	 Catch:{ Exception -> 0x0062 }
-        r3 = 2;	 Catch:{ Exception -> 0x0062 }
-        r3 = new java.lang.Object[r3];	 Catch:{ Exception -> 0x0062 }
-        r4 = 0;	 Catch:{ Exception -> 0x0062 }
-        r3[r4] = r6;	 Catch:{ Exception -> 0x0062 }
-        r6 = java.lang.Integer.valueOf(r7);	 Catch:{ Exception -> 0x0062 }
-        r7 = 1;	 Catch:{ Exception -> 0x0062 }
-        r3[r7] = r6;	 Catch:{ Exception -> 0x0062 }
-        r6 = java.lang.String.format(r1, r2, r3);	 Catch:{ Exception -> 0x0062 }
-        r1 = new java.lang.Object[r4];	 Catch:{ Exception -> 0x0062 }
-        r6 = r0.queryFinalized(r6, r1);	 Catch:{ Exception -> 0x0062 }
-        r0 = r6.next();	 Catch:{ Exception -> 0x0062 }
-        if (r0 == 0) goto L_0x0059;	 Catch:{ Exception -> 0x0062 }
-        r0 = r6.byteBufferValue(r4);	 Catch:{ Exception -> 0x0062 }
-        if (r0 == 0) goto L_0x0059;	 Catch:{ Exception -> 0x0062 }
-        r1 = r0.readInt32(r4);	 Catch:{ Exception -> 0x0062 }
-        r1 = org.telegram.tgnet.TLRPC.MessageMedia.TLdeserialize(r0, r1, r4);	 Catch:{ Exception -> 0x0062 }
-        r0.reuse();	 Catch:{ Exception -> 0x0062 }
-        r0 = r1 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaDocument;	 Catch:{ Exception -> 0x0062 }
-        if (r0 == 0) goto L_0x0045;	 Catch:{ Exception -> 0x0062 }
-        r1 = (org.telegram.tgnet.TLRPC.TL_messageMediaDocument) r1;	 Catch:{ Exception -> 0x0062 }
-        r0 = r1.document;	 Catch:{ Exception -> 0x0062 }
-        r8[r4] = r0;	 Catch:{ Exception -> 0x0062 }
-        goto L_0x004f;	 Catch:{ Exception -> 0x0062 }
-        r0 = r1 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaPhoto;	 Catch:{ Exception -> 0x0062 }
-        if (r0 == 0) goto L_0x004f;	 Catch:{ Exception -> 0x0062 }
-        r1 = (org.telegram.tgnet.TLRPC.TL_messageMediaPhoto) r1;	 Catch:{ Exception -> 0x0062 }
-        r0 = r1.photo;	 Catch:{ Exception -> 0x0062 }
-        r8[r4] = r0;	 Catch:{ Exception -> 0x0062 }
-        r0 = r8[r4];	 Catch:{ Exception -> 0x0062 }
-        if (r0 == 0) goto L_0x0059;	 Catch:{ Exception -> 0x0062 }
-        r0 = r6.stringValue(r7);	 Catch:{ Exception -> 0x0062 }
-        r8[r7] = r0;	 Catch:{ Exception -> 0x0062 }
-        r6.dispose();	 Catch:{ Exception -> 0x0062 }
-        r9.countDown();
-        goto L_0x0067;
-        r6 = move-exception;
-        goto L_0x0068;
-        r6 = move-exception;
-        org.telegram.messenger.FileLog.e(r6);	 Catch:{ all -> 0x0060 }
-        goto L_0x005c;
-        return;
-        r9.countDown();
-        throw r6;
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getSentFile$100$MessagesStorage(java.lang.String, int, java.lang.Object[], java.util.concurrent.CountDownLatch):void");
-    }
-
-    /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:24:0x004d in {9, 12, 18, 19, 20, 22, 23} preds:[]
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-        	at java.lang.Iterable.forEach(Iterable.java:75)
-        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-        */
-    public /* synthetic */ void lambda$getWallpapers$32$MessagesStorage() {
-        /*
-        r5 = this;
-        r0 = 0;
-        r1 = r5.database;	 Catch:{ Exception -> 0x003d }
-        r2 = "SELECT data FROM wallpapers2 WHERE 1 ORDER BY num ASC";	 Catch:{ Exception -> 0x003d }
-        r3 = 0;	 Catch:{ Exception -> 0x003d }
-        r4 = new java.lang.Object[r3];	 Catch:{ Exception -> 0x003d }
-        r0 = r1.queryFinalized(r2, r4);	 Catch:{ Exception -> 0x003d }
-        r1 = new java.util.ArrayList;	 Catch:{ Exception -> 0x003d }
-        r1.<init>();	 Catch:{ Exception -> 0x003d }
-        r2 = r0.next();	 Catch:{ Exception -> 0x003d }
-        if (r2 == 0) goto L_0x0030;	 Catch:{ Exception -> 0x003d }
-        r2 = r0.byteBufferValue(r3);	 Catch:{ Exception -> 0x003d }
-        if (r2 == 0) goto L_0x0011;	 Catch:{ Exception -> 0x003d }
-        r4 = r2.readInt32(r3);	 Catch:{ Exception -> 0x003d }
-        r4 = org.telegram.tgnet.TLRPC.WallPaper.TLdeserialize(r2, r4, r3);	 Catch:{ Exception -> 0x003d }
-        r4 = (org.telegram.tgnet.TLRPC.TL_wallPaper) r4;	 Catch:{ Exception -> 0x003d }
-        r2.reuse();	 Catch:{ Exception -> 0x003d }
-        if (r4 == 0) goto L_0x0011;	 Catch:{ Exception -> 0x003d }
-        r1.add(r4);	 Catch:{ Exception -> 0x003d }
-        goto L_0x0011;	 Catch:{ Exception -> 0x003d }
-        r2 = new org.telegram.messenger.-$$Lambda$MessagesStorage$laGcyL2VMuNvphN9xrLjowzyS3Y;	 Catch:{ Exception -> 0x003d }
-        r2.<init>(r1);	 Catch:{ Exception -> 0x003d }
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r2);	 Catch:{ Exception -> 0x003d }
-        if (r0 == 0) goto L_0x0046;
-        goto L_0x0043;
-        r1 = move-exception;
-        goto L_0x0047;
-        r1 = move-exception;
-        org.telegram.messenger.FileLog.e(r1);	 Catch:{ all -> 0x003b }
-        if (r0 == 0) goto L_0x0046;
-        r0.dispose();
-        return;
-        if (r0 == 0) goto L_0x004c;
-        r0.dispose();
-        throw r1;
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getWallpapers$32$MessagesStorage():void");
-    }
-
-    /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:95:0x01cc in {9, 11, 13, 14, 25, 26, 29, 38, 39, 42, 43, 48, 50, 53, 59, 60, 63, 65, 71, 72, 74, 77, 79, 81, 83, 87, 88, 89, 90, 93, 94} preds:[]
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-        	at java.lang.Iterable.forEach(Iterable.java:75)
-        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-        */
-    public /* synthetic */ void lambda$loadChatInfo$84$MessagesStorage(int r17, java.util.concurrent.CountDownLatch r18, boolean r19, boolean r20) {
-        /*
-        r16 = this;
-        r1 = r16;
-        r3 = r17;
-        r5 = new java.util.ArrayList;
-        r5.<init>();
-        r2 = 0;
-        r9 = 0;
-        r0 = r1.database;	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
-        r4 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
-        r4.<init>();	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
-        r6 = "SELECT info, pinned, online FROM chat_settings_v2 WHERE uid = ";	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
-        r4.append(r6);	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
-        r4.append(r3);	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
-        r4 = r4.toString();	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
-        r6 = 0;	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
-        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
-        r0 = r0.queryFinalized(r4, r7);	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
-        r4 = r0.next();	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
-        r7 = 2;	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
-        r8 = 1;	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
-        if (r4 == 0) goto L_0x0054;	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
-        r4 = r0.byteBufferValue(r6);	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
-        if (r4 == 0) goto L_0x0054;	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
-        r10 = r4.readInt32(r6);	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
-        r10 = org.telegram.tgnet.TLRPC.ChatFull.TLdeserialize(r4, r10, r6);	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
-        r4.reuse();	 Catch:{ Exception -> 0x0050, all -> 0x004c }
-        r4 = r0.intValue(r8);	 Catch:{ Exception -> 0x0050, all -> 0x004c }
-        r10.pinned_msg_id = r4;	 Catch:{ Exception -> 0x0050, all -> 0x004c }
-        r4 = r0.intValue(r7);	 Catch:{ Exception -> 0x0050, all -> 0x004c }
-        r10.online_count = r4;	 Catch:{ Exception -> 0x0050, all -> 0x004c }
-        r4 = r10;
-        goto L_0x0055;
-        r0 = move-exception;
-        r4 = r10;
-        goto L_0x01b5;
-        r0 = move-exception;
-        r4 = r10;
-        goto L_0x019b;
-        r4 = r2;
-        r0.dispose();	 Catch:{ Exception -> 0x0194 }
-        r0 = r4 instanceof org.telegram.tgnet.TLRPC.TL_chatFull;	 Catch:{ Exception -> 0x0194 }
-        r10 = ",";
-        if (r0 == 0) goto L_0x0098;
-        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0194 }
-        r0.<init>();	 Catch:{ Exception -> 0x0194 }
-        r2 = 0;	 Catch:{ Exception -> 0x0194 }
-        r7 = r4.participants;	 Catch:{ Exception -> 0x0194 }
-        r7 = r7.participants;	 Catch:{ Exception -> 0x0194 }
-        r7 = r7.size();	 Catch:{ Exception -> 0x0194 }
-        if (r2 >= r7) goto L_0x0089;	 Catch:{ Exception -> 0x0194 }
-        r7 = r4.participants;	 Catch:{ Exception -> 0x0194 }
-        r7 = r7.participants;	 Catch:{ Exception -> 0x0194 }
-        r7 = r7.get(r2);	 Catch:{ Exception -> 0x0194 }
-        r7 = (org.telegram.tgnet.TLRPC.ChatParticipant) r7;	 Catch:{ Exception -> 0x0194 }
-        r8 = r0.length();	 Catch:{ Exception -> 0x0194 }
-        if (r8 == 0) goto L_0x0081;	 Catch:{ Exception -> 0x0194 }
-        r0.append(r10);	 Catch:{ Exception -> 0x0194 }
-        r7 = r7.user_id;	 Catch:{ Exception -> 0x0194 }
-        r0.append(r7);	 Catch:{ Exception -> 0x0194 }
-        r2 = r2 + 1;	 Catch:{ Exception -> 0x0194 }
-        goto L_0x0064;	 Catch:{ Exception -> 0x0194 }
-        r2 = r0.length();	 Catch:{ Exception -> 0x0194 }
-        if (r2 == 0) goto L_0x015f;	 Catch:{ Exception -> 0x0194 }
-        r0 = r0.toString();	 Catch:{ Exception -> 0x0194 }
-        r1.getUsersInternal(r0, r5);	 Catch:{ Exception -> 0x0194 }
-        goto L_0x015f;	 Catch:{ Exception -> 0x0194 }
-        r0 = r4 instanceof org.telegram.tgnet.TLRPC.TL_channelFull;	 Catch:{ Exception -> 0x0194 }
-        if (r0 == 0) goto L_0x015f;	 Catch:{ Exception -> 0x0194 }
-        r0 = r1.database;	 Catch:{ Exception -> 0x0194 }
-        r11 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0194 }
-        r11.<init>();	 Catch:{ Exception -> 0x0194 }
-        r12 = "SELECT us.data, us.status, cu.data, cu.date FROM channel_users_v2 as cu LEFT JOIN users as us ON us.uid = cu.uid WHERE cu.did = ";	 Catch:{ Exception -> 0x0194 }
-        r11.append(r12);	 Catch:{ Exception -> 0x0194 }
-        r12 = -r3;	 Catch:{ Exception -> 0x0194 }
-        r11.append(r12);	 Catch:{ Exception -> 0x0194 }
-        r12 = " ORDER BY cu.date DESC";	 Catch:{ Exception -> 0x0194 }
-        r11.append(r12);	 Catch:{ Exception -> 0x0194 }
-        r11 = r11.toString();	 Catch:{ Exception -> 0x0194 }
-        r12 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x0194 }
-        r11 = r0.queryFinalized(r11, r12);	 Catch:{ Exception -> 0x0194 }
-        r0 = new org.telegram.tgnet.TLRPC$TL_chatParticipants;	 Catch:{ Exception -> 0x0194 }
-        r0.<init>();	 Catch:{ Exception -> 0x0194 }
-        r4.participants = r0;	 Catch:{ Exception -> 0x0194 }
-        r0 = r11.next();	 Catch:{ Exception -> 0x0194 }
-        if (r0 == 0) goto L_0x0128;
-        r0 = r11.byteBufferValue(r6);	 Catch:{ Exception -> 0x0123 }
-        if (r0 == 0) goto L_0x00da;	 Catch:{ Exception -> 0x0123 }
-        r12 = r0.readInt32(r6);	 Catch:{ Exception -> 0x0123 }
-        r12 = org.telegram.tgnet.TLRPC.User.TLdeserialize(r0, r12, r6);	 Catch:{ Exception -> 0x0123 }
-        r0.reuse();	 Catch:{ Exception -> 0x0123 }
-        goto L_0x00db;	 Catch:{ Exception -> 0x0123 }
-        r12 = r2;	 Catch:{ Exception -> 0x0123 }
-        r0 = r11.byteBufferValue(r7);	 Catch:{ Exception -> 0x0123 }
-        if (r0 == 0) goto L_0x00ed;	 Catch:{ Exception -> 0x0123 }
-        r13 = r0.readInt32(r6);	 Catch:{ Exception -> 0x0123 }
-        r13 = org.telegram.tgnet.TLRPC.ChannelParticipant.TLdeserialize(r0, r13, r6);	 Catch:{ Exception -> 0x0123 }
-        r0.reuse();	 Catch:{ Exception -> 0x0123 }
-        goto L_0x00ee;	 Catch:{ Exception -> 0x0123 }
-        r13 = r2;	 Catch:{ Exception -> 0x0123 }
-        if (r12 == 0) goto L_0x00c2;	 Catch:{ Exception -> 0x0123 }
-        if (r13 == 0) goto L_0x00c2;	 Catch:{ Exception -> 0x0123 }
-        r0 = r12.status;	 Catch:{ Exception -> 0x0123 }
-        if (r0 == 0) goto L_0x00fe;	 Catch:{ Exception -> 0x0123 }
-        r0 = r12.status;	 Catch:{ Exception -> 0x0123 }
-        r14 = r11.intValue(r8);	 Catch:{ Exception -> 0x0123 }
-        r0.expires = r14;	 Catch:{ Exception -> 0x0123 }
-        r5.add(r12);	 Catch:{ Exception -> 0x0123 }
-        r0 = 3;	 Catch:{ Exception -> 0x0123 }
-        r0 = r11.intValue(r0);	 Catch:{ Exception -> 0x0123 }
-        r13.date = r0;	 Catch:{ Exception -> 0x0123 }
-        r0 = new org.telegram.tgnet.TLRPC$TL_chatChannelParticipant;	 Catch:{ Exception -> 0x0123 }
-        r0.<init>();	 Catch:{ Exception -> 0x0123 }
-        r12 = r13.user_id;	 Catch:{ Exception -> 0x0123 }
-        r0.user_id = r12;	 Catch:{ Exception -> 0x0123 }
-        r12 = r13.date;	 Catch:{ Exception -> 0x0123 }
-        r0.date = r12;	 Catch:{ Exception -> 0x0123 }
-        r12 = r13.inviter_id;	 Catch:{ Exception -> 0x0123 }
-        r0.inviter_id = r12;	 Catch:{ Exception -> 0x0123 }
-        r0.channelParticipant = r13;	 Catch:{ Exception -> 0x0123 }
-        r12 = r4.participants;	 Catch:{ Exception -> 0x0123 }
-        r12 = r12.participants;	 Catch:{ Exception -> 0x0123 }
-        r12.add(r0);	 Catch:{ Exception -> 0x0123 }
-        goto L_0x00c2;
-        r0 = move-exception;
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x0194 }
-        goto L_0x00c2;	 Catch:{ Exception -> 0x0194 }
-        r11.dispose();	 Catch:{ Exception -> 0x0194 }
-        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0194 }
-        r0.<init>();	 Catch:{ Exception -> 0x0194 }
-        r2 = 0;	 Catch:{ Exception -> 0x0194 }
-        r7 = r4.bot_info;	 Catch:{ Exception -> 0x0194 }
-        r7 = r7.size();	 Catch:{ Exception -> 0x0194 }
-        if (r2 >= r7) goto L_0x0152;	 Catch:{ Exception -> 0x0194 }
-        r7 = r4.bot_info;	 Catch:{ Exception -> 0x0194 }
-        r7 = r7.get(r2);	 Catch:{ Exception -> 0x0194 }
-        r7 = (org.telegram.tgnet.TLRPC.BotInfo) r7;	 Catch:{ Exception -> 0x0194 }
-        r8 = r0.length();	 Catch:{ Exception -> 0x0194 }
-        if (r8 == 0) goto L_0x014a;	 Catch:{ Exception -> 0x0194 }
-        r0.append(r10);	 Catch:{ Exception -> 0x0194 }
-        r7 = r7.user_id;	 Catch:{ Exception -> 0x0194 }
-        r0.append(r7);	 Catch:{ Exception -> 0x0194 }
-        r2 = r2 + 1;	 Catch:{ Exception -> 0x0194 }
-        goto L_0x0131;	 Catch:{ Exception -> 0x0194 }
-        r2 = r0.length();	 Catch:{ Exception -> 0x0194 }
-        if (r2 == 0) goto L_0x015f;	 Catch:{ Exception -> 0x0194 }
-        r0 = r0.toString();	 Catch:{ Exception -> 0x0194 }
-        r1.getUsersInternal(r0, r5);	 Catch:{ Exception -> 0x0194 }
-        if (r18 == 0) goto L_0x0164;	 Catch:{ Exception -> 0x0194 }
-        r18.countDown();	 Catch:{ Exception -> 0x0194 }
-        if (r4 == 0) goto L_0x0181;	 Catch:{ Exception -> 0x0194 }
-        r0 = r4.pinned_msg_id;	 Catch:{ Exception -> 0x0194 }
-        if (r0 == 0) goto L_0x0181;	 Catch:{ Exception -> 0x0194 }
-        r0 = r1.currentAccount;	 Catch:{ Exception -> 0x0194 }
-        r10 = org.telegram.messenger.DataQuery.getInstance(r0);	 Catch:{ Exception -> 0x0194 }
-        r0 = -r3;	 Catch:{ Exception -> 0x0194 }
-        r11 = (long) r0;	 Catch:{ Exception -> 0x0194 }
-        r0 = r4 instanceof org.telegram.tgnet.TLRPC.TL_channelFull;	 Catch:{ Exception -> 0x0194 }
-        if (r0 == 0) goto L_0x0178;	 Catch:{ Exception -> 0x0194 }
-        r13 = r3;	 Catch:{ Exception -> 0x0194 }
-        goto L_0x0179;	 Catch:{ Exception -> 0x0194 }
-        r13 = 0;	 Catch:{ Exception -> 0x0194 }
-        r14 = r4.pinned_msg_id;	 Catch:{ Exception -> 0x0194 }
-        r15 = 0;	 Catch:{ Exception -> 0x0194 }
-        r0 = r10.loadPinnedMessage(r11, r13, r14, r15);	 Catch:{ Exception -> 0x0194 }
-        r9 = r0;
-        r0 = r1.currentAccount;
-        r2 = org.telegram.messenger.MessagesController.getInstance(r0);
-        r6 = 1;
-        r3 = r17;
-        r7 = r19;
-        r8 = r20;
-        r2.processChatInfo(r3, r4, r5, r6, r7, r8, r9);
-        if (r18 == 0) goto L_0x01b3;
-        goto L_0x01b0;
-        r0 = move-exception;
-        goto L_0x019b;
-        r0 = move-exception;
-        r4 = r2;
-        goto L_0x01b5;
-        r0 = move-exception;
-        r4 = r2;
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x01b4 }
-        r0 = r1.currentAccount;
-        r2 = org.telegram.messenger.MessagesController.getInstance(r0);
-        r6 = 1;
-        r3 = r17;
-        r7 = r19;
-        r8 = r20;
-        r2.processChatInfo(r3, r4, r5, r6, r7, r8, r9);
-        if (r18 == 0) goto L_0x01b3;
-        r18.countDown();
-        return;
-        r0 = move-exception;
-        r2 = r1.currentAccount;
-        r2 = org.telegram.messenger.MessagesController.getInstance(r2);
-        r6 = 1;
-        r9 = 0;
-        r3 = r17;
-        r7 = r19;
-        r8 = r20;
-        r2.processChatInfo(r3, r4, r5, r6, r7, r8, r9);
-        if (r18 == 0) goto L_0x01cb;
-        r18.countDown();
-        throw r0;
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$loadChatInfo$84$MessagesStorage(int, java.util.concurrent.CountDownLatch, boolean, boolean):void");
-    }
-
-    /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:27:0x0074 in {6, 9, 10, 12, 13, 14, 15, 22, 23, 25, 26} preds:[]
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-        	at java.lang.Iterable.forEach(Iterable.java:75)
-        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-        */
-    public /* synthetic */ void lambda$putSentFile$101$MessagesStorage(java.lang.String r5, org.telegram.tgnet.TLObject r6, int r7, java.lang.String r8) {
-        /*
-        r4 = this;
-        r0 = 0;
-        r5 = org.telegram.messenger.Utilities.MD5(r5);	 Catch:{ Exception -> 0x0066 }
-        if (r5 == 0) goto L_0x005e;	 Catch:{ Exception -> 0x0066 }
-        r1 = r6 instanceof org.telegram.tgnet.TLRPC.Photo;	 Catch:{ Exception -> 0x0066 }
-        r2 = 1;	 Catch:{ Exception -> 0x0066 }
-        if (r1 == 0) goto L_0x001b;	 Catch:{ Exception -> 0x0066 }
-        r1 = new org.telegram.tgnet.TLRPC$TL_messageMediaPhoto;	 Catch:{ Exception -> 0x0066 }
-        r1.<init>();	 Catch:{ Exception -> 0x0066 }
-        r6 = (org.telegram.tgnet.TLRPC.Photo) r6;	 Catch:{ Exception -> 0x0066 }
-        r1.photo = r6;	 Catch:{ Exception -> 0x0066 }
-        r6 = r1.flags;	 Catch:{ Exception -> 0x0066 }
-        r6 = r6 | r2;	 Catch:{ Exception -> 0x0066 }
-        r1.flags = r6;	 Catch:{ Exception -> 0x0066 }
-        goto L_0x002f;	 Catch:{ Exception -> 0x0066 }
-        r1 = r6 instanceof org.telegram.tgnet.TLRPC.Document;	 Catch:{ Exception -> 0x0066 }
-        if (r1 == 0) goto L_0x002e;	 Catch:{ Exception -> 0x0066 }
-        r1 = new org.telegram.tgnet.TLRPC$TL_messageMediaDocument;	 Catch:{ Exception -> 0x0066 }
-        r1.<init>();	 Catch:{ Exception -> 0x0066 }
-        r6 = (org.telegram.tgnet.TLRPC.Document) r6;	 Catch:{ Exception -> 0x0066 }
-        r1.document = r6;	 Catch:{ Exception -> 0x0066 }
-        r6 = r1.flags;	 Catch:{ Exception -> 0x0066 }
-        r6 = r6 | r2;	 Catch:{ Exception -> 0x0066 }
-        r1.flags = r6;	 Catch:{ Exception -> 0x0066 }
-        goto L_0x002f;	 Catch:{ Exception -> 0x0066 }
-        r1 = r0;	 Catch:{ Exception -> 0x0066 }
-        if (r1 != 0) goto L_0x0032;	 Catch:{ Exception -> 0x0066 }
-        return;	 Catch:{ Exception -> 0x0066 }
-        r6 = r4.database;	 Catch:{ Exception -> 0x0066 }
-        r3 = "REPLACE INTO sent_files_v2 VALUES(?, ?, ?, ?)";	 Catch:{ Exception -> 0x0066 }
-        r0 = r6.executeFast(r3);	 Catch:{ Exception -> 0x0066 }
-        r0.requery();	 Catch:{ Exception -> 0x0066 }
-        r6 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0066 }
-        r3 = r1.getObjectSize();	 Catch:{ Exception -> 0x0066 }
-        r6.<init>(r3);	 Catch:{ Exception -> 0x0066 }
-        r1.serializeToStream(r6);	 Catch:{ Exception -> 0x0066 }
-        r0.bindString(r2, r5);	 Catch:{ Exception -> 0x0066 }
-        r5 = 2;	 Catch:{ Exception -> 0x0066 }
-        r0.bindInteger(r5, r7);	 Catch:{ Exception -> 0x0066 }
-        r5 = 3;	 Catch:{ Exception -> 0x0066 }
-        r0.bindByteBuffer(r5, r6);	 Catch:{ Exception -> 0x0066 }
-        r5 = 4;	 Catch:{ Exception -> 0x0066 }
-        r0.bindString(r5, r8);	 Catch:{ Exception -> 0x0066 }
-        r0.step();	 Catch:{ Exception -> 0x0066 }
-        r6.reuse();	 Catch:{ Exception -> 0x0066 }
-        if (r0 == 0) goto L_0x006d;
-        r0.dispose();
-        goto L_0x006d;
-        r5 = move-exception;
-        goto L_0x006e;
-        r5 = move-exception;
-        org.telegram.messenger.FileLog.e(r5);	 Catch:{ all -> 0x0064 }
-        if (r0 == 0) goto L_0x006d;
-        goto L_0x0060;
-        return;
-        if (r0 == 0) goto L_0x0073;
-        r0.dispose();
-        throw r5;
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putSentFile$101$MessagesStorage(java.lang.String, org.telegram.tgnet.TLObject, int, java.lang.String):void");
     }
 
     public static MessagesStorage getInstance(int i) {
@@ -5890,6 +1947,39 @@ public class MessagesStorage {
 
     public void getWallpapers() {
         this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$ANII5DCxsANA4ox20RDROdwMfjc(this));
+    }
+
+    public /* synthetic */ void lambda$getWallpapers$32$MessagesStorage() {
+        SQLiteCursor sQLiteCursor = null;
+        try {
+            sQLiteCursor = this.database.queryFinalized("SELECT data FROM wallpapers2 WHERE 1 ORDER BY num ASC", new Object[0]);
+            ArrayList arrayList = new ArrayList();
+            while (sQLiteCursor.next()) {
+                NativeByteBuffer byteBufferValue = sQLiteCursor.byteBufferValue(0);
+                if (byteBufferValue != null) {
+                    TL_wallPaper tL_wallPaper = (TL_wallPaper) WallPaper.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
+                    byteBufferValue.reuse();
+                    if (tL_wallPaper != null) {
+                        arrayList.add(tL_wallPaper);
+                    }
+                }
+            }
+            AndroidUtilities.runOnUIThread(new -$$Lambda$MessagesStorage$laGcyL2VMuNvphN9xrLjowzyS3Y(arrayList));
+            if (sQLiteCursor == null) {
+                return;
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+            if (sQLiteCursor == null) {
+                return;
+            }
+        } catch (Throwable e2) {
+            if (sQLiteCursor != null) {
+                sQLiteCursor.dispose();
+            }
+            throw e2;
+        }
+        sQLiteCursor.dispose();
     }
 
     public void loadWebRecent(int i) {
@@ -8227,6 +4317,285 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$VOppcN16yRL668WP3aQYIlU1CXM(this, i, countDownLatch, z, z2));
     }
 
+    /* JADX WARNING: Removed duplicated region for block: B:30:0x0098 A:{Catch:{ Exception -> 0x0194 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:19:0x005e A:{SYNTHETIC, Splitter:B:19:0x005e} */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x0161 A:{Catch:{ Exception -> 0x0194 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x0178 A:{Catch:{ Exception -> 0x0194 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:71:0x0176 A:{Catch:{ Exception -> 0x0194 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:105:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:90:0x01c8  */
+    /* JADX WARNING: Removed duplicated region for block: B:106:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:90:0x01c8  */
+    /* JADX WARNING: Removed duplicated region for block: B:106:? A:{SYNTHETIC, RETURN} */
+    public /* synthetic */ void lambda$loadChatInfo$84$MessagesStorage(int r17, java.util.concurrent.CountDownLatch r18, boolean r19, boolean r20) {
+        /*
+        r16 = this;
+        r1 = r16;
+        r3 = r17;
+        r5 = new java.util.ArrayList;
+        r5.<init>();
+        r2 = 0;
+        r9 = 0;
+        r0 = r1.database;	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
+        r4 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
+        r4.<init>();	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
+        r6 = "SELECT info, pinned, online FROM chat_settings_v2 WHERE uid = ";
+        r4.append(r6);	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
+        r4.append(r3);	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
+        r4 = r4.toString();	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
+        r6 = 0;
+        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
+        r0 = r0.queryFinalized(r4, r7);	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
+        r4 = r0.next();	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
+        r7 = 2;
+        r8 = 1;
+        if (r4 == 0) goto L_0x0054;
+    L_0x002d:
+        r4 = r0.byteBufferValue(r6);	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
+        if (r4 == 0) goto L_0x0054;
+    L_0x0033:
+        r10 = r4.readInt32(r6);	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
+        r10 = org.telegram.tgnet.TLRPC.ChatFull.TLdeserialize(r4, r10, r6);	 Catch:{ Exception -> 0x0199, all -> 0x0196 }
+        r4.reuse();	 Catch:{ Exception -> 0x0050, all -> 0x004c }
+        r4 = r0.intValue(r8);	 Catch:{ Exception -> 0x0050, all -> 0x004c }
+        r10.pinned_msg_id = r4;	 Catch:{ Exception -> 0x0050, all -> 0x004c }
+        r4 = r0.intValue(r7);	 Catch:{ Exception -> 0x0050, all -> 0x004c }
+        r10.online_count = r4;	 Catch:{ Exception -> 0x0050, all -> 0x004c }
+        r4 = r10;
+        goto L_0x0055;
+    L_0x004c:
+        r0 = move-exception;
+        r4 = r10;
+        goto L_0x01b5;
+    L_0x0050:
+        r0 = move-exception;
+        r4 = r10;
+        goto L_0x019b;
+    L_0x0054:
+        r4 = r2;
+    L_0x0055:
+        r0.dispose();	 Catch:{ Exception -> 0x0194 }
+        r0 = r4 instanceof org.telegram.tgnet.TLRPC.TL_chatFull;	 Catch:{ Exception -> 0x0194 }
+        r10 = ",";
+        if (r0 == 0) goto L_0x0098;
+    L_0x005e:
+        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0194 }
+        r0.<init>();	 Catch:{ Exception -> 0x0194 }
+        r2 = 0;
+    L_0x0064:
+        r7 = r4.participants;	 Catch:{ Exception -> 0x0194 }
+        r7 = r7.participants;	 Catch:{ Exception -> 0x0194 }
+        r7 = r7.size();	 Catch:{ Exception -> 0x0194 }
+        if (r2 >= r7) goto L_0x0089;
+    L_0x006e:
+        r7 = r4.participants;	 Catch:{ Exception -> 0x0194 }
+        r7 = r7.participants;	 Catch:{ Exception -> 0x0194 }
+        r7 = r7.get(r2);	 Catch:{ Exception -> 0x0194 }
+        r7 = (org.telegram.tgnet.TLRPC.ChatParticipant) r7;	 Catch:{ Exception -> 0x0194 }
+        r8 = r0.length();	 Catch:{ Exception -> 0x0194 }
+        if (r8 == 0) goto L_0x0081;
+    L_0x007e:
+        r0.append(r10);	 Catch:{ Exception -> 0x0194 }
+    L_0x0081:
+        r7 = r7.user_id;	 Catch:{ Exception -> 0x0194 }
+        r0.append(r7);	 Catch:{ Exception -> 0x0194 }
+        r2 = r2 + 1;
+        goto L_0x0064;
+    L_0x0089:
+        r2 = r0.length();	 Catch:{ Exception -> 0x0194 }
+        if (r2 == 0) goto L_0x015f;
+    L_0x008f:
+        r0 = r0.toString();	 Catch:{ Exception -> 0x0194 }
+        r1.getUsersInternal(r0, r5);	 Catch:{ Exception -> 0x0194 }
+        goto L_0x015f;
+    L_0x0098:
+        r0 = r4 instanceof org.telegram.tgnet.TLRPC.TL_channelFull;	 Catch:{ Exception -> 0x0194 }
+        if (r0 == 0) goto L_0x015f;
+    L_0x009c:
+        r0 = r1.database;	 Catch:{ Exception -> 0x0194 }
+        r11 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0194 }
+        r11.<init>();	 Catch:{ Exception -> 0x0194 }
+        r12 = "SELECT us.data, us.status, cu.data, cu.date FROM channel_users_v2 as cu LEFT JOIN users as us ON us.uid = cu.uid WHERE cu.did = ";
+        r11.append(r12);	 Catch:{ Exception -> 0x0194 }
+        r12 = -r3;
+        r11.append(r12);	 Catch:{ Exception -> 0x0194 }
+        r12 = " ORDER BY cu.date DESC";
+        r11.append(r12);	 Catch:{ Exception -> 0x0194 }
+        r11 = r11.toString();	 Catch:{ Exception -> 0x0194 }
+        r12 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x0194 }
+        r11 = r0.queryFinalized(r11, r12);	 Catch:{ Exception -> 0x0194 }
+        r0 = new org.telegram.tgnet.TLRPC$TL_chatParticipants;	 Catch:{ Exception -> 0x0194 }
+        r0.<init>();	 Catch:{ Exception -> 0x0194 }
+        r4.participants = r0;	 Catch:{ Exception -> 0x0194 }
+    L_0x00c2:
+        r0 = r11.next();	 Catch:{ Exception -> 0x0194 }
+        if (r0 == 0) goto L_0x0128;
+    L_0x00c8:
+        r0 = r11.byteBufferValue(r6);	 Catch:{ Exception -> 0x0123 }
+        if (r0 == 0) goto L_0x00da;
+    L_0x00ce:
+        r12 = r0.readInt32(r6);	 Catch:{ Exception -> 0x0123 }
+        r12 = org.telegram.tgnet.TLRPC.User.TLdeserialize(r0, r12, r6);	 Catch:{ Exception -> 0x0123 }
+        r0.reuse();	 Catch:{ Exception -> 0x0123 }
+        goto L_0x00db;
+    L_0x00da:
+        r12 = r2;
+    L_0x00db:
+        r0 = r11.byteBufferValue(r7);	 Catch:{ Exception -> 0x0123 }
+        if (r0 == 0) goto L_0x00ed;
+    L_0x00e1:
+        r13 = r0.readInt32(r6);	 Catch:{ Exception -> 0x0123 }
+        r13 = org.telegram.tgnet.TLRPC.ChannelParticipant.TLdeserialize(r0, r13, r6);	 Catch:{ Exception -> 0x0123 }
+        r0.reuse();	 Catch:{ Exception -> 0x0123 }
+        goto L_0x00ee;
+    L_0x00ed:
+        r13 = r2;
+    L_0x00ee:
+        if (r12 == 0) goto L_0x00c2;
+    L_0x00f0:
+        if (r13 == 0) goto L_0x00c2;
+    L_0x00f2:
+        r0 = r12.status;	 Catch:{ Exception -> 0x0123 }
+        if (r0 == 0) goto L_0x00fe;
+    L_0x00f6:
+        r0 = r12.status;	 Catch:{ Exception -> 0x0123 }
+        r14 = r11.intValue(r8);	 Catch:{ Exception -> 0x0123 }
+        r0.expires = r14;	 Catch:{ Exception -> 0x0123 }
+    L_0x00fe:
+        r5.add(r12);	 Catch:{ Exception -> 0x0123 }
+        r0 = 3;
+        r0 = r11.intValue(r0);	 Catch:{ Exception -> 0x0123 }
+        r13.date = r0;	 Catch:{ Exception -> 0x0123 }
+        r0 = new org.telegram.tgnet.TLRPC$TL_chatChannelParticipant;	 Catch:{ Exception -> 0x0123 }
+        r0.<init>();	 Catch:{ Exception -> 0x0123 }
+        r12 = r13.user_id;	 Catch:{ Exception -> 0x0123 }
+        r0.user_id = r12;	 Catch:{ Exception -> 0x0123 }
+        r12 = r13.date;	 Catch:{ Exception -> 0x0123 }
+        r0.date = r12;	 Catch:{ Exception -> 0x0123 }
+        r12 = r13.inviter_id;	 Catch:{ Exception -> 0x0123 }
+        r0.inviter_id = r12;	 Catch:{ Exception -> 0x0123 }
+        r0.channelParticipant = r13;	 Catch:{ Exception -> 0x0123 }
+        r12 = r4.participants;	 Catch:{ Exception -> 0x0123 }
+        r12 = r12.participants;	 Catch:{ Exception -> 0x0123 }
+        r12.add(r0);	 Catch:{ Exception -> 0x0123 }
+        goto L_0x00c2;
+    L_0x0123:
+        r0 = move-exception;
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Exception -> 0x0194 }
+        goto L_0x00c2;
+    L_0x0128:
+        r11.dispose();	 Catch:{ Exception -> 0x0194 }
+        r0 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0194 }
+        r0.<init>();	 Catch:{ Exception -> 0x0194 }
+        r2 = 0;
+    L_0x0131:
+        r7 = r4.bot_info;	 Catch:{ Exception -> 0x0194 }
+        r7 = r7.size();	 Catch:{ Exception -> 0x0194 }
+        if (r2 >= r7) goto L_0x0152;
+    L_0x0139:
+        r7 = r4.bot_info;	 Catch:{ Exception -> 0x0194 }
+        r7 = r7.get(r2);	 Catch:{ Exception -> 0x0194 }
+        r7 = (org.telegram.tgnet.TLRPC.BotInfo) r7;	 Catch:{ Exception -> 0x0194 }
+        r8 = r0.length();	 Catch:{ Exception -> 0x0194 }
+        if (r8 == 0) goto L_0x014a;
+    L_0x0147:
+        r0.append(r10);	 Catch:{ Exception -> 0x0194 }
+    L_0x014a:
+        r7 = r7.user_id;	 Catch:{ Exception -> 0x0194 }
+        r0.append(r7);	 Catch:{ Exception -> 0x0194 }
+        r2 = r2 + 1;
+        goto L_0x0131;
+    L_0x0152:
+        r2 = r0.length();	 Catch:{ Exception -> 0x0194 }
+        if (r2 == 0) goto L_0x015f;
+    L_0x0158:
+        r0 = r0.toString();	 Catch:{ Exception -> 0x0194 }
+        r1.getUsersInternal(r0, r5);	 Catch:{ Exception -> 0x0194 }
+    L_0x015f:
+        if (r18 == 0) goto L_0x0164;
+    L_0x0161:
+        r18.countDown();	 Catch:{ Exception -> 0x0194 }
+    L_0x0164:
+        if (r4 == 0) goto L_0x0181;
+    L_0x0166:
+        r0 = r4.pinned_msg_id;	 Catch:{ Exception -> 0x0194 }
+        if (r0 == 0) goto L_0x0181;
+    L_0x016a:
+        r0 = r1.currentAccount;	 Catch:{ Exception -> 0x0194 }
+        r10 = org.telegram.messenger.DataQuery.getInstance(r0);	 Catch:{ Exception -> 0x0194 }
+        r0 = -r3;
+        r11 = (long) r0;	 Catch:{ Exception -> 0x0194 }
+        r0 = r4 instanceof org.telegram.tgnet.TLRPC.TL_channelFull;	 Catch:{ Exception -> 0x0194 }
+        if (r0 == 0) goto L_0x0178;
+    L_0x0176:
+        r13 = r3;
+        goto L_0x0179;
+    L_0x0178:
+        r13 = 0;
+    L_0x0179:
+        r14 = r4.pinned_msg_id;	 Catch:{ Exception -> 0x0194 }
+        r15 = 0;
+        r0 = r10.loadPinnedMessage(r11, r13, r14, r15);	 Catch:{ Exception -> 0x0194 }
+        r9 = r0;
+    L_0x0181:
+        r0 = r1.currentAccount;
+        r2 = org.telegram.messenger.MessagesController.getInstance(r0);
+        r6 = 1;
+        r3 = r17;
+        r7 = r19;
+        r8 = r20;
+        r2.processChatInfo(r3, r4, r5, r6, r7, r8, r9);
+        if (r18 == 0) goto L_0x01b3;
+    L_0x0193:
+        goto L_0x01b0;
+    L_0x0194:
+        r0 = move-exception;
+        goto L_0x019b;
+    L_0x0196:
+        r0 = move-exception;
+        r4 = r2;
+        goto L_0x01b5;
+    L_0x0199:
+        r0 = move-exception;
+        r4 = r2;
+    L_0x019b:
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x01b4 }
+        r0 = r1.currentAccount;
+        r2 = org.telegram.messenger.MessagesController.getInstance(r0);
+        r6 = 1;
+        r3 = r17;
+        r7 = r19;
+        r8 = r20;
+        r2.processChatInfo(r3, r4, r5, r6, r7, r8, r9);
+        if (r18 == 0) goto L_0x01b3;
+    L_0x01b0:
+        r18.countDown();
+    L_0x01b3:
+        return;
+    L_0x01b4:
+        r0 = move-exception;
+    L_0x01b5:
+        r2 = r1.currentAccount;
+        r2 = org.telegram.messenger.MessagesController.getInstance(r2);
+        r6 = 1;
+        r9 = 0;
+        r3 = r17;
+        r7 = r19;
+        r8 = r20;
+        r2.processChatInfo(r3, r4, r5, r6, r7, r8, r9);
+        if (r18 == 0) goto L_0x01cb;
+    L_0x01c8:
+        r18.countDown();
+    L_0x01cb:
+        goto L_0x01cd;
+    L_0x01cc:
+        throw r0;
+    L_0x01cd:
+        goto L_0x01cc;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$loadChatInfo$84$MessagesStorage(int, java.util.concurrent.CountDownLatch, boolean, boolean):void");
+    }
+
     public void processPendingRead(long j, long j2, long j3, int i, boolean z) {
         this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$BFuJtbbUa5cf4B4J2ETafzpLwTU(this, j, j2, z, j3));
     }
@@ -8451,6 +4820,437 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     public void getCachedPhoneBook(boolean z) {
         this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$IEfB3sC9k_J4K6n4lzcQAX4QVAM(this, z));
+    }
+
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x0186 A:{Catch:{ Exception -> 0x0220 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x016c A:{SYNTHETIC, Splitter:B:98:0x016c} */
+    /* JADX WARNING: Removed duplicated region for block: B:105:0x0197 A:{Catch:{ Exception -> 0x0218, all -> 0x0216 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:144:0x024c  */
+    /* JADX WARNING: Removed duplicated region for block: B:80:0x013e  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x0105 A:{Catch:{ Throwable -> 0x014d, all -> 0x014a }} */
+    /* JADX WARNING: Removed duplicated region for block: B:82:0x0144  */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x016c A:{SYNTHETIC, Splitter:B:98:0x016c} */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x0186 A:{Catch:{ Exception -> 0x0220 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:105:0x0197 A:{Catch:{ Exception -> 0x0218, all -> 0x0216 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:148:0x0253  */
+    /* JADX WARNING: Removed duplicated region for block: B:58:0x00f0  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x0105 A:{Catch:{ Throwable -> 0x014d, all -> 0x014a }} */
+    /* JADX WARNING: Removed duplicated region for block: B:80:0x013e  */
+    /* JADX WARNING: Removed duplicated region for block: B:82:0x0144  */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x0186 A:{Catch:{ Exception -> 0x0220 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x016c A:{SYNTHETIC, Splitter:B:98:0x016c} */
+    /* JADX WARNING: Removed duplicated region for block: B:105:0x0197 A:{Catch:{ Exception -> 0x0218, all -> 0x0216 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:148:0x0253  */
+    /* JADX WARNING: Removed duplicated region for block: B:95:0x0160  */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x016c A:{SYNTHETIC, Splitter:B:98:0x016c} */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x0186 A:{Catch:{ Exception -> 0x0220 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:105:0x0197 A:{Catch:{ Exception -> 0x0218, all -> 0x0216 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:84:0x014a A:{Splitter:B:62:0x00ff, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:95:0x0160  */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x0186 A:{Catch:{ Exception -> 0x0220 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x016c A:{SYNTHETIC, Splitter:B:98:0x016c} */
+    /* JADX WARNING: Removed duplicated region for block: B:105:0x0197 A:{Catch:{ Exception -> 0x0218, all -> 0x0216 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:84:0x014a A:{Splitter:B:62:0x00ff, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:95:0x0160  */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x016c A:{SYNTHETIC, Splitter:B:98:0x016c} */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x0186 A:{Catch:{ Exception -> 0x0220 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:105:0x0197 A:{Catch:{ Exception -> 0x0218, all -> 0x0216 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:137:0x0229  */
+    /* JADX WARNING: Removed duplicated region for block: B:58:0x00f0  */
+    /* JADX WARNING: Removed duplicated region for block: B:80:0x013e  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x0105 A:{Catch:{ Throwable -> 0x014d, all -> 0x014a }} */
+    /* JADX WARNING: Removed duplicated region for block: B:82:0x0144  */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x0186 A:{Catch:{ Exception -> 0x0220 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x016c A:{SYNTHETIC, Splitter:B:98:0x016c} */
+    /* JADX WARNING: Removed duplicated region for block: B:105:0x0197 A:{Catch:{ Exception -> 0x0218, all -> 0x0216 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:141:0x0246  */
+    /* JADX WARNING: Failed to process nested try/catch */
+    /* JADX WARNING: Failed to process nested try/catch */
+    /* JADX WARNING: Missing block: B:78:0x013a, code skipped:
+            r0 = th;
+     */
+    /* JADX WARNING: Missing block: B:79:0x013b, code skipped:
+            r17 = r3;
+     */
+    /* JADX WARNING: Missing block: B:84:0x014a, code skipped:
+            r0 = th;
+     */
+    /* JADX WARNING: Missing block: B:85:0x014d, code skipped:
+            r0 = th;
+     */
+    /* JADX WARNING: Missing block: B:86:0x014e, code skipped:
+            r17 = r3;
+     */
+    /* JADX WARNING: Missing block: B:95:0x0160, code skipped:
+            r17.dispose();
+     */
+    /* JADX WARNING: Missing block: B:144:0x024c, code skipped:
+            r3.dispose();
+     */
+    public /* synthetic */ void lambda$getCachedPhoneBook$90$MessagesStorage(boolean r27) {
+        /*
+        r26 = this;
+        r1 = r26;
+        r2 = "";
+        r3 = 6;
+        r4 = 3;
+        r5 = 2;
+        r6 = 5;
+        r7 = 4;
+        r9 = 1;
+        r11 = 8;
+        r12 = 5000; // 0x1388 float:7.006E-42 double:2.4703E-320;
+        r13 = 0;
+        r0 = r1.database;	 Catch:{ Throwable -> 0x00e9, all -> 0x00e5 }
+        r14 = "SELECT name FROM sqlite_master WHERE type='table' AND name='user_contacts_v6'";
+        r15 = new java.lang.Object[r13];	 Catch:{ Throwable -> 0x00e9, all -> 0x00e5 }
+        r14 = r0.queryFinalized(r14, r15);	 Catch:{ Throwable -> 0x00e9, all -> 0x00e5 }
+        r0 = r14.next();	 Catch:{ Throwable -> 0x00e2, all -> 0x00de }
+        r14.dispose();	 Catch:{ Throwable -> 0x00e2, all -> 0x00de }
+        if (r0 == 0) goto L_0x00db;
+    L_0x0022:
+        r0 = r1.database;	 Catch:{ Throwable -> 0x00e9, all -> 0x00e5 }
+        r14 = "SELECT COUNT(uid) FROM user_contacts_v6 WHERE 1";
+        r15 = new java.lang.Object[r13];	 Catch:{ Throwable -> 0x00e9, all -> 0x00e5 }
+        r14 = r0.queryFinalized(r14, r15);	 Catch:{ Throwable -> 0x00e9, all -> 0x00e5 }
+        r0 = r14.next();	 Catch:{ Throwable -> 0x00e2, all -> 0x00de }
+        if (r0 == 0) goto L_0x003b;
+    L_0x0032:
+        r0 = r14.intValue(r13);	 Catch:{ Throwable -> 0x00e2, all -> 0x00de }
+        r0 = java.lang.Math.min(r12, r0);	 Catch:{ Throwable -> 0x00e2, all -> 0x00de }
+        goto L_0x003d;
+    L_0x003b:
+        r0 = 16;
+    L_0x003d:
+        r14.dispose();	 Catch:{ Throwable -> 0x00e2, all -> 0x00de }
+        r15 = new android.util.SparseArray;	 Catch:{ Throwable -> 0x00e2, all -> 0x00de }
+        r15.<init>(r0);	 Catch:{ Throwable -> 0x00e2, all -> 0x00de }
+        r0 = r1.database;	 Catch:{ Throwable -> 0x00e2, all -> 0x00de }
+        r8 = "SELECT us.uid, us.fname, us.sname, up.phone, up.sphone, up.deleted, us.imported FROM user_contacts_v6 as us LEFT JOIN user_phones_v6 as up ON us.uid = up.uid WHERE 1";
+        r10 = new java.lang.Object[r13];	 Catch:{ Throwable -> 0x00e2, all -> 0x00de }
+        r10 = r0.queryFinalized(r8, r10);	 Catch:{ Throwable -> 0x00e2, all -> 0x00de }
+    L_0x004f:
+        r0 = r10.next();	 Catch:{ Throwable -> 0x00d9 }
+        if (r0 == 0) goto L_0x00cc;
+    L_0x0055:
+        r0 = r10.intValue(r13);	 Catch:{ Throwable -> 0x00d9 }
+        r8 = r15.get(r0);	 Catch:{ Throwable -> 0x00d9 }
+        r8 = (org.telegram.messenger.ContactsController.Contact) r8;	 Catch:{ Throwable -> 0x00d9 }
+        if (r8 != 0) goto L_0x0089;
+    L_0x0061:
+        r8 = new org.telegram.messenger.ContactsController$Contact;	 Catch:{ Throwable -> 0x00d9 }
+        r8.<init>();	 Catch:{ Throwable -> 0x00d9 }
+        r14 = r10.stringValue(r9);	 Catch:{ Throwable -> 0x00d9 }
+        r8.first_name = r14;	 Catch:{ Throwable -> 0x00d9 }
+        r14 = r10.stringValue(r5);	 Catch:{ Throwable -> 0x00d9 }
+        r8.last_name = r14;	 Catch:{ Throwable -> 0x00d9 }
+        r14 = r10.intValue(r3);	 Catch:{ Throwable -> 0x00d9 }
+        r8.imported = r14;	 Catch:{ Throwable -> 0x00d9 }
+        r14 = r8.first_name;	 Catch:{ Throwable -> 0x00d9 }
+        if (r14 != 0) goto L_0x007e;
+    L_0x007c:
+        r8.first_name = r2;	 Catch:{ Throwable -> 0x00d9 }
+    L_0x007e:
+        r14 = r8.last_name;	 Catch:{ Throwable -> 0x00d9 }
+        if (r14 != 0) goto L_0x0084;
+    L_0x0082:
+        r8.last_name = r2;	 Catch:{ Throwable -> 0x00d9 }
+    L_0x0084:
+        r8.contact_id = r0;	 Catch:{ Throwable -> 0x00d9 }
+        r15.put(r0, r8);	 Catch:{ Throwable -> 0x00d9 }
+    L_0x0089:
+        r0 = r10.stringValue(r4);	 Catch:{ Throwable -> 0x00d9 }
+        if (r0 != 0) goto L_0x0090;
+    L_0x008f:
+        goto L_0x004f;
+    L_0x0090:
+        r14 = r8.phones;	 Catch:{ Throwable -> 0x00d9 }
+        r14.add(r0);	 Catch:{ Throwable -> 0x00d9 }
+        r14 = r10.stringValue(r7);	 Catch:{ Throwable -> 0x00d9 }
+        if (r14 != 0) goto L_0x009c;
+    L_0x009b:
+        goto L_0x004f;
+    L_0x009c:
+        r3 = r14.length();	 Catch:{ Throwable -> 0x00d9 }
+        if (r3 != r11) goto L_0x00ac;
+    L_0x00a2:
+        r3 = r0.length();	 Catch:{ Throwable -> 0x00d9 }
+        if (r3 == r11) goto L_0x00ac;
+    L_0x00a8:
+        r14 = org.telegram.PhoneFormat.PhoneFormat.stripExceptNumbers(r0);	 Catch:{ Throwable -> 0x00d9 }
+    L_0x00ac:
+        r0 = r8.shortPhones;	 Catch:{ Throwable -> 0x00d9 }
+        r0.add(r14);	 Catch:{ Throwable -> 0x00d9 }
+        r0 = r8.phoneDeleted;	 Catch:{ Throwable -> 0x00d9 }
+        r3 = r10.intValue(r6);	 Catch:{ Throwable -> 0x00d9 }
+        r3 = java.lang.Integer.valueOf(r3);	 Catch:{ Throwable -> 0x00d9 }
+        r0.add(r3);	 Catch:{ Throwable -> 0x00d9 }
+        r0 = r8.phoneTypes;	 Catch:{ Throwable -> 0x00d9 }
+        r0.add(r2);	 Catch:{ Throwable -> 0x00d9 }
+        r0 = r15.size();	 Catch:{ Throwable -> 0x00d9 }
+        if (r0 != r12) goto L_0x00ca;
+    L_0x00c9:
+        goto L_0x00cc;
+    L_0x00ca:
+        r3 = 6;
+        goto L_0x004f;
+    L_0x00cc:
+        r10.dispose();	 Catch:{ Throwable -> 0x00d9 }
+        r0 = r1.currentAccount;	 Catch:{ Throwable -> 0x00e9, all -> 0x00e5 }
+        r0 = org.telegram.messenger.ContactsController.getInstance(r0);	 Catch:{ Throwable -> 0x00e9, all -> 0x00e5 }
+        r0.migratePhoneBookToV7(r15);	 Catch:{ Throwable -> 0x00e9, all -> 0x00e5 }
+        return;
+    L_0x00d9:
+        r0 = move-exception;
+        goto L_0x00eb;
+    L_0x00db:
+        r17 = 0;
+        goto L_0x00f5;
+    L_0x00de:
+        r0 = move-exception;
+        r10 = r14;
+        goto L_0x0251;
+    L_0x00e2:
+        r0 = move-exception;
+        r10 = r14;
+        goto L_0x00eb;
+    L_0x00e5:
+        r0 = move-exception;
+        r10 = 0;
+        goto L_0x0251;
+    L_0x00e9:
+        r0 = move-exception;
+        r10 = 0;
+    L_0x00eb:
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x0250 }
+        if (r10 == 0) goto L_0x00f3;
+    L_0x00f0:
+        r10.dispose();
+    L_0x00f3:
+        r17 = r10;
+    L_0x00f5:
+        r0 = r1.database;	 Catch:{ Throwable -> 0x0156 }
+        r3 = "SELECT COUNT(key) FROM user_contacts_v7 WHERE 1";
+        r8 = new java.lang.Object[r13];	 Catch:{ Throwable -> 0x0156 }
+        r3 = r0.queryFinalized(r3, r8);	 Catch:{ Throwable -> 0x0156 }
+        r0 = r3.next();	 Catch:{ Throwable -> 0x014d, all -> 0x014a }
+        if (r0 == 0) goto L_0x013e;
+    L_0x0105:
+        r8 = r3.intValue(r13);	 Catch:{ Throwable -> 0x014d, all -> 0x014a }
+        r10 = java.lang.Math.min(r12, r8);	 Catch:{ Throwable -> 0x013a, all -> 0x014a }
+        if (r8 <= r12) goto L_0x0113;
+    L_0x010f:
+        r0 = r8 + -5000;
+        r14 = r0;
+        goto L_0x0114;
+    L_0x0113:
+        r14 = 0;
+    L_0x0114:
+        r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Throwable -> 0x0134, all -> 0x014a }
+        if (r0 == 0) goto L_0x0131;
+    L_0x0118:
+        r0 = new java.lang.StringBuilder;	 Catch:{ Throwable -> 0x0134, all -> 0x014a }
+        r0.<init>();	 Catch:{ Throwable -> 0x0134, all -> 0x014a }
+        r15 = r1.currentAccount;	 Catch:{ Throwable -> 0x0134, all -> 0x014a }
+        r0.append(r15);	 Catch:{ Throwable -> 0x0134, all -> 0x014a }
+        r15 = " current cached contacts count = ";
+        r0.append(r15);	 Catch:{ Throwable -> 0x0134, all -> 0x014a }
+        r0.append(r8);	 Catch:{ Throwable -> 0x0134, all -> 0x014a }
+        r0 = r0.toString();	 Catch:{ Throwable -> 0x0134, all -> 0x014a }
+        org.telegram.messenger.FileLog.d(r0);	 Catch:{ Throwable -> 0x0134, all -> 0x014a }
+    L_0x0131:
+        r16 = r10;
+        goto L_0x0142;
+    L_0x0134:
+        r0 = move-exception;
+        r17 = r3;
+        r16 = r10;
+        goto L_0x015b;
+    L_0x013a:
+        r0 = move-exception;
+        r17 = r3;
+        goto L_0x0158;
+    L_0x013e:
+        r8 = 0;
+        r14 = 0;
+        r16 = 16;
+    L_0x0142:
+        if (r3 == 0) goto L_0x0147;
+    L_0x0144:
+        r3.dispose();
+    L_0x0147:
+        r17 = r3;
+        goto L_0x0163;
+    L_0x014a:
+        r0 = move-exception;
+        goto L_0x024a;
+    L_0x014d:
+        r0 = move-exception;
+        r17 = r3;
+        goto L_0x0157;
+    L_0x0151:
+        r0 = move-exception;
+        r3 = r17;
+        goto L_0x024a;
+    L_0x0156:
+        r0 = move-exception;
+    L_0x0157:
+        r8 = 0;
+    L_0x0158:
+        r14 = 0;
+        r16 = 16;
+    L_0x015b:
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x0151 }
+        if (r17 == 0) goto L_0x0163;
+    L_0x0160:
+        r17.dispose();
+    L_0x0163:
+        r0 = r16;
+        r3 = new java.util.HashMap;
+        r3.<init>(r0);
+        if (r14 == 0) goto L_0x0186;
+    L_0x016c:
+        r0 = r1.database;	 Catch:{ Exception -> 0x0220 }
+        r10 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0220 }
+        r10.<init>();	 Catch:{ Exception -> 0x0220 }
+        r14 = "SELECT us.key, us.uid, us.fname, us.sname, up.phone, up.sphone, up.deleted, us.imported FROM user_contacts_v7 as us LEFT JOIN user_phones_v7 as up ON us.key = up.key WHERE 1 LIMIT 0,";
+        r10.append(r14);	 Catch:{ Exception -> 0x0220 }
+        r10.append(r8);	 Catch:{ Exception -> 0x0220 }
+        r8 = r10.toString();	 Catch:{ Exception -> 0x0220 }
+        r10 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x0220 }
+        r0 = r0.queryFinalized(r8, r10);	 Catch:{ Exception -> 0x0220 }
+        goto L_0x0190;
+    L_0x0186:
+        r0 = r1.database;	 Catch:{ Exception -> 0x0220 }
+        r8 = "SELECT us.key, us.uid, us.fname, us.sname, up.phone, up.sphone, up.deleted, us.imported FROM user_contacts_v7 as us LEFT JOIN user_phones_v7 as up ON us.key = up.key WHERE 1";
+        r10 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x0220 }
+        r0 = r0.queryFinalized(r8, r10);	 Catch:{ Exception -> 0x0220 }
+    L_0x0190:
+        r8 = r0;
+    L_0x0191:
+        r0 = r8.next();	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        if (r0 == 0) goto L_0x0212;
+    L_0x0197:
+        r0 = r8.stringValue(r13);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        r10 = r3.get(r0);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        r10 = (org.telegram.messenger.ContactsController.Contact) r10;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        if (r10 != 0) goto L_0x01d0;
+    L_0x01a3:
+        r10 = new org.telegram.messenger.ContactsController$Contact;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        r10.<init>();	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        r14 = r8.intValue(r9);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        r10.contact_id = r14;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        r14 = r8.stringValue(r5);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        r10.first_name = r14;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        r14 = r8.stringValue(r4);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        r10.last_name = r14;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        r14 = 7;
+        r14 = r8.intValue(r14);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        r10.imported = r14;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        r14 = r10.first_name;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        if (r14 != 0) goto L_0x01c7;
+    L_0x01c5:
+        r10.first_name = r2;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+    L_0x01c7:
+        r14 = r10.last_name;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        if (r14 != 0) goto L_0x01cd;
+    L_0x01cb:
+        r10.last_name = r2;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+    L_0x01cd:
+        r3.put(r0, r10);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+    L_0x01d0:
+        r0 = r8.stringValue(r7);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        if (r0 != 0) goto L_0x01d8;
+    L_0x01d6:
+        r14 = 6;
+        goto L_0x0191;
+    L_0x01d8:
+        r14 = r10.phones;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        r14.add(r0);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        r14 = r8.stringValue(r6);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        if (r14 != 0) goto L_0x01e4;
+    L_0x01e3:
+        goto L_0x01d6;
+    L_0x01e4:
+        r15 = r14.length();	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        if (r15 != r11) goto L_0x01f4;
+    L_0x01ea:
+        r15 = r0.length();	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        if (r15 == r11) goto L_0x01f4;
+    L_0x01f0:
+        r14 = org.telegram.PhoneFormat.PhoneFormat.stripExceptNumbers(r0);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+    L_0x01f4:
+        r0 = r10.shortPhones;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        r0.add(r14);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        r0 = r10.phoneDeleted;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        r14 = 6;
+        r15 = r8.intValue(r14);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        r15 = java.lang.Integer.valueOf(r15);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        r0.add(r15);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        r0 = r10.phoneTypes;	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        r0.add(r2);	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        r0 = r3.size();	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        if (r0 != r12) goto L_0x0191;
+    L_0x0212:
+        r8.dispose();	 Catch:{ Exception -> 0x0218, all -> 0x0216 }
+        goto L_0x022c;
+    L_0x0216:
+        r0 = move-exception;
+        goto L_0x0244;
+    L_0x0218:
+        r0 = move-exception;
+        r17 = r8;
+        goto L_0x0221;
+    L_0x021c:
+        r0 = move-exception;
+        r8 = r17;
+        goto L_0x0244;
+    L_0x0220:
+        r0 = move-exception;
+    L_0x0221:
+        r3.clear();	 Catch:{ all -> 0x021c }
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x021c }
+        if (r17 == 0) goto L_0x022c;
+    L_0x0229:
+        r17.dispose();
+    L_0x022c:
+        r0 = r1.currentAccount;
+        r18 = org.telegram.messenger.ContactsController.getInstance(r0);
+        r20 = 1;
+        r21 = 1;
+        r22 = 0;
+        r23 = 0;
+        r24 = r27 ^ 1;
+        r25 = 0;
+        r19 = r3;
+        r18.performSyncPhoneBook(r19, r20, r21, r22, r23, r24, r25);
+        return;
+    L_0x0244:
+        if (r8 == 0) goto L_0x0249;
+    L_0x0246:
+        r8.dispose();
+    L_0x0249:
+        throw r0;
+    L_0x024a:
+        if (r3 == 0) goto L_0x024f;
+    L_0x024c:
+        r3.dispose();
+    L_0x024f:
+        throw r0;
+    L_0x0250:
+        r0 = move-exception;
+    L_0x0251:
+        if (r10 == 0) goto L_0x0256;
+    L_0x0253:
+        r10.dispose();
+    L_0x0256:
+        goto L_0x0258;
+    L_0x0257:
+        throw r0;
+    L_0x0258:
+        goto L_0x0257;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getCachedPhoneBook$90$MessagesStorage(boolean):void");
     }
 
     public void getContacts() {
@@ -8812,6 +5612,3376 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$Ivgf6-gd46CXISXbnplVg1Z0jok(this, i, i2, z, j, i6, i4, i3, i5, i7));
     }
 
+    /* JADX WARNING: Removed duplicated region for block: B:390:0x0919  */
+    /* JADX WARNING: Removed duplicated region for block: B:389:0x0917  */
+    /* JADX WARNING: Removed duplicated region for block: B:404:0x095d A:{Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }} */
+    /* JADX WARNING: Removed duplicated region for block: B:392:0x091c A:{SYNTHETIC, Splitter:B:392:0x091c} */
+    /* JADX WARNING: Removed duplicated region for block: B:433:0x0a92  */
+    /* JADX WARNING: Removed duplicated region for block: B:406:0x0961 A:{Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }} */
+    /* JADX WARNING: Removed duplicated region for block: B:532:0x0cc6 A:{Catch:{ Exception -> 0x0d12, all -> 0x0d06 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:584:0x0e8a  */
+    /* JADX WARNING: Removed duplicated region for block: B:582:0x0e85 A:{SYNTHETIC, Splitter:B:582:0x0e85} */
+    /* JADX WARNING: Removed duplicated region for block: B:710:0x10d2  */
+    /* JADX WARNING: Removed duplicated region for block: B:707:0x10c4 A:{Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:733:0x111d A:{Catch:{ Exception -> 0x1216, all -> 0x120b }} */
+    /* JADX WARNING: Removed duplicated region for block: B:714:0x10d9 A:{SYNTHETIC, Splitter:B:714:0x10d9} */
+    /* JADX WARNING: Removed duplicated region for block: B:813:0x1308 A:{Catch:{ Exception -> 0x1216, all -> 0x120b }} */
+    /* JADX WARNING: Removed duplicated region for block: B:842:0x13bc A:{Catch:{ Exception -> 0x1216, all -> 0x120b }} */
+    /* JADX WARNING: Removed duplicated region for block: B:760:0x120b A:{PHI: r11 r27 r29 r30 r31 r33 r39 r44 , Splitter:B:631:0x0f6b, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x112b A:{Catch:{ Exception -> 0x1216, all -> 0x120b }, Splitter:B:711:0x10d3, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x112b A:{Catch:{ Exception -> 0x1216, all -> 0x120b }, Splitter:B:711:0x10d3, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Failed to process nested try/catch */
+    /* JADX WARNING: Failed to process nested try/catch */
+    /* JADX WARNING: Failed to process nested try/catch */
+    /* JADX WARNING: Failed to process nested try/catch */
+    /* JADX WARNING: Missing block: B:273:0x04f5, code skipped:
+            if (r15 == 2) goto L_0x0792;
+     */
+    /* JADX WARNING: Missing block: B:519:0x0c7c, code skipped:
+            r0 = move-exception;
+     */
+    /* JADX WARNING: Missing block: B:520:0x0c7d, code skipped:
+            r7 = r39;
+            r21 = r0;
+            r6 = r2;
+            r33 = r10;
+            r11 = r27;
+            r12 = 0;
+            r13 = 0;
+            r14 = 0;
+            r17 = true;
+     */
+    /* JADX WARNING: Missing block: B:522:0x0CLASSNAME, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:523:0x0CLASSNAME, code skipped:
+            r7 = r39;
+            r6 = r2;
+            r33 = r10;
+            r11 = r27;
+            r12 = 0;
+            r13 = 0;
+            r14 = 0;
+            r17 = true;
+     */
+    /* JADX WARNING: Missing block: B:662:0x0fd9, code skipped:
+            if (r13.reply_to_random_id != 0) goto L_0x0ffc;
+     */
+    /* JADX WARNING: Missing block: B:725:0x110b, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:728:0x1111, code skipped:
+            r0 = e;
+     */
+    /* JADX WARNING: Missing block: B:729:0x1112, code skipped:
+            r27 = r2;
+            r23 = r4;
+            r26 = r9;
+     */
+    /* JADX WARNING: Missing block: B:735:0x112b, code skipped:
+            r0 = th;
+     */
+    /* JADX WARNING: Missing block: B:760:0x120b, code skipped:
+            r0 = th;
+     */
+    /* JADX WARNING: Missing block: B:762:0x1216, code skipped:
+            r0 = e;
+     */
+    public /* synthetic */ void lambda$getMessages$98$MessagesStorage(int r38, int r39, boolean r40, long r41, int r43, int r44, int r45, int r46, int r47) {
+        /*
+        r37 = this;
+        r1 = r37;
+        r2 = r38;
+        r3 = r39;
+        r4 = r41;
+        r15 = r43;
+        r6 = r1.currentAccount;
+        r6 = org.telegram.messenger.UserConfig.getInstance(r6);
+        r6 = r6.clientUserId;
+        r7 = new org.telegram.tgnet.TLRPC$TL_messages_messages;
+        r7.<init>();
+        r8 = (long) r3;
+        if (r40 == 0) goto L_0x001d;
+    L_0x001a:
+        r11 = (int) r4;
+        r11 = -r11;
+        goto L_0x001e;
+    L_0x001d:
+        r11 = 0;
+    L_0x001e:
+        r12 = 32;
+        r13 = 0;
+        r16 = (r8 > r13 ? 1 : (r8 == r13 ? 0 : -1));
+        if (r16 == 0) goto L_0x002b;
+    L_0x0026:
+        if (r11 == 0) goto L_0x002b;
+    L_0x0028:
+        r13 = (long) r11;
+        r13 = r13 << r12;
+        r8 = r8 | r13;
+    L_0x002b:
+        r13 = r8;
+        r8 = 777000; // 0xbdb28 float:1.088809E-39 double:3.83889E-318;
+        r19 = (r4 > r8 ? 1 : (r4 == r8 ? 0 : -1));
+        if (r19 != 0) goto L_0x0036;
+    L_0x0033:
+        r8 = 10;
+        goto L_0x0037;
+    L_0x0036:
+        r8 = 1;
+    L_0x0037:
+        r9 = new java.util.ArrayList;	 Catch:{ Exception -> 0x1512, all -> 0x14fe }
+        r9.<init>();	 Catch:{ Exception -> 0x1512, all -> 0x14fe }
+        r12 = new java.util.ArrayList;	 Catch:{ Exception -> 0x1512, all -> 0x14fe }
+        r12.<init>();	 Catch:{ Exception -> 0x1512, all -> 0x14fe }
+        r10 = new java.util.ArrayList;	 Catch:{ Exception -> 0x1512, all -> 0x14fe }
+        r10.<init>();	 Catch:{ Exception -> 0x1512, all -> 0x14fe }
+        r21 = r10;
+        r10 = new android.util.SparseArray;	 Catch:{ Exception -> 0x1512, all -> 0x14fe }
+        r10.<init>();	 Catch:{ Exception -> 0x1512, all -> 0x14fe }
+        r22 = r10;
+        r10 = new android.util.LongSparseArray;	 Catch:{ Exception -> 0x1512, all -> 0x14fe }
+        r10.<init>();	 Catch:{ Exception -> 0x1512, all -> 0x14fe }
+        r23 = r10;
+        r10 = (int) r4;
+        r24 = r9;
+        if (r10 == 0) goto L_0x0bb7;
+    L_0x005b:
+        r9 = "SELECT inbox_max, unread_count, date, unread_count_i FROM dialogs WHERE did = ";
+        r26 = r12;
+        r12 = 3;
+        if (r15 != r12) goto L_0x0150;
+    L_0x0062:
+        if (r44 != 0) goto L_0x0150;
+    L_0x0064:
+        r8 = r1.database;	 Catch:{ Exception -> 0x013e, all -> 0x012b }
+        r12 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x013e, all -> 0x012b }
+        r12.<init>();	 Catch:{ Exception -> 0x013e, all -> 0x012b }
+        r12.append(r9);	 Catch:{ Exception -> 0x013e, all -> 0x012b }
+        r12.append(r4);	 Catch:{ Exception -> 0x013e, all -> 0x012b }
+        r9 = r12.toString();	 Catch:{ Exception -> 0x013e, all -> 0x012b }
+        r27 = r7;
+        r12 = 0;
+        r7 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
+        r7 = r8.queryFinalized(r9, r7);	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
+        r8 = r7.next();	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
+        if (r8 == 0) goto L_0x00e8;
+    L_0x0084:
+        r8 = r7.intValue(r12);	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
+        r9 = 1;
+        r8 = r8 + r9;
+        r12 = r7.intValue(r9);	 Catch:{ Exception -> 0x00da, all -> 0x00ca }
+        r9 = 2;
+        r28 = r7.intValue(r9);	 Catch:{ Exception -> 0x00c0, all -> 0x00b4 }
+        r9 = 3;
+        r29 = r7.intValue(r9);	 Catch:{ Exception -> 0x00a8, all -> 0x009a }
+        goto L_0x00ee;
+    L_0x009a:
+        r0 = move-exception;
+        r21 = r0;
+        r6 = r2;
+        r7 = r3;
+        r33 = r8;
+        r13 = r12;
+        r11 = r27;
+        r14 = r28;
+    L_0x00a6:
+        r12 = 0;
+        goto L_0x00d6;
+    L_0x00a8:
+        r0 = move-exception;
+        r6 = r2;
+        r7 = r3;
+        r33 = r8;
+        r13 = r12;
+        r11 = r27;
+        r14 = r28;
+    L_0x00b2:
+        r12 = 0;
+        goto L_0x00e4;
+    L_0x00b4:
+        r0 = move-exception;
+        r21 = r0;
+        r6 = r2;
+        r7 = r3;
+        r33 = r8;
+        r13 = r12;
+        r11 = r27;
+    L_0x00be:
+        r12 = 0;
+        goto L_0x00d5;
+    L_0x00c0:
+        r0 = move-exception;
+        r6 = r2;
+        r7 = r3;
+        r33 = r8;
+        r13 = r12;
+        r11 = r27;
+    L_0x00c8:
+        r12 = 0;
+        goto L_0x00e3;
+    L_0x00ca:
+        r0 = move-exception;
+        r21 = r0;
+        r6 = r2;
+        r7 = r3;
+        r33 = r8;
+        r11 = r27;
+    L_0x00d3:
+        r12 = 0;
+        r13 = 0;
+    L_0x00d5:
+        r14 = 0;
+    L_0x00d6:
+        r17 = 0;
+        goto L_0x0c8b;
+    L_0x00da:
+        r0 = move-exception;
+        r6 = r2;
+        r7 = r3;
+        r33 = r8;
+        r11 = r27;
+    L_0x00e1:
+        r12 = 0;
+        r13 = 0;
+    L_0x00e3:
+        r14 = 0;
+    L_0x00e4:
+        r17 = 0;
+        goto L_0x0c9e;
+    L_0x00e8:
+        r8 = 0;
+        r12 = 0;
+        r28 = 0;
+        r29 = 0;
+    L_0x00ee:
+        r7.dispose();	 Catch:{ Exception -> 0x0118, all -> 0x0103 }
+        r31 = r3;
+        r36 = r6;
+        r33 = r8;
+        r30 = r29;
+        r6 = 0;
+        r32 = 0;
+        r29 = r28;
+        r28 = r10;
+        r10 = r12;
+        goto L_0x0425;
+    L_0x0103:
+        r0 = move-exception;
+        r21 = r0;
+        r6 = r2;
+        r7 = r3;
+        r33 = r8;
+        r13 = r12;
+        r11 = r27;
+        r14 = r28;
+        r20 = r29;
+        r12 = 0;
+        r17 = 0;
+        r19 = 0;
+        goto L_0x1553;
+    L_0x0118:
+        r0 = move-exception;
+        r6 = r2;
+        r7 = r3;
+        r33 = r8;
+        r13 = r12;
+        r11 = r27;
+        r14 = r28;
+        r20 = r29;
+        r12 = 0;
+        r17 = 0;
+        r19 = 0;
+        goto L_0x1523;
+    L_0x012b:
+        r0 = move-exception;
+        r21 = r0;
+        r6 = r2;
+        r11 = r7;
+        r12 = 0;
+        r13 = 0;
+        r14 = 0;
+        r17 = 0;
+        r19 = 0;
+        r20 = 0;
+        r33 = 0;
+        r7 = r3;
+        goto L_0x1553;
+    L_0x013e:
+        r0 = move-exception;
+        r6 = r2;
+        r11 = r7;
+        r12 = 0;
+        r13 = 0;
+        r14 = 0;
+        r17 = 0;
+        r19 = 0;
+        r20 = 0;
+        r33 = 0;
+        r2 = r0;
+        r7 = r3;
+        goto L_0x1524;
+    L_0x0150:
+        r27 = r7;
+        r7 = 1;
+        if (r15 == r7) goto L_0x0415;
+    L_0x0155:
+        r7 = 3;
+        if (r15 == r7) goto L_0x0415;
+    L_0x0158:
+        r7 = 4;
+        if (r15 == r7) goto L_0x0415;
+    L_0x015b:
+        if (r44 != 0) goto L_0x0415;
+    L_0x015d:
+        r7 = 2;
+        if (r15 != r7) goto L_0x03df;
+    L_0x0160:
+        r7 = r1.database;	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
+        r12 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
+        r12.<init>();	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
+        r12.append(r9);	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
+        r12.append(r4);	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
+        r9 = r12.toString();	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
+        r28 = r10;
+        r12 = 0;
+        r10 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
+        r7 = r7.queryFinalized(r9, r10);	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
+        r9 = r7.next();	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
+        if (r9 == 0) goto L_0x01fd;
+    L_0x0180:
+        r9 = r7.intValue(r12);	 Catch:{ Exception -> 0x03d8, all -> 0x03cf }
+        r13 = (long) r9;
+        r10 = 1;
+        r12 = r7.intValue(r10);	 Catch:{ Exception -> 0x01f2, all -> 0x01e5 }
+        r10 = 2;
+        r29 = r7.intValue(r10);	 Catch:{ Exception -> 0x01d9, all -> 0x01cb }
+        r10 = 3;
+        r30 = r7.intValue(r10);	 Catch:{ Exception -> 0x01bd, all -> 0x01ad }
+        r16 = 0;
+        r10 = (r13 > r16 ? 1 : (r13 == r16 ? 0 : -1));
+        if (r10 == 0) goto L_0x01a5;
+    L_0x019a:
+        if (r11 == 0) goto L_0x01a5;
+    L_0x019c:
+        r31 = r9;
+        r9 = (long) r11;
+        r18 = 32;
+        r9 = r9 << r18;
+        r13 = r13 | r9;
+        goto L_0x01a7;
+    L_0x01a5:
+        r31 = r9;
+    L_0x01a7:
+        r10 = r12;
+        r12 = r31;
+        r9 = 1;
+        goto L_0x0206;
+    L_0x01ad:
+        r0 = move-exception;
+        r31 = r9;
+        r21 = r0;
+        r6 = r2;
+        r7 = r3;
+        r13 = r12;
+        r11 = r27;
+        r14 = r29;
+        r33 = r31;
+        goto L_0x00a6;
+    L_0x01bd:
+        r0 = move-exception;
+        r31 = r9;
+        r6 = r2;
+        r7 = r3;
+        r13 = r12;
+        r11 = r27;
+        r14 = r29;
+        r33 = r31;
+        goto L_0x00b2;
+    L_0x01cb:
+        r0 = move-exception;
+        r31 = r9;
+        r21 = r0;
+        r6 = r2;
+        r7 = r3;
+        r13 = r12;
+        r11 = r27;
+        r33 = r31;
+        goto L_0x00be;
+    L_0x01d9:
+        r0 = move-exception;
+        r31 = r9;
+        r6 = r2;
+        r7 = r3;
+        r13 = r12;
+        r11 = r27;
+        r33 = r31;
+        goto L_0x00c8;
+    L_0x01e5:
+        r0 = move-exception;
+        r31 = r9;
+        r21 = r0;
+        r6 = r2;
+        r7 = r3;
+        r11 = r27;
+        r33 = r31;
+        goto L_0x00d3;
+    L_0x01f2:
+        r0 = move-exception;
+        r31 = r9;
+        r6 = r2;
+        r7 = r3;
+        r11 = r27;
+        r33 = r31;
+        goto L_0x00e1;
+    L_0x01fd:
+        r31 = r3;
+        r9 = 0;
+        r10 = 0;
+        r12 = 0;
+        r29 = 0;
+        r30 = 0;
+    L_0x0206:
+        r7.dispose();	 Catch:{ Exception -> 0x03c5, all -> 0x03b9 }
+        if (r9 != 0) goto L_0x02ab;
+    L_0x020b:
+        r7 = r1.database;	 Catch:{ Exception -> 0x02a4, all -> 0x029d }
+        r32 = r9;
+        r9 = java.util.Locale.US;	 Catch:{ Exception -> 0x029b, all -> 0x0299 }
+        r33 = r12;
+        r12 = "SELECT min(mid), max(date) FROM messages WHERE uid = %d AND out = 0 AND read_state IN(0,2) AND mid > 0";
+        r34 = r13;
+        r13 = 1;
+        r14 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
+        r13 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
+        r36 = r6;
+        r6 = 0;
+        r14[r6] = r13;	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
+        r9 = java.lang.String.format(r9, r12, r14);	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
+        r12 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
+        r7 = r7.queryFinalized(r9, r12);	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
+        r9 = r7.next();	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
+        if (r9 == 0) goto L_0x024f;
+    L_0x0233:
+        r9 = r7.intValue(r6);	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
+        r6 = 1;
+        r12 = r7.intValue(r6);	 Catch:{ Exception -> 0x0248, all -> 0x023f }
+        r33 = r9;
+        goto L_0x0251;
+    L_0x023f:
+        r0 = move-exception;
+        r21 = r0;
+        r6 = r2;
+        r7 = r3;
+        r33 = r9;
+        goto L_0x040c;
+    L_0x0248:
+        r0 = move-exception;
+        r6 = r2;
+        r7 = r3;
+        r33 = r9;
+        goto L_0x0412;
+    L_0x024f:
+        r12 = r29;
+    L_0x0251:
+        r7.dispose();	 Catch:{ Exception -> 0x0294, all -> 0x028f }
+        if (r33 == 0) goto L_0x0289;
+    L_0x0256:
+        r6 = r1.database;	 Catch:{ Exception -> 0x0294, all -> 0x028f }
+        r7 = java.util.Locale.US;	 Catch:{ Exception -> 0x0294, all -> 0x028f }
+        r9 = "SELECT COUNT(*) FROM messages WHERE uid = %d AND mid >= %d AND out = 0 AND read_state IN(0,2)";
+        r13 = 2;
+        r14 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x0294, all -> 0x028f }
+        r13 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0294, all -> 0x028f }
+        r29 = r12;
+        r12 = 0;
+        r14[r12] = r13;	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
+        r13 = java.lang.Integer.valueOf(r33);	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
+        r19 = 1;
+        r14[r19] = r13;	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
+        r7 = java.lang.String.format(r7, r9, r14);	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
+        r9 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
+        r6 = r6.queryFinalized(r7, r9);	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
+        r7 = r6.next();	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
+        if (r7 == 0) goto L_0x0285;
+    L_0x0280:
+        r7 = r6.intValue(r12);	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
+        r10 = r7;
+    L_0x0285:
+        r6.dispose();	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
+        goto L_0x028b;
+    L_0x0289:
+        r29 = r12;
+    L_0x028b:
+        r13 = r34;
+        goto L_0x03ee;
+    L_0x028f:
+        r0 = move-exception;
+        r29 = r12;
+        goto L_0x0408;
+    L_0x0294:
+        r0 = move-exception;
+        r29 = r12;
+        goto L_0x0410;
+    L_0x0299:
+        r0 = move-exception;
+        goto L_0x02a0;
+    L_0x029b:
+        r0 = move-exception;
+        goto L_0x02a7;
+    L_0x029d:
+        r0 = move-exception;
+        r32 = r9;
+    L_0x02a0:
+        r33 = r12;
+        goto L_0x0408;
+    L_0x02a4:
+        r0 = move-exception;
+        r32 = r9;
+    L_0x02a7:
+        r33 = r12;
+        goto L_0x0410;
+    L_0x02ab:
+        r36 = r6;
+        r32 = r9;
+        r33 = r12;
+        r34 = r13;
+        if (r31 != 0) goto L_0x0336;
+    L_0x02b5:
+        r6 = r1.database;	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
+        r7 = java.util.Locale.US;	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
+        r9 = "SELECT COUNT(*) FROM messages WHERE uid = %d AND mid > 0 AND out = 0 AND read_state IN(0,2)";
+        r12 = 1;
+        r13 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
+        r12 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
+        r14 = 0;
+        r13[r14] = r12;	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
+        r7 = java.lang.String.format(r7, r9, r13);	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
+        r9 = new java.lang.Object[r14];	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
+        r6 = r6.queryFinalized(r7, r9);	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
+        r7 = r6.next();	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
+        if (r7 == 0) goto L_0x02da;
+    L_0x02d5:
+        r7 = r6.intValue(r14);	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
+        goto L_0x02db;
+    L_0x02da:
+        r7 = 0;
+    L_0x02db:
+        r6.dispose();	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
+        if (r7 != r10) goto L_0x0324;
+    L_0x02e0:
+        r6 = r1.database;	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
+        r7 = java.util.Locale.US;	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
+        r9 = "SELECT min(mid) FROM messages WHERE uid = %d AND out = 0 AND read_state IN(0,2) AND mid > 0";
+        r12 = 1;
+        r13 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
+        r12 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
+        r14 = 0;
+        r13[r14] = r12;	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
+        r7 = java.lang.String.format(r7, r9, r13);	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
+        r9 = new java.lang.Object[r14];	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
+        r6 = r6.queryFinalized(r7, r9);	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
+        r7 = r6.next();	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
+        if (r7 == 0) goto L_0x0319;
+    L_0x0300:
+        r7 = r6.intValue(r14);	 Catch:{ Exception -> 0x0333, all -> 0x0330 }
+        r13 = (long) r7;
+        r16 = 0;
+        r9 = (r13 > r16 ? 1 : (r13 == r16 ? 0 : -1));
+        if (r9 == 0) goto L_0x0315;
+    L_0x030b:
+        if (r11 == 0) goto L_0x0315;
+    L_0x030d:
+        r12 = r10;
+        r9 = (long) r11;
+        r18 = 32;
+        r9 = r9 << r18;
+        r13 = r13 | r9;
+        goto L_0x0316;
+    L_0x0315:
+        r12 = r10;
+    L_0x0316:
+        r33 = r7;
+        goto L_0x031e;
+    L_0x0319:
+        r12 = r10;
+        r7 = r31;
+        r13 = r34;
+    L_0x031e:
+        r6.dispose();	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        r34 = r13;
+        goto L_0x0327;
+    L_0x0324:
+        r12 = r10;
+        r7 = r31;
+    L_0x0327:
+        r10 = r33;
+        r31 = r7;
+        r33 = r10;
+    L_0x032d:
+        r10 = r12;
+        goto L_0x028b;
+    L_0x0330:
+        r0 = move-exception;
+        goto L_0x03be;
+    L_0x0333:
+        r0 = move-exception;
+        goto L_0x03ca;
+    L_0x0336:
+        r12 = r10;
+        r6 = r1.database;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        r7 = java.util.Locale.US;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        r9 = "SELECT start, end FROM messages_holes WHERE uid = %d AND start < %d AND end > %d";
+        r10 = 3;
+        r13 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        r10 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        r14 = 0;
+        r13[r14] = r10;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        r10 = java.lang.Integer.valueOf(r31);	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        r14 = 1;
+        r13[r14] = r10;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        r10 = java.lang.Integer.valueOf(r31);	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        r14 = 2;
+        r13[r14] = r10;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        r7 = java.lang.String.format(r7, r9, r13);	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        r9 = 0;
+        r10 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        r6 = r6.queryFinalized(r7, r10);	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        r7 = r6.next();	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        if (r7 != 0) goto L_0x0368;
+    L_0x0366:
+        r7 = 1;
+        goto L_0x0369;
+    L_0x0368:
+        r7 = 0;
+    L_0x0369:
+        r6.dispose();	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        if (r7 == 0) goto L_0x032d;
+    L_0x036e:
+        r6 = r1.database;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        r7 = java.util.Locale.US;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        r9 = "SELECT min(mid) FROM messages WHERE uid = %d AND out = 0 AND read_state IN(0,2) AND mid > %d";
+        r10 = 2;
+        r13 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        r10 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        r14 = 0;
+        r13[r14] = r10;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        r10 = java.lang.Integer.valueOf(r31);	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        r19 = 1;
+        r13[r19] = r10;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        r7 = java.lang.String.format(r7, r9, r13);	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        r9 = new java.lang.Object[r14];	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        r6 = r6.queryFinalized(r7, r9);	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        r7 = r6.next();	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        if (r7 == 0) goto L_0x03aa;
+    L_0x0396:
+        r7 = r6.intValue(r14);	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        r13 = (long) r7;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        r9 = 0;
+        r31 = (r13 > r9 ? 1 : (r13 == r9 ? 0 : -1));
+        if (r31 == 0) goto L_0x03ae;
+    L_0x03a1:
+        if (r11 == 0) goto L_0x03ae;
+    L_0x03a3:
+        r9 = (long) r11;	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        r18 = 32;
+        r9 = r9 << r18;
+        r13 = r13 | r9;
+        goto L_0x03ae;
+    L_0x03aa:
+        r7 = r31;
+        r13 = r34;
+    L_0x03ae:
+        r6.dispose();	 Catch:{ Exception -> 0x03b7, all -> 0x03b5 }
+        r31 = r7;
+        r10 = r12;
+        goto L_0x03ee;
+    L_0x03b5:
+        r0 = move-exception;
+        goto L_0x03bf;
+    L_0x03b7:
+        r0 = move-exception;
+        goto L_0x03cb;
+    L_0x03b9:
+        r0 = move-exception;
+        r32 = r9;
+        r33 = r12;
+    L_0x03be:
+        r12 = r10;
+    L_0x03bf:
+        r21 = r0;
+        r6 = r2;
+        r7 = r3;
+        goto L_0x0b96;
+    L_0x03c5:
+        r0 = move-exception;
+        r32 = r9;
+        r33 = r12;
+    L_0x03ca:
+        r12 = r10;
+    L_0x03cb:
+        r6 = r2;
+        r7 = r3;
+        goto L_0x0ba9;
+    L_0x03cf:
+        r0 = move-exception;
+        r21 = r0;
+        r6 = r2;
+        r7 = r3;
+        r11 = r27;
+        goto L_0x1506;
+    L_0x03d8:
+        r0 = move-exception;
+        r6 = r2;
+        r7 = r3;
+        r11 = r27;
+        goto L_0x1518;
+    L_0x03df:
+        r36 = r6;
+        r28 = r10;
+        r31 = r3;
+        r10 = 0;
+        r29 = 0;
+        r30 = 0;
+        r32 = 0;
+        r33 = 0;
+    L_0x03ee:
+        if (r2 > r10) goto L_0x03f8;
+    L_0x03f0:
+        if (r10 >= r8) goto L_0x03f3;
+    L_0x03f2:
+        goto L_0x03f8;
+    L_0x03f3:
+        r6 = r10 - r2;
+        r2 = r2 + 10;
+        goto L_0x0425;
+    L_0x03f8:
+        r6 = r10 + 10;
+        r2 = java.lang.Math.max(r2, r6);	 Catch:{ Exception -> 0x040f, all -> 0x0407 }
+        if (r10 >= r8) goto L_0x0405;
+    L_0x0400:
+        r6 = 0;
+        r10 = 0;
+        r13 = 0;
+        goto L_0x0421;
+    L_0x0405:
+        r6 = 0;
+        goto L_0x0425;
+    L_0x0407:
+        r0 = move-exception;
+    L_0x0408:
+        r21 = r0;
+        r6 = r2;
+        r7 = r3;
+    L_0x040c:
+        r13 = r10;
+        goto L_0x0b97;
+    L_0x040f:
+        r0 = move-exception;
+    L_0x0410:
+        r6 = r2;
+        r7 = r3;
+    L_0x0412:
+        r13 = r10;
+        goto L_0x0baa;
+    L_0x0415:
+        r36 = r6;
+        r28 = r10;
+        r31 = r3;
+        r6 = 0;
+        r10 = 0;
+        r29 = 0;
+        r30 = 0;
+    L_0x0421:
+        r32 = 0;
+        r33 = 0;
+    L_0x0425:
+        r7 = r1.database;	 Catch:{ Exception -> 0x0ba4, all -> 0x0b8f }
+        r8 = java.util.Locale.US;	 Catch:{ Exception -> 0x0ba4, all -> 0x0b8f }
+        r9 = "SELECT start FROM messages_holes WHERE uid = %d AND start IN (0, 1)";
+        r12 = 1;
+        r3 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x0ba4, all -> 0x0b8f }
+        r12 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0ba4, all -> 0x0b8f }
+        r34 = r10;
+        r10 = 0;
+        r3[r10] = r12;	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
+        r3 = java.lang.String.format(r8, r9, r3);	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
+        r8 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
+        r3 = r7.queryFinalized(r3, r8);	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
+        r7 = r3.next();	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
+        if (r7 == 0) goto L_0x04a1;
+    L_0x0447:
+        r7 = r3.intValue(r10);	 Catch:{ Exception -> 0x0491, all -> 0x047f }
+        r8 = 1;
+        if (r7 != r8) goto L_0x0450;
+    L_0x044e:
+        r10 = 1;
+        goto L_0x0451;
+    L_0x0450:
+        r10 = 0;
+    L_0x0451:
+        r3.dispose();	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r3 = 3;
+        goto L_0x04ed;
+    L_0x0457:
+        r0 = move-exception;
+        r7 = r39;
+        r21 = r0;
+        r6 = r2;
+        r17 = r10;
+        r11 = r27;
+        r14 = r29;
+        r20 = r30;
+        r19 = r32;
+        r13 = r34;
+    L_0x0469:
+        r12 = 0;
+        goto L_0x1553;
+    L_0x046c:
+        r0 = move-exception;
+        r7 = r39;
+        r6 = r2;
+        r17 = r10;
+        r11 = r27;
+        r14 = r29;
+        r20 = r30;
+        r19 = r32;
+        r13 = r34;
+    L_0x047c:
+        r12 = 0;
+        goto L_0x1523;
+    L_0x047f:
+        r0 = move-exception;
+        r7 = r39;
+        r21 = r0;
+        r6 = r2;
+        r11 = r27;
+        r14 = r29;
+        r20 = r30;
+        r19 = r32;
+        r13 = r34;
+        goto L_0x0b9f;
+    L_0x0491:
+        r0 = move-exception;
+        r7 = r39;
+        r6 = r2;
+        r11 = r27;
+        r14 = r29;
+        r20 = r30;
+        r19 = r32;
+        r13 = r34;
+        goto L_0x0bb2;
+    L_0x04a1:
+        r3.dispose();	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
+        r3 = r1.database;	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
+        r7 = java.util.Locale.US;	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
+        r8 = "SELECT min(mid) FROM messages WHERE uid = %d AND mid > 0";
+        r9 = 1;
+        r10 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
+        r9 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
+        r12 = 0;
+        r10[r12] = r9;	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
+        r7 = java.lang.String.format(r7, r8, r10);	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
+        r8 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
+        r3 = r3.queryFinalized(r7, r8);	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
+        r7 = r3.next();	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
+        if (r7 == 0) goto L_0x04e8;
+    L_0x04c4:
+        r7 = r3.intValue(r12);	 Catch:{ Exception -> 0x0491, all -> 0x047f }
+        if (r7 == 0) goto L_0x04e8;
+    L_0x04ca:
+        r8 = r1.database;	 Catch:{ Exception -> 0x0491, all -> 0x047f }
+        r9 = "REPLACE INTO messages_holes VALUES(?, ?, ?)";
+        r8 = r8.executeFast(r9);	 Catch:{ Exception -> 0x0491, all -> 0x047f }
+        r8.requery();	 Catch:{ Exception -> 0x0491, all -> 0x047f }
+        r9 = 1;
+        r8.bindLong(r9, r4);	 Catch:{ Exception -> 0x0491, all -> 0x047f }
+        r9 = 2;
+        r10 = 0;
+        r8.bindInteger(r9, r10);	 Catch:{ Exception -> 0x0491, all -> 0x047f }
+        r9 = 3;
+        r8.bindInteger(r9, r7);	 Catch:{ Exception -> 0x0491, all -> 0x047f }
+        r8.step();	 Catch:{ Exception -> 0x0491, all -> 0x047f }
+        r8.dispose();	 Catch:{ Exception -> 0x0491, all -> 0x047f }
+    L_0x04e8:
+        r3.dispose();	 Catch:{ Exception -> 0x0b8b, all -> 0x0b87 }
+        r3 = 3;
+        r10 = 0;
+    L_0x04ed:
+        if (r15 == r3) goto L_0x0792;
+    L_0x04ef:
+        r3 = 4;
+        if (r15 == r3) goto L_0x0792;
+    L_0x04f2:
+        if (r32 == 0) goto L_0x04f9;
+    L_0x04f4:
+        r3 = 2;
+        if (r15 != r3) goto L_0x04fa;
+    L_0x04f7:
+        goto L_0x0792;
+    L_0x04f9:
+        r3 = 2;
+    L_0x04fa:
+        r7 = 1;
+        if (r15 != r7) goto L_0x05a9;
+    L_0x04fd:
+        r6 = r1.database;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r7 = java.util.Locale.US;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r8 = "SELECT start, end FROM messages_holes WHERE uid = %d AND start >= %d AND start != 1 AND end != 1 ORDER BY start ASC LIMIT 1";
+        r9 = new java.lang.Object[r3];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r3 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r12 = 0;
+        r9[r12] = r3;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r3 = java.lang.Integer.valueOf(r39);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r19 = 1;
+        r9[r19] = r3;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r3 = java.lang.String.format(r7, r8, r9);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r7 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r3 = r6.queryFinalized(r3, r7);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r6 = r3.next();	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        if (r6 == 0) goto L_0x0531;
+    L_0x0524:
+        r6 = r3.intValue(r12);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r6 = (long) r6;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        if (r11 == 0) goto L_0x0533;
+    L_0x052b:
+        r8 = (long) r11;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r11 = 32;
+        r8 = r8 << r11;
+        r6 = r6 | r8;
+        goto L_0x0533;
+    L_0x0531:
+        r6 = 0;
+    L_0x0533:
+        r3.dispose();	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r8 = 0;
+        r3 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
+        if (r3 == 0) goto L_0x0577;
+    L_0x053c:
+        r3 = r1.database;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r8 = java.util.Locale.US;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r9 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date >= %d AND m.mid > %d AND m.mid <= %d ORDER BY m.date ASC, m.mid ASC LIMIT %d";
+        r11 = 5;
+        r12 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r11 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r20 = 0;
+        r12[r20] = r11;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r11 = java.lang.Integer.valueOf(r44);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r19 = 1;
+        r12[r19] = r11;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r11 = java.lang.Long.valueOf(r13);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r13 = 2;
+        r12[r13] = r11;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r6 = java.lang.Long.valueOf(r6);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r7 = 3;
+        r12[r7] = r6;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r6 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r7 = 4;
+        r12[r7] = r6;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r6 = java.lang.String.format(r8, r9, r12);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r7 = 0;
+        r8 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r3 = r3.queryFinalized(r6, r8);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        goto L_0x068c;
+    L_0x0577:
+        r3 = r1.database;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r7 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date >= %d AND m.mid > %d ORDER BY m.date ASC, m.mid ASC LIMIT %d";
+        r8 = 4;
+        r9 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r8 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r11 = 0;
+        r9[r11] = r8;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r8 = java.lang.Integer.valueOf(r44);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r11 = 1;
+        r9[r11] = r8;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r8 = java.lang.Long.valueOf(r13);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r11 = 2;
+        r9[r11] = r8;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r8 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r11 = 3;
+        r9[r11] = r8;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r6 = java.lang.String.format(r6, r7, r9);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r7 = 0;
+        r8 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r3 = r3.queryFinalized(r6, r8);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        goto L_0x068c;
+    L_0x05a9:
+        if (r44 == 0) goto L_0x069f;
+    L_0x05ab:
+        r7 = 0;
+        r3 = (r13 > r7 ? 1 : (r13 == r7 ? 0 : -1));
+        if (r3 == 0) goto L_0x065c;
+    L_0x05b1:
+        r3 = r1.database;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r7 = "SELECT end FROM messages_holes WHERE uid = %d AND end <= %d ORDER BY end DESC LIMIT 1";
+        r8 = 2;
+        r9 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r8 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r12 = 0;
+        r9[r12] = r8;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r8 = java.lang.Integer.valueOf(r39);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r19 = 1;
+        r9[r19] = r8;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r6 = java.lang.String.format(r6, r7, r9);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r7 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r3 = r3.queryFinalized(r6, r7);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r6 = r3.next();	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        if (r6 == 0) goto L_0x05e6;
+    L_0x05d9:
+        r6 = r3.intValue(r12);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r6 = (long) r6;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        if (r11 == 0) goto L_0x05e8;
+    L_0x05e0:
+        r8 = (long) r11;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r11 = 32;
+        r8 = r8 << r11;
+        r6 = r6 | r8;
+        goto L_0x05e8;
+    L_0x05e6:
+        r6 = 0;
+    L_0x05e8:
+        r3.dispose();	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r8 = 0;
+        r3 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1));
+        if (r3 == 0) goto L_0x062b;
+    L_0x05f1:
+        r3 = r1.database;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r8 = java.util.Locale.US;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r9 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date <= %d AND m.mid < %d AND (m.mid >= %d OR m.mid < 0) ORDER BY m.date DESC, m.mid DESC LIMIT %d";
+        r11 = 5;
+        r12 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r11 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r20 = 0;
+        r12[r20] = r11;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r11 = java.lang.Integer.valueOf(r44);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r19 = 1;
+        r12[r19] = r11;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r11 = java.lang.Long.valueOf(r13);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r13 = 2;
+        r12[r13] = r11;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r6 = java.lang.Long.valueOf(r6);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r7 = 3;
+        r12[r7] = r6;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r6 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r7 = 4;
+        r12[r7] = r6;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r6 = java.lang.String.format(r8, r9, r12);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r7 = 0;
+        r8 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r3 = r3.queryFinalized(r6, r8);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        goto L_0x068c;
+    L_0x062b:
+        r3 = r1.database;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r7 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date <= %d AND m.mid < %d ORDER BY m.date DESC, m.mid DESC LIMIT %d";
+        r8 = 4;
+        r9 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r8 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r11 = 0;
+        r9[r11] = r8;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r8 = java.lang.Integer.valueOf(r44);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r11 = 1;
+        r9[r11] = r8;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r8 = java.lang.Long.valueOf(r13);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r11 = 2;
+        r9[r11] = r8;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r8 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r11 = 3;
+        r9[r11] = r8;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r6 = java.lang.String.format(r6, r7, r9);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r7 = 0;
+        r8 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r3 = r3.queryFinalized(r6, r8);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        goto L_0x068c;
+    L_0x065c:
+        r3 = r1.database;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r7 = java.util.Locale.US;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r8 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date <= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d,%d";
+        r9 = 4;
+        r11 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r9 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r12 = 0;
+        r11[r12] = r9;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r9 = java.lang.Integer.valueOf(r44);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r12 = 1;
+        r11[r12] = r9;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r6 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r9 = 2;
+        r11[r9] = r6;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r6 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r9 = 3;
+        r11[r9] = r6;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r6 = java.lang.String.format(r7, r8, r11);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r7 = 0;
+        r8 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r3 = r3.queryFinalized(r6, r8);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+    L_0x068c:
+        r7 = r39;
+        r6 = r2;
+        r35 = r10;
+        r14 = r29;
+        r2 = r30;
+        r8 = r31;
+        r11 = r33;
+        r13 = r34;
+        r10 = 0;
+        r12 = 0;
+        goto L_0x0ed2;
+    L_0x069f:
+        r3 = r1.database;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r7 = java.util.Locale.US;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r8 = "SELECT max(mid) FROM messages WHERE uid = %d AND mid > 0";
+        r9 = 1;
+        r12 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r9 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r13 = 0;
+        r12[r13] = r9;	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r7 = java.lang.String.format(r7, r8, r12);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r8 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r3 = r3.queryFinalized(r7, r8);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        r7 = r3.next();	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        if (r7 == 0) goto L_0x06c4;
+    L_0x06bf:
+        r7 = r3.intValue(r13);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        goto L_0x06c5;
+    L_0x06c4:
+        r7 = 0;
+    L_0x06c5:
+        r3.dispose();	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r3 = r1.database;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r8 = java.util.Locale.US;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r9 = "SELECT max(end) FROM messages_holes WHERE uid = %d";
+        r12 = 1;
+        r13 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r12 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r14 = 0;
+        r13[r14] = r12;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r8 = java.lang.String.format(r8, r9, r13);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r9 = new java.lang.Object[r14];	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r3 = r3.queryFinalized(r8, r9);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r8 = r3.next();	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        if (r8 == 0) goto L_0x06f5;
+    L_0x06e8:
+        r8 = r3.intValue(r14);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r13 = (long) r8;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        if (r11 == 0) goto L_0x06f7;
+    L_0x06ef:
+        r8 = (long) r11;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r11 = 32;
+        r8 = r8 << r11;
+        r13 = r13 | r8;
+        goto L_0x06f7;
+    L_0x06f5:
+        r13 = 0;
+    L_0x06f7:
+        r3.dispose();	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r8 = 0;
+        r3 = (r13 > r8 ? 1 : (r13 == r8 ? 0 : -1));
+        if (r3 == 0) goto L_0x0732;
+    L_0x0700:
+        r3 = r1.database;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r8 = java.util.Locale.US;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r9 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND (m.mid >= %d OR m.mid < 0) ORDER BY m.date DESC, m.mid DESC LIMIT %d,%d";
+        r11 = 4;
+        r12 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r11 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r20 = 0;
+        r12[r20] = r11;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r11 = java.lang.Long.valueOf(r13);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r13 = 1;
+        r12[r13] = r11;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r6 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r11 = 2;
+        r12[r11] = r6;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r6 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r11 = 3;
+        r12[r11] = r6;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r6 = java.lang.String.format(r8, r9, r12);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r8 = 0;
+        r9 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r3 = r3.queryFinalized(r6, r9);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        goto L_0x075b;
+    L_0x0732:
+        r3 = r1.database;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r8 = java.util.Locale.US;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r9 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d ORDER BY m.date DESC, m.mid DESC LIMIT %d,%d";
+        r11 = 3;
+        r12 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r11 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r13 = 0;
+        r12[r13] = r11;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r6 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r11 = 1;
+        r12[r11] = r6;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r6 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r11 = 2;
+        r12[r11] = r6;	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r6 = java.lang.String.format(r8, r9, r12);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r8 = 0;
+        r9 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+        r3 = r3.queryFinalized(r6, r9);	 Catch:{ Exception -> 0x0781, all -> 0x076e }
+    L_0x075b:
+        r6 = r2;
+        r12 = r7;
+        r35 = r10;
+        r14 = r29;
+        r2 = r30;
+        r8 = r31;
+        r11 = r33;
+        r13 = r34;
+        r10 = 0;
+        r7 = r39;
+        goto L_0x0ed2;
+    L_0x076e:
+        r0 = move-exception;
+        r21 = r0;
+        r6 = r2;
+        r12 = r7;
+        r17 = r10;
+        r11 = r27;
+        r14 = r29;
+        r20 = r30;
+        r19 = r32;
+        r13 = r34;
+        goto L_0x14e6;
+    L_0x0781:
+        r0 = move-exception;
+        r6 = r2;
+        r12 = r7;
+        r17 = r10;
+        r11 = r27;
+        r14 = r29;
+        r20 = r30;
+        r19 = r32;
+        r13 = r34;
+        goto L_0x14fb;
+    L_0x0792:
+        r3 = r1.database;	 Catch:{ Exception -> 0x0b72, all -> 0x0b5b }
+        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x0b72, all -> 0x0b5b }
+        r7 = "SELECT max(mid) FROM messages WHERE uid = %d AND mid > 0";
+        r8 = 1;
+        r9 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0b72, all -> 0x0b5b }
+        r8 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0b72, all -> 0x0b5b }
+        r12 = 0;
+        r9[r12] = r8;	 Catch:{ Exception -> 0x0b72, all -> 0x0b5b }
+        r6 = java.lang.String.format(r6, r7, r9);	 Catch:{ Exception -> 0x0b72, all -> 0x0b5b }
+        r7 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x0b72, all -> 0x0b5b }
+        r3 = r3.queryFinalized(r6, r7);	 Catch:{ Exception -> 0x0b72, all -> 0x0b5b }
+        r6 = r3.next();	 Catch:{ Exception -> 0x0b72, all -> 0x0b5b }
+        if (r6 == 0) goto L_0x07b7;
+    L_0x07b2:
+        r6 = r3.intValue(r12);	 Catch:{ Exception -> 0x046c, all -> 0x0457 }
+        goto L_0x07b8;
+    L_0x07b7:
+        r6 = 0;
+    L_0x07b8:
+        r3.dispose();	 Catch:{ Exception -> 0x0b42, all -> 0x0b27 }
+        r3 = 4;
+        if (r15 != r3) goto L_0x090d;
+    L_0x07be:
+        if (r45 == 0) goto L_0x090d;
+    L_0x07c0:
+        r3 = r1.database;	 Catch:{ Exception -> 0x08f7, all -> 0x08df }
+        r7 = java.util.Locale.US;	 Catch:{ Exception -> 0x08f7, all -> 0x08df }
+        r8 = "SELECT max(mid) FROM messages WHERE uid = %d AND date <= %d AND mid > 0";
+        r9 = 2;
+        r12 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x08f7, all -> 0x08df }
+        r9 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x08f7, all -> 0x08df }
+        r38 = r6;
+        r6 = 0;
+        r12[r6] = r9;	 Catch:{ Exception -> 0x08dd, all -> 0x08db }
+        r9 = java.lang.Integer.valueOf(r45);	 Catch:{ Exception -> 0x08dd, all -> 0x08db }
+        r19 = 1;
+        r12[r19] = r9;	 Catch:{ Exception -> 0x08dd, all -> 0x08db }
+        r7 = java.lang.String.format(r7, r8, r12);	 Catch:{ Exception -> 0x08dd, all -> 0x08db }
+        r8 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x08dd, all -> 0x08db }
+        r3 = r3.queryFinalized(r7, r8);	 Catch:{ Exception -> 0x08dd, all -> 0x08db }
+        r7 = r3.next();	 Catch:{ Exception -> 0x08dd, all -> 0x08db }
+        if (r7 == 0) goto L_0x0819;
+    L_0x07ea:
+        r7 = r3.intValue(r6);	 Catch:{ Exception -> 0x0805, all -> 0x07ef }
+        goto L_0x081a;
+    L_0x07ef:
+        r0 = move-exception;
+        r12 = r38;
+        r7 = r39;
+        r21 = r0;
+        r6 = r2;
+        r17 = r10;
+        r11 = r27;
+        r14 = r29;
+        r20 = r30;
+        r19 = r32;
+        r13 = r34;
+        goto L_0x1553;
+    L_0x0805:
+        r0 = move-exception;
+        r12 = r38;
+        r7 = r39;
+        r6 = r2;
+        r17 = r10;
+        r11 = r27;
+        r14 = r29;
+        r20 = r30;
+        r19 = r32;
+        r13 = r34;
+        goto L_0x1523;
+    L_0x0819:
+        r7 = -1;
+    L_0x081a:
+        r3.dispose();	 Catch:{ Exception -> 0x08dd, all -> 0x08db }
+        r3 = r1.database;	 Catch:{ Exception -> 0x08dd, all -> 0x08db }
+        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x08dd, all -> 0x08db }
+        r9 = "SELECT min(mid) FROM messages WHERE uid = %d AND date >= %d AND mid > 0";
+        r12 = 2;
+        r8 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x08dd, all -> 0x08db }
+        r12 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x08dd, all -> 0x08db }
+        r35 = r10;
+        r10 = 0;
+        r8[r10] = r12;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r12 = java.lang.Integer.valueOf(r45);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r19 = 1;
+        r8[r19] = r12;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r6 = java.lang.String.format(r6, r9, r8);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r8 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r3 = r3.queryFinalized(r6, r8);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r6 = r3.next();	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        if (r6 == 0) goto L_0x084c;
+    L_0x0847:
+        r8 = r3.intValue(r10);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        goto L_0x084d;
+    L_0x084c:
+        r8 = -1;
+    L_0x084d:
+        r3.dispose();	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r3 = -1;
+        if (r7 == r3) goto L_0x0911;
+    L_0x0853:
+        if (r8 == r3) goto L_0x0911;
+    L_0x0855:
+        if (r7 != r8) goto L_0x085c;
+    L_0x0857:
+        r3 = r39;
+        r8 = r7;
+        goto L_0x0915;
+    L_0x085c:
+        r3 = r1.database;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r9 = "SELECT start FROM messages_holes WHERE uid = %d AND start <= %d AND end > %d";
+        r10 = 3;
+        r12 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r10 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r20 = 0;
+        r12[r20] = r10;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r10 = java.lang.Integer.valueOf(r7);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r19 = 1;
+        r12[r19] = r10;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r10 = java.lang.Integer.valueOf(r7);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r25 = 2;
+        r12[r25] = r10;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r6 = java.lang.String.format(r6, r9, r12);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r9 = 0;
+        r10 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r3 = r3.queryFinalized(r6, r10);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r6 = r3.next();	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        if (r6 == 0) goto L_0x088f;
+    L_0x088e:
+        r7 = -1;
+    L_0x088f:
+        r3.dispose();	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r3 = -1;
+        if (r7 == r3) goto L_0x0911;
+    L_0x0895:
+        r3 = r1.database;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r7 = "SELECT start FROM messages_holes WHERE uid = %d AND start <= %d AND end > %d";
+        r9 = 3;
+        r10 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r9 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r12 = 0;
+        r10[r12] = r9;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r9 = java.lang.Integer.valueOf(r8);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r12 = 1;
+        r10[r12] = r9;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r9 = java.lang.Integer.valueOf(r8);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r12 = 2;
+        r10[r12] = r9;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r6 = java.lang.String.format(r6, r7, r10);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r7 = 0;
+        r9 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r3 = r3.queryFinalized(r6, r9);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r6 = r3.next();	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        if (r6 == 0) goto L_0x08c5;
+    L_0x08c4:
+        r8 = -1;
+    L_0x08c5:
+        r3.dispose();	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r3 = -1;
+        if (r8 == r3) goto L_0x0911;
+    L_0x08cb:
+        r13 = (long) r8;
+        r6 = 0;
+        r3 = (r13 > r6 ? 1 : (r13 == r6 ? 0 : -1));
+        if (r3 == 0) goto L_0x08d9;
+    L_0x08d2:
+        if (r11 == 0) goto L_0x08d9;
+    L_0x08d4:
+        r6 = (long) r11;
+        r3 = 32;
+        r6 = r6 << r3;
+        r13 = r13 | r6;
+    L_0x08d9:
+        r3 = r8;
+        goto L_0x0915;
+    L_0x08db:
+        r0 = move-exception;
+        goto L_0x08e2;
+    L_0x08dd:
+        r0 = move-exception;
+        goto L_0x08fa;
+    L_0x08df:
+        r0 = move-exception;
+        r38 = r6;
+    L_0x08e2:
+        r35 = r10;
+    L_0x08e4:
+        r12 = r38;
+        r7 = r39;
+        r21 = r0;
+        r6 = r2;
+        r11 = r27;
+        r14 = r29;
+        r20 = r30;
+        r19 = r32;
+        r13 = r34;
+        goto L_0x0f1e;
+    L_0x08f7:
+        r0 = move-exception;
+        r38 = r6;
+    L_0x08fa:
+        r35 = r10;
+    L_0x08fc:
+        r12 = r38;
+        r7 = r39;
+        r6 = r2;
+        r11 = r27;
+        r14 = r29;
+        r20 = r30;
+        r19 = r32;
+        r13 = r34;
+        goto L_0x0var_;
+    L_0x090d:
+        r38 = r6;
+        r35 = r10;
+    L_0x0911:
+        r3 = r39;
+        r8 = r31;
+    L_0x0915:
+        if (r8 == 0) goto L_0x0919;
+    L_0x0917:
+        r10 = 1;
+        goto L_0x091a;
+    L_0x0919:
+        r10 = 0;
+    L_0x091a:
+        if (r10 == 0) goto L_0x095d;
+    L_0x091c:
+        r6 = r1.database;	 Catch:{ Exception -> 0x0959, all -> 0x0955 }
+        r7 = java.util.Locale.US;	 Catch:{ Exception -> 0x0959, all -> 0x0955 }
+        r9 = "SELECT start FROM messages_holes WHERE uid = %d AND start < %d AND end > %d";
+        r39 = r3;
+        r12 = 3;
+        r3 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r12 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r20 = 0;
+        r3[r20] = r12;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r12 = java.lang.Integer.valueOf(r8);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r19 = 1;
+        r3[r19] = r12;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r12 = java.lang.Integer.valueOf(r8);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r25 = 2;
+        r3[r25] = r12;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r3 = java.lang.String.format(r7, r9, r3);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r7 = 0;
+        r9 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r3 = r6.queryFinalized(r3, r9);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r6 = r3.next();	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        if (r6 == 0) goto L_0x0951;
+    L_0x0950:
+        r10 = 0;
+    L_0x0951:
+        r3.dispose();	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        goto L_0x095f;
+    L_0x0955:
+        r0 = move-exception;
+        r39 = r3;
+        goto L_0x08e4;
+    L_0x0959:
+        r0 = move-exception;
+        r39 = r3;
+        goto L_0x08fc;
+    L_0x095d:
+        r39 = r3;
+    L_0x095f:
+        if (r10 == 0) goto L_0x0a92;
+    L_0x0961:
+        r3 = r1.database;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r9 = java.util.Locale.US;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r10 = "SELECT start FROM messages_holes WHERE uid = %d AND start >= %d ORDER BY start ASC LIMIT 1";
+        r12 = 2;
+        r6 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r7 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r12 = 0;
+        r6[r12] = r7;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r7 = java.lang.Integer.valueOf(r8);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r19 = 1;
+        r6[r19] = r7;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r6 = java.lang.String.format(r9, r10, r6);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r7 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r3 = r3.queryFinalized(r6, r7);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r6 = r3.next();	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        if (r6 == 0) goto L_0x0996;
+    L_0x0989:
+        r6 = r3.intValue(r12);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r6 = (long) r6;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        if (r11 == 0) goto L_0x0998;
+    L_0x0990:
+        r9 = (long) r11;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r12 = 32;
+        r9 = r9 << r12;
+        r6 = r6 | r9;
+        goto L_0x0998;
+    L_0x0996:
+        r6 = 0;
+    L_0x0998:
+        r3.dispose();	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r3 = r1.database;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r9 = java.util.Locale.US;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r10 = "SELECT end FROM messages_holes WHERE uid = %d AND end <= %d ORDER BY end DESC LIMIT 1";
+        r12 = 2;
+        r4 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r5 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r12 = 0;
+        r4[r12] = r5;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r5 = java.lang.Integer.valueOf(r8);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r19 = 1;
+        r4[r19] = r5;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r4 = java.lang.String.format(r9, r10, r4);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r5 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r3 = r3.queryFinalized(r4, r5);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r4 = r3.next();	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        if (r4 == 0) goto L_0x09d0;
+    L_0x09c3:
+        r4 = r3.intValue(r12);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r4 = (long) r4;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        if (r11 == 0) goto L_0x09d2;
+    L_0x09ca:
+        r9 = (long) r11;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r12 = 32;
+        r9 = r9 << r12;
+        r4 = r4 | r9;
+        goto L_0x09d2;
+    L_0x09d0:
+        r4 = 1;
+    L_0x09d2:
+        r3.dispose();	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r9 = 0;
+        r3 = (r6 > r9 ? 1 : (r6 == r9 ? 0 : -1));
+        if (r3 != 0) goto L_0x0a25;
+    L_0x09db:
+        r9 = 1;
+        r3 = (r4 > r9 ? 1 : (r4 == r9 ? 0 : -1));
+        if (r3 == 0) goto L_0x09e2;
+    L_0x09e1:
+        goto L_0x0a25;
+    L_0x09e2:
+        r3 = r1.database;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r4 = java.util.Locale.US;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r5 = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
+        r6 = 6;
+        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r6 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r9 = 0;
+        r7[r9] = r6;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r6 = java.lang.Long.valueOf(r13);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r9 = 1;
+        r7[r9] = r6;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r6 = r2 / 2;
+        r6 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r9 = 2;
+        r7[r9] = r6;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r6 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r9 = 3;
+        r7[r9] = r6;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r6 = java.lang.Long.valueOf(r13);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r9 = 4;
+        r7[r9] = r6;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r6 = r2 / 2;
+        r6 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r9 = 5;
+        r7[r9] = r6;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r4 = java.lang.String.format(r4, r5, r7);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r5 = 0;
+        r6 = new java.lang.Object[r5];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r3 = r3.queryFinalized(r4, r6);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        goto L_0x0a88;
+    L_0x0a25:
+        r9 = 0;
+        r3 = (r6 > r9 ? 1 : (r6 == r9 ? 0 : -1));
+        if (r3 != 0) goto L_0x0a35;
+    L_0x0a2b:
+        r6 = NUM; // 0x3b9aca00 float:0.NUM double:4.94065646E-315;
+        if (r11 == 0) goto L_0x0a35;
+    L_0x0a30:
+        r9 = (long) r11;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r3 = 32;
+        r9 = r9 << r3;
+        r6 = r6 | r9;
+    L_0x0a35:
+        r3 = r1.database;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r9 = java.util.Locale.US;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r10 = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d AND (m.mid >= %d OR m.mid < 0) ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d AND (m.mid <= %d OR m.mid < 0) ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
+        r11 = 8;
+        r11 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r12 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r20 = 0;
+        r11[r20] = r12;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r12 = java.lang.Long.valueOf(r13);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r19 = 1;
+        r11[r19] = r12;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r4 = java.lang.Long.valueOf(r4);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r5 = 2;
+        r11[r5] = r4;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r4 = r2 / 2;
+        r4 = java.lang.Integer.valueOf(r4);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r5 = 3;
+        r11[r5] = r4;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r4 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r5 = 4;
+        r11[r5] = r4;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r4 = java.lang.Long.valueOf(r13);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r5 = 5;
+        r11[r5] = r4;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r4 = java.lang.Long.valueOf(r6);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r5 = 6;
+        r11[r5] = r4;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r4 = 7;
+        r5 = r2 / 2;
+        r5 = java.lang.Integer.valueOf(r5);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r11[r4] = r5;	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r4 = java.lang.String.format(r9, r10, r11);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r5 = 0;
+        r6 = new java.lang.Object[r5];	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        r3 = r3.queryFinalized(r4, r6);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+    L_0x0a88:
+        r12 = r34;
+        goto L_0x0b18;
+    L_0x0a8c:
+        r0 = move-exception;
+        goto L_0x08e4;
+    L_0x0a8f:
+        r0 = move-exception;
+        goto L_0x08fc;
+    L_0x0a92:
+        r3 = 2;
+        if (r15 != r3) goto L_0x0b15;
+    L_0x0a95:
+        r3 = r1.database;	 Catch:{ Exception -> 0x0b13, all -> 0x0b11 }
+        r4 = java.util.Locale.US;	 Catch:{ Exception -> 0x0b13, all -> 0x0b11 }
+        r5 = "SELECT COUNT(*) FROM messages WHERE uid = %d AND mid != 0 AND out = 0 AND read_state IN(0,2)";
+        r6 = 1;
+        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x0b13, all -> 0x0b11 }
+        r6 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0b13, all -> 0x0b11 }
+        r9 = 0;
+        r7[r9] = r6;	 Catch:{ Exception -> 0x0b13, all -> 0x0b11 }
+        r4 = java.lang.String.format(r4, r5, r7);	 Catch:{ Exception -> 0x0b13, all -> 0x0b11 }
+        r5 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x0b13, all -> 0x0b11 }
+        r3 = r3.queryFinalized(r4, r5);	 Catch:{ Exception -> 0x0b13, all -> 0x0b11 }
+        r4 = r3.next();	 Catch:{ Exception -> 0x0b13, all -> 0x0b11 }
+        if (r4 == 0) goto L_0x0aba;
+    L_0x0ab5:
+        r10 = r3.intValue(r9);	 Catch:{ Exception -> 0x0a8f, all -> 0x0a8c }
+        goto L_0x0abb;
+    L_0x0aba:
+        r10 = 0;
+    L_0x0abb:
+        r3.dispose();	 Catch:{ Exception -> 0x0b13, all -> 0x0b11 }
+        r12 = r34;
+        if (r10 != r12) goto L_0x0b0b;
+    L_0x0ac2:
+        r3 = r1.database;	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
+        r4 = java.util.Locale.US;	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
+        r5 = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d ORDER BY m.date DESC, m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d ORDER BY m.date ASC, m.mid ASC LIMIT %d)";
+        r6 = 6;
+        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
+        r6 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
+        r9 = 0;
+        r7[r9] = r6;	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
+        r6 = java.lang.Long.valueOf(r13);	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
+        r9 = 1;
+        r7[r9] = r6;	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
+        r6 = r2 / 2;
+        r6 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
+        r9 = 2;
+        r7[r9] = r6;	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
+        r6 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
+        r9 = 3;
+        r7[r9] = r6;	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
+        r6 = java.lang.Long.valueOf(r13);	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
+        r9 = 4;
+        r7[r9] = r6;	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
+        r6 = r2 / 2;
+        r6 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
+        r9 = 5;
+        r7[r9] = r6;	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
+        r4 = java.lang.String.format(r4, r5, r7);	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
+        r5 = 0;
+        r6 = new java.lang.Object[r5];	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
+        r3 = r3.queryFinalized(r4, r6);	 Catch:{ Exception -> 0x0b09, all -> 0x0b07 }
+        r4 = r3;
+        r3 = 1;
+        goto L_0x0b0e;
+    L_0x0b07:
+        r0 = move-exception;
+        goto L_0x0b2e;
+    L_0x0b09:
+        r0 = move-exception;
+        goto L_0x0b49;
+    L_0x0b0b:
+        r3 = 0;
+        r4 = r3;
+        r3 = 0;
+    L_0x0b0e:
+        r10 = r3;
+        r3 = r4;
+        goto L_0x0b19;
+    L_0x0b11:
+        r0 = move-exception;
+        goto L_0x0b2c;
+    L_0x0b13:
+        r0 = move-exception;
+        goto L_0x0b47;
+    L_0x0b15:
+        r12 = r34;
+        r3 = 0;
+    L_0x0b18:
+        r10 = 0;
+    L_0x0b19:
+        r7 = r39;
+        r6 = r2;
+        r13 = r12;
+        r14 = r29;
+        r2 = r30;
+        r11 = r33;
+        r12 = r38;
+        goto L_0x0ed2;
+    L_0x0b27:
+        r0 = move-exception;
+        r38 = r6;
+        r35 = r10;
+    L_0x0b2c:
+        r12 = r34;
+    L_0x0b2e:
+        r7 = r39;
+        r21 = r0;
+        r6 = r2;
+        r13 = r12;
+        r11 = r27;
+        r14 = r29;
+        r20 = r30;
+        r19 = r32;
+        r17 = r35;
+        r12 = r38;
+        goto L_0x1553;
+    L_0x0b42:
+        r0 = move-exception;
+        r38 = r6;
+        r35 = r10;
+    L_0x0b47:
+        r12 = r34;
+    L_0x0b49:
+        r7 = r39;
+        r6 = r2;
+        r13 = r12;
+        r11 = r27;
+        r14 = r29;
+        r20 = r30;
+        r19 = r32;
+        r17 = r35;
+        r12 = r38;
+        goto L_0x1523;
+    L_0x0b5b:
+        r0 = move-exception;
+        r35 = r10;
+        r12 = r34;
+        r7 = r39;
+        r21 = r0;
+        r6 = r2;
+        r13 = r12;
+        r11 = r27;
+        r14 = r29;
+        r20 = r30;
+        r19 = r32;
+        r17 = r35;
+        goto L_0x0469;
+    L_0x0b72:
+        r0 = move-exception;
+        r35 = r10;
+        r12 = r34;
+        r7 = r39;
+        r6 = r2;
+        r13 = r12;
+        r11 = r27;
+        r14 = r29;
+        r20 = r30;
+        r19 = r32;
+        r17 = r35;
+        goto L_0x047c;
+    L_0x0b87:
+        r0 = move-exception;
+        r12 = r34;
+        goto L_0x0b91;
+    L_0x0b8b:
+        r0 = move-exception;
+        r12 = r34;
+        goto L_0x0ba6;
+    L_0x0b8f:
+        r0 = move-exception;
+        r12 = r10;
+    L_0x0b91:
+        r7 = r39;
+        r21 = r0;
+        r6 = r2;
+    L_0x0b96:
+        r13 = r12;
+    L_0x0b97:
+        r11 = r27;
+        r14 = r29;
+        r20 = r30;
+        r19 = r32;
+    L_0x0b9f:
+        r12 = 0;
+        r17 = 0;
+        goto L_0x1553;
+    L_0x0ba4:
+        r0 = move-exception;
+        r12 = r10;
+    L_0x0ba6:
+        r7 = r39;
+        r6 = r2;
+    L_0x0ba9:
+        r13 = r12;
+    L_0x0baa:
+        r11 = r27;
+        r14 = r29;
+        r20 = r30;
+        r19 = r32;
+    L_0x0bb2:
+        r12 = 0;
+        r17 = 0;
+        goto L_0x1523;
+    L_0x0bb7:
+        r36 = r6;
+        r27 = r7;
+        r28 = r10;
+        r26 = r12;
+        r3 = "SELECT min(mid) FROM messages WHERE uid = %d AND mid < 0";
+        r4 = 3;
+        if (r15 != r4) goto L_0x0cc0;
+    L_0x0bc4:
+        if (r44 != 0) goto L_0x0cc0;
+    L_0x0bc6:
+        r4 = r1.database;	 Catch:{ Exception -> 0x0cb3, all -> 0x0ca4 }
+        r5 = java.util.Locale.US;	 Catch:{ Exception -> 0x0cb3, all -> 0x0ca4 }
+        r6 = 1;
+        r7 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x0cb3, all -> 0x0ca4 }
+        r6 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0cb3, all -> 0x0ca4 }
+        r9 = 0;
+        r7[r9] = r6;	 Catch:{ Exception -> 0x0cb3, all -> 0x0ca4 }
+        r5 = java.lang.String.format(r5, r3, r7);	 Catch:{ Exception -> 0x0cb3, all -> 0x0ca4 }
+        r6 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x0cb3, all -> 0x0ca4 }
+        r4 = r4.queryFinalized(r5, r6);	 Catch:{ Exception -> 0x0cb3, all -> 0x0ca4 }
+        r5 = r4.next();	 Catch:{ Exception -> 0x0cb3, all -> 0x0ca4 }
+        if (r5 == 0) goto L_0x0be9;
+    L_0x0be4:
+        r10 = r4.intValue(r9);	 Catch:{ Exception -> 0x0cb3, all -> 0x0ca4 }
+        goto L_0x0bea;
+    L_0x0be9:
+        r10 = 0;
+    L_0x0bea:
+        r4.dispose();	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c7c }
+        r4 = r1.database;	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c7c }
+        r5 = java.util.Locale.US;	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c7c }
+        r6 = "SELECT max(mid), max(date) FROM messages WHERE uid = %d AND out = 0 AND read_state IN(0,2) AND mid < 0";
+        r7 = 1;
+        r9 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c7c }
+        r7 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c7c }
+        r11 = 0;
+        r9[r11] = r7;	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c7c }
+        r5 = java.lang.String.format(r5, r6, r9);	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c7c }
+        r6 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c7c }
+        r4 = r4.queryFinalized(r5, r6);	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c7c }
+        r5 = r4.next();	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c7c }
+        if (r5 == 0) goto L_0x0CLASSNAME;
+    L_0x0c0d:
+        r5 = r4.intValue(r11);	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c7c }
+        r6 = 1;
+        r7 = r4.intValue(r6);	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0c7c }
+        goto L_0x0CLASSNAME;
+    L_0x0CLASSNAME:
+        r5 = 0;
+        r7 = 0;
+    L_0x0CLASSNAME:
+        r4.dispose();	 Catch:{ Exception -> 0x0CLASSNAME, all -> 0x0CLASSNAME }
+        if (r5 == 0) goto L_0x0CLASSNAME;
+    L_0x0c1e:
+        r4 = r1.database;	 Catch:{ Exception -> 0x0c5a, all -> 0x0CLASSNAME }
+        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x0c5a, all -> 0x0CLASSNAME }
+        r9 = "SELECT COUNT(*) FROM messages WHERE uid = %d AND mid <= %d AND out = 0 AND read_state IN(0,2)";
+        r10 = 2;
+        r11 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x0c5a, all -> 0x0CLASSNAME }
+        r10 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0c5a, all -> 0x0CLASSNAME }
+        r12 = 0;
+        r11[r12] = r10;	 Catch:{ Exception -> 0x0c5a, all -> 0x0CLASSNAME }
+        r10 = java.lang.Integer.valueOf(r5);	 Catch:{ Exception -> 0x0c5a, all -> 0x0CLASSNAME }
+        r19 = 1;
+        r11[r19] = r10;	 Catch:{ Exception -> 0x0c5a, all -> 0x0CLASSNAME }
+        r6 = java.lang.String.format(r6, r9, r11);	 Catch:{ Exception -> 0x0c5a, all -> 0x0CLASSNAME }
+        r9 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x0c5a, all -> 0x0CLASSNAME }
+        r4 = r4.queryFinalized(r6, r9);	 Catch:{ Exception -> 0x0c5a, all -> 0x0CLASSNAME }
+        r6 = r4.next();	 Catch:{ Exception -> 0x0c5a, all -> 0x0CLASSNAME }
+        if (r6 == 0) goto L_0x0c4b;
+    L_0x0CLASSNAME:
+        r10 = r4.intValue(r12);	 Catch:{ Exception -> 0x0c5a, all -> 0x0CLASSNAME }
+        goto L_0x0c4c;
+    L_0x0c4b:
+        r10 = 0;
+    L_0x0c4c:
+        r4.dispose();	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r4 = 3;
+        goto L_0x0cc4;
+    L_0x0CLASSNAME:
+        r0 = move-exception;
+        r21 = r0;
+        r6 = r2;
+        r33 = r5;
+        r14 = r7;
+        goto L_0x0c6b;
+    L_0x0c5a:
+        r0 = move-exception;
+        r6 = r2;
+        r33 = r5;
+        r14 = r7;
+        goto L_0x0CLASSNAME;
+    L_0x0CLASSNAME:
+        r5 = r10;
+        r4 = 3;
+        goto L_0x0cc3;
+    L_0x0CLASSNAME:
+        r0 = move-exception;
+        r21 = r0;
+        r6 = r2;
+        r14 = r7;
+        r33 = r10;
+    L_0x0c6b:
+        r11 = r27;
+        r12 = 0;
+        r13 = 0;
+        goto L_0x14e0;
+    L_0x0CLASSNAME:
+        r0 = move-exception;
+        r6 = r2;
+        r14 = r7;
+        r33 = r10;
+    L_0x0CLASSNAME:
+        r11 = r27;
+        r12 = 0;
+        r13 = 0;
+        goto L_0x14f5;
+    L_0x0c7c:
+        r0 = move-exception;
+        r7 = r39;
+        r21 = r0;
+        r6 = r2;
+        r33 = r10;
+        r11 = r27;
+        r12 = 0;
+        r13 = 0;
+        r14 = 0;
+        r17 = 1;
+    L_0x0c8b:
+        r19 = 0;
+        r20 = 0;
+        goto L_0x1553;
+    L_0x0CLASSNAME:
+        r0 = move-exception;
+        r7 = r39;
+        r6 = r2;
+        r33 = r10;
+        r11 = r27;
+        r12 = 0;
+        r13 = 0;
+        r14 = 0;
+        r17 = 1;
+    L_0x0c9e:
+        r19 = 0;
+        r20 = 0;
+        goto L_0x1523;
+    L_0x0ca4:
+        r0 = move-exception;
+        r7 = r39;
+        r21 = r0;
+        r6 = r2;
+        r11 = r27;
+        r12 = 0;
+        r13 = 0;
+        r14 = 0;
+        r17 = 1;
+        goto L_0x150b;
+    L_0x0cb3:
+        r0 = move-exception;
+        r7 = r39;
+        r6 = r2;
+        r11 = r27;
+        r12 = 0;
+        r13 = 0;
+        r14 = 0;
+        r17 = 1;
+        goto L_0x151d;
+    L_0x0cc0:
+        r4 = 3;
+        r5 = 0;
+        r7 = 0;
+    L_0x0cc3:
+        r10 = 0;
+    L_0x0cc4:
+        if (r15 == r4) goto L_0x0e67;
+    L_0x0cc6:
+        r6 = 4;
+        if (r15 != r6) goto L_0x0ccb;
+    L_0x0cc9:
+        goto L_0x0e67;
+    L_0x0ccb:
+        r6 = 1;
+        if (r15 != r6) goto L_0x0d1c;
+    L_0x0cce:
+        r3 = r1.database;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r8 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid < %d ORDER BY m.mid DESC LIMIT %d";
+        r9 = new java.lang.Object[r4];	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r4 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r11 = 0;
+        r9[r11] = r4;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r4 = java.lang.Integer.valueOf(r39);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r11 = 1;
+        r9[r11] = r4;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r4 = java.lang.Integer.valueOf(r38);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r11 = 2;
+        r9[r11] = r4;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r4 = java.lang.String.format(r6, r8, r9);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r6 = 0;
+        r8 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r3 = r3.queryFinalized(r4, r8);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+    L_0x0cf6:
+        r8 = r39;
+        r6 = r2;
+        r11 = r5;
+        r14 = r7;
+        r13 = r10;
+        r2 = 0;
+        r10 = 0;
+        r12 = 0;
+    L_0x0cff:
+        r32 = 0;
+        r35 = 1;
+        r7 = r8;
+        goto L_0x0ed2;
+    L_0x0d06:
+        r0 = move-exception;
+        r21 = r0;
+        r6 = r2;
+        r33 = r5;
+        r14 = r7;
+        r13 = r10;
+        r11 = r27;
+        goto L_0x14df;
+    L_0x0d12:
+        r0 = move-exception;
+        r6 = r2;
+        r33 = r5;
+        r14 = r7;
+        r13 = r10;
+        r11 = r27;
+        goto L_0x14f4;
+    L_0x0d1c:
+        if (r44 == 0) goto L_0x0d7b;
+    L_0x0d1e:
+        if (r39 == 0) goto L_0x0d4a;
+    L_0x0d20:
+        r3 = r1.database;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r4 = java.util.Locale.US;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r6 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d ORDER BY m.mid ASC LIMIT %d";
+        r8 = 3;
+        r9 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r8 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r11 = 0;
+        r9[r11] = r8;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r8 = java.lang.Integer.valueOf(r39);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r11 = 1;
+        r9[r11] = r8;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r8 = java.lang.Integer.valueOf(r38);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r11 = 2;
+        r9[r11] = r8;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r4 = java.lang.String.format(r4, r6, r9);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r6 = 0;
+        r8 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r3 = r3.queryFinalized(r4, r8);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        goto L_0x0cf6;
+    L_0x0d4a:
+        r3 = r1.database;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r4 = java.util.Locale.US;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r6 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.date <= %d ORDER BY m.mid ASC LIMIT %d,%d";
+        r8 = 4;
+        r9 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r8 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r11 = 0;
+        r9[r11] = r8;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r8 = java.lang.Integer.valueOf(r44);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r12 = 1;
+        r9[r12] = r8;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r8 = java.lang.Integer.valueOf(r11);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r12 = 2;
+        r9[r12] = r8;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r8 = java.lang.Integer.valueOf(r38);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r12 = 3;
+        r9[r12] = r8;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r4 = java.lang.String.format(r4, r6, r9);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r6 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r3 = r3.queryFinalized(r4, r6);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        goto L_0x0cf6;
+    L_0x0d7b:
+        r4 = 2;
+        if (r15 != r4) goto L_0x0e02;
+    L_0x0d7e:
+        r4 = r1.database;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r9 = 1;
+        r11 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r9 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r12 = 0;
+        r11[r12] = r9;	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r3 = java.lang.String.format(r6, r3, r11);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r6 = new java.lang.Object[r12];	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r3 = r4.queryFinalized(r3, r6);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        r4 = r3.next();	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        if (r4 == 0) goto L_0x0da1;
+    L_0x0d9c:
+        r4 = r3.intValue(r12);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        goto L_0x0da2;
+    L_0x0da1:
+        r4 = 0;
+    L_0x0da2:
+        r3.dispose();	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r3 = r1.database;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r9 = "SELECT max(mid), max(date) FROM messages WHERE uid = %d AND out = 0 AND read_state IN(0,2) AND mid < 0";
+        r11 = 1;
+        r12 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r11 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r13 = 0;
+        r12[r13] = r11;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r6 = java.lang.String.format(r6, r9, r12);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r9 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r3 = r3.queryFinalized(r6, r9);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r6 = r3.next();	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        if (r6 == 0) goto L_0x0dce;
+    L_0x0dc5:
+        r5 = r3.intValue(r13);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r6 = 1;
+        r7 = r3.intValue(r6);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+    L_0x0dce:
+        r3.dispose();	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        if (r5 == 0) goto L_0x0e03;
+    L_0x0dd3:
+        r3 = r1.database;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r9 = "SELECT COUNT(*) FROM messages WHERE uid = %d AND mid <= %d AND out = 0 AND read_state IN(0,2)";
+        r11 = 2;
+        r12 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r11 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r13 = 0;
+        r12[r13] = r11;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r11 = java.lang.Integer.valueOf(r5);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r14 = 1;
+        r12[r14] = r11;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r6 = java.lang.String.format(r6, r9, r12);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r9 = new java.lang.Object[r13];	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r3 = r3.queryFinalized(r6, r9);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r6 = r3.next();	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        if (r6 == 0) goto L_0x0dfe;
+    L_0x0dfa:
+        r10 = r3.intValue(r13);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+    L_0x0dfe:
+        r3.dispose();	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        goto L_0x0e03;
+    L_0x0e02:
+        r4 = 0;
+    L_0x0e03:
+        if (r2 > r10) goto L_0x0e0d;
+    L_0x0e05:
+        if (r10 >= r8) goto L_0x0e08;
+    L_0x0e07:
+        goto L_0x0e0d;
+    L_0x0e08:
+        r3 = r10 - r2;
+        r2 = r2 + 10;
+        goto L_0x0e1b;
+    L_0x0e0d:
+        r3 = r10 + 10;
+        r2 = java.lang.Math.max(r2, r3);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        if (r10 >= r8) goto L_0x0e1a;
+    L_0x0e15:
+        r3 = 0;
+        r4 = 0;
+        r5 = 0;
+        r10 = 0;
+        goto L_0x0e1b;
+    L_0x0e1a:
+        r3 = 0;
+    L_0x0e1b:
+        r6 = r1.database;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r8 = java.util.Locale.US;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r9 = "SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d ORDER BY m.mid ASC LIMIT %d,%d";
+        r11 = 3;
+        r12 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r11 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r13 = 0;
+        r12[r13] = r11;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r3 = java.lang.Integer.valueOf(r3);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r11 = 1;
+        r12[r11] = r3;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r3 = java.lang.Integer.valueOf(r2);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r11 = 2;
+        r12[r11] = r3;	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r3 = java.lang.String.format(r8, r9, r12);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r8 = 0;
+        r9 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+        r3 = r6.queryFinalized(r3, r9);	 Catch:{ Exception -> 0x0e5c, all -> 0x0e4f }
+    L_0x0e44:
+        r8 = r39;
+        r6 = r2;
+        r12 = r4;
+        r11 = r5;
+        r14 = r7;
+        r13 = r10;
+        r2 = 0;
+        r10 = 0;
+        goto L_0x0cff;
+    L_0x0e4f:
+        r0 = move-exception;
+        r21 = r0;
+        r6 = r2;
+        r12 = r4;
+        r33 = r5;
+        r14 = r7;
+        r13 = r10;
+        r11 = r27;
+        goto L_0x14e0;
+    L_0x0e5c:
+        r0 = move-exception;
+        r6 = r2;
+        r12 = r4;
+        r33 = r5;
+        r14 = r7;
+        r13 = r10;
+        r11 = r27;
+        goto L_0x14f5;
+    L_0x0e67:
+        r4 = r1.database;	 Catch:{ Exception -> 0x14ea, all -> 0x14d3 }
+        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x14ea, all -> 0x14d3 }
+        r8 = 1;
+        r9 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x14ea, all -> 0x14d3 }
+        r8 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x14ea, all -> 0x14d3 }
+        r11 = 0;
+        r9[r11] = r8;	 Catch:{ Exception -> 0x14ea, all -> 0x14d3 }
+        r3 = java.lang.String.format(r6, r3, r9);	 Catch:{ Exception -> 0x14ea, all -> 0x14d3 }
+        r6 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x14ea, all -> 0x14d3 }
+        r3 = r4.queryFinalized(r3, r6);	 Catch:{ Exception -> 0x14ea, all -> 0x14d3 }
+        r4 = r3.next();	 Catch:{ Exception -> 0x14ea, all -> 0x14d3 }
+        if (r4 == 0) goto L_0x0e8a;
+    L_0x0e85:
+        r4 = r3.intValue(r11);	 Catch:{ Exception -> 0x0d12, all -> 0x0d06 }
+        goto L_0x0e8b;
+    L_0x0e8a:
+        r4 = 0;
+    L_0x0e8b:
+        r3.dispose();	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
+        r3 = r1.database;	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
+        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
+        r8 = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d ORDER BY m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d ORDER BY m.mid ASC LIMIT %d)";
+        r9 = 6;
+        r11 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
+        r9 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
+        r12 = 0;
+        r11[r12] = r9;	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
+        r9 = java.lang.Long.valueOf(r13);	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
+        r12 = 1;
+        r11[r12] = r9;	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
+        r9 = r2 / 2;
+        r9 = java.lang.Integer.valueOf(r9);	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
+        r12 = 2;
+        r11[r12] = r9;	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
+        r9 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
+        r12 = 3;
+        r11[r12] = r9;	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
+        r9 = java.lang.Long.valueOf(r13);	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
+        r12 = 4;
+        r11[r12] = r9;	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
+        r9 = r2 / 2;
+        r9 = java.lang.Integer.valueOf(r9);	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
+        r12 = 5;
+        r11[r12] = r9;	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
+        r6 = java.lang.String.format(r6, r8, r11);	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
+        r8 = 0;
+        r9 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x14b4, all -> 0x14af }
+        r3 = r3.queryFinalized(r6, r9);	 Catch:{ Exception -> 0x14c7, all -> 0x14b9 }
+        goto L_0x0e44;
+    L_0x0ed2:
+        r4 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
+        if (r3 == 0) goto L_0x1259;
+    L_0x0ed7:
+        r9 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
+    L_0x0ed9:
+        r29 = r3.next();	 Catch:{ Exception -> 0x123d, all -> 0x1220 }
+        if (r29 == 0) goto L_0x11ec;
+    L_0x0edf:
+        r39 = r14;
+        r5 = 1;
+        r14 = r3.byteBufferValue(r5);	 Catch:{ Exception -> 0x11d9, all -> 0x11c6 }
+        if (r14 == 0) goto L_0x1190;
+    L_0x0ee8:
+        r44 = r13;
+        r5 = 0;
+        r13 = r14.readInt32(r5);	 Catch:{ Exception -> 0x117d, all -> 0x116a }
+        r13 = org.telegram.tgnet.TLRPC.Message.TLdeserialize(r14, r13, r5);	 Catch:{ Exception -> 0x117d, all -> 0x116a }
+        r29 = r12;
+        r5 = 2;
+        r12 = r3.intValue(r5);	 Catch:{ Exception -> 0x1154, all -> 0x113d }
+        r13.send_state = r12;	 Catch:{ Exception -> 0x1154, all -> 0x113d }
+        r5 = r13.id;	 Catch:{ Exception -> 0x1154, all -> 0x113d }
+        if (r5 <= 0) goto L_0x0var_;
+    L_0x0var_:
+        r5 = r13.send_state;	 Catch:{ Exception -> 0x0var_, all -> 0x0f0d }
+        if (r5 == 0) goto L_0x0var_;
+    L_0x0var_:
+        r5 = r13.send_state;	 Catch:{ Exception -> 0x0var_, all -> 0x0f0d }
+        r12 = 3;
+        if (r5 == r12) goto L_0x0var_;
+    L_0x0var_:
+        r5 = 0;
+        r13.send_state = r5;	 Catch:{ Exception -> 0x0var_, all -> 0x0f0d }
+        goto L_0x0var_;
+    L_0x0f0d:
+        r0 = move-exception;
+        r14 = r39;
+        r13 = r44;
+        r21 = r0;
+        r20 = r2;
+        r33 = r11;
+        r11 = r27;
+        r12 = r29;
+        r19 = r32;
+    L_0x0f1e:
+        r17 = r35;
+        goto L_0x1553;
+    L_0x0var_:
+        r0 = move-exception;
+        r14 = r39;
+        r13 = r44;
+        r20 = r2;
+        r33 = r11;
+        r11 = r27;
+        r12 = r29;
+        r19 = r32;
+    L_0x0var_:
+        r17 = r35;
+        goto L_0x1523;
+    L_0x0var_:
+        r30 = r11;
+        r5 = r36;
+        r11 = (long) r5;
+        r33 = r6;
+        r31 = r7;
+        r6 = r41;
+        r34 = (r6 > r11 ? 1 : (r6 == r11 ? 0 : -1));
+        if (r34 != 0) goto L_0x0f6b;
+    L_0x0var_:
+        r11 = 1;
+        r13.out = r11;	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
+        goto L_0x0f6b;
+    L_0x0var_:
+        r0 = move-exception;
+        r14 = r39;
+        r13 = r44;
+        r21 = r0;
+        r20 = r2;
+        r11 = r27;
+        goto L_0x1491;
+    L_0x0var_:
+        r0 = move-exception;
+        r14 = r39;
+        r13 = r44;
+        r20 = r2;
+        r11 = r27;
+    L_0x0f5e:
+        r12 = r29;
+        r7 = r31;
+        r19 = r32;
+        r6 = r33;
+        r17 = r35;
+        r2 = r0;
+        goto L_0x1255;
+    L_0x0f6b:
+        r13.readAttachPath(r14, r5);	 Catch:{ Exception -> 0x1136, all -> 0x112f }
+        r14.reuse();	 Catch:{ Exception -> 0x1136, all -> 0x112f }
+        r11 = 0;
+        r12 = r3.intValue(r11);	 Catch:{ Exception -> 0x1136, all -> 0x112f }
+        org.telegram.messenger.MessageObject.setUnreadFlags(r13, r12);	 Catch:{ Exception -> 0x1136, all -> 0x112f }
+        r11 = 3;
+        r12 = r3.intValue(r11);	 Catch:{ Exception -> 0x1136, all -> 0x112f }
+        r13.id = r12;	 Catch:{ Exception -> 0x1136, all -> 0x112f }
+        r11 = r13.id;	 Catch:{ Exception -> 0x1136, all -> 0x112f }
+        if (r11 <= 0) goto L_0x0var_;
+    L_0x0var_:
+        r11 = r13.id;	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
+        r4 = java.lang.Math.min(r11, r4);	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
+        r11 = r13.id;	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
+        r9 = java.lang.Math.max(r11, r9);	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
+    L_0x0var_:
+        r11 = 4;
+        r12 = r3.intValue(r11);	 Catch:{ Exception -> 0x1136, all -> 0x112f }
+        r13.date = r12;	 Catch:{ Exception -> 0x1136, all -> 0x112f }
+        r13.dialog_id = r6;	 Catch:{ Exception -> 0x1136, all -> 0x112f }
+        r11 = r13.flags;	 Catch:{ Exception -> 0x1136, all -> 0x112f }
+        r11 = r11 & 1024;
+        if (r11 == 0) goto L_0x0fa6;
+    L_0x0f9f:
+        r11 = 7;
+        r11 = r3.intValue(r11);	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
+        r13.views = r11;	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
+    L_0x0fa6:
+        if (r28 == 0) goto L_0x0fb4;
+    L_0x0fa8:
+        r11 = r13.ttl;	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
+        if (r11 != 0) goto L_0x0fb4;
+    L_0x0fac:
+        r11 = 8;
+        r11 = r3.intValue(r11);	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
+        r13.ttl = r11;	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
+    L_0x0fb4:
+        r11 = 9;
+        r11 = r3.intValue(r11);	 Catch:{ Exception -> 0x1136, all -> 0x112f }
+        if (r11 == 0) goto L_0x0fbf;
+    L_0x0fbc:
+        r11 = 1;
+        r13.mentioned = r11;	 Catch:{ Exception -> 0x0var_, all -> 0x0var_ }
+    L_0x0fbf:
+        r11 = r27;
+        r12 = r11.messages;	 Catch:{ Exception -> 0x112d, all -> 0x112b }
+        r12.add(r13);	 Catch:{ Exception -> 0x112d, all -> 0x112b }
+        r12 = r24;
+        r14 = r26;
+        addUsersAndChatsFromMessage(r13, r12, r14);	 Catch:{ Exception -> 0x112d, all -> 0x112b }
+        r24 = r4;
+        r4 = r13.reply_to_msg_id;	 Catch:{ Exception -> 0x112d, all -> 0x112b }
+        if (r4 != 0) goto L_0x0ffc;
+    L_0x0fd3:
+        r6 = r13.reply_to_random_id;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r16 = 0;
+        r4 = (r6 > r16 ? 1 : (r6 == r16 ? 0 : -1));
+        if (r4 == 0) goto L_0x0fdc;
+    L_0x0fdb:
+        goto L_0x0ffc;
+    L_0x0fdc:
+        r36 = r5;
+        r5 = r21;
+        r4 = r23;
+        r18 = 32;
+        r21 = r8;
+        goto L_0x10c2;
+    L_0x0fe8:
+        r0 = move-exception;
+        r14 = r39;
+        r13 = r44;
+        r21 = r0;
+        r20 = r2;
+        goto L_0x1491;
+    L_0x0ff3:
+        r0 = move-exception;
+        r14 = r39;
+        r13 = r44;
+        r20 = r2;
+        goto L_0x0f5e;
+    L_0x0ffc:
+        r6 = 6;
+        r4 = r3.isNull(r6);	 Catch:{ Exception -> 0x112d, all -> 0x112b }
+        if (r4 != 0) goto L_0x1034;
+    L_0x1003:
+        r4 = r3.byteBufferValue(r6);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        if (r4 == 0) goto L_0x1034;
+    L_0x1009:
+        r7 = 0;
+        r6 = r4.readInt32(r7);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r6 = org.telegram.tgnet.TLRPC.Message.TLdeserialize(r4, r6, r7);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r13.replyMessage = r6;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r6 = r13.replyMessage;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r6.readAttachPath(r4, r5);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r4.reuse();	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r4 = r13.replyMessage;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        if (r4 == 0) goto L_0x1034;
+    L_0x1020:
+        r4 = org.telegram.messenger.MessageObject.isMegagroup(r13);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        if (r4 == 0) goto L_0x102f;
+    L_0x1026:
+        r4 = r13.replyMessage;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r6 = r4.flags;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r7 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
+        r6 = r6 | r7;
+        r4.flags = r6;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+    L_0x102f:
+        r4 = r13.replyMessage;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        addUsersAndChatsFromMessage(r4, r12, r14);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+    L_0x1034:
+        r4 = r13.replyMessage;	 Catch:{ Exception -> 0x112d, all -> 0x112b }
+        if (r4 != 0) goto L_0x0fdc;
+    L_0x1038:
+        r4 = r13.reply_to_msg_id;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        if (r4 == 0) goto L_0x1089;
+    L_0x103c:
+        r4 = r13.reply_to_msg_id;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r6 = (long) r4;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r4 = r13.to_id;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r4 = r4.channel_id;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        if (r4 == 0) goto L_0x1052;
+    L_0x1045:
+        r4 = r13.to_id;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r4 = r4.channel_id;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r36 = r5;
+        r4 = (long) r4;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r18 = 32;
+        r4 = r4 << r18;
+        r6 = r6 | r4;
+        goto L_0x1056;
+    L_0x1052:
+        r36 = r5;
+        r18 = 32;
+    L_0x1056:
+        r4 = java.lang.Long.valueOf(r6);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r5 = r21;
+        r4 = r5.contains(r4);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        if (r4 != 0) goto L_0x1069;
+    L_0x1062:
+        r4 = java.lang.Long.valueOf(r6);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r5.add(r4);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+    L_0x1069:
+        r4 = r13.reply_to_msg_id;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r6 = r22;
+        r4 = r6.get(r4);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r4 = (java.util.ArrayList) r4;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        if (r4 != 0) goto L_0x107f;
+    L_0x1075:
+        r4 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r4.<init>();	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r7 = r13.reply_to_msg_id;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r6.put(r7, r4);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+    L_0x107f:
+        r4.add(r13);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r22 = r6;
+        r21 = r8;
+        r4 = r23;
+        goto L_0x10c2;
+    L_0x1089:
+        r36 = r5;
+        r5 = r21;
+        r18 = 32;
+        r6 = r13.reply_to_random_id;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r4 = java.lang.Long.valueOf(r6);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r4 = r5.contains(r4);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        if (r4 != 0) goto L_0x10a4;
+    L_0x109b:
+        r6 = r13.reply_to_random_id;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r4 = java.lang.Long.valueOf(r6);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r5.add(r4);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+    L_0x10a4:
+        r6 = r13.reply_to_random_id;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r4 = r23;
+        r6 = r4.get(r6);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r6 = (java.util.ArrayList) r6;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        if (r6 != 0) goto L_0x10bd;
+    L_0x10b0:
+        r6 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r6.<init>();	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r21 = r8;
+        r7 = r13.reply_to_random_id;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r4.put(r7, r6);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        goto L_0x10bf;
+    L_0x10bd:
+        r21 = r8;
+    L_0x10bf:
+        r6.add(r13);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+    L_0x10c2:
+        if (r28 != 0) goto L_0x10d2;
+    L_0x10c4:
+        r6 = 5;
+        r7 = r3.isNull(r6);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        if (r7 != 0) goto L_0x10d3;
+    L_0x10cb:
+        r7 = r3.longValue(r6);	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        r13.random_id = r7;	 Catch:{ Exception -> 0x0ff3, all -> 0x0fe8 }
+        goto L_0x10d3;
+    L_0x10d2:
+        r6 = 5;
+    L_0x10d3:
+        r7 = org.telegram.messenger.MessageObject.isSecretMedia(r13);	 Catch:{ Exception -> 0x112d, all -> 0x112b }
+        if (r7 == 0) goto L_0x111d;
+    L_0x10d9:
+        r7 = r1.database;	 Catch:{ Exception -> 0x1111, all -> 0x112b }
+        r8 = java.util.Locale.US;	 Catch:{ Exception -> 0x1111, all -> 0x112b }
+        r6 = "SELECT date FROM enc_tasks_v2 WHERE mid = %d";
+        r23 = r4;
+        r26 = r9;
+        r4 = 1;
+        r9 = new java.lang.Object[r4];	 Catch:{ Exception -> 0x110d, all -> 0x112b }
+        r4 = r13.id;	 Catch:{ Exception -> 0x110d, all -> 0x112b }
+        r4 = java.lang.Integer.valueOf(r4);	 Catch:{ Exception -> 0x110d, all -> 0x112b }
+        r27 = r2;
+        r2 = 0;
+        r9[r2] = r4;	 Catch:{ Exception -> 0x110b, all -> 0x120b }
+        r4 = java.lang.String.format(r8, r6, r9);	 Catch:{ Exception -> 0x110b, all -> 0x120b }
+        r6 = new java.lang.Object[r2];	 Catch:{ Exception -> 0x110b, all -> 0x120b }
+        r4 = r7.queryFinalized(r4, r6);	 Catch:{ Exception -> 0x110b, all -> 0x120b }
+        r6 = r4.next();	 Catch:{ Exception -> 0x110b, all -> 0x120b }
+        if (r6 == 0) goto L_0x1107;
+    L_0x1101:
+        r6 = r4.intValue(r2);	 Catch:{ Exception -> 0x110b, all -> 0x120b }
+        r13.destroyTime = r6;	 Catch:{ Exception -> 0x110b, all -> 0x120b }
+    L_0x1107:
+        r4.dispose();	 Catch:{ Exception -> 0x110b, all -> 0x120b }
+        goto L_0x1123;
+    L_0x110b:
+        r0 = move-exception;
+        goto L_0x1118;
+    L_0x110d:
+        r0 = move-exception;
+        r27 = r2;
+        goto L_0x1118;
+    L_0x1111:
+        r0 = move-exception;
+        r27 = r2;
+        r23 = r4;
+        r26 = r9;
+    L_0x1118:
+        r2 = r0;
+        org.telegram.messenger.FileLog.e(r2);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        goto L_0x1123;
+    L_0x111d:
+        r27 = r2;
+        r23 = r4;
+        r26 = r9;
+    L_0x1123:
+        r2 = r23;
+        r4 = r24;
+        r9 = r26;
+        goto L_0x11aa;
+    L_0x112b:
+        r0 = move-exception;
+        goto L_0x1132;
+    L_0x112d:
+        r0 = move-exception;
+        goto L_0x1139;
+    L_0x112f:
+        r0 = move-exception;
+        r11 = r27;
+    L_0x1132:
+        r27 = r2;
+        goto L_0x120c;
+    L_0x1136:
+        r0 = move-exception;
+        r11 = r27;
+    L_0x1139:
+        r27 = r2;
+        goto L_0x1217;
+    L_0x113d:
+        r0 = move-exception;
+        r33 = r6;
+        r31 = r7;
+        r30 = r11;
+        r11 = r27;
+        r27 = r2;
+        r14 = r39;
+        r13 = r44;
+        r21 = r0;
+        r20 = r27;
+        r12 = r29;
+        goto L_0x1235;
+    L_0x1154:
+        r0 = move-exception;
+        r33 = r6;
+        r31 = r7;
+        r30 = r11;
+        r11 = r27;
+        r27 = r2;
+        r14 = r39;
+        r13 = r44;
+        r2 = r0;
+        r20 = r27;
+        r12 = r29;
+        goto L_0x1251;
+    L_0x116a:
+        r0 = move-exception;
+        r33 = r6;
+        r31 = r7;
+        r30 = r11;
+        r29 = r12;
+        r11 = r27;
+        r27 = r2;
+        r14 = r39;
+        r13 = r44;
+        goto L_0x1231;
+    L_0x117d:
+        r0 = move-exception;
+        r33 = r6;
+        r31 = r7;
+        r30 = r11;
+        r29 = r12;
+        r11 = r27;
+        r27 = r2;
+        r14 = r39;
+        r13 = r44;
+        goto L_0x124e;
+    L_0x1190:
+        r33 = r6;
+        r31 = r7;
+        r30 = r11;
+        r29 = r12;
+        r44 = r13;
+        r5 = r21;
+        r12 = r24;
+        r14 = r26;
+        r11 = r27;
+        r18 = 32;
+        r27 = r2;
+        r21 = r8;
+        r2 = r23;
+    L_0x11aa:
+        r13 = r44;
+        r23 = r2;
+        r24 = r12;
+        r26 = r14;
+        r8 = r21;
+        r2 = r27;
+        r12 = r29;
+        r7 = r31;
+        r6 = r33;
+        r14 = r39;
+        r21 = r5;
+        r27 = r11;
+        r11 = r30;
+        goto L_0x0ed9;
+    L_0x11c6:
+        r0 = move-exception;
+        r33 = r6;
+        r31 = r7;
+        r30 = r11;
+        r29 = r12;
+        r44 = r13;
+        r11 = r27;
+        r27 = r2;
+        r14 = r39;
+        goto L_0x1231;
+    L_0x11d9:
+        r0 = move-exception;
+        r33 = r6;
+        r31 = r7;
+        r30 = r11;
+        r29 = r12;
+        r44 = r13;
+        r11 = r27;
+        r27 = r2;
+        r14 = r39;
+        goto L_0x124e;
+    L_0x11ec:
+        r33 = r6;
+        r31 = r7;
+        r30 = r11;
+        r29 = r12;
+        r44 = r13;
+        r39 = r14;
+        r5 = r21;
+        r12 = r24;
+        r14 = r26;
+        r11 = r27;
+        r27 = r2;
+        r21 = r8;
+        r2 = r23;
+        r3.dispose();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        goto L_0x1275;
+    L_0x120b:
+        r0 = move-exception;
+    L_0x120c:
+        r14 = r39;
+        r13 = r44;
+        r21 = r0;
+        r20 = r27;
+        goto L_0x1491;
+    L_0x1216:
+        r0 = move-exception;
+    L_0x1217:
+        r14 = r39;
+        r13 = r44;
+        r2 = r0;
+        r20 = r27;
+        goto L_0x14a5;
+    L_0x1220:
+        r0 = move-exception;
+        r33 = r6;
+        r31 = r7;
+        r30 = r11;
+        r29 = r12;
+        r44 = r13;
+        r39 = r14;
+        r11 = r27;
+        r27 = r2;
+    L_0x1231:
+        r21 = r0;
+        r20 = r27;
+    L_0x1235:
+        r19 = r32;
+    L_0x1237:
+        r17 = r35;
+        r33 = r30;
+        goto L_0x1553;
+    L_0x123d:
+        r0 = move-exception;
+        r33 = r6;
+        r31 = r7;
+        r30 = r11;
+        r29 = r12;
+        r44 = r13;
+        r39 = r14;
+        r11 = r27;
+        r27 = r2;
+    L_0x124e:
+        r2 = r0;
+        r20 = r27;
+    L_0x1251:
+        r19 = r32;
+    L_0x1253:
+        r17 = r35;
+    L_0x1255:
+        r33 = r30;
+        goto L_0x1524;
+    L_0x1259:
+        r33 = r6;
+        r31 = r7;
+        r30 = r11;
+        r29 = r12;
+        r44 = r13;
+        r39 = r14;
+        r5 = r21;
+        r12 = r24;
+        r14 = r26;
+        r11 = r27;
+        r27 = r2;
+        r21 = r8;
+        r2 = r23;
+        r9 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
+    L_0x1275:
+        r3 = r11.messages;	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
+        r6 = org.telegram.messenger.-$$Lambda$MessagesStorage$ckxq9sSVjeMrluKAIkQqpix6aHQ.INSTANCE;	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
+        java.util.Collections.sort(r3, r6);	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
+        if (r28 == 0) goto L_0x12be;
+    L_0x127e:
+        r3 = 3;
+        if (r15 == r3) goto L_0x128e;
+    L_0x1281:
+        r3 = 4;
+        if (r15 == r3) goto L_0x128e;
+    L_0x1284:
+        r3 = 2;
+        if (r15 != r3) goto L_0x128c;
+    L_0x1287:
+        if (r32 == 0) goto L_0x128c;
+    L_0x1289:
+        if (r10 != 0) goto L_0x128c;
+    L_0x128b:
+        goto L_0x128e;
+    L_0x128c:
+        r3 = 4;
+        goto L_0x12ab;
+    L_0x128e:
+        r3 = r11.messages;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r3 = r3.isEmpty();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        if (r3 != 0) goto L_0x128c;
+    L_0x1296:
+        r8 = r21;
+        if (r4 > r8) goto L_0x129c;
+    L_0x129a:
+        if (r9 >= r8) goto L_0x128c;
+    L_0x129c:
+        r5.clear();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r12.clear();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r14.clear();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r3 = r11.messages;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r3.clear();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        goto L_0x128c;
+    L_0x12ab:
+        if (r15 == r3) goto L_0x12b0;
+    L_0x12ad:
+        r3 = 3;
+        if (r15 != r3) goto L_0x12be;
+    L_0x12b0:
+        r3 = r11.messages;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r3 = r3.size();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r4 = 1;
+        if (r3 != r4) goto L_0x12be;
+    L_0x12b9:
+        r3 = r11.messages;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r3.clear();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+    L_0x12be:
+        r3 = r5.isEmpty();	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
+        r4 = ",";
+        if (r3 != 0) goto L_0x13e2;
+    L_0x12c6:
+        r3 = r22.size();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        if (r3 <= 0) goto L_0x12e8;
+    L_0x12cc:
+        r3 = r1.database;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r7 = "SELECT data, mid, date FROM messages WHERE mid IN(%s)";
+        r8 = 1;
+        r9 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r5 = android.text.TextUtils.join(r4, r5);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r8 = 0;
+        r9[r8] = r5;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r5 = java.lang.String.format(r6, r7, r9);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r6 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r3 = r3.queryFinalized(r5, r6);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+    L_0x12e6:
+        r8 = 0;
+        goto L_0x1302;
+    L_0x12e8:
+        r3 = r1.database;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r6 = java.util.Locale.US;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r7 = "SELECT m.data, m.mid, m.date, r.random_id FROM randoms as r INNER JOIN messages as m ON r.mid = m.mid WHERE r.random_id IN(%s)";
+        r8 = 1;
+        r9 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r5 = android.text.TextUtils.join(r4, r5);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r8 = 0;
+        r9[r8] = r5;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r5 = java.lang.String.format(r6, r7, r9);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r6 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r3 = r3.queryFinalized(r5, r6);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+    L_0x1302:
+        r5 = r3.next();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        if (r5 == 0) goto L_0x13b3;
+    L_0x1308:
+        r5 = r3.byteBufferValue(r8);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        if (r5 == 0) goto L_0x13aa;
+    L_0x130e:
+        r6 = r5.readInt32(r8);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r6 = org.telegram.tgnet.TLRPC.Message.TLdeserialize(r5, r6, r8);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r7 = r36;
+        r6.readAttachPath(r5, r7);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r5.reuse();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r5 = 1;
+        r8 = r3.intValue(r5);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r6.id = r8;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r5 = 2;
+        r8 = r3.intValue(r5);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r6.date = r8;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r8 = r41;
+        r6.dialog_id = r8;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        addUsersAndChatsFromMessage(r6, r12, r14);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r10 = r22.size();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        if (r10 <= 0) goto L_0x136d;
+    L_0x1339:
+        r10 = r6.id;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r13 = r22;
+        r10 = r13.get(r10);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r10 = (java.util.ArrayList) r10;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        if (r10 == 0) goto L_0x136a;
+    L_0x1345:
+        r36 = r7;
+        r5 = 0;
+    L_0x1348:
+        r7 = r10.size();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        if (r5 >= r7) goto L_0x13ac;
+    L_0x134e:
+        r7 = r10.get(r5);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r7 = (org.telegram.tgnet.TLRPC.Message) r7;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r7.replyMessage = r6;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r18 = org.telegram.messenger.MessageObject.isMegagroup(r7);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        if (r18 == 0) goto L_0x1365;
+    L_0x135c:
+        r7 = r7.replyMessage;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r8 = r7.flags;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r9 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
+        r8 = r8 | r9;
+        r7.flags = r8;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+    L_0x1365:
+        r5 = r5 + 1;
+        r8 = r41;
+        goto L_0x1348;
+    L_0x136a:
+        r36 = r7;
+        goto L_0x13ac;
+    L_0x136d:
+        r36 = r7;
+        r13 = r22;
+        r5 = 3;
+        r7 = r3.longValue(r5);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r9 = r2.get(r7);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r9 = (java.util.ArrayList) r9;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r2.remove(r7);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        if (r9 == 0) goto L_0x13ad;
+    L_0x1381:
+        r7 = 0;
+    L_0x1382:
+        r8 = r9.size();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        if (r7 >= r8) goto L_0x13ad;
+    L_0x1388:
+        r8 = r9.get(r7);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r8 = (org.telegram.tgnet.TLRPC.Message) r8;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r8.replyMessage = r6;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r10 = r6.id;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r8.reply_to_msg_id = r10;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r10 = org.telegram.messenger.MessageObject.isMegagroup(r8);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        if (r10 == 0) goto L_0x13a5;
+    L_0x139a:
+        r8 = r8.replyMessage;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r10 = r8.flags;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r18 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
+        r10 = r10 | r18;
+        r8.flags = r10;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        goto L_0x13a7;
+    L_0x13a5:
+        r18 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
+    L_0x13a7:
+        r7 = r7 + 1;
+        goto L_0x1382;
+    L_0x13aa:
+        r13 = r22;
+    L_0x13ac:
+        r5 = 3;
+    L_0x13ad:
+        r18 = -NUM; // 0xfffffffvar_ float:-0.0 double:NaN;
+        r22 = r13;
+        goto L_0x12e6;
+    L_0x13b3:
+        r3.dispose();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r3 = r2.size();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        if (r3 <= 0) goto L_0x13e2;
+    L_0x13bc:
+        r3 = 0;
+    L_0x13bd:
+        r5 = r2.size();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        if (r3 >= r5) goto L_0x13e2;
+    L_0x13c3:
+        r5 = r2.valueAt(r3);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r5 = (java.util.ArrayList) r5;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r6 = 0;
+    L_0x13ca:
+        r7 = r5.size();	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        if (r6 >= r7) goto L_0x13dd;
+    L_0x13d0:
+        r7 = r5.get(r6);	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r7 = (org.telegram.tgnet.TLRPC.Message) r7;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r8 = 0;
+        r7.reply_to_random_id = r8;	 Catch:{ Exception -> 0x1216, all -> 0x120b }
+        r6 = r6 + 1;
+        goto L_0x13ca;
+    L_0x13dd:
+        r8 = 0;
+        r3 = r3 + 1;
+        goto L_0x13bd;
+    L_0x13e2:
+        if (r27 == 0) goto L_0x142f;
+    L_0x13e4:
+        r2 = r1.database;	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
+        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
+        r5 = "SELECT COUNT(mid) FROM messages WHERE uid = %d AND mention = 1 AND read_state IN(0, 1)";
+        r6 = 1;
+        r6 = new java.lang.Object[r6];	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
+        r7 = java.lang.Long.valueOf(r41);	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
+        r8 = 0;
+        r6[r8] = r7;	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
+        r3 = java.lang.String.format(r3, r5, r6);	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
+        r5 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
+        r2 = r2.queryFinalized(r3, r5);	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
+        r3 = r2.next();	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
+        if (r3 == 0) goto L_0x1411;
+    L_0x1404:
+        r3 = r2.intValue(r8);	 Catch:{ Exception -> 0x149b, all -> 0x1486 }
+        r5 = r27;
+        if (r5 == r3) goto L_0x140f;
+    L_0x140c:
+        r3 = r5 * -1;
+        goto L_0x1414;
+    L_0x140f:
+        r3 = r5;
+        goto L_0x1414;
+    L_0x1411:
+        r5 = r27;
+        goto L_0x140c;
+    L_0x1414:
+        r2.dispose();	 Catch:{ Exception -> 0x1425, all -> 0x141a }
+        r20 = r3;
+        goto L_0x1433;
+    L_0x141a:
+        r0 = move-exception;
+        r14 = r39;
+        r13 = r44;
+        r21 = r0;
+        r20 = r3;
+        goto L_0x1491;
+    L_0x1425:
+        r0 = move-exception;
+        r14 = r39;
+        r13 = r44;
+        r2 = r0;
+        r20 = r3;
+        goto L_0x14a5;
+    L_0x142f:
+        r5 = r27;
+        r20 = r5;
+    L_0x1433:
+        r2 = r12.isEmpty();	 Catch:{ Exception -> 0x147f, all -> 0x1477 }
+        if (r2 != 0) goto L_0x1442;
+    L_0x1439:
+        r2 = android.text.TextUtils.join(r4, r12);	 Catch:{ Exception -> 0x147f, all -> 0x1477 }
+        r3 = r11.users;	 Catch:{ Exception -> 0x147f, all -> 0x1477 }
+        r1.getUsersInternal(r2, r3);	 Catch:{ Exception -> 0x147f, all -> 0x1477 }
+    L_0x1442:
+        r2 = r14.isEmpty();	 Catch:{ Exception -> 0x147f, all -> 0x1477 }
+        if (r2 != 0) goto L_0x1451;
+    L_0x1448:
+        r2 = android.text.TextUtils.join(r4, r14);	 Catch:{ Exception -> 0x147f, all -> 0x1477 }
+        r3 = r11.chats;	 Catch:{ Exception -> 0x147f, all -> 0x1477 }
+        r1.getChatsInternal(r2, r3);	 Catch:{ Exception -> 0x147f, all -> 0x1477 }
+    L_0x1451:
+        r2 = r1.currentAccount;
+        r2 = org.telegram.messenger.MessagesController.getInstance(r2);
+        r9 = 1;
+        r3 = r11;
+        r4 = r41;
+        r6 = r33;
+        r7 = r31;
+        r8 = r45;
+        r10 = r46;
+        r11 = r30;
+        r12 = r29;
+        r13 = r44;
+        r14 = r39;
+        r15 = r43;
+        r16 = r40;
+        r17 = r35;
+        r18 = r47;
+        r19 = r32;
+        goto L_0x154c;
+    L_0x1477:
+        r0 = move-exception;
+        r14 = r39;
+        r13 = r44;
+        r21 = r0;
+        goto L_0x1491;
+    L_0x147f:
+        r0 = move-exception;
+        r14 = r39;
+        r13 = r44;
+        r2 = r0;
+        goto L_0x14a5;
+    L_0x1486:
+        r0 = move-exception;
+        r5 = r27;
+        r14 = r39;
+        r13 = r44;
+        r21 = r0;
+        r20 = r5;
+    L_0x1491:
+        r12 = r29;
+        r7 = r31;
+        r19 = r32;
+        r6 = r33;
+        goto L_0x1237;
+    L_0x149b:
+        r0 = move-exception;
+        r5 = r27;
+        r14 = r39;
+        r13 = r44;
+        r2 = r0;
+        r20 = r5;
+    L_0x14a5:
+        r12 = r29;
+        r7 = r31;
+        r19 = r32;
+        r6 = r33;
+        goto L_0x1253;
+    L_0x14af:
+        r0 = move-exception;
+        r11 = r27;
+        r6 = 1;
+        goto L_0x14be;
+    L_0x14b4:
+        r0 = move-exception;
+        r11 = r27;
+        r6 = 1;
+        goto L_0x14cc;
+    L_0x14b9:
+        r0 = move-exception;
+        r11 = r27;
+        r6 = 1;
+        r8 = 0;
+    L_0x14be:
+        r21 = r0;
+        r6 = r2;
+        r12 = r4;
+        r33 = r5;
+        r14 = r7;
+        r13 = r10;
+        goto L_0x14e0;
+    L_0x14c7:
+        r0 = move-exception;
+        r11 = r27;
+        r6 = 1;
+        r8 = 0;
+    L_0x14cc:
+        r6 = r2;
+        r12 = r4;
+        r33 = r5;
+        r14 = r7;
+        r13 = r10;
+        goto L_0x14f5;
+    L_0x14d3:
+        r0 = move-exception;
+        r11 = r27;
+        r6 = 1;
+        r8 = 0;
+        r21 = r0;
+        r6 = r2;
+        r33 = r5;
+        r14 = r7;
+        r13 = r10;
+    L_0x14df:
+        r12 = 0;
+    L_0x14e0:
+        r17 = 1;
+        r19 = 0;
+        r20 = 0;
+    L_0x14e6:
+        r7 = r39;
+        goto L_0x1553;
+    L_0x14ea:
+        r0 = move-exception;
+        r11 = r27;
+        r6 = 1;
+        r8 = 0;
+        r6 = r2;
+        r33 = r5;
+        r14 = r7;
+        r13 = r10;
+    L_0x14f4:
+        r12 = 0;
+    L_0x14f5:
+        r17 = 1;
+        r19 = 0;
+        r20 = 0;
+    L_0x14fb:
+        r7 = r39;
+        goto L_0x1523;
+    L_0x14fe:
+        r0 = move-exception;
+        r11 = r7;
+        r8 = 0;
+        r7 = r39;
+        r21 = r0;
+        r6 = r2;
+    L_0x1506:
+        r12 = 0;
+        r13 = 0;
+        r14 = 0;
+        r17 = 0;
+    L_0x150b:
+        r19 = 0;
+        r20 = 0;
+        r33 = 0;
+        goto L_0x1553;
+    L_0x1512:
+        r0 = move-exception;
+        r11 = r7;
+        r8 = 0;
+        r7 = r39;
+        r6 = r2;
+    L_0x1518:
+        r12 = 0;
+        r13 = 0;
+        r14 = 0;
+        r17 = 0;
+    L_0x151d:
+        r19 = 0;
+        r20 = 0;
+        r33 = 0;
+    L_0x1523:
+        r2 = r0;
+    L_0x1524:
+        r3 = r11.messages;	 Catch:{ all -> 0x1550 }
+        r3.clear();	 Catch:{ all -> 0x1550 }
+        r3 = r11.chats;	 Catch:{ all -> 0x1550 }
+        r3.clear();	 Catch:{ all -> 0x1550 }
+        r3 = r11.users;	 Catch:{ all -> 0x1550 }
+        r3.clear();	 Catch:{ all -> 0x1550 }
+        org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x1550 }
+        r2 = r1.currentAccount;
+        r2 = org.telegram.messenger.MessagesController.getInstance(r2);
+        r9 = 1;
+        r3 = r11;
+        r4 = r41;
+        r8 = r45;
+        r10 = r46;
+        r11 = r33;
+        r15 = r43;
+        r16 = r40;
+        r18 = r47;
+    L_0x154c:
+        r2.processLoadedMessages(r3, r4, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16, r17, r18, r19, r20);
+        return;
+    L_0x1550:
+        r0 = move-exception;
+        r21 = r0;
+    L_0x1553:
+        r2 = r1.currentAccount;
+        r2 = org.telegram.messenger.MessagesController.getInstance(r2);
+        r9 = 1;
+        r3 = r11;
+        r4 = r41;
+        r8 = r45;
+        r10 = r46;
+        r11 = r33;
+        r15 = r43;
+        r16 = r40;
+        r18 = r47;
+        r2.processLoadedMessages(r3, r4, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16, r17, r18, r19, r20);
+        goto L_0x156e;
+    L_0x156d:
+        throw r21;
+    L_0x156e:
+        goto L_0x156d;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getMessages$98$MessagesStorage(int, int, boolean, long, int, int, int, int, int):void");
+    }
+
     static /* synthetic */ int lambda$null$97(Message message, Message message2) {
         int i;
         int i2 = message.id;
@@ -8881,10 +9051,136 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         return null;
     }
 
+    public /* synthetic */ void lambda$getSentFile$100$MessagesStorage(String str, int i, Object[] objArr, CountDownLatch countDownLatch) {
+        try {
+            if (Utilities.MD5(str) != null) {
+                SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT data, parent FROM sent_files_v2 WHERE uid = '%s' AND type = %d", new Object[]{str, Integer.valueOf(i)}), new Object[0]);
+                if (queryFinalized.next()) {
+                    NativeByteBuffer byteBufferValue = queryFinalized.byteBufferValue(0);
+                    if (byteBufferValue != null) {
+                        MessageMedia TLdeserialize = MessageMedia.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
+                        byteBufferValue.reuse();
+                        if (TLdeserialize instanceof TL_messageMediaDocument) {
+                            objArr[0] = ((TL_messageMediaDocument) TLdeserialize).document;
+                        } else if (TLdeserialize instanceof TL_messageMediaPhoto) {
+                            objArr[0] = ((TL_messageMediaPhoto) TLdeserialize).photo;
+                        }
+                        if (objArr[0] != null) {
+                            objArr[1] = queryFinalized.stringValue(1);
+                        }
+                    }
+                }
+                queryFinalized.dispose();
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        } catch (Throwable th) {
+            countDownLatch.countDown();
+        }
+        countDownLatch.countDown();
+    }
+
     public void putSentFile(String str, TLObject tLObject, int i, String str2) {
         if (str != null && tLObject != null && str2 != null) {
             this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$fEBfzEcgB9kbydLipulXIRTQMog(this, str, tLObject, i, str2));
         }
+    }
+
+    /* JADX WARNING: Missing block: B:14:0x005e, code skipped:
+            if (r0 != null) goto L_0x0060;
+     */
+    /* JADX WARNING: Missing block: B:15:0x0060, code skipped:
+            r0.dispose();
+     */
+    /* JADX WARNING: Missing block: B:20:0x006a, code skipped:
+            if (r0 == null) goto L_0x006d;
+     */
+    /* JADX WARNING: Missing block: B:21:0x006d, code skipped:
+            return;
+     */
+    public /* synthetic */ void lambda$putSentFile$101$MessagesStorage(java.lang.String r5, org.telegram.tgnet.TLObject r6, int r7, java.lang.String r8) {
+        /*
+        r4 = this;
+        r0 = 0;
+        r5 = org.telegram.messenger.Utilities.MD5(r5);	 Catch:{ Exception -> 0x0066 }
+        if (r5 == 0) goto L_0x005e;
+    L_0x0007:
+        r1 = r6 instanceof org.telegram.tgnet.TLRPC.Photo;	 Catch:{ Exception -> 0x0066 }
+        r2 = 1;
+        if (r1 == 0) goto L_0x001b;
+    L_0x000c:
+        r1 = new org.telegram.tgnet.TLRPC$TL_messageMediaPhoto;	 Catch:{ Exception -> 0x0066 }
+        r1.<init>();	 Catch:{ Exception -> 0x0066 }
+        r6 = (org.telegram.tgnet.TLRPC.Photo) r6;	 Catch:{ Exception -> 0x0066 }
+        r1.photo = r6;	 Catch:{ Exception -> 0x0066 }
+        r6 = r1.flags;	 Catch:{ Exception -> 0x0066 }
+        r6 = r6 | r2;
+        r1.flags = r6;	 Catch:{ Exception -> 0x0066 }
+        goto L_0x002f;
+    L_0x001b:
+        r1 = r6 instanceof org.telegram.tgnet.TLRPC.Document;	 Catch:{ Exception -> 0x0066 }
+        if (r1 == 0) goto L_0x002e;
+    L_0x001f:
+        r1 = new org.telegram.tgnet.TLRPC$TL_messageMediaDocument;	 Catch:{ Exception -> 0x0066 }
+        r1.<init>();	 Catch:{ Exception -> 0x0066 }
+        r6 = (org.telegram.tgnet.TLRPC.Document) r6;	 Catch:{ Exception -> 0x0066 }
+        r1.document = r6;	 Catch:{ Exception -> 0x0066 }
+        r6 = r1.flags;	 Catch:{ Exception -> 0x0066 }
+        r6 = r6 | r2;
+        r1.flags = r6;	 Catch:{ Exception -> 0x0066 }
+        goto L_0x002f;
+    L_0x002e:
+        r1 = r0;
+    L_0x002f:
+        if (r1 != 0) goto L_0x0032;
+    L_0x0031:
+        return;
+    L_0x0032:
+        r6 = r4.database;	 Catch:{ Exception -> 0x0066 }
+        r3 = "REPLACE INTO sent_files_v2 VALUES(?, ?, ?, ?)";
+        r0 = r6.executeFast(r3);	 Catch:{ Exception -> 0x0066 }
+        r0.requery();	 Catch:{ Exception -> 0x0066 }
+        r6 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0066 }
+        r3 = r1.getObjectSize();	 Catch:{ Exception -> 0x0066 }
+        r6.<init>(r3);	 Catch:{ Exception -> 0x0066 }
+        r1.serializeToStream(r6);	 Catch:{ Exception -> 0x0066 }
+        r0.bindString(r2, r5);	 Catch:{ Exception -> 0x0066 }
+        r5 = 2;
+        r0.bindInteger(r5, r7);	 Catch:{ Exception -> 0x0066 }
+        r5 = 3;
+        r0.bindByteBuffer(r5, r6);	 Catch:{ Exception -> 0x0066 }
+        r5 = 4;
+        r0.bindString(r5, r8);	 Catch:{ Exception -> 0x0066 }
+        r0.step();	 Catch:{ Exception -> 0x0066 }
+        r6.reuse();	 Catch:{ Exception -> 0x0066 }
+    L_0x005e:
+        if (r0 == 0) goto L_0x006d;
+    L_0x0060:
+        r0.dispose();
+        goto L_0x006d;
+    L_0x0064:
+        r5 = move-exception;
+        goto L_0x006e;
+    L_0x0066:
+        r5 = move-exception;
+        org.telegram.messenger.FileLog.e(r5);	 Catch:{ all -> 0x0064 }
+        if (r0 == 0) goto L_0x006d;
+    L_0x006c:
+        goto L_0x0060;
+    L_0x006d:
+        return;
+    L_0x006e:
+        if (r0 == 0) goto L_0x0073;
+    L_0x0070:
+        r0.dispose();
+    L_0x0073:
+        goto L_0x0075;
+    L_0x0074:
+        throw r5;
+    L_0x0075:
+        goto L_0x0074;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$putSentFile$101$MessagesStorage(java.lang.String, org.telegram.tgnet.TLObject, int, java.lang.String):void");
     }
 
     public void updateEncryptedChatSeq(EncryptedChat encryptedChat, boolean z) {
@@ -9588,7 +9884,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     } else if (TLdeserialize.photo != null) {
                         downloadObject.object = TLdeserialize.photo;
                     }
-                    downloadObject.secret = TLdeserialize.ttl_seconds != 0;
+                    boolean z = TLdeserialize.ttl_seconds > 0 && TLdeserialize.ttl_seconds <= 60;
+                    downloadObject.secret = z;
                     downloadObject.forceCache = (TLdeserialize.flags & Integer.MIN_VALUE) != 0;
                 }
                 arrayList.add(downloadObject);
@@ -11779,6 +12076,88 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         return updateMessageStateAndIdInternal(j, num, i, i2, i3);
     }
 
+    private void updateUsersInternal(ArrayList<User> arrayList, boolean z, boolean z2) {
+        if (Thread.currentThread().getId() == this.storageQueue.getId()) {
+            int i = 0;
+            int i2;
+            User user;
+            if (z) {
+                if (z2) {
+                    try {
+                        this.database.beginTransaction();
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                        return;
+                    }
+                }
+                SQLitePreparedStatement executeFast = this.database.executeFast("UPDATE users SET status = ? WHERE uid = ?");
+                int size = arrayList.size();
+                for (i2 = 0; i2 < size; i2++) {
+                    user = (User) arrayList.get(i2);
+                    executeFast.requery();
+                    if (user.status != null) {
+                        executeFast.bindInteger(1, user.status.expires);
+                    } else {
+                        executeFast.bindInteger(1, 0);
+                    }
+                    executeFast.bindInteger(2, user.id);
+                    executeFast.step();
+                }
+                executeFast.dispose();
+                if (z2) {
+                    this.database.commitTransaction();
+                    return;
+                }
+                return;
+            }
+            StringBuilder stringBuilder = new StringBuilder();
+            SparseArray sparseArray = new SparseArray();
+            i2 = arrayList.size();
+            for (int i3 = 0; i3 < i2; i3++) {
+                User user2 = (User) arrayList.get(i3);
+                if (stringBuilder.length() != 0) {
+                    stringBuilder.append(",");
+                }
+                stringBuilder.append(user2.id);
+                sparseArray.put(user2.id, user2);
+            }
+            ArrayList arrayList2 = new ArrayList();
+            getUsersInternal(stringBuilder.toString(), arrayList2);
+            int size2 = arrayList2.size();
+            while (i < size2) {
+                User user3 = (User) arrayList2.get(i);
+                user = (User) sparseArray.get(user3.id);
+                if (user != null) {
+                    if (user.first_name != null && user.last_name != null) {
+                        if (!UserObject.isContact(user3)) {
+                            user3.first_name = user.first_name;
+                            user3.last_name = user.last_name;
+                        }
+                        user3.username = user.username;
+                    } else if (user.photo != null) {
+                        user3.photo = user.photo;
+                    } else if (user.phone != null) {
+                        user3.phone = user.phone;
+                    }
+                }
+                i++;
+            }
+            if (!arrayList2.isEmpty()) {
+                if (z2) {
+                    this.database.beginTransaction();
+                }
+                putUsersInternal(arrayList2);
+                if (z2) {
+                    this.database.commitTransaction();
+                    return;
+                }
+                return;
+            }
+            return;
+        }
+        throw new RuntimeException("wrong db thread");
+    }
+
     public void updateUsers(ArrayList<User> arrayList, boolean z, boolean z2, boolean z3) {
         if (arrayList != null && !arrayList.isEmpty()) {
             if (z3) {
@@ -12436,6 +12815,148 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.markMessagesAsDeletedInternal(java.util.ArrayList, int):java.util.ArrayList");
     }
 
+    private void updateDialogsWithDeletedMessagesInternal(ArrayList<Integer> arrayList, ArrayList<Long> arrayList2, int i) {
+        ArrayList<Long> arrayList3 = arrayList2;
+        int i2 = i;
+        if (Thread.currentThread().getId() == this.storageQueue.getId()) {
+            try {
+                ArrayList arrayList4 = new ArrayList();
+                String str = ",";
+                int i3 = 0;
+                if (arrayList.isEmpty()) {
+                    arrayList4.add(Long.valueOf((long) (-i2)));
+                } else {
+                    SQLitePreparedStatement executeFast;
+                    if (i2 != 0) {
+                        arrayList4.add(Long.valueOf((long) (-i2)));
+                        executeFast = this.database.executeFast("UPDATE dialogs SET last_mid = (SELECT mid FROM messages WHERE uid = ? AND date = (SELECT MAX(date) FROM messages WHERE uid = ?)) WHERE did = ?");
+                    } else {
+                        String join = TextUtils.join(str, arrayList);
+                        SQLiteCursor queryFinalized = this.database.queryFinalized(String.format(Locale.US, "SELECT did FROM dialogs WHERE last_mid IN(%s)", new Object[]{join}), new Object[0]);
+                        while (queryFinalized.next()) {
+                            arrayList4.add(Long.valueOf(queryFinalized.longValue(0)));
+                        }
+                        queryFinalized.dispose();
+                        executeFast = this.database.executeFast("UPDATE dialogs SET last_mid = (SELECT mid FROM messages WHERE uid = ? AND date = (SELECT MAX(date) FROM messages WHERE uid = ? AND date != 0)) WHERE did = ?");
+                    }
+                    this.database.beginTransaction();
+                    for (int i4 = 0; i4 < arrayList4.size(); i4++) {
+                        long longValue = ((Long) arrayList4.get(i4)).longValue();
+                        executeFast.requery();
+                        executeFast.bindLong(1, longValue);
+                        executeFast.bindLong(2, longValue);
+                        executeFast.bindLong(3, longValue);
+                        executeFast.step();
+                    }
+                    executeFast.dispose();
+                    this.database.commitTransaction();
+                }
+                if (arrayList3 != null) {
+                    for (int i5 = 0; i5 < arrayList2.size(); i5++) {
+                        Long l = (Long) arrayList3.get(i5);
+                        if (!arrayList4.contains(l)) {
+                            arrayList4.add(l);
+                        }
+                    }
+                }
+                String join2 = TextUtils.join(str, arrayList4);
+                TL_messages_dialogs tL_messages_dialogs = new TL_messages_dialogs();
+                ArrayList arrayList5 = new ArrayList();
+                ArrayList arrayList6 = new ArrayList();
+                ArrayList arrayList7 = new ArrayList();
+                ArrayList arrayList8 = new ArrayList();
+                SQLiteCursor queryFinalized2 = this.database.queryFinalized(String.format(Locale.US, "SELECT d.did, d.last_mid, d.unread_count, d.date, m.data, m.read_state, m.mid, m.send_state, m.date, d.pts, d.inbox_max, d.outbox_max, d.pinned, d.unread_count_i, d.flags, d.folder_id, d.data FROM dialogs as d LEFT JOIN messages as m ON d.last_mid = m.mid WHERE d.did IN(%s)", new Object[]{join2}), new Object[0]);
+                while (queryFinalized2.next()) {
+                    Dialog tL_dialogFolder;
+                    long longValue2 = queryFinalized2.longValue(i3);
+                    if (DialogObject.isFolderDialogId(longValue2)) {
+                        tL_dialogFolder = new TL_dialogFolder();
+                        if (!queryFinalized2.isNull(16)) {
+                            NativeByteBuffer byteBufferValue = queryFinalized2.byteBufferValue(16);
+                            if (byteBufferValue != null) {
+                                tL_dialogFolder.folder = TL_folder.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(i3), i3);
+                            } else {
+                                tL_dialogFolder.folder = new TL_folder();
+                                tL_dialogFolder.folder.id = queryFinalized2.intValue(15);
+                            }
+                            byteBufferValue.reuse();
+                        }
+                    } else {
+                        tL_dialogFolder = new TL_dialog();
+                    }
+                    tL_dialogFolder.id = longValue2;
+                    tL_dialogFolder.top_message = queryFinalized2.intValue(1);
+                    tL_dialogFolder.read_inbox_max_id = queryFinalized2.intValue(10);
+                    tL_dialogFolder.read_outbox_max_id = queryFinalized2.intValue(11);
+                    tL_dialogFolder.unread_count = queryFinalized2.intValue(2);
+                    tL_dialogFolder.unread_mentions_count = queryFinalized2.intValue(13);
+                    tL_dialogFolder.last_message_date = queryFinalized2.intValue(3);
+                    tL_dialogFolder.pts = queryFinalized2.intValue(9);
+                    tL_dialogFolder.flags = i2 == 0 ? 0 : 1;
+                    tL_dialogFolder.pinnedNum = queryFinalized2.intValue(12);
+                    tL_dialogFolder.pinned = tL_dialogFolder.pinnedNum != 0;
+                    tL_dialogFolder.unread_mark = (queryFinalized2.intValue(14) & 1) != 0;
+                    tL_dialogFolder.folder_id = queryFinalized2.intValue(15);
+                    tL_messages_dialogs.dialogs.add(tL_dialogFolder);
+                    NativeByteBuffer byteBufferValue2 = queryFinalized2.byteBufferValue(4);
+                    if (byteBufferValue2 != null) {
+                        Message TLdeserialize = Message.TLdeserialize(byteBufferValue2, byteBufferValue2.readInt32(false), false);
+                        TLdeserialize.readAttachPath(byteBufferValue2, UserConfig.getInstance(this.currentAccount).clientUserId);
+                        byteBufferValue2.reuse();
+                        MessageObject.setUnreadFlags(TLdeserialize, queryFinalized2.intValue(5));
+                        TLdeserialize.id = queryFinalized2.intValue(6);
+                        TLdeserialize.send_state = queryFinalized2.intValue(7);
+                        i3 = queryFinalized2.intValue(8);
+                        if (i3 != 0) {
+                            tL_dialogFolder.last_message_date = i3;
+                        }
+                        TLdeserialize.dialog_id = tL_dialogFolder.id;
+                        tL_messages_dialogs.messages.add(TLdeserialize);
+                        addUsersAndChatsFromMessage(TLdeserialize, arrayList6, arrayList7);
+                    }
+                    i3 = (int) tL_dialogFolder.id;
+                    int i6 = (int) (tL_dialogFolder.id >> 32);
+                    if (i3 != 0) {
+                        if (i6 == 1) {
+                            if (!arrayList7.contains(Integer.valueOf(i3))) {
+                                arrayList7.add(Integer.valueOf(i3));
+                            }
+                        } else if (i3 <= 0) {
+                            i6 = -i3;
+                            if (!arrayList7.contains(Integer.valueOf(i6))) {
+                                arrayList7.add(Integer.valueOf(i6));
+                            }
+                        } else if (!arrayList6.contains(Integer.valueOf(i3))) {
+                            arrayList6.add(Integer.valueOf(i3));
+                        }
+                    } else if (!arrayList8.contains(Integer.valueOf(i6))) {
+                        arrayList8.add(Integer.valueOf(i6));
+                    }
+                    i3 = 0;
+                }
+                queryFinalized2.dispose();
+                if (!arrayList8.isEmpty()) {
+                    getEncryptedChatsInternal(TextUtils.join(str, arrayList8), arrayList5, arrayList6);
+                }
+                if (!arrayList7.isEmpty()) {
+                    getChatsInternal(TextUtils.join(str, arrayList7), tL_messages_dialogs.chats);
+                }
+                if (!arrayList6.isEmpty()) {
+                    getUsersInternal(TextUtils.join(str, arrayList6), tL_messages_dialogs.users);
+                }
+                if (!tL_messages_dialogs.dialogs.isEmpty() || !arrayList5.isEmpty()) {
+                    MessagesController.getInstance(this.currentAccount).processDialogsUpdate(tL_messages_dialogs, arrayList5);
+                    return;
+                }
+                return;
+            } catch (Exception e) {
+                FileLog.e(e);
+                return;
+            }
+        }
+        throw new RuntimeException("wrong db thread");
+    }
+
     public void updateDialogsWithDeletedMessages(ArrayList<Integer> arrayList, ArrayList<Long> arrayList2, boolean z, int i) {
         if (!arrayList.isEmpty() || i != 0) {
             if (z) {
@@ -12594,13 +13115,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             if (messageMedia instanceof TL_messageMediaUnsupported_old) {
                 if (messageMedia.bytes.length == 0) {
                     messageMedia.bytes = new byte[1];
-                    messageMedia.bytes[0] = (byte) 99;
+                    messageMedia.bytes[0] = (byte) 100;
                 }
             } else if (messageMedia instanceof TL_messageMediaUnsupported) {
                 message.media = new TL_messageMediaUnsupported_old();
                 messageMedia = message.media;
                 messageMedia.bytes = new byte[1];
-                messageMedia.bytes[0] = (byte) 99;
+                messageMedia.bytes[0] = (byte) 100;
                 message.flags |= 512;
             }
         }

@@ -1027,6 +1027,10 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
                         -CC.$default$didPressVoteButton(this, chatMessageCell, tL_pollAnswer);
                     }
 
+                    public /* synthetic */ void didStartVideoStream(MessageObject messageObject) {
+                        -CC.$default$didStartVideoStream(this, messageObject);
+                    }
+
                     public /* synthetic */ boolean isChatAdminCell(int i) {
                         return -CC.$default$isChatAdminCell(this, i);
                     }
@@ -1290,7 +1294,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r1.setAllowOverlayTitle(r7);
         r1 = r6.actionBar;
         r2 = "BackgroundPreview";
-        r3 = NUM; // 0x7f0d01a1 float:1.874296E38 double:1.0531299836E-314;
+        r3 = NUM; // 0x7f0d01a9 float:1.8742977E38 double:1.0531299875E-314;
         r2 = org.telegram.messenger.LocaleController.getString(r2, r3);
         r1.setTitle(r2);
         r1 = r6.actionBar;
@@ -1436,7 +1440,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r11 = org.telegram.ui.ActionBar.Theme.getColor(r14);
         r9.setTextColor(r11);
         r9 = r6.bottomOverlayChatText;
-        r11 = NUM; // 0x7f0d08e6 float:1.8746735E38 double:1.053130903E-314;
+        r11 = NUM; // 0x7f0d0921 float:1.8746855E38 double:1.053130932E-314;
         r10 = "SetBackground";
         r10 = org.telegram.messenger.LocaleController.getString(r10, r11);
         r9.setText(r10);
@@ -1467,25 +1471,25 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r12 = r12 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper;
         if (r12 == 0) goto L_0x019f;
     L_0x017d:
-        r12 = NUM; // 0x7f0d0198 float:1.8742942E38 double:1.053129979E-314;
+        r12 = NUM; // 0x7f0d01a0 float:1.8742958E38 double:1.053129983E-314;
         r11 = "BackgroundColor";
         r11 = org.telegram.messenger.LocaleController.getString(r11, r12);
         r9[r4] = r11;
-        r11 = NUM; // 0x7f0d01a0 float:1.8742958E38 double:1.053129983E-314;
+        r11 = NUM; // 0x7f0d01a8 float:1.8742975E38 double:1.053129987E-314;
         r12 = "BackgroundPattern";
         r11 = org.telegram.messenger.LocaleController.getString(r12, r11);
         r9[r7] = r11;
-        r11 = NUM; // 0x7f0d019f float:1.8742956E38 double:1.0531299826E-314;
+        r11 = NUM; // 0x7f0d01a7 float:1.8742973E38 double:1.0531299865E-314;
         r12 = "BackgroundMotion";
         r11 = org.telegram.messenger.LocaleController.getString(r12, r11);
         r9[r3] = r11;
         goto L_0x01b5;
     L_0x019f:
-        r11 = NUM; // 0x7f0d0196 float:1.8742938E38 double:1.053129978E-314;
+        r11 = NUM; // 0x7f0d019e float:1.8742954E38 double:1.053129982E-314;
         r12 = "BackgroundBlurred";
         r11 = org.telegram.messenger.LocaleController.getString(r12, r11);
         r9[r4] = r11;
-        r11 = NUM; // 0x7f0d019f float:1.8742956E38 double:1.0531299826E-314;
+        r11 = NUM; // 0x7f0d01a7 float:1.8742973E38 double:1.0531299865E-314;
         r12 = "BackgroundMotion";
         r11 = org.telegram.messenger.LocaleController.getString(r12, r11);
         r9[r7] = r11;
@@ -1716,7 +1720,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r4.setTextColor(r5);
         r4 = r6.patternsCancelButton;
         r4 = r4[r2];
-        r5 = NUM; // 0x7f0d01de float:1.8743084E38 double:1.0531300137E-314;
+        r5 = NUM; // 0x7f0d01ef float:1.8743119E38 double:1.053130022E-314;
         r10 = "Cancel";
         r5 = org.telegram.messenger.LocaleController.getString(r10, r5);
         r5 = r5.toUpperCase();
@@ -1770,7 +1774,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r3.setTextColor(r8);
         r3 = r6.patternsSaveButton;
         r3 = r3[r2];
-        r8 = NUM; // 0x7f0d087f float:1.8746526E38 double:1.053130852E-314;
+        r8 = NUM; // 0x7f0d08b7 float:1.874664E38 double:1.05313088E-314;
         r10 = "Save";
         r8 = org.telegram.messenger.LocaleController.getString(r10, r8);
         r8 = r8.toUpperCase();
@@ -1845,7 +1849,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r3.<init>(r0);
         r6.intensityCell = r3;
         r3 = r6.intensityCell;
-        r5 = NUM; // 0x7f0d019e float:1.8742954E38 double:1.053129982E-314;
+        r5 = NUM; // 0x7f0d01a6 float:1.874297E38 double:1.053129986E-314;
         r13 = "BackgroundIntensity";
         r5 = org.telegram.messenger.LocaleController.getString(r13, r5);
         r3.setText(r5);
@@ -1958,20 +1962,20 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x0117 A:{SYNTHETIC, Splitter:B:60:0x0117} */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x014d  */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x013c  */
-    /* JADX WARNING: Removed duplicated region for block: B:99:0x01e9  */
-    /* JADX WARNING: Removed duplicated region for block: B:98:0x01e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:102:0x01fa  */
-    /* JADX WARNING: Removed duplicated region for block: B:110:0x0266  */
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x0117 A:{SYNTHETIC, Splitter:B:60:0x0117} */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x013c  */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x014d  */
-    /* JADX WARNING: Removed duplicated region for block: B:98:0x01e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:99:0x01e9  */
-    /* JADX WARNING: Removed duplicated region for block: B:102:0x01fa  */
-    /* JADX WARNING: Removed duplicated region for block: B:110:0x0266  */
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x0119 A:{SYNTHETIC, Splitter:B:60:0x0119} */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x014f  */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x013e  */
+    /* JADX WARNING: Removed duplicated region for block: B:99:0x01eb  */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x01e8  */
+    /* JADX WARNING: Removed duplicated region for block: B:102:0x01fc  */
+    /* JADX WARNING: Removed duplicated region for block: B:110:0x0268  */
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x0119 A:{SYNTHETIC, Splitter:B:60:0x0119} */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x013e  */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x014f  */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x01e8  */
+    /* JADX WARNING: Removed duplicated region for block: B:99:0x01eb  */
+    /* JADX WARNING: Removed duplicated region for block: B:102:0x01fc  */
+    /* JADX WARNING: Removed duplicated region for block: B:110:0x0268  */
     public /* synthetic */ void lambda$createView$1$WallpaperActivity(android.view.View r32) {
         /*
         r31 = this;
@@ -1980,13 +1984,13 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r0 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();
         r3 = r1.isBlurred;
         r4 = "wallpaper.jpg";
-        if (r3 == 0) goto L_0x0011;
-    L_0x000e:
+        if (r3 == 0) goto L_0x0013;
+    L_0x000f:
         r3 = "wallpaper_original.jpg";
-        goto L_0x0012;
-    L_0x0011:
+        goto L_0x0014;
+    L_0x0013:
         r3 = r4;
-    L_0x0012:
+    L_0x0014:
         r2.<init>(r0, r3);
         r0 = r1.currentWallpaper;
         r3 = r0 instanceof org.telegram.tgnet.TLRPC.TL_wallPaper;
@@ -1995,175 +1999,175 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r8 = 87;
         r9 = 0;
         r10 = 1;
-        if (r3 == 0) goto L_0x0059;
-    L_0x0023:
-        r0 = r1.backgroundImage;	 Catch:{ Exception -> 0x003c }
-        r0 = r0.getImageReceiver();	 Catch:{ Exception -> 0x003c }
-        r0 = r0.getBitmap();	 Catch:{ Exception -> 0x003c }
-        r3 = new java.io.FileOutputStream;	 Catch:{ Exception -> 0x003c }
-        r3.<init>(r2);	 Catch:{ Exception -> 0x003c }
-        r11 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Exception -> 0x003c }
-        r0.compress(r11, r8, r3);	 Catch:{ Exception -> 0x003c }
-        r3.close();	 Catch:{ Exception -> 0x003c }
+        if (r3 == 0) goto L_0x005b;
+    L_0x0025:
+        r0 = r1.backgroundImage;	 Catch:{ Exception -> 0x003e }
+        r0 = r0.getImageReceiver();	 Catch:{ Exception -> 0x003e }
+        r0 = r0.getBitmap();	 Catch:{ Exception -> 0x003e }
+        r3 = new java.io.FileOutputStream;	 Catch:{ Exception -> 0x003e }
+        r3.<init>(r2);	 Catch:{ Exception -> 0x003e }
+        r11 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Exception -> 0x003e }
+        r0.compress(r11, r8, r3);	 Catch:{ Exception -> 0x003e }
+        r3.close();	 Catch:{ Exception -> 0x003e }
         r0 = 1;
-        goto L_0x0041;
-    L_0x003c:
+        goto L_0x0043;
+    L_0x003e:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
         r0 = 0;
-    L_0x0041:
-        if (r0 != 0) goto L_0x00b9;
     L_0x0043:
+        if (r0 != 0) goto L_0x00bb;
+    L_0x0045:
         r0 = r1.currentWallpaper;
         r0 = (org.telegram.tgnet.TLRPC.TL_wallPaper) r0;
         r0 = r0.document;
         r0 = org.telegram.messenger.FileLoader.getPathToAttach(r0, r10);
-        r0 = org.telegram.messenger.AndroidUtilities.copyFile(r0, r2);	 Catch:{ Exception -> 0x0052 }
-        goto L_0x00b9;
-    L_0x0052:
+        r0 = org.telegram.messenger.AndroidUtilities.copyFile(r0, r2);	 Catch:{ Exception -> 0x0054 }
+        goto L_0x00bb;
+    L_0x0054:
         r0 = move-exception;
         r3 = r0;
         org.telegram.messenger.FileLog.e(r3);
-        goto L_0x0111;
-    L_0x0059:
+        goto L_0x0113;
+    L_0x005b:
         r3 = r0 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper;
-        if (r3 == 0) goto L_0x00bb;
-    L_0x005d:
+        if (r3 == 0) goto L_0x00bd;
+    L_0x005f:
         r3 = r1.selectedPattern;
-        if (r3 == 0) goto L_0x00b8;
-    L_0x0061:
-        r0 = (org.telegram.ui.WallpapersListActivity.ColorWallpaper) r0;	 Catch:{ Throwable -> 0x00b3 }
-        r0 = r1.backgroundImage;	 Catch:{ Throwable -> 0x00b3 }
-        r0 = r0.getImageReceiver();	 Catch:{ Throwable -> 0x00b3 }
-        r0 = r0.getBitmap();	 Catch:{ Throwable -> 0x00b3 }
-        r3 = r0.getWidth();	 Catch:{ Throwable -> 0x00b3 }
-        r11 = r0.getHeight();	 Catch:{ Throwable -> 0x00b3 }
-        r12 = android.graphics.Bitmap.Config.ARGB_8888;	 Catch:{ Throwable -> 0x00b3 }
-        r3 = android.graphics.Bitmap.createBitmap(r3, r11, r12);	 Catch:{ Throwable -> 0x00b3 }
-        r11 = new android.graphics.Canvas;	 Catch:{ Throwable -> 0x00b3 }
-        r11.<init>(r3);	 Catch:{ Throwable -> 0x00b3 }
-        r12 = r1.backgroundColor;	 Catch:{ Throwable -> 0x00b3 }
-        r11.drawColor(r12);	 Catch:{ Throwable -> 0x00b3 }
-        r12 = new android.graphics.Paint;	 Catch:{ Throwable -> 0x00b3 }
+        if (r3 == 0) goto L_0x00ba;
+    L_0x0063:
+        r0 = (org.telegram.ui.WallpapersListActivity.ColorWallpaper) r0;	 Catch:{ Throwable -> 0x00b5 }
+        r0 = r1.backgroundImage;	 Catch:{ Throwable -> 0x00b5 }
+        r0 = r0.getImageReceiver();	 Catch:{ Throwable -> 0x00b5 }
+        r0 = r0.getBitmap();	 Catch:{ Throwable -> 0x00b5 }
+        r3 = r0.getWidth();	 Catch:{ Throwable -> 0x00b5 }
+        r11 = r0.getHeight();	 Catch:{ Throwable -> 0x00b5 }
+        r12 = android.graphics.Bitmap.Config.ARGB_8888;	 Catch:{ Throwable -> 0x00b5 }
+        r3 = android.graphics.Bitmap.createBitmap(r3, r11, r12);	 Catch:{ Throwable -> 0x00b5 }
+        r11 = new android.graphics.Canvas;	 Catch:{ Throwable -> 0x00b5 }
+        r11.<init>(r3);	 Catch:{ Throwable -> 0x00b5 }
+        r12 = r1.backgroundColor;	 Catch:{ Throwable -> 0x00b5 }
+        r11.drawColor(r12);	 Catch:{ Throwable -> 0x00b5 }
+        r12 = new android.graphics.Paint;	 Catch:{ Throwable -> 0x00b5 }
         r13 = 2;
-        r12.<init>(r13);	 Catch:{ Throwable -> 0x00b3 }
-        r13 = new android.graphics.PorterDuffColorFilter;	 Catch:{ Throwable -> 0x00b3 }
-        r14 = r1.patternColor;	 Catch:{ Throwable -> 0x00b3 }
-        r15 = r1.blendMode;	 Catch:{ Throwable -> 0x00b3 }
-        r13.<init>(r14, r15);	 Catch:{ Throwable -> 0x00b3 }
-        r12.setColorFilter(r13);	 Catch:{ Throwable -> 0x00b3 }
+        r12.<init>(r13);	 Catch:{ Throwable -> 0x00b5 }
+        r13 = new android.graphics.PorterDuffColorFilter;	 Catch:{ Throwable -> 0x00b5 }
+        r14 = r1.patternColor;	 Catch:{ Throwable -> 0x00b5 }
+        r15 = r1.blendMode;	 Catch:{ Throwable -> 0x00b5 }
+        r13.<init>(r14, r15);	 Catch:{ Throwable -> 0x00b5 }
+        r12.setColorFilter(r13);	 Catch:{ Throwable -> 0x00b5 }
         r13 = NUM; // 0x437var_ float:255.0 double:5.5947823E-315;
-        r14 = r1.currentIntensity;	 Catch:{ Throwable -> 0x00b3 }
+        r14 = r1.currentIntensity;	 Catch:{ Throwable -> 0x00b5 }
         r14 = r14 * r13;
-        r13 = (int) r14;	 Catch:{ Throwable -> 0x00b3 }
-        r12.setAlpha(r13);	 Catch:{ Throwable -> 0x00b3 }
+        r13 = (int) r14;	 Catch:{ Throwable -> 0x00b5 }
+        r12.setAlpha(r13);	 Catch:{ Throwable -> 0x00b5 }
         r13 = 0;
-        r11.drawBitmap(r0, r13, r13, r12);	 Catch:{ Throwable -> 0x00b3 }
-        r0 = new java.io.FileOutputStream;	 Catch:{ Throwable -> 0x00b3 }
-        r0.<init>(r2);	 Catch:{ Throwable -> 0x00b3 }
-        r11 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Throwable -> 0x00b3 }
-        r3.compress(r11, r8, r0);	 Catch:{ Throwable -> 0x00b3 }
-        r0.close();	 Catch:{ Throwable -> 0x00b3 }
-        goto L_0x00b8;
-    L_0x00b3:
+        r11.drawBitmap(r0, r13, r13, r12);	 Catch:{ Throwable -> 0x00b5 }
+        r0 = new java.io.FileOutputStream;	 Catch:{ Throwable -> 0x00b5 }
+        r0.<init>(r2);	 Catch:{ Throwable -> 0x00b5 }
+        r11 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Throwable -> 0x00b5 }
+        r3.compress(r11, r8, r0);	 Catch:{ Throwable -> 0x00b5 }
+        r0.close();	 Catch:{ Throwable -> 0x00b5 }
+        goto L_0x00ba;
+    L_0x00b5:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-        goto L_0x0111;
-    L_0x00b8:
-        r0 = 1;
-    L_0x00b9:
-        r3 = 0;
         goto L_0x0113;
+    L_0x00ba:
+        r0 = 1;
     L_0x00bb:
+        r3 = 0;
+        goto L_0x0115;
+    L_0x00bd:
         r3 = r0 instanceof org.telegram.ui.WallpapersListActivity.FileWallpaper;
-        if (r3 == 0) goto L_0x00ea;
-    L_0x00bf:
+        if (r3 == 0) goto L_0x00ec;
+    L_0x00c1:
         r0 = (org.telegram.ui.WallpapersListActivity.FileWallpaper) r0;
         r3 = r0.resId;
-        if (r3 != 0) goto L_0x00b8;
-    L_0x00c5:
+        if (r3 != 0) goto L_0x00ba;
+    L_0x00c7:
         r11 = (long) r3;
         r3 = (r11 > r6 ? 1 : (r11 == r6 ? 0 : -1));
-        if (r3 != 0) goto L_0x00cb;
-    L_0x00ca:
-        goto L_0x00b8;
-    L_0x00cb:
-        r3 = r0.originalPath;	 Catch:{ Exception -> 0x00e3 }
-        if (r3 == 0) goto L_0x00d2;
-    L_0x00cf:
-        r0 = r0.originalPath;	 Catch:{ Exception -> 0x00e3 }
-        goto L_0x00d4;
-    L_0x00d2:
-        r0 = r0.path;	 Catch:{ Exception -> 0x00e3 }
+        if (r3 != 0) goto L_0x00cd;
+    L_0x00cc:
+        goto L_0x00ba;
+    L_0x00cd:
+        r3 = r0.originalPath;	 Catch:{ Exception -> 0x00e5 }
+        if (r3 == 0) goto L_0x00d4;
+    L_0x00d1:
+        r0 = r0.originalPath;	 Catch:{ Exception -> 0x00e5 }
+        goto L_0x00d6;
     L_0x00d4:
-        r3 = r0.equals(r2);	 Catch:{ Exception -> 0x00e3 }
-        if (r3 == 0) goto L_0x00dc;
-    L_0x00da:
-        r0 = 1;
-        goto L_0x0113;
+        r0 = r0.path;	 Catch:{ Exception -> 0x00e5 }
+    L_0x00d6:
+        r3 = r0.equals(r2);	 Catch:{ Exception -> 0x00e5 }
+        if (r3 == 0) goto L_0x00de;
     L_0x00dc:
-        r0 = org.telegram.messenger.AndroidUtilities.copyFile(r0, r2);	 Catch:{ Exception -> 0x00e1 }
-        goto L_0x0113;
-    L_0x00e1:
-        r0 = move-exception;
-        goto L_0x00e5;
+        r0 = 1;
+        goto L_0x0115;
+    L_0x00de:
+        r0 = org.telegram.messenger.AndroidUtilities.copyFile(r0, r2);	 Catch:{ Exception -> 0x00e3 }
+        goto L_0x0115;
     L_0x00e3:
         r0 = move-exception;
-        r3 = 0;
+        goto L_0x00e7;
     L_0x00e5:
+        r0 = move-exception;
+        r3 = 0;
+    L_0x00e7:
         org.telegram.messenger.FileLog.e(r0);
         r0 = 0;
-        goto L_0x0113;
-    L_0x00ea:
+        goto L_0x0115;
+    L_0x00ec:
         r3 = r0 instanceof org.telegram.messenger.MediaController.SearchImage;
-        if (r3 == 0) goto L_0x0111;
-    L_0x00ee:
+        if (r3 == 0) goto L_0x0113;
+    L_0x00f0:
         r0 = (org.telegram.messenger.MediaController.SearchImage) r0;
         r3 = r0.photo;
-        if (r3 == 0) goto L_0x0101;
-    L_0x00f4:
+        if (r3 == 0) goto L_0x0103;
+    L_0x00f6:
         r0 = r3.sizes;
         r3 = r1.maxWallpaperSize;
         r0 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r0, r3, r10);
         r0 = org.telegram.messenger.FileLoader.getPathToAttach(r0, r10);
-        goto L_0x0107;
-    L_0x0101:
+        goto L_0x0109;
+    L_0x0103:
         r0 = r0.imageUrl;
         r0 = org.telegram.messenger.ImageLoader.getHttpFilePath(r0, r5);
-    L_0x0107:
-        r0 = org.telegram.messenger.AndroidUtilities.copyFile(r0, r2);	 Catch:{ Exception -> 0x010c }
-        goto L_0x00b9;
-    L_0x010c:
+    L_0x0109:
+        r0 = org.telegram.messenger.AndroidUtilities.copyFile(r0, r2);	 Catch:{ Exception -> 0x010e }
+        goto L_0x00bb;
+    L_0x010e:
         r0 = move-exception;
         r3 = r0;
         org.telegram.messenger.FileLog.e(r3);
-    L_0x0111:
-        r0 = 0;
-        goto L_0x00b9;
     L_0x0113:
+        r0 = 0;
+        goto L_0x00bb;
+    L_0x0115:
         r11 = r1.isBlurred;
-        if (r11 == 0) goto L_0x0136;
-    L_0x0117:
-        r0 = new java.io.File;	 Catch:{ Throwable -> 0x0131 }
-        r11 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();	 Catch:{ Throwable -> 0x0131 }
-        r0.<init>(r11, r4);	 Catch:{ Throwable -> 0x0131 }
-        r4 = new java.io.FileOutputStream;	 Catch:{ Throwable -> 0x0131 }
-        r4.<init>(r0);	 Catch:{ Throwable -> 0x0131 }
-        r0 = r1.blurredBitmap;	 Catch:{ Throwable -> 0x0131 }
-        r11 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Throwable -> 0x0131 }
-        r0.compress(r11, r8, r4);	 Catch:{ Throwable -> 0x0131 }
-        r4.close();	 Catch:{ Throwable -> 0x0131 }
+        if (r11 == 0) goto L_0x0138;
+    L_0x0119:
+        r0 = new java.io.File;	 Catch:{ Throwable -> 0x0133 }
+        r11 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed();	 Catch:{ Throwable -> 0x0133 }
+        r0.<init>(r11, r4);	 Catch:{ Throwable -> 0x0133 }
+        r4 = new java.io.FileOutputStream;	 Catch:{ Throwable -> 0x0133 }
+        r4.<init>(r0);	 Catch:{ Throwable -> 0x0133 }
+        r0 = r1.blurredBitmap;	 Catch:{ Throwable -> 0x0133 }
+        r11 = android.graphics.Bitmap.CompressFormat.JPEG;	 Catch:{ Throwable -> 0x0133 }
+        r0.compress(r11, r8, r4);	 Catch:{ Throwable -> 0x0133 }
+        r4.close();	 Catch:{ Throwable -> 0x0133 }
         r0 = 1;
-        goto L_0x0136;
-    L_0x0131:
+        goto L_0x0138;
+    L_0x0133:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
         r0 = 0;
-    L_0x0136:
+    L_0x0138:
         r8 = r1.currentWallpaper;
         r11 = r8 instanceof org.telegram.tgnet.TLRPC.TL_wallPaper;
-        if (r11 == 0) goto L_0x014d;
-    L_0x013c:
+        if (r11 == 0) goto L_0x014f;
+    L_0x013e:
         r8 = (org.telegram.tgnet.TLRPC.TL_wallPaper) r8;
         r12 = r8.id;
         r4 = r8.access_hash;
@@ -2172,99 +2176,99 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r8 = 0;
         r14 = 0;
         r19 = 0;
-        goto L_0x01d4;
-    L_0x014d:
+        goto L_0x01d6;
+    L_0x014f:
         r4 = r8 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper;
-        if (r4 == 0) goto L_0x0195;
-    L_0x0151:
+        if (r4 == 0) goto L_0x0197;
+    L_0x0153:
         r8 = (org.telegram.ui.WallpapersListActivity.ColorWallpaper) r8;
         r4 = r1.selectedPattern;
-        if (r4 == 0) goto L_0x0183;
-    L_0x0157:
+        if (r4 == 0) goto L_0x0185;
+    L_0x0159:
         r12 = r4.id;
         r4 = r4.access_hash;
         r6 = r8.id;
         r14 = r8.patternId;
         r11 = (r6 > r14 ? 1 : (r6 == r14 ? 0 : -1));
-        if (r11 != 0) goto L_0x0178;
-    L_0x0163:
+        if (r11 != 0) goto L_0x017a;
+    L_0x0165:
         r6 = r1.backgroundColor;
         r7 = r8.color;
-        if (r6 != r7) goto L_0x0178;
-    L_0x0169:
+        if (r6 != r7) goto L_0x017a;
+    L_0x016b:
         r6 = r8.intensity;
         r7 = r1.currentIntensity;
         r6 = r6 - r7;
         r7 = NUM; // 0x3a83126f float:0.001 double:4.85008663E-315;
         r6 = (r6 > r7 ? 1 : (r6 == r7 ? 0 : -1));
-        if (r6 > 0) goto L_0x0178;
-    L_0x0175:
+        if (r6 > 0) goto L_0x017a;
+    L_0x0177:
         r16 = r12;
-        goto L_0x017a;
-    L_0x0178:
-        r16 = -1;
+        goto L_0x017c;
     L_0x017a:
+        r16 = -1;
+    L_0x017c:
         r6 = r1.selectedPattern;
         r14 = r6.id;
         r6 = r14;
         r14 = r12;
         r12 = r16;
-        goto L_0x018b;
-    L_0x0183:
+        goto L_0x018d;
+    L_0x0185:
         r4 = 0;
         r6 = 0;
         r12 = -1;
         r14 = 0;
-    L_0x018b:
+    L_0x018d:
         r8 = r1.backgroundColor;
         r22 = r4;
         r20 = r14;
         r19 = 0;
         r14 = r6;
-        goto L_0x01d4;
-    L_0x0195:
+        goto L_0x01d6;
+    L_0x0197:
         r4 = r8 instanceof org.telegram.ui.WallpapersListActivity.FileWallpaper;
-        if (r4 == 0) goto L_0x01a9;
-    L_0x0199:
+        if (r4 == 0) goto L_0x01ab;
+    L_0x019b:
         r8 = (org.telegram.ui.WallpapersListActivity.FileWallpaper) r8;
         r12 = r8.id;
         r4 = r8.path;
         r19 = r4;
         r8 = 0;
-    L_0x01a2:
-        r14 = 0;
     L_0x01a4:
+        r14 = 0;
+    L_0x01a6:
         r20 = 0;
         r22 = 0;
-        goto L_0x01d4;
-    L_0x01a9:
+        goto L_0x01d6;
+    L_0x01ab:
         r4 = r8 instanceof org.telegram.messenger.MediaController.SearchImage;
-        if (r4 == 0) goto L_0x01cc;
-    L_0x01ad:
+        if (r4 == 0) goto L_0x01ce;
+    L_0x01af:
         r8 = (org.telegram.messenger.MediaController.SearchImage) r8;
         r4 = r8.photo;
-        if (r4 == 0) goto L_0x01c0;
-    L_0x01b3:
+        if (r4 == 0) goto L_0x01c2;
+    L_0x01b5:
         r4 = r4.sizes;
         r5 = r1.maxWallpaperSize;
         r4 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r4, r5, r10);
         r4 = org.telegram.messenger.FileLoader.getPathToAttach(r4, r10);
-        goto L_0x01c6;
-    L_0x01c0:
+        goto L_0x01c8;
+    L_0x01c2:
         r4 = r8.imageUrl;
         r4 = org.telegram.messenger.ImageLoader.getHttpFilePath(r4, r5);
-    L_0x01c6:
+    L_0x01c8:
         r19 = r4;
         r8 = 0;
         r12 = -1;
-        goto L_0x01a2;
-    L_0x01cc:
+        goto L_0x01a4;
+    L_0x01ce:
         r8 = 0;
         r12 = 0;
         r14 = 0;
         r19 = 0;
-        goto L_0x01a4;
-    L_0x01d4:
+        goto L_0x01a6;
+    L_0x01d6:
         r4 = r1.currentAccount;
         r18 = org.telegram.messenger.MessagesController.getInstance(r4);
         r4 = r1.isBlurred;
@@ -2272,21 +2276,21 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r6 = r1.currentIntensity;
         r16 = 0;
         r7 = (r22 > r16 ? 1 : (r22 == r16 ? 0 : -1));
-        if (r7 == 0) goto L_0x01e9;
-    L_0x01e6:
+        if (r7 == 0) goto L_0x01eb;
+    L_0x01e8:
         r28 = 1;
-        goto L_0x01eb;
-    L_0x01e9:
-        r28 = 0;
+        goto L_0x01ed;
     L_0x01eb:
+        r28 = 0;
+    L_0x01ed:
         r29 = 0;
         r24 = r4;
         r25 = r5;
         r26 = r8;
         r27 = r6;
         r18.saveWallpaperToServer(r19, r20, r22, r24, r25, r26, r27, r28, r29);
-        if (r0 == 0) goto L_0x0262;
-    L_0x01fa:
+        if (r0 == 0) goto L_0x0264;
+    L_0x01fc:
         r0 = "chat_serviceBackground";
         r0 = org.telegram.ui.ActionBar.Theme.getColor(r0);
         org.telegram.ui.ActionBar.Theme.serviceMessageColorBackup = r0;
@@ -2309,16 +2313,16 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r0.putLong(r4, r14);
         r4 = -2;
         r6 = (r12 > r4 ? 1 : (r12 == r4 ? 0 : -1));
-        if (r6 == 0) goto L_0x0235;
-    L_0x0234:
+        if (r6 == 0) goto L_0x0237;
+    L_0x0236:
         r9 = 1;
-    L_0x0235:
+    L_0x0237:
         r4 = "overrideThemeWallpaper";
         r0.putBoolean(r4, r9);
         r0.commit();
         org.telegram.ui.ActionBar.Theme.reloadWallpaper();
-        if (r3 != 0) goto L_0x0262;
-    L_0x0242:
+        if (r3 != 0) goto L_0x0264;
+    L_0x0244:
         r0 = org.telegram.messenger.ImageLoader.getInstance();
         r3 = new java.lang.StringBuilder;
         r3.<init>();
@@ -2329,12 +2333,12 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r3.append(r2);
         r2 = r3.toString();
         r0.removeImage(r2);
-    L_0x0262:
+    L_0x0264:
         r0 = r1.delegate;
-        if (r0 == 0) goto L_0x0269;
-    L_0x0266:
+        if (r0 == 0) goto L_0x026b;
+    L_0x0268:
         r0.didSetNewBackground();
-    L_0x0269:
+    L_0x026b:
         r31.finishFragment();
         return;
         */

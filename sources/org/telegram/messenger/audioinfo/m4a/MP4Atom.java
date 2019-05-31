@@ -6,50 +6,6 @@ import java.math.BigDecimal;
 import org.telegram.messenger.audioinfo.util.RangeInputStream;
 
 public class MP4Atom extends MP4Box<RangeInputStream> {
-    /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:7:0x0030 in {4, 6} preds:[]
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-        	at java.lang.Iterable.forEach(Iterable.java:75)
-        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-        */
-    public org.telegram.messenger.audioinfo.m4a.MP4Atom nextChildUpTo(java.lang.String r6) throws java.io.IOException {
-        /*
-        r5 = this;
-        r0 = r5.getRemaining();
-        r2 = 0;
-        r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
-        if (r4 <= 0) goto L_0x0019;
-        r0 = r5.nextChild();
-        r1 = r0.getType();
-        r1 = r1.matches(r6);
-        if (r1 == 0) goto L_0x0000;
-        return r0;
-        r0 = new java.io.IOException;
-        r1 = new java.lang.StringBuilder;
-        r1.<init>();
-        r2 = "atom type mismatch, not found: ";
-        r1.append(r2);
-        r1.append(r6);
-        r6 = r1.toString();
-        r0.<init>(r6);
-        throw r0;
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.audioinfo.m4a.MP4Atom.nextChildUpTo(java.lang.String):org.telegram.messenger.audioinfo.m4a.MP4Atom");
-    }
-
     public MP4Atom(RangeInputStream rangeInputStream, MP4Box<?> mP4Box, String str) {
         super(rangeInputStream, mP4Box, str);
     }
@@ -68,6 +24,19 @@ public class MP4Atom extends MP4Box<RangeInputStream> {
 
     public boolean hasMoreChildren() {
         return (getChild() != null ? getChild().getRemaining() : 0) < getRemaining();
+    }
+
+    public MP4Atom nextChildUpTo(String str) throws IOException {
+        while (getRemaining() > 0) {
+            MP4Atom nextChild = nextChild();
+            if (nextChild.getType().matches(str)) {
+                return nextChild;
+            }
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("atom type mismatch, not found: ");
+        stringBuilder.append(str);
+        throw new IOException(stringBuilder.toString());
     }
 
     public boolean readBoolean() throws IOException {

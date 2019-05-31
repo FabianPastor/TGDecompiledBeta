@@ -213,7 +213,7 @@ public class EditTextBoldCursor extends EditText {
         if (r0 == 0) goto L_0x00ff;
     L_0x00f3:
         r0 = mCursorDrawableResField;	 Catch:{ Throwable -> 0x00ff }
-        r1 = NUM; // 0x7var_d3 float:1.7945006E38 double:1.0529356073E-314;
+        r1 = NUM; // 0x7var_d2 float:1.7945004E38 double:1.052935607E-314;
         r1 = java.lang.Integer.valueOf(r1);	 Catch:{ Throwable -> 0x00ff }
         r0.set(r8, r1);	 Catch:{ Throwable -> 0x00ff }
     L_0x00ff:
@@ -321,6 +321,10 @@ public class EditTextBoldCursor extends EditText {
             this.errorText = charSequence;
             requestLayout();
         }
+    }
+
+    public boolean requestFocus(int i, Rect rect) {
+        return super.requestFocus(i, rect);
     }
 
     public boolean hasErrorText() {

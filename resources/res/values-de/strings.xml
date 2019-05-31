@@ -206,9 +206,7 @@
     <string name="AllowReadSms">Bitte erlaube Telegram den Zugriff auf SMS, so dass wir den Code automatisch in der App für dich eingeben können.</string>
     <string name="AlternativeOptions">Alternative Optionen</string>
     <string name="AlwaysAllow">Immer erlauben</string>
-    <string name="AlwaysAllowPlaceholder">Immer erlauben...</string>
     <string name="AlwaysShareWith">Immer teilen mit</string>
-    <string name="AlwaysShareWithPlaceholder">Immer teilen mit...</string>
     <string name="AlwaysShareWithTitle">Immer teilen</string>
     <string name="AlwaysShowPopup">Popups immer anzeigen</string>
     <string name="AndMoreTypingGroup_few">%1$s und %2$d weitere tippen</string>
@@ -263,7 +261,6 @@
     <string name="AreTyping">tippen…</string>
     <string name="AreTypingGroup">%1$s tippen...</string>
     <string name="AreYouSure">Bist du sicher?</string>
-    <string name="AreYouSureBlockContact">Diesen Kontakt wirklich blockieren?</string>
     <string name="AreYouSureClearDrafts">Wirklich all deine Cloud-Entwürfe löschen?</string>
     <string name="AreYouSureClearHistory">Möchtest du wirklich den Verlauf löschen?</string>
     <string name="AreYouSureClearHistoryCacheFewChats">Gesamten Text- und Medien-Cache für ausgewählte Chats löschen?</string>
@@ -377,7 +374,6 @@
     <string name="AutoLockDisabled">Deaktiviert</string>
     <string name="AutoLockInTime">in %1$s</string>
     <string name="AutoLockInfo">Sperrt App bei Inaktivität automatisch.</string>
-    <string name="AutoNightAutomatic">Automatisch</string>
     <string name="AutoNightBrightness">Helligkeitsgrenze</string>
     <string name="AutoNightBrightnessInfo">Zum Nachtthema wechseln, wenn die Umgebungshelligkeit weniger als %1$d%% beträgt.</string>
     <string name="AutoNightDisabled">Aus</string>
@@ -1447,9 +1443,7 @@
     <string name="NetworkUsageSince">Netzwerk-Nutzung seit %1$s</string>
     <string name="NetworkUsageWiFi">WLAN</string>
     <string name="NeverAllow">Niemals erlauben</string>
-    <string name="NeverAllowPlaceholder">Niemals erlauben...</string>
     <string name="NeverShareWith">Niemals teilen mit</string>
-    <string name="NeverShareWithPlaceholder">Niemals teilen mit...</string>
     <string name="NeverShareWithTitle">Niemals teilen</string>
     <string name="NewBroadcastList">Neue Broadcast Liste</string>
     <string name="NewChannel">Neuer Kanal</string>
@@ -1672,7 +1666,6 @@
     <string name="OpenInBrowser">ÖFFNEN MIT...</string>
     <string name="OpenInExternalApp">Öffnen in...</string>
     <string name="OpenMessage">NACHRICHT ANZEIGEN</string>
-    <string name="OpenUrlAlert">URL %1$s öffnen?</string>
     <string name="OptionHint">Option</string>
     <string name="Option_few">%1$d weitere Optionen möglich.</string>
     <string name="Option_many">%1$d weitere Optionen möglich.</string>

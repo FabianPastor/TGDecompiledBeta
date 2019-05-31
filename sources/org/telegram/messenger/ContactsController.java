@@ -49,6 +49,7 @@ import org.telegram.tgnet.TLRPC.TL_inputPhoneContact;
 import org.telegram.tgnet.TLRPC.TL_inputPrivacyKeyChatInvite;
 import org.telegram.tgnet.TLRPC.TL_inputPrivacyKeyForwards;
 import org.telegram.tgnet.TLRPC.TL_inputPrivacyKeyPhoneCall;
+import org.telegram.tgnet.TLRPC.TL_inputPrivacyKeyPhoneNumber;
 import org.telegram.tgnet.TLRPC.TL_inputPrivacyKeyPhoneP2P;
 import org.telegram.tgnet.TLRPC.TL_inputPrivacyKeyProfilePhoto;
 import org.telegram.tgnet.TLRPC.TL_inputPrivacyKeyStatusTimestamp;
@@ -64,6 +65,14 @@ import org.telegram.tgnet.TLRPC.contacts_Contacts;
 
 public class ContactsController {
     private static volatile ContactsController[] Instance = new ContactsController[3];
+    public static final int PRIVACY_RULES_TYPE_CALLS = 2;
+    public static final int PRIVACY_RULES_TYPE_COUNT = 7;
+    public static final int PRIVACY_RULES_TYPE_FORWARDS = 5;
+    public static final int PRIVACY_RULES_TYPE_INVITE = 1;
+    public static final int PRIVACY_RULES_TYPE_LASTSEEN = 0;
+    public static final int PRIVACY_RULES_TYPE_P2P = 3;
+    public static final int PRIVACY_RULES_TYPE_PHONE = 6;
+    public static final int PRIVACY_RULES_TYPE_PHOTO = 4;
     private ArrayList<PrivacyRule> callPrivacyRules;
     private int completedRequestsCount;
     public ArrayList<TL_contact> contacts;
@@ -83,17 +92,18 @@ public class ContactsController {
     private boolean ignoreChanges;
     private String inviteLink;
     private String lastContactsVersions = "";
+    private ArrayList<PrivacyRule> lastseenPrivacyRules;
     private final Object loadContactsSync = new Object();
     private boolean loadingContacts;
     private int loadingDeleteInfo;
-    private int[] loadingPrivacyInfo = new int[6];
+    private int[] loadingPrivacyInfo = new int[7];
     private boolean migratingContacts;
     private final Object observerLock = new Object();
     private ArrayList<PrivacyRule> p2pPrivacyRules;
     public ArrayList<Contact> phoneBookContacts;
     public ArrayList<String> phoneBookSectionsArray;
     public HashMap<String, ArrayList<Object>> phoneBookSectionsDict;
-    private ArrayList<PrivacyRule> privacyRules;
+    private ArrayList<PrivacyRule> phonePrivacyRules;
     private ArrayList<PrivacyRule> profilePhotoPrivacyRules;
     private String[] projectionNames;
     private String[] projectionPhones;
@@ -166,540 +176,6 @@ public class ContactsController {
     }
 
     static /* synthetic */ void lambda$resetImportedContacts$9(TLObject tLObject, TL_error tL_error) {
-    }
-
-    /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:39:0x00a3 in {4, 11, 19, 20, 21, 23, 25, 27, 29, 30, 33, 34, 35, 37, 38} preds:[]
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-        	at java.lang.Iterable.forEach(Iterable.java:75)
-        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-        */
-    private void performWriteContactsToPhoneBookInternal(java.util.ArrayList<org.telegram.tgnet.TLRPC.TL_contact> r11) {
-        /*
-        r10 = this;
-        r0 = 0;
-        r1 = r10.hasContactsPermission();	 Catch:{ Exception -> 0x0093 }
-        if (r1 != 0) goto L_0x0008;	 Catch:{ Exception -> 0x0093 }
-        return;	 Catch:{ Exception -> 0x0093 }
-        r1 = android.provider.ContactsContract.RawContacts.CONTENT_URI;	 Catch:{ Exception -> 0x0093 }
-        r1 = r1.buildUpon();	 Catch:{ Exception -> 0x0093 }
-        r2 = "account_name";	 Catch:{ Exception -> 0x0093 }
-        r3 = r10.systemAccount;	 Catch:{ Exception -> 0x0093 }
-        r3 = r3.name;	 Catch:{ Exception -> 0x0093 }
-        r1 = r1.appendQueryParameter(r2, r3);	 Catch:{ Exception -> 0x0093 }
-        r2 = "account_type";	 Catch:{ Exception -> 0x0093 }
-        r3 = r10.systemAccount;	 Catch:{ Exception -> 0x0093 }
-        r3 = r3.type;	 Catch:{ Exception -> 0x0093 }
-        r1 = r1.appendQueryParameter(r2, r3);	 Catch:{ Exception -> 0x0093 }
-        r3 = r1.build();	 Catch:{ Exception -> 0x0093 }
-        r1 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0093 }
-        r2 = r1.getContentResolver();	 Catch:{ Exception -> 0x0093 }
-        r1 = 2;	 Catch:{ Exception -> 0x0093 }
-        r4 = new java.lang.String[r1];	 Catch:{ Exception -> 0x0093 }
-        r1 = "_id";	 Catch:{ Exception -> 0x0093 }
-        r8 = 0;	 Catch:{ Exception -> 0x0093 }
-        r4[r8] = r1;	 Catch:{ Exception -> 0x0093 }
-        r1 = "sync2";	 Catch:{ Exception -> 0x0093 }
-        r9 = 1;	 Catch:{ Exception -> 0x0093 }
-        r4[r9] = r1;	 Catch:{ Exception -> 0x0093 }
-        r5 = 0;	 Catch:{ Exception -> 0x0093 }
-        r6 = 0;	 Catch:{ Exception -> 0x0093 }
-        r7 = 0;	 Catch:{ Exception -> 0x0093 }
-        r1 = r2.query(r3, r4, r5, r6, r7);	 Catch:{ Exception -> 0x0093 }
-        r2 = new org.telegram.messenger.support.SparseLongArray;	 Catch:{ Exception -> 0x008e, all -> 0x008b }
-        r2.<init>();	 Catch:{ Exception -> 0x008e, all -> 0x008b }
-        if (r1 == 0) goto L_0x0087;	 Catch:{ Exception -> 0x008e, all -> 0x008b }
-        r3 = r1.moveToNext();	 Catch:{ Exception -> 0x008e, all -> 0x008b }
-        if (r3 == 0) goto L_0x0059;	 Catch:{ Exception -> 0x008e, all -> 0x008b }
-        r3 = r1.getInt(r9);	 Catch:{ Exception -> 0x008e, all -> 0x008b }
-        r4 = r1.getLong(r8);	 Catch:{ Exception -> 0x008e, all -> 0x008b }
-        r2.put(r3, r4);	 Catch:{ Exception -> 0x008e, all -> 0x008b }
-        goto L_0x0047;	 Catch:{ Exception -> 0x008e, all -> 0x008b }
-        r1.close();	 Catch:{ Exception -> 0x008e, all -> 0x008b }
-        r1 = 0;
-        r3 = r11.size();	 Catch:{ Exception -> 0x0093 }
-        if (r1 >= r3) goto L_0x0088;	 Catch:{ Exception -> 0x0093 }
-        r3 = r11.get(r1);	 Catch:{ Exception -> 0x0093 }
-        r3 = (org.telegram.tgnet.TLRPC.TL_contact) r3;	 Catch:{ Exception -> 0x0093 }
-        r4 = r3.user_id;	 Catch:{ Exception -> 0x0093 }
-        r4 = r2.indexOfKey(r4);	 Catch:{ Exception -> 0x0093 }
-        if (r4 >= 0) goto L_0x0084;	 Catch:{ Exception -> 0x0093 }
-        r4 = r10.currentAccount;	 Catch:{ Exception -> 0x0093 }
-        r4 = org.telegram.messenger.MessagesController.getInstance(r4);	 Catch:{ Exception -> 0x0093 }
-        r3 = r3.user_id;	 Catch:{ Exception -> 0x0093 }
-        r3 = java.lang.Integer.valueOf(r3);	 Catch:{ Exception -> 0x0093 }
-        r3 = r4.getUser(r3);	 Catch:{ Exception -> 0x0093 }
-        r10.addContactToPhoneBook(r3, r8);	 Catch:{ Exception -> 0x0093 }
-        r1 = r1 + 1;
-        goto L_0x005d;
-        r0 = r1;
-        if (r0 == 0) goto L_0x009c;
-        goto L_0x0099;
-        r11 = move-exception;
-        r0 = r1;
-        goto L_0x009d;
-        r11 = move-exception;
-        r0 = r1;
-        goto L_0x0094;
-        r11 = move-exception;
-        goto L_0x009d;
-        r11 = move-exception;
-        org.telegram.messenger.FileLog.e(r11);	 Catch:{ all -> 0x0091 }
-        if (r0 == 0) goto L_0x009c;
-        r0.close();
-        return;
-        if (r0 == 0) goto L_0x00a2;
-        r0.close();
-        throw r11;
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ContactsController.performWriteContactsToPhoneBookInternal(java.util.ArrayList):void");
-    }
-
-    /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:228:0x036d in {4, 6, 11, 13, 28, 31, 32, 35, 38, 43, 45, 47, 48, 57, 58, 63, 70, 71, 76, 81, 82, 83, 84, 92, 93, 94, 97, 100, 103, 106, 107, 109, 110, 111, 114, 116, 117, 118, 119, 121, 122, 124, 125, 144, 145, 147, 148, 153, 154, 160, 166, 168, 169, 174, 175, 177, 178, 180, 182, 183, 184, 186, 187, 191, 193, 195, 197, 199, 200, 202, 203, 205, 207, 211, 214, 216, 217, 218, 220, 224, 226, 227} preds:[]
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-        	at java.lang.Iterable.forEach(Iterable.java:75)
-        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-        */
-    private java.util.HashMap<java.lang.String, org.telegram.messenger.ContactsController.Contact> readContactsFromPhoneBook() {
-        /*
-        r21 = this;
-        r1 = r21;
-        r0 = r1.currentAccount;
-        r0 = org.telegram.messenger.UserConfig.getInstance(r0);
-        r0 = r0.syncContacts;
-        if (r0 != 0) goto L_0x001b;
-        r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r0 == 0) goto L_0x0015;
-        r0 = "contacts sync disabled";
-        org.telegram.messenger.FileLog.d(r0);
-        r0 = new java.util.HashMap;
-        r0.<init>();
-        return r0;
-        r0 = r21.hasContactsPermission();
-        if (r0 != 0) goto L_0x0030;
-        r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r0 == 0) goto L_0x002a;
-        r0 = "app has no contacts permissions";
-        org.telegram.messenger.FileLog.d(r0);
-        r0 = new java.util.HashMap;
-        r0.<init>();
-        return r0;
-        r0 = new java.lang.StringBuilder;	 Catch:{ Throwable -> 0x0344, all -> 0x033f }
-        r0.<init>();	 Catch:{ Throwable -> 0x0344, all -> 0x033f }
-        r3 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x0344, all -> 0x033f }
-        r3 = r3.getContentResolver();	 Catch:{ Throwable -> 0x0344, all -> 0x033f }
-        r10 = new java.util.HashMap;	 Catch:{ Throwable -> 0x0344, all -> 0x033f }
-        r10.<init>();	 Catch:{ Throwable -> 0x0344, all -> 0x033f }
-        r11 = new java.util.ArrayList;	 Catch:{ Throwable -> 0x0344, all -> 0x033f }
-        r11.<init>();	 Catch:{ Throwable -> 0x0344, all -> 0x033f }
-        r5 = android.provider.ContactsContract.CommonDataKinds.Phone.CONTENT_URI;	 Catch:{ Throwable -> 0x0344, all -> 0x033f }
-        r6 = r1.projectionPhones;	 Catch:{ Throwable -> 0x0344, all -> 0x033f }
-        r7 = 0;	 Catch:{ Throwable -> 0x0344, all -> 0x033f }
-        r8 = 0;	 Catch:{ Throwable -> 0x0344, all -> 0x033f }
-        r9 = 0;	 Catch:{ Throwable -> 0x0344, all -> 0x033f }
-        r4 = r3;	 Catch:{ Throwable -> 0x0344, all -> 0x033f }
-        r4 = r4.query(r5, r6, r7, r8, r9);	 Catch:{ Throwable -> 0x0344, all -> 0x033f }
-        r14 = 0;
-        r15 = "";
-        r9 = 1;
-        if (r4 == 0) goto L_0x020e;
-        r5 = r4.getCount();	 Catch:{ Throwable -> 0x0207, all -> 0x0201 }
-        if (r5 <= 0) goto L_0x01ef;	 Catch:{ Throwable -> 0x0207, all -> 0x0201 }
-        r6 = new java.util.HashMap;	 Catch:{ Throwable -> 0x0207, all -> 0x0201 }
-        r6.<init>(r5);	 Catch:{ Throwable -> 0x0207, all -> 0x0201 }
-        r5 = 1;
-        r7 = r4.moveToNext();	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        if (r7 == 0) goto L_0x01eb;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r7 = r4.getString(r9);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r8 = 5;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r8 = r4.getString(r8);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        if (r8 != 0) goto L_0x0075;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r8 = r15;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r2 = ".sim";	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r2 = r8.indexOf(r2);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        if (r2 == 0) goto L_0x007f;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r2 = 1;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        goto L_0x0080;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r2 = 0;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r17 = android.text.TextUtils.isEmpty(r7);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        if (r17 == 0) goto L_0x0087;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        goto L_0x00e5;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r7 = org.telegram.PhoneFormat.PhoneFormat.stripExceptNumbers(r7, r9);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r17 = android.text.TextUtils.isEmpty(r7);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        if (r17 == 0) goto L_0x0092;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        goto L_0x00e5;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r12 = "+";	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r12 = r7.startsWith(r12);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        if (r12 == 0) goto L_0x00a7;
-        r12 = r7.substring(r9);	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
-        goto L_0x00a8;
-        r0 = move-exception;
-        r10 = r1;
-        goto L_0x0204;
-        r0 = move-exception;
-        r10 = r1;
-        goto L_0x01fa;
-        r12 = r7;
-        r9 = r4.getString(r14);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r0.setLength(r14);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        android.database.DatabaseUtils.appendEscapedSQLString(r0, r9);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r13 = r0.toString();	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r18 = r10.get(r12);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r14 = r18;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r14 = (org.telegram.messenger.ContactsController.Contact) r14;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        if (r14 == 0) goto L_0x00e9;
-        r7 = r14.isGoodProvider;	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
-        if (r7 != 0) goto L_0x00e5;	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
-        r7 = r14.provider;	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
-        r7 = r8.equals(r7);	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
-        if (r7 != 0) goto L_0x00e5;	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
-        r7 = 0;	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
-        r0.setLength(r7);	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
-        r7 = r14.key;	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
-        android.database.DatabaseUtils.appendEscapedSQLString(r0, r7);	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
-        r7 = r0.toString();	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
-        r11.remove(r7);	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
-        r11.add(r13);	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
-        r14.key = r9;	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
-        r14.isGoodProvider = r2;	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
-        r14.provider = r8;	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
-        r9 = 1;
-        r14 = 0;
-        goto L_0x0063;
-        r14 = r11.contains(r13);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        if (r14 != 0) goto L_0x00f2;
-        r11.add(r13);	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
-        r13 = 2;
-        r14 = r4.getInt(r13);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r13 = r6.get(r9);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r13 = (org.telegram.messenger.ContactsController.Contact) r13;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        if (r13 != 0) goto L_0x015a;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r13 = new org.telegram.messenger.ContactsController$Contact;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r13.<init>();	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r18 = r0;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r0 = 4;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r0 = r4.getString(r0);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        if (r0 != 0) goto L_0x010f;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r0 = r15;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        goto L_0x0113;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r0 = r0.trim();	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r19 = r1.isNotValidNameString(r0);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        if (r19 == 0) goto L_0x0120;
-        r13.first_name = r0;	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
-        r13.last_name = r15;	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
-        r19 = r3;
-        goto L_0x014b;
-        r19 = r3;
-        r3 = 32;
-        r3 = r0.lastIndexOf(r3);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r1 = -1;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        if (r3 == r1) goto L_0x0147;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r1 = 0;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r20 = r0.substring(r1, r3);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r1 = r20.trim();	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r13.first_name = r1;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r3 = r3 + 1;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r1 = r0.length();	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r0 = r0.substring(r3, r1);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r0 = r0.trim();	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r13.last_name = r0;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        goto L_0x014b;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r13.first_name = r0;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r13.last_name = r15;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r13.provider = r8;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r13.isGoodProvider = r2;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r13.key = r9;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r0 = r5 + 1;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r13.contact_id = r5;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r6.put(r9, r13);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r5 = r0;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        goto L_0x015e;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r18 = r0;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r19 = r3;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r0 = r13.shortPhones;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r0.add(r12);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r0 = r13.phones;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r0.add(r7);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r0 = r13.phoneDeleted;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r1 = 0;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r2 = java.lang.Integer.valueOf(r1);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r0.add(r2);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r0 = NUM; // 0x7f0d07c0 float:1.8746139E38 double:1.053130758E-314;
-        r1 = "PhoneMobile";
-        if (r14 != 0) goto L_0x018c;
-        r2 = 3;
-        r3 = r4.getString(r2);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r2 = r13.phoneTypes;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        if (r3 == 0) goto L_0x0183;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        goto L_0x0187;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r3 = org.telegram.messenger.LocaleController.getString(r1, r0);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r2.add(r3);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r2 = 1;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        goto L_0x01de;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r2 = 1;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        if (r14 != r2) goto L_0x019e;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r0 = r13.phoneTypes;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r1 = "PhoneHome";	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r3 = NUM; // 0x7f0d07be float:1.8746135E38 double:1.053130757E-314;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r1 = org.telegram.messenger.LocaleController.getString(r1, r3);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r0.add(r1);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        goto L_0x01de;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r3 = 2;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        if (r14 != r3) goto L_0x01ab;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r3 = r13.phoneTypes;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r0 = org.telegram.messenger.LocaleController.getString(r1, r0);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r3.add(r0);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        goto L_0x01de;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r0 = 3;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        if (r14 != r0) goto L_0x01bd;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r0 = r13.phoneTypes;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r1 = "PhoneWork";	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r3 = NUM; // 0x7f0d07c6 float:1.874615E38 double:1.0531307607E-314;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r1 = org.telegram.messenger.LocaleController.getString(r1, r3);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r0.add(r1);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        goto L_0x01de;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r0 = 12;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        if (r14 != r0) goto L_0x01d0;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r0 = r13.phoneTypes;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r1 = "PhoneMain";	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r3 = NUM; // 0x7f0d07bf float:1.8746137E38 double:1.0531307573E-314;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r1 = org.telegram.messenger.LocaleController.getString(r1, r3);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r0.add(r1);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        goto L_0x01de;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r0 = r13.phoneTypes;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r1 = "PhoneOther";	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r3 = NUM; // 0x7f0d07c5 float:1.8746149E38 double:1.05313076E-314;	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r1 = org.telegram.messenger.LocaleController.getString(r1, r3);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r0.add(r1);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r10.put(r12, r13);	 Catch:{ Throwable -> 0x01f7, all -> 0x0201 }
-        r0 = r18;
-        r3 = r19;
-        r9 = 1;
-        r14 = 0;
-        r1 = r21;
-        goto L_0x0063;
-        r19 = r3;
-        r2 = 1;
-        goto L_0x01f3;
-        r19 = r3;
-        r2 = 1;
-        r6 = 0;
-        r4.close();	 Catch:{ Exception -> 0x01fe }
-        goto L_0x01fe;
-        r0 = move-exception;
-        r10 = r21;
-        r2 = r4;
-        r1 = r6;
-        goto L_0x0348;
-        r1 = r6;
-        r3 = 0;
-        goto L_0x0213;
-        r0 = move-exception;
-        r10 = r21;
-        r1 = r0;
-        goto L_0x0361;
-        r0 = move-exception;
-        r1 = 0;
-        r10 = r21;
-        r2 = r4;
-        goto L_0x0348;
-        r19 = r3;
-        r2 = 1;
-        r3 = r4;
-        r1 = 0;
-        r0 = ",";	 Catch:{ Throwable -> 0x033a, all -> 0x0334 }
-        r0 = android.text.TextUtils.join(r0, r11);	 Catch:{ Throwable -> 0x033a, all -> 0x0334 }
-        r5 = android.provider.ContactsContract.Data.CONTENT_URI;	 Catch:{ Throwable -> 0x033a, all -> 0x0334 }
-        r10 = r21;
-        r6 = r10.projectionNames;	 Catch:{ Throwable -> 0x0332, all -> 0x0330 }
-        r4 = new java.lang.StringBuilder;	 Catch:{ Throwable -> 0x0332, all -> 0x0330 }
-        r4.<init>();	 Catch:{ Throwable -> 0x0332, all -> 0x0330 }
-        r7 = "lookup IN (";	 Catch:{ Throwable -> 0x0332, all -> 0x0330 }
-        r4.append(r7);	 Catch:{ Throwable -> 0x0332, all -> 0x0330 }
-        r4.append(r0);	 Catch:{ Throwable -> 0x0332, all -> 0x0330 }
-        r0 = ") AND ";	 Catch:{ Throwable -> 0x0332, all -> 0x0330 }
-        r4.append(r0);	 Catch:{ Throwable -> 0x0332, all -> 0x0330 }
-        r0 = "mimetype";	 Catch:{ Throwable -> 0x0332, all -> 0x0330 }
-        r4.append(r0);	 Catch:{ Throwable -> 0x0332, all -> 0x0330 }
-        r0 = " = '";	 Catch:{ Throwable -> 0x0332, all -> 0x0330 }
-        r4.append(r0);	 Catch:{ Throwable -> 0x0332, all -> 0x0330 }
-        r0 = "vnd.android.cursor.item/name";	 Catch:{ Throwable -> 0x0332, all -> 0x0330 }
-        r4.append(r0);	 Catch:{ Throwable -> 0x0332, all -> 0x0330 }
-        r0 = "'";	 Catch:{ Throwable -> 0x0332, all -> 0x0330 }
-        r4.append(r0);	 Catch:{ Throwable -> 0x0332, all -> 0x0330 }
-        r7 = r4.toString();	 Catch:{ Throwable -> 0x0332, all -> 0x0330 }
-        r8 = 0;	 Catch:{ Throwable -> 0x0332, all -> 0x0330 }
-        r9 = 0;	 Catch:{ Throwable -> 0x0332, all -> 0x0330 }
-        r4 = r19;	 Catch:{ Throwable -> 0x0332, all -> 0x0330 }
-        r0 = 1;	 Catch:{ Throwable -> 0x0332, all -> 0x0330 }
-        r2 = r4.query(r5, r6, r7, r8, r9);	 Catch:{ Throwable -> 0x0332, all -> 0x0330 }
-        if (r2 == 0) goto L_0x0322;
-        r3 = r2.moveToNext();	 Catch:{ Throwable -> 0x0320 }
-        if (r3 == 0) goto L_0x031a;	 Catch:{ Throwable -> 0x0320 }
-        r3 = 0;	 Catch:{ Throwable -> 0x0320 }
-        r4 = r2.getString(r3);	 Catch:{ Throwable -> 0x0320 }
-        r5 = r2.getString(r0);	 Catch:{ Throwable -> 0x0320 }
-        r6 = 2;	 Catch:{ Throwable -> 0x0320 }
-        r7 = r2.getString(r6);	 Catch:{ Throwable -> 0x0320 }
-        r8 = 3;	 Catch:{ Throwable -> 0x0320 }
-        r9 = r2.getString(r8);	 Catch:{ Throwable -> 0x0320 }
-        r4 = r1.get(r4);	 Catch:{ Throwable -> 0x0320 }
-        r4 = (org.telegram.messenger.ContactsController.Contact) r4;	 Catch:{ Throwable -> 0x0320 }
-        if (r4 == 0) goto L_0x0254;	 Catch:{ Throwable -> 0x0320 }
-        r11 = r4.namesFilled;	 Catch:{ Throwable -> 0x0320 }
-        if (r11 != 0) goto L_0x0254;	 Catch:{ Throwable -> 0x0320 }
-        r11 = r4.isGoodProvider;	 Catch:{ Throwable -> 0x0320 }
-        r12 = " ";
-        if (r11 == 0) goto L_0x02b5;
-        if (r5 == 0) goto L_0x0284;
-        r4.first_name = r5;	 Catch:{ Throwable -> 0x0320 }
-        goto L_0x0286;	 Catch:{ Throwable -> 0x0320 }
-        r4.first_name = r15;	 Catch:{ Throwable -> 0x0320 }
-        if (r7 == 0) goto L_0x028b;	 Catch:{ Throwable -> 0x0320 }
-        r4.last_name = r7;	 Catch:{ Throwable -> 0x0320 }
-        goto L_0x028d;	 Catch:{ Throwable -> 0x0320 }
-        r4.last_name = r15;	 Catch:{ Throwable -> 0x0320 }
-        r5 = android.text.TextUtils.isEmpty(r9);	 Catch:{ Throwable -> 0x0320 }
-        if (r5 != 0) goto L_0x0316;	 Catch:{ Throwable -> 0x0320 }
-        r5 = r4.first_name;	 Catch:{ Throwable -> 0x0320 }
-        r5 = android.text.TextUtils.isEmpty(r5);	 Catch:{ Throwable -> 0x0320 }
-        if (r5 != 0) goto L_0x02b2;	 Catch:{ Throwable -> 0x0320 }
-        r5 = new java.lang.StringBuilder;	 Catch:{ Throwable -> 0x0320 }
-        r5.<init>();	 Catch:{ Throwable -> 0x0320 }
-        r7 = r4.first_name;	 Catch:{ Throwable -> 0x0320 }
-        r5.append(r7);	 Catch:{ Throwable -> 0x0320 }
-        r5.append(r12);	 Catch:{ Throwable -> 0x0320 }
-        r5.append(r9);	 Catch:{ Throwable -> 0x0320 }
-        r5 = r5.toString();	 Catch:{ Throwable -> 0x0320 }
-        r4.first_name = r5;	 Catch:{ Throwable -> 0x0320 }
-        goto L_0x0316;	 Catch:{ Throwable -> 0x0320 }
-        r4.first_name = r9;	 Catch:{ Throwable -> 0x0320 }
-        goto L_0x0316;	 Catch:{ Throwable -> 0x0320 }
-        r11 = r10.isNotValidNameString(r5);	 Catch:{ Throwable -> 0x0320 }
-        if (r11 != 0) goto L_0x02cb;	 Catch:{ Throwable -> 0x0320 }
-        r11 = r4.first_name;	 Catch:{ Throwable -> 0x0320 }
-        r11 = r11.contains(r5);	 Catch:{ Throwable -> 0x0320 }
-        if (r11 != 0) goto L_0x02e1;	 Catch:{ Throwable -> 0x0320 }
-        r11 = r4.first_name;	 Catch:{ Throwable -> 0x0320 }
-        r11 = r5.contains(r11);	 Catch:{ Throwable -> 0x0320 }
-        if (r11 != 0) goto L_0x02e1;	 Catch:{ Throwable -> 0x0320 }
-        r11 = r10.isNotValidNameString(r7);	 Catch:{ Throwable -> 0x0320 }
-        if (r11 != 0) goto L_0x0316;	 Catch:{ Throwable -> 0x0320 }
-        r11 = r4.last_name;	 Catch:{ Throwable -> 0x0320 }
-        r11 = r11.contains(r7);	 Catch:{ Throwable -> 0x0320 }
-        if (r11 != 0) goto L_0x02e1;	 Catch:{ Throwable -> 0x0320 }
-        r11 = r4.last_name;	 Catch:{ Throwable -> 0x0320 }
-        r11 = r5.contains(r11);	 Catch:{ Throwable -> 0x0320 }
-        if (r11 == 0) goto L_0x0316;	 Catch:{ Throwable -> 0x0320 }
-        if (r5 == 0) goto L_0x02e6;	 Catch:{ Throwable -> 0x0320 }
-        r4.first_name = r5;	 Catch:{ Throwable -> 0x0320 }
-        goto L_0x02e8;	 Catch:{ Throwable -> 0x0320 }
-        r4.first_name = r15;	 Catch:{ Throwable -> 0x0320 }
-        r5 = android.text.TextUtils.isEmpty(r9);	 Catch:{ Throwable -> 0x0320 }
-        if (r5 != 0) goto L_0x030f;	 Catch:{ Throwable -> 0x0320 }
-        r5 = r4.first_name;	 Catch:{ Throwable -> 0x0320 }
-        r5 = android.text.TextUtils.isEmpty(r5);	 Catch:{ Throwable -> 0x0320 }
-        if (r5 != 0) goto L_0x030d;	 Catch:{ Throwable -> 0x0320 }
-        r5 = new java.lang.StringBuilder;	 Catch:{ Throwable -> 0x0320 }
-        r5.<init>();	 Catch:{ Throwable -> 0x0320 }
-        r11 = r4.first_name;	 Catch:{ Throwable -> 0x0320 }
-        r5.append(r11);	 Catch:{ Throwable -> 0x0320 }
-        r5.append(r12);	 Catch:{ Throwable -> 0x0320 }
-        r5.append(r9);	 Catch:{ Throwable -> 0x0320 }
-        r5 = r5.toString();	 Catch:{ Throwable -> 0x0320 }
-        r4.first_name = r5;	 Catch:{ Throwable -> 0x0320 }
-        goto L_0x030f;	 Catch:{ Throwable -> 0x0320 }
-        r4.first_name = r9;	 Catch:{ Throwable -> 0x0320 }
-        if (r7 == 0) goto L_0x0314;	 Catch:{ Throwable -> 0x0320 }
-        r4.last_name = r7;	 Catch:{ Throwable -> 0x0320 }
-        goto L_0x0316;	 Catch:{ Throwable -> 0x0320 }
-        r4.last_name = r15;	 Catch:{ Throwable -> 0x0320 }
-        r4.namesFilled = r0;	 Catch:{ Throwable -> 0x0320 }
-        goto L_0x0254;
-        r2.close();	 Catch:{ Exception -> 0x031d }
-        r16 = 0;
-        goto L_0x0324;
-        r0 = move-exception;
-        goto L_0x0348;
-        r16 = r2;
-        if (r16 == 0) goto L_0x0355;
-        r16.close();	 Catch:{ Exception -> 0x032a }
-        goto L_0x0355;
-        r0 = move-exception;
-        r2 = r0;
-        org.telegram.messenger.FileLog.e(r2);
-        goto L_0x0355;
-        r0 = move-exception;
-        goto L_0x0337;
-        r0 = move-exception;
-        goto L_0x033d;
-        r0 = move-exception;
-        r10 = r21;
-        r1 = r0;
-        r4 = r3;
-        goto L_0x0361;
-        r0 = move-exception;
-        r10 = r21;
-        r2 = r3;
-        goto L_0x0348;
-        r0 = move-exception;
-        r10 = r1;
-        r1 = r0;
-        r4 = 0;
-        goto L_0x0361;
-        r0 = move-exception;
-        r10 = r1;
-        r1 = 0;
-        r2 = 0;
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x035e }
-        if (r1 == 0) goto L_0x0350;	 Catch:{ all -> 0x035e }
-        r1.clear();	 Catch:{ all -> 0x035e }
-        if (r2 == 0) goto L_0x0355;
-        r2.close();	 Catch:{ Exception -> 0x032a }
-        if (r1 == 0) goto L_0x0358;
-        goto L_0x035d;
-        r1 = new java.util.HashMap;
-        r1.<init>();
-        return r1;
-        r0 = move-exception;
-        r1 = r0;
-        r4 = r2;
-        if (r4 == 0) goto L_0x036c;
-        r4.close();	 Catch:{ Exception -> 0x0367 }
-        goto L_0x036c;
-        r0 = move-exception;
-        r2 = r0;
-        org.telegram.messenger.FileLog.e(r2);
-        throw r1;
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ContactsController.readContactsFromPhoneBook():java.util.HashMap");
     }
 
     public static ContactsController getInstance(int i) {
@@ -815,12 +291,13 @@ public class ContactsController {
                 iArr[i] = 0;
                 i++;
             } else {
-                this.privacyRules = null;
+                this.lastseenPrivacyRules = null;
                 this.groupPrivacyRules = null;
                 this.callPrivacyRules = null;
                 this.p2pPrivacyRules = null;
                 this.profilePhotoPrivacyRules = null;
                 this.forwardsPrivacyRules = null;
+                this.phonePrivacyRules = null;
                 Utilities.globalQueue.postRunnable(new -$$Lambda$ContactsController$6JQLrbPbpNJhoOI_5BGOSFa9lbo(this));
                 return;
             }
@@ -1173,88 +650,40 @@ public class ContactsController {
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_contacts_resetSaved(), -$$Lambda$ContactsController$rEtEE7WzBCVDghotOSTBjLdLnsM.INSTANCE);
     }
 
-    /* JADX WARNING: Missing block: B:20:0x004f, code skipped:
-            if (r2 != null) goto L_0x0051;
-     */
-    /* JADX WARNING: Missing block: B:22:?, code skipped:
-            r2.close();
-     */
-    /* JADX WARNING: Missing block: B:27:0x005b, code skipped:
-            if (r2 == null) goto L_0x0068;
-     */
     private boolean checkContactsInternal() {
-        /*
-        r10 = this;
-        r0 = "version";
-        r1 = 0;
-        r2 = r10.hasContactsPermission();	 Catch:{ Exception -> 0x0064 }
-        if (r2 != 0) goto L_0x000a;
-    L_0x0009:
-        return r1;
-    L_0x000a:
-        r2 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0064 }
-        r3 = r2.getContentResolver();	 Catch:{ Exception -> 0x0064 }
-        r2 = 0;
-        r4 = android.provider.ContactsContract.RawContacts.CONTENT_URI;	 Catch:{ Exception -> 0x0057 }
-        r9 = 1;
-        r5 = new java.lang.String[r9];	 Catch:{ Exception -> 0x0057 }
-        r5[r1] = r0;	 Catch:{ Exception -> 0x0057 }
-        r6 = 0;
-        r7 = 0;
-        r8 = 0;
-        r2 = r3.query(r4, r5, r6, r7, r8);	 Catch:{ Exception -> 0x0057 }
-        if (r2 == 0) goto L_0x004f;
-    L_0x0021:
-        r3 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0057 }
-        r3.<init>();	 Catch:{ Exception -> 0x0057 }
-    L_0x0026:
-        r4 = r2.moveToNext();	 Catch:{ Exception -> 0x0057 }
-        if (r4 == 0) goto L_0x0038;
-    L_0x002c:
-        r4 = r2.getColumnIndex(r0);	 Catch:{ Exception -> 0x0057 }
-        r4 = r2.getString(r4);	 Catch:{ Exception -> 0x0057 }
-        r3.append(r4);	 Catch:{ Exception -> 0x0057 }
-        goto L_0x0026;
-    L_0x0038:
-        r0 = r3.toString();	 Catch:{ Exception -> 0x0057 }
-        r3 = r10.lastContactsVersions;	 Catch:{ Exception -> 0x0057 }
-        r3 = r3.length();	 Catch:{ Exception -> 0x0057 }
-        if (r3 == 0) goto L_0x004d;
-    L_0x0044:
-        r3 = r10.lastContactsVersions;	 Catch:{ Exception -> 0x0057 }
-        r3 = r3.equals(r0);	 Catch:{ Exception -> 0x0057 }
-        if (r3 != 0) goto L_0x004d;
-    L_0x004c:
-        r1 = 1;
-    L_0x004d:
-        r10.lastContactsVersions = r0;	 Catch:{ Exception -> 0x0057 }
-    L_0x004f:
-        if (r2 == 0) goto L_0x0068;
-    L_0x0051:
-        r2.close();	 Catch:{ Exception -> 0x0064 }
-        goto L_0x0068;
-    L_0x0055:
-        r0 = move-exception;
-        goto L_0x005e;
-    L_0x0057:
-        r0 = move-exception;
-        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x0055 }
-        if (r2 == 0) goto L_0x0068;
-    L_0x005d:
-        goto L_0x0051;
-    L_0x005e:
-        if (r2 == 0) goto L_0x0063;
-    L_0x0060:
-        r2.close();	 Catch:{ Exception -> 0x0064 }
-    L_0x0063:
-        throw r0;	 Catch:{ Exception -> 0x0064 }
-    L_0x0064:
-        r0 = move-exception;
-        org.telegram.messenger.FileLog.e(r0);
-    L_0x0068:
-        return r1;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ContactsController.checkContactsInternal():boolean");
+        Throwable th;
+        String str = "version";
+        boolean z = false;
+        try {
+            if (!hasContactsPermission()) {
+                return false;
+            }
+            ContentResolver contentResolver = ApplicationLoader.applicationContext.getContentResolver();
+            Cursor query;
+            try {
+                query = contentResolver.query(RawContacts.CONTENT_URI, new String[]{str}, null, null, null);
+                if (query != null) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    while (query.moveToNext()) {
+                        stringBuilder.append(query.getString(query.getColumnIndex(str)));
+                    }
+                    str = stringBuilder.toString();
+                    if (!(this.lastContactsVersions.length() == 0 || this.lastContactsVersions.equals(str))) {
+                        z = true;
+                    }
+                    this.lastContactsVersions = str;
+                }
+                if (query != null) {
+                    query.close();
+                }
+            } catch (Exception th2) {
+                FileLog.e(th2);
+            } catch (Throwable unused) {
+            }
+            return z;
+        } catch (Exception th22) {
+            FileLog.e(th22);
+        }
     }
 
     public void readContacts() {
@@ -1294,6 +723,587 @@ public class ContactsController {
             z = false;
         }
         return z;
+    }
+
+    /* JADX WARNING: Removed duplicated region for block: B:210:0x0353  */
+    /* JADX WARNING: Removed duplicated region for block: B:205:0x0348 A:{Catch:{ all -> 0x0359 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:207:0x034d A:{SYNTHETIC, Splitter:B:207:0x034d} */
+    /* JADX WARNING: Removed duplicated region for block: B:210:0x0353  */
+    /* JADX WARNING: Removed duplicated region for block: B:215:0x035e A:{SYNTHETIC, Splitter:B:215:0x035e} */
+    /* JADX WARNING: Removed duplicated region for block: B:215:0x035e A:{SYNTHETIC, Splitter:B:215:0x035e} */
+    /* JADX WARNING: Removed duplicated region for block: B:215:0x035e A:{SYNTHETIC, Splitter:B:215:0x035e} */
+    /* JADX WARNING: Removed duplicated region for block: B:205:0x0348 A:{Catch:{ all -> 0x0359 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:207:0x034d A:{SYNTHETIC, Splitter:B:207:0x034d} */
+    /* JADX WARNING: Removed duplicated region for block: B:210:0x0353  */
+    /* JADX WARNING: Removed duplicated region for block: B:215:0x035e A:{SYNTHETIC, Splitter:B:215:0x035e} */
+    /* JADX WARNING: Removed duplicated region for block: B:205:0x0348 A:{Catch:{ all -> 0x0359 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:207:0x034d A:{SYNTHETIC, Splitter:B:207:0x034d} */
+    /* JADX WARNING: Removed duplicated region for block: B:210:0x0353  */
+    /* JADX WARNING: Removed duplicated region for block: B:118:0x01fb A:{Splitter:B:18:0x0057, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:205:0x0348 A:{Catch:{ all -> 0x0359 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:207:0x034d A:{SYNTHETIC, Splitter:B:207:0x034d} */
+    /* JADX WARNING: Removed duplicated region for block: B:210:0x0353  */
+    /* JADX WARNING: Removed duplicated region for block: B:215:0x035e A:{SYNTHETIC, Splitter:B:215:0x035e} */
+    /* JADX WARNING: Removed duplicated region for block: B:205:0x0348 A:{Catch:{ all -> 0x0359 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:207:0x034d A:{SYNTHETIC, Splitter:B:207:0x034d} */
+    /* JADX WARNING: Removed duplicated region for block: B:210:0x0353  */
+    /* JADX WARNING: Failed to process nested try/catch */
+    /* JADX WARNING: Missing block: B:118:0x01fb, code skipped:
+            r0 = th;
+     */
+    /* JADX WARNING: Missing block: B:119:0x01fc, code skipped:
+            r10 = r21;
+     */
+    /* JADX WARNING: Missing block: B:121:0x0201, code skipped:
+            r0 = th;
+     */
+    /* JADX WARNING: Missing block: B:122:0x0202, code skipped:
+            r1 = null;
+            r10 = r21;
+            r2 = r4;
+     */
+    private java.util.HashMap<java.lang.String, org.telegram.messenger.ContactsController.Contact> readContactsFromPhoneBook() {
+        /*
+        r21 = this;
+        r1 = r21;
+        r0 = r1.currentAccount;
+        r0 = org.telegram.messenger.UserConfig.getInstance(r0);
+        r0 = r0.syncContacts;
+        if (r0 != 0) goto L_0x001b;
+    L_0x000c:
+        r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
+        if (r0 == 0) goto L_0x0015;
+    L_0x0010:
+        r0 = "contacts sync disabled";
+        org.telegram.messenger.FileLog.d(r0);
+    L_0x0015:
+        r0 = new java.util.HashMap;
+        r0.<init>();
+        return r0;
+    L_0x001b:
+        r0 = r21.hasContactsPermission();
+        if (r0 != 0) goto L_0x0030;
+    L_0x0021:
+        r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
+        if (r0 == 0) goto L_0x002a;
+    L_0x0025:
+        r0 = "app has no contacts permissions";
+        org.telegram.messenger.FileLog.d(r0);
+    L_0x002a:
+        r0 = new java.util.HashMap;
+        r0.<init>();
+        return r0;
+    L_0x0030:
+        r0 = new java.lang.StringBuilder;	 Catch:{ Throwable -> 0x033f, all -> 0x033a }
+        r0.<init>();	 Catch:{ Throwable -> 0x033f, all -> 0x033a }
+        r3 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x033f, all -> 0x033a }
+        r3 = r3.getContentResolver();	 Catch:{ Throwable -> 0x033f, all -> 0x033a }
+        r10 = new java.util.HashMap;	 Catch:{ Throwable -> 0x033f, all -> 0x033a }
+        r10.<init>();	 Catch:{ Throwable -> 0x033f, all -> 0x033a }
+        r11 = new java.util.ArrayList;	 Catch:{ Throwable -> 0x033f, all -> 0x033a }
+        r11.<init>();	 Catch:{ Throwable -> 0x033f, all -> 0x033a }
+        r5 = android.provider.ContactsContract.CommonDataKinds.Phone.CONTENT_URI;	 Catch:{ Throwable -> 0x033f, all -> 0x033a }
+        r6 = r1.projectionPhones;	 Catch:{ Throwable -> 0x033f, all -> 0x033a }
+        r7 = 0;
+        r8 = 0;
+        r9 = 0;
+        r4 = r3;
+        r4 = r4.query(r5, r6, r7, r8, r9);	 Catch:{ Throwable -> 0x033f, all -> 0x033a }
+        r14 = 0;
+        r15 = "";
+        r9 = 1;
+        if (r4 == 0) goto L_0x0208;
+    L_0x0057:
+        r5 = r4.getCount();	 Catch:{ Throwable -> 0x0201, all -> 0x01fb }
+        if (r5 <= 0) goto L_0x01e9;
+    L_0x005d:
+        r6 = new java.util.HashMap;	 Catch:{ Throwable -> 0x0201, all -> 0x01fb }
+        r6.<init>(r5);	 Catch:{ Throwable -> 0x0201, all -> 0x01fb }
+        r5 = 1;
+    L_0x0063:
+        r7 = r4.moveToNext();	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        if (r7 == 0) goto L_0x01e5;
+    L_0x0069:
+        r7 = r4.getString(r9);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r8 = 5;
+        r8 = r4.getString(r8);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        if (r8 != 0) goto L_0x0075;
+    L_0x0074:
+        r8 = r15;
+    L_0x0075:
+        r2 = ".sim";
+        r2 = r8.indexOf(r2);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        if (r2 == 0) goto L_0x007f;
+    L_0x007d:
+        r2 = 1;
+        goto L_0x0080;
+    L_0x007f:
+        r2 = 0;
+    L_0x0080:
+        r17 = android.text.TextUtils.isEmpty(r7);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        if (r17 == 0) goto L_0x0087;
+    L_0x0086:
+        goto L_0x00e5;
+    L_0x0087:
+        r7 = org.telegram.PhoneFormat.PhoneFormat.stripExceptNumbers(r7, r9);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r17 = android.text.TextUtils.isEmpty(r7);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        if (r17 == 0) goto L_0x0092;
+    L_0x0091:
+        goto L_0x00e5;
+    L_0x0092:
+        r12 = "+";
+        r12 = r7.startsWith(r12);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        if (r12 == 0) goto L_0x00a7;
+    L_0x009a:
+        r12 = r7.substring(r9);	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
+        goto L_0x00a8;
+    L_0x009f:
+        r0 = move-exception;
+        r10 = r1;
+        goto L_0x01fe;
+    L_0x00a3:
+        r0 = move-exception;
+        r10 = r1;
+        goto L_0x01f4;
+    L_0x00a7:
+        r12 = r7;
+    L_0x00a8:
+        r9 = r4.getString(r14);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r0.setLength(r14);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        android.database.DatabaseUtils.appendEscapedSQLString(r0, r9);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r13 = r0.toString();	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r18 = r10.get(r12);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r14 = r18;
+        r14 = (org.telegram.messenger.ContactsController.Contact) r14;	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        if (r14 == 0) goto L_0x00e9;
+    L_0x00c0:
+        r7 = r14.isGoodProvider;	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
+        if (r7 != 0) goto L_0x00e5;
+    L_0x00c4:
+        r7 = r14.provider;	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
+        r7 = r8.equals(r7);	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
+        if (r7 != 0) goto L_0x00e5;
+    L_0x00cc:
+        r7 = 0;
+        r0.setLength(r7);	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
+        r7 = r14.key;	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
+        android.database.DatabaseUtils.appendEscapedSQLString(r0, r7);	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
+        r7 = r0.toString();	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
+        r11.remove(r7);	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
+        r11.add(r13);	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
+        r14.key = r9;	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
+        r14.isGoodProvider = r2;	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
+        r14.provider = r8;	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
+    L_0x00e5:
+        r9 = 1;
+        r14 = 0;
+        goto L_0x0063;
+    L_0x00e9:
+        r14 = r11.contains(r13);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        if (r14 != 0) goto L_0x00f2;
+    L_0x00ef:
+        r11.add(r13);	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
+    L_0x00f2:
+        r13 = 2;
+        r14 = r4.getInt(r13);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r13 = r6.get(r9);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r13 = (org.telegram.messenger.ContactsController.Contact) r13;	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        if (r13 != 0) goto L_0x0156;
+    L_0x00ff:
+        r13 = new org.telegram.messenger.ContactsController$Contact;	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r13.<init>();	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r18 = r0;
+        r0 = 4;
+        r0 = r4.getString(r0);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        if (r0 != 0) goto L_0x010f;
+    L_0x010d:
+        r0 = r15;
+        goto L_0x0113;
+    L_0x010f:
+        r0 = r0.trim();	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+    L_0x0113:
+        r19 = r1.isNotValidNameString(r0);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        if (r19 == 0) goto L_0x0120;
+    L_0x0119:
+        r13.first_name = r0;	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
+        r13.last_name = r15;	 Catch:{ Throwable -> 0x00a3, all -> 0x009f }
+        r19 = r3;
+        goto L_0x0147;
+    L_0x0120:
+        r19 = r3;
+        r3 = 32;
+        r3 = r0.lastIndexOf(r3);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r1 = -1;
+        if (r3 == r1) goto L_0x0143;
+    L_0x012b:
+        r1 = 0;
+        r20 = r0.substring(r1, r3);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r1 = r20.trim();	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r13.first_name = r1;	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r3 = r3 + 1;
+        r0 = r0.substring(r3);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r0 = r0.trim();	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r13.last_name = r0;	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        goto L_0x0147;
+    L_0x0143:
+        r13.first_name = r0;	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r13.last_name = r15;	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+    L_0x0147:
+        r13.provider = r8;	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r13.isGoodProvider = r2;	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r13.key = r9;	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r0 = r5 + 1;
+        r13.contact_id = r5;	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r6.put(r9, r13);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r5 = r0;
+        goto L_0x015a;
+    L_0x0156:
+        r18 = r0;
+        r19 = r3;
+    L_0x015a:
+        r0 = r13.shortPhones;	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r0.add(r12);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r0 = r13.phones;	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r0.add(r7);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r0 = r13.phoneDeleted;	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r1 = 0;
+        r2 = java.lang.Integer.valueOf(r1);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r0.add(r2);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r0 = NUM; // 0x7f0d07f2 float:1.874624E38 double:1.0531307825E-314;
+        r1 = "PhoneMobile";
+        if (r14 != 0) goto L_0x0188;
+    L_0x0175:
+        r2 = 3;
+        r3 = r4.getString(r2);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r2 = r13.phoneTypes;	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        if (r3 == 0) goto L_0x017f;
+    L_0x017e:
+        goto L_0x0183;
+    L_0x017f:
+        r3 = org.telegram.messenger.LocaleController.getString(r1, r0);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+    L_0x0183:
+        r2.add(r3);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r2 = 1;
+        goto L_0x01da;
+    L_0x0188:
+        r2 = 1;
+        if (r14 != r2) goto L_0x019a;
+    L_0x018b:
+        r0 = r13.phoneTypes;	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r1 = "PhoneHome";
+        r3 = NUM; // 0x7f0d07f0 float:1.8746236E38 double:1.0531307815E-314;
+        r1 = org.telegram.messenger.LocaleController.getString(r1, r3);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r0.add(r1);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        goto L_0x01da;
+    L_0x019a:
+        r3 = 2;
+        if (r14 != r3) goto L_0x01a7;
+    L_0x019d:
+        r3 = r13.phoneTypes;	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r0 = org.telegram.messenger.LocaleController.getString(r1, r0);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r3.add(r0);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        goto L_0x01da;
+    L_0x01a7:
+        r0 = 3;
+        if (r14 != r0) goto L_0x01b9;
+    L_0x01aa:
+        r0 = r13.phoneTypes;	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r1 = "PhoneWork";
+        r3 = NUM; // 0x7f0d07f8 float:1.8746252E38 double:1.0531307854E-314;
+        r1 = org.telegram.messenger.LocaleController.getString(r1, r3);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r0.add(r1);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        goto L_0x01da;
+    L_0x01b9:
+        r0 = 12;
+        if (r14 != r0) goto L_0x01cc;
+    L_0x01bd:
+        r0 = r13.phoneTypes;	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r1 = "PhoneMain";
+        r3 = NUM; // 0x7f0d07f1 float:1.8746238E38 double:1.053130782E-314;
+        r1 = org.telegram.messenger.LocaleController.getString(r1, r3);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r0.add(r1);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        goto L_0x01da;
+    L_0x01cc:
+        r0 = r13.phoneTypes;	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r1 = "PhoneOther";
+        r3 = NUM; // 0x7f0d07f7 float:1.874625E38 double:1.053130785E-314;
+        r1 = org.telegram.messenger.LocaleController.getString(r1, r3);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r0.add(r1);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+    L_0x01da:
+        r10.put(r12, r13);	 Catch:{ Throwable -> 0x01f1, all -> 0x01fb }
+        r1 = r21;
+        r0 = r18;
+        r3 = r19;
+        goto L_0x00e5;
+    L_0x01e5:
+        r19 = r3;
+        r2 = 1;
+        goto L_0x01ed;
+    L_0x01e9:
+        r19 = r3;
+        r2 = 1;
+        r6 = 0;
+    L_0x01ed:
+        r4.close();	 Catch:{ Exception -> 0x01f8 }
+        goto L_0x01f8;
+    L_0x01f1:
+        r0 = move-exception;
+        r10 = r21;
+    L_0x01f4:
+        r2 = r4;
+        r1 = r6;
+        goto L_0x0343;
+    L_0x01f8:
+        r1 = r6;
+        r3 = 0;
+        goto L_0x020d;
+    L_0x01fb:
+        r0 = move-exception;
+        r10 = r21;
+    L_0x01fe:
+        r1 = r0;
+        goto L_0x035c;
+    L_0x0201:
+        r0 = move-exception;
+        r1 = 0;
+        r10 = r21;
+        r2 = r4;
+        goto L_0x0343;
+    L_0x0208:
+        r19 = r3;
+        r2 = 1;
+        r3 = r4;
+        r1 = 0;
+    L_0x020d:
+        r0 = ",";
+        r0 = android.text.TextUtils.join(r0, r11);	 Catch:{ Throwable -> 0x0335, all -> 0x032f }
+        r5 = android.provider.ContactsContract.Data.CONTENT_URI;	 Catch:{ Throwable -> 0x0335, all -> 0x032f }
+        r10 = r21;
+        r6 = r10.projectionNames;	 Catch:{ Throwable -> 0x032d, all -> 0x032b }
+        r4 = new java.lang.StringBuilder;	 Catch:{ Throwable -> 0x032d, all -> 0x032b }
+        r4.<init>();	 Catch:{ Throwable -> 0x032d, all -> 0x032b }
+        r7 = "lookup IN (";
+        r4.append(r7);	 Catch:{ Throwable -> 0x032d, all -> 0x032b }
+        r4.append(r0);	 Catch:{ Throwable -> 0x032d, all -> 0x032b }
+        r0 = ") AND ";
+        r4.append(r0);	 Catch:{ Throwable -> 0x032d, all -> 0x032b }
+        r0 = "mimetype";
+        r4.append(r0);	 Catch:{ Throwable -> 0x032d, all -> 0x032b }
+        r0 = " = '";
+        r4.append(r0);	 Catch:{ Throwable -> 0x032d, all -> 0x032b }
+        r0 = "vnd.android.cursor.item/name";
+        r4.append(r0);	 Catch:{ Throwable -> 0x032d, all -> 0x032b }
+        r0 = "'";
+        r4.append(r0);	 Catch:{ Throwable -> 0x032d, all -> 0x032b }
+        r7 = r4.toString();	 Catch:{ Throwable -> 0x032d, all -> 0x032b }
+        r8 = 0;
+        r9 = 0;
+        r4 = r19;
+        r0 = 1;
+        r2 = r4.query(r5, r6, r7, r8, r9);	 Catch:{ Throwable -> 0x032d, all -> 0x032b }
+        if (r2 == 0) goto L_0x031d;
+    L_0x024f:
+        r3 = r2.moveToNext();	 Catch:{ Throwable -> 0x031b }
+        if (r3 == 0) goto L_0x0315;
+    L_0x0255:
+        r3 = 0;
+        r4 = r2.getString(r3);	 Catch:{ Throwable -> 0x031b }
+        r5 = r2.getString(r0);	 Catch:{ Throwable -> 0x031b }
+        r6 = 2;
+        r7 = r2.getString(r6);	 Catch:{ Throwable -> 0x031b }
+        r8 = 3;
+        r9 = r2.getString(r8);	 Catch:{ Throwable -> 0x031b }
+        r4 = r1.get(r4);	 Catch:{ Throwable -> 0x031b }
+        r4 = (org.telegram.messenger.ContactsController.Contact) r4;	 Catch:{ Throwable -> 0x031b }
+        if (r4 == 0) goto L_0x024f;
+    L_0x0270:
+        r11 = r4.namesFilled;	 Catch:{ Throwable -> 0x031b }
+        if (r11 != 0) goto L_0x024f;
+    L_0x0274:
+        r11 = r4.isGoodProvider;	 Catch:{ Throwable -> 0x031b }
+        r12 = " ";
+        if (r11 == 0) goto L_0x02b0;
+    L_0x027a:
+        if (r5 == 0) goto L_0x027f;
+    L_0x027c:
+        r4.first_name = r5;	 Catch:{ Throwable -> 0x031b }
+        goto L_0x0281;
+    L_0x027f:
+        r4.first_name = r15;	 Catch:{ Throwable -> 0x031b }
+    L_0x0281:
+        if (r7 == 0) goto L_0x0286;
+    L_0x0283:
+        r4.last_name = r7;	 Catch:{ Throwable -> 0x031b }
+        goto L_0x0288;
+    L_0x0286:
+        r4.last_name = r15;	 Catch:{ Throwable -> 0x031b }
+    L_0x0288:
+        r5 = android.text.TextUtils.isEmpty(r9);	 Catch:{ Throwable -> 0x031b }
+        if (r5 != 0) goto L_0x0311;
+    L_0x028e:
+        r5 = r4.first_name;	 Catch:{ Throwable -> 0x031b }
+        r5 = android.text.TextUtils.isEmpty(r5);	 Catch:{ Throwable -> 0x031b }
+        if (r5 != 0) goto L_0x02ad;
+    L_0x0296:
+        r5 = new java.lang.StringBuilder;	 Catch:{ Throwable -> 0x031b }
+        r5.<init>();	 Catch:{ Throwable -> 0x031b }
+        r7 = r4.first_name;	 Catch:{ Throwable -> 0x031b }
+        r5.append(r7);	 Catch:{ Throwable -> 0x031b }
+        r5.append(r12);	 Catch:{ Throwable -> 0x031b }
+        r5.append(r9);	 Catch:{ Throwable -> 0x031b }
+        r5 = r5.toString();	 Catch:{ Throwable -> 0x031b }
+        r4.first_name = r5;	 Catch:{ Throwable -> 0x031b }
+        goto L_0x0311;
+    L_0x02ad:
+        r4.first_name = r9;	 Catch:{ Throwable -> 0x031b }
+        goto L_0x0311;
+    L_0x02b0:
+        r11 = r10.isNotValidNameString(r5);	 Catch:{ Throwable -> 0x031b }
+        if (r11 != 0) goto L_0x02c6;
+    L_0x02b6:
+        r11 = r4.first_name;	 Catch:{ Throwable -> 0x031b }
+        r11 = r11.contains(r5);	 Catch:{ Throwable -> 0x031b }
+        if (r11 != 0) goto L_0x02dc;
+    L_0x02be:
+        r11 = r4.first_name;	 Catch:{ Throwable -> 0x031b }
+        r11 = r5.contains(r11);	 Catch:{ Throwable -> 0x031b }
+        if (r11 != 0) goto L_0x02dc;
+    L_0x02c6:
+        r11 = r10.isNotValidNameString(r7);	 Catch:{ Throwable -> 0x031b }
+        if (r11 != 0) goto L_0x0311;
+    L_0x02cc:
+        r11 = r4.last_name;	 Catch:{ Throwable -> 0x031b }
+        r11 = r11.contains(r7);	 Catch:{ Throwable -> 0x031b }
+        if (r11 != 0) goto L_0x02dc;
+    L_0x02d4:
+        r11 = r4.last_name;	 Catch:{ Throwable -> 0x031b }
+        r11 = r5.contains(r11);	 Catch:{ Throwable -> 0x031b }
+        if (r11 == 0) goto L_0x0311;
+    L_0x02dc:
+        if (r5 == 0) goto L_0x02e1;
+    L_0x02de:
+        r4.first_name = r5;	 Catch:{ Throwable -> 0x031b }
+        goto L_0x02e3;
+    L_0x02e1:
+        r4.first_name = r15;	 Catch:{ Throwable -> 0x031b }
+    L_0x02e3:
+        r5 = android.text.TextUtils.isEmpty(r9);	 Catch:{ Throwable -> 0x031b }
+        if (r5 != 0) goto L_0x030a;
+    L_0x02e9:
+        r5 = r4.first_name;	 Catch:{ Throwable -> 0x031b }
+        r5 = android.text.TextUtils.isEmpty(r5);	 Catch:{ Throwable -> 0x031b }
+        if (r5 != 0) goto L_0x0308;
+    L_0x02f1:
+        r5 = new java.lang.StringBuilder;	 Catch:{ Throwable -> 0x031b }
+        r5.<init>();	 Catch:{ Throwable -> 0x031b }
+        r11 = r4.first_name;	 Catch:{ Throwable -> 0x031b }
+        r5.append(r11);	 Catch:{ Throwable -> 0x031b }
+        r5.append(r12);	 Catch:{ Throwable -> 0x031b }
+        r5.append(r9);	 Catch:{ Throwable -> 0x031b }
+        r5 = r5.toString();	 Catch:{ Throwable -> 0x031b }
+        r4.first_name = r5;	 Catch:{ Throwable -> 0x031b }
+        goto L_0x030a;
+    L_0x0308:
+        r4.first_name = r9;	 Catch:{ Throwable -> 0x031b }
+    L_0x030a:
+        if (r7 == 0) goto L_0x030f;
+    L_0x030c:
+        r4.last_name = r7;	 Catch:{ Throwable -> 0x031b }
+        goto L_0x0311;
+    L_0x030f:
+        r4.last_name = r15;	 Catch:{ Throwable -> 0x031b }
+    L_0x0311:
+        r4.namesFilled = r0;	 Catch:{ Throwable -> 0x031b }
+        goto L_0x024f;
+    L_0x0315:
+        r2.close();	 Catch:{ Exception -> 0x0318 }
+    L_0x0318:
+        r16 = 0;
+        goto L_0x031f;
+    L_0x031b:
+        r0 = move-exception;
+        goto L_0x0343;
+    L_0x031d:
+        r16 = r2;
+    L_0x031f:
+        if (r16 == 0) goto L_0x0350;
+    L_0x0321:
+        r16.close();	 Catch:{ Exception -> 0x0325 }
+        goto L_0x0350;
+    L_0x0325:
+        r0 = move-exception;
+        r2 = r0;
+        org.telegram.messenger.FileLog.e(r2);
+        goto L_0x0350;
+    L_0x032b:
+        r0 = move-exception;
+        goto L_0x0332;
+    L_0x032d:
+        r0 = move-exception;
+        goto L_0x0338;
+    L_0x032f:
+        r0 = move-exception;
+        r10 = r21;
+    L_0x0332:
+        r1 = r0;
+        r4 = r3;
+        goto L_0x035c;
+    L_0x0335:
+        r0 = move-exception;
+        r10 = r21;
+    L_0x0338:
+        r2 = r3;
+        goto L_0x0343;
+    L_0x033a:
+        r0 = move-exception;
+        r10 = r1;
+        r1 = r0;
+        r4 = 0;
+        goto L_0x035c;
+    L_0x033f:
+        r0 = move-exception;
+        r10 = r1;
+        r1 = 0;
+        r2 = 0;
+    L_0x0343:
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ all -> 0x0359 }
+        if (r1 == 0) goto L_0x034b;
+    L_0x0348:
+        r1.clear();	 Catch:{ all -> 0x0359 }
+    L_0x034b:
+        if (r2 == 0) goto L_0x0350;
+    L_0x034d:
+        r2.close();	 Catch:{ Exception -> 0x0325 }
+    L_0x0350:
+        if (r1 == 0) goto L_0x0353;
+    L_0x0352:
+        goto L_0x0358;
+    L_0x0353:
+        r1 = new java.util.HashMap;
+        r1.<init>();
+    L_0x0358:
+        return r1;
+    L_0x0359:
+        r0 = move-exception;
+        r1 = r0;
+        r4 = r2;
+    L_0x035c:
+        if (r4 == 0) goto L_0x0367;
+    L_0x035e:
+        r4.close();	 Catch:{ Exception -> 0x0362 }
+        goto L_0x0367;
+    L_0x0362:
+        r0 = move-exception;
+        r2 = r0;
+        org.telegram.messenger.FileLog.e(r2);
+    L_0x0367:
+        goto L_0x0369;
+    L_0x0368:
+        throw r1;
+    L_0x0369:
+        goto L_0x0368;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ContactsController.readContactsFromPhoneBook():java.util.HashMap");
     }
 
     public HashMap<String, Contact> getContactsCopy(HashMap<String, Contact> hashMap) {
@@ -2930,6 +2940,126 @@ public class ContactsController {
         }
     }
 
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x009f  */
+    /* JADX WARNING: Missing block: B:22:0x0088, code skipped:
+            if (r0 != null) goto L_0x0099;
+     */
+    /* JADX WARNING: Missing block: B:31:0x0097, code skipped:
+            if (r0 != null) goto L_0x0099;
+     */
+    /* JADX WARNING: Missing block: B:32:0x0099, code skipped:
+            r0.close();
+     */
+    /* JADX WARNING: Missing block: B:33:0x009c, code skipped:
+            return;
+     */
+    private void performWriteContactsToPhoneBookInternal(java.util.ArrayList<org.telegram.tgnet.TLRPC.TL_contact> r11) {
+        /*
+        r10 = this;
+        r0 = 0;
+        r1 = r10.hasContactsPermission();	 Catch:{ Exception -> 0x0093 }
+        if (r1 != 0) goto L_0x0008;
+    L_0x0007:
+        return;
+    L_0x0008:
+        r1 = android.provider.ContactsContract.RawContacts.CONTENT_URI;	 Catch:{ Exception -> 0x0093 }
+        r1 = r1.buildUpon();	 Catch:{ Exception -> 0x0093 }
+        r2 = "account_name";
+        r3 = r10.systemAccount;	 Catch:{ Exception -> 0x0093 }
+        r3 = r3.name;	 Catch:{ Exception -> 0x0093 }
+        r1 = r1.appendQueryParameter(r2, r3);	 Catch:{ Exception -> 0x0093 }
+        r2 = "account_type";
+        r3 = r10.systemAccount;	 Catch:{ Exception -> 0x0093 }
+        r3 = r3.type;	 Catch:{ Exception -> 0x0093 }
+        r1 = r1.appendQueryParameter(r2, r3);	 Catch:{ Exception -> 0x0093 }
+        r3 = r1.build();	 Catch:{ Exception -> 0x0093 }
+        r1 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0093 }
+        r2 = r1.getContentResolver();	 Catch:{ Exception -> 0x0093 }
+        r1 = 2;
+        r4 = new java.lang.String[r1];	 Catch:{ Exception -> 0x0093 }
+        r1 = "_id";
+        r8 = 0;
+        r4[r8] = r1;	 Catch:{ Exception -> 0x0093 }
+        r1 = "sync2";
+        r9 = 1;
+        r4[r9] = r1;	 Catch:{ Exception -> 0x0093 }
+        r5 = 0;
+        r6 = 0;
+        r7 = 0;
+        r1 = r2.query(r3, r4, r5, r6, r7);	 Catch:{ Exception -> 0x0093 }
+        r2 = new org.telegram.messenger.support.SparseLongArray;	 Catch:{ Exception -> 0x008e, all -> 0x008b }
+        r2.<init>();	 Catch:{ Exception -> 0x008e, all -> 0x008b }
+        if (r1 == 0) goto L_0x0087;
+    L_0x0047:
+        r3 = r1.moveToNext();	 Catch:{ Exception -> 0x008e, all -> 0x008b }
+        if (r3 == 0) goto L_0x0059;
+    L_0x004d:
+        r3 = r1.getInt(r9);	 Catch:{ Exception -> 0x008e, all -> 0x008b }
+        r4 = r1.getLong(r8);	 Catch:{ Exception -> 0x008e, all -> 0x008b }
+        r2.put(r3, r4);	 Catch:{ Exception -> 0x008e, all -> 0x008b }
+        goto L_0x0047;
+    L_0x0059:
+        r1.close();	 Catch:{ Exception -> 0x008e, all -> 0x008b }
+        r1 = 0;
+    L_0x005d:
+        r3 = r11.size();	 Catch:{ Exception -> 0x0093 }
+        if (r1 >= r3) goto L_0x0088;
+    L_0x0063:
+        r3 = r11.get(r1);	 Catch:{ Exception -> 0x0093 }
+        r3 = (org.telegram.tgnet.TLRPC.TL_contact) r3;	 Catch:{ Exception -> 0x0093 }
+        r4 = r3.user_id;	 Catch:{ Exception -> 0x0093 }
+        r4 = r2.indexOfKey(r4);	 Catch:{ Exception -> 0x0093 }
+        if (r4 >= 0) goto L_0x0084;
+    L_0x0071:
+        r4 = r10.currentAccount;	 Catch:{ Exception -> 0x0093 }
+        r4 = org.telegram.messenger.MessagesController.getInstance(r4);	 Catch:{ Exception -> 0x0093 }
+        r3 = r3.user_id;	 Catch:{ Exception -> 0x0093 }
+        r3 = java.lang.Integer.valueOf(r3);	 Catch:{ Exception -> 0x0093 }
+        r3 = r4.getUser(r3);	 Catch:{ Exception -> 0x0093 }
+        r10.addContactToPhoneBook(r3, r8);	 Catch:{ Exception -> 0x0093 }
+    L_0x0084:
+        r1 = r1 + 1;
+        goto L_0x005d;
+    L_0x0087:
+        r0 = r1;
+    L_0x0088:
+        if (r0 == 0) goto L_0x009c;
+    L_0x008a:
+        goto L_0x0099;
+    L_0x008b:
+        r11 = move-exception;
+        r0 = r1;
+        goto L_0x009d;
+    L_0x008e:
+        r11 = move-exception;
+        r0 = r1;
+        goto L_0x0094;
+    L_0x0091:
+        r11 = move-exception;
+        goto L_0x009d;
+    L_0x0093:
+        r11 = move-exception;
+    L_0x0094:
+        org.telegram.messenger.FileLog.e(r11);	 Catch:{ all -> 0x0091 }
+        if (r0 == 0) goto L_0x009c;
+    L_0x0099:
+        r0.close();
+    L_0x009c:
+        return;
+    L_0x009d:
+        if (r0 == 0) goto L_0x00a2;
+    L_0x009f:
+        r0.close();
+    L_0x00a2:
+        goto L_0x00a4;
+    L_0x00a3:
+        throw r11;
+    L_0x00a4:
+        goto L_0x00a3;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ContactsController.performWriteContactsToPhoneBookInternal(java.util.ArrayList):void");
+    }
+
     private void performWriteContactsToPhoneBook() {
         Utilities.phoneBookQueue.postRunnable(new -$$Lambda$ContactsController$E0GDxDm4XOysG7SHcvpj5BVOSkQ(this, new ArrayList(this.contacts)));
     }
@@ -3121,7 +3251,7 @@ public class ContactsController {
         }
     }
 
-    /* JADX WARNING: Missing block: B:43:0x013c, code skipped:
+    /* JADX WARNING: Missing block: B:43:0x013e, code skipped:
             return -1;
      */
     public long addContactToPhoneBook(org.telegram.tgnet.TLRPC.User r8, boolean r9) {
@@ -3129,15 +3259,15 @@ public class ContactsController {
         r7 = this;
         r0 = r7.systemAccount;
         r1 = -1;
-        if (r0 == 0) goto L_0x013c;
+        if (r0 == 0) goto L_0x013e;
     L_0x0006:
-        if (r8 == 0) goto L_0x013c;
+        if (r8 == 0) goto L_0x013e;
     L_0x0008:
         r0 = r8.phone;
         r0 = android.text.TextUtils.isEmpty(r0);
         if (r0 == 0) goto L_0x0012;
     L_0x0010:
-        goto L_0x013c;
+        goto L_0x013e;
     L_0x0012:
         r0 = r7.hasContactsPermission();
         if (r0 != 0) goto L_0x0019;
@@ -3147,8 +3277,8 @@ public class ContactsController {
         r0 = r7.observerLock;
         monitor-enter(r0);
         r3 = 1;
-        r7.ignoreChanges = r3;	 Catch:{ all -> 0x0139 }
-        monitor-exit(r0);	 Catch:{ all -> 0x0139 }
+        r7.ignoreChanges = r3;	 Catch:{ all -> 0x013b }
+        monitor-exit(r0);	 Catch:{ all -> 0x013b }
         r0 = org.telegram.messenger.ApplicationLoader.applicationContext;
         r0 = r0.getContentResolver();
         if (r9 == 0) goto L_0x0065;
@@ -3244,36 +3374,36 @@ public class ContactsController {
         r8 = r3.build();
         r9.add(r8);
         r8 = "com.android.contacts";
-        r8 = r0.applyBatch(r8, r9);	 Catch:{ Exception -> 0x012f }
-        if (r8 == 0) goto L_0x012f;
-    L_0x0119:
-        r9 = r8.length;	 Catch:{ Exception -> 0x012f }
-        if (r9 <= 0) goto L_0x012f;
-    L_0x011c:
-        r9 = r8[r4];	 Catch:{ Exception -> 0x012f }
-        r9 = r9.uri;	 Catch:{ Exception -> 0x012f }
-        if (r9 == 0) goto L_0x012f;
-    L_0x0122:
-        r8 = r8[r4];	 Catch:{ Exception -> 0x012f }
-        r8 = r8.uri;	 Catch:{ Exception -> 0x012f }
-        r8 = r8.getLastPathSegment();	 Catch:{ Exception -> 0x012f }
-        r8 = java.lang.Long.parseLong(r8);	 Catch:{ Exception -> 0x012f }
+        r8 = r0.applyBatch(r8, r9);	 Catch:{ Exception -> 0x0131 }
+        if (r8 == 0) goto L_0x0131;
+    L_0x011b:
+        r9 = r8.length;	 Catch:{ Exception -> 0x0131 }
+        if (r9 <= 0) goto L_0x0131;
+    L_0x011e:
+        r9 = r8[r4];	 Catch:{ Exception -> 0x0131 }
+        r9 = r9.uri;	 Catch:{ Exception -> 0x0131 }
+        if (r9 == 0) goto L_0x0131;
+    L_0x0124:
+        r8 = r8[r4];	 Catch:{ Exception -> 0x0131 }
+        r8 = r8.uri;	 Catch:{ Exception -> 0x0131 }
+        r8 = r8.getLastPathSegment();	 Catch:{ Exception -> 0x0131 }
+        r8 = java.lang.Long.parseLong(r8);	 Catch:{ Exception -> 0x0131 }
         r1 = r8;
-    L_0x012f:
+    L_0x0131:
         r8 = r7.observerLock;
         monitor-enter(r8);
-        r7.ignoreChanges = r4;	 Catch:{ all -> 0x0136 }
-        monitor-exit(r8);	 Catch:{ all -> 0x0136 }
+        r7.ignoreChanges = r4;	 Catch:{ all -> 0x0138 }
+        monitor-exit(r8);	 Catch:{ all -> 0x0138 }
         return r1;
-    L_0x0136:
+    L_0x0138:
         r9 = move-exception;
-        monitor-exit(r8);	 Catch:{ all -> 0x0136 }
+        monitor-exit(r8);	 Catch:{ all -> 0x0138 }
         throw r9;
-    L_0x0139:
+    L_0x013b:
         r8 = move-exception;
-        monitor-exit(r0);	 Catch:{ all -> 0x0139 }
+        monitor-exit(r0);	 Catch:{ all -> 0x013b }
         throw r8;
-    L_0x013c:
+    L_0x013e:
         return r1;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ContactsController.addContactToPhoneBook(org.telegram.tgnet.TLRPC$User, boolean):long");
@@ -3515,10 +3645,12 @@ public class ContactsController {
                         tL_account_getPrivacy.key = new TL_inputPrivacyKeyPhoneCall();
                     } else if (i == 3) {
                         tL_account_getPrivacy.key = new TL_inputPrivacyKeyPhoneP2P();
-                    } else if (i != 4) {
-                        tL_account_getPrivacy.key = new TL_inputPrivacyKeyForwards();
-                    } else {
+                    } else if (i == 4) {
                         tL_account_getPrivacy.key = new TL_inputPrivacyKeyProfilePhoto();
+                    } else if (i != 5) {
+                        tL_account_getPrivacy.key = new TL_inputPrivacyKeyPhoneNumber();
+                    } else {
+                        tL_account_getPrivacy.key = new TL_inputPrivacyKeyForwards();
                     }
                     ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_account_getPrivacy, new -$$Lambda$ContactsController$AbTZFLT5AeZ8Xev0g7z_25zx9YM(this, i));
                 }
@@ -3552,18 +3684,21 @@ public class ContactsController {
         if (tL_error == null) {
             TL_account_privacyRules tL_account_privacyRules = (TL_account_privacyRules) tLObject;
             MessagesController.getInstance(this.currentAccount).putUsers(tL_account_privacyRules.users, false);
+            MessagesController.getInstance(this.currentAccount).putChats(tL_account_privacyRules.chats, false);
             if (i == 0) {
-                this.privacyRules = tL_account_privacyRules.rules;
+                this.lastseenPrivacyRules = tL_account_privacyRules.rules;
             } else if (i == 1) {
                 this.groupPrivacyRules = tL_account_privacyRules.rules;
             } else if (i == 2) {
                 this.callPrivacyRules = tL_account_privacyRules.rules;
             } else if (i == 3) {
                 this.p2pPrivacyRules = tL_account_privacyRules.rules;
-            } else if (i != 4) {
-                this.forwardsPrivacyRules = tL_account_privacyRules.rules;
-            } else {
+            } else if (i == 4) {
                 this.profilePhotoPrivacyRules = tL_account_privacyRules.rules;
+            } else if (i != 5) {
+                this.phonePrivacyRules = tL_account_privacyRules.rules;
+            } else {
+                this.forwardsPrivacyRules = tL_account_privacyRules.rules;
             }
             this.loadingPrivacyInfo[i] = 2;
         } else {
@@ -3589,46 +3724,58 @@ public class ContactsController {
     }
 
     public ArrayList<PrivacyRule> getPrivacyRules(int i) {
-        if (i == 5) {
-            return this.forwardsPrivacyRules;
+        switch (i) {
+            case 0:
+                return this.lastseenPrivacyRules;
+            case 1:
+                return this.groupPrivacyRules;
+            case 2:
+                return this.callPrivacyRules;
+            case 3:
+                return this.p2pPrivacyRules;
+            case 4:
+                return this.profilePhotoPrivacyRules;
+            case 5:
+                return this.forwardsPrivacyRules;
+            case 6:
+                return this.phonePrivacyRules;
+            default:
+                return null;
         }
-        if (i == 4) {
-            return this.profilePhotoPrivacyRules;
-        }
-        if (i == 3) {
-            return this.p2pPrivacyRules;
-        }
-        if (i == 2) {
-            return this.callPrivacyRules;
-        }
-        if (i == 1) {
-            return this.groupPrivacyRules;
-        }
-        return this.privacyRules;
     }
 
     public void setPrivacyRules(ArrayList<PrivacyRule> arrayList, int i) {
-        if (i == 5) {
-            this.forwardsPrivacyRules = arrayList;
-        } else if (i == 4) {
-            this.profilePhotoPrivacyRules = arrayList;
-        } else if (i == 3) {
-            this.p2pPrivacyRules = arrayList;
-        } else if (i == 2) {
-            this.callPrivacyRules = arrayList;
-        } else if (i == 1) {
-            this.groupPrivacyRules = arrayList;
-        } else {
-            this.privacyRules = arrayList;
+        switch (i) {
+            case 0:
+                this.lastseenPrivacyRules = arrayList;
+                break;
+            case 1:
+                this.groupPrivacyRules = arrayList;
+                break;
+            case 2:
+                this.callPrivacyRules = arrayList;
+                break;
+            case 3:
+                this.p2pPrivacyRules = arrayList;
+                break;
+            case 4:
+                this.profilePhotoPrivacyRules = arrayList;
+                break;
+            case 5:
+                this.forwardsPrivacyRules = arrayList;
+                break;
+            case 6:
+                this.phonePrivacyRules = arrayList;
+                break;
         }
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.privacyRulesUpdated, new Object[0]);
         reloadContactsStatuses();
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:23:0x0264 A:{Catch:{ Exception -> 0x026f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:13:0x00ca A:{Catch:{ Exception -> 0x026f }} */
-    /* JADX WARNING: Removed duplicated region for block: B:17:0x0107 A:{SYNTHETIC, Splitter:B:17:0x0107} */
-    /* JADX WARNING: Removed duplicated region for block: B:23:0x0264 A:{Catch:{ Exception -> 0x026f }} */
+    /* JADX WARNING: Removed duplicated region for block: B:23:0x0269 A:{Catch:{ Exception -> 0x0274 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:13:0x00cb A:{Catch:{ Exception -> 0x0274 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:17:0x0108 A:{SYNTHETIC, Splitter:B:17:0x0108} */
+    /* JADX WARNING: Removed duplicated region for block: B:23:0x0269 A:{Catch:{ Exception -> 0x0274 }} */
     public void createOrUpdateConnectionServiceContact(int r23, java.lang.String r24, java.lang.String r25) {
         /*
         r22 = this;
@@ -3645,41 +3792,41 @@ public class ContactsController {
         r10 = "";
         r11 = "raw_contact_id";
         r12 = r22.hasContactsPermission();
-        if (r12 != 0) goto L_0x001f;
-    L_0x001e:
-        return;
+        if (r12 != 0) goto L_0x0020;
     L_0x001f:
-        r12 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x026f }
-        r12 = r12.getContentResolver();	 Catch:{ Exception -> 0x026f }
-        r15 = new java.util.ArrayList;	 Catch:{ Exception -> 0x026f }
-        r15.<init>();	 Catch:{ Exception -> 0x026f }
-        r13 = android.provider.ContactsContract.Groups.CONTENT_URI;	 Catch:{ Exception -> 0x026f }
-        r13 = r13.buildUpon();	 Catch:{ Exception -> 0x026f }
-        r13 = r13.appendQueryParameter(r8, r7);	 Catch:{ Exception -> 0x026f }
-        r14 = r13.build();	 Catch:{ Exception -> 0x026f }
-        r13 = android.provider.ContactsContract.RawContacts.CONTENT_URI;	 Catch:{ Exception -> 0x026f }
-        r13 = r13.buildUpon();	 Catch:{ Exception -> 0x026f }
-        r7 = r13.appendQueryParameter(r8, r7);	 Catch:{ Exception -> 0x026f }
-        r7 = r7.build();	 Catch:{ Exception -> 0x026f }
+        return;
+    L_0x0020:
+        r12 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0274 }
+        r12 = r12.getContentResolver();	 Catch:{ Exception -> 0x0274 }
+        r15 = new java.util.ArrayList;	 Catch:{ Exception -> 0x0274 }
+        r15.<init>();	 Catch:{ Exception -> 0x0274 }
+        r13 = android.provider.ContactsContract.Groups.CONTENT_URI;	 Catch:{ Exception -> 0x0274 }
+        r13 = r13.buildUpon();	 Catch:{ Exception -> 0x0274 }
+        r13 = r13.appendQueryParameter(r8, r7);	 Catch:{ Exception -> 0x0274 }
+        r14 = r13.build();	 Catch:{ Exception -> 0x0274 }
+        r13 = android.provider.ContactsContract.RawContacts.CONTENT_URI;	 Catch:{ Exception -> 0x0274 }
+        r13 = r13.buildUpon();	 Catch:{ Exception -> 0x0274 }
+        r7 = r13.appendQueryParameter(r8, r7);	 Catch:{ Exception -> 0x0274 }
+        r7 = r7.build();	 Catch:{ Exception -> 0x0274 }
         r8 = 1;
-        r13 = new java.lang.String[r8];	 Catch:{ Exception -> 0x026f }
+        r13 = new java.lang.String[r8];	 Catch:{ Exception -> 0x0274 }
         r16 = "_id";
         r8 = 0;
-        r13[r8] = r16;	 Catch:{ Exception -> 0x026f }
+        r13[r8] = r16;	 Catch:{ Exception -> 0x0274 }
         r16 = "title=? AND account_type=? AND account_name=?";
         r8 = 3;
         r19 = r9;
-        r9 = new java.lang.String[r8];	 Catch:{ Exception -> 0x026f }
+        r9 = new java.lang.String[r8];	 Catch:{ Exception -> 0x0274 }
         r17 = 0;
-        r9[r17] = r6;	 Catch:{ Exception -> 0x026f }
-        r8 = r1.systemAccount;	 Catch:{ Exception -> 0x026f }
-        r8 = r8.type;	 Catch:{ Exception -> 0x026f }
+        r9[r17] = r6;	 Catch:{ Exception -> 0x0274 }
+        r8 = r1.systemAccount;	 Catch:{ Exception -> 0x0274 }
+        r8 = r8.type;	 Catch:{ Exception -> 0x0274 }
         r17 = 1;
-        r9[r17] = r8;	 Catch:{ Exception -> 0x026f }
-        r8 = r1.systemAccount;	 Catch:{ Exception -> 0x026f }
-        r8 = r8.name;	 Catch:{ Exception -> 0x026f }
+        r9[r17] = r8;	 Catch:{ Exception -> 0x0274 }
+        r8 = r1.systemAccount;	 Catch:{ Exception -> 0x0274 }
+        r8 = r8.name;	 Catch:{ Exception -> 0x0274 }
         r3 = 2;
-        r9[r3] = r8;	 Catch:{ Exception -> 0x026f }
+        r9[r3] = r8;	 Catch:{ Exception -> 0x0274 }
         r18 = 0;
         r8 = r13;
         r13 = r12;
@@ -3687,212 +3834,212 @@ public class ContactsController {
         r21 = r15;
         r15 = r8;
         r17 = r9;
-        r8 = r13.query(r14, r15, r16, r17, r18);	 Catch:{ Exception -> 0x026f }
+        r8 = r13.query(r14, r15, r16, r17, r18);	 Catch:{ Exception -> 0x0274 }
         r9 = "account_name";
         r15 = "account_type";
-        if (r8 == 0) goto L_0x008b;
-    L_0x007d:
-        r13 = r8.moveToFirst();	 Catch:{ Exception -> 0x026f }
-        if (r13 == 0) goto L_0x008b;
-    L_0x0083:
+        if (r8 == 0) goto L_0x008c;
+    L_0x007e:
+        r13 = r8.moveToFirst();	 Catch:{ Exception -> 0x0274 }
+        if (r13 == 0) goto L_0x008c;
+    L_0x0084:
         r13 = 0;
-        r6 = r8.getInt(r13);	 Catch:{ Exception -> 0x026f }
+        r6 = r8.getInt(r13);	 Catch:{ Exception -> 0x0274 }
         r16 = r15;
-        goto L_0x00c8;
-    L_0x008b:
-        r13 = new android.content.ContentValues;	 Catch:{ Exception -> 0x026f }
-        r13.<init>();	 Catch:{ Exception -> 0x026f }
-        r14 = r1.systemAccount;	 Catch:{ Exception -> 0x026f }
-        r14 = r14.type;	 Catch:{ Exception -> 0x026f }
-        r13.put(r15, r14);	 Catch:{ Exception -> 0x026f }
-        r14 = r1.systemAccount;	 Catch:{ Exception -> 0x026f }
-        r14 = r14.name;	 Catch:{ Exception -> 0x026f }
-        r13.put(r9, r14);	 Catch:{ Exception -> 0x026f }
+        goto L_0x00c9;
+    L_0x008c:
+        r13 = new android.content.ContentValues;	 Catch:{ Exception -> 0x0274 }
+        r13.<init>();	 Catch:{ Exception -> 0x0274 }
+        r14 = r1.systemAccount;	 Catch:{ Exception -> 0x0274 }
+        r14 = r14.type;	 Catch:{ Exception -> 0x0274 }
+        r13.put(r15, r14);	 Catch:{ Exception -> 0x0274 }
+        r14 = r1.systemAccount;	 Catch:{ Exception -> 0x0274 }
+        r14 = r14.name;	 Catch:{ Exception -> 0x0274 }
+        r13.put(r9, r14);	 Catch:{ Exception -> 0x0274 }
         r14 = "group_visible";
         r16 = 0;
-        r3 = java.lang.Integer.valueOf(r16);	 Catch:{ Exception -> 0x026f }
-        r13.put(r14, r3);	 Catch:{ Exception -> 0x026f }
+        r3 = java.lang.Integer.valueOf(r16);	 Catch:{ Exception -> 0x0274 }
+        r13.put(r14, r3);	 Catch:{ Exception -> 0x0274 }
         r3 = "group_is_read_only";
         r16 = r15;
         r14 = 1;
-        r15 = java.lang.Integer.valueOf(r14);	 Catch:{ Exception -> 0x026f }
-        r13.put(r3, r15);	 Catch:{ Exception -> 0x026f }
+        r15 = java.lang.Integer.valueOf(r14);	 Catch:{ Exception -> 0x0274 }
+        r13.put(r3, r15);	 Catch:{ Exception -> 0x0274 }
         r3 = "title";
-        r13.put(r3, r6);	 Catch:{ Exception -> 0x026f }
+        r13.put(r3, r6);	 Catch:{ Exception -> 0x0274 }
         r3 = r20;
-        r3 = r12.insert(r3, r13);	 Catch:{ Exception -> 0x026f }
-        r3 = r3.getLastPathSegment();	 Catch:{ Exception -> 0x026f }
-        r6 = java.lang.Integer.parseInt(r3);	 Catch:{ Exception -> 0x026f }
-    L_0x00c8:
-        if (r8 == 0) goto L_0x00cd;
-    L_0x00ca:
-        r8.close();	 Catch:{ Exception -> 0x026f }
-    L_0x00cd:
-        r14 = android.provider.ContactsContract.Data.CONTENT_URI;	 Catch:{ Exception -> 0x026f }
+        r3 = r12.insert(r3, r13);	 Catch:{ Exception -> 0x0274 }
+        r3 = r3.getLastPathSegment();	 Catch:{ Exception -> 0x0274 }
+        r6 = java.lang.Integer.parseInt(r3);	 Catch:{ Exception -> 0x0274 }
+    L_0x00c9:
+        if (r8 == 0) goto L_0x00ce;
+    L_0x00cb:
+        r8.close();	 Catch:{ Exception -> 0x0274 }
+    L_0x00ce:
+        r14 = android.provider.ContactsContract.Data.CONTENT_URI;	 Catch:{ Exception -> 0x0274 }
         r3 = 1;
-        r15 = new java.lang.String[r3];	 Catch:{ Exception -> 0x026f }
+        r15 = new java.lang.String[r3];	 Catch:{ Exception -> 0x0274 }
         r3 = 0;
-        r15[r3] = r11;	 Catch:{ Exception -> 0x026f }
+        r15[r3] = r11;	 Catch:{ Exception -> 0x0274 }
         r8 = "mimetype=? AND data1=?";
         r13 = 2;
-        r3 = new java.lang.String[r13];	 Catch:{ Exception -> 0x026f }
+        r3 = new java.lang.String[r13];	 Catch:{ Exception -> 0x0274 }
         r13 = 0;
-        r3[r13] = r5;	 Catch:{ Exception -> 0x026f }
-        r13 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x026f }
-        r13.<init>();	 Catch:{ Exception -> 0x026f }
-        r13.append(r6);	 Catch:{ Exception -> 0x026f }
-        r13.append(r10);	 Catch:{ Exception -> 0x026f }
-        r13 = r13.toString();	 Catch:{ Exception -> 0x026f }
+        r3[r13] = r5;	 Catch:{ Exception -> 0x0274 }
+        r13 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0274 }
+        r13.<init>();	 Catch:{ Exception -> 0x0274 }
+        r13.append(r6);	 Catch:{ Exception -> 0x0274 }
+        r13.append(r10);	 Catch:{ Exception -> 0x0274 }
+        r13 = r13.toString();	 Catch:{ Exception -> 0x0274 }
         r17 = 1;
-        r3[r17] = r13;	 Catch:{ Exception -> 0x026f }
+        r3[r17] = r13;	 Catch:{ Exception -> 0x0274 }
         r18 = 0;
         r13 = r12;
         r20 = r12;
         r12 = r16;
         r16 = r8;
         r17 = r3;
-        r3 = r13.query(r14, r15, r16, r17, r18);	 Catch:{ Exception -> 0x026f }
-        r8 = r21.size();	 Catch:{ Exception -> 0x026f }
+        r3 = r13.query(r14, r15, r16, r17, r18);	 Catch:{ Exception -> 0x0274 }
+        r8 = r21.size();	 Catch:{ Exception -> 0x0274 }
         r13 = "data1";
-        if (r3 == 0) goto L_0x01bf;
-    L_0x0107:
-        r14 = r3.moveToFirst();	 Catch:{ Exception -> 0x026f }
-        if (r14 == 0) goto L_0x01bf;
-    L_0x010d:
+        if (r3 == 0) goto L_0x01c2;
+    L_0x0108:
+        r14 = r3.moveToFirst();	 Catch:{ Exception -> 0x0274 }
+        if (r14 == 0) goto L_0x01c2;
+    L_0x010e:
         r14 = 0;
-        r5 = r3.getInt(r14);	 Catch:{ Exception -> 0x026f }
-        r6 = android.content.ContentProviderOperation.newUpdate(r7);	 Catch:{ Exception -> 0x026f }
+        r5 = r3.getInt(r14);	 Catch:{ Exception -> 0x0274 }
+        r6 = android.content.ContentProviderOperation.newUpdate(r7);	 Catch:{ Exception -> 0x0274 }
         r7 = "_id=?";
         r8 = 1;
-        r9 = new java.lang.String[r8];	 Catch:{ Exception -> 0x026f }
-        r8 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x026f }
-        r8.<init>();	 Catch:{ Exception -> 0x026f }
-        r8.append(r5);	 Catch:{ Exception -> 0x026f }
-        r8.append(r10);	 Catch:{ Exception -> 0x026f }
-        r8 = r8.toString();	 Catch:{ Exception -> 0x026f }
+        r9 = new java.lang.String[r8];	 Catch:{ Exception -> 0x0274 }
+        r8 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0274 }
+        r8.<init>();	 Catch:{ Exception -> 0x0274 }
+        r8.append(r5);	 Catch:{ Exception -> 0x0274 }
+        r8.append(r10);	 Catch:{ Exception -> 0x0274 }
+        r8 = r8.toString();	 Catch:{ Exception -> 0x0274 }
         r11 = 0;
-        r9[r11] = r8;	 Catch:{ Exception -> 0x026f }
-        r6 = r6.withSelection(r7, r9);	 Catch:{ Exception -> 0x026f }
+        r9[r11] = r8;	 Catch:{ Exception -> 0x0274 }
+        r6 = r6.withSelection(r7, r9);	 Catch:{ Exception -> 0x0274 }
         r7 = "deleted";
-        r8 = java.lang.Integer.valueOf(r11);	 Catch:{ Exception -> 0x026f }
-        r6 = r6.withValue(r7, r8);	 Catch:{ Exception -> 0x026f }
-        r6 = r6.build();	 Catch:{ Exception -> 0x026f }
+        r8 = java.lang.Integer.valueOf(r11);	 Catch:{ Exception -> 0x0274 }
+        r6 = r6.withValue(r7, r8);	 Catch:{ Exception -> 0x0274 }
+        r6 = r6.build();	 Catch:{ Exception -> 0x0274 }
         r14 = r21;
-        r14.add(r6);	 Catch:{ Exception -> 0x026f }
-        r6 = android.provider.ContactsContract.Data.CONTENT_URI;	 Catch:{ Exception -> 0x026f }
-        r6 = android.content.ContentProviderOperation.newUpdate(r6);	 Catch:{ Exception -> 0x026f }
+        r14.add(r6);	 Catch:{ Exception -> 0x0274 }
+        r6 = android.provider.ContactsContract.Data.CONTENT_URI;	 Catch:{ Exception -> 0x0274 }
+        r6 = android.content.ContentProviderOperation.newUpdate(r6);	 Catch:{ Exception -> 0x0274 }
         r7 = 2;
-        r8 = new java.lang.String[r7];	 Catch:{ Exception -> 0x026f }
-        r7 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x026f }
-        r7.<init>();	 Catch:{ Exception -> 0x026f }
-        r7.append(r5);	 Catch:{ Exception -> 0x026f }
-        r7.append(r10);	 Catch:{ Exception -> 0x026f }
-        r7 = r7.toString();	 Catch:{ Exception -> 0x026f }
+        r8 = new java.lang.String[r7];	 Catch:{ Exception -> 0x0274 }
+        r7 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0274 }
+        r7.<init>();	 Catch:{ Exception -> 0x0274 }
+        r7.append(r5);	 Catch:{ Exception -> 0x0274 }
+        r7.append(r10);	 Catch:{ Exception -> 0x0274 }
+        r7 = r7.toString();	 Catch:{ Exception -> 0x0274 }
         r9 = 0;
-        r8[r9] = r7;	 Catch:{ Exception -> 0x026f }
+        r8[r9] = r7;	 Catch:{ Exception -> 0x0274 }
         r7 = "vnd.android.cursor.item/phone_v2";
         r9 = 1;
-        r8[r9] = r7;	 Catch:{ Exception -> 0x026f }
-        r6 = r6.withSelection(r4, r8);	 Catch:{ Exception -> 0x026f }
-        r7 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x026f }
-        r7.<init>();	 Catch:{ Exception -> 0x026f }
+        r8[r9] = r7;	 Catch:{ Exception -> 0x0274 }
+        r6 = r6.withSelection(r4, r8);	 Catch:{ Exception -> 0x0274 }
+        r7 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0274 }
+        r7.<init>();	 Catch:{ Exception -> 0x0274 }
         r8 = "+99084";
-        r7.append(r8);	 Catch:{ Exception -> 0x026f }
-        r7.append(r0);	 Catch:{ Exception -> 0x026f }
-        r0 = r7.toString();	 Catch:{ Exception -> 0x026f }
-        r0 = r6.withValue(r13, r0);	 Catch:{ Exception -> 0x026f }
-        r0 = r0.build();	 Catch:{ Exception -> 0x026f }
-        r14.add(r0);	 Catch:{ Exception -> 0x026f }
-        r0 = android.provider.ContactsContract.Data.CONTENT_URI;	 Catch:{ Exception -> 0x026f }
-        r0 = android.content.ContentProviderOperation.newUpdate(r0);	 Catch:{ Exception -> 0x026f }
+        r7.append(r8);	 Catch:{ Exception -> 0x0274 }
+        r7.append(r0);	 Catch:{ Exception -> 0x0274 }
+        r0 = r7.toString();	 Catch:{ Exception -> 0x0274 }
+        r0 = r6.withValue(r13, r0);	 Catch:{ Exception -> 0x0274 }
+        r0 = r0.build();	 Catch:{ Exception -> 0x0274 }
+        r14.add(r0);	 Catch:{ Exception -> 0x0274 }
+        r0 = android.provider.ContactsContract.Data.CONTENT_URI;	 Catch:{ Exception -> 0x0274 }
+        r0 = android.content.ContentProviderOperation.newUpdate(r0);	 Catch:{ Exception -> 0x0274 }
         r6 = 2;
-        r6 = new java.lang.String[r6];	 Catch:{ Exception -> 0x026f }
-        r7 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x026f }
-        r7.<init>();	 Catch:{ Exception -> 0x026f }
-        r7.append(r5);	 Catch:{ Exception -> 0x026f }
-        r7.append(r10);	 Catch:{ Exception -> 0x026f }
-        r5 = r7.toString();	 Catch:{ Exception -> 0x026f }
+        r6 = new java.lang.String[r6];	 Catch:{ Exception -> 0x0274 }
+        r7 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0274 }
+        r7.<init>();	 Catch:{ Exception -> 0x0274 }
+        r7.append(r5);	 Catch:{ Exception -> 0x0274 }
+        r7.append(r10);	 Catch:{ Exception -> 0x0274 }
+        r5 = r7.toString();	 Catch:{ Exception -> 0x0274 }
         r7 = 0;
-        r6[r7] = r5;	 Catch:{ Exception -> 0x026f }
+        r6[r7] = r5;	 Catch:{ Exception -> 0x0274 }
         r5 = "vnd.android.cursor.item/name";
         r7 = 1;
-        r6[r7] = r5;	 Catch:{ Exception -> 0x026f }
-        r0 = r0.withSelection(r4, r6);	 Catch:{ Exception -> 0x026f }
+        r6[r7] = r5;	 Catch:{ Exception -> 0x0274 }
+        r0 = r0.withSelection(r4, r6);	 Catch:{ Exception -> 0x0274 }
         r4 = "data2";
-        r0 = r0.withValue(r4, r2);	 Catch:{ Exception -> 0x026f }
+        r0 = r0.withValue(r4, r2);	 Catch:{ Exception -> 0x0274 }
         r2 = "data3";
         r4 = r25;
-        r0 = r0.withValue(r2, r4);	 Catch:{ Exception -> 0x026f }
-        r0 = r0.build();	 Catch:{ Exception -> 0x026f }
-        r14.add(r0);	 Catch:{ Exception -> 0x026f }
-        goto L_0x0262;
-    L_0x01bf:
+        r0 = r0.withValue(r2, r4);	 Catch:{ Exception -> 0x0274 }
+        r0 = r0.build();	 Catch:{ Exception -> 0x0274 }
+        r14.add(r0);	 Catch:{ Exception -> 0x0274 }
+        goto L_0x0267;
+    L_0x01c2:
         r4 = r25;
         r14 = r21;
-        r7 = android.content.ContentProviderOperation.newInsert(r7);	 Catch:{ Exception -> 0x026f }
-        r10 = r1.systemAccount;	 Catch:{ Exception -> 0x026f }
-        r10 = r10.type;	 Catch:{ Exception -> 0x026f }
-        r7 = r7.withValue(r12, r10);	 Catch:{ Exception -> 0x026f }
-        r10 = r1.systemAccount;	 Catch:{ Exception -> 0x026f }
-        r10 = r10.name;	 Catch:{ Exception -> 0x026f }
-        r7 = r7.withValue(r9, r10);	 Catch:{ Exception -> 0x026f }
+        r7 = android.content.ContentProviderOperation.newInsert(r7);	 Catch:{ Exception -> 0x0274 }
+        r10 = r1.systemAccount;	 Catch:{ Exception -> 0x0274 }
+        r10 = r10.type;	 Catch:{ Exception -> 0x0274 }
+        r7 = r7.withValue(r12, r10);	 Catch:{ Exception -> 0x0274 }
+        r10 = r1.systemAccount;	 Catch:{ Exception -> 0x0274 }
+        r10 = r10.name;	 Catch:{ Exception -> 0x0274 }
+        r7 = r7.withValue(r9, r10);	 Catch:{ Exception -> 0x0274 }
         r9 = "raw_contact_is_read_only";
         r10 = 1;
-        r10 = java.lang.Integer.valueOf(r10);	 Catch:{ Exception -> 0x026f }
-        r7 = r7.withValue(r9, r10);	 Catch:{ Exception -> 0x026f }
+        r10 = java.lang.Integer.valueOf(r10);	 Catch:{ Exception -> 0x0274 }
+        r7 = r7.withValue(r9, r10);	 Catch:{ Exception -> 0x0274 }
         r9 = "aggregation_mode";
         r10 = 3;
-        r10 = java.lang.Integer.valueOf(r10);	 Catch:{ Exception -> 0x026f }
-        r7 = r7.withValue(r9, r10);	 Catch:{ Exception -> 0x026f }
-        r7 = r7.build();	 Catch:{ Exception -> 0x026f }
-        r14.add(r7);	 Catch:{ Exception -> 0x026f }
-        r7 = android.provider.ContactsContract.Data.CONTENT_URI;	 Catch:{ Exception -> 0x026f }
-        r7 = android.content.ContentProviderOperation.newInsert(r7);	 Catch:{ Exception -> 0x026f }
-        r7 = r7.withValueBackReference(r11, r8);	 Catch:{ Exception -> 0x026f }
+        r10 = java.lang.Integer.valueOf(r10);	 Catch:{ Exception -> 0x0274 }
+        r7 = r7.withValue(r9, r10);	 Catch:{ Exception -> 0x0274 }
+        r7 = r7.build();	 Catch:{ Exception -> 0x0274 }
+        r14.add(r7);	 Catch:{ Exception -> 0x0274 }
+        r7 = android.provider.ContactsContract.Data.CONTENT_URI;	 Catch:{ Exception -> 0x0274 }
+        r7 = android.content.ContentProviderOperation.newInsert(r7);	 Catch:{ Exception -> 0x0274 }
+        r7 = r7.withValueBackReference(r11, r8);	 Catch:{ Exception -> 0x0274 }
         r9 = "vnd.android.cursor.item/name";
         r10 = r19;
-        r7 = r7.withValue(r10, r9);	 Catch:{ Exception -> 0x026f }
+        r7 = r7.withValue(r10, r9);	 Catch:{ Exception -> 0x0274 }
         r9 = "data2";
-        r2 = r7.withValue(r9, r2);	 Catch:{ Exception -> 0x026f }
+        r2 = r7.withValue(r9, r2);	 Catch:{ Exception -> 0x0274 }
         r7 = "data3";
-        r2 = r2.withValue(r7, r4);	 Catch:{ Exception -> 0x026f }
-        r2 = r2.build();	 Catch:{ Exception -> 0x026f }
-        r14.add(r2);	 Catch:{ Exception -> 0x026f }
-        r2 = android.provider.ContactsContract.Data.CONTENT_URI;	 Catch:{ Exception -> 0x026f }
-        r2 = android.content.ContentProviderOperation.newInsert(r2);	 Catch:{ Exception -> 0x026f }
-        r2 = r2.withValueBackReference(r11, r8);	 Catch:{ Exception -> 0x026f }
+        r2 = r2.withValue(r7, r4);	 Catch:{ Exception -> 0x0274 }
+        r2 = r2.build();	 Catch:{ Exception -> 0x0274 }
+        r14.add(r2);	 Catch:{ Exception -> 0x0274 }
+        r2 = android.provider.ContactsContract.Data.CONTENT_URI;	 Catch:{ Exception -> 0x0274 }
+        r2 = android.content.ContentProviderOperation.newInsert(r2);	 Catch:{ Exception -> 0x0274 }
+        r2 = r2.withValueBackReference(r11, r8);	 Catch:{ Exception -> 0x0274 }
         r4 = "vnd.android.cursor.item/phone_v2";
-        r2 = r2.withValue(r10, r4);	 Catch:{ Exception -> 0x026f }
-        r4 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x026f }
-        r4.<init>();	 Catch:{ Exception -> 0x026f }
+        r2 = r2.withValue(r10, r4);	 Catch:{ Exception -> 0x0274 }
+        r4 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0274 }
+        r4.<init>();	 Catch:{ Exception -> 0x0274 }
         r7 = "+99084";
-        r4.append(r7);	 Catch:{ Exception -> 0x026f }
-        r4.append(r0);	 Catch:{ Exception -> 0x026f }
-        r0 = r4.toString();	 Catch:{ Exception -> 0x026f }
-        r0 = r2.withValue(r13, r0);	 Catch:{ Exception -> 0x026f }
-        r0 = r0.build();	 Catch:{ Exception -> 0x026f }
-        r14.add(r0);	 Catch:{ Exception -> 0x026f }
-        r0 = android.provider.ContactsContract.Data.CONTENT_URI;	 Catch:{ Exception -> 0x026f }
-        r0 = android.content.ContentProviderOperation.newInsert(r0);	 Catch:{ Exception -> 0x026f }
-        r0 = r0.withValueBackReference(r11, r8);	 Catch:{ Exception -> 0x026f }
-        r0 = r0.withValue(r10, r5);	 Catch:{ Exception -> 0x026f }
-        r2 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x026f }
-        r0 = r0.withValue(r13, r2);	 Catch:{ Exception -> 0x026f }
-        r0 = r0.build();	 Catch:{ Exception -> 0x026f }
-        r14.add(r0);	 Catch:{ Exception -> 0x026f }
-    L_0x0262:
-        if (r3 == 0) goto L_0x0267;
-    L_0x0264:
-        r3.close();	 Catch:{ Exception -> 0x026f }
+        r4.append(r7);	 Catch:{ Exception -> 0x0274 }
+        r4.append(r0);	 Catch:{ Exception -> 0x0274 }
+        r0 = r4.toString();	 Catch:{ Exception -> 0x0274 }
+        r0 = r2.withValue(r13, r0);	 Catch:{ Exception -> 0x0274 }
+        r0 = r0.build();	 Catch:{ Exception -> 0x0274 }
+        r14.add(r0);	 Catch:{ Exception -> 0x0274 }
+        r0 = android.provider.ContactsContract.Data.CONTENT_URI;	 Catch:{ Exception -> 0x0274 }
+        r0 = android.content.ContentProviderOperation.newInsert(r0);	 Catch:{ Exception -> 0x0274 }
+        r0 = r0.withValueBackReference(r11, r8);	 Catch:{ Exception -> 0x0274 }
+        r0 = r0.withValue(r10, r5);	 Catch:{ Exception -> 0x0274 }
+        r2 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x0274 }
+        r0 = r0.withValue(r13, r2);	 Catch:{ Exception -> 0x0274 }
+        r0 = r0.build();	 Catch:{ Exception -> 0x0274 }
+        r14.add(r0);	 Catch:{ Exception -> 0x0274 }
     L_0x0267:
+        if (r3 == 0) goto L_0x026c;
+    L_0x0269:
+        r3.close();	 Catch:{ Exception -> 0x0274 }
+    L_0x026c:
         r0 = "com.android.contacts";
         r2 = r20;
-        r2.applyBatch(r0, r14);	 Catch:{ Exception -> 0x026f }
-        goto L_0x0273;
-    L_0x026f:
+        r2.applyBatch(r0, r14);	 Catch:{ Exception -> 0x0274 }
+        goto L_0x0278;
+    L_0x0274:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x0273:
+    L_0x0278:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ContactsController.createOrUpdateConnectionServiceContact(int, java.lang.String, java.lang.String):void");

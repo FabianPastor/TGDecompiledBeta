@@ -271,7 +271,7 @@ public class BotHelpCell extends View {
 
     /* Access modifiers changed, original: protected */
     public void onDraw(Canvas canvas) {
-        int width = (canvas.getWidth() - this.width) / 2;
+        int width = (getWidth() - this.width) / 2;
         int dp = AndroidUtilities.dp(4.0f);
         Theme.chat_msgInMediaShadowDrawable.setBounds(width, dp, this.width + width, this.height + dp);
         Theme.chat_msgInMediaShadowDrawable.draw(canvas);

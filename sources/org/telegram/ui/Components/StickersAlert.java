@@ -883,7 +883,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r12 = r12.positionsToSets;
         r12 = r12.get(r13);
         r12 = (org.telegram.tgnet.TLRPC.StickerSetCovered) r12;
-        if (r12 == 0) goto L_0x011a;
+        if (r12 == 0) goto L_0x011b;
     L_0x0012:
         r11.dismiss();
         r3 = new org.telegram.tgnet.TLRPC$TL_inputStickerSetID;
@@ -901,18 +901,18 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r0 = r12;
         r0.<init>(r1, r2, r3, r4, r5);
         r12.show();
-        goto L_0x011a;
+        goto L_0x011b;
     L_0x0035:
         r12 = r11.stickerSet;
-        if (r12 == 0) goto L_0x011a;
+        if (r12 == 0) goto L_0x011b;
     L_0x0039:
-        if (r13 < 0) goto L_0x011a;
+        if (r13 < 0) goto L_0x011b;
     L_0x003b:
         r12 = r12.documents;
         r12 = r12.size();
         if (r13 < r12) goto L_0x0045;
     L_0x0043:
-        goto L_0x011a;
+        goto L_0x011b;
     L_0x0045:
         r12 = r11.stickerSet;
         r12 = r12.documents;
@@ -1011,7 +1011,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r0 = 200; // 0xc8 float:2.8E-43 double:9.9E-322;
         r13.setDuration(r0);
         r13.start();
-    L_0x011a:
+    L_0x011b:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.StickersAlert.lambda$init$6$StickersAlert(android.view.View, int):void");
@@ -1203,7 +1203,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r0 = r10.stickerSet;
         r1 = r0.set;
         r1 = r1.masks;
-        r6 = NUM; // 0x7f0d0837 float:1.874638E38 double:1.0531308166E-314;
+        r6 = NUM; // 0x7f0d086f float:1.8746494E38 double:1.053130844E-314;
         r7 = "RemoveStickersCount";
         if (r1 == 0) goto L_0x00d0;
     L_0x00b9:
@@ -1245,7 +1245,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r0 = r10.stickerSet;
         r6 = r0.set;
         r6 = r6.masks;
-        r7 = NUM; // 0x7f0d00b3 float:1.8742478E38 double:1.053129866E-314;
+        r7 = NUM; // 0x7f0d00b9 float:1.874249E38 double:1.053129869E-314;
         r8 = "AddStickersCount";
         if (r6 == 0) goto L_0x012e;
     L_0x0117:
@@ -1275,7 +1275,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r0.notifyDataSetChanged();
         goto L_0x016f;
     L_0x0156:
-        r0 = NUM; // 0x7f0d02bf float:1.874354E38 double:1.053130125E-314;
+        r0 = NUM; // 0x7f0d02d1 float:1.8743577E38 double:1.053130134E-314;
         r2 = "Close";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r0 = r0.toUpperCase();
