@@ -29,58 +29,6 @@ public class OutputSurface implements OnFrameAvailableListener {
     private int mWidth;
     private int rotateRender = 0;
 
-    /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:23:0x0036 in {8, 10, 14, 18, 22} preds:[]
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-        */
-    public void awaitNewImage() {
-        /*
-        r4 = this;
-        r0 = r4.mFrameSyncObject;
-        monitor-enter(r0);
-        r1 = r4.mFrameAvailable;	 Catch:{ all -> 0x0033 }
-        if (r1 != 0) goto L_0x0022;
-        r1 = r4.mFrameSyncObject;	 Catch:{ InterruptedException -> 0x001b }
-        r2 = 2500; // 0x9c4 float:3.503E-42 double:1.235E-320;	 Catch:{ InterruptedException -> 0x001b }
-        r1.wait(r2);	 Catch:{ InterruptedException -> 0x001b }
-        r1 = r4.mFrameAvailable;	 Catch:{ InterruptedException -> 0x001b }
-        if (r1 == 0) goto L_0x0013;	 Catch:{ InterruptedException -> 0x001b }
-        goto L_0x0003;	 Catch:{ InterruptedException -> 0x001b }
-        r1 = new java.lang.RuntimeException;	 Catch:{ InterruptedException -> 0x001b }
-        r2 = "Surface frame wait timed out";	 Catch:{ InterruptedException -> 0x001b }
-        r1.<init>(r2);	 Catch:{ InterruptedException -> 0x001b }
-        throw r1;	 Catch:{ InterruptedException -> 0x001b }
-        r1 = move-exception;
-        r2 = new java.lang.RuntimeException;	 Catch:{ all -> 0x0033 }
-        r2.<init>(r1);	 Catch:{ all -> 0x0033 }
-        throw r2;	 Catch:{ all -> 0x0033 }
-        r1 = 0;	 Catch:{ all -> 0x0033 }
-        r4.mFrameAvailable = r1;	 Catch:{ all -> 0x0033 }
-        monitor-exit(r0);	 Catch:{ all -> 0x0033 }
-        r0 = r4.mTextureRender;
-        r1 = "before updateTexImage";
-        r0.checkGlError(r1);
-        r0 = r4.mSurfaceTexture;
-        r0.updateTexImage();
-        return;
-        r1 = move-exception;
-        monitor-exit(r0);	 Catch:{ all -> 0x0033 }
-        throw r1;
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.video.OutputSurface.awaitNewImage():void");
-    }
-
     public OutputSurface(int i, int i2, int i3) {
         if (i <= 0 || i2 <= 0) {
             throw new IllegalArgumentException();
@@ -173,6 +121,24 @@ public class OutputSurface implements OnFrameAvailableListener {
 
     public Surface getSurface() {
         return this.mSurface;
+    }
+
+    public void awaitNewImage() {
+        synchronized (this.mFrameSyncObject) {
+            while (!this.mFrameAvailable) {
+                try {
+                    this.mFrameSyncObject.wait(2500);
+                    if (!this.mFrameAvailable) {
+                        throw new RuntimeException("Surface frame wait timed out");
+                    }
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            this.mFrameAvailable = false;
+        }
+        this.mTextureRender.checkGlError("before updateTexImage");
+        this.mSurfaceTexture.updateTexImage();
     }
 
     public void drawImage(boolean z) {

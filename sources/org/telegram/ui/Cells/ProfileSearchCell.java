@@ -463,7 +463,7 @@ public class ProfileSearchCell extends BaseCell {
         r2 = r2.format(r3);
         goto L_0x01f1;
     L_0x01e8:
-        r2 = NUM; // 0x7f0d04ab float:1.8744538E38 double:1.053130368E-314;
+        r2 = NUM; // 0x7f0d04d4 float:1.8744622E38 double:1.053130388E-314;
         r3 = "HiddenName";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
     L_0x01f1:
@@ -681,13 +681,13 @@ public class ProfileSearchCell extends BaseCell {
         r4 = android.text.TextUtils.isEmpty(r4);
         if (r4 == 0) goto L_0x0385;
     L_0x0377:
-        r4 = NUM; // 0x7f0d023e float:1.8743279E38 double:1.053130061E-314;
+        r4 = NUM; // 0x7f0d024c float:1.8743307E38 double:1.053130068E-314;
         r7 = "ChannelPrivate";
         r4 = org.telegram.messenger.LocaleController.getString(r7, r4);
         r14 = r4.toLowerCase();
         goto L_0x03ba;
     L_0x0385:
-        r4 = NUM; // 0x7f0d0241 float:1.8743285E38 double:1.0531300626E-314;
+        r4 = NUM; // 0x7f0d024f float:1.8743313E38 double:1.0531300695E-314;
         r7 = "ChannelPublic";
         r4 = org.telegram.messenger.LocaleController.getString(r7, r4);
         r14 = r4.toLowerCase();
@@ -698,13 +698,13 @@ public class ProfileSearchCell extends BaseCell {
         r4 = android.text.TextUtils.isEmpty(r4);
         if (r4 == 0) goto L_0x03ab;
     L_0x039d:
-        r4 = NUM; // 0x7f0d056d float:1.8744932E38 double:1.053130464E-314;
+        r4 = NUM; // 0x7f0d0597 float:1.8745017E38 double:1.0531304846E-314;
         r7 = "MegaPrivate";
         r4 = org.telegram.messenger.LocaleController.getString(r7, r4);
         r14 = r4.toLowerCase();
         goto L_0x03ba;
     L_0x03ab:
-        r4 = NUM; // 0x7f0d0570 float:1.8744938E38 double:1.0531304653E-314;
+        r4 = NUM; // 0x7f0d059a float:1.8745023E38 double:1.053130486E-314;
         r7 = "MegaPublic";
         r4 = org.telegram.messenger.LocaleController.getString(r7, r4);
         r14 = r4.toLowerCase();
@@ -727,7 +727,7 @@ public class ProfileSearchCell extends BaseCell {
         r4 = org.telegram.messenger.MessagesController.isSupportUser(r4);
         if (r4 == 0) goto L_0x03dc;
     L_0x03d2:
-        r4 = NUM; // 0x7f0d0959 float:1.8746968E38 double:1.05313096E-314;
+        r4 = NUM; // 0x7f0d0990 float:1.874708E38 double:1.053130987E-314;
         r7 = "SupportStatus";
         r14 = org.telegram.messenger.LocaleController.getString(r7, r4);
         goto L_0x043c;
@@ -736,7 +736,7 @@ public class ProfileSearchCell extends BaseCell {
         r7 = r4.bot;
         if (r7 == 0) goto L_0x03ec;
     L_0x03e2:
-        r4 = NUM; // 0x7f0d01b4 float:1.8743E38 double:1.053129993E-314;
+        r4 = NUM; // 0x7f0d01c0 float:1.8743023E38 double:1.053129999E-314;
         r7 = "Bot";
         r14 = org.telegram.messenger.LocaleController.getString(r7, r4);
         goto L_0x043c;
@@ -772,12 +772,12 @@ public class ProfileSearchCell extends BaseCell {
         if (r4 <= r7) goto L_0x043c;
     L_0x0425:
         r2 = org.telegram.ui.ActionBar.Theme.dialogs_onlinePaint;
-        r4 = NUM; // 0x7f0d067c float:1.8745482E38 double:1.0531305977E-314;
+        r4 = NUM; // 0x7f0d06a4 float:1.8745563E38 double:1.0531306175E-314;
         r7 = "Online";
         r14 = org.telegram.messenger.LocaleController.getString(r7, r4);
         goto L_0x043c;
     L_0x0431:
-        r4 = NUM; // 0x7f0d08de float:1.8746719E38 double:1.053130899E-314;
+        r4 = NUM; // 0x7f0d0914 float:1.8746828E38 double:1.0531309258E-314;
         r7 = "ServiceNotifications";
         r14 = org.telegram.messenger.LocaleController.getString(r7, r4);
         goto L_0x043c;

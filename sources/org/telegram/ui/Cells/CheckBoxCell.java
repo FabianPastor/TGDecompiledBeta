@@ -6,6 +6,7 @@ import android.text.TextUtils.TruncateAt;
 import android.view.View.MeasureSpec;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
@@ -15,6 +16,7 @@ import org.telegram.ui.Components.LayoutHelper;
 
 public class CheckBoxCell extends FrameLayout {
     private CheckBoxSquare checkBox;
+    private boolean isMultiline;
     private boolean needDivider;
     private TextView textView;
     private TextView valueTextView;
@@ -31,6 +33,7 @@ public class CheckBoxCell extends FrameLayout {
         this.textView = new TextView(context2);
         boolean z = true;
         this.textView.setTextColor(Theme.getColor(i3 == 1 ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
+        this.textView.setLinkTextColor(Theme.getColor(i3 == 1 ? "dialogTextLink" : "windowBackgroundWhiteLinkText"));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -87,6 +90,10 @@ public class CheckBoxCell extends FrameLayout {
 
     /* Access modifiers changed, original: protected */
     public void onMeasure(int i, int i2) {
+        if (this.isMultiline) {
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(0, 0));
+            return;
+        }
         setMeasuredDimension(MeasureSpec.getSize(i), AndroidUtilities.dp(50.0f) + this.needDivider);
         i = ((getMeasuredWidth() - getPaddingLeft()) - getPaddingRight()) - AndroidUtilities.dp(34.0f);
         this.valueTextView.measure(MeasureSpec.makeMeasureSpec(i / 2, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM));
@@ -98,12 +105,39 @@ public class CheckBoxCell extends FrameLayout {
         this.textView.setTextColor(i);
     }
 
-    public void setText(String str, String str2, boolean z, boolean z2) {
-        this.textView.setText(str);
+    public void setText(CharSequence charSequence, String str, boolean z, boolean z2) {
+        this.textView.setText(charSequence);
         this.checkBox.setChecked(z, false);
-        this.valueTextView.setText(str2);
+        this.valueTextView.setText(str);
         this.needDivider = z2;
         setWillNotDraw(z2 ^ 1);
+    }
+
+    public void setMultiline(boolean z) {
+        this.isMultiline = z;
+        LayoutParams layoutParams = (LayoutParams) this.textView.getLayoutParams();
+        LayoutParams layoutParams2 = (LayoutParams) this.checkBox.getLayoutParams();
+        if (this.isMultiline) {
+            this.textView.setLines(0);
+            this.textView.setMaxLines(0);
+            this.textView.setSingleLine(false);
+            this.textView.setEllipsize(null);
+            this.textView.setPadding(0, 0, 0, AndroidUtilities.dp(5.0f));
+            layoutParams.height = -2;
+            layoutParams.topMargin = AndroidUtilities.dp(10.0f);
+            layoutParams2.topMargin = AndroidUtilities.dp(12.0f);
+        } else {
+            this.textView.setLines(1);
+            this.textView.setMaxLines(1);
+            this.textView.setSingleLine(true);
+            this.textView.setEllipsize(TruncateAt.END);
+            this.textView.setPadding(0, 0, 0, 0);
+            layoutParams.height = -1;
+            layoutParams.topMargin = 0;
+            layoutParams2.topMargin = AndroidUtilities.dp(15.0f);
+        }
+        this.textView.setLayoutParams(layoutParams);
+        this.checkBox.setLayoutParams(layoutParams2);
     }
 
     public void setEnabled(boolean z) {

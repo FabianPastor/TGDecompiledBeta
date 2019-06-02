@@ -32,236 +32,6 @@ public class NativeByteBuffer extends AbstractSerializedData {
         return b >= (byte) 0 ? b : b + 256;
     }
 
-    /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:21:0x0061 in {3, 4, 9, 10, 16, 18, 20} preds:[]
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-        	at java.lang.Iterable.forEach(Iterable.java:75)
-        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-        */
-    public byte[] readByteArray(boolean r6) {
-        /*
-        r5 = this;
-        r0 = r5.buffer;	 Catch:{ Exception -> 0x004b }
-        r0 = r0.get();	 Catch:{ Exception -> 0x004b }
-        r0 = r5.getIntFromByte(r0);	 Catch:{ Exception -> 0x004b }
-        r1 = 254; // 0xfe float:3.56E-43 double:1.255E-321;	 Catch:{ Exception -> 0x004b }
-        r2 = 4;	 Catch:{ Exception -> 0x004b }
-        if (r0 < r1) goto L_0x0035;	 Catch:{ Exception -> 0x004b }
-        r0 = r5.buffer;	 Catch:{ Exception -> 0x004b }
-        r0 = r0.get();	 Catch:{ Exception -> 0x004b }
-        r0 = r5.getIntFromByte(r0);	 Catch:{ Exception -> 0x004b }
-        r1 = r5.buffer;	 Catch:{ Exception -> 0x004b }
-        r1 = r1.get();	 Catch:{ Exception -> 0x004b }
-        r1 = r5.getIntFromByte(r1);	 Catch:{ Exception -> 0x004b }
-        r1 = r1 << 8;	 Catch:{ Exception -> 0x004b }
-        r0 = r0 | r1;	 Catch:{ Exception -> 0x004b }
-        r1 = r5.buffer;	 Catch:{ Exception -> 0x004b }
-        r1 = r1.get();	 Catch:{ Exception -> 0x004b }
-        r1 = r5.getIntFromByte(r1);	 Catch:{ Exception -> 0x004b }
-        r1 = r1 << 16;	 Catch:{ Exception -> 0x004b }
-        r0 = r0 | r1;	 Catch:{ Exception -> 0x004b }
-        r1 = 4;	 Catch:{ Exception -> 0x004b }
-        goto L_0x0036;	 Catch:{ Exception -> 0x004b }
-        r1 = 1;	 Catch:{ Exception -> 0x004b }
-        r3 = new byte[r0];	 Catch:{ Exception -> 0x004b }
-        r4 = r5.buffer;	 Catch:{ Exception -> 0x004b }
-        r4.get(r3);	 Catch:{ Exception -> 0x004b }
-        r4 = r0 + r1;	 Catch:{ Exception -> 0x004b }
-        r4 = r4 % r2;	 Catch:{ Exception -> 0x004b }
-        if (r4 == 0) goto L_0x004a;	 Catch:{ Exception -> 0x004b }
-        r4 = r5.buffer;	 Catch:{ Exception -> 0x004b }
-        r4.get();	 Catch:{ Exception -> 0x004b }
-        r1 = r1 + 1;
-        goto L_0x003d;
-        return r3;
-        r0 = move-exception;
-        r1 = "read byte array error";
-        if (r6 != 0) goto L_0x005b;
-        r6 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r6 == 0) goto L_0x0057;
-        org.telegram.messenger.FileLog.e(r1);
-        r6 = 0;
-        r6 = new byte[r6];
-        return r6;
-        r6 = new java.lang.RuntimeException;
-        r6.<init>(r1, r0);
-        throw r6;
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.tgnet.NativeByteBuffer.readByteArray(boolean):byte[]");
-    }
-
-    /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:21:0x0081 in {3, 4, 9, 10, 16, 18, 20} preds:[]
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-        	at java.lang.Iterable.forEach(Iterable.java:75)
-        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-        */
-    public org.telegram.tgnet.NativeByteBuffer readByteBuffer(boolean r8) {
-        /*
-        r7 = this;
-        r0 = r7.buffer;	 Catch:{ Exception -> 0x006d }
-        r0 = r0.get();	 Catch:{ Exception -> 0x006d }
-        r0 = r7.getIntFromByte(r0);	 Catch:{ Exception -> 0x006d }
-        r1 = 254; // 0xfe float:3.56E-43 double:1.255E-321;	 Catch:{ Exception -> 0x006d }
-        r2 = 4;	 Catch:{ Exception -> 0x006d }
-        if (r0 < r1) goto L_0x0035;	 Catch:{ Exception -> 0x006d }
-        r0 = r7.buffer;	 Catch:{ Exception -> 0x006d }
-        r0 = r0.get();	 Catch:{ Exception -> 0x006d }
-        r0 = r7.getIntFromByte(r0);	 Catch:{ Exception -> 0x006d }
-        r1 = r7.buffer;	 Catch:{ Exception -> 0x006d }
-        r1 = r1.get();	 Catch:{ Exception -> 0x006d }
-        r1 = r7.getIntFromByte(r1);	 Catch:{ Exception -> 0x006d }
-        r1 = r1 << 8;	 Catch:{ Exception -> 0x006d }
-        r0 = r0 | r1;	 Catch:{ Exception -> 0x006d }
-        r1 = r7.buffer;	 Catch:{ Exception -> 0x006d }
-        r1 = r1.get();	 Catch:{ Exception -> 0x006d }
-        r1 = r7.getIntFromByte(r1);	 Catch:{ Exception -> 0x006d }
-        r1 = r1 << 16;	 Catch:{ Exception -> 0x006d }
-        r0 = r0 | r1;	 Catch:{ Exception -> 0x006d }
-        r1 = 4;	 Catch:{ Exception -> 0x006d }
-        goto L_0x0036;	 Catch:{ Exception -> 0x006d }
-        r1 = 1;	 Catch:{ Exception -> 0x006d }
-        r3 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x006d }
-        r3.<init>(r0);	 Catch:{ Exception -> 0x006d }
-        r4 = r7.buffer;	 Catch:{ Exception -> 0x006d }
-        r4 = r4.limit();	 Catch:{ Exception -> 0x006d }
-        r5 = r7.buffer;	 Catch:{ Exception -> 0x006d }
-        r6 = r7.buffer;	 Catch:{ Exception -> 0x006d }
-        r6 = r6.position();	 Catch:{ Exception -> 0x006d }
-        r6 = r6 + r0;	 Catch:{ Exception -> 0x006d }
-        r5.limit(r6);	 Catch:{ Exception -> 0x006d }
-        r5 = r3.buffer;	 Catch:{ Exception -> 0x006d }
-        r6 = r7.buffer;	 Catch:{ Exception -> 0x006d }
-        r5.put(r6);	 Catch:{ Exception -> 0x006d }
-        r5 = r7.buffer;	 Catch:{ Exception -> 0x006d }
-        r5.limit(r4);	 Catch:{ Exception -> 0x006d }
-        r4 = r3.buffer;	 Catch:{ Exception -> 0x006d }
-        r5 = 0;	 Catch:{ Exception -> 0x006d }
-        r4.position(r5);	 Catch:{ Exception -> 0x006d }
-        r4 = r0 + r1;	 Catch:{ Exception -> 0x006d }
-        r4 = r4 % r2;	 Catch:{ Exception -> 0x006d }
-        if (r4 == 0) goto L_0x006c;	 Catch:{ Exception -> 0x006d }
-        r4 = r7.buffer;	 Catch:{ Exception -> 0x006d }
-        r4.get();	 Catch:{ Exception -> 0x006d }
-        r1 = r1 + 1;
-        goto L_0x005f;
-        return r3;
-        r0 = move-exception;
-        r1 = "read byte array error";
-        if (r8 != 0) goto L_0x007b;
-        r8 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r8 == 0) goto L_0x0079;
-        org.telegram.messenger.FileLog.e(r1);
-        r8 = 0;
-        return r8;
-        r8 = new java.lang.RuntimeException;
-        r8.<init>(r1, r0);
-        throw r8;
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.tgnet.NativeByteBuffer.readByteBuffer(boolean):org.telegram.tgnet.NativeByteBuffer");
-    }
-
-    /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:22:0x006e in {4, 5, 9, 11, 17, 19, 21} preds:[]
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-        	at java.lang.Iterable.forEach(Iterable.java:75)
-        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-        */
-    public java.lang.String readString(boolean r7) {
-        /*
-        r6 = this;
-        r0 = r6.getPosition();
-        r1 = r6.buffer;	 Catch:{ Exception -> 0x0056 }
-        r1 = r1.get();	 Catch:{ Exception -> 0x0056 }
-        r1 = r6.getIntFromByte(r1);	 Catch:{ Exception -> 0x0056 }
-        r2 = 254; // 0xfe float:3.56E-43 double:1.255E-321;	 Catch:{ Exception -> 0x0056 }
-        r3 = 4;	 Catch:{ Exception -> 0x0056 }
-        if (r1 < r2) goto L_0x0039;	 Catch:{ Exception -> 0x0056 }
-        r1 = r6.buffer;	 Catch:{ Exception -> 0x0056 }
-        r1 = r1.get();	 Catch:{ Exception -> 0x0056 }
-        r1 = r6.getIntFromByte(r1);	 Catch:{ Exception -> 0x0056 }
-        r2 = r6.buffer;	 Catch:{ Exception -> 0x0056 }
-        r2 = r2.get();	 Catch:{ Exception -> 0x0056 }
-        r2 = r6.getIntFromByte(r2);	 Catch:{ Exception -> 0x0056 }
-        r2 = r2 << 8;	 Catch:{ Exception -> 0x0056 }
-        r1 = r1 | r2;	 Catch:{ Exception -> 0x0056 }
-        r2 = r6.buffer;	 Catch:{ Exception -> 0x0056 }
-        r2 = r2.get();	 Catch:{ Exception -> 0x0056 }
-        r2 = r6.getIntFromByte(r2);	 Catch:{ Exception -> 0x0056 }
-        r2 = r2 << 16;	 Catch:{ Exception -> 0x0056 }
-        r1 = r1 | r2;	 Catch:{ Exception -> 0x0056 }
-        r2 = 4;	 Catch:{ Exception -> 0x0056 }
-        goto L_0x003a;	 Catch:{ Exception -> 0x0056 }
-        r2 = 1;	 Catch:{ Exception -> 0x0056 }
-        r4 = new byte[r1];	 Catch:{ Exception -> 0x0056 }
-        r5 = r6.buffer;	 Catch:{ Exception -> 0x0056 }
-        r5.get(r4);	 Catch:{ Exception -> 0x0056 }
-        r5 = r1 + r2;	 Catch:{ Exception -> 0x0056 }
-        r5 = r5 % r3;	 Catch:{ Exception -> 0x0056 }
-        if (r5 == 0) goto L_0x004e;	 Catch:{ Exception -> 0x0056 }
-        r5 = r6.buffer;	 Catch:{ Exception -> 0x0056 }
-        r5.get();	 Catch:{ Exception -> 0x0056 }
-        r2 = r2 + 1;	 Catch:{ Exception -> 0x0056 }
-        goto L_0x0041;	 Catch:{ Exception -> 0x0056 }
-        r1 = new java.lang.String;	 Catch:{ Exception -> 0x0056 }
-        r2 = "UTF-8";	 Catch:{ Exception -> 0x0056 }
-        r1.<init>(r4, r2);	 Catch:{ Exception -> 0x0056 }
-        return r1;
-        r1 = move-exception;
-        r2 = "read string error";
-        if (r7 != 0) goto L_0x0068;
-        r7 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-        if (r7 == 0) goto L_0x0062;
-        org.telegram.messenger.FileLog.e(r2);
-        r6.position(r0);
-        r7 = "";
-        return r7;
-        r7 = new java.lang.RuntimeException;
-        r7.<init>(r2, r1);
-        throw r7;
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.tgnet.NativeByteBuffer.readString(boolean):java.lang.String");
-    }
-
     /* synthetic */ NativeByteBuffer(int i, boolean z, AnonymousClass1 anonymousClass1) {
         this(i, z);
     }
@@ -679,6 +449,146 @@ public class NativeByteBuffer extends AbstractSerializedData {
         readBytes(bArr, z);
         return bArr;
     }
+
+    public String readString(boolean z) {
+        int position = getPosition();
+        try {
+            int i;
+            int intFromByte = getIntFromByte(this.buffer.get());
+            if (intFromByte >= 254) {
+                intFromByte = (getIntFromByte(this.buffer.get()) | (getIntFromByte(this.buffer.get()) << 8)) | (getIntFromByte(this.buffer.get()) << 16);
+                i = 4;
+            } else {
+                i = 1;
+            }
+            byte[] bArr = new byte[intFromByte];
+            this.buffer.get(bArr);
+            for (i = 
+/*
+Method generation error in method: org.telegram.tgnet.NativeByteBuffer.readString(boolean):java.lang.String, dex: classes.dex
+jadx.core.utils.exceptions.CodegenException: Error generate insn: PHI: (r2_11 'i' int) = (r2_9 'i' int), (r2_10 'i' int) binds: {(r2_9 'i' int)=B:4:0x0013, (r2_10 'i' int)=B:5:0x0039} in method: org.telegram.tgnet.NativeByteBuffer.readString(boolean):java.lang.String, dex: classes.dex
+	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:228)
+	at jadx.core.codegen.RegionGen.makeLoop(RegionGen.java:185)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:63)
+	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:89)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:95)
+	at jadx.core.codegen.RegionGen.makeTryCatch(RegionGen.java:280)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:65)
+	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:89)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:183)
+	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:321)
+	at jadx.core.codegen.ClassGen.addMethods(ClassGen.java:259)
+	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:221)
+	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:111)
+	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:77)
+	at jadx.core.codegen.CodeGen.visit(CodeGen.java:10)
+	at jadx.core.ProcessClass.process(ProcessClass.java:38)
+	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
+	at jadx.api.JavaClass.decompile(JavaClass.java:62)
+	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
+Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in fallback mode
+	at jadx.core.codegen.InsnGen.fallbackOnlyInsn(InsnGen.java:539)
+	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:511)
+	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:222)
+	... 20 more
+
+*/
+
+    public byte[] readByteArray(boolean z) {
+        try {
+            int i;
+            int intFromByte = getIntFromByte(this.buffer.get());
+            if (intFromByte >= 254) {
+                intFromByte = (getIntFromByte(this.buffer.get()) | (getIntFromByte(this.buffer.get()) << 8)) | (getIntFromByte(this.buffer.get()) << 16);
+                i = 4;
+            } else {
+                i = 1;
+            }
+            byte[] bArr = new byte[intFromByte];
+            this.buffer.get(bArr);
+            for (i = 
+/*
+Method generation error in method: org.telegram.tgnet.NativeByteBuffer.readByteArray(boolean):byte[], dex: classes.dex
+jadx.core.utils.exceptions.CodegenException: Error generate insn: PHI: (r1_11 'i' int) = (r1_9 'i' int), (r1_10 'i' int) binds: {(r1_9 'i' int)=B:3:0x000f, (r1_10 'i' int)=B:4:0x0035} in method: org.telegram.tgnet.NativeByteBuffer.readByteArray(boolean):byte[], dex: classes.dex
+	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:228)
+	at jadx.core.codegen.RegionGen.makeLoop(RegionGen.java:185)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:63)
+	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:89)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:95)
+	at jadx.core.codegen.RegionGen.makeTryCatch(RegionGen.java:280)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:65)
+	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:89)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:183)
+	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:321)
+	at jadx.core.codegen.ClassGen.addMethods(ClassGen.java:259)
+	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:221)
+	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:111)
+	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:77)
+	at jadx.core.codegen.CodeGen.visit(CodeGen.java:10)
+	at jadx.core.ProcessClass.process(ProcessClass.java:38)
+	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
+	at jadx.api.JavaClass.decompile(JavaClass.java:62)
+	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
+Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in fallback mode
+	at jadx.core.codegen.InsnGen.fallbackOnlyInsn(InsnGen.java:539)
+	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:511)
+	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:222)
+	... 20 more
+
+*/
+
+    public NativeByteBuffer readByteBuffer(boolean z) {
+        try {
+            int i;
+            int intFromByte = getIntFromByte(this.buffer.get());
+            if (intFromByte >= 254) {
+                intFromByte = (getIntFromByte(this.buffer.get()) | (getIntFromByte(this.buffer.get()) << 8)) | (getIntFromByte(this.buffer.get()) << 16);
+                i = 4;
+            } else {
+                i = 1;
+            }
+            NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(intFromByte);
+            int limit = this.buffer.limit();
+            this.buffer.limit(this.buffer.position() + intFromByte);
+            nativeByteBuffer.buffer.put(this.buffer);
+            this.buffer.limit(limit);
+            nativeByteBuffer.buffer.position(0);
+            for (i = 
+/*
+Method generation error in method: org.telegram.tgnet.NativeByteBuffer.readByteBuffer(boolean):org.telegram.tgnet.NativeByteBuffer, dex: classes.dex
+jadx.core.utils.exceptions.CodegenException: Error generate insn: PHI: (r1_11 'i' int) = (r1_9 'i' int), (r1_10 'i' int) binds: {(r1_9 'i' int)=B:3:0x000f, (r1_10 'i' int)=B:4:0x0035} in method: org.telegram.tgnet.NativeByteBuffer.readByteBuffer(boolean):org.telegram.tgnet.NativeByteBuffer, dex: classes.dex
+	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:228)
+	at jadx.core.codegen.RegionGen.makeLoop(RegionGen.java:185)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:63)
+	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:89)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:95)
+	at jadx.core.codegen.RegionGen.makeTryCatch(RegionGen.java:280)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:65)
+	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:89)
+	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:183)
+	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:321)
+	at jadx.core.codegen.ClassGen.addMethods(ClassGen.java:259)
+	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:221)
+	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:111)
+	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:77)
+	at jadx.core.codegen.CodeGen.visit(CodeGen.java:10)
+	at jadx.core.ProcessClass.process(ProcessClass.java:38)
+	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
+	at jadx.api.JavaClass.decompile(JavaClass.java:62)
+	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
+Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in fallback mode
+	at jadx.core.codegen.InsnGen.fallbackOnlyInsn(InsnGen.java:539)
+	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:511)
+	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:222)
+	... 20 more
+
+*/
 
     public double readDouble(boolean z) {
         try {

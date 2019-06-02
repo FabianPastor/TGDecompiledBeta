@@ -330,6 +330,10 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     public void didPressVoteButton(ChatMessageCell chatMessageCell, TL_pollAnswer tL_pollAnswer) {
                     }
 
+                    public /* synthetic */ void didStartVideoStream(MessageObject messageObject) {
+                        -CC.$default$didStartVideoStream(this, messageObject);
+                    }
+
                     public boolean isChatAdminCell(int i) {
                         return false;
                     }
@@ -461,8 +465,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         EmbedBottomSheet.show(ChatActivityAdapter.this.mContext, str2, str3, str4, str, i, i2);
                     }
 
-                    /* JADX WARNING: Missing block: B:49:0x0101, code skipped:
-            if (r9.exists() != false) goto L_0x0105;
+                    /* JADX WARNING: Missing block: B:49:0x0102, code skipped:
+            if (r9.exists() != false) goto L_0x0106;
      */
                     public void didPressImage(org.telegram.ui.Cells.ChatMessageCell r9, float r10, float r11) {
                         /*
@@ -484,94 +488,94 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         r2 = r10;
                         r2.<init>(r3, r4, r5, r6, r7);
                         r9.showDialog(r10);
-                        goto L_0x01d2;
+                        goto L_0x01d3;
                     L_0x0027:
                         r9 = r1.isVideo();
-                        if (r9 != 0) goto L_0x01b0;
+                        if (r9 != 0) goto L_0x01b1;
                     L_0x002d:
                         r9 = r1.type;
                         r10 = 1;
-                        if (r9 == r10) goto L_0x01b0;
+                        if (r9 == r10) goto L_0x01b1;
                     L_0x0032:
                         if (r9 != 0) goto L_0x003a;
                     L_0x0034:
                         r9 = r1.isWebpageDocument();
-                        if (r9 == 0) goto L_0x01b0;
+                        if (r9 == 0) goto L_0x01b1;
                     L_0x003a:
                         r9 = r1.isGif();
                         if (r9 == 0) goto L_0x0042;
                     L_0x0040:
-                        goto L_0x01b0;
+                        goto L_0x01b1;
                     L_0x0042:
                         r9 = r1.type;
                         r11 = 3;
                         r0 = 0;
-                        if (r9 != r11) goto L_0x00b2;
+                        if (r9 != r11) goto L_0x00b3;
                     L_0x0048:
-                        r9 = r1.messageOwner;	 Catch:{ Exception -> 0x00a9 }
-                        r9 = r9.attachPath;	 Catch:{ Exception -> 0x00a9 }
+                        r9 = r1.messageOwner;	 Catch:{ Exception -> 0x00aa }
+                        r9 = r9.attachPath;	 Catch:{ Exception -> 0x00aa }
                         if (r9 == 0) goto L_0x0061;
                     L_0x004e:
-                        r9 = r1.messageOwner;	 Catch:{ Exception -> 0x00a9 }
-                        r9 = r9.attachPath;	 Catch:{ Exception -> 0x00a9 }
-                        r9 = r9.length();	 Catch:{ Exception -> 0x00a9 }
+                        r9 = r1.messageOwner;	 Catch:{ Exception -> 0x00aa }
+                        r9 = r9.attachPath;	 Catch:{ Exception -> 0x00aa }
+                        r9 = r9.length();	 Catch:{ Exception -> 0x00aa }
                         if (r9 == 0) goto L_0x0061;
                     L_0x0058:
-                        r0 = new java.io.File;	 Catch:{ Exception -> 0x00a9 }
-                        r9 = r1.messageOwner;	 Catch:{ Exception -> 0x00a9 }
-                        r9 = r9.attachPath;	 Catch:{ Exception -> 0x00a9 }
-                        r0.<init>(r9);	 Catch:{ Exception -> 0x00a9 }
+                        r0 = new java.io.File;	 Catch:{ Exception -> 0x00aa }
+                        r9 = r1.messageOwner;	 Catch:{ Exception -> 0x00aa }
+                        r9 = r9.attachPath;	 Catch:{ Exception -> 0x00aa }
+                        r0.<init>(r9);	 Catch:{ Exception -> 0x00aa }
                     L_0x0061:
                         if (r0 == 0) goto L_0x0069;
                     L_0x0063:
-                        r9 = r0.exists();	 Catch:{ Exception -> 0x00a9 }
+                        r9 = r0.exists();	 Catch:{ Exception -> 0x00aa }
                         if (r9 != 0) goto L_0x006f;
                     L_0x0069:
-                        r9 = r1.messageOwner;	 Catch:{ Exception -> 0x00a9 }
-                        r0 = org.telegram.messenger.FileLoader.getPathToMessage(r9);	 Catch:{ Exception -> 0x00a9 }
+                        r9 = r1.messageOwner;	 Catch:{ Exception -> 0x00aa }
+                        r0 = org.telegram.messenger.FileLoader.getPathToMessage(r9);	 Catch:{ Exception -> 0x00aa }
                     L_0x006f:
-                        r9 = new android.content.Intent;	 Catch:{ Exception -> 0x00a9 }
+                        r9 = new android.content.Intent;	 Catch:{ Exception -> 0x00aa }
                         r11 = "android.intent.action.VIEW";
-                        r9.<init>(r11);	 Catch:{ Exception -> 0x00a9 }
-                        r11 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x00a9 }
+                        r9.<init>(r11);	 Catch:{ Exception -> 0x00aa }
+                        r11 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x00aa }
                         r2 = 24;
                         r3 = "video/mp4";
-                        if (r11 < r2) goto L_0x0093;
-                    L_0x007e:
-                        r9.setFlags(r10);	 Catch:{ Exception -> 0x00a9 }
-                        r10 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;	 Catch:{ Exception -> 0x00a9 }
-                        r10 = org.telegram.ui.ChannelAdminLogActivity.this;	 Catch:{ Exception -> 0x00a9 }
-                        r10 = r10.getParentActivity();	 Catch:{ Exception -> 0x00a9 }
+                        if (r11 < r2) goto L_0x0094;
+                    L_0x007f:
+                        r9.setFlags(r10);	 Catch:{ Exception -> 0x00aa }
+                        r10 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;	 Catch:{ Exception -> 0x00aa }
+                        r10 = org.telegram.ui.ChannelAdminLogActivity.this;	 Catch:{ Exception -> 0x00aa }
+                        r10 = r10.getParentActivity();	 Catch:{ Exception -> 0x00aa }
                         r11 = "org.telegram.messenger.provider";
-                        r10 = androidx.core.content.FileProvider.getUriForFile(r10, r11, r0);	 Catch:{ Exception -> 0x00a9 }
-                        r9.setDataAndType(r10, r3);	 Catch:{ Exception -> 0x00a9 }
-                        goto L_0x009a;
-                    L_0x0093:
-                        r10 = android.net.Uri.fromFile(r0);	 Catch:{ Exception -> 0x00a9 }
-                        r9.setDataAndType(r10, r3);	 Catch:{ Exception -> 0x00a9 }
-                    L_0x009a:
-                        r10 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;	 Catch:{ Exception -> 0x00a9 }
-                        r10 = org.telegram.ui.ChannelAdminLogActivity.this;	 Catch:{ Exception -> 0x00a9 }
-                        r10 = r10.getParentActivity();	 Catch:{ Exception -> 0x00a9 }
+                        r10 = androidx.core.content.FileProvider.getUriForFile(r10, r11, r0);	 Catch:{ Exception -> 0x00aa }
+                        r9.setDataAndType(r10, r3);	 Catch:{ Exception -> 0x00aa }
+                        goto L_0x009b;
+                    L_0x0094:
+                        r10 = android.net.Uri.fromFile(r0);	 Catch:{ Exception -> 0x00aa }
+                        r9.setDataAndType(r10, r3);	 Catch:{ Exception -> 0x00aa }
+                    L_0x009b:
+                        r10 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;	 Catch:{ Exception -> 0x00aa }
+                        r10 = org.telegram.ui.ChannelAdminLogActivity.this;	 Catch:{ Exception -> 0x00aa }
+                        r10 = r10.getParentActivity();	 Catch:{ Exception -> 0x00aa }
                         r11 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
-                        r10.startActivityForResult(r9, r11);	 Catch:{ Exception -> 0x00a9 }
-                        goto L_0x01d2;
-                    L_0x00a9:
+                        r10.startActivityForResult(r9, r11);	 Catch:{ Exception -> 0x00aa }
+                        goto L_0x01d3;
+                    L_0x00aa:
                         r9 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;
                         r9 = org.telegram.ui.ChannelAdminLogActivity.this;
                         r9.alertUserOpenError(r1);
-                        goto L_0x01d2;
-                    L_0x00b2:
+                        goto L_0x01d3;
+                    L_0x00b3:
                         r11 = 4;
-                        if (r9 != r11) goto L_0x00d2;
-                    L_0x00b5:
+                        if (r9 != r11) goto L_0x00d3;
+                    L_0x00b6:
                         r9 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;
                         r9 = org.telegram.ui.ChannelAdminLogActivity.this;
                         r9 = org.telegram.messenger.AndroidUtilities.isGoogleMapsInstalled(r9);
-                        if (r9 != 0) goto L_0x00c0;
-                    L_0x00bf:
-                        return;
+                        if (r9 != 0) goto L_0x00c1;
                     L_0x00c0:
+                        return;
+                    L_0x00c1:
                         r9 = new org.telegram.ui.LocationActivity;
                         r10 = 0;
                         r9.<init>(r10);
@@ -579,52 +583,52 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         r10 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;
                         r10 = org.telegram.ui.ChannelAdminLogActivity.this;
                         r10.presentFragment(r9);
-                        goto L_0x01d2;
-                    L_0x00d2:
+                        goto L_0x01d3;
+                    L_0x00d3:
                         r11 = 9;
-                        if (r9 == r11) goto L_0x00d8;
-                    L_0x00d6:
-                        if (r9 != 0) goto L_0x01d2;
-                    L_0x00d8:
+                        if (r9 == r11) goto L_0x00d9;
+                    L_0x00d7:
+                        if (r9 != 0) goto L_0x01d3;
+                    L_0x00d9:
                         r9 = r1.getDocumentName();
                         r9 = r9.toLowerCase();
                         r11 = "attheme";
                         r9 = r9.endsWith(r11);
-                        if (r9 == 0) goto L_0x019c;
-                    L_0x00e8:
+                        if (r9 == 0) goto L_0x019d;
+                    L_0x00e9:
                         r9 = r1.messageOwner;
                         r9 = r9.attachPath;
-                        if (r9 == 0) goto L_0x0104;
-                    L_0x00ee:
+                        if (r9 == 0) goto L_0x0105;
+                    L_0x00ef:
                         r9 = r9.length();
-                        if (r9 == 0) goto L_0x0104;
-                    L_0x00f4:
+                        if (r9 == 0) goto L_0x0105;
+                    L_0x00f5:
                         r9 = new java.io.File;
                         r11 = r1.messageOwner;
                         r11 = r11.attachPath;
                         r9.<init>(r11);
                         r11 = r9.exists();
-                        if (r11 == 0) goto L_0x0104;
-                    L_0x0103:
-                        goto L_0x0105;
+                        if (r11 == 0) goto L_0x0105;
                     L_0x0104:
-                        r9 = r0;
+                        goto L_0x0106;
                     L_0x0105:
-                        if (r9 != 0) goto L_0x0114;
-                    L_0x0107:
+                        r9 = r0;
+                    L_0x0106:
+                        if (r9 != 0) goto L_0x0115;
+                    L_0x0108:
                         r11 = r1.messageOwner;
                         r11 = org.telegram.messenger.FileLoader.getPathToMessage(r11);
                         r0 = r11.exists();
-                        if (r0 == 0) goto L_0x0114;
-                    L_0x0113:
-                        r9 = r11;
+                        if (r0 == 0) goto L_0x0115;
                     L_0x0114:
+                        r9 = r11;
+                    L_0x0115:
                         r11 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;
                         r11 = org.telegram.ui.ChannelAdminLogActivity.this;
                         r11 = r11.chatLayoutManager;
                         r0 = -1;
-                        if (r11 == 0) goto L_0x017e;
-                    L_0x011f:
+                        if (r11 == 0) goto L_0x017f;
+                    L_0x0120:
                         r11 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;
                         r11 = org.telegram.ui.ChannelAdminLogActivity.this;
                         r11 = r11.chatLayoutManager;
@@ -634,8 +638,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         r2 = r2.chatLayoutManager;
                         r2 = r2.getItemCount();
                         r2 = r2 - r10;
-                        if (r11 >= r2) goto L_0x0177;
-                    L_0x013a:
+                        if (r11 >= r2) goto L_0x0178;
+                    L_0x013b:
                         r11 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;
                         r11 = org.telegram.ui.ChannelAdminLogActivity.this;
                         r2 = r11.chatLayoutManager;
@@ -649,50 +653,50 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         r2 = r2.scrollToPositionOnRecreate;
                         r11 = r11.findViewHolderForAdapterPosition(r2);
                         r11 = (org.telegram.ui.Components.RecyclerListView.Holder) r11;
-                        if (r11 == 0) goto L_0x016f;
-                    L_0x0161:
+                        if (r11 == 0) goto L_0x0170;
+                    L_0x0162:
                         r2 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;
                         r2 = org.telegram.ui.ChannelAdminLogActivity.this;
                         r11 = r11.itemView;
                         r11 = r11.getTop();
                         r2.scrollToOffsetOnRecreate = r11;
-                        goto L_0x017e;
-                    L_0x016f:
+                        goto L_0x017f;
+                    L_0x0170:
                         r11 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;
                         r11 = org.telegram.ui.ChannelAdminLogActivity.this;
                         r11.scrollToPositionOnRecreate = r0;
-                        goto L_0x017e;
-                    L_0x0177:
+                        goto L_0x017f;
+                    L_0x0178:
                         r11 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;
                         r11 = org.telegram.ui.ChannelAdminLogActivity.this;
                         r11.scrollToPositionOnRecreate = r0;
-                    L_0x017e:
+                    L_0x017f:
                         r11 = r1.getDocumentName();
                         r10 = org.telegram.ui.ActionBar.Theme.applyThemeFile(r9, r11, r10);
-                        if (r10 == 0) goto L_0x0195;
-                    L_0x0188:
+                        if (r10 == 0) goto L_0x0196;
+                    L_0x0189:
                         r11 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;
                         r11 = org.telegram.ui.ChannelAdminLogActivity.this;
                         r0 = new org.telegram.ui.ThemePreviewActivity;
                         r0.<init>(r9, r10);
                         r11.presentFragment(r0);
                         return;
-                    L_0x0195:
+                    L_0x0196:
                         r9 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;
                         r9 = org.telegram.ui.ChannelAdminLogActivity.this;
                         r9.scrollToPositionOnRecreate = r0;
-                    L_0x019c:
-                        r9 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;	 Catch:{ Exception -> 0x01a8 }
-                        r9 = org.telegram.ui.ChannelAdminLogActivity.this;	 Catch:{ Exception -> 0x01a8 }
-                        r9 = r9.getParentActivity();	 Catch:{ Exception -> 0x01a8 }
-                        org.telegram.messenger.AndroidUtilities.openForView(r1, r9);	 Catch:{ Exception -> 0x01a8 }
-                        goto L_0x01d2;
-                    L_0x01a8:
+                    L_0x019d:
+                        r9 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;	 Catch:{ Exception -> 0x01a9 }
+                        r9 = org.telegram.ui.ChannelAdminLogActivity.this;	 Catch:{ Exception -> 0x01a9 }
+                        r9 = r9.getParentActivity();	 Catch:{ Exception -> 0x01a9 }
+                        org.telegram.messenger.AndroidUtilities.openForView(r1, r9);	 Catch:{ Exception -> 0x01a9 }
+                        goto L_0x01d3;
+                    L_0x01a9:
                         r9 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;
                         r9 = org.telegram.ui.ChannelAdminLogActivity.this;
                         r9.alertUserOpenError(r1);
-                        goto L_0x01d2;
-                    L_0x01b0:
+                        goto L_0x01d3;
+                    L_0x01b1:
                         r9 = org.telegram.ui.PhotoViewer.getInstance();
                         r10 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this;
                         r10 = org.telegram.ui.ChannelAdminLogActivity.this;
@@ -705,7 +709,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         r9 = org.telegram.ui.ChannelAdminLogActivity.this;
                         r6 = r9.provider;
                         r0.openPhoto(r1, r2, r4, r6);
-                    L_0x01d2:
+                    L_0x01d3:
                         return;
                         */
                         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter$AnonymousClass1.didPressImage(org.telegram.ui.Cells.ChatMessageCell, float, float):void");
@@ -2390,7 +2394,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r2.putExtra(r5, r0);
     L_0x01fb:
         r0 = r10.getParentActivity();
-        r3 = NUM; // 0x7f0d08f6 float:1.8746768E38 double:1.053130911E-314;
+        r3 = NUM; // 0x7f0d092c float:1.8746877E38 double:1.0531309376E-314;
         r4 = "ShareFile";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2 = android.content.Intent.createChooser(r2, r3);
@@ -2432,9 +2436,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r1 = r1.toLowerCase();
         r2 = "attheme";
         r1 = r1.endsWith(r2);
-        r2 = NUM; // 0x7f0d0679 float:1.8745476E38 double:1.053130596E-314;
+        r2 = NUM; // 0x7f0d06a1 float:1.8745557E38 double:1.053130616E-314;
         r3 = "OK";
-        r4 = NUM; // 0x7f0d00e7 float:1.8742583E38 double:1.0531298917E-314;
+        r4 = NUM; // 0x7f0d00eb float:1.8742591E38 double:1.0531298936E-314;
         r5 = "AppName";
         if (r1 == 0) goto L_0x02de;
     L_0x025d:
@@ -2489,7 +2493,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r0.<init>(r1);
         r1 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0d04c7 float:1.8744595E38 double:1.053130382E-314;
+        r1 = NUM; // 0x7f0d04f0 float:1.8744678E38 double:1.053130402E-314;
         r4 = "IncorrectTheme";
         r1 = org.telegram.messenger.LocaleController.getString(r4, r1);
         r0.setMessage(r1);
@@ -2520,7 +2524,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r0.<init>(r1);
         r1 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0d04c6 float:1.8744593E38 double:1.0531303813E-314;
+        r1 = NUM; // 0x7f0d04ef float:1.8744676E38 double:1.0531304015E-314;
         r4 = "IncorrectLocalization";
         r1 = org.telegram.messenger.LocaleController.getString(r4, r1);
         r0.setMessage(r1);
@@ -3022,8 +3026,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-        builder.setTitle(LocaleController.getString("AppName", NUM));
-        builder.setMessage(LocaleController.formatString("OpenUrlAlert", NUM, str));
+        builder.setTitle(LocaleController.getString("OpenUrlTitle", NUM));
+        builder.setMessage(LocaleController.formatString("OpenUrlAlert2", NUM, str));
         builder.setPositiveButton(LocaleController.getString("Open", NUM), new -$$Lambda$ChannelAdminLogActivity$iAIppxrAcTSiaPaqrhtDiQvqAXs(this, str));
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
         showDialog(builder.create());
@@ -3045,7 +3049,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[206];
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[207];
         themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, 0, null, null, null, null, "chat_wallpaper");
         themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault");
         themeDescriptionArr[2] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault");
@@ -3113,107 +3117,108 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         themeDescriptionArr[64] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgOutCallSelectedDrawable}, null, "chat_outInstantSelected");
         themeDescriptionArr[65] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgInInstantDrawable, Theme.chat_msgInCallDrawable}, null, "chat_inInstant");
         themeDescriptionArr[66] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgInCallSelectedDrawable}, null, "chat_inInstantSelected");
-        themeDescriptionArr[67] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgCallUpRedDrawable, Theme.chat_msgCallDownRedDrawable}, null, "calls_callReceivedRedIcon");
-        themeDescriptionArr[68] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgCallUpGreenDrawable, Theme.chat_msgCallDownGreenDrawable}, null, "calls_callReceivedGreenIcon");
-        themeDescriptionArr[69] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, Theme.chat_msgErrorPaint, null, null, "chat_sentError");
-        themeDescriptionArr[70] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgErrorDrawable}, null, "chat_sentErrorIcon");
-        themeDescriptionArr[71] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, Theme.chat_durationPaint, null, null, "chat_previewDurationText");
-        themeDescriptionArr[72] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, Theme.chat_gamePaint, null, null, "chat_previewGameText");
-        themeDescriptionArr[73] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inPreviewInstantText");
-        themeDescriptionArr[74] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outPreviewInstantText");
-        themeDescriptionArr[75] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inPreviewInstantSelectedText");
-        themeDescriptionArr[76] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outPreviewInstantSelectedText");
-        themeDescriptionArr[77] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, Theme.chat_deleteProgressPaint, null, null, "chat_secretTimeText");
-        themeDescriptionArr[78] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_stickerNameText");
-        themeDescriptionArr[79] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, Theme.chat_botButtonPaint, null, null, "chat_botButtonText");
-        themeDescriptionArr[80] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, Theme.chat_botProgressPaint, null, null, "chat_botProgress");
-        themeDescriptionArr[81] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inForwardedNameText");
-        themeDescriptionArr[82] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outForwardedNameText");
-        themeDescriptionArr[83] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inViaBotNameText");
-        themeDescriptionArr[84] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outViaBotNameText");
-        themeDescriptionArr[85] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_stickerViaBotNameText");
-        themeDescriptionArr[86] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inReplyLine");
-        themeDescriptionArr[87] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outReplyLine");
-        themeDescriptionArr[88] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_stickerReplyLine");
-        themeDescriptionArr[89] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inReplyNameText");
-        themeDescriptionArr[90] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outReplyNameText");
-        themeDescriptionArr[91] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_stickerReplyNameText");
-        themeDescriptionArr[92] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inReplyMessageText");
-        themeDescriptionArr[93] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outReplyMessageText");
-        themeDescriptionArr[94] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inReplyMediaMessageText");
-        themeDescriptionArr[95] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outReplyMediaMessageText");
-        themeDescriptionArr[96] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inReplyMediaMessageSelectedText");
-        themeDescriptionArr[97] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outReplyMediaMessageSelectedText");
-        themeDescriptionArr[98] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_stickerReplyMessageText");
-        themeDescriptionArr[99] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inPreviewLine");
-        themeDescriptionArr[100] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outPreviewLine");
-        themeDescriptionArr[101] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inSiteNameText");
-        themeDescriptionArr[102] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outSiteNameText");
-        themeDescriptionArr[103] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inContactNameText");
-        themeDescriptionArr[104] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outContactNameText");
-        themeDescriptionArr[105] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inContactPhoneText");
-        themeDescriptionArr[106] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outContactPhoneText");
-        themeDescriptionArr[107] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_mediaProgress");
-        themeDescriptionArr[108] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inAudioProgress");
-        themeDescriptionArr[109] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outAudioProgress");
-        themeDescriptionArr[110] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inAudioSelectedProgress");
-        themeDescriptionArr[111] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outAudioSelectedProgress");
-        themeDescriptionArr[112] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_mediaTimeText");
-        themeDescriptionArr[113] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inTimeText");
-        themeDescriptionArr[114] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outTimeText");
-        themeDescriptionArr[115] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inTimeSelectedText");
-        themeDescriptionArr[116] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outTimeSelectedText");
-        themeDescriptionArr[117] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inAudioPerfomerText");
-        themeDescriptionArr[118] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outAudioPerfomerText");
-        themeDescriptionArr[119] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inAudioTitleText");
-        themeDescriptionArr[120] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outAudioTitleText");
-        themeDescriptionArr[121] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inAudioDurationText");
-        themeDescriptionArr[122] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outAudioDurationText");
-        themeDescriptionArr[123] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inAudioDurationSelectedText");
-        themeDescriptionArr[124] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outAudioDurationSelectedText");
-        themeDescriptionArr[125] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inAudioSeekbar");
-        themeDescriptionArr[126] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outAudioSeekbar");
-        themeDescriptionArr[127] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inAudioSeekbarSelected");
-        themeDescriptionArr[128] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outAudioSeekbarSelected");
-        themeDescriptionArr[129] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inAudioSeekbarFill");
-        themeDescriptionArr[130] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inAudioCacheSeekbar");
-        themeDescriptionArr[131] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outAudioSeekbarFill");
-        themeDescriptionArr[132] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outAudioCacheSeekbar");
-        themeDescriptionArr[133] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inVoiceSeekbar");
-        themeDescriptionArr[134] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outVoiceSeekbar");
-        themeDescriptionArr[135] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inVoiceSeekbarSelected");
-        themeDescriptionArr[136] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outVoiceSeekbarSelected");
-        themeDescriptionArr[137] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inVoiceSeekbarFill");
-        themeDescriptionArr[138] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outVoiceSeekbarFill");
-        themeDescriptionArr[139] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inFileProgress");
-        themeDescriptionArr[140] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outFileProgress");
-        themeDescriptionArr[141] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inFileProgressSelected");
-        themeDescriptionArr[142] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outFileProgressSelected");
-        themeDescriptionArr[143] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inFileNameText");
-        themeDescriptionArr[144] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outFileNameText");
-        themeDescriptionArr[145] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inFileInfoText");
-        themeDescriptionArr[146] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outFileInfoText");
-        themeDescriptionArr[147] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inFileInfoSelectedText");
-        themeDescriptionArr[148] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outFileInfoSelectedText");
-        themeDescriptionArr[149] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inFileBackground");
-        themeDescriptionArr[150] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outFileBackground");
-        themeDescriptionArr[151] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inFileBackgroundSelected");
-        themeDescriptionArr[152] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outFileBackgroundSelected");
-        themeDescriptionArr[153] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inVenueInfoText");
-        themeDescriptionArr[154] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outVenueInfoText");
-        themeDescriptionArr[155] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inVenueInfoSelectedText");
-        themeDescriptionArr[156] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outVenueInfoSelectedText");
-        themeDescriptionArr[157] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_mediaInfoText");
-        themeDescriptionArr[158] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, Theme.chat_urlPaint, null, null, "chat_linkSelectBackground");
-        themeDescriptionArr[159] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, Theme.chat_textSearchSelectionPaint, null, null, "chat_textSelectBackground");
-        themeDescriptionArr[160] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outLoader");
-        themeDescriptionArr[161] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outMediaIcon");
-        themeDescriptionArr[162] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outLoaderSelected");
-        themeDescriptionArr[163] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outMediaIconSelected");
-        themeDescriptionArr[164] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inLoader");
-        themeDescriptionArr[165] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inMediaIcon");
-        themeDescriptionArr[166] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inLoaderSelected");
-        themeDescriptionArr[167] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inMediaIconSelected");
+        themeDescriptionArr[67] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgCallUpGreenDrawable}, null, "chat_outUpCall");
+        themeDescriptionArr[68] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgCallDownRedDrawable}, null, "chat_inUpCall");
+        themeDescriptionArr[69] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgCallDownGreenDrawable}, null, "chat_inDownCall");
+        themeDescriptionArr[70] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, Theme.chat_msgErrorPaint, null, null, "chat_sentError");
+        themeDescriptionArr[71] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_msgErrorDrawable}, null, "chat_sentErrorIcon");
+        themeDescriptionArr[72] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, Theme.chat_durationPaint, null, null, "chat_previewDurationText");
+        themeDescriptionArr[73] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, Theme.chat_gamePaint, null, null, "chat_previewGameText");
+        themeDescriptionArr[74] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inPreviewInstantText");
+        themeDescriptionArr[75] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outPreviewInstantText");
+        themeDescriptionArr[76] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inPreviewInstantSelectedText");
+        themeDescriptionArr[77] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outPreviewInstantSelectedText");
+        themeDescriptionArr[78] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, Theme.chat_deleteProgressPaint, null, null, "chat_secretTimeText");
+        themeDescriptionArr[79] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_stickerNameText");
+        themeDescriptionArr[80] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, Theme.chat_botButtonPaint, null, null, "chat_botButtonText");
+        themeDescriptionArr[81] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, Theme.chat_botProgressPaint, null, null, "chat_botProgress");
+        themeDescriptionArr[82] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inForwardedNameText");
+        themeDescriptionArr[83] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outForwardedNameText");
+        themeDescriptionArr[84] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inViaBotNameText");
+        themeDescriptionArr[85] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outViaBotNameText");
+        themeDescriptionArr[86] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_stickerViaBotNameText");
+        themeDescriptionArr[87] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inReplyLine");
+        themeDescriptionArr[88] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outReplyLine");
+        themeDescriptionArr[89] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_stickerReplyLine");
+        themeDescriptionArr[90] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inReplyNameText");
+        themeDescriptionArr[91] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outReplyNameText");
+        themeDescriptionArr[92] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_stickerReplyNameText");
+        themeDescriptionArr[93] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inReplyMessageText");
+        themeDescriptionArr[94] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outReplyMessageText");
+        themeDescriptionArr[95] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inReplyMediaMessageText");
+        themeDescriptionArr[96] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outReplyMediaMessageText");
+        themeDescriptionArr[97] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inReplyMediaMessageSelectedText");
+        themeDescriptionArr[98] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outReplyMediaMessageSelectedText");
+        themeDescriptionArr[99] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_stickerReplyMessageText");
+        themeDescriptionArr[100] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inPreviewLine");
+        themeDescriptionArr[101] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outPreviewLine");
+        themeDescriptionArr[102] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inSiteNameText");
+        themeDescriptionArr[103] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outSiteNameText");
+        themeDescriptionArr[104] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inContactNameText");
+        themeDescriptionArr[105] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outContactNameText");
+        themeDescriptionArr[106] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inContactPhoneText");
+        themeDescriptionArr[107] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outContactPhoneText");
+        themeDescriptionArr[108] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_mediaProgress");
+        themeDescriptionArr[109] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inAudioProgress");
+        themeDescriptionArr[110] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outAudioProgress");
+        themeDescriptionArr[111] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inAudioSelectedProgress");
+        themeDescriptionArr[112] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outAudioSelectedProgress");
+        themeDescriptionArr[113] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_mediaTimeText");
+        themeDescriptionArr[114] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inTimeText");
+        themeDescriptionArr[115] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outTimeText");
+        themeDescriptionArr[116] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inTimeSelectedText");
+        themeDescriptionArr[117] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outTimeSelectedText");
+        themeDescriptionArr[118] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inAudioPerfomerText");
+        themeDescriptionArr[119] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outAudioPerfomerText");
+        themeDescriptionArr[120] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inAudioTitleText");
+        themeDescriptionArr[121] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outAudioTitleText");
+        themeDescriptionArr[122] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inAudioDurationText");
+        themeDescriptionArr[123] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outAudioDurationText");
+        themeDescriptionArr[124] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inAudioDurationSelectedText");
+        themeDescriptionArr[125] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outAudioDurationSelectedText");
+        themeDescriptionArr[126] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inAudioSeekbar");
+        themeDescriptionArr[127] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outAudioSeekbar");
+        themeDescriptionArr[128] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inAudioSeekbarSelected");
+        themeDescriptionArr[129] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outAudioSeekbarSelected");
+        themeDescriptionArr[130] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inAudioSeekbarFill");
+        themeDescriptionArr[131] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inAudioCacheSeekbar");
+        themeDescriptionArr[132] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outAudioSeekbarFill");
+        themeDescriptionArr[133] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outAudioCacheSeekbar");
+        themeDescriptionArr[134] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inVoiceSeekbar");
+        themeDescriptionArr[135] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outVoiceSeekbar");
+        themeDescriptionArr[136] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inVoiceSeekbarSelected");
+        themeDescriptionArr[137] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outVoiceSeekbarSelected");
+        themeDescriptionArr[138] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inVoiceSeekbarFill");
+        themeDescriptionArr[139] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outVoiceSeekbarFill");
+        themeDescriptionArr[140] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inFileProgress");
+        themeDescriptionArr[141] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outFileProgress");
+        themeDescriptionArr[142] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inFileProgressSelected");
+        themeDescriptionArr[143] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outFileProgressSelected");
+        themeDescriptionArr[144] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inFileNameText");
+        themeDescriptionArr[145] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outFileNameText");
+        themeDescriptionArr[146] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inFileInfoText");
+        themeDescriptionArr[147] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outFileInfoText");
+        themeDescriptionArr[148] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inFileInfoSelectedText");
+        themeDescriptionArr[149] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outFileInfoSelectedText");
+        themeDescriptionArr[150] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inFileBackground");
+        themeDescriptionArr[151] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outFileBackground");
+        themeDescriptionArr[152] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inFileBackgroundSelected");
+        themeDescriptionArr[153] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outFileBackgroundSelected");
+        themeDescriptionArr[154] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inVenueInfoText");
+        themeDescriptionArr[155] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outVenueInfoText");
+        themeDescriptionArr[156] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inVenueInfoSelectedText");
+        themeDescriptionArr[157] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outVenueInfoSelectedText");
+        themeDescriptionArr[158] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_mediaInfoText");
+        themeDescriptionArr[159] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, Theme.chat_urlPaint, null, null, "chat_linkSelectBackground");
+        themeDescriptionArr[160] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, Theme.chat_textSearchSelectionPaint, null, null, "chat_textSelectBackground");
+        themeDescriptionArr[161] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outLoader");
+        themeDescriptionArr[162] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outMediaIcon");
+        themeDescriptionArr[163] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outLoaderSelected");
+        themeDescriptionArr[164] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_outMediaIconSelected");
+        themeDescriptionArr[165] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inLoader");
+        themeDescriptionArr[166] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inMediaIcon");
+        themeDescriptionArr[167] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inLoaderSelected");
+        themeDescriptionArr[168] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, null, null, "chat_inMediaIconSelected");
         RecyclerListView recyclerListView = this.chatListView;
         int i = ThemeDescription.FLAG_BACKGROUNDFILTER;
         Class[] clsArr = new Class[]{ChatMessageCell.class};
@@ -3223,7 +3228,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r14[1] = drawableArr[1][0];
         r14[2] = drawableArr[2][0];
         r14[3] = drawableArr[3][0];
-        themeDescriptionArr[168] = new ThemeDescription(recyclerListView, i, clsArr, null, r14, null, "chat_mediaLoaderPhoto");
+        themeDescriptionArr[169] = new ThemeDescription(recyclerListView, i, clsArr, null, r14, null, "chat_mediaLoaderPhoto");
         recyclerListView = this.chatListView;
         clsArr = new Class[]{ChatMessageCell.class};
         r14 = new Drawable[4];
@@ -3232,7 +3237,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r14[1] = drawableArr2[1][0];
         r14[2] = drawableArr2[2][0];
         r14[3] = drawableArr2[3][0];
-        themeDescriptionArr[169] = new ThemeDescription(recyclerListView, 0, clsArr, null, r14, null, "chat_mediaLoaderPhotoIcon");
+        themeDescriptionArr[170] = new ThemeDescription(recyclerListView, 0, clsArr, null, r14, null, "chat_mediaLoaderPhotoIcon");
         recyclerListView = this.chatListView;
         i = ThemeDescription.FLAG_BACKGROUNDFILTER;
         clsArr = new Class[]{ChatMessageCell.class};
@@ -3242,7 +3247,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r14[1] = drawableArr[1][1];
         r14[2] = drawableArr[2][1];
         r14[3] = drawableArr[3][1];
-        themeDescriptionArr[170] = new ThemeDescription(recyclerListView, i, clsArr, null, r14, null, "chat_mediaLoaderPhotoSelected");
+        themeDescriptionArr[171] = new ThemeDescription(recyclerListView, i, clsArr, null, r14, null, "chat_mediaLoaderPhotoSelected");
         recyclerListView = this.chatListView;
         clsArr = new Class[]{ChatMessageCell.class};
         r7 = new Drawable[4];
@@ -3251,7 +3256,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r7[1] = drawableArr3[1][1];
         r7[2] = drawableArr3[2][1];
         r7[3] = drawableArr3[3][1];
-        themeDescriptionArr[171] = new ThemeDescription(recyclerListView, 0, clsArr, null, r7, null, "chat_mediaLoaderPhotoIconSelected");
+        themeDescriptionArr[172] = new ThemeDescription(recyclerListView, 0, clsArr, null, r7, null, "chat_mediaLoaderPhotoIconSelected");
         RecyclerListView recyclerListView2 = this.chatListView;
         int i2 = ThemeDescription.FLAG_BACKGROUNDFILTER;
         Class[] clsArr2 = new Class[]{ChatMessageCell.class};
@@ -3259,14 +3264,14 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         Drawable[][] drawableArr4 = Theme.chat_photoStatesDrawables;
         r7[0] = drawableArr4[7][0];
         r7[1] = drawableArr4[8][0];
-        themeDescriptionArr[172] = new ThemeDescription(recyclerListView2, i2, clsArr2, null, r7, null, "chat_outLoaderPhoto");
+        themeDescriptionArr[173] = new ThemeDescription(recyclerListView2, i2, clsArr2, null, r7, null, "chat_outLoaderPhoto");
         recyclerListView2 = this.chatListView;
         clsArr2 = new Class[]{ChatMessageCell.class};
         r7 = new Drawable[2];
         drawableArr4 = Theme.chat_photoStatesDrawables;
         r7[0] = drawableArr4[7][0];
         r7[1] = drawableArr4[8][0];
-        themeDescriptionArr[173] = new ThemeDescription(recyclerListView2, 0, clsArr2, null, r7, null, "chat_outLoaderPhotoIcon");
+        themeDescriptionArr[174] = new ThemeDescription(recyclerListView2, 0, clsArr2, null, r7, null, "chat_outLoaderPhotoIcon");
         recyclerListView2 = this.chatListView;
         i2 = ThemeDescription.FLAG_BACKGROUNDFILTER;
         clsArr2 = new Class[]{ChatMessageCell.class};
@@ -3274,14 +3279,14 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         drawableArr4 = Theme.chat_photoStatesDrawables;
         r7[0] = drawableArr4[7][1];
         r7[1] = drawableArr4[8][1];
-        themeDescriptionArr[174] = new ThemeDescription(recyclerListView2, i2, clsArr2, null, r7, null, "chat_outLoaderPhotoSelected");
+        themeDescriptionArr[175] = new ThemeDescription(recyclerListView2, i2, clsArr2, null, r7, null, "chat_outLoaderPhotoSelected");
         recyclerListView2 = this.chatListView;
         clsArr2 = new Class[]{ChatMessageCell.class};
         r7 = new Drawable[2];
         drawableArr4 = Theme.chat_photoStatesDrawables;
         r7[0] = drawableArr4[7][1];
         r7[1] = drawableArr4[8][1];
-        themeDescriptionArr[175] = new ThemeDescription(recyclerListView2, 0, clsArr2, null, r7, null, "chat_outLoaderPhotoIconSelected");
+        themeDescriptionArr[176] = new ThemeDescription(recyclerListView2, 0, clsArr2, null, r7, null, "chat_outLoaderPhotoIconSelected");
         recyclerListView2 = this.chatListView;
         i2 = ThemeDescription.FLAG_BACKGROUNDFILTER;
         clsArr2 = new Class[]{ChatMessageCell.class};
@@ -3289,14 +3294,14 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         Drawable[][] drawableArr5 = Theme.chat_photoStatesDrawables;
         r7[0] = drawableArr5[10][0];
         r7[1] = drawableArr5[11][0];
-        themeDescriptionArr[176] = new ThemeDescription(recyclerListView2, i2, clsArr2, null, r7, null, "chat_inLoaderPhoto");
+        themeDescriptionArr[177] = new ThemeDescription(recyclerListView2, i2, clsArr2, null, r7, null, "chat_inLoaderPhoto");
         recyclerListView2 = this.chatListView;
         clsArr2 = new Class[]{ChatMessageCell.class};
         r7 = new Drawable[2];
         drawableArr5 = Theme.chat_photoStatesDrawables;
         r7[0] = drawableArr5[10][0];
         r7[1] = drawableArr5[11][0];
-        themeDescriptionArr[177] = new ThemeDescription(recyclerListView2, 0, clsArr2, null, r7, null, "chat_inLoaderPhotoIcon");
+        themeDescriptionArr[178] = new ThemeDescription(recyclerListView2, 0, clsArr2, null, r7, null, "chat_inLoaderPhotoIcon");
         recyclerListView2 = this.chatListView;
         i2 = ThemeDescription.FLAG_BACKGROUNDFILTER;
         clsArr2 = new Class[]{ChatMessageCell.class};
@@ -3304,51 +3309,51 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         drawableArr5 = Theme.chat_photoStatesDrawables;
         r7[0] = drawableArr5[10][1];
         r7[1] = drawableArr5[11][1];
-        themeDescriptionArr[178] = new ThemeDescription(recyclerListView2, i2, clsArr2, null, r7, null, "chat_inLoaderPhotoSelected");
+        themeDescriptionArr[179] = new ThemeDescription(recyclerListView2, i2, clsArr2, null, r7, null, "chat_inLoaderPhotoSelected");
         recyclerListView2 = this.chatListView;
         clsArr2 = new Class[]{ChatMessageCell.class};
         r5 = new Drawable[2];
         Drawable[][] drawableArr6 = Theme.chat_photoStatesDrawables;
         r5[0] = drawableArr6[10][1];
         r5[1] = drawableArr6[11][1];
-        themeDescriptionArr[179] = new ThemeDescription(recyclerListView2, 0, clsArr2, null, r5, null, "chat_inLoaderPhotoIconSelected");
-        themeDescriptionArr[180] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[9][0]}, null, "chat_outFileIcon");
-        themeDescriptionArr[181] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[9][1]}, null, "chat_outFileSelectedIcon");
+        themeDescriptionArr[180] = new ThemeDescription(recyclerListView2, 0, clsArr2, null, r5, null, "chat_inLoaderPhotoIconSelected");
+        themeDescriptionArr[181] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[9][0]}, null, "chat_outFileIcon");
+        themeDescriptionArr[182] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[9][1]}, null, "chat_outFileSelectedIcon");
         ThemeDescriptionDelegate themeDescriptionDelegate = null;
-        themeDescriptionArr[182] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[12][0]}, null, "chat_inFileIcon");
-        themeDescriptionArr[183] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[12][1]}, null, "chat_inFileSelectedIcon");
-        themeDescriptionArr[184] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_contactDrawable[0]}, null, "chat_inContactBackground");
-        themeDescriptionArr[185] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_contactDrawable[0]}, null, "chat_inContactIcon");
-        themeDescriptionArr[186] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_contactDrawable[1]}, null, "chat_outContactBackground");
-        themeDescriptionArr[187] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_contactDrawable[1]}, null, "chat_outContactIcon");
-        themeDescriptionArr[188] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_locationDrawable[0]}, null, "chat_inLocationBackground");
-        themeDescriptionArr[189] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_locationDrawable[0]}, null, "chat_inLocationIcon");
-        themeDescriptionArr[190] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_locationDrawable[1]}, null, "chat_outLocationBackground");
-        themeDescriptionArr[191] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_locationDrawable[1]}, null, "chat_outLocationIcon");
-        themeDescriptionArr[192] = new ThemeDescription(this.bottomOverlayChat, 0, null, Theme.chat_composeBackgroundPaint, null, null, "chat_messagePanelBackground");
-        themeDescriptionArr[193] = new ThemeDescription(this.bottomOverlayChat, 0, null, null, new Drawable[]{Theme.chat_composeShadowDrawable}, null, "chat_messagePanelShadow");
-        themeDescriptionArr[194] = new ThemeDescription(this.bottomOverlayChatText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_fieldOverlayText");
-        themeDescriptionArr[195] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_serviceText");
-        themeDescriptionArr[196] = new ThemeDescription(this.progressBar, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, "chat_serviceText");
-        themeDescriptionArr[197] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, new Class[]{ChatUnreadCell.class}, new String[]{"backgroundLayout"}, null, null, null, "chat_unreadMessagesStartBackground");
-        themeDescriptionArr[198] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{ChatUnreadCell.class}, new String[]{"imageView"}, null, null, null, "chat_unreadMessagesStartArrowIcon");
+        themeDescriptionArr[183] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[12][0]}, null, "chat_inFileIcon");
+        themeDescriptionArr[184] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_photoStatesDrawables[12][1]}, null, "chat_inFileSelectedIcon");
+        themeDescriptionArr[185] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_contactDrawable[0]}, null, "chat_inContactBackground");
+        themeDescriptionArr[186] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_contactDrawable[0]}, null, "chat_inContactIcon");
+        themeDescriptionArr[187] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_contactDrawable[1]}, null, "chat_outContactBackground");
+        themeDescriptionArr[188] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_contactDrawable[1]}, null, "chat_outContactIcon");
+        themeDescriptionArr[189] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_locationDrawable[0]}, null, "chat_inLocationBackground");
+        themeDescriptionArr[190] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_locationDrawable[0]}, null, "chat_inLocationIcon");
+        themeDescriptionArr[191] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_locationDrawable[1]}, null, "chat_outLocationBackground");
+        themeDescriptionArr[192] = new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_locationDrawable[1]}, null, "chat_outLocationIcon");
+        themeDescriptionArr[193] = new ThemeDescription(this.bottomOverlayChat, 0, null, Theme.chat_composeBackgroundPaint, null, null, "chat_messagePanelBackground");
+        themeDescriptionArr[194] = new ThemeDescription(this.bottomOverlayChat, 0, null, null, new Drawable[]{Theme.chat_composeShadowDrawable}, null, "chat_messagePanelShadow");
+        themeDescriptionArr[195] = new ThemeDescription(this.bottomOverlayChatText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_fieldOverlayText");
+        themeDescriptionArr[196] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "chat_serviceText");
+        themeDescriptionArr[197] = new ThemeDescription(this.progressBar, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, "chat_serviceText");
+        themeDescriptionArr[198] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, new Class[]{ChatUnreadCell.class}, new String[]{"backgroundLayout"}, null, null, null, "chat_unreadMessagesStartBackground");
+        themeDescriptionArr[199] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{ChatUnreadCell.class}, new String[]{"imageView"}, null, null, null, "chat_unreadMessagesStartArrowIcon");
         View view = this.chatListView;
         int i3 = ThemeDescription.FLAG_TEXTCOLOR;
         Class[] clsArr3 = new Class[]{ChatUnreadCell.class};
         String[] strArr = new String[1];
         strArr[0] = "textView";
-        themeDescriptionArr[199] = new ThemeDescription(view, i3, clsArr3, strArr, null, null, null, "chat_unreadMessagesStartText");
-        themeDescriptionArr[200] = new ThemeDescription(this.progressView2, ThemeDescription.FLAG_SERVICEBACKGROUND, null, null, null, null, "chat_serviceBackground");
-        themeDescriptionArr[201] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_SERVICEBACKGROUND, null, null, null, null, "chat_serviceBackground");
-        themeDescriptionArr[202] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_SERVICEBACKGROUND, new Class[]{ChatLoadingCell.class}, new String[]{"textView"}, null, null, null, "chat_serviceBackground");
-        themeDescriptionArr[203] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_PROGRESSBAR, new Class[]{ChatLoadingCell.class}, new String[]{"textView"}, null, null, null, "chat_serviceText");
+        themeDescriptionArr[200] = new ThemeDescription(view, i3, clsArr3, strArr, null, null, null, "chat_unreadMessagesStartText");
+        themeDescriptionArr[201] = new ThemeDescription(this.progressView2, ThemeDescription.FLAG_SERVICEBACKGROUND, null, null, null, null, "chat_serviceBackground");
+        themeDescriptionArr[202] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_SERVICEBACKGROUND, null, null, null, null, "chat_serviceBackground");
+        themeDescriptionArr[203] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_SERVICEBACKGROUND, new Class[]{ChatLoadingCell.class}, new String[]{"textView"}, null, null, null, "chat_serviceBackground");
+        themeDescriptionArr[204] = new ThemeDescription(this.chatListView, ThemeDescription.FLAG_PROGRESSBAR, new Class[]{ChatLoadingCell.class}, new String[]{"textView"}, null, null, null, "chat_serviceText");
         ChatAvatarContainer chatAvatarContainer = this.avatarContainer;
-        themeDescriptionArr[204] = new ThemeDescription(chatAvatarContainer != null ? chatAvatarContainer.getTimeItem() : null, 0, null, null, null, null, "chat_secretTimerBackground");
+        themeDescriptionArr[205] = new ThemeDescription(chatAvatarContainer != null ? chatAvatarContainer.getTimeItem() : null, 0, null, null, null, null, "chat_secretTimerBackground");
         chatAvatarContainer = this.avatarContainer;
         if (chatAvatarContainer != null) {
             themeDescriptionDelegate = chatAvatarContainer.getTimeItem();
         }
-        themeDescriptionArr[205] = new ThemeDescription(themeDescriptionDelegate, 0, null, null, null, null, "chat_secretTimerText");
+        themeDescriptionArr[206] = new ThemeDescription(themeDescriptionDelegate, 0, null, null, null, null, "chat_secretTimerText");
         return themeDescriptionArr;
     }
 }

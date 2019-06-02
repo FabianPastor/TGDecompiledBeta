@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.ParsePosition;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -261,101 +262,6 @@ public class FastDateParser implements DateParser, Serializable {
         }
     }
 
-    /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:20:0x00c9 in {9, 11, 13, 16, 17, 19} preds:[]
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-        */
-    private void init(java.util.Calendar r7) {
-        /*
-        r6 = this;
-        r0 = new java.lang.StringBuilder;
-        r0.<init>();
-        r1 = new java.util.ArrayList;
-        r1.<init>();
-        r2 = formatPattern;
-        r3 = r6.pattern;
-        r2 = r2.matcher(r3);
-        r3 = r2.lookingAt();
-        if (r3 == 0) goto L_0x00a3;
-        r3 = r2.group();
-        r6.currentFormatField = r3;
-        r3 = r6.currentFormatField;
-        r3 = r6.getStrategy(r3, r7);
-        r4 = r2.end();
-        r5 = r2.regionEnd();
-        r2.region(r4, r5);
-        r4 = r2.lookingAt();
-        if (r4 != 0) goto L_0x008b;
-        r7 = 0;
-        r6.nextStrategy = r7;
-        r4 = r2.regionStart();
-        r5 = r2.regionEnd();
-        if (r4 != r5) goto L_0x0066;
-        r2 = r3.addRegex(r6, r0);
-        if (r2 == 0) goto L_0x004b;
-        r1.add(r3);
-        r6.currentFormatField = r7;
-        r7 = r1.size();
-        r7 = new org.telegram.messenger.time.FastDateParser.Strategy[r7];
-        r7 = r1.toArray(r7);
-        r7 = (org.telegram.messenger.time.FastDateParser.Strategy[]) r7;
-        r6.strategies = r7;
-        r7 = r0.toString();
-        r7 = java.util.regex.Pattern.compile(r7);
-        r6.parsePattern = r7;
-        return;
-        r7 = new java.lang.IllegalArgumentException;
-        r0 = new java.lang.StringBuilder;
-        r0.<init>();
-        r1 = "Failed to parse \"";
-        r0.append(r1);
-        r1 = r6.pattern;
-        r0.append(r1);
-        r1 = "\" ; gave up at index ";
-        r0.append(r1);
-        r1 = r2.regionStart();
-        r0.append(r1);
-        r0 = r0.toString();
-        r7.<init>(r0);
-        throw r7;
-        r4 = r2.group();
-        r5 = r6.getStrategy(r4, r7);
-        r6.nextStrategy = r5;
-        r5 = r3.addRegex(r6, r0);
-        if (r5 == 0) goto L_0x009e;
-        r1.add(r3);
-        r6.currentFormatField = r4;
-        r3 = r6.nextStrategy;
-        goto L_0x0024;
-        r7 = new java.lang.IllegalArgumentException;
-        r0 = new java.lang.StringBuilder;
-        r0.<init>();
-        r1 = "Illegal pattern character '";
-        r0.append(r1);
-        r1 = r6.pattern;
-        r2 = r2.regionStart();
-        r1 = r1.charAt(r2);
-        r0.append(r1);
-        r1 = "'";
-        r0.append(r1);
-        r0 = r0.toString();
-        r7.<init>(r0);
-        throw r7;
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.time.FastDateParser.init(java.util.Calendar):void");
-    }
-
     static {
         String str = "JP";
         JAPANESE_IMPERIAL = new Locale("ja", str, str);
@@ -383,6 +289,50 @@ public class FastDateParser implements DateParser, Serializable {
         this.century = (i / 100) * 100;
         this.startYear = i - this.century;
         init(instance);
+    }
+
+    private void init(Calendar calendar) {
+        StringBuilder stringBuilder = new StringBuilder();
+        ArrayList arrayList = new ArrayList();
+        Matcher matcher = formatPattern.matcher(this.pattern);
+        if (matcher.lookingAt()) {
+            this.currentFormatField = matcher.group();
+            Strategy strategy = getStrategy(this.currentFormatField, calendar);
+            while (true) {
+                matcher.region(matcher.end(), matcher.regionEnd());
+                if (!matcher.lookingAt()) {
+                    break;
+                }
+                String group = matcher.group();
+                this.nextStrategy = getStrategy(group, calendar);
+                if (strategy.addRegex(this, stringBuilder)) {
+                    arrayList.add(strategy);
+                }
+                this.currentFormatField = group;
+                strategy = this.nextStrategy;
+            }
+            this.nextStrategy = null;
+            if (matcher.regionStart() == matcher.regionEnd()) {
+                if (strategy.addRegex(this, stringBuilder)) {
+                    arrayList.add(strategy);
+                }
+                this.currentFormatField = null;
+                this.strategies = (Strategy[]) arrayList.toArray(new Strategy[arrayList.size()]);
+                this.parsePattern = Pattern.compile(stringBuilder.toString());
+                return;
+            }
+            stringBuilder = new StringBuilder();
+            stringBuilder.append("Failed to parse \"");
+            stringBuilder.append(this.pattern);
+            stringBuilder.append("\" ; gave up at index ");
+            stringBuilder.append(matcher.regionStart());
+            throw new IllegalArgumentException(stringBuilder.toString());
+        }
+        stringBuilder = new StringBuilder();
+        stringBuilder.append("Illegal pattern character '");
+        stringBuilder.append(this.pattern.charAt(matcher.regionStart()));
+        stringBuilder.append("'");
+        throw new IllegalArgumentException(stringBuilder.toString());
     }
 
     public String getPattern() {

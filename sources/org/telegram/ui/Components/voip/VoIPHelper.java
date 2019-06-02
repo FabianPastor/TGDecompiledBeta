@@ -251,7 +251,7 @@ public class VoIPHelper {
         String[] strArr = new String[]{"echo", "noise", "interruptions", "distorted_speech", "silent_local", "silent_remote", "dropped"};
         int i3 = 0;
         while (i3 < strArr.length) {
-            String string;
+            CharSequence string;
             checkBoxCell = new CheckBoxCell(context2, i2);
             checkBoxCell.setClipToPadding(false);
             checkBoxCell.setTag(strArr[i3]);

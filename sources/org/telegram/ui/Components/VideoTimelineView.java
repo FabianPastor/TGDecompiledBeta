@@ -49,63 +49,6 @@ public class VideoTimelineView extends View {
         void onRightProgressChanged(float f);
     }
 
-    /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:28:0x0042 in {7, 12, 19, 20, 23, 24, 27} preds:[]
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-        */
-    public void destroy() {
-        /*
-        r3 = this;
-        r0 = sync;
-        monitor-enter(r0);
-        r1 = 0;
-        r2 = r3.mediaMetadataRetriever;	 Catch:{ Exception -> 0x0012 }
-        if (r2 == 0) goto L_0x0016;	 Catch:{ Exception -> 0x0012 }
-        r2 = r3.mediaMetadataRetriever;	 Catch:{ Exception -> 0x0012 }
-        r2.release();	 Catch:{ Exception -> 0x0012 }
-        r3.mediaMetadataRetriever = r1;	 Catch:{ Exception -> 0x0012 }
-        goto L_0x0016;
-        r1 = move-exception;
-        goto L_0x0040;
-        r2 = move-exception;
-        org.telegram.messenger.FileLog.e(r2);	 Catch:{ all -> 0x0010 }
-        monitor-exit(r0);	 Catch:{ all -> 0x0010 }
-        r0 = 0;
-        r2 = r3.frames;
-        r2 = r2.size();
-        if (r0 >= r2) goto L_0x0030;
-        r2 = r3.frames;
-        r2 = r2.get(r0);
-        r2 = (android.graphics.Bitmap) r2;
-        if (r2 == 0) goto L_0x002d;
-        r2.recycle();
-        r0 = r0 + 1;
-        goto L_0x0018;
-        r0 = r3.frames;
-        r0.clear();
-        r0 = r3.currentTask;
-        if (r0 == 0) goto L_0x003f;
-        r2 = 1;
-        r0.cancel(r2);
-        r3.currentTask = r1;
-        return;
-        monitor-exit(r0);	 Catch:{ all -> 0x0010 }
-        throw r1;
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.VideoTimelineView.destroy():void");
-    }
-
     public VideoTimelineView(Context context) {
         super(context);
         this.paint.setColor(-1);
@@ -356,6 +299,31 @@ public class VideoTimelineView extends View {
                 }
             };
             this.currentTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Integer[]{Integer.valueOf(i), null, null});
+        }
+    }
+
+    public void destroy() {
+        synchronized (sync) {
+            try {
+                if (this.mediaMetadataRetriever != null) {
+                    this.mediaMetadataRetriever.release();
+                    this.mediaMetadataRetriever = null;
+                }
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        }
+        for (int i = 0; i < this.frames.size(); i++) {
+            Bitmap bitmap = (Bitmap) this.frames.get(i);
+            if (bitmap != null) {
+                bitmap.recycle();
+            }
+        }
+        this.frames.clear();
+        AsyncTask asyncTask = this.currentTask;
+        if (asyncTask != null) {
+            asyncTask.cancel(true);
+            this.currentTask = null;
         }
     }
 

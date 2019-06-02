@@ -35,6 +35,7 @@ import android.opengl.EGLSurface;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
+import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Handler;
 import android.os.Looper;
@@ -84,6 +85,7 @@ import org.telegram.messenger.camera.CameraInfo;
 import org.telegram.messenger.camera.CameraSession;
 import org.telegram.messenger.camera.Size;
 import org.telegram.messenger.video.MP4Builder;
+import org.telegram.messenger.video.Mp4Movie;
 import org.telegram.tgnet.TLRPC.InputEncryptedFile;
 import org.telegram.tgnet.TLRPC.InputFile;
 import org.telegram.ui.ActionBar.Theme;
@@ -279,419 +281,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         private int videoWidth;
         private int zeroTimeStamps;
 
-        /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-            jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:61:0x02c2 in {4, 7, 11, 14, 26, 28, 37, 39, 45, 46, 47, 49, 51, 53, 55, 57, 60} preds:[]
-            	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-            	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-            	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-            	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-            	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-            	at java.util.ArrayList.forEach(ArrayList.java:1257)
-            	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-            	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$0(DepthTraversal.java:13)
-            	at java.util.ArrayList.forEach(ArrayList.java:1257)
-            	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:13)
-            	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-            	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-            	at java.lang.Iterable.forEach(Iterable.java:75)
-            	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-            	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-            	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-            	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-            	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-            */
-        private void prepareEncoder() {
-            /*
-            r25 = this;
-            r1 = r25;
-            r0 = "video/avc";
-            r2 = "bitrate";
-            r3 = "audio/mp4a-latm";
-            r4 = 16;
-            r5 = 44100; // 0xaCLASSNAME float:6.1797E-41 double:2.17883E-319;
-            r6 = 2;
-            r4 = android.media.AudioRecord.getMinBufferSize(r5, r4, r6);	 Catch:{ Exception -> 0x02bb }
-            if (r4 > 0) goto L_0x0016;	 Catch:{ Exception -> 0x02bb }
-            r4 = 3584; // 0xe00 float:5.022E-42 double:1.7707E-320;	 Catch:{ Exception -> 0x02bb }
-            r7 = 49152; // 0xCLASSNAME float:6.8877E-41 double:2.42843E-319;	 Catch:{ Exception -> 0x02bb }
-            r8 = 1;	 Catch:{ Exception -> 0x02bb }
-            if (r7 >= r4) goto L_0x0023;	 Catch:{ Exception -> 0x02bb }
-            r4 = r4 / 2048;	 Catch:{ Exception -> 0x02bb }
-            r4 = r4 + r8;	 Catch:{ Exception -> 0x02bb }
-            r4 = r4 * 2048;	 Catch:{ Exception -> 0x02bb }
-            r7 = r4 * 2;	 Catch:{ Exception -> 0x02bb }
-            r9 = 0;	 Catch:{ Exception -> 0x02bb }
-            r15 = 3;	 Catch:{ Exception -> 0x02bb }
-            r14 = 0;	 Catch:{ Exception -> 0x02bb }
-            if (r9 >= r15) goto L_0x0037;	 Catch:{ Exception -> 0x02bb }
-            r10 = r1.buffers;	 Catch:{ Exception -> 0x02bb }
-            r11 = new org.telegram.ui.Components.InstantCameraView$AudioBufferInfo;	 Catch:{ Exception -> 0x02bb }
-            r12 = org.telegram.ui.Components.InstantCameraView.this;	 Catch:{ Exception -> 0x02bb }
-            r11.<init>(r12, r14);	 Catch:{ Exception -> 0x02bb }
-            r10.add(r11);	 Catch:{ Exception -> 0x02bb }
-            r9 = r9 + 1;	 Catch:{ Exception -> 0x02bb }
-            goto L_0x0024;	 Catch:{ Exception -> 0x02bb }
-            r13 = new android.media.AudioRecord;	 Catch:{ Exception -> 0x02bb }
-            r10 = 0;	 Catch:{ Exception -> 0x02bb }
-            r11 = 44100; // 0xaCLASSNAME float:6.1797E-41 double:2.17883E-319;	 Catch:{ Exception -> 0x02bb }
-            r12 = 16;	 Catch:{ Exception -> 0x02bb }
-            r16 = 2;	 Catch:{ Exception -> 0x02bb }
-            r9 = r13;	 Catch:{ Exception -> 0x02bb }
-            r15 = r13;	 Catch:{ Exception -> 0x02bb }
-            r13 = r16;	 Catch:{ Exception -> 0x02bb }
-            r4 = r14;	 Catch:{ Exception -> 0x02bb }
-            r14 = r7;	 Catch:{ Exception -> 0x02bb }
-            r9.<init>(r10, r11, r12, r13, r14);	 Catch:{ Exception -> 0x02bb }
-            r1.audioRecorder = r15;	 Catch:{ Exception -> 0x02bb }
-            r9 = r1.audioRecorder;	 Catch:{ Exception -> 0x02bb }
-            r9.startRecording();	 Catch:{ Exception -> 0x02bb }
-            r9 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Exception -> 0x02bb }
-            if (r9 == 0) goto L_0x0085;	 Catch:{ Exception -> 0x02bb }
-            r9 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x02bb }
-            r9.<init>();	 Catch:{ Exception -> 0x02bb }
-            r10 = "initied audio record with channels ";	 Catch:{ Exception -> 0x02bb }
-            r9.append(r10);	 Catch:{ Exception -> 0x02bb }
-            r10 = r1.audioRecorder;	 Catch:{ Exception -> 0x02bb }
-            r10 = r10.getChannelCount();	 Catch:{ Exception -> 0x02bb }
-            r9.append(r10);	 Catch:{ Exception -> 0x02bb }
-            r10 = " sample rate = ";	 Catch:{ Exception -> 0x02bb }
-            r9.append(r10);	 Catch:{ Exception -> 0x02bb }
-            r10 = r1.audioRecorder;	 Catch:{ Exception -> 0x02bb }
-            r10 = r10.getSampleRate();	 Catch:{ Exception -> 0x02bb }
-            r9.append(r10);	 Catch:{ Exception -> 0x02bb }
-            r10 = " bufferSize = ";	 Catch:{ Exception -> 0x02bb }
-            r9.append(r10);	 Catch:{ Exception -> 0x02bb }
-            r9.append(r7);	 Catch:{ Exception -> 0x02bb }
-            r7 = r9.toString();	 Catch:{ Exception -> 0x02bb }
-            org.telegram.messenger.FileLog.d(r7);	 Catch:{ Exception -> 0x02bb }
-            r7 = new java.lang.Thread;	 Catch:{ Exception -> 0x02bb }
-            r9 = r1.recorderRunnable;	 Catch:{ Exception -> 0x02bb }
-            r7.<init>(r9);	 Catch:{ Exception -> 0x02bb }
-            r9 = 10;	 Catch:{ Exception -> 0x02bb }
-            r7.setPriority(r9);	 Catch:{ Exception -> 0x02bb }
-            r7.start();	 Catch:{ Exception -> 0x02bb }
-            r7 = new android.media.MediaCodec$BufferInfo;	 Catch:{ Exception -> 0x02bb }
-            r7.<init>();	 Catch:{ Exception -> 0x02bb }
-            r1.audioBufferInfo = r7;	 Catch:{ Exception -> 0x02bb }
-            r7 = new android.media.MediaCodec$BufferInfo;	 Catch:{ Exception -> 0x02bb }
-            r7.<init>();	 Catch:{ Exception -> 0x02bb }
-            r1.videoBufferInfo = r7;	 Catch:{ Exception -> 0x02bb }
-            r7 = new android.media.MediaFormat;	 Catch:{ Exception -> 0x02bb }
-            r7.<init>();	 Catch:{ Exception -> 0x02bb }
-            r9 = "mime";	 Catch:{ Exception -> 0x02bb }
-            r7.setString(r9, r3);	 Catch:{ Exception -> 0x02bb }
-            r9 = "aac-profile";	 Catch:{ Exception -> 0x02bb }
-            r7.setInteger(r9, r6);	 Catch:{ Exception -> 0x02bb }
-            r9 = "sample-rate";	 Catch:{ Exception -> 0x02bb }
-            r7.setInteger(r9, r5);	 Catch:{ Exception -> 0x02bb }
-            r5 = "channel-count";	 Catch:{ Exception -> 0x02bb }
-            r7.setInteger(r5, r8);	 Catch:{ Exception -> 0x02bb }
-            r5 = 32000; // 0x7d00 float:4.4842E-41 double:1.581E-319;	 Catch:{ Exception -> 0x02bb }
-            r7.setInteger(r2, r5);	 Catch:{ Exception -> 0x02bb }
-            r5 = "max-input-size";	 Catch:{ Exception -> 0x02bb }
-            r9 = 20480; // 0x5000 float:2.8699E-41 double:1.01185E-319;	 Catch:{ Exception -> 0x02bb }
-            r7.setInteger(r5, r9);	 Catch:{ Exception -> 0x02bb }
-            r3 = android.media.MediaCodec.createEncoderByType(r3);	 Catch:{ Exception -> 0x02bb }
-            r1.audioEncoder = r3;	 Catch:{ Exception -> 0x02bb }
-            r3 = r1.audioEncoder;	 Catch:{ Exception -> 0x02bb }
-            r3.configure(r7, r4, r4, r8);	 Catch:{ Exception -> 0x02bb }
-            r3 = r1.audioEncoder;	 Catch:{ Exception -> 0x02bb }
-            r3.start();	 Catch:{ Exception -> 0x02bb }
-            r3 = android.media.MediaCodec.createEncoderByType(r0);	 Catch:{ Exception -> 0x02bb }
-            r1.videoEncoder = r3;	 Catch:{ Exception -> 0x02bb }
-            r3 = r1.videoWidth;	 Catch:{ Exception -> 0x02bb }
-            r5 = r1.videoHeight;	 Catch:{ Exception -> 0x02bb }
-            r0 = android.media.MediaFormat.createVideoFormat(r0, r3, r5);	 Catch:{ Exception -> 0x02bb }
-            r3 = "color-format";	 Catch:{ Exception -> 0x02bb }
-            r5 = NUM; // 0x7var_ float:1.701803E38 double:1.0527098025E-314;	 Catch:{ Exception -> 0x02bb }
-            r0.setInteger(r3, r5);	 Catch:{ Exception -> 0x02bb }
-            r3 = r1.videoBitrate;	 Catch:{ Exception -> 0x02bb }
-            r0.setInteger(r2, r3);	 Catch:{ Exception -> 0x02bb }
-            r2 = "frame-rate";	 Catch:{ Exception -> 0x02bb }
-            r3 = 30;	 Catch:{ Exception -> 0x02bb }
-            r0.setInteger(r2, r3);	 Catch:{ Exception -> 0x02bb }
-            r2 = "i-frame-interval";	 Catch:{ Exception -> 0x02bb }
-            r0.setInteger(r2, r8);	 Catch:{ Exception -> 0x02bb }
-            r2 = r1.videoEncoder;	 Catch:{ Exception -> 0x02bb }
-            r2.configure(r0, r4, r4, r8);	 Catch:{ Exception -> 0x02bb }
-            r0 = r1.videoEncoder;	 Catch:{ Exception -> 0x02bb }
-            r0 = r0.createInputSurface();	 Catch:{ Exception -> 0x02bb }
-            r1.surface = r0;	 Catch:{ Exception -> 0x02bb }
-            r0 = r1.videoEncoder;	 Catch:{ Exception -> 0x02bb }
-            r0.start();	 Catch:{ Exception -> 0x02bb }
-            r0 = new org.telegram.messenger.video.Mp4Movie;	 Catch:{ Exception -> 0x02bb }
-            r0.<init>();	 Catch:{ Exception -> 0x02bb }
-            r2 = r1.videoFile;	 Catch:{ Exception -> 0x02bb }
-            r0.setCacheFile(r2);	 Catch:{ Exception -> 0x02bb }
-            r2 = 0;	 Catch:{ Exception -> 0x02bb }
-            r0.setRotation(r2);	 Catch:{ Exception -> 0x02bb }
-            r2 = r1.videoWidth;	 Catch:{ Exception -> 0x02bb }
-            r3 = r1.videoHeight;	 Catch:{ Exception -> 0x02bb }
-            r0.setSize(r2, r3);	 Catch:{ Exception -> 0x02bb }
-            r2 = new org.telegram.messenger.video.MP4Builder;	 Catch:{ Exception -> 0x02bb }
-            r2.<init>();	 Catch:{ Exception -> 0x02bb }
-            r3 = org.telegram.ui.Components.InstantCameraView.this;	 Catch:{ Exception -> 0x02bb }
-            r3 = r3.isSecretChat;	 Catch:{ Exception -> 0x02bb }
-            r0 = r2.createMovie(r0, r3);	 Catch:{ Exception -> 0x02bb }
-            r1.mediaMuxer = r0;	 Catch:{ Exception -> 0x02bb }
-            r0 = new org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$8ZN8xq5EwIyFVJLsetA_qjZZbSQ;	 Catch:{ Exception -> 0x02bb }
-            r0.<init>(r1);	 Catch:{ Exception -> 0x02bb }
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0);	 Catch:{ Exception -> 0x02bb }
-            r0 = r1.eglDisplay;
-            r2 = android.opengl.EGL14.EGL_NO_DISPLAY;
-            if (r0 != r2) goto L_0x02b3;
-            r0 = 0;
-            r2 = android.opengl.EGL14.eglGetDisplay(r0);
-            r1.eglDisplay = r2;
-            r2 = r1.eglDisplay;
-            r3 = android.opengl.EGL14.EGL_NO_DISPLAY;
-            if (r2 == r3) goto L_0x02ab;
-            r3 = new int[r6];
-            r2 = android.opengl.EGL14.eglInitialize(r2, r3, r0, r3, r8);
-            if (r2 == 0) goto L_0x02a1;
-            r0 = r1.eglContext;
-            r2 = android.opengl.EGL14.EGL_NO_CONTEXT;
-            if (r0 != r2) goto L_0x01a3;
-            r0 = 13;
-            r0 = new int[r0];
-            r0 = {12324, 8, 12323, 8, 12322, 8, 12321, 8, 12352, 4, 12610, 1, 12344};
-            r2 = new android.opengl.EGLConfig[r8];
-            r3 = new int[r8];
-            r4 = r1.eglDisplay;
-            r19 = 0;
-            r21 = 0;
-            r5 = r2.length;
-            r24 = 0;
-            r17 = r4;
-            r18 = r0;
-            r20 = r2;
-            r22 = r5;
-            r23 = r3;
-            r0 = android.opengl.EGL14.eglChooseConfig(r17, r18, r19, r20, r21, r22, r23, r24);
-            if (r0 == 0) goto L_0x019b;
-            r0 = 3;
-            r0 = new int[r0];
-            r0 = {12440, 2, 12344};
-            r3 = r1.eglDisplay;
-            r4 = 0;
-            r5 = r2[r4];
-            r6 = r1.sharedEglContext;
-            r0 = android.opengl.EGL14.eglCreateContext(r3, r5, r6, r0, r4);
-            r1.eglContext = r0;
-            r0 = r2[r4];
-            r1.eglConfig = r0;
-            goto L_0x01a3;
-            r0 = new java.lang.RuntimeException;
-            r2 = "Unable to find a suitable EGLConfig";
-            r0.<init>(r2);
-            throw r0;
-            r0 = new int[r8];
-            r2 = r1.eglDisplay;
-            r3 = r1.eglContext;
-            r4 = 12440; // 0x3098 float:1.7432E-41 double:6.146E-320;
-            r5 = 0;
-            android.opengl.EGL14.eglQueryContext(r2, r3, r4, r0, r5);
-            r0 = r1.eglSurface;
-            r2 = android.opengl.EGL14.EGL_NO_SURFACE;
-            if (r0 != r2) goto L_0x0299;
-            r0 = new int[r8];
-            r2 = 12344; // 0x3038 float:1.7298E-41 double:6.0987E-320;
-            r0[r5] = r2;
-            r2 = r1.eglDisplay;
-            r3 = r1.eglConfig;
-            r4 = r1.surface;
-            r0 = android.opengl.EGL14.eglCreateWindowSurface(r2, r3, r4, r0, r5);
-            r1.eglSurface = r0;
-            r0 = r1.eglSurface;
-            if (r0 == 0) goto L_0x0291;
-            r2 = r1.eglDisplay;
-            r3 = r1.eglContext;
-            r0 = android.opengl.EGL14.eglMakeCurrent(r2, r0, r0, r3);
-            if (r0 != 0) goto L_0x01fd;
-            r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-            if (r0 == 0) goto L_0x01f5;
-            r0 = new java.lang.StringBuilder;
-            r0.<init>();
-            r2 = "eglMakeCurrent failed ";
-            r0.append(r2);
-            r2 = android.opengl.EGL14.eglGetError();
-            r2 = android.opengl.GLUtils.getEGLErrorString(r2);
-            r0.append(r2);
-            r0 = r0.toString();
-            org.telegram.messenger.FileLog.e(r0);
-            r0 = new java.lang.RuntimeException;
-            r2 = "eglMakeCurrent failed";
-            r0.<init>(r2);
-            throw r0;
-            r0 = 770; // 0x302 float:1.079E-42 double:3.804E-321;
-            r2 = 771; // 0x303 float:1.08E-42 double:3.81E-321;
-            android.opengl.GLES20.glBlendFunc(r0, r2);
-            r0 = org.telegram.ui.Components.InstantCameraView.this;
-            r2 = 35633; // 0x8b31 float:4.9932E-41 double:1.7605E-319;
-            r3 = "uniform mat4 uMVPMatrix;\nuniform mat4 uSTMatrix;\nattribute vec4 aPosition;\nattribute vec4 aTextureCoord;\nvarying vec2 vTextureCoord;\nvoid main() {\n   gl_Position = uMVPMatrix * aPosition;\n   vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n}\n";
-            r0 = r0.loadShader(r2, r3);
-            r2 = org.telegram.ui.Components.InstantCameraView.this;
-            r3 = 35632; // 0x8b30 float:4.9931E-41 double:1.76045E-319;
-            r4 = "#extension GL_OES_EGL_image_external : require\nprecision highp float;\nvarying vec2 vTextureCoord;\nuniform float scaleX;\nuniform float scaleY;\nuniform float alpha;\nuniform samplerExternalOES sTexture;\nvoid main() {\n   vec2 coord = vec2((vTextureCoord.x - 0.5) * scaleX, (vTextureCoord.y - 0.5) * scaleY);\n   float coef = ceil(clamp(0.2601 - dot(coord, coord), 0.0, 1.0));\n   vec3 color = texture2D(sTexture, vTextureCoord).rgb * coef + (1.0 - step(0.001, coef));\n   gl_FragColor = vec4(color * alpha, alpha);\n}\n";
-            r2 = r2.loadShader(r3, r4);
-            if (r0 == 0) goto L_0x0290;
-            if (r2 == 0) goto L_0x0290;
-            r3 = android.opengl.GLES20.glCreateProgram();
-            r1.drawProgram = r3;
-            r3 = r1.drawProgram;
-            android.opengl.GLES20.glAttachShader(r3, r0);
-            r0 = r1.drawProgram;
-            android.opengl.GLES20.glAttachShader(r0, r2);
-            r0 = r1.drawProgram;
-            android.opengl.GLES20.glLinkProgram(r0);
-            r0 = new int[r8];
-            r2 = r1.drawProgram;
-            r3 = 35714; // 0x8b82 float:5.0046E-41 double:1.7645E-319;
-            r4 = 0;
-            android.opengl.GLES20.glGetProgramiv(r2, r3, r0, r4);
-            r0 = r0[r4];
-            if (r0 != 0) goto L_0x024a;
-            r0 = r1.drawProgram;
-            android.opengl.GLES20.glDeleteProgram(r0);
-            r1.drawProgram = r4;
-            goto L_0x0290;
-            r0 = r1.drawProgram;
-            r2 = "aPosition";
-            r0 = android.opengl.GLES20.glGetAttribLocation(r0, r2);
-            r1.positionHandle = r0;
-            r0 = r1.drawProgram;
-            r2 = "aTextureCoord";
-            r0 = android.opengl.GLES20.glGetAttribLocation(r0, r2);
-            r1.textureHandle = r0;
-            r0 = r1.drawProgram;
-            r2 = "scaleX";
-            r0 = android.opengl.GLES20.glGetUniformLocation(r0, r2);
-            r1.scaleXHandle = r0;
-            r0 = r1.drawProgram;
-            r2 = "scaleY";
-            r0 = android.opengl.GLES20.glGetUniformLocation(r0, r2);
-            r1.scaleYHandle = r0;
-            r0 = r1.drawProgram;
-            r2 = "alpha";
-            r0 = android.opengl.GLES20.glGetUniformLocation(r0, r2);
-            r1.alphaHandle = r0;
-            r0 = r1.drawProgram;
-            r2 = "uMVPMatrix";
-            r0 = android.opengl.GLES20.glGetUniformLocation(r0, r2);
-            r1.vertexMatrixHandle = r0;
-            r0 = r1.drawProgram;
-            r2 = "uSTMatrix";
-            r0 = android.opengl.GLES20.glGetUniformLocation(r0, r2);
-            r1.textureMatrixHandle = r0;
-            return;
-            r0 = new java.lang.RuntimeException;
-            r2 = "surface was null";
-            r0.<init>(r2);
-            throw r0;
-            r0 = new java.lang.IllegalStateException;
-            r2 = "surface already created";
-            r0.<init>(r2);
-            throw r0;
-            r1.eglDisplay = r4;
-            r0 = new java.lang.RuntimeException;
-            r2 = "unable to initialize EGL14";
-            r0.<init>(r2);
-            throw r0;
-            r0 = new java.lang.RuntimeException;
-            r2 = "unable to get EGL14 display";
-            r0.<init>(r2);
-            throw r0;
-            r0 = new java.lang.RuntimeException;
-            r2 = "EGL already set up";
-            r0.<init>(r2);
-            throw r0;
-            r0 = move-exception;
-            r2 = new java.lang.RuntimeException;
-            r2.<init>(r0);
-            throw r2;
-            return;
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.InstantCameraView$VideoRecorder.prepareEncoder():void");
-        }
-
-        /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-            jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:32:0x0064 in {2, 7, 8, 9, 16, 19, 23, 27, 31} preds:[]
-            	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-            	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-            	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-            	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-            	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-            	at java.util.ArrayList.forEach(ArrayList.java:1257)
-            	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-            	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$0(DepthTraversal.java:13)
-            	at java.util.ArrayList.forEach(ArrayList.java:1257)
-            	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:13)
-            	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-            	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-            	at java.lang.Iterable.forEach(Iterable.java:75)
-            	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-            	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-            	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-            	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-            	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-            */
-        public void startRecording(java.io.File r3, android.opengl.EGLContext r4) {
-            /*
-            r2 = this;
-            r0 = android.os.Build.DEVICE;
-            if (r0 != 0) goto L_0x0006;
-            r0 = "";
-            r1 = "zeroflte";
-            r1 = r0.startsWith(r1);
-            if (r1 != 0) goto L_0x001f;
-            r1 = "zenlte";
-            r0 = r0.startsWith(r1);
-            if (r0 == 0) goto L_0x0019;
-            goto L_0x001f;
-            r0 = 240; // 0xf0 float:3.36E-43 double:1.186E-321;
-            r1 = 400000; // 0x61a80 float:5.6052E-40 double:1.976263E-318;
-            goto L_0x0024;
-            r0 = 320; // 0x140 float:4.48E-43 double:1.58E-321;
-            r1 = 600000; // 0x927c0 float:8.40779E-40 double:2.964394E-318;
-            r2.videoFile = r3;
-            r2.videoWidth = r0;
-            r2.videoHeight = r0;
-            r2.videoBitrate = r1;
-            r2.sharedEglContext = r4;
-            r3 = r2.sync;
-            monitor-enter(r3);
-            r4 = r2.running;	 Catch:{ all -> 0x0061 }
-            if (r4 == 0) goto L_0x0037;	 Catch:{ all -> 0x0061 }
-            monitor-exit(r3);	 Catch:{ all -> 0x0061 }
-            return;	 Catch:{ all -> 0x0061 }
-            r4 = 1;	 Catch:{ all -> 0x0061 }
-            r2.running = r4;	 Catch:{ all -> 0x0061 }
-            r4 = new java.lang.Thread;	 Catch:{ all -> 0x0061 }
-            r0 = "TextureMovieEncoder";	 Catch:{ all -> 0x0061 }
-            r4.<init>(r2, r0);	 Catch:{ all -> 0x0061 }
-            r0 = 10;	 Catch:{ all -> 0x0061 }
-            r4.setPriority(r0);	 Catch:{ all -> 0x0061 }
-            r4.start();	 Catch:{ all -> 0x0061 }
-            r4 = r2.ready;	 Catch:{ all -> 0x0061 }
-            if (r4 != 0) goto L_0x0053;
-            r4 = r2.sync;	 Catch:{ InterruptedException -> 0x0049 }
-            r4.wait();	 Catch:{ InterruptedException -> 0x0049 }
-            goto L_0x0049;
-            monitor-exit(r3);	 Catch:{ all -> 0x0061 }
-            r3 = r2.handler;
-            r4 = r2.handler;
-            r0 = 0;
-            r4 = r4.obtainMessage(r0);
-            r3.sendMessage(r4);
-            return;
-            r4 = move-exception;
-            monitor-exit(r3);	 Catch:{ all -> 0x0061 }
-            throw r4;
-            return;
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.InstantCameraView$VideoRecorder.startRecording(java.io.File, android.opengl.EGLContext):void");
-        }
-
         private VideoRecorder() {
             this.videoConvertFirstWrite = true;
             this.eglDisplay = EGL14.EGL_NO_DISPLAY;
@@ -873,6 +462,43 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             this();
         }
 
+        public void startRecording(File file, EGLContext eGLContext) {
+            int i;
+            int i2;
+            String str = Build.DEVICE;
+            if (str == null) {
+                str = "";
+            }
+            if (str.startsWith("zeroflte") || str.startsWith("zenlte")) {
+                i = 320;
+                i2 = 600000;
+            } else {
+                i = 240;
+                i2 = 400000;
+            }
+            this.videoFile = file;
+            this.videoWidth = i;
+            this.videoHeight = i;
+            this.videoBitrate = i2;
+            this.sharedEglContext = eGLContext;
+            synchronized (this.sync) {
+                if (this.running) {
+                    return;
+                }
+                this.running = true;
+                Thread thread = new Thread(this, "TextureMovieEncoder");
+                thread.setPriority(10);
+                thread.start();
+                while (!this.ready) {
+                    try {
+                        this.sync.wait();
+                    } catch (InterruptedException unused) {
+                    }
+                }
+                this.handler.sendMessage(this.handler.obtainMessage(0));
+            }
+        }
+
         public void stopRecording(int i) {
             this.handler.sendMessage(this.handler.obtainMessage(1, i, 0));
         }
@@ -976,8 +602,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             }
         }
 
-        /* JADX WARNING: Removed duplicated region for block: B:100:0x00fb A:{SYNTHETIC, EDGE_INSN: B:100:0x00fb->B:39:0x00fb ?: BREAK  } */
-        /* JADX WARNING: Removed duplicated region for block: B:32:0x00c8  */
+        /* JADX WARNING: Removed duplicated region for block: B:100:0x00fc A:{SYNTHETIC, EDGE_INSN: B:100:0x00fc->B:39:0x00fc ?: BREAK  } */
+        /* JADX WARNING: Removed duplicated region for block: B:32:0x00c9  */
         private void handleAudioFrameAvailable(org.telegram.ui.Components.InstantCameraView.AudioBufferInfo r17) {
             /*
             r16 = this;
@@ -995,27 +621,27 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             r7 = 0;
             r8 = 1;
             r0 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1));
-            if (r0 != 0) goto L_0x00fb;
+            if (r0 != 0) goto L_0x00fc;
         L_0x0018:
             r3 = r1.videoFirst;
             r0 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1));
-            if (r0 != 0) goto L_0x0028;
+            if (r0 != 0) goto L_0x0029;
         L_0x001e:
             r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-            if (r0 == 0) goto L_0x0027;
+            if (r0 == 0) goto L_0x0028;
         L_0x0022:
             r0 = "video record not yet started";
             org.telegram.messenger.FileLog.d(r0);
-        L_0x0027:
-            return;
         L_0x0028:
-            r0 = 0;
+            return;
         L_0x0029:
+            r0 = 0;
+        L_0x002a:
             r3 = r2.results;
-            if (r0 >= r3) goto L_0x00c5;
-        L_0x002d:
-            if (r0 != 0) goto L_0x0069;
-        L_0x002f:
+            if (r0 >= r3) goto L_0x00c6;
+        L_0x002e:
+            if (r0 != 0) goto L_0x006a;
+        L_0x0030:
             r3 = r1.videoFirst;
             r9 = r2.offset;
             r10 = r9[r0];
@@ -1023,8 +649,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             r3 = java.lang.Math.abs(r3);
             r9 = 10000000; // 0x989680 float:1.4012985E-38 double:4.9406565E-317;
             r11 = (r3 > r9 ? 1 : (r3 == r9 ? 0 : -1));
-            if (r11 <= 0) goto L_0x0069;
-        L_0x0041:
+            if (r11 <= 0) goto L_0x006a;
+        L_0x0042:
             r3 = r1.videoFirst;
             r9 = r2.offset;
             r10 = r9[r0];
@@ -1033,8 +659,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             r3 = r9[r0];
             r1.audioFirst = r3;
             r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-            if (r0 == 0) goto L_0x009d;
-        L_0x0052:
+            if (r0 == 0) goto L_0x009e;
+        L_0x0053:
             r0 = new java.lang.StringBuilder;
             r0.<init>();
             r3 = "detected desync between audio and video ";
@@ -1043,21 +669,21 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             r0.append(r3);
             r0 = r0.toString();
             org.telegram.messenger.FileLog.d(r0);
-            goto L_0x009d;
-        L_0x0069:
+            goto L_0x009e;
+        L_0x006a:
             r3 = r2.offset;
             r9 = r3[r0];
             r11 = r1.videoFirst;
             r4 = " timestamp = ";
             r13 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1));
-            if (r13 < 0) goto L_0x009f;
-        L_0x0075:
+            if (r13 < 0) goto L_0x00a0;
+        L_0x0076:
             r2.lastWroteBuffer = r0;
             r9 = r3[r0];
             r1.audioFirst = r9;
             r3 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-            if (r3 == 0) goto L_0x009d;
-        L_0x007f:
+            if (r3 == 0) goto L_0x009e;
+        L_0x0080:
             r3 = new java.lang.StringBuilder;
             r3.<init>();
             r9 = "found first audio frame at ";
@@ -1069,13 +695,13 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             r3.append(r9);
             r0 = r3.toString();
             org.telegram.messenger.FileLog.d(r0);
-        L_0x009d:
+        L_0x009e:
             r0 = 1;
-            goto L_0x00c6;
-        L_0x009f:
+            goto L_0x00c7;
+        L_0x00a0:
             r3 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-            if (r3 == 0) goto L_0x00c1;
-        L_0x00a3:
+            if (r3 == 0) goto L_0x00c2;
+        L_0x00a4:
             r3 = new java.lang.StringBuilder;
             r3.<init>();
             r9 = "ignore first audio frame at ";
@@ -1087,17 +713,17 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             r3.append(r9);
             r3 = r3.toString();
             org.telegram.messenger.FileLog.d(r3);
-        L_0x00c1:
+        L_0x00c2:
             r0 = r0 + 1;
-            goto L_0x0029;
-        L_0x00c5:
-            r0 = 0;
+            goto L_0x002a;
         L_0x00c6:
-            if (r0 != 0) goto L_0x00fb;
-        L_0x00c8:
+            r0 = 0;
+        L_0x00c7:
+            if (r0 != 0) goto L_0x00fc;
+        L_0x00c9:
             r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;
-            if (r0 == 0) goto L_0x00e2;
-        L_0x00cc:
+            if (r0 == 0) goto L_0x00e3;
+        L_0x00cd:
             r0 = new java.lang.StringBuilder;
             r0.<init>();
             r3 = "first audio frame not found, removing buffers ";
@@ -1106,208 +732,208 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             r0.append(r3);
             r0 = r0.toString();
             org.telegram.messenger.FileLog.d(r0);
-        L_0x00e2:
+        L_0x00e3:
             r0 = r1.buffersToWrite;
             r0.remove(r2);
             r0 = r1.buffersToWrite;
             r0 = r0.isEmpty();
-            if (r0 != 0) goto L_0x00fa;
-        L_0x00ef:
+            if (r0 != 0) goto L_0x00fb;
+        L_0x00f0:
             r0 = r1.buffersToWrite;
             r0 = r0.get(r7);
             r2 = r0;
             r2 = (org.telegram.ui.Components.InstantCameraView.AudioBufferInfo) r2;
-            goto L_0x0028;
-        L_0x00fa:
-            return;
+            goto L_0x0029;
         L_0x00fb:
+            return;
+        L_0x00fc:
             r3 = r1.audioStartTime;
             r0 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1));
-            if (r0 != 0) goto L_0x0109;
-        L_0x0101:
+            if (r0 != 0) goto L_0x010a;
+        L_0x0102:
             r0 = r2.offset;
             r3 = r2.lastWroteBuffer;
             r3 = r0[r3];
             r1.audioStartTime = r3;
-        L_0x0109:
+        L_0x010a:
             r0 = r1.buffersToWrite;
             r0 = r0.size();
-            if (r0 <= r8) goto L_0x011a;
-        L_0x0111:
+            if (r0 <= r8) goto L_0x011b;
+        L_0x0112:
             r0 = r1.buffersToWrite;
             r0 = r0.get(r7);
             r2 = r0;
             r2 = (org.telegram.ui.Components.InstantCameraView.AudioBufferInfo) r2;
-        L_0x011a:
-            r1.drainEncoder(r7);	 Catch:{ Exception -> 0x011e }
-            goto L_0x0123;
-        L_0x011e:
+        L_0x011b:
+            r1.drainEncoder(r7);	 Catch:{ Exception -> 0x011f }
+            goto L_0x0124;
+        L_0x011f:
             r0 = move-exception;
             r3 = r0;
             org.telegram.messenger.FileLog.e(r3);
-        L_0x0123:
-            r0 = 0;
         L_0x0124:
-            if (r2 == 0) goto L_0x0215;
-        L_0x0126:
-            r3 = r1.audioEncoder;	 Catch:{ Throwable -> 0x0211 }
+            r0 = 0;
+        L_0x0125:
+            if (r2 == 0) goto L_0x0216;
+        L_0x0127:
+            r3 = r1.audioEncoder;	 Catch:{ Throwable -> 0x0212 }
             r4 = 0;
-            r10 = r3.dequeueInputBuffer(r4);	 Catch:{ Throwable -> 0x0211 }
-            if (r10 < 0) goto L_0x020b;
-        L_0x0130:
-            r3 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Throwable -> 0x0211 }
+            r10 = r3.dequeueInputBuffer(r4);	 Catch:{ Throwable -> 0x0212 }
+            if (r10 < 0) goto L_0x020c;
+        L_0x0131:
+            r3 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Throwable -> 0x0212 }
             r6 = 21;
-            if (r3 < r6) goto L_0x013d;
-        L_0x0136:
-            r3 = r1.audioEncoder;	 Catch:{ Throwable -> 0x0211 }
-            r3 = r3.getInputBuffer(r10);	 Catch:{ Throwable -> 0x0211 }
-            goto L_0x0148;
-        L_0x013d:
-            r3 = r1.audioEncoder;	 Catch:{ Throwable -> 0x0211 }
-            r3 = r3.getInputBuffers();	 Catch:{ Throwable -> 0x0211 }
-            r3 = r3[r10];	 Catch:{ Throwable -> 0x0211 }
-            r3.clear();	 Catch:{ Throwable -> 0x0211 }
-        L_0x0148:
-            r6 = r2.offset;	 Catch:{ Throwable -> 0x0211 }
-            r9 = r2.lastWroteBuffer;	 Catch:{ Throwable -> 0x0211 }
-            r11 = r6[r9];	 Catch:{ Throwable -> 0x0211 }
-            r6 = r2.lastWroteBuffer;	 Catch:{ Throwable -> 0x0211 }
-        L_0x0150:
-            r9 = r2.results;	 Catch:{ Throwable -> 0x0211 }
+            if (r3 < r6) goto L_0x013e;
+        L_0x0137:
+            r3 = r1.audioEncoder;	 Catch:{ Throwable -> 0x0212 }
+            r3 = r3.getInputBuffer(r10);	 Catch:{ Throwable -> 0x0212 }
+            goto L_0x0149;
+        L_0x013e:
+            r3 = r1.audioEncoder;	 Catch:{ Throwable -> 0x0212 }
+            r3 = r3.getInputBuffers();	 Catch:{ Throwable -> 0x0212 }
+            r3 = r3[r10];	 Catch:{ Throwable -> 0x0212 }
+            r3.clear();	 Catch:{ Throwable -> 0x0212 }
+        L_0x0149:
+            r6 = r2.offset;	 Catch:{ Throwable -> 0x0212 }
+            r9 = r2.lastWroteBuffer;	 Catch:{ Throwable -> 0x0212 }
+            r11 = r6[r9];	 Catch:{ Throwable -> 0x0212 }
+            r6 = r2.lastWroteBuffer;	 Catch:{ Throwable -> 0x0212 }
+        L_0x0151:
+            r9 = r2.results;	 Catch:{ Throwable -> 0x0212 }
             r13 = 0;
-            if (r6 > r9) goto L_0x01e9;
-        L_0x0155:
-            r9 = r2.results;	 Catch:{ Throwable -> 0x0211 }
-            if (r6 >= r9) goto L_0x01b4;
-        L_0x0159:
-            r9 = r1.running;	 Catch:{ Throwable -> 0x0211 }
-            if (r9 != 0) goto L_0x019b;
-        L_0x015d:
-            r9 = r2.offset;	 Catch:{ Throwable -> 0x0211 }
-            r14 = r9[r6];	 Catch:{ Throwable -> 0x0211 }
-            r4 = r1.videoLast;	 Catch:{ Throwable -> 0x0211 }
-            r7 = r1.desyncTime;	 Catch:{ Throwable -> 0x0211 }
+            if (r6 > r9) goto L_0x01ea;
+        L_0x0156:
+            r9 = r2.results;	 Catch:{ Throwable -> 0x0212 }
+            if (r6 >= r9) goto L_0x01b5;
+        L_0x015a:
+            r9 = r1.running;	 Catch:{ Throwable -> 0x0212 }
+            if (r9 != 0) goto L_0x019c;
+        L_0x015e:
+            r9 = r2.offset;	 Catch:{ Throwable -> 0x0212 }
+            r14 = r9[r6];	 Catch:{ Throwable -> 0x0212 }
+            r4 = r1.videoLast;	 Catch:{ Throwable -> 0x0212 }
+            r7 = r1.desyncTime;	 Catch:{ Throwable -> 0x0212 }
             r4 = r4 - r7;
             r7 = (r14 > r4 ? 1 : (r14 == r4 ? 0 : -1));
-            if (r7 < 0) goto L_0x019b;
-        L_0x016a:
-            r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Throwable -> 0x0211 }
-            if (r0 == 0) goto L_0x0190;
-        L_0x016e:
-            r0 = new java.lang.StringBuilder;	 Catch:{ Throwable -> 0x0211 }
-            r0.<init>();	 Catch:{ Throwable -> 0x0211 }
+            if (r7 < 0) goto L_0x019c;
+        L_0x016b:
+            r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED;	 Catch:{ Throwable -> 0x0212 }
+            if (r0 == 0) goto L_0x0191;
+        L_0x016f:
+            r0 = new java.lang.StringBuilder;	 Catch:{ Throwable -> 0x0212 }
+            r0.<init>();	 Catch:{ Throwable -> 0x0212 }
             r4 = "stop audio encoding because of stoped video recording at ";
-            r0.append(r4);	 Catch:{ Throwable -> 0x0211 }
-            r2 = r2.offset;	 Catch:{ Throwable -> 0x0211 }
-            r4 = r2[r6];	 Catch:{ Throwable -> 0x0211 }
-            r0.append(r4);	 Catch:{ Throwable -> 0x0211 }
+            r0.append(r4);	 Catch:{ Throwable -> 0x0212 }
+            r2 = r2.offset;	 Catch:{ Throwable -> 0x0212 }
+            r4 = r2[r6];	 Catch:{ Throwable -> 0x0212 }
+            r0.append(r4);	 Catch:{ Throwable -> 0x0212 }
             r2 = " last video ";
-            r0.append(r2);	 Catch:{ Throwable -> 0x0211 }
-            r4 = r1.videoLast;	 Catch:{ Throwable -> 0x0211 }
-            r0.append(r4);	 Catch:{ Throwable -> 0x0211 }
-            r0 = r0.toString();	 Catch:{ Throwable -> 0x0211 }
-            org.telegram.messenger.FileLog.d(r0);	 Catch:{ Throwable -> 0x0211 }
-        L_0x0190:
+            r0.append(r2);	 Catch:{ Throwable -> 0x0212 }
+            r4 = r1.videoLast;	 Catch:{ Throwable -> 0x0212 }
+            r0.append(r4);	 Catch:{ Throwable -> 0x0212 }
+            r0 = r0.toString();	 Catch:{ Throwable -> 0x0212 }
+            org.telegram.messenger.FileLog.d(r0);	 Catch:{ Throwable -> 0x0212 }
+        L_0x0191:
             r2 = 1;
-            r1.audioStopedByTime = r2;	 Catch:{ Throwable -> 0x0211 }
-            r0 = r1.buffersToWrite;	 Catch:{ Throwable -> 0x0211 }
-            r0.clear();	 Catch:{ Throwable -> 0x0211 }
+            r1.audioStopedByTime = r2;	 Catch:{ Throwable -> 0x0212 }
+            r0 = r1.buffersToWrite;	 Catch:{ Throwable -> 0x0212 }
+            r0.clear();	 Catch:{ Throwable -> 0x0212 }
             r2 = r13;
             r0 = 1;
-            goto L_0x01e9;
-        L_0x019b:
-            r4 = r3.remaining();	 Catch:{ Throwable -> 0x0211 }
-            r5 = r2.read;	 Catch:{ Throwable -> 0x0211 }
-            r5 = r5[r6];	 Catch:{ Throwable -> 0x0211 }
-            if (r4 >= r5) goto L_0x01a9;
-        L_0x01a5:
-            r2.lastWroteBuffer = r6;	 Catch:{ Throwable -> 0x0211 }
+            goto L_0x01ea;
+        L_0x019c:
+            r4 = r3.remaining();	 Catch:{ Throwable -> 0x0212 }
+            r5 = r2.read;	 Catch:{ Throwable -> 0x0212 }
+            r5 = r5[r6];	 Catch:{ Throwable -> 0x0212 }
+            if (r4 >= r5) goto L_0x01aa;
+        L_0x01a6:
+            r2.lastWroteBuffer = r6;	 Catch:{ Throwable -> 0x0212 }
             r2 = r13;
-            goto L_0x01e9;
-        L_0x01a9:
-            r4 = r2.buffer;	 Catch:{ Throwable -> 0x0211 }
+            goto L_0x01ea;
+        L_0x01aa:
+            r4 = r2.buffer;	 Catch:{ Throwable -> 0x0212 }
             r5 = r6 * 2048;
-            r7 = r2.read;	 Catch:{ Throwable -> 0x0211 }
-            r7 = r7[r6];	 Catch:{ Throwable -> 0x0211 }
-            r3.put(r4, r5, r7);	 Catch:{ Throwable -> 0x0211 }
-        L_0x01b4:
-            r4 = r2.results;	 Catch:{ Throwable -> 0x0211 }
+            r7 = r2.read;	 Catch:{ Throwable -> 0x0212 }
+            r7 = r7[r6];	 Catch:{ Throwable -> 0x0212 }
+            r3.put(r4, r5, r7);	 Catch:{ Throwable -> 0x0212 }
+        L_0x01b5:
+            r4 = r2.results;	 Catch:{ Throwable -> 0x0212 }
             r5 = 1;
             r4 = r4 - r5;
-            if (r6 < r4) goto L_0x01e0;
-        L_0x01ba:
-            r4 = r1.buffersToWrite;	 Catch:{ Throwable -> 0x0211 }
-            r4.remove(r2);	 Catch:{ Throwable -> 0x0211 }
-            r4 = r1.running;	 Catch:{ Throwable -> 0x0211 }
-            if (r4 == 0) goto L_0x01c8;
-        L_0x01c3:
-            r4 = r1.buffers;	 Catch:{ Throwable -> 0x0211 }
-            r4.put(r2);	 Catch:{ Throwable -> 0x0211 }
-        L_0x01c8:
-            r4 = r1.buffersToWrite;	 Catch:{ Throwable -> 0x0211 }
-            r4 = r4.isEmpty();	 Catch:{ Throwable -> 0x0211 }
-            if (r4 != 0) goto L_0x01da;
-        L_0x01d0:
-            r2 = r1.buffersToWrite;	 Catch:{ Throwable -> 0x0211 }
+            if (r6 < r4) goto L_0x01e1;
+        L_0x01bb:
+            r4 = r1.buffersToWrite;	 Catch:{ Throwable -> 0x0212 }
+            r4.remove(r2);	 Catch:{ Throwable -> 0x0212 }
+            r4 = r1.running;	 Catch:{ Throwable -> 0x0212 }
+            if (r4 == 0) goto L_0x01c9;
+        L_0x01c4:
+            r4 = r1.buffers;	 Catch:{ Throwable -> 0x0212 }
+            r4.put(r2);	 Catch:{ Throwable -> 0x0212 }
+        L_0x01c9:
+            r4 = r1.buffersToWrite;	 Catch:{ Throwable -> 0x0212 }
+            r4 = r4.isEmpty();	 Catch:{ Throwable -> 0x0212 }
+            if (r4 != 0) goto L_0x01db;
+        L_0x01d1:
+            r2 = r1.buffersToWrite;	 Catch:{ Throwable -> 0x0212 }
             r4 = 0;
-            r2 = r2.get(r4);	 Catch:{ Throwable -> 0x0211 }
-            r2 = (org.telegram.ui.Components.InstantCameraView.AudioBufferInfo) r2;	 Catch:{ Throwable -> 0x0211 }
-            goto L_0x01e1;
-        L_0x01da:
+            r2 = r2.get(r4);	 Catch:{ Throwable -> 0x0212 }
+            r2 = (org.telegram.ui.Components.InstantCameraView.AudioBufferInfo) r2;	 Catch:{ Throwable -> 0x0212 }
+            goto L_0x01e2;
+        L_0x01db:
             r4 = 0;
-            r8 = r2.last;	 Catch:{ Throwable -> 0x0211 }
+            r8 = r2.last;	 Catch:{ Throwable -> 0x0212 }
             r0 = r8;
             r2 = r13;
-            goto L_0x01eb;
-        L_0x01e0:
-            r4 = 0;
+            goto L_0x01ec;
         L_0x01e1:
+            r4 = 0;
+        L_0x01e2:
             r6 = r6 + 1;
             r4 = 0;
             r7 = 0;
             r8 = 1;
-            goto L_0x0150;
-        L_0x01e9:
+            goto L_0x0151;
+        L_0x01ea:
             r4 = 0;
             r5 = 1;
-        L_0x01eb:
-            r9 = r1.audioEncoder;	 Catch:{ Throwable -> 0x0211 }
+        L_0x01ec:
+            r9 = r1.audioEncoder;	 Catch:{ Throwable -> 0x0212 }
             r6 = 0;
-            r3 = r3.position();	 Catch:{ Throwable -> 0x0211 }
+            r3 = r3.position();	 Catch:{ Throwable -> 0x0212 }
             r7 = 0;
             r13 = (r11 > r7 ? 1 : (r11 == r7 ? 0 : -1));
-            if (r13 != 0) goto L_0x01fa;
-        L_0x01f8:
+            if (r13 != 0) goto L_0x01fb;
+        L_0x01f9:
             r13 = r7;
-            goto L_0x01ff;
-        L_0x01fa:
-            r7 = r1.audioStartTime;	 Catch:{ Throwable -> 0x0211 }
+            goto L_0x0200;
+        L_0x01fb:
+            r7 = r1.audioStartTime;	 Catch:{ Throwable -> 0x0212 }
             r7 = r11 - r7;
-            goto L_0x01f8;
-        L_0x01ff:
-            if (r0 == 0) goto L_0x0204;
-        L_0x0201:
+            goto L_0x01f9;
+        L_0x0200:
+            if (r0 == 0) goto L_0x0205;
+        L_0x0202:
             r7 = 4;
             r15 = 4;
-            goto L_0x0205;
-        L_0x0204:
-            r15 = 0;
+            goto L_0x0206;
         L_0x0205:
+            r15 = 0;
+        L_0x0206:
             r11 = r6;
             r12 = r3;
-            r9.queueInputBuffer(r10, r11, r12, r13, r15);	 Catch:{ Throwable -> 0x0211 }
-            goto L_0x020d;
-        L_0x020b:
+            r9.queueInputBuffer(r10, r11, r12, r13, r15);	 Catch:{ Throwable -> 0x0212 }
+            goto L_0x020e;
+        L_0x020c:
             r4 = 0;
             r5 = 1;
-        L_0x020d:
+        L_0x020e:
             r7 = 0;
             r8 = 1;
-            goto L_0x0124;
-        L_0x0211:
+            goto L_0x0125;
+        L_0x0212:
             r0 = move-exception;
             org.telegram.messenger.FileLog.e(r0);
-        L_0x0215:
+        L_0x0216:
             return;
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.InstantCameraView$VideoRecorder.handleAudioFrameAvailable(org.telegram.ui.Components.InstantCameraView$AudioBufferInfo):void");
@@ -1695,6 +1321,140 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 NotificationCenter.getInstance(InstantCameraView.this.currentAccount).postNotificationName(NotificationCenter.audioDidSent, InstantCameraView.this.videoEditedInfo, this.videoFile.getAbsolutePath());
             }
             didWriteData(this.videoFile, 0, true);
+        }
+
+        private void prepareEncoder() {
+            String str = "video/avc";
+            String str2 = "bitrate";
+            String str3 = "audio/mp4a-latm";
+            try {
+                int minBufferSize = AudioRecord.getMinBufferSize(44100, 16, 2);
+                if (minBufferSize <= 0) {
+                    minBufferSize = 3584;
+                }
+                int i = 49152;
+                if (49152 < minBufferSize) {
+                    i = (((minBufferSize / 2048) + 1) * 2048) * 2;
+                }
+                for (int i2 = 0; i2 < 3; i2++) {
+                    this.buffers.add(new AudioBufferInfo(InstantCameraView.this, null));
+                }
+                AudioRecord audioRecord = r9;
+                Surface surface = null;
+                AudioRecord audioRecord2 = new AudioRecord(0, 44100, 16, 2, i);
+                this.audioRecorder = audioRecord;
+                this.audioRecorder.startRecording();
+                if (BuildVars.LOGS_ENABLED) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("initied audio record with channels ");
+                    stringBuilder.append(this.audioRecorder.getChannelCount());
+                    stringBuilder.append(" sample rate = ");
+                    stringBuilder.append(this.audioRecorder.getSampleRate());
+                    stringBuilder.append(" bufferSize = ");
+                    stringBuilder.append(i);
+                    FileLog.d(stringBuilder.toString());
+                }
+                Thread thread = new Thread(this.recorderRunnable);
+                thread.setPriority(10);
+                thread.start();
+                this.audioBufferInfo = new BufferInfo();
+                this.videoBufferInfo = new BufferInfo();
+                MediaFormat mediaFormat = new MediaFormat();
+                mediaFormat.setString("mime", str3);
+                mediaFormat.setInteger("aac-profile", 2);
+                mediaFormat.setInteger("sample-rate", 44100);
+                mediaFormat.setInteger("channel-count", 1);
+                mediaFormat.setInteger(str2, 32000);
+                mediaFormat.setInteger("max-input-size", 20480);
+                this.audioEncoder = MediaCodec.createEncoderByType(str3);
+                this.audioEncoder.configure(mediaFormat, surface, surface, 1);
+                this.audioEncoder.start();
+                this.videoEncoder = MediaCodec.createEncoderByType(str);
+                MediaFormat createVideoFormat = MediaFormat.createVideoFormat(str, this.videoWidth, this.videoHeight);
+                createVideoFormat.setInteger("color-format", NUM);
+                createVideoFormat.setInteger(str2, this.videoBitrate);
+                createVideoFormat.setInteger("frame-rate", 30);
+                createVideoFormat.setInteger("i-frame-interval", 1);
+                this.videoEncoder.configure(createVideoFormat, surface, surface, 1);
+                this.surface = this.videoEncoder.createInputSurface();
+                this.videoEncoder.start();
+                Mp4Movie mp4Movie = new Mp4Movie();
+                mp4Movie.setCacheFile(this.videoFile);
+                mp4Movie.setRotation(0);
+                mp4Movie.setSize(this.videoWidth, this.videoHeight);
+                this.mediaMuxer = new MP4Builder().createMovie(mp4Movie, InstantCameraView.this.isSecretChat);
+                AndroidUtilities.runOnUIThread(new -$$Lambda$InstantCameraView$VideoRecorder$8ZN8xq5EwIyFVJLsetA_qjZZbSQ(this));
+                if (this.eglDisplay == EGL14.EGL_NO_DISPLAY) {
+                    this.eglDisplay = EGL14.eglGetDisplay(0);
+                    EGLDisplay eGLDisplay = this.eglDisplay;
+                    if (eGLDisplay != EGL14.EGL_NO_DISPLAY) {
+                        int[] iArr = new int[2];
+                        if (EGL14.eglInitialize(eGLDisplay, iArr, 0, iArr, 1)) {
+                            int[] iArr2;
+                            if (this.eglContext == EGL14.EGL_NO_CONTEXT) {
+                                iArr2 = new int[]{12324, 8, 12323, 8, 12322, 8, 12321, 8, 12352, 4, 12610, 1, 12344};
+                                EGLConfig[] eGLConfigArr = new EGLConfig[1];
+                                iArr = new int[1];
+                                if (EGL14.eglChooseConfig(this.eglDisplay, iArr2, 0, eGLConfigArr, 0, eGLConfigArr.length, iArr, 0)) {
+                                    this.eglContext = EGL14.eglCreateContext(this.eglDisplay, eGLConfigArr[0], this.sharedEglContext, new int[]{12440, 2, 12344}, 0);
+                                    this.eglConfig = eGLConfigArr[0];
+                                } else {
+                                    throw new RuntimeException("Unable to find a suitable EGLConfig");
+                                }
+                            }
+                            EGL14.eglQueryContext(this.eglDisplay, this.eglContext, 12440, new int[1], 0);
+                            if (this.eglSurface == EGL14.EGL_NO_SURFACE) {
+                                this.eglSurface = EGL14.eglCreateWindowSurface(this.eglDisplay, this.eglConfig, this.surface, new int[]{12344}, 0);
+                                EGLSurface eGLSurface = this.eglSurface;
+                                if (eGLSurface == null) {
+                                    throw new RuntimeException("surface was null");
+                                } else if (EGL14.eglMakeCurrent(this.eglDisplay, eGLSurface, eGLSurface, this.eglContext)) {
+                                    GLES20.glBlendFunc(770, 771);
+                                    int access$1800 = InstantCameraView.this.loadShader(35633, "uniform mat4 uMVPMatrix;\nuniform mat4 uSTMatrix;\nattribute vec4 aPosition;\nattribute vec4 aTextureCoord;\nvarying vec2 vTextureCoord;\nvoid main() {\n   gl_Position = uMVPMatrix * aPosition;\n   vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n}\n");
+                                    int access$18002 = InstantCameraView.this.loadShader(35632, "#extension GL_OES_EGL_image_external : require\nprecision highp float;\nvarying vec2 vTextureCoord;\nuniform float scaleX;\nuniform float scaleY;\nuniform float alpha;\nuniform samplerExternalOES sTexture;\nvoid main() {\n   vec2 coord = vec2((vTextureCoord.x - 0.5) * scaleX, (vTextureCoord.y - 0.5) * scaleY);\n   float coef = ceil(clamp(0.2601 - dot(coord, coord), 0.0, 1.0));\n   vec3 color = texture2D(sTexture, vTextureCoord).rgb * coef + (1.0 - step(0.001, coef));\n   gl_FragColor = vec4(color * alpha, alpha);\n}\n");
+                                    if (access$1800 != 0 && access$18002 != 0) {
+                                        this.drawProgram = GLES20.glCreateProgram();
+                                        GLES20.glAttachShader(this.drawProgram, access$1800);
+                                        GLES20.glAttachShader(this.drawProgram, access$18002);
+                                        GLES20.glLinkProgram(this.drawProgram);
+                                        iArr2 = new int[1];
+                                        GLES20.glGetProgramiv(this.drawProgram, 35714, iArr2, 0);
+                                        if (iArr2[0] == 0) {
+                                            GLES20.glDeleteProgram(this.drawProgram);
+                                            this.drawProgram = 0;
+                                            return;
+                                        }
+                                        this.positionHandle = GLES20.glGetAttribLocation(this.drawProgram, "aPosition");
+                                        this.textureHandle = GLES20.glGetAttribLocation(this.drawProgram, "aTextureCoord");
+                                        this.scaleXHandle = GLES20.glGetUniformLocation(this.drawProgram, "scaleX");
+                                        this.scaleYHandle = GLES20.glGetUniformLocation(this.drawProgram, "scaleY");
+                                        this.alphaHandle = GLES20.glGetUniformLocation(this.drawProgram, "alpha");
+                                        this.vertexMatrixHandle = GLES20.glGetUniformLocation(this.drawProgram, "uMVPMatrix");
+                                        this.textureMatrixHandle = GLES20.glGetUniformLocation(this.drawProgram, "uSTMatrix");
+                                        return;
+                                    }
+                                    return;
+                                } else {
+                                    if (BuildVars.LOGS_ENABLED) {
+                                        StringBuilder stringBuilder2 = new StringBuilder();
+                                        stringBuilder2.append("eglMakeCurrent failed ");
+                                        stringBuilder2.append(GLUtils.getEGLErrorString(EGL14.eglGetError()));
+                                        FileLog.e(stringBuilder2.toString());
+                                    }
+                                    throw new RuntimeException("eglMakeCurrent failed");
+                                }
+                            }
+                            throw new IllegalStateException("surface already created");
+                        }
+                        this.eglDisplay = surface;
+                        throw new RuntimeException("unable to initialize EGL14");
+                    }
+                    throw new RuntimeException("unable to get EGL14 display");
+                }
+                throw new RuntimeException("EGL already set up");
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
 
         public /* synthetic */ void lambda$prepareEncoder$3$InstantCameraView$VideoRecorder() {

@@ -109,6 +109,7 @@ import org.telegram.tgnet.TLRPC.TL_keyboardButtonRequestGeoLocation;
 import org.telegram.tgnet.TLRPC.TL_keyboardButtonRequestPhone;
 import org.telegram.tgnet.TLRPC.TL_keyboardButtonSwitchInline;
 import org.telegram.tgnet.TLRPC.TL_keyboardButtonUrl;
+import org.telegram.tgnet.TLRPC.TL_keyboardButtonUrlAuth;
 import org.telegram.tgnet.TLRPC.TL_message;
 import org.telegram.tgnet.TLRPC.TL_messageEntityBold;
 import org.telegram.tgnet.TLRPC.TL_messageEntityCode;
@@ -922,13 +923,19 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             }
 
             public boolean onTouchEvent(MotionEvent motionEvent) {
-                if (ChatActivityEnterView.this.isPopupShowing() && motionEvent.getAction() == 0) {
-                    if (ChatActivityEnterView.this.searchingType != 0) {
-                        ChatActivityEnterView.this.searchingType = 0;
-                        ChatActivityEnterView.this.emojiView.closeSearch(false);
+                if (motionEvent.getAction() == 0) {
+                    if (ChatActivityEnterView.this.isPopupShowing()) {
+                        if (ChatActivityEnterView.this.searchingType != 0) {
+                            ChatActivityEnterView.this.searchingType = 0;
+                            ChatActivityEnterView.this.emojiView.closeSearch(false);
+                        }
+                        ChatActivityEnterView.this.showPopup(AndroidUtilities.usingHardwareInput ? 0 : 2, 0);
+                        ChatActivityEnterView.this.openKeyboardInternal();
                     }
-                    ChatActivityEnterView.this.showPopup(AndroidUtilities.usingHardwareInput ? 0 : 2, 0);
-                    ChatActivityEnterView.this.openKeyboardInternal();
+                    if (!AndroidUtilities.showKeyboard(this)) {
+                        clearFocus();
+                        requestFocus();
+                    }
                 }
                 try {
                     return super.onTouchEvent(motionEvent);
@@ -1319,7 +1326,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         });
         this.recordedAudioPanel.addView(this.videoTimelineView, LayoutHelper.createFrame(-1, 32.0f, 19, 40.0f, 0.0f, 0.0f, 0.0f));
         this.recordedAudioBackground = new View(activity2);
-        this.recordedAudioBackground.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(16.0f), Theme.getColor("chat_recordedVoiceBackground")));
+        this.recordedAudioBackground.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(18.0f), Theme.getColor("chat_recordedVoiceBackground")));
         this.recordedAudioPanel.addView(this.recordedAudioBackground, LayoutHelper.createFrame(-1, 36.0f, 19, 48.0f, 0.0f, 0.0f, 0.0f));
         this.recordedAudioSeekBar = new SeekBarWaveformView(activity2);
         this.recordedAudioPanel.addView(this.recordedAudioSeekBar, LayoutHelper.createFrame(-1, 32.0f, 19, 92.0f, 0.0f, 52.0f, 0.0f));
@@ -3859,7 +3866,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 builder.setPositiveButton(LocaleController.getString("OK", NUM), new -$$Lambda$ChatActivityEnterView$fmPI_spkDt8Wbdud0XG8IKtQnwY(this, messageObject2, keyboardButton));
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), null);
                 this.parentFragment.showDialog(builder.create());
-            } else if ((keyboardButton instanceof TL_keyboardButtonCallback) || (keyboardButton instanceof TL_keyboardButtonGame) || (keyboardButton instanceof TL_keyboardButtonBuy)) {
+            } else if ((keyboardButton instanceof TL_keyboardButtonCallback) || (keyboardButton instanceof TL_keyboardButtonGame) || (keyboardButton instanceof TL_keyboardButtonBuy) || (keyboardButton instanceof TL_keyboardButtonUrlAuth)) {
                 SendMessagesHelper.getInstance(this.currentAccount).sendCallback(true, messageObject2, keyboardButton, this.parentFragment);
             } else if ((keyboardButton instanceof TL_keyboardButtonSwitchInline) && !this.parentFragment.processSwitchButton((TL_keyboardButtonSwitchInline) keyboardButton)) {
                 if (keyboardButton.same_peer) {

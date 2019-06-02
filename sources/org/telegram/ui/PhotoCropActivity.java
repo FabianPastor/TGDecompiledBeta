@@ -1105,6 +1105,7 @@ public class PhotoCropActivity extends BaseFragment {
         this.actionBar.setBackgroundColor(-13421773);
         this.actionBar.setItemsBackgroundColor(-12763843, false);
         this.actionBar.setTitleColor(-1);
+        this.actionBar.setItemsColor(-1, false);
         this.actionBar.setBackButtonImage(NUM);
         this.actionBar.setAllowOverlayTitle(true);
         this.actionBar.setTitle(LocaleController.getString("CropImage", NUM));

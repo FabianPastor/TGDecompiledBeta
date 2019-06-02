@@ -2945,6 +2945,29 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         }
     }
 
+    public void updateAdapters() {
+        SharedPhotoVideoAdapter sharedPhotoVideoAdapter = this.photoVideoAdapter;
+        if (sharedPhotoVideoAdapter != null) {
+            sharedPhotoVideoAdapter.notifyDataSetChanged();
+        }
+        SharedDocumentsAdapter sharedDocumentsAdapter = this.documentsAdapter;
+        if (sharedDocumentsAdapter != null) {
+            sharedDocumentsAdapter.notifyDataSetChanged();
+        }
+        sharedDocumentsAdapter = this.voiceAdapter;
+        if (sharedDocumentsAdapter != null) {
+            sharedDocumentsAdapter.notifyDataSetChanged();
+        }
+        SharedLinksAdapter sharedLinksAdapter = this.linksAdapter;
+        if (sharedLinksAdapter != null) {
+            sharedLinksAdapter.notifyDataSetChanged();
+        }
+        sharedDocumentsAdapter = this.audioAdapter;
+        if (sharedDocumentsAdapter != null) {
+            sharedDocumentsAdapter.notifyDataSetChanged();
+        }
+    }
+
     private void updateRowsSelection() {
         int i = 0;
         while (true) {
@@ -3123,7 +3146,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         if (r0 != 0) goto L_0x00cf;
     L_0x00c1:
         r0 = r12.scrollSlidingTextTabStrip;
-        r2 = NUM; // 0x7f0d0909 float:1.8746806E38 double:1.0531309203E-314;
+        r2 = NUM; // 0x7f0d093f float:1.8746916E38 double:1.053130947E-314;
         r9 = "SharedMediaTab";
         r2 = org.telegram.messenger.LocaleController.getString(r9, r2);
         r0.addTextTab(r1, r2);
@@ -3137,14 +3160,14 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         if (r0 != 0) goto L_0x00eb;
     L_0x00dd:
         r0 = r12.scrollSlidingTextTabStrip;
-        r2 = NUM; // 0x7f0d0905 float:1.8746798E38 double:1.0531309183E-314;
+        r2 = NUM; // 0x7f0d093b float:1.8746907E38 double:1.053130945E-314;
         r9 = "SharedFilesTab";
         r2 = org.telegram.messenger.LocaleController.getString(r9, r2);
         r0.addTextTab(r6, r2);
     L_0x00eb:
         r9 = r12.dialog_id;
         r0 = (int) r9;
-        r2 = NUM; // 0x7f0d090a float:1.8746808E38 double:1.053130921E-314;
+        r2 = NUM; // 0x7f0d0940 float:1.8746918E38 double:1.0531309475E-314;
         r9 = "SharedMusicTab";
         if (r0 == 0) goto L_0x0129;
     L_0x00f5:
@@ -3157,7 +3180,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         if (r0 != 0) goto L_0x0111;
     L_0x0103:
         r0 = r12.scrollSlidingTextTabStrip;
-        r7 = NUM; // 0x7f0d0907 float:1.8746802E38 double:1.0531309193E-314;
+        r7 = NUM; // 0x7f0d093d float:1.8746912E38 double:1.053130946E-314;
         r8 = "SharedLinksTab";
         r7 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r0.addTextTab(r3, r7);
@@ -3209,7 +3232,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         if (r0 != 0) goto L_0x0178;
     L_0x016a:
         r0 = r12.scrollSlidingTextTabStrip;
-        r2 = NUM; // 0x7f0d090d float:1.8746814E38 double:1.0531309223E-314;
+        r2 = NUM; // 0x7f0d0943 float:1.8746924E38 double:1.053130949E-314;
         r3 = "SharedVoiceTab";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.addTextTab(r4, r2);
@@ -3677,10 +3700,10 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         view2 = this.fragmentContextView;
         view3 = view2;
         arrayList.add(new ThemeDescription(view3, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{FragmentContextView.class}, new String[]{"closeButton"}, null, null, null, "inappPlayerClose"));
-        arrayList.add(new ThemeDescription(this.scrollSlidingTextTabStrip.getTabsContainer(), ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{TextView.class}, null, null, null, "actionBarDefaultTitle"));
-        arrayList.add(new ThemeDescription(this.scrollSlidingTextTabStrip.getTabsContainer(), ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{TextView.class}, null, null, null, "actionBarDefaultSubtitle"));
-        arrayList.add(new ThemeDescription(this.scrollSlidingTextTabStrip.getTabsContainer(), ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, new Class[]{TextView.class}, null, null, null, "actionBarDefaultSelector"));
-        arrayList.add(new ThemeDescription(null, 0, null, null, new Drawable[]{this.scrollSlidingTextTabStrip.getSelectorDrawable()}, null, "actionBarDefaultTitle"));
+        arrayList.add(new ThemeDescription(this.scrollSlidingTextTabStrip.getTabsContainer(), ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{TextView.class}, null, null, null, "actionBarTabActiveText"));
+        arrayList.add(new ThemeDescription(this.scrollSlidingTextTabStrip.getTabsContainer(), ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{TextView.class}, null, null, null, "actionBarTabUnactiveText"));
+        arrayList.add(new ThemeDescription(this.scrollSlidingTextTabStrip.getTabsContainer(), ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, new Class[]{TextView.class}, null, null, null, "actionBarTabLine"));
+        arrayList.add(new ThemeDescription(null, 0, null, null, new Drawable[]{this.scrollSlidingTextTabStrip.getSelectorDrawable()}, null, "actionBarTabSelector"));
         int i2 = 0;
         while (true) {
             MediaPage[] mediaPageArr = this.mediaPages;

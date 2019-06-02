@@ -68,7 +68,7 @@ public class PlayingGameDrawable extends StatusDrawable {
             intrinsicHeight += AndroidUtilities.dp(1.0f);
         }
         int i = intrinsicHeight;
-        this.paint.setColor(Theme.getColor("actionBarDefaultSubtitle"));
+        this.paint.setColor(Theme.getColor("chat_status"));
         this.rect.set(0.0f, (float) i, (float) dp, (float) (i + dp));
         float f = this.progress;
         intrinsicHeight = (int) (f < 0.5f ? (1.0f - (f / 0.5f)) * 35.0f : ((f - 0.5f) * 35.0f) / 0.5f);

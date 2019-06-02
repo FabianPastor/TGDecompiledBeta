@@ -13,6 +13,6 @@ public final /* synthetic */ class -$$Lambda$AlertsCreator$mK-3N6UsQGpxwpYn5q6EG
     }
 
     public final void onClick(DialogInterface dialogInterface, int i) {
-        this.f$0.run(0);
+        this.f$0.run(1);
     }
 }

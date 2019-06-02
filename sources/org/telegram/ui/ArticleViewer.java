@@ -178,6 +178,7 @@ import org.telegram.tgnet.TLRPC.TL_textConcat;
 import org.telegram.tgnet.TLRPC.TL_textEmail;
 import org.telegram.tgnet.TLRPC.TL_textEmpty;
 import org.telegram.tgnet.TLRPC.TL_textFixed;
+import org.telegram.tgnet.TLRPC.TL_textImage;
 import org.telegram.tgnet.TLRPC.TL_textItalic;
 import org.telegram.tgnet.TLRPC.TL_textMarked;
 import org.telegram.tgnet.TLRPC.TL_textPhone;
@@ -209,6 +210,7 @@ import org.telegram.ui.ActionBar.DrawerLayoutContainer;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.AnchorSpan;
 import org.telegram.ui.Components.AnimatedArrowDrawable;
 import org.telegram.ui.Components.AnimatedFileDrawable;
 import org.telegram.ui.Components.AnimationProperties;
@@ -232,7 +234,11 @@ import org.telegram.ui.Components.ShareAlert;
 import org.telegram.ui.Components.TableLayout;
 import org.telegram.ui.Components.TableLayout.Child;
 import org.telegram.ui.Components.TableLayout.TableLayoutDelegate;
+import org.telegram.ui.Components.TextPaintImageReceiverSpan;
+import org.telegram.ui.Components.TextPaintMarkSpan;
+import org.telegram.ui.Components.TextPaintSpan;
 import org.telegram.ui.Components.TextPaintUrlSpan;
+import org.telegram.ui.Components.TextPaintWebpageUrlSpan;
 import org.telegram.ui.Components.TypefaceSpan;
 import org.telegram.ui.Components.VideoPlayer;
 import org.telegram.ui.Components.VideoPlayer.VideoPlayerDelegate;
@@ -1340,7 +1346,7 @@ public class ArticleViewer implements NotificationCenterDelegate, OnGestureListe
                     for (i3 = 
 /*
 Method generation error in method: org.telegram.ui.ArticleViewer.BlockCollageCell.GroupedMessages.calculate():void, dex: classes.dex
-jadx.core.utils.exceptions.CodegenException: Error generate insn: PHI: (r14_15 'i3' int) = (r14_2 'i3' int), (r14_0 'i3' int), (r14_14 'i3' int) binds: {(r14_2 'i3' int)=B:71:0x04f3, (r14_0 'i3' int)=B:72:0x04f8, (r14_14 'i3' int)=B:218:0x073f} in method: org.telegram.ui.ArticleViewer.BlockCollageCell.GroupedMessages.calculate():void, dex: classes.dex
+jadx.core.utils.exceptions.CodegenException: Error generate insn: PHI: (r14_15 'i3' int) = (r14_2 'i3' int), (r14_0 'i3' int), (r14_14 'i3' int) binds: {(r14_2 'i3' int)=B:71:0x04f4, (r14_0 'i3' int)=B:72:0x04f9, (r14_14 'i3' int)=B:218:0x0740} in method: org.telegram.ui.ArticleViewer.BlockCollageCell.GroupedMessages.calculate():void, dex: classes.dex
 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:228)
 	at jadx.core.codegen.RegionGen.makeLoop(RegionGen.java:185)
 	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:63)
@@ -8158,27 +8164,175 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         private ArrayList<PageBlock> localBlocks = new ArrayList();
         private ArrayList<PageBlock> photoBlocks = new ArrayList();
 
-        /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-            jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:150:0x0532 in {2, 3, 8, 11, 15, 20, 23, 33, 36, 39, 40, 41, 45, 46, 51, 53, 58, 67, 68, 69, 72, 77, 78, 80, 83, 84, 91, 92, 93, 94, 105, 106, 109, 110, 115, 116, 121, 122, 125, 126, 127, 129, 132, 133, 140, 143, 144, 145, 146, 149} preds:[]
-            	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-            	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-            	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-            	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-            	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-            	at java.util.ArrayList.forEach(ArrayList.java:1257)
-            	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-            	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$0(DepthTraversal.java:13)
-            	at java.util.ArrayList.forEach(ArrayList.java:1257)
-            	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:13)
-            	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-            	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-            	at java.lang.Iterable.forEach(Iterable.java:75)
-            	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-            	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-            	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-            	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-            	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-            */
+        public WebpageAdapter(Context context) {
+            this.context = context;
+        }
+
+        private void setRichTextParents(RichText richText, RichText richText2) {
+            if (richText2 != null) {
+                richText2.parentRichText = richText;
+                if (richText2 instanceof TL_textFixed) {
+                    setRichTextParents(richText2, ((TL_textFixed) richText2).text);
+                } else if (richText2 instanceof TL_textItalic) {
+                    setRichTextParents(richText2, ((TL_textItalic) richText2).text);
+                } else if (richText2 instanceof TL_textBold) {
+                    setRichTextParents(richText2, ((TL_textBold) richText2).text);
+                } else if (richText2 instanceof TL_textUnderline) {
+                    setRichTextParents(richText2, ((TL_textUnderline) richText2).text);
+                } else if (richText2 instanceof TL_textStrike) {
+                    setRichTextParents(richText2, ((TL_textStrike) richText2).text);
+                } else if (richText2 instanceof TL_textEmail) {
+                    setRichTextParents(richText2, ((TL_textEmail) richText2).text);
+                } else if (richText2 instanceof TL_textPhone) {
+                    setRichTextParents(richText2, ((TL_textPhone) richText2).text);
+                } else if (richText2 instanceof TL_textUrl) {
+                    setRichTextParents(richText2, ((TL_textUrl) richText2).text);
+                } else if (richText2 instanceof TL_textConcat) {
+                    int size = richText2.texts.size();
+                    for (int i = 0; i < size; i++) {
+                        setRichTextParents(richText2, (RichText) richText2.texts.get(i));
+                    }
+                } else if (richText2 instanceof TL_textSubscript) {
+                    setRichTextParents(richText2, ((TL_textSubscript) richText2).text);
+                } else if (richText2 instanceof TL_textSuperscript) {
+                    setRichTextParents(richText2, ((TL_textSuperscript) richText2).text);
+                } else if (richText2 instanceof TL_textMarked) {
+                    setRichTextParents(richText2, ((TL_textMarked) richText2).text);
+                } else if (richText2 instanceof TL_textAnchor) {
+                    TL_textAnchor tL_textAnchor = (TL_textAnchor) richText2;
+                    setRichTextParents(richText2, tL_textAnchor.text);
+                    String toLowerCase = tL_textAnchor.name.toLowerCase();
+                    this.anchors.put(toLowerCase, Integer.valueOf(this.blocks.size()));
+                    RichText richText3 = tL_textAnchor.text;
+                    if (richText3 instanceof TL_textPlain) {
+                        if (!TextUtils.isEmpty(((TL_textPlain) richText3).text)) {
+                            this.anchorsParent.put(toLowerCase, tL_textAnchor);
+                        }
+                    } else if (!(richText3 instanceof TL_textEmpty)) {
+                        this.anchorsParent.put(toLowerCase, tL_textAnchor);
+                    }
+                    this.anchorsOffset.put(toLowerCase, Integer.valueOf(-1));
+                }
+            }
+        }
+
+        private void setRichTextParents(PageBlock pageBlock) {
+            if (pageBlock instanceof TL_pageBlockEmbedPost) {
+                TL_pageBlockEmbedPost tL_pageBlockEmbedPost = (TL_pageBlockEmbedPost) pageBlock;
+                setRichTextParents(null, tL_pageBlockEmbedPost.caption.text);
+                setRichTextParents(null, tL_pageBlockEmbedPost.caption.credit);
+            } else if (pageBlock instanceof TL_pageBlockParagraph) {
+                setRichTextParents(null, ((TL_pageBlockParagraph) pageBlock).text);
+            } else if (pageBlock instanceof TL_pageBlockKicker) {
+                setRichTextParents(null, ((TL_pageBlockKicker) pageBlock).text);
+            } else if (pageBlock instanceof TL_pageBlockFooter) {
+                setRichTextParents(null, ((TL_pageBlockFooter) pageBlock).text);
+            } else if (pageBlock instanceof TL_pageBlockHeader) {
+                setRichTextParents(null, ((TL_pageBlockHeader) pageBlock).text);
+            } else if (pageBlock instanceof TL_pageBlockPreformatted) {
+                setRichTextParents(null, ((TL_pageBlockPreformatted) pageBlock).text);
+            } else if (pageBlock instanceof TL_pageBlockSubheader) {
+                setRichTextParents(null, ((TL_pageBlockSubheader) pageBlock).text);
+            } else {
+                int i = 0;
+                int size;
+                if (pageBlock instanceof TL_pageBlockSlideshow) {
+                    TL_pageBlockSlideshow tL_pageBlockSlideshow = (TL_pageBlockSlideshow) pageBlock;
+                    setRichTextParents(null, tL_pageBlockSlideshow.caption.text);
+                    setRichTextParents(null, tL_pageBlockSlideshow.caption.credit);
+                    size = tL_pageBlockSlideshow.items.size();
+                    while (i < size) {
+                        setRichTextParents((PageBlock) tL_pageBlockSlideshow.items.get(i));
+                        i++;
+                    }
+                } else if (pageBlock instanceof TL_pageBlockPhoto) {
+                    TL_pageBlockPhoto tL_pageBlockPhoto = (TL_pageBlockPhoto) pageBlock;
+                    setRichTextParents(null, tL_pageBlockPhoto.caption.text);
+                    setRichTextParents(null, tL_pageBlockPhoto.caption.credit);
+                } else if (pageBlock instanceof TL_pageBlockListItem) {
+                    TL_pageBlockListItem tL_pageBlockListItem = (TL_pageBlockListItem) pageBlock;
+                    if (tL_pageBlockListItem.textItem != null) {
+                        setRichTextParents(null, tL_pageBlockListItem.textItem);
+                    } else if (tL_pageBlockListItem.blockItem != null) {
+                        setRichTextParents(tL_pageBlockListItem.blockItem);
+                    }
+                } else if (pageBlock instanceof TL_pageBlockOrderedListItem) {
+                    TL_pageBlockOrderedListItem tL_pageBlockOrderedListItem = (TL_pageBlockOrderedListItem) pageBlock;
+                    if (tL_pageBlockOrderedListItem.textItem != null) {
+                        setRichTextParents(null, tL_pageBlockOrderedListItem.textItem);
+                    } else if (tL_pageBlockOrderedListItem.blockItem != null) {
+                        setRichTextParents(tL_pageBlockOrderedListItem.blockItem);
+                    }
+                } else if (pageBlock instanceof TL_pageBlockCollage) {
+                    TL_pageBlockCollage tL_pageBlockCollage = (TL_pageBlockCollage) pageBlock;
+                    setRichTextParents(null, tL_pageBlockCollage.caption.text);
+                    setRichTextParents(null, tL_pageBlockCollage.caption.credit);
+                    size = tL_pageBlockCollage.items.size();
+                    while (i < size) {
+                        setRichTextParents((PageBlock) tL_pageBlockCollage.items.get(i));
+                        i++;
+                    }
+                } else if (pageBlock instanceof TL_pageBlockEmbed) {
+                    TL_pageBlockEmbed tL_pageBlockEmbed = (TL_pageBlockEmbed) pageBlock;
+                    setRichTextParents(null, tL_pageBlockEmbed.caption.text);
+                    setRichTextParents(null, tL_pageBlockEmbed.caption.credit);
+                } else if (pageBlock instanceof TL_pageBlockSubtitle) {
+                    setRichTextParents(null, ((TL_pageBlockSubtitle) pageBlock).text);
+                } else if (pageBlock instanceof TL_pageBlockBlockquote) {
+                    TL_pageBlockBlockquote tL_pageBlockBlockquote = (TL_pageBlockBlockquote) pageBlock;
+                    setRichTextParents(null, tL_pageBlockBlockquote.text);
+                    setRichTextParents(null, tL_pageBlockBlockquote.caption);
+                } else if (pageBlock instanceof TL_pageBlockDetails) {
+                    TL_pageBlockDetails tL_pageBlockDetails = (TL_pageBlockDetails) pageBlock;
+                    setRichTextParents(null, tL_pageBlockDetails.title);
+                    size = tL_pageBlockDetails.blocks.size();
+                    while (i < size) {
+                        setRichTextParents((PageBlock) tL_pageBlockDetails.blocks.get(i));
+                        i++;
+                    }
+                } else if (pageBlock instanceof TL_pageBlockVideo) {
+                    TL_pageBlockVideo tL_pageBlockVideo = (TL_pageBlockVideo) pageBlock;
+                    setRichTextParents(null, tL_pageBlockVideo.caption.text);
+                    setRichTextParents(null, tL_pageBlockVideo.caption.credit);
+                } else if (pageBlock instanceof TL_pageBlockPullquote) {
+                    TL_pageBlockPullquote tL_pageBlockPullquote = (TL_pageBlockPullquote) pageBlock;
+                    setRichTextParents(null, tL_pageBlockPullquote.text);
+                    setRichTextParents(null, tL_pageBlockPullquote.caption);
+                } else if (pageBlock instanceof TL_pageBlockAudio) {
+                    TL_pageBlockAudio tL_pageBlockAudio = (TL_pageBlockAudio) pageBlock;
+                    setRichTextParents(null, tL_pageBlockAudio.caption.text);
+                    setRichTextParents(null, tL_pageBlockAudio.caption.credit);
+                } else if (pageBlock instanceof TL_pageBlockTable) {
+                    TL_pageBlockTable tL_pageBlockTable = (TL_pageBlockTable) pageBlock;
+                    setRichTextParents(null, tL_pageBlockTable.title);
+                    size = tL_pageBlockTable.rows.size();
+                    for (int i2 = 0; i2 < size; i2++) {
+                        TL_pageTableRow tL_pageTableRow = (TL_pageTableRow) tL_pageBlockTable.rows.get(i2);
+                        int size2 = tL_pageTableRow.cells.size();
+                        for (int i3 = 0; i3 < size2; i3++) {
+                            setRichTextParents(null, ((TL_pageTableCell) tL_pageTableRow.cells.get(i3)).text);
+                        }
+                    }
+                } else if (pageBlock instanceof TL_pageBlockTitle) {
+                    setRichTextParents(null, ((TL_pageBlockTitle) pageBlock).text);
+                } else if (pageBlock instanceof TL_pageBlockCover) {
+                    setRichTextParents(((TL_pageBlockCover) pageBlock).cover);
+                } else if (pageBlock instanceof TL_pageBlockAuthorDate) {
+                    setRichTextParents(null, ((TL_pageBlockAuthorDate) pageBlock).author);
+                } else if (pageBlock instanceof TL_pageBlockMap) {
+                    TL_pageBlockMap tL_pageBlockMap = (TL_pageBlockMap) pageBlock;
+                    setRichTextParents(null, tL_pageBlockMap.caption.text);
+                    setRichTextParents(null, tL_pageBlockMap.caption.credit);
+                } else if (pageBlock instanceof TL_pageBlockRelatedArticles) {
+                    setRichTextParents(null, ((TL_pageBlockRelatedArticles) pageBlock).title);
+                }
+            }
+        }
+
+        /* JADX WARNING: Removed duplicated region for block: B:129:0x04b4  */
+        /* JADX WARNING: Removed duplicated region for block: B:128:0x0497  */
+        /* JADX WARNING: Removed duplicated region for block: B:161:0x051b A:{SYNTHETIC} */
+        /* JADX WARNING: Removed duplicated region for block: B:135:0x04c7  */
         private void addBlock(org.telegram.tgnet.TLRPC.PageBlock r25, int r26, int r27, int r28) {
             /*
             r24 = this;
@@ -8189,24 +8343,33 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r4 = r28;
             r5 = r0 instanceof org.telegram.ui.ArticleViewer.TL_pageBlockDetailsChild;
             if (r5 == 0) goto L_0x0016;
+        L_0x000e:
             r6 = r0;
             r6 = (org.telegram.ui.ArticleViewer.TL_pageBlockDetailsChild) r6;
             r6 = r6.block;
             goto L_0x0017;
+        L_0x0016:
             r6 = r0;
+        L_0x0017:
             r7 = r6 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockList;
             if (r7 != 0) goto L_0x0025;
+        L_0x001b:
             r7 = r6 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockOrderedList;
             if (r7 != 0) goto L_0x0025;
+        L_0x001f:
             r1.setRichTextParents(r6);
             r1.addAllMediaFromBlock(r6);
+        L_0x0025:
             r7 = org.telegram.ui.ArticleViewer.this;
             r6 = r7.getLastNonListPageBlock(r6);
             r7 = r6 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockUnsupported;
             if (r7 == 0) goto L_0x0030;
+        L_0x002f:
             return;
+        L_0x0030:
             r7 = r6 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockAnchor;
             if (r7 == 0) goto L_0x004c;
+        L_0x0034:
             r0 = r1.anchors;
             r6 = (org.telegram.tgnet.TLRPC.TL_pageBlockAnchor) r6;
             r2 = r6.name;
@@ -8216,16 +8379,21 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r3 = java.lang.Integer.valueOf(r3);
             r0.put(r2, r3);
             return;
+        L_0x004c:
             r7 = r6 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockList;
             if (r7 != 0) goto L_0x0059;
+        L_0x0050:
             r8 = r6 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockOrderedList;
             if (r8 != 0) goto L_0x0059;
+        L_0x0054:
             r8 = r1.blocks;
             r8.add(r0);
+        L_0x0059:
             r8 = r6 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockAudio;
             r9 = 0;
             r10 = 1;
             if (r8 == 0) goto L_0x00dd;
+        L_0x005f:
             r0 = r6;
             r0 = (org.telegram.tgnet.TLRPC.TL_pageBlockAudio) r0;
             r2 = new org.telegram.tgnet.TLRPC$TL_message;
@@ -8280,27 +8448,35 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r2 = r1.audioBlocks;
             r2.put(r0, r3);
             goto L_0x052e;
+        L_0x00dd:
             r8 = r6 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockEmbedPost;
             r11 = 0;
             if (r8 == 0) goto L_0x016a;
+        L_0x00e2:
             r0 = r6;
             r0 = (org.telegram.tgnet.TLRPC.TL_pageBlockEmbedPost) r0;
             r2 = r0.blocks;
             r2 = r2.isEmpty();
             if (r2 != 0) goto L_0x052e;
+        L_0x00ed:
             r2 = -1;
             r6.level = r2;
+        L_0x00f0:
             r2 = r0.blocks;
             r2 = r2.size();
             if (r9 >= r2) goto L_0x0139;
+        L_0x00f8:
             r2 = r0.blocks;
             r2 = r2.get(r9);
             r2 = (org.telegram.tgnet.TLRPC.PageBlock) r2;
             r3 = r2 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockUnsupported;
             if (r3 == 0) goto L_0x0105;
+        L_0x0104:
             goto L_0x0136;
+        L_0x0105:
             r3 = r2 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockAnchor;
             if (r3 == 0) goto L_0x0121;
+        L_0x0109:
             r2 = (org.telegram.tgnet.TLRPC.TL_pageBlockAnchor) r2;
             r3 = r1.anchors;
             r2 = r2.name;
@@ -8310,27 +8486,34 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r4 = java.lang.Integer.valueOf(r4);
             r3.put(r2, r4);
             goto L_0x0136;
+        L_0x0121:
             r2.level = r10;
             r3 = r0.blocks;
             r3 = r3.size();
             r3 = r3 - r10;
             if (r9 != r3) goto L_0x012e;
+        L_0x012c:
             r2.bottom = r10;
+        L_0x012e:
             r3 = r1.blocks;
             r3.add(r2);
             r1.addAllMediaFromBlock(r2);
+        L_0x0136:
             r9 = r9 + 1;
             goto L_0x00f0;
+        L_0x0139:
             r2 = r0.caption;
             r2 = r2.text;
             r2 = org.telegram.ui.ArticleViewer.getPlainText(r2);
             r2 = android.text.TextUtils.isEmpty(r2);
             if (r2 == 0) goto L_0x0155;
+        L_0x0147:
             r2 = r0.caption;
             r2 = r2.credit;
             r2 = org.telegram.ui.ArticleViewer.getPlainText(r2);
             r2 = android.text.TextUtils.isEmpty(r2);
             if (r2 != 0) goto L_0x052e;
+        L_0x0155:
             r2 = new org.telegram.ui.ArticleViewer$TL_pageBlockEmbedPostCaption;
             r3 = org.telegram.ui.ArticleViewer.this;
             r2.<init>(r3, r11);
@@ -8340,8 +8523,10 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r0 = r1.blocks;
             r0.add(r2);
             goto L_0x052e;
+        L_0x016a:
             r8 = r6 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockRelatedArticles;
             if (r8 == 0) goto L_0x01b4;
+        L_0x016e:
             r6 = (org.telegram.tgnet.TLRPC.TL_pageBlockRelatedArticles) r6;
             r0 = new org.telegram.ui.ArticleViewer$TL_pageBlockRelatedArticlesShadow;
             r2 = org.telegram.ui.ArticleViewer.this;
@@ -8353,7 +8538,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r2.add(r3, r0);
             r0 = r6.articles;
             r0 = r0.size();
+        L_0x018a:
             if (r9 >= r0) goto L_0x01a1;
+        L_0x018c:
             r2 = new org.telegram.ui.ArticleViewer$TL_pageBlockRelatedArticlesChild;
             r3 = org.telegram.ui.ArticleViewer.this;
             r2.<init>(r3, r11);
@@ -8363,7 +8550,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r3.add(r2);
             r9 = r9 + 1;
             goto L_0x018a;
+        L_0x01a1:
             if (r4 != 0) goto L_0x052e;
+        L_0x01a3:
             r0 = new org.telegram.ui.ArticleViewer$TL_pageBlockRelatedArticlesShadow;
             r2 = org.telegram.ui.ArticleViewer.this;
             r0.<init>(r2, r11);
@@ -8371,12 +8560,16 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r2 = r1.blocks;
             r2.add(r0);
             goto L_0x052e;
+        L_0x01b4:
             r8 = r6 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockDetails;
             if (r8 == 0) goto L_0x01e5;
+        L_0x01b8:
             r6 = (org.telegram.tgnet.TLRPC.TL_pageBlockDetails) r6;
             r5 = r6.blocks;
             r5 = r5.size();
+        L_0x01c0:
             if (r9 >= r5) goto L_0x052e;
+        L_0x01c2:
             r7 = new org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild;
             r8 = org.telegram.ui.ArticleViewer.this;
             r7.<init>(r8, r11);
@@ -8391,10 +8584,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r1.addBlock(r7, r8, r3, r4);
             r9 = r9 + 1;
             goto L_0x01c0;
+        L_0x01e5:
             r8 = " ";
             r12 = ".%d";
             r13 = "%d.";
             if (r7 == 0) goto L_0x0331;
+        L_0x01ed:
             r6 = (org.telegram.tgnet.TLRPC.TL_pageBlockList) r6;
             r7 = new org.telegram.ui.ArticleViewer$TL_pageBlockListParent;
             r14 = org.telegram.ui.ArticleViewer.this;
@@ -8404,7 +8599,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r14 = r6.items;
             r14 = r14.size();
             r15 = 0;
+        L_0x0203:
             if (r15 >= r14) goto L_0x052e;
+        L_0x0205:
             r9 = r6.items;
             r9 = r9.get(r15);
             r9 = (org.telegram.tgnet.TLRPC.PageListItem) r9;
@@ -8416,9 +8613,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r10.parent = r7;
             r14 = r6.ordered;
             if (r14 == 0) goto L_0x0252;
+        L_0x0220:
             r14 = org.telegram.ui.ArticleViewer.this;
             r14 = r14.isRtl;
             if (r14 == 0) goto L_0x023d;
+        L_0x0228:
             r14 = 1;
             r11 = new java.lang.Object[r14];
             r17 = r15 + 1;
@@ -8428,6 +8627,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r11 = java.lang.String.format(r12, r11);
             r10.num = r11;
             goto L_0x0258;
+        L_0x023d:
             r14 = 1;
             r16 = 0;
             r11 = new java.lang.Object[r14];
@@ -8437,37 +8637,46 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r11 = java.lang.String.format(r13, r11);
             r10.num = r11;
             goto L_0x0258;
+        L_0x0252:
             r11 = "•";
             r10.num = r11;
+        L_0x0258:
             r11 = r7.items;
             r11.add(r10);
             r11 = r9 instanceof org.telegram.tgnet.TLRPC.TL_pageListItemText;
             if (r11 == 0) goto L_0x026c;
+        L_0x0263:
             r11 = r9;
             r11 = (org.telegram.tgnet.TLRPC.TL_pageListItemText) r11;
             r11 = r11.text;
             r10.textItem = r11;
             goto L_0x0296;
+        L_0x026c:
             r11 = r9 instanceof org.telegram.tgnet.TLRPC.TL_pageListItemBlocks;
             if (r11 == 0) goto L_0x0296;
+        L_0x0270:
             r11 = r9;
             r11 = (org.telegram.tgnet.TLRPC.TL_pageListItemBlocks) r11;
             r14 = r11.blocks;
             r14 = r14.isEmpty();
             if (r14 != 0) goto L_0x0288;
+        L_0x027b:
             r11 = r11.blocks;
             r14 = 0;
             r11 = r11.get(r14);
             r11 = (org.telegram.tgnet.TLRPC.PageBlock) r11;
             r10.blockItem = r11;
             goto L_0x0296;
+        L_0x0288:
             r9 = new org.telegram.tgnet.TLRPC$TL_pageListItemText;
             r9.<init>();
             r11 = new org.telegram.tgnet.TLRPC$TL_textPlain;
             r11.<init>();
             r11.text = r8;
             r9.text = r11;
+        L_0x0296:
             if (r5 == 0) goto L_0x02b7;
+        L_0x0298:
             r11 = r0;
             r11 = (org.telegram.ui.ArticleViewer.TL_pageBlockDetailsChild) r11;
             r14 = new org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild;
@@ -8482,20 +8691,27 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r6 = r3 + 1;
             r1.addBlock(r14, r2, r6, r4);
             goto L_0x02c8;
+        L_0x02b7:
             r20 = r6;
             r21 = r8;
             if (r15 != 0) goto L_0x02c3;
+        L_0x02bd:
             r6 = org.telegram.ui.ArticleViewer.this;
             r10 = r6.fixListBlock(r0, r10);
+        L_0x02c3:
             r6 = r3 + 1;
             r1.addBlock(r10, r2, r6, r4);
+        L_0x02c8:
             r6 = r9 instanceof org.telegram.tgnet.TLRPC.TL_pageListItemBlocks;
             if (r6 == 0) goto L_0x0324;
+        L_0x02cc:
             r9 = (org.telegram.tgnet.TLRPC.TL_pageListItemBlocks) r9;
             r6 = r9.blocks;
             r6 = r6.size();
             r8 = 1;
+        L_0x02d5:
             if (r8 >= r6) goto L_0x0324;
+        L_0x02d7:
             r10 = new org.telegram.ui.ArticleViewer$TL_pageBlockListItem;
             r11 = org.telegram.ui.ArticleViewer.this;
             r14 = 0;
@@ -8506,6 +8722,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r10.blockItem = r11;
             r10.parent = r7;
             if (r5 == 0) goto L_0x030d;
+        L_0x02ef:
             r11 = r0;
             r11 = (org.telegram.ui.ArticleViewer.TL_pageBlockDetailsChild) r11;
             r22 = r6;
@@ -8519,16 +8736,19 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r9 = r3 + 1;
             r1.addBlock(r6, r2, r9, r4);
             goto L_0x0316;
+        L_0x030d:
             r22 = r6;
             r23 = r9;
             r6 = r3 + 1;
             r1.addBlock(r10, r2, r6, r4);
+        L_0x0316:
             r6 = r7.items;
             r6.add(r10);
             r8 = r8 + 1;
             r6 = r22;
             r9 = r23;
             goto L_0x02d5;
+        L_0x0324:
             r15 = r15 + 1;
             r14 = r18;
             r6 = r20;
@@ -8537,9 +8757,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r10 = 1;
             r11 = 0;
             goto L_0x0203;
+        L_0x0331:
             r21 = r8;
             r7 = r6 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockOrderedList;
             if (r7 == 0) goto L_0x052e;
+        L_0x0337:
             r6 = (org.telegram.tgnet.TLRPC.TL_pageBlockOrderedList) r6;
             r7 = new org.telegram.ui.ArticleViewer$TL_pageBlockOrderedListParent;
             r8 = org.telegram.ui.ArticleViewer.this;
@@ -8550,7 +8772,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r8 = r6.items;
             r8 = r8.size();
             r9 = 0;
+        L_0x034e:
             if (r9 >= r8) goto L_0x052e;
+        L_0x0350:
             r10 = r6.items;
             r10 = r10.get(r9);
             r10 = (org.telegram.tgnet.TLRPC.PageListOrderedItem) r10;
@@ -8565,6 +8789,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r14 = r10 instanceof org.telegram.tgnet.TLRPC.TL_pageListOrderedItemText;
             r15 = ".";
             if (r14 == 0) goto L_0x03ed;
+        L_0x0373:
             r14 = r10;
             r14 = (org.telegram.tgnet.TLRPC.TL_pageListOrderedItemText) r14;
             r18 = r6;
@@ -8573,9 +8798,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r6 = r14.num;
             r6 = android.text.TextUtils.isEmpty(r6);
             if (r6 == 0) goto L_0x03b9;
+        L_0x0385:
             r6 = org.telegram.ui.ArticleViewer.this;
             r6 = r6.isRtl;
             if (r6 == 0) goto L_0x03a3;
+        L_0x038d:
             r6 = 1;
             r14 = new java.lang.Object[r6];
             r15 = r9 + 1;
@@ -8585,6 +8812,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r14 = java.lang.String.format(r12, r14);
             r11.num = r14;
             goto L_0x048f;
+        L_0x03a3:
             r6 = 1;
             r16 = 0;
             r14 = new java.lang.Object[r6];
@@ -8594,9 +8822,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r6 = java.lang.String.format(r13, r14);
             r11.num = r6;
             goto L_0x048f;
+        L_0x03b9:
             r6 = org.telegram.ui.ArticleViewer.this;
             r6 = r6.isRtl;
             if (r6 == 0) goto L_0x03d7;
+        L_0x03c1:
             r6 = new java.lang.StringBuilder;
             r6.<init>();
             r6.append(r15);
@@ -8605,6 +8835,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r6 = r6.toString();
             r11.num = r6;
             goto L_0x048f;
+        L_0x03d7:
             r6 = new java.lang.StringBuilder;
             r6.<init>();
             r14 = r14.num;
@@ -8613,14 +8844,17 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r6 = r6.toString();
             r11.num = r6;
             goto L_0x048f;
+        L_0x03ed:
             r18 = r6;
             r6 = r10 instanceof org.telegram.tgnet.TLRPC.TL_pageListOrderedItemBlocks;
             if (r6 == 0) goto L_0x048f;
+        L_0x03f3:
             r6 = r10;
             r6 = (org.telegram.tgnet.TLRPC.TL_pageListOrderedItemBlocks) r6;
             r14 = r6.blocks;
             r14 = r14.isEmpty();
             if (r14 != 0) goto L_0x040f;
+        L_0x03fe:
             r14 = r6.blocks;
             r20 = r8;
             r8 = 0;
@@ -8629,6 +8863,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r11.blockItem = r14;
             r14 = r21;
             goto L_0x0421;
+        L_0x040f:
             r20 = r8;
             r10 = new org.telegram.tgnet.TLRPC$TL_pageListOrderedItemText;
             r10.<init>();
@@ -8637,12 +8872,15 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r14 = r21;
             r8.text = r14;
             r10.text = r8;
+        L_0x0421:
             r8 = r6.num;
             r8 = android.text.TextUtils.isEmpty(r8);
             if (r8 == 0) goto L_0x045b;
+        L_0x0429:
             r6 = org.telegram.ui.ArticleViewer.this;
             r6 = r6.isRtl;
             if (r6 == 0) goto L_0x0446;
+        L_0x0431:
             r8 = 1;
             r6 = new java.lang.Object[r8];
             r15 = r9 + 1;
@@ -8652,6 +8890,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r6 = java.lang.String.format(r12, r6);
             r11.num = r6;
             goto L_0x0495;
+        L_0x0446:
             r8 = 1;
             r16 = 0;
             r6 = new java.lang.Object[r8];
@@ -8661,10 +8900,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r6 = java.lang.String.format(r13, r6);
             r11.num = r6;
             goto L_0x0495;
+        L_0x045b:
             r16 = 0;
             r8 = org.telegram.ui.ArticleViewer.this;
             r8 = r8.isRtl;
             if (r8 == 0) goto L_0x047a;
+        L_0x0465:
             r8 = new java.lang.StringBuilder;
             r8.<init>();
             r8.append(r15);
@@ -8673,6 +8914,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r6 = r8.toString();
             r11.num = r6;
             goto L_0x0495;
+        L_0x047a:
             r8 = new java.lang.StringBuilder;
             r8.<init>();
             r6 = r6.num;
@@ -8681,10 +8923,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r6 = r8.toString();
             r11.num = r6;
             goto L_0x0495;
+        L_0x048f:
             r20 = r8;
             r14 = r21;
             r16 = 0;
+        L_0x0495:
             if (r5 == 0) goto L_0x04b4;
+        L_0x0497:
             r6 = r0;
             r6 = (org.telegram.ui.ArticleViewer.TL_pageBlockDetailsChild) r6;
             r8 = new org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild;
@@ -8698,19 +8943,26 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r6 = r3 + 1;
             r1.addBlock(r8, r2, r6, r4);
             goto L_0x04c3;
+        L_0x04b4:
             r21 = r12;
             if (r9 != 0) goto L_0x04be;
+        L_0x04b8:
             r6 = org.telegram.ui.ArticleViewer.this;
             r11 = r6.fixListBlock(r0, r11);
+        L_0x04be:
             r6 = r3 + 1;
             r1.addBlock(r11, r2, r6, r4);
+        L_0x04c3:
             r6 = r10 instanceof org.telegram.tgnet.TLRPC.TL_pageListOrderedItemBlocks;
             if (r6 == 0) goto L_0x051b;
+        L_0x04c7:
             r10 = (org.telegram.tgnet.TLRPC.TL_pageListOrderedItemBlocks) r10;
             r6 = r10.blocks;
             r6 = r6.size();
             r8 = 1;
+        L_0x04d0:
             if (r8 >= r6) goto L_0x051b;
+        L_0x04d2:
             r11 = new org.telegram.ui.ArticleViewer$TL_pageBlockOrderedListItem;
             r12 = org.telegram.ui.ArticleViewer.this;
             r15 = 0;
@@ -8721,6 +8973,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r11.blockItem = r12;
             r11.parent = r7;
             if (r5 == 0) goto L_0x0506;
+        L_0x04ea:
             r12 = r0;
             r12 = (org.telegram.ui.ArticleViewer.TL_pageBlockDetailsChild) r12;
             r0 = new org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild;
@@ -8733,15 +8986,18 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r5 = r3 + 1;
             r1.addBlock(r0, r2, r5, r4);
             goto L_0x050d;
+        L_0x0506:
             r19 = r5;
             r0 = r3 + 1;
             r1.addBlock(r11, r2, r0, r4);	 Catch:{ Throwable -> 0x052f }
+        L_0x050d:
             r0 = r7.items;
             r0.add(r11);
             r8 = r8 + 1;
             r0 = r25;
             r5 = r19;
             goto L_0x04d0;
+        L_0x051b:
             r19 = r5;
             r15 = 0;
             r9 = r9 + 1;
@@ -8752,448 +9008,18 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r12 = r21;
             r21 = r14;
             goto L_0x034e;
+        L_0x052e:
             return;
+        L_0x052f:
             r0 = move-exception;
             r2 = r0;
+            goto L_0x0533;
+        L_0x0532:
             throw r2;
-            return;
+        L_0x0533:
+            goto L_0x0532;
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer$WebpageAdapter.addBlock(org.telegram.tgnet.TLRPC$PageBlock, int, int, int):void");
-        }
-
-        /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-            jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:102:0x022b in {2, 5, 8, 11, 14, 17, 20, 25, 28, 33, 36, 41, 44, 49, 52, 55, 58, 63, 66, 69, 72, 79, 80, 83, 89, 92, 95, 98, 99, 101} preds:[]
-            	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-            	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-            	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-            	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-            	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-            	at java.util.ArrayList.forEach(ArrayList.java:1257)
-            	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-            	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$0(DepthTraversal.java:13)
-            	at java.util.ArrayList.forEach(ArrayList.java:1257)
-            	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:13)
-            	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-            	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-            	at java.lang.Iterable.forEach(Iterable.java:75)
-            	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-            	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-            	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-            	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-            	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-            */
-        private void setRichTextParents(org.telegram.tgnet.TLRPC.PageBlock r9) {
-            /*
-            r8 = this;
-            r0 = r9 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockEmbedPost;
-            r1 = 0;
-            if (r0 == 0) goto L_0x0017;
-            r9 = (org.telegram.tgnet.TLRPC.TL_pageBlockEmbedPost) r9;
-            r0 = r9.caption;
-            r0 = r0.text;
-            r8.setRichTextParents(r1, r0);
-            r9 = r9.caption;
-            r9 = r9.credit;
-            r8.setRichTextParents(r1, r9);
-            goto L_0x0228;
-            r0 = r9 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockParagraph;
-            if (r0 == 0) goto L_0x0024;
-            r9 = (org.telegram.tgnet.TLRPC.TL_pageBlockParagraph) r9;
-            r9 = r9.text;
-            r8.setRichTextParents(r1, r9);
-            goto L_0x0228;
-            r0 = r9 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockKicker;
-            if (r0 == 0) goto L_0x0031;
-            r9 = (org.telegram.tgnet.TLRPC.TL_pageBlockKicker) r9;
-            r9 = r9.text;
-            r8.setRichTextParents(r1, r9);
-            goto L_0x0228;
-            r0 = r9 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockFooter;
-            if (r0 == 0) goto L_0x003e;
-            r9 = (org.telegram.tgnet.TLRPC.TL_pageBlockFooter) r9;
-            r9 = r9.text;
-            r8.setRichTextParents(r1, r9);
-            goto L_0x0228;
-            r0 = r9 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockHeader;
-            if (r0 == 0) goto L_0x004b;
-            r9 = (org.telegram.tgnet.TLRPC.TL_pageBlockHeader) r9;
-            r9 = r9.text;
-            r8.setRichTextParents(r1, r9);
-            goto L_0x0228;
-            r0 = r9 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockPreformatted;
-            if (r0 == 0) goto L_0x0058;
-            r9 = (org.telegram.tgnet.TLRPC.TL_pageBlockPreformatted) r9;
-            r9 = r9.text;
-            r8.setRichTextParents(r1, r9);
-            goto L_0x0228;
-            r0 = r9 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockSubheader;
-            if (r0 == 0) goto L_0x0065;
-            r9 = (org.telegram.tgnet.TLRPC.TL_pageBlockSubheader) r9;
-            r9 = r9.text;
-            r8.setRichTextParents(r1, r9);
-            goto L_0x0228;
-            r0 = r9 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockSlideshow;
-            r2 = 0;
-            if (r0 == 0) goto L_0x0090;
-            r9 = (org.telegram.tgnet.TLRPC.TL_pageBlockSlideshow) r9;
-            r0 = r9.caption;
-            r0 = r0.text;
-            r8.setRichTextParents(r1, r0);
-            r0 = r9.caption;
-            r0 = r0.credit;
-            r8.setRichTextParents(r1, r0);
-            r0 = r9.items;
-            r0 = r0.size();
-            if (r2 >= r0) goto L_0x0228;
-            r1 = r9.items;
-            r1 = r1.get(r2);
-            r1 = (org.telegram.tgnet.TLRPC.PageBlock) r1;
-            r8.setRichTextParents(r1);
-            r2 = r2 + 1;
-            goto L_0x0080;
-            r0 = r9 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockPhoto;
-            if (r0 == 0) goto L_0x00a6;
-            r9 = (org.telegram.tgnet.TLRPC.TL_pageBlockPhoto) r9;
-            r0 = r9.caption;
-            r0 = r0.text;
-            r8.setRichTextParents(r1, r0);
-            r9 = r9.caption;
-            r9 = r9.credit;
-            r8.setRichTextParents(r1, r9);
-            goto L_0x0228;
-            r0 = r9 instanceof org.telegram.ui.ArticleViewer.TL_pageBlockListItem;
-            if (r0 == 0) goto L_0x00ca;
-            r9 = (org.telegram.ui.ArticleViewer.TL_pageBlockListItem) r9;
-            r0 = r9.textItem;
-            if (r0 == 0) goto L_0x00bb;
-            r9 = r9.textItem;
-            r8.setRichTextParents(r1, r9);
-            goto L_0x0228;
-            r0 = r9.blockItem;
-            if (r0 == 0) goto L_0x0228;
-            r9 = r9.blockItem;
-            r8.setRichTextParents(r9);
-            goto L_0x0228;
-            r0 = r9 instanceof org.telegram.ui.ArticleViewer.TL_pageBlockOrderedListItem;
-            if (r0 == 0) goto L_0x00ee;
-            r9 = (org.telegram.ui.ArticleViewer.TL_pageBlockOrderedListItem) r9;
-            r0 = r9.textItem;
-            if (r0 == 0) goto L_0x00df;
-            r9 = r9.textItem;
-            r8.setRichTextParents(r1, r9);
-            goto L_0x0228;
-            r0 = r9.blockItem;
-            if (r0 == 0) goto L_0x0228;
-            r9 = r9.blockItem;
-            r8.setRichTextParents(r9);
-            goto L_0x0228;
-            r0 = r9 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockCollage;
-            if (r0 == 0) goto L_0x0118;
-            r9 = (org.telegram.tgnet.TLRPC.TL_pageBlockCollage) r9;
-            r0 = r9.caption;
-            r0 = r0.text;
-            r8.setRichTextParents(r1, r0);
-            r0 = r9.caption;
-            r0 = r0.credit;
-            r8.setRichTextParents(r1, r0);
-            r0 = r9.items;
-            r0 = r0.size();
-            if (r2 >= r0) goto L_0x0228;
-            r1 = r9.items;
-            r1 = r1.get(r2);
-            r1 = (org.telegram.tgnet.TLRPC.PageBlock) r1;
-            r8.setRichTextParents(r1);
-            r2 = r2 + 1;
-            goto L_0x0108;
-            r0 = r9 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockEmbed;
-            if (r0 == 0) goto L_0x012e;
-            r9 = (org.telegram.tgnet.TLRPC.TL_pageBlockEmbed) r9;
-            r0 = r9.caption;
-            r0 = r0.text;
-            r8.setRichTextParents(r1, r0);
-            r9 = r9.caption;
-            r9 = r9.credit;
-            r8.setRichTextParents(r1, r9);
-            goto L_0x0228;
-            r0 = r9 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockSubtitle;
-            if (r0 == 0) goto L_0x013b;
-            r9 = (org.telegram.tgnet.TLRPC.TL_pageBlockSubtitle) r9;
-            r9 = r9.text;
-            r8.setRichTextParents(r1, r9);
-            goto L_0x0228;
-            r0 = r9 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockBlockquote;
-            if (r0 == 0) goto L_0x014d;
-            r9 = (org.telegram.tgnet.TLRPC.TL_pageBlockBlockquote) r9;
-            r0 = r9.text;
-            r8.setRichTextParents(r1, r0);
-            r9 = r9.caption;
-            r8.setRichTextParents(r1, r9);
-            goto L_0x0228;
-            r0 = r9 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockDetails;
-            if (r0 == 0) goto L_0x016e;
-            r9 = (org.telegram.tgnet.TLRPC.TL_pageBlockDetails) r9;
-            r0 = r9.title;
-            r8.setRichTextParents(r1, r0);
-            r0 = r9.blocks;
-            r0 = r0.size();
-            if (r2 >= r0) goto L_0x0228;
-            r1 = r9.blocks;
-            r1 = r1.get(r2);
-            r1 = (org.telegram.tgnet.TLRPC.PageBlock) r1;
-            r8.setRichTextParents(r1);
-            r2 = r2 + 1;
-            goto L_0x015e;
-            r0 = r9 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockVideo;
-            if (r0 == 0) goto L_0x0184;
-            r9 = (org.telegram.tgnet.TLRPC.TL_pageBlockVideo) r9;
-            r0 = r9.caption;
-            r0 = r0.text;
-            r8.setRichTextParents(r1, r0);
-            r9 = r9.caption;
-            r9 = r9.credit;
-            r8.setRichTextParents(r1, r9);
-            goto L_0x0228;
-            r0 = r9 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockPullquote;
-            if (r0 == 0) goto L_0x0196;
-            r9 = (org.telegram.tgnet.TLRPC.TL_pageBlockPullquote) r9;
-            r0 = r9.text;
-            r8.setRichTextParents(r1, r0);
-            r9 = r9.caption;
-            r8.setRichTextParents(r1, r9);
-            goto L_0x0228;
-            r0 = r9 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockAudio;
-            if (r0 == 0) goto L_0x01ac;
-            r9 = (org.telegram.tgnet.TLRPC.TL_pageBlockAudio) r9;
-            r0 = r9.caption;
-            r0 = r0.text;
-            r8.setRichTextParents(r1, r0);
-            r9 = r9.caption;
-            r9 = r9.credit;
-            r8.setRichTextParents(r1, r9);
-            goto L_0x0228;
-            r0 = r9 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockTable;
-            if (r0 == 0) goto L_0x01e4;
-            r9 = (org.telegram.tgnet.TLRPC.TL_pageBlockTable) r9;
-            r0 = r9.title;
-            r8.setRichTextParents(r1, r0);
-            r0 = r9.rows;
-            r0 = r0.size();
-            r3 = 0;
-            if (r3 >= r0) goto L_0x0228;
-            r4 = r9.rows;
-            r4 = r4.get(r3);
-            r4 = (org.telegram.tgnet.TLRPC.TL_pageTableRow) r4;
-            r5 = r4.cells;
-            r5 = r5.size();
-            r6 = 0;
-            if (r6 >= r5) goto L_0x01e1;
-            r7 = r4.cells;
-            r7 = r7.get(r6);
-            r7 = (org.telegram.tgnet.TLRPC.TL_pageTableCell) r7;
-            r7 = r7.text;
-            r8.setRichTextParents(r1, r7);
-            r6 = r6 + 1;
-            goto L_0x01cf;
-            r3 = r3 + 1;
-            goto L_0x01be;
-            r0 = r9 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockTitle;
-            if (r0 == 0) goto L_0x01f0;
-            r9 = (org.telegram.tgnet.TLRPC.TL_pageBlockTitle) r9;
-            r9 = r9.text;
-            r8.setRichTextParents(r1, r9);
-            goto L_0x0228;
-            r0 = r9 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockCover;
-            if (r0 == 0) goto L_0x01fc;
-            r9 = (org.telegram.tgnet.TLRPC.TL_pageBlockCover) r9;
-            r9 = r9.cover;
-            r8.setRichTextParents(r9);	 Catch:{ Throwable -> 0x0229 }
-            goto L_0x0228;
-            r0 = r9 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockAuthorDate;
-            if (r0 == 0) goto L_0x0208;
-            r9 = (org.telegram.tgnet.TLRPC.TL_pageBlockAuthorDate) r9;
-            r9 = r9.author;
-            r8.setRichTextParents(r1, r9);
-            goto L_0x0228;
-            r0 = r9 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockMap;
-            if (r0 == 0) goto L_0x021d;
-            r9 = (org.telegram.tgnet.TLRPC.TL_pageBlockMap) r9;
-            r0 = r9.caption;
-            r0 = r0.text;
-            r8.setRichTextParents(r1, r0);
-            r9 = r9.caption;
-            r9 = r9.credit;
-            r8.setRichTextParents(r1, r9);
-            goto L_0x0228;
-            r0 = r9 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockRelatedArticles;
-            if (r0 == 0) goto L_0x0228;
-            r9 = (org.telegram.tgnet.TLRPC.TL_pageBlockRelatedArticles) r9;
-            r9 = r9.title;
-            r8.setRichTextParents(r1, r9);
-            return;
-            r9 = move-exception;
-            throw r9;
-            return;
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer$WebpageAdapter.setRichTextParents(org.telegram.tgnet.TLRPC$PageBlock):void");
-        }
-
-        /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-            jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:57:0x0104 in {1, 4, 7, 10, 13, 16, 19, 22, 25, 30, 33, 36, 39, 49, 52, 53, 54, 56} preds:[]
-            	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-            	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-            	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-            	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-            	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-            	at java.util.ArrayList.forEach(ArrayList.java:1257)
-            	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-            	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$0(DepthTraversal.java:13)
-            	at java.util.ArrayList.forEach(ArrayList.java:1257)
-            	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:13)
-            	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-            	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-            	at java.lang.Iterable.forEach(Iterable.java:75)
-            	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-            	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-            	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-            	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-            	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-            */
-        private void setRichTextParents(org.telegram.tgnet.TLRPC.RichText r3, org.telegram.tgnet.TLRPC.RichText r4) {
-            /*
-            r2 = this;
-            if (r4 != 0) goto L_0x0003;
-            return;
-            r4.parentRichText = r3;
-            r3 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textFixed;
-            if (r3 == 0) goto L_0x0013;
-            r3 = r4;
-            r3 = (org.telegram.tgnet.TLRPC.TL_textFixed) r3;
-            r3 = r3.text;
-            r2.setRichTextParents(r4, r3);
-            goto L_0x0101;
-            r3 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textItalic;
-            if (r3 == 0) goto L_0x0021;
-            r3 = r4;
-            r3 = (org.telegram.tgnet.TLRPC.TL_textItalic) r3;
-            r3 = r3.text;
-            r2.setRichTextParents(r4, r3);
-            goto L_0x0101;
-            r3 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textBold;
-            if (r3 == 0) goto L_0x002f;
-            r3 = r4;
-            r3 = (org.telegram.tgnet.TLRPC.TL_textBold) r3;
-            r3 = r3.text;
-            r2.setRichTextParents(r4, r3);
-            goto L_0x0101;
-            r3 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textUnderline;
-            if (r3 == 0) goto L_0x003d;
-            r3 = r4;
-            r3 = (org.telegram.tgnet.TLRPC.TL_textUnderline) r3;
-            r3 = r3.text;
-            r2.setRichTextParents(r4, r3);
-            goto L_0x0101;
-            r3 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textStrike;
-            if (r3 == 0) goto L_0x004b;
-            r3 = r4;
-            r3 = (org.telegram.tgnet.TLRPC.TL_textStrike) r3;
-            r3 = r3.text;
-            r2.setRichTextParents(r4, r3);
-            goto L_0x0101;
-            r3 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textEmail;
-            if (r3 == 0) goto L_0x0059;
-            r3 = r4;
-            r3 = (org.telegram.tgnet.TLRPC.TL_textEmail) r3;
-            r3 = r3.text;
-            r2.setRichTextParents(r4, r3);
-            goto L_0x0101;
-            r3 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textPhone;
-            if (r3 == 0) goto L_0x0067;
-            r3 = r4;
-            r3 = (org.telegram.tgnet.TLRPC.TL_textPhone) r3;
-            r3 = r3.text;
-            r2.setRichTextParents(r4, r3);
-            goto L_0x0101;
-            r3 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textUrl;
-            if (r3 == 0) goto L_0x0075;
-            r3 = r4;
-            r3 = (org.telegram.tgnet.TLRPC.TL_textUrl) r3;
-            r3 = r3.text;
-            r2.setRichTextParents(r4, r3);
-            goto L_0x0101;
-            r3 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textConcat;
-            if (r3 == 0) goto L_0x0090;
-            r3 = r4.texts;
-            r3 = r3.size();
-            r0 = 0;
-            if (r0 >= r3) goto L_0x0101;
-            r1 = r4.texts;
-            r1 = r1.get(r0);
-            r1 = (org.telegram.tgnet.TLRPC.RichText) r1;
-            r2.setRichTextParents(r4, r1);
-            r0 = r0 + 1;
-            goto L_0x0080;
-            r3 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textSubscript;
-            if (r3 == 0) goto L_0x009d;
-            r3 = r4;
-            r3 = (org.telegram.tgnet.TLRPC.TL_textSubscript) r3;
-            r3 = r3.text;
-            r2.setRichTextParents(r4, r3);
-            goto L_0x0101;
-            r3 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textSuperscript;
-            if (r3 == 0) goto L_0x00aa;
-            r3 = r4;
-            r3 = (org.telegram.tgnet.TLRPC.TL_textSuperscript) r3;
-            r3 = r3.text;
-            r2.setRichTextParents(r4, r3);
-            goto L_0x0101;
-            r3 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textMarked;
-            if (r3 == 0) goto L_0x00b7;
-            r3 = r4;
-            r3 = (org.telegram.tgnet.TLRPC.TL_textMarked) r3;
-            r3 = r3.text;
-            r2.setRichTextParents(r4, r3);
-            goto L_0x0101;
-            r3 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textAnchor;
-            if (r3 == 0) goto L_0x0101;
-            r3 = r4;
-            r3 = (org.telegram.tgnet.TLRPC.TL_textAnchor) r3;
-            r0 = r3.text;
-            r2.setRichTextParents(r4, r0);	 Catch:{ Throwable -> 0x0102 }
-            r4 = r3.name;
-            r4 = r4.toLowerCase();
-            r0 = r2.anchors;
-            r1 = r2.blocks;
-            r1 = r1.size();
-            r1 = java.lang.Integer.valueOf(r1);
-            r0.put(r4, r1);
-            r0 = r3.text;
-            r1 = r0 instanceof org.telegram.tgnet.TLRPC.TL_textPlain;
-            if (r1 == 0) goto L_0x00ee;
-            r0 = (org.telegram.tgnet.TLRPC.TL_textPlain) r0;
-            r0 = r0.text;
-            r0 = android.text.TextUtils.isEmpty(r0);
-            if (r0 != 0) goto L_0x00f7;
-            r0 = r2.anchorsParent;
-            r0.put(r4, r3);
-            goto L_0x00f7;
-            r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_textEmpty;
-            if (r0 != 0) goto L_0x00f7;
-            r0 = r2.anchorsParent;
-            r0.put(r4, r3);
-            r3 = r2.anchorsOffset;
-            r0 = -1;
-            r0 = java.lang.Integer.valueOf(r0);
-            r3.put(r4, r0);
-            return;
-            r3 = move-exception;
-            throw r3;
-            return;
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer$WebpageAdapter.setRichTextParents(org.telegram.tgnet.TLRPC$RichText, org.telegram.tgnet.TLRPC$RichText):void");
-        }
-
-        public WebpageAdapter(Context context) {
-            this.context = context;
         }
 
         private void addAllMediaFromBlock(PageBlock pageBlock) {
@@ -9728,581 +9554,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         /* synthetic */ TL_pageBlockEmbedPostCaption(ArticleViewer articleViewer, AnonymousClass1 anonymousClass1) {
             this();
         }
-    }
-
-    /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:71:0x00db in {2, 6, 10, 14, 18, 22, 26, 30, 34, 38, 41, 46, 47, 51, 55, 59, 65, 68, 70} preds:[]
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-        	at java.lang.Iterable.forEach(Iterable.java:75)
-        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-        */
-    public static java.lang.CharSequence getPlainText(org.telegram.tgnet.TLRPC.RichText r4) {
-        /*
-        r0 = "";
-        if (r4 != 0) goto L_0x0005;
-        return r0;
-        r1 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textFixed;
-        if (r1 == 0) goto L_0x0012;
-        r4 = (org.telegram.tgnet.TLRPC.TL_textFixed) r4;
-        r4 = r4.text;
-        r4 = getPlainText(r4);
-        return r4;
-        r1 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textItalic;
-        if (r1 == 0) goto L_0x001f;
-        r4 = (org.telegram.tgnet.TLRPC.TL_textItalic) r4;
-        r4 = r4.text;
-        r4 = getPlainText(r4);
-        return r4;
-        r1 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textBold;
-        if (r1 == 0) goto L_0x002c;
-        r4 = (org.telegram.tgnet.TLRPC.TL_textBold) r4;
-        r4 = r4.text;
-        r4 = getPlainText(r4);
-        return r4;
-        r1 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textUnderline;
-        if (r1 == 0) goto L_0x0039;
-        r4 = (org.telegram.tgnet.TLRPC.TL_textUnderline) r4;
-        r4 = r4.text;
-        r4 = getPlainText(r4);
-        return r4;
-        r1 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textStrike;
-        if (r1 == 0) goto L_0x0046;
-        r4 = (org.telegram.tgnet.TLRPC.TL_textStrike) r4;
-        r4 = r4.text;
-        r4 = getPlainText(r4);
-        return r4;
-        r1 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textEmail;
-        if (r1 == 0) goto L_0x0053;
-        r4 = (org.telegram.tgnet.TLRPC.TL_textEmail) r4;
-        r4 = r4.text;
-        r4 = getPlainText(r4);
-        return r4;
-        r1 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textUrl;
-        if (r1 == 0) goto L_0x0060;
-        r4 = (org.telegram.tgnet.TLRPC.TL_textUrl) r4;
-        r4 = r4.text;
-        r4 = getPlainText(r4);
-        return r4;
-        r1 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textPlain;
-        if (r1 == 0) goto L_0x0069;
-        r4 = (org.telegram.tgnet.TLRPC.TL_textPlain) r4;
-        r4 = r4.text;
-        return r4;
-        r1 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textAnchor;
-        if (r1 == 0) goto L_0x0076;
-        r4 = (org.telegram.tgnet.TLRPC.TL_textAnchor) r4;
-        r4 = r4.text;
-        r4 = getPlainText(r4);
-        return r4;
-        r1 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textEmpty;
-        if (r1 == 0) goto L_0x007b;
-        return r0;
-        r1 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textConcat;
-        if (r1 == 0) goto L_0x00a0;
-        r0 = new java.lang.StringBuilder;
-        r0.<init>();
-        r1 = r4.texts;
-        r1 = r1.size();
-        r2 = 0;
-        if (r2 >= r1) goto L_0x009f;
-        r3 = r4.texts;
-        r3 = r3.get(r2);
-        r3 = (org.telegram.tgnet.TLRPC.RichText) r3;
-        r3 = getPlainText(r3);
-        r0.append(r3);
-        r2 = r2 + 1;
-        goto L_0x008b;
-        return r0;
-        r1 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textSubscript;
-        if (r1 == 0) goto L_0x00ad;
-        r4 = (org.telegram.tgnet.TLRPC.TL_textSubscript) r4;
-        r4 = r4.text;
-        r4 = getPlainText(r4);
-        return r4;
-        r1 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textSuperscript;
-        if (r1 == 0) goto L_0x00ba;
-        r4 = (org.telegram.tgnet.TLRPC.TL_textSuperscript) r4;
-        r4 = r4.text;
-        r4 = getPlainText(r4);
-        return r4;
-        r1 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textMarked;
-        if (r1 == 0) goto L_0x00c7;
-        r4 = (org.telegram.tgnet.TLRPC.TL_textMarked) r4;
-        r4 = r4.text;
-        r4 = getPlainText(r4);
-        return r4;
-        r1 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textPhone;
-        if (r1 == 0) goto L_0x00d4;
-        r4 = (org.telegram.tgnet.TLRPC.TL_textPhone) r4;
-        r4 = r4.text;
-        r4 = getPlainText(r4);	 Catch:{ Throwable -> 0x00d9 }
-        return r4;
-        r4 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textImage;
-        if (r4 == 0) goto L_0x00d8;
-        return r0;
-        r4 = move-exception;
-        throw r4;
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.getPlainText(org.telegram.tgnet.TLRPC$RichText):java.lang.CharSequence");
-    }
-
-    /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:166:0x0399 in {2, 6, 10, 14, 18, 22, 30, 31, 32, 33, 40, 41, 42, 45, 46, 49, 50, 54, 58, 61, 72, 73, 80, 89, 92, 95, 98, 99, 102, 106, 107, 108, 112, 116, 125, 126, 127, 128, 129, 141, 142, 143, 144, 145, 152, 153, 156, 157, 159, 160, 162, 165} preds:[]
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-        	at java.lang.Iterable.forEach(Iterable.java:75)
-        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-        */
-    private java.lang.CharSequence getText(android.view.View r26, org.telegram.tgnet.TLRPC.RichText r27, org.telegram.tgnet.TLRPC.RichText r28, org.telegram.tgnet.TLRPC.PageBlock r29, int r30) {
-        /*
-        r25 = this;
-        r7 = r25;
-        r0 = r27;
-        r8 = r28;
-        r9 = r29;
-        r10 = 0;
-        if (r8 != 0) goto L_0x000c;
-        return r10;
-        r1 = r8 instanceof org.telegram.tgnet.TLRPC.TL_textFixed;
-        if (r1 == 0) goto L_0x0024;
-        r1 = r8;
-        r1 = (org.telegram.tgnet.TLRPC.TL_textFixed) r1;
-        r4 = r1.text;
-        r1 = r25;
-        r2 = r26;
-        r3 = r27;
-        r5 = r29;
-        r6 = r30;
-        r0 = r1.getText(r2, r3, r4, r5, r6);
-        return r0;
-        r1 = r8 instanceof org.telegram.tgnet.TLRPC.TL_textItalic;
-        if (r1 == 0) goto L_0x003c;
-        r1 = r8;
-        r1 = (org.telegram.tgnet.TLRPC.TL_textItalic) r1;
-        r4 = r1.text;
-        r1 = r25;
-        r2 = r26;
-        r3 = r27;
-        r5 = r29;
-        r6 = r30;
-        r0 = r1.getText(r2, r3, r4, r5, r6);
-        return r0;
-        r1 = r8 instanceof org.telegram.tgnet.TLRPC.TL_textBold;
-        if (r1 == 0) goto L_0x0054;
-        r1 = r8;
-        r1 = (org.telegram.tgnet.TLRPC.TL_textBold) r1;
-        r4 = r1.text;
-        r1 = r25;
-        r2 = r26;
-        r3 = r27;
-        r5 = r29;
-        r6 = r30;
-        r0 = r1.getText(r2, r3, r4, r5, r6);
-        return r0;
-        r1 = r8 instanceof org.telegram.tgnet.TLRPC.TL_textUnderline;
-        if (r1 == 0) goto L_0x006c;
-        r1 = r8;
-        r1 = (org.telegram.tgnet.TLRPC.TL_textUnderline) r1;
-        r4 = r1.text;
-        r1 = r25;
-        r2 = r26;
-        r3 = r27;
-        r5 = r29;
-        r6 = r30;
-        r0 = r1.getText(r2, r3, r4, r5, r6);
-        return r0;
-        r1 = r8 instanceof org.telegram.tgnet.TLRPC.TL_textStrike;
-        if (r1 == 0) goto L_0x0084;
-        r1 = r8;
-        r1 = (org.telegram.tgnet.TLRPC.TL_textStrike) r1;
-        r4 = r1.text;
-        r1 = r25;
-        r2 = r26;
-        r3 = r27;
-        r5 = r29;
-        r6 = r30;
-        r0 = r1.getText(r2, r3, r4, r5, r6);
-        return r0;
-        r1 = r8 instanceof org.telegram.tgnet.TLRPC.TL_textEmail;
-        r11 = 33;
-        r12 = 0;
-        if (r1 == 0) goto L_0x00e0;
-        r13 = new android.text.SpannableStringBuilder;
-        r1 = r8;
-        r1 = (org.telegram.tgnet.TLRPC.TL_textEmail) r1;
-        r4 = r1.text;
-        r1 = r25;
-        r2 = r26;
-        r3 = r27;
-        r5 = r29;
-        r6 = r30;
-        r1 = r1.getText(r2, r3, r4, r5, r6);
-        r13.<init>(r1);
-        r1 = r13.length();
-        r2 = android.text.style.MetricAffectingSpan.class;
-        r1 = r13.getSpans(r12, r1, r2);
-        r1 = (android.text.style.MetricAffectingSpan[]) r1;
-        r2 = r13.length();
-        if (r2 == 0) goto L_0x00df;
-        r2 = new org.telegram.ui.Components.TextPaintUrlSpan;
-        if (r1 == 0) goto L_0x00bc;
-        r1 = r1.length;
-        if (r1 != 0) goto L_0x00c0;
-        r10 = r7.getTextPaint(r0, r8, r9);
-        r0 = new java.lang.StringBuilder;
-        r0.<init>();
-        r1 = "mailto:";
-        r0.append(r1);
-        r1 = getUrl(r28);
-        r0.append(r1);
-        r0 = r0.toString();
-        r2.<init>(r10, r0);
-        r0 = r13.length();
-        r13.setSpan(r2, r12, r0, r11);
-        return r13;
-        r1 = r8 instanceof org.telegram.tgnet.TLRPC.TL_textUrl;
-        r13 = 0;
-        if (r1 == 0) goto L_0x013e;
-        r15 = r8;
-        r15 = (org.telegram.tgnet.TLRPC.TL_textUrl) r15;
-        r6 = new android.text.SpannableStringBuilder;
-        r4 = r15.text;
-        r1 = r25;
-        r2 = r26;
-        r3 = r27;
-        r5 = r29;
-        r10 = r6;
-        r6 = r30;
-        r1 = r1.getText(r2, r3, r4, r5, r6);
-        r10.<init>(r1);
-        r1 = r10.length();
-        r2 = android.text.style.MetricAffectingSpan.class;
-        r1 = r10.getSpans(r12, r1, r2);
-        r1 = (android.text.style.MetricAffectingSpan[]) r1;
-        if (r1 == 0) goto L_0x0113;
-        r1 = r1.length;
-        if (r1 != 0) goto L_0x0111;
-        goto L_0x0113;
-        r0 = 0;
-        goto L_0x0117;
-        r0 = r7.getTextPaint(r0, r8, r9);
-        r1 = r15.webpage_id;
-        r3 = (r1 > r13 ? 1 : (r1 == r13 ? 0 : -1));
-        if (r3 == 0) goto L_0x0127;
-        r1 = new org.telegram.ui.Components.TextPaintWebpageUrlSpan;
-        r2 = getUrl(r28);
-        r1.<init>(r0, r2);
-        goto L_0x0130;
-        r1 = new org.telegram.ui.Components.TextPaintUrlSpan;
-        r2 = getUrl(r28);
-        r1.<init>(r0, r2);
-        r0 = r10.length();
-        if (r0 == 0) goto L_0x013d;
-        r0 = r10.length();
-        r10.setSpan(r1, r12, r0, r11);
-        return r10;
-        r1 = r8 instanceof org.telegram.tgnet.TLRPC.TL_textPlain;
-        if (r1 == 0) goto L_0x0148;
-        r0 = r8;
-        r0 = (org.telegram.tgnet.TLRPC.TL_textPlain) r0;
-        r0 = r0.text;
-        return r0;
-        r1 = r8 instanceof org.telegram.tgnet.TLRPC.TL_textAnchor;
-        if (r1 == 0) goto L_0x0174;
-        r8 = (org.telegram.tgnet.TLRPC.TL_textAnchor) r8;
-        r10 = new android.text.SpannableStringBuilder;
-        r4 = r8.text;
-        r1 = r25;
-        r2 = r26;
-        r3 = r27;
-        r5 = r29;
-        r6 = r30;
-        r0 = r1.getText(r2, r3, r4, r5, r6);
-        r10.<init>(r0);
-        r0 = new org.telegram.ui.Components.AnchorSpan;
-        r1 = r8.name;
-        r0.<init>(r1);
-        r1 = r10.length();
-        r2 = 17;
-        r10.setSpan(r0, r12, r1, r2);
-        return r10;
-        r1 = r8 instanceof org.telegram.tgnet.TLRPC.TL_textEmpty;
-        r2 = "";
-        if (r1 == 0) goto L_0x017b;
-        return r2;
-        r1 = r8 instanceof org.telegram.tgnet.TLRPC.TL_textConcat;
-        r10 = 1;
-        if (r1 == 0) goto L_0x0250;
-        r15 = new android.text.SpannableStringBuilder;
-        r15.<init>();
-        r1 = r8.texts;
-        r6 = r1.size();
-        r5 = 0;
-        if (r5 >= r6) goto L_0x024f;
-        r1 = r8.texts;
-        r1 = r1.get(r5);
-        r4 = r1;
-        r4 = (org.telegram.tgnet.TLRPC.RichText) r4;
-        r3 = r7.getLastRichText(r4);
-        if (r30 < 0) goto L_0x01ad;
-        r1 = r4 instanceof org.telegram.tgnet.TLRPC.TL_textUrl;
-        if (r1 == 0) goto L_0x01ad;
-        r1 = r4;
-        r1 = (org.telegram.tgnet.TLRPC.TL_textUrl) r1;
-        r1 = r1.webpage_id;
-        r16 = (r1 > r13 ? 1 : (r1 == r13 ? 0 : -1));
-        if (r16 == 0) goto L_0x01ad;
-        r16 = 1;
-        goto L_0x01af;
-        r16 = 0;
-        r2 = " ";
-        if (r16 == 0) goto L_0x01c9;
-        r1 = r15.length();
-        if (r1 == 0) goto L_0x01c9;
-        r1 = r15.length();
-        r1 = r1 - r10;
-        r1 = r15.charAt(r1);
-        r10 = 10;
-        if (r1 == r10) goto L_0x01c9;
-        r15.append(r2);
-        r1 = r25;
-        r10 = r2;
-        r2 = r26;
-        r13 = r3;
-        r3 = r27;
-        r14 = r4;
-        r12 = r5;
-        r5 = r29;
-        r17 = r6;
-        r6 = r30;
-        r1 = r1.getText(r2, r3, r4, r5, r6);
-        r2 = r7.getTextFlags(r13);
-        r3 = r15.length();
-        r15.append(r1);
-        if (r2 == 0) goto L_0x023c;
-        r1 = r1 instanceof android.text.SpannableStringBuilder;
-        if (r1 != 0) goto L_0x023c;
-        r1 = r2 & 8;
-        if (r1 != 0) goto L_0x020e;
-        r1 = r2 & 512;
-        if (r1 == 0) goto L_0x01f7;
-        goto L_0x020e;
-        r1 = r15.length();
-        if (r3 == r1) goto L_0x023c;
-        r1 = new org.telegram.ui.Components.TextPaintSpan;
-        r2 = r7.getTextPaint(r0, r13, r9);
-        r1.<init>(r2);
-        r2 = r15.length();
-        r15.setSpan(r1, r3, r2, r11);
-        goto L_0x023c;
-        r1 = getUrl(r14);
-        if (r1 != 0) goto L_0x0218;
-        r1 = getUrl(r27);
-        r2 = r2 & 512;
-        if (r2 == 0) goto L_0x0226;
-        r2 = new org.telegram.ui.Components.TextPaintWebpageUrlSpan;
-        r4 = r7.getTextPaint(r0, r13, r9);
-        r2.<init>(r4, r1);
-        goto L_0x022f;
-        r2 = new org.telegram.ui.Components.TextPaintUrlSpan;
-        r4 = r7.getTextPaint(r0, r13, r9);
-        r2.<init>(r4, r1);
-        r1 = r15.length();
-        if (r3 == r1) goto L_0x023c;
-        r1 = r15.length();
-        r15.setSpan(r2, r3, r1, r11);
-        if (r16 == 0) goto L_0x0245;
-        r6 = r17 + -1;
-        if (r12 == r6) goto L_0x0245;
-        r15.append(r10);
-        r5 = r12 + 1;
-        r6 = r17;
-        r10 = 1;
-        r12 = 0;
-        r13 = 0;
-        goto L_0x018c;
-        return r15;
-        r1 = r8 instanceof org.telegram.tgnet.TLRPC.TL_textSubscript;
-        if (r1 == 0) goto L_0x0268;
-        r1 = r8;
-        r1 = (org.telegram.tgnet.TLRPC.TL_textSubscript) r1;
-        r4 = r1.text;
-        r1 = r25;
-        r2 = r26;
-        r3 = r27;
-        r5 = r29;
-        r6 = r30;
-        r0 = r1.getText(r2, r3, r4, r5, r6);
-        return r0;
-        r1 = r8 instanceof org.telegram.tgnet.TLRPC.TL_textSuperscript;
-        if (r1 == 0) goto L_0x0280;
-        r1 = r8;
-        r1 = (org.telegram.tgnet.TLRPC.TL_textSuperscript) r1;
-        r4 = r1.text;
-        r1 = r25;
-        r2 = r26;
-        r3 = r27;
-        r5 = r29;
-        r6 = r30;
-        r0 = r1.getText(r2, r3, r4, r5, r6);
-        return r0;
-        r1 = r8 instanceof org.telegram.tgnet.TLRPC.TL_textMarked;
-        if (r1 == 0) goto L_0x02c9;
-        r10 = new android.text.SpannableStringBuilder;
-        r1 = r8;
-        r1 = (org.telegram.tgnet.TLRPC.TL_textMarked) r1;
-        r4 = r1.text;
-        r1 = r25;
-        r2 = r26;
-        r3 = r27;
-        r5 = r29;
-        r6 = r30;
-        r1 = r1.getText(r2, r3, r4, r5, r6);
-        r10.<init>(r1);
-        r1 = r10.length();
-        r2 = android.text.style.MetricAffectingSpan.class;
-        r3 = 0;
-        r1 = r10.getSpans(r3, r1, r2);
-        r1 = (android.text.style.MetricAffectingSpan[]) r1;
-        r2 = r10.length();
-        if (r2 == 0) goto L_0x02c8;
-        r2 = new org.telegram.ui.Components.TextPaintMarkSpan;
-        if (r1 == 0) goto L_0x02b9;
-        r1 = r1.length;
-        if (r1 != 0) goto L_0x02b7;
-        goto L_0x02b9;
-        r0 = 0;
-        goto L_0x02bd;
-        r0 = r7.getTextPaint(r0, r8, r9);
-        r2.<init>(r0);
-        r0 = r10.length();
-        r1 = 0;
-        r10.setSpan(r2, r1, r0, r11);
-        return r10;
-        r1 = r8 instanceof org.telegram.tgnet.TLRPC.TL_textPhone;
-        if (r1 == 0) goto L_0x0327;
-        r10 = new android.text.SpannableStringBuilder;
-        r1 = r8;
-        r1 = (org.telegram.tgnet.TLRPC.TL_textPhone) r1;
-        r4 = r1.text;
-        r1 = r25;
-        r2 = r26;
-        r3 = r27;
-        r5 = r29;
-        r6 = r30;
-        r1 = r1.getText(r2, r3, r4, r5, r6);	 Catch:{ Throwable -> 0x0396 }
-        r10.<init>(r1);
-        r1 = r10.length();
-        r2 = android.text.style.MetricAffectingSpan.class;
-        r3 = 0;
-        r1 = r10.getSpans(r3, r1, r2);
-        r1 = (android.text.style.MetricAffectingSpan[]) r1;
-        r2 = r10.length();
-        if (r2 == 0) goto L_0x0326;
-        r2 = new org.telegram.ui.Components.TextPaintUrlSpan;
-        if (r1 == 0) goto L_0x0302;
-        r1 = r1.length;
-        if (r1 != 0) goto L_0x0300;
-        goto L_0x0302;
-        r0 = 0;
-        goto L_0x0306;
-        r0 = r7.getTextPaint(r0, r8, r9);
-        r1 = new java.lang.StringBuilder;
-        r1.<init>();
-        r3 = "tel:";
-        r1.append(r3);
-        r3 = getUrl(r28);
-        r1.append(r3);
-        r1 = r1.toString();
-        r2.<init>(r0, r1);
-        r0 = r10.length();
-        r1 = 0;
-        r10.setSpan(r2, r1, r0, r11);
-        return r10;
-        r0 = r8 instanceof org.telegram.tgnet.TLRPC.TL_textImage;
-        if (r0 == 0) goto L_0x0384;
-        r0 = r8;
-        r0 = (org.telegram.tgnet.TLRPC.TL_textImage) r0;
-        r3 = r0.document_id;
-        r19 = r7.getDocumentWithId(r3);
-        if (r19 == 0) goto L_0x0383;
-        r1 = new android.text.SpannableStringBuilder;
-        r2 = "*";
-        r1.<init>(r2);
-        r2 = r0.w;
-        r2 = (float) r2;
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
-        r0 = r0.h;
-        r0 = (float) r0;
-        r0 = org.telegram.messenger.AndroidUtilities.dp(r0);
-        r3 = java.lang.Math.abs(r30);
-        if (r2 <= r3) goto L_0x035d;
-        r4 = (float) r3;
-        r2 = (float) r2;
-        r4 = r4 / r2;
-        r0 = (float) r0;
-        r0 = r0 * r4;
-        r0 = (int) r0;
-        r22 = r0;
-        r21 = r3;
-        goto L_0x0361;
-        r22 = r0;
-        r21 = r2;
-        r0 = new org.telegram.ui.Components.TextPaintImageReceiverSpan;
-        r2 = r7.currentPage;
-        r23 = 0;
-        r3 = r7.selectedColor;
-        r4 = 2;
-        if (r3 != r4) goto L_0x036f;
-        r24 = 1;
-        goto L_0x0371;
-        r24 = 0;
-        r17 = r0;
-        r18 = r26;
-        r20 = r2;
-        r17.<init>(r18, r19, r20, r21, r22, r23, r24);
-        r2 = r1.length();
-        r3 = 0;
-        r1.setSpan(r0, r3, r2, r11);
-        return r1;
-        return r2;
-        r0 = new java.lang.StringBuilder;
-        r0.<init>();
-        r1 = "not supported ";
-        r0.append(r1);
-        r0.append(r8);
-        r0 = r0.toString();
-        return r0;
-        r0 = move-exception;
-        r1 = r0;
-        throw r1;
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.getText(android.view.View, org.telegram.tgnet.TLRPC$RichText, org.telegram.tgnet.TLRPC$RichText, org.telegram.tgnet.TLRPC$PageBlock, int):java.lang.CharSequence");
     }
 
     public boolean onDoubleTapEvent(MotionEvent motionEvent) {
@@ -11110,6 +10361,241 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             }
         }
         return richText;
+    }
+
+    private CharSequence getText(View view, RichText richText, RichText richText2, PageBlock pageBlock, int i) {
+        RichText richText3 = richText;
+        RichText richText4 = richText2;
+        PageBlock pageBlock2 = pageBlock;
+        TextPaint textPaint = null;
+        if (richText4 == null) {
+            return null;
+        }
+        MetricAffectingSpan[] metricAffectingSpanArr;
+        StringBuilder stringBuilder;
+        if (richText4 instanceof TL_textFixed) {
+            return getText(view, richText, ((TL_textFixed) richText4).text, pageBlock, i);
+        } else if (richText4 instanceof TL_textItalic) {
+            return getText(view, richText, ((TL_textItalic) richText4).text, pageBlock, i);
+        } else if (richText4 instanceof TL_textBold) {
+            return getText(view, richText, ((TL_textBold) richText4).text, pageBlock, i);
+        } else if (richText4 instanceof TL_textUnderline) {
+            return getText(view, richText, ((TL_textUnderline) richText4).text, pageBlock, i);
+        } else if (richText4 instanceof TL_textStrike) {
+            return getText(view, richText, ((TL_textStrike) richText4).text, pageBlock, i);
+        } else if (richText4 instanceof TL_textEmail) {
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getText(view, richText, ((TL_textEmail) richText4).text, pageBlock, i));
+            metricAffectingSpanArr = (MetricAffectingSpan[]) spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), MetricAffectingSpan.class);
+            if (spannableStringBuilder.length() != 0) {
+                if (metricAffectingSpanArr == null || metricAffectingSpanArr.length == 0) {
+                    textPaint = getTextPaint(richText3, richText4, pageBlock2);
+                }
+                stringBuilder = new StringBuilder();
+                stringBuilder.append("mailto:");
+                stringBuilder.append(getUrl(richText2));
+                spannableStringBuilder.setSpan(new TextPaintUrlSpan(textPaint, stringBuilder.toString()), 0, spannableStringBuilder.length(), 33);
+            }
+            return spannableStringBuilder;
+        } else {
+            long j = 0;
+            SpannableStringBuilder spannableStringBuilder2;
+            TextPaint textPaint2;
+            if (richText4 instanceof TL_textUrl) {
+                Object textPaintWebpageUrlSpan;
+                TL_textUrl tL_textUrl = (TL_textUrl) richText4;
+                spannableStringBuilder2 = new SpannableStringBuilder(getText(view, richText, tL_textUrl.text, pageBlock, i));
+                metricAffectingSpanArr = (MetricAffectingSpan[]) spannableStringBuilder2.getSpans(0, spannableStringBuilder2.length(), MetricAffectingSpan.class);
+                textPaint2 = (metricAffectingSpanArr == null || metricAffectingSpanArr.length == 0) ? getTextPaint(richText3, richText4, pageBlock2) : null;
+                if (tL_textUrl.webpage_id != 0) {
+                    textPaintWebpageUrlSpan = new TextPaintWebpageUrlSpan(textPaint2, getUrl(richText2));
+                } else {
+                    textPaintWebpageUrlSpan = new TextPaintUrlSpan(textPaint2, getUrl(richText2));
+                }
+                if (spannableStringBuilder2.length() != 0) {
+                    spannableStringBuilder2.setSpan(textPaintWebpageUrlSpan, 0, spannableStringBuilder2.length(), 33);
+                }
+                return spannableStringBuilder2;
+            } else if (richText4 instanceof TL_textPlain) {
+                return ((TL_textPlain) richText4).text;
+            } else {
+                if (richText4 instanceof TL_textAnchor) {
+                    TL_textAnchor tL_textAnchor = (TL_textAnchor) richText4;
+                    spannableStringBuilder2 = new SpannableStringBuilder(getText(view, richText, tL_textAnchor.text, pageBlock, i));
+                    spannableStringBuilder2.setSpan(new AnchorSpan(tL_textAnchor.name), 0, spannableStringBuilder2.length(), 17);
+                    return spannableStringBuilder2;
+                }
+                String str = "";
+                if (richText4 instanceof TL_textEmpty) {
+                    return str;
+                }
+                int i2 = 1;
+                int textFlags;
+                int length;
+                if (richText4 instanceof TL_textConcat) {
+                    SpannableStringBuilder spannableStringBuilder3 = new SpannableStringBuilder();
+                    int size = richText4.texts.size();
+                    int i3 = 0;
+                    while (i3 < size) {
+                        RichText richText5 = (RichText) richText4.texts.get(i3);
+                        RichText lastRichText = getLastRichText(richText5);
+                        Object obj = (i < 0 || !(richText5 instanceof TL_textUrl) || ((TL_textUrl) richText5).webpage_id == j) ? null : 1;
+                        str = " ";
+                        if (!(obj == null || spannableStringBuilder3.length() == 0 || spannableStringBuilder3.charAt(spannableStringBuilder3.length() - i2) == 10)) {
+                            spannableStringBuilder3.append(str);
+                        }
+                        String str2 = str;
+                        RichText richText6 = lastRichText;
+                        RichText richText7 = richText5;
+                        int i4 = i3;
+                        int i5 = size;
+                        CharSequence text = getText(view, richText, richText5, pageBlock, i);
+                        textFlags = getTextFlags(richText6);
+                        length = spannableStringBuilder3.length();
+                        spannableStringBuilder3.append(text);
+                        if (!(textFlags == 0 || (text instanceof SpannableStringBuilder))) {
+                            if ((textFlags & 8) != 0 || (textFlags & 512) != 0) {
+                                Object textPaintWebpageUrlSpan2;
+                                String url = getUrl(richText7);
+                                if (url == null) {
+                                    url = getUrl(richText);
+                                }
+                                if ((textFlags & 512) != 0) {
+                                    textPaintWebpageUrlSpan2 = new TextPaintWebpageUrlSpan(getTextPaint(richText3, richText6, pageBlock2), url);
+                                } else {
+                                    textPaintWebpageUrlSpan2 = new TextPaintUrlSpan(getTextPaint(richText3, richText6, pageBlock2), url);
+                                }
+                                if (length != spannableStringBuilder3.length()) {
+                                    spannableStringBuilder3.setSpan(textPaintWebpageUrlSpan2, length, spannableStringBuilder3.length(), 33);
+                                }
+                            } else if (length != spannableStringBuilder3.length()) {
+                                spannableStringBuilder3.setSpan(new TextPaintSpan(getTextPaint(richText3, richText6, pageBlock2)), length, spannableStringBuilder3.length(), 33);
+                            }
+                        }
+                        if (!(obj == null || i4 == i5 - 1)) {
+                            spannableStringBuilder3.append(str2);
+                        }
+                        i3 = i4 + 1;
+                        size = i5;
+                        i2 = 1;
+                        j = 0;
+                    }
+                    return spannableStringBuilder3;
+                } else if (richText4 instanceof TL_textSubscript) {
+                    return getText(view, richText, ((TL_textSubscript) richText4).text, pageBlock, i);
+                } else if (richText4 instanceof TL_textSuperscript) {
+                    return getText(view, richText, ((TL_textSuperscript) richText4).text, pageBlock, i);
+                } else if (richText4 instanceof TL_textMarked) {
+                    spannableStringBuilder2 = new SpannableStringBuilder(getText(view, richText, ((TL_textMarked) richText4).text, pageBlock, i));
+                    metricAffectingSpanArr = (MetricAffectingSpan[]) spannableStringBuilder2.getSpans(0, spannableStringBuilder2.length(), MetricAffectingSpan.class);
+                    if (spannableStringBuilder2.length() != 0) {
+                        textPaint2 = (metricAffectingSpanArr == null || metricAffectingSpanArr.length == 0) ? getTextPaint(richText3, richText4, pageBlock2) : null;
+                        spannableStringBuilder2.setSpan(new TextPaintMarkSpan(textPaint2), 0, spannableStringBuilder2.length(), 33);
+                    }
+                    return spannableStringBuilder2;
+                } else if (richText4 instanceof TL_textPhone) {
+                    try {
+                        spannableStringBuilder2 = new SpannableStringBuilder(getText(view, richText, ((TL_textPhone) richText4).text, pageBlock, i));
+                        metricAffectingSpanArr = (MetricAffectingSpan[]) spannableStringBuilder2.getSpans(0, spannableStringBuilder2.length(), MetricAffectingSpan.class);
+                        if (spannableStringBuilder2.length() != 0) {
+                            textPaint2 = (metricAffectingSpanArr == null || metricAffectingSpanArr.length == 0) ? getTextPaint(richText3, richText4, pageBlock2) : null;
+                            StringBuilder stringBuilder2 = new StringBuilder();
+                            stringBuilder2.append("tel:");
+                            stringBuilder2.append(getUrl(richText2));
+                            spannableStringBuilder2.setSpan(new TextPaintUrlSpan(textPaint2, stringBuilder2.toString()), 0, spannableStringBuilder2.length(), 33);
+                        }
+                        return spannableStringBuilder2;
+                    } catch (Throwable th) {
+                        Throwable th2 = th;
+                    }
+                } else if (richText4 instanceof TL_textImage) {
+                    TL_textImage tL_textImage = (TL_textImage) richText4;
+                    Document documentWithId = getDocumentWithId(tL_textImage.document_id);
+                    if (documentWithId == null) {
+                        return str;
+                    }
+                    int i6;
+                    int i7;
+                    SpannableStringBuilder spannableStringBuilder4 = new SpannableStringBuilder("*");
+                    textFlags = AndroidUtilities.dp((float) tL_textImage.w);
+                    int dp = AndroidUtilities.dp((float) tL_textImage.h);
+                    length = Math.abs(i);
+                    if (textFlags > length) {
+                        i6 = (int) (((float) dp) * (((float) length) / ((float) textFlags)));
+                        i7 = length;
+                    } else {
+                        i6 = dp;
+                        i7 = textFlags;
+                    }
+                    spannableStringBuilder4.setSpan(new TextPaintImageReceiverSpan(view, documentWithId, this.currentPage, i7, i6, false, this.selectedColor == 2), 0, spannableStringBuilder4.length(), 33);
+                    return spannableStringBuilder4;
+                } else {
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append("not supported ");
+                    stringBuilder.append(richText4);
+                    return stringBuilder.toString();
+                }
+            }
+        }
+    }
+
+    public static CharSequence getPlainText(RichText richText) {
+        String str = "";
+        if (richText == null) {
+            return str;
+        }
+        if (richText instanceof TL_textFixed) {
+            return getPlainText(((TL_textFixed) richText).text);
+        }
+        if (richText instanceof TL_textItalic) {
+            return getPlainText(((TL_textItalic) richText).text);
+        }
+        if (richText instanceof TL_textBold) {
+            return getPlainText(((TL_textBold) richText).text);
+        }
+        if (richText instanceof TL_textUnderline) {
+            return getPlainText(((TL_textUnderline) richText).text);
+        }
+        if (richText instanceof TL_textStrike) {
+            return getPlainText(((TL_textStrike) richText).text);
+        }
+        if (richText instanceof TL_textEmail) {
+            return getPlainText(((TL_textEmail) richText).text);
+        }
+        if (richText instanceof TL_textUrl) {
+            return getPlainText(((TL_textUrl) richText).text);
+        }
+        if (richText instanceof TL_textPlain) {
+            return ((TL_textPlain) richText).text;
+        }
+        if (richText instanceof TL_textAnchor) {
+            return getPlainText(((TL_textAnchor) richText).text);
+        }
+        if (richText instanceof TL_textEmpty) {
+            return str;
+        }
+        if (richText instanceof TL_textConcat) {
+            StringBuilder stringBuilder = new StringBuilder();
+            int size = richText.texts.size();
+            for (int i = 0; i < size; i++) {
+                stringBuilder.append(getPlainText((RichText) richText.texts.get(i)));
+            }
+            return stringBuilder;
+        } else if (richText instanceof TL_textSubscript) {
+            return getPlainText(((TL_textSubscript) richText).text);
+        } else {
+            if (richText instanceof TL_textSuperscript) {
+                return getPlainText(((TL_textSuperscript) richText).text);
+            }
+            if (richText instanceof TL_textMarked) {
+                return getPlainText(((TL_textMarked) richText).text);
+            }
+            if (richText instanceof TL_textPhone) {
+                return getPlainText(((TL_textPhone) richText).text);
+            }
+            if (richText instanceof TL_textImage) {
+            }
+            return str;
+        }
     }
 
     public static String getUrl(RichText richText) {
@@ -14961,7 +14447,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x004f:
         r0 = r5.parentActivity;	 Catch:{ Exception -> 0x0098 }
         r2 = "ShareFile";
-        r3 = NUM; // 0x7f0d08f6 float:1.8746768E38 double:1.053130911E-314;
+        r3 = NUM; // 0x7f0d092c float:1.8746877E38 double:1.0531309376E-314;
         r2 = org.telegram.messenger.LocaleController.getString(r2, r3);	 Catch:{ Exception -> 0x0098 }
         r1 = android.content.Intent.createChooser(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r2 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
@@ -14972,16 +14458,16 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = r5.parentActivity;	 Catch:{ Exception -> 0x0098 }
         r0.<init>(r1);	 Catch:{ Exception -> 0x0098 }
         r1 = "AppName";
-        r2 = NUM; // 0x7f0d00e7 float:1.8742583E38 double:1.0531298917E-314;
+        r2 = NUM; // 0x7f0d00eb float:1.8742591E38 double:1.0531298936E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r0.setTitle(r1);	 Catch:{ Exception -> 0x0098 }
         r1 = "OK";
-        r2 = NUM; // 0x7f0d0679 float:1.8745476E38 double:1.053130596E-314;
+        r2 = NUM; // 0x7f0d06a1 float:1.8745557E38 double:1.053130616E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r2 = 0;
         r0.setPositiveButton(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r1 = "PleaseDownload";
-        r2 = NUM; // 0x7f0d07db float:1.8746194E38 double:1.053130771E-314;
+        r2 = NUM; // 0x7f0d0806 float:1.874628E38 double:1.0531307924E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r0.setMessage(r1);	 Catch:{ Exception -> 0x0098 }
         r0 = r0.create();	 Catch:{ Exception -> 0x0098 }
@@ -15500,7 +14986,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0 = r6.menuItem;
         r0.hideSubItem(r9);
         r0 = r6.actionBar;
-        r1 = NUM; // 0x7f0d0138 float:1.8742748E38 double:1.0531299317E-314;
+        r1 = NUM; // 0x7f0d013c float:1.8742756E38 double:1.0531299337E-314;
         r2 = "AttachGif";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
@@ -15515,21 +15001,21 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         if (r14 == 0) goto L_0x00ef;
     L_0x00e0:
         r0 = r6.actionBar;
-        r1 = NUM; // 0x7f0d0149 float:1.8742782E38 double:1.05312994E-314;
+        r1 = NUM; // 0x7f0d014d float:1.874279E38 double:1.053129942E-314;
         r2 = "AttachVideo";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
         goto L_0x0123;
     L_0x00ef:
         r0 = r6.actionBar;
-        r1 = NUM; // 0x7f0d0143 float:1.874277E38 double:1.053129937E-314;
+        r1 = NUM; // 0x7f0d0147 float:1.8742778E38 double:1.053129939E-314;
         r2 = "AttachPhoto";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
         goto L_0x0123;
     L_0x00fe:
         r0 = r6.actionBar;
-        r1 = NUM; // 0x7f0d067b float:1.874548E38 double:1.053130597E-314;
+        r1 = NUM; // 0x7f0d06a3 float:1.874556E38 double:1.053130617E-314;
         r2 = new java.lang.Object[r10];
         r3 = r6.currentIndex;
         r3 = r3 + r9;

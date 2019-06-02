@@ -4,6 +4,9 @@ import android.text.TextUtils;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -514,6 +517,9 @@ public class FileLoader {
     public void loadFile(Document document, Object obj, int i, int i2) {
         if (document != null) {
             int i3 = (i2 != 0 || document.key == null) ? i2 : 1;
+            if (i3 == 2) {
+                FileLog.d("test");
+            }
             loadFile(document, null, null, null, null, obj, null, 0, i, i3);
         }
     }
@@ -1628,5 +1634,20 @@ public class FileLoader {
 
     public static boolean isVideoMimeType(String str) {
         return "video/mp4".equals(str) || (SharedConfig.streamMkv && "video/x-matroska".equals(str));
+    }
+
+    public static boolean copyFile(InputStream inputStream, File file) throws IOException {
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        byte[] bArr = new byte[4096];
+        while (true) {
+            int read = inputStream.read(bArr);
+            if (read > 0) {
+                Thread.yield();
+                fileOutputStream.write(bArr, 0, read);
+            } else {
+                fileOutputStream.close();
+                return true;
+            }
+        }
     }
 }

@@ -36,8 +36,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
-import androidx.core.view.NestedScrollingParent3;
-import androidx.core.view.NestedScrollingParentHelper;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.ItemTouchHelper.Callback;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -45,6 +43,7 @@ import androidx.recyclerview.widget.LinearSmoothScrollerMiddle;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener;
+import androidx.recyclerview.widget.RecyclerView.Recycler;
 import androidx.recyclerview.widget.RecyclerView.State;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import com.airbnb.lottie.LottieDrawable;
@@ -197,6 +196,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     private boolean proxyItemVisisble;
     private ActionBarMenuSubItem readItem;
     private boolean scrollUpdated;
+    private boolean scrollingManually;
     private long searchDialogId;
     private EmptyTextProgressView searchEmptyView;
     private TLObject searchObject;
@@ -208,8 +208,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     private NumberTextView selectedDialogsCountTextView;
     private RecyclerView sideMenu;
     private DialogCell slidingView;
+    private boolean startedScrollAtTop;
     private SwipeController swipeController;
     private ActionBarMenuItem switchItem;
+    private int totalConsumedAmount;
     private UndoView[] undoView = new UndoView[2];
     private boolean waitingForScrollFinished;
 
@@ -217,237 +219,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList<Long> arrayList, CharSequence charSequence, boolean z);
     }
 
-    class SwipeController extends Callback {
-        private RectF buttonInstance;
-        private ViewHolder currentItemViewHolder;
-        private boolean swipeFolderBack;
-        private boolean swipingFolder;
-
-        public float getSwipeEscapeVelocity(float f) {
-            return 3500.0f;
-        }
-
-        public float getSwipeThreshold(ViewHolder viewHolder) {
-            return 0.3f;
-        }
-
-        public float getSwipeVelocityThreshold(float f) {
-            return Float.MAX_VALUE;
-        }
-
-        SwipeController() {
-        }
-
-        public int getMovementFlags(RecyclerView recyclerView, ViewHolder viewHolder) {
-            if (!DialogsActivity.this.waitingForDialogsAnimationEnd() && (DialogsActivity.this.parentLayout == null || !DialogsActivity.this.parentLayout.isInPreviewMode())) {
-                if (this.swipingFolder && this.swipeFolderBack) {
-                    this.swipingFolder = false;
-                    return 0;
-                } else if (!DialogsActivity.this.onlySelect && DialogsActivity.this.dialogsType == 0 && DialogsActivity.this.slidingView == null && recyclerView.getAdapter() == DialogsActivity.this.dialogsAdapter) {
-                    View view = viewHolder.itemView;
-                    if (view instanceof DialogCell) {
-                        DialogCell dialogCell = (DialogCell) view;
-                        long dialogId = dialogCell.getDialogId();
-                        if (DialogsActivity.this.actionBar.isActionModeShowed()) {
-                            Dialog dialog = (Dialog) DialogsActivity.this.getMessagesController().dialogs_dict.get(dialogId);
-                            if (!DialogsActivity.this.allowMoving || dialog == null || !dialog.pinned || DialogObject.isFolderDialogId(dialogId)) {
-                                return 0;
-                            }
-                            DialogsActivity.this.movingView = (DialogCell) viewHolder.itemView;
-                            DialogsActivity.this.movingView.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                            return Callback.makeMovementFlags(3, 0);
-                        } else if (!(!DialogsActivity.this.allowSwipeDuringCurrentTouch || dialogId == ((long) DialogsActivity.this.getUserConfig().clientUserId) || dialogId == 777000 || DialogsActivity.this.getMessagesController().isProxyDialog(dialogId))) {
-                            this.swipeFolderBack = false;
-                            boolean z = SharedConfig.archiveHidden && DialogObject.isFolderDialogId(dialogCell.getDialogId());
-                            this.swipingFolder = z;
-                            dialogCell.setSliding(true);
-                            return Callback.makeMovementFlags(0, 4);
-                        }
-                    }
-                }
-            }
-            return 0;
-        }
-
-        public boolean onMove(RecyclerView recyclerView, ViewHolder viewHolder, ViewHolder viewHolder2) {
-            View view = viewHolder2.itemView;
-            if (!(view instanceof DialogCell)) {
-                return false;
-            }
-            long dialogId = ((DialogCell) view).getDialogId();
-            Dialog dialog = (Dialog) DialogsActivity.this.getMessagesController().dialogs_dict.get(dialogId);
-            if (dialog == null || !dialog.pinned || DialogObject.isFolderDialogId(dialogId)) {
-                return false;
-            }
-            DialogsActivity.this.dialogsAdapter.notifyItemMoved(viewHolder.getAdapterPosition(), viewHolder2.getAdapterPosition());
-            DialogsActivity.this.updateDialogIndices();
-            DialogsActivity.this.movingWas = true;
-            return true;
-        }
-
-        public int convertToAbsoluteDirection(int i, int i2) {
-            if (this.swipeFolderBack) {
-                return 0;
-            }
-            return super.convertToAbsoluteDirection(i, i2);
-        }
-
-        public void onSwiped(ViewHolder viewHolder, int i) {
-            if (viewHolder != null) {
-                DialogCell dialogCell = (DialogCell) viewHolder.itemView;
-                if (DialogObject.isFolderDialogId(dialogCell.getDialogId())) {
-                    SharedConfig.toggleArchiveHidden();
-                    if (SharedConfig.archiveHidden) {
-                        DialogsActivity.this.waitingForScrollFinished = true;
-                        DialogsActivity.this.listView.smoothScrollBy(0, dialogCell.getMeasuredHeight() + dialogCell.getTop(), CubicBezierInterpolator.EASE_OUT);
-                        DialogsActivity.this.getUndoView().showWithAction(0, 6, null, null);
-                    }
-                    return;
-                }
-                DialogsActivity.this.slidingView = dialogCell;
-                int adapterPosition = viewHolder.getAdapterPosition();
-                -$$Lambda$DialogsActivity$SwipeController$p1WvioWe4QIXpl_h9JruXCBarGg -__lambda_dialogsactivity_swipecontroller_p1wviowe4qixpl_h9jruxcbargg = new -$$Lambda$DialogsActivity$SwipeController$p1WvioWe4QIXpl_h9JruXCBarGg(this, DialogsActivity.this.dialogsAdapter.fixPosition(adapterPosition), DialogsActivity.this.dialogsAdapter.getItemCount(), adapterPosition);
-                DialogsActivity.this.setDialogsListFrozen(true);
-                if (Utilities.random.nextInt(1000) == 1) {
-                    if (DialogsActivity.this.pacmanAnimation == null) {
-                        DialogsActivity dialogsActivity = DialogsActivity.this;
-                        dialogsActivity.pacmanAnimation = new PacmanAnimation(dialogsActivity.listView);
-                    }
-                    DialogsActivity.this.pacmanAnimation.setFinishRunnable(-__lambda_dialogsactivity_swipecontroller_p1wviowe4qixpl_h9jruxcbargg);
-                    DialogsActivity.this.pacmanAnimation.start();
-                } else {
-                    -__lambda_dialogsactivity_swipecontroller_p1wviowe4qixpl_h9jruxcbargg.run();
-                }
-            } else {
-                DialogsActivity.this.slidingView = null;
-            }
-        }
-
-        public /* synthetic */ void lambda$onSwiped$1$DialogsActivity$SwipeController(int i, int i2, int i3) {
-            Dialog dialog = (Dialog) DialogsActivity.frozenDialogsList.remove(i);
-            int i4 = dialog.pinnedNum;
-            DialogsActivity.this.slidingView = null;
-            DialogsActivity.this.listView.invalidate();
-            int addDialogToFolder = DialogsActivity.this.getMessagesController().addDialogToFolder(dialog.id, DialogsActivity.this.folderId == 0 ? 1 : 0, -1, 0);
-            if (addDialogToFolder == 2) {
-                DialogsActivity.this.dialogsAdapter.notifyItemChanged(i2 - 1);
-            }
-            if (!(addDialogToFolder == 2 && i3 == 0)) {
-                DialogsActivity.this.dialogsItemAnimator.prepareForRemove();
-                DialogsActivity.this.lastItemsCount = DialogsActivity.this.lastItemsCount - 1;
-                DialogsActivity.this.dialogsAdapter.notifyItemRemoved(i3);
-                DialogsActivity.this.dialogRemoveFinished = 2;
-            }
-            if (DialogsActivity.this.folderId == 0) {
-                if (addDialogToFolder == 2) {
-                    DialogsActivity.this.dialogsItemAnimator.prepareForRemove();
-                    if (i3 == 0) {
-                        DialogsActivity.this.dialogChangeFinished = 2;
-                        DialogsActivity.this.setDialogsListFrozen(true);
-                        DialogsActivity.this.dialogsAdapter.notifyItemChanged(0);
-                    } else {
-                        DialogsActivity.this.lastItemsCount = DialogsActivity.this.lastItemsCount + 1;
-                        DialogsActivity.this.dialogsAdapter.notifyItemInserted(0);
-                    }
-                    DialogsActivity.frozenDialogsList.add(0, DialogsActivity.getDialogsArray(DialogsActivity.this.currentAccount, DialogsActivity.this.dialogsType, DialogsActivity.this.folderId, false).get(0));
-                } else if (addDialogToFolder == 1) {
-                    ViewHolder findViewHolderForAdapterPosition = DialogsActivity.this.listView.findViewHolderForAdapterPosition(0);
-                    if (findViewHolderForAdapterPosition != null) {
-                        View view = findViewHolderForAdapterPosition.itemView;
-                        if (view instanceof DialogCell) {
-                            DialogCell dialogCell = (DialogCell) view;
-                            dialogCell.checkCurrentDialogIndex(true);
-                            dialogCell.animateArchiveAvatar();
-                        }
-                    }
-                }
-                SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
-                String str = "archivehint_l";
-                boolean z = globalMainSettings.getBoolean(str, false);
-                globalMainSettings.edit().putBoolean(str, true).commit();
-                DialogsActivity.this.getUndoView().showWithAction(dialog.id, z ? 2 : 3, null, new -$$Lambda$DialogsActivity$SwipeController$YQ1mguBHuXIRhAK21aamsJthsAQ(this, dialog, i4));
-            }
-            if (DialogsActivity.this.folderId != 0 && DialogsActivity.frozenDialogsList.isEmpty()) {
-                DialogsActivity.this.listView.setEmptyView(null);
-                DialogsActivity.this.progressView.setVisibility(4);
-            }
-        }
-
-        public /* synthetic */ void lambda$null$0$DialogsActivity$SwipeController(Dialog dialog, int i) {
-            DialogsActivity.this.dialogsListFrozen = true;
-            DialogsActivity.this.getMessagesController().addDialogToFolder(dialog.id, 0, i, 0);
-            DialogsActivity.this.dialogsListFrozen = false;
-            ArrayList dialogs = DialogsActivity.this.getMessagesController().getDialogs(0);
-            int indexOf = dialogs.indexOf(dialog);
-            if (indexOf >= 0) {
-                ArrayList dialogs2 = DialogsActivity.this.getMessagesController().getDialogs(1);
-                if (!(dialogs2.isEmpty() && indexOf == 1)) {
-                    DialogsActivity.this.dialogInsertFinished = 2;
-                    DialogsActivity.this.setDialogsListFrozen(true);
-                    DialogsActivity.this.dialogsItemAnimator.prepareForRemove();
-                    DialogsActivity.this.lastItemsCount = DialogsActivity.this.lastItemsCount + 1;
-                    DialogsActivity.this.dialogsAdapter.notifyItemInserted(indexOf);
-                }
-                if (dialogs2.isEmpty()) {
-                    dialogs.remove(0);
-                    if (indexOf == 1) {
-                        DialogsActivity.this.dialogChangeFinished = 2;
-                        DialogsActivity.this.setDialogsListFrozen(true);
-                        DialogsActivity.this.dialogsAdapter.notifyItemChanged(0);
-                        return;
-                    }
-                    DialogsActivity.frozenDialogsList.remove(0);
-                    DialogsActivity.this.dialogsItemAnimator.prepareForRemove();
-                    DialogsActivity.this.lastItemsCount = DialogsActivity.this.lastItemsCount - 1;
-                    DialogsActivity.this.dialogsAdapter.notifyItemRemoved(0);
-                    return;
-                }
-                return;
-            }
-            DialogsActivity.this.dialogsAdapter.notifyDataSetChanged();
-        }
-
-        public void onSelectedChanged(ViewHolder viewHolder, int i) {
-            if (viewHolder != null) {
-                DialogsActivity.this.listView.hideSelector();
-            }
-            super.onSelectedChanged(viewHolder, i);
-        }
-
-        public long getAnimationDuration(RecyclerView recyclerView, int i, float f, float f2) {
-            if (i == 4) {
-                return 200;
-            }
-            if (i == 8 && DialogsActivity.this.movingView != null) {
-                AndroidUtilities.runOnUIThread(new -$$Lambda$DialogsActivity$SwipeController$P5v0ux1s9L8VHZMGfvGmr58IqXA(DialogsActivity.this.movingView), DialogsActivity.this.dialogsItemAnimator.getMoveDuration());
-                DialogsActivity.this.movingView = null;
-            }
-            return super.getAnimationDuration(recyclerView, i, f, f2);
-        }
-    }
-
-    private class ContentView extends SizeNotifierFrameLayout implements NestedScrollingParent3 {
+    private class ContentView extends SizeNotifierFrameLayout {
         private int inputFieldHeight;
-        private NestedScrollingParentHelper nestedScrollingParentHelper = new NestedScrollingParentHelper(this);
-        private boolean startedScrollAtTop;
-        private int totalConsumedAmount;
-
-        public boolean onNestedFling(View view, float f, float f2, boolean z) {
-            return false;
-        }
-
-        public boolean onNestedPreFling(View view, float f, float f2) {
-            return false;
-        }
-
-        public void onNestedScroll(View view, int i, int i2, int i3, int i4) {
-        }
-
-        public void onNestedScroll(View view, int i, int i2, int i3, int i4, int i5) {
-        }
-
-        public void onNestedScroll(View view, int i, int i2, int i3, int i4, int i5, int[] iArr) {
-        }
 
         public ContentView(Context context) {
             super(context);
@@ -662,74 +435,228 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             boolean z = true;
             if (actionMasked == 0 || actionMasked == 1 || actionMasked == 3) {
                 if (actionMasked == 0) {
-                    if (DialogsActivity.this.layoutManager.findFirstVisibleItemPosition() > 1) {
+                    actionMasked = DialogsActivity.this.layoutManager.findFirstVisibleItemPosition();
+                    DialogsActivity dialogsActivity = DialogsActivity.this;
+                    if (actionMasked > 1) {
                         z = false;
                     }
-                    this.startedScrollAtTop = z;
+                    dialogsActivity.startedScrollAtTop = z;
                 } else if (DialogsActivity.this.actionBar.isActionModeShowed()) {
                     DialogsActivity.this.allowMoving = true;
                 }
-                this.totalConsumedAmount = 0;
+                DialogsActivity.this.totalConsumedAmount = 0;
                 DialogsActivity.this.allowScrollToHiddenView = false;
             }
             return super.onInterceptTouchEvent(motionEvent);
         }
+    }
 
-        public boolean onStartNestedScroll(View view, View view2, int i, int i2) {
-            return !DialogsActivity.this.onlySelect && DialogsActivity.this.dialogsType == 0 && DialogsActivity.this.folderId == 0 && view == DialogsActivity.this.listView && DialogsActivity.this.listView.getAdapter() == DialogsActivity.this.dialogsAdapter && i == 2;
+    class SwipeController extends Callback {
+        private RectF buttonInstance;
+        private ViewHolder currentItemViewHolder;
+        private boolean swipeFolderBack;
+        private boolean swipingFolder;
+
+        public float getSwipeEscapeVelocity(float f) {
+            return 3500.0f;
         }
 
-        public void onNestedScrollAccepted(View view, View view2, int i, int i2) {
-            this.nestedScrollingParentHelper.onNestedScrollAccepted(view, view2, i);
+        public float getSwipeThreshold(ViewHolder viewHolder) {
+            return 0.3f;
         }
 
-        public void onStopNestedScroll(View view, int i) {
-            this.nestedScrollingParentHelper.onStopNestedScroll(view);
+        public float getSwipeVelocityThreshold(float f) {
+            return Float.MAX_VALUE;
         }
 
-        public void onNestedPreScroll(View view, int i, int i2, int[] iArr, int i3) {
-            int findFirstVisibleItemPosition;
-            if (DialogsActivity.this.allowScrollToHiddenView && i3 == 0) {
-                iArr[1] = i2;
-                findFirstVisibleItemPosition = DialogsActivity.this.layoutManager.findFirstVisibleItemPosition();
-                if (findFirstVisibleItemPosition == 0) {
-                    view = DialogsActivity.this.layoutManager.findViewByPosition(findFirstVisibleItemPosition);
-                    if (view != null && view.getTop() >= 0) {
-                        DialogsActivity.this.allowScrollToHiddenView = false;
-                        this.totalConsumedAmount = 0;
-                    }
-                }
-            }
-            if (!DialogsActivity.this.allowScrollToHiddenView && DialogsActivity.this.folderId == 0 && i2 < 0 && DialogsActivity.this.getMessagesController().hasHiddenArchive()) {
-                View findViewByPosition;
-                findFirstVisibleItemPosition = DialogsActivity.this.layoutManager.findFirstVisibleItemPosition();
-                if (findFirstVisibleItemPosition == 0) {
-                    findViewByPosition = DialogsActivity.this.layoutManager.findViewByPosition(findFirstVisibleItemPosition);
-                    if (findViewByPosition != null && findViewByPosition.getBottom() <= AndroidUtilities.dp(1.0f)) {
-                        findFirstVisibleItemPosition = 1;
-                    }
-                }
-                if (!(findFirstVisibleItemPosition == 0 || findFirstVisibleItemPosition == -1)) {
-                    findViewByPosition = DialogsActivity.this.layoutManager.findViewByPosition(findFirstVisibleItemPosition);
-                    if (findViewByPosition != null) {
-                        int dp = AndroidUtilities.dp(SharedConfig.useThreeLinesLayout ? 78.0f : 72.0f) + 1;
-                        i3 = (-findViewByPosition.getTop()) + ((findFirstVisibleItemPosition - 1) * dp);
-                        findFirstVisibleItemPosition = Math.abs(i2);
-                        if (i3 < findFirstVisibleItemPosition) {
-                            iArr[1] = i3 - findFirstVisibleItemPosition;
-                            this.totalConsumedAmount += Math.abs(iArr[1]);
-                            if (this.startedScrollAtTop && this.totalConsumedAmount >= AndroidUtilities.dp(150.0f)) {
-                                DialogsActivity.this.listView.smoothScrollBy(0, -dp, CubicBezierInterpolator.EASE_OUT_QUINT);
-                                DialogsActivity.this.allowScrollToHiddenView = true;
-                                try {
-                                    performHapticFeedback(3, 2);
-                                } catch (Exception unused) {
-                                }
+        SwipeController() {
+        }
+
+        public int getMovementFlags(RecyclerView recyclerView, ViewHolder viewHolder) {
+            if (!DialogsActivity.this.waitingForDialogsAnimationEnd() && (DialogsActivity.this.parentLayout == null || !DialogsActivity.this.parentLayout.isInPreviewMode())) {
+                if (this.swipingFolder && this.swipeFolderBack) {
+                    this.swipingFolder = false;
+                    return 0;
+                } else if (!DialogsActivity.this.onlySelect && DialogsActivity.this.dialogsType == 0 && DialogsActivity.this.slidingView == null && recyclerView.getAdapter() == DialogsActivity.this.dialogsAdapter) {
+                    View view = viewHolder.itemView;
+                    if (view instanceof DialogCell) {
+                        DialogCell dialogCell = (DialogCell) view;
+                        long dialogId = dialogCell.getDialogId();
+                        if (DialogsActivity.this.actionBar.isActionModeShowed()) {
+                            Dialog dialog = (Dialog) DialogsActivity.this.getMessagesController().dialogs_dict.get(dialogId);
+                            if (!DialogsActivity.this.allowMoving || dialog == null || !dialog.pinned || DialogObject.isFolderDialogId(dialogId)) {
+                                return 0;
                             }
+                            DialogsActivity.this.movingView = (DialogCell) viewHolder.itemView;
+                            DialogsActivity.this.movingView.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                            return Callback.makeMovementFlags(3, 0);
+                        } else if (!(!DialogsActivity.this.allowSwipeDuringCurrentTouch || dialogId == ((long) DialogsActivity.this.getUserConfig().clientUserId) || dialogId == 777000 || DialogsActivity.this.getMessagesController().isProxyDialog(dialogId, false))) {
+                            this.swipeFolderBack = false;
+                            boolean z = SharedConfig.archiveHidden && DialogObject.isFolderDialogId(dialogCell.getDialogId());
+                            this.swipingFolder = z;
+                            dialogCell.setSliding(true);
+                            return Callback.makeMovementFlags(0, 4);
                         }
                     }
                 }
             }
+            return 0;
+        }
+
+        public boolean onMove(RecyclerView recyclerView, ViewHolder viewHolder, ViewHolder viewHolder2) {
+            View view = viewHolder2.itemView;
+            if (!(view instanceof DialogCell)) {
+                return false;
+            }
+            long dialogId = ((DialogCell) view).getDialogId();
+            Dialog dialog = (Dialog) DialogsActivity.this.getMessagesController().dialogs_dict.get(dialogId);
+            if (dialog == null || !dialog.pinned || DialogObject.isFolderDialogId(dialogId)) {
+                return false;
+            }
+            DialogsActivity.this.dialogsAdapter.notifyItemMoved(viewHolder.getAdapterPosition(), viewHolder2.getAdapterPosition());
+            DialogsActivity.this.updateDialogIndices();
+            DialogsActivity.this.movingWas = true;
+            return true;
+        }
+
+        public int convertToAbsoluteDirection(int i, int i2) {
+            if (this.swipeFolderBack) {
+                return 0;
+            }
+            return super.convertToAbsoluteDirection(i, i2);
+        }
+
+        public void onSwiped(ViewHolder viewHolder, int i) {
+            if (viewHolder != null) {
+                DialogCell dialogCell = (DialogCell) viewHolder.itemView;
+                if (DialogObject.isFolderDialogId(dialogCell.getDialogId())) {
+                    SharedConfig.toggleArchiveHidden();
+                    if (SharedConfig.archiveHidden) {
+                        DialogsActivity.this.waitingForScrollFinished = true;
+                        DialogsActivity.this.listView.smoothScrollBy(0, dialogCell.getMeasuredHeight() + dialogCell.getTop(), CubicBezierInterpolator.EASE_OUT);
+                        DialogsActivity.this.getUndoView().showWithAction(0, 6, null, null);
+                    }
+                    return;
+                }
+                DialogsActivity.this.slidingView = dialogCell;
+                int adapterPosition = viewHolder.getAdapterPosition();
+                -$$Lambda$DialogsActivity$SwipeController$p1WvioWe4QIXpl_h9JruXCBarGg -__lambda_dialogsactivity_swipecontroller_p1wviowe4qixpl_h9jruxcbargg = new -$$Lambda$DialogsActivity$SwipeController$p1WvioWe4QIXpl_h9JruXCBarGg(this, DialogsActivity.this.dialogsAdapter.fixPosition(adapterPosition), DialogsActivity.this.dialogsAdapter.getItemCount(), adapterPosition);
+                DialogsActivity.this.setDialogsListFrozen(true);
+                if (Utilities.random.nextInt(1000) == 1) {
+                    if (DialogsActivity.this.pacmanAnimation == null) {
+                        DialogsActivity dialogsActivity = DialogsActivity.this;
+                        dialogsActivity.pacmanAnimation = new PacmanAnimation(dialogsActivity.listView);
+                    }
+                    DialogsActivity.this.pacmanAnimation.setFinishRunnable(-__lambda_dialogsactivity_swipecontroller_p1wviowe4qixpl_h9jruxcbargg);
+                    DialogsActivity.this.pacmanAnimation.start();
+                } else {
+                    -__lambda_dialogsactivity_swipecontroller_p1wviowe4qixpl_h9jruxcbargg.run();
+                }
+            } else {
+                DialogsActivity.this.slidingView = null;
+            }
+        }
+
+        public /* synthetic */ void lambda$onSwiped$1$DialogsActivity$SwipeController(int i, int i2, int i3) {
+            Dialog dialog = (Dialog) DialogsActivity.frozenDialogsList.remove(i);
+            int i4 = dialog.pinnedNum;
+            DialogsActivity.this.slidingView = null;
+            DialogsActivity.this.listView.invalidate();
+            int addDialogToFolder = DialogsActivity.this.getMessagesController().addDialogToFolder(dialog.id, DialogsActivity.this.folderId == 0 ? 1 : 0, -1, 0);
+            if (addDialogToFolder == 2) {
+                DialogsActivity.this.dialogsAdapter.notifyItemChanged(i2 - 1);
+            }
+            if (!(addDialogToFolder == 2 && i3 == 0)) {
+                DialogsActivity.this.dialogsItemAnimator.prepareForRemove();
+                DialogsActivity.this.lastItemsCount = DialogsActivity.this.lastItemsCount - 1;
+                DialogsActivity.this.dialogsAdapter.notifyItemRemoved(i3);
+                DialogsActivity.this.dialogRemoveFinished = 2;
+            }
+            if (DialogsActivity.this.folderId == 0) {
+                if (addDialogToFolder == 2) {
+                    DialogsActivity.this.dialogsItemAnimator.prepareForRemove();
+                    if (i3 == 0) {
+                        DialogsActivity.this.dialogChangeFinished = 2;
+                        DialogsActivity.this.setDialogsListFrozen(true);
+                        DialogsActivity.this.dialogsAdapter.notifyItemChanged(0);
+                    } else {
+                        DialogsActivity.this.lastItemsCount = DialogsActivity.this.lastItemsCount + 1;
+                        DialogsActivity.this.dialogsAdapter.notifyItemInserted(0);
+                    }
+                    DialogsActivity.frozenDialogsList.add(0, DialogsActivity.getDialogsArray(DialogsActivity.this.currentAccount, DialogsActivity.this.dialogsType, DialogsActivity.this.folderId, false).get(0));
+                } else if (addDialogToFolder == 1) {
+                    ViewHolder findViewHolderForAdapterPosition = DialogsActivity.this.listView.findViewHolderForAdapterPosition(0);
+                    if (findViewHolderForAdapterPosition != null) {
+                        View view = findViewHolderForAdapterPosition.itemView;
+                        if (view instanceof DialogCell) {
+                            DialogCell dialogCell = (DialogCell) view;
+                            dialogCell.checkCurrentDialogIndex(true);
+                            dialogCell.animateArchiveAvatar();
+                        }
+                    }
+                }
+                SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
+                String str = "archivehint_l";
+                boolean z = globalMainSettings.getBoolean(str, false);
+                globalMainSettings.edit().putBoolean(str, true).commit();
+                DialogsActivity.this.getUndoView().showWithAction(dialog.id, z ? 2 : 3, null, new -$$Lambda$DialogsActivity$SwipeController$YQ1mguBHuXIRhAK21aamsJthsAQ(this, dialog, i4));
+            }
+            if (DialogsActivity.this.folderId != 0 && DialogsActivity.frozenDialogsList.isEmpty()) {
+                DialogsActivity.this.listView.setEmptyView(null);
+                DialogsActivity.this.progressView.setVisibility(4);
+            }
+        }
+
+        public /* synthetic */ void lambda$null$0$DialogsActivity$SwipeController(Dialog dialog, int i) {
+            DialogsActivity.this.dialogsListFrozen = true;
+            DialogsActivity.this.getMessagesController().addDialogToFolder(dialog.id, 0, i, 0);
+            DialogsActivity.this.dialogsListFrozen = false;
+            ArrayList dialogs = DialogsActivity.this.getMessagesController().getDialogs(0);
+            int indexOf = dialogs.indexOf(dialog);
+            if (indexOf >= 0) {
+                ArrayList dialogs2 = DialogsActivity.this.getMessagesController().getDialogs(1);
+                if (!(dialogs2.isEmpty() && indexOf == 1)) {
+                    DialogsActivity.this.dialogInsertFinished = 2;
+                    DialogsActivity.this.setDialogsListFrozen(true);
+                    DialogsActivity.this.dialogsItemAnimator.prepareForRemove();
+                    DialogsActivity.this.lastItemsCount = DialogsActivity.this.lastItemsCount + 1;
+                    DialogsActivity.this.dialogsAdapter.notifyItemInserted(indexOf);
+                }
+                if (dialogs2.isEmpty()) {
+                    dialogs.remove(0);
+                    if (indexOf == 1) {
+                        DialogsActivity.this.dialogChangeFinished = 2;
+                        DialogsActivity.this.setDialogsListFrozen(true);
+                        DialogsActivity.this.dialogsAdapter.notifyItemChanged(0);
+                        return;
+                    }
+                    DialogsActivity.frozenDialogsList.remove(0);
+                    DialogsActivity.this.dialogsItemAnimator.prepareForRemove();
+                    DialogsActivity.this.lastItemsCount = DialogsActivity.this.lastItemsCount - 1;
+                    DialogsActivity.this.dialogsAdapter.notifyItemRemoved(0);
+                    return;
+                }
+                return;
+            }
+            DialogsActivity.this.dialogsAdapter.notifyDataSetChanged();
+        }
+
+        public void onSelectedChanged(ViewHolder viewHolder, int i) {
+            if (viewHolder != null) {
+                DialogsActivity.this.listView.hideSelector();
+            }
+            super.onSelectedChanged(viewHolder, i);
+        }
+
+        public long getAnimationDuration(RecyclerView recyclerView, int i, float f, float f2) {
+            if (i == 4) {
+                return 200;
+            }
+            if (i == 8 && DialogsActivity.this.movingView != null) {
+                AndroidUtilities.runOnUIThread(new -$$Lambda$DialogsActivity$SwipeController$P5v0ux1s9L8VHZMGfvGmr58IqXA(DialogsActivity.this.movingView), DialogsActivity.this.dialogsItemAnimator.getMoveDuration());
+                DialogsActivity.this.movingView = null;
+            }
+            return super.getAnimationDuration(recyclerView, i, f, f2);
         }
     }
 
@@ -1004,11 +931,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                         DialogsActivity.this.perfromSelectedDialogsAction(i, true);
                     }
                 } else if (DialogsActivity.this.getParentActivity() != null) {
-                    DialogsActivityDelegate access$6100 = DialogsActivity.this.delegate;
+                    DialogsActivityDelegate access$6200 = DialogsActivity.this.delegate;
                     LaunchActivity launchActivity = (LaunchActivity) DialogsActivity.this.getParentActivity();
                     launchActivity.switchToAccount(i - 10, true);
                     DialogsActivity dialogsActivity = new DialogsActivity(DialogsActivity.this.arguments);
-                    dialogsActivity.setDelegate(access$6100);
+                    dialogsActivity.setDelegate(access$6200);
                     launchActivity.presentFragment(dialogsActivity, false, true);
                 }
             }
@@ -1097,14 +1024,31 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     return false;
                 }
                 int action = motionEvent.getAction();
-                if (!DialogsActivity.this.itemTouchhelper.isIdle() && DialogsActivity.this.swipeController.swipingFolder && (action == 3 || action == 1)) {
+                if ((action == 1 || action == 3) && !DialogsActivity.this.itemTouchhelper.isIdle() && DialogsActivity.this.swipeController.swipingFolder) {
                     DialogsActivity.this.swipeController.swipeFolderBack = true;
                     if (DialogsActivity.this.itemTouchhelper.checkHorizontalSwipe(null, 4) != 0) {
                         SharedConfig.toggleArchiveHidden();
                         DialogsActivity.this.getUndoView().showWithAction(0, 7, null, null);
                     }
                 }
-                return super.onTouchEvent(motionEvent);
+                boolean onTouchEvent = super.onTouchEvent(motionEvent);
+                if ((action == 1 || action == 3) && DialogsActivity.this.allowScrollToHiddenView) {
+                    action = DialogsActivity.this.layoutManager.findFirstVisibleItemPosition();
+                    if (action == 0) {
+                        View findViewByPosition = DialogsActivity.this.layoutManager.findViewByPosition(action);
+                        int dp = (AndroidUtilities.dp(SharedConfig.useThreeLinesLayout ? 78.0f : 72.0f) / 4) * 3;
+                        int top = findViewByPosition.getTop() + findViewByPosition.getMeasuredHeight();
+                        if (findViewByPosition != null) {
+                            if (top < dp) {
+                                DialogsActivity.this.listView.smoothScrollBy(0, top, CubicBezierInterpolator.EASE_OUT_QUINT);
+                            } else {
+                                DialogsActivity.this.listView.smoothScrollBy(0, findViewByPosition.getTop(), CubicBezierInterpolator.EASE_OUT_QUINT);
+                            }
+                        }
+                    }
+                    DialogsActivity.this.allowScrollToHiddenView = false;
+                }
+                return onTouchEvent;
             }
 
             public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
@@ -1158,6 +1102,38 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 LinearSmoothScrollerMiddle linearSmoothScrollerMiddle = new LinearSmoothScrollerMiddle(recyclerView.getContext());
                 linearSmoothScrollerMiddle.setTargetPosition(i);
                 startSmoothScroll(linearSmoothScrollerMiddle);
+            }
+
+            public int scrollVerticallyBy(int i, Recycler recycler, State state) {
+                if (DialogsActivity.this.listView.getAdapter() == DialogsActivity.this.dialogsAdapter && DialogsActivity.this.dialogsType == 0 && !DialogsActivity.this.onlySelect && !DialogsActivity.this.allowScrollToHiddenView && DialogsActivity.this.folderId == 0 && i < 0 && DialogsActivity.this.getMessagesController().hasHiddenArchive()) {
+                    View findViewByPosition;
+                    int findFirstVisibleItemPosition = DialogsActivity.this.layoutManager.findFirstVisibleItemPosition();
+                    if (findFirstVisibleItemPosition == 0) {
+                        findViewByPosition = DialogsActivity.this.layoutManager.findViewByPosition(findFirstVisibleItemPosition);
+                        if (findViewByPosition != null && findViewByPosition.getBottom() <= AndroidUtilities.dp(1.0f)) {
+                            findFirstVisibleItemPosition = 1;
+                        }
+                    }
+                    if (!(findFirstVisibleItemPosition == 0 || findFirstVisibleItemPosition == -1)) {
+                        findViewByPosition = DialogsActivity.this.layoutManager.findViewByPosition(findFirstVisibleItemPosition);
+                        if (findViewByPosition != null) {
+                            int dp = (-findViewByPosition.getTop()) + ((findFirstVisibleItemPosition - 1) * (AndroidUtilities.dp(SharedConfig.useThreeLinesLayout ? 78.0f : 72.0f) + 1));
+                            if (dp < Math.abs(i)) {
+                                DialogsActivity dialogsActivity = DialogsActivity.this;
+                                dialogsActivity.totalConsumedAmount = dialogsActivity.totalConsumedAmount + Math.abs(i);
+                                i = -dp;
+                                if (DialogsActivity.this.startedScrollAtTop && DialogsActivity.this.totalConsumedAmount >= AndroidUtilities.dp(150.0f)) {
+                                    DialogsActivity.this.allowScrollToHiddenView = true;
+                                    try {
+                                        DialogsActivity.this.listView.performHapticFeedback(3, 2);
+                                    } catch (Exception unused) {
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return super.scrollVerticallyBy(i, recycler, state);
             }
         };
         this.layoutManager.setOrientation(1);
@@ -1291,16 +1267,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         this.floatingButtonContainer.setContentDescription(LocaleController.getString("NewMessageTitle", NUM));
         this.floatingButtonContainer.addView(this.floatingButton, LayoutHelper.createFrame(VERSION.SDK_INT >= 21 ? 56 : 60, (float) (VERSION.SDK_INT >= 21 ? 56 : 60), 51, 10.0f, 0.0f, 10.0f, 0.0f));
         this.listView.setOnScrollListener(new OnScrollListener() {
-            private boolean scrollingManually;
-
             public void onScrollStateChanged(RecyclerView recyclerView, int i) {
                 if (i == 1) {
                     if (DialogsActivity.this.searching && DialogsActivity.this.searchWas) {
                         AndroidUtilities.hideKeyboard(DialogsActivity.this.getParentActivity().getCurrentFocus());
                     }
-                    this.scrollingManually = true;
+                    DialogsActivity.this.scrollingManually = true;
                 } else {
-                    this.scrollingManually = false;
+                    DialogsActivity.this.scrollingManually = false;
                 }
                 if (DialogsActivity.this.waitingForScrollFinished && i == 0) {
                     DialogsActivity.this.waitingForScrollFinished = false;
@@ -1393,7 +1367,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                 r8 = r8.floatingButtonContainer;
                 r8 = r8.getVisibility();
                 r1 = 8;
-                if (r8 == r1) goto L_0x0123;
+                if (r8 == r1) goto L_0x0127;
             L_0x00c3:
                 r8 = 0;
                 r6 = r6.getChildAt(r8);
@@ -1436,29 +1410,30 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             L_0x00fc:
                 r8 = 1;
             L_0x00fd:
-                if (r8 == 0) goto L_0x0114;
+                if (r8 == 0) goto L_0x0118;
             L_0x00ff:
                 r8 = org.telegram.ui.DialogsActivity.this;
                 r8 = r8.scrollUpdated;
-                if (r8 == 0) goto L_0x0114;
+                if (r8 == 0) goto L_0x0118;
             L_0x0107:
-                if (r2 != 0) goto L_0x010f;
+                if (r2 != 0) goto L_0x0113;
             L_0x0109:
-                if (r2 != 0) goto L_0x0114;
+                if (r2 != 0) goto L_0x0118;
             L_0x010b:
-                r8 = r5.scrollingManually;
-                if (r8 == 0) goto L_0x0114;
-            L_0x010f:
+                r8 = org.telegram.ui.DialogsActivity.this;
+                r8 = r8.scrollingManually;
+                if (r8 == 0) goto L_0x0118;
+            L_0x0113:
                 r8 = org.telegram.ui.DialogsActivity.this;
                 r8.hideFloatingButton(r2);
-            L_0x0114:
+            L_0x0118:
                 r8 = org.telegram.ui.DialogsActivity.this;
                 r8.prevPosition = r7;
                 r7 = org.telegram.ui.DialogsActivity.this;
                 r7.prevTop = r6;
                 r6 = org.telegram.ui.DialogsActivity.this;
                 r6.scrollUpdated = r0;
-            L_0x0123:
+            L_0x0127:
                 return;
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity$AnonymousClass8.onScrolled(androidx.recyclerview.widget.RecyclerView, int, int):void");
@@ -1511,9 +1486,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     }
                     DialogsActivity.this.closeSearch();
                     if (AndroidUtilities.isTablet() && DialogsActivity.this.dialogsAdapter != null) {
-                        DialogsAdapter access$1300 = DialogsActivity.this.dialogsAdapter;
+                        DialogsAdapter access$1800 = DialogsActivity.this.dialogsAdapter;
                         DialogsActivity.this.openedDialogId = j;
-                        access$1300.setOpenedDialogId(j);
+                        access$1800.setOpenedDialogId(j);
                         DialogsActivity.this.updateVisibleRows(512);
                     }
                     if (DialogsActivity.this.searchString != null) {
@@ -2218,7 +2193,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
     }
 
     private boolean hasHiddenArchive() {
-        return !this.onlySelect && this.dialogsType == 0 && this.folderId == 0 && getMessagesController().hasHiddenArchive();
+        return this.listView.getAdapter() == this.dialogsAdapter && !this.onlySelect && this.dialogsType == 0 && this.folderId == 0 && getMessagesController().hasHiddenArchive();
     }
 
     private boolean waitingForDialogsAnimationEnd() {
@@ -2467,7 +2442,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r12 = r12 + r16;
         if (r12 <= r4) goto L_0x0228;
     L_0x011b:
-        r0 = NUM; // 0x7f0d07d5 float:1.8746181E38 double:1.053130768E-314;
+        r0 = NUM; // 0x7f0d0800 float:1.8746269E38 double:1.0531307894E-314;
         r1 = new java.lang.Object[r9];
         r2 = "Chats";
         r2 = org.telegram.messenger.LocaleController.formatPluralString(r2, r4);
@@ -2505,7 +2480,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r0.<init>(r4);
         if (r2 != r3) goto L_0x0197;
     L_0x0163:
-        r3 = NUM; // 0x7f0d0338 float:1.8743786E38 double:1.0531301847E-314;
+        r3 = NUM; // 0x7f0d034a float:1.8743823E38 double:1.0531301935E-314;
         r4 = new java.lang.Object[r9];
         r5 = "ChatsSelected";
         r1 = org.telegram.messenger.LocaleController.formatPluralString(r5, r1);
@@ -2513,11 +2488,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r1 = "DeleteFewChatsTitle";
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r3, r4);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0d0115 float:1.8742677E38 double:1.0531299144E-314;
+        r1 = NUM; // 0x7f0d0119 float:1.8742685E38 double:1.0531299164E-314;
         r3 = "AreYouSureDeleteFewChats";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
-        r1 = NUM; // 0x7f0d032b float:1.874376E38 double:1.053130178E-314;
+        r1 = NUM; // 0x7f0d033b float:1.8743792E38 double:1.053130186E-314;
         r3 = "Delete";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r3 = new org.telegram.ui.-$$Lambda$DialogsActivity$jWd3WTqe_JWytlcg5OAtRHiocr4;
@@ -2528,7 +2503,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r3 = r7.canClearCacheCount;
         if (r3 == 0) goto L_0x01cf;
     L_0x019b:
-        r3 = NUM; // 0x7f0d02b2 float:1.8743514E38 double:1.0531301184E-314;
+        r3 = NUM; // 0x7f0d02c0 float:1.8743543E38 double:1.0531301254E-314;
         r4 = new java.lang.Object[r9];
         r5 = "ChatsSelectedClearCache";
         r1 = org.telegram.messenger.LocaleController.formatPluralString(r5, r1);
@@ -2536,11 +2511,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r1 = "ClearCacheFewChatsTitle";
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r3, r4);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0d010a float:1.8742654E38 double:1.053129909E-314;
+        r1 = NUM; // 0x7f0d010e float:1.8742662E38 double:1.053129911E-314;
         r3 = "AreYouSureClearHistoryCacheFewChats";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
-        r1 = NUM; // 0x7f0d02b6 float:1.8743522E38 double:1.0531301204E-314;
+        r1 = NUM; // 0x7f0d02c4 float:1.874355E38 double:1.0531301273E-314;
         r3 = "ClearHistoryCache";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r3 = new org.telegram.ui.-$$Lambda$DialogsActivity$iMQ7bU7WAaE9d3J2u7XQeCZi3Ow;
@@ -2548,7 +2523,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r0.setPositiveButton(r1, r3);
         goto L_0x0202;
     L_0x01cf:
-        r3 = NUM; // 0x7f0d02b4 float:1.8743518E38 double:1.0531301194E-314;
+        r3 = NUM; // 0x7f0d02c2 float:1.8743547E38 double:1.0531301264E-314;
         r4 = new java.lang.Object[r9];
         r5 = "ChatsSelectedClear";
         r1 = org.telegram.messenger.LocaleController.formatPluralString(r5, r1);
@@ -2556,18 +2531,18 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         r1 = "ClearFewChatsTitle";
         r1 = org.telegram.messenger.LocaleController.formatString(r1, r3, r4);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0d010c float:1.8742658E38 double:1.05312991E-314;
+        r1 = NUM; // 0x7f0d0110 float:1.8742666E38 double:1.053129912E-314;
         r3 = "AreYouSureClearHistoryFewChats";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
-        r1 = NUM; // 0x7f0d02b5 float:1.874352E38 double:1.05313012E-314;
+        r1 = NUM; // 0x7f0d02c3 float:1.8743549E38 double:1.053130127E-314;
         r3 = "ClearHistory";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r3 = new org.telegram.ui.-$$Lambda$DialogsActivity$4jeFfbPa00Dvar_qyJvj0h0oI_X4;
         r3.<init>(r7, r2);
         r0.setPositiveButton(r1, r3);
     L_0x0202:
-        r1 = NUM; // 0x7f0d01de float:1.8743084E38 double:1.0531300137E-314;
+        r1 = NUM; // 0x7f0d01eb float:1.874311E38 double:1.05313002E-314;
         r2 = "Cancel";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setNegativeButton(r1, r8);
@@ -3019,7 +2994,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                         dialog2 = dialog;
                     } else {
                         dialog2 = dialog;
-                        if (!(j == ((long) getUserConfig().getClientUserId()) || j == 777000)) {
+                        if (!(j == ((long) getUserConfig().getClientUserId()) || j == 777000 || getMessagesController().isProxyDialog(j, false))) {
                             i5++;
                         }
                     }
@@ -3027,7 +3002,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
                     int i8 = (int) (j >> 32);
                     if (DialogObject.isChannel(dialog2)) {
                         Chat chat = getMessagesController().getChat(Integer.valueOf(-i7));
-                        if (getMessagesController().isProxyDialog(dialog2.id)) {
+                        if (getMessagesController().isProxyDialog(dialog2.id, true)) {
                             this.canClearCacheCount++;
                         } else {
                             if (z3) {

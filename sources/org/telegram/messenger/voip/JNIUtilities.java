@@ -20,6 +20,14 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 
 public class JNIUtilities {
+    public static int getMaxVideoResolution() {
+        return 320;
+    }
+
+    public static String getSupportedVideoCodecs() {
+        return "";
+    }
+
     @TargetApi(23)
     public static String getCurrentNetworkInterfaceName() {
         ConnectivityManager connectivityManager = (ConnectivityManager) ApplicationLoader.applicationContext.getSystemService("connectivity");

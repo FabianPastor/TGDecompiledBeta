@@ -32,6 +32,11 @@ public class CheckBox2 extends View {
         this.checkBoxBase.setSize(i);
     }
 
+    public void setEnabled(boolean z) {
+        this.checkBoxBase.setEnabled(z);
+        super.setEnabled(z);
+    }
+
     public void setDrawUnchecked(boolean z) {
         this.checkBoxBase.setDrawUnchecked(z);
     }

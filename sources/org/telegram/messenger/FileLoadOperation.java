@@ -3,9 +3,12 @@ package org.telegram.messenger;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.ZipException;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.TLObject;
@@ -121,6 +124,7 @@ public class FileLoadOperation {
     private File tempPath;
     private int totalBytesCount;
     private int totalPreloadedBytes;
+    private boolean ungzip;
     private WebFile webFile;
     private InputWebFileLocation webLocation;
 
@@ -295,10 +299,10 @@ public class FileLoadOperation {
         this.ext = ImageLoader.getHttpUrlExtension(webFile.url, mimeTypePart);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:33:0x00db A:{Catch:{ Exception -> 0x00fd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:32:0x00d6 A:{Catch:{ Exception -> 0x00fd }} */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x00e5 A:{Catch:{ Exception -> 0x0107 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:32:0x00e0 A:{Catch:{ Exception -> 0x0107 }} */
     /* JADX WARNING: Removed duplicated region for block: B:45:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:39:0x00f4 A:{Catch:{ Exception -> 0x00fd }} */
+    /* JADX WARNING: Removed duplicated region for block: B:39:0x00fe A:{Catch:{ Exception -> 0x0107 }} */
     public FileLoadOperation(org.telegram.tgnet.TLRPC.Document r7, java.lang.Object r8) {
         /*
         r6 = this;
@@ -309,152 +313,156 @@ public class FileLoadOperation {
         r1 = 0;
         r6.state = r1;
         r2 = 1;
-        r6.parentObject = r8;	 Catch:{ Exception -> 0x00fd }
-        r8 = r7 instanceof org.telegram.tgnet.TLRPC.TL_documentEncrypted;	 Catch:{ Exception -> 0x00fd }
+        r6.parentObject = r8;	 Catch:{ Exception -> 0x0107 }
+        r8 = r7 instanceof org.telegram.tgnet.TLRPC.TL_documentEncrypted;	 Catch:{ Exception -> 0x0107 }
         r3 = "";
         if (r8 == 0) goto L_0x0043;
     L_0x0015:
-        r8 = new org.telegram.tgnet.TLRPC$TL_inputEncryptedFileLocation;	 Catch:{ Exception -> 0x00fd }
-        r8.<init>();	 Catch:{ Exception -> 0x00fd }
-        r6.location = r8;	 Catch:{ Exception -> 0x00fd }
-        r8 = r6.location;	 Catch:{ Exception -> 0x00fd }
-        r4 = r7.id;	 Catch:{ Exception -> 0x00fd }
-        r8.id = r4;	 Catch:{ Exception -> 0x00fd }
-        r8 = r6.location;	 Catch:{ Exception -> 0x00fd }
-        r4 = r7.access_hash;	 Catch:{ Exception -> 0x00fd }
-        r8.access_hash = r4;	 Catch:{ Exception -> 0x00fd }
-        r8 = r7.dc_id;	 Catch:{ Exception -> 0x00fd }
-        r6.datacenterId = r8;	 Catch:{ Exception -> 0x00fd }
-        r6.initialDatacenterId = r8;	 Catch:{ Exception -> 0x00fd }
+        r8 = new org.telegram.tgnet.TLRPC$TL_inputEncryptedFileLocation;	 Catch:{ Exception -> 0x0107 }
+        r8.<init>();	 Catch:{ Exception -> 0x0107 }
+        r6.location = r8;	 Catch:{ Exception -> 0x0107 }
+        r8 = r6.location;	 Catch:{ Exception -> 0x0107 }
+        r4 = r7.id;	 Catch:{ Exception -> 0x0107 }
+        r8.id = r4;	 Catch:{ Exception -> 0x0107 }
+        r8 = r6.location;	 Catch:{ Exception -> 0x0107 }
+        r4 = r7.access_hash;	 Catch:{ Exception -> 0x0107 }
+        r8.access_hash = r4;	 Catch:{ Exception -> 0x0107 }
+        r8 = r7.dc_id;	 Catch:{ Exception -> 0x0107 }
+        r6.datacenterId = r8;	 Catch:{ Exception -> 0x0107 }
+        r6.initialDatacenterId = r8;	 Catch:{ Exception -> 0x0107 }
         r8 = 32;
-        r8 = new byte[r8];	 Catch:{ Exception -> 0x00fd }
-        r6.iv = r8;	 Catch:{ Exception -> 0x00fd }
-        r8 = r7.iv;	 Catch:{ Exception -> 0x00fd }
-        r4 = r6.iv;	 Catch:{ Exception -> 0x00fd }
-        r5 = r6.iv;	 Catch:{ Exception -> 0x00fd }
-        r5 = r5.length;	 Catch:{ Exception -> 0x00fd }
-        java.lang.System.arraycopy(r8, r1, r4, r1, r5);	 Catch:{ Exception -> 0x00fd }
-        r8 = r7.key;	 Catch:{ Exception -> 0x00fd }
-        r6.key = r8;	 Catch:{ Exception -> 0x00fd }
+        r8 = new byte[r8];	 Catch:{ Exception -> 0x0107 }
+        r6.iv = r8;	 Catch:{ Exception -> 0x0107 }
+        r8 = r7.iv;	 Catch:{ Exception -> 0x0107 }
+        r4 = r6.iv;	 Catch:{ Exception -> 0x0107 }
+        r5 = r6.iv;	 Catch:{ Exception -> 0x0107 }
+        r5 = r5.length;	 Catch:{ Exception -> 0x0107 }
+        java.lang.System.arraycopy(r8, r1, r4, r1, r5);	 Catch:{ Exception -> 0x0107 }
+        r8 = r7.key;	 Catch:{ Exception -> 0x0107 }
+        r6.key = r8;	 Catch:{ Exception -> 0x0107 }
         goto L_0x0091;
     L_0x0043:
-        r8 = r7 instanceof org.telegram.tgnet.TLRPC.TL_document;	 Catch:{ Exception -> 0x00fd }
+        r8 = r7 instanceof org.telegram.tgnet.TLRPC.TL_document;	 Catch:{ Exception -> 0x0107 }
         if (r8 == 0) goto L_0x0091;
     L_0x0047:
-        r8 = new org.telegram.tgnet.TLRPC$TL_inputDocumentFileLocation;	 Catch:{ Exception -> 0x00fd }
-        r8.<init>();	 Catch:{ Exception -> 0x00fd }
-        r6.location = r8;	 Catch:{ Exception -> 0x00fd }
-        r8 = r6.location;	 Catch:{ Exception -> 0x00fd }
-        r4 = r7.id;	 Catch:{ Exception -> 0x00fd }
-        r8.id = r4;	 Catch:{ Exception -> 0x00fd }
-        r8 = r6.location;	 Catch:{ Exception -> 0x00fd }
-        r4 = r7.access_hash;	 Catch:{ Exception -> 0x00fd }
-        r8.access_hash = r4;	 Catch:{ Exception -> 0x00fd }
-        r8 = r6.location;	 Catch:{ Exception -> 0x00fd }
-        r4 = r7.file_reference;	 Catch:{ Exception -> 0x00fd }
-        r8.file_reference = r4;	 Catch:{ Exception -> 0x00fd }
-        r8 = r6.location;	 Catch:{ Exception -> 0x00fd }
-        r8.thumb_size = r3;	 Catch:{ Exception -> 0x00fd }
-        r8 = r6.location;	 Catch:{ Exception -> 0x00fd }
-        r8 = r8.file_reference;	 Catch:{ Exception -> 0x00fd }
+        r8 = new org.telegram.tgnet.TLRPC$TL_inputDocumentFileLocation;	 Catch:{ Exception -> 0x0107 }
+        r8.<init>();	 Catch:{ Exception -> 0x0107 }
+        r6.location = r8;	 Catch:{ Exception -> 0x0107 }
+        r8 = r6.location;	 Catch:{ Exception -> 0x0107 }
+        r4 = r7.id;	 Catch:{ Exception -> 0x0107 }
+        r8.id = r4;	 Catch:{ Exception -> 0x0107 }
+        r8 = r6.location;	 Catch:{ Exception -> 0x0107 }
+        r4 = r7.access_hash;	 Catch:{ Exception -> 0x0107 }
+        r8.access_hash = r4;	 Catch:{ Exception -> 0x0107 }
+        r8 = r6.location;	 Catch:{ Exception -> 0x0107 }
+        r4 = r7.file_reference;	 Catch:{ Exception -> 0x0107 }
+        r8.file_reference = r4;	 Catch:{ Exception -> 0x0107 }
+        r8 = r6.location;	 Catch:{ Exception -> 0x0107 }
+        r8.thumb_size = r3;	 Catch:{ Exception -> 0x0107 }
+        r8 = r6.location;	 Catch:{ Exception -> 0x0107 }
+        r8 = r8.file_reference;	 Catch:{ Exception -> 0x0107 }
         if (r8 != 0) goto L_0x0070;
     L_0x006a:
-        r8 = r6.location;	 Catch:{ Exception -> 0x00fd }
-        r4 = new byte[r1];	 Catch:{ Exception -> 0x00fd }
-        r8.file_reference = r4;	 Catch:{ Exception -> 0x00fd }
+        r8 = r6.location;	 Catch:{ Exception -> 0x0107 }
+        r4 = new byte[r1];	 Catch:{ Exception -> 0x0107 }
+        r8.file_reference = r4;	 Catch:{ Exception -> 0x0107 }
     L_0x0070:
-        r8 = r7.dc_id;	 Catch:{ Exception -> 0x00fd }
-        r6.datacenterId = r8;	 Catch:{ Exception -> 0x00fd }
-        r6.initialDatacenterId = r8;	 Catch:{ Exception -> 0x00fd }
-        r6.allowDisordererFileSave = r2;	 Catch:{ Exception -> 0x00fd }
-        r8 = r7.attributes;	 Catch:{ Exception -> 0x00fd }
-        r8 = r8.size();	 Catch:{ Exception -> 0x00fd }
+        r8 = r7.dc_id;	 Catch:{ Exception -> 0x0107 }
+        r6.datacenterId = r8;	 Catch:{ Exception -> 0x0107 }
+        r6.initialDatacenterId = r8;	 Catch:{ Exception -> 0x0107 }
+        r6.allowDisordererFileSave = r2;	 Catch:{ Exception -> 0x0107 }
+        r8 = r7.attributes;	 Catch:{ Exception -> 0x0107 }
+        r8 = r8.size();	 Catch:{ Exception -> 0x0107 }
         r4 = 0;
     L_0x007f:
         if (r4 >= r8) goto L_0x0091;
     L_0x0081:
-        r5 = r7.attributes;	 Catch:{ Exception -> 0x00fd }
-        r5 = r5.get(r4);	 Catch:{ Exception -> 0x00fd }
-        r5 = r5 instanceof org.telegram.tgnet.TLRPC.TL_documentAttributeVideo;	 Catch:{ Exception -> 0x00fd }
+        r5 = r7.attributes;	 Catch:{ Exception -> 0x0107 }
+        r5 = r5.get(r4);	 Catch:{ Exception -> 0x0107 }
+        r5 = r5 instanceof org.telegram.tgnet.TLRPC.TL_documentAttributeVideo;	 Catch:{ Exception -> 0x0107 }
         if (r5 == 0) goto L_0x008e;
     L_0x008b:
-        r6.supportsPreloading = r2;	 Catch:{ Exception -> 0x00fd }
+        r6.supportsPreloading = r2;	 Catch:{ Exception -> 0x0107 }
         goto L_0x0091;
     L_0x008e:
         r4 = r4 + 1;
         goto L_0x007f;
     L_0x0091:
-        r8 = r7.size;	 Catch:{ Exception -> 0x00fd }
-        r6.totalBytesCount = r8;	 Catch:{ Exception -> 0x00fd }
-        r8 = r6.key;	 Catch:{ Exception -> 0x00fd }
-        if (r8 == 0) goto L_0x00ab;
-    L_0x0099:
-        r8 = r6.totalBytesCount;	 Catch:{ Exception -> 0x00fd }
+        r8 = "application/x-tgsticker";
+        r4 = r7.mime_type;	 Catch:{ Exception -> 0x0107 }
+        r8 = r8.equals(r4);	 Catch:{ Exception -> 0x0107 }
+        r6.ungzip = r8;	 Catch:{ Exception -> 0x0107 }
+        r8 = r7.size;	 Catch:{ Exception -> 0x0107 }
+        r6.totalBytesCount = r8;	 Catch:{ Exception -> 0x0107 }
+        r8 = r6.key;	 Catch:{ Exception -> 0x0107 }
+        if (r8 == 0) goto L_0x00b5;
+    L_0x00a3:
+        r8 = r6.totalBytesCount;	 Catch:{ Exception -> 0x0107 }
         r8 = r8 % r0;
-        if (r8 == 0) goto L_0x00ab;
-    L_0x009e:
-        r8 = r6.totalBytesCount;	 Catch:{ Exception -> 0x00fd }
+        if (r8 == 0) goto L_0x00b5;
+    L_0x00a8:
+        r8 = r6.totalBytesCount;	 Catch:{ Exception -> 0x0107 }
         r8 = r8 % r0;
         r0 = r0 - r8;
-        r6.bytesCountPadding = r0;	 Catch:{ Exception -> 0x00fd }
-        r8 = r6.totalBytesCount;	 Catch:{ Exception -> 0x00fd }
-        r0 = r6.bytesCountPadding;	 Catch:{ Exception -> 0x00fd }
+        r6.bytesCountPadding = r0;	 Catch:{ Exception -> 0x0107 }
+        r8 = r6.totalBytesCount;	 Catch:{ Exception -> 0x0107 }
+        r0 = r6.bytesCountPadding;	 Catch:{ Exception -> 0x0107 }
         r8 = r8 + r0;
-        r6.totalBytesCount = r8;	 Catch:{ Exception -> 0x00fd }
-    L_0x00ab:
-        r8 = org.telegram.messenger.FileLoader.getDocumentFileName(r7);	 Catch:{ Exception -> 0x00fd }
-        r6.ext = r8;	 Catch:{ Exception -> 0x00fd }
-        r8 = r6.ext;	 Catch:{ Exception -> 0x00fd }
-        if (r8 == 0) goto L_0x00ca;
+        r6.totalBytesCount = r8;	 Catch:{ Exception -> 0x0107 }
     L_0x00b5:
-        r8 = r6.ext;	 Catch:{ Exception -> 0x00fd }
+        r8 = org.telegram.messenger.FileLoader.getDocumentFileName(r7);	 Catch:{ Exception -> 0x0107 }
+        r6.ext = r8;	 Catch:{ Exception -> 0x0107 }
+        r8 = r6.ext;	 Catch:{ Exception -> 0x0107 }
+        if (r8 == 0) goto L_0x00d4;
+    L_0x00bf:
+        r8 = r6.ext;	 Catch:{ Exception -> 0x0107 }
         r0 = 46;
-        r8 = r8.lastIndexOf(r0);	 Catch:{ Exception -> 0x00fd }
+        r8 = r8.lastIndexOf(r0);	 Catch:{ Exception -> 0x0107 }
         r0 = -1;
-        if (r8 != r0) goto L_0x00c1;
-    L_0x00c0:
-        goto L_0x00ca;
-    L_0x00c1:
-        r0 = r6.ext;	 Catch:{ Exception -> 0x00fd }
-        r8 = r0.substring(r8);	 Catch:{ Exception -> 0x00fd }
-        r6.ext = r8;	 Catch:{ Exception -> 0x00fd }
-        goto L_0x00cc;
+        if (r8 != r0) goto L_0x00cb;
     L_0x00ca:
-        r6.ext = r3;	 Catch:{ Exception -> 0x00fd }
-    L_0x00cc:
-        r8 = "audio/ogg";
-        r0 = r7.mime_type;	 Catch:{ Exception -> 0x00fd }
-        r8 = r8.equals(r0);	 Catch:{ Exception -> 0x00fd }
-        if (r8 == 0) goto L_0x00db;
+        goto L_0x00d4;
+    L_0x00cb:
+        r0 = r6.ext;	 Catch:{ Exception -> 0x0107 }
+        r8 = r0.substring(r8);	 Catch:{ Exception -> 0x0107 }
+        r6.ext = r8;	 Catch:{ Exception -> 0x0107 }
+        goto L_0x00d6;
+    L_0x00d4:
+        r6.ext = r3;	 Catch:{ Exception -> 0x0107 }
     L_0x00d6:
+        r8 = "audio/ogg";
+        r0 = r7.mime_type;	 Catch:{ Exception -> 0x0107 }
+        r8 = r8.equals(r0);	 Catch:{ Exception -> 0x0107 }
+        if (r8 == 0) goto L_0x00e5;
+    L_0x00e0:
         r8 = 50331648; // 0x3000000 float:3.761582E-37 double:2.4867138E-316;
-        r6.currentType = r8;	 Catch:{ Exception -> 0x00fd }
-        goto L_0x00ec;
-    L_0x00db:
-        r8 = r7.mime_type;	 Catch:{ Exception -> 0x00fd }
-        r8 = org.telegram.messenger.FileLoader.isVideoMimeType(r8);	 Catch:{ Exception -> 0x00fd }
-        if (r8 == 0) goto L_0x00e8;
-    L_0x00e3:
+        r6.currentType = r8;	 Catch:{ Exception -> 0x0107 }
+        goto L_0x00f6;
+    L_0x00e5:
+        r8 = r7.mime_type;	 Catch:{ Exception -> 0x0107 }
+        r8 = org.telegram.messenger.FileLoader.isVideoMimeType(r8);	 Catch:{ Exception -> 0x0107 }
+        if (r8 == 0) goto L_0x00f2;
+    L_0x00ed:
         r8 = 33554432; // 0x2000000 float:9.403955E-38 double:1.6578092E-316;
-        r6.currentType = r8;	 Catch:{ Exception -> 0x00fd }
-        goto L_0x00ec;
-    L_0x00e8:
+        r6.currentType = r8;	 Catch:{ Exception -> 0x0107 }
+        goto L_0x00f6;
+    L_0x00f2:
         r8 = 67108864; // 0x4000000 float:1.5046328E-36 double:3.31561842E-316;
-        r6.currentType = r8;	 Catch:{ Exception -> 0x00fd }
-    L_0x00ec:
-        r8 = r6.ext;	 Catch:{ Exception -> 0x00fd }
-        r8 = r8.length();	 Catch:{ Exception -> 0x00fd }
-        if (r8 > r2) goto L_0x0104;
-    L_0x00f4:
-        r7 = r7.mime_type;	 Catch:{ Exception -> 0x00fd }
-        r7 = org.telegram.messenger.FileLoader.getExtensionByMimeType(r7);	 Catch:{ Exception -> 0x00fd }
-        r6.ext = r7;	 Catch:{ Exception -> 0x00fd }
-        goto L_0x0104;
-    L_0x00fd:
+        r6.currentType = r8;	 Catch:{ Exception -> 0x0107 }
+    L_0x00f6:
+        r8 = r6.ext;	 Catch:{ Exception -> 0x0107 }
+        r8 = r8.length();	 Catch:{ Exception -> 0x0107 }
+        if (r8 > r2) goto L_0x010e;
+    L_0x00fe:
+        r7 = r7.mime_type;	 Catch:{ Exception -> 0x0107 }
+        r7 = org.telegram.messenger.FileLoader.getExtensionByMimeType(r7);	 Catch:{ Exception -> 0x0107 }
+        r6.ext = r7;	 Catch:{ Exception -> 0x0107 }
+        goto L_0x010e;
+    L_0x0107:
         r7 = move-exception;
         org.telegram.messenger.FileLog.e(r7);
         r6.onFail(r2, r1);
-    L_0x0104:
+    L_0x010e:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.FileLoadOperation.<init>(org.telegram.tgnet.TLRPC$Document, java.lang.Object):void");
@@ -1949,23 +1957,23 @@ public class FileLoadOperation {
     }
 
     private void onFinishLoadingFile(boolean z) {
+        StringBuilder stringBuilder;
         if (this.state == 1) {
             this.state = 3;
             cleanup();
             if (this.isPreloadVideoOperation) {
                 this.preloadFinished = true;
                 if (BuildVars.DEBUG_VERSION) {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("finished preloading file to ");
-                    stringBuilder.append(this.cacheFileTemp);
-                    stringBuilder.append(" loaded ");
-                    stringBuilder.append(this.totalPreloadedBytes);
-                    stringBuilder.append(" of ");
-                    stringBuilder.append(this.totalBytesCount);
-                    FileLog.d(stringBuilder.toString());
+                    StringBuilder stringBuilder2 = new StringBuilder();
+                    stringBuilder2.append("finished preloading file to ");
+                    stringBuilder2.append(this.cacheFileTemp);
+                    stringBuilder2.append(" loaded ");
+                    stringBuilder2.append(this.totalPreloadedBytes);
+                    stringBuilder2.append(" of ");
+                    stringBuilder2.append(this.totalBytesCount);
+                    FileLog.d(stringBuilder2.toString());
                 }
             } else {
-                StringBuilder stringBuilder2;
                 File file = this.cacheIvTemp;
                 if (file != null) {
                     file.delete();
@@ -1982,30 +1990,51 @@ public class FileLoadOperation {
                     this.cacheFilePreload = null;
                 }
                 file = this.cacheFileTemp;
-                if (!(file == null || file.renameTo(this.cacheFileFinal))) {
-                    if (BuildVars.LOGS_ENABLED) {
-                        stringBuilder2 = new StringBuilder();
-                        stringBuilder2.append("unable to rename temp = ");
-                        stringBuilder2.append(this.cacheFileTemp);
-                        stringBuilder2.append(" to final = ");
-                        stringBuilder2.append(this.cacheFileFinal);
-                        stringBuilder2.append(" retry = ");
-                        stringBuilder2.append(this.renameRetryCount);
-                        FileLog.e(stringBuilder2.toString());
+                if (file != null) {
+                    String str = " to final = ";
+                    if (this.ungzip) {
+                        try {
+                            GZIPInputStream gZIPInputStream = new GZIPInputStream(new FileInputStream(file));
+                            FileLoader.copyFile(gZIPInputStream, this.cacheFileFinal);
+                            gZIPInputStream.close();
+                            this.cacheFileTemp.delete();
+                        } catch (ZipException unused) {
+                            this.ungzip = false;
+                        } catch (Throwable th) {
+                            FileLog.e(th);
+                            stringBuilder = new StringBuilder();
+                            stringBuilder.append("unable to ungzip temp = ");
+                            stringBuilder.append(this.cacheFileTemp);
+                            stringBuilder.append(str);
+                            stringBuilder.append(this.cacheFileFinal);
+                            FileLog.e(stringBuilder.toString());
+                        }
                     }
-                    this.renameRetryCount++;
-                    if (this.renameRetryCount < 3) {
-                        this.state = 1;
-                        Utilities.stageQueue.postRunnable(new -$$Lambda$FileLoadOperation$Pg1188DV6hLAQ13wzfrMjXc2Ie0(this, z), 200);
-                        return;
+                    if (!(this.ungzip || this.cacheFileTemp.renameTo(this.cacheFileFinal))) {
+                        if (BuildVars.LOGS_ENABLED) {
+                            stringBuilder = new StringBuilder();
+                            stringBuilder.append("unable to rename temp = ");
+                            stringBuilder.append(this.cacheFileTemp);
+                            stringBuilder.append(str);
+                            stringBuilder.append(this.cacheFileFinal);
+                            stringBuilder.append(" retry = ");
+                            stringBuilder.append(this.renameRetryCount);
+                            FileLog.e(stringBuilder.toString());
+                        }
+                        this.renameRetryCount++;
+                        if (this.renameRetryCount < 3) {
+                            this.state = 1;
+                            Utilities.stageQueue.postRunnable(new -$$Lambda$FileLoadOperation$Pg1188DV6hLAQ13wzfrMjXc2Ie0(this, z), 200);
+                            return;
+                        }
+                        this.cacheFileFinal = this.cacheFileTemp;
                     }
-                    this.cacheFileFinal = this.cacheFileTemp;
                 }
                 if (BuildVars.LOGS_ENABLED) {
-                    stringBuilder2 = new StringBuilder();
-                    stringBuilder2.append("finished downloading file to ");
-                    stringBuilder2.append(this.cacheFileFinal);
-                    FileLog.d(stringBuilder2.toString());
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append("finished downloading file to ");
+                    stringBuilder.append(this.cacheFileFinal);
+                    FileLog.d(stringBuilder.toString());
                 }
                 if (z) {
                     int i = this.currentType;

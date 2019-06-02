@@ -31,7 +31,6 @@ public class ChatListCell extends LinearLayout {
             this.textPaint = new TextPaint(1);
             setWillNotDraw(false);
             this.isThreeLines = z;
-            this.button = new RadioButton(context);
             this.textPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
             this.button = new RadioButton(context, ChatListCell.this) {
                 public void invalidate() {

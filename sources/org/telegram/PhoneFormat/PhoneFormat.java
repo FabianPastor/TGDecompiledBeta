@@ -17,125 +17,6 @@ public class PhoneFormat {
     public String defaultCountry;
     private boolean initialzed = false;
 
-    /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:70:0x00c5 in {10, 14, 16, 20, 22, 26, 27, 29, 31, 33, 35, 37, 39, 45, 47, 51, 53, 54, 56, 60, 62, 66, 68, 69} preds:[]
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-        */
-    public void init(java.lang.String r8) {
-        /*
-        r7 = this;
-        r0 = 0;
-        r1 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0094, all -> 0x0090 }
-        r1 = r1.getAssets();	 Catch:{ Exception -> 0x0094, all -> 0x0090 }
-        r2 = "PhoneFormats.dat";	 Catch:{ Exception -> 0x0094, all -> 0x0090 }
-        r1 = r1.open(r2);	 Catch:{ Exception -> 0x0094, all -> 0x0090 }
-        r2 = new java.io.ByteArrayOutputStream;	 Catch:{ Exception -> 0x008e }
-        r2.<init>();	 Catch:{ Exception -> 0x008e }
-        r0 = 1024; // 0x400 float:1.435E-42 double:5.06E-321;
-        r3 = new byte[r0];	 Catch:{ Exception -> 0x008b, all -> 0x0089 }
-        r4 = 0;	 Catch:{ Exception -> 0x008b, all -> 0x0089 }
-        r5 = r1.read(r3, r4, r0);	 Catch:{ Exception -> 0x008b, all -> 0x0089 }
-        r6 = -1;	 Catch:{ Exception -> 0x008b, all -> 0x0089 }
-        if (r5 == r6) goto L_0x0022;	 Catch:{ Exception -> 0x008b, all -> 0x0089 }
-        r2.write(r3, r4, r5);	 Catch:{ Exception -> 0x008b, all -> 0x0089 }
-        goto L_0x0016;	 Catch:{ Exception -> 0x008b, all -> 0x0089 }
-        r0 = r2.toByteArray();	 Catch:{ Exception -> 0x008b, all -> 0x0089 }
-        r7.data = r0;	 Catch:{ Exception -> 0x008b, all -> 0x0089 }
-        r0 = r7.data;	 Catch:{ Exception -> 0x008b, all -> 0x0089 }
-        r0 = java.nio.ByteBuffer.wrap(r0);	 Catch:{ Exception -> 0x008b, all -> 0x0089 }
-        r7.buffer = r0;	 Catch:{ Exception -> 0x008b, all -> 0x0089 }
-        r0 = r7.buffer;	 Catch:{ Exception -> 0x008b, all -> 0x0089 }
-        r3 = java.nio.ByteOrder.LITTLE_ENDIAN;	 Catch:{ Exception -> 0x008b, all -> 0x0089 }
-        r0.order(r3);	 Catch:{ Exception -> 0x008b, all -> 0x0089 }
-        r2.close();	 Catch:{ Exception -> 0x003b }
-        goto L_0x003f;
-        r0 = move-exception;
-        org.telegram.messenger.FileLog.e(r0);
-        if (r1 == 0) goto L_0x0049;
-        r1.close();	 Catch:{ Exception -> 0x0045 }
-        goto L_0x0049;
-        r0 = move-exception;
-        org.telegram.messenger.FileLog.e(r0);
-        if (r8 == 0) goto L_0x0054;
-        r0 = r8.length();
-        if (r0 == 0) goto L_0x0054;
-        r7.defaultCountry = r8;
-        goto L_0x0062;
-        r8 = java.util.Locale.getDefault();
-        r8 = r8.getCountry();
-        r8 = r8.toLowerCase();
-        r7.defaultCountry = r8;
-        r8 = new java.util.HashMap;
-        r0 = 255; // 0xff float:3.57E-43 double:1.26E-321;
-        r8.<init>(r0);
-        r7.callingCodeOffsets = r8;
-        r8 = new java.util.HashMap;
-        r8.<init>(r0);
-        r7.callingCodeCountries = r8;
-        r8 = new java.util.HashMap;
-        r1 = 10;
-        r8.<init>(r1);
-        r7.callingCodeData = r8;
-        r8 = new java.util.HashMap;
-        r8.<init>(r0);
-        r7.countryCallingCode = r8;
-        r7.parseDataHeader();
-        r8 = 1;
-        r7.initialzed = r8;
-        return;
-        r8 = move-exception;
-        goto L_0x00b0;
-        r8 = move-exception;
-        r0 = r2;
-        goto L_0x0096;
-        r8 = move-exception;
-        goto L_0x0096;
-        r8 = move-exception;
-        r1 = r0;
-        r2 = r1;
-        goto L_0x00b0;
-        r8 = move-exception;
-        r1 = r0;
-        r8.printStackTrace();	 Catch:{ all -> 0x00ae }
-        if (r0 == 0) goto L_0x00a3;
-        r0.close();	 Catch:{ Exception -> 0x009f }
-        goto L_0x00a3;
-        r8 = move-exception;
-        org.telegram.messenger.FileLog.e(r8);
-        if (r1 == 0) goto L_0x00ad;
-        r1.close();	 Catch:{ Exception -> 0x00a9 }
-        goto L_0x00ad;
-        r8 = move-exception;
-        org.telegram.messenger.FileLog.e(r8);
-        return;
-        r8 = move-exception;
-        r2 = r0;
-        if (r2 == 0) goto L_0x00ba;
-        r2.close();	 Catch:{ Exception -> 0x00b6 }
-        goto L_0x00ba;
-        r0 = move-exception;
-        org.telegram.messenger.FileLog.e(r0);
-        if (r1 == 0) goto L_0x00c4;
-        r1.close();	 Catch:{ Exception -> 0x00c0 }
-        goto L_0x00c4;
-        r0 = move-exception;
-        org.telegram.messenger.FileLog.e(r0);
-        throw r8;
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.PhoneFormat.PhoneFormat.init(java.lang.String):void");
-    }
-
     public static PhoneFormat getInstance() {
         PhoneFormat phoneFormat = Instance;
         if (phoneFormat == null) {
@@ -190,6 +71,154 @@ public class PhoneFormat {
 
     public PhoneFormat(String str) {
         init(str);
+    }
+
+    /* JADX WARNING: Removed duplicated region for block: B:39:0x009b A:{SYNTHETIC, Splitter:B:39:0x009b} */
+    /* JADX WARNING: Removed duplicated region for block: B:44:0x00a5 A:{SYNTHETIC, Splitter:B:44:0x00a5} */
+    /* JADX WARNING: Removed duplicated region for block: B:39:0x009b A:{SYNTHETIC, Splitter:B:39:0x009b} */
+    /* JADX WARNING: Removed duplicated region for block: B:44:0x00a5 A:{SYNTHETIC, Splitter:B:44:0x00a5} */
+    /* JADX WARNING: Removed duplicated region for block: B:52:0x00b2 A:{SYNTHETIC, Splitter:B:52:0x00b2} */
+    /* JADX WARNING: Removed duplicated region for block: B:57:0x00bc A:{SYNTHETIC, Splitter:B:57:0x00bc} */
+    /* JADX WARNING: Removed duplicated region for block: B:52:0x00b2 A:{SYNTHETIC, Splitter:B:52:0x00b2} */
+    /* JADX WARNING: Removed duplicated region for block: B:57:0x00bc A:{SYNTHETIC, Splitter:B:57:0x00bc} */
+    public void init(java.lang.String r8) {
+        /*
+        r7 = this;
+        r0 = 0;
+        r1 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0094, all -> 0x0090 }
+        r1 = r1.getAssets();	 Catch:{ Exception -> 0x0094, all -> 0x0090 }
+        r2 = "PhoneFormats.dat";
+        r1 = r1.open(r2);	 Catch:{ Exception -> 0x0094, all -> 0x0090 }
+        r2 = new java.io.ByteArrayOutputStream;	 Catch:{ Exception -> 0x008e }
+        r2.<init>();	 Catch:{ Exception -> 0x008e }
+        r0 = 1024; // 0x400 float:1.435E-42 double:5.06E-321;
+        r3 = new byte[r0];	 Catch:{ Exception -> 0x008b, all -> 0x0089 }
+    L_0x0016:
+        r4 = 0;
+        r5 = r1.read(r3, r4, r0);	 Catch:{ Exception -> 0x008b, all -> 0x0089 }
+        r6 = -1;
+        if (r5 == r6) goto L_0x0022;
+    L_0x001e:
+        r2.write(r3, r4, r5);	 Catch:{ Exception -> 0x008b, all -> 0x0089 }
+        goto L_0x0016;
+    L_0x0022:
+        r0 = r2.toByteArray();	 Catch:{ Exception -> 0x008b, all -> 0x0089 }
+        r7.data = r0;	 Catch:{ Exception -> 0x008b, all -> 0x0089 }
+        r0 = r7.data;	 Catch:{ Exception -> 0x008b, all -> 0x0089 }
+        r0 = java.nio.ByteBuffer.wrap(r0);	 Catch:{ Exception -> 0x008b, all -> 0x0089 }
+        r7.buffer = r0;	 Catch:{ Exception -> 0x008b, all -> 0x0089 }
+        r0 = r7.buffer;	 Catch:{ Exception -> 0x008b, all -> 0x0089 }
+        r3 = java.nio.ByteOrder.LITTLE_ENDIAN;	 Catch:{ Exception -> 0x008b, all -> 0x0089 }
+        r0.order(r3);	 Catch:{ Exception -> 0x008b, all -> 0x0089 }
+        r2.close();	 Catch:{ Exception -> 0x003b }
+        goto L_0x003f;
+    L_0x003b:
+        r0 = move-exception;
+        org.telegram.messenger.FileLog.e(r0);
+    L_0x003f:
+        if (r1 == 0) goto L_0x0049;
+    L_0x0041:
+        r1.close();	 Catch:{ Exception -> 0x0045 }
+        goto L_0x0049;
+    L_0x0045:
+        r0 = move-exception;
+        org.telegram.messenger.FileLog.e(r0);
+    L_0x0049:
+        if (r8 == 0) goto L_0x0054;
+    L_0x004b:
+        r0 = r8.length();
+        if (r0 == 0) goto L_0x0054;
+    L_0x0051:
+        r7.defaultCountry = r8;
+        goto L_0x0062;
+    L_0x0054:
+        r8 = java.util.Locale.getDefault();
+        r8 = r8.getCountry();
+        r8 = r8.toLowerCase();
+        r7.defaultCountry = r8;
+    L_0x0062:
+        r8 = new java.util.HashMap;
+        r0 = 255; // 0xff float:3.57E-43 double:1.26E-321;
+        r8.<init>(r0);
+        r7.callingCodeOffsets = r8;
+        r8 = new java.util.HashMap;
+        r8.<init>(r0);
+        r7.callingCodeCountries = r8;
+        r8 = new java.util.HashMap;
+        r1 = 10;
+        r8.<init>(r1);
+        r7.callingCodeData = r8;
+        r8 = new java.util.HashMap;
+        r8.<init>(r0);
+        r7.countryCallingCode = r8;
+        r7.parseDataHeader();
+        r8 = 1;
+        r7.initialzed = r8;
+        return;
+    L_0x0089:
+        r8 = move-exception;
+        goto L_0x00b0;
+    L_0x008b:
+        r8 = move-exception;
+        r0 = r2;
+        goto L_0x0096;
+    L_0x008e:
+        r8 = move-exception;
+        goto L_0x0096;
+    L_0x0090:
+        r8 = move-exception;
+        r1 = r0;
+        r2 = r1;
+        goto L_0x00b0;
+    L_0x0094:
+        r8 = move-exception;
+        r1 = r0;
+    L_0x0096:
+        r8.printStackTrace();	 Catch:{ all -> 0x00ae }
+        if (r0 == 0) goto L_0x00a3;
+    L_0x009b:
+        r0.close();	 Catch:{ Exception -> 0x009f }
+        goto L_0x00a3;
+    L_0x009f:
+        r8 = move-exception;
+        org.telegram.messenger.FileLog.e(r8);
+    L_0x00a3:
+        if (r1 == 0) goto L_0x00ad;
+    L_0x00a5:
+        r1.close();	 Catch:{ Exception -> 0x00a9 }
+        goto L_0x00ad;
+    L_0x00a9:
+        r8 = move-exception;
+        org.telegram.messenger.FileLog.e(r8);
+    L_0x00ad:
+        return;
+    L_0x00ae:
+        r8 = move-exception;
+        r2 = r0;
+    L_0x00b0:
+        if (r2 == 0) goto L_0x00ba;
+    L_0x00b2:
+        r2.close();	 Catch:{ Exception -> 0x00b6 }
+        goto L_0x00ba;
+    L_0x00b6:
+        r0 = move-exception;
+        org.telegram.messenger.FileLog.e(r0);
+    L_0x00ba:
+        if (r1 == 0) goto L_0x00c4;
+    L_0x00bc:
+        r1.close();	 Catch:{ Exception -> 0x00c0 }
+        goto L_0x00c4;
+    L_0x00c0:
+        r0 = move-exception;
+        org.telegram.messenger.FileLog.e(r0);
+    L_0x00c4:
+        goto L_0x00c6;
+    L_0x00c5:
+        throw r8;
+    L_0x00c6:
+        goto L_0x00c5;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.PhoneFormat.PhoneFormat.init(java.lang.String):void");
     }
 
     public String defaultCallingCode() {

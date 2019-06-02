@@ -890,7 +890,9 @@ public class BottomSheet extends Dialog {
         attributes.gravity = 51;
         attributes.dimAmount = 0.0f;
         attributes.flags &= -3;
-        if (!this.focusable) {
+        if (this.focusable) {
+            attributes.softInputMode = 16;
+        } else {
             attributes.flags |= 131072;
         }
         if (this.isFullscreen) {
@@ -898,6 +900,7 @@ public class BottomSheet extends Dialog {
                 attributes.flags |= -NUM;
             }
             attributes.flags |= 1024;
+            this.container.setSystemUiVisibility(1284);
         }
         attributes.height = -1;
         if (VERSION.SDK_INT >= 28) {
@@ -1023,6 +1026,12 @@ public class BottomSheet extends Dialog {
                             }
                             if (BottomSheet.this.useHardwareLayer) {
                                 BottomSheet.this.container.setLayerType(0, null);
+                            }
+                            bottomSheet = BottomSheet.this;
+                            if (bottomSheet.isFullscreen) {
+                                WindowManager.LayoutParams attributes = bottomSheet.getWindow().getAttributes();
+                                attributes.flags &= -1025;
+                                BottomSheet.this.getWindow().setAttributes(attributes);
                             }
                         }
                     }

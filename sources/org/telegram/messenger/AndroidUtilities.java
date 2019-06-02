@@ -635,7 +635,7 @@ public class AndroidUtilities {
         return iArr;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:21:0x0059 A:{SYNTHETIC, Splitter:B:21:0x0059} */
+    /* JADX WARNING: Removed duplicated region for block: B:21:0x005a A:{SYNTHETIC, Splitter:B:21:0x005a} */
     public static boolean isInternalUri(android.net.Uri r5) {
         /*
         r5 = r5.getPath();
@@ -658,54 +658,54 @@ public class AndroidUtilities {
         r1.append(r2);
         r1 = r1.toString();
         r1 = r5.matches(r1);
-        if (r1 == 0) goto L_0x0035;
-    L_0x0034:
-        return r0;
+        if (r1 == 0) goto L_0x0036;
     L_0x0035:
-        r1 = 0;
+        return r0;
     L_0x0036:
+        r1 = 0;
+    L_0x0037:
         r2 = 1;
-        if (r5 == 0) goto L_0x0042;
-    L_0x0039:
+        if (r5 == 0) goto L_0x0043;
+    L_0x003a:
         r3 = r5.length();
         r4 = 4096; // 0x1000 float:5.74E-42 double:2.0237E-320;
-        if (r3 <= r4) goto L_0x0042;
-    L_0x0041:
-        return r2;
+        if (r3 <= r4) goto L_0x0043;
     L_0x0042:
+        return r2;
+    L_0x0043:
         r3 = org.telegram.messenger.Utilities.readlink(r5);
-        if (r3 == 0) goto L_0x0057;
-    L_0x0048:
+        if (r3 == 0) goto L_0x0058;
+    L_0x0049:
         r4 = r3.equals(r5);
-        if (r4 == 0) goto L_0x004f;
-    L_0x004e:
-        goto L_0x0057;
+        if (r4 == 0) goto L_0x0050;
     L_0x004f:
+        goto L_0x0058;
+    L_0x0050:
         r1 = r1 + r2;
         r5 = 10;
-        if (r1 < r5) goto L_0x0055;
-    L_0x0054:
-        return r2;
+        if (r1 < r5) goto L_0x0056;
     L_0x0055:
+        return r2;
+    L_0x0056:
         r5 = r3;
-        goto L_0x0036;
-    L_0x0057:
-        if (r5 == 0) goto L_0x006d;
-    L_0x0059:
-        r1 = new java.io.File;	 Catch:{ Exception -> 0x0066 }
-        r1.<init>(r5);	 Catch:{ Exception -> 0x0066 }
-        r1 = r1.getCanonicalPath();	 Catch:{ Exception -> 0x0066 }
-        if (r1 == 0) goto L_0x006d;
-    L_0x0064:
+        goto L_0x0037;
+    L_0x0058:
+        if (r5 == 0) goto L_0x006e;
+    L_0x005a:
+        r1 = new java.io.File;	 Catch:{ Exception -> 0x0067 }
+        r1.<init>(r5);	 Catch:{ Exception -> 0x0067 }
+        r1 = r1.getCanonicalPath();	 Catch:{ Exception -> 0x0067 }
+        if (r1 == 0) goto L_0x006e;
+    L_0x0065:
         r5 = r1;
-        goto L_0x006d;
-    L_0x0066:
+        goto L_0x006e;
+    L_0x0067:
         r1 = "/./";
         r3 = "/";
         r5.replace(r1, r3);
-    L_0x006d:
-        if (r5 == 0) goto L_0x0091;
-    L_0x006f:
+    L_0x006e:
+        if (r5 == 0) goto L_0x0092;
+    L_0x0070:
         r5 = r5.toLowerCase();
         r1 = new java.lang.StringBuilder;
         r1.<init>();
@@ -716,10 +716,10 @@ public class AndroidUtilities {
         r1.append(r3);
         r1 = r1.toString();
         r5 = r5.contains(r1);
-        if (r5 == 0) goto L_0x0091;
-    L_0x0090:
-        r0 = 1;
+        if (r5 == 0) goto L_0x0092;
     L_0x0091:
+        r0 = 1;
+    L_0x0092:
         return r0;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.isInternalUri(android.net.Uri):boolean");
@@ -2202,9 +2202,9 @@ public class AndroidUtilities {
         r7 = r5.exists();
         if (r7 == 0) goto L_0x015c;
     L_0x004d:
-        r7 = NUM; // 0x7f0d0679 float:1.8745476E38 double:1.053130596E-314;
+        r7 = NUM; // 0x7f0d06a1 float:1.8745557E38 double:1.053130616E-314;
         r8 = "OK";
-        r9 = NUM; // 0x7f0d00e7 float:1.8742583E38 double:1.0531298917E-314;
+        r9 = NUM; // 0x7f0d00eb float:1.8742591E38 double:1.0531298936E-314;
         r10 = "AppName";
         r11 = 1;
         if (r2 == 0) goto L_0x00a6;
@@ -2228,7 +2228,7 @@ public class AndroidUtilities {
         r0.<init>(r1);
         r1 = org.telegram.messenger.LocaleController.getString(r10, r9);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0d04c7 float:1.8744595E38 double:1.053130382E-314;
+        r1 = NUM; // 0x7f0d04f0 float:1.8744678E38 double:1.053130402E-314;
         r3 = "IncorrectTheme";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r0.setMessage(r1);
@@ -2325,7 +2325,7 @@ public class AndroidUtilities {
         r3.setTitle(r1);
         r1 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r3.setPositiveButton(r1, r6);
-        r1 = NUM; // 0x7f0d05ce float:1.8745129E38 double:1.0531305117E-314;
+        r1 = NUM; // 0x7f0d05f6 float:1.874521E38 double:1.0531305315E-314;
         r4 = 1;
         r4 = new java.lang.Object[r4];
         r5 = 0;
@@ -2447,21 +2447,21 @@ public class AndroidUtilities {
     L_0x0092:
         r8 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r8.<init>(r9);
-        r0 = NUM; // 0x7f0d00e7 float:1.8742583E38 double:1.0531298917E-314;
+        r0 = NUM; // 0x7f0d00eb float:1.8742591E38 double:1.0531298936E-314;
         r1 = "AppName";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r8.setTitle(r0);
-        r0 = NUM; // 0x7f0d00e6 float:1.8742581E38 double:1.053129891E-314;
+        r0 = NUM; // 0x7f0d00ea float:1.874259E38 double:1.053129893E-314;
         r1 = "ApkRestricted";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r8.setMessage(r0);
-        r0 = NUM; // 0x7f0d07b8 float:1.8746123E38 double:1.053130754E-314;
+        r0 = NUM; // 0x7f0d07e3 float:1.874621E38 double:1.053130775E-314;
         r1 = "PermissionOpenSettings";
         r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
         r1 = new org.telegram.messenger.-$$Lambda$AndroidUtilities$WTDNtmPdy5yTCpHQSYXokc0QdfY;
         r1.<init>(r9);
         r8.setPositiveButton(r0, r1);
-        r9 = NUM; // 0x7f0d01de float:1.8743084E38 double:1.0531300137E-314;
+        r9 = NUM; // 0x7f0d01eb float:1.874311E38 double:1.05313002E-314;
         r0 = "Cancel";
         r9 = org.telegram.messenger.LocaleController.getString(r0, r9);
         r8.setNegativeButton(r9, r2);

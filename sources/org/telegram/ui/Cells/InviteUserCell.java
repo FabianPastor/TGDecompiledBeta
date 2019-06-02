@@ -11,13 +11,13 @@ import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
-import org.telegram.ui.Components.GroupCreateCheckBox;
+import org.telegram.ui.Components.CheckBox2;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class InviteUserCell extends FrameLayout {
     private AvatarDrawable avatarDrawable = new AvatarDrawable();
     private BackupImageView avatarImageView;
-    private GroupCreateCheckBox checkBox;
+    private CheckBox2 checkBox;
     private Contact currentContact;
     private CharSequence currentName;
     private SimpleTextView nameTextView;
@@ -45,13 +45,16 @@ public class InviteUserCell extends FrameLayout {
         this.statusTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
         addView(this.statusTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 28.0f : 72.0f, 39.0f, LocaleController.isRTL ? 72.0f : 28.0f, 0.0f));
         if (z) {
-            this.checkBox = new GroupCreateCheckBox(context2);
-            this.checkBox.setVisibility(0);
-            GroupCreateCheckBox groupCreateCheckBox = this.checkBox;
+            this.checkBox = new CheckBox2(context2);
+            this.checkBox.setColor(null, "windowBackgroundWhite", "checkboxCheck");
+            this.checkBox.setSize(21);
+            this.checkBox.setDrawUnchecked(false);
+            this.checkBox.setDrawBackgroundAsArc(3);
+            CheckBox2 checkBox2 = this.checkBox;
             if (!LocaleController.isRTL) {
                 i = 3;
             }
-            addView(groupCreateCheckBox, LayoutHelper.createFrame(24, 24.0f, i | 48, LocaleController.isRTL ? 0.0f : 41.0f, 41.0f, LocaleController.isRTL ? 41.0f : 0.0f, 0.0f));
+            addView(checkBox2, LayoutHelper.createFrame(24, 24.0f, i | 48, LocaleController.isRTL ? 0.0f : 40.0f, 40.0f, LocaleController.isRTL ? 39.0f : 0.0f, 0.0f));
         }
     }
 

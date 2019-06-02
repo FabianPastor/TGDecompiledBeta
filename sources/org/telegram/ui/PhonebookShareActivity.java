@@ -776,8 +776,8 @@ public class PhonebookShareActivity extends BaseFragment {
                     }
                 }
 
-                /* JADX WARNING: Removed duplicated region for block: B:97:0x029e  */
-                /* JADX WARNING: Removed duplicated region for block: B:96:0x0296  */
+                /* JADX WARNING: Removed duplicated region for block: B:97:0x02a7  */
+                /* JADX WARNING: Removed duplicated region for block: B:96:0x029f  */
                 public void onClick(android.content.DialogInterface r19, int r20) {
                     /*
                     r18 = this;
@@ -791,23 +791,23 @@ public class PhonebookShareActivity extends BaseFragment {
                 L_0x000d:
                     r2 = 0;
                     r3 = 1;
-                    if (r0 != 0) goto L_0x001e;
+                    if (r0 != 0) goto L_0x001f;
                 L_0x0011:
                     r2 = new android.content.Intent;
                     r0 = "android.intent.action.INSERT";
                     r2.<init>(r0);
                     r0 = "vnd.android.cursor.dir/raw_contact";
                     r2.setType(r0);
-                    goto L_0x002c;
-                L_0x001e:
-                    if (r0 != r3) goto L_0x002c;
-                L_0x0020:
+                    goto L_0x002e;
+                L_0x001f:
+                    if (r0 != r3) goto L_0x002e;
+                L_0x0021:
                     r2 = new android.content.Intent;
                     r0 = "android.intent.action.INSERT_OR_EDIT";
                     r2.<init>(r0);
                     r0 = "vnd.android.cursor.item/contact";
                     r2.setType(r0);
-                L_0x002c:
+                L_0x002e:
                     r0 = org.telegram.ui.PhonebookShareActivity.this;
                     r0 = r0.currentUser;
                     r0 = r0.first_name;
@@ -821,14 +821,14 @@ public class PhonebookShareActivity extends BaseFragment {
                     r0.<init>();
                     r4 = 0;
                     r5 = 0;
-                L_0x004c:
+                L_0x004e:
                     r6 = org.telegram.ui.PhonebookShareActivity.this;
                     r6 = r6.phones;
                     r6 = r6.size();
                     r7 = "data1";
                     r8 = "mimetype";
-                    if (r5 >= r6) goto L_0x0086;
-                L_0x005c:
+                    if (r5 >= r6) goto L_0x0089;
+                L_0x005e:
                     r6 = org.telegram.ui.PhonebookShareActivity.this;
                     r6 = r6.phones;
                     r6 = r6.get(r5);
@@ -843,23 +843,23 @@ public class PhonebookShareActivity extends BaseFragment {
                     r1.fillRowWithType(r6, r9);
                     r0.add(r9);
                     r5 = r5 + 1;
-                    goto L_0x004c;
-                L_0x0086:
+                    goto L_0x004e;
+                L_0x0089:
                     r5 = 0;
                     r6 = 0;
-                L_0x0088:
+                L_0x008b:
                     r9 = org.telegram.ui.PhonebookShareActivity.this;
                     r9 = r9.other;
                     r9 = r9.size();
-                    if (r5 >= r9) goto L_0x0373;
-                L_0x0094:
+                    if (r5 >= r9) goto L_0x037d;
+                L_0x0097:
                     r9 = org.telegram.ui.PhonebookShareActivity.this;
                     r9 = r9.other;
                     r9 = r9.get(r5);
                     r9 = (org.telegram.messenger.AndroidUtilities.VcardItem) r9;
                     r10 = r9.type;
-                    if (r10 != r3) goto L_0x00c6;
-                L_0x00a4:
+                    if (r10 != r3) goto L_0x00ca;
+                L_0x00a7:
                     r10 = new android.content.ContentValues;
                     r10.<init>();
                     r11 = "vnd.android.cursor.item/email_v2";
@@ -869,16 +869,16 @@ public class PhonebookShareActivity extends BaseFragment {
                     r9 = r9.getRawType(r4);
                     r1.fillRowWithType(r9, r10);
                     r0.add(r10);
-                L_0x00bf:
+                L_0x00c3:
                     r16 = r2;
                     r17 = r5;
-                L_0x00c3:
+                L_0x00c7:
                     r9 = 0;
-                    goto L_0x036b;
-                L_0x00c6:
+                    goto L_0x0375;
+                L_0x00ca:
                     r11 = 3;
-                    if (r10 != r11) goto L_0x00e5;
-                L_0x00c9:
+                    if (r10 != r11) goto L_0x00ea;
+                L_0x00cd:
                     r10 = new android.content.ContentValues;
                     r10.<init>();
                     r11 = "vnd.android.cursor.item/website";
@@ -888,11 +888,11 @@ public class PhonebookShareActivity extends BaseFragment {
                     r9 = r9.getRawType(r4);
                     r1.fillUrlRowWithType(r9, r10);
                     r0.add(r10);
-                    goto L_0x00bf;
-                L_0x00e5:
+                    goto L_0x00c3;
+                L_0x00ea:
                     r12 = 4;
-                    if (r10 != r12) goto L_0x00fd;
-                L_0x00e8:
+                    if (r10 != r12) goto L_0x0103;
+                L_0x00ed:
                     r10 = new android.content.ContentValues;
                     r10.<init>();
                     r11 = "vnd.android.cursor.item/note";
@@ -900,12 +900,12 @@ public class PhonebookShareActivity extends BaseFragment {
                     r9 = r9.getValue(r4);
                     r10.put(r7, r9);
                     r0.add(r10);
-                    goto L_0x00bf;
-                L_0x00fd:
+                    goto L_0x00c3;
+                L_0x0103:
                     r13 = 5;
                     r14 = "data2";
-                    if (r10 != r13) goto L_0x011e;
-                L_0x0102:
+                    if (r10 != r13) goto L_0x0125;
+                L_0x0108:
                     r10 = new android.content.ContentValues;
                     r10.<init>();
                     r12 = "vnd.android.cursor.item/contact_event";
@@ -915,16 +915,16 @@ public class PhonebookShareActivity extends BaseFragment {
                     r9 = java.lang.Integer.valueOf(r11);
                     r10.put(r14, r9);
                     r0.add(r10);
-                    goto L_0x00bf;
-                L_0x011e:
+                    goto L_0x00c3;
+                L_0x0125:
                     r15 = "data6";
                     r13 = "OTHER";
                     r12 = "WORK";
                     r11 = "data4";
                     r3 = 2;
                     r4 = "data5";
-                    if (r10 != r3) goto L_0x01bf;
-                L_0x012b:
+                    if (r10 != r3) goto L_0x01c7;
+                L_0x0132:
                     r10 = new android.content.ContentValues;
                     r10.<init>();
                     r3 = "vnd.android.cursor.item/postal-address_v2";
@@ -932,96 +932,96 @@ public class PhonebookShareActivity extends BaseFragment {
                     r3 = r9.getRawValue();
                     r16 = r2;
                     r2 = r3.length;
-                    if (r2 <= 0) goto L_0x0147;
-                L_0x013e:
+                    if (r2 <= 0) goto L_0x014f;
+                L_0x0146:
                     r17 = r5;
                     r2 = 0;
                     r5 = r3[r2];
                     r10.put(r4, r5);
-                    goto L_0x0149;
-                L_0x0147:
+                    goto L_0x0151;
+                L_0x014f:
                     r17 = r5;
-                L_0x0149:
+                L_0x0151:
                     r2 = r3.length;
                     r4 = 1;
-                    if (r2 <= r4) goto L_0x0152;
-                L_0x014d:
+                    if (r2 <= r4) goto L_0x015a;
+                L_0x0155:
                     r2 = r3[r4];
                     r10.put(r15, r2);
-                L_0x0152:
+                L_0x015a:
                     r2 = r3.length;
                     r4 = 2;
-                    if (r2 <= r4) goto L_0x015b;
-                L_0x0156:
+                    if (r2 <= r4) goto L_0x0163;
+                L_0x015e:
                     r2 = r3[r4];
                     r10.put(r11, r2);
-                L_0x015b:
+                L_0x0163:
                     r2 = r3.length;
                     r4 = 3;
-                    if (r2 <= r4) goto L_0x0166;
-                L_0x015f:
+                    if (r2 <= r4) goto L_0x016e;
+                L_0x0167:
                     r2 = r3[r4];
                     r4 = "data7";
                     r10.put(r4, r2);
-                L_0x0166:
+                L_0x016e:
                     r2 = r3.length;
                     r4 = 4;
-                    if (r2 <= r4) goto L_0x0171;
-                L_0x016a:
+                    if (r2 <= r4) goto L_0x0179;
+                L_0x0172:
                     r2 = r3[r4];
                     r4 = "data8";
                     r10.put(r4, r2);
-                L_0x0171:
+                L_0x0179:
                     r2 = r3.length;
                     r4 = 5;
-                    if (r2 <= r4) goto L_0x017c;
-                L_0x0175:
+                    if (r2 <= r4) goto L_0x0184;
+                L_0x017d:
                     r2 = r3[r4];
                     r4 = "data9";
                     r10.put(r4, r2);
-                L_0x017c:
+                L_0x0184:
                     r2 = r3.length;
                     r4 = 6;
-                    if (r2 <= r4) goto L_0x0187;
-                L_0x0180:
+                    if (r2 <= r4) goto L_0x018f;
+                L_0x0188:
                     r2 = r3[r4];
                     r3 = "data10";
                     r10.put(r3, r2);
-                L_0x0187:
+                L_0x018f:
                     r2 = 0;
                     r3 = r9.getRawType(r2);
                     r2 = "HOME";
                     r2 = r2.equalsIgnoreCase(r3);
-                    if (r2 == 0) goto L_0x019d;
-                L_0x0194:
+                    if (r2 == 0) goto L_0x01a5;
+                L_0x019c:
                     r2 = 1;
                     r3 = java.lang.Integer.valueOf(r2);
                     r10.put(r14, r3);
-                    goto L_0x01ba;
-                L_0x019d:
+                    goto L_0x01c2;
+                L_0x01a5:
                     r2 = r12.equalsIgnoreCase(r3);
-                    if (r2 == 0) goto L_0x01ac;
-                L_0x01a3:
+                    if (r2 == 0) goto L_0x01b4;
+                L_0x01ab:
                     r2 = 2;
                     r2 = java.lang.Integer.valueOf(r2);
                     r10.put(r14, r2);
-                    goto L_0x01ba;
-                L_0x01ac:
+                    goto L_0x01c2;
+                L_0x01b4:
                     r2 = r13.equalsIgnoreCase(r3);
-                    if (r2 == 0) goto L_0x01ba;
-                L_0x01b2:
+                    if (r2 == 0) goto L_0x01c2;
+                L_0x01ba:
                     r2 = 3;
                     r2 = java.lang.Integer.valueOf(r2);
                     r10.put(r14, r2);
-                L_0x01ba:
+                L_0x01c2:
                     r0.add(r10);
-                    goto L_0x00c3;
-                L_0x01bf:
+                    goto L_0x00c7;
+                L_0x01c7:
                     r16 = r2;
                     r17 = r5;
                     r2 = 20;
-                    if (r10 != r2) goto L_0x02c0;
-                L_0x01c7:
+                    if (r10 != r2) goto L_0x02c9;
+                L_0x01cf:
                     r2 = new android.content.ContentValues;
                     r2.<init>();
                     r3 = "vnd.android.cursor.item/im";
@@ -1034,229 +1034,229 @@ public class PhonebookShareActivity extends BaseFragment {
                     r2.put(r7, r11);
                     r11 = "AIM";
                     r11 = r11.equalsIgnoreCase(r5);
-                    if (r11 == 0) goto L_0x01f4;
-                L_0x01ea:
+                    if (r11 == 0) goto L_0x01fd;
+                L_0x01f3:
                     r5 = java.lang.Integer.valueOf(r3);
                     r2.put(r4, r5);
-                L_0x01f1:
+                L_0x01fa:
                     r3 = 1;
-                    goto L_0x028e;
-                L_0x01f4:
+                    goto L_0x0297;
+                L_0x01fd:
                     r3 = "MSN";
                     r3 = r3.equalsIgnoreCase(r5);
-                    if (r3 == 0) goto L_0x0205;
-                L_0x01fc:
+                    if (r3 == 0) goto L_0x020e;
+                L_0x0205:
                     r3 = 1;
                     r5 = java.lang.Integer.valueOf(r3);
                     r2.put(r4, r5);
-                    goto L_0x01f1;
-                L_0x0205:
+                    goto L_0x01fa;
+                L_0x020e:
                     r3 = "YAHOO";
                     r3 = r3.equalsIgnoreCase(r5);
-                    if (r3 == 0) goto L_0x0216;
-                L_0x020d:
+                    if (r3 == 0) goto L_0x021f;
+                L_0x0216:
                     r3 = 2;
                     r5 = java.lang.Integer.valueOf(r3);
                     r2.put(r4, r5);
-                    goto L_0x01f1;
-                L_0x0216:
+                    goto L_0x01fa;
+                L_0x021f:
                     r3 = "SKYPE";
                     r3 = r3.equalsIgnoreCase(r5);
-                    if (r3 == 0) goto L_0x0227;
-                L_0x021e:
+                    if (r3 == 0) goto L_0x0230;
+                L_0x0227:
                     r3 = 3;
                     r5 = java.lang.Integer.valueOf(r3);
                     r2.put(r4, r5);
-                    goto L_0x01f1;
-                L_0x0227:
+                    goto L_0x01fa;
+                L_0x0230:
                     r3 = "QQ";
                     r3 = r3.equalsIgnoreCase(r5);
-                    if (r3 == 0) goto L_0x0238;
-                L_0x022f:
+                    if (r3 == 0) goto L_0x0241;
+                L_0x0238:
                     r3 = 4;
                     r3 = java.lang.Integer.valueOf(r3);
                     r2.put(r4, r3);
-                    goto L_0x01f1;
-                L_0x0238:
+                    goto L_0x01fa;
+                L_0x0241:
                     r3 = "GOOGLE-TALK";
                     r3 = r3.equalsIgnoreCase(r5);
-                    if (r3 == 0) goto L_0x0249;
-                L_0x0240:
+                    if (r3 == 0) goto L_0x0252;
+                L_0x0249:
                     r3 = 5;
                     r3 = java.lang.Integer.valueOf(r3);
                     r2.put(r4, r3);
-                    goto L_0x01f1;
-                L_0x0249:
+                    goto L_0x01fa;
+                L_0x0252:
                     r3 = "ICQ";
                     r3 = r3.equalsIgnoreCase(r5);
-                    if (r3 == 0) goto L_0x025a;
-                L_0x0251:
+                    if (r3 == 0) goto L_0x0263;
+                L_0x025a:
                     r3 = 6;
                     r3 = java.lang.Integer.valueOf(r3);
                     r2.put(r4, r3);
-                    goto L_0x01f1;
-                L_0x025a:
+                    goto L_0x01fa;
+                L_0x0263:
                     r3 = "JABBER";
                     r3 = r3.equalsIgnoreCase(r5);
-                    if (r3 == 0) goto L_0x026b;
-                L_0x0262:
+                    if (r3 == 0) goto L_0x0274;
+                L_0x026b:
                     r3 = 7;
                     r3 = java.lang.Integer.valueOf(r3);
                     r2.put(r4, r3);
-                    goto L_0x01f1;
-                L_0x026b:
+                    goto L_0x01fa;
+                L_0x0274:
                     r3 = "NETMEETING";
                     r3 = r3.equalsIgnoreCase(r5);
-                    if (r3 == 0) goto L_0x027e;
-                L_0x0273:
+                    if (r3 == 0) goto L_0x0287;
+                L_0x027c:
                     r3 = 8;
                     r3 = java.lang.Integer.valueOf(r3);
                     r2.put(r4, r3);
-                    goto L_0x01f1;
-                L_0x027e:
+                    goto L_0x01fa;
+                L_0x0287:
                     r3 = -1;
                     r3 = java.lang.Integer.valueOf(r3);
                     r2.put(r4, r3);
                     r3 = 1;
                     r4 = r9.getRawType(r3);
                     r2.put(r15, r4);
-                L_0x028e:
+                L_0x0297:
                     r4 = "HOME";
                     r4 = r4.equalsIgnoreCase(r10);
-                    if (r4 == 0) goto L_0x029e;
-                L_0x0296:
+                    if (r4 == 0) goto L_0x02a7;
+                L_0x029f:
                     r4 = java.lang.Integer.valueOf(r3);
                     r2.put(r14, r4);
-                    goto L_0x02bb;
-                L_0x029e:
+                    goto L_0x02c4;
+                L_0x02a7:
                     r3 = r12.equalsIgnoreCase(r10);
-                    if (r3 == 0) goto L_0x02ad;
-                L_0x02a4:
+                    if (r3 == 0) goto L_0x02b6;
+                L_0x02ad:
                     r3 = 2;
                     r3 = java.lang.Integer.valueOf(r3);
                     r2.put(r14, r3);
-                    goto L_0x02bb;
-                L_0x02ad:
+                    goto L_0x02c4;
+                L_0x02b6:
                     r3 = r13.equalsIgnoreCase(r10);
-                    if (r3 == 0) goto L_0x02bb;
-                L_0x02b3:
+                    if (r3 == 0) goto L_0x02c4;
+                L_0x02bc:
                     r3 = 3;
                     r3 = java.lang.Integer.valueOf(r3);
                     r2.put(r14, r3);
-                L_0x02bb:
+                L_0x02c4:
                     r0.add(r2);
-                    goto L_0x00c3;
-                L_0x02c0:
+                    goto L_0x00c7;
+                L_0x02c9:
                     r2 = 6;
-                    if (r10 != r2) goto L_0x00c3;
-                L_0x02c3:
-                    if (r6 == 0) goto L_0x02c7;
-                L_0x02c5:
-                    goto L_0x00c3;
-                L_0x02c7:
+                    if (r10 != r2) goto L_0x00c7;
+                L_0x02cc:
+                    if (r6 == 0) goto L_0x02d0;
+                L_0x02ce:
+                    goto L_0x00c7;
+                L_0x02d0:
                     r2 = new android.content.ContentValues;
                     r2.<init>();
                     r3 = "vnd.android.cursor.item/organization";
                     r2.put(r8, r3);
                     r3 = r17;
-                L_0x02d3:
+                L_0x02dd:
                     r5 = org.telegram.ui.PhonebookShareActivity.this;
                     r5 = r5.other;
                     r5 = r5.size();
-                    if (r3 >= r5) goto L_0x0366;
-                L_0x02df:
+                    if (r3 >= r5) goto L_0x0370;
+                L_0x02e9:
                     r5 = org.telegram.ui.PhonebookShareActivity.this;
                     r5 = r5.other;
                     r5 = r5.get(r3);
                     r5 = (org.telegram.messenger.AndroidUtilities.VcardItem) r5;
                     r6 = r5.type;
                     r9 = 6;
-                    if (r6 == r9) goto L_0x02f4;
-                L_0x02f0:
+                    if (r6 == r9) goto L_0x02fe;
+                L_0x02fa:
                     r5 = 2;
                     r9 = 0;
-                    goto L_0x0362;
-                L_0x02f4:
+                    goto L_0x036c;
+                L_0x02fe:
                     r6 = 1;
                     r10 = r5.getRawType(r6);
                     r15 = "ORG";
                     r15 = r15.equalsIgnoreCase(r10);
-                    if (r15 == 0) goto L_0x031e;
-                L_0x0301:
+                    if (r15 == 0) goto L_0x0328;
+                L_0x030b:
                     r10 = r5.getRawValue();
                     r15 = r10.length;
-                    if (r15 != 0) goto L_0x0309;
-                L_0x0308:
-                    goto L_0x02f0;
-                L_0x0309:
+                    if (r15 != 0) goto L_0x0313;
+                L_0x0312:
+                    goto L_0x02fa;
+                L_0x0313:
                     r15 = r10.length;
-                    if (r15 < r6) goto L_0x0312;
-                L_0x030c:
+                    if (r15 < r6) goto L_0x031c;
+                L_0x0316:
                     r15 = 0;
                     r9 = r10[r15];
                     r2.put(r7, r9);
-                L_0x0312:
+                L_0x031c:
                     r9 = r10.length;
                     r15 = 2;
-                    if (r9 < r15) goto L_0x031b;
-                L_0x0316:
+                    if (r9 < r15) goto L_0x0325;
+                L_0x0320:
                     r9 = r10[r6];
                     r2.put(r4, r9);
-                L_0x031b:
+                L_0x0325:
                     r6 = 1;
                     r9 = 0;
-                    goto L_0x0340;
-                L_0x031e:
+                    goto L_0x034a;
+                L_0x0328:
                     r6 = "TITLE";
                     r6 = r6.equalsIgnoreCase(r10);
-                    if (r6 == 0) goto L_0x032f;
-                L_0x0326:
+                    if (r6 == 0) goto L_0x0339;
+                L_0x0330:
                     r9 = 0;
                     r6 = r5.getValue(r9);
                     r2.put(r11, r6);
-                    goto L_0x033f;
-                L_0x032f:
+                    goto L_0x0349;
+                L_0x0339:
                     r9 = 0;
                     r6 = "ROLE";
                     r6 = r6.equalsIgnoreCase(r10);
-                    if (r6 == 0) goto L_0x033f;
-                L_0x0338:
+                    if (r6 == 0) goto L_0x0349;
+                L_0x0342:
                     r6 = r5.getValue(r9);
                     r2.put(r11, r6);
-                L_0x033f:
+                L_0x0349:
                     r6 = 1;
-                L_0x0340:
+                L_0x034a:
                     r5 = r5.getRawType(r6);
                     r10 = r12.equalsIgnoreCase(r5);
-                    if (r10 == 0) goto L_0x0352;
-                L_0x034a:
+                    if (r10 == 0) goto L_0x035c;
+                L_0x0354:
                     r5 = java.lang.Integer.valueOf(r6);
                     r2.put(r14, r5);
-                    goto L_0x0361;
-                L_0x0352:
+                    goto L_0x036b;
+                L_0x035c:
                     r5 = r13.equalsIgnoreCase(r5);
-                    if (r5 == 0) goto L_0x0361;
-                L_0x0358:
+                    if (r5 == 0) goto L_0x036b;
+                L_0x0362:
                     r5 = 2;
                     r6 = java.lang.Integer.valueOf(r5);
                     r2.put(r14, r6);
-                    goto L_0x0362;
-                L_0x0361:
+                    goto L_0x036c;
+                L_0x036b:
                     r5 = 2;
-                L_0x0362:
+                L_0x036c:
                     r3 = r3 + 1;
-                    goto L_0x02d3;
-                L_0x0366:
+                    goto L_0x02dd;
+                L_0x0370:
                     r9 = 0;
                     r0.add(r2);
                     r6 = 1;
-                L_0x036b:
+                L_0x0375:
                     r5 = r17 + 1;
                     r2 = r16;
                     r3 = 1;
                     r4 = 0;
-                    goto L_0x0088;
-                L_0x0373:
+                    goto L_0x008b;
+                L_0x037d:
                     r16 = r2;
                     r2 = "finishActivityOnSaveCompleted";
                     r3 = r16;
@@ -1264,16 +1264,16 @@ public class PhonebookShareActivity extends BaseFragment {
                     r3.putExtra(r2, r4);
                     r2 = "data";
                     r3.putParcelableArrayListExtra(r2, r0);
-                    r0 = org.telegram.ui.PhonebookShareActivity.this;	 Catch:{ Exception -> 0x0391 }
-                    r0 = r0.getParentActivity();	 Catch:{ Exception -> 0x0391 }
-                    r0.startActivity(r3);	 Catch:{ Exception -> 0x0391 }
-                    r0 = org.telegram.ui.PhonebookShareActivity.this;	 Catch:{ Exception -> 0x0391 }
-                    r0.finishFragment();	 Catch:{ Exception -> 0x0391 }
-                    goto L_0x0395;
-                L_0x0391:
+                    r0 = org.telegram.ui.PhonebookShareActivity.this;	 Catch:{ Exception -> 0x039b }
+                    r0 = r0.getParentActivity();	 Catch:{ Exception -> 0x039b }
+                    r0.startActivity(r3);	 Catch:{ Exception -> 0x039b }
+                    r0 = org.telegram.ui.PhonebookShareActivity.this;	 Catch:{ Exception -> 0x039b }
+                    r0.finishFragment();	 Catch:{ Exception -> 0x039b }
+                    goto L_0x039f;
+                L_0x039b:
                     r0 = move-exception;
                     org.telegram.messenger.FileLog.e(r0);
-                L_0x0395:
+                L_0x039f:
                     return;
                     */
                     throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhonebookShareActivity$AnonymousClass5.onClick(android.content.DialogInterface, int):void");

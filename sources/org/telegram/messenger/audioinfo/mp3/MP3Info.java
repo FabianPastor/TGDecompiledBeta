@@ -15,100 +15,6 @@ public class MP3Info extends AudioInfo {
         boolean stopRead(MP3Input mP3Input) throws IOException;
     }
 
-    /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:23:0x0095 in {5, 12, 16, 19, 20, 22} preds:[]
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-        	at java.lang.Iterable.forEach(Iterable.java:75)
-        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-        */
-    long calculateDuration(org.telegram.messenger.audioinfo.mp3.MP3Input r19, long r20, org.telegram.messenger.audioinfo.mp3.MP3Info.StopReadCondition r22) throws java.io.IOException, org.telegram.messenger.audioinfo.mp3.MP3Exception {
-        /*
-        r18 = this;
-        r0 = r18;
-        r1 = r19;
-        r2 = r22;
-        r3 = r0.readFirstFrame(r1, r2);
-        if (r3 == 0) goto L_0x008d;
-        r4 = r3.getNumberOfFrames();
-        if (r4 <= 0) goto L_0x0022;
-        r1 = r3.getHeader();
-        r2 = r3.getSize();
-        r4 = r4 * r2;
-        r2 = (long) r4;
-        r1 = r1.getTotalDuration(r2);
-        return r1;
-        r4 = r19.getPosition();
-        r6 = r3.getSize();
-        r6 = (long) r6;
-        r4 = r4 - r6;
-        r6 = r3.getSize();
-        r6 = (long) r6;
-        r8 = r3.getHeader();
-        r8 = r8.getBitrate();
-        r9 = (long) r8;
-        r11 = 0;
-        r12 = 10000; // 0x2710 float:1.4013E-41 double:4.9407E-320;
-        r13 = r3.getHeader();
-        r13 = r13.getDuration();
-        r12 = r12 / r13;
-        r13 = 1;
-        r14 = r9;
-        r9 = r6;
-        r6 = r3;
-        r3 = 1;
-        if (r3 != r12) goto L_0x0060;
-        if (r11 != 0) goto L_0x0060;
-        r16 = 0;
-        r7 = (r20 > r16 ? 1 : (r20 == r16 ? 0 : -1));
-        if (r7 <= 0) goto L_0x0060;
-        r1 = r6.getHeader();
-        r2 = r20 - r4;
-        r1 = r1.getTotalDuration(r2);
-        return r1;
-        r6 = r0.readNextFrame(r1, r2, r6);
-        if (r6 != 0) goto L_0x0073;
-        r1 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
-        r9 = r9 * r1;
-        r1 = (long) r3;
-        r9 = r9 * r1;
-        r1 = 8;
-        r9 = r9 * r1;
-        r9 = r9 / r14;
-        return r9;
-        r7 = r6.getHeader();
-        r7 = r7.getBitrate();
-        if (r7 == r8) goto L_0x007e;
-        r11 = 1;
-        r0 = (long) r7;
-        r14 = r14 + r0;
-        r0 = r6.getSize();
-        r0 = (long) r0;
-        r9 = r9 + r0;
-        r3 = r3 + 1;
-        r0 = r18;
-        r1 = r19;
-        goto L_0x004b;
-        r0 = new org.telegram.messenger.audioinfo.mp3.MP3Exception;
-        r1 = "No audio frame";
-        r0.<init>(r1);
-        throw r0;
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.audioinfo.mp3.MP3Info.calculateDuration(org.telegram.messenger.audioinfo.mp3.MP3Input, long, org.telegram.messenger.audioinfo.mp3.MP3Info$StopReadCondition):long");
-    }
-
     public MP3Info(InputStream inputStream, long j) throws IOException, ID3v2Exception, MP3Exception {
         this(inputStream, j, Level.FINEST);
     }
@@ -283,5 +189,48 @@ public class MP3Info extends AudioInfo {
             mP3Input.reset();
         }
         return null;
+    }
+
+    /* Access modifiers changed, original: 0000 */
+    public long calculateDuration(MP3Input mP3Input, long j, StopReadCondition stopReadCondition) throws IOException, MP3Exception {
+        MP3Info mP3Info = this;
+        MP3Input mP3Input2 = mP3Input;
+        StopReadCondition stopReadCondition2 = stopReadCondition;
+        MP3Frame readFirstFrame = mP3Info.readFirstFrame(mP3Input2, stopReadCondition2);
+        if (readFirstFrame != null) {
+            int numberOfFrames = readFirstFrame.getNumberOfFrames();
+            if (numberOfFrames > 0) {
+                return readFirstFrame.getHeader().getTotalDuration((long) (numberOfFrames * readFirstFrame.getSize()));
+            }
+            long position = mP3Input.getPosition() - ((long) readFirstFrame.getSize());
+            long size = (long) readFirstFrame.getSize();
+            int bitrate = readFirstFrame.getHeader().getBitrate();
+            Object obj = null;
+            int duration = 10000 / readFirstFrame.getHeader().getDuration();
+            long j2 = (long) bitrate;
+            long j3 = size;
+            MP3Frame mP3Frame = readFirstFrame;
+            int i = 1;
+            while (true) {
+                if (i == duration && obj == null && j > 0) {
+                    return mP3Frame.getHeader().getTotalDuration(j - position);
+                }
+                mP3Frame = mP3Info.readNextFrame(mP3Input2, stopReadCondition2, mP3Frame);
+                if (mP3Frame == null) {
+                    return (((j3 * 1000) * ((long) i)) * 8) / j2;
+                }
+                int bitrate2 = mP3Frame.getHeader().getBitrate();
+                if (bitrate2 != bitrate) {
+                    obj = 1;
+                }
+                j2 += (long) bitrate2;
+                j3 += (long) mP3Frame.getSize();
+                i++;
+                mP3Info = this;
+                mP3Input2 = mP3Input;
+            }
+        } else {
+            throw new MP3Exception("No audio frame");
+        }
     }
 }

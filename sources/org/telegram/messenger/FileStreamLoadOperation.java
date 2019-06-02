@@ -26,85 +26,6 @@ public class FileStreamLoadOperation extends BaseDataSource implements FileLoadO
     private Object parentObject;
     private Uri uri;
 
-    /*  JADX ERROR: JadxRuntimeException in pass: BlockProcessor
-        jadx.core.utils.exceptions.JadxRuntimeException: Can't find immediate dominator for block B:20:0x006c in {2, 6, 9, 14, 16, 19} preds:[]
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.computeDominators(BlockProcessor.java:242)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.processBlocksTree(BlockProcessor.java:52)
-        	at jadx.core.dex.visitors.blocksmaker.BlockProcessor.visit(BlockProcessor.java:42)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:27)
-        	at jadx.core.dex.visitors.DepthTraversal.lambda$visit$1(DepthTraversal.java:14)
-        	at java.util.ArrayList.forEach(ArrayList.java:1257)
-        	at jadx.core.dex.visitors.DepthTraversal.visit(DepthTraversal.java:14)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:32)
-        	at jadx.core.ProcessClass.lambda$processDependencies$0(ProcessClass.java:51)
-        	at java.lang.Iterable.forEach(Iterable.java:75)
-        	at jadx.core.ProcessClass.processDependencies(ProcessClass.java:51)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:37)
-        	at jadx.api.JadxDecompiler.processClass(JadxDecompiler.java:292)
-        	at jadx.api.JavaClass.decompile(JavaClass.java:62)
-        	at jadx.api.JadxDecompiler.lambda$appendSourcesSave$0(JadxDecompiler.java:200)
-        */
-    public int read(byte[] r7, int r8, int r9) throws java.io.IOException {
-        /*
-        r6 = this;
-        r0 = 0;
-        if (r9 != 0) goto L_0x0004;
-        return r0;
-        r1 = r6.bytesRemaining;
-        r3 = 0;
-        r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1));
-        if (r5 != 0) goto L_0x000e;
-        r7 = -1;
-        return r7;
-        r3 = (long) r9;
-        r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1));
-        if (r5 >= 0) goto L_0x0014;
-        r9 = (int) r1;
-        if (r0 != 0) goto L_0x0051;
-        r0 = r6.loadOperation;	 Catch:{ Exception -> 0x0065 }
-        r1 = r6.currentOffset;	 Catch:{ Exception -> 0x0065 }
-        r0 = r0.getDownloadedLengthFromOffset(r1, r9);	 Catch:{ Exception -> 0x0065 }
-        if (r0 != 0) goto L_0x0014;	 Catch:{ Exception -> 0x0065 }
-        r1 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0065 }
-        r1.<init>();	 Catch:{ Exception -> 0x0065 }
-        r2 = "not found bytes ";	 Catch:{ Exception -> 0x0065 }
-        r1.append(r2);	 Catch:{ Exception -> 0x0065 }
-        r1.append(r8);	 Catch:{ Exception -> 0x0065 }
-        r1 = r1.toString();	 Catch:{ Exception -> 0x0065 }
-        org.telegram.messenger.FileLog.d(r1);	 Catch:{ Exception -> 0x0065 }
-        r1 = r6.currentAccount;	 Catch:{ Exception -> 0x0065 }
-        r1 = org.telegram.messenger.FileLoader.getInstance(r1);	 Catch:{ Exception -> 0x0065 }
-        r2 = r6.document;	 Catch:{ Exception -> 0x0065 }
-        r3 = r6.parentObject;	 Catch:{ Exception -> 0x0065 }
-        r4 = r6.currentOffset;	 Catch:{ Exception -> 0x0065 }
-        r1.loadStreamFile(r6, r2, r3, r4);	 Catch:{ Exception -> 0x0065 }
-        r1 = new java.util.concurrent.CountDownLatch;	 Catch:{ Exception -> 0x0065 }
-        r2 = 1;	 Catch:{ Exception -> 0x0065 }
-        r1.<init>(r2);	 Catch:{ Exception -> 0x0065 }
-        r6.countDownLatch = r1;	 Catch:{ Exception -> 0x0065 }
-        r1 = r6.countDownLatch;	 Catch:{ Exception -> 0x0065 }
-        r1.await();	 Catch:{ Exception -> 0x0065 }
-        goto L_0x0014;	 Catch:{ Exception -> 0x0065 }
-        r9 = r6.file;	 Catch:{ Exception -> 0x0065 }
-        r9.readFully(r7, r8, r0);	 Catch:{ Exception -> 0x0065 }
-        r7 = r6.currentOffset;	 Catch:{ Exception -> 0x0065 }
-        r7 = r7 + r0;	 Catch:{ Exception -> 0x0065 }
-        r6.currentOffset = r7;	 Catch:{ Exception -> 0x0065 }
-        r7 = r6.bytesRemaining;	 Catch:{ Exception -> 0x0065 }
-        r1 = (long) r0;	 Catch:{ Exception -> 0x0065 }
-        r7 = r7 - r1;	 Catch:{ Exception -> 0x0065 }
-        r6.bytesRemaining = r7;	 Catch:{ Exception -> 0x0065 }
-        r6.bytesTransferred(r0);	 Catch:{ Exception -> 0x0065 }
-        return r0;
-        r7 = move-exception;
-        r8 = new java.io.IOException;
-        r8.<init>(r7);
-        throw r8;
-        return;
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.FileStreamLoadOperation.read(byte[], int, int):int");
-    }
-
     public FileStreamLoadOperation() {
         super(false);
     }
@@ -158,6 +79,41 @@ public class FileStreamLoadOperation extends BaseDataSource implements FileLoadO
             return this.bytesRemaining;
         }
         throw new EOFException();
+    }
+
+    public int read(byte[] bArr, int i, int i2) throws IOException {
+        int i3 = 0;
+        if (i2 == 0) {
+            return 0;
+        }
+        long j = this.bytesRemaining;
+        if (j == 0) {
+            return -1;
+        }
+        if (j < ((long) i2)) {
+            i2 = (int) j;
+        }
+        while (i3 == 0) {
+            try {
+                i3 = this.loadOperation.getDownloadedLengthFromOffset(this.currentOffset, i2);
+                if (i3 == 0) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("not found bytes ");
+                    stringBuilder.append(i);
+                    FileLog.d(stringBuilder.toString());
+                    FileLoader.getInstance(this.currentAccount).loadStreamFile(this, this.document, this.parentObject, this.currentOffset);
+                    this.countDownLatch = new CountDownLatch(1);
+                    this.countDownLatch.await();
+                }
+            } catch (Exception e) {
+                throw new IOException(e);
+            }
+        }
+        this.file.readFully(bArr, i, i3);
+        this.currentOffset += i3;
+        this.bytesRemaining -= (long) i3;
+        bytesTransferred(i3);
+        return i3;
     }
 
     public Uri getUri() {

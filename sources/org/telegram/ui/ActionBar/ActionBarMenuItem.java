@@ -703,7 +703,7 @@ public class ActionBarMenuItem extends FrameLayout {
                 }
             };
             this.searchField.setCursorWidth(1.5f);
-            this.searchField.setCursorColor(-1);
+            this.searchField.setCursorColor(Theme.getColor(str));
             this.searchField.setTextSize(1, 18.0f);
             this.searchField.setHintTextColor(Theme.getColor("actionBarDefaultSearchPlaceholder"));
             this.searchField.setTextColor(Theme.getColor(str));

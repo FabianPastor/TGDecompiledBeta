@@ -506,7 +506,7 @@ public class DialogMeUrlCell extends BaseCell {
         r0 = android.text.TextUtils.isEmpty(r2);
         if (r0 == 0) goto L_0x031e;
     L_0x0315:
-        r0 = NUM; // 0x7f0d04ab float:1.8744538E38 double:1.053130368E-314;
+        r0 = NUM; // 0x7f0d04d4 float:1.8744622E38 double:1.053130388E-314;
         r2 = "HiddenName";
         r2 = org.telegram.messenger.LocaleController.getString(r2, r0);
     L_0x031e:
