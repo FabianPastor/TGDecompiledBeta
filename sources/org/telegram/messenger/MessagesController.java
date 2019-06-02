@@ -4683,12 +4683,14 @@ public class MessagesController implements NotificationCenterDelegate {
     public /* synthetic */ void lambda$null$91$MessagesController() {
         Dialog dialog = this.proxyDialog;
         if (dialog != null) {
-            long j = dialog.id;
-            if (j < 0) {
-                Chat chat = getChat(Integer.valueOf(-((int) j)));
-                if (chat == null || chat.left || chat.kicked || chat.restricted) {
+            int i = (int) dialog.id;
+            if (i < 0) {
+                Chat chat = getChat(Integer.valueOf(-i));
+                if (ChatObject.isNotInChat(chat) || chat.restricted) {
                     removeDialog(this.proxyDialog);
                 }
+            } else {
+                removeDialog(dialog);
             }
             this.proxyDialog = null;
             sortDialogs(null);
@@ -4699,12 +4701,14 @@ public class MessagesController implements NotificationCenterDelegate {
     public /* synthetic */ void lambda$null$94$MessagesController() {
         Dialog dialog = this.proxyDialog;
         if (dialog != null) {
-            long j = dialog.id;
-            if (j < 0) {
-                Chat chat = getChat(Integer.valueOf(-((int) j)));
-                if (chat == null || chat.left || chat.kicked || chat.restricted) {
+            int i = (int) dialog.id;
+            if (i < 0) {
+                Chat chat = getChat(Integer.valueOf(-i));
+                if (ChatObject.isNotInChat(chat) || chat.restricted) {
                     removeDialog(this.proxyDialog);
                 }
+            } else {
+                removeDialog(dialog);
             }
             this.proxyDialog = null;
             sortDialogs(null);
@@ -4715,12 +4719,14 @@ public class MessagesController implements NotificationCenterDelegate {
     public /* synthetic */ void lambda$checkProxyInfoInternal$96$MessagesController() {
         Dialog dialog = this.proxyDialog;
         if (dialog != null) {
-            long j = dialog.id;
-            if (j < 0) {
-                Chat chat = getChat(Integer.valueOf(-((int) j)));
-                if (chat == null || chat.left || chat.kicked || chat.restricted) {
+            int i = (int) dialog.id;
+            if (i < 0) {
+                Chat chat = getChat(Integer.valueOf(-i));
+                if (ChatObject.isNotInChat(chat) || chat.restricted) {
                     removeDialog(this.proxyDialog);
                 }
+            } else {
+                removeDialog(dialog);
             }
             this.proxyDialog = null;
             sortDialogs(null);
