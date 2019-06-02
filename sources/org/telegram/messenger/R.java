@@ -323,6 +323,7 @@ public final class R {
         public static final int titleMarginEnd = NUM;
         public static final int titleMarginStart = NUM;
         public static final int titleMarginTop = NUM;
+        @Deprecated
         public static final int titleMargins = NUM;
         public static final int titleTextAppearance = NUM;
         public static final int titleTextColor = NUM;
@@ -6642,6 +6643,7 @@ public final class R {
         public static final int TextAppearance_android_typeface = 1;
         public static final int TextAppearance_fontFamily = 11;
         public static final int TextAppearance_textAllCaps = 12;
+        @Deprecated
         public static final int[] Toolbar = new int[]{16842927, 16843072, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM, NUM};
         public static final int Toolbar_android_gravity = 0;
         public static final int Toolbar_android_minHeight = 1;
@@ -6669,6 +6671,7 @@ public final class R {
         public static final int Toolbar_titleMarginEnd = 23;
         public static final int Toolbar_titleMarginStart = 24;
         public static final int Toolbar_titleMarginTop = 25;
+        @Deprecated
         public static final int Toolbar_titleMargins = 26;
         public static final int Toolbar_titleTextAppearance = 27;
         public static final int Toolbar_titleTextColor = 28;

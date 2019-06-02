@@ -55,6 +55,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
@@ -1875,15 +1876,17 @@ public class Theme {
         HashMap hashMap2 = themesDict;
         currentNightTheme = themeInfo;
         hashMap2.put("Dark Blue", themeInfo);
-        themeInfo = new ThemeInfo();
-        themeInfo.name = "Graphite";
-        themeInfo.assetName = "graphite.attheme";
-        themeInfo.previewBackgroundColor = -8749431;
-        themeInfo.previewInColor = -6775901;
-        themeInfo.previewOutColor = -5980167;
-        themeInfo.sortIndex = 4;
-        themes.add(themeInfo);
-        themesDict.put("Graphite", themeInfo);
+        if (BuildVars.DEBUG_VERSION) {
+            themeInfo = new ThemeInfo();
+            themeInfo.name = "Graphite";
+            themeInfo.assetName = "graphite.attheme";
+            themeInfo.previewBackgroundColor = -8749431;
+            themeInfo.previewInColor = -6775901;
+            themeInfo.previewOutColor = -5980167;
+            themeInfo.sortIndex = 4;
+            themes.add(themeInfo);
+            themesDict.put("Graphite", themeInfo);
+        }
         themeInfo = new ThemeInfo();
         themeInfo.name = "Arctic Blue";
         themeInfo.assetName = "arctic.attheme";
@@ -5069,6 +5072,10 @@ public class Theme {
 
     public static void setAnimatingColor(boolean z) {
         animatingColors = z ? new HashMap() : null;
+    }
+
+    public static boolean isAnimatingColor() {
+        return animatingColors != null;
     }
 
     public static void setAnimatedColor(String str, int i) {

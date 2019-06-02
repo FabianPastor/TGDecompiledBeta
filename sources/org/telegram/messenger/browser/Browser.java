@@ -537,13 +537,14 @@ public class Browser {
         if ("tg".equals(uri.getScheme())) {
             return true;
         }
-        String str = "iv";
+        String str = "s/";
+        String str2 = "iv";
         String path;
         if ("telegram.dog".equals(toLowerCase)) {
             path = uri.getPath();
             if (path != null && path.length() > 1) {
                 path = path.substring(1).toLowerCase();
-                if (!path.startsWith("blog") && !path.equals(str) && !path.startsWith("faq") && !path.equals("apps")) {
+                if (!path.startsWith("blog") && !path.equals(str2) && !path.startsWith("faq") && !path.equals("apps") && !path.startsWith(str)) {
                     return true;
                 }
                 if (zArr != null) {
@@ -554,13 +555,13 @@ public class Browser {
         } else if ("telegram.me".equals(toLowerCase) || "t.me".equals(toLowerCase)) {
             path = uri.getPath();
             if (path != null && path.length() > 1) {
-                if (!path.substring(1).toLowerCase().equals(str)) {
+                path = path.substring(1).toLowerCase();
+                if (!path.equals(str2) && !path.startsWith(str)) {
                     return true;
                 }
                 if (zArr != null) {
                     zArr[0] = true;
                 }
-                return false;
             }
         }
         return false;

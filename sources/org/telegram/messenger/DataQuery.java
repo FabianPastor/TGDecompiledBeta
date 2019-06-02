@@ -1300,9 +1300,9 @@ public class DataQuery {
 
     /* JADX WARNING: Removed duplicated region for block: B:47:0x0097  */
     /* JADX WARNING: Removed duplicated region for block: B:47:0x0097  */
-    /* JADX WARNING: Removed duplicated region for block: B:35:0x0084 A:{Splitter:B:3:0x0019, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x0084 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:3:0x0019} */
     /* JADX WARNING: Removed duplicated region for block: B:47:0x0097  */
-    /* JADX WARNING: Removed duplicated region for block: B:35:0x0084 A:{Splitter:B:3:0x0019, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x0084 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:3:0x0019} */
     /* JADX WARNING: Removed duplicated region for block: B:52:0x00a5  */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */
@@ -1799,9 +1799,9 @@ public class DataQuery {
 
     /* JADX WARNING: Removed duplicated region for block: B:40:0x0085  */
     /* JADX WARNING: Removed duplicated region for block: B:40:0x0085  */
-    /* JADX WARNING: Removed duplicated region for block: B:29:0x0073 A:{Splitter:B:3:0x0025, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:29:0x0073 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:3:0x0025} */
     /* JADX WARNING: Removed duplicated region for block: B:40:0x0085  */
-    /* JADX WARNING: Removed duplicated region for block: B:29:0x0073 A:{Splitter:B:3:0x0025, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:29:0x0073 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:3:0x0025} */
     /* JADX WARNING: Removed duplicated region for block: B:45:0x0094  */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */

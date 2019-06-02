@@ -845,58 +845,60 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
 
     private void showEditDoneProgress(boolean z) {
         final boolean z2 = z;
-        AnimatorSet animatorSet = this.doneItemAnimation;
-        if (animatorSet != null) {
-            animatorSet.cancel();
-        }
-        this.doneItemAnimation = new AnimatorSet();
-        String str = "alpha";
-        String str2 = "scaleY";
-        String str3 = "scaleX";
-        if (z2) {
-            this.progressView.setVisibility(0);
-            this.floatingButtonContainer.setEnabled(false);
-            AnimatorSet animatorSet2 = this.doneItemAnimation;
-            Animator[] animatorArr = new Animator[6];
-            animatorArr[0] = ObjectAnimator.ofFloat(this.floatingButtonIcon, str3, new float[]{0.1f});
-            animatorArr[1] = ObjectAnimator.ofFloat(this.floatingButtonIcon, str2, new float[]{0.1f});
-            animatorArr[2] = ObjectAnimator.ofFloat(this.floatingButtonIcon, str, new float[]{0.0f});
-            animatorArr[3] = ObjectAnimator.ofFloat(this.progressView, str3, new float[]{1.0f});
-            animatorArr[4] = ObjectAnimator.ofFloat(this.progressView, str2, new float[]{1.0f});
-            animatorArr[5] = ObjectAnimator.ofFloat(this.progressView, str, new float[]{1.0f});
-            animatorSet2.playTogether(animatorArr);
-        } else {
-            this.floatingButtonIcon.setVisibility(0);
-            this.floatingButtonContainer.setEnabled(true);
-            animatorSet = this.doneItemAnimation;
-            Animator[] animatorArr2 = new Animator[6];
-            animatorArr2[0] = ObjectAnimator.ofFloat(this.progressView, str3, new float[]{0.1f});
-            animatorArr2[1] = ObjectAnimator.ofFloat(this.progressView, str2, new float[]{0.1f});
-            animatorArr2[2] = ObjectAnimator.ofFloat(this.progressView, str, new float[]{0.0f});
-            animatorArr2[3] = ObjectAnimator.ofFloat(this.floatingButtonIcon, str3, new float[]{1.0f});
-            animatorArr2[4] = ObjectAnimator.ofFloat(this.floatingButtonIcon, str2, new float[]{1.0f});
-            animatorArr2[5] = ObjectAnimator.ofFloat(this.floatingButtonIcon, str, new float[]{1.0f});
-            animatorSet.playTogether(animatorArr2);
-        }
-        this.doneItemAnimation.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animator) {
-                if (GroupCreateFinalActivity.this.doneItemAnimation != null && GroupCreateFinalActivity.this.doneItemAnimation.equals(animator)) {
-                    if (z2) {
-                        GroupCreateFinalActivity.this.floatingButtonIcon.setVisibility(4);
-                    } else {
-                        GroupCreateFinalActivity.this.progressView.setVisibility(4);
+        if (this.floatingButtonIcon != null) {
+            AnimatorSet animatorSet = this.doneItemAnimation;
+            if (animatorSet != null) {
+                animatorSet.cancel();
+            }
+            this.doneItemAnimation = new AnimatorSet();
+            String str = "alpha";
+            String str2 = "scaleY";
+            String str3 = "scaleX";
+            if (z2) {
+                this.progressView.setVisibility(0);
+                this.floatingButtonContainer.setEnabled(false);
+                AnimatorSet animatorSet2 = this.doneItemAnimation;
+                Animator[] animatorArr = new Animator[6];
+                animatorArr[0] = ObjectAnimator.ofFloat(this.floatingButtonIcon, str3, new float[]{0.1f});
+                animatorArr[1] = ObjectAnimator.ofFloat(this.floatingButtonIcon, str2, new float[]{0.1f});
+                animatorArr[2] = ObjectAnimator.ofFloat(this.floatingButtonIcon, str, new float[]{0.0f});
+                animatorArr[3] = ObjectAnimator.ofFloat(this.progressView, str3, new float[]{1.0f});
+                animatorArr[4] = ObjectAnimator.ofFloat(this.progressView, str2, new float[]{1.0f});
+                animatorArr[5] = ObjectAnimator.ofFloat(this.progressView, str, new float[]{1.0f});
+                animatorSet2.playTogether(animatorArr);
+            } else {
+                this.floatingButtonIcon.setVisibility(0);
+                this.floatingButtonContainer.setEnabled(true);
+                animatorSet = this.doneItemAnimation;
+                Animator[] animatorArr2 = new Animator[6];
+                animatorArr2[0] = ObjectAnimator.ofFloat(this.progressView, str3, new float[]{0.1f});
+                animatorArr2[1] = ObjectAnimator.ofFloat(this.progressView, str2, new float[]{0.1f});
+                animatorArr2[2] = ObjectAnimator.ofFloat(this.progressView, str, new float[]{0.0f});
+                animatorArr2[3] = ObjectAnimator.ofFloat(this.floatingButtonIcon, str3, new float[]{1.0f});
+                animatorArr2[4] = ObjectAnimator.ofFloat(this.floatingButtonIcon, str2, new float[]{1.0f});
+                animatorArr2[5] = ObjectAnimator.ofFloat(this.floatingButtonIcon, str, new float[]{1.0f});
+                animatorSet.playTogether(animatorArr2);
+            }
+            this.doneItemAnimation.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animator) {
+                    if (GroupCreateFinalActivity.this.doneItemAnimation != null && GroupCreateFinalActivity.this.doneItemAnimation.equals(animator)) {
+                        if (z2) {
+                            GroupCreateFinalActivity.this.floatingButtonIcon.setVisibility(4);
+                        } else {
+                            GroupCreateFinalActivity.this.progressView.setVisibility(4);
+                        }
                     }
                 }
-            }
 
-            public void onAnimationCancel(Animator animator) {
-                if (GroupCreateFinalActivity.this.doneItemAnimation != null && GroupCreateFinalActivity.this.doneItemAnimation.equals(animator)) {
-                    GroupCreateFinalActivity.this.doneItemAnimation = null;
+                public void onAnimationCancel(Animator animator) {
+                    if (GroupCreateFinalActivity.this.doneItemAnimation != null && GroupCreateFinalActivity.this.doneItemAnimation.equals(animator)) {
+                        GroupCreateFinalActivity.this.doneItemAnimation = null;
+                    }
                 }
-            }
-        });
-        this.doneItemAnimation.setDuration(150);
-        this.doneItemAnimation.start();
+            });
+            this.doneItemAnimation.setDuration(150);
+            this.doneItemAnimation.start();
+        }
     }
 
     public ThemeDescription[] getThemeDescriptions() {

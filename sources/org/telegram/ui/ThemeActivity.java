@@ -324,47 +324,48 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                 /* Access modifiers changed, original: protected */
                 public void onDraw(Canvas canvas) {
                     Drawable cachedWallpaperNonBlocking = Theme.getCachedWallpaperNonBlocking();
-                    Drawable drawable = this.backgroundDrawable;
-                    if (!(cachedWallpaperNonBlocking == drawable || cachedWallpaperNonBlocking == null)) {
-                        this.oldBackgroundDrawable = drawable;
+                    if (!(cachedWallpaperNonBlocking == this.backgroundDrawable || cachedWallpaperNonBlocking == null)) {
+                        if (Theme.isAnimatingColor()) {
+                            this.oldBackgroundDrawable = this.backgroundDrawable;
+                        }
                         this.backgroundDrawable = cachedWallpaperNonBlocking;
                     }
                     float themeAnimationValue = ThemeActivity.this.parentLayout.getThemeAnimationValue();
                     int i = 0;
                     while (i < 2) {
-                        Drawable drawable2 = i == 0 ? this.oldBackgroundDrawable : this.backgroundDrawable;
-                        if (drawable2 != null) {
+                        Drawable drawable = i == 0 ? this.oldBackgroundDrawable : this.backgroundDrawable;
+                        if (drawable != null) {
                             if (i != 1 || this.oldBackgroundDrawable == null || ThemeActivity.this.parentLayout == null) {
-                                drawable2.setAlpha(255);
+                                drawable.setAlpha(255);
                             } else {
-                                drawable2.setAlpha((int) (255.0f * themeAnimationValue));
+                                drawable.setAlpha((int) (255.0f * themeAnimationValue));
                             }
-                            if (drawable2 instanceof ColorDrawable) {
-                                drawable2.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
-                                drawable2.draw(canvas);
-                            } else if (drawable2 instanceof BitmapDrawable) {
-                                if (((BitmapDrawable) drawable2).getTileModeX() == TileMode.REPEAT) {
+                            if (drawable instanceof ColorDrawable) {
+                                drawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
+                                drawable.draw(canvas);
+                            } else if (drawable instanceof BitmapDrawable) {
+                                if (((BitmapDrawable) drawable).getTileModeX() == TileMode.REPEAT) {
                                     canvas.save();
                                     float f = 2.0f / AndroidUtilities.density;
                                     canvas.scale(f, f);
-                                    drawable2.setBounds(0, 0, (int) Math.ceil((double) (((float) getMeasuredWidth()) / f)), (int) Math.ceil((double) (((float) getMeasuredHeight()) / f)));
-                                    drawable2.draw(canvas);
+                                    drawable.setBounds(0, 0, (int) Math.ceil((double) (((float) getMeasuredWidth()) / f)), (int) Math.ceil((double) (((float) getMeasuredHeight()) / f)));
+                                    drawable.draw(canvas);
                                     canvas.restore();
                                 } else {
                                     int measuredHeight = getMeasuredHeight();
-                                    float measuredWidth = ((float) getMeasuredWidth()) / ((float) drawable2.getIntrinsicWidth());
-                                    float intrinsicHeight = ((float) measuredHeight) / ((float) drawable2.getIntrinsicHeight());
+                                    float measuredWidth = ((float) getMeasuredWidth()) / ((float) drawable.getIntrinsicWidth());
+                                    float intrinsicHeight = ((float) measuredHeight) / ((float) drawable.getIntrinsicHeight());
                                     if (measuredWidth < intrinsicHeight) {
                                         measuredWidth = intrinsicHeight;
                                     }
-                                    int ceil = (int) Math.ceil((double) (((float) drawable2.getIntrinsicWidth()) * measuredWidth));
-                                    int ceil2 = (int) Math.ceil((double) (((float) drawable2.getIntrinsicHeight()) * measuredWidth));
+                                    int ceil = (int) Math.ceil((double) (((float) drawable.getIntrinsicWidth()) * measuredWidth));
+                                    int ceil2 = (int) Math.ceil((double) (((float) drawable.getIntrinsicHeight()) * measuredWidth));
                                     int measuredWidth2 = (getMeasuredWidth() - ceil) / 2;
                                     measuredHeight = (measuredHeight - ceil2) / 2;
                                     canvas.save();
                                     canvas.clipRect(0, 0, ceil, getMeasuredHeight());
-                                    drawable2.setBounds(measuredWidth2, measuredHeight, ceil + measuredWidth2, ceil2 + measuredHeight);
-                                    drawable2.draw(canvas);
+                                    drawable.setBounds(measuredWidth2, measuredHeight, ceil + measuredWidth2, ceil2 + measuredHeight);
+                                    drawable.draw(canvas);
                                     canvas.restore();
                                 }
                             }

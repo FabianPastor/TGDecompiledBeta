@@ -179,6 +179,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
             i = ((((i - ceil2) + this.keyboardHeight) / 2) + currentActionBarHeight) + ((int) this.translationY);
             canvas.save();
             canvas.clipRect(0, currentActionBarHeight, ceil, getMeasuredHeight() - this.bottomClip);
+            this.backgroundDrawable.setAlpha(255);
             this.backgroundDrawable.setBounds(measuredWidth2, i, ceil + measuredWidth2, ceil2 + i);
             this.backgroundDrawable.draw(canvas);
             canvas.restore();

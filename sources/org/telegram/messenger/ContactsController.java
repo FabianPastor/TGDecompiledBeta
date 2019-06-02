@@ -739,7 +739,7 @@ public class ContactsController {
     /* JADX WARNING: Removed duplicated region for block: B:205:0x0348 A:{Catch:{ all -> 0x0359 }} */
     /* JADX WARNING: Removed duplicated region for block: B:207:0x034d A:{SYNTHETIC, Splitter:B:207:0x034d} */
     /* JADX WARNING: Removed duplicated region for block: B:210:0x0353  */
-    /* JADX WARNING: Removed duplicated region for block: B:118:0x01fb A:{Splitter:B:18:0x0057, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:118:0x01fb A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:18:0x0057} */
     /* JADX WARNING: Removed duplicated region for block: B:205:0x0348 A:{Catch:{ all -> 0x0359 }} */
     /* JADX WARNING: Removed duplicated region for block: B:207:0x034d A:{SYNTHETIC, Splitter:B:207:0x034d} */
     /* JADX WARNING: Removed duplicated region for block: B:210:0x0353  */

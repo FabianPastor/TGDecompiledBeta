@@ -195,6 +195,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
     private ListAdapter listAdapter;
     private RecyclerListView listView;
     private boolean loadingUsers;
+    private MediaActivity mediaActivity;
     private int[] mediaCount = new int[]{-1, -1, -1, -1, -1};
     private int[] mediaMergeCount = new int[]{-1, -1, -1, -1, -1};
     private int membersEndRow;
@@ -2262,9 +2263,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 }
                 int[] iArr = new int[5];
                 System.arraycopy(this.lastMediaCount, 0, iArr, 0, iArr.length);
-                MediaActivity mediaActivity = new MediaActivity(bundle, iArr, this.sharedMediaData, i3);
-                mediaActivity.setChatInfo(this.chatInfo);
-                presentFragment(mediaActivity);
+                this.mediaActivity = new MediaActivity(bundle, iArr, this.sharedMediaData, i3);
+                this.mediaActivity.setChatInfo(this.chatInfo);
+                presentFragment(this.mediaActivity);
             } else if (i2 == this.groupsInCommonRow) {
                 presentFragment(new CommonGroupsActivity(this.user_id));
             } else {
@@ -3624,15 +3625,28 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
                 }
                 ArrayList arrayList3 = (ArrayList) objArr[0];
                 i2 = arrayList3.size();
-                for (i6 = 0; i6 < i2; i6++) {
-                    i4 = 0;
+                i6 = 0;
+                Object obj = null;
+                while (i6 < i2) {
+                    Object obj2 = obj;
+                    i5 = 0;
                     while (true) {
                         SharedMediaData[] sharedMediaDataArr = this.sharedMediaData;
-                        if (i4 >= sharedMediaDataArr.length) {
+                        if (i5 >= sharedMediaDataArr.length) {
                             break;
                         }
-                        sharedMediaDataArr[i4].deleteMessage(((Integer) arrayList3.get(i6)).intValue(), 0);
-                        i4++;
+                        if (sharedMediaDataArr[i5].deleteMessage(((Integer) arrayList3.get(i6)).intValue(), 0)) {
+                            obj2 = 1;
+                        }
+                        i5++;
+                    }
+                    i6++;
+                    obj = obj2;
+                }
+                if (obj != null) {
+                    MediaActivity mediaActivity = this.mediaActivity;
+                    if (mediaActivity != null) {
+                        mediaActivity.updateAdapters();
                     }
                 }
                 loadMediaCounts();

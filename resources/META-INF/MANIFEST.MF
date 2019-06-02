@@ -3,7 +3,7 @@ Built-By: Generated-by-ADT
 Created-By: Android Gradle 3.4.1
 
 Name: AndroidManifest.xml
-SHA1-Digest: kbDthFPj50tIQM+mLT7PKG5TJQI=
+SHA1-Digest: V3OO0cw950H7MFE8A+0lXIp65wU=
 
 Name: META-INF/androidx.appcompat_appcompat.version
 SHA1-Digest: xTi2bHEQyjoCjM/kItDx+iAKmTU=
@@ -237,7 +237,7 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: y/sLdtQIE8fUclOYqaYa3Zhqd9w=
+SHA1-Digest: I15u9jO2cwsVGCQhZx7OnvmOKWs=
 
 Name: fabric/com.stripe.stripe-android.properties
 SHA1-Digest: FHlRDdxccFhBf1l94YXJ1DBcfcA=
@@ -267,16 +267,16 @@ Name: isoparser-default.properties
 SHA1-Digest: 6/KBb+rGX/5O2/xNP3HN6XIg3lI=
 
 Name: lib/arm64-v8a/libtmessages.30.so
-SHA1-Digest: gg6SzoGDSsnvcVzhxG4JZozy/9w=
+SHA1-Digest: Bu1rwzlvBkeuSdiGuxm5Kc353sM=
 
 Name: lib/armeabi-v7a/libtmessages.30.so
-SHA1-Digest: JYHtqSUBM3KJSL1T2VH3h3jJQjQ=
+SHA1-Digest: IO0hhDzhongqT12LY8RQzNMp/4I=
 
 Name: lib/x86/libtmessages.30.so
-SHA1-Digest: HSWfLycFJE4QdKpkzatL8Hb3WmY=
+SHA1-Digest: LVp5/B267ivsq98tWHexScPJ0iw=
 
 Name: lib/x86_64/libtmessages.30.so
-SHA1-Digest: SeofdJinj2dQifzbcFyDYocuXsQ=
+SHA1-Digest: fNDbzSkQdseTeI8kRQYdg9cn6tI=
 
 Name: play-services-auth-api-phone.properties
 SHA1-Digest: rb3Bk4T5pz5AHoW0qxdt2WLJk1I=
@@ -1791,7 +1791,7 @@ Name: res/drawable-hdpi-v4/msg_theme.png
 SHA1-Digest: 2KM25Er2CZEPc7efyUpD1YPhs2Y=
 
 Name: res/drawable-hdpi-v4/msg_timer.png
-SHA1-Digest: 4gvPmzTEeHT/eatOXnjVusvhsG0=
+SHA1-Digest: zVOaoN89T+4B5PG6B2Wv+6aLtlY=
 
 Name: res/drawable-hdpi-v4/msg_unarchive.png
 SHA1-Digest: toeDelp5NIIUWSEPIVIph8lEmQo=

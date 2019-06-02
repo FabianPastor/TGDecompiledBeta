@@ -2945,6 +2945,29 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         }
     }
 
+    public void updateAdapters() {
+        SharedPhotoVideoAdapter sharedPhotoVideoAdapter = this.photoVideoAdapter;
+        if (sharedPhotoVideoAdapter != null) {
+            sharedPhotoVideoAdapter.notifyDataSetChanged();
+        }
+        SharedDocumentsAdapter sharedDocumentsAdapter = this.documentsAdapter;
+        if (sharedDocumentsAdapter != null) {
+            sharedDocumentsAdapter.notifyDataSetChanged();
+        }
+        sharedDocumentsAdapter = this.voiceAdapter;
+        if (sharedDocumentsAdapter != null) {
+            sharedDocumentsAdapter.notifyDataSetChanged();
+        }
+        SharedLinksAdapter sharedLinksAdapter = this.linksAdapter;
+        if (sharedLinksAdapter != null) {
+            sharedLinksAdapter.notifyDataSetChanged();
+        }
+        sharedDocumentsAdapter = this.audioAdapter;
+        if (sharedDocumentsAdapter != null) {
+            sharedDocumentsAdapter.notifyDataSetChanged();
+        }
+    }
+
     private void updateRowsSelection() {
         int i = 0;
         while (true) {
