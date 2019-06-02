@@ -621,6 +621,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         boolean z = false;
         this.actionBar.setItemsBackgroundColor(-12763843, false);
         this.actionBar.setTitleColor(-1);
+        this.actionBar.setItemsColor(-1, false);
         this.actionBar.setBackButtonImage(NUM);
         AlbumEntry albumEntry = this.selectedAlbum;
         String str = "SearchGifsTitle";

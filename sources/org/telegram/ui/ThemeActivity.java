@@ -27,19 +27,22 @@ import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.TextPaint;
+import android.text.TextUtils;
+import android.text.TextUtils.TruncateAt;
 import android.text.style.CharacterStyle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView.LayoutParams;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -191,6 +194,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
     private class InnerThemeView extends FrameLayout {
         private RadioButton button;
         private Drawable inDrawable;
+        private boolean isFirst;
         private boolean isLast;
         private Drawable outDrawable;
         private Paint paint = new Paint(1);
@@ -216,12 +220,21 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
 
         /* Access modifiers changed, original: protected */
         public void onMeasure(int i, int i2) {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) ((this.isLast ? 0 : 15) + 76)), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(148.0f), NUM));
+            i2 = 22;
+            i = (this.isLast ? 22 : 15) + 76;
+            if (!this.isFirst) {
+                i2 = 0;
+            }
+            super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) (i + i2)), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(148.0f), NUM));
         }
 
-        public void setTheme(ThemeInfo themeInfo, boolean z) {
+        public void setTheme(ThemeInfo themeInfo, boolean z, boolean z2) {
             this.themeInfo = themeInfo;
+            this.isFirst = z2;
             this.isLast = z;
+            LayoutParams layoutParams = (LayoutParams) this.button.getLayoutParams();
+            layoutParams.leftMargin = AndroidUtilities.dp(this.isFirst ? 49.0f : 27.0f);
+            this.button.setLayoutParams(layoutParams);
             this.inDrawable.setColorFilter(new PorterDuffColorFilter(themeInfo.previewInColor, Mode.MULTIPLY));
             this.outDrawable.setColorFilter(new PorterDuffColorFilter(themeInfo.previewOutColor, Mode.MULTIPLY));
         }
@@ -238,27 +251,29 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
 
         /* Access modifiers changed, original: protected */
         public void onDraw(Canvas canvas) {
+            int blue;
             this.paint.setColor(this.themeInfo.previewBackgroundColor);
-            this.rect.set(0.0f, (float) AndroidUtilities.dp(11.0f), (float) AndroidUtilities.dp(76.0f), (float) AndroidUtilities.dp(108.0f));
+            int dp = this.isFirst ? AndroidUtilities.dp(22.0f) : 0;
+            this.rect.set((float) dp, (float) AndroidUtilities.dp(11.0f), (float) (AndroidUtilities.dp(76.0f) + dp), (float) AndroidUtilities.dp(108.0f));
             canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp(6.0f), this.paint);
             if ("Arctic Blue".equals(this.themeInfo.name)) {
                 int red = Color.red(-5196358);
                 int green = Color.green(-5196358);
-                int blue = Color.blue(-5196358);
+                blue = Color.blue(-5196358);
                 this.button.setColor(-5000269, -13129232);
                 Theme.chat_instantViewRectPaint.setColor(Color.argb(43, red, green, blue));
                 canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp(6.0f), Theme.chat_instantViewRectPaint);
             } else {
                 this.button.setColor(NUM, -1);
             }
-            this.inDrawable.setBounds(AndroidUtilities.dp(6.0f), AndroidUtilities.dp(22.0f), AndroidUtilities.dp(49.0f), AndroidUtilities.dp(36.0f));
+            this.inDrawable.setBounds(AndroidUtilities.dp(6.0f) + dp, AndroidUtilities.dp(22.0f), AndroidUtilities.dp(49.0f) + dp, AndroidUtilities.dp(36.0f));
             this.inDrawable.draw(canvas);
-            this.outDrawable.setBounds(AndroidUtilities.dp(27.0f), AndroidUtilities.dp(41.0f), AndroidUtilities.dp(70.0f), AndroidUtilities.dp(55.0f));
+            this.outDrawable.setBounds(AndroidUtilities.dp(27.0f) + dp, AndroidUtilities.dp(41.0f), AndroidUtilities.dp(70.0f) + dp, AndroidUtilities.dp(55.0f));
             this.outDrawable.draw(canvas);
-            String name = this.themeInfo.getName();
-            int ceil = (int) Math.ceil((double) this.textPaint.measureText(name));
+            String charSequence = TextUtils.ellipsize(this.themeInfo.getName(), this.textPaint, (float) (getMeasuredWidth() - AndroidUtilities.dp(10.0f)), TruncateAt.END).toString();
+            blue = (int) Math.ceil((double) this.textPaint.measureText(charSequence));
             this.textPaint.setColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-            canvas.drawText(name, (float) ((AndroidUtilities.dp(76.0f) - ceil) / 2), (float) AndroidUtilities.dp(131.0f), this.textPaint);
+            canvas.drawText(charSequence, (float) (dp + ((AndroidUtilities.dp(76.0f) - blue) / 2)), (float) AndroidUtilities.dp(131.0f), this.textPaint);
         }
     }
 
@@ -595,10 +610,11 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             InnerThemeView innerThemeView = (InnerThemeView) viewHolder.itemView;
             ThemeInfo themeInfo = (ThemeInfo) ThemeActivity.this.defaultThemes.get(i);
             boolean z = true;
-            if (i != ThemeActivity.this.defaultThemes.size() - 1) {
+            boolean z2 = i == ThemeActivity.this.defaultThemes.size() - 1;
+            if (i != 0) {
                 z = false;
             }
-            innerThemeView.setTheme(themeInfo, z);
+            innerThemeView.setTheme(themeInfo, z2, z);
         }
 
         public int getItemCount() {
@@ -766,7 +782,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         L_0x00e0:
             r4 = org.telegram.ui.ThemeActivity.this;	 Catch:{ Exception -> 0x00f6 }
             r6 = "ShareFile";
-            r0 = NUM; // 0x7f0d0931 float:1.8746887E38 double:1.05313094E-314;
+            r0 = NUM; // 0x7f0d092c float:1.8746877E38 double:1.0531309376E-314;
             r6 = org.telegram.messenger.LocaleController.getString(r6, r0);	 Catch:{ Exception -> 0x00f6 }
             r5 = android.content.Intent.createChooser(r5, r6);	 Catch:{ Exception -> 0x00f6 }
             r6 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
@@ -805,21 +821,21 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             r0 = org.telegram.ui.ThemeActivity.this;
             r0 = r0.getParentActivity();
             r6.<init>(r0);
-            r0 = NUM; // 0x7f0d0360 float:1.8743867E38 double:1.0531302044E-314;
+            r0 = NUM; // 0x7f0d035c float:1.874386E38 double:1.0531302024E-314;
             r1 = "DeleteThemeAlert";
             r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
             r6.setMessage(r0);
-            r0 = NUM; // 0x7f0d00ed float:1.8742595E38 double:1.0531298946E-314;
+            r0 = NUM; // 0x7f0d00eb float:1.8742591E38 double:1.0531298936E-314;
             r1 = "AppName";
             r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
             r6.setTitle(r0);
-            r0 = NUM; // 0x7f0d033f float:1.87438E38 double:1.053130188E-314;
+            r0 = NUM; // 0x7f0d033b float:1.8743792E38 double:1.053130186E-314;
             r1 = "Delete";
             r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
             r1 = new org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$HjGrFd2877SP2gFmUCLASSNAMEvuRyOmw;
             r1.<init>(r3, r4);
             r6.setPositiveButton(r0, r1);
-            r4 = NUM; // 0x7f0d01ef float:1.8743119E38 double:1.053130022E-314;
+            r4 = NUM; // 0x7f0d01eb float:1.874311E38 double:1.05313002E-314;
             r0 = "Cancel";
             r4 = org.telegram.messenger.LocaleController.getString(r0, r4);
             r6.setNegativeButton(r4, r5);
@@ -948,7 +964,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                             return false;
                         }
                     };
-                    themeCell.setPadding(AndroidUtilities.dp(22.0f), 0, AndroidUtilities.dp(22.0f), 0);
+                    themeCell.setPadding(0, 0, 0, 0);
                     themeCell.setClipToPadding(false);
                     anonymousClass4.setOrientation(0);
                     themeCell.setLayoutManager(anonymousClass4);
@@ -956,7 +972,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                     themeCell.setOnItemClickListener(new -$$Lambda$ThemeActivity$ListAdapter$dquXXwWPa2MGvu2xAYM60dhzabo(this));
                     themeCell.setOnItemLongClickListener(new -$$Lambda$ThemeActivity$ListAdapter$pvw4GcZiIzN9zYxDAOmGDBqZDj0(this));
                     ThemeActivity.this.innerListView = themeCell;
-                    themeCell.setLayoutParams(new LayoutParams(-1, AndroidUtilities.dp(148.0f)));
+                    themeCell.setLayoutParams(new RecyclerView.LayoutParams(-1, AndroidUtilities.dp(148.0f)));
                     break;
             }
             textSettingsCell = themeCell;

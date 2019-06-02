@@ -1075,12 +1075,11 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
         Context context2 = context;
         ArrayList<MessageObject> arrayList2 = arrayList;
         boolean z3 = z;
-        final boolean z4 = z2;
         super(context2, true, 1);
         this.shadowDrawable = context.getResources().getDrawable(NUM).mutate();
         String str3 = "dialogBackground";
         this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str3), Mode.MULTIPLY));
-        this.isFullscreen = z4;
+        this.isFullscreen = z2;
         this.linkToCopy = str2;
         this.sendingMessageObjects = arrayList2;
         this.searchAdapter = new ShareSearchAdapter(context2);
@@ -1102,7 +1101,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
             public void onMeasure(int i, int i2) {
                 i2 = MeasureSpec.getSize(i2);
                 boolean z = true;
-                if (VERSION.SDK_INT >= 21 && !z4) {
+                if (VERSION.SDK_INT >= 21 && !ShareAlert.this.isFullscreen) {
                     this.ignoreLayout = true;
                     setPadding(ShareAlert.this.backgroundPaddingLeft, AndroidUtilities.statusBarHeight, ShareAlert.this.backgroundPaddingLeft, 0);
                     this.ignoreLayout = false;
@@ -1136,7 +1135,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                 int size = MeasureSpec.getSize(i);
                 int size2 = MeasureSpec.getSize(i2);
                 setMeasuredDimension(size, size2);
-                int access$1300 = size - (ShareAlert.this.backgroundPaddingLeft * 2);
+                int access$1400 = size - (ShareAlert.this.backgroundPaddingLeft * 2);
                 float f = 1.0f;
                 if (getKeyboardHeight() <= AndroidUtilities.dp(20.0f)) {
                     if (AndroidUtilities.isInMultiwindow) {
@@ -1179,11 +1178,11 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                         if (ShareAlert.this.commentTextView == null || !ShareAlert.this.commentTextView.isPopupView(childAt)) {
                             measureChildWithMargins(childAt, i, 0, i3, 0);
                         } else if (!AndroidUtilities.isInMultiwindow && !AndroidUtilities.isTablet()) {
-                            childAt.measure(MeasureSpec.makeMeasureSpec(access$1300, NUM), MeasureSpec.makeMeasureSpec(childAt.getLayoutParams().height, NUM));
+                            childAt.measure(MeasureSpec.makeMeasureSpec(access$1400, NUM), MeasureSpec.makeMeasureSpec(childAt.getLayoutParams().height, NUM));
                         } else if (AndroidUtilities.isTablet()) {
-                            childAt.measure(MeasureSpec.makeMeasureSpec(access$1300, NUM), MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(AndroidUtilities.isTablet() ? 200.0f : 320.0f), (i5 - AndroidUtilities.statusBarHeight) + getPaddingTop()), NUM));
+                            childAt.measure(MeasureSpec.makeMeasureSpec(access$1400, NUM), MeasureSpec.makeMeasureSpec(Math.min(AndroidUtilities.dp(AndroidUtilities.isTablet() ? 200.0f : 320.0f), (i5 - AndroidUtilities.statusBarHeight) + getPaddingTop()), NUM));
                         } else {
-                            childAt.measure(MeasureSpec.makeMeasureSpec(access$1300, NUM), MeasureSpec.makeMeasureSpec((i5 - AndroidUtilities.statusBarHeight) + getPaddingTop(), NUM));
+                            childAt.measure(MeasureSpec.makeMeasureSpec(access$1400, NUM), MeasureSpec.makeMeasureSpec((i5 - AndroidUtilities.statusBarHeight) + getPaddingTop(), NUM));
                         }
                     }
                 }
@@ -1363,11 +1362,11 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
             }
 
             /* Access modifiers changed, original: protected */
-            /* JADX WARNING: Removed duplicated region for block: B:17:0x00b5  */
+            /* JADX WARNING: Removed duplicated region for block: B:17:0x00b9  */
             /* JADX WARNING: Removed duplicated region for block: B:22:? A:{SYNTHETIC, RETURN} */
-            /* JADX WARNING: Removed duplicated region for block: B:20:0x0148  */
-            /* JADX WARNING: Removed duplicated region for block: B:17:0x00b5  */
-            /* JADX WARNING: Removed duplicated region for block: B:20:0x0148  */
+            /* JADX WARNING: Removed duplicated region for block: B:20:0x014c  */
+            /* JADX WARNING: Removed duplicated region for block: B:17:0x00b9  */
+            /* JADX WARNING: Removed duplicated region for block: B:20:0x014c  */
             /* JADX WARNING: Removed duplicated region for block: B:22:? A:{SYNTHETIC, RETURN} */
             public void onDraw(android.graphics.Canvas r14) {
                 /*
@@ -1395,29 +1394,30 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                 r3 = org.telegram.ui.Components.ShareAlert.this;
                 r3 = r3.backgroundPaddingTop;
                 r2 = r2 + r3;
-                r3 = r4;
+                r3 = org.telegram.ui.Components.ShareAlert.this;
+                r3 = r3.isFullscreen;
                 r4 = 0;
                 r5 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-                if (r3 != 0) goto L_0x0096;
-            L_0x0041:
+                if (r3 != 0) goto L_0x009a;
+            L_0x0045:
                 r3 = android.os.Build.VERSION.SDK_INT;
                 r6 = 21;
-                if (r3 < r6) goto L_0x0096;
-            L_0x0047:
+                if (r3 < r6) goto L_0x009a;
+            L_0x004b:
                 r3 = org.telegram.messenger.AndroidUtilities.statusBarHeight;
                 r1 = r1 + r3;
                 r0 = r0 + r3;
                 r2 = r2 - r3;
                 r3 = r13.fullHeight;
-                if (r3 == 0) goto L_0x0096;
-            L_0x0050:
+                if (r3 == 0) goto L_0x009a;
+            L_0x0054:
                 r3 = org.telegram.ui.Components.ShareAlert.this;
                 r3 = r3.backgroundPaddingTop;
                 r3 = r3 + r1;
                 r6 = org.telegram.messenger.AndroidUtilities.statusBarHeight;
                 r7 = r6 * 2;
-                if (r3 >= r7) goto L_0x007b;
-            L_0x005d:
+                if (r3 >= r7) goto L_0x007f;
+            L_0x0061:
                 r3 = r6 * 2;
                 r3 = r3 - r1;
                 r7 = org.telegram.ui.Components.ShareAlert.this;
@@ -1433,27 +1433,27 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                 r3 = r3 / r6;
                 r3 = java.lang.Math.min(r5, r3);
                 r3 = r5 - r3;
-                goto L_0x007d;
-            L_0x007b:
+                goto L_0x0081;
+            L_0x007f:
                 r3 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-            L_0x007d:
+            L_0x0081:
                 r6 = org.telegram.ui.Components.ShareAlert.this;
                 r6 = r6.backgroundPaddingTop;
                 r6 = r6 + r1;
                 r7 = org.telegram.messenger.AndroidUtilities.statusBarHeight;
-                if (r6 >= r7) goto L_0x0098;
-            L_0x0088:
+                if (r6 >= r7) goto L_0x009c;
+            L_0x008c:
                 r6 = r7 - r1;
                 r8 = org.telegram.ui.Components.ShareAlert.this;
                 r8 = r8.backgroundPaddingTop;
                 r6 = r6 - r8;
                 r6 = java.lang.Math.min(r7, r6);
-                goto L_0x0099;
-            L_0x0096:
+                goto L_0x009d;
+            L_0x009a:
                 r3 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-            L_0x0098:
+            L_0x009c:
                 r6 = 0;
-            L_0x0099:
+            L_0x009d:
                 r7 = org.telegram.ui.Components.ShareAlert.this;
                 r7 = r7.shadowDrawable;
                 r8 = r13.getMeasuredWidth();
@@ -1463,8 +1463,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                 r2.draw(r14);
                 r2 = "dialogBackground";
                 r4 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1));
-                if (r4 == 0) goto L_0x0104;
-            L_0x00b5:
+                if (r4 == 0) goto L_0x0108;
+            L_0x00b9:
                 r4 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint;
                 r5 = org.telegram.ui.ActionBar.Theme.getColor(r2);
                 r4.setColor(r5);
@@ -1499,7 +1499,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                 r4 = r4 * r3;
                 r3 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint;
                 r14.drawRoundRect(r1, r5, r4, r3);
-            L_0x0104:
+            L_0x0108:
                 r1 = NUM; // 0x42100000 float:36.0 double:5.47595105E-315;
                 r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
                 r3 = r13.rect1;
@@ -1529,8 +1529,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                 r1 = (float) r1;
                 r4 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint;
                 r14.drawRoundRect(r0, r3, r1, r4);
-                if (r6 <= 0) goto L_0x0192;
-            L_0x0148:
+                if (r6 <= 0) goto L_0x0196;
+            L_0x014c:
                 r0 = org.telegram.ui.ActionBar.Theme.getColor(r2);
                 r1 = 255; // 0xff float:3.57E-43 double:1.26E-321;
                 r2 = android.graphics.Color.red(r0);
@@ -1565,7 +1565,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                 r12 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint;
                 r7 = r14;
                 r7.drawRect(r8, r9, r10, r11, r12);
-            L_0x0192:
+            L_0x0196:
                 return;
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ShareAlert$AnonymousClass1.onDraw(android.graphics.Canvas):void");

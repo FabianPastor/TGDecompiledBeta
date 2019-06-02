@@ -324,14 +324,14 @@ public class ManageChatUserCell extends FrameLayout {
         goto L_0x00d8;
     L_0x00c9:
         r13 = r12.statusTextView;
-        r4 = NUM; // 0x7f0d01ce float:1.8743052E38 double:1.053130006E-314;
+        r4 = NUM; // 0x7f0d01ca float:1.8743044E38 double:1.053130004E-314;
         r5 = "BotStatusCantRead";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r13.setText(r4);
         goto L_0x0144;
     L_0x00d8:
         r13 = r12.statusTextView;
-        r4 = NUM; // 0x7f0d01cf float:1.8743054E38 double:1.0531300063E-314;
+        r4 = NUM; // 0x7f0d01cb float:1.8743046E38 double:1.0531300043E-314;
         r5 = "BotStatusRead";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r13.setText(r4);
@@ -375,7 +375,7 @@ public class ManageChatUserCell extends FrameLayout {
         r4 = r12.statusOnlineColor;
         r13.setTextColor(r4);
         r13 = r12.statusTextView;
-        r4 = NUM; // 0x7f0d06aa float:1.8745575E38 double:1.0531306204E-314;
+        r4 = NUM; // 0x7f0d06a4 float:1.8745563E38 double:1.0531306175E-314;
         r5 = "Online";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r13.setText(r4);
@@ -506,14 +506,14 @@ public class ManageChatUserCell extends FrameLayout {
         if (r13 == 0) goto L_0x0205;
     L_0x01f6:
         r13 = r12.statusTextView;
-        r4 = NUM; // 0x7f0d059b float:1.8745025E38 double:1.0531304865E-314;
+        r4 = NUM; // 0x7f0d0597 float:1.8745017E38 double:1.0531304846E-314;
         r5 = "MegaPrivate";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r13.setText(r4);
         goto L_0x0213;
     L_0x0205:
         r13 = r12.statusTextView;
-        r4 = NUM; // 0x7f0d059e float:1.8745031E38 double:1.053130488E-314;
+        r4 = NUM; // 0x7f0d059a float:1.8745023E38 double:1.053130486E-314;
         r5 = "MegaPublic";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r13.setText(r4);

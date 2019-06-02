@@ -6060,74 +6060,74 @@ public class ImageLoader {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageLoader.lambda$createLoadOperationForImageReceiver$5$ImageLoader(int, java.lang.String, java.lang.String, int, org.telegram.messenger.ImageReceiver, java.lang.String, int, org.telegram.messenger.ImageLocation, boolean, java.lang.Object, org.telegram.tgnet.TLRPC$Document, boolean, boolean, int, int, java.lang.String, int):void");
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:133:0x027c  */
-    /* JADX WARNING: Removed duplicated region for block: B:132:0x0277  */
-    /* JADX WARNING: Removed duplicated region for block: B:212:0x0290 A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:135:0x0281  */
-    /* JADX WARNING: Removed duplicated region for block: B:132:0x0277  */
-    /* JADX WARNING: Removed duplicated region for block: B:133:0x027c  */
-    /* JADX WARNING: Removed duplicated region for block: B:212:0x0290 A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:135:0x0281  */
-    /* JADX WARNING: Removed duplicated region for block: B:118:0x023c  */
+    /* JADX WARNING: Removed duplicated region for block: B:133:0x027e  */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0279  */
+    /* JADX WARNING: Removed duplicated region for block: B:212:0x0292 A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:135:0x0283  */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0279  */
+    /* JADX WARNING: Removed duplicated region for block: B:133:0x027e  */
+    /* JADX WARNING: Removed duplicated region for block: B:212:0x0292 A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:135:0x0283  */
+    /* JADX WARNING: Removed duplicated region for block: B:118:0x023e  */
     /* JADX WARNING: Removed duplicated region for block: B:112:0x021e  */
-    /* JADX WARNING: Removed duplicated region for block: B:133:0x027c  */
-    /* JADX WARNING: Removed duplicated region for block: B:132:0x0277  */
-    /* JADX WARNING: Removed duplicated region for block: B:212:0x0290 A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:135:0x0281  */
-    /* JADX WARNING: Removed duplicated region for block: B:132:0x0277  */
-    /* JADX WARNING: Removed duplicated region for block: B:133:0x027c  */
-    /* JADX WARNING: Removed duplicated region for block: B:212:0x0290 A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:135:0x0281  */
-    /* JADX WARNING: Removed duplicated region for block: B:133:0x027c  */
-    /* JADX WARNING: Removed duplicated region for block: B:132:0x0277  */
-    /* JADX WARNING: Removed duplicated region for block: B:212:0x0290 A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:135:0x0281  */
+    /* JADX WARNING: Removed duplicated region for block: B:133:0x027e  */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0279  */
+    /* JADX WARNING: Removed duplicated region for block: B:212:0x0292 A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:135:0x0283  */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0279  */
+    /* JADX WARNING: Removed duplicated region for block: B:133:0x027e  */
+    /* JADX WARNING: Removed duplicated region for block: B:212:0x0292 A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:135:0x0283  */
+    /* JADX WARNING: Removed duplicated region for block: B:133:0x027e  */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0279  */
+    /* JADX WARNING: Removed duplicated region for block: B:212:0x0292 A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:135:0x0283  */
     /* JADX WARNING: Removed duplicated region for block: B:57:0x00eb  */
-    /* JADX WARNING: Removed duplicated region for block: B:209:0x029e A:{SYNTHETIC, EDGE_INSN: B:209:0x029e->B:139:0x029e ?: BREAK  , EDGE_INSN: B:209:0x029e->B:139:0x029e ?: BREAK  } */
+    /* JADX WARNING: Removed duplicated region for block: B:209:0x02a0 A:{SYNTHETIC, EDGE_INSN: B:209:0x02a0->B:139:0x02a0 ?: BREAK  , EDGE_INSN: B:209:0x02a0->B:139:0x02a0 ?: BREAK  } */
     /* JADX WARNING: Removed duplicated region for block: B:61:0x0100  */
-    /* JADX WARNING: Removed duplicated region for block: B:154:0x0301  */
-    /* JADX WARNING: Removed duplicated region for block: B:141:0x02a7  */
-    /* JADX WARNING: Removed duplicated region for block: B:195:0x03e5  */
-    /* JADX WARNING: Removed duplicated region for block: B:178:0x038e  */
+    /* JADX WARNING: Removed duplicated region for block: B:154:0x0303  */
+    /* JADX WARNING: Removed duplicated region for block: B:141:0x02a9  */
+    /* JADX WARNING: Removed duplicated region for block: B:195:0x03e7  */
+    /* JADX WARNING: Removed duplicated region for block: B:178:0x0390  */
     /* JADX WARNING: Removed duplicated region for block: B:52:0x00db  */
     /* JADX WARNING: Removed duplicated region for block: B:50:0x00ce  */
     /* JADX WARNING: Removed duplicated region for block: B:57:0x00eb  */
     /* JADX WARNING: Removed duplicated region for block: B:61:0x0100  */
-    /* JADX WARNING: Removed duplicated region for block: B:209:0x029e A:{SYNTHETIC, EDGE_INSN: B:209:0x029e->B:139:0x029e ?: BREAK  , EDGE_INSN: B:209:0x029e->B:139:0x029e ?: BREAK  , EDGE_INSN: B:209:0x029e->B:139:0x029e ?: BREAK  } */
-    /* JADX WARNING: Removed duplicated region for block: B:141:0x02a7  */
-    /* JADX WARNING: Removed duplicated region for block: B:154:0x0301  */
-    /* JADX WARNING: Removed duplicated region for block: B:157:0x0308 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:162:0x0326 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:170:0x0359  */
-    /* JADX WARNING: Removed duplicated region for block: B:178:0x038e  */
-    /* JADX WARNING: Removed duplicated region for block: B:195:0x03e5  */
+    /* JADX WARNING: Removed duplicated region for block: B:209:0x02a0 A:{SYNTHETIC, EDGE_INSN: B:209:0x02a0->B:139:0x02a0 ?: BREAK  , EDGE_INSN: B:209:0x02a0->B:139:0x02a0 ?: BREAK  , EDGE_INSN: B:209:0x02a0->B:139:0x02a0 ?: BREAK  } */
+    /* JADX WARNING: Removed duplicated region for block: B:141:0x02a9  */
+    /* JADX WARNING: Removed duplicated region for block: B:154:0x0303  */
+    /* JADX WARNING: Removed duplicated region for block: B:157:0x030a A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:162:0x0328 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:170:0x035b  */
+    /* JADX WARNING: Removed duplicated region for block: B:178:0x0390  */
+    /* JADX WARNING: Removed duplicated region for block: B:195:0x03e7  */
     /* JADX WARNING: Removed duplicated region for block: B:33:0x0080  */
     /* JADX WARNING: Removed duplicated region for block: B:50:0x00ce  */
     /* JADX WARNING: Removed duplicated region for block: B:52:0x00db  */
     /* JADX WARNING: Removed duplicated region for block: B:57:0x00eb  */
-    /* JADX WARNING: Removed duplicated region for block: B:209:0x029e A:{SYNTHETIC, EDGE_INSN: B:209:0x029e->B:139:0x029e ?: BREAK  , EDGE_INSN: B:209:0x029e->B:139:0x029e ?: BREAK  , EDGE_INSN: B:209:0x029e->B:139:0x029e ?: BREAK  , EDGE_INSN: B:209:0x029e->B:139:0x029e ?: BREAK  } */
+    /* JADX WARNING: Removed duplicated region for block: B:209:0x02a0 A:{SYNTHETIC, EDGE_INSN: B:209:0x02a0->B:139:0x02a0 ?: BREAK  , EDGE_INSN: B:209:0x02a0->B:139:0x02a0 ?: BREAK  , EDGE_INSN: B:209:0x02a0->B:139:0x02a0 ?: BREAK  , EDGE_INSN: B:209:0x02a0->B:139:0x02a0 ?: BREAK  } */
     /* JADX WARNING: Removed duplicated region for block: B:61:0x0100  */
-    /* JADX WARNING: Removed duplicated region for block: B:154:0x0301  */
-    /* JADX WARNING: Removed duplicated region for block: B:141:0x02a7  */
-    /* JADX WARNING: Removed duplicated region for block: B:157:0x0308 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:162:0x0326 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:170:0x0359  */
-    /* JADX WARNING: Removed duplicated region for block: B:195:0x03e5  */
-    /* JADX WARNING: Removed duplicated region for block: B:178:0x038e  */
+    /* JADX WARNING: Removed duplicated region for block: B:154:0x0303  */
+    /* JADX WARNING: Removed duplicated region for block: B:141:0x02a9  */
+    /* JADX WARNING: Removed duplicated region for block: B:157:0x030a A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:162:0x0328 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:170:0x035b  */
+    /* JADX WARNING: Removed duplicated region for block: B:195:0x03e7  */
+    /* JADX WARNING: Removed duplicated region for block: B:178:0x0390  */
     /* JADX WARNING: Removed duplicated region for block: B:25:0x0068  */
     /* JADX WARNING: Removed duplicated region for block: B:33:0x0080  */
     /* JADX WARNING: Removed duplicated region for block: B:52:0x00db  */
     /* JADX WARNING: Removed duplicated region for block: B:50:0x00ce  */
     /* JADX WARNING: Removed duplicated region for block: B:57:0x00eb  */
     /* JADX WARNING: Removed duplicated region for block: B:61:0x0100  */
-    /* JADX WARNING: Removed duplicated region for block: B:209:0x029e A:{SYNTHETIC, EDGE_INSN: B:209:0x029e->B:139:0x029e ?: BREAK  , EDGE_INSN: B:209:0x029e->B:139:0x029e ?: BREAK  , EDGE_INSN: B:209:0x029e->B:139:0x029e ?: BREAK  , EDGE_INSN: B:209:0x029e->B:139:0x029e ?: BREAK  , EDGE_INSN: B:209:0x029e->B:139:0x029e ?: BREAK  } */
-    /* JADX WARNING: Removed duplicated region for block: B:141:0x02a7  */
-    /* JADX WARNING: Removed duplicated region for block: B:154:0x0301  */
-    /* JADX WARNING: Removed duplicated region for block: B:157:0x0308 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:162:0x0326 A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:170:0x0359  */
-    /* JADX WARNING: Removed duplicated region for block: B:178:0x038e  */
-    /* JADX WARNING: Removed duplicated region for block: B:195:0x03e5  */
+    /* JADX WARNING: Removed duplicated region for block: B:209:0x02a0 A:{SYNTHETIC, EDGE_INSN: B:209:0x02a0->B:139:0x02a0 ?: BREAK  , EDGE_INSN: B:209:0x02a0->B:139:0x02a0 ?: BREAK  , EDGE_INSN: B:209:0x02a0->B:139:0x02a0 ?: BREAK  , EDGE_INSN: B:209:0x02a0->B:139:0x02a0 ?: BREAK  , EDGE_INSN: B:209:0x02a0->B:139:0x02a0 ?: BREAK  } */
+    /* JADX WARNING: Removed duplicated region for block: B:141:0x02a9  */
+    /* JADX WARNING: Removed duplicated region for block: B:154:0x0303  */
+    /* JADX WARNING: Removed duplicated region for block: B:157:0x030a A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:162:0x0328 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:170:0x035b  */
+    /* JADX WARNING: Removed duplicated region for block: B:178:0x0390  */
+    /* JADX WARNING: Removed duplicated region for block: B:195:0x03e7  */
     public void loadImageForImageReceiver(org.telegram.messenger.ImageReceiver r30) {
         /*
         r29 = this;
@@ -6281,7 +6281,7 @@ public class ImageLoader {
     L_0x00fb:
         r2 = 2;
         r11 = ".";
-        if (r7 >= r2) goto L_0x029e;
+        if (r7 >= r2) goto L_0x02a0;
     L_0x0100:
         if (r7 != 0) goto L_0x0104;
     L_0x0102:
@@ -6308,7 +6308,7 @@ public class ImageLoader {
         r25 = r14;
         r26 = r15;
         r15 = 1;
-        goto L_0x0290;
+        goto L_0x0292;
     L_0x011e:
         r23 = r13;
         r13 = r2.path;
@@ -6327,7 +6327,7 @@ public class ImageLoader {
         r26 = r15;
     L_0x0140:
         r15 = 1;
-        goto L_0x0275;
+        goto L_0x0277;
     L_0x0143:
         r13 = r2.photoSize;
         r13 = r13 instanceof org.telegram.tgnet.TLRPC.TL_photoStrippedSize;
@@ -6381,7 +6381,7 @@ public class ImageLoader {
         r11 = r24;
         r15 = 1;
         r20 = 1;
-        goto L_0x0275;
+        goto L_0x0277;
     L_0x01a2:
         r25 = r14;
         r26 = r15;
@@ -6413,7 +6413,7 @@ public class ImageLoader {
         goto L_0x0140;
     L_0x01e4:
         r11 = r2.document;
-        if (r11 == 0) goto L_0x0272;
+        if (r11 == 0) goto L_0x0274;
     L_0x01e8:
         if (r7 != 0) goto L_0x01fd;
     L_0x01ea:
@@ -6445,28 +6445,28 @@ public class ImageLoader {
     L_0x0217:
         r14 = r11.length();
         r15 = 1;
-        if (r14 > r15) goto L_0x023c;
+        if (r14 > r15) goto L_0x023e;
     L_0x021e:
         r11 = r2.document;
         r11 = r11.mime_type;
         r14 = "video/mp4";
         r11 = r14.equals(r11);
-        if (r11 == 0) goto L_0x022d;
-    L_0x022a:
+        if (r11 == 0) goto L_0x022e;
+    L_0x022b:
         r13 = ".mp4";
-        goto L_0x023d;
-    L_0x022d:
+        goto L_0x023f;
+    L_0x022e:
         r11 = r2.document;
         r11 = r11.mime_type;
         r14 = "video/x-matroska";
         r11 = r14.equals(r11);
-        if (r11 == 0) goto L_0x023d;
-    L_0x0239:
+        if (r11 == 0) goto L_0x023f;
+    L_0x023b:
         r13 = ".mkv";
-        goto L_0x023d;
-    L_0x023c:
+        goto L_0x023f;
+    L_0x023e:
         r13 = r11;
-    L_0x023d:
+    L_0x023f:
         r11 = new java.lang.StringBuilder;
         r11.<init>();
         r11.append(r12);
@@ -6474,53 +6474,53 @@ public class ImageLoader {
         r11 = r11.toString();
         r13 = r2.document;
         r13 = org.telegram.messenger.MessageObject.isVideoDocument(r13);
-        if (r13 != 0) goto L_0x026e;
-    L_0x0254:
+        if (r13 != 0) goto L_0x0270;
+    L_0x0256:
         r13 = r2.document;
         r13 = org.telegram.messenger.MessageObject.isGifDocument(r13);
-        if (r13 != 0) goto L_0x026e;
-    L_0x025c:
+        if (r13 != 0) goto L_0x0270;
+    L_0x025e:
         r13 = r2.document;
         r13 = org.telegram.messenger.MessageObject.isRoundVideoDocument(r13);
-        if (r13 != 0) goto L_0x026e;
-    L_0x0264:
+        if (r13 != 0) goto L_0x0270;
+    L_0x0266:
         r13 = r2.document;
         r13 = org.telegram.messenger.MessageObject.canPreviewDocument(r13);
-        if (r13 != 0) goto L_0x026e;
-    L_0x026c:
-        r13 = 1;
-        goto L_0x026f;
+        if (r13 != 0) goto L_0x0270;
     L_0x026e:
+        r13 = 1;
+        goto L_0x0271;
+    L_0x0270:
         r13 = 0;
-    L_0x026f:
+    L_0x0271:
         r20 = r13;
-        goto L_0x0275;
-    L_0x0272:
+        goto L_0x0277;
+    L_0x0274:
         r15 = 1;
         r11 = r16;
-    L_0x0275:
-        if (r7 != 0) goto L_0x027c;
     L_0x0277:
+        if (r7 != 0) goto L_0x027e;
+    L_0x0279:
         r21 = r11;
         r19 = r12;
-        goto L_0x027f;
-    L_0x027c:
+        goto L_0x0281;
+    L_0x027e:
         r22 = r11;
         r1 = r12;
-    L_0x027f:
-        if (r2 != r5) goto L_0x0290;
     L_0x0281:
-        if (r7 != 0) goto L_0x028a;
+        if (r2 != r5) goto L_0x0292;
     L_0x0283:
+        if (r7 != 0) goto L_0x028c;
+    L_0x0285:
         r8 = r16;
         r19 = r8;
         r21 = r19;
-        goto L_0x0290;
-    L_0x028a:
+        goto L_0x0292;
+    L_0x028c:
         r1 = r16;
         r17 = r1;
         r22 = r17;
-    L_0x0290:
+    L_0x0292:
         r7 = r7 + 1;
         r11 = r29;
         r12 = r30;
@@ -6528,24 +6528,24 @@ public class ImageLoader {
         r14 = r25;
         r15 = r26;
         goto L_0x00fb;
-    L_0x029e:
+    L_0x02a0:
         r23 = r13;
         r25 = r14;
         r26 = r15;
         r15 = 1;
-        if (r5 == 0) goto L_0x0301;
-    L_0x02a7:
-        if (r17 == 0) goto L_0x02ac;
+        if (r5 == 0) goto L_0x0303;
     L_0x02a9:
+        if (r17 == 0) goto L_0x02ae;
+    L_0x02ab:
         r4 = r17;
-        goto L_0x02ad;
-    L_0x02ac:
+        goto L_0x02af;
+    L_0x02ae:
         r4 = r8;
-    L_0x02ad:
+    L_0x02af:
         r3 = r5.getKey(r3, r4);
         r4 = r5.path;
-        if (r4 == 0) goto L_0x02ce;
-    L_0x02b5:
+        if (r4 == 0) goto L_0x02d0;
+    L_0x02b7:
         r4 = new java.lang.StringBuilder;
         r4.<init>();
         r4.append(r3);
@@ -6554,42 +6554,42 @@ public class ImageLoader {
         r7 = getHttpUrlExtension(r7, r10);
         r4.append(r7);
         r4 = r4.toString();
-        goto L_0x0304;
-    L_0x02ce:
+        goto L_0x0306;
+    L_0x02d0:
         r4 = r5.photoSize;
         r4 = r4 instanceof org.telegram.tgnet.TLRPC.TL_photoStrippedSize;
-        if (r4 == 0) goto L_0x02e7;
-    L_0x02d4:
+        if (r4 == 0) goto L_0x02e9;
+    L_0x02d6:
         r4 = new java.lang.StringBuilder;
         r4.<init>();
         r4.append(r3);
         r4.append(r11);
         r4.append(r9);
         r4 = r4.toString();
-        goto L_0x0304;
-    L_0x02e7:
+        goto L_0x0306;
+    L_0x02e9:
         r4 = r5.location;
-        if (r4 == 0) goto L_0x02fe;
-    L_0x02eb:
+        if (r4 == 0) goto L_0x0300;
+    L_0x02ed:
         r4 = new java.lang.StringBuilder;
         r4.<init>();
         r4.append(r3);
         r4.append(r11);
         r4.append(r9);
         r4 = r4.toString();
-        goto L_0x0304;
-    L_0x02fe:
+        goto L_0x0306;
+    L_0x0300:
         r4 = r16;
-        goto L_0x0304;
-    L_0x0301:
+        goto L_0x0306;
+    L_0x0303:
         r3 = r16;
         r4 = r3;
-    L_0x0304:
+    L_0x0306:
         r7 = "@";
-        if (r1 == 0) goto L_0x031f;
-    L_0x0308:
-        if (r25 == 0) goto L_0x031f;
+        if (r1 == 0) goto L_0x0321;
     L_0x030a:
+        if (r25 == 0) goto L_0x0321;
+    L_0x030c:
         r10 = new java.lang.StringBuilder;
         r10.<init>();
         r10.append(r1);
@@ -6597,16 +6597,16 @@ public class ImageLoader {
         r11 = r25;
         r10.append(r11);
         r1 = r10.toString();
-        goto L_0x0321;
-    L_0x031f:
-        r11 = r25;
+        goto L_0x0323;
     L_0x0321:
+        r11 = r25;
+    L_0x0323:
         r12 = r1;
         r1 = r19;
-        if (r1 == 0) goto L_0x033d;
-    L_0x0326:
-        if (r26 == 0) goto L_0x033d;
+        if (r1 == 0) goto L_0x033f;
     L_0x0328:
+        if (r26 == 0) goto L_0x033f;
+    L_0x032a:
         r10 = new java.lang.StringBuilder;
         r10.<init>();
         r10.append(r1);
@@ -6614,15 +6614,15 @@ public class ImageLoader {
         r13 = r26;
         r10.append(r13);
         r1 = r10.toString();
-        goto L_0x033f;
-    L_0x033d:
-        r13 = r26;
+        goto L_0x0341;
     L_0x033f:
+        r13 = r26;
+    L_0x0341:
         r14 = r1;
-        if (r3 == 0) goto L_0x0357;
-    L_0x0342:
-        if (r6 == 0) goto L_0x0357;
+        if (r3 == 0) goto L_0x0359;
     L_0x0344:
+        if (r6 == 0) goto L_0x0359;
+    L_0x0346:
         r1 = new java.lang.StringBuilder;
         r1.<init>();
         r1.append(r3);
@@ -6630,19 +6630,19 @@ public class ImageLoader {
         r1.append(r6);
         r1 = r1.toString();
         r3 = r1;
-    L_0x0357:
-        if (r8 == 0) goto L_0x0388;
     L_0x0359:
+        if (r8 == 0) goto L_0x038a;
+    L_0x035b:
         r1 = r8.path;
-        if (r1 == 0) goto L_0x0388;
-    L_0x035d:
+        if (r1 == 0) goto L_0x038a;
+    L_0x035f:
         r7 = 0;
         r10 = 1;
         r11 = 1;
-        if (r0 == 0) goto L_0x0363;
-    L_0x0362:
+        if (r0 == 0) goto L_0x0365;
+    L_0x0364:
         r15 = 2;
-    L_0x0363:
+    L_0x0365:
         r0 = r29;
         r1 = r30;
         r2 = r3;
@@ -6664,50 +6664,50 @@ public class ImageLoader {
         r5 = r16;
         r6 = r13;
         r0.createLoadOperationForImageReceiver(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10);
-        goto L_0x0417;
-    L_0x0388:
+        goto L_0x0419;
+    L_0x038a:
         r16 = r8;
         r18 = r9;
-        if (r17 == 0) goto L_0x03e5;
-    L_0x038e:
+        if (r17 == 0) goto L_0x03e7;
+    L_0x0390:
         r1 = r30.getCacheType();
         r19 = 1;
-        if (r1 != 0) goto L_0x039b;
-    L_0x0396:
-        if (r20 == 0) goto L_0x039b;
+        if (r1 != 0) goto L_0x039d;
     L_0x0398:
+        if (r20 == 0) goto L_0x039d;
+    L_0x039a:
         r20 = 1;
-        goto L_0x039d;
-    L_0x039b:
-        r20 = r1;
+        goto L_0x039f;
     L_0x039d:
-        if (r20 != 0) goto L_0x03a1;
+        r20 = r1;
     L_0x039f:
-        r8 = 1;
-        goto L_0x03a3;
+        if (r20 != 0) goto L_0x03a3;
     L_0x03a1:
-        r8 = r20;
+        r8 = 1;
+        goto L_0x03a5;
     L_0x03a3:
-        if (r0 != 0) goto L_0x03b7;
+        r8 = r20;
     L_0x03a5:
+        if (r0 != 0) goto L_0x03b9;
+    L_0x03a7:
         r7 = 0;
         r9 = 1;
-        if (r0 == 0) goto L_0x03ab;
-    L_0x03a9:
-        r10 = 2;
-        goto L_0x03ac;
+        if (r0 == 0) goto L_0x03ad;
     L_0x03ab:
+        r10 = 2;
+        goto L_0x03ae;
+    L_0x03ad:
         r10 = 1;
-    L_0x03ac:
+    L_0x03ae:
         r0 = r29;
         r1 = r30;
         r2 = r3;
         r3 = r4;
         r4 = r18;
         r0.createLoadOperationForImageReceiver(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10);
-    L_0x03b7:
-        if (r23 != 0) goto L_0x03cd;
     L_0x03b9:
+        if (r23 != 0) goto L_0x03cf;
+    L_0x03bb:
         r7 = 0;
         r9 = 0;
         r10 = 0;
@@ -6720,7 +6720,7 @@ public class ImageLoader {
         r6 = r13;
         r8 = r19;
         r0.createLoadOperationForImageReceiver(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10);
-    L_0x03cd:
+    L_0x03cf:
         r7 = r30.getSize();
         r9 = 3;
         r10 = 0;
@@ -6733,34 +6733,34 @@ public class ImageLoader {
         r6 = r11;
         r8 = r20;
         r0.createLoadOperationForImageReceiver(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10);
-        goto L_0x0417;
-    L_0x03e5:
+        goto L_0x0419;
+    L_0x03e7:
         r1 = r30.getCacheType();
-        if (r1 != 0) goto L_0x03ef;
-    L_0x03eb:
-        if (r20 == 0) goto L_0x03ef;
+        if (r1 != 0) goto L_0x03f1;
     L_0x03ed:
-        r11 = 1;
-        goto L_0x03f0;
+        if (r20 == 0) goto L_0x03f1;
     L_0x03ef:
+        r11 = 1;
+        goto L_0x03f2;
+    L_0x03f1:
         r11 = r1;
-    L_0x03f0:
-        if (r11 != 0) goto L_0x03f4;
     L_0x03f2:
-        r8 = 1;
-        goto L_0x03f5;
+        if (r11 != 0) goto L_0x03f6;
     L_0x03f4:
+        r8 = 1;
+        goto L_0x03f7;
+    L_0x03f6:
         r8 = r11;
-    L_0x03f5:
+    L_0x03f7:
         r7 = 0;
         r9 = 1;
-        if (r0 == 0) goto L_0x03fb;
-    L_0x03f9:
-        r10 = 2;
-        goto L_0x03fc;
+        if (r0 == 0) goto L_0x03fd;
     L_0x03fb:
+        r10 = 2;
+        goto L_0x03fe;
+    L_0x03fd:
         r10 = 1;
-    L_0x03fc:
+    L_0x03fe:
         r0 = r29;
         r1 = r30;
         r2 = r3;
@@ -6776,7 +6776,7 @@ public class ImageLoader {
         r6 = r13;
         r8 = r11;
         r0.createLoadOperationForImageReceiver(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10);
-    L_0x0417:
+    L_0x0419:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageLoader.loadImageForImageReceiver(org.telegram.messenger.ImageReceiver):void");

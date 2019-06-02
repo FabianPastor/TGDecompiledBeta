@@ -1294,7 +1294,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r1.setAllowOverlayTitle(r7);
         r1 = r6.actionBar;
         r2 = "BackgroundPreview";
-        r3 = NUM; // 0x7f0d01a9 float:1.8742977E38 double:1.0531299875E-314;
+        r3 = NUM; // 0x7f0d01a5 float:1.8742969E38 double:1.0531299855E-314;
         r2 = org.telegram.messenger.LocaleController.getString(r2, r3);
         r1.setTitle(r2);
         r1 = r6.actionBar;
@@ -1440,7 +1440,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r11 = org.telegram.ui.ActionBar.Theme.getColor(r14);
         r9.setTextColor(r11);
         r9 = r6.bottomOverlayChatText;
-        r11 = NUM; // 0x7f0d0921 float:1.8746855E38 double:1.053130932E-314;
+        r11 = NUM; // 0x7f0d091c float:1.8746845E38 double:1.0531309297E-314;
         r10 = "SetBackground";
         r10 = org.telegram.messenger.LocaleController.getString(r10, r11);
         r9.setText(r10);
@@ -1471,25 +1471,25 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r12 = r12 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper;
         if (r12 == 0) goto L_0x019f;
     L_0x017d:
-        r12 = NUM; // 0x7f0d01a0 float:1.8742958E38 double:1.053129983E-314;
+        r12 = NUM; // 0x7f0d019c float:1.874295E38 double:1.053129981E-314;
         r11 = "BackgroundColor";
         r11 = org.telegram.messenger.LocaleController.getString(r11, r12);
         r9[r4] = r11;
-        r11 = NUM; // 0x7f0d01a8 float:1.8742975E38 double:1.053129987E-314;
+        r11 = NUM; // 0x7f0d01a4 float:1.8742967E38 double:1.053129985E-314;
         r12 = "BackgroundPattern";
         r11 = org.telegram.messenger.LocaleController.getString(r12, r11);
         r9[r7] = r11;
-        r11 = NUM; // 0x7f0d01a7 float:1.8742973E38 double:1.0531299865E-314;
+        r11 = NUM; // 0x7f0d01a3 float:1.8742965E38 double:1.0531299846E-314;
         r12 = "BackgroundMotion";
         r11 = org.telegram.messenger.LocaleController.getString(r12, r11);
         r9[r3] = r11;
         goto L_0x01b5;
     L_0x019f:
-        r11 = NUM; // 0x7f0d019e float:1.8742954E38 double:1.053129982E-314;
+        r11 = NUM; // 0x7f0d019a float:1.8742946E38 double:1.05312998E-314;
         r12 = "BackgroundBlurred";
         r11 = org.telegram.messenger.LocaleController.getString(r12, r11);
         r9[r4] = r11;
-        r11 = NUM; // 0x7f0d01a7 float:1.8742973E38 double:1.0531299865E-314;
+        r11 = NUM; // 0x7f0d01a3 float:1.8742965E38 double:1.0531299846E-314;
         r12 = "BackgroundMotion";
         r11 = org.telegram.messenger.LocaleController.getString(r12, r11);
         r9[r7] = r11;
@@ -1720,7 +1720,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r4.setTextColor(r5);
         r4 = r6.patternsCancelButton;
         r4 = r4[r2];
-        r5 = NUM; // 0x7f0d01ef float:1.8743119E38 double:1.053130022E-314;
+        r5 = NUM; // 0x7f0d01eb float:1.874311E38 double:1.05313002E-314;
         r10 = "Cancel";
         r5 = org.telegram.messenger.LocaleController.getString(r10, r5);
         r5 = r5.toUpperCase();
@@ -1774,7 +1774,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r3.setTextColor(r8);
         r3 = r6.patternsSaveButton;
         r3 = r3[r2];
-        r8 = NUM; // 0x7f0d08b7 float:1.874664E38 double:1.05313088E-314;
+        r8 = NUM; // 0x7f0d08b2 float:1.874663E38 double:1.0531308773E-314;
         r10 = "Save";
         r8 = org.telegram.messenger.LocaleController.getString(r10, r8);
         r8 = r8.toUpperCase();
@@ -1849,7 +1849,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r3.<init>(r0);
         r6.intensityCell = r3;
         r3 = r6.intensityCell;
-        r5 = NUM; // 0x7f0d01a6 float:1.874297E38 double:1.053129986E-314;
+        r5 = NUM; // 0x7f0d01a2 float:1.8742963E38 double:1.053129984E-314;
         r13 = "BackgroundIntensity";
         r5 = org.telegram.messenger.LocaleController.getString(r13, r5);
         r3.setText(r5);

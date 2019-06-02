@@ -181,7 +181,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                 if (PrivacyUsersActivity.this.blockedUsersActivity) {
                     manageChatTextCell.setText(LocaleController.getString("BlockUser", NUM), null, NUM, false);
                 } else {
-                    manageChatTextCell.setText(LocaleController.getString("NotificationsAddAnException", NUM), null, NUM, false);
+                    manageChatTextCell.setText(LocaleController.getString("PrivacyAddAnException", NUM), null, NUM, false);
                 }
             } else if (itemViewType == 3) {
                 HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
@@ -192,7 +192,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                     headerCell.setText(LocaleController.formatPluralString("BlockedUsersCount", PrivacyUsersActivity.this.getMessagesController().blockedUsers.size()));
                     return;
                 }
-                headerCell.setText(LocaleController.getString("NotificationsExceptions", NUM));
+                headerCell.setText(LocaleController.getString("PrivacyExceptions", NUM));
             }
         }
 

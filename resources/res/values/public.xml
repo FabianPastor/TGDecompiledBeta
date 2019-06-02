@@ -3778,6 +3778,7 @@
     <public type="string" name="PopupNotification" id="NUM" />
     <public type="string" name="PreviewFeedback" id="NUM" />
     <public type="string" name="PriorityInfo" id="NUM" />
+    <public type="string" name="PrivacyAddAnException" id="NUM" />
     <public type="string" name="PrivacyAdvanced" id="NUM" />
     <public type="string" name="PrivacyBots" id="NUM" />
     <public type="string" name="PrivacyBotsInfo" id="NUM" />
@@ -3785,6 +3786,7 @@
     <public type="string" name="PrivacyClearPayment" id="NUM" />
     <public type="string" name="PrivacyClearShipping" id="NUM" />
     <public type="string" name="PrivacyDeleteCloudDrafts" id="NUM" />
+    <public type="string" name="PrivacyExceptions" id="NUM" />
     <public type="string" name="PrivacyFloodControlError" id="NUM" />
     <public type="string" name="PrivacyForwards" id="NUM" />
     <public type="string" name="PrivacyForwardsContacts" id="NUM" />

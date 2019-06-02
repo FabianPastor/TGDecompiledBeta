@@ -833,7 +833,7 @@
     <string name="DeleteAccountTitle">Account self-destructs</string>
     <string name="DeleteAll">Delete All</string>
     <string name="DeleteAllFrom">Delete all from %1$s</string>
-    <string name="DeleteAllMessagesAlert">Warning! This will delete all messages in this chat for both participants.</string>
+    <string name="DeleteAllMessagesAlert">Warning! This will **delete all messages** in this chat for **both** participants.</string>
     <string name="DeleteAndExit">Delete and leave group</string>
     <string name="DeleteAndExitButton">Delete and Leave Group</string>
     <string name="DeleteAndStop">Delete and stop</string>
@@ -2074,6 +2074,7 @@
     <string name="PopupNotification">Popup Notifications</string>
     <string name="PreviewFeedback">Leave feedback about this preview</string>
     <string name="PriorityInfo">Higher priority notifications will work even if your phone is in Do Not Disturb mode.</string>
+    <string name="PrivacyAddAnException">Add Users or Groups</string>
     <string name="PrivacyAdvanced">Advanced</string>
     <string name="PrivacyBots">Bots and websites</string>
     <string name="PrivacyBotsInfo">Websites where you used Telegram to log in.</string>
@@ -2081,6 +2082,7 @@
     <string name="PrivacyClearPayment">Payment info</string>
     <string name="PrivacyClearShipping">Shipping info</string>
     <string name="PrivacyDeleteCloudDrafts">Delete All Cloud Drafts</string>
+    <string name="PrivacyExceptions">Exceptions</string>
     <string name="PrivacyFloodControlError">Sorry, too many requests. Unable to change privacy settings now, please wait.</string>
     <string name="PrivacyForwards">Forwarded Messages</string>
     <string name="PrivacyForwardsContacts">Link if allowed by the settings below</string>

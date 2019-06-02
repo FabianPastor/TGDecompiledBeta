@@ -465,7 +465,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
                     dp2 = AndroidUtilities.dp(24.0f);
                 } else {
                     dp = (AndroidUtilities.dp(96.0f) + (Math.max(3, StickersAlert.this.stickerSet != null ? (int) Math.ceil((double) (((float) StickersAlert.this.stickerSet.documents.size()) / 5.0f)) : 0) * AndroidUtilities.dp(82.0f))) + StickersAlert.this.backgroundPaddingTop;
-                    dp2 = AndroidUtilities.dp(16.0f);
+                    dp2 = AndroidUtilities.statusBarHeight;
                 }
                 dp += dp2;
                 double d = (double) dp;
@@ -1203,7 +1203,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r0 = r10.stickerSet;
         r1 = r0.set;
         r1 = r1.masks;
-        r6 = NUM; // 0x7f0d086f float:1.8746494E38 double:1.053130844E-314;
+        r6 = NUM; // 0x7f0d086a float:1.8746484E38 double:1.053130842E-314;
         r7 = "RemoveStickersCount";
         if (r1 == 0) goto L_0x00d0;
     L_0x00b9:
@@ -1275,7 +1275,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r0.notifyDataSetChanged();
         goto L_0x016f;
     L_0x0156:
-        r0 = NUM; // 0x7f0d02d1 float:1.8743577E38 double:1.053130134E-314;
+        r0 = NUM; // 0x7f0d02cd float:1.874357E38 double:1.053130132E-314;
         r2 = "Close";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r0 = r0.toUpperCase();

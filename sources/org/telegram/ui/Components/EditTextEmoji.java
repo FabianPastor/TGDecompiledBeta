@@ -82,6 +82,10 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenterDele
                     EditTextEmoji.this.showPopup(AndroidUtilities.usingHardwareInput ? 0 : 2);
                     EditTextEmoji.this.openKeyboardInternal();
                 }
+                if (motionEvent.getAction() == 0 && !AndroidUtilities.showKeyboard(this)) {
+                    clearFocus();
+                    requestFocus();
+                }
                 try {
                     return super.onTouchEvent(motionEvent);
                 } catch (Exception e) {

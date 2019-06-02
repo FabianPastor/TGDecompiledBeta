@@ -8,6 +8,7 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.zip.GZIPInputStream;
+import java.util.zip.ZipException;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.TLObject;
@@ -1997,6 +1998,8 @@ public class FileLoadOperation {
                             FileLoader.copyFile(gZIPInputStream, this.cacheFileFinal);
                             gZIPInputStream.close();
                             this.cacheFileTemp.delete();
+                        } catch (ZipException unused) {
+                            this.ungzip = false;
                         } catch (Throwable th) {
                             FileLog.e(th);
                             stringBuilder = new StringBuilder();
@@ -2006,7 +2009,8 @@ public class FileLoadOperation {
                             stringBuilder.append(this.cacheFileFinal);
                             FileLog.e(stringBuilder.toString());
                         }
-                    } else if (!file.renameTo(this.cacheFileFinal)) {
+                    }
+                    if (!(this.ungzip || this.cacheFileTemp.renameTo(this.cacheFileFinal))) {
                         if (BuildVars.LOGS_ENABLED) {
                             stringBuilder = new StringBuilder();
                             stringBuilder.append("unable to rename temp = ");
