@@ -1561,6 +1561,9 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
 
     private boolean onDonePressed(boolean z) {
         int i = 0;
+        if (this.selectedContacts.size() == 0) {
+            return false;
+        }
         ArrayList arrayList;
         if (z && this.addToGroup) {
             if (getParentActivity() == null) {

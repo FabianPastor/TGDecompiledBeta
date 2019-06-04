@@ -923,19 +923,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             }
 
             public boolean onTouchEvent(MotionEvent motionEvent) {
-                if (motionEvent.getAction() == 0) {
-                    if (ChatActivityEnterView.this.isPopupShowing()) {
-                        if (ChatActivityEnterView.this.searchingType != 0) {
-                            ChatActivityEnterView.this.searchingType = 0;
-                            ChatActivityEnterView.this.emojiView.closeSearch(false);
-                        }
-                        ChatActivityEnterView.this.showPopup(AndroidUtilities.usingHardwareInput ? 0 : 2, 0);
-                        ChatActivityEnterView.this.openKeyboardInternal();
+                if (ChatActivityEnterView.this.isPopupShowing() && motionEvent.getAction() == 0) {
+                    if (ChatActivityEnterView.this.searchingType != 0) {
+                        ChatActivityEnterView.this.searchingType = 0;
+                        ChatActivityEnterView.this.emojiView.closeSearch(false);
                     }
-                    if (!AndroidUtilities.showKeyboard(this)) {
-                        clearFocus();
-                        requestFocus();
-                    }
+                    ChatActivityEnterView.this.showPopup(AndroidUtilities.usingHardwareInput ? 0 : 2, 0);
+                    ChatActivityEnterView.this.openKeyboardInternal();
                 }
                 try {
                     return super.onTouchEvent(motionEvent);

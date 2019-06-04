@@ -118,7 +118,6 @@ public class DrawerLayoutAdapter extends SelectionAdapter {
         int itemViewType = viewHolder.getItemViewType();
         if (itemViewType == 0) {
             ((DrawerProfileCell) viewHolder.itemView).setUser(MessagesController.getInstance(UserConfig.selectedAccount).getUser(Integer.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId())), this.accountsShowed);
-            viewHolder.itemView.setBackgroundColor(Theme.getColor("avatar_backgroundActionBarBlue"));
         } else if (itemViewType == 3) {
             i -= 2;
             if (this.accountsShowed) {

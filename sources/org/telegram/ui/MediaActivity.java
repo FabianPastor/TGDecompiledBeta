@@ -769,7 +769,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                     MediaActivity.this.audioCache.add((SharedAudioCell) graySectionCell);
                 }
             } else {
-                graySectionCell = new LoadingCell(this.mContext);
+                graySectionCell = new LoadingCell(this.mContext, AndroidUtilities.dp(32.0f), AndroidUtilities.dp(54.0f));
             }
             return new Holder(graySectionCell);
         }
@@ -880,7 +880,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             if (i == 0) {
                 graySectionCell = new GraySectionCell(this.mContext);
             } else if (i != 1) {
-                graySectionCell = new LoadingCell(this.mContext);
+                graySectionCell = new LoadingCell(this.mContext, AndroidUtilities.dp(32.0f), AndroidUtilities.dp(54.0f));
             } else {
                 graySectionCell = new SharedLinkCell(this.mContext);
                 graySectionCell.setDelegate(MediaActivity.this.sharedLinkCellDelegate);
@@ -976,7 +976,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             if (i == 0) {
                 sharedMediaSectionCell = new SharedMediaSectionCell(this.mContext);
             } else if (i != 1) {
-                sharedMediaSectionCell = new LoadingCell(this.mContext);
+                sharedMediaSectionCell = new LoadingCell(this.mContext, AndroidUtilities.dp(32.0f), AndroidUtilities.dp(74.0f));
             } else {
                 if (MediaActivity.this.cellCache.isEmpty()) {
                     sharedMediaSectionCell = new SharedPhotoVideoCell(this.mContext);

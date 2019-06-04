@@ -1890,8 +1890,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatUsersActivity.createView(android.content.Context):android.view.View");
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x04b7  */
-    /* JADX WARNING: Removed duplicated region for block: B:253:0x04b6 A:{RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:258:0x04bd  */
+    /* JADX WARNING: Removed duplicated region for block: B:257:0x04bc A:{RETURN} */
     public /* synthetic */ void lambda$createView$4$ChatUsersActivity(android.view.View r20, int r21) {
         /*
         r19 = this;
@@ -2474,10 +2474,10 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r12 = r9;
         r6 = 0;
     L_0x038a:
-        if (r10 == 0) goto L_0x04c9;
+        if (r10 == 0) goto L_0x04cf;
     L_0x038c:
         r0 = r8.selectType;
-        if (r0 == 0) goto L_0x0425;
+        if (r0 == 0) goto L_0x042b;
     L_0x0390:
         if (r0 == r2) goto L_0x039a;
     L_0x0392:
@@ -2486,7 +2486,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         goto L_0x039a;
     L_0x0395:
         r8.removeUser(r10);
-        goto L_0x04c9;
+        goto L_0x04cf;
     L_0x039a:
         r0 = r8.selectType;
         if (r0 == r4) goto L_0x040f;
@@ -2536,7 +2536,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r10.setNegativeButton(r0, r7);
         r0 = r10.create();
         r8.showDialog(r0);
-        goto L_0x04c9;
+        goto L_0x04cf;
     L_0x040f:
         r0 = r8.selectType;
         if (r0 != r4) goto L_0x0415;
@@ -2546,7 +2546,14 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     L_0x0415:
         r7 = 1;
     L_0x0416:
+        r0 = r8.selectType;
+        if (r0 != r4) goto L_0x041c;
+    L_0x041a:
+        r11 = 1;
+        goto L_0x041d;
+    L_0x041c:
         r11 = 0;
+    L_0x041d:
         r0 = r19;
         r1 = r10;
         r2 = r15;
@@ -2556,60 +2563,60 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r6 = r7;
         r7 = r11;
         r0.openRightsEdit(r1, r2, r3, r4, r5, r6, r7);
-        goto L_0x04c9;
-    L_0x0425:
+        goto L_0x04cf;
+    L_0x042b:
         r0 = r8.type;
-        if (r0 != r4) goto L_0x0441;
-    L_0x0429:
+        if (r0 != r4) goto L_0x0447;
+    L_0x042f:
         r0 = r8.currentAccount;
         r0 = org.telegram.messenger.UserConfig.getInstance(r0);
         r0 = r0.getClientUserId();
-        if (r10 == r0) goto L_0x043f;
-    L_0x0435:
+        if (r10 == r0) goto L_0x0445;
+    L_0x043b:
         r0 = r8.currentChat;
         r0 = r0.creator;
-        if (r0 != 0) goto L_0x043d;
-    L_0x043b:
-        if (r6 == 0) goto L_0x043f;
-    L_0x043d:
-        r0 = 1;
-        goto L_0x044f;
-    L_0x043f:
-        r0 = 0;
-        goto L_0x044f;
+        if (r0 != 0) goto L_0x0443;
     L_0x0441:
-        if (r0 == 0) goto L_0x0449;
+        if (r6 == 0) goto L_0x0445;
     L_0x0443:
-        if (r0 != r2) goto L_0x0446;
+        r0 = 1;
+        goto L_0x0455;
     L_0x0445:
-        goto L_0x0449;
-    L_0x0446:
-        r16 = 0;
-        goto L_0x0451;
+        r0 = 0;
+        goto L_0x0455;
+    L_0x0447:
+        if (r0 == 0) goto L_0x044f;
     L_0x0449:
+        if (r0 != r2) goto L_0x044c;
+    L_0x044b:
+        goto L_0x044f;
+    L_0x044c:
+        r16 = 0;
+        goto L_0x0457;
+    L_0x044f:
         r0 = r8.currentChat;
         r0 = org.telegram.messenger.ChatObject.canBlockUsers(r0);
-    L_0x044f:
-        r16 = r0;
-    L_0x0451:
-        r0 = r8.type;
-        if (r0 == 0) goto L_0x04ac;
     L_0x0455:
-        if (r0 == r4) goto L_0x045b;
+        r16 = r0;
     L_0x0457:
-        r0 = r8.isChannel;
-        if (r0 != 0) goto L_0x04ac;
-    L_0x045b:
         r0 = r8.type;
-        if (r0 != r5) goto L_0x0464;
-    L_0x045f:
+        if (r0 == 0) goto L_0x04b2;
+    L_0x045b:
+        if (r0 == r4) goto L_0x0461;
+    L_0x045d:
+        r0 = r8.isChannel;
+        if (r0 != 0) goto L_0x04b2;
+    L_0x0461:
+        r0 = r8.type;
+        if (r0 != r5) goto L_0x046a;
+    L_0x0465:
         r0 = r8.selectType;
-        if (r0 != 0) goto L_0x0464;
-    L_0x0463:
-        goto L_0x04ac;
-    L_0x0464:
-        if (r9 != 0) goto L_0x0485;
-    L_0x0466:
+        if (r0 != 0) goto L_0x046a;
+    L_0x0469:
+        goto L_0x04b2;
+    L_0x046a:
+        if (r9 != 0) goto L_0x048b;
+    L_0x046c:
         r0 = new org.telegram.tgnet.TLRPC$TL_chatBannedRights;
         r0.<init>();
         r0.view_messages = r4;
@@ -2625,28 +2632,28 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r0.invite_users = r4;
         r0.change_info = r4;
         r14 = r0;
-        goto L_0x0486;
-    L_0x0485:
+        goto L_0x048c;
+    L_0x048b:
         r14 = r9;
-    L_0x0486:
+    L_0x048c:
         r0 = new org.telegram.ui.ChatRightsEditActivity;
         r11 = r8.chatId;
         r13 = r8.defaultBannedRights;
         r1 = r8.type;
-        if (r1 != r4) goto L_0x0492;
-    L_0x0490:
+        if (r1 != r4) goto L_0x0498;
+    L_0x0496:
         r1 = 0;
-        goto L_0x0493;
-    L_0x0492:
-        r1 = 1;
-    L_0x0493:
-        if (r15 != 0) goto L_0x0498;
-    L_0x0495:
-        r17 = 1;
-        goto L_0x049a;
+        goto L_0x0499;
     L_0x0498:
+        r1 = 1;
+    L_0x0499:
+        if (r15 != 0) goto L_0x049e;
+    L_0x049b:
+        r17 = 1;
+        goto L_0x04a0;
+    L_0x049e:
         r17 = 0;
-    L_0x049a:
+    L_0x04a0:
         r9 = r0;
         r2 = r15;
         r15 = r1;
@@ -2655,14 +2662,14 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r1.<init>(r8, r2);
         r0.setDelegate(r1);
         r8.presentFragment(r0);
-        goto L_0x04c9;
-    L_0x04ac:
+        goto L_0x04cf;
+    L_0x04b2:
         r0 = r19.getUserConfig();
         r0 = r0.getClientUserId();
-        if (r10 != r0) goto L_0x04b7;
-    L_0x04b6:
+        if (r10 != r0) goto L_0x04bd;
+    L_0x04bc:
         return;
-    L_0x04b7:
+    L_0x04bd:
         r0 = new android.os.Bundle;
         r0.<init>();
         r1 = "user_id";
@@ -2670,7 +2677,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         r1 = new org.telegram.ui.ProfileActivity;
         r1.<init>(r0);
         r8.presentFragment(r1);
-    L_0x04c9:
+    L_0x04cf:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatUsersActivity.lambda$createView$4$ChatUsersActivity(android.view.View, int):void");

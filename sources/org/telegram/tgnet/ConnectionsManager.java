@@ -20,6 +20,7 @@ import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -69,6 +70,7 @@ public class ConnectionsManager {
     private static ConcurrentHashMap<String, ResolvedDomain> dnsCache = new ConcurrentHashMap();
     private static int lastClassGuid = 1;
     private static long lastDnsRequestTime;
+    private static HashMap<String, ResolveHostByNameTask> resolvingHostnameTasks = new HashMap();
     private boolean appPaused = true;
     private int appResumeCount;
     private int connectionState;
@@ -592,12 +594,17 @@ public class ConnectionsManager {
     }
 
     private static class ResolveHostByNameTask extends AsyncTask<Void, Void, String> {
-        private long currentAddress;
+        private ArrayList<Long> addresses = new ArrayList();
         private String currentHostName;
 
-        public ResolveHostByNameTask(long j, String str) {
-            this.currentAddress = j;
+        public ResolveHostByNameTask(String str) {
             this.currentHostName = str;
+        }
+
+        public void addAddress(long j) {
+            if (!this.addresses.contains(Long.valueOf(j))) {
+                this.addresses.add(Long.valueOf(j));
+            }
         }
 
         /* Access modifiers changed, original: protected|varargs */
@@ -789,7 +796,11 @@ public class ConnectionsManager {
 
         /* Access modifiers changed, original: protected */
         public void onPostExecute(String str) {
-            ConnectionsManager.native_onHostNameResolved(this.currentHostName, this.currentAddress, str);
+            int size = this.addresses.size();
+            for (int i = 0; i < size; i++) {
+                ConnectionsManager.native_onHostNameResolved(this.currentHostName, ((Long) this.addresses.get(i)).longValue(), str);
+            }
+            ConnectionsManager.resolvingHostnameTasks.remove(this.currentHostName);
         }
     }
 
@@ -1304,7 +1315,13 @@ public class ConnectionsManager {
     public static void getHostByName(String str, long j) {
         ResolvedDomain resolvedDomain = (ResolvedDomain) dnsCache.get(str);
         if (resolvedDomain == null || SystemClock.elapsedRealtime() - resolvedDomain.ttl >= 300000) {
-            new ResolveHostByNameTask(j, str).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+            ResolveHostByNameTask resolveHostByNameTask = (ResolveHostByNameTask) resolvingHostnameTasks.get(str);
+            if (resolveHostByNameTask == null) {
+                resolveHostByNameTask = new ResolveHostByNameTask(str);
+                resolveHostByNameTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
+                resolvingHostnameTasks.put(str, resolveHostByNameTask);
+            }
+            resolveHostByNameTask.addAddress(j);
             return;
         }
         native_onHostNameResolved(str, j, resolvedDomain.getAddress());

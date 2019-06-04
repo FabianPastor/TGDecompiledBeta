@@ -607,6 +607,32 @@ public class DownloadController implements NotificationCenterDelegate {
         return canDownloadMedia(messageObject.messageOwner) == 1;
     }
 
+    public boolean canDownloadMedia(int i, int i2) {
+        Preset currentWiFiPreset;
+        boolean z = false;
+        if (ApplicationLoader.isConnectedToWiFi()) {
+            if (!this.wifiPreset.enabled) {
+                return false;
+            }
+            currentWiFiPreset = getCurrentWiFiPreset();
+        } else if (ApplicationLoader.isRoaming()) {
+            if (!this.roamingPreset.enabled) {
+                return false;
+            }
+            currentWiFiPreset = getCurrentRoamingPreset();
+        } else if (!this.mobilePreset.enabled) {
+            return false;
+        } else {
+            currentWiFiPreset = getCurrentMobilePreset();
+        }
+        int i3 = currentWiFiPreset.mask[1];
+        int i4 = currentWiFiPreset.sizes[typeToIndex(i)];
+        if ((i == 1 || (i2 != 0 && i2 <= i4)) && (i == 2 || (i & i3) != 0)) {
+            z = true;
+        }
+        return z;
+    }
+
     /* JADX WARNING: Removed duplicated region for block: B:52:0x00b2  */
     /* JADX WARNING: Removed duplicated region for block: B:48:0x00a6  */
     /* JADX WARNING: Removed duplicated region for block: B:48:0x00a6  */
@@ -826,7 +852,6 @@ public class DownloadController implements NotificationCenterDelegate {
         }
     }
 
-    /* Access modifiers changed, original: protected */
     public int getCurrentDownloadMask() {
         int i = 0;
         int i2;

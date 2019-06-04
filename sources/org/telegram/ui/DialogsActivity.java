@@ -3877,7 +3877,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
         arrayList.add(new ThemeDescription(this.sideMenu, 0, new Class[]{DrawerProfileCell.class}, null, null, null, "chats_menuCloudBackgroundCats"));
         arrayList.add(new ThemeDescription(this.sideMenu, 0, new Class[]{DrawerProfileCell.class}, null, null, null, "chat_serviceBackground"));
         arrayList.add(new ThemeDescription(this.sideMenu, 0, new Class[]{DrawerProfileCell.class}, null, null, null, "chats_menuTopShadow"));
-        arrayList.add(new ThemeDescription(this.sideMenu, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{DrawerProfileCell.class}, null, null, null, "avatar_backgroundActionBarBlue"));
+        arrayList.add(new ThemeDescription(this.sideMenu, 0, new Class[]{DrawerProfileCell.class}, null, null, null, "chats_menuTopShadowCats"));
+        -__lambda_dialogsactivity_kk8tcost0vvk5ix4tzpsefego6c2 = -__lambda_dialogsactivity_kk8tcost0vvk5ix4tzpsefego6c;
+        arrayList.add(new ThemeDescription(this.sideMenu, ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{DrawerProfileCell.class}, null, null, -__lambda_dialogsactivity_kk8tcost0vvk5ix4tzpsefego6c2, "chats_menuTopBackgroundCats"));
+        arrayList.add(new ThemeDescription(this.sideMenu, ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{DrawerProfileCell.class}, null, null, -__lambda_dialogsactivity_kk8tcost0vvk5ix4tzpsefego6c2, "chats_menuTopBackground"));
         View view = this.sideMenu;
         int i = ThemeDescription.FLAG_IMAGECOLOR;
         Class[] clsArr = new Class[]{DrawerActionCell.class};
@@ -4051,13 +4054,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
 
     public /* synthetic */ void lambda$getThemeDescriptions$19$DialogsActivity() {
         int i;
-        View childAt;
         RecyclerListView recyclerListView = this.listView;
-        int i2 = 0;
         if (recyclerListView != null) {
             int childCount = recyclerListView.getChildCount();
             for (i = 0; i < childCount; i++) {
-                childAt = this.listView.getChildAt(i);
+                View childAt = this.listView.getChildAt(i);
                 if (childAt instanceof ProfileSearchCell) {
                     ((ProfileSearchCell) childAt).update(0);
                 } else if (childAt instanceof DialogCell) {
@@ -4070,13 +4071,19 @@ public class DialogsActivity extends BaseFragment implements NotificationCenterD
             recyclerListView = dialogsSearchAdapter.getInnerListView();
             if (recyclerListView != null) {
                 i = recyclerListView.getChildCount();
-                while (i2 < i) {
-                    childAt = recyclerListView.getChildAt(i2);
-                    if (childAt instanceof HintDialogCell) {
-                        ((HintDialogCell) childAt).update();
+                for (int i2 = 0; i2 < i; i2++) {
+                    View childAt2 = recyclerListView.getChildAt(i2);
+                    if (childAt2 instanceof HintDialogCell) {
+                        ((HintDialogCell) childAt2).update();
                     }
-                    i2++;
                 }
+            }
+        }
+        RecyclerView recyclerView = this.sideMenu;
+        if (recyclerView != null) {
+            View childAt3 = recyclerView.getChildAt(0);
+            if (childAt3 instanceof DrawerProfileCell) {
+                ((DrawerProfileCell) childAt3).applyBackground();
             }
         }
     }

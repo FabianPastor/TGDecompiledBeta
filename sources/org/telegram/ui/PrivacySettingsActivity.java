@@ -150,9 +150,11 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                     str = "BlockedUsers";
                     if (PrivacySettingsActivity.this.getMessagesController().loadingBlockedUsers) {
                         textSettingsCell.setText(LocaleController.getString(str, NUM), true);
-                        return;
+                    } else if (PrivacySettingsActivity.this.getMessagesController().blockedUsers.size() == 0) {
+                        textSettingsCell.setTextAndValue(LocaleController.getString(str, NUM), LocaleController.getString("EmptyExceptions", NUM), true);
+                    } else {
+                        textSettingsCell.setTextAndValue(LocaleController.getString(str, NUM), String.format("%d", new Object[]{Integer.valueOf(PrivacySettingsActivity.this.getMessagesController().blockedUsers.size())}), true);
                     }
-                    textSettingsCell.setTextAndValue(LocaleController.getString(str, NUM), String.format("%d", new Object[]{Integer.valueOf(PrivacySettingsActivity.this.getMessagesController().blockedUsers.size())}), true);
                 } else if (i == PrivacySettingsActivity.this.sessionsRow) {
                     textSettingsCell.setText(LocaleController.getString("SessionsTitle", NUM), false);
                 } else if (i == PrivacySettingsActivity.this.webSessionsRow) {

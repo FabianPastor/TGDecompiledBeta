@@ -36,6 +36,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.CountDownLatch;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -139,10 +141,10 @@ public class NotificationsController {
         }
     }
 
-    static /* synthetic */ void lambda$updateServerNotificationsSettings$34(TLObject tLObject, TL_error tL_error) {
+    static /* synthetic */ void lambda$updateServerNotificationsSettings$36(TLObject tLObject, TL_error tL_error) {
     }
 
-    static /* synthetic */ void lambda$updateServerNotificationsSettings$35(TLObject tLObject, TL_error tL_error) {
+    static /* synthetic */ void lambda$updateServerNotificationsSettings$37(TLObject tLObject, TL_error tL_error) {
     }
 
     public String getGlobalNotificationsKey(int i) {
@@ -6143,6 +6145,61 @@ public class NotificationsController {
     }
 
     @TargetApi(26)
+    public void deleteNotificationChannel(long j) {
+        notificationsQueue.postRunnable(new -$$Lambda$NotificationsController$eYqBa_GxEYzKlHSSB2VWl64XX2Q(this, j));
+    }
+
+    public /* synthetic */ void lambda$deleteNotificationChannel$29$NotificationsController(long j) {
+        if (VERSION.SDK_INT >= 26) {
+            try {
+                SharedPreferences notificationsSettings = MessagesController.getNotificationsSettings(this.currentAccount);
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("org.telegram.key");
+                stringBuilder.append(j);
+                String stringBuilder2 = stringBuilder.toString();
+                String string = notificationsSettings.getString(stringBuilder2, null);
+                if (string != null) {
+                    Editor remove = notificationsSettings.edit().remove(stringBuilder2);
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append(stringBuilder2);
+                    stringBuilder.append("_s");
+                    remove.remove(stringBuilder.toString()).commit();
+                    systemNotificationManager.deleteNotificationChannel(string);
+                }
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        }
+    }
+
+    @TargetApi(26)
+    public void deleteAllNotificationChannels() {
+        notificationsQueue.postRunnable(new -$$Lambda$NotificationsController$iv6fUe9w-2CLASSNAMEmbdiQOLFrNptrg(this));
+    }
+
+    public /* synthetic */ void lambda$deleteAllNotificationChannels$30$NotificationsController() {
+        if (VERSION.SDK_INT >= 26) {
+            try {
+                SharedPreferences notificationsSettings = MessagesController.getNotificationsSettings(this.currentAccount);
+                Map all = notificationsSettings.getAll();
+                Editor edit = notificationsSettings.edit();
+                for (Entry entry : all.entrySet()) {
+                    String str = (String) entry.getKey();
+                    if (str.startsWith("org.telegram.key")) {
+                        if (!str.endsWith("_s")) {
+                            systemNotificationManager.deleteNotificationChannel((String) entry.getValue());
+                        }
+                        edit.remove(str);
+                    }
+                }
+                edit.commit();
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        }
+    }
+
+    @TargetApi(26)
     private String validateChannelId(long j, String str, long[] jArr, int i, Uri uri, int i2, long[] jArr2, Uri uri2, int i3) {
         String str2;
         long j2 = j;
@@ -6220,184 +6277,184 @@ public class NotificationsController {
         return string;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:427:0x091e A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:426:0x0914 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:430:0x0925 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:483:0x0aba A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:482:0x0aa1 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:487:0x0af1 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:486:0x0ad8 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:391:0x0856 A:{SKIP, Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:451:0x0996 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:482:0x0aa1 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:483:0x0aba A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:486:0x0ad8 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:487:0x0af1 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:391:0x0856 A:{SKIP, Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:451:0x0996 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:483:0x0aba A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:482:0x0aa1 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:487:0x0af1 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:486:0x0ad8 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:391:0x0856 A:{SKIP, Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:451:0x0996 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:482:0x0aa1 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:483:0x0aba A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:486:0x0ad8 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:487:0x0af1 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:391:0x0856 A:{SKIP, Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:451:0x0996 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:483:0x0aba A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:482:0x0aa1 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:487:0x0af1 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:486:0x0ad8 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:391:0x0856 A:{SKIP, Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:451:0x0996 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:482:0x0aa1 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:483:0x0aba A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:486:0x0ad8 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:487:0x0af1 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:317:0x06c6 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:305:0x064d A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:356:0x07f9  */
-    /* JADX WARNING: Removed duplicated region for block: B:342:0x07af A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:305:0x064d A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:317:0x06c6 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:342:0x07af A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:356:0x07f9  */
-    /* JADX WARNING: Removed duplicated region for block: B:360:0x07fe  */
-    /* JADX WARNING: Removed duplicated region for block: B:283:0x056d A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:278:0x0535 A:{SYNTHETIC, Splitter:B:278:0x0535} */
-    /* JADX WARNING: Removed duplicated region for block: B:286:0x0579 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:294:0x05a7 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:293:0x058f A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:264:0x0502 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:263:0x04ff A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:273:0x051d A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:272:0x051c A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:256:0x04ec A:{SKIP, Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:263:0x04ff A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:264:0x0502 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:272:0x051c A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:273:0x051d A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:198:0x03cc A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:197:0x03c7 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:247:0x04ae A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:202:0x03fe  */
-    /* JADX WARNING: Removed duplicated region for block: B:256:0x04ec A:{SKIP, Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:264:0x0502 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:263:0x04ff A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:273:0x051d A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:272:0x051c A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:194:0x03c0 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:156:0x0345 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:197:0x03c7 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:198:0x03cc A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:202:0x03fe  */
-    /* JADX WARNING: Removed duplicated region for block: B:247:0x04ae A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:256:0x04ec A:{SKIP, Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:263:0x04ff A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:264:0x0502 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:272:0x051c A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:273:0x051d A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:108:0x02eb A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:103:0x02b4 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:112:0x02f1 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:111:0x02f0 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:116:0x02fa A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:115:0x02f6 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:140:0x0323  */
-    /* JADX WARNING: Removed duplicated region for block: B:131:0x0313  */
-    /* JADX WARNING: Removed duplicated region for block: B:156:0x0345 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:194:0x03c0 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:198:0x03cc A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:197:0x03c7 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:247:0x04ae A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:202:0x03fe  */
-    /* JADX WARNING: Removed duplicated region for block: B:256:0x04ec A:{SKIP, Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:264:0x0502 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:263:0x04ff A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:273:0x051d A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:272:0x051c A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x0213  */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x01c3 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:92:0x027a A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x021c  */
-    /* JADX WARNING: Removed duplicated region for block: B:103:0x02b4 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:108:0x02eb A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:111:0x02f0 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:112:0x02f1 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:115:0x02f6 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:116:0x02fa A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:125:0x030a A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:131:0x0313  */
-    /* JADX WARNING: Removed duplicated region for block: B:140:0x0323  */
-    /* JADX WARNING: Removed duplicated region for block: B:194:0x03c0 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:156:0x0345 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:197:0x03c7 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:198:0x03cc A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:202:0x03fe  */
-    /* JADX WARNING: Removed duplicated region for block: B:247:0x04ae A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:256:0x04ec A:{SKIP, Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:263:0x04ff A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:264:0x0502 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:272:0x051c A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:273:0x051d A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x01c3 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x0213  */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x021c  */
-    /* JADX WARNING: Removed duplicated region for block: B:92:0x027a A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:108:0x02eb A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:103:0x02b4 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:112:0x02f1 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:111:0x02f0 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:116:0x02fa A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:115:0x02f6 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:125:0x030a A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:140:0x0323  */
-    /* JADX WARNING: Removed duplicated region for block: B:131:0x0313  */
-    /* JADX WARNING: Removed duplicated region for block: B:156:0x0345 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:194:0x03c0 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:198:0x03cc A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:197:0x03c7 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:247:0x04ae A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:202:0x03fe  */
-    /* JADX WARNING: Removed duplicated region for block: B:256:0x04ec A:{SKIP, Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:264:0x0502 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:263:0x04ff A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:273:0x051d A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:272:0x051c A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:56:0x0133 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:55:0x0106 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:58:0x0138 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x0213  */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x01c3 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:92:0x027a A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x021c  */
-    /* JADX WARNING: Removed duplicated region for block: B:103:0x02b4 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:108:0x02eb A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:111:0x02f0 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:112:0x02f1 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:115:0x02f6 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:116:0x02fa A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:125:0x030a A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:131:0x0313  */
-    /* JADX WARNING: Removed duplicated region for block: B:140:0x0323  */
-    /* JADX WARNING: Removed duplicated region for block: B:194:0x03c0 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:156:0x0345 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:197:0x03c7 A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:198:0x03cc A:{Catch:{ Exception -> 0x02e6 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:202:0x03fe  */
-    /* JADX WARNING: Removed duplicated region for block: B:247:0x04ae A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:256:0x04ec A:{SKIP, Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:263:0x04ff A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:264:0x0502 A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:272:0x051c A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Removed duplicated region for block: B:273:0x051d A:{Catch:{ Exception -> 0x0afd }} */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:421:0x0900 */
+    /* JADX WARNING: Removed duplicated region for block: B:427:0x0922 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:426:0x0918 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:430:0x0929 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:483:0x0abe A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:482:0x0aa5 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:487:0x0af5 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:486:0x0adc A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:391:0x085a A:{SKIP, Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:451:0x099a A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:482:0x0aa5 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:483:0x0abe A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:486:0x0adc A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:487:0x0af5 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:391:0x085a A:{SKIP, Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:451:0x099a A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:483:0x0abe A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:482:0x0aa5 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:487:0x0af5 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:486:0x0adc A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:391:0x085a A:{SKIP, Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:451:0x099a A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:482:0x0aa5 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:483:0x0abe A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:486:0x0adc A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:487:0x0af5 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:391:0x085a A:{SKIP, Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:451:0x099a A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:483:0x0abe A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:482:0x0aa5 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:487:0x0af5 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:486:0x0adc A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:391:0x085a A:{SKIP, Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:451:0x099a A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:482:0x0aa5 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:483:0x0abe A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:486:0x0adc A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:487:0x0af5 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:317:0x06ca A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:305:0x0651 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:356:0x07fd  */
+    /* JADX WARNING: Removed duplicated region for block: B:342:0x07b3 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:305:0x0651 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:317:0x06ca A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:342:0x07b3 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:356:0x07fd  */
+    /* JADX WARNING: Removed duplicated region for block: B:360:0x0802  */
+    /* JADX WARNING: Removed duplicated region for block: B:283:0x0571 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:278:0x0539 A:{SYNTHETIC, Splitter:B:278:0x0539} */
+    /* JADX WARNING: Removed duplicated region for block: B:286:0x057d A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:294:0x05ab A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:293:0x0593 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:264:0x0506 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:263:0x0503 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:273:0x0521 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:272:0x0520 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:256:0x04f0 A:{SKIP, Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:263:0x0503 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:264:0x0506 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:272:0x0520 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:273:0x0521 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:198:0x03d0 A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:197:0x03cb A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:247:0x04b2 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:202:0x0402  */
+    /* JADX WARNING: Removed duplicated region for block: B:256:0x04f0 A:{SKIP, Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:264:0x0506 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:263:0x0503 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:273:0x0521 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:272:0x0520 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:194:0x03c4 A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:156:0x0349 A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:197:0x03cb A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:198:0x03d0 A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:202:0x0402  */
+    /* JADX WARNING: Removed duplicated region for block: B:247:0x04b2 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:256:0x04f0 A:{SKIP, Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:263:0x0503 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:264:0x0506 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:272:0x0520 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:273:0x0521 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:108:0x02ef A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:103:0x02b8 A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x02f5 A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:111:0x02f4 A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:116:0x02fe A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:115:0x02fa A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:140:0x0327  */
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x0317  */
+    /* JADX WARNING: Removed duplicated region for block: B:156:0x0349 A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:194:0x03c4 A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:198:0x03d0 A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:197:0x03cb A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:247:0x04b2 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:202:0x0402  */
+    /* JADX WARNING: Removed duplicated region for block: B:256:0x04f0 A:{SKIP, Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:264:0x0506 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:263:0x0503 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:273:0x0521 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:272:0x0520 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x0214  */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x01c3 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:92:0x027d A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x021d  */
+    /* JADX WARNING: Removed duplicated region for block: B:103:0x02b8 A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:108:0x02ef A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:111:0x02f4 A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x02f5 A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:115:0x02fa A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:116:0x02fe A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:125:0x030e A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x0317  */
+    /* JADX WARNING: Removed duplicated region for block: B:140:0x0327  */
+    /* JADX WARNING: Removed duplicated region for block: B:194:0x03c4 A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:156:0x0349 A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:197:0x03cb A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:198:0x03d0 A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:202:0x0402  */
+    /* JADX WARNING: Removed duplicated region for block: B:247:0x04b2 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:256:0x04f0 A:{SKIP, Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:263:0x0503 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:264:0x0506 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:272:0x0520 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:273:0x0521 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x01c3 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x0214  */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x021d  */
+    /* JADX WARNING: Removed duplicated region for block: B:92:0x027d A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:108:0x02ef A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:103:0x02b8 A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x02f5 A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:111:0x02f4 A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:116:0x02fe A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:115:0x02fa A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:125:0x030e A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:140:0x0327  */
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x0317  */
+    /* JADX WARNING: Removed duplicated region for block: B:156:0x0349 A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:194:0x03c4 A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:198:0x03d0 A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:197:0x03cb A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:247:0x04b2 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:202:0x0402  */
+    /* JADX WARNING: Removed duplicated region for block: B:256:0x04f0 A:{SKIP, Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:264:0x0506 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:263:0x0503 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:273:0x0521 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:272:0x0520 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x0133 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:55:0x0106 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:58:0x0138 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x0214  */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x01c3 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:92:0x027d A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x021d  */
+    /* JADX WARNING: Removed duplicated region for block: B:103:0x02b8 A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:108:0x02ef A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:111:0x02f4 A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x02f5 A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:115:0x02fa A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:116:0x02fe A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:125:0x030e A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x0317  */
+    /* JADX WARNING: Removed duplicated region for block: B:140:0x0327  */
+    /* JADX WARNING: Removed duplicated region for block: B:194:0x03c4 A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:156:0x0349 A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:197:0x03cb A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:198:0x03d0 A:{Catch:{ Exception -> 0x02ea }} */
+    /* JADX WARNING: Removed duplicated region for block: B:202:0x0402  */
+    /* JADX WARNING: Removed duplicated region for block: B:247:0x04b2 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:256:0x04f0 A:{SKIP, Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:263:0x0503 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:264:0x0506 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:272:0x0520 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:273:0x0521 A:{Catch:{ Exception -> 0x0b01 }} */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:421:0x0904 */
     /* JADX WARNING: Exception block dominator not found, dom blocks: [] */
-    /* JADX WARNING: Missing block: B:387:0x084d, code skipped:
-            if (android.os.Build.VERSION.SDK_INT >= 26) goto L_0x084f;
+    /* JADX WARNING: Missing block: B:387:0x0851, code skipped:
+            if (android.os.Build.VERSION.SDK_INT >= 26) goto L_0x0853;
      */
     private void showOrUpdateNotification(boolean r46) {
         /*
@@ -6408,11 +6465,11 @@ public class NotificationsController {
         r2 = r12.currentAccount;
         r2 = org.telegram.messenger.UserConfig.getInstance(r2);
         r2 = r2.isClientActivated();
-        if (r2 == 0) goto L_0x0b03;
+        if (r2 == 0) goto L_0x0b07;
     L_0x0012:
         r2 = r12.pushMessages;
         r2 = r2.isEmpty();
-        if (r2 != 0) goto L_0x0b03;
+        if (r2 != 0) goto L_0x0b07;
     L_0x001a:
         r2 = org.telegram.messenger.SharedConfig.showNotificationsForAllAccounts;
         if (r2 != 0) goto L_0x0026;
@@ -6421,84 +6478,84 @@ public class NotificationsController {
         r3 = org.telegram.messenger.UserConfig.selectedAccount;
         if (r2 == r3) goto L_0x0026;
     L_0x0024:
-        goto L_0x0b03;
+        goto L_0x0b07;
     L_0x0026:
-        r2 = r12.currentAccount;	 Catch:{ Exception -> 0x0afd }
-        r2 = org.telegram.tgnet.ConnectionsManager.getInstance(r2);	 Catch:{ Exception -> 0x0afd }
-        r2.resumeNetworkMaybe();	 Catch:{ Exception -> 0x0afd }
-        r2 = r12.pushMessages;	 Catch:{ Exception -> 0x0afd }
+        r2 = r12.currentAccount;	 Catch:{ Exception -> 0x0b01 }
+        r2 = org.telegram.tgnet.ConnectionsManager.getInstance(r2);	 Catch:{ Exception -> 0x0b01 }
+        r2.resumeNetworkMaybe();	 Catch:{ Exception -> 0x0b01 }
+        r2 = r12.pushMessages;	 Catch:{ Exception -> 0x0b01 }
         r3 = 0;
-        r2 = r2.get(r3);	 Catch:{ Exception -> 0x0afd }
-        r2 = (org.telegram.messenger.MessageObject) r2;	 Catch:{ Exception -> 0x0afd }
-        r4 = r12.currentAccount;	 Catch:{ Exception -> 0x0afd }
-        r4 = org.telegram.messenger.MessagesController.getNotificationsSettings(r4);	 Catch:{ Exception -> 0x0afd }
+        r2 = r2.get(r3);	 Catch:{ Exception -> 0x0b01 }
+        r2 = (org.telegram.messenger.MessageObject) r2;	 Catch:{ Exception -> 0x0b01 }
+        r4 = r12.currentAccount;	 Catch:{ Exception -> 0x0b01 }
+        r4 = org.telegram.messenger.MessagesController.getNotificationsSettings(r4);	 Catch:{ Exception -> 0x0b01 }
         r5 = "dismissDate";
-        r5 = r4.getInt(r5, r3);	 Catch:{ Exception -> 0x0afd }
-        r6 = r2.messageOwner;	 Catch:{ Exception -> 0x0afd }
-        r6 = r6.date;	 Catch:{ Exception -> 0x0afd }
+        r5 = r4.getInt(r5, r3);	 Catch:{ Exception -> 0x0b01 }
+        r6 = r2.messageOwner;	 Catch:{ Exception -> 0x0b01 }
+        r6 = r6.date;	 Catch:{ Exception -> 0x0b01 }
         if (r6 > r5) goto L_0x004e;
     L_0x004a:
-        r45.dismissNotification();	 Catch:{ Exception -> 0x0afd }
+        r45.dismissNotification();	 Catch:{ Exception -> 0x0b01 }
         return;
     L_0x004e:
-        r6 = r2.getDialogId();	 Catch:{ Exception -> 0x0afd }
-        r8 = r2.messageOwner;	 Catch:{ Exception -> 0x0afd }
-        r8 = r8.mentioned;	 Catch:{ Exception -> 0x0afd }
+        r6 = r2.getDialogId();	 Catch:{ Exception -> 0x0b01 }
+        r8 = r2.messageOwner;	 Catch:{ Exception -> 0x0b01 }
+        r8 = r8.mentioned;	 Catch:{ Exception -> 0x0b01 }
         if (r8 == 0) goto L_0x005e;
     L_0x0058:
-        r8 = r2.messageOwner;	 Catch:{ Exception -> 0x0afd }
-        r8 = r8.from_id;	 Catch:{ Exception -> 0x0afd }
-        r8 = (long) r8;	 Catch:{ Exception -> 0x0afd }
+        r8 = r2.messageOwner;	 Catch:{ Exception -> 0x0b01 }
+        r8 = r8.from_id;	 Catch:{ Exception -> 0x0b01 }
+        r8 = (long) r8;	 Catch:{ Exception -> 0x0b01 }
         goto L_0x005f;
     L_0x005e:
         r8 = r6;
     L_0x005f:
-        r2.getId();	 Catch:{ Exception -> 0x0afd }
-        r10 = r2.messageOwner;	 Catch:{ Exception -> 0x0afd }
-        r10 = r10.to_id;	 Catch:{ Exception -> 0x0afd }
-        r10 = r10.chat_id;	 Catch:{ Exception -> 0x0afd }
+        r2.getId();	 Catch:{ Exception -> 0x0b01 }
+        r10 = r2.messageOwner;	 Catch:{ Exception -> 0x0b01 }
+        r10 = r10.to_id;	 Catch:{ Exception -> 0x0b01 }
+        r10 = r10.chat_id;	 Catch:{ Exception -> 0x0b01 }
         if (r10 == 0) goto L_0x0071;
     L_0x006a:
-        r10 = r2.messageOwner;	 Catch:{ Exception -> 0x0afd }
-        r10 = r10.to_id;	 Catch:{ Exception -> 0x0afd }
-        r10 = r10.chat_id;	 Catch:{ Exception -> 0x0afd }
+        r10 = r2.messageOwner;	 Catch:{ Exception -> 0x0b01 }
+        r10 = r10.to_id;	 Catch:{ Exception -> 0x0b01 }
+        r10 = r10.chat_id;	 Catch:{ Exception -> 0x0b01 }
         goto L_0x0077;
     L_0x0071:
-        r10 = r2.messageOwner;	 Catch:{ Exception -> 0x0afd }
-        r10 = r10.to_id;	 Catch:{ Exception -> 0x0afd }
-        r10 = r10.channel_id;	 Catch:{ Exception -> 0x0afd }
+        r10 = r2.messageOwner;	 Catch:{ Exception -> 0x0b01 }
+        r10 = r10.to_id;	 Catch:{ Exception -> 0x0b01 }
+        r10 = r10.channel_id;	 Catch:{ Exception -> 0x0b01 }
     L_0x0077:
-        r11 = r2.messageOwner;	 Catch:{ Exception -> 0x0afd }
-        r11 = r11.to_id;	 Catch:{ Exception -> 0x0afd }
-        r11 = r11.user_id;	 Catch:{ Exception -> 0x0afd }
+        r11 = r2.messageOwner;	 Catch:{ Exception -> 0x0b01 }
+        r11 = r11.to_id;	 Catch:{ Exception -> 0x0b01 }
+        r11 = r11.user_id;	 Catch:{ Exception -> 0x0b01 }
         if (r11 != 0) goto L_0x0084;
     L_0x007f:
-        r11 = r2.messageOwner;	 Catch:{ Exception -> 0x0afd }
-        r11 = r11.from_id;	 Catch:{ Exception -> 0x0afd }
+        r11 = r2.messageOwner;	 Catch:{ Exception -> 0x0b01 }
+        r11 = r11.from_id;	 Catch:{ Exception -> 0x0b01 }
         goto L_0x0094;
     L_0x0084:
-        r14 = r12.currentAccount;	 Catch:{ Exception -> 0x0afd }
-        r14 = org.telegram.messenger.UserConfig.getInstance(r14);	 Catch:{ Exception -> 0x0afd }
-        r14 = r14.getClientUserId();	 Catch:{ Exception -> 0x0afd }
+        r14 = r12.currentAccount;	 Catch:{ Exception -> 0x0b01 }
+        r14 = org.telegram.messenger.UserConfig.getInstance(r14);	 Catch:{ Exception -> 0x0b01 }
+        r14 = r14.getClientUserId();	 Catch:{ Exception -> 0x0b01 }
         if (r11 != r14) goto L_0x0094;
     L_0x0090:
-        r11 = r2.messageOwner;	 Catch:{ Exception -> 0x0afd }
-        r11 = r11.from_id;	 Catch:{ Exception -> 0x0afd }
+        r11 = r2.messageOwner;	 Catch:{ Exception -> 0x0b01 }
+        r11 = r11.from_id;	 Catch:{ Exception -> 0x0b01 }
     L_0x0094:
-        r14 = r12.currentAccount;	 Catch:{ Exception -> 0x0afd }
-        r14 = org.telegram.messenger.MessagesController.getInstance(r14);	 Catch:{ Exception -> 0x0afd }
-        r15 = java.lang.Integer.valueOf(r11);	 Catch:{ Exception -> 0x0afd }
-        r14 = r14.getUser(r15);	 Catch:{ Exception -> 0x0afd }
+        r14 = r12.currentAccount;	 Catch:{ Exception -> 0x0b01 }
+        r14 = org.telegram.messenger.MessagesController.getInstance(r14);	 Catch:{ Exception -> 0x0b01 }
+        r15 = java.lang.Integer.valueOf(r11);	 Catch:{ Exception -> 0x0b01 }
+        r14 = r14.getUser(r15);	 Catch:{ Exception -> 0x0b01 }
         if (r10 == 0) goto L_0x00c2;
     L_0x00a4:
-        r15 = r12.currentAccount;	 Catch:{ Exception -> 0x0afd }
-        r15 = org.telegram.messenger.MessagesController.getInstance(r15);	 Catch:{ Exception -> 0x0afd }
-        r3 = java.lang.Integer.valueOf(r10);	 Catch:{ Exception -> 0x0afd }
-        r15 = r15.getChat(r3);	 Catch:{ Exception -> 0x0afd }
-        r3 = org.telegram.messenger.ChatObject.isChannel(r15);	 Catch:{ Exception -> 0x0afd }
+        r15 = r12.currentAccount;	 Catch:{ Exception -> 0x0b01 }
+        r15 = org.telegram.messenger.MessagesController.getInstance(r15);	 Catch:{ Exception -> 0x0b01 }
+        r3 = java.lang.Integer.valueOf(r10);	 Catch:{ Exception -> 0x0b01 }
+        r15 = r15.getChat(r3);	 Catch:{ Exception -> 0x0b01 }
+        r3 = org.telegram.messenger.ChatObject.isChannel(r15);	 Catch:{ Exception -> 0x0b01 }
         if (r3 == 0) goto L_0x00be;
     L_0x00b8:
-        r3 = r15.megagroup;	 Catch:{ Exception -> 0x0afd }
+        r3 = r15.megagroup;	 Catch:{ Exception -> 0x0b01 }
         if (r3 != 0) goto L_0x00be;
     L_0x00bc:
         r3 = 1;
@@ -6513,14 +6570,14 @@ public class NotificationsController {
         r3 = 0;
         r15 = 0;
     L_0x00c6:
-        r5 = r12.getNotifyOverride(r4, r8);	 Catch:{ Exception -> 0x0afd }
+        r5 = r12.getNotifyOverride(r4, r8);	 Catch:{ Exception -> 0x0b01 }
         r20 = r2;
         r2 = -1;
         r21 = r1;
         r1 = 2;
         if (r5 != r2) goto L_0x00d7;
     L_0x00d2:
-        r2 = r12.isGlobalNotificationsEnabled(r6);	 Catch:{ Exception -> 0x0afd }
+        r2 = r12.isGlobalNotificationsEnabled(r6);	 Catch:{ Exception -> 0x0b01 }
         goto L_0x00dc;
     L_0x00d7:
         if (r5 == r1) goto L_0x00db;
@@ -6549,31 +6606,31 @@ public class NotificationsController {
     L_0x00ec:
         if (r15 == 0) goto L_0x0185;
     L_0x00ee:
-        r5 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0afd }
-        r5.<init>();	 Catch:{ Exception -> 0x0afd }
+        r5 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0b01 }
+        r5.<init>();	 Catch:{ Exception -> 0x0b01 }
         r8 = "custom_";
-        r5.append(r8);	 Catch:{ Exception -> 0x0afd }
-        r5.append(r6);	 Catch:{ Exception -> 0x0afd }
-        r5 = r5.toString();	 Catch:{ Exception -> 0x0afd }
+        r5.append(r8);	 Catch:{ Exception -> 0x0b01 }
+        r5.append(r6);	 Catch:{ Exception -> 0x0b01 }
+        r5 = r5.toString();	 Catch:{ Exception -> 0x0b01 }
         r8 = 0;
-        r5 = r4.getBoolean(r5, r8);	 Catch:{ Exception -> 0x0afd }
+        r5 = r4.getBoolean(r5, r8);	 Catch:{ Exception -> 0x0b01 }
         if (r5 == 0) goto L_0x0133;
     L_0x0106:
-        r5 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0afd }
-        r5.<init>();	 Catch:{ Exception -> 0x0afd }
+        r5 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0b01 }
+        r5.<init>();	 Catch:{ Exception -> 0x0b01 }
         r8 = "smart_max_count_";
-        r5.append(r8);	 Catch:{ Exception -> 0x0afd }
-        r5.append(r6);	 Catch:{ Exception -> 0x0afd }
-        r5 = r5.toString();	 Catch:{ Exception -> 0x0afd }
-        r5 = r4.getInt(r5, r1);	 Catch:{ Exception -> 0x0afd }
-        r8 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0afd }
-        r8.<init>();	 Catch:{ Exception -> 0x0afd }
+        r5.append(r8);	 Catch:{ Exception -> 0x0b01 }
+        r5.append(r6);	 Catch:{ Exception -> 0x0b01 }
+        r5 = r5.toString();	 Catch:{ Exception -> 0x0b01 }
+        r5 = r4.getInt(r5, r1);	 Catch:{ Exception -> 0x0b01 }
+        r8 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0b01 }
+        r8.<init>();	 Catch:{ Exception -> 0x0b01 }
         r9 = "smart_delay_";
-        r8.append(r9);	 Catch:{ Exception -> 0x0afd }
-        r8.append(r6);	 Catch:{ Exception -> 0x0afd }
-        r8 = r8.toString();	 Catch:{ Exception -> 0x0afd }
+        r8.append(r9);	 Catch:{ Exception -> 0x0b01 }
+        r8.append(r6);	 Catch:{ Exception -> 0x0b01 }
+        r8 = r8.toString();	 Catch:{ Exception -> 0x0b01 }
         r9 = 180; // 0xb4 float:2.52E-43 double:8.9E-322;
-        r8 = r4.getInt(r8, r9);	 Catch:{ Exception -> 0x0afd }
+        r8 = r4.getInt(r8, r9);	 Catch:{ Exception -> 0x0b01 }
         goto L_0x0136;
     L_0x0133:
         r8 = 180; // 0xb4 float:2.52E-43 double:8.9E-322;
@@ -6581,47 +6638,47 @@ public class NotificationsController {
     L_0x0136:
         if (r5 == 0) goto L_0x0185;
     L_0x0138:
-        r9 = r12.smartNotificationsDialogs;	 Catch:{ Exception -> 0x0afd }
-        r9 = r9.get(r6);	 Catch:{ Exception -> 0x0afd }
-        r9 = (android.graphics.Point) r9;	 Catch:{ Exception -> 0x0afd }
+        r9 = r12.smartNotificationsDialogs;	 Catch:{ Exception -> 0x0b01 }
+        r9 = r9.get(r6);	 Catch:{ Exception -> 0x0b01 }
+        r9 = (android.graphics.Point) r9;	 Catch:{ Exception -> 0x0b01 }
         if (r9 != 0) goto L_0x0155;
     L_0x0142:
-        r5 = new android.graphics.Point;	 Catch:{ Exception -> 0x0afd }
-        r8 = java.lang.System.currentTimeMillis();	 Catch:{ Exception -> 0x0afd }
+        r5 = new android.graphics.Point;	 Catch:{ Exception -> 0x0b01 }
+        r8 = java.lang.System.currentTimeMillis();	 Catch:{ Exception -> 0x0b01 }
         r8 = r8 / r22;
-        r9 = (int) r8;	 Catch:{ Exception -> 0x0afd }
+        r9 = (int) r8;	 Catch:{ Exception -> 0x0b01 }
         r8 = 1;
-        r5.<init>(r8, r9);	 Catch:{ Exception -> 0x0afd }
-        r8 = r12.smartNotificationsDialogs;	 Catch:{ Exception -> 0x0afd }
-        r8.put(r6, r5);	 Catch:{ Exception -> 0x0afd }
+        r5.<init>(r8, r9);	 Catch:{ Exception -> 0x0b01 }
+        r8 = r12.smartNotificationsDialogs;	 Catch:{ Exception -> 0x0b01 }
+        r8.put(r6, r5);	 Catch:{ Exception -> 0x0b01 }
         goto L_0x0185;
     L_0x0155:
-        r1 = r9.y;	 Catch:{ Exception -> 0x0afd }
+        r1 = r9.y;	 Catch:{ Exception -> 0x0b01 }
         r1 = r1 + r8;
         r8 = r2;
-        r1 = (long) r1;	 Catch:{ Exception -> 0x0afd }
-        r24 = java.lang.System.currentTimeMillis();	 Catch:{ Exception -> 0x0afd }
+        r1 = (long) r1;	 Catch:{ Exception -> 0x0b01 }
+        r24 = java.lang.System.currentTimeMillis();	 Catch:{ Exception -> 0x0b01 }
         r24 = r24 / r22;
         r26 = (r1 > r24 ? 1 : (r1 == r24 ? 0 : -1));
         if (r26 >= 0) goto L_0x0170;
     L_0x0164:
-        r1 = java.lang.System.currentTimeMillis();	 Catch:{ Exception -> 0x0afd }
+        r1 = java.lang.System.currentTimeMillis();	 Catch:{ Exception -> 0x0b01 }
         r1 = r1 / r22;
-        r2 = (int) r1;	 Catch:{ Exception -> 0x0afd }
+        r2 = (int) r1;	 Catch:{ Exception -> 0x0b01 }
         r1 = 1;
-        r9.set(r1, r2);	 Catch:{ Exception -> 0x0afd }
+        r9.set(r1, r2);	 Catch:{ Exception -> 0x0b01 }
         goto L_0x0186;
     L_0x0170:
-        r1 = r9.x;	 Catch:{ Exception -> 0x0afd }
+        r1 = r9.x;	 Catch:{ Exception -> 0x0b01 }
         if (r1 >= r5) goto L_0x0182;
     L_0x0174:
         r2 = 1;
         r1 = r1 + r2;
-        r24 = java.lang.System.currentTimeMillis();	 Catch:{ Exception -> 0x0afd }
+        r24 = java.lang.System.currentTimeMillis();	 Catch:{ Exception -> 0x0b01 }
         r2 = r14;
         r13 = r24 / r22;
-        r5 = (int) r13;	 Catch:{ Exception -> 0x0afd }
-        r9.set(r1, r5);	 Catch:{ Exception -> 0x0afd }
+        r5 = (int) r13;	 Catch:{ Exception -> 0x0b01 }
+        r9.set(r1, r5);	 Catch:{ Exception -> 0x0b01 }
         goto L_0x0187;
     L_0x0182:
         r2 = r14;
@@ -6632,1330 +6689,1330 @@ public class NotificationsController {
     L_0x0186:
         r2 = r14;
     L_0x0187:
-        r1 = android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;	 Catch:{ Exception -> 0x0afd }
-        r1 = r1.getPath();	 Catch:{ Exception -> 0x0afd }
+        r1 = android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;	 Catch:{ Exception -> 0x0b01 }
+        r1 = r1.getPath();	 Catch:{ Exception -> 0x0b01 }
         r5 = "EnableInAppSounds";
         r9 = 1;
-        r5 = r4.getBoolean(r5, r9);	 Catch:{ Exception -> 0x0afd }
+        r5 = r4.getBoolean(r5, r9);	 Catch:{ Exception -> 0x0b01 }
         r13 = "EnableInAppVibrate";
-        r13 = r4.getBoolean(r13, r9);	 Catch:{ Exception -> 0x0afd }
+        r13 = r4.getBoolean(r13, r9);	 Catch:{ Exception -> 0x0b01 }
         r14 = "EnableInAppPreview";
-        r14 = r4.getBoolean(r14, r9);	 Catch:{ Exception -> 0x0afd }
+        r14 = r4.getBoolean(r14, r9);	 Catch:{ Exception -> 0x0b01 }
         r9 = "EnableInAppPriority";
         r24 = r14;
         r14 = 0;
-        r9 = r4.getBoolean(r9, r14);	 Catch:{ Exception -> 0x0afd }
-        r14 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0afd }
-        r14.<init>();	 Catch:{ Exception -> 0x0afd }
+        r9 = r4.getBoolean(r9, r14);	 Catch:{ Exception -> 0x0b01 }
+        r14 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0b01 }
+        r14.<init>();	 Catch:{ Exception -> 0x0b01 }
         r25 = r2;
         r2 = "custom_";
-        r14.append(r2);	 Catch:{ Exception -> 0x0afd }
-        r14.append(r6);	 Catch:{ Exception -> 0x0afd }
-        r2 = r14.toString();	 Catch:{ Exception -> 0x0afd }
+        r14.append(r2);	 Catch:{ Exception -> 0x0b01 }
+        r14.append(r6);	 Catch:{ Exception -> 0x0b01 }
+        r2 = r14.toString();	 Catch:{ Exception -> 0x0b01 }
         r14 = 0;
-        r2 = r4.getBoolean(r2, r14);	 Catch:{ Exception -> 0x0afd }
-        if (r2 == 0) goto L_0x0213;
+        r2 = r4.getBoolean(r2, r14);	 Catch:{ Exception -> 0x0b01 }
+        if (r2 == 0) goto L_0x0214;
     L_0x01c3:
-        r14 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0afd }
-        r14.<init>();	 Catch:{ Exception -> 0x0afd }
+        r14 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0b01 }
+        r14.<init>();	 Catch:{ Exception -> 0x0b01 }
         r27 = r15;
         r15 = "vibrate_";
-        r14.append(r15);	 Catch:{ Exception -> 0x0afd }
-        r14.append(r6);	 Catch:{ Exception -> 0x0afd }
-        r14 = r14.toString();	 Catch:{ Exception -> 0x0afd }
+        r14.append(r15);	 Catch:{ Exception -> 0x0b01 }
+        r14.append(r6);	 Catch:{ Exception -> 0x0b01 }
+        r14 = r14.toString();	 Catch:{ Exception -> 0x0b01 }
         r15 = 0;
-        r14 = r4.getInt(r14, r15);	 Catch:{ Exception -> 0x0afd }
-        r15 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0afd }
-        r15.<init>();	 Catch:{ Exception -> 0x0afd }
+        r14 = r4.getInt(r14, r15);	 Catch:{ Exception -> 0x0b01 }
+        r15 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0b01 }
+        r15.<init>();	 Catch:{ Exception -> 0x0b01 }
         r28 = r14;
         r14 = "priority_";
-        r15.append(r14);	 Catch:{ Exception -> 0x0afd }
-        r15.append(r6);	 Catch:{ Exception -> 0x0afd }
-        r14 = r15.toString();	 Catch:{ Exception -> 0x0afd }
+        r15.append(r14);	 Catch:{ Exception -> 0x0b01 }
+        r15.append(r6);	 Catch:{ Exception -> 0x0b01 }
+        r14 = r15.toString();	 Catch:{ Exception -> 0x0b01 }
         r15 = 3;
-        r14 = r4.getInt(r14, r15);	 Catch:{ Exception -> 0x0afd }
-        r15 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0afd }
-        r15.<init>();	 Catch:{ Exception -> 0x0afd }
+        r14 = r4.getInt(r14, r15);	 Catch:{ Exception -> 0x0b01 }
+        r15 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0b01 }
+        r15.<init>();	 Catch:{ Exception -> 0x0b01 }
         r29 = r14;
         r14 = "sound_path_";
-        r15.append(r14);	 Catch:{ Exception -> 0x0afd }
-        r15.append(r6);	 Catch:{ Exception -> 0x0afd }
-        r14 = r15.toString();	 Catch:{ Exception -> 0x0afd }
+        r15.append(r14);	 Catch:{ Exception -> 0x0b01 }
+        r15.append(r6);	 Catch:{ Exception -> 0x0b01 }
+        r14 = r15.toString();	 Catch:{ Exception -> 0x0b01 }
         r15 = 0;
-        r14 = r4.getString(r14, r15);	 Catch:{ Exception -> 0x0afd }
+        r14 = r4.getString(r14, r15);	 Catch:{ Exception -> 0x0b01 }
         r15 = r14;
         r14 = r28;
         r12 = r29;
         r28 = r8;
-        goto L_0x021a;
-    L_0x0213:
+        goto L_0x021b;
+    L_0x0214:
         r27 = r15;
         r28 = r8;
         r12 = 3;
         r14 = 0;
         r15 = 0;
-    L_0x021a:
-        if (r10 == 0) goto L_0x027a;
-    L_0x021c:
-        if (r3 == 0) goto L_0x024c;
-    L_0x021e:
-        if (r15 == 0) goto L_0x0228;
-    L_0x0220:
-        r3 = r15.equals(r1);	 Catch:{ Exception -> 0x02e6 }
-        if (r3 == 0) goto L_0x0228;
-    L_0x0226:
+    L_0x021b:
+        if (r10 == 0) goto L_0x027d;
+    L_0x021d:
+        if (r3 == 0) goto L_0x024e;
+    L_0x021f:
+        if (r15 == 0) goto L_0x0229;
+    L_0x0221:
+        r3 = r15.equals(r1);	 Catch:{ Exception -> 0x02ea }
+        if (r3 == 0) goto L_0x0229;
+    L_0x0227:
         r15 = 0;
-        goto L_0x0230;
-    L_0x0228:
-        if (r15 != 0) goto L_0x0230;
-    L_0x022a:
+        goto L_0x0231;
+    L_0x0229:
+        if (r15 != 0) goto L_0x0231;
+    L_0x022b:
         r3 = "ChannelSoundPath";
-        r15 = r4.getString(r3, r1);	 Catch:{ Exception -> 0x02e6 }
-    L_0x0230:
+        r15 = r4.getString(r3, r1);	 Catch:{ Exception -> 0x02ea }
+    L_0x0231:
         r3 = "vibrate_channel";
         r8 = 0;
-        r3 = r4.getInt(r3, r8);	 Catch:{ Exception -> 0x02e6 }
+        r3 = r4.getInt(r3, r8);	 Catch:{ Exception -> 0x02ea }
         r8 = "priority_channel";
         r30 = r3;
         r3 = 1;
-        r8 = r4.getInt(r8, r3);	 Catch:{ Exception -> 0x02e6 }
+        r8 = r4.getInt(r8, r3);	 Catch:{ Exception -> 0x02ea }
         r3 = "ChannelLed";
         r31 = r8;
         r8 = -16776961; // 0xfffffffffvar_ff float:-1.7014636E38 double:NaN;
-        r8 = r4.getInt(r3, r8);	 Catch:{ Exception -> 0x02e6 }
-        goto L_0x02a9;
-    L_0x024c:
-        if (r15 == 0) goto L_0x0256;
+        r8 = r4.getInt(r3, r8);	 Catch:{ Exception -> 0x02ea }
+        goto L_0x02ad;
     L_0x024e:
-        r3 = r15.equals(r1);	 Catch:{ Exception -> 0x02e6 }
-        if (r3 == 0) goto L_0x0256;
-    L_0x0254:
-        r15 = 0;
-        goto L_0x025e;
+        if (r15 == 0) goto L_0x0258;
+    L_0x0250:
+        r3 = r15.equals(r1);	 Catch:{ Exception -> 0x02ea }
+        if (r3 == 0) goto L_0x0258;
     L_0x0256:
-        if (r15 != 0) goto L_0x025e;
+        r15 = 0;
+        goto L_0x0260;
     L_0x0258:
+        if (r15 != 0) goto L_0x0260;
+    L_0x025a:
         r3 = "GroupSoundPath";
-        r15 = r4.getString(r3, r1);	 Catch:{ Exception -> 0x02e6 }
-    L_0x025e:
+        r15 = r4.getString(r3, r1);	 Catch:{ Exception -> 0x02ea }
+    L_0x0260:
         r3 = "vibrate_group";
         r8 = 0;
-        r3 = r4.getInt(r3, r8);	 Catch:{ Exception -> 0x02e6 }
+        r3 = r4.getInt(r3, r8);	 Catch:{ Exception -> 0x02ea }
         r8 = "priority_group";
         r30 = r3;
         r3 = 1;
-        r8 = r4.getInt(r8, r3);	 Catch:{ Exception -> 0x02e6 }
+        r8 = r4.getInt(r8, r3);	 Catch:{ Exception -> 0x02ea }
         r3 = "GroupLed";
         r31 = r8;
         r8 = -16776961; // 0xfffffffffvar_ff float:-1.7014636E38 double:NaN;
-        r8 = r4.getInt(r3, r8);	 Catch:{ Exception -> 0x02e6 }
-        goto L_0x02a9;
-    L_0x027a:
-        if (r11 == 0) goto L_0x02ac;
-    L_0x027c:
-        if (r15 == 0) goto L_0x0286;
-    L_0x027e:
-        r3 = r15.equals(r1);	 Catch:{ Exception -> 0x02e6 }
-        if (r3 == 0) goto L_0x0286;
-    L_0x0284:
+        r8 = r4.getInt(r3, r8);	 Catch:{ Exception -> 0x02ea }
+        goto L_0x02ad;
+    L_0x027d:
+        if (r11 == 0) goto L_0x02b0;
+    L_0x027f:
+        if (r15 == 0) goto L_0x0289;
+    L_0x0281:
+        r3 = r15.equals(r1);	 Catch:{ Exception -> 0x02ea }
+        if (r3 == 0) goto L_0x0289;
+    L_0x0287:
         r15 = 0;
-        goto L_0x028e;
-    L_0x0286:
-        if (r15 != 0) goto L_0x028e;
-    L_0x0288:
+        goto L_0x0291;
+    L_0x0289:
+        if (r15 != 0) goto L_0x0291;
+    L_0x028b:
         r3 = "GlobalSoundPath";
-        r15 = r4.getString(r3, r1);	 Catch:{ Exception -> 0x02e6 }
-    L_0x028e:
+        r15 = r4.getString(r3, r1);	 Catch:{ Exception -> 0x02ea }
+    L_0x0291:
         r3 = "vibrate_messages";
         r8 = 0;
-        r3 = r4.getInt(r3, r8);	 Catch:{ Exception -> 0x02e6 }
+        r3 = r4.getInt(r3, r8);	 Catch:{ Exception -> 0x02ea }
         r8 = "priority_messages";
         r30 = r3;
         r3 = 1;
-        r8 = r4.getInt(r8, r3);	 Catch:{ Exception -> 0x02e6 }
+        r8 = r4.getInt(r8, r3);	 Catch:{ Exception -> 0x02ea }
         r3 = "MessagesLed";
         r31 = r8;
         r8 = -16776961; // 0xfffffffffvar_ff float:-1.7014636E38 double:NaN;
-        r8 = r4.getInt(r3, r8);	 Catch:{ Exception -> 0x02e6 }
-    L_0x02a9:
+        r8 = r4.getInt(r3, r8);	 Catch:{ Exception -> 0x02ea }
+    L_0x02ad:
         r3 = r30;
-        goto L_0x02b2;
-    L_0x02ac:
+        goto L_0x02b6;
+    L_0x02b0:
         r8 = -16776961; // 0xfffffffffvar_ff float:-1.7014636E38 double:NaN;
         r3 = 0;
         r31 = 0;
-    L_0x02b2:
-        if (r2 == 0) goto L_0x02eb;
-    L_0x02b4:
-        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x02e6 }
-        r2.<init>();	 Catch:{ Exception -> 0x02e6 }
+    L_0x02b6:
+        if (r2 == 0) goto L_0x02ef;
+    L_0x02b8:
+        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x02ea }
+        r2.<init>();	 Catch:{ Exception -> 0x02ea }
         r29 = r8;
         r8 = "color_";
-        r2.append(r8);	 Catch:{ Exception -> 0x02e6 }
-        r2.append(r6);	 Catch:{ Exception -> 0x02e6 }
-        r2 = r2.toString();	 Catch:{ Exception -> 0x02e6 }
-        r2 = r4.contains(r2);	 Catch:{ Exception -> 0x02e6 }
-        if (r2 == 0) goto L_0x02ed;
-    L_0x02cd:
-        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x02e6 }
-        r2.<init>();	 Catch:{ Exception -> 0x02e6 }
+        r2.append(r8);	 Catch:{ Exception -> 0x02ea }
+        r2.append(r6);	 Catch:{ Exception -> 0x02ea }
+        r2 = r2.toString();	 Catch:{ Exception -> 0x02ea }
+        r2 = r4.contains(r2);	 Catch:{ Exception -> 0x02ea }
+        if (r2 == 0) goto L_0x02f1;
+    L_0x02d1:
+        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x02ea }
+        r2.<init>();	 Catch:{ Exception -> 0x02ea }
         r8 = "color_";
-        r2.append(r8);	 Catch:{ Exception -> 0x02e6 }
-        r2.append(r6);	 Catch:{ Exception -> 0x02e6 }
-        r2 = r2.toString();	 Catch:{ Exception -> 0x02e6 }
+        r2.append(r8);	 Catch:{ Exception -> 0x02ea }
+        r2.append(r6);	 Catch:{ Exception -> 0x02ea }
+        r2 = r2.toString();	 Catch:{ Exception -> 0x02ea }
         r8 = 0;
-        r2 = r4.getInt(r2, r8);	 Catch:{ Exception -> 0x02e6 }
+        r2 = r4.getInt(r2, r8);	 Catch:{ Exception -> 0x02ea }
         r29 = r2;
-        goto L_0x02ed;
-    L_0x02e6:
+        goto L_0x02f1;
+    L_0x02ea:
         r0 = move-exception;
         r12 = r45;
-        goto L_0x0afe;
-    L_0x02eb:
+        goto L_0x0b02;
+    L_0x02ef:
         r29 = r8;
-    L_0x02ed:
-        r2 = 3;
-        if (r12 == r2) goto L_0x02f1;
-    L_0x02f0:
-        goto L_0x02f3;
     L_0x02f1:
+        r2 = 3;
+        if (r12 == r2) goto L_0x02f5;
+    L_0x02f4:
+        goto L_0x02f7;
+    L_0x02f5:
         r12 = r31;
-    L_0x02f3:
+    L_0x02f7:
         r4 = 4;
-        if (r3 != r4) goto L_0x02fa;
-    L_0x02f6:
+        if (r3 != r4) goto L_0x02fe;
+    L_0x02fa:
         r3 = 0;
         r4 = 2;
         r8 = 1;
-        goto L_0x02fc;
-    L_0x02fa:
+        goto L_0x0300;
+    L_0x02fe:
         r4 = 2;
         r8 = 0;
-    L_0x02fc:
-        if (r3 != r4) goto L_0x0303;
-    L_0x02fe:
+    L_0x0300:
+        if (r3 != r4) goto L_0x0307;
+    L_0x0302:
         r4 = 1;
-        if (r14 == r4) goto L_0x030f;
-    L_0x0301:
-        if (r14 == r2) goto L_0x030f;
-    L_0x0303:
+        if (r14 == r4) goto L_0x0313;
+    L_0x0305:
+        if (r14 == r2) goto L_0x0313;
+    L_0x0307:
         r2 = 2;
-        if (r3 == r2) goto L_0x0308;
-    L_0x0306:
-        if (r14 == r2) goto L_0x030f;
-    L_0x0308:
-        if (r14 == 0) goto L_0x030e;
+        if (r3 == r2) goto L_0x030c;
     L_0x030a:
-        r2 = 4;
-        if (r14 == r2) goto L_0x030e;
-    L_0x030d:
-        goto L_0x030f;
+        if (r14 == r2) goto L_0x0313;
+    L_0x030c:
+        if (r14 == 0) goto L_0x0312;
     L_0x030e:
+        r2 = 4;
+        if (r14 == r2) goto L_0x0312;
+    L_0x0311:
+        goto L_0x0313;
+    L_0x0312:
         r14 = r3;
-    L_0x030f:
-        r2 = org.telegram.messenger.ApplicationLoader.mainInterfacePaused;	 Catch:{ Exception -> 0x02e6 }
-        if (r2 != 0) goto L_0x0323;
     L_0x0313:
-        if (r5 != 0) goto L_0x0316;
-    L_0x0315:
-        r15 = 0;
-    L_0x0316:
-        if (r13 != 0) goto L_0x0319;
-    L_0x0318:
-        r14 = 2;
+        r2 = org.telegram.messenger.ApplicationLoader.mainInterfacePaused;	 Catch:{ Exception -> 0x02ea }
+        if (r2 != 0) goto L_0x0327;
+    L_0x0317:
+        if (r5 != 0) goto L_0x031a;
     L_0x0319:
-        if (r9 != 0) goto L_0x031e;
-    L_0x031b:
+        r15 = 0;
+    L_0x031a:
+        if (r13 != 0) goto L_0x031d;
+    L_0x031c:
+        r14 = 2;
+    L_0x031d:
+        if (r9 != 0) goto L_0x0322;
+    L_0x031f:
         r2 = 2;
         r3 = 0;
-        goto L_0x0325;
-    L_0x031e:
+        goto L_0x0329;
+    L_0x0322:
         r2 = 2;
-        if (r12 != r2) goto L_0x0324;
-    L_0x0321:
-        r3 = 1;
-        goto L_0x0325;
-    L_0x0323:
-        r2 = 2;
-    L_0x0324:
-        r3 = r12;
+        if (r12 != r2) goto L_0x0328;
     L_0x0325:
-        if (r8 == 0) goto L_0x033b;
+        r3 = 1;
+        goto L_0x0329;
     L_0x0327:
-        if (r14 == r2) goto L_0x033b;
+        r2 = 2;
+    L_0x0328:
+        r3 = r12;
     L_0x0329:
-        r2 = audioManager;	 Catch:{ Exception -> 0x0336 }
-        r2 = r2.getRingerMode();	 Catch:{ Exception -> 0x0336 }
-        if (r2 == 0) goto L_0x033b;
-    L_0x0331:
+        if (r8 == 0) goto L_0x033f;
+    L_0x032b:
+        if (r14 == r2) goto L_0x033f;
+    L_0x032d:
+        r2 = audioManager;	 Catch:{ Exception -> 0x033a }
+        r2 = r2.getRingerMode();	 Catch:{ Exception -> 0x033a }
+        if (r2 == 0) goto L_0x033f;
+    L_0x0335:
         r4 = 1;
-        if (r2 == r4) goto L_0x033b;
-    L_0x0334:
+        if (r2 == r4) goto L_0x033f;
+    L_0x0338:
         r14 = 2;
-        goto L_0x033b;
-    L_0x0336:
+        goto L_0x033f;
+    L_0x033a:
         r0 = move-exception;
         r2 = r0;
-        org.telegram.messenger.FileLog.e(r2);	 Catch:{ Exception -> 0x02e6 }
-    L_0x033b:
-        r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x02e6 }
+        org.telegram.messenger.FileLog.e(r2);	 Catch:{ Exception -> 0x02ea }
+    L_0x033f:
+        r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x02ea }
         r4 = 100;
         r9 = 26;
         r12 = 0;
-        if (r2 < r9) goto L_0x03c0;
-    L_0x0345:
+        if (r2 < r9) goto L_0x03c4;
+    L_0x0349:
         r2 = 2;
-        if (r14 != r2) goto L_0x0352;
-    L_0x0348:
-        r9 = new long[r2];	 Catch:{ Exception -> 0x02e6 }
+        if (r14 != r2) goto L_0x0356;
+    L_0x034c:
+        r9 = new long[r2];	 Catch:{ Exception -> 0x02ea }
         r2 = 0;
-        r9[r2] = r12;	 Catch:{ Exception -> 0x02e6 }
+        r9[r2] = r12;	 Catch:{ Exception -> 0x02ea }
         r2 = 1;
-        r9[r2] = r12;	 Catch:{ Exception -> 0x02e6 }
+        r9[r2] = r12;	 Catch:{ Exception -> 0x02ea }
         r8 = r9;
-        goto L_0x037c;
-    L_0x0352:
+        goto L_0x0380;
+    L_0x0356:
         r2 = 1;
-        if (r14 != r2) goto L_0x0364;
-    L_0x0355:
+        if (r14 != r2) goto L_0x0368;
+    L_0x0359:
         r9 = 4;
-        r8 = new long[r9];	 Catch:{ Exception -> 0x02e6 }
+        r8 = new long[r9];	 Catch:{ Exception -> 0x02ea }
         r9 = 0;
-        r8[r9] = r12;	 Catch:{ Exception -> 0x02e6 }
-        r8[r2] = r4;	 Catch:{ Exception -> 0x02e6 }
+        r8[r9] = r12;	 Catch:{ Exception -> 0x02ea }
+        r8[r2] = r4;	 Catch:{ Exception -> 0x02ea }
         r2 = 2;
-        r8[r2] = r12;	 Catch:{ Exception -> 0x02e6 }
+        r8[r2] = r12;	 Catch:{ Exception -> 0x02ea }
         r2 = 3;
-        r8[r2] = r4;	 Catch:{ Exception -> 0x02e6 }
-        goto L_0x037c;
-    L_0x0364:
-        if (r14 == 0) goto L_0x0379;
-    L_0x0366:
-        r2 = 4;
-        if (r14 != r2) goto L_0x036a;
-    L_0x0369:
-        goto L_0x0379;
+        r8[r2] = r4;	 Catch:{ Exception -> 0x02ea }
+        goto L_0x0380;
+    L_0x0368:
+        if (r14 == 0) goto L_0x037d;
     L_0x036a:
-        r2 = 3;
-        if (r14 != r2) goto L_0x0377;
+        r2 = 4;
+        if (r14 != r2) goto L_0x036e;
     L_0x036d:
+        goto L_0x037d;
+    L_0x036e:
+        r2 = 3;
+        if (r14 != r2) goto L_0x037b;
+    L_0x0371:
         r2 = 2;
-        r8 = new long[r2];	 Catch:{ Exception -> 0x02e6 }
+        r8 = new long[r2];	 Catch:{ Exception -> 0x02ea }
         r2 = 0;
-        r8[r2] = r12;	 Catch:{ Exception -> 0x02e6 }
+        r8[r2] = r12;	 Catch:{ Exception -> 0x02ea }
         r2 = 1;
-        r8[r2] = r22;	 Catch:{ Exception -> 0x02e6 }
-        goto L_0x037c;
-    L_0x0377:
+        r8[r2] = r22;	 Catch:{ Exception -> 0x02ea }
+        goto L_0x0380;
+    L_0x037b:
         r8 = 0;
-        goto L_0x037c;
-    L_0x0379:
+        goto L_0x0380;
+    L_0x037d:
         r2 = 0;
-        r8 = new long[r2];	 Catch:{ Exception -> 0x02e6 }
-    L_0x037c:
-        if (r15 == 0) goto L_0x0394;
-    L_0x037e:
+        r8 = new long[r2];	 Catch:{ Exception -> 0x02ea }
+    L_0x0380:
+        if (r15 == 0) goto L_0x0398;
+    L_0x0382:
         r2 = "NoSound";
-        r2 = r15.equals(r2);	 Catch:{ Exception -> 0x02e6 }
-        if (r2 != 0) goto L_0x0394;
-    L_0x0386:
-        r2 = r15.equals(r1);	 Catch:{ Exception -> 0x02e6 }
-        if (r2 == 0) goto L_0x038f;
-    L_0x038c:
-        r2 = android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;	 Catch:{ Exception -> 0x02e6 }
-        goto L_0x0395;
-    L_0x038f:
-        r2 = android.net.Uri.parse(r15);	 Catch:{ Exception -> 0x02e6 }
-        goto L_0x0395;
-    L_0x0394:
+        r2 = r15.equals(r2);	 Catch:{ Exception -> 0x02ea }
+        if (r2 != 0) goto L_0x0398;
+    L_0x038a:
+        r2 = r15.equals(r1);	 Catch:{ Exception -> 0x02ea }
+        if (r2 == 0) goto L_0x0393;
+    L_0x0390:
+        r2 = android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;	 Catch:{ Exception -> 0x02ea }
+        goto L_0x0399;
+    L_0x0393:
+        r2 = android.net.Uri.parse(r15);	 Catch:{ Exception -> 0x02ea }
+        goto L_0x0399;
+    L_0x0398:
         r2 = 0;
-    L_0x0395:
-        if (r3 != 0) goto L_0x039d;
-    L_0x0397:
+    L_0x0399:
+        if (r3 != 0) goto L_0x03a1;
+    L_0x039b:
         r32 = r2;
         r9 = r8;
         r33 = 3;
-        goto L_0x03c5;
-    L_0x039d:
+        goto L_0x03c9;
+    L_0x03a1:
         r9 = 1;
-        if (r3 == r9) goto L_0x03ba;
-    L_0x03a0:
-        r9 = 2;
-        if (r3 != r9) goto L_0x03a4;
-    L_0x03a3:
-        goto L_0x03ba;
+        if (r3 == r9) goto L_0x03be;
     L_0x03a4:
-        r9 = 4;
-        if (r3 != r9) goto L_0x03ad;
+        r9 = 2;
+        if (r3 != r9) goto L_0x03a8;
     L_0x03a7:
+        goto L_0x03be;
+    L_0x03a8:
+        r9 = 4;
+        if (r3 != r9) goto L_0x03b1;
+    L_0x03ab:
         r32 = r2;
         r9 = r8;
         r33 = 1;
-        goto L_0x03c5;
-    L_0x03ad:
+        goto L_0x03c9;
+    L_0x03b1:
         r9 = 5;
-        if (r3 != r9) goto L_0x03b6;
-    L_0x03b0:
+        if (r3 != r9) goto L_0x03ba;
+    L_0x03b4:
         r32 = r2;
         r9 = r8;
         r33 = 2;
-        goto L_0x03c5;
-    L_0x03b6:
-        r32 = r2;
-        r9 = r8;
-        goto L_0x03c3;
+        goto L_0x03c9;
     L_0x03ba:
         r32 = r2;
         r9 = r8;
+        goto L_0x03c7;
+    L_0x03be:
+        r32 = r2;
+        r9 = r8;
         r33 = 4;
-        goto L_0x03c5;
-    L_0x03c0:
+        goto L_0x03c9;
+    L_0x03c4:
         r9 = 0;
         r32 = 0;
-    L_0x03c3:
-        r33 = 0;
-    L_0x03c5:
-        if (r28 == 0) goto L_0x03cc;
     L_0x03c7:
+        r33 = 0;
+    L_0x03c9:
+        if (r28 == 0) goto L_0x03d0;
+    L_0x03cb:
         r3 = 0;
         r8 = 0;
         r14 = 0;
         r15 = 0;
-        goto L_0x03ce;
-    L_0x03cc:
+        goto L_0x03d2;
+    L_0x03d0:
         r8 = r29;
-    L_0x03ce:
-        r2 = new android.content.Intent;	 Catch:{ Exception -> 0x02e6 }
-        r4 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x02e6 }
+    L_0x03d2:
+        r2 = new android.content.Intent;	 Catch:{ Exception -> 0x02ea }
+        r4 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x02ea }
         r5 = org.telegram.ui.LaunchActivity.class;
-        r2.<init>(r4, r5);	 Catch:{ Exception -> 0x02e6 }
-        r4 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x02e6 }
-        r4.<init>();	 Catch:{ Exception -> 0x02e6 }
+        r2.<init>(r4, r5);	 Catch:{ Exception -> 0x02ea }
+        r4 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x02ea }
+        r4.<init>();	 Catch:{ Exception -> 0x02ea }
         r5 = "com.tmessages.openchat";
-        r4.append(r5);	 Catch:{ Exception -> 0x02e6 }
-        r12 = java.lang.Math.random();	 Catch:{ Exception -> 0x02e6 }
-        r4.append(r12);	 Catch:{ Exception -> 0x02e6 }
+        r4.append(r5);	 Catch:{ Exception -> 0x02ea }
+        r12 = java.lang.Math.random();	 Catch:{ Exception -> 0x02ea }
+        r4.append(r12);	 Catch:{ Exception -> 0x02ea }
         r5 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
-        r4.append(r5);	 Catch:{ Exception -> 0x02e6 }
-        r4 = r4.toString();	 Catch:{ Exception -> 0x02e6 }
-        r2.setAction(r4);	 Catch:{ Exception -> 0x02e6 }
+        r4.append(r5);	 Catch:{ Exception -> 0x02ea }
+        r4 = r4.toString();	 Catch:{ Exception -> 0x02ea }
+        r2.setAction(r4);	 Catch:{ Exception -> 0x02ea }
         r4 = 32768; // 0x8000 float:4.5918E-41 double:1.61895E-319;
-        r2.setFlags(r4);	 Catch:{ Exception -> 0x02e6 }
+        r2.setFlags(r4);	 Catch:{ Exception -> 0x02ea }
         r4 = (int) r6;
-        if (r4 == 0) goto L_0x04ae;
-    L_0x03fe:
+        if (r4 == 0) goto L_0x04b2;
+    L_0x0402:
         r12 = r45;
-        r5 = r12.pushDialogs;	 Catch:{ Exception -> 0x0afd }
-        r5 = r5.size();	 Catch:{ Exception -> 0x0afd }
+        r5 = r12.pushDialogs;	 Catch:{ Exception -> 0x0b01 }
+        r5 = r5.size();	 Catch:{ Exception -> 0x0b01 }
         r13 = 1;
-        if (r5 != r13) goto L_0x0418;
-    L_0x0409:
-        if (r10 == 0) goto L_0x0411;
-    L_0x040b:
+        if (r5 != r13) goto L_0x041c;
+    L_0x040d:
+        if (r10 == 0) goto L_0x0415;
+    L_0x040f:
         r5 = "chatId";
-        r2.putExtra(r5, r10);	 Catch:{ Exception -> 0x0afd }
-        goto L_0x0418;
-    L_0x0411:
-        if (r11 == 0) goto L_0x0418;
-    L_0x0413:
+        r2.putExtra(r5, r10);	 Catch:{ Exception -> 0x0b01 }
+        goto L_0x041c;
+    L_0x0415:
+        if (r11 == 0) goto L_0x041c;
+    L_0x0417:
         r5 = "userId";
-        r2.putExtra(r5, r11);	 Catch:{ Exception -> 0x0afd }
-    L_0x0418:
+        r2.putExtra(r5, r11);	 Catch:{ Exception -> 0x0b01 }
+    L_0x041c:
         r5 = 0;
-        r11 = org.telegram.messenger.AndroidUtilities.needShowPasscode(r5);	 Catch:{ Exception -> 0x0afd }
-        if (r11 != 0) goto L_0x04a3;
-    L_0x041f:
-        r5 = org.telegram.messenger.SharedConfig.isWaitingForPasscodeEnter;	 Catch:{ Exception -> 0x0afd }
-        if (r5 == 0) goto L_0x0425;
+        r11 = org.telegram.messenger.AndroidUtilities.needShowPasscode(r5);	 Catch:{ Exception -> 0x0b01 }
+        if (r11 != 0) goto L_0x04a7;
     L_0x0423:
-        goto L_0x04a3;
-    L_0x0425:
-        r5 = r12.pushDialogs;	 Catch:{ Exception -> 0x0afd }
-        r5 = r5.size();	 Catch:{ Exception -> 0x0afd }
+        r5 = org.telegram.messenger.SharedConfig.isWaitingForPasscodeEnter;	 Catch:{ Exception -> 0x0b01 }
+        if (r5 == 0) goto L_0x0429;
+    L_0x0427:
+        goto L_0x04a7;
+    L_0x0429:
+        r5 = r12.pushDialogs;	 Catch:{ Exception -> 0x0b01 }
+        r5 = r5.size();	 Catch:{ Exception -> 0x0b01 }
         r11 = 1;
-        if (r5 != r11) goto L_0x049c;
-    L_0x042e:
-        r5 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0afd }
+        if (r5 != r11) goto L_0x04a0;
+    L_0x0432:
+        r5 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0b01 }
         r11 = 28;
-        if (r5 >= r11) goto L_0x049c;
-    L_0x0434:
-        if (r27 == 0) goto L_0x046c;
-    L_0x0436:
+        if (r5 >= r11) goto L_0x04a0;
+    L_0x0438:
+        if (r27 == 0) goto L_0x0470;
+    L_0x043a:
         r5 = r27;
-        r11 = r5.photo;	 Catch:{ Exception -> 0x0afd }
-        if (r11 == 0) goto L_0x0465;
-    L_0x043c:
-        r11 = r5.photo;	 Catch:{ Exception -> 0x0afd }
-        r11 = r11.photo_small;	 Catch:{ Exception -> 0x0afd }
-        if (r11 == 0) goto L_0x0465;
-    L_0x0442:
-        r11 = r5.photo;	 Catch:{ Exception -> 0x0afd }
-        r11 = r11.photo_small;	 Catch:{ Exception -> 0x0afd }
+        r11 = r5.photo;	 Catch:{ Exception -> 0x0b01 }
+        if (r11 == 0) goto L_0x0469;
+    L_0x0440:
+        r11 = r5.photo;	 Catch:{ Exception -> 0x0b01 }
+        r11 = r11.photo_small;	 Catch:{ Exception -> 0x0b01 }
+        if (r11 == 0) goto L_0x0469;
+    L_0x0446:
+        r11 = r5.photo;	 Catch:{ Exception -> 0x0b01 }
+        r11 = r11.photo_small;	 Catch:{ Exception -> 0x0b01 }
         r27 = r14;
-        r13 = r11.volume_id;	 Catch:{ Exception -> 0x0afd }
+        r13 = r11.volume_id;	 Catch:{ Exception -> 0x0b01 }
         r34 = 0;
         r11 = (r13 > r34 ? 1 : (r13 == r34 ? 0 : -1));
-        if (r11 == 0) goto L_0x0467;
-    L_0x0450:
-        r11 = r5.photo;	 Catch:{ Exception -> 0x0afd }
-        r11 = r11.photo_small;	 Catch:{ Exception -> 0x0afd }
-        r11 = r11.local_id;	 Catch:{ Exception -> 0x0afd }
-        if (r11 == 0) goto L_0x0467;
-    L_0x0458:
-        r11 = r5.photo;	 Catch:{ Exception -> 0x0afd }
-        r11 = r11.photo_small;	 Catch:{ Exception -> 0x0afd }
+        if (r11 == 0) goto L_0x046b;
+    L_0x0454:
+        r11 = r5.photo;	 Catch:{ Exception -> 0x0b01 }
+        r11 = r11.photo_small;	 Catch:{ Exception -> 0x0b01 }
+        r11 = r11.local_id;	 Catch:{ Exception -> 0x0b01 }
+        if (r11 == 0) goto L_0x046b;
+    L_0x045c:
+        r11 = r5.photo;	 Catch:{ Exception -> 0x0b01 }
+        r11 = r11.photo_small;	 Catch:{ Exception -> 0x0b01 }
         r29 = r8;
         r13 = r11;
         r11 = r25;
-    L_0x0461:
-        r25 = r9;
-        goto L_0x04d8;
     L_0x0465:
+        r25 = r9;
+        goto L_0x04dc;
+    L_0x0469:
         r27 = r14;
-    L_0x0467:
+    L_0x046b:
         r29 = r8;
         r11 = r25;
-        goto L_0x04ab;
-    L_0x046c:
+        goto L_0x04af;
+    L_0x0470:
         r5 = r27;
         r27 = r14;
-        if (r25 == 0) goto L_0x0499;
-    L_0x0472:
+        if (r25 == 0) goto L_0x049d;
+    L_0x0476:
         r11 = r25;
-        r13 = r11.photo;	 Catch:{ Exception -> 0x0afd }
-        if (r13 == 0) goto L_0x04d4;
-    L_0x0478:
-        r13 = r11.photo;	 Catch:{ Exception -> 0x0afd }
-        r13 = r13.photo_small;	 Catch:{ Exception -> 0x0afd }
-        if (r13 == 0) goto L_0x04d4;
-    L_0x047e:
-        r13 = r11.photo;	 Catch:{ Exception -> 0x0afd }
-        r13 = r13.photo_small;	 Catch:{ Exception -> 0x0afd }
-        r13 = r13.volume_id;	 Catch:{ Exception -> 0x0afd }
+        r13 = r11.photo;	 Catch:{ Exception -> 0x0b01 }
+        if (r13 == 0) goto L_0x04d8;
+    L_0x047c:
+        r13 = r11.photo;	 Catch:{ Exception -> 0x0b01 }
+        r13 = r13.photo_small;	 Catch:{ Exception -> 0x0b01 }
+        if (r13 == 0) goto L_0x04d8;
+    L_0x0482:
+        r13 = r11.photo;	 Catch:{ Exception -> 0x0b01 }
+        r13 = r13.photo_small;	 Catch:{ Exception -> 0x0b01 }
+        r13 = r13.volume_id;	 Catch:{ Exception -> 0x0b01 }
         r34 = 0;
         r25 = (r13 > r34 ? 1 : (r13 == r34 ? 0 : -1));
-        if (r25 == 0) goto L_0x04d4;
-    L_0x048a:
-        r13 = r11.photo;	 Catch:{ Exception -> 0x0afd }
-        r13 = r13.photo_small;	 Catch:{ Exception -> 0x0afd }
-        r13 = r13.local_id;	 Catch:{ Exception -> 0x0afd }
-        if (r13 == 0) goto L_0x04d4;
-    L_0x0492:
-        r13 = r11.photo;	 Catch:{ Exception -> 0x0afd }
-        r13 = r13.photo_small;	 Catch:{ Exception -> 0x0afd }
+        if (r25 == 0) goto L_0x04d8;
+    L_0x048e:
+        r13 = r11.photo;	 Catch:{ Exception -> 0x0b01 }
+        r13 = r13.photo_small;	 Catch:{ Exception -> 0x0b01 }
+        r13 = r13.local_id;	 Catch:{ Exception -> 0x0b01 }
+        if (r13 == 0) goto L_0x04d8;
+    L_0x0496:
+        r13 = r11.photo;	 Catch:{ Exception -> 0x0b01 }
+        r13 = r13.photo_small;	 Catch:{ Exception -> 0x0b01 }
         r29 = r8;
-        goto L_0x0461;
-    L_0x0499:
+        goto L_0x0465;
+    L_0x049d:
         r11 = r25;
-        goto L_0x04d4;
-    L_0x049c:
+        goto L_0x04d8;
+    L_0x04a0:
         r11 = r25;
         r5 = r27;
         r27 = r14;
-        goto L_0x04d4;
-    L_0x04a3:
+        goto L_0x04d8;
+    L_0x04a7:
         r11 = r25;
         r5 = r27;
         r27 = r14;
         r29 = r8;
-    L_0x04ab:
+    L_0x04af:
         r25 = r9;
-        goto L_0x04d7;
-    L_0x04ae:
+        goto L_0x04db;
+    L_0x04b2:
         r12 = r45;
         r11 = r25;
         r5 = r27;
         r27 = r14;
-        r13 = r12.pushDialogs;	 Catch:{ Exception -> 0x0afd }
-        r13 = r13.size();	 Catch:{ Exception -> 0x0afd }
+        r13 = r12.pushDialogs;	 Catch:{ Exception -> 0x0b01 }
+        r13 = r13.size();	 Catch:{ Exception -> 0x0b01 }
         r14 = 1;
-        if (r13 != r14) goto L_0x04d4;
-    L_0x04bf:
-        r13 = globalSecretChatId;	 Catch:{ Exception -> 0x0afd }
+        if (r13 != r14) goto L_0x04d8;
+    L_0x04c3:
+        r13 = globalSecretChatId;	 Catch:{ Exception -> 0x0b01 }
         r25 = (r6 > r13 ? 1 : (r6 == r13 ? 0 : -1));
-        if (r25 == 0) goto L_0x04d4;
-    L_0x04c5:
+        if (r25 == 0) goto L_0x04d8;
+    L_0x04c9:
         r13 = "encId";
         r14 = 32;
         r29 = r8;
         r25 = r9;
         r8 = r6 >> r14;
-        r9 = (int) r8;	 Catch:{ Exception -> 0x0afd }
-        r2.putExtra(r13, r9);	 Catch:{ Exception -> 0x0afd }
-        goto L_0x04d7;
-    L_0x04d4:
-        r29 = r8;
-        goto L_0x04ab;
-    L_0x04d7:
-        r13 = 0;
+        r9 = (int) r8;	 Catch:{ Exception -> 0x0b01 }
+        r2.putExtra(r13, r9);	 Catch:{ Exception -> 0x0b01 }
+        goto L_0x04db;
     L_0x04d8:
-        r8 = r12.currentAccount;	 Catch:{ Exception -> 0x0afd }
+        r29 = r8;
+        goto L_0x04af;
+    L_0x04db:
+        r13 = 0;
+    L_0x04dc:
+        r8 = r12.currentAccount;	 Catch:{ Exception -> 0x0b01 }
         r9 = r21;
-        r2.putExtra(r9, r8);	 Catch:{ Exception -> 0x0afd }
-        r8 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0afd }
+        r2.putExtra(r9, r8);	 Catch:{ Exception -> 0x0b01 }
+        r8 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0b01 }
         r14 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
         r36 = r6;
         r6 = 0;
-        r2 = android.app.PendingIntent.getActivity(r8, r6, r2, r14);	 Catch:{ Exception -> 0x0afd }
-        if (r10 == 0) goto L_0x04ee;
-    L_0x04ec:
-        if (r5 == 0) goto L_0x04f0;
-    L_0x04ee:
-        if (r11 != 0) goto L_0x04fb;
+        r2 = android.app.PendingIntent.getActivity(r8, r6, r2, r14);	 Catch:{ Exception -> 0x0b01 }
+        if (r10 == 0) goto L_0x04f2;
     L_0x04f0:
-        r6 = r20.isFcmMessage();	 Catch:{ Exception -> 0x0afd }
-        if (r6 == 0) goto L_0x04fb;
-    L_0x04f6:
+        if (r5 == 0) goto L_0x04f4;
+    L_0x04f2:
+        if (r11 != 0) goto L_0x04ff;
+    L_0x04f4:
+        r6 = r20.isFcmMessage();	 Catch:{ Exception -> 0x0b01 }
+        if (r6 == 0) goto L_0x04ff;
+    L_0x04fa:
         r6 = r20;
-        r7 = r6.localName;	 Catch:{ Exception -> 0x0afd }
-        goto L_0x0506;
-    L_0x04fb:
-        r6 = r20;
-        if (r5 == 0) goto L_0x0502;
+        r7 = r6.localName;	 Catch:{ Exception -> 0x0b01 }
+        goto L_0x050a;
     L_0x04ff:
-        r7 = r5.title;	 Catch:{ Exception -> 0x0afd }
-        goto L_0x0506;
-    L_0x0502:
-        r7 = org.telegram.messenger.UserObject.getUserName(r11);	 Catch:{ Exception -> 0x0afd }
+        r6 = r20;
+        if (r5 == 0) goto L_0x0506;
+    L_0x0503:
+        r7 = r5.title;	 Catch:{ Exception -> 0x0b01 }
+        goto L_0x050a;
     L_0x0506:
-        if (r4 == 0) goto L_0x0520;
-    L_0x0508:
-        r4 = r12.pushDialogs;	 Catch:{ Exception -> 0x0afd }
-        r4 = r4.size();	 Catch:{ Exception -> 0x0afd }
+        r7 = org.telegram.messenger.UserObject.getUserName(r11);	 Catch:{ Exception -> 0x0b01 }
+    L_0x050a:
+        if (r4 == 0) goto L_0x0524;
+    L_0x050c:
+        r4 = r12.pushDialogs;	 Catch:{ Exception -> 0x0b01 }
+        r4 = r4.size();	 Catch:{ Exception -> 0x0b01 }
         r8 = 1;
-        if (r4 > r8) goto L_0x0520;
-    L_0x0511:
+        if (r4 > r8) goto L_0x0524;
+    L_0x0515:
         r4 = 0;
-        r8 = org.telegram.messenger.AndroidUtilities.needShowPasscode(r4);	 Catch:{ Exception -> 0x0afd }
-        if (r8 != 0) goto L_0x0520;
-    L_0x0518:
-        r4 = org.telegram.messenger.SharedConfig.isWaitingForPasscodeEnter;	 Catch:{ Exception -> 0x0afd }
-        if (r4 == 0) goto L_0x051d;
+        r8 = org.telegram.messenger.AndroidUtilities.needShowPasscode(r4);	 Catch:{ Exception -> 0x0b01 }
+        if (r8 != 0) goto L_0x0524;
     L_0x051c:
-        goto L_0x0520;
-    L_0x051d:
+        r4 = org.telegram.messenger.SharedConfig.isWaitingForPasscodeEnter;	 Catch:{ Exception -> 0x0b01 }
+        if (r4 == 0) goto L_0x0521;
+    L_0x0520:
+        goto L_0x0524;
+    L_0x0521:
         r4 = r7;
         r8 = 1;
-        goto L_0x052a;
-    L_0x0520:
+        goto L_0x052e;
+    L_0x0524:
         r4 = "AppName";
         r8 = NUM; // 0x7f0d00eb float:1.8742591E38 double:1.0531298936E-314;
-        r4 = org.telegram.messenger.LocaleController.getString(r4, r8);	 Catch:{ Exception -> 0x0afd }
+        r4 = org.telegram.messenger.LocaleController.getString(r4, r8);	 Catch:{ Exception -> 0x0b01 }
         r8 = 0;
-    L_0x052a:
-        r10 = org.telegram.messenger.UserConfig.getActivatedAccountsCount();	 Catch:{ Exception -> 0x0afd }
+    L_0x052e:
+        r10 = org.telegram.messenger.UserConfig.getActivatedAccountsCount();	 Catch:{ Exception -> 0x0b01 }
         r14 = "";
         r20 = r7;
         r7 = 1;
-        if (r10 <= r7) goto L_0x056d;
-    L_0x0535:
-        r10 = r12.pushDialogs;	 Catch:{ Exception -> 0x0afd }
-        r10 = r10.size();	 Catch:{ Exception -> 0x0afd }
-        if (r10 != r7) goto L_0x054c;
-    L_0x053d:
-        r7 = r12.currentAccount;	 Catch:{ Exception -> 0x0afd }
-        r7 = org.telegram.messenger.UserConfig.getInstance(r7);	 Catch:{ Exception -> 0x0afd }
-        r7 = r7.getCurrentUser();	 Catch:{ Exception -> 0x0afd }
-        r7 = org.telegram.messenger.UserObject.getFirstName(r7);	 Catch:{ Exception -> 0x0afd }
-        goto L_0x056e;
-    L_0x054c:
-        r7 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0afd }
-        r7.<init>();	 Catch:{ Exception -> 0x0afd }
-        r10 = r12.currentAccount;	 Catch:{ Exception -> 0x0afd }
-        r10 = org.telegram.messenger.UserConfig.getInstance(r10);	 Catch:{ Exception -> 0x0afd }
-        r10 = r10.getCurrentUser();	 Catch:{ Exception -> 0x0afd }
-        r10 = org.telegram.messenger.UserObject.getFirstName(r10);	 Catch:{ Exception -> 0x0afd }
-        r7.append(r10);	 Catch:{ Exception -> 0x0afd }
+        if (r10 <= r7) goto L_0x0571;
+    L_0x0539:
+        r10 = r12.pushDialogs;	 Catch:{ Exception -> 0x0b01 }
+        r10 = r10.size();	 Catch:{ Exception -> 0x0b01 }
+        if (r10 != r7) goto L_0x0550;
+    L_0x0541:
+        r7 = r12.currentAccount;	 Catch:{ Exception -> 0x0b01 }
+        r7 = org.telegram.messenger.UserConfig.getInstance(r7);	 Catch:{ Exception -> 0x0b01 }
+        r7 = r7.getCurrentUser();	 Catch:{ Exception -> 0x0b01 }
+        r7 = org.telegram.messenger.UserObject.getFirstName(r7);	 Catch:{ Exception -> 0x0b01 }
+        goto L_0x0572;
+    L_0x0550:
+        r7 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0b01 }
+        r7.<init>();	 Catch:{ Exception -> 0x0b01 }
+        r10 = r12.currentAccount;	 Catch:{ Exception -> 0x0b01 }
+        r10 = org.telegram.messenger.UserConfig.getInstance(r10);	 Catch:{ Exception -> 0x0b01 }
+        r10 = r10.getCurrentUser();	 Catch:{ Exception -> 0x0b01 }
+        r10 = org.telegram.messenger.UserObject.getFirstName(r10);	 Catch:{ Exception -> 0x0b01 }
+        r7.append(r10);	 Catch:{ Exception -> 0x0b01 }
         r10 = "・";
-        r7.append(r10);	 Catch:{ Exception -> 0x0afd }
-        r7 = r7.toString();	 Catch:{ Exception -> 0x0afd }
-        goto L_0x056e;
-    L_0x056d:
+        r7.append(r10);	 Catch:{ Exception -> 0x0b01 }
+        r7 = r7.toString();	 Catch:{ Exception -> 0x0b01 }
+        goto L_0x0572;
+    L_0x0571:
         r7 = r14;
-    L_0x056e:
-        r10 = r12.pushDialogs;	 Catch:{ Exception -> 0x0afd }
-        r10 = r10.size();	 Catch:{ Exception -> 0x0afd }
+    L_0x0572:
+        r10 = r12.pushDialogs;	 Catch:{ Exception -> 0x0b01 }
+        r10 = r10.size();	 Catch:{ Exception -> 0x0b01 }
         r21 = r1;
         r1 = 1;
-        if (r10 != r1) goto L_0x0586;
-    L_0x0579:
-        r1 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0afd }
+        if (r10 != r1) goto L_0x058a;
+    L_0x057d:
+        r1 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0b01 }
         r10 = 23;
-        if (r1 >= r10) goto L_0x0580;
-    L_0x057f:
-        goto L_0x0586;
-    L_0x0580:
+        if (r1 >= r10) goto L_0x0584;
+    L_0x0583:
+        goto L_0x058a;
+    L_0x0584:
         r40 = r3;
         r39 = r15;
-    L_0x0584:
+    L_0x0588:
         r15 = r7;
-        goto L_0x05e1;
-    L_0x0586:
-        r1 = r12.pushDialogs;	 Catch:{ Exception -> 0x0afd }
-        r1 = r1.size();	 Catch:{ Exception -> 0x0afd }
+        goto L_0x05e5;
+    L_0x058a:
+        r1 = r12.pushDialogs;	 Catch:{ Exception -> 0x0b01 }
+        r1 = r1.size();	 Catch:{ Exception -> 0x0b01 }
         r10 = 1;
-        if (r1 != r10) goto L_0x05a7;
-    L_0x058f:
-        r1 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0afd }
-        r1.<init>();	 Catch:{ Exception -> 0x0afd }
-        r1.append(r7);	 Catch:{ Exception -> 0x0afd }
+        if (r1 != r10) goto L_0x05ab;
+    L_0x0593:
+        r1 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0b01 }
+        r1.<init>();	 Catch:{ Exception -> 0x0b01 }
+        r1.append(r7);	 Catch:{ Exception -> 0x0b01 }
         r7 = "NewMessages";
-        r10 = r12.total_unread_count;	 Catch:{ Exception -> 0x0afd }
-        r7 = org.telegram.messenger.LocaleController.formatPluralString(r7, r10);	 Catch:{ Exception -> 0x0afd }
-        r1.append(r7);	 Catch:{ Exception -> 0x0afd }
-        r7 = r1.toString();	 Catch:{ Exception -> 0x0afd }
-        goto L_0x0580;
-    L_0x05a7:
-        r1 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0afd }
-        r1.<init>();	 Catch:{ Exception -> 0x0afd }
-        r1.append(r7);	 Catch:{ Exception -> 0x0afd }
+        r10 = r12.total_unread_count;	 Catch:{ Exception -> 0x0b01 }
+        r7 = org.telegram.messenger.LocaleController.formatPluralString(r7, r10);	 Catch:{ Exception -> 0x0b01 }
+        r1.append(r7);	 Catch:{ Exception -> 0x0b01 }
+        r7 = r1.toString();	 Catch:{ Exception -> 0x0b01 }
+        goto L_0x0584;
+    L_0x05ab:
+        r1 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0b01 }
+        r1.<init>();	 Catch:{ Exception -> 0x0b01 }
+        r1.append(r7);	 Catch:{ Exception -> 0x0b01 }
         r7 = "NotificationMessagesPeopleDisplayOrder";
         r39 = r15;
         r10 = 2;
-        r15 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x0afd }
+        r15 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x0b01 }
         r10 = "NewMessages";
         r40 = r3;
-        r3 = r12.total_unread_count;	 Catch:{ Exception -> 0x0afd }
-        r3 = org.telegram.messenger.LocaleController.formatPluralString(r10, r3);	 Catch:{ Exception -> 0x0afd }
+        r3 = r12.total_unread_count;	 Catch:{ Exception -> 0x0b01 }
+        r3 = org.telegram.messenger.LocaleController.formatPluralString(r10, r3);	 Catch:{ Exception -> 0x0b01 }
         r10 = 0;
-        r15[r10] = r3;	 Catch:{ Exception -> 0x0afd }
+        r15[r10] = r3;	 Catch:{ Exception -> 0x0b01 }
         r3 = "FromChats";
-        r10 = r12.pushDialogs;	 Catch:{ Exception -> 0x0afd }
-        r10 = r10.size();	 Catch:{ Exception -> 0x0afd }
-        r3 = org.telegram.messenger.LocaleController.formatPluralString(r3, r10);	 Catch:{ Exception -> 0x0afd }
+        r10 = r12.pushDialogs;	 Catch:{ Exception -> 0x0b01 }
+        r10 = r10.size();	 Catch:{ Exception -> 0x0b01 }
+        r3 = org.telegram.messenger.LocaleController.formatPluralString(r3, r10);	 Catch:{ Exception -> 0x0b01 }
         r10 = 1;
-        r15[r10] = r3;	 Catch:{ Exception -> 0x0afd }
+        r15[r10] = r3;	 Catch:{ Exception -> 0x0b01 }
         r3 = NUM; // 0x7f0d0675 float:1.8745467E38 double:1.053130594E-314;
-        r3 = org.telegram.messenger.LocaleController.formatString(r7, r3, r15);	 Catch:{ Exception -> 0x0afd }
-        r1.append(r3);	 Catch:{ Exception -> 0x0afd }
-        r7 = r1.toString();	 Catch:{ Exception -> 0x0afd }
-        goto L_0x0584;
-    L_0x05e1:
-        r10 = new androidx.core.app.NotificationCompat$Builder;	 Catch:{ Exception -> 0x0afd }
-        r1 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0afd }
-        r10.<init>(r1);	 Catch:{ Exception -> 0x0afd }
-        r10.setContentTitle(r4);	 Catch:{ Exception -> 0x0afd }
+        r3 = org.telegram.messenger.LocaleController.formatString(r7, r3, r15);	 Catch:{ Exception -> 0x0b01 }
+        r1.append(r3);	 Catch:{ Exception -> 0x0b01 }
+        r7 = r1.toString();	 Catch:{ Exception -> 0x0b01 }
+        goto L_0x0588;
+    L_0x05e5:
+        r10 = new androidx.core.app.NotificationCompat$Builder;	 Catch:{ Exception -> 0x0b01 }
+        r1 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0b01 }
+        r10.<init>(r1);	 Catch:{ Exception -> 0x0b01 }
+        r10.setContentTitle(r4);	 Catch:{ Exception -> 0x0b01 }
         r1 = NUM; // 0x7var_b float:1.7945639E38 double:1.0529357614E-314;
-        r10.setSmallIcon(r1);	 Catch:{ Exception -> 0x0afd }
+        r10.setSmallIcon(r1);	 Catch:{ Exception -> 0x0b01 }
         r1 = 1;
-        r10.setAutoCancel(r1);	 Catch:{ Exception -> 0x0afd }
-        r1 = r12.total_unread_count;	 Catch:{ Exception -> 0x0afd }
-        r10.setNumber(r1);	 Catch:{ Exception -> 0x0afd }
-        r10.setContentIntent(r2);	 Catch:{ Exception -> 0x0afd }
-        r1 = r12.notificationGroup;	 Catch:{ Exception -> 0x0afd }
-        r10.setGroup(r1);	 Catch:{ Exception -> 0x0afd }
+        r10.setAutoCancel(r1);	 Catch:{ Exception -> 0x0b01 }
+        r1 = r12.total_unread_count;	 Catch:{ Exception -> 0x0b01 }
+        r10.setNumber(r1);	 Catch:{ Exception -> 0x0b01 }
+        r10.setContentIntent(r2);	 Catch:{ Exception -> 0x0b01 }
+        r1 = r12.notificationGroup;	 Catch:{ Exception -> 0x0b01 }
+        r10.setGroup(r1);	 Catch:{ Exception -> 0x0b01 }
         r1 = 1;
-        r10.setGroupSummary(r1);	 Catch:{ Exception -> 0x0afd }
-        r10.setShowWhen(r1);	 Catch:{ Exception -> 0x0afd }
-        r1 = r6.messageOwner;	 Catch:{ Exception -> 0x0afd }
-        r1 = r1.date;	 Catch:{ Exception -> 0x0afd }
-        r1 = (long) r1;	 Catch:{ Exception -> 0x0afd }
+        r10.setGroupSummary(r1);	 Catch:{ Exception -> 0x0b01 }
+        r10.setShowWhen(r1);	 Catch:{ Exception -> 0x0b01 }
+        r1 = r6.messageOwner;	 Catch:{ Exception -> 0x0b01 }
+        r1 = r1.date;	 Catch:{ Exception -> 0x0b01 }
+        r1 = (long) r1;	 Catch:{ Exception -> 0x0b01 }
         r1 = r1 * r22;
-        r10.setWhen(r1);	 Catch:{ Exception -> 0x0afd }
+        r10.setWhen(r1);	 Catch:{ Exception -> 0x0b01 }
         r1 = -15618822; // 0xfffffffffvar_acfa float:-1.936362E38 double:NaN;
-        r10.setColor(r1);	 Catch:{ Exception -> 0x0afd }
+        r10.setColor(r1);	 Catch:{ Exception -> 0x0b01 }
         r1 = "msg";
-        r10.setCategory(r1);	 Catch:{ Exception -> 0x0afd }
-        if (r5 != 0) goto L_0x0644;
-    L_0x0620:
-        if (r11 == 0) goto L_0x0644;
-    L_0x0622:
-        r1 = r11.phone;	 Catch:{ Exception -> 0x0afd }
-        if (r1 == 0) goto L_0x0644;
+        r10.setCategory(r1);	 Catch:{ Exception -> 0x0b01 }
+        if (r5 != 0) goto L_0x0648;
+    L_0x0624:
+        if (r11 == 0) goto L_0x0648;
     L_0x0626:
-        r1 = r11.phone;	 Catch:{ Exception -> 0x0afd }
-        r1 = r1.length();	 Catch:{ Exception -> 0x0afd }
-        if (r1 <= 0) goto L_0x0644;
-    L_0x062e:
-        r1 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0afd }
-        r1.<init>();	 Catch:{ Exception -> 0x0afd }
+        r1 = r11.phone;	 Catch:{ Exception -> 0x0b01 }
+        if (r1 == 0) goto L_0x0648;
+    L_0x062a:
+        r1 = r11.phone;	 Catch:{ Exception -> 0x0b01 }
+        r1 = r1.length();	 Catch:{ Exception -> 0x0b01 }
+        if (r1 <= 0) goto L_0x0648;
+    L_0x0632:
+        r1 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0b01 }
+        r1.<init>();	 Catch:{ Exception -> 0x0b01 }
         r2 = "tel:+";
-        r1.append(r2);	 Catch:{ Exception -> 0x0afd }
-        r2 = r11.phone;	 Catch:{ Exception -> 0x0afd }
-        r1.append(r2);	 Catch:{ Exception -> 0x0afd }
-        r1 = r1.toString();	 Catch:{ Exception -> 0x0afd }
-        r10.addPerson(r1);	 Catch:{ Exception -> 0x0afd }
-    L_0x0644:
-        r1 = r12.pushMessages;	 Catch:{ Exception -> 0x0afd }
-        r1 = r1.size();	 Catch:{ Exception -> 0x0afd }
+        r1.append(r2);	 Catch:{ Exception -> 0x0b01 }
+        r2 = r11.phone;	 Catch:{ Exception -> 0x0b01 }
+        r1.append(r2);	 Catch:{ Exception -> 0x0b01 }
+        r1 = r1.toString();	 Catch:{ Exception -> 0x0b01 }
+        r10.addPerson(r1);	 Catch:{ Exception -> 0x0b01 }
+    L_0x0648:
+        r1 = r12.pushMessages;	 Catch:{ Exception -> 0x0b01 }
+        r1 = r1.size();	 Catch:{ Exception -> 0x0b01 }
         r2 = 1;
-        if (r1 != r2) goto L_0x06c6;
-    L_0x064d:
-        r1 = r12.pushMessages;	 Catch:{ Exception -> 0x0afd }
+        if (r1 != r2) goto L_0x06ca;
+    L_0x0651:
+        r1 = r12.pushMessages;	 Catch:{ Exception -> 0x0b01 }
         r3 = 0;
-        r1 = r1.get(r3);	 Catch:{ Exception -> 0x0afd }
-        r1 = (org.telegram.messenger.MessageObject) r1;	 Catch:{ Exception -> 0x0afd }
-        r7 = new boolean[r2];	 Catch:{ Exception -> 0x0afd }
+        r1 = r1.get(r3);	 Catch:{ Exception -> 0x0b01 }
+        r1 = (org.telegram.messenger.MessageObject) r1;	 Catch:{ Exception -> 0x0b01 }
+        r7 = new boolean[r2];	 Catch:{ Exception -> 0x0b01 }
         r2 = 0;
-        r11 = r12.getStringForMessage(r1, r3, r7, r2);	 Catch:{ Exception -> 0x0afd }
-        r1 = r1.messageOwner;	 Catch:{ Exception -> 0x0afd }
-        r1 = r1.silent;	 Catch:{ Exception -> 0x0afd }
-        if (r11 != 0) goto L_0x0664;
-    L_0x0663:
+        r11 = r12.getStringForMessage(r1, r3, r7, r2);	 Catch:{ Exception -> 0x0b01 }
+        r1 = r1.messageOwner;	 Catch:{ Exception -> 0x0b01 }
+        r1 = r1.silent;	 Catch:{ Exception -> 0x0b01 }
+        if (r11 != 0) goto L_0x0668;
+    L_0x0667:
         return;
-    L_0x0664:
-        if (r8 == 0) goto L_0x06af;
-    L_0x0666:
-        if (r5 == 0) goto L_0x067e;
     L_0x0668:
-        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0afd }
-        r2.<init>();	 Catch:{ Exception -> 0x0afd }
+        if (r8 == 0) goto L_0x06b3;
+    L_0x066a:
+        if (r5 == 0) goto L_0x0682;
+    L_0x066c:
+        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0b01 }
+        r2.<init>();	 Catch:{ Exception -> 0x0b01 }
         r3 = " @ ";
-        r2.append(r3);	 Catch:{ Exception -> 0x0afd }
-        r2.append(r4);	 Catch:{ Exception -> 0x0afd }
-        r2 = r2.toString();	 Catch:{ Exception -> 0x0afd }
-        r2 = r11.replace(r2, r14);	 Catch:{ Exception -> 0x0afd }
-        goto L_0x06b0;
-    L_0x067e:
+        r2.append(r3);	 Catch:{ Exception -> 0x0b01 }
+        r2.append(r4);	 Catch:{ Exception -> 0x0b01 }
+        r2 = r2.toString();	 Catch:{ Exception -> 0x0b01 }
+        r2 = r11.replace(r2, r14);	 Catch:{ Exception -> 0x0b01 }
+        goto L_0x06b4;
+    L_0x0682:
         r2 = 0;
-        r3 = r7[r2];	 Catch:{ Exception -> 0x0afd }
-        if (r3 == 0) goto L_0x0699;
-    L_0x0683:
-        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0afd }
-        r2.<init>();	 Catch:{ Exception -> 0x0afd }
-        r2.append(r4);	 Catch:{ Exception -> 0x0afd }
+        r3 = r7[r2];	 Catch:{ Exception -> 0x0b01 }
+        if (r3 == 0) goto L_0x069d;
+    L_0x0687:
+        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0b01 }
+        r2.<init>();	 Catch:{ Exception -> 0x0b01 }
+        r2.append(r4);	 Catch:{ Exception -> 0x0b01 }
         r3 = ": ";
-        r2.append(r3);	 Catch:{ Exception -> 0x0afd }
-        r2 = r2.toString();	 Catch:{ Exception -> 0x0afd }
-        r2 = r11.replace(r2, r14);	 Catch:{ Exception -> 0x0afd }
-        goto L_0x06b0;
-    L_0x0699:
-        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0afd }
-        r2.<init>();	 Catch:{ Exception -> 0x0afd }
-        r2.append(r4);	 Catch:{ Exception -> 0x0afd }
+        r2.append(r3);	 Catch:{ Exception -> 0x0b01 }
+        r2 = r2.toString();	 Catch:{ Exception -> 0x0b01 }
+        r2 = r11.replace(r2, r14);	 Catch:{ Exception -> 0x0b01 }
+        goto L_0x06b4;
+    L_0x069d:
+        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0b01 }
+        r2.<init>();	 Catch:{ Exception -> 0x0b01 }
+        r2.append(r4);	 Catch:{ Exception -> 0x0b01 }
         r3 = " ";
-        r2.append(r3);	 Catch:{ Exception -> 0x0afd }
-        r2 = r2.toString();	 Catch:{ Exception -> 0x0afd }
-        r2 = r11.replace(r2, r14);	 Catch:{ Exception -> 0x0afd }
-        goto L_0x06b0;
-    L_0x06af:
+        r2.append(r3);	 Catch:{ Exception -> 0x0b01 }
+        r2 = r2.toString();	 Catch:{ Exception -> 0x0b01 }
+        r2 = r11.replace(r2, r14);	 Catch:{ Exception -> 0x0b01 }
+        goto L_0x06b4;
+    L_0x06b3:
         r2 = r11;
-    L_0x06b0:
-        r10.setContentText(r2);	 Catch:{ Exception -> 0x0afd }
-        r3 = new androidx.core.app.NotificationCompat$BigTextStyle;	 Catch:{ Exception -> 0x0afd }
-        r3.<init>();	 Catch:{ Exception -> 0x0afd }
-        r3.bigText(r2);	 Catch:{ Exception -> 0x0afd }
-        r10.setStyle(r3);	 Catch:{ Exception -> 0x0afd }
+    L_0x06b4:
+        r10.setContentText(r2);	 Catch:{ Exception -> 0x0b01 }
+        r3 = new androidx.core.app.NotificationCompat$BigTextStyle;	 Catch:{ Exception -> 0x0b01 }
+        r3.<init>();	 Catch:{ Exception -> 0x0b01 }
+        r3.bigText(r2);	 Catch:{ Exception -> 0x0b01 }
+        r10.setStyle(r3);	 Catch:{ Exception -> 0x0b01 }
         r44 = r6;
         r43 = r9;
         r42 = r13;
-        goto L_0x0786;
-    L_0x06c6:
-        r10.setContentText(r15);	 Catch:{ Exception -> 0x0afd }
-        r1 = new androidx.core.app.NotificationCompat$InboxStyle;	 Catch:{ Exception -> 0x0afd }
-        r1.<init>();	 Catch:{ Exception -> 0x0afd }
-        r1.setBigContentTitle(r4);	 Catch:{ Exception -> 0x0afd }
+        goto L_0x078a;
+    L_0x06ca:
+        r10.setContentText(r15);	 Catch:{ Exception -> 0x0b01 }
+        r1 = new androidx.core.app.NotificationCompat$InboxStyle;	 Catch:{ Exception -> 0x0b01 }
+        r1.<init>();	 Catch:{ Exception -> 0x0b01 }
+        r1.setBigContentTitle(r4);	 Catch:{ Exception -> 0x0b01 }
         r2 = 10;
-        r3 = r12.pushMessages;	 Catch:{ Exception -> 0x0afd }
-        r3 = r3.size();	 Catch:{ Exception -> 0x0afd }
-        r2 = java.lang.Math.min(r2, r3);	 Catch:{ Exception -> 0x0afd }
+        r3 = r12.pushMessages;	 Catch:{ Exception -> 0x0b01 }
+        r3 = r3.size();	 Catch:{ Exception -> 0x0b01 }
+        r2 = java.lang.Math.min(r2, r3);	 Catch:{ Exception -> 0x0b01 }
         r3 = 1;
-        r7 = new boolean[r3];	 Catch:{ Exception -> 0x0afd }
+        r7 = new boolean[r3];	 Catch:{ Exception -> 0x0b01 }
         r3 = 0;
         r11 = 2;
         r38 = 0;
-    L_0x06e4:
-        if (r3 >= r2) goto L_0x0777;
-    L_0x06e6:
+    L_0x06e8:
+        if (r3 >= r2) goto L_0x077b;
+    L_0x06ea:
         r41 = r2;
-        r2 = r12.pushMessages;	 Catch:{ Exception -> 0x0afd }
-        r2 = r2.get(r3);	 Catch:{ Exception -> 0x0afd }
-        r2 = (org.telegram.messenger.MessageObject) r2;	 Catch:{ Exception -> 0x0afd }
+        r2 = r12.pushMessages;	 Catch:{ Exception -> 0x0b01 }
+        r2 = r2.get(r3);	 Catch:{ Exception -> 0x0b01 }
+        r2 = (org.telegram.messenger.MessageObject) r2;	 Catch:{ Exception -> 0x0b01 }
         r44 = r6;
         r43 = r9;
         r42 = r13;
         r9 = 0;
         r13 = 0;
-        r6 = r12.getStringForMessage(r2, r9, r7, r13);	 Catch:{ Exception -> 0x0afd }
-        if (r6 == 0) goto L_0x0767;
-    L_0x06fe:
-        r9 = r2.messageOwner;	 Catch:{ Exception -> 0x0afd }
-        r9 = r9.date;	 Catch:{ Exception -> 0x0afd }
+        r6 = r12.getStringForMessage(r2, r9, r7, r13);	 Catch:{ Exception -> 0x0b01 }
+        if (r6 == 0) goto L_0x076b;
+    L_0x0702:
+        r9 = r2.messageOwner;	 Catch:{ Exception -> 0x0b01 }
+        r9 = r9.date;	 Catch:{ Exception -> 0x0b01 }
         r13 = r19;
-        if (r9 > r13) goto L_0x0707;
-    L_0x0706:
-        goto L_0x0769;
-    L_0x0707:
-        r9 = 2;
-        if (r11 != r9) goto L_0x0710;
+        if (r9 > r13) goto L_0x070b;
     L_0x070a:
-        r2 = r2.messageOwner;	 Catch:{ Exception -> 0x0afd }
-        r11 = r2.silent;	 Catch:{ Exception -> 0x0afd }
+        goto L_0x076d;
+    L_0x070b:
+        r9 = 2;
+        if (r11 != r9) goto L_0x0714;
+    L_0x070e:
+        r2 = r2.messageOwner;	 Catch:{ Exception -> 0x0b01 }
+        r11 = r2.silent;	 Catch:{ Exception -> 0x0b01 }
         r38 = r6;
-    L_0x0710:
-        r2 = r12.pushDialogs;	 Catch:{ Exception -> 0x0afd }
-        r2 = r2.size();	 Catch:{ Exception -> 0x0afd }
+    L_0x0714:
+        r2 = r12.pushDialogs;	 Catch:{ Exception -> 0x0b01 }
+        r2 = r2.size();	 Catch:{ Exception -> 0x0b01 }
         r9 = 1;
-        if (r2 != r9) goto L_0x0763;
-    L_0x0719:
-        if (r8 == 0) goto L_0x0763;
-    L_0x071b:
-        if (r5 == 0) goto L_0x0733;
+        if (r2 != r9) goto L_0x0767;
     L_0x071d:
-        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0afd }
-        r2.<init>();	 Catch:{ Exception -> 0x0afd }
+        if (r8 == 0) goto L_0x0767;
+    L_0x071f:
+        if (r5 == 0) goto L_0x0737;
+    L_0x0721:
+        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0b01 }
+        r2.<init>();	 Catch:{ Exception -> 0x0b01 }
         r9 = " @ ";
-        r2.append(r9);	 Catch:{ Exception -> 0x0afd }
-        r2.append(r4);	 Catch:{ Exception -> 0x0afd }
-        r2 = r2.toString();	 Catch:{ Exception -> 0x0afd }
-        r6 = r6.replace(r2, r14);	 Catch:{ Exception -> 0x0afd }
-        goto L_0x0763;
-    L_0x0733:
+        r2.append(r9);	 Catch:{ Exception -> 0x0b01 }
+        r2.append(r4);	 Catch:{ Exception -> 0x0b01 }
+        r2 = r2.toString();	 Catch:{ Exception -> 0x0b01 }
+        r6 = r6.replace(r2, r14);	 Catch:{ Exception -> 0x0b01 }
+        goto L_0x0767;
+    L_0x0737:
         r2 = 0;
-        r9 = r7[r2];	 Catch:{ Exception -> 0x0afd }
-        if (r9 == 0) goto L_0x074e;
-    L_0x0738:
-        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0afd }
-        r2.<init>();	 Catch:{ Exception -> 0x0afd }
-        r2.append(r4);	 Catch:{ Exception -> 0x0afd }
+        r9 = r7[r2];	 Catch:{ Exception -> 0x0b01 }
+        if (r9 == 0) goto L_0x0752;
+    L_0x073c:
+        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0b01 }
+        r2.<init>();	 Catch:{ Exception -> 0x0b01 }
+        r2.append(r4);	 Catch:{ Exception -> 0x0b01 }
         r9 = ": ";
-        r2.append(r9);	 Catch:{ Exception -> 0x0afd }
-        r2 = r2.toString();	 Catch:{ Exception -> 0x0afd }
-        r6 = r6.replace(r2, r14);	 Catch:{ Exception -> 0x0afd }
-        goto L_0x0763;
-    L_0x074e:
-        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0afd }
-        r2.<init>();	 Catch:{ Exception -> 0x0afd }
-        r2.append(r4);	 Catch:{ Exception -> 0x0afd }
+        r2.append(r9);	 Catch:{ Exception -> 0x0b01 }
+        r2 = r2.toString();	 Catch:{ Exception -> 0x0b01 }
+        r6 = r6.replace(r2, r14);	 Catch:{ Exception -> 0x0b01 }
+        goto L_0x0767;
+    L_0x0752:
+        r2 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0b01 }
+        r2.<init>();	 Catch:{ Exception -> 0x0b01 }
+        r2.append(r4);	 Catch:{ Exception -> 0x0b01 }
         r9 = " ";
-        r2.append(r9);	 Catch:{ Exception -> 0x0afd }
-        r2 = r2.toString();	 Catch:{ Exception -> 0x0afd }
-        r6 = r6.replace(r2, r14);	 Catch:{ Exception -> 0x0afd }
-    L_0x0763:
-        r1.addLine(r6);	 Catch:{ Exception -> 0x0afd }
-        goto L_0x0769;
+        r2.append(r9);	 Catch:{ Exception -> 0x0b01 }
+        r2 = r2.toString();	 Catch:{ Exception -> 0x0b01 }
+        r6 = r6.replace(r2, r14);	 Catch:{ Exception -> 0x0b01 }
     L_0x0767:
+        r1.addLine(r6);	 Catch:{ Exception -> 0x0b01 }
+        goto L_0x076d;
+    L_0x076b:
         r13 = r19;
-    L_0x0769:
+    L_0x076d:
         r3 = r3 + 1;
         r19 = r13;
         r2 = r41;
         r13 = r42;
         r9 = r43;
         r6 = r44;
-        goto L_0x06e4;
-    L_0x0777:
+        goto L_0x06e8;
+    L_0x077b:
         r44 = r6;
         r43 = r9;
         r42 = r13;
-        r1.setSummaryText(r15);	 Catch:{ Exception -> 0x0afd }
-        r10.setStyle(r1);	 Catch:{ Exception -> 0x0afd }
+        r1.setSummaryText(r15);	 Catch:{ Exception -> 0x0b01 }
+        r10.setStyle(r1);	 Catch:{ Exception -> 0x0b01 }
         r1 = r11;
         r11 = r38;
-    L_0x0786:
-        r2 = new android.content.Intent;	 Catch:{ Exception -> 0x0afd }
-        r3 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0afd }
+    L_0x078a:
+        r2 = new android.content.Intent;	 Catch:{ Exception -> 0x0b01 }
+        r3 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0b01 }
         r4 = org.telegram.messenger.NotificationDismissReceiver.class;
-        r2.<init>(r3, r4);	 Catch:{ Exception -> 0x0afd }
+        r2.<init>(r3, r4);	 Catch:{ Exception -> 0x0b01 }
         r3 = "messageDate";
         r4 = r44;
-        r5 = r4.messageOwner;	 Catch:{ Exception -> 0x0afd }
-        r5 = r5.date;	 Catch:{ Exception -> 0x0afd }
-        r2.putExtra(r3, r5);	 Catch:{ Exception -> 0x0afd }
-        r3 = r12.currentAccount;	 Catch:{ Exception -> 0x0afd }
+        r5 = r4.messageOwner;	 Catch:{ Exception -> 0x0b01 }
+        r5 = r5.date;	 Catch:{ Exception -> 0x0b01 }
+        r2.putExtra(r3, r5);	 Catch:{ Exception -> 0x0b01 }
+        r3 = r12.currentAccount;	 Catch:{ Exception -> 0x0b01 }
         r5 = r43;
-        r2.putExtra(r5, r3);	 Catch:{ Exception -> 0x0afd }
-        r3 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0afd }
+        r2.putExtra(r5, r3);	 Catch:{ Exception -> 0x0b01 }
+        r3 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0b01 }
         r6 = NUM; // 0x8000000 float:3.85186E-34 double:6.63123685E-316;
         r7 = 1;
-        r2 = android.app.PendingIntent.getBroadcast(r3, r7, r2, r6);	 Catch:{ Exception -> 0x0afd }
-        r10.setDeleteIntent(r2);	 Catch:{ Exception -> 0x0afd }
-        if (r42 == 0) goto L_0x07f9;
-    L_0x07af:
-        r2 = org.telegram.messenger.ImageLoader.getInstance();	 Catch:{ Exception -> 0x0afd }
+        r2 = android.app.PendingIntent.getBroadcast(r3, r7, r2, r6);	 Catch:{ Exception -> 0x0b01 }
+        r10.setDeleteIntent(r2);	 Catch:{ Exception -> 0x0b01 }
+        if (r42 == 0) goto L_0x07fd;
+    L_0x07b3:
+        r2 = org.telegram.messenger.ImageLoader.getInstance();	 Catch:{ Exception -> 0x0b01 }
         r3 = "50_50";
         r13 = r42;
         r7 = 0;
-        r2 = r2.getImageFromMemory(r13, r7, r3);	 Catch:{ Exception -> 0x0afd }
-        if (r2 == 0) goto L_0x07c6;
-    L_0x07be:
-        r2 = r2.getBitmap();	 Catch:{ Exception -> 0x0afd }
-        r10.setLargeIcon(r2);	 Catch:{ Exception -> 0x0afd }
-        goto L_0x07fa;
-    L_0x07c6:
+        r2 = r2.getImageFromMemory(r13, r7, r3);	 Catch:{ Exception -> 0x0b01 }
+        if (r2 == 0) goto L_0x07ca;
+    L_0x07c2:
+        r2 = r2.getBitmap();	 Catch:{ Exception -> 0x0b01 }
+        r10.setLargeIcon(r2);	 Catch:{ Exception -> 0x0b01 }
+        goto L_0x07fe;
+    L_0x07ca:
         r2 = 1;
-        r3 = org.telegram.messenger.FileLoader.getPathToAttach(r13, r2);	 Catch:{ Throwable -> 0x07fa }
-        r2 = r3.exists();	 Catch:{ Throwable -> 0x07fa }
-        if (r2 == 0) goto L_0x07fa;
-    L_0x07d1:
+        r3 = org.telegram.messenger.FileLoader.getPathToAttach(r13, r2);	 Catch:{ Throwable -> 0x07fe }
+        r2 = r3.exists();	 Catch:{ Throwable -> 0x07fe }
+        if (r2 == 0) goto L_0x07fe;
+    L_0x07d5:
         r2 = NUM; // 0x43200000 float:160.0 double:5.564022167E-315;
         r8 = NUM; // 0x42480000 float:50.0 double:5.49408334E-315;
-        r8 = org.telegram.messenger.AndroidUtilities.dp(r8);	 Catch:{ Throwable -> 0x07fa }
-        r8 = (float) r8;	 Catch:{ Throwable -> 0x07fa }
+        r8 = org.telegram.messenger.AndroidUtilities.dp(r8);	 Catch:{ Throwable -> 0x07fe }
+        r8 = (float) r8;	 Catch:{ Throwable -> 0x07fe }
         r2 = r2 / r8;
-        r8 = new android.graphics.BitmapFactory$Options;	 Catch:{ Throwable -> 0x07fa }
-        r8.<init>();	 Catch:{ Throwable -> 0x07fa }
+        r8 = new android.graphics.BitmapFactory$Options;	 Catch:{ Throwable -> 0x07fe }
+        r8.<init>();	 Catch:{ Throwable -> 0x07fe }
         r9 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r9 = (r2 > r9 ? 1 : (r2 == r9 ? 0 : -1));
-        if (r9 >= 0) goto L_0x07e8;
-    L_0x07e6:
+        if (r9 >= 0) goto L_0x07ec;
+    L_0x07ea:
         r2 = 1;
-        goto L_0x07e9;
-    L_0x07e8:
-        r2 = (int) r2;	 Catch:{ Throwable -> 0x07fa }
-    L_0x07e9:
-        r8.inSampleSize = r2;	 Catch:{ Throwable -> 0x07fa }
-        r2 = r3.getAbsolutePath();	 Catch:{ Throwable -> 0x07fa }
-        r2 = android.graphics.BitmapFactory.decodeFile(r2, r8);	 Catch:{ Throwable -> 0x07fa }
-        if (r2 == 0) goto L_0x07fa;
-    L_0x07f5:
-        r10.setLargeIcon(r2);	 Catch:{ Throwable -> 0x07fa }
-        goto L_0x07fa;
+        goto L_0x07ed;
+    L_0x07ec:
+        r2 = (int) r2;	 Catch:{ Throwable -> 0x07fe }
+    L_0x07ed:
+        r8.inSampleSize = r2;	 Catch:{ Throwable -> 0x07fe }
+        r2 = r3.getAbsolutePath();	 Catch:{ Throwable -> 0x07fe }
+        r2 = android.graphics.BitmapFactory.decodeFile(r2, r8);	 Catch:{ Throwable -> 0x07fe }
+        if (r2 == 0) goto L_0x07fe;
     L_0x07f9:
+        r10.setLargeIcon(r2);	 Catch:{ Throwable -> 0x07fe }
+        goto L_0x07fe;
+    L_0x07fd:
         r7 = 0;
-    L_0x07fa:
-        r13 = r46;
-        if (r13 == 0) goto L_0x0845;
     L_0x07fe:
-        r2 = 1;
-        if (r1 != r2) goto L_0x0802;
-    L_0x0801:
-        goto L_0x0845;
+        r13 = r46;
+        if (r13 == 0) goto L_0x0849;
     L_0x0802:
-        if (r40 != 0) goto L_0x0811;
-    L_0x0804:
+        r2 = 1;
+        if (r1 != r2) goto L_0x0806;
+    L_0x0805:
+        goto L_0x0849;
+    L_0x0806:
+        if (r40 != 0) goto L_0x0815;
+    L_0x0808:
         r2 = 0;
-        r10.setPriority(r2);	 Catch:{ Exception -> 0x0afd }
-        r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0afd }
+        r10.setPriority(r2);	 Catch:{ Exception -> 0x0b01 }
+        r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0b01 }
         r3 = 26;
-        if (r2 < r3) goto L_0x0852;
-    L_0x080e:
+        if (r2 < r3) goto L_0x0856;
+    L_0x0812:
         r2 = 1;
         r8 = 3;
-        goto L_0x0854;
-    L_0x0811:
+        goto L_0x0858;
+    L_0x0815:
         r3 = r40;
         r2 = 1;
-        if (r3 == r2) goto L_0x0839;
-    L_0x0816:
+        if (r3 == r2) goto L_0x083d;
+    L_0x081a:
         r2 = 2;
-        if (r3 != r2) goto L_0x081b;
-    L_0x0819:
+        if (r3 != r2) goto L_0x081f;
+    L_0x081d:
         r2 = 1;
-        goto L_0x0839;
-    L_0x081b:
+        goto L_0x083d;
+    L_0x081f:
         r2 = 4;
-        if (r3 != r2) goto L_0x082b;
-    L_0x081e:
+        if (r3 != r2) goto L_0x082f;
+    L_0x0822:
         r2 = -2;
-        r10.setPriority(r2);	 Catch:{ Exception -> 0x0afd }
-        r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0afd }
+        r10.setPriority(r2);	 Catch:{ Exception -> 0x0b01 }
+        r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0b01 }
         r3 = 26;
-        if (r2 < r3) goto L_0x0852;
-    L_0x0828:
+        if (r2 < r3) goto L_0x0856;
+    L_0x082c:
         r2 = 1;
         r8 = 1;
-        goto L_0x0854;
-    L_0x082b:
+        goto L_0x0858;
+    L_0x082f:
         r2 = 5;
-        if (r3 != r2) goto L_0x0852;
-    L_0x082e:
+        if (r3 != r2) goto L_0x0856;
+    L_0x0832:
         r2 = -1;
-        r10.setPriority(r2);	 Catch:{ Exception -> 0x0afd }
-        r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0afd }
+        r10.setPriority(r2);	 Catch:{ Exception -> 0x0b01 }
+        r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0b01 }
         r3 = 26;
-        if (r2 < r3) goto L_0x0852;
-    L_0x0838:
-        goto L_0x084f;
-    L_0x0839:
-        r10.setPriority(r2);	 Catch:{ Exception -> 0x0afd }
-        r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0afd }
+        if (r2 < r3) goto L_0x0856;
+    L_0x083c:
+        goto L_0x0853;
+    L_0x083d:
+        r10.setPriority(r2);	 Catch:{ Exception -> 0x0b01 }
+        r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0b01 }
         r3 = 26;
-        if (r2 < r3) goto L_0x0852;
-    L_0x0842:
+        if (r2 < r3) goto L_0x0856;
+    L_0x0846:
         r2 = 1;
         r8 = 4;
-        goto L_0x0854;
-    L_0x0845:
+        goto L_0x0858;
+    L_0x0849:
         r2 = -1;
-        r10.setPriority(r2);	 Catch:{ Exception -> 0x0afd }
-        r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0afd }
+        r10.setPriority(r2);	 Catch:{ Exception -> 0x0b01 }
+        r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0b01 }
         r3 = 26;
-        if (r2 < r3) goto L_0x0852;
-    L_0x084f:
+        if (r2 < r3) goto L_0x0856;
+    L_0x0853:
         r2 = 1;
         r8 = 2;
-        goto L_0x0854;
-    L_0x0852:
+        goto L_0x0858;
+    L_0x0856:
         r2 = 1;
         r8 = 0;
-    L_0x0854:
-        if (r1 == r2) goto L_0x097e;
-    L_0x0856:
-        if (r28 != 0) goto L_0x097e;
     L_0x0858:
-        r1 = org.telegram.messenger.ApplicationLoader.mainInterfacePaused;	 Catch:{ Exception -> 0x0afd }
-        if (r1 != 0) goto L_0x085e;
+        if (r1 == r2) goto L_0x0982;
+    L_0x085a:
+        if (r28 != 0) goto L_0x0982;
     L_0x085c:
-        if (r24 == 0) goto L_0x088d;
-    L_0x085e:
-        r1 = r11.length();	 Catch:{ Exception -> 0x0afd }
+        r1 = org.telegram.messenger.ApplicationLoader.mainInterfacePaused;	 Catch:{ Exception -> 0x0b01 }
+        if (r1 != 0) goto L_0x0862;
+    L_0x0860:
+        if (r24 == 0) goto L_0x0891;
+    L_0x0862:
+        r1 = r11.length();	 Catch:{ Exception -> 0x0b01 }
         r2 = 100;
-        if (r1 <= r2) goto L_0x088a;
-    L_0x0866:
-        r1 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0afd }
-        r1.<init>();	 Catch:{ Exception -> 0x0afd }
+        if (r1 <= r2) goto L_0x088e;
+    L_0x086a:
+        r1 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x0b01 }
+        r1.<init>();	 Catch:{ Exception -> 0x0b01 }
         r2 = 100;
         r3 = 0;
-        r2 = r11.substring(r3, r2);	 Catch:{ Exception -> 0x0afd }
+        r2 = r11.substring(r3, r2);	 Catch:{ Exception -> 0x0b01 }
         r3 = 10;
         r9 = 32;
-        r2 = r2.replace(r3, r9);	 Catch:{ Exception -> 0x0afd }
-        r2 = r2.trim();	 Catch:{ Exception -> 0x0afd }
-        r1.append(r2);	 Catch:{ Exception -> 0x0afd }
+        r2 = r2.replace(r3, r9);	 Catch:{ Exception -> 0x0b01 }
+        r2 = r2.trim();	 Catch:{ Exception -> 0x0b01 }
+        r1.append(r2);	 Catch:{ Exception -> 0x0b01 }
         r2 = "...";
-        r1.append(r2);	 Catch:{ Exception -> 0x0afd }
-        r11 = r1.toString();	 Catch:{ Exception -> 0x0afd }
-    L_0x088a:
-        r10.setTicker(r11);	 Catch:{ Exception -> 0x0afd }
-    L_0x088d:
-        r1 = org.telegram.messenger.MediaController.getInstance();	 Catch:{ Exception -> 0x0afd }
-        r1 = r1.isRecordingAudio();	 Catch:{ Exception -> 0x0afd }
-        if (r1 != 0) goto L_0x0911;
-    L_0x0897:
-        if (r39 == 0) goto L_0x0911;
-    L_0x0899:
+        r1.append(r2);	 Catch:{ Exception -> 0x0b01 }
+        r11 = r1.toString();	 Catch:{ Exception -> 0x0b01 }
+    L_0x088e:
+        r10.setTicker(r11);	 Catch:{ Exception -> 0x0b01 }
+    L_0x0891:
+        r1 = org.telegram.messenger.MediaController.getInstance();	 Catch:{ Exception -> 0x0b01 }
+        r1 = r1.isRecordingAudio();	 Catch:{ Exception -> 0x0b01 }
+        if (r1 != 0) goto L_0x0915;
+    L_0x089b:
+        if (r39 == 0) goto L_0x0915;
+    L_0x089d:
         r1 = "NoSound";
         r2 = r39;
-        r1 = r2.equals(r1);	 Catch:{ Exception -> 0x0afd }
-        if (r1 != 0) goto L_0x0911;
-    L_0x08a3:
-        r1 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0afd }
+        r1 = r2.equals(r1);	 Catch:{ Exception -> 0x0b01 }
+        if (r1 != 0) goto L_0x0915;
+    L_0x08a7:
+        r1 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0b01 }
         r3 = 26;
-        if (r1 < r3) goto L_0x08b9;
-    L_0x08a9:
+        if (r1 < r3) goto L_0x08bd;
+    L_0x08ad:
         r1 = r21;
-        r1 = r2.equals(r1);	 Catch:{ Exception -> 0x0afd }
-        if (r1 == 0) goto L_0x08b4;
-    L_0x08b1:
-        r1 = android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;	 Catch:{ Exception -> 0x0afd }
-        goto L_0x0912;
-    L_0x08b4:
-        r1 = android.net.Uri.parse(r2);	 Catch:{ Exception -> 0x0afd }
-        goto L_0x0912;
-    L_0x08b9:
+        r1 = r2.equals(r1);	 Catch:{ Exception -> 0x0b01 }
+        if (r1 == 0) goto L_0x08b8;
+    L_0x08b5:
+        r1 = android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;	 Catch:{ Exception -> 0x0b01 }
+        goto L_0x0916;
+    L_0x08b8:
+        r1 = android.net.Uri.parse(r2);	 Catch:{ Exception -> 0x0b01 }
+        goto L_0x0916;
+    L_0x08bd:
         r1 = r21;
-        r1 = r2.equals(r1);	 Catch:{ Exception -> 0x0afd }
-        if (r1 == 0) goto L_0x08c8;
-    L_0x08c1:
-        r1 = android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;	 Catch:{ Exception -> 0x0afd }
+        r1 = r2.equals(r1);	 Catch:{ Exception -> 0x0b01 }
+        if (r1 == 0) goto L_0x08cc;
+    L_0x08c5:
+        r1 = android.provider.Settings.System.DEFAULT_NOTIFICATION_URI;	 Catch:{ Exception -> 0x0b01 }
         r2 = 5;
-        r10.setSound(r1, r2);	 Catch:{ Exception -> 0x0afd }
-        goto L_0x0911;
-    L_0x08c8:
-        r1 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0afd }
+        r10.setSound(r1, r2);	 Catch:{ Exception -> 0x0b01 }
+        goto L_0x0915;
+    L_0x08cc:
+        r1 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0b01 }
         r3 = 24;
-        if (r1 < r3) goto L_0x0909;
-    L_0x08ce:
+        if (r1 < r3) goto L_0x090d;
+    L_0x08d2:
         r1 = "file://";
-        r1 = r2.startsWith(r1);	 Catch:{ Exception -> 0x0afd }
-        if (r1 == 0) goto L_0x0909;
-    L_0x08d6:
-        r1 = android.net.Uri.parse(r2);	 Catch:{ Exception -> 0x0afd }
-        r1 = org.telegram.messenger.AndroidUtilities.isInternalUri(r1);	 Catch:{ Exception -> 0x0afd }
-        if (r1 != 0) goto L_0x0909;
-    L_0x08e0:
-        r1 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0900 }
+        r1 = r2.startsWith(r1);	 Catch:{ Exception -> 0x0b01 }
+        if (r1 == 0) goto L_0x090d;
+    L_0x08da:
+        r1 = android.net.Uri.parse(r2);	 Catch:{ Exception -> 0x0b01 }
+        r1 = org.telegram.messenger.AndroidUtilities.isInternalUri(r1);	 Catch:{ Exception -> 0x0b01 }
+        if (r1 != 0) goto L_0x090d;
+    L_0x08e4:
+        r1 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0904 }
         r3 = "org.telegram.messenger.beta.provider";
-        r9 = new java.io.File;	 Catch:{ Exception -> 0x0900 }
+        r9 = new java.io.File;	 Catch:{ Exception -> 0x0904 }
         r11 = "file://";
-        r11 = r2.replace(r11, r14);	 Catch:{ Exception -> 0x0900 }
-        r9.<init>(r11);	 Catch:{ Exception -> 0x0900 }
-        r1 = androidx.core.content.FileProvider.getUriForFile(r1, r3, r9);	 Catch:{ Exception -> 0x0900 }
-        r3 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0900 }
+        r11 = r2.replace(r11, r14);	 Catch:{ Exception -> 0x0904 }
+        r9.<init>(r11);	 Catch:{ Exception -> 0x0904 }
+        r1 = androidx.core.content.FileProvider.getUriForFile(r1, r3, r9);	 Catch:{ Exception -> 0x0904 }
+        r3 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0904 }
         r9 = "com.android.systemui";
         r11 = 1;
-        r3.grantUriPermission(r9, r1, r11);	 Catch:{ Exception -> 0x0900 }
+        r3.grantUriPermission(r9, r1, r11);	 Catch:{ Exception -> 0x0904 }
         r3 = 5;
-        r10.setSound(r1, r3);	 Catch:{ Exception -> 0x0900 }
-        goto L_0x0911;
-    L_0x0900:
-        r1 = android.net.Uri.parse(r2);	 Catch:{ Exception -> 0x0afd }
+        r10.setSound(r1, r3);	 Catch:{ Exception -> 0x0904 }
+        goto L_0x0915;
+    L_0x0904:
+        r1 = android.net.Uri.parse(r2);	 Catch:{ Exception -> 0x0b01 }
         r2 = 5;
-        r10.setSound(r1, r2);	 Catch:{ Exception -> 0x0afd }
-        goto L_0x0911;
-    L_0x0909:
-        r1 = android.net.Uri.parse(r2);	 Catch:{ Exception -> 0x0afd }
+        r10.setSound(r1, r2);	 Catch:{ Exception -> 0x0b01 }
+        goto L_0x0915;
+    L_0x090d:
+        r1 = android.net.Uri.parse(r2);	 Catch:{ Exception -> 0x0b01 }
         r2 = 5;
-        r10.setSound(r1, r2);	 Catch:{ Exception -> 0x0afd }
-    L_0x0911:
+        r10.setSound(r1, r2);	 Catch:{ Exception -> 0x0b01 }
+    L_0x0915:
         r1 = r7;
-    L_0x0912:
-        if (r29 == 0) goto L_0x091e;
-    L_0x0914:
+    L_0x0916:
+        if (r29 == 0) goto L_0x0922;
+    L_0x0918:
         r2 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
         r3 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
         r9 = r29;
-        r10.setLights(r9, r2, r3);	 Catch:{ Exception -> 0x0afd }
-        goto L_0x0920;
-    L_0x091e:
+        r10.setLights(r9, r2, r3);	 Catch:{ Exception -> 0x0b01 }
+        goto L_0x0924;
+    L_0x0922:
         r9 = r29;
-    L_0x0920:
+    L_0x0924:
         r14 = r27;
         r2 = 2;
-        if (r14 == r2) goto L_0x096c;
-    L_0x0925:
-        r2 = org.telegram.messenger.MediaController.getInstance();	 Catch:{ Exception -> 0x0afd }
-        r2 = r2.isRecordingAudio();	 Catch:{ Exception -> 0x0afd }
-        if (r2 == 0) goto L_0x0931;
-    L_0x092f:
+        if (r14 == r2) goto L_0x0970;
+    L_0x0929:
+        r2 = org.telegram.messenger.MediaController.getInstance();	 Catch:{ Exception -> 0x0b01 }
+        r2 = r2.isRecordingAudio();	 Catch:{ Exception -> 0x0b01 }
+        if (r2 == 0) goto L_0x0935;
+    L_0x0933:
         r2 = 2;
-        goto L_0x096c;
-    L_0x0931:
+        goto L_0x0970;
+    L_0x0935:
         r2 = 1;
-        if (r14 != r2) goto L_0x094a;
-    L_0x0934:
+        if (r14 != r2) goto L_0x094e;
+    L_0x0938:
         r3 = 4;
-        r3 = new long[r3];	 Catch:{ Exception -> 0x0afd }
+        r3 = new long[r3];	 Catch:{ Exception -> 0x0b01 }
         r7 = 0;
         r21 = 0;
-        r3[r7] = r21;	 Catch:{ Exception -> 0x0afd }
+        r3[r7] = r21;	 Catch:{ Exception -> 0x0b01 }
         r27 = 100;
-        r3[r2] = r27;	 Catch:{ Exception -> 0x0afd }
+        r3[r2] = r27;	 Catch:{ Exception -> 0x0b01 }
         r2 = 2;
-        r3[r2] = r21;	 Catch:{ Exception -> 0x0afd }
+        r3[r2] = r21;	 Catch:{ Exception -> 0x0b01 }
         r2 = 3;
-        r3[r2] = r27;	 Catch:{ Exception -> 0x0afd }
-        r10.setVibrate(r3);	 Catch:{ Exception -> 0x0afd }
-        goto L_0x0979;
-    L_0x094a:
-        if (r14 == 0) goto L_0x0964;
-    L_0x094c:
-        r2 = 4;
-        if (r14 != r2) goto L_0x0950;
-    L_0x094f:
-        goto L_0x0964;
+        r3[r2] = r27;	 Catch:{ Exception -> 0x0b01 }
+        r10.setVibrate(r3);	 Catch:{ Exception -> 0x0b01 }
+        goto L_0x097d;
+    L_0x094e:
+        if (r14 == 0) goto L_0x0968;
     L_0x0950:
-        r2 = 3;
-        if (r14 != r2) goto L_0x0962;
+        r2 = 4;
+        if (r14 != r2) goto L_0x0954;
     L_0x0953:
+        goto L_0x0968;
+    L_0x0954:
+        r2 = 3;
+        if (r14 != r2) goto L_0x0966;
+    L_0x0957:
         r2 = 2;
-        r3 = new long[r2];	 Catch:{ Exception -> 0x0afd }
+        r3 = new long[r2];	 Catch:{ Exception -> 0x0b01 }
         r2 = 0;
         r18 = 0;
-        r3[r2] = r18;	 Catch:{ Exception -> 0x0afd }
+        r3[r2] = r18;	 Catch:{ Exception -> 0x0b01 }
         r2 = 1;
-        r3[r2] = r22;	 Catch:{ Exception -> 0x0afd }
-        r10.setVibrate(r3);	 Catch:{ Exception -> 0x0afd }
-        goto L_0x0979;
-    L_0x0962:
+        r3[r2] = r22;	 Catch:{ Exception -> 0x0b01 }
+        r10.setVibrate(r3);	 Catch:{ Exception -> 0x0b01 }
+        goto L_0x097d;
+    L_0x0966:
         r11 = r1;
-        goto L_0x097b;
-    L_0x0964:
+        goto L_0x097f;
+    L_0x0968:
         r2 = 2;
-        r10.setDefaults(r2);	 Catch:{ Exception -> 0x0afd }
+        r10.setDefaults(r2);	 Catch:{ Exception -> 0x0b01 }
         r2 = 0;
-        r3 = new long[r2];	 Catch:{ Exception -> 0x0afd }
-        goto L_0x0979;
-    L_0x096c:
-        r3 = new long[r2];	 Catch:{ Exception -> 0x0afd }
+        r3 = new long[r2];	 Catch:{ Exception -> 0x0b01 }
+        goto L_0x097d;
+    L_0x0970:
+        r3 = new long[r2];	 Catch:{ Exception -> 0x0b01 }
         r2 = 0;
         r21 = 0;
-        r3[r2] = r21;	 Catch:{ Exception -> 0x0afd }
+        r3[r2] = r21;	 Catch:{ Exception -> 0x0b01 }
         r2 = 1;
-        r3[r2] = r21;	 Catch:{ Exception -> 0x0afd }
-        r10.setVibrate(r3);	 Catch:{ Exception -> 0x0afd }
-    L_0x0979:
+        r3[r2] = r21;	 Catch:{ Exception -> 0x0b01 }
+        r10.setVibrate(r3);	 Catch:{ Exception -> 0x0b01 }
+    L_0x097d:
         r11 = r1;
         r7 = r3;
-    L_0x097b:
+    L_0x097f:
         r1 = 0;
         r3 = 1;
-        goto L_0x0990;
-    L_0x097e:
+        goto L_0x0994;
+    L_0x0982:
         r9 = r29;
         r1 = 2;
-        r2 = new long[r1];	 Catch:{ Exception -> 0x0afd }
+        r2 = new long[r1];	 Catch:{ Exception -> 0x0b01 }
         r1 = 0;
         r18 = 0;
-        r2[r1] = r18;	 Catch:{ Exception -> 0x0afd }
+        r2[r1] = r18;	 Catch:{ Exception -> 0x0b01 }
         r3 = 1;
-        r2[r3] = r18;	 Catch:{ Exception -> 0x0afd }
-        r10.setVibrate(r2);	 Catch:{ Exception -> 0x0afd }
+        r2[r3] = r18;	 Catch:{ Exception -> 0x0b01 }
+        r10.setVibrate(r2);	 Catch:{ Exception -> 0x0b01 }
         r11 = r7;
         r7 = r2;
-    L_0x0990:
-        r2 = org.telegram.messenger.AndroidUtilities.needShowPasscode(r1);	 Catch:{ Exception -> 0x0afd }
-        if (r2 != 0) goto L_0x0a6d;
-    L_0x0996:
-        r1 = org.telegram.messenger.SharedConfig.isWaitingForPasscodeEnter;	 Catch:{ Exception -> 0x0afd }
-        if (r1 != 0) goto L_0x0a6d;
+    L_0x0994:
+        r2 = org.telegram.messenger.AndroidUtilities.needShowPasscode(r1);	 Catch:{ Exception -> 0x0b01 }
+        if (r2 != 0) goto L_0x0a71;
     L_0x099a:
-        r1 = r4.getDialogId();	 Catch:{ Exception -> 0x0afd }
+        r1 = org.telegram.messenger.SharedConfig.isWaitingForPasscodeEnter;	 Catch:{ Exception -> 0x0b01 }
+        if (r1 != 0) goto L_0x0a71;
+    L_0x099e:
+        r1 = r4.getDialogId();	 Catch:{ Exception -> 0x0b01 }
         r16 = 777000; // 0xbdb28 float:1.088809E-39 double:3.83889E-318;
         r14 = (r1 > r16 ? 1 : (r1 == r16 ? 0 : -1));
-        if (r14 != 0) goto L_0x0a6d;
-    L_0x09a5:
-        r1 = r4.messageOwner;	 Catch:{ Exception -> 0x0afd }
-        r1 = r1.reply_markup;	 Catch:{ Exception -> 0x0afd }
-        if (r1 == 0) goto L_0x0a6d;
-    L_0x09ab:
-        r1 = r4.messageOwner;	 Catch:{ Exception -> 0x0afd }
-        r1 = r1.reply_markup;	 Catch:{ Exception -> 0x0afd }
-        r1 = r1.rows;	 Catch:{ Exception -> 0x0afd }
-        r2 = r1.size();	 Catch:{ Exception -> 0x0afd }
+        if (r14 != 0) goto L_0x0a71;
+    L_0x09a9:
+        r1 = r4.messageOwner;	 Catch:{ Exception -> 0x0b01 }
+        r1 = r1.reply_markup;	 Catch:{ Exception -> 0x0b01 }
+        if (r1 == 0) goto L_0x0a71;
+    L_0x09af:
+        r1 = r4.messageOwner;	 Catch:{ Exception -> 0x0b01 }
+        r1 = r1.reply_markup;	 Catch:{ Exception -> 0x0b01 }
+        r1 = r1.rows;	 Catch:{ Exception -> 0x0b01 }
+        r2 = r1.size();	 Catch:{ Exception -> 0x0b01 }
         r14 = 0;
         r16 = 0;
-    L_0x09b8:
-        if (r14 >= r2) goto L_0x0a65;
-    L_0x09ba:
-        r17 = r1.get(r14);	 Catch:{ Exception -> 0x0afd }
+    L_0x09bc:
+        if (r14 >= r2) goto L_0x0a69;
+    L_0x09be:
+        r17 = r1.get(r14);	 Catch:{ Exception -> 0x0b01 }
         r3 = r17;
-        r3 = (org.telegram.tgnet.TLRPC.TL_keyboardButtonRow) r3;	 Catch:{ Exception -> 0x0afd }
-        r6 = r3.buttons;	 Catch:{ Exception -> 0x0afd }
-        r6 = r6.size();	 Catch:{ Exception -> 0x0afd }
+        r3 = (org.telegram.tgnet.TLRPC.TL_keyboardButtonRow) r3;	 Catch:{ Exception -> 0x0b01 }
+        r6 = r3.buttons;	 Catch:{ Exception -> 0x0b01 }
+        r6 = r6.size();	 Catch:{ Exception -> 0x0b01 }
         r21 = r1;
         r1 = 0;
-    L_0x09cb:
-        if (r1 >= r6) goto L_0x0a49;
-    L_0x09cd:
+    L_0x09cf:
+        if (r1 >= r6) goto L_0x0a4d;
+    L_0x09d1:
         r22 = r2;
-        r2 = r3.buttons;	 Catch:{ Exception -> 0x0afd }
-        r2 = r2.get(r1);	 Catch:{ Exception -> 0x0afd }
-        r2 = (org.telegram.tgnet.TLRPC.KeyboardButton) r2;	 Catch:{ Exception -> 0x0afd }
+        r2 = r3.buttons;	 Catch:{ Exception -> 0x0b01 }
+        r2 = r2.get(r1);	 Catch:{ Exception -> 0x0b01 }
+        r2 = (org.telegram.tgnet.TLRPC.KeyboardButton) r2;	 Catch:{ Exception -> 0x0b01 }
         r23 = r3;
-        r3 = r2 instanceof org.telegram.tgnet.TLRPC.TL_keyboardButtonCallback;	 Catch:{ Exception -> 0x0afd }
-        if (r3 == 0) goto L_0x0a29;
-    L_0x09dd:
-        r3 = new android.content.Intent;	 Catch:{ Exception -> 0x0afd }
+        r3 = r2 instanceof org.telegram.tgnet.TLRPC.TL_keyboardButtonCallback;	 Catch:{ Exception -> 0x0b01 }
+        if (r3 == 0) goto L_0x0a2d;
+    L_0x09e1:
+        r3 = new android.content.Intent;	 Catch:{ Exception -> 0x0b01 }
         r24 = r6;
-        r6 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0afd }
+        r6 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0b01 }
         r13 = org.telegram.messenger.NotificationCallbackReceiver.class;
-        r3.<init>(r6, r13);	 Catch:{ Exception -> 0x0afd }
-        r6 = r12.currentAccount;	 Catch:{ Exception -> 0x0afd }
-        r3.putExtra(r5, r6);	 Catch:{ Exception -> 0x0afd }
+        r3.<init>(r6, r13);	 Catch:{ Exception -> 0x0b01 }
+        r6 = r12.currentAccount;	 Catch:{ Exception -> 0x0b01 }
+        r3.putExtra(r5, r6);	 Catch:{ Exception -> 0x0b01 }
         r6 = "did";
         r13 = r8;
         r29 = r9;
         r8 = r36;
-        r3.putExtra(r6, r8);	 Catch:{ Exception -> 0x0afd }
-        r6 = r2.data;	 Catch:{ Exception -> 0x0afd }
-        if (r6 == 0) goto L_0x0a05;
-    L_0x09fb:
+        r3.putExtra(r6, r8);	 Catch:{ Exception -> 0x0b01 }
+        r6 = r2.data;	 Catch:{ Exception -> 0x0b01 }
+        if (r6 == 0) goto L_0x0a09;
+    L_0x09ff:
         r6 = "data";
         r26 = r15;
-        r15 = r2.data;	 Catch:{ Exception -> 0x0afd }
-        r3.putExtra(r6, r15);	 Catch:{ Exception -> 0x0afd }
-        goto L_0x0a07;
-    L_0x0a05:
+        r15 = r2.data;	 Catch:{ Exception -> 0x0b01 }
+        r3.putExtra(r6, r15);	 Catch:{ Exception -> 0x0b01 }
+        goto L_0x0a0b;
+    L_0x0a09:
         r26 = r15;
-    L_0x0a07:
+    L_0x0a0b:
         r6 = "mid";
-        r15 = r4.getId();	 Catch:{ Exception -> 0x0afd }
-        r3.putExtra(r6, r15);	 Catch:{ Exception -> 0x0afd }
-        r2 = r2.text;	 Catch:{ Exception -> 0x0afd }
-        r6 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0afd }
-        r15 = r12.lastButtonId;	 Catch:{ Exception -> 0x0afd }
+        r15 = r4.getId();	 Catch:{ Exception -> 0x0b01 }
+        r3.putExtra(r6, r15);	 Catch:{ Exception -> 0x0b01 }
+        r2 = r2.text;	 Catch:{ Exception -> 0x0b01 }
+        r6 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0b01 }
+        r15 = r12.lastButtonId;	 Catch:{ Exception -> 0x0b01 }
         r44 = r4;
         r4 = r15 + 1;
-        r12.lastButtonId = r4;	 Catch:{ Exception -> 0x0afd }
+        r12.lastButtonId = r4;	 Catch:{ Exception -> 0x0b01 }
         r4 = NUM; // 0x8000000 float:3.85186E-34 double:6.63123685E-316;
-        r3 = android.app.PendingIntent.getBroadcast(r6, r15, r3, r4);	 Catch:{ Exception -> 0x0afd }
+        r3 = android.app.PendingIntent.getBroadcast(r6, r15, r3, r4);	 Catch:{ Exception -> 0x0b01 }
         r4 = 0;
-        r10.addAction(r4, r2, r3);	 Catch:{ Exception -> 0x0afd }
+        r10.addAction(r4, r2, r3);	 Catch:{ Exception -> 0x0b01 }
         r16 = 1;
-        goto L_0x0a35;
-    L_0x0a29:
+        goto L_0x0a39;
+    L_0x0a2d:
         r44 = r4;
         r24 = r6;
         r13 = r8;
@@ -7963,7 +8020,7 @@ public class NotificationsController {
         r26 = r15;
         r8 = r36;
         r4 = 0;
-    L_0x0a35:
+    L_0x0a39:
         r1 = r1 + 1;
         r36 = r8;
         r8 = r13;
@@ -7974,8 +8031,8 @@ public class NotificationsController {
         r9 = r29;
         r4 = r44;
         r13 = r46;
-        goto L_0x09cb;
-    L_0x0a49:
+        goto L_0x09cf;
+    L_0x0a4d:
         r22 = r2;
         r44 = r4;
         r13 = r8;
@@ -7991,69 +8048,69 @@ public class NotificationsController {
         r3 = 1;
         r6 = NUM; // 0x8000000 float:3.85186E-34 double:6.63123685E-316;
         r13 = r46;
-        goto L_0x09b8;
-    L_0x0a65:
+        goto L_0x09bc;
+    L_0x0a69:
         r13 = r8;
         r29 = r9;
         r26 = r15;
         r8 = r36;
-        goto L_0x0a77;
-    L_0x0a6d:
+        goto L_0x0a7b;
+    L_0x0a71:
         r13 = r8;
         r29 = r9;
         r26 = r15;
         r8 = r36;
         r4 = 0;
         r16 = 0;
-    L_0x0a77:
-        if (r16 != 0) goto L_0x0ad2;
-    L_0x0a79:
-        r1 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0afd }
+    L_0x0a7b:
+        if (r16 != 0) goto L_0x0ad6;
+    L_0x0a7d:
+        r1 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0b01 }
         r2 = 24;
-        if (r1 >= r2) goto L_0x0ad2;
-    L_0x0a7f:
-        r1 = org.telegram.messenger.SharedConfig.passcodeHash;	 Catch:{ Exception -> 0x0afd }
-        r1 = r1.length();	 Catch:{ Exception -> 0x0afd }
-        if (r1 != 0) goto L_0x0ad2;
-    L_0x0a87:
-        r1 = r45.hasMessagesToReply();	 Catch:{ Exception -> 0x0afd }
-        if (r1 == 0) goto L_0x0ad2;
-    L_0x0a8d:
-        r1 = new android.content.Intent;	 Catch:{ Exception -> 0x0afd }
-        r2 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0afd }
+        if (r1 >= r2) goto L_0x0ad6;
+    L_0x0a83:
+        r1 = org.telegram.messenger.SharedConfig.passcodeHash;	 Catch:{ Exception -> 0x0b01 }
+        r1 = r1.length();	 Catch:{ Exception -> 0x0b01 }
+        if (r1 != 0) goto L_0x0ad6;
+    L_0x0a8b:
+        r1 = r45.hasMessagesToReply();	 Catch:{ Exception -> 0x0b01 }
+        if (r1 == 0) goto L_0x0ad6;
+    L_0x0a91:
+        r1 = new android.content.Intent;	 Catch:{ Exception -> 0x0b01 }
+        r2 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0b01 }
         r3 = org.telegram.messenger.PopupReplyReceiver.class;
-        r1.<init>(r2, r3);	 Catch:{ Exception -> 0x0afd }
-        r2 = r12.currentAccount;	 Catch:{ Exception -> 0x0afd }
-        r1.putExtra(r5, r2);	 Catch:{ Exception -> 0x0afd }
-        r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0afd }
+        r1.<init>(r2, r3);	 Catch:{ Exception -> 0x0b01 }
+        r2 = r12.currentAccount;	 Catch:{ Exception -> 0x0b01 }
+        r1.putExtra(r5, r2);	 Catch:{ Exception -> 0x0b01 }
+        r2 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0b01 }
         r3 = 19;
-        if (r2 > r3) goto L_0x0aba;
-    L_0x0aa1:
+        if (r2 > r3) goto L_0x0abe;
+    L_0x0aa5:
         r2 = NUM; // 0x7var_fd float:1.7945091E38 double:1.052935628E-314;
         r3 = "Reply";
         r4 = NUM; // 0x7f0d0875 float:1.8746506E38 double:1.053130847E-314;
-        r3 = org.telegram.messenger.LocaleController.getString(r3, r4);	 Catch:{ Exception -> 0x0afd }
-        r4 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0afd }
+        r3 = org.telegram.messenger.LocaleController.getString(r3, r4);	 Catch:{ Exception -> 0x0b01 }
+        r4 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0b01 }
         r5 = NUM; // 0x8000000 float:3.85186E-34 double:6.63123685E-316;
         r6 = 2;
-        r1 = android.app.PendingIntent.getBroadcast(r4, r6, r1, r5);	 Catch:{ Exception -> 0x0afd }
-        r10.addAction(r2, r3, r1);	 Catch:{ Exception -> 0x0afd }
-        goto L_0x0ad2;
-    L_0x0aba:
+        r1 = android.app.PendingIntent.getBroadcast(r4, r6, r1, r5);	 Catch:{ Exception -> 0x0b01 }
+        r10.addAction(r2, r3, r1);	 Catch:{ Exception -> 0x0b01 }
+        goto L_0x0ad6;
+    L_0x0abe:
         r2 = NUM; // 0x7var_fc float:1.794509E38 double:1.0529356275E-314;
         r3 = "Reply";
         r4 = NUM; // 0x7f0d0875 float:1.8746506E38 double:1.053130847E-314;
-        r3 = org.telegram.messenger.LocaleController.getString(r3, r4);	 Catch:{ Exception -> 0x0afd }
-        r4 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0afd }
+        r3 = org.telegram.messenger.LocaleController.getString(r3, r4);	 Catch:{ Exception -> 0x0b01 }
+        r4 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Exception -> 0x0b01 }
         r5 = NUM; // 0x8000000 float:3.85186E-34 double:6.63123685E-316;
         r6 = 2;
-        r1 = android.app.PendingIntent.getBroadcast(r4, r6, r1, r5);	 Catch:{ Exception -> 0x0afd }
-        r10.addAction(r2, r3, r1);	 Catch:{ Exception -> 0x0afd }
-    L_0x0ad2:
-        r1 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0afd }
+        r1 = android.app.PendingIntent.getBroadcast(r4, r6, r1, r5);	 Catch:{ Exception -> 0x0b01 }
+        r10.addAction(r2, r3, r1);	 Catch:{ Exception -> 0x0b01 }
+    L_0x0ad6:
+        r1 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Exception -> 0x0b01 }
         r2 = 26;
-        if (r1 < r2) goto L_0x0af1;
-    L_0x0ad8:
+        if (r1 < r2) goto L_0x0af5;
+    L_0x0adc:
         r1 = r45;
         r2 = r8;
         r4 = r20;
@@ -8065,25 +8122,25 @@ public class NotificationsController {
         r13 = r10;
         r10 = r32;
         r11 = r33;
-        r1 = r1.validateChannelId(r2, r4, r5, r6, r7, r8, r9, r10, r11);	 Catch:{ Exception -> 0x0afd }
-        r13.setChannelId(r1);	 Catch:{ Exception -> 0x0afd }
-        goto L_0x0af2;
-    L_0x0af1:
+        r1 = r1.validateChannelId(r2, r4, r5, r6, r7, r8, r9, r10, r11);	 Catch:{ Exception -> 0x0b01 }
+        r13.setChannelId(r1);	 Catch:{ Exception -> 0x0b01 }
+        goto L_0x0af6;
+    L_0x0af5:
         r13 = r10;
-    L_0x0af2:
+    L_0x0af6:
         r1 = r46;
         r7 = r26;
-        r12.showExtraNotifications(r13, r1, r7);	 Catch:{ Exception -> 0x0afd }
-        r45.scheduleNotificationRepeat();	 Catch:{ Exception -> 0x0afd }
-        goto L_0x0b02;
-    L_0x0afd:
+        r12.showExtraNotifications(r13, r1, r7);	 Catch:{ Exception -> 0x0b01 }
+        r45.scheduleNotificationRepeat();	 Catch:{ Exception -> 0x0b01 }
+        goto L_0x0b06;
+    L_0x0b01:
         r0 = move-exception;
-    L_0x0afe:
+    L_0x0b02:
         r1 = r0;
         org.telegram.messenger.FileLog.e(r1);
-    L_0x0b02:
+    L_0x0b06:
         return;
-    L_0x0b03:
+    L_0x0b07:
         r45.dismissNotification();
         return;
         */
@@ -9099,7 +9156,7 @@ public class NotificationsController {
         r3 = "com.android.systemui";
         r4 = 1;
         r2.grantUriPermission(r3, r1, r4);
-        r2 = new org.telegram.messenger.-$$Lambda$NotificationsController$rp5UduKdgkEW13Ywgxmq3rLards;
+        r2 = new org.telegram.messenger.-$$Lambda$NotificationsController$hROO1aIM4eduzMv5uJ3U4yL97Bo;
         r2.<init>(r1);
         r3 = 20000; // 0x4e20 float:2.8026E-41 double:9.8813E-320;
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r2, r3);
@@ -9780,13 +9837,13 @@ public class NotificationsController {
     private void loadRoundAvatar(File file, Person.Builder builder) {
         if (file != null) {
             try {
-                builder.setIcon(IconCompat.createWithBitmap(ImageDecoder.decodeBitmap(ImageDecoder.createSource(file), -$$Lambda$NotificationsController$C4kknRhSoerGbeYtz59Rj_58u1c.INSTANCE)));
+                builder.setIcon(IconCompat.createWithBitmap(ImageDecoder.decodeBitmap(ImageDecoder.createSource(file), -$$Lambda$NotificationsController$N5IA2yCFiGMc2IXHr3hVgVbBFF8.INSTANCE)));
             } catch (Throwable unused) {
             }
         }
     }
 
-    static /* synthetic */ int lambda$null$30(Canvas canvas) {
+    static /* synthetic */ int lambda$null$32(Canvas canvas) {
         Path path = new Path();
         path.setFillType(FillType.INVERSE_EVEN_ODD);
         int width = canvas.getWidth();
@@ -9809,17 +9866,17 @@ public class NotificationsController {
             } catch (Exception e) {
                 FileLog.e(e);
             }
-            notificationsQueue.postRunnable(new -$$Lambda$NotificationsController$kf9bqRk5suqHIdYDJjbITjvps7s(this));
+            notificationsQueue.postRunnable(new -$$Lambda$NotificationsController$9BWFjQml5zrAo3EV8FWEAyCpJLQ(this));
         }
     }
 
-    public /* synthetic */ void lambda$playOutChatSound$33$NotificationsController() {
+    public /* synthetic */ void lambda$playOutChatSound$35$NotificationsController() {
         try {
             if (Math.abs(System.currentTimeMillis() - this.lastSoundOutPlay) > 100) {
                 this.lastSoundOutPlay = System.currentTimeMillis();
                 if (this.soundPool == null) {
                     this.soundPool = new SoundPool(3, 1, 0);
-                    this.soundPool.setOnLoadCompleteListener(-$$Lambda$NotificationsController$_CCwM5_EZm4sosrK1IRQX9xM4t8.INSTANCE);
+                    this.soundPool.setOnLoadCompleteListener(-$$Lambda$NotificationsController$wVHQwnWTTlh7lF1NZGGoEEMMuyY.INSTANCE);
                 }
                 if (this.soundOut == 0 && !this.soundOutLoaded) {
                     this.soundOutLoaded = true;
@@ -9838,7 +9895,7 @@ public class NotificationsController {
         }
     }
 
-    static /* synthetic */ void lambda$null$32(SoundPool soundPool, int i, int i2) {
+    static /* synthetic */ void lambda$null$34(SoundPool soundPool, int i, int i2) {
         if (i2 == 0) {
             try {
                 soundPool.play(i, 1.0f, 1.0f, 1, 0, 1.0f);
@@ -9949,7 +10006,7 @@ public class NotificationsController {
             }
             tL_account_updateNotifySettings.peer = new TL_inputNotifyPeer();
             ((TL_inputNotifyPeer) tL_account_updateNotifySettings.peer).peer = MessagesController.getInstance(this.currentAccount).getInputPeer(i2);
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_account_updateNotifySettings, -$$Lambda$NotificationsController$QmASD7DNsYMRCdcl1HKFxPE8kQ0.INSTANCE);
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_account_updateNotifySettings, -$$Lambda$NotificationsController$KyQqllEdy_fdmMCr6frsin2S3Cs.INSTANCE);
         }
     }
 
@@ -9971,7 +10028,7 @@ public class NotificationsController {
             tL_account_updateNotifySettings.settings.mute_until = notificationsSettings.getInt("EnableChannel2", 0);
             tL_account_updateNotifySettings.settings.show_previews = notificationsSettings.getBoolean("EnablePreviewChannel", true);
         }
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_account_updateNotifySettings, -$$Lambda$NotificationsController$ptsxJN6gBi-7rCsn_K2HRpoBb4k.INSTANCE);
+        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_account_updateNotifySettings, -$$Lambda$NotificationsController$WV8JpQrNXdfWVJfPV9wKTUTuLBk.INSTANCE);
     }
 
     public boolean isGlobalNotificationsEnabled(long j) {

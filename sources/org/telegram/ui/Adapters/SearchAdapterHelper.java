@@ -110,7 +110,9 @@ public class SearchAdapterHelper {
             this.delegate.onDataSetChanged();
             return;
         }
+        boolean z5;
         if (str.length() <= 0) {
+            z5 = z4;
             this.groupSearch.clear();
             this.groupSearchMap.clear();
             this.channelLastReqId = 0;
@@ -132,8 +134,9 @@ public class SearchAdapterHelper {
             tL_channels_getParticipants.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(i3);
             i3 = this.channelLastReqId + 1;
             this.channelLastReqId = i3;
-            this.channelReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_channels_getParticipants, new -$$Lambda$SearchAdapterHelper$ss23u_GFUQJUVeu6gtt8hTPVc_o(this, i3, str), 2);
+            this.channelReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_channels_getParticipants, new -$$Lambda$SearchAdapterHelper$lQm_KegCMNFAimI1TKtkhyCcOJg(this, i3, str, z4), 2);
         } else {
+            z5 = z4;
             this.lastFoundChannel = str.toLowerCase();
         }
         if (z) {
@@ -154,11 +157,11 @@ public class SearchAdapterHelper {
         }
     }
 
-    public /* synthetic */ void lambda$queryServerSearch$1$SearchAdapterHelper(int i, String str, TLObject tLObject, TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$SearchAdapterHelper$zzD8O5q37u-u2IW8yJlQc3bxUjs(this, i, tL_error, tLObject, str));
+    public /* synthetic */ void lambda$queryServerSearch$1$SearchAdapterHelper(int i, String str, boolean z, TLObject tLObject, TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$SearchAdapterHelper$v5cwP_i-1geBZNEja0OzJuPoFoM(this, i, tL_error, tLObject, str, z));
     }
 
-    public /* synthetic */ void lambda$null$0$SearchAdapterHelper(int i, TL_error tL_error, TLObject tLObject, String str) {
+    public /* synthetic */ void lambda$null$0$SearchAdapterHelper(int i, TL_error tL_error, TLObject tLObject, String str, boolean z) {
         if (i == this.channelLastReqId && tL_error == null) {
             TL_channels_channelParticipants tL_channels_channelParticipants = (TL_channels_channelParticipants) tLObject;
             this.lastFoundChannel = str.toLowerCase();
@@ -166,10 +169,15 @@ public class SearchAdapterHelper {
             this.groupSearch.clear();
             this.groupSearchMap.clear();
             this.groupSearch.addAll(tL_channels_channelParticipants.participants);
-            i = tL_channels_channelParticipants.participants.size();
-            for (int i2 = 0; i2 < i; i2++) {
+            i = UserConfig.getInstance(this.currentAccount).getClientUserId();
+            int size = tL_channels_channelParticipants.participants.size();
+            for (int i2 = 0; i2 < size; i2++) {
                 ChannelParticipant channelParticipant = (ChannelParticipant) tL_channels_channelParticipants.participants.get(i2);
-                this.groupSearchMap.put(channelParticipant.user_id, channelParticipant);
+                if (z || channelParticipant.user_id != i) {
+                    this.groupSearchMap.put(channelParticipant.user_id, channelParticipant);
+                } else {
+                    this.groupSearch.remove(channelParticipant);
+                }
             }
             ArrayList arrayList = this.localSearchResults;
             if (arrayList != null) {

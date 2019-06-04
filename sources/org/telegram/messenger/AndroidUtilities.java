@@ -1714,11 +1714,15 @@ public class AndroidUtilities {
     }
 
     public static void checkForCrashes(Activity activity) {
-        CrashManager.register(activity, BuildVars.DEBUG_VERSION ? BuildVars.HOCKEY_APP_HASH_DEBUG : BuildVars.HOCKEY_APP_HASH, new CrashManagerListener() {
-            public boolean includeDeviceData() {
-                return true;
-            }
-        });
+        try {
+            CrashManager.register(activity, BuildVars.DEBUG_VERSION ? BuildVars.HOCKEY_APP_HASH_DEBUG : BuildVars.HOCKEY_APP_HASH, new CrashManagerListener() {
+                public boolean includeDeviceData() {
+                    return true;
+                }
+            });
+        } catch (Throwable th) {
+            FileLog.e(th);
+        }
     }
 
     public static void checkForUpdates(Activity activity) {
