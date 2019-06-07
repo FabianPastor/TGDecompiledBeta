@@ -92,6 +92,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
     private boolean shouldGenerateQualityThumb;
     private float sideClip;
     private Drawable staticThumbDrawable;
+    private ImageLocation strippedLocation;
     private int thumbOrientation;
     private BitmapShader thumbShader;
     private int thumbTag;
@@ -203,6 +204,14 @@ public class ImageReceiver implements NotificationCenterDelegate {
         return this.forceLoding;
     }
 
+    public void setStrippedLocation(ImageLocation imageLocation) {
+        this.strippedLocation = imageLocation;
+    }
+
+    public ImageLocation getStrippedLocation() {
+        return this.strippedLocation;
+    }
+
     public void setImage(ImageLocation imageLocation, String str, Drawable drawable, String str2, Object obj, int i) {
         setImage(imageLocation, str, null, null, drawable, 0, str2, obj, i);
     }
@@ -231,22 +240,24 @@ public class ImageReceiver implements NotificationCenterDelegate {
     /* JADX WARNING: Removed duplicated region for block: B:66:0x011c  */
     /* JADX WARNING: Removed duplicated region for block: B:75:0x013f  */
     /* JADX WARNING: Removed duplicated region for block: B:81:0x014d  */
-    /* JADX WARNING: Removed duplicated region for block: B:112:0x018e  */
-    /* JADX WARNING: Removed duplicated region for block: B:108:0x0184  */
-    /* JADX WARNING: Removed duplicated region for block: B:129:0x0228  */
-    /* JADX WARNING: Removed duplicated region for block: B:118:0x01ab  */
-    /* JADX WARNING: Removed duplicated region for block: B:132:0x0269  */
-    /* JADX WARNING: Removed duplicated region for block: B:150:0x0295  */
+    /* JADX WARNING: Removed duplicated region for block: B:109:0x0187  */
+    /* JADX WARNING: Removed duplicated region for block: B:114:0x0193  */
+    /* JADX WARNING: Removed duplicated region for block: B:113:0x018e  */
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x022d  */
+    /* JADX WARNING: Removed duplicated region for block: B:120:0x01b0  */
+    /* JADX WARNING: Removed duplicated region for block: B:134:0x026e  */
+    /* JADX WARNING: Removed duplicated region for block: B:152:0x029a  */
     /* JADX WARNING: Removed duplicated region for block: B:66:0x011c  */
     /* JADX WARNING: Removed duplicated region for block: B:67:0x0121  */
     /* JADX WARNING: Removed duplicated region for block: B:75:0x013f  */
     /* JADX WARNING: Removed duplicated region for block: B:81:0x014d  */
-    /* JADX WARNING: Removed duplicated region for block: B:108:0x0184  */
-    /* JADX WARNING: Removed duplicated region for block: B:112:0x018e  */
-    /* JADX WARNING: Removed duplicated region for block: B:118:0x01ab  */
-    /* JADX WARNING: Removed duplicated region for block: B:129:0x0228  */
-    /* JADX WARNING: Removed duplicated region for block: B:132:0x0269  */
-    /* JADX WARNING: Removed duplicated region for block: B:150:0x0295  */
+    /* JADX WARNING: Removed duplicated region for block: B:109:0x0187  */
+    /* JADX WARNING: Removed duplicated region for block: B:113:0x018e  */
+    /* JADX WARNING: Removed duplicated region for block: B:114:0x0193  */
+    /* JADX WARNING: Removed duplicated region for block: B:120:0x01b0  */
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x022d  */
+    /* JADX WARNING: Removed duplicated region for block: B:134:0x026e  */
+    /* JADX WARNING: Removed duplicated region for block: B:152:0x029a  */
     /* JADX WARNING: Missing block: B:78:0x0147, code skipped:
             if (r10.equals(r14) != false) goto L_0x0153;
      */
@@ -573,39 +584,44 @@ public class ImageReceiver implements NotificationCenterDelegate {
     L_0x0181:
         return;
     L_0x0182:
-        if (r5 == 0) goto L_0x018e;
-    L_0x0184:
-        if (r1 == 0) goto L_0x0188;
+        r10 = r0.strippedLocation;
+        if (r10 == 0) goto L_0x0187;
     L_0x0186:
-        r10 = r1;
-        goto L_0x0189;
-    L_0x0188:
-        r10 = r3;
+        goto L_0x018c;
+    L_0x0187:
+        if (r1 == 0) goto L_0x018b;
     L_0x0189:
-        r11 = r5.getKey(r9, r10);
-        goto L_0x018f;
+        r10 = r1;
+        goto L_0x018c;
+    L_0x018b:
+        r10 = r3;
+    L_0x018c:
+        if (r5 == 0) goto L_0x0193;
     L_0x018e:
-        r11 = 0;
-    L_0x018f:
-        if (r11 == 0) goto L_0x01a5;
-    L_0x0191:
-        if (r6 == 0) goto L_0x01a5;
+        r11 = r5.getKey(r9, r10);
+        goto L_0x0194;
     L_0x0193:
+        r11 = 0;
+    L_0x0194:
+        if (r11 == 0) goto L_0x01aa;
+    L_0x0196:
+        if (r6 == 0) goto L_0x01aa;
+    L_0x0198:
         r10 = new java.lang.StringBuilder;
         r10.<init>();
         r10.append(r11);
         r10.append(r13);
         r10.append(r6);
         r11 = r10.toString();
-    L_0x01a5:
+    L_0x01aa:
         r10 = r0.crossfadeWithOldImage;
         r12 = 3;
         r13 = 2;
-        if (r10 == 0) goto L_0x0228;
-    L_0x01ab:
+        if (r10 == 0) goto L_0x022d;
+    L_0x01b0:
         r10 = r0.currentImageDrawable;
-        if (r10 == 0) goto L_0x01cf;
-    L_0x01af:
+        if (r10 == 0) goto L_0x01d4;
+    L_0x01b4:
         r10 = 1;
         r0.recycleBitmap(r11, r10);
         r10 = 0;
@@ -621,14 +637,14 @@ public class ImageReceiver implements NotificationCenterDelegate {
         r0.crossfadingWithThumb = r12;
         r0.currentImageDrawable = r10;
         r0.currentImageKey = r10;
-    L_0x01cd:
+    L_0x01d2:
         r12 = 1;
-        goto L_0x023a;
-    L_0x01cf:
+        goto L_0x023f;
+    L_0x01d4:
         r12 = 0;
         r10 = r0.currentThumbDrawable;
-        if (r10 == 0) goto L_0x01f2;
-    L_0x01d4:
+        if (r10 == 0) goto L_0x01f7;
+    L_0x01d9:
         r0.recycleBitmap(r14, r12);
         r10 = 0;
         r0.recycleBitmap(r10, r13);
@@ -643,11 +659,11 @@ public class ImageReceiver implements NotificationCenterDelegate {
         r0.crossfadingWithThumb = r12;
         r0.currentThumbDrawable = r10;
         r0.currentThumbKey = r10;
-        goto L_0x01cd;
-    L_0x01f2:
+        goto L_0x01d2;
+    L_0x01f7:
         r10 = r0.staticThumbDrawable;
-        if (r10 == 0) goto L_0x0216;
-    L_0x01f6:
+        if (r10 == 0) goto L_0x021b;
+    L_0x01fb:
         r0.recycleBitmap(r14, r12);
         r10 = 1;
         r0.recycleBitmap(r11, r10);
@@ -663,8 +679,8 @@ public class ImageReceiver implements NotificationCenterDelegate {
         r0.crossfadeKey = r10;
         r0.currentThumbDrawable = r10;
         r0.currentThumbKey = r10;
-        goto L_0x01cd;
-    L_0x0216:
+        goto L_0x01d2;
+    L_0x021b:
         r10 = 0;
         r0.recycleBitmap(r14, r12);
         r12 = 1;
@@ -673,8 +689,8 @@ public class ImageReceiver implements NotificationCenterDelegate {
         r13 = 3;
         r0.recycleBitmap(r15, r13);
         r0.crossfadeShader = r10;
-        goto L_0x023a;
-    L_0x0228:
+        goto L_0x023f;
+    L_0x022d:
         r10 = 0;
         r12 = 1;
         r0.recycleBitmap(r14, r10);
@@ -684,7 +700,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
         r13 = 3;
         r0.recycleBitmap(r15, r13);
         r0.crossfadeShader = r10;
-    L_0x023a:
+    L_0x023f:
         r0.currentImageLocation = r3;
         r0.currentImageFilter = r4;
         r0.currentImageKey = r14;
@@ -708,50 +724,50 @@ public class ImageReceiver implements NotificationCenterDelegate {
         r1 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r0.currentAlpha = r1;
         r1 = r0.delegate;
-        if (r1 == 0) goto L_0x028a;
-    L_0x0269:
+        if (r1 == 0) goto L_0x028f;
+    L_0x026e:
         r2 = r0.currentImageDrawable;
-        if (r2 != 0) goto L_0x027c;
-    L_0x026d:
+        if (r2 != 0) goto L_0x0281;
+    L_0x0272:
         r2 = r0.currentThumbDrawable;
-        if (r2 != 0) goto L_0x027c;
-    L_0x0271:
+        if (r2 != 0) goto L_0x0281;
+    L_0x0276:
         r2 = r0.staticThumbDrawable;
-        if (r2 != 0) goto L_0x027c;
-    L_0x0275:
-        r2 = r0.currentMediaDrawable;
-        if (r2 == 0) goto L_0x027a;
-    L_0x0279:
-        goto L_0x027c;
+        if (r2 != 0) goto L_0x0281;
     L_0x027a:
+        r2 = r0.currentMediaDrawable;
+        if (r2 == 0) goto L_0x027f;
+    L_0x027e:
+        goto L_0x0281;
+    L_0x027f:
         r2 = 0;
-        goto L_0x027d;
-    L_0x027c:
-        r2 = 1;
-    L_0x027d:
-        r3 = r0.currentImageDrawable;
-        if (r3 != 0) goto L_0x0286;
+        goto L_0x0282;
     L_0x0281:
-        r3 = r0.currentMediaDrawable;
-        if (r3 != 0) goto L_0x0286;
-    L_0x0285:
-        goto L_0x0287;
+        r2 = 1;
+    L_0x0282:
+        r3 = r0.currentImageDrawable;
+        if (r3 != 0) goto L_0x028b;
     L_0x0286:
-        r12 = 0;
-    L_0x0287:
-        r1.didSetImage(r0, r2, r12);
+        r3 = r0.currentMediaDrawable;
+        if (r3 != 0) goto L_0x028b;
     L_0x028a:
+        goto L_0x028c;
+    L_0x028b:
+        r12 = 0;
+    L_0x028c:
+        r1.didSetImage(r0, r2, r12);
+    L_0x028f:
         r1 = org.telegram.messenger.ImageLoader.getInstance();
         r1.loadImageForImageReceiver(r0);
         r1 = r0.parentView;
-        if (r1 == 0) goto L_0x02aa;
-    L_0x0295:
+        if (r1 == 0) goto L_0x02af;
+    L_0x029a:
         r2 = r0.invalidateAll;
-        if (r2 == 0) goto L_0x029d;
-    L_0x0299:
+        if (r2 == 0) goto L_0x02a2;
+    L_0x029e:
         r1.invalidate();
-        goto L_0x02aa;
-    L_0x029d:
+        goto L_0x02af;
+    L_0x02a2:
         r2 = r0.imageX;
         r3 = r0.imageY;
         r4 = r0.imageW;
@@ -759,7 +775,7 @@ public class ImageReceiver implements NotificationCenterDelegate {
         r5 = r0.imageH;
         r5 = r5 + r3;
         r1.invalidate(r2, r3, r4, r5);
-    L_0x02aa:
+    L_0x02af:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageReceiver.setImage(org.telegram.messenger.ImageLocation, java.lang.String, org.telegram.messenger.ImageLocation, java.lang.String, org.telegram.messenger.ImageLocation, java.lang.String, android.graphics.drawable.Drawable, int, java.lang.String, java.lang.Object, int):void");

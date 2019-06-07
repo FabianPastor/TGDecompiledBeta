@@ -841,7 +841,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         return this.fragmentView;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:101:0x01f9  */
+    /* JADX WARNING: Removed duplicated region for block: B:101:0x01fc  */
     public /* synthetic */ void lambda$createView$8$NotificationsCustomSettingsActivity(android.view.View r11, int r12, float r13, float r14) {
         /*
         r10 = this;
@@ -853,7 +853,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         r13 = r10.listView;
         r13 = r13.getAdapter();
         r14 = r10.searchListViewAdapter;
-        if (r13 == r14) goto L_0x0202;
+        if (r13 == r14) goto L_0x0205;
     L_0x0011:
         r13 = r10.exceptionsStartRow;
         if (r12 < r13) goto L_0x001b;
@@ -861,7 +861,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         r13 = r10.exceptionsEndRow;
         if (r12 >= r13) goto L_0x001b;
     L_0x0019:
-        goto L_0x0202;
+        goto L_0x0205;
     L_0x001b:
         r13 = r10.exceptionsAddRow;
         r14 = 2;
@@ -898,7 +898,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         r12.<init>(r10);
         r13.setDelegate(r12);
         r10.presentFragment(r13);
-        goto L_0x01f4;
+        goto L_0x01f7;
     L_0x0059:
         r13 = r10.alertRow;
         if (r12 != r13) goto L_0x00a3;
@@ -937,7 +937,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         org.telegram.ui.Components.AlertsCreator.showCustomNotificationsDialog(r3, r4, r6, r7, r8, r9);
     L_0x00a0:
         r12 = r13;
-        goto L_0x01f5;
+        goto L_0x01f8;
     L_0x00a3:
         r13 = r10.previewRow;
         if (r12 != r13) goto L_0x00f1;
@@ -977,7 +977,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         r13 = org.telegram.messenger.NotificationsController.getInstance(r13);
         r14 = r10.currentType;
         r13.updateServerNotificationsSettings(r14);
-        goto L_0x01f5;
+        goto L_0x01f8;
     L_0x00f1:
         r13 = r10.messageSoundRow;
         if (r12 != r13) goto L_0x016f;
@@ -1046,11 +1046,11 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         r13 = "android.intent.extra.ringtone.EXISTING_URI";
         r2.putExtra(r13, r14);	 Catch:{ Exception -> 0x0169 }
         r10.startActivityForResult(r2, r12);	 Catch:{ Exception -> 0x0169 }
-        goto L_0x01f4;
+        goto L_0x01f7;
     L_0x0169:
         r12 = move-exception;
         org.telegram.messenger.FileLog.e(r12);
-        goto L_0x01f4;
+        goto L_0x01f7;
     L_0x016f:
         r13 = r10.messageLedRow;
         r2 = 0;
@@ -1067,7 +1067,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         r4.<init>(r10, r12);
         r12 = org.telegram.ui.Components.AlertsCreator.createColorSelectDialog(r13, r2, r14, r4);
         r10.showDialog(r12);
-        goto L_0x01f4;
+        goto L_0x01f7;
     L_0x018f:
         r13 = r10.messagePopupNotificationRow;
         if (r12 != r13) goto L_0x01ad;
@@ -1083,10 +1083,10 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         r2.<init>(r10, r12);
         r12 = org.telegram.ui.Components.AlertsCreator.createPopupSelectDialog(r13, r14, r2);
         r10.showDialog(r12);
-        goto L_0x01f4;
+        goto L_0x01f7;
     L_0x01ad:
         r13 = r10.messageVibrateRow;
-        if (r12 != r13) goto L_0x01d7;
+        if (r12 != r13) goto L_0x01da;
     L_0x01b1:
         r13 = r11.isEnabled();
         if (r13 != 0) goto L_0x01b8;
@@ -1094,74 +1094,74 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         return;
     L_0x01b8:
         r13 = r10.currentType;
-        if (r13 != r1) goto L_0x01bf;
+        if (r13 != r1) goto L_0x01c0;
     L_0x01bc:
         r13 = "vibrate_messages";
-        goto L_0x01c6;
-    L_0x01bf:
-        if (r13 != 0) goto L_0x01c4;
-    L_0x01c1:
+        goto L_0x01c9;
+    L_0x01c0:
+        if (r13 != 0) goto L_0x01c6;
+    L_0x01c2:
         r13 = "vibrate_group";
-        goto L_0x01c6;
-    L_0x01c4:
-        r13 = "vibrate_channel";
+        goto L_0x01c9;
     L_0x01c6:
+        r13 = "vibrate_channel";
+    L_0x01c9:
         r14 = r10.getParentActivity();
         r4 = new org.telegram.ui.-$$Lambda$NotificationsCustomSettingsActivity$5JQeM2VZAZohz71seJkzo9Axyl8;
         r4.<init>(r10, r12);
         r12 = org.telegram.ui.Components.AlertsCreator.createVibrationSelectDialog(r14, r2, r13, r4);
         r10.showDialog(r12);
-        goto L_0x01f4;
-    L_0x01d7:
+        goto L_0x01f7;
+    L_0x01da:
         r13 = r10.messagePriorityRow;
-        if (r12 != r13) goto L_0x01f4;
-    L_0x01db:
+        if (r12 != r13) goto L_0x01f7;
+    L_0x01de:
         r13 = r11.isEnabled();
-        if (r13 != 0) goto L_0x01e2;
-    L_0x01e1:
+        if (r13 != 0) goto L_0x01e5;
+    L_0x01e4:
         return;
-    L_0x01e2:
+    L_0x01e5:
         r13 = r10.getParentActivity();
         r14 = r10.currentType;
         r4 = new org.telegram.ui.-$$Lambda$NotificationsCustomSettingsActivity$tal7L4g8KTgKJ9Uilx8RMZ5-g8Y;
         r4.<init>(r10, r12);
         r12 = org.telegram.ui.Components.AlertsCreator.createPrioritySelectDialog(r13, r2, r14, r4);
         r10.showDialog(r12);
-    L_0x01f4:
+    L_0x01f7:
         r12 = 0;
-    L_0x01f5:
+    L_0x01f8:
         r13 = r11 instanceof org.telegram.ui.Cells.TextCheckCell;
-        if (r13 == 0) goto L_0x0201;
-    L_0x01f9:
+        if (r13 == 0) goto L_0x0204;
+    L_0x01fc:
         r11 = (org.telegram.ui.Cells.TextCheckCell) r11;
-        if (r12 != 0) goto L_0x01fe;
-    L_0x01fd:
+        if (r12 != 0) goto L_0x0201;
+    L_0x0200:
         r0 = 1;
-    L_0x01fe:
-        r11.setChecked(r0);
     L_0x0201:
+        r11.setChecked(r0);
+    L_0x0204:
         return;
-    L_0x0202:
+    L_0x0205:
         r11 = r10.listView;
         r11 = r11.getAdapter();
         r13 = r10.searchListViewAdapter;
-        if (r11 != r13) goto L_0x0212;
-    L_0x020c:
+        if (r11 != r13) goto L_0x0215;
+    L_0x020f:
         r11 = r13.searchResult;
         r13 = r12;
-        goto L_0x0218;
-    L_0x0212:
+        goto L_0x021b;
+    L_0x0215:
         r11 = r10.exceptions;
         r13 = r10.exceptionsStartRow;
         r13 = r12 - r13;
-    L_0x0218:
-        if (r13 < 0) goto L_0x0237;
-    L_0x021a:
+    L_0x021b:
+        if (r13 < 0) goto L_0x023a;
+    L_0x021d:
         r14 = r11.size();
-        if (r13 < r14) goto L_0x0221;
-    L_0x0220:
-        goto L_0x0237;
-    L_0x0221:
+        if (r13 < r14) goto L_0x0224;
+    L_0x0223:
+        goto L_0x023a;
+    L_0x0224:
         r13 = r11.get(r13);
         r13 = (org.telegram.ui.NotificationsSettingsActivity.NotificationException) r13;
         r1 = r13.did;
@@ -1173,7 +1173,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         r7.<init>(r10, r11, r13, r12);
         r0 = r10;
         org.telegram.ui.Components.AlertsCreator.showCustomNotificationsDialog(r0, r1, r3, r4, r5, r6, r7);
-    L_0x0237:
+    L_0x023a:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.NotificationsCustomSettingsActivity.lambda$createView$8$NotificationsCustomSettingsActivity(android.view.View, int, float, float):void");

@@ -58,8 +58,8 @@ public class TextColorThemeCell extends FrameLayout {
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50.0f) + this.needDivider, NUM));
     }
 
-    public void setTextAndColor(String str, int i) {
-        this.textView.setText(str);
+    public void setTextAndColor(CharSequence charSequence, int i) {
+        this.textView.setText(charSequence);
         this.currentColor = i;
         boolean z = !this.needDivider && this.currentColor == 0;
         setWillNotDraw(z);

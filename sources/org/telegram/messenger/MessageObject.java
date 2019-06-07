@@ -98,6 +98,7 @@ import org.telegram.tgnet.TLRPC.TL_messageActionUserJoined;
 import org.telegram.tgnet.TLRPC.TL_messageActionUserUpdatedPhoto;
 import org.telegram.tgnet.TLRPC.TL_messageEmpty;
 import org.telegram.tgnet.TLRPC.TL_messageEncryptedAction;
+import org.telegram.tgnet.TLRPC.TL_messageEntityBlockquote;
 import org.telegram.tgnet.TLRPC.TL_messageEntityBold;
 import org.telegram.tgnet.TLRPC.TL_messageEntityBotCommand;
 import org.telegram.tgnet.TLRPC.TL_messageEntityCashtag;
@@ -109,7 +110,9 @@ import org.telegram.tgnet.TLRPC.TL_messageEntityMention;
 import org.telegram.tgnet.TLRPC.TL_messageEntityMentionName;
 import org.telegram.tgnet.TLRPC.TL_messageEntityPhone;
 import org.telegram.tgnet.TLRPC.TL_messageEntityPre;
+import org.telegram.tgnet.TLRPC.TL_messageEntityStrike;
 import org.telegram.tgnet.TLRPC.TL_messageEntityTextUrl;
+import org.telegram.tgnet.TLRPC.TL_messageEntityUnderline;
 import org.telegram.tgnet.TLRPC.TL_messageEntityUrl;
 import org.telegram.tgnet.TLRPC.TL_messageForwarded_old2;
 import org.telegram.tgnet.TLRPC.TL_messageMediaContact;
@@ -167,6 +170,14 @@ import org.telegram.ui.Components.URLSpanReplacement;
 import org.telegram.ui.Components.URLSpanUserMention;
 
 public class MessageObject {
+    private static final int FLAG_STYLE_BOLD = 1;
+    private static final int FLAG_STYLE_ITALIC = 2;
+    private static final int FLAG_STYLE_MENTION = 64;
+    private static final int FLAG_STYLE_MONO = 4;
+    private static final int FLAG_STYLE_QUOTE = 32;
+    private static final int FLAG_STYLE_STRIKE = 8;
+    private static final int FLAG_STYLE_UNDERLINE = 16;
+    private static final int FLAG_STYLE_URL = 128;
     private static final int LINES_PER_BLOCK = 10;
     public static final int MESSAGE_SEND_STATE_EDITING = 3;
     public static final int MESSAGE_SEND_STATE_SENDING = 1;
@@ -1570,6 +1581,20 @@ public class MessageObject {
         public boolean isRtl() {
             byte b = this.directionFlags;
             return (b & 1) != 0 && (b & 2) == 0;
+        }
+    }
+
+    private static class TextStyleRun {
+        private int end;
+        private int flags;
+        private int start;
+        private MessageEntity urlEntity;
+
+        public TextStyleRun(TextStyleRun textStyleRun) {
+            this.flags = textStyleRun.flags;
+            this.start = textStyleRun.start;
+            this.end = textStyleRun.end;
+            this.urlEntity = textStyleRun.urlEntity;
         }
     }
 
@@ -5852,10 +5877,13 @@ public class MessageObject {
             return false;
         }
         Spannable spannable = (Spannable) charSequence2;
-        int size = arrayList.size();
         URLSpan[] uRLSpanArr = (URLSpan[]) spannable.getSpans(0, charSequence.length(), URLSpan.class);
         boolean z5 = uRLSpanArr != null && uRLSpanArr.length > 0;
+        if (arrayList.isEmpty()) {
+            return z5;
+        }
         int i2 = z3 ? 2 : z ? 1 : 0;
+        int size = arrayList.size();
         boolean z6 = z5;
         for (int i3 = 0; i3 < size; i3++) {
             MessageEntity messageEntity = (MessageEntity) arrayList.get(i3);
@@ -5866,7 +5894,7 @@ public class MessageObject {
                     if (messageEntity.offset + messageEntity.length > charSequence.length()) {
                         messageEntity.length = charSequence.length() - messageEntity.offset;
                     }
-                    if ((!z4 || (messageEntity instanceof TL_messageEntityBold) || (messageEntity instanceof TL_messageEntityItalic) || (messageEntity instanceof TL_messageEntityCode) || (messageEntity instanceof TL_messageEntityPre) || (messageEntity instanceof TL_messageEntityMentionName) || (messageEntity instanceof TL_inputMessageEntityMentionName)) && uRLSpanArr != null && uRLSpanArr.length > 0) {
+                    if ((!z4 || (messageEntity instanceof TL_messageEntityBold) || (messageEntity instanceof TL_messageEntityItalic) || (messageEntity instanceof TL_messageEntityStrike) || (messageEntity instanceof TL_messageEntityUnderline) || (messageEntity instanceof TL_messageEntityBlockquote) || (messageEntity instanceof TL_messageEntityCode) || (messageEntity instanceof TL_messageEntityPre) || (messageEntity instanceof TL_messageEntityMentionName) || (messageEntity instanceof TL_inputMessageEntityMentionName)) && uRLSpanArr != null && uRLSpanArr.length > 0) {
                         for (i4 = 0; i4 < uRLSpanArr.length; i4++) {
                             if (uRLSpanArr[i4] != null) {
                                 int spanStart = spannable.getSpanStart(uRLSpanArr[i4]);
@@ -5884,99 +5912,101 @@ public class MessageObject {
                             }
                         }
                     }
-                    TypefaceSpan typefaceSpan;
-                    if (messageEntity instanceof TL_messageEntityBold) {
-                        typefaceSpan = new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                        spanEnd = messageEntity.offset;
-                        spannable.setSpan(typefaceSpan, spanEnd, messageEntity.length + spanEnd, 33);
-                    } else if (messageEntity instanceof TL_messageEntityItalic) {
-                        typefaceSpan = new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf"));
-                        spanEnd = messageEntity.offset;
-                        spannable.setSpan(typefaceSpan, spanEnd, messageEntity.length + spanEnd, 33);
-                    } else if ((messageEntity instanceof TL_messageEntityCode) || (messageEntity instanceof TL_messageEntityPre)) {
-                        spanEnd = messageEntity.offset;
-                        URLSpanMono uRLSpanMono = new URLSpanMono(spannable, spanEnd, messageEntity.length + spanEnd, i2);
-                        spanEnd = messageEntity.offset;
-                        spannable.setSpan(uRLSpanMono, spanEnd, messageEntity.length + spanEnd, 33);
-                    } else {
-                        String str = "";
-                        StringBuilder stringBuilder;
-                        URLSpanUserMention uRLSpanUserMention;
-                        if (messageEntity instanceof TL_messageEntityMentionName) {
-                            if (z2) {
-                                stringBuilder = new StringBuilder();
-                                stringBuilder.append(str);
-                                stringBuilder.append(((TL_messageEntityMentionName) messageEntity).user_id);
-                                uRLSpanUserMention = new URLSpanUserMention(stringBuilder.toString(), i2);
-                                spanEnd = messageEntity.offset;
-                                spannable.setSpan(uRLSpanUserMention, spanEnd, messageEntity.length + spanEnd, 33);
-                            }
-                        } else if (messageEntity instanceof TL_inputMessageEntityMentionName) {
-                            if (z2) {
-                                stringBuilder = new StringBuilder();
-                                stringBuilder.append(str);
-                                stringBuilder.append(((TL_inputMessageEntityMentionName) messageEntity).user_id.user_id);
-                                uRLSpanUserMention = new URLSpanUserMention(stringBuilder.toString(), i2);
-                                spanEnd = messageEntity.offset;
-                                spannable.setSpan(uRLSpanUserMention, spanEnd, messageEntity.length + spanEnd, 33);
-                            }
-                        } else if (!z4) {
-                            i4 = messageEntity.offset;
-                            String substring = TextUtils.substring(charSequence2, i4, messageEntity.length + i4);
-                            if (messageEntity instanceof TL_messageEntityBotCommand) {
-                                URLSpanBotCommand uRLSpanBotCommand = new URLSpanBotCommand(substring, i2);
-                                i4 = messageEntity.offset;
-                                spannable.setSpan(uRLSpanBotCommand, i4, messageEntity.length + i4, 33);
-                            } else if ((messageEntity instanceof TL_messageEntityHashtag) || ((z2 && (messageEntity instanceof TL_messageEntityMention)) || (messageEntity instanceof TL_messageEntityCashtag))) {
-                                URLSpanNoUnderline uRLSpanNoUnderline = new URLSpanNoUnderline(substring);
-                                i4 = messageEntity.offset;
-                                spannable.setSpan(uRLSpanNoUnderline, i4, messageEntity.length + i4, 33);
-                            } else if (messageEntity instanceof TL_messageEntityEmail) {
-                                stringBuilder = new StringBuilder();
-                                stringBuilder.append("mailto:");
-                                stringBuilder.append(substring);
-                                URLSpanReplacement uRLSpanReplacement = new URLSpanReplacement(stringBuilder.toString());
-                                i4 = messageEntity.offset;
-                                spannable.setSpan(uRLSpanReplacement, i4, messageEntity.length + i4, 33);
-                            } else {
-                                StringBuilder stringBuilder2;
-                                if (messageEntity instanceof TL_messageEntityUrl) {
-                                    if (!Browser.isPassportUrl(messageEntity.url)) {
-                                        URLSpanBrowser uRLSpanBrowser;
-                                        if (substring.toLowerCase().startsWith("http") || substring.toLowerCase().startsWith("tg://")) {
-                                            uRLSpanBrowser = new URLSpanBrowser(substring);
-                                            i4 = messageEntity.offset;
-                                            spannable.setSpan(uRLSpanBrowser, i4, messageEntity.length + i4, 33);
-                                        } else {
-                                            stringBuilder2 = new StringBuilder();
-                                            stringBuilder2.append("http://");
-                                            stringBuilder2.append(substring);
-                                            uRLSpanBrowser = new URLSpanBrowser(stringBuilder2.toString());
-                                            i4 = messageEntity.offset;
-                                            spannable.setSpan(uRLSpanBrowser, i4, messageEntity.length + i4, 33);
-                                        }
-                                    }
-                                } else if (messageEntity instanceof TL_messageEntityPhone) {
-                                    String stripExceptNumbers = PhoneFormat.stripExceptNumbers(substring);
-                                    str = "+";
-                                    if (substring.startsWith(str)) {
-                                        StringBuilder stringBuilder3 = new StringBuilder();
-                                        stringBuilder3.append(str);
-                                        stringBuilder3.append(stripExceptNumbers);
-                                        stripExceptNumbers = stringBuilder3.toString();
-                                    }
-                                    stringBuilder2 = new StringBuilder();
-                                    stringBuilder2.append("tel:");
-                                    stringBuilder2.append(stripExceptNumbers);
-                                    URLSpanBrowser uRLSpanBrowser2 = new URLSpanBrowser(stringBuilder2.toString());
-                                    int i6 = messageEntity.offset;
-                                    spannable.setSpan(uRLSpanBrowser2, i6, messageEntity.length + i6, 33);
-                                } else if ((messageEntity instanceof TL_messageEntityTextUrl) && !Browser.isPassportUrl(messageEntity.url)) {
-                                    URLSpanReplacement uRLSpanReplacement2 = new URLSpanReplacement(messageEntity.url);
+                    if (!((messageEntity instanceof TL_messageEntityStrike) || (messageEntity instanceof TL_messageEntityUnderline) || (messageEntity instanceof TL_messageEntityBlockquote))) {
+                        TypefaceSpan typefaceSpan;
+                        if (messageEntity instanceof TL_messageEntityBold) {
+                            typefaceSpan = new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                            spanEnd = messageEntity.offset;
+                            spannable.setSpan(typefaceSpan, spanEnd, messageEntity.length + spanEnd, 33);
+                        } else if (messageEntity instanceof TL_messageEntityItalic) {
+                            typefaceSpan = new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf"));
+                            spanEnd = messageEntity.offset;
+                            spannable.setSpan(typefaceSpan, spanEnd, messageEntity.length + spanEnd, 33);
+                        } else if ((messageEntity instanceof TL_messageEntityCode) || (messageEntity instanceof TL_messageEntityPre)) {
+                            spanEnd = messageEntity.offset;
+                            URLSpanMono uRLSpanMono = new URLSpanMono(spannable, spanEnd, messageEntity.length + spanEnd, i2);
+                            spanEnd = messageEntity.offset;
+                            spannable.setSpan(uRLSpanMono, spanEnd, messageEntity.length + spanEnd, 33);
+                        } else {
+                            String str = "";
+                            StringBuilder stringBuilder;
+                            URLSpanUserMention uRLSpanUserMention;
+                            if (messageEntity instanceof TL_messageEntityMentionName) {
+                                if (z2) {
+                                    stringBuilder = new StringBuilder();
+                                    stringBuilder.append(str);
+                                    stringBuilder.append(((TL_messageEntityMentionName) messageEntity).user_id);
+                                    uRLSpanUserMention = new URLSpanUserMention(stringBuilder.toString(), i2);
                                     spanEnd = messageEntity.offset;
-                                    spannable.setSpan(uRLSpanReplacement2, spanEnd, messageEntity.length + spanEnd, 33);
+                                    spannable.setSpan(uRLSpanUserMention, spanEnd, messageEntity.length + spanEnd, 33);
                                 }
-                                z6 = true;
+                            } else if (messageEntity instanceof TL_inputMessageEntityMentionName) {
+                                if (z2) {
+                                    stringBuilder = new StringBuilder();
+                                    stringBuilder.append(str);
+                                    stringBuilder.append(((TL_inputMessageEntityMentionName) messageEntity).user_id.user_id);
+                                    uRLSpanUserMention = new URLSpanUserMention(stringBuilder.toString(), i2);
+                                    spanEnd = messageEntity.offset;
+                                    spannable.setSpan(uRLSpanUserMention, spanEnd, messageEntity.length + spanEnd, 33);
+                                }
+                            } else if (!z4) {
+                                i4 = messageEntity.offset;
+                                String substring = TextUtils.substring(charSequence2, i4, messageEntity.length + i4);
+                                if (messageEntity instanceof TL_messageEntityBotCommand) {
+                                    URLSpanBotCommand uRLSpanBotCommand = new URLSpanBotCommand(substring, i2);
+                                    i4 = messageEntity.offset;
+                                    spannable.setSpan(uRLSpanBotCommand, i4, messageEntity.length + i4, 33);
+                                } else if ((messageEntity instanceof TL_messageEntityHashtag) || ((z2 && (messageEntity instanceof TL_messageEntityMention)) || (messageEntity instanceof TL_messageEntityCashtag))) {
+                                    URLSpanNoUnderline uRLSpanNoUnderline = new URLSpanNoUnderline(substring);
+                                    i4 = messageEntity.offset;
+                                    spannable.setSpan(uRLSpanNoUnderline, i4, messageEntity.length + i4, 33);
+                                } else if (messageEntity instanceof TL_messageEntityEmail) {
+                                    stringBuilder = new StringBuilder();
+                                    stringBuilder.append("mailto:");
+                                    stringBuilder.append(substring);
+                                    URLSpanReplacement uRLSpanReplacement = new URLSpanReplacement(stringBuilder.toString());
+                                    i4 = messageEntity.offset;
+                                    spannable.setSpan(uRLSpanReplacement, i4, messageEntity.length + i4, 33);
+                                } else {
+                                    StringBuilder stringBuilder2;
+                                    if (messageEntity instanceof TL_messageEntityUrl) {
+                                        if (!Browser.isPassportUrl(messageEntity.url)) {
+                                            URLSpanBrowser uRLSpanBrowser;
+                                            if (substring.toLowerCase().startsWith("http") || substring.toLowerCase().startsWith("tg://")) {
+                                                uRLSpanBrowser = new URLSpanBrowser(substring);
+                                                i4 = messageEntity.offset;
+                                                spannable.setSpan(uRLSpanBrowser, i4, messageEntity.length + i4, 33);
+                                            } else {
+                                                stringBuilder2 = new StringBuilder();
+                                                stringBuilder2.append("http://");
+                                                stringBuilder2.append(substring);
+                                                uRLSpanBrowser = new URLSpanBrowser(stringBuilder2.toString());
+                                                i4 = messageEntity.offset;
+                                                spannable.setSpan(uRLSpanBrowser, i4, messageEntity.length + i4, 33);
+                                            }
+                                        }
+                                    } else if (messageEntity instanceof TL_messageEntityPhone) {
+                                        String stripExceptNumbers = PhoneFormat.stripExceptNumbers(substring);
+                                        str = "+";
+                                        if (substring.startsWith(str)) {
+                                            StringBuilder stringBuilder3 = new StringBuilder();
+                                            stringBuilder3.append(str);
+                                            stringBuilder3.append(stripExceptNumbers);
+                                            stripExceptNumbers = stringBuilder3.toString();
+                                        }
+                                        stringBuilder2 = new StringBuilder();
+                                        stringBuilder2.append("tel:");
+                                        stringBuilder2.append(stripExceptNumbers);
+                                        URLSpanBrowser uRLSpanBrowser2 = new URLSpanBrowser(stringBuilder2.toString());
+                                        int i6 = messageEntity.offset;
+                                        spannable.setSpan(uRLSpanBrowser2, i6, messageEntity.length + i6, 33);
+                                    } else if ((messageEntity instanceof TL_messageEntityTextUrl) && !Browser.isPassportUrl(messageEntity.url)) {
+                                        URLSpanReplacement uRLSpanReplacement2 = new URLSpanReplacement(messageEntity.url);
+                                        spanEnd = messageEntity.offset;
+                                        spannable.setSpan(uRLSpanReplacement2, spanEnd, messageEntity.length + spanEnd, 33);
+                                    }
+                                    z6 = true;
+                                }
                             }
                         }
                     }

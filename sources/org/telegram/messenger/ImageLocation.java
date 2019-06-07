@@ -17,7 +17,6 @@ import org.telegram.tgnet.TLRPC.TL_photoStrippedSize;
 import org.telegram.tgnet.TLRPC.TL_secureFile;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.tgnet.TLRPC.UserProfilePhoto;
-import org.telegram.tgnet.TLRPC.WebPage;
 
 public class ImageLocation {
     public long access_hash;
@@ -235,52 +234,138 @@ public class ImageLocation {
         return imageLocation;
     }
 
-    public static String getStippedKey(Object obj, Object obj2) {
-        StringBuilder stringBuilder;
-        String str = "stripped";
-        if (obj instanceof WebPage) {
-            String str2 = "_";
-            StringBuilder stringBuilder2;
-            if (obj2 instanceof Document) {
-                Document document = (Document) obj2;
-                stringBuilder2 = new StringBuilder();
-                stringBuilder2.append(str);
-                stringBuilder2.append(FileRefController.getKeyForParentObject(obj));
-                stringBuilder2.append(str2);
-                stringBuilder2.append(document.id);
-                return stringBuilder2.toString();
-            } else if (obj2 instanceof PhotoSize) {
-                PhotoSize photoSize = (PhotoSize) obj2;
-                if (photoSize.location != null) {
-                    stringBuilder2 = new StringBuilder();
-                    stringBuilder2.append(str);
-                    stringBuilder2.append(FileRefController.getKeyForParentObject(obj));
-                    stringBuilder2.append(str2);
-                    stringBuilder2.append(photoSize.location.local_id);
-                    stringBuilder2.append(str2);
-                    stringBuilder2.append(photoSize.location.volume_id);
-                    return stringBuilder2.toString();
-                }
-                stringBuilder = new StringBuilder();
-                stringBuilder.append(str);
-                stringBuilder.append(FileRefController.getKeyForParentObject(obj));
-                return stringBuilder.toString();
-            } else if (obj2 instanceof FileLocation) {
-                FileLocation fileLocation = (FileLocation) obj2;
-                stringBuilder2 = new StringBuilder();
-                stringBuilder2.append(str);
-                stringBuilder2.append(FileRefController.getKeyForParentObject(obj));
-                stringBuilder2.append(str2);
-                stringBuilder2.append(fileLocation.local_id);
-                stringBuilder2.append(str2);
-                stringBuilder2.append(fileLocation.volume_id);
-                return stringBuilder2.toString();
-            }
-        }
-        stringBuilder = new StringBuilder();
-        stringBuilder.append(str);
-        stringBuilder.append(FileRefController.getKeyForParentObject(obj));
-        return stringBuilder.toString();
+    /* JADX WARNING: Removed duplicated region for block: B:16:0x003c  */
+    /* JADX WARNING: Removed duplicated region for block: B:14:0x0022  */
+    public static java.lang.String getStippedKey(java.lang.Object r3, java.lang.Object r4, java.lang.Object r5) {
+        /*
+        r0 = r3 instanceof org.telegram.tgnet.TLRPC.WebPage;
+        r1 = "stripped";
+        if (r0 == 0) goto L_0x00f0;
+    L_0x0006:
+        r0 = r4 instanceof org.telegram.messenger.ImageLocation;
+        if (r0 == 0) goto L_0x001d;
+    L_0x000a:
+        r0 = r4;
+        r0 = (org.telegram.messenger.ImageLocation) r0;
+        r2 = r0.document;
+        if (r2 == 0) goto L_0x0012;
+    L_0x0011:
+        goto L_0x001e;
+    L_0x0012:
+        r2 = r0.photoSize;
+        if (r2 == 0) goto L_0x0017;
+    L_0x0016:
+        goto L_0x001e;
+    L_0x0017:
+        r0 = r0.photo;
+        if (r0 == 0) goto L_0x001d;
+    L_0x001b:
+        r2 = r0;
+        goto L_0x001e;
+    L_0x001d:
+        r2 = r4;
+    L_0x001e:
+        r4 = "_";
+        if (r2 != 0) goto L_0x003c;
+    L_0x0022:
+        r0 = new java.lang.StringBuilder;
+        r0.<init>();
+        r0.append(r1);
+        r3 = org.telegram.messenger.FileRefController.getKeyForParentObject(r3);
+        r0.append(r3);
+        r0.append(r4);
+        r0.append(r5);
+        r3 = r0.toString();
+        return r3;
+    L_0x003c:
+        r5 = r2 instanceof org.telegram.tgnet.TLRPC.Document;
+        if (r5 == 0) goto L_0x005e;
+    L_0x0040:
+        r2 = (org.telegram.tgnet.TLRPC.Document) r2;
+        r5 = new java.lang.StringBuilder;
+        r5.<init>();
+        r5.append(r1);
+        r3 = org.telegram.messenger.FileRefController.getKeyForParentObject(r3);
+        r5.append(r3);
+        r5.append(r4);
+        r3 = r2.id;
+        r5.append(r3);
+        r3 = r5.toString();
+        return r3;
+    L_0x005e:
+        r5 = r2 instanceof org.telegram.tgnet.TLRPC.Photo;
+        if (r5 == 0) goto L_0x0080;
+    L_0x0062:
+        r2 = (org.telegram.tgnet.TLRPC.Photo) r2;
+        r5 = new java.lang.StringBuilder;
+        r5.<init>();
+        r5.append(r1);
+        r3 = org.telegram.messenger.FileRefController.getKeyForParentObject(r3);
+        r5.append(r3);
+        r5.append(r4);
+        r3 = r2.id;
+        r5.append(r3);
+        r3 = r5.toString();
+        return r3;
+    L_0x0080:
+        r5 = r2 instanceof org.telegram.tgnet.TLRPC.PhotoSize;
+        if (r5 == 0) goto L_0x00c6;
+    L_0x0084:
+        r2 = (org.telegram.tgnet.TLRPC.PhotoSize) r2;
+        r5 = r2.location;
+        if (r5 == 0) goto L_0x00b2;
+    L_0x008a:
+        r5 = new java.lang.StringBuilder;
+        r5.<init>();
+        r5.append(r1);
+        r3 = org.telegram.messenger.FileRefController.getKeyForParentObject(r3);
+        r5.append(r3);
+        r5.append(r4);
+        r3 = r2.location;
+        r3 = r3.local_id;
+        r5.append(r3);
+        r5.append(r4);
+        r3 = r2.location;
+        r3 = r3.volume_id;
+        r5.append(r3);
+        r3 = r5.toString();
+        return r3;
+    L_0x00b2:
+        r4 = new java.lang.StringBuilder;
+        r4.<init>();
+        r4.append(r1);
+        r3 = org.telegram.messenger.FileRefController.getKeyForParentObject(r3);
+        r4.append(r3);
+        r3 = r4.toString();
+        return r3;
+    L_0x00c6:
+        r5 = r2 instanceof org.telegram.tgnet.TLRPC.FileLocation;
+        if (r5 == 0) goto L_0x00f0;
+    L_0x00ca:
+        r2 = (org.telegram.tgnet.TLRPC.FileLocation) r2;
+        r5 = new java.lang.StringBuilder;
+        r5.<init>();
+        r5.append(r1);
+        r3 = org.telegram.messenger.FileRefController.getKeyForParentObject(r3);
+        r5.append(r3);
+        r5.append(r4);
+        r3 = r2.local_id;
+        r5.append(r3);
+        r5.append(r4);
+        r3 = r2.volume_id;
+        r5.append(r3);
+        r3 = r5.toString();
+        return r3;
+    L_0x00f0:
+        r4 = new java.lang.StringBuilder;
+        r4.<init>();
+        r4.append(r1);
+        r3 = org.telegram.messenger.FileRefController.getKeyForParentObject(r3);
+        r4.append(r3);
+        r3 = r4.toString();
+        return r3;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageLocation.getStippedKey(java.lang.Object, java.lang.Object, java.lang.Object):java.lang.String");
     }
 
     public String getKey(Object obj, Object obj2) {
@@ -296,7 +381,7 @@ public class ImageLocation {
         PhotoSize photoSize = this.photoSize;
         if (photoSize instanceof TL_photoStrippedSize) {
             if (photoSize.bytes.length > 0) {
-                return getStippedKey(obj, obj2);
+                return getStippedKey(obj, obj2, photoSize);
             }
         } else if (this.location != null) {
             stringBuilder = new StringBuilder();

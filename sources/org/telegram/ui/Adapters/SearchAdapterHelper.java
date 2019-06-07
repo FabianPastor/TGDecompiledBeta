@@ -193,109 +193,113 @@ public class SearchAdapterHelper {
     }
 
     public /* synthetic */ void lambda$null$2$SearchAdapterHelper(int i, TL_error tL_error, TLObject tLObject, boolean z, boolean z2, boolean z3, String str) {
-        if (i == this.lastReqId && tL_error == null) {
-            int i2;
-            TL_contacts_found tL_contacts_found = (TL_contacts_found) tLObject;
-            this.globalSearch.clear();
-            this.globalSearchMap.clear();
-            this.localServerSearch.clear();
-            MessagesController.getInstance(this.currentAccount).putChats(tL_contacts_found.chats, false);
-            MessagesController.getInstance(this.currentAccount).putUsers(tL_contacts_found.users, false);
-            MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(tL_contacts_found.users, tL_contacts_found.chats, true, true);
-            SparseArray sparseArray = new SparseArray();
-            SparseArray sparseArray2 = new SparseArray();
-            for (i2 = 0; i2 < tL_contacts_found.chats.size(); i2++) {
-                Chat chat = (Chat) tL_contacts_found.chats.get(i2);
-                sparseArray.put(chat.id, chat);
-            }
-            for (i2 = 0; i2 < tL_contacts_found.users.size(); i2++) {
-                User user = (User) tL_contacts_found.users.get(i2);
-                sparseArray2.put(user.id, user);
-            }
-            for (i2 = 0; i2 < 2; i2++) {
-                ArrayList arrayList;
-                if (i2 != 0) {
-                    arrayList = tL_contacts_found.results;
-                } else if (this.allResultsAreGlobal) {
-                    arrayList = tL_contacts_found.my_results;
-                } else {
+        if (i == this.lastReqId) {
+            i = 0;
+            this.reqId = 0;
+            if (tL_error == null) {
+                int i2;
+                TL_contacts_found tL_contacts_found = (TL_contacts_found) tLObject;
+                this.globalSearch.clear();
+                this.globalSearchMap.clear();
+                this.localServerSearch.clear();
+                MessagesController.getInstance(this.currentAccount).putChats(tL_contacts_found.chats, false);
+                MessagesController.getInstance(this.currentAccount).putUsers(tL_contacts_found.users, false);
+                MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(tL_contacts_found.users, tL_contacts_found.chats, true, true);
+                SparseArray sparseArray = new SparseArray();
+                SparseArray sparseArray2 = new SparseArray();
+                for (i2 = 0; i2 < tL_contacts_found.chats.size(); i2++) {
+                    Chat chat = (Chat) tL_contacts_found.chats.get(i2);
+                    sparseArray.put(chat.id, chat);
                 }
-                for (int i3 = 0; i3 < arrayList.size(); i3++) {
-                    User user2;
-                    Object obj;
-                    Peer peer = (Peer) arrayList.get(i3);
-                    int i4 = peer.user_id;
-                    if (i4 != 0) {
-                        user2 = (User) sparseArray2.get(i4);
-                        obj = null;
+                for (i2 = 0; i2 < tL_contacts_found.users.size(); i2++) {
+                    User user = (User) tL_contacts_found.users.get(i2);
+                    sparseArray2.put(user.id, user);
+                }
+                for (i2 = 0; i2 < 2; i2++) {
+                    ArrayList arrayList;
+                    if (i2 != 0) {
+                        arrayList = tL_contacts_found.results;
+                    } else if (this.allResultsAreGlobal) {
+                        arrayList = tL_contacts_found.my_results;
                     } else {
-                        i4 = peer.chat_id;
+                    }
+                    for (int i3 = 0; i3 < arrayList.size(); i3++) {
+                        User user2;
+                        Object obj;
+                        Peer peer = (Peer) arrayList.get(i3);
+                        int i4 = peer.user_id;
                         if (i4 != 0) {
-                            obj = (Chat) sparseArray.get(i4);
+                            user2 = (User) sparseArray2.get(i4);
+                            obj = null;
                         } else {
-                            int i5 = peer.channel_id;
-                            if (i5 != 0) {
-                                Chat chat2 = (Chat) sparseArray.get(i5);
+                            i4 = peer.chat_id;
+                            if (i4 != 0) {
+                                obj = (Chat) sparseArray.get(i4);
                             } else {
-                                obj = null;
-                                user2 = obj;
+                                int i5 = peer.channel_id;
+                                if (i5 != 0) {
+                                    Chat chat2 = (Chat) sparseArray.get(i5);
+                                } else {
+                                    obj = null;
+                                    user2 = obj;
+                                }
                             }
+                            user2 = null;
                         }
-                        user2 = null;
-                    }
-                    if (obj != null) {
-                        if (z) {
-                            this.globalSearch.add(obj);
-                            this.globalSearchMap.put(-obj.id, obj);
+                        if (obj != null) {
+                            if (z) {
+                                this.globalSearch.add(obj);
+                                this.globalSearchMap.put(-obj.id, obj);
+                            }
+                        } else if (user2 != null && ((z2 || !user2.bot) && (z3 || !user2.self))) {
+                            this.globalSearch.add(user2);
+                            this.globalSearchMap.put(user2.id, user2);
                         }
-                    } else if (user2 != null && ((z2 || !user2.bot) && (z3 || !user2.self))) {
-                        this.globalSearch.add(user2);
-                        this.globalSearchMap.put(user2.id, user2);
                     }
                 }
-            }
-            if (!this.allResultsAreGlobal) {
-                for (int i6 = 0; i6 < tL_contacts_found.my_results.size(); i6++) {
-                    Object obj2;
-                    Object obj3;
-                    Peer peer2 = (Peer) tL_contacts_found.my_results.get(i6);
-                    int i7 = peer2.user_id;
-                    if (i7 != 0) {
-                        obj2 = (User) sparseArray2.get(i7);
-                        obj3 = null;
-                    } else {
-                        i7 = peer2.chat_id;
-                        if (i7 != 0) {
-                            obj3 = (Chat) sparseArray.get(i7);
+                if (!this.allResultsAreGlobal) {
+                    while (i < tL_contacts_found.my_results.size()) {
+                        Object obj2;
+                        Object obj3;
+                        Peer peer2 = (Peer) tL_contacts_found.my_results.get(i);
+                        int i6 = peer2.user_id;
+                        if (i6 != 0) {
+                            obj2 = (User) sparseArray2.get(i6);
+                            obj3 = null;
                         } else {
-                            int i8 = peer2.channel_id;
-                            if (i8 != 0) {
-                                Chat chat3 = (Chat) sparseArray.get(i8);
+                            i6 = peer2.chat_id;
+                            if (i6 != 0) {
+                                obj3 = (Chat) sparseArray.get(i6);
                             } else {
-                                obj3 = null;
-                                obj2 = obj3;
+                                int i7 = peer2.channel_id;
+                                if (i7 != 0) {
+                                    Chat chat3 = (Chat) sparseArray.get(i7);
+                                } else {
+                                    obj3 = null;
+                                    obj2 = obj3;
+                                }
                             }
+                            obj2 = null;
                         }
-                        obj2 = null;
-                    }
-                    if (obj3 != null) {
-                        this.localServerSearch.add(obj3);
-                        this.globalSearchMap.put(-obj3.id, obj3);
-                    } else if (obj2 != null) {
-                        this.localServerSearch.add(obj2);
-                        this.globalSearchMap.put(obj2.id, obj2);
+                        if (obj3 != null) {
+                            this.localServerSearch.add(obj3);
+                            this.globalSearchMap.put(-obj3.id, obj3);
+                        } else if (obj2 != null) {
+                            this.localServerSearch.add(obj2);
+                            this.globalSearchMap.put(obj2.id, obj2);
+                        }
+                        i++;
                     }
                 }
+                this.lastFoundUsername = str.toLowerCase();
+                ArrayList arrayList2 = this.localSearchResults;
+                if (arrayList2 != null) {
+                    mergeResults(arrayList2);
+                }
+                mergeExcludeResults();
+                this.delegate.onDataSetChanged();
             }
-            this.lastFoundUsername = str.toLowerCase();
-            ArrayList arrayList2 = this.localSearchResults;
-            if (arrayList2 != null) {
-                mergeResults(arrayList2);
-            }
-            mergeExcludeResults();
-            this.delegate.onDataSetChanged();
         }
-        this.reqId = 0;
     }
 
     public void unloadRecentHashtags() {

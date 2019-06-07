@@ -49,11 +49,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Timer;
-import java.util.TimerTask;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -344,7 +343,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         private SearchAdapterHelper searchAdapterHelper;
         private ArrayList<TLObject> searchResult = new ArrayList();
         private ArrayList<CharSequence> searchResultNames = new ArrayList();
-        private Timer searchTimer;
+        private Runnable searchRunnable;
         private boolean searching;
         private int usersStartRow;
 
@@ -394,6 +393,9 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 }
 
                 public void onDataSetChanged() {
+                    if (GroupCreateAdapter.this.searchRunnable == null && !GroupCreateAdapter.this.searchAdapterHelper.isSearchInProgress()) {
+                        GroupCreateActivity.this.emptyView.showTextView();
+                    }
                     GroupCreateAdapter.this.notifyDataSetChanged();
                 }
             });
@@ -778,13 +780,10 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             return false;
         }
 
-        public void searchDialogs(final String str) {
-            try {
-                if (this.searchTimer != null) {
-                    this.searchTimer.cancel();
-                }
-            } catch (Exception e) {
-                FileLog.e(e);
+        public void searchDialogs(String str) {
+            if (this.searchRunnable != null) {
+                Utilities.searchQueue.cancelRunnable(this.searchRunnable);
+                this.searchRunnable = null;
             }
             if (str == null) {
                 this.searchResult.clear();
@@ -796,230 +795,226 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 notifyDataSetChanged();
                 return;
             }
-            this.searchTimer = new Timer();
-            this.searchTimer.schedule(new TimerTask() {
-                public void run() {
-                    try {
-                        GroupCreateAdapter.this.searchTimer.cancel();
-                        GroupCreateAdapter.this.searchTimer = null;
-                    } catch (Exception e) {
-                        FileLog.e(e);
-                    }
-                    AndroidUtilities.runOnUIThread(new -$$Lambda$GroupCreateActivity$GroupCreateAdapter$3$wWcLpY_du4_rpNgvonXl87vzFTU(this, str));
-                }
+            DispatchQueue dispatchQueue = Utilities.searchQueue;
+            -$$Lambda$GroupCreateActivity$GroupCreateAdapter$_nn7RP5zPzTfvTRFWkLrJYebAeI -__lambda_groupcreateactivity_groupcreateadapter__nn7rp5zpztfvtrfwklrjyebaei = new -$$Lambda$GroupCreateActivity$GroupCreateAdapter$_nn7RP5zPzTfvTRFWkLrJYebAeI(this, str);
+            this.searchRunnable = -__lambda_groupcreateactivity_groupcreateadapter__nn7rp5zpztfvtrfwklrjyebaei;
+            dispatchQueue.postRunnable(-__lambda_groupcreateactivity_groupcreateadapter__nn7rp5zpztfvtrfwklrjyebaei, 300);
+        }
 
-                public /* synthetic */ void lambda$run$1$GroupCreateActivity$GroupCreateAdapter$3(String str) {
-                    SearchAdapterHelper access$3900 = GroupCreateAdapter.this.searchAdapterHelper;
-                    boolean z = GroupCreateActivity.this.isAlwaysShare || GroupCreateActivity.this.isNeverShare;
-                    access$3900.queryServerSearch(str, true, z, true, false, 0, 0);
-                    Utilities.searchQueue.postRunnable(new -$$Lambda$GroupCreateActivity$GroupCreateAdapter$3$N0OOEZ27-yY58u6OB8iaEcy4ZUI(this, str));
-                }
+        public /* synthetic */ void lambda$searchDialogs$2$GroupCreateActivity$GroupCreateAdapter(String str) {
+            AndroidUtilities.runOnUIThread(new -$$Lambda$GroupCreateActivity$GroupCreateAdapter$0GX4ESbcO5iM0ilImNc3QCLvsKs(this, str));
+        }
 
-                /* JADX WARNING: Removed duplicated region for block: B:51:0x0134 A:{LOOP_END, LOOP:1: B:27:0x0097->B:51:0x0134} */
-                /* JADX WARNING: Removed duplicated region for block: B:59:0x00e4 A:{SYNTHETIC} */
-                /* JADX WARNING: Missing block: B:36:0x00d3, code skipped:
-            if (r12.contains(r4.toString()) != false) goto L_0x00e1;
+        public /* synthetic */ void lambda$null$1$GroupCreateActivity$GroupCreateAdapter(String str) {
+            SearchAdapterHelper searchAdapterHelper = this.searchAdapterHelper;
+            boolean z = GroupCreateActivity.this.isAlwaysShare || GroupCreateActivity.this.isNeverShare;
+            searchAdapterHelper.queryServerSearch(str, true, z, true, false, 0, 0);
+            DispatchQueue dispatchQueue = Utilities.searchQueue;
+            -$$Lambda$GroupCreateActivity$GroupCreateAdapter$EPf9AhHV36Zo3odTABUpDhfBxWw -__lambda_groupcreateactivity_groupcreateadapter_epf9ahhv36zo3odtabupdhfbxww = new -$$Lambda$GroupCreateActivity$GroupCreateAdapter$EPf9AhHV36Zo3odTABUpDhfBxWw(this, str);
+            this.searchRunnable = -__lambda_groupcreateactivity_groupcreateadapter_epf9ahhv36zo3odtabupdhfbxww;
+            dispatchQueue.postRunnable(-__lambda_groupcreateactivity_groupcreateadapter_epf9ahhv36zo3odtabupdhfbxww);
+        }
+
+        /* JADX WARNING: Removed duplicated region for block: B:51:0x012a A:{LOOP_END, LOOP:1: B:27:0x008d->B:51:0x012a} */
+        /* JADX WARNING: Removed duplicated region for block: B:60:0x00da A:{SYNTHETIC} */
+        /* JADX WARNING: Missing block: B:36:0x00c9, code skipped:
+            if (r12.contains(r4.toString()) != false) goto L_0x00d7;
      */
-                public /* synthetic */ void lambda$null$0$GroupCreateActivity$GroupCreateAdapter$3(java.lang.String r18) {
-                    /*
-                    r17 = this;
-                    r0 = r17;
-                    r1 = r18.trim();
-                    r1 = r1.toLowerCase();
-                    r2 = r1.length();
-                    if (r2 != 0) goto L_0x0020;
-                L_0x0010:
-                    r1 = org.telegram.ui.GroupCreateActivity.GroupCreateAdapter.this;
-                    r2 = new java.util.ArrayList;
-                    r2.<init>();
-                    r3 = new java.util.ArrayList;
-                    r3.<init>();
-                    r1.updateSearchResults(r2, r3);
-                    return;
-                L_0x0020:
-                    r2 = org.telegram.messenger.LocaleController.getInstance();
-                    r2 = r2.getTranslitString(r1);
-                    r3 = r1.equals(r2);
-                    if (r3 != 0) goto L_0x0034;
-                L_0x002e:
-                    r3 = r2.length();
-                    if (r3 != 0) goto L_0x0035;
-                L_0x0034:
-                    r2 = 0;
-                L_0x0035:
-                    r3 = 0;
-                    r5 = 1;
-                    if (r2 == 0) goto L_0x003b;
-                L_0x0039:
-                    r6 = 1;
-                    goto L_0x003c;
-                L_0x003b:
-                    r6 = 0;
-                L_0x003c:
-                    r6 = r6 + r5;
-                    r6 = new java.lang.String[r6];
-                    r6[r3] = r1;
-                    if (r2 == 0) goto L_0x0045;
-                L_0x0043:
-                    r6[r5] = r2;
-                L_0x0045:
-                    r1 = new java.util.ArrayList;
-                    r1.<init>();
-                    r2 = new java.util.ArrayList;
-                    r2.<init>();
-                    r7 = 0;
-                L_0x0050:
-                    r8 = org.telegram.ui.GroupCreateActivity.GroupCreateAdapter.this;
-                    r8 = r8.contacts;
-                    r8 = r8.size();
-                    if (r7 >= r8) goto L_0x0144;
-                L_0x005c:
-                    r8 = org.telegram.ui.GroupCreateActivity.GroupCreateAdapter.this;
-                    r8 = r8.contacts;
-                    r8 = r8.get(r7);
-                    r8 = (org.telegram.tgnet.TLObject) r8;
-                    r9 = r8 instanceof org.telegram.tgnet.TLRPC.User;
-                    if (r9 == 0) goto L_0x007e;
-                L_0x006c:
-                    r10 = r8;
-                    r10 = (org.telegram.tgnet.TLRPC.User) r10;
-                    r11 = r10.first_name;
-                    r12 = r10.last_name;
-                    r11 = org.telegram.messenger.ContactsController.formatName(r11, r12);
-                    r11 = r11.toLowerCase();
-                    r10 = r10.username;
-                    goto L_0x0085;
-                L_0x007e:
-                    r10 = r8;
-                    r10 = (org.telegram.tgnet.TLRPC.Chat) r10;
-                    r11 = r10.title;
-                    r10 = r10.username;
-                L_0x0085:
-                    r12 = org.telegram.messenger.LocaleController.getInstance();
-                    r12 = r12.getTranslitString(r11);
-                    r13 = r11.equals(r12);
-                    if (r13 == 0) goto L_0x0094;
-                L_0x0093:
-                    r12 = 0;
-                L_0x0094:
-                    r13 = r6.length;
-                    r14 = 0;
-                    r15 = 0;
-                L_0x0097:
-                    if (r14 >= r13) goto L_0x013c;
-                L_0x0099:
-                    r3 = r6[r14];
-                    r16 = r11.startsWith(r3);
-                    if (r16 != 0) goto L_0x00e1;
-                L_0x00a1:
-                    r4 = new java.lang.StringBuilder;
-                    r4.<init>();
-                    r5 = " ";
-                    r4.append(r5);
-                    r4.append(r3);
-                    r4 = r4.toString();
-                    r4 = r11.contains(r4);
-                    if (r4 != 0) goto L_0x00e1;
-                L_0x00b8:
-                    if (r12 == 0) goto L_0x00d6;
-                L_0x00ba:
-                    r4 = r12.startsWith(r3);
-                    if (r4 != 0) goto L_0x00e1;
-                L_0x00c0:
-                    r4 = new java.lang.StringBuilder;
-                    r4.<init>();
-                    r4.append(r5);
-                    r4.append(r3);
-                    r4 = r4.toString();
-                    r4 = r12.contains(r4);
-                    if (r4 == 0) goto L_0x00d6;
-                L_0x00d5:
-                    goto L_0x00e1;
-                L_0x00d6:
-                    if (r10 == 0) goto L_0x00e2;
-                L_0x00d8:
-                    r4 = r10.startsWith(r3);
-                    if (r4 == 0) goto L_0x00e2;
-                L_0x00de:
-                    r4 = 2;
-                    r15 = 2;
-                    goto L_0x00e2;
-                L_0x00e1:
-                    r15 = 1;
-                L_0x00e2:
-                    if (r15 == 0) goto L_0x0134;
-                L_0x00e4:
-                    r4 = 1;
-                    if (r15 != r4) goto L_0x0107;
-                L_0x00e7:
-                    if (r9 == 0) goto L_0x00f8;
-                L_0x00e9:
-                    r5 = r8;
-                    r5 = (org.telegram.tgnet.TLRPC.User) r5;
-                    r9 = r5.first_name;
-                    r5 = r5.last_name;
-                    r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r9, r5, r3);
-                    r2.add(r3);
-                    goto L_0x0105;
-                L_0x00f8:
-                    r5 = r8;
-                    r5 = (org.telegram.tgnet.TLRPC.Chat) r5;
-                    r5 = r5.title;
-                    r9 = 0;
-                    r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r5, r9, r3);
-                    r2.add(r3);
-                L_0x0105:
-                    r9 = 0;
-                    goto L_0x012f;
-                L_0x0107:
-                    r5 = new java.lang.StringBuilder;
-                    r5.<init>();
-                    r9 = "@";
-                    r5.append(r9);
-                    r5.append(r10);
-                    r5 = r5.toString();
-                    r10 = new java.lang.StringBuilder;
-                    r10.<init>();
-                    r10.append(r9);
-                    r10.append(r3);
-                    r3 = r10.toString();
-                    r9 = 0;
-                    r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r5, r9, r3);
-                    r2.add(r3);
-                L_0x012f:
-                    r1.add(r8);
-                    r3 = r9;
-                    goto L_0x013e;
-                L_0x0134:
-                    r3 = 0;
-                    r4 = 1;
-                    r14 = r14 + 1;
-                    r3 = 0;
-                    r5 = 1;
-                    goto L_0x0097;
-                L_0x013c:
-                    r3 = 0;
-                    r4 = 1;
-                L_0x013e:
-                    r7 = r7 + 1;
-                    r3 = 0;
-                    r5 = 1;
-                    goto L_0x0050;
-                L_0x0144:
-                    r3 = org.telegram.ui.GroupCreateActivity.GroupCreateAdapter.this;
-                    r3.updateSearchResults(r1, r2);
-                    return;
-                    */
-                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.GroupCreateActivity$GroupCreateAdapter$AnonymousClass3.lambda$null$0$GroupCreateActivity$GroupCreateAdapter$3(java.lang.String):void");
-                }
-            }, 200, 300);
+        public /* synthetic */ void lambda$null$0$GroupCreateActivity$GroupCreateAdapter(java.lang.String r18) {
+            /*
+            r17 = this;
+            r0 = r17;
+            r1 = r18.trim();
+            r1 = r1.toLowerCase();
+            r2 = r1.length();
+            if (r2 != 0) goto L_0x001e;
+        L_0x0010:
+            r1 = new java.util.ArrayList;
+            r1.<init>();
+            r2 = new java.util.ArrayList;
+            r2.<init>();
+            r0.updateSearchResults(r1, r2);
+            return;
+        L_0x001e:
+            r2 = org.telegram.messenger.LocaleController.getInstance();
+            r2 = r2.getTranslitString(r1);
+            r3 = r1.equals(r2);
+            if (r3 != 0) goto L_0x0032;
+        L_0x002c:
+            r3 = r2.length();
+            if (r3 != 0) goto L_0x0033;
+        L_0x0032:
+            r2 = 0;
+        L_0x0033:
+            r3 = 0;
+            r5 = 1;
+            if (r2 == 0) goto L_0x0039;
+        L_0x0037:
+            r6 = 1;
+            goto L_0x003a;
+        L_0x0039:
+            r6 = 0;
+        L_0x003a:
+            r6 = r6 + r5;
+            r6 = new java.lang.String[r6];
+            r6[r3] = r1;
+            if (r2 == 0) goto L_0x0043;
+        L_0x0041:
+            r6[r5] = r2;
+        L_0x0043:
+            r1 = new java.util.ArrayList;
+            r1.<init>();
+            r2 = new java.util.ArrayList;
+            r2.<init>();
+            r7 = 0;
+        L_0x004e:
+            r8 = r0.contacts;
+            r8 = r8.size();
+            if (r7 >= r8) goto L_0x013a;
+        L_0x0056:
+            r8 = r0.contacts;
+            r8 = r8.get(r7);
+            r8 = (org.telegram.tgnet.TLObject) r8;
+            r9 = r8 instanceof org.telegram.tgnet.TLRPC.User;
+            if (r9 == 0) goto L_0x0074;
+        L_0x0062:
+            r10 = r8;
+            r10 = (org.telegram.tgnet.TLRPC.User) r10;
+            r11 = r10.first_name;
+            r12 = r10.last_name;
+            r11 = org.telegram.messenger.ContactsController.formatName(r11, r12);
+            r11 = r11.toLowerCase();
+            r10 = r10.username;
+            goto L_0x007b;
+        L_0x0074:
+            r10 = r8;
+            r10 = (org.telegram.tgnet.TLRPC.Chat) r10;
+            r11 = r10.title;
+            r10 = r10.username;
+        L_0x007b:
+            r12 = org.telegram.messenger.LocaleController.getInstance();
+            r12 = r12.getTranslitString(r11);
+            r13 = r11.equals(r12);
+            if (r13 == 0) goto L_0x008a;
+        L_0x0089:
+            r12 = 0;
+        L_0x008a:
+            r13 = r6.length;
+            r14 = 0;
+            r15 = 0;
+        L_0x008d:
+            if (r14 >= r13) goto L_0x0132;
+        L_0x008f:
+            r3 = r6[r14];
+            r16 = r11.startsWith(r3);
+            if (r16 != 0) goto L_0x00d7;
+        L_0x0097:
+            r4 = new java.lang.StringBuilder;
+            r4.<init>();
+            r5 = " ";
+            r4.append(r5);
+            r4.append(r3);
+            r4 = r4.toString();
+            r4 = r11.contains(r4);
+            if (r4 != 0) goto L_0x00d7;
+        L_0x00ae:
+            if (r12 == 0) goto L_0x00cc;
+        L_0x00b0:
+            r4 = r12.startsWith(r3);
+            if (r4 != 0) goto L_0x00d7;
+        L_0x00b6:
+            r4 = new java.lang.StringBuilder;
+            r4.<init>();
+            r4.append(r5);
+            r4.append(r3);
+            r4 = r4.toString();
+            r4 = r12.contains(r4);
+            if (r4 == 0) goto L_0x00cc;
+        L_0x00cb:
+            goto L_0x00d7;
+        L_0x00cc:
+            if (r10 == 0) goto L_0x00d8;
+        L_0x00ce:
+            r4 = r10.startsWith(r3);
+            if (r4 == 0) goto L_0x00d8;
+        L_0x00d4:
+            r4 = 2;
+            r15 = 2;
+            goto L_0x00d8;
+        L_0x00d7:
+            r15 = 1;
+        L_0x00d8:
+            if (r15 == 0) goto L_0x012a;
+        L_0x00da:
+            r4 = 1;
+            if (r15 != r4) goto L_0x00fd;
+        L_0x00dd:
+            if (r9 == 0) goto L_0x00ee;
+        L_0x00df:
+            r5 = r8;
+            r5 = (org.telegram.tgnet.TLRPC.User) r5;
+            r9 = r5.first_name;
+            r5 = r5.last_name;
+            r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r9, r5, r3);
+            r2.add(r3);
+            goto L_0x00fb;
+        L_0x00ee:
+            r5 = r8;
+            r5 = (org.telegram.tgnet.TLRPC.Chat) r5;
+            r5 = r5.title;
+            r9 = 0;
+            r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r5, r9, r3);
+            r2.add(r3);
+        L_0x00fb:
+            r9 = 0;
+            goto L_0x0125;
+        L_0x00fd:
+            r5 = new java.lang.StringBuilder;
+            r5.<init>();
+            r9 = "@";
+            r5.append(r9);
+            r5.append(r10);
+            r5 = r5.toString();
+            r10 = new java.lang.StringBuilder;
+            r10.<init>();
+            r10.append(r9);
+            r10.append(r3);
+            r3 = r10.toString();
+            r9 = 0;
+            r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r5, r9, r3);
+            r2.add(r3);
+        L_0x0125:
+            r1.add(r8);
+            r3 = r9;
+            goto L_0x0134;
+        L_0x012a:
+            r3 = 0;
+            r4 = 1;
+            r14 = r14 + 1;
+            r3 = 0;
+            r5 = 1;
+            goto L_0x008d;
+        L_0x0132:
+            r3 = 0;
+            r4 = 1;
+        L_0x0134:
+            r7 = r7 + 1;
+            r3 = 0;
+            r5 = 1;
+            goto L_0x004e;
+        L_0x013a:
+            r0.updateSearchResults(r1, r2);
+            return;
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.GroupCreateActivity$GroupCreateAdapter.lambda$null$0$GroupCreateActivity$GroupCreateAdapter(java.lang.String):void");
         }
 
         private void updateSearchResults(ArrayList<TLObject> arrayList, ArrayList<CharSequence> arrayList2) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$GroupCreateActivity$GroupCreateAdapter$C0i_zDLg66DiKGKME02xepSowZQ(this, arrayList, arrayList2));
+            AndroidUtilities.runOnUIThread(new -$$Lambda$GroupCreateActivity$GroupCreateAdapter$MCwNrPscrSAKJczJPxnkyUGoI30(this, arrayList, arrayList2));
         }
 
-        public /* synthetic */ void lambda$updateSearchResults$0$GroupCreateActivity$GroupCreateAdapter(ArrayList arrayList, ArrayList arrayList2) {
+        public /* synthetic */ void lambda$updateSearchResults$3$GroupCreateActivity$GroupCreateAdapter(ArrayList arrayList, ArrayList arrayList2) {
+            this.searchRunnable = null;
             this.searchResult = arrayList;
             this.searchResultNames = arrayList2;
             this.searchAdapterHelper.mergeResults(this.searchResult);
@@ -1561,6 +1556,9 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
 
     private boolean onDonePressed(boolean z) {
         int i = 0;
+        if (this.selectedContacts.size() == 0) {
+            return false;
+        }
         ArrayList arrayList;
         if (z && this.addToGroup) {
             if (getParentActivity() == null) {

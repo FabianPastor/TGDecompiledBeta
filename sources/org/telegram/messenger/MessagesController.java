@@ -3314,14 +3314,14 @@ public class MessagesController implements NotificationCenterDelegate {
     }
 
     /* Access modifiers changed, original: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:32:0x009b  */
-    /* JADX WARNING: Removed duplicated region for block: B:26:0x0079  */
-    /* JADX WARNING: Removed duplicated region for block: B:117:0x02d4  */
-    /* JADX WARNING: Removed duplicated region for block: B:108:0x028d  */
-    /* JADX WARNING: Removed duplicated region for block: B:108:0x028d  */
-    /* JADX WARNING: Removed duplicated region for block: B:117:0x02d4  */
-    /* JADX WARNING: Removed duplicated region for block: B:117:0x02d4  */
-    /* JADX WARNING: Removed duplicated region for block: B:108:0x028d  */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x00a8  */
+    /* JADX WARNING: Removed duplicated region for block: B:29:0x0086  */
+    /* JADX WARNING: Removed duplicated region for block: B:120:0x02e1  */
+    /* JADX WARNING: Removed duplicated region for block: B:111:0x029a  */
+    /* JADX WARNING: Removed duplicated region for block: B:111:0x029a  */
+    /* JADX WARNING: Removed duplicated region for block: B:120:0x02e1  */
+    /* JADX WARNING: Removed duplicated region for block: B:120:0x02e1  */
+    /* JADX WARNING: Removed duplicated region for block: B:111:0x029a  */
     public void deleteDialog(long r27, boolean r29, int r30, int r31, boolean r32, org.telegram.tgnet.TLRPC.InputPeer r33, long r34) {
         /*
         r26 = this;
@@ -3354,7 +3354,7 @@ public class MessagesController implements NotificationCenterDelegate {
         r12 = 0;
         r10 = 0;
         r14 = 1;
-        if (r0 == 0) goto L_0x0210;
+        if (r0 == 0) goto L_0x021d;
     L_0x0031:
         r15 = r11.currentAccount;
         r15 = org.telegram.messenger.MessagesStorage.getInstance(r15);
@@ -3362,83 +3362,91 @@ public class MessagesController implements NotificationCenterDelegate {
         r15 = r11.dialogs_dict;
         r15 = r15.get(r5);
         r15 = (org.telegram.tgnet.TLRPC.Dialog) r15;
-        if (r15 == 0) goto L_0x01b5;
+        if (r7 == 0) goto L_0x0046;
     L_0x0044:
-        if (r31 != 0) goto L_0x0059;
+        if (r7 != r2) goto L_0x004f;
     L_0x0046:
+        r1 = r11.currentAccount;
+        r1 = org.telegram.messenger.NotificationsController.getInstance(r1);
+        r1.deleteNotificationChannel(r5);
+    L_0x004f:
+        if (r15 == 0) goto L_0x01c2;
+    L_0x0051:
+        if (r31 != 0) goto L_0x0066;
+    L_0x0053:
         r1 = r15.top_message;
         r1 = java.lang.Math.max(r10, r1);
         r8 = r15.read_inbox_max_id;
         r1 = java.lang.Math.max(r1, r8);
         r8 = r15.read_outbox_max_id;
         r1 = java.lang.Math.max(r1, r8);
-        goto L_0x005b;
-    L_0x0059:
+        goto L_0x0068;
+    L_0x0066:
         r1 = r31;
-    L_0x005b:
-        if (r7 == 0) goto L_0x0066;
-    L_0x005d:
-        if (r7 != r2) goto L_0x0060;
-    L_0x005f:
-        goto L_0x0066;
-    L_0x0060:
+    L_0x0068:
+        if (r7 == 0) goto L_0x0073;
+    L_0x006a:
+        if (r7 != r2) goto L_0x006d;
+    L_0x006c:
+        goto L_0x0073;
+    L_0x006d:
         r15.unread_count = r10;
         r16 = r3;
         r2 = 0;
-        goto L_0x00b3;
-    L_0x0066:
+        goto L_0x00c0;
+    L_0x0073:
         r8 = r11.proxyDialog;
-        if (r8 == 0) goto L_0x0074;
-    L_0x006a:
+        if (r8 == 0) goto L_0x0081;
+    L_0x0077:
         r16 = r3;
         r2 = r8.id;
         r8 = (r2 > r5 ? 1 : (r2 == r5 ? 0 : -1));
-        if (r8 != 0) goto L_0x0076;
-    L_0x0072:
+        if (r8 != 0) goto L_0x0083;
+    L_0x007f:
         r2 = 1;
-        goto L_0x0077;
-    L_0x0074:
+        goto L_0x0084;
+    L_0x0081:
         r16 = r3;
-    L_0x0076:
+    L_0x0083:
         r2 = 0;
-    L_0x0077:
-        if (r2 == 0) goto L_0x009b;
-    L_0x0079:
+    L_0x0084:
+        if (r2 == 0) goto L_0x00a8;
+    L_0x0086:
         r11.isLeftProxyChannel = r14;
         r3 = r11.proxyDialog;
         r17 = r15;
         r14 = r3.id;
         r3 = (r14 > r12 ? 1 : (r14 == r12 ? 0 : -1));
-        if (r3 >= 0) goto L_0x0094;
-    L_0x0085:
+        if (r3 >= 0) goto L_0x00a1;
+    L_0x0092:
         r3 = (int) r14;
         r3 = -r3;
         r3 = java.lang.Integer.valueOf(r3);
         r3 = r11.getChat(r3);
-        if (r3 == 0) goto L_0x0094;
-    L_0x0091:
+        if (r3 == 0) goto L_0x00a1;
+    L_0x009e:
         r8 = 1;
         r3.left = r8;
-    L_0x0094:
+    L_0x00a1:
         r3 = 0;
         r11.sortDialogs(r3);
         r15 = r17;
-        goto L_0x00b3;
-    L_0x009b:
+        goto L_0x00c0;
+    L_0x00a8:
         r11.removeDialog(r15);
         r3 = r11.nextDialogsCacheOffset;
         r14 = r15.folder_id;
         r3 = r3.get(r14, r10);
-        if (r3 <= 0) goto L_0x00b3;
-    L_0x00a8:
+        if (r3 <= 0) goto L_0x00c0;
+    L_0x00b5:
         r14 = r11.nextDialogsCacheOffset;
         r8 = r15.folder_id;
         r17 = 1;
         r3 = r3 + -1;
         r14.put(r8, r3);
-    L_0x00b3:
-        if (r2 != 0) goto L_0x01b2;
-    L_0x00b5:
+    L_0x00c0:
+        if (r2 != 0) goto L_0x01bf;
+    L_0x00c2:
         r3 = r11.dialogMessage;
         r12 = r15.id;
         r3 = r3.get(r12);
@@ -3446,14 +3454,14 @@ public class MessagesController implements NotificationCenterDelegate {
         r8 = r11.dialogMessage;
         r12 = r15.id;
         r8.remove(r12);
-        if (r3 == 0) goto L_0x00d6;
-    L_0x00c8:
+        if (r3 == 0) goto L_0x00e3;
+    L_0x00d5:
         r8 = r3.getId();
         r12 = r11.dialogMessagesByIds;
         r13 = r3.getId();
         r12.remove(r13);
-        goto L_0x00e7;
-    L_0x00d6:
+        goto L_0x00f4;
+    L_0x00e3:
         r8 = r15.top_message;
         r3 = r11.dialogMessagesByIds;
         r3 = r3.get(r8);
@@ -3461,26 +3469,26 @@ public class MessagesController implements NotificationCenterDelegate {
         r12 = r11.dialogMessagesByIds;
         r13 = r15.top_message;
         r12.remove(r13);
-    L_0x00e7:
+    L_0x00f4:
         r12 = r8;
-        if (r3 == 0) goto L_0x00f9;
-    L_0x00ea:
+        if (r3 == 0) goto L_0x0106;
+    L_0x00f7:
         r3 = r3.messageOwner;
         r13 = r3.random_id;
         r18 = 0;
         r3 = (r13 > r18 ? 1 : (r13 == r18 ? 0 : -1));
-        if (r3 == 0) goto L_0x00f9;
-    L_0x00f4:
+        if (r3 == 0) goto L_0x0106;
+    L_0x0101:
         r3 = r11.dialogMessagesByRandomIds;
         r3.remove(r13);
-    L_0x00f9:
+    L_0x0106:
         r3 = 1;
-        if (r7 != r3) goto L_0x01ad;
-    L_0x00fc:
-        if (r16 == 0) goto L_0x01ad;
-    L_0x00fe:
-        if (r12 <= 0) goto L_0x01ad;
-    L_0x0100:
+        if (r7 != r3) goto L_0x01ba;
+    L_0x0109:
+        if (r16 == 0) goto L_0x01ba;
+    L_0x010b:
+        if (r12 <= 0) goto L_0x01ba;
+    L_0x010d:
         r3 = new org.telegram.tgnet.TLRPC$TL_messageService;
         r3.<init>();
         r12 = r15.top_message;
@@ -3490,13 +3498,13 @@ public class MessagesController implements NotificationCenterDelegate {
         r12 = r12.getClientUserId();
         r12 = (long) r12;
         r14 = (r12 > r5 ? 1 : (r12 == r5 ? 0 : -1));
-        if (r14 != 0) goto L_0x011a;
-    L_0x0118:
+        if (r14 != 0) goto L_0x0127;
+    L_0x0125:
         r12 = 1;
-        goto L_0x011b;
-    L_0x011a:
+        goto L_0x0128;
+    L_0x0127:
         r12 = 0;
-    L_0x011b:
+    L_0x0128:
         r3.out = r12;
         r12 = r11.currentAccount;
         r12 = org.telegram.messenger.UserConfig.getInstance(r12);
@@ -3513,34 +3521,34 @@ public class MessagesController implements NotificationCenterDelegate {
         r12 = r16;
         r13 = (long) r12;
         r3.dialog_id = r13;
-        if (r12 <= 0) goto L_0x014d;
-    L_0x0141:
+        if (r12 <= 0) goto L_0x015a;
+    L_0x014e:
         r13 = new org.telegram.tgnet.TLRPC$TL_peerUser;
         r13.<init>();
         r3.to_id = r13;
         r13 = r3.to_id;
         r13.user_id = r12;
-        goto L_0x0173;
-    L_0x014d:
+        goto L_0x0180;
+    L_0x015a:
         r13 = -r12;
         r14 = java.lang.Integer.valueOf(r13);
         r14 = r11.getChat(r14);
         r14 = org.telegram.messenger.ChatObject.isChannel(r14);
-        if (r14 == 0) goto L_0x0168;
-    L_0x015c:
+        if (r14 == 0) goto L_0x0175;
+    L_0x0169:
         r14 = new org.telegram.tgnet.TLRPC$TL_peerChannel;
         r14.<init>();
         r3.to_id = r14;
         r14 = r3.to_id;
         r14.channel_id = r13;
-        goto L_0x0173;
-    L_0x0168:
+        goto L_0x0180;
+    L_0x0175:
         r14 = new org.telegram.tgnet.TLRPC$TL_peerChat;
         r14.<init>();
         r3.to_id = r14;
         r14 = r3.to_id;
         r14.chat_id = r13;
-    L_0x0173:
+    L_0x0180:
         r13 = new org.telegram.messenger.MessageObject;
         r14 = r11.currentAccount;
         r15 = r11.createdDialogIds;
@@ -3563,24 +3571,24 @@ public class MessagesController implements NotificationCenterDelegate {
         r25 = 0;
         r21 = r9;
         r20.putMessages(r21, r22, r23, r24, r25);
-        goto L_0x01b9;
-    L_0x01ad:
+        goto L_0x01c6;
+    L_0x01ba:
         r12 = r16;
         r15.top_message = r10;
-        goto L_0x01b9;
-    L_0x01b2:
+        goto L_0x01c6;
+    L_0x01bf:
         r12 = r16;
-        goto L_0x01b9;
-    L_0x01b5:
+        goto L_0x01c6;
+    L_0x01c2:
         r12 = r3;
         r1 = r31;
         r2 = 0;
-    L_0x01b9:
+    L_0x01c6:
         r3 = r11.dialogsInTransaction;
-        if (r3 != 0) goto L_0x01fc;
-    L_0x01bd:
-        if (r2 == 0) goto L_0x01d4;
-    L_0x01bf:
+        if (r3 != 0) goto L_0x0209;
+    L_0x01ca:
+        if (r2 == 0) goto L_0x01e1;
+    L_0x01cc:
         r2 = r11.currentAccount;
         r2 = org.telegram.messenger.NotificationCenter.getInstance(r2);
         r3 = org.telegram.messenger.NotificationCenter.dialogsNeedReload;
@@ -3589,8 +3597,8 @@ public class MessagesController implements NotificationCenterDelegate {
         r13 = java.lang.Boolean.valueOf(r8);
         r9[r10] = r13;
         r2.postNotificationName(r3, r9);
-        goto L_0x01fc;
-    L_0x01d4:
+        goto L_0x0209;
+    L_0x01e1:
         r2 = r11.currentAccount;
         r2 = org.telegram.messenger.NotificationCenter.getInstance(r2);
         r3 = org.telegram.messenger.NotificationCenter.dialogsNeedReload;
@@ -3607,7 +3615,7 @@ public class MessagesController implements NotificationCenterDelegate {
         r8 = 1;
         r9[r8] = r13;
         r2.postNotificationName(r3, r9);
-    L_0x01fc:
+    L_0x0209:
         r2 = r11.currentAccount;
         r2 = org.telegram.messenger.MessagesStorage.getInstance(r2);
         r2 = r2.getStorageQueue();
@@ -3615,106 +3623,106 @@ public class MessagesController implements NotificationCenterDelegate {
         r3.<init>(r11, r5);
         r2.postRunnable(r3);
         r9 = r1;
-        goto L_0x0213;
-    L_0x0210:
+        goto L_0x0220;
+    L_0x021d:
         r12 = r3;
         r9 = r31;
-    L_0x0213:
+    L_0x0220:
         r1 = 1;
-        if (r4 == r1) goto L_0x0324;
-    L_0x0216:
+        if (r4 == r1) goto L_0x0331;
+    L_0x0223:
         r1 = 3;
-        if (r7 != r1) goto L_0x021b;
-    L_0x0219:
-        goto L_0x0324;
-    L_0x021b:
-        if (r12 == 0) goto L_0x0305;
-    L_0x021d:
-        if (r33 != 0) goto L_0x0225;
-    L_0x021f:
+        if (r7 != r1) goto L_0x0228;
+    L_0x0226:
+        goto L_0x0331;
+    L_0x0228:
+        if (r12 == 0) goto L_0x0312;
+    L_0x022a:
+        if (r33 != 0) goto L_0x0232;
+    L_0x022c:
         r1 = r11.getInputPeer(r12);
         r12 = r1;
-        goto L_0x0227;
-    L_0x0225:
+        goto L_0x0234;
+    L_0x0232:
         r12 = r33;
-    L_0x0227:
-        if (r12 != 0) goto L_0x022a;
-    L_0x0229:
+    L_0x0234:
+        if (r12 != 0) goto L_0x0237;
+    L_0x0236:
         return;
-    L_0x022a:
+    L_0x0237:
         r1 = r12 instanceof org.telegram.tgnet.TLRPC.TL_inputPeerChannel;
         r2 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
-        if (r1 == 0) goto L_0x0237;
-    L_0x0231:
-        if (r7 == 0) goto L_0x0234;
-    L_0x0233:
-        goto L_0x0237;
-    L_0x0234:
+        if (r1 == 0) goto L_0x0244;
+    L_0x023e:
+        if (r7 == 0) goto L_0x0241;
+    L_0x0240:
+        goto L_0x0244;
+    L_0x0241:
         r13 = r32;
-        goto L_0x0287;
-    L_0x0237:
-        if (r9 <= 0) goto L_0x0244;
-    L_0x0239:
-        if (r9 == r2) goto L_0x0244;
-    L_0x023b:
+        goto L_0x0294;
+    L_0x0244:
+        if (r9 <= 0) goto L_0x0251;
+    L_0x0246:
+        if (r9 == r2) goto L_0x0251;
+    L_0x0248:
         r3 = r11.deletedHistory;
         r4 = java.lang.Integer.valueOf(r9);
         r3.put(r5, r4);
-    L_0x0244:
+    L_0x0251:
         r3 = 0;
         r13 = (r34 > r3 ? 1 : (r34 == r3 ? 0 : -1));
-        if (r13 != 0) goto L_0x0234;
-    L_0x024a:
-        r3 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0275 }
-        r4 = r12.getObjectSize();	 Catch:{ Exception -> 0x0275 }
+        if (r13 != 0) goto L_0x0241;
+    L_0x0257:
+        r3 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x0282 }
+        r4 = r12.getObjectSize();	 Catch:{ Exception -> 0x0282 }
         r4 = r4 + 28;
-        r3.<init>(r4);	 Catch:{ Exception -> 0x0275 }
+        r3.<init>(r4);	 Catch:{ Exception -> 0x0282 }
         r4 = 13;
-        r3.writeInt32(r4);	 Catch:{ Exception -> 0x0271 }
-        r3.writeInt64(r5);	 Catch:{ Exception -> 0x0271 }
-        r3.writeBool(r0);	 Catch:{ Exception -> 0x0271 }
-        r3.writeInt32(r7);	 Catch:{ Exception -> 0x0271 }
-        r3.writeInt32(r9);	 Catch:{ Exception -> 0x0271 }
+        r3.writeInt32(r4);	 Catch:{ Exception -> 0x027e }
+        r3.writeInt64(r5);	 Catch:{ Exception -> 0x027e }
+        r3.writeBool(r0);	 Catch:{ Exception -> 0x027e }
+        r3.writeInt32(r7);	 Catch:{ Exception -> 0x027e }
+        r3.writeInt32(r9);	 Catch:{ Exception -> 0x027e }
         r13 = r32;
-        r3.writeBool(r13);	 Catch:{ Exception -> 0x026f }
-        r12.serializeToStream(r3);	 Catch:{ Exception -> 0x026f }
-        goto L_0x027c;
-    L_0x026f:
+        r3.writeBool(r13);	 Catch:{ Exception -> 0x027c }
+        r12.serializeToStream(r3);	 Catch:{ Exception -> 0x027c }
+        goto L_0x0289;
+    L_0x027c:
         r0 = move-exception;
-        goto L_0x0279;
-    L_0x0271:
+        goto L_0x0286;
+    L_0x027e:
         r0 = move-exception;
         r13 = r32;
-        goto L_0x0279;
-    L_0x0275:
+        goto L_0x0286;
+    L_0x0282:
         r0 = move-exception;
         r13 = r32;
         r3 = 0;
-    L_0x0279:
+    L_0x0286:
         org.telegram.messenger.FileLog.e(r0);
-    L_0x027c:
+    L_0x0289:
         r0 = r11.currentAccount;
         r0 = org.telegram.messenger.MessagesStorage.getInstance(r0);
         r3 = r0.createPendingTask(r3);
-        goto L_0x0289;
-    L_0x0287:
+        goto L_0x0296;
+    L_0x0294:
         r3 = r34;
-    L_0x0289:
+    L_0x0296:
         r0 = 64;
-        if (r1 == 0) goto L_0x02d4;
-    L_0x028d:
-        if (r7 != 0) goto L_0x029f;
-    L_0x028f:
+        if (r1 == 0) goto L_0x02e1;
+    L_0x029a:
+        if (r7 != 0) goto L_0x02ac;
+    L_0x029c:
         r7 = 0;
         r0 = (r3 > r7 ? 1 : (r3 == r7 ? 0 : -1));
-        if (r0 == 0) goto L_0x029e;
-    L_0x0295:
+        if (r0 == 0) goto L_0x02ab;
+    L_0x02a2:
         r0 = r11.currentAccount;
         r0 = org.telegram.messenger.MessagesStorage.getInstance(r0);
         r0.removePendingTask(r3);
-    L_0x029e:
+    L_0x02ab:
         return;
-    L_0x029f:
+    L_0x02ac:
         r1 = new org.telegram.tgnet.TLRPC$TL_channels_deleteHistory;
         r1.<init>();
         r7 = new org.telegram.tgnet.TLRPC$TL_inputChannel;
@@ -3725,12 +3733,12 @@ public class MessagesController implements NotificationCenterDelegate {
         r7.channel_id = r8;
         r12 = r12.access_hash;
         r7.access_hash = r12;
-        if (r9 <= 0) goto L_0x02b8;
-    L_0x02b7:
-        goto L_0x02bb;
-    L_0x02b8:
+        if (r9 <= 0) goto L_0x02c5;
+    L_0x02c4:
+        goto L_0x02c8;
+    L_0x02c5:
         r9 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
-    L_0x02bb:
+    L_0x02c8:
         r1.max_id = r9;
         r2 = r11.currentAccount;
         r2 = org.telegram.tgnet.ConnectionsManager.getInstance(r2);
@@ -3741,25 +3749,25 @@ public class MessagesController implements NotificationCenterDelegate {
         r33 = r27;
         r29.<init>(r30, r31, r33);
         r2.sendRequest(r1, r7, r0);
-        goto L_0x0324;
-    L_0x02d4:
+        goto L_0x0331;
+    L_0x02e1:
         r14 = new org.telegram.tgnet.TLRPC$TL_messages_deleteHistory;
         r14.<init>();
         r14.peer = r12;
-        if (r7 != 0) goto L_0x02de;
-    L_0x02dd:
-        goto L_0x02df;
-    L_0x02de:
+        if (r7 != 0) goto L_0x02eb;
+    L_0x02ea:
+        goto L_0x02ec;
+    L_0x02eb:
         r2 = r9;
-    L_0x02df:
+    L_0x02ec:
         r14.max_id = r2;
-        if (r7 == 0) goto L_0x02e5;
-    L_0x02e3:
+        if (r7 == 0) goto L_0x02f2;
+    L_0x02f0:
         r8 = 1;
-        goto L_0x02e6;
-    L_0x02e5:
+        goto L_0x02f3;
+    L_0x02f2:
         r8 = 0;
-    L_0x02e6:
+    L_0x02f3:
         r14.just_clear = r8;
         r14.revoke = r13;
         r1 = r11.currentAccount;
@@ -3775,23 +3783,23 @@ public class MessagesController implements NotificationCenterDelegate {
         r10 = r12;
         r1.<init>(r2, r3, r5, r7, r8, r9, r10);
         r15.sendRequest(r14, r13, r0);
-        goto L_0x0324;
-    L_0x0305:
+        goto L_0x0331;
+    L_0x0312:
         r1 = 1;
-        if (r7 != r1) goto L_0x031b;
-    L_0x0308:
+        if (r7 != r1) goto L_0x0328;
+    L_0x0315:
         r0 = r11.currentAccount;
         r0 = org.telegram.messenger.SecretChatHelper.getInstance(r0);
         r1 = java.lang.Integer.valueOf(r4);
         r1 = r11.getEncryptedChat(r1);
         r2 = 0;
         r0.sendClearHistoryMessage(r1, r2);
-        goto L_0x0324;
-    L_0x031b:
+        goto L_0x0331;
+    L_0x0328:
         r0 = r11.currentAccount;
         r0 = org.telegram.messenger.SecretChatHelper.getInstance(r0);
         r0.declineSecretChat(r4);
-    L_0x0324:
+    L_0x0331:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.deleteDialog(long, boolean, int, int, boolean, org.telegram.tgnet.TLRPC$InputPeer, long):void");
@@ -6441,6 +6449,7 @@ public class MessagesController implements NotificationCenterDelegate {
 
     public void forceResetDialogs() {
         resetDialogs(true, MessagesStorage.getInstance(this.currentAccount).getLastSeqValue(), MessagesStorage.getInstance(this.currentAccount).getLastPtsValue(), MessagesStorage.getInstance(this.currentAccount).getLastDateValue(), MessagesStorage.getInstance(this.currentAccount).getLastQtsValue());
+        NotificationsController.getInstance(this.currentAccount).deleteAllNotificationChannels();
     }
 
     /* Access modifiers changed, original: protected */

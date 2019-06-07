@@ -51,6 +51,7 @@ import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 
 public class MentionsAdapter extends SelectionAdapter {
+    private static final String punctuationsChars = " !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~\n";
     private SparseArray<BotInfo> botInfo;
     private int botsCount;
     private Runnable cancelDelayRunnable;
@@ -784,8 +785,8 @@ public class MentionsAdapter extends SelectionAdapter {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:113:0x01ba  */
-    /* JADX WARNING: Removed duplicated region for block: B:111:0x01b4  */
+    /* JADX WARNING: Removed duplicated region for block: B:120:0x01d2  */
+    /* JADX WARNING: Removed duplicated region for block: B:118:0x01cc  */
     public void searchUsernameOrHashtag(java.lang.String r17, int r18, java.util.ArrayList<org.telegram.messenger.MessageObject> r19, boolean r20) {
         /*
         r16 = this;
@@ -947,15 +948,15 @@ public class MentionsAdapter extends SelectionAdapter {
         r0 = 0;
     L_0x00ff:
         r4 = -1;
-        goto L_0x01b2;
+        goto L_0x01ca;
     L_0x0102:
-        if (r4 < 0) goto L_0x01af;
+        if (r4 < 0) goto L_0x01c7;
     L_0x0104:
         r13 = r17.length();
         if (r4 < r13) goto L_0x010e;
     L_0x010a:
         r11 = 64;
-        goto L_0x01ab;
+        goto L_0x01c3;
     L_0x010e:
         r13 = r0.charAt(r4);
         if (r4 == 0) goto L_0x012b;
@@ -972,18 +973,18 @@ public class MentionsAdapter extends SelectionAdapter {
         goto L_0x012b;
     L_0x0127:
         r11 = 64;
-        goto L_0x01a8;
+        goto L_0x01c0;
     L_0x012b:
         r11 = 64;
-        if (r13 != r11) goto L_0x0156;
+        if (r13 != r11) goto L_0x0157;
     L_0x012f:
         r14 = r7.needUsernames;
         if (r14 != 0) goto L_0x0139;
     L_0x0133:
         r14 = r7.needBotContext;
-        if (r14 == 0) goto L_0x01a8;
+        if (r14 == 0) goto L_0x01c0;
     L_0x0137:
-        if (r4 != 0) goto L_0x01a8;
+        if (r4 != 0) goto L_0x01c0;
     L_0x0139:
         r11 = r7.info;
         if (r11 != 0) goto L_0x014b;
@@ -1002,15 +1003,15 @@ public class MentionsAdapter extends SelectionAdapter {
         r0 = r0 + r8;
         r7.resultLength = r0;
         r0 = 0;
-        goto L_0x01b2;
-    L_0x0156:
+        goto L_0x01ca;
+    L_0x0157:
         r14 = 35;
-        if (r13 != r14) goto L_0x017c;
-    L_0x015a:
+        if (r13 != r14) goto L_0x017d;
+    L_0x015b:
         r11 = r7.searchAdapterHelper;
         r11 = r11.loadRecentHashtags();
-        if (r11 == 0) goto L_0x0170;
-    L_0x0162:
+        if (r11 == 0) goto L_0x0171;
+    L_0x0163:
         r7.resultStartPosition = r4;
         r0 = r9.length();
         r0 = r0 + r8;
@@ -1018,92 +1019,107 @@ public class MentionsAdapter extends SelectionAdapter {
         r9.insert(r6, r13);
         r0 = 1;
         goto L_0x00ff;
-    L_0x0170:
+    L_0x0171:
         r7.lastText = r0;
         r7.lastPosition = r1;
         r7.messages = r2;
         r0 = r7.delegate;
         r0.needChangePanelVisibility(r6);
         return;
-    L_0x017c:
-        if (r4 != 0) goto L_0x0192;
-    L_0x017e:
+    L_0x017d:
+        if (r4 != 0) goto L_0x0193;
+    L_0x017f:
         r14 = r7.botInfo;
-        if (r14 == 0) goto L_0x0192;
-    L_0x0182:
+        if (r14 == 0) goto L_0x0193;
+    L_0x0183:
         r14 = 47;
-        if (r13 != r14) goto L_0x0192;
-    L_0x0186:
+        if (r13 != r14) goto L_0x0193;
+    L_0x0187:
         r7.resultStartPosition = r4;
         r0 = r9.length();
         r0 = r0 + r8;
         r7.resultLength = r0;
         r0 = 2;
         goto L_0x00ff;
-    L_0x0192:
+    L_0x0193:
         r14 = 58;
-        if (r13 != r14) goto L_0x01a8;
-    L_0x0196:
+        if (r13 != r14) goto L_0x01c0;
+    L_0x0197:
         r14 = r9.length();
-        if (r14 <= 0) goto L_0x01a8;
-    L_0x019c:
+        if (r14 <= 0) goto L_0x01c0;
+    L_0x019d:
+        r14 = r9.charAt(r6);
+        r15 = " !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~\n";
+        r14 = r15.indexOf(r14);
+        if (r14 < 0) goto L_0x01ab;
+    L_0x01a9:
+        r14 = 1;
+        goto L_0x01ac;
+    L_0x01ab:
+        r14 = 0;
+    L_0x01ac:
+        if (r14 == 0) goto L_0x01b4;
+    L_0x01ae:
+        r14 = r9.length();
+        if (r14 <= r8) goto L_0x01c0;
+    L_0x01b4:
         r7.resultStartPosition = r4;
         r0 = r9.length();
         r0 = r0 + r8;
         r7.resultLength = r0;
         r0 = 3;
         goto L_0x00ff;
-    L_0x01a8:
+    L_0x01c0:
         r9.insert(r6, r13);
-    L_0x01ab:
+    L_0x01c3:
         r4 = r4 + -1;
         goto L_0x0102;
-    L_0x01af:
+    L_0x01c7:
         r0 = -1;
         goto L_0x00ff;
-    L_0x01b2:
-        if (r0 != r12) goto L_0x01ba;
-    L_0x01b4:
+    L_0x01ca:
+        if (r0 != r12) goto L_0x01d2;
+    L_0x01cc:
         r0 = r7.delegate;
         r0.needChangePanelVisibility(r6);
         return;
-    L_0x01ba:
-        if (r0 != 0) goto L_0x03b6;
-    L_0x01bc:
+    L_0x01d2:
+        if (r0 != 0) goto L_0x03ce;
+    L_0x01d4:
         r0 = new java.util.ArrayList;
         r0.<init>();
         r1 = 0;
-    L_0x01c2:
+    L_0x01da:
         r11 = 100;
         r12 = r19.size();
         r11 = java.lang.Math.min(r11, r12);
-        if (r1 >= r11) goto L_0x01ec;
-    L_0x01ce:
+        if (r1 >= r11) goto L_0x0204;
+    L_0x01e6:
         r11 = r2.get(r1);
         r11 = (org.telegram.messenger.MessageObject) r11;
         r11 = r11.messageOwner;
         r11 = r11.from_id;
         r12 = java.lang.Integer.valueOf(r11);
         r12 = r0.contains(r12);
-        if (r12 != 0) goto L_0x01e9;
-    L_0x01e2:
+        if (r12 != 0) goto L_0x0201;
+    L_0x01fa:
         r11 = java.lang.Integer.valueOf(r11);
         r0.add(r11);
-    L_0x01e9:
+    L_0x0201:
         r1 = r1 + 1;
-        goto L_0x01c2;
-    L_0x01ec:
+        goto L_0x01da;
+    L_0x0204:
         r1 = r9.toString();
         r9 = r1.toLowerCase();
         r1 = 32;
         r1 = r9.indexOf(r1);
-        if (r1 < 0) goto L_0x01fe;
-    L_0x01fc:
+        if (r1 < 0) goto L_0x0216;
+    L_0x0214:
         r1 = 1;
-        goto L_0x01ff;
-    L_0x01fe:
+        goto L_0x0217;
+    L_0x0216:
         r1 = 0;
-    L_0x01ff:
+    L_0x0217:
         r11 = new java.util.ArrayList;
         r11.<init>();
         r2 = new android.util.SparseArray;
@@ -1114,100 +1130,100 @@ public class MentionsAdapter extends SelectionAdapter {
         r13 = org.telegram.messenger.DataQuery.getInstance(r13);
         r13 = r13.inlineBots;
         r14 = 5;
-        if (r3 != 0) goto L_0x0275;
-    L_0x0219:
+        if (r3 != 0) goto L_0x028d;
+    L_0x0231:
         r15 = r7.needBotContext;
-        if (r15 == 0) goto L_0x0275;
-    L_0x021d:
-        if (r4 != 0) goto L_0x0275;
-    L_0x021f:
+        if (r15 == 0) goto L_0x028d;
+    L_0x0235:
+        if (r4 != 0) goto L_0x028d;
+    L_0x0237:
         r4 = r13.isEmpty();
-        if (r4 != 0) goto L_0x0275;
-    L_0x0225:
+        if (r4 != 0) goto L_0x028d;
+    L_0x023d:
         r4 = 0;
         r15 = 0;
-    L_0x0227:
+    L_0x023f:
         r6 = r13.size();
-        if (r4 >= r6) goto L_0x0275;
-    L_0x022d:
+        if (r4 >= r6) goto L_0x028d;
+    L_0x0245:
         r6 = r13.get(r4);
         r6 = (org.telegram.tgnet.TLRPC.TL_topPeer) r6;
         r6 = r6.peer;
         r6 = r6.user_id;
         r6 = java.lang.Integer.valueOf(r6);
         r6 = r10.getUser(r6);
-        if (r6 != 0) goto L_0x0242;
-    L_0x0241:
-        goto L_0x0271;
-    L_0x0242:
+        if (r6 != 0) goto L_0x025a;
+    L_0x0259:
+        goto L_0x0289;
+    L_0x025a:
         r8 = r6.username;
-        if (r8 == 0) goto L_0x026e;
-    L_0x0246:
+        if (r8 == 0) goto L_0x0286;
+    L_0x025e:
         r8 = r8.length();
-        if (r8 <= 0) goto L_0x026e;
-    L_0x024c:
+        if (r8 <= 0) goto L_0x0286;
+    L_0x0264:
         r8 = r9.length();
-        if (r8 <= 0) goto L_0x025e;
-    L_0x0252:
+        if (r8 <= 0) goto L_0x0276;
+    L_0x026a:
         r8 = r6.username;
         r8 = r8.toLowerCase();
         r8 = r8.startsWith(r9);
-        if (r8 != 0) goto L_0x0264;
-    L_0x025e:
+        if (r8 != 0) goto L_0x027c;
+    L_0x0276:
         r8 = r9.length();
-        if (r8 != 0) goto L_0x026e;
-    L_0x0264:
+        if (r8 != 0) goto L_0x0286;
+    L_0x027c:
         r11.add(r6);
         r8 = r6.id;
         r2.put(r8, r6);
         r15 = r15 + 1;
-    L_0x026e:
-        if (r15 != r14) goto L_0x0271;
-    L_0x0270:
-        goto L_0x0275;
-    L_0x0271:
+    L_0x0286:
+        if (r15 != r14) goto L_0x0289;
+    L_0x0288:
+        goto L_0x028d;
+    L_0x0289:
         r4 = r4 + 1;
         r8 = 1;
-        goto L_0x0227;
-    L_0x0275:
+        goto L_0x023f;
+    L_0x028d:
         r4 = r7.parentFragment;
-        if (r4 == 0) goto L_0x027e;
-    L_0x0279:
+        if (r4 == 0) goto L_0x0296;
+    L_0x0291:
         r4 = r4.getCurrentChat();
-        goto L_0x028e;
-    L_0x027e:
+        goto L_0x02a6;
+    L_0x0296:
         r4 = r7.info;
-        if (r4 == 0) goto L_0x028d;
-    L_0x0282:
+        if (r4 == 0) goto L_0x02a5;
+    L_0x029a:
         r4 = r4.id;
         r4 = java.lang.Integer.valueOf(r4);
         r4 = r10.getChat(r4);
-        goto L_0x028e;
-    L_0x028d:
+        goto L_0x02a6;
+    L_0x02a5:
         r4 = r5;
-    L_0x028e:
-        if (r4 == 0) goto L_0x0365;
-    L_0x0290:
+    L_0x02a6:
+        if (r4 == 0) goto L_0x037d;
+    L_0x02a8:
         r6 = r7.info;
-        if (r6 == 0) goto L_0x0365;
-    L_0x0294:
+        if (r6 == 0) goto L_0x037d;
+    L_0x02ac:
         r6 = r6.participants;
-        if (r6 == 0) goto L_0x0365;
-    L_0x0298:
+        if (r6 == 0) goto L_0x037d;
+    L_0x02b0:
         r6 = org.telegram.messenger.ChatObject.isChannel(r4);
-        if (r6 == 0) goto L_0x02a2;
-    L_0x029e:
+        if (r6 == 0) goto L_0x02ba;
+    L_0x02b6:
         r6 = r4.megagroup;
-        if (r6 == 0) goto L_0x0365;
-    L_0x02a2:
+        if (r6 == 0) goto L_0x037d;
+    L_0x02ba:
         r6 = 0;
-    L_0x02a3:
+    L_0x02bb:
         r8 = r7.info;
         r8 = r8.participants;
         r8 = r8.participants;
         r8 = r8.size();
-        if (r6 >= r8) goto L_0x0365;
-    L_0x02af:
+        if (r6 >= r8) goto L_0x037d;
+    L_0x02c7:
         r8 = r7.info;
         r8 = r8.participants;
         r8 = r8.participants;
@@ -1216,92 +1232,92 @@ public class MentionsAdapter extends SelectionAdapter {
         r8 = r8.user_id;
         r8 = java.lang.Integer.valueOf(r8);
         r8 = r10.getUser(r8);
-        if (r8 == 0) goto L_0x0361;
-    L_0x02c7:
-        if (r3 != 0) goto L_0x02cf;
-    L_0x02c9:
+        if (r8 == 0) goto L_0x0379;
+    L_0x02df:
+        if (r3 != 0) goto L_0x02e7;
+    L_0x02e1:
         r13 = org.telegram.messenger.UserObject.isUserSelf(r8);
-        if (r13 != 0) goto L_0x0361;
-    L_0x02cf:
+        if (r13 != 0) goto L_0x0379;
+    L_0x02e7:
         r13 = r8.id;
         r13 = r2.indexOfKey(r13);
-        if (r13 < 0) goto L_0x02d9;
-    L_0x02d7:
-        goto L_0x0361;
-    L_0x02d9:
+        if (r13 < 0) goto L_0x02f1;
+    L_0x02ef:
+        goto L_0x0379;
+    L_0x02f1:
         r13 = r9.length();
-        if (r13 != 0) goto L_0x02e8;
-    L_0x02df:
+        if (r13 != 0) goto L_0x0300;
+    L_0x02f7:
         r13 = r8.deleted;
-        if (r13 != 0) goto L_0x0361;
-    L_0x02e3:
+        if (r13 != 0) goto L_0x0379;
+    L_0x02fb:
         r11.add(r8);
-        goto L_0x0361;
-    L_0x02e8:
+        goto L_0x0379;
+    L_0x0300:
         r13 = r8.username;
-        if (r13 == 0) goto L_0x0307;
-    L_0x02ec:
+        if (r13 == 0) goto L_0x031f;
+    L_0x0304:
         r13 = r13.length();
-        if (r13 <= 0) goto L_0x0307;
-    L_0x02f2:
+        if (r13 <= 0) goto L_0x031f;
+    L_0x030a:
         r13 = r8.username;
         r13 = r13.toLowerCase();
         r13 = r13.startsWith(r9);
-        if (r13 == 0) goto L_0x0307;
-    L_0x02fe:
+        if (r13 == 0) goto L_0x031f;
+    L_0x0316:
         r11.add(r8);
         r13 = r8.id;
         r12.put(r13, r8);
-        goto L_0x0361;
-    L_0x0307:
+        goto L_0x0379;
+    L_0x031f:
         r13 = r8.first_name;
-        if (r13 == 0) goto L_0x0326;
-    L_0x030b:
+        if (r13 == 0) goto L_0x033e;
+    L_0x0323:
         r13 = r13.length();
-        if (r13 <= 0) goto L_0x0326;
-    L_0x0311:
+        if (r13 <= 0) goto L_0x033e;
+    L_0x0329:
         r13 = r8.first_name;
         r13 = r13.toLowerCase();
         r13 = r13.startsWith(r9);
-        if (r13 == 0) goto L_0x0326;
-    L_0x031d:
+        if (r13 == 0) goto L_0x033e;
+    L_0x0335:
         r11.add(r8);
         r13 = r8.id;
         r12.put(r13, r8);
-        goto L_0x0361;
-    L_0x0326:
+        goto L_0x0379;
+    L_0x033e:
         r13 = r8.last_name;
-        if (r13 == 0) goto L_0x0345;
-    L_0x032a:
+        if (r13 == 0) goto L_0x035d;
+    L_0x0342:
         r13 = r13.length();
-        if (r13 <= 0) goto L_0x0345;
-    L_0x0330:
+        if (r13 <= 0) goto L_0x035d;
+    L_0x0348:
         r13 = r8.last_name;
         r13 = r13.toLowerCase();
         r13 = r13.startsWith(r9);
-        if (r13 == 0) goto L_0x0345;
-    L_0x033c:
+        if (r13 == 0) goto L_0x035d;
+    L_0x0354:
         r11.add(r8);
         r13 = r8.id;
         r12.put(r13, r8);
-        goto L_0x0361;
-    L_0x0345:
-        if (r1 == 0) goto L_0x0361;
-    L_0x0347:
+        goto L_0x0379;
+    L_0x035d:
+        if (r1 == 0) goto L_0x0379;
+    L_0x035f:
         r13 = r8.first_name;
         r15 = r8.last_name;
         r13 = org.telegram.messenger.ContactsController.formatName(r13, r15);
         r13 = r13.toLowerCase();
         r13 = r13.startsWith(r9);
-        if (r13 == 0) goto L_0x0361;
-    L_0x0359:
+        if (r13 == 0) goto L_0x0379;
+    L_0x0371:
         r11.add(r8);
         r13 = r8.id;
         r12.put(r13, r8);
-    L_0x0361:
+    L_0x0379:
         r6 = r6 + 1;
-        goto L_0x02a3;
-    L_0x0365:
+        goto L_0x02bb;
+    L_0x037d:
         r1 = new org.telegram.ui.Adapters.-$$Lambda$MentionsAdapter$RtUwcbbmysCllxWaHytbPO9oFzY;
         r1.<init>(r12, r0);
         java.util.Collections.sort(r11, r1);
@@ -1310,27 +1326,27 @@ public class MentionsAdapter extends SelectionAdapter {
         r7.searchResultCommandsHelp = r5;
         r7.searchResultCommandsUsers = r5;
         r7.searchResultSuggestions = r5;
-        if (r4 == 0) goto L_0x03b0;
-    L_0x0379:
+        if (r4 == 0) goto L_0x03c8;
+    L_0x0391:
         r0 = r4.megagroup;
-        if (r0 == 0) goto L_0x03b0;
-    L_0x037d:
+        if (r0 == 0) goto L_0x03c8;
+    L_0x0395:
         r0 = r9.length();
-        if (r0 <= 0) goto L_0x03b0;
-    L_0x0383:
+        if (r0 <= 0) goto L_0x03c8;
+    L_0x039b:
         r0 = r11.size();
-        if (r0 >= r14) goto L_0x0396;
-    L_0x0389:
+        if (r0 >= r14) goto L_0x03ae;
+    L_0x03a1:
         r0 = new org.telegram.ui.Adapters.-$$Lambda$MentionsAdapter$_MTgLbVZU0vjX841sg9FU0IKm0g;
         r0.<init>(r7, r11, r12);
         r7.cancelDelayRunnable = r0;
         r1 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r0, r1);
-        goto L_0x039a;
-    L_0x0396:
+        goto L_0x03b2;
+    L_0x03ae:
         r0 = 1;
         r7.showUsersResult(r11, r12, r0);
-    L_0x039a:
+    L_0x03b2:
         r8 = new org.telegram.ui.Adapters.MentionsAdapter$5;
         r0 = r8;
         r1 = r16;
@@ -1343,15 +1359,15 @@ public class MentionsAdapter extends SelectionAdapter {
         r7.searchGlobalRunnable = r8;
         r0 = 200; // 0xc8 float:2.8E-43 double:9.9E-322;
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r8, r0);
-        goto L_0x04cd;
-    L_0x03b0:
+        goto L_0x04e5;
+    L_0x03c8:
         r1 = 1;
         r7.showUsersResult(r11, r12, r1);
-        goto L_0x04cd;
-    L_0x03b6:
+        goto L_0x04e5;
+    L_0x03ce:
         r1 = 1;
-        if (r0 != r1) goto L_0x040b;
-    L_0x03b9:
+        if (r0 != r1) goto L_0x0423;
+    L_0x03d1:
         r0 = new java.util.ArrayList;
         r0.<init>();
         r1 = r9.toString();
@@ -1359,26 +1375,26 @@ public class MentionsAdapter extends SelectionAdapter {
         r2 = r7.searchAdapterHelper;
         r2 = r2.getHashtags();
         r3 = 0;
-    L_0x03cd:
+    L_0x03e5:
         r4 = r2.size();
-        if (r3 >= r4) goto L_0x03ed;
-    L_0x03d3:
+        if (r3 >= r4) goto L_0x0405;
+    L_0x03eb:
         r4 = r2.get(r3);
         r4 = (org.telegram.ui.Adapters.SearchAdapterHelper.HashtagObject) r4;
-        if (r4 == 0) goto L_0x03ea;
-    L_0x03db:
+        if (r4 == 0) goto L_0x0402;
+    L_0x03f3:
         r6 = r4.hashtag;
-        if (r6 == 0) goto L_0x03ea;
-    L_0x03df:
+        if (r6 == 0) goto L_0x0402;
+    L_0x03f7:
         r6 = r6.startsWith(r1);
-        if (r6 == 0) goto L_0x03ea;
-    L_0x03e5:
+        if (r6 == 0) goto L_0x0402;
+    L_0x03fd:
         r4 = r4.hashtag;
         r0.add(r4);
-    L_0x03ea:
+    L_0x0402:
         r3 = r3 + 1;
-        goto L_0x03cd;
-    L_0x03ed:
+        goto L_0x03e5;
+    L_0x0405:
         r7.searchResultHashtags = r0;
         r7.searchResultUsernames = r5;
         r7.searchResultUsernamesMap = r5;
@@ -1392,11 +1408,11 @@ public class MentionsAdapter extends SelectionAdapter {
         r2 = 1;
         r0 = r0 ^ r2;
         r1.needChangePanelVisibility(r0);
-        goto L_0x04cd;
-    L_0x040b:
+        goto L_0x04e5;
+    L_0x0423:
         r1 = 2;
-        if (r0 != r1) goto L_0x049e;
-    L_0x040e:
+        if (r0 != r1) goto L_0x04b6;
+    L_0x0426:
         r0 = new java.util.ArrayList;
         r0.<init>();
         r1 = new java.util.ArrayList;
@@ -1406,31 +1422,31 @@ public class MentionsAdapter extends SelectionAdapter {
         r3 = r9.toString();
         r3 = r3.toLowerCase();
         r4 = 0;
-    L_0x0426:
+    L_0x043e:
         r6 = r7.botInfo;
         r6 = r6.size();
-        if (r4 >= r6) goto L_0x0481;
-    L_0x042e:
+        if (r4 >= r6) goto L_0x0499;
+    L_0x0446:
         r6 = r7.botInfo;
         r6 = r6.valueAt(r4);
         r6 = (org.telegram.tgnet.TLRPC.BotInfo) r6;
         r8 = 0;
-    L_0x0437:
+    L_0x044f:
         r9 = r6.commands;
         r9 = r9.size();
-        if (r8 >= r9) goto L_0x047e;
-    L_0x043f:
+        if (r8 >= r9) goto L_0x0496;
+    L_0x0457:
         r9 = r6.commands;
         r9 = r9.get(r8);
         r9 = (org.telegram.tgnet.TLRPC.TL_botCommand) r9;
-        if (r9 == 0) goto L_0x047b;
-    L_0x0449:
+        if (r9 == 0) goto L_0x0493;
+    L_0x0461:
         r11 = r9.command;
-        if (r11 == 0) goto L_0x047b;
-    L_0x044d:
+        if (r11 == 0) goto L_0x0493;
+    L_0x0465:
         r11 = r11.startsWith(r3);
-        if (r11 == 0) goto L_0x047b;
-    L_0x0453:
+        if (r11 == 0) goto L_0x0493;
+    L_0x046b:
         r11 = new java.lang.StringBuilder;
         r11.<init>();
         r12 = "/";
@@ -1445,13 +1461,13 @@ public class MentionsAdapter extends SelectionAdapter {
         r9 = java.lang.Integer.valueOf(r9);
         r9 = r10.getUser(r9);
         r2.add(r9);
-    L_0x047b:
+    L_0x0493:
         r8 = r8 + 1;
-        goto L_0x0437;
-    L_0x047e:
+        goto L_0x044f;
+    L_0x0496:
         r4 = r4 + 1;
-        goto L_0x0426;
-    L_0x0481:
+        goto L_0x043e;
+    L_0x0499:
         r7.searchResultHashtags = r5;
         r7.searchResultUsernames = r5;
         r7.searchResultUsernamesMap = r5;
@@ -1465,20 +1481,20 @@ public class MentionsAdapter extends SelectionAdapter {
         r2 = 1;
         r0 = r0 ^ r2;
         r1.needChangePanelVisibility(r0);
-        goto L_0x04cd;
-    L_0x049e:
+        goto L_0x04e5;
+    L_0x04b6:
         r1 = 3;
-        if (r0 != r1) goto L_0x04cd;
-    L_0x04a1:
+        if (r0 != r1) goto L_0x04e5;
+    L_0x04b9:
         r0 = org.telegram.messenger.AndroidUtilities.getCurrentKeyboardLanguage();
         r1 = r7.lastSearchKeyboardLanguage;
         r1 = java.util.Arrays.equals(r0, r1);
-        if (r1 != 0) goto L_0x04b6;
-    L_0x04ad:
+        if (r1 != 0) goto L_0x04ce;
+    L_0x04c5:
         r1 = r7.currentAccount;
         r1 = org.telegram.messenger.DataQuery.getInstance(r1);
         r1.fetchNewEmojiKeywords(r0);
-    L_0x04b6:
+    L_0x04ce:
         r7.lastSearchKeyboardLanguage = r0;
         r0 = r7.currentAccount;
         r0 = org.telegram.messenger.DataQuery.getInstance(r0);
@@ -1488,7 +1504,7 @@ public class MentionsAdapter extends SelectionAdapter {
         r3.<init>(r7);
         r4 = 0;
         r0.getEmojiSuggestions(r1, r2, r4, r3);
-    L_0x04cd:
+    L_0x04e5:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.MentionsAdapter.searchUsernameOrHashtag(java.lang.String, int, java.util.ArrayList, boolean):void");

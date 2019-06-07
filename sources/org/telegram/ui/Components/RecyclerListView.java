@@ -1203,6 +1203,15 @@ public class RecyclerListView extends RecyclerView {
         }
     }
 
+    public void setSelectorDrawableColor(int i) {
+        Drawable drawable = this.selectorDrawable;
+        if (drawable != null) {
+            drawable.setCallback(null);
+        }
+        this.selectorDrawable = Theme.getSelectorDrawable(i, false);
+        this.selectorDrawable.setCallback(this);
+    }
+
     public void checkSection() {
         if ((this.scrollingByUser && this.fastScroll != null) || !(this.sectionsType == 0 || this.sectionsAdapter == null)) {
             LayoutManager layoutManager = getLayoutManager();

@@ -923,19 +923,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             }
 
             public boolean onTouchEvent(MotionEvent motionEvent) {
-                if (motionEvent.getAction() == 0) {
-                    if (ChatActivityEnterView.this.isPopupShowing()) {
-                        if (ChatActivityEnterView.this.searchingType != 0) {
-                            ChatActivityEnterView.this.searchingType = 0;
-                            ChatActivityEnterView.this.emojiView.closeSearch(false);
-                        }
-                        ChatActivityEnterView.this.showPopup(AndroidUtilities.usingHardwareInput ? 0 : 2, 0);
-                        ChatActivityEnterView.this.openKeyboardInternal();
+                if (ChatActivityEnterView.this.isPopupShowing() && motionEvent.getAction() == 0) {
+                    if (ChatActivityEnterView.this.searchingType != 0) {
+                        ChatActivityEnterView.this.searchingType = 0;
+                        ChatActivityEnterView.this.emojiView.closeSearch(false);
                     }
-                    if (!AndroidUtilities.showKeyboard(this)) {
-                        clearFocus();
-                        requestFocus();
-                    }
+                    ChatActivityEnterView.this.showPopup(AndroidUtilities.usingHardwareInput ? 0 : 2, 0);
+                    ChatActivityEnterView.this.openKeyboardInternal();
                 }
                 try {
                     return super.onTouchEvent(motionEvent);
@@ -2384,6 +2378,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
     public void onResume() {
         this.isPaused = false;
+        getVisibility();
         if (this.showKeyboardOnResume) {
             this.showKeyboardOnResume = false;
             if (this.searchingType == 0) {
@@ -2396,6 +2391,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 AndroidUtilities.runOnUIThread(this.openKeyboardRunnable, 100);
             }
         }
+    }
+
+    public void setVisibility(int i) {
+        super.setVisibility(i);
+        this.messageEditText.setFocusable(i == 0);
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:19:0x0139  */

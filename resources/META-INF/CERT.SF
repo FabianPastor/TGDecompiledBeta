@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: 1.0 (Android)
-SHA1-Digest-Manifest: PtO/eGdJPCF7POCmPRHQMhzD3x0=
+SHA1-Digest-Manifest: Ce/dkEXzG86kmuiFHbN5GhbgeRU=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: H8sdxvbZzGe4rm/a2iwoIhCk3f4=
+SHA1-Digest: l87NcTD4laAuYk6L+s8Bq7AjcJM=
 
 Name: META-INF/androidx.appcompat_appcompat.version
 SHA1-Digest: Q82O8vXFHwteVUsLsa5xZBp0MsI=
@@ -106,7 +106,7 @@ Name: assets/PhoneFormats.dat
 SHA1-Digest: VkZQbSGwSVwFrDRP8ehCRSbVoSc=
 
 Name: assets/arctic.attheme
-SHA1-Digest: HYuf9V18L3R/R0vSUIyvScUUMSw=
+SHA1-Digest: oWOxHlfFOjmTIUWmTSH3xF8SMIc=
 
 Name: assets/bluebubbles.attheme
 SHA1-Digest: +9O+oLmhugavvVyJjJenamR2t6U=
@@ -238,7 +238,7 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: 7SiRsE5tK7HEsln9Eomx2CHJh4s=
+SHA1-Digest: fpfLJJvVJ0VHeXZRV6CPX5Tld4M=
 
 Name: fabric/com.stripe.stripe-android.properties
 SHA1-Digest: meJMBKLUSTmOentmkKD9WbS/j5I=

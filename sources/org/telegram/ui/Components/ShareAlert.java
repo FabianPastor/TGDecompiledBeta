@@ -1005,7 +1005,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenterDelegat
                     int i = this.lastSearchId + 1;
                     this.lastSearchId = i;
                     this.searchRunnable = new -$$Lambda$ShareAlert$ShareSearchAdapter$JorHI9Z-U3Y0Qlm94ObAFcE-y04(this, str, i);
-                    Utilities.globalQueue.postRunnable(this.searchRunnable, 300);
+                    Utilities.searchQueue.postRunnable(this.searchRunnable, 300);
                 }
             }
         }

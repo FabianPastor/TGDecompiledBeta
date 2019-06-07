@@ -224,7 +224,7 @@ import org.telegram.ui.Components.GroupedPhotosListView.GroupedPhotosListViewDel
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LineProgressView;
 import org.telegram.ui.Components.LinkPath;
-import org.telegram.ui.Components.RadialProgress;
+import org.telegram.ui.Components.RadialProgress2;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
@@ -5848,7 +5848,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         private boolean isLast;
         private String lastTimeString;
         private WebpageAdapter parentAdapter;
-        private RadialProgress radialProgress;
+        private RadialProgress2 radialProgress;
         private SeekBar seekBar;
         private int seekBarX;
         private int seekBarY;
@@ -5862,10 +5862,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         public BlockAudioCell(Context context, WebpageAdapter webpageAdapter) {
             super(context);
             this.parentAdapter = webpageAdapter;
-            this.radialProgress = new RadialProgress(this);
-            this.radialProgress.setAlphaForPrevious(true);
-            this.radialProgress.setDiff(AndroidUtilities.dp(0.0f));
-            this.radialProgress.setStrokeWidth(AndroidUtilities.dp(2.0f));
+            this.radialProgress = new RadialProgress2(this);
+            this.radialProgress.setBackgroundStroke(AndroidUtilities.dp(3.0f));
+            this.radialProgress.setCircleRadius(AndroidUtilities.dp(24.0f));
             this.TAG = DownloadController.getInstance(ArticleViewer.this.currentAccount).generateObserverTag();
             this.seekBar = new SeekBar(context);
             this.seekBar.setDelegate(new -$$Lambda$ArticleViewer$BlockAudioCell$WgP383-edJ263u4ZKo-pJ9bitM4(this));
@@ -5965,36 +5964,33 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             if (r0 <= 0) goto L_0x006a;
         L_0x0066:
             r0 = r11.buttonState;
-            if (r0 != 0) goto L_0x0098;
+            if (r0 != 0) goto L_0x008f;
         L_0x006a:
             r11.buttonPressed = r3;
             r11.invalidate();
-            goto L_0x0098;
+            goto L_0x008f;
         L_0x0070:
             r0 = r12.getAction();
-            if (r0 != r3) goto L_0x008f;
+            if (r0 != r3) goto L_0x0086;
         L_0x0076:
             r0 = r11.buttonPressed;
-            if (r0 != r3) goto L_0x0098;
+            if (r0 != r3) goto L_0x008f;
         L_0x007a:
             r11.buttonPressed = r4;
             r11.playSoundEffect(r4);
-            r11.didPressedButton(r4);
-            r0 = r11.radialProgress;
-            r1 = r11.getDrawableForCurrentState();
-            r0.swapBackground(r1);
+            r11.didPressedButton(r3);
             r11.invalidate();
-            goto L_0x0098;
-        L_0x008f:
+            goto L_0x008f;
+        L_0x0086:
             r0 = r12.getAction();
             r1 = 3;
-            if (r0 != r1) goto L_0x0098;
-        L_0x0096:
+            if (r0 != r1) goto L_0x008f;
+        L_0x008d:
             r11.buttonPressed = r4;
-        L_0x0098:
+        L_0x008f:
             r0 = r11.buttonPressed;
-            if (r0 != 0) goto L_0x00c8;
-        L_0x009c:
+            if (r0 != 0) goto L_0x00bf;
+        L_0x0093:
             r5 = org.telegram.ui.ArticleViewer.this;
             r8 = r11.captionLayout;
             r9 = r11.textX;
@@ -6002,8 +5998,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r6 = r12;
             r7 = r11;
             r0 = r5.checkLayoutForLinks(r6, r7, r8, r9, r10);
-            if (r0 != 0) goto L_0x00c8;
-        L_0x00ac:
+            if (r0 != 0) goto L_0x00bf;
+        L_0x00a3:
             r5 = org.telegram.ui.ArticleViewer.this;
             r8 = r11.creditLayout;
             r9 = r11.textX;
@@ -6013,15 +6009,15 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r6 = r12;
             r7 = r11;
             r0 = r5.checkLayoutForLinks(r6, r7, r8, r9, r10);
-            if (r0 != 0) goto L_0x00c8;
-        L_0x00c0:
+            if (r0 != 0) goto L_0x00bf;
+        L_0x00b7:
             r12 = super.onTouchEvent(r12);
-            if (r12 == 0) goto L_0x00c7;
-        L_0x00c6:
-            goto L_0x00c8;
-        L_0x00c7:
+            if (r12 == 0) goto L_0x00be;
+        L_0x00bd:
+            goto L_0x00bf;
+        L_0x00be:
             r3 = 0;
-        L_0x00c8:
+        L_0x00bf:
             return r3;
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer$BlockAudioCell.onTouchEvent(android.view.MotionEvent):boolean");
@@ -6042,13 +6038,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     this.textX = AndroidUtilities.dp(18.0f);
                 }
                 int dp2 = (size - this.textX) - AndroidUtilities.dp(18.0f);
-                int dp3 = AndroidUtilities.dp(40.0f);
+                int dp3 = AndroidUtilities.dp(44.0f);
                 this.buttonX = AndroidUtilities.dp(16.0f);
-                this.buttonY = AndroidUtilities.dp(7.0f);
-                RadialProgress radialProgress = this.radialProgress;
+                this.buttonY = AndroidUtilities.dp(5.0f);
+                RadialProgress2 radialProgress2 = this.radialProgress;
                 int i5 = this.buttonX;
                 int i6 = this.buttonY;
-                radialProgress.setProgressRect(i5, i6, i5 + dp3, i6 + dp3);
+                radialProgress2.setProgressRect(i5, i6, i5 + dp3, i6 + dp3);
                 ArticleViewer articleViewer = ArticleViewer.this;
                 TL_pageBlockAudio tL_pageBlockAudio2 = this.currentBlock;
                 this.captionLayout = articleViewer.createLayoutForText(this, null, tL_pageBlockAudio2.caption.text, dp2, tL_pageBlockAudio2, this.parentAdapter);
@@ -6099,6 +6095,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         /* Access modifiers changed, original: protected */
         public void onDraw(Canvas canvas) {
             if (this.currentBlock != null) {
+                this.radialProgress.setColors(ArticleViewer.this.getTextColor(), ArticleViewer.this.getTextColor(), ArticleViewer.this.getTextColor(), ArticleViewer.this.getTextColor());
                 this.radialProgress.draw(canvas);
                 canvas.save();
                 canvas.translate((float) this.seekBarX, (float) this.seekBarY);
@@ -6134,8 +6131,15 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             }
         }
 
-        private Drawable getDrawableForCurrentState() {
-            return Theme.chat_ivStatesDrawable[this.buttonState][this.buttonPressed != 0 ? 1 : 0];
+        private int getIconForCurrentState() {
+            int i = this.buttonState;
+            if (i == 1) {
+                return 1;
+            }
+            if (i == 2) {
+                return 2;
+            }
+            return i == 3 ? 3 : 0;
         }
 
         public void updatePlayingMessageProgress() {
@@ -6172,7 +6176,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             String attachFileName = FileLoader.getAttachFileName(this.currentDocument);
             boolean exists = FileLoader.getPathToAttach(this.currentDocument, true).exists();
             if (TextUtils.isEmpty(attachFileName)) {
-                this.radialProgress.setBackground(null, false, false);
+                this.radialProgress.setIcon(4, false, false);
                 return;
             }
             if (exists) {
@@ -6183,7 +6187,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 } else {
                     this.buttonState = 1;
                 }
-                this.radialProgress.setBackground(getDrawableForCurrentState(), false, z);
+                this.radialProgress.setIcon(getIconForCurrentState(), false, z);
             } else {
                 DownloadController.getInstance(ArticleViewer.this.currentAccount).addLoadingFileObserver(attachFileName, null, this);
                 if (FileLoader.getInstance(ArticleViewer.this.currentAccount).isLoadingFile(attachFileName)) {
@@ -6194,11 +6198,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     } else {
                         this.radialProgress.setProgress(0.0f, z);
                     }
-                    this.radialProgress.setBackground(getDrawableForCurrentState(), true, z);
+                    this.radialProgress.setIcon(getIconForCurrentState(), true, z);
                 } else {
                     this.buttonState = 2;
                     this.radialProgress.setProgress(0.0f, z);
-                    this.radialProgress.setBackground(getDrawableForCurrentState(), false, z);
+                    this.radialProgress.setIcon(getIconForCurrentState(), false, z);
                 }
             }
             updatePlayingMessageProgress();
@@ -6209,25 +6213,25 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             if (i == 0) {
                 if (MediaController.getInstance().setPlaylist(this.parentAdapter.audioMessages, this.currentMessageObject, false)) {
                     this.buttonState = 1;
-                    this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
+                    this.radialProgress.setIcon(getIconForCurrentState(), false, z);
                     invalidate();
                 }
             } else if (i == 1) {
                 if (MediaController.getInstance().lambda$startAudioAgain$5$MediaController(this.currentMessageObject)) {
                     this.buttonState = 0;
-                    this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
+                    this.radialProgress.setIcon(getIconForCurrentState(), false, z);
                     invalidate();
                 }
             } else if (i == 2) {
                 this.radialProgress.setProgress(0.0f, false);
                 FileLoader.getInstance(ArticleViewer.this.currentAccount).loadFile(this.currentDocument, ArticleViewer.this.currentPage, 1, 1);
                 this.buttonState = 3;
-                this.radialProgress.setBackground(getDrawableForCurrentState(), true, false);
+                this.radialProgress.setIcon(getIconForCurrentState(), true, z);
                 invalidate();
             } else if (i == 3) {
                 FileLoader.getInstance(ArticleViewer.this.currentAccount).cancelLoadFile(this.currentDocument);
                 this.buttonState = 2;
-                this.radialProgress.setBackground(getDrawableForCurrentState(), false, false);
+                this.radialProgress.setIcon(getIconForCurrentState(), false, z);
                 invalidate();
             }
         }
@@ -6256,7 +6260,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         public void onProgressDownload(String str, float f) {
             this.radialProgress.setProgress(f, true);
             if (this.buttonState != 3) {
-                updateButtonState(false);
+                updateButtonState(true);
             }
         }
 
@@ -6267,6 +6271,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     private class BlockPhotoCell extends FrameLayout implements FileDownloadProgressListener {
         private int TAG;
+        boolean autoDownload;
         private int buttonPressed;
         private int buttonState;
         private int buttonX;
@@ -6277,7 +6282,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         private DrawingText creditLayout;
         private int creditOffset;
         private TL_pageBlockPhoto currentBlock;
+        private String currentFilter;
+        private Photo currentPhoto;
         private PhotoSize currentPhotoObject;
+        private PhotoSize currentPhotoObjectThumb;
+        private String currentThumbFilter;
         private int currentType;
         private GroupedMessagePosition groupPosition;
         private ImageReceiver imageView = new ImageReceiver(this);
@@ -6287,7 +6296,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         private WebpageAdapter parentAdapter;
         private PageBlock parentBlock;
         private boolean photoPressed;
-        private RadialProgress radialProgress;
+        private RadialProgress2 radialProgress;
         private int textX;
         private int textY;
 
@@ -6299,9 +6308,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             this.parentAdapter = webpageAdapter;
             setWillNotDraw(false);
             this.channelCell = new BlockChannelCell(context, this.parentAdapter, 1);
-            this.radialProgress = new RadialProgress(this);
-            this.radialProgress.setAlphaForPrevious(true);
+            this.radialProgress = new RadialProgress2(this);
             this.radialProgress.setProgressColor(-1);
+            this.radialProgress.setColors(NUM, NUM, -1, -2500135);
             this.TAG = DownloadController.getInstance(ArticleViewer.this.currentAccount).generateObserverTag();
             addView(this.channelCell, LayoutHelper.createFrame(-1, -2.0f));
             this.currentType = i;
@@ -6343,8 +6352,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             return this.channelCell;
         }
 
-        /* JADX WARNING: Missing block: B:32:0x00ba, code skipped:
-            if (super.onTouchEvent(r12) == false) goto L_0x00bd;
+        /* JADX WARNING: Missing block: B:25:0x0095, code skipped:
+            if (r1 <= ((float) (r0 + org.telegram.messenger.AndroidUtilities.dp(48.0f)))) goto L_0x009b;
+     */
+        /* JADX WARNING: Missing block: B:50:0x0103, code skipped:
+            if (super.onTouchEvent(r12) == false) goto L_0x0106;
      */
         public boolean onTouchEvent(android.view.MotionEvent r12) {
             /*
@@ -6395,36 +6407,83 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             return r4;
         L_0x0060:
             r2 = r12.getAction();
-            if (r2 != 0) goto L_0x0071;
+            if (r2 != 0) goto L_0x00a4;
         L_0x0066:
             r2 = r11.imageView;
-            r0 = r2.isInsideImage(r0, r1);
-            if (r0 == 0) goto L_0x0071;
+            r2 = r2.isInsideImage(r0, r1);
+            if (r2 == 0) goto L_0x00a4;
         L_0x006e:
+            r2 = r11.buttonState;
+            r5 = -1;
+            if (r2 == r5) goto L_0x0097;
+        L_0x0073:
+            r2 = r11.buttonX;
+            r5 = (float) r2;
+            r5 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1));
+            if (r5 < 0) goto L_0x0097;
+        L_0x007a:
+            r5 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
+            r6 = org.telegram.messenger.AndroidUtilities.dp(r5);
+            r2 = r2 + r6;
+            r2 = (float) r2;
+            r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1));
+            if (r0 > 0) goto L_0x0097;
+        L_0x0086:
+            r0 = r11.buttonY;
+            r2 = (float) r0;
+            r2 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1));
+            if (r2 < 0) goto L_0x0097;
+        L_0x008d:
+            r2 = org.telegram.messenger.AndroidUtilities.dp(r5);
+            r0 = r0 + r2;
+            r0 = (float) r0;
+            r0 = (r1 > r0 ? 1 : (r1 == r0 ? 0 : -1));
+            if (r0 <= 0) goto L_0x009b;
+        L_0x0097:
+            r0 = r11.buttonState;
+            if (r0 != 0) goto L_0x00a1;
+        L_0x009b:
+            r11.buttonPressed = r4;
+            r11.invalidate();
+            goto L_0x00d3;
+        L_0x00a1:
             r11.photoPressed = r4;
-            goto L_0x008e;
-        L_0x0071:
+            goto L_0x00d3;
+        L_0x00a4:
             r0 = r12.getAction();
-            if (r0 != r4) goto L_0x0085;
-        L_0x0077:
+            if (r0 != r4) goto L_0x00c8;
+        L_0x00aa:
             r0 = r11.photoPressed;
-            if (r0 == 0) goto L_0x0085;
-        L_0x007b:
+            if (r0 == 0) goto L_0x00b8;
+        L_0x00ae:
             r11.photoPressed = r3;
             r0 = org.telegram.ui.ArticleViewer.this;
             r1 = r11.currentBlock;
             r0.openPhoto(r1);
-            goto L_0x008e;
-        L_0x0085:
+            goto L_0x00d3;
+        L_0x00b8:
+            r0 = r11.buttonPressed;
+            if (r0 != r4) goto L_0x00d3;
+        L_0x00bc:
+            r11.buttonPressed = r3;
+            r11.playSoundEffect(r3);
+            r11.didPressedButton(r4);
+            r11.invalidate();
+            goto L_0x00d3;
+        L_0x00c8:
             r0 = r12.getAction();
             r1 = 3;
-            if (r0 != r1) goto L_0x008e;
-        L_0x008c:
+            if (r0 != r1) goto L_0x00d3;
+        L_0x00cf:
             r11.photoPressed = r3;
-        L_0x008e:
+            r11.buttonPressed = r3;
+        L_0x00d3:
             r0 = r11.photoPressed;
-            if (r0 != 0) goto L_0x00bc;
-        L_0x0092:
+            if (r0 != 0) goto L_0x0105;
+        L_0x00d7:
+            r0 = r11.buttonPressed;
+            if (r0 != 0) goto L_0x0105;
+        L_0x00db:
             r5 = org.telegram.ui.ArticleViewer.this;
             r8 = r11.captionLayout;
             r9 = r11.textX;
@@ -6432,8 +6491,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r6 = r12;
             r7 = r11;
             r0 = r5.checkLayoutForLinks(r6, r7, r8, r9, r10);
-            if (r0 != 0) goto L_0x00bc;
-        L_0x00a2:
+            if (r0 != 0) goto L_0x0105;
+        L_0x00eb:
             r5 = org.telegram.ui.ArticleViewer.this;
             r8 = r11.creditLayout;
             r9 = r11.textX;
@@ -6443,48 +6502,47 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r6 = r12;
             r7 = r11;
             r0 = r5.checkLayoutForLinks(r6, r7, r8, r9, r10);
-            if (r0 != 0) goto L_0x00bc;
-        L_0x00b6:
+            if (r0 != 0) goto L_0x0105;
+        L_0x00ff:
             r12 = super.onTouchEvent(r12);
-            if (r12 == 0) goto L_0x00bd;
-        L_0x00bc:
+            if (r12 == 0) goto L_0x0106;
+        L_0x0105:
             r3 = 1;
-        L_0x00bd:
+        L_0x0106:
             return r3;
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer$BlockPhotoCell.onTouchEvent(android.view.MotionEvent):boolean");
         }
 
         /* Access modifiers changed, original: protected */
-        /* JADX WARNING: Removed duplicated region for block: B:53:0x0157  */
-        /* JADX WARNING: Removed duplicated region for block: B:52:0x0154  */
-        /* JADX WARNING: Removed duplicated region for block: B:43:0x0136  */
-        /* JADX WARNING: Removed duplicated region for block: B:52:0x0154  */
-        /* JADX WARNING: Removed duplicated region for block: B:53:0x0157  */
-        /* JADX WARNING: Removed duplicated region for block: B:20:0x009b  */
-        /* JADX WARNING: Removed duplicated region for block: B:29:0x00fb  */
-        /* JADX WARNING: Removed duplicated region for block: B:23:0x00a2  */
-        /* JADX WARNING: Removed duplicated region for block: B:43:0x0136  */
-        /* JADX WARNING: Removed duplicated region for block: B:53:0x0157  */
-        /* JADX WARNING: Removed duplicated region for block: B:52:0x0154  */
-        /* JADX WARNING: Removed duplicated region for block: B:57:0x01cb  */
+        /* JADX WARNING: Removed duplicated region for block: B:55:0x0163  */
+        /* JADX WARNING: Removed duplicated region for block: B:54:0x0160  */
+        /* JADX WARNING: Removed duplicated region for block: B:59:0x0192  */
+        /* JADX WARNING: Removed duplicated region for block: B:58:0x0190  */
+        /* JADX WARNING: Removed duplicated region for block: B:45:0x0146  */
+        /* JADX WARNING: Removed duplicated region for block: B:54:0x0160  */
+        /* JADX WARNING: Removed duplicated region for block: B:55:0x0163  */
+        /* JADX WARNING: Removed duplicated region for block: B:58:0x0190  */
+        /* JADX WARNING: Removed duplicated region for block: B:59:0x0192  */
+        /* JADX WARNING: Removed duplicated region for block: B:62:0x019f  */
+        /* JADX WARNING: Removed duplicated region for block: B:70:0x0247  */
         /* JADX WARNING: Removed duplicated region for block: B:9:0x0047  */
         @android.annotation.SuppressLint({"NewApi"})
-        public void onMeasure(int r27, int r28) {
+        public void onMeasure(int r25, int r26) {
             /*
-            r26 = this;
-            r8 = r26;
-            r0 = android.view.View.MeasureSpec.getSize(r27);
+            r24 = this;
+            r8 = r24;
+            r0 = android.view.View.MeasureSpec.getSize(r25);
             r1 = r8.currentType;
             r9 = 2;
             r10 = 0;
             r11 = 1;
             if (r1 != r11) goto L_0x0023;
         L_0x000d:
-            r0 = r26.getParent();
+            r0 = r24.getParent();
             r0 = (android.view.View) r0;
             r0 = r0.getMeasuredWidth();
-            r1 = r26.getParent();
+            r1 = r24.getParent();
             r1 = (android.view.View) r1;
             r1 = r1.getMeasuredHeight();
         L_0x0021:
@@ -6512,335 +6570,402 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r1 = 0;
         L_0x0043:
             r0 = r8.currentBlock;
-            if (r0 == 0) goto L_0x0277;
+            if (r0 == 0) goto L_0x02f2;
         L_0x0047:
             r2 = org.telegram.ui.ArticleViewer.this;
             r3 = r0.photo_id;
             r0 = r2.getPhotoWithId(r3);
-            r2 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
+            r8.currentPhoto = r0;
+            r0 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
+            r0 = org.telegram.messenger.AndroidUtilities.dp(r0);
+            r2 = r8.currentType;
+            r3 = NUM; // 0x41900000 float:18.0 double:5.43450582E-315;
+            if (r2 != 0) goto L_0x007a;
+        L_0x005d:
+            r2 = r8.currentBlock;
+            r2 = r2.level;
+            if (r2 <= 0) goto L_0x007a;
+        L_0x0063:
+            r2 = r2 * 14;
+            r2 = (float) r2;
             r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
-            r3 = r8.currentType;
-            r4 = NUM; // 0x41900000 float:18.0 double:5.43450582E-315;
-            if (r3 != 0) goto L_0x0078;
-        L_0x005b:
-            r3 = r8.currentBlock;
-            r3 = r3.level;
-            if (r3 <= 0) goto L_0x0078;
-        L_0x0061:
-            r3 = r3 * 14;
-            r3 = (float) r3;
+            r4 = org.telegram.messenger.AndroidUtilities.dp(r3);
+            r2 = r2 + r4;
+            r8.textX = r2;
             r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
-            r5 = org.telegram.messenger.AndroidUtilities.dp(r4);
-            r3 = r3 + r5;
-            r8.textX = r3;
-            r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
-            r4 = r4 + r3;
-            r4 = r12 - r4;
-            r7 = r4;
-            goto L_0x0089;
-        L_0x0078:
-            r3 = org.telegram.messenger.AndroidUtilities.dp(r4);
-            r8.textX = r3;
-            r3 = NUM; // 0x42100000 float:36.0 double:5.47595105E-315;
-            r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
+            r3 = r3 + r2;
             r3 = r12 - r3;
             r7 = r3;
-            r4 = r12;
-            r3 = 0;
-        L_0x0089:
-            if (r0 == 0) goto L_0x01c6;
+            goto L_0x008b;
+        L_0x007a:
+            r2 = org.telegram.messenger.AndroidUtilities.dp(r3);
+            r8.textX = r2;
+            r2 = NUM; // 0x42100000 float:36.0 double:5.47595105E-315;
+            r2 = org.telegram.messenger.AndroidUtilities.dp(r2);
+            r2 = r12 - r2;
+            r7 = r2;
+            r3 = r12;
+            r2 = 0;
         L_0x008b:
+            r4 = r8.currentPhoto;
+            r13 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
+            if (r4 == 0) goto L_0x0242;
+        L_0x0091:
             r5 = r8.currentPhotoObject;
-            if (r5 == 0) goto L_0x01c6;
-        L_0x008f:
-            r5 = r0.sizes;
-            r6 = 80;
-            r5 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r5, r6, r11);
-            r6 = r8.currentPhotoObject;
-            if (r6 != r5) goto L_0x009c;
-        L_0x009b:
-            r5 = 0;
-        L_0x009c:
-            r6 = r8.currentType;
-            r15 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-            if (r6 != 0) goto L_0x00fb;
-        L_0x00a2:
-            r1 = (float) r4;
-            r6 = r8.currentPhotoObject;
-            r14 = r6.w;
+            if (r5 == 0) goto L_0x0242;
+        L_0x0095:
+            r4 = r4.sizes;
+            r5 = 40;
+            r4 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r4, r5, r11);
+            r8.currentPhotoObjectThumb = r4;
+            r4 = r8.currentPhotoObject;
+            r5 = r8.currentPhotoObjectThumb;
+            r6 = 0;
+            if (r4 != r5) goto L_0x00a8;
+        L_0x00a6:
+            r8.currentPhotoObjectThumb = r6;
+        L_0x00a8:
+            r4 = r8.currentType;
+            r5 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+            if (r4 != 0) goto L_0x0107;
+        L_0x00ae:
+            r1 = (float) r3;
+            r4 = r8.currentPhotoObject;
+            r14 = r4.w;
             r14 = (float) r14;
             r1 = r1 / r14;
-            r6 = r6.h;
-            r6 = (float) r6;
-            r1 = r1 * r6;
+            r4 = r4.h;
+            r4 = (float) r4;
+            r1 = r1 * r4;
             r1 = (int) r1;
-            r6 = r8.parentBlock;
-            r6 = r6 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockCover;
-            if (r6 == 0) goto L_0x00bb;
-        L_0x00b5:
-            r1 = java.lang.Math.min(r1, r4);
-            goto L_0x012f;
-        L_0x00bb:
-            r6 = org.telegram.ui.ArticleViewer.this;
-            r6 = r6.listView;
-            r6 = r6[r10];
-            r6 = r6.getMeasuredWidth();
+            r4 = r8.parentBlock;
+            r4 = r4 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockCover;
+            if (r4 == 0) goto L_0x00c7;
+        L_0x00c1:
+            r1 = java.lang.Math.min(r1, r3);
+            goto L_0x013f;
+        L_0x00c7:
+            r4 = org.telegram.ui.ArticleViewer.this;
+            r4 = r4.listView;
+            r4 = r4[r10];
+            r4 = r4.getMeasuredWidth();
             r14 = org.telegram.ui.ArticleViewer.this;
             r14 = r14.listView;
             r14 = r14[r10];
             r14 = r14.getMeasuredHeight();
-            r6 = java.lang.Math.max(r6, r14);
+            r4 = java.lang.Math.max(r4, r14);
             r14 = NUM; // 0x42600000 float:56.0 double:5.50185432E-315;
             r14 = org.telegram.messenger.AndroidUtilities.dp(r14);
-            r6 = r6 - r14;
-            r6 = (float) r6;
+            r4 = r4 - r14;
+            r4 = (float) r4;
             r14 = NUM; // 0x3var_ float:0.9 double:5.2552552E-315;
-            r6 = r6 * r14;
-            r6 = (int) r6;
-            if (r1 <= r6) goto L_0x012f;
-        L_0x00e7:
-            r1 = (float) r6;
-            r4 = r8.currentPhotoObject;
-            r14 = r4.h;
+            r4 = r4 * r14;
+            r4 = (int) r4;
+            if (r1 <= r4) goto L_0x013f;
+        L_0x00f3:
+            r1 = (float) r4;
+            r3 = r8.currentPhotoObject;
+            r14 = r3.h;
             r14 = (float) r14;
             r1 = r1 / r14;
-            r4 = r4.w;
-            r4 = (float) r4;
-            r1 = r1 * r4;
-            r4 = (int) r1;
-            r1 = r12 - r3;
-            r1 = r1 - r4;
+            r3 = r3.w;
+            r3 = (float) r3;
+            r1 = r1 * r3;
+            r3 = (int) r1;
+            r1 = r12 - r2;
+            r1 = r1 - r3;
             r1 = r1 / r9;
-            r3 = r3 + r1;
-            r1 = r6;
-            goto L_0x012f;
-        L_0x00fb:
-            if (r6 != r9) goto L_0x012f;
-        L_0x00fd:
-            r6 = r8.groupPosition;
-            r6 = r6.flags;
-            r6 = r6 & r9;
-            if (r6 != 0) goto L_0x0109;
-        L_0x0104:
-            r6 = org.telegram.messenger.AndroidUtilities.dp(r15);
-            r4 = r4 - r6;
+            r2 = r2 + r1;
+            r1 = r4;
+            goto L_0x013f;
+        L_0x0107:
+            if (r4 != r9) goto L_0x013f;
         L_0x0109:
-            r6 = r8.groupPosition;
-            r6 = r6.flags;
-            r6 = r6 & 8;
-            if (r6 != 0) goto L_0x0118;
-        L_0x0111:
-            r6 = org.telegram.messenger.AndroidUtilities.dp(r15);
-            r6 = r1 - r6;
-            goto L_0x0119;
-        L_0x0118:
-            r6 = r1;
-        L_0x0119:
+            r4 = r8.groupPosition;
+            r4 = r4.flags;
+            r4 = r4 & r9;
+            if (r4 != 0) goto L_0x0115;
+        L_0x0110:
+            r4 = org.telegram.messenger.AndroidUtilities.dp(r5);
+            r3 = r3 - r4;
+        L_0x0115:
+            r4 = r8.groupPosition;
+            r4 = r4.flags;
+            r4 = r4 & 8;
+            if (r4 != 0) goto L_0x0124;
+        L_0x011d:
+            r4 = org.telegram.messenger.AndroidUtilities.dp(r5);
+            r4 = r1 - r4;
+            goto L_0x0125;
+        L_0x0124:
+            r4 = r1;
+        L_0x0125:
             r14 = r8.groupPosition;
             r14 = r14.leftSpanOffset;
-            if (r14 == 0) goto L_0x0130;
-        L_0x011f:
+            if (r14 == 0) goto L_0x0139;
+        L_0x012b:
             r14 = r14 * r12;
             r14 = (float) r14;
-            r16 = NUM; // 0x447a0000 float:1000.0 double:5.676053805E-315;
-            r14 = r14 / r16;
-            r13 = (double) r14;
-            r13 = java.lang.Math.ceil(r13);
-            r13 = (int) r13;
-            r4 = r4 - r13;
-            r3 = r3 + r13;
-            goto L_0x0130;
-        L_0x012f:
-            r6 = r1;
-        L_0x0130:
-            r13 = r8.imageView;
-            r14 = r8.isFirst;
-            if (r14 != 0) goto L_0x014c;
-        L_0x0136:
-            r14 = r8.currentType;
-            if (r14 == r11) goto L_0x014c;
-        L_0x013a:
-            if (r14 == r9) goto L_0x014c;
-        L_0x013c:
-            r14 = r8.currentBlock;
-            r14 = r14.level;
-            if (r14 <= 0) goto L_0x0143;
-        L_0x0142:
-            goto L_0x014c;
-        L_0x0143:
-            r14 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
-            r17 = org.telegram.messenger.AndroidUtilities.dp(r14);
-            r14 = r17;
-            goto L_0x014d;
+            r15 = NUM; // 0x447a0000 float:1000.0 double:5.676053805E-315;
+            r14 = r14 / r15;
+            r14 = (double) r14;
+            r14 = java.lang.Math.ceil(r14);
+            r14 = (int) r14;
+            r3 = r3 - r14;
+            r2 = r2 + r14;
+        L_0x0139:
+            r23 = r4;
+            r4 = r1;
+            r1 = r23;
+            goto L_0x0140;
+        L_0x013f:
+            r4 = r1;
+        L_0x0140:
+            r14 = r8.imageView;
+            r15 = r8.isFirst;
+            if (r15 != 0) goto L_0x0158;
+        L_0x0146:
+            r15 = r8.currentType;
+            if (r15 == r11) goto L_0x0158;
+        L_0x014a:
+            if (r15 == r9) goto L_0x0158;
         L_0x014c:
-            r14 = 0;
-        L_0x014d:
-            r13.setImageCoords(r3, r14, r4, r6);
-            r3 = r8.currentType;
-            if (r3 != 0) goto L_0x0157;
-        L_0x0154:
-            r19 = 0;
-            goto L_0x016f;
-        L_0x0157:
-            r3 = java.util.Locale.US;
-            r13 = new java.lang.Object[r9];
-            r4 = java.lang.Integer.valueOf(r4);
-            r13[r10] = r4;
-            r4 = java.lang.Integer.valueOf(r6);
-            r13[r11] = r4;
-            r4 = "%d_%d";
-            r14 = java.lang.String.format(r3, r4, r13);
-            r19 = r14;
-        L_0x016f:
-            r3 = r8.imageView;
-            r4 = r8.currentPhotoObject;
-            r18 = org.telegram.messenger.ImageLocation.getForPhoto(r4, r0);
-            r20 = org.telegram.messenger.ImageLocation.getForPhoto(r5, r0);
-            r0 = r8.currentPhotoObject;
-            r0 = r0.size;
-            r23 = 0;
-            r4 = org.telegram.ui.ArticleViewer.this;
-            r24 = r4.currentPage;
-            r25 = 1;
-            r21 = "80_80_b";
-            r17 = r3;
-            r22 = r0;
-            r17.setImage(r18, r19, r20, r21, r22, r23, r24, r25);
-            r0 = r8.imageView;
-            r0 = r0.getImageX();
-            r0 = (float) r0;
-            r3 = r8.imageView;
-            r3 = r3.getImageWidth();
-            r3 = r3 - r2;
-            r3 = (float) r3;
-            r3 = r3 / r15;
+            r15 = r8.currentBlock;
+            r15 = r15.level;
+            if (r15 <= 0) goto L_0x0153;
+        L_0x0152:
+            goto L_0x0158;
+        L_0x0153:
+            r15 = org.telegram.messenger.AndroidUtilities.dp(r13);
+            goto L_0x0159;
+        L_0x0158:
+            r15 = 0;
+        L_0x0159:
+            r14.setImageCoords(r2, r15, r3, r1);
+            r2 = r8.currentType;
+            if (r2 != 0) goto L_0x0163;
+        L_0x0160:
+            r8.currentFilter = r6;
+            goto L_0x017b;
+        L_0x0163:
+            r2 = java.util.Locale.US;
+            r14 = new java.lang.Object[r9];
+            r3 = java.lang.Integer.valueOf(r3);
+            r14[r10] = r3;
+            r1 = java.lang.Integer.valueOf(r1);
+            r14[r11] = r1;
+            r1 = "%d_%d";
+            r1 = java.lang.String.format(r2, r1, r14);
+            r8.currentFilter = r1;
+        L_0x017b:
+            r1 = "80_80_b";
+            r8.currentThumbFilter = r1;
+            r1 = org.telegram.ui.ArticleViewer.this;
+            r1 = r1.currentAccount;
+            r1 = org.telegram.messenger.DownloadController.getInstance(r1);
+            r1 = r1.getCurrentDownloadMask();
+            r1 = r1 & r11;
+            if (r1 == 0) goto L_0x0192;
+        L_0x0190:
+            r1 = 1;
+            goto L_0x0193;
+        L_0x0192:
+            r1 = 0;
+        L_0x0193:
+            r8.autoDownload = r1;
+            r1 = r8.currentPhotoObject;
+            r1 = org.telegram.messenger.FileLoader.getPathToAttach(r1, r11);
+            r2 = r8.autoDownload;
+            if (r2 != 0) goto L_0x01da;
+        L_0x019f:
+            r1 = r1.exists();
+            if (r1 == 0) goto L_0x01a6;
+        L_0x01a5:
+            goto L_0x01da;
+        L_0x01a6:
+            r1 = r8.imageView;
+            r2 = r8.currentPhotoObject;
+            r3 = r8.currentPhoto;
+            r2 = org.telegram.messenger.ImageLocation.getForPhoto(r2, r3);
+            r1.setStrippedLocation(r2);
+            r14 = r8.imageView;
+            r15 = 0;
+            r1 = r8.currentFilter;
+            r2 = r8.currentPhotoObjectThumb;
+            r3 = r8.currentPhoto;
+            r17 = org.telegram.messenger.ImageLocation.getForPhoto(r2, r3);
+            r2 = r8.currentThumbFilter;
+            r3 = r8.currentPhotoObject;
+            r3 = r3.size;
+            r20 = 0;
+            r6 = org.telegram.ui.ArticleViewer.this;
+            r21 = r6.currentPage;
+            r22 = 1;
+            r16 = r1;
+            r18 = r2;
+            r19 = r3;
+            r14.setImage(r15, r16, r17, r18, r19, r20, r21, r22);
+            goto L_0x020c;
+        L_0x01da:
+            r1 = r8.imageView;
+            r1.setStrippedLocation(r6);
+            r14 = r8.imageView;
+            r1 = r8.currentPhotoObject;
+            r2 = r8.currentPhoto;
+            r15 = org.telegram.messenger.ImageLocation.getForPhoto(r1, r2);
+            r1 = r8.currentFilter;
+            r2 = r8.currentPhotoObjectThumb;
+            r3 = r8.currentPhoto;
+            r17 = org.telegram.messenger.ImageLocation.getForPhoto(r2, r3);
+            r2 = r8.currentThumbFilter;
+            r3 = r8.currentPhotoObject;
+            r3 = r3.size;
+            r20 = 0;
+            r6 = org.telegram.ui.ArticleViewer.this;
+            r21 = r6.currentPage;
+            r22 = 1;
+            r16 = r1;
+            r18 = r2;
+            r19 = r3;
+            r14.setImage(r15, r16, r17, r18, r19, r20, r21, r22);
+        L_0x020c:
+            r1 = r8.imageView;
+            r1 = r1.getImageX();
+            r1 = (float) r1;
+            r2 = r8.imageView;
+            r2 = r2.getImageWidth();
+            r2 = r2 - r0;
+            r2 = (float) r2;
+            r2 = r2 / r5;
+            r1 = r1 + r2;
+            r1 = (int) r1;
+            r8.buttonX = r1;
+            r1 = r8.imageView;
+            r1 = r1.getImageY();
+            r1 = (float) r1;
+            r2 = r8.imageView;
+            r2 = r2.getImageHeight();
+            r2 = r2 - r0;
+            r2 = (float) r2;
+            r2 = r2 / r5;
+            r1 = r1 + r2;
+            r1 = (int) r1;
+            r8.buttonY = r1;
+            r1 = r8.radialProgress;
+            r2 = r8.buttonX;
+            r3 = r8.buttonY;
+            r5 = r2 + r0;
             r0 = r0 + r3;
-            r0 = (int) r0;
-            r8.buttonX = r0;
-            r0 = r8.imageView;
-            r0 = r0.getImageY();
-            r0 = (float) r0;
-            r3 = r8.imageView;
-            r3 = r3.getImageHeight();
-            r3 = r3 - r2;
-            r3 = (float) r3;
-            r3 = r3 / r15;
-            r0 = r0 + r3;
-            r0 = (int) r0;
-            r8.buttonY = r0;
-            r0 = r8.radialProgress;
-            r3 = r8.buttonX;
-            r4 = r8.buttonY;
-            r5 = r3 + r2;
-            r2 = r2 + r4;
-            r0.setProgressRect(r3, r4, r5, r2);
-        L_0x01c6:
-            r13 = r1;
+            r1.setProgressRect(r2, r3, r5, r0);
+            r14 = r4;
+            goto L_0x0243;
+        L_0x0242:
+            r14 = r1;
+        L_0x0243:
             r0 = r8.currentType;
-            if (r0 != 0) goto L_0x022b;
-        L_0x01cb:
+            if (r0 != 0) goto L_0x02aa;
+        L_0x0247:
             r0 = org.telegram.ui.ArticleViewer.this;
             r2 = 0;
             r5 = r8.currentBlock;
             r1 = r5.caption;
             r3 = r1.text;
             r6 = r8.parentAdapter;
-            r1 = r26;
+            r1 = r24;
             r4 = r7;
             r0 = r0.createLayoutForText(r1, r2, r3, r4, r5, r6);
             r8.captionLayout = r0;
             r0 = r8.captionLayout;
-            r14 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
-            if (r0 == 0) goto L_0x01fa;
-        L_0x01e5:
-            r0 = org.telegram.messenger.AndroidUtilities.dp(r14);
+            r15 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
+            if (r0 == 0) goto L_0x0276;
+        L_0x0261:
+            r0 = org.telegram.messenger.AndroidUtilities.dp(r15);
             r1 = r8.captionLayout;
             r1 = r1.getHeight();
             r0 = r0 + r1;
             r8.creditOffset = r0;
             r0 = r8.creditOffset;
-            r1 = org.telegram.messenger.AndroidUtilities.dp(r14);
+            r1 = org.telegram.messenger.AndroidUtilities.dp(r15);
             r0 = r0 + r1;
-            r13 = r13 + r0;
-        L_0x01fa:
+            r14 = r14 + r0;
+        L_0x0276:
             r0 = org.telegram.ui.ArticleViewer.this;
             r2 = 0;
             r5 = r8.currentBlock;
             r1 = r5.caption;
             r3 = r1.credit;
             r1 = r0.isRtl;
-            if (r1 == 0) goto L_0x020c;
-        L_0x0209:
+            if (r1 == 0) goto L_0x0288;
+        L_0x0285:
             r1 = android.text.Layout.Alignment.ALIGN_RIGHT;
-            goto L_0x020e;
-        L_0x020c:
+            goto L_0x028a;
+        L_0x0288:
             r1 = android.text.Layout.Alignment.ALIGN_NORMAL;
-        L_0x020e:
+        L_0x028a:
             r6 = r1;
-            r15 = r8.parentAdapter;
-            r1 = r26;
+            r4 = r8.parentAdapter;
+            r1 = r24;
+            r16 = r4;
             r4 = r7;
-            r7 = r15;
+            r7 = r16;
             r0 = r0.createLayoutForText(r1, r2, r3, r4, r5, r6, r7);
             r8.creditLayout = r0;
             r0 = r8.creditLayout;
-            if (r0 == 0) goto L_0x022b;
-        L_0x021f:
-            r0 = org.telegram.messenger.AndroidUtilities.dp(r14);
+            if (r0 == 0) goto L_0x02aa;
+        L_0x029e:
+            r0 = org.telegram.messenger.AndroidUtilities.dp(r15);
             r1 = r8.creditLayout;
             r1 = r1.getHeight();
             r0 = r0 + r1;
-            r13 = r13 + r0;
-        L_0x022b:
+            r14 = r14 + r0;
+        L_0x02aa:
             r0 = r8.isFirst;
-            if (r0 != 0) goto L_0x0240;
-        L_0x022f:
+            if (r0 != 0) goto L_0x02bd;
+        L_0x02ae:
             r0 = r8.currentType;
-            if (r0 != 0) goto L_0x0240;
-        L_0x0233:
+            if (r0 != 0) goto L_0x02bd;
+        L_0x02b2:
             r0 = r8.currentBlock;
             r0 = r0.level;
-            if (r0 > 0) goto L_0x0240;
-        L_0x0239:
-            r0 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
-            r1 = org.telegram.messenger.AndroidUtilities.dp(r0);
-            r13 = r13 + r1;
-        L_0x0240:
+            if (r0 > 0) goto L_0x02bd;
+        L_0x02b8:
+            r0 = org.telegram.messenger.AndroidUtilities.dp(r13);
+            r14 = r14 + r0;
+        L_0x02bd:
             r0 = r8.parentBlock;
             r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockCover;
-            if (r0 == 0) goto L_0x0269;
-        L_0x0246:
+            if (r0 == 0) goto L_0x02e6;
+        L_0x02c3:
             r0 = r8.parentAdapter;
             r0 = r0.blocks;
-            if (r0 == 0) goto L_0x0269;
-        L_0x024e:
+            if (r0 == 0) goto L_0x02e6;
+        L_0x02cb:
             r0 = r8.parentAdapter;
             r0 = r0.blocks;
             r0 = r0.size();
-            if (r0 <= r11) goto L_0x0269;
-        L_0x025a:
+            if (r0 <= r11) goto L_0x02e6;
+        L_0x02d7:
             r0 = r8.parentAdapter;
             r0 = r0.blocks;
             r0 = r0.get(r11);
             r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockChannel;
-            if (r0 == 0) goto L_0x0269;
-        L_0x0268:
+            if (r0 == 0) goto L_0x02e6;
+        L_0x02e5:
             r10 = 1;
-        L_0x0269:
+        L_0x02e6:
             r0 = r8.currentType;
-            if (r0 == r9) goto L_0x0276;
-        L_0x026d:
-            if (r10 != 0) goto L_0x0276;
-        L_0x026f:
-            r0 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
-            r0 = org.telegram.messenger.AndroidUtilities.dp(r0);
-            r13 = r13 + r0;
-        L_0x0276:
-            r11 = r13;
-        L_0x0277:
+            if (r0 == r9) goto L_0x02f1;
+        L_0x02ea:
+            if (r10 != 0) goto L_0x02f1;
+        L_0x02ec:
+            r0 = org.telegram.messenger.AndroidUtilities.dp(r13);
+            r14 = r14 + r0;
+        L_0x02f1:
+            r11 = r14;
+        L_0x02f2:
             r0 = r8.channelCell;
-            r1 = r27;
-            r2 = r28;
+            r1 = r25;
+            r2 = r26;
             r0.measure(r1, r2);
             r0 = r8.channelCell;
             r1 = r8.imageView;
@@ -6892,34 +7017,57 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             }
         }
 
-        private Drawable getDrawableForCurrentState() {
+        private int getIconForCurrentState() {
             int i = this.buttonState;
-            return (i < 0 || i >= 6) ? null : Theme.chat_photoStatesDrawables[i][this.buttonPressed];
+            if (i == 0) {
+                return 2;
+            }
+            return i == 1 ? 3 : 4;
+        }
+
+        private void didPressedButton(boolean z) {
+            int i = this.buttonState;
+            if (i == 0) {
+                this.cancelLoading = false;
+                this.radialProgress.setProgress(0.0f, z);
+                this.imageView.setImage(ImageLocation.getForPhoto(this.currentPhotoObject, this.currentPhoto), this.currentFilter, ImageLocation.getForPhoto(this.currentPhotoObjectThumb, this.currentPhoto), this.currentThumbFilter, this.currentPhotoObject.size, null, ArticleViewer.this.currentPage, 1);
+                this.buttonState = 1;
+                this.radialProgress.setIcon(getIconForCurrentState(), true, z);
+                invalidate();
+            } else if (i == 1) {
+                this.cancelLoading = true;
+                this.imageView.cancelLoadImage();
+                this.buttonState = 0;
+                this.radialProgress.setIcon(getIconForCurrentState(), false, z);
+                invalidate();
+            }
         }
 
         public void updateButtonState(boolean z) {
             String attachFileName = FileLoader.getAttachFileName(this.currentPhotoObject);
             boolean exists = FileLoader.getPathToAttach(this.currentPhotoObject, true).exists();
             if (TextUtils.isEmpty(attachFileName)) {
-                this.radialProgress.setBackground(null, false, false);
+                this.radialProgress.setIcon(4, false, false);
                 return;
             }
             if (exists) {
                 DownloadController.getInstance(ArticleViewer.this.currentAccount).removeLoadingFileObserver(this);
                 this.buttonState = -1;
-                this.radialProgress.setBackground(getDrawableForCurrentState(), false, z);
+                this.radialProgress.setIcon(getIconForCurrentState(), false, z);
                 invalidate();
             } else {
                 DownloadController.getInstance(ArticleViewer.this.currentAccount).addLoadingFileObserver(attachFileName, null, this);
-                this.buttonState = 5;
                 float f = 0.0f;
-                if (FileLoader.getInstance(ArticleViewer.this.currentAccount).isLoadingFile(attachFileName)) {
+                if (this.autoDownload || FileLoader.getInstance(ArticleViewer.this.currentAccount).isLoadingFile(attachFileName)) {
+                    this.buttonState = 1;
                     Float fileProgress = ImageLoader.getInstance().getFileProgress(attachFileName);
                     if (fileProgress != null) {
                         f = fileProgress.floatValue();
                     }
+                } else {
+                    this.buttonState = 0;
                 }
-                this.radialProgress.setBackground(getDrawableForCurrentState(), true, z);
+                this.radialProgress.setIcon(getIconForCurrentState(), true, z);
                 this.radialProgress.setProgress(f, false);
                 invalidate();
             }
@@ -6951,7 +7099,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         public void onProgressDownload(String str, float f) {
             this.radialProgress.setProgress(f, true);
             if (this.buttonState != 1) {
-                updateButtonState(false);
+                updateButtonState(true);
             }
         }
 
@@ -7210,6 +7358,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
 
     private class BlockVideoCell extends FrameLayout implements FileDownloadProgressListener {
         private int TAG;
+        private boolean autoDownload;
         private int buttonPressed;
         private int buttonState;
         private int buttonX;
@@ -7230,7 +7379,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         private WebpageAdapter parentAdapter;
         private PageBlock parentBlock;
         private boolean photoPressed;
-        private RadialProgress radialProgress;
+        private RadialProgress2 radialProgress;
         private int textX;
         private int textY;
 
@@ -7244,9 +7393,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             this.imageView.setNeedsQualityThumb(true);
             this.imageView.setShouldGenerateQualityThumb(true);
             this.currentType = i;
-            this.radialProgress = new RadialProgress(this);
-            this.radialProgress.setAlphaForPrevious(true);
+            this.radialProgress = new RadialProgress2(this);
             this.radialProgress.setProgressColor(-1);
+            this.radialProgress.setColors(NUM, NUM, -1, -2500135);
             this.TAG = DownloadController.getInstance(ArticleViewer.this.currentAccount).generateObserverTag();
             this.channelCell = new BlockChannelCell(context, this.parentAdapter, 1);
             addView(this.channelCell, LayoutHelper.createFrame(-1, -2.0f));
@@ -7280,8 +7429,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         /* JADX WARNING: Missing block: B:25:0x0095, code skipped:
             if (r1 <= ((float) (r0 + org.telegram.messenger.AndroidUtilities.dp(48.0f)))) goto L_0x009b;
      */
-        /* JADX WARNING: Missing block: B:50:0x010a, code skipped:
-            if (super.onTouchEvent(r12) == false) goto L_0x010d;
+        /* JADX WARNING: Missing block: B:50:0x0101, code skipped:
+            if (super.onTouchEvent(r12) == false) goto L_0x0104;
      */
         public boolean onTouchEvent(android.view.MotionEvent r12) {
             /*
@@ -7370,13 +7519,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         L_0x009b:
             r11.buttonPressed = r4;
             r11.invalidate();
-            goto L_0x00da;
+            goto L_0x00d1;
         L_0x00a1:
             r11.photoPressed = r4;
-            goto L_0x00da;
+            goto L_0x00d1;
         L_0x00a4:
             r0 = r12.getAction();
-            if (r0 != r4) goto L_0x00d1;
+            if (r0 != r4) goto L_0x00c8;
         L_0x00aa:
             r0 = r11.photoPressed;
             if (r0 == 0) goto L_0x00b8;
@@ -7385,32 +7534,29 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r0 = org.telegram.ui.ArticleViewer.this;
             r1 = r11.currentBlock;
             r0.openPhoto(r1);
-            goto L_0x00da;
+            goto L_0x00d1;
         L_0x00b8:
             r0 = r11.buttonPressed;
-            if (r0 != r4) goto L_0x00da;
+            if (r0 != r4) goto L_0x00d1;
         L_0x00bc:
             r11.buttonPressed = r3;
             r11.playSoundEffect(r3);
-            r11.didPressedButton(r3);
-            r0 = r11.radialProgress;
-            r1 = r11.getDrawableForCurrentState();
-            r0.swapBackground(r1);
+            r11.didPressedButton(r4);
             r11.invalidate();
-            goto L_0x00da;
-        L_0x00d1:
+            goto L_0x00d1;
+        L_0x00c8:
             r0 = r12.getAction();
             r1 = 3;
-            if (r0 != r1) goto L_0x00da;
-        L_0x00d8:
+            if (r0 != r1) goto L_0x00d1;
+        L_0x00cf:
             r11.photoPressed = r3;
-        L_0x00da:
+        L_0x00d1:
             r0 = r11.photoPressed;
-            if (r0 != 0) goto L_0x010c;
-        L_0x00de:
+            if (r0 != 0) goto L_0x0103;
+        L_0x00d5:
             r0 = r11.buttonPressed;
-            if (r0 != 0) goto L_0x010c;
-        L_0x00e2:
+            if (r0 != 0) goto L_0x0103;
+        L_0x00d9:
             r5 = org.telegram.ui.ArticleViewer.this;
             r8 = r11.captionLayout;
             r9 = r11.textX;
@@ -7418,8 +7564,8 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r6 = r12;
             r7 = r11;
             r0 = r5.checkLayoutForLinks(r6, r7, r8, r9, r10);
-            if (r0 != 0) goto L_0x010c;
-        L_0x00f2:
+            if (r0 != 0) goto L_0x0103;
+        L_0x00e9:
             r5 = org.telegram.ui.ArticleViewer.this;
             r8 = r11.creditLayout;
             r9 = r11.textX;
@@ -7429,48 +7575,49 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r6 = r12;
             r7 = r11;
             r0 = r5.checkLayoutForLinks(r6, r7, r8, r9, r10);
-            if (r0 != 0) goto L_0x010c;
-        L_0x0106:
+            if (r0 != 0) goto L_0x0103;
+        L_0x00fd:
             r12 = super.onTouchEvent(r12);
-            if (r12 == 0) goto L_0x010d;
-        L_0x010c:
+            if (r12 == 0) goto L_0x0104;
+        L_0x0103:
             r3 = 1;
-        L_0x010d:
+        L_0x0104:
             return r3;
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer$BlockVideoCell.onTouchEvent(android.view.MotionEvent):boolean");
         }
 
         /* Access modifiers changed, original: protected */
-        /* JADX WARNING: Removed duplicated region for block: B:66:0x019d  */
-        /* JADX WARNING: Removed duplicated region for block: B:65:0x016f  */
-        /* JADX WARNING: Removed duplicated region for block: B:56:0x0152  */
-        /* JADX WARNING: Removed duplicated region for block: B:65:0x016f  */
-        /* JADX WARNING: Removed duplicated region for block: B:66:0x019d  */
+        /* JADX WARNING: Removed duplicated region for block: B:71:0x0204  */
+        /* JADX WARNING: Removed duplicated region for block: B:65:0x0175  */
+        /* JADX WARNING: Removed duplicated region for block: B:56:0x0157  */
+        /* JADX WARNING: Removed duplicated region for block: B:65:0x0175  */
+        /* JADX WARNING: Removed duplicated region for block: B:71:0x0204  */
+        /* JADX WARNING: Removed duplicated region for block: B:73:0x0264  */
         /* JADX WARNING: Removed duplicated region for block: B:17:0x007d  */
-        /* JADX WARNING: Removed duplicated region for block: B:70:0x01fb  */
-        /* JADX WARNING: Removed duplicated region for block: B:89:0x0276  */
-        /* JADX WARNING: Removed duplicated region for block: B:99:0x02a2  */
+        /* JADX WARNING: Removed duplicated region for block: B:76:0x0269  */
+        /* JADX WARNING: Removed duplicated region for block: B:95:0x02e4  */
+        /* JADX WARNING: Removed duplicated region for block: B:105:0x0310  */
         /* JADX WARNING: Removed duplicated region for block: B:9:0x0047  */
-        /* JADX WARNING: Missing block: B:92:0x028f, code skipped:
-            if ((org.telegram.ui.ArticleViewer.WebpageAdapter.access$6900(r8.parentAdapter).get(1) instanceof org.telegram.tgnet.TLRPC.TL_pageBlockChannel) != false) goto L_0x0293;
+        /* JADX WARNING: Missing block: B:98:0x02fd, code skipped:
+            if ((org.telegram.ui.ArticleViewer.WebpageAdapter.access$6900(r8.parentAdapter).get(1) instanceof org.telegram.tgnet.TLRPC.TL_pageBlockChannel) != false) goto L_0x0301;
      */
         @android.annotation.SuppressLint({"NewApi"})
-        public void onMeasure(int r38, int r39) {
+        public void onMeasure(int r30, int r31) {
             /*
-            r37 = this;
-            r8 = r37;
-            r0 = android.view.View.MeasureSpec.getSize(r38);
+            r29 = this;
+            r8 = r29;
+            r0 = android.view.View.MeasureSpec.getSize(r30);
             r1 = r8.currentType;
             r9 = 2;
             r10 = 0;
             r11 = 1;
             if (r1 != r11) goto L_0x0023;
         L_0x000d:
-            r0 = r37.getParent();
+            r0 = r29.getParent();
             r0 = (android.view.View) r0;
             r0 = r0.getMeasuredWidth();
-            r1 = r37.getParent();
+            r1 = r29.getParent();
             r1 = (android.view.View) r1;
             r1 = r1.getMeasuredHeight();
         L_0x0021:
@@ -7498,7 +7645,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r1 = 0;
         L_0x0043:
             r0 = r8.currentBlock;
-            if (r0 == 0) goto L_0x02a2;
+            if (r0 == 0) goto L_0x0310;
         L_0x0047:
             r2 = r8.currentType;
             r3 = NUM; // 0x41900000 float:18.0 double:5.43450582E-315;
@@ -7529,7 +7676,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r0 = 0;
         L_0x0079:
             r3 = r8.currentDocument;
-            if (r3 == 0) goto L_0x01f6;
+            if (r3 == 0) goto L_0x0264;
         L_0x007d:
             r3 = NUM; // 0x42400000 float:48.0 double:5.491493014E-315;
             r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
@@ -7635,17 +7782,17 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             if (r5 != 0) goto L_0x0121;
         L_0x011c:
             r1 = org.telegram.messenger.AndroidUtilities.dp(r13);
-            goto L_0x0144;
+            goto L_0x0149;
         L_0x0121:
             if (r5 >= r3) goto L_0x0125;
         L_0x0123:
             r1 = r3;
-            goto L_0x0144;
+            goto L_0x0149;
         L_0x0125:
             r1 = r5;
-            goto L_0x0144;
+            goto L_0x0149;
         L_0x0127:
-            if (r5 != r9) goto L_0x0144;
+            if (r5 != r9) goto L_0x0149;
         L_0x0129:
             r5 = r8.groupPosition;
             r5 = r5.flags;
@@ -7658,128 +7805,182 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r5 = r8.groupPosition;
             r5 = r5.flags;
             r5 = r5 & 8;
-            if (r5 != 0) goto L_0x0144;
+            if (r5 != 0) goto L_0x0149;
         L_0x013d:
             r5 = org.telegram.messenger.AndroidUtilities.dp(r6);
             r5 = r1 - r5;
-            goto L_0x0145;
-        L_0x0144:
+            r28 = r5;
             r5 = r1;
-        L_0x0145:
+            r1 = r28;
+            goto L_0x014a;
+        L_0x0149:
+            r5 = r1;
+        L_0x014a:
             r11 = r8.imageView;
             r13 = r8.currentDocument;
             r11.setQualityThumbDocument(r13);
             r11 = r8.imageView;
             r13 = r8.isFirst;
-            if (r13 != 0) goto L_0x0167;
-        L_0x0152:
+            if (r13 != 0) goto L_0x016c;
+        L_0x0157:
             r13 = r8.currentType;
             r14 = 1;
-            if (r13 == r14) goto L_0x0167;
-        L_0x0157:
-            if (r13 == r9) goto L_0x0167;
-        L_0x0159:
+            if (r13 == r14) goto L_0x016c;
+        L_0x015c:
+            if (r13 == r9) goto L_0x016c;
+        L_0x015e:
             r13 = r8.currentBlock;
             r13 = r13.level;
-            if (r13 <= 0) goto L_0x0160;
-        L_0x015f:
-            goto L_0x0167;
-        L_0x0160:
+            if (r13 <= 0) goto L_0x0165;
+        L_0x0164:
+            goto L_0x016c;
+        L_0x0165:
             r13 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
             r14 = org.telegram.messenger.AndroidUtilities.dp(r13);
-            goto L_0x0168;
-        L_0x0167:
+            goto L_0x016d;
+        L_0x016c:
             r14 = 0;
-        L_0x0168:
-            r11.setImageCoords(r0, r14, r2, r5);
+        L_0x016d:
+            r11.setImageCoords(r0, r14, r2, r1);
             r0 = r8.isGif;
-            if (r0 == 0) goto L_0x019d;
-        L_0x016f:
+            r1 = 0;
+            if (r0 == 0) goto L_0x0204;
+        L_0x0175:
+            r0 = org.telegram.ui.ArticleViewer.this;
+            r0 = r0.currentAccount;
+            r0 = org.telegram.messenger.DownloadController.getInstance(r0);
+            r2 = 4;
+            r11 = r8.currentDocument;
+            r11 = r11.size;
+            r0 = r0.canDownloadMedia(r2, r11);
+            r8.autoDownload = r0;
+            r0 = r8.currentDocument;
+            r2 = 1;
+            r0 = org.telegram.messenger.FileLoader.getPathToAttach(r0, r2);
+            r2 = r8.autoDownload;
+            if (r2 != 0) goto L_0x01d1;
+        L_0x0195:
+            r0 = r0.exists();
+            if (r0 == 0) goto L_0x019c;
+        L_0x019b:
+            goto L_0x01d1;
+        L_0x019c:
             r0 = r8.imageView;
-            r2 = r8.currentDocument;
-            r17 = org.telegram.messenger.ImageLocation.getForDocument(r2);
+            r1 = r8.currentDocument;
+            r1 = org.telegram.messenger.ImageLocation.getForDocument(r1);
+            r0.setStrippedLocation(r1);
+            r0 = r8.imageView;
+            r17 = 0;
             r18 = 0;
             r19 = 0;
             r20 = 0;
-            r2 = r8.currentDocument;
-            r21 = org.telegram.messenger.ImageLocation.getForDocument(r4, r2);
+            r1 = r8.currentDocument;
+            r21 = org.telegram.messenger.ImageLocation.getForDocument(r4, r1);
             r23 = 0;
-            r2 = r8.currentDocument;
-            r2 = r2.size;
+            r1 = r8.currentDocument;
+            r1 = r1.size;
             r25 = 0;
-            r4 = org.telegram.ui.ArticleViewer.this;
-            r26 = r4.currentPage;
+            r2 = org.telegram.ui.ArticleViewer.this;
+            r26 = r2.currentPage;
             r27 = 1;
             r22 = "80_80_b";
             r16 = r0;
-            r24 = r2;
+            r24 = r1;
             r16.setImage(r17, r18, r19, r20, r21, r22, r23, r24, r25, r26, r27);
-            goto L_0x01bc;
-        L_0x019d:
+            goto L_0x0228;
+        L_0x01d1:
             r0 = r8.imageView;
-            r29 = 0;
-            r30 = 0;
-            r2 = r8.currentDocument;
-            r31 = org.telegram.messenger.ImageLocation.getForDocument(r4, r2);
-            r33 = 0;
-            r34 = 0;
+            r0.setStrippedLocation(r1);
+            r0 = r8.imageView;
+            r1 = r8.currentDocument;
+            r17 = org.telegram.messenger.ImageLocation.getForDocument(r1);
+            r18 = 0;
+            r19 = 0;
+            r20 = 0;
+            r1 = r8.currentDocument;
+            r21 = org.telegram.messenger.ImageLocation.getForDocument(r4, r1);
+            r23 = 0;
+            r1 = r8.currentDocument;
+            r1 = r1.size;
+            r25 = 0;
             r2 = org.telegram.ui.ArticleViewer.this;
-            r35 = r2.currentPage;
-            r36 = 1;
-            r32 = "80_80_b";
-            r28 = r0;
-            r28.setImage(r29, r30, r31, r32, r33, r34, r35, r36);
-        L_0x01bc:
+            r26 = r2.currentPage;
+            r27 = 1;
+            r22 = "80_80_b";
+            r16 = r0;
+            r24 = r1;
+            r16.setImage(r17, r18, r19, r20, r21, r22, r23, r24, r25, r26, r27);
+            goto L_0x0228;
+        L_0x0204:
             r0 = r8.imageView;
-            r2 = 1;
-            r0.setAspectFit(r2);
+            r0.setStrippedLocation(r1);
+            r0 = r8.imageView;
+            r17 = 0;
+            r18 = 0;
+            r1 = r8.currentDocument;
+            r19 = org.telegram.messenger.ImageLocation.getForDocument(r4, r1);
+            r21 = 0;
+            r22 = 0;
+            r1 = org.telegram.ui.ArticleViewer.this;
+            r23 = r1.currentPage;
+            r24 = 1;
+            r20 = "80_80_b";
+            r16 = r0;
+            r16.setImage(r17, r18, r19, r20, r21, r22, r23, r24);
+        L_0x0228:
+            r0 = r8.imageView;
+            r1 = 1;
+            r0.setAspectFit(r1);
             r0 = r8.imageView;
             r0 = r0.getImageX();
             r0 = (float) r0;
-            r2 = r8.imageView;
-            r2 = r2.getImageWidth();
-            r2 = r2 - r3;
-            r2 = (float) r2;
-            r2 = r2 / r6;
-            r0 = r0 + r2;
+            r1 = r8.imageView;
+            r1 = r1.getImageWidth();
+            r1 = r1 - r3;
+            r1 = (float) r1;
+            r1 = r1 / r6;
+            r0 = r0 + r1;
             r0 = (int) r0;
             r8.buttonX = r0;
             r0 = r8.imageView;
             r0 = r0.getImageY();
             r0 = (float) r0;
-            r2 = r8.imageView;
-            r2 = r2.getImageHeight();
-            r2 = r2 - r3;
-            r2 = (float) r2;
-            r2 = r2 / r6;
-            r0 = r0 + r2;
+            r1 = r8.imageView;
+            r1 = r1.getImageHeight();
+            r1 = r1 - r3;
+            r1 = (float) r1;
+            r1 = r1 / r6;
+            r0 = r0 + r1;
             r0 = (int) r0;
             r8.buttonY = r0;
             r0 = r8.radialProgress;
-            r2 = r8.buttonX;
-            r4 = r8.buttonY;
-            r5 = r2 + r3;
-            r3 = r3 + r4;
-            r0.setProgressRect(r2, r4, r5, r3);
-        L_0x01f6:
+            r1 = r8.buttonX;
+            r2 = r8.buttonY;
+            r4 = r1 + r3;
+            r3 = r3 + r2;
+            r0.setProgressRect(r1, r2, r4, r3);
+            r11 = r5;
+            goto L_0x0265;
+        L_0x0264:
             r11 = r1;
+        L_0x0265:
             r0 = r8.currentType;
-            if (r0 != 0) goto L_0x025b;
-        L_0x01fb:
+            if (r0 != 0) goto L_0x02c9;
+        L_0x0269:
             r0 = org.telegram.ui.ArticleViewer.this;
             r2 = 0;
             r5 = r8.currentBlock;
             r1 = r5.caption;
             r3 = r1.text;
             r6 = r8.parentAdapter;
-            r1 = r37;
+            r1 = r29;
             r4 = r7;
             r0 = r0.createLayoutForText(r1, r2, r3, r4, r5, r6);
             r8.captionLayout = r0;
             r0 = r8.captionLayout;
             r13 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
-            if (r0 == 0) goto L_0x022a;
-        L_0x0215:
+            if (r0 == 0) goto L_0x0298;
+        L_0x0283:
             r0 = org.telegram.messenger.AndroidUtilities.dp(r13);
             r1 = r8.captionLayout;
             r1 = r1.getHeight();
@@ -7789,87 +7990,87 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             r1 = org.telegram.messenger.AndroidUtilities.dp(r13);
             r0 = r0 + r1;
             r11 = r11 + r0;
-        L_0x022a:
+        L_0x0298:
             r0 = org.telegram.ui.ArticleViewer.this;
             r2 = 0;
             r5 = r8.currentBlock;
             r1 = r5.caption;
             r3 = r1.credit;
             r1 = r0.isRtl;
-            if (r1 == 0) goto L_0x023c;
-        L_0x0239:
+            if (r1 == 0) goto L_0x02aa;
+        L_0x02a7:
             r1 = android.text.Layout.Alignment.ALIGN_RIGHT;
-            goto L_0x023e;
-        L_0x023c:
+            goto L_0x02ac;
+        L_0x02aa:
             r1 = android.text.Layout.Alignment.ALIGN_NORMAL;
-        L_0x023e:
+        L_0x02ac:
             r6 = r1;
             r14 = r8.parentAdapter;
-            r1 = r37;
+            r1 = r29;
             r4 = r7;
             r7 = r14;
             r0 = r0.createLayoutForText(r1, r2, r3, r4, r5, r6, r7);
             r8.creditLayout = r0;
             r0 = r8.creditLayout;
-            if (r0 == 0) goto L_0x025b;
-        L_0x024f:
+            if (r0 == 0) goto L_0x02c9;
+        L_0x02bd:
             r0 = org.telegram.messenger.AndroidUtilities.dp(r13);
             r1 = r8.creditLayout;
             r1 = r1.getHeight();
             r0 = r0 + r1;
             r11 = r11 + r0;
-        L_0x025b:
+        L_0x02c9:
             r0 = r8.isFirst;
-            if (r0 != 0) goto L_0x0270;
-        L_0x025f:
+            if (r0 != 0) goto L_0x02de;
+        L_0x02cd:
             r0 = r8.currentType;
-            if (r0 != 0) goto L_0x0270;
-        L_0x0263:
+            if (r0 != 0) goto L_0x02de;
+        L_0x02d1:
             r0 = r8.currentBlock;
             r0 = r0.level;
-            if (r0 > 0) goto L_0x0270;
-        L_0x0269:
+            if (r0 > 0) goto L_0x02de;
+        L_0x02d7:
             r0 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
             r1 = org.telegram.messenger.AndroidUtilities.dp(r0);
             r11 = r11 + r1;
-        L_0x0270:
+        L_0x02de:
             r0 = r8.parentBlock;
             r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockCover;
-            if (r0 == 0) goto L_0x0292;
-        L_0x0276:
+            if (r0 == 0) goto L_0x0300;
+        L_0x02e4:
             r0 = r8.parentAdapter;
             r0 = r0.blocks;
             r0 = r0.size();
             r14 = 1;
-            if (r0 <= r14) goto L_0x0292;
-        L_0x0283:
+            if (r0 <= r14) goto L_0x0300;
+        L_0x02f1:
             r0 = r8.parentAdapter;
             r0 = r0.blocks;
             r0 = r0.get(r14);
             r0 = r0 instanceof org.telegram.tgnet.TLRPC.TL_pageBlockChannel;
-            if (r0 == 0) goto L_0x0292;
-        L_0x0291:
-            goto L_0x0293;
-        L_0x0292:
+            if (r0 == 0) goto L_0x0300;
+        L_0x02ff:
+            goto L_0x0301;
+        L_0x0300:
             r14 = 0;
-        L_0x0293:
+        L_0x0301:
             r0 = r8.currentType;
-            if (r0 == r9) goto L_0x02a0;
-        L_0x0297:
-            if (r14 != 0) goto L_0x02a0;
-        L_0x0299:
+            if (r0 == r9) goto L_0x030e;
+        L_0x0305:
+            if (r14 != 0) goto L_0x030e;
+        L_0x0307:
             r0 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
             r0 = org.telegram.messenger.AndroidUtilities.dp(r0);
             r11 = r11 + r0;
-        L_0x02a0:
+        L_0x030e:
             r14 = r11;
-            goto L_0x02a3;
-        L_0x02a2:
+            goto L_0x0311;
+        L_0x0310:
             r14 = 1;
-        L_0x02a3:
+        L_0x0311:
             r0 = r8.channelCell;
-            r1 = r38;
-            r2 = r39;
+            r1 = r30;
+            r2 = r31;
             r0.measure(r1, r2);
             r0 = r8.channelCell;
             r1 = r8.imageView;
@@ -7915,9 +8116,18 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             }
         }
 
-        private Drawable getDrawableForCurrentState() {
+        private int getIconForCurrentState() {
             int i = this.buttonState;
-            return (i < 0 || i >= 4) ? null : Theme.chat_photoStatesDrawables[i][this.buttonPressed];
+            if (i == 0) {
+                return 2;
+            }
+            if (i == 1) {
+                return 3;
+            }
+            if (i == 2) {
+                return 8;
+            }
+            return i == 3 ? 0 : 4;
         }
 
         public void updateButtonState(boolean z) {
@@ -7925,7 +8135,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             boolean z2 = true;
             boolean exists = FileLoader.getPathToAttach(this.currentDocument, true).exists();
             if (TextUtils.isEmpty(attachFileName)) {
-                this.radialProgress.setBackground(null, false, false);
+                this.radialProgress.setIcon(4, false, false);
                 return;
             }
             if (exists) {
@@ -7935,7 +8145,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 } else {
                     this.buttonState = 3;
                 }
-                this.radialProgress.setBackground(getDrawableForCurrentState(), false, z);
+                this.radialProgress.setIcon(getIconForCurrentState(), false, z);
                 invalidate();
             } else {
                 DownloadController.getInstance(ArticleViewer.this.currentAccount).addLoadingFileObserver(attachFileName, null, this);
@@ -7946,13 +8156,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     if (fileProgress != null) {
                         f = fileProgress.floatValue();
                     }
-                } else if (this.cancelLoading || !this.isGif) {
+                } else if (!this.cancelLoading && this.autoDownload && this.isGif) {
+                    this.buttonState = 1;
+                } else {
                     this.buttonState = 0;
                     z2 = false;
-                } else {
-                    this.buttonState = 1;
                 }
-                this.radialProgress.setBackground(getDrawableForCurrentState(), z2, z);
+                this.radialProgress.setIcon(getIconForCurrentState(), z2, z);
                 this.radialProgress.setProgress(f, false);
                 invalidate();
             }
@@ -7965,12 +8175,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 this.radialProgress.setProgress(0.0f, false);
                 if (this.isGif) {
                     String str = "80_80_b";
-                    this.imageView.setImage(ImageLocation.getForDocument(this.currentDocument), null, ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(this.currentDocument.thumbs, 90), this.currentDocument), str, this.currentDocument.size, null, ArticleViewer.this.currentPage, 1);
+                    this.imageView.setImage(ImageLocation.getForDocument(this.currentDocument), null, ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(this.currentDocument.thumbs, 40), this.currentDocument), str, this.currentDocument.size, null, ArticleViewer.this.currentPage, 1);
                 } else {
                     FileLoader.getInstance(ArticleViewer.this.currentAccount).loadFile(this.currentDocument, ArticleViewer.this.currentPage, 1, 1);
                 }
                 this.buttonState = 1;
-                this.radialProgress.setBackground(getDrawableForCurrentState(), true, z);
+                this.radialProgress.setIcon(getIconForCurrentState(), true, z);
                 invalidate();
             } else if (i == 1) {
                 this.cancelLoading = true;
@@ -7980,13 +8190,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     FileLoader.getInstance(ArticleViewer.this.currentAccount).cancelLoadFile(this.currentDocument);
                 }
                 this.buttonState = 0;
-                this.radialProgress.setBackground(getDrawableForCurrentState(), false, z);
+                this.radialProgress.setIcon(getIconForCurrentState(), false, z);
                 invalidate();
             } else if (i == 2) {
                 this.imageView.setAllowStartAnimation(true);
                 this.imageView.startAnimation();
                 this.buttonState = -1;
-                this.radialProgress.setBackground(getDrawableForCurrentState(), false, z);
+                this.radialProgress.setIcon(getIconForCurrentState(), false, z);
             } else if (i == 3) {
                 ArticleViewer.this.openPhoto(this.currentBlock);
             }
@@ -8023,7 +8233,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         public void onProgressDownload(String str, float f) {
             this.radialProgress.setProgress(f, true);
             if (this.buttonState != 1) {
-                updateButtonState(false);
+                updateButtonState(true);
             }
         }
 
@@ -12249,7 +12459,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                         for (i4 = 0; i4 < i2; i4++) {
                             childAt = this.listView[i].getChildAt(i4);
                             if (childAt instanceof BlockAudioCell) {
-                                ((BlockAudioCell) childAt).updateButtonState(false);
+                                ((BlockAudioCell) childAt).updateButtonState(true);
                             }
                         }
                         i++;
@@ -12270,7 +12480,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                             if (childAt instanceof BlockAudioCell) {
                                 BlockAudioCell blockAudioCell = (BlockAudioCell) childAt;
                                 if (blockAudioCell.getMessageObject() != null) {
-                                    blockAudioCell.updateButtonState(false);
+                                    blockAudioCell.updateButtonState(true);
                                 }
                             }
                         }
@@ -12412,24 +12622,22 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     }
 
     private void updatePaintColors() {
-        int i;
+        int i = 0;
         ApplicationLoader.applicationContext.getSharedPreferences("articles", 0).edit().putInt("font_color", this.selectedColor).commit();
         int selectedColor = getSelectedColor();
         RecyclerListView[] recyclerListViewArr;
         if (selectedColor == 0) {
             this.backgroundPaint.setColor(-1);
-            i = 0;
             while (true) {
-                RecyclerListView[] recyclerListViewArr2 = this.listView;
-                if (i >= recyclerListViewArr2.length) {
+                recyclerListViewArr = this.listView;
+                if (i >= recyclerListViewArr.length) {
                     break;
                 }
-                recyclerListViewArr2[i].setGlowColor(-657673);
+                recyclerListViewArr[i].setGlowColor(-657673);
                 i++;
             }
         } else if (selectedColor == 1) {
             this.backgroundPaint.setColor(-659492);
-            i = 0;
             while (true) {
                 recyclerListViewArr = this.listView;
                 if (i >= recyclerListViewArr.length) {
@@ -12440,7 +12648,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             }
         } else if (selectedColor == 2) {
             this.backgroundPaint.setColor(-15461356);
-            i = 0;
             while (true) {
                 recyclerListViewArr = this.listView;
                 if (i >= recyclerListViewArr.length) {
@@ -12449,18 +12656,6 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                 recyclerListViewArr[i].setGlowColor(-15461356);
                 i++;
             }
-        }
-        i = 0;
-        while (true) {
-            Drawable[][] drawableArr = Theme.chat_ivStatesDrawable;
-            if (i >= drawableArr.length) {
-                break;
-            }
-            Theme.setCombinedDrawableColor(drawableArr[i][0], getTextColor(), false);
-            Theme.setCombinedDrawableColor(Theme.chat_ivStatesDrawable[i][0], getTextColor(), true);
-            Theme.setCombinedDrawableColor(Theme.chat_ivStatesDrawable[i][1], getTextColor(), false);
-            Theme.setCombinedDrawableColor(Theme.chat_ivStatesDrawable[i][1], getTextColor(), true);
-            i++;
         }
         TextPaint textPaint = listTextPointerPaint;
         if (textPaint != null) {
