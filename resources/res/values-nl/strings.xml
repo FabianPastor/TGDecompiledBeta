@@ -618,6 +618,7 @@
     <string name="ChannelSignMessagesInfo">Beheerdersnaam bij alle uitgaande berichten.</string>
     <string name="ChannelSilentBroadcast">Stil massabericht</string>
     <string name="ChannelSubscribers">Abonnees</string>
+    <string name="ChannelTooMuch">Sorry, you are a member of too many groups and channels. Please leave some before creating a new one.</string>
     <string name="ChannelType">Kanaaltype</string>
     <string name="ChannelTypeHeader">Kanaaltype</string>
     <string name="ChannelUnmute">GELUID AAN</string>
@@ -951,6 +952,7 @@
     <string name="EditCantEditPermissions">Je kunt deze rechten niet aanpassen.</string>
     <string name="EditCantEditPermissionsPublic">Dit recht is niet beschikbaar in publieke groepen.</string>
     <string name="EditCaption">Wijzig onderschrift</string>
+    <string name="EditChannelAdminTransferAlertText">You can transfer this channel to **%1$s** only if you have:</string>
     <string name="EditContact">Wijzig</string>
     <string name="EditMessage">Bericht wijzigen</string>
     <string name="EditMessageError">Je mag dit bericht niet wijzigen.</string>

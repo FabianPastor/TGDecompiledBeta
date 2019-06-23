@@ -618,6 +618,7 @@
     <string name="ChannelSignMessagesInfo"> Aggiungi i nomi degli amministratori nei messaggi da loro pubblicati.</string>
     <string name="ChannelSilentBroadcast">Post silenzioso</string>
     <string name="ChannelSubscribers">Iscritti</string>
+    <string name="ChannelTooMuch">Sorry, you are a member of too many groups and channels. Please leave some before creating a new one.</string>
     <string name="ChannelType">Tipo di canale</string>
     <string name="ChannelTypeHeader">Tipo di canale</string>
     <string name="ChannelUnmute">SUONA</string>
@@ -951,6 +952,7 @@
     <string name="EditCantEditPermissions">Non puoi modificare questo permesso.</string>
     <string name="EditCantEditPermissionsPublic">Questo permesso non è disponibile nei gruppi pubblici.</string>
     <string name="EditCaption">Modifica didascalia</string>
+    <string name="EditChannelAdminTransferAlertText">You can transfer this channel to **%1$s** only if you have:</string>
     <string name="EditContact">Modifica contatto</string>
     <string name="EditMessage">Modifica messaggio</string>
     <string name="EditMessageError">Spiacenti, non puoi modificare questo messaggio.</string>
@@ -2062,7 +2064,7 @@
     <string name="PeopleNearby">Persone vicine</string>
     <string name="PeopleNearbyAccessInfo">Usa questa sezione per scambiare rapidamente i numeri di telefono con le persone intorno a te.\10\10Per favore concedi l\'accesso alla posizione per abilitare questa funzione.</string>
     <string name="PeopleNearbyAllowAccess">Consenti accesso</string>
-    <string name="PeopleNearbyEmpty">Nessun altro sta guardando le **Persone vicine**.</string>
+    <string name="PeopleNearbyEmpty">Cerco utenti attorno a te...</string>
     <string name="PeopleNearbyGps">Turn On</string>
     <string name="PeopleNearbyGpsInfo">Use this section to quickly exchange phone numbers with people around you.\10\10Please turn location services on to enable this feature.</string>
     <string name="PeopleNearbyHeader">Persone vicine</string>

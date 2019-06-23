@@ -618,6 +618,7 @@
     <string name="ChannelSignMessagesInfo">Zeigt Namen der Admins in ausgehenden Nachrichten.</string>
     <string name="ChannelSilentBroadcast">Lautloser Broadcast</string>
     <string name="ChannelSubscribers">Abonnenten</string>
+    <string name="ChannelTooMuch">Sorry, you are a member of too many groups and channels. Please leave some before creating a new one.</string>
     <string name="ChannelType">Kanaltyp</string>
     <string name="ChannelTypeHeader">Kanalart</string>
     <string name="ChannelUnmute">STUMM AUS</string>
@@ -951,6 +952,7 @@
     <string name="EditCantEditPermissions">Diese Berechtigung kannst du nicht bearbeiten.</string>
     <string name="EditCantEditPermissionsPublic">Diese Berechtigung ist in öffentlichen Gruppen nicht verfügbar.</string>
     <string name="EditCaption">Beschriftung bearbeiten</string>
+    <string name="EditChannelAdminTransferAlertText">You can transfer this channel to **%1$s** only if you have:</string>
     <string name="EditContact">Kontakt bearbeiten</string>
     <string name="EditMessage">Nachricht bearbeiten</string>
     <string name="EditMessageError">Du kannst diese Nachricht nicht bearbeiten.</string>
@@ -2063,8 +2065,8 @@
     <string name="PeopleNearbyAccessInfo">Nutze diesen Bereich, um schnell Nummern mit Leuten im Umkreis auszutauschen.\10\10Bitte aktiviere den Standortzugriff, um diese Funktion nutzen zu können.</string>
     <string name="PeopleNearbyAllowAccess">Zugriff erlauben</string>
     <string name="PeopleNearbyEmpty">Prüfe, wer bei dir in der Nähe ist...</string>
-    <string name="PeopleNearbyGps">Turn On</string>
-    <string name="PeopleNearbyGpsInfo">Use this section to quickly exchange phone numbers with people around you.\10\10Please turn location services on to enable this feature.</string>
+    <string name="PeopleNearbyGps">Einschalten</string>
+    <string name="PeopleNearbyGpsInfo">Benutze diesen Bereich um Leute aus der Nähe schnell hinzuzufügen und um Gruppen aus der Nähe zu finden.\10\10Erlaube der App den Standortzugriff, um die Funktion nutzen zu können.</string>
     <string name="PeopleNearbyHeader">Leute in der Nähe</string>
     <string name="PeopleNearbyInfo">Bitte deinen Freund in der Nähe, diese Seite zu öffnen, um Nummern auszutauschen.</string>
     <string name="PermissionContacts">Damit du dich mit Freunden auf all deinen Geräten verbinden kannst, werden deine Kontakte durchgehend mit den stark verschlüsselten Cloud Servern von Telegram synchronisiert.</string>
@@ -2501,7 +2503,7 @@
     <string name="StopVerification">Möchtest du wirklich den Verifikationsvorgang stoppen? </string>
     <string name="StorageUsage">Speichernutzung</string>
     <string name="Streaming">Streaming</string>
-    <string name="Strike">Strike</string>
+    <string name="Strike">Durchstreichen</string>
     <string name="Subscribers_few">%1$d Abonnenten</string>
     <string name="Subscribers_many">%1$d Abonnenten</string>
     <string name="Subscribers_one">%1$d Abonnent</string>
@@ -2604,7 +2606,7 @@
     <string name="UnbanText">Gedrückt halten um zu entsperren</string>
     <string name="Unblock">Freigeben</string>
     <string name="UnblockText">Gedrückt halten um freizugeben.</string>
-    <string name="Underline">Underline</string>
+    <string name="Underline">Unterstreichen</string>
     <string name="Undo">RÜCKGÄNGIG</string>
     <string name="UndoAllCustom">Das setzt all deine angepassten Einstellungen für Kontakte, Gruppen und Kanäle zurück.</string>
     <string name="UnhideFromTop">Anheften</string>

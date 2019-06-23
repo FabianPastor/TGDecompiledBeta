@@ -2332,7 +2332,7 @@ public class MessageObject {
         r7 = r3.megagroup;
         if (r7 == 0) goto L_0x00a7;
     L_0x0092:
-        r7 = NUM; // 0x7f0d0409 float:1.874421E38 double:1.053130288E-314;
+        r7 = NUM; // 0x7f0d040b float:1.8744214E38 double:1.053130289E-314;
         r9 = new java.lang.Object[r8];
         r9[r14] = r6;
         r6 = "EventLogEditedGroupTitle";
@@ -2341,7 +2341,7 @@ public class MessageObject {
         r0.messageText = r6;
         goto L_0x0daf;
     L_0x00a7:
-        r7 = NUM; // 0x7f0d0406 float:1.8744204E38 double:1.0531302864E-314;
+        r7 = NUM; // 0x7f0d0408 float:1.8744208E38 double:1.0531302874E-314;
         r9 = new java.lang.Object[r8];
         r9[r14] = r6;
         r6 = "EventLogEditedChannelTitle";
@@ -2368,14 +2368,14 @@ public class MessageObject {
         r6 = r3.megagroup;
         if (r6 == 0) goto L_0x00ed;
     L_0x00dc:
-        r6 = NUM; // 0x7f0d0438 float:1.8744305E38 double:1.053130311E-314;
+        r6 = NUM; // 0x7f0d043a float:1.874431E38 double:1.053130312E-314;
         r7 = "EventLogRemovedWGroupPhoto";
         r6 = org.telegram.messenger.LocaleController.getString(r7, r6);
         r6 = r0.replaceWithLink(r6, r13, r4);
         r0.messageText = r6;
         goto L_0x0daf;
     L_0x00ed:
-        r6 = NUM; // 0x7f0d0432 float:1.8744293E38 double:1.053130308E-314;
+        r6 = NUM; // 0x7f0d0434 float:1.8744297E38 double:1.053130309E-314;
         r7 = "EventLogRemovedChannelPhoto";
         r6 = org.telegram.messenger.LocaleController.getString(r7, r6);
         r6 = r0.replaceWithLink(r6, r13, r4);
@@ -2394,14 +2394,14 @@ public class MessageObject {
         r6 = r3.megagroup;
         if (r6 == 0) goto L_0x0126;
     L_0x0115:
-        r6 = NUM; // 0x7f0d0408 float:1.8744208E38 double:1.0531302874E-314;
+        r6 = NUM; // 0x7f0d040a float:1.8744212E38 double:1.0531302884E-314;
         r7 = "EventLogEditedGroupPhoto";
         r6 = org.telegram.messenger.LocaleController.getString(r7, r6);
         r6 = r0.replaceWithLink(r6, r13, r4);
         r0.messageText = r6;
         goto L_0x0daf;
     L_0x0126:
-        r6 = NUM; // 0x7f0d0405 float:1.8744202E38 double:1.053130286E-314;
+        r6 = NUM; // 0x7f0d0407 float:1.8744206E38 double:1.053130287E-314;
         r7 = "EventLogEditedChannelPhoto";
         r6 = org.telegram.messenger.LocaleController.getString(r7, r6);
         r6 = r0.replaceWithLink(r6, r13, r4);
@@ -2415,14 +2415,14 @@ public class MessageObject {
         r6 = r3.megagroup;
         if (r6 == 0) goto L_0x0152;
     L_0x0141:
-        r6 = NUM; // 0x7f0d041b float:1.8744246E38 double:1.053130297E-314;
+        r6 = NUM; // 0x7f0d041d float:1.874425E38 double:1.053130298E-314;
         r7 = "EventLogGroupJoined";
         r6 = org.telegram.messenger.LocaleController.getString(r7, r6);
         r6 = r0.replaceWithLink(r6, r13, r4);
         r0.messageText = r6;
         goto L_0x0daf;
     L_0x0152:
-        r6 = NUM; // 0x7f0d03fe float:1.8744188E38 double:1.0531302825E-314;
+        r6 = NUM; // 0x7f0d0400 float:1.8744192E38 double:1.0531302835E-314;
         r6 = org.telegram.messenger.LocaleController.getString(r15, r6);
         r6 = r0.replaceWithLink(r6, r13, r4);
         r0.messageText = r6;
@@ -2445,14 +2445,14 @@ public class MessageObject {
         r6 = r3.megagroup;
         if (r6 == 0) goto L_0x0192;
     L_0x0181:
-        r6 = NUM; // 0x7f0d0420 float:1.8744257E38 double:1.0531302993E-314;
+        r6 = NUM; // 0x7f0d0422 float:1.874426E38 double:1.0531303003E-314;
         r7 = "EventLogLeftGroup";
         r6 = org.telegram.messenger.LocaleController.getString(r7, r6);
         r6 = r0.replaceWithLink(r6, r13, r4);
         r0.messageText = r6;
         goto L_0x0daf;
     L_0x0192:
-        r6 = NUM; // 0x7f0d041f float:1.8744255E38 double:1.053130299E-314;
+        r6 = NUM; // 0x7f0d0421 float:1.8744259E38 double:1.0531303E-314;
         r7 = "EventLogLeftChannel";
         r6 = org.telegram.messenger.LocaleController.getString(r7, r6);
         r6 = r0.replaceWithLink(r6, r13, r4);
@@ -2486,20 +2486,20 @@ public class MessageObject {
         r5 = r3.megagroup;
         if (r5 == 0) goto L_0x01ec;
     L_0x01db:
-        r5 = NUM; // 0x7f0d041b float:1.8744246E38 double:1.053130297E-314;
+        r5 = NUM; // 0x7f0d041d float:1.874425E38 double:1.053130298E-314;
         r6 = "EventLogGroupJoined";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r5 = r0.replaceWithLink(r5, r13, r4);
         r0.messageText = r5;
         goto L_0x0daf;
     L_0x01ec:
-        r5 = NUM; // 0x7f0d03fe float:1.8744188E38 double:1.0531302825E-314;
+        r5 = NUM; // 0x7f0d0400 float:1.8744192E38 double:1.0531302835E-314;
         r5 = org.telegram.messenger.LocaleController.getString(r15, r5);
         r5 = r0.replaceWithLink(r5, r13, r4);
         r0.messageText = r5;
         goto L_0x0daf;
     L_0x01fb:
-        r7 = NUM; // 0x7f0d03f4 float:1.8744167E38 double:1.0531302775E-314;
+        r7 = NUM; // 0x7f0d03f6 float:1.8744171E38 double:1.0531302785E-314;
         r9 = "EventLogAdded";
         r7 = org.telegram.messenger.LocaleController.getString(r9, r7);
         r5 = r0.replaceWithLink(r7, r5, r6);
@@ -2535,7 +2535,7 @@ public class MessageObject {
         r6 = r6 instanceof org.telegram.tgnet.TLRPC.TL_channelParticipantCreator;
         if (r6 == 0) goto L_0x026d;
     L_0x0249:
-        r6 = NUM; // 0x7f0d03fc float:1.8744184E38 double:1.0531302815E-314;
+        r6 = NUM; // 0x7f0d03fe float:1.8744188E38 double:1.0531302825E-314;
         r7 = "EventLogChangedOwnership";
         r6 = org.telegram.messenger.LocaleController.getString(r7, r6);
         r7 = r6.indexOf(r15);
@@ -2549,7 +2549,7 @@ public class MessageObject {
         r9.<init>(r5);
         goto L_0x03e2;
     L_0x026d:
-        r6 = NUM; // 0x7f0d0427 float:1.874427E38 double:1.0531303027E-314;
+        r6 = NUM; // 0x7f0d0429 float:1.8744275E38 double:1.0531303037E-314;
         r7 = "EventLogPromoted";
         r6 = org.telegram.messenger.LocaleController.getString(r7, r6);
         r7 = r6.indexOf(r15);
@@ -2596,11 +2596,11 @@ public class MessageObject {
         r7 = r3.megagroup;
         if (r7 == 0) goto L_0x02ce;
     L_0x02c8:
-        r7 = NUM; // 0x7f0d042c float:1.874428E38 double:1.053130305E-314;
+        r7 = NUM; // 0x7f0d042e float:1.8744285E38 double:1.053130306E-314;
         r13 = "EventLogPromotedChangeGroupInfo";
         goto L_0x02d3;
     L_0x02ce:
-        r7 = NUM; // 0x7f0d042b float:1.8744279E38 double:1.0531303047E-314;
+        r7 = NUM; // 0x7f0d042d float:1.8744283E38 double:1.0531303057E-314;
         r13 = "EventLogPromotedChangeChannelInfo";
     L_0x02d3:
         r7 = org.telegram.messenger.LocaleController.getString(r13, r7);
@@ -2624,7 +2624,7 @@ public class MessageObject {
     L_0x02f0:
         r9.append(r7);
         r9.append(r10);
-        r7 = NUM; // 0x7f0d0430 float:1.874429E38 double:1.053130307E-314;
+        r7 = NUM; // 0x7f0d0432 float:1.8744293E38 double:1.053130308E-314;
         r13 = "EventLogPromotedPostMessages";
         r7 = org.telegram.messenger.LocaleController.getString(r13, r7);
         r9.append(r7);
@@ -2644,7 +2644,7 @@ public class MessageObject {
     L_0x0314:
         r9.append(r7);
         r9.append(r10);
-        r7 = NUM; // 0x7f0d042e float:1.8744285E38 double:1.053130306E-314;
+        r7 = NUM; // 0x7f0d0430 float:1.874429E38 double:1.053130307E-314;
         r13 = "EventLogPromotedEditMessages";
         r7 = org.telegram.messenger.LocaleController.getString(r13, r7);
         r9.append(r7);
@@ -2664,7 +2664,7 @@ public class MessageObject {
     L_0x0338:
         r9.append(r7);
         r9.append(r10);
-        r7 = NUM; // 0x7f0d042d float:1.8744283E38 double:1.0531303057E-314;
+        r7 = NUM; // 0x7f0d042f float:1.8744287E38 double:1.0531303067E-314;
         r13 = "EventLogPromotedDeleteMessages";
         r7 = org.telegram.messenger.LocaleController.getString(r13, r7);
         r9.append(r7);
@@ -2684,7 +2684,7 @@ public class MessageObject {
     L_0x035c:
         r9.append(r7);
         r9.append(r10);
-        r7 = NUM; // 0x7f0d0428 float:1.8744273E38 double:1.053130303E-314;
+        r7 = NUM; // 0x7f0d042a float:1.8744277E38 double:1.053130304E-314;
         r13 = "EventLogPromotedAddAdmins";
         r7 = org.telegram.messenger.LocaleController.getString(r13, r7);
         r9.append(r7);
@@ -2707,7 +2707,7 @@ public class MessageObject {
     L_0x0384:
         r9.append(r7);
         r9.append(r10);
-        r7 = NUM; // 0x7f0d042a float:1.8744277E38 double:1.053130304E-314;
+        r7 = NUM; // 0x7f0d042c float:1.874428E38 double:1.053130305E-314;
         r13 = "EventLogPromotedBanUsers";
         r7 = org.telegram.messenger.LocaleController.getString(r13, r7);
         r9.append(r7);
@@ -2727,7 +2727,7 @@ public class MessageObject {
     L_0x03a8:
         r9.append(r7);
         r9.append(r10);
-        r7 = NUM; // 0x7f0d0429 float:1.8744275E38 double:1.0531303037E-314;
+        r7 = NUM; // 0x7f0d042b float:1.8744279E38 double:1.0531303047E-314;
         r13 = "EventLogPromotedAddUsers";
         r7 = org.telegram.messenger.LocaleController.getString(r13, r7);
         r9.append(r7);
@@ -2750,7 +2750,7 @@ public class MessageObject {
     L_0x03d0:
         r9.append(r5);
         r9.append(r10);
-        r5 = NUM; // 0x7f0d042f float:1.8744287E38 double:1.0531303067E-314;
+        r5 = NUM; // 0x7f0d0431 float:1.8744291E38 double:1.0531303077E-314;
         r6 = "EventLogPromotedPinMessages";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r9.append(r5);
@@ -2769,7 +2769,7 @@ public class MessageObject {
         r5 = r7.prev_banned_rights;
         r6 = r7.new_banned_rights;
         r7 = new java.lang.StringBuilder;
-        r9 = NUM; // 0x7f0d0401 float:1.8744194E38 double:1.053130284E-314;
+        r9 = NUM; // 0x7f0d0403 float:1.8744198E38 double:1.053130285E-314;
         r13 = "EventLogDefaultPermissions";
         r9 = org.telegram.messenger.LocaleController.getString(r13, r9);
         r7.<init>(r9);
@@ -2799,7 +2799,7 @@ public class MessageObject {
     L_0x042c:
         r7.append(r9);
         r7.append(r10);
-        r9 = NUM; // 0x7f0d043f float:1.874432E38 double:1.0531303146E-314;
+        r9 = NUM; // 0x7f0d0441 float:1.8744323E38 double:1.0531303156E-314;
         r13 = "EventLogRestrictedSendMessages";
         r9 = org.telegram.messenger.LocaleController.getString(r13, r9);
         r7.append(r9);
@@ -2840,7 +2840,7 @@ public class MessageObject {
     L_0x046b:
         r7.append(r13);
         r7.append(r10);
-        r13 = NUM; // 0x7f0d0441 float:1.8744323E38 double:1.0531303156E-314;
+        r13 = NUM; // 0x7f0d0443 float:1.8744328E38 double:1.0531303166E-314;
         r15 = "EventLogRestrictedSendStickers";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         r7.append(r13);
@@ -2865,7 +2865,7 @@ public class MessageObject {
     L_0x0495:
         r7.append(r13);
         r7.append(r10);
-        r13 = NUM; // 0x7f0d043e float:1.8744317E38 double:1.053130314E-314;
+        r13 = NUM; // 0x7f0d0440 float:1.8744321E38 double:1.053130315E-314;
         r15 = "EventLogRestrictedSendMedia";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         r7.append(r13);
@@ -2890,7 +2890,7 @@ public class MessageObject {
     L_0x04bf:
         r7.append(r13);
         r7.append(r10);
-        r13 = NUM; // 0x7f0d0440 float:1.8744321E38 double:1.053130315E-314;
+        r13 = NUM; // 0x7f0d0442 float:1.8744326E38 double:1.053130316E-314;
         r15 = "EventLogRestrictedSendPolls";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         r7.append(r13);
@@ -2915,7 +2915,7 @@ public class MessageObject {
     L_0x04e9:
         r7.append(r13);
         r7.append(r10);
-        r13 = NUM; // 0x7f0d043d float:1.8744315E38 double:1.0531303136E-314;
+        r13 = NUM; // 0x7f0d043f float:1.874432E38 double:1.0531303146E-314;
         r15 = "EventLogRestrictedSendEmbed";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         r7.append(r13);
@@ -2940,7 +2940,7 @@ public class MessageObject {
     L_0x0513:
         r7.append(r13);
         r7.append(r10);
-        r13 = NUM; // 0x7f0d0439 float:1.8744307E38 double:1.0531303116E-314;
+        r13 = NUM; // 0x7f0d043b float:1.8744311E38 double:1.0531303126E-314;
         r15 = "EventLogRestrictedChangeInfo";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         r7.append(r13);
@@ -2965,7 +2965,7 @@ public class MessageObject {
     L_0x053d:
         r7.append(r13);
         r7.append(r10);
-        r13 = NUM; // 0x7f0d043a float:1.874431E38 double:1.053130312E-314;
+        r13 = NUM; // 0x7f0d043c float:1.8744313E38 double:1.053130313E-314;
         r15 = "EventLogRestrictedInviteUsers";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         r7.append(r13);
@@ -2989,7 +2989,7 @@ public class MessageObject {
     L_0x0566:
         r7.append(r5);
         r7.append(r10);
-        r5 = NUM; // 0x7f0d043b float:1.8744311E38 double:1.0531303126E-314;
+        r5 = NUM; // 0x7f0d043d float:1.8744315E38 double:1.0531303136E-314;
         r6 = "EventLogRestrictedPinMessages";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r7.append(r5);
@@ -3120,12 +3120,12 @@ public class MessageObject {
         goto L_0x05ea;
     L_0x063d:
         r9 = new java.lang.StringBuilder;
-        r8 = NUM; // 0x7f0d0a82 float:1.874757E38 double:1.0531311066E-314;
+        r8 = NUM; // 0x7f0d0a84 float:1.8747575E38 double:1.0531311076E-314;
         r10 = "UserRestrictionsUntilForever";
         r8 = org.telegram.messenger.LocaleController.getString(r10, r8);
         r9.<init>(r8);
     L_0x064b:
-        r8 = NUM; // 0x7f0d0442 float:1.8744326E38 double:1.053130316E-314;
+        r8 = NUM; // 0x7f0d0444 float:1.874433E38 double:1.053130317E-314;
         r10 = "EventLogRestrictedUntil";
         r8 = org.telegram.messenger.LocaleController.getString(r10, r8);
         r10 = r8.indexOf(r15);
@@ -3170,7 +3170,7 @@ public class MessageObject {
         r11.append(r5);
         r5 = 32;
         r11.append(r5);
-        r5 = NUM; // 0x7f0d043c float:1.8744313E38 double:1.053130313E-314;
+        r5 = NUM; // 0x7f0d043e float:1.8744317E38 double:1.053130314E-314;
         r8 = "EventLogRestrictedReadMessages";
         r5 = org.telegram.messenger.LocaleController.getString(r8, r5);
         r11.append(r5);
@@ -3204,7 +3204,7 @@ public class MessageObject {
         r11.append(r5);
         r5 = 32;
         r11.append(r5);
-        r5 = NUM; // 0x7f0d043f float:1.874432E38 double:1.0531303146E-314;
+        r5 = NUM; // 0x7f0d0441 float:1.8744323E38 double:1.0531303156E-314;
         r9 = "EventLogRestrictedSendMessages";
         r5 = org.telegram.messenger.LocaleController.getString(r9, r5);
         r11.append(r5);
@@ -3246,7 +3246,7 @@ public class MessageObject {
         r11.append(r5);
         r5 = 32;
         r11.append(r5);
-        r5 = NUM; // 0x7f0d0441 float:1.8744323E38 double:1.0531303156E-314;
+        r5 = NUM; // 0x7f0d0443 float:1.8744328E38 double:1.0531303166E-314;
         r9 = "EventLogRestrictedSendStickers";
         r5 = org.telegram.messenger.LocaleController.getString(r9, r5);
         r11.append(r5);
@@ -3276,7 +3276,7 @@ public class MessageObject {
         r11.append(r5);
         r5 = 32;
         r11.append(r5);
-        r5 = NUM; // 0x7f0d043e float:1.8744317E38 double:1.053130314E-314;
+        r5 = NUM; // 0x7f0d0440 float:1.8744321E38 double:1.053130315E-314;
         r9 = "EventLogRestrictedSendMedia";
         r5 = org.telegram.messenger.LocaleController.getString(r9, r5);
         r11.append(r5);
@@ -3306,7 +3306,7 @@ public class MessageObject {
         r11.append(r5);
         r5 = 32;
         r11.append(r5);
-        r5 = NUM; // 0x7f0d0440 float:1.8744321E38 double:1.053130315E-314;
+        r5 = NUM; // 0x7f0d0442 float:1.8744326E38 double:1.053130316E-314;
         r9 = "EventLogRestrictedSendPolls";
         r5 = org.telegram.messenger.LocaleController.getString(r9, r5);
         r11.append(r5);
@@ -3336,7 +3336,7 @@ public class MessageObject {
         r11.append(r5);
         r5 = 32;
         r11.append(r5);
-        r5 = NUM; // 0x7f0d043d float:1.8744315E38 double:1.0531303136E-314;
+        r5 = NUM; // 0x7f0d043f float:1.874432E38 double:1.0531303146E-314;
         r9 = "EventLogRestrictedSendEmbed";
         r5 = org.telegram.messenger.LocaleController.getString(r9, r5);
         r11.append(r5);
@@ -3366,7 +3366,7 @@ public class MessageObject {
         r11.append(r5);
         r5 = 32;
         r11.append(r5);
-        r5 = NUM; // 0x7f0d0439 float:1.8744307E38 double:1.0531303116E-314;
+        r5 = NUM; // 0x7f0d043b float:1.8744311E38 double:1.0531303126E-314;
         r9 = "EventLogRestrictedChangeInfo";
         r5 = org.telegram.messenger.LocaleController.getString(r9, r5);
         r11.append(r5);
@@ -3396,7 +3396,7 @@ public class MessageObject {
         r11.append(r5);
         r5 = 32;
         r11.append(r5);
-        r5 = NUM; // 0x7f0d043a float:1.874431E38 double:1.053130312E-314;
+        r5 = NUM; // 0x7f0d043c float:1.8744313E38 double:1.053130313E-314;
         r9 = "EventLogRestrictedInviteUsers";
         r5 = org.telegram.messenger.LocaleController.getString(r9, r5);
         r11.append(r5);
@@ -3425,7 +3425,7 @@ public class MessageObject {
         r11.append(r5);
         r5 = 32;
         r11.append(r5);
-        r5 = NUM; // 0x7f0d043b float:1.8744311E38 double:1.0531303126E-314;
+        r5 = NUM; // 0x7f0d043d float:1.8744315E38 double:1.0531303136E-314;
         r6 = "EventLogRestrictedPinMessages";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r11.append(r5);
@@ -3441,12 +3441,12 @@ public class MessageObject {
         r6 = r6.view_messages;
         if (r6 == 0) goto L_0x0865;
     L_0x085b:
-        r6 = NUM; // 0x7f0d03ff float:1.874419E38 double:1.053130283E-314;
+        r6 = NUM; // 0x7f0d0401 float:1.8744194E38 double:1.053130284E-314;
         r7 = "EventLogChannelRestricted";
         r6 = org.telegram.messenger.LocaleController.getString(r7, r6);
         goto L_0x086e;
     L_0x0865:
-        r6 = NUM; // 0x7f0d0400 float:1.8744192E38 double:1.0531302835E-314;
+        r6 = NUM; // 0x7f0d0402 float:1.8744196E38 double:1.0531302845E-314;
         r7 = "EventLogChannelUnrestricted";
         r6 = org.telegram.messenger.LocaleController.getString(r7, r6);
     L_0x086e:
@@ -3488,14 +3488,14 @@ public class MessageObject {
         r6 = r6 instanceof org.telegram.tgnet.TLRPC.TL_messageEmpty;
         if (r6 == 0) goto L_0x08ca;
     L_0x08b9:
-        r6 = NUM; // 0x7f0d044b float:1.8744344E38 double:1.0531303205E-314;
+        r6 = NUM; // 0x7f0d044d float:1.8744348E38 double:1.0531303215E-314;
         r7 = "EventLogUnpinnedMessages";
         r6 = org.telegram.messenger.LocaleController.getString(r7, r6);
         r5 = r0.replaceWithLink(r6, r13, r5);
         r0.messageText = r5;
         goto L_0x0daf;
     L_0x08ca:
-        r6 = NUM; // 0x7f0d0424 float:1.8744265E38 double:1.0531303013E-314;
+        r6 = NUM; // 0x7f0d0426 float:1.8744269E38 double:1.053130302E-314;
         r7 = "EventLogPinnedMessages";
         r6 = org.telegram.messenger.LocaleController.getString(r7, r6);
         r5 = r0.replaceWithLink(r6, r13, r5);
@@ -3507,14 +3507,14 @@ public class MessageObject {
         r5 = r5 instanceof org.telegram.tgnet.TLRPC.TL_messageEmpty;
         if (r5 == 0) goto L_0x08f4;
     L_0x08e3:
-        r5 = NUM; // 0x7f0d044b float:1.8744344E38 double:1.0531303205E-314;
+        r5 = NUM; // 0x7f0d044d float:1.8744348E38 double:1.0531303215E-314;
         r6 = "EventLogUnpinnedMessages";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r5 = r0.replaceWithLink(r5, r13, r4);
         r0.messageText = r5;
         goto L_0x0daf;
     L_0x08f4:
-        r5 = NUM; // 0x7f0d0424 float:1.8744265E38 double:1.0531303013E-314;
+        r5 = NUM; // 0x7f0d0426 float:1.8744269E38 double:1.053130302E-314;
         r6 = "EventLogPinnedMessages";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r5 = r0.replaceWithLink(r5, r13, r4);
@@ -3524,7 +3524,7 @@ public class MessageObject {
         r8 = r7 instanceof org.telegram.tgnet.TLRPC.TL_channelAdminLogEventActionStopPoll;
         if (r8 == 0) goto L_0x091a;
     L_0x0909:
-        r5 = NUM; // 0x7f0d0444 float:1.874433E38 double:1.053130317E-314;
+        r5 = NUM; // 0x7f0d0446 float:1.8744334E38 double:1.053130318E-314;
         r6 = "EventLogStopPoll";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r5 = r0.replaceWithLink(r5, r13, r4);
@@ -3538,14 +3538,14 @@ public class MessageObject {
         r5 = r7.new_value;
         if (r5 == 0) goto L_0x0935;
     L_0x0924:
-        r5 = NUM; // 0x7f0d044a float:1.8744342E38 double:1.05313032E-314;
+        r5 = NUM; // 0x7f0d044c float:1.8744346E38 double:1.053130321E-314;
         r6 = "EventLogToggledSignaturesOn";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r5 = r0.replaceWithLink(r5, r13, r4);
         r0.messageText = r5;
         goto L_0x0daf;
     L_0x0935:
-        r5 = NUM; // 0x7f0d0449 float:1.874434E38 double:1.0531303195E-314;
+        r5 = NUM; // 0x7f0d044b float:1.8744344E38 double:1.0531303205E-314;
         r6 = "EventLogToggledSignaturesOff";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r5 = r0.replaceWithLink(r5, r13, r4);
@@ -3559,14 +3559,14 @@ public class MessageObject {
         r5 = r7.new_value;
         if (r5 == 0) goto L_0x0961;
     L_0x0950:
-        r5 = NUM; // 0x7f0d0448 float:1.8744338E38 double:1.053130319E-314;
+        r5 = NUM; // 0x7f0d044a float:1.8744342E38 double:1.05313032E-314;
         r6 = "EventLogToggledInvitesOn";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r5 = r0.replaceWithLink(r5, r13, r4);
         r0.messageText = r5;
         goto L_0x0daf;
     L_0x0961:
-        r5 = NUM; // 0x7f0d0447 float:1.8744336E38 double:1.0531303185E-314;
+        r5 = NUM; // 0x7f0d0449 float:1.874434E38 double:1.0531303195E-314;
         r6 = "EventLogToggledInvitesOff";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r5 = r0.replaceWithLink(r5, r13, r4);
@@ -3576,7 +3576,7 @@ public class MessageObject {
         r8 = r7 instanceof org.telegram.tgnet.TLRPC.TL_channelAdminLogEventActionDeleteMessage;
         if (r8 == 0) goto L_0x0987;
     L_0x0976:
-        r5 = NUM; // 0x7f0d0402 float:1.8744196E38 double:1.0531302845E-314;
+        r5 = NUM; // 0x7f0d0404 float:1.87442E38 double:1.0531302854E-314;
         r6 = "EventLogDeletedMessages";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r5 = r0.replaceWithLink(r5, r13, r4);
@@ -3600,7 +3600,7 @@ public class MessageObject {
         r6 = org.telegram.messenger.MessagesController.getInstance(r6);
         r7 = java.lang.Integer.valueOf(r7);
         r6 = r6.getChat(r7);
-        r7 = NUM; // 0x7f0d0434 float:1.8744297E38 double:1.053130309E-314;
+        r7 = NUM; // 0x7f0d0436 float:1.8744301E38 double:1.05313031E-314;
         r8 = "EventLogRemovedLinkedChannel";
         r7 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r7 = r0.replaceWithLink(r7, r13, r4);
@@ -3614,7 +3614,7 @@ public class MessageObject {
         r7 = org.telegram.messenger.MessagesController.getInstance(r7);
         r6 = java.lang.Integer.valueOf(r6);
         r6 = r7.getChat(r6);
-        r7 = NUM; // 0x7f0d03f9 float:1.8744177E38 double:1.05313028E-314;
+        r7 = NUM; // 0x7f0d03fb float:1.8744182E38 double:1.053130281E-314;
         r8 = "EventLogChangedLinkedChannel";
         r7 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r7 = r0.replaceWithLink(r7, r13, r4);
@@ -3630,7 +3630,7 @@ public class MessageObject {
         r6 = org.telegram.messenger.MessagesController.getInstance(r6);
         r7 = java.lang.Integer.valueOf(r7);
         r6 = r6.getChat(r7);
-        r7 = NUM; // 0x7f0d0435 float:1.87443E38 double:1.0531303097E-314;
+        r7 = NUM; // 0x7f0d0437 float:1.8744303E38 double:1.0531303106E-314;
         r8 = "EventLogRemovedLinkedGroup";
         r7 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r7 = r0.replaceWithLink(r7, r13, r4);
@@ -3644,7 +3644,7 @@ public class MessageObject {
         r7 = org.telegram.messenger.MessagesController.getInstance(r7);
         r6 = java.lang.Integer.valueOf(r6);
         r6 = r7.getChat(r6);
-        r7 = NUM; // 0x7f0d03fa float:1.874418E38 double:1.0531302805E-314;
+        r7 = NUM; // 0x7f0d03fc float:1.8744184E38 double:1.0531302815E-314;
         r8 = "EventLogChangedLinkedGroup";
         r7 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r7 = r0.replaceWithLink(r7, r13, r4);
@@ -3661,14 +3661,14 @@ public class MessageObject {
         r5 = r7.new_value;
         if (r5 == 0) goto L_0x0a53;
     L_0x0a42:
-        r5 = NUM; // 0x7f0d0445 float:1.8744332E38 double:1.0531303176E-314;
+        r5 = NUM; // 0x7f0d0447 float:1.8744336E38 double:1.0531303185E-314;
         r6 = "EventLogToggledInvitesHistoryOff";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r5 = r0.replaceWithLink(r5, r13, r4);
         r0.messageText = r5;
         goto L_0x0daf;
     L_0x0a53:
-        r5 = NUM; // 0x7f0d0446 float:1.8744334E38 double:1.053130318E-314;
+        r5 = NUM; // 0x7f0d0448 float:1.8744338E38 double:1.053130319E-314;
         r6 = "EventLogToggledInvitesHistoryOn";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r5 = r0.replaceWithLink(r5, r13, r4);
@@ -3681,11 +3681,11 @@ public class MessageObject {
         r5 = r3.megagroup;
         if (r5 == 0) goto L_0x0a72;
     L_0x0a6c:
-        r5 = NUM; // 0x7f0d0407 float:1.8744206E38 double:1.053130287E-314;
+        r5 = NUM; // 0x7f0d0409 float:1.874421E38 double:1.053130288E-314;
         r7 = "EventLogEditedGroupDescription";
         goto L_0x0a77;
     L_0x0a72:
-        r5 = NUM; // 0x7f0d0404 float:1.87442E38 double:1.0531302854E-314;
+        r5 = NUM; // 0x7f0d0406 float:1.8744204E38 double:1.0531302864E-314;
         r7 = "EventLogEditedChannelDescription";
     L_0x0a77:
         r5 = org.telegram.messenger.LocaleController.getString(r7, r5);
@@ -3724,7 +3724,7 @@ public class MessageObject {
         r6.flags = r7;
         r6.display_url = r12;
         r6.url = r12;
-        r7 = NUM; // 0x7f0d0425 float:1.8744267E38 double:1.0531303017E-314;
+        r7 = NUM; // 0x7f0d0427 float:1.874427E38 double:1.0531303027E-314;
         r8 = "EventLogPreviousGroupDescription";
         r7 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r6.site_name = r7;
@@ -3752,11 +3752,11 @@ public class MessageObject {
         r7 = r3.megagroup;
         if (r7 == 0) goto L_0x0afe;
     L_0x0af8:
-        r7 = NUM; // 0x7f0d03f8 float:1.8744175E38 double:1.0531302795E-314;
+        r7 = NUM; // 0x7f0d03fa float:1.874418E38 double:1.0531302805E-314;
         r8 = "EventLogChangedGroupLink";
         goto L_0x0b03;
     L_0x0afe:
-        r7 = NUM; // 0x7f0d03f7 float:1.8744173E38 double:1.053130279E-314;
+        r7 = NUM; // 0x7f0d03f9 float:1.8744177E38 double:1.05313028E-314;
         r8 = "EventLogChangedChannelLink";
     L_0x0b03:
         r7 = org.telegram.messenger.LocaleController.getString(r8, r7);
@@ -3767,11 +3767,11 @@ public class MessageObject {
         r7 = r3.megagroup;
         if (r7 == 0) goto L_0x0b18;
     L_0x0b12:
-        r7 = NUM; // 0x7f0d0433 float:1.8744295E38 double:1.0531303087E-314;
+        r7 = NUM; // 0x7f0d0435 float:1.87443E38 double:1.0531303097E-314;
         r8 = "EventLogRemovedGroupLink";
         goto L_0x0b1d;
     L_0x0b18:
-        r7 = NUM; // 0x7f0d0431 float:1.8744291E38 double:1.0531303077E-314;
+        r7 = NUM; // 0x7f0d0433 float:1.8744295E38 double:1.0531303087E-314;
         r8 = "EventLogRemovedChannelLink";
     L_0x0b1d:
         r7 = org.telegram.messenger.LocaleController.getString(r8, r7);
@@ -3835,7 +3835,7 @@ public class MessageObject {
         r5.flags = r6;
         r5.display_url = r12;
         r5.url = r12;
-        r6 = NUM; // 0x7f0d0426 float:1.8744269E38 double:1.053130302E-314;
+        r6 = NUM; // 0x7f0d0428 float:1.8744273E38 double:1.053130303E-314;
         r8 = "EventLogPreviousLink";
         r6 = org.telegram.messenger.LocaleController.getString(r8, r6);
         r5.site_name = r6;
@@ -3941,7 +3941,7 @@ public class MessageObject {
     L_0x0CLASSNAME:
         if (r8 == 0) goto L_0x0c6a;
     L_0x0c5a:
-        r9 = NUM; // 0x7f0d040b float:1.8744214E38 double:1.053130289E-314;
+        r9 = NUM; // 0x7f0d040d float:1.8744218E38 double:1.05313029E-314;
         r10 = "EventLogEditedMediaCaption";
         r9 = org.telegram.messenger.LocaleController.getString(r10, r9);
         r9 = r0.replaceWithLink(r9, r13, r4);
@@ -3950,14 +3950,14 @@ public class MessageObject {
     L_0x0c6a:
         if (r8 == 0) goto L_0x0c7c;
     L_0x0c6c:
-        r9 = NUM; // 0x7f0d0403 float:1.8744198E38 double:1.053130285E-314;
+        r9 = NUM; // 0x7f0d0405 float:1.8744202E38 double:1.053130286E-314;
         r10 = "EventLogEditedCaption";
         r9 = org.telegram.messenger.LocaleController.getString(r10, r9);
         r9 = r0.replaceWithLink(r9, r13, r4);
         r0.messageText = r9;
         goto L_0x0c8b;
     L_0x0c7c:
-        r9 = NUM; // 0x7f0d040a float:1.8744212E38 double:1.0531302884E-314;
+        r9 = NUM; // 0x7f0d040c float:1.8744216E38 double:1.0531302894E-314;
         r10 = "EventLogEditedMedia";
         r9 = org.telegram.messenger.LocaleController.getString(r10, r9);
         r9 = r0.replaceWithLink(r9, r13, r4);
@@ -3973,7 +3973,7 @@ public class MessageObject {
         r8.webpage = r9;
         r8 = r5.media;
         r8 = r8.webpage;
-        r9 = NUM; // 0x7f0d0421 float:1.8744259E38 double:1.0531303E-314;
+        r9 = NUM; // 0x7f0d0423 float:1.8744263E38 double:1.053130301E-314;
         r10 = "EventLogOriginalCaption";
         r9 = org.telegram.messenger.LocaleController.getString(r10, r9);
         r8.site_name = r9;
@@ -3983,7 +3983,7 @@ public class MessageObject {
     L_0x0cb1:
         r6 = r5.media;
         r6 = r6.webpage;
-        r8 = NUM; // 0x7f0d0422 float:1.874426E38 double:1.0531303003E-314;
+        r8 = NUM; // 0x7f0d0424 float:1.8744265E38 double:1.0531303013E-314;
         r9 = "EventLogOriginalCaptionEmpty";
         r8 = org.telegram.messenger.LocaleController.getString(r9, r8);
         r6.description = r8;
@@ -3995,7 +3995,7 @@ public class MessageObject {
         r8.description = r6;
         goto L_0x0d1c;
     L_0x0cca:
-        r8 = NUM; // 0x7f0d040c float:1.8744216E38 double:1.0531302894E-314;
+        r8 = NUM; // 0x7f0d040e float:1.874422E38 double:1.0531302904E-314;
         r9 = "EventLogEditedMessages";
         r8 = org.telegram.messenger.LocaleController.getString(r9, r8);
         r8 = r0.replaceWithLink(r8, r13, r4);
@@ -4011,7 +4011,7 @@ public class MessageObject {
         r8.webpage = r9;
         r8 = r5.media;
         r8 = r8.webpage;
-        r9 = NUM; // 0x7f0d0423 float:1.8744263E38 double:1.053130301E-314;
+        r9 = NUM; // 0x7f0d0425 float:1.8744267E38 double:1.0531303017E-314;
         r10 = "EventLogOriginalMessages";
         r9 = org.telegram.messenger.LocaleController.getString(r10, r9);
         r8.site_name = r9;
@@ -4021,7 +4021,7 @@ public class MessageObject {
     L_0x0d04:
         r6 = r5.media;
         r6 = r6.webpage;
-        r8 = NUM; // 0x7f0d0422 float:1.874426E38 double:1.0531303003E-314;
+        r8 = NUM; // 0x7f0d0424 float:1.8744265E38 double:1.0531303013E-314;
         r9 = "EventLogOriginalCaptionEmpty";
         r8 = org.telegram.messenger.LocaleController.getString(r9, r8);
         r6.description = r8;
@@ -4059,14 +4059,14 @@ public class MessageObject {
     L_0x0d43:
         goto L_0x0d54;
     L_0x0d44:
-        r5 = NUM; // 0x7f0d03fd float:1.8744186E38 double:1.053130282E-314;
+        r5 = NUM; // 0x7f0d03ff float:1.874419E38 double:1.053130283E-314;
         r6 = "EventLogChangedStickersSet";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r5 = r0.replaceWithLink(r5, r13, r4);
         r0.messageText = r5;
         goto L_0x0daf;
     L_0x0d54:
-        r5 = NUM; // 0x7f0d0437 float:1.8744303E38 double:1.0531303106E-314;
+        r5 = NUM; // 0x7f0d0439 float:1.8744307E38 double:1.0531303116E-314;
         r6 = "EventLogRemovedStickersSet";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r5 = r0.replaceWithLink(r5, r13, r4);
@@ -4081,7 +4081,7 @@ public class MessageObject {
         r6 = r5 instanceof org.telegram.tgnet.TLRPC.TL_channelLocationEmpty;
         if (r6 == 0) goto L_0x0d80;
     L_0x0d70:
-        r5 = NUM; // 0x7f0d0436 float:1.8744301E38 double:1.05313031E-314;
+        r5 = NUM; // 0x7f0d0438 float:1.8744305E38 double:1.053130311E-314;
         r6 = "EventLogRemovedLocation";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r5 = r0.replaceWithLink(r5, r13, r4);
@@ -4089,7 +4089,7 @@ public class MessageObject {
         goto L_0x0daf;
     L_0x0d80:
         r5 = (org.telegram.tgnet.TLRPC.TL_channelLocation) r5;
-        r6 = NUM; // 0x7f0d03fb float:1.8744182E38 double:1.053130281E-314;
+        r6 = NUM; // 0x7f0d03fd float:1.8744186E38 double:1.053130282E-314;
         r7 = 1;
         r8 = new java.lang.Object[r7];
         r5 = r5.address;
@@ -8747,7 +8747,7 @@ public class MessageObject {
         r10 = r6.title;
         return r10;
     L_0x0105:
-        r10 = NUM; // 0x7f0d04c0 float:1.8744581E38 double:1.0531303783E-314;
+        r10 = NUM; // 0x7f0d04c2 float:1.8744585E38 double:1.0531303793E-314;
         r0 = "FromYou";
         r10 = org.telegram.messenger.LocaleController.getString(r0, r10);
         return r10;

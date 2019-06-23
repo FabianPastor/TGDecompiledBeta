@@ -3834,7 +3834,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         r4 = r17.getParentActivity();
         r3.<init>(r4);
         r3.setTitle(r1);
-        r1 = NUM; // 0x7f0d06d0 float:1.8745652E38 double:1.053130639E-314;
+        r1 = NUM; // 0x7f0d06d2 float:1.8745656E38 double:1.05313064E-314;
         r4 = "OK";
         r1 = org.telegram.messenger.LocaleController.getString(r4, r1);
         r3.setPositiveButton(r1, r7);

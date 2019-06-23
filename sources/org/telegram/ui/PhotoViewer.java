@@ -2227,7 +2227,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         if (r1 != 0) goto L_0x0607;
     L_0x02f0:
         r1 = r0.opennedFromMedia;
-        r2 = NUM; // 0x7f0d06d2 float:1.8745656E38 double:1.05313064E-314;
+        r2 = NUM; // 0x7f0d06d4 float:1.874566E38 double:1.053130641E-314;
         r3 = "Of";
         if (r1 == 0) goto L_0x031a;
     L_0x02f9:
@@ -2807,7 +2807,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
     L_0x00a8:
         r1 = r6.parentActivity;	 Catch:{ Exception -> 0x00c1 }
         r2 = "ShareFile";
-        r3 = NUM; // 0x7f0d096d float:1.8747009E38 double:1.0531309697E-314;
+        r3 = NUM; // 0x7f0d096f float:1.8747013E38 double:1.0531309707E-314;
         r2 = org.telegram.messenger.LocaleController.getString(r2, r3);	 Catch:{ Exception -> 0x00c1 }
         r0 = android.content.Intent.createChooser(r0, r2);	 Catch:{ Exception -> 0x00c1 }
         r2 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
@@ -5406,7 +5406,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         ChatActivity chatActivity = this.parentChatActivity;
         if (chatActivity != null) {
             EncryptedChat encryptedChat = chatActivity.currentEncryptedChat;
-            if (encryptedChat == null || AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 101) {
+            if (encryptedChat != null && AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 101) {
                 z = true;
                 photoViewerCaptionEnterView.setAllowTextEntitiesIntersection(z);
             }
@@ -6012,7 +6012,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r2.onAppear();
         r2 = r0.editorDoneLayout;
         r2 = r2.doneButton;
-        r4 = NUM; // 0x7f0d0318 float:1.8743721E38 double:1.053130169E-314;
+        r4 = NUM; // 0x7f0d0319 float:1.8743723E38 double:1.0531301693E-314;
         r5 = "Crop";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r2.setText(r4);
@@ -7135,7 +7135,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r0.isEvent = r10;
         r0.sharedMediaType = r8;
         r10 = r0.allMediaItem;
-        r14 = NUM; // 0x7f0d098d float:1.8747074E38 double:1.0531309855E-314;
+        r14 = NUM; // 0x7f0d098f float:1.8747078E38 double:1.0531309865E-314;
         r15 = "ShowAllMedia";
         r14 = org.telegram.messenger.LocaleController.getString(r15, r14);
         r10.setText(r14);
@@ -7281,7 +7281,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r15 = 0;
         goto L_0x01da;
     L_0x01ef:
-        r10 = NUM; // 0x7f0d098c float:1.8747072E38 double:1.053130985E-314;
+        r10 = NUM; // 0x7f0d098e float:1.8747076E38 double:1.053130986E-314;
         r13 = "ShowAllFiles";
         if (r1 == 0) goto L_0x02de;
     L_0x01f6:
@@ -8173,7 +8173,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r5 = (long) r5;
         r7 = 1000; // 0x3e8 float:1.401E-42 double:4.94E-321;
         r5 = r5 * r7;
-        r7 = NUM; // 0x7f0d0b4d float:1.8747982E38 double:1.053131207E-314;
+        r7 = NUM; // 0x7f0d0b4f float:1.8747986E38 double:1.053131208E-314;
         r8 = new java.lang.Object[r13];
         r11 = org.telegram.messenger.LocaleController.getInstance();
         r11 = r11.formatterYear;
@@ -8350,7 +8350,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r6 = r6 + r7;
         r6 = java.lang.Integer.valueOf(r6);
         r5[r3] = r6;
-        r3 = NUM; // 0x7f0d06d2 float:1.8745656E38 double:1.05313064E-314;
+        r3 = NUM; // 0x7f0d06d4 float:1.874566E38 double:1.053130641E-314;
         r3 = org.telegram.messenger.LocaleController.formatString(r10, r3, r5);
         r4.setTitle(r3);
         goto L_0x03ea;
@@ -8452,7 +8452,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r5 = r5 + r7;
         r5 = java.lang.Integer.valueOf(r5);
         r4[r6] = r5;
-        r5 = NUM; // 0x7f0d06d2 float:1.8745656E38 double:1.05313064E-314;
+        r5 = NUM; // 0x7f0d06d4 float:1.874566E38 double:1.053130641E-314;
         r4 = org.telegram.messenger.LocaleController.formatString(r10, r5, r4);
         r3.setTitle(r4);
         goto L_0x03ea;
@@ -8598,7 +8598,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r4 = r4.size();
         r4 = java.lang.Integer.valueOf(r4);
         r3[r2] = r4;
-        r2 = NUM; // 0x7f0d06d2 float:1.8745656E38 double:1.05313064E-314;
+        r2 = NUM; // 0x7f0d06d4 float:1.874566E38 double:1.053130641E-314;
         r2 = org.telegram.messenger.LocaleController.formatString(r10, r2, r3);
         r1.setTitle(r2);
         goto L_0x0758;
@@ -8657,7 +8657,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r3 = r3.size();
         r3 = java.lang.Integer.valueOf(r3);
         r2[r4] = r3;
-        r3 = NUM; // 0x7f0d06d2 float:1.8745656E38 double:1.05313064E-314;
+        r3 = NUM; // 0x7f0d06d4 float:1.874566E38 double:1.053130641E-314;
         r2 = org.telegram.messenger.LocaleController.formatString(r10, r3, r2);
         r1.setTitle(r2);
     L_0x04fe:
@@ -8952,7 +8952,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r5 = r5.size();
         r5 = java.lang.Integer.valueOf(r5);
         r4[r12] = r5;
-        r5 = NUM; // 0x7f0d06d2 float:1.8745656E38 double:1.05313064E-314;
+        r5 = NUM; // 0x7f0d06d4 float:1.874566E38 double:1.053130641E-314;
         r4 = org.telegram.messenger.LocaleController.formatString(r10, r5, r4);
         r3.setTitle(r4);
     L_0x06d8:
@@ -10679,7 +10679,7 @@ public class PhotoViewer implements NotificationCenterDelegate, OnGestureListene
         r5 = r25;
         r9.parentChatActivity = r5;
         r5 = r9.actionBar;
-        r14 = NUM; // 0x7f0d06d2 float:1.8745656E38 double:1.05313064E-314;
+        r14 = NUM; // 0x7f0d06d4 float:1.874566E38 double:1.053130641E-314;
         r15 = 2;
         r15 = new java.lang.Object[r15];
         r16 = java.lang.Integer.valueOf(r12);

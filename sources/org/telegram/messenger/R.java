@@ -2354,6 +2354,7 @@ public final class R {
         public static final int ChannelSignMessagesInfo = NUM;
         public static final int ChannelSilentBroadcast = NUM;
         public static final int ChannelSubscribers = NUM;
+        public static final int ChannelTooMuch = NUM;
         public static final int ChannelType = NUM;
         public static final int ChannelTypeHeader = NUM;
         public static final int ChannelUnmute = NUM;
@@ -2687,6 +2688,7 @@ public final class R {
         public static final int EditCantEditPermissions = NUM;
         public static final int EditCantEditPermissionsPublic = NUM;
         public static final int EditCaption = NUM;
+        public static final int EditChannelAdminTransferAlertText = NUM;
         public static final int EditContact = NUM;
         public static final int EditMessage = NUM;
         public static final int EditMessageError = NUM;

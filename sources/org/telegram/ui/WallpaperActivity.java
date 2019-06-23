@@ -1440,7 +1440,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r11 = org.telegram.ui.ActionBar.Theme.getColor(r14);
         r9.setTextColor(r11);
         r9 = r6.bottomOverlayChatText;
-        r11 = NUM; // 0x7f0d095d float:1.8746976E38 double:1.053130962E-314;
+        r11 = NUM; // 0x7f0d095f float:1.874698E38 double:1.053130963E-314;
         r10 = "SetBackground";
         r10 = org.telegram.messenger.LocaleController.getString(r10, r11);
         r9.setText(r10);
@@ -1774,7 +1774,7 @@ public class WallpaperActivity extends BaseFragment implements FileDownloadProgr
         r3.setTextColor(r8);
         r3 = r6.patternsSaveButton;
         r3 = r3[r2];
-        r8 = NUM; // 0x7f0d08f3 float:1.8746761E38 double:1.0531309094E-314;
+        r8 = NUM; // 0x7f0d08f5 float:1.8746765E38 double:1.0531309104E-314;
         r10 = "Save";
         r8 = org.telegram.messenger.LocaleController.getString(r10, r8);
         r8 = r8.toUpperCase();

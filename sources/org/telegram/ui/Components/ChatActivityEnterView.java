@@ -966,7 +966,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         ChatActivity chatActivity2 = this.parentFragment;
         EncryptedChat currentEncryptedChat = chatActivity2 != null ? chatActivity2.getCurrentEncryptedChat() : null;
         EditTextCaption editTextCaption = this.messageEditText;
-        boolean z2 = currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) >= 101;
+        boolean z2 = currentEncryptedChat != null && AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) >= 101;
         editTextCaption.setAllowTextEntitiesIntersection(z2);
         updateFieldHint();
         int i3 = NUM;

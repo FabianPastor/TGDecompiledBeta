@@ -192,7 +192,7 @@
     <string name="AddStickersInstalled">تمت إضافة ملصقات جديدة</string>
     <string name="AddStickersNotFound">لم يُعثر على الملصقات</string>
     <string name="AddSubscriber">إضافة مشترك </string>
-    <string name="AddToContacts">أضف لجهات الاتصال</string>
+    <string name="AddToContacts">إضافة لجهات الاتصال</string>
     <string name="AddToExceptions">Add to exceptions</string>
     <string name="AddToExistingContact">إضافة إلى جهة اتصال موجودة</string>
     <string name="AddToFavorites">إضافة للمفضلة</string>
@@ -618,6 +618,7 @@
     <string name="ChannelSignMessagesInfo">إضافة أسماء المشرفين للمنشورات التي ينشرونها.</string>
     <string name="ChannelSilentBroadcast">منشور صامت</string>
     <string name="ChannelSubscribers">المشتركون </string>
+    <string name="ChannelTooMuch">Sorry, you are a member of too many groups and channels. Please leave some before creating a new one.</string>
     <string name="ChannelType">نوع القناة</string>
     <string name="ChannelTypeHeader">نوع القناة</string>
     <string name="ChannelUnmute">إلغاء الكتم</string>
@@ -931,7 +932,7 @@
     <string name="EditAdminDeleteMessages">حذف رسائل الآخرين</string>
     <string name="EditAdminEditMessages">تعديل رسائل الآخرين</string>
     <string name="EditAdminGroupDeleteMessages">حذف الرسائل</string>
-    <string name="EditAdminGroupTransfer">Transfer Group Ownership</string>
+    <string name="EditAdminGroupTransfer">نقل ملكية المجموعة</string>
     <string name="EditAdminPinMessages">تثبيت الرسائل</string>
     <string name="EditAdminPostMessages">نشر الرسائل</string>
     <string name="EditAdminPromotedBy">تمت ترقيته من قبل %1$s</string>
@@ -951,6 +952,7 @@
     <string name="EditCantEditPermissions">لا يمكنك تعديل هذه الصلاحية.</string>
     <string name="EditCantEditPermissionsPublic">هذه الصلاحية ليست متاحةً في المجموعات العامة.</string>
     <string name="EditCaption">تعديل الوصف</string>
+    <string name="EditChannelAdminTransferAlertText">You can transfer this channel to **%1$s** only if you have:</string>
     <string name="EditContact">تعديل جهة الاتصال</string>
     <string name="EditMessage">تعديل الرسالة</string>
     <string name="EditMessageError">المعذرة، لا يمكنك تعديل هذه الرسالة.</string>
@@ -1020,7 +1022,7 @@
     <string name="EventLogChangedLinkedChannel">ربط un1 هذه المجموعة بـ un2</string>
     <string name="EventLogChangedLinkedGroup">جعل un1 un2 مجموعة نقاشات هذه القناة</string>
     <string name="EventLogChangedLocation">un1 changed group location to \"%1$s\"</string>
-    <string name="EventLogChangedOwnership">transferred ownership to %1$s</string>
+    <string name="EventLogChangedOwnership">نقل ملكية المجموعة لـ %1$s</string>
     <string name="EventLogChangedStickersSet">un1 غير حزمة ملصقات المجموعة</string>
     <string name="EventLogChannelJoined">un1 انضم للقناة</string>
     <string name="EventLogChannelRestricted">حظر %1$s</string>
@@ -1526,11 +1528,11 @@
     <string name="MuteDisable">تعطيل</string>
     <string name="MuteFor">كتم لمدة %1$s</string>
     <string name="MuteNotifications">كتم الإشعارات</string>
-    <string name="NearbyCreateGroup">Create a Local Group</string>
+    <string name="NearbyCreateGroup">إنشاء مجموعة محلية</string>
     <string name="NearbyCreateGroupInfo">Anyone close to this location (neighbors, co-workers, fellow students, event attendees, visitors of a venue) will be able to see your group in the People Nearby section.</string>
     <string name="NearbyCreateGroupInfo2">If you start an unrelated group at this location, you may lose the ability to create location-based groups.</string>
     <string name="NearbyPlaces">أو اختر مكانًا</string>
-    <string name="NearbyStartGroup">Start Group</string>
+    <string name="NearbyStartGroup">إنشاء مجموعة</string>
     <string name="NetworkUsage">استهلاك البيانات</string>
     <string name="NetworkUsageMobile">الخلوية</string>
     <string name="NetworkUsageRoaming">التجوال</string>
@@ -1742,7 +1744,7 @@
     <string name="NotificationsTurnOn">تشغيل</string>
     <string name="NotificationsUnmuted">مُلغى كتمها</string>
     <string name="November">نوفمبر</string>
-    <string name="NowInContacts">%1$s is now in your contact list.</string>
+    <string name="NowInContacts">تمت إضافة %1$s إلى قائمة جهات اتصالك.</string>
     <string name="NumberUnknown">غير معروف</string>
     <string name="OK">حسنًا</string>
     <string name="October">أكتوبر</string>

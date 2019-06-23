@@ -618,6 +618,7 @@
     <string name="ChannelSignMessagesInfo">메시지에 게시한 관리자의 이름을 추가합니다.</string>
     <string name="ChannelSilentBroadcast">조용히 알리기</string>
     <string name="ChannelSubscribers">구독자</string>
+    <string name="ChannelTooMuch">Sorry, you are a member of too many groups and channels. Please leave some before creating a new one.</string>
     <string name="ChannelType">채널 종류</string>
     <string name="ChannelTypeHeader">채널 종류</string>
     <string name="ChannelUnmute">음소거 취소</string>
@@ -951,6 +952,7 @@
     <string name="EditCantEditPermissions">이 권한을 수정하실 수 없습니다.</string>
     <string name="EditCantEditPermissionsPublic">이 권한은 공개 그룹에서 부여되지 않습니다.</string>
     <string name="EditCaption">설명 수정</string>
+    <string name="EditChannelAdminTransferAlertText">You can transfer this channel to **%1$s** only if you have:</string>
     <string name="EditContact">연락처 수정</string>
     <string name="EditMessage">메시지 수정</string>
     <string name="EditMessageError">죄송합니다. 메시지를 수정할 수 없습니다.</string>

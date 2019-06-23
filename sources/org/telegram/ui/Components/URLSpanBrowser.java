@@ -28,8 +28,7 @@ public class URLSpanBrowser extends URLSpan {
         TextStyleRun textStyleRun = this.style;
         if (textStyleRun != null) {
             textStyleRun.applyStyle(textPaint);
-        } else {
-            textPaint.setUnderlineText(false);
         }
+        textPaint.setUnderlineText(true);
     }
 }

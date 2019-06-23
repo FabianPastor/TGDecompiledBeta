@@ -779,6 +779,13 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdaterDelega
         if (AndroidUtilities.isGoogleMapsInstalled(this)) {
             LocationActivity locationActivity = new LocationActivity(4);
             locationActivity.setDialogId((long) (-this.chatId));
+            ChatFull chatFull = this.info;
+            if (chatFull != null) {
+                ChannelLocation channelLocation = chatFull.location;
+                if (channelLocation instanceof TL_channelLocation) {
+                    locationActivity.setInitialLocation((TL_channelLocation) channelLocation);
+                }
+            }
             locationActivity.setDelegate(new -$$Lambda$ChatEditActivity$xT_N5utjPY_kVjntCN2GmeQLCWw(this));
             presentFragment(locationActivity);
         }
@@ -1036,7 +1043,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdaterDelega
         r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder;
         r1 = r3.getParentActivity();
         r0.<init>(r1);
-        r1 = NUM; // 0x7f0d0a6a float:1.8747522E38 double:1.0531310947E-314;
+        r1 = NUM; // 0x7f0d0a6c float:1.8747526E38 double:1.0531310957E-314;
         r2 = "UserRestrictionsApplyChanges";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
@@ -1049,7 +1056,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdaterDelega
         r0.setMessage(r1);
         goto L_0x0098;
     L_0x008c:
-        r1 = NUM; // 0x7f0d04de float:1.8744642E38 double:1.053130393E-314;
+        r1 = NUM; // 0x7f0d04e0 float:1.8744646E38 double:1.053130394E-314;
         r2 = "GroupSettingsChangedAlert";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setMessage(r1);
@@ -1060,7 +1067,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdaterDelega
         r2 = new org.telegram.ui.-$$Lambda$ChatEditActivity$TOgShEf6MXFD3VhufzCjnieIAt0;
         r2.<init>(r3);
         r0.setPositiveButton(r1, r2);
-        r1 = NUM; // 0x7f0d0743 float:1.8745885E38 double:1.053130696E-314;
+        r1 = NUM; // 0x7f0d0745 float:1.874589E38 double:1.053130697E-314;
         r2 = "PassportDiscard";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r2 = new org.telegram.ui.-$$Lambda$ChatEditActivity$YVjMK5_diwcVq6bEDj5YD-pWfbg;

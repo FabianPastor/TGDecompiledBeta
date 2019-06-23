@@ -2315,6 +2315,7 @@
     <public type="string" name="ChannelSignMessagesInfo" id="NUM" />
     <public type="string" name="ChannelSilentBroadcast" id="NUM" />
     <public type="string" name="ChannelSubscribers" id="NUM" />
+    <public type="string" name="ChannelTooMuch" id="NUM" />
     <public type="string" name="ChannelType" id="NUM" />
     <public type="string" name="ChannelTypeHeader" id="NUM" />
     <public type="string" name="ChannelUnmute" id="NUM" />
@@ -2648,6 +2649,7 @@
     <public type="string" name="EditCantEditPermissions" id="NUM" />
     <public type="string" name="EditCantEditPermissionsPublic" id="NUM" />
     <public type="string" name="EditCaption" id="NUM" />
+    <public type="string" name="EditChannelAdminTransferAlertText" id="NUM" />
     <public type="string" name="EditContact" id="NUM" />
     <public type="string" name="EditMessage" id="NUM" />
     <public type="string" name="EditMessageError" id="NUM" />

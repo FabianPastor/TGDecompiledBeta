@@ -84,9 +84,7 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
 
     public void setCustomLocation(Location location) {
         this.customLocation = location;
-        if (this.customLocation == null) {
-            fetchLocationAddress();
-        }
+        fetchLocationAddress();
         updateCell();
     }
 

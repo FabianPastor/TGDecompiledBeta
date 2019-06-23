@@ -416,7 +416,7 @@ public class MediaDataController extends BaseController {
         if (r1 == 0) goto L_0x005e;
     L_0x004b:
         r2 = org.telegram.messenger.ApplicationLoader.applicationContext;
-        r3 = NUM; // 0x7f0d08a6 float:1.8746605E38 double:1.0531308714E-314;
+        r3 = NUM; // 0x7f0d08a8 float:1.874661E38 double:1.0531308724E-314;
         r4 = "RemovedFromFavorites";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2 = android.widget.Toast.makeText(r2, r3, r8);
@@ -1299,9 +1299,9 @@ public class MediaDataController extends BaseController {
 
     /* JADX WARNING: Removed duplicated region for block: B:47:0x0095  */
     /* JADX WARNING: Removed duplicated region for block: B:47:0x0095  */
-    /* JADX WARNING: Removed duplicated region for block: B:35:0x0082 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:3:0x0017} */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x0082 A:{Splitter:B:3:0x0017, ExcHandler: all (th java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:47:0x0095  */
-    /* JADX WARNING: Removed duplicated region for block: B:35:0x0082 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:3:0x0017} */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x0082 A:{Splitter:B:3:0x0017, ExcHandler: all (th java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:52:0x00a3  */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */
@@ -1793,10 +1793,10 @@ public class MediaDataController extends BaseController {
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:40:0x0083  */
-    /* JADX WARNING: Removed duplicated region for block: B:29:0x0071 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:3:0x0023} */
+    /* JADX WARNING: Removed duplicated region for block: B:29:0x0071 A:{Splitter:B:3:0x0023, ExcHandler: all (th java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:45:0x0092  */
     /* JADX WARNING: Removed duplicated region for block: B:40:0x0083  */
-    /* JADX WARNING: Removed duplicated region for block: B:29:0x0071 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:3:0x0023} */
+    /* JADX WARNING: Removed duplicated region for block: B:29:0x0071 A:{Splitter:B:3:0x0023, ExcHandler: all (th java.lang.Throwable)} */
     /* JADX WARNING: Removed duplicated region for block: B:40:0x0083  */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */
@@ -3604,7 +3604,7 @@ public class MediaDataController extends BaseController {
         r10 = new android.content.pm.ShortcutInfo$Builder;	 Catch:{ Throwable -> 0x02b7 }
         r11 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x02b7 }
         r10.<init>(r11, r9);	 Catch:{ Throwable -> 0x02b7 }
-        r11 = NUM; // 0x7f0d0606 float:1.8745242E38 double:1.0531305394E-314;
+        r11 = NUM; // 0x7f0d0608 float:1.8745246E38 double:1.0531305404E-314;
         r12 = org.telegram.messenger.LocaleController.getString(r0, r11);	 Catch:{ Throwable -> 0x02b7 }
         r10 = r10.setShortLabel(r12);	 Catch:{ Throwable -> 0x02b7 }
         r0 = org.telegram.messenger.LocaleController.getString(r0, r11);	 Catch:{ Throwable -> 0x02b7 }
@@ -4351,7 +4351,7 @@ public class MediaDataController extends BaseController {
         if (r8 == 0) goto L_0x006b;
     L_0x005e:
         r8 = "SavedMessages";
-        r9 = NUM; // 0x7f0d08fa float:1.8746776E38 double:1.053130913E-314;
+        r9 = NUM; // 0x7f0d08fc float:1.874678E38 double:1.053130914E-314;
         r8 = org.telegram.messenger.LocaleController.getString(r8, r9);	 Catch:{ Exception -> 0x023d }
         r9 = r4;
         r10 = r8;

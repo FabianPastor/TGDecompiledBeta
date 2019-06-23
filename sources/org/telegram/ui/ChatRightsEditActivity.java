@@ -1023,7 +1023,11 @@ public class ChatRightsEditActivity extends BaseFragment {
                     textView.setTextColor(Theme.getColor(str3));
                     textView.setTextSize(1, 16.0f);
                     textView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-                    textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("EditAdminTransferAlertText", NUM, UserObject.getFirstName(this.currentUser))));
+                    if (this.isChannel) {
+                        textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("EditChannelAdminTransferAlertText", NUM, UserObject.getFirstName(this.currentUser))));
+                    } else {
+                        textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("EditAdminTransferAlertText", NUM, UserObject.getFirstName(this.currentUser))));
+                    }
                     linearLayout.addView(textView, LayoutHelper.createLinear(-1, -2));
                     LinearLayout linearLayout2 = new LinearLayout(getParentActivity());
                     linearLayout2.setOrientation(0);

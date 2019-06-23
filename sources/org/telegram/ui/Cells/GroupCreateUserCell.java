@@ -310,7 +310,7 @@ public class GroupCreateUserCell extends FrameLayout {
         r1 = org.telegram.ui.ActionBar.Theme.getColor(r1);
         r14.setTextColor(r1);
         r14 = r13.statusTextView;
-        r1 = NUM; // 0x7f0d06d3 float:1.8745658E38 double:1.0531306407E-314;
+        r1 = NUM; // 0x7f0d06d5 float:1.8745662E38 double:1.0531306417E-314;
         r3 = "Online";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r14.setText(r1);
@@ -430,7 +430,7 @@ public class GroupCreateUserCell extends FrameLayout {
         if (r14 == 0) goto L_0x01e9;
     L_0x01da:
         r14 = r13.statusTextView;
-        r1 = NUM; // 0x7f0d05b9 float:1.8745086E38 double:1.0531305014E-314;
+        r1 = NUM; // 0x7f0d05bb float:1.874509E38 double:1.0531305023E-314;
         r3 = "MegaLocation";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r14.setText(r1);
@@ -441,14 +441,14 @@ public class GroupCreateUserCell extends FrameLayout {
         if (r14 == 0) goto L_0x0200;
     L_0x01f1:
         r14 = r13.statusTextView;
-        r1 = NUM; // 0x7f0d05ba float:1.8745088E38 double:1.053130502E-314;
+        r1 = NUM; // 0x7f0d05bc float:1.8745092E38 double:1.053130503E-314;
         r3 = "MegaPrivate";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r14.setText(r1);
         goto L_0x020e;
     L_0x0200:
         r14 = r13.statusTextView;
-        r1 = NUM; // 0x7f0d05bd float:1.8745094E38 double:1.0531305033E-314;
+        r1 = NUM; // 0x7f0d05bf float:1.8745098E38 double:1.0531305043E-314;
         r3 = "MegaPublic";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r14.setText(r1);

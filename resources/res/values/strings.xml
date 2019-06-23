@@ -618,6 +618,7 @@
     <string name="ChannelSignMessagesInfo">Add names of the admins to the messages they post.</string>
     <string name="ChannelSilentBroadcast">Silent Broadcast</string>
     <string name="ChannelSubscribers">Subscribers</string>
+    <string name="ChannelTooMuch">Sorry, you are a member of too many groups and channels. Please leave some before creating a new one.</string>
     <string name="ChannelType">Channel Type</string>
     <string name="ChannelTypeHeader">Channel type</string>
     <string name="ChannelUnmute">UNMUTE</string>
@@ -951,6 +952,7 @@
     <string name="EditCantEditPermissions">You cannot edit this permission.</string>
     <string name="EditCantEditPermissionsPublic">This permission is not available in public groups.</string>
     <string name="EditCaption">Edit Caption</string>
+    <string name="EditChannelAdminTransferAlertText">You can transfer this channel to **%1$s** only if you have:</string>
     <string name="EditContact">Edit contact</string>
     <string name="EditMessage">Edit Message</string>
     <string name="EditMessageError">Sorry, you can\'t edit this message.</string>
