@@ -669,8 +669,12 @@ public class DialogOrContactPickerActivity extends BaseFragment {
     }
 
     public /* synthetic */ void lambda$showBlockAlert$3$DialogOrContactPickerActivity(User user, DialogInterface dialogInterface, int i) {
-        MessagesController.getInstance(this.currentAccount).blockUser(user.id);
-        AlertsCreator.showSimpleToast(this, LocaleController.getString("UserBlocked", NUM));
+        if (MessagesController.isSupportUser(user)) {
+            AlertsCreator.showSimpleToast(this, LocaleController.getString("ErrorOccurred", NUM));
+        } else {
+            MessagesController.getInstance(this.currentAccount).blockUser(user.id);
+            AlertsCreator.showSimpleToast(this, LocaleController.getString("UserBlocked", NUM));
+        }
         finishFragment();
     }
 

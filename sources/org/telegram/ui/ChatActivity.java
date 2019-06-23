@@ -3411,14 +3411,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r3 = r7.editTextItem;
         r4 = 52;
         r3.addSubItem(r4, r2);
-        r3 = r7.currentEncryptedChat;
+        r2 = r7.currentEncryptedChat;
         r14 = 16;
-        if (r3 == 0) goto L_0x0269;
+        if (r2 == 0) goto L_0x0270;
     L_0x020e:
-        r3 = r3.layer;
-        r3 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r3);
-        r4 = 101; // 0x65 float:1.42E-43 double:5.0E-322;
-        if (r3 < r4) goto L_0x0269;
+        r2 = r2.layer;
+        r2 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r2);
+        r3 = 101; // 0x65 float:1.42E-43 double:5.0E-322;
+        if (r2 < r3) goto L_0x0270;
     L_0x0218:
         r2 = new android.text.SpannableStringBuilder;
         r3 = NUM; // 0x7f0d09c7 float:1.8747191E38 double:1.053131014E-314;
@@ -3452,10 +3452,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r4.<init>(r3);
         r3 = r2.length();
         r2.setSpan(r4, r9, r3, r5);
-    L_0x0269:
         r3 = r7.editTextItem;
         r4 = 56;
         r3.addSubItem(r4, r2);
+    L_0x0270:
         r2 = r7.editTextItem;
         r3 = 53;
         r4 = NUM; // 0x7f0d0313 float:1.874371E38 double:1.0531301664E-314;
@@ -18008,13 +18008,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r1 = NUM; // 0x7var_aa float:1.8077846E38 double:1.052967966E-314;
         r3 = 8;
         r9.add(r6, r1, r3, r0);
-        r1 = r8.currentEncryptedChat;
-        if (r1 == 0) goto L_0x0118;
+        r0 = r8.currentEncryptedChat;
+        if (r0 == 0) goto L_0x0120;
     L_0x00bd:
-        r1 = r1.layer;
-        r1 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r1);
-        r7 = 101; // 0x65 float:1.42E-43 double:5.0E-322;
-        if (r1 < r7) goto L_0x0118;
+        r0 = r0.layer;
+        r0 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r0);
+        r1 = 101; // 0x65 float:1.42E-43 double:5.0E-322;
+        if (r0 < r1) goto L_0x0120;
     L_0x00c7:
         r0 = new android.text.SpannableStringBuilder;
         r1 = NUM; // 0x7f0d09c7 float:1.8747191E38 double:1.053131014E-314;
@@ -18047,10 +18047,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
         r3.<init>(r1);
         r1 = r0.length();
         r0.setSpan(r3, r5, r1, r4);
-    L_0x0118:
         r1 = NUM; // 0x7var_ad float:1.8077852E38 double:1.0529679676E-314;
         r3 = 10;
         r9.add(r6, r1, r3, r0);
+    L_0x0120:
         r0 = NUM; // 0x7var_a9 float:1.8077844E38 double:1.0529679656E-314;
         r1 = 11;
         r3 = NUM; // 0x7f0d0313 float:1.874371E38 double:1.0531301664E-314;
