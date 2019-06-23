@@ -497,7 +497,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         AnimatorSet animatorSet;
         if (isSharingLocation) {
             updateStyle(2);
-            this.playButton.setImageDrawable(new ShareLocationDrawable(getContext(), true));
+            this.playButton.setImageDrawable(new ShareLocationDrawable(getContext(), 1));
             if (z && this.topPadding == 0.0f) {
                 setTopPadding((float) AndroidUtilities.dp2(36.0f));
                 this.yPosition = 0.0f;

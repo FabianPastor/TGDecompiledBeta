@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Canvas;
-import android.graphics.Typeface;
 import android.os.Build.VERSION;
 import android.text.Editable;
 import android.text.Layout.Alignment;
@@ -21,8 +20,10 @@ import android.view.View.MeasureSpec;
 import android.view.accessibility.AccessibilityNodeInfo;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
+import org.telegram.ui.Components.TextStyleSpan.TextStyleRun;
 
 public class EditTextCaption extends EditTextBoldCursor {
+    private boolean allowTextEntitiesIntersection;
     private String caption;
     private StaticLayout captionLayout;
     private boolean copyPasteShowed;
@@ -47,7 +48,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         String str2 = this.caption;
         if ((str2 != null && str2.length() != 0) || (str != null && str.length() != 0)) {
             str2 = this.caption;
-            if (str2 == null || str == null || !str2.equals(str)) {
+            if (str2 == null || !str2.equals(str)) {
                 this.caption = str;
                 str = this.caption;
                 if (str != null) {
@@ -62,16 +63,38 @@ public class EditTextCaption extends EditTextBoldCursor {
         this.delegate = editTextCaptionDelegate;
     }
 
+    public void setAllowTextEntitiesIntersection(boolean z) {
+        this.allowTextEntitiesIntersection = z;
+    }
+
     public void makeSelectedBold() {
-        applyTextStyleToSelection(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")));
+        TextStyleRun textStyleRun = new TextStyleRun();
+        textStyleRun.flags |= 1;
+        applyTextStyleToSelection(new TextStyleSpan(textStyleRun));
     }
 
     public void makeSelectedItalic() {
-        applyTextStyleToSelection(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf")));
+        TextStyleRun textStyleRun = new TextStyleRun();
+        textStyleRun.flags |= 2;
+        applyTextStyleToSelection(new TextStyleSpan(textStyleRun));
     }
 
     public void makeSelectedMono() {
-        applyTextStyleToSelection(new TypefaceSpan(Typeface.MONOSPACE));
+        TextStyleRun textStyleRun = new TextStyleRun();
+        textStyleRun.flags |= 4;
+        applyTextStyleToSelection(new TextStyleSpan(textStyleRun));
+    }
+
+    public void makeSelectedStrike() {
+        TextStyleRun textStyleRun = new TextStyleRun();
+        textStyleRun.flags |= 8;
+        applyTextStyleToSelection(new TextStyleSpan(textStyleRun));
+    }
+
+    public void makeSelectedUnderline() {
+        TextStyleRun textStyleRun = new TextStyleRun();
+        textStyleRun.flags |= 16;
+        applyTextStyleToSelection(new TextStyleSpan(textStyleRun));
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:8:0x00c2  */
@@ -82,7 +105,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         r1 = r9.getContext();
         r0.<init>(r1);
         r1 = "CreateLink";
-        r2 = NUM; // 0x7f0d0301 float:1.8743674E38 double:1.0531301575E-314;
+        r2 = NUM; // 0x7f0d0313 float:1.874371E38 double:1.0531301664E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);
         r0.setTitle(r1);
         r1 = new org.telegram.ui.Components.EditTextCaption$1;
@@ -97,7 +120,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         r3 = org.telegram.ui.ActionBar.Theme.getColor(r3);
         r1.setTextColor(r3);
         r3 = "URL";
-        r4 = NUM; // 0x7f0d09df float:1.874724E38 double:1.053131026E-314;
+        r4 = NUM; // 0x7f0d0a27 float:1.8747386E38 double:1.0531310616E-314;
         r3 = org.telegram.messenger.LocaleController.getString(r3, r4);
         r1.setHintText(r3);
         r3 = "windowBackgroundWhiteBlueHeader";
@@ -135,13 +158,13 @@ public class EditTextCaption extends EditTextBoldCursor {
         r5 = r9.getSelectionStart();
         r6 = r9.getSelectionEnd();
     L_0x0091:
-        r7 = NUM; // 0x7f0d06a1 float:1.8745557E38 double:1.053130616E-314;
+        r7 = NUM; // 0x7f0d06d2 float:1.8745656E38 double:1.05313064E-314;
         r8 = "OK";
         r7 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r8 = new org.telegram.ui.Components.-$$Lambda$EditTextCaption$BQIhHIR0EWfMGyyXmJJ-pkFKO1Y;
         r8.<init>(r9, r5, r6, r1);
         r0.setPositiveButton(r7, r8);
-        r5 = NUM; // 0x7f0d01eb float:1.874311E38 double:1.05313002E-314;
+        r5 = NUM; // 0x7f0d01f6 float:1.8743133E38 double:1.0531300256E-314;
         r6 = "Cancel";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r0.setNegativeButton(r5, r3);
@@ -217,69 +240,37 @@ public class EditTextCaption extends EditTextBoldCursor {
         this.selectionEnd = i2;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:13:0x002d  */
-    /* JADX WARNING: Removed duplicated region for block: B:20:0x0049  */
-    /* JADX WARNING: Removed duplicated region for block: B:28:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:23:0x0050  */
-    private void applyTextStyleToSelection(org.telegram.ui.Components.TypefaceSpan r10) {
+    /* JADX WARNING: Removed duplicated region for block: B:10:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:8:0x0026  */
+    private void applyTextStyleToSelection(org.telegram.ui.Components.TextStyleSpan r5) {
         /*
-        r9 = this;
-        r0 = r9.selectionStart;
+        r4 = this;
+        r0 = r4.selectionStart;
         if (r0 < 0) goto L_0x000e;
     L_0x0004:
-        r1 = r9.selectionEnd;
+        r1 = r4.selectionEnd;
         if (r1 < 0) goto L_0x000e;
     L_0x0008:
         r2 = -1;
-        r9.selectionEnd = r2;
-        r9.selectionStart = r2;
+        r4.selectionEnd = r2;
+        r4.selectionStart = r2;
         goto L_0x0016;
     L_0x000e:
-        r0 = r9.getSelectionStart();
-        r1 = r9.getSelectionEnd();
+        r0 = r4.getSelectionStart();
+        r1 = r4.getSelectionEnd();
     L_0x0016:
-        r2 = r9.getText();
-        r3 = android.text.style.CharacterStyle.class;
-        r3 = r2.getSpans(r0, r1, r3);
-        r3 = (android.text.style.CharacterStyle[]) r3;
-        r4 = 33;
-        if (r3 == 0) goto L_0x0047;
+        r4.getText();
+        r2 = r4.getText();
+        r3 = r4.allowTextEntitiesIntersection;
+        org.telegram.messenger.MediaDataController.addStyleToText(r5, r0, r1, r2, r3);
+        r5 = r4.delegate;
+        if (r5 == 0) goto L_0x0029;
     L_0x0026:
-        r5 = r3.length;
-        if (r5 <= 0) goto L_0x0047;
+        r5.onSpansChanged();
     L_0x0029:
-        r5 = 0;
-    L_0x002a:
-        r6 = r3.length;
-        if (r5 >= r6) goto L_0x0047;
-    L_0x002d:
-        r6 = r3[r5];
-        r7 = r2.getSpanStart(r6);
-        r8 = r2.getSpanEnd(r6);
-        r2.removeSpan(r6);
-        if (r7 >= r0) goto L_0x003f;
-    L_0x003c:
-        r2.setSpan(r6, r7, r0, r4);
-    L_0x003f:
-        if (r8 <= r1) goto L_0x0044;
-    L_0x0041:
-        r2.setSpan(r6, r1, r8, r4);
-    L_0x0044:
-        r5 = r5 + 1;
-        goto L_0x002a;
-    L_0x0047:
-        if (r10 == 0) goto L_0x004c;
-    L_0x0049:
-        r2.setSpan(r10, r0, r1, r4);
-    L_0x004c:
-        r10 = r9.delegate;
-        if (r10 == 0) goto L_0x0053;
-    L_0x0050:
-        r10.onSpansChanged();
-    L_0x0053:
         return;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.EditTextCaption.applyTextStyleToSelection(org.telegram.ui.Components.TypefaceSpan):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.EditTextCaption.applyTextStyleToSelection(org.telegram.ui.Components.TextStyleSpan):void");
     }
 
     public void onWindowFocusChanged(boolean z) {
@@ -318,6 +309,14 @@ public class EditTextCaption extends EditTextBoldCursor {
                     return true;
                 } else if (menuItem.getItemId() == NUM) {
                     EditTextCaption.this.makeSelectedUrl();
+                    actionMode.finish();
+                    return true;
+                } else if (menuItem.getItemId() == NUM) {
+                    EditTextCaption.this.makeSelectedStrike();
+                    actionMode.finish();
+                    return true;
+                } else if (menuItem.getItemId() == NUM) {
+                    EditTextCaption.this.makeSelectedUnderline();
                     actionMode.finish();
                     return true;
                 } else {

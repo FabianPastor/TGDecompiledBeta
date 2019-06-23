@@ -4,7 +4,6 @@ import android.os.SystemClock;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
-import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
@@ -68,9 +67,8 @@ import org.telegram.tgnet.TLRPC.User;
 import org.telegram.tgnet.TLRPC.UserProfilePhoto;
 import org.telegram.tgnet.TLRPC.WebPage;
 
-public class FileRefController {
+public class FileRefController extends BaseController {
     private static volatile FileRefController[] Instance = new FileRefController[3];
-    private int currentAccount;
     private long lastCleanupTime = SystemClock.uptimeMillis();
     private HashMap<String, ArrayList<Requester>> locationRequester = new HashMap();
     private HashMap<TL_messages_sendMultiMedia, Object[]> multiMediaCache = new HashMap();
@@ -122,7 +120,7 @@ public class FileRefController {
     }
 
     public FileRefController(int i) {
-        this.currentAccount = i;
+        super(i);
     }
 
     public static String getKeyForParentObject(Object obj) {
@@ -449,14 +447,14 @@ public class FileRefController {
             channelId = messageObject.getChannelId();
             if (channelId != 0) {
                 TL_channels_getMessages tL_channels_getMessages = new TL_channels_getMessages();
-                tL_channels_getMessages.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(channelId);
+                tL_channels_getMessages.channel = getMessagesController().getInputChannel(channelId);
                 tL_channels_getMessages.id.add(Integer.valueOf(messageObject.getRealId()));
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_channels_getMessages, new -$$Lambda$FileRefController$bJSiLyN_Loo2lNffdEwzSUZ6du0(this, str, str2));
+                getConnectionsManager().sendRequest(tL_channels_getMessages, new -$$Lambda$FileRefController$bJSiLyN_Loo2lNffdEwzSUZ6du0(this, str, str2));
                 return;
             }
             tL_messages_getMessages = new TL_messages_getMessages();
             tL_messages_getMessages.id.add(Integer.valueOf(messageObject.getRealId()));
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_messages_getMessages, new -$$Lambda$FileRefController$iH_RpP96708b-YCozHWKOTcxbr4(this, str, str2));
+            getConnectionsManager().sendRequest(tL_messages_getMessages, new -$$Lambda$FileRefController$iH_RpP96708b-YCozHWKOTcxbr4(this, str, str2));
         } else if (obj instanceof TL_wallPaper) {
             TL_wallPaper tL_wallPaper = (TL_wallPaper) obj;
             TL_account_getWallPaper tL_account_getWallPaper = new TL_account_getWallPaper();
@@ -464,39 +462,39 @@ public class FileRefController {
             tL_inputWallPaper.id = tL_wallPaper.id;
             tL_inputWallPaper.access_hash = tL_wallPaper.access_hash;
             tL_account_getWallPaper.wallpaper = tL_inputWallPaper;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_account_getWallPaper, new -$$Lambda$FileRefController$l7gUgVrfRVPQOPlPV4-4bUexFYw(this, str, str2));
+            getConnectionsManager().sendRequest(tL_account_getWallPaper, new -$$Lambda$FileRefController$l7gUgVrfRVPQOPlPV4-4bUexFYw(this, str, str2));
         } else if (obj instanceof WebPage) {
             WebPage webPage = (WebPage) obj;
             TL_messages_getWebPage tL_messages_getWebPage = new TL_messages_getWebPage();
             tL_messages_getWebPage.url = webPage.url;
             tL_messages_getWebPage.hash = 0;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_messages_getWebPage, new -$$Lambda$FileRefController$ZZalHmw878mE45n2TIDtpdup6rk(this, str, str2));
+            getConnectionsManager().sendRequest(tL_messages_getWebPage, new -$$Lambda$FileRefController$ZZalHmw878mE45n2TIDtpdup6rk(this, str, str2));
         } else if (obj instanceof User) {
             User user = (User) obj;
             TL_users_getUsers tL_users_getUsers = new TL_users_getUsers();
-            tL_users_getUsers.id.add(MessagesController.getInstance(this.currentAccount).getInputUser(user));
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_users_getUsers, new -$$Lambda$FileRefController$PPQViQbtvXgiD0HkQf0oK3_ZBkE(this, str, str2));
+            tL_users_getUsers.id.add(getMessagesController().getInputUser(user));
+            getConnectionsManager().sendRequest(tL_users_getUsers, new -$$Lambda$FileRefController$PPQViQbtvXgiD0HkQf0oK3_ZBkE(this, str, str2));
         } else if (obj instanceof Chat) {
             Chat chat = (Chat) obj;
             if (chat instanceof TL_chat) {
                 TL_messages_getChats tL_messages_getChats = new TL_messages_getChats();
                 tL_messages_getChats.id.add(Integer.valueOf(chat.id));
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_messages_getChats, new -$$Lambda$FileRefController$7qx1abCFn6GfdxglKDbFuGfloVQ(this, str, str2));
+                getConnectionsManager().sendRequest(tL_messages_getChats, new -$$Lambda$FileRefController$7qx1abCFn6GfdxglKDbFuGfloVQ(this, str, str2));
             } else if (chat instanceof TL_channel) {
                 TL_channels_getChannels tL_channels_getChannels = new TL_channels_getChannels();
                 tL_channels_getChannels.id.add(MessagesController.getInputChannel(chat));
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_channels_getChannels, new -$$Lambda$FileRefController$MN7WJPmFdFnXGwTYeLjLskDZA_s(this, str, str2));
+                getConnectionsManager().sendRequest(tL_channels_getChannels, new -$$Lambda$FileRefController$MN7WJPmFdFnXGwTYeLjLskDZA_s(this, str, str2));
             }
         } else if (obj instanceof String) {
             String str3 = (String) obj;
             if ("wallpaper".equals(str3)) {
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getWallPapers(), new -$$Lambda$FileRefController$hU-_PNtgoV5UVJ0PgXNS0w6t-Ck(this, str, str2));
+                getConnectionsManager().sendRequest(new TL_account_getWallPapers(), new -$$Lambda$FileRefController$hU-_PNtgoV5UVJ0PgXNS0w6t-Ck(this, str, str2));
             } else if (str3.startsWith("gif")) {
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_messages_getSavedGifs(), new -$$Lambda$FileRefController$XmvlggjDShdh6wwrH2NBXtZN860(this, str, str2));
+                getConnectionsManager().sendRequest(new TL_messages_getSavedGifs(), new -$$Lambda$FileRefController$XmvlggjDShdh6wwrH2NBXtZN860(this, str, str2));
             } else if ("recent".equals(str3)) {
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_messages_getRecentStickers(), new -$$Lambda$FileRefController$1aFkU4DGV4no_EoB8k2dbx7DLBY(this, str, str2));
+                getConnectionsManager().sendRequest(new TL_messages_getRecentStickers(), new -$$Lambda$FileRefController$1aFkU4DGV4no_EoB8k2dbx7DLBY(this, str, str2));
             } else if ("fav".equals(str3)) {
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_messages_getFavedStickers(), new -$$Lambda$FileRefController$4w92eKYUWTkjdDZrk7Ab6kZgCz4(this, str, str2));
+                getConnectionsManager().sendRequest(new TL_messages_getFavedStickers(), new -$$Lambda$FileRefController$4w92eKYUWTkjdDZrk7Ab6kZgCz4(this, str, str2));
             } else if (str3.startsWith("avatar_")) {
                 int intValue = Utilities.parseInt(str3).intValue();
                 if (intValue > 0) {
@@ -504,8 +502,8 @@ public class FileRefController {
                     tL_photos_getUserPhotos.limit = 80;
                     tL_photos_getUserPhotos.offset = 0;
                     tL_photos_getUserPhotos.max_id = 0;
-                    tL_photos_getUserPhotos.user_id = MessagesController.getInstance(this.currentAccount).getInputUser(intValue);
-                    ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_photos_getUserPhotos, new -$$Lambda$FileRefController$lc6KWNmCjlTmUjUWy2DU6yide1g(this, str, str2));
+                    tL_photos_getUserPhotos.user_id = getMessagesController().getInputUser(intValue);
+                    getConnectionsManager().sendRequest(tL_photos_getUserPhotos, new -$$Lambda$FileRefController$lc6KWNmCjlTmUjUWy2DU6yide1g(this, str, str2));
                     return;
                 }
                 TL_messages_search tL_messages_search = new TL_messages_search();
@@ -513,22 +511,22 @@ public class FileRefController {
                 tL_messages_search.limit = 80;
                 tL_messages_search.offset_id = 0;
                 tL_messages_search.q = "";
-                tL_messages_search.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(intValue);
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_messages_search, new -$$Lambda$FileRefController$WYAn7hVey6Q-NHtwvjaWCOxf8sA(this, str, str2));
+                tL_messages_search.peer = getMessagesController().getInputPeer(intValue);
+                getConnectionsManager().sendRequest(tL_messages_search, new -$$Lambda$FileRefController$WYAn7hVey6Q-NHtwvjaWCOxf8sA(this, str, str2));
             } else if (str3.startsWith("sent_")) {
                 String[] split = str3.split("_");
                 if (split.length == 3) {
                     channelId = Utilities.parseInt(split[1]).intValue();
                     if (channelId != 0) {
                         TL_channels_getMessages tL_channels_getMessages2 = new TL_channels_getMessages();
-                        tL_channels_getMessages2.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(channelId);
+                        tL_channels_getMessages2.channel = getMessagesController().getInputChannel(channelId);
                         tL_channels_getMessages2.id.add(Utilities.parseInt(split[2]));
-                        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_channels_getMessages2, new -$$Lambda$FileRefController$AUpNheLWJQs7kyRgJ6tIGIQTBNY(this, str, str2));
+                        getConnectionsManager().sendRequest(tL_channels_getMessages2, new -$$Lambda$FileRefController$AUpNheLWJQs7kyRgJ6tIGIQTBNY(this, str, str2));
                         return;
                     }
                     tL_messages_getMessages = new TL_messages_getMessages();
                     tL_messages_getMessages.id.add(Utilities.parseInt(split[2]));
-                    ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_messages_getMessages, new -$$Lambda$FileRefController$oHc4Ko0S36uJ174mUmftFNV5oEU(this, str, str2));
+                    getConnectionsManager().sendRequest(tL_messages_getMessages, new -$$Lambda$FileRefController$oHc4Ko0S36uJ174mUmftFNV5oEU(this, str, str2));
                     return;
                 }
                 sendErrorToObject(objArr, 0);
@@ -543,7 +541,7 @@ public class FileRefController {
             stickerSet = tL_messages_stickerSet.set;
             inputStickerSet.id = stickerSet.id;
             inputStickerSet.access_hash = stickerSet.access_hash;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_messages_getStickerSet, new -$$Lambda$FileRefController$exbLp78Kychyc6GzkLXULN8LNGg(this, str, str2));
+            getConnectionsManager().sendRequest(tL_messages_getStickerSet, new -$$Lambda$FileRefController$exbLp78Kychyc6GzkLXULN8LNGg(this, str, str2));
         } else if (obj instanceof StickerSetCovered) {
             StickerSetCovered stickerSetCovered = (StickerSetCovered) obj;
             tL_messages_getStickerSet = new TL_messages_getStickerSet();
@@ -552,11 +550,11 @@ public class FileRefController {
             stickerSet = stickerSetCovered.set;
             inputStickerSet.id = stickerSet.id;
             inputStickerSet.access_hash = stickerSet.access_hash;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_messages_getStickerSet, new -$$Lambda$FileRefController$oQwONz9oH9KbjBHI1GVgQcuvYoU(this, str, str2));
+            getConnectionsManager().sendRequest(tL_messages_getStickerSet, new -$$Lambda$FileRefController$oQwONz9oH9KbjBHI1GVgQcuvYoU(this, str, str2));
         } else if (obj instanceof InputStickerSet) {
             tL_messages_getStickerSet = new TL_messages_getStickerSet();
             tL_messages_getStickerSet.stickerset = (InputStickerSet) obj;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_messages_getStickerSet, new -$$Lambda$FileRefController$taVyElfntghqykv41aff7_1-UM8(this, str, str2));
+            getConnectionsManager().sendRequest(tL_messages_getStickerSet, new -$$Lambda$FileRefController$taVyElfntghqykv41aff7_1-UM8(this, str, str2));
         } else {
             sendErrorToObject(objArr, 0);
         }
@@ -669,7 +667,7 @@ public class FileRefController {
                     }
                     if (obj != null) {
                         this.multiMediaCache.remove(tL_messages_sendMultiMedia);
-                        SendMessagesHelper.getInstance(this.currentAccount).performSendMessageRequestMulti(tL_messages_sendMultiMedia, (ArrayList) objArr[1], (ArrayList) objArr[2], null, (DelayedMessage) objArr[4]);
+                        getSendMessagesHelper().performSendMessageRequestMulti(tL_messages_sendMultiMedia, (ArrayList) objArr[1], (ArrayList) objArr[2], null, (DelayedMessage) objArr[4]);
                     }
                 }
             }
@@ -680,7 +678,7 @@ public class FileRefController {
             } else if (inputMedia instanceof TL_inputMediaPhoto) {
                 ((TL_inputMediaPhoto) inputMedia).id.file_reference = bArr2;
             }
-            SendMessagesHelper.getInstance(this.currentAccount).performSendMessageRequest((TLObject) requester.args[0], (MessageObject) requester.args[1], (String) requester.args[2], (DelayedMessage) requester.args[3], ((Boolean) requester.args[4]).booleanValue(), (DelayedMessage) requester.args[5], null);
+            getSendMessagesHelper().performSendMessageRequest((TLObject) requester.args[0], (MessageObject) requester.args[1], (String) requester.args[2], (DelayedMessage) requester.args[3], ((Boolean) requester.args[4]).booleanValue(), (DelayedMessage) requester.args[5], null);
         } else if (requester.args[0] instanceof TL_messages_editMessage) {
             inputMedia = ((TL_messages_editMessage) requester.args[0]).media;
             if (inputMedia instanceof TL_inputMediaDocument) {
@@ -688,19 +686,19 @@ public class FileRefController {
             } else if (inputMedia instanceof TL_inputMediaPhoto) {
                 ((TL_inputMediaPhoto) inputMedia).id.file_reference = bArr2;
             }
-            SendMessagesHelper.getInstance(this.currentAccount).performSendMessageRequest((TLObject) requester.args[0], (MessageObject) requester.args[1], (String) requester.args[2], (DelayedMessage) requester.args[3], ((Boolean) requester.args[4]).booleanValue(), (DelayedMessage) requester.args[5], null);
+            getSendMessagesHelper().performSendMessageRequest((TLObject) requester.args[0], (MessageObject) requester.args[1], (String) requester.args[2], (DelayedMessage) requester.args[3], ((Boolean) requester.args[4]).booleanValue(), (DelayedMessage) requester.args[5], null);
         } else if (requester.args[0] instanceof TL_messages_saveGif) {
             TL_messages_saveGif tL_messages_saveGif = (TL_messages_saveGif) requester.args[0];
             tL_messages_saveGif.id.file_reference = bArr2;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_messages_saveGif, -$$Lambda$FileRefController$glsZ-ebv4-mT6CRmECvMkMDX4tM.INSTANCE);
+            getConnectionsManager().sendRequest(tL_messages_saveGif, -$$Lambda$FileRefController$glsZ-ebv4-mT6CRmECvMkMDX4tM.INSTANCE);
         } else if (requester.args[0] instanceof TL_messages_saveRecentSticker) {
             TL_messages_saveRecentSticker tL_messages_saveRecentSticker = (TL_messages_saveRecentSticker) requester.args[0];
             tL_messages_saveRecentSticker.id.file_reference = bArr2;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_messages_saveRecentSticker, -$$Lambda$FileRefController$7dnf8o-vZU8kWj-oHiGfTHxk_5E.INSTANCE);
+            getConnectionsManager().sendRequest(tL_messages_saveRecentSticker, -$$Lambda$FileRefController$7dnf8o-vZU8kWj-oHiGfTHxk_5E.INSTANCE);
         } else if (requester.args[0] instanceof TL_messages_faveSticker) {
             TL_messages_faveSticker tL_messages_faveSticker = (TL_messages_faveSticker) requester.args[0];
             tL_messages_faveSticker.id.file_reference = bArr2;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_messages_faveSticker, -$$Lambda$FileRefController$2YbOQ-Rvo_LvdJ_-ALCga2DKRrU.INSTANCE);
+            getConnectionsManager().sendRequest(tL_messages_faveSticker, -$$Lambda$FileRefController$2YbOQ-Rvo_LvdJ_-ALCga2DKRrU.INSTANCE);
         } else if (requester.args[0] instanceof TL_messages_getAttachedStickers) {
             TL_messages_getAttachedStickers tL_messages_getAttachedStickers = (TL_messages_getAttachedStickers) requester.args[0];
             InputStickeredMedia inputStickeredMedia = tL_messages_getAttachedStickers.media;
@@ -709,7 +707,7 @@ public class FileRefController {
             } else if (inputStickeredMedia instanceof TL_inputStickeredMediaPhoto) {
                 ((TL_inputStickeredMediaPhoto) inputStickeredMedia).id.file_reference = bArr2;
             }
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_messages_getAttachedStickers, (RequestDelegate) requester.args[1]);
+            getConnectionsManager().sendRequest(tL_messages_getAttachedStickers, (RequestDelegate) requester.args[1]);
         } else if (requester.args[1] instanceof FileLoadOperation) {
             FileLoadOperation fileLoadOperation = (FileLoadOperation) requester.args[1];
             if (inputFileLocation2 != null) {
@@ -728,10 +726,10 @@ public class FileRefController {
             objArr = (Object[]) this.multiMediaCache.get(tL_messages_sendMultiMedia);
             if (objArr != null) {
                 this.multiMediaCache.remove(tL_messages_sendMultiMedia);
-                SendMessagesHelper.getInstance(this.currentAccount).performSendMessageRequestMulti(tL_messages_sendMultiMedia, (ArrayList) objArr[1], (ArrayList) objArr[2], null, (DelayedMessage) objArr[4]);
+                getSendMessagesHelper().performSendMessageRequestMulti(tL_messages_sendMultiMedia, (ArrayList) objArr[1], (ArrayList) objArr[2], null, (DelayedMessage) objArr[4]);
             }
         } else if ((objArr[0] instanceof TL_messages_sendMedia) || (objArr[0] instanceof TL_messages_editMessage)) {
-            SendMessagesHelper.getInstance(this.currentAccount).performSendMessageRequest((TLObject) objArr[0], (MessageObject) objArr[1], (String) objArr[2], (DelayedMessage) objArr[3], ((Boolean) objArr[4]).booleanValue(), (DelayedMessage) objArr[5], null);
+            getSendMessagesHelper().performSendMessageRequest((TLObject) objArr[0], (MessageObject) objArr[1], (String) objArr[2], (DelayedMessage) objArr[3], ((Boolean) objArr[4]).booleanValue(), (DelayedMessage) objArr[5], null);
         } else if (objArr[0] instanceof TL_messages_saveGif) {
             TL_messages_saveGif tL_messages_saveGif = (TL_messages_saveGif) objArr[0];
         } else if (objArr[0] instanceof TL_messages_saveRecentSticker) {
@@ -739,7 +737,7 @@ public class FileRefController {
         } else if (objArr[0] instanceof TL_messages_faveSticker) {
             TL_messages_faveSticker tL_messages_faveSticker = (TL_messages_faveSticker) objArr[0];
         } else if (objArr[0] instanceof TL_messages_getAttachedStickers) {
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest((TL_messages_getAttachedStickers) objArr[0], (RequestDelegate) objArr[1]);
+            getConnectionsManager().sendRequest((TL_messages_getAttachedStickers) objArr[0], (RequestDelegate) objArr[1]);
         } else if (i == 0) {
             TL_error tL_error = new TL_error();
             tL_error.text = "not found parent object to request reference";
@@ -756,15 +754,15 @@ public class FileRefController {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:78:0x0163  */
-    /* JADX WARNING: Removed duplicated region for block: B:78:0x0163  */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x0155 A:{LOOP_END, LOOP:2: B:37:0x009b->B:74:0x0155} */
+    /* JADX WARNING: Removed duplicated region for block: B:78:0x0161  */
+    /* JADX WARNING: Removed duplicated region for block: B:78:0x0161  */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x0153 A:{LOOP_END, LOOP:2: B:37:0x009b->B:74:0x0153} */
     /* JADX WARNING: Removed duplicated region for block: B:199:0x0103 A:{SYNTHETIC} */
     /* JADX WARNING: Removed duplicated region for block: B:199:0x0103 A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x0155 A:{LOOP_END, LOOP:2: B:37:0x009b->B:74:0x0155} */
-    /* JADX WARNING: Removed duplicated region for block: B:78:0x0163  */
-    /* JADX WARNING: Removed duplicated region for block: B:185:0x040c  */
-    /* JADX WARNING: Removed duplicated region for block: B:181:0x03fe  */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x0153 A:{LOOP_END, LOOP:2: B:37:0x009b->B:74:0x0153} */
+    /* JADX WARNING: Removed duplicated region for block: B:78:0x0161  */
+    /* JADX WARNING: Removed duplicated region for block: B:185:0x03f8  */
+    /* JADX WARNING: Removed duplicated region for block: B:181:0x03ea  */
     /* JADX WARNING: Removed duplicated region for block: B:24:0x0057  */
     /* JADX WARNING: Removed duplicated region for block: B:23:0x0056 A:{RETURN} */
     private boolean onRequestComplete(java.lang.String r25, java.lang.String r26, org.telegram.tgnet.TLObject r27, boolean r28) {
@@ -837,7 +835,7 @@ public class FileRefController {
         r12 = r11;
         r8 = 0;
     L_0x005f:
-        if (r8 >= r7) goto L_0x041d;
+        if (r8 >= r7) goto L_0x0409;
     L_0x0061:
         r13 = r2.get(r8);
         r13 = (org.telegram.messenger.FileRefController.Requester) r13;
@@ -848,7 +846,7 @@ public class FileRefController {
         r14 = r4;
         r2 = 0;
         r5 = 1;
-        goto L_0x0415;
+        goto L_0x0401;
     L_0x0074:
         r14 = r13.location;
         r14 = r14 instanceof org.telegram.tgnet.TLRPC.TL_inputFileLocation;
@@ -859,20 +857,20 @@ public class FileRefController {
     L_0x0080:
         r13.completed = r6;
         r14 = r3 instanceof org.telegram.tgnet.TLRPC.messages_Messages;
-        if (r14 == 0) goto L_0x0192;
+        if (r14 == 0) goto L_0x018e;
     L_0x0087:
         r14 = r3;
         r14 = (org.telegram.tgnet.TLRPC.messages_Messages) r14;
         r15 = r14.messages;
         r15 = r15.isEmpty();
-        if (r15 != 0) goto L_0x018f;
+        if (r15 != 0) goto L_0x018b;
     L_0x0092:
         r15 = r14.messages;
         r15 = r15.size();
         r16 = r12;
         r12 = 0;
     L_0x009b:
-        if (r12 >= r15) goto L_0x015d;
+        if (r12 >= r15) goto L_0x015b;
     L_0x009d:
         r4 = r14.messages;
         r4 = r4.get(r12);
@@ -926,9 +924,9 @@ public class FileRefController {
     L_0x00ff:
         r16 = r5;
     L_0x0101:
-        if (r16 == 0) goto L_0x0155;
+        if (r16 == 0) goto L_0x0153;
     L_0x0103:
-        if (r28 == 0) goto L_0x015d;
+        if (r28 == 0) goto L_0x015b;
     L_0x0105:
         r5 = r4.to_id;
         if (r5 == 0) goto L_0x0139;
@@ -966,8 +964,7 @@ public class FileRefController {
     L_0x0139:
         r26 = r2;
     L_0x013b:
-        r2 = r0.currentAccount;
-        r18 = org.telegram.messenger.MessagesStorage.getInstance(r2);
+        r18 = r24.getMessagesStorage();
         r2 = r0.currentAccount;
         r5 = r14.users;
         r6 = r14.chats;
@@ -977,21 +974,20 @@ public class FileRefController {
         r21 = r5;
         r22 = r6;
         r18.replaceMessageIfExists(r19, r20, r21, r22, r23);
-        goto L_0x015f;
-    L_0x0155:
+        goto L_0x015d;
+    L_0x0153:
         r26 = r2;
         r12 = r12 + 1;
         r4 = 0;
         r6 = 1;
         goto L_0x009b;
-    L_0x015d:
+    L_0x015b:
         r26 = r2;
-    L_0x015f:
+    L_0x015d:
         r12 = r16;
-        if (r12 != 0) goto L_0x01a3;
-    L_0x0163:
-        r2 = r0.currentAccount;
-        r18 = org.telegram.messenger.MessagesStorage.getInstance(r2);
+        if (r12 != 0) goto L_0x019f;
+    L_0x0161:
+        r18 = r24.getMessagesStorage();
         r2 = r14.messages;
         r4 = 0;
         r2 = r2.get(r4);
@@ -1006,115 +1002,112 @@ public class FileRefController {
         r22 = r5;
         r18.replaceMessageIfExists(r19, r20, r21, r22, r23);
         r2 = org.telegram.messenger.BuildVars.DEBUG_VERSION;
-        if (r2 == 0) goto L_0x01a3;
-    L_0x0189:
+        if (r2 == 0) goto L_0x019f;
+    L_0x0185:
         r2 = "file ref not found in messages, replacing message";
         org.telegram.messenger.FileLog.d(r2);
-        goto L_0x01a3;
-    L_0x018f:
+        goto L_0x019f;
+    L_0x018b:
         r26 = r2;
-        goto L_0x01a3;
-    L_0x0192:
+        goto L_0x019f;
+    L_0x018e:
         r26 = r2;
         r2 = r3 instanceof org.telegram.tgnet.TLRPC.WebPage;
-        if (r2 == 0) goto L_0x01a6;
-    L_0x0198:
+        if (r2 == 0) goto L_0x01a2;
+    L_0x0194:
         r2 = r3;
         r2 = (org.telegram.tgnet.TLRPC.WebPage) r2;
         r4 = r13.location;
         r12 = r0.getFileReference(r2, r4, r9, r11);
-    L_0x01a3:
+    L_0x019f:
         r14 = 0;
-        goto L_0x03fc;
-    L_0x01a6:
+        goto L_0x03e8;
+    L_0x01a2:
         r2 = r3 instanceof org.telegram.tgnet.TLRPC.TL_account_wallPapers;
-        if (r2 == 0) goto L_0x01df;
-    L_0x01aa:
+        if (r2 == 0) goto L_0x01d9;
+    L_0x01a6:
         r2 = r3;
         r2 = (org.telegram.tgnet.TLRPC.TL_account_wallPapers) r2;
         r4 = r2.wallpapers;
         r4 = r4.size();
         r5 = 0;
-    L_0x01b4:
-        if (r5 >= r4) goto L_0x01ce;
-    L_0x01b6:
+    L_0x01b0:
+        if (r5 >= r4) goto L_0x01ca;
+    L_0x01b2:
         r6 = r2.wallpapers;
         r6 = r6.get(r5);
         r6 = (org.telegram.tgnet.TLRPC.TL_wallPaper) r6;
         r6 = r6.document;
         r12 = r13.location;
         r12 = r0.getFileReference(r6, r12, r9, r11);
-        if (r12 == 0) goto L_0x01cb;
-    L_0x01ca:
-        goto L_0x01ce;
-    L_0x01cb:
+        if (r12 == 0) goto L_0x01c7;
+    L_0x01c6:
+        goto L_0x01ca;
+    L_0x01c7:
         r5 = r5 + 1;
-        goto L_0x01b4;
+        goto L_0x01b0;
+    L_0x01ca:
+        if (r12 == 0) goto L_0x019f;
+    L_0x01cc:
+        if (r28 == 0) goto L_0x019f;
     L_0x01ce:
-        if (r12 == 0) goto L_0x01a3;
-    L_0x01d0:
-        if (r28 == 0) goto L_0x01a3;
-    L_0x01d2:
-        r4 = r0.currentAccount;
-        r4 = org.telegram.messenger.MessagesStorage.getInstance(r4);
+        r4 = r24.getMessagesStorage();
         r2 = r2.wallpapers;
         r5 = 1;
         r4.putWallpapers(r2, r5);
-        goto L_0x01a3;
-    L_0x01df:
+        goto L_0x019f;
+    L_0x01d9:
         r2 = r3 instanceof org.telegram.tgnet.TLRPC.TL_wallPaper;
-        if (r2 == 0) goto L_0x0207;
-    L_0x01e3:
+        if (r2 == 0) goto L_0x01ff;
+    L_0x01dd:
         r2 = r3;
         r2 = (org.telegram.tgnet.TLRPC.TL_wallPaper) r2;
         r4 = r2.document;
         r5 = r13.location;
         r12 = r0.getFileReference(r4, r5, r9, r11);
-        if (r12 == 0) goto L_0x01a3;
-    L_0x01f2:
-        if (r28 == 0) goto L_0x01a3;
-    L_0x01f4:
+        if (r12 == 0) goto L_0x019f;
+    L_0x01ec:
+        if (r28 == 0) goto L_0x019f;
+    L_0x01ee:
         r4 = new java.util.ArrayList;
         r4.<init>();
         r4.add(r2);
-        r2 = r0.currentAccount;
-        r2 = org.telegram.messenger.MessagesStorage.getInstance(r2);
+        r2 = r24.getMessagesStorage();
         r5 = 0;
         r2.putWallpapers(r4, r5);
-        goto L_0x01a3;
-    L_0x0207:
+        goto L_0x019f;
+    L_0x01ff:
         r2 = r3 instanceof org.telegram.tgnet.TLRPC.Vector;
-        if (r2 == 0) goto L_0x0299;
-    L_0x020b:
+        if (r2 == 0) goto L_0x028d;
+    L_0x0203:
         r2 = r3;
         r2 = (org.telegram.tgnet.TLRPC.Vector) r2;
         r4 = r2.objects;
         r4 = r4.isEmpty();
-        if (r4 != 0) goto L_0x01a3;
-    L_0x0216:
+        if (r4 != 0) goto L_0x019f;
+    L_0x020e:
         r4 = r2.objects;
         r4 = r4.size();
         r5 = 0;
-    L_0x021d:
-        if (r5 >= r4) goto L_0x01a3;
-    L_0x021f:
+    L_0x0215:
+        if (r5 >= r4) goto L_0x019f;
+    L_0x0217:
         r6 = r2.objects;
         r6 = r6.get(r5);
         r14 = r6 instanceof org.telegram.tgnet.TLRPC.User;
-        if (r14 == 0) goto L_0x025c;
-    L_0x0229:
+        if (r14 == 0) goto L_0x0252;
+    L_0x0221:
         r6 = (org.telegram.tgnet.TLRPC.User) r6;
         r12 = r13.location;
         r12 = r0.getFileReference(r6, r12, r9, r11);
-        if (r28 == 0) goto L_0x0257;
-    L_0x0235:
-        if (r12 == 0) goto L_0x0257;
-    L_0x0237:
+        if (r28 == 0) goto L_0x024d;
+    L_0x022d:
+        if (r12 == 0) goto L_0x024d;
+    L_0x022f:
         r14 = new java.util.ArrayList;
         r14.<init>();
         r14.add(r6);
-        r15 = r0.currentAccount;
-        r15 = org.telegram.messenger.MessagesStorage.getInstance(r15);
+        r15 = r24.getMessagesStorage();
         r16 = r2;
         r18 = r4;
         r2 = 0;
@@ -1123,116 +1116,113 @@ public class FileRefController {
         r2 = new org.telegram.messenger.-$$Lambda$FileRefController$-CZgXfaxqSfurGMxYgHRkXa2trY;
         r2.<init>(r0, r6);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r2);
-        goto L_0x028e;
-    L_0x0257:
+        goto L_0x0282;
+    L_0x024d:
         r16 = r2;
         r18 = r4;
-        goto L_0x028e;
-    L_0x025c:
+        goto L_0x0282;
+    L_0x0252:
         r16 = r2;
         r18 = r4;
         r2 = r6 instanceof org.telegram.tgnet.TLRPC.Chat;
-        if (r2 == 0) goto L_0x028e;
-    L_0x0264:
+        if (r2 == 0) goto L_0x0282;
+    L_0x025a:
         r6 = (org.telegram.tgnet.TLRPC.Chat) r6;
         r2 = r13.location;
         r2 = r0.getFileReference(r6, r2, r9, r11);
-        if (r28 == 0) goto L_0x028d;
-    L_0x0270:
-        if (r2 == 0) goto L_0x028d;
-    L_0x0272:
+        if (r28 == 0) goto L_0x0281;
+    L_0x0266:
+        if (r2 == 0) goto L_0x0281;
+    L_0x0268:
         r4 = new java.util.ArrayList;
         r4.<init>();
         r4.add(r6);
-        r12 = r0.currentAccount;
-        r12 = org.telegram.messenger.MessagesStorage.getInstance(r12);
+        r12 = r24.getMessagesStorage();
         r14 = 0;
         r15 = 1;
         r12.putUsersAndChats(r14, r4, r15, r15);
         r4 = new org.telegram.messenger.-$$Lambda$FileRefController$ezrB_EEVIghp6y7yWEa40dOLdLU;
         r4.<init>(r0, r6);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r4);
-    L_0x028d:
+    L_0x0281:
         r12 = r2;
-    L_0x028e:
-        if (r12 == 0) goto L_0x0292;
-    L_0x0290:
-        goto L_0x01a3;
-    L_0x0292:
+    L_0x0282:
+        if (r12 == 0) goto L_0x0286;
+    L_0x0284:
+        goto L_0x019f;
+    L_0x0286:
         r5 = r5 + 1;
         r2 = r16;
         r4 = r18;
-        goto L_0x021d;
-    L_0x0299:
+        goto L_0x0215;
+    L_0x028d:
         r2 = r3 instanceof org.telegram.tgnet.TLRPC.TL_messages_chats;
-        if (r2 == 0) goto L_0x02e6;
-    L_0x029d:
+        if (r2 == 0) goto L_0x02d8;
+    L_0x0291:
         r2 = r3;
         r2 = (org.telegram.tgnet.TLRPC.TL_messages_chats) r2;
         r4 = r2.chats;
         r4 = r4.isEmpty();
-        if (r4 != 0) goto L_0x01a3;
-    L_0x02a8:
+        if (r4 != 0) goto L_0x019f;
+    L_0x029c:
         r4 = r2.chats;
         r4 = r4.size();
         r5 = 0;
-    L_0x02af:
-        if (r5 >= r4) goto L_0x01a3;
-    L_0x02b1:
+    L_0x02a3:
+        if (r5 >= r4) goto L_0x019f;
+    L_0x02a5:
         r6 = r2.chats;
         r6 = r6.get(r5);
         r6 = (org.telegram.tgnet.TLRPC.Chat) r6;
         r12 = r13.location;
         r12 = r0.getFileReference(r6, r12, r9, r11);
-        if (r12 == 0) goto L_0x02e2;
-    L_0x02c3:
-        if (r28 == 0) goto L_0x01a3;
-    L_0x02c5:
+        if (r12 == 0) goto L_0x02d4;
+    L_0x02b7:
+        if (r28 == 0) goto L_0x019f;
+    L_0x02b9:
         r2 = new java.util.ArrayList;
         r2.<init>();
         r2.add(r6);
-        r4 = r0.currentAccount;
-        r4 = org.telegram.messenger.MessagesStorage.getInstance(r4);
+        r4 = r24.getMessagesStorage();
         r5 = 1;
         r14 = 0;
         r4.putUsersAndChats(r14, r2, r5, r5);
         r2 = new org.telegram.messenger.-$$Lambda$FileRefController$wxZbkcK98NrwAinOuNo_DdhwDyk;
         r2.<init>(r0, r6);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r2);
-        goto L_0x03fc;
-    L_0x02e2:
+        goto L_0x03e8;
+    L_0x02d4:
         r14 = 0;
         r5 = r5 + 1;
-        goto L_0x02af;
-    L_0x02e6:
+        goto L_0x02a3;
+    L_0x02d8:
         r14 = 0;
         r2 = r3 instanceof org.telegram.tgnet.TLRPC.TL_messages_savedGifs;
-        if (r2 == 0) goto L_0x0326;
-    L_0x02eb:
+        if (r2 == 0) goto L_0x0316;
+    L_0x02dd:
         r2 = r3;
         r2 = (org.telegram.tgnet.TLRPC.TL_messages_savedGifs) r2;
         r4 = r2.gifs;
         r4 = r4.size();
         r5 = 0;
-    L_0x02f5:
-        if (r5 >= r4) goto L_0x030d;
-    L_0x02f7:
+    L_0x02e7:
+        if (r5 >= r4) goto L_0x02ff;
+    L_0x02e9:
         r6 = r2.gifs;
         r6 = r6.get(r5);
         r6 = (org.telegram.tgnet.TLRPC.Document) r6;
         r12 = r13.location;
         r12 = r0.getFileReference(r6, r12, r9, r11);
-        if (r12 == 0) goto L_0x030a;
-    L_0x0309:
-        goto L_0x030d;
-    L_0x030a:
+        if (r12 == 0) goto L_0x02fc;
+    L_0x02fb:
+        goto L_0x02ff;
+    L_0x02fc:
         r5 = r5 + 1;
-        goto L_0x02f5;
-    L_0x030d:
-        if (r28 == 0) goto L_0x03fc;
-    L_0x030f:
-        r4 = r0.currentAccount;
-        r15 = org.telegram.messenger.DataQuery.getInstance(r4);
+        goto L_0x02e7;
+    L_0x02ff:
+        if (r28 == 0) goto L_0x03e8;
+    L_0x0301:
+        r15 = r24.getMediaDataController();
         r16 = 0;
         r2 = r2.gifs;
         r18 = 1;
@@ -1240,67 +1230,66 @@ public class FileRefController {
         r20 = 1;
         r17 = r2;
         r15.processLoadedRecentDocuments(r16, r17, r18, r19, r20);
-        goto L_0x03fc;
-    L_0x0326:
+        goto L_0x03e8;
+    L_0x0316:
         r2 = r3 instanceof org.telegram.tgnet.TLRPC.TL_messages_stickerSet;
-        if (r2 == 0) goto L_0x035a;
-    L_0x032a:
+        if (r2 == 0) goto L_0x034a;
+    L_0x031a:
         r2 = r3;
         r2 = (org.telegram.tgnet.TLRPC.TL_messages_stickerSet) r2;
-        if (r12 != 0) goto L_0x034e;
-    L_0x032f:
+        if (r12 != 0) goto L_0x033e;
+    L_0x031f:
         r4 = r2.documents;
         r4 = r4.size();
         r5 = 0;
-    L_0x0336:
-        if (r5 >= r4) goto L_0x034e;
-    L_0x0338:
+    L_0x0326:
+        if (r5 >= r4) goto L_0x033e;
+    L_0x0328:
         r6 = r2.documents;
         r6 = r6.get(r5);
         r6 = (org.telegram.tgnet.TLRPC.Document) r6;
         r12 = r13.location;
         r12 = r0.getFileReference(r6, r12, r9, r11);
-        if (r12 == 0) goto L_0x034b;
-    L_0x034a:
-        goto L_0x034e;
-    L_0x034b:
+        if (r12 == 0) goto L_0x033b;
+    L_0x033a:
+        goto L_0x033e;
+    L_0x033b:
         r5 = r5 + 1;
-        goto L_0x0336;
-    L_0x034e:
-        if (r28 == 0) goto L_0x03fc;
-    L_0x0350:
+        goto L_0x0326;
+    L_0x033e:
+        if (r28 == 0) goto L_0x03e8;
+    L_0x0340:
         r4 = new org.telegram.messenger.-$$Lambda$FileRefController$FlgFGmJyAwG8D7Z8OYWnK63ajJo;
         r4.<init>(r0, r2);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(r4);
-        goto L_0x03fc;
-    L_0x035a:
+        goto L_0x03e8;
+    L_0x034a:
         r2 = r3 instanceof org.telegram.tgnet.TLRPC.TL_messages_recentStickers;
-        if (r2 == 0) goto L_0x0398;
-    L_0x035e:
+        if (r2 == 0) goto L_0x0386;
+    L_0x034e:
         r2 = r3;
         r2 = (org.telegram.tgnet.TLRPC.TL_messages_recentStickers) r2;
         r4 = r2.stickers;
         r4 = r4.size();
         r5 = 0;
-    L_0x0368:
-        if (r5 >= r4) goto L_0x0380;
-    L_0x036a:
+    L_0x0358:
+        if (r5 >= r4) goto L_0x0370;
+    L_0x035a:
         r6 = r2.stickers;
         r6 = r6.get(r5);
         r6 = (org.telegram.tgnet.TLRPC.Document) r6;
         r12 = r13.location;
         r12 = r0.getFileReference(r6, r12, r9, r11);
-        if (r12 == 0) goto L_0x037d;
-    L_0x037c:
-        goto L_0x0380;
-    L_0x037d:
+        if (r12 == 0) goto L_0x036d;
+    L_0x036c:
+        goto L_0x0370;
+    L_0x036d:
         r5 = r5 + 1;
-        goto L_0x0368;
-    L_0x0380:
-        if (r28 == 0) goto L_0x03fc;
-    L_0x0382:
-        r4 = r0.currentAccount;
-        r15 = org.telegram.messenger.DataQuery.getInstance(r4);
+        goto L_0x0358;
+    L_0x0370:
+        if (r28 == 0) goto L_0x03e8;
+    L_0x0372:
+        r15 = r24.getMediaDataController();
         r16 = 0;
         r2 = r2.stickers;
         r18 = 0;
@@ -1308,35 +1297,34 @@ public class FileRefController {
         r20 = 1;
         r17 = r2;
         r15.processLoadedRecentDocuments(r16, r17, r18, r19, r20);
-        goto L_0x03fc;
-    L_0x0398:
+        goto L_0x03e8;
+    L_0x0386:
         r2 = r3 instanceof org.telegram.tgnet.TLRPC.TL_messages_favedStickers;
-        if (r2 == 0) goto L_0x03d6;
-    L_0x039c:
+        if (r2 == 0) goto L_0x03c2;
+    L_0x038a:
         r2 = r3;
         r2 = (org.telegram.tgnet.TLRPC.TL_messages_favedStickers) r2;
         r4 = r2.stickers;
         r4 = r4.size();
         r5 = 0;
-    L_0x03a6:
-        if (r5 >= r4) goto L_0x03be;
-    L_0x03a8:
+    L_0x0394:
+        if (r5 >= r4) goto L_0x03ac;
+    L_0x0396:
         r6 = r2.stickers;
         r6 = r6.get(r5);
         r6 = (org.telegram.tgnet.TLRPC.Document) r6;
         r12 = r13.location;
         r12 = r0.getFileReference(r6, r12, r9, r11);
-        if (r12 == 0) goto L_0x03bb;
-    L_0x03ba:
-        goto L_0x03be;
-    L_0x03bb:
+        if (r12 == 0) goto L_0x03a9;
+    L_0x03a8:
+        goto L_0x03ac;
+    L_0x03a9:
         r5 = r5 + 1;
-        goto L_0x03a6;
-    L_0x03be:
-        if (r28 == 0) goto L_0x03fc;
-    L_0x03c0:
-        r4 = r0.currentAccount;
-        r15 = org.telegram.messenger.DataQuery.getInstance(r4);
+        goto L_0x0394;
+    L_0x03ac:
+        if (r28 == 0) goto L_0x03e8;
+    L_0x03ae:
+        r15 = r24.getMediaDataController();
         r16 = 2;
         r2 = r2.stickers;
         r18 = 0;
@@ -1344,83 +1332,83 @@ public class FileRefController {
         r20 = 1;
         r17 = r2;
         r15.processLoadedRecentDocuments(r16, r17, r18, r19, r20);
-        goto L_0x03fc;
-    L_0x03d6:
+        goto L_0x03e8;
+    L_0x03c2:
         r2 = r3 instanceof org.telegram.tgnet.TLRPC.photos_Photos;
-        if (r2 == 0) goto L_0x03fc;
-    L_0x03da:
+        if (r2 == 0) goto L_0x03e8;
+    L_0x03c6:
         r2 = r3;
         r2 = (org.telegram.tgnet.TLRPC.photos_Photos) r2;
         r4 = r2.photos;
         r4 = r4.size();
         r5 = 0;
-    L_0x03e4:
-        if (r5 >= r4) goto L_0x03fc;
-    L_0x03e6:
+    L_0x03d0:
+        if (r5 >= r4) goto L_0x03e8;
+    L_0x03d2:
         r6 = r2.photos;
         r6 = r6.get(r5);
         r6 = (org.telegram.tgnet.TLRPC.Photo) r6;
         r12 = r13.location;
         r12 = r0.getFileReference(r6, r12, r9, r11);
-        if (r12 == 0) goto L_0x03f9;
-    L_0x03f8:
-        goto L_0x03fc;
-    L_0x03f9:
+        if (r12 == 0) goto L_0x03e5;
+    L_0x03e4:
+        goto L_0x03e8;
+    L_0x03e5:
         r5 = r5 + 1;
-        goto L_0x03e4;
-    L_0x03fc:
-        if (r12 == 0) goto L_0x040c;
-    L_0x03fe:
-        if (r11 == 0) goto L_0x0404;
-    L_0x0400:
+        goto L_0x03d0;
+    L_0x03e8:
+        if (r12 == 0) goto L_0x03f8;
+    L_0x03ea:
+        if (r11 == 0) goto L_0x03f0;
+    L_0x03ec:
         r2 = 0;
         r4 = r11[r2];
-        goto L_0x0406;
-    L_0x0404:
+        goto L_0x03f2;
+    L_0x03f0:
         r2 = 0;
         r4 = r14;
-    L_0x0406:
+    L_0x03f2:
         r0.onUpdateObjectReference(r13, r12, r4);
         r5 = 1;
         r10 = 1;
-        goto L_0x0415;
-    L_0x040c:
+        goto L_0x0401;
+    L_0x03f8:
         r2 = 0;
         r4 = r13.args;
         r5 = 1;
         r0.sendErrorToObject(r4, r5);
-    L_0x0415:
+    L_0x0401:
         r8 = r8 + 1;
         r2 = r26;
         r4 = r14;
         r6 = 1;
         goto L_0x005f;
-    L_0x041d:
+    L_0x0409:
         r2 = r0.locationRequester;
         r2.remove(r1);
-        if (r10 == 0) goto L_0x0427;
-    L_0x0424:
+        if (r10 == 0) goto L_0x0413;
+    L_0x0410:
         r0.putReponseToCache(r1, r3);
-    L_0x0427:
+    L_0x0413:
         return r10;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.FileRefController.onRequestComplete(java.lang.String, java.lang.String, org.telegram.tgnet.TLObject, boolean):boolean");
     }
 
     public /* synthetic */ void lambda$onRequestComplete$21$FileRefController(User user) {
-        MessagesController.getInstance(this.currentAccount).putUser(user, false);
+        getMessagesController().putUser(user, false);
     }
 
     public /* synthetic */ void lambda$onRequestComplete$22$FileRefController(Chat chat) {
-        MessagesController.getInstance(this.currentAccount).putChat(chat, false);
+        getMessagesController().putChat(chat, false);
     }
 
     public /* synthetic */ void lambda$onRequestComplete$23$FileRefController(Chat chat) {
-        MessagesController.getInstance(this.currentAccount).putChat(chat, false);
+        getMessagesController().putChat(chat, false);
     }
 
     public /* synthetic */ void lambda$onRequestComplete$24$FileRefController(TL_messages_stickerSet tL_messages_stickerSet) {
-        DataQuery.getInstance(this.currentAccount).replaceStickerSet(tL_messages_stickerSet);
+        getMediaDataController().replaceStickerSet(tL_messages_stickerSet);
     }
 
     private void cleanupCache() {

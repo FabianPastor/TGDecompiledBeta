@@ -15,9 +15,9 @@ import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
@@ -46,6 +46,7 @@ import org.telegram.ui.Cells.HashtagSearchCell;
 import org.telegram.ui.Cells.HintDialogCell;
 import org.telegram.ui.Cells.LoadingCell;
 import org.telegram.ui.Cells.ProfileSearchCell;
+import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
@@ -133,7 +134,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         public void onBindViewHolder(ViewHolder viewHolder, int i) {
             Chat chat;
             HintDialogCell hintDialogCell = (HintDialogCell) viewHolder.itemView;
-            TL_topPeer tL_topPeer = (TL_topPeer) DataQuery.getInstance(DialogsSearchAdapter.this.currentAccount).hints.get(i);
+            TL_topPeer tL_topPeer = (TL_topPeer) MediaDataController.getInstance(DialogsSearchAdapter.this.currentAccount).hints.get(i);
             TL_dialog tL_dialog = new TL_dialog();
             Peer peer = tL_topPeer.peer;
             int i2 = peer.user_id;
@@ -163,7 +164,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         }
 
         public int getItemCount() {
-            return DataQuery.getInstance(DialogsSearchAdapter.this.currentAccount).hints.size();
+            return MediaDataController.getInstance(DialogsSearchAdapter.this.currentAccount).hints.size();
         }
     }
 
@@ -200,7 +201,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         this.dialogsType = i2;
         this.selfUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
         loadRecentSearch();
-        DataQuery.getInstance(this.currentAccount).loadHints(true);
+        MediaDataController.getInstance(this.currentAccount).loadHints(true);
     }
 
     public RecyclerListView getInnerListView() {
@@ -315,11 +316,18 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     }
 
     public boolean hasRecentRearch() {
-        return (this.recentSearchObjects.isEmpty() && DataQuery.getInstance(this.currentAccount).hints.isEmpty()) ? false : true;
+        int i = this.dialogsType;
+        return (i == 4 || i == 5 || i == 6 || (this.recentSearchObjects.isEmpty() && MediaDataController.getInstance(this.currentAccount).hints.isEmpty())) ? false : true;
     }
 
     public boolean isRecentSearchDisplayed() {
-        return (this.needMessagesSearch == 2 || this.searchWas || (this.recentSearchObjects.isEmpty() && DataQuery.getInstance(this.currentAccount).hints.isEmpty())) ? false : true;
+        if (!(this.needMessagesSearch == 2 || this.searchWas || (this.recentSearchObjects.isEmpty() && MediaDataController.getInstance(this.currentAccount).hints.isEmpty()))) {
+            int i = this.dialogsType;
+            if (!(i == 4 || i == 5 || i == 6)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void loadRecentSearch() {
@@ -634,44 +642,44 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:95:0x0252 A:{LOOP_END, LOOP:2: B:65:0x0194->B:95:0x0252, Catch:{ Exception -> 0x068b }} */
-    /* JADX WARNING: Removed duplicated region for block: B:276:0x01e7 A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:189:0x050b A:{LOOP_END, LOOP:6: B:150:0x0397->B:189:0x050b, Catch:{ Exception -> 0x068b }} */
-    /* JADX WARNING: Removed duplicated region for block: B:295:0x03e2 A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:252:0x0668 A:{LOOP_END, LOOP:10: B:223:0x05bc->B:252:0x0668, Catch:{ Exception -> 0x068b }} */
-    /* JADX WARNING: Removed duplicated region for block: B:306:0x060d A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:105:0x0267 A:{LOOP_END, Catch:{ Exception -> 0x06a4 }, LOOP:2: B:75:0x01a9->B:105:0x0267} */
+    /* JADX WARNING: Removed duplicated region for block: B:290:0x01fc A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:199:0x0520 A:{LOOP_END, Catch:{ Exception -> 0x06a4 }, LOOP:6: B:160:0x03ac->B:199:0x0520} */
+    /* JADX WARNING: Removed duplicated region for block: B:309:0x03f7 A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:262:0x0680 A:{LOOP_END, Catch:{ Exception -> 0x06a4 }, LOOP:10: B:233:0x05d3->B:262:0x0680} */
+    /* JADX WARNING: Removed duplicated region for block: B:319:0x0624 A:{SYNTHETIC} */
     public /* synthetic */ void lambda$searchDialogsInternal$8$DialogsSearchAdapter(java.lang.String r25, int r26) {
         /*
         r24 = this;
         r1 = r24;
         r0 = "SavedMessages";
-        r2 = NUM; // 0x7f0d08b9 float:1.8746644E38 double:1.053130881E-314;
-        r0 = org.telegram.messenger.LocaleController.getString(r0, r2);	 Catch:{ Exception -> 0x068b }
-        r0 = r0.toLowerCase();	 Catch:{ Exception -> 0x068b }
-        r2 = r25.trim();	 Catch:{ Exception -> 0x068b }
-        r2 = r2.toLowerCase();	 Catch:{ Exception -> 0x068b }
-        r3 = r2.length();	 Catch:{ Exception -> 0x068b }
+        r2 = NUM; // 0x7f0d08fc float:1.874678E38 double:1.053130914E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r0, r2);	 Catch:{ Exception -> 0x06a4 }
+        r0 = r0.toLowerCase();	 Catch:{ Exception -> 0x06a4 }
+        r2 = r25.trim();	 Catch:{ Exception -> 0x06a4 }
+        r2 = r2.toLowerCase();	 Catch:{ Exception -> 0x06a4 }
+        r3 = r2.length();	 Catch:{ Exception -> 0x06a4 }
         r4 = -1;
         if (r3 != 0) goto L_0x0035;
     L_0x001e:
-        r1.lastSearchId = r4;	 Catch:{ Exception -> 0x068b }
-        r0 = new java.util.ArrayList;	 Catch:{ Exception -> 0x068b }
-        r0.<init>();	 Catch:{ Exception -> 0x068b }
-        r2 = new java.util.ArrayList;	 Catch:{ Exception -> 0x068b }
-        r2.<init>();	 Catch:{ Exception -> 0x068b }
-        r3 = new java.util.ArrayList;	 Catch:{ Exception -> 0x068b }
-        r3.<init>();	 Catch:{ Exception -> 0x068b }
-        r4 = r1.lastSearchId;	 Catch:{ Exception -> 0x068b }
-        r1.updateSearchResults(r0, r2, r3, r4);	 Catch:{ Exception -> 0x068b }
+        r1.lastSearchId = r4;	 Catch:{ Exception -> 0x06a4 }
+        r0 = new java.util.ArrayList;	 Catch:{ Exception -> 0x06a4 }
+        r0.<init>();	 Catch:{ Exception -> 0x06a4 }
+        r2 = new java.util.ArrayList;	 Catch:{ Exception -> 0x06a4 }
+        r2.<init>();	 Catch:{ Exception -> 0x06a4 }
+        r3 = new java.util.ArrayList;	 Catch:{ Exception -> 0x06a4 }
+        r3.<init>();	 Catch:{ Exception -> 0x06a4 }
+        r4 = r1.lastSearchId;	 Catch:{ Exception -> 0x06a4 }
+        r1.updateSearchResults(r0, r2, r3, r4);	 Catch:{ Exception -> 0x06a4 }
         return;
     L_0x0035:
-        r3 = org.telegram.messenger.LocaleController.getInstance();	 Catch:{ Exception -> 0x068b }
-        r3 = r3.getTranslitString(r2);	 Catch:{ Exception -> 0x068b }
-        r5 = r2.equals(r3);	 Catch:{ Exception -> 0x068b }
+        r3 = org.telegram.messenger.LocaleController.getInstance();	 Catch:{ Exception -> 0x06a4 }
+        r3 = r3.getTranslitString(r2);	 Catch:{ Exception -> 0x06a4 }
+        r5 = r2.equals(r3);	 Catch:{ Exception -> 0x06a4 }
         r6 = 0;
         if (r5 != 0) goto L_0x004a;
     L_0x0044:
-        r5 = r3.length();	 Catch:{ Exception -> 0x068b }
+        r5 = r3.length();	 Catch:{ Exception -> 0x06a4 }
         if (r5 != 0) goto L_0x004b;
     L_0x004a:
         r3 = r6;
@@ -686,272 +694,292 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         r8 = 0;
     L_0x0052:
         r8 = r8 + r5;
-        r8 = new java.lang.String[r8];	 Catch:{ Exception -> 0x068b }
-        r8[r7] = r2;	 Catch:{ Exception -> 0x068b }
+        r8 = new java.lang.String[r8];	 Catch:{ Exception -> 0x06a4 }
+        r8[r7] = r2;	 Catch:{ Exception -> 0x06a4 }
         if (r3 == 0) goto L_0x005b;
     L_0x0059:
-        r8[r5] = r3;	 Catch:{ Exception -> 0x068b }
+        r8[r5] = r3;	 Catch:{ Exception -> 0x06a4 }
     L_0x005b:
-        r3 = new java.util.ArrayList;	 Catch:{ Exception -> 0x068b }
-        r3.<init>();	 Catch:{ Exception -> 0x068b }
-        r9 = new java.util.ArrayList;	 Catch:{ Exception -> 0x068b }
-        r9.<init>();	 Catch:{ Exception -> 0x068b }
-        r10 = new java.util.ArrayList;	 Catch:{ Exception -> 0x068b }
-        r10.<init>();	 Catch:{ Exception -> 0x068b }
-        r11 = new java.util.ArrayList;	 Catch:{ Exception -> 0x068b }
-        r11.<init>();	 Catch:{ Exception -> 0x068b }
-        r12 = new android.util.LongSparseArray;	 Catch:{ Exception -> 0x068b }
-        r12.<init>();	 Catch:{ Exception -> 0x068b }
-        r13 = r1.currentAccount;	 Catch:{ Exception -> 0x068b }
-        r13 = org.telegram.messenger.MessagesStorage.getInstance(r13);	 Catch:{ Exception -> 0x068b }
-        r13 = r13.getDatabase();	 Catch:{ Exception -> 0x068b }
+        r3 = new java.util.ArrayList;	 Catch:{ Exception -> 0x06a4 }
+        r3.<init>();	 Catch:{ Exception -> 0x06a4 }
+        r9 = new java.util.ArrayList;	 Catch:{ Exception -> 0x06a4 }
+        r9.<init>();	 Catch:{ Exception -> 0x06a4 }
+        r10 = new java.util.ArrayList;	 Catch:{ Exception -> 0x06a4 }
+        r10.<init>();	 Catch:{ Exception -> 0x06a4 }
+        r11 = new java.util.ArrayList;	 Catch:{ Exception -> 0x06a4 }
+        r11.<init>();	 Catch:{ Exception -> 0x06a4 }
+        r12 = new android.util.LongSparseArray;	 Catch:{ Exception -> 0x06a4 }
+        r12.<init>();	 Catch:{ Exception -> 0x06a4 }
+        r13 = r1.currentAccount;	 Catch:{ Exception -> 0x06a4 }
+        r13 = org.telegram.messenger.MessagesStorage.getInstance(r13);	 Catch:{ Exception -> 0x06a4 }
+        r13 = r13.getDatabase();	 Catch:{ Exception -> 0x06a4 }
         r14 = "SELECT did, date FROM dialogs ORDER BY date DESC LIMIT 600";
-        r15 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x068b }
-        r13 = r13.queryFinalized(r14, r15);	 Catch:{ Exception -> 0x068b }
+        r15 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x06a4 }
+        r13 = r13.queryFinalized(r14, r15);	 Catch:{ Exception -> 0x06a4 }
     L_0x0086:
-        r14 = r13.next();	 Catch:{ Exception -> 0x068b }
+        r14 = r13.next();	 Catch:{ Exception -> 0x06a4 }
         r15 = 32;
-        if (r14 == 0) goto L_0x010a;
+        if (r14 == 0) goto L_0x011f;
     L_0x008e:
-        r4 = r13.longValue(r7);	 Catch:{ Exception -> 0x068b }
-        r14 = new org.telegram.ui.Adapters.DialogsSearchAdapter$DialogSearchResult;	 Catch:{ Exception -> 0x068b }
-        r14.<init>(r1, r6);	 Catch:{ Exception -> 0x068b }
+        r4 = r13.longValue(r7);	 Catch:{ Exception -> 0x06a4 }
+        r14 = new org.telegram.ui.Adapters.DialogsSearchAdapter$DialogSearchResult;	 Catch:{ Exception -> 0x06a4 }
+        r14.<init>(r1, r6);	 Catch:{ Exception -> 0x06a4 }
         r7 = 1;
-        r6 = r13.intValue(r7);	 Catch:{ Exception -> 0x068b }
-        r14.date = r6;	 Catch:{ Exception -> 0x068b }
-        r12.put(r4, r14);	 Catch:{ Exception -> 0x068b }
-        r6 = (int) r4;	 Catch:{ Exception -> 0x068b }
+        r6 = r13.intValue(r7);	 Catch:{ Exception -> 0x06a4 }
+        r14.date = r6;	 Catch:{ Exception -> 0x06a4 }
+        r12.put(r4, r14);	 Catch:{ Exception -> 0x06a4 }
+        r6 = (int) r4;	 Catch:{ Exception -> 0x06a4 }
         r4 = r4 >> r15;
-        r5 = (int) r4;	 Catch:{ Exception -> 0x068b }
-        if (r6 == 0) goto L_0x00ea;
+        r5 = (int) r4;	 Catch:{ Exception -> 0x06a4 }
+        if (r6 == 0) goto L_0x0104;
     L_0x00a6:
-        if (r5 != r7) goto L_0x00be;
+        if (r5 != r7) goto L_0x00c8;
     L_0x00a8:
-        r4 = r1.dialogsType;	 Catch:{ Exception -> 0x068b }
-        if (r4 != 0) goto L_0x0104;
-    L_0x00ac:
-        r4 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x068b }
-        r4 = r9.contains(r4);	 Catch:{ Exception -> 0x068b }
-        if (r4 != 0) goto L_0x0104;
-    L_0x00b6:
-        r4 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x068b }
-        r9.add(r4);	 Catch:{ Exception -> 0x068b }
-        goto L_0x0104;
-    L_0x00be:
-        if (r6 <= 0) goto L_0x00d7;
-    L_0x00c0:
-        r4 = r1.dialogsType;	 Catch:{ Exception -> 0x068b }
-        r5 = 2;
-        if (r4 == r5) goto L_0x0104;
-    L_0x00c5:
-        r4 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x068b }
-        r4 = r3.contains(r4);	 Catch:{ Exception -> 0x068b }
-        if (r4 != 0) goto L_0x0104;
-    L_0x00cf:
-        r4 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x068b }
-        r3.add(r4);	 Catch:{ Exception -> 0x068b }
-        goto L_0x0104;
-    L_0x00d7:
-        r4 = -r6;
-        r5 = java.lang.Integer.valueOf(r4);	 Catch:{ Exception -> 0x068b }
-        r5 = r9.contains(r5);	 Catch:{ Exception -> 0x068b }
-        if (r5 != 0) goto L_0x0104;
-    L_0x00e2:
-        r4 = java.lang.Integer.valueOf(r4);	 Catch:{ Exception -> 0x068b }
-        r9.add(r4);	 Catch:{ Exception -> 0x068b }
-        goto L_0x0104;
-    L_0x00ea:
-        r4 = r1.dialogsType;	 Catch:{ Exception -> 0x068b }
-        if (r4 == 0) goto L_0x00f3;
-    L_0x00ee:
-        r4 = r1.dialogsType;	 Catch:{ Exception -> 0x068b }
-        r6 = 3;
-        if (r4 != r6) goto L_0x0104;
-    L_0x00f3:
-        r4 = java.lang.Integer.valueOf(r5);	 Catch:{ Exception -> 0x068b }
-        r4 = r10.contains(r4);	 Catch:{ Exception -> 0x068b }
-        if (r4 != 0) goto L_0x0104;
-    L_0x00fd:
-        r4 = java.lang.Integer.valueOf(r5);	 Catch:{ Exception -> 0x068b }
-        r10.add(r4);	 Catch:{ Exception -> 0x068b }
-    L_0x0104:
+        r4 = r1.dialogsType;	 Catch:{ Exception -> 0x06a4 }
+        r5 = 4;
+        if (r4 != r5) goto L_0x00b2;
+    L_0x00ad:
         r4 = -1;
         r5 = 1;
         r6 = 0;
         r7 = 0;
         goto L_0x0086;
-    L_0x010a:
-        r13.dispose();	 Catch:{ Exception -> 0x068b }
-        r2 = r0.startsWith(r2);	 Catch:{ Exception -> 0x068b }
-        if (r2 == 0) goto L_0x0134;
-    L_0x0113:
-        r2 = r1.currentAccount;	 Catch:{ Exception -> 0x068b }
-        r2 = org.telegram.messenger.UserConfig.getInstance(r2);	 Catch:{ Exception -> 0x068b }
-        r2 = r2.getCurrentUser();	 Catch:{ Exception -> 0x068b }
-        r4 = new org.telegram.ui.Adapters.DialogsSearchAdapter$DialogSearchResult;	 Catch:{ Exception -> 0x068b }
+    L_0x00b2:
+        r4 = r1.dialogsType;	 Catch:{ Exception -> 0x06a4 }
+        if (r4 != 0) goto L_0x00ad;
+    L_0x00b6:
+        r4 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x06a4 }
+        r4 = r9.contains(r4);	 Catch:{ Exception -> 0x06a4 }
+        if (r4 != 0) goto L_0x00ad;
+    L_0x00c0:
+        r4 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x06a4 }
+        r9.add(r4);	 Catch:{ Exception -> 0x06a4 }
+        goto L_0x00ad;
+    L_0x00c8:
+        if (r6 <= 0) goto L_0x00eb;
+    L_0x00ca:
+        r4 = r1.dialogsType;	 Catch:{ Exception -> 0x06a4 }
+        r5 = 4;
+        if (r4 != r5) goto L_0x00d4;
+    L_0x00cf:
+        r4 = r1.selfUserId;	 Catch:{ Exception -> 0x06a4 }
+        if (r6 != r4) goto L_0x00d4;
+    L_0x00d3:
+        goto L_0x00ad;
+    L_0x00d4:
+        r4 = r1.dialogsType;	 Catch:{ Exception -> 0x06a4 }
+        r5 = 2;
+        if (r4 == r5) goto L_0x00ad;
+    L_0x00d9:
+        r4 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x06a4 }
+        r4 = r3.contains(r4);	 Catch:{ Exception -> 0x06a4 }
+        if (r4 != 0) goto L_0x00ad;
+    L_0x00e3:
+        r4 = java.lang.Integer.valueOf(r6);	 Catch:{ Exception -> 0x06a4 }
+        r3.add(r4);	 Catch:{ Exception -> 0x06a4 }
+        goto L_0x00ad;
+    L_0x00eb:
+        r4 = r1.dialogsType;	 Catch:{ Exception -> 0x06a4 }
+        r5 = 4;
+        if (r4 != r5) goto L_0x00f1;
+    L_0x00f0:
+        goto L_0x00ad;
+    L_0x00f1:
+        r4 = -r6;
+        r5 = java.lang.Integer.valueOf(r4);	 Catch:{ Exception -> 0x06a4 }
+        r5 = r9.contains(r5);	 Catch:{ Exception -> 0x06a4 }
+        if (r5 != 0) goto L_0x00ad;
+    L_0x00fc:
+        r4 = java.lang.Integer.valueOf(r4);	 Catch:{ Exception -> 0x06a4 }
+        r9.add(r4);	 Catch:{ Exception -> 0x06a4 }
+        goto L_0x00ad;
+    L_0x0104:
+        r4 = r1.dialogsType;	 Catch:{ Exception -> 0x06a4 }
+        if (r4 == 0) goto L_0x010d;
+    L_0x0108:
+        r4 = r1.dialogsType;	 Catch:{ Exception -> 0x06a4 }
+        r6 = 3;
+        if (r4 != r6) goto L_0x00ad;
+    L_0x010d:
+        r4 = java.lang.Integer.valueOf(r5);	 Catch:{ Exception -> 0x06a4 }
+        r4 = r10.contains(r4);	 Catch:{ Exception -> 0x06a4 }
+        if (r4 != 0) goto L_0x00ad;
+    L_0x0117:
+        r4 = java.lang.Integer.valueOf(r5);	 Catch:{ Exception -> 0x06a4 }
+        r10.add(r4);	 Catch:{ Exception -> 0x06a4 }
+        goto L_0x00ad;
+    L_0x011f:
+        r13.dispose();	 Catch:{ Exception -> 0x06a4 }
+        r2 = r0.startsWith(r2);	 Catch:{ Exception -> 0x06a4 }
+        if (r2 == 0) goto L_0x0149;
+    L_0x0128:
+        r2 = r1.currentAccount;	 Catch:{ Exception -> 0x06a4 }
+        r2 = org.telegram.messenger.UserConfig.getInstance(r2);	 Catch:{ Exception -> 0x06a4 }
+        r2 = r2.getCurrentUser();	 Catch:{ Exception -> 0x06a4 }
+        r4 = new org.telegram.ui.Adapters.DialogsSearchAdapter$DialogSearchResult;	 Catch:{ Exception -> 0x06a4 }
         r5 = 0;
-        r4.<init>(r1, r5);	 Catch:{ Exception -> 0x068b }
+        r4.<init>(r1, r5);	 Catch:{ Exception -> 0x06a4 }
         r5 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
-        r4.date = r5;	 Catch:{ Exception -> 0x068b }
-        r4.name = r0;	 Catch:{ Exception -> 0x068b }
-        r4.object = r2;	 Catch:{ Exception -> 0x068b }
-        r0 = r2.id;	 Catch:{ Exception -> 0x068b }
-        r5 = (long) r0;	 Catch:{ Exception -> 0x068b }
-        r12.put(r5, r4);	 Catch:{ Exception -> 0x068b }
+        r4.date = r5;	 Catch:{ Exception -> 0x06a4 }
+        r4.name = r0;	 Catch:{ Exception -> 0x06a4 }
+        r4.object = r2;	 Catch:{ Exception -> 0x06a4 }
+        r0 = r2.id;	 Catch:{ Exception -> 0x06a4 }
+        r5 = (long) r0;	 Catch:{ Exception -> 0x06a4 }
+        r12.put(r5, r4);	 Catch:{ Exception -> 0x06a4 }
         r0 = 1;
-        goto L_0x0135;
-    L_0x0134:
+        goto L_0x014a;
+    L_0x0149:
         r0 = 0;
-    L_0x0135:
-        r2 = r3.isEmpty();	 Catch:{ Exception -> 0x068b }
+    L_0x014a:
+        r2 = r3.isEmpty();	 Catch:{ Exception -> 0x06a4 }
         r4 = ";;;";
         r5 = ",";
         r6 = "@";
         r7 = " ";
-        if (r2 != 0) goto L_0x0271;
-    L_0x0143:
-        r2 = r1.currentAccount;	 Catch:{ Exception -> 0x068b }
-        r2 = org.telegram.messenger.MessagesStorage.getInstance(r2);	 Catch:{ Exception -> 0x068b }
-        r2 = r2.getDatabase();	 Catch:{ Exception -> 0x068b }
-        r13 = java.util.Locale.US;	 Catch:{ Exception -> 0x068b }
+        if (r2 != 0) goto L_0x0286;
+    L_0x0158:
+        r2 = r1.currentAccount;	 Catch:{ Exception -> 0x06a4 }
+        r2 = org.telegram.messenger.MessagesStorage.getInstance(r2);	 Catch:{ Exception -> 0x06a4 }
+        r2 = r2.getDatabase();	 Catch:{ Exception -> 0x06a4 }
+        r13 = java.util.Locale.US;	 Catch:{ Exception -> 0x06a4 }
         r14 = "SELECT data, status, name FROM users WHERE uid IN(%s)";
-        r17 = r0;
+        r18 = r0;
         r15 = 1;
-        r0 = new java.lang.Object[r15];	 Catch:{ Exception -> 0x068b }
-        r3 = android.text.TextUtils.join(r5, r3);	 Catch:{ Exception -> 0x068b }
+        r0 = new java.lang.Object[r15];	 Catch:{ Exception -> 0x06a4 }
+        r3 = android.text.TextUtils.join(r5, r3);	 Catch:{ Exception -> 0x06a4 }
         r15 = 0;
-        r0[r15] = r3;	 Catch:{ Exception -> 0x068b }
-        r0 = java.lang.String.format(r13, r14, r0);	 Catch:{ Exception -> 0x068b }
-        r3 = new java.lang.Object[r15];	 Catch:{ Exception -> 0x068b }
-        r0 = r2.queryFinalized(r0, r3);	 Catch:{ Exception -> 0x068b }
-    L_0x0167:
-        r2 = r0.next();	 Catch:{ Exception -> 0x068b }
-        if (r2 == 0) goto L_0x026b;
-    L_0x016d:
+        r0[r15] = r3;	 Catch:{ Exception -> 0x06a4 }
+        r0 = java.lang.String.format(r13, r14, r0);	 Catch:{ Exception -> 0x06a4 }
+        r3 = new java.lang.Object[r15];	 Catch:{ Exception -> 0x06a4 }
+        r0 = r2.queryFinalized(r0, r3);	 Catch:{ Exception -> 0x06a4 }
+    L_0x017c:
+        r2 = r0.next();	 Catch:{ Exception -> 0x06a4 }
+        if (r2 == 0) goto L_0x0280;
+    L_0x0182:
         r2 = 2;
-        r3 = r0.stringValue(r2);	 Catch:{ Exception -> 0x068b }
-        r2 = org.telegram.messenger.LocaleController.getInstance();	 Catch:{ Exception -> 0x068b }
-        r2 = r2.getTranslitString(r3);	 Catch:{ Exception -> 0x068b }
-        r13 = r3.equals(r2);	 Catch:{ Exception -> 0x068b }
-        if (r13 == 0) goto L_0x0181;
-    L_0x0180:
+        r3 = r0.stringValue(r2);	 Catch:{ Exception -> 0x06a4 }
+        r2 = org.telegram.messenger.LocaleController.getInstance();	 Catch:{ Exception -> 0x06a4 }
+        r2 = r2.getTranslitString(r3);	 Catch:{ Exception -> 0x06a4 }
+        r13 = r3.equals(r2);	 Catch:{ Exception -> 0x06a4 }
+        if (r13 == 0) goto L_0x0196;
+    L_0x0195:
         r2 = 0;
-    L_0x0181:
-        r13 = r3.lastIndexOf(r4);	 Catch:{ Exception -> 0x068b }
+    L_0x0196:
+        r13 = r3.lastIndexOf(r4);	 Catch:{ Exception -> 0x06a4 }
         r14 = -1;
-        if (r13 == r14) goto L_0x018f;
-    L_0x0188:
+        if (r13 == r14) goto L_0x01a4;
+    L_0x019d:
         r13 = r13 + 3;
-        r13 = r3.substring(r13);	 Catch:{ Exception -> 0x068b }
-        goto L_0x0190;
-    L_0x018f:
+        r13 = r3.substring(r13);	 Catch:{ Exception -> 0x06a4 }
+        goto L_0x01a5;
+    L_0x01a4:
         r13 = 0;
-    L_0x0190:
-        r15 = r8.length;	 Catch:{ Exception -> 0x068b }
+    L_0x01a5:
+        r15 = r8.length;	 Catch:{ Exception -> 0x06a4 }
         r14 = 0;
         r20 = 0;
-    L_0x0194:
-        if (r14 >= r15) goto L_0x0265;
-    L_0x0196:
+    L_0x01a9:
+        if (r14 >= r15) goto L_0x027a;
+    L_0x01ab:
         r21 = r15;
-        r15 = r8[r14];	 Catch:{ Exception -> 0x068b }
-        r22 = r3.startsWith(r15);	 Catch:{ Exception -> 0x068b }
-        if (r22 != 0) goto L_0x01e2;
-    L_0x01a0:
+        r15 = r8[r14];	 Catch:{ Exception -> 0x06a4 }
+        r22 = r3.startsWith(r15);	 Catch:{ Exception -> 0x06a4 }
+        if (r22 != 0) goto L_0x01f7;
+    L_0x01b5:
         r22 = r14;
-        r14 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x068b }
-        r14.<init>();	 Catch:{ Exception -> 0x068b }
-        r14.append(r7);	 Catch:{ Exception -> 0x068b }
-        r14.append(r15);	 Catch:{ Exception -> 0x068b }
-        r14 = r14.toString();	 Catch:{ Exception -> 0x068b }
-        r14 = r3.contains(r14);	 Catch:{ Exception -> 0x068b }
-        if (r14 != 0) goto L_0x01e4;
-    L_0x01b7:
-        if (r2 == 0) goto L_0x01d5;
-    L_0x01b9:
-        r14 = r2.startsWith(r15);	 Catch:{ Exception -> 0x068b }
-        if (r14 != 0) goto L_0x01e4;
-    L_0x01bf:
-        r14 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x068b }
-        r14.<init>();	 Catch:{ Exception -> 0x068b }
-        r14.append(r7);	 Catch:{ Exception -> 0x068b }
-        r14.append(r15);	 Catch:{ Exception -> 0x068b }
-        r14 = r14.toString();	 Catch:{ Exception -> 0x068b }
-        r14 = r2.contains(r14);	 Catch:{ Exception -> 0x068b }
-        if (r14 == 0) goto L_0x01d5;
+        r14 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x06a4 }
+        r14.<init>();	 Catch:{ Exception -> 0x06a4 }
+        r14.append(r7);	 Catch:{ Exception -> 0x06a4 }
+        r14.append(r15);	 Catch:{ Exception -> 0x06a4 }
+        r14 = r14.toString();	 Catch:{ Exception -> 0x06a4 }
+        r14 = r3.contains(r14);	 Catch:{ Exception -> 0x06a4 }
+        if (r14 != 0) goto L_0x01f9;
+    L_0x01cc:
+        if (r2 == 0) goto L_0x01ea;
+    L_0x01ce:
+        r14 = r2.startsWith(r15);	 Catch:{ Exception -> 0x06a4 }
+        if (r14 != 0) goto L_0x01f9;
     L_0x01d4:
-        goto L_0x01e4;
-    L_0x01d5:
-        if (r13 == 0) goto L_0x01df;
-    L_0x01d7:
-        r14 = r13.startsWith(r15);	 Catch:{ Exception -> 0x068b }
-        if (r14 == 0) goto L_0x01df;
-    L_0x01dd:
+        r14 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x06a4 }
+        r14.<init>();	 Catch:{ Exception -> 0x06a4 }
+        r14.append(r7);	 Catch:{ Exception -> 0x06a4 }
+        r14.append(r15);	 Catch:{ Exception -> 0x06a4 }
+        r14 = r14.toString();	 Catch:{ Exception -> 0x06a4 }
+        r14 = r2.contains(r14);	 Catch:{ Exception -> 0x06a4 }
+        if (r14 == 0) goto L_0x01ea;
+    L_0x01e9:
+        goto L_0x01f9;
+    L_0x01ea:
+        if (r13 == 0) goto L_0x01f4;
+    L_0x01ec:
+        r14 = r13.startsWith(r15);	 Catch:{ Exception -> 0x06a4 }
+        if (r14 == 0) goto L_0x01f4;
+    L_0x01f2:
         r14 = 2;
-        goto L_0x01e5;
-    L_0x01df:
+        goto L_0x01fa;
+    L_0x01f4:
         r14 = r20;
-        goto L_0x01e5;
-    L_0x01e2:
+        goto L_0x01fa;
+    L_0x01f7:
         r22 = r14;
-    L_0x01e4:
+    L_0x01f9:
         r14 = 1;
-    L_0x01e5:
-        if (r14 == 0) goto L_0x0252;
-    L_0x01e7:
+    L_0x01fa:
+        if (r14 == 0) goto L_0x0267;
+    L_0x01fc:
         r2 = 0;
-        r3 = r0.byteBufferValue(r2);	 Catch:{ Exception -> 0x068b }
-        if (r3 == 0) goto L_0x0265;
-    L_0x01ee:
-        r13 = r3.readInt32(r2);	 Catch:{ Exception -> 0x068b }
-        r13 = org.telegram.tgnet.TLRPC.User.TLdeserialize(r3, r13, r2);	 Catch:{ Exception -> 0x068b }
-        r3.reuse();	 Catch:{ Exception -> 0x068b }
-        r2 = r13.id;	 Catch:{ Exception -> 0x068b }
-        r2 = (long) r2;	 Catch:{ Exception -> 0x068b }
-        r2 = r12.get(r2);	 Catch:{ Exception -> 0x068b }
-        r2 = (org.telegram.ui.Adapters.DialogsSearchAdapter.DialogSearchResult) r2;	 Catch:{ Exception -> 0x068b }
-        r3 = r13.status;	 Catch:{ Exception -> 0x068b }
-        if (r3 == 0) goto L_0x0216;
-    L_0x0206:
-        r3 = r13.status;	 Catch:{ Exception -> 0x068b }
+        r3 = r0.byteBufferValue(r2);	 Catch:{ Exception -> 0x06a4 }
+        if (r3 == 0) goto L_0x027a;
+    L_0x0203:
+        r13 = r3.readInt32(r2);	 Catch:{ Exception -> 0x06a4 }
+        r13 = org.telegram.tgnet.TLRPC.User.TLdeserialize(r3, r13, r2);	 Catch:{ Exception -> 0x06a4 }
+        r3.reuse();	 Catch:{ Exception -> 0x06a4 }
+        r2 = r13.id;	 Catch:{ Exception -> 0x06a4 }
+        r2 = (long) r2;	 Catch:{ Exception -> 0x06a4 }
+        r2 = r12.get(r2);	 Catch:{ Exception -> 0x06a4 }
+        r2 = (org.telegram.ui.Adapters.DialogsSearchAdapter.DialogSearchResult) r2;	 Catch:{ Exception -> 0x06a4 }
+        r3 = r13.status;	 Catch:{ Exception -> 0x06a4 }
+        if (r3 == 0) goto L_0x022b;
+    L_0x021b:
+        r3 = r13.status;	 Catch:{ Exception -> 0x06a4 }
         r19 = r11;
         r22 = r14;
         r14 = 1;
-        r11 = r0.intValue(r14);	 Catch:{ Exception -> 0x068b }
+        r11 = r0.intValue(r14);	 Catch:{ Exception -> 0x06a4 }
         r14 = r22;
-        r3.expires = r11;	 Catch:{ Exception -> 0x068b }
-        goto L_0x0218;
-    L_0x0216:
+        r3.expires = r11;	 Catch:{ Exception -> 0x06a4 }
+        goto L_0x022d;
+    L_0x022b:
         r19 = r11;
-    L_0x0218:
+    L_0x022d:
         r3 = 1;
-        if (r14 != r3) goto L_0x0226;
-    L_0x021b:
-        r3 = r13.first_name;	 Catch:{ Exception -> 0x068b }
-        r14 = r13.last_name;	 Catch:{ Exception -> 0x068b }
-        r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r3, r14, r15);	 Catch:{ Exception -> 0x068b }
-        r2.name = r3;	 Catch:{ Exception -> 0x068b }
-        goto L_0x024d;
-    L_0x0226:
-        r3 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x068b }
-        r3.<init>();	 Catch:{ Exception -> 0x068b }
-        r3.append(r6);	 Catch:{ Exception -> 0x068b }
-        r14 = r13.username;	 Catch:{ Exception -> 0x068b }
-        r3.append(r14);	 Catch:{ Exception -> 0x068b }
-        r3 = r3.toString();	 Catch:{ Exception -> 0x068b }
-        r14 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x068b }
-        r14.<init>();	 Catch:{ Exception -> 0x068b }
-        r14.append(r6);	 Catch:{ Exception -> 0x068b }
-        r14.append(r15);	 Catch:{ Exception -> 0x068b }
-        r14 = r14.toString();	 Catch:{ Exception -> 0x068b }
+        if (r14 != r3) goto L_0x023b;
+    L_0x0230:
+        r3 = r13.first_name;	 Catch:{ Exception -> 0x06a4 }
+        r14 = r13.last_name;	 Catch:{ Exception -> 0x06a4 }
+        r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r3, r14, r15);	 Catch:{ Exception -> 0x06a4 }
+        r2.name = r3;	 Catch:{ Exception -> 0x06a4 }
+        goto L_0x0262;
+    L_0x023b:
+        r3 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x06a4 }
+        r3.<init>();	 Catch:{ Exception -> 0x06a4 }
+        r3.append(r6);	 Catch:{ Exception -> 0x06a4 }
+        r14 = r13.username;	 Catch:{ Exception -> 0x06a4 }
+        r3.append(r14);	 Catch:{ Exception -> 0x06a4 }
+        r3 = r3.toString();	 Catch:{ Exception -> 0x06a4 }
+        r14 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x06a4 }
+        r14.<init>();	 Catch:{ Exception -> 0x06a4 }
+        r14.append(r6);	 Catch:{ Exception -> 0x06a4 }
+        r14.append(r15);	 Catch:{ Exception -> 0x06a4 }
+        r14 = r14.toString();	 Catch:{ Exception -> 0x06a4 }
         r15 = 0;
-        r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r3, r15, r14);	 Catch:{ Exception -> 0x068b }
-        r2.name = r3;	 Catch:{ Exception -> 0x068b }
-    L_0x024d:
-        r2.object = r13;	 Catch:{ Exception -> 0x068b }
-        r17 = r17 + 1;
-        goto L_0x0267;
-    L_0x0252:
+        r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r3, r15, r14);	 Catch:{ Exception -> 0x06a4 }
+        r2.name = r3;	 Catch:{ Exception -> 0x06a4 }
+    L_0x0262:
+        r2.object = r13;	 Catch:{ Exception -> 0x06a4 }
+        r18 = r18 + 1;
+        goto L_0x027c;
+    L_0x0267:
         r20 = r2;
         r19 = r11;
         r2 = r22;
@@ -961,568 +989,572 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         r14 = r2;
         r2 = r20;
         r20 = r23;
-        goto L_0x0194;
-    L_0x0265:
+        goto L_0x01a9;
+    L_0x027a:
         r19 = r11;
-    L_0x0267:
+    L_0x027c:
         r11 = r19;
-        goto L_0x0167;
-    L_0x026b:
+        goto L_0x017c;
+    L_0x0280:
         r19 = r11;
-        r0.dispose();	 Catch:{ Exception -> 0x068b }
-        goto L_0x0275;
-    L_0x0271:
-        r17 = r0;
+        r0.dispose();	 Catch:{ Exception -> 0x06a4 }
+        goto L_0x028a;
+    L_0x0286:
+        r18 = r0;
         r19 = r11;
-    L_0x0275:
-        r0 = r9.isEmpty();	 Catch:{ Exception -> 0x068b }
-        if (r0 != 0) goto L_0x0344;
-    L_0x027b:
-        r0 = r1.currentAccount;	 Catch:{ Exception -> 0x068b }
-        r0 = org.telegram.messenger.MessagesStorage.getInstance(r0);	 Catch:{ Exception -> 0x068b }
-        r0 = r0.getDatabase();	 Catch:{ Exception -> 0x068b }
-        r2 = java.util.Locale.US;	 Catch:{ Exception -> 0x068b }
+    L_0x028a:
+        r0 = r9.isEmpty();	 Catch:{ Exception -> 0x06a4 }
+        if (r0 != 0) goto L_0x0359;
+    L_0x0290:
+        r0 = r1.currentAccount;	 Catch:{ Exception -> 0x06a4 }
+        r0 = org.telegram.messenger.MessagesStorage.getInstance(r0);	 Catch:{ Exception -> 0x06a4 }
+        r0 = r0.getDatabase();	 Catch:{ Exception -> 0x06a4 }
+        r2 = java.util.Locale.US;	 Catch:{ Exception -> 0x06a4 }
         r3 = "SELECT data, name FROM chats WHERE uid IN(%s)";
         r11 = 1;
-        r13 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x068b }
-        r9 = android.text.TextUtils.join(r5, r9);	 Catch:{ Exception -> 0x068b }
+        r13 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x06a4 }
+        r9 = android.text.TextUtils.join(r5, r9);	 Catch:{ Exception -> 0x06a4 }
         r11 = 0;
-        r13[r11] = r9;	 Catch:{ Exception -> 0x068b }
-        r2 = java.lang.String.format(r2, r3, r13);	 Catch:{ Exception -> 0x068b }
-        r3 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x068b }
-        r0 = r0.queryFinalized(r2, r3);	 Catch:{ Exception -> 0x068b }
-    L_0x029d:
-        r2 = r0.next();	 Catch:{ Exception -> 0x068b }
-        if (r2 == 0) goto L_0x0341;
-    L_0x02a3:
+        r13[r11] = r9;	 Catch:{ Exception -> 0x06a4 }
+        r2 = java.lang.String.format(r2, r3, r13);	 Catch:{ Exception -> 0x06a4 }
+        r3 = new java.lang.Object[r11];	 Catch:{ Exception -> 0x06a4 }
+        r0 = r0.queryFinalized(r2, r3);	 Catch:{ Exception -> 0x06a4 }
+    L_0x02b2:
+        r2 = r0.next();	 Catch:{ Exception -> 0x06a4 }
+        if (r2 == 0) goto L_0x0356;
+    L_0x02b8:
         r2 = 1;
-        r3 = r0.stringValue(r2);	 Catch:{ Exception -> 0x068b }
-        r2 = org.telegram.messenger.LocaleController.getInstance();	 Catch:{ Exception -> 0x068b }
-        r2 = r2.getTranslitString(r3);	 Catch:{ Exception -> 0x068b }
-        r9 = r3.equals(r2);	 Catch:{ Exception -> 0x068b }
-        if (r9 == 0) goto L_0x02b7;
-    L_0x02b6:
+        r3 = r0.stringValue(r2);	 Catch:{ Exception -> 0x06a4 }
+        r2 = org.telegram.messenger.LocaleController.getInstance();	 Catch:{ Exception -> 0x06a4 }
+        r2 = r2.getTranslitString(r3);	 Catch:{ Exception -> 0x06a4 }
+        r9 = r3.equals(r2);	 Catch:{ Exception -> 0x06a4 }
+        if (r9 == 0) goto L_0x02cc;
+    L_0x02cb:
         r2 = 0;
-    L_0x02b7:
-        r9 = r8.length;	 Catch:{ Exception -> 0x068b }
+    L_0x02cc:
+        r9 = r8.length;	 Catch:{ Exception -> 0x06a4 }
         r11 = 0;
-    L_0x02b9:
-        if (r11 >= r9) goto L_0x029d;
-    L_0x02bb:
-        r13 = r8[r11];	 Catch:{ Exception -> 0x068b }
-        r15 = r3.startsWith(r13);	 Catch:{ Exception -> 0x068b }
-        if (r15 != 0) goto L_0x02f9;
-    L_0x02c3:
-        r15 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x068b }
-        r15.<init>();	 Catch:{ Exception -> 0x068b }
-        r15.append(r7);	 Catch:{ Exception -> 0x068b }
-        r15.append(r13);	 Catch:{ Exception -> 0x068b }
-        r15 = r15.toString();	 Catch:{ Exception -> 0x068b }
-        r15 = r3.contains(r15);	 Catch:{ Exception -> 0x068b }
-        if (r15 != 0) goto L_0x02f9;
+    L_0x02ce:
+        if (r11 >= r9) goto L_0x02b2;
+    L_0x02d0:
+        r13 = r8[r11];	 Catch:{ Exception -> 0x06a4 }
+        r15 = r3.startsWith(r13);	 Catch:{ Exception -> 0x06a4 }
+        if (r15 != 0) goto L_0x030e;
     L_0x02d8:
-        if (r2 == 0) goto L_0x02f6;
-    L_0x02da:
-        r15 = r2.startsWith(r13);	 Catch:{ Exception -> 0x068b }
-        if (r15 != 0) goto L_0x02f9;
-    L_0x02e0:
-        r15 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x068b }
-        r15.<init>();	 Catch:{ Exception -> 0x068b }
-        r15.append(r7);	 Catch:{ Exception -> 0x068b }
-        r15.append(r13);	 Catch:{ Exception -> 0x068b }
-        r15 = r15.toString();	 Catch:{ Exception -> 0x068b }
-        r15 = r2.contains(r15);	 Catch:{ Exception -> 0x068b }
-        if (r15 == 0) goto L_0x02f6;
+        r15 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x06a4 }
+        r15.<init>();	 Catch:{ Exception -> 0x06a4 }
+        r15.append(r7);	 Catch:{ Exception -> 0x06a4 }
+        r15.append(r13);	 Catch:{ Exception -> 0x06a4 }
+        r15 = r15.toString();	 Catch:{ Exception -> 0x06a4 }
+        r15 = r3.contains(r15);	 Catch:{ Exception -> 0x06a4 }
+        if (r15 != 0) goto L_0x030e;
+    L_0x02ed:
+        if (r2 == 0) goto L_0x030b;
+    L_0x02ef:
+        r15 = r2.startsWith(r13);	 Catch:{ Exception -> 0x06a4 }
+        if (r15 != 0) goto L_0x030e;
     L_0x02f5:
-        goto L_0x02f9;
-    L_0x02f6:
+        r15 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x06a4 }
+        r15.<init>();	 Catch:{ Exception -> 0x06a4 }
+        r15.append(r7);	 Catch:{ Exception -> 0x06a4 }
+        r15.append(r13);	 Catch:{ Exception -> 0x06a4 }
+        r15 = r15.toString();	 Catch:{ Exception -> 0x06a4 }
+        r15 = r2.contains(r15);	 Catch:{ Exception -> 0x06a4 }
+        if (r15 == 0) goto L_0x030b;
+    L_0x030a:
+        goto L_0x030e;
+    L_0x030b:
         r11 = r11 + 1;
-        goto L_0x02b9;
-    L_0x02f9:
+        goto L_0x02ce;
+    L_0x030e:
         r2 = 0;
-        r3 = r0.byteBufferValue(r2);	 Catch:{ Exception -> 0x068b }
-        if (r3 == 0) goto L_0x029d;
-    L_0x0300:
-        r9 = r3.readInt32(r2);	 Catch:{ Exception -> 0x068b }
-        r9 = org.telegram.tgnet.TLRPC.Chat.TLdeserialize(r3, r9, r2);	 Catch:{ Exception -> 0x068b }
-        r3.reuse();	 Catch:{ Exception -> 0x068b }
-        if (r9 == 0) goto L_0x029d;
-    L_0x030d:
-        r2 = r9.deactivated;	 Catch:{ Exception -> 0x068b }
-        if (r2 != 0) goto L_0x029d;
-    L_0x0311:
-        r2 = org.telegram.messenger.ChatObject.isChannel(r9);	 Catch:{ Exception -> 0x068b }
-        if (r2 == 0) goto L_0x031d;
-    L_0x0317:
-        r2 = org.telegram.messenger.ChatObject.isNotInChat(r9);	 Catch:{ Exception -> 0x068b }
-        if (r2 != 0) goto L_0x029d;
-    L_0x031d:
-        r2 = r9.id;	 Catch:{ Exception -> 0x068b }
-        if (r2 <= 0) goto L_0x0326;
-    L_0x0321:
-        r2 = r9.id;	 Catch:{ Exception -> 0x068b }
-        r2 = -r2;
-        r2 = (long) r2;	 Catch:{ Exception -> 0x068b }
-        goto L_0x032c;
+        r3 = r0.byteBufferValue(r2);	 Catch:{ Exception -> 0x06a4 }
+        if (r3 == 0) goto L_0x02b2;
+    L_0x0315:
+        r9 = r3.readInt32(r2);	 Catch:{ Exception -> 0x06a4 }
+        r9 = org.telegram.tgnet.TLRPC.Chat.TLdeserialize(r3, r9, r2);	 Catch:{ Exception -> 0x06a4 }
+        r3.reuse();	 Catch:{ Exception -> 0x06a4 }
+        if (r9 == 0) goto L_0x02b2;
+    L_0x0322:
+        r2 = r9.deactivated;	 Catch:{ Exception -> 0x06a4 }
+        if (r2 != 0) goto L_0x02b2;
     L_0x0326:
-        r2 = r9.id;	 Catch:{ Exception -> 0x068b }
-        r2 = org.telegram.messenger.AndroidUtilities.makeBroadcastId(r2);	 Catch:{ Exception -> 0x068b }
+        r2 = org.telegram.messenger.ChatObject.isChannel(r9);	 Catch:{ Exception -> 0x06a4 }
+        if (r2 == 0) goto L_0x0332;
     L_0x032c:
-        r2 = r12.get(r2);	 Catch:{ Exception -> 0x068b }
-        r2 = (org.telegram.ui.Adapters.DialogsSearchAdapter.DialogSearchResult) r2;	 Catch:{ Exception -> 0x068b }
-        r3 = r9.title;	 Catch:{ Exception -> 0x068b }
-        r11 = 0;
-        r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r3, r11, r13);	 Catch:{ Exception -> 0x068b }
-        r2.name = r3;	 Catch:{ Exception -> 0x068b }
-        r2.object = r9;	 Catch:{ Exception -> 0x068b }
-        r17 = r17 + 1;
-        goto L_0x029d;
+        r2 = org.telegram.messenger.ChatObject.isNotInChat(r9);	 Catch:{ Exception -> 0x06a4 }
+        if (r2 != 0) goto L_0x02b2;
+    L_0x0332:
+        r2 = r9.id;	 Catch:{ Exception -> 0x06a4 }
+        if (r2 <= 0) goto L_0x033b;
+    L_0x0336:
+        r2 = r9.id;	 Catch:{ Exception -> 0x06a4 }
+        r2 = -r2;
+        r2 = (long) r2;	 Catch:{ Exception -> 0x06a4 }
+        goto L_0x0341;
+    L_0x033b:
+        r2 = r9.id;	 Catch:{ Exception -> 0x06a4 }
+        r2 = org.telegram.messenger.AndroidUtilities.makeBroadcastId(r2);	 Catch:{ Exception -> 0x06a4 }
     L_0x0341:
-        r0.dispose();	 Catch:{ Exception -> 0x068b }
-    L_0x0344:
-        r0 = r10.isEmpty();	 Catch:{ Exception -> 0x068b }
-        if (r0 != 0) goto L_0x051d;
-    L_0x034a:
-        r0 = r1.currentAccount;	 Catch:{ Exception -> 0x068b }
-        r0 = org.telegram.messenger.MessagesStorage.getInstance(r0);	 Catch:{ Exception -> 0x068b }
-        r0 = r0.getDatabase();	 Catch:{ Exception -> 0x068b }
-        r2 = java.util.Locale.US;	 Catch:{ Exception -> 0x068b }
+        r2 = r12.get(r2);	 Catch:{ Exception -> 0x06a4 }
+        r2 = (org.telegram.ui.Adapters.DialogsSearchAdapter.DialogSearchResult) r2;	 Catch:{ Exception -> 0x06a4 }
+        r3 = r9.title;	 Catch:{ Exception -> 0x06a4 }
+        r11 = 0;
+        r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r3, r11, r13);	 Catch:{ Exception -> 0x06a4 }
+        r2.name = r3;	 Catch:{ Exception -> 0x06a4 }
+        r2.object = r9;	 Catch:{ Exception -> 0x06a4 }
+        r18 = r18 + 1;
+        goto L_0x02b2;
+    L_0x0356:
+        r0.dispose();	 Catch:{ Exception -> 0x06a4 }
+    L_0x0359:
+        r0 = r10.isEmpty();	 Catch:{ Exception -> 0x06a4 }
+        if (r0 != 0) goto L_0x0534;
+    L_0x035f:
+        r0 = r1.currentAccount;	 Catch:{ Exception -> 0x06a4 }
+        r0 = org.telegram.messenger.MessagesStorage.getInstance(r0);	 Catch:{ Exception -> 0x06a4 }
+        r0 = r0.getDatabase();	 Catch:{ Exception -> 0x06a4 }
+        r2 = java.util.Locale.US;	 Catch:{ Exception -> 0x06a4 }
         r3 = "SELECT q.data, u.name, q.user, q.g, q.authkey, q.ttl, u.data, u.status, q.layer, q.seq_in, q.seq_out, q.use_count, q.exchange_id, q.key_date, q.fprint, q.fauthkey, q.khash, q.in_seq_no, q.admin_id, q.mtproto_seq FROM enc_chats as q INNER JOIN users as u ON q.user = u.uid WHERE q.uid IN(%s)";
         r9 = 1;
-        r11 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x068b }
-        r5 = android.text.TextUtils.join(r5, r10);	 Catch:{ Exception -> 0x068b }
+        r11 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x06a4 }
+        r5 = android.text.TextUtils.join(r5, r10);	 Catch:{ Exception -> 0x06a4 }
         r9 = 0;
-        r11[r9] = r5;	 Catch:{ Exception -> 0x068b }
-        r2 = java.lang.String.format(r2, r3, r11);	 Catch:{ Exception -> 0x068b }
-        r3 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x068b }
-        r0 = r0.queryFinalized(r2, r3);	 Catch:{ Exception -> 0x068b }
-    L_0x036c:
-        r2 = r0.next();	 Catch:{ Exception -> 0x068b }
-        if (r2 == 0) goto L_0x0517;
-    L_0x0372:
+        r11[r9] = r5;	 Catch:{ Exception -> 0x06a4 }
+        r2 = java.lang.String.format(r2, r3, r11);	 Catch:{ Exception -> 0x06a4 }
+        r3 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x06a4 }
+        r0 = r0.queryFinalized(r2, r3);	 Catch:{ Exception -> 0x06a4 }
+    L_0x0381:
+        r2 = r0.next();	 Catch:{ Exception -> 0x06a4 }
+        if (r2 == 0) goto L_0x052e;
+    L_0x0387:
         r2 = 1;
-        r3 = r0.stringValue(r2);	 Catch:{ Exception -> 0x068b }
-        r2 = org.telegram.messenger.LocaleController.getInstance();	 Catch:{ Exception -> 0x068b }
-        r2 = r2.getTranslitString(r3);	 Catch:{ Exception -> 0x068b }
-        r5 = r3.equals(r2);	 Catch:{ Exception -> 0x068b }
-        if (r5 == 0) goto L_0x0386;
-    L_0x0385:
+        r3 = r0.stringValue(r2);	 Catch:{ Exception -> 0x06a4 }
+        r2 = org.telegram.messenger.LocaleController.getInstance();	 Catch:{ Exception -> 0x06a4 }
+        r2 = r2.getTranslitString(r3);	 Catch:{ Exception -> 0x06a4 }
+        r5 = r3.equals(r2);	 Catch:{ Exception -> 0x06a4 }
+        if (r5 == 0) goto L_0x039b;
+    L_0x039a:
         r2 = 0;
-    L_0x0386:
-        r5 = r3.lastIndexOf(r4);	 Catch:{ Exception -> 0x068b }
+    L_0x039b:
+        r5 = r3.lastIndexOf(r4);	 Catch:{ Exception -> 0x06a4 }
         r9 = -1;
-        if (r5 == r9) goto L_0x0394;
-    L_0x038d:
+        if (r5 == r9) goto L_0x03a9;
+    L_0x03a2:
         r5 = r5 + 2;
-        r5 = r3.substring(r5);	 Catch:{ Exception -> 0x068b }
-        goto L_0x0395;
-    L_0x0394:
+        r5 = r3.substring(r5);	 Catch:{ Exception -> 0x06a4 }
+        goto L_0x03aa;
+    L_0x03a9:
         r5 = 0;
-    L_0x0395:
+    L_0x03aa:
         r9 = 0;
         r10 = 0;
-    L_0x0397:
-        r11 = r8.length;	 Catch:{ Exception -> 0x068b }
-        if (r9 >= r11) goto L_0x0511;
-    L_0x039a:
-        r11 = r8[r9];	 Catch:{ Exception -> 0x068b }
-        r13 = r3.startsWith(r11);	 Catch:{ Exception -> 0x068b }
-        if (r13 != 0) goto L_0x03df;
-    L_0x03a2:
-        r13 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x068b }
-        r13.<init>();	 Catch:{ Exception -> 0x068b }
-        r13.append(r7);	 Catch:{ Exception -> 0x068b }
-        r13.append(r11);	 Catch:{ Exception -> 0x068b }
-        r13 = r13.toString();	 Catch:{ Exception -> 0x068b }
-        r13 = r3.contains(r13);	 Catch:{ Exception -> 0x068b }
-        if (r13 != 0) goto L_0x03df;
+    L_0x03ac:
+        r11 = r8.length;	 Catch:{ Exception -> 0x06a4 }
+        if (r9 >= r11) goto L_0x0527;
+    L_0x03af:
+        r11 = r8[r9];	 Catch:{ Exception -> 0x06a4 }
+        r13 = r3.startsWith(r11);	 Catch:{ Exception -> 0x06a4 }
+        if (r13 != 0) goto L_0x03f4;
     L_0x03b7:
-        if (r2 == 0) goto L_0x03d5;
-    L_0x03b9:
-        r13 = r2.startsWith(r11);	 Catch:{ Exception -> 0x068b }
-        if (r13 != 0) goto L_0x03df;
-    L_0x03bf:
-        r13 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x068b }
-        r13.<init>();	 Catch:{ Exception -> 0x068b }
-        r13.append(r7);	 Catch:{ Exception -> 0x068b }
-        r13.append(r11);	 Catch:{ Exception -> 0x068b }
-        r13 = r13.toString();	 Catch:{ Exception -> 0x068b }
-        r13 = r2.contains(r13);	 Catch:{ Exception -> 0x068b }
-        if (r13 == 0) goto L_0x03d5;
+        r13 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x06a4 }
+        r13.<init>();	 Catch:{ Exception -> 0x06a4 }
+        r13.append(r7);	 Catch:{ Exception -> 0x06a4 }
+        r13.append(r11);	 Catch:{ Exception -> 0x06a4 }
+        r13 = r13.toString();	 Catch:{ Exception -> 0x06a4 }
+        r13 = r3.contains(r13);	 Catch:{ Exception -> 0x06a4 }
+        if (r13 != 0) goto L_0x03f4;
+    L_0x03cc:
+        if (r2 == 0) goto L_0x03ea;
+    L_0x03ce:
+        r13 = r2.startsWith(r11);	 Catch:{ Exception -> 0x06a4 }
+        if (r13 != 0) goto L_0x03f4;
     L_0x03d4:
-        goto L_0x03df;
-    L_0x03d5:
-        if (r5 == 0) goto L_0x03e0;
-    L_0x03d7:
-        r13 = r5.startsWith(r11);	 Catch:{ Exception -> 0x068b }
-        if (r13 == 0) goto L_0x03e0;
-    L_0x03dd:
-        r10 = 2;
-        goto L_0x03e0;
-    L_0x03df:
-        r10 = 1;
-    L_0x03e0:
-        if (r10 == 0) goto L_0x050b;
-    L_0x03e2:
-        r13 = 0;
-        r2 = r0.byteBufferValue(r13);	 Catch:{ Exception -> 0x068b }
-        if (r2 == 0) goto L_0x03f5;
+        r13 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x06a4 }
+        r13.<init>();	 Catch:{ Exception -> 0x06a4 }
+        r13.append(r7);	 Catch:{ Exception -> 0x06a4 }
+        r13.append(r11);	 Catch:{ Exception -> 0x06a4 }
+        r13 = r13.toString();	 Catch:{ Exception -> 0x06a4 }
+        r13 = r2.contains(r13);	 Catch:{ Exception -> 0x06a4 }
+        if (r13 == 0) goto L_0x03ea;
     L_0x03e9:
-        r3 = r2.readInt32(r13);	 Catch:{ Exception -> 0x068b }
-        r3 = org.telegram.tgnet.TLRPC.EncryptedChat.TLdeserialize(r2, r3, r13);	 Catch:{ Exception -> 0x068b }
-        r2.reuse();	 Catch:{ Exception -> 0x068b }
-        goto L_0x03f6;
+        goto L_0x03f4;
+    L_0x03ea:
+        if (r5 == 0) goto L_0x03f5;
+    L_0x03ec:
+        r13 = r5.startsWith(r11);	 Catch:{ Exception -> 0x06a4 }
+        if (r13 == 0) goto L_0x03f5;
+    L_0x03f2:
+        r10 = 2;
+        goto L_0x03f5;
+    L_0x03f4:
+        r10 = 1;
     L_0x03f5:
-        r3 = 0;
-    L_0x03f6:
-        r2 = 6;
-        r2 = r0.byteBufferValue(r2);	 Catch:{ Exception -> 0x068b }
+        if (r10 == 0) goto L_0x0520;
+    L_0x03f7:
+        r13 = 0;
+        r2 = r0.byteBufferValue(r13);	 Catch:{ Exception -> 0x06a4 }
         if (r2 == 0) goto L_0x040a;
-    L_0x03fd:
-        r5 = 0;
-        r9 = r2.readInt32(r5);	 Catch:{ Exception -> 0x068b }
-        r9 = org.telegram.tgnet.TLRPC.User.TLdeserialize(r2, r9, r5);	 Catch:{ Exception -> 0x068b }
-        r2.reuse();	 Catch:{ Exception -> 0x068b }
+    L_0x03fe:
+        r3 = r2.readInt32(r13);	 Catch:{ Exception -> 0x06a4 }
+        r3 = org.telegram.tgnet.TLRPC.EncryptedChat.TLdeserialize(r2, r3, r13);	 Catch:{ Exception -> 0x06a4 }
+        r2.reuse();	 Catch:{ Exception -> 0x06a4 }
         goto L_0x040b;
     L_0x040a:
-        r9 = 0;
+        r3 = 0;
     L_0x040b:
-        if (r3 == 0) goto L_0x0511;
-    L_0x040d:
-        if (r9 == 0) goto L_0x0511;
-    L_0x040f:
-        r2 = r3.id;	 Catch:{ Exception -> 0x068b }
-        r14 = (long) r2;	 Catch:{ Exception -> 0x068b }
+        r2 = 6;
+        r2 = r0.byteBufferValue(r2);	 Catch:{ Exception -> 0x06a4 }
+        if (r2 == 0) goto L_0x041f;
+    L_0x0412:
+        r5 = 0;
+        r9 = r2.readInt32(r5);	 Catch:{ Exception -> 0x06a4 }
+        r9 = org.telegram.tgnet.TLRPC.User.TLdeserialize(r2, r9, r5);	 Catch:{ Exception -> 0x06a4 }
+        r2.reuse();	 Catch:{ Exception -> 0x06a4 }
+        goto L_0x0420;
+    L_0x041f:
+        r9 = 0;
+    L_0x0420:
+        if (r3 == 0) goto L_0x0527;
+    L_0x0422:
+        if (r9 == 0) goto L_0x0527;
+    L_0x0424:
+        r2 = r3.id;	 Catch:{ Exception -> 0x06a4 }
+        r14 = (long) r2;	 Catch:{ Exception -> 0x06a4 }
         r13 = 32;
         r14 = r14 << r13;
-        r2 = r12.get(r14);	 Catch:{ Exception -> 0x068b }
-        r2 = (org.telegram.ui.Adapters.DialogsSearchAdapter.DialogSearchResult) r2;	 Catch:{ Exception -> 0x068b }
+        r2 = r12.get(r14);	 Catch:{ Exception -> 0x06a4 }
+        r2 = (org.telegram.ui.Adapters.DialogsSearchAdapter.DialogSearchResult) r2;	 Catch:{ Exception -> 0x06a4 }
         r5 = 2;
-        r14 = r0.intValue(r5);	 Catch:{ Exception -> 0x068b }
-        r3.user_id = r14;	 Catch:{ Exception -> 0x068b }
+        r14 = r0.intValue(r5);	 Catch:{ Exception -> 0x06a4 }
+        r3.user_id = r14;	 Catch:{ Exception -> 0x06a4 }
         r5 = 3;
-        r14 = r0.byteArrayValue(r5);	 Catch:{ Exception -> 0x068b }
-        r3.a_or_b = r14;	 Catch:{ Exception -> 0x068b }
-        r5 = 4;
-        r5 = r0.byteArrayValue(r5);	 Catch:{ Exception -> 0x068b }
-        r3.auth_key = r5;	 Catch:{ Exception -> 0x068b }
+        r14 = r0.byteArrayValue(r5);	 Catch:{ Exception -> 0x06a4 }
+        r3.a_or_b = r14;	 Catch:{ Exception -> 0x06a4 }
+        r15 = 4;
+        r5 = r0.byteArrayValue(r15);	 Catch:{ Exception -> 0x06a4 }
+        r3.auth_key = r5;	 Catch:{ Exception -> 0x06a4 }
         r5 = 5;
-        r5 = r0.intValue(r5);	 Catch:{ Exception -> 0x068b }
-        r3.ttl = r5;	 Catch:{ Exception -> 0x068b }
+        r5 = r0.intValue(r5);	 Catch:{ Exception -> 0x06a4 }
+        r3.ttl = r5;	 Catch:{ Exception -> 0x06a4 }
         r5 = 8;
-        r5 = r0.intValue(r5);	 Catch:{ Exception -> 0x068b }
-        r3.layer = r5;	 Catch:{ Exception -> 0x068b }
+        r5 = r0.intValue(r5);	 Catch:{ Exception -> 0x06a4 }
+        r3.layer = r5;	 Catch:{ Exception -> 0x06a4 }
         r5 = 9;
-        r5 = r0.intValue(r5);	 Catch:{ Exception -> 0x068b }
-        r3.seq_in = r5;	 Catch:{ Exception -> 0x068b }
+        r5 = r0.intValue(r5);	 Catch:{ Exception -> 0x06a4 }
+        r3.seq_in = r5;	 Catch:{ Exception -> 0x06a4 }
         r5 = 10;
-        r5 = r0.intValue(r5);	 Catch:{ Exception -> 0x068b }
-        r3.seq_out = r5;	 Catch:{ Exception -> 0x068b }
+        r5 = r0.intValue(r5);	 Catch:{ Exception -> 0x06a4 }
+        r3.seq_out = r5;	 Catch:{ Exception -> 0x06a4 }
         r5 = 11;
-        r5 = r0.intValue(r5);	 Catch:{ Exception -> 0x068b }
+        r5 = r0.intValue(r5);	 Catch:{ Exception -> 0x06a4 }
         r14 = r5 >> 16;
-        r14 = (short) r14;	 Catch:{ Exception -> 0x068b }
-        r3.key_use_count_in = r14;	 Catch:{ Exception -> 0x068b }
-        r5 = (short) r5;	 Catch:{ Exception -> 0x068b }
-        r3.key_use_count_out = r5;	 Catch:{ Exception -> 0x068b }
+        r14 = (short) r14;	 Catch:{ Exception -> 0x06a4 }
+        r3.key_use_count_in = r14;	 Catch:{ Exception -> 0x06a4 }
+        r5 = (short) r5;	 Catch:{ Exception -> 0x06a4 }
+        r3.key_use_count_out = r5;	 Catch:{ Exception -> 0x06a4 }
         r5 = 12;
-        r14 = r0.longValue(r5);	 Catch:{ Exception -> 0x068b }
-        r3.exchange_id = r14;	 Catch:{ Exception -> 0x068b }
+        r13 = r0.longValue(r5);	 Catch:{ Exception -> 0x06a4 }
+        r3.exchange_id = r13;	 Catch:{ Exception -> 0x06a4 }
         r5 = 13;
-        r5 = r0.intValue(r5);	 Catch:{ Exception -> 0x068b }
-        r3.key_create_date = r5;	 Catch:{ Exception -> 0x068b }
+        r5 = r0.intValue(r5);	 Catch:{ Exception -> 0x06a4 }
+        r3.key_create_date = r5;	 Catch:{ Exception -> 0x06a4 }
         r5 = 14;
-        r14 = r0.longValue(r5);	 Catch:{ Exception -> 0x068b }
-        r3.future_key_fingerprint = r14;	 Catch:{ Exception -> 0x068b }
+        r13 = r0.longValue(r5);	 Catch:{ Exception -> 0x06a4 }
+        r3.future_key_fingerprint = r13;	 Catch:{ Exception -> 0x06a4 }
         r5 = 15;
-        r5 = r0.byteArrayValue(r5);	 Catch:{ Exception -> 0x068b }
-        r3.future_auth_key = r5;	 Catch:{ Exception -> 0x068b }
+        r5 = r0.byteArrayValue(r5);	 Catch:{ Exception -> 0x06a4 }
+        r3.future_auth_key = r5;	 Catch:{ Exception -> 0x06a4 }
         r5 = 16;
-        r5 = r0.byteArrayValue(r5);	 Catch:{ Exception -> 0x068b }
-        r3.key_hash = r5;	 Catch:{ Exception -> 0x068b }
+        r5 = r0.byteArrayValue(r5);	 Catch:{ Exception -> 0x06a4 }
+        r3.key_hash = r5;	 Catch:{ Exception -> 0x06a4 }
         r5 = 17;
-        r5 = r0.intValue(r5);	 Catch:{ Exception -> 0x068b }
-        r3.in_seq_no = r5;	 Catch:{ Exception -> 0x068b }
+        r5 = r0.intValue(r5);	 Catch:{ Exception -> 0x06a4 }
+        r3.in_seq_no = r5;	 Catch:{ Exception -> 0x06a4 }
         r5 = 18;
-        r5 = r0.intValue(r5);	 Catch:{ Exception -> 0x068b }
-        if (r5 == 0) goto L_0x0497;
-    L_0x0495:
-        r3.admin_id = r5;	 Catch:{ Exception -> 0x068b }
-    L_0x0497:
-        r5 = 19;
-        r5 = r0.intValue(r5);	 Catch:{ Exception -> 0x068b }
-        r3.mtproto_seq = r5;	 Catch:{ Exception -> 0x068b }
-        r5 = r9.status;	 Catch:{ Exception -> 0x068b }
+        r5 = r0.intValue(r5);	 Catch:{ Exception -> 0x06a4 }
         if (r5 == 0) goto L_0x04ac;
-    L_0x04a3:
-        r5 = r9.status;	 Catch:{ Exception -> 0x068b }
-        r14 = 7;
-        r14 = r0.intValue(r14);	 Catch:{ Exception -> 0x068b }
-        r5.expires = r14;	 Catch:{ Exception -> 0x068b }
+    L_0x04aa:
+        r3.admin_id = r5;	 Catch:{ Exception -> 0x06a4 }
     L_0x04ac:
+        r5 = 19;
+        r5 = r0.intValue(r5);	 Catch:{ Exception -> 0x06a4 }
+        r3.mtproto_seq = r5;	 Catch:{ Exception -> 0x06a4 }
+        r5 = r9.status;	 Catch:{ Exception -> 0x06a4 }
+        if (r5 == 0) goto L_0x04c1;
+    L_0x04b8:
+        r5 = r9.status;	 Catch:{ Exception -> 0x06a4 }
+        r13 = 7;
+        r13 = r0.intValue(r13);	 Catch:{ Exception -> 0x06a4 }
+        r5.expires = r13;	 Catch:{ Exception -> 0x06a4 }
+    L_0x04c1:
         r5 = 1;
-        if (r10 != r5) goto L_0x04da;
-    L_0x04af:
-        r5 = new android.text.SpannableStringBuilder;	 Catch:{ Exception -> 0x068b }
-        r10 = r9.first_name;	 Catch:{ Exception -> 0x068b }
-        r11 = r9.last_name;	 Catch:{ Exception -> 0x068b }
-        r10 = org.telegram.messenger.ContactsController.formatName(r10, r11);	 Catch:{ Exception -> 0x068b }
-        r5.<init>(r10);	 Catch:{ Exception -> 0x068b }
-        r2.name = r5;	 Catch:{ Exception -> 0x068b }
-        r5 = r2.name;	 Catch:{ Exception -> 0x068b }
-        r5 = (android.text.SpannableStringBuilder) r5;	 Catch:{ Exception -> 0x068b }
-        r10 = new android.text.style.ForegroundColorSpan;	 Catch:{ Exception -> 0x068b }
+        if (r10 != r5) goto L_0x04ef;
+    L_0x04c4:
+        r5 = new android.text.SpannableStringBuilder;	 Catch:{ Exception -> 0x06a4 }
+        r10 = r9.first_name;	 Catch:{ Exception -> 0x06a4 }
+        r11 = r9.last_name;	 Catch:{ Exception -> 0x06a4 }
+        r10 = org.telegram.messenger.ContactsController.formatName(r10, r11);	 Catch:{ Exception -> 0x06a4 }
+        r5.<init>(r10);	 Catch:{ Exception -> 0x06a4 }
+        r2.name = r5;	 Catch:{ Exception -> 0x06a4 }
+        r5 = r2.name;	 Catch:{ Exception -> 0x06a4 }
+        r5 = (android.text.SpannableStringBuilder) r5;	 Catch:{ Exception -> 0x06a4 }
+        r10 = new android.text.style.ForegroundColorSpan;	 Catch:{ Exception -> 0x06a4 }
         r11 = "chats_secretName";
-        r11 = org.telegram.ui.ActionBar.Theme.getColor(r11);	 Catch:{ Exception -> 0x068b }
-        r10.<init>(r11);	 Catch:{ Exception -> 0x068b }
-        r11 = r2.name;	 Catch:{ Exception -> 0x068b }
-        r11 = r11.length();	 Catch:{ Exception -> 0x068b }
-        r15 = 33;
-        r13 = 0;
-        r5.setSpan(r10, r13, r11, r15);	 Catch:{ Exception -> 0x068b }
-        goto L_0x0501;
-    L_0x04da:
-        r5 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x068b }
-        r5.<init>();	 Catch:{ Exception -> 0x068b }
-        r5.append(r6);	 Catch:{ Exception -> 0x068b }
-        r10 = r9.username;	 Catch:{ Exception -> 0x068b }
-        r5.append(r10);	 Catch:{ Exception -> 0x068b }
-        r5 = r5.toString();	 Catch:{ Exception -> 0x068b }
-        r10 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x068b }
-        r10.<init>();	 Catch:{ Exception -> 0x068b }
-        r10.append(r6);	 Catch:{ Exception -> 0x068b }
-        r10.append(r11);	 Catch:{ Exception -> 0x068b }
-        r10 = r10.toString();	 Catch:{ Exception -> 0x068b }
+        r11 = org.telegram.ui.ActionBar.Theme.getColor(r11);	 Catch:{ Exception -> 0x06a4 }
+        r10.<init>(r11);	 Catch:{ Exception -> 0x06a4 }
+        r11 = r2.name;	 Catch:{ Exception -> 0x06a4 }
+        r11 = r11.length();	 Catch:{ Exception -> 0x06a4 }
+        r13 = 33;
+        r14 = 0;
+        r5.setSpan(r10, r14, r11, r13);	 Catch:{ Exception -> 0x06a4 }
+        goto L_0x0516;
+    L_0x04ef:
+        r5 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x06a4 }
+        r5.<init>();	 Catch:{ Exception -> 0x06a4 }
+        r5.append(r6);	 Catch:{ Exception -> 0x06a4 }
+        r10 = r9.username;	 Catch:{ Exception -> 0x06a4 }
+        r5.append(r10);	 Catch:{ Exception -> 0x06a4 }
+        r5 = r5.toString();	 Catch:{ Exception -> 0x06a4 }
+        r10 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x06a4 }
+        r10.<init>();	 Catch:{ Exception -> 0x06a4 }
+        r10.append(r6);	 Catch:{ Exception -> 0x06a4 }
+        r10.append(r11);	 Catch:{ Exception -> 0x06a4 }
+        r10 = r10.toString();	 Catch:{ Exception -> 0x06a4 }
         r11 = 0;
-        r5 = org.telegram.messenger.AndroidUtilities.generateSearchName(r5, r11, r10);	 Catch:{ Exception -> 0x068b }
-        r2.name = r5;	 Catch:{ Exception -> 0x068b }
-    L_0x0501:
-        r2.object = r3;	 Catch:{ Exception -> 0x068b }
+        r5 = org.telegram.messenger.AndroidUtilities.generateSearchName(r5, r11, r10);	 Catch:{ Exception -> 0x06a4 }
+        r2.name = r5;	 Catch:{ Exception -> 0x06a4 }
+    L_0x0516:
+        r2.object = r3;	 Catch:{ Exception -> 0x06a4 }
         r11 = r19;
-        r11.add(r9);	 Catch:{ Exception -> 0x068b }
-        r17 = r17 + 1;
-        goto L_0x0513;
-    L_0x050b:
+        r11.add(r9);	 Catch:{ Exception -> 0x06a4 }
+        r18 = r18 + 1;
+        goto L_0x052a;
+    L_0x0520:
         r11 = r19;
+        r15 = 4;
         r9 = r9 + 1;
-        goto L_0x0397;
-    L_0x0511:
-        r11 = r19;
-    L_0x0513:
-        r19 = r11;
-        goto L_0x036c;
-    L_0x0517:
-        r11 = r19;
-        r0.dispose();	 Catch:{ Exception -> 0x068b }
-        goto L_0x051f;
-    L_0x051d:
-        r11 = r19;
-    L_0x051f:
-        r0 = r17;
-        r2 = new java.util.ArrayList;	 Catch:{ Exception -> 0x068b }
-        r2.<init>(r0);	 Catch:{ Exception -> 0x068b }
-        r0 = 0;
+        goto L_0x03ac;
     L_0x0527:
-        r3 = r12.size();	 Catch:{ Exception -> 0x068b }
-        if (r0 >= r3) goto L_0x0541;
-    L_0x052d:
-        r3 = r12.valueAt(r0);	 Catch:{ Exception -> 0x068b }
-        r3 = (org.telegram.ui.Adapters.DialogsSearchAdapter.DialogSearchResult) r3;	 Catch:{ Exception -> 0x068b }
-        r5 = r3.object;	 Catch:{ Exception -> 0x068b }
-        if (r5 == 0) goto L_0x053e;
-    L_0x0537:
-        r5 = r3.name;	 Catch:{ Exception -> 0x068b }
-        if (r5 == 0) goto L_0x053e;
-    L_0x053b:
-        r2.add(r3);	 Catch:{ Exception -> 0x068b }
+        r11 = r19;
+        r15 = 4;
+    L_0x052a:
+        r19 = r11;
+        goto L_0x0381;
+    L_0x052e:
+        r11 = r19;
+        r0.dispose();	 Catch:{ Exception -> 0x06a4 }
+        goto L_0x0536;
+    L_0x0534:
+        r11 = r19;
+    L_0x0536:
+        r0 = r18;
+        r2 = new java.util.ArrayList;	 Catch:{ Exception -> 0x06a4 }
+        r2.<init>(r0);	 Catch:{ Exception -> 0x06a4 }
+        r0 = 0;
     L_0x053e:
+        r3 = r12.size();	 Catch:{ Exception -> 0x06a4 }
+        if (r0 >= r3) goto L_0x0558;
+    L_0x0544:
+        r3 = r12.valueAt(r0);	 Catch:{ Exception -> 0x06a4 }
+        r3 = (org.telegram.ui.Adapters.DialogsSearchAdapter.DialogSearchResult) r3;	 Catch:{ Exception -> 0x06a4 }
+        r5 = r3.object;	 Catch:{ Exception -> 0x06a4 }
+        if (r5 == 0) goto L_0x0555;
+    L_0x054e:
+        r5 = r3.name;	 Catch:{ Exception -> 0x06a4 }
+        if (r5 == 0) goto L_0x0555;
+    L_0x0552:
+        r2.add(r3);	 Catch:{ Exception -> 0x06a4 }
+    L_0x0555:
         r0 = r0 + 1;
-        goto L_0x0527;
-    L_0x0541:
-        r0 = org.telegram.ui.Adapters.-$$Lambda$DialogsSearchAdapter$FVguPxj8QpbjyrNjyvgW9r4iI6c.INSTANCE;	 Catch:{ Exception -> 0x068b }
-        java.util.Collections.sort(r2, r0);	 Catch:{ Exception -> 0x068b }
-        r0 = new java.util.ArrayList;	 Catch:{ Exception -> 0x068b }
-        r0.<init>();	 Catch:{ Exception -> 0x068b }
-        r3 = new java.util.ArrayList;	 Catch:{ Exception -> 0x068b }
-        r3.<init>();	 Catch:{ Exception -> 0x068b }
+        goto L_0x053e;
+    L_0x0558:
+        r0 = org.telegram.ui.Adapters.-$$Lambda$DialogsSearchAdapter$FVguPxj8QpbjyrNjyvgW9r4iI6c.INSTANCE;	 Catch:{ Exception -> 0x06a4 }
+        java.util.Collections.sort(r2, r0);	 Catch:{ Exception -> 0x06a4 }
+        r0 = new java.util.ArrayList;	 Catch:{ Exception -> 0x06a4 }
+        r0.<init>();	 Catch:{ Exception -> 0x06a4 }
+        r3 = new java.util.ArrayList;	 Catch:{ Exception -> 0x06a4 }
+        r3.<init>();	 Catch:{ Exception -> 0x06a4 }
         r5 = 0;
-    L_0x0551:
-        r9 = r2.size();	 Catch:{ Exception -> 0x068b }
-        if (r5 >= r9) goto L_0x056a;
-    L_0x0557:
-        r9 = r2.get(r5);	 Catch:{ Exception -> 0x068b }
-        r9 = (org.telegram.ui.Adapters.DialogsSearchAdapter.DialogSearchResult) r9;	 Catch:{ Exception -> 0x068b }
-        r10 = r9.object;	 Catch:{ Exception -> 0x068b }
-        r0.add(r10);	 Catch:{ Exception -> 0x068b }
-        r9 = r9.name;	 Catch:{ Exception -> 0x068b }
-        r3.add(r9);	 Catch:{ Exception -> 0x068b }
+    L_0x0568:
+        r9 = r2.size();	 Catch:{ Exception -> 0x06a4 }
+        if (r5 >= r9) goto L_0x0581;
+    L_0x056e:
+        r9 = r2.get(r5);	 Catch:{ Exception -> 0x06a4 }
+        r9 = (org.telegram.ui.Adapters.DialogsSearchAdapter.DialogSearchResult) r9;	 Catch:{ Exception -> 0x06a4 }
+        r10 = r9.object;	 Catch:{ Exception -> 0x06a4 }
+        r0.add(r10);	 Catch:{ Exception -> 0x06a4 }
+        r9 = r9.name;	 Catch:{ Exception -> 0x06a4 }
+        r3.add(r9);	 Catch:{ Exception -> 0x06a4 }
         r5 = r5 + 1;
-        goto L_0x0551;
-    L_0x056a:
-        r2 = r1.dialogsType;	 Catch:{ Exception -> 0x068b }
+        goto L_0x0568;
+    L_0x0581:
+        r2 = r1.dialogsType;	 Catch:{ Exception -> 0x06a4 }
         r5 = 2;
-        if (r2 == r5) goto L_0x0685;
-    L_0x056f:
-        r2 = r1.currentAccount;	 Catch:{ Exception -> 0x068b }
-        r2 = org.telegram.messenger.MessagesStorage.getInstance(r2);	 Catch:{ Exception -> 0x068b }
-        r2 = r2.getDatabase();	 Catch:{ Exception -> 0x068b }
+        if (r2 == r5) goto L_0x069e;
+    L_0x0586:
+        r2 = r1.currentAccount;	 Catch:{ Exception -> 0x06a4 }
+        r2 = org.telegram.messenger.MessagesStorage.getInstance(r2);	 Catch:{ Exception -> 0x06a4 }
+        r2 = r2.getDatabase();	 Catch:{ Exception -> 0x06a4 }
         r5 = "SELECT u.data, u.status, u.name, u.uid FROM users as u INNER JOIN contacts as c ON u.uid = c.uid";
         r9 = 0;
-        r10 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x068b }
-        r2 = r2.queryFinalized(r5, r10);	 Catch:{ Exception -> 0x068b }
-    L_0x0582:
-        r5 = r2.next();	 Catch:{ Exception -> 0x068b }
-        if (r5 == 0) goto L_0x0682;
-    L_0x0588:
+        r10 = new java.lang.Object[r9];	 Catch:{ Exception -> 0x06a4 }
+        r2 = r2.queryFinalized(r5, r10);	 Catch:{ Exception -> 0x06a4 }
+    L_0x0599:
+        r5 = r2.next();	 Catch:{ Exception -> 0x06a4 }
+        if (r5 == 0) goto L_0x069b;
+    L_0x059f:
         r5 = 3;
-        r9 = r2.intValue(r5);	 Catch:{ Exception -> 0x068b }
-        r9 = (long) r9;	 Catch:{ Exception -> 0x068b }
-        r9 = r12.indexOfKey(r9);	 Catch:{ Exception -> 0x068b }
-        if (r9 < 0) goto L_0x0595;
-    L_0x0594:
-        goto L_0x0582;
-    L_0x0595:
+        r9 = r2.intValue(r5);	 Catch:{ Exception -> 0x06a4 }
+        r9 = (long) r9;	 Catch:{ Exception -> 0x06a4 }
+        r9 = r12.indexOfKey(r9);	 Catch:{ Exception -> 0x06a4 }
+        if (r9 < 0) goto L_0x05ac;
+    L_0x05ab:
+        goto L_0x0599;
+    L_0x05ac:
         r9 = 2;
-        r10 = r2.stringValue(r9);	 Catch:{ Exception -> 0x068b }
-        r13 = org.telegram.messenger.LocaleController.getInstance();	 Catch:{ Exception -> 0x068b }
-        r13 = r13.getTranslitString(r10);	 Catch:{ Exception -> 0x068b }
-        r15 = r10.equals(r13);	 Catch:{ Exception -> 0x068b }
-        if (r15 == 0) goto L_0x05a9;
-    L_0x05a8:
+        r10 = r2.stringValue(r9);	 Catch:{ Exception -> 0x06a4 }
+        r13 = org.telegram.messenger.LocaleController.getInstance();	 Catch:{ Exception -> 0x06a4 }
+        r13 = r13.getTranslitString(r10);	 Catch:{ Exception -> 0x06a4 }
+        r14 = r10.equals(r13);	 Catch:{ Exception -> 0x06a4 }
+        if (r14 == 0) goto L_0x05c0;
+    L_0x05bf:
         r13 = 0;
-    L_0x05a9:
-        r15 = r10.lastIndexOf(r4);	 Catch:{ Exception -> 0x068b }
-        r5 = -1;
-        if (r15 == r5) goto L_0x05b7;
-    L_0x05b0:
-        r15 = r15 + 3;
-        r15 = r10.substring(r15);	 Catch:{ Exception -> 0x068b }
-        goto L_0x05b8;
-    L_0x05b7:
-        r15 = 0;
-    L_0x05b8:
-        r5 = r8.length;	 Catch:{ Exception -> 0x068b }
+    L_0x05c0:
+        r14 = r10.lastIndexOf(r4);	 Catch:{ Exception -> 0x06a4 }
+        r15 = -1;
+        if (r14 == r15) goto L_0x05ce;
+    L_0x05c7:
+        r14 = r14 + 3;
+        r14 = r10.substring(r14);	 Catch:{ Exception -> 0x06a4 }
+        goto L_0x05cf;
+    L_0x05ce:
+        r14 = 0;
+    L_0x05cf:
+        r5 = r8.length;	 Catch:{ Exception -> 0x06a4 }
         r9 = 0;
-        r17 = 0;
-    L_0x05bc:
-        if (r9 >= r5) goto L_0x0678;
-    L_0x05be:
-        r14 = r8[r9];	 Catch:{ Exception -> 0x068b }
-        r18 = r10.startsWith(r14);	 Catch:{ Exception -> 0x068b }
-        if (r18 != 0) goto L_0x0608;
-    L_0x05c6:
-        r18 = r4;
-        r4 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x068b }
-        r4.<init>();	 Catch:{ Exception -> 0x068b }
-        r4.append(r7);	 Catch:{ Exception -> 0x068b }
-        r4.append(r14);	 Catch:{ Exception -> 0x068b }
-        r4 = r4.toString();	 Catch:{ Exception -> 0x068b }
-        r4 = r10.contains(r4);	 Catch:{ Exception -> 0x068b }
-        if (r4 != 0) goto L_0x060a;
+        r16 = 0;
+    L_0x05d3:
+        if (r9 >= r5) goto L_0x0691;
+    L_0x05d5:
+        r15 = r8[r9];	 Catch:{ Exception -> 0x06a4 }
+        r18 = r10.startsWith(r15);	 Catch:{ Exception -> 0x06a4 }
+        if (r18 != 0) goto L_0x061f;
     L_0x05dd:
-        if (r13 == 0) goto L_0x05fb;
-    L_0x05df:
-        r4 = r13.startsWith(r14);	 Catch:{ Exception -> 0x068b }
-        if (r4 != 0) goto L_0x060a;
-    L_0x05e5:
-        r4 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x068b }
-        r4.<init>();	 Catch:{ Exception -> 0x068b }
-        r4.append(r7);	 Catch:{ Exception -> 0x068b }
-        r4.append(r14);	 Catch:{ Exception -> 0x068b }
-        r4 = r4.toString();	 Catch:{ Exception -> 0x068b }
-        r4 = r13.contains(r4);	 Catch:{ Exception -> 0x068b }
-        if (r4 == 0) goto L_0x05fb;
-    L_0x05fa:
-        goto L_0x060a;
-    L_0x05fb:
-        if (r15 == 0) goto L_0x0605;
-    L_0x05fd:
-        r4 = r15.startsWith(r14);	 Catch:{ Exception -> 0x068b }
-        if (r4 == 0) goto L_0x0605;
-    L_0x0603:
-        r4 = 2;
-        goto L_0x060b;
-    L_0x0605:
-        r4 = r17;
-        goto L_0x060b;
-    L_0x0608:
         r18 = r4;
-    L_0x060a:
-        r4 = 1;
-    L_0x060b:
-        if (r4 == 0) goto L_0x0668;
-    L_0x060d:
-        r5 = 0;
-        r9 = r2.byteBufferValue(r5);	 Catch:{ Exception -> 0x068b }
-        if (r9 == 0) goto L_0x067b;
+        r4 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x06a4 }
+        r4.<init>();	 Catch:{ Exception -> 0x06a4 }
+        r4.append(r7);	 Catch:{ Exception -> 0x06a4 }
+        r4.append(r15);	 Catch:{ Exception -> 0x06a4 }
+        r4 = r4.toString();	 Catch:{ Exception -> 0x06a4 }
+        r4 = r10.contains(r4);	 Catch:{ Exception -> 0x06a4 }
+        if (r4 != 0) goto L_0x0621;
+    L_0x05f4:
+        if (r13 == 0) goto L_0x0612;
+    L_0x05f6:
+        r4 = r13.startsWith(r15);	 Catch:{ Exception -> 0x06a4 }
+        if (r4 != 0) goto L_0x0621;
+    L_0x05fc:
+        r4 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x06a4 }
+        r4.<init>();	 Catch:{ Exception -> 0x06a4 }
+        r4.append(r7);	 Catch:{ Exception -> 0x06a4 }
+        r4.append(r15);	 Catch:{ Exception -> 0x06a4 }
+        r4 = r4.toString();	 Catch:{ Exception -> 0x06a4 }
+        r4 = r13.contains(r4);	 Catch:{ Exception -> 0x06a4 }
+        if (r4 == 0) goto L_0x0612;
+    L_0x0611:
+        goto L_0x0621;
+    L_0x0612:
+        if (r14 == 0) goto L_0x061c;
     L_0x0614:
-        r10 = r9.readInt32(r5);	 Catch:{ Exception -> 0x068b }
-        r10 = org.telegram.tgnet.TLRPC.User.TLdeserialize(r9, r10, r5);	 Catch:{ Exception -> 0x068b }
-        r9.reuse();	 Catch:{ Exception -> 0x068b }
-        r9 = r10.status;	 Catch:{ Exception -> 0x068b }
-        if (r9 == 0) goto L_0x062c;
-    L_0x0623:
-        r9 = r10.status;	 Catch:{ Exception -> 0x068b }
-        r13 = 1;
-        r15 = r2.intValue(r13);	 Catch:{ Exception -> 0x068b }
-        r9.expires = r15;	 Catch:{ Exception -> 0x068b }
-    L_0x062c:
-        r9 = 1;
-        if (r4 != r9) goto L_0x063c;
-    L_0x062f:
-        r4 = r10.first_name;	 Catch:{ Exception -> 0x068b }
-        r13 = r10.last_name;	 Catch:{ Exception -> 0x068b }
-        r4 = org.telegram.messenger.AndroidUtilities.generateSearchName(r4, r13, r14);	 Catch:{ Exception -> 0x068b }
-        r3.add(r4);	 Catch:{ Exception -> 0x068b }
-        r14 = 0;
-        goto L_0x0664;
-    L_0x063c:
-        r4 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x068b }
-        r4.<init>();	 Catch:{ Exception -> 0x068b }
-        r4.append(r6);	 Catch:{ Exception -> 0x068b }
-        r13 = r10.username;	 Catch:{ Exception -> 0x068b }
-        r4.append(r13);	 Catch:{ Exception -> 0x068b }
-        r4 = r4.toString();	 Catch:{ Exception -> 0x068b }
-        r13 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x068b }
-        r13.<init>();	 Catch:{ Exception -> 0x068b }
-        r13.append(r6);	 Catch:{ Exception -> 0x068b }
-        r13.append(r14);	 Catch:{ Exception -> 0x068b }
-        r13 = r13.toString();	 Catch:{ Exception -> 0x068b }
-        r14 = 0;
-        r4 = org.telegram.messenger.AndroidUtilities.generateSearchName(r4, r14, r13);	 Catch:{ Exception -> 0x068b }
-        r3.add(r4);	 Catch:{ Exception -> 0x068b }
-    L_0x0664:
-        r0.add(r10);	 Catch:{ Exception -> 0x068b }
-        goto L_0x067c;
-    L_0x0668:
-        r17 = r5;
+        r4 = r14.startsWith(r15);	 Catch:{ Exception -> 0x06a4 }
+        if (r4 == 0) goto L_0x061c;
+    L_0x061a:
+        r4 = 2;
+        goto L_0x0622;
+    L_0x061c:
+        r4 = r16;
+        goto L_0x0622;
+    L_0x061f:
+        r18 = r4;
+    L_0x0621:
+        r4 = 1;
+    L_0x0622:
+        if (r4 == 0) goto L_0x0680;
+    L_0x0624:
         r5 = 0;
-        r14 = 0;
-        r16 = 1;
+        r9 = r2.byteBufferValue(r5);	 Catch:{ Exception -> 0x06a4 }
+        if (r9 == 0) goto L_0x0694;
+    L_0x062b:
+        r10 = r9.readInt32(r5);	 Catch:{ Exception -> 0x06a4 }
+        r10 = org.telegram.tgnet.TLRPC.User.TLdeserialize(r9, r10, r5);	 Catch:{ Exception -> 0x06a4 }
+        r9.reuse();	 Catch:{ Exception -> 0x06a4 }
+        r9 = r10.status;	 Catch:{ Exception -> 0x06a4 }
+        if (r9 == 0) goto L_0x0644;
+    L_0x063a:
+        r9 = r10.status;	 Catch:{ Exception -> 0x06a4 }
+        r13 = 1;
+        r14 = r2.intValue(r13);	 Catch:{ Exception -> 0x06a4 }
+        r13 = r14;
+        r9.expires = r13;	 Catch:{ Exception -> 0x06a4 }
+    L_0x0644:
+        r9 = 1;
+        if (r4 != r9) goto L_0x0654;
+    L_0x0647:
+        r4 = r10.first_name;	 Catch:{ Exception -> 0x06a4 }
+        r13 = r10.last_name;	 Catch:{ Exception -> 0x06a4 }
+        r4 = org.telegram.messenger.AndroidUtilities.generateSearchName(r4, r13, r15);	 Catch:{ Exception -> 0x06a4 }
+        r3.add(r4);	 Catch:{ Exception -> 0x06a4 }
+        r15 = 0;
+        goto L_0x067c;
+    L_0x0654:
+        r4 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x06a4 }
+        r4.<init>();	 Catch:{ Exception -> 0x06a4 }
+        r4.append(r6);	 Catch:{ Exception -> 0x06a4 }
+        r13 = r10.username;	 Catch:{ Exception -> 0x06a4 }
+        r4.append(r13);	 Catch:{ Exception -> 0x06a4 }
+        r4 = r4.toString();	 Catch:{ Exception -> 0x06a4 }
+        r13 = new java.lang.StringBuilder;	 Catch:{ Exception -> 0x06a4 }
+        r13.<init>();	 Catch:{ Exception -> 0x06a4 }
+        r13.append(r6);	 Catch:{ Exception -> 0x06a4 }
+        r13.append(r15);	 Catch:{ Exception -> 0x06a4 }
+        r13 = r13.toString();	 Catch:{ Exception -> 0x06a4 }
+        r15 = 0;
+        r4 = org.telegram.messenger.AndroidUtilities.generateSearchName(r4, r15, r13);	 Catch:{ Exception -> 0x06a4 }
+        r3.add(r4);	 Catch:{ Exception -> 0x06a4 }
+    L_0x067c:
+        r0.add(r10);	 Catch:{ Exception -> 0x06a4 }
+        goto L_0x0695;
+    L_0x0680:
+        r16 = r5;
+        r5 = 0;
+        r15 = 0;
+        r17 = 1;
         r9 = r9 + 1;
-        r5 = r17;
-        r17 = r4;
+        r5 = r16;
+        r15 = -1;
+        r16 = r4;
         r4 = r18;
-        goto L_0x05bc;
-    L_0x0678:
+        goto L_0x05d3;
+    L_0x0691:
         r18 = r4;
         r5 = 0;
-    L_0x067b:
-        r14 = 0;
-    L_0x067c:
-        r16 = 1;
+    L_0x0694:
+        r15 = 0;
+    L_0x0695:
+        r17 = 1;
         r4 = r18;
-        goto L_0x0582;
-    L_0x0682:
-        r2.dispose();	 Catch:{ Exception -> 0x068b }
-    L_0x0685:
+        goto L_0x0599;
+    L_0x069b:
+        r2.dispose();	 Catch:{ Exception -> 0x06a4 }
+    L_0x069e:
         r2 = r26;
-        r1.updateSearchResults(r0, r3, r11, r2);	 Catch:{ Exception -> 0x068b }
-        goto L_0x068f;
-    L_0x068b:
+        r1.updateSearchResults(r0, r3, r11, r2);	 Catch:{ Exception -> 0x06a4 }
+        goto L_0x06a8;
+    L_0x06a4:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x068f:
+    L_0x06a8:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.DialogsSearchAdapter.lambda$searchDialogsInternal$8$DialogsSearchAdapter(java.lang.String, int):void");
@@ -1569,6 +1601,10 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         }
     }
 
+    public boolean isHashtagSearch() {
+        return this.searchResultHashtags.isEmpty() ^ 1;
+    }
+
     public void clearRecentHashtags() {
         this.searchAdapterHelper.clearRecentHashtags();
         this.searchResultHashtags.clear();
@@ -1595,7 +1631,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
                 this.searchResultHashtags.clear();
                 this.searchAdapterHelper.mergeResults(null);
                 if (this.needMessagesSearch != 2) {
-                    this.searchAdapterHelper.queryServerSearch(null, true, true, true, true, 0, 0);
+                    this.searchAdapterHelper.queryServerSearch(null, true, true, true, true, 0, this.dialogsType == 0, 0);
                 }
                 this.searchWas = false;
                 this.lastSearchId = -1;
@@ -1643,7 +1679,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         this.searchRunnable2 = null;
         if (i == this.lastSearchId) {
             if (this.needMessagesSearch != 2) {
-                this.searchAdapterHelper.queryServerSearch(str, true, true, true, true, 0, 0);
+                this.searchAdapterHelper.queryServerSearch(str, true, this.dialogsType != 4, true, this.dialogsType != 4, 0, this.dialogsType == 0, 0);
             }
             searchMessagesInternal(str);
         }
@@ -1655,7 +1691,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         if (isRecentSearchDisplayed()) {
             i = 0;
             size = !this.recentSearchObjects.isEmpty() ? this.recentSearchObjects.size() + 1 : 0;
-            if (!DataQuery.getInstance(this.currentAccount).hints.isEmpty()) {
+            if (!MediaDataController.getInstance(this.currentAccount).hints.isEmpty()) {
                 i = 2;
             }
             return size + i;
@@ -1665,13 +1701,17 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             size = this.searchResult.size();
             i = this.searchAdapterHelper.getLocalServerSearch().size();
             int size2 = this.searchAdapterHelper.getGlobalSearch().size();
-            int size3 = this.searchResultMessages.size();
+            int size3 = this.searchAdapterHelper.getPhoneSearch().size();
+            int size4 = this.searchResultMessages.size();
             size += i;
             if (size2 != 0) {
                 size += size2 + 1;
             }
             if (size3 != 0) {
-                size += (size3 + 1) + (this.messagesSearchEndReached ^ 1);
+                size += size3;
+            }
+            if (size4 != 0) {
+                size += (size4 + 1) + (this.messagesSearchEndReached ^ 1);
             }
             return size;
         }
@@ -1683,40 +1723,40 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     /* JADX WARNING: Missing block: B:15:0x005f, code skipped:
             if (r0 != null) goto L_0x0061;
      */
-    public java.lang.Object getItem(int r9) {
+    public java.lang.Object getItem(int r11) {
         /*
-        r8 = this;
-        r0 = r8.isRecentSearchDisplayed();
+        r10 = this;
+        r0 = r10.isRecentSearchDisplayed();
         r1 = 0;
         r2 = 0;
         if (r0 == 0) goto L_0x0064;
     L_0x0008:
-        r0 = r8.currentAccount;
-        r0 = org.telegram.messenger.DataQuery.getInstance(r0);
+        r0 = r10.currentAccount;
+        r0 = org.telegram.messenger.MediaDataController.getInstance(r0);
         r0 = r0.hints;
         r0 = r0.isEmpty();
         if (r0 != 0) goto L_0x0017;
     L_0x0016:
         r2 = 2;
     L_0x0017:
-        if (r9 <= r2) goto L_0x0063;
+        if (r11 <= r2) goto L_0x0063;
     L_0x0019:
-        r9 = r9 + -1;
-        r9 = r9 - r2;
-        r0 = r8.recentSearchObjects;
+        r11 = r11 + -1;
+        r11 = r11 - r2;
+        r0 = r10.recentSearchObjects;
         r0 = r0.size();
-        if (r9 >= r0) goto L_0x0063;
+        if (r11 >= r0) goto L_0x0063;
     L_0x0024:
-        r0 = r8.recentSearchObjects;
-        r9 = r0.get(r9);
-        r9 = (org.telegram.ui.Adapters.DialogsSearchAdapter.RecentSearchObject) r9;
-        r9 = r9.object;
-        r0 = r9 instanceof org.telegram.tgnet.TLRPC.User;
+        r0 = r10.recentSearchObjects;
+        r11 = r0.get(r11);
+        r11 = (org.telegram.ui.Adapters.DialogsSearchAdapter.RecentSearchObject) r11;
+        r11 = r11.object;
+        r0 = r11 instanceof org.telegram.tgnet.TLRPC.User;
         if (r0 == 0) goto L_0x0048;
     L_0x0032:
-        r0 = r8.currentAccount;
+        r0 = r10.currentAccount;
         r0 = org.telegram.messenger.MessagesController.getInstance(r0);
-        r1 = r9;
+        r1 = r11;
         r1 = (org.telegram.tgnet.TLRPC.User) r1;
         r1 = r1.id;
         r1 = java.lang.Integer.valueOf(r1);
@@ -1725,109 +1765,109 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     L_0x0047:
         goto L_0x0061;
     L_0x0048:
-        r0 = r9 instanceof org.telegram.tgnet.TLRPC.Chat;
+        r0 = r11 instanceof org.telegram.tgnet.TLRPC.Chat;
         if (r0 == 0) goto L_0x0062;
     L_0x004c:
-        r0 = r8.currentAccount;
+        r0 = r10.currentAccount;
         r0 = org.telegram.messenger.MessagesController.getInstance(r0);
-        r1 = r9;
+        r1 = r11;
         r1 = (org.telegram.tgnet.TLRPC.Chat) r1;
         r1 = r1.id;
         r1 = java.lang.Integer.valueOf(r1);
         r0 = r0.getChat(r1);
         if (r0 == 0) goto L_0x0062;
     L_0x0061:
-        r9 = r0;
+        r11 = r0;
     L_0x0062:
-        return r9;
+        return r11;
     L_0x0063:
         return r1;
     L_0x0064:
-        r0 = r8.searchResultHashtags;
+        r0 = r10.searchResultHashtags;
         r0 = r0.isEmpty();
         if (r0 != 0) goto L_0x0078;
     L_0x006c:
-        if (r9 <= 0) goto L_0x0077;
+        if (r11 <= 0) goto L_0x0077;
     L_0x006e:
-        r0 = r8.searchResultHashtags;
-        r9 = r9 + -1;
-        r9 = r0.get(r9);
-        return r9;
+        r0 = r10.searchResultHashtags;
+        r11 = r11 + -1;
+        r11 = r0.get(r11);
+        return r11;
     L_0x0077:
         return r1;
     L_0x0078:
-        r0 = r8.searchAdapterHelper;
+        r0 = r10.searchAdapterHelper;
         r0 = r0.getGlobalSearch();
-        r3 = r8.searchAdapterHelper;
+        r3 = r10.searchAdapterHelper;
         r3 = r3.getLocalServerSearch();
-        r4 = r8.searchResult;
-        r4 = r4.size();
-        r5 = r3.size();
-        r6 = r0.isEmpty();
-        if (r6 == 0) goto L_0x0096;
-    L_0x0094:
-        r6 = 0;
-        goto L_0x009c;
-    L_0x0096:
-        r6 = r0.size();
-        r6 = r6 + 1;
-    L_0x009c:
-        r7 = r8.searchResultMessages;
-        r7 = r7.isEmpty();
-        if (r7 == 0) goto L_0x00a5;
-    L_0x00a4:
-        goto L_0x00ad;
-    L_0x00a5:
-        r2 = r8.searchResultMessages;
+        r4 = r10.searchAdapterHelper;
+        r4 = r4.getPhoneSearch();
+        r5 = r10.searchResult;
+        r5 = r5.size();
+        r6 = r3.size();
+        r7 = r4.size();
+        r8 = r0.isEmpty();
+        if (r8 == 0) goto L_0x00a0;
+    L_0x009e:
+        r8 = 0;
+        goto L_0x00a6;
+    L_0x00a0:
+        r8 = r0.size();
+        r8 = r8 + 1;
+    L_0x00a6:
+        r9 = r10.searchResultMessages;
+        r9 = r9.isEmpty();
+        if (r9 == 0) goto L_0x00af;
+    L_0x00ae:
+        goto L_0x00b7;
+    L_0x00af:
+        r2 = r10.searchResultMessages;
         r2 = r2.size();
         r2 = r2 + 1;
-    L_0x00ad:
-        if (r9 < 0) goto L_0x00b8;
-    L_0x00af:
-        if (r9 >= r4) goto L_0x00b8;
-    L_0x00b1:
-        r0 = r8.searchResult;
-        r9 = r0.get(r9);
-        return r9;
-    L_0x00b8:
-        if (r9 < r4) goto L_0x00c4;
-    L_0x00ba:
-        r7 = r5 + r4;
-        if (r9 >= r7) goto L_0x00c4;
-    L_0x00be:
-        r9 = r9 - r4;
-        r9 = r3.get(r9);
-        return r9;
-    L_0x00c4:
-        r3 = r4 + r5;
-        if (r9 <= r3) goto L_0x00d6;
-    L_0x00c8:
-        r3 = r6 + r4;
-        r3 = r3 + r5;
-        if (r9 >= r3) goto L_0x00d6;
-    L_0x00cd:
-        r9 = r9 - r4;
-        r9 = r9 - r5;
-        r9 = r9 + -1;
-        r9 = r0.get(r9);
-        return r9;
+    L_0x00b7:
+        if (r11 < 0) goto L_0x00c2;
+    L_0x00b9:
+        if (r11 >= r5) goto L_0x00c2;
+    L_0x00bb:
+        r0 = r10.searchResult;
+        r11 = r0.get(r11);
+        return r11;
+    L_0x00c2:
+        r11 = r11 - r5;
+        if (r11 < 0) goto L_0x00cc;
+    L_0x00c5:
+        if (r11 >= r6) goto L_0x00cc;
+    L_0x00c7:
+        r11 = r3.get(r11);
+        return r11;
+    L_0x00cc:
+        r11 = r11 - r6;
+        if (r11 < 0) goto L_0x00d6;
+    L_0x00cf:
+        if (r11 >= r7) goto L_0x00d6;
+    L_0x00d1:
+        r11 = r4.get(r11);
+        return r11;
     L_0x00d6:
-        r0 = r6 + r4;
-        r3 = r0 + r5;
-        if (r9 <= r3) goto L_0x00ec;
-    L_0x00dc:
-        r0 = r0 + r2;
-        r0 = r0 + r5;
-        if (r9 >= r0) goto L_0x00ec;
-    L_0x00e0:
-        r0 = r8.searchResultMessages;
-        r9 = r9 - r4;
-        r9 = r9 - r6;
-        r9 = r9 - r5;
-        r9 = r9 + -1;
-        r9 = r0.get(r9);
-        return r9;
-    L_0x00ec:
+        r11 = r11 - r7;
+        if (r11 <= 0) goto L_0x00e2;
+    L_0x00d9:
+        if (r11 >= r8) goto L_0x00e2;
+    L_0x00db:
+        r11 = r11 + -1;
+        r11 = r0.get(r11);
+        return r11;
+    L_0x00e2:
+        r11 = r11 - r8;
+        if (r11 <= 0) goto L_0x00f0;
+    L_0x00e5:
+        if (r11 >= r2) goto L_0x00f0;
+    L_0x00e7:
+        r0 = r10.searchResultMessages;
+        r11 = r11 + -1;
+        r11 = r0.get(r11);
+        return r11;
+    L_0x00f0:
         return r1;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.DialogsSearchAdapter.getItem(int):java.lang.Object");
@@ -1841,19 +1881,26 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         ArrayList localServerSearch = this.searchAdapterHelper.getLocalServerSearch();
         int size = this.searchResult.size();
         int size2 = localServerSearch.size();
-        int size3 = globalSearch.isEmpty() ? 0 : globalSearch.size() + 1;
-        int size4 = this.searchResultMessages.isEmpty() ? 0 : this.searchResultMessages.size() + 1;
+        int size3 = this.searchAdapterHelper.getPhoneSearch().size();
+        int size4 = globalSearch.isEmpty() ? 0 : globalSearch.size() + 1;
+        int size5 = this.searchResultMessages.isEmpty() ? 0 : this.searchResultMessages.size() + 1;
         if (i >= 0 && i < size) {
             return false;
         }
-        if (i >= size && i < size2 + size) {
+        i -= size;
+        if (i >= 0 && i < size2) {
             return false;
         }
-        if (i > size + size2 && i < (size3 + size) + size2) {
+        i -= size2;
+        if (i > 0 && i < size3) {
+            return false;
+        }
+        i -= size3;
+        if (i > 0 && i < size4) {
             return true;
         }
-        size3 += size;
-        if (i <= size3 + size2 || i < (size3 + size4) + size2) {
+        i -= size4;
+        if (i <= 0 || i < size5) {
         }
         return false;
     }
@@ -1861,51 +1908,6 @@ public class DialogsSearchAdapter extends SelectionAdapter {
     public boolean isEnabled(ViewHolder viewHolder) {
         int itemViewType = viewHolder.getItemViewType();
         return (itemViewType == 1 || itemViewType == 3) ? false : true;
-    }
-
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = null;
-        if (i == 0) {
-            view = new ProfileSearchCell(this.mContext);
-        } else if (i == 1) {
-            view = new GraySectionCell(this.mContext);
-        } else if (i == 2) {
-            view = new DialogCell(this.mContext, false, true);
-        } else if (i == 3) {
-            view = new LoadingCell(this.mContext);
-        } else if (i == 4) {
-            view = new HashtagSearchCell(this.mContext);
-        } else if (i == 5) {
-            View anonymousClass2 = new RecyclerListView(this.mContext) {
-                public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
-                    if (!(getParent() == null || getParent().getParent() == null)) {
-                        getParent().getParent().requestDisallowInterceptTouchEvent(true);
-                    }
-                    return super.onInterceptTouchEvent(motionEvent);
-                }
-            };
-            anonymousClass2.setTag(Integer.valueOf(9));
-            anonymousClass2.setItemAnimator(null);
-            anonymousClass2.setLayoutAnimation(null);
-            AnonymousClass3 anonymousClass3 = new LinearLayoutManager(this.mContext) {
-                public boolean supportsPredictiveItemAnimations() {
-                    return false;
-                }
-            };
-            anonymousClass3.setOrientation(0);
-            anonymousClass2.setLayoutManager(anonymousClass3);
-            anonymousClass2.setAdapter(new CategoryAdapterRecycler(this, null));
-            anonymousClass2.setOnItemClickListener(new -$$Lambda$DialogsSearchAdapter$DZkEHCwRy7JqjbUQmUNPYIVHu-I(this));
-            anonymousClass2.setOnItemLongClickListener(new -$$Lambda$DialogsSearchAdapter$VmJg1wMYhOLJS8dwKIzHrQMjS0A(this));
-            this.innerListView = anonymousClass2;
-            view = anonymousClass2;
-        }
-        if (i == 5) {
-            view.setLayoutParams(new LayoutParams(-1, AndroidUtilities.dp(86.0f)));
-        } else {
-            view.setLayoutParams(new LayoutParams(-1, -2));
-        }
-        return new Holder(view);
     }
 
     public /* synthetic */ void lambda$onCreateViewHolder$12$DialogsSearchAdapter(View view, int i) {
@@ -1923,43 +1925,120 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         return true;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:134:0x02f4  */
-    /* JADX WARNING: Removed duplicated region for block: B:133:0x02f2  */
-    public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r18, int r19) {
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        View view = null;
+        switch (i) {
+            case 0:
+                view = new ProfileSearchCell(this.mContext);
+                break;
+            case 1:
+                view = new GraySectionCell(this.mContext);
+                break;
+            case 2:
+                view = new DialogCell(this.mContext, false, true);
+                break;
+            case 3:
+                view = new LoadingCell(this.mContext);
+                break;
+            case 4:
+                view = new HashtagSearchCell(this.mContext);
+                break;
+            case 5:
+                View anonymousClass2 = new RecyclerListView(this.mContext) {
+                    public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+                        if (!(getParent() == null || getParent().getParent() == null)) {
+                            getParent().getParent().requestDisallowInterceptTouchEvent(true);
+                        }
+                        return super.onInterceptTouchEvent(motionEvent);
+                    }
+                };
+                anonymousClass2.setTag(Integer.valueOf(9));
+                anonymousClass2.setItemAnimator(null);
+                anonymousClass2.setLayoutAnimation(null);
+                AnonymousClass3 anonymousClass3 = new LinearLayoutManager(this.mContext) {
+                    public boolean supportsPredictiveItemAnimations() {
+                        return false;
+                    }
+                };
+                anonymousClass3.setOrientation(0);
+                anonymousClass2.setLayoutManager(anonymousClass3);
+                anonymousClass2.setAdapter(new CategoryAdapterRecycler(this, null));
+                anonymousClass2.setOnItemClickListener(new -$$Lambda$DialogsSearchAdapter$DZkEHCwRy7JqjbUQmUNPYIVHu-I(this));
+                anonymousClass2.setOnItemLongClickListener(new -$$Lambda$DialogsSearchAdapter$VmJg1wMYhOLJS8dwKIzHrQMjS0A(this));
+                this.innerListView = anonymousClass2;
+                view = anonymousClass2;
+                break;
+            case 6:
+                view = new TextCell(this.mContext, 16);
+                break;
+        }
+        if (i == 5) {
+            view.setLayoutParams(new LayoutParams(-1, AndroidUtilities.dp(86.0f)));
+        } else {
+            view.setLayoutParams(new LayoutParams(-1, -2));
+        }
+        return new Holder(view);
+    }
+
+    /* JADX WARNING: Removed duplicated region for block: B:150:0x037e  */
+    public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r17, int r18) {
         /*
-        r17 = this;
-        r1 = r17;
-        r0 = r18;
-        r2 = r19;
-        r3 = r18.getItemViewType();
-        r4 = 3;
-        r5 = 2;
+        r16 = this;
+        r1 = r16;
+        r0 = r17;
+        r2 = r18;
+        r3 = r17.getItemViewType();
+        r4 = 2;
+        r5 = 0;
         r6 = 0;
         r7 = 1;
-        if (r3 == 0) goto L_0x010e;
+        if (r3 == 0) goto L_0x017f;
     L_0x0010:
-        if (r3 == r7) goto L_0x006e;
+        if (r3 == r7) goto L_0x00aa;
     L_0x0012:
-        if (r3 == r5) goto L_0x004d;
+        if (r3 == r4) goto L_0x0089;
     L_0x0014:
-        if (r3 == r4) goto L_0x02fa;
-    L_0x0016:
-        r4 = 4;
-        if (r3 == r4) goto L_0x002e;
-    L_0x0019:
-        r4 = 5;
-        if (r3 == r4) goto L_0x001e;
-    L_0x001c:
-        goto L_0x02fa;
-    L_0x001e:
+        r8 = 4;
+        if (r3 == r8) goto L_0x006a;
+    L_0x0017:
+        r8 = 5;
+        if (r3 == r8) goto L_0x005a;
+    L_0x001a:
+        r4 = 6;
+        if (r3 == r4) goto L_0x001f;
+    L_0x001d:
+        goto L_0x0384;
+    L_0x001f:
+        r2 = r1.getItem(r2);
+        r2 = (java.lang.String) r2;
+        r0 = r0.itemView;
+        r0 = (org.telegram.ui.Cells.TextCell) r0;
+        r3 = "windowBackgroundWhiteBlueText2";
+        r0.setColors(r5, r3);
+        r3 = NUM; // 0x7f0d00a8 float:1.8742455E38 double:1.0531298605E-314;
+        r4 = new java.lang.Object[r7];
+        r5 = org.telegram.PhoneFormat.PhoneFormat.getInstance();
+        r7 = new java.lang.StringBuilder;
+        r7.<init>();
+        r8 = "+";
+        r7.append(r8);
+        r7.append(r2);
+        r2 = r7.toString();
+        r2 = r5.format(r2);
+        r4[r6] = r2;
+        r2 = "AddContactByPhone";
+        r2 = org.telegram.messenger.LocaleController.formatString(r2, r3, r4);
+        r0.setText(r2, r6);
+        goto L_0x0384;
+    L_0x005a:
         r0 = r0.itemView;
         r0 = (org.telegram.ui.Components.RecyclerListView) r0;
         r0 = r0.getAdapter();
         r0 = (org.telegram.ui.Adapters.DialogsSearchAdapter.CategoryAdapterRecycler) r0;
-        r2 = r2 / r5;
+        r2 = r2 / r4;
         r0.setIndex(r2);
-        goto L_0x02fa;
-    L_0x002e:
+        goto L_0x0384;
+    L_0x006a:
         r0 = r0.itemView;
         r0 = (org.telegram.ui.Cells.HashtagSearchCell) r0;
         r3 = r1.searchResultHashtags;
@@ -1969,21 +2048,21 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         r0.setText(r3);
         r3 = r1.searchResultHashtags;
         r3 = r3.size();
-        if (r2 == r3) goto L_0x0048;
-    L_0x0047:
+        if (r2 == r3) goto L_0x0084;
+    L_0x0083:
         r6 = 1;
-    L_0x0048:
+    L_0x0084:
         r0.setNeedDivider(r6);
-        goto L_0x02fa;
-    L_0x004d:
+        goto L_0x0384;
+    L_0x0089:
         r0 = r0.itemView;
         r0 = (org.telegram.ui.Cells.DialogCell) r0;
-        r3 = r17.getItemCount();
+        r3 = r16.getItemCount();
         r3 = r3 - r7;
-        if (r2 == r3) goto L_0x0059;
-    L_0x0058:
+        if (r2 == r3) goto L_0x0095;
+    L_0x0094:
         r6 = 1;
-    L_0x0059:
+    L_0x0095:
         r0.useSeparator = r6;
         r2 = r1.getItem(r2);
         r2 = (org.telegram.messenger.MessageObject) r2;
@@ -1991,119 +2070,151 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         r5 = r2.messageOwner;
         r5 = r5.date;
         r0.setDialog(r3, r2, r5);
-        goto L_0x02fa;
-    L_0x006e:
+        goto L_0x0384;
+    L_0x00aa:
         r0 = r0.itemView;
         r0 = (org.telegram.ui.Cells.GraySectionCell) r0;
-        r3 = r17.isRecentSearchDisplayed();
-        r4 = NUM; // 0x7f0d02be float:1.8743539E38 double:1.0531301244E-314;
-        r7 = "ClearButton";
-        if (r3 == 0) goto L_0x00b4;
-    L_0x007d:
+        r3 = r16.isRecentSearchDisplayed();
+        r5 = NUM; // 0x7f0d02d0 float:1.8743575E38 double:1.0531301333E-314;
+        r8 = "ClearButton";
+        if (r3 == 0) goto L_0x00f0;
+    L_0x00b9:
         r3 = r1.currentAccount;
-        r3 = org.telegram.messenger.DataQuery.getInstance(r3);
+        r3 = org.telegram.messenger.MediaDataController.getInstance(r3);
         r3 = r3.hints;
         r3 = r3.isEmpty();
-        if (r3 != 0) goto L_0x008c;
-    L_0x008b:
-        goto L_0x008d;
-    L_0x008c:
-        r5 = 0;
-    L_0x008d:
-        if (r2 >= r5) goto L_0x009d;
-    L_0x008f:
-        r2 = NUM; // 0x7f0d0275 float:1.874339E38 double:1.0531300883E-314;
+        if (r3 != 0) goto L_0x00c8;
+    L_0x00c7:
+        goto L_0x00c9;
+    L_0x00c8:
+        r4 = 0;
+    L_0x00c9:
+        if (r2 >= r4) goto L_0x00d9;
+    L_0x00cb:
+        r2 = NUM; // 0x7f0d0283 float:1.8743419E38 double:1.053130095E-314;
         r3 = "ChatHints";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.setText(r2);
-        goto L_0x02fa;
-    L_0x009d:
-        r2 = NUM; // 0x7f0d0859 float:1.874645E38 double:1.0531308334E-314;
+        goto L_0x0384;
+    L_0x00d9:
+        r2 = NUM; // 0x7f0d0896 float:1.8746573E38 double:1.0531308635E-314;
         r3 = "Recent";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
-        r3 = org.telegram.messenger.LocaleController.getString(r7, r4);
+        r3 = org.telegram.messenger.LocaleController.getString(r8, r5);
         r4 = new org.telegram.ui.Adapters.-$$Lambda$DialogsSearchAdapter$941fnPDSgReuKOmz7WsSoxVuOTY;
         r4.<init>(r1);
         r0.setText(r2, r3, r4);
-        goto L_0x02fa;
-    L_0x00b4:
+        goto L_0x0384;
+    L_0x00f0:
         r3 = r1.searchResultHashtags;
         r3 = r3.isEmpty();
-        if (r3 != 0) goto L_0x00d3;
-    L_0x00bc:
-        r2 = NUM; // 0x7f0d04d2 float:1.8744618E38 double:1.053130387E-314;
+        if (r3 != 0) goto L_0x010f;
+    L_0x00f8:
+        r2 = NUM; // 0x7f0d04f5 float:1.8744689E38 double:1.0531304045E-314;
         r3 = "Hashtags";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
-        r3 = org.telegram.messenger.LocaleController.getString(r7, r4);
+        r3 = org.telegram.messenger.LocaleController.getString(r8, r5);
         r4 = new org.telegram.ui.Adapters.-$$Lambda$DialogsSearchAdapter$honrBco-zV9w0fwaI91SKdwfMI0;
         r4.<init>(r1);
         r0.setText(r2, r3, r4);
-        goto L_0x02fa;
-    L_0x00d3:
+        goto L_0x0384;
+    L_0x010f:
         r3 = r1.searchAdapterHelper;
         r3 = r3.getGlobalSearch();
-        r3 = r3.isEmpty();
-        if (r3 != 0) goto L_0x0100;
-    L_0x00df:
-        r3 = r1.searchResult;
-        r3 = r3.size();
-        r4 = r1.searchAdapterHelper;
-        r4 = r4.getLocalServerSearch();
+        r4 = r1.searchResult;
         r4 = r4.size();
-        r3 = r3 + r4;
-        if (r2 != r3) goto L_0x0100;
-    L_0x00f2:
-        r2 = NUM; // 0x7f0d04aa float:1.8744536E38 double:1.0531303675E-314;
+        r5 = r1.searchAdapterHelper;
+        r5 = r5.getLocalServerSearch();
+        r5 = r5.size();
+        r8 = r1.searchAdapterHelper;
+        r8 = r8.getPhoneSearch();
+        r8 = r8.size();
+        r9 = r3.isEmpty();
+        if (r9 == 0) goto L_0x0136;
+    L_0x0135:
+        goto L_0x013c;
+    L_0x0136:
+        r3 = r3.size();
+        r6 = r3 + 1;
+    L_0x013c:
+        r3 = r1.searchResultMessages;
+        r3 = r3.isEmpty();
+        if (r3 == 0) goto L_0x0145;
+    L_0x0144:
+        goto L_0x014a;
+    L_0x0145:
+        r3 = r1.searchResultMessages;
+        r3.size();
+    L_0x014a:
+        r4 = r4 + r5;
+        r2 = r2 - r4;
+        if (r2 < 0) goto L_0x015e;
+    L_0x014e:
+        if (r2 >= r8) goto L_0x015e;
+    L_0x0150:
+        r2 = NUM; // 0x7f0d082a float:1.8746354E38 double:1.05313081E-314;
+        r3 = "PhoneNumberSearch";
+        r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
+        r0.setText(r2);
+        goto L_0x0384;
+    L_0x015e:
+        r2 = r2 - r8;
+        if (r2 < 0) goto L_0x0171;
+    L_0x0161:
+        if (r2 >= r6) goto L_0x0171;
+    L_0x0163:
+        r2 = NUM; // 0x7f0d04cc float:1.8744605E38 double:1.0531303843E-314;
         r3 = "GlobalSearch";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.setText(r2);
-        goto L_0x02fa;
-    L_0x0100:
-        r2 = NUM; // 0x7f0d08cf float:1.8746688E38 double:1.0531308917E-314;
+        goto L_0x0384;
+    L_0x0171:
+        r2 = NUM; // 0x7f0d0912 float:1.8746824E38 double:1.053130925E-314;
         r3 = "SearchMessages";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.setText(r2);
-        goto L_0x02fa;
-    L_0x010e:
+        goto L_0x0384;
+    L_0x017f:
         r0 = r0.itemView;
         r8 = r0;
         r8 = (org.telegram.ui.Cells.ProfileSearchCell) r8;
         r0 = r1.getItem(r2);
         r3 = r0 instanceof org.telegram.tgnet.TLRPC.User;
-        if (r3 == 0) goto L_0x0124;
-    L_0x011b:
+        if (r3 == 0) goto L_0x0195;
+    L_0x018c:
         r0 = (org.telegram.tgnet.TLRPC.User) r0;
         r3 = r0.username;
-        r11 = r3;
-        r10 = 0;
-        r12 = 0;
+        r10 = r3;
+        r9 = r5;
+        r11 = r9;
         r3 = r0;
-        goto L_0x0172;
-    L_0x0124:
+        goto L_0x01e4;
+    L_0x0195:
         r3 = r0 instanceof org.telegram.tgnet.TLRPC.Chat;
-        if (r3 == 0) goto L_0x0144;
-    L_0x0128:
+        if (r3 == 0) goto L_0x01b6;
+    L_0x0199:
         r3 = r1.currentAccount;
         r3 = org.telegram.messenger.MessagesController.getInstance(r3);
         r0 = (org.telegram.tgnet.TLRPC.Chat) r0;
-        r10 = r0.id;
-        r10 = java.lang.Integer.valueOf(r10);
-        r3 = r3.getChat(r10);
-        if (r3 != 0) goto L_0x013d;
-    L_0x013c:
-        goto L_0x013e;
-    L_0x013d:
+        r9 = r0.id;
+        r9 = java.lang.Integer.valueOf(r9);
+        r3 = r3.getChat(r9);
+        if (r3 != 0) goto L_0x01ae;
+    L_0x01ad:
+        goto L_0x01af;
+    L_0x01ae:
         r0 = r3;
-    L_0x013e:
+    L_0x01af:
         r3 = r0.username;
-        r10 = r0;
+        r9 = r0;
+        r10 = r3;
+        r3 = r5;
         r11 = r3;
-        r3 = 0;
-        goto L_0x0171;
-    L_0x0144:
+        goto L_0x01e4;
+    L_0x01b6:
         r3 = r0 instanceof org.telegram.tgnet.TLRPC.EncryptedChat;
-        if (r3 == 0) goto L_0x016e;
-    L_0x0148:
+        if (r3 == 0) goto L_0x01e0;
+    L_0x01ba:
         r3 = r1.currentAccount;
         r3 = org.telegram.messenger.MessagesController.getInstance(r3);
         r0 = (org.telegram.tgnet.TLRPC.EncryptedChat) r0;
@@ -2112,260 +2223,273 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         r0 = r3.getEncryptedChat(r0);
         r3 = r1.currentAccount;
         r3 = org.telegram.messenger.MessagesController.getInstance(r3);
-        r10 = r0.user_id;
-        r10 = java.lang.Integer.valueOf(r10);
-        r3 = r3.getUser(r10);
-        r12 = r0;
-        r10 = 0;
-        r11 = 0;
-        goto L_0x0172;
-    L_0x016e:
-        r3 = 0;
-        r10 = 0;
-        r11 = 0;
-    L_0x0171:
-        r12 = 0;
-    L_0x0172:
-        r0 = r17.isRecentSearchDisplayed();
-        if (r0 == 0) goto L_0x0189;
-    L_0x0178:
-        r0 = r17.getItemCount();
+        r9 = r0.user_id;
+        r9 = java.lang.Integer.valueOf(r9);
+        r3 = r3.getUser(r9);
+        r11 = r0;
+        r9 = r5;
+        r10 = r9;
+        goto L_0x01e4;
+    L_0x01e0:
+        r3 = r5;
+        r9 = r3;
+        r10 = r9;
+        r11 = r10;
+    L_0x01e4:
+        r0 = r16.isRecentSearchDisplayed();
+        if (r0 == 0) goto L_0x01fa;
+    L_0x01ea:
+        r0 = r16.getItemCount();
         r0 = r0 - r7;
-        if (r2 == r0) goto L_0x0181;
-    L_0x017f:
+        if (r2 == r0) goto L_0x01f3;
+    L_0x01f1:
         r0 = 1;
-        goto L_0x0182;
-    L_0x0181:
+        goto L_0x01f4;
+    L_0x01f3:
         r0 = 0;
-    L_0x0182:
+    L_0x01f4:
         r8.useSeparator = r0;
-        r0 = 0;
-        r9 = 0;
+        r0 = r5;
         r13 = 1;
-        goto L_0x0293;
-    L_0x0189:
+        goto L_0x031f;
+    L_0x01fa:
         r0 = r1.searchAdapterHelper;
         r0 = r0.getGlobalSearch();
+        r12 = r1.searchAdapterHelper;
+        r12 = r12.getPhoneSearch();
         r13 = r1.searchResult;
         r13 = r13.size();
         r14 = r1.searchAdapterHelper;
         r14 = r14.getLocalServerSearch();
         r14 = r14.size();
-        r15 = r0.isEmpty();
-        if (r15 == 0) goto L_0x01a7;
-    L_0x01a5:
+        r15 = r12.size();
+        if (r15 <= 0) goto L_0x0229;
+    L_0x021c:
+        r5 = r15 + -1;
+        r5 = r12.get(r5);
+        r5 = r5 instanceof java.lang.String;
+        if (r5 == 0) goto L_0x0229;
+    L_0x0226:
+        r5 = r15 + -2;
+        goto L_0x022a;
+    L_0x0229:
+        r5 = r15;
+    L_0x022a:
+        r12 = r0.isEmpty();
+        if (r12 == 0) goto L_0x0232;
+    L_0x0230:
         r0 = 0;
-        goto L_0x01ac;
-    L_0x01a7:
+        goto L_0x0237;
+    L_0x0232:
         r0 = r0.size();
         r0 = r0 + r7;
-    L_0x01ac:
-        r15 = r17.getItemCount();
-        r15 = r15 - r7;
-        if (r2 == r15) goto L_0x01bf;
-    L_0x01b3:
-        r15 = r13 + r14;
-        r15 = r15 - r7;
-        if (r2 == r15) goto L_0x01bf;
-    L_0x01b8:
+    L_0x0237:
+        r12 = r16.getItemCount();
+        r12 = r12 - r7;
+        if (r2 == r12) goto L_0x024b;
+    L_0x023e:
+        r5 = r5 + r13;
+        r5 = r5 + r14;
+        r5 = r5 - r7;
+        if (r2 == r5) goto L_0x024b;
+    L_0x0243:
         r13 = r13 + r0;
+        r13 = r13 + r15;
         r13 = r13 + r14;
         r13 = r13 - r7;
-        if (r2 == r13) goto L_0x01bf;
-    L_0x01bd:
+        if (r2 == r13) goto L_0x024b;
+    L_0x0249:
         r0 = 1;
-        goto L_0x01c0;
-    L_0x01bf:
+        goto L_0x024c;
+    L_0x024b:
         r0 = 0;
-    L_0x01c0:
+    L_0x024c:
         r8.useSeparator = r0;
         r0 = r1.searchResult;
         r0 = r0.size();
-        r13 = "@";
-        if (r2 >= r0) goto L_0x0201;
-    L_0x01cc:
+        r5 = "@";
+        if (r2 >= r0) goto L_0x028d;
+    L_0x0258:
         r0 = r1.searchResultNames;
         r0 = r0.get(r2);
         r0 = (java.lang.CharSequence) r0;
-        if (r0 == 0) goto L_0x0291;
-    L_0x01d6:
-        if (r3 == 0) goto L_0x0291;
-    L_0x01d8:
+        if (r0 == 0) goto L_0x031d;
+    L_0x0262:
+        if (r3 == 0) goto L_0x031d;
+    L_0x0264:
         r2 = r3.username;
-        if (r2 == 0) goto L_0x0291;
-    L_0x01dc:
+        if (r2 == 0) goto L_0x031d;
+    L_0x0268:
         r2 = r2.length();
-        if (r2 <= 0) goto L_0x0291;
-    L_0x01e2:
+        if (r2 <= 0) goto L_0x031d;
+    L_0x026e:
         r2 = r0.toString();
-        r11 = new java.lang.StringBuilder;
-        r11.<init>();
-        r11.append(r13);
-        r13 = r3.username;
-        r11.append(r13);
-        r11 = r11.toString();
-        r2 = r2.startsWith(r11);
-        if (r2 == 0) goto L_0x0291;
-    L_0x01fd:
-        r9 = r0;
-    L_0x01fe:
+        r10 = new java.lang.StringBuilder;
+        r10.<init>();
+        r10.append(r5);
+        r5 = r3.username;
+        r10.append(r5);
+        r5 = r10.toString();
+        r2 = r2.startsWith(r5);
+        if (r2 == 0) goto L_0x031d;
+    L_0x0289:
+        r5 = r0;
+    L_0x028a:
         r0 = 0;
-        goto L_0x0292;
-    L_0x0201:
+        goto L_0x031e;
+    L_0x028d:
         r0 = r1.searchAdapterHelper;
         r0 = r0.getLastFoundUsername();
         r2 = android.text.TextUtils.isEmpty(r0);
-        if (r2 != 0) goto L_0x0290;
-    L_0x020d:
-        if (r3 == 0) goto L_0x021c;
-    L_0x020f:
+        if (r2 != 0) goto L_0x031c;
+    L_0x0299:
+        if (r3 == 0) goto L_0x02a8;
+    L_0x029b:
         r2 = r3.first_name;
-        r14 = r3.last_name;
-        r2 = org.telegram.messenger.ContactsController.formatName(r2, r14);
-        r14 = r2.toLowerCase();
-        goto L_0x0227;
-    L_0x021c:
-        if (r10 == 0) goto L_0x0225;
-    L_0x021e:
-        r2 = r10.title;
-        r14 = r2.toLowerCase();
-        goto L_0x0227;
-    L_0x0225:
+        r12 = r3.last_name;
+        r2 = org.telegram.messenger.ContactsController.formatName(r2, r12);
+        r12 = r2.toLowerCase();
+        goto L_0x02b3;
+    L_0x02a8:
+        if (r9 == 0) goto L_0x02b1;
+    L_0x02aa:
+        r2 = r9.title;
+        r12 = r2.toLowerCase();
+        goto L_0x02b3;
+    L_0x02b1:
         r2 = 0;
-        r14 = 0;
-    L_0x0227:
-        r15 = 33;
-        r16 = "windowBackgroundWhiteBlueText4";
-        r9 = -1;
-        if (r2 == 0) goto L_0x024d;
-    L_0x022f:
-        r14 = r14.indexOf(r0);
-        if (r14 == r9) goto L_0x024d;
-    L_0x0235:
-        r9 = new android.text.SpannableStringBuilder;
-        r9.<init>(r2);
+        r12 = 0;
+    L_0x02b3:
+        r13 = 33;
+        r14 = "windowBackgroundWhiteBlueText4";
+        r15 = -1;
+        if (r2 == 0) goto L_0x02d9;
+    L_0x02bb:
+        r12 = r12.indexOf(r0);
+        if (r12 == r15) goto L_0x02d9;
+    L_0x02c1:
+        r5 = new android.text.SpannableStringBuilder;
+        r5.<init>(r2);
         r2 = new android.text.style.ForegroundColorSpan;
-        r11 = org.telegram.ui.ActionBar.Theme.getColor(r16);
-        r2.<init>(r11);
+        r10 = org.telegram.ui.ActionBar.Theme.getColor(r14);
+        r2.<init>(r10);
         r0 = r0.length();
-        r0 = r0 + r14;
-        r9.setSpan(r2, r14, r0, r15);
-        r0 = r9;
-        goto L_0x0291;
-    L_0x024d:
-        if (r11 == 0) goto L_0x0290;
-    L_0x024f:
-        r2 = r0.startsWith(r13);
-        if (r2 == 0) goto L_0x0259;
-    L_0x0255:
+        r0 = r0 + r12;
+        r5.setSpan(r2, r12, r0, r13);
+        r0 = r5;
+        goto L_0x031d;
+    L_0x02d9:
+        if (r10 == 0) goto L_0x031c;
+    L_0x02db:
+        r2 = r0.startsWith(r5);
+        if (r2 == 0) goto L_0x02e5;
+    L_0x02e1:
         r0 = r0.substring(r7);
-    L_0x0259:
-        r2 = new android.text.SpannableStringBuilder;	 Catch:{ Exception -> 0x0289 }
-        r2.<init>();	 Catch:{ Exception -> 0x0289 }
-        r2.append(r13);	 Catch:{ Exception -> 0x0289 }
-        r2.append(r11);	 Catch:{ Exception -> 0x0289 }
-        r13 = r11.toLowerCase();	 Catch:{ Exception -> 0x0289 }
-        r13 = r13.indexOf(r0);	 Catch:{ Exception -> 0x0289 }
-        if (r13 == r9) goto L_0x0286;
-    L_0x026e:
-        r0 = r0.length();	 Catch:{ Exception -> 0x0289 }
-        if (r13 != 0) goto L_0x0277;
-    L_0x0274:
+    L_0x02e5:
+        r2 = new android.text.SpannableStringBuilder;	 Catch:{ Exception -> 0x0315 }
+        r2.<init>();	 Catch:{ Exception -> 0x0315 }
+        r2.append(r5);	 Catch:{ Exception -> 0x0315 }
+        r2.append(r10);	 Catch:{ Exception -> 0x0315 }
+        r5 = r10.toLowerCase();	 Catch:{ Exception -> 0x0315 }
+        r5 = r5.indexOf(r0);	 Catch:{ Exception -> 0x0315 }
+        if (r5 == r15) goto L_0x0312;
+    L_0x02fa:
+        r0 = r0.length();	 Catch:{ Exception -> 0x0315 }
+        if (r5 != 0) goto L_0x0303;
+    L_0x0300:
         r0 = r0 + 1;
-        goto L_0x0279;
-    L_0x0277:
-        r13 = r13 + 1;
-    L_0x0279:
-        r9 = new android.text.style.ForegroundColorSpan;	 Catch:{ Exception -> 0x0289 }
-        r14 = org.telegram.ui.ActionBar.Theme.getColor(r16);	 Catch:{ Exception -> 0x0289 }
-        r9.<init>(r14);	 Catch:{ Exception -> 0x0289 }
-        r0 = r0 + r13;
-        r2.setSpan(r9, r13, r0, r15);	 Catch:{ Exception -> 0x0289 }
-    L_0x0286:
-        r9 = r2;
-        goto L_0x01fe;
-    L_0x0289:
+        goto L_0x0305;
+    L_0x0303:
+        r5 = r5 + 1;
+    L_0x0305:
+        r12 = new android.text.style.ForegroundColorSpan;	 Catch:{ Exception -> 0x0315 }
+        r14 = org.telegram.ui.ActionBar.Theme.getColor(r14);	 Catch:{ Exception -> 0x0315 }
+        r12.<init>(r14);	 Catch:{ Exception -> 0x0315 }
+        r0 = r0 + r5;
+        r2.setSpan(r12, r5, r0, r13);	 Catch:{ Exception -> 0x0315 }
+    L_0x0312:
+        r5 = r2;
+        goto L_0x028a;
+    L_0x0315:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-        r9 = r11;
-        goto L_0x01fe;
-    L_0x0290:
+        r5 = r10;
+        goto L_0x028a;
+    L_0x031c:
         r0 = 0;
-    L_0x0291:
-        r9 = 0;
-    L_0x0292:
+    L_0x031d:
+        r5 = 0;
+    L_0x031e:
         r13 = 0;
-    L_0x0293:
-        if (r3 == 0) goto L_0x02a8;
-    L_0x0295:
+    L_0x031f:
+        if (r3 == 0) goto L_0x0333;
+    L_0x0321:
         r2 = r3.id;
-        r11 = r1.selfUserId;
-        if (r2 != r11) goto L_0x02a8;
-    L_0x029b:
-        r0 = NUM; // 0x7f0d08b9 float:1.8746644E38 double:1.053130881E-314;
+        r10 = r1.selfUserId;
+        if (r2 != r10) goto L_0x0333;
+    L_0x0327:
+        r0 = NUM; // 0x7f0d08fc float:1.874678E38 double:1.053130914E-314;
         r2 = "SavedMessages";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
-        r11 = r0;
-        r9 = 0;
+        r5 = 0;
         r14 = 1;
-        goto L_0x02aa;
-    L_0x02a8:
-        r11 = r0;
+        goto L_0x0334;
+    L_0x0333:
         r14 = 0;
-    L_0x02aa:
-        if (r10 == 0) goto L_0x02ef;
-    L_0x02ac:
-        r0 = r10.participants_count;
-        if (r0 == 0) goto L_0x02ef;
-    L_0x02b0:
-        r0 = org.telegram.messenger.ChatObject.isChannel(r10);
-        if (r0 == 0) goto L_0x02c3;
-    L_0x02b6:
-        r0 = r10.megagroup;
-        if (r0 != 0) goto L_0x02c3;
-    L_0x02ba:
-        r0 = r10.participants_count;
-        r2 = "Subscribers";
-        r0 = org.telegram.messenger.LocaleController.formatPluralString(r2, r0);
-        goto L_0x02cb;
-    L_0x02c3:
-        r0 = r10.participants_count;
-        r2 = "Members";
-        r0 = org.telegram.messenger.LocaleController.formatPluralString(r2, r0);
-    L_0x02cb:
-        r2 = r9 instanceof android.text.SpannableStringBuilder;
-        r15 = ", ";
-        if (r2 == 0) goto L_0x02dc;
-    L_0x02d1:
-        r2 = r9;
-        r2 = (android.text.SpannableStringBuilder) r2;
-        r2 = r2.append(r15);
-        r2.append(r0);
-        goto L_0x02ef;
-    L_0x02dc:
-        r2 = android.text.TextUtils.isEmpty(r9);
-        if (r2 != 0) goto L_0x02f0;
-    L_0x02e2:
-        r2 = new java.lang.CharSequence[r4];
-        r2[r6] = r9;
-        r2[r7] = r15;
-        r2[r5] = r0;
-        r0 = android.text.TextUtils.concat(r2);
-        goto L_0x02f0;
-    L_0x02ef:
-        r0 = r9;
-    L_0x02f0:
-        if (r3 == 0) goto L_0x02f4;
-    L_0x02f2:
+    L_0x0334:
+        if (r9 == 0) goto L_0x037b;
+    L_0x0336:
+        r2 = r9.participants_count;
+        if (r2 == 0) goto L_0x037b;
+    L_0x033a:
+        r2 = org.telegram.messenger.ChatObject.isChannel(r9);
+        if (r2 == 0) goto L_0x034d;
+    L_0x0340:
+        r2 = r9.megagroup;
+        if (r2 != 0) goto L_0x034d;
+    L_0x0344:
+        r2 = r9.participants_count;
+        r10 = "Subscribers";
+        r2 = org.telegram.messenger.LocaleController.formatPluralString(r10, r2);
+        goto L_0x0355;
+    L_0x034d:
+        r2 = r9.participants_count;
+        r10 = "Members";
+        r2 = org.telegram.messenger.LocaleController.formatPluralString(r10, r2);
+    L_0x0355:
+        r10 = r5 instanceof android.text.SpannableStringBuilder;
+        r12 = ", ";
+        if (r10 == 0) goto L_0x0366;
+    L_0x035b:
+        r4 = r5;
+        r4 = (android.text.SpannableStringBuilder) r4;
+        r4 = r4.append(r12);
+        r4.append(r2);
+        goto L_0x037b;
+    L_0x0366:
+        r10 = android.text.TextUtils.isEmpty(r5);
+        if (r10 != 0) goto L_0x0379;
+    L_0x036c:
+        r10 = 3;
+        r10 = new java.lang.CharSequence[r10];
+        r10[r6] = r5;
+        r10[r7] = r12;
+        r10[r4] = r2;
+        r2 = android.text.TextUtils.concat(r10);
+    L_0x0379:
+        r12 = r2;
+        goto L_0x037c;
+    L_0x037b:
+        r12 = r5;
+    L_0x037c:
+        if (r3 == 0) goto L_0x037f;
+    L_0x037e:
         r9 = r3;
-        goto L_0x02f5;
-    L_0x02f4:
-        r9 = r10;
-    L_0x02f5:
-        r10 = r12;
-        r12 = r0;
+    L_0x037f:
+        r10 = r11;
+        r11 = r0;
         r8.setData(r9, r10, r11, r12, r13, r14);
-    L_0x02fa:
+    L_0x0384:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.DialogsSearchAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");
@@ -2389,7 +2513,7 @@ public class DialogsSearchAdapter extends SelectionAdapter {
         int i2 = 1;
         int i3;
         if (isRecentSearchDisplayed()) {
-            i3 = !DataQuery.getInstance(this.currentAccount).hints.isEmpty() ? 2 : 0;
+            i3 = !MediaDataController.getInstance(this.currentAccount).hints.isEmpty() ? 2 : 0;
             if (i > i3) {
                 return 0;
             }
@@ -2401,19 +2525,38 @@ public class DialogsSearchAdapter extends SelectionAdapter {
             ArrayList globalSearch = this.searchAdapterHelper.getGlobalSearch();
             int size = this.searchResult.size();
             int size2 = this.searchAdapterHelper.getLocalServerSearch().size();
+            int size3 = this.searchAdapterHelper.getPhoneSearch().size();
             i3 = globalSearch.isEmpty() ? 0 : globalSearch.size() + 1;
-            int size3 = this.searchResultMessages.isEmpty() ? 0 : this.searchResultMessages.size() + 1;
-            if ((i >= 0 && i < size + size2) || (i > size + size2 && i < (i3 + size) + size2)) {
+            int size4 = this.searchResultMessages.isEmpty() ? 0 : this.searchResultMessages.size() + 1;
+            if (i >= 0 && i < size) {
                 return 0;
             }
-            i3 += size;
-            if (i > i3 + size2 && i < (i3 + size3) + size2) {
-                return 2;
+            i -= size;
+            if (i >= 0 && i < size2) {
+                return 0;
             }
-            if (size3 == 0 || i != (i3 + size3) + size2) {
-                return 1;
+            i -= size2;
+            if (i < 0 || i >= size3) {
+                i -= size3;
+                if (i >= 0 && i < i3) {
+                    return i == 0 ? 1 : 0;
+                } else {
+                    i -= i3;
+                    if (i < 0 || i >= size4) {
+                        return 3;
+                    }
+                    return i == 0 ? 1 : 2;
+                }
+            } else {
+                Object item = getItem(i);
+                if (!(item instanceof String)) {
+                    return 0;
+                }
+                if ("section".equals((String) item)) {
+                    return 1;
+                }
+                return 6;
             }
-            return 3;
         } else {
             if (i != 0) {
                 i2 = 4;

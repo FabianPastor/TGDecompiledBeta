@@ -12,7 +12,6 @@ import android.graphics.Paint.Style;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
-import android.graphics.Typeface;
 import android.os.SystemClock;
 import android.text.TextPaint;
 import android.text.TextUtils.TruncateAt;
@@ -21,7 +20,6 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
-import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
@@ -32,11 +30,9 @@ import com.airbnb.lottie.SimpleColorFilter;
 import com.airbnb.lottie.model.KeyPath;
 import com.airbnb.lottie.value.LottieValueCallback;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.ui.ActionBar.Theme;
 
 public class UndoView extends FrameLayout {
@@ -47,7 +43,11 @@ public class UndoView extends FrameLayout {
     public static final int ACTION_ARCHIVE_HINT = 3;
     public static final int ACTION_ARCHIVE_PINNED = 7;
     public static final int ACTION_CLEAR = 0;
+    public static final int ACTION_CONTACT_ADDED = 8;
     public static final int ACTION_DELETE = 1;
+    public static final int ACTION_OWNER_TRANSFERED_CHANNEL = 9;
+    public static final int ACTION_OWNER_TRANSFERED_GROUP = 10;
+    private float additionalTranslationY;
     private int currentAccount = UserConfig.selectedAccount;
     private int currentAction;
     private Runnable currentActionRunnable;
@@ -150,7 +150,16 @@ public class UndoView extends FrameLayout {
 
     private boolean isTooltipAction() {
         int i = this.currentAction;
+        return i == 6 || i == 3 || i == 5 || i == 7 || i == 8 || i == 9 || i == 10;
+    }
+
+    private boolean hasSubInfo() {
+        int i = this.currentAction;
         return i == 6 || i == 3 || i == 5 || i == 7;
+    }
+
+    public void setAdditionalTranslationY(float f) {
+        this.additionalTranslationY = f;
     }
 
     public void hide(boolean z, int i) {
@@ -181,7 +190,7 @@ public class UndoView extends FrameLayout {
                     Animator[] animatorArr = new Animator[1];
                     Property property = View.TRANSLATION_Y;
                     float[] fArr = new float[1];
-                    if (!isTooltipAction()) {
+                    if (!hasSubInfo()) {
                         i3 = 48;
                     }
                     fArr[0] = (float) AndroidUtilities.dp((float) (i3 + 8));
@@ -208,7 +217,7 @@ public class UndoView extends FrameLayout {
                 animatorSet.start();
                 return;
             }
-            if (!isTooltipAction()) {
+            if (!hasSubInfo()) {
                 i3 = 48;
             }
             setTranslationY((float) AndroidUtilities.dp((float) (i3 + 8)));
@@ -217,137 +226,394 @@ public class UndoView extends FrameLayout {
     }
 
     public void showWithAction(long j, int i, Runnable runnable) {
-        showWithAction(j, i, runnable, null);
+        showWithAction(j, i, null, runnable, null);
+    }
+
+    public void showWithAction(long j, int i, Object obj) {
+        showWithAction(j, i, obj, null, null);
     }
 
     public void showWithAction(long j, int i, Runnable runnable, Runnable runnable2) {
-        String stringBuilder;
-        long j2 = j;
-        int i2 = i;
-        Runnable runnable3 = this.currentActionRunnable;
-        if (runnable3 != null) {
-            runnable3.run();
-        }
-        this.isShowed = true;
-        this.currentActionRunnable = runnable;
-        this.currentCancelRunnable = runnable2;
-        this.currentDialogId = j2;
-        this.currentAction = i2;
-        this.timeLeft = 5000;
-        this.lastUpdateTime = SystemClock.uptimeMillis();
-        String str = "ChatArchived";
-        String str2 = "ChatsArchived";
-        LayoutParams layoutParams;
-        if (isTooltipAction()) {
-            if (i2 == 6) {
-                this.infoTextView.setText(LocaleController.getString("ArchiveHidden", NUM));
-                this.subinfoTextView.setText(LocaleController.getString("ArchiveHiddenInfo", NUM));
-                this.leftImageView.setAnimation(NUM);
-            } else if (i2 == 7) {
-                this.infoTextView.setText(LocaleController.getString("ArchivePinned", NUM));
-                this.subinfoTextView.setText(LocaleController.getString("ArchivePinnedInfo", NUM));
-                this.leftImageView.setAnimation(NUM);
-            } else {
-                if (i2 == 3) {
-                    this.infoTextView.setText(LocaleController.getString(str, NUM));
-                } else {
-                    this.infoTextView.setText(LocaleController.getString(str2, NUM));
-                }
-                this.subinfoTextView.setText(LocaleController.getString("ChatArchivedInfo", NUM));
-                this.leftImageView.setAnimation(NUM);
-            }
-            layoutParams = (LayoutParams) this.infoTextView.getLayoutParams();
-            layoutParams.leftMargin = AndroidUtilities.dp(58.0f);
-            layoutParams.topMargin = AndroidUtilities.dp(6.0f);
-            this.infoTextView.setTextSize(1, 14.0f);
-            this.infoTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            this.subinfoTextView.setVisibility(0);
-            this.undoButton.setVisibility(8);
-            this.leftImageView.setVisibility(0);
-            this.leftImageView.setProgress(0.0f);
-            this.leftImageView.playAnimation();
-        } else {
-            int i3 = this.currentAction;
-            if (i3 == 2 || i3 == 4) {
-                if (i2 == 2) {
-                    this.infoTextView.setText(LocaleController.getString(str, NUM));
-                } else {
-                    this.infoTextView.setText(LocaleController.getString(str2, NUM));
-                }
-                layoutParams = (LayoutParams) this.infoTextView.getLayoutParams();
-                layoutParams.leftMargin = AndroidUtilities.dp(58.0f);
-                layoutParams.topMargin = AndroidUtilities.dp(13.0f);
-                this.infoTextView.setTextSize(1, 15.0f);
-                this.undoButton.setVisibility(0);
-                this.infoTextView.setTypeface(Typeface.DEFAULT);
-                this.subinfoTextView.setVisibility(8);
-                this.leftImageView.setVisibility(0);
-                this.leftImageView.setAnimation(NUM);
-                this.leftImageView.setProgress(0.0f);
-                this.leftImageView.playAnimation();
-            } else {
-                LayoutParams layoutParams2 = (LayoutParams) this.infoTextView.getLayoutParams();
-                layoutParams2.leftMargin = AndroidUtilities.dp(45.0f);
-                layoutParams2.topMargin = AndroidUtilities.dp(13.0f);
-                this.infoTextView.setTextSize(1, 15.0f);
-                this.undoButton.setVisibility(0);
-                this.infoTextView.setTypeface(Typeface.DEFAULT);
-                this.subinfoTextView.setVisibility(8);
-                this.leftImageView.setVisibility(8);
-                if (this.currentAction == 0) {
-                    this.infoTextView.setText(LocaleController.getString("HistoryClearedUndo", NUM));
-                } else {
-                    i2 = (int) j2;
-                    if (i2 < 0) {
-                        Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-i2));
-                        if (!ChatObject.isChannel(chat) || chat.megagroup) {
-                            this.infoTextView.setText(LocaleController.getString("GroupDeletedUndo", NUM));
-                        } else {
-                            this.infoTextView.setText(LocaleController.getString("ChannelDeletedUndo", NUM));
-                        }
-                    } else {
-                        this.infoTextView.setText(LocaleController.getString("ChatDeletedUndo", NUM));
-                    }
-                }
-                MessagesController.getInstance(this.currentAccount).addDialogAction(j2, this.currentAction == 0);
-            }
-        }
-        StringBuilder stringBuilder2 = new StringBuilder();
-        stringBuilder2.append(this.infoTextView.getText());
-        if (this.subinfoTextView.getVisibility() == 0) {
-            StringBuilder stringBuilder3 = new StringBuilder();
-            stringBuilder3.append(". ");
-            stringBuilder3.append(this.subinfoTextView.getText());
-            stringBuilder = stringBuilder3.toString();
-        } else {
-            stringBuilder = "";
-        }
-        stringBuilder2.append(stringBuilder);
-        AndroidUtilities.makeAccessibilityAnnouncement(stringBuilder2.toString());
-        if (getVisibility() != 0) {
-            setVisibility(0);
-            int i4 = 52;
-            setTranslationY((float) AndroidUtilities.dp((float) ((isTooltipAction() ? 52 : 48) + 8)));
-            AnimatorSet animatorSet = new AnimatorSet();
-            Animator[] animatorArr = new Animator[1];
-            Property property = View.TRANSLATION_Y;
-            float[] fArr = new float[2];
-            if (!isTooltipAction()) {
-                i4 = 48;
-            }
-            fArr[0] = (float) AndroidUtilities.dp((float) (i4 + 8));
-            fArr[1] = 0.0f;
-            animatorArr[0] = ObjectAnimator.ofFloat(this, property, fArr);
-            animatorSet.playTogether(animatorArr);
-            animatorSet.setInterpolator(new DecelerateInterpolator());
-            animatorSet.setDuration(180);
-            animatorSet.start();
-        }
+        showWithAction(j, i, null, runnable, runnable2);
+    }
+
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x011e  */
+    /* JADX WARNING: Removed duplicated region for block: B:30:0x00eb  */
+    public void showWithAction(long r17, int r19, java.lang.Object r20, java.lang.Runnable r21, java.lang.Runnable r22) {
+        /*
+        r16 = this;
+        r0 = r16;
+        r1 = r17;
+        r3 = r19;
+        r4 = r0.currentActionRunnable;
+        if (r4 == 0) goto L_0x000d;
+    L_0x000a:
+        r4.run();
+    L_0x000d:
+        r4 = 1;
+        r0.isShowed = r4;
+        r5 = r21;
+        r0.currentActionRunnable = r5;
+        r5 = r22;
+        r0.currentCancelRunnable = r5;
+        r0.currentDialogId = r1;
+        r0.currentAction = r3;
+        r5 = 5000; // 0x1388 float:7.006E-42 double:2.4703E-320;
+        r0.timeLeft = r5;
+        r5 = android.os.SystemClock.uptimeMillis();
+        r0.lastUpdateTime = r5;
+        r5 = r16.isTooltipAction();
+        r6 = 0;
+        r7 = NUM; // 0x7f0d027c float:1.8743405E38 double:1.053130092E-314;
+        r8 = "ChatArchived";
+        r9 = NUM; // 0x7f0d029d float:1.8743472E38 double:1.053130108E-314;
+        r10 = "ChatsArchived";
+        r11 = NUM; // 0x42680000 float:58.0 double:5.50444465E-315;
+        r12 = NUM; // 0x41700000 float:15.0 double:5.424144515E-315;
+        r13 = NUM; // 0x41500000 float:13.0 double:5.413783207E-315;
+        r15 = 8;
+        r14 = 0;
+        if (r5 == 0) goto L_0x0159;
+    L_0x0040:
+        r2 = 0;
+        r5 = 9;
+        if (r3 == r5) goto L_0x00ab;
+    L_0x0045:
+        r1 = 10;
+        if (r3 != r1) goto L_0x004a;
+    L_0x0049:
+        goto L_0x00ab;
+    L_0x004a:
+        if (r3 != r15) goto L_0x0063;
+    L_0x004c:
+        r1 = r20;
+        r1 = (org.telegram.tgnet.TLRPC.User) r1;
+        r3 = NUM; // 0x7f0d06d0 float:1.8745652E38 double:1.053130639E-314;
+        r5 = new java.lang.Object[r4];
+        r1 = org.telegram.messenger.UserObject.getFirstName(r1);
+        r5[r14] = r1;
+        r1 = "NowInContacts";
+        r1 = org.telegram.messenger.LocaleController.formatString(r1, r3, r5);
+        goto L_0x00dc;
+    L_0x0063:
+        r1 = 6;
+        if (r3 != r1) goto L_0x007c;
+    L_0x0066:
+        r1 = NUM; // 0x7f0d00f7 float:1.8742616E38 double:1.0531298996E-314;
+        r2 = "ArchiveHidden";
+        r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
+        r2 = NUM; // 0x7f0d00f8 float:1.8742618E38 double:1.0531299E-314;
+        r3 = "ArchiveHiddenInfo";
+        r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
+        r3 = NUM; // 0x7f0CLASSNAME float:1.8609202E38 double:1.053097401E-314;
+        goto L_0x00df;
+    L_0x007c:
+        r1 = 7;
+        if (r3 != r1) goto L_0x0095;
+    L_0x007f:
+        r1 = NUM; // 0x7f0d00ff float:1.8742632E38 double:1.0531299035E-314;
+        r2 = "ArchivePinned";
+        r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
+        r2 = NUM; // 0x7f0d0100 float:1.8742634E38 double:1.053129904E-314;
+        r3 = "ArchivePinnedInfo";
+        r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
+    L_0x0091:
+        r3 = NUM; // 0x7f0CLASSNAME float:1.86092E38 double:1.0530974004E-314;
+        goto L_0x00df;
+    L_0x0095:
+        r1 = 3;
+        if (r3 != r1) goto L_0x009d;
+    L_0x0098:
+        r1 = org.telegram.messenger.LocaleController.getString(r8, r7);
+        goto L_0x00a1;
+    L_0x009d:
+        r1 = org.telegram.messenger.LocaleController.getString(r10, r9);
+    L_0x00a1:
+        r2 = NUM; // 0x7f0d027d float:1.8743407E38 double:1.0531300923E-314;
+        r3 = "ChatArchivedInfo";
+        r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
+        goto L_0x0091;
+    L_0x00ab:
+        r1 = r20;
+        r1 = (org.telegram.tgnet.TLRPC.User) r1;
+        if (r3 != r5) goto L_0x00c7;
+    L_0x00b1:
+        r3 = NUM; // 0x7f0d03b0 float:1.874403E38 double:1.053130244E-314;
+        r5 = new java.lang.Object[r4];
+        r1 = org.telegram.messenger.UserObject.getFirstName(r1);
+        r5[r14] = r1;
+        r1 = "EditAdminTransferChannelToast";
+        r1 = org.telegram.messenger.LocaleController.formatString(r1, r3, r5);
+        r1 = org.telegram.messenger.AndroidUtilities.replaceTags(r1);
+        goto L_0x00dc;
+    L_0x00c7:
+        r3 = NUM; // 0x7f0d03b1 float:1.8744031E38 double:1.0531302444E-314;
+        r5 = new java.lang.Object[r4];
+        r1 = org.telegram.messenger.UserObject.getFirstName(r1);
+        r5[r14] = r1;
+        r1 = "EditAdminTransferGroupToast";
+        r1 = org.telegram.messenger.LocaleController.formatString(r1, r3, r5);
+        r1 = org.telegram.messenger.AndroidUtilities.replaceTags(r1);
+    L_0x00dc:
+        r3 = NUM; // 0x7f0CLASSNAME float:1.8609208E38 double:1.0530974024E-314;
+    L_0x00df:
+        r5 = r0.infoTextView;
+        r5.setText(r1);
+        r1 = r0.leftImageView;
+        r1.setAnimation(r3);
+        if (r2 == 0) goto L_0x011e;
+    L_0x00eb:
+        r1 = r0.infoTextView;
+        r1 = r1.getLayoutParams();
+        r1 = (android.widget.FrameLayout.LayoutParams) r1;
+        r3 = org.telegram.messenger.AndroidUtilities.dp(r11);
+        r1.leftMargin = r3;
+        r3 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
+        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
+        r1.topMargin = r3;
+        r1 = r0.subinfoTextView;
+        r1.setText(r2);
+        r1 = r0.subinfoTextView;
+        r1.setVisibility(r14);
+        r1 = r0.infoTextView;
+        r2 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
+        r1.setTextSize(r4, r2);
+        r1 = r0.infoTextView;
+        r2 = "fonts/rmedium.ttf";
+        r2 = org.telegram.messenger.AndroidUtilities.getTypeface(r2);
+        r1.setTypeface(r2);
+        goto L_0x0143;
+    L_0x011e:
+        r1 = r0.infoTextView;
+        r1 = r1.getLayoutParams();
+        r1 = (android.widget.FrameLayout.LayoutParams) r1;
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r11);
+        r1.leftMargin = r2;
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r13);
+        r1.topMargin = r2;
+        r1 = r0.subinfoTextView;
+        r1.setVisibility(r15);
+        r1 = r0.infoTextView;
+        r1.setTextSize(r4, r12);
+        r1 = r0.infoTextView;
+        r2 = android.graphics.Typeface.DEFAULT;
+        r1.setTypeface(r2);
+    L_0x0143:
+        r1 = r0.undoButton;
+        r1.setVisibility(r15);
+        r1 = r0.leftImageView;
+        r1.setVisibility(r14);
+        r1 = r0.leftImageView;
+        r1.setProgress(r6);
+        r1 = r0.leftImageView;
+        r1.playAnimation();
+        goto L_0x0258;
+    L_0x0159:
+        r5 = r0.currentAction;
+        r6 = 2;
+        if (r5 == r6) goto L_0x0200;
+    L_0x015e:
+        r6 = 4;
+        if (r5 != r6) goto L_0x0163;
+    L_0x0161:
+        goto L_0x0200;
+    L_0x0163:
+        r3 = r0.infoTextView;
+        r3 = r3.getLayoutParams();
+        r3 = (android.widget.FrameLayout.LayoutParams) r3;
+        r5 = NUM; // 0x42340000 float:45.0 double:5.487607523E-315;
+        r5 = org.telegram.messenger.AndroidUtilities.dp(r5);
+        r3.leftMargin = r5;
+        r5 = org.telegram.messenger.AndroidUtilities.dp(r13);
+        r3.topMargin = r5;
+        r3 = r0.infoTextView;
+        r3.setTextSize(r4, r12);
+        r3 = r0.undoButton;
+        r3.setVisibility(r14);
+        r3 = r0.infoTextView;
+        r5 = android.graphics.Typeface.DEFAULT;
+        r3.setTypeface(r5);
+        r3 = r0.subinfoTextView;
+        r3.setVisibility(r15);
+        r3 = r0.leftImageView;
+        r3.setVisibility(r15);
+        r3 = r0.currentAction;
+        if (r3 != 0) goto L_0x01a7;
+    L_0x0198:
+        r3 = r0.infoTextView;
+        r5 = NUM; // 0x7f0d04fb float:1.87447E38 double:1.0531304075E-314;
+        r6 = "HistoryClearedUndo";
+        r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
+        r3.setText(r5);
+        goto L_0x01ef;
+    L_0x01a7:
+        r3 = (int) r1;
+        if (r3 >= 0) goto L_0x01e1;
+    L_0x01aa:
+        r5 = r0.currentAccount;
+        r5 = org.telegram.messenger.MessagesController.getInstance(r5);
+        r3 = -r3;
+        r3 = java.lang.Integer.valueOf(r3);
+        r3 = r5.getChat(r3);
+        r5 = org.telegram.messenger.ChatObject.isChannel(r3);
+        if (r5 == 0) goto L_0x01d2;
+    L_0x01bf:
+        r3 = r3.megagroup;
+        if (r3 != 0) goto L_0x01d2;
+    L_0x01c3:
+        r3 = r0.infoTextView;
+        r5 = NUM; // 0x7f0d0231 float:1.8743253E38 double:1.0531300547E-314;
+        r6 = "ChannelDeletedUndo";
+        r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
+        r3.setText(r5);
+        goto L_0x01ef;
+    L_0x01d2:
+        r3 = r0.infoTextView;
+        r5 = NUM; // 0x7f0d04d5 float:1.8744624E38 double:1.0531303887E-314;
+        r6 = "GroupDeletedUndo";
+        r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
+        r3.setText(r5);
+        goto L_0x01ef;
+    L_0x01e1:
+        r3 = r0.infoTextView;
+        r5 = NUM; // 0x7f0d0280 float:1.8743413E38 double:1.0531300937E-314;
+        r6 = "ChatDeletedUndo";
+        r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
+        r3.setText(r5);
+    L_0x01ef:
+        r3 = r0.currentAccount;
+        r3 = org.telegram.messenger.MessagesController.getInstance(r3);
+        r5 = r0.currentAction;
+        if (r5 != 0) goto L_0x01fb;
+    L_0x01f9:
+        r5 = 1;
+        goto L_0x01fc;
+    L_0x01fb:
+        r5 = 0;
+    L_0x01fc:
+        r3.addDialogAction(r1, r5);
+        goto L_0x0258;
+    L_0x0200:
+        r1 = 2;
+        if (r3 != r1) goto L_0x020d;
+    L_0x0203:
+        r1 = r0.infoTextView;
+        r2 = org.telegram.messenger.LocaleController.getString(r8, r7);
+        r1.setText(r2);
+        goto L_0x0216;
+    L_0x020d:
+        r1 = r0.infoTextView;
+        r2 = org.telegram.messenger.LocaleController.getString(r10, r9);
+        r1.setText(r2);
+    L_0x0216:
+        r1 = r0.infoTextView;
+        r1 = r1.getLayoutParams();
+        r1 = (android.widget.FrameLayout.LayoutParams) r1;
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r11);
+        r1.leftMargin = r2;
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r13);
+        r1.topMargin = r2;
+        r1 = r0.infoTextView;
+        r1.setTextSize(r4, r12);
+        r1 = r0.undoButton;
+        r1.setVisibility(r14);
+        r1 = r0.infoTextView;
+        r2 = android.graphics.Typeface.DEFAULT;
+        r1.setTypeface(r2);
+        r1 = r0.subinfoTextView;
+        r1.setVisibility(r15);
+        r1 = r0.leftImageView;
+        r1.setVisibility(r14);
+        r1 = r0.leftImageView;
+        r2 = NUM; // 0x7f0CLASSNAME float:1.8609196E38 double:1.0530973994E-314;
+        r1.setAnimation(r2);
+        r1 = r0.leftImageView;
+        r2 = 0;
+        r1.setProgress(r2);
+        r1 = r0.leftImageView;
+        r1.playAnimation();
+    L_0x0258:
+        r1 = new java.lang.StringBuilder;
+        r1.<init>();
+        r2 = r0.infoTextView;
+        r2 = r2.getText();
+        r1.append(r2);
+        r2 = r0.subinfoTextView;
+        r2 = r2.getVisibility();
+        if (r2 != 0) goto L_0x0286;
+    L_0x026e:
+        r2 = new java.lang.StringBuilder;
+        r2.<init>();
+        r3 = ". ";
+        r2.append(r3);
+        r3 = r0.subinfoTextView;
+        r3 = r3.getText();
+        r2.append(r3);
+        r2 = r2.toString();
+        goto L_0x0288;
+    L_0x0286:
+        r2 = "";
+    L_0x0288:
+        r1.append(r2);
+        r1 = r1.toString();
+        org.telegram.messenger.AndroidUtilities.makeAccessibilityAnnouncement(r1);
+        r1 = r16.getVisibility();
+        if (r1 == 0) goto L_0x02ee;
+    L_0x0298:
+        r0.setVisibility(r14);
+        r1 = r16.hasSubInfo();
+        if (r1 == 0) goto L_0x02a4;
+    L_0x02a1:
+        r1 = 52;
+        goto L_0x02a6;
+    L_0x02a4:
+        r1 = 48;
+    L_0x02a6:
+        r1 = r1 + r15;
+        r1 = (float) r1;
+        r1 = org.telegram.messenger.AndroidUtilities.dp(r1);
+        r1 = (float) r1;
+        r0.setTranslationY(r1);
+        r1 = new android.animation.AnimatorSet;
+        r1.<init>();
+        r2 = new android.animation.Animator[r4];
+        r3 = android.view.View.TRANSLATION_Y;
+        r5 = 2;
+        r5 = new float[r5];
+        r6 = r16.hasSubInfo();
+        if (r6 == 0) goto L_0x02c5;
+    L_0x02c2:
+        r6 = 52;
+        goto L_0x02c7;
+    L_0x02c5:
+        r6 = 48;
+    L_0x02c7:
+        r6 = r6 + r15;
+        r6 = (float) r6;
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);
+        r6 = (float) r6;
+        r5[r14] = r6;
+        r6 = r0.additionalTranslationY;
+        r6 = -r6;
+        r5[r4] = r6;
+        r3 = android.animation.ObjectAnimator.ofFloat(r0, r3, r5);
+        r2[r14] = r3;
+        r1.playTogether(r2);
+        r2 = new android.view.animation.DecelerateInterpolator;
+        r2.<init>();
+        r1.setInterpolator(r2);
+        r2 = 180; // 0xb4 float:2.52E-43 double:8.9E-322;
+        r1.setDuration(r2);
+        r1.start();
+    L_0x02ee:
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.UndoView.showWithAction(long, int, java.lang.Object, java.lang.Runnable, java.lang.Runnable):void");
     }
 
     /* Access modifiers changed, original: protected */
     public void onMeasure(int i, int i2) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(isTooltipAction() ? 52.0f : 48.0f), NUM));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(i), NUM), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(hasSubInfo() ? 52.0f : 48.0f), NUM));
     }
 
     /* Access modifiers changed, original: protected */

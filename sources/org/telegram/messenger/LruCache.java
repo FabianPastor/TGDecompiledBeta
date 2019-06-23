@@ -48,6 +48,13 @@ public class LruCache<T> {
         return arrayList != null ? new ArrayList(arrayList) : null;
     }
 
+    public void moveToFront(String str) {
+        Object remove = this.map.remove(str);
+        if (remove != null) {
+            this.map.put(str, remove);
+        }
+    }
+
     public T put(String str, T t) {
         if (str == null || t == null) {
             throw new NullPointerException("key == null || value == null");

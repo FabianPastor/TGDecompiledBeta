@@ -6,10 +6,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
@@ -25,6 +27,7 @@ import org.telegram.tgnet.TLRPC.TL_channelParticipantsKicked;
 import org.telegram.tgnet.TLRPC.TL_channelParticipantsSearch;
 import org.telegram.tgnet.TLRPC.TL_channels_channelParticipants;
 import org.telegram.tgnet.TLRPC.TL_channels_getParticipants;
+import org.telegram.tgnet.TLRPC.TL_contact;
 import org.telegram.tgnet.TLRPC.TL_contacts_found;
 import org.telegram.tgnet.TLRPC.TL_contacts_search;
 import org.telegram.tgnet.TLRPC.TL_error;
@@ -48,6 +51,8 @@ public class SearchAdapterHelper {
     private int lastReqId;
     private ArrayList<TLObject> localSearchResults;
     private ArrayList<TLObject> localServerSearch = new ArrayList();
+    private SparseArray<TLObject> phoneSearchMap = new SparseArray();
+    private ArrayList<Object> phonesSearch = new ArrayList();
     private int reqId = 0;
 
     protected static final class DialogSearchResult {
@@ -70,6 +75,9 @@ public class SearchAdapterHelper {
             public static SparseArray $default$getExcludeUsers(SearchAdapterHelperDelegate searchAdapterHelperDelegate) {
                 return null;
             }
+
+            public static void $default$onSetHashtags(SearchAdapterHelperDelegate searchAdapterHelperDelegate, ArrayList arrayList, HashMap hashMap) {
+            }
         }
 
         SparseArray<User> getExcludeUsers();
@@ -87,7 +95,7 @@ public class SearchAdapterHelper {
         return (this.reqId == 0 && this.channelReqId == 0) ? false : true;
     }
 
-    public void queryServerSearch(String str, boolean z, boolean z2, boolean z3, boolean z4, int i, int i2) {
+    public void queryServerSearch(String str, boolean z, boolean z2, boolean z3, boolean z4, int i, boolean z5, int i2) {
         String str2 = str;
         int i3 = i;
         int i4 = i2;
@@ -105,14 +113,17 @@ public class SearchAdapterHelper {
             this.globalSearch.clear();
             this.globalSearchMap.clear();
             this.localServerSearch.clear();
+            this.phonesSearch.clear();
+            this.phoneSearchMap.clear();
             this.lastReqId = 0;
             this.channelLastReqId = 0;
             this.delegate.onDataSetChanged();
             return;
         }
-        boolean z5;
+        int i5;
+        boolean z6;
         if (str.length() <= 0) {
-            z5 = z4;
+            z6 = z4;
             this.groupSearch.clear();
             this.groupSearchMap.clear();
             this.channelLastReqId = 0;
@@ -134,9 +145,9 @@ public class SearchAdapterHelper {
             tL_channels_getParticipants.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(i3);
             i3 = this.channelLastReqId + 1;
             this.channelLastReqId = i3;
-            this.channelReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_channels_getParticipants, new -$$Lambda$SearchAdapterHelper$lQm_KegCMNFAimI1TKtkhyCcOJg(this, i3, str, z4), 2);
+            this.channelReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_channels_getParticipants, new -$$Lambda$SearchAdapterHelper$lQm_KegCMNFAimI1TKtkhyCcOJg(this, i3, str2, z4), 2);
         } else {
-            z5 = z4;
+            z6 = z4;
             this.lastFoundChannel = str.toLowerCase();
         }
         if (z) {
@@ -144,7 +155,7 @@ public class SearchAdapterHelper {
                 TL_contacts_search tL_contacts_search = new TL_contacts_search();
                 tL_contacts_search.q = str2;
                 tL_contacts_search.limit = 50;
-                int i5 = this.lastReqId + 1;
+                i5 = this.lastReqId + 1;
                 this.lastReqId = i5;
                 this.reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_contacts_search, new -$$Lambda$SearchAdapterHelper$dscYso9YL4gEzQpoIdpN_Bu9BdA(this, i5, z2, z3, z4, str), 2);
             } else {
@@ -154,6 +165,32 @@ public class SearchAdapterHelper {
                 this.lastReqId = 0;
                 this.delegate.onDataSetChanged();
             }
+        }
+        if (z5 && str2.startsWith("+") && str.length() > 3) {
+            this.phonesSearch.clear();
+            this.phoneSearchMap.clear();
+            String stripExceptNumbers = PhoneFormat.stripExceptNumbers(str);
+            ArrayList arrayList = ContactsController.getInstance(this.currentAccount).contacts;
+            i5 = arrayList.size();
+            Object obj = null;
+            for (int i6 = 0; i6 < i5; i6++) {
+                User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(((TL_contact) arrayList.get(i6)).user_id));
+                if (user != null) {
+                    String str3 = user.phone;
+                    if (str3 != null && str3.startsWith(stripExceptNumbers)) {
+                        if (obj == null) {
+                            obj = user.phone.length() == stripExceptNumbers.length() ? 1 : null;
+                        }
+                        this.phonesSearch.add(user);
+                        this.phoneSearchMap.put(user.id, user);
+                    }
+                }
+            }
+            if (obj == null) {
+                this.phonesSearch.add("section");
+                this.phonesSearch.add(stripExceptNumbers);
+            }
+            this.delegate.onDataSetChanged();
         }
     }
 
@@ -282,8 +319,10 @@ public class SearchAdapterHelper {
                             obj2 = null;
                         }
                         if (obj3 != null) {
-                            this.localServerSearch.add(obj3);
-                            this.globalSearchMap.put(-obj3.id, obj3);
+                            if (z) {
+                                this.localServerSearch.add(obj3);
+                                this.globalSearchMap.put(-obj3.id, obj3);
+                            }
                         } else if (obj2 != null) {
                             this.localServerSearch.add(obj2);
                             this.globalSearchMap.put(obj2.id, obj2);
@@ -361,6 +400,11 @@ public class SearchAdapterHelper {
                     if (tLObject2 != null) {
                         this.groupSearch.remove(tLObject2);
                         this.groupSearchMap.remove(user.id);
+                    }
+                    Object obj = this.phoneSearchMap.get(user.id);
+                    if (obj != null) {
+                        this.phonesSearch.remove(obj);
+                        this.phoneSearchMap.remove(user.id);
                     }
                 } else if (tLObject instanceof Chat) {
                     Chat chat = (Chat) this.globalSearchMap.get(-((Chat) tLObject).id);
@@ -476,6 +520,10 @@ public class SearchAdapterHelper {
 
     public ArrayList<TLObject> getGlobalSearch() {
         return this.globalSearch;
+    }
+
+    public ArrayList<Object> getPhoneSearch() {
+        return this.phonesSearch;
     }
 
     public ArrayList<TLObject> getLocalServerSearch() {

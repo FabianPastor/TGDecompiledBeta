@@ -1,6 +1,6 @@
 package org.telegram.tgnet;
 
-import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.AccountInstance;
 
 /* compiled from: lambda */
 public final /* synthetic */ class -$$Lambda$ConnectionsManager$GiXNWNTneL61N5XH1sI4IVkif4k implements Runnable {
@@ -11,6 +11,6 @@ public final /* synthetic */ class -$$Lambda$ConnectionsManager$GiXNWNTneL61N5XH
     }
 
     public final void run() {
-        MessagesController.getInstance(this.f$0).updateTimerProc();
+        AccountInstance.getInstance(this.f$0).getMessagesController().updateTimerProc();
     }
 }

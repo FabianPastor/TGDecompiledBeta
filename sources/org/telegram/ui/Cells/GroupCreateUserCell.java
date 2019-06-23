@@ -261,7 +261,7 @@ public class GroupCreateUserCell extends FrameLayout {
         r1 = org.telegram.ui.ActionBar.Theme.getColor(r5);
         r14.setTextColor(r1);
         r14 = r13.statusTextView;
-        r1 = NUM; // 0x7f0d01c0 float:1.8743023E38 double:1.053129999E-314;
+        r1 = NUM; // 0x7f0d01cb float:1.8743046E38 double:1.0531300043E-314;
         r3 = "Bot";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r14.setText(r1);
@@ -310,7 +310,7 @@ public class GroupCreateUserCell extends FrameLayout {
         r1 = org.telegram.ui.ActionBar.Theme.getColor(r1);
         r14.setTextColor(r1);
         r14 = r13.statusTextView;
-        r1 = NUM; // 0x7f0d06a4 float:1.8745563E38 double:1.0531306175E-314;
+        r1 = NUM; // 0x7f0d06d5 float:1.8745662E38 double:1.0531306417E-314;
         r3 = "Online";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r14.setText(r1);
@@ -319,7 +319,7 @@ public class GroupCreateUserCell extends FrameLayout {
         r1 = org.telegram.messenger.ImageLocation.getForUser(r0, r4);
         r3 = r13.avatarDrawable;
         r14.setImage(r1, r2, r3, r0);
-        goto L_0x0206;
+        goto L_0x0219;
     L_0x0147:
         r0 = (org.telegram.tgnet.TLRPC.Chat) r0;
         r1 = r0.photo;
@@ -410,7 +410,7 @@ public class GroupCreateUserCell extends FrameLayout {
         r14.setText(r1);
     L_0x01b4:
         r14 = r13.currentStatus;
-        if (r14 != 0) goto L_0x01fb;
+        if (r14 != 0) goto L_0x020e;
     L_0x01b8:
         r14 = r13.statusTextView;
         r14.setTag(r5);
@@ -424,33 +424,43 @@ public class GroupCreateUserCell extends FrameLayout {
         r3 = "Members";
         r14 = org.telegram.messenger.LocaleController.formatPluralString(r3, r14);
         r1.setText(r14);
-        goto L_0x01fb;
+        goto L_0x020e;
     L_0x01d6:
+        r14 = r0.has_geo;
+        if (r14 == 0) goto L_0x01e9;
+    L_0x01da:
+        r14 = r13.statusTextView;
+        r1 = NUM; // 0x7f0d05bb float:1.874509E38 double:1.0531305023E-314;
+        r3 = "MegaLocation";
+        r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
+        r14.setText(r1);
+        goto L_0x020e;
+    L_0x01e9:
         r14 = r0.username;
         r14 = android.text.TextUtils.isEmpty(r14);
-        if (r14 == 0) goto L_0x01ed;
-    L_0x01de:
+        if (r14 == 0) goto L_0x0200;
+    L_0x01f1:
         r14 = r13.statusTextView;
-        r1 = NUM; // 0x7f0d0597 float:1.8745017E38 double:1.0531304846E-314;
+        r1 = NUM; // 0x7f0d05bc float:1.8745092E38 double:1.053130503E-314;
         r3 = "MegaPrivate";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r14.setText(r1);
-        goto L_0x01fb;
-    L_0x01ed:
+        goto L_0x020e;
+    L_0x0200:
         r14 = r13.statusTextView;
-        r1 = NUM; // 0x7f0d059a float:1.8745023E38 double:1.053130486E-314;
+        r1 = NUM; // 0x7f0d05bf float:1.8745098E38 double:1.0531305043E-314;
         r3 = "MegaPublic";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r14.setText(r1);
-    L_0x01fb:
+    L_0x020e:
         r14 = r13.avatarImageView;
         r1 = org.telegram.messenger.ImageLocation.getForChat(r0, r4);
         r3 = r13.avatarDrawable;
         r14.setImage(r1, r2, r3, r0);
-    L_0x0206:
+    L_0x0219:
         r14 = r13.currentStatus;
-        if (r14 == 0) goto L_0x021d;
-    L_0x020a:
+        if (r14 == 0) goto L_0x0230;
+    L_0x021d:
         r0 = r13.statusTextView;
         r0.setText(r14, r6);
         r14 = r13.statusTextView;
@@ -458,7 +468,7 @@ public class GroupCreateUserCell extends FrameLayout {
         r14 = r13.statusTextView;
         r0 = org.telegram.ui.ActionBar.Theme.getColor(r5);
         r14.setTextColor(r0);
-    L_0x021d:
+    L_0x0230:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.GroupCreateUserCell.update(int):void");

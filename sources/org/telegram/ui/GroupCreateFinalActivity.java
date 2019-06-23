@@ -15,6 +15,7 @@ import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -47,6 +48,7 @@ import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.FileLocation;
 import org.telegram.tgnet.TLRPC.InputFile;
+import org.telegram.tgnet.TLRPC.MessageMedia;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
@@ -56,6 +58,7 @@ import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.GroupCreateUserCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
+import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CombinedDrawable;
@@ -84,6 +87,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     private RadialProgressView avatarProgressView;
     private int chatType;
     private boolean createAfterUpload;
+    private String currentGroupCreateAddress;
+    private Location currentGroupCreateLocation;
     private GroupCreateFinalActivityDelegate delegate;
     private AnimatorSet doneItemAnimation;
     private boolean donePressed;
@@ -92,7 +97,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     private FrameLayout floatingButtonContainer;
     private ImageView floatingButtonIcon;
     private ImageUpdater imageUpdater;
-    private RecyclerView listView;
+    private RecyclerListView listView;
     private String nameToSet;
     private ContextProgressView progressView;
     private int reqId;
@@ -110,21 +115,19 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
 
     public class GroupCreateAdapter extends SelectionAdapter {
         private Context context;
-
-        public int getItemViewType(int i) {
-            return i != 0 ? i != 1 ? 2 : 1 : 0;
-        }
-
-        public boolean isEnabled(ViewHolder viewHolder) {
-            return false;
-        }
+        private int usersStartRow;
 
         public GroupCreateAdapter(Context context) {
             this.context = context;
         }
 
         public int getItemCount() {
-            return GroupCreateFinalActivity.this.selectedContacts.size() + 2;
+            int size = GroupCreateFinalActivity.this.selectedContacts.size() + 2;
+            return GroupCreateFinalActivity.this.currentGroupCreateAddress != null ? size + 3 : size;
+        }
+
+        public boolean isEnabled(ViewHolder viewHolder) {
+            return viewHolder.getItemViewType() == 3;
         }
 
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
@@ -136,7 +139,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 shadowSectionCell.setBackgroundDrawable(combinedDrawable);
                 view = shadowSectionCell;
             } else if (i != 1) {
-                view = new GroupCreateUserCell(this.context, false, 3);
+                view = i != 2 ? new TextSettingsCell(this.context) : new GroupCreateUserCell(this.context, false, 3);
             } else {
                 view = new HeaderCell(this.context);
                 view.setHeight(46);
@@ -147,9 +150,38 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         public void onBindViewHolder(ViewHolder viewHolder, int i) {
             int itemViewType = viewHolder.getItemViewType();
             if (itemViewType == 1) {
-                ((HeaderCell) viewHolder.itemView).setText(LocaleController.formatPluralString("Members", GroupCreateFinalActivity.this.selectedContacts.size()));
+                HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
+                if (GroupCreateFinalActivity.this.currentGroupCreateAddress == null || i != 1) {
+                    headerCell.setText(LocaleController.formatPluralString("Members", GroupCreateFinalActivity.this.selectedContacts.size()));
+                    return;
+                }
+                headerCell.setText(LocaleController.getString("AttachLocation", NUM));
             } else if (itemViewType == 2) {
-                ((GroupCreateUserCell) viewHolder.itemView).setObject(MessagesController.getInstance(GroupCreateFinalActivity.this.currentAccount).getUser((Integer) GroupCreateFinalActivity.this.selectedContacts.get(i - 2)), null, null);
+                ((GroupCreateUserCell) viewHolder.itemView).setObject(MessagesController.getInstance(GroupCreateFinalActivity.this.currentAccount).getUser((Integer) GroupCreateFinalActivity.this.selectedContacts.get(i - this.usersStartRow)), null, null);
+            } else if (itemViewType == 3) {
+                ((TextSettingsCell) viewHolder.itemView).setText(GroupCreateFinalActivity.this.currentGroupCreateAddress, false);
+            }
+        }
+
+        public int getItemViewType(int i) {
+            if (GroupCreateFinalActivity.this.currentGroupCreateAddress == null) {
+                this.usersStartRow = 2;
+            } else if (i == 0) {
+                return 0;
+            } else {
+                if (i == 1) {
+                    return 1;
+                }
+                if (i == 2) {
+                    return 3;
+                }
+                i -= 3;
+                this.usersStartRow = 5;
+            }
+            if (i != 0) {
+                return i != 1 ? 2 : 1;
+            } else {
+                return 0;
             }
         }
 
@@ -163,6 +195,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     public GroupCreateFinalActivity(Bundle bundle) {
         super(bundle);
         this.chatType = bundle.getInt("chatType", 0);
+        this.currentGroupCreateAddress = bundle.getString("address");
+        this.currentGroupCreateLocation = (Location) bundle.getParcelable("location");
     }
 
     public boolean onFragmentCreate() {
@@ -556,15 +590,15 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         this.editTextContainer.addView(this.editText, LayoutHelper.createFrame(-1, -2.0f, 16, LocaleController.isRTL ? 5.0f : 96.0f, 0.0f, LocaleController.isRTL ? 96.0f : 5.0f, 0.0f));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context2, 1, false);
         this.listView = new RecyclerListView(context2);
-        RecyclerView recyclerView = this.listView;
+        RecyclerListView recyclerListView = this.listView;
         GroupCreateAdapter groupCreateAdapter = new GroupCreateAdapter(context2);
         this.adapter = groupCreateAdapter;
-        recyclerView.setAdapter(groupCreateAdapter);
+        recyclerListView.setAdapter(groupCreateAdapter);
         this.listView.setLayoutManager(linearLayoutManager);
         this.listView.setVerticalScrollBarEnabled(false);
         this.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
         GroupCreateDividerItemDecoration groupCreateDividerItemDecoration = new GroupCreateDividerItemDecoration();
-        groupCreateDividerItemDecoration.setSkipRows(2);
+        groupCreateDividerItemDecoration.setSkipRows(this.currentGroupCreateAddress != null ? 5 : 2);
         this.listView.addItemDecoration(groupCreateDividerItemDecoration);
         anonymousClass3.addView(this.listView, LayoutHelper.createLinear(-1, -1));
         this.listView.setOnScrollListener(new OnScrollListener() {
@@ -574,6 +608,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 }
             }
         });
+        this.listView.setOnItemClickListener(new -$$Lambda$GroupCreateFinalActivity$PCsAqUjRC9rH-X9j5r1-vaqTngI(this));
         this.floatingButtonContainer = new FrameLayout(context2);
         float f = 56.0f;
         Drawable createSimpleSelectorCircleDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56.0f), Theme.getColor("chats_actionBackground"), Theme.getColor("chats_actionPressedBackground"));
@@ -605,7 +640,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             i = 5;
         }
         anonymousClass2.addView(frameLayout, LayoutHelper.createFrame(i3, f2, i | 80, LocaleController.isRTL ? 14.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 14.0f, 14.0f));
-        this.floatingButtonContainer.setOnClickListener(new -$$Lambda$GroupCreateFinalActivity$75-_1xxdeXhVklExcewj9GeLGnQ(this));
+        this.floatingButtonContainer.setOnClickListener(new -$$Lambda$GroupCreateFinalActivity$0NqpPulP1O624fCYT4-zY4Rvar_Q(this));
         this.floatingButtonIcon = new ImageView(context2);
         this.floatingButtonIcon.setScaleType(ScaleType.CENTER);
         this.floatingButtonIcon.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chats_actionIcon"), Mode.MULTIPLY));
@@ -641,7 +676,22 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         this.avatarEditor.setImageResource(NUM);
     }
 
-    public /* synthetic */ void lambda$createView$4$GroupCreateFinalActivity(View view) {
+    public /* synthetic */ void lambda$createView$5$GroupCreateFinalActivity(View view, int i) {
+        if ((view instanceof TextSettingsCell) && AndroidUtilities.isGoogleMapsInstalled(this)) {
+            LocationActivity locationActivity = new LocationActivity(4);
+            locationActivity.setDialogId(0);
+            locationActivity.setDelegate(new -$$Lambda$GroupCreateFinalActivity$aeNh984lesCfPcrxtuATCZCNzJc(this));
+            presentFragment(locationActivity);
+        }
+    }
+
+    public /* synthetic */ void lambda$null$4$GroupCreateFinalActivity(MessageMedia messageMedia, int i) {
+        this.currentGroupCreateLocation.setLatitude(messageMedia.geo.lat);
+        this.currentGroupCreateLocation.setLongitude(messageMedia.geo._long);
+        this.currentGroupCreateAddress = messageMedia.address;
+    }
+
+    public /* synthetic */ void lambda$createView$6$GroupCreateFinalActivity(View view) {
         if (!this.donePressed) {
             if (this.editText.length() == 0) {
                 Vibrator vibrator = (Vibrator) getParentActivity().getSystemService("vibrator");
@@ -658,16 +708,16 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 this.createAfterUpload = true;
             } else {
                 showEditDoneProgress(true);
-                this.reqId = MessagesController.getInstance(this.currentAccount).createChat(this.editText.getText().toString(), this.selectedContacts, null, this.chatType, this);
+                this.reqId = MessagesController.getInstance(this.currentAccount).createChat(this.editText.getText().toString(), this.selectedContacts, null, this.chatType, this.currentGroupCreateLocation, this.currentGroupCreateAddress, this);
             }
         }
     }
 
     public void didUploadPhoto(InputFile inputFile, PhotoSize photoSize, PhotoSize photoSize2) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$GroupCreateFinalActivity$NmRkjRZ6-MrsxxvtnDOrMWsjyWE(this, inputFile, photoSize2, photoSize));
+        AndroidUtilities.runOnUIThread(new -$$Lambda$GroupCreateFinalActivity$JwhV27OkXZpe1BVw5I-Oh-G-zC4(this, inputFile, photoSize2, photoSize));
     }
 
-    public /* synthetic */ void lambda$didUploadPhoto$5$GroupCreateFinalActivity(InputFile inputFile, PhotoSize photoSize, PhotoSize photoSize2) {
+    public /* synthetic */ void lambda$didUploadPhoto$7$GroupCreateFinalActivity(InputFile inputFile, PhotoSize photoSize, PhotoSize photoSize2) {
         if (inputFile != null) {
             this.uploadedAvatar = inputFile;
             if (this.createAfterUpload) {
@@ -675,7 +725,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 if (groupCreateFinalActivityDelegate != null) {
                     groupCreateFinalActivityDelegate.didStartChatCreation();
                 }
-                MessagesController.getInstance(this.currentAccount).createChat(this.editText.getText().toString(), this.selectedContacts, null, this.chatType, this);
+                MessagesController.getInstance(this.currentAccount).createChat(this.editText.getText().toString(), this.selectedContacts, null, this.chatType, this.currentGroupCreateLocation, this.currentGroupCreateAddress, this);
             }
             showAvatarProgress(false, true);
             this.avatarEditor.setImageDrawable(null);
@@ -902,61 +952,50 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        -$$Lambda$GroupCreateFinalActivity$CRety3GO9dgZ2xrvwCLASSNAMELAKNWX8 -__lambda_groupcreatefinalactivity_crety3go9dgz2xrvwCLASSNAMElaknwx8 = new -$$Lambda$GroupCreateFinalActivity$CRety3GO9dgZ2xrvwCLASSNAMELAKNWX8(this);
-        ThemeDescription[] themeDescriptionArr = new ThemeDescription[34];
-        themeDescriptionArr[0] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundWhite");
-        themeDescriptionArr[1] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault");
-        themeDescriptionArr[2] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault");
-        themeDescriptionArr[3] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon");
-        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle");
-        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector");
-        themeDescriptionArr[6] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21");
-        themeDescriptionArr[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, null, null, null, null, "fastScrollActive");
-        themeDescriptionArr[8] = new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, null, null, null, null, "fastScrollInactive");
-        themeDescriptionArr[9] = new ThemeDescription(this.listView, ThemeDescription.FLAG_FASTSCROLL, null, null, null, null, "fastScrollText");
-        themeDescriptionArr[10] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider");
-        themeDescriptionArr[11] = new ThemeDescription(this.editText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[12] = new ThemeDescription(this.editText, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, "groupcreate_hintText");
-        themeDescriptionArr[13] = new ThemeDescription(this.editText, ThemeDescription.FLAG_CURSORCOLOR, null, null, null, null, "groupcreate_cursor");
-        themeDescriptionArr[14] = new ThemeDescription(this.editText, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "windowBackgroundWhiteInputField");
-        themeDescriptionArr[15] = new ThemeDescription(this.editText, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, "windowBackgroundWhiteInputFieldActivated");
-        themeDescriptionArr[16] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, "windowBackgroundGrayShadow");
-        themeDescriptionArr[17] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{ShadowSectionCell.class}, null, null, null, "windowBackgroundGray");
+        -$$Lambda$GroupCreateFinalActivity$VPEySrwsnDav95hCH-qJfgjLqoE -__lambda_groupcreatefinalactivity_vpeysrwsndav95hch-qjfgjlqoe = new -$$Lambda$GroupCreateFinalActivity$VPEySrwsnDav95hCH-qJfgjLqoE(this);
+        r10 = new ThemeDescription[35];
+        r10[10] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider");
+        r10[11] = new ThemeDescription(this.editText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
+        r10[12] = new ThemeDescription(this.editText, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, "groupcreate_hintText");
+        r10[13] = new ThemeDescription(this.editText, ThemeDescription.FLAG_CURSORCOLOR, null, null, null, null, "groupcreate_cursor");
+        r10[14] = new ThemeDescription(this.editText, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "windowBackgroundWhiteInputField");
+        r10[15] = new ThemeDescription(this.editText, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, "windowBackgroundWhiteInputFieldActivated");
+        r10[16] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, "windowBackgroundGrayShadow");
+        r10[17] = new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{ShadowSectionCell.class}, null, null, null, "windowBackgroundGray");
         View view = this.listView;
         Class[] clsArr = new Class[]{HeaderCell.class};
         String[] strArr = new String[1];
         strArr[0] = "textView";
-        themeDescriptionArr[18] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "windowBackgroundWhiteBlueHeader");
-        themeDescriptionArr[19] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateUserCell.class}, new String[]{"textView"}, null, null, null, "groupcreate_sectionText");
+        r10[18] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "windowBackgroundWhiteBlueHeader");
+        r10[19] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateUserCell.class}, new String[]{"textView"}, null, null, null, "groupcreate_sectionText");
         view = this.listView;
         int i = ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG;
         clsArr = new Class[]{GroupCreateUserCell.class};
         strArr = new String[1];
         strArr[0] = "statusTextView";
-        themeDescriptionArr[20] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "windowBackgroundWhiteBlueText");
-        themeDescriptionArr[21] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{GroupCreateUserCell.class}, new String[]{"statusTextView"}, null, null, null, "windowBackgroundWhiteGrayText");
-        Class[] clsArr2 = new Class[]{GroupCreateUserCell.class};
-        Paint paint = null;
-        -$$Lambda$GroupCreateFinalActivity$CRety3GO9dgZ2xrvwCLASSNAMELAKNWX8 -__lambda_groupcreatefinalactivity_crety3go9dgz2xrvwCLASSNAMElaknwx82 = -__lambda_groupcreatefinalactivity_crety3go9dgz2xrvwCLASSNAMElaknwx8;
-        themeDescriptionArr[22] = new ThemeDescription(this.listView, 0, clsArr2, paint, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, -__lambda_groupcreatefinalactivity_crety3go9dgz2xrvwCLASSNAMElaknwx82, "avatar_text");
-        themeDescriptionArr[23] = new ThemeDescription(null, 0, null, null, null, -__lambda_groupcreatefinalactivity_crety3go9dgz2xrvwCLASSNAMElaknwx82, "avatar_backgroundRed");
-        themeDescriptionArr[24] = new ThemeDescription(null, 0, null, null, null, -__lambda_groupcreatefinalactivity_crety3go9dgz2xrvwCLASSNAMElaknwx82, "avatar_backgroundOrange");
-        themeDescriptionArr[25] = new ThemeDescription(null, 0, null, null, null, -__lambda_groupcreatefinalactivity_crety3go9dgz2xrvwCLASSNAMElaknwx82, "avatar_backgroundViolet");
-        themeDescriptionArr[26] = new ThemeDescription(null, 0, null, null, null, -__lambda_groupcreatefinalactivity_crety3go9dgz2xrvwCLASSNAMElaknwx82, "avatar_backgroundGreen");
-        themeDescriptionArr[27] = new ThemeDescription(null, 0, null, null, null, -__lambda_groupcreatefinalactivity_crety3go9dgz2xrvwCLASSNAMElaknwx82, "avatar_backgroundCyan");
-        themeDescriptionArr[28] = new ThemeDescription(null, 0, null, null, null, -__lambda_groupcreatefinalactivity_crety3go9dgz2xrvwCLASSNAMElaknwx82, "avatar_backgroundBlue");
-        themeDescriptionArr[29] = new ThemeDescription(null, 0, null, null, null, -__lambda_groupcreatefinalactivity_crety3go9dgz2xrvwCLASSNAMElaknwx82, "avatar_backgroundPink");
-        themeDescriptionArr[30] = new ThemeDescription(this.progressView, 0, null, null, null, null, "contextProgressInner2");
-        themeDescriptionArr[31] = new ThemeDescription(this.progressView, 0, null, null, null, null, "contextProgressOuter2");
-        themeDescriptionArr[32] = new ThemeDescription(this.editText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
-        themeDescriptionArr[33] = new ThemeDescription(this.editText, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, "windowBackgroundWhiteHintText");
-        return themeDescriptionArr;
+        r10[20] = new ThemeDescription(view, i, clsArr, strArr, null, null, null, "windowBackgroundWhiteBlueText");
+        r10[21] = new ThemeDescription(this.listView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{GroupCreateUserCell.class}, new String[]{"statusTextView"}, null, null, null, "windowBackgroundWhiteGrayText");
+        -$$Lambda$GroupCreateFinalActivity$VPEySrwsnDav95hCH-qJfgjLqoE -__lambda_groupcreatefinalactivity_vpeysrwsndav95hch-qjfgjlqoe2 = -__lambda_groupcreatefinalactivity_vpeysrwsndav95hch-qjfgjlqoe;
+        r10[22] = new ThemeDescription(this.listView, 0, new Class[]{GroupCreateUserCell.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, -__lambda_groupcreatefinalactivity_vpeysrwsndav95hch-qjfgjlqoe2, "avatar_text");
+        r10[23] = new ThemeDescription(null, 0, null, null, null, -__lambda_groupcreatefinalactivity_vpeysrwsndav95hch-qjfgjlqoe2, "avatar_backgroundRed");
+        r10[24] = new ThemeDescription(null, 0, null, null, null, -__lambda_groupcreatefinalactivity_vpeysrwsndav95hch-qjfgjlqoe2, "avatar_backgroundOrange");
+        r10[25] = new ThemeDescription(null, 0, null, null, null, -__lambda_groupcreatefinalactivity_vpeysrwsndav95hch-qjfgjlqoe2, "avatar_backgroundViolet");
+        r10[26] = new ThemeDescription(null, 0, null, null, null, -__lambda_groupcreatefinalactivity_vpeysrwsndav95hch-qjfgjlqoe2, "avatar_backgroundGreen");
+        r10[27] = new ThemeDescription(null, 0, null, null, null, -__lambda_groupcreatefinalactivity_vpeysrwsndav95hch-qjfgjlqoe2, "avatar_backgroundCyan");
+        r10[28] = new ThemeDescription(null, 0, null, null, null, -__lambda_groupcreatefinalactivity_vpeysrwsndav95hch-qjfgjlqoe2, "avatar_backgroundBlue");
+        r10[29] = new ThemeDescription(null, 0, null, null, null, -__lambda_groupcreatefinalactivity_vpeysrwsndav95hch-qjfgjlqoe2, "avatar_backgroundPink");
+        r10[30] = new ThemeDescription(this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteBlackText");
+        r10[31] = new ThemeDescription(this.progressView, 0, null, null, null, null, "contextProgressInner2");
+        r10[32] = new ThemeDescription(this.progressView, 0, null, null, null, null, "contextProgressOuter2");
+        r10[33] = new ThemeDescription(this.editText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "windowBackgroundWhiteBlackText");
+        r10[34] = new ThemeDescription(this.editText, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, "windowBackgroundWhiteHintText");
+        return r10;
     }
 
-    public /* synthetic */ void lambda$getThemeDescriptions$6$GroupCreateFinalActivity() {
-        RecyclerView recyclerView = this.listView;
-        if (recyclerView != null) {
-            int childCount = recyclerView.getChildCount();
+    public /* synthetic */ void lambda$getThemeDescriptions$8$GroupCreateFinalActivity() {
+        RecyclerListView recyclerListView = this.listView;
+        if (recyclerListView != null) {
+            int childCount = recyclerListView.getChildCount();
             for (int i = 0; i < childCount; i++) {
                 View childAt = this.listView.getChildAt(i);
                 if (childAt instanceof GroupCreateUserCell) {

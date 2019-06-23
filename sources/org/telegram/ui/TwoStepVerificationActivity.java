@@ -39,6 +39,7 @@ import org.telegram.messenger.Utilities;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC.InputCheckPasswordSRP;
 import org.telegram.tgnet.TLRPC.PasswordKdfAlgo;
 import org.telegram.tgnet.TLRPC.SecurePasswordKdfAlgo;
 import org.telegram.tgnet.TLRPC.TL_account_cancelPasswordEmail;
@@ -95,6 +96,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     private byte[] currentPasswordHash;
     private byte[] currentSecret;
     private long currentSecretId;
+    private TwoStepVerificationActivityDelegate delegate;
     private boolean destroyed;
     private ActionBarMenuItem doneItem;
     private AnimatorSet doneItemAnimation;
@@ -128,6 +130,10 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     private int turnPasswordOffRow;
     private int type;
     private boolean waitingForEmail;
+
+    public interface TwoStepVerificationActivityDelegate {
+        void didEnterPassword(InputCheckPasswordSRP inputCheckPasswordSRP);
+    }
 
     private class ListAdapter extends SelectionAdapter {
         private Context mContext;
@@ -340,6 +346,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         this.titleTextView.setTextColor(Theme.getColor(str2));
         this.titleTextView.setTextSize(1, 18.0f);
         this.titleTextView.setGravity(1);
+        this.titleTextView.setPadding(AndroidUtilities.dp(40.0f), 0, AndroidUtilities.dp(40.0f), 0);
         linearLayout.addView(this.titleTextView, LayoutHelper.createLinear(-2, -2, 1, 0, 38, 0, 0));
         this.passwordEditText = new EditTextBoldCursor(context2);
         this.passwordEditText.setTextSize(1, 20.0f);
@@ -434,7 +441,11 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             });
             updateRows();
             this.actionBar.setTitle(LocaleController.getString("TwoStepVerificationTitle", NUM));
-            this.titleTextView.setText(LocaleController.getString("PleaseEnterCurrentPassword", NUM));
+            if (this.delegate != null) {
+                this.titleTextView.setText(LocaleController.getString("PleaseEnterCurrentPasswordTransfer", NUM));
+            } else {
+                this.titleTextView.setText(LocaleController.getString("PleaseEnterCurrentPassword", NUM));
+            }
         } else if (i2 == 1) {
             setPasswordSetState(this.passwordSetState);
         }
@@ -442,9 +453,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             this.fragmentView.setBackgroundColor(Theme.getColor(str));
             this.fragmentView.setTag(str);
         } else {
-            String str4 = "windowBackgroundGray";
-            this.fragmentView.setBackgroundColor(Theme.getColor(str4));
-            this.fragmentView.setTag(str4);
+            this.fragmentView.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
+            this.fragmentView.setTag("windowBackgroundGray");
         }
         return this.fragmentView;
     }
@@ -663,8 +673,14 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     }
 
     public void setCurrentPasswordInfo(byte[] bArr, TL_account_password tL_account_password) {
-        this.currentPasswordHash = bArr;
+        if (bArr != null) {
+            this.currentPasswordHash = bArr;
+        }
         this.currentPassword = tL_account_password;
+    }
+
+    public void setDelegate(TwoStepVerificationActivityDelegate twoStepVerificationActivityDelegate) {
+        this.delegate = twoStepVerificationActivityDelegate;
     }
 
     public void onTransitionAnimationEnd(boolean z, boolean z2) {
@@ -1032,31 +1048,31 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             this.doneItem.setEnabled(false);
             AnimatorSet animatorSet2 = this.doneItemAnimation;
             Animator[] animatorArr = new Animator[6];
-            animatorArr[0] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), str3, new float[]{0.1f});
-            animatorArr[1] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), str2, new float[]{0.1f});
-            animatorArr[2] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), str, new float[]{0.0f});
+            animatorArr[0] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), str3, new float[]{0.1f});
+            animatorArr[1] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), str2, new float[]{0.1f});
+            animatorArr[2] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), str, new float[]{0.0f});
             animatorArr[3] = ObjectAnimator.ofFloat(this.progressView, str3, new float[]{1.0f});
             animatorArr[4] = ObjectAnimator.ofFloat(this.progressView, str2, new float[]{1.0f});
             animatorArr[5] = ObjectAnimator.ofFloat(this.progressView, str, new float[]{1.0f});
             animatorSet2.playTogether(animatorArr);
         } else {
-            this.doneItem.getImageView().setVisibility(0);
+            this.doneItem.getContentView().setVisibility(0);
             this.doneItem.setEnabled(true);
             animatorSet = this.doneItemAnimation;
             Animator[] animatorArr2 = new Animator[6];
             animatorArr2[0] = ObjectAnimator.ofFloat(this.progressView, str3, new float[]{0.1f});
             animatorArr2[1] = ObjectAnimator.ofFloat(this.progressView, str2, new float[]{0.1f});
             animatorArr2[2] = ObjectAnimator.ofFloat(this.progressView, str, new float[]{0.0f});
-            animatorArr2[3] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), str3, new float[]{1.0f});
-            animatorArr2[4] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), str2, new float[]{1.0f});
-            animatorArr2[5] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), str, new float[]{1.0f});
+            animatorArr2[3] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), str3, new float[]{1.0f});
+            animatorArr2[4] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), str2, new float[]{1.0f});
+            animatorArr2[5] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), str, new float[]{1.0f});
             animatorSet.playTogether(animatorArr2);
         }
         this.doneItemAnimation.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 if (TwoStepVerificationActivity.this.doneItemAnimation != null && TwoStepVerificationActivity.this.doneItemAnimation.equals(animator)) {
                     if (z2) {
-                        TwoStepVerificationActivity.this.doneItem.getImageView().setVisibility(4);
+                        TwoStepVerificationActivity.this.doneItem.getContentView().setVisibility(4);
                     } else {
                         TwoStepVerificationActivity.this.progressView.setVisibility(4);
                     }
@@ -1081,7 +1097,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         }
     }
 
-    private void needHideProgress() {
+    /* Access modifiers changed, original: protected */
+    public void needHideProgress() {
         AlertDialog alertDialog = this.progressDialog;
         if (alertDialog != null) {
             try {
@@ -1279,7 +1296,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         return;
     L_0x0022:
         r3.needHideProgress();
-        r0 = NUM; // 0x7f0d06a1 float:1.8745557E38 double:1.053130616E-314;
+        r0 = NUM; // 0x7f0d06d2 float:1.8745656E38 double:1.05313064E-314;
         r1 = "OK";
         r2 = 0;
         if (r4 != 0) goto L_0x00ac;
@@ -1322,18 +1339,18 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         r5 = r5.has_password;
         if (r5 == 0) goto L_0x0082;
     L_0x0075:
-        r5 = NUM; // 0x7f0d0ac1 float:1.8747698E38 double:1.0531311377E-314;
+        r5 = NUM; // 0x7f0d0b0a float:1.8747847E38 double:1.053131174E-314;
         r6 = "YourEmailSuccessText";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r4.setMessage(r5);
         goto L_0x008e;
     L_0x0082:
-        r5 = NUM; // 0x7f0d0ac5 float:1.8747707E38 double:1.0531311397E-314;
+        r5 = NUM; // 0x7f0d0b0f float:1.8747857E38 double:1.053131176E-314;
         r6 = "YourPasswordSuccessText";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r4.setMessage(r5);
     L_0x008e:
-        r5 = NUM; // 0x7f0d0ac4 float:1.8747705E38 double:1.053131139E-314;
+        r5 = NUM; // 0x7f0d0b0e float:1.8747855E38 double:1.0531311758E-314;
         r6 = "YourPasswordSuccess";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r4.setTitle(r5);
@@ -1362,12 +1379,12 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         r5 = r4.text;
         r6 = "EMAIL_INVALID";
         r5 = r6.equals(r5);
-        r6 = NUM; // 0x7f0d00eb float:1.8742591E38 double:1.0531298936E-314;
+        r6 = NUM; // 0x7f0d00ef float:1.87426E38 double:1.0531298956E-314;
         r7 = "AppName";
         if (r5 == 0) goto L_0x00e4;
     L_0x00d2:
         r4 = org.telegram.messenger.LocaleController.getString(r7, r6);
-        r5 = NUM; // 0x7f0d079b float:1.8746064E38 double:1.0531307395E-314;
+        r5 = NUM; // 0x7f0d07cc float:1.8746163E38 double:1.0531307637E-314;
         r6 = "PasswordEmailInvalid";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r3.showAlertWithText(r4, r5);
@@ -1393,7 +1410,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         r4 = org.telegram.messenger.LocaleController.formatPluralString(r5, r4);
     L_0x010a:
         r5 = org.telegram.messenger.LocaleController.getString(r7, r6);
-        r6 = NUM; // 0x7f0d0448 float:1.8744338E38 double:1.053130319E-314;
+        r6 = NUM; // 0x7f0d046a float:1.8744407E38 double:1.053130336E-314;
         r7 = 1;
         r7 = new java.lang.Object[r7];
         r7[r2] = r4;
@@ -1419,11 +1436,11 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         r6 = new org.telegram.ui.-$$Lambda$TwoStepVerificationActivity$dZl6L7A3pdg7u0zh2dz9t60mIJU;
         r6.<init>(r3, r7, r8);
         r4.setPositiveButton(r5, r6);
-        r5 = NUM; // 0x7f0d0aba float:1.8747684E38 double:1.0531311342E-314;
+        r5 = NUM; // 0x7f0d0b03 float:1.8747832E38 double:1.0531311703E-314;
         r6 = "YourEmailAlmostThereText";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r4.setMessage(r5);
-        r5 = NUM; // 0x7f0d0ab9 float:1.8747682E38 double:1.053131134E-314;
+        r5 = NUM; // 0x7f0d0b02 float:1.874783E38 double:1.05313117E-314;
         r6 = "YourEmailAlmostThere";
         r5 = org.telegram.messenger.LocaleController.getString(r6, r5);
         r4.setTitle(r5);
@@ -1488,7 +1505,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         finishFragment();
     }
 
-    private TL_inputCheckPasswordSRP getNewSrpPassword() {
+    /* Access modifiers changed, original: protected */
+    public TL_inputCheckPasswordSRP getNewSrpPassword() {
         TL_account_password tL_account_password = this.currentPassword;
         PasswordKdfAlgo passwordKdfAlgo = tL_account_password.current_algo;
         if (!(passwordKdfAlgo instanceof TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow)) {
@@ -1665,13 +1683,21 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     }
 
     public /* synthetic */ void lambda$null$27$TwoStepVerificationActivity(boolean z, byte[] bArr) {
-        needHideProgress();
+        if (this.delegate == null || !z) {
+            needHideProgress();
+        }
         if (z) {
             this.currentPasswordHash = bArr;
             this.passwordEntered = true;
             AndroidUtilities.hideKeyboard(this.passwordEditText);
-            updateRows();
-            return;
+            TwoStepVerificationActivityDelegate twoStepVerificationActivityDelegate = this.delegate;
+            if (twoStepVerificationActivityDelegate != null) {
+                twoStepVerificationActivityDelegate.didEnterPassword(getNewSrpPassword());
+                return;
+            } else {
+                updateRows();
+                return;
+            }
         }
         AlertsCreator.showUpdateAppAlert(getParentActivity(), LocaleController.getString("UpdateAppAlert", NUM), true);
     }

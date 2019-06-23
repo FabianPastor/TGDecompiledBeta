@@ -47,11 +47,11 @@ import java.util.Map.Entry;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ContactsController;
-import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -2056,10 +2056,10 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
                             int i4 = anonymousClass8.selectedType == 0 ? 0 : anonymousClass8.selectedType == 1 ? 1 : anonymousClass8.selectedType == 2 ? 2 : anonymousClass8.selectedType == 4 ? 4 : 3;
                             if (!MediaActivity.this.sharedMediaData[anonymousClass8.selectedType].endReached[0]) {
                                 MediaActivity.this.sharedMediaData[anonymousClass8.selectedType].loading = true;
-                                DataQuery.getInstance(MediaActivity.this.currentAccount).loadMedia(MediaActivity.this.dialog_id, 50, MediaActivity.this.sharedMediaData[anonymousClass8.selectedType].max_id[0], i4, 1, MediaActivity.this.classGuid);
+                                MediaDataController.getInstance(MediaActivity.this.currentAccount).loadMedia(MediaActivity.this.dialog_id, 50, MediaActivity.this.sharedMediaData[anonymousClass8.selectedType].max_id[0], i4, 1, MediaActivity.this.classGuid);
                             } else if (!(MediaActivity.this.mergeDialogId == 0 || MediaActivity.this.sharedMediaData[anonymousClass8.selectedType].endReached[1])) {
                                 MediaActivity.this.sharedMediaData[anonymousClass8.selectedType].loading = true;
-                                DataQuery.getInstance(MediaActivity.this.currentAccount).loadMedia(MediaActivity.this.mergeDialogId, 50, MediaActivity.this.sharedMediaData[anonymousClass8.selectedType].max_id[1], i4, 1, MediaActivity.this.classGuid);
+                                MediaDataController.getInstance(MediaActivity.this.currentAccount).loadMedia(MediaActivity.this.mergeDialogId, 50, MediaActivity.this.sharedMediaData[anonymousClass8.selectedType].max_id[1], i4, 1, MediaActivity.this.classGuid);
                             }
                         }
                         if (!(recyclerView != MediaActivity.this.mediaPages[0].listView || MediaActivity.this.searching || MediaActivity.this.actionBar.isActionModeShowed())) {
@@ -2332,7 +2332,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         r1 = r1[r12];
         r1.loading = r11;
         r1 = r0.currentAccount;
-        r13 = org.telegram.messenger.DataQuery.getInstance(r1);
+        r13 = org.telegram.messenger.MediaDataController.getInstance(r1);
         r14 = r0.mergeDialogId;
         r16 = 50;
         r1 = r0.sharedMediaData;
@@ -2603,7 +2603,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         goto L_0x02a8;
     L_0x0282:
         r12 = r5.messageOwner;
-        r12 = org.telegram.messenger.DataQuery.getMediaType(r12);
+        r12 = org.telegram.messenger.MediaDataController.getMediaType(r12);
         r13 = -1;
         if (r12 != r13) goto L_0x028c;
     L_0x028b:
@@ -3146,7 +3146,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         if (r0 != 0) goto L_0x00cf;
     L_0x00c1:
         r0 = r12.scrollSlidingTextTabStrip;
-        r2 = NUM; // 0x7f0d093f float:1.8746916E38 double:1.053130947E-314;
+        r2 = NUM; // 0x7f0d0984 float:1.8747056E38 double:1.053130981E-314;
         r9 = "SharedMediaTab";
         r2 = org.telegram.messenger.LocaleController.getString(r9, r2);
         r0.addTextTab(r1, r2);
@@ -3160,14 +3160,14 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         if (r0 != 0) goto L_0x00eb;
     L_0x00dd:
         r0 = r12.scrollSlidingTextTabStrip;
-        r2 = NUM; // 0x7f0d093b float:1.8746907E38 double:1.053130945E-314;
+        r2 = NUM; // 0x7f0d0980 float:1.8747047E38 double:1.053130979E-314;
         r9 = "SharedFilesTab";
         r2 = org.telegram.messenger.LocaleController.getString(r9, r2);
         r0.addTextTab(r6, r2);
     L_0x00eb:
         r9 = r12.dialog_id;
         r0 = (int) r9;
-        r2 = NUM; // 0x7f0d0940 float:1.8746918E38 double:1.0531309475E-314;
+        r2 = NUM; // 0x7f0d0985 float:1.8747058E38 double:1.0531309816E-314;
         r9 = "SharedMusicTab";
         if (r0 == 0) goto L_0x0129;
     L_0x00f5:
@@ -3180,7 +3180,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         if (r0 != 0) goto L_0x0111;
     L_0x0103:
         r0 = r12.scrollSlidingTextTabStrip;
-        r7 = NUM; // 0x7f0d093d float:1.8746912E38 double:1.053130946E-314;
+        r7 = NUM; // 0x7f0d0982 float:1.8747051E38 double:1.05313098E-314;
         r8 = "SharedLinksTab";
         r7 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r0.addTextTab(r3, r7);
@@ -3232,7 +3232,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
         if (r0 != 0) goto L_0x0178;
     L_0x016a:
         r0 = r12.scrollSlidingTextTabStrip;
-        r2 = NUM; // 0x7f0d0943 float:1.8746924E38 double:1.053130949E-314;
+        r2 = NUM; // 0x7f0d0988 float:1.8747064E38 double:1.053130983E-314;
         r3 = "SharedVoiceTab";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r0.addTextTab(r4, r2);
@@ -3439,7 +3439,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenterDel
             }
             if (!(this.sharedMediaData[this.mediaPages[z].selectedType].loading || this.sharedMediaData[this.mediaPages[z].selectedType].endReached[0] || !this.sharedMediaData[this.mediaPages[z].selectedType].messages.isEmpty())) {
                 this.sharedMediaData[this.mediaPages[z].selectedType].loading = true;
-                DataQuery.getInstance(this.currentAccount).loadMedia(this.dialog_id, 50, 0, this.mediaPages[z].selectedType, 1, this.classGuid);
+                MediaDataController.getInstance(this.currentAccount).loadMedia(this.dialog_id, 50, 0, this.mediaPages[z].selectedType, 1, this.classGuid);
             }
             if (this.sharedMediaData[this.mediaPages[z].selectedType].loading && this.sharedMediaData[this.mediaPages[z].selectedType].messages.isEmpty()) {
                 this.mediaPages[z].progressView.setVisibility(0);

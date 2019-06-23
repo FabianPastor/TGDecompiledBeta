@@ -22,10 +22,8 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.ChatFull;
@@ -69,10 +67,12 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
     private EditText editText;
     private HeaderCell headerCell;
     private HeaderCell headerCell2;
+    private boolean ignoreTextChanges;
     private ChatFull info;
     private TextInfoPrivacyCell infoCell;
     private ExportedChatInvite invite;
     private boolean isChannel;
+    private boolean isForcePublic;
     private boolean isPrivate;
     private String lastCheckName;
     private boolean lastNameAvailable;
@@ -95,18 +95,18 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
     private TextInfoPrivacyCell typeInfoCell;
     private EditTextBoldCursor usernameTextView;
 
-    public ChatEditTypeActivity(int i) {
+    public ChatEditTypeActivity(int i, boolean z) {
         this.chatId = i;
+        this.isForcePublic = z;
     }
 
-    /* JADX WARNING: Missing block: B:17:0x005f, code skipped:
-            if (r5.info == null) goto L_0x0061;
+    /* JADX WARNING: Missing block: B:17:0x0057, code skipped:
+            if (r5.info == null) goto L_0x0059;
      */
     public boolean onFragmentCreate() {
         /*
         r5 = this;
-        r0 = r5.currentAccount;
-        r0 = org.telegram.messenger.MessagesController.getInstance(r0);
+        r0 = r5.getMessagesController();
         r1 = r5.chatId;
         r1 = java.lang.Integer.valueOf(r1);
         r0 = r0.getChat(r1);
@@ -114,71 +114,86 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         r0 = r5.currentChat;
         r1 = 1;
         r2 = 0;
-        if (r0 != 0) goto L_0x0062;
-    L_0x0018:
+        if (r0 != 0) goto L_0x005a;
+    L_0x0016:
         r0 = new java.util.concurrent.CountDownLatch;
         r0.<init>(r1);
-        r3 = r5.currentAccount;
-        r3 = org.telegram.messenger.MessagesStorage.getInstance(r3);
+        r3 = r5.getMessagesStorage();
         r3 = r3.getStorageQueue();
         r4 = new org.telegram.ui.-$$Lambda$ChatEditTypeActivity$_xE1oN7Z_mocgmUxwzzUt1LjqBE;
         r4.<init>(r5, r0);
         r3.postRunnable(r4);
-        r0.await();	 Catch:{ Exception -> 0x0033 }
-        goto L_0x0037;
-    L_0x0033:
+        r0.await();	 Catch:{ Exception -> 0x002f }
+        goto L_0x0033;
+    L_0x002f:
         r3 = move-exception;
         org.telegram.messenger.FileLog.e(r3);
-    L_0x0037:
+    L_0x0033:
         r3 = r5.currentChat;
-        if (r3 == 0) goto L_0x0061;
-    L_0x003b:
-        r3 = r5.currentAccount;
-        r3 = org.telegram.messenger.MessagesController.getInstance(r3);
+        if (r3 == 0) goto L_0x0059;
+    L_0x0037:
+        r3 = r5.getMessagesController();
         r4 = r5.currentChat;
         r3.putChat(r4, r1);
         r3 = r5.info;
-        if (r3 != 0) goto L_0x0062;
-    L_0x004a:
-        r3 = r5.currentAccount;
-        r3 = org.telegram.messenger.MessagesStorage.getInstance(r3);
+        if (r3 != 0) goto L_0x005a;
+    L_0x0044:
+        r3 = r5.getMessagesStorage();
         r4 = r5.chatId;
         r3.loadChatInfo(r4, r0, r2, r2);
-        r0.await();	 Catch:{ Exception -> 0x0059 }
-        goto L_0x005d;
-    L_0x0059:
+        r0.await();	 Catch:{ Exception -> 0x0051 }
+        goto L_0x0055;
+    L_0x0051:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x005d:
+    L_0x0055:
         r0 = r5.info;
-        if (r0 != 0) goto L_0x0062;
-    L_0x0061:
+        if (r0 != 0) goto L_0x005a;
+    L_0x0059:
         return r2;
-    L_0x0062:
+    L_0x005a:
+        r0 = r5.isForcePublic;
+        if (r0 != 0) goto L_0x006a;
+    L_0x005e:
         r0 = r5.currentChat;
         r0 = r0.username;
         r0 = android.text.TextUtils.isEmpty(r0);
+        if (r0 == 0) goto L_0x006a;
+    L_0x0068:
+        r0 = 1;
+        goto L_0x006b;
+    L_0x006a:
+        r0 = 0;
+    L_0x006b:
         r5.isPrivate = r0;
         r0 = r5.currentChat;
         r0 = org.telegram.messenger.ChatObject.isChannel(r0);
-        if (r0 == 0) goto L_0x007b;
-    L_0x0074:
+        if (r0 == 0) goto L_0x007c;
+    L_0x0075:
         r0 = r5.currentChat;
         r0 = r0.megagroup;
-        if (r0 != 0) goto L_0x007b;
-    L_0x007a:
-        goto L_0x007c;
+        if (r0 != 0) goto L_0x007c;
     L_0x007b:
-        r1 = 0;
+        goto L_0x007d;
     L_0x007c:
+        r1 = 0;
+    L_0x007d:
         r5.isChannel = r1;
+        r0 = r5.isForcePublic;
+        if (r0 == 0) goto L_0x008d;
+    L_0x0083:
+        r0 = r5.currentChat;
+        r0 = r0.username;
+        r0 = android.text.TextUtils.isEmpty(r0);
+        if (r0 != 0) goto L_0x0097;
+    L_0x008d:
         r0 = r5.isPrivate;
-        if (r0 == 0) goto L_0x00a6;
-    L_0x0082:
+        if (r0 == 0) goto L_0x00b3;
+    L_0x0091:
         r0 = r5.currentChat;
         r0 = r0.creator;
-        if (r0 == 0) goto L_0x00a6;
-    L_0x0088:
+        if (r0 == 0) goto L_0x00b3;
+    L_0x0097:
         r0 = new org.telegram.tgnet.TLRPC$TL_channels_checkUsername;
         r0.<init>();
         r1 = "1";
@@ -186,14 +201,12 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         r1 = new org.telegram.tgnet.TLRPC$TL_inputChannelEmpty;
         r1.<init>();
         r0.channel = r1;
-        r1 = r5.currentAccount;
-        r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1);
+        r1 = r5.getConnectionsManager();
         r2 = new org.telegram.ui.-$$Lambda$ChatEditTypeActivity$cvbA8EN1qfRN8RDcsasuoHRxqE8;
         r2.<init>(r5);
         r1.sendRequest(r0, r2);
-    L_0x00a6:
-        r0 = r5.currentAccount;
-        r0 = org.telegram.messenger.NotificationCenter.getInstance(r0);
+    L_0x00b3:
+        r0 = r5.getNotificationCenter();
         r1 = org.telegram.messenger.NotificationCenter.chatInfoDidLoad;
         r0.addObserver(r5, r1);
         r0 = super.onFragmentCreate();
@@ -203,7 +216,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
     }
 
     public /* synthetic */ void lambda$onFragmentCreate$0$ChatEditTypeActivity(CountDownLatch countDownLatch) {
-        this.currentChat = MessagesStorage.getInstance(this.currentAccount).getChat(this.chatId);
+        this.currentChat = getMessagesStorage().getChat(this.chatId);
         countDownLatch.countDown();
     }
 
@@ -221,7 +234,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatInfoDidLoad);
+        getNotificationCenter().removeObserver(this, NotificationCenter.chatInfoDidLoad);
         AndroidUtilities.removeAdjustResize(getParentActivity(), this.classGuid);
     }
 
@@ -238,6 +251,18 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
                 } else {
                     textSettingsCell.setText(LocaleController.getString(str, NUM), false);
                 }
+            }
+        }
+    }
+
+    /* Access modifiers changed, original: protected */
+    public void onBecomeFullyVisible() {
+        super.onBecomeFullyVisible();
+        if (this.isForcePublic) {
+            EditTextBoldCursor editTextBoldCursor = this.usernameTextView;
+            if (editTextBoldCursor != null) {
+                editTextBoldCursor.requestFocus();
+                AndroidUtilities.showKeyboard(this.usernameTextView);
             }
         }
     }
@@ -267,7 +292,9 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         this.linearLayout = new LinearLayout(context);
         scrollView.addView(this.linearLayout, new LayoutParams(-1, -2));
         this.linearLayout.setOrientation(1);
-        if (this.isChannel) {
+        if (this.isForcePublic) {
+            this.actionBar.setTitle(LocaleController.getString("TypeLocationGroup", NUM));
+        } else if (this.isChannel) {
             this.actionBar.setTitle(LocaleController.getString("ChannelSettingsTitle", NUM));
         } else {
             this.actionBar.setTitle(LocaleController.getString("GroupSettingsTitle", NUM));
@@ -305,6 +332,12 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         this.radioButtonCell1.setOnClickListener(new -$$Lambda$ChatEditTypeActivity$IpgElbmOCajv_apzoxCqnnTdt5I(this));
         this.sectionCell2 = new ShadowSectionCell(context);
         this.linearLayout.addView(this.sectionCell2, LayoutHelper.createLinear(-1, -2));
+        if (this.isForcePublic) {
+            this.radioButtonCell2.setVisibility(8);
+            this.radioButtonCell1.setVisibility(8);
+            this.sectionCell2.setVisibility(8);
+            this.headerCell2.setVisibility(8);
+        }
         this.linkContainer = new LinearLayout(context);
         this.linkContainer.setOrientation(1);
         this.linkContainer.setBackgroundColor(Theme.getColor(str));
@@ -317,7 +350,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         this.editText = new EditText(context);
         EditText editText = this.editText;
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(MessagesController.getInstance(this.currentAccount).linkPrefix);
+        stringBuilder.append(getMessagesController().linkPrefix);
         stringBuilder.append("/");
         editText.setText(stringBuilder.toString());
         this.editText.setTextSize(1, 18.0f);
@@ -336,9 +369,6 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         this.publicContainer.addView(this.editText, LayoutHelper.createLinear(-2, 36));
         this.usernameTextView = new EditTextBoldCursor(context);
         this.usernameTextView.setTextSize(1, 18.0f);
-        if (!this.isPrivate) {
-            this.usernameTextView.setText(this.currentChat.username);
-        }
         this.usernameTextView.setHintTextColor(Theme.getColor(str2));
         this.usernameTextView.setTextColor(Theme.getColor(str3));
         this.usernameTextView.setMaxLines(1);
@@ -361,8 +391,10 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
             }
 
             public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                ChatEditTypeActivity chatEditTypeActivity = ChatEditTypeActivity.this;
-                chatEditTypeActivity.checkUserName(chatEditTypeActivity.usernameTextView.getText().toString());
+                if (!ChatEditTypeActivity.this.ignoreTextChanges) {
+                    ChatEditTypeActivity chatEditTypeActivity = ChatEditTypeActivity.this;
+                    chatEditTypeActivity.checkUserName(chatEditTypeActivity.usernameTextView.getText().toString());
+                }
             }
         });
         this.privateContainer = new LinearLayout(context);
@@ -401,6 +433,15 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         this.linearLayout.addView(this.adminnedChannelsLayout, LayoutHelper.createLinear(-1, -2));
         this.adminedInfoCell = new ShadowSectionCell(context);
         this.linearLayout.addView(this.adminedInfoCell, LayoutHelper.createLinear(-1, -2));
+        if (!this.isPrivate) {
+            String str4 = this.currentChat.username;
+            if (str4 != null) {
+                this.ignoreTextChanges = true;
+                this.usernameTextView.setText(str4);
+                this.usernameTextView.setSelection(this.currentChat.username.length());
+                this.ignoreTextChanges = false;
+            }
+        }
         updatePrivatePublic();
         return this.fragmentView;
     }
@@ -490,105 +531,109 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         }
     }
 
-    /* JADX WARNING: Missing block: B:9:0x0026, code skipped:
-            if (r0.equalsIgnoreCase(r4.usernameTextView.getText().toString()) == false) goto L_0x0028;
-     */
     private void processDone() {
+        if (trySetUsername()) {
+            finishFragment();
+        }
+    }
+
+    /* JADX WARNING: Missing block: B:9:0x0027, code skipped:
+            if (r0.equalsIgnoreCase(r5.usernameTextView.getText().toString()) == false) goto L_0x0029;
+     */
+    private boolean trySetUsername() {
         /*
-        r4 = this;
-        r0 = r4.isPrivate;
+        r5 = this;
+        r0 = r5.isPrivate;
+        r1 = 0;
         if (r0 != 0) goto L_0x0051;
-    L_0x0004:
-        r0 = r4.currentChat;
+    L_0x0005:
+        r0 = r5.currentChat;
         r0 = r0.username;
-        if (r0 != 0) goto L_0x0012;
-    L_0x000a:
-        r0 = r4.usernameTextView;
+        if (r0 != 0) goto L_0x0013;
+    L_0x000b:
+        r0 = r5.usernameTextView;
         r0 = r0.length();
-        if (r0 != 0) goto L_0x0028;
-    L_0x0012:
-        r0 = r4.currentChat;
+        if (r0 != 0) goto L_0x0029;
+    L_0x0013:
+        r0 = r5.currentChat;
         r0 = r0.username;
         if (r0 == 0) goto L_0x0051;
-    L_0x0018:
-        r1 = r4.usernameTextView;
-        r1 = r1.getText();
-        r1 = r1.toString();
-        r0 = r0.equalsIgnoreCase(r1);
+    L_0x0019:
+        r2 = r5.usernameTextView;
+        r2 = r2.getText();
+        r2 = r2.toString();
+        r0 = r0.equalsIgnoreCase(r2);
         if (r0 != 0) goto L_0x0051;
-    L_0x0028:
-        r0 = r4.usernameTextView;
+    L_0x0029:
+        r0 = r5.usernameTextView;
         r0 = r0.length();
         if (r0 == 0) goto L_0x0051;
-    L_0x0030:
-        r0 = r4.lastNameAvailable;
+    L_0x0031:
+        r0 = r5.lastNameAvailable;
         if (r0 != 0) goto L_0x0051;
-    L_0x0034:
-        r0 = r4.getParentActivity();
-        r1 = "vibrator";
-        r0 = r0.getSystemService(r1);
+    L_0x0035:
+        r0 = r5.getParentActivity();
+        r2 = "vibrator";
+        r0 = r0.getSystemService(r2);
         r0 = (android.os.Vibrator) r0;
-        if (r0 == 0) goto L_0x0048;
-    L_0x0043:
-        r1 = 200; // 0xc8 float:2.8E-43 double:9.9E-322;
-        r0.vibrate(r1);
-    L_0x0048:
-        r0 = r4.checkTextView;
-        r1 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-        r2 = 0;
-        org.telegram.messenger.AndroidUtilities.shakeView(r0, r1, r2);
-        return;
+        if (r0 == 0) goto L_0x0049;
+    L_0x0044:
+        r2 = 200; // 0xc8 float:2.8E-43 double:9.9E-322;
+        r0.vibrate(r2);
+    L_0x0049:
+        r0 = r5.checkTextView;
+        r2 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+        org.telegram.messenger.AndroidUtilities.shakeView(r0, r2, r1);
+        return r1;
     L_0x0051:
-        r0 = r4.currentChat;
+        r0 = r5.currentChat;
         r0 = r0.username;
-        r1 = "";
+        r2 = "";
         if (r0 == 0) goto L_0x005a;
     L_0x0059:
         goto L_0x005b;
     L_0x005a:
-        r0 = r1;
+        r0 = r2;
     L_0x005b:
-        r2 = r4.isPrivate;
-        if (r2 == 0) goto L_0x0060;
+        r3 = r5.isPrivate;
+        if (r3 == 0) goto L_0x0060;
     L_0x005f:
         goto L_0x006a;
     L_0x0060:
-        r1 = r4.usernameTextView;
-        r1 = r1.getText();
-        r1 = r1.toString();
+        r2 = r5.usernameTextView;
+        r2 = r2.getText();
+        r2 = r2.toString();
     L_0x006a:
-        r0 = r0.equals(r1);
-        if (r0 != 0) goto L_0x009c;
+        r0 = r0.equals(r2);
+        if (r0 != 0) goto L_0x0098;
     L_0x0070:
-        r0 = r4.currentChat;
+        r0 = r5.currentChat;
         r0 = org.telegram.messenger.ChatObject.isChannel(r0);
-        if (r0 != 0) goto L_0x008d;
+        if (r0 != 0) goto L_0x008b;
     L_0x0078:
-        r0 = r4.currentAccount;
-        r0 = org.telegram.messenger.MessagesController.getInstance(r0);
-        r1 = r4.getParentActivity();
-        r2 = r4.chatId;
-        r3 = new org.telegram.ui.-$$Lambda$ChatEditTypeActivity$wzFYEdqnqyRZtP7rz7ySevzOMoo;
-        r3.<init>(r4);
-        r0.convertToMegaGroup(r1, r2, r3);
-        return;
-    L_0x008d:
-        r0 = r4.currentAccount;
-        r0 = org.telegram.messenger.MessagesController.getInstance(r0);
-        r2 = r4.chatId;
-        r0.updateChannelUserName(r2, r1);
-        r0 = r4.currentChat;
-        r0.username = r1;
-    L_0x009c:
-        r4.finishFragment();
-        return;
+        r0 = r5.getMessagesController();
+        r2 = r5.getParentActivity();
+        r3 = r5.chatId;
+        r4 = new org.telegram.ui.-$$Lambda$ChatEditTypeActivity$yOK8cp3uiTmUCSl-GfecfZ4Txl4;
+        r4.<init>(r5);
+        r0.convertToMegaGroup(r2, r3, r4);
+        return r1;
+    L_0x008b:
+        r0 = r5.getMessagesController();
+        r1 = r5.chatId;
+        r0.updateChannelUserName(r1, r2);
+        r0 = r5.currentChat;
+        r0.username = r2;
+    L_0x0098:
+        r0 = 1;
+        return r0;
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatEditTypeActivity.processDone():void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatEditTypeActivity.trySetUsername():boolean");
     }
 
-    public /* synthetic */ void lambda$processDone$10$ChatEditTypeActivity(int i) {
+    public /* synthetic */ void lambda$trySetUsername$10$ChatEditTypeActivity(int i) {
         this.chatId = i;
-        this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(i));
+        this.currentChat = getMessagesController().getChat(Integer.valueOf(i));
         processDone();
     }
 
@@ -596,7 +641,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         if (!this.loadingAdminedChannels && this.adminnedChannelsLayout != null) {
             this.loadingAdminedChannels = true;
             updatePrivatePublic();
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_channels_getAdminedPublicChannels(), new -$$Lambda$ChatEditTypeActivity$kDy8MSXJZPphT1ROvE66SmVIgsc(this));
+            getConnectionsManager().sendRequest(new TL_channels_getAdminedPublicChannels(), new -$$Lambda$ChatEditTypeActivity$kDy8MSXJZPphT1ROvE66SmVIgsc(this));
         }
     }
 
@@ -638,7 +683,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         if (this.isChannel) {
             objArr = new Object[2];
             stringBuilder = new StringBuilder();
-            stringBuilder.append(MessagesController.getInstance(this.currentAccount).linkPrefix);
+            stringBuilder.append(getMessagesController().linkPrefix);
             stringBuilder.append(str);
             stringBuilder.append(currentChannel.username);
             objArr[0] = stringBuilder.toString();
@@ -647,7 +692,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         } else {
             objArr = new Object[2];
             stringBuilder = new StringBuilder();
-            stringBuilder.append(MessagesController.getInstance(this.currentAccount).linkPrefix);
+            stringBuilder.append(getMessagesController().linkPrefix);
             stringBuilder.append(str);
             stringBuilder.append(currentChannel.username);
             objArr[0] = stringBuilder.toString();
@@ -663,7 +708,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         TL_channels_updateUsername tL_channels_updateUsername = new TL_channels_updateUsername();
         tL_channels_updateUsername.channel = MessagesController.getInputChannel(chat);
         tL_channels_updateUsername.username = "";
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_channels_updateUsername, new -$$Lambda$ChatEditTypeActivity$16BX7QJDGBSQnfTPIEFvTHPHhfQ(this), 64);
+        getConnectionsManager().sendRequest(tL_channels_updateUsername, new -$$Lambda$ChatEditTypeActivity$16BX7QJDGBSQnfTPIEFvTHPHhfQ(this), 64);
     }
 
     public /* synthetic */ void lambda$null$12$ChatEditTypeActivity(TLObject tLObject, TL_error tL_error) {
@@ -691,7 +736,11 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
                 str2 = "windowBackgroundWhiteGrayText4";
                 this.typeInfoCell.setTag(str2);
                 this.typeInfoCell.setTextColor(Theme.getColor(str2));
-                this.sectionCell2.setVisibility(0);
+                if (this.isForcePublic) {
+                    this.sectionCell2.setVisibility(8);
+                } else {
+                    this.sectionCell2.setVisibility(0);
+                }
                 this.adminedInfoCell.setVisibility(8);
                 textInfoPrivacyCell = this.typeInfoCell;
                 textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(textInfoPrivacyCell.getContext(), NUM, str));
@@ -747,6 +796,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
                 this.typeInfoCell.setTag(str2);
                 this.typeInfoCell.setTextColor(Theme.getColor(str2));
                 this.linkContainer.setVisibility(8);
+                this.checkTextView.setVisibility(8);
                 this.sectionCell2.setVisibility(8);
                 this.adminedInfoCell.setVisibility(0);
                 if (this.loadingAdminedChannels) {
@@ -782,7 +832,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
             this.checkRunnable = null;
             this.lastCheckName = null;
             if (this.checkReqId != 0) {
-                ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.checkReqId, true);
+                getConnectionsManager().cancelRequest(this.checkReqId, true);
             }
         }
         this.lastNameAvailable = false;
@@ -840,8 +890,8 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
     public /* synthetic */ void lambda$checkUserName$19$ChatEditTypeActivity(String str) {
         TL_channels_checkUsername tL_channels_checkUsername = new TL_channels_checkUsername();
         tL_channels_checkUsername.username = str;
-        tL_channels_checkUsername.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(this.chatId);
-        this.checkReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_channels_checkUsername, new -$$Lambda$ChatEditTypeActivity$tnmJrzBKMOfOJQl31MjjEIQidqw(this, str), 2);
+        tL_channels_checkUsername.channel = getMessagesController().getInputChannel(this.chatId);
+        this.checkReqId = getConnectionsManager().sendRequest(tL_channels_checkUsername, new -$$Lambda$ChatEditTypeActivity$tnmJrzBKMOfOJQl31MjjEIQidqw(this, str), 2);
     }
 
     public /* synthetic */ void lambda$null$18$ChatEditTypeActivity(String str, TLObject tLObject, TL_error tL_error) {
@@ -872,8 +922,8 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
     private void generateLink(boolean z) {
         this.loadingInvite = true;
         TL_messages_exportChatInvite tL_messages_exportChatInvite = new TL_messages_exportChatInvite();
-        tL_messages_exportChatInvite.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(-this.chatId);
-        ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_messages_exportChatInvite, new -$$Lambda$ChatEditTypeActivity$NQoUsXIxZfHWCE1utCEcp_nY2As(this, z)), this.classGuid);
+        tL_messages_exportChatInvite.peer = getMessagesController().getInputPeer(-this.chatId);
+        getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tL_messages_exportChatInvite, new -$$Lambda$ChatEditTypeActivity$NQoUsXIxZfHWCE1utCEcp_nY2As(this, z)), this.classGuid);
     }
 
     public /* synthetic */ void lambda$generateLink$21$ChatEditTypeActivity(boolean z, TLObject tLObject, TL_error tL_error) {

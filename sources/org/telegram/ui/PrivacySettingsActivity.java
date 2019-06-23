@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
-import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
@@ -151,7 +151,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                     if (PrivacySettingsActivity.this.getMessagesController().loadingBlockedUsers) {
                         textSettingsCell.setText(LocaleController.getString(str, NUM), true);
                     } else if (PrivacySettingsActivity.this.getMessagesController().blockedUsers.size() == 0) {
-                        textSettingsCell.setTextAndValue(LocaleController.getString(str, NUM), LocaleController.getString("EmptyExceptions", NUM), true);
+                        textSettingsCell.setTextAndValue(LocaleController.getString(str, NUM), LocaleController.getString("BlockedEmpty", NUM), true);
                     } else {
                         textSettingsCell.setTextAndValue(LocaleController.getString(str, NUM), String.format("%d", new Object[]{Integer.valueOf(PrivacySettingsActivity.this.getMessagesController().blockedUsers.size())}), true);
                     }
@@ -348,7 +348,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         boolean z = this.newSuggest;
         if (z != this.currentSuggest) {
             if (!z) {
-                DataQuery.getInstance(this.currentAccount).clearTopPeers();
+                MediaDataController.getInstance(this.currentAccount).clearTopPeers();
             }
             UserConfig.getInstance(this.currentAccount).suggestContacts = this.newSuggest;
             UserConfig.getInstance(this.currentAccount).saveConfig(false);
@@ -531,7 +531,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
     }
 
     public /* synthetic */ void lambda$null$1$PrivacySettingsActivity() {
-        DataQuery.getInstance(this.currentAccount).clearAllDrafts();
+        MediaDataController.getInstance(this.currentAccount).clearAllDrafts();
     }
 
     public /* synthetic */ void lambda$null$2$PrivacySettingsActivity(TLObject tLObject, TL_error tL_error) {

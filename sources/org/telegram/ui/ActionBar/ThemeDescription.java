@@ -697,6 +697,8 @@ public class ThemeDescription {
                                                 } else {
                                                     ((LineProgressView) obj2).setBackColor(i);
                                                 }
+                                            } else if (obj2 instanceof RadialProgressView) {
+                                                ((RadialProgressView) obj2).setProgressColor(i);
                                             } else if (obj2 instanceof Paint) {
                                                 ((Paint) obj2).setColor(i);
                                             } else if (obj2 instanceof SeekBarView) {

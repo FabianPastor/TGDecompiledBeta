@@ -117,8 +117,25 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
     }
 
     private class CustomCell extends FrameLayout {
+        private ImageView imageView;
+        private ProfileSearchCell profileSearchCell;
+
         public CustomCell(Context context) {
             super(context);
+            setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+            this.profileSearchCell = new ProfileSearchCell(context);
+            this.profileSearchCell.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(32.0f) : 0, 0, LocaleController.isRTL ? 0 : AndroidUtilities.dp(32.0f), 0);
+            this.profileSearchCell.setSublabelOffset(AndroidUtilities.dp(LocaleController.isRTL ? 2.0f : -2.0f), -AndroidUtilities.dp(4.0f));
+            addView(this.profileSearchCell, LayoutHelper.createFrame(-1, -1.0f));
+            this.imageView = new ImageView(context);
+            this.imageView.setImageResource(NUM);
+            this.imageView.setAlpha(214);
+            this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("featuredStickers_addButton"), Mode.MULTIPLY));
+            this.imageView.setBackgroundDrawable(Theme.createSelectorDrawable(NUM, 0));
+            this.imageView.setScaleType(ScaleType.CENTER);
+            this.imageView.setOnClickListener(CallLogActivity.this.callBtnClickListener);
+            this.imageView.setContentDescription(LocaleController.getString("Call", NUM));
+            addView(this.imageView, LayoutHelper.createFrame(48, 48.0f, (LocaleController.isRTL ? 3 : 5) | 16, 8.0f, 0.0f, 8.0f, 0.0f));
         }
     }
 
@@ -150,31 +167,14 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
 
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View customCell;
-            String str = "windowBackgroundWhite";
             if (i == 0) {
                 customCell = new CustomCell(this.mContext);
-                customCell.setBackgroundColor(Theme.getColor(str));
-                ProfileSearchCell profileSearchCell = new ProfileSearchCell(this.mContext);
-                profileSearchCell.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(32.0f) : 0, 0, LocaleController.isRTL ? 0 : AndroidUtilities.dp(32.0f), 0);
-                profileSearchCell.setSublabelOffset(AndroidUtilities.dp(LocaleController.isRTL ? 2.0f : -2.0f), -AndroidUtilities.dp(4.0f));
-                customCell.addView(profileSearchCell);
-                ImageView imageView = new ImageView(this.mContext);
-                imageView.setImageResource(NUM);
-                imageView.setAlpha(214);
-                imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), Mode.MULTIPLY));
-                imageView.setBackgroundDrawable(Theme.createSelectorDrawable(NUM, 0));
-                imageView.setScaleType(ScaleType.CENTER);
-                imageView.setOnClickListener(CallLogActivity.this.callBtnClickListener);
-                imageView.setContentDescription(LocaleController.getString("Call", NUM));
-                customCell.addView(imageView, LayoutHelper.createFrame(48, 48.0f, (LocaleController.isRTL ? 3 : 5) | 16, 8.0f, 0.0f, 8.0f, 0.0f));
-                customCell.setTag(new ViewItem(imageView, profileSearchCell));
+                customCell.setTag(new ViewItem(customCell.imageView, customCell.profileSearchCell));
             } else if (i != 1) {
-                View textInfoPrivacyCell = new TextInfoPrivacyCell(this.mContext);
-                textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
-                customCell = textInfoPrivacyCell;
+                customCell = new TextInfoPrivacyCell(this.mContext);
+                customCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
             } else {
                 customCell = new LoadingCell(this.mContext);
-                customCell.setBackgroundColor(Theme.getColor(str));
             }
             return new Holder(customCell);
         }
@@ -692,44 +692,45 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
 
     public ThemeDescription[] getThemeDescriptions() {
         -$$Lambda$CallLogActivity$jzz7fdD3HMf_Ya8AHg1H2NHtPCs -__lambda_calllogactivity_jzz7fdd3hmf_ya8ahg1h2nhtpcs = new -$$Lambda$CallLogActivity$jzz7fdD3HMf_Ya8AHg1H2NHtPCs(this);
-        r10 = new ThemeDescription[33];
-        r10[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{LocationCell.class, CustomCell.class}, null, null, null, "windowBackgroundWhite");
-        r10[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundGray");
-        r10[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault");
-        r10[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault");
-        r10[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon");
-        r10[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle");
-        r10[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector");
-        r10[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21");
-        r10[8] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider");
-        r10[9] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "emptyListPlaceholder");
-        r10[10] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, "progressCircle");
-        r10[11] = new ThemeDescription(this.listView, 0, new Class[]{LoadingCell.class}, new String[]{"progressBar"}, null, null, null, "progressCircle");
+        ThemeDescription[] themeDescriptionArr = new ThemeDescription[34];
+        themeDescriptionArr[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{LocationCell.class, CustomCell.class}, null, null, null, "windowBackgroundWhite");
+        themeDescriptionArr[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "windowBackgroundGray");
+        themeDescriptionArr[2] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, "actionBarDefault");
+        themeDescriptionArr[3] = new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, "actionBarDefault");
+        themeDescriptionArr[4] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, "actionBarDefaultIcon");
+        themeDescriptionArr[5] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, "actionBarDefaultTitle");
+        themeDescriptionArr[6] = new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, "actionBarDefaultSelector");
+        themeDescriptionArr[7] = new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, "listSelectorSDK21");
+        themeDescriptionArr[8] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, "divider");
+        themeDescriptionArr[9] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, "emptyListPlaceholder");
+        themeDescriptionArr[10] = new ThemeDescription(this.emptyView, ThemeDescription.FLAG_PROGRESSBAR, null, null, null, null, "progressCircle");
+        themeDescriptionArr[11] = new ThemeDescription(this.listView, 0, new Class[]{LoadingCell.class}, new String[]{"progressBar"}, null, null, null, "progressCircle");
         View view = this.listView;
         View view2 = view;
-        r10[12] = new ThemeDescription(view2, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow");
-        r10[13] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGrayText4");
-        r10[14] = new ThemeDescription(this.floatingButton, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chats_actionIcon");
-        r10[15] = new ThemeDescription(this.floatingButton, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "chats_actionBackground");
-        r10[16] = new ThemeDescription(this.floatingButton, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, "chats_actionPressedBackground");
-        r10[17] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Drawable[]{Theme.dialogs_verifiedCheckDrawable}, null, "chats_verifiedCheck");
-        r10[18] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Drawable[]{Theme.dialogs_verifiedDrawable}, null, "chats_verifiedBackground");
-        r10[19] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, Theme.dialogs_offlinePaint, null, null, "windowBackgroundWhiteGrayText3");
-        r10[20] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, Theme.dialogs_onlinePaint, null, null, "windowBackgroundWhiteBlueText3");
-        r10[21] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Paint[]{Theme.dialogs_namePaint, Theme.dialogs_searchNamePaint}, null, null, "chats_name");
-        r10[22] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Paint[]{Theme.dialogs_nameEncryptedPaint, Theme.dialogs_searchNameEncryptedPaint}, null, null, "chats_secretName");
-        r10[23] = new ThemeDescription(this.listView, 0, new Class[]{ProfileSearchCell.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, "avatar_text");
+        themeDescriptionArr[12] = new ThemeDescription(view2, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, "windowBackgroundGrayShadow");
+        themeDescriptionArr[13] = new ThemeDescription(this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, "windowBackgroundWhiteGrayText4");
+        themeDescriptionArr[14] = new ThemeDescription(this.floatingButton, ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, "chats_actionIcon");
+        themeDescriptionArr[15] = new ThemeDescription(this.floatingButton, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, "chats_actionBackground");
+        themeDescriptionArr[16] = new ThemeDescription(this.floatingButton, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, "chats_actionPressedBackground");
+        themeDescriptionArr[17] = new ThemeDescription(this.listView, 0, new Class[]{CustomCell.class}, new String[]{"imageView"}, null, null, null, "featuredStickers_addButton");
+        themeDescriptionArr[18] = new ThemeDescription(this.listView, 0, new Class[]{CustomCell.class}, null, new Drawable[]{Theme.dialogs_verifiedCheckDrawable}, null, "chats_verifiedCheck");
+        themeDescriptionArr[19] = new ThemeDescription(this.listView, 0, new Class[]{CustomCell.class}, null, new Drawable[]{Theme.dialogs_verifiedDrawable}, null, "chats_verifiedBackground");
+        themeDescriptionArr[20] = new ThemeDescription(this.listView, 0, new Class[]{CustomCell.class}, Theme.dialogs_offlinePaint, null, null, "windowBackgroundWhiteGrayText3");
+        themeDescriptionArr[21] = new ThemeDescription(this.listView, 0, new Class[]{CustomCell.class}, Theme.dialogs_onlinePaint, null, null, "windowBackgroundWhiteBlueText3");
+        themeDescriptionArr[22] = new ThemeDescription(this.listView, 0, new Class[]{CustomCell.class}, null, new Paint[]{Theme.dialogs_namePaint, Theme.dialogs_searchNamePaint}, null, null, "chats_name");
+        themeDescriptionArr[23] = new ThemeDescription(this.listView, 0, new Class[]{CustomCell.class}, null, new Paint[]{Theme.dialogs_nameEncryptedPaint, Theme.dialogs_searchNameEncryptedPaint}, null, null, "chats_secretName");
+        themeDescriptionArr[24] = new ThemeDescription(this.listView, 0, new Class[]{CustomCell.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, "avatar_text");
         -$$Lambda$CallLogActivity$jzz7fdD3HMf_Ya8AHg1H2NHtPCs -__lambda_calllogactivity_jzz7fdd3hmf_ya8ahg1h2nhtpcs2 = -__lambda_calllogactivity_jzz7fdd3hmf_ya8ahg1h2nhtpcs;
-        r10[24] = new ThemeDescription(null, 0, null, null, null, -__lambda_calllogactivity_jzz7fdd3hmf_ya8ahg1h2nhtpcs2, "avatar_backgroundRed");
-        r10[25] = new ThemeDescription(null, 0, null, null, null, -__lambda_calllogactivity_jzz7fdd3hmf_ya8ahg1h2nhtpcs2, "avatar_backgroundOrange");
-        r10[26] = new ThemeDescription(null, 0, null, null, null, -__lambda_calllogactivity_jzz7fdd3hmf_ya8ahg1h2nhtpcs2, "avatar_backgroundViolet");
-        r10[27] = new ThemeDescription(null, 0, null, null, null, -__lambda_calllogactivity_jzz7fdd3hmf_ya8ahg1h2nhtpcs2, "avatar_backgroundGreen");
-        r10[28] = new ThemeDescription(null, 0, null, null, null, -__lambda_calllogactivity_jzz7fdd3hmf_ya8ahg1h2nhtpcs2, "avatar_backgroundCyan");
-        r10[29] = new ThemeDescription(null, 0, null, null, null, -__lambda_calllogactivity_jzz7fdd3hmf_ya8ahg1h2nhtpcs2, "avatar_backgroundBlue");
-        r10[30] = new ThemeDescription(null, 0, null, null, null, -__lambda_calllogactivity_jzz7fdd3hmf_ya8ahg1h2nhtpcs2, "avatar_backgroundPink");
-        r10[31] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, null, new Drawable[]{this.greenDrawable, this.greenDrawable2, Theme.calllog_msgCallUpRedDrawable, Theme.calllog_msgCallDownRedDrawable}, null, "calls_callReceivedGreenIcon");
-        r10[32] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, null, new Drawable[]{this.redDrawable, Theme.calllog_msgCallUpGreenDrawable, Theme.calllog_msgCallDownGreenDrawable}, null, "calls_callReceivedRedIcon");
-        return r10;
+        themeDescriptionArr[25] = new ThemeDescription(null, 0, null, null, null, -__lambda_calllogactivity_jzz7fdd3hmf_ya8ahg1h2nhtpcs2, "avatar_backgroundRed");
+        themeDescriptionArr[26] = new ThemeDescription(null, 0, null, null, null, -__lambda_calllogactivity_jzz7fdd3hmf_ya8ahg1h2nhtpcs2, "avatar_backgroundOrange");
+        themeDescriptionArr[27] = new ThemeDescription(null, 0, null, null, null, -__lambda_calllogactivity_jzz7fdd3hmf_ya8ahg1h2nhtpcs2, "avatar_backgroundViolet");
+        themeDescriptionArr[28] = new ThemeDescription(null, 0, null, null, null, -__lambda_calllogactivity_jzz7fdd3hmf_ya8ahg1h2nhtpcs2, "avatar_backgroundGreen");
+        themeDescriptionArr[29] = new ThemeDescription(null, 0, null, null, null, -__lambda_calllogactivity_jzz7fdd3hmf_ya8ahg1h2nhtpcs2, "avatar_backgroundCyan");
+        themeDescriptionArr[30] = new ThemeDescription(null, 0, null, null, null, -__lambda_calllogactivity_jzz7fdd3hmf_ya8ahg1h2nhtpcs2, "avatar_backgroundBlue");
+        themeDescriptionArr[31] = new ThemeDescription(null, 0, null, null, null, -__lambda_calllogactivity_jzz7fdd3hmf_ya8ahg1h2nhtpcs2, "avatar_backgroundPink");
+        themeDescriptionArr[32] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, null, new Drawable[]{this.greenDrawable, this.greenDrawable2, Theme.calllog_msgCallUpRedDrawable, Theme.calllog_msgCallDownRedDrawable}, null, "calls_callReceivedGreenIcon");
+        themeDescriptionArr[33] = new ThemeDescription(this.listView, 0, new Class[]{View.class}, null, new Drawable[]{this.redDrawable, Theme.calllog_msgCallUpGreenDrawable, Theme.calllog_msgCallDownGreenDrawable}, null, "calls_callReceivedRedIcon");
+        return themeDescriptionArr;
     }
 
     public /* synthetic */ void lambda$getThemeDescriptions$8$CallLogActivity() {
@@ -738,8 +739,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
             int childCount = recyclerListView.getChildCount();
             for (int i = 0; i < childCount; i++) {
                 View childAt = this.listView.getChildAt(i);
-                if (childAt instanceof ProfileSearchCell) {
-                    ((ProfileSearchCell) childAt).update(0);
+                if (childAt instanceof CustomCell) {
+                    ((CustomCell) childAt).profileSearchCell.update(0);
                 }
             }
         }

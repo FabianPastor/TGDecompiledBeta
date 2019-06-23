@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
@@ -187,8 +187,8 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
         super(context);
         setBackgroundColor(-14540254);
         setClickable(true);
-        DataQuery.getInstance(this.currentAccount).checkStickers(0);
-        DataQuery.getInstance(this.currentAccount).checkStickers(1);
+        MediaDataController.getInstance(this.currentAccount).checkStickers(0);
+        MediaDataController.getInstance(this.currentAccount).checkStickers(1);
         this.stickersGridView = new RecyclerListView(context) {
             public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
                 return super.onInterceptTouchEvent(motionEvent) || ContentPreviewViewer.getInstance().onInterceptTouchEvent(motionEvent, StickerMasksView.this.stickersGridView, StickerMasksView.this.getMeasuredHeight(), null);
@@ -247,7 +247,7 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
                 Document sticker = stickerEmojiCell.getSticker();
                 Object parentObject = stickerEmojiCell.getParentObject();
                 this.listener.onStickerSelected(parentObject, sticker);
-                DataQuery.getInstance(this.currentAccount).addRecentSticker(1, parentObject, sticker, (int) (System.currentTimeMillis() / 1000), false);
+                MediaDataController.getInstance(this.currentAccount).addRecentSticker(1, parentObject, sticker, (int) (System.currentTimeMillis() / 1000), false);
                 MessagesController.getInstance(this.currentAccount).saveRecentSticker(parentObject, sticker, true);
             }
         }
@@ -264,7 +264,7 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
             if (listener != null) {
                 listener.onTypeChanged();
             }
-            this.recentStickers[this.currentType] = DataQuery.getInstance(this.currentAccount).getRecentStickers(this.currentType);
+            this.recentStickers[this.currentType] = MediaDataController.getInstance(this.currentAccount).getRecentStickers(this.currentType);
             this.stickersLayoutManager.scrollToPositionWithOffset(0, 0);
             updateStickerTabs();
             reloadStickersAdapter();
@@ -333,7 +333,7 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
                 this.scrollSlidingTabStrip.addIconTab(Theme.createEmojiIconSelectorDrawable(getContext(), NUM, Theme.getColor("chat_emojiPanelMasksIcon"), Theme.getColor("chat_emojiPanelMasksIconSelected")));
             }
             this.stickerSets[this.currentType].clear();
-            ArrayList stickerSets = DataQuery.getInstance(this.currentAccount).getStickerSets(this.currentType);
+            ArrayList stickerSets = MediaDataController.getInstance(this.currentAccount).getStickerSets(this.currentType);
             for (int i2 = 0; i2 < stickerSets.size(); i2++) {
                 TL_messages_stickerSet tL_messages_stickerSet = (TL_messages_stickerSet) stickerSets.get(i2);
                 if (!tL_messages_stickerSet.set.archived) {
@@ -373,9 +373,9 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
 
     public void addRecentSticker(Document document) {
         if (document != null) {
-            DataQuery.getInstance(this.currentAccount).addRecentSticker(this.currentType, null, document, (int) (System.currentTimeMillis() / 1000), false);
+            MediaDataController.getInstance(this.currentAccount).addRecentSticker(this.currentType, null, document, (int) (System.currentTimeMillis() / 1000), false);
             boolean isEmpty = this.recentStickers[this.currentType].isEmpty();
-            this.recentStickers[this.currentType] = DataQuery.getInstance(this.currentAccount).getRecentStickers(this.currentType);
+            this.recentStickers[this.currentType] = MediaDataController.getInstance(this.currentAccount).getRecentStickers(this.currentType);
             StickersGridAdapter stickersGridAdapter = this.stickersGridAdapter;
             if (stickersGridAdapter != null) {
                 stickersGridAdapter.notifyDataSetChanged();
@@ -432,9 +432,9 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
             updateStickerTabs();
             reloadStickersAdapter();
             checkDocuments();
-            DataQuery.getInstance(this.currentAccount).loadRecents(0, false, true, false);
-            DataQuery.getInstance(this.currentAccount).loadRecents(1, false, true, false);
-            DataQuery.getInstance(this.currentAccount).loadRecents(2, false, true, false);
+            MediaDataController.getInstance(this.currentAccount).loadRecents(0, false, true, false);
+            MediaDataController.getInstance(this.currentAccount).loadRecents(1, false, true, false);
+            MediaDataController.getInstance(this.currentAccount).loadRecents(2, false, true, false);
         }
     }
 
@@ -447,7 +447,7 @@ public class StickerMasksView extends FrameLayout implements NotificationCenterD
 
     private void checkDocuments() {
         int size = this.recentStickers[this.currentType].size();
-        this.recentStickers[this.currentType] = DataQuery.getInstance(this.currentAccount).getRecentStickers(this.currentType);
+        this.recentStickers[this.currentType] = MediaDataController.getInstance(this.currentAccount).getRecentStickers(this.currentType);
         StickersGridAdapter stickersGridAdapter = this.stickersGridAdapter;
         if (stickersGridAdapter != null) {
             stickersGridAdapter.notifyDataSetChanged();

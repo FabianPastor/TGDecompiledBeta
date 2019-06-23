@@ -20,13 +20,13 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.FrameLayout;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
@@ -87,7 +87,7 @@ public class ContentPreviewViewer {
                 if (ContentPreviewViewer.this.currentContentType == 0) {
                     if (ContentPreviewViewer.this.currentStickerSet != null) {
                         int i;
-                        boolean isStickerInFavorites = DataQuery.getInstance(ContentPreviewViewer.this.currentAccount).isStickerInFavorites(ContentPreviewViewer.this.currentDocument);
+                        boolean isStickerInFavorites = MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).isStickerInFavorites(ContentPreviewViewer.this.currentDocument);
                         Builder builder = new Builder(ContentPreviewViewer.this.parentActivity);
                         arrayList = new ArrayList();
                         ArrayList arrayList2 = new ArrayList();
@@ -104,7 +104,7 @@ public class ContentPreviewViewer {
                                 arrayList2.add(Integer.valueOf(1));
                             }
                         }
-                        if (!MessageObject.isMaskDocument(ContentPreviewViewer.this.currentDocument) && (isStickerInFavorites || DataQuery.getInstance(ContentPreviewViewer.this.currentAccount).canAddStickerToFavorites())) {
+                        if (!MessageObject.isMaskDocument(ContentPreviewViewer.this.currentDocument) && (isStickerInFavorites || MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).canAddStickerToFavorites())) {
                             String str;
                             if (isStickerInFavorites) {
                                 i = NUM;
@@ -163,7 +163,7 @@ public class ContentPreviewViewer {
                         arrayList5.add(Integer.valueOf(0));
                     }
                     if (ContentPreviewViewer.this.currentDocument != null) {
-                        hasRecentGif = DataQuery.getInstance(ContentPreviewViewer.this.currentAccount).hasRecentGif(ContentPreviewViewer.this.currentDocument);
+                        hasRecentGif = MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).hasRecentGif(ContentPreviewViewer.this.currentDocument);
                         if (hasRecentGif) {
                             arrayList4.add(LocaleController.formatString("Delete", NUM, new Object[0]));
                             arrayList.add(Integer.valueOf(NUM));
@@ -203,7 +203,7 @@ public class ContentPreviewViewer {
                         ContentPreviewViewer.this.delegate.openSet(ContentPreviewViewer.this.currentStickerSet, ContentPreviewViewer.this.clearsInputField);
                     }
                 } else if (((Integer) arrayList.get(i)).intValue() == 2) {
-                    DataQuery.getInstance(ContentPreviewViewer.this.currentAccount).addRecentSticker(2, ContentPreviewViewer.this.currentStickerSet, ContentPreviewViewer.this.currentDocument, (int) (System.currentTimeMillis() / 1000), z);
+                    MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).addRecentSticker(2, ContentPreviewViewer.this.currentStickerSet, ContentPreviewViewer.this.currentDocument, (int) (System.currentTimeMillis() / 1000), z);
                 }
             }
         }
@@ -220,10 +220,10 @@ public class ContentPreviewViewer {
                         ContentPreviewViewer.this.delegate.sendGif(ContentPreviewViewer.this.currentDocument != null ? ContentPreviewViewer.this.currentDocument : ContentPreviewViewer.this.inlineResult);
                     }
                 } else if (((Integer) arrayList.get(i)).intValue() == 1) {
-                    DataQuery.getInstance(ContentPreviewViewer.this.currentAccount).removeRecentGif(ContentPreviewViewer.this.currentDocument);
+                    MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).removeRecentGif(ContentPreviewViewer.this.currentDocument);
                     ContentPreviewViewer.this.delegate.gifAddedOrDeleted();
                 } else if (((Integer) arrayList.get(i)).intValue() == 2) {
-                    DataQuery.getInstance(ContentPreviewViewer.this.currentAccount).addRecentGif(ContentPreviewViewer.this.currentDocument, (int) (System.currentTimeMillis() / 1000));
+                    MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).addRecentGif(ContentPreviewViewer.this.currentDocument, (int) (System.currentTimeMillis() / 1000));
                     MessagesController.getInstance(ContentPreviewViewer.this.currentAccount).saveGif("gif", ContentPreviewViewer.this.currentDocument);
                     ContentPreviewViewer.this.delegate.gifAddedOrDeleted();
                 }

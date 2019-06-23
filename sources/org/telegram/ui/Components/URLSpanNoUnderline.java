@@ -5,10 +5,18 @@ import android.text.TextPaint;
 import android.text.style.URLSpan;
 import android.view.View;
 import org.telegram.messenger.browser.Browser;
+import org.telegram.ui.Components.TextStyleSpan.TextStyleRun;
 
 public class URLSpanNoUnderline extends URLSpan {
+    private TextStyleRun style;
+
     public URLSpanNoUnderline(String str) {
+        this(str, null);
+    }
+
+    public URLSpanNoUnderline(String str, TextStyleRun textStyleRun) {
         super(str);
+        this.style = textStyleRun;
     }
 
     public void onClick(View view) {
@@ -25,6 +33,11 @@ public class URLSpanNoUnderline extends URLSpan {
 
     public void updateDrawState(TextPaint textPaint) {
         super.updateDrawState(textPaint);
-        textPaint.setUnderlineText(false);
+        TextStyleRun textStyleRun = this.style;
+        if (textStyleRun != null) {
+            textStyleRun.applyStyle(textPaint);
+        } else {
+            textPaint.setUnderlineText(false);
+        }
     }
 }

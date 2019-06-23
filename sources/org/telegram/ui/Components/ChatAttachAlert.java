@@ -48,7 +48,6 @@ import java.util.Map.Entry;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
-import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver.BitmapHolder;
@@ -56,6 +55,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaController.AlbumEntry;
 import org.telegram.messenger.MediaController.PhotoEntry;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -258,7 +258,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
         }
 
         public /* synthetic */ void lambda$onLongPress$0$ChatAttachAlert$AttachBotButton(DialogInterface dialogInterface, int i) {
-            DataQuery.getInstance(ChatAttachAlert.this.currentAccount).removeInline(this.currentUser.id);
+            MediaDataController.getInstance(ChatAttachAlert.this.currentAccount).removeInline(this.currentUser.id);
         }
 
         public void setUser(User user) {
@@ -283,7 +283,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                         getParent().requestDisallowInterceptTouchEvent(true);
                         this.pressed = false;
                         playSoundEffect(0);
-                        ChatAttachAlert.this.delegate.didSelectBot(MessagesController.getInstance(ChatAttachAlert.this.currentAccount).getUser(Integer.valueOf(((TL_topPeer) DataQuery.getInstance(ChatAttachAlert.this.currentAccount).inlineBots.get(((Integer) getTag()).intValue())).peer.user_id)));
+                        ChatAttachAlert.this.delegate.didSelectBot(MessagesController.getInstance(ChatAttachAlert.this.currentAccount).getUser(Integer.valueOf(((TL_topPeer) MediaDataController.getInstance(ChatAttachAlert.this.currentAccount).inlineBots.get(((Integer) getTag()).intValue())).peer.user_id)));
                         ChatAttachAlert.this.setUseRevealAnimation(false);
                         ChatAttachAlert.this.dismiss();
                         ChatAttachAlert.this.setUseRevealAnimation(true);
@@ -604,12 +604,12 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                 for (int i2 = 0; i2 < 4; i2++) {
                     AttachBotButton attachBotButton = (AttachBotButton) frameLayout.getChildAt(i2);
                     int i3 = i + i2;
-                    if (i3 >= DataQuery.getInstance(ChatAttachAlert.this.currentAccount).inlineBots.size()) {
+                    if (i3 >= MediaDataController.getInstance(ChatAttachAlert.this.currentAccount).inlineBots.size()) {
                         attachBotButton.setVisibility(4);
                     } else {
                         attachBotButton.setVisibility(0);
                         attachBotButton.setTag(Integer.valueOf(i3));
-                        attachBotButton.setUser(MessagesController.getInstance(ChatAttachAlert.this.currentAccount).getUser(Integer.valueOf(((TL_topPeer) DataQuery.getInstance(ChatAttachAlert.this.currentAccount).inlineBots.get(i3)).peer.user_id)));
+                        attachBotButton.setUser(MessagesController.getInstance(ChatAttachAlert.this.currentAccount).getUser(Integer.valueOf(((TL_topPeer) MediaDataController.getInstance(ChatAttachAlert.this.currentAccount).inlineBots.get(i3)).peer.user_id)));
                     }
                 }
             }
@@ -619,7 +619,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
             if (ChatAttachAlert.this.editingMessageObject != null || !(ChatAttachAlert.this.baseFragment instanceof ChatActivity)) {
                 return 1;
             }
-            return (!DataQuery.getInstance(ChatAttachAlert.this.currentAccount).inlineBots.isEmpty() ? ((int) Math.ceil((double) (((float) DataQuery.getInstance(ChatAttachAlert.this.currentAccount).inlineBots.size()) / 4.0f))) + 1 : 0) + 1;
+            return (!MediaDataController.getInstance(ChatAttachAlert.this.currentAccount).inlineBots.isEmpty() ? ((int) Math.ceil((double) (((float) MediaDataController.getInstance(ChatAttachAlert.this.currentAccount).inlineBots.size()) / 4.0f))) + 1 : 0) + 1;
         }
     }
 
@@ -984,7 +984,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
                     i2 -= AndroidUtilities.statusBarHeight;
                 }
                 float f = (float) (ChatAttachAlert.this.baseFragment instanceof ChatActivity ? 298 : 203);
-                int access$2400 = (ChatAttachAlert.this.backgroundPaddingTop + AndroidUtilities.dp(f)) + (DataQuery.getInstance(ChatAttachAlert.this.currentAccount).inlineBots.isEmpty() ? 0 : (((int) Math.ceil((double) (((float) DataQuery.getInstance(ChatAttachAlert.this.currentAccount).inlineBots.size()) / 4.0f))) * AndroidUtilities.dp(100.0f)) + AndroidUtilities.dp(12.0f));
+                int access$2400 = (ChatAttachAlert.this.backgroundPaddingTop + AndroidUtilities.dp(f)) + (MediaDataController.getInstance(ChatAttachAlert.this.currentAccount).inlineBots.isEmpty() ? 0 : (((int) Math.ceil((double) (((float) MediaDataController.getInstance(ChatAttachAlert.this.currentAccount).inlineBots.size()) / 4.0f))) * AndroidUtilities.dp(100.0f)) + AndroidUtilities.dp(12.0f));
                 int max = access$2400 == AndroidUtilities.dp(f) ? 0 : Math.max(0, i2 - AndroidUtilities.dp(f));
                 if (max != 0 && access$2400 < i2) {
                     max -= i2 - access$2400;
@@ -2952,7 +2952,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenterDe
     }
 
     private void showHint() {
-        if (this.editingMessageObject == null && (this.baseFragment instanceof ChatActivity) && !DataQuery.getInstance(this.currentAccount).inlineBots.isEmpty() && !MessagesController.getGlobalMainSettings().getBoolean("bothint", false)) {
+        if (this.editingMessageObject == null && (this.baseFragment instanceof ChatActivity) && !MediaDataController.getInstance(this.currentAccount).inlineBots.isEmpty() && !MessagesController.getGlobalMainSettings().getBoolean("bothint", false)) {
             this.hintShowed = true;
             this.hintTextView.setVisibility(0);
             this.currentHintAnimation = new AnimatorSet();

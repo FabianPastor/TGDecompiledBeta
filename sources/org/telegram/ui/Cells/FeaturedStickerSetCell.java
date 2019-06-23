@@ -22,10 +22,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.PhotoSize;
@@ -126,7 +126,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
         this.addButton.setTextSize(1, 14.0f);
         this.addButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.addButton.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
-        this.addButton.setText(LocaleController.getString("Add", NUM).toUpperCase());
+        this.addButton.setText(LocaleController.getString("Add", NUM));
         this.addButton.setPadding(AndroidUtilities.dp(17.0f), 0, AndroidUtilities.dp(17.0f), 0);
         TextView textView = this.addButton;
         if (LocaleController.isRTL) {
@@ -235,7 +235,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
         boolean z4;
         if (obj != null) {
             z4 = this.isInstalled;
-            boolean isStickerPackInstalled = DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(stickerSetCovered2.set.id);
+            boolean isStickerPackInstalled = MediaDataController.getInstance(this.currentAccount).isStickerPackInstalled(stickerSetCovered2.set.id);
             this.isInstalled = isStickerPackInstalled;
             String str = "scaleY";
             String str2 = "scaleX";
@@ -289,7 +289,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
                 return;
             }
         }
-        z4 = DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(stickerSetCovered2.set.id);
+        z4 = MediaDataController.getInstance(this.currentAccount).isStickerPackInstalled(stickerSetCovered2.set.id);
         this.isInstalled = z4;
         if (z4) {
             this.addButton.setVisibility(4);

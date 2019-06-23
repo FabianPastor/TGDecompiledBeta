@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
+import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
@@ -25,6 +26,7 @@ import org.telegram.ui.Adapters.SearchAdapterHelper.HashtagObject;
 import org.telegram.ui.Adapters.SearchAdapterHelper.SearchAdapterHelperDelegate;
 import org.telegram.ui.Cells.GraySectionCell;
 import org.telegram.ui.Cells.ProfileSearchCell;
+import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.UserCell;
 import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
@@ -32,6 +34,7 @@ import org.telegram.ui.Components.RecyclerListView.SelectionAdapter;
 public class SearchAdapter extends SelectionAdapter {
     private boolean allowBots;
     private boolean allowChats;
+    private boolean allowPhoneNumbers;
     private boolean allowUsernameSearch;
     private int channelId;
     private SparseArray<?> checkedMap;
@@ -44,7 +47,7 @@ public class SearchAdapter extends SelectionAdapter {
     private Timer searchTimer;
     private boolean useUserCell;
 
-    public SearchAdapter(Context context, SparseArray<User> sparseArray, boolean z, boolean z2, boolean z3, boolean z4, int i) {
+    public SearchAdapter(Context context, SparseArray<User> sparseArray, boolean z, boolean z2, boolean z3, boolean z4, boolean z5, int i) {
         this.mContext = context;
         this.ignoreUsers = sparseArray;
         this.onlyMutual = z2;
@@ -52,6 +55,7 @@ public class SearchAdapter extends SelectionAdapter {
         this.allowChats = z3;
         this.allowBots = z4;
         this.channelId = i;
+        this.allowPhoneNumbers = z5;
         this.searchAdapterHelper = new SearchAdapterHelper(true);
         this.searchAdapterHelper.setDelegate(new SearchAdapterHelperDelegate() {
             public void onSetHashtags(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap) {
@@ -87,7 +91,7 @@ public class SearchAdapter extends SelectionAdapter {
             this.searchResult.clear();
             this.searchResultNames.clear();
             if (this.allowUsernameSearch) {
-                this.searchAdapterHelper.queryServerSearch(null, true, this.allowChats, this.allowBots, true, this.channelId, 0);
+                this.searchAdapterHelper.queryServerSearch(null, true, this.allowChats, this.allowBots, true, this.channelId, this.allowPhoneNumbers, 0);
             }
             notifyDataSetChanged();
             return;
@@ -112,7 +116,7 @@ public class SearchAdapter extends SelectionAdapter {
 
     public /* synthetic */ void lambda$processSearch$1$SearchAdapter(String str) {
         if (this.allowUsernameSearch) {
-            this.searchAdapterHelper.queryServerSearch(str, true, this.allowChats, this.allowBots, true, this.channelId, -1);
+            this.searchAdapterHelper.queryServerSearch(str, true, this.allowChats, this.allowBots, true, this.channelId, this.allowPhoneNumbers, -1);
         }
         int i = UserConfig.selectedAccount;
         Utilities.searchQueue.postRunnable(new -$$Lambda$SearchAdapter$MJ9cur0I3ZiqQGm3sZTS0MY0LdM(this, str, new ArrayList(ContactsController.getInstance(i).contacts), i));
@@ -317,82 +321,103 @@ public class SearchAdapter extends SelectionAdapter {
     }
 
     public boolean isEnabled(ViewHolder viewHolder) {
-        return viewHolder.getItemViewType() == 0;
+        int itemViewType = viewHolder.getItemViewType();
+        return itemViewType == 0 || itemViewType == 2;
     }
 
     public int getItemCount() {
         int size = this.searchResult.size();
         int size2 = this.searchAdapterHelper.getGlobalSearch().size();
-        return size2 != 0 ? size + (size2 + 1) : size;
+        if (size2 != 0) {
+            size += size2 + 1;
+        }
+        size2 = this.searchAdapterHelper.getPhoneSearch().size();
+        return size2 != 0 ? size + size2 : size;
     }
 
     public boolean isGlobalSearch(int i) {
         int size = this.searchResult.size();
-        return (i < 0 || i >= size) && i > size && i <= this.searchAdapterHelper.getGlobalSearch().size() + size;
+        int size2 = this.searchAdapterHelper.getGlobalSearch().size();
+        int size3 = this.searchAdapterHelper.getPhoneSearch().size();
+        if (i < 0 || i >= size) {
+            return (i <= size || i >= size + size3) && i > size + size3 && i <= (size2 + size3) + size;
+        } else {
+            return false;
+        }
     }
 
-    public TLObject getItem(int i) {
+    public Object getItem(int i) {
         int size = this.searchResult.size();
         int size2 = this.searchAdapterHelper.getGlobalSearch().size();
-        if (i < 0 || i >= size) {
-            return (i <= size || i > size2 + size) ? null : (TLObject) this.searchAdapterHelper.getGlobalSearch().get((i - size) - 1);
-        } else {
-            return (TLObject) this.searchResult.get(i);
+        int size3 = this.searchAdapterHelper.getPhoneSearch().size();
+        if (i >= 0 && i < size) {
+            return this.searchResult.get(i);
         }
+        i -= size;
+        if (i >= 0 && i < size3) {
+            return this.searchAdapterHelper.getPhoneSearch().get(i);
+        }
+        i -= size3;
+        return (i <= 0 || i > size2) ? null : this.searchAdapterHelper.getGlobalSearch().get(i - 1);
     }
 
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View graySectionCell;
+        View textCell;
         if (i != 0) {
-            graySectionCell = new GraySectionCell(this.mContext);
-            graySectionCell.setText(LocaleController.getString("GlobalSearch", NUM));
-        } else if (this.useUserCell) {
-            graySectionCell = new UserCell(this.mContext, 1, 1, false);
-            if (this.checkedMap != null) {
-                graySectionCell.setChecked(false, false);
+            if (i != 1) {
+                textCell = new TextCell(this.mContext, 16);
+            } else {
+                textCell = new GraySectionCell(this.mContext);
             }
+        } else if (this.useUserCell) {
+            View userCell = new UserCell(this.mContext, 1, 1, false);
+            if (this.checkedMap != null) {
+                userCell.setChecked(false, false);
+            }
+            textCell = userCell;
         } else {
-            graySectionCell = new ProfileSearchCell(this.mContext);
+            textCell = new ProfileSearchCell(this.mContext);
         }
-        return new Holder(graySectionCell);
+        return new Holder(textCell);
     }
 
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        if (viewHolder.getItemViewType() == 0) {
-            TLObject item = getItem(i);
-            if (item != null) {
+        int itemViewType = viewHolder.getItemViewType();
+        boolean z = false;
+        boolean z2 = true;
+        if (itemViewType == 0) {
+            TLObject tLObject = (TLObject) getItem(i);
+            if (tLObject != null) {
                 String str;
-                int i2;
                 CharSequence charSequence;
                 CharSequence charSequence2;
-                boolean z = false;
-                if (item instanceof User) {
-                    User user = (User) item;
+                if (tLObject instanceof User) {
+                    User user = (User) tLObject;
                     str = user.username;
-                    i2 = user.id;
-                } else if (item instanceof Chat) {
-                    Chat chat = (Chat) item;
+                    itemViewType = user.id;
+                } else if (tLObject instanceof Chat) {
+                    Chat chat = (Chat) tLObject;
                     str = chat.username;
-                    i2 = chat.id;
+                    itemViewType = chat.id;
                 } else {
                     str = null;
-                    i2 = 0;
+                    itemViewType = 0;
                 }
                 String str2 = "@";
-                boolean z2 = true;
                 if (i < this.searchResult.size()) {
-                    charSequence = (CharSequence) this.searchResultNames.get(i);
-                    if (!(charSequence == null || str == null || str.length() <= 0)) {
-                        String charSequence3 = charSequence.toString();
+                    CharSequence charSequence3 = (CharSequence) this.searchResultNames.get(i);
+                    if (!(charSequence3 == null || str == null || str.length() <= 0)) {
+                        String charSequence4 = charSequence3.toString();
                         StringBuilder stringBuilder = new StringBuilder();
                         stringBuilder.append(str2);
                         stringBuilder.append(str);
-                        if (charSequence3.startsWith(stringBuilder.toString())) {
-                            charSequence2 = charSequence;
+                        if (charSequence4.startsWith(stringBuilder.toString())) {
                             charSequence = null;
+                            charSequence2 = charSequence3;
                         }
                     }
                     charSequence2 = null;
+                    charSequence = charSequence3;
                 } else if (i <= this.searchResult.size() || str == null) {
                     charSequence = null;
                     charSequence2 = charSequence;
@@ -402,9 +427,9 @@ public class SearchAdapter extends SelectionAdapter {
                         lastFoundUsername = lastFoundUsername.substring(1);
                     }
                     try {
-                        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
-                        spannableStringBuilder.append(str2);
-                        spannableStringBuilder.append(str);
+                        charSequence2 = new SpannableStringBuilder();
+                        charSequence2.append(str2);
+                        charSequence2.append(str);
                         int indexOf = str.toLowerCase().indexOf(lastFoundUsername);
                         if (indexOf != -1) {
                             int length = lastFoundUsername.length();
@@ -413,10 +438,9 @@ public class SearchAdapter extends SelectionAdapter {
                             } else {
                                 indexOf++;
                             }
-                            spannableStringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor("windowBackgroundWhiteBlueText4")), indexOf, length + indexOf, 33);
+                            charSequence2.setSpan(new ForegroundColorSpan(Theme.getColor("windowBackgroundWhiteBlueText4")), indexOf, length + indexOf, 33);
                         }
                         charSequence = null;
-                        charSequence2 = spannableStringBuilder;
                     } catch (Exception e) {
                         FileLog.e(e);
                         charSequence = null;
@@ -425,10 +449,10 @@ public class SearchAdapter extends SelectionAdapter {
                 }
                 if (this.useUserCell) {
                     UserCell userCell = (UserCell) viewHolder.itemView;
-                    userCell.setData(item, charSequence, charSequence2, 0);
+                    userCell.setData(tLObject, charSequence, charSequence2, 0);
                     SparseArray sparseArray = this.checkedMap;
                     if (sparseArray != null) {
-                        if (sparseArray.indexOfKey(i2) < 0) {
+                        if (sparseArray.indexOfKey(itemViewType) < 0) {
                             z2 = false;
                         }
                         userCell.setChecked(z2, false);
@@ -437,16 +461,44 @@ public class SearchAdapter extends SelectionAdapter {
                     return;
                 }
                 ProfileSearchCell profileSearchCell = (ProfileSearchCell) viewHolder.itemView;
-                profileSearchCell.setData(item, null, charSequence, charSequence2, false, false);
+                profileSearchCell.setData(tLObject, null, charSequence, charSequence2, false, false);
                 if (!(i == getItemCount() - 1 || i == this.searchResult.size() - 1)) {
                     z = true;
                 }
                 profileSearchCell.useSeparator = z;
             }
+        } else if (itemViewType == 1) {
+            GraySectionCell graySectionCell = (GraySectionCell) viewHolder.itemView;
+            if (getItem(i) == null) {
+                graySectionCell.setText(LocaleController.getString("GlobalSearch", NUM));
+            } else {
+                graySectionCell.setText(LocaleController.getString("PhoneNumberSearch", NUM));
+            }
+        } else if (itemViewType == 2) {
+            String str3 = (String) getItem(i);
+            TextCell textCell = (TextCell) viewHolder.itemView;
+            textCell.setColors(null, "windowBackgroundWhiteBlueText2");
+            Object[] objArr = new Object[1];
+            PhoneFormat instance = PhoneFormat.getInstance();
+            StringBuilder stringBuilder2 = new StringBuilder();
+            stringBuilder2.append("+");
+            stringBuilder2.append(str3);
+            objArr[0] = instance.format(stringBuilder2.toString());
+            textCell.setText(LocaleController.formatString("AddContactByPhone", NUM, objArr), false);
         }
     }
 
     public int getItemViewType(int i) {
-        return i == this.searchResult.size() ? 1 : 0;
+        Object item = getItem(i);
+        if (item == null) {
+            return 1;
+        }
+        if (!(item instanceof String)) {
+            return 0;
+        }
+        if ("section".equals((String) item)) {
+            return 1;
+        }
+        return 2;
     }
 }

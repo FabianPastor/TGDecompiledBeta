@@ -1,6 +1,6 @@
 package org.telegram.tgnet;
 
-import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.AccountInstance;
 import org.telegram.tgnet.TLRPC.TL_config;
 
 /* compiled from: lambda */
@@ -14,6 +14,6 @@ public final /* synthetic */ class -$$Lambda$ConnectionsManager$wiVMBnjTO-Ju65Uh
     }
 
     public final void run() {
-        MessagesController.getInstance(this.f$0).updateConfig(this.f$1);
+        AccountInstance.getInstance(this.f$0).getMessagesController().updateConfig(this.f$1);
     }
 }

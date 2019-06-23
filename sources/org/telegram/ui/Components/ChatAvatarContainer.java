@@ -123,6 +123,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 return;
             }
             bundle.putInt("user_id", currentUser.id);
+            bundle.putBoolean("reportSpam", this.parentFragment.hasReportSpam());
             if (this.timeItem != null) {
                 bundle.putLong(str, this.parentFragment.getDialogId());
             }
@@ -326,7 +327,15 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                             }
                         }
                         if (currentChat.megagroup) {
-                            replace = LocaleController.getString("Loading", NUM).toLowerCase();
+                            if (currentChatInfo == null) {
+                                replace = LocaleController.getString("Loading", NUM).toLowerCase();
+                            } else if (currentChat.has_geo) {
+                                replace = LocaleController.getString("MegaLocation", NUM).toLowerCase();
+                            } else if (TextUtils.isEmpty(currentChat.username)) {
+                                replace = LocaleController.getString("MegaPrivate", NUM).toLowerCase();
+                            } else {
+                                replace = LocaleController.getString("MegaPublic", NUM).toLowerCase();
+                            }
                         } else if ((currentChat.flags & 64) != 0) {
                             replace = LocaleController.getString("ChannelPublic", NUM).toLowerCase();
                         } else {

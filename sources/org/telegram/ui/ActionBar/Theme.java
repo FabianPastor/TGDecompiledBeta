@@ -15,7 +15,6 @@ import android.graphics.Path;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -135,6 +134,7 @@ public class Theme {
     public static int autoNightSunsetTime = 0;
     public static Paint avatar_backgroundPaint = null;
     public static Drawable avatar_broadcastDrawable = null;
+    public static Drawable avatar_ghostDrawable = null;
     public static Drawable avatar_savedDrawable = null;
     public static Drawable calllog_msgCallDownGreenDrawable = null;
     public static Drawable calllog_msgCallDownRedDrawable = null;
@@ -288,7 +288,7 @@ public class Theme {
     private static ThemeInfo defaultTheme = null;
     public static LottieDrawable dialogs_archiveAvatarDrawable = null;
     public static boolean dialogs_archiveAvatarDrawableRecolored = false;
-    public static Drawable dialogs_archiveDrawable = null;
+    public static LottieDrawable dialogs_archiveDrawable = null;
     public static boolean dialogs_archiveDrawableRecolored = false;
     public static TextPaint dialogs_archiveTextPaint = null;
     public static Drawable dialogs_botDrawable = null;
@@ -316,7 +316,7 @@ public class Theme {
     public static TextPaint dialogs_offlinePaint = null;
     public static Paint dialogs_onlineCirclePaint = null;
     public static TextPaint dialogs_onlinePaint = null;
-    public static Drawable dialogs_pinArchiveDrawable = null;
+    public static LottieDrawable dialogs_pinArchiveDrawable = null;
     public static Drawable dialogs_pinnedDrawable = null;
     public static Paint dialogs_pinnedPaint = null;
     public static Drawable dialogs_reorderDrawable = null;
@@ -325,8 +325,8 @@ public class Theme {
     public static TextPaint dialogs_searchNamePaint = null;
     public static Paint dialogs_tabletSeletedPaint = null;
     public static TextPaint dialogs_timePaint = null;
-    public static Drawable dialogs_unarchiveDrawable = null;
-    public static Drawable dialogs_unpinArchiveDrawable = null;
+    public static LottieDrawable dialogs_unarchiveDrawable = null;
+    public static LottieDrawable dialogs_unpinArchiveDrawable = null;
     public static Drawable dialogs_verifiedCheckDrawable = null;
     public static Drawable dialogs_verifiedDrawable = null;
     public static Paint dividerPaint = null;
@@ -385,8 +385,8 @@ public class Theme {
     public static final String key_avatar_text = "avatar_text";
     public static final String key_calls_callReceivedGreenIcon = "calls_callReceivedGreenIcon";
     public static final String key_calls_callReceivedRedIcon = "calls_callReceivedRedIcon";
-    public static final String key_changephoneinfo_changeText = "key_changephoneinfo_changeText";
     public static final String key_changephoneinfo_image = "changephoneinfo_image";
+    public static final String key_changephoneinfo_image2 = "changephoneinfo_image2";
     public static final String key_chat_addContact = "chat_addContact";
     public static final String key_chat_adminSelectedText = "chat_adminSelectedText";
     public static final String key_chat_adminText = "chat_adminText";
@@ -823,7 +823,6 @@ public class Theme {
     public static final String key_inappPlayerTitle = "inappPlayerTitle";
     public static final String key_listSelector = "listSelectorSDK21";
     public static final String key_location_liveLocationProgress = "location_liveLocationProgress";
-    public static final String key_location_markerX = "location_markerX";
     public static final String key_location_placeLocationBackground = "location_placeLocationBackground";
     public static final String key_location_sendLiveLocationBackground = "location_sendLiveLocationBackground";
     public static final String key_location_sendLiveLocationIcon = "location_sendLiveLocationIcon";
@@ -1639,7 +1638,7 @@ public class Theme {
         defaultColors.put("chat_messagePanelVoiceDuration", valueOf);
         defaultColors.put("chat_inlineResultIcon", Integer.valueOf(-11037236));
         defaultColors.put("chat_topPanelBackground", valueOf);
-        defaultColors.put("chat_topPanelClose", Integer.valueOf(-5723992));
+        defaultColors.put("chat_topPanelClose", Integer.valueOf(-7563878));
         defaultColors.put("chat_topPanelLine", Integer.valueOf(-9658414));
         defaultColors.put("chat_topPanelTitle", valueOf3);
         defaultColors.put("chat_topPanelMessage", Integer.valueOf(-6710887));
@@ -1695,7 +1694,6 @@ public class Theme {
         defaultColors.put("passport_authorizeBackground", Integer.valueOf(-12211217));
         defaultColors.put("passport_authorizeBackgroundSelected", Integer.valueOf(-12542501));
         defaultColors.put("passport_authorizeText", valueOf);
-        defaultColors.put("location_markerX", Integer.valueOf(-8355712));
         defaultColors.put("location_sendLocationBackground", Integer.valueOf(-9592620));
         defaultColors.put("location_sendLiveLocationBackground", Integer.valueOf(-39836));
         defaultColors.put("location_sendLocationIcon", valueOf);
@@ -1730,8 +1728,8 @@ public class Theme {
         defaultColors.put("checkboxDisabled", Integer.valueOf(-5195326));
         defaultColors.put("stickers_menu", Integer.valueOf(-4801083));
         defaultColors.put("stickers_menuSelector", Integer.valueOf(NUM));
-        defaultColors.put("changephoneinfo_image", Integer.valueOf(-5723992));
-        defaultColors.put("key_changephoneinfo_changeText", Integer.valueOf(-11697229));
+        defaultColors.put("changephoneinfo_image", Integer.valueOf(-4669499));
+        defaultColors.put("changephoneinfo_image2", Integer.valueOf(-11491350));
         defaultColors.put("groupcreate_hintText", valueOf6);
         defaultColors.put("groupcreate_cursor", Integer.valueOf(-11361317));
         defaultColors.put("groupcreate_sectionShadow", valueOf4);
@@ -1762,7 +1760,7 @@ public class Theme {
         fallbackKeys.put("chat_outAudioCacheSeekbar", "chat_outAudioSeekbar");
         fallbackKeys.put("chat_emojiSearchBackground", "chat_emojiPanelStickerPackSelector");
         fallbackKeys.put("location_sendLiveLocationIcon", "location_sendLocationIcon");
-        fallbackKeys.put("key_changephoneinfo_changeText", "windowBackgroundWhiteBlueText4");
+        fallbackKeys.put("changephoneinfo_image2", "featuredStickers_addButton");
         fallbackKeys.put("key_graySectionText", "windowBackgroundWhiteGrayText2");
         fallbackKeys.put("chat_inMediaIcon", "chat_inBubble");
         fallbackKeys.put("chat_outMediaIcon", "chat_outBubble");
@@ -2176,7 +2174,7 @@ public class Theme {
     L_0x005f:
         r0 = org.telegram.messenger.ApplicationLoader.applicationContext;
         r0 = r0.getResources();
-        r1 = NUM; // 0x7var_ float:1.7945622E38 double:1.0529357575E-314;
+        r1 = NUM; // 0x7var_b float:1.7945639E38 double:1.0529357614E-314;
         r0 = r0.getDrawable(r1);
         dialogs_holidayDrawable = r0;
         r0 = NUM; // 0x40400000 float:3.0 double:5.325712093E-315;
@@ -2406,60 +2404,100 @@ public class Theme {
         return createSelectorDrawable(i, 1);
     }
 
-    public static Drawable createSelectorDrawable(int i, final int i2) {
-        int i3 = VERSION.SDK_INT;
-        if (i3 >= 21) {
-            Drawable anonymousClass6;
-            RippleDrawable rippleDrawable;
-            if (i2 != 1 || i3 < 23) {
-                if (i2 == 1 || i2 == 3 || i2 == 4) {
-                    maskPaint.setColor(-1);
-                    anonymousClass6 = new Drawable() {
-                        public int getOpacity() {
-                            return 0;
-                        }
-
-                        public void setAlpha(int i) {
-                        }
-
-                        public void setColorFilter(ColorFilter colorFilter) {
-                        }
-
-                        public void draw(Canvas canvas) {
-                            Rect bounds = getBounds();
-                            int i = i2;
-                            if (i == 1) {
-                                i = AndroidUtilities.dp(20.0f);
-                            } else if (i == 3) {
-                                i = Math.max(bounds.width(), bounds.height()) / 2;
-                            } else {
-                                i = (int) Math.ceil(Math.sqrt((double) (((bounds.left - bounds.centerX()) * (bounds.left - bounds.centerX())) + ((bounds.top - bounds.centerY()) * (bounds.top - bounds.centerY())))));
-                            }
-                            canvas.drawCircle((float) bounds.centerX(), (float) bounds.centerY(), (float) i, Theme.maskPaint);
-                        }
-                    };
-                    rippleDrawable = new RippleDrawable(new ColorStateList(new int[][]{StateSet.WILD_CARD}, new int[]{i}), null, anonymousClass6);
-                    if (i2 == 1 && VERSION.SDK_INT >= 23) {
-                        rippleDrawable.setRadius(AndroidUtilities.dp(20.0f));
-                    }
-                    return rippleDrawable;
-                } else if (i2 == 2) {
-                    anonymousClass6 = new ColorDrawable(-1);
-                    rippleDrawable = new RippleDrawable(new ColorStateList(new int[][]{StateSet.WILD_CARD}, new int[]{i}), null, anonymousClass6);
-                    rippleDrawable.setRadius(AndroidUtilities.dp(20.0f));
-                    return rippleDrawable;
-                }
-            }
-            anonymousClass6 = null;
-            rippleDrawable = new RippleDrawable(new ColorStateList(new int[][]{StateSet.WILD_CARD}, new int[]{i}), null, anonymousClass6);
-            rippleDrawable.setRadius(AndroidUtilities.dp(20.0f));
-            return rippleDrawable;
-        }
-        StateListDrawable stateListDrawable = new StateListDrawable();
-        stateListDrawable.addState(new int[]{16842919}, new ColorDrawable(i));
-        stateListDrawable.addState(new int[]{16842913}, new ColorDrawable(i));
-        stateListDrawable.addState(StateSet.WILD_CARD, new ColorDrawable(0));
-        return stateListDrawable;
+    /* JADX WARNING: Removed duplicated region for block: B:20:0x004d  */
+    /* JADX WARNING: Removed duplicated region for block: B:20:0x004d  */
+    public static android.graphics.drawable.Drawable createSelectorDrawable(int r10, final int r11) {
+        /*
+        r0 = android.os.Build.VERSION.SDK_INT;
+        r1 = 0;
+        r2 = 1;
+        r3 = 21;
+        if (r0 < r3) goto L_0x005f;
+    L_0x0008:
+        r0 = 23;
+        r3 = -1;
+        r4 = 5;
+        r5 = 0;
+        if (r11 == r2) goto L_0x0011;
+    L_0x000f:
+        if (r11 != r4) goto L_0x0017;
+    L_0x0011:
+        r6 = android.os.Build.VERSION.SDK_INT;
+        if (r6 < r0) goto L_0x0017;
+    L_0x0015:
+        r6 = r5;
+        goto L_0x0035;
+    L_0x0017:
+        if (r11 == r2) goto L_0x002b;
+    L_0x0019:
+        r6 = 3;
+        if (r11 == r6) goto L_0x002b;
+    L_0x001c:
+        r6 = 4;
+        if (r11 == r6) goto L_0x002b;
+    L_0x001f:
+        if (r11 != r4) goto L_0x0022;
+    L_0x0021:
+        goto L_0x002b;
+    L_0x0022:
+        r6 = 2;
+        if (r11 != r6) goto L_0x0015;
+    L_0x0025:
+        r6 = new android.graphics.drawable.ColorDrawable;
+        r6.<init>(r3);
+        goto L_0x0035;
+    L_0x002b:
+        r6 = maskPaint;
+        r6.setColor(r3);
+        r6 = new org.telegram.ui.ActionBar.Theme$6;
+        r6.<init>(r11);
+    L_0x0035:
+        r7 = new android.content.res.ColorStateList;
+        r8 = new int[r2][];
+        r9 = android.util.StateSet.WILD_CARD;
+        r8[r1] = r9;
+        r9 = new int[r2];
+        r9[r1] = r10;
+        r7.<init>(r8, r9);
+        r10 = new android.graphics.drawable.RippleDrawable;
+        r10.<init>(r7, r5, r6);
+        r1 = android.os.Build.VERSION.SDK_INT;
+        if (r1 < r0) goto L_0x005e;
+    L_0x004d:
+        if (r11 != r2) goto L_0x0059;
+    L_0x004f:
+        r11 = NUM; // 0x41a00000 float:20.0 double:5.439686476E-315;
+        r11 = org.telegram.messenger.AndroidUtilities.dp(r11);
+        r10.setRadius(r11);
+        goto L_0x005e;
+    L_0x0059:
+        if (r11 != r4) goto L_0x005e;
+    L_0x005b:
+        r10.setRadius(r3);
+    L_0x005e:
+        return r10;
+    L_0x005f:
+        r11 = new android.graphics.drawable.StateListDrawable;
+        r11.<init>();
+        r0 = new int[r2];
+        r3 = 16842919; // 0x10100a7 float:2.3694026E-38 double:8.3215077E-317;
+        r0[r1] = r3;
+        r3 = new android.graphics.drawable.ColorDrawable;
+        r3.<init>(r10);
+        r11.addState(r0, r3);
+        r0 = new int[r2];
+        r2 = 16842913; // 0x10100a1 float:2.369401E-38 double:8.3215047E-317;
+        r0[r1] = r2;
+        r2 = new android.graphics.drawable.ColorDrawable;
+        r2.<init>(r10);
+        r11.addState(r0, r2);
+        r10 = android.util.StateSet.WILD_CARD;
+        r0 = new android.graphics.drawable.ColorDrawable;
+        r0.<init>(r1);
+        r11.addState(r10, r0);
+        return r11;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.createSelectorDrawable(int, int):android.graphics.drawable.Drawable");
     }
 
     public static void applyPreviousTheme() {
@@ -3293,27 +3331,21 @@ public class Theme {
             Resources resources = context.getResources();
             avatar_broadcastDrawable = resources.getDrawable(NUM);
             avatar_savedDrawable = resources.getDrawable(NUM);
+            avatar_ghostDrawable = resources.getDrawable(NUM);
             dialogs_archiveAvatarDrawable = new LottieDrawable();
             dialogs_archiveAvatarDrawable.setComposition((LottieComposition) LottieCompositionFactory.fromRawResSync(context, NUM).getValue());
-            if (VERSION.SDK_INT == 24) {
-                dialogs_archiveDrawable = resources.getDrawable(NUM);
-                dialogs_unarchiveDrawable = resources.getDrawable(NUM);
-                dialogs_pinArchiveDrawable = resources.getDrawable(NUM);
-                dialogs_unpinArchiveDrawable = resources.getDrawable(NUM);
-            } else {
-                LottieDrawable lottieDrawable = new LottieDrawable();
-                lottieDrawable.setComposition((LottieComposition) LottieCompositionFactory.fromRawResSync(context, NUM).getValue());
-                dialogs_archiveDrawable = lottieDrawable;
-                lottieDrawable = new LottieDrawable();
-                lottieDrawable.setComposition((LottieComposition) LottieCompositionFactory.fromRawResSync(context, NUM).getValue());
-                dialogs_unarchiveDrawable = lottieDrawable;
-                lottieDrawable = new LottieDrawable();
-                lottieDrawable.setComposition((LottieComposition) LottieCompositionFactory.fromRawResSync(context, NUM).getValue());
-                dialogs_pinArchiveDrawable = lottieDrawable;
-                lottieDrawable = new LottieDrawable();
-                lottieDrawable.setComposition((LottieComposition) LottieCompositionFactory.fromRawResSync(context, NUM).getValue());
-                dialogs_unpinArchiveDrawable = lottieDrawable;
-            }
+            LottieDrawable lottieDrawable = new LottieDrawable();
+            lottieDrawable.setComposition((LottieComposition) LottieCompositionFactory.fromRawResSync(context, NUM).getValue());
+            dialogs_archiveDrawable = lottieDrawable;
+            lottieDrawable = new LottieDrawable();
+            lottieDrawable.setComposition((LottieComposition) LottieCompositionFactory.fromRawResSync(context, NUM).getValue());
+            dialogs_unarchiveDrawable = lottieDrawable;
+            lottieDrawable = new LottieDrawable();
+            lottieDrawable.setComposition((LottieComposition) LottieCompositionFactory.fromRawResSync(context, NUM).getValue());
+            dialogs_pinArchiveDrawable = lottieDrawable;
+            lottieDrawable = new LottieDrawable();
+            lottieDrawable.setComposition((LottieComposition) LottieCompositionFactory.fromRawResSync(context, NUM).getValue());
+            dialogs_unpinArchiveDrawable = lottieDrawable;
             applyCommonTheme();
         }
     }
@@ -3353,49 +3385,31 @@ public class Theme {
             r8[1] = str2;
             lottieDrawable.addValueCallback(new KeyPath(r8), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str))));
             dialogs_archiveAvatarDrawableRecolored = false;
-            Drawable drawable = dialogs_pinArchiveDrawable;
-            String str4 = "Line";
-            String str5 = "Arrow";
-            String str6 = "chats_archiveIcon";
-            if (drawable instanceof LottieDrawable) {
-                lottieDrawable = (LottieDrawable) drawable;
-                lottieDrawable.addValueCallback(new KeyPath(str2), LottieProperty.COLOR_FILTER, null);
-                lottieDrawable.addValueCallback(new KeyPath(str5, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str6))));
-                lottieDrawable.addValueCallback(new KeyPath(str4, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str6))));
-            } else {
-                setDrawableColorByKey(drawable, str6);
-            }
-            drawable = dialogs_unpinArchiveDrawable;
-            if (drawable instanceof LottieDrawable) {
-                lottieDrawable = (LottieDrawable) drawable;
-                lottieDrawable.addValueCallback(new KeyPath(str2), LottieProperty.COLOR_FILTER, null);
-                lottieDrawable.addValueCallback(new KeyPath(str5, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str6))));
-                lottieDrawable.addValueCallback(new KeyPath(str4, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str6))));
-            } else {
-                setDrawableColorByKey(drawable, str6);
-            }
-            drawable = dialogs_archiveDrawable;
-            if (drawable instanceof LottieDrawable) {
-                lottieDrawable = (LottieDrawable) drawable;
-                lottieDrawable.addValueCallback(new KeyPath(str2), LottieProperty.COLOR_FILTER, null);
-                lottieDrawable.addValueCallback(new KeyPath(str5, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor("chats_archiveBackground"))));
-                lottieDrawable.addValueCallback(new KeyPath(r11, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str6))));
-                lottieDrawable.addValueCallback(new KeyPath(str3, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str6))));
-                dialogs_archiveDrawableRecolored = false;
-            } else {
-                setDrawableColorByKey(drawable, str6);
-            }
-            drawable = dialogs_unarchiveDrawable;
-            if (drawable instanceof LottieDrawable) {
-                lottieDrawable = (LottieDrawable) drawable;
-                lottieDrawable.addValueCallback(new KeyPath(str2), LottieProperty.COLOR_FILTER, null);
-                lottieDrawable.addValueCallback(new KeyPath(r9, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str6))));
-                lottieDrawable.addValueCallback(new KeyPath(r10, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor("chats_archivePinBackground"))));
-                lottieDrawable.addValueCallback(new KeyPath(r11, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str6))));
-                lottieDrawable.addValueCallback(new KeyPath(str3, str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str6))));
-            } else {
-                setDrawableColorByKey(drawable, str6);
-            }
+            dialogs_pinArchiveDrawable.addValueCallback(new KeyPath(str2), LottieProperty.COLOR_FILTER, null);
+            lottieDrawable = dialogs_pinArchiveDrawable;
+            r2 = new String[2];
+            r2[0] = "Arrow";
+            r2[1] = str2;
+            String str4 = "chats_archiveIcon";
+            lottieDrawable.addValueCallback(new KeyPath(r2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str4))));
+            lottieDrawable = dialogs_pinArchiveDrawable;
+            r2 = new String[2];
+            r2[0] = "Line";
+            r2[1] = str2;
+            lottieDrawable.addValueCallback(new KeyPath(r2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str4))));
+            dialogs_unpinArchiveDrawable.addValueCallback(new KeyPath(str2), LottieProperty.COLOR_FILTER, null);
+            dialogs_unpinArchiveDrawable.addValueCallback(new KeyPath("Arrow", str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str4))));
+            dialogs_unpinArchiveDrawable.addValueCallback(new KeyPath("Line", str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str4))));
+            dialogs_archiveDrawable.addValueCallback(new KeyPath(str2), LottieProperty.COLOR_FILTER, null);
+            dialogs_archiveDrawable.addValueCallback(new KeyPath("Arrow", str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor("chats_archiveBackground"))));
+            dialogs_archiveDrawable.addValueCallback(new KeyPath("Box2", str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str4))));
+            dialogs_archiveDrawable.addValueCallback(new KeyPath("Box1", str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str4))));
+            dialogs_archiveDrawableRecolored = false;
+            dialogs_unarchiveDrawable.addValueCallback(new KeyPath(str2), LottieProperty.COLOR_FILTER, null);
+            dialogs_unarchiveDrawable.addValueCallback(new KeyPath("Arrow1", str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str4))));
+            dialogs_unarchiveDrawable.addValueCallback(new KeyPath("Arrow2", str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor("chats_archivePinBackground"))));
+            dialogs_unarchiveDrawable.addValueCallback(new KeyPath("Box2", str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str4))));
+            dialogs_unarchiveDrawable.addValueCallback(new KeyPath("Box1", str2), LottieProperty.COLOR_FILTER, new LottieValueCallback(new SimpleColorFilter(getColor(str4))));
         }
     }
 
@@ -3776,74 +3790,74 @@ public class Theme {
         r1.<init>();
         chat_composeBackgroundPaint = r1;
         r1 = r14.getResources();
-        r3 = NUM; // 0x7var_ce float:1.7945515E38 double:1.0529357313E-314;
+        r3 = NUM; // 0x7var_d4 float:1.7945527E38 double:1.0529357343E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgInDrawable = r3;
-        r3 = NUM; // 0x7var_ce float:1.7945515E38 double:1.0529357313E-314;
+        r3 = NUM; // 0x7var_d4 float:1.7945527E38 double:1.0529357343E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgInSelectedDrawable = r3;
-        r3 = NUM; // 0x7var_d3 float:1.7946044E38 double:1.05293586E-314;
+        r3 = NUM; // 0x7var_dc float:1.7946063E38 double:1.0529358647E-314;
         r3 = r1.getDrawable(r3);
         chat_msgNoSoundDrawable = r3;
-        r3 = NUM; // 0x7var_dd float:1.7945545E38 double:1.0529357387E-314;
+        r3 = NUM; // 0x7var_e3 float:1.7945558E38 double:1.0529357417E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgOutDrawable = r3;
-        r3 = NUM; // 0x7var_dd float:1.7945545E38 double:1.0529357387E-314;
+        r3 = NUM; // 0x7var_e3 float:1.7945558E38 double:1.0529357417E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgOutSelectedDrawable = r3;
-        r3 = NUM; // 0x7var_e2 float:1.7945556E38 double:1.052935741E-314;
+        r3 = NUM; // 0x7var_e8 float:1.7945568E38 double:1.052935744E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgInMediaDrawable = r3;
-        r3 = NUM; // 0x7var_e2 float:1.7945556E38 double:1.052935741E-314;
+        r3 = NUM; // 0x7var_e8 float:1.7945568E38 double:1.052935744E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgInMediaSelectedDrawable = r3;
-        r3 = NUM; // 0x7var_e2 float:1.7945556E38 double:1.052935741E-314;
+        r3 = NUM; // 0x7var_e8 float:1.7945568E38 double:1.052935744E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgOutMediaDrawable = r3;
-        r3 = NUM; // 0x7var_e2 float:1.7945556E38 double:1.052935741E-314;
+        r3 = NUM; // 0x7var_e8 float:1.7945568E38 double:1.052935744E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgOutMediaSelectedDrawable = r3;
-        r3 = NUM; // 0x7var_bd float:1.794548E38 double:1.052935723E-314;
+        r3 = NUM; // 0x7var_c3 float:1.7945493E38 double:1.052935726E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgOutCheckDrawable = r3;
-        r3 = NUM; // 0x7var_bd float:1.794548E38 double:1.052935723E-314;
+        r3 = NUM; // 0x7var_c3 float:1.7945493E38 double:1.052935726E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgOutCheckSelectedDrawable = r3;
-        r3 = NUM; // 0x7var_bd float:1.794548E38 double:1.052935723E-314;
+        r3 = NUM; // 0x7var_c3 float:1.7945493E38 double:1.052935726E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgMediaCheckDrawable = r3;
-        r3 = NUM; // 0x7var_bd float:1.794548E38 double:1.052935723E-314;
+        r3 = NUM; // 0x7var_c3 float:1.7945493E38 double:1.052935726E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgStickerCheckDrawable = r3;
-        r3 = NUM; // 0x7var_cb float:1.7945509E38 double:1.05293573E-314;
+        r3 = NUM; // 0x7var_d1 float:1.7945521E38 double:1.052935733E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgOutHalfCheckDrawable = r3;
-        r3 = NUM; // 0x7var_cb float:1.7945509E38 double:1.05293573E-314;
+        r3 = NUM; // 0x7var_d1 float:1.7945521E38 double:1.052935733E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgOutHalfCheckSelectedDrawable = r3;
-        r3 = NUM; // 0x7var_cb float:1.7945509E38 double:1.05293573E-314;
+        r3 = NUM; // 0x7var_d1 float:1.7945521E38 double:1.052935733E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgMediaHalfCheckDrawable = r3;
-        r3 = NUM; // 0x7var_cb float:1.7945509E38 double:1.05293573E-314;
+        r3 = NUM; // 0x7var_d1 float:1.7945521E38 double:1.052935733E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgStickerHalfCheckDrawable = r3;
-        r3 = NUM; // 0x7var_bf float:1.7945485E38 double:1.052935724E-314;
+        r3 = NUM; // 0x7var_c5 float:1.7945497E38 double:1.052935727E-314;
         r4 = r1.getDrawable(r3);
         r4 = r4.mutate();
         chat_msgOutClockDrawable = r4;
@@ -3862,65 +3876,65 @@ public class Theme {
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgStickerClockDrawable = r3;
-        r3 = NUM; // 0x7var_fd float:1.794561E38 double:1.0529357545E-314;
+        r3 = NUM; // 0x7var_ float:1.7945622E38 double:1.0529357575E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgInViewsDrawable = r3;
-        r3 = NUM; // 0x7var_fd float:1.794561E38 double:1.0529357545E-314;
+        r3 = NUM; // 0x7var_ float:1.7945622E38 double:1.0529357575E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgInViewsSelectedDrawable = r3;
-        r3 = NUM; // 0x7var_fd float:1.794561E38 double:1.0529357545E-314;
+        r3 = NUM; // 0x7var_ float:1.7945622E38 double:1.0529357575E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgOutViewsDrawable = r3;
-        r3 = NUM; // 0x7var_fd float:1.794561E38 double:1.0529357545E-314;
+        r3 = NUM; // 0x7var_ float:1.7945622E38 double:1.0529357575E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgOutViewsSelectedDrawable = r3;
-        r3 = NUM; // 0x7var_fd float:1.794561E38 double:1.0529357545E-314;
+        r3 = NUM; // 0x7var_ float:1.7945622E38 double:1.0529357575E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgMediaViewsDrawable = r3;
-        r3 = NUM; // 0x7var_fd float:1.794561E38 double:1.0529357545E-314;
+        r3 = NUM; // 0x7var_ float:1.7945622E38 double:1.0529357575E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgStickerViewsDrawable = r3;
-        r3 = NUM; // 0x7var_b5 float:1.7945464E38 double:1.052935719E-314;
+        r3 = NUM; // 0x7var_bb float:1.7945476E38 double:1.052935722E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgInMenuDrawable = r3;
-        r3 = NUM; // 0x7var_b5 float:1.7945464E38 double:1.052935719E-314;
+        r3 = NUM; // 0x7var_bb float:1.7945476E38 double:1.052935722E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgInMenuSelectedDrawable = r3;
-        r3 = NUM; // 0x7var_b5 float:1.7945464E38 double:1.052935719E-314;
+        r3 = NUM; // 0x7var_bb float:1.7945476E38 double:1.052935722E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgOutMenuDrawable = r3;
-        r3 = NUM; // 0x7var_b5 float:1.7945464E38 double:1.052935719E-314;
+        r3 = NUM; // 0x7var_bb float:1.7945476E38 double:1.052935722E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgOutMenuSelectedDrawable = r3;
-        r3 = NUM; // 0x7var_cc float:1.794603E38 double:1.052935857E-314;
+        r3 = NUM; // 0x7var_d5 float:1.7946048E38 double:1.052935861E-314;
         r3 = r1.getDrawable(r3);
         chat_msgMediaMenuDrawable = r3;
-        r3 = NUM; // 0x7var_d0 float:1.794552E38 double:1.0529357323E-314;
+        r3 = NUM; // 0x7var_d6 float:1.7945531E38 double:1.052935735E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgInInstantDrawable = r3;
-        r3 = NUM; // 0x7var_d0 float:1.794552E38 double:1.0529357323E-314;
+        r3 = NUM; // 0x7var_d6 float:1.7945531E38 double:1.052935735E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgOutInstantDrawable = r3;
-        r3 = NUM; // 0x7var_fe float:1.7945612E38 double:1.052935755E-314;
+        r3 = NUM; // 0x7var_ float:1.7945625E38 double:1.052935758E-314;
         r3 = r1.getDrawable(r3);
         chat_msgErrorDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.7945306E38 double:1.0529356804E-314;
+        r3 = NUM; // 0x7var_b float:1.7945314E38 double:1.0529356824E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_muteIconDrawable = r3;
-        r3 = NUM; // 0x7var_a float:1.794515E38 double:1.0529356424E-314;
+        r3 = NUM; // 0x7var_e float:1.7945158E38 double:1.0529356443E-314;
         r3 = r1.getDrawable(r3);
         chat_lockIconDrawable = r3;
         r3 = NUM; // 0x7var_c float:1.7944862E38 double:1.052935572E-314;
@@ -3931,51 +3945,51 @@ public class Theme {
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgBroadcastMediaDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.7945113E38 double:1.0529356335E-314;
+        r3 = NUM; // 0x7var_c float:1.7945122E38 double:1.0529356354E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgInCallDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.7945113E38 double:1.0529356335E-314;
+        r3 = NUM; // 0x7var_c float:1.7945122E38 double:1.0529356354E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgInCallSelectedDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.7945113E38 double:1.0529356335E-314;
+        r3 = NUM; // 0x7var_c float:1.7945122E38 double:1.0529356354E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgOutCallDrawable = r3;
-        r3 = NUM; // 0x7var_ float:1.7945113E38 double:1.0529356335E-314;
+        r3 = NUM; // 0x7var_c float:1.7945122E38 double:1.0529356354E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgOutCallSelectedDrawable = r3;
-        r3 = NUM; // 0x7var_b float:1.794512E38 double:1.052935635E-314;
+        r3 = NUM; // 0x7var_f float:1.7945128E38 double:1.052935637E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgCallUpGreenDrawable = r3;
-        r3 = NUM; // 0x7var_e float:1.7945126E38 double:1.0529356364E-314;
+        r3 = NUM; // 0x7var_ float:1.7945134E38 double:1.0529356384E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgCallDownRedDrawable = r3;
-        r3 = NUM; // 0x7var_e float:1.7945126E38 double:1.0529356364E-314;
+        r3 = NUM; // 0x7var_ float:1.7945134E38 double:1.0529356384E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgCallDownGreenDrawable = r3;
-        r3 = NUM; // 0x7var_b float:1.794512E38 double:1.052935635E-314;
+        r3 = NUM; // 0x7var_f float:1.7945128E38 double:1.052935637E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         calllog_msgCallUpRedDrawable = r3;
-        r3 = NUM; // 0x7var_b float:1.794512E38 double:1.052935635E-314;
+        r3 = NUM; // 0x7var_f float:1.7945128E38 double:1.052935637E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         calllog_msgCallUpGreenDrawable = r3;
-        r3 = NUM; // 0x7var_e float:1.7945126E38 double:1.0529356364E-314;
+        r3 = NUM; // 0x7var_ float:1.7945134E38 double:1.0529356384E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         calllog_msgCallDownRedDrawable = r3;
-        r3 = NUM; // 0x7var_e float:1.7945126E38 double:1.0529356364E-314;
+        r3 = NUM; // 0x7var_ float:1.7945134E38 double:1.0529356384E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         calllog_msgCallDownGreenDrawable = r3;
-        r3 = NUM; // 0x7var_f float:1.7945322E38 double:1.0529356843E-314;
+        r3 = NUM; // 0x7var_ float:1.794533E38 double:1.0529356863E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_msgAvatarLiveLocationDrawable = r3;
@@ -3988,20 +4002,20 @@ public class Theme {
         r3 = NUM; // 0x7var_ float:1.794485E38 double:1.052935569E-314;
         r3 = r1.getDrawable(r3);
         chat_inlineResultLocation = r3;
-        r3 = NUM; // 0x7var_e float:1.7945353E38 double:1.052935692E-314;
+        r3 = NUM; // 0x7var_ float:1.794536E38 double:1.0529356937E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_redLocationIcon = r3;
-        r3 = NUM; // 0x7var_cf float:1.7945517E38 double:1.052935732E-314;
+        r3 = NUM; // 0x7var_d5 float:1.794553E38 double:1.0529357347E-314;
         r3 = r1.getDrawable(r3);
         chat_msgInShadowDrawable = r3;
-        r3 = NUM; // 0x7var_de float:1.7945547E38 double:1.052935739E-314;
+        r3 = NUM; // 0x7var_e4 float:1.794556E38 double:1.052935742E-314;
         r3 = r1.getDrawable(r3);
         chat_msgOutShadowDrawable = r3;
-        r3 = NUM; // 0x7var_e3 float:1.7945558E38 double:1.0529357417E-314;
+        r3 = NUM; // 0x7var_e9 float:1.794557E38 double:1.0529357446E-314;
         r3 = r1.getDrawable(r3);
         chat_msgInMediaShadowDrawable = r3;
-        r3 = NUM; // 0x7var_e3 float:1.7945558E38 double:1.0529357417E-314;
+        r3 = NUM; // 0x7var_e9 float:1.794557E38 double:1.0529357446E-314;
         r3 = r1.getDrawable(r3);
         chat_msgOutMediaShadowDrawable = r3;
         r3 = NUM; // 0x7var_ float:1.7944848E38 double:1.0529355687E-314;
@@ -4010,10 +4024,10 @@ public class Theme {
         r3 = NUM; // 0x7var_ float:1.7944846E38 double:1.052935568E-314;
         r3 = r1.getDrawable(r3);
         chat_botInlineDrawable = r3;
-        r3 = NUM; // 0x7var_af float:1.7945971E38 double:1.0529358425E-314;
+        r3 = NUM; // 0x7var_b8 float:1.794599E38 double:1.052935847E-314;
         r3 = r1.getDrawable(r3);
         chat_systemDrawable = r3;
-        r3 = NUM; // 0x7var_f1 float:1.7945067E38 double:1.052935622E-314;
+        r3 = NUM; // 0x7var_f5 float:1.7945075E38 double:1.052935624E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_contextResult_shadowUnderSwitchDrawable = r3;
@@ -4107,16 +4121,16 @@ public class Theme {
         r4 = NUM; // 0x7var_c4 float:1.7944975E38 double:1.0529356E-314;
         r4 = r1.getDrawable(r4);
         r3[r7] = r4;
-        r3 = NUM; // 0x7var_e float:1.7945872E38 double:1.052935818E-314;
+        r3 = NUM; // 0x7var_ float:1.7945886E38 double:1.0529358217E-314;
         r3 = r1.getDrawable(r3);
         chat_shareDrawable = r3;
-        r3 = NUM; // 0x7var_d float:1.794587E38 double:1.0529358177E-314;
+        r3 = NUM; // 0x7var_ float:1.7945884E38 double:1.052935821E-314;
         r3 = r1.getDrawable(r3);
         chat_shareIconDrawable = r3;
         r3 = NUM; // 0x7var_d1 float:1.7945002E38 double:1.0529356063E-314;
         r3 = r1.getDrawable(r3);
         chat_replyIconDrawable = r3;
-        r3 = NUM; // 0x7var_ae float:1.794545E38 double:1.0529357155E-314;
+        r3 = NUM; // 0x7var_b4 float:1.7945462E38 double:1.0529357184E-314;
         r3 = r1.getDrawable(r3);
         chat_goIconDrawable = r3;
         r3 = chat_fileMiniStatesDrawable;
@@ -4167,7 +4181,7 @@ public class Theme {
         r3 = chat_fileMiniStatesDrawable;
         r3 = r3[r8];
         r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r10 = NUM; // 0x7var_d0 float:1.7946038E38 double:1.052935859E-314;
+        r10 = NUM; // 0x7var_d9 float:1.7946057E38 double:1.052935863E-314;
         r6 = createCircleDrawableWithIcon(r6, r10);
         r3[r5] = r6;
         r3 = chat_fileMiniStatesDrawable;
@@ -4178,16 +4192,16 @@ public class Theme {
         r3 = chat_fileMiniStatesDrawable;
         r3 = r3[r9];
         r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r10 = NUM; // 0x7var_d1 float:1.794604E38 double:1.0529358592E-314;
+        r10 = NUM; // 0x7var_da float:1.7946059E38 double:1.0529358637E-314;
         r6 = createCircleDrawableWithIcon(r6, r10);
         r3[r5] = r6;
         r3 = chat_fileMiniStatesDrawable;
         r3 = r3[r9];
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r6 = NUM; // 0x7var_d1 float:1.794604E38 double:1.0529358592E-314;
+        r6 = NUM; // 0x7var_da float:1.7946059E38 double:1.0529358637E-314;
         r4 = createCircleDrawableWithIcon(r4, r6);
         r3[r2] = r4;
-        r3 = NUM; // 0x7var_ea float:1.7945572E38 double:1.052935745E-314;
+        r3 = NUM; // 0x7var_f0 float:1.7945584E38 double:1.052935748E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_fileIcon = r3;
@@ -4195,7 +4209,7 @@ public class Theme {
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_flameIcon = r3;
-        r3 = NUM; // 0x7var_eb float:1.7945574E38 double:1.0529357456E-314;
+        r3 = NUM; // 0x7var_f1 float:1.7945586E38 double:1.0529357486E-314;
         r3 = r1.getDrawable(r3);
         r3 = r3.mutate();
         chat_gifIcon = r3;
@@ -4203,7 +4217,7 @@ public class Theme {
         r3 = r3[r5];
         r4 = NUM; // 0x42300000 float:44.0 double:5.48631236E-315;
         r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r10 = NUM; // 0x7var_ee float:1.794558E38 double:1.052935747E-314;
+        r10 = NUM; // 0x7var_f4 float:1.7945592E38 double:1.05293575E-314;
         r6 = createCircleDrawableWithIcon(r6, r10);
         r3[r5] = r6;
         r3 = chat_fileStatesDrawable;
@@ -4214,7 +4228,7 @@ public class Theme {
         r3 = chat_fileStatesDrawable;
         r3 = r3[r2];
         r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r10 = NUM; // 0x7var_ed float:1.7945578E38 double:1.0529357466E-314;
+        r10 = NUM; // 0x7var_f3 float:1.794559E38 double:1.0529357496E-314;
         r6 = createCircleDrawableWithIcon(r6, r10);
         r3[r5] = r6;
         r3 = chat_fileStatesDrawable;
@@ -4225,7 +4239,7 @@ public class Theme {
         r3 = chat_fileStatesDrawable;
         r3 = r3[r0];
         r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r10 = NUM; // 0x7var_ec float:1.7945576E38 double:1.052935746E-314;
+        r10 = NUM; // 0x7var_f2 float:1.7945588E38 double:1.052935749E-314;
         r6 = createCircleDrawableWithIcon(r6, r10);
         r3[r5] = r6;
         r3 = chat_fileStatesDrawable;
@@ -4236,7 +4250,7 @@ public class Theme {
         r3 = chat_fileStatesDrawable;
         r3 = r3[r7];
         r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r11 = NUM; // 0x7var_ea float:1.7945572E38 double:1.052935745E-314;
+        r11 = NUM; // 0x7var_f0 float:1.7945584E38 double:1.052935748E-314;
         r6 = createCircleDrawableWithIcon(r6, r11);
         r3[r5] = r6;
         r3 = chat_fileStatesDrawable;
@@ -4247,7 +4261,7 @@ public class Theme {
         r3 = chat_fileStatesDrawable;
         r3 = r3[r8];
         r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r11 = NUM; // 0x7var_e9 float:1.794557E38 double:1.0529357446E-314;
+        r11 = NUM; // 0x7var_ef float:1.7945582E38 double:1.0529357476E-314;
         r6 = createCircleDrawableWithIcon(r6, r11);
         r3[r5] = r6;
         r3 = chat_fileStatesDrawable;
@@ -4258,7 +4272,7 @@ public class Theme {
         r3 = chat_fileStatesDrawable;
         r3 = r3[r9];
         r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r12 = NUM; // 0x7var_ee float:1.794558E38 double:1.052935747E-314;
+        r12 = NUM; // 0x7var_f4 float:1.7945592E38 double:1.05293575E-314;
         r6 = createCircleDrawableWithIcon(r6, r12);
         r3[r5] = r6;
         r3 = chat_fileStatesDrawable;
@@ -4270,7 +4284,7 @@ public class Theme {
         r6 = 6;
         r3 = r3[r6];
         r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r12 = NUM; // 0x7var_ed float:1.7945578E38 double:1.0529357466E-314;
+        r12 = NUM; // 0x7var_f3 float:1.794559E38 double:1.0529357496E-314;
         r6 = createCircleDrawableWithIcon(r6, r12);
         r3[r5] = r6;
         r3 = chat_fileStatesDrawable;
@@ -4295,7 +4309,7 @@ public class Theme {
         r6 = 8;
         r3 = r3[r6];
         r6 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r12 = NUM; // 0x7var_ea float:1.7945572E38 double:1.052935745E-314;
+        r12 = NUM; // 0x7var_f0 float:1.7945584E38 double:1.052935748E-314;
         r6 = createCircleDrawableWithIcon(r6, r12);
         r3[r5] = r6;
         r3 = chat_fileStatesDrawable;
@@ -4340,7 +4354,7 @@ public class Theme {
         r3 = chat_photoStatesDrawables;
         r3 = r3[r0];
         r12 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r13 = NUM; // 0x7var_eb float:1.7945574E38 double:1.0529357456E-314;
+        r13 = NUM; // 0x7var_f1 float:1.7945586E38 double:1.0529357486E-314;
         r12 = createCircleDrawableWithIcon(r12, r13);
         r3[r5] = r12;
         r3 = chat_photoStatesDrawables;
@@ -4351,13 +4365,13 @@ public class Theme {
         r3 = chat_photoStatesDrawables;
         r3 = r3[r7];
         r12 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r13 = NUM; // 0x7var_ee float:1.794558E38 double:1.052935747E-314;
+        r13 = NUM; // 0x7var_f4 float:1.7945592E38 double:1.05293575E-314;
         r12 = createCircleDrawableWithIcon(r12, r13);
         r3[r5] = r12;
         r3 = chat_photoStatesDrawables;
         r3 = r3[r7];
         r7 = org.telegram.messenger.AndroidUtilities.dp(r6);
-        r12 = NUM; // 0x7var_ee float:1.794558E38 double:1.052935747E-314;
+        r12 = NUM; // 0x7var_f4 float:1.7945592E38 double:1.05293575E-314;
         r7 = createCircleDrawableWithIcon(r7, r12);
         r3[r2] = r7;
         r3 = chat_photoStatesDrawables;
@@ -4379,7 +4393,7 @@ public class Theme {
         r7 = r3[r7];
         r8 = 6;
         r3 = r3[r8];
-        r8 = NUM; // 0x7var_f float:1.7945744E38 double:1.052935787E-314;
+        r8 = NUM; // 0x7var_ float:1.7945758E38 double:1.0529357906E-314;
         r8 = r1.getDrawable(r8);
         r3[r2] = r8;
         r7[r5] = r8;
@@ -4461,18 +4475,18 @@ public class Theme {
         r3[r2] = r1;
         r1 = chat_contactDrawable;
         r3 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r6 = NUM; // 0x7var_c0 float:1.7945487E38 double:1.0529357244E-314;
+        r6 = NUM; // 0x7var_c6 float:1.7945499E38 double:1.0529357273E-314;
         r3 = createCircleDrawableWithIcon(r3, r6);
         r1[r5] = r3;
         r1 = chat_contactDrawable;
         r3 = org.telegram.messenger.AndroidUtilities.dp(r4);
-        r4 = NUM; // 0x7var_c0 float:1.7945487E38 double:1.0529357244E-314;
+        r4 = NUM; // 0x7var_c6 float:1.7945499E38 double:1.0529357273E-314;
         r3 = createCircleDrawableWithIcon(r3, r4);
         r1[r2] = r3;
         r1 = chat_locationDrawable;
         r3 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
         r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
-        r4 = NUM; // 0x7var_d4 float:1.7945527E38 double:1.0529357343E-314;
+        r4 = NUM; // 0x7var_da float:1.794554E38 double:1.052935737E-314;
         r3 = createRoundRectDrawableWithIcon(r3, r4);
         r1[r5] = r3;
         r1 = chat_locationDrawable;

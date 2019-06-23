@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
-import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC.Document;
 import org.telegram.tgnet.TLRPC.Photo;
@@ -24,7 +23,7 @@ import org.telegram.tgnet.TLRPC.TL_account_saveAutoDownloadSettings;
 import org.telegram.tgnet.TLRPC.TL_autoDownloadSettings;
 import org.telegram.tgnet.TLRPC.TL_error;
 
-public class DownloadController implements NotificationCenterDelegate {
+public class DownloadController extends BaseController implements NotificationCenterDelegate {
     public static final int AUTODOWNLOAD_TYPE_AUDIO = 2;
     public static final int AUTODOWNLOAD_TYPE_DOCUMENT = 8;
     public static final int AUTODOWNLOAD_TYPE_PHOTO = 1;
@@ -40,7 +39,6 @@ public class DownloadController implements NotificationCenterDelegate {
     public static final int PRESET_SIZE_NUM_VIDEO = 1;
     private HashMap<String, FileDownloadProgressListener> addLaterArray = new HashMap();
     private ArrayList<DownloadObject> audioDownloadQueue = new ArrayList();
-    private int currentAccount;
     public int currentMobilePreset;
     public int currentRoamingPreset;
     public int currentWifiPreset;
@@ -257,13 +255,13 @@ public class DownloadController implements NotificationCenterDelegate {
     }
 
     public DownloadController(int i) {
-        this.currentAccount = i;
+        super(i);
         SharedPreferences mainSettings = MessagesController.getMainSettings(this.currentAccount);
         this.lowPreset = new Preset(mainSettings.getString("preset0", "1_1_1_1_1048576_512000_512000_524288_0_0_1_1"));
         this.mediumPreset = new Preset(mainSettings.getString("preset1", "13_13_13_13_1048576_10485760_1048576_524288_1_1_1_0"));
         this.highPreset = new Preset(mainSettings.getString("preset2", "13_13_13_13_1048576_15728640_3145728_524288_1_1_1_0"));
         String str = "newConfig";
-        Object obj = (mainSettings.contains(str) || !UserConfig.getInstance(this.currentAccount).isClientActivated()) ? 1 : null;
+        Object obj = (mainSettings.contains(str) || !getUserConfig().isClientActivated()) ? 1 : null;
         String str2 = "currentRoamingPreset";
         String str3 = "currentWifiPreset";
         String str4 = "currentMobilePreset";
@@ -356,26 +354,26 @@ public class DownloadController implements NotificationCenterDelegate {
                 DownloadController.this.checkAutodownloadSettings();
             }
         }, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
-        if (UserConfig.getInstance(this.currentAccount).isClientActivated()) {
+        if (getUserConfig().isClientActivated()) {
             checkAutodownloadSettings();
         }
     }
 
     public /* synthetic */ void lambda$new$0$DownloadController() {
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidFailedLoad);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidLoad);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileLoadProgressChanged);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileUploadProgressChanged);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.httpFileDidLoad);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.httpFileDidFailedLoad);
+        getNotificationCenter().addObserver(this, NotificationCenter.fileDidFailedLoad);
+        getNotificationCenter().addObserver(this, NotificationCenter.fileDidLoad);
+        getNotificationCenter().addObserver(this, NotificationCenter.FileLoadProgressChanged);
+        getNotificationCenter().addObserver(this, NotificationCenter.FileUploadProgressChanged);
+        getNotificationCenter().addObserver(this, NotificationCenter.httpFileDidLoad);
+        getNotificationCenter().addObserver(this, NotificationCenter.httpFileDidFailedLoad);
         loadAutoDownloadConfig(false);
     }
 
     public void loadAutoDownloadConfig(boolean z) {
         if (!this.loadingAutoDownloadConfig) {
-            if (z || Math.abs(System.currentTimeMillis() - UserConfig.getInstance(this.currentAccount).autoDownloadConfigLoadTime) >= 86400000) {
+            if (z || Math.abs(System.currentTimeMillis() - getUserConfig().autoDownloadConfigLoadTime) >= 86400000) {
                 this.loadingAutoDownloadConfig = true;
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TL_account_getAutoDownloadSettings(), new -$$Lambda$DownloadController$Vy_RFVunDaT6j2u2tHT0TGLKrLk(this));
+                getConnectionsManager().sendRequest(new TL_account_getAutoDownloadSettings(), new -$$Lambda$DownloadController$Vy_RFVunDaT6j2u2tHT0TGLKrLk(this));
             }
         }
     }
@@ -387,8 +385,8 @@ public class DownloadController implements NotificationCenterDelegate {
     public /* synthetic */ void lambda$null$1$DownloadController(TLObject tLObject) {
         int i = 0;
         this.loadingAutoDownloadConfig = false;
-        UserConfig.getInstance(this.currentAccount).autoDownloadConfigLoadTime = System.currentTimeMillis();
-        UserConfig.getInstance(this.currentAccount).saveConfig(false);
+        getUserConfig().autoDownloadConfigLoadTime = System.currentTimeMillis();
+        getUserConfig().saveConfig(false);
         if (tLObject != null) {
             TL_account_autoDownloadSettings tL_account_autoDownloadSettings = (TL_account_autoDownloadSettings) tLObject;
             this.lowPreset.set(tL_account_autoDownloadSettings.low);
@@ -550,9 +548,9 @@ public class DownloadController implements NotificationCenterDelegate {
                     DownloadObject downloadObject = (DownloadObject) this.photoDownloadQueue.get(i);
                     TLObject tLObject = downloadObject.object;
                     if (tLObject instanceof Photo) {
-                        FileLoader.getInstance(this.currentAccount).cancelLoadFile(FileLoader.getClosestPhotoSizeWithSize(((Photo) tLObject).sizes, AndroidUtilities.getPhotoSize()));
+                        getFileLoader().cancelLoadFile(FileLoader.getClosestPhotoSizeWithSize(((Photo) tLObject).sizes, AndroidUtilities.getPhotoSize()));
                     } else if (tLObject instanceof Document) {
-                        FileLoader.getInstance(this.currentAccount).cancelLoadFile((Document) downloadObject.object);
+                        getFileLoader().cancelLoadFile((Document) downloadObject.object);
                     }
                 }
                 this.photoDownloadQueue.clear();
@@ -561,7 +559,7 @@ public class DownloadController implements NotificationCenterDelegate {
             }
             if ((currentDownloadMask & 2) == 0) {
                 for (i = 0; i < this.audioDownloadQueue.size(); i++) {
-                    FileLoader.getInstance(this.currentAccount).cancelLoadFile((Document) ((DownloadObject) this.audioDownloadQueue.get(i)).object);
+                    getFileLoader().cancelLoadFile((Document) ((DownloadObject) this.audioDownloadQueue.get(i)).object);
                 }
                 this.audioDownloadQueue.clear();
             } else if (this.audioDownloadQueue.isEmpty()) {
@@ -569,7 +567,7 @@ public class DownloadController implements NotificationCenterDelegate {
             }
             if ((currentDownloadMask & 8) == 0) {
                 for (i = 0; i < this.documentDownloadQueue.size(); i++) {
-                    FileLoader.getInstance(this.currentAccount).cancelLoadFile((Document) ((DownloadObject) this.documentDownloadQueue.get(i)).object);
+                    getFileLoader().cancelLoadFile((Document) ((DownloadObject) this.documentDownloadQueue.get(i)).object);
                 }
                 this.documentDownloadQueue.clear();
             } else if (this.documentDownloadQueue.isEmpty()) {
@@ -577,7 +575,7 @@ public class DownloadController implements NotificationCenterDelegate {
             }
             if ((currentDownloadMask & 4) == 0) {
                 for (currentDownloadMask = 0; currentDownloadMask < this.videoDownloadQueue.size(); currentDownloadMask++) {
-                    FileLoader.getInstance(this.currentAccount).cancelLoadFile((Document) ((DownloadObject) this.videoDownloadQueue.get(currentDownloadMask)).object);
+                    getFileLoader().cancelLoadFile((Document) ((DownloadObject) this.videoDownloadQueue.get(currentDownloadMask)).object);
                 }
                 this.videoDownloadQueue.clear();
             } else if (this.videoDownloadQueue.isEmpty()) {
@@ -585,19 +583,19 @@ public class DownloadController implements NotificationCenterDelegate {
             }
             currentDownloadMask = getAutodownloadMaskAll();
             if (currentDownloadMask == 0) {
-                MessagesStorage.getInstance(this.currentAccount).clearDownloadQueue(0);
+                getMessagesStorage().clearDownloadQueue(0);
             } else {
                 if ((currentDownloadMask & 1) == 0) {
-                    MessagesStorage.getInstance(this.currentAccount).clearDownloadQueue(1);
+                    getMessagesStorage().clearDownloadQueue(1);
                 }
                 if ((currentDownloadMask & 2) == 0) {
-                    MessagesStorage.getInstance(this.currentAccount).clearDownloadQueue(2);
+                    getMessagesStorage().clearDownloadQueue(2);
                 }
                 if ((currentDownloadMask & 4) == 0) {
-                    MessagesStorage.getInstance(this.currentAccount).clearDownloadQueue(4);
+                    getMessagesStorage().clearDownloadQueue(4);
                 }
                 if ((currentDownloadMask & 8) == 0) {
-                    MessagesStorage.getInstance(this.currentAccount).clearDownloadQueue(8);
+                    getMessagesStorage().clearDownloadQueue(8);
                 }
             }
         }
@@ -633,22 +631,22 @@ public class DownloadController implements NotificationCenterDelegate {
         return z;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:52:0x00b2  */
-    /* JADX WARNING: Removed duplicated region for block: B:48:0x00a6  */
-    /* JADX WARNING: Removed duplicated region for block: B:48:0x00a6  */
-    /* JADX WARNING: Removed duplicated region for block: B:52:0x00b2  */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x00e1  */
-    /* JADX WARNING: Removed duplicated region for block: B:52:0x00b2  */
-    /* JADX WARNING: Removed duplicated region for block: B:48:0x00a6  */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x00e1  */
-    /* JADX WARNING: Missing block: B:29:0x005b, code skipped:
-            if (org.telegram.messenger.ContactsController.getInstance(r9.currentAccount).contactsDict.containsKey(java.lang.Integer.valueOf(r5.user_id)) != false) goto L_0x005d;
+    /* JADX WARNING: Removed duplicated region for block: B:52:0x00ac  */
+    /* JADX WARNING: Removed duplicated region for block: B:48:0x00a0  */
+    /* JADX WARNING: Removed duplicated region for block: B:48:0x00a0  */
+    /* JADX WARNING: Removed duplicated region for block: B:52:0x00ac  */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x00db  */
+    /* JADX WARNING: Removed duplicated region for block: B:52:0x00ac  */
+    /* JADX WARNING: Removed duplicated region for block: B:48:0x00a0  */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x00db  */
+    /* JADX WARNING: Missing block: B:29:0x0059, code skipped:
+            if (getContactsController().contactsDict.containsKey(java.lang.Integer.valueOf(r5.user_id)) != false) goto L_0x005b;
      */
-    /* JADX WARNING: Missing block: B:36:0x0079, code skipped:
-            if (org.telegram.messenger.ContactsController.getInstance(r9.currentAccount).contactsDict.containsKey(java.lang.Integer.valueOf(r10.from_id)) != false) goto L_0x005d;
+    /* JADX WARNING: Missing block: B:36:0x0075, code skipped:
+            if (getContactsController().contactsDict.containsKey(java.lang.Integer.valueOf(r10.from_id)) != false) goto L_0x005b;
      */
-    /* JADX WARNING: Missing block: B:43:0x009a, code skipped:
-            if (org.telegram.messenger.ContactsController.getInstance(r9.currentAccount).contactsDict.containsKey(java.lang.Integer.valueOf(r10.from_id)) != false) goto L_0x005d;
+    /* JADX WARNING: Missing block: B:43:0x0094, code skipped:
+            if (getContactsController().contactsDict.containsKey(java.lang.Integer.valueOf(r10.from_id)) != false) goto L_0x005b;
      */
     public int canDownloadMedia(org.telegram.tgnet.TLRPC.Message r10) {
         /*
@@ -702,130 +700,127 @@ public class DownloadController implements NotificationCenterDelegate {
         r4 = 4;
     L_0x0041:
         r5 = r10.to_id;
-        if (r5 == 0) goto L_0x009f;
+        if (r5 == 0) goto L_0x0099;
     L_0x0045:
         r6 = r5.user_id;
-        if (r6 == 0) goto L_0x005f;
+        if (r6 == 0) goto L_0x005d;
     L_0x0049:
-        r6 = r9.currentAccount;
-        r6 = org.telegram.messenger.ContactsController.getInstance(r6);
+        r6 = r9.getContactsController();
         r6 = r6.contactsDict;
         r5 = r5.user_id;
         r5 = java.lang.Integer.valueOf(r5);
         r5 = r6.containsKey(r5);
-        if (r5 == 0) goto L_0x009f;
-    L_0x005d:
+        if (r5 == 0) goto L_0x0099;
+    L_0x005b:
         r5 = 0;
-        goto L_0x00a0;
-    L_0x005f:
+        goto L_0x009a;
+    L_0x005d:
         r5 = r5.chat_id;
-        if (r5 == 0) goto L_0x007e;
-    L_0x0063:
+        if (r5 == 0) goto L_0x007a;
+    L_0x0061:
         r5 = r10.from_id;
-        if (r5 == 0) goto L_0x007c;
-    L_0x0067:
-        r5 = r9.currentAccount;
-        r5 = org.telegram.messenger.ContactsController.getInstance(r5);
+        if (r5 == 0) goto L_0x0078;
+    L_0x0065:
+        r5 = r9.getContactsController();
         r5 = r5.contactsDict;
         r6 = r10.from_id;
         r6 = java.lang.Integer.valueOf(r6);
         r5 = r5.containsKey(r6);
-        if (r5 == 0) goto L_0x007c;
-    L_0x007b:
-        goto L_0x005d;
-    L_0x007c:
+        if (r5 == 0) goto L_0x0078;
+    L_0x0077:
+        goto L_0x005b;
+    L_0x0078:
         r5 = 2;
-        goto L_0x00a0;
-    L_0x007e:
+        goto L_0x009a;
+    L_0x007a:
         r5 = org.telegram.messenger.MessageObject.isMegagroup(r10);
-        if (r5 == 0) goto L_0x009d;
-    L_0x0084:
+        if (r5 == 0) goto L_0x0097;
+    L_0x0080:
         r5 = r10.from_id;
-        if (r5 == 0) goto L_0x007c;
-    L_0x0088:
-        r5 = r9.currentAccount;
-        r5 = org.telegram.messenger.ContactsController.getInstance(r5);
+        if (r5 == 0) goto L_0x0078;
+    L_0x0084:
+        r5 = r9.getContactsController();
         r5 = r5.contactsDict;
         r6 = r10.from_id;
         r6 = java.lang.Integer.valueOf(r6);
         r5 = r5.containsKey(r6);
-        if (r5 == 0) goto L_0x007c;
-    L_0x009c:
-        goto L_0x005d;
-    L_0x009d:
+        if (r5 == 0) goto L_0x0078;
+    L_0x0096:
+        goto L_0x005b;
+    L_0x0097:
         r5 = 3;
-        goto L_0x00a0;
-    L_0x009f:
+        goto L_0x009a;
+    L_0x0099:
         r5 = 1;
-    L_0x00a0:
+    L_0x009a:
         r6 = org.telegram.messenger.ApplicationLoader.isConnectedToWiFi();
-        if (r6 == 0) goto L_0x00b2;
-    L_0x00a6:
+        if (r6 == 0) goto L_0x00ac;
+    L_0x00a0:
         r6 = r9.wifiPreset;
         r6 = r6.enabled;
-        if (r6 != 0) goto L_0x00ad;
-    L_0x00ac:
+        if (r6 != 0) goto L_0x00a7;
+    L_0x00a6:
         return r0;
-    L_0x00ad:
+    L_0x00a7:
         r6 = r9.getCurrentWiFiPreset();
-        goto L_0x00cf;
-    L_0x00b2:
+        goto L_0x00c9;
+    L_0x00ac:
         r6 = org.telegram.messenger.ApplicationLoader.isRoaming();
-        if (r6 == 0) goto L_0x00c4;
-    L_0x00b8:
+        if (r6 == 0) goto L_0x00be;
+    L_0x00b2:
         r6 = r9.roamingPreset;
         r6 = r6.enabled;
-        if (r6 != 0) goto L_0x00bf;
-    L_0x00be:
+        if (r6 != 0) goto L_0x00b9;
+    L_0x00b8:
         return r0;
-    L_0x00bf:
+    L_0x00b9:
         r6 = r9.getCurrentRoamingPreset();
-        goto L_0x00cf;
-    L_0x00c4:
+        goto L_0x00c9;
+    L_0x00be:
         r6 = r9.mobilePreset;
         r6 = r6.enabled;
-        if (r6 != 0) goto L_0x00cb;
-    L_0x00ca:
+        if (r6 != 0) goto L_0x00c5;
+    L_0x00c4:
         return r0;
-    L_0x00cb:
+    L_0x00c5:
         r6 = r9.getCurrentMobilePreset();
-    L_0x00cf:
+    L_0x00c9:
         r7 = r6.mask;
         r5 = r7[r5];
         r7 = r6.sizes;
         r8 = typeToIndex(r4);
         r7 = r7[r8];
         r10 = org.telegram.messenger.MessageObject.getMessageSize(r10);
-        if (r1 == 0) goto L_0x00f1;
-    L_0x00e1:
+        if (r1 == 0) goto L_0x00eb;
+    L_0x00db:
         r1 = r6.preloadVideo;
-        if (r1 == 0) goto L_0x00f1;
-    L_0x00e5:
-        if (r10 <= r7) goto L_0x00f1;
-    L_0x00e7:
+        if (r1 == 0) goto L_0x00eb;
+    L_0x00df:
+        if (r10 <= r7) goto L_0x00eb;
+    L_0x00e1:
         r1 = 2097152; // 0x200000 float:2.938736E-39 double:1.0361308E-317;
-        if (r7 <= r1) goto L_0x00f1;
-    L_0x00eb:
+        if (r7 <= r1) goto L_0x00eb;
+    L_0x00e5:
         r10 = r5 & r4;
-        if (r10 == 0) goto L_0x00f0;
-    L_0x00ef:
+        if (r10 == 0) goto L_0x00ea;
+    L_0x00e9:
         r0 = 2;
-    L_0x00f0:
+    L_0x00ea:
         return r0;
+    L_0x00eb:
+        if (r4 == r3) goto L_0x00f1;
+    L_0x00ed:
+        if (r10 == 0) goto L_0x00f8;
+    L_0x00ef:
+        if (r10 > r7) goto L_0x00f8;
     L_0x00f1:
-        if (r4 == r3) goto L_0x00f7;
+        if (r4 == r2) goto L_0x00f7;
     L_0x00f3:
-        if (r10 == 0) goto L_0x00fe;
-    L_0x00f5:
-        if (r10 > r7) goto L_0x00fe;
-    L_0x00f7:
-        if (r4 == r2) goto L_0x00fd;
-    L_0x00f9:
         r10 = r5 & r4;
-        if (r10 == 0) goto L_0x00fe;
-    L_0x00fd:
+        if (r10 == 0) goto L_0x00f8;
+    L_0x00f7:
         r0 = 1;
-    L_0x00fe:
+    L_0x00f8:
         return r0;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.DownloadController.canDownloadMedia(org.telegram.tgnet.TLRPC$Message):int");
@@ -939,12 +934,12 @@ public class DownloadController implements NotificationCenterDelegate {
             i2 = currentMobilePreset.sizes[2];
         }
         tL_autoDownloadSettings2.file_size_max = i2;
-        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_account_saveAutoDownloadSettings, -$$Lambda$DownloadController$0LtKveHOl8NLZKx-EDiX80oSJa0.INSTANCE);
+        getConnectionsManager().sendRequest(tL_account_saveAutoDownloadSettings, -$$Lambda$DownloadController$0LtKveHOl8NLZKx-EDiX80oSJa0.INSTANCE);
     }
 
     /* Access modifiers changed, original: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x00b9 A:{SYNTHETIC} */
-    /* JADX WARNING: Removed duplicated region for block: B:47:0x00b1  */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x00b5 A:{SYNTHETIC} */
+    /* JADX WARNING: Removed duplicated region for block: B:47:0x00ad  */
     public void processDownloadObjects(int r20, java.util.ArrayList<org.telegram.messenger.DownloadObject> r21) {
         /*
         r19 = this;
@@ -986,7 +981,7 @@ public class DownloadController implements NotificationCenterDelegate {
         r6 = 0;
     L_0x0028:
         r7 = r21.size();
-        if (r6 >= r7) goto L_0x00bd;
+        if (r6 >= r7) goto L_0x00b9;
     L_0x002e:
         r7 = r21;
         r8 = r7.get(r6);
@@ -1014,15 +1009,15 @@ public class DownloadController implements NotificationCenterDelegate {
         r9 = r3;
         r10 = r9;
     L_0x005d:
-        if (r9 == 0) goto L_0x00b9;
+        if (r9 == 0) goto L_0x00b5;
     L_0x005f:
         r11 = r0.downloadQueueKeys;
         r11 = r11.containsKey(r9);
         if (r11 == 0) goto L_0x0068;
     L_0x0067:
-        goto L_0x00b9;
+        goto L_0x00b5;
     L_0x0068:
-        if (r10 == 0) goto L_0x0092;
+        if (r10 == 0) goto L_0x0090;
     L_0x006a:
         r11 = r8.object;
         r11 = (org.telegram.tgnet.TLRPC.Photo) r11;
@@ -1040,47 +1035,45 @@ public class DownloadController implements NotificationCenterDelegate {
     L_0x007c:
         r18 = 0;
     L_0x007e:
-        r12 = r0.currentAccount;
-        r13 = org.telegram.messenger.FileLoader.getInstance(r12);
+        r13 = r19.getFileLoader();
         r14 = org.telegram.messenger.ImageLocation.getForPhoto(r10, r11);
         r15 = r8.parent;
         r16 = 0;
         r17 = 0;
         r13.loadFile(r14, r15, r16, r17, r18);
-        goto L_0x00ac;
-    L_0x0092:
+        goto L_0x00a8;
+    L_0x0090:
         r10 = r8.object;
         r11 = r10 instanceof org.telegram.tgnet.TLRPC.Document;
-        if (r11 == 0) goto L_0x00ae;
-    L_0x0098:
+        if (r11 == 0) goto L_0x00aa;
+    L_0x0096:
         r10 = (org.telegram.tgnet.TLRPC.Document) r10;
-        r11 = r0.currentAccount;
-        r11 = org.telegram.messenger.FileLoader.getInstance(r11);
+        r11 = r19.getFileLoader();
         r12 = r8.parent;
         r13 = r8.secret;
-        if (r13 == 0) goto L_0x00a8;
-    L_0x00a6:
+        if (r13 == 0) goto L_0x00a4;
+    L_0x00a2:
         r13 = 2;
-        goto L_0x00a9;
-    L_0x00a8:
+        goto L_0x00a5;
+    L_0x00a4:
         r13 = 0;
-    L_0x00a9:
+    L_0x00a5:
         r11.loadFile(r10, r12, r5, r13);
-    L_0x00ac:
+    L_0x00a8:
         r10 = 1;
-        goto L_0x00af;
-    L_0x00ae:
+        goto L_0x00ab;
+    L_0x00aa:
         r10 = 0;
-    L_0x00af:
-        if (r10 == 0) goto L_0x00b9;
-    L_0x00b1:
+    L_0x00ab:
+        if (r10 == 0) goto L_0x00b5;
+    L_0x00ad:
         r1.add(r8);
         r10 = r0.downloadQueueKeys;
         r10.put(r9, r8);
-    L_0x00b9:
+    L_0x00b5:
         r6 = r6 + 1;
         goto L_0x0028;
-    L_0x00bd:
+    L_0x00b9:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.DownloadController.processDownloadObjects(int, java.util.ArrayList):void");
@@ -1090,16 +1083,16 @@ public class DownloadController implements NotificationCenterDelegate {
     public void newDownloadObjectsAvailable(int i) {
         int currentDownloadMask = getCurrentDownloadMask();
         if (!((currentDownloadMask & 1) == 0 || (i & 1) == 0 || !this.photoDownloadQueue.isEmpty())) {
-            MessagesStorage.getInstance(this.currentAccount).getDownloadQueue(1);
+            getMessagesStorage().getDownloadQueue(1);
         }
         if (!((currentDownloadMask & 2) == 0 || (i & 2) == 0 || !this.audioDownloadQueue.isEmpty())) {
-            MessagesStorage.getInstance(this.currentAccount).getDownloadQueue(2);
+            getMessagesStorage().getDownloadQueue(2);
         }
         if (!((currentDownloadMask & 4) == 0 || (i & 4) == 0 || !this.videoDownloadQueue.isEmpty())) {
-            MessagesStorage.getInstance(this.currentAccount).getDownloadQueue(4);
+            getMessagesStorage().getDownloadQueue(4);
         }
         if ((currentDownloadMask & 8) != 0 && (i & 8) != 0 && this.documentDownloadQueue.isEmpty()) {
-            MessagesStorage.getInstance(this.currentAccount).getDownloadQueue(8);
+            getMessagesStorage().getDownloadQueue(8);
         }
     }
 
@@ -1108,7 +1101,7 @@ public class DownloadController implements NotificationCenterDelegate {
         if (downloadObject != null) {
             this.downloadQueueKeys.remove(str);
             if (i == 0 || i == 2) {
-                MessagesStorage.getInstance(this.currentAccount).removeFromDownloadQueue(downloadObject.id, downloadObject.type, false);
+                getMessagesStorage().removeFromDownloadQueue(downloadObject.id, downloadObject.type, false);
             }
             i = downloadObject.type;
             if (i == 1) {
@@ -1297,7 +1290,7 @@ public class DownloadController implements NotificationCenterDelegate {
             this.listenerInProgress = false;
             processLaterArrays();
             try {
-                arrayList = SendMessagesHelper.getInstance(this.currentAccount).getDelayedMessages(str);
+                arrayList = getSendMessagesHelper().getDelayedMessages(str);
                 if (arrayList != null) {
                     for (size2 = 0; size2 < arrayList.size(); size2++) {
                         DelayedMessage delayedMessage = (DelayedMessage) arrayList.get(size2);
@@ -1313,9 +1306,9 @@ public class DownloadController implements NotificationCenterDelegate {
                                     stringBuilder.append("_i");
                                     MessageObject messageObject = (MessageObject) hashMap.get(stringBuilder.toString());
                                     if (messageObject == null || !messageObject.isVideo()) {
-                                        MessagesController.getInstance(this.currentAccount).sendTyping(j, 4, 0);
+                                        getMessagesController().sendTyping(j, 4, 0);
                                     } else {
-                                        MessagesController.getInstance(this.currentAccount).sendTyping(j, 5, 0);
+                                        getMessagesController().sendTyping(j, 5, 0);
                                     }
                                     this.typingTimes.put(j, Long.valueOf(System.currentTimeMillis()));
                                 }
@@ -1324,15 +1317,15 @@ public class DownloadController implements NotificationCenterDelegate {
                                 delayedMessage.obj.getDocument();
                                 if (l == null || l.longValue() + 4000 < System.currentTimeMillis()) {
                                     if (delayedMessage.obj.isRoundVideo()) {
-                                        MessagesController.getInstance(this.currentAccount).sendTyping(j, 8, 0);
+                                        getMessagesController().sendTyping(j, 8, 0);
                                     } else if (delayedMessage.obj.isVideo()) {
-                                        MessagesController.getInstance(this.currentAccount).sendTyping(j, 5, 0);
+                                        getMessagesController().sendTyping(j, 5, 0);
                                     } else if (delayedMessage.obj.isVoice()) {
-                                        MessagesController.getInstance(this.currentAccount).sendTyping(j, 9, 0);
+                                        getMessagesController().sendTyping(j, 9, 0);
                                     } else if (delayedMessage.obj.getDocument() != null) {
-                                        MessagesController.getInstance(this.currentAccount).sendTyping(j, 3, 0);
+                                        getMessagesController().sendTyping(j, 3, 0);
                                     } else if (delayedMessage.photoSize != null) {
-                                        MessagesController.getInstance(this.currentAccount).sendTyping(j, 4, 0);
+                                        getMessagesController().sendTyping(j, 4, 0);
                                     }
                                     this.typingTimes.put(j, Long.valueOf(System.currentTimeMillis()));
                                 }
