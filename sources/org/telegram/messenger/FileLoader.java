@@ -37,7 +37,7 @@ import org.telegram.tgnet.TLRPC.TL_secureFile;
 import org.telegram.tgnet.TLRPC.WebDocument;
 import org.telegram.tgnet.TLRPC.WebPage;
 
-public class FileLoader {
+public class FileLoader extends BaseController {
     private static volatile FileLoader[] Instance = new FileLoader[3];
     public static final int MEDIA_DIR_AUDIO = 1;
     public static final int MEDIA_DIR_CACHE = 4;
@@ -48,7 +48,6 @@ public class FileLoader {
     private static SparseArray<File> mediaDirs = null;
     private ArrayList<FileLoadOperation> activeFileLoadOperation = new ArrayList();
     private SparseArray<LinkedList<FileLoadOperation>> audioLoadOperationQueues = new SparseArray();
-    private int currentAccount;
     private SparseIntArray currentAudioLoadOperationsCount = new SparseIntArray();
     private SparseIntArray currentLoadOperationsCount = new SparseIntArray();
     private SparseIntArray currentPhotoLoadOperationsCount = new SparseIntArray();
@@ -99,7 +98,7 @@ public class FileLoader {
     }
 
     public FileLoader(int i) {
-        this.currentAccount = i;
+        super(i);
     }
 
     public static void setMediaDirs(SparseArray<File> sparseArray) {
@@ -142,7 +141,7 @@ public class FileLoader {
         stringBuilder.append(attachFileName);
         stringBuilder.append(z ? "p" : "");
         this.loadingVideos.put(stringBuilder.toString(), Boolean.valueOf(true));
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.videoLoadingStateChanged, attachFileName);
+        getNotificationCenter().postNotificationName(NotificationCenter.videoLoadingStateChanged, attachFileName);
     }
 
     public void setLoadingVideo(Document document, boolean z, boolean z2) {
@@ -183,7 +182,7 @@ public class FileLoader {
         stringBuilder.append(attachFileName);
         stringBuilder.append(z ? "p" : "");
         if (this.loadingVideos.remove(stringBuilder.toString()) != null) {
-            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.videoLoadingStateChanged, attachFileName);
+            getNotificationCenter().postNotificationName(NotificationCenter.videoLoadingStateChanged, attachFileName);
         }
     }
 

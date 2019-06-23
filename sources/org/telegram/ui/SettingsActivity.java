@@ -58,13 +58,13 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ContactsController;
-import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
@@ -542,7 +542,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         }
 
         public /* synthetic */ void lambda$new$1$SettingsActivity$SearchAdapter() {
-            this.this$0.presentFragment(new ChangePhoneHelpActivity());
+            this.this$0.presentFragment(new ActionIntroActivity(3));
         }
 
         public /* synthetic */ void lambda$new$2$SettingsActivity$SearchAdapter() {
@@ -1458,7 +1458,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         i = this.rowCount;
         this.rowCount = i + 1;
         this.versionRow = i;
-        DataQuery.getInstance(this.currentAccount).checkFeaturedStickers();
+        MediaDataController.getInstance(this.currentAccount).checkFeaturedStickers();
         this.userInfo = MessagesController.getInstance(this.currentAccount).getUserFull(UserConfig.getInstance(this.currentAccount).getClientUserId());
         MessagesController.getInstance(this.currentAccount).loadUserInfo(UserConfig.getInstance(this.currentAccount).getCurrentUser(), true, this.classGuid);
         return true;
@@ -1848,7 +1848,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     presentFragment(new ChangeBioActivity());
                 }
             } else if (i == this.numberRow) {
-                presentFragment(new ChangePhoneHelpActivity());
+                presentFragment(new ActionIntroActivity(3));
             }
         } else if (i >= 0) {
             Object valueOf = Integer.valueOf(this.numberRow);

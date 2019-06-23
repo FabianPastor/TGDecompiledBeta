@@ -90,6 +90,7 @@ public class RadioCell extends FrameLayout {
     }
 
     public void setEnabled(boolean z, ArrayList<Animator> arrayList) {
+        super.setEnabled(z);
         float f = 1.0f;
         if (arrayList != null) {
             TextView textView = this.textView;

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build.VERSION;
 import android.os.Bundle;
@@ -19,11 +20,17 @@ import java.util.ArrayList;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ContactsController;
-import org.telegram.messenger.DataQuery;
+import org.telegram.messenger.DownloadController;
+import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.LocationController;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
+import org.telegram.messenger.SecretChatHelper;
+import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 
@@ -200,6 +207,11 @@ public class BaseFragment {
             this.actionBar = null;
         }
         this.parentLayout = null;
+    }
+
+    public void setParentFragment(BaseFragment baseFragment) {
+        setParentLayout(baseFragment.parentLayout);
+        this.fragmentView = createView(this.parentLayout.getContext());
     }
 
     /* Access modifiers changed, original: protected */
@@ -464,7 +476,6 @@ public class BaseFragment {
         return new ThemeDescription[0];
     }
 
-    /* Access modifiers changed, original: protected */
     public AccountInstance getAccountInstance() {
         return AccountInstance.getInstance(this.currentAccount);
     }
@@ -480,8 +491,8 @@ public class BaseFragment {
     }
 
     /* Access modifiers changed, original: protected */
-    public DataQuery getDataQuery() {
-        return getAccountInstance().getDataQuery();
+    public MediaDataController getMediaDataController() {
+        return getAccountInstance().getMediaDataController();
     }
 
     /* Access modifiers changed, original: protected */
@@ -490,8 +501,43 @@ public class BaseFragment {
     }
 
     /* Access modifiers changed, original: protected */
+    public LocationController getLocationController() {
+        return getAccountInstance().getLocationController();
+    }
+
+    /* Access modifiers changed, original: protected */
     public NotificationsController getNotificationsController() {
         return getAccountInstance().getNotificationsController();
+    }
+
+    /* Access modifiers changed, original: protected */
+    public MessagesStorage getMessagesStorage() {
+        return getAccountInstance().getMessagesStorage();
+    }
+
+    /* Access modifiers changed, original: protected */
+    public SendMessagesHelper getSendMessagesHelper() {
+        return getAccountInstance().getSendMessagesHelper();
+    }
+
+    /* Access modifiers changed, original: protected */
+    public FileLoader getFileLoader() {
+        return getAccountInstance().getFileLoader();
+    }
+
+    /* Access modifiers changed, original: protected */
+    public SecretChatHelper getSecretChatHelper() {
+        return getAccountInstance().getSecretChatHelper();
+    }
+
+    /* Access modifiers changed, original: protected */
+    public DownloadController getDownloadController() {
+        return getAccountInstance().getDownloadController();
+    }
+
+    /* Access modifiers changed, original: protected */
+    public SharedPreferences getNotificationsSettings() {
+        return getAccountInstance().getNotificationsSettings();
     }
 
     public NotificationCenter getNotificationCenter() {

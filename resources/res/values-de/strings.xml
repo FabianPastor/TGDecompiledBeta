@@ -529,7 +529,6 @@
     <string name="ChannelAdmin">Admin</string>
     <string name="ChannelAdministrators">Administratoren</string>
     <string name="ChannelAdminsInfo">Administratoren helfen dir, deinen Kanal zu verwalten. Tippen und halten, um sie zu löschen.</string>
-    <string name="ChannelAlertCreate">KANAL ERSTELLEN</string>
     <string name="ChannelAlertText">In einem Kanal kannst du deine Nachrichten an ein großes Publikum schicken.</string>
     <string name="ChannelAlertTitle">Was ist ein Kanal?</string>
     <string name="ChannelBlacklist">Entfernte Nutzer</string>
@@ -2029,7 +2028,6 @@
     <string name="PhoneMain">Hauptnummer</string>
     <string name="PhoneMobile">Mobil</string>
     <string name="PhoneNumberAlert">Deinen Kontakten wird deine neue Nummer ihrem Telefonbuch hinzugefügt, sofern sie deine alte Nummer gespeichert hatten und du sie nicht blockiert hattest.</string>
-    <string name="PhoneNumberChange">NUMMER ÄNDERN</string>
     <string name="PhoneNumberFlood">Du hast dein Konto leider zu oft gelöscht. Bitte warte einige Tage, erst dann kannst du dich erneut registrieren.</string>
     <string name="PhoneNumberHelp">Du kannst deine Telefonnummer hier ändern. Dein Konto und alle Daten in der Telegram-Cloud, also Nachrichten, Medien, Kontakte, etc. werden auf das neue Konto übertragen.\10\10**Wichtig:** Alle deine Kontakte erhalten deine **neue Nummer** ihrem Telefonbuch hinzugefügt, sofern sie deine alte Nummer gespeichert hatten und du sie nicht blockiert hattest.</string>
     <string name="PhoneOther">Sonstiges</string>

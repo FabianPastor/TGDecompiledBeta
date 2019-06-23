@@ -21,9 +21,9 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.util.ArrayList;
 import java.util.Locale;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
@@ -125,18 +125,18 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             if (i < StickersActivity.this.stickersStartRow || i >= StickersActivity.this.stickersEndRow) {
                 return (i == StickersActivity.this.suggestRow || i == StickersActivity.this.suggestInfoRow || i == StickersActivity.this.archivedRow || i == StickersActivity.this.archivedInfoRow || i == StickersActivity.this.featuredRow || i == StickersActivity.this.featuredInfoRow || i == StickersActivity.this.masksRow || i == StickersActivity.this.masksInfoRow) ? -2147483648L : (long) i;
             } else {
-                return ((TL_messages_stickerSet) DataQuery.getInstance(StickersActivity.this.currentAccount).getStickerSets(StickersActivity.this.currentType).get(i - StickersActivity.this.stickersStartRow)).set.id;
+                return ((TL_messages_stickerSet) MediaDataController.getInstance(StickersActivity.this.currentAccount).getStickerSets(StickersActivity.this.currentType).get(i - StickersActivity.this.stickersStartRow)).set.id;
             }
         }
 
         private void processSelectionOption(int i, TL_messages_stickerSet tL_messages_stickerSet) {
             if (i == 0) {
-                DataQuery instance = DataQuery.getInstance(StickersActivity.this.currentAccount);
+                MediaDataController instance = MediaDataController.getInstance(StickersActivity.this.currentAccount);
                 Activity parentActivity = StickersActivity.this.getParentActivity();
                 StickerSet stickerSet = tL_messages_stickerSet.set;
                 instance.removeStickersSet(parentActivity, stickerSet, !stickerSet.archived ? 1 : 2, StickersActivity.this, true);
             } else if (i == 1) {
-                DataQuery.getInstance(StickersActivity.this.currentAccount).removeStickersSet(StickersActivity.this.getParentActivity(), tL_messages_stickerSet.set, 0, StickersActivity.this, true);
+                MediaDataController.getInstance(StickersActivity.this.currentAccount).removeStickersSet(StickersActivity.this.getParentActivity(), tL_messages_stickerSet.set, 0, StickersActivity.this, true);
             } else {
                 String str = "/addstickers/%s";
                 String str2 = "https://";
@@ -179,7 +179,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             String string;
             String format;
             if (itemViewType == 0) {
-                ArrayList stickerSets = DataQuery.getInstance(StickersActivity.this.currentAccount).getStickerSets(StickersActivity.this.currentType);
+                ArrayList stickerSets = MediaDataController.getInstance(StickersActivity.this.currentAccount).getStickerSets(StickersActivity.this.currentType);
                 i -= StickersActivity.this.stickersStartRow;
                 StickerSetCell stickerSetCell = (StickerSetCell) viewHolder.itemView;
                 TL_messages_stickerSet tL_messages_stickerSet = (TL_messages_stickerSet) stickerSets.get(i);
@@ -198,7 +198,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                         }
                     }
                 } else if (i == StickersActivity.this.featuredRow) {
-                    i = DataQuery.getInstance(StickersActivity.this.currentAccount).getUnreadStickerSets().size();
+                    i = MediaDataController.getInstance(StickersActivity.this.currentAccount).getUnreadStickerSets().size();
                     TextSettingsCell textSettingsCell = (TextSettingsCell) viewHolder.itemView;
                     string = LocaleController.getString("FeaturedStickers", NUM);
                     if (i != 0) {
@@ -348,7 +348,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             if (i != i2) {
                 StickersActivity.this.needReorder = true;
             }
-            ArrayList stickerSets = DataQuery.getInstance(StickersActivity.this.currentAccount).getStickerSets(StickersActivity.this.currentType);
+            ArrayList stickerSets = MediaDataController.getInstance(StickersActivity.this.currentAccount).getStickerSets(StickersActivity.this.currentType);
             TL_messages_stickerSet tL_messages_stickerSet = (TL_messages_stickerSet) stickerSets.get(i - StickersActivity.this.stickersStartRow);
             stickerSets.set(i - StickersActivity.this.stickersStartRow, stickerSets.get(i2 - StickersActivity.this.stickersStartRow));
             stickerSets.set(i2 - StickersActivity.this.stickersStartRow, tL_messages_stickerSet);
@@ -365,9 +365,9 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
-        DataQuery.getInstance(this.currentAccount).checkStickers(this.currentType);
+        MediaDataController.getInstance(this.currentAccount).checkStickers(this.currentType);
         if (this.currentType == 0) {
-            DataQuery.getInstance(this.currentAccount).checkFeaturedStickers();
+            MediaDataController.getInstance(this.currentAccount).checkFeaturedStickers();
         }
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.stickersDidLoad);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.archivedStickersCountDidLoad);
@@ -419,7 +419,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
     public /* synthetic */ void lambda$createView$1$StickersActivity(View view, int i) {
         if (i >= this.stickersStartRow && i < this.stickersEndRow && getParentActivity() != null) {
             sendReorder();
-            TL_messages_stickerSet tL_messages_stickerSet = (TL_messages_stickerSet) DataQuery.getInstance(this.currentAccount).getStickerSets(this.currentType).get(i - this.stickersStartRow);
+            TL_messages_stickerSet tL_messages_stickerSet = (TL_messages_stickerSet) MediaDataController.getInstance(this.currentAccount).getStickerSets(this.currentType).get(i - this.stickersStartRow);
             ArrayList arrayList = tL_messages_stickerSet.documents;
             if (arrayList != null && !arrayList.isEmpty()) {
                 showDialog(new StickersAlert(getParentActivity(), this, null, tL_messages_stickerSet, null));
@@ -462,11 +462,11 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
     private void sendReorder() {
         if (this.needReorder) {
-            DataQuery.getInstance(this.currentAccount).calcNewHash(this.currentType);
+            MediaDataController.getInstance(this.currentAccount).calcNewHash(this.currentType);
             this.needReorder = false;
             TL_messages_reorderStickerSets tL_messages_reorderStickerSets = new TL_messages_reorderStickerSets();
             tL_messages_reorderStickerSets.masks = this.currentType == 1;
-            ArrayList stickerSets = DataQuery.getInstance(this.currentAccount).getStickerSets(this.currentType);
+            ArrayList stickerSets = MediaDataController.getInstance(this.currentAccount).getStickerSets(this.currentType);
             for (int i = 0; i < stickerSets.size(); i++) {
                 tL_messages_reorderStickerSets.order.add(Long.valueOf(((TL_messages_stickerSet) stickerSets.get(i)).set.id));
             }
@@ -500,7 +500,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             this.masksRow = -1;
             this.masksInfoRow = -1;
         }
-        if (DataQuery.getInstance(this.currentAccount).getArchivedStickersCount(this.currentType) != 0) {
+        if (MediaDataController.getInstance(this.currentAccount).getArchivedStickersCount(this.currentType) != 0) {
             i = this.rowCount;
             this.rowCount = i + 1;
             this.archivedRow = i;
@@ -511,7 +511,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             this.archivedRow = -1;
             this.archivedInfoRow = -1;
         }
-        ArrayList stickerSets = DataQuery.getInstance(this.currentAccount).getStickerSets(this.currentType);
+        ArrayList stickerSets = MediaDataController.getInstance(this.currentAccount).getStickerSets(this.currentType);
         if (stickerSets.isEmpty()) {
             this.stickersStartRow = -1;
             this.stickersEndRow = -1;

@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.DataQuery;
-import org.telegram.messenger.DataQuery.KeywordResult;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
+import org.telegram.messenger.MediaDataController;
+import org.telegram.messenger.MediaDataController.KeywordResult;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.messenger.UserConfig;
@@ -58,8 +58,8 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
     public StickersAdapter(Context context, StickersAdapterDelegate stickersAdapterDelegate) {
         this.mContext = context;
         this.delegate = stickersAdapterDelegate;
-        DataQuery.getInstance(this.currentAccount).checkStickers(0);
-        DataQuery.getInstance(this.currentAccount).checkStickers(1);
+        MediaDataController.getInstance(this.currentAccount).checkStickers(0);
+        MediaDataController.getInstance(this.currentAccount).checkStickers(1);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.newEmojiSuggestionsAvailable);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidLoad);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidFailedLoad);
@@ -217,7 +217,7 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
     private void searchEmojiByKeyword() {
         String[] currentKeyboardLanguage = AndroidUtilities.getCurrentKeyboardLanguage();
         if (!Arrays.equals(currentKeyboardLanguage, this.lastSearchKeyboardLanguage)) {
-            DataQuery.getInstance(this.currentAccount).fetchNewEmojiKeywords(currentKeyboardLanguage);
+            MediaDataController.getInstance(this.currentAccount).fetchNewEmojiKeywords(currentKeyboardLanguage);
         }
         this.lastSearchKeyboardLanguage = currentKeyboardLanguage;
         String str = this.lastSticker;
@@ -232,7 +232,7 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
     }
 
     public /* synthetic */ void lambda$searchEmojiByKeyword$1$StickersAdapter(String str) {
-        DataQuery.getInstance(this.currentAccount).getEmojiSuggestions(this.lastSearchKeyboardLanguage, str, true, new -$$Lambda$StickersAdapter$E0BPvXZpH_mYvi0Rgt-AsiZ8kew(this, str));
+        MediaDataController.getInstance(this.currentAccount).getEmojiSuggestions(this.lastSearchKeyboardLanguage, str, true, new -$$Lambda$StickersAdapter$IWP-RbXaJ9N4HusD1vEW5c2KLHE(this, str));
     }
 
     public /* synthetic */ void lambda$null$0$StickersAdapter(String str, ArrayList arrayList, String str2) {
@@ -342,194 +342,186 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
     L_0x009f:
         r11 = r5.toString();
         r10.lastSticker = r11;
-        if (r2 == 0) goto L_0x00b7;
-    L_0x00a7:
+        r11 = r10.stickersToLoad;
+        r11.clear();
+        if (r2 == 0) goto L_0x00bc;
+    L_0x00ac:
         r11 = org.telegram.messenger.Emoji.isValidEmoji(r3);
-        if (r11 != 0) goto L_0x00b5;
-    L_0x00ad:
+        if (r11 != 0) goto L_0x00ba;
+    L_0x00b2:
         r11 = r10.lastSticker;
         r11 = org.telegram.messenger.Emoji.isValidEmoji(r11);
-        if (r11 == 0) goto L_0x00b7;
-    L_0x00b5:
-        r11 = 1;
-        goto L_0x00b8;
-    L_0x00b7:
-        r11 = 0;
-    L_0x00b8:
-        if (r12 != 0) goto L_0x01c2;
+        if (r11 == 0) goto L_0x00bc;
     L_0x00ba:
+        r11 = 1;
+        goto L_0x00bd;
+    L_0x00bc:
+        r11 = 0;
+    L_0x00bd:
+        if (r12 != 0) goto L_0x01ba;
+    L_0x00bf:
         r12 = org.telegram.messenger.SharedConfig.suggestStickers;
-        if (r12 == r6) goto L_0x01c2;
-    L_0x00be:
-        if (r11 != 0) goto L_0x00c2;
-    L_0x00c0:
-        goto L_0x01c2;
-    L_0x00c2:
+        if (r12 == r6) goto L_0x01ba;
+    L_0x00c3:
+        if (r11 != 0) goto L_0x00c7;
+    L_0x00c5:
+        goto L_0x01ba;
+    L_0x00c7:
         r10.cancelEmojiSearch();
         r11 = 0;
         r10.stickers = r11;
         r10.stickersParents = r11;
         r10.stickersMap = r11;
         r12 = r10.lastReqId;
-        if (r12 == 0) goto L_0x00dd;
-    L_0x00d0:
+        if (r12 == 0) goto L_0x00e2;
+    L_0x00d5:
         r12 = r10.currentAccount;
         r12 = org.telegram.tgnet.ConnectionsManager.getInstance(r12);
         r2 = r10.lastReqId;
         r12.cancelRequest(r2, r0);
         r10.lastReqId = r1;
-    L_0x00dd:
+    L_0x00e2:
         r10.delayLocalResults = r1;
         r12 = r10.currentAccount;
-        r12 = org.telegram.messenger.DataQuery.getInstance(r12);
+        r12 = org.telegram.messenger.MediaDataController.getInstance(r12);
         r12 = r12.getRecentStickersNoCopy(r1);
         r2 = r10.currentAccount;
-        r2 = org.telegram.messenger.DataQuery.getInstance(r2);
+        r2 = org.telegram.messenger.MediaDataController.getInstance(r2);
         r2 = r2.getRecentStickersNoCopy(r6);
         r4 = r12.size();
         r5 = 0;
         r6 = 0;
-    L_0x00f9:
+    L_0x00fe:
         r7 = 5;
-        if (r5 >= r4) goto L_0x0117;
-    L_0x00fc:
+        if (r5 >= r4) goto L_0x011c;
+    L_0x0101:
         r8 = r12.get(r5);
         r8 = (org.telegram.tgnet.TLRPC.Document) r8;
         r9 = r10.lastSticker;
         r9 = r10.isValidSticker(r8, r9);
-        if (r9 == 0) goto L_0x0114;
-    L_0x010a:
+        if (r9 == 0) goto L_0x0119;
+    L_0x010f:
         r9 = "recent";
         r10.addStickerToResult(r8, r9);
         r6 = r6 + 1;
-        if (r6 < r7) goto L_0x0114;
-    L_0x0113:
-        goto L_0x0117;
-    L_0x0114:
+        if (r6 < r7) goto L_0x0119;
+    L_0x0118:
+        goto L_0x011c;
+    L_0x0119:
         r5 = r5 + 1;
-        goto L_0x00f9;
-    L_0x0117:
+        goto L_0x00fe;
+    L_0x011c:
         r4 = r2.size();
         r5 = 0;
-    L_0x011c:
-        if (r5 >= r4) goto L_0x0134;
-    L_0x011e:
+    L_0x0121:
+        if (r5 >= r4) goto L_0x0139;
+    L_0x0123:
         r6 = r2.get(r5);
         r6 = (org.telegram.tgnet.TLRPC.Document) r6;
         r8 = r10.lastSticker;
         r8 = r10.isValidSticker(r6, r8);
-        if (r8 == 0) goto L_0x0131;
-    L_0x012c:
+        if (r8 == 0) goto L_0x0136;
+    L_0x0131:
         r8 = "fav";
         r10.addStickerToResult(r6, r8);
-    L_0x0131:
+    L_0x0136:
         r5 = r5 + 1;
-        goto L_0x011c;
-    L_0x0134:
+        goto L_0x0121;
+    L_0x0139:
         r4 = r10.currentAccount;
-        r4 = org.telegram.messenger.DataQuery.getInstance(r4);
+        r4 = org.telegram.messenger.MediaDataController.getInstance(r4);
         r4 = r4.getAllStickers();
-        if (r4 == 0) goto L_0x0149;
-    L_0x0140:
+        if (r4 == 0) goto L_0x014e;
+    L_0x0145:
         r5 = r10.lastSticker;
         r4 = r4.get(r5);
         r4 = (java.util.ArrayList) r4;
-        goto L_0x014a;
-    L_0x0149:
+        goto L_0x014f;
+    L_0x014e:
         r4 = r11;
-    L_0x014a:
-        if (r4 == 0) goto L_0x0168;
-    L_0x014c:
+    L_0x014f:
+        if (r4 == 0) goto L_0x016d;
+    L_0x0151:
         r5 = r4.isEmpty();
-        if (r5 != 0) goto L_0x0168;
-    L_0x0152:
+        if (r5 != 0) goto L_0x016d;
+    L_0x0157:
         r5 = new java.util.ArrayList;
         r5.<init>(r4);
         r4 = r12.isEmpty();
-        if (r4 != 0) goto L_0x0165;
-    L_0x015d:
+        if (r4 != 0) goto L_0x016a;
+    L_0x0162:
         r4 = new org.telegram.ui.Adapters.StickersAdapter$1;
         r4.<init>(r2, r12);
         java.util.Collections.sort(r5, r4);
-    L_0x0165:
+    L_0x016a:
         r10.addStickersToResult(r5, r11);
-    L_0x0168:
+    L_0x016d:
         r12 = org.telegram.messenger.SharedConfig.suggestStickers;
-        if (r12 != 0) goto L_0x0171;
-    L_0x016c:
+        if (r12 != 0) goto L_0x0176;
+    L_0x0171:
         r12 = r10.lastSticker;
         r10.searchServerStickers(r12, r3);
-    L_0x0171:
+    L_0x0176:
         r12 = r10.stickers;
-        if (r12 == 0) goto L_0x01b6;
-    L_0x0175:
+        if (r12 == 0) goto L_0x01ae;
+    L_0x017a:
         r12 = r12.isEmpty();
-        if (r12 != 0) goto L_0x01b6;
-    L_0x017b:
+        if (r12 != 0) goto L_0x01ae;
+    L_0x0180:
         r12 = org.telegram.messenger.SharedConfig.suggestStickers;
-        if (r12 != 0) goto L_0x0191;
-    L_0x017f:
+        if (r12 != 0) goto L_0x0196;
+    L_0x0184:
         r12 = r10.stickers;
         r12 = r12.size();
-        if (r12 >= r7) goto L_0x0191;
-    L_0x0187:
+        if (r12 >= r7) goto L_0x0196;
+    L_0x018c:
         r10.delayLocalResults = r0;
         r11 = r10.delegate;
         r11.needChangePanelVisibility(r1);
         r10.visible = r1;
-        goto L_0x01b2;
-    L_0x0191:
+        goto L_0x01aa;
+    L_0x0196:
         r10.checkStickerFilesExistAndDownload();
-        r12 = r10.stickers;
-        if (r12 == 0) goto L_0x01a7;
-    L_0x0198:
-        r12 = r12.isEmpty();
-        if (r12 != 0) goto L_0x01a7;
-    L_0x019e:
         r12 = r10.stickersToLoad;
         r12 = r12.isEmpty();
-        if (r12 == 0) goto L_0x01a7;
-    L_0x01a6:
-        r1 = 1;
-    L_0x01a7:
-        if (r1 == 0) goto L_0x01ab;
-    L_0x01a9:
+        if (r12 == 0) goto L_0x01a3;
+    L_0x01a1:
         r10.keywordResults = r11;
-    L_0x01ab:
+    L_0x01a3:
         r11 = r10.delegate;
-        r11.needChangePanelVisibility(r1);
+        r11.needChangePanelVisibility(r12);
         r10.visible = r0;
-    L_0x01b2:
+    L_0x01aa:
         r10.notifyDataSetChanged();
-        goto L_0x01c1;
-    L_0x01b6:
+        goto L_0x01b9;
+    L_0x01ae:
         r11 = r10.visible;
-        if (r11 == 0) goto L_0x01c1;
-    L_0x01ba:
+        if (r11 == 0) goto L_0x01b9;
+    L_0x01b2:
         r11 = r10.delegate;
         r11.needChangePanelVisibility(r1);
         r10.visible = r1;
-    L_0x01c1:
+    L_0x01b9:
         return;
-    L_0x01c2:
+    L_0x01ba:
         r12 = r10.visible;
-        if (r12 == 0) goto L_0x01da;
-    L_0x01c6:
+        if (r12 == 0) goto L_0x01d2;
+    L_0x01be:
         r12 = r10.keywordResults;
-        if (r12 == 0) goto L_0x01d0;
-    L_0x01ca:
+        if (r12 == 0) goto L_0x01c8;
+    L_0x01c2:
         r12 = r12.isEmpty();
-        if (r12 == 0) goto L_0x01da;
-    L_0x01d0:
+        if (r12 == 0) goto L_0x01d2;
+    L_0x01c8:
         r10.visible = r1;
         r12 = r10.delegate;
         r12.needChangePanelVisibility(r1);
         r10.notifyDataSetChanged();
-    L_0x01da:
-        if (r11 != 0) goto L_0x01df;
-    L_0x01dc:
+    L_0x01d2:
+        if (r11 != 0) goto L_0x01d7;
+    L_0x01d4:
         r10.searchEmojiByKeyword();
-    L_0x01df:
+    L_0x01d7:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.StickersAdapter.loadStikersForEmoji(java.lang.CharSequence, boolean):void");
@@ -547,7 +539,7 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
     }
 
     public /* synthetic */ void lambda$null$2$StickersAdapter(String str, TLObject tLObject) {
-        boolean z = false;
+        int i = 0;
         this.lastReqId = 0;
         if (str.equals(this.lastSticker) && (tLObject instanceof TL_messages_stickers)) {
             this.delayLocalResults = false;
@@ -560,23 +552,22 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
             stringBuilder.append(str);
             addStickersToResult(arrayList2, stringBuilder.toString());
             ArrayList arrayList3 = this.stickers;
-            int size2 = arrayList3 != null ? arrayList3.size() : 0;
+            if (arrayList3 != null) {
+                i = arrayList3.size();
+            }
             if (!this.visible) {
-                arrayList2 = this.stickers;
-                if (!(arrayList2 == null || arrayList2.isEmpty())) {
+                arrayList3 = this.stickers;
+                if (!(arrayList3 == null || arrayList3.isEmpty())) {
                     checkStickerFilesExistAndDownload();
-                    arrayList2 = this.stickers;
-                    if (!(arrayList2 == null || arrayList2.isEmpty() || !this.stickersToLoad.isEmpty())) {
-                        z = true;
-                    }
-                    if (z) {
+                    boolean isEmpty = this.stickersToLoad.isEmpty();
+                    if (isEmpty) {
                         this.keywordResults = null;
                     }
-                    this.delegate.needChangePanelVisibility(z);
+                    this.delegate.needChangePanelVisibility(isEmpty);
                     this.visible = true;
                 }
             }
-            if (size != size2) {
+            if (size != i) {
                 notifyDataSetChanged();
             }
         }
@@ -584,12 +575,13 @@ public class StickersAdapter extends SelectionAdapter implements NotificationCen
 
     public void clearStickers() {
         if (!this.delayLocalResults && this.lastReqId == 0) {
-            this.lastSticker = null;
-            this.stickers = null;
-            this.stickersParents = null;
-            this.stickersMap = null;
+            if (this.stickersToLoad.isEmpty()) {
+                this.lastSticker = null;
+                this.stickers = null;
+                this.stickersParents = null;
+                this.stickersMap = null;
+            }
             this.keywordResults = null;
-            this.stickersToLoad.clear();
             notifyDataSetChanged();
             if (this.lastReqId != 0) {
                 ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.lastReqId, true);

@@ -6152,7 +6152,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r3 = r3 + 1;
         goto L_0x054c;
     L_0x0574:
-        r0 = NUM; // 0x7f0d06a3 float:1.874556E38 double:1.053130617E-314;
+        r0 = NUM; // 0x7f0d06d3 float:1.8745658E38 double:1.0531306407E-314;
         r3 = new java.lang.Object[r9];
         r6 = java.lang.Integer.valueOf(r13);
         r3[r12] = r6;
@@ -6573,7 +6573,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = 6;
         if (r0 != r4) goto L_0x0817;
     L_0x080e:
-        r0 = NUM; // 0x7f0d0270 float:1.874338E38 double:1.053130086E-314;
+        r0 = NUM; // 0x7f0d027e float:1.8743409E38 double:1.053130093E-314;
         r4 = "ChatBackground";
         r7 = org.telegram.messenger.LocaleController.getString(r4, r0);
     L_0x0817:
@@ -8736,7 +8736,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r2 = r1.hasGamePreview;
         if (r2 == 0) goto L_0x1654;
     L_0x1627:
-        r2 = NUM; // 0x7f0d013b float:1.8742754E38 double:1.053129933E-314;
+        r2 = NUM; // 0x7f0d013f float:1.8742762E38 double:1.053129935E-314;
         r3 = "AttachGame";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r4 = r2.toUpperCase();
@@ -8768,7 +8768,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = r4 & 4;
         if (r4 == 0) goto L_0x1672;
     L_0x1664:
-        r2 = NUM; // 0x7f0d07c4 float:1.8746147E38 double:1.0531307597E-314;
+        r2 = NUM; // 0x7f0d07f4 float:1.8746244E38 double:1.0531307835E-314;
         r4 = "PaymentReceipt";
         r2 = org.telegram.messenger.LocaleController.getString(r4, r2);
         r2 = r2.toUpperCase();
@@ -8777,13 +8777,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r2 = r2.test;
         if (r2 == 0) goto L_0x1684;
     L_0x1676:
-        r2 = NUM; // 0x7f0d07d6 float:1.8746183E38 double:1.0531307686E-314;
+        r2 = NUM; // 0x7f0d0806 float:1.874628E38 double:1.0531307924E-314;
         r4 = "PaymentTestInvoice";
         r2 = org.telegram.messenger.LocaleController.getString(r4, r2);
         r2 = r2.toUpperCase();
         goto L_0x1691;
     L_0x1684:
-        r2 = NUM; // 0x7f0d07b7 float:1.874612E38 double:1.0531307533E-314;
+        r2 = NUM; // 0x7f0d07e7 float:1.8746218E38 double:1.053130777E-314;
         r4 = "PaymentInvoice";
         r2 = org.telegram.messenger.LocaleController.getString(r4, r2);
         r2 = r2.toUpperCase();
@@ -8982,19 +8982,19 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x180a:
         if (r4 == 0) goto L_0x1816;
     L_0x180c:
-        r4 = NUM; // 0x7f0d01dd float:1.8743082E38 double:1.053130013E-314;
+        r4 = NUM; // 0x7f0d01e8 float:1.8743105E38 double:1.0531300186E-314;
         r5 = "CallMessageOutgoingMissed";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         goto L_0x1845;
     L_0x1816:
-        r4 = NUM; // 0x7f0d01dc float:1.874308E38 double:1.0531300127E-314;
+        r4 = NUM; // 0x7f0d01e7 float:1.8743102E38 double:1.053130018E-314;
         r5 = "CallMessageOutgoing";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         goto L_0x1845;
     L_0x1820:
         if (r4 == 0) goto L_0x182c;
     L_0x1822:
-        r4 = NUM; // 0x7f0d01db float:1.8743078E38 double:1.053130012E-314;
+        r4 = NUM; // 0x7f0d01e6 float:1.87431E38 double:1.0531300177E-314;
         r5 = "CallMessageIncomingMissed";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         goto L_0x1845;
@@ -9003,12 +9003,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = r4 instanceof org.telegram.tgnet.TLRPC.TL_phoneCallDiscardReasonBusy;
         if (r4 == 0) goto L_0x183c;
     L_0x1832:
-        r4 = NUM; // 0x7f0d01da float:1.8743076E38 double:1.0531300117E-314;
+        r4 = NUM; // 0x7f0d01e5 float:1.8743098E38 double:1.053130017E-314;
         r5 = "CallMessageIncomingDeclined";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         goto L_0x1845;
     L_0x183c:
-        r4 = NUM; // 0x7f0d01d9 float:1.8743074E38 double:1.053130011E-314;
+        r4 = NUM; // 0x7f0d01e4 float:1.8743096E38 double:1.0531300167E-314;
         r5 = "CallMessageIncoming";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
     L_0x1845:
@@ -9213,7 +9213,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0 = r2.format(r0);
         goto L_0x1993;
     L_0x19d1:
-        r0 = NUM; // 0x7f0d06a0 float:1.8745555E38 double:1.0531306155E-314;
+        r0 = NUM; // 0x7f0d06d0 float:1.8745652E38 double:1.053130639E-314;
         r2 = "NumberUnknown";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         goto L_0x1993;
@@ -9555,11 +9555,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = r4.closed;
         if (r4 == 0) goto L_0x1CLASSNAME;
     L_0x1c5d:
-        r4 = NUM; // 0x7f0d0442 float:1.8744326E38 double:1.053130316E-314;
+        r4 = NUM; // 0x7f0d0463 float:1.8744392E38 double:1.0531303324E-314;
         r5 = "FinalResults";
         goto L_0x1CLASSNAME;
     L_0x1CLASSNAME:
-        r4 = NUM; // 0x7f0d00e9 float:1.8742587E38 double:1.0531298927E-314;
+        r4 = NUM; // 0x7f0d00ed float:1.8742595E38 double:1.0531298946E-314;
         r5 = "AnonymousPoll";
     L_0x1CLASSNAME:
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
@@ -9629,7 +9629,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = r4.total_voters;
         if (r4 != 0) goto L_0x1ceb;
     L_0x1ce1:
-        r4 = NUM; // 0x7f0d0614 float:1.874527E38 double:1.0531305463E-314;
+        r4 = NUM; // 0x7f0d0640 float:1.874536E38 double:1.053130568E-314;
         r5 = "NoVotes";
         r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
         goto L_0x1cf1;
@@ -10662,7 +10662,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r12 = 0;
     L_0x2420:
         r2 = new android.text.StaticLayout;
-        r3 = NUM; // 0x7f0d0141 float:1.8742766E38 double:1.053129936E-314;
+        r3 = NUM; // 0x7f0d0145 float:1.8742774E38 double:1.053129938E-314;
         r4 = "AttachLiveLocation";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r4 = org.telegram.ui.ActionBar.Theme.chat_locationTitlePaint;
@@ -12886,7 +12886,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x3228:
         r2 = r1.photoImage;
         r3 = r59.getResources();
-        r4 = NUM; // 0x7var_b2 float:1.7945977E38 double:1.052935844E-314;
+        r4 = NUM; // 0x7var_bb float:1.7945996E38 double:1.0529358484E-314;
         r3 = r3.getDrawable(r4);
         r2.setImageBitmap(r3);
         goto L_0x3423;
@@ -13862,7 +13862,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r10 = r10 & 4;
         if (r10 == 0) goto L_0x390f;
     L_0x3905:
-        r10 = NUM; // 0x7f0d07c4 float:1.8746147E38 double:1.0531307597E-314;
+        r10 = NUM; // 0x7f0d07f4 float:1.8746244E38 double:1.0531307835E-314;
         r11 = "PaymentReceipt";
         r10 = org.telegram.messenger.LocaleController.getString(r11, r10);
         goto L_0x3934;
@@ -21011,7 +21011,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     L_0x00d8:
         r1 = new java.lang.StringBuilder;
         r1.<init>();
-        r2 = NUM; // 0x7f0d039f float:1.8743995E38 double:1.0531302355E-314;
+        r2 = NUM; // 0x7f0d03bd float:1.8744056E38 double:1.0531302504E-314;
         r9 = "EditedMessage";
         r2 = org.telegram.messenger.LocaleController.getString(r9, r2);
         r1.append(r2);
@@ -21259,52 +21259,52 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(messageFwdHeader.channel_id));
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:59:0x0194  */
-    /* JADX WARNING: Removed duplicated region for block: B:87:0x0232  */
-    /* JADX WARNING: Removed duplicated region for block: B:80:0x0219  */
-    /* JADX WARNING: Removed duplicated region for block: B:91:0x0245  */
-    /* JADX WARNING: Removed duplicated region for block: B:90:0x0242  */
-    /* JADX WARNING: Removed duplicated region for block: B:110:0x032d  */
-    /* JADX WARNING: Removed duplicated region for block: B:94:0x0250  */
-    /* JADX WARNING: Removed duplicated region for block: B:124:0x03b7 A:{Catch:{ Exception -> 0x03bb }} */
-    /* JADX WARNING: Removed duplicated region for block: B:123:0x0386 A:{Catch:{ Exception -> 0x03bb }} */
-    /* JADX WARNING: Removed duplicated region for block: B:130:0x03cb  */
-    /* JADX WARNING: Removed duplicated region for block: B:129:0x03c7  */
-    /* JADX WARNING: Removed duplicated region for block: B:141:0x03f7  */
-    /* JADX WARNING: Removed duplicated region for block: B:144:0x0415  */
-    /* JADX WARNING: Removed duplicated region for block: B:147:0x0433  */
-    /* JADX WARNING: Removed duplicated region for block: B:160:0x0465  */
-    /* JADX WARNING: Removed duplicated region for block: B:156:0x0445  */
-    /* JADX WARNING: Removed duplicated region for block: B:173:0x0523  */
-    /* JADX WARNING: Removed duplicated region for block: B:172:0x04da  */
-    /* JADX WARNING: Removed duplicated region for block: B:185:0x060a A:{Catch:{ Exception -> 0x0616 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:190:0x0620  */
-    /* JADX WARNING: Removed duplicated region for block: B:40:0x0152  */
-    /* JADX WARNING: Removed duplicated region for block: B:48:0x0167  */
-    /* JADX WARNING: Removed duplicated region for block: B:55:0x017b A:{SKIP} */
-    /* JADX WARNING: Removed duplicated region for block: B:59:0x0194  */
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x01a0  */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x01d1  */
-    /* JADX WARNING: Removed duplicated region for block: B:80:0x0219  */
-    /* JADX WARNING: Removed duplicated region for block: B:87:0x0232  */
-    /* JADX WARNING: Removed duplicated region for block: B:90:0x0242  */
-    /* JADX WARNING: Removed duplicated region for block: B:91:0x0245  */
-    /* JADX WARNING: Removed duplicated region for block: B:94:0x0250  */
-    /* JADX WARNING: Removed duplicated region for block: B:110:0x032d  */
-    /* JADX WARNING: Removed duplicated region for block: B:115:0x0352 A:{Catch:{ Exception -> 0x03bb }} */
-    /* JADX WARNING: Removed duplicated region for block: B:123:0x0386 A:{Catch:{ Exception -> 0x03bb }} */
-    /* JADX WARNING: Removed duplicated region for block: B:124:0x03b7 A:{Catch:{ Exception -> 0x03bb }} */
-    /* JADX WARNING: Removed duplicated region for block: B:129:0x03c7  */
-    /* JADX WARNING: Removed duplicated region for block: B:130:0x03cb  */
-    /* JADX WARNING: Removed duplicated region for block: B:141:0x03f7  */
-    /* JADX WARNING: Removed duplicated region for block: B:144:0x0415  */
-    /* JADX WARNING: Removed duplicated region for block: B:147:0x0433  */
-    /* JADX WARNING: Removed duplicated region for block: B:156:0x0445  */
-    /* JADX WARNING: Removed duplicated region for block: B:160:0x0465  */
-    /* JADX WARNING: Removed duplicated region for block: B:172:0x04da  */
-    /* JADX WARNING: Removed duplicated region for block: B:173:0x0523  */
-    /* JADX WARNING: Removed duplicated region for block: B:185:0x060a A:{Catch:{ Exception -> 0x0616 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:190:0x0620  */
+    /* JADX WARNING: Removed duplicated region for block: B:59:0x0191  */
+    /* JADX WARNING: Removed duplicated region for block: B:87:0x022f  */
+    /* JADX WARNING: Removed duplicated region for block: B:80:0x0216  */
+    /* JADX WARNING: Removed duplicated region for block: B:91:0x0242  */
+    /* JADX WARNING: Removed duplicated region for block: B:90:0x023f  */
+    /* JADX WARNING: Removed duplicated region for block: B:111:0x0335  */
+    /* JADX WARNING: Removed duplicated region for block: B:94:0x024d  */
+    /* JADX WARNING: Removed duplicated region for block: B:125:0x03bf A:{Catch:{ Exception -> 0x03c3 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:124:0x038e A:{Catch:{ Exception -> 0x03c3 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x03d3  */
+    /* JADX WARNING: Removed duplicated region for block: B:130:0x03cf  */
+    /* JADX WARNING: Removed duplicated region for block: B:142:0x03ff  */
+    /* JADX WARNING: Removed duplicated region for block: B:145:0x041d  */
+    /* JADX WARNING: Removed duplicated region for block: B:148:0x043b  */
+    /* JADX WARNING: Removed duplicated region for block: B:161:0x046d  */
+    /* JADX WARNING: Removed duplicated region for block: B:157:0x044d  */
+    /* JADX WARNING: Removed duplicated region for block: B:174:0x052b  */
+    /* JADX WARNING: Removed duplicated region for block: B:173:0x04e2  */
+    /* JADX WARNING: Removed duplicated region for block: B:186:0x060d A:{Catch:{ Exception -> 0x0619 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:191:0x0623  */
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x0150  */
+    /* JADX WARNING: Removed duplicated region for block: B:48:0x0165  */
+    /* JADX WARNING: Removed duplicated region for block: B:55:0x0179 A:{SKIP} */
+    /* JADX WARNING: Removed duplicated region for block: B:59:0x0191  */
+    /* JADX WARNING: Removed duplicated region for block: B:62:0x019d  */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x01ce  */
+    /* JADX WARNING: Removed duplicated region for block: B:80:0x0216  */
+    /* JADX WARNING: Removed duplicated region for block: B:87:0x022f  */
+    /* JADX WARNING: Removed duplicated region for block: B:90:0x023f  */
+    /* JADX WARNING: Removed duplicated region for block: B:91:0x0242  */
+    /* JADX WARNING: Removed duplicated region for block: B:94:0x024d  */
+    /* JADX WARNING: Removed duplicated region for block: B:111:0x0335  */
+    /* JADX WARNING: Removed duplicated region for block: B:116:0x035a A:{Catch:{ Exception -> 0x03c3 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:124:0x038e A:{Catch:{ Exception -> 0x03c3 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:125:0x03bf A:{Catch:{ Exception -> 0x03c3 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:130:0x03cf  */
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x03d3  */
+    /* JADX WARNING: Removed duplicated region for block: B:142:0x03ff  */
+    /* JADX WARNING: Removed duplicated region for block: B:145:0x041d  */
+    /* JADX WARNING: Removed duplicated region for block: B:148:0x043b  */
+    /* JADX WARNING: Removed duplicated region for block: B:157:0x044d  */
+    /* JADX WARNING: Removed duplicated region for block: B:161:0x046d  */
+    /* JADX WARNING: Removed duplicated region for block: B:173:0x04e2  */
+    /* JADX WARNING: Removed duplicated region for block: B:174:0x052b  */
+    /* JADX WARNING: Removed duplicated region for block: B:186:0x060d A:{Catch:{ Exception -> 0x0619 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:191:0x0623  */
     private void setMessageObjectInternal(org.telegram.messenger.MessageObject r39) {
         /*
         r38 = this;
@@ -21406,438 +21406,442 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1.namesOffset = r5;
         r0 = r2.messageOwner;
         r6 = r0.via_bot_id;
-        r7 = NUM; // 0x7f0d0a4f float:1.8747467E38 double:1.0531310814E-314;
-        r8 = "ViaBot";
-        r9 = 2;
+        r7 = "@";
+        r8 = NUM; // 0x7f0d0a96 float:1.8747611E38 double:1.0531311165E-314;
+        r9 = "ViaBot";
+        r10 = 2;
         if (r6 == 0) goto L_0x0104;
-    L_0x00aa:
+    L_0x00ac:
         r0 = r1.currentAccount;
         r0 = org.telegram.messenger.MessagesController.getInstance(r0);
         r6 = r2.messageOwner;
         r6 = r6.via_bot_id;
         r6 = java.lang.Integer.valueOf(r6);
         r0 = r0.getUser(r6);
-        if (r0 == 0) goto L_0x014c;
-    L_0x00be:
+        if (r0 == 0) goto L_0x014a;
+    L_0x00c0:
         r6 = r0.username;
-        if (r6 == 0) goto L_0x014c;
-    L_0x00c2:
+        if (r6 == 0) goto L_0x014a;
+    L_0x00c4:
         r6 = r6.length();
-        if (r6 <= 0) goto L_0x014c;
-    L_0x00c8:
+        if (r6 <= 0) goto L_0x014a;
+    L_0x00ca:
         r6 = new java.lang.StringBuilder;
         r6.<init>();
-        r10 = "@";
-        r6.append(r10);
-        r10 = r0.username;
-        r6.append(r10);
+        r6.append(r7);
+        r7 = r0.username;
+        r6.append(r7);
         r6 = r6.toString();
-        r10 = new java.lang.Object[r9];
-        r11 = org.telegram.messenger.LocaleController.getString(r8, r7);
-        r10[r5] = r11;
-        r10[r3] = r6;
+        r7 = new java.lang.Object[r10];
+        r11 = org.telegram.messenger.LocaleController.getString(r9, r8);
+        r7[r5] = r11;
+        r7[r3] = r6;
         r11 = " %s <b>%s</b>";
-        r10 = java.lang.String.format(r11, r10);
-        r10 = org.telegram.messenger.AndroidUtilities.replaceTags(r10);
+        r7 = java.lang.String.format(r11, r7);
+        r7 = org.telegram.messenger.AndroidUtilities.replaceTags(r7);
         r11 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint;
-        r12 = r10.length();
-        r11 = r11.measureText(r10, r5, r12);
+        r12 = r7.length();
+        r11 = r11.measureText(r7, r5, r12);
         r11 = (double) r11;
         r11 = java.lang.Math.ceil(r11);
         r11 = (int) r11;
         r1.viaWidth = r11;
         r1.currentViaBotUser = r0;
-        goto L_0x014e;
+        goto L_0x014c;
     L_0x0104:
         r0 = r0.via_bot_name;
-        if (r0 == 0) goto L_0x014c;
+        if (r0 == 0) goto L_0x014a;
     L_0x0108:
         r0 = r0.length();
-        if (r0 <= 0) goto L_0x014c;
+        if (r0 <= 0) goto L_0x014a;
     L_0x010e:
         r0 = new java.lang.StringBuilder;
         r0.<init>();
-        r6 = "@";
-        r0.append(r6);
+        r0.append(r7);
         r6 = r2.messageOwner;
         r6 = r6.via_bot_name;
         r0.append(r6);
         r0 = r0.toString();
-        r6 = new java.lang.Object[r9];
-        r10 = org.telegram.messenger.LocaleController.getString(r8, r7);
-        r6[r5] = r10;
+        r6 = new java.lang.Object[r10];
+        r7 = org.telegram.messenger.LocaleController.getString(r9, r8);
+        r6[r5] = r7;
         r6[r3] = r0;
-        r10 = " %s <b>%s</b>";
-        r6 = java.lang.String.format(r10, r6);
+        r7 = " %s <b>%s</b>";
+        r6 = java.lang.String.format(r7, r6);
         r6 = org.telegram.messenger.AndroidUtilities.replaceTags(r6);
-        r10 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint;
+        r7 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint;
         r11 = r6.length();
-        r10 = r10.measureText(r6, r5, r11);
-        r10 = (double) r10;
-        r10 = java.lang.Math.ceil(r10);
-        r10 = (int) r10;
-        r1.viaWidth = r10;
-        r10 = r6;
+        r7 = r7.measureText(r6, r5, r11);
+        r11 = (double) r7;
+        r11 = java.lang.Math.ceil(r11);
+        r7 = (int) r11;
+        r1.viaWidth = r7;
+        r7 = r6;
         r6 = r0;
-        goto L_0x014e;
-    L_0x014c:
+        goto L_0x014c;
+    L_0x014a:
         r6 = r4;
-        r10 = r6;
-    L_0x014e:
+        r7 = r6;
+    L_0x014c:
         r0 = r1.drawName;
-        if (r0 == 0) goto L_0x0160;
-    L_0x0152:
+        if (r0 == 0) goto L_0x015e;
+    L_0x0150:
         r0 = r1.isChat;
-        if (r0 == 0) goto L_0x0160;
-    L_0x0156:
+        if (r0 == 0) goto L_0x015e;
+    L_0x0154:
         r0 = r1.currentMessageObject;
         r0 = r0.isOutOwner();
-        if (r0 != 0) goto L_0x0160;
-    L_0x015e:
+        if (r0 != 0) goto L_0x015e;
+    L_0x015c:
         r0 = 1;
-        goto L_0x0161;
-    L_0x0160:
+        goto L_0x015f;
+    L_0x015e:
         r0 = 0;
-    L_0x0161:
+    L_0x015f:
         r11 = r2.messageOwner;
         r11 = r11.fwd_from;
-        if (r11 == 0) goto L_0x016d;
-    L_0x0167:
+        if (r11 == 0) goto L_0x016b;
+    L_0x0165:
         r11 = r2.type;
         r12 = 14;
-        if (r11 != r12) goto L_0x0171;
+        if (r11 != r12) goto L_0x016f;
+    L_0x016b:
+        if (r6 == 0) goto L_0x016f;
     L_0x016d:
-        if (r6 == 0) goto L_0x0171;
-    L_0x016f:
         r11 = 1;
-        goto L_0x0172;
-    L_0x0171:
+        goto L_0x0170;
+    L_0x016f:
         r11 = 0;
-    L_0x0172:
+    L_0x0170:
         r13 = "fonts/rmedium.ttf";
         r15 = 32;
         r12 = 10;
         r14 = 5;
-        if (r0 != 0) goto L_0x0188;
+        if (r0 != 0) goto L_0x0185;
+    L_0x0179:
+        if (r11 == 0) goto L_0x017c;
     L_0x017b:
-        if (r11 == 0) goto L_0x017e;
-    L_0x017d:
-        goto L_0x0188;
-    L_0x017e:
+        goto L_0x0185;
+    L_0x017c:
         r1.currentNameString = r4;
         r1.nameLayout = r4;
         r1.nameWidth = r5;
         r3 = r4;
-        r11 = r8;
-        goto L_0x03cc;
-    L_0x0188:
+        goto L_0x03d4;
+    L_0x0185:
         r1.drawNameLayout = r3;
         r4 = r38.getMaxNameWidth();
         r1.nameWidth = r4;
         r4 = r1.nameWidth;
-        if (r4 >= 0) goto L_0x019c;
-    L_0x0194:
+        if (r4 >= 0) goto L_0x0199;
+    L_0x0191:
         r4 = NUM; // 0x42CLASSNAME float:100.0 double:5.53552857E-315;
         r4 = org.telegram.messenger.AndroidUtilities.dp(r4);
         r1.nameWidth = r4;
-    L_0x019c:
+    L_0x0199:
         r4 = r1.isMegagroup;
-        if (r4 == 0) goto L_0x01cd;
-    L_0x01a0:
+        if (r4 == 0) goto L_0x01ca;
+    L_0x019d:
         r4 = r1.currentChat;
-        if (r4 == 0) goto L_0x01cd;
-    L_0x01a4:
+        if (r4 == 0) goto L_0x01ca;
+    L_0x01a1:
         r4 = r1.currentMessageObject;
         r4 = r4.isForwardedChannelPost();
-        if (r4 == 0) goto L_0x01cd;
-    L_0x01ac:
-        r4 = NUM; // 0x7f0d036f float:1.8743898E38 double:1.053130212E-314;
-        r9 = "DiscussChannel";
-        r4 = org.telegram.messenger.LocaleController.getString(r9, r4);
-        r9 = org.telegram.ui.ActionBar.Theme.chat_adminPaint;
-        r9 = r9.measureText(r4);
+        if (r4 == 0) goto L_0x01ca;
+    L_0x01a9:
+        r4 = NUM; // 0x7f0d0381 float:1.8743934E38 double:1.0531302207E-314;
+        r10 = "DiscussChannel";
+        r4 = org.telegram.messenger.LocaleController.getString(r10, r4);
+        r10 = org.telegram.ui.ActionBar.Theme.chat_adminPaint;
+        r10 = r10.measureText(r4);
         r21 = r4;
-        r3 = (double) r9;
+        r3 = (double) r10;
         r3 = java.lang.Math.ceil(r3);
         r3 = (int) r3;
         r4 = r1.nameWidth;
         r4 = r4 - r3;
         r1.nameWidth = r4;
         r23 = r21;
-        r21 = r8;
-        goto L_0x0217;
-    L_0x01cd:
+        r21 = r9;
+        goto L_0x0214;
+    L_0x01ca:
         r3 = r1.currentUser;
-        if (r3 == 0) goto L_0x0212;
-    L_0x01d1:
+        if (r3 == 0) goto L_0x020f;
+    L_0x01ce:
         r3 = r1.currentMessageObject;
         r3 = r3.isOutOwner();
-        if (r3 != 0) goto L_0x0212;
-    L_0x01d9:
+        if (r3 != 0) goto L_0x020f;
+    L_0x01d6:
         r3 = r1.currentMessageObject;
         r3 = r3.isAnyKindOfSticker();
-        if (r3 != 0) goto L_0x0212;
-    L_0x01e1:
+        if (r3 != 0) goto L_0x020f;
+    L_0x01de:
         r3 = r1.currentMessageObject;
         r3 = r3.type;
-        if (r3 == r14) goto L_0x0212;
-    L_0x01e7:
+        if (r3 == r14) goto L_0x020f;
+    L_0x01e4:
         r3 = r1.delegate;
         r4 = r1.currentUser;
         r4 = r4.id;
         r3 = r3.isChatAdminCell(r4);
-        if (r3 == 0) goto L_0x0212;
-    L_0x01f3:
-        r3 = NUM; // 0x7f0d026d float:1.8743374E38 double:1.0531300844E-314;
+        if (r3 == 0) goto L_0x020f;
+    L_0x01f0:
+        r3 = NUM; // 0x7f0d027b float:1.8743403E38 double:1.0531300913E-314;
         r4 = "ChatAdmin";
         r4 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r3 = org.telegram.ui.ActionBar.Theme.chat_adminPaint;
         r3 = r3.measureText(r4);
-        r21 = r8;
-        r7 = (double) r3;
-        r7 = java.lang.Math.ceil(r7);
-        r3 = (int) r7;
-        r7 = r1.nameWidth;
-        r7 = r7 - r3;
-        r1.nameWidth = r7;
+        r21 = r9;
+        r8 = (double) r3;
+        r8 = java.lang.Math.ceil(r8);
+        r3 = (int) r8;
+        r8 = r1.nameWidth;
+        r8 = r8 - r3;
+        r1.nameWidth = r8;
         r23 = r4;
-        goto L_0x0217;
-    L_0x0212:
-        r21 = r8;
+        goto L_0x0214;
+    L_0x020f:
+        r21 = r9;
         r3 = 0;
         r23 = 0;
-    L_0x0217:
-        if (r0 == 0) goto L_0x0232;
-    L_0x0219:
+    L_0x0214:
+        if (r0 == 0) goto L_0x022f;
+    L_0x0216:
         r0 = r1.currentUser;
-        if (r0 == 0) goto L_0x0224;
-    L_0x021d:
+        if (r0 == 0) goto L_0x0221;
+    L_0x021a:
         r0 = org.telegram.messenger.UserObject.getUserName(r0);
         r1.currentNameString = r0;
-        goto L_0x0236;
-    L_0x0224:
+        goto L_0x0233;
+    L_0x0221:
         r0 = r1.currentChat;
-        if (r0 == 0) goto L_0x022d;
-    L_0x0228:
+        if (r0 == 0) goto L_0x022a;
+    L_0x0225:
         r0 = r0.title;
         r1.currentNameString = r0;
-        goto L_0x0236;
-    L_0x022d:
+        goto L_0x0233;
+    L_0x022a:
         r0 = "DELETED";
         r1.currentNameString = r0;
-        goto L_0x0236;
-    L_0x0232:
+        goto L_0x0233;
+    L_0x022f:
         r0 = "";
         r1.currentNameString = r0;
-    L_0x0236:
+    L_0x0233:
         r0 = r1.currentNameString;
         r0 = r0.replace(r12, r15);
         r4 = org.telegram.ui.ActionBar.Theme.chat_namePaint;
-        r7 = r1.nameWidth;
-        if (r11 == 0) goto L_0x0245;
+        r8 = r1.nameWidth;
+        if (r11 == 0) goto L_0x0242;
+    L_0x023f:
+        r9 = r1.viaWidth;
+        goto L_0x0243;
     L_0x0242:
-        r8 = r1.viaWidth;
-        goto L_0x0246;
-    L_0x0245:
-        r8 = 0;
-    L_0x0246:
-        r7 = r7 - r8;
-        r7 = (float) r7;
-        r8 = android.text.TextUtils.TruncateAt.END;
-        r0 = android.text.TextUtils.ellipsize(r0, r4, r7, r8);
-        if (r11 == 0) goto L_0x032d;
-    L_0x0250:
+        r9 = 0;
+    L_0x0243:
+        r8 = r8 - r9;
+        r8 = (float) r8;
+        r9 = android.text.TextUtils.TruncateAt.END;
+        r0 = android.text.TextUtils.ellipsize(r0, r4, r8, r9);
+        if (r11 == 0) goto L_0x0335;
+    L_0x024d:
         r4 = org.telegram.ui.ActionBar.Theme.chat_namePaint;
-        r7 = r0.length();
-        r4 = r4.measureText(r0, r5, r7);
-        r7 = (double) r4;
-        r7 = java.lang.Math.ceil(r7);
-        r4 = (int) r7;
+        r8 = r0.length();
+        r4 = r4.measureText(r0, r5, r8);
+        r8 = (double) r4;
+        r8 = java.lang.Math.ceil(r8);
+        r4 = (int) r8;
         r1.viaNameWidth = r4;
         r4 = r1.viaNameWidth;
-        if (r4 == 0) goto L_0x026f;
-    L_0x0266:
-        r7 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
-        r7 = org.telegram.messenger.AndroidUtilities.dp(r7);
-        r4 = r4 + r7;
+        if (r4 == 0) goto L_0x026c;
+    L_0x0263:
+        r8 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
+        r8 = org.telegram.messenger.AndroidUtilities.dp(r8);
+        r4 = r4 + r8;
         r1.viaNameWidth = r4;
-    L_0x026f:
+    L_0x026c:
         r4 = r1.currentMessageObject;
         r4 = r4.shouldDrawWithoutBackground();
-        if (r4 == 0) goto L_0x027e;
-    L_0x0277:
+        if (r4 == 0) goto L_0x0280;
+    L_0x0274:
         r4 = "chat_stickerViaBotNameText";
         r4 = org.telegram.ui.ActionBar.Theme.getColor(r4);
-        goto L_0x028f;
-    L_0x027e:
+    L_0x027a:
+        r9 = r21;
+        r8 = NUM; // 0x7f0d0a96 float:1.8747611E38 double:1.0531311165E-314;
+        goto L_0x0292;
+    L_0x0280:
         r4 = r1.currentMessageObject;
         r4 = r4.isOutOwner();
-        if (r4 == 0) goto L_0x0289;
-    L_0x0286:
+        if (r4 == 0) goto L_0x028b;
+    L_0x0288:
         r4 = "chat_outViaBotNameText";
-        goto L_0x028b;
-    L_0x0289:
-        r4 = "chat_inViaBotNameText";
+        goto L_0x028d;
     L_0x028b:
+        r4 = "chat_inViaBotNameText";
+    L_0x028d:
         r4 = org.telegram.ui.ActionBar.Theme.getColor(r4);
-    L_0x028f:
-        r7 = r1.currentNameString;
-        r7 = r7.length();
-        if (r7 <= 0) goto L_0x02e8;
-    L_0x0297:
-        r7 = new android.text.SpannableStringBuilder;
-        r8 = 3;
-        r8 = new java.lang.Object[r8];
-        r8[r5] = r0;
-        r11 = r21;
-        r9 = NUM; // 0x7f0d0a4f float:1.8747467E38 double:1.0531310814E-314;
-        r21 = org.telegram.messenger.LocaleController.getString(r11, r9);
+        goto L_0x027a;
+    L_0x0292:
+        r11 = org.telegram.messenger.LocaleController.getString(r9, r8);
+        r8 = r1.currentNameString;
+        r8 = r8.length();
+        if (r8 <= 0) goto L_0x02f0;
+    L_0x029e:
+        r8 = new android.text.SpannableStringBuilder;
+        r10 = 3;
+        r10 = new java.lang.Object[r10];
+        r10[r5] = r0;
         r20 = 1;
-        r8[r20] = r21;
+        r10[r20] = r11;
         r17 = 2;
-        r8[r17] = r6;
-        r9 = "%s %s %s";
-        r8 = java.lang.String.format(r9, r8);
-        r7.<init>(r8);
-        r8 = new org.telegram.ui.Components.TypefaceSpan;
-        r9 = android.graphics.Typeface.DEFAULT;
-        r8.<init>(r9, r5, r4);
-        r9 = r0.length();
-        r9 = r9 + 1;
+        r10[r17] = r6;
+        r14 = "%s %s %s";
+        r10 = java.lang.String.format(r14, r10);
+        r8.<init>(r10);
+        r10 = new org.telegram.ui.Components.TypefaceSpan;
+        r14 = android.graphics.Typeface.DEFAULT;
+        r10.<init>(r14, r5, r4);
+        r14 = r0.length();
+        r14 = r14 + 1;
         r22 = r0.length();
-        r16 = 4;
-        r12 = r22 + 4;
+        r22 = r22 + 1;
+        r24 = r11.length();
+        r12 = r22 + r24;
         r15 = 33;
-        r7.setSpan(r8, r9, r12, r15);
-        r8 = new org.telegram.ui.Components.TypefaceSpan;
-        r9 = org.telegram.messenger.AndroidUtilities.getTypeface(r13);
-        r8.<init>(r9, r5, r4);
+        r8.setSpan(r10, r14, r12, r15);
+        r10 = new org.telegram.ui.Components.TypefaceSpan;
+        r12 = org.telegram.messenger.AndroidUtilities.getTypeface(r13);
+        r10.<init>(r12, r5, r4);
         r0 = r0.length();
-        r0 = r0 + r14;
-        r4 = r7.length();
-        r7.setSpan(r8, r0, r4, r15);
-        goto L_0x0321;
-    L_0x02e8:
-        r11 = r21;
-        r7 = new android.text.SpannableStringBuilder;
-        r8 = 2;
-        r0 = new java.lang.Object[r8];
-        r8 = NUM; // 0x7f0d0a4f float:1.8747467E38 double:1.0531310814E-314;
-        r12 = org.telegram.messenger.LocaleController.getString(r11, r8);
-        r0[r5] = r12;
-        r8 = 1;
-        r0[r8] = r6;
-        r8 = "%s %s";
-        r0 = java.lang.String.format(r8, r0);
-        r7.<init>(r0);
+        r12 = 2;
+        r0 = r0 + r12;
+        r4 = r11.length();
+        r0 = r0 + r4;
+        r4 = r8.length();
+        r8.setSpan(r10, r0, r4, r15);
+        goto L_0x0329;
+    L_0x02f0:
+        r12 = 2;
+        r8 = new android.text.SpannableStringBuilder;
+        r0 = new java.lang.Object[r12];
+        r0[r5] = r11;
+        r10 = 1;
+        r0[r10] = r6;
+        r12 = "%s %s";
+        r0 = java.lang.String.format(r12, r0);
+        r8.<init>(r0);
         r0 = new org.telegram.ui.Components.TypefaceSpan;
-        r8 = android.graphics.Typeface.DEFAULT;
-        r0.<init>(r8, r5, r4);
-        r8 = 4;
-        r12 = 33;
-        r7.setSpan(r0, r5, r8, r12);
+        r12 = android.graphics.Typeface.DEFAULT;
+        r0.<init>(r12, r5, r4);
+        r12 = r11.length();
+        r12 = r12 + r10;
+        r14 = 33;
+        r8.setSpan(r0, r5, r12, r14);
         r0 = new org.telegram.ui.Components.TypefaceSpan;
-        r15 = org.telegram.messenger.AndroidUtilities.getTypeface(r13);
-        r0.<init>(r15, r5, r4);
-        r4 = r7.length();
-        r7.setSpan(r0, r8, r4, r12);
-    L_0x0321:
+        r12 = org.telegram.messenger.AndroidUtilities.getTypeface(r13);
+        r0.<init>(r12, r5, r4);
+        r4 = r11.length();
+        r4 = r4 + r10;
+        r10 = r8.length();
+        r8.setSpan(r0, r4, r10, r14);
+    L_0x0329:
         r0 = org.telegram.ui.ActionBar.Theme.chat_namePaint;
         r4 = r1.nameWidth;
         r4 = (float) r4;
-        r8 = android.text.TextUtils.TruncateAt.END;
-        r0 = android.text.TextUtils.ellipsize(r7, r0, r4, r8);
-        goto L_0x032f;
-    L_0x032d:
-        r11 = r21;
-    L_0x032f:
+        r10 = android.text.TextUtils.TruncateAt.END;
+        r0 = android.text.TextUtils.ellipsize(r8, r0, r4, r10);
+        goto L_0x0337;
+    L_0x0335:
+        r9 = r21;
+    L_0x0337:
         r31 = r0;
-        r0 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x03bb }
-        r32 = org.telegram.ui.ActionBar.Theme.chat_namePaint;	 Catch:{ Exception -> 0x03bb }
-        r4 = r1.nameWidth;	 Catch:{ Exception -> 0x03bb }
-        r7 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-        r8 = org.telegram.messenger.AndroidUtilities.dp(r7);	 Catch:{ Exception -> 0x03bb }
-        r33 = r4 + r8;
-        r34 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x03bb }
+        r0 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x03c3 }
+        r32 = org.telegram.ui.ActionBar.Theme.chat_namePaint;	 Catch:{ Exception -> 0x03c3 }
+        r4 = r1.nameWidth;	 Catch:{ Exception -> 0x03c3 }
+        r8 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+        r10 = org.telegram.messenger.AndroidUtilities.dp(r8);	 Catch:{ Exception -> 0x03c3 }
+        r33 = r4 + r10;
+        r34 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x03c3 }
         r35 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r36 = 0;
         r37 = 0;
         r30 = r0;
-        r30.<init>(r31, r32, r33, r34, r35, r36, r37);	 Catch:{ Exception -> 0x03bb }
-        r1.nameLayout = r0;	 Catch:{ Exception -> 0x03bb }
-        r0 = r1.nameLayout;	 Catch:{ Exception -> 0x03bb }
-        if (r0 == 0) goto L_0x0382;
-    L_0x0352:
-        r0 = r1.nameLayout;	 Catch:{ Exception -> 0x03bb }
-        r0 = r0.getLineCount();	 Catch:{ Exception -> 0x03bb }
-        if (r0 <= 0) goto L_0x0382;
+        r30.<init>(r31, r32, r33, r34, r35, r36, r37);	 Catch:{ Exception -> 0x03c3 }
+        r1.nameLayout = r0;	 Catch:{ Exception -> 0x03c3 }
+        r0 = r1.nameLayout;	 Catch:{ Exception -> 0x03c3 }
+        if (r0 == 0) goto L_0x038a;
     L_0x035a:
-        r0 = r1.nameLayout;	 Catch:{ Exception -> 0x03bb }
-        r0 = r0.getLineWidth(r5);	 Catch:{ Exception -> 0x03bb }
-        r7 = (double) r0;	 Catch:{ Exception -> 0x03bb }
-        r7 = java.lang.Math.ceil(r7);	 Catch:{ Exception -> 0x03bb }
-        r0 = (int) r7;	 Catch:{ Exception -> 0x03bb }
-        r1.nameWidth = r0;	 Catch:{ Exception -> 0x03bb }
-        r0 = r39.isAnyKindOfSticker();	 Catch:{ Exception -> 0x03bb }
-        if (r0 != 0) goto L_0x0379;
-    L_0x036e:
-        r0 = r1.namesOffset;	 Catch:{ Exception -> 0x03bb }
+        r0 = r1.nameLayout;	 Catch:{ Exception -> 0x03c3 }
+        r0 = r0.getLineCount();	 Catch:{ Exception -> 0x03c3 }
+        if (r0 <= 0) goto L_0x038a;
+    L_0x0362:
+        r0 = r1.nameLayout;	 Catch:{ Exception -> 0x03c3 }
+        r0 = r0.getLineWidth(r5);	 Catch:{ Exception -> 0x03c3 }
+        r10 = (double) r0;	 Catch:{ Exception -> 0x03c3 }
+        r10 = java.lang.Math.ceil(r10);	 Catch:{ Exception -> 0x03c3 }
+        r0 = (int) r10;	 Catch:{ Exception -> 0x03c3 }
+        r1.nameWidth = r0;	 Catch:{ Exception -> 0x03c3 }
+        r0 = r39.isAnyKindOfSticker();	 Catch:{ Exception -> 0x03c3 }
+        if (r0 != 0) goto L_0x0381;
+    L_0x0376:
+        r0 = r1.namesOffset;	 Catch:{ Exception -> 0x03c3 }
         r4 = NUM; // 0x41980000 float:19.0 double:5.43709615E-315;
-        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x03bb }
+        r4 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x03c3 }
         r0 = r0 + r4;
-        r1.namesOffset = r0;	 Catch:{ Exception -> 0x03bb }
-    L_0x0379:
-        r0 = r1.nameLayout;	 Catch:{ Exception -> 0x03bb }
-        r0 = r0.getLineLeft(r5);	 Catch:{ Exception -> 0x03bb }
-        r1.nameOffsetX = r0;	 Catch:{ Exception -> 0x03bb }
-        goto L_0x0384;
-    L_0x0382:
-        r1.nameWidth = r5;	 Catch:{ Exception -> 0x03bb }
-    L_0x0384:
-        if (r23 == 0) goto L_0x03b7;
-    L_0x0386:
-        r0 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x03bb }
-        r24 = org.telegram.ui.ActionBar.Theme.chat_adminPaint;	 Catch:{ Exception -> 0x03bb }
+        r1.namesOffset = r0;	 Catch:{ Exception -> 0x03c3 }
+    L_0x0381:
+        r0 = r1.nameLayout;	 Catch:{ Exception -> 0x03c3 }
+        r0 = r0.getLineLeft(r5);	 Catch:{ Exception -> 0x03c3 }
+        r1.nameOffsetX = r0;	 Catch:{ Exception -> 0x03c3 }
+        goto L_0x038c;
+    L_0x038a:
+        r1.nameWidth = r5;	 Catch:{ Exception -> 0x03c3 }
+    L_0x038c:
+        if (r23 == 0) goto L_0x03bf;
+    L_0x038e:
+        r0 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x03c3 }
+        r24 = org.telegram.ui.ActionBar.Theme.chat_adminPaint;	 Catch:{ Exception -> 0x03c3 }
         r4 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-        r7 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x03bb }
-        r25 = r3 + r7;
-        r26 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x03bb }
+        r8 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x03c3 }
+        r25 = r3 + r8;
+        r26 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x03c3 }
         r27 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r28 = 0;
         r29 = 0;
         r22 = r0;
-        r22.<init>(r23, r24, r25, r26, r27, r28, r29);	 Catch:{ Exception -> 0x03bb }
-        r1.adminLayout = r0;	 Catch:{ Exception -> 0x03bb }
-        r0 = r1.nameWidth;	 Catch:{ Exception -> 0x03bb }
-        r0 = (float) r0;	 Catch:{ Exception -> 0x03bb }
-        r3 = r1.adminLayout;	 Catch:{ Exception -> 0x03bb }
-        r3 = r3.getLineWidth(r5);	 Catch:{ Exception -> 0x03bb }
+        r22.<init>(r23, r24, r25, r26, r27, r28, r29);	 Catch:{ Exception -> 0x03c3 }
+        r1.adminLayout = r0;	 Catch:{ Exception -> 0x03c3 }
+        r0 = r1.nameWidth;	 Catch:{ Exception -> 0x03c3 }
+        r0 = (float) r0;	 Catch:{ Exception -> 0x03c3 }
+        r3 = r1.adminLayout;	 Catch:{ Exception -> 0x03c3 }
+        r3 = r3.getLineWidth(r5);	 Catch:{ Exception -> 0x03c3 }
         r4 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
-        r7 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x03bb }
-        r4 = (float) r7;	 Catch:{ Exception -> 0x03bb }
+        r8 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x03c3 }
+        r4 = (float) r8;	 Catch:{ Exception -> 0x03c3 }
         r3 = r3 + r4;
         r0 = r0 + r3;
-        r0 = (int) r0;	 Catch:{ Exception -> 0x03bb }
-        r1.nameWidth = r0;	 Catch:{ Exception -> 0x03bb }
-        goto L_0x03bf;
-    L_0x03b7:
+        r0 = (int) r0;	 Catch:{ Exception -> 0x03c3 }
+        r1.nameWidth = r0;	 Catch:{ Exception -> 0x03c3 }
+        goto L_0x03c7;
+    L_0x03bf:
         r3 = 0;
-        r1.adminLayout = r3;	 Catch:{ Exception -> 0x03bb }
-        goto L_0x03bf;
-    L_0x03bb:
+        r1.adminLayout = r3;	 Catch:{ Exception -> 0x03c3 }
+        goto L_0x03c7;
+    L_0x03c3:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x03bf:
+    L_0x03c7:
         r0 = r1.currentNameString;
         r0 = r0.length();
-        if (r0 != 0) goto L_0x03cb;
-    L_0x03c7:
+        if (r0 != 0) goto L_0x03d3;
+    L_0x03cf:
         r3 = 0;
         r1.currentNameString = r3;
-        goto L_0x03cc;
-    L_0x03cb:
+        goto L_0x03d4;
+    L_0x03d3:
         r3 = 0;
-    L_0x03cc:
+    L_0x03d4:
         r1.currentForwardUser = r3;
         r1.currentForwardNameString = r3;
         r1.currentForwardChannel = r3;
@@ -21848,22 +21852,22 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0[r4] = r3;
         r1.forwardedNameWidth = r5;
         r0 = r1.drawForwardedName;
-        if (r0 == 0) goto L_0x061a;
-    L_0x03e1:
+        if (r0 == 0) goto L_0x061d;
+    L_0x03e9:
         r0 = r39.needDrawForwarded();
-        if (r0 == 0) goto L_0x061a;
-    L_0x03e7:
-        r0 = r1.currentPosition;
-        if (r0 == 0) goto L_0x03ef;
-    L_0x03eb:
-        r0 = r0.minY;
-        if (r0 != 0) goto L_0x061a;
+        if (r0 == 0) goto L_0x061d;
     L_0x03ef:
+        r0 = r1.currentPosition;
+        if (r0 == 0) goto L_0x03f7;
+    L_0x03f3:
+        r0 = r0.minY;
+        if (r0 != 0) goto L_0x061d;
+    L_0x03f7:
         r0 = r2.messageOwner;
         r0 = r0.fwd_from;
         r0 = r0.channel_id;
-        if (r0 == 0) goto L_0x040d;
-    L_0x03f7:
+        if (r0 == 0) goto L_0x0415;
+    L_0x03ff:
         r0 = r1.currentAccount;
         r0 = org.telegram.messenger.MessagesController.getInstance(r0);
         r3 = r2.messageOwner;
@@ -21872,12 +21876,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r3 = java.lang.Integer.valueOf(r3);
         r0 = r0.getChat(r3);
         r1.currentForwardChannel = r0;
-    L_0x040d:
+    L_0x0415:
         r0 = r2.messageOwner;
         r0 = r0.fwd_from;
         r0 = r0.from_id;
-        if (r0 == 0) goto L_0x042b;
-    L_0x0415:
+        if (r0 == 0) goto L_0x0433;
+    L_0x041d:
         r0 = r1.currentAccount;
         r0 = org.telegram.messenger.MessagesController.getInstance(r0);
         r3 = r2.messageOwner;
@@ -21886,122 +21890,122 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r3 = java.lang.Integer.valueOf(r3);
         r0 = r0.getUser(r3);
         r1.currentForwardUser = r0;
-    L_0x042b:
+    L_0x0433:
         r0 = r2.messageOwner;
         r0 = r0.fwd_from;
         r0 = r0.from_name;
-        if (r0 == 0) goto L_0x0435;
-    L_0x0433:
+        if (r0 == 0) goto L_0x043d;
+    L_0x043b:
         r1.currentForwardName = r0;
-    L_0x0435:
-        r0 = r1.currentForwardUser;
-        if (r0 != 0) goto L_0x0441;
-    L_0x0439:
-        r0 = r1.currentForwardChannel;
-        if (r0 != 0) goto L_0x0441;
     L_0x043d:
-        r0 = r1.currentForwardName;
-        if (r0 == 0) goto L_0x061a;
+        r0 = r1.currentForwardUser;
+        if (r0 != 0) goto L_0x0449;
     L_0x0441:
         r0 = r1.currentForwardChannel;
-        if (r0 == 0) goto L_0x0465;
+        if (r0 != 0) goto L_0x0449;
     L_0x0445:
-        r3 = r1.currentForwardUser;
-        if (r3 == 0) goto L_0x0460;
+        r0 = r1.currentForwardName;
+        if (r0 == 0) goto L_0x061d;
     L_0x0449:
+        r0 = r1.currentForwardChannel;
+        if (r0 == 0) goto L_0x046d;
+    L_0x044d:
+        r3 = r1.currentForwardUser;
+        if (r3 == 0) goto L_0x0468;
+    L_0x0451:
         r4 = 2;
-        r7 = new java.lang.Object[r4];
+        r8 = new java.lang.Object[r4];
         r0 = r0.title;
-        r7[r5] = r0;
+        r8[r5] = r0;
         r0 = org.telegram.messenger.UserObject.getUserName(r3);
         r3 = 1;
-        r7[r3] = r0;
+        r8[r3] = r0;
         r0 = "%s (%s)";
-        r0 = java.lang.String.format(r0, r7);
+        r0 = java.lang.String.format(r0, r8);
         r1.currentForwardNameString = r0;
-        goto L_0x0476;
-    L_0x0460:
+        goto L_0x047e;
+    L_0x0468:
         r0 = r0.title;
         r1.currentForwardNameString = r0;
-        goto L_0x0476;
-    L_0x0465:
+        goto L_0x047e;
+    L_0x046d:
         r0 = r1.currentForwardUser;
-        if (r0 == 0) goto L_0x0470;
-    L_0x0469:
+        if (r0 == 0) goto L_0x0478;
+    L_0x0471:
         r0 = org.telegram.messenger.UserObject.getUserName(r0);
         r1.currentForwardNameString = r0;
-        goto L_0x0476;
-    L_0x0470:
+        goto L_0x047e;
+    L_0x0478:
         r0 = r1.currentForwardName;
-        if (r0 == 0) goto L_0x0476;
-    L_0x0474:
+        if (r0 == 0) goto L_0x047e;
+    L_0x047c:
         r1.currentForwardNameString = r0;
-    L_0x0476:
+    L_0x047e:
         r0 = r38.getMaxNameWidth();
         r1.forwardedNameWidth = r0;
-        r0 = NUM; // 0x7f0d0496 float:1.8744496E38 double:1.0531303576E-314;
+        r0 = NUM; // 0x7f0d04b7 float:1.8744563E38 double:1.053130374E-314;
         r3 = "From";
         r0 = org.telegram.messenger.LocaleController.getString(r3, r0);
-        r3 = NUM; // 0x7f0d049e float:1.8744512E38 double:1.0531303615E-314;
+        r3 = NUM; // 0x7f0d04bf float:1.874458E38 double:1.053130378E-314;
         r4 = "FromFormatted";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r4 = "%1$s";
         r4 = r3.indexOf(r4);
-        r7 = org.telegram.ui.ActionBar.Theme.chat_forwardNamePaint;
-        r8 = new java.lang.StringBuilder;
-        r8.<init>();
-        r8.append(r0);
+        r8 = org.telegram.ui.ActionBar.Theme.chat_forwardNamePaint;
+        r10 = new java.lang.StringBuilder;
+        r10.<init>();
+        r10.append(r0);
         r0 = " ";
-        r8.append(r0);
-        r0 = r8.toString();
-        r0 = r7.measureText(r0);
-        r7 = (double) r0;
-        r7 = java.lang.Math.ceil(r7);
-        r0 = (int) r7;
-        r7 = r1.currentForwardNameString;
-        r8 = 32;
-        r12 = 10;
-        r7 = r7.replace(r12, r8);
-        r8 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint;
-        r12 = r1.forwardedNameWidth;
-        r12 = r12 - r0;
-        r15 = r1.viaWidth;
-        r12 = r12 - r15;
-        r12 = (float) r12;
-        r15 = android.text.TextUtils.TruncateAt.END;
-        r7 = android.text.TextUtils.ellipsize(r7, r8, r12, r15);
-        r8 = 1;
-        r12 = new java.lang.Object[r8];	 Catch:{ Exception -> 0x04d4 }
-        r12[r5] = r7;	 Catch:{ Exception -> 0x04d4 }
-        r8 = java.lang.String.format(r3, r12);	 Catch:{ Exception -> 0x04d4 }
-        goto L_0x04d8;
-    L_0x04d4:
-        r8 = r7.toString();
-    L_0x04d8:
-        if (r10 == 0) goto L_0x0523;
-    L_0x04da:
+        r10.append(r0);
+        r0 = r10.toString();
+        r0 = r8.measureText(r0);
+        r10 = (double) r0;
+        r10 = java.lang.Math.ceil(r10);
+        r0 = (int) r10;
+        r8 = r1.currentForwardNameString;
+        r10 = 32;
+        r11 = 10;
+        r8 = r8.replace(r11, r10);
+        r10 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint;
+        r11 = r1.forwardedNameWidth;
+        r11 = r11 - r0;
+        r12 = r1.viaWidth;
+        r11 = r11 - r12;
+        r11 = (float) r11;
+        r12 = android.text.TextUtils.TruncateAt.END;
+        r8 = android.text.TextUtils.ellipsize(r8, r10, r11, r12);
+        r10 = 1;
+        r11 = new java.lang.Object[r10];	 Catch:{ Exception -> 0x04dc }
+        r11[r5] = r8;	 Catch:{ Exception -> 0x04dc }
+        r10 = java.lang.String.format(r3, r11);	 Catch:{ Exception -> 0x04dc }
+        goto L_0x04e0;
+    L_0x04dc:
+        r10 = r8.toString();
+    L_0x04e0:
+        if (r7 == 0) goto L_0x052b;
+    L_0x04e2:
         r3 = new android.text.SpannableStringBuilder;
-        r10 = 3;
-        r10 = new java.lang.Object[r10];
-        r10[r5] = r8;
-        r9 = NUM; // 0x7f0d0a4f float:1.8747467E38 double:1.0531310814E-314;
-        r9 = org.telegram.messenger.LocaleController.getString(r11, r9);
+        r7 = 3;
+        r7 = new java.lang.Object[r7];
+        r7[r5] = r10;
+        r11 = NUM; // 0x7f0d0a96 float:1.8747611E38 double:1.0531311165E-314;
+        r9 = org.telegram.messenger.LocaleController.getString(r9, r11);
         r11 = 1;
-        r10[r11] = r9;
+        r7[r11] = r9;
         r9 = 2;
-        r10[r9] = r6;
+        r7[r9] = r6;
         r9 = "%s %s %s";
-        r9 = java.lang.String.format(r9, r10);
-        r3.<init>(r9);
-        r9 = org.telegram.ui.ActionBar.Theme.chat_forwardNamePaint;
-        r8 = r9.measureText(r8);
-        r8 = (double) r8;
-        r8 = java.lang.Math.ceil(r8);
-        r8 = (int) r8;
-        r1.viaNameWidth = r8;
-        r8 = new org.telegram.ui.Components.TypefaceSpan;
+        r7 = java.lang.String.format(r9, r7);
+        r3.<init>(r7);
+        r7 = org.telegram.ui.ActionBar.Theme.chat_forwardNamePaint;
+        r7 = r7.measureText(r10);
+        r9 = (double) r7;
+        r9 = java.lang.Math.ceil(r9);
+        r7 = (int) r9;
+        r1.viaNameWidth = r7;
+        r7 = new org.telegram.ui.Components.TypefaceSpan;
         r9 = org.telegram.messenger.AndroidUtilities.getTypeface(r13);
-        r8.<init>(r9);
+        r7.<init>(r9);
         r9 = r3.length();
         r6 = r6.length();
         r9 = r9 - r6;
@@ -22009,172 +22013,175 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r9 = r9 - r6;
         r10 = r3.length();
         r11 = 33;
-        r3.setSpan(r8, r9, r10, r11);
-        goto L_0x0532;
-    L_0x0523:
+        r3.setSpan(r7, r9, r10, r11);
+        goto L_0x053a;
+    L_0x052b:
         r6 = 1;
-        r8 = new android.text.SpannableStringBuilder;
+        r7 = new android.text.SpannableStringBuilder;
         r9 = new java.lang.Object[r6];
-        r9[r5] = r7;
+        r9[r5] = r8;
         r3 = java.lang.String.format(r3, r9);
-        r8.<init>(r3);
-        r3 = r8;
-    L_0x0532:
+        r7.<init>(r3);
+        r3 = r7;
+    L_0x053a:
         r6 = org.telegram.ui.ActionBar.Theme.chat_forwardNamePaint;
-        r8 = r7.length();
-        r6 = r6.measureText(r7, r5, r8);
-        r8 = (double) r6;
-        r8 = java.lang.Math.ceil(r8);
-        r6 = (int) r8;
-        r8 = 2;
-        r6 = r6 / r8;
+        r7 = r8.length();
+        r6 = r6.measureText(r8, r5, r7);
+        r6 = (double) r6;
+        r6 = java.lang.Math.ceil(r6);
+        r6 = (int) r6;
+        r7 = 2;
+        r6 = r6 / r7;
         r0 = r0 + r6;
         r1.forwardNameCenterX = r0;
-        if (r4 < 0) goto L_0x0568;
-    L_0x0549:
+        if (r4 < 0) goto L_0x0570;
+    L_0x0551:
         r0 = r1.currentForwardName;
-        if (r0 == 0) goto L_0x0555;
-    L_0x054d:
+        if (r0 == 0) goto L_0x055d;
+    L_0x0555:
         r0 = r2.messageOwner;
         r0 = r0.fwd_from;
         r0 = r0.from_id;
-        if (r0 == 0) goto L_0x0568;
-    L_0x0555:
+        if (r0 == 0) goto L_0x0570;
+    L_0x055d:
         r0 = new org.telegram.ui.Components.TypefaceSpan;
         r6 = org.telegram.messenger.AndroidUtilities.getTypeface(r13);
         r0.<init>(r6);
-        r6 = r7.length();
+        r6 = r8.length();
         r6 = r6 + r4;
         r7 = 33;
         r3.setSpan(r0, r4, r6, r7);
-    L_0x0568:
+    L_0x0570:
         r0 = org.telegram.ui.ActionBar.Theme.chat_forwardNamePaint;
         r4 = r1.forwardedNameWidth;
         r4 = (float) r4;
         r6 = android.text.TextUtils.TruncateAt.END;
-        r22 = android.text.TextUtils.ellipsize(r3, r0, r4, r6);
-        r0 = r1.forwardedNameLayout;	 Catch:{ Exception -> 0x0616 }
-        r3 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x0616 }
-        r23 = org.telegram.ui.ActionBar.Theme.chat_forwardNamePaint;	 Catch:{ Exception -> 0x0616 }
-        r4 = r1.forwardedNameWidth;	 Catch:{ Exception -> 0x0616 }
+        r8 = android.text.TextUtils.ellipsize(r3, r0, r4, r6);
+        r0 = r1.forwardedNameLayout;	 Catch:{ Exception -> 0x0619 }
+        r3 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x0619 }
+        r9 = org.telegram.ui.ActionBar.Theme.chat_forwardNamePaint;	 Catch:{ Exception -> 0x0619 }
+        r4 = r1.forwardedNameWidth;	 Catch:{ Exception -> 0x0619 }
         r6 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-        r7 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x0616 }
-        r24 = r4 + r7;
-        r25 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x0616 }
-        r26 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r27 = 0;
-        r28 = 0;
-        r21 = r3;
-        r21.<init>(r22, r23, r24, r25, r26, r27, r28);	 Catch:{ Exception -> 0x0616 }
+        r7 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x0619 }
+        r10 = r4 + r7;
+        r11 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x0619 }
+        r12 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r13 = 0;
+        r14 = 0;
+        r7 = r3;
+        r7.<init>(r8, r9, r10, r11, r12, r13, r14);	 Catch:{ Exception -> 0x0619 }
         r4 = 1;
-        r0[r4] = r3;	 Catch:{ Exception -> 0x0616 }
+        r0[r4] = r3;	 Catch:{ Exception -> 0x0619 }
         r0 = "ForwardedMessage";
-        r3 = NUM; // 0x7f0d046a float:1.8744407E38 double:1.053130336E-314;
-        r0 = org.telegram.messenger.LocaleController.getString(r0, r3);	 Catch:{ Exception -> 0x0616 }
-        r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0);	 Catch:{ Exception -> 0x0616 }
-        r3 = org.telegram.ui.ActionBar.Theme.chat_forwardNamePaint;	 Catch:{ Exception -> 0x0616 }
-        r4 = r1.forwardedNameWidth;	 Catch:{ Exception -> 0x0616 }
-        r4 = (float) r4;	 Catch:{ Exception -> 0x0616 }
-        r6 = android.text.TextUtils.TruncateAt.END;	 Catch:{ Exception -> 0x0616 }
-        r22 = android.text.TextUtils.ellipsize(r0, r3, r4, r6);	 Catch:{ Exception -> 0x0616 }
-        r0 = r1.forwardedNameLayout;	 Catch:{ Exception -> 0x0616 }
-        r3 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x0616 }
-        r23 = org.telegram.ui.ActionBar.Theme.chat_forwardNamePaint;	 Catch:{ Exception -> 0x0616 }
-        r4 = r1.forwardedNameWidth;	 Catch:{ Exception -> 0x0616 }
+        r3 = NUM; // 0x7f0d048b float:1.8744474E38 double:1.053130352E-314;
+        r0 = org.telegram.messenger.LocaleController.getString(r0, r3);	 Catch:{ Exception -> 0x0619 }
+        r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0);	 Catch:{ Exception -> 0x0619 }
+        r3 = org.telegram.ui.ActionBar.Theme.chat_forwardNamePaint;	 Catch:{ Exception -> 0x0619 }
+        r4 = r1.forwardedNameWidth;	 Catch:{ Exception -> 0x0619 }
+        r4 = (float) r4;	 Catch:{ Exception -> 0x0619 }
+        r6 = android.text.TextUtils.TruncateAt.END;	 Catch:{ Exception -> 0x0619 }
+        r8 = android.text.TextUtils.ellipsize(r0, r3, r4, r6);	 Catch:{ Exception -> 0x0619 }
+        r0 = r1.forwardedNameLayout;	 Catch:{ Exception -> 0x0619 }
+        r3 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x0619 }
+        r9 = org.telegram.ui.ActionBar.Theme.chat_forwardNamePaint;	 Catch:{ Exception -> 0x0619 }
+        r4 = r1.forwardedNameWidth;	 Catch:{ Exception -> 0x0619 }
         r6 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x0616 }
-        r24 = r4 + r6;
-        r25 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x0616 }
-        r26 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
-        r27 = 0;
-        r28 = 0;
-        r21 = r3;
-        r21.<init>(r22, r23, r24, r25, r26, r27, r28);	 Catch:{ Exception -> 0x0616 }
-        r0[r5] = r3;	 Catch:{ Exception -> 0x0616 }
-        r0 = r1.forwardedNameLayout;	 Catch:{ Exception -> 0x0616 }
-        r0 = r0[r5];	 Catch:{ Exception -> 0x0616 }
-        r0 = r0.getLineWidth(r5);	 Catch:{ Exception -> 0x0616 }
-        r3 = (double) r0;	 Catch:{ Exception -> 0x0616 }
-        r3 = java.lang.Math.ceil(r3);	 Catch:{ Exception -> 0x0616 }
-        r0 = (int) r3;	 Catch:{ Exception -> 0x0616 }
-        r3 = r1.forwardedNameLayout;	 Catch:{ Exception -> 0x0616 }
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r6);	 Catch:{ Exception -> 0x0619 }
+        r10 = r4 + r6;
+        r11 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x0619 }
+        r12 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r13 = 0;
+        r14 = 0;
+        r7 = r3;
+        r7.<init>(r8, r9, r10, r11, r12, r13, r14);	 Catch:{ Exception -> 0x0619 }
+        r0[r5] = r3;	 Catch:{ Exception -> 0x0619 }
+        r0 = r1.forwardedNameLayout;	 Catch:{ Exception -> 0x0619 }
+        r0 = r0[r5];	 Catch:{ Exception -> 0x0619 }
+        r0 = r0.getLineWidth(r5);	 Catch:{ Exception -> 0x0619 }
+        r3 = (double) r0;	 Catch:{ Exception -> 0x0619 }
+        r3 = java.lang.Math.ceil(r3);	 Catch:{ Exception -> 0x0619 }
+        r0 = (int) r3;	 Catch:{ Exception -> 0x0619 }
+        r3 = r1.forwardedNameLayout;	 Catch:{ Exception -> 0x0619 }
         r4 = 1;
-        r3 = r3[r4];	 Catch:{ Exception -> 0x0616 }
-        r3 = r3.getLineWidth(r5);	 Catch:{ Exception -> 0x0616 }
-        r3 = (double) r3;	 Catch:{ Exception -> 0x0616 }
-        r3 = java.lang.Math.ceil(r3);	 Catch:{ Exception -> 0x0616 }
-        r3 = (int) r3;	 Catch:{ Exception -> 0x0616 }
-        r0 = java.lang.Math.max(r0, r3);	 Catch:{ Exception -> 0x0616 }
-        r1.forwardedNameWidth = r0;	 Catch:{ Exception -> 0x0616 }
-        r0 = r1.forwardNameOffsetX;	 Catch:{ Exception -> 0x0616 }
-        r3 = r1.forwardedNameLayout;	 Catch:{ Exception -> 0x0616 }
-        r3 = r3[r5];	 Catch:{ Exception -> 0x0616 }
-        r3 = r3.getLineLeft(r5);	 Catch:{ Exception -> 0x0616 }
-        r0[r5] = r3;	 Catch:{ Exception -> 0x0616 }
-        r0 = r1.forwardNameOffsetX;	 Catch:{ Exception -> 0x0616 }
-        r3 = r1.forwardedNameLayout;	 Catch:{ Exception -> 0x0616 }
+        r3 = r3[r4];	 Catch:{ Exception -> 0x0619 }
+        r3 = r3.getLineWidth(r5);	 Catch:{ Exception -> 0x0619 }
+        r3 = (double) r3;	 Catch:{ Exception -> 0x0619 }
+        r3 = java.lang.Math.ceil(r3);	 Catch:{ Exception -> 0x0619 }
+        r3 = (int) r3;	 Catch:{ Exception -> 0x0619 }
+        r0 = java.lang.Math.max(r0, r3);	 Catch:{ Exception -> 0x0619 }
+        r1.forwardedNameWidth = r0;	 Catch:{ Exception -> 0x0619 }
+        r0 = r1.forwardNameOffsetX;	 Catch:{ Exception -> 0x0619 }
+        r3 = r1.forwardedNameLayout;	 Catch:{ Exception -> 0x0619 }
+        r3 = r3[r5];	 Catch:{ Exception -> 0x0619 }
+        r3 = r3.getLineLeft(r5);	 Catch:{ Exception -> 0x0619 }
+        r0[r5] = r3;	 Catch:{ Exception -> 0x0619 }
+        r0 = r1.forwardNameOffsetX;	 Catch:{ Exception -> 0x0619 }
+        r3 = r1.forwardedNameLayout;	 Catch:{ Exception -> 0x0619 }
         r4 = 1;
-        r3 = r3[r4];	 Catch:{ Exception -> 0x0616 }
-        r3 = r3.getLineLeft(r5);	 Catch:{ Exception -> 0x0616 }
-        r0[r4] = r3;	 Catch:{ Exception -> 0x0616 }
-        r0 = r2.type;	 Catch:{ Exception -> 0x0616 }
-        if (r0 == r14) goto L_0x061a;
-    L_0x060a:
-        r0 = r1.namesOffset;	 Catch:{ Exception -> 0x0616 }
+        r3 = r3[r4];	 Catch:{ Exception -> 0x0619 }
+        r3 = r3.getLineLeft(r5);	 Catch:{ Exception -> 0x0619 }
+        r0[r4] = r3;	 Catch:{ Exception -> 0x0619 }
+        r0 = r2.type;	 Catch:{ Exception -> 0x0619 }
+        r3 = 5;
+        if (r0 == r3) goto L_0x061d;
+    L_0x060d:
+        r0 = r1.namesOffset;	 Catch:{ Exception -> 0x0619 }
         r3 = NUM; // 0x42100000 float:36.0 double:5.47595105E-315;
-        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);	 Catch:{ Exception -> 0x0616 }
+        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);	 Catch:{ Exception -> 0x0619 }
         r0 = r0 + r3;
-        r1.namesOffset = r0;	 Catch:{ Exception -> 0x0616 }
-        goto L_0x061a;
-    L_0x0616:
+        r1.namesOffset = r0;	 Catch:{ Exception -> 0x0619 }
+        goto L_0x061d;
+    L_0x0619:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x061a:
+    L_0x061d:
         r0 = r39.hasValidReplyMessageObject();
-        if (r0 == 0) goto L_0x08e3;
-    L_0x0620:
+        if (r0 == 0) goto L_0x08e6;
+    L_0x0623:
         r0 = r1.currentPosition;
-        if (r0 == 0) goto L_0x0628;
-    L_0x0624:
+        if (r0 == 0) goto L_0x062b;
+    L_0x0627:
         r0 = r0.minY;
-        if (r0 != 0) goto L_0x08e3;
-    L_0x0628:
+        if (r0 != 0) goto L_0x08e6;
+    L_0x062b:
         r0 = r39.isAnyKindOfSticker();
-        if (r0 != 0) goto L_0x064c;
-    L_0x062e:
+        if (r0 != 0) goto L_0x0650;
+    L_0x0631:
         r0 = r2.type;
-        if (r0 == r14) goto L_0x064c;
-    L_0x0632:
+        r3 = 5;
+        if (r0 == r3) goto L_0x0650;
+    L_0x0636:
         r0 = r1.namesOffset;
         r3 = NUM; // 0x42280000 float:42.0 double:5.483722033E-315;
         r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
         r0 = r0 + r3;
         r1.namesOffset = r0;
         r0 = r2.type;
-        if (r0 == 0) goto L_0x064c;
-    L_0x0641:
+        if (r0 == 0) goto L_0x0650;
+    L_0x0645:
         r0 = r1.namesOffset;
         r3 = NUM; // 0x40a00000 float:5.0 double:5.356796015E-315;
         r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
         r0 = r0 + r3;
         r1.namesOffset = r0;
-    L_0x064c:
+    L_0x0650:
         r0 = r38.getMaxNameWidth();
         r3 = r39.shouldDrawWithoutBackground();
-        if (r3 != 0) goto L_0x065e;
-    L_0x0656:
+        if (r3 != 0) goto L_0x0662;
+    L_0x065a:
         r3 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
         r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
         r0 = r0 - r3;
-        goto L_0x0669;
-    L_0x065e:
-        r3 = r2.type;
-        if (r3 != r14) goto L_0x0669;
+        goto L_0x066e;
     L_0x0662:
+        r3 = r2.type;
+        r4 = 5;
+        if (r3 != r4) goto L_0x066e;
+    L_0x0667:
         r3 = NUM; // 0x41500000 float:13.0 double:5.413783207E-315;
         r3 = org.telegram.messenger.AndroidUtilities.dp(r3);
         r0 = r0 + r3;
-    L_0x0669:
+    L_0x066e:
         r3 = r2.replyMessageObject;
         r3 = r3.photoThumbs2;
         r4 = 320; // 0x140 float:4.48E-43 double:1.58E-321;
@@ -22185,30 +22192,30 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r4 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r4, r6);
         r6 = r2.replyMessageObject;
         r7 = r6.photoThumbsObject2;
-        if (r3 != 0) goto L_0x06b8;
-    L_0x0683:
+        if (r3 != 0) goto L_0x06bd;
+    L_0x0688:
         r3 = r6.mediaExists;
-        if (r3 == 0) goto L_0x0699;
-    L_0x0687:
+        if (r3 == 0) goto L_0x069e;
+    L_0x068c:
         r3 = r6.photoThumbs;
         r4 = org.telegram.messenger.AndroidUtilities.getPhotoSize();
         r3 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r3, r4);
-        if (r3 == 0) goto L_0x0696;
-    L_0x0693:
+        if (r3 == 0) goto L_0x069b;
+    L_0x0698:
         r4 = r3.size;
-        goto L_0x0697;
-    L_0x0696:
+        goto L_0x069c;
+    L_0x069b:
         r4 = 0;
-    L_0x0697:
+    L_0x069c:
         r6 = 0;
-        goto L_0x06a3;
-    L_0x0699:
+        goto L_0x06a8;
+    L_0x069e:
         r3 = r6.photoThumbs;
         r4 = 320; // 0x140 float:4.48E-43 double:1.58E-321;
         r3 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r3, r4);
         r4 = 0;
         r6 = 1;
-    L_0x06a3:
+    L_0x06a8:
         r7 = r2.replyMessageObject;
         r7 = r7.photoThumbs;
         r8 = 40;
@@ -22219,46 +22226,46 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r29 = r6;
         r4 = r7;
         r7 = r8;
-        goto L_0x06bc;
-    L_0x06b8:
+        goto L_0x06c1;
+    L_0x06bd:
         r26 = 0;
         r29 = 1;
-    L_0x06bc:
-        if (r4 != r3) goto L_0x06bf;
-    L_0x06be:
-        r4 = 0;
-    L_0x06bf:
-        if (r3 == 0) goto L_0x071f;
     L_0x06c1:
+        if (r4 != r3) goto L_0x06c4;
+    L_0x06c3:
+        r4 = 0;
+    L_0x06c4:
+        if (r3 == 0) goto L_0x0724;
+    L_0x06c6:
         r6 = r2.replyMessageObject;
         r6 = r6.isAnyKindOfSticker();
-        if (r6 != 0) goto L_0x071f;
-    L_0x06c9:
+        if (r6 != 0) goto L_0x0724;
+    L_0x06ce:
         r6 = r39.isAnyKindOfSticker();
-        if (r6 == 0) goto L_0x06d5;
-    L_0x06cf:
+        if (r6 == 0) goto L_0x06da;
+    L_0x06d4:
         r6 = org.telegram.messenger.AndroidUtilities.isTablet();
-        if (r6 == 0) goto L_0x071f;
-    L_0x06d5:
+        if (r6 == 0) goto L_0x0724;
+    L_0x06da:
         r6 = r2.replyMessageObject;
         r6 = r6.isSecretMedia();
-        if (r6 == 0) goto L_0x06de;
-    L_0x06dd:
-        goto L_0x071f;
-    L_0x06de:
+        if (r6 == 0) goto L_0x06e3;
+    L_0x06e2:
+        goto L_0x0724;
+    L_0x06e3:
         r6 = r2.replyMessageObject;
         r6 = r6.isRoundVideo();
-        if (r6 == 0) goto L_0x06f2;
-    L_0x06e6:
+        if (r6 == 0) goto L_0x06f7;
+    L_0x06eb:
         r6 = r1.replyImageReceiver;
         r8 = NUM; // 0x41b00000 float:22.0 double:5.44486713E-315;
         r8 = org.telegram.messenger.AndroidUtilities.dp(r8);
         r6.setRoundRadius(r8);
-        goto L_0x06f7;
-    L_0x06f2:
+        goto L_0x06fc;
+    L_0x06f7:
         r6 = r1.replyImageReceiver;
         r6.setRoundRadius(r5);
-    L_0x06f7:
+    L_0x06fc:
         r1.currentReplyPhoto = r3;
         r6 = r1.replyImageReceiver;
         r22 = org.telegram.messenger.ImageLocation.getForObject(r3, r7);
@@ -22277,23 +22284,23 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0 = r0 - r3;
         r3 = r0;
         r4 = 0;
-        goto L_0x0728;
-    L_0x071f:
+        goto L_0x072d;
+    L_0x0724:
         r3 = r1.replyImageReceiver;
         r4 = 0;
         r3.setImageBitmap(r4);
         r1.needReplyImage = r5;
         r3 = r0;
-    L_0x0728:
-        r0 = r2.customReplyName;
-        if (r0 == 0) goto L_0x072d;
-    L_0x072c:
-        goto L_0x078e;
     L_0x072d:
+        r0 = r2.customReplyName;
+        if (r0 == 0) goto L_0x0732;
+    L_0x0731:
+        goto L_0x0793;
+    L_0x0732:
         r0 = r2.replyMessageObject;
         r0 = r0.isFromUser();
-        if (r0 == 0) goto L_0x0750;
-    L_0x0735:
+        if (r0 == 0) goto L_0x0755;
+    L_0x073a:
         r0 = r1.currentAccount;
         r0 = org.telegram.messenger.MessagesController.getInstance(r0);
         r6 = r2.replyMessageObject;
@@ -22301,16 +22308,16 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r6 = r6.from_id;
         r6 = java.lang.Integer.valueOf(r6);
         r0 = r0.getUser(r6);
-        if (r0 == 0) goto L_0x078d;
-    L_0x074b:
-        r0 = org.telegram.messenger.UserObject.getUserName(r0);
-        goto L_0x078e;
+        if (r0 == 0) goto L_0x0792;
     L_0x0750:
+        r0 = org.telegram.messenger.UserObject.getUserName(r0);
+        goto L_0x0793;
+    L_0x0755:
         r0 = r2.replyMessageObject;
         r0 = r0.messageOwner;
         r0 = r0.from_id;
-        if (r0 >= 0) goto L_0x0772;
-    L_0x0758:
+        if (r0 >= 0) goto L_0x0777;
+    L_0x075d:
         r0 = r1.currentAccount;
         r0 = org.telegram.messenger.MessagesController.getInstance(r0);
         r6 = r2.replyMessageObject;
@@ -22319,11 +22326,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r6 = -r6;
         r6 = java.lang.Integer.valueOf(r6);
         r0 = r0.getChat(r6);
-        if (r0 == 0) goto L_0x078d;
-    L_0x076f:
+        if (r0 == 0) goto L_0x0792;
+    L_0x0774:
         r0 = r0.title;
-        goto L_0x078e;
-    L_0x0772:
+        goto L_0x0793;
+    L_0x0777:
         r0 = r1.currentAccount;
         r0 = org.telegram.messenger.MessagesController.getInstance(r0);
         r6 = r2.replyMessageObject;
@@ -22332,33 +22339,33 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r6 = r6.channel_id;
         r6 = java.lang.Integer.valueOf(r6);
         r0 = r0.getChat(r6);
-        if (r0 == 0) goto L_0x078d;
-    L_0x078a:
+        if (r0 == 0) goto L_0x0792;
+    L_0x078f:
         r0 = r0.title;
-        goto L_0x078e;
-    L_0x078d:
+        goto L_0x0793;
+    L_0x0792:
         r0 = r4;
-    L_0x078e:
-        if (r0 != 0) goto L_0x0799;
-    L_0x0790:
-        r0 = NUM; // 0x7f0d0558 float:1.874489E38 double:1.0531304534E-314;
+    L_0x0793:
+        if (r0 != 0) goto L_0x079e;
+    L_0x0795:
+        r0 = NUM; // 0x7f0d057a float:1.8744958E38 double:1.05313047E-314;
         r6 = "Loading";
         r0 = org.telegram.messenger.LocaleController.getString(r6, r0);
-    L_0x0799:
+    L_0x079e:
         r6 = 32;
         r7 = 10;
         r0 = r0.replace(r7, r6);
         r6 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint;
         r7 = (float) r3;
         r8 = android.text.TextUtils.TruncateAt.END;
-        r18 = android.text.TextUtils.ellipsize(r0, r6, r7, r8);
+        r17 = android.text.TextUtils.ellipsize(r0, r6, r7, r8);
         r0 = r2.replyMessageObject;
         r6 = r0.messageOwner;
         r6 = r6.media;
         r8 = r6 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaGame;
         r9 = NUM; // 0x41600000 float:14.0 double:5.41896386E-315;
-        if (r8 == 0) goto L_0x07d2;
-    L_0x07b6:
+        if (r8 == 0) goto L_0x07d7;
+    L_0x07bb:
         r0 = r6.game;
         r0 = r0.title;
         r2 = org.telegram.ui.ActionBar.Theme.chat_replyTextPaint;
@@ -22368,13 +22375,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r2 = org.telegram.ui.ActionBar.Theme.chat_replyTextPaint;
         r4 = android.text.TextUtils.TruncateAt.END;
         r4 = android.text.TextUtils.ellipsize(r0, r2, r7, r4);
-    L_0x07d0:
+    L_0x07d5:
         r7 = r4;
-        goto L_0x082e;
-    L_0x07d2:
+        goto L_0x0833;
+    L_0x07d7:
         r8 = r6 instanceof org.telegram.tgnet.TLRPC.TL_messageMediaInvoice;
-        if (r8 == 0) goto L_0x07ef;
-    L_0x07d6:
+        if (r8 == 0) goto L_0x07f4;
+    L_0x07db:
         r0 = r6.title;
         r2 = org.telegram.ui.ActionBar.Theme.chat_replyTextPaint;
         r2 = r2.getFontMetricsInt();
@@ -22383,24 +22390,24 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r2 = org.telegram.ui.ActionBar.Theme.chat_replyTextPaint;
         r4 = android.text.TextUtils.TruncateAt.END;
         r4 = android.text.TextUtils.ellipsize(r0, r2, r7, r4);
-        goto L_0x07d0;
-    L_0x07ef:
+        goto L_0x07d5;
+    L_0x07f4:
         r0 = r0.messageText;
-        if (r0 == 0) goto L_0x07d0;
-    L_0x07f3:
+        if (r0 == 0) goto L_0x07d5;
+    L_0x07f8:
         r0 = r0.length();
-        if (r0 <= 0) goto L_0x07d0;
-    L_0x07f9:
+        if (r0 <= 0) goto L_0x07d5;
+    L_0x07fe:
         r0 = r2.replyMessageObject;
         r0 = r0.messageText;
         r0 = r0.toString();
         r2 = r0.length();
         r4 = 150; // 0x96 float:2.1E-43 double:7.4E-322;
-        if (r2 <= r4) goto L_0x080f;
-    L_0x0809:
+        if (r2 <= r4) goto L_0x0814;
+    L_0x080e:
         r2 = 150; // 0x96 float:2.1E-43 double:7.4E-322;
         r0 = r0.substring(r5, r2);
-    L_0x080f:
+    L_0x0814:
         r2 = 32;
         r4 = 10;
         r0 = r0.replace(r4, r2);
@@ -22411,108 +22418,108 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r2 = org.telegram.ui.ActionBar.Theme.chat_replyTextPaint;
         r4 = android.text.TextUtils.TruncateAt.END;
         r4 = android.text.TextUtils.ellipsize(r0, r2, r7, r4);
-        goto L_0x07d0;
-    L_0x082e:
-        r0 = r1.needReplyImage;	 Catch:{ Exception -> 0x0886 }
-        if (r0 == 0) goto L_0x0835;
-    L_0x0832:
-        r0 = 44;
-        goto L_0x0836;
-    L_0x0835:
-        r0 = 0;
-    L_0x0836:
-        r2 = 4;
-        r14 = r2 + r0;
-        r0 = (float) r14;	 Catch:{ Exception -> 0x0886 }
-        r0 = org.telegram.messenger.AndroidUtilities.dp(r0);	 Catch:{ Exception -> 0x0886 }
-        r1.replyNameWidth = r0;	 Catch:{ Exception -> 0x0886 }
-        if (r18 == 0) goto L_0x088a;
-    L_0x0842:
-        r0 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x0886 }
-        r19 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint;	 Catch:{ Exception -> 0x0886 }
+        goto L_0x07d5;
+    L_0x0833:
+        r0 = 4;
+        r2 = r1.needReplyImage;	 Catch:{ Exception -> 0x088a }
+        if (r2 == 0) goto L_0x083b;
+    L_0x0838:
+        r2 = 44;
+        goto L_0x083c;
+    L_0x083b:
+        r2 = 0;
+    L_0x083c:
+        r0 = r0 + r2;
+        r0 = (float) r0;	 Catch:{ Exception -> 0x088a }
+        r0 = org.telegram.messenger.AndroidUtilities.dp(r0);	 Catch:{ Exception -> 0x088a }
+        r1.replyNameWidth = r0;	 Catch:{ Exception -> 0x088a }
+        if (r17 == 0) goto L_0x088e;
+    L_0x0846:
+        r0 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x088a }
+        r18 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint;	 Catch:{ Exception -> 0x088a }
         r2 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);	 Catch:{ Exception -> 0x0886 }
-        r20 = r3 + r2;
-        r21 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x0886 }
-        r22 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);	 Catch:{ Exception -> 0x088a }
+        r19 = r3 + r2;
+        r20 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x088a }
+        r21 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
+        r22 = 0;
         r23 = 0;
-        r24 = 0;
-        r17 = r0;
-        r17.<init>(r18, r19, r20, r21, r22, r23, r24);	 Catch:{ Exception -> 0x0886 }
-        r1.replyNameLayout = r0;	 Catch:{ Exception -> 0x0886 }
-        r0 = r1.replyNameLayout;	 Catch:{ Exception -> 0x0886 }
-        r0 = r0.getLineCount();	 Catch:{ Exception -> 0x0886 }
-        if (r0 <= 0) goto L_0x088a;
-    L_0x0865:
-        r0 = r1.replyNameWidth;	 Catch:{ Exception -> 0x0886 }
-        r2 = r1.replyNameLayout;	 Catch:{ Exception -> 0x0886 }
-        r2 = r2.getLineWidth(r5);	 Catch:{ Exception -> 0x0886 }
-        r8 = (double) r2;	 Catch:{ Exception -> 0x0886 }
-        r8 = java.lang.Math.ceil(r8);	 Catch:{ Exception -> 0x0886 }
-        r2 = (int) r8;	 Catch:{ Exception -> 0x0886 }
+        r16 = r0;
+        r16.<init>(r17, r18, r19, r20, r21, r22, r23);	 Catch:{ Exception -> 0x088a }
+        r1.replyNameLayout = r0;	 Catch:{ Exception -> 0x088a }
+        r0 = r1.replyNameLayout;	 Catch:{ Exception -> 0x088a }
+        r0 = r0.getLineCount();	 Catch:{ Exception -> 0x088a }
+        if (r0 <= 0) goto L_0x088e;
+    L_0x0869:
+        r0 = r1.replyNameWidth;	 Catch:{ Exception -> 0x088a }
+        r2 = r1.replyNameLayout;	 Catch:{ Exception -> 0x088a }
+        r2 = r2.getLineWidth(r5);	 Catch:{ Exception -> 0x088a }
+        r8 = (double) r2;	 Catch:{ Exception -> 0x088a }
+        r8 = java.lang.Math.ceil(r8);	 Catch:{ Exception -> 0x088a }
+        r2 = (int) r8;	 Catch:{ Exception -> 0x088a }
         r4 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
-        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x0886 }
+        r6 = org.telegram.messenger.AndroidUtilities.dp(r4);	 Catch:{ Exception -> 0x088a }
         r2 = r2 + r6;
         r0 = r0 + r2;
-        r1.replyNameWidth = r0;	 Catch:{ Exception -> 0x0886 }
-        r0 = r1.replyNameLayout;	 Catch:{ Exception -> 0x0886 }
-        r0 = r0.getLineLeft(r5);	 Catch:{ Exception -> 0x0886 }
-        r1.replyNameOffset = r0;	 Catch:{ Exception -> 0x0886 }
-        goto L_0x088a;
-    L_0x0886:
+        r1.replyNameWidth = r0;	 Catch:{ Exception -> 0x088a }
+        r0 = r1.replyNameLayout;	 Catch:{ Exception -> 0x088a }
+        r0 = r0.getLineLeft(r5);	 Catch:{ Exception -> 0x088a }
+        r1.replyNameOffset = r0;	 Catch:{ Exception -> 0x088a }
+        goto L_0x088e;
+    L_0x088a:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x088a:
-        r0 = r1.needReplyImage;	 Catch:{ Exception -> 0x08df }
-        if (r0 == 0) goto L_0x0891;
     L_0x088e:
-        r0 = 44;
-        goto L_0x0892;
-    L_0x0891:
-        r0 = 0;
-    L_0x0892:
-        r2 = 4;
-        r14 = r2 + r0;
-        r0 = (float) r14;	 Catch:{ Exception -> 0x08df }
-        r0 = org.telegram.messenger.AndroidUtilities.dp(r0);	 Catch:{ Exception -> 0x08df }
-        r1.replyTextWidth = r0;	 Catch:{ Exception -> 0x08df }
-        if (r7 == 0) goto L_0x08e3;
-    L_0x089e:
-        r0 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x08df }
-        r8 = org.telegram.ui.ActionBar.Theme.chat_replyTextPaint;	 Catch:{ Exception -> 0x08df }
+        r0 = 4;
+        r2 = r1.needReplyImage;	 Catch:{ Exception -> 0x08e2 }
+        if (r2 == 0) goto L_0x0896;
+    L_0x0893:
+        r2 = 44;
+        goto L_0x0897;
+    L_0x0896:
+        r2 = 0;
+    L_0x0897:
+        r0 = r0 + r2;
+        r0 = (float) r0;	 Catch:{ Exception -> 0x08e2 }
+        r0 = org.telegram.messenger.AndroidUtilities.dp(r0);	 Catch:{ Exception -> 0x08e2 }
+        r1.replyTextWidth = r0;	 Catch:{ Exception -> 0x08e2 }
+        if (r7 == 0) goto L_0x08e6;
+    L_0x08a1:
+        r0 = new android.text.StaticLayout;	 Catch:{ Exception -> 0x08e2 }
+        r8 = org.telegram.ui.ActionBar.Theme.chat_replyTextPaint;	 Catch:{ Exception -> 0x08e2 }
         r2 = NUM; // 0x40CLASSNAME float:6.0 double:5.367157323E-315;
-        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);	 Catch:{ Exception -> 0x08df }
+        r2 = org.telegram.messenger.AndroidUtilities.dp(r2);	 Catch:{ Exception -> 0x08e2 }
         r9 = r3 + r2;
-        r10 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x08df }
+        r10 = android.text.Layout.Alignment.ALIGN_NORMAL;	 Catch:{ Exception -> 0x08e2 }
         r11 = NUM; // 0x3var_ float:1.0 double:5.263544247E-315;
         r12 = 0;
         r13 = 0;
         r6 = r0;
-        r6.<init>(r7, r8, r9, r10, r11, r12, r13);	 Catch:{ Exception -> 0x08df }
-        r1.replyTextLayout = r0;	 Catch:{ Exception -> 0x08df }
-        r0 = r1.replyTextLayout;	 Catch:{ Exception -> 0x08df }
-        r0 = r0.getLineCount();	 Catch:{ Exception -> 0x08df }
-        if (r0 <= 0) goto L_0x08e3;
-    L_0x08be:
-        r0 = r1.replyTextWidth;	 Catch:{ Exception -> 0x08df }
-        r2 = r1.replyTextLayout;	 Catch:{ Exception -> 0x08df }
-        r2 = r2.getLineWidth(r5);	 Catch:{ Exception -> 0x08df }
-        r2 = (double) r2;	 Catch:{ Exception -> 0x08df }
-        r2 = java.lang.Math.ceil(r2);	 Catch:{ Exception -> 0x08df }
-        r2 = (int) r2;	 Catch:{ Exception -> 0x08df }
+        r6.<init>(r7, r8, r9, r10, r11, r12, r13);	 Catch:{ Exception -> 0x08e2 }
+        r1.replyTextLayout = r0;	 Catch:{ Exception -> 0x08e2 }
+        r0 = r1.replyTextLayout;	 Catch:{ Exception -> 0x08e2 }
+        r0 = r0.getLineCount();	 Catch:{ Exception -> 0x08e2 }
+        if (r0 <= 0) goto L_0x08e6;
+    L_0x08c1:
+        r0 = r1.replyTextWidth;	 Catch:{ Exception -> 0x08e2 }
+        r2 = r1.replyTextLayout;	 Catch:{ Exception -> 0x08e2 }
+        r2 = r2.getLineWidth(r5);	 Catch:{ Exception -> 0x08e2 }
+        r2 = (double) r2;	 Catch:{ Exception -> 0x08e2 }
+        r2 = java.lang.Math.ceil(r2);	 Catch:{ Exception -> 0x08e2 }
+        r2 = (int) r2;	 Catch:{ Exception -> 0x08e2 }
         r3 = NUM; // 0x41000000 float:8.0 double:5.38787994E-315;
-        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);	 Catch:{ Exception -> 0x08df }
+        r3 = org.telegram.messenger.AndroidUtilities.dp(r3);	 Catch:{ Exception -> 0x08e2 }
         r2 = r2 + r3;
         r0 = r0 + r2;
-        r1.replyTextWidth = r0;	 Catch:{ Exception -> 0x08df }
-        r0 = r1.replyTextLayout;	 Catch:{ Exception -> 0x08df }
-        r0 = r0.getLineLeft(r5);	 Catch:{ Exception -> 0x08df }
-        r1.replyTextOffset = r0;	 Catch:{ Exception -> 0x08df }
-        goto L_0x08e3;
-    L_0x08df:
+        r1.replyTextWidth = r0;	 Catch:{ Exception -> 0x08e2 }
+        r0 = r1.replyTextLayout;	 Catch:{ Exception -> 0x08e2 }
+        r0 = r0.getLineLeft(r5);	 Catch:{ Exception -> 0x08e2 }
+        r1.replyTextOffset = r0;	 Catch:{ Exception -> 0x08e2 }
+        goto L_0x08e6;
+    L_0x08e2:
         r0 = move-exception;
         org.telegram.messenger.FileLog.e(r0);
-    L_0x08e3:
+    L_0x08e6:
         r38.requestLayout();
         return;
         */
@@ -23207,6 +23214,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             return;
         }
         if (!z || this.pressedLink != null) {
+            if (this.currentMessageObject.isOutOwner()) {
+                Theme.chat_msgTextPaint.setColor(Theme.getColor("chat_messageTextOut"));
+                Theme.chat_msgTextPaint.linkColor = Theme.getColor("chat_messageLinkOut");
+            } else {
+                Theme.chat_msgTextPaint.setColor(Theme.getColor("chat_messageTextIn"));
+                Theme.chat_msgTextPaint.linkColor = Theme.getColor("chat_messageLinkIn");
+            }
             canvas.save();
             canvas.translate((float) this.captionX, (float) this.captionY);
             if (this.pressedLink != null) {

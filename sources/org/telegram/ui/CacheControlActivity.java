@@ -511,8 +511,8 @@ public class CacheControlActivity extends BaseFragment {
     /* JADX WARNING: Removed duplicated region for block: B:46:0x01e5 A:{Catch:{ Exception -> 0x0240, all -> 0x023c }} */
     /* JADX WARNING: Removed duplicated region for block: B:46:0x01e5 A:{Catch:{ Exception -> 0x0240, all -> 0x023c }} */
     /* JADX WARNING: Removed duplicated region for block: B:47:0x01ef A:{Catch:{ Exception -> 0x0240, all -> 0x023c }} */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x023c A:{Splitter:B:18:0x0083, ExcHandler: all (th java.lang.Throwable)} */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x023c A:{Splitter:B:18:0x0083, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x023c A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:18:0x0083} */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x023c A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:18:0x0083} */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Missing block: B:40:0x0117, code skipped:
             r0 = e;
@@ -727,7 +727,7 @@ public class CacheControlActivity extends BaseFragment {
         r0 = r0.stepThis();	 Catch:{ Exception -> 0x0240, all -> 0x023c }
         r0.dispose();	 Catch:{ Exception -> 0x0240, all -> 0x023c }
         r0 = r1.currentAccount;	 Catch:{ Exception -> 0x0240, all -> 0x023c }
-        r0 = org.telegram.messenger.DataQuery.getInstance(r0);	 Catch:{ Exception -> 0x0240, all -> 0x023c }
+        r0 = org.telegram.messenger.MediaDataController.getInstance(r0);	 Catch:{ Exception -> 0x0240, all -> 0x023c }
         r5 = r11.longValue();	 Catch:{ Exception -> 0x0240, all -> 0x023c }
         r2 = 0;
         r0.clearBotKeyboard(r5, r2);	 Catch:{ Exception -> 0x0240, all -> 0x023c }

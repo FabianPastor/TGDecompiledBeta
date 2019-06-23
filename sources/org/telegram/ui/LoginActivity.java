@@ -2332,13 +2332,13 @@ public class LoginActivity extends BaseFragment {
             r7 = r6.text;
             r8 = "PHONE_NUMBER_INVALID";
             r7 = r7.contains(r8);
-            r8 = NUM; // 0x7f0d00eb float:1.8742591E38 double:1.0531298936E-314;
+            r8 = NUM; // 0x7f0d00ef float:1.87426E38 double:1.0531298956E-314;
             r3 = "AppName";
             if (r7 == 0) goto L_0x00ed;
         L_0x00d9:
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0d04fa float:1.8744699E38 double:1.053130407E-314;
+            r8 = NUM; // 0x7f0d051c float:1.8744768E38 double:1.053130424E-314;
             r2 = "InvalidPhoneNumber";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
@@ -2367,7 +2367,7 @@ public class LoginActivity extends BaseFragment {
             r6.setPage(r0, r2, r7, r2);
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0d02d0 float:1.8743575E38 double:1.0531301333E-314;
+            r8 = NUM; // 0x7f0d02e2 float:1.8743612E38 double:1.053130142E-314;
             r2 = "CodeExpired";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
@@ -2380,7 +2380,7 @@ public class LoginActivity extends BaseFragment {
         L_0x0132:
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0d0447 float:1.8744336E38 double:1.0531303185E-314;
+            r8 = NUM; // 0x7f0d0468 float:1.8744403E38 double:1.053130335E-314;
             r2 = "FloodWait";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
@@ -2390,7 +2390,7 @@ public class LoginActivity extends BaseFragment {
             r8 = org.telegram.messenger.LocaleController.getString(r3, r8);
             r2 = new java.lang.StringBuilder;
             r2.<init>();
-            r3 = NUM; // 0x7f0d03cf float:1.8744092E38 double:1.0531302593E-314;
+            r3 = NUM; // 0x7f0d03ed float:1.8744153E38 double:1.053130274E-314;
             r4 = "ErrorOccurred";
             r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
             r2.append(r3);
@@ -2404,7 +2404,7 @@ public class LoginActivity extends BaseFragment {
         L_0x016e:
             r6 = r5.this$0;
             r7 = org.telegram.messenger.LocaleController.getString(r3, r8);
-            r8 = NUM; // 0x7f0d04f7 float:1.8744693E38 double:1.0531304055E-314;
+            r8 = NUM; // 0x7f0d0519 float:1.8744762E38 double:1.0531304223E-314;
             r2 = "InvalidCode";
             r8 = org.telegram.messenger.LocaleController.getString(r2, r8);
             r6.needShowAlert(r7, r8);
@@ -3850,31 +3850,31 @@ public class LoginActivity extends BaseFragment {
             this.doneProgressView.setVisibility(0);
             animatorSet = this.doneItemAnimation;
             Animator[] animatorArr = new Animator[6];
-            animatorArr[0] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), str3, new float[]{0.1f});
-            animatorArr[1] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), str2, new float[]{0.1f});
-            animatorArr[2] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), str, new float[]{0.0f});
+            animatorArr[0] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), str3, new float[]{0.1f});
+            animatorArr[1] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), str2, new float[]{0.1f});
+            animatorArr[2] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), str, new float[]{0.0f});
             animatorArr[3] = ObjectAnimator.ofFloat(this.doneProgressView, str3, new float[]{1.0f});
             animatorArr[4] = ObjectAnimator.ofFloat(this.doneProgressView, str2, new float[]{1.0f});
             animatorArr[5] = ObjectAnimator.ofFloat(this.doneProgressView, str, new float[]{1.0f});
             animatorSet.playTogether(animatorArr);
         } else {
             this.doneProgressView.setTag(null);
-            this.doneItem.getImageView().setVisibility(0);
+            this.doneItem.getContentView().setVisibility(0);
             animatorSet = this.doneItemAnimation;
             Animator[] animatorArr2 = new Animator[6];
             animatorArr2[0] = ObjectAnimator.ofFloat(this.doneProgressView, str3, new float[]{0.1f});
             animatorArr2[1] = ObjectAnimator.ofFloat(this.doneProgressView, str2, new float[]{0.1f});
             animatorArr2[2] = ObjectAnimator.ofFloat(this.doneProgressView, str, new float[]{0.0f});
-            animatorArr2[3] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), str3, new float[]{1.0f});
-            animatorArr2[4] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), str2, new float[]{1.0f});
-            animatorArr2[5] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), str, new float[]{1.0f});
+            animatorArr2[3] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), str3, new float[]{1.0f});
+            animatorArr2[4] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), str2, new float[]{1.0f});
+            animatorArr2[5] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), str, new float[]{1.0f});
             animatorSet.playTogether(animatorArr2);
         }
         this.doneItemAnimation.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 if (LoginActivity.this.doneItemAnimation != null && LoginActivity.this.doneItemAnimation.equals(animator)) {
                     if (z2) {
-                        LoginActivity.this.doneItem.getImageView().setVisibility(4);
+                        LoginActivity.this.doneItem.getContentView().setVisibility(4);
                     } else {
                         LoginActivity.this.doneProgressView.setVisibility(4);
                     }

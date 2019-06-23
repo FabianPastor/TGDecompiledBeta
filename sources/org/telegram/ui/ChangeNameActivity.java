@@ -173,14 +173,15 @@ public class ChangeNameActivity extends BaseFragment {
 
     public void onTransitionAnimationEnd(boolean z, boolean z2) {
         if (z) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public void run() {
-                    if (ChangeNameActivity.this.firstNameField != null) {
-                        ChangeNameActivity.this.firstNameField.requestFocus();
-                        AndroidUtilities.showKeyboard(ChangeNameActivity.this.firstNameField);
-                    }
-                }
-            }, 100);
+            AndroidUtilities.runOnUIThread(new -$$Lambda$ChangeNameActivity$EvUw0TzJV_f3lPaYO2DcFGi13KM(this), 100);
+        }
+    }
+
+    public /* synthetic */ void lambda$onTransitionAnimationEnd$0$ChangeNameActivity() {
+        EditTextBoldCursor editTextBoldCursor = this.firstNameField;
+        if (editTextBoldCursor != null) {
+            editTextBoldCursor.requestFocus();
+            AndroidUtilities.showKeyboard(this.firstNameField);
         }
     }
 

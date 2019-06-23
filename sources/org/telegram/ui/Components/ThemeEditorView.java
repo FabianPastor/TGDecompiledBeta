@@ -1087,11 +1087,12 @@ public class ThemeEditorView {
                     int size = EditorAlert.this.listAdapter.items.size();
                     for (int i2 = 0; i2 < size; i2++) {
                         ArrayList arrayList3 = (ArrayList) EditorAlert.this.listAdapter.items.get(i2);
-                        String toLowerCase = ((ThemeDescription) arrayList3.get(0)).getCurrentKey().toLowerCase();
+                        String currentKey = ((ThemeDescription) arrayList3.get(0)).getCurrentKey();
+                        String toLowerCase = currentKey.toLowerCase();
                         for (CharSequence charSequence : strArr) {
                             if (toLowerCase.contains(charSequence)) {
                                 arrayList.add(arrayList3);
-                                arrayList2.add(generateSearchName(toLowerCase, charSequence));
+                                arrayList2.add(generateSearchName(currentKey, charSequence));
                                 break;
                             }
                         }
@@ -1760,7 +1761,7 @@ public class ThemeEditorView {
                 }
             });
             animatorSet2.start();
-            this.listAdapter.notifyItemChanged(this.this$0.currentThemeDesriptionPosition);
+            this.listView.getAdapter().notifyItemChanged(this.this$0.currentThemeDesriptionPosition);
         }
 
         private int getCurrentTop() {

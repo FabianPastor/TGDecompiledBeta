@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
-import org.telegram.messenger.DataQuery.KeywordResult;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaDataController.KeywordResult;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
@@ -1127,7 +1127,7 @@ public class MentionsAdapter extends SelectionAdapter {
         r12 = new android.util.SparseArray;
         r12.<init>();
         r13 = r7.currentAccount;
-        r13 = org.telegram.messenger.DataQuery.getInstance(r13);
+        r13 = org.telegram.messenger.MediaDataController.getInstance(r13);
         r13 = r13.inlineBots;
         r14 = 5;
         if (r3 != 0) goto L_0x028d;
@@ -1492,15 +1492,15 @@ public class MentionsAdapter extends SelectionAdapter {
         if (r1 != 0) goto L_0x04ce;
     L_0x04c5:
         r1 = r7.currentAccount;
-        r1 = org.telegram.messenger.DataQuery.getInstance(r1);
+        r1 = org.telegram.messenger.MediaDataController.getInstance(r1);
         r1.fetchNewEmojiKeywords(r0);
     L_0x04ce:
         r7.lastSearchKeyboardLanguage = r0;
         r0 = r7.currentAccount;
-        r0 = org.telegram.messenger.DataQuery.getInstance(r0);
+        r0 = org.telegram.messenger.MediaDataController.getInstance(r0);
         r1 = r7.lastSearchKeyboardLanguage;
         r2 = r9.toString();
-        r3 = new org.telegram.ui.Adapters.-$$Lambda$MentionsAdapter$rScwFUSTmUPNK4byYGdy0eHPN2M;
+        r3 = new org.telegram.ui.Adapters.-$$Lambda$MentionsAdapter$791x1Cqm32fnVWdshTaskYBglKQ;
         r3.<init>(r7);
         r4 = 0;
         r0.getEmojiSuggestions(r1, r2, r4, r3);

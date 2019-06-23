@@ -158,6 +158,9 @@ public class MediaActionDrawable extends Drawable {
             } else {
                 this.transitionAnimationTime = 220.0f;
             }
+            if (this.animatingTransition) {
+                this.currentIcon = this.nextIcon;
+            }
             this.animatingTransition = true;
             this.nextIcon = i;
             this.savedTransitionProgress = this.transitionProgress;

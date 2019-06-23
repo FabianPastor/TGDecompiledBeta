@@ -161,7 +161,7 @@ public class ImageLocation {
         } else if (photoSize == null || document == null) {
             return null;
         } else {
-            InputStickerSet inputStickerSet = DataQuery.getInputStickerSet(document);
+            InputStickerSet inputStickerSet = MediaDataController.getInputStickerSet(document);
             if (inputStickerSet == null) {
                 return null;
             }

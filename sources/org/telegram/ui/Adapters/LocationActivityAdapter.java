@@ -10,8 +10,11 @@ import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
+import org.telegram.messenger.LocationController.LocationFetchCallback;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.UserConfig;
+import org.telegram.tgnet.TLRPC.TL_channelLocation;
+import org.telegram.tgnet.TLRPC.TL_geoPoint;
 import org.telegram.tgnet.TLRPC.TL_messageMediaVenue;
 import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Cells.GraySectionCell;
@@ -23,23 +26,27 @@ import org.telegram.ui.Cells.SharingLiveLocationCell;
 import org.telegram.ui.Components.RecyclerListView.Holder;
 import org.telegram.ui.LocationActivity.LiveLocation;
 
-public class LocationActivityAdapter extends BaseLocationAdapter {
+public class LocationActivityAdapter extends BaseLocationAdapter implements LocationFetchCallback {
+    private String addressName;
+    private TL_channelLocation chatLocation;
     private int currentAccount = UserConfig.selectedAccount;
     private ArrayList<LiveLocation> currentLiveLocations = new ArrayList();
     private MessageObject currentMessageObject;
     private Location customLocation;
     private long dialogId;
+    private boolean fetchingLocation;
     private Location gpsLocation;
-    private int liveLocationType;
+    private int locationType;
     private Context mContext;
     private int overScrollHeight;
+    private Location previousFetchedLocation;
     private boolean pulledUp;
     private SendLocationCell sendLocationCell;
     private int shareLiveLocationPotistion = -1;
 
     public LocationActivityAdapter(Context context, int i, long j) {
         this.mContext = context;
-        this.liveLocationType = i;
+        this.locationType = i;
         this.dialogId = j;
     }
 
@@ -50,6 +57,9 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
     public void setGpsLocation(Location location) {
         Object obj = this.gpsLocation == null ? 1 : null;
         this.gpsLocation = location;
+        if (this.customLocation == null) {
+            fetchLocationAddress();
+        }
         if (obj != null) {
             int i = this.shareLiveLocationPotistion;
             if (i > 0) {
@@ -59,7 +69,7 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
         if (this.currentMessageObject != null) {
             notifyItemChanged(1);
             updateLiveLocations();
-        } else if (this.liveLocationType != 2) {
+        } else if (this.locationType != 2) {
             updateCell();
         } else {
             updateLiveLocations();
@@ -74,6 +84,9 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
 
     public void setCustomLocation(Location location) {
         this.customLocation = location;
+        if (this.customLocation == null) {
+            fetchLocationAddress();
+        }
         updateCell();
     }
 
@@ -94,43 +107,122 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
         notifyDataSetChanged();
     }
 
+    public void setChatLocation(TL_channelLocation tL_channelLocation) {
+        this.chatLocation = tL_channelLocation;
+    }
+
     private void updateCell() {
         SendLocationCell sendLocationCell = this.sendLocationCell;
-        if (sendLocationCell == null) {
-            return;
+        if (sendLocationCell != null) {
+            String str = "Loading";
+            String str2 = "(%f,%f)";
+            if (this.locationType == 4) {
+                String str3 = this.addressName;
+                if (str3 == null) {
+                    if ((this.customLocation == null && this.gpsLocation == null) || this.fetchingLocation) {
+                        str3 = LocaleController.getString(str, NUM);
+                    } else {
+                        if (this.customLocation != null) {
+                            str3 = String.format(Locale.US, str2, new Object[]{Double.valueOf(r0.getLatitude()), Double.valueOf(this.customLocation.getLongitude())});
+                        } else {
+                            if (this.gpsLocation != null) {
+                                str3 = String.format(Locale.US, str2, new Object[]{Double.valueOf(r0.getLatitude()), Double.valueOf(this.gpsLocation.getLongitude())});
+                            } else {
+                                str3 = LocaleController.getString(str, NUM);
+                            }
+                        }
+                    }
+                }
+                this.sendLocationCell.setText(LocaleController.getString("ChatSetThisLocation", NUM), str3);
+            } else if (this.customLocation != null) {
+                sendLocationCell.setText(LocaleController.getString("SendSelectedLocation", NUM), String.format(Locale.US, str2, new Object[]{Double.valueOf(this.customLocation.getLatitude()), Double.valueOf(this.customLocation.getLongitude())}));
+            } else {
+                String str4 = "SendLocation";
+                if (this.gpsLocation != null) {
+                    String string = LocaleController.getString(str4, NUM);
+                    Object[] objArr = new Object[1];
+                    objArr[0] = LocaleController.formatPluralString("Meters", (int) this.gpsLocation.getAccuracy());
+                    sendLocationCell.setText(string, LocaleController.formatString("AccurateTo", NUM, objArr));
+                    return;
+                }
+                sendLocationCell.setText(LocaleController.getString(str4, NUM), LocaleController.getString(str, NUM));
+            }
         }
-        if (this.customLocation != null) {
-            sendLocationCell.setText(LocaleController.getString("SendSelectedLocation", NUM), String.format(Locale.US, "(%f,%f)", new Object[]{Double.valueOf(this.customLocation.getLatitude()), Double.valueOf(this.customLocation.getLongitude())}));
-            return;
-        }
-        String str = "SendLocation";
-        if (this.gpsLocation != null) {
-            String string = LocaleController.getString(str, NUM);
-            Object[] objArr = new Object[1];
-            objArr[0] = LocaleController.formatPluralString("Meters", (int) this.gpsLocation.getAccuracy());
-            sendLocationCell.setText(string, LocaleController.formatString("AccurateTo", NUM, objArr));
-            return;
-        }
-        sendLocationCell.setText(LocaleController.getString(str, NUM), LocaleController.getString("Loading", NUM));
+    }
+
+    private String getAddressName() {
+        return this.addressName;
+    }
+
+    public void onLocationAddressAvailable(String str, Location location) {
+        this.fetchingLocation = false;
+        this.previousFetchedLocation = location;
+        this.addressName = str;
+        updateCell();
+    }
+
+    /* JADX WARNING: Missing block: B:6:0x000d, code skipped:
+            if (r0 != null) goto L_0x000f;
+     */
+    public void fetchLocationAddress() {
+        /*
+        r3 = this;
+        r0 = r3.locationType;
+        r1 = 4;
+        if (r0 == r1) goto L_0x0006;
+    L_0x0005:
+        return;
+    L_0x0006:
+        r0 = r3.customLocation;
+        if (r0 == 0) goto L_0x000b;
+    L_0x000a:
+        goto L_0x000f;
+    L_0x000b:
+        r0 = r3.gpsLocation;
+        if (r0 == 0) goto L_0x0029;
+    L_0x000f:
+        r1 = r3.previousFetchedLocation;
+        if (r1 == 0) goto L_0x001d;
+    L_0x0013:
+        r1 = r1.distanceTo(r0);
+        r2 = NUM; // 0x42CLASSNAME float:100.0 double:5.53552857E-315;
+        r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1));
+        if (r1 <= 0) goto L_0x0020;
+    L_0x001d:
+        r1 = 0;
+        r3.addressName = r1;
+    L_0x0020:
+        r3.updateCell();
+        r1 = 1;
+        r3.fetchingLocation = r1;
+        org.telegram.messenger.LocationController.fetchLocationAddress(r0, r3);
+    L_0x0029:
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.LocationActivityAdapter.fetchLocationAddress():void");
     }
 
     public int getItemCount() {
+        int i = this.locationType;
+        int i2 = 5;
+        if (i == 5 || i == 4) {
+            return 2;
+        }
         if (this.currentMessageObject != null) {
             return (this.currentLiveLocations.isEmpty() ? 0 : this.currentLiveLocations.size() + 2) + 2;
-        } else if (this.liveLocationType == 2) {
+        } else if (i == 2) {
             return this.currentLiveLocations.size() + 2;
         } else {
             boolean z = this.searching;
-            int i = 4;
             if (z || (!z && this.places.isEmpty())) {
-                if (this.liveLocationType != 0) {
-                    i = 5;
+                if (this.locationType == 0) {
+                    i2 = 4;
                 }
-                return i;
-            } else if (this.liveLocationType == 1) {
-                return (this.places.size() + 4) + (this.places.isEmpty() ^ 1);
+                return i2;
+            } else if (this.locationType == 1) {
+                return (this.places.size() + 4) + (1 ^ this.places.isEmpty());
             } else {
-                return (this.places.size() + 3) + (this.places.isEmpty() ^ 1);
+                return (this.places.size() + 3) + (1 ^ this.places.isEmpty());
             }
         }
     }
@@ -161,7 +253,10 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
                 emptyCell.setDialogId(this.dialogId);
                 break;
             default:
-                emptyCell = new SharingLiveLocationCell(this.mContext, true);
+                Context context = this.mContext;
+                int i2 = this.locationType;
+                i2 = (i2 == 4 || i2 == 5) ? 16 : 54;
+                emptyCell = new SharingLiveLocationCell(context, true, i2);
                 break;
         }
         return new Holder(emptyCell);
@@ -175,7 +270,7 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
     }
 
     public /* synthetic */ void lambda$setPulledUp$0$LocationActivityAdapter() {
-        notifyItemChanged(this.liveLocationType == 0 ? 2 : 3);
+        notifyItemChanged(this.locationType == 0 ? 2 : 3);
     }
 
     public boolean isPulledUp() {
@@ -201,9 +296,14 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
                             sendLocationCell.setHasLocation(z);
                             return;
                         } else if (itemViewType == 7) {
+                            SharingLiveLocationCell sharingLiveLocationCell = (SharingLiveLocationCell) viewHolder.itemView;
+                            TL_channelLocation tL_channelLocation = this.chatLocation;
+                            if (tL_channelLocation != null) {
+                                sharingLiveLocationCell.setDialog(this.dialogId, tL_channelLocation);
+                                return;
+                            }
                             MessageObject messageObject = this.currentMessageObject;
                             if (messageObject == null || i != 1) {
-                                SharingLiveLocationCell sharingLiveLocationCell = (SharingLiveLocationCell) viewHolder.itemView;
                                 ArrayList arrayList = this.currentLiveLocations;
                                 if (this.currentMessageObject != null) {
                                     i2 = 4;
@@ -211,12 +311,12 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
                                 sharingLiveLocationCell.setDialog((LiveLocation) arrayList.get(i - i2), this.gpsLocation);
                                 return;
                             }
-                            ((SharingLiveLocationCell) viewHolder.itemView).setDialog(messageObject, this.gpsLocation);
+                            sharingLiveLocationCell.setDialog(messageObject, this.gpsLocation);
                             return;
                         } else {
                             return;
                         }
-                    } else if (this.liveLocationType == 0) {
+                    } else if (this.locationType == 0) {
                         i -= 3;
                         ((LocationCell) viewHolder.itemView).setLocation((TL_messageMediaVenue) this.places.get(i), (String) this.iconUrls.get(i), true);
                         return;
@@ -244,10 +344,17 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
     }
 
     public Object getItem(int i) {
-        MessageObject messageObject = this.currentMessageObject;
-        if (messageObject == null) {
-            int i2 = this.liveLocationType;
-            if (i2 == 2) {
+        int i2 = this.locationType;
+        if (i2 != 4) {
+            MessageObject messageObject = this.currentMessageObject;
+            if (messageObject != null) {
+                if (i == 1) {
+                    return messageObject;
+                }
+                if (i > 3 && i < this.places.size() + 3) {
+                    return this.currentLiveLocations.get(i - 4);
+                }
+            } else if (i2 == 2) {
                 if (i >= 2) {
                     return this.currentLiveLocations.get(i - 2);
                 }
@@ -259,69 +366,86 @@ public class LocationActivityAdapter extends BaseLocationAdapter {
             } else if (i > 2 && i < this.places.size() + 3) {
                 return this.places.get(i - 3);
             }
-        } else if (i == 1) {
-            return messageObject;
+            return null;
+        } else if (this.addressName == null) {
+            return null;
         } else {
-            if (i > 3 && i < this.places.size() + 3) {
-                return this.currentLiveLocations.get(i - 4);
+            TL_messageMediaVenue tL_messageMediaVenue = new TL_messageMediaVenue();
+            tL_messageMediaVenue.address = this.addressName;
+            tL_messageMediaVenue.geo = new TL_geoPoint();
+            Location location = this.customLocation;
+            if (location != null) {
+                tL_messageMediaVenue.geo.lat = location.getLatitude();
+                tL_messageMediaVenue.geo._long = this.customLocation.getLongitude();
+            } else {
+                location = this.gpsLocation;
+                if (location != null) {
+                    tL_messageMediaVenue.geo.lat = location.getLatitude();
+                    tL_messageMediaVenue.geo._long = this.gpsLocation.getLongitude();
+                }
             }
+            return tL_messageMediaVenue;
         }
-        return null;
     }
 
     public int getItemViewType(int i) {
         if (i == 0) {
             return 0;
         }
-        if (this.currentMessageObject == null) {
-            int i2 = this.liveLocationType;
-            if (i2 != 2) {
-                boolean z;
-                if (i2 == 1) {
-                    if (i == 1) {
-                        return 1;
-                    }
-                    if (i == 2) {
-                        this.shareLiveLocationPotistion = i;
-                        return 6;
-                    } else if (i == 3) {
-                        return 2;
-                    } else {
-                        z = this.searching;
-                        if (z || (!z && this.places.isEmpty())) {
-                            return 4;
-                        }
-                        if (i == this.places.size() + 4) {
-                            return 5;
-                        }
-                    }
-                } else if (i == 1) {
+        int i2 = this.locationType;
+        if (i2 == 5) {
+            return 7;
+        }
+        if (i2 == 4) {
+            return 1;
+        }
+        if (this.currentMessageObject != null) {
+            if (i == 2) {
+                return 2;
+            }
+            if (i != 3) {
+                return 7;
+            }
+            this.shareLiveLocationPotistion = i;
+            return 6;
+        } else if (i2 != 2) {
+            boolean z;
+            if (i2 == 1) {
+                if (i == 1) {
                     return 1;
+                }
+                if (i == 2) {
+                    this.shareLiveLocationPotistion = i;
+                    return 6;
+                } else if (i == 3) {
+                    return 2;
                 } else {
-                    if (i == 2) {
-                        return 2;
-                    }
                     z = this.searching;
                     if (z || (!z && this.places.isEmpty())) {
                         return 4;
                     }
-                    if (i == this.places.size() + 3) {
+                    if (i == this.places.size() + 4) {
                         return 5;
                     }
                 }
-                return 3;
-            } else if (i != 1) {
-                return 7;
+            } else if (i == 1) {
+                return 1;
             } else {
-                this.shareLiveLocationPotistion = i;
-                return 6;
+                if (i == 2) {
+                    return 2;
+                }
+                z = this.searching;
+                if (z || (!z && this.places.isEmpty())) {
+                    return 4;
+                }
+                if (i == this.places.size() + 3) {
+                    return 5;
+                }
             }
-        } else if (i == 2) {
-            return 2;
+            return 3;
+        } else if (i != 1) {
+            return 7;
         } else {
-            if (i != 3) {
-                return 7;
-            }
             this.shareLiveLocationPotistion = i;
             return 6;
         }

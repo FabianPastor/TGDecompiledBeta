@@ -529,7 +529,6 @@
     <string name="ChannelAdmin">관리자</string>
     <string name="ChannelAdministrators">관리자</string>
     <string name="ChannelAdminsInfo">채널을 관리하는 데 도움을 줄 만한 관리자를 추가하실 수 있습니다. 관리자를 제명하려면 길게 누르세요.</string>
-    <string name="ChannelAlertCreate">채널 만들기</string>
     <string name="ChannelAlertText">채널은 회원님의 메시지를 수많은 사람에게 알리기 위한 도구입니다.</string>
     <string name="ChannelAlertTitle">채널이란 무엇인가요?</string>
     <string name="ChannelBlacklist">추방된 사용자</string>
@@ -2029,7 +2028,6 @@
     <string name="PhoneMain">주</string>
     <string name="PhoneMobile">휴대전화</string>
     <string name="PhoneNumberAlert">텔레그램 연락 상대 중에서 회원님의 옛 전화번호가 있으며 차단되지 않은 모두에게 회원님의 새 전화번호가 등록됩니다.</string>
-    <string name="PhoneNumberChange">번호 바꾸기</string>
     <string name="PhoneNumberFlood">죄송합니다. 최근 들어 계정을 너무 많이 삭제한 뒤 재생성하셨습니다. 며칠 기다렸다 다시 가입해 주세요.</string>
     <string name="PhoneNumberHelp">텔레그램 번호를 여기서 바꾸실 수 있습니다. 회원님의 계정과 함께 메시지와 미디어, 연락처 따위의 모든 클라우드 데이터가 새 번호로 옮겨집니다.\10\10**중요:** 텔레그램 연락 상대 중에서 회원님의 옛 전화번호가 있으며 차단되지 않은 모두에게 회원님의 **새 전화번호**가 등록됩니다.</string>
     <string name="PhoneOther">기타</string>

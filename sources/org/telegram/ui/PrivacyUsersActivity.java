@@ -147,6 +147,8 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                     int i2 = chat.participants_count;
                     if (i2 != 0) {
                         stringBuilder = LocaleController.formatPluralString("Members", i2);
+                    } else if (chat.has_geo) {
+                        stringBuilder = LocaleController.getString("MegaLocation", NUM);
                     } else if (TextUtils.isEmpty(chat.username)) {
                         stringBuilder = LocaleController.getString("MegaPrivate", NUM);
                     } else {
@@ -294,13 +296,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         Bundle bundle;
         if (i == this.blockUserRow) {
             if (this.blockedUsersActivity) {
-                bundle = new Bundle();
-                bundle.putBoolean("onlyUsers", true);
-                bundle.putBoolean("destroyAfterSelect", true);
-                bundle.putBoolean("returnAsResult", true);
-                ContactsActivity contactsActivity = new ContactsActivity(bundle);
-                contactsActivity.setDelegate(this);
-                presentFragment(contactsActivity);
+                presentFragment(new DialogOrContactPickerActivity());
                 return;
             }
             bundle = new Bundle();

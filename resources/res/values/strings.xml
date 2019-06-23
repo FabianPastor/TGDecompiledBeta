@@ -168,7 +168,9 @@
     <string name="AddBotAsAdmin">Bots can only be added as administrators.</string>
     <string name="AddCaption">Add a caption...</string>
     <string name="AddContact">Add</string>
+    <string name="AddContactByPhone">Add %1$s</string>
     <string name="AddContactChat">ADD CONTACT</string>
+    <string name="AddContactFullChat">ADD %1$s TO CONTACTS</string>
     <string name="AddContactTitle">Add contact</string>
     <string name="AddExceptions">Add exceptions</string>
     <string name="AddMasks">Add Masks</string>
@@ -181,6 +183,7 @@
     <string name="AddMutual">Add contacts to your channel</string>
     <string name="AddOneMemberAlertTitle">Add member</string>
     <string name="AddOneMemberForwardMessages">Show the last 100 messages to **%1$s**</string>
+    <string name="AddPeopleNearby">Add People Nearby</string>
     <string name="AddProxy">Add Proxy</string>
     <string name="AddRecipient">Add recipient</string>
     <string name="AddShortcut">Add to Home screen</string>
@@ -190,6 +193,7 @@
     <string name="AddStickersNotFound">Stickers not found</string>
     <string name="AddSubscriber">Add subscriber</string>
     <string name="AddToContacts">Add to contacts</string>
+    <string name="AddToExceptions">Add to exceptions</string>
     <string name="AddToExistingContact">Add to Existing Contact</string>
     <string name="AddToFavorites">Add to Favorites</string>
     <string name="AddToMasks">Add to Masks</string>
@@ -409,6 +413,7 @@
     <string name="AutoplayVideoInfo">Press the volume buttons to turn sound on.</string>
     <string name="Available">Available</string>
     <string name="AwaitingEncryption">Waiting for %s to get online...</string>
+    <string name="AwayTo">%1$s away</string>
     <string name="Back">Back</string>
     <string name="BackgroundBlurred">Blurred</string>
     <string name="BackgroundBrightness">Brightness</string>
@@ -435,6 +440,12 @@
     <string name="Black">Black</string>
     <string name="BlockContact">Block</string>
     <string name="BlockUser">Block user</string>
+    <string name="BlockUserAlert">Do you want to block **%1$s** from messaging and calling you on Telegram?</string>
+    <string name="BlockUserChatsTitle">CHATS</string>
+    <string name="BlockUserContactsTitle">CONTACTS</string>
+    <string name="BlockUserMultiTitle">Block User</string>
+    <string name="BlockUserTitle">Block %1$s</string>
+    <string name="BlockedEmpty">None</string>
     <string name="BlockedUsers">Blocked Users</string>
     <string name="BlockedUsersCount_few">%1$d blocked users</string>
     <string name="BlockedUsersCount_many">%1$d blocked users</string>
@@ -506,6 +517,7 @@
     <string name="CantPlayVideo">App was unable to play this video. Try to play it with external player?</string>
     <string name="Caption">Caption</string>
     <string name="Change">Change</string>
+    <string name="ChangeChatBackground">Change Chat Background</string>
     <string name="ChangeLanguageLater">You can change your language later in Settings.</string>
     <string name="ChangePasscode">Change Passcode</string>
     <string name="ChangePasscodeInfo">When you set up an additional passcode, a lock icon will appear on the chats page. Tap it to lock and unlock your Telegram app.\10\10Note: if you forget the passcode, you\'ll need to delete and reinstall the app. All secret chats will be lost.</string>
@@ -527,9 +539,10 @@
     <string name="ChannelAddedBy">un1 added you to this channel</string>
     <string name="ChannelAddedByNotification">%1$s added you to the channel %2$s</string>
     <string name="ChannelAdmin">Admin</string>
+    <string name="ChannelAdministrator">Administrator</string>
     <string name="ChannelAdministrators">Administrators</string>
     <string name="ChannelAdminsInfo">You can add administrators to help you manage your channel. Tap and hold to remove admins.</string>
-    <string name="ChannelAlertCreate">CREATE CHANNEL</string>
+    <string name="ChannelAlertCreate2">Create Channel</string>
     <string name="ChannelAlertText">Channels are a tool for broadcasting your messages to unlimited audiences.</string>
     <string name="ChannelAlertTitle">What is a Channel?</string>
     <string name="ChannelBlacklist">Removed Users</string>
@@ -643,6 +656,9 @@
     <string name="ChatListDefault">Two lines</string>
     <string name="ChatListExpanded">Three lines</string>
     <string name="ChatLocation">Location</string>
+    <string name="ChatSetLocation">Set Location</string>
+    <string name="ChatSetLocationInfo">People will be able to find your group in the People Nearby section.</string>
+    <string name="ChatSetThisLocation">Set this location</string>
     <string name="ChatSettings">Chat Settings</string>
     <string name="ChatVideo">Video</string>
     <string name="ChatYourSelf">forward here to save</string>
@@ -660,6 +676,7 @@
     <string name="ChatsException_two">%1$d chats</string>
     <string name="ChatsException_zero">%1$d chats</string>
     <string name="ChatsMute">Mute</string>
+    <string name="ChatsNearbyHeader">Groups nearby</string>
     <string name="ChatsSelectedClearCache_few">%1$d chats</string>
     <string name="ChatsSelectedClearCache_many">%1$d chats</string>
     <string name="ChatsSelectedClearCache_one">%1$d chat</string>
@@ -910,14 +927,26 @@
     <string name="EditAdminCantEdit">You cannot edit the rights of this admin.</string>
     <string name="EditAdminChangeChannelInfo">Change Channel Info</string>
     <string name="EditAdminChangeGroupInfo">Change Group Info</string>
+    <string name="EditAdminChannelTransfer">Transfer Channel Ownership</string>
     <string name="EditAdminDeleteMessages">Delete Messages of Others</string>
     <string name="EditAdminEditMessages">Edit Messages of Others</string>
     <string name="EditAdminGroupDeleteMessages">Delete Messages</string>
+    <string name="EditAdminGroupTransfer">Transfer Group Ownership</string>
     <string name="EditAdminPinMessages">Pin Messages</string>
     <string name="EditAdminPostMessages">Post Messages</string>
     <string name="EditAdminPromotedBy">Promoted by %1$s</string>
     <string name="EditAdminRemoveAdmin">Dismiss Admin</string>
     <string name="EditAdminRights">Edit admin rights</string>
+    <string name="EditAdminTransferAlertText">You can transfer this group to **%1$s** only if you have:</string>
+    <string name="EditAdminTransferAlertText1">Enabled **2-Step Verification** more than **7 days** ago.</string>
+    <string name="EditAdminTransferAlertText2">Logged in on this device more than **24 hours** ago.</string>
+    <string name="EditAdminTransferAlertText3">Please come back later.</string>
+    <string name="EditAdminTransferAlertTitle">Security Check</string>
+    <string name="EditAdminTransferChangeOwner">Change Owner</string>
+    <string name="EditAdminTransferChannelToast">**%1$s** is now the owner of the channel.</string>
+    <string name="EditAdminTransferGroupToast">**%1$s** is now the owner of the group.</string>
+    <string name="EditAdminTransferReadyAlertText">This will transfer the **full owner** rights for **%1$s** to **%2$s**.</string>
+    <string name="EditAdminTransferSetPassword">Set Password</string>
     <string name="EditAdminWhatCanDo">What can this admin do?</string>
     <string name="EditCantEditPermissions">You cannot edit this permission.</string>
     <string name="EditCantEditPermissionsPublic">This permission is not available in public groups.</string>
@@ -990,6 +1019,8 @@
     <string name="EventLogChangedGroupLink">un1 changed the group link:</string>
     <string name="EventLogChangedLinkedChannel">un1 linked this group to un2</string>
     <string name="EventLogChangedLinkedGroup">un1 made un2 the discussion group for this channel</string>
+    <string name="EventLogChangedLocation">un1 changed group location to \"%1$s\"</string>
+    <string name="EventLogChangedOwnership">transferred ownership to %1$s</string>
     <string name="EventLogChangedStickersSet">un1 changed the group sticker set</string>
     <string name="EventLogChannelJoined">un1 joined the channel</string>
     <string name="EventLogChannelRestricted">banned %1$s</string>
@@ -1047,6 +1078,7 @@
     <string name="EventLogRemovedGroupLink">un1 removed the group link</string>
     <string name="EventLogRemovedLinkedChannel">un1 unlinked this group from un2</string>
     <string name="EventLogRemovedLinkedGroup">un1 removed the discussion group un2</string>
+    <string name="EventLogRemovedLocation">un1 removed group location</string>
     <string name="EventLogRemovedStickersSet">un1 removed the group sticker set</string>
     <string name="EventLogRemovedWGroupPhoto">un1 removed the group photo</string>
     <string name="EventLogRestrictedChangeInfo">Change info</string>
@@ -1201,6 +1233,7 @@
     <string name="Grain">Grain</string>
     <string name="Gray">Gray</string>
     <string name="Green">Green</string>
+    <string name="GroupAddMembers">Add Members</string>
     <string name="GroupContacts">Contacts in this group</string>
     <string name="GroupDeletedUndo">Group deleted.</string>
     <string name="GroupDescription1">Up to 200,000 members</string>
@@ -1380,6 +1413,7 @@
     <string name="LocalMusicCache">Music</string>
     <string name="LocalPhotoCache">Photos</string>
     <string name="LocalVideoCache">Videos</string>
+    <string name="LocatedChannelsTooMuch">Sorry, the target user has too many location-based groups already. Please ask them to delete one of their existing ones first.</string>
     <string name="LocationUpdated">updated</string>
     <string name="LocationUpdatedFormatted">updated %1$s</string>
     <string name="LocationUpdatedJustNow">updated just now</string>
@@ -1431,6 +1465,7 @@
     <string name="MegaDeleteInfo">You will lose all messages in this group.</string>
     <string name="MegaLeaveAlert">Are you sure you want to leave the group?</string>
     <string name="MegaLeaveAlertWithName">Are you sure you want to leave **%1$s**?</string>
+    <string name="MegaLocation">Location-based Group</string>
     <string name="MegaPrivate">Private Group</string>
     <string name="MegaPrivateInfo">Private groups can only be joined if you were invited or have an invite link.</string>
     <string name="MegaPrivateLinkHelp">People can join your group by following this link. You can revoke the link any time.</string>
@@ -1476,6 +1511,9 @@
     <string name="Minutes_other">%1$d minutes</string>
     <string name="Minutes_two">%1$d minutes</string>
     <string name="Minutes_zero">%1$d minutes</string>
+    <string name="MobileHidden">Mobile hidden</string>
+    <string name="MobileHiddenExceptionInfo">Phone number will be visible once %1$s adds you as a contact.</string>
+    <string name="MobileVisibleInfo">When you tap **DONE**, your phone number will become visible to %1$s.</string>
     <string name="Mono">Mono</string>
     <string name="Months_few">%1$d months</string>
     <string name="Months_many">%1$d months</string>
@@ -1488,7 +1526,11 @@
     <string name="MuteDisable">Disable</string>
     <string name="MuteFor">Mute for %1$s</string>
     <string name="MuteNotifications">Mute notifications</string>
+    <string name="NearbyCreateGroup">Create a Local Group</string>
+    <string name="NearbyCreateGroupInfo">Anyone close to this location (neighbors, co-workers, fellow students, event attendees, visitors of a venue) will be able to see your group in the People Nearby section.</string>
+    <string name="NearbyCreateGroupInfo2">If you start an unrelated group at this location, you may lose the ability to create location-based groups.</string>
     <string name="NearbyPlaces">Or choose a place</string>
+    <string name="NearbyStartGroup">Start Group</string>
     <string name="NetworkUsage">Data Usage</string>
     <string name="NetworkUsageMobile">MOBILE</string>
     <string name="NetworkUsageRoaming">ROAMING</string>
@@ -1499,6 +1541,7 @@
     <string name="NeverShareWithTitle">Never Share</string>
     <string name="NewBroadcastList">New Broadcast List</string>
     <string name="NewChannel">New Channel</string>
+    <string name="NewContact">New Contact</string>
     <string name="NewConversationShortcut">New conversation</string>
     <string name="NewGroup">New Group</string>
     <string name="NewMessageTitle">New Message</string>
@@ -1663,6 +1706,9 @@
     <string name="NotificationsCustomize">Customize</string>
     <string name="NotificationsDefaultOff">Default (Off)</string>
     <string name="NotificationsDefaultOn">Default (On)</string>
+    <string name="NotificationsDeleteAllException">Delete All Exceptions</string>
+    <string name="NotificationsDeleteAllExceptionAlert">Are you sure you want to delete all exceptions?</string>
+    <string name="NotificationsDeleteAllExceptionTitle">Delete all exceptions</string>
     <string name="NotificationsEnableCustom">Enable Custom Notifications</string>
     <string name="NotificationsExceptions">Exceptions</string>
     <string name="NotificationsExceptionsAlert">Please note that **%1$s** are listed as exceptions and won\'t be affected by this change.</string>
@@ -1696,6 +1742,7 @@
     <string name="NotificationsTurnOn">Turn On</string>
     <string name="NotificationsUnmuted">Unmuted</string>
     <string name="November">November</string>
+    <string name="NowInContacts">%1$s is now in your contact list.</string>
     <string name="NumberUnknown">Unknown</string>
     <string name="OK">OK</string>
     <string name="October">October</string>
@@ -2012,6 +2059,12 @@
     <string name="PaymentTransactionTotal">Total</string>
     <string name="PaymentWarning">Warning</string>
     <string name="PaymentWarningText">Neither Telegram, nor %1$s will have access to your credit card information. Credit card details will be handled only by the payment system, %2$s.\10\10Payments will go directly to the developer of %1$s. Telegram cannot provide any guarantees, so proceed at your own risk. In case of problems, please contact the developer of %1$s or your bank.</string>
+    <string name="PeopleNearby">People Nearby</string>
+    <string name="PeopleNearbyAccessInfo">Use this section to quickly exchange phone numbers with people around you.\10\10Please switch on location access to enable this feature.</string>
+    <string name="PeopleNearbyAllowAccess">Allow Access</string>
+    <string name="PeopleNearbyEmpty">Looking for users around you...</string>
+    <string name="PeopleNearbyHeader">People nearby</string>
+    <string name="PeopleNearbyInfo">Ask your friend nearby to open this page to exchange phone numbers.</string>
     <string name="PermissionContacts">To let you connect with friends across all your devices, your contacts will be continuously synced with Telegram\'s heavily encrypted cloud servers.</string>
     <string name="PermissionDrawAboveOtherApps">Telegram needs access to draw above other apps to play videos in Picture-in-Picture mode.</string>
     <string name="PermissionNoAudio">Telegram needs access to your microphone so that you can send voice messages.</string>
@@ -2029,9 +2082,11 @@
     <string name="PhoneMain">Main</string>
     <string name="PhoneMobile">Mobile</string>
     <string name="PhoneNumberAlert">All your Telegram contacts will get your new number added to their address book, provided they had your old number and you haven\'t blocked them in Telegram.</string>
-    <string name="PhoneNumberChange">CHANGE NUMBER</string>
+    <string name="PhoneNumberChange2">Change Number</string>
+    <string name="PhoneNumberChangeTitle">Change number</string>
     <string name="PhoneNumberFlood">Sorry, you have deleted and re-created your account too many times recently. Please wait for a few days before signing up again.</string>
     <string name="PhoneNumberHelp">You can change your Telegram number here. Your account and all your cloud data — messages, media, contacts, etc. will be moved to the new number.\10\10**Important:** all your Telegram contacts will get your **new number** added to their address book, provided they had your old number and you haven\'t blocked them in Telegram.</string>
+    <string name="PhoneNumberSearch">Phone number</string>
     <string name="PhoneOther">Other</string>
     <string name="PhoneWork">Work</string>
     <string name="PhotoCaption">Photo Caption</string>
@@ -2056,6 +2111,7 @@
     <string name="PinnedPoll">Pinned poll</string>
     <string name="PleaseDownload">Please download media first</string>
     <string name="PleaseEnterCurrentPassword">Enter your password</string>
+    <string name="PleaseEnterCurrentPasswordTransfer">Please enter your password to complete the transfer.</string>
     <string name="PleaseEnterFirstPassword">Enter a password</string>
     <string name="PleaseEnterPassword">Enter your new password</string>
     <string name="PleaseLoginPassport">Please log in to your Telegram account to use Telegram Passport.</string>
@@ -2120,6 +2176,7 @@
     <string name="ProxyConnections">Connections</string>
     <string name="ProxyDetails">Proxy Details</string>
     <string name="ProxySettings">Proxy Settings</string>
+    <string name="PublicChannelsTooMuch">Sorry, the target user has too many public groups or channels already. Please ask them to make one of their existing groups or channels private first.</string>
     <string name="Purple">Purple</string>
     <string name="Question">Question</string>
     <string name="QuestionHint">Ask a question</string>
@@ -2181,6 +2238,12 @@
     <string name="ReportSpamAlertChannel">Are you sure you want to report spam from this channel?</string>
     <string name="ReportSpamAlertGroup">Are you sure you want to report spam from this group?</string>
     <string name="ReportSpamAndLeave">REPORT SPAM AND LEAVE</string>
+    <string name="ReportSpamLocation">GROUP UNRELATED TO LOCATION?</string>
+    <string name="ReportSpamTitle">Report spam</string>
+    <string name="ReportSpamUser">BLOCK USER</string>
+    <string name="ReportUnrelatedGroup">Report unrelated group</string>
+    <string name="ReportUnrelatedGroupText">Please let us know if this group is not related to this location:\10\10**%1$s**</string>
+    <string name="ReportUnrelatedGroupTextNoAddress">Please let us know if this group is not related to this location.</string>
     <string name="ResendCode">Resend code</string>
     <string name="ResendCodeInfo">The verification code was sent to your email.</string>
     <string name="Reset">Reset</string>
@@ -2351,7 +2414,9 @@
     <string name="ShareFile">Share</string>
     <string name="ShareLink">Share Link</string>
     <string name="ShareLocation">Location</string>
-    <string name="ShareMyContactInfo">Share my contact</string>
+    <string name="ShareMyContactInfo">Share my phone</string>
+    <string name="ShareMyPhone">SHARE MY PHONE NUMBER</string>
+    <string name="SharePhoneNumberWith">Share my phone number with %1$s</string>
     <string name="ShareSendTo">Send to...</string>
     <string name="ShareTelegram">Share Telegram...</string>
     <string name="ShareYouLocationInfo">This will send your current location to the bot.</string>
@@ -2434,6 +2499,7 @@
     <string name="StopVerification">Do you want to stop the phone number verification process?</string>
     <string name="StorageUsage">Storage Usage</string>
     <string name="Streaming">Streaming</string>
+    <string name="Strike">Strike</string>
     <string name="Subscribers_few">%1$d subscribers</string>
     <string name="Subscribers_many">%1$d subscribers</string>
     <string name="Subscribers_one">%1$d subscriber</string>
@@ -2521,6 +2587,8 @@
     <string name="TurnPasswordOffQuestion">Are you sure you want to disable your password?</string>
     <string name="TwoStepVerification">Two-Step Verification</string>
     <string name="TwoStepVerificationTitle">Two-Step Verification</string>
+    <string name="TypeLocationGroup">Link</string>
+    <string name="TypeLocationGroupEdit">Tap to add a permanent link</string>
     <string name="TypeMessage">Message</string>
     <string name="TypePrivate">Private</string>
     <string name="TypePrivateGroup">Private</string>
@@ -2534,6 +2602,7 @@
     <string name="UnbanText">Tap and hold on user to unban.</string>
     <string name="Unblock">Unblock</string>
     <string name="UnblockText">Tap and hold on user to unblock.</string>
+    <string name="Underline">Underline</string>
     <string name="Undo">UNDO</string>
     <string name="UndoAllCustom">Undo all custom notification settings for all your contacts, groups and channels.</string>
     <string name="UnhideFromTop">Pin</string>
@@ -2629,7 +2698,7 @@
     <string name="UsernameHelpLink">This link opens a chat with you:\10%1$s</string>
     <string name="UsernameInUse">Sorry, this username is already taken.</string>
     <string name="UsernameInvalid">Sorry, this username is invalid.</string>
-    <string name="UsernameInvalidLong">The username must not exceed 32 characters.</string>
+    <string name="UsernameInvalidLong">The username mustto not exceed 32 characters.</string>
     <string name="UsernameInvalidShort">A username must have at least 5 characters.</string>
     <string name="UsernameInvalidStartNumber">Sorry, a username can\'t start with a number.</string>
     <string name="UsernamePlaceholder">Your Username</string>
@@ -2754,6 +2823,7 @@
     <string name="YourEmailSkipWarning">Warning</string>
     <string name="YourEmailSkipWarningText">No, seriously.\10\10If you forget your password, you will lose access to your Telegram account. There will be no way to restore it.</string>
     <string name="YourEmailSuccessText">Your recovery email for Two-Step Verification is now active.</string>
+    <string name="YourLocatedChannelsTooMuch">Sorry, you have too many location-based groups already. Please delete one of your existing ones first.</string>
     <string name="YourName">Your name</string>
     <string name="YourPassword">Your Password</string>
     <string name="YourPasswordSuccess">Success!</string>

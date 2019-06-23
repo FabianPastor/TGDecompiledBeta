@@ -589,31 +589,31 @@ public class PollCreateActivity extends BaseFragment {
             this.doneItem.setEnabled(false);
             animatorSet2 = this.doneItemAnimation;
             animatorArr = new Animator[6];
-            animatorArr[0] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), View.SCALE_X, new float[]{0.1f});
-            animatorArr[1] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), View.SCALE_Y, new float[]{0.1f});
-            animatorArr[2] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), View.ALPHA, new float[]{0.0f});
+            animatorArr[0] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), View.SCALE_X, new float[]{0.1f});
+            animatorArr[1] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), View.SCALE_Y, new float[]{0.1f});
+            animatorArr[2] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), View.ALPHA, new float[]{0.0f});
             animatorArr[3] = ObjectAnimator.ofFloat(this.progressView, View.SCALE_X, new float[]{1.0f});
             animatorArr[4] = ObjectAnimator.ofFloat(this.progressView, View.SCALE_Y, new float[]{1.0f});
             animatorArr[5] = ObjectAnimator.ofFloat(this.progressView, View.ALPHA, new float[]{1.0f});
             animatorSet2.playTogether(animatorArr);
         } else {
-            this.doneItem.getImageView().setVisibility(0);
+            this.doneItem.getContentView().setVisibility(0);
             this.doneItem.setEnabled(true);
             animatorSet2 = this.doneItemAnimation;
             animatorArr = new Animator[6];
             animatorArr[0] = ObjectAnimator.ofFloat(this.progressView, View.SCALE_X, new float[]{0.1f});
             animatorArr[1] = ObjectAnimator.ofFloat(this.progressView, View.SCALE_Y, new float[]{0.1f});
             animatorArr[2] = ObjectAnimator.ofFloat(this.progressView, View.ALPHA, new float[]{0.0f});
-            animatorArr[3] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), View.SCALE_X, new float[]{1.0f});
-            animatorArr[4] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), View.SCALE_Y, new float[]{1.0f});
-            animatorArr[5] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), View.ALPHA, new float[]{1.0f});
+            animatorArr[3] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), View.SCALE_X, new float[]{1.0f});
+            animatorArr[4] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), View.SCALE_Y, new float[]{1.0f});
+            animatorArr[5] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), View.ALPHA, new float[]{1.0f});
             animatorSet2.playTogether(animatorArr);
         }
         this.doneItemAnimation.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 if (PollCreateActivity.this.doneItemAnimation != null && PollCreateActivity.this.doneItemAnimation.equals(animator)) {
                     if (z) {
-                        PollCreateActivity.this.doneItem.getImageView().setVisibility(4);
+                        PollCreateActivity.this.doneItem.getContentView().setVisibility(4);
                     } else {
                         PollCreateActivity.this.progressView.setVisibility(4);
                     }

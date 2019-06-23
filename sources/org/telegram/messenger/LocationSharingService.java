@@ -29,19 +29,19 @@ public class LocationSharingService extends Service implements NotificationCente
     public void onCreate() {
         super.onCreate();
         this.handler = new Handler();
-        this.runnable = new Runnable() {
-            public void run() {
-                LocationSharingService.this.handler.postDelayed(LocationSharingService.this.runnable, 60000);
-                Utilities.stageQueue.postRunnable(new Runnable() {
-                    public void run() {
-                        for (int i = 0; i < 3; i++) {
-                            LocationController.getInstance(i).update();
-                        }
-                    }
-                });
-            }
-        };
+        this.runnable = new -$$Lambda$LocationSharingService$nPgxbLYJUuL6mX_Yd5lVL7HSSeY(this);
         this.handler.postDelayed(this.runnable, 60000);
+    }
+
+    public /* synthetic */ void lambda$onCreate$1$LocationSharingService() {
+        this.handler.postDelayed(this.runnable, 60000);
+        Utilities.stageQueue.postRunnable(-$$Lambda$LocationSharingService$9a42Vs-_pZkbJD8v75PcBjP85zg.INSTANCE);
+    }
+
+    static /* synthetic */ void lambda$null$0() {
+        for (int i = 0; i < 3; i++) {
+            LocationController.getInstance(i).update();
+        }
     }
 
     public void onDestroy() {
@@ -50,6 +50,7 @@ public class LocationSharingService extends Service implements NotificationCente
             handler.removeCallbacks(this.runnable);
         }
         stopForeground(true);
+        NotificationManagerCompat.from(ApplicationLoader.applicationContext).cancel(6);
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.liveLocationsChanged);
     }
 
@@ -57,16 +58,16 @@ public class LocationSharingService extends Service implements NotificationCente
         if (i == NotificationCenter.liveLocationsChanged) {
             Handler handler = this.handler;
             if (handler != null) {
-                handler.post(new Runnable() {
-                    public void run() {
-                        if (LocationSharingService.this.getInfos().isEmpty()) {
-                            LocationSharingService.this.stopSelf();
-                        } else {
-                            LocationSharingService.this.updateNotification(true);
-                        }
-                    }
-                });
+                handler.post(new -$$Lambda$LocationSharingService$Pgnt4LkJ9hM4FIwwB259oJzj6ug(this));
             }
+        }
+    }
+
+    public /* synthetic */ void lambda$didReceivedNotification$2$LocationSharingService() {
+        if (getInfos().isEmpty()) {
+            stopSelf();
+        } else {
+            updateNotification(true);
         }
     }
 

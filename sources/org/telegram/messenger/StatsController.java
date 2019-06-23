@@ -3,7 +3,7 @@ package org.telegram.messenger;
 import java.io.RandomAccessFile;
 import java.lang.reflect.Array;
 
-public class StatsController {
+public class StatsController extends BaseController {
     private static volatile StatsController[] Instance = new StatsController[3];
     private static final int TYPES_COUNT = 7;
     public static final int TYPE_AUDIOS = 3;
@@ -107,7 +107,7 @@ public class StatsController {
     private StatsController(int r15) {
         /*
         r14 = this;
-        r14.<init>();
+        r14.<init>(r15);
         r0 = 8;
         r1 = new byte[r0];
         r14.buffer = r1;

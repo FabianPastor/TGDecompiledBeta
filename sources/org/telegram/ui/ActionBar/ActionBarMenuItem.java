@@ -35,9 +35,9 @@ import org.telegram.ui.Components.LayoutHelper;
 
 public class ActionBarMenuItem extends FrameLayout {
     private int additionalOffset;
-    private boolean allowCloseAnimation = true;
-    private boolean animateClear = true;
-    private boolean animationEnabled = true;
+    private boolean allowCloseAnimation;
+    private boolean animateClear;
+    private boolean animationEnabled;
     private ImageView clearButton;
     private ActionBarMenuItemDelegate delegate;
     protected ImageView iconView;
@@ -46,7 +46,7 @@ public class ActionBarMenuItem extends FrameLayout {
     private boolean layoutInScreen;
     private ActionBarMenuItemSearchListener listener;
     private int[] location;
-    private boolean longClickEnabled = true;
+    private boolean longClickEnabled;
     protected boolean overrideMenuClick;
     private ActionBarMenu parentMenu;
     private ActionBarPopupWindowLayout popupLayout;
@@ -60,6 +60,7 @@ public class ActionBarMenuItem extends FrameLayout {
     private View selectedMenuView;
     private Runnable showMenuRunnable;
     private int subMenuOpenSide;
+    protected TextView textView;
     private int yOffset;
 
     public interface ActionBarMenuItemDelegate {
@@ -92,11 +93,31 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     public ActionBarMenuItem(Context context, ActionBarMenu actionBarMenu, int i, int i2) {
+        this(context, actionBarMenu, i, i2, false);
+    }
+
+    public ActionBarMenuItem(Context context, ActionBarMenu actionBarMenu, int i, int i2, boolean z) {
         super(context);
+        this.allowCloseAnimation = true;
+        this.animationEnabled = true;
+        this.longClickEnabled = true;
+        this.animateClear = true;
         if (i != 0) {
-            setBackgroundDrawable(Theme.createSelectorDrawable(i));
+            setBackgroundDrawable(Theme.createSelectorDrawable(i, z ? 5 : 1));
         }
         this.parentMenu = actionBarMenu;
+        if (z) {
+            this.textView = new TextView(context);
+            this.textView.setTextSize(1, 15.0f);
+            this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            this.textView.setGravity(17);
+            this.textView.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
+            if (i2 != 0) {
+                this.textView.setTextColor(i2);
+            }
+            addView(this.textView, LayoutHelper.createFrame(-2, -1.0f));
+            return;
+        }
         this.iconView = new ImageView(context);
         this.iconView.setScaleType(ScaleType.CENTER);
         addView(this.iconView, LayoutHelper.createFrame(-1, -1.0f));
@@ -212,8 +233,15 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     public void setIconColor(int i) {
-        this.iconView.setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
-        ImageView imageView = this.clearButton;
+        ImageView imageView = this.iconView;
+        if (imageView != null) {
+            imageView.setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
+        }
+        TextView textView = this.textView;
+        if (textView != null) {
+            textView.setText(i);
+        }
+        imageView = this.clearButton;
         if (imageView != null) {
             imageView.setColorFilter(new PorterDuffColorFilter(i, Mode.MULTIPLY));
         }
@@ -605,16 +633,30 @@ public class ActionBarMenuItem extends FrameLayout {
         }
     }
 
-    public void setIcon(int i) {
-        this.iconView.setImageResource(i);
-    }
-
     public void setIcon(Drawable drawable) {
-        this.iconView.setImageDrawable(drawable);
+        ImageView imageView = this.iconView;
+        if (imageView != null) {
+            imageView.setImageDrawable(drawable);
+        }
     }
 
-    public ImageView getImageView() {
-        return this.iconView;
+    public void setIcon(int i) {
+        ImageView imageView = this.iconView;
+        if (imageView != null) {
+            imageView.setImageResource(i);
+        }
+    }
+
+    public void setText(CharSequence charSequence) {
+        TextView textView = this.textView;
+        if (textView != null) {
+            textView.setText(charSequence);
+        }
+    }
+
+    public View getContentView() {
+        View view = this.iconView;
+        return view != null ? view : this.textView;
     }
 
     public void setSearchFieldHint(CharSequence charSequence) {

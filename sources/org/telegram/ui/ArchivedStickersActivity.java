@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerView.OnScrollListener;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
 import org.telegram.tgnet.ConnectionsManager;
@@ -77,7 +77,7 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
                     z = false;
                 }
                 archivedStickerSetCell.setStickersSet(stickerSetCovered, z);
-                archivedStickerSetCell.setChecked(DataQuery.getInstance(ArchivedStickersActivity.this.currentAccount).isStickerPackInstalled(stickerSetCovered.set.id));
+                archivedStickerSetCell.setChecked(MediaDataController.getInstance(ArchivedStickersActivity.this.currentAccount).isStickerPackInstalled(stickerSetCovered.set.id));
             }
         }
 
@@ -88,7 +88,7 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
         public /* synthetic */ void lambda$onCreateViewHolder$0$ArchivedStickersActivity$ListAdapter(Switch switchR, boolean z) {
             int intValue = ((Integer) ((ArchivedStickerSetCell) switchR.getParent()).getTag()).intValue();
             if (intValue < ArchivedStickersActivity.this.sets.size()) {
-                DataQuery.getInstance(ArchivedStickersActivity.this.currentAccount).removeStickersSet(ArchivedStickersActivity.this.getParentActivity(), ((StickerSetCovered) ArchivedStickersActivity.this.sets.get(intValue)).set, !z ? 1 : 2, ArchivedStickersActivity.this, false);
+                MediaDataController.getInstance(ArchivedStickersActivity.this.currentAccount).removeStickersSet(ArchivedStickersActivity.this.getParentActivity(), ((StickerSetCovered) ArchivedStickersActivity.this.sets.get(intValue)).set, !z ? 1 : 2, ArchivedStickersActivity.this, false);
             }
         }
 

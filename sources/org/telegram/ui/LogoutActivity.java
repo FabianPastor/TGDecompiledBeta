@@ -225,7 +225,7 @@ public class LogoutActivity extends BaseFragment {
         } else if (i == this.cacheRow) {
             presentFragment(new CacheControlActivity());
         } else if (i == this.phoneRow) {
-            presentFragment(new ChangePhoneHelpActivity());
+            presentFragment(new ActionIntroActivity(3));
         } else if (i == this.supportRow) {
             showDialog(AlertsCreator.createSupportAlert(this));
         } else if (i == this.logoutRow && getParentActivity() != null) {

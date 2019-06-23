@@ -309,6 +309,24 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
         return true;
     }
 
+    public void onListScroll(int i) {
+        int size;
+        if (!this.mPendingRemovals.isEmpty()) {
+            size = this.mPendingRemovals.size();
+            for (int i2 = 0; i2 < size; i2++) {
+                View view = ((ViewHolder) this.mPendingRemovals.get(i2)).itemView;
+                view.setTranslationY(view.getTranslationY() + ((float) i));
+            }
+        }
+        if (!this.mRemoveAnimations.isEmpty()) {
+            size = this.mRemoveAnimations.size();
+            for (int i3 = 0; i3 < size; i3++) {
+                View view2 = ((ViewHolder) this.mRemoveAnimations.get(i3)).itemView;
+                view2.setTranslationY(view2.getTranslationY() + ((float) i));
+            }
+        }
+    }
+
     /* Access modifiers changed, original: 0000 */
     public void animateMoveImpl(ViewHolder viewHolder, int i, int i2, int i3, int i4) {
         final View view = viewHolder.itemView;
@@ -545,6 +563,7 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
     }
 
     public void endAnimations() {
+        View view;
         int size = this.mPendingMoves.size();
         while (true) {
             size--;
@@ -552,14 +571,18 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
                 break;
             }
             MoveInfo moveInfo = (MoveInfo) this.mPendingMoves.get(size);
-            View view = moveInfo.holder.itemView;
+            view = moveInfo.holder.itemView;
             view.setTranslationY(0.0f);
             view.setTranslationX(0.0f);
             dispatchMoveFinished(moveInfo.holder);
             this.mPendingMoves.remove(size);
         }
         for (size = this.mPendingRemovals.size() - 1; size >= 0; size--) {
-            dispatchRemoveFinished((ViewHolder) this.mPendingRemovals.get(size));
+            ViewHolder viewHolder = (ViewHolder) this.mPendingRemovals.get(size);
+            view = viewHolder.itemView;
+            view.setTranslationY(0.0f);
+            view.setTranslationX(0.0f);
+            dispatchRemoveFinished(viewHolder);
             this.mPendingRemovals.remove(size);
         }
         size = this.mPendingAdditions.size();
@@ -568,14 +591,14 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
             if (size < 0) {
                 break;
             }
-            ViewHolder viewHolder = (ViewHolder) this.mPendingAdditions.get(size);
-            View view2 = viewHolder.itemView;
+            ViewHolder viewHolder2 = (ViewHolder) this.mPendingAdditions.get(size);
+            View view2 = viewHolder2.itemView;
             if (view2 instanceof DialogCell) {
                 ((DialogCell) view2).setClipProgress(0.0f);
             } else {
                 view2.setAlpha(1.0f);
             }
-            dispatchAddFinished(viewHolder);
+            dispatchAddFinished(viewHolder2);
             this.mPendingAdditions.remove(size);
         }
         for (size = this.mPendingChanges.size() - 1; size >= 0; size--) {
@@ -603,14 +626,14 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
             for (size = this.mAdditionsList.size() - 1; size >= 0; size--) {
                 arrayList = (ArrayList) this.mAdditionsList.get(size);
                 for (size2 = arrayList.size() - 1; size2 >= 0; size2--) {
-                    ViewHolder viewHolder2 = (ViewHolder) arrayList.get(size2);
-                    view3 = viewHolder2.itemView;
+                    ViewHolder viewHolder3 = (ViewHolder) arrayList.get(size2);
+                    view3 = viewHolder3.itemView;
                     if (view3 instanceof DialogCell) {
                         ((DialogCell) view3).setClipProgress(0.0f);
                     } else {
                         view3.setAlpha(1.0f);
                     }
-                    dispatchAddFinished(viewHolder2);
+                    dispatchAddFinished(viewHolder3);
                     arrayList.remove(size2);
                     if (arrayList.isEmpty()) {
                         this.mAdditionsList.remove(arrayList);

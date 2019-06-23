@@ -215,7 +215,7 @@ public class WebviewActivity extends BaseFragment {
             this.progressView.setScaleX(1.0f);
             this.progressView.setScaleY(1.0f);
             this.progressView.setVisibility(0);
-            this.progressItem.getImageView().setVisibility(8);
+            this.progressItem.getContentView().setVisibility(8);
             this.progressItem.setEnabled(false);
         }
         this.webView = new WebView(context);
@@ -280,9 +280,9 @@ public class WebviewActivity extends BaseFragment {
                     String str3 = "scaleY";
                     String str4 = "scaleX";
                     if (WebviewActivity.this.type == 0) {
-                        WebviewActivity.this.progressItem.getImageView().setVisibility(0);
+                        WebviewActivity.this.progressItem.getContentView().setVisibility(0);
                         WebviewActivity.this.progressItem.setEnabled(true);
-                        animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(WebviewActivity.this.progressView, str4, new float[]{1.0f, 0.1f}), ObjectAnimator.ofFloat(WebviewActivity.this.progressView, str3, new float[]{1.0f, 0.1f}), ObjectAnimator.ofFloat(WebviewActivity.this.progressView, str2, new float[]{1.0f, 0.0f}), ObjectAnimator.ofFloat(WebviewActivity.this.progressItem.getImageView(), str4, new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(WebviewActivity.this.progressItem.getImageView(), str3, new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(WebviewActivity.this.progressItem.getImageView(), str2, new float[]{0.0f, 1.0f})});
+                        animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(WebviewActivity.this.progressView, str4, new float[]{1.0f, 0.1f}), ObjectAnimator.ofFloat(WebviewActivity.this.progressView, str3, new float[]{1.0f, 0.1f}), ObjectAnimator.ofFloat(WebviewActivity.this.progressView, str2, new float[]{1.0f, 0.0f}), ObjectAnimator.ofFloat(WebviewActivity.this.progressItem.getContentView(), str4, new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(WebviewActivity.this.progressItem.getContentView(), str3, new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(WebviewActivity.this.progressItem.getContentView(), str2, new float[]{0.0f, 1.0f})});
                     } else {
                         animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(WebviewActivity.this.progressView, str4, new float[]{1.0f, 0.1f}), ObjectAnimator.ofFloat(WebviewActivity.this.progressView, str3, new float[]{1.0f, 0.1f}), ObjectAnimator.ofFloat(WebviewActivity.this.progressView, str2, new float[]{1.0f, 0.0f})});
                     }

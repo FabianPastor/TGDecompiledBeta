@@ -29,6 +29,8 @@ import org.telegram.ui.Components.RecyclerListView.SectionsAdapter;
 public class ContactsAdapter extends SectionsAdapter {
     private SparseArray<?> checkedMap;
     private int currentAccount = UserConfig.selectedAccount;
+    private boolean disableSections;
+    private boolean hasGps;
     private SparseArray<User> ignoreUsers;
     private boolean isAdmin;
     private boolean isChannel;
@@ -39,17 +41,22 @@ public class ContactsAdapter extends SectionsAdapter {
     private boolean scrolling;
     private int sortType;
 
-    public ContactsAdapter(Context context, int i, boolean z, SparseArray<User> sparseArray, int i2) {
+    public ContactsAdapter(Context context, int i, boolean z, SparseArray<User> sparseArray, int i2, boolean z2) {
         this.mContext = context;
         this.onlyUsers = i;
         this.needPhonebook = z;
         this.ignoreUsers = sparseArray;
-        boolean z2 = true;
+        boolean z3 = true;
         this.isAdmin = i2 != 0;
         if (i2 != 2) {
-            z2 = false;
+            z3 = false;
         }
-        this.isChannel = z2;
+        this.isChannel = z3;
+        this.hasGps = z2;
+    }
+
+    public void setDisableSections(boolean z) {
+        this.disableSections = z;
     }
 
     public void setSortType(int i) {
@@ -257,8 +264,13 @@ public class ContactsAdapter extends SectionsAdapter {
                 return z;
             }
             return true;
-        } else if (this.needPhonebook || this.isAdmin) {
+        } else if (this.isAdmin) {
             if (i2 != 1) {
+                z = true;
+            }
+            return z;
+        } else if (this.needPhonebook) {
+            if ((this.hasGps && i2 != 2) || !(this.hasGps || i2 == 1)) {
                 z = true;
             }
             return z;
@@ -288,16 +300,23 @@ public class ContactsAdapter extends SectionsAdapter {
     }
 
     public int getCountForSection(int i) {
+        int i2 = 2;
         HashMap hashMap = this.onlyUsers == 2 ? ContactsController.getInstance(this.currentAccount).usersMutualSectionsDict : ContactsController.getInstance(this.currentAccount).usersSectionsDict;
         ArrayList arrayList = this.onlyUsers == 2 ? ContactsController.getInstance(this.currentAccount).sortedUsersMutualSectionsArray : ContactsController.getInstance(this.currentAccount).sortedUsersSectionsArray;
-        int i2 = 0;
+        int i3 = 0;
         int size;
         if (this.onlyUsers == 0 || this.isAdmin) {
             if (i == 0) {
-                if (this.needPhonebook || this.isAdmin) {
+                if (this.isAdmin) {
                     return 2;
                 }
-                return 4;
+                if (!this.needPhonebook) {
+                    return 4;
+                }
+                if (this.hasGps) {
+                    i2 = 3;
+                }
+                return i2;
             } else if (this.sortType != 2) {
                 i--;
                 if (i < arrayList.size()) {
@@ -309,9 +328,9 @@ public class ContactsAdapter extends SectionsAdapter {
                 }
             } else if (i == 1) {
                 if (!this.onlineContacts.isEmpty()) {
-                    i2 = this.onlineContacts.size() + 1;
+                    i3 = this.onlineContacts.size() + 1;
                 }
-                return i2;
+                return i3;
             }
         } else if (i < arrayList.size()) {
             size = ((ArrayList) hashMap.get(arrayList.get(i))).size();
@@ -339,7 +358,7 @@ public class ContactsAdapter extends SectionsAdapter {
         }
         LetterSectionCell letterSectionCell = (LetterSectionCell) view;
         String str = "";
-        if (this.sortType == 2) {
+        if (this.sortType == 2 || this.disableSections) {
             letterSectionCell.setLetter(str);
         } else if (this.onlyUsers == 0 || this.isAdmin) {
             if (i == 0) {
@@ -387,7 +406,8 @@ public class ContactsAdapter extends SectionsAdapter {
         if (itemViewType == 0) {
             ArrayList arrayList;
             UserCell userCell = (UserCell) viewHolder.itemView;
-            userCell.setAvatarPadding(this.sortType == 2 ? 6 : 58);
+            itemViewType = (this.sortType == 2 || this.disableSections) ? 6 : 58;
+            userCell.setAvatarPadding(itemViewType);
             if (this.sortType == 2) {
                 arrayList = this.onlineContacts;
             } else {
@@ -434,7 +454,11 @@ public class ContactsAdapter extends SectionsAdapter {
                 stringBuilder.append(contact.last_name);
                 textCell.setText(stringBuilder.toString(), false);
             } else if (this.needPhonebook) {
-                textCell.setTextAndIcon(LocaleController.getString("InviteFriends", NUM), NUM, false);
+                if (i2 == 0) {
+                    textCell.setTextAndIcon(LocaleController.getString("InviteFriends", NUM), NUM, false);
+                } else if (i2 == 1) {
+                    textCell.setTextAndIcon(LocaleController.getString("AddPeopleNearby", NUM), NUM, false);
+                }
             } else if (this.isAdmin) {
                 if (this.isChannel) {
                     textCell.setTextAndIcon(LocaleController.getString("ChannelInviteViaLink", NUM), NUM, false);
@@ -467,7 +491,16 @@ public class ContactsAdapter extends SectionsAdapter {
         int i3 = 0;
         if (this.onlyUsers == 0 || this.isAdmin) {
             if (i == 0) {
-                if (((this.needPhonebook || this.isAdmin) && i2 == 1) || i2 == 3) {
+                if (this.isAdmin) {
+                    if (i2 == 1) {
+                        return 2;
+                    }
+                } else if (this.needPhonebook) {
+                    if ((!this.hasGps || i2 != 2) && (this.hasGps || i2 != 1)) {
+                        return 1;
+                    }
+                    return 2;
+                } else if (i2 == 3) {
                     return 2;
                 }
             } else if (this.sortType != 2) {
@@ -501,10 +534,14 @@ public class ContactsAdapter extends SectionsAdapter {
         if (i == -1) {
             i = arrayList.size() - 1;
         }
-        if (i <= 0 || i > arrayList.size()) {
-            return null;
+        if (this.onlyUsers == 0 || this.isAdmin) {
+            if (i > 0 && i <= arrayList.size()) {
+                return (String) arrayList.get(i - 1);
+            }
+        } else if (i >= 0 && i < arrayList.size()) {
+            return (String) arrayList.get(i);
         }
-        return (String) arrayList.get(i - 1);
+        return null;
     }
 
     public int getPositionForScrollProgress(float f) {

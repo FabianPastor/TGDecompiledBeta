@@ -529,7 +529,6 @@
     <string name="ChannelAdmin">Beheerder</string>
     <string name="ChannelAdministrators">Beheerders</string>
     <string name="ChannelAdminsInfo">Je kunt beheerders toevoegen om je te helpen je kanaal te beheren. Druk en houd ingedrukt om beheerders te verwijderen.</string>
-    <string name="ChannelAlertCreate">MAAK KANAAL</string>
     <string name="ChannelAlertText">Kanalen zijn een functie om berichten naar een ongelimiteerd publiek te sturen.</string>
     <string name="ChannelAlertTitle">Wat is een kanaal?</string>
     <string name="ChannelBlacklist">Verwijderde gebruikers</string>
@@ -2029,7 +2028,6 @@
     <string name="PhoneMain">Hoofd</string>
     <string name="PhoneMobile">Mobiel</string>
     <string name="PhoneNumberAlert">Al je Telegram-contacten krijgen je nieuwe nummer in hun adresboek, ervan uitgaande dat ze je oude nummer hadden en je hen niet had geblokkeerd in Telegram.</string>
-    <string name="PhoneNumberChange">NUMMER WIJZIGEN</string>
     <string name="PhoneNumberFlood">Je hebt in korte tijd je account veelvuldig verwijderd en opnieuw aangemaakt. Probeer het over een aantal dagen nog eens.</string>
     <string name="PhoneNumberHelp">Je kan je telefoonnummer hier wijzigen. Al je clouddata — berichten, bestanden, groepen, contacten, etc. zullen worden gekopieërd naar je nieuwe nummer.\10\10**Let op:** al je Telegram-contacten krijgen je **nieuwe nummer** in hun adresboek, ervan uitgaande dat ze je oude nummer hadden en je hen niet had geblokkeerd in Telegram.</string>
     <string name="PhoneOther">Overig</string>

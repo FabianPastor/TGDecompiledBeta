@@ -12,7 +12,7 @@ import org.telegram.tgnet.TLRPC.TL_help_appUpdate;
 import org.telegram.tgnet.TLRPC.TL_help_termsOfService;
 import org.telegram.tgnet.TLRPC.User;
 
-public class UserConfig {
+public class UserConfig extends BaseController {
     private static volatile UserConfig[] Instance = new UserConfig[3];
     public static final int MAX_ACCOUNT_COUNT = 3;
     public static final int i_dialogsLoadOffsetAccess_1 = 5;
@@ -30,7 +30,6 @@ public class UserConfig {
     private boolean configLoaded;
     public boolean contactsReimported;
     public int contactsSavedCount;
-    private int currentAccount;
     private User currentUser;
     public boolean draftsLoaded;
     public boolean hasSecureData;
@@ -83,7 +82,7 @@ public class UserConfig {
     public static int getActivatedAccountsCount() {
         int i = 0;
         for (int i2 = 0; i2 < 3; i2++) {
-            if (getInstance(i2).isClientActivated()) {
+            if (AccountInstance.getInstance(i2).getUserConfig().isClientActivated()) {
                 i++;
             }
         }
@@ -91,7 +90,7 @@ public class UserConfig {
     }
 
     public UserConfig(int i) {
-        this.currentAccount = i;
+        super(i);
     }
 
     public int getNewMessageId() {
@@ -580,7 +579,7 @@ public class UserConfig {
         this.lastHintsSyncTime = ((int) (System.currentTimeMillis() / 1000)) - 90000;
         resetSavedPassword();
         for (int i2 = 0; i2 < 3; i2++) {
-            if (getInstance(i2).isClientActivated()) {
+            if (AccountInstance.getInstance(i2).getUserConfig().isClientActivated()) {
                 i = 1;
                 break;
             }

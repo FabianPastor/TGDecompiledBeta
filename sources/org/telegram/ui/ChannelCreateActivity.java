@@ -247,7 +247,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                                 ChannelCreateActivity.this.progressDialog.show();
                                 return;
                             }
-                            i = MessagesController.getInstance(ChannelCreateActivity.this.currentAccount).createChat(ChannelCreateActivity.this.nameTextView.getText().toString(), new ArrayList(), ChannelCreateActivity.this.descriptionTextView.getText().toString(), 2, ChannelCreateActivity.this);
+                            i = MessagesController.getInstance(ChannelCreateActivity.this.currentAccount).createChat(ChannelCreateActivity.this.nameTextView.getText().toString(), new ArrayList(), ChannelCreateActivity.this.descriptionTextView.getText().toString(), 2, null, null, ChannelCreateActivity.this);
                             ChannelCreateActivity channelCreateActivity2 = ChannelCreateActivity.this;
                             channelCreateActivity2.progressDialog = new AlertDialog(channelCreateActivity2.getParentActivity(), 3);
                             ChannelCreateActivity.this.progressDialog.setOnCancelListener(new -$$Lambda$ChannelCreateActivity$1$q1TLoAihH5rBozhaNhmW5QGac-s(this, i));

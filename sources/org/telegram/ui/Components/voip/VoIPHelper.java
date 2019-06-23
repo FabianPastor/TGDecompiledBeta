@@ -21,6 +21,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
@@ -440,7 +441,7 @@ public class VoIPHelper {
                         }
                         AnonymousClass11 anonymousClass11 = AnonymousClass11.this;
                         if (zArr2[0] && logFile.exists() && tL_phone_setCallRating.rating < 4) {
-                            SendMessagesHelper.prepareSendingDocument(logFile.getAbsolutePath(), logFile.getAbsolutePath(), null, TextUtils.join(" ", arrayList), "text/plain", 4244000, null, null, null);
+                            SendMessagesHelper.prepareSendingDocument(AccountInstance.getInstance(UserConfig.selectedAccount), logFile.getAbsolutePath(), logFile.getAbsolutePath(), null, TextUtils.join(" ", arrayList), "text/plain", 4244000, null, null, null);
                             Toast.makeText(context2, LocaleController.getString("CallReportSent", NUM), 1).show();
                         }
                     }

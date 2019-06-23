@@ -684,6 +684,10 @@ public class ActionBar extends FrameLayout {
         }
     }
 
+    public void setSearchFieldText(String str) {
+        this.menu.setSearchFieldText(str);
+    }
+
     public void setEnabled(boolean z) {
         super.setEnabled(z);
         ImageView imageView = this.backButtonImageView;

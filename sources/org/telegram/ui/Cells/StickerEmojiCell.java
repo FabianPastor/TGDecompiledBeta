@@ -151,7 +151,7 @@ public class StickerEmojiCell extends FrameLayout {
     L_0x009a:
         r1 = r0.emojiTextView;
         r2 = r0.currentAccount;
-        r2 = org.telegram.messenger.DataQuery.getInstance(r2);
+        r2 = org.telegram.messenger.MediaDataController.getInstance(r2);
         r5 = r0.sticker;
         r5 = r5.id;
         r2 = r2.getEmojiForSticker(r5);

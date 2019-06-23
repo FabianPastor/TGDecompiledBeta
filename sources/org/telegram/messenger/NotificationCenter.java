@@ -99,6 +99,8 @@ public class NotificationCenter {
     public static final int needShowAlert;
     public static final int newDraftReceived;
     public static final int newEmojiSuggestionsAvailable;
+    public static final int newLocationAvailable;
+    public static final int newPeopleNearbyAvailable;
     public static final int newSessionReceived;
     public static final int notificationsCountUpdated;
     public static final int notificationsSettingsUpdated;
@@ -380,6 +382,9 @@ public class NotificationCenter {
         videoLoadingStateChanged = i;
         i = totalEvents;
         totalEvents = i + 1;
+        newPeopleNearbyAvailable = i;
+        i = totalEvents;
+        totalEvents = i + 1;
         httpFileDidLoad = i;
         i = totalEvents;
         totalEvents = i + 1;
@@ -543,6 +548,9 @@ public class NotificationCenter {
         i = totalEvents;
         totalEvents = i + 1;
         liveLocationsChanged = i;
+        i = totalEvents;
+        totalEvents = i + 1;
+        newLocationAvailable = i;
         i = totalEvents;
         totalEvents = i + 1;
         liveLocationsCacheChanged = i;

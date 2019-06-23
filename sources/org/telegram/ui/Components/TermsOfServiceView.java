@@ -146,21 +146,21 @@ public class TermsOfServiceView extends FrameLayout {
         }
         if (tLObject instanceof TL_boolTrue) {
             MessagesController.getInstance(this.currentAccount).performLogout(0);
-            return;
+        } else if (tL_error == null || tL_error.code != -1000) {
+            CharSequence string = LocaleController.getString("ErrorOccurred", NUM);
+            if (tL_error != null) {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(string);
+                stringBuilder.append("\n");
+                stringBuilder.append(tL_error.text);
+                string = stringBuilder.toString();
+            }
+            Builder builder = new Builder(getContext());
+            builder.setTitle(LocaleController.getString("AppName", NUM));
+            builder.setMessage(string);
+            builder.setPositiveButton(LocaleController.getString("OK", NUM), null);
+            builder.show();
         }
-        CharSequence string = LocaleController.getString("ErrorOccurred", NUM);
-        if (tL_error != null) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(string);
-            stringBuilder.append("\n");
-            stringBuilder.append(tL_error.text);
-            string = stringBuilder.toString();
-        }
-        Builder builder = new Builder(getContext());
-        builder.setTitle(LocaleController.getString("AppName", NUM));
-        builder.setMessage(string);
-        builder.setPositiveButton(LocaleController.getString("OK", NUM), null);
-        builder.show();
     }
 
     public /* synthetic */ void lambda$new$6$TermsOfServiceView(View view) {

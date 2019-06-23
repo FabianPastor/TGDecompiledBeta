@@ -529,7 +529,6 @@
     <string name="ChannelAdmin">مشرف</string>
     <string name="ChannelAdministrators">المشرفون</string>
     <string name="ChannelAdminsInfo">يمكنك إضافة مشرفين لمساعدتك في إدارة القناة، اضغط مطوَّلا على أيٍّ منهم لحذفه.</string>
-    <string name="ChannelAlertCreate">إنشاء قناة</string>
     <string name="ChannelAlertText">القنوات هي أداة جديدة لإيصال رسائلك لجمهور غير محدود.</string>
     <string name="ChannelAlertTitle">ما هي القنوات؟</string>
     <string name="ChannelBlacklist">مستخدمون تمت إزالتهم</string>
@@ -2029,7 +2028,6 @@
     <string name="PhoneMain">الرئيسية</string>
     <string name="PhoneMobile">جوال</string>
     <string name="PhoneNumberAlert">ستحصل جميع جهات اتصالك على رقمك الجديد، في حال وجود رقمك القديم عندها وعدم قيامك بحظرها سابقًا في تيليجرام.</string>
-    <string name="PhoneNumberChange">تغيير الرقم</string>
     <string name="PhoneNumberFlood">المعذرة، لقد قمت بحذف حسابك وإعادة إنشائه عدة مرات مؤخرًا، انتظر لعدة أيام رجاءً قبل محاولة إنشاء الحساب من جديد.</string>
     <string name="PhoneNumberHelp">يمكنك تغيير رقم تيليجرام الخاص بك هنا، سيتم نقل حسابك وجميع بياناتك التي في سحابة تيليجرام بما فيها رسائلك، الوسائط، جهات الاتصال وغيرها للرقم الجديد.\10\10**هام:** ستحصل جميع جهات اتصالك على **رقمك الجديد**، في حال وجود رقمك القديم عندها وعدم قيامك بحظرها سابقًا في تيليجرام.</string>
     <string name="PhoneOther">آخر</string>

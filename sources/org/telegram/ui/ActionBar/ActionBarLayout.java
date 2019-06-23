@@ -792,6 +792,7 @@ public class ActionBarLayout extends FrameLayout {
                     AndroidUtilities.hideKeyboard(this.parentActivity.getCurrentFocus());
                 }
                 Object obj = (z7 || (!z6 && MessagesController.getGlobalMainSettings().getBoolean("view_animations", true))) ? 1 : null;
+                AnimatorSet animatorSet = null;
                 if (this.fragmentsStack.isEmpty()) {
                     baseFragment3 = null;
                 } else {
@@ -883,6 +884,10 @@ public class ActionBarLayout extends FrameLayout {
                         view2.setAlpha(1.0f);
                         this.backgroundView.setVisibility(0);
                     }
+                    if (baseFragment3 != null) {
+                        baseFragment3.onTransitionAnimationStart(false, false);
+                        baseFragment3.onTransitionAnimationEnd(false, false);
+                    }
                     baseFragment2.onTransitionAnimationStart(true, false);
                     baseFragment2.onTransitionAnimationEnd(true, false);
                     baseFragment.onBecomeFullyVisible();
@@ -890,7 +895,7 @@ public class ActionBarLayout extends FrameLayout {
                     presentFragmentInternalRemoveOld(z5, baseFragment3);
                     this.transitionAnimationStartTime = System.currentTimeMillis();
                     this.transitionAnimationInProgress = true;
-                    this.onOpenAnimationEndRunnable = new -$$Lambda$ActionBarLayout$pYh6HgDiwfydlsh9Xn7223Bd-IA(baseFragment2);
+                    this.onOpenAnimationEndRunnable = new -$$Lambda$ActionBarLayout$rN6X9ltc9Ag_bAyne2dx8uCZ0cs(baseFragment3, baseFragment2);
                     ArrayList arrayList2 = new ArrayList();
                     String str = "alpha";
                     arrayList2.add(ObjectAnimator.ofFloat(this, str, new float[]{0.0f, 1.0f}));
@@ -898,6 +903,9 @@ public class ActionBarLayout extends FrameLayout {
                     if (view3 != null) {
                         view3.setVisibility(0);
                         arrayList2.add(ObjectAnimator.ofFloat(this.backgroundView, str, new float[]{0.0f, 1.0f}));
+                    }
+                    if (baseFragment3 != null) {
+                        baseFragment3.onTransitionAnimationStart(false, false);
                     }
                     baseFragment2.onTransitionAnimationStart(true, false);
                     this.currentAnimation = new AnimatorSet();
@@ -914,12 +922,15 @@ public class ActionBarLayout extends FrameLayout {
                     this.transitionAnimationPreviewMode = z7;
                     this.transitionAnimationStartTime = System.currentTimeMillis();
                     this.transitionAnimationInProgress = true;
-                    -$$Lambda$ActionBarLayout$gS41pICx_migujhqTs-lczeRv1Y -__lambda_actionbarlayout_gs41picx_migujhqts-lczerv1y = r0;
-                    -$$Lambda$ActionBarLayout$gS41pICx_migujhqTs-lczeRv1Y -__lambda_actionbarlayout_gs41picx_migujhqts-lczerv1y2 = new -$$Lambda$ActionBarLayout$gS41pICx_migujhqTs-lczeRv1Y(this, z4, z, baseFragment3, baseFragment);
-                    this.onOpenAnimationEndRunnable = -__lambda_actionbarlayout_gs41picx_migujhqts-lczerv1y;
+                    this.onOpenAnimationEndRunnable = new -$$Lambda$ActionBarLayout$gS41pICx_migujhqTs-lczeRv1Y(this, z4, z, baseFragment3, baseFragment);
+                    if (baseFragment3 != null) {
+                        baseFragment3.onTransitionAnimationStart(false, false);
+                    }
                     baseFragment2.onTransitionAnimationStart(true, false);
-                    AnimatorSet onCustomTransitionAnimation = !z7 ? baseFragment2.onCustomTransitionAnimation(true, new -$$Lambda$ActionBarLayout$ZVBs3Yp413UBaNwwGzpjbW7oZTc(this)) : null;
-                    if (onCustomTransitionAnimation == null) {
+                    if (!z7) {
+                        animatorSet = baseFragment2.onCustomTransitionAnimation(true, new -$$Lambda$ActionBarLayout$ZVBs3Yp413UBaNwwGzpjbW7oZTc(this));
+                    }
+                    if (animatorSet == null) {
                         this.containerView.setAlpha(0.0f);
                         if (z7) {
                             this.containerView.setTranslationX(0.0f);
@@ -956,7 +967,7 @@ public class ActionBarLayout extends FrameLayout {
                     } else {
                         this.containerView.setAlpha(1.0f);
                         this.containerView.setTranslationX(0.0f);
-                        this.currentAnimation = onCustomTransitionAnimation;
+                        this.currentAnimation = animatorSet;
                     }
                 }
                 return true;
@@ -965,9 +976,12 @@ public class ActionBarLayout extends FrameLayout {
         return false;
     }
 
-    static /* synthetic */ void lambda$presentFragment$0(BaseFragment baseFragment) {
-        baseFragment.onTransitionAnimationEnd(true, false);
-        baseFragment.onBecomeFullyVisible();
+    static /* synthetic */ void lambda$presentFragment$0(BaseFragment baseFragment, BaseFragment baseFragment2) {
+        if (baseFragment != null) {
+            baseFragment.onTransitionAnimationEnd(false, false);
+        }
+        baseFragment2.onTransitionAnimationEnd(true, false);
+        baseFragment2.onBecomeFullyVisible();
     }
 
     public /* synthetic */ void lambda$presentFragment$1$ActionBarLayout(boolean z, boolean z2, BaseFragment baseFragment, BaseFragment baseFragment2) {
@@ -979,6 +993,9 @@ public class ActionBarLayout extends FrameLayout {
         } else {
             presentFragmentInternalRemoveOld(z2, baseFragment);
             this.containerView.setTranslationX(0.0f);
+        }
+        if (baseFragment != null) {
+            baseFragment.onTransitionAnimationEnd(false, false);
         }
         baseFragment2.onTransitionAnimationEnd(true, false);
         baseFragment2.onBecomeFullyVisible();

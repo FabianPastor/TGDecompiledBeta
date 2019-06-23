@@ -40,10 +40,10 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.FileRefController;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate;
@@ -385,10 +385,10 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         InputStickerSet inputStickerSet = this.inputStickerSet;
         if (inputStickerSet != null) {
             if (this.stickerSet == null && inputStickerSet.short_name != null) {
-                this.stickerSet = DataQuery.getInstance(this.currentAccount).getStickerSetByName(this.inputStickerSet.short_name);
+                this.stickerSet = MediaDataController.getInstance(this.currentAccount).getStickerSetByName(this.inputStickerSet.short_name);
             }
             if (this.stickerSet == null) {
-                this.stickerSet = DataQuery.getInstance(this.currentAccount).getStickerSetById(this.inputStickerSet.id);
+                this.stickerSet = MediaDataController.getInstance(this.currentAccount).getStickerSetById(this.inputStickerSet.id);
             }
             if (this.stickerSet == null) {
                 TL_messages_getStickerSet tL_messages_getStickerSet = new TL_messages_getStickerSet();
@@ -961,7 +961,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
     L_0x0097:
         r13 = r11.stickerEmojiTextView;
         r0 = r11.currentAccount;
-        r0 = org.telegram.messenger.DataQuery.getInstance(r0);
+        r0 = org.telegram.messenger.MediaDataController.getInstance(r0);
         r3 = r11.selectedSticker;
         r3 = r3.id;
         r0 = r0.getEmojiForSticker(r3);
@@ -1191,7 +1191,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         if (r0 == 0) goto L_0x010a;
     L_0x0099:
         r0 = r10.currentAccount;
-        r0 = org.telegram.messenger.DataQuery.getInstance(r0);
+        r0 = org.telegram.messenger.MediaDataController.getInstance(r0);
         r6 = r10.stickerSet;
         r6 = r6.set;
         r6 = r6.id;
@@ -1203,7 +1203,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r0 = r10.stickerSet;
         r1 = r0.set;
         r1 = r1.masks;
-        r6 = NUM; // 0x7f0d086a float:1.8746484E38 double:1.053130842E-314;
+        r6 = NUM; // 0x7f0d08a5 float:1.8746603E38 double:1.053130871E-314;
         r7 = "RemoveStickersCount";
         if (r1 == 0) goto L_0x00d0;
     L_0x00b9:
@@ -1245,7 +1245,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r0 = r10.stickerSet;
         r6 = r0.set;
         r6 = r6.masks;
-        r7 = NUM; // 0x7f0d00b9 float:1.874249E38 double:1.053129869E-314;
+        r7 = NUM; // 0x7f0d00bc float:1.8742496E38 double:1.0531298704E-314;
         r8 = "AddStickersCount";
         if (r6 == 0) goto L_0x012e;
     L_0x0117:
@@ -1275,7 +1275,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r0.notifyDataSetChanged();
         goto L_0x016f;
     L_0x0156:
-        r0 = NUM; // 0x7f0d02cd float:1.874357E38 double:1.053130132E-314;
+        r0 = NUM; // 0x7f0d02df float:1.8743605E38 double:1.0531301407E-314;
         r2 = "Close";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r0 = r0.toUpperCase();
@@ -1324,7 +1324,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         } else {
             Toast.makeText(getContext(), LocaleController.getString("ErrorOccurred", NUM), 0).show();
         }
-        DataQuery.getInstance(this.currentAccount).loadStickers(this.stickerSet.set.masks, false, true);
+        MediaDataController.getInstance(this.currentAccount).loadStickers(this.stickerSet.set.masks, false, true);
     }
 
     public /* synthetic */ void lambda$updateFields$14$StickersAlert(View view) {
@@ -1333,7 +1333,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
             stickersAlertInstallDelegate.onStickerSetUninstalled();
         }
         dismiss();
-        DataQuery.getInstance(this.currentAccount).removeStickersSet(getContext(), this.stickerSet.set, 1, this.parentFragment, true);
+        MediaDataController.getInstance(this.currentAccount).removeStickersSet(getContext(), this.stickerSet.set, 1, this.parentFragment, true);
     }
 
     public /* synthetic */ void lambda$updateFields$15$StickersAlert(View view) {
@@ -1342,7 +1342,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
             stickersAlertInstallDelegate.onStickerSetUninstalled();
         }
         dismiss();
-        DataQuery.getInstance(this.currentAccount).removeStickersSet(getContext(), this.stickerSet.set, 0, this.parentFragment, true);
+        MediaDataController.getInstance(this.currentAccount).removeStickersSet(getContext(), this.stickerSet.set, 0, this.parentFragment, true);
     }
 
     public /* synthetic */ void lambda$updateFields$16$StickersAlert(View view) {

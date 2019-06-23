@@ -1274,23 +1274,13 @@
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">?android:attr/textColorSecondary</item>
     </style>
-    <style name="TextAppearance.Compat.Notification.Info.Media">
-    </style>
     <style name="TextAppearance.Compat.Notification.Line2">
-    </style>
-    <style name="TextAppearance.Compat.Notification.Line2.Media">
-    </style>
-    <style name="TextAppearance.Compat.Notification.Media">
     </style>
     <style name="TextAppearance.Compat.Notification.Time">
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">?android:attr/textColorSecondary</item>
     </style>
-    <style name="TextAppearance.Compat.Notification.Time.Media">
-    </style>
     <style name="TextAppearance.Compat.Notification.Title">
-    </style>
-    <style name="TextAppearance.Compat.Notification.Title.Media">
     </style>
     <style name="TextAppearance.Widget.AppCompat.ExpandedMenu.Item">
     </style>

@@ -59,12 +59,12 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
-import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -85,7 +85,9 @@ import org.telegram.tgnet.TLRPC.MessageMedia;
 import org.telegram.tgnet.TLRPC.PhotoSize;
 import org.telegram.tgnet.TLRPC.TL_channelAdminLogEvent;
 import org.telegram.tgnet.TLRPC.TL_channelAdminLogEventActionChangeStickerSet;
+import org.telegram.tgnet.TLRPC.TL_channelAdminLogEventActionParticipantToggleAdmin;
 import org.telegram.tgnet.TLRPC.TL_channelAdminLogEventsFilter;
+import org.telegram.tgnet.TLRPC.TL_channelParticipantCreator;
 import org.telegram.tgnet.TLRPC.TL_channelParticipantsAdmins;
 import org.telegram.tgnet.TLRPC.TL_channels_adminLogResults;
 import org.telegram.tgnet.TLRPC.TL_channels_channelParticipants;
@@ -1177,12 +1179,15 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         for (i = 0; i < tL_channels_adminLogResults.events.size(); i++) {
             TL_channelAdminLogEvent tL_channelAdminLogEvent = (TL_channelAdminLogEvent) tL_channels_adminLogResults.events.get(i);
             if (this.messagesDict.indexOfKey(tL_channelAdminLogEvent.id) < 0) {
-                this.minEventId = Math.min(this.minEventId, tL_channelAdminLogEvent.id);
-                MessageObject messageObject = new MessageObject(this.currentAccount, tL_channelAdminLogEvent, this.messages, this.messagesByDays, this.currentChat, this.mid);
-                if (messageObject.contentType >= 0) {
-                    this.messagesDict.put(tL_channelAdminLogEvent.id, messageObject);
+                ChannelAdminLogEventAction channelAdminLogEventAction = tL_channelAdminLogEvent.action;
+                if (!(channelAdminLogEventAction instanceof TL_channelAdminLogEventActionParticipantToggleAdmin) || !(channelAdminLogEventAction.prev_participant instanceof TL_channelParticipantCreator) || (channelAdminLogEventAction.new_participant instanceof TL_channelParticipantCreator)) {
+                    this.minEventId = Math.min(this.minEventId, tL_channelAdminLogEvent.id);
+                    MessageObject messageObject = new MessageObject(this.currentAccount, tL_channelAdminLogEvent, this.messages, this.messagesByDays, this.currentChat, this.mid);
+                    if (messageObject.contentType >= 0) {
+                        this.messagesDict.put(tL_channelAdminLogEvent.id, messageObject);
+                    }
+                    obj = 1;
                 }
-                obj = 1;
             }
         }
         int size2 = this.messages.size() - size;
@@ -2394,7 +2399,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r2.putExtra(r5, r0);
     L_0x01fb:
         r0 = r10.getParentActivity();
-        r3 = NUM; // 0x7f0d092c float:1.8746877E38 double:1.0531309376E-314;
+        r3 = NUM; // 0x7f0d096d float:1.8747009E38 double:1.0531309697E-314;
         r4 = "ShareFile";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
         r2 = android.content.Intent.createChooser(r2, r3);
@@ -2436,9 +2441,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r1 = r1.toLowerCase();
         r2 = "attheme";
         r1 = r1.endsWith(r2);
-        r2 = NUM; // 0x7f0d06a1 float:1.8745557E38 double:1.053130616E-314;
+        r2 = NUM; // 0x7f0d06d1 float:1.8745654E38 double:1.0531306397E-314;
         r3 = "OK";
-        r4 = NUM; // 0x7f0d00eb float:1.8742591E38 double:1.0531298936E-314;
+        r4 = NUM; // 0x7f0d00ef float:1.87426E38 double:1.0531298956E-314;
         r5 = "AppName";
         if (r1 == 0) goto L_0x02de;
     L_0x025d:
@@ -2493,7 +2498,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r0.<init>(r1);
         r1 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0d04f0 float:1.8744678E38 double:1.053130402E-314;
+        r1 = NUM; // 0x7f0d0512 float:1.8744747E38 double:1.053130419E-314;
         r4 = "IncorrectTheme";
         r1 = org.telegram.messenger.LocaleController.getString(r4, r1);
         r0.setMessage(r1);
@@ -2524,7 +2529,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         r0.<init>(r1);
         r1 = org.telegram.messenger.LocaleController.getString(r5, r4);
         r0.setTitle(r1);
-        r1 = NUM; // 0x7f0d04ef float:1.8744676E38 double:1.0531304015E-314;
+        r1 = NUM; // 0x7f0d0511 float:1.8744745E38 double:1.0531304183E-314;
         r4 = "IncorrectLocalization";
         r1 = org.telegram.messenger.LocaleController.getString(r4, r1);
         r0.setMessage(r1);
@@ -2614,10 +2619,10 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             if (messageObject.isSticker()) {
                 InputStickerSet inputStickerSet = messageObject.getInputStickerSet();
                 if (inputStickerSet instanceof TL_inputStickerSetID) {
-                    if (!DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(inputStickerSet.id)) {
+                    if (!MediaDataController.getInstance(this.currentAccount).isStickerPackInstalled(inputStickerSet.id)) {
                         return 7;
                     }
-                } else if (!(inputStickerSet instanceof TL_inputStickerSetShortName) || DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(inputStickerSet.short_name)) {
+                } else if (!(inputStickerSet instanceof TL_inputStickerSetShortName) || MediaDataController.getInstance(this.currentAccount).isStickerPackInstalled(inputStickerSet.short_name)) {
                     return 2;
                 } else {
                     return 7;
@@ -2905,16 +2910,16 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     public void onTransitionAnimationStart(boolean z, boolean z2) {
-        NotificationCenter.getInstance(this.currentAccount).setAllowedNotificationsDutingAnimation(new int[]{NotificationCenter.chatInfoDidLoad, NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats, NotificationCenter.messagesDidLoad, NotificationCenter.botKeyboardDidLoad});
-        NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(true);
         if (z) {
+            NotificationCenter.getInstance(this.currentAccount).setAllowedNotificationsDutingAnimation(new int[]{NotificationCenter.chatInfoDidLoad, NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats, NotificationCenter.messagesDidLoad, NotificationCenter.botKeyboardDidLoad});
+            NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(true);
             this.openAnimationEnded = false;
         }
     }
 
     public void onTransitionAnimationEnd(boolean z, boolean z2) {
-        NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(false);
         if (z) {
+            NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(false);
             this.openAnimationEnded = true;
         }
     }

@@ -16,17 +16,23 @@ import org.telegram.ui.ActionBar.Theme;
 
 public class TextCell extends FrameLayout {
     private ImageView imageView;
+    private int leftPadding;
     private boolean needDivider;
     private SimpleTextView textView;
     private ImageView valueImageView;
     private SimpleTextView valueTextView;
 
     public TextCell(Context context) {
+        this(context, 23);
+    }
+
+    public TextCell(Context context, int i) {
         super(context);
+        this.leftPadding = i;
         this.textView = new SimpleTextView(context);
         this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.textView.setTextSize(16);
-        int i = 5;
+        int i2 = 5;
         this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
         addView(this.textView);
         this.valueTextView = new SimpleTextView(context);
@@ -34,9 +40,9 @@ public class TextCell extends FrameLayout {
         this.valueTextView.setTextSize(16);
         SimpleTextView simpleTextView = this.valueTextView;
         if (LocaleController.isRTL) {
-            i = 3;
+            i2 = 3;
         }
-        simpleTextView.setGravity(i);
+        simpleTextView.setGravity(i2);
         addView(this.valueTextView);
         this.imageView = new ImageView(context);
         this.imageView.setScaleType(ScaleType.CENTER);
@@ -64,8 +70,8 @@ public class TextCell extends FrameLayout {
     public void onMeasure(int i, int i2) {
         i = MeasureSpec.getSize(i);
         i2 = AndroidUtilities.dp(48.0f);
-        this.valueTextView.measure(MeasureSpec.makeMeasureSpec(i - AndroidUtilities.dp(23.0f), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
-        this.textView.measure(MeasureSpec.makeMeasureSpec((i - AndroidUtilities.dp(95.0f)) - this.valueTextView.getTextWidth(), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
+        this.valueTextView.measure(MeasureSpec.makeMeasureSpec(i - AndroidUtilities.dp((float) this.leftPadding), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
+        this.textView.measure(MeasureSpec.makeMeasureSpec((i - AndroidUtilities.dp((float) (this.leftPadding + 71))) - this.valueTextView.getTextWidth(), Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), NUM));
         if (this.imageView.getVisibility() == 0) {
             this.imageView.measure(MeasureSpec.makeMeasureSpec(i, Integer.MIN_VALUE), MeasureSpec.makeMeasureSpec(i2, Integer.MIN_VALUE));
         }
@@ -80,7 +86,7 @@ public class TextCell extends FrameLayout {
         i4 -= i2;
         i3 -= i;
         int textHeight = (i4 - this.valueTextView.getTextHeight()) / 2;
-        i = LocaleController.isRTL ? AndroidUtilities.dp(23.0f) : 0;
+        i = LocaleController.isRTL ? AndroidUtilities.dp((float) this.leftPadding) : 0;
         SimpleTextView simpleTextView = this.valueTextView;
         simpleTextView.layout(i, textHeight, simpleTextView.getMeasuredWidth() + i, this.valueTextView.getMeasuredHeight() + textHeight);
         textHeight = (i4 - this.textView.getTextHeight()) / 2;
@@ -88,12 +94,12 @@ public class TextCell extends FrameLayout {
         if (LocaleController.isRTL) {
             i = getMeasuredWidth() - this.textView.getMeasuredWidth();
             if (this.imageView.getVisibility() != 0) {
-                f = 23.0f;
+                f = (float) this.leftPadding;
             }
             i -= AndroidUtilities.dp(f);
         } else {
             if (this.imageView.getVisibility() != 0) {
-                f = 23.0f;
+                f = (float) this.leftPadding;
             }
             i = AndroidUtilities.dp(f);
         }

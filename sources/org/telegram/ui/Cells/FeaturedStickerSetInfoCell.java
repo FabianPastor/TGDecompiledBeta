@@ -15,8 +15,8 @@ import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC.StickerSetCovered;
 import org.telegram.ui.ActionBar.Theme;
@@ -141,14 +141,14 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         this.isUnread = z;
         if (this.hasOnClick) {
             this.addButton.setVisibility(0);
-            z = DataQuery.getInstance(this.currentAccount).isStickerPackInstalled(stickerSetCovered.set.id);
+            z = MediaDataController.getInstance(this.currentAccount).isStickerPackInstalled(stickerSetCovered.set.id);
             this.isInstalled = z;
             if (z) {
                 this.addButton.setBackgroundDrawable(this.delDrawable);
-                this.addButton.setText(LocaleController.getString("StickersRemove", NUM).toUpperCase());
+                this.addButton.setText(LocaleController.getString("StickersRemove", NUM));
             } else {
                 this.addButton.setBackgroundDrawable(this.addDrawable);
-                this.addButton.setText(LocaleController.getString("Add", NUM).toUpperCase());
+                this.addButton.setText(LocaleController.getString("Add", NUM));
             }
             this.addButton.setPadding(AndroidUtilities.dp(17.0f), 0, AndroidUtilities.dp(17.0f), 0);
         } else {

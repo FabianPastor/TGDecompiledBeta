@@ -107,27 +107,27 @@ public class DrawerProfileCell extends FrameLayout {
         /*
         r8 = this;
         r0 = org.telegram.ui.ActionBar.Theme.getCachedWallpaper();
-        r1 = r8.applyBackground();
-        r2 = "chats_menuTopBackground";
-        r1 = r1.equals(r2);
-        r2 = 1;
-        r3 = 0;
-        if (r1 != 0) goto L_0x0022;
+        r1 = 0;
+        r2 = r8.applyBackground(r1);
+        r3 = "chats_menuTopBackground";
+        r2 = r2.equals(r3);
+        r3 = 1;
+        if (r2 != 0) goto L_0x0022;
     L_0x0012:
-        r1 = org.telegram.ui.ActionBar.Theme.isCustomTheme();
-        if (r1 == 0) goto L_0x0022;
+        r2 = org.telegram.ui.ActionBar.Theme.isCustomTheme();
+        if (r2 == 0) goto L_0x0022;
     L_0x0018:
-        r1 = org.telegram.ui.ActionBar.Theme.isPatternWallpaper();
-        if (r1 != 0) goto L_0x0022;
+        r2 = org.telegram.ui.ActionBar.Theme.isPatternWallpaper();
+        if (r2 != 0) goto L_0x0022;
     L_0x001e:
         if (r0 == 0) goto L_0x0022;
     L_0x0020:
-        r1 = 1;
+        r2 = 1;
         goto L_0x0023;
     L_0x0022:
-        r1 = 0;
+        r2 = 0;
     L_0x0023:
-        if (r1 != 0) goto L_0x0032;
+        if (r2 != 0) goto L_0x0032;
     L_0x0025:
         r4 = "chats_menuTopShadowCats";
         r5 = org.telegram.ui.ActionBar.Theme.hasThemeKey(r4);
@@ -136,18 +136,18 @@ public class DrawerProfileCell extends FrameLayout {
         r4 = org.telegram.ui.ActionBar.Theme.getColor(r4);
         goto L_0x0047;
     L_0x0032:
-        r2 = "chats_menuTopShadow";
-        r4 = org.telegram.ui.ActionBar.Theme.hasThemeKey(r2);
+        r3 = "chats_menuTopShadow";
+        r4 = org.telegram.ui.ActionBar.Theme.hasThemeKey(r3);
         if (r4 == 0) goto L_0x003f;
     L_0x003a:
-        r4 = org.telegram.ui.ActionBar.Theme.getColor(r2);
+        r4 = org.telegram.ui.ActionBar.Theme.getColor(r3);
         goto L_0x0046;
     L_0x003f:
-        r2 = org.telegram.ui.ActionBar.Theme.getServiceMessageColor();
+        r3 = org.telegram.ui.ActionBar.Theme.getServiceMessageColor();
         r4 = -16777216; // 0xfffffffffvar_ float:-1.7014118E38 double:NaN;
-        r4 = r4 | r2;
+        r4 = r4 | r3;
     L_0x0046:
-        r2 = 0;
+        r3 = 0;
     L_0x0047:
         r5 = r8.currentColor;
         if (r5 == 0) goto L_0x0051;
@@ -168,70 +168,70 @@ public class DrawerProfileCell extends FrameLayout {
         r5 = "chats_menuName";
         r5 = org.telegram.ui.ActionBar.Theme.getColor(r5);
         r4.setTextColor(r5);
-        if (r1 == 0) goto L_0x0104;
+        if (r2 == 0) goto L_0x0104;
     L_0x0074:
-        r1 = r8.phoneTextView;
-        r2 = "chats_menuPhone";
-        r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
-        r1.setTextColor(r2);
-        r1 = r8.shadowView;
-        r1 = r1.getVisibility();
-        if (r1 == 0) goto L_0x008c;
+        r2 = r8.phoneTextView;
+        r3 = "chats_menuPhone";
+        r3 = org.telegram.ui.ActionBar.Theme.getColor(r3);
+        r2.setTextColor(r3);
+        r2 = r8.shadowView;
+        r2 = r2.getVisibility();
+        if (r2 == 0) goto L_0x008c;
     L_0x0087:
-        r1 = r8.shadowView;
-        r1.setVisibility(r3);
+        r2 = r8.shadowView;
+        r2.setVisibility(r1);
     L_0x008c:
-        r1 = r0 instanceof android.graphics.drawable.ColorDrawable;
-        if (r1 == 0) goto L_0x00a0;
+        r2 = r0 instanceof android.graphics.drawable.ColorDrawable;
+        if (r2 == 0) goto L_0x00a0;
     L_0x0090:
-        r1 = r8.getMeasuredWidth();
-        r2 = r8.getMeasuredHeight();
-        r0.setBounds(r3, r3, r1, r2);
+        r2 = r8.getMeasuredWidth();
+        r3 = r8.getMeasuredHeight();
+        r0.setBounds(r1, r1, r2, r3);
         r0.draw(r9);
         goto L_0x0123;
     L_0x00a0:
-        r1 = r0 instanceof android.graphics.drawable.BitmapDrawable;
-        if (r1 == 0) goto L_0x0123;
+        r2 = r0 instanceof android.graphics.drawable.BitmapDrawable;
+        if (r2 == 0) goto L_0x0123;
     L_0x00a4:
         r0 = (android.graphics.drawable.BitmapDrawable) r0;
         r0 = r0.getBitmap();
-        r1 = r8.getMeasuredWidth();
-        r1 = (float) r1;
-        r2 = r0.getWidth();
+        r2 = r8.getMeasuredWidth();
         r2 = (float) r2;
-        r1 = r1 / r2;
-        r2 = r8.getMeasuredHeight();
-        r2 = (float) r2;
+        r3 = r0.getWidth();
+        r3 = (float) r3;
+        r2 = r2 / r3;
+        r3 = r8.getMeasuredHeight();
+        r3 = (float) r3;
         r4 = r0.getHeight();
         r4 = (float) r4;
-        r2 = r2 / r4;
-        r4 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1));
+        r3 = r3 / r4;
+        r4 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1));
         if (r4 >= 0) goto L_0x00c5;
     L_0x00c4:
-        r1 = r2;
+        r2 = r3;
     L_0x00c5:
-        r2 = r8.getMeasuredWidth();
-        r2 = (float) r2;
-        r2 = r2 / r1;
-        r2 = (int) r2;
+        r3 = r8.getMeasuredWidth();
+        r3 = (float) r3;
+        r3 = r3 / r2;
+        r3 = (int) r3;
         r4 = r8.getMeasuredHeight();
         r4 = (float) r4;
-        r4 = r4 / r1;
-        r1 = (int) r4;
+        r4 = r4 / r2;
+        r2 = (int) r4;
         r4 = r0.getWidth();
-        r4 = r4 - r2;
+        r4 = r4 - r3;
         r4 = r4 / 2;
         r5 = r0.getHeight();
-        r5 = r5 - r1;
+        r5 = r5 - r2;
         r5 = r5 / 2;
         r6 = r8.srcRect;
-        r2 = r2 + r4;
-        r1 = r1 + r5;
-        r6.set(r4, r5, r2, r1);
-        r1 = r8.destRect;
-        r2 = r8.getMeasuredWidth();
+        r3 = r3 + r4;
+        r2 = r2 + r5;
+        r6.set(r4, r5, r3, r2);
+        r2 = r8.destRect;
+        r3 = r8.getMeasuredWidth();
         r4 = r8.getMeasuredHeight();
-        r1.set(r3, r3, r2, r4);
+        r2.set(r1, r1, r3, r4);
         r1 = r8.srcRect;	 Catch:{ Throwable -> 0x00ff }
         r2 = r8.destRect;	 Catch:{ Throwable -> 0x00ff }
         r3 = r8.paint;	 Catch:{ Throwable -> 0x00ff }
@@ -242,18 +242,18 @@ public class DrawerProfileCell extends FrameLayout {
         org.telegram.messenger.FileLog.e(r0);
         goto L_0x0123;
     L_0x0104:
-        if (r2 == 0) goto L_0x0107;
+        if (r3 == 0) goto L_0x0107;
     L_0x0106:
         goto L_0x0108;
     L_0x0107:
-        r3 = 4;
+        r1 = 4;
     L_0x0108:
         r0 = r8.shadowView;
         r0 = r0.getVisibility();
-        if (r0 == r3) goto L_0x0115;
+        if (r0 == r1) goto L_0x0115;
     L_0x0110:
         r0 = r8.shadowView;
-        r0.setVisibility(r3);
+        r0.setVisibility(r1);
     L_0x0115:
         r0 = r8.phoneTextView;
         r1 = "chats_menuPhoneCats";
@@ -317,17 +317,17 @@ public class DrawerProfileCell extends FrameLayout {
             Drawable avatarDrawable = new AvatarDrawable(user);
             avatarDrawable.setColor(Theme.getColor("avatar_backgroundInProfileBlue"));
             this.avatarImageView.setImage(ImageLocation.getForUser(user, false), "50_50", avatarDrawable, (Object) user);
-            applyBackground();
+            applyBackground(true);
         }
     }
 
-    public String applyBackground() {
+    public String applyBackground(boolean z) {
         String str = (String) getTag();
         String str2 = "chats_menuTopBackground";
         if (!Theme.hasThemeKey(str2) || Theme.getColor(str2) == 0) {
             str2 = "chats_menuTopBackgroundCats";
         }
-        if (!str2.equals(str)) {
+        if (z || !str2.equals(str)) {
             setBackgroundColor(Theme.getColor(str2));
             setTag(str2);
         }

@@ -18,11 +18,13 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController.SharingLocationInfo;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.Message;
 import org.telegram.tgnet.TLRPC.MessageFwdHeader;
+import org.telegram.tgnet.TLRPC.TL_channelLocation;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
@@ -50,7 +52,7 @@ public class SharingLiveLocationCell extends FrameLayout {
     private SimpleTextView nameTextView;
     private RectF rect = new RectF();
 
-    public SharingLiveLocationCell(Context context, boolean z) {
+    public SharingLiveLocationCell(Context context, boolean z, int i) {
         super(context);
         this.avatarImageView = new BackupImageView(context);
         this.avatarImageView.setRoundRadius(AndroidUtilities.dp(20.0f));
@@ -59,28 +61,28 @@ public class SharingLiveLocationCell extends FrameLayout {
         this.nameTextView.setTextSize(16);
         this.nameTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        int i = 5;
+        int i2 = 5;
         this.nameTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         SimpleTextView simpleTextView;
         if (z) {
             addView(this.avatarImageView, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 17.0f, 13.0f, LocaleController.isRTL ? 17.0f : 0.0f, 0.0f));
-            addView(this.nameTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 54.0f : 73.0f, 12.0f, LocaleController.isRTL ? 73.0f : 54.0f, 0.0f));
+            addView(this.nameTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? (float) i : 73.0f, 12.0f, LocaleController.isRTL ? 73.0f : (float) i, 0.0f));
             this.distanceTextView = new SimpleTextView(context);
             this.distanceTextView.setTextSize(14);
             this.distanceTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
             this.distanceTextView.setGravity(LocaleController.isRTL ? 5 : 3);
             simpleTextView = this.distanceTextView;
             if (!LocaleController.isRTL) {
-                i = 3;
+                i2 = 3;
             }
-            addView(simpleTextView, LayoutHelper.createFrame(-1, 20.0f, i | 48, LocaleController.isRTL ? 54.0f : 73.0f, 37.0f, LocaleController.isRTL ? 73.0f : 54.0f, 0.0f));
+            addView(simpleTextView, LayoutHelper.createFrame(-1, 20.0f, i2 | 48, LocaleController.isRTL ? (float) i : 73.0f, 37.0f, LocaleController.isRTL ? 73.0f : (float) i, 0.0f));
         } else {
             addView(this.avatarImageView, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 17.0f, 7.0f, LocaleController.isRTL ? 17.0f : 0.0f, 0.0f));
             simpleTextView = this.nameTextView;
             if (!LocaleController.isRTL) {
-                i = 3;
+                i2 = 3;
             }
-            addView(simpleTextView, LayoutHelper.createFrame(-2, -2.0f, i | 48, LocaleController.isRTL ? 54.0f : 74.0f, 17.0f, LocaleController.isRTL ? 74.0f : 54.0f, 0.0f));
+            addView(simpleTextView, LayoutHelper.createFrame(-2, -2.0f, i2 | 48, LocaleController.isRTL ? (float) i : 74.0f, 17.0f, LocaleController.isRTL ? 74.0f : (float) i, 0.0f));
         }
         setWillNotDraw(false);
     }
@@ -100,6 +102,35 @@ public class SharingLiveLocationCell extends FrameLayout {
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         AndroidUtilities.runOnUIThread(this.invalidateRunnable);
+    }
+
+    public void setDialog(long j, TL_channelLocation tL_channelLocation) {
+        this.currentAccount = UserConfig.selectedAccount;
+        String str = tL_channelLocation.address;
+        this.avatarDrawable = null;
+        int i = (int) j;
+        String str2 = "50_50";
+        CharSequence charSequence = "";
+        Object user;
+        if (i > 0) {
+            user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(i));
+            if (user != null) {
+                this.avatarDrawable = new AvatarDrawable((User) user);
+                charSequence = UserObject.getUserName(user);
+                this.avatarImageView.setImage(ImageLocation.getForUser(user, false), str2, this.avatarDrawable, user);
+            }
+        } else {
+            user = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-i));
+            if (user != null) {
+                this.avatarDrawable = new AvatarDrawable((Chat) user);
+                charSequence = user.title;
+                this.avatarImageView.setImage(ImageLocation.getForChat(user, false), str2, this.avatarDrawable, user);
+            }
+        }
+        this.nameTextView.setText(charSequence);
+        this.location.setLatitude(tL_channelLocation.geo_point.lat);
+        this.location.setLongitude(tL_channelLocation.geo_point._long);
+        this.distanceTextView.setText(str);
     }
 
     public void setDialog(MessageObject messageObject, Location location) {

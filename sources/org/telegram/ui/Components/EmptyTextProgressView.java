@@ -90,12 +90,16 @@ public class EmptyTextProgressView extends FrameLayout {
             View childAt = getChildAt(i2);
             if (childAt.getVisibility() != 8) {
                 int measuredHeight;
+                int paddingTop;
                 int measuredWidth = (i3 - childAt.getMeasuredWidth()) / 2;
                 if (this.showAtCenter) {
                     measuredHeight = ((i4 / 2) - childAt.getMeasuredHeight()) / 2;
+                    paddingTop = getPaddingTop();
                 } else {
                     measuredHeight = (i4 - childAt.getMeasuredHeight()) / 2;
+                    paddingTop = getPaddingTop();
                 }
+                measuredHeight += paddingTop;
                 childAt.layout(measuredWidth, measuredHeight, childAt.getMeasuredWidth() + measuredWidth, childAt.getMeasuredHeight() + measuredHeight);
             }
         }

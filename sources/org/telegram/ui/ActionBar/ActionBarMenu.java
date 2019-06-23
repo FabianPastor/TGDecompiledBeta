@@ -45,37 +45,53 @@ public class ActionBarMenu extends LinearLayout {
     }
 
     public ActionBarMenuItem addItem(int i, Drawable drawable) {
-        return addItem(i, 0, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor, drawable, AndroidUtilities.dp(48.0f), null);
+        return addItem(i, 0, null, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor, drawable, AndroidUtilities.dp(48.0f), null);
     }
 
     public ActionBarMenuItem addItem(int i, int i2) {
         return addItem(i, i2, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor);
     }
 
+    public ActionBarMenuItem addItem(int i, CharSequence charSequence) {
+        return addItem(i, 0, charSequence, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor, null, 0, charSequence);
+    }
+
     public ActionBarMenuItem addItem(int i, int i2, int i3) {
-        return addItem(i, i2, i3, null, AndroidUtilities.dp(48.0f), null);
+        return addItem(i, i2, null, i3, null, AndroidUtilities.dp(48.0f), null);
     }
 
     public ActionBarMenuItem addItemWithWidth(int i, int i2, int i3) {
-        return addItem(i, i2, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor, null, i3, null);
+        return addItem(i, i2, null, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor, null, i3, null);
     }
 
     public ActionBarMenuItem addItemWithWidth(int i, int i2, int i3, CharSequence charSequence) {
-        return addItem(i, i2, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor, null, i3, charSequence);
+        return addItem(i, i2, null, this.isActionMode ? this.parentActionBar.itemsActionModeBackgroundColor : this.parentActionBar.itemsBackgroundColor, null, i3, charSequence);
     }
 
-    public ActionBarMenuItem addItem(int i, int i2, int i3, Drawable drawable, int i4, CharSequence charSequence) {
-        ActionBarMenuItem actionBarMenuItem = new ActionBarMenuItem(getContext(), this, i3, this.isActionMode ? this.parentActionBar.itemsActionModeColor : this.parentActionBar.itemsColor);
+    public ActionBarMenuItem addItem(int i, int i2, CharSequence charSequence, int i3, Drawable drawable, int i4, CharSequence charSequence2) {
+        ActionBarMenuItem actionBarMenuItem = new ActionBarMenuItem(getContext(), this, i3, this.isActionMode ? this.parentActionBar.itemsActionModeColor : this.parentActionBar.itemsColor, charSequence != null);
         actionBarMenuItem.setTag(Integer.valueOf(i));
-        if (drawable != null) {
-            actionBarMenuItem.iconView.setImageDrawable(drawable);
-        } else if (i2 != 0) {
-            actionBarMenuItem.iconView.setImageResource(i2);
-        }
-        addView(actionBarMenuItem, new LayoutParams(i4, -1));
-        actionBarMenuItem.setOnClickListener(new -$$Lambda$ActionBarMenu$ppo9UED664gE-YCecAHKNZM7u90(this));
         if (charSequence != null) {
-            actionBarMenuItem.setContentDescription(charSequence);
+            actionBarMenuItem.textView.setText(charSequence);
+            if (i4 == 0) {
+                i4 = -2;
+            }
+            LayoutParams layoutParams = new LayoutParams(i4, -1);
+            i = AndroidUtilities.dp(14.0f);
+            layoutParams.rightMargin = i;
+            layoutParams.leftMargin = i;
+            addView(actionBarMenuItem, layoutParams);
+        } else {
+            if (drawable != null) {
+                actionBarMenuItem.iconView.setImageDrawable(drawable);
+            } else if (i2 != 0) {
+                actionBarMenuItem.iconView.setImageResource(i2);
+            }
+            addView(actionBarMenuItem, new LayoutParams(i4, -1));
+        }
+        actionBarMenuItem.setOnClickListener(new -$$Lambda$ActionBarMenu$ppo9UED664gE-YCecAHKNZM7u90(this));
+        if (charSequence2 != null) {
+            actionBarMenuItem.setContentDescription(charSequence2);
         }
         return actionBarMenuItem;
     }
@@ -184,6 +200,21 @@ public class ActionBarMenu extends LinearLayout {
                         actionBarMenuItem.getSearchField().setTextColor(i);
                         return;
                     }
+                }
+            }
+        }
+    }
+
+    public void setSearchFieldText(String str) {
+        int childCount = getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View childAt = getChildAt(i);
+            if (childAt instanceof ActionBarMenuItem) {
+                ActionBarMenuItem actionBarMenuItem = (ActionBarMenuItem) childAt;
+                if (actionBarMenuItem.isSearchField()) {
+                    actionBarMenuItem.setSearchFieldText(str, false);
+                    actionBarMenuItem.getSearchField().setSelection(str.length());
+                    return;
                 }
             }
         }

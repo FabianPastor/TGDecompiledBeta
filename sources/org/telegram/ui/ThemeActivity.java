@@ -535,16 +535,21 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                 edit.putInt("fons_size", SharedConfig.fontSize);
                 edit.commit();
                 Theme.chat_msgTextPaint.setTextSize((float) AndroidUtilities.dp((float) SharedConfig.fontSize));
-                round = 0;
+                round = ThemeActivity.this.layoutManager.findFirstVisibleItemPosition();
+                View findViewByPosition = round != -1 ? ThemeActivity.this.layoutManager.findViewByPosition(round) : null;
+                int i2 = 0;
+                int top = findViewByPosition != null ? findViewByPosition.getTop() : 0;
                 while (true) {
                     ChatMessageCell[] chatMessageCellArr = this.cells;
-                    if (round < chatMessageCellArr.length) {
-                        chatMessageCellArr[round].getMessageObject().resetLayout();
-                        this.cells[round].requestLayout();
-                        round++;
-                    } else {
-                        return;
+                    if (i2 >= chatMessageCellArr.length) {
+                        break;
                     }
+                    chatMessageCellArr[i2].getMessageObject().resetLayout();
+                    this.cells[i2].requestLayout();
+                    i2++;
+                }
+                if (findViewByPosition != null) {
+                    ThemeActivity.this.layoutManager.scrollToPositionWithOffset(round, top);
                 }
             }
         }
@@ -783,7 +788,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
         L_0x00e0:
             r4 = org.telegram.ui.ThemeActivity.this;	 Catch:{ Exception -> 0x00f6 }
             r6 = "ShareFile";
-            r0 = NUM; // 0x7f0d092c float:1.8746877E38 double:1.0531309376E-314;
+            r0 = NUM; // 0x7f0d096d float:1.8747009E38 double:1.0531309697E-314;
             r6 = org.telegram.messenger.LocaleController.getString(r6, r0);	 Catch:{ Exception -> 0x00f6 }
             r5 = android.content.Intent.createChooser(r5, r6);	 Catch:{ Exception -> 0x00f6 }
             r6 = 500; // 0x1f4 float:7.0E-43 double:2.47E-321;
@@ -822,21 +827,21 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             r0 = org.telegram.ui.ThemeActivity.this;
             r0 = r0.getParentActivity();
             r6.<init>(r0);
-            r0 = NUM; // 0x7f0d035c float:1.874386E38 double:1.0531302024E-314;
+            r0 = NUM; // 0x7f0d036e float:1.8743896E38 double:1.0531302113E-314;
             r1 = "DeleteThemeAlert";
             r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
             r6.setMessage(r0);
-            r0 = NUM; // 0x7f0d00eb float:1.8742591E38 double:1.0531298936E-314;
+            r0 = NUM; // 0x7f0d00ef float:1.87426E38 double:1.0531298956E-314;
             r1 = "AppName";
             r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
             r6.setTitle(r0);
-            r0 = NUM; // 0x7f0d033b float:1.8743792E38 double:1.053130186E-314;
+            r0 = NUM; // 0x7f0d034d float:1.8743829E38 double:1.053130195E-314;
             r1 = "Delete";
             r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
             r1 = new org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$HjGrFd2877SP2gFmUCLASSNAMEvuRyOmw;
             r1.<init>(r3, r4);
             r6.setPositiveButton(r0, r1);
-            r4 = NUM; // 0x7f0d01eb float:1.874311E38 double:1.05313002E-314;
+            r4 = NUM; // 0x7f0d01f6 float:1.8743133E38 double:1.0531300256E-314;
             r0 = "Cancel";
             r4 = org.telegram.messenger.LocaleController.getString(r0, r4);
             r6.setNegativeButton(r4, r5);
@@ -970,7 +975,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                     anonymousClass4.setOrientation(0);
                     themeCell.setLayoutManager(anonymousClass4);
                     themeCell.setAdapter(new InnerListAdapter(this.mContext));
-                    themeCell.setOnItemClickListener(new -$$Lambda$ThemeActivity$ListAdapter$dquXXwWPa2MGvu2xAYM60dhzabo(this));
+                    themeCell.setOnItemClickListener(new -$$Lambda$ThemeActivity$ListAdapter$jD2LkJbKmvip1R-irZeeLDqtIgg(this, themeCell));
                     themeCell.setOnItemLongClickListener(new -$$Lambda$ThemeActivity$ListAdapter$pvw4GcZiIzN9zYxDAOmGDBqZDj0(this));
                     ThemeActivity.this.innerListView = themeCell;
                     themeCell.setLayoutParams(new RecyclerView.LayoutParams(-1, AndroidUtilities.dp(148.0f)));
@@ -980,21 +985,28 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             return new Holder(textSettingsCell);
         }
 
-        public /* synthetic */ void lambda$onCreateViewHolder$3$ThemeActivity$ListAdapter(View view, int i) {
-            ThemeInfo access$6400 = ((InnerThemeView) view).themeInfo;
-            if (access$6400 != Theme.getCurrentTheme()) {
+        public /* synthetic */ void lambda$onCreateViewHolder$3$ThemeActivity$ListAdapter(RecyclerListView recyclerListView, View view, int i) {
+            ThemeInfo access$6500 = ((InnerThemeView) view).themeInfo;
+            if (access$6500 != Theme.getCurrentTheme()) {
                 NotificationCenter globalInstance = NotificationCenter.getGlobalInstance();
                 int i2 = NotificationCenter.needSetDayNightTheme;
-                r1 = new Object[2];
+                r2 = new Object[2];
                 int i3 = 0;
-                r1[0] = access$6400;
-                r1[1] = Boolean.valueOf(false);
-                globalInstance.postNotificationName(i2, r1);
+                r2[0] = access$6500;
+                r2[1] = Boolean.valueOf(false);
+                globalInstance.postNotificationName(i2, r2);
+                i = view.getLeft();
+                int right = view.getRight();
+                if (i < 0) {
+                    recyclerListView.smoothScrollBy(i - AndroidUtilities.dp(8.0f), 0);
+                } else if (right > recyclerListView.getMeasuredWidth()) {
+                    recyclerListView.smoothScrollBy(right - recyclerListView.getMeasuredWidth(), 0);
+                }
                 int childCount = ThemeActivity.this.innerListView.getChildCount();
                 while (i3 < childCount) {
-                    View childAt = ThemeActivity.this.innerListView.getChildAt(i3);
-                    if (childAt instanceof InnerThemeView) {
-                        ((InnerThemeView) childAt).updateCurrentThemeCheck();
+                    view = ThemeActivity.this.innerListView.getChildAt(i3);
+                    if (view instanceof InnerThemeView) {
+                        ((InnerThemeView) view).updateCurrentThemeCheck();
                     }
                     i3++;
                 }
@@ -1018,23 +1030,23 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                 String string;
                 switch (itemViewType) {
                     case 0:
-                        ArrayList access$2000;
+                        ArrayList access$2100;
                         if (ThemeActivity.this.themeStart2Row < 0 || i < ThemeActivity.this.themeStart2Row) {
                             i -= ThemeActivity.this.themeStartRow;
                             if (ThemeActivity.this.currentType == 1) {
-                                access$2000 = ThemeActivity.this.darkThemes;
+                                access$2100 = ThemeActivity.this.darkThemes;
                             } else if (ThemeActivity.this.currentType == 2) {
-                                access$2000 = ThemeActivity.this.defaultThemes;
+                                access$2100 = ThemeActivity.this.defaultThemes;
                             } else {
-                                access$2000 = Theme.themes;
+                                access$2100 = Theme.themes;
                             }
                         } else {
                             i -= ThemeActivity.this.themeStart2Row;
-                            access$2000 = ThemeActivity.this.darkThemes;
+                            access$2100 = ThemeActivity.this.darkThemes;
                         }
-                        ThemeInfo themeInfo = (ThemeInfo) access$2000.get(i);
+                        ThemeInfo themeInfo = (ThemeInfo) access$2100.get(i);
                         ThemeCell themeCell = (ThemeCell) viewHolder.itemView;
-                        if (i != access$2000.size() - 1 || ThemeActivity.this.hasCustomThemes) {
+                        if (i != access$2100.size() - 1 || ThemeActivity.this.hasCustomThemes) {
                             z = true;
                         }
                         themeCell.setTheme(themeInfo, z);
@@ -1068,7 +1080,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
                                 textSettingsCell.setTextAndValue(LocaleController.getString("SortBy", NUM), string, true);
                                 return;
                             } else if (i == ThemeActivity.this.backgroundRow) {
-                                textSettingsCell.setText(LocaleController.getString("ChatBackground", NUM), false);
+                                textSettingsCell.setText(LocaleController.getString("ChangeChatBackground", NUM), false);
                                 return;
                             } else if (i == ThemeActivity.this.contactsReimportRow) {
                                 textSettingsCell.setText(LocaleController.getString("ImportContacts", NUM), true);

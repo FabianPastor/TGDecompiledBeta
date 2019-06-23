@@ -529,7 +529,6 @@
     <string name="ChannelAdmin">Amministratore</string>
     <string name="ChannelAdministrators">Amministratori</string>
     <string name="ChannelAdminsInfo">Puoi aggiungere amministratori per farti aiutare a gestire il tuo canale. Tieni premuto per rimuovere gli amministratori.</string>
-    <string name="ChannelAlertCreate">CREA CANALE</string>
     <string name="ChannelAlertText">I canali sono uno strumento per diffondere i tuoi messaggi a un pubblico illimitato.</string>
     <string name="ChannelAlertTitle">Cos\'è un canale?</string>
     <string name="ChannelBlacklist">Utenti rimossi</string>
@@ -2029,7 +2028,6 @@
     <string name="PhoneMain">Principale</string>
     <string name="PhoneMobile">Cellulare</string>
     <string name="PhoneNumberAlert">Tutti i tuoi contatti Telegram avranno il tuo nuovo numero tra i loro contatti, purché abbiano il tuo vecchio numero e tu non li abbia bloccati su Telegram.</string>
-    <string name="PhoneNumberChange">CAMBIA NUMERO</string>
     <string name="PhoneNumberFlood">Spiacenti, hai eliminato e ricreato il tuo account troppe volte di recente. Per favore attendi alcuni giorni prima di iscriverti di nuovo.</string>
     <string name="PhoneNumberHelp">Puoi cambiare il tuo numero di telefono qui. Il tuo account e tutti i tuoi dati cloud — messaggi, file, contatti, etc. saranno trasferiti sul nuovo numero.\10\10**Importante:** a tutti i tuoi contatti di Telegram verrà aggiunto il tuo **nuovo numero** ai contatti, purché abbiano il tuo vecchio numero e tu non li abbia bloccati su Telegram.</string>
     <string name="PhoneOther">Altro</string>

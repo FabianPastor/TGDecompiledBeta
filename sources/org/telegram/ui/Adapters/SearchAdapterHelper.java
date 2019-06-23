@@ -6,10 +6,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
@@ -25,6 +27,7 @@ import org.telegram.tgnet.TLRPC.TL_channelParticipantsKicked;
 import org.telegram.tgnet.TLRPC.TL_channelParticipantsSearch;
 import org.telegram.tgnet.TLRPC.TL_channels_channelParticipants;
 import org.telegram.tgnet.TLRPC.TL_channels_getParticipants;
+import org.telegram.tgnet.TLRPC.TL_contact;
 import org.telegram.tgnet.TLRPC.TL_contacts_found;
 import org.telegram.tgnet.TLRPC.TL_contacts_search;
 import org.telegram.tgnet.TLRPC.TL_error;
@@ -48,6 +51,8 @@ public class SearchAdapterHelper {
     private int lastReqId;
     private ArrayList<TLObject> localSearchResults;
     private ArrayList<TLObject> localServerSearch = new ArrayList();
+    private SparseArray<TLObject> phoneSearchMap = new SparseArray();
+    private ArrayList<Object> phonesSearch = new ArrayList();
     private int reqId = 0;
 
     protected static final class DialogSearchResult {
@@ -70,6 +75,9 @@ public class SearchAdapterHelper {
             public static SparseArray $default$getExcludeUsers(SearchAdapterHelperDelegate searchAdapterHelperDelegate) {
                 return null;
             }
+
+            public static void $default$onSetHashtags(SearchAdapterHelperDelegate searchAdapterHelperDelegate, ArrayList arrayList, HashMap hashMap) {
+            }
         }
 
         SparseArray<User> getExcludeUsers();
@@ -87,7 +95,7 @@ public class SearchAdapterHelper {
         return (this.reqId == 0 && this.channelReqId == 0) ? false : true;
     }
 
-    public void queryServerSearch(String str, boolean z, boolean z2, boolean z3, boolean z4, int i, int i2) {
+    public void queryServerSearch(String str, boolean z, boolean z2, boolean z3, boolean z4, int i, boolean z5, int i2) {
         String str2 = str;
         int i3 = i;
         int i4 = i2;
@@ -105,14 +113,17 @@ public class SearchAdapterHelper {
             this.globalSearch.clear();
             this.globalSearchMap.clear();
             this.localServerSearch.clear();
+            this.phonesSearch.clear();
+            this.phoneSearchMap.clear();
             this.lastReqId = 0;
             this.channelLastReqId = 0;
             this.delegate.onDataSetChanged();
             return;
         }
-        boolean z5;
+        int i5;
+        boolean z6;
         if (str.length() <= 0) {
-            z5 = z4;
+            z6 = z4;
             this.groupSearch.clear();
             this.groupSearchMap.clear();
             this.channelLastReqId = 0;
@@ -134,9 +145,9 @@ public class SearchAdapterHelper {
             tL_channels_getParticipants.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(i3);
             i3 = this.channelLastReqId + 1;
             this.channelLastReqId = i3;
-            this.channelReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_channels_getParticipants, new -$$Lambda$SearchAdapterHelper$lQm_KegCMNFAimI1TKtkhyCcOJg(this, i3, str, z4), 2);
+            this.channelReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_channels_getParticipants, new -$$Lambda$SearchAdapterHelper$lQm_KegCMNFAimI1TKtkhyCcOJg(this, i3, str2, z4), 2);
         } else {
-            z5 = z4;
+            z6 = z4;
             this.lastFoundChannel = str.toLowerCase();
         }
         if (z) {
@@ -144,7 +155,7 @@ public class SearchAdapterHelper {
                 TL_contacts_search tL_contacts_search = new TL_contacts_search();
                 tL_contacts_search.q = str2;
                 tL_contacts_search.limit = 50;
-                int i5 = this.lastReqId + 1;
+                i5 = this.lastReqId + 1;
                 this.lastReqId = i5;
                 this.reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tL_contacts_search, new -$$Lambda$SearchAdapterHelper$dscYso9YL4gEzQpoIdpN_Bu9BdA(this, i5, z2, z3, z4, str), 2);
             } else {
@@ -154,6 +165,32 @@ public class SearchAdapterHelper {
                 this.lastReqId = 0;
                 this.delegate.onDataSetChanged();
             }
+        }
+        if (z5 && str2.startsWith("+") && str.length() > 3) {
+            this.phonesSearch.clear();
+            this.phoneSearchMap.clear();
+            String stripExceptNumbers = PhoneFormat.stripExceptNumbers(str);
+            ArrayList arrayList = ContactsController.getInstance(this.currentAccount).contacts;
+            i5 = arrayList.size();
+            Object obj = null;
+            for (int i6 = 0; i6 < i5; i6++) {
+                User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(((TL_contact) arrayList.get(i6)).user_id));
+                if (user != null) {
+                    String str3 = user.phone;
+                    if (str3 != null && str3.startsWith(stripExceptNumbers)) {
+                        if (obj == null) {
+                            obj = user.phone.length() == stripExceptNumbers.length() ? 1 : null;
+                        }
+                        this.phonesSearch.add(user);
+                        this.phoneSearchMap.put(user.id, user);
+                    }
+                }
+            }
+            if (obj == null) {
+                this.phonesSearch.add("section");
+                this.phonesSearch.add(stripExceptNumbers);
+            }
+            this.delegate.onDataSetChanged();
         }
     }
 
@@ -193,109 +230,115 @@ public class SearchAdapterHelper {
     }
 
     public /* synthetic */ void lambda$null$2$SearchAdapterHelper(int i, TL_error tL_error, TLObject tLObject, boolean z, boolean z2, boolean z3, String str) {
-        if (i == this.lastReqId && tL_error == null) {
-            int i2;
-            TL_contacts_found tL_contacts_found = (TL_contacts_found) tLObject;
-            this.globalSearch.clear();
-            this.globalSearchMap.clear();
-            this.localServerSearch.clear();
-            MessagesController.getInstance(this.currentAccount).putChats(tL_contacts_found.chats, false);
-            MessagesController.getInstance(this.currentAccount).putUsers(tL_contacts_found.users, false);
-            MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(tL_contacts_found.users, tL_contacts_found.chats, true, true);
-            SparseArray sparseArray = new SparseArray();
-            SparseArray sparseArray2 = new SparseArray();
-            for (i2 = 0; i2 < tL_contacts_found.chats.size(); i2++) {
-                Chat chat = (Chat) tL_contacts_found.chats.get(i2);
-                sparseArray.put(chat.id, chat);
-            }
-            for (i2 = 0; i2 < tL_contacts_found.users.size(); i2++) {
-                User user = (User) tL_contacts_found.users.get(i2);
-                sparseArray2.put(user.id, user);
-            }
-            for (i2 = 0; i2 < 2; i2++) {
-                ArrayList arrayList;
-                if (i2 != 0) {
-                    arrayList = tL_contacts_found.results;
-                } else if (this.allResultsAreGlobal) {
-                    arrayList = tL_contacts_found.my_results;
-                } else {
+        if (i == this.lastReqId) {
+            i = 0;
+            this.reqId = 0;
+            if (tL_error == null) {
+                int i2;
+                TL_contacts_found tL_contacts_found = (TL_contacts_found) tLObject;
+                this.globalSearch.clear();
+                this.globalSearchMap.clear();
+                this.localServerSearch.clear();
+                MessagesController.getInstance(this.currentAccount).putChats(tL_contacts_found.chats, false);
+                MessagesController.getInstance(this.currentAccount).putUsers(tL_contacts_found.users, false);
+                MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(tL_contacts_found.users, tL_contacts_found.chats, true, true);
+                SparseArray sparseArray = new SparseArray();
+                SparseArray sparseArray2 = new SparseArray();
+                for (i2 = 0; i2 < tL_contacts_found.chats.size(); i2++) {
+                    Chat chat = (Chat) tL_contacts_found.chats.get(i2);
+                    sparseArray.put(chat.id, chat);
                 }
-                for (int i3 = 0; i3 < arrayList.size(); i3++) {
-                    User user2;
-                    Object obj;
-                    Peer peer = (Peer) arrayList.get(i3);
-                    int i4 = peer.user_id;
-                    if (i4 != 0) {
-                        user2 = (User) sparseArray2.get(i4);
-                        obj = null;
+                for (i2 = 0; i2 < tL_contacts_found.users.size(); i2++) {
+                    User user = (User) tL_contacts_found.users.get(i2);
+                    sparseArray2.put(user.id, user);
+                }
+                for (i2 = 0; i2 < 2; i2++) {
+                    ArrayList arrayList;
+                    if (i2 != 0) {
+                        arrayList = tL_contacts_found.results;
+                    } else if (this.allResultsAreGlobal) {
+                        arrayList = tL_contacts_found.my_results;
                     } else {
-                        i4 = peer.chat_id;
+                    }
+                    for (int i3 = 0; i3 < arrayList.size(); i3++) {
+                        User user2;
+                        Object obj;
+                        Peer peer = (Peer) arrayList.get(i3);
+                        int i4 = peer.user_id;
                         if (i4 != 0) {
-                            obj = (Chat) sparseArray.get(i4);
+                            user2 = (User) sparseArray2.get(i4);
+                            obj = null;
                         } else {
-                            int i5 = peer.channel_id;
-                            if (i5 != 0) {
-                                Chat chat2 = (Chat) sparseArray.get(i5);
+                            i4 = peer.chat_id;
+                            if (i4 != 0) {
+                                obj = (Chat) sparseArray.get(i4);
                             } else {
-                                obj = null;
-                                user2 = obj;
+                                int i5 = peer.channel_id;
+                                if (i5 != 0) {
+                                    Chat chat2 = (Chat) sparseArray.get(i5);
+                                } else {
+                                    obj = null;
+                                    user2 = obj;
+                                }
                             }
+                            user2 = null;
                         }
-                        user2 = null;
-                    }
-                    if (obj != null) {
-                        if (z) {
-                            this.globalSearch.add(obj);
-                            this.globalSearchMap.put(-obj.id, obj);
+                        if (obj != null) {
+                            if (z) {
+                                this.globalSearch.add(obj);
+                                this.globalSearchMap.put(-obj.id, obj);
+                            }
+                        } else if (user2 != null && ((z2 || !user2.bot) && (z3 || !user2.self))) {
+                            this.globalSearch.add(user2);
+                            this.globalSearchMap.put(user2.id, user2);
                         }
-                    } else if (user2 != null && ((z2 || !user2.bot) && (z3 || !user2.self))) {
-                        this.globalSearch.add(user2);
-                        this.globalSearchMap.put(user2.id, user2);
                     }
                 }
-            }
-            if (!this.allResultsAreGlobal) {
-                for (int i6 = 0; i6 < tL_contacts_found.my_results.size(); i6++) {
-                    Object obj2;
-                    Object obj3;
-                    Peer peer2 = (Peer) tL_contacts_found.my_results.get(i6);
-                    int i7 = peer2.user_id;
-                    if (i7 != 0) {
-                        obj2 = (User) sparseArray2.get(i7);
-                        obj3 = null;
-                    } else {
-                        i7 = peer2.chat_id;
-                        if (i7 != 0) {
-                            obj3 = (Chat) sparseArray.get(i7);
+                if (!this.allResultsAreGlobal) {
+                    while (i < tL_contacts_found.my_results.size()) {
+                        Object obj2;
+                        Object obj3;
+                        Peer peer2 = (Peer) tL_contacts_found.my_results.get(i);
+                        int i6 = peer2.user_id;
+                        if (i6 != 0) {
+                            obj2 = (User) sparseArray2.get(i6);
+                            obj3 = null;
                         } else {
-                            int i8 = peer2.channel_id;
-                            if (i8 != 0) {
-                                Chat chat3 = (Chat) sparseArray.get(i8);
+                            i6 = peer2.chat_id;
+                            if (i6 != 0) {
+                                obj3 = (Chat) sparseArray.get(i6);
                             } else {
-                                obj3 = null;
-                                obj2 = obj3;
+                                int i7 = peer2.channel_id;
+                                if (i7 != 0) {
+                                    Chat chat3 = (Chat) sparseArray.get(i7);
+                                } else {
+                                    obj3 = null;
+                                    obj2 = obj3;
+                                }
                             }
+                            obj2 = null;
                         }
-                        obj2 = null;
-                    }
-                    if (obj3 != null) {
-                        this.localServerSearch.add(obj3);
-                        this.globalSearchMap.put(-obj3.id, obj3);
-                    } else if (obj2 != null) {
-                        this.localServerSearch.add(obj2);
-                        this.globalSearchMap.put(obj2.id, obj2);
+                        if (obj3 != null) {
+                            if (z) {
+                                this.localServerSearch.add(obj3);
+                                this.globalSearchMap.put(-obj3.id, obj3);
+                            }
+                        } else if (obj2 != null) {
+                            this.localServerSearch.add(obj2);
+                            this.globalSearchMap.put(obj2.id, obj2);
+                        }
+                        i++;
                     }
                 }
+                this.lastFoundUsername = str.toLowerCase();
+                ArrayList arrayList2 = this.localSearchResults;
+                if (arrayList2 != null) {
+                    mergeResults(arrayList2);
+                }
+                mergeExcludeResults();
+                this.delegate.onDataSetChanged();
             }
-            this.lastFoundUsername = str.toLowerCase();
-            ArrayList arrayList2 = this.localSearchResults;
-            if (arrayList2 != null) {
-                mergeResults(arrayList2);
-            }
-            mergeExcludeResults();
-            this.delegate.onDataSetChanged();
         }
-        this.reqId = 0;
     }
 
     public void unloadRecentHashtags() {
@@ -357,6 +400,11 @@ public class SearchAdapterHelper {
                     if (tLObject2 != null) {
                         this.groupSearch.remove(tLObject2);
                         this.groupSearchMap.remove(user.id);
+                    }
+                    Object obj = this.phoneSearchMap.get(user.id);
+                    if (obj != null) {
+                        this.phonesSearch.remove(obj);
+                        this.phoneSearchMap.remove(user.id);
                     }
                 } else if (tLObject instanceof Chat) {
                     Chat chat = (Chat) this.globalSearchMap.get(-((Chat) tLObject).id);
@@ -472,6 +520,10 @@ public class SearchAdapterHelper {
 
     public ArrayList<TLObject> getGlobalSearch() {
         return this.globalSearch;
+    }
+
+    public ArrayList<Object> getPhoneSearch() {
+        return this.phonesSearch;
     }
 
     public ArrayList<TLObject> getLocalServerSearch() {

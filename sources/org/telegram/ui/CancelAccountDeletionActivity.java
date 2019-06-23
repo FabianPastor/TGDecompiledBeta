@@ -803,7 +803,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             if (r7 != 0) goto L_0x003e;
         L_0x000b:
             r7 = r6.this$0;
-            r8 = NUM; // 0x7f0d01f0 float:1.874312E38 double:1.0531300226E-314;
+            r8 = NUM; // 0x7f0d01fb float:1.8743143E38 double:1.053130028E-314;
             r1 = new java.lang.Object[r1];
             r2 = org.telegram.PhoneFormat.PhoneFormat.getInstance();
             r3 = new java.lang.StringBuilder;

@@ -304,21 +304,9 @@
     </style>
     <style name="TextAppearance.Compat.Notification.Info">
     </style>
-    <style name="TextAppearance.Compat.Notification.Info.Media">
-        <item name="android:textColor">@color/secondary_text_default_material_dark</item>
-    </style>
-    <style name="TextAppearance.Compat.Notification.Media">
-        <item name="android:textColor">@color/secondary_text_default_material_dark</item>
-    </style>
     <style name="TextAppearance.Compat.Notification.Time">
     </style>
-    <style name="TextAppearance.Compat.Notification.Time.Media">
-        <item name="android:textColor">@color/secondary_text_default_material_dark</item>
-    </style>
     <style name="TextAppearance.Compat.Notification.Title">
-    </style>
-    <style name="TextAppearance.Compat.Notification.Title.Media">
-        <item name="android:textColor">@color/primary_text_default_material_dark</item>
     </style>
     <style name="Theme.TMessages">
         <item name="android:colorBackground">@android:color/white</item>

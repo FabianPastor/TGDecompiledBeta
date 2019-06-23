@@ -31,9 +31,9 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.DataQuery;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
@@ -111,7 +111,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
             boolean z = true;
             StickerSetCell stickerSetCell;
             if (itemViewType == 0) {
-                ArrayList stickerSets = DataQuery.getInstance(GroupStickersActivity.this.currentAccount).getStickerSets(0);
+                ArrayList stickerSets = MediaDataController.getInstance(GroupStickersActivity.this.currentAccount).getStickerSets(0);
                 i -= GroupStickersActivity.this.stickersStartRow;
                 stickerSetCell = (StickerSetCell) viewHolder.itemView;
                 TL_messages_stickerSet tL_messages_stickerSet = (TL_messages_stickerSet) stickerSets.get(i);
@@ -227,7 +227,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
 
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
-        DataQuery.getInstance(this.currentAccount).checkStickers(0);
+        MediaDataController.getInstance(this.currentAccount).checkStickers(0);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.stickersDidLoad);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatInfoDidLoad);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.groupStickersDidLoad);
@@ -431,7 +431,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                 int findFirstVisibleItemPosition = this.layoutManager.findFirstVisibleItemPosition();
                 Holder holder = (Holder) this.listView.findViewHolderForAdapterPosition(findFirstVisibleItemPosition);
                 int top = holder != null ? holder.itemView.getTop() : Integer.MAX_VALUE;
-                this.selectedStickerSet = (TL_messages_stickerSet) DataQuery.getInstance(this.currentAccount).getStickerSets(0).get(i - this.stickersStartRow);
+                this.selectedStickerSet = (TL_messages_stickerSet) MediaDataController.getInstance(this.currentAccount).getStickerSets(0).get(i - this.stickersStartRow);
                 this.ignoreTextChanges = true;
                 this.usernameTextView.setText(this.selectedStickerSet.set.short_name);
                 EditTextBoldCursor editTextBoldCursor = this.usernameTextView;
@@ -455,7 +455,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
             ChatFull chatFull = (ChatFull) objArr[0];
             if (chatFull.id == this.chatId) {
                 if (this.info == null && chatFull.stickerset != null) {
-                    this.selectedStickerSet = DataQuery.getInstance(this.currentAccount).getGroupStickerSetById(chatFull.stickerset);
+                    this.selectedStickerSet = MediaDataController.getInstance(this.currentAccount).getGroupStickerSetById(chatFull.stickerset);
                 }
                 this.info = chatFull;
                 updateRows();
@@ -476,7 +476,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         this.info = chatFull;
         chatFull = this.info;
         if (chatFull != null && chatFull.stickerset != null) {
-            this.selectedStickerSet = DataQuery.getInstance(this.currentAccount).getGroupStickerSetById(this.info.stickerset);
+            this.selectedStickerSet = MediaDataController.getInstance(this.currentAccount).getGroupStickerSetById(this.info.stickerset);
         }
     }
 
@@ -503,7 +503,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
             this.searching = true;
             this.searchWas = true;
             String obj = this.usernameTextView.getText().toString();
-            TL_messages_stickerSet stickerSetByName = DataQuery.getInstance(this.currentAccount).getStickerSetByName(obj);
+            TL_messages_stickerSet stickerSetByName = MediaDataController.getInstance(this.currentAccount).getStickerSetByName(obj);
             if (stickerSetByName != null) {
                 this.selectedStickerSet = stickerSetByName;
             }
@@ -676,7 +676,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                 this.info.stickerset = null;
             } else {
                 this.info.stickerset = tL_messages_stickerSet.set;
-                DataQuery.getInstance(this.currentAccount).putGroupStickerSet(this.selectedStickerSet);
+                MediaDataController.getInstance(this.currentAccount).putGroupStickerSet(this.selectedStickerSet);
             }
             ChatFull chatFull = this.info;
             if (chatFull.stickerset == null) {
@@ -714,7 +714,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         i = this.rowCount;
         this.rowCount = i + 1;
         this.infoRow = i;
-        ArrayList stickerSets = DataQuery.getInstance(this.currentAccount).getStickerSets(0);
+        ArrayList stickerSets = MediaDataController.getInstance(this.currentAccount).getStickerSets(0);
         if (stickerSets.isEmpty()) {
             this.headerRow = -1;
             this.stickersStartRow = -1;
@@ -770,31 +770,31 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                 this.doneItem.setEnabled(false);
                 AnimatorSet animatorSet2 = this.doneItemAnimation;
                 Animator[] animatorArr = new Animator[6];
-                animatorArr[0] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), str3, new float[]{0.1f});
-                animatorArr[1] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), str2, new float[]{0.1f});
-                animatorArr[2] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), str, new float[]{0.0f});
+                animatorArr[0] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), str3, new float[]{0.1f});
+                animatorArr[1] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), str2, new float[]{0.1f});
+                animatorArr[2] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), str, new float[]{0.0f});
                 animatorArr[3] = ObjectAnimator.ofFloat(this.progressView, str3, new float[]{1.0f});
                 animatorArr[4] = ObjectAnimator.ofFloat(this.progressView, str2, new float[]{1.0f});
                 animatorArr[5] = ObjectAnimator.ofFloat(this.progressView, str, new float[]{1.0f});
                 animatorSet2.playTogether(animatorArr);
             } else {
-                this.doneItem.getImageView().setVisibility(0);
+                this.doneItem.getContentView().setVisibility(0);
                 this.doneItem.setEnabled(true);
                 animatorSet = this.doneItemAnimation;
                 Animator[] animatorArr2 = new Animator[6];
                 animatorArr2[0] = ObjectAnimator.ofFloat(this.progressView, str3, new float[]{0.1f});
                 animatorArr2[1] = ObjectAnimator.ofFloat(this.progressView, str2, new float[]{0.1f});
                 animatorArr2[2] = ObjectAnimator.ofFloat(this.progressView, str, new float[]{0.0f});
-                animatorArr2[3] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), str3, new float[]{1.0f});
-                animatorArr2[4] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), str2, new float[]{1.0f});
-                animatorArr2[5] = ObjectAnimator.ofFloat(this.doneItem.getImageView(), str, new float[]{1.0f});
+                animatorArr2[3] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), str3, new float[]{1.0f});
+                animatorArr2[4] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), str2, new float[]{1.0f});
+                animatorArr2[5] = ObjectAnimator.ofFloat(this.doneItem.getContentView(), str, new float[]{1.0f});
                 animatorSet.playTogether(animatorArr2);
             }
             this.doneItemAnimation.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     if (GroupStickersActivity.this.doneItemAnimation != null && GroupStickersActivity.this.doneItemAnimation.equals(animator)) {
                         if (z2) {
-                            GroupStickersActivity.this.doneItem.getImageView().setVisibility(4);
+                            GroupStickersActivity.this.doneItem.getContentView().setVisibility(4);
                         } else {
                             GroupStickersActivity.this.progressView.setVisibility(4);
                         }

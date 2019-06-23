@@ -88,7 +88,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
                 SharingLocationsAlert.this.textView.setPadding(0, 0, 0, AndroidUtilities.dp(8.0f));
                 anonymousClass1.addView(SharingLocationsAlert.this.textView, LayoutHelper.createFrame(-1, 40.0f));
             } else {
-                anonymousClass1 = new SharingLiveLocationCell(this.context, false);
+                anonymousClass1 = new SharingLiveLocationCell(this.context, false, 54);
             }
             return new Holder(anonymousClass1);
         }

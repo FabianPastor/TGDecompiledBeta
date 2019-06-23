@@ -14,6 +14,7 @@ import com.airbnb.lottie.model.KeyPath;
 import com.airbnb.lottie.value.LottieValueCallback;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC.Chat;
 import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.Theme;
@@ -27,6 +28,7 @@ public class AvatarDrawable extends Drawable {
     private int avatarType;
     private int color;
     private boolean drawBrodcast;
+    private boolean drawDeleted;
     private boolean isProfile;
     private TextPaint namePaint;
     private StringBuilder stringBuilder;
@@ -73,6 +75,7 @@ public class AvatarDrawable extends Drawable {
         this.isProfile = z;
         if (user != null) {
             setInfo(user.id, user.first_name, user.last_name, false, null);
+            this.drawDeleted = UserObject.isDeleted(user);
         }
     }
 
@@ -124,6 +127,7 @@ public class AvatarDrawable extends Drawable {
     public void setInfo(User user) {
         if (user != null) {
             setInfo(user.id, user.first_name, user.last_name, false, null);
+            this.drawDeleted = UserObject.isDeleted(user);
         }
     }
 
@@ -175,6 +179,7 @@ public class AvatarDrawable extends Drawable {
         }
         this.drawBrodcast = z;
         this.avatarType = 0;
+        this.drawDeleted = false;
         if (str == null || str.length() == 0) {
             str = str2;
             str2 = null;
@@ -277,6 +282,7 @@ public class AvatarDrawable extends Drawable {
                 canvas.restore();
             } else {
                 Drawable drawable;
+                Drawable drawable2;
                 if (i != 0) {
                     drawable = Theme.avatar_savedDrawable;
                     if (drawable != null) {
@@ -297,9 +303,19 @@ public class AvatarDrawable extends Drawable {
                     if (drawable != null) {
                         intrinsicWidth = (width - drawable.getIntrinsicWidth()) / 2;
                         width = (width - Theme.avatar_broadcastDrawable.getIntrinsicHeight()) / 2;
-                        Drawable drawable2 = Theme.avatar_broadcastDrawable;
+                        drawable2 = Theme.avatar_broadcastDrawable;
                         drawable2.setBounds(intrinsicWidth, width, drawable2.getIntrinsicWidth() + intrinsicWidth, Theme.avatar_broadcastDrawable.getIntrinsicHeight() + width);
                         Theme.avatar_broadcastDrawable.draw(canvas);
+                    }
+                }
+                if (this.drawDeleted) {
+                    drawable = Theme.avatar_ghostDrawable;
+                    if (drawable != null) {
+                        intrinsicWidth = (width - drawable.getIntrinsicWidth()) / 2;
+                        width = (width - Theme.avatar_ghostDrawable.getIntrinsicHeight()) / 2;
+                        drawable2 = Theme.avatar_ghostDrawable;
+                        drawable2.setBounds(intrinsicWidth, width, drawable2.getIntrinsicWidth() + intrinsicWidth, Theme.avatar_ghostDrawable.getIntrinsicHeight() + width);
+                        Theme.avatar_ghostDrawable.draw(canvas);
                     }
                 }
                 if (this.textLayout != null) {
