@@ -159,82 +159,83 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         this.delegate = null;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:42:0x014e  */
-    /* JADX WARNING: Removed duplicated region for block: B:38:0x0146  */
-    /* JADX WARNING: Removed duplicated region for block: B:50:0x01f3  */
-    /* JADX WARNING: Removed duplicated region for block: B:49:0x01f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:54:0x01fe  */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x01fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:58:0x020a  */
-    /* JADX WARNING: Removed duplicated region for block: B:57:0x0207  */
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x0219  */
-    /* JADX WARNING: Removed duplicated region for block: B:61:0x0216  */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x0224  */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x0221  */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x0263  */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x02c0  */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x032c  */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x0329  */
-    /* JADX WARNING: Removed duplicated region for block: B:79:0x0333  */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x0129 A:{Catch:{ Throwable -> 0x0156, Throwable -> 0x015b }} */
+    /* JADX WARNING: Removed duplicated region for block: B:58:0x0185  */
+    /* JADX WARNING: Removed duplicated region for block: B:54:0x017d  */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x022a  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x0227  */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x0235  */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x0232  */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x0241  */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x023e  */
+    /* JADX WARNING: Removed duplicated region for block: B:78:0x0250  */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x024d  */
+    /* JADX WARNING: Removed duplicated region for block: B:82:0x025b  */
+    /* JADX WARNING: Removed duplicated region for block: B:81:0x0258  */
+    /* JADX WARNING: Removed duplicated region for block: B:85:0x029a  */
+    /* JADX WARNING: Removed duplicated region for block: B:88:0x02f7  */
+    /* JADX WARNING: Removed duplicated region for block: B:92:0x0363  */
+    /* JADX WARNING: Removed duplicated region for block: B:91:0x0360  */
+    /* JADX WARNING: Removed duplicated region for block: B:95:0x036a  */
     public android.view.View createView(android.content.Context r25) {
         /*
         r24 = this;
-        r8 = r24;
-        r7 = r25;
-        r6 = 0;
-        r8.searching = r6;
-        r8.searchWas = r6;
-        r0 = r8.actionBar;
+        r9 = r24;
+        r8 = r25;
+        r7 = 0;
+        r9.searching = r7;
+        r9.searchWas = r7;
+        r0 = r9.actionBar;
         r1 = NUM; // 0x7var_f8 float:1.794508E38 double:1.0529356256E-314;
         r0.setBackButtonImage(r1);
-        r0 = r8.actionBar;
-        r5 = 1;
-        r0.setAllowOverlayTitle(r5);
-        r0 = r8.destroyAfterSelect;
+        r0 = r9.actionBar;
+        r6 = 1;
+        r0.setAllowOverlayTitle(r6);
+        r0 = r9.destroyAfterSelect;
         if (r0 == 0) goto L_0x0050;
     L_0x001b:
-        r0 = r8.returnAsResult;
+        r0 = r9.returnAsResult;
         if (r0 == 0) goto L_0x002e;
     L_0x001f:
-        r0 = r8.actionBar;
+        r0 = r9.actionBar;
         r1 = NUM; // 0x7f0d0929 float:1.874687E38 double:1.053130936E-314;
         r2 = "SelectContact";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
         goto L_0x005e;
     L_0x002e:
-        r0 = r8.createSecretChat;
+        r0 = r9.createSecretChat;
         if (r0 == 0) goto L_0x0041;
     L_0x0032:
-        r0 = r8.actionBar;
+        r0 = r9.actionBar;
         r1 = NUM; // 0x7f0d0611 float:1.8745265E38 double:1.053130545E-314;
         r2 = "NewSecretChat";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
         goto L_0x005e;
     L_0x0041:
-        r0 = r8.actionBar;
+        r0 = r9.actionBar;
         r1 = NUM; // 0x7f0d0609 float:1.8745248E38 double:1.053130541E-314;
         r2 = "NewMessageTitle";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
         goto L_0x005e;
     L_0x0050:
-        r0 = r8.actionBar;
+        r0 = r9.actionBar;
         r1 = NUM; // 0x7f0d02ff float:1.874367E38 double:1.0531301565E-314;
         r2 = "Contacts";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setTitle(r1);
     L_0x005e:
-        r0 = r8.actionBar;
+        r0 = r9.actionBar;
         r1 = new org.telegram.ui.ContactsActivity$1;
         r1.<init>();
         r0.setActionBarMenuOnItemClick(r1);
-        r0 = r8.actionBar;
+        r0 = r9.actionBar;
         r0 = r0.createMenu();
         r1 = NUM; // 0x7var_ float:1.7945101E38 double:1.0529356305E-314;
-        r1 = r0.addItem(r6, r1);
-        r1 = r1.setIsSearchField(r5);
+        r1 = r0.addItem(r7, r1);
+        r1 = r1.setIsSearchField(r6);
         r2 = new org.telegram.ui.ContactsActivity$2;
         r2.<init>();
         r1 = r1.setActionBarMenuItemSearchListener(r2);
@@ -244,13 +245,13 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         r1.setSearchFieldHint(r4);
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setContentDescription(r2);
-        r1 = r8.createSecretChat;
+        r1 = r9.createSecretChat;
         if (r1 != 0) goto L_0x00bc;
     L_0x0099:
-        r1 = r8.returnAsResult;
+        r1 = r9.returnAsResult;
         if (r1 != 0) goto L_0x00bc;
     L_0x009d:
-        r1 = r8.sortByName;
+        r1 = r9.sortByName;
         if (r1 == 0) goto L_0x00a5;
     L_0x00a1:
         r1 = NUM; // 0x7var_c3 float:1.7944973E38 double:1.0529355994E-314;
@@ -258,231 +259,265 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     L_0x00a5:
         r1 = NUM; // 0x7var_c2 float:1.7944971E38 double:1.052935599E-314;
     L_0x00a8:
-        r0 = r0.addItem(r5, r1);
-        r8.sortItem = r0;
-        r0 = r8.sortItem;
+        r0 = r0.addItem(r6, r1);
+        r9.sortItem = r0;
+        r0 = r9.sortItem;
         r1 = NUM; // 0x7f0d001d float:1.8742174E38 double:1.053129792E-314;
         r2 = "AccDescrContactSorting";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setContentDescription(r1);
     L_0x00bc:
         r0 = new org.telegram.ui.Adapters.SearchAdapter;
-        r11 = r8.ignoreUsers;
-        r12 = r8.allowUsernameSearch;
-        r13 = 0;
+        r12 = r9.ignoreUsers;
+        r13 = r9.allowUsernameSearch;
         r14 = 0;
-        r15 = r8.allowBots;
-        r16 = 1;
-        r17 = 0;
-        r9 = r0;
-        r10 = r25;
-        r9.<init>(r10, r11, r12, r13, r14, r15, r16, r17);
-        r8.searchListViewAdapter = r0;
-        r0 = r8.chatId;
-        r9 = 3;
-        r10 = 2;
-        if (r0 == 0) goto L_0x00ee;
-    L_0x00d8:
-        r0 = r8.currentAccount;
+        r15 = 0;
+        r1 = r9.allowBots;
+        r17 = 1;
+        r18 = 0;
+        r10 = r0;
+        r11 = r25;
+        r16 = r1;
+        r10.<init>(r11, r12, r13, r14, r15, r16, r17, r18);
+        r9.searchListViewAdapter = r0;
+        r0 = r9.chatId;
+        r10 = 3;
+        r11 = 2;
+        if (r0 == 0) goto L_0x00f0;
+    L_0x00da:
+        r0 = r9.currentAccount;
         r0 = org.telegram.messenger.MessagesController.getInstance(r0);
-        r1 = r8.chatId;
+        r1 = r9.chatId;
         r1 = java.lang.Integer.valueOf(r1);
         r0 = r0.getChat(r1);
-        r0 = org.telegram.messenger.ChatObject.canUserDoAdminAction(r0, r9);
-    L_0x00ec:
-        r11 = r0;
-        goto L_0x0115;
+        r0 = org.telegram.messenger.ChatObject.canUserDoAdminAction(r0, r10);
     L_0x00ee:
-        r0 = r8.channelId;
-        if (r0 == 0) goto L_0x0114;
-    L_0x00f2:
-        r0 = r8.currentAccount;
+        r12 = r0;
+        goto L_0x0117;
+    L_0x00f0:
+        r0 = r9.channelId;
+        if (r0 == 0) goto L_0x0116;
+    L_0x00f4:
+        r0 = r9.currentAccount;
         r0 = org.telegram.messenger.MessagesController.getInstance(r0);
-        r1 = r8.channelId;
+        r1 = r9.channelId;
         r1 = java.lang.Integer.valueOf(r1);
         r0 = r0.getChat(r1);
-        r1 = org.telegram.messenger.ChatObject.canUserDoAdminAction(r0, r9);
-        if (r1 == 0) goto L_0x0112;
-    L_0x0108:
+        r1 = org.telegram.messenger.ChatObject.canUserDoAdminAction(r0, r10);
+        if (r1 == 0) goto L_0x0114;
+    L_0x010a:
         r0 = r0.username;
         r0 = android.text.TextUtils.isEmpty(r0);
-        if (r0 == 0) goto L_0x0112;
-    L_0x0110:
-        r0 = 2;
-        goto L_0x00ec;
+        if (r0 == 0) goto L_0x0114;
     L_0x0112:
-        r0 = 0;
-        goto L_0x00ec;
+        r0 = 2;
+        goto L_0x00ee;
     L_0x0114:
-        r11 = 0;
-    L_0x0115:
-        r0 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x0124 }
-        r0 = r0.getPackageManager();	 Catch:{ Throwable -> 0x0124 }
+        r0 = 0;
+        goto L_0x00ee;
+    L_0x0116:
+        r12 = 0;
+    L_0x0117:
+        r0 = org.telegram.messenger.ApplicationLoader.applicationContext;	 Catch:{ Throwable -> 0x015b }
+        r0 = r0.getPackageManager();	 Catch:{ Throwable -> 0x015b }
         r1 = "android.hardware.location.gps";
-        r0 = r0.hasSystemFeature(r1);	 Catch:{ Throwable -> 0x0124 }
-        r8.hasGps = r0;	 Catch:{ Throwable -> 0x0124 }
-        goto L_0x0126;
-    L_0x0124:
-        r8.hasGps = r6;
-    L_0x0126:
-        r12 = new org.telegram.ui.ContactsActivity$3;
-        r3 = r8.onlyUsers;
-        r4 = r8.needPhonebook;
-        r13 = r8.ignoreUsers;
-        r14 = r8.hasGps;
-        r0 = r12;
-        r1 = r24;
-        r2 = r25;
+        r0 = r0.hasSystemFeature(r1);	 Catch:{ Throwable -> 0x015b }
+        r9.hasGps = r0;	 Catch:{ Throwable -> 0x015b }
+        r0 = r9.hasGps;	 Catch:{ Throwable -> 0x015b }
+        if (r0 == 0) goto L_0x015d;
+    L_0x0129:
+        r0 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Throwable -> 0x015b }
+        r1 = 28;
+        if (r0 < r1) goto L_0x013e;
+    L_0x012f:
+        r0 = "location";
+        r0 = r8.getSystemService(r0);	 Catch:{ Throwable -> 0x015b }
+        r0 = (android.location.LocationManager) r0;	 Catch:{ Throwable -> 0x015b }
+        r0 = r0.isLocationEnabled();	 Catch:{ Throwable -> 0x015b }
+        r9.hasGps = r0;	 Catch:{ Throwable -> 0x015b }
+        goto L_0x015d;
+    L_0x013e:
+        r0 = android.os.Build.VERSION.SDK_INT;	 Catch:{ Throwable -> 0x015b }
+        r1 = 19;
+        if (r0 < r1) goto L_0x015d;
+    L_0x0144:
+        r0 = r25.getContentResolver();	 Catch:{ Throwable -> 0x0156 }
+        r1 = "location_mode";
+        r0 = android.provider.Settings.Secure.getInt(r0, r1, r7);	 Catch:{ Throwable -> 0x0156 }
+        if (r0 == 0) goto L_0x0152;
+    L_0x0150:
+        r0 = 1;
+        goto L_0x0153;
+    L_0x0152:
+        r0 = 0;
+    L_0x0153:
+        r9.hasGps = r0;	 Catch:{ Throwable -> 0x0156 }
+        goto L_0x015d;
+    L_0x0156:
+        r0 = move-exception;
+        org.telegram.messenger.FileLog.e(r0);	 Catch:{ Throwable -> 0x015b }
+        goto L_0x015d;
+    L_0x015b:
+        r9.hasGps = r7;
+    L_0x015d:
+        r0 = new org.telegram.ui.ContactsActivity$3;
+        r4 = r9.onlyUsers;
+        r5 = r9.needPhonebook;
+        r13 = r9.ignoreUsers;
+        r14 = r9.hasGps;
+        r1 = r0;
+        r2 = r24;
+        r3 = r25;
         r15 = 1;
-        r5 = r13;
+        r6 = r13;
         r13 = 0;
-        r6 = r11;
-        r9 = r7;
-        r7 = r14;
-        r0.<init>(r2, r3, r4, r5, r6, r7);
-        r8.listViewAdapter = r12;
-        r0 = r8.listViewAdapter;
-        r1 = r8.sortItem;
-        if (r1 == 0) goto L_0x014e;
-    L_0x0146:
-        r1 = r8.sortByName;
-        if (r1 == 0) goto L_0x014c;
-    L_0x014a:
+        r7 = r12;
+        r10 = r8;
+        r8 = r14;
+        r1.<init>(r3, r4, r5, r6, r7, r8);
+        r9.listViewAdapter = r0;
+        r0 = r9.listViewAdapter;
+        r1 = r9.sortItem;
+        if (r1 == 0) goto L_0x0185;
+    L_0x017d:
+        r1 = r9.sortByName;
+        if (r1 == 0) goto L_0x0183;
+    L_0x0181:
         r1 = 1;
-        goto L_0x014f;
-    L_0x014c:
+        goto L_0x0186;
+    L_0x0183:
         r1 = 2;
-        goto L_0x014f;
-    L_0x014e:
+        goto L_0x0186;
+    L_0x0185:
         r1 = 0;
-    L_0x014f:
+    L_0x0186:
         r0.setSortType(r1);
-        r0 = r8.listViewAdapter;
-        r1 = r8.disableSections;
+        r0 = r9.listViewAdapter;
+        r1 = r9.disableSections;
         r0.setDisableSections(r1);
         r0 = new org.telegram.ui.ContactsActivity$4;
-        r0.<init>(r9);
-        r8.fragmentView = r0;
-        r0 = r8.fragmentView;
+        r0.<init>(r10);
+        r9.fragmentView = r0;
+        r0 = r9.fragmentView;
         r0 = (android.widget.FrameLayout) r0;
         r1 = new org.telegram.ui.Components.EmptyTextProgressView;
-        r1.<init>(r9);
-        r8.emptyView = r1;
-        r1 = r8.emptyView;
+        r1.<init>(r10);
+        r9.emptyView = r1;
+        r1 = r9.emptyView;
         r1.setShowAtCenter(r15);
-        r1 = r8.emptyView;
+        r1 = r9.emptyView;
         r2 = NUM; // 0x7f0d061d float:1.8745289E38 double:1.053130551E-314;
         r3 = "NoContacts";
         r2 = org.telegram.messenger.LocaleController.getString(r3, r2);
         r1.setText(r2);
-        r1 = r8.emptyView;
+        r1 = r9.emptyView;
         r1.showTextView();
-        r1 = r8.emptyView;
+        r1 = r9.emptyView;
         r2 = -NUM; // 0xffffffffbvar_ float:-1.0 double:NaN;
         r3 = -1;
         r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r3, r2);
         r0.addView(r1, r4);
         r1 = new org.telegram.ui.ContactsActivity$5;
-        r1.<init>(r9);
-        r8.listView = r1;
-        r1 = r8.listView;
+        r1.<init>(r10);
+        r9.listView = r1;
+        r1 = r9.listView;
         r1.setSectionsType(r15);
-        r1 = r8.listView;
+        r1 = r9.listView;
         r1.setVerticalScrollBarEnabled(r13);
-        r1 = r8.listView;
+        r1 = r9.listView;
         r1.setFastScrollEnabled();
-        r1 = r8.listView;
+        r1 = r9.listView;
         r4 = new androidx.recyclerview.widget.LinearLayoutManager;
-        r4.<init>(r9, r15, r13);
-        r8.layoutManager = r4;
+        r4.<init>(r10, r15, r13);
+        r9.layoutManager = r4;
         r1.setLayoutManager(r4);
-        r1 = r8.listView;
-        r4 = r8.listViewAdapter;
+        r1 = r9.listView;
+        r4 = r9.listViewAdapter;
         r1.setAdapter(r4);
-        r1 = r8.listView;
+        r1 = r9.listView;
         r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r3, r2);
         r0.addView(r1, r2);
-        r1 = r8.listView;
+        r1 = r9.listView;
         r2 = new org.telegram.ui.-$$Lambda$ContactsActivity$gnTnCjocys4rzqdEYocufNT6sRA;
-        r2.<init>(r8, r11);
+        r2.<init>(r9, r12);
         r1.setOnItemClickListener(r2);
-        r1 = r8.listView;
+        r1 = r9.listView;
         r2 = new org.telegram.ui.ContactsActivity$6;
         r2.<init>();
         r1.setOnScrollListener(r2);
-        r1 = r8.createSecretChat;
-        if (r1 != 0) goto L_0x0345;
-    L_0x01d9:
-        r1 = r8.returnAsResult;
-        if (r1 != 0) goto L_0x0345;
-    L_0x01dd:
+        r1 = r9.createSecretChat;
+        if (r1 != 0) goto L_0x037d;
+    L_0x0210:
+        r1 = r9.returnAsResult;
+        if (r1 != 0) goto L_0x037d;
+    L_0x0214:
         r1 = new android.widget.FrameLayout;
-        r1.<init>(r9);
-        r8.floatingButtonContainer = r1;
-        r1 = r8.floatingButtonContainer;
+        r1.<init>(r10);
+        r9.floatingButtonContainer = r1;
+        r1 = r9.floatingButtonContainer;
         r2 = android.os.Build.VERSION.SDK_INT;
         r3 = 56;
         r4 = 60;
         r5 = 21;
-        if (r2 < r5) goto L_0x01f3;
-    L_0x01f0:
+        if (r2 < r5) goto L_0x022a;
+    L_0x0227:
         r2 = 56;
-        goto L_0x01f5;
-    L_0x01f3:
+        goto L_0x022c;
+    L_0x022a:
         r2 = 60;
-    L_0x01f5:
+    L_0x022c:
         r17 = r2 + 20;
         r2 = android.os.Build.VERSION.SDK_INT;
-        if (r2 < r5) goto L_0x01fe;
-    L_0x01fb:
+        if (r2 < r5) goto L_0x0235;
+    L_0x0232:
         r2 = 56;
-        goto L_0x0200;
-    L_0x01fe:
+        goto L_0x0237;
+    L_0x0235:
         r2 = 60;
-    L_0x0200:
+    L_0x0237:
         r2 = r2 + 14;
         r2 = (float) r2;
         r6 = org.telegram.messenger.LocaleController.isRTL;
-        if (r6 == 0) goto L_0x020a;
-    L_0x0207:
+        if (r6 == 0) goto L_0x0241;
+    L_0x023e:
         r16 = 3;
-        goto L_0x020d;
-    L_0x020a:
+        goto L_0x0244;
+    L_0x0241:
         r6 = 5;
         r16 = 5;
-    L_0x020d:
+    L_0x0244:
         r19 = r16 | 80;
         r6 = org.telegram.messenger.LocaleController.isRTL;
         r7 = 0;
-        r11 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
-        if (r6 == 0) goto L_0x0219;
-    L_0x0216:
+        r8 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
+        if (r6 == 0) goto L_0x0250;
+    L_0x024d:
         r20 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
-        goto L_0x021b;
-    L_0x0219:
+        goto L_0x0252;
+    L_0x0250:
         r20 = 0;
-    L_0x021b:
+    L_0x0252:
         r21 = 0;
         r6 = org.telegram.messenger.LocaleController.isRTL;
-        if (r6 == 0) goto L_0x0224;
-    L_0x0221:
+        if (r6 == 0) goto L_0x025b;
+    L_0x0258:
         r22 = 0;
-        goto L_0x0226;
-    L_0x0224:
+        goto L_0x025d;
+    L_0x025b:
         r22 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
-    L_0x0226:
+    L_0x025d:
         r23 = 0;
         r18 = r2;
         r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23);
         r0.addView(r1, r2);
-        r0 = r8.floatingButtonContainer;
+        r0 = r9.floatingButtonContainer;
         r1 = new org.telegram.ui.-$$Lambda$ContactsActivity$XQCfC9ukjnkgkb2J-v7QLg6mf6E;
-        r1.<init>(r8);
+        r1.<init>(r9);
         r0.setOnClickListener(r1);
         r0 = new android.widget.ImageView;
-        r0.<init>(r9);
-        r8.floatingButton = r0;
-        r0 = r8.floatingButton;
+        r0.<init>(r10);
+        r9.floatingButton = r0;
+        r0 = r9.floatingButton;
         r1 = android.widget.ImageView.ScaleType.CENTER;
         r0.setScaleType(r1);
         r0 = NUM; // 0x42600000 float:56.0 double:5.50185432E-315;
@@ -493,16 +528,16 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         r6 = org.telegram.ui.ActionBar.Theme.getColor(r6);
         r1 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r1, r2, r6);
         r2 = android.os.Build.VERSION.SDK_INT;
-        if (r2 >= r5) goto L_0x028f;
-    L_0x0263:
+        if (r2 >= r5) goto L_0x02c6;
+    L_0x029a:
         r2 = r25.getResources();
         r6 = NUM; // 0x7var_db float:1.7945022E38 double:1.052935611E-314;
         r2 = r2.getDrawable(r6);
         r2 = r2.mutate();
         r6 = new android.graphics.PorterDuffColorFilter;
         r7 = -16777216; // 0xfffffffffvar_ float:-1.7014118E38 double:NaN;
-        r9 = android.graphics.PorterDuff.Mode.MULTIPLY;
-        r6.<init>(r7, r9);
+        r10 = android.graphics.PorterDuff.Mode.MULTIPLY;
+        r6.<init>(r7, r10);
         r2.setColorFilter(r6);
         r6 = new org.telegram.ui.Components.CombinedDrawable;
         r6.<init>(r2, r1, r13, r13);
@@ -510,40 +545,40 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         r0 = org.telegram.messenger.AndroidUtilities.dp(r0);
         r6.setIconSize(r1, r0);
         r1 = r6;
-    L_0x028f:
-        r0 = r8.floatingButton;
+    L_0x02c6:
+        r0 = r9.floatingButton;
         r0.setBackgroundDrawable(r1);
-        r0 = r8.floatingButton;
+        r0 = r9.floatingButton;
         r1 = new android.graphics.PorterDuffColorFilter;
         r2 = "chats_actionIcon";
         r2 = org.telegram.ui.ActionBar.Theme.getColor(r2);
         r6 = android.graphics.PorterDuff.Mode.MULTIPLY;
         r1.<init>(r2, r6);
         r0.setColorFilter(r1);
-        r0 = r8.floatingButton;
+        r0 = r9.floatingButton;
         r1 = NUM; // 0x7var_ float:1.7944773E38 double:1.0529355505E-314;
         r0.setImageResource(r1);
-        r0 = r8.floatingButtonContainer;
+        r0 = r9.floatingButtonContainer;
         r1 = NUM; // 0x7f0d0314 float:1.8743713E38 double:1.053130167E-314;
         r2 = "CreateNewContact";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setContentDescription(r1);
         r0 = android.os.Build.VERSION.SDK_INT;
-        if (r0 < r5) goto L_0x0321;
-    L_0x02c0:
+        if (r0 < r5) goto L_0x0358;
+    L_0x02f7:
         r0 = new android.animation.StateListAnimator;
         r0.<init>();
         r1 = new int[r15];
         r2 = 16842919; // 0x10100a7 float:2.3694026E-38 double:8.3215077E-317;
         r1[r13] = r2;
-        r2 = r8.floatingButton;
+        r2 = r9.floatingButton;
         r6 = android.view.View.TRANSLATION_Z;
-        r7 = new float[r10];
-        r9 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
-        r12 = org.telegram.messenger.AndroidUtilities.dp(r9);
+        r7 = new float[r11];
+        r10 = NUM; // 0x40000000 float:2.0 double:5.304989477E-315;
+        r12 = org.telegram.messenger.AndroidUtilities.dp(r10);
         r12 = (float) r12;
         r7[r13] = r12;
-        r12 = org.telegram.messenger.AndroidUtilities.dp(r11);
+        r12 = org.telegram.messenger.AndroidUtilities.dp(r8);
         r12 = (float) r12;
         r7[r15] = r12;
         r2 = android.animation.ObjectAnimator.ofFloat(r2, r6, r7);
@@ -551,53 +586,53 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         r2 = r2.setDuration(r6);
         r0.addState(r1, r2);
         r1 = new int[r13];
-        r2 = r8.floatingButton;
+        r2 = r9.floatingButton;
         r6 = android.view.View.TRANSLATION_Z;
-        r7 = new float[r10];
-        r10 = org.telegram.messenger.AndroidUtilities.dp(r11);
-        r10 = (float) r10;
-        r7[r13] = r10;
-        r9 = org.telegram.messenger.AndroidUtilities.dp(r9);
-        r9 = (float) r9;
-        r7[r15] = r9;
+        r7 = new float[r11];
+        r8 = org.telegram.messenger.AndroidUtilities.dp(r8);
+        r8 = (float) r8;
+        r7[r13] = r8;
+        r8 = org.telegram.messenger.AndroidUtilities.dp(r10);
+        r8 = (float) r8;
+        r7[r15] = r8;
         r2 = android.animation.ObjectAnimator.ofFloat(r2, r6, r7);
         r6 = 200; // 0xc8 float:2.8E-43 double:9.9E-322;
         r2 = r2.setDuration(r6);
         r0.addState(r1, r2);
-        r1 = r8.floatingButton;
+        r1 = r9.floatingButton;
         r1.setStateListAnimator(r0);
-        r0 = r8.floatingButton;
+        r0 = r9.floatingButton;
         r1 = new org.telegram.ui.ContactsActivity$7;
         r1.<init>();
         r0.setOutlineProvider(r1);
-    L_0x0321:
-        r0 = r8.floatingButtonContainer;
-        r1 = r8.floatingButton;
+    L_0x0358:
+        r0 = r9.floatingButtonContainer;
+        r1 = r9.floatingButton;
         r2 = android.os.Build.VERSION.SDK_INT;
-        if (r2 < r5) goto L_0x032c;
-    L_0x0329:
-        r9 = 56;
-        goto L_0x032e;
-    L_0x032c:
-        r9 = 60;
-    L_0x032e:
+        if (r2 < r5) goto L_0x0363;
+    L_0x0360:
+        r10 = 56;
+        goto L_0x0365;
+    L_0x0363:
+        r10 = 60;
+    L_0x0365:
         r2 = android.os.Build.VERSION.SDK_INT;
-        if (r2 < r5) goto L_0x0333;
-    L_0x0332:
-        goto L_0x0335;
-    L_0x0333:
+        if (r2 < r5) goto L_0x036a;
+    L_0x0369:
+        goto L_0x036c;
+    L_0x036a:
         r3 = 60;
-    L_0x0335:
-        r10 = (float) r3;
-        r11 = 51;
-        r12 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
-        r13 = 0;
-        r14 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
-        r15 = 0;
-        r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r10, r11, r12, r13, r14, r15);
+    L_0x036c:
+        r11 = (float) r3;
+        r12 = 51;
+        r13 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
+        r14 = 0;
+        r15 = NUM; // 0x41200000 float:10.0 double:5.398241246E-315;
+        r16 = 0;
+        r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11, r12, r13, r14, r15, r16);
         r0.addView(r1, r2);
-    L_0x0345:
-        r0 = r8.fragmentView;
+    L_0x037d:
+        r0 = r9.fragmentView;
         return r0;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ContactsActivity.createView(android.content.Context):android.view.View");

@@ -2549,6 +2549,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenterD
             ChannelParticipant channelParticipant2 = ((TL_chatChannelParticipant) chatParticipant2).channelParticipant;
             MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(chatParticipant2.user_id));
             canAddAdmins = ChatObject.canAddAdmins(this.currentChat);
+            if (canAddAdmins && ((channelParticipant2 instanceof TL_channelParticipantCreator) || ((channelParticipant2 instanceof TL_channelParticipantAdmin) && !channelParticipant2.can_edit))) {
+                canAddAdmins = false;
+            }
             z = ChatObject.canBlockUsers(this.currentChat) && (!((channelParticipant2 instanceof TL_channelParticipantAdmin) || (channelParticipant2 instanceof TL_channelParticipantCreator)) || channelParticipant2.can_edit);
             z2 = channelParticipant2 instanceof TL_channelParticipantAdmin;
             channelParticipant = channelParticipant2;

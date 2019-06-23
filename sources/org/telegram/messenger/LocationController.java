@@ -39,6 +39,7 @@ import org.telegram.tgnet.TLRPC.TL_inputMediaGeoLive;
 import org.telegram.tgnet.TLRPC.TL_messageMediaGeoLive;
 import org.telegram.tgnet.TLRPC.TL_messages_editMessage;
 import org.telegram.tgnet.TLRPC.TL_messages_getRecentLocations;
+import org.telegram.tgnet.TLRPC.TL_peerLocated;
 import org.telegram.tgnet.TLRPC.TL_updateEditChannelMessage;
 import org.telegram.tgnet.TLRPC.TL_updateEditMessage;
 import org.telegram.tgnet.TLRPC.Update;
@@ -56,6 +57,8 @@ public class LocationController extends BaseController implements NotificationCe
     private static HashMap<LocationFetchCallback, Runnable> callbacks = new HashMap();
     private static final double eps = 1.0E-4d;
     private LongSparseArray<Boolean> cacheRequests = new LongSparseArray();
+    private ArrayList<TL_peerLocated> cachedNearbyChats = new ArrayList();
+    private ArrayList<TL_peerLocated> cachedNearbyUsers = new ArrayList();
     private FusedLocationListener fusedLocationListener = new FusedLocationListener();
     private GoogleApiClient googleApiClient;
     private GpsLocationListener gpsLocationListener = new GpsLocationListener();
@@ -408,6 +411,8 @@ public class LocationController extends BaseController implements NotificationCe
         this.sharingLocationsMapUI.clear();
         this.locationsCache.clear();
         this.cacheRequests.clear();
+        this.cachedNearbyUsers.clear();
+        this.cachedNearbyChats.clear();
         stopService();
         Utilities.stageQueue.postRunnable(new -$$Lambda$LocationController$CqwMtWkVqaOCz-mvGUr_tzsuYCI(this));
     }
@@ -425,6 +430,19 @@ public class LocationController extends BaseController implements NotificationCe
         if (this.lastKnownLocation != null) {
             AndroidUtilities.runOnUIThread(-$$Lambda$LocationController$AEkDvaX8RuyeC1CNnzKt58x3ZZE.INSTANCE);
         }
+    }
+
+    public void setCachedNearbyUsersAndChats(ArrayList<TL_peerLocated> arrayList, ArrayList<TL_peerLocated> arrayList2) {
+        this.cachedNearbyUsers = new ArrayList(arrayList);
+        this.cachedNearbyChats = new ArrayList(arrayList2);
+    }
+
+    public ArrayList<TL_peerLocated> getCachedNearbyUsers() {
+        return this.cachedNearbyUsers;
+    }
+
+    public ArrayList<TL_peerLocated> getCachedNearbyChats() {
+        return this.cachedNearbyChats;
     }
 
     /* Access modifiers changed, original: protected */

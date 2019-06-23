@@ -105,7 +105,7 @@ public class ThemeCell extends FrameLayout {
     /* JADX WARNING: Removed duplicated region for block: B:70:0x0106 A:{SYNTHETIC, Splitter:B:70:0x0106} */
     /* JADX WARNING: Removed duplicated region for block: B:73:0x010b  */
     /* JADX WARNING: Removed duplicated region for block: B:90:? A:{SYNTHETIC, RETURN} */
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x00f6 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:15:0x0050} */
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x00f6 A:{Splitter:B:15:0x0050, ExcHandler: all (th java.lang.Throwable)} */
     /* JADX WARNING: Missing exception handler attribute for start block: B:36:0x00af */
     /* JADX WARNING: Removed duplicated region for block: B:70:0x0106 A:{SYNTHETIC, Splitter:B:70:0x0106} */
     /* JADX WARNING: Removed duplicated region for block: B:90:? A:{SYNTHETIC, RETURN} */

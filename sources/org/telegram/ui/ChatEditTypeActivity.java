@@ -259,10 +259,10 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
     public void onBecomeFullyVisible() {
         super.onBecomeFullyVisible();
         if (this.isForcePublic) {
-            EditText editText = this.editText;
-            if (editText != null) {
-                editText.requestFocus();
-                AndroidUtilities.showKeyboard(this.editText);
+            EditTextBoldCursor editTextBoldCursor = this.usernameTextView;
+            if (editTextBoldCursor != null) {
+                editTextBoldCursor.requestFocus();
+                AndroidUtilities.showKeyboard(this.usernameTextView);
             }
         }
     }

@@ -57,7 +57,7 @@ import org.telegram.ui.Components.ShareLocationDrawable;
 public class PeopleNearbyActivity extends BaseFragment implements NotificationCenterDelegate, LocationFetchCallback {
     private static final int SHORT_POLL_TIMEOUT = 25000;
     private boolean canCreateGroup;
-    private ArrayList<TL_peerLocated> chats = new ArrayList();
+    private ArrayList<TL_peerLocated> chats = new ArrayList(getLocationController().getCachedNearbyChats());
     private int chatsCreateRow;
     private int chatsEndRow;
     private int chatsHeaderRow;
@@ -70,57 +70,22 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
     private Location currentGroupCreateLocation;
     private ActionIntroActivity groupCreateActivity;
     private int helpRow;
+    private Location lastLoadedLocation;
     private RecyclerListView listView;
     private ListAdapter listViewAdapter;
     private AlertDialog loadingDialog;
+    private int reqId;
     private int rowCount;
     private Runnable shortPollRunnable = new Runnable() {
         public void run() {
-            Location lastKnownLocation = PeopleNearbyActivity.this.getLocationController().getLastKnownLocation();
-            if (lastKnownLocation != null) {
-                PeopleNearbyActivity.this.currentGroupCreateLocation = lastKnownLocation;
-                LocationController.fetchLocationAddress(PeopleNearbyActivity.this.currentGroupCreateLocation, PeopleNearbyActivity.this);
-                TL_contacts_getLocated tL_contacts_getLocated = new TL_contacts_getLocated();
-                tL_contacts_getLocated.geo_point = new TL_inputGeoPoint();
-                tL_contacts_getLocated.geo_point.lat = lastKnownLocation.getLatitude();
-                tL_contacts_getLocated.geo_point._long = lastKnownLocation.getLongitude();
-                PeopleNearbyActivity.this.getConnectionsManager().sendRequest(tL_contacts_getLocated, new -$$Lambda$PeopleNearbyActivity$1$1bHdRPJOKvMuJPVf7e1fyBX8mc8(this));
+            if (PeopleNearbyActivity.this.shortPollRunnable != null) {
+                PeopleNearbyActivity.this.sendRequest(true);
                 AndroidUtilities.cancelRunOnUIThread(PeopleNearbyActivity.this.shortPollRunnable);
                 AndroidUtilities.runOnUIThread(PeopleNearbyActivity.this.shortPollRunnable, 25000);
             }
         }
-
-        public /* synthetic */ void lambda$run$1$PeopleNearbyActivity$1(TLObject tLObject, TL_error tL_error) {
-            AndroidUtilities.runOnUIThread(new -$$Lambda$PeopleNearbyActivity$1$QROjrw_f8oGdJpBBU-tgjrHlJeQ(this, tLObject));
-        }
-
-        public /* synthetic */ void lambda$null$0$PeopleNearbyActivity$1(TLObject tLObject) {
-            TL_updates tL_updates = (TL_updates) tLObject;
-            PeopleNearbyActivity.this.getMessagesController().putUsers(tL_updates.users, false);
-            PeopleNearbyActivity.this.getMessagesController().putChats(tL_updates.chats, false);
-            PeopleNearbyActivity.this.users.clear();
-            PeopleNearbyActivity.this.chats.clear();
-            int size = tL_updates.updates.size();
-            for (int i = 0; i < size; i++) {
-                Update update = (Update) tL_updates.updates.get(i);
-                if (update instanceof TL_updatePeerLocated) {
-                    TL_updatePeerLocated tL_updatePeerLocated = (TL_updatePeerLocated) update;
-                    int size2 = tL_updatePeerLocated.peers.size();
-                    for (int i2 = 0; i2 < size2; i2++) {
-                        TL_peerLocated tL_peerLocated = (TL_peerLocated) tL_updatePeerLocated.peers.get(i2);
-                        if (tL_peerLocated.peer instanceof TL_peerUser) {
-                            PeopleNearbyActivity.this.users.add(tL_peerLocated);
-                        } else {
-                            PeopleNearbyActivity.this.chats.add(tL_peerLocated);
-                        }
-                    }
-                }
-            }
-            PeopleNearbyActivity.this.checkForExpiredLocations();
-            PeopleNearbyActivity.this.updateRows();
-        }
     };
-    private ArrayList<TL_peerLocated> users = new ArrayList();
+    private ArrayList<TL_peerLocated> users = new ArrayList(getLocationController().getCachedNearbyUsers());
     private int usersEmptyRow;
     private int usersEndRow;
     private int usersHeaderRow;
@@ -307,6 +272,11 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         }
     }
 
+    public PeopleNearbyActivity() {
+        updateRows();
+        checkForExpiredLocations();
+    }
+
     private void updateRows() {
         this.rowCount = 0;
         this.usersStartRow = -1;
@@ -360,7 +330,8 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.newLocationAvailable);
         getNotificationCenter().addObserver(this, NotificationCenter.newPeopleNearbyAvailable);
         checkCanCreateGroup();
-        loadNearby();
+        sendRequest(false);
+        AndroidUtilities.runOnUIThread(this.shortPollRunnable, 25000);
         return true;
     }
 
@@ -368,7 +339,11 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         super.onFragmentDestroy();
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.newLocationAvailable);
         getNotificationCenter().removeObserver(this, NotificationCenter.newPeopleNearbyAvailable);
-        AndroidUtilities.cancelRunOnUIThread(this.shortPollRunnable);
+        Runnable runnable = this.shortPollRunnable;
+        if (runnable != null) {
+            AndroidUtilities.cancelRunOnUIThread(runnable);
+            this.shortPollRunnable = null;
+        }
     }
 
     public View createView(Context context) {
@@ -422,17 +397,18 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                 }
                 bundle.putInt("chat_id", i2);
                 presentFragment(new ChatActivity(bundle));
-            } else if (i == this.chatsCreateRow) {
-                if (this.checkingCanCreate) {
+                return;
+            } else if (i != this.chatsCreateRow) {
+                return;
+            } else {
+                if (this.checkingCanCreate || this.currentGroupCreateAddress == null) {
                     this.loadingDialog = new AlertDialog(getParentActivity(), 3);
                     this.loadingDialog.setOnCancelListener(new -$$Lambda$PeopleNearbyActivity$-ClnBHYBP7TYqVqigBXtr1of8f8(this));
                     this.loadingDialog.show();
                     return;
-                } else if (this.currentGroupCreateAddress != null) {
-                    openGroupCreate();
-                } else {
-                    return;
                 }
+                openGroupCreate();
+                return;
             }
         }
         tL_peerLocated = (TL_peerLocated) this.users.get(i - i2);
@@ -473,7 +449,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         this.canCreateGroup = tL_error == null;
         this.checkingCanCreate = false;
         AlertDialog alertDialog = this.loadingDialog;
-        if (alertDialog != null) {
+        if (alertDialog != null && this.currentGroupCreateAddress != null) {
             try {
                 alertDialog.dismiss();
             } catch (Throwable th) {
@@ -484,9 +460,72 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         }
     }
 
-    private void loadNearby() {
-        AndroidUtilities.cancelRunOnUIThread(this.shortPollRunnable);
-        this.shortPollRunnable.run();
+    private void sendRequest(boolean z) {
+        Location lastKnownLocation = getLocationController().getLastKnownLocation();
+        if (lastKnownLocation != null) {
+            this.currentGroupCreateLocation = lastKnownLocation;
+            if (!z) {
+                Location location = this.lastLoadedLocation;
+                if (location != null) {
+                    if (location.distanceTo(lastKnownLocation) <= 7.0f) {
+                        return;
+                    }
+                    if (this.reqId != 0) {
+                        getConnectionsManager().cancelRequest(this.reqId, true);
+                        this.reqId = 0;
+                    }
+                }
+            }
+            if (this.reqId == 0) {
+                this.lastLoadedLocation = lastKnownLocation;
+                LocationController.fetchLocationAddress(this.currentGroupCreateLocation, this);
+                TL_contacts_getLocated tL_contacts_getLocated = new TL_contacts_getLocated();
+                tL_contacts_getLocated.geo_point = new TL_inputGeoPoint();
+                tL_contacts_getLocated.geo_point.lat = lastKnownLocation.getLatitude();
+                tL_contacts_getLocated.geo_point._long = lastKnownLocation.getLongitude();
+                this.reqId = getConnectionsManager().sendRequest(tL_contacts_getLocated, new -$$Lambda$PeopleNearbyActivity$jI_2r1jpiini1bd_Nd3sGKXYxYs(this));
+                getConnectionsManager().bindRequestToGuid(this.reqId, this.classGuid);
+            }
+        }
+    }
+
+    public /* synthetic */ void lambda$sendRequest$5$PeopleNearbyActivity(TLObject tLObject, TL_error tL_error) {
+        AndroidUtilities.runOnUIThread(new -$$Lambda$PeopleNearbyActivity$hS8cAtCfRm_fqqztwDkCaVnNaXo(this, tLObject));
+    }
+
+    public /* synthetic */ void lambda$null$4$PeopleNearbyActivity(TLObject tLObject) {
+        this.reqId = 0;
+        if (tLObject != null) {
+            TL_updates tL_updates = (TL_updates) tLObject;
+            getMessagesController().putUsers(tL_updates.users, false);
+            getMessagesController().putChats(tL_updates.chats, false);
+            this.users.clear();
+            this.chats.clear();
+            int size = tL_updates.updates.size();
+            for (int i = 0; i < size; i++) {
+                Update update = (Update) tL_updates.updates.get(i);
+                if (update instanceof TL_updatePeerLocated) {
+                    TL_updatePeerLocated tL_updatePeerLocated = (TL_updatePeerLocated) update;
+                    int size2 = tL_updatePeerLocated.peers.size();
+                    for (int i2 = 0; i2 < size2; i2++) {
+                        TL_peerLocated tL_peerLocated = (TL_peerLocated) tL_updatePeerLocated.peers.get(i2);
+                        if (tL_peerLocated.peer instanceof TL_peerUser) {
+                            this.users.add(tL_peerLocated);
+                        } else {
+                            this.chats.add(tL_peerLocated);
+                        }
+                    }
+                }
+            }
+            getLocationController().setCachedNearbyUsersAndChats(this.users, this.chats);
+            checkForExpiredLocations();
+            updateRows();
+        }
+        Runnable runnable = this.shortPollRunnable;
+        if (runnable != null) {
+            AndroidUtilities.cancelRunOnUIThread(runnable);
+            AndroidUtilities.runOnUIThread(this.shortPollRunnable, 25000);
+        }
     }
 
     public void onResume() {
@@ -510,6 +549,16 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         if (actionIntroActivity != null) {
             actionIntroActivity.setGroupCreateAddress(this.currentGroupCreateAddress, this.currentGroupCreateLocation);
         }
+        AlertDialog alertDialog = this.loadingDialog;
+        if (alertDialog != null && !this.checkingCanCreate) {
+            try {
+                alertDialog.dismiss();
+            } catch (Throwable th) {
+                FileLog.e(th);
+            }
+            this.loadingDialog = null;
+            openGroupCreate();
+        }
     }
 
     /* Access modifiers changed, original: protected */
@@ -520,12 +569,11 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         if (i == NotificationCenter.newLocationAvailable) {
-            AndroidUtilities.cancelRunOnUIThread(this.shortPollRunnable);
-            this.shortPollRunnable.run();
+            sendRequest(false);
         } else if (i == NotificationCenter.newPeopleNearbyAvailable) {
             TL_updatePeerLocated tL_updatePeerLocated = (TL_updatePeerLocated) objArr[0];
-            int size = tL_updatePeerLocated.peers.size();
-            for (int i3 = 0; i3 < size; i3++) {
+            i2 = tL_updatePeerLocated.peers.size();
+            for (int i3 = 0; i3 < i2; i3++) {
                 ArrayList arrayList;
                 TL_peerLocated tL_peerLocated = (TL_peerLocated) tL_updatePeerLocated.peers.get(i3);
                 if (tL_peerLocated.peer instanceof TL_peerUser) {
@@ -533,9 +581,9 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                 } else {
                     arrayList = this.chats;
                 }
-                int size2 = arrayList.size();
+                int size = arrayList.size();
                 Object obj = null;
-                for (int i4 = 0; i4 < size2; i4++) {
+                for (int i4 = 0; i4 < size; i4++) {
                     TL_peerLocated tL_peerLocated2 = (TL_peerLocated) arrayList.get(i4);
                     int i5 = tL_peerLocated2.peer.user_id;
                     if (i5 == 0 || i5 != tL_peerLocated.peer.user_id) {
@@ -555,6 +603,8 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                     arrayList.add(tL_peerLocated);
                 }
             }
+            getLocationController().setCachedNearbyUsersAndChats(this.users, this.chats);
+            checkForExpiredLocations();
             updateRows();
         }
     }
@@ -593,19 +643,19 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
             updateRows();
         }
         if (i2 != Integer.MAX_VALUE) {
-            -$$Lambda$PeopleNearbyActivity$gXTQyg8xzWH0InAzjk-1628Dn_o -__lambda_peoplenearbyactivity_gxtqyg8xzwh0inazjk-1628dn_o = new -$$Lambda$PeopleNearbyActivity$gXTQyg8xzWH0InAzjk-1628Dn_o(this);
-            this.checkExpiredRunnable = -__lambda_peoplenearbyactivity_gxtqyg8xzwh0inazjk-1628dn_o;
-            AndroidUtilities.runOnUIThread(-__lambda_peoplenearbyactivity_gxtqyg8xzwh0inazjk-1628dn_o, (long) ((i2 - currentTime) * 1000));
+            -$$Lambda$PeopleNearbyActivity$iLABDO3r6jvyupeMcaNenLlk8zY -__lambda_peoplenearbyactivity_ilabdo3r6jvyupemcanenllk8zy = new -$$Lambda$PeopleNearbyActivity$iLABDO3r6jvyupeMcaNenLlk8zY(this);
+            this.checkExpiredRunnable = -__lambda_peoplenearbyactivity_ilabdo3r6jvyupemcanenllk8zy;
+            AndroidUtilities.runOnUIThread(-__lambda_peoplenearbyactivity_ilabdo3r6jvyupemcanenllk8zy, (long) ((i2 - currentTime) * 1000));
         }
     }
 
-    public /* synthetic */ void lambda$checkForExpiredLocations$4$PeopleNearbyActivity() {
+    public /* synthetic */ void lambda$checkForExpiredLocations$6$PeopleNearbyActivity() {
         this.checkExpiredRunnable = null;
         checkForExpiredLocations();
     }
 
     public ThemeDescription[] getThemeDescriptions() {
-        -$$Lambda$PeopleNearbyActivity$wAIuQdlR_jvMD5-bAmvrbb7gg50 -__lambda_peoplenearbyactivity_waiuqdlr_jvmd5-bamvrbb7gg50 = new -$$Lambda$PeopleNearbyActivity$wAIuQdlR_jvMD5-bAmvrbb7gg50(this);
+        -$$Lambda$PeopleNearbyActivity$MByzzx_oaI0hBPBQHGQ3YioL0Q4 -__lambda_peoplenearbyactivity_mbyzzx_oai0hbpbqhgq3yiol0q4 = new -$$Lambda$PeopleNearbyActivity$MByzzx_oaI0hBPBQHGQ3YioL0Q4(this);
         r11 = new ThemeDescription[29];
         r11[0] = new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{ManageChatUserCell.class, ManageChatTextCell.class, HeaderCell.class, TextView.class}, null, null, null, "windowBackgroundWhite");
         r11[1] = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND | ThemeDescription.FLAG_CHECKTAG, null, null, null, null, "windowBackgroundGray");
@@ -626,18 +676,18 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         strArr[0] = "textView";
         r11[11] = new ThemeDescription(view, 0, clsArr, strArr, null, null, null, "windowBackgroundWhiteBlueHeader");
         r11[12] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"nameTextView"}, null, null, null, "windowBackgroundWhiteBlackText");
-        ThemeDescriptionDelegate themeDescriptionDelegate = -__lambda_peoplenearbyactivity_waiuqdlr_jvmd5-bamvrbb7gg50;
+        ThemeDescriptionDelegate themeDescriptionDelegate = -__lambda_peoplenearbyactivity_mbyzzx_oai0hbpbqhgq3yiol0q4;
         r11[13] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusColor"}, null, null, themeDescriptionDelegate, "windowBackgroundWhiteGrayText");
         r11[14] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusOnlineColor"}, null, null, themeDescriptionDelegate, "windowBackgroundWhiteBlueText");
         r11[15] = new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, null, new Drawable[]{Theme.avatar_broadcastDrawable, Theme.avatar_savedDrawable}, null, "avatar_text");
-        -$$Lambda$PeopleNearbyActivity$wAIuQdlR_jvMD5-bAmvrbb7gg50 -__lambda_peoplenearbyactivity_waiuqdlr_jvmd5-bamvrbb7gg502 = -__lambda_peoplenearbyactivity_waiuqdlr_jvmd5-bamvrbb7gg50;
-        r11[16] = new ThemeDescription(null, 0, null, null, null, -__lambda_peoplenearbyactivity_waiuqdlr_jvmd5-bamvrbb7gg502, "avatar_backgroundRed");
-        r11[17] = new ThemeDescription(null, 0, null, null, null, -__lambda_peoplenearbyactivity_waiuqdlr_jvmd5-bamvrbb7gg502, "avatar_backgroundOrange");
-        r11[18] = new ThemeDescription(null, 0, null, null, null, -__lambda_peoplenearbyactivity_waiuqdlr_jvmd5-bamvrbb7gg502, "avatar_backgroundViolet");
-        r11[19] = new ThemeDescription(null, 0, null, null, null, -__lambda_peoplenearbyactivity_waiuqdlr_jvmd5-bamvrbb7gg502, "avatar_backgroundGreen");
-        r11[20] = new ThemeDescription(null, 0, null, null, null, -__lambda_peoplenearbyactivity_waiuqdlr_jvmd5-bamvrbb7gg502, "avatar_backgroundCyan");
-        r11[21] = new ThemeDescription(null, 0, null, null, null, -__lambda_peoplenearbyactivity_waiuqdlr_jvmd5-bamvrbb7gg502, "avatar_backgroundBlue");
-        r11[22] = new ThemeDescription(null, 0, null, null, null, -__lambda_peoplenearbyactivity_waiuqdlr_jvmd5-bamvrbb7gg502, "avatar_backgroundPink");
+        -$$Lambda$PeopleNearbyActivity$MByzzx_oaI0hBPBQHGQ3YioL0Q4 -__lambda_peoplenearbyactivity_mbyzzx_oai0hbpbqhgq3yiol0q42 = -__lambda_peoplenearbyactivity_mbyzzx_oai0hbpbqhgq3yiol0q4;
+        r11[16] = new ThemeDescription(null, 0, null, null, null, -__lambda_peoplenearbyactivity_mbyzzx_oai0hbpbqhgq3yiol0q42, "avatar_backgroundRed");
+        r11[17] = new ThemeDescription(null, 0, null, null, null, -__lambda_peoplenearbyactivity_mbyzzx_oai0hbpbqhgq3yiol0q42, "avatar_backgroundOrange");
+        r11[18] = new ThemeDescription(null, 0, null, null, null, -__lambda_peoplenearbyactivity_mbyzzx_oai0hbpbqhgq3yiol0q42, "avatar_backgroundViolet");
+        r11[19] = new ThemeDescription(null, 0, null, null, null, -__lambda_peoplenearbyactivity_mbyzzx_oai0hbpbqhgq3yiol0q42, "avatar_backgroundGreen");
+        r11[20] = new ThemeDescription(null, 0, null, null, null, -__lambda_peoplenearbyactivity_mbyzzx_oai0hbpbqhgq3yiol0q42, "avatar_backgroundCyan");
+        r11[21] = new ThemeDescription(null, 0, null, null, null, -__lambda_peoplenearbyactivity_mbyzzx_oai0hbpbqhgq3yiol0q42, "avatar_backgroundBlue");
+        r11[22] = new ThemeDescription(null, 0, null, null, null, -__lambda_peoplenearbyactivity_mbyzzx_oai0hbpbqhgq3yiol0q42, "avatar_backgroundPink");
         view = this.listView;
         int i = ThemeDescription.FLAG_BACKGROUNDFILTER;
         clsArr = new Class[]{HintInnerCell.class};
@@ -660,7 +710,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         return r11;
     }
 
-    public /* synthetic */ void lambda$getThemeDescriptions$5$PeopleNearbyActivity() {
+    public /* synthetic */ void lambda$getThemeDescriptions$7$PeopleNearbyActivity() {
         RecyclerListView recyclerListView = this.listView;
         if (recyclerListView != null) {
             int childCount = recyclerListView.getChildCount();
