@@ -73,7 +73,7 @@ public class ConnectionsManager extends BaseController {
     private static HashMap<String, ResolveHostByNameTask> resolvingHostnameTasks = new HashMap();
     private boolean appPaused = true;
     private int appResumeCount;
-    private int connectionState;
+    private int connectionState = native_getConnectionState(this.currentAccount);
     private boolean isUpdating;
     private long lastPauseTime = System.currentTimeMillis();
     private AtomicInteger lastRequestToken = new AtomicInteger(1);
@@ -904,8 +904,6 @@ public class ConnectionsManager extends BaseController {
         String str4 = "Android unknown";
         String str5 = "en";
         super(i);
-        this.currentAccount = i2;
-        this.connectionState = native_getConnectionState(this.currentAccount);
         File filesDirFixed = ApplicationLoader.getFilesDirFixed();
         if (i2 != 0) {
             stringBuilder = new StringBuilder();

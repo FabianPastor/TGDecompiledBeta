@@ -19,6 +19,10 @@ public class URLSpanBrowser extends URLSpan {
         this.style = textStyleRun;
     }
 
+    public TextStyleRun getStyle() {
+        return this.style;
+    }
+
     public void onClick(View view) {
         Browser.openUrl(view.getContext(), Uri.parse(getURL()));
     }

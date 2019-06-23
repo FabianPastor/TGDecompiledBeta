@@ -487,6 +487,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     frameLayout2.setBackgroundResource(NUM);
                     this.mapViewClip.addView(frameLayout2, LayoutHelper.createFrame(62, 76, 49));
                     BackupImageView backupImageView = new BackupImageView(context2);
+                    backupImageView.setRoundRadius(AndroidUtilities.dp(26.0f));
                     backupImageView.setImage(ImageLocation.getForChat(chat, false), "50_50", new AvatarDrawable((Chat) chat), chat);
                     frameLayout2.addView(backupImageView, LayoutHelper.createFrame(52, 52.0f, 51, 5.0f, 5.0f, 0.0f, 0.0f));
                     this.markerImageView = frameLayout2;

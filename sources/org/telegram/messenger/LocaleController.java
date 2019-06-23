@@ -806,6 +806,10 @@ public class LocaleController {
     }
 
     public static String getLocaleStringIso639() {
+        LocaleInfo localeInfo = getInstance().currentLocaleInfo;
+        if (localeInfo != null) {
+            return localeInfo.getLangCode();
+        }
         Locale locale = getInstance().currentLocale;
         String str = "en";
         if (locale == null) {
