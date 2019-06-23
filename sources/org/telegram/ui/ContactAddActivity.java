@@ -214,16 +214,18 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
             i = 5;
         }
         textView.setGravity(i);
-        if (this.addContact && (!this.needAddException || TextUtils.isEmpty(user.phone))) {
-            linearLayout.addView(this.infoTextView, LayoutHelper.createLinear(-1, -2, 24.0f, 18.0f, 24.0f, 0.0f));
-        }
-        if (this.needAddException) {
-            this.checkBoxCell = new CheckBoxCell(getParentActivity(), 0);
-            this.checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-            this.checkBoxCell.setText(LocaleController.formatString("SharePhoneNumberWith", NUM, UserObject.getFirstName(user)), "", true, false);
-            this.checkBoxCell.setPadding(AndroidUtilities.dp(7.0f), 0, AndroidUtilities.dp(7.0f), 0);
-            this.checkBoxCell.setOnClickListener(new -$$Lambda$ContactAddActivity$f_vG6dzJwQF_sWyoDFMgXkCQQaA(this));
-            linearLayout.addView(this.checkBoxCell, LayoutHelper.createLinear(-1, -2, 0.0f, 10.0f, 0.0f, 0.0f));
+        if (this.addContact) {
+            if (!this.needAddException || TextUtils.isEmpty(user.phone)) {
+                linearLayout.addView(this.infoTextView, LayoutHelper.createLinear(-1, -2, 24.0f, 18.0f, 24.0f, 0.0f));
+            }
+            if (this.needAddException) {
+                this.checkBoxCell = new CheckBoxCell(getParentActivity(), 0);
+                this.checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                this.checkBoxCell.setText(LocaleController.formatString("SharePhoneNumberWith", NUM, UserObject.getFirstName(user)), "", true, false);
+                this.checkBoxCell.setPadding(AndroidUtilities.dp(7.0f), 0, AndroidUtilities.dp(7.0f), 0);
+                this.checkBoxCell.setOnClickListener(new -$$Lambda$ContactAddActivity$f_vG6dzJwQF_sWyoDFMgXkCQQaA(this));
+                linearLayout.addView(this.checkBoxCell, LayoutHelper.createLinear(-1, -2, 0.0f, 10.0f, 0.0f, 0.0f));
+            }
         }
         return this.fragmentView;
     }

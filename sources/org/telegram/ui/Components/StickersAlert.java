@@ -1275,7 +1275,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenterDele
         r0.notifyDataSetChanged();
         goto L_0x016f;
     L_0x0156:
-        r0 = NUM; // 0x7f0d02df float:1.8743605E38 double:1.0531301407E-314;
+        r0 = NUM; // 0x7f0d02de float:1.8743603E38 double:1.05313014E-314;
         r2 = "Close";
         r0 = org.telegram.messenger.LocaleController.getString(r2, r0);
         r0 = r0.toUpperCase();

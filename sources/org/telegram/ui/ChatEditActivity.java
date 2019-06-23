@@ -638,7 +638,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdaterDelega
             this.doneButton = createMenu.addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f));
             this.doneButton.setContentDescription(LocaleController.getString("Done", NUM));
         }
-        if (!(this.signCell == null && this.historyCell == null && this.typeCell == null && this.linkedCell == null)) {
+        if (!(this.locationCell == null && this.signCell == null && this.historyCell == null && this.typeCell == null && this.linkedCell == null)) {
             this.settingsSectionCell = new ShadowSectionCell(context2);
             linearLayout.addView(this.settingsSectionCell, LayoutHelper.createLinear(-1, -2));
         }
@@ -1043,13 +1043,13 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdaterDelega
         r1 = r3.isChannel;
         if (r1 == 0) goto L_0x008c;
     L_0x007f:
-        r1 = NUM; // 0x7f0d0265 float:1.8743358E38 double:1.0531300804E-314;
+        r1 = NUM; // 0x7f0d0264 float:1.8743356E38 double:1.05313008E-314;
         r2 = "ChannelSettingsChangedAlert";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setMessage(r1);
         goto L_0x0098;
     L_0x008c:
-        r1 = NUM; // 0x7f0d04df float:1.8744644E38 double:1.0531303936E-314;
+        r1 = NUM; // 0x7f0d04de float:1.8744642E38 double:1.053130393E-314;
         r2 = "GroupSettingsChangedAlert";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r0.setMessage(r1);
@@ -1060,7 +1060,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdaterDelega
         r2 = new org.telegram.ui.-$$Lambda$ChatEditActivity$TOgShEf6MXFD3VhufzCjnieIAt0;
         r2.<init>(r3);
         r0.setPositiveButton(r1, r2);
-        r1 = NUM; // 0x7f0d0744 float:1.8745887E38 double:1.0531306965E-314;
+        r1 = NUM; // 0x7f0d0743 float:1.8745885E38 double:1.053130696E-314;
         r2 = "PassportDiscard";
         r1 = org.telegram.messenger.LocaleController.getString(r2, r1);
         r2 = new org.telegram.ui.-$$Lambda$ChatEditActivity$YVjMK5_diwcVq6bEDj5YD-pWfbg;
@@ -1425,11 +1425,17 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdaterDelega
         }
         ShadowSectionCell shadowSectionCell = this.settingsSectionCell;
         if (shadowSectionCell != null) {
-            if (this.signCell == null && this.typeCell == null && this.linkedCell == null) {
-                TextDetailCell textDetailCell2 = this.historyCell;
+            if (this.signCell == null && this.typeCell == null) {
+                TextDetailCell textDetailCell2 = this.linkedCell;
                 if (textDetailCell2 == null || textDetailCell2.getVisibility() != 0) {
-                    i = 8;
-                    shadowSectionCell.setVisibility(i);
+                    textDetailCell2 = this.historyCell;
+                    if (textDetailCell2 == null || textDetailCell2.getVisibility() != 0) {
+                        textDetailCell2 = this.locationCell;
+                        if (textDetailCell2 == null || textDetailCell2.getVisibility() != 0) {
+                            i = 8;
+                            shadowSectionCell.setVisibility(i);
+                        }
+                    }
                 }
             }
             i = 0;

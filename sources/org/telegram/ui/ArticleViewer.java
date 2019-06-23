@@ -14657,7 +14657,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r0.setTitle(r1);	 Catch:{ Exception -> 0x0098 }
         r1 = "OK";
-        r2 = NUM; // 0x7f0d06d1 float:1.8745654E38 double:1.0531306397E-314;
+        r2 = NUM; // 0x7f0d06d0 float:1.8745652E38 double:1.053130639E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);	 Catch:{ Exception -> 0x0098 }
         r2 = 0;
         r0.setPositiveButton(r1, r2);	 Catch:{ Exception -> 0x0098 }
@@ -15210,7 +15210,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         goto L_0x0123;
     L_0x00fe:
         r0 = r6.actionBar;
-        r1 = NUM; // 0x7f0d06d3 float:1.8745658E38 double:1.0531306407E-314;
+        r1 = NUM; // 0x7f0d06d2 float:1.8745656E38 double:1.05313064E-314;
         r2 = new java.lang.Object[r10];
         r3 = r6.currentIndex;
         r3 = r3 + r9;

@@ -406,7 +406,7 @@ public class Browser {
         r3 = getSession();	 Catch:{ Exception -> 0x0222 }
         r2.<init>(r3);	 Catch:{ Exception -> 0x0222 }
         r3 = "CopyLink";
-        r4 = NUM; // 0x7f0d030e float:1.87437E38 double:1.053130164E-314;
+        r4 = NUM; // 0x7f0d030d float:1.8743699E38 double:1.0531301634E-314;
         r3 = org.telegram.messenger.LocaleController.getString(r3, r4);	 Catch:{ Exception -> 0x0222 }
         r2.addMenuItem(r3, r1);	 Catch:{ Exception -> 0x0222 }
         r1 = "actionBarDefault";

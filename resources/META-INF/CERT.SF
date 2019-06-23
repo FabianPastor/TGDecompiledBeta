@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: 1.0 (Android)
-SHA1-Digest-Manifest: kn31eZ/35SZYKYy0b8VVN4GvDb4=
+SHA1-Digest-Manifest: GnYKJi5EAlh9gErkZvK6K0j1BVQ=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: 3t4ZcJtmUTUddr3SrJfgpzRP8Vg=
+SHA1-Digest: q/tmD5cNi6rwwAPR4Qbfs5I1tXY=
 
 Name: META-INF/androidx.appcompat_appcompat.version
 SHA1-Digest: Q82O8vXFHwteVUsLsa5xZBp0MsI=
@@ -232,7 +232,7 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: xMGvEo+9mrC4g09WhLykzBd01pc=
+SHA1-Digest: RnrKPxweKoFXBglo+fqRaj1wEE8=
 
 Name: fabric/com.stripe.stripe-android.properties
 SHA1-Digest: meJMBKLUSTmOentmkKD9WbS/j5I=
@@ -9061,7 +9061,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: eTsXoSZyDh88OuOS8VQI6OdVkfQ=
 
 Name: resources.arsc
-SHA1-Digest: T64kqnFw29KJhZzk1u4g2MtOFBE=
+SHA1-Digest: Ue3CLe120qkwjNSMQSEGbEj+A6s=
 
 Name: version.txt
 SHA1-Digest: N6saYwG9YKFIhHj+jH0ssSY5RCQ=

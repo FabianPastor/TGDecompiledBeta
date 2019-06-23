@@ -3760,6 +3760,8 @@
     <public type="string" name="PeopleNearbyAccessInfo" id="NUM" />
     <public type="string" name="PeopleNearbyAllowAccess" id="NUM" />
     <public type="string" name="PeopleNearbyEmpty" id="NUM" />
+    <public type="string" name="PeopleNearbyGps" id="NUM" />
+    <public type="string" name="PeopleNearbyGpsInfo" id="NUM" />
     <public type="string" name="PeopleNearbyHeader" id="NUM" />
     <public type="string" name="PeopleNearbyInfo" id="NUM" />
     <public type="string" name="PermissionContacts" id="NUM" />

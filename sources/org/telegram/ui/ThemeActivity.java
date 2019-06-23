@@ -827,7 +827,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             r0 = org.telegram.ui.ThemeActivity.this;
             r0 = r0.getParentActivity();
             r6.<init>(r0);
-            r0 = NUM; // 0x7f0d036e float:1.8743896E38 double:1.0531302113E-314;
+            r0 = NUM; // 0x7f0d036d float:1.8743894E38 double:1.053130211E-314;
             r1 = "DeleteThemeAlert";
             r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
             r6.setMessage(r0);
@@ -835,7 +835,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenterDel
             r1 = "AppName";
             r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
             r6.setTitle(r0);
-            r0 = NUM; // 0x7f0d034d float:1.8743829E38 double:1.053130195E-314;
+            r0 = NUM; // 0x7f0d034c float:1.8743827E38 double:1.0531301945E-314;
             r1 = "Delete";
             r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
             r1 = new org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$HjGrFd2877SP2gFmUCLASSNAMEvuRyOmw;

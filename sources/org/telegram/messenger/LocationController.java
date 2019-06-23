@@ -107,7 +107,7 @@ public class LocationController extends BaseController implements NotificationCe
     }
 
     public interface LocationFetchCallback {
-        void onLocationAddressAvailable(String str, Location location);
+        void onLocationAddressAvailable(String str, String str2, Location location);
     }
 
     public static class SharingLocationInfo {
@@ -877,7 +877,7 @@ public class LocationController extends BaseController implements NotificationCe
             }
             if (location == null) {
                 if (locationFetchCallback != null) {
-                    locationFetchCallback.onLocationAddressAvailable(null, null);
+                    locationFetchCallback.onLocationAddressAvailable(null, null, null);
                 }
                 return;
             }
@@ -890,68 +890,106 @@ public class LocationController extends BaseController implements NotificationCe
 
     static /* synthetic */ void lambda$fetchLocationAddress$22(Location location, LocationFetchCallback locationFetchCallback) {
         String str = "Unknown address (%f,%f)";
+        String subAdminArea;
         try {
-            List fromLocation = new Geocoder(ApplicationLoader.applicationContext, Locale.getDefault()).getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            List fromLocation = new Geocoder(ApplicationLoader.applicationContext, LocaleController.getInstance().getSystemDefaultLocale()).getFromLocation(location.getLatitude(), location.getLongitude(), 1);
             if (fromLocation.size() > 0) {
                 Object obj;
                 Address address = (Address) fromLocation.get(0);
-                StringBuilder stringBuilder = new StringBuilder(address.getCountryName());
-                String locality = address.getLocality();
-                String str2 = ", ";
-                if (!TextUtils.isEmpty(locality)) {
-                    if (stringBuilder.length() > 0) {
-                        stringBuilder.append(str2);
-                    }
-                    stringBuilder.append(locality);
-                }
-                locality = address.getThoroughfare();
-                if (TextUtils.isEmpty(locality)) {
+                StringBuilder stringBuilder = new StringBuilder();
+                StringBuilder stringBuilder2 = new StringBuilder();
+                String subThoroughfare = address.getSubThoroughfare();
+                if (TextUtils.isEmpty(subThoroughfare)) {
                     obj = null;
                 } else {
-                    if (stringBuilder.length() > 0) {
-                        stringBuilder.append(str2);
-                    }
-                    stringBuilder.append(locality);
-                    obj = 1;
-                }
-                String subThoroughfare = address.getSubThoroughfare();
-                if (!TextUtils.isEmpty(subThoroughfare)) {
-                    if (stringBuilder.length() > 0) {
-                        stringBuilder.append(" ");
-                    }
                     stringBuilder.append(subThoroughfare);
                     obj = 1;
                 }
-                if (obj == null) {
-                    locality = address.getAdminArea();
-                    if (!TextUtils.isEmpty(locality)) {
-                        if (stringBuilder.length() > 0) {
-                            stringBuilder.append(str2);
-                        }
-                        stringBuilder.append(locality);
+                String thoroughfare = address.getThoroughfare();
+                String str2 = ", ";
+                if (!TextUtils.isEmpty(thoroughfare)) {
+                    if (stringBuilder.length() > 0) {
+                        stringBuilder.append(str2);
                     }
-                    String subAdminArea = address.getSubAdminArea();
-                    if (!TextUtils.isEmpty(subAdminArea)) {
+                    stringBuilder.append(thoroughfare);
+                    obj = 1;
+                }
+                if (obj == null) {
+                    thoroughfare = address.getAdminArea();
+                    if (!TextUtils.isEmpty(thoroughfare)) {
                         if (stringBuilder.length() > 0) {
                             stringBuilder.append(str2);
                         }
-                        stringBuilder.append(subAdminArea);
+                        stringBuilder.append(thoroughfare);
+                    }
+                    thoroughfare = address.getSubAdminArea();
+                    if (!TextUtils.isEmpty(thoroughfare)) {
+                        if (stringBuilder.length() > 0) {
+                            stringBuilder.append(str2);
+                        }
+                        stringBuilder.append(thoroughfare);
                     }
                 }
-                str = stringBuilder.toString();
-            } else {
-                str = String.format(Locale.US, str, new Object[]{Double.valueOf(location.getLatitude()), Double.valueOf(location.getLongitude())});
+                thoroughfare = address.getLocality();
+                if (!TextUtils.isEmpty(thoroughfare)) {
+                    if (stringBuilder.length() > 0) {
+                        stringBuilder.append(str2);
+                    }
+                    stringBuilder.append(thoroughfare);
+                }
+                thoroughfare = address.getCountryName();
+                if (!TextUtils.isEmpty(thoroughfare)) {
+                    if (stringBuilder.length() > 0) {
+                        stringBuilder.append(str2);
+                    }
+                    stringBuilder.append(thoroughfare);
+                }
+                thoroughfare = address.getCountryName();
+                if (!TextUtils.isEmpty(thoroughfare)) {
+                    if (stringBuilder2.length() > 0) {
+                        stringBuilder2.append(str2);
+                    }
+                    stringBuilder2.append(thoroughfare);
+                }
+                thoroughfare = address.getLocality();
+                if (!TextUtils.isEmpty(thoroughfare)) {
+                    if (stringBuilder2.length() > 0) {
+                        stringBuilder2.append(str2);
+                    }
+                    stringBuilder2.append(thoroughfare);
+                }
+                if (obj == null) {
+                    subThoroughfare = address.getAdminArea();
+                    if (!TextUtils.isEmpty(subThoroughfare)) {
+                        if (stringBuilder2.length() > 0) {
+                            stringBuilder2.append(str2);
+                        }
+                        stringBuilder2.append(subThoroughfare);
+                    }
+                    subAdminArea = address.getSubAdminArea();
+                    if (!TextUtils.isEmpty(subAdminArea)) {
+                        if (stringBuilder2.length() > 0) {
+                            stringBuilder2.append(str2);
+                        }
+                        stringBuilder2.append(subAdminArea);
+                    }
+                }
+                subAdminArea = stringBuilder.toString();
+                str = stringBuilder2.toString();
+                AndroidUtilities.runOnUIThread(new -$$Lambda$LocationController$bOYgJNCZwK3lpg5f5m5MU9x-WWw(locationFetchCallback, subAdminArea, str, location));
             }
+            subAdminArea = String.format(Locale.US, str, new Object[]{Double.valueOf(location.getLatitude()), Double.valueOf(location.getLongitude())});
+            str = subAdminArea;
+            AndroidUtilities.runOnUIThread(new -$$Lambda$LocationController$bOYgJNCZwK3lpg5f5m5MU9x-WWw(locationFetchCallback, subAdminArea, str, location));
         } catch (Exception unused) {
-            str = String.format(Locale.US, str, new Object[]{Double.valueOf(location.getLatitude()), Double.valueOf(location.getLongitude())});
+            subAdminArea = String.format(Locale.US, str, new Object[]{Double.valueOf(location.getLatitude()), Double.valueOf(location.getLongitude())});
         }
-        AndroidUtilities.runOnUIThread(new -$$Lambda$LocationController$Ma7LxkxqXgAn0e_aaDhRTD3Fgwg(locationFetchCallback, str, location));
     }
 
-    static /* synthetic */ void lambda$null$21(LocationFetchCallback locationFetchCallback, String str, Location location) {
+    static /* synthetic */ void lambda$null$21(LocationFetchCallback locationFetchCallback, String str, String str2, Location location) {
         callbacks.remove(locationFetchCallback);
         if (locationFetchCallback != null) {
-            locationFetchCallback.onLocationAddressAvailable(str, location);
+            locationFetchCallback.onLocationAddressAvailable(str, str2, location);
         }
     }
 }

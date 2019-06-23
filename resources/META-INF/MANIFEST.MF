@@ -3,7 +3,7 @@ Built-By: Generated-by-ADT
 Created-By: Android Gradle 3.4.1
 
 Name: AndroidManifest.xml
-SHA1-Digest: El42svnBZscUMUkh+JEjPvTNlOQ=
+SHA1-Digest: 1q433Mz7K/RTwUukAYumRcPjpC0=
 
 Name: META-INF/androidx.appcompat_appcompat.version
 SHA1-Digest: xTi2bHEQyjoCjM/kItDx+iAKmTU=
@@ -231,7 +231,7 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: H6MU8kYxGKQzB4qz4AA1Q4eJHd4=
+SHA1-Digest: IIwSOOIY2L4Ay2JHu0M1bleQqT4=
 
 Name: fabric/com.stripe.stripe-android.properties
 SHA1-Digest: FHlRDdxccFhBf1l94YXJ1DBcfcA=
@@ -9060,7 +9060,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: +MNf64vCtPnRiuZgbqYoIaqfJC4=
 
 Name: resources.arsc
-SHA1-Digest: l0BEs1G8aTB2LPlY2RIZLDYFI1s=
+SHA1-Digest: HwjSVjg/ozKp2Y3Zhty9FZ1hD+I=
 
 Name: version.txt
 SHA1-Digest: J/nihzJRxlZEj3lPEgpfeoTyk98=

@@ -1775,6 +1775,7 @@ public class MessagesStorage extends BaseController {
                 while (queryFinalized.next()) {
                     byteBufferValue = queryFinalized.byteBufferValue(max);
                     if (byteBufferValue != null) {
+                        int i5;
                         Message TLdeserialize2 = Message.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(max), max);
                         byteBufferValue.reuse();
                         TLdeserialize2.id = queryFinalized.intValue(1);
@@ -1789,6 +1790,23 @@ public class MessagesStorage extends BaseController {
                         }
                         String str4 = str3;
                         int intValue = queryFinalized.intValue(8);
+                        if (TLdeserialize2.from_id == 0) {
+                            i5 = (int) TLdeserialize2.dialog_id;
+                            if (i5 > 0) {
+                                TLdeserialize2.from_id = i5;
+                            }
+                        }
+                        i5 = (int) TLdeserialize2.dialog_id;
+                        if (i5 > 0) {
+                            if (!arrayList6.contains(Integer.valueOf(i5))) {
+                                arrayList6.add(Integer.valueOf(i5));
+                            }
+                        } else if (i5 < 0) {
+                            int i6 = -i5;
+                            if (!arrayList7.contains(Integer.valueOf(i6))) {
+                                arrayList7.add(Integer.valueOf(i6));
+                            }
+                        }
                         arrayList11.add(new MessageObject(this.currentAccount, TLdeserialize2, stringValue, stringValue2, str4, (intValue & 1) != 0, (intValue & 2) != 0, false));
                         addUsersAndChatsFromMessage(TLdeserialize2, arrayList6, arrayList7);
                     }
@@ -1798,13 +1816,13 @@ public class MessagesStorage extends BaseController {
                 if (!arrayList9.isEmpty()) {
                     sQLiteDatabase = this.database;
                     Object[] objArr = new Object[1];
-                    int i5 = 0;
+                    int i7 = 0;
                     objArr[0] = TextUtils.join(str, arrayList9);
                     queryFinalized = sQLiteDatabase.queryFinalized(String.format(Locale.US, "SELECT data, mid, date, uid FROM messages WHERE mid IN(%s)", objArr), new Object[0]);
                     while (queryFinalized.next()) {
-                        byteBufferValue = queryFinalized.byteBufferValue(i5);
+                        byteBufferValue = queryFinalized.byteBufferValue(i7);
                         if (byteBufferValue != null) {
-                            Message TLdeserialize3 = Message.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(i5), i5);
+                            Message TLdeserialize3 = Message.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(i7), i7);
                             TLdeserialize3.readAttachPath(byteBufferValue, getUserConfig().clientUserId);
                             byteBufferValue.reuse();
                             TLdeserialize3.id = queryFinalized.intValue(1);
@@ -1823,7 +1841,7 @@ public class MessagesStorage extends BaseController {
                                 }
                             }
                         }
-                        i5 = 0;
+                        i7 = 0;
                     }
                     queryFinalized.dispose();
                 }
@@ -1864,14 +1882,14 @@ public class MessagesStorage extends BaseController {
                             i4--;
                             longSparseArray = longSparseArray3;
                             longSparseArray.remove((long) (-chat.id));
-                            int i6 = 0;
-                            while (i6 < arrayList4.size()) {
+                            int i8 = 0;
+                            while (i8 < arrayList4.size()) {
                                 arrayList16 = arrayList4;
-                                if (((Message) arrayList16.get(i6)).dialog_id == ((long) (-chat.id))) {
-                                    arrayList16.remove(i6);
-                                    i6--;
+                                if (((Message) arrayList16.get(i8)).dialog_id == ((long) (-chat.id))) {
+                                    arrayList16.remove(i8);
+                                    i8--;
                                 }
-                                i6++;
+                                i8++;
                                 arrayList4 = arrayList16;
                             }
                             arrayList16 = arrayList4;
@@ -3823,7 +3841,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:21:0x005d A:{Splitter:B:1:0x0001, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:21:0x005d A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:1:0x0001} */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Missing block: B:21:0x005d, code skipped:
             r5 = th;
@@ -4584,11 +4602,11 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$loadChatInfo$84$MessagesStorage(int, java.util.concurrent.CountDownLatch, boolean, boolean):void");
     }
 
-    public void processPendingRead(long j, long j2, long j3, int i, boolean z) {
-        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$BFuJtbbUa5cf4B4J2ETafzpLwTU(this, j, j2, z, j3));
+    public void processPendingRead(long j, long j2, long j3, boolean z) {
+        this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$mrG9ITUKGTDUR5C5aGPIWaHe95o(this, j, j2, z, this.lastSavedDate, j3));
     }
 
-    public /* synthetic */ void lambda$processPendingRead$85$MessagesStorage(long j, long j2, boolean z, long j3) {
+    public /* synthetic */ void lambda$processPendingRead$85$MessagesStorage(long j, long j2, boolean z, int i, long j3) {
         long j4 = j;
         try {
             int intValue;
@@ -4598,7 +4616,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("SELECT unread_count, inbox_max, last_mid FROM dialogs WHERE did = ");
             stringBuilder.append(j4);
-            int i = 0;
+            int i2 = 0;
             SQLiteCursor queryFinalized = sQLiteDatabase.queryFinalized(stringBuilder.toString(), new Object[0]);
             long j5 = 0;
             if (queryFinalized.next()) {
@@ -4611,13 +4629,13 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
             }
             queryFinalized.dispose();
             this.database.beginTransaction();
-            int i2 = (int) j4;
+            int i3 = (int) j4;
             String str = "SELECT changes()";
             int intValue2;
-            if (i2 != 0) {
+            if (i3 != 0) {
                 j5 = Math.max(j5, (long) ((int) j2));
                 if (z) {
-                    j5 |= ((long) (-i2)) << 32;
+                    j5 |= ((long) (-i3)) << 32;
                 }
                 executeFast = this.database.executeFast("UPDATE messages SET read_state = read_state | 1 WHERE uid = ? AND mid <= ? AND read_state IN(0,2) AND out = 0");
                 executeFast.requery();
@@ -4629,12 +4647,18 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     queryFinalized = this.database.queryFinalized(str, new Object[0]);
                     intValue2 = queryFinalized.next() ? queryFinalized.intValue(0) : 0;
                     queryFinalized.dispose();
-                    i = Math.max(0, intValue - intValue2);
+                    i2 = Math.max(0, intValue - intValue2);
                 }
                 executeFast = this.database.executeFast("DELETE FROM unread_push_messages WHERE uid = ? AND mid <= ?");
                 executeFast.requery();
                 executeFast.bindLong(1, j4);
                 executeFast.bindLong(2, j5);
+                executeFast.step();
+                executeFast.dispose();
+                executeFast = this.database.executeFast("DELETE FROM unread_push_messages WHERE uid = ? AND date <= ?");
+                executeFast.requery();
+                executeFast.bindLong(1, j4);
+                executeFast.bindLong(2, (long) i);
                 executeFast.step();
                 executeFast.dispose();
             } else {
@@ -4649,18 +4673,12 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
                     queryFinalized = this.database.queryFinalized(str, new Object[0]);
                     intValue2 = queryFinalized.next() ? queryFinalized.intValue(0) : 0;
                     queryFinalized.dispose();
-                    i = Math.max(0, intValue - intValue2);
+                    i2 = Math.max(0, intValue - intValue2);
                 }
-                executeFast = this.database.executeFast("DELETE FROM unread_push_messages WHERE uid = ? AND mid >= ?");
-                executeFast.requery();
-                executeFast.bindLong(1, j4);
-                executeFast.bindLong(2, j5);
-                executeFast.step();
-                executeFast.dispose();
             }
             executeFast = this.database.executeFast("UPDATE dialogs SET unread_count = ?, inbox_max = ? WHERE did = ?");
             executeFast.requery();
-            executeFast.bindInteger(1, i);
+            executeFast.bindInteger(1, i2);
             executeFast.bindInteger(2, (int) j5);
             executeFast.bindLong(3, j4);
             executeFast.step();
@@ -4831,7 +4849,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:98:0x016a A:{SYNTHETIC, Splitter:B:98:0x016a} */
     /* JADX WARNING: Removed duplicated region for block: B:100:0x0184 A:{Catch:{ Exception -> 0x021e }} */
     /* JADX WARNING: Removed duplicated region for block: B:105:0x0195 A:{Catch:{ Exception -> 0x0216, all -> 0x0214 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:84:0x0148 A:{Splitter:B:62:0x00fd, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:84:0x0148 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:62:0x00fd} */
     /* JADX WARNING: Removed duplicated region for block: B:95:0x015e  */
     /* JADX WARNING: Removed duplicated region for block: B:100:0x0184 A:{Catch:{ Exception -> 0x021e }} */
     /* JADX WARNING: Removed duplicated region for block: B:98:0x016a A:{SYNTHETIC, Splitter:B:98:0x016a} */
@@ -4840,7 +4858,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:98:0x016a A:{SYNTHETIC, Splitter:B:98:0x016a} */
     /* JADX WARNING: Removed duplicated region for block: B:100:0x0184 A:{Catch:{ Exception -> 0x021e }} */
     /* JADX WARNING: Removed duplicated region for block: B:105:0x0195 A:{Catch:{ Exception -> 0x0216, all -> 0x0214 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:84:0x0148 A:{Splitter:B:62:0x00fd, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:84:0x0148 A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:62:0x00fd} */
     /* JADX WARNING: Removed duplicated region for block: B:58:0x00ee  */
     /* JADX WARNING: Removed duplicated region for block: B:80:0x013c  */
     /* JADX WARNING: Removed duplicated region for block: B:65:0x0103 A:{Catch:{ Throwable -> 0x014b, all -> 0x0148 }} */
@@ -5634,9 +5652,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:714:0x10d7 A:{SYNTHETIC, Splitter:B:714:0x10d7} */
     /* JADX WARNING: Removed duplicated region for block: B:813:0x1306 A:{Catch:{ Exception -> 0x1214, all -> 0x1209 }} */
     /* JADX WARNING: Removed duplicated region for block: B:842:0x13ba A:{Catch:{ Exception -> 0x1214, all -> 0x1209 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:760:0x1209 A:{Splitter:B:631:0x0var_, PHI: r11 r27 r29 r30 r31 r33 r39 r44 , ExcHandler: all (th java.lang.Throwable)} */
-    /* JADX WARNING: Removed duplicated region for block: B:735:0x1129 A:{Splitter:B:711:0x10d1, ExcHandler: all (th java.lang.Throwable), Catch:{ Exception -> 0x1214, all -> 0x1209 }} */
-    /* JADX WARNING: Removed duplicated region for block: B:735:0x1129 A:{Splitter:B:711:0x10d1, ExcHandler: all (th java.lang.Throwable), Catch:{ Exception -> 0x1214, all -> 0x1209 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:760:0x1209 A:{PHI: r11 r27 r29 r30 r31 r33 r39 r44 , ExcHandler: all (th java.lang.Throwable), Splitter:B:631:0x0var_} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x1129 A:{ExcHandler: all (th java.lang.Throwable), Catch:{ Exception -> 0x1214, all -> 0x1209 }, Splitter:B:711:0x10d1} */
+    /* JADX WARNING: Removed duplicated region for block: B:735:0x1129 A:{ExcHandler: all (th java.lang.Throwable), Catch:{ Exception -> 0x1214, all -> 0x1209 }, Splitter:B:711:0x10d1} */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */

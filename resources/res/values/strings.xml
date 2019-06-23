@@ -2063,6 +2063,8 @@
     <string name="PeopleNearbyAccessInfo">Use this section to quickly exchange phone numbers with people around you.\10\10Please switch on location access to enable this feature.</string>
     <string name="PeopleNearbyAllowAccess">Allow Access</string>
     <string name="PeopleNearbyEmpty">Looking for users around you...</string>
+    <string name="PeopleNearbyGps">Turn On</string>
+    <string name="PeopleNearbyGpsInfo">Use this section to quickly exchange phone numbers with people around you.\10\10Please turn location services on to enable this feature.</string>
     <string name="PeopleNearbyHeader">People nearby</string>
     <string name="PeopleNearbyInfo">Ask your friend nearby to open this page to exchange phone numbers.</string>
     <string name="PermissionContacts">To let you connect with friends across all your devices, your contacts will be continuously synced with Telegram\'s heavily encrypted cloud servers.</string>

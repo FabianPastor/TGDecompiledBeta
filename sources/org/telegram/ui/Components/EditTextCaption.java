@@ -105,7 +105,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         r1 = r9.getContext();
         r0.<init>(r1);
         r1 = "CreateLink";
-        r2 = NUM; // 0x7f0d0313 float:1.874371E38 double:1.0531301664E-314;
+        r2 = NUM; // 0x7f0d0312 float:1.8743709E38 double:1.053130166E-314;
         r1 = org.telegram.messenger.LocaleController.getString(r1, r2);
         r0.setTitle(r1);
         r1 = new org.telegram.ui.Components.EditTextCaption$1;
@@ -158,7 +158,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         r5 = r9.getSelectionStart();
         r6 = r9.getSelectionEnd();
     L_0x0091:
-        r7 = NUM; // 0x7f0d06d1 float:1.8745654E38 double:1.0531306397E-314;
+        r7 = NUM; // 0x7f0d06d0 float:1.8745652E38 double:1.053130639E-314;
         r8 = "OK";
         r7 = org.telegram.messenger.LocaleController.getString(r8, r7);
         r8 = new org.telegram.ui.Components.-$$Lambda$EditTextCaption$BQIhHIR0EWfMGyyXmJJ-pkFKO1Y;

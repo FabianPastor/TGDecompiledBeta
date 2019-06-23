@@ -592,7 +592,7 @@ public class AlertsCreator {
         if (r15 != 0) goto L_0x00c3;
     L_0x00b2:
         r13 = r10[r15];
-        r12 = NUM; // 0x7f0d036c float:1.8743891E38 double:1.0531302103E-314;
+        r12 = NUM; // 0x7f0d036b float:1.874389E38 double:1.05313021E-314;
         r16 = r1;
         r1 = "DeleteReportSpam";
         r1 = org.telegram.messenger.LocaleController.getString(r1, r12);
@@ -603,7 +603,7 @@ public class AlertsCreator {
         if (r15 != r4) goto L_0x00da;
     L_0x00c7:
         r1 = r10[r15];
-        r12 = NUM; // 0x7f0d036f float:1.8743898E38 double:1.053130212E-314;
+        r12 = NUM; // 0x7f0d036e float:1.8743896E38 double:1.0531302113E-314;
         r13 = new java.lang.Object[r8];
         r17 = r2;
         r2 = "DeleteThisChat";
@@ -2887,7 +2887,7 @@ public class AlertsCreator {
         r14.setTag(r13);
         if (r9 != 0) goto L_0x0230;
     L_0x0220:
-        r13 = NUM; // 0x7f0d0357 float:1.8743849E38 double:1.0531302E-314;
+        r13 = NUM; // 0x7f0d0356 float:1.8743847E38 double:1.0531301995E-314;
         r15 = "DeleteBanUser";
         r13 = org.telegram.messenger.LocaleController.getString(r15, r13);
         r15 = 0;
@@ -2900,7 +2900,7 @@ public class AlertsCreator {
         r15 = 0;
         if (r9 != r13) goto L_0x0241;
     L_0x0234:
-        r13 = NUM; // 0x7f0d036c float:1.8743891E38 double:1.0531302103E-314;
+        r13 = NUM; // 0x7f0d036b float:1.874389E38 double:1.05313021E-314;
         r0 = "DeleteReportSpam";
         r0 = org.telegram.messenger.LocaleController.getString(r0, r13);
         r14.setText(r0, r5, r15, r15);
@@ -2917,7 +2917,7 @@ public class AlertsCreator {
         r11 = org.telegram.messenger.ContactsController.formatName(r13, r11);
         r0[r15] = r11;
         r11 = "DeleteAllFrom";
-        r13 = NUM; // 0x7f0d0352 float:1.8743839E38 double:1.0531301975E-314;
+        r13 = NUM; // 0x7f0d0351 float:1.8743837E38 double:1.053130197E-314;
         r0 = org.telegram.messenger.LocaleController.formatString(r11, r13, r0);
         r14.setText(r0, r5, r15, r15);
     L_0x025f:
@@ -2979,7 +2979,7 @@ public class AlertsCreator {
         r1 = 0;
         r11 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r1);
         r9.setBackgroundDrawable(r11);
-        r11 = NUM; // 0x7f0d0364 float:1.8743875E38 double:1.0531302064E-314;
+        r11 = NUM; // 0x7f0d0363 float:1.8743873E38 double:1.053130206E-314;
         r12 = "DeleteMessagesOption";
         r11 = org.telegram.messenger.LocaleController.getString(r12, r11);
         r9.setText(r11, r5, r1, r1);
@@ -3191,7 +3191,7 @@ public class AlertsCreator {
         r8.setBackgroundDrawable(r12);
         if (r27 == 0) goto L_0x042e;
     L_0x0417:
-        r12 = NUM; // 0x7f0d0365 float:1.8743877E38 double:1.053130207E-314;
+        r12 = NUM; // 0x7f0d0364 float:1.8743875E38 double:1.0531302064E-314;
         r13 = new java.lang.Object[r9];
         r9 = org.telegram.messenger.UserObject.getFirstName(r37);
         r13[r1] = r9;
@@ -3212,7 +3212,7 @@ public class AlertsCreator {
     L_0x0437:
         r9 = r26;
     L_0x0439:
-        r12 = NUM; // 0x7f0d035d float:1.8743861E38 double:1.053130203E-314;
+        r12 = NUM; // 0x7f0d035c float:1.874386E38 double:1.0531302024E-314;
         r13 = "DeleteForAll";
         r12 = org.telegram.messenger.LocaleController.getString(r13, r12);
         r8.setText(r12, r5, r1, r1);
@@ -3220,7 +3220,7 @@ public class AlertsCreator {
     L_0x0446:
         r9 = r26;
     L_0x0448:
-        r12 = NUM; // 0x7f0d0364 float:1.8743875E38 double:1.0531302064E-314;
+        r12 = NUM; // 0x7f0d0363 float:1.8743873E38 double:1.053130206E-314;
         r13 = "DeleteMessagesOption";
         r12 = org.telegram.messenger.LocaleController.getString(r13, r12);
         r8.setText(r12, r5, r1, r1);
@@ -3273,7 +3273,7 @@ public class AlertsCreator {
     L_0x04a3:
         r21 = 0;
     L_0x04a5:
-        r1 = NUM; // 0x7f0d034d float:1.8743829E38 double:1.053130195E-314;
+        r1 = NUM; // 0x7f0d034c float:1.8743827E38 double:1.0531301945E-314;
         r3 = "Delete";
         r1 = org.telegram.messenger.LocaleController.getString(r3, r1);
         r3 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$yfZoNW2-xo7PIX4K5_JbF7y85W0;
@@ -3295,13 +3295,13 @@ public class AlertsCreator {
         r3 = 1;
         if (r9 != r3) goto L_0x04df;
     L_0x04d2:
-        r8 = NUM; // 0x7f0d036d float:1.8743894E38 double:1.053130211E-314;
+        r8 = NUM; // 0x7f0d036c float:1.8743891E38 double:1.0531302103E-314;
         r10 = "DeleteSingleMessagesTitle";
         r8 = org.telegram.messenger.LocaleController.getString(r10, r8);
         r0.setTitle(r8);
         goto L_0x04f4;
     L_0x04df:
-        r8 = NUM; // 0x7f0d0369 float:1.8743885E38 double:1.053130209E-314;
+        r8 = NUM; // 0x7f0d0368 float:1.8743883E38 double:1.0531302084E-314;
         r10 = new java.lang.Object[r3];
         r3 = org.telegram.messenger.LocaleController.formatPluralString(r1, r9);
         r11 = 0;
@@ -3322,7 +3322,7 @@ public class AlertsCreator {
     L_0x0504:
         if (r6 == r9) goto L_0x051e;
     L_0x0506:
-        r3 = NUM; // 0x7f0d0368 float:1.8743883E38 double:1.0531302084E-314;
+        r3 = NUM; // 0x7f0d0367 float:1.8743881E38 double:1.053130208E-314;
         r4 = 1;
         r4 = new java.lang.Object[r4];
         r1 = org.telegram.messenger.LocaleController.formatPluralString(r1, r6);
@@ -3352,7 +3352,7 @@ public class AlertsCreator {
     L_0x0539:
         if (r4 == 0) goto L_0x0552;
     L_0x053b:
-        r3 = NUM; // 0x7f0d0367 float:1.8743881E38 double:1.053130208E-314;
+        r3 = NUM; // 0x7f0d0366 float:1.874388E38 double:1.0531302074E-314;
         r4 = 1;
         r4 = new java.lang.Object[r4];
         r1 = org.telegram.messenger.LocaleController.formatPluralString(r1, r6);
@@ -3364,7 +3364,7 @@ public class AlertsCreator {
         goto L_0x05a9;
     L_0x0552:
         r5 = 0;
-        r3 = NUM; // 0x7f0d0366 float:1.874388E38 double:1.0531302074E-314;
+        r3 = NUM; // 0x7f0d0365 float:1.8743877E38 double:1.053130207E-314;
         r4 = 2;
         r4 = new java.lang.Object[r4];
         r1 = org.telegram.messenger.LocaleController.formatPluralString(r1, r6);

@@ -8996,42 +8996,41 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:12:0x004f  */
-    /* JADX WARNING: Removed duplicated region for block: B:15:0x009a  */
-    /* JADX WARNING: Removed duplicated region for block: B:27:0x00fd  */
-    public void markDialogAsRead(long r19, int r21, int r22, int r23, boolean r24, int r25, boolean r26) {
+    /* JADX WARNING: Removed duplicated region for block: B:12:0x004d  */
+    /* JADX WARNING: Removed duplicated region for block: B:15:0x0093  */
+    public void markDialogAsRead(long r18, int r20, int r21, int r22, boolean r23, int r24, boolean r25) {
         /*
-        r18 = this;
-        r9 = r18;
-        r10 = r19;
-        r12 = r21;
+        r17 = this;
+        r9 = r17;
+        r10 = r18;
+        r12 = r20;
+        r8 = r21;
         r13 = r22;
-        r14 = r23;
         r0 = (int) r10;
         r1 = 32;
         r2 = r10 >> r1;
         r3 = (int) r2;
-        r2 = r18.getNotificationsController();
-        r15 = r2.showBadgeMessages;
-        r8 = 1;
-        if (r0 == 0) goto L_0x009d;
+        r2 = r17.getNotificationsController();
+        r14 = r2.showBadgeMessages;
+        r15 = 1;
+        if (r0 == 0) goto L_0x0096;
     L_0x0019:
-        if (r12 == 0) goto L_0x009c;
+        if (r12 == 0) goto L_0x0095;
     L_0x001b:
-        if (r3 != r8) goto L_0x001f;
+        if (r3 != r15) goto L_0x001f;
     L_0x001d:
-        goto L_0x009c;
+        goto L_0x0095;
     L_0x001f:
         r2 = (long) r12;
-        r4 = (long) r13;
-        r13 = 0;
-        if (r0 >= 0) goto L_0x003d;
+        r4 = (long) r8;
+        r8 = 0;
+        if (r0 >= 0) goto L_0x003c;
     L_0x0024:
         r0 = -r0;
         r6 = java.lang.Integer.valueOf(r0);
         r6 = r9.getChat(r6);
         r6 = org.telegram.messenger.ChatObject.isChannel(r6);
-        if (r6 == 0) goto L_0x003d;
+        if (r6 == 0) goto L_0x003c;
     L_0x0033:
         r6 = (long) r0;
         r0 = r6 << r1;
@@ -9039,117 +9038,113 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         r0 = r0 | r4;
         r5 = r0;
         r3 = r2;
-        r16 = 1;
-        goto L_0x0041;
-    L_0x003d:
+        r7 = 1;
+        goto L_0x003f;
+    L_0x003c:
         r5 = r4;
-        r16 = 0;
+        r7 = 0;
         r3 = r2;
-    L_0x0041:
+    L_0x003f:
         r0 = r9.dialogs_read_inbox_max;
-        r1 = java.lang.Long.valueOf(r19);
+        r1 = java.lang.Long.valueOf(r18);
         r0 = r0.get(r1);
         r0 = (java.lang.Integer) r0;
-        if (r0 != 0) goto L_0x0053;
-    L_0x004f:
-        r0 = java.lang.Integer.valueOf(r13);
-    L_0x0053:
+        if (r0 != 0) goto L_0x0051;
+    L_0x004d:
+        r0 = java.lang.Integer.valueOf(r8);
+    L_0x0051:
         r1 = r9.dialogs_read_inbox_max;
-        r2 = java.lang.Long.valueOf(r19);
+        r2 = java.lang.Long.valueOf(r18);
         r0 = r0.intValue();
         r0 = java.lang.Math.max(r0, r12);
         r0 = java.lang.Integer.valueOf(r0);
         r1.put(r2, r0);
-        r0 = r18.getMessagesStorage();
-        r1 = r19;
-        r7 = r23;
-        r17 = 1;
-        r8 = r16;
-        r0.processPendingRead(r1, r3, r5, r7, r8);
-        r0 = r18.getMessagesStorage();
-        r8 = r0.getStorageQueue();
-        r7 = new org.telegram.messenger.-$$Lambda$MessagesController$hn-SvAXVeuxCYnxgaaX_Rgf7tNs;
-        r0 = r7;
+        r0 = r17.getMessagesStorage();
         r1 = r18;
-        r2 = r19;
-        r4 = r25;
-        r5 = r21;
-        r6 = r15;
-        r15 = r7;
-        r7 = r24;
+        r0.processPendingRead(r1, r3, r5, r7);
+        r0 = r17.getMessagesStorage();
+        r7 = r0.getStorageQueue();
+        r6 = new org.telegram.messenger.-$$Lambda$MessagesController$hn-SvAXVeuxCYnxgaaX_Rgf7tNs;
+        r0 = r6;
+        r1 = r17;
+        r2 = r18;
+        r4 = r24;
+        r5 = r20;
+        r8 = r6;
+        r6 = r14;
+        r14 = r7;
+        r7 = r23;
         r0.<init>(r1, r2, r4, r5, r6, r7);
-        r8.postRunnable(r15);
+        r14.postRunnable(r8);
         r0 = NUM; // 0x7fffffff float:NaN double:1.060997895E-314;
-        if (r12 == r0) goto L_0x009a;
+        if (r12 == r0) goto L_0x0093;
+    L_0x0092:
+        goto L_0x00f0;
+    L_0x0093:
+        r15 = 0;
+        goto L_0x00f0;
+    L_0x0095:
+        return;
+    L_0x0096:
+        if (r13 != 0) goto L_0x0099;
+    L_0x0098:
+        return;
     L_0x0099:
-        goto L_0x00fa;
-    L_0x009a:
-        r8 = 0;
-        goto L_0x00fb;
-    L_0x009c:
-        return;
-    L_0x009d:
-        r17 = 1;
-        if (r14 != 0) goto L_0x00a2;
-    L_0x00a1:
-        return;
-    L_0x00a2:
         r0 = java.lang.Integer.valueOf(r3);
-        r8 = r9.getEncryptedChat(r0);
-        r0 = r18.getMessagesStorage();
+        r7 = r9.getEncryptedChat(r0);
+        r0 = r17.getMessagesStorage();
         r3 = (long) r12;
-        r5 = (long) r13;
+        r5 = (long) r8;
         r16 = 0;
-        r1 = r19;
-        r7 = r23;
-        r9 = r8;
-        r8 = r16;
-        r0.processPendingRead(r1, r3, r5, r7, r8);
-        r0 = r18.getMessagesStorage();
-        r8 = r0.getStorageQueue();
-        r7 = new org.telegram.messenger.-$$Lambda$MessagesController$w9XQvAOdl78XSvAXCJDSbdLvKsQ;
-        r0 = r7;
         r1 = r18;
-        r2 = r19;
-        r4 = r23;
-        r5 = r24;
-        r6 = r25;
+        r15 = r7;
+        r7 = r16;
+        r0.processPendingRead(r1, r3, r5, r7);
+        r0 = r17.getMessagesStorage();
+        r7 = r0.getStorageQueue();
+        r6 = new org.telegram.messenger.-$$Lambda$MessagesController$w9XQvAOdl78XSvAXCJDSbdLvKsQ;
+        r0 = r6;
+        r1 = r17;
+        r2 = r18;
+        r4 = r22;
+        r5 = r23;
+        r9 = r6;
+        r6 = r24;
         r10 = r7;
-        r7 = r22;
-        r11 = r8;
-        r8 = r15;
+        r7 = r21;
+        r8 = r14;
         r0.<init>(r1, r2, r4, r5, r6, r7, r8);
-        r11.postRunnable(r10);
-        if (r9 == 0) goto L_0x00fa;
-    L_0x00de:
-        r0 = r9.ttl;
-        if (r0 <= 0) goto L_0x00fa;
-    L_0x00e2:
-        r0 = r18.getConnectionsManager();
+        r10.postRunnable(r9);
+        if (r15 == 0) goto L_0x00ef;
+    L_0x00d3:
+        r0 = r15.ttl;
+        if (r0 <= 0) goto L_0x00ef;
+    L_0x00d7:
+        r0 = r17.getConnectionsManager();
         r0 = r0.getCurrentTime();
-        r4 = java.lang.Math.max(r0, r14);
-        r1 = r18.getMessagesStorage();
-        r2 = r9.id;
+        r4 = java.lang.Math.max(r0, r13);
+        r1 = r17.getMessagesStorage();
+        r2 = r15.id;
         r5 = 0;
         r6 = 0;
         r3 = r4;
         r1.createTaskForSecretChat(r2, r3, r4, r5, r6);
-    L_0x00fa:
-        r8 = 1;
-    L_0x00fb:
-        if (r8 == 0) goto L_0x0112;
-    L_0x00fd:
+    L_0x00ef:
+        r15 = 1;
+    L_0x00f0:
+        if (r15 == 0) goto L_0x0107;
+    L_0x00f2:
         r7 = org.telegram.messenger.Utilities.stageQueue;
         r8 = new org.telegram.messenger.-$$Lambda$MessagesController$_VEgWywMVWfxr_9Ssi-lPDOcdtc;
         r0 = r8;
-        r1 = r18;
-        r2 = r19;
-        r4 = r26;
-        r5 = r23;
-        r6 = r21;
+        r1 = r17;
+        r2 = r18;
+        r4 = r25;
+        r5 = r22;
+        r6 = r20;
         r0.<init>(r1, r2, r4, r5, r6);
         r7.postRunnable(r8);
-    L_0x0112:
+    L_0x0107:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.markDialogAsRead(long, int, int, int, boolean, int, boolean):void");

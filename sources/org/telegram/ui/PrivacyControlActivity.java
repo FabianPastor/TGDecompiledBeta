@@ -412,7 +412,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             r12 = r12.rulesType;
             if (r12 != r2) goto L_0x0043;
         L_0x002a:
-            r12 = NUM; // 0x7f0d06fb float:1.874574E38 double:1.0531306604E-314;
+            r12 = NUM; // 0x7f0d06fa float:1.8745737E38 double:1.05313066E-314;
             r0 = "P2PEverybody";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             r0 = org.telegram.ui.PrivacyControlActivity.this;
@@ -427,7 +427,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             r11.setText(r12, r0, r4);
             goto L_0x00f3;
         L_0x0043:
-            r12 = NUM; // 0x7f0d055a float:1.8744893E38 double:1.0531304544E-314;
+            r12 = NUM; // 0x7f0d0559 float:1.8744891E38 double:1.053130454E-314;
             r0 = "LastSeenEverybody";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             r0 = org.telegram.ui.PrivacyControlActivity.this;
@@ -450,7 +450,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             r12 = r12.rulesType;
             if (r12 != r2) goto L_0x008f;
         L_0x006c:
-            r12 = NUM; // 0x7f0d06f6 float:1.874573E38 double:1.053130658E-314;
+            r12 = NUM; // 0x7f0d06f5 float:1.8745727E38 double:1.0531306575E-314;
             r0 = "P2PContacts";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             r0 = org.telegram.ui.PrivacyControlActivity.this;
@@ -474,7 +474,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             r11.setText(r12, r0, r1);
             goto L_0x00f4;
         L_0x008f:
-            r12 = NUM; // 0x7f0d0554 float:1.8744881E38 double:1.0531304514E-314;
+            r12 = NUM; // 0x7f0d0553 float:1.874488E38 double:1.053130451E-314;
             r0 = "LastSeenContacts";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             r0 = org.telegram.ui.PrivacyControlActivity.this;
@@ -506,7 +506,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             r12 = r12.rulesType;
             if (r12 != r2) goto L_0x00da;
         L_0x00c2:
-            r12 = NUM; // 0x7f0d06fd float:1.8745743E38 double:1.0531306614E-314;
+            r12 = NUM; // 0x7f0d06fc float:1.8745741E38 double:1.053130661E-314;
             r0 = "P2PNobody";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             r0 = org.telegram.ui.PrivacyControlActivity.this;
@@ -521,7 +521,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             r11.setText(r12, r0, r3);
             goto L_0x00f1;
         L_0x00da:
-            r12 = NUM; // 0x7f0d055d float:1.87449E38 double:1.053130456E-314;
+            r12 = NUM; // 0x7f0d055c float:1.8744897E38 double:1.0531304554E-314;
             r0 = "LastSeenNobody";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             r0 = org.telegram.ui.PrivacyControlActivity.this;
@@ -598,7 +598,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             r12 = r12.rulesType;
             if (r12 != r2) goto L_0x017e;
         L_0x0170:
-            r12 = NUM; // 0x7f0d06fa float:1.8745737E38 double:1.05313066E-314;
+            r12 = NUM; // 0x7f0d06f9 float:1.8745735E38 double:1.0531306595E-314;
             r0 = "P2PEnabledWith";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             r11.setText(r12);
@@ -624,7 +624,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             r11.setText(r12);
             goto L_0x043c;
         L_0x01aa:
-            r12 = NUM; // 0x7f0d055f float:1.8744904E38 double:1.053130457E-314;
+            r12 = NUM; // 0x7f0d055e float:1.8744902E38 double:1.0531304564E-314;
             r0 = "LastSeenTitle";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             r11.setText(r12);
@@ -718,7 +718,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             r11.setText(r12);
             goto L_0x0281;
         L_0x0275:
-            r12 = NUM; // 0x7f0d0325 float:1.8743747E38 double:1.0531301753E-314;
+            r12 = NUM; // 0x7f0d0324 float:1.8743745E38 double:1.053130175E-314;
             r0 = "CustomHelp";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             r11.setText(r12);
@@ -767,7 +767,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             r12 = r12.rulesType;
             if (r12 != r2) goto L_0x02ec;
         L_0x02df:
-            r12 = NUM; // 0x7f0d0327 float:1.8743752E38 double:1.0531301763E-314;
+            r12 = NUM; // 0x7f0d0326 float:1.874375E38 double:1.053130176E-314;
             r0 = "CustomP2PInfo";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             r11.setText(r12);
@@ -777,7 +777,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             r12 = r12.rulesType;
             if (r12 != r8) goto L_0x0301;
         L_0x02f4:
-            r12 = NUM; // 0x7f0d0324 float:1.8743745E38 double:1.053130175E-314;
+            r12 = NUM; // 0x7f0d0323 float:1.8743743E38 double:1.0531301743E-314;
             r0 = "CustomCallInfo";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             r11.setText(r12);
@@ -787,13 +787,13 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             r12 = r12.rulesType;
             if (r12 != r4) goto L_0x0316;
         L_0x0309:
-            r12 = NUM; // 0x7f0d0328 float:1.8743754E38 double:1.0531301767E-314;
+            r12 = NUM; // 0x7f0d0327 float:1.8743752E38 double:1.0531301763E-314;
             r0 = "CustomShareInfo";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             r11.setText(r12);
             goto L_0x0322;
         L_0x0316:
-            r12 = NUM; // 0x7f0d0329 float:1.8743756E38 double:1.053130177E-314;
+            r12 = NUM; // 0x7f0d0328 float:1.8743754E38 double:1.0531301767E-314;
             r0 = "CustomShareSettingsHelp";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             r11.setText(r12);
@@ -826,7 +826,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             r0 = org.telegram.ui.PrivacyControlActivity.this;
             r0 = r0.alwaysShareRow;
             r5 = "Users";
-            r6 = NUM; // 0x7f0d03cf float:1.8744092E38 double:1.0531302593E-314;
+            r6 = NUM; // 0x7f0d03ce float:1.874409E38 double:1.053130259E-314;
             r7 = "EmpryUsersPlaceholder";
             if (r12 != r0) goto L_0x03bb;
         L_0x0366:
@@ -892,13 +892,13 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             r0 = r0.rulesType;
             if (r0 == 0) goto L_0x03f7;
         L_0x03ea:
-            r0 = NUM; // 0x7f0d0601 float:1.8745232E38 double:1.053130537E-314;
+            r0 = NUM; // 0x7f0d0600 float:1.874523E38 double:1.0531305364E-314;
             r1 = "NeverAllow";
             r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
             r11.setTextAndValue(r0, r12, r3);
             goto L_0x043c;
         L_0x03f7:
-            r0 = NUM; // 0x7f0d0602 float:1.8745234E38 double:1.0531305374E-314;
+            r0 = NUM; // 0x7f0d0601 float:1.8745232E38 double:1.053130537E-314;
             r1 = "NeverShareWith";
             r0 = org.telegram.messenger.LocaleController.getString(r1, r0);
             r11.setTextAndValue(r0, r12, r3);
@@ -914,7 +914,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
             r12 = r12.getLoadingPrivicyInfo(r2);
             if (r12 == 0) goto L_0x0426;
         L_0x041c:
-            r12 = NUM; // 0x7f0d057a float:1.8744958E38 double:1.05313047E-314;
+            r12 = NUM; // 0x7f0d0579 float:1.8744956E38 double:1.0531304697E-314;
             r0 = "Loading";
             r12 = org.telegram.messenger.LocaleController.getString(r0, r12);
             goto L_0x0430;

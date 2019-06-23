@@ -154,7 +154,7 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
         return this.addressName;
     }
 
-    public void onLocationAddressAvailable(String str, Location location) {
+    public void onLocationAddressAvailable(String str, String str2, Location location) {
         this.fetchingLocation = false;
         this.previousFetchedLocation = location;
         this.addressName = str;
