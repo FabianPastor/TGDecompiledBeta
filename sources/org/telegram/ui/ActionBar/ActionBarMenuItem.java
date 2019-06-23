@@ -239,7 +239,7 @@ public class ActionBarMenuItem extends FrameLayout {
         }
         TextView textView = this.textView;
         if (textView != null) {
-            textView.setText(i);
+            textView.setTextColor(i);
         }
         imageView = this.clearButton;
         if (imageView != null) {

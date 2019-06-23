@@ -582,6 +582,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
             int i2 = 0;
             String stringBuilder;
             int i3;
+            int i4;
             if (i == -1) {
                 int access$3100;
                 AccessibilityNodeInfo obtain = AccessibilityNodeInfo.obtain(ChatMessageCell.this);
@@ -624,17 +625,16 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 stringBuilder3.append(ChatMessageCell.this.currentTimeString);
                 stringBuilder = stringBuilder3.toString();
                 if (ChatMessageCell.this.currentMessageObject.isOut()) {
-                    int i4;
                     stringBuilder2.append(LocaleController.formatString("AccDescrSentDate", NUM, stringBuilder));
                     stringBuilder2.append(str);
                     if (ChatMessageCell.this.currentMessageObject.isUnread()) {
-                        i4 = NUM;
+                        i3 = NUM;
                         stringBuilder = "AccDescrMsgUnread";
                     } else {
-                        i4 = NUM;
+                        i3 = NUM;
                         stringBuilder = "AccDescrMsgRead";
                     }
-                    stringBuilder2.append(LocaleController.getString(stringBuilder, i4));
+                    stringBuilder2.append(LocaleController.getString(stringBuilder, i3));
                 } else {
                     stringBuilder2.append(LocaleController.formatString("AccDescrReceivedDate", NUM, stringBuilder));
                 }
@@ -673,10 +673,10 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                 }
                 if (ChatMessageCell.this.currentMessageObject.messageText instanceof Spannable) {
                     Spannable spannable = (Spannable) ChatMessageCell.this.currentMessageObject.messageText;
-                    i3 = 0;
+                    i4 = 0;
                     for (CharacterStyle characterStyle : (CharacterStyle[]) spannable.getSpans(0, spannable.length(), ClickableSpan.class)) {
-                        obtain.addChild(ChatMessageCell.this, i3 + 2000);
-                        i3++;
+                        obtain.addChild(ChatMessageCell.this, i4 + 2000);
+                        i4++;
                     }
                 }
                 Iterator it = ChatMessageCell.this.botButtons.iterator();
@@ -710,23 +710,21 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
             obtain2.setSource(ChatMessageCell.this, i);
             obtain2.setParent(ChatMessageCell.this);
             obtain2.setPackageName(ChatMessageCell.this.getContext().getPackageName());
-            int spanEnd;
             if (i >= 2000) {
                 Spannable spannable2 = (Spannable) ChatMessageCell.this.currentMessageObject.messageText;
                 ClickableSpan linkById = getLinkById(i);
                 if (linkById == null) {
                     return null;
                 }
-                i3 = spannable2.getSpanStart(linkById);
-                spanEnd = spannable2.getSpanEnd(linkById);
-                obtain2.setText(spannable2.subSequence(i3, spanEnd).toString());
+                int[] access$3900 = ChatMessageCell.this.getRealSpanStartAndEnd(spannable2, linkById);
+                obtain2.setText(spannable2.subSequence(access$3900[0], access$3900[1]).toString());
                 Iterator it2 = ChatMessageCell.this.currentMessageObject.textLayoutBlocks.iterator();
                 while (it2.hasNext()) {
                     TextLayoutBlock textLayoutBlock = (TextLayoutBlock) it2.next();
-                    int length = textLayoutBlock.textLayout.getText().length();
+                    i3 = textLayoutBlock.textLayout.getText().length();
                     int i5 = textLayoutBlock.charactersOffset;
-                    if (i5 <= i3 && length + i5 >= spanEnd) {
-                        textLayoutBlock.textLayout.getSelectionPath(i3 - i5, spanEnd - i5, this.linkPath);
+                    if (i5 <= access$3900[0] && i3 + i5 >= access$3900[1]) {
+                        textLayoutBlock.textLayout.getSelectionPath(access$3900[0] - i5, access$3900[1] - i5, this.linkPath);
                         this.linkPath.computeBounds(this.rectF, true);
                         Rect rect = this.rect;
                         RectF rectF = this.rectF;
@@ -815,13 +813,13 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     }
                     obtain2.addAction(16);
                     i6 = ChatMessageCell.this.photoImage.getImageX();
-                    spanEnd = ChatMessageCell.this.getMeasuredHeight() - AndroidUtilities.dp(64.0f);
+                    int measuredHeight = ChatMessageCell.this.getMeasuredHeight() - AndroidUtilities.dp(64.0f);
                     if (ChatMessageCell.this.currentMessageObject.isOutOwner()) {
-                        i3 = (ChatMessageCell.this.getMeasuredWidth() - ChatMessageCell.this.widthForButtons) - AndroidUtilities.dp(10.0f);
+                        i4 = (ChatMessageCell.this.getMeasuredWidth() - ChatMessageCell.this.widthForButtons) - AndroidUtilities.dp(10.0f);
                     } else {
-                        i3 = AndroidUtilities.dp(ChatMessageCell.this.mediaBackground ? 1.0f : 7.0f) + ChatMessageCell.this.backgroundDrawableLeft;
+                        i4 = AndroidUtilities.dp(ChatMessageCell.this.mediaBackground ? 1.0f : 7.0f) + ChatMessageCell.this.backgroundDrawableLeft;
                     }
-                    this.rect.set(i6 + i3, spanEnd, (i6 + ChatMessageCell.this.instantWidth) + i3, AndroidUtilities.dp(38.0f) + spanEnd);
+                    this.rect.set(i6 + i4, measuredHeight, (i6 + ChatMessageCell.this.instantWidth) + i4, AndroidUtilities.dp(38.0f) + measuredHeight);
                     obtain2.setBoundsInParent(this.rect);
                     if (ChatMessageCell.this.accessibilityVirtualViewBounds.get(i) == null || !((Rect) ChatMessageCell.this.accessibilityVirtualViewBounds.get(i)).equals(this.rect)) {
                         ChatMessageCell.this.accessibilityVirtualViewBounds.put(i, new Rect(this.rect));
@@ -883,7 +881,7 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
             } else if (i2 == 64) {
                 ChatMessageCell.this.sendAccessibilityEventForVirtualView(i, 32768);
             } else if (i2 == 16) {
-                ChatMessageCellDelegate access$6000;
+                ChatMessageCellDelegate access$6100;
                 ChatMessageCell chatMessageCell;
                 if (i >= 2000) {
                     linkById = getLinkById(i);
@@ -913,18 +911,18 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
                     ChatMessageCell.this.sendAccessibilityEventForVirtualView(i, 1);
                 } else if (i == 499) {
                     if (ChatMessageCell.this.delegate != null) {
-                        access$6000 = ChatMessageCell.this.delegate;
+                        access$6100 = ChatMessageCell.this.delegate;
                         chatMessageCell = ChatMessageCell.this;
-                        access$6000.didPressInstantButton(chatMessageCell, chatMessageCell.drawInstantViewType);
+                        access$6100.didPressInstantButton(chatMessageCell, chatMessageCell.drawInstantViewType);
                     }
                 } else if (i == 498) {
                     if (ChatMessageCell.this.delegate != null) {
                         ChatMessageCell.this.delegate.didPressShare(ChatMessageCell.this);
                     }
                 } else if (i == 497 && ChatMessageCell.this.delegate != null) {
-                    access$6000 = ChatMessageCell.this.delegate;
+                    access$6100 = ChatMessageCell.this.delegate;
                     chatMessageCell = ChatMessageCell.this;
-                    access$6000.didPressReplyMessage(chatMessageCell, chatMessageCell.currentMessageObject.messageOwner.reply_to_msg_id);
+                    access$6100.didPressReplyMessage(chatMessageCell, chatMessageCell.currentMessageObject.messageOwner.reply_to_msg_id);
                 }
             } else if (i2 == 32) {
                 linkById = getLinkById(i);
@@ -1048,69 +1046,111 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         return linkPath;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:56:0x00e9 A:{Catch:{ Exception -> 0x01ef }} */
-    /* JADX WARNING: Removed duplicated region for block: B:46:0x00d6 A:{Catch:{ Exception -> 0x01ef }} */
-    /* JADX WARNING: Removed duplicated region for block: B:56:0x00e9 A:{Catch:{ Exception -> 0x01ef }} */
-    private boolean checkTextBlockMotionEvent(android.view.MotionEvent r15) {
+    /* JADX WARNING: Removed duplicated region for block: B:9:0x0020  */
+    private int[] getRealSpanStartAndEnd(android.text.Spannable r6, android.text.style.CharacterStyle r7) {
         /*
-        r14 = this;
-        r0 = r14.currentMessageObject;
+        r5 = this;
+        r0 = r7 instanceof org.telegram.ui.Components.URLSpanBrowser;
+        r1 = 1;
+        r2 = 0;
+        if (r0 == 0) goto L_0x001b;
+    L_0x0006:
+        r0 = r7;
+        r0 = (org.telegram.ui.Components.URLSpanBrowser) r0;
+        r0 = r0.getStyle();
+        if (r0 == 0) goto L_0x001b;
+    L_0x000f:
+        r0 = r0.urlEntity;
+        if (r0 == 0) goto L_0x001b;
+    L_0x0013:
+        r3 = r0.offset;
+        r0 = r0.length;
+        r0 = r0 + r3;
+        r4 = r0;
+        r0 = 1;
+        goto L_0x001e;
+    L_0x001b:
+        r0 = 0;
+        r3 = 0;
+        r4 = 0;
+    L_0x001e:
+        if (r0 != 0) goto L_0x0028;
+    L_0x0020:
+        r3 = r6.getSpanStart(r7);
+        r4 = r6.getSpanEnd(r7);
+    L_0x0028:
+        r6 = 2;
+        r6 = new int[r6];
+        r6[r2] = r3;
+        r6[r1] = r4;
+        return r6;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ChatMessageCell.getRealSpanStartAndEnd(android.text.Spannable, android.text.style.CharacterStyle):int[]");
+    }
+
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x00e9 A:{Catch:{ Exception -> 0x01f3 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x00d6 A:{Catch:{ Exception -> 0x01f3 }} */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x00e9 A:{Catch:{ Exception -> 0x01f3 }} */
+    private boolean checkTextBlockMotionEvent(android.view.MotionEvent r14) {
+        /*
+        r13 = this;
+        r0 = r13.currentMessageObject;
         r1 = r0.type;
         r2 = 0;
-        if (r1 != 0) goto L_0x01f7;
+        if (r1 != 0) goto L_0x01fb;
     L_0x0007:
         r0 = r0.textLayoutBlocks;
-        if (r0 == 0) goto L_0x01f7;
+        if (r0 == 0) goto L_0x01fb;
     L_0x000b:
         r0 = r0.isEmpty();
-        if (r0 != 0) goto L_0x01f7;
+        if (r0 != 0) goto L_0x01fb;
     L_0x0011:
-        r0 = r14.currentMessageObject;
+        r0 = r13.currentMessageObject;
         r0 = r0.messageText;
         r0 = r0 instanceof android.text.Spannable;
         if (r0 != 0) goto L_0x001b;
     L_0x0019:
-        goto L_0x01f7;
+        goto L_0x01fb;
     L_0x001b:
-        r0 = r15.getAction();
+        r0 = r14.getAction();
         r1 = 1;
         if (r0 == 0) goto L_0x002c;
     L_0x0022:
-        r0 = r15.getAction();
-        if (r0 != r1) goto L_0x01f7;
+        r0 = r14.getAction();
+        if (r0 != r1) goto L_0x01fb;
     L_0x0028:
-        r0 = r14.pressedLinkType;
-        if (r0 != r1) goto L_0x01f7;
+        r0 = r13.pressedLinkType;
+        if (r0 != r1) goto L_0x01fb;
     L_0x002c:
-        r0 = r15.getX();
+        r0 = r14.getX();
         r0 = (int) r0;
-        r3 = r15.getY();
+        r3 = r14.getY();
         r3 = (int) r3;
-        r4 = r14.textX;
-        if (r0 < r4) goto L_0x01f4;
+        r4 = r13.textX;
+        if (r0 < r4) goto L_0x01f8;
     L_0x003a:
-        r5 = r14.textY;
-        if (r3 < r5) goto L_0x01f4;
+        r5 = r13.textY;
+        if (r3 < r5) goto L_0x01f8;
     L_0x003e:
-        r6 = r14.currentMessageObject;
+        r6 = r13.currentMessageObject;
         r7 = r6.textWidth;
         r4 = r4 + r7;
-        if (r0 > r4) goto L_0x01f4;
+        if (r0 > r4) goto L_0x01f8;
     L_0x0045:
         r4 = r6.textHeight;
         r4 = r4 + r5;
-        if (r3 > r4) goto L_0x01f4;
+        if (r3 > r4) goto L_0x01f8;
     L_0x004a:
         r3 = r3 - r5;
         r4 = 0;
         r5 = 0;
     L_0x004d:
-        r6 = r14.currentMessageObject;
+        r6 = r13.currentMessageObject;
         r6 = r6.textLayoutBlocks;
         r6 = r6.size();
         if (r4 >= r6) goto L_0x006f;
     L_0x0057:
-        r6 = r14.currentMessageObject;
+        r6 = r13.currentMessageObject;
         r6 = r6.textLayoutBlocks;
         r6 = r6.get(r4);
         r6 = (org.telegram.messenger.MessageObject.TextLayoutBlock) r6;
@@ -1122,60 +1162,60 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         goto L_0x006f;
     L_0x0069:
         r5 = r4 + 1;
-        r13 = r5;
+        r12 = r5;
         r5 = r4;
-        r4 = r13;
+        r4 = r12;
         goto L_0x004d;
     L_0x006f:
-        r4 = r14.currentMessageObject;	 Catch:{ Exception -> 0x01ef }
-        r4 = r4.textLayoutBlocks;	 Catch:{ Exception -> 0x01ef }
-        r4 = r4.get(r5);	 Catch:{ Exception -> 0x01ef }
-        r4 = (org.telegram.messenger.MessageObject.TextLayoutBlock) r4;	 Catch:{ Exception -> 0x01ef }
-        r0 = (float) r0;	 Catch:{ Exception -> 0x01ef }
-        r6 = r14.textX;	 Catch:{ Exception -> 0x01ef }
-        r6 = (float) r6;	 Catch:{ Exception -> 0x01ef }
-        r7 = r4.isRtl();	 Catch:{ Exception -> 0x01ef }
+        r4 = r13.currentMessageObject;	 Catch:{ Exception -> 0x01f3 }
+        r4 = r4.textLayoutBlocks;	 Catch:{ Exception -> 0x01f3 }
+        r4 = r4.get(r5);	 Catch:{ Exception -> 0x01f3 }
+        r4 = (org.telegram.messenger.MessageObject.TextLayoutBlock) r4;	 Catch:{ Exception -> 0x01f3 }
+        r0 = (float) r0;	 Catch:{ Exception -> 0x01f3 }
+        r6 = r13.textX;	 Catch:{ Exception -> 0x01f3 }
+        r6 = (float) r6;	 Catch:{ Exception -> 0x01f3 }
+        r7 = r4.isRtl();	 Catch:{ Exception -> 0x01f3 }
         r8 = 0;
         if (r7 == 0) goto L_0x0089;
     L_0x0084:
-        r7 = r14.currentMessageObject;	 Catch:{ Exception -> 0x01ef }
-        r7 = r7.textXOffset;	 Catch:{ Exception -> 0x01ef }
+        r7 = r13.currentMessageObject;	 Catch:{ Exception -> 0x01f3 }
+        r7 = r7.textXOffset;	 Catch:{ Exception -> 0x01f3 }
         goto L_0x008a;
     L_0x0089:
         r7 = 0;
     L_0x008a:
         r6 = r6 - r7;
         r0 = r0 - r6;
-        r0 = (int) r0;	 Catch:{ Exception -> 0x01ef }
-        r3 = (float) r3;	 Catch:{ Exception -> 0x01ef }
-        r6 = r4.textYOffset;	 Catch:{ Exception -> 0x01ef }
+        r0 = (int) r0;	 Catch:{ Exception -> 0x01f3 }
+        r3 = (float) r3;	 Catch:{ Exception -> 0x01f3 }
+        r6 = r4.textYOffset;	 Catch:{ Exception -> 0x01f3 }
         r3 = r3 - r6;
-        r3 = (int) r3;	 Catch:{ Exception -> 0x01ef }
-        r6 = r4.textLayout;	 Catch:{ Exception -> 0x01ef }
-        r3 = r6.getLineForVertical(r3);	 Catch:{ Exception -> 0x01ef }
-        r6 = r4.textLayout;	 Catch:{ Exception -> 0x01ef }
-        r0 = (float) r0;	 Catch:{ Exception -> 0x01ef }
-        r6 = r6.getOffsetForHorizontal(r3, r0);	 Catch:{ Exception -> 0x01ef }
-        r7 = r4.textLayout;	 Catch:{ Exception -> 0x01ef }
-        r7 = r7.getLineLeft(r3);	 Catch:{ Exception -> 0x01ef }
+        r3 = (int) r3;	 Catch:{ Exception -> 0x01f3 }
+        r6 = r4.textLayout;	 Catch:{ Exception -> 0x01f3 }
+        r3 = r6.getLineForVertical(r3);	 Catch:{ Exception -> 0x01f3 }
+        r6 = r4.textLayout;	 Catch:{ Exception -> 0x01f3 }
+        r0 = (float) r0;	 Catch:{ Exception -> 0x01f3 }
+        r6 = r6.getOffsetForHorizontal(r3, r0);	 Catch:{ Exception -> 0x01f3 }
+        r7 = r4.textLayout;	 Catch:{ Exception -> 0x01f3 }
+        r7 = r7.getLineLeft(r3);	 Catch:{ Exception -> 0x01f3 }
         r9 = (r7 > r0 ? 1 : (r7 == r0 ? 0 : -1));
-        if (r9 > 0) goto L_0x01f7;
+        if (r9 > 0) goto L_0x01fb;
     L_0x00a9:
-        r9 = r4.textLayout;	 Catch:{ Exception -> 0x01ef }
-        r3 = r9.getLineWidth(r3);	 Catch:{ Exception -> 0x01ef }
+        r9 = r4.textLayout;	 Catch:{ Exception -> 0x01f3 }
+        r3 = r9.getLineWidth(r3);	 Catch:{ Exception -> 0x01f3 }
         r7 = r7 + r3;
         r0 = (r7 > r0 ? 1 : (r7 == r0 ? 0 : -1));
-        if (r0 < 0) goto L_0x01f7;
+        if (r0 < 0) goto L_0x01fb;
     L_0x00b4:
-        r0 = r14.currentMessageObject;	 Catch:{ Exception -> 0x01ef }
-        r0 = r0.messageText;	 Catch:{ Exception -> 0x01ef }
-        r0 = (android.text.Spannable) r0;	 Catch:{ Exception -> 0x01ef }
+        r0 = r13.currentMessageObject;	 Catch:{ Exception -> 0x01f3 }
+        r0 = r0.messageText;	 Catch:{ Exception -> 0x01f3 }
+        r0 = (android.text.Spannable) r0;	 Catch:{ Exception -> 0x01f3 }
         r3 = android.text.style.ClickableSpan.class;
-        r3 = r0.getSpans(r6, r6, r3);	 Catch:{ Exception -> 0x01ef }
-        r3 = (android.text.style.CharacterStyle[]) r3;	 Catch:{ Exception -> 0x01ef }
+        r3 = r0.getSpans(r6, r6, r3);	 Catch:{ Exception -> 0x01f3 }
+        r3 = (android.text.style.CharacterStyle[]) r3;	 Catch:{ Exception -> 0x01f3 }
         if (r3 == 0) goto L_0x00ca;
     L_0x00c4:
-        r7 = r3.length;	 Catch:{ Exception -> 0x01ef }
+        r7 = r3.length;	 Catch:{ Exception -> 0x01f3 }
         if (r7 != 0) goto L_0x00c8;
     L_0x00c7:
         goto L_0x00ca;
@@ -1184,21 +1224,21 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         goto L_0x00d3;
     L_0x00ca:
         r3 = org.telegram.ui.Components.URLSpanMono.class;
-        r3 = r0.getSpans(r6, r6, r3);	 Catch:{ Exception -> 0x01ef }
-        r3 = (android.text.style.CharacterStyle[]) r3;	 Catch:{ Exception -> 0x01ef }
+        r3 = r0.getSpans(r6, r6, r3);	 Catch:{ Exception -> 0x01f3 }
+        r3 = (android.text.style.CharacterStyle[]) r3;	 Catch:{ Exception -> 0x01f3 }
         r6 = 1;
     L_0x00d3:
-        r7 = r3.length;	 Catch:{ Exception -> 0x01ef }
+        r7 = r3.length;	 Catch:{ Exception -> 0x01f3 }
         if (r7 == 0) goto L_0x00e6;
     L_0x00d6:
-        r7 = r3.length;	 Catch:{ Exception -> 0x01ef }
+        r7 = r3.length;	 Catch:{ Exception -> 0x01f3 }
         if (r7 == 0) goto L_0x00e4;
     L_0x00d9:
-        r7 = r3[r2];	 Catch:{ Exception -> 0x01ef }
-        r7 = r7 instanceof org.telegram.ui.Components.URLSpanBotCommand;	 Catch:{ Exception -> 0x01ef }
+        r7 = r3[r2];	 Catch:{ Exception -> 0x01f3 }
+        r7 = r7 instanceof org.telegram.ui.Components.URLSpanBotCommand;	 Catch:{ Exception -> 0x01f3 }
         if (r7 == 0) goto L_0x00e4;
     L_0x00df:
-        r7 = org.telegram.ui.Components.URLSpanBotCommand.enabled;	 Catch:{ Exception -> 0x01ef }
+        r7 = org.telegram.ui.Components.URLSpanBotCommand.enabled;	 Catch:{ Exception -> 0x01f3 }
         if (r7 != 0) goto L_0x00e4;
     L_0x00e3:
         goto L_0x00e6;
@@ -1208,167 +1248,172 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
     L_0x00e6:
         r7 = 1;
     L_0x00e7:
-        if (r7 != 0) goto L_0x01f7;
+        if (r7 != 0) goto L_0x01fb;
     L_0x00e9:
-        r15 = r15.getAction();	 Catch:{ Exception -> 0x01ef }
-        if (r15 != 0) goto L_0x01dc;
+        r14 = r14.getAction();	 Catch:{ Exception -> 0x01f3 }
+        if (r14 != 0) goto L_0x01e0;
     L_0x00ef:
-        r15 = r3[r2];	 Catch:{ Exception -> 0x01ef }
-        r14.pressedLink = r15;	 Catch:{ Exception -> 0x01ef }
-        r14.linkBlockNum = r5;	 Catch:{ Exception -> 0x01ef }
-        r14.pressedLinkType = r1;	 Catch:{ Exception -> 0x01ef }
-        r14.resetUrlPaths(r2);	 Catch:{ Exception -> 0x01ef }
-        r15 = r14.obtainNewUrlPath(r2);	 Catch:{ Exception -> 0x01d4 }
-        r3 = r14.pressedLink;	 Catch:{ Exception -> 0x01d4 }
-        r3 = r0.getSpanStart(r3);	 Catch:{ Exception -> 0x01d4 }
-        r7 = r14.pressedLink;	 Catch:{ Exception -> 0x01d4 }
-        r7 = r0.getSpanEnd(r7);	 Catch:{ Exception -> 0x01d4 }
-        r9 = r4.textLayout;	 Catch:{ Exception -> 0x01d4 }
-        r15.setCurrentLayout(r9, r3, r8);	 Catch:{ Exception -> 0x01d4 }
-        r8 = r4.textLayout;	 Catch:{ Exception -> 0x01d4 }
-        r8.getSelectionPath(r3, r7, r15);	 Catch:{ Exception -> 0x01d4 }
-        r15 = r4.charactersEnd;	 Catch:{ Exception -> 0x01d4 }
-        if (r7 < r15) goto L_0x0171;
-    L_0x0118:
-        r15 = r5 + 1;
+        r14 = r3[r2];	 Catch:{ Exception -> 0x01f3 }
+        r13.pressedLink = r14;	 Catch:{ Exception -> 0x01f3 }
+        r13.linkBlockNum = r5;	 Catch:{ Exception -> 0x01f3 }
+        r13.pressedLinkType = r1;	 Catch:{ Exception -> 0x01f3 }
+        r13.resetUrlPaths(r2);	 Catch:{ Exception -> 0x01f3 }
+        r14 = r13.obtainNewUrlPath(r2);	 Catch:{ Exception -> 0x01d8 }
+        r3 = r13.pressedLink;	 Catch:{ Exception -> 0x01d8 }
+        r3 = r13.getRealSpanStartAndEnd(r0, r3);	 Catch:{ Exception -> 0x01d8 }
+        r7 = r4.textLayout;	 Catch:{ Exception -> 0x01d8 }
+        r9 = r3[r2];	 Catch:{ Exception -> 0x01d8 }
+        r14.setCurrentLayout(r7, r9, r8);	 Catch:{ Exception -> 0x01d8 }
+        r7 = r4.textLayout;	 Catch:{ Exception -> 0x01d8 }
+        r8 = r3[r2];	 Catch:{ Exception -> 0x01d8 }
+        r9 = r3[r1];	 Catch:{ Exception -> 0x01d8 }
+        r7.getSelectionPath(r8, r9, r14);	 Catch:{ Exception -> 0x01d8 }
+        r14 = r3[r1];	 Catch:{ Exception -> 0x01d8 }
+        r7 = r4.charactersEnd;	 Catch:{ Exception -> 0x01d8 }
+        if (r14 < r7) goto L_0x0177;
     L_0x011a:
-        r8 = r14.currentMessageObject;	 Catch:{ Exception -> 0x01d4 }
-        r8 = r8.textLayoutBlocks;	 Catch:{ Exception -> 0x01d4 }
-        r8 = r8.size();	 Catch:{ Exception -> 0x01d4 }
-        if (r15 >= r8) goto L_0x0171;
-    L_0x0124:
-        r8 = r14.currentMessageObject;	 Catch:{ Exception -> 0x01d4 }
-        r8 = r8.textLayoutBlocks;	 Catch:{ Exception -> 0x01d4 }
-        r8 = r8.get(r15);	 Catch:{ Exception -> 0x01d4 }
-        r8 = (org.telegram.messenger.MessageObject.TextLayoutBlock) r8;	 Catch:{ Exception -> 0x01d4 }
-        if (r6 == 0) goto L_0x013d;
-    L_0x0130:
-        r9 = r8.charactersOffset;	 Catch:{ Exception -> 0x01d4 }
-        r10 = r8.charactersOffset;	 Catch:{ Exception -> 0x01d4 }
-        r11 = org.telegram.ui.Components.URLSpanMono.class;
-        r9 = r0.getSpans(r9, r10, r11);	 Catch:{ Exception -> 0x01d4 }
-        r9 = (android.text.style.CharacterStyle[]) r9;	 Catch:{ Exception -> 0x01d4 }
-        goto L_0x0149;
-    L_0x013d:
-        r9 = r8.charactersOffset;	 Catch:{ Exception -> 0x01d4 }
-        r10 = r8.charactersOffset;	 Catch:{ Exception -> 0x01d4 }
-        r11 = android.text.style.ClickableSpan.class;
-        r9 = r0.getSpans(r9, r10, r11);	 Catch:{ Exception -> 0x01d4 }
-        r9 = (android.text.style.CharacterStyle[]) r9;	 Catch:{ Exception -> 0x01d4 }
-    L_0x0149:
-        if (r9 == 0) goto L_0x0171;
+        r14 = r5 + 1;
+    L_0x011c:
+        r7 = r13.currentMessageObject;	 Catch:{ Exception -> 0x01d8 }
+        r7 = r7.textLayoutBlocks;	 Catch:{ Exception -> 0x01d8 }
+        r7 = r7.size();	 Catch:{ Exception -> 0x01d8 }
+        if (r14 >= r7) goto L_0x0177;
+    L_0x0126:
+        r7 = r13.currentMessageObject;	 Catch:{ Exception -> 0x01d8 }
+        r7 = r7.textLayoutBlocks;	 Catch:{ Exception -> 0x01d8 }
+        r7 = r7.get(r14);	 Catch:{ Exception -> 0x01d8 }
+        r7 = (org.telegram.messenger.MessageObject.TextLayoutBlock) r7;	 Catch:{ Exception -> 0x01d8 }
+        if (r6 == 0) goto L_0x013f;
+    L_0x0132:
+        r8 = r7.charactersOffset;	 Catch:{ Exception -> 0x01d8 }
+        r9 = r7.charactersOffset;	 Catch:{ Exception -> 0x01d8 }
+        r10 = org.telegram.ui.Components.URLSpanMono.class;
+        r8 = r0.getSpans(r8, r9, r10);	 Catch:{ Exception -> 0x01d8 }
+        r8 = (android.text.style.CharacterStyle[]) r8;	 Catch:{ Exception -> 0x01d8 }
+        goto L_0x014b;
+    L_0x013f:
+        r8 = r7.charactersOffset;	 Catch:{ Exception -> 0x01d8 }
+        r9 = r7.charactersOffset;	 Catch:{ Exception -> 0x01d8 }
+        r10 = android.text.style.ClickableSpan.class;
+        r8 = r0.getSpans(r8, r9, r10);	 Catch:{ Exception -> 0x01d8 }
+        r8 = (android.text.style.CharacterStyle[]) r8;	 Catch:{ Exception -> 0x01d8 }
     L_0x014b:
-        r10 = r9.length;	 Catch:{ Exception -> 0x01d4 }
-        if (r10 == 0) goto L_0x0171;
-    L_0x014e:
-        r9 = r9[r2];	 Catch:{ Exception -> 0x01d4 }
-        r10 = r14.pressedLink;	 Catch:{ Exception -> 0x01d4 }
-        if (r9 == r10) goto L_0x0155;
-    L_0x0154:
-        goto L_0x0171;
-    L_0x0155:
-        r9 = r14.obtainNewUrlPath(r2);	 Catch:{ Exception -> 0x01d4 }
-        r10 = r8.textLayout;	 Catch:{ Exception -> 0x01d4 }
-        r11 = r8.textYOffset;	 Catch:{ Exception -> 0x01d4 }
-        r12 = r4.textYOffset;	 Catch:{ Exception -> 0x01d4 }
-        r11 = r11 - r12;
-        r9.setCurrentLayout(r10, r2, r11);	 Catch:{ Exception -> 0x01d4 }
-        r10 = r8.textLayout;	 Catch:{ Exception -> 0x01d4 }
-        r10.getSelectionPath(r2, r7, r9);	 Catch:{ Exception -> 0x01d4 }
-        r8 = r8.charactersEnd;	 Catch:{ Exception -> 0x01d4 }
-        r8 = r8 - r1;
-        if (r7 >= r8) goto L_0x016e;
-    L_0x016d:
-        goto L_0x0171;
-    L_0x016e:
-        r15 = r15 + 1;
-        goto L_0x011a;
-    L_0x0171:
-        r15 = r4.charactersOffset;	 Catch:{ Exception -> 0x01d4 }
-        if (r3 > r15) goto L_0x01d8;
-    L_0x0175:
-        r5 = r5 - r1;
-        r15 = 0;
-    L_0x0177:
-        if (r5 < 0) goto L_0x01d8;
-    L_0x0179:
-        r3 = r14.currentMessageObject;	 Catch:{ Exception -> 0x01d4 }
-        r3 = r3.textLayoutBlocks;	 Catch:{ Exception -> 0x01d4 }
-        r3 = r3.get(r5);	 Catch:{ Exception -> 0x01d4 }
-        r3 = (org.telegram.messenger.MessageObject.TextLayoutBlock) r3;	 Catch:{ Exception -> 0x01d4 }
-        if (r6 == 0) goto L_0x0194;
-    L_0x0185:
-        r4 = r3.charactersEnd;	 Catch:{ Exception -> 0x01d4 }
-        r4 = r4 - r1;
-        r7 = r3.charactersEnd;	 Catch:{ Exception -> 0x01d4 }
-        r7 = r7 - r1;
-        r8 = org.telegram.ui.Components.URLSpanMono.class;
-        r4 = r0.getSpans(r4, r7, r8);	 Catch:{ Exception -> 0x01d4 }
-        r4 = (android.text.style.CharacterStyle[]) r4;	 Catch:{ Exception -> 0x01d4 }
-        goto L_0x01a2;
-    L_0x0194:
-        r4 = r3.charactersEnd;	 Catch:{ Exception -> 0x01d4 }
-        r4 = r4 - r1;
-        r7 = r3.charactersEnd;	 Catch:{ Exception -> 0x01d4 }
-        r7 = r7 - r1;
-        r8 = android.text.style.ClickableSpan.class;
-        r4 = r0.getSpans(r4, r7, r8);	 Catch:{ Exception -> 0x01d4 }
-        r4 = (android.text.style.CharacterStyle[]) r4;	 Catch:{ Exception -> 0x01d4 }
-    L_0x01a2:
-        if (r4 == 0) goto L_0x01d8;
-    L_0x01a4:
-        r7 = r4.length;	 Catch:{ Exception -> 0x01d4 }
-        if (r7 == 0) goto L_0x01d8;
-    L_0x01a7:
-        r4 = r4[r2];	 Catch:{ Exception -> 0x01d4 }
-        r7 = r14.pressedLink;	 Catch:{ Exception -> 0x01d4 }
-        if (r4 == r7) goto L_0x01ae;
-    L_0x01ad:
-        goto L_0x01d8;
-    L_0x01ae:
-        r4 = r14.obtainNewUrlPath(r2);	 Catch:{ Exception -> 0x01d4 }
-        r7 = r14.pressedLink;	 Catch:{ Exception -> 0x01d4 }
-        r7 = r0.getSpanStart(r7);	 Catch:{ Exception -> 0x01d4 }
-        r8 = r3.height;	 Catch:{ Exception -> 0x01d4 }
-        r15 = r15 - r8;
-        r8 = r3.textLayout;	 Catch:{ Exception -> 0x01d4 }
-        r9 = (float) r15;	 Catch:{ Exception -> 0x01d4 }
-        r4.setCurrentLayout(r8, r7, r9);	 Catch:{ Exception -> 0x01d4 }
-        r8 = r3.textLayout;	 Catch:{ Exception -> 0x01d4 }
-        r9 = r14.pressedLink;	 Catch:{ Exception -> 0x01d4 }
-        r9 = r0.getSpanEnd(r9);	 Catch:{ Exception -> 0x01d4 }
-        r8.getSelectionPath(r7, r9, r4);	 Catch:{ Exception -> 0x01d4 }
-        r3 = r3.charactersOffset;	 Catch:{ Exception -> 0x01d4 }
-        if (r7 <= r3) goto L_0x01d1;
-    L_0x01d0:
-        goto L_0x01d8;
-    L_0x01d1:
-        r5 = r5 + -1;
+        if (r8 == 0) goto L_0x0177;
+    L_0x014d:
+        r9 = r8.length;	 Catch:{ Exception -> 0x01d8 }
+        if (r9 == 0) goto L_0x0177;
+    L_0x0150:
+        r8 = r8[r2];	 Catch:{ Exception -> 0x01d8 }
+        r9 = r13.pressedLink;	 Catch:{ Exception -> 0x01d8 }
+        if (r8 == r9) goto L_0x0157;
+    L_0x0156:
         goto L_0x0177;
+    L_0x0157:
+        r8 = r13.obtainNewUrlPath(r2);	 Catch:{ Exception -> 0x01d8 }
+        r9 = r7.textLayout;	 Catch:{ Exception -> 0x01d8 }
+        r10 = r7.textYOffset;	 Catch:{ Exception -> 0x01d8 }
+        r11 = r4.textYOffset;	 Catch:{ Exception -> 0x01d8 }
+        r10 = r10 - r11;
+        r8.setCurrentLayout(r9, r2, r10);	 Catch:{ Exception -> 0x01d8 }
+        r9 = r7.textLayout;	 Catch:{ Exception -> 0x01d8 }
+        r10 = r3[r1];	 Catch:{ Exception -> 0x01d8 }
+        r9.getSelectionPath(r2, r10, r8);	 Catch:{ Exception -> 0x01d8 }
+        r8 = r3[r1];	 Catch:{ Exception -> 0x01d8 }
+        r7 = r7.charactersEnd;	 Catch:{ Exception -> 0x01d8 }
+        r7 = r7 - r1;
+        if (r8 >= r7) goto L_0x0174;
+    L_0x0173:
+        goto L_0x0177;
+    L_0x0174:
+        r14 = r14 + 1;
+        goto L_0x011c;
+    L_0x0177:
+        r14 = r3[r2];	 Catch:{ Exception -> 0x01d8 }
+        r4 = r4.charactersOffset;	 Catch:{ Exception -> 0x01d8 }
+        if (r14 > r4) goto L_0x01dc;
+    L_0x017d:
+        r5 = r5 - r1;
+        r14 = 0;
+    L_0x017f:
+        if (r5 < 0) goto L_0x01dc;
+    L_0x0181:
+        r4 = r13.currentMessageObject;	 Catch:{ Exception -> 0x01d8 }
+        r4 = r4.textLayoutBlocks;	 Catch:{ Exception -> 0x01d8 }
+        r4 = r4.get(r5);	 Catch:{ Exception -> 0x01d8 }
+        r4 = (org.telegram.messenger.MessageObject.TextLayoutBlock) r4;	 Catch:{ Exception -> 0x01d8 }
+        if (r6 == 0) goto L_0x019c;
+    L_0x018d:
+        r7 = r4.charactersEnd;	 Catch:{ Exception -> 0x01d8 }
+        r7 = r7 - r1;
+        r8 = r4.charactersEnd;	 Catch:{ Exception -> 0x01d8 }
+        r8 = r8 - r1;
+        r9 = org.telegram.ui.Components.URLSpanMono.class;
+        r7 = r0.getSpans(r7, r8, r9);	 Catch:{ Exception -> 0x01d8 }
+        r7 = (android.text.style.CharacterStyle[]) r7;	 Catch:{ Exception -> 0x01d8 }
+        goto L_0x01aa;
+    L_0x019c:
+        r7 = r4.charactersEnd;	 Catch:{ Exception -> 0x01d8 }
+        r7 = r7 - r1;
+        r8 = r4.charactersEnd;	 Catch:{ Exception -> 0x01d8 }
+        r8 = r8 - r1;
+        r9 = android.text.style.ClickableSpan.class;
+        r7 = r0.getSpans(r7, r8, r9);	 Catch:{ Exception -> 0x01d8 }
+        r7 = (android.text.style.CharacterStyle[]) r7;	 Catch:{ Exception -> 0x01d8 }
+    L_0x01aa:
+        if (r7 == 0) goto L_0x01dc;
+    L_0x01ac:
+        r8 = r7.length;	 Catch:{ Exception -> 0x01d8 }
+        if (r8 == 0) goto L_0x01dc;
+    L_0x01af:
+        r7 = r7[r2];	 Catch:{ Exception -> 0x01d8 }
+        r8 = r13.pressedLink;	 Catch:{ Exception -> 0x01d8 }
+        if (r7 == r8) goto L_0x01b6;
+    L_0x01b5:
+        goto L_0x01dc;
+    L_0x01b6:
+        r7 = r13.obtainNewUrlPath(r2);	 Catch:{ Exception -> 0x01d8 }
+        r8 = r4.height;	 Catch:{ Exception -> 0x01d8 }
+        r14 = r14 - r8;
+        r8 = r4.textLayout;	 Catch:{ Exception -> 0x01d8 }
+        r9 = r3[r2];	 Catch:{ Exception -> 0x01d8 }
+        r10 = (float) r14;	 Catch:{ Exception -> 0x01d8 }
+        r7.setCurrentLayout(r8, r9, r10);	 Catch:{ Exception -> 0x01d8 }
+        r8 = r4.textLayout;	 Catch:{ Exception -> 0x01d8 }
+        r9 = r3[r2];	 Catch:{ Exception -> 0x01d8 }
+        r10 = r3[r1];	 Catch:{ Exception -> 0x01d8 }
+        r8.getSelectionPath(r9, r10, r7);	 Catch:{ Exception -> 0x01d8 }
+        r7 = r3[r2];	 Catch:{ Exception -> 0x01d8 }
+        r4 = r4.charactersOffset;	 Catch:{ Exception -> 0x01d8 }
+        if (r7 <= r4) goto L_0x01d5;
     L_0x01d4:
-        r15 = move-exception;
-        org.telegram.messenger.FileLog.e(r15);	 Catch:{ Exception -> 0x01ef }
+        goto L_0x01dc;
+    L_0x01d5:
+        r5 = r5 + -1;
+        goto L_0x017f;
     L_0x01d8:
-        r14.invalidate();	 Catch:{ Exception -> 0x01ef }
-        return r1;
+        r14 = move-exception;
+        org.telegram.messenger.FileLog.e(r14);	 Catch:{ Exception -> 0x01f3 }
     L_0x01dc:
-        r15 = r3[r2];	 Catch:{ Exception -> 0x01ef }
-        r0 = r14.pressedLink;	 Catch:{ Exception -> 0x01ef }
-        if (r15 != r0) goto L_0x01f7;
-    L_0x01e2:
-        r15 = r14.delegate;	 Catch:{ Exception -> 0x01ef }
-        r0 = r14.currentMessageObject;	 Catch:{ Exception -> 0x01ef }
-        r3 = r14.pressedLink;	 Catch:{ Exception -> 0x01ef }
-        r15.didPressUrl(r0, r3, r2);	 Catch:{ Exception -> 0x01ef }
-        r14.resetPressedLink(r1);	 Catch:{ Exception -> 0x01ef }
+        r13.invalidate();	 Catch:{ Exception -> 0x01f3 }
         return r1;
-    L_0x01ef:
-        r15 = move-exception;
-        org.telegram.messenger.FileLog.e(r15);
-        goto L_0x01f7;
-    L_0x01f4:
-        r14.resetPressedLink(r1);
-    L_0x01f7:
+    L_0x01e0:
+        r14 = r3[r2];	 Catch:{ Exception -> 0x01f3 }
+        r0 = r13.pressedLink;	 Catch:{ Exception -> 0x01f3 }
+        if (r14 != r0) goto L_0x01fb;
+    L_0x01e6:
+        r14 = r13.delegate;	 Catch:{ Exception -> 0x01f3 }
+        r0 = r13.currentMessageObject;	 Catch:{ Exception -> 0x01f3 }
+        r3 = r13.pressedLink;	 Catch:{ Exception -> 0x01f3 }
+        r14.didPressUrl(r0, r3, r2);	 Catch:{ Exception -> 0x01f3 }
+        r13.resetPressedLink(r1);	 Catch:{ Exception -> 0x01f3 }
+        return r1;
+    L_0x01f3:
+        r14 = move-exception;
+        org.telegram.messenger.FileLog.e(r14);
+        goto L_0x01fb;
+    L_0x01f8:
+        r13.resetPressedLink(r1);
+    L_0x01fb:
         return r2;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ChatMessageCell.checkTextBlockMotionEvent(android.view.MotionEvent):boolean");
@@ -1485,14 +1530,15 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         r7.resetUrlPaths(r1);	 Catch:{ Exception -> 0x00dc }
         r0 = r7.obtainNewUrlPath(r1);	 Catch:{ Exception -> 0x00c1 }
         r3 = r7.pressedLink;	 Catch:{ Exception -> 0x00c1 }
-        r3 = r8.getSpanStart(r3);	 Catch:{ Exception -> 0x00c1 }
-        r4 = r7.captionLayout;	 Catch:{ Exception -> 0x00c1 }
+        r8 = r7.getRealSpanStartAndEnd(r8, r3);	 Catch:{ Exception -> 0x00c1 }
+        r3 = r7.captionLayout;	 Catch:{ Exception -> 0x00c1 }
+        r4 = r8[r1];	 Catch:{ Exception -> 0x00c1 }
         r5 = 0;
-        r0.setCurrentLayout(r4, r3, r5);	 Catch:{ Exception -> 0x00c1 }
-        r4 = r7.captionLayout;	 Catch:{ Exception -> 0x00c1 }
-        r5 = r7.pressedLink;	 Catch:{ Exception -> 0x00c1 }
-        r8 = r8.getSpanEnd(r5);	 Catch:{ Exception -> 0x00c1 }
-        r4.getSelectionPath(r3, r8, r0);	 Catch:{ Exception -> 0x00c1 }
+        r0.setCurrentLayout(r3, r4, r5);	 Catch:{ Exception -> 0x00c1 }
+        r3 = r7.captionLayout;	 Catch:{ Exception -> 0x00c1 }
+        r4 = r8[r1];	 Catch:{ Exception -> 0x00c1 }
+        r8 = r8[r2];	 Catch:{ Exception -> 0x00c1 }
+        r3.getSelectionPath(r4, r8, r0);	 Catch:{ Exception -> 0x00c1 }
         goto L_0x00c5;
     L_0x00c1:
         r8 = move-exception;
@@ -1664,14 +1710,15 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         r7.resetUrlPaths(r1);	 Catch:{ Exception -> 0x00ec }
         r0 = r7.obtainNewUrlPath(r1);	 Catch:{ Exception -> 0x00e4 }
         r2 = r7.pressedLink;	 Catch:{ Exception -> 0x00e4 }
-        r2 = r8.getSpanStart(r2);	 Catch:{ Exception -> 0x00e4 }
-        r3 = r7.descriptionLayout;	 Catch:{ Exception -> 0x00e4 }
+        r8 = r7.getRealSpanStartAndEnd(r8, r2);	 Catch:{ Exception -> 0x00e4 }
+        r2 = r7.descriptionLayout;	 Catch:{ Exception -> 0x00e4 }
+        r3 = r8[r1];	 Catch:{ Exception -> 0x00e4 }
         r4 = 0;
-        r0.setCurrentLayout(r3, r2, r4);	 Catch:{ Exception -> 0x00e4 }
-        r3 = r7.descriptionLayout;	 Catch:{ Exception -> 0x00e4 }
-        r4 = r7.pressedLink;	 Catch:{ Exception -> 0x00e4 }
-        r8 = r8.getSpanEnd(r4);	 Catch:{ Exception -> 0x00e4 }
-        r3.getSelectionPath(r2, r8, r0);	 Catch:{ Exception -> 0x00e4 }
+        r0.setCurrentLayout(r2, r3, r4);	 Catch:{ Exception -> 0x00e4 }
+        r2 = r7.descriptionLayout;	 Catch:{ Exception -> 0x00e4 }
+        r3 = r8[r1];	 Catch:{ Exception -> 0x00e4 }
+        r8 = r8[r5];	 Catch:{ Exception -> 0x00e4 }
+        r2.getSelectionPath(r3, r8, r0);	 Catch:{ Exception -> 0x00e4 }
         goto L_0x00e8;
     L_0x00e4:
         r8 = move-exception;
@@ -1896,14 +1943,15 @@ public class ChatMessageCell extends BaseCell implements SeekBarDelegate, ImageR
         r1.resetUrlPaths(r2);	 Catch:{ Exception -> 0x00e6 }
         r9 = r1.obtainNewUrlPath(r2);	 Catch:{ Exception -> 0x00de }
         r10 = r1.pressedLink;	 Catch:{ Exception -> 0x00de }
-        r10 = r0.getSpanStart(r10);	 Catch:{ Exception -> 0x00de }
-        r11 = r1.descriptionLayout;	 Catch:{ Exception -> 0x00de }
+        r0 = r1.getRealSpanStartAndEnd(r0, r10);	 Catch:{ Exception -> 0x00de }
+        r10 = r1.descriptionLayout;	 Catch:{ Exception -> 0x00de }
+        r11 = r0[r2];	 Catch:{ Exception -> 0x00de }
         r12 = 0;
-        r9.setCurrentLayout(r11, r10, r12);	 Catch:{ Exception -> 0x00de }
-        r11 = r1.descriptionLayout;	 Catch:{ Exception -> 0x00de }
-        r12 = r1.pressedLink;	 Catch:{ Exception -> 0x00de }
-        r0 = r0.getSpanEnd(r12);	 Catch:{ Exception -> 0x00de }
-        r11.getSelectionPath(r10, r0, r9);	 Catch:{ Exception -> 0x00de }
+        r9.setCurrentLayout(r10, r11, r12);	 Catch:{ Exception -> 0x00de }
+        r10 = r1.descriptionLayout;	 Catch:{ Exception -> 0x00de }
+        r11 = r0[r2];	 Catch:{ Exception -> 0x00de }
+        r0 = r0[r8];	 Catch:{ Exception -> 0x00de }
+        r10.getSelectionPath(r11, r0, r9);	 Catch:{ Exception -> 0x00de }
         goto L_0x00e2;
     L_0x00de:
         r0 = move-exception;

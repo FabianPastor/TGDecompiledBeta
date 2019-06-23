@@ -131,7 +131,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenterD
             this.imageView.setImageResource(NUM);
             this.imageView.setAlpha(214);
             this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("featuredStickers_addButton"), Mode.MULTIPLY));
-            this.imageView.setBackgroundDrawable(Theme.createSelectorDrawable(NUM, 0));
+            this.imageView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21"), 1));
             this.imageView.setScaleType(ScaleType.CENTER);
             this.imageView.setOnClickListener(CallLogActivity.this.callBtnClickListener);
             this.imageView.setContentDescription(LocaleController.getString("Call", NUM));

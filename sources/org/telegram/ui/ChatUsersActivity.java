@@ -3466,7 +3466,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             return;
         }
         int i5 = i;
-        if (z && ((tLObject2 instanceof TL_channelParticipantAdmin) || (tLObject2 instanceof TL_chatParticipantAdmin))) {
+        if (((Integer) arrayList2.get(i4)).intValue() == 1 && z && ((tLObject2 instanceof TL_channelParticipantAdmin) || (tLObject2 instanceof TL_chatParticipantAdmin))) {
             Builder builder = new Builder(getParentActivity());
             builder.setTitle(LocaleController.getString("AppName", NUM));
             builder.setMessage(LocaleController.formatString("AdminWillBeRemoved", NUM, ContactsController.formatName(user2.first_name, user2.last_name)));
