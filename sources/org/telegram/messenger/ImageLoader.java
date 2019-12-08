@@ -6526,7 +6526,7 @@ public class ImageLoader {
         if (r0 == 0) goto L_0x002e;
     L_0x0019:
         r1 = r0.document;
-        r1 = org.telegram.messenger.MessageObject.isAnimatedStickerDocument(r1);
+        r1 = org.telegram.messenger.MessageObject.isAnimatedStickerDocument(r1, r8);
         if (r1 != 0) goto L_0x0025;
     L_0x0021:
         r0 = r0.lottieAnimation;
@@ -6574,7 +6574,7 @@ public class ImageLoader {
         if (r1 == 0) goto L_0x0079;
     L_0x0064:
         r2 = r1.document;
-        r2 = org.telegram.messenger.MessageObject.isAnimatedStickerDocument(r2);
+        r2 = org.telegram.messenger.MessageObject.isAnimatedStickerDocument(r2, r8);
         if (r2 != 0) goto L_0x0070;
     L_0x006c:
         r1 = r1.lottieAnimation;
@@ -6621,7 +6621,7 @@ public class ImageLoader {
         if (r0 == 0) goto L_0x00c3;
     L_0x00ae:
         r1 = r0.document;
-        r1 = org.telegram.messenger.MessageObject.isAnimatedStickerDocument(r1);
+        r1 = org.telegram.messenger.MessageObject.isAnimatedStickerDocument(r1, r8);
         if (r1 != 0) goto L_0x00ba;
     L_0x00b6:
         r0 = r0.lottieAnimation;

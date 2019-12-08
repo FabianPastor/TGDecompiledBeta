@@ -7665,7 +7665,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
                     MessageObject messageObject = chatMessageCell.getMessageObject();
                     if (!(messageObject == null || messageObject.mediaExists || !messageObject.isSent())) {
                         Document document = messageObject.getDocument();
-                        if (!(document == null || MessageObject.isStickerDocument(document) || MessageObject.isAnimatedStickerDocument(document) || MessageObject.isGifDocument(document) || MessageObject.isRoundVideoDocument(document))) {
+                        if (!(document == null || MessageObject.isStickerDocument(document) || MessageObject.isAnimatedStickerDocument(document, true) || MessageObject.isGifDocument(document) || MessageObject.isRoundVideoDocument(document))) {
                             int canDownloadMedia = getDownloadController().canDownloadMedia(messageObject.messageOwner);
                             if (canDownloadMedia != 0) {
                                 int i4 = 2;
@@ -23536,21 +23536,31 @@ public class ChatActivity extends BaseFragment implements NotificationCenterDele
     private void restartSticker(ChatMessageCell chatMessageCell) {
         MessageObject messageObject = chatMessageCell.getMessageObject();
         Document document = messageObject.getDocument();
-        if (messageObject.isAnimatedEmoji() || (MessageObject.isAnimatedStickerDocument(document) && !SharedConfig.loopStickers)) {
-            RLottieDrawable lottieAnimation = chatMessageCell.getPhotoImage().getLottieAnimation();
-            if (lottieAnimation != null) {
-                lottieAnimation.restart();
-                if (messageObject.isAnimatedEmoji()) {
-                    if ("❤".equals(messageObject.getStickerEmoji())) {
-                        HashMap hashMap = new HashMap();
-                        hashMap.put(Integer.valueOf(1), Integer.valueOf(1));
-                        hashMap.put(Integer.valueOf(13), Integer.valueOf(0));
-                        hashMap.put(Integer.valueOf(59), Integer.valueOf(1));
-                        hashMap.put(Integer.valueOf(71), Integer.valueOf(0));
-                        hashMap.put(Integer.valueOf(128), Integer.valueOf(1));
-                        hashMap.put(Integer.valueOf(140), Integer.valueOf(0));
-                        lottieAnimation.setVibrationPattern(hashMap);
-                    }
+        boolean isAnimatedEmoji = messageObject.isAnimatedEmoji();
+        boolean z = false;
+        Integer valueOf = Integer.valueOf(0);
+        Integer valueOf2 = Integer.valueOf(1);
+        if (!isAnimatedEmoji) {
+            if (this.currentEncryptedChat == null) {
+                z = true;
+            }
+            if (!MessageObject.isAnimatedStickerDocument(document, z) || SharedConfig.loopStickers) {
+                return;
+            }
+        }
+        RLottieDrawable lottieAnimation = chatMessageCell.getPhotoImage().getLottieAnimation();
+        if (lottieAnimation != null) {
+            lottieAnimation.restart();
+            if (messageObject.isAnimatedEmoji()) {
+                if ("❤".equals(messageObject.getStickerEmoji())) {
+                    HashMap hashMap = new HashMap();
+                    hashMap.put(valueOf2, valueOf2);
+                    hashMap.put(Integer.valueOf(13), valueOf);
+                    hashMap.put(Integer.valueOf(59), valueOf2);
+                    hashMap.put(Integer.valueOf(71), valueOf);
+                    hashMap.put(Integer.valueOf(128), valueOf2);
+                    hashMap.put(Integer.valueOf(140), valueOf);
+                    lottieAnimation.setVibrationPattern(hashMap);
                 }
             }
         }

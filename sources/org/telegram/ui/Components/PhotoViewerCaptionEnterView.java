@@ -2,7 +2,6 @@ package org.telegram.ui.Components;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Point;
@@ -24,8 +23,6 @@ import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
@@ -259,32 +256,6 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
 
     public void setForceFloatingEmoji(boolean z) {
         this.forceFloatingEmoji = z;
-    }
-
-    @SuppressLint({"PrivateApi"})
-    private void fixActionMode(ActionMode actionMode) {
-        try {
-            Class cls = Class.forName("com.android.internal.view.FloatingActionMode");
-            Field declaredField = cls.getDeclaredField("mFloatingToolbar");
-            declaredField.setAccessible(true);
-            Object obj = declaredField.get(actionMode);
-            Class cls2 = Class.forName("com.android.internal.widget.FloatingToolbar");
-            Field declaredField2 = cls2.getDeclaredField("mPopup");
-            Field declaredField3 = cls2.getDeclaredField("mWidthChanged");
-            declaredField2.setAccessible(true);
-            declaredField3.setAccessible(true);
-            obj = declaredField2.get(obj);
-            declaredField3 = Class.forName("com.android.internal.widget.FloatingToolbar$FloatingToolbarPopup").getDeclaredField("mParent");
-            declaredField3.setAccessible(true);
-            if (((View) declaredField3.get(obj)) != this.windowView) {
-                declaredField3.set(obj, this.windowView);
-                Method declaredMethod = cls.getDeclaredMethod("updateViewLocationInWindow", new Class[0]);
-                declaredMethod.setAccessible(true);
-                declaredMethod.invoke(actionMode, new Object[0]);
-            }
-        } catch (Throwable th) {
-            FileLog.e(th);
-        }
     }
 
     private void onWindowSizeChanged() {

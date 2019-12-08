@@ -676,6 +676,7 @@ public class EditTextBoldCursor extends EditText {
         extendActionMode(floatingActionMode2, floatingActionMode2.getMenu());
         this.floatingActionMode.invalidate();
         getViewTreeObserver().addOnPreDrawListener(this.floatingToolbarPreDrawListener);
+        invalidate();
         return this.floatingActionMode;
     }
 

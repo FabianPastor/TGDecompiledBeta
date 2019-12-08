@@ -391,20 +391,20 @@ public class MediaDataController extends BaseController {
         r0 = r16;
         r1 = r18;
         r2 = org.telegram.messenger.MessageObject.isStickerDocument(r16);
-        if (r2 != 0) goto L_0x0013;
-    L_0x000c:
-        r2 = org.telegram.messenger.MessageObject.isAnimatedStickerDocument(r16);
-        if (r2 != 0) goto L_0x0013;
-    L_0x0012:
-        return;
+        r8 = 1;
+        if (r2 != 0) goto L_0x0014;
+    L_0x000d:
+        r2 = org.telegram.messenger.MessageObject.isAnimatedStickerDocument(r0, r8);
+        if (r2 != 0) goto L_0x0014;
     L_0x0013:
-        r8 = 0;
+        return;
+    L_0x0014:
+        r9 = 0;
         r2 = 0;
-    L_0x0015:
+    L_0x0016:
         r3 = r6.recentStickers;
         r3 = r3[r7];
         r3 = r3.size();
-        r9 = 1;
         if (r2 >= r3) goto L_0x0047;
     L_0x0020:
         r3 = r6.recentStickers;
@@ -423,13 +423,13 @@ public class MediaDataController extends BaseController {
     L_0x003b:
         r2 = r6.recentStickers;
         r2 = r2[r7];
-        r2.add(r8, r3);
+        r2.add(r9, r3);
     L_0x0042:
         r2 = 1;
         goto L_0x0048;
     L_0x0044:
         r2 = r2 + 1;
-        goto L_0x0015;
+        goto L_0x0016;
     L_0x0047:
         r2 = 0;
     L_0x0048:
@@ -439,7 +439,7 @@ public class MediaDataController extends BaseController {
     L_0x004c:
         r2 = r6.recentStickers;
         r2 = r2[r7];
-        r2.add(r8, r0);
+        r2.add(r9, r0);
     L_0x0053:
         r10 = 2;
         if (r7 != r10) goto L_0x00b5;
@@ -450,7 +450,7 @@ public class MediaDataController extends BaseController {
         r3 = NUM; // 0x7f0e08f1 float:1.887968E38 double:1.0531632875E-314;
         r4 = "RemovedFromFavorites";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
-        r2 = android.widget.Toast.makeText(r2, r3, r8);
+        r2 = android.widget.Toast.makeText(r2, r3, r9);
         r2.show();
         goto L_0x007d;
     L_0x006b:
@@ -458,7 +458,7 @@ public class MediaDataController extends BaseController {
         r3 = NUM; // 0x7f0e00cb float:1.887545E38 double:1.053162257E-314;
         r4 = "AddedToFavorites";
         r3 = org.telegram.messenger.LocaleController.getString(r4, r3);
-        r2 = android.widget.Toast.makeText(r2, r3, r8);
+        r2 = android.widget.Toast.makeText(r2, r3, r9);
         r2.show();
     L_0x007d:
         r2 = new org.telegram.tgnet.TLRPC$TL_messages_faveSticker;
@@ -476,7 +476,7 @@ public class MediaDataController extends BaseController {
         r4 = r3.file_reference;
         if (r4 != 0) goto L_0x009f;
     L_0x009b:
-        r4 = new byte[r8];
+        r4 = new byte[r9];
         r3.file_reference = r4;
     L_0x009f:
         r2.unfave = r1;
@@ -508,7 +508,7 @@ public class MediaDataController extends BaseController {
         r3 = r2[r7];
         r2 = r2[r7];
         r2 = r2.size();
-        r2 = r2 - r9;
+        r2 = r2 - r8;
         r2 = r3.remove(r2);
         r2 = (org.telegram.tgnet.TLRPC.Document) r2;
     L_0x00dc:
@@ -535,10 +535,10 @@ public class MediaDataController extends BaseController {
         r0 = r13.getNotificationCenter();
         r1 = org.telegram.messenger.NotificationCenter.recentDocumentsDidLoad;
         r2 = new java.lang.Object[r10];
-        r3 = java.lang.Boolean.valueOf(r8);
-        r2[r8] = r3;
-        r3 = java.lang.Integer.valueOf(r14);
+        r3 = java.lang.Boolean.valueOf(r9);
         r2[r9] = r3;
+        r3 = java.lang.Integer.valueOf(r14);
+        r2[r8] = r3;
         r0.postNotificationName(r1, r2);
     L_0x0118:
         return;

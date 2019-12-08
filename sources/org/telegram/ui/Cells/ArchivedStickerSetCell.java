@@ -110,14 +110,15 @@ public class ArchivedStickerSetCell extends FrameLayout {
             } else {
                 forDocument = ImageLocation.getForSticker(photoSize, tLObject);
             }
-            if (z2 && MessageObject.isAnimatedStickerDocument(tLObject)) {
-                this.imageView.setImage(ImageLocation.getForDocument(tLObject), "50_50", forDocument, null, 0, stickerSetCovered);
+            ImageLocation imageLocation = forDocument;
+            if (z2 && MessageObject.isAnimatedStickerDocument(tLObject, true)) {
+                this.imageView.setImage(ImageLocation.getForDocument(tLObject), "50_50", imageLocation, null, 0, stickerSetCovered);
                 return;
-            } else if (forDocument == null || !forDocument.lottieAnimation) {
-                this.imageView.setImage(forDocument, "50_50", "webp", null, (Object) stickerSetCovered);
+            } else if (imageLocation == null || !imageLocation.lottieAnimation) {
+                this.imageView.setImage(imageLocation, "50_50", "webp", null, (Object) stickerSetCovered);
                 return;
             } else {
-                this.imageView.setImage(forDocument, "50_50", "tgs", null, (Object) stickerSetCovered);
+                this.imageView.setImage(imageLocation, "50_50", "tgs", null, (Object) stickerSetCovered);
                 return;
             }
         }
