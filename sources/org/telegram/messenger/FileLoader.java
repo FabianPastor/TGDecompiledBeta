@@ -1636,18 +1636,27 @@ public class FileLoader extends BaseController {
     }
 
     public static boolean copyFile(InputStream inputStream, File file) throws IOException {
+        return copyFile(inputStream, file, -1);
+    }
+
+    public static boolean copyFile(InputStream inputStream, File file, int i) throws IOException {
         FileOutputStream fileOutputStream = new FileOutputStream(file);
         byte[] bArr = new byte[4096];
+        int i2 = 0;
         while (true) {
             int read = inputStream.read(bArr);
-            if (read > 0) {
-                Thread.yield();
-                fileOutputStream.write(bArr, 0, read);
-            } else {
-                fileOutputStream.getFD().sync();
-                fileOutputStream.close();
-                return true;
+            if (read <= 0) {
+                break;
+            }
+            Thread.yield();
+            fileOutputStream.write(bArr, 0, read);
+            i2 += read;
+            if (i > 0 && i2 >= i) {
+                break;
             }
         }
+        fileOutputStream.getFD().sync();
+        fileOutputStream.close();
+        return true;
     }
 }

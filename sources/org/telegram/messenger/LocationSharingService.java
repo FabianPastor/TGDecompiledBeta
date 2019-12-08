@@ -30,11 +30,11 @@ public class LocationSharingService extends Service implements NotificationCente
         super.onCreate();
         this.handler = new Handler();
         this.runnable = new -$$Lambda$LocationSharingService$nPgxbLYJUuL6mX_Yd5lVL7HSSeY(this);
-        this.handler.postDelayed(this.runnable, 60000);
+        this.handler.postDelayed(this.runnable, 1000);
     }
 
     public /* synthetic */ void lambda$onCreate$1$LocationSharingService() {
-        this.handler.postDelayed(this.runnable, 60000);
+        this.handler.postDelayed(this.runnable, 1000);
         Utilities.stageQueue.postRunnable(-$$Lambda$LocationSharingService$9a42Vs-_pZkbJD8v75PcBjP85zg.INSTANCE);
     }
 
