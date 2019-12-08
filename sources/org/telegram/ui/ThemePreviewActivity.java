@@ -1097,6 +1097,12 @@ public class ThemePreviewActivity extends BaseFragment implements NotificationCe
         if (this.screenType != 1) {
             this.parentLayout.rebuildAllFragmentViews(false, false);
         }
+        if (this.deleteOnCancel) {
+            ThemeInfo themeInfo = this.applyingTheme;
+            if (!(themeInfo.pathToFile == null || Theme.isThemeInstalled(themeInfo))) {
+                new File(this.applyingTheme.pathToFile).delete();
+            }
+        }
         return super.onBackPressed();
     }
 

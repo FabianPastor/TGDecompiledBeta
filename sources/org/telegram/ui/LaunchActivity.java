@@ -5383,38 +5383,83 @@ public class LaunchActivity extends Activity implements ActionBarLayoutDelegate,
     }
 
     public /* synthetic */ void lambda$runLinkRequest$32$LaunchActivity(AlertDialog alertDialog, TLObject tLObject, TL_error tL_error) {
-        AndroidUtilities.runOnUIThread(new -$$Lambda$LaunchActivity$JAZnr-SY0yE9yA_RKf3eYmn_c3Y(this, tLObject, alertDialog));
+        AndroidUtilities.runOnUIThread(new -$$Lambda$LaunchActivity$MAdQ64j86FlPYBo5DMZDwglDjLU(this, tLObject, alertDialog, tL_error));
     }
 
-    public /* synthetic */ void lambda$null$31$LaunchActivity(TLObject tLObject, AlertDialog alertDialog) {
-        Object obj;
-        if (tLObject instanceof TL_theme) {
-            TL_theme tL_theme = (TL_theme) tLObject;
-            if (tL_theme.document != null) {
-                this.loadingTheme = tL_theme;
-                this.loadingThemeFileName = FileLoader.getAttachFileName(this.loadingTheme.document);
-                this.loadingThemeProgressDialog = alertDialog;
-                FileLoader.getInstance(this.currentAccount).loadFile(this.loadingTheme.document, tL_theme, 1, 1);
-                obj = null;
-            } else {
-                obj = 1;
-            }
-        } else {
-            obj = 2;
-        }
-        if (obj != null) {
-            try {
-                alertDialog.dismiss();
-            } catch (Exception e) {
-                FileLog.e(e);
-            }
-            String str = "Theme";
-            if (obj == 1) {
-                showAlertDialog(AlertsCreator.createSimpleAlert(this, LocaleController.getString(str, NUM), LocaleController.getString("ThemeNotSupported", NUM)));
-            } else {
-                showAlertDialog(AlertsCreator.createSimpleAlert(this, LocaleController.getString(str, NUM), LocaleController.getString("ThemeNotFound", NUM)));
-            }
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:20:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Removed duplicated region for block: B:11:0x0039 A:{SYNTHETIC, Splitter:B:11:0x0039} */
+    /* JADX WARNING: Removed duplicated region for block: B:11:0x0039 A:{SYNTHETIC, Splitter:B:11:0x0039} */
+    /* JADX WARNING: Removed duplicated region for block: B:20:? A:{SYNTHETIC, RETURN} */
+    /* JADX WARNING: Missing block: B:7:0x0032, code skipped:
+            if ("THEME_FORMAT_INVALID".equals(r5.text) != false) goto L_0x0034;
+     */
+    public /* synthetic */ void lambda$null$31$LaunchActivity(org.telegram.tgnet.TLObject r3, org.telegram.ui.ActionBar.AlertDialog r4, org.telegram.tgnet.TLRPC.TL_error r5) {
+        /*
+        r2 = this;
+        r0 = r3 instanceof org.telegram.tgnet.TLRPC.TL_theme;
+        r1 = 1;
+        if (r0 == 0) goto L_0x0028;
+    L_0x0005:
+        r3 = (org.telegram.tgnet.TLRPC.TL_theme) r3;
+        r5 = r3.document;
+        if (r5 == 0) goto L_0x0034;
+    L_0x000b:
+        r2.loadingTheme = r3;
+        r5 = r2.loadingTheme;
+        r5 = r5.document;
+        r5 = org.telegram.messenger.FileLoader.getAttachFileName(r5);
+        r2.loadingThemeFileName = r5;
+        r2.loadingThemeProgressDialog = r4;
+        r5 = r2.currentAccount;
+        r5 = org.telegram.messenger.FileLoader.getInstance(r5);
+        r0 = r2.loadingTheme;
+        r0 = r0.document;
+        r5.loadFile(r0, r3, r1, r1);
+        r3 = 0;
+        goto L_0x0037;
+    L_0x0028:
+        if (r5 == 0) goto L_0x0036;
+    L_0x002a:
+        r3 = r5.text;
+        r5 = "THEME_FORMAT_INVALID";
+        r3 = r5.equals(r3);
+        if (r3 == 0) goto L_0x0036;
+    L_0x0034:
+        r3 = 1;
+        goto L_0x0037;
+    L_0x0036:
+        r3 = 2;
+    L_0x0037:
+        if (r3 == 0) goto L_0x0071;
+    L_0x0039:
+        r4.dismiss();	 Catch:{ Exception -> 0x003d }
+        goto L_0x0041;
+    L_0x003d:
+        r4 = move-exception;
+        org.telegram.messenger.FileLog.e(r4);
+    L_0x0041:
+        r4 = NUM; // 0x7f0d0a58 float:1.8747486E38 double:1.053131086E-314;
+        r5 = "Theme";
+        if (r3 != r1) goto L_0x005d;
+    L_0x0048:
+        r3 = org.telegram.messenger.LocaleController.getString(r5, r4);
+        r4 = NUM; // 0x7f0d0a6b float:1.8747524E38 double:1.053131095E-314;
+        r5 = "ThemeNotSupported";
+        r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
+        r3 = org.telegram.ui.Components.AlertsCreator.createSimpleAlert(r2, r3, r4);
+        r2.showAlertDialog(r3);
+        goto L_0x0071;
+    L_0x005d:
+        r3 = org.telegram.messenger.LocaleController.getString(r5, r4);
+        r4 = NUM; // 0x7f0d0a6a float:1.8747522E38 double:1.0531310947E-314;
+        r5 = "ThemeNotFound";
+        r4 = org.telegram.messenger.LocaleController.getString(r5, r4);
+        r3 = org.telegram.ui.Components.AlertsCreator.createSimpleAlert(r2, r3, r4);
+        r2.showAlertDialog(r3);
+    L_0x0071:
+        return;
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.lambda$null$31$LaunchActivity(org.telegram.tgnet.TLObject, org.telegram.ui.ActionBar.AlertDialog, org.telegram.tgnet.TLRPC$TL_error):void");
     }
 
     public /* synthetic */ void lambda$runLinkRequest$35$LaunchActivity(Bundle bundle, Integer num, int[] iArr, AlertDialog alertDialog, BaseFragment baseFragment, int i) {
