@@ -3051,159 +3051,178 @@ public class MessagesStorage extends BaseController {
         this.storageQueue.postRunnable(new -$$Lambda$MessagesStorage$cxqbo7mHWSo0fNJM_X4GL6eYcVI(this, arrayList));
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:27:0x00e9 A:{Catch:{ Exception -> 0x011e }} */
-    /* JADX WARNING: Removed duplicated region for block: B:26:0x00e3 A:{Catch:{ Exception -> 0x011e }} */
-    /* JADX WARNING: Removed duplicated region for block: B:31:0x00fd A:{Catch:{ Exception -> 0x011e }} */
-    /* JADX WARNING: Removed duplicated region for block: B:30:0x00fb A:{Catch:{ Exception -> 0x011e }} */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x0108 A:{Catch:{ Exception -> 0x013d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:32:0x0102 A:{Catch:{ Exception -> 0x013d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:37:0x011c A:{Catch:{ Exception -> 0x013d }} */
+    /* JADX WARNING: Removed duplicated region for block: B:36:0x011a A:{Catch:{ Exception -> 0x013d }} */
     public /* synthetic */ void lambda$emptyMessagesMedia$53$MessagesStorage(java.util.ArrayList r12) {
         /*
         r11 = this;
-        r0 = new java.util.ArrayList;	 Catch:{ Exception -> 0x011e }
-        r0.<init>();	 Catch:{ Exception -> 0x011e }
-        r1 = new java.util.ArrayList;	 Catch:{ Exception -> 0x011e }
-        r1.<init>();	 Catch:{ Exception -> 0x011e }
-        r2 = r11.database;	 Catch:{ Exception -> 0x011e }
-        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x011e }
+        r0 = new java.util.ArrayList;	 Catch:{ Exception -> 0x013d }
+        r0.<init>();	 Catch:{ Exception -> 0x013d }
+        r1 = new java.util.ArrayList;	 Catch:{ Exception -> 0x013d }
+        r1.<init>();	 Catch:{ Exception -> 0x013d }
+        r2 = r11.database;	 Catch:{ Exception -> 0x013d }
+        r3 = java.util.Locale.US;	 Catch:{ Exception -> 0x013d }
         r4 = "SELECT data, mid, date, uid FROM messages WHERE mid IN (%s)";
         r5 = 1;
-        r6 = new java.lang.Object[r5];	 Catch:{ Exception -> 0x011e }
+        r6 = new java.lang.Object[r5];	 Catch:{ Exception -> 0x013d }
         r7 = ",";
-        r12 = android.text.TextUtils.join(r7, r12);	 Catch:{ Exception -> 0x011e }
+        r12 = android.text.TextUtils.join(r7, r12);	 Catch:{ Exception -> 0x013d }
         r7 = 0;
-        r6[r7] = r12;	 Catch:{ Exception -> 0x011e }
-        r12 = java.lang.String.format(r3, r4, r6);	 Catch:{ Exception -> 0x011e }
-        r3 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x011e }
-        r12 = r2.queryFinalized(r12, r3);	 Catch:{ Exception -> 0x011e }
+        r6[r7] = r12;	 Catch:{ Exception -> 0x013d }
+        r12 = java.lang.String.format(r3, r4, r6);	 Catch:{ Exception -> 0x013d }
+        r3 = new java.lang.Object[r7];	 Catch:{ Exception -> 0x013d }
+        r12 = r2.queryFinalized(r12, r3);	 Catch:{ Exception -> 0x013d }
     L_0x0026:
-        r2 = r12.next();	 Catch:{ Exception -> 0x011e }
+        r2 = r12.next();	 Catch:{ Exception -> 0x013d }
         r3 = 3;
         r4 = 2;
-        if (r2 == 0) goto L_0x0073;
+        if (r2 == 0) goto L_0x0092;
     L_0x002e:
-        r2 = r12.byteBufferValue(r7);	 Catch:{ Exception -> 0x011e }
+        r2 = r12.byteBufferValue(r7);	 Catch:{ Exception -> 0x013d }
         if (r2 == 0) goto L_0x0026;
     L_0x0034:
-        r6 = r2.readInt32(r7);	 Catch:{ Exception -> 0x011e }
-        r6 = org.telegram.tgnet.TLRPC.Message.TLdeserialize(r2, r6, r7);	 Catch:{ Exception -> 0x011e }
-        r8 = r11.getUserConfig();	 Catch:{ Exception -> 0x011e }
-        r8 = r8.clientUserId;	 Catch:{ Exception -> 0x011e }
-        r6.readAttachPath(r2, r8);	 Catch:{ Exception -> 0x011e }
-        r2.reuse();	 Catch:{ Exception -> 0x011e }
-        r2 = r6.media;	 Catch:{ Exception -> 0x011e }
+        r6 = r2.readInt32(r7);	 Catch:{ Exception -> 0x013d }
+        r6 = org.telegram.tgnet.TLRPC.Message.TLdeserialize(r2, r6, r7);	 Catch:{ Exception -> 0x013d }
+        r8 = r11.getUserConfig();	 Catch:{ Exception -> 0x013d }
+        r8 = r8.clientUserId;	 Catch:{ Exception -> 0x013d }
+        r6.readAttachPath(r2, r8);	 Catch:{ Exception -> 0x013d }
+        r2.reuse();	 Catch:{ Exception -> 0x013d }
+        r2 = r6.media;	 Catch:{ Exception -> 0x013d }
         if (r2 == 0) goto L_0x0026;
     L_0x004c:
-        r2 = r11.addFilesToDelete(r6, r0, r5);	 Catch:{ Exception -> 0x011e }
+        r2 = r11.addFilesToDelete(r6, r0, r5);	 Catch:{ Exception -> 0x013d }
         if (r2 != 0) goto L_0x0053;
     L_0x0052:
         goto L_0x0026;
     L_0x0053:
-        r2 = r6.media;	 Catch:{ Exception -> 0x011e }
-        r8 = r6.media;	 Catch:{ Exception -> 0x011e }
-        r8 = r8.flags;	 Catch:{ Exception -> 0x011e }
+        r2 = r6.media;	 Catch:{ Exception -> 0x013d }
+        r2 = r2.document;	 Catch:{ Exception -> 0x013d }
+        if (r2 == 0) goto L_0x0063;
+    L_0x0059:
+        r2 = r6.media;	 Catch:{ Exception -> 0x013d }
+        r8 = new org.telegram.tgnet.TLRPC$TL_documentEmpty;	 Catch:{ Exception -> 0x013d }
+        r8.<init>();	 Catch:{ Exception -> 0x013d }
+        r2.document = r8;	 Catch:{ Exception -> 0x013d }
+        goto L_0x0072;
+    L_0x0063:
+        r2 = r6.media;	 Catch:{ Exception -> 0x013d }
+        r2 = r2.photo;	 Catch:{ Exception -> 0x013d }
+        if (r2 == 0) goto L_0x0072;
+    L_0x0069:
+        r2 = r6.media;	 Catch:{ Exception -> 0x013d }
+        r8 = new org.telegram.tgnet.TLRPC$TL_photoEmpty;	 Catch:{ Exception -> 0x013d }
+        r8.<init>();	 Catch:{ Exception -> 0x013d }
+        r2.photo = r8;	 Catch:{ Exception -> 0x013d }
+    L_0x0072:
+        r2 = r6.media;	 Catch:{ Exception -> 0x013d }
+        r8 = r6.media;	 Catch:{ Exception -> 0x013d }
+        r8 = r8.flags;	 Catch:{ Exception -> 0x013d }
         r8 = r8 & -2;
-        r2.flags = r8;	 Catch:{ Exception -> 0x011e }
-        r2 = r12.intValue(r5);	 Catch:{ Exception -> 0x011e }
-        r6.id = r2;	 Catch:{ Exception -> 0x011e }
-        r2 = r12.intValue(r4);	 Catch:{ Exception -> 0x011e }
-        r6.date = r2;	 Catch:{ Exception -> 0x011e }
-        r2 = r12.longValue(r3);	 Catch:{ Exception -> 0x011e }
-        r6.dialog_id = r2;	 Catch:{ Exception -> 0x011e }
-        r1.add(r6);	 Catch:{ Exception -> 0x011e }
+        r2.flags = r8;	 Catch:{ Exception -> 0x013d }
+        r2 = r12.intValue(r5);	 Catch:{ Exception -> 0x013d }
+        r6.id = r2;	 Catch:{ Exception -> 0x013d }
+        r2 = r12.intValue(r4);	 Catch:{ Exception -> 0x013d }
+        r6.date = r2;	 Catch:{ Exception -> 0x013d }
+        r2 = r12.longValue(r3);	 Catch:{ Exception -> 0x013d }
+        r6.dialog_id = r2;	 Catch:{ Exception -> 0x013d }
+        r1.add(r6);	 Catch:{ Exception -> 0x013d }
         goto L_0x0026;
-    L_0x0073:
-        r12.dispose();	 Catch:{ Exception -> 0x011e }
-        r12 = r1.isEmpty();	 Catch:{ Exception -> 0x011e }
-        if (r12 != 0) goto L_0x0116;
-    L_0x007c:
-        r12 = r11.database;	 Catch:{ Exception -> 0x011e }
+    L_0x0092:
+        r12.dispose();	 Catch:{ Exception -> 0x013d }
+        r12 = r1.isEmpty();	 Catch:{ Exception -> 0x013d }
+        if (r12 != 0) goto L_0x0135;
+    L_0x009b:
+        r12 = r11.database;	 Catch:{ Exception -> 0x013d }
         r2 = "REPLACE INTO messages VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?)";
-        r12 = r12.executeFast(r2);	 Catch:{ Exception -> 0x011e }
+        r12 = r12.executeFast(r2);	 Catch:{ Exception -> 0x013d }
         r2 = 0;
-    L_0x0085:
-        r6 = r1.size();	 Catch:{ Exception -> 0x011e }
-        if (r2 >= r6) goto L_0x010b;
-    L_0x008b:
-        r6 = r1.get(r2);	 Catch:{ Exception -> 0x011e }
-        r6 = (org.telegram.tgnet.TLRPC.Message) r6;	 Catch:{ Exception -> 0x011e }
-        r8 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x011e }
-        r9 = r6.getObjectSize();	 Catch:{ Exception -> 0x011e }
-        r8.<init>(r9);	 Catch:{ Exception -> 0x011e }
-        r6.serializeToStream(r8);	 Catch:{ Exception -> 0x011e }
-        r12.requery();	 Catch:{ Exception -> 0x011e }
-        r9 = r6.id;	 Catch:{ Exception -> 0x011e }
-        r9 = (long) r9;	 Catch:{ Exception -> 0x011e }
-        r12.bindLong(r5, r9);	 Catch:{ Exception -> 0x011e }
-        r9 = r6.dialog_id;	 Catch:{ Exception -> 0x011e }
-        r12.bindLong(r4, r9);	 Catch:{ Exception -> 0x011e }
-        r9 = org.telegram.messenger.MessageObject.getUnreadFlags(r6);	 Catch:{ Exception -> 0x011e }
-        r12.bindInteger(r3, r9);	 Catch:{ Exception -> 0x011e }
+    L_0x00a4:
+        r6 = r1.size();	 Catch:{ Exception -> 0x013d }
+        if (r2 >= r6) goto L_0x012a;
+    L_0x00aa:
+        r6 = r1.get(r2);	 Catch:{ Exception -> 0x013d }
+        r6 = (org.telegram.tgnet.TLRPC.Message) r6;	 Catch:{ Exception -> 0x013d }
+        r8 = new org.telegram.tgnet.NativeByteBuffer;	 Catch:{ Exception -> 0x013d }
+        r9 = r6.getObjectSize();	 Catch:{ Exception -> 0x013d }
+        r8.<init>(r9);	 Catch:{ Exception -> 0x013d }
+        r6.serializeToStream(r8);	 Catch:{ Exception -> 0x013d }
+        r12.requery();	 Catch:{ Exception -> 0x013d }
+        r9 = r6.id;	 Catch:{ Exception -> 0x013d }
+        r9 = (long) r9;	 Catch:{ Exception -> 0x013d }
+        r12.bindLong(r5, r9);	 Catch:{ Exception -> 0x013d }
+        r9 = r6.dialog_id;	 Catch:{ Exception -> 0x013d }
+        r12.bindLong(r4, r9);	 Catch:{ Exception -> 0x013d }
+        r9 = org.telegram.messenger.MessageObject.getUnreadFlags(r6);	 Catch:{ Exception -> 0x013d }
+        r12.bindInteger(r3, r9);	 Catch:{ Exception -> 0x013d }
         r9 = 4;
-        r10 = r6.send_state;	 Catch:{ Exception -> 0x011e }
-        r12.bindInteger(r9, r10);	 Catch:{ Exception -> 0x011e }
+        r10 = r6.send_state;	 Catch:{ Exception -> 0x013d }
+        r12.bindInteger(r9, r10);	 Catch:{ Exception -> 0x013d }
         r9 = 5;
-        r10 = r6.date;	 Catch:{ Exception -> 0x011e }
-        r12.bindInteger(r9, r10);	 Catch:{ Exception -> 0x011e }
+        r10 = r6.date;	 Catch:{ Exception -> 0x013d }
+        r12.bindInteger(r9, r10);	 Catch:{ Exception -> 0x013d }
         r9 = 6;
-        r12.bindByteBuffer(r9, r8);	 Catch:{ Exception -> 0x011e }
+        r12.bindByteBuffer(r9, r8);	 Catch:{ Exception -> 0x013d }
         r9 = 7;
-        r10 = org.telegram.messenger.MessageObject.isOut(r6);	 Catch:{ Exception -> 0x011e }
-        if (r10 != 0) goto L_0x00d0;
-    L_0x00c9:
-        r10 = r6.from_scheduled;	 Catch:{ Exception -> 0x011e }
-        if (r10 == 0) goto L_0x00ce;
-    L_0x00cd:
-        goto L_0x00d0;
-    L_0x00ce:
+        r10 = org.telegram.messenger.MessageObject.isOut(r6);	 Catch:{ Exception -> 0x013d }
+        if (r10 != 0) goto L_0x00ef;
+    L_0x00e8:
+        r10 = r6.from_scheduled;	 Catch:{ Exception -> 0x013d }
+        if (r10 == 0) goto L_0x00ed;
+    L_0x00ec:
+        goto L_0x00ef;
+    L_0x00ed:
         r10 = 0;
-        goto L_0x00d1;
-    L_0x00d0:
+        goto L_0x00f0;
+    L_0x00ef:
         r10 = 1;
-    L_0x00d1:
-        r12.bindInteger(r9, r10);	 Catch:{ Exception -> 0x011e }
+    L_0x00f0:
+        r12.bindInteger(r9, r10);	 Catch:{ Exception -> 0x013d }
         r9 = 8;
-        r10 = r6.ttl;	 Catch:{ Exception -> 0x011e }
-        r12.bindInteger(r9, r10);	 Catch:{ Exception -> 0x011e }
-        r9 = r6.flags;	 Catch:{ Exception -> 0x011e }
+        r10 = r6.ttl;	 Catch:{ Exception -> 0x013d }
+        r12.bindInteger(r9, r10);	 Catch:{ Exception -> 0x013d }
+        r9 = r6.flags;	 Catch:{ Exception -> 0x013d }
         r9 = r9 & 1024;
         r10 = 9;
-        if (r9 == 0) goto L_0x00e9;
-    L_0x00e3:
-        r9 = r6.views;	 Catch:{ Exception -> 0x011e }
-        r12.bindInteger(r10, r9);	 Catch:{ Exception -> 0x011e }
-        goto L_0x00f0;
-    L_0x00e9:
-        r9 = r11.getMessageMediaType(r6);	 Catch:{ Exception -> 0x011e }
-        r12.bindInteger(r10, r9);	 Catch:{ Exception -> 0x011e }
-    L_0x00f0:
+        if (r9 == 0) goto L_0x0108;
+    L_0x0102:
+        r9 = r6.views;	 Catch:{ Exception -> 0x013d }
+        r12.bindInteger(r10, r9);	 Catch:{ Exception -> 0x013d }
+        goto L_0x010f;
+    L_0x0108:
+        r9 = r11.getMessageMediaType(r6);	 Catch:{ Exception -> 0x013d }
+        r12.bindInteger(r10, r9);	 Catch:{ Exception -> 0x013d }
+    L_0x010f:
         r9 = 10;
-        r12.bindInteger(r9, r7);	 Catch:{ Exception -> 0x011e }
+        r12.bindInteger(r9, r7);	 Catch:{ Exception -> 0x013d }
         r9 = 11;
-        r6 = r6.mentioned;	 Catch:{ Exception -> 0x011e }
-        if (r6 == 0) goto L_0x00fd;
-    L_0x00fb:
+        r6 = r6.mentioned;	 Catch:{ Exception -> 0x013d }
+        if (r6 == 0) goto L_0x011c;
+    L_0x011a:
         r6 = 1;
-        goto L_0x00fe;
-    L_0x00fd:
+        goto L_0x011d;
+    L_0x011c:
         r6 = 0;
-    L_0x00fe:
-        r12.bindInteger(r9, r6);	 Catch:{ Exception -> 0x011e }
-        r12.step();	 Catch:{ Exception -> 0x011e }
-        r8.reuse();	 Catch:{ Exception -> 0x011e }
+    L_0x011d:
+        r12.bindInteger(r9, r6);	 Catch:{ Exception -> 0x013d }
+        r12.step();	 Catch:{ Exception -> 0x013d }
+        r8.reuse();	 Catch:{ Exception -> 0x013d }
         r2 = r2 + 1;
-        goto L_0x0085;
-    L_0x010b:
-        r12.dispose();	 Catch:{ Exception -> 0x011e }
-        r12 = new org.telegram.messenger.-$$Lambda$MessagesStorage$72wTv-LNhymdYFtfN_3iFK6abDA;	 Catch:{ Exception -> 0x011e }
-        r12.<init>(r11, r1);	 Catch:{ Exception -> 0x011e }
-        org.telegram.messenger.AndroidUtilities.runOnUIThread(r12);	 Catch:{ Exception -> 0x011e }
-    L_0x0116:
-        r12 = r11.getFileLoader();	 Catch:{ Exception -> 0x011e }
-        r12.deleteFiles(r0, r7);	 Catch:{ Exception -> 0x011e }
-        goto L_0x0122;
-    L_0x011e:
+        goto L_0x00a4;
+    L_0x012a:
+        r12.dispose();	 Catch:{ Exception -> 0x013d }
+        r12 = new org.telegram.messenger.-$$Lambda$MessagesStorage$72wTv-LNhymdYFtfN_3iFK6abDA;	 Catch:{ Exception -> 0x013d }
+        r12.<init>(r11, r1);	 Catch:{ Exception -> 0x013d }
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(r12);	 Catch:{ Exception -> 0x013d }
+    L_0x0135:
+        r12 = r11.getFileLoader();	 Catch:{ Exception -> 0x013d }
+        r12.deleteFiles(r0, r7);	 Catch:{ Exception -> 0x013d }
+        goto L_0x0141;
+    L_0x013d:
         r12 = move-exception;
         org.telegram.messenger.FileLog.e(r12);
-    L_0x0122:
+    L_0x0141:
         return;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$emptyMessagesMedia$53$MessagesStorage(java.util.ArrayList):void");
@@ -3919,7 +3938,7 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:21:0x005d A:{Splitter:B:1:0x0001, ExcHandler: all (th java.lang.Throwable)} */
+    /* JADX WARNING: Removed duplicated region for block: B:21:0x005d A:{ExcHandler: all (th java.lang.Throwable), Splitter:B:1:0x0001} */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Missing block: B:21:0x005d, code skipped:
             r5 = th;
@@ -5842,9 +5861,9 @@ Caused by: jadx.core.utils.exceptions.CodegenException: PHI can be used only in 
     /* JADX WARNING: Removed duplicated region for block: B:901:0x1506 A:{Catch:{ Exception -> 0x1730, all -> 0x172d }} */
     /* JADX WARNING: Removed duplicated region for block: B:968:0x165c  */
     /* JADX WARNING: Removed duplicated region for block: B:932:0x15a0 A:{SYNTHETIC, Splitter:B:932:0x15a0} */
-    /* JADX WARNING: Removed duplicated region for block: B:1016:0x172d A:{Splitter:B:754:0x1261, ExcHandler: all (th java.lang.Throwable), PHI: r3 r22 r43 r44 r50 } */
-    /* JADX WARNING: Removed duplicated region for block: B:1016:0x172d A:{Splitter:B:754:0x1261, ExcHandler: all (th java.lang.Throwable), PHI: r3 r22 r43 r44 r50 } */
-    /* JADX WARNING: Removed duplicated region for block: B:1016:0x172d A:{Splitter:B:754:0x1261, ExcHandler: all (th java.lang.Throwable), PHI: r3 r22 r43 r44 r50 } */
+    /* JADX WARNING: Removed duplicated region for block: B:1016:0x172d A:{PHI: r3 r22 r43 r44 r50 , ExcHandler: all (th java.lang.Throwable), Splitter:B:754:0x1261} */
+    /* JADX WARNING: Removed duplicated region for block: B:1016:0x172d A:{PHI: r3 r22 r43 r44 r50 , ExcHandler: all (th java.lang.Throwable), Splitter:B:754:0x1261} */
+    /* JADX WARNING: Removed duplicated region for block: B:1016:0x172d A:{PHI: r3 r22 r43 r44 r50 , ExcHandler: all (th java.lang.Throwable), Splitter:B:754:0x1261} */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Failed to process nested try/catch */
