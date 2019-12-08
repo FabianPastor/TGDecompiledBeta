@@ -36,14 +36,13 @@ public class RLottieImageView extends ImageView {
         if (this.autoRepeat) {
             this.drawable.setAutoRepeat(1);
         }
-        this.drawable.beginApplyLayerColors();
-        HashMap hashMap = this.layerColors;
-        if (hashMap != null) {
-            for (Entry entry : hashMap.entrySet()) {
+        if (this.layerColors != null) {
+            this.drawable.beginApplyLayerColors();
+            for (Entry entry : this.layerColors.entrySet()) {
                 this.drawable.setLayerColor((String) entry.getKey(), ((Integer) entry.getValue()).intValue());
             }
+            this.drawable.commitApplyLayerColors();
         }
-        this.drawable.commitApplyLayerColors();
         this.drawable.setAllowDecodeSingleFrame(true);
         setImageDrawable(this.drawable);
     }
@@ -52,7 +51,7 @@ public class RLottieImageView extends ImageView {
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.attachedToWindow = true;
-        if (this.playing) {
+        if (this.playing && this.autoRepeat) {
             this.drawable.start();
         }
     }
@@ -62,7 +61,7 @@ public class RLottieImageView extends ImageView {
         super.onDetachedFromWindow();
         this.attachedToWindow = false;
         RLottieDrawable rLottieDrawable = this.drawable;
-        if (rLottieDrawable != null) {
+        if (rLottieDrawable != null && this.autoRepeat) {
             rLottieDrawable.stop();
         }
     }

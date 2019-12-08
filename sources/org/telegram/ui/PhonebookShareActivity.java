@@ -711,6 +711,7 @@ public class PhonebookShareActivity extends BaseFragment {
                         }
                     }
                 }
+                this.currentUser.restriction_reason.clear();
                 TL_restrictionReason tL_restrictionReason = new TL_restrictionReason();
                 tL_restrictionReason.text = stringBuilder.toString();
                 String str2 = "";

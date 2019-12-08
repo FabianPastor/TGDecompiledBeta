@@ -8405,6 +8405,21 @@ public class MessageObject {
         return false;
     }
 
+    public static boolean isStickerHasSet(Document document) {
+        if (document != null) {
+            for (int i = 0; i < document.attributes.size(); i++) {
+                DocumentAttribute documentAttribute = (DocumentAttribute) document.attributes.get(i);
+                if (documentAttribute instanceof TL_documentAttributeSticker) {
+                    InputStickerSet inputStickerSet = documentAttribute.stickerset;
+                    if (!(inputStickerSet == null || (inputStickerSet instanceof TL_inputStickerSetEmpty))) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     public static boolean isAnimatedStickerDocument(Document document) {
         if (document != null) {
             if ("application/x-tgsticker".equals(document.mime_type) && !document.thumbs.isEmpty()) {

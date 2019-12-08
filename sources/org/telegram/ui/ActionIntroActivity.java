@@ -27,6 +27,8 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
 import org.telegram.messenger.LocationController.LocationFetchCallback;
+import org.telegram.messenger.UserConfig;
+import org.telegram.tgnet.TLRPC.User;
 import org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick;
 import org.telegram.ui.ActionBar.AlertDialog.Builder;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -625,12 +627,19 @@ public class ActionIntroActivity extends BaseFragment implements LocationFetchCa
             this.drawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("changephoneinfo_image2"), Mode.MULTIPLY));
             this.imageView.setImageDrawable(new CombinedDrawable(this.drawable1, this.drawable2));
             this.imageView.setScaleType(ScaleType.CENTER);
-            textView = this.subtitleTextView;
-            PhoneFormat instance = PhoneFormat.getInstance();
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("+");
-            stringBuilder.append(getUserConfig().getCurrentUser().phone);
-            textView.setText(instance.format(stringBuilder.toString()));
+            UserConfig userConfig = getUserConfig();
+            User user = getMessagesController().getUser(Integer.valueOf(userConfig.clientUserId));
+            if (user == null) {
+                user = userConfig.getCurrentUser();
+            }
+            if (user != null) {
+                textView = this.subtitleTextView;
+                PhoneFormat instance = PhoneFormat.getInstance();
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("+");
+                stringBuilder.append(user.phone);
+                textView.setText(instance.format(stringBuilder.toString()));
+            }
             this.titleTextView.setText(LocaleController.getString("PhoneNumberChange2", NUM));
             this.descriptionText.setText(AndroidUtilities.replaceTags(LocaleController.getString("PhoneNumberHelp", NUM)));
             this.buttonTextView.setText(LocaleController.getString("PhoneNumberChange2", NUM));

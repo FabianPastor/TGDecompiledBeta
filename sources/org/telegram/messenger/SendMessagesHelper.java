@@ -655,18 +655,22 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                                         stringBuilder3.append(str6);
                                         stringBuilder3.append(str2);
                                         int indexOf3 = delayedMessage.messageObjects.indexOf((MessageObject) hashMap3.get(stringBuilder3.toString()));
+                                        if (indexOf3 >= 0) {
+                                            stopVideoService(((MessageObject) delayedMessage.messageObjects.get(indexOf3)).messageOwner.attachPath);
+                                        }
                                         hashMap3 = delayedMessage.extraHashMap;
                                         stringBuilder3 = new StringBuilder();
                                         stringBuilder3.append(str6);
                                         stringBuilder3.append(str);
                                         delayedMessage.photoSize = (PhotoSize) hashMap3.get(stringBuilder3.toString());
-                                        stopVideoService(((MessageObject) delayedMessage.messageObjects.get(indexOf3)).messageOwner.attachPath);
-                                        if (inputMedia.thumb != null || delayedMessage.photoSize == null) {
-                                            uploadMultiMedia(delayedMessage, inputMedia, null, str6);
-                                        } else {
-                                            delayedMessage.performMediaUpload = z2;
-                                            performSendDelayedMessage(delayedMessage, indexOf3);
+                                        if (inputMedia.thumb == null) {
+                                            PhotoSize photoSize2 = delayedMessage.photoSize;
+                                            if (!(photoSize2 == null || photoSize2.location == null)) {
+                                                delayedMessage.performMediaUpload = z2;
+                                                performSendDelayedMessage(delayedMessage, indexOf3);
+                                            }
                                         }
+                                        uploadMultiMedia(delayedMessage, inputMedia, null, str6);
                                     } else {
                                         inputMedia.thumb = inputFile2;
                                         inputMedia.flags |= z;
@@ -8755,6 +8759,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     if (messageObject3.getDocument() != null) {
                         str7 = "_t";
                         str8 = "_i";
+                        PhotoSize photoSize;
                         HashMap hashMap;
                         StringBuilder stringBuilder3;
                         if (delayedMessage2.videoEditedInfo != null) {
@@ -8775,7 +8780,8 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                             stringBuilder4.append(str);
                             stringBuilder4.append(str8);
                             hashMap2.put(stringBuilder4.toString(), messageObject3);
-                            if (delayedMessage2.photoSize != null) {
+                            photoSize = delayedMessage2.photoSize;
+                            if (!(photoSize == null || photoSize.location == null)) {
                                 hashMap = delayedMessage2.extraHashMap;
                                 stringBuilder3 = new StringBuilder();
                                 stringBuilder3.append(str);
@@ -8816,7 +8822,8 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                                     stringBuilder3.append(str9);
                                     stringBuilder3.append(str8);
                                     hashMap3.put(stringBuilder3.toString(), messageObject3);
-                                    if (delayedMessage2.photoSize != null) {
+                                    photoSize = delayedMessage2.photoSize;
+                                    if (!(photoSize == null || photoSize.location == null)) {
                                         hashMap = delayedMessage2.extraHashMap;
                                         stringBuilder6 = new StringBuilder();
                                         stringBuilder6.append(str9);
@@ -8862,7 +8869,8 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                                 stringBuilder3.append(str9);
                                 stringBuilder3.append(str8);
                                 hashMap3.put(stringBuilder3.toString(), messageObject3);
-                                if (delayedMessage2.photoSize != null) {
+                                photoSize = delayedMessage2.photoSize;
+                                if (!(photoSize == null || photoSize.location == null)) {
                                     hashMap = delayedMessage2.extraHashMap;
                                     stringBuilder6 = new StringBuilder();
                                     stringBuilder6.append(str9);

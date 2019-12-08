@@ -478,7 +478,7 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
                         if (WalletActivity.viewOffset != 0.0f) {
                             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{WalletActivity.viewOffset, 0.0f});
                             ofFloat.addUpdateListener(new -$$Lambda$WalletActivity$PullRecyclerView$lkXwd8GU-zP0QF_nYEqnNgLp6_Q(this));
-                            ofFloat.setDuration((long) (350.0f - ((WalletActivity.viewOffset / PullForegroundDrawable.maxOverScroll) * 120.0f)));
+                            ofFloat.setDuration((long) (350.0f - ((WalletActivity.viewOffset / ((float) PullForegroundDrawable.getMaxOverscroll())) * 120.0f)));
                             ofFloat.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
                             WalletActivity.this.listView.setScrollEnabled(false);
                             ofFloat.addListener(new AnimatorListenerAdapter() {
@@ -620,15 +620,15 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
             /* JADX WARNING: Removed duplicated region for block: B:31:0x00b4  */
             /* JADX WARNING: Removed duplicated region for block: B:36:0x00cf  */
             /* JADX WARNING: Removed duplicated region for block: B:39:0x00e4  */
-            /* JADX WARNING: Removed duplicated region for block: B:76:0x01d2  */
-            /* JADX WARNING: Removed duplicated region for block: B:78:0x01f4  */
+            /* JADX WARNING: Removed duplicated region for block: B:76:0x01d5  */
+            /* JADX WARNING: Removed duplicated region for block: B:78:0x01f7  */
             /* JADX WARNING: Removed duplicated region for block: B:31:0x00b4  */
             /* JADX WARNING: Removed duplicated region for block: B:32:0x00b8  */
             /* JADX WARNING: Removed duplicated region for block: B:36:0x00cf  */
             /* JADX WARNING: Removed duplicated region for block: B:39:0x00e4  */
             /* JADX WARNING: Removed duplicated region for block: B:42:0x00f2 A:{SKIP} */
-            /* JADX WARNING: Removed duplicated region for block: B:76:0x01d2  */
-            /* JADX WARNING: Removed duplicated region for block: B:78:0x01f4  */
+            /* JADX WARNING: Removed duplicated region for block: B:76:0x01d5  */
+            /* JADX WARNING: Removed duplicated region for block: B:78:0x01f7  */
             public int scrollVerticallyBy(int r13, androidx.recyclerview.widget.RecyclerView.Recycler r14, androidx.recyclerview.widget.RecyclerView.State r15) {
                 /*
                 r12 = this;
@@ -770,14 +770,14 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
                 r6 = r6.findViewByPosition(r15);
             L_0x00ee:
                 r8 = 0;
-                if (r15 != 0) goto L_0x01c0;
+                if (r15 != 0) goto L_0x01c3;
             L_0x00f2:
-                if (r6 == 0) goto L_0x01c0;
+                if (r6 == 0) goto L_0x01c3;
             L_0x00f4:
                 r15 = r6.getBottom();
                 r10 = NUM; // 0x40800000 float:4.0 double:5.34643471E-315;
                 r10 = org.telegram.messenger.AndroidUtilities.dp(r10);
-                if (r15 < r10) goto L_0x01c0;
+                if (r15 < r10) goto L_0x01c3;
             L_0x0100:
                 r15 = org.telegram.ui.Wallet.WalletActivity.this;
                 r10 = r15.startArchivePullingTime;
@@ -844,14 +844,15 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
                 r2.colorize(r1);
             L_0x017f:
                 r3 = r3 - r14;
-                if (r3 == 0) goto L_0x01a0;
+                if (r3 == 0) goto L_0x01a3;
             L_0x0182:
-                if (r13 >= 0) goto L_0x01a0;
+                if (r13 >= 0) goto L_0x01a3;
             L_0x0184:
-                if (r0 == 0) goto L_0x01a0;
+                if (r0 == 0) goto L_0x01a3;
             L_0x0186:
                 r0 = org.telegram.ui.Wallet.WalletActivity.viewOffset;
-                r1 = org.telegram.ui.Components.PullForegroundDrawable.maxOverScroll;
+                r1 = org.telegram.ui.Components.PullForegroundDrawable.getMaxOverscroll();
+                r1 = (float) r1;
                 r0 = r0 / r1;
                 r5 = r5 - r0;
                 r0 = org.telegram.ui.Wallet.WalletActivity.viewOffset;
@@ -863,11 +864,11 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
                 r13 = org.telegram.ui.Wallet.WalletActivity.this;
                 r13 = r13.listView;
                 r13.setViewsOffset(r0);
-            L_0x01a0:
+            L_0x01a3:
                 r13 = org.telegram.ui.Wallet.WalletActivity.this;
                 r13 = r13.pullForegroundDrawable;
-                if (r13 == 0) goto L_0x01f2;
-            L_0x01a8:
+                if (r13 == 0) goto L_0x01f5;
+            L_0x01ab:
                 r13 = org.telegram.ui.Wallet.WalletActivity.this;
                 r13 = r13.pullForegroundDrawable;
                 r13.pullProgress = r15;
@@ -876,16 +877,16 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
                 r15 = org.telegram.ui.Wallet.WalletActivity.this;
                 r15 = r15.listView;
                 r13.setListView(r15);
-                goto L_0x01f2;
-            L_0x01c0:
+                goto L_0x01f5;
+            L_0x01c3:
                 r13 = org.telegram.ui.Wallet.WalletActivity.this;
                 r13.startArchivePullingTime = r8;
                 r13 = org.telegram.ui.Wallet.WalletActivity.this;
                 r13.canShowHiddenPull = r1;
                 r13 = org.telegram.ui.Wallet.WalletActivity.this;
                 r13 = r13.pullForegroundDrawable;
-                if (r13 == 0) goto L_0x01f2;
-            L_0x01d2:
+                if (r13 == 0) goto L_0x01f5;
+            L_0x01d5:
                 r13 = org.telegram.ui.Wallet.WalletActivity.this;
                 r13 = r13.pullForegroundDrawable;
                 r13.resetText();
@@ -897,11 +898,11 @@ public class WalletActivity extends BaseFragment implements NotificationCenterDe
                 r15 = org.telegram.ui.Wallet.WalletActivity.this;
                 r15 = r15.listView;
                 r13.setListView(r15);
-            L_0x01f2:
-                if (r6 == 0) goto L_0x01f7;
-            L_0x01f4:
-                r6.invalidate();
+            L_0x01f5:
+                if (r6 == 0) goto L_0x01fa;
             L_0x01f7:
+                r6.invalidate();
+            L_0x01fa:
                 return r14;
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Wallet.WalletActivity$AnonymousClass6.scrollVerticallyBy(int, androidx.recyclerview.widget.RecyclerView$Recycler, androidx.recyclerview.widget.RecyclerView$State):int");

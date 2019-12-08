@@ -112,7 +112,7 @@ public class ContentPreviewViewer {
                             arrayList2.add(Integer.valueOf(1));
                         }
                     }
-                    if (!MessageObject.isMaskDocument(ContentPreviewViewer.this.currentDocument) && (isStickerInFavorites || MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).canAddStickerToFavorites())) {
+                    if (!MessageObject.isMaskDocument(ContentPreviewViewer.this.currentDocument) && (isStickerInFavorites || (MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).canAddStickerToFavorites() && MessageObject.isStickerHasSet(ContentPreviewViewer.this.currentDocument)))) {
                         String str2;
                         if (isStickerInFavorites) {
                             i = NUM;

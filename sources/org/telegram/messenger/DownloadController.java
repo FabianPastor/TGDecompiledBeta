@@ -481,12 +481,13 @@ public class DownloadController extends BaseController implements NotificationCe
 
     public int getAutodownloadMask() {
         int[] iArr;
-        if (ApplicationLoader.isConnectedToWiFi()) {
+        int autodownloadNetworkType = ApplicationLoader.getAutodownloadNetworkType();
+        if (autodownloadNetworkType == 1) {
             if (!this.wifiPreset.enabled) {
                 return 0;
             }
             iArr = getCurrentWiFiPreset().mask;
-        } else if (ApplicationLoader.isRoaming()) {
+        } else if (autodownloadNetworkType == 2) {
             if (!this.roamingPreset.enabled) {
                 return 0;
             }
@@ -498,10 +499,7 @@ public class DownloadController extends BaseController implements NotificationCe
         }
         int i = 0;
         for (int i2 = 0; i2 < iArr.length; i2++) {
-            int i3 = 1;
-            if ((iArr[i2] & 1) == 0) {
-                i3 = 0;
-            }
+            int i3 = (iArr[i2] & 1) != 0 ? 1 : 0;
             if ((iArr[i2] & 2) != 0) {
                 i3 |= 2;
             }
@@ -610,13 +608,14 @@ public class DownloadController extends BaseController implements NotificationCe
 
     public boolean canDownloadMedia(int i, int i2) {
         Preset currentWiFiPreset;
+        int autodownloadNetworkType = ApplicationLoader.getAutodownloadNetworkType();
         boolean z = false;
-        if (ApplicationLoader.isConnectedToWiFi()) {
+        if (autodownloadNetworkType == 1) {
             if (!this.wifiPreset.enabled) {
                 return false;
             }
             currentWiFiPreset = getCurrentWiFiPreset();
-        } else if (ApplicationLoader.isRoaming()) {
+        } else if (autodownloadNetworkType == 2) {
             if (!this.roamingPreset.enabled) {
                 return false;
             }
@@ -627,8 +626,8 @@ public class DownloadController extends BaseController implements NotificationCe
             currentWiFiPreset = getCurrentMobilePreset();
         }
         int i3 = currentWiFiPreset.mask[1];
-        int i4 = currentWiFiPreset.sizes[typeToIndex(i)];
-        if ((i == 1 || (i2 != 0 && i2 <= i4)) && (i == 2 || (i & i3) != 0)) {
+        autodownloadNetworkType = currentWiFiPreset.sizes[typeToIndex(i)];
+        if ((i == 1 || (i2 != 0 && i2 <= autodownloadNetworkType)) && (i == 2 || (i & i3) != 0)) {
             z = true;
         }
         return z;
@@ -638,10 +637,10 @@ public class DownloadController extends BaseController implements NotificationCe
     /* JADX WARNING: Removed duplicated region for block: B:50:0x00a6  */
     /* JADX WARNING: Removed duplicated region for block: B:50:0x00a6  */
     /* JADX WARNING: Removed duplicated region for block: B:54:0x00b2  */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x00e1  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x00dd  */
     /* JADX WARNING: Removed duplicated region for block: B:54:0x00b2  */
     /* JADX WARNING: Removed duplicated region for block: B:50:0x00a6  */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x00e1  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x00dd  */
     /* JADX WARNING: Missing block: B:31:0x005f, code skipped:
             if (getContactsController().contactsDict.containsKey(java.lang.Integer.valueOf(r5.user_id)) != false) goto L_0x0061;
      */
@@ -759,8 +758,8 @@ public class DownloadController extends BaseController implements NotificationCe
     L_0x009f:
         r5 = 1;
     L_0x00a0:
-        r6 = org.telegram.messenger.ApplicationLoader.isConnectedToWiFi();
-        if (r6 == 0) goto L_0x00b2;
+        r6 = org.telegram.messenger.ApplicationLoader.getAutodownloadNetworkType();
+        if (r6 != r3) goto L_0x00b2;
     L_0x00a6:
         r6 = r9.wifiPreset;
         r6 = r6.enabled;
@@ -769,64 +768,63 @@ public class DownloadController extends BaseController implements NotificationCe
         return r0;
     L_0x00ad:
         r6 = r9.getCurrentWiFiPreset();
-        goto L_0x00cf;
+        goto L_0x00cb;
     L_0x00b2:
-        r6 = org.telegram.messenger.ApplicationLoader.isRoaming();
-        if (r6 == 0) goto L_0x00c4;
-    L_0x00b8:
+        if (r6 != r2) goto L_0x00c0;
+    L_0x00b4:
         r6 = r9.roamingPreset;
         r6 = r6.enabled;
-        if (r6 != 0) goto L_0x00bf;
-    L_0x00be:
+        if (r6 != 0) goto L_0x00bb;
+    L_0x00ba:
         return r0;
-    L_0x00bf:
+    L_0x00bb:
         r6 = r9.getCurrentRoamingPreset();
-        goto L_0x00cf;
-    L_0x00c4:
+        goto L_0x00cb;
+    L_0x00c0:
         r6 = r9.mobilePreset;
         r6 = r6.enabled;
-        if (r6 != 0) goto L_0x00cb;
-    L_0x00ca:
+        if (r6 != 0) goto L_0x00c7;
+    L_0x00c6:
         return r0;
-    L_0x00cb:
+    L_0x00c7:
         r6 = r9.getCurrentMobilePreset();
-    L_0x00cf:
+    L_0x00cb:
         r7 = r6.mask;
         r5 = r7[r5];
         r7 = r6.sizes;
         r8 = typeToIndex(r4);
         r7 = r7[r8];
         r10 = org.telegram.messenger.MessageObject.getMessageSize(r10);
-        if (r1 == 0) goto L_0x00f1;
-    L_0x00e1:
+        if (r1 == 0) goto L_0x00ed;
+    L_0x00dd:
         r1 = r6.preloadVideo;
-        if (r1 == 0) goto L_0x00f1;
-    L_0x00e5:
-        if (r10 <= r7) goto L_0x00f1;
-    L_0x00e7:
+        if (r1 == 0) goto L_0x00ed;
+    L_0x00e1:
+        if (r10 <= r7) goto L_0x00ed;
+    L_0x00e3:
         r1 = 2097152; // 0x200000 float:2.938736E-39 double:1.0361308E-317;
-        if (r7 <= r1) goto L_0x00f1;
+        if (r7 <= r1) goto L_0x00ed;
+    L_0x00e7:
+        r10 = r5 & r4;
+        if (r10 == 0) goto L_0x00ec;
     L_0x00eb:
-        r10 = r5 & r4;
-        if (r10 == 0) goto L_0x00f0;
-    L_0x00ef:
         r0 = 2;
-    L_0x00f0:
+    L_0x00ec:
         return r0;
+    L_0x00ed:
+        if (r4 == r3) goto L_0x00f3;
+    L_0x00ef:
+        if (r10 == 0) goto L_0x00fa;
     L_0x00f1:
-        if (r4 == r3) goto L_0x00f7;
+        if (r10 > r7) goto L_0x00fa;
     L_0x00f3:
-        if (r10 == 0) goto L_0x00fe;
+        if (r4 == r2) goto L_0x00f9;
     L_0x00f5:
-        if (r10 > r7) goto L_0x00fe;
-    L_0x00f7:
-        if (r4 == r2) goto L_0x00fd;
-    L_0x00f9:
         r10 = r5 & r4;
-        if (r10 == 0) goto L_0x00fe;
-    L_0x00fd:
+        if (r10 == 0) goto L_0x00fa;
+    L_0x00f9:
         r0 = 1;
-    L_0x00fe:
+    L_0x00fa:
         return r0;
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.DownloadController.canDownloadMedia(org.telegram.tgnet.TLRPC$Message):int");
@@ -834,57 +832,58 @@ public class DownloadController extends BaseController implements NotificationCe
 
     /* Access modifiers changed, original: protected */
     public boolean canDownloadNextTrack() {
-        boolean z = true;
-        if (ApplicationLoader.isConnectedToWiFi()) {
-            if (!(this.wifiPreset.enabled && getCurrentWiFiPreset().preloadMusic)) {
-                z = false;
+        int autodownloadNetworkType = ApplicationLoader.getAutodownloadNetworkType();
+        boolean z = false;
+        if (autodownloadNetworkType == 1) {
+            if (this.wifiPreset.enabled && getCurrentWiFiPreset().preloadMusic) {
+                z = true;
             }
             return z;
-        } else if (ApplicationLoader.isRoaming()) {
-            if (!(this.roamingPreset.enabled && getCurrentRoamingPreset().preloadMusic)) {
-                z = false;
+        } else if (autodownloadNetworkType == 2) {
+            if (this.roamingPreset.enabled && getCurrentRoamingPreset().preloadMusic) {
+                z = true;
             }
             return z;
         } else {
-            if (!(this.mobilePreset.enabled && getCurrentMobilePreset().preloadMusic)) {
-                z = false;
+            if (this.mobilePreset.enabled && getCurrentMobilePreset().preloadMusic) {
+                z = true;
             }
             return z;
         }
     }
 
     public int getCurrentDownloadMask() {
+        int autodownloadNetworkType = ApplicationLoader.getAutodownloadNetworkType();
         int i = 0;
-        int i2;
-        if (ApplicationLoader.isConnectedToWiFi()) {
+        if (autodownloadNetworkType == 1) {
             if (!this.wifiPreset.enabled) {
                 return 0;
             }
-            i2 = 0;
+            autodownloadNetworkType = 0;
             while (i < 4) {
-                i2 |= getCurrentWiFiPreset().mask[i];
+                autodownloadNetworkType |= getCurrentWiFiPreset().mask[i];
                 i++;
             }
-            return i2;
-        } else if (ApplicationLoader.isRoaming()) {
+            return autodownloadNetworkType;
+        } else if (autodownloadNetworkType == 2) {
             if (!this.roamingPreset.enabled) {
                 return 0;
             }
-            i2 = 0;
+            autodownloadNetworkType = 0;
             while (i < 4) {
-                i2 |= getCurrentRoamingPreset().mask[i];
+                autodownloadNetworkType |= getCurrentRoamingPreset().mask[i];
                 i++;
             }
-            return i2;
+            return autodownloadNetworkType;
         } else if (!this.mobilePreset.enabled) {
             return 0;
         } else {
-            i2 = 0;
+            autodownloadNetworkType = 0;
             while (i < 4) {
-                i2 |= getCurrentMobilePreset().mask[i];
+                autodownloadNetworkType |= getCurrentMobilePreset().mask[i];
                 i++;
             }
-            return i2;
+            return autodownloadNetworkType;
         }
     }
 

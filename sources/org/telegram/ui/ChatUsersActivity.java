@@ -3293,6 +3293,10 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         presentFragment(chatRightsEditActivity);
     }
 
+    public boolean canBeginSlide() {
+        return checkDiscard();
+    }
+
     private void openRightsEdit(int i, TLObject tLObject, TL_chatAdminRights tL_chatAdminRights, TL_chatBannedRights tL_chatBannedRights, String str, boolean z, int i2, boolean z2) {
         final TLObject tLObject2 = tLObject;
         final boolean z3 = z2;
